@@ -375,7 +375,15 @@ abstract class Controller extends AgaviObject
 
 		$file = MO_LIB_DIR . '/models/' . $modelName . 'Model.class.php';
 
-		require_once($file);
+			if(file_exists($file)) {
+				require_once($file);
+			} else {
+				$pattern = MO_LIB_DIR . '/' . '*' . '/models/' . $modelName . 'Model.class.php';
+				$files = glob($pattern);
+
+				// only include the first file found
+				require_once($files[0]);
+			}
 
 		$class = $modelName . 'Model';
 
