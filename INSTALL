@@ -1,0 +1,43 @@
+Archive Directory Structure:
+
+- root
+  - php_documentor (templates for generating Agavi API docs)
+  - source (all source files)
+    - agavi (the agavi source)
+    - webapp (your web application, which should not be accessible from the web)
+    - www (web accessible files)
+  - samples (sample configuration files)
+
+
+Installation Steps:
+
+1. Move the "source/agavi" directory to a non web accessible location,
+   preferrably the parent directory of your root web directory. On most
+   installations this would be the parent directory of your "public_html" or
+   "www" directory.
+
+2. Move the "source/webapp" directory to a non web accessible location,
+   preferrably the parent directory of your root web directory.
+
+3. Give your "webapp/cache" directory full write permissions. In unix you can
+   type "chmod 777 cache". On Windows you must go through your webserver to give
+   it write permissions.
+
+4. Move the "source/www/index.php" file to your web directory. This must be
+   accessible from the web. Any location that is accessible via the web
+   will do.
+
+5. Configure your "webapp/config.php" configuration file.
+
+6. Configure your web directory's "index.php" file that we just moved.
+
+7. You're done. Try accessing your index.php file from the web.
+
+
+Post-Install Configuration:
+
+1. Setting up your database(s):
+
+   Turn on database support in webapp/config/settings.ini. The USE_DATABASE
+   setting is Off by default. Set it to On. Next, read the examples in
+   webapp/config/databases.ini to setup your database connectivity.

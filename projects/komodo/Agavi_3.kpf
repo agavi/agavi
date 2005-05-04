@@ -1,0 +1,470 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Komodo Project File - DO NOT EDIT -->
+<project id="D3CF2D7A-76F9-40FB-A38D-F674742762AB" name="Agavi_3" kpf_version="2">
+<preference-set id="">
+  <string id="import_dirname">D:\Projects\applications\Agavi 3.0.0-DEV</string>
+</preference-set>
+<file url="../../LICENSE" id="2913A9D7-D68C-4274-941A-A89A85396F86" name="LICENSE">
+</file>
+<file url="../../TODO" id="1069986E-E688-402F-9D1A-45B6DE54B624" name="TODO">
+</file>
+<file url="../../INSTALL" id="195D046F-BA6B-4092-9879-3C9CD34C6E50" name="INSTALL">
+</file>
+<file url="../../CHANGELOG" id="CCCA06EC-F84D-48A8-B45D-B4C4B36C7EEE" name="CHANGELOG">
+</file>
+<folder url="../../source" id="7AB83E1B-9325-4F61-B15A-C1A7A92DA2FA" name="source">
+<preference-set id="">
+</preference-set>
+<folder url="../../source/www" id="4BE3F6EC-F0B3-47B4-8BE8-5BCBE6116068" name="www">
+<file url="../../source/www/index.php" id="9AAA91F8-B732-4010-AA37-58ED97B7A256" name="index.php">
+</file>
+</folder>
+<folder url="../../source/agavi" id="08861105-5C2B-414B-9107-35AF9E7AC027" name="agavi">
+<preference-set id="">
+</preference-set>
+<file url="../../source/agavi/version.php" id="EB3E2691-446E-4B21-AB2E-AC793594F3A6" name="version.php">
+</file>
+<file url="../../source/agavi/agavi.php" id="89A29495-F1BB-47E2-8B2E-D7CA4A857CFC" name="agavi.php">
+</file>
+<folder url="../../source/agavi/controller" id="F973CD8D-F8BD-4074-829C-35D0F7C0E359" name="controller">
+<file url="../../source/agavi/controller/ConsoleController.class.php" id="41CF9D52-21B8-4A47-A156-A063B33A7491" name="ConsoleController.class.php">
+</file>
+<file url="../../source/agavi/controller/FrontWebController.class.php" id="D3EC8DF4-38D6-4032-B0B1-DAC61D503B3E" name="FrontWebController.class.php">
+</file>
+<file url="../../source/agavi/controller/PageWebController.class.php" id="27DC1A16-B93C-407E-B332-F773C0954F23" name="PageWebController.class.php">
+</file>
+<file url="../../source/agavi/controller/WebController.class.php" id="9766ECBE-3EAB-4F87-BEFC-BF45396BFCD9" name="WebController.class.php">
+</file>
+<file url="../../source/agavi/controller/Controller.class.php" id="7B165CF7-B3E2-45C3-9750-8445C09A2BA0" name="Controller.class.php">
+</file>
+</folder>
+<folder url="../../source/agavi/validator" id="B310018E-2776-41B2-AFBE-CE061A999E58" name="validator">
+<file url="../../source/agavi/validator/Validator.class.php" id="49AF6C10-4565-4087-8C84-EAF3C1EEF527" name="Validator.class.php">
+</file>
+<file url="../../source/agavi/validator/ValidatorManager.class.php" id="7786E07F-BFF1-4F0C-B41F-22B899569579" name="ValidatorManager.class.php">
+</file>
+<file url="../../source/agavi/validator/RegexValidator.class.php" id="981070CB-D14F-44CB-853F-37A488226E32" name="RegexValidator.class.php">
+</file>
+<file url="../../source/agavi/validator/EmailValidator.class.php" id="AC0FB719-0248-445F-AB31-26B3ABBEFA49" name="EmailValidator.class.php">
+</file>
+<file url="../../source/agavi/validator/StringValidator.class.php" id="892AF347-D414-490A-9ED3-7FA82DCB51D6" name="StringValidator.class.php">
+</file>
+<file url="../../source/agavi/validator/NumberValidator.class.php" id="65A59591-0719-4D5F-AB76-BB3FEDB5218D" name="NumberValidator.class.php">
+</file>
+<file url="../../source/agavi/validator/DateValidator.class.php" id="AA3F4574-26F7-4FAF-8EC0-95997551F985" name="DateValidator.class.php">
+</file>
+</folder>
+<folder url="../../source/agavi/filter" id="7D8DE9E5-3DD3-48EB-BD61-4E0A8F1A9D73" name="filter">
+<file url="../../source/agavi/filter/Filter.class.php" id="91345C76-F8F9-4224-B788-533E0A167A7E" name="Filter.class.php">
+</file>
+<file url="../../source/agavi/filter/FilterChain.class.php" id="7766C131-EA7F-454F-B0E6-FE6A1807648A" name="FilterChain.class.php">
+</file>
+<file url="../../source/agavi/filter/ExecutionTimeFilter.class.php" id="CFE27720-4355-4BB6-9B31-5BF0A6CB7C62" name="ExecutionTimeFilter.class.php">
+</file>
+<file url="../../source/agavi/filter/BasicSecurityFilter.class.php" id="D0BC6D0E-D7CF-4F0A-B664-2F2F14050FAC" name="BasicSecurityFilter.class.php">
+</file>
+<file url="../../source/agavi/filter/ExecutionFilter.class.php" id="582722CD-CE82-4D9E-BC64-F3B6850B433C" name="ExecutionFilter.class.php">
+</file>
+<file url="../../source/agavi/filter/SecurityFilter.class.php" id="0296F75C-45EB-463D-836D-DC9495709BBA" name="SecurityFilter.class.php">
+</file>
+</folder>
+<folder url="../../source/agavi/logging" id="CCF90185-8159-461C-B8B2-BECBA99E60A5" name="logging">
+<file url="../../source/agavi/logging/ErrorLogger.class.php" id="810E8067-289E-4A3F-9F33-39D2FA0B7899" name="ErrorLogger.class.php">
+</file>
+<file url="../../source/agavi/logging/LoggerManager.class.php" id="64468BE9-D907-4321-BAD4-72E7B4612FA1" name="LoggerManager.class.php">
+</file>
+<file url="../../source/agavi/logging/PatternLayout.class.php" id="27038487-4753-44AC-AE79-2364C612B749" name="PatternLayout.class.php">
+</file>
+<file url="../../source/agavi/logging/Layout.class.php" id="DBAFF343-A3D7-44F3-B3B5-B7298FAFD85C" name="Layout.class.php">
+</file>
+<file url="../../source/agavi/logging/Appender.class.php" id="F7B4CA5B-E849-4AB9-9B7A-47EEE53A099D" name="Appender.class.php">
+</file>
+<file url="../../source/agavi/logging/FileAppender.class.php" id="16A18B50-49EB-4232-96A6-E2EBF8495455" name="FileAppender.class.php">
+</file>
+<file url="../../source/agavi/logging/Logger.class.php" id="59B075F6-E885-47F3-AF81-863BB5A66223" name="Logger.class.php">
+</file>
+<file url="../../source/agavi/logging/StdoutAppender.class.php" id="E2D8265C-A9DC-4FD1-A911-3AA0F91B1FD9" name="StdoutAppender.class.php">
+</file>
+<file url="../../source/agavi/logging/MailAppender.class.php" id="98607C5A-0562-46A7-89B3-48F31A7523A8" name="MailAppender.class.php">
+</file>
+<file url="../../source/agavi/logging/StderrAppender.class.php" id="A29B19BA-DE00-4DC0-89D4-6995037B74AE" name="StderrAppender.class.php">
+</file>
+<file url="../../source/agavi/logging/Message.class.php" id="F69DBFE0-2438-4806-8524-A07999528572" name="Message.class.php">
+</file>
+</folder>
+<folder url="../../source/agavi/request" id="F098F3C2-3CF8-4405-B827-FC07799CC753" name="request">
+<file url="../../source/agavi/request/WebRequest.class.php" id="FBF8423B-5E79-40FA-8EE8-1D4118E04165" name="WebRequest.class.php">
+</file>
+<file url="../../source/agavi/request/ConsoleRequest.class.php" id="84D2B5C5-0927-483C-9401-ADA5FCEDE151" name="ConsoleRequest.class.php">
+</file>
+<file url="../../source/agavi/request/Request.class.php" id="B87EF11B-C5D0-45D9-AD43-412627EECD4D" name="Request.class.php">
+</file>
+</folder>
+<folder url="../../source/agavi/core" id="D2524A92-3E70-446E-AE79-2A8985BBECE3" name="core">
+<file url="../../source/agavi/core/AgaviObject.class.php" id="35C7CD75-B4B3-4DF3-8C8A-3567D9CEC276" name="AgaviObject.class.php">
+</file>
+<file url="../../source/agavi/core/Context.class.php" id="5616E91D-6072-4EF5-A315-4BFB082827F5" name="Context.class.php">
+</file>
+</folder>
+<folder url="../../source/agavi/exception" id="E98114DD-4820-4B2D-944E-27B932CD24C3" name="exception">
+<file url="../../source/agavi/exception/SecurityException.class.php" id="822332BF-B580-46E3-9854-0BEE22A09D9E" name="SecurityException.class.php">
+</file>
+<file url="../../source/agavi/exception/FactoryException.class.php" id="0D617AFF-6E2E-487C-BEF3-8BCD31CB4A37" name="FactoryException.class.php">
+</file>
+<file url="../../source/agavi/exception/AutoloadException.class.php" id="A61EE6FB-00D1-40D8-87B6-60347F41C861" name="AutoloadException.class.php">
+</file>
+<file url="../../source/agavi/exception/ConfigurationException.class.php" id="56282CBD-F88E-45E0-981E-B1569FD81E8F" name="ConfigurationException.class.php">
+</file>
+<file url="../../source/agavi/exception/FileException.class.php" id="3A50B012-6B85-49DE-A5BF-ADC7F8E0893C" name="FileException.class.php">
+</file>
+<file url="../../source/agavi/exception/ParseException.class.php" id="E16BAE66-02FC-4392-92D2-788D756C44F0" name="ParseException.class.php">
+</file>
+<file url="../../source/agavi/exception/RenderException.class.php" id="B4968393-A5B3-4FC7-885A-A20D3E2A72F6" name="RenderException.class.php">
+</file>
+<file url="../../source/agavi/exception/ControllerException.class.php" id="9F8AC788-D4B9-4BDD-8465-54E9AC7FC9D1" name="ControllerException.class.php">
+</file>
+<file url="../../source/agavi/exception/AgaviException.class.php" id="4C328FFE-DF40-4FF9-8A5D-DB092B6C79FE" name="AgaviException.class.php">
+</file>
+<file url="../../source/agavi/exception/FilterException.class.php" id="04D461EB-D254-49B3-994A-82A59436F7B3" name="FilterException.class.php">
+</file>
+<file url="../../source/agavi/exception/InitializationException.class.php" id="F85910AB-87C1-4AFF-B1B8-D26530E2848C" name="InitializationException.class.php">
+</file>
+<file url="../../source/agavi/exception/CacheException.class.php" id="0F61C36F-405A-41A0-8F11-C5683B2C27E8" name="CacheException.class.php">
+</file>
+<file url="../../source/agavi/exception/ForwardException.class.php" id="F3CAB346-74BC-421E-983E-4D7CE455D4E3" name="ForwardException.class.php">
+</file>
+<file url="../../source/agavi/exception/DatabaseException.class.php" id="11B3E355-67C8-447B-82FB-2514C828F3B5" name="DatabaseException.class.php">
+</file>
+<file url="../../source/agavi/exception/StorageException.class.php" id="99B4F159-9A72-429A-AA52-1A4131D4CCC0" name="StorageException.class.php">
+</file>
+<file url="../../source/agavi/exception/ViewException.class.php" id="00C3FC4F-4948-4A09-A624-9546FE3F87BD" name="ViewException.class.php">
+</file>
+<file url="../../source/agavi/exception/ValidatorException.class.php" id="2BE00BB7-2953-48F0-829B-784D4FF2397A" name="ValidatorException.class.php">
+</file>
+<file url="file:///D:/Projects/Agavi/applications/Agavi/branches/3.0.0-DEV/source/agavi/exception/LoggingException.class.php" id="15C2384D-5FEA-484F-BE4F-D0C3CB8170F1" name="LoggingException.class.php">
+</file>
+</folder>
+<folder url="../../source/agavi/model" id="E4B73496-2AB2-4CE6-BE15-D8D789718B89" name="model">
+<file url="../../source/agavi/model/Model.class.php" id="4614B055-E937-4222-83FC-481DBB497564" name="Model.class.php">
+</file>
+</folder>
+<folder url="../../source/agavi/database" id="1CC8E4B1-CE7E-4958-AAC2-6E7F95A5A3DC" name="database">
+<file url="../../source/agavi/database/Database.class.php" id="C47B6962-C26A-470D-A801-0725CAA34F80" name="Database.class.php">
+</file>
+<file url="../../source/agavi/database/DatabaseManager.class.php" id="A9F0C4D9-FCE7-4BB9-8E7C-5789E01C092A" name="DatabaseManager.class.php">
+</file>
+<file url="../../source/agavi/database/MySQLDatabase.class.php" id="9C56721F-8CAE-4F51-9C7E-B6A3FC3A31E8" name="MySQLDatabase.class.php">
+</file>
+<file url="../../source/agavi/database/PostgreSQLDatabase.class.php" id="72AD0E4D-40BC-4807-B978-963C4A18A2B1" name="PostgreSQLDatabase.class.php">
+</file>
+<file url="../../source/agavi/database/CreoleDatabase.class.php" id="49CF19A7-7CF0-4224-BF6C-B8347EBDE581" name="CreoleDatabase.class.php">
+</file>
+<file url="../../source/agavi/database/PDODatabase.class.php" id="8B69DF0F-8D69-47CA-BF02-6D1D00A62EAD" name="PDODatabase.class.php">
+</file>
+</folder>
+<folder url="../../source/agavi/storage" id="EC7E334B-7877-46D6-8D5B-808DF336FAF2" name="storage">
+<file url="../../source/agavi/storage/SessionStorage.class.php" id="2A298D6D-A4BE-4D9F-9C8A-09441665B903" name="SessionStorage.class.php">
+</file>
+<file url="../../source/agavi/storage/PostgreSQLSessionStorage.class.php" id="6B27BA07-5A46-46BE-B7EE-FC38C364A1C8" name="PostgreSQLSessionStorage.class.php">
+</file>
+<file url="../../source/agavi/storage/Storage.class.php" id="109BF209-5BC7-476A-8D0D-D232207A0DF9" name="Storage.class.php">
+</file>
+<file url="../../source/agavi/storage/MySQLSessionStorage.class.php" id="2C063637-3376-4685-80ED-B0F6EAD84072" name="MySQLSessionStorage.class.php">
+</file>
+</folder>
+<folder url="../../source/agavi/config" id="185DB216-67EB-48E2-9E5E-84DDB5463666" name="config">
+<file url="../../source/agavi/config/RootConfigHandler.class.php" id="8A702339-68F1-4CF9-88B3-EEEAC8310EC8" name="RootConfigHandler.class.php">
+</file>
+<file url="../../source/agavi/config/FilterConfigHandler.class.php" id="EF20A880-CE58-4A9E-904A-BD1AA5ADE086" name="FilterConfigHandler.class.php">
+</file>
+<file url="../../source/agavi/config/ValidatorConfigHandler.class.php" id="7780AA34-117E-47FE-AF81-7BCFD0298EF4" name="ValidatorConfigHandler.class.php">
+</file>
+<file url="../../source/agavi/config/LoggingConfigHandler.class.php" id="6A31840C-B7BA-4492-BF8C-E18B5711FC5C" name="LoggingConfigHandler.class.php">
+</file>
+<file url="../../source/agavi/config/AutoloadConfigHandler.class.php" id="DC930A9E-34BF-4C88-8517-2A49F58867E3" name="AutoloadConfigHandler.class.php">
+</file>
+<file url="../../source/agavi/config/CompileConfigHandler.class.php" id="17A38172-0B46-49FC-B1BD-2E247CAD3A04" name="CompileConfigHandler.class.php">
+</file>
+<file url="../../source/agavi/config/DefineConfigHandler.class.php" id="311E998B-8DF9-44B0-8CE2-217B564F134F" name="DefineConfigHandler.class.php">
+</file>
+<file url="../../source/agavi/config/ModuleConfigHandler.class.php" id="67A5ED5F-0889-42FF-88C6-B0ABF6DE045B" name="ModuleConfigHandler.class.php">
+</file>
+<file url="../../source/agavi/config/ConfigCache.class.php" id="55854B5F-880D-4FAA-95BA-8C75C8285B29" name="ConfigCache.class.php">
+</file>
+<file url="../../source/agavi/config/ConfigHandler.class.php" id="BD58DB78-ABB7-4CB8-B3D7-9D6F88FC4232" name="ConfigHandler.class.php">
+</file>
+<file url="../../source/agavi/config/ParameterParser.class.php" id="94A71F25-767C-44DD-9331-F89426501668" name="ParameterParser.class.php">
+</file>
+<file url="../../source/agavi/config/IniConfigHandler.class.php" id="DB2923C5-5C65-4D90-BA2A-406CB7B3861B" name="IniConfigHandler.class.php">
+</file>
+<file url="../../source/agavi/config/FactoryConfigHandler.class.php" id="3DA3086E-28F6-4D6E-BB86-2B3451404884" name="FactoryConfigHandler.class.php">
+</file>
+<file url="../../source/agavi/config/DatabaseConfigHandler.class.php" id="9CCAC968-AFE6-4881-88EA-444CE28A2EB7" name="DatabaseConfigHandler.class.php">
+</file>
+</folder>
+<folder url="../../source/agavi/view" id="230A3244-ECC5-4831-AF31-4283B1430667" name="view">
+<preference-set id="">
+</preference-set>
+<file url="../../source/agavi/view/SmartyView.class.php" id="A92AD9FA-5429-4AC5-B0E0-32D3476FF14C" name="SmartyView.class.php">
+</file>
+<file url="../../source/agavi/view/PHPView.class.php" id="49E5E59C-C6FE-41E7-B839-B6FC7754EC4D" name="PHPView.class.php">
+</file>
+<file url="../../source/agavi/view/View.class.php" id="82898815-22C5-479B-9BE8-657DF160C0D5" name="View.class.php">
+</file>
+</folder>
+<folder url="../../source/agavi/action" id="EC1256AF-4A54-4FD8-8F3E-3619F567A752" name="action">
+<file url="../../source/agavi/action/ActionStack.class.php" id="6E68A017-8067-41B6-BDE8-E047BEEC50D3" name="ActionStack.class.php">
+</file>
+<file url="../../source/agavi/action/Action.class.php" id="185D6307-3E13-4189-A9EF-AB00B9498CE0" name="Action.class.php">
+</file>
+<file url="../../source/agavi/action/ActionStackEntry.class.php" id="D1E095A1-5CD2-4BC6-9856-676A6BE925E3" name="ActionStackEntry.class.php">
+</file>
+</folder>
+<folder url="../../source/agavi/util" id="D36D055F-46C3-40F9-8AC2-69612AE33005" name="util">
+<file url="../../source/agavi/util/ConversionPattern.class.php" id="85C38BCE-6986-4FCD-911D-9E2E710449F2" name="ConversionPattern.class.php">
+</file>
+<file url="../../source/agavi/util/Toolkit.class.php" id="5332E8BE-8DB8-4176-BAE0-111CD002BCEE" name="Toolkit.class.php">
+</file>
+<file url="../../source/agavi/util/ParameterHolder.class.php" id="53EBBB6E-A497-4DE4-89B1-2ABC21700A48" name="ParameterHolder.class.php">
+</file>
+</folder>
+<folder url="../../source/agavi/user" id="33163BF5-F6FC-4E04-B272-6FE459AAA69C" name="user">
+<file url="../../source/agavi/user/SecurityUser.class.php" id="9225B695-0F8C-47BA-8C50-3834DA7DF977" name="SecurityUser.class.php">
+</file>
+<file url="../../source/agavi/user/BasicSecurityUser.class.php" id="AFBE7B23-1284-4C07-A179-26362456B5E9" name="BasicSecurityUser.class.php">
+</file>
+<file url="../../source/agavi/user/User.class.php" id="3AC1415A-93F3-4B5E-A2EE-78E5C1D4E7CE" name="User.class.php">
+</file>
+</folder>
+</folder>
+<folder url="../../source/webapp" id="57D7FA64-C451-4B7B-8201-5C04008529EC" name="webapp">
+<preference-set id="">
+</preference-set>
+<file url="../../source/webapp/config.php" id="8CF75AF9-8E3E-40B2-A627-D648875F5B03" name="config.php">
+</file>
+<folder url="../../source/webapp/config" id="34D6C89E-75FA-475E-9E93-EB319038064B" name="config">
+<file url="../../source/webapp/config/config_handlers.ini" id="AEA8C0C9-E536-4399-8C48-953A880347DF" name="config_handlers.ini">
+</file>
+<file url="../../source/webapp/config/logging.ini" id="AC45DFF5-176A-4513-8946-7A3FC2D34B3F" name="logging.ini">
+</file>
+<file url="../../source/webapp/config/filters.ini" id="F18ADB03-41F8-48AB-8A1E-B270AC9A2C58" name="filters.ini">
+</file>
+<file url="../../source/webapp/config/autoload.ini" id="DA73B19E-D350-4FB2-A11D-E1F134B95E09" name="autoload.ini">
+</file>
+<file url="../../source/webapp/config/compile.conf" id="3520FB71-F4E2-40F1-8E47-D8B8B0647824" name="compile.conf">
+</file>
+<file url="../../source/webapp/config/factories.ini" id="C101FF3F-6E48-4AB8-B60B-B4835CD27FD9" name="factories.ini">
+</file>
+<file url="../../source/webapp/config/settings.ini" id="96C92CA7-7501-493A-B1D5-9BC9FBB0B217" name="settings.ini">
+</file>
+<file url="../../source/webapp/config/databases.ini" id="FE6F9E25-D767-463B-803F-B787DB90A389" name="databases.ini">
+</file>
+<file url="../../source/webapp/config/validators.ini" id="BEECD7D8-A077-4C16-A3D4-914007262E18" name="validators.ini">
+</file>
+</folder>
+<folder url="../../source/webapp/modules" id="29E8D6D2-F341-4D69-ABDA-C3899EB68168" name="modules">
+<preference-set id="">
+</preference-set>
+<folder url="../../source/webapp/modules/Default" id="C6A91BD3-DCF5-43BD-AAB5-0235C315D3C7" name="Default">
+<preference-set id="">
+</preference-set>
+<folder url="../../source/webapp/modules/Default/actions" id="5F81BBF4-21EC-4CC4-8F22-443B7AE86185" name="actions">
+<preference-set id="">
+</preference-set>
+<file url="../../source/webapp/modules/Default/actions/IndexAction.class.php" id="AB8B2DF9-4031-42AA-A44B-48104F260F04" name="IndexAction.class.php">
+</file>
+<file url="../../source/webapp/modules/Default/actions/LoginAction.class.php" id="D1A5198C-1413-4E31-9393-2F4EDC2B9475" name="LoginAction.class.php">
+</file>
+<file url="../../source/webapp/modules/Default/actions/ModuleDisabledAction.class.php" id="73BD6253-B704-4630-8ED7-8F203589E2FF" name="ModuleDisabledAction.class.php">
+</file>
+<file url="../../source/webapp/modules/Default/actions/Error404Action.class.php" id="00DE6391-A43D-4C38-9B36-630C97A5665A" name="Error404Action.class.php">
+</file>
+<file url="../../source/webapp/modules/Default/actions/UnavailableAction.class.php" id="99243871-09E7-4431-86AA-42EAAE7468F8" name="UnavailableAction.class.php">
+</file>
+<file url="../../source/webapp/modules/Default/actions/SecureAction.class.php" id="CE571391-BDD3-4FC4-99DD-C10947E34271" name="SecureAction.class.php">
+</file>
+</folder>
+<folder url="../../source/webapp/modules/Default/config" id="002DBBF9-E393-4D90-A399-E6C857E31BB9" name="config">
+<preference-set id="">
+</preference-set>
+<file url="../../source/webapp/modules/Default/config/config_handlers.ini" id="8E470F0D-D7E1-4384-9390-BD3F493096FC" name="config_handlers.ini">
+</file>
+<file url="../../source/webapp/modules/Default/config/module.ini" id="79804A2A-E420-4B6E-B2A6-0E9D935DF3E3" name="module.ini">
+</file>
+<folder id="495DCCC1-FC8F-4CA5-AD01-2FEC20119E6E" name="action">
+<preference-set id="">
+  <string id="import_dirname">D:\Projects\applications\Agavi 3.0.0-DEV\source\webapp\modules\Default\config\action</string>
+</preference-set>
+<file url="../../source/webapp/modules/Default/config/action/StaticAction.ini" id="BFE6B686-C94A-4A55-BF6A-48D6AAC05D4C" name="StaticAction.ini">
+</file>
+</folder>
+</folder>
+<folder url="../../source/webapp/modules/Default/lib" id="355C0F10-46BD-456B-B8EB-2FA977332D25" name="lib">
+<preference-set id="">
+</preference-set>
+<file url="../../source/webapp/modules/Default/lib/build_menu.php" id="68E8D35A-992D-464C-820A-00CE56A80B45" name="build_menu.php">
+</file>
+<file url="../../source/webapp/modules/Default/lib/StaticActionConfigHandler.class.php" id="C4DDBA94-E3F1-4A98-8464-ED8CCB065737" name="StaticActionConfigHandler.class.php">
+</file>
+</folder>
+<folder url="../../source/webapp/modules/Default/views" id="6D97F8DA-6E39-4D2F-ADBA-05B9E0FFCC5A" name="views">
+<file url="../../source/webapp/modules/Default/views/Error404SuccessView.class.php" id="C496E306-1E84-4D8F-9C86-67EF4C64655E" name="Error404SuccessView.class.php">
+</file>
+<file url="../../source/webapp/modules/Default/views/UnavailableSuccessView.class.php" id="F75C4FE7-4A50-4311-827C-2F9770C64CF1" name="UnavailableSuccessView.class.php">
+</file>
+<file url="../../source/webapp/modules/Default/views/SecureSuccessView.class.php" id="C7C8F824-4948-40A0-A2D4-B89869CAE5B2" name="SecureSuccessView.class.php">
+</file>
+<file url="../../source/webapp/modules/Default/views/IndexSuccessView.class.php" id="CD4D6536-8AB8-41E4-8FE0-E780A567DA6D" name="IndexSuccessView.class.php">
+</file>
+<file url="../../source/webapp/modules/Default/views/ModuleDisabledSuccessView.class.php" id="5E5EF4B7-D94E-4611-A473-4D008B416CC0" name="ModuleDisabledSuccessView.class.php">
+</file>
+<file url="../../source/webapp/modules/Default/views/LoginInputView.class.php" id="510293F1-A815-49CF-A50A-5C9B86F04970" name="LoginInputView.class.php">
+</file>
+</folder>
+<folder url="../../source/webapp/modules/Default/templates" id="8F0EAF7B-E7DA-4BD2-AEB6-69921ECFCAA0" name="templates">
+<file url="../../source/webapp/modules/Default/templates/Error404Success.php" id="197F6B6A-3D98-4B99-805C-7DB52E5CF988" name="Error404Success.php">
+</file>
+<file url="../../source/webapp/modules/Default/templates/UnavailableSuccess.php" id="07B02138-7169-4B47-8A24-9D230879DA44" name="UnavailableSuccess.php">
+</file>
+<file url="../../source/webapp/modules/Default/templates/SecureSuccess.php" id="587FBA99-B182-474C-9AAF-E91919D374A6" name="SecureSuccess.php">
+</file>
+<file url="../../source/webapp/modules/Default/templates/IndexSuccess.php" id="2FC502F6-6434-4D48-9FBE-A9FF1D632193" name="IndexSuccess.php">
+</file>
+<file url="../../source/webapp/modules/Default/templates/ModuleDisabledSuccess.php" id="00EE0718-8412-43B8-8173-4867C1B93A10" name="ModuleDisabledSuccess.php">
+</file>
+<file url="../../source/webapp/modules/Default/templates/LoginInput.php" id="4FA95AD2-FEFD-494C-99CC-438950E814D9" name="LoginInput.php">
+</file>
+<folder url="../../source/webapp/modules/Default/templates/includes" id="9257C720-805F-4B65-A53F-161F3CB7FC17" name="includes">
+<file url="../../source/webapp/modules/Default/templates/includes/footer.php" id="7A9BCAAE-CFA9-479C-9007-E1DB5B653ADA" name="footer.php">
+</file>
+<file url="../../source/webapp/modules/Default/templates/includes/header.php" id="609B1C5D-0166-4204-8720-93EBE567B563" name="header.php">
+</file>
+</folder>
+</folder>
+<folder url="../../source/webapp/modules/Default/static" id="A5678201-A307-4164-A95A-2A66C34519A1" name="static">
+<file url="../../source/webapp/modules/Default/static/index.php" id="4ED11931-6E37-4471-B5A6-70AE9131968B" name="index.php">
+</file>
+<file url="../../source/webapp/modules/Default/static/error.php" id="8E7C8B9E-239F-47DA-8BFB-D80B61DA72CC" name="error.php">
+</file>
+<file url="../../source/webapp/modules/Default/static/error404.php" id="9932ACD1-A468-44B5-8048-8116FED23228" name="error404.php">
+</file>
+</folder>
+<folder url="../../source/webapp/modules/Default/validate" id="46C6F487-3020-4566-A078-25CDC3D3C541" name="validate">
+<file url="../../source/webapp/modules/Default/validate/Static.ini" id="620ED3D2-AA8F-4FEA-94FD-44C860133D31" name="Static.ini">
+</file>
+</folder>
+</folder>
+</folder>
+</folder>
+</folder>
+<folder url="../../samples" id="1E6B85A9-6591-49C1-B84B-4CBD99FC8806" name="samples">
+<preference-set id="">
+</preference-set>
+<file url="../../samples/validator.ini" id="C3456346-56F8-4ABA-825C-81CF9084CB51" name="validator.ini">
+</file>
+<file url="../../samples/config_handlers.ini" id="1F50BB19-38FB-4FB0-9F7E-77AAD93F64BF" name="config_handlers.ini">
+</file>
+</folder>
+<folder url="../../php_documentor" id="AB6AC518-E72B-440E-85D0-77603FAFF3F8" name="php_documentor">
+<folder url="../../php_documentor/smarty_plugins" id="4C87C8F6-F5B1-4735-A6BC-FAD2CE3E6573" name="smarty_plugins">
+<file url="../../php_documentor/smarty_plugins/function.append.php" id="BFC3F6A8-381E-4544-B0E0-C1CAC318920E" name="function.append.php">
+</file>
+<file url="../../php_documentor/smarty_plugins/function.build_argument_list.php" id="1C056976-4E34-463E-91B1-1A4C797D02D0" name="function.build_argument_list.php">
+</file>
+<file url="../../php_documentor/smarty_plugins/function.extract_attribute.php" id="DC5E9D19-67BF-43F3-9A32-B429CC8F8933" name="function.extract_attribute.php">
+</file>
+</folder>
+<folder url="../../php_documentor/template" id="A8DF2946-BCDF-412C-B41F-E6533AFB36E2" name="template">
+<file url="../../php_documentor/template/options.ini" id="8C061C95-B6AC-4993-9B5B-15D43DB1D613" name="options.ini">
+</file>
+<folder url="../../php_documentor/template/templates" id="4794094B-2666-45C0-B9BE-7846F8ACAD53" name="templates">
+<file url="../../php_documentor/template/templates/elementindex.tpl" id="CBD2EC1A-799A-4F02-B206-66B07E26DEB1" name="elementindex.tpl">
+</file>
+<file url="../../php_documentor/template/templates/_method_details.tpl" id="9EB37AFE-C554-47E6-BE58-55490678DF88" name="_method_details.tpl">
+</file>
+<file url="../../php_documentor/template/templates/_header.tpl" id="8D57E063-AACD-4FF0-9507-EB97EB70E4DF" name="_header.tpl">
+</file>
+<file url="../../php_documentor/template/templates/_get_constant_type.tpl" id="9E81EEDB-29D1-47DC-8BB6-79FD78A51BD0" name="_get_constant_type.tpl">
+</file>
+<file url="../../php_documentor/template/templates/errors.tpl" id="E107BFF5-6BA8-4832-9A43-CC44F5872374" name="errors.tpl">
+</file>
+<file url="../../php_documentor/template/templates/docblock.tpl" id="47233776-2C80-4E41-B829-F2D1F61BCA18" name="docblock.tpl">
+</file>
+<file url="../../php_documentor/template/templates/function.tpl" id="6122810D-5E9B-41EB-912E-E24B3C44D51D" name="function.tpl">
+</file>
+<file url="../../php_documentor/template/templates/fileleft.tpl" id="481330CE-C712-47F4-8A5E-5B29FC42399D" name="fileleft.tpl">
+</file>
+<file url="../../php_documentor/template/templates/_constant_details.tpl" id="61DCAC89-A75E-46CF-B1CF-36B5DD8FDFB8" name="_constant_details.tpl">
+</file>
+<file url="../../php_documentor/template/templates/include.tpl" id="770E394C-36CE-46EA-B9C4-09EF3A7A9B7E" name="include.tpl">
+</file>
+<file url="../../php_documentor/template/templates/define.tpl" id="581A9637-0B73-4758-A822-E8167B827D98" name="define.tpl">
+</file>
+<file url="../../php_documentor/template/templates/tags.tpl" id="ED98E786-8FCC-45B8-9E1A-98920AD26FB4" name="tags.tpl">
+</file>
+<file url="../../php_documentor/template/templates/_class_list.tpl" id="8D7A27F3-76DE-4229-AEE8-58740B6A501C" name="_class_list.tpl">
+</file>
+<file url="../../php_documentor/template/templates/_constructor_summary.tpl" id="717DE6C5-CF00-455C-927A-5ECFF4B6CC56" name="_constructor_summary.tpl">
+</file>
+<file url="../../php_documentor/template/templates/_sub_classes.tpl" id="277211AE-4394-43FA-A34F-706A03C1BB6D" name="_sub_classes.tpl">
+</file>
+<file url="../../php_documentor/template/templates/_inherited_constants.tpl" id="9059C754-9715-47A1-A1B6-A00BC3D225EA" name="_inherited_constants.tpl">
+</file>
+<file url="../../php_documentor/template/templates/_class_description.tpl" id="DBCF1950-977C-4C45-A71F-B0AE95425CF0" name="_class_description.tpl">
+</file>
+<file url="../../php_documentor/template/templates/_destructor_summary.tpl" id="7317E87E-B9AA-4680-9159-D5E5E10B30B3" name="_destructor_summary.tpl">
+</file>
+<file url="../../php_documentor/template/templates/_inheritence_tree.tpl" id="FEEC5CBE-8AC0-44AA-B829-EB35FF3E8BF6" name="_inheritence_tree.tpl">
+</file>
+<file url="../../php_documentor/template/templates/packages.tpl" id="F9C5FA0F-359D-411E-9426-A07BC3A7A18C" name="packages.tpl">
+</file>
+<file url="../../php_documentor/template/templates/classleft.tpl" id="6A4E8747-8ABE-4E49-A5D6-B07DFA051C3D" name="classleft.tpl">
+</file>
+<file url="../../php_documentor/template/templates/pkgelementindex.tpl" id="9EF4D95B-D4E6-4BCE-AD3A-FC4E5A23593C" name="pkgelementindex.tpl">
+</file>
+<file url="../../php_documentor/template/templates/var.tpl" id="51189BF8-FC4B-4BBF-9D90-FB1E2E100493" name="var.tpl">
+</file>
+<file url="../../php_documentor/template/templates/_constructor_details.tpl" id="D8D898CC-5561-427C-8048-748E7BBF375F" name="_constructor_details.tpl">
+</file>
+<file url="../../php_documentor/template/templates/_method_summary.tpl" id="7AC6E52A-9350-4B18-AD7C-AFC6D3189A61" name="_method_summary.tpl">
+</file>
+<file url="../../php_documentor/template/templates/_tags.tpl" id="52449464-1686-4B30-9298-A8B7158A326B" name="_tags.tpl">
+</file>
+<file url="../../php_documentor/template/templates/_inherited_methods.tpl" id="3DC3CBD8-9D7B-4D14-A0F3-CA70C71DCA91" name="_inherited_methods.tpl">
+</file>
+<file url="../../php_documentor/template/templates/_footer.tpl" id="D2830AFA-F415-4857-93D1-BAB661D23587" name="_footer.tpl">
+</file>
+<file url="../../php_documentor/template/templates/filetags.tpl" id="1B39D4C2-9278-473B-B0BF-2F936A74D7A8" name="filetags.tpl">
+</file>
+<file url="../../php_documentor/template/templates/_destructor_details.tpl" id="080868D8-C2A3-42BD-9A2E-65A8DC5458BE" name="_destructor_details.tpl">
+</file>
+<file url="../../php_documentor/template/templates/_constant_summary.tpl" id="FBBAEB0E-6F35-48E3-9F55-8EE39F9513EF" name="_constant_summary.tpl">
+</file>
+<file url="../../php_documentor/template/templates/class.tpl" id="80F6716E-2E79-4670-AD7E-04C1DBF0EC3B" name="class.tpl">
+</file>
+<file url="../../php_documentor/template/templates/index.tpl" id="229D676B-90DF-4EB1-8247-056035B250D1" name="index.tpl">
+</file>
+<file url="../../php_documentor/template/templates/classtrees.tpl" id="423AF0A9-BA13-4834-9273-0557E3848433" name="classtrees.tpl">
+</file>
+<file url="../../php_documentor/template/templates/_class_declaration.tpl" id="FC04218A-B35E-40DB-A21C-309A3D7BE3D3" name="_class_declaration.tpl">
+</file>
+<file url="../../php_documentor/template/templates/basicindex.tpl" id="C4BD2DF1-B659-4BA5-8F5B-2F37C6CC7650" name="basicindex.tpl">
+</file>
+<file url="../../php_documentor/template/templates/page.tpl" id="0E2F9F74-6900-425D-A4CA-8C6988141601" name="page.tpl">
+</file>
+<folder url="../../php_documentor/template/templates/media" id="291C4041-21D7-49C6-BFCA-2239B9F6E2B7" name="media">
+<file url="../../php_documentor/template/templates/media/common.css" id="0D1E6076-F07B-495C-A98A-4D6CCDF472F7" name="common.css">
+</file>
+<file url="../../php_documentor/template/templates/media/constants.css" id="6432E055-01EC-44AD-A27A-A19BAAF32494" name="constants.css">
+</file>
+<file url="../../php_documentor/template/templates/media/logo.gif" id="C3A5982E-0565-4757-B7F0-4854AFFDAFA5" name="logo.gif">
+</file>
+<file url="../../php_documentor/template/templates/media/methods.css" id="C7013A70-482A-437D-861A-96AFAB33EEE5" name="methods.css">
+</file>
+<file url="../../php_documentor/template/templates/media/class.css" id="4782357D-279F-40F2-BE42-418590BE28B7" name="class.css">
+</file>
+</folder>
+</folder>
+</folder>
+</folder>
+</project>
