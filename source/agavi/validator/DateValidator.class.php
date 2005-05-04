@@ -36,12 +36,34 @@ class DateValidator extends Validator
 	 * @return bool true, if this validator executes successfully, otherwise
 	 *              false.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
-	 * @since  3.0.0
+	 * @author Bob Zoller (bzoller@agavi.org)
+	 * @since  1.0
 	 */
 	public function execute (&$value, &$error)
 	{
+		if (empty($value) || (strtotime($value) == -1)) {
+			$error = $this->getParameter('error');
+			return false;
+		}
+		return true;
+	}
 
+	/**
+	 * Initialize this validator.
+	 *
+	 * @param Context The current application context.
+	 * @param array   An associative array of initialization parameters.
+	 *
+	 * @return bool true, if initialization completes successfully, otherwise
+	 *              false.
+	 *
+	 * @author Bob Zoller (bob@agavi.org)
+	 * @since  1.0
+	 */
+	public function initialize ($context, $parameters = null)
+	{
+		$this->setParameter('error', 'Date is not valid.');
+		parent::initialize($context, $parameters);
 	}
 
 }
