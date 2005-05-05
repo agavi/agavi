@@ -10,6 +10,10 @@
 // +---------------------------------------------------------------------------+
 
 /**
+ * ConsoleController allows you to centralize your entry point in your web
+ * application, but at the same time allow for any module and action combination
+ * to be requested.
+ *
  * @package    agavi
  * @subpackage controller
  *
@@ -18,28 +22,78 @@
  * @since     3.0.0
  * @version   $Id$
  */
-abstract class ConsoleController extends Controller
+class ConsoleController extends Controller
 {
-
-	// +-----------------------------------------------------------------------+
-	// | CONSTANTS                                                             |
-	// +-----------------------------------------------------------------------+
-
-	// +-----------------------------------------------------------------------+
-	// | PUBLIC VARIABLES                                                      |
-	// +-----------------------------------------------------------------------+
-
-	// +-----------------------------------------------------------------------+
-	// | PRIVATE VARIABLES                                                     |
-	// +-----------------------------------------------------------------------+
-
-	// +-----------------------------------------------------------------------+
-	// | CONSTRUCTOR                                                           |
-	// +-----------------------------------------------------------------------+
 
 	// +-----------------------------------------------------------------------+
 	// | METHODS                                                               |
 	// +-----------------------------------------------------------------------+
+
+	/**
+	 * Dispatch a request.
+	 *
+	 * This will determine which module and action to use by request parameters
+	 * specified by the user.
+	 *
+	 * @return void
+	 *
+	 * @author Agavi Foundation (info@agavi.org)
+	 * @since  3.0.0
+	 */
+	public function dispatch ($params=null)
+	{
+
+		try {
+
+			// set the console parameters
+			$this->setParametersByRef($params);
+
+			// initialize the controller
+			$this->initialize();
+
+			// get the application context
+			$context = $this->getContext();
+
+			// determine our module and action
+			$moduleName = (defined('AG_CONSOLE_MODULE') ? AG_CONSOLE_MODULE : MO_DEFAULT_MODULE);
+			$actionName = (defined('AG_CONSOLE_ACTION') ? AG_CONSOLE_ACTION : null);
+
+			if ($actionName == null) {
+
+				// no action has been specified
+				if ($moduleName == MO_DEFAULT_MODULE) {
+
+					$actionName = MO_DEFAULT_ACTION;
+
+				} else if ($this->actionExists($moduleName, 'Index')) {
+
+					// an Index action exists
+					$actionName = 'Index';
+
+				}
+			}
+
+			// set the module and action in the Request parameters
+			$this->getContext()->getRequest()->setParameter(MO_MODULE_ACCESSOR, $moduleName);
+			$this->getContext()->getRequest()->setParameter(MO_ACTION_ACCESSOR, $actionName);
+
+			// make the first request
+			$this->forward($moduleName, $actionName);
+
+		} catch (AgaviException $e) {
+
+			$e->printStackTrace();
+
+		} catch (Exception $e) {
+
+			// most likely an exception from a third-party library
+			$e = new AgaviException($e->getMessage());
+
+			$e->printStackTrace();
+
+		}
+
+	}
 
 }
 

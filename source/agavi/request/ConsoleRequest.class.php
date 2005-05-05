@@ -10,7 +10,8 @@
 // +---------------------------------------------------------------------------+
 
 /**
- *
+ * ConsoleRequest provides additional support for web-only client requests such as
+ * cookie and file manipulation.
  *
  * @package    agavi
  * @subpackage request
@@ -24,24 +25,10 @@ class ConsoleRequest extends Request
 {
 
 	// +-----------------------------------------------------------------------+
-	// | CONSTANTS                                                             |
-	// +-----------------------------------------------------------------------+
-
-	// +-----------------------------------------------------------------------+
-	// | PUBLIC VARIABLES                                                      |
-	// +-----------------------------------------------------------------------+
-
-	// +-----------------------------------------------------------------------+
-	// | PRIVATE VARIABLES                                                     |
-	// +-----------------------------------------------------------------------+
-
-	// +-----------------------------------------------------------------------+
-	// | CONSTRUCTOR                                                           |
-	// +-----------------------------------------------------------------------+
-
-	// +-----------------------------------------------------------------------+
 	// | METHODS                                                               |
 	// +-----------------------------------------------------------------------+
+
+	// -------------------------------------------------------------------------
 
 	/**
 	 * Initialize this Request.
@@ -61,6 +48,36 @@ class ConsoleRequest extends Request
 	public function initialize ($context, $parameters = null)
 	{
 
+		// load parameters
+		$this->loadParameters($context);
+
+	}
+
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Loads command line parameters into the parameter list.
+	 *
+	 * @param Context $context
+	 * @return void
+	 *
+	 * @author Agavi Foundation (info@agavi.org)
+	 * @since  3.0.0
+	 */
+	private function loadParameters ($context)
+	{
+		$shortopts = $context->getController()->getParameter('shortopts');
+		if (!is_array($longopts = $context->getController()->getParameter('longopts'))) {
+			$longopts = array();
+		}
+
+		if (($params = @getopt($shortopts, $longopts)) === false) {
+			throw new AgaviException('Invalid getopt options');
+		}
+
+		print_r($params);
+		$this->setParameters($params);
+
 	}
 
 	// -------------------------------------------------------------------------
@@ -75,6 +92,8 @@ class ConsoleRequest extends Request
 	 */
 	public function shutdown ()
 	{
+
+		// nothing to do here
 
 	}
 

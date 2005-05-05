@@ -20,7 +20,7 @@
  * @since     3.0.0
  * @version   $Id$
  */
-abstract class ParameterHolder
+abstract class ParameterHolder extends AgaviObject
 {
 
 	// +-----------------------------------------------------------------------+

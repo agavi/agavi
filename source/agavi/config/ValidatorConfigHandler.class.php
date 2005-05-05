@@ -100,7 +100,7 @@ class ValidatorConfigHandler extends IniConfigHandler
 		$this->loadAttributes($config, $methods, $names, $validators, $ini, $list);
 
 		// generate GET file/parameter data
-		$data[] = "if (\$_SERVER['REQUEST_METHOD'] == 'GET')";
+		$data[] = "if (!isset(\$_SERVER['REQUEST_METHOD']) || \$_SERVER['REQUEST_METHOD'] == 'GET')";
 		$data[] = "{";
 
 		$this->generateRegistration('GET', $data, $methods, $names, $validators);
