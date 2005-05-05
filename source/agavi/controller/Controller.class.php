@@ -877,6 +877,19 @@ abstract class Controller extends ParameterHolder
 
 	}
 
+	/**
+	 * Indicates whether or not we were called using the CLI version of PHP.
+	 *
+	 * @return bool true, if we're using cli, otherwise false.
+	 *
+	 * @author Bob Zoller (bob@agavi.org)
+	 * @since  1.0
+	 */
+	public function inCLI()
+	{
+		return php_sapi_name() == 'cli';
+	}
+
 }
 
 ?>
