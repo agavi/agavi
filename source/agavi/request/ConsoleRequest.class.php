@@ -75,7 +75,6 @@ class ConsoleRequest extends Request
 			throw new AgaviException('Invalid getopt options');
 		}
 
-		print_r($params);
 		$this->setParameters($params);
 
 	}
