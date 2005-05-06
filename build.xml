@@ -27,6 +27,7 @@
 			<batchtest>
 				<fileset dir="tests">
 					<include name="**/*Test*.php"/>
+					<exclude name="**/sandbox/**"/>
 				</fileset>
 			</batchtest>
 		</phpunit2>
