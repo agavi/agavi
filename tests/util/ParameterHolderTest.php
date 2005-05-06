@@ -19,13 +19,13 @@ class ParameterHolderTest extends PHPUnit2_Framework_TestCase
 		$this->_ph->setParameter('name1', 'value1');
 		self::assertTrue($this->_ph->getParameters() != array());
 		$this->_ph->clearParameters();
-		self::assertEquals($this->_ph->getParameters(), array());
+		self::assertEquals(array(), $this->_ph->getParameters());
 	}
 
 	public function testgetParameter()
 	{
 		$this->_ph->setParameter('name1', 'value1');
-		self::assertEquals($this->_ph->getParameter('name1'), 'value1');
+		self::assertEquals('value1', $this->_ph->getParameter('name1'));
 	}
 
 	public function testgetParameterNames()
@@ -34,14 +34,14 @@ class ParameterHolderTest extends PHPUnit2_Framework_TestCase
 			'name1'=>'value1',
 			'name2'=>'value2'
 		));
-		self::assertEquals($this->_ph->getParameterNames(), array('name1', 'name2'));
+		self::assertEquals(array('name1', 'name2'), $this->_ph->getParameterNames());
 	}
 
 	public function testgetParameters()
 	{
 		$params = array('name1'=>'value1','name2'=>'value2');
 		$this->_ph->setParameters($params);
-		self::assertEquals($this->_ph->getParameters(), $params);
+		self::assertEquals($params, $this->_ph->getParameters());
 	}
 
 	public function testhasParameter()
@@ -55,22 +55,22 @@ class ParameterHolderTest extends PHPUnit2_Framework_TestCase
 	{
 		self::assertNull($this->_ph->removeParameter('name1'));
 		$this->_ph->setParameter('name1', 'value1');
-		self::assertEquals($this->_ph->removeParameter('name1'), 'value1');
+		self::assertEquals('value1', $this->_ph->removeParameter('name1'));
 	}
 
 	public function testsetParameter()
 	{
 		$this->_ph->setParameter('name1', 'value1');
-		self::assertEquals($this->_ph->getParameter('name1'), 'value1');
+		self::assertEquals('value1', $this->_ph->getParameter('name1'));
 	}
 
 	public function testsetParameterByRef()
 	{
 		$val = 'value1';
 		$this->_ph->setParameterByRef('name1', $val);
-		self::assertEquals($this->_ph->getParameter('name1'), $val);
+		self::assertEquals($val, $this->_ph->getParameter('name1'));
 		$val = 'newvalue1';
-		self::assertEquals($this->_ph->getParameter('name1'), $val);
+		self::assertEquals($val, $this->_ph->getParameter('name1'));
 	}
 
 	public function testsetParameters()
@@ -80,7 +80,7 @@ class ParameterHolderTest extends PHPUnit2_Framework_TestCase
 			'name2'=>'value2'
 		);
 		$this->_ph->setParameters($params);
-		self::assertEquals($this->_ph->getParameters(), $params);
+		self::assertEquals($params, $this->_ph->getParameters());
 	}
 
 	public function testsetParametersByRef()
@@ -90,9 +90,9 @@ class ParameterHolderTest extends PHPUnit2_Framework_TestCase
 			'name2'=>'value2'
 		);
 		$this->_ph->setParametersByRef($params);
-		self::assertEquals($this->_ph->getParameters(), $params);
+		self::assertEquals($params, $this->_ph->getParameters());
 		$params['name1'] = 'newvalue1';
-		self::assertEquals($this->_ph->getParameters(), $params);
+		self::assertEquals($params, $this->_ph->getParameters());
 	}
 
 }

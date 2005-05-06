@@ -18,7 +18,7 @@ class AgaviObjectTest extends PHPUnit2_Framework_TestCase
 	public function testtoString()
 	{
 		$ao = new SampleAgaviObject();
-		self::assertEquals($ao->toString(), '_something: a value, _somethingelse: Array');
+		self::assertEquals('_something: a value, _somethingelse: Array', $ao->toString());
 	}
 }
 

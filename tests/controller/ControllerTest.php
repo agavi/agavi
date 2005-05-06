@@ -30,6 +30,7 @@ class ControllerTest extends PHPUnit2_Framework_TestCase
 
 	public function testforward()
 	{
+		throw new PHPUnit2_Framework_IncompleteTestError;
 	}
 
 	public function testgetAction()
@@ -39,10 +40,12 @@ class ControllerTest extends PHPUnit2_Framework_TestCase
 
 	public function testgetActionStack()
 	{
+		throw new PHPUnit2_Framework_IncompleteTestError;
 	}
 
 	public function testgetContext()
 	{
+		throw new PHPUnit2_Framework_IncompleteTestError;
 	}
 
 	public function testgetGlobalModel()
@@ -62,7 +65,7 @@ class ControllerTest extends PHPUnit2_Framework_TestCase
 			self::fail();
 		} catch (ControllerException $e) { }
 		$this->_c = SampleController::newInstance('SampleController');
-		self::assertSame(SampleController::getInstance(), $this->_c);
+		self::assertSame($this->_c, SampleController::getInstance());
 	}
 
 	public function testgetModel()
@@ -73,6 +76,7 @@ class ControllerTest extends PHPUnit2_Framework_TestCase
 
 	public function testgetRenderMode()
 	{
+		throw new PHPUnit2_Framework_IncompleteTestError;
 	}
 
 	public function testgetView()
@@ -83,14 +87,17 @@ class ControllerTest extends PHPUnit2_Framework_TestCase
 
 	public function testInitialize()
 	{
+		throw new PHPUnit2_Framework_IncompleteTestError;
 	}
 
 	public function testloadGlobalFilters()
 	{
+		throw new PHPUnit2_Framework_IncompleteTestError;
 	}
 
 	public function testloadModuleFilters()
 	{
+		throw new PHPUnit2_Framework_IncompleteTestError;
 	}
 
 	public function testmodelExists()
@@ -108,14 +115,17 @@ class ControllerTest extends PHPUnit2_Framework_TestCase
 
 	public function testnewInstance()
 	{
+		throw new PHPUnit2_Framework_IncompleteTestError;
 	}
 
 	public function testsetRenderMode()
 	{
+		throw new PHPUnit2_Framework_IncompleteTestError;
 	}
 
 	public function testshutdown()
 	{
+		throw new PHPUnit2_Framework_IncompleteTestError;
 	}
 
 	public function testviewExists()
@@ -127,7 +137,7 @@ class ControllerTest extends PHPUnit2_Framework_TestCase
 
 	public function inCLI()
 	{
-		self::assertEquals($this->_c->inCLI(), (php_sapi_name() == 'cli'));
+		self::assertEquals((php_sapi_name() == 'cli'), $this->_c->inCLI());
 	}
 
 }
