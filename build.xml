@@ -22,8 +22,8 @@
 
 	<!-- test target -->
 	<target name="test" description="run unit tests">
-		<phpunit2 haltonfailure="true" haltonerror="true">
-			<formatter type="plain" usefile="false"/>
+		<phpunit2>
+			<formatter type="xml" todir="reports"/>
 			<batchtest>
 				<fileset dir="tests">
 					<include name="**/*Test*.php"/>
@@ -31,6 +31,8 @@
 				</fileset>
 			</batchtest>
 		</phpunit2>
+		<phpunit2report infile="reports/testsuites.xml" format="frames" todir="reports/tests" styledir="etc"/>
+		<echo msg="PHPUnit2 test reports have been built in reports/tests."/>
 	</target>
 
 </project>
