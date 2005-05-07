@@ -30,33 +30,79 @@
 	</target>
 
 	<target name="module" description="create a new module">
+		<available file="${project.dir}/modules" type="dir" property="is_webapp" value="true"/>
+		<fail unless="is_webapp" message="Must be called in the root of a webapp directory."/>
 		<input propertyname="module" promptChar="?" message="Module Name"/>
-		<property name="prefix" value="modules/${module}/"/>
+		<property name="prefix" value="${project.dir}/modules/${module}/"/>
 		<mkdir dir="${prefix}"/>
 		<mkdir dir="${prefix}actions"/>
 		<mkdir dir="${prefix}config"/>
+		<copy file="code_templates/module.ini.tmpl" tofile="${prefix}config/module.ini">
+			<filterchain>
+				<replacetokens begintoken="%%" endtoken="%%">    
+					<token key="MODULE" value="${module}"/>
+				</replacetokens>
+			</filterchain>
+		</copy>
 		<mkdir dir="${prefix}models"/>
 		<mkdir dir="${prefix}templates"/>
 		<mkdir dir="${prefix}views"/>
 		<input propertyname="actions" promptChar="?" defaultValue="Index" message="Actions for ${module} (no whitespace, comma seperated)"/>
 		<foreach list="${actions}" param="action" target="buildaction"/>
+		<input propertyname="models" promptChar="?" message="Models for ${module} (no whitespace, comma seperated)"/>
+		<foreach list="${models}" param="model" target="buildmodel"/>
 	</target>
 
 	<target name="action" description="create a new action">
-		<php expression="basename('${project.basedir}')" returnProperty="module"/>
+		<available file="${project.dir}/config/module.ini" property="is_module" value="true"/>
+		<fail unless="is_module" message="Must be called in the root of a module directory."/>
+		<property name="module" value="${cwd_name}"/>
 		<input propertyname="action" promptChar="?" defaultValue="Index" message="Action Name"/>
-		<property name="prefix" value=""/>
+		<property name="prefix" value="${project.dir}/"/>
 		<phingcall target="buildaction"/>
 	</target>
 
 	<target name="buildaction">
-		<touch file="${prefix}actions/${action}Action.class.php"/>
+		<copy file="code_templates/Action.class.php.tmpl" tofile="${prefix}actions/${action}Action.class.php">
+			<filterchain>
+				<replacetokens begintoken="%%" endtoken="%%">    
+					<token key="MODULE" value="${module}"/>
+					<token key="ACTION" value="${action}"/>
+				</replacetokens>
+			</filterchain>
+		</copy>
 		<input propertyname="views" promptChar="?" defaultValue="Success" message="Views for ${action} (no whitespace, comma seperated)"/>
 		<foreach list="${views}" param="view" target="buildview"/>
 	</target>
 
 	<target name="buildview">
-		<touch file="${prefix}views/${action}${view}View.class.php"/>
+		<copy file="code_templates/View.class.php.tmpl" tofile="${prefix}views/${action}${view}View.class.php">
+			<filterchain>
+				<replacetokens begintoken="%%" endtoken="%%">    
+					<token key="MODULE" value="${module}"/>
+					<token key="ACTION" value="${action}"/>
+					<token key="VIEW" value="${view}"/>
+				</replacetokens>
+			</filterchain>
+		</copy>
+		<touch file="${prefix}templates/${action}${view}.php"/>
+	</target>
+
+	<target name="model" description="create a new model">
+		<input propertyname="model" promptChar="?" defaultValue="${module}" message="Model Name"/>
+		<property name="prefix" value="${project.dir}/"/>
+		<phingcall target="buildmodel"/>
+	</target>
+
+	<target name="buildmodel">
+		<copy file="code_templates/Model.class.php.tmpl" tofile="${prefix}models/${model}Model.class.php">
+			<filterchain>
+				<replacetokens begintoken="%%" endtoken="%%">    
+					<token key="MODULE" value="${module}"/>
+					<token key="MODEL" value="${model}"/>
+				</replacetokens>
+			</filterchain>
+		</copy>
 	</target>
 
 </project>

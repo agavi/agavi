@@ -2,7 +2,6 @@
 
 # ------------------------------------------------------------------------
 # The agavi build script for Unix based systems
-# $Id: pear-propel-gen,v 1.2 2004/10/17 13:24:09 hlellelid Exp $
 # ------------------------------------------------------------------------
 
 # Change this to reflect your environment if the default value doesn't work
@@ -18,4 +17,4 @@ if (test -z "$PHING_COMMAND") ; then
 	export PHING_COMMAND=php
 fi
 
-$PHING_COMMAND -f %%INSTALL_DIR%%/build.xml -Dproject.basedir="`pwd`" $*
+$PHING_COMMAND -f %%INSTALL_DIR%%/build.xml -Dproject.dir="`pwd`" -Dcwd_name="`basename \`pwd\``" $*
