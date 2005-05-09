@@ -17,4 +17,4 @@ if (test -z "$PHING_COMMAND") ; then
 	export PHING_COMMAND=php
 fi
 
-$PHING_COMMAND -f %%INSTALL_DIR%%/build.xml -Dproject.dir="`pwd`" -Dcwd_name="`basename \`pwd\``" $*
+$PHING_COMMAND -f @PEAR-DIR@/agavi/build.xml -Dproject.dir="`pwd`" -Dcwd_name="`basename \`pwd\``" $*
