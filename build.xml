@@ -17,22 +17,6 @@
   <!-- main target -->
 	<target name="main" description="main target">
 		<echo msg="available targets: " /> 
-		<echo msg="  test     - run unit tests" />
-	</target>
-
-	<!-- test target -->
-	<target name="test" description="run unit tests">
-		<phpunit2>
-			<formatter type="xml" todir="reports"/>
-			<batchtest>
-				<fileset dir="tests">
-					<include name="**/*Test*.php"/>
-					<exclude name="**/sandbox/**"/>
-				</fileset>
-			</batchtest>
-		</phpunit2>
-		<phpunit2report infile="reports/testsuites.xml" format="frames" todir="reports/tests" styledir="etc"/>
-		<echo msg="PHPUnit2 test reports have been built in reports/tests."/>
 	</target>
 
 </project>
