@@ -42,7 +42,7 @@ class EmailValidator extends Validator
 	 */
 	public function execute (&$value, &$error)
 	{
-		if (empty($value) || (!preg_match("/^([a-zA-Z0-9])+([a-zA-Z0-9\._-])*@([a-zA-Z0-9_-])+([a-zA-Z0-9\._-]+)+$/", $value))) {
+		if (empty($value) || (!preg_match("/^([a-zA-Z0-9])+\+?([a-zA-Z0-9\._-])*@([a-zA-Z0-9_-])+([a-zA-Z0-9\._-]+)+$/", $value))) {
 			$error = $this->getParameter('error');
 			return false;
 		}
