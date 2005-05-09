@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+
+<project name="agavi" basedir="." default="main">
+
+	<!-- set up some stuff -->
+  <property environment="env"/>
+  <property file="build.properties"/>
+  <property name="package"  value="${phing.project.name}" override="true" />
+  <property name="builddir" value="build" override="true" />
+  <property name="srcdir"   value="${project.basedir}" override="true" />
+
+  <!-- fileset for -dist files -->
+  <fileset dir="." id="distfiles">
+		<include name="**/*-dist"/>
+  </fileset>
+
+  <!-- main target -->
+	<target name="main" description="main target">
+		<echo msg="available targets: " /> 
+	</target>
+
+</project>

@@ -1,0 +1,25 @@
+<?php
+
+class %%MODULE%%_%%ACTION%%%%VIEW%%View extends PHPView
+{
+
+	/**
+	 * Execute any presentation logic and set template attributes.
+	 *
+	 * @return void
+	 *
+	 */
+	public function execute ()
+	{
+
+		// set our template
+		$this->setTemplate('%%ACTION%%%%VIEW%%.php');
+
+		// set the title
+		$this->setAttribute('title', '%%ACTION%% Action');
+
+	}
+
+}
+
+?>

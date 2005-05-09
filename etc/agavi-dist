@@ -1,0 +1,20 @@
+#!/bin/sh
+
+# ------------------------------------------------------------------------
+# The agavi build script for Unix based systems
+# ------------------------------------------------------------------------
+
+# Change this to reflect your environment if the default value doesn't work
+export PHING_COMMAND="phing"
+
+# -------------------------------------------------------------------------
+# Do not change anything below this line unless you know what you're doing.
+# -------------------------------------------------------------------------
+
+# (currently this is not reached)
+if (test -z "$PHING_COMMAND") ; then
+	echo "WARNING: PHP_COMMAND environment not set. (Assuming phing on PATH)"
+	export PHING_COMMAND=php
+fi
+
+$PHING_COMMAND -f %%INSTALL_DIR%%/build.xml -Dproject.dir="`pwd`" -Dcwd_name="`basename \`pwd\``" $*
