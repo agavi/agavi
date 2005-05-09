@@ -50,6 +50,13 @@ abstract class Request extends ParameterHolder
 	 */
 	const POST = 4;
 
+	/**
+	 * Process validation and execution for only CONSOLE requests.
+	 *
+	 * @since 3.0.0
+	 */
+	const CONSOLE = 8;
+
 	// +-----------------------------------------------------------------------+
 	// | PRIVATE VARIABLES                                                     |
 	// +-----------------------------------------------------------------------+
@@ -230,6 +237,7 @@ abstract class Request extends ParameterHolder
 	 * @return int One of the following constants:
 	 *             - Request::GET
 	 *             - Request::POST
+	 *             - Request::CONSOLE
 	 *
 	 * @author Agavi Foundation (info@agavi.org)
 	 * @since  1.0.0
@@ -563,6 +571,7 @@ abstract class Request extends ParameterHolder
 	 * @param int One of the following constants:
 	 *            - Request::GET
 	 *            - Request::POST
+	 *            - Request::CONSOLE
 	 *
 	 * @return void
 	 *
@@ -575,7 +584,7 @@ abstract class Request extends ParameterHolder
 	public function setMethod ($method)
 	{
 
-		if ($method == self::GET || $method == self::POST)
+		if ($method == self::GET || $method == self::POST || $method == self::CONSOLE)
 		{
 
 			$this->method = $method;

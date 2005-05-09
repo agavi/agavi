@@ -51,6 +51,9 @@ class ConsoleRequest extends Request
 		// load parameters
 		$this->loadParameters($context);
 
+		// set the default method
+		$this->setMethod(self::CONSOLE);
+
 	}
 
 	// -------------------------------------------------------------------------
