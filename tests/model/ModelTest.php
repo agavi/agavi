@@ -2,9 +2,9 @@
 require_once('core/AgaviObject.class.php');
 require_once('model/Model.class.php');
 
-class SampleModel extends Model {}
+class ModelSampleModel extends Model {}
 
-class Context extends AgaviObject {}
+class ModelContext extends Context {}
 
 class TestModel extends UnitTestCase
 {
@@ -12,18 +12,18 @@ class TestModel extends UnitTestCase
 
 	public function setUp()
 	{
-		$this->_m = new SampleModel();
+		$this->_m = new ModelSampleModel();
 	}
 
 	public function testinitialize()
 	{
-		$context = new Context();
+		$context = new ModelContext();
 		$this->assertTrue($this->_m->initialize($context));
 	}
 
 	public function testgetContext()
 	{
-		$context = new Context();
+		$context = new ModelContext();
 		$this->_m->initialize($context);
 		$this->assertReference($context, $this->_m->getContext());
 	}
