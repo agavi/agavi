@@ -72,7 +72,7 @@ abstract class ParameterHolder extends AgaviObject
 		if (isset($this->parameters[$name]))
 		{
 
-			$retval = $this->parameters[$name];
+			$retval =& $this->parameters[$name];
 
 		}
 
@@ -107,7 +107,7 @@ abstract class ParameterHolder extends AgaviObject
 	 * @author Agavi Foundation (info@agavi.org)
 	 * @since  3.0.0
 	 */
-	public function & getParameters ()
+	public function getParameters ()
 	{
 
 		return $this->parameters;
@@ -202,7 +202,7 @@ abstract class ParameterHolder extends AgaviObject
 	 * @author Agavi Foundation (info@agavi.org)
 	 * @since  2.0.0
 	 */
-	public function setParameterByRef ($name, $value)
+	public function setParameterByRef ($name, &$value)
 	{
 
 		$this->parameters[$name] =& $value;

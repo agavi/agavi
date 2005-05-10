@@ -67,9 +67,7 @@ class ParameterHolderTest extends UnitTestCase
 	{
 		$val = 'value1';
 		$this->_ph->setParameterByRef('name1', $val);
-		$this->assertEqual($val, $this->_ph->getParameter('name1'));
-		$val = 'newvalue1';
-		$this->assertEqual($val, $this->_ph->getParameter('name1'));
+		$this->assertReference($val, $this->_ph->getParameter('name1'));
 	}
 
 	public function testsetParameters()
@@ -84,14 +82,15 @@ class ParameterHolderTest extends UnitTestCase
 
 	public function testsetParametersByRef()
 	{
+		$val1 = 'value1';
+		$val2 = 'value2';
 		$params = array(
-			'name1'=>'value1',
-			'name2'=>'value2'
+			'name1'=>&$val1,
+			'name2'=>&$val2
 		);
 		$this->_ph->setParametersByRef($params);
-		$this->assertEqual($params, $this->_ph->getParameters());
-		$params['name1'] = 'newvalue1';
-		$this->assertEqual($params, $this->_ph->getParameters());
+		$this->assertReference($val1, $this->_ph->getParameter('name1'));
+		$this->assertReference($val2, $this->_ph->getParameter('name2'));
 	}
 
 }

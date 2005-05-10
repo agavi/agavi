@@ -84,9 +84,9 @@ class ControllerTest extends UnitTestCase
 
 	public function testgetRenderMode()
 	{
-		$this->assertNull($this->_c->getRenderMode());
-		$this->_c->setRenderMode(View::RENDER_CLIENT);
 		$this->assertEqual(View::RENDER_CLIENT, $this->_c->getRenderMode());
+		$this->_c->setRenderMode(View::RENDER_NONE);
+		$this->assertEqual(View::RENDER_NONE, $this->_c->getRenderMode());
 	}
 
 	public function testgetView()
