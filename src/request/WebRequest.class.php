@@ -391,7 +391,7 @@ class WebRequest extends Request
 		$this->setParametersByRef($_GET);
 
 		// parse PATH_INFO
-		switch (MO_PATH_INFO_ARRAY)
+		switch (AG_PATH_INFO_ARRAY)
 		{
 
 			case 'SERVER':
@@ -406,10 +406,10 @@ class WebRequest extends Request
 
 		}
 
-		if (isset($pathArray[MO_PATH_INFO_KEY]))
+		if (isset($pathArray[AG_PATH_INFO_KEY]))
 		{
 
-			$array = explode('/', trim($pathArray[MO_PATH_INFO_KEY], '/'));
+			$array = explode('/', trim($pathArray[AG_PATH_INFO_KEY], '/'));
 			$count = count($array);
 
 			for ($i = 0; $i < $count; $i++)

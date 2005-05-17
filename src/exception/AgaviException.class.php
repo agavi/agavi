@@ -275,7 +275,7 @@ class AgaviException extends Exception
 						  </tr>
 						  <tr>
 						      <td class="title">Agavi Version:</td>
-						      <td>' . MO_APP_VERSION . '</td>
+						      <td>' . AG_APP_VERSION . '</td>
 						  </tr>
 						  <tr>
 						      <td class="title">PHP Version:</td>

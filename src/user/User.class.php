@@ -78,7 +78,7 @@ class User extends ParameterHolder
 	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  1.0.0
 	 */
-	public function & getAttribute ($name, $ns = MO_USER_NAMESPACE)
+	public function & getAttribute ($name, $ns = AG_USER_NAMESPACE)
 	{
 
 		$retval = null;
@@ -108,7 +108,7 @@ class User extends ParameterHolder
 	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  1.0.0
 	 */
-	public function getAttributeNames ($ns = MO_USER_NAMESPACE)
+	public function getAttributeNames ($ns = AG_USER_NAMESPACE)
 	{
 
 		if (isset($this->attributes[$ns]))
@@ -134,7 +134,7 @@ class User extends ParameterHolder
 	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
-	public function & getAttributeNamespace ($ns = MO_USER_NAMESPACE)
+	public function & getAttributeNamespace ($ns = AG_USER_NAMESPACE)
 	{
 
 		$retval = null;
@@ -197,7 +197,7 @@ class User extends ParameterHolder
 	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  1.0.0
 	 */
-	public function hasAttribute ($name, $ns = MO_USER_NAMESPACE)
+	public function hasAttribute ($name, $ns = AG_USER_NAMESPACE)
 	{
 
 		if (isset($this->attributes[$ns]))
@@ -324,7 +324,7 @@ class User extends ParameterHolder
 	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  1.0.0
 	 */
-	public function & removeAttribute ($name, $ns = MO_USER_NAMESPACE)
+	public function & removeAttribute ($name, $ns = AG_USER_NAMESPACE)
 	{
 
 		$retval = null;
@@ -384,7 +384,7 @@ class User extends ParameterHolder
 	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  1.0.0
 	 */
-	public function setAttribute ($name, $value, $ns = MO_USER_NAMESPACE)
+	public function setAttribute ($name, $value, $ns = AG_USER_NAMESPACE)
 	{
 
 		if (!isset($this->attributes[$ns]))
@@ -415,7 +415,7 @@ class User extends ParameterHolder
 	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  1.0.0
 	 */
-	public function setAttributeByRef ($name, &$value, $ns = MO_USER_NAMESPACE)
+	public function setAttributeByRef ($name, &$value, $ns = AG_USER_NAMESPACE)
 	{
 
 		if (!isset($this->attributes[$ns]))
@@ -446,7 +446,7 @@ class User extends ParameterHolder
 	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
-	public function setAttributes ($attributes, $ns = MO_USER_NAMESPACE)
+	public function setAttributes ($attributes, $ns = AG_USER_NAMESPACE)
 	{
 
 		if (!isset($this->attributes[$ns]))
@@ -478,7 +478,7 @@ class User extends ParameterHolder
 	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
-	public function setAttributesByRef (&$attributes, $ns = MO_USER_NAMESPACE)
+	public function setAttributesByRef (&$attributes, $ns = AG_USER_NAMESPACE)
 	{
 
 		if (!isset($this->attributes[$ns]))

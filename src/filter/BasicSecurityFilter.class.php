@@ -77,7 +77,7 @@ class BasicSecurityFilter extends SecurityFilter
 			{
 
 				// the user doesn't have access, exit stage left
-				$controller->forward(MO_SECURE_MODULE, MO_SECURE_ACTION);
+				$controller->forward(AG_SECURE_MODULE, AG_SECURE_ACTION);
 
 			}
 
@@ -85,7 +85,7 @@ class BasicSecurityFilter extends SecurityFilter
 		{
 
 			// the user is not authenticated
-			$controller->forward(MO_LOGIN_MODULE, MO_LOGIN_ACTION);
+			$controller->forward(AG_LOGIN_MODULE, AG_LOGIN_ACTION);
 
 		}
 

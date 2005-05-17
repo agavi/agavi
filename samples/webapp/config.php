@@ -8,27 +8,27 @@
 // | This should stay on while you're developing your application, because     |
 // | many errors can stem from the fact that you're using an old cache file.   |
 // +---------------------------------------------------------------------------+
-define('MO_DEBUG', true);
+define('AG_DEBUG', true);
 
 // +---------------------------------------------------------------------------+
 // | The PHP error reporting level.                                            |
 // |                                                                           |
 // | See: http://www.php.net/error_reporting                                   |
 // +---------------------------------------------------------------------------+
-define('MO_ERROR_REPORTING', E_ALL | E_STRICT);
+define('AG_ERROR_REPORTING', E_ALL | E_STRICT);
 
 // +---------------------------------------------------------------------------+
 // | An absolute filesystem path to the agavi package. This directory         |
 // | contains all the Agavi packages.                                         |
 // +---------------------------------------------------------------------------+
-define('MO_APP_DIR', '<REPLACE ME>/agavi');
+define('AG_APP_DIR', '<REPLACE ME>/agavi');
 
 // +---------------------------------------------------------------------------+
 // | An absolute filesystem path to your web application directory. This       |
 // | directory is the root of your web application, which includes the core    |
 // | configuration files and related web application data.                     |
 // +---------------------------------------------------------------------------+
-define('MO_WEBAPP_DIR', '<REPLACE ME>/webapp');
+define('AG_WEBAPP_DIR', '<REPLACE ME>/webapp');
 
 // +---------------------------------------------------------------------------+
 // | An absolute filesystem path to the directory where cache files will be    |
@@ -38,6 +38,6 @@ define('MO_WEBAPP_DIR', '<REPLACE ME>/webapp');
 // |       sub-directory of the temp directory. The cache system will attempt  |
 // |       to clean up *ALL* data in this directory.                           |
 // +---------------------------------------------------------------------------+
-define('MO_CACHE_DIR', MO_WEBAPP_DIR . '/cache');
+define('AG_CACHE_DIR', AG_WEBAPP_DIR . '/cache');
 
 ?>

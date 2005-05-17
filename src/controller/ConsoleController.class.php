@@ -60,15 +60,15 @@ class ConsoleController extends Controller
 			$context = $this->getContext();
 
 			// determine our module and action
-			$moduleName = (defined('AG_CONSOLE_MODULE') ? AG_CONSOLE_MODULE : MO_DEFAULT_MODULE);
+			$moduleName = (defined('AG_CONSOLE_MODULE') ? AG_CONSOLE_MODULE : AG_DEFAULT_MODULE);
 			$actionName = (defined('AG_CONSOLE_ACTION') ? AG_CONSOLE_ACTION : null);
 
 			if ($actionName == null) {
 
 				// no action has been specified
-				if ($moduleName == MO_DEFAULT_MODULE) {
+				if ($moduleName == AG_DEFAULT_MODULE) {
 
-					$actionName = MO_DEFAULT_ACTION;
+					$actionName = AG_DEFAULT_ACTION;
 
 				} else if ($this->actionExists($moduleName, 'Index')) {
 
@@ -79,8 +79,8 @@ class ConsoleController extends Controller
 			}
 
 			// set the module and action in the Request parameters
-			$this->getContext()->getRequest()->setParameter(MO_MODULE_ACCESSOR, $moduleName);
-			$this->getContext()->getRequest()->setParameter(MO_ACTION_ACCESSOR, $actionName);
+			$this->getContext()->getRequest()->setParameter(AG_MODULE_ACCESSOR, $moduleName);
+			$this->getContext()->getRequest()->setParameter(AG_ACTION_ACCESSOR, $actionName);
 
 			// make the first request
 			$this->forward($moduleName, $actionName);

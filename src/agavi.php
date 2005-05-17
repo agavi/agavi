@@ -84,7 +84,7 @@ function __autoload ($class)
 try
 {
 
-	error_reporting(MO_ERROR_REPORTING);
+	error_reporting(AG_ERROR_REPORTING);
 
 	// ini settings
 	ini_set('arg_separator.output',      '&amp;');
@@ -93,32 +93,32 @@ try
 	ini_set('unserialize_callback_func', '__autoload');
 
 	// define a few filesystem paths
-	define('MO_CONFIG_DIR',   MO_WEBAPP_DIR . '/config');
-	define('MO_LIB_DIR',      MO_WEBAPP_DIR . '/lib');
-	define('MO_MODULE_DIR',   MO_WEBAPP_DIR . '/modules');
-	define('MO_TEMPLATE_DIR', MO_WEBAPP_DIR . '/templates');
+	define('AG_CONFIG_DIR',   AG_WEBAPP_DIR . '/config');
+	define('AG_LIB_DIR',      AG_WEBAPP_DIR . '/lib');
+	define('AG_MODULE_DIR',   AG_WEBAPP_DIR . '/modules');
+	define('AG_TEMPLATE_DIR', AG_WEBAPP_DIR . '/templates');
 
 	// required files
-	require_once(MO_APP_DIR . '/version.php');
+	require_once(AG_APP_DIR . '/version.php');
 
 	// required classes for this file and ConfigCache to run
-	require_once(MO_APP_DIR . '/core/AgaviObject.class.php');
-	require_once(MO_APP_DIR . '/util/ParameterHolder.class.php');
-	require_once(MO_APP_DIR . '/config/ConfigCache.class.php');
-	require_once(MO_APP_DIR . '/config/ConfigHandler.class.php');
-	require_once(MO_APP_DIR . '/config/ParameterParser.class.php');
-	require_once(MO_APP_DIR . '/config/IniConfigHandler.class.php');
-	require_once(MO_APP_DIR . '/config/AutoloadConfigHandler.class.php');
-	require_once(MO_APP_DIR . '/config/RootConfigHandler.class.php');
-	require_once(MO_APP_DIR . '/exception/AgaviException.class.php');
-	require_once(MO_APP_DIR . '/exception/AutoloadException.class.php');
-	require_once(MO_APP_DIR . '/exception/CacheException.class.php');
-	require_once(MO_APP_DIR . '/exception/ConfigurationException.class.php');
-	require_once(MO_APP_DIR . '/exception/ParseException.class.php');
-	require_once(MO_APP_DIR . '/util/Toolkit.class.php');
+	require_once(AG_APP_DIR . '/core/AgaviObject.class.php');
+	require_once(AG_APP_DIR . '/util/ParameterHolder.class.php');
+	require_once(AG_APP_DIR . '/config/ConfigCache.class.php');
+	require_once(AG_APP_DIR . '/config/ConfigHandler.class.php');
+	require_once(AG_APP_DIR . '/config/ParameterParser.class.php');
+	require_once(AG_APP_DIR . '/config/IniConfigHandler.class.php');
+	require_once(AG_APP_DIR . '/config/AutoloadConfigHandler.class.php');
+	require_once(AG_APP_DIR . '/config/RootConfigHandler.class.php');
+	require_once(AG_APP_DIR . '/exception/AgaviException.class.php');
+	require_once(AG_APP_DIR . '/exception/AutoloadException.class.php');
+	require_once(AG_APP_DIR . '/exception/CacheException.class.php');
+	require_once(AG_APP_DIR . '/exception/ConfigurationException.class.php');
+	require_once(AG_APP_DIR . '/exception/ParseException.class.php');
+	require_once(AG_APP_DIR . '/util/Toolkit.class.php');
 
 	// clear our cache if the conditions are right
-	if (MO_DEBUG)
+	if (AG_DEBUG)
 	{
 
 		ConfigCache::clear();

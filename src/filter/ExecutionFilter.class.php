@@ -95,7 +95,7 @@ class ExecutionFilter extends Filter
 			$validated = true;
 
 			// get the current action validation configuration
-			$validationConfig = MO_MODULE_DIR . '/' . $moduleName .
+			$validationConfig = AG_MODULE_DIR . '/' . $moduleName .
 						        '/validate/' . $actionName . '.ini';
 
 			if (is_readable($validationConfig))
@@ -156,7 +156,7 @@ class ExecutionFilter extends Filter
 			{
 
 				// the requested view doesn't exist
-				$file = MO_MODULE_DIR . '/' . $moduleName . '/views/' .
+				$file = AG_MODULE_DIR . '/' . $moduleName . '/views/' .
 						$viewName . 'View.class.php';
 
 				$error = 'Module "%s" does not contain the view "%sView" or ' .

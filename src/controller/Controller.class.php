@@ -59,7 +59,7 @@ abstract class Controller extends ParameterHolder
 	public function actionExists ($moduleName, $actionName)
 	{
 
-		$file = MO_MODULE_DIR . '/' . $moduleName . '/actions/' . $actionName .
+		$file = AG_MODULE_DIR . '/' . $moduleName . '/actions/' . $actionName .
 				'Action.class.php';
 
 		return is_readable($file);
@@ -109,20 +109,20 @@ abstract class Controller extends ParameterHolder
 
 		}
 
-		if (!MO_AVAILABLE)
+		if (!AG_AVAILABLE)
 		{
 
 			// application is unavailable
-			$moduleName = MO_UNAVAILABLE_MODULE;
-			$actionName = MO_UNAVAILABLE_ACTION;
+			$moduleName = AG_UNAVAILABLE_MODULE;
+			$actionName = AG_UNAVAILABLE_ACTION;
 
 			if (!$this->actionExists($moduleName, $actionName))
 			{
 
 				// cannot find unavailable module/action
 				$error = 'Invalid configuration settings: ' .
-						 'MO_UNAVAILABLE_MODULE "%s", ' .
-						 'MO_UNAVAILABLE_ACTION "%s"';
+						 'AG_UNAVAILABLE_MODULE "%s", ' .
+						 'AG_UNAVAILABLE_ACTION "%s"';
 
 				$error = sprintf($error, $moduleName, $actionName);
 
@@ -141,16 +141,16 @@ abstract class Controller extends ParameterHolder
 			$this->request->setAttribute('requested_module', $moduleName);
 
 			// switch to error 404 action
-			$moduleName = MO_ERROR_404_MODULE;
-			$actionName = MO_ERROR_404_ACTION;
+			$moduleName = AG_ERROR_404_MODULE;
+			$actionName = AG_ERROR_404_ACTION;
 
 			if (!$this->actionExists($moduleName, $actionName))
 			{
 
 				// cannot find unavailable module/action
 				$error = 'Invalid configuration settings: ' .
-						 'MO_ERROR_404_MODULE "%s", ' .
-						 'MO_ERROR_404_ACTION "%s"';
+						 'AG_ERROR_404_MODULE "%s", ' .
+						 'AG_ERROR_404_ACTION "%s"';
 
 				$error = sprintf($error, $moduleName, $actionName);
 
@@ -176,7 +176,7 @@ abstract class Controller extends ParameterHolder
 			// module is enabled
 
 			// check for a module config.php
-			$moduleConfig = MO_MODULE_DIR . '/' . $moduleName . '/config.php';
+			$moduleConfig = AG_MODULE_DIR . '/' . $moduleName . '/config.php';
 
 			if (is_readable($moduleConfig))
 			{
@@ -192,14 +192,14 @@ abstract class Controller extends ParameterHolder
 				// create a new filter chain
 				$filterChain = new FilterChain();
 
-				if (MO_AVAILABLE)
+				if (AG_AVAILABLE)
 				{
 
 				    // the application is available so we'll register
 				    // global and module filters, otherwise skip them
 
 				    // does this action require security?
-				    if (MO_USE_SECURITY && $actionInstance->isSecure())
+				    if (AG_USE_SECURITY && $actionInstance->isSecure())
 				    {
 
 						if (!($this->user instanceof SecurityUser))
@@ -252,16 +252,16 @@ abstract class Controller extends ParameterHolder
 		{
 
 			// module is disabled
-			$moduleName = MO_MODULE_DISABLED_MODULE;
-			$actionName = MO_MODULE_DISABLED_ACTION;
+			$moduleName = AG_MODULE_DISABLED_MODULE;
+			$actionName = AG_MODULE_DISABLED_ACTION;
 
 			if (!$this->actionExists($moduleName, $actionName))
 			{
 
 				// cannot find mod disabled module/action
 				$error = 'Invalid configuration settings: ' .
-						 'MO_MODULE_DISABLED_MODULE "%s", ' .
-						 'MO_MODULE_DISABLED_ACTION "%s"';
+						 'AG_MODULE_DISABLED_MODULE "%s", ' .
+						 'AG_MODULE_DISABLED_ACTION "%s"';
 
 				$error = sprintf($error, $moduleName, $actionName);
 
@@ -292,7 +292,7 @@ abstract class Controller extends ParameterHolder
 	public function getAction ($moduleName, $actionName)
 	{
 
-		$file = MO_MODULE_DIR . '/' . $moduleName . '/actions/' . $actionName .
+		$file = AG_MODULE_DIR . '/' . $moduleName . '/actions/' . $actionName .
 				'Action.class.php';
 
 		require_once($file);
@@ -373,12 +373,12 @@ abstract class Controller extends ParameterHolder
 	public function getGlobalModel ($modelName)
 	{
 
-		$file = MO_LIB_DIR . '/models/' . $modelName . 'Model.class.php';
+		$file = AG_LIB_DIR . '/models/' . $modelName . 'Model.class.php';
 
 			if(file_exists($file)) {
 				require_once($file);
 			} else {
-				$pattern = MO_LIB_DIR . '/' . '*' . '/models/' . $modelName . 'Model.class.php';
+				$pattern = AG_LIB_DIR . '/' . '*' . '/models/' . $modelName . 'Model.class.php';
 				$files = glob($pattern);
 
 				// only include the first file found
@@ -442,7 +442,7 @@ abstract class Controller extends ParameterHolder
 	public function getModel ($moduleName, $modelName)
 	{
 
-		$file = MO_MODULE_DIR . '/' . $moduleName . '/models/' . $modelName .
+		$file = AG_MODULE_DIR . '/' . $moduleName . '/models/' . $modelName .
 				'Model.class.php';
 
 		require_once($file);
@@ -503,7 +503,7 @@ abstract class Controller extends ParameterHolder
 	public function getView ($moduleName, $viewName)
 	{
 
-		$file = MO_MODULE_DIR . '/' . $moduleName . '/views/' . $viewName .
+		$file = AG_MODULE_DIR . '/' . $moduleName . '/views/' . $viewName .
 				'View.class.php';
 
 		require_once($file);
@@ -546,7 +546,7 @@ abstract class Controller extends ParameterHolder
 	protected function initialize ()
 	{
 
-		if (MO_USE_DATABASE)
+		if (AG_USE_DATABASE)
 		{
 
 			// setup our database connections
@@ -572,10 +572,10 @@ abstract class Controller extends ParameterHolder
 		// TODO: logging setup
 
 		// set max forwards
-		if (defined('MO_MAX_FORWARDS'))
+		if (defined('AG_MAX_FORWARDS'))
 		{
 
-			$this->maxForwards = MO_MAX_FORWARDS;
+			$this->maxForwards = AG_MAX_FORWARDS;
 
 		}
 
@@ -599,7 +599,7 @@ abstract class Controller extends ParameterHolder
 		static $list = array();
 
 		// grab our global filter ini and preset the module name
-		$config     = MO_CONFIG_DIR . '/filters.ini';
+		$config     = AG_CONFIG_DIR . '/filters.ini';
 		$moduleName = 'global';
 
 		if (!isset($list[$moduleName]) && is_readable($config))
@@ -645,7 +645,7 @@ abstract class Controller extends ParameterHolder
 		{
 
 			// we haven't loaded a filter list for this module yet
-			$config = MO_MODULE_DIR . '/' . $moduleName . '/config/filters.ini';
+			$config = AG_MODULE_DIR . '/' . $moduleName . '/config/filters.ini';
 
 			if (is_readable($config))
 			{
@@ -689,7 +689,7 @@ abstract class Controller extends ParameterHolder
 	public function modelExists ($moduleName, $modelName)
 	{
 
-		$file = MO_MODULE_DIR . '/' . $moduleName . '/models/' . $modelName .
+		$file = AG_MODULE_DIR . '/' . $moduleName . '/models/' . $modelName .
 				'Model.class.php';
 
 		return is_readable($file);
@@ -711,7 +711,7 @@ abstract class Controller extends ParameterHolder
 	public function moduleExists ($moduleName)
 	{
 
-		$file = MO_MODULE_DIR . '/' . $moduleName . '/config/module.ini';
+		$file = AG_MODULE_DIR . '/' . $moduleName . '/config/module.ini';
 
 		return is_readable($file);
 
@@ -845,7 +845,7 @@ abstract class Controller extends ParameterHolder
 		$this->storage->shutdown();
 		$this->request->shutdown();
 
-		if (MO_USE_DATABASE)
+		if (AG_USE_DATABASE)
 		{
 
 			$this->databaseManager->shutdown();
@@ -870,7 +870,7 @@ abstract class Controller extends ParameterHolder
 	public function viewExists ($moduleName, $viewName)
 	{
 
-		$file = MO_MODULE_DIR . '/' . $moduleName . '/views/' . $viewName .
+		$file = AG_MODULE_DIR . '/' . $moduleName . '/views/' . $viewName .
 				'View.class.php';
 
 		return is_readable($file);

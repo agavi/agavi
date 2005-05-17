@@ -115,7 +115,7 @@ class Context extends AgaviObject
 	 * This is a shortcut to manually getting a connection from an existing
 	 * database implementation instance.
 	 *
-	 * If the MO_USE_DATABASE setting is off, this will return null.
+	 * If the AG_USE_DATABASE setting is off, this will return null.
 	 *
 	 * @param name A database name.
 	 *
@@ -175,7 +175,7 @@ class Context extends AgaviObject
 		// get the last action stack entry
 		$actionEntry = $this->actionStack->getLastEntry();
 
-		return MO_MODULE_DIR . '/' . $actionEntry->getModuleName();
+		return AG_MODULE_DIR . '/' . $actionEntry->getModuleName();
 
 	}
 

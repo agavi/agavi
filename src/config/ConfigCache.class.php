@@ -140,7 +140,7 @@ class ConfigCache extends AgaviObject
 	 * recompile the cache file associated with it.
 	 *
 	 * If the configuration file path is relative, the path itself is relative
-	 * to the Agavi MO_WEBAPP_DIR application setting.
+	 * to the Agavi AG_WEBAPP_DIR application setting.
 	 *
 	 * @param string A filesystem path to a configuration file.
 	 *
@@ -162,7 +162,7 @@ class ConfigCache extends AgaviObject
 		if (!Toolkit::isPathAbsolute($filename))
 		{
 
-			$filename = MO_WEBAPP_DIR . '/' . $filename;
+			$filename = AG_WEBAPP_DIR . '/' . $filename;
 
 		}
 
@@ -205,7 +205,7 @@ class ConfigCache extends AgaviObject
 	public static function clear ()
 	{
 
-		self::clearCache(MO_CACHE_DIR);
+		self::clearCache(AG_CACHE_DIR);
 
 	}
 
@@ -293,7 +293,7 @@ class ConfigCache extends AgaviObject
 		$config  = str_replace(array('\\', '/'), '_', $config);
 		$config .= '.php';
 
-		return MO_CACHE_DIR . '/' . $config;
+		return AG_CACHE_DIR . '/' . $config;
 
 	}
 
@@ -303,7 +303,7 @@ class ConfigCache extends AgaviObject
 	 * Import a configuration file.
 	 *
 	 * If the configuration file path is relative, the path itself is relative
-	 * to the Agavi MO_WEBAPP_DIR application setting.
+	 * to the Agavi AG_WEBAPP_DIR application setting.
 	 *
 	 * @param string A filesystem path to a configuration file.
 	 * @param bool   Only allow this configuration file to be included once per
@@ -362,14 +362,14 @@ class ConfigCache extends AgaviObject
 		// module level configuration handlers
 
 		// make sure our modules directory exists
-		if (is_readable(MO_MODULE_DIR))
+		if (is_readable(AG_MODULE_DIR))
 		{
 
 			// ignore names
 			$ignore = array('.', '..', 'CVS', '.svn');
 
 			// create a file pointer to the module dir
-			$fp = opendir(MO_MODULE_DIR);
+			$fp = opendir(AG_MODULE_DIR);
 
 			// loop through the directory and grab the modules
 			while (($directory = readdir($fp)) !== false)
@@ -378,7 +378,7 @@ class ConfigCache extends AgaviObject
 				if (!in_array($directory, $ignore))
 				{
 
-				    $config = MO_MODULE_DIR . '/' . $directory .
+				    $config = AG_MODULE_DIR . '/' . $directory .
 						      '/config/config_handlers.ini';
 
 				    if (is_readable($config))
@@ -412,7 +412,7 @@ class ConfigCache extends AgaviObject
 
 			// module directory doesn't exist or isn't readable
 			$error = 'Module directory "%s" does not exist or is not readable';
-			$error = sprintf($error, MO_MODULE_DIR);
+			$error = sprintf($error, AG_MODULE_DIR);
 
 			throw new ConfigurationException($error);
 

@@ -168,11 +168,11 @@ abstract class ConfigHandler extends ParameterHolder
 	{
 
 		static
-			$keys = array('%MO_APP_DIR%', '%MO_LIB_DIR%', '%MO_MODULE_DIR%',
-						  '%MO_WEBAPP_DIR%'),
+			$keys = array('%AG_APP_DIR%', '%AG_LIB_DIR%', '%AG_MODULE_DIR%',
+						  '%AG_WEBAPP_DIR%'),
 
-			$reps = array(MO_APP_DIR, MO_LIB_DIR, MO_MODULE_DIR,
-						  MO_WEBAPP_DIR);
+			$reps = array(AG_APP_DIR, AG_LIB_DIR, AG_MODULE_DIR,
+						  AG_WEBAPP_DIR);
 
 		$value = str_replace($keys, $reps, $value);
 
@@ -199,7 +199,7 @@ abstract class ConfigHandler extends ParameterHolder
 		{
 
 			// not an absolute path so we'll prepend to it
-			$path = MO_WEBAPP_DIR . '/' . $path;
+			$path = AG_WEBAPP_DIR . '/' . $path;
 
 		}
 

@@ -10,8 +10,8 @@ require_once('exception/RenderException.class.php');
 require_once('view/View.class.php');
 
 // setup some defines
-define('MO_MODULE_DIR', dirname(__file__).'/sandbox/modules/');
-define('MO_LIB_DIR', dirname(__file__).'/sandbox/lib');
+define('AG_MODULE_DIR', dirname(__file__).'/sandbox/modules/');
+define('AG_LIB_DIR', dirname(__file__).'/sandbox/lib');
 
 // generate our Mocks
 

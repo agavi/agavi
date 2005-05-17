@@ -13,12 +13,12 @@
 
 // menu links
 $links = array();
-$links['default_action']         = array(MO_DEFAULT_MODULE,         MO_DEFAULT_ACTION);
-$links['error_404_action']       = array(MO_ERROR_404_MODULE,       MO_ERROR_404_ACTION);
-$links['login_action']           = array(MO_LOGIN_MODULE,           MO_LOGIN_ACTION);
-$links['module_disabled_action'] = array(MO_MODULE_DISABLED_MODULE, MO_MODULE_DISABLED_ACTION);
-$links['secure_action']          = array(MO_SECURE_MODULE,          MO_SECURE_ACTION);
-$links['unavailable_action']     = array(MO_UNAVAILABLE_MODULE,     MO_UNAVAILABLE_ACTION);
+$links['default_action']         = array(AG_DEFAULT_MODULE,         AG_DEFAULT_ACTION);
+$links['error_404_action']       = array(AG_ERROR_404_MODULE,       AG_ERROR_404_ACTION);
+$links['login_action']           = array(AG_LOGIN_MODULE,           AG_LOGIN_ACTION);
+$links['module_disabled_action'] = array(AG_MODULE_DISABLED_MODULE, AG_MODULE_DISABLED_ACTION);
+$links['secure_action']          = array(AG_SECURE_MODULE,          AG_SECURE_ACTION);
+$links['unavailable_action']     = array(AG_UNAVAILABLE_MODULE,     AG_UNAVAILABLE_ACTION);
 
 // get the controller
 $controller = $this->getContext()->getController();
@@ -27,8 +27,8 @@ $controller = $this->getContext()->getController();
 foreach ($links as $key => &$parameters)
 {
 
-	$parameters = array(MO_MODULE_ACCESSOR => $parameters[0],
-						MO_ACTION_ACCESSOR => $parameters[1]);
+	$parameters = array(AG_MODULE_ACCESSOR => $parameters[0],
+						AG_ACTION_ACCESSOR => $parameters[1]);
 
 	$links[$key] = $controller->genURL(null, $parameters);
 

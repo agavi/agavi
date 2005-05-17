@@ -54,16 +54,16 @@ class FrontWebController extends WebController
 
 			// determine our module and action
 			$moduleName = $context->getRequest()
-						          ->getParameter(MO_MODULE_ACCESSOR);
+						          ->getParameter(AG_MODULE_ACCESSOR);
 
 			$actionName = $context->getRequest()
-						          ->getParameter(MO_ACTION_ACCESSOR);
+						          ->getParameter(AG_ACTION_ACCESSOR);
 
 			if ($moduleName == null)
 			{
 
 				// no module has been specified
-				$moduleName = MO_DEFAULT_MODULE;
+				$moduleName = AG_DEFAULT_MODULE;
 
 			}
 
@@ -81,7 +81,7 @@ class FrontWebController extends WebController
 				{
 
 				    // use the default action
-				    $actionName = MO_DEFAULT_ACTION;
+				    $actionName = AG_DEFAULT_ACTION;
 
 				}
 

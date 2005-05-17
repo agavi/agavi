@@ -101,7 +101,7 @@ class FactoryConfigHandler extends IniConfigHandler
 					case 'security_filter':
 	
 						// append creation/initialization in one swipe
-						$tmp = "\n\tif (MO_USE_SECURITY)\n\t{\n" .
+						$tmp = "\n\tif (AG_USE_SECURITY)\n\t{\n" .
 						       "\t\t\$this->securityFilter = " .
 						       "SecurityFilter::newInstance('%s');\n" .
 						       "\t\t\$this->securityFilter->initialize(" .

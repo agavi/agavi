@@ -497,7 +497,7 @@ abstract class View extends AgaviObject
 		// default template directory
 		$module = $context->getModuleName();
 
-		$this->decoratorDirectory = MO_MODULE_DIR . '/' . $module .'/templates';
+		$this->decoratorDirectory = AG_MODULE_DIR . '/' . $module .'/templates';
 		$this->directory          = $this->decoratorDirectory;
 
 		return true;

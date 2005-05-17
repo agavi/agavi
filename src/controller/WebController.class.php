@@ -56,7 +56,7 @@ abstract class WebController extends Controller
 
 		}
 
-		if (MO_URL_FORMAT == 'PATH')
+		if (AG_URL_FORMAT == 'PATH')
 		{
 
 			// use PATH format
@@ -128,7 +128,7 @@ abstract class WebController extends Controller
 		// set our content type
 		$this->contentType = $this->getContext()
 						          ->getRequest()
-						          ->getParameter('ctype', MO_CONTENT_TYPE);
+						          ->getParameter('ctype', AG_CONTENT_TYPE);
 
 	}
 

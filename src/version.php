@@ -20,25 +20,25 @@
  * @version   $Id$
  */
 
-define('MO_APP_NAME',          'Agavi');
+define('AG_APP_NAME',          'Agavi');
 
-define('MO_APP_MAJOR_VERSION', '3');
+define('AG_APP_MAJOR_VERSION', '3');
 
-define('MO_APP_MINOR_VERSION', '0');
+define('AG_APP_MINOR_VERSION', '0');
 
-define('MO_APP_MICRO_VERSION', '0');
+define('AG_APP_MICRO_VERSION', '0');
 
-define('MO_APP_BRANCH',        'dev-3.0.0');
+define('AG_APP_BRANCH',        'dev-3.0.0');
 
-define('MO_APP_STATUS',        'DEV');
+define('AG_APP_STATUS',        'DEV');
 
-define('MO_APP_VERSION',       MO_APP_MAJOR_VERSION . '.' .
-						       MO_APP_MINOR_VERSION . '.' .
-						       MO_APP_MICRO_VERSION . '-' . MO_APP_STATUS);
+define('AG_APP_VERSION',       AG_APP_MAJOR_VERSION . '.' .
+						       AG_APP_MINOR_VERSION . '.' .
+						       AG_APP_MICRO_VERSION . '-' . AG_APP_STATUS);
 
-define('MO_APP_URL',           'http://www.agavi.org');
+define('AG_APP_URL',           'http://www.agavi.org');
 
-define('MO_APP_INFO',          MO_APP_NAME . ' ' . MO_APP_VERSION .
-						       ' (' . MO_APP_URL . ')');
+define('AG_APP_INFO',          AG_APP_NAME . ' ' . AG_APP_VERSION .
+						       ' (' . AG_APP_URL . ')');
 
 ?>

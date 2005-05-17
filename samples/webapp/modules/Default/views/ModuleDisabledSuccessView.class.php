@@ -34,7 +34,7 @@ class ModuleDisabledSuccessView extends PHPView
 		$this->setAttribute('title', 'Module Disabled');
 
 		// build our menu
-		require_once(MO_MODULE_DIR . '/Default/lib/build_menu.php');
+		require_once(AG_MODULE_DIR . '/Default/lib/build_menu.php');
 
 	}
 

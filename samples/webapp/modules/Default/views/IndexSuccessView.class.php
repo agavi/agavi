@@ -34,7 +34,7 @@ class IndexSuccessView extends PHPView
 		$this->setAttribute('title', 'Default Action');
 
 		// build our menu
-		require_once(MO_MODULE_DIR . '/Default/lib/build_menu.php');
+		require_once(AG_MODULE_DIR . '/Default/lib/build_menu.php');
 
 	}
 
