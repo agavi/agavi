@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003, 2004 Agavi Foundation.                                |
+// | Copyright (c) 2003-2005  Sean Kerr.                                       |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -15,8 +15,8 @@
  * @package    agavi
  * @subpackage storage
  *
- * @author    Agavi Foundation (info@agavi.org)
- * @copyright (c) Agavi Foundation, {@link http://www.agavi.org}
+ * @author    Sean Kerr (skerr@mojavi.org)
+ * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
  * @since     3.0.0
  * @version   $Id$
  */
@@ -39,7 +39,7 @@ abstract class Storage extends ParameterHolder
 	 *
 	 * @return Context A Context instance.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function getContext ()
@@ -63,7 +63,7 @@ abstract class Storage extends ParameterHolder
 	 * @throws <b>InitializationException</b> If an error occurs while
 	 *                                        initializing this Storage.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function initialize ($context, $parameters = null)
@@ -92,7 +92,7 @@ abstract class Storage extends ParameterHolder
 	 * @throws <b>FactoryException</b> If a storage implementation instance
 	 *                                 cannot be created.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public static function newInstance ($class)
@@ -131,7 +131,7 @@ abstract class Storage extends ParameterHolder
 	 * @throws <b>StorageException</b> If an error occurs while reading data from
 	 *                                 this storage.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	abstract function & read ($key);
@@ -151,7 +151,7 @@ abstract class Storage extends ParameterHolder
 	 * @throws <b>StorageException</b> If an error occurs while removing data from
 	 *                                 this storage.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	abstract function & remove ($key);
@@ -166,7 +166,7 @@ abstract class Storage extends ParameterHolder
 	 * @throws <b>StorageException</b> If an error occurs while shutting down
 	 *                                 this storage.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	abstract function shutdown ();
@@ -187,7 +187,7 @@ abstract class Storage extends ParameterHolder
 	 * @throws <b>StorageException</b> If an error occurs while writing to this
 	 *                                 storage.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	abstract function write ($key, &$data);

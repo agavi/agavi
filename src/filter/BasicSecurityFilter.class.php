@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003, 2004 Agavi Foundation.                                |
+// | Copyright (c) 2003-2005  Sean Kerr.                                       |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -18,8 +18,8 @@
  * @package    agavi
  * @subpackage filter
  *
- * @author    Agavi Foundation (info@agavi.org)
- * @copyright (c) Agavi Foundation, {@link http://www.agavi.org}
+ * @author    Sean Kerr (skerr@mojavi.org)
+ * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
  * @since     3.0.0
  * @version   $Id$
  */
@@ -37,7 +37,7 @@ class BasicSecurityFilter extends SecurityFilter
 	 *
 	 * @return void
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function execute ($filterChain)

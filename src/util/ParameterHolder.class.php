@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003, 2004 Agavi Foundation.                                |
+// | Copyright (c) 2003-2005  Sean Kerr.                                       |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -15,8 +15,8 @@
  * @package    agavi
  * @subpackage util
  *
- * @author    Agavi Foundation (info@agavi.org)
- * @copyright (c) Agavi Foundation, {@link http://www.agavi.org}
+ * @author    Sean Kerr (skerr@mojavi.org)
+ * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
  * @since     3.0.0
  * @version   $Id$
  */
@@ -39,7 +39,7 @@ abstract class ParameterHolder extends AgaviObject
 	 *
 	 * @return void
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function clearParameters ()
@@ -61,7 +61,7 @@ abstract class ParameterHolder extends AgaviObject
 	 * @return mixed A parameter value, if the parameter exists, otherwise
 	 *               null.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function & getParameter ($name, $default = null)
@@ -87,7 +87,7 @@ abstract class ParameterHolder extends AgaviObject
 	 *
 	 * @return array An indexed array of parameter names.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function getParameterNames ()
@@ -104,7 +104,7 @@ abstract class ParameterHolder extends AgaviObject
 	 *
 	 * @return array An associative array of parameters.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function getParameters ()
@@ -123,7 +123,7 @@ abstract class ParameterHolder extends AgaviObject
 	 *
 	 * @return bool true, if the parameter exists, otherwise false.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function hasParameter ($name)
@@ -143,7 +143,7 @@ abstract class ParameterHolder extends AgaviObject
 	 * @return string A parameter value, if the parameter was removed,
 	 *                otherwise null.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  1.0.0
 	 */
 	public function & removeParameter ($name)
@@ -176,7 +176,7 @@ abstract class ParameterHolder extends AgaviObject
 	 *
 	 * @return void
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  2.0.0
 	 */
 	public function setParameter ($name, $value)
@@ -199,7 +199,7 @@ abstract class ParameterHolder extends AgaviObject
 	 *
 	 * @return void
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  2.0.0
 	 */
 	public function setParameterByRef ($name, &$value)
@@ -222,7 +222,7 @@ abstract class ParameterHolder extends AgaviObject
 	 *
 	 * @return void
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function setParameters ($parameters)
@@ -245,7 +245,7 @@ abstract class ParameterHolder extends AgaviObject
 	 *
 	 * @return void
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function setParametersByRef (&$parameters)

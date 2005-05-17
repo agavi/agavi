@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003, 2004 Agavi Foundation.                                |
+// | Copyright (c) 2003-2005  Sean Kerr.                                       |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -15,8 +15,8 @@
  * @package    agavi
  * @subpackage user
  *
- * @author    Agavi Foundation (info@agavi.org)
- * @copyright (c) Agavi Foundation, {@link http://www.agavi.org}
+ * @author    Sean Kerr (skerr@mojavi.org)
+ * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
  * @since     3.0.0
  * @version   $Id$
  */
@@ -34,7 +34,7 @@ abstract class SecurityUser extends User
 	 *
 	 * @return void
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	abstract function addCredential ($credential);
@@ -46,7 +46,7 @@ abstract class SecurityUser extends User
 	 *
 	 * @return void
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	abstract function clearCredentials ();
@@ -60,7 +60,7 @@ abstract class SecurityUser extends User
 	 *
 	 * @return bool true, if this user has the credential, otherwise false.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	abstract function hasCredential ($credential);
@@ -72,7 +72,7 @@ abstract class SecurityUser extends User
 	 *
 	 * @return bool true, if this user is authenticated, otherwise false.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	abstract function isAuthenticated ();
@@ -86,7 +86,7 @@ abstract class SecurityUser extends User
 	 *
 	 * @return void
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	abstract function removeCredential ($credential);
@@ -100,7 +100,7 @@ abstract class SecurityUser extends User
 	 *
 	 * @return void
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	abstract function setAuthenticated ($authenticated);

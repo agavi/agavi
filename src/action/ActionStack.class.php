@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003, 2004 Agavi Foundation.                                |
+// | Copyright (c) 2003-2005  Sean Kerr.                                       |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -16,8 +16,8 @@
  * @package    agavi
  * @subpackage action
  *
- * @author    Agavi Foundation (info@agavi.org)
- * @copyright (c) Agavi Foundation, {@link http://www.agavi.org}
+ * @author    Sean Kerr (skerr@mojavi.org)
+ * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
  * @since     3.0.0
  * @version   $Id$
  */
@@ -44,7 +44,7 @@ class ActionStack extends AgaviObject
 	 *
 	 * @return void
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function addEntry ($moduleName, $actionName, $actionInstance)
@@ -67,7 +67,7 @@ class ActionStack extends AgaviObject
 	 *
 	 * @return ActionStackEntry An action stack entry implementation.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function getEntry ($index)
@@ -93,7 +93,7 @@ class ActionStack extends AgaviObject
 	 *
 	 * @return ActionStackEntry An action stack entry implementation.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function getFirstEntry ()
@@ -120,7 +120,7 @@ class ActionStack extends AgaviObject
 	 *
 	 * @return ActionStackEntry An action stack entry implementation.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function getLastEntry ()
@@ -147,7 +147,7 @@ class ActionStack extends AgaviObject
 	 *
 	 * @return int The size of this stack.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function getSize ()

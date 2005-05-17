@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003, 2004 Agavi Foundation.                                |
+// | Copyright (c) 2003-2005  Sean Kerr.                                       |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -34,7 +34,7 @@ class SecureAction extends Action
 	 *                 1. The parent action of the view that will be executed.
 	 *                 2. The view that will be executed.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  1.0.0
 	 */
 	public function execute ()
@@ -58,7 +58,7 @@ class SecureAction extends Action
 	 *                 1. The parent action of the view that will be executed.
 	 *                 2. The view that will be executed.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  1.0.0
 	 */
 	public function getDefaultView ()
@@ -81,7 +81,7 @@ class SecureAction extends Action
 	 *             - Request::NONE - Indicates that this action serves no
 	 *               requests, or...
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  1.0.0
 	 */
 	public function getRequestMethods ()

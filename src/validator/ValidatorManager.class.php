@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003, 2004 Agavi Foundation.                                |
+// | Copyright (c) 2003-2005  Sean Kerr.                                       |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -16,8 +16,8 @@
  * @package    agavi
  * @subpackage validator
  *
- * @author    Agavi Foundation (info@agavi.org)
- * @copyright (c) Agavi Foundation, {@link http://www.agavi.org}
+ * @author    Sean Kerr (skerr@mojavi.org)
+ * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
  * @since     1.0.0
  * @version   $Id$
  */
@@ -42,7 +42,7 @@ class ValidatorManager extends AgaviObject
 	 *
 	 * @retun void
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function clear ()
@@ -62,7 +62,7 @@ class ValidatorManager extends AgaviObject
 	 *
 	 * @return bool true, if validation completed successfully, otherwise false.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  1.0.0
 	 */
 	public function execute ()
@@ -148,7 +148,7 @@ class ValidatorManager extends AgaviObject
 	 *
 	 * @return void
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function initialize ($context)
@@ -169,7 +169,7 @@ class ValidatorManager extends AgaviObject
 	 * @param string  A group name.
 	 * @param string  A parent array.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function registerName ($name, $required = true,
@@ -244,7 +244,7 @@ class ValidatorManager extends AgaviObject
 	 *
 	 * @return void
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function registerValidator ($name, $validator, $parent = null)
@@ -277,7 +277,7 @@ class ValidatorManager extends AgaviObject
 	 *
 	 * @return bool true, if validation completes successfully, otherwise false.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	private function validate (&$name, &$data, $parent)

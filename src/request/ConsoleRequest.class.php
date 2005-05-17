@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003, 2004 Agavi Foundation.                                |
+// | Copyright (c) 2003-2005  Agavi Foundation.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -10,14 +10,14 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * ConsoleRequest provides additional support for web-only client requests such as
- * cookie and file manipulation.
- *
+ * ConsoleRequest provides support for console-only request information such as
+ * command-line parameters.
+ * 
  * @package    agavi
  * @subpackage request
  *
  * @author    Agavi Foundation (info@agavi.org)
- * @copyright (c) Agavi Foundation, {@link http://www.agavi.org}
+ * @copyright (c) Agavi Foundation
  * @since     3.0.0
  * @version   $Id$
  */

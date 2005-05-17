@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003, 2004 Agavi Foundation.                                |
+// | Copyright (c) 2003-2005  Sean Kerr.                                       |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -17,8 +17,8 @@
  * @package    agavi
  * @subpackage config
  *
- * @author    Agavi Foundation (info@agavi.org)
- * @copyright (c) Agavi Foundation, {@link http://www.agavi.org}
+ * @author    Sean Kerr (skerr@mojavi.org)
+ * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
  * @since     3.0.0
  * @version   $Id$
  */
@@ -50,7 +50,7 @@ class ConfigCache extends AgaviObject
 	 *                                       does not have an associated
 	 *                                       configuration handler.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	private static function callHandler ($handler, $config, $cache)
@@ -150,7 +150,7 @@ class ConfigCache extends AgaviObject
 	 * @throws <b>ConfigurationException</b> If a requested configuration file
 	 *                                       does not exist.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public static function checkConfig ($config)
@@ -199,7 +199,7 @@ class ConfigCache extends AgaviObject
 	 *
 	 * @return void
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public static function clear ()
@@ -221,7 +221,7 @@ class ConfigCache extends AgaviObject
 	 *
 	 * @return void
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	private static function clearCache ($directory)
@@ -274,7 +274,7 @@ class ConfigCache extends AgaviObject
 	 *
 	 * @return string An absolute filesystem path to a cache filename.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public static function getCacheName ($config)
@@ -311,7 +311,7 @@ class ConfigCache extends AgaviObject
 	 *
 	 * @return void
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public static function import ($config, $once = true)
@@ -345,7 +345,7 @@ class ConfigCache extends AgaviObject
 	 * @throws <b>ConfigurationException</b> If a configuration related error
 	 *                                       occurs.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	private static function loadConfigHandlers ()
@@ -433,7 +433,7 @@ class ConfigCache extends AgaviObject
 	 *
 	 * @throws <b>CacheException</b> If the cache file cannot be written.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	private static function writeCacheFile ($config, $cache, &$data, $append)

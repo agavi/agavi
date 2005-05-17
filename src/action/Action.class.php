@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003, 2004 Agavi Foundation.                                |
+// | Copyright (c) 2003-2005  Sean Kerr.                                       |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -17,8 +17,8 @@
  * @package    agavi
  * @subpackage action
  *
- * @author    Agavi Foundation (info@agavi.org)
- * @copyright (c) Agavi Foundation, {@link http://www.agavi.org}
+ * @author    Sean Kerr (skerr@mojavi.org)
+ * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
  * @since     1.0.0
  * @version   $Id$
  */
@@ -55,7 +55,7 @@ abstract class Action extends AgaviObject
 	 *               - The parent module of the view that will be executed.
 	 *               - The view that will be executed.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  1.0.0
 	 */
 	abstract function execute ();
@@ -67,7 +67,7 @@ abstract class Action extends AgaviObject
 	 *
 	 * @return Context The current Context instance.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public final function getContext ()
@@ -84,7 +84,7 @@ abstract class Action extends AgaviObject
 	 *
 	 * @return mixed Data that indicates the level of security for this action.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function getCredential ()
@@ -108,7 +108,7 @@ abstract class Action extends AgaviObject
 	 *               - The parent module of the view that will be executed.
 	 *               - The view that will be executed.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  1.0.0
 	 */
 	public function getDefaultView ()
@@ -131,7 +131,7 @@ abstract class Action extends AgaviObject
 	 *             - Request::NONE
 	 *
 	 * @see Request
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  1.0.0
 	 */
 	public function getRequestMethods ()
@@ -154,7 +154,7 @@ abstract class Action extends AgaviObject
 	 *               - The parent module of the view that will be executed.
 	 *               - The view that will be executed.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  2.0.0
 	 */
 	public function handleError ()
@@ -174,7 +174,7 @@ abstract class Action extends AgaviObject
 	 * @return bool true, if initialization completes successfully, otherwise
 	 *              false.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  2.0.0
 	 */
 	public function initialize ($context)
@@ -193,7 +193,7 @@ abstract class Action extends AgaviObject
 	 *
 	 * @return bool true, if this action requires security, otherwise false.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  1.0.0
 	 */
 	public function isSecure ()
@@ -212,7 +212,7 @@ abstract class Action extends AgaviObject
 	 *
 	 * @return void
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  1.0.0
 	 */
 	public function registerValidators ($validatorManager)
@@ -227,7 +227,7 @@ abstract class Action extends AgaviObject
 	 *
 	 * @return bool true, if validation completes successfully, otherwise false.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  1.0.0
 	 */
 	public function validate ()

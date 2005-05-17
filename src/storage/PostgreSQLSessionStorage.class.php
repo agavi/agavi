@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003, 2004 Agavi Foundation.                                |
+// | Copyright (c) 2003-2005  Sean Kerr.                                       |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -30,8 +30,8 @@
  * @package    agavi
  * @subpackage storage
  *
- * @author    Agavi Foundation (info@agavi.org)
- * @copyright (c) Agavi Foundation, {@link http://www.agavi.org}
+ * @author    Sean Kerr (skerr@mojavi.org)
+ * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
  * @since     3.0.0
  * @version   $Id$
  */
@@ -61,7 +61,7 @@ class PostgreSQLSessionStorage extends SessionStorage
 	 * @throws <b>InitializationException</b> If an error occurs while
 	 *                                        initializing this Storage.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function initialize ($context, $parameters = null)
@@ -104,7 +104,7 @@ class PostgreSQLSessionStorage extends SessionStorage
 	 *
 	 * @return bool true, if the session was closed, otherwise false.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function sessionClose ()
@@ -127,7 +127,7 @@ class PostgreSQLSessionStorage extends SessionStorage
 	 *
 	 * @throws <b>DatabaseException</b> If the session cannot be destroyed.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function sessionDestroy ($id)
@@ -171,7 +171,7 @@ class PostgreSQLSessionStorage extends SessionStorage
 	 *
 	 * @throws <b>DatabaseException</b> If any old sessions cannot be cleaned.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function sessionGC ($lifetime)
@@ -216,7 +216,7 @@ class PostgreSQLSessionStorage extends SessionStorage
 	 * @throws <b>DatabaseException</b> If a connection with the database does
 	 *                                  not exist or cannot be created.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function sessionOpen ($path, $name)
@@ -247,7 +247,7 @@ class PostgreSQLSessionStorage extends SessionStorage
 	 *
 	 * @throws <b>DatabaseException</b> If the session cannot be read.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function sessionRead ($id)
@@ -316,7 +316,7 @@ class PostgreSQLSessionStorage extends SessionStorage
 	 *
 	 * @throws <b>DatabaseException</b> If the session data cannot be written.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function sessionWrite ($id, &$data)
@@ -361,7 +361,7 @@ class PostgreSQLSessionStorage extends SessionStorage
 	 *
 	 * @return void
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function shutdown ()

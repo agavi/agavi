@@ -1,9 +1,21 @@
 <?php
+
+// +---------------------------------------------------------------------------+
+// | This file is part of the Agavi package.                                   |
+// | Copyright (c) 2003-2005  Agavi Foundation                                 |
+// |                                                                           |
+// | For the full copyright and license information, please view the LICENSE   |
+// | file that was distributed with this source code. You can also view the    |
+// | LICENSE file online at http://www.agavi.org.                              |
+// +---------------------------------------------------------------------------+
 /**
  * An Agavi Database driver for Propel, derived from the native Creole driver. 
  * 
+ * @package agavi
+ * @subpackage database
+ * 
  * @since 1.0 
- * @author Dusty Matthews (dustym@agavi.org)
+ * @author Agavi Foundation (info@agavi.org)
  */
 class PropelDatabase extends Database
 {

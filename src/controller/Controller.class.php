@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003, 2004 Agavi Foundation.                                |
+// | Copyright (c) 2003-2005  Sean Kerr.                                       |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -15,8 +15,8 @@
  * @package    agavi
  * @subpackage controller
  *
- * @author    Agavi Foundation (info@agavi.org)
- * @copyright (c) Agavi Foundation, {@link http://www.agavi.org}
+ * @author    Sean Kerr (skerr@mojavi.org)
+ * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
  * @since     1.0.0
  * @version   $Id$
  */
@@ -53,7 +53,7 @@ abstract class Controller extends ParameterHolder
 	 *
 	 * @return bool true, if the action exists, otherwise false.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  1.0.0
 	 */
 	public function actionExists ($moduleName, $actionName)
@@ -86,7 +86,7 @@ abstract class Controller extends ParameterHolder
 	 *                                  the user implementation is not of type
 	 *                                  SecurityUser.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  1.0.0
 	 */
 	public function forward ($moduleName, $actionName)
@@ -286,7 +286,7 @@ abstract class Controller extends ParameterHolder
 	 * @return Action An Action implementation instance, if the action exists,
 	 *                otherwise null.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function getAction ($moduleName, $actionName)
@@ -330,7 +330,7 @@ abstract class Controller extends ParameterHolder
 	 * @return ActionStack An ActionStack instance, if the action stack is
 	 *                     enabled, otherwise null.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function getActionStack ()
@@ -347,7 +347,7 @@ abstract class Controller extends ParameterHolder
 	 *
 	 * @return Context A Context instance.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function getContext ()
@@ -367,7 +367,7 @@ abstract class Controller extends ParameterHolder
 	 * @return Model A Model implementation instance, if the model exists,
 	 *               otherwise null.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function getGlobalModel ($modelName)
@@ -405,7 +405,7 @@ abstract class Controller extends ParameterHolder
 	 * @throws <b>ControllerException</b> If a controller implementation
 	 *                                    instance has not been created.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public static function getInstance ()
@@ -436,7 +436,7 @@ abstract class Controller extends ParameterHolder
 	 * @return Model A Model implementation instance, if the model exists,
 	 *               otherwise null.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function getModel ($moduleName, $modelName)
@@ -476,7 +476,7 @@ abstract class Controller extends ParameterHolder
 	 *             - View::RENDER_CLIENT
 	 *             - View::RENDER_VAR
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  1.0.0
 	 */
 	public function getRenderMode ()
@@ -497,7 +497,7 @@ abstract class Controller extends ParameterHolder
 	 * @return View A View implementation instance, if the model exists,
 	 *              otherwise null.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function getView ($moduleName, $viewName)
@@ -540,7 +540,7 @@ abstract class Controller extends ParameterHolder
 	 *
 	 * @return void
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	protected function initialize ()
@@ -590,7 +590,7 @@ abstract class Controller extends ParameterHolder
 	 *
 	 * @return void
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	private function loadGlobalFilters ($filterChain)
@@ -629,7 +629,7 @@ abstract class Controller extends ParameterHolder
 	 *
 	 * @return void
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	private function loadModuleFilters ($filterChain)
@@ -683,7 +683,7 @@ abstract class Controller extends ParameterHolder
 	 *
 	 * @return bool true, if the model exists, otherwise false.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  1.0.0
 	 */
 	public function modelExists ($moduleName, $modelName)
@@ -705,7 +705,7 @@ abstract class Controller extends ParameterHolder
 	 *
 	 * @return bool true, if the module exists, otherwise false.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  1.0.0
 	 */
 	public function moduleExists ($moduleName)
@@ -729,7 +729,7 @@ abstract class Controller extends ParameterHolder
 	 * @throws <b>FactoryException</b> If a new controller implementation
 	 *                                 instance cannot be created.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public static function newInstance ($class)
@@ -801,7 +801,7 @@ abstract class Controller extends ParameterHolder
 	 *
 	 * @throws <b>RenderException</b> - If an invalid render mode has been set.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  2.0.0
 	 */
 	public function setRenderMode ($mode)
@@ -832,7 +832,7 @@ abstract class Controller extends ParameterHolder
 	 *
 	 * @return void
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function shutdown ()
@@ -864,7 +864,7 @@ abstract class Controller extends ParameterHolder
 	 *
 	 * @return bool true, if the view exists, otherwise false.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function viewExists ($moduleName, $viewName)

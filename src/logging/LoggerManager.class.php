@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003, 2004 Agavi Foundation.                                |
+// | Copyright (c) 2003-2005  Sean Kerr.                                       |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -15,8 +15,8 @@
  * @package    agavi
  * @subpackage logging
  *
- * @author     Agavi Foundation (info@agavi.org)
- * @copyright  (c) Agavi Foundation, {@link http://www.agavi.org}
+ * @author     Sean Kerr (skerr@mojavi.org)
+ * @copyright  (c) Sean Kerr, {@link http://www.mojavi.org}
  * @since      3.0.0
  * @version    $Id$
  */
@@ -42,7 +42,7 @@ class LoggerManager extends AgaviObject
 	 * @return Logger A Logger, if a logger with the name exists, otherwise
 	 *                null.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  1.0.0
 	 */
 	public static function getLogger ($name = 'default')
@@ -66,7 +66,7 @@ class LoggerManager extends AgaviObject
 	 *
 	 * @return array An indexed array of logger names.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public static function getLoggerNames ()
@@ -85,7 +85,7 @@ class LoggerManager extends AgaviObject
 	 *
 	 * @return bool true, if the logger exists, otherwise false.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  1.0.0
 	 */
 	public static function hasLogger ($name)
@@ -107,7 +107,7 @@ class LoggerManager extends AgaviObject
 	 * @throws <b>LoggingException</b> If the logger name is 'default', which
 	 *                                 cannot be removed.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public static function & removeLogger ($name)
@@ -155,7 +155,7 @@ class LoggerManager extends AgaviObject
 	 *
 	 * @throws <b>LoggingException</b> If a logger with the name already exists.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public static function setLogger ($name, $logger)
@@ -185,7 +185,7 @@ class LoggerManager extends AgaviObject
 	 *
 	 * @return void
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public static function shutdown ()

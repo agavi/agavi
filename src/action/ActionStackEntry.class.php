@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003, 2004 Agavi Foundation.                                |
+// | Copyright (c) 2003-2005  Sean Kerr.                                       |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -16,8 +16,8 @@
  * @package    agavi
  * @subpackage action
  *
- * @author    Agavi Foundation (info@agavi.org)
- * @copyright (c) Agavi Foundation, {@link http://www.agavi.org}
+ * @author    Sean Kerr (skerr@mojavi.org)
+ * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
  * @since     3.0.0
  * @version   $Id$
  */
@@ -48,7 +48,7 @@ class ActionStackEntry extends AgaviObject
 	 *
 	 * @return void
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function __construct ($moduleName, $actionName, $actionInstance)
@@ -66,7 +66,7 @@ class ActionStackEntry extends AgaviObject
 	 *
 	 * @return string An action name.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function getActionName ()
@@ -81,7 +81,7 @@ class ActionStackEntry extends AgaviObject
 	 *
 	 * @return Action An action implementation instance.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function getActionInstance ()
@@ -97,7 +97,7 @@ class ActionStackEntry extends AgaviObject
 	 * @return string A string representing the microtime this entry was
 	 *                created.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function getMicrotime ()
@@ -112,7 +112,7 @@ class ActionStackEntry extends AgaviObject
 	 *
 	 * @return string A module name.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function getModuleName ()
@@ -130,7 +130,7 @@ class ActionStackEntry extends AgaviObject
 	 *
 	 * @return string An action name.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function & getPresentation ()
@@ -147,7 +147,7 @@ class ActionStackEntry extends AgaviObject
 	 *
 	 * @return void
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function setPresentation (&$presentation)

@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003, 2004 Agavi Foundation.                                |
+// | Copyright (c) 2003-2005  Sean Kerr.                                       |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -17,8 +17,8 @@
  * @package    agavi
  * @subpackage config
  *
- * @author    Agavi Foundation (info@agavi.org)
- * @copyright (c) Agavi Foundation, {@link http://www.agavi.org}
+ * @author    Sean Kerr (skerr@mojavi.org)
+ * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
  * @since     3.0.0
  * @version   $Id$
  */
@@ -37,7 +37,7 @@ abstract class ConfigHandler extends ParameterHolder
 	 *
 	 * @return void
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function addReplacement ($oldValue, $newValue)
@@ -62,7 +62,7 @@ abstract class ConfigHandler extends ParameterHolder
 	 * @throws <b>ParseException</b> If a requested configuration file is
 	 *                               improperly formatted.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	abstract function & execute ($config);
@@ -80,7 +80,7 @@ abstract class ConfigHandler extends ParameterHolder
 	 * @throws <b>InitializationException</b> If an error occurs while
 	 *                                        initializing this ConfigHandler.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function initialize ($parameters = null)
@@ -104,7 +104,7 @@ abstract class ConfigHandler extends ParameterHolder
 	 *
 	 * @return string A literalized value.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public static function literalize ($value)
@@ -161,7 +161,7 @@ abstract class ConfigHandler extends ParameterHolder
 	 *
 	 * @return string The new value.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public static function & replaceConstants ($value)
@@ -189,7 +189,7 @@ abstract class ConfigHandler extends ParameterHolder
 	 *
 	 * @return string The new path.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public static function & replacePath ($path)

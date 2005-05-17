@@ -7,7 +7,7 @@
 <!--
 <div id="footer">
     <div style="float: left;">
-        Copyright &copy; 2004 Agavi Foundation. All rights reserved.
+        Copyright &copy; 2004 Sean Kerr.        All rights reserved.
     </div>
     <div style="float: right;">
         <a href="#TOP">Back to the top</a>

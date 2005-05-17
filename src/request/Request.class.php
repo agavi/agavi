@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003, 2004 Agavi Foundation.                                |
+// | Copyright (c) 2003-2005  Sean Kerr.                                       |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -17,8 +17,8 @@
  * @package    agavi
  * @subpackage request
  *
- * @author    Agavi Foundation (info@agavi.org)
- * @copyright (c) Agavi Foundation, {@link http://www.agavi.org}
+ * @author    Sean Kerr (skerr@mojavi.org)
+ * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
  * @since     1.0.0
  * @version   $Id$
  */
@@ -75,7 +75,7 @@ abstract class Request extends ParameterHolder
 	 *
 	 * @return void
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  1.0.0
 	 */
 	public function clearAttributes ()
@@ -97,7 +97,7 @@ abstract class Request extends ParameterHolder
 	 *               a specified parameter doesn't exist an empty string will
 	 *               be returned for its value.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function & extractParameters ($names)
@@ -131,7 +131,7 @@ abstract class Request extends ParameterHolder
 	 * @return mixed An attribute value, if the attribute exists, otherwise
 	 *               null.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  1.0.0
 	 */
 	public function & getAttribute ($name)
@@ -157,7 +157,7 @@ abstract class Request extends ParameterHolder
 	 *
 	 * @return array An indexed array of attribute names.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  1.0.0
 	 */
 	public function getAttributeNames ()
@@ -176,7 +176,7 @@ abstract class Request extends ParameterHolder
 	 *
 	 * @return string An error message, if the error exists, otherwise null.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  1.0.0
 	 */
 	public function getError ($name)
@@ -202,7 +202,7 @@ abstract class Request extends ParameterHolder
 	 *
 	 * @return array An indexed array of error names.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function getErrorNames ()
@@ -219,7 +219,7 @@ abstract class Request extends ParameterHolder
 	 *
 	 * @return array An associative array of errors.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  1.0.0
 	 */
 	public function getErrors ()
@@ -239,7 +239,7 @@ abstract class Request extends ParameterHolder
 	 *             - Request::POST
 	 *             - Request::CONSOLE
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  1.0.0
 	 */
 	public function getMethod ()
@@ -258,7 +258,7 @@ abstract class Request extends ParameterHolder
 	 *
 	 * @return bool true, if the attribute exists, otherwise false.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  1.0.0
 	 */
 	public function hasAttribute ($name)
@@ -277,7 +277,7 @@ abstract class Request extends ParameterHolder
 	 *
 	 * @return bool true, if the error exists, otherwise false.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  1.0.0
 	 */
 	public function hasError ($name)
@@ -295,7 +295,7 @@ abstract class Request extends ParameterHolder
 	 *
 	 * @return bool true, if any error exist, otherwise false.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  2.0.0
 	 */
 	public function hasErrors ()
@@ -319,7 +319,7 @@ abstract class Request extends ParameterHolder
 	 * @throws <b>InitializationException</b> If an error occurs while
 	 *                                        initializing this Request.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	abstract function initialize ($context, $parameters = null);
@@ -336,7 +336,7 @@ abstract class Request extends ParameterHolder
 	 * @throws <b>FactoryException</b> If a request implementation instance
 	 *                                 cannot be created.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public static function newInstance ($class)
@@ -370,7 +370,7 @@ abstract class Request extends ParameterHolder
 	 * @return mixed An attribute value, if the attribute was removed,
 	 *               otherwise null.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  1.0.0
 	 */
 	public function & removeAttribute ($name)
@@ -401,7 +401,7 @@ abstract class Request extends ParameterHolder
 	 * @return string An error message, if the error was removed, otherwise
 	 *                null.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  1.0.0
 	 */
 	public function & removeError ($name)
@@ -435,7 +435,7 @@ abstract class Request extends ParameterHolder
 	 *
 	 * @return void
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  1.0.0
 	 */
 	public function setAttribute ($name, $value)
@@ -458,7 +458,7 @@ abstract class Request extends ParameterHolder
 	 *
 	 * @return void
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  1.0.0
 	 */
 	public function setAttributeByRef ($name, &$value)
@@ -481,7 +481,7 @@ abstract class Request extends ParameterHolder
 	 *
 	 * @return void
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function setAttributes ($attributes)
@@ -504,7 +504,7 @@ abstract class Request extends ParameterHolder
 	 *
 	 * @return void
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function setAttributesByRef (&$attributes)
@@ -529,7 +529,7 @@ abstract class Request extends ParameterHolder
 	 *
 	 * @return void
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  1.0.0
 	 */
 	public function setError ($name, $message)
@@ -553,7 +553,7 @@ abstract class Request extends ParameterHolder
 	 *
 	 * @return void
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  2.0.0
 	 */
 	public function setErrors ($errors)
@@ -578,7 +578,7 @@ abstract class Request extends ParameterHolder
 	 * @throws <b>AgaviException</b> - If the specified request method is
 	 *                                  invalid.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  2.0.0
 	 */
 	public function setMethod ($method)
@@ -608,7 +608,7 @@ abstract class Request extends ParameterHolder
 	 *
 	 * @return void
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	abstract function shutdown ();

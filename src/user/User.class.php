@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003, 2004 Agavi Foundation.                                |
+// | Copyright (c) 2003-2005  Sean Kerr.                                       |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -18,8 +18,8 @@
  * @package    agavi
  * @subpackage user
  *
- * @author    Agavi Foundation (info@agavi.org)
- * @copyright (c) Agavi Foundation, {@link http://www.agavi.org}
+ * @author    Sean Kerr (skerr@mojavi.org)
+ * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
  * @since     1.0.0
  * @version   $Id$
  */
@@ -53,7 +53,7 @@ class User extends ParameterHolder
 	 *
 	 * @return void
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  1.0.0
 	 */
 	public function clearAttributes ()
@@ -75,7 +75,7 @@ class User extends ParameterHolder
 	 * @return mixed An attribute value, if the attribute exists, otherwise
 	 *               null.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  1.0.0
 	 */
 	public function & getAttribute ($name, $ns = MO_USER_NAMESPACE)
@@ -105,7 +105,7 @@ class User extends ParameterHolder
 	 * @return array An indexed array of attribute names, if the namespace
 	 *               exists, otherwise null.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  1.0.0
 	 */
 	public function getAttributeNames ($ns = MO_USER_NAMESPACE)
@@ -131,7 +131,7 @@ class User extends ParameterHolder
 	 *
 	 * @return array An associative array of attributes.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function & getAttributeNamespace ($ns = MO_USER_NAMESPACE)
@@ -157,7 +157,7 @@ class User extends ParameterHolder
 	 *
 	 * @return array An indexed array of attribute namespaces.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  1.0.0
 	 */
 	public function getAttributeNamespaces ()
@@ -174,7 +174,7 @@ class User extends ParameterHolder
 	 *
 	 * @return Context A Context instance.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function getContext ()
@@ -194,7 +194,7 @@ class User extends ParameterHolder
 	 *
 	 * @return bool true, if the attribute exists, otherwise false.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  1.0.0
 	 */
 	public function hasAttribute ($name, $ns = MO_USER_NAMESPACE)
@@ -220,7 +220,7 @@ class User extends ParameterHolder
 	 *
 	 * @return bool true, if the namespace exists, otherwise false.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function hasAttributeNamespace ($ns)
@@ -244,7 +244,7 @@ class User extends ParameterHolder
 	 * @throws <b>InitializationException</b> If an error occurs while
 	 *                                        initializing this User.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function initialize ($context, $parameters = null)
@@ -286,7 +286,7 @@ class User extends ParameterHolder
 	 * @throws <b>FactoryException</b> If a user implementation instance cannot
 	 *                                 be created.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public static function newInstance ($class)
@@ -321,7 +321,7 @@ class User extends ParameterHolder
 	 * @return mixed An attribute value, if the attribute was removed,
 	 *               otherwise null.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  1.0.0
 	 */
 	public function & removeAttribute ($name, $ns = MO_USER_NAMESPACE)
@@ -352,7 +352,7 @@ class User extends ParameterHolder
 	 *
 	 * @return void
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function removeAttributeNamespace ($ns)
@@ -381,7 +381,7 @@ class User extends ParameterHolder
 	 *
 	 * @return void
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  1.0.0
 	 */
 	public function setAttribute ($name, $value, $ns = MO_USER_NAMESPACE)
@@ -412,7 +412,7 @@ class User extends ParameterHolder
 	 *
 	 * @return void
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  1.0.0
 	 */
 	public function setAttributeByRef ($name, &$value, $ns = MO_USER_NAMESPACE)
@@ -443,7 +443,7 @@ class User extends ParameterHolder
 	 *
 	 * @return void
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function setAttributes ($attributes, $ns = MO_USER_NAMESPACE)
@@ -475,7 +475,7 @@ class User extends ParameterHolder
 	 *
 	 * @return void
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function setAttributesByRef (&$attributes, $ns = MO_USER_NAMESPACE)
@@ -504,7 +504,7 @@ class User extends ParameterHolder
 	 *
 	 * @return void
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function shutdown ()

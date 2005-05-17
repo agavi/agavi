@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003, 2004 Agavi Foundation.                                |
+// | Copyright (c) 2003-2005  Sean Kerr.                                       |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -18,8 +18,8 @@
  * @package    agavi
  * @subpackage core
  *
- * @author    Agavi Foundation (info@agavi.org)
- * @copyright (c) Agavi Foundation, {@link http://www.agavi.org}
+ * @author    Sean Kerr (skerr@mojavi.org)
+ * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
  * @since     3.0.0
  * @version   $Id$
  */
@@ -51,7 +51,7 @@ class Context extends AgaviObject
 	 * @param Storage         The current Storage implementation instance.
 	 * @param DatabaseManager The current DatabaseManager instance.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function __construct ($controller, $request, $user, $storage,
@@ -77,7 +77,7 @@ class Context extends AgaviObject
 	 * @return string The currently executing action name, if one is set,
 	 *                otherwise null.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function getActionName ()
@@ -97,7 +97,7 @@ class Context extends AgaviObject
 	 *
 	 * @return Controller The current Controller implementation instance.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function getController ()
@@ -124,7 +124,7 @@ class Context extends AgaviObject
 	 * @throws <b>DatabaseException</b> If the requested database name does
 	 *                                  not exist.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function getDatabaseConnection ($name = 'default')
@@ -148,7 +148,7 @@ class Context extends AgaviObject
 	 *
 	 * @return DatabaseManager The current DatabaseManager instance.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function getDatabaseManager ()
@@ -166,7 +166,7 @@ class Context extends AgaviObject
 	 * @return string An absolute filesystem path to the directory of the
 	 *                currently executing module, if one is set, otherwise null.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function getModuleDirectory ()
@@ -187,7 +187,7 @@ class Context extends AgaviObject
 	 * @return string The currently executing module name, if one is set,
 	 *                otherwise null.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function getModuleName ()
@@ -207,7 +207,7 @@ class Context extends AgaviObject
 	 *
 	 * @return Request The current Request implementation instance.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function getRequest ()
@@ -224,7 +224,7 @@ class Context extends AgaviObject
 	 *
 	 * @return Storage The current Storage implementation instance.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function getStorage ()
@@ -241,7 +241,7 @@ class Context extends AgaviObject
 	 *
 	 * @return User The current User implementation instance.
 	 *
-	 * @author Agavi Foundation (info@agavi.org)
+	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
 	public function getUser ()
