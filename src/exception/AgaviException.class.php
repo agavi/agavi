@@ -2,7 +2,10 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2005  Sean Kerr.                                       |
+// | Authors                                                                   |
+// |  Sean Kerr (skerr@mojavi.org)                                             |
+// |  Bob Zoller (bob@agavi.org)                                               |
+// | Copyright (c) 2003-2005  Authors.                                         |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -18,7 +21,8 @@
  * @subpackage exception
  *
  * @author    Sean Kerr (skerr@mojavi.org)
- * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
+ * @author    Bob Zoller (bob@agavi.org)
+ * @copyright (c) Authors
  * @since     3.0.0
  * @version   $Id$
  */
@@ -84,10 +88,15 @@ class AgaviException extends Exception
 	 *               - plain
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
+	 * @author Bob Zoller (bob@agavi.org)
 	 * @since  3.0.0
 	 */
 	public function printStackTrace ($format = 'html')
 	{
+		if (function_exists('__agavi_printStackTrace')) {
+			__agavi_printStackTrace($this, $format);
+			exit;
+		}
 
 		// exception related properties
 		$class     = ($this->getFile() != null)
