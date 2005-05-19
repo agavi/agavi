@@ -17,6 +17,11 @@
   <!-- main target -->
 	<target name="main" description="main target">
 		<echo msg="available targets: " /> 
+		<echo msg="  docs    : regenerate phpdocs" />
+	</target>
+
+	<target name="docs" description="docs target">
+		<phpdoc title="Agavi Documentation" destdir="apidocs" sourcepath="src" output="HTML:frames:earthli"/>
 	</target>
 
 </project>
