@@ -42,7 +42,8 @@ class User extends ParameterHolder
 	// +-----------------------------------------------------------------------+
 
 	private
-		$attributes = null;
+		$attributes = null,
+		$context = null;
 
 	// +-----------------------------------------------------------------------+
 	// | METHODS                                                               |
