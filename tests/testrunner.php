@@ -2,6 +2,7 @@
 <?php
 require_once('simpletest/unit_tester.php');
 require_once('simpletest/reporter.php');
+require_once('simpletest/mock_objects.php');
 set_include_path(get_include_path().':'.dirname(dirname(__file__)).'/src');
 
 $opts = getopt('t:m:');
