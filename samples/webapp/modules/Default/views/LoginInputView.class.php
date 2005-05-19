@@ -9,7 +9,7 @@
 // | LICENSE file online at http://www.agavi.org.                              |
 // +---------------------------------------------------------------------------+
 
-class LoginInputView extends PHPView
+class Default_LoginInputView extends PHPView
 {
 
 	// +-----------------------------------------------------------------------+

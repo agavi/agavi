@@ -9,7 +9,7 @@
 // | LICENSE file online at http://www.agavi.org.                              |
 // +---------------------------------------------------------------------------+
 
-class ModuleDisabledSuccessView extends PHPView
+class Default_ModuleDisabledSuccessView extends PHPView
 {
 
 	// +-----------------------------------------------------------------------+

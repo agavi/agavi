@@ -9,7 +9,7 @@
 // | LICENSE file online at http://www.agavi.org.                              |
 // +---------------------------------------------------------------------------+
 
-class SecureAction extends Action
+class Default_SecureAction extends Action
 {
 
 	// +-----------------------------------------------------------------------+

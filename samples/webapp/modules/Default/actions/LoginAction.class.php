@@ -9,7 +9,7 @@
 // | LICENSE file online at http://www.agavi.org.                              |
 // +---------------------------------------------------------------------------+
 
-class LoginAction extends Action
+class Default_LoginAction extends Action
 {
 
 	// +-----------------------------------------------------------------------+

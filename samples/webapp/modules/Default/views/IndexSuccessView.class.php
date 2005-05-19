@@ -9,7 +9,7 @@
 // | LICENSE file online at http://www.agavi.org.                              |
 // +---------------------------------------------------------------------------+
 
-class IndexSuccessView extends PHPView
+class Default_IndexSuccessView extends PHPView
 {
 
 	// +-----------------------------------------------------------------------+

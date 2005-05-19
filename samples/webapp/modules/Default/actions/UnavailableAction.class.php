@@ -9,7 +9,7 @@
 // | LICENSE file online at http://www.agavi.org.                              |
 // +---------------------------------------------------------------------------+
 
-class UnavailableAction extends Action
+class Default_UnavailableAction extends Action
 {
 
 	// +-----------------------------------------------------------------------+

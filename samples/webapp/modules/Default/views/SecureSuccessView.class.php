@@ -9,7 +9,7 @@
 // | LICENSE file online at http://www.agavi.org.                              |
 // +---------------------------------------------------------------------------+
 
-class SecureSuccessView extends PHPView
+class Default_SecureSuccessView extends PHPView
 {
 
 	// +-----------------------------------------------------------------------+

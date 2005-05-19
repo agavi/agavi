@@ -9,7 +9,7 @@
 // | LICENSE file online at http://www.agavi.org.                              |
 // +---------------------------------------------------------------------------+
 
-class IndexAction extends Action
+class Default_IndexAction extends Action
 {
 
 	// +-----------------------------------------------------------------------+

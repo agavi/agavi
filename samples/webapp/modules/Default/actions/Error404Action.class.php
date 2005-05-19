@@ -9,7 +9,7 @@
 // | LICENSE file online at http://www.agavi.org.                              |
 // +---------------------------------------------------------------------------+
 
-class Error404Action extends Action
+class Default_Error404Action extends Action
 {
 
 	// +-----------------------------------------------------------------------+
