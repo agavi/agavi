@@ -10,6 +10,7 @@
   <!-- main target -->
 	<target name="main" description="main target">
 		<echo msg="available targets: " /> 
+		<echo msg="  project    - create a project" />
 		<echo msg="  module     - create a module" />
 		<echo msg="  action     - create an action" />
 	</target>
@@ -29,10 +30,40 @@
 		<echo msg="PHPUnit2 test reports have been built in reports/tests."/>
 	</target>
 
+	<target name="project" description="create a new project">
+		<input propertyname="project.dir" promptChar="?" message="Full path to your new project (no trailing slash!)"/>
+		<mkdir dir="${project.dir}"/>
+		<mkdir dir="${project.dir}/cache"/>
+		<copy file="code_templates/config.php.tmpl" tofile="${project.dir}/config.php">
+			<filterchain>
+				<replacetokens begintoken="%%" endtoken="%%">    
+					<token key="PATH_TO_AGAVI" value="${project.basedir}"/>
+					<token key="PATH_TO_PROJECT" value="${project.dir}"/>
+				</replacetokens>
+			</filterchain>
+		</copy>
+		<mkdir dir="${project.dir}/config"/>
+		<copy todir="${project.dir}/config">
+			<fileset dir="code_templates/config">
+				<include name="*.ini"/>
+			</fileset>
+		</copy>
+		<mkdir dir="${project.dir}/lib"/>
+		<mkdir dir="${project.dir}/lib/models"/>
+		<mkdir dir="${project.dir}/modules"/>
+		<mkdir dir="${project.dir}/templates"/>
+		<input propertyname="modules" promptChar="?" defaultValue="Default" message="Modules for your project (no whitespace, comma seperated)"/>
+		<foreach list="${modules}" param="module" target="buildmodule"/>
+	</target>
+
 	<target name="module" description="create a new module">
 		<available file="${project.dir}/modules" type="dir" property="is_webapp" value="true"/>
 		<fail unless="is_webapp" message="Must be called in the root of a webapp directory."/>
 		<input propertyname="module" promptChar="?" message="Module Name"/>
+		<phingcall target="buildmodule"/>
+	</target>
+
+	<target name="buildmodule">
 		<property name="prefix" value="${project.dir}/modules/${module}/"/>
 		<mkdir dir="${prefix}"/>
 		<mkdir dir="${prefix}actions"/>
