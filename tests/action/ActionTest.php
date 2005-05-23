@@ -39,7 +39,7 @@ class TestAction extends UnitTestCase
 
 	public function testgetRequestMethods()
 	{
-		$this->assertEqual((Request::GET | Request::POST), $this->_a->getRequestMethods());
+		$this->assertEqual((Request::GET | Request::POST | Request::NONE), $this->_a->getRequestMethods());
 	}
 
 	public function testhandleError()

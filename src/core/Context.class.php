@@ -11,66 +11,66 @@
 
 /**
  * Context provides information about the current application context, such as
- * the module and action names and the module directory. References to the
- * current controller, request, and user implementation instances are also
- * provided.
+ * the module and action names and the module directory. 
+ * It also serves as a gateway to the core pieces of the framework, allowing
+ * objects with access to the context, to access other useful objects such as
+ * the current controller, request, user, actionstack, databasemanager, storage,
+ * and loggingmanager.
  *
  * @package    agavi
  * @subpackage core
  *
- * @author    Sean Kerr (skerr@mojavi.org)
- * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
+ * @author    Sean Kerr (skerr@mojavi.org) {@link http://www.mojavi.org}
+ * @author    Mike Vincent (mike@agavi.org) {@link http://www.agavi.org}
+ * @copyright (c) authors 
+ * @license		LGPL {@link http://www.agavi.org/LICENSE}
  * @since     3.0.0
  * @version   $Id$
  */
 class Context extends AgaviObject
 {
 
-	// +-----------------------------------------------------------------------+
-	// | PRIVATE VARIABLES                                                     |
-	// +-----------------------------------------------------------------------+
-
-	private
+	protected
 		$actionStack     = null,
 		$controller      = null,
 		$databaseManager = null,
 		$request         = null,
+		$securityFilter	 = null,
 		$storage         = null,
 		$user            = null;
-
-	// +-----------------------------------------------------------------------+
-	// | CONSTRUCTOR                                                           |
-	// +-----------------------------------------------------------------------+
-
-	/**
-	 * Class constructor.
-	 *
-	 * @param Controller      The current Controller implementation instance.
-	 * @param Request         The current Request implementation instance.
-	 * @param User            The current User implementation instance.
-	 * @param Storage         The current Storage implementation instance.
-	 * @param DatabaseManager The current DatabaseManager instance.
-	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
-	 */
-	public function __construct ($controller, $request, $user, $storage,
-						         $databaseManager)
-	{
-
-		$this->actionStack     = $controller->getActionStack();
-		$this->controller      = $controller;
-		$this->databaseManager = $databaseManager;
-		$this->request         = $request;
-		$this->storage         = $storage;
-		$this->user            = $user;
-
-	}
+	protected static
+		$instance				= null;
 
 	// +-----------------------------------------------------------------------+
 	// | METHODS                                                               |
 	// +-----------------------------------------------------------------------+
 
+	/*
+	 * Clone method, overridden to prevent cloning, there can be only one. 
+	 *
+	 * @author Mike Vincent (mike@agavi.org)	
+	 * @since 1.0.0
+	 */
+	public function __clone()
+	{
+		trigger_error('Cloning the Context object is not allowed.', E_USER_ERROR);
+	}	
+
+	// -------------------------------------------------------------------------
+	
+	/*
+	 * Constuctor method, intentionally made private so the context cannot be created directly
+	 *
+	 * @author Mike Vincent (mike@agavi.org)	
+	 * @since 1.0.0
+	 */
+	protected function __construct() 
+	{
+		// Singleton, use Context::getInstance($controller) to get the instance
+	}
+
+	// -------------------------------------------------------------------------
+	
 	/**
 	 * Retrieve the action name for this context.
 	 *
@@ -88,6 +88,22 @@ class Context extends AgaviObject
 
 		return $actionEntry->getActionName();
 
+	}
+
+	// -------------------------------------------------------------------------
+	
+	/**
+	 * Retrieve the ActionStack.
+	 *
+	 * @return ActionStack the ActionStack instance
+	 *                
+	 *
+	 * @author Mike Vincent (mike@agavi.org)
+	 * @since  3.0.0
+	 */
+	public function getActionStack()
+	{
+		return $this->actionStack;
 	}
 
 	// -------------------------------------------------------------------------
@@ -161,6 +177,35 @@ class Context extends AgaviObject
 	// -------------------------------------------------------------------------
 
 	/**
+	 * Retrieve the Context instance.
+	 *
+	 * @param Controller reference to the controller instance.
+	 * @return Context instance of the current Context
+	 *
+	 * @author Mike Vincent (mike@agavi.org)
+	 * @since  1.0.0
+	 */
+	public static function getInstance(&$controller)
+	{
+		if (!isset(self::$instance)) {
+			$class = __CLASS__;
+			self::$instance = new $class;
+		
+			if (defined(AG_USE_DATABASE) && AG_USE_DATABASE) {
+				self::$instance->databaseManager = new DatabaseManager();
+				self::$instance->databaseManager->initialize();
+			}
+			self::$instance->controller 			= $controller;
+			self::$instance->actionStack			= new ActionStack();
+		
+			require_once(ConfigCache::checkConfig('config/factories.ini'));
+		}
+		return self::$instance;
+	}
+
+	// -------------------------------------------------------------------------
+
+	/**
 	 * Retrieve the module directory for this context.
 	 *
 	 * @return string An absolute filesystem path to the directory of the
@@ -214,6 +259,23 @@ class Context extends AgaviObject
 	{
 
 		return $this->request;
+
+	}
+
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Retrieve the securityFilter
+	 *
+	 * @return SecurityFilter The current SecurityFilter implementation instance.
+	 *
+	 * @author Mike Vincent (mike@agavi.org)
+	 * @since  3.0.0
+	 */
+	public function getSecurityFilter ()
+	{
+
+		return $this->securityFilter;
 
 	}
 

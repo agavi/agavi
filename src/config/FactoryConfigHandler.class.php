@@ -16,8 +16,9 @@
  * @package    agavi
  * @subpackage config
  *
- * @author    Sean Kerr (skerr@mojavi.org)
- * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
+ * @author    Sean Kerr (skerr@mojavi.org) {@link http://www.mojavi.org}
+ * @author    Mike Vincent (mike@agavi.org) {@link http://www.agavi.org}
+ * @copyright (c) authors
  * @since     3.0.0
  * @version   $Id$
  */
@@ -45,10 +46,10 @@ class FactoryConfigHandler extends IniConfigHandler
 	 */
 	public function & execute ($config)
 	{
-  	// available list of controllers
+  	// We need to at least have a base controller defined
 		$required_controllers = array('Controller');
   
-  	// available list of factories
+  	// These factories must be defined. 
   	$required_factories = array('request', 'storage', 'user', 'security_filter');
   
 		// set our required categories list and initialize our handler
@@ -58,7 +59,7 @@ class FactoryConfigHandler extends IniConfigHandler
 		// parse the ini
 		$ini = $this->parseIni($config);
   
-  	// Revers the order of the controllers
+  	// Reverse the order of the controllers
   	$ini = array_reverse($ini, true);
   
 		// init our data and includes arrays
@@ -88,48 +89,23 @@ class FactoryConfigHandler extends IniConfigHandler
 				// append new data
 				switch ($factory) {
 					case 'request':
-	
-						// append instance creation
-						$tmp = "\t\$this->request = " .  "Request::newInstance('%s');";
-						$instances[] = sprintf($tmp, $class);
-	
-						// append instance initialization
-						$tmp = "\t\$this->request->initialize(\$this->context, " .  "%s);";
-						$inits[] = sprintf($tmp, $parameters);
-	
+						$instances[] = sprintf("\tself::\$instance->request = " .  "Request::newInstance('%s');", $class);
+						$inits[] = sprintf("\tself::\$instance->request->initialize(self::\$instance, " .  "%s);", $parameters);
 						break;
 					case 'security_filter':
-	
-						// append creation/initialization in one swipe
-						$tmp = "\n\tif (AG_USE_SECURITY)\n\t{\n" .
-						       "\t\t\$this->securityFilter = " .
-						       "SecurityFilter::newInstance('%s');\n" .
-						       "\t\t\$this->securityFilter->initialize(" .
-						       "\$this->context, %s);\n\t}\n";
+						$tmp = "\n\tif (AG_USE_SECURITY) {\n" .
+						       "\t\tself::\$instance->securityFilter = SecurityFilter::newInstance('%s');\n" .
+						       "\t\tself::\$instance->securityFilter->initialize(self::\$instance);\n" .
+									 "\t}\n";
 						$inits[] = sprintf($tmp, $class, $parameters);
-	
 						break;
 					case 'storage':
-	
-						// append instance creation
-						$tmp = "\t\$this->storage = " .
-						       "Storage::newInstance('%s');";
-						$instances[] = sprintf($tmp, $class);
-	
-						// append instance initialization
-						$tmp = "\t\$this->storage->initialize(\$this->context, " . "%s);";
-						$inits[] = sprintf($tmp, $parameters);
-	
+						$instances[] = sprintf("\tself::\$instance->storage = Storage::newInstance('%s');", $class);
+						$inits[] = sprintf("\tself::\$instance->storage->initialize(self::\$instance, " . "%s);", $parameters);
 						break;
 					case 'user':
-	
-						// append instance creation
-						$tmp = "\t\$this->user = User::newInstance('%s');";
-						$instances[] = sprintf($tmp, $class);
-	
-						// append instance initialization
-						$tmp = "\t\$this->user->initialize(\$this->context, %s);";
-						$inits[] = sprintf($tmp, $parameters);
+						$instances[] = sprintf("\tself::\$instance->user = User::newInstance('%s');", $class);
+						$inits[] = sprintf("\tself::\$instance->user->initialize(self::\$instance, %s);", $parameters);
 						break;
 					default:
 					 continue;
@@ -152,22 +128,13 @@ class FactoryConfigHandler extends IniConfigHandler
 						throw new ParseException($error);
 		
 					}
-		
-					// append our data
-					$tmp        = "\trequire_once('%s');";
-					$includes[] = sprintf($tmp, $file);
+					$includes[] = sprintf("\trequire_once('%s');", $file);
 		
 				}
 			}
   	
-			// context creation
-			$context = "\t\$this->context = new Context(%s, %s, %s, %s, %s);";
-			$context = sprintf($context, '$this', '$this->request', '$this->user', '$this->storage',
-			'$this->databaseManager');
-		
-			$tmp = "if (\$this instanceof $controllerName)\n{\n%s\n%s\n%s\n%s\n\treturn;\n}";
-			$controllers[] = sprintf($tmp, implode("\n", $includes),
-			implode("\n", $instances), $context, implode("\n", $inits));
+			$tmp = "if (self::\$instance->controller instanceof $controllerName)\n{\n%s\n%s\n%s\n\treturn;\n}";
+			$controllers[] = sprintf($tmp, implode("\n", $includes), implode("\n", $instances), implode("\n", $inits));
 		}
 	
 		// compile data

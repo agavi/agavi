@@ -306,8 +306,7 @@ class ConfigCache extends AgaviObject
 	 * to the Agavi AG_WEBAPP_DIR application setting.
 	 *
 	 * @param string A filesystem path to a configuration file.
-	 * @param bool   Only allow this configuration file to be included once per
-	 *               request?
+	 * @param bool   Only allow this configuration file to be included once per request?
 	 *
 	 * @return void
 	 *
@@ -316,21 +315,12 @@ class ConfigCache extends AgaviObject
 	 */
 	public static function import ($config, $once = true)
 	{
-
-		// check the config file
 		$cache = self::checkConfig($config);
 
-		// include cache file
-		if ($once)
-		{
-
+		if ($once) {
 			include_once($cache);
-
-		} else
-		{
-
+		} else {
 			include($cache);
-
 		}
 
 	}

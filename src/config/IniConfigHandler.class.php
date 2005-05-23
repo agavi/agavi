@@ -46,56 +46,32 @@ abstract class IniConfigHandler extends ConfigHandler
 	 */
 	protected function & parseIni ($config)
 	{
-
-		if (!is_readable($config))
-		{
-
-			// can't read the configuration
-			$error = 'Configuration file "%s" does not exist or is not ' .
-				     'readable';
-			$error = sprintf($error, $config);
-
+		if (!is_readable($config)) {
+			$error = 'Configuration file "' . $config . '" does not exist or is not readable';
 			throw new ConfigurationException($error);
-
 		}
 
 		// parse our config
 		$ini = @parse_ini_file($config, true);
 
-		if ($ini === false)
-		{
-
-			// configuration couldn't be parsed
-			$error = 'Configuration file "%s" could not be parsed';
-			$error = sprintf($error, $config);
-
+		if ($ini === false)	{
+			$error = 'Configuration file "' . $config . '" could not be parsed';
 			throw new ParseException($error);
-
 		}
 
 		// get a list of the required categories
-		if ($this->hasParameter('required_categories'))
-		{
-
+		if ($this->hasParameter('required_categories')) {
 			$categories = $this->getParameter('required_categories');
 
-			foreach ($categories as $category)
-			{
-
-				if (!isset($ini[$category]))
-				{
-
-				    $error = 'Configuration file "%s" is missing "%s" category';
-				    $error = sprintf($error, $config, $category);
-
-				    throw new ParseException($error);
-
+			foreach ($categories as $category) {
+				if (!isset($ini[$category])) {
+			    $error = 'Configuration file "' . $config . '" is missing "' . $category . '" category';
+			    throw new ParseException($error);
 				}
 
 			}
 
 		}
-
 		return $ini;
 
 	}

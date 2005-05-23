@@ -137,7 +137,7 @@ abstract class Action extends AgaviObject
 	public function getRequestMethods ()
 	{
 
-		return Request::GET | Request::POST;
+		return Request::GET | Request::POST | Request::NONE;
 
 	}
 

@@ -41,10 +41,24 @@ abstract class Controller extends ParameterHolder
 	private static
 		$instance = null;
 
+	public function __construct()
+	{
+	}
+
 	// +-----------------------------------------------------------------------+
 	// | METHODS                                                               |
 	// +-----------------------------------------------------------------------+
-
+	
+	/**
+	 *
+	 * The dispatch method must be implemented
+	 * it's expected to:
+	 *		put and parameters into the request object
+	 *		call the controller's initialize method
+	 *		forward to the requested module/action
+	 */
+	abstract function dispatch();
+	
 	/**
 	 * Indicates whether or not a module has a specific action.
 	 *
@@ -58,12 +72,8 @@ abstract class Controller extends ParameterHolder
 	 */
 	public function actionExists ($moduleName, $actionName)
 	{
-
-		$file = AG_MODULE_DIR . '/' . $moduleName . '/actions/' . $actionName .
-				'Action.class.php';
-
+		$file = AG_MODULE_DIR . '/' . $moduleName . '/actions/' . $actionName . 'Action.class.php';
 		return is_readable($file);
-
 	}
 
 	// -------------------------------------------------------------------------
@@ -92,25 +102,15 @@ abstract class Controller extends ParameterHolder
 	public function forward ($moduleName, $actionName)
 	{
 
-		// replace periods with slashes for action sub-directories
 		$actionName = str_replace('.', '/', $actionName);
-
-		// replace unwanted characters
-		$moduleName = preg_replace('/[^a-z0-9\-_]+/i', '', $moduleName);
 		$actionName = preg_replace('/[^a-z0-9\-_\/]+/i', '', $actionName);
+		$moduleName = preg_replace('/[^a-z0-9\-_]+/i', '', $moduleName);
 
-		if ($this->actionStack->getSize() >= $this->maxForwards)
-		{
-
-			// let's kill this party before it turns into cpu cycle hell
-			$error = 'Too many forwards have been detected for this request';
-
-			throw new ForwardException($error);
-
+		if ($this->actionStack->getSize() >= $this->maxForwards) {
+			throw new ForwardException('Too many forwards have been detected for this request');
 		}
 
-		if (!AG_AVAILABLE)
-		{
+		if (!AG_AVAILABLE) {
 
 			// application is unavailable
 			$moduleName = AG_UNAVAILABLE_MODULE;
@@ -168,61 +168,46 @@ abstract class Controller extends ParameterHolder
 						             $actionInstance);
 
 		// include the module configuration
-		ConfigCache::import('modules/' . $moduleName . '/config/module.ini');
+		ConfigCache::import(AG_MODULE_DIR . '/' . $moduleName . '/config/module.ini');
 
-		if (constant('MOD_' . strtoupper($moduleName) . '_ENABLED'))
-		{
-
-			// module is enabled
-
+		if (constant('MOD_' . strtoupper($moduleName) . '_ENABLED')) {
+			
 			// check for a module config.php
 			$moduleConfig = AG_MODULE_DIR . '/' . $moduleName . '/config.php';
-
-			if (is_readable($moduleConfig))
-			{
-
+			if (is_readable($moduleConfig)) {
 				require_once($moduleConfig);
-
 			}
 
 			// initialize the action
-			if ($actionInstance->initialize($this->context))
-			{
+			if ($actionInstance->initialize($this->context)) {
 
 				// create a new filter chain
 				$filterChain = new FilterChain();
 
-				if (AG_AVAILABLE)
-				{
+				if (AG_AVAILABLE) {
+					// the application is available so we'll register
+					// global and module filters, otherwise skip them
 
-				    // the application is available so we'll register
-				    // global and module filters, otherwise skip them
+					// does this action require security?
+					if (AG_USE_SECURITY && $actionInstance->isSecure()) {
 
-				    // does this action require security?
-				    if (AG_USE_SECURITY && $actionInstance->isSecure())
-				    {
-
-						if (!($this->user instanceof SecurityUser))
-						{
-
-						    // we've got security on but the user implementation
-						    // isn't a sub-class of SecurityUser
-						    $error = 'Security is enabled, but your User ' .
-						             'implementation isn\'t a sub-class of ' .
-						             'SecurityUser';
-
-						    throw new SecurityException($error);
+						if (!($this->user instanceof SecurityUser)) {
+							$error = 'Security is enabled, but your User ' .
+							         'implementation isn\'t a sub-class of ' .
+							         'SecurityUser';
+							
+							throw new SecurityException($error);
 
 						}
 
 						// register security filter
 						$filterChain->register($this->securityFilter);
 
-				    }
-
-				    // load filters
-				    $this->loadGlobalFilters($filterChain);
-				    $this->loadModuleFilters($filterChain);
+					}
+					
+					// load filters
+					$this->loadGlobalFilters($filterChain);
+					$this->loadModuleFilters($filterChain);
 
 				}
 
@@ -287,35 +272,27 @@ abstract class Controller extends ParameterHolder
 	 *                otherwise null.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
+	 * @author Mike Vincent (mike@agavi.org)
 	 * @since  3.0.0
 	 */
 	public function getAction ($moduleName, $actionName)
 	{
-
-		$file = AG_MODULE_DIR . '/' . $moduleName . '/actions/' . $actionName .
-				'Action.class.php';
-
-		require_once($file);
-
+		$file = AG_MODULE_DIR . '/' . $moduleName . '/actions/' . $actionName . 'Action.class.php';
+		
+		if (file_exists($file)) {
+			require_once($file);
+		}
+		
+		// Nested action check?
 		$position = strrpos($actionName, '/');
-
-		if ($position > -1)
-		{
-
+		if ($position > -1) {
 			$actionName = substr($actionName, $position + 1);
-
 		}
 
-		$class = $actionName . 'Action';
-
-		// fix for same name classes
-		$moduleClass = $moduleName . '_' . $class;
-
-		if (class_exists($moduleClass, false))
-		{
-
-			$class = $moduleClass;
-
+		if (class_exists($moduleName . '_' . $actionName . 'Action', false)) {
+			$class = $moduleName . '_' . $actionName . 'Action';
+		} else {
+			$class = $actionName . 'Action';
 		}
 
 		return new $class();
@@ -541,46 +518,28 @@ abstract class Controller extends ParameterHolder
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
+	 * @author Mike Vincent (mike@agavi.org)
 	 * @since  3.0.0
 	 */
 	protected function initialize ()
 	{
-
-		if (AG_USE_DATABASE)
-		{
-
-			// setup our database connections
-			$this->databaseManager = new DatabaseManager();
-			$this->databaseManager->initialize();
-
-		}
-
-		// create a new action stack
-		$this->actionStack = new ActionStack();
-
-		// create factory implementation instances
-		$config = ConfigCache::checkConfig('config/factories.ini');
-
-		// include the factories configuration
-		require_once($config);
-
-		// register our shutdown function
+		$this->maxForwards = defined('AG_MAX_FORWARDS') ? AG_MAX_FORWARDS : 20;
+	
+		$this->loadContext();
+		$this->actionStack 			=& $this->context->getActionStack();
+		$this->request 					=& $this->context->getRequest();
+		$this->user 						=& $this->context->getUser();
+		$this->databaseManager 	=& $this->context->getDatabaseManager();
+		$this->securityFilter 	=& $this->context->getSecurityFilter();
+		$this->storage 					=& $this->context->getStorage();
+		
 		register_shutdown_function(array($this, 'shutdown'));
-
-		// $this->context is created in the factories configuration up above
-
-		// TODO: logging setup
-
-		// set max forwards
-		if (defined('AG_MAX_FORWARDS'))
-		{
-
-			$this->maxForwards = AG_MAX_FORWARDS;
-
-		}
-
 	}
 
+	protected function loadContext()
+	{
+		$this->context = Context::getInstance($this);
+	}
 	// -------------------------------------------------------------------------
 
 	/**
