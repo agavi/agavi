@@ -52,6 +52,10 @@ define('AG_CACHE_DIR', dirname(__file__).'/sandbox/cache');
 define('AG_LIB_DIR', 		dirname(__file__).'/sandbox/lib');
 define('AG_MODULE_DIR', dirname(__file__).'/sandbox/modules/');
 define('AG_WEBAPP_DIR', dirname(__file__).'/sandbox');
+define('AG_USE_DATABASE', false);
+define('AG_USE_SECURITY', false);
+define('AG_PATH_INFO_ARRAY', 'SERVER');
+define('AG_PATH_INFO_KEY', 'PATH_INFO');
 
 class MockContext extends Context {
 
@@ -82,7 +86,6 @@ class SampleController extends Controller {
 	// for testing, we will only initialize the controller for now. 
 	public function dispatch() 
 	{
-		define('AG_USE_DATABASE', false);
 		$this->initialize();
 	}
 
