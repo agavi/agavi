@@ -92,11 +92,11 @@ class SampleController extends Controller {
 	// the idea here being we should be able to simple s/Context/MockContext/g and control everything via our mocked out Context
 	// but for whatever reason, if I uncomment the method below, which is an exact copy of it's parent, the actionStack, etc members
 	// on the controller dont get setup. You can confirm this with a var_dump/print_r somewhere like in testNewController() where it's commented out.
+	*/
 	protected function loadContext()
 	{
-		$this->context = Context::getInstance($this);
+		$this->context = MockContext::getInstance($this);
 	}
-	*/
 
 }
 

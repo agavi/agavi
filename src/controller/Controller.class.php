@@ -29,7 +29,6 @@ abstract class Controller extends ParameterHolder
 
 	private
 		$actionStack     = null,
-		$context         = null,
 		$databaseManager = null,
 		$maxForwards     = 20,
 		$renderMode      = View::RENDER_CLIENT,
@@ -37,6 +36,9 @@ abstract class Controller extends ParameterHolder
 		$securityFilter  = null,
 		$storage         = null,
 		$user            = null;
+
+	protected
+		$context         = null;
 
 	private static
 		$instance = null;
