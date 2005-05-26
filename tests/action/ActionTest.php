@@ -1,30 +1,39 @@
 <?php
 require_once('core/AgaviObject.class.php');
+require_once('core/Context.class.php');
 require_once('util/ParameterHolder.class.php');
+require_once('controller/Controller.class.php');
+require_once('config/ParameterParser.class.php');
 require_once('view/View.class.php');
 require_once('request/Request.class.php');
 require_once('action/Action.class.php');
+
+class ActionTestSampleController extends Controller {
+	public function dispatch() {}
+}
 
 class SampleAction extends Action {
 	public function execute() {}
 }
 
-class Context extends AgaviObject {}
-
 class TestAction extends UnitTestCase
 {
-	private $_a = null;
+	private $_a = null,
+					$_controller = null,
+					$_context = null;
 
 	public function setUp()
 	{
 		$this->_a = new SampleAction();
+		$this->_controller = new ActionTestSampleController();
+		$this->_context = Context::getInstance($this->_controller);
 	}
 
 	public function testgetContext()
 	{
-		$context = new Context();
-		$this->_a->initialize($context);
-		$this->assertReference($context, $this->_a->getContext());
+		$this->_a->initialize($this->_context);
+		$c = $this->_a->getContext();
+		$this->assertReference($this->_context, $c);
 	}
 
 	public function testgetCredential()
@@ -49,8 +58,7 @@ class TestAction extends UnitTestCase
 
 	public function testinitialize()
 	{
-		$context = new Context();
-		$this->assertTrue($this->_a->initialize($context));
+		$this->assertTrue($this->_a->initialize($this->_context));
 	}
 
 	public function testisSecure()
@@ -60,6 +68,7 @@ class TestAction extends UnitTestCase
 
 	public function testregisterValidators()
 	{
+		$this->fail('Incomplete Test, unimplemented method.');
 	}
 
 	public function testvalidate()
