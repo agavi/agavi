@@ -46,6 +46,7 @@
 		<copy todir="${project.dir}/config">
 			<fileset dir="code_templates/config">
 				<include name="*.ini"/>
+				<include name="*.conf"/>
 			</fileset>
 		</copy>
 		<mkdir dir="${project.dir}/lib"/>
