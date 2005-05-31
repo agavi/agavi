@@ -62,12 +62,6 @@ $e = $packagexml->setOptions(array(
 		'.svn/',
 	), 
 	'roles' => array(
-		'php' => 'php',
-		'html' => 'php',
-		'xml' => 'doc',
-		'ini' => 'doc',
-		'tmpl' => 'doc',
-		'conf' => 'doc',
 		'*' => 'php',
 	),
 	'exceptions' => array(
@@ -95,8 +89,12 @@ $e = $packagexml->setOptions(array(
 		)
 	),
 	'platformexceptions' => array(
-		'agavi-dist' => '(*ix|*ux|darwin*|SunOS*)',
-		'agavi.bat-dist' => 'windows'
+		'scripts/agavi-dist' => '(*ix|*ux|darwin*|SunOS*)',
+		'scripts/agavi.bat-dist' => 'windows'
+	),
+	'installexceptions' => array(
+		'scripts/agavi-dist' => '/',
+		'scripts/agavi.bat-dist' => '/'
 	)
 ));
 if (is_a($e, 'PEAR_Error')) {
