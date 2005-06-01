@@ -33,28 +33,41 @@
 	<target name="project" description="create a new project">
 		<input propertyname="project.dir" promptChar="?" message="Full path to your new project (no trailing slash!)"/>
 		<mkdir dir="${project.dir}"/>
-		<mkdir dir="${project.dir}/cache"/>
-		<copy file="code_templates/config.php.tmpl" tofile="${project.dir}/config.php">
+		<mkdir dir="${project.dir}/www"/>
+		<copy file="code_templates/index.php.tmpl" tofile="${project.dir}/www/index.php">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">    
 					<token key="PATH_TO_AGAVI" value="${project.basedir}"/>
-					<token key="PATH_TO_PROJECT" value="${project.dir}"/>
+					<token key="PATH_TO_PROJECT" value="${project.dir}/webapp"/>
 				</replacetokens>
 			</filterchain>
 		</copy>
-		<mkdir dir="${project.dir}/config"/>
-		<copy todir="${project.dir}/config">
+		<mkdir dir="${project.dir}/www/modpub"/>
+		<mkdir dir="${project.dir}/webapp"/>
+		<mkdir dir="${project.dir}/webapp/cache"/>
+		<copy file="code_templates/config.php.tmpl" tofile="${project.dir}/webapp/config.php">
+			<filterchain>
+				<replacetokens begintoken="%%" endtoken="%%">    
+					<token key="PATH_TO_AGAVI" value="${project.basedir}"/>
+					<token key="PATH_TO_PROJECT" value="${project.dir}/webapp"/>
+				</replacetokens>
+			</filterchain>
+		</copy>
+		<mkdir dir="${project.dir}/webapp/config"/>
+		<copy todir="${project.dir}/webapp/config">
 			<fileset dir="code_templates/config">
 				<include name="*.ini"/>
 				<include name="*.conf"/>
 			</fileset>
 		</copy>
-		<mkdir dir="${project.dir}/lib"/>
-		<mkdir dir="${project.dir}/lib/models"/>
-		<mkdir dir="${project.dir}/modules"/>
-		<mkdir dir="${project.dir}/templates"/>
+		<mkdir dir="${project.dir}/webapp/lib"/>
+		<mkdir dir="${project.dir}/webapp/lib/models"/>
+		<mkdir dir="${project.dir}/webapp/modules"/>
+		<mkdir dir="${project.dir}/webapp/templates"/>
 		<input propertyname="modules" promptChar="?" defaultValue="Default" message="Modules for your project (no whitespace, comma seperated)"/>
-		<foreach list="${modules}" param="module" target="buildmodule"/>
+		<foreach list="${modules}" param="module" target="buildmodule">
+			<property name="project.dir" value="${project.dir}/webapp" override="true"/>
+		</foreach>
 	</target>
 
 	<target name="module" description="create a new module">
