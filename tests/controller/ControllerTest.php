@@ -19,10 +19,16 @@ class ControllerTest extends UnitTestCase
 
 	public function testNewController()
 	{
-		define('AG_USE_DATABASE', true);
 		$this->assertTrue($this->_c instanceof MockController);
 		$context = $this->_c->getContext();
 		$this->assertTrue($context instanceof Context);
+		$this->assertTrue($context->getRequest() instanceof MockWebRequest);
+		if (defined('AG_USE_DATABASE') && AG_USE_DATABASE) {
+			$this->assertTrue($context->getDatabaseManager() instanceof MockDatabaseManager);
+		} else {
+			$this->fail('Database Disabled');
+			$this->assertNull($context->getDatabaseManager());
+		}
 	}
 
 	public function testactionExists()

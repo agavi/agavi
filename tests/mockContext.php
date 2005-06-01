@@ -28,7 +28,7 @@ require_once('util/ParameterHolder.class.php'); 	// Controller's Parent Class
 require_once('controller/Controller.class.php');	// We'll extend this with our mock controller
 
 require_once('core/Context.class.php');						// Context provides the glueworks to the rest of the framework
-
+require_once('database/DatabaseManager.class.php');
 require_once('action/ActionStack.class.php');			
 require_once('request/Request.class.php');	
 require_once('request/WebRequest.class.php');	
@@ -84,8 +84,9 @@ define('AG_CONFIG_DIR',	AG_WEBAPP_DIR . '/sandbox/config');
 define('AG_CACHE_DIR',	AG_WEBAPP_DIR . '/cache');
 define('AG_LIB_DIR',		AG_WEBAPP_DIR . '/lib');
 define('AG_MODULE_DIR',	AG_WEBAPP_DIR . '/modules/');
-//define('AG_PATH_INFO_ARRAY', 'SERVER');
-//define('AG_PATH_INFO_KEY', 'PATH_INFO');
+define('AG_PATH_INFO_ARRAY', 'SERVER');
+define('AG_PATH_INFO_KEY', 'PATH_INFO');
+define('AG_USE_DATABASE', true);
 
 
 class MockContext extends Context {
@@ -98,7 +99,7 @@ class MockContext extends Context {
 			$class = __CLASS__;
 			self::$instance = new $class;
 		
-			if (defined(AG_USE_DATABASE) && AG_USE_DATABASE) {
+			if (AG_USE_DATABASE) {
 				self::$instance->databaseManager = new MockDatabaseManager($test);
 				self::$instance->databaseManager->initialize();
 			}
