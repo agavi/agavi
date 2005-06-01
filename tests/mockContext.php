@@ -52,8 +52,9 @@ require_once('exception/ConfigurationException.class.php');	// Thrown if somethi
 require_once('exception/CacheException.class.php');					// Thrown if something's bunk in a config
 require_once('exception/ParseException.class.php');					// Thrown if there was a problem parsing something (inifile)
 
-//require_once('config/ParameterParser.class.php');
 require_once('view/View.class.php');								// Needed for some constants and stuff.. 
+
+require_once('config/ParameterParser.class.php');
 require_once('config/ConfigCache.class.php');				// needed in forward, possibly other methods
 
 require_once('config/ConfigHandler.class.php');			

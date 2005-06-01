@@ -3,6 +3,7 @@ require_once dirname(__FILE__) . '/../mockContext.php';
 
 class ConfigCacheTest extends UnitTestCase
 {
+/*
 	private	$_controller = null,
 					$_context = null;
 
@@ -20,18 +21,45 @@ class ConfigCacheTest extends UnitTestCase
 		$this->_context = null;
 	}
 
+*/
 
 	public function testCheckConfig()
 	{
-		// We should be throwing exceptions if the config is bunk/unreadable
+		try {
+			$filename = ConfigCache::checkConfig('config/factories.ini');
+			$this->assertIdentical(AG_CACHE_DIR . '/config_factories.ini.php', $filename);
+			$this->assertTrue( file_exists($filename) );
+		} catch (ConfigurationException $e) {
+			$this->fail($e->getMessage());
+		}
+		
 		try {
 			ConfigCache::checkConfig('a file that doesnt exist');
 		} catch (ConfigurationException $e) {
 			$this->pass('Successfully caught configuration exception');
 		}
 		$this->assertTrue($e, 'Did not get expected ConfigurationException?');
+
 	}
 
+
+	public function testgetCacheName()
+	{
+		$name = 'bleh/blah.ini';	
+		$this->assertIdentical(AG_CACHE_DIR . '/bleh_blah.ini.php', ConfigCache::getCacheName($name) );
+		
+		$name = 'bleh\blah.ini';	
+		$this->assertIdentical(AG_CACHE_DIR . '/bleh_blah.ini.php', ConfigCache::getCacheName($name) );
+	}
+	
+	public function testimport()
+	{
+		$this->assertFalse( defined('Sompn_loaded') );
+		ConfigCache::import('config/sompn.ini');
+		$this->assertTrue( defined('Sompn_loaded') );
+			
+	}
+	
 	public function testclear()
 	{
 		$dummyfile = AG_CACHE_DIR . '/dummyfile.ini.php';
@@ -39,17 +67,5 @@ class ConfigCacheTest extends UnitTestCase
 		$this->assertTrue( file_exists($dummyfile) );
 		ConfigCache::clear();
 		$this->assertFalse( file_exists($dummyfile) );
-		
-	}
-
-	public function testgetCacheName()
-	{
-		
-		$this->fail('incomplete Test');
-	}
-	
-	public function testimport()
-	{
-		$this->fail('incomplete Test');
 	}
 }
