@@ -1,26 +1,23 @@
 <?php
-require_once 'core/AgaviObject.class.php';
-require_once 'config/ConfigCache.class.php';
-require_once 'util/Toolkit.class.php';
-require_once 'exception/AgaviException.class.php';
-require_once 'exception/ConfigurationException.class.php';
+require_once dirname(__FILE__) . '/../mockContext.php';
 
-if (!defined('AG_WEBAPP_DIR')) {
-	define('AG_WEBAPP_DIR', dirname(__FILE__) . '/sandbox');
-}
-
-if (!defined('AG_CACHE_DIR')) {
-	define('AG_CACHE_DIR', AG_WEBAPP_DIR . '/cache');
-}
-	
 class ConfigCacheTest extends UnitTestCase
 {
+	private	$_controller = null,
+					$_context = null;
 
-	public function setup() 
+	public function setUp()
 	{
-		// TODO: create an ini file on the fly.. 
-		$inifile = '';
-		
+		$this->_controller = new MockController($this);
+		$this->_controller->dispatch();
+		$this->_context = $this->_controller->getContext();
+	}
+
+	public function tearDown() 
+	{
+		$this->_controller = null;
+		$this->_context->cleanSlate();
+		$this->_context = null;
 	}
 
 
@@ -32,16 +29,17 @@ class ConfigCacheTest extends UnitTestCase
 		} catch (ConfigurationException $e) {
 			$this->pass('Successfully caught configuration exception');
 		}
-		// the string passed into checkConfig maybe an absolute path or relative
-		// regardless, an absolute path is ascertained and internally knowns as the $filename
-		// the name of the cache file is determined
-		
+		$this->assertTrue($e, 'Did not get expected ConfigurationException?');
 	}
 
 	public function testclear()
 	{
-	
-		$this->fail('incomplete Test');
+		$dummyfile = AG_CACHE_DIR . '/dummyfile.ini.php';
+		file_put_contents($dummyfile, 'Dummy file created in ' . __FILE__ . ' - ' . date('Y/m/d'));
+		$this->assertTrue( file_exists($dummyfile) );
+		ConfigCache::clear();
+		$this->assertFalse( file_exists($dummyfile) );
+		
 	}
 
 	public function testgetCacheName()

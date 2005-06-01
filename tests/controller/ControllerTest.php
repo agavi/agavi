@@ -1,143 +1,14 @@
 <?php
-require_once('core/AgaviObject.class.php');				// ParameterHolder's Parent Class
-require_once('util/ParameterHolder.class.php'); 	// Controller's Parent Class
-require_once('controller/Controller.class.php');	// This is what we're testing, son.
 
-require_once('core/Context.class.php');						// Context provides the glueworks to the rest of the framework
-
-require_once('action/ActionStack.class.php');	
-require_once('request/Request.class.php');	
-require_once('request/WebRequest.class.php');	
-require_once('storage/Storage.class.php');	
-require_once('storage/SessionStorage.class.php');	
-require_once('user/User.class.php');	
-require_once('user/SecurityUser.class.php');	
-require_once('user/BasicSecurityUser.class.php');	
-require_once('filter/Filter.class.php');	
-require_once('filter/SecurityFilter.class.php');	
-require_once('filter/BasicSecurityFilter.class.php');	
-
-require_once('util/Toolkit.class.php');						// utilized by AgaviException, View, ConfigCache, ConfigHandler
-
-require_once('exception/AgaviException.class.php');					// Base Exception class
-require_once('exception/ControllerException.class.php');		// Thrown if the requested controller isnt implemented
-require_once('exception/FactoryException.class.php');				// Thrown if sompn wasnt right in a newInstance call
-require_once('exception/ForwardException.class.php');				// Thrown if sompn wasnt right in a newInstance call
-require_once('exception/RenderException.class.php');				// Thrown if a view's pre-render check fails
-require_once('exception/ConfigurationException.class.php');	// Thrown if something's bunk in a config
-require_once('exception/CacheException.class.php');					// Thrown if something's bunk in a config
-require_once('exception/ParseException.class.php');					// Thrown if there was a problem parsing something (inifile)
-
-//require_once('config/ParameterParser.class.php');
-require_once('view/View.class.php');								// Needed for some constants and stuff.. 
-require_once('config/ConfigCache.class.php');				// needed in forward, possibly other methods
-
-require_once('config/ConfigHandler.class.php');			
-require_once('config/IniConfigHandler.class.php');	
-require_once('config/RootConfigHandler.class.php');	
-require_once('config/AutoloadConfigHandler.class.php');
-require_once('config/DatabaseConfigHandler.class.php');
-require_once('config/DefineConfigHandler.class.php');
-require_once('config/FactoryConfigHandler.class.php');
-require_once('config/CompileConfigHandler.class.php');
-require_once('config/FilterConfigHandler.class.php');
-require_once('config/LoggingConfigHandler.class.php');
-require_once('config/ModuleConfigHandler.class.php');
-require_once('config/ValidatorConfigHandler.class.php');
-
-
-// setup some defines
-define('AG_CONFIG_DIR',	dirname(__file__).'/sandbox/config');
-define('AG_CACHE_DIR',	dirname(__file__).'/sandbox/cache');
-define('AG_LIB_DIR',		dirname(__file__).'/sandbox/lib');
-define('AG_MODULE_DIR',	dirname(__file__).'/sandbox/modules/');
-define('AG_WEBAPP_DIR',	dirname(__file__).'/sandbox');
-define('AG_USE_DATABASE', false);
-define('AG_USE_SECURITY', false);
-define('AG_PATH_INFO_ARRAY', 'SERVER');
-define('AG_PATH_INFO_KEY', 'PATH_INFO');
-
-
-// Our Mocked Collaborators
-Mock::generate('DatabaseManager');
-Mock::generate('ActionStack');
-Mock::generate('WebRequest');
-Mock::generate('SecurityFilter');
-Mock::generate('SecurityUser');
-Mock::generate('SessionStorage');
-
-class MockContext extends Context {
-
-	// Overide the getInstance method to load our mocks instead
-	// added a test parameter to it's signature too, so we can get a reference to the test object for the mocks
-	public static function getInstance($controller, &$test=null)
-	{
-		if (!isset(self::$instance)) {
-			$class = __CLASS__;
-			self::$instance = new $class;
-		
-			if (defined(AG_USE_DATABASE) && AG_USE_DATABASE) {
-				self::$instance->databaseManager = new MockDatabaseManager($test);
-				self::$instance->databaseManager->initialize();
-			}
-			self::$instance->controller 			= $controller;
-			self::$instance->actionStack			= new MockActionStack($test);
-			// In the live getInstance we would do this.. 
-			// require_once(ConfigCache::checkConfig('config/factories.ini'));
-			// which essentially establishes the request, storage, user,  and optionally securityFilter objects initializing each as well
-			// so we'll just go ahead and do that here.
-			self::$instance->request = new MockWebRequest($test);
-			self::$instance->storage = new MockSessionStorage($test);
-			self::$instance->user = new MockSecurityUser($test);
-			self::$instance->request->initialize(self::$instance, null);
-			self::$instance->storage->initialize(self::$instance, null);
-			self::$instance->user->initialize(self::$instance, null);
-		
-			if (AG_USE_SECURITY) {
-				self::$instance->securityFilter = new MockSecurityFilter($test);
-				self::$instance->securityFilter->initialize(self::$instance);
-			}
-		}
-		return self::$instance;
-	}
-
-}
-
-class SampleController extends Controller {
-	// normally, the dispatch will stuff any parameters found into the request object 
-	// and forward to the requested module/action (or defaults) as well
-	// for testing, we will only initialize the controller for now. 
-	private $test;
-
-	// we need a reference to the test object to pass into our mocks, so we pass it into the constructor. 
-	public function __construct(&$test = null)
-	{
-		$this->test = $test;
-	}
-	
-	public function dispatch() 
-	{
-		$this->initialize();
-	}
-
-	protected function loadContext()
-	{
-		$this->context = MockContext::getInstance($this, $this->test);
-	}
-
-}
+require_once dirname(__FILE__) . '/../mockContext.php';
 
 class ControllerTest extends UnitTestCase
 {
 	private $_c = null;
 
-	public function __construct()
-	{
-	}
-
 	public function setUp()
 	{
-		$this->_c = new SampleController($this);
+		$this->_c = new MockController($this);
 		$this->_c->dispatch();
 	}
 
@@ -149,11 +20,9 @@ class ControllerTest extends UnitTestCase
 	public function testNewController()
 	{
 		define('AG_USE_DATABASE', true);
-		$this->assertTrue($this->_c instanceof SampleController);
+		$this->assertTrue($this->_c instanceof MockController);
 		$context = $this->_c->getContext();
 		$this->assertTrue($context instanceof Context);
-		
-
 	}
 
 	public function testactionExists()
@@ -166,8 +35,6 @@ class ControllerTest extends UnitTestCase
 
 	public function testforward()
 	{
-		define('AG_ERROR_404_MODULE', 'Test');
-		define('AG_ERROR_404_ACTION', 'Test');
 		try {
 			$this->_c->forward('Default', 'SOMEACTIONTHATSURELYDONUTEXIST');
 		} catch (ConfigurationException $e) {
@@ -207,13 +74,13 @@ class ControllerTest extends UnitTestCase
 	public function testgetInstance()
 	{
 		try {
-			SampleController::getInstance();
+			MockController::getInstance();
 			$this->fail('Expected ControllerException not thrown!');
 		} catch (ControllerException $e) {
 			$this->pass();
 		}
-		$this->_c = Controller::newInstance('SampleController');
-		$this->assertIdentical($this->_c, SampleController::getInstance());
+		$this->_c = Controller::newInstance('MockController');
+		$this->assertIdentical($this->_c, MockController::getInstance());
 	}
 
 	public function testgetModel()
@@ -257,15 +124,15 @@ class ControllerTest extends UnitTestCase
 		 */
 
 		/*
-		$this->assertIsA(Controller::newInstance('SampleController'), 'SampleController');
+		$this->assertIsA(Controller::newInstance('MockController'), 'MockController');
 		try {
-			SampleController::newInstance('Request');
+			MockController::newInstance('Request');
 			$this->fail('Expected FactoryException not thrown!');
 		} catch (FactoryException $e) {
 			$this->pass();
 		}
 		try {
-			SampleController::newInstance('SampleController');
+			MockController::newInstance('MockController');
 			$this->fail('Expected FactoryException not thrown!');
 		} catch (FactoryException $e) {
 			$this->pass();
