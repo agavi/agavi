@@ -191,7 +191,7 @@ class Context extends AgaviObject
 			$class = __CLASS__;
 			self::$instance = new $class;
 		
-			if (defined(AG_USE_DATABASE) && AG_USE_DATABASE) {
+			if (defined('AG_USE_DATABASE') && AG_USE_DATABASE) {
 				self::$instance->databaseManager = new DatabaseManager();
 				self::$instance->databaseManager->initialize();
 			}
