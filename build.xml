@@ -19,9 +19,10 @@
   <!-- main target -->
 	<target name="main" description="main target">
 		<echo msg="available targets: " /> 
-		<echo msg="  docs    : regenerate phpdocs" />
-		<echo msg="  test    : run unit test suite" />
+		<echo msg="  docs    : regenerate phpdocs   " />
+		<echo msg="  test    : run unit test suite  " />
 		<echo msg="  package : generate PEAR package" />
+		<echo msg="  clean   : clean out cruft      " />
 	</target>
 
 	<target name="docs" description="docs target">
@@ -33,8 +34,20 @@
 	</target>
 
 	<target name="test" description="run test suite">
-		<!-- <agavitest outfile="tests.html" reporter="html"/> -->
 		<agavitest exit="true"/>
+	</target>
+
+	<target name="clean" description="clean out the cruft">
+		<delete dir="build" includeemptydirs="true" failonerror="true" />
+		<delete dir="apidocs" includeemptydirs="true" quiet="true" failonerror="false" />
+		<delete file="tests.html" includeemptydirs="true" quiet="true" failonerror="false" />
+	</target>
+
+	<target name="damagecontrol" description="damagecontrol target">
+		<phingcall target="docs"/>
+		<phingcall target="package"/>
+		<agavitest exit="true" outfile="tests.html" reporter="html"/>
+		<!-- sync docs, packages, tests.html -->
 	</target>
 
 </project>
