@@ -89,6 +89,9 @@ define('AG_MODULE_DIR',	AG_WEBAPP_DIR . '/modules/');
 define('AG_PATH_INFO_ARRAY', 'SERVER');
 define('AG_PATH_INFO_KEY', 'PATH_INFO');
 define('AG_USE_DATABASE', true);
+define('AG_USE_SECURITY', true);
+define('AG_APP_DIR', dirname(dirname(__FILE__)) . '/src');
+define('AG_AVAILABLE', 'On');
 
 define('AG_ERROR_404_MODULE', 'ErrorModule');
 define('AG_ERROR_404_ACTION', 'Some');
