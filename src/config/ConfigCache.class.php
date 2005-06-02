@@ -56,81 +56,47 @@ class ConfigCache extends AgaviObject
 	private static function callHandler ($handler, $config, $cache)
 	{
 
-		if (count(self::$handlers) == 0)
-		{
-
+		if (count(self::$handlers) == 0) {
 			// we need to load the handlers first
 			self::loadConfigHandlers();
-
 		}
 
 		// grab the base name of the handler
 		$basename = basename($handler);
 
-		if (isset(self::$handlers[$handler]))
-		{
-
+		if (isset(self::$handlers[$handler])) {
 			// we have a handler associated with the full configuration path
-
 			// call the handler and retrieve the cache data
 			$data =& self::$handlers[$handler]->execute($config);
-
 			self::writeCacheFile($config, $cache, $data, false);
-
 			return;
-
-		} else if (isset(self::$handlers[$basename]))
-		{
-
+		} else if (isset(self::$handlers[$basename]))	{
 			// we have a handler associated with the configuration base name
-
 			// call the handler and retrieve the cache data
 			$data =& self::$handlers[$basename]->execute($config);
-
 			self::writeCacheFile($config, $cache, $data, false);
-
 			return;
-
-		} else
-		{
-
+		} else {
 			// let's see if we have any wildcard handlers registered that match
 			// this basename
-			foreach (self::$handlers as $key => $handlerInstance)
-			{
-
+			foreach (self::$handlers as $key => $handlerInstance)	{
 				// replace wildcard chars in the configuration
 				$pattern = str_replace('.', '\.', $key);
 				$pattern = str_replace('*', '.*?', $pattern);
-
 				// create pattern from config
 				$pattern = '#' . $pattern . '#';
-
-				if (preg_match($pattern, $handler))
-				{
-
-				    // we found a match!
-
-				    // call the handler and retrieve the cache data
-				    $data =& self::$handlers[$key]->execute($config);
-
-				    self::writeCacheFile($config, $cache, $data, false);
-
-				    return;
-
+				if (preg_match($pattern, $handler))	{
+					// call the handler and retrieve the cache data
+					$data =& self::$handlers[$key]->execute($config);
+					self::writeCacheFile($config, $cache, $data, false);
+					return;
 				}
-
 			}
-
 		}
-
 		// we do not have a registered handler for this file
-		$error = 'Configuration file "%s" does not have a ' .
-				 'registered handler';
+		$error = 'Configuration file "%s" does not have a registered handler';
 		$error = sprintf($error, $config);
-
 		throw new ConfigurationException($error);
-
 	}
 
 	// -------------------------------------------------------------------------
@@ -155,37 +121,19 @@ class ConfigCache extends AgaviObject
 	 */
 	public static function checkConfig ($config)
 	{
+		// the full filename path to the config, which might not be what we were given.
+		$filename = Toolkit::isPathAbsolute($config) ? $config : AG_WEBAPP_DIR . '/' . $config;
 
-		// the full filename path to the config
-		$filename = $config;
-
-		if (!Toolkit::isPathAbsolute($filename))
-		{
-
-			$filename = AG_WEBAPP_DIR . '/' . $filename;
-
-		}
-
-		if (!is_readable($filename))
-		{
-
-			// configuration file does not exist
-			$error = 'Configuration file "%s" does not exist or is unreadable';
-			$error = sprintf($error, $filename);
-
-			throw new ConfigurationException($error);
-
+		if (!is_readable($filename)) {
+			throw new ConfigurationException('Configuration file "' . $filename . '" does not exist or is unreadable.');
 		}
 
 		// the cache filename we'll be using
 		$cache = self::getCacheName($config);
 
-		if (!is_readable($cache) || filemtime($filename) > filemtime($cache))
-		{
-
+		if (!is_readable($cache) || filemtime($filename) > filemtime($cache))	{
 			// configuration file has changed so we need to reparse it
 			self::callHandler($config, $filename, $cache);
-
 		}
 
 		return $cache;
@@ -233,27 +181,16 @@ class ConfigCache extends AgaviObject
 		// ignore names
 		$ignore = array('.', '..', 'CVS', '.svn');
 
-		while (($file = readdir($fp)) !== false)
-		{
-
-			if (!in_array($file, $ignore))
-			{
-
-				if (is_dir($file))
-				{
-
+		while (($file = readdir($fp)) !== false) {
+			if (!in_array($file, $ignore)) {
+				if (is_dir($file)) {
 				    // recurse through directory
 				    self::clearCache($file);
-
 				    // delete the directory
 				    rmdir($file);
-
-				} else
-				{
-
+				} else {
 				    // delete the file
 				    unlink($directory . '/' . $file);
-
 				}
 
 			}
@@ -280,19 +217,13 @@ class ConfigCache extends AgaviObject
 	public static function getCacheName ($config)
 	{
 
-		if (strlen($config) > 3 && ctype_alpha($config{0}) &&
-			$config{1} == ':' && $config{2} == '\\')
-		{
-
+		if (strlen($config) > 3 && ctype_alpha($config{0}) &&	$config{1} == ':' && $config{2} == '\\') {
 			// file is a windows absolute path, strip off the drive letter
 			$config = substr($config, 3);
-
 		}
 
-		// replace unfriendly filename characters with an underscore
-		$config  = str_replace(array('\\', '/'), '_', $config);
-		$config .= '.php';
-
+		// replace unfriendly filename characters with an underscore and postfix the name with a php extension
+		$config  = str_replace(array('\\', '/'), '_', $config) . '.php';
 		return AG_CACHE_DIR . '/' . $config;
 
 	}
@@ -346,15 +277,12 @@ class ConfigCache extends AgaviObject
 		self::$handlers['config_handlers.ini']->initialize();
 
 		// application configuration handlers
-
 		require_once(ConfigCache::checkConfig('config/config_handlers.ini'));
 
 		// module level configuration handlers
 
 		// make sure our modules directory exists
-		if (is_readable(AG_MODULE_DIR))
-		{
-
+		if (is_readable(AG_MODULE_DIR))	{
 			// ignore names
 			$ignore = array('.', '..', 'CVS', '.svn');
 
@@ -362,17 +290,14 @@ class ConfigCache extends AgaviObject
 			$fp = opendir(AG_MODULE_DIR);
 
 			// loop through the directory and grab the modules
-			while (($directory = readdir($fp)) !== false)
-			{
+			while (($directory = readdir($fp)) !== false)	{
 
 				if (!in_array($directory, $ignore))
 				{
 
-				    $config = AG_MODULE_DIR . '/' . $directory .
-						      '/config/config_handlers.ini';
+				    $config = AG_MODULE_DIR . '/' . $directory . '/config/config_handlers.ini';
 
-				    if (is_readable($config))
-				    {
+				    if (is_readable($config)) {
 
 						// initialize the root configuration handler with this
 						// module name
@@ -397,8 +322,7 @@ class ConfigCache extends AgaviObject
 			// close file pointer
 			fclose($fp);
 
-		} else
-		{
+		} else {
 
 			// module directory doesn't exist or isn't readable
 			$error = 'Module directory "%s" does not exist or is not readable';
