@@ -9,6 +9,7 @@
   <property name="builddir" value="build" override="true" />
   <property name="srcdir"   value="${project.basedir}" override="true" />
 	<taskdef classname="etc.phing.AgaviPackageTask" name="agavipackage"/>
+	<taskdef classname="etc.phing.AgaviTestTask" name="agavitest"/>
 
   <!-- fileset for -dist files -->
   <fileset dir="." id="distfiles">
@@ -19,6 +20,8 @@
 	<target name="main" description="main target">
 		<echo msg="available targets: " /> 
 		<echo msg="  docs    : regenerate phpdocs" />
+		<echo msg="  test    : run unit test suite" />
+		<echo msg="  package : generate PEAR package" />
 	</target>
 
 	<target name="docs" description="docs target">
@@ -27,6 +30,11 @@
 
 	<target name="package" description="build pear package">
 		<agavipackage dir="build"/>
+	</target>
+
+	<target name="test" description="run test suite">
+		<!-- <agavitest outfile="tests.html" reporter="html"/> -->
+		<agavitest exit="true"/>
 	</target>
 
 </project>
