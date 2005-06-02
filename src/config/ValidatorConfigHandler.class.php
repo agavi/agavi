@@ -212,13 +212,8 @@ class ValidatorConfigHandler extends IniConfigHandler
 
 				// register validators for this file/parameter
 				foreach ($attributes['validators'] as &$validator) {
-
-					$tmp    = "\t\$validatorManager->registerValidator('%s', %s, " .
-					          "%s);";
-					$data[] = sprintf($tmp, $name,
-					                  "\$validators['$validator']",
-					                  $attributes['parent']);
-
+					$tmp    = "\t\$validatorManager->registerValidator('%s', %s, %s);";
+					$data[] = sprintf($tmp, $name, "\$validators['$validator']", $attributes['parent']);
 				}
 
 			}
