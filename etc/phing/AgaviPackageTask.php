@@ -25,6 +25,7 @@ class AgaviPackageTask extends Task {
 		$this->log("Building package contents in: {$this->dir}", PROJECT_MSG_INFO);
 
 		exec("cp -Rp src/* {$this->dir}");
+		exec('find '.$this->dir.' -name ".svn" -type d -exec rm -rf {} \; 2>&1 >/dev/null');
 		copy('CHANGELOG', "{$this->dir}/CHANGELOG");
 		copy('LICENSE', "{$this->dir}/LICENSE");
 		mkdir("{$this->dir}/scripts");
