@@ -8,6 +8,7 @@
   <property name="package"  value="${phing.project.name}" override="true" />
   <property name="builddir" value="build" override="true" />
   <property name="srcdir"   value="${project.basedir}" override="true" />
+	<taskdef classname="etc.phing.AgaviPackageTask" name="agavipackage"/>
 
   <!-- fileset for -dist files -->
   <fileset dir="." id="distfiles">
@@ -22,6 +23,10 @@
 
 	<target name="docs" description="docs target">
 		<phpdoc title="Agavi Documentation" destdir="apidocs" sourcepath="src" output="HTML:frames:earthli"/>
+	</target>
+
+	<target name="package" description="build pear package">
+		<agavipackage dir="build"/>
 	</target>
 
 </project>
