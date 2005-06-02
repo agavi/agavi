@@ -18,7 +18,8 @@
  * @subpackage config
  *
  * @author    Sean Kerr (skerr@mojavi.org)
- * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
+ * @copyright (c) Sean Kerr, {@link http://www.mojavi.org} 2004-2005
+ * @copyright (c) Agavi Foundation {@link http://www.agavi.org} 2005
  * @since     3.0.0
  * @version   $Id$
  */

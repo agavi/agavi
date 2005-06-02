@@ -10,18 +10,22 @@ $opts['m'] = (empty($opts['m']) ? '*' : $opts['m']);
 $opts['t'] = (empty($opts['t']) ? 'Text' : $opts['t']);
 
 $test = new GroupTest('Agavi Test Suite');
+
 foreach (glob(dirname(__file__)."/{$opts['m']}") as $dir) {
+	//echo 'Checking for ' . basename($dir) .' tests: ';
 	if (!is_dir($dir)) { continue; }
-	$group = &new GroupTest(dirname($dir) . ' Test Suite');
+	$group = &new GroupTest(basename($dir) . ' Test Suite');
 	foreach (glob("{$dir}/*Test*.php") as $file) {
+		//echo basename($file).' ';
 		$group->addTestFile($file);
 	}
+	//echo "done\n";
 	$test->addTestCase($group);
 }
+
 if (strtolower($opts['t']) == 'html')
 	$rclass = 'HTMLReporter';
 else
 	$rclass = 'TextReporter';
 $test->run(new $rclass());
-
 ?>
