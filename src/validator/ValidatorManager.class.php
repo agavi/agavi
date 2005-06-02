@@ -69,65 +69,32 @@ class ValidatorManager extends AgaviObject
 	{
 
 		$retval = true;
-
-		// loop through the names and start our validation
-		// if 1 or more groups exist, we'll have to do a second pass
 		$pass = 1;
 
-		while (true)
-		{
-
-			foreach ($this->names as $name => &$data)
-			{
-
-				if (isset($data['_is_parent']))
-				{
-
-				    // this is a parent
-				    foreach ($data as $subname => &$subdata)
-				    {
-
-						if ($subname == '_is_parent')
-						{
-
-						    // this isn't an actual index, but more of a flag
-						    continue;
-
+		while (true) {
+			foreach ($this->names as $name => &$data)	{
+				if (isset($data['_is_parent'])) {
+					foreach ($data as $subname => &$subdata) {
+						if ($subname == '_is_parent') {
+							// this isn't an actual index, but more of a flag
+							continue;
 						}
 
-						if ($subdata['validation_status'] == true &&
-						    !$this->validate($subname, $subdata, $name))
-						{
-
-						    // validation failed
-						    $retval = false;
-
+						if ($subdata['validation_status'] == true && !$this->validate($subname, $subdata, $name)) {
+							// validation failed
+							$retval = false;
 						}
-
-				    }
-
-				} else
-				{
-
-				    // single parameter
-				    if ($data['validation_status'] == true &&
-						!$this->validate($name, $data, null))
-				    {
-
+					}
+				} else {
+					// single parameter
+					if ($data['validation_status'] == true && !$this->validate($name, $data, null)) {
 						// validation failed
 						$retval = false;
-
-				    }
-
+					}
 				}
-
 			}
-
-			if (count($this->groups) == 0 || $pass == 2)
-			{
-
+			if (count($this->groups) == 0 || $pass == 2) {
 				break;
-
 			}
 
 			// increase our pass indicator
@@ -139,6 +106,7 @@ class ValidatorManager extends AgaviObject
 
 	}
 
+	
 	// -------------------------------------------------------------------------
 
 	/**
@@ -166,18 +134,15 @@ class ValidatorManager extends AgaviObject
 	 * @param string  A file or parameter name.
 	 * @param bool    The required status.
 	 * @param string  A required error message.
+	 * @param string  A parent array
 	 * @param string  A group name.
-	 * @param string  A parent array.
+	 * @param bool 		An unused(?) parameter, apparently meant to determine if the name is a parameter or filename.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  3.0.0
 	 */
-	public function registerName ($name, $required = true,
-						          $message = 'Required', $parent = null,
-						          $group = null, $isFile = false)
+	public function registerName ($name, $required = true, $message = 'Required', $parent = null, $group = null, $isFile = false)
 	{
-
-		// create the entry
 		$entry                      = array();
 		$entry['group']             = null;
 		$entry['is_file']           = $isFile;
@@ -186,23 +151,15 @@ class ValidatorManager extends AgaviObject
 		$entry['validation_status'] = true;
 		$entry['validators']        = array();
 
-		if ($parent != null)
-		{
-
+		if ($parent != null) {
 			// this parameter has a parent array
-			if (!isset($this->names[$parent]))
-			{
-
+			if (!isset($this->names[$parent])) {
 				// create the parent array
 				$this->names[$parent] = array('_is_parent' => true);
-
 			}
-
 			// register this parameter
 			$this->names[$parent][$name] =& $entry;
-
-		} else
-		{
+		} else {
 
 			// no parent
 
@@ -211,12 +168,10 @@ class ValidatorManager extends AgaviObject
 
 		}
 
-		if ($group != null)
-		{
+		if ($group != null) {
 
 			// set group
-			if (!isset($this->groups[$group]))
-			{
+			if (!isset($this->groups[$group])) {
 
 				// create our group
 				$this->groups[$group] = array('_force' => false);

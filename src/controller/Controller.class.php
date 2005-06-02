@@ -43,10 +43,6 @@ abstract class Controller extends ParameterHolder
 	private static
 		$instance = null;
 
-	public function __construct()
-	{
-	}
-
 	// +-----------------------------------------------------------------------+
 	// | METHODS                                                               |
 	// +-----------------------------------------------------------------------+
@@ -166,8 +162,7 @@ abstract class Controller extends ParameterHolder
 		$actionInstance = $this->getAction($moduleName, $actionName);
 
 		// add a new action stack entry
-		$this->actionStack->addEntry($moduleName, $actionName,
-						             $actionInstance);
+		$this->actionStack->addEntry($moduleName, $actionName, $actionInstance);
 
 		// include the module configuration
 		ConfigCache::import(AG_MODULE_DIR . '/' . $moduleName . '/config/module.ini');
@@ -390,16 +385,12 @@ abstract class Controller extends ParameterHolder
 	public static function getInstance ()
 	{
 
-		if (isset(self::$instance))
-		{
-
+		if (isset(self::$instance)) {
 			return self::$instance;
-
 		}
 
 		// an instance of the controller has not been created
 		$error = 'A Controller implementation instance has not been created';
-
 		throw new ControllerException($error);
 
 	}
@@ -563,20 +554,14 @@ abstract class Controller extends ParameterHolder
 		$config     = AG_CONFIG_DIR . '/filters.ini';
 		$moduleName = 'global';
 
-		if (!isset($list[$moduleName]) && is_readable($config))
-		{
-
+		if (!isset($list[$moduleName]) && is_readable($config))	{
 			// load global filters
 			require_once(ConfigCache::checkConfig('config/filters.ini'));
-
 		}
 
 		// register filters
-		foreach ($list[$moduleName] as $filter)
-		{
-
+		foreach ($list[$moduleName] as $filter)	{
 			$filterChain->register($filter);
-
 		}
 
 	}
@@ -602,34 +587,21 @@ abstract class Controller extends ParameterHolder
 		// get the module name
 		$moduleName = $this->context->getModuleName();
 
-		if (!isset($list[$moduleName]))
-		{
-
+		if (!isset($list[$moduleName]))	{
 			// we haven't loaded a filter list for this module yet
 			$config = AG_MODULE_DIR . '/' . $moduleName . '/config/filters.ini';
-
-			if (is_readable($config))
-			{
-
+			if (is_readable($config)) {
 				require_once(ConfigCache::checkConfig($config));
-
-			} else
-			{
-
+			} else {
 				// add an emptry array for this module since no filters
 				// exist
 				$list[$moduleName] = array();
-
 			}
-
 		}
 
 		// register filters
-		foreach ($list[$moduleName] as $filter)
-		{
-
+		foreach ($list[$moduleName] as $filter)	{
 			$filterChain->register($filter);
-
 		}
 
 	}
@@ -650,8 +622,7 @@ abstract class Controller extends ParameterHolder
 	public function modelExists ($moduleName, $modelName)
 	{
 
-		$file = AG_MODULE_DIR . '/' . $moduleName . '/models/' . $modelName .
-				'Model.class.php';
+		$file = AG_MODULE_DIR . '/' . $moduleName . '/models/' . $modelName .	'Model.class.php';
 
 		return is_readable($file);
 
@@ -721,21 +692,16 @@ abstract class Controller extends ParameterHolder
 
 				return $object;
 
-			} else
-			{
+			} else {
 
 				$type = get_class(self::$instance);
-
 				// an instance has already been created
-				$error = 'A Controller implementation instance has already ' .
-						 'been created';
-
+				$error = 'A Controller implementation instance has already been created';
 				throw new FactoryException($error);
 
 			}
 
-		} catch (AgaviException $e)
-		{
+		} catch (AgaviException $e) {
 
 			$e->printStackTrace();
 
@@ -806,11 +772,8 @@ abstract class Controller extends ParameterHolder
 		$this->storage->shutdown();
 		$this->request->shutdown();
 
-		if (AG_USE_DATABASE)
-		{
-
+		if (AG_USE_DATABASE) {
 			$this->databaseManager->shutdown();
-
 		}
 
 	}

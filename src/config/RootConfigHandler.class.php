@@ -51,15 +51,10 @@ class RootConfigHandler extends IniConfigHandler
 
 		// determine if we're loading the system config_handlers.ini or a module
 		// config_handlers.ini
-		$moduleLevel = ($this->getParameter('module_level') === true)
-				       ? true : false;
+		$moduleLevel = ($this->getParameter('module_level') === true) ? true : false;
 
-		if ($moduleLevel)
-		{
-
-			// get the current module name
+		if ($moduleLevel)	{
 			$moduleName = $this->getParameter('module_name');
-
 		}
 
 		// init our data and includes arrays
@@ -67,21 +62,14 @@ class RootConfigHandler extends IniConfigHandler
 		$includes = array();
 
 		// let's do our fancy work
-		foreach ($ini as $category => &$keys)
-		{
+		foreach ($ini as $category => &$keys)	{
 
-			if ($moduleLevel)
-			{
-
-				// module-level registration, so we must prepend the module
-				// root to the category
-				$category = 'modules/' . $moduleName . '/' .
-						    $category;
-
+			if ($moduleLevel)	{
+				// module-level registration, so we must prepend the module root to the category
+				$category = 'modules/' . $moduleName . '/' . $category;
 			}
 
-			if (!isset($keys['class']))
-			{
+			if (!isset($keys['class']))	{
 
 				// missing class key
 				$error = 'Configuration file "%s" specifies category ' .
@@ -94,16 +82,14 @@ class RootConfigHandler extends IniConfigHandler
 
 			$class =& $keys['class'];
 
-			if (isset($keys['file']))
-			{
+			if (isset($keys['file']))	{
 
 				// we have a file to include
 				$file =& $keys['file'];
 				$file =  $this->replaceConstants($file);
 				$file =  $this->replacePath($file);
 
-				if (!is_readable($file))
-				{
+				if (!is_readable($file)) {
 
 				    // handler file doesn't exist
 				    $error = 'Configuration file "%s" specifies class "%s" ' .
