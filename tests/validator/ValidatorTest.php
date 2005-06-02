@@ -1,11 +1,10 @@
 <?php
 require_once dirname(__FILE__) . '/../mockContext.php';
-
 require_once('validator/Validator.class.php');
 
 class SampleValidator extends Validator
 {
-	public function execute(&$value, &$error) { }
+	public function execute(&$value, &$error) { return true; }
 }
 
 class ValidatorTest extends UnitTestCase
@@ -49,6 +48,13 @@ class ValidatorTest extends UnitTestCase
 		$this->_validator->initialize($this->_context);
 		$c = $this->_validator->getContext();
 		$this->assertReference($this->_context, $c);
+	}
+
+	public function testExecute()
+	{
+		$test = 'test';
+		$msg = 'error message';
+		$this->assertTrue($this->_validator->execute($test, $msg));
 	}
 }
 

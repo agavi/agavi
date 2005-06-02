@@ -37,7 +37,9 @@ require_once('storage/SessionStorage.class.php');
 require_once('user/User.class.php');	
 require_once('user/SecurityUser.class.php');	
 require_once('user/BasicSecurityUser.class.php');	
+require_once('filter/FilterChain.class.php');	
 require_once('filter/Filter.class.php');	
+require_once('filter/ExecutionFilter.class.php');
 require_once('filter/SecurityFilter.class.php');	
 require_once('filter/BasicSecurityFilter.class.php');	
 
@@ -88,6 +90,10 @@ define('AG_PATH_INFO_ARRAY', 'SERVER');
 define('AG_PATH_INFO_KEY', 'PATH_INFO');
 define('AG_USE_DATABASE', true);
 
+define('AG_ERROR_404_MODULE', 'ErrorModule');
+define('AG_ERROR_404_ACTION', 'Some');
+define('AG_MAX_FORWARDS', 3);
+
 
 class MockContext extends Context {
 
@@ -130,6 +136,12 @@ class MockContext extends Context {
 		self::$instance = null; // will this in turn free all the objs it held reference to, I wonder? (IT SHOULD, YEA?)
 	}
 
+	public static function useRealActionStack()
+	{
+		self::$instance->actionStack = new ActionStack();
+		self::$instance->controller->replaceActionStack();
+	}
+
 }
 
 
@@ -142,6 +154,9 @@ class MockController extends Controller {
 	// we need a reference to the test object to pass into our mocks, so we pass it into the constructor. 
 	public function __construct(&$test = null)
 	{
+		if (!$test) {
+			die('Pass me the test, foo!');
+		}
 		$this->test = $test;
 	}
 	
@@ -155,6 +170,11 @@ class MockController extends Controller {
 	protected function loadContext()
 	{
 		$this->context = MockContext::getInstance($this, $this->test);
+	}
+
+	public function replaceActionStack()
+	{
+		$this->actionStack = $this->context->getActionStack();
 	}
 
 }

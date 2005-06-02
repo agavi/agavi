@@ -28,7 +28,6 @@ class TestAction extends UnitTestCase
 		$this->_context = null;
 	}
 
-
 	public function testgetContext()
 	{
 		$this->_action->initialize($this->_context);

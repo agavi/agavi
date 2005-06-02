@@ -20,13 +20,14 @@ class ActionStackEntryTest extends UnitTestCase
 		$this->_ase = new ActionStackEntry('Sample', 'Index', $this->_a);
 	}
 
-	public function test__construct()
+	public function testNewActionStackEntry()
 	{
+		$this->assertTrue($this->_ase instanceof ActionStackEntry);
 	}
 
 	public function testgetActionName()
 	{
-		$this->assertEqual('Index', $this->_ase->getActionName());
+		$this->assertIdentical('Index', $this->_ase->getActionName());
 	}
 	
 	public function testgetActionInstance()
@@ -36,7 +37,9 @@ class ActionStackEntryTest extends UnitTestCase
 
 	public function testgetMicrotime()
 	{
-		$this->assertNotNull($this->_ase->getMicrotime());
+		$mt = $this->_ase->getMicrotime();
+		$this->assertNotNull($mt);
+		$this->assertTrue( is_string($mt) );
 	}
 
 	public function testgetModuleName()

@@ -8,7 +8,7 @@ class ContextTest extends UnitTestCase
 
 	public function setup()
 	{
-		$this->_controller = new MockController();
+		$this->_controller = new MockController($this);
 		$this->_controller->dispatch();
 	}
 	
