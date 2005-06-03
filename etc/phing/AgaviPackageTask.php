@@ -87,6 +87,7 @@ EOD;
 		$p2->addRole('*', 'php');
 		$p2->setPhpDep('5.0.0');
 		$p2->setPearinstallerDep('1.4.0a12');
+		//$p2->addPackageDepWithUri('required', 'phing', 'http://phing.info/pear/phing-current.tgz');
 		$p2->setLicense('LGPL', 'http://www.gnu.org/copyleft/lesser.html');
 		$p2->addMaintainer('lead', 'bob', 'Bob Zoller', 'bob@agavi.org');
 		$p2->addMaintainer('lead', 'mike', 'Mike Vincent', 'mike@agavi.org');

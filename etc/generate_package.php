@@ -102,6 +102,12 @@ if (is_a($e, 'PEAR_Error')) {
 	die();
 }
 
+$e = $packagexml->addDependency('phing', '2.1.0');
+if (is_a($e, 'PEAR_Error')) {
+	echo $e->getMessage();
+	exit;
+}
+
 $e = $packagexml->addMaintainer('bob', 'lead', 'Bob Zoller', 'bob@agavi.org');
 if (is_a($e, 'PEAR_Error')) {
 	echo $e->getMessage();
