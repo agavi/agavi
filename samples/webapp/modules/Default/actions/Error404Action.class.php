@@ -6,7 +6,11 @@
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
-// | LICENSE file online at http://www.agavi.org.                              |
+// | LICENSE file online at http://www.agavi.org/LICENSE.txt                   |
+// |   vi: set noexpandtab:                                                    |
+// |   Local Variables:                                                        |
+// |   indent-tabs-mode: t                                                     |
+// |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
 class Default_Error404Action extends Action
