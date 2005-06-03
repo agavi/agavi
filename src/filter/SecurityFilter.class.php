@@ -18,7 +18,7 @@
  *
  * @author    Sean Kerr (skerr@mojavi.org)
  * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
- * @since     3.0.0
+ * @since     0.9.0
  * @version   $Id$
  */
 abstract class SecurityFilter extends Filter
@@ -39,7 +39,7 @@ abstract class SecurityFilter extends Filter
 	 *                                 instance cannot be created.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public static function newInstance ($class)
 	{

@@ -24,7 +24,7 @@
  *
  * @author    Sean Kerr (skerr@mojavi.org)
  * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
- * @since     3.0.0
+ * @since     0.9.0
  * @version   $Id$
  */
 class SessionStorage extends Storage
@@ -47,7 +47,7 @@ class SessionStorage extends Storage
 	 *                                        initializing this Storage.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function initialize ($context, $parameters = null)
 	{
@@ -83,7 +83,7 @@ class SessionStorage extends Storage
 	 * @return mixed Data associated with the key.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function & read ($key)
 	{
@@ -114,7 +114,7 @@ class SessionStorage extends Storage
 	 * @return mixed Data associated with the key.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function & remove ($key)
 	{
@@ -142,7 +142,7 @@ class SessionStorage extends Storage
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function shutdown ()
 	{
@@ -165,7 +165,7 @@ class SessionStorage extends Storage
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function write ($key, &$data)
 	{

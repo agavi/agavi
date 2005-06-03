@@ -20,7 +20,7 @@
  *
  * @author    Sean Kerr (skerr@mojavi.org)
  * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
- * @since     1.0.0
+ * @since     0.9.0
  * @version   $Id$
  */
 class User extends ParameterHolder
@@ -33,7 +33,7 @@ class User extends ParameterHolder
 	/**
 	 * The namespace under which attributes will be stored.
 	 *
-	 * @since 3.0.0
+	 * @since 0.9.0
 	 */
 	const ATTRIBUTE_NAMESPACE = 'org/agavi/user/User/attributes';
 
@@ -55,7 +55,7 @@ class User extends ParameterHolder
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  1.0.0
+	 * @since  0.9.0
 	 */
 	public function clearAttributes ()
 	{
@@ -77,7 +77,7 @@ class User extends ParameterHolder
 	 *               null.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  1.0.0
+	 * @since  0.9.0
 	 */
 	public function & getAttribute ($name, $ns = AG_USER_NAMESPACE)
 	{
@@ -107,7 +107,7 @@ class User extends ParameterHolder
 	 *               exists, otherwise null.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  1.0.0
+	 * @since  0.9.0
 	 */
 	public function getAttributeNames ($ns = AG_USER_NAMESPACE)
 	{
@@ -133,7 +133,7 @@ class User extends ParameterHolder
 	 * @return array An associative array of attributes.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function & getAttributeNamespace ($ns = AG_USER_NAMESPACE)
 	{
@@ -159,7 +159,7 @@ class User extends ParameterHolder
 	 * @return array An indexed array of attribute namespaces.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  1.0.0
+	 * @since  0.9.0
 	 */
 	public function getAttributeNamespaces ()
 	{
@@ -176,7 +176,7 @@ class User extends ParameterHolder
 	 * @return Context A Context instance.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function getContext ()
 	{
@@ -196,7 +196,7 @@ class User extends ParameterHolder
 	 * @return bool true, if the attribute exists, otherwise false.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  1.0.0
+	 * @since  0.9.0
 	 */
 	public function hasAttribute ($name, $ns = AG_USER_NAMESPACE)
 	{
@@ -222,7 +222,7 @@ class User extends ParameterHolder
 	 * @return bool true, if the namespace exists, otherwise false.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function hasAttributeNamespace ($ns)
 	{
@@ -246,7 +246,7 @@ class User extends ParameterHolder
 	 *                                        initializing this User.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function initialize ($context, $parameters = null)
 	{
@@ -288,7 +288,7 @@ class User extends ParameterHolder
 	 *                                 be created.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public static function newInstance ($class)
 	{
@@ -323,7 +323,7 @@ class User extends ParameterHolder
 	 *               otherwise null.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  1.0.0
+	 * @since  0.9.0
 	 */
 	public function & removeAttribute ($name, $ns = AG_USER_NAMESPACE)
 	{
@@ -354,7 +354,7 @@ class User extends ParameterHolder
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function removeAttributeNamespace ($ns)
 	{
@@ -383,7 +383,7 @@ class User extends ParameterHolder
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  1.0.0
+	 * @since  0.9.0
 	 */
 	public function setAttribute ($name, $value, $ns = AG_USER_NAMESPACE)
 	{
@@ -414,7 +414,7 @@ class User extends ParameterHolder
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  1.0.0
+	 * @since  0.9.0
 	 */
 	public function setAttributeByRef ($name, &$value, $ns = AG_USER_NAMESPACE)
 	{
@@ -445,7 +445,7 @@ class User extends ParameterHolder
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function setAttributes ($attributes, $ns = AG_USER_NAMESPACE)
 	{
@@ -477,7 +477,7 @@ class User extends ParameterHolder
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function setAttributesByRef (&$attributes, $ns = AG_USER_NAMESPACE)
 	{
@@ -506,7 +506,7 @@ class User extends ParameterHolder
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function shutdown ()
 	{

@@ -18,7 +18,7 @@
  *
  * @author    Sean Kerr (skerr@mojavi.org)
  * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
- * @since     3.0.0
+ * @since     0.9.0
  * @version   $Id$
  */
 class ActionStack extends AgaviObject
@@ -45,7 +45,7 @@ class ActionStack extends AgaviObject
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function addEntry ($moduleName, $actionName, $actionInstance)
 	{
@@ -68,7 +68,7 @@ class ActionStack extends AgaviObject
 	 * @return ActionStackEntry An action stack entry implementation.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function getEntry ($index)
 	{
@@ -94,7 +94,7 @@ class ActionStack extends AgaviObject
 	 * @return ActionStackEntry An action stack entry implementation.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function getFirstEntry ()
 	{
@@ -121,7 +121,7 @@ class ActionStack extends AgaviObject
 	 * @return ActionStackEntry An action stack entry implementation.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function getLastEntry ()
 	{
@@ -148,7 +148,7 @@ class ActionStack extends AgaviObject
 	 * @return int The size of this stack.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function getSize ()
 	{

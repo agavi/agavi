@@ -16,7 +16,7 @@
  *
  * @author    Sean Kerr (skerr@mojavi.org)
  * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
- * @since     3.0.0
+ * @since     0.9.0
  * @version   $Id$
  */
 
@@ -28,7 +28,7 @@
  * @return void
  *
  * @author Sean Kerr (skerr@mojavi.org)
- * @since  3.0.0
+ * @since  0.9.0
  */
 function __autoload ($class)
 {

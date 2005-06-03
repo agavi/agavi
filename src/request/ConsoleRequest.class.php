@@ -18,7 +18,7 @@
  *
  * @author    Agavi Foundation (info@agavi.org)
  * @copyright (c) Agavi Foundation
- * @since     3.0.0
+ * @since     0.9.0
  * @version   $Id$
  */
 class ConsoleRequest extends Request
@@ -43,7 +43,7 @@ class ConsoleRequest extends Request
 	 *                                        initializing this Request.
 	 *
 	 * @author Agavi Foundation (info@agavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function initialize ($context, $parameters = null)
 	{
@@ -65,7 +65,7 @@ class ConsoleRequest extends Request
 	 * @return void
 	 *
 	 * @author Agavi Foundation (info@agavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	private function loadParameters ($context)
 	{
@@ -90,7 +90,7 @@ class ConsoleRequest extends Request
 	 * @return void
 	 *
 	 * @author Agavi Foundation (info@agavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function shutdown ()
 	{

@@ -18,7 +18,7 @@
  *
  * @author    Sean Kerr (skerr@mojavi.org)
  * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
- * @since     1.0.0
+ * @since     0.9.0
  * @version   $Id$
  */
 abstract class Appender extends AgaviObject
@@ -41,7 +41,7 @@ abstract class Appender extends AgaviObject
 	 * @return Layout A Layout instance, if one has been set, otherwise null.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  1.0.0
+	 * @since  0.9.0
 	 */
 	public function getLayout ()
 	{
@@ -60,7 +60,7 @@ abstract class Appender extends AgaviObject
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  1.0.0
+	 * @since  0.9.0
 	 */
 	public function setLayout ($layout)
 	{
@@ -77,7 +77,7 @@ abstract class Appender extends AgaviObject
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	abstract function shutdown ();
 
@@ -91,7 +91,7 @@ abstract class Appender extends AgaviObject
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  1.0.0
+	 * @since  0.9.0
 	 */
 	abstract function write (&$data);
 

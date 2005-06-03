@@ -22,7 +22,7 @@
  * @author    Sean Kerr (skerr@mojavi.org)
  * @author    Agavi Foundation (info@agavi.org)
  * @copyright (c) Authors
- * @since     1.0.0
+ * @since     0.9.0
  * @version   $Id$
  */
 class EmailValidator extends Validator

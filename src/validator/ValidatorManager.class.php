@@ -18,7 +18,7 @@
  *
  * @author    Sean Kerr (skerr@mojavi.org)
  * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
- * @since     1.0.0
+ * @since     0.9.0
  * @version   $Id$
  */
 class ValidatorManager extends AgaviObject
@@ -43,7 +43,7 @@ class ValidatorManager extends AgaviObject
 	 * @retun void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function clear ()
 	{
@@ -63,7 +63,7 @@ class ValidatorManager extends AgaviObject
 	 * @return bool true, if validation completed successfully, otherwise false.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  1.0.0
+	 * @since  0.9.0
 	 */
 	public function execute ()
 	{
@@ -117,7 +117,7 @@ class ValidatorManager extends AgaviObject
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function initialize ($context)
 	{
@@ -139,7 +139,7 @@ class ValidatorManager extends AgaviObject
 	 * @param bool 		An unused(?) parameter, apparently meant to determine if the name is a parameter or filename.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function registerName ($name, $required = true, $message = 'Required', $parent = null, $group = null, $isFile = false)
 	{
@@ -200,7 +200,7 @@ class ValidatorManager extends AgaviObject
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function registerValidator ($name, $validator, $parent = null)
 	{
@@ -233,7 +233,7 @@ class ValidatorManager extends AgaviObject
 	 * @return bool true, if validation completes successfully, otherwise false.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	private function validate (&$name, &$data, $parent)
 	{

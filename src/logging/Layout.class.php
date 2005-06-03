@@ -17,7 +17,7 @@
  *
  * @author    Sean Kerr (skerr@mojavi.org)
  * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
- * @since     1.0.0
+ * @since     0.9.0
  * @version   $Id$
  */
 abstract class Layout extends AgaviObject
@@ -42,7 +42,7 @@ abstract class Layout extends AgaviObject
 	 * @return string A formatted message.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  1.0.0
+	 * @since  0.9.0
 	 */
 	abstract function & format ($message);
 
@@ -54,7 +54,7 @@ abstract class Layout extends AgaviObject
 	 * @return string A message layout.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function getLayout ()
 	{
@@ -73,7 +73,7 @@ abstract class Layout extends AgaviObject
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function setLayout ($layout)
 	{

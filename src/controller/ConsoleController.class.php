@@ -23,7 +23,7 @@
  * @author    Sean Kerr (skerr@mojavi.org)
  * @author    Agavi Foundation (info@agavi.org)
  * @copyright (c) Author
- * @since     3.0.0
+ * @since     0.9.0
  * @version   $Id$
  */
 class ConsoleController extends Controller
@@ -43,7 +43,7 @@ class ConsoleController extends Controller
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @author Agavi Foundation (info@agavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function dispatch ($params=null)
 	{

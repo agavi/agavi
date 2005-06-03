@@ -19,7 +19,7 @@
  * @author    Sean Kerr (skerr@mojavi.org) {@link http://www.mojavi.org}
  * @author    Mike Vincent (mike@agavi.org) {@link http://www.agavi.org}
  * @copyright (c) authors
- * @since     3.0.0
+ * @since     0.9.0
  * @version   $Id$
  */
 class FactoryConfigHandler extends IniConfigHandler
@@ -42,7 +42,7 @@ class FactoryConfigHandler extends IniConfigHandler
 	 *                               improperly formatted.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function & execute ($config)
 	{

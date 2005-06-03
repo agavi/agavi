@@ -17,7 +17,7 @@
  *
  * @author    Sean Kerr (skerr@mojavi.org)
  * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
- * @since     1.0.0
+ * @since     0.9.0
  * @version   $Id$
  */
 class Toolkit extends AgaviObject
@@ -36,7 +36,7 @@ class Toolkit extends AgaviObject
 	 *                otherwise null.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public static function extractClassName ($filename)
 	{
@@ -73,7 +73,7 @@ class Toolkit extends AgaviObject
 	 * @return bool true, if the path is absolute, otherwise false.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public static function isPathAbsolute ($path)
 	{

@@ -18,7 +18,7 @@
  *
  * @author    Sean Kerr (skerr@mojavi.org)
  * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
- * @since     1.0.0
+ * @since     0.9.0
  * @version   $Id$
  */
 class Logger extends AgaviObject
@@ -31,35 +31,35 @@ class Logger extends AgaviObject
 	/**
 	 * Debug level.
 	 *
-	 * @since 3.0.0
+	 * @since 0.9.0
 	 */
 	const DEBUG = 1000;
 
 	/**
 	 * Error level.
 	 *
-	 * @since 3.0.0
+	 * @since 0.9.0
 	 */
 	const ERROR = 4000;
 
 	/**
 	 * Information level.
 	 *
-	 * @since 3.0.0
+	 * @since 0.9.0
 	 */
 	const INFO = 2000;
 
 	/**
 	 * Warning level.
 	 *
-	 * @since 3.0.0
+	 * @since 0.9.0
 	 */
 	const WARN = 3000;
 
 	/**
 	 * Fatal level.
 	 *
-	 * @since 3.0.0
+	 * @since 0.9.0
 	 */
 	const FATAL = 5000;
 
@@ -85,7 +85,7 @@ class Logger extends AgaviObject
 	 *                  otherwise null.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  1.0.0
+	 * @since  0.9.0
 	 */
 	public function getAppender ($name)
 	{
@@ -107,7 +107,7 @@ class Logger extends AgaviObject
 	 * @return int The exit priority level.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  1.0.0
+	 * @since  0.9.0
 	 */
 	public function getExitPriority ()
 	{
@@ -127,7 +127,7 @@ class Logger extends AgaviObject
 	 * @return int The priority level.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  1.0.0
+	 * @since  0.9.0
 	 */
 	public function getPriority ()
 	{
@@ -146,7 +146,7 @@ class Logger extends AgaviObject
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function log ($message)
 	{
@@ -200,7 +200,7 @@ class Logger extends AgaviObject
 	 *                  null.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  1.0.0
+	 * @since  0.9.0
 	 */
 	public function removeAppender ($name)
 	{
@@ -236,7 +236,7 @@ class Logger extends AgaviObject
 	 *                                 exists.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function setAppender ($name, $appender)
 	{
@@ -268,7 +268,7 @@ class Logger extends AgaviObject
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  1.0.0
+	 * @since  0.9.0
 	 */
 	public function setExitPriority ($priority)
 	{
@@ -287,7 +287,7 @@ class Logger extends AgaviObject
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  1.0.0
+	 * @since  0.9.0
 	 */
 	public function setPriority ($priority)
 	{
@@ -304,7 +304,7 @@ class Logger extends AgaviObject
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function shutdown ()
 	{

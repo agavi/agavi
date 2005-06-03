@@ -18,7 +18,7 @@
  *
  * @author    Sean Kerr (skerr@mojavi.org)
  * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
- * @since     3.0.0
+ * @since     0.9.0
  * @version   $Id$
  */
 abstract class WebController extends Controller
@@ -44,7 +44,7 @@ abstract class WebController extends Controller
 	 * @return string A URL to a Agavi resource.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function genURL ($url = null, $parameters = array())
 	{
@@ -100,7 +100,7 @@ abstract class WebController extends Controller
 	 * @return string A content type.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function getContentType ()
 	{
@@ -117,7 +117,7 @@ abstract class WebController extends Controller
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	protected function initialize ()
 	{
@@ -144,7 +144,7 @@ abstract class WebController extends Controller
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function redirect ($url, $delay = 0)
 	{
@@ -179,7 +179,7 @@ abstract class WebController extends Controller
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function setContentType ($type)
 	{

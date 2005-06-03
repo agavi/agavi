@@ -19,7 +19,7 @@
  *
  * @author    Sean Kerr (skerr@mojavi.org)
  * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
- * @since     3.0.0
+ * @since     0.9.0
  * @version   $Id$
  */
 class ConfigCache extends AgaviObject
@@ -51,7 +51,7 @@ class ConfigCache extends AgaviObject
 	 *                                       configuration handler.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	private static function callHandler ($handler, $config, $cache)
 	{
@@ -117,7 +117,7 @@ class ConfigCache extends AgaviObject
 	 *                                       does not exist.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public static function checkConfig ($config)
 	{
@@ -148,7 +148,7 @@ class ConfigCache extends AgaviObject
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public static function clear ()
 	{
@@ -170,7 +170,7 @@ class ConfigCache extends AgaviObject
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	private static function clearCache ($directory)
 	{
@@ -212,7 +212,7 @@ class ConfigCache extends AgaviObject
 	 * @return string An absolute filesystem path to a cache filename.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public static function getCacheName ($config)
 	{
@@ -242,7 +242,7 @@ class ConfigCache extends AgaviObject
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public static function import ($config, $once = true)
 	{
@@ -267,7 +267,7 @@ class ConfigCache extends AgaviObject
 	 *                                       occurs.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	private static function loadConfigHandlers ()
 	{
@@ -348,7 +348,7 @@ class ConfigCache extends AgaviObject
 	 * @throws <b>CacheException</b> If the cache file cannot be written.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	private static function writeCacheFile ($config, $cache, &$data, $append)
 	{

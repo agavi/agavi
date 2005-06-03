@@ -20,7 +20,7 @@
  *
  * @author    Sean Kerr (skerr@mojavi.org)
  * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
- * @since     3.0.0
+ * @since     0.9.0
  * @version   $Id$
  */
 abstract class Model extends AgaviObject
@@ -42,7 +42,7 @@ abstract class Model extends AgaviObject
 	 * @return Context The current Context instance.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public final function getContext ()
 	{
@@ -62,7 +62,7 @@ abstract class Model extends AgaviObject
 	 *              false.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function initialize ($context)
 	{

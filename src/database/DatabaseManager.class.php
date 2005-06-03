@@ -19,7 +19,7 @@
  *
  * @author    Sean Kerr (skerr@mojavi.org)
  * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
- * @since     3.0.0
+ * @since     0.9.0
  * @version   $Id$
  */
 class DatabaseManager extends AgaviObject
@@ -77,7 +77,7 @@ class DatabaseManager extends AgaviObject
 	 *                                        initializing this DatabaseManager.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function initialize ()
 	{
@@ -98,7 +98,7 @@ class DatabaseManager extends AgaviObject
 	 *                                 this DatabaseManager.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function shutdown ()
 	{

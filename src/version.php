@@ -16,7 +16,7 @@
  * 
  * @author    Sean Kerr (skerr@mojavi.org)
  * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
- * @since     3.0.0
+ * @since     0.9.0
  * @version   $Id$
  */
 
@@ -28,7 +28,7 @@ define('AG_APP_MINOR_VERSION', '0');
 
 define('AG_APP_MICRO_VERSION', '0');
 
-define('AG_APP_BRANCH',        'dev-3.0.0');
+define('AG_APP_BRANCH',        'dev-0.9.0');
 
 define('AG_APP_STATUS',        'DEV');
 

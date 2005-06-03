@@ -45,7 +45,7 @@
  *
  * @author    Sean Kerr (skerr@mojavi.org)
  * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
- * @since     3.0.0
+ * @since     0.9.0
  * @version   $Id$
  */
 class CreoleDatabase extends Database
@@ -61,7 +61,7 @@ class CreoleDatabase extends Database
 	 * @throws <b>DatabaseException</b> If a connection could not be created.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function connect ()
 	{
@@ -194,7 +194,7 @@ class CreoleDatabase extends Database
 	 * @return array An associative array of connection parameters.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	private function & loadDSN (&$array)
 	{
@@ -245,7 +245,7 @@ class CreoleDatabase extends Database
 	 *                                 this database.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function shutdown ()
 	{

@@ -23,7 +23,7 @@
  * @author    Sean Kerr (skerr@mojavi.org)
  * @author    Bob Zoller (bob@agavi.org)
  * @copyright (c) Authors
- * @since     3.0.0
+ * @since     0.9.0
  * @version   $Id$
  */
 class AgaviException extends Exception
@@ -47,7 +47,7 @@ class AgaviException extends Exception
 	 * @param int    The error code.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function __construct ($message = null, $code = 0)
 	{
@@ -68,7 +68,7 @@ class AgaviException extends Exception
 	 * @return string This exception's name.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function getName ()
 	{
@@ -89,7 +89,7 @@ class AgaviException extends Exception
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @author Bob Zoller (bob@agavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function printStackTrace ($format = 'html')
 	{
@@ -320,7 +320,7 @@ class AgaviException extends Exception
 	 * @param string An exception name.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	protected function setName ($name)
 	{

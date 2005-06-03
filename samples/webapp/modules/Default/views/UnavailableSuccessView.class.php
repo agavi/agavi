@@ -22,7 +22,7 @@ class Default_UnavailableSuccessView extends PHPView
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  1.0.0
+	 * @since  0.9.0
 	 */
 	public function execute ()
 	{

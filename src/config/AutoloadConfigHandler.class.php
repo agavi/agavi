@@ -18,7 +18,7 @@
  *
  * @author    Sean Kerr (skerr@mojavi.org)
  * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
- * @since     3.0.0
+ * @since     0.9.0
  * @version   $Id$
  */
 class AutoloadConfigHandler extends IniConfigHandler
@@ -41,7 +41,7 @@ class AutoloadConfigHandler extends IniConfigHandler
 	 *                               improperly formatted.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function & execute ($config)
 	{

@@ -17,7 +17,7 @@
  *
  * @author    Sean Kerr (skerr@mojavi.org)
  * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
- * @since     3.0.0
+ * @since     0.9.0
  * @version   $Id$
  */
 class RenderException extends AgaviException
@@ -34,7 +34,7 @@ class RenderException extends AgaviException
 	 * @param int    The error code.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function __construct ($message = null, $code = 0)
 	{

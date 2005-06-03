@@ -17,7 +17,7 @@
  *
  * @author    Sean Kerr (skerr@mojavi.org)
  * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
- * @since     3.0.0
+ * @since     0.9.0
  * @version   $Id$
  */
 abstract class ParameterHolder extends AgaviObject
@@ -40,7 +40,7 @@ abstract class ParameterHolder extends AgaviObject
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function clearParameters ()
 	{
@@ -62,7 +62,7 @@ abstract class ParameterHolder extends AgaviObject
 	 *               null.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function & getParameter ($name, $default = null)
 	{
@@ -88,7 +88,7 @@ abstract class ParameterHolder extends AgaviObject
 	 * @return array An indexed array of parameter names.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function getParameterNames ()
 	{
@@ -105,7 +105,7 @@ abstract class ParameterHolder extends AgaviObject
 	 * @return array An associative array of parameters.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function getParameters ()
 	{
@@ -124,7 +124,7 @@ abstract class ParameterHolder extends AgaviObject
 	 * @return bool true, if the parameter exists, otherwise false.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function hasParameter ($name)
 	{
@@ -144,7 +144,7 @@ abstract class ParameterHolder extends AgaviObject
 	 *                otherwise null.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  1.0.0
+	 * @since  0.9.0
 	 */
 	public function & removeParameter ($name)
 	{
@@ -223,7 +223,7 @@ abstract class ParameterHolder extends AgaviObject
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function setParameters ($parameters)
 	{
@@ -246,7 +246,7 @@ abstract class ParameterHolder extends AgaviObject
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function setParametersByRef (&$parameters)
 	{

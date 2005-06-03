@@ -25,7 +25,7 @@ require_once(AG_SMARTY_DIR.'/libs/Smarty.class.php');
  * @author    zembla {@link http://forum.mojavi.org/index.php?showuser=329}
  * @author    Agavi Foundation (info@agavi.org)
  * @copyright (c) Authors, {@link http://www.agavi.org}
- * @since     1.0.0
+ * @since     0.9.0
  */
 abstract class SmartyView extends View
 {

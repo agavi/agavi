@@ -17,7 +17,7 @@
  *
  * @author    Sean Kerr (skerr@mojavi.org)
  * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
- * @since     1.0.0
+ * @since     0.9.0
  * @version   $Id$
  */
 class PatternLayout extends Layout
@@ -35,7 +35,7 @@ class PatternLayout extends Layout
 	 * @return string A formatted message.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  1.0.0
+	 * @since  0.9.0
 	 */
 	public function & format ($message)
 	{

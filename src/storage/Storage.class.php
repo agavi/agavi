@@ -17,7 +17,7 @@
  *
  * @author    Sean Kerr (skerr@mojavi.org)
  * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
- * @since     3.0.0
+ * @since     0.9.0
  * @version   $Id$
  */
 abstract class Storage extends ParameterHolder
@@ -40,7 +40,7 @@ abstract class Storage extends ParameterHolder
 	 * @return Context A Context instance.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function getContext ()
 	{
@@ -64,7 +64,7 @@ abstract class Storage extends ParameterHolder
 	 *                                        initializing this Storage.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function initialize ($context, $parameters = null)
 	{
@@ -93,7 +93,7 @@ abstract class Storage extends ParameterHolder
 	 *                                 cannot be created.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public static function newInstance ($class)
 	{
@@ -132,7 +132,7 @@ abstract class Storage extends ParameterHolder
 	 *                                 this storage.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	abstract function & read ($key);
 
@@ -152,7 +152,7 @@ abstract class Storage extends ParameterHolder
 	 *                                 this storage.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	abstract function & remove ($key);
 
@@ -167,7 +167,7 @@ abstract class Storage extends ParameterHolder
 	 *                                 this storage.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	abstract function shutdown ();
 
@@ -188,7 +188,7 @@ abstract class Storage extends ParameterHolder
 	 *                                 storage.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	abstract function write ($key, &$data);
 

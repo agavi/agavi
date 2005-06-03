@@ -35,7 +35,7 @@ class Default_SecureAction extends Action
 	 *                 2. The view that will be executed.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  1.0.0
+	 * @since  0.9.0
 	 */
 	public function execute ()
 	{
@@ -59,7 +59,7 @@ class Default_SecureAction extends Action
 	 *                 2. The view that will be executed.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  1.0.0
+	 * @since  0.9.0
 	 */
 	public function getDefaultView ()
 	{
@@ -82,7 +82,7 @@ class Default_SecureAction extends Action
 	 *               requests, or...
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  1.0.0
+	 * @since  0.9.0
 	 */
 	public function getRequestMethods ()
 	{

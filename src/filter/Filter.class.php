@@ -18,7 +18,7 @@
  *
  * @author    Sean Kerr (skerr@mojavi.org)
  * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
- * @since     1.0.0
+ * @since     0.9.0
  * @version   $Id$
  */
 abstract class Filter extends ParameterHolder
@@ -43,7 +43,7 @@ abstract class Filter extends ParameterHolder
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  1.0.0
+	 * @since  0.9.0
 	 */
 	abstract function execute ($filterChain);
 
@@ -55,7 +55,7 @@ abstract class Filter extends ParameterHolder
 	 * @return Context The current Context instance.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public final function getContext ()
 	{
@@ -79,7 +79,7 @@ abstract class Filter extends ParameterHolder
 	 *                                        initializing this Filter.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function initialize ($context, $parameters = null)
 	{

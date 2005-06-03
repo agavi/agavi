@@ -32,7 +32,7 @@
  *
  * @author    Sean Kerr (skerr@mojavi.org)
  * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
- * @since     3.0.0
+ * @since     0.9.0
  * @version   $Id$
  */
 class PostgreSQLSessionStorage extends SessionStorage
@@ -62,7 +62,7 @@ class PostgreSQLSessionStorage extends SessionStorage
 	 *                                        initializing this Storage.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function initialize ($context, $parameters = null)
 	{
@@ -105,7 +105,7 @@ class PostgreSQLSessionStorage extends SessionStorage
 	 * @return bool true, if the session was closed, otherwise false.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function sessionClose ()
 	{
@@ -128,7 +128,7 @@ class PostgreSQLSessionStorage extends SessionStorage
 	 * @throws <b>DatabaseException</b> If the session cannot be destroyed.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function sessionDestroy ($id)
 	{
@@ -172,7 +172,7 @@ class PostgreSQLSessionStorage extends SessionStorage
 	 * @throws <b>DatabaseException</b> If any old sessions cannot be cleaned.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function sessionGC ($lifetime)
 	{
@@ -217,7 +217,7 @@ class PostgreSQLSessionStorage extends SessionStorage
 	 *                                  not exist or cannot be created.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function sessionOpen ($path, $name)
 	{
@@ -248,7 +248,7 @@ class PostgreSQLSessionStorage extends SessionStorage
 	 * @throws <b>DatabaseException</b> If the session cannot be read.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function sessionRead ($id)
 	{
@@ -317,7 +317,7 @@ class PostgreSQLSessionStorage extends SessionStorage
 	 * @throws <b>DatabaseException</b> If the session data cannot be written.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function sessionWrite ($id, &$data)
 	{
@@ -362,7 +362,7 @@ class PostgreSQLSessionStorage extends SessionStorage
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function shutdown ()
 	{

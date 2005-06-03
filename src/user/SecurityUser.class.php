@@ -17,7 +17,7 @@
  *
  * @author    Sean Kerr (skerr@mojavi.org)
  * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
- * @since     3.0.0
+ * @since     0.9.0
  * @version   $Id$
  */
 abstract class SecurityUser extends User
@@ -35,7 +35,7 @@ abstract class SecurityUser extends User
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	abstract function addCredential ($credential);
 
@@ -47,7 +47,7 @@ abstract class SecurityUser extends User
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	abstract function clearCredentials ();
 
@@ -61,7 +61,7 @@ abstract class SecurityUser extends User
 	 * @return bool true, if this user has the credential, otherwise false.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	abstract function hasCredential ($credential);
 
@@ -73,7 +73,7 @@ abstract class SecurityUser extends User
 	 * @return bool true, if this user is authenticated, otherwise false.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	abstract function isAuthenticated ();
 
@@ -87,7 +87,7 @@ abstract class SecurityUser extends User
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	abstract function removeCredential ($credential);
 
@@ -101,7 +101,7 @@ abstract class SecurityUser extends User
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	abstract function setAuthenticated ($authenticated);
 

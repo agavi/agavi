@@ -20,7 +20,7 @@
  * @author    Sean Kerr (skerr@mojavi.org)
  * @copyright (c) Sean Kerr, {@link http://www.mojavi.org} 2004-2005
  * @copyright (c) Agavi Foundation {@link http://www.agavi.org} 2005
- * @since     3.0.0
+ * @since     0.9.0
  * @version   $Id$
  */
 class DatabaseConfigHandler extends IniConfigHandler
@@ -43,7 +43,7 @@ class DatabaseConfigHandler extends IniConfigHandler
 	 *                               improperly formatted.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function & execute ($config)
 	{

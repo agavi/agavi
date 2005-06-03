@@ -19,7 +19,7 @@
  *
  * @author    Sean Kerr (skerr@mojavi.org)
  * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
- * @since     1.0.0
+ * @since     0.9.0
  * @version   $Id$
  */
 abstract class Request extends ParameterHolder
@@ -32,28 +32,28 @@ abstract class Request extends ParameterHolder
 	/**
 	 * Process validation and execution for only GET requests.
 	 *
-	 * @since 3.0.0
+	 * @since 0.9.0
 	 */
 	const GET = 2;
 
 	/**
 	 * Skip validation and execution for any request method.
 	 *
-	 * @since 3.0.0
+	 * @since 0.9.0
 	 */
 	const NONE = 1;
 
 	/**
 	 * Process validation and execution for only POST requests.
 	 *
-	 * @since 3.0.0
+	 * @since 0.9.0
 	 */
 	const POST = 4;
 
 	/**
 	 * Process validation and execution for only CONSOLE requests.
 	 *
-	 * @since 3.0.0
+	 * @since 0.9.0
 	 */
 	const CONSOLE = 8;
 
@@ -76,7 +76,7 @@ abstract class Request extends ParameterHolder
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  1.0.0
+	 * @since  0.9.0
 	 */
 	public function clearAttributes ()
 	{
@@ -98,7 +98,7 @@ abstract class Request extends ParameterHolder
 	 *               be returned for its value.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function & extractParameters ($names)
 	{
@@ -132,7 +132,7 @@ abstract class Request extends ParameterHolder
 	 *               null.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  1.0.0
+	 * @since  0.9.0
 	 */
 	public function & getAttribute ($name)
 	{
@@ -158,7 +158,7 @@ abstract class Request extends ParameterHolder
 	 * @return array An indexed array of attribute names.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  1.0.0
+	 * @since  0.9.0
 	 */
 	public function getAttributeNames ()
 	{
@@ -177,7 +177,7 @@ abstract class Request extends ParameterHolder
 	 * @return string An error message, if the error exists, otherwise null.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  1.0.0
+	 * @since  0.9.0
 	 */
 	public function getError ($name)
 	{
@@ -203,7 +203,7 @@ abstract class Request extends ParameterHolder
 	 * @return array An indexed array of error names.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function getErrorNames ()
 	{
@@ -220,7 +220,7 @@ abstract class Request extends ParameterHolder
 	 * @return array An associative array of errors.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  1.0.0
+	 * @since  0.9.0
 	 */
 	public function getErrors ()
 	{
@@ -240,7 +240,7 @@ abstract class Request extends ParameterHolder
 	 *             - Request::CONSOLE
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  1.0.0
+	 * @since  0.9.0
 	 */
 	public function getMethod ()
 	{
@@ -259,7 +259,7 @@ abstract class Request extends ParameterHolder
 	 * @return bool true, if the attribute exists, otherwise false.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  1.0.0
+	 * @since  0.9.0
 	 */
 	public function hasAttribute ($name)
 	{
@@ -278,7 +278,7 @@ abstract class Request extends ParameterHolder
 	 * @return bool true, if the error exists, otherwise false.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  1.0.0
+	 * @since  0.9.0
 	 */
 	public function hasError ($name)
 	{
@@ -320,7 +320,7 @@ abstract class Request extends ParameterHolder
 	 *                                        initializing this Request.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	abstract function initialize ($context, $parameters = null);
 
@@ -337,7 +337,7 @@ abstract class Request extends ParameterHolder
 	 *                                 cannot be created.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public static function newInstance ($class)
 	{
@@ -371,7 +371,7 @@ abstract class Request extends ParameterHolder
 	 *               otherwise null.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  1.0.0
+	 * @since  0.9.0
 	 */
 	public function & removeAttribute ($name)
 	{
@@ -402,7 +402,7 @@ abstract class Request extends ParameterHolder
 	 *                null.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  1.0.0
+	 * @since  0.9.0
 	 */
 	public function & removeError ($name)
 	{
@@ -436,7 +436,7 @@ abstract class Request extends ParameterHolder
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  1.0.0
+	 * @since  0.9.0
 	 */
 	public function setAttribute ($name, $value)
 	{
@@ -459,7 +459,7 @@ abstract class Request extends ParameterHolder
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  1.0.0
+	 * @since  0.9.0
 	 */
 	public function setAttributeByRef ($name, &$value)
 	{
@@ -482,7 +482,7 @@ abstract class Request extends ParameterHolder
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function setAttributes ($attributes)
 	{
@@ -505,7 +505,7 @@ abstract class Request extends ParameterHolder
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function setAttributesByRef (&$attributes)
 	{
@@ -530,7 +530,7 @@ abstract class Request extends ParameterHolder
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  1.0.0
+	 * @since  0.9.0
 	 */
 	public function setError ($name, $message)
 	{
@@ -609,7 +609,7 @@ abstract class Request extends ParameterHolder
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	abstract function shutdown ();
 

@@ -17,7 +17,7 @@
  *
  * @author    Sean Kerr (skerr@mojavi.org)
  * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
- * @since     3.0.0
+ * @since     0.9.0
  * @version   $Id$
  */
 class ValidatorConfigHandler extends IniConfigHandler
@@ -40,7 +40,7 @@ class ValidatorConfigHandler extends IniConfigHandler
 	 *                               improperly formatted.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function & execute ($config)
 	{
@@ -137,7 +137,7 @@ class ValidatorConfigHandler extends IniConfigHandler
 	 * @param array  A validators array.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	private function generateRegistration ($method, &$data, &$methods, &$names, &$validators)
 	{
@@ -239,7 +239,7 @@ class ValidatorConfigHandler extends IniConfigHandler
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	private function loadAttributes (&$config, &$methods, &$names, &$validators, &$ini, &$list)
 	{
@@ -349,7 +349,7 @@ class ValidatorConfigHandler extends IniConfigHandler
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	private function loadNames (&$config, &$method, &$methods, &$names, &$ini, &$list)
 	{
@@ -461,7 +461,7 @@ class ValidatorConfigHandler extends IniConfigHandler
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	private function loadValidators (&$config, &$validators, &$ini, &$list, &$entry)
 	{

@@ -36,7 +36,7 @@
  *
  * @author    Sean Kerr (skerr@mojavi.org)
  * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
- * @since     3.0.0
+ * @since     0.9.0
  * @version   $Id$
  */
 class PostgreSQLDatabase extends Database
@@ -52,7 +52,7 @@ class PostgreSQLDatabase extends Database
 	 * @throws <b>DatabaseException</b> If a connection could not be created.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function connect ()
 	{
@@ -138,7 +138,7 @@ class PostgreSQLDatabase extends Database
 	 * @return string A connection string.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	private function loadParameters (&$array)
 	{
@@ -171,7 +171,7 @@ class PostgreSQLDatabase extends Database
 	 *                                 this database.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function shutdown ()
 	{

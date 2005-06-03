@@ -19,7 +19,7 @@
  *
  * @author    Sean Kerr (skerr@mojavi.org)
  * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
- * @since     3.0.0
+ * @since     0.9.0
  * @version   $Id$
  */
 abstract class ConfigHandler extends ParameterHolder
@@ -38,7 +38,7 @@ abstract class ConfigHandler extends ParameterHolder
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function addReplacement ($oldValue, $newValue)
 	{
@@ -63,7 +63,7 @@ abstract class ConfigHandler extends ParameterHolder
 	 *                               improperly formatted.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	abstract function & execute ($config);
 
@@ -81,7 +81,7 @@ abstract class ConfigHandler extends ParameterHolder
 	 *                                        initializing this ConfigHandler.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function initialize ($parameters = null)
 	{
@@ -105,7 +105,7 @@ abstract class ConfigHandler extends ParameterHolder
 	 * @return string A literalized value.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public static function literalize ($value)
 	{
@@ -162,7 +162,7 @@ abstract class ConfigHandler extends ParameterHolder
 	 * @return string The new value.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public static function & replaceConstants ($value)
 	{
@@ -190,7 +190,7 @@ abstract class ConfigHandler extends ParameterHolder
 	 * @return string The new path.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public static function & replacePath ($path)
 	{

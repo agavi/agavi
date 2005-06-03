@@ -19,7 +19,7 @@
  *
  * @author    Sean Kerr (skerr@mojavi.org)
  * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
- * @since     1.0.0
+ * @since     0.9.0
  * @version   $Id$
  */
 abstract class Action extends AgaviObject
@@ -56,7 +56,7 @@ abstract class Action extends AgaviObject
 	 *               - The view that will be executed.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  1.0.0
+	 * @since  0.9.0
 	 */
 	abstract function execute ();
 
@@ -68,7 +68,7 @@ abstract class Action extends AgaviObject
 	 * @return Context The current Context instance.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public final function getContext ()
 	{
@@ -85,7 +85,7 @@ abstract class Action extends AgaviObject
 	 * @return mixed Data that indicates the level of security for this action.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function getCredential ()
 	{
@@ -109,7 +109,7 @@ abstract class Action extends AgaviObject
 	 *               - The view that will be executed.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  1.0.0
+	 * @since  0.9.0
 	 */
 	public function getDefaultView ()
 	{
@@ -132,7 +132,7 @@ abstract class Action extends AgaviObject
 	 *
 	 * @see Request
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  1.0.0
+	 * @since  0.9.0
 	 */
 	public function getRequestMethods ()
 	{
@@ -194,7 +194,7 @@ abstract class Action extends AgaviObject
 	 * @return bool true, if this action requires security, otherwise false.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  1.0.0
+	 * @since  0.9.0
 	 */
 	public function isSecure ()
 	{
@@ -213,7 +213,7 @@ abstract class Action extends AgaviObject
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  1.0.0
+	 * @since  0.9.0
 	 */
 	public function registerValidators ($validatorManager)
 	{
@@ -228,7 +228,7 @@ abstract class Action extends AgaviObject
 	 * @return bool true, if validation completes successfully, otherwise false.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  1.0.0
+	 * @since  0.9.0
 	 */
 	public function validate ()
 	{

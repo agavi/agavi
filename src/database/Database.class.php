@@ -18,7 +18,7 @@
  *
  * @author    Sean Kerr (skerr@mojavi.org)
  * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
- * @since     3.0.0
+ * @since     0.9.0
  * @version   $Id$
  */
 abstract class Database extends ParameterHolder
@@ -42,7 +42,7 @@ abstract class Database extends ParameterHolder
 	 * @throws <b>DatabaseException</b> If a connection could not be created.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	abstract function connect ();
 
@@ -111,7 +111,7 @@ abstract class Database extends ParameterHolder
 	 *                                        initializing this Database.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function initialize ($parameters = null)
 	{
@@ -136,7 +136,7 @@ abstract class Database extends ParameterHolder
 	 *                                 this database.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	abstract function shutdown ();
 

@@ -27,7 +27,7 @@
  *
  * @author    Sean Kerr (skerr@mojavi.org)
  * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
- * @since     1.0.0
+ * @since     0.9.0
  * @version   $Id$
  */
 class ExecutionTimeFilter extends Filter
@@ -46,7 +46,7 @@ class ExecutionTimeFilter extends Filter
 	 * @return double The execution time in seconds.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	private function calculateTime ($start, $end)
 	{
@@ -73,7 +73,7 @@ class ExecutionTimeFilter extends Filter
 	 * @throws <b>FilterException</b> If an erro occurs during execution.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  1.0.0
+	 * @since  0.9.0
 	 */
 	public function execute ($filterChain)
 	{
@@ -176,7 +176,7 @@ class ExecutionTimeFilter extends Filter
 	 * @throws <b>FilterException</b> If an error occurs during initialization.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function initialize ($context, $parameters = null)
 	{

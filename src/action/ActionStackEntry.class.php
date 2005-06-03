@@ -18,7 +18,7 @@
  *
  * @author    Sean Kerr (skerr@mojavi.org)
  * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
- * @since     3.0.0
+ * @since     0.9.0
  * @version   $Id$
  */
 class ActionStackEntry extends AgaviObject
@@ -49,7 +49,7 @@ class ActionStackEntry extends AgaviObject
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function __construct ($moduleName, $actionName, $actionInstance)
 	{
@@ -67,7 +67,7 @@ class ActionStackEntry extends AgaviObject
 	 * @return string An action name.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function getActionName ()
 	{
@@ -82,7 +82,7 @@ class ActionStackEntry extends AgaviObject
 	 * @return Action An action implementation instance.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function getActionInstance ()
 	{
@@ -98,7 +98,7 @@ class ActionStackEntry extends AgaviObject
 	 *                created.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function getMicrotime ()
 	{
@@ -113,7 +113,7 @@ class ActionStackEntry extends AgaviObject
 	 * @return string A module name.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function getModuleName ()
 	{
@@ -131,7 +131,7 @@ class ActionStackEntry extends AgaviObject
 	 * @return string An action name.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function & getPresentation ()
 	{
@@ -148,7 +148,7 @@ class ActionStackEntry extends AgaviObject
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function setPresentation (&$presentation)
 	{

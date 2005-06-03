@@ -17,7 +17,7 @@
  *
  * @author    Sean Kerr (skerr@mojavi.org)
  * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
- * @since     3.0.0
+ * @since     0.9.0
  * @version   $Id$
  */
 class BasicSecurityUser extends SecurityUser
@@ -57,7 +57,7 @@ class BasicSecurityUser extends SecurityUser
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function addCredential ($credential)
 	{
@@ -79,7 +79,7 @@ class BasicSecurityUser extends SecurityUser
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function clearCredentials ()
 	{
@@ -99,7 +99,7 @@ class BasicSecurityUser extends SecurityUser
 	 * @return bool true, if this user has the credential, otherwise false.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function hasCredential ($credential)
 	{
@@ -123,7 +123,7 @@ class BasicSecurityUser extends SecurityUser
 	 *                                        initializing this User.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function initialize ($context, $parameters = null)
 	{
@@ -156,7 +156,7 @@ class BasicSecurityUser extends SecurityUser
 	 * @return bool true, if this user is authenticated, otherwise false.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function isAuthenticated ()
 	{
@@ -175,7 +175,7 @@ class BasicSecurityUser extends SecurityUser
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function removeCredential ($credential)
 	{
@@ -214,7 +214,7 @@ class BasicSecurityUser extends SecurityUser
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function setAuthenticated ($authenticated)
 	{
@@ -240,7 +240,7 @@ class BasicSecurityUser extends SecurityUser
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function shutdown ()
 	{

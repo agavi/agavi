@@ -17,7 +17,7 @@
  *
  * @author    Sean Kerr (skerr@mojavi.org)
  * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
- * @since     1.0.0
+ * @since     0.9.0
  * @version   $Id$
  */
 abstract class Controller extends ParameterHolder
@@ -66,7 +66,7 @@ abstract class Controller extends ParameterHolder
 	 * @return bool true, if the action exists, otherwise false.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  1.0.0
+	 * @since  0.9.0
 	 */
 	public function actionExists ($moduleName, $actionName)
 	{
@@ -95,7 +95,7 @@ abstract class Controller extends ParameterHolder
 	 *                                  SecurityUser.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  1.0.0
+	 * @since  0.9.0
 	 */
 	public function forward ($moduleName, $actionName)
 	{
@@ -270,7 +270,7 @@ abstract class Controller extends ParameterHolder
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @author Mike Vincent (mike@agavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function getAction ($moduleName, $actionName)
 	{
@@ -305,7 +305,7 @@ abstract class Controller extends ParameterHolder
 	 *                     enabled, otherwise null.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function getActionStack ()
 	{
@@ -322,7 +322,7 @@ abstract class Controller extends ParameterHolder
 	 * @return Context A Context instance.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function getContext ()
 	{
@@ -342,7 +342,7 @@ abstract class Controller extends ParameterHolder
 	 *               otherwise null.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function getGlobalModel ($modelName)
 	{
@@ -380,7 +380,7 @@ abstract class Controller extends ParameterHolder
 	 *                                    instance has not been created.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public static function getInstance ()
 	{
@@ -407,7 +407,7 @@ abstract class Controller extends ParameterHolder
 	 *               otherwise null.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function getModel ($moduleName, $modelName)
 	{
@@ -447,7 +447,7 @@ abstract class Controller extends ParameterHolder
 	 *             - View::RENDER_VAR
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  1.0.0
+	 * @since  0.9.0
 	 */
 	public function getRenderMode ()
 	{
@@ -468,7 +468,7 @@ abstract class Controller extends ParameterHolder
 	 *              otherwise null.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function getView ($moduleName, $viewName)
 	{
@@ -512,7 +512,7 @@ abstract class Controller extends ParameterHolder
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @author Mike Vincent (mike@agavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	protected function initialize ()
 	{
@@ -543,7 +543,7 @@ abstract class Controller extends ParameterHolder
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	private function loadGlobalFilters ($filterChain)
 	{
@@ -576,7 +576,7 @@ abstract class Controller extends ParameterHolder
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	private function loadModuleFilters ($filterChain)
 	{
@@ -617,7 +617,7 @@ abstract class Controller extends ParameterHolder
 	 * @return bool true, if the model exists, otherwise false.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  1.0.0
+	 * @since  0.9.0
 	 */
 	public function modelExists ($moduleName, $modelName)
 	{
@@ -638,7 +638,7 @@ abstract class Controller extends ParameterHolder
 	 * @return bool true, if the module exists, otherwise false.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  1.0.0
+	 * @since  0.9.0
 	 */
 	public function moduleExists ($moduleName)
 	{
@@ -662,7 +662,7 @@ abstract class Controller extends ParameterHolder
 	 *                                 instance cannot be created.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public static function newInstance ($class)
 	{
@@ -760,7 +760,7 @@ abstract class Controller extends ParameterHolder
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function shutdown ()
 	{
@@ -789,7 +789,7 @@ abstract class Controller extends ParameterHolder
 	 * @return bool true, if the view exists, otherwise false.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function viewExists ($moduleName, $viewName)
 	{

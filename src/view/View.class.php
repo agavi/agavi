@@ -19,7 +19,7 @@
  *
  * @author    Sean Kerr (skerr@mojavi.org)
  * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
- * @since     1.0.0
+ * @since     0.9.0
  * @version   $Id$
  */
 abstract class View extends AgaviObject
@@ -32,56 +32,56 @@ abstract class View extends AgaviObject
 	/**
 	 * Show an alert view.
 	 *
-	 * @since 3.0.0
+	 * @since 0.9.0
 	 */
 	const ALERT = 'Alert';
 
 	/**
 	 * Show an error view.
 	 *
-	 * @since 3.0.0
+	 * @since 0.9.0
 	 */
 	const ERROR = 'Error';
 
 	/**
 	 * Show a form input view.
 	 *
-	 * @since 3.0.0
+	 * @since 0.9.0
 	 */
 	const INPUT = 'Input';
 
 	/**
 	 * Skip view execution.
 	 *
-	 * @since 3.0.0
+	 * @since 0.9.0
 	 */
 	const NONE = null;
 
 	/**
 	 * Show a success view.
 	 *
-	 * @since 3.0.0
+	 * @since 0.9.0
 	 */
 	const SUCCESS = 'Success';
 
 	/**
 	 * Render the presentation to the client.
 	 *
-	 * @since 3.0.0
+	 * @since 0.9.0
 	 */
 	const RENDER_CLIENT = 2;
 
 	/**
 	 * Do not render the presentation.
 	 *
-	 * @since 3.0.0
+	 * @since 0.9.0
 	 */
 	const RENDER_NONE = 1;
 
 	/**
 	 * Render the presentation to a variable.
 	 *
-	 * @since 3.0.0
+	 * @since 0.9.0
 	 */
 	const RENDER_VAR = 4;
 
@@ -109,7 +109,7 @@ abstract class View extends AgaviObject
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	abstract function clearAttributes ();
 
@@ -124,7 +124,7 @@ abstract class View extends AgaviObject
 	 * @return string A decorated template.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	protected function & decorate (&$content)
 	{
@@ -186,7 +186,7 @@ abstract class View extends AgaviObject
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  1.0.0
+	 * @since  0.9.0
 	 */
 	abstract function execute ();
 
@@ -201,7 +201,7 @@ abstract class View extends AgaviObject
 	 *               null.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	abstract function & getAttribute ($name);
 
@@ -213,7 +213,7 @@ abstract class View extends AgaviObject
 	 * @return array An indexed array of attribute names.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	abstract function getAttributeNames ();
 
@@ -225,7 +225,7 @@ abstract class View extends AgaviObject
 	 * @return Context The current Context instance.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public final function getContext ()
 	{
@@ -243,7 +243,7 @@ abstract class View extends AgaviObject
 	 *                template directory.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function getDecoratorDirectory ()
 	{
@@ -261,7 +261,7 @@ abstract class View extends AgaviObject
 	 *                null.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function getDecoratorTemplate ()
 	{
@@ -279,7 +279,7 @@ abstract class View extends AgaviObject
 	 *                directory.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function getDirectory ()
 	{
@@ -307,7 +307,7 @@ abstract class View extends AgaviObject
 	 * @return array An associative array of decorator slots.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	protected function & getSlots ()
 	{
@@ -325,7 +325,7 @@ abstract class View extends AgaviObject
 	 *                null.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function getTemplate ()
 	{
@@ -349,7 +349,7 @@ abstract class View extends AgaviObject
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function importAttributes ($names, $files = false, $errors = true,
 						              $stripTags = true, $specialChars = true)
@@ -512,7 +512,7 @@ abstract class View extends AgaviObject
 	 * @return bool true, if this view is a decorating view, otherwise false.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function isDecorator ()
 	{
@@ -532,7 +532,7 @@ abstract class View extends AgaviObject
 	 * @throws <b>RenderException</b> If the pre-render check fails.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	protected function preRenderCheck ()
 	{
@@ -594,7 +594,7 @@ abstract class View extends AgaviObject
 	 *               otherwise null.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	abstract function & removeAttribute ($name);
 
@@ -611,7 +611,7 @@ abstract class View extends AgaviObject
 	 *                null.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	abstract function & render ();
 
@@ -626,7 +626,7 @@ abstract class View extends AgaviObject
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	abstract function setAttribute ($name, $value);
 
@@ -641,7 +641,7 @@ abstract class View extends AgaviObject
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	abstract function setAttributeByRef ($name, &$value);
 
@@ -656,7 +656,7 @@ abstract class View extends AgaviObject
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	abstract function setAttributes ($values);
 
@@ -671,7 +671,7 @@ abstract class View extends AgaviObject
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	abstract function setAttributesByRef (&$values);
 
@@ -685,7 +685,7 @@ abstract class View extends AgaviObject
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function setDecoratorDirectory ($directory)
 	{
@@ -707,7 +707,7 @@ abstract class View extends AgaviObject
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function setDecoratorTemplate ($template)
 	{
@@ -740,7 +740,7 @@ abstract class View extends AgaviObject
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function setDirectory ($directory)
 	{
@@ -764,7 +764,7 @@ abstract class View extends AgaviObject
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function setSlot ($attributeName, $moduleName, $actionName)
 	{
@@ -788,7 +788,7 @@ abstract class View extends AgaviObject
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @since  0.9.0
 	 */
 	public function setTemplate ($template)
 	{
