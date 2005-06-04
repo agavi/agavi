@@ -89,6 +89,7 @@
 				</replacetokens>
 			</filterchain>
 		</copy>
+		<mkdir dir="${prefix}lib"/>
 		<mkdir dir="${prefix}models"/>
 		<mkdir dir="${prefix}templates"/>
 		<mkdir dir="${prefix}views"/>
