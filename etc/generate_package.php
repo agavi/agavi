@@ -102,7 +102,7 @@ if (is_a($e, 'PEAR_Error')) {
 	die();
 }
 
-$e = $packagexml->addDependency('phing', '2.1.0');
+$e = $packagexml->addDependency('phing', '2.0.0');
 if (is_a($e, 'PEAR_Error')) {
 	echo $e->getMessage();
 	exit;

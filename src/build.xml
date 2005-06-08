@@ -149,6 +149,7 @@
 				</replacetokens>
 			</filterchain>
 		</copy>
+		<delete file="${prefix}models/Model.class.php" quiet="true" failonerror="false" />
 	</target>
 
 </project>
