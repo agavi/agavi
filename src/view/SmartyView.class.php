@@ -58,6 +58,11 @@ abstract class SmartyView extends View
 		return array_keys($this->smarty->get_template_vars());
 	}
 
+	public function hasAttribute($name)
+	{
+		return !is_null($this->smarty->get_template_vars($name));
+	}
+
 	public function & getAttribute($name)
 	{
 		return $this->smarty->get_template_vars($name);
@@ -75,9 +80,19 @@ abstract class SmartyView extends View
 		$this->smarty->assign($name, $value);
 	}
 
+	public function appendAttribute($name, $value)
+	{
+		$this->smarty->append($name, $value);
+	}
+
 	public function setAttributeByRef($name, &$value)
 	{
 		$this->smarty->assign_by_ref($name, $value);
+	}
+
+	public function appendAttributeByRef($name, &$value)
+	{
+		$this->smarty->append_by_ref($name, $value);
 	}
 
 	public function setAttributes($attributes)

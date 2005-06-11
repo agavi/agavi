@@ -2,7 +2,10 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2005  Sean Kerr.                                       |
+// | Authors                                                                   |
+// |  Sean Kerr (skerr@mojavi.org)                                             |
+// |  Agavi Foundation (info@agavi.org)                                        |
+// | Copyright (c) 2003-2005  Authors                                          |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -22,7 +25,8 @@
  * @subpackage request
  *
  * @author    Sean Kerr (skerr@mojavi.org)
- * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
+ * @author    Agavi Foundation (info@agavi.org)
+ * @copyright (c) Authors
  * @since     0.9.0
  * @version   $Id$
  */
@@ -131,27 +135,23 @@ abstract class Request extends ParameterHolder
 	 * Retrieve an attribute.
 	 *
 	 * @param string An attribute name.
+	 * @param mixed A default attribute value.
 	 *
 	 * @return mixed An attribute value, if the attribute exists, otherwise
 	 *               null.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
+	 * @author Bob Zoller (bob@agavi.org)
 	 * @since  0.9.0
 	 */
-	public function & getAttribute ($name)
+	public function & getAttribute($name, $default=null)
 	{
+		$retval = &$default;
 
-		$retval = null;
-
-		if (isset($this->attributes[$name]))
-		{
-
-			return $this->attributes[$name];
-
+		if (isset($this->attributes[$name])) {
+			$retval =& $this->attributes[$name];
 		}
-
 		return $retval;
-
 	}
 
 	// -------------------------------------------------------------------------
@@ -452,6 +452,32 @@ abstract class Request extends ParameterHolder
 	// -------------------------------------------------------------------------
 
 	/**
+	 * Append an attribute.
+	 * 
+	 * If this attribute is already set, convert it to an array and append the
+	 * new value.  If not, set the new value like normal.
+	 *
+	 * @param string An attribute name.
+	 * @param mixed  An attribute value.
+	 *
+	 * @return void
+	 *
+	 * @author Bob Zoller (bob@agavi.org)
+	 * @since  0.9.1
+	 */
+	public function appendAttribute($name, $value)
+	{
+
+		if (!isset($this->attributes[$name]) || !is_array($this->attributes[$name])) {
+			settype($this->attributes[$name], 'array');
+		}
+		$this->attributes[$name][] = $value;
+
+	}
+
+	// -------------------------------------------------------------------------
+
+	/**
 	 * Set an attribute by reference.
 	 *
 	 * If an attribute with the name already exists the value will be
@@ -465,10 +491,36 @@ abstract class Request extends ParameterHolder
 	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  0.9.0
 	 */
-	public function setAttributeByRef ($name, &$value)
+	public function setAttributeByRef($name, &$value)
 	{
 
 		$this->attributes[$name] =& $value;
+
+	}
+
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Append an attribute by reference.
+	 * 
+	 * If this attribute is already set, convert it to an array and append the
+	 * reference to the new value.  If not, set the new value like normal.
+	 *
+	 * @param string An attribute name.
+	 * @param mixed  A reference to an attribute value.
+	 *
+	 * @return void
+	 *
+	 * @author Bob Zoller (bob@agavi.org)
+	 * @since  0.9.1
+	 */
+	public function appendAttributeByRef($name, &$value)
+	{
+
+		if (!isset($this->attributes[$name]) || !is_array($this->attributes[$name])) {
+			settype($this->attributes[$name], 'array');
+		}
+		$this->attributes[$name][] =& $value;
 
 	}
 
