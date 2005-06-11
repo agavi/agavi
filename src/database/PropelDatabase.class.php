@@ -20,58 +20,114 @@
  * 
  * @since 1.0 
  * @author Agavi Foundation (info@agavi.org)
+ * @author David Zuelke (dz@bitxtender.com)
  */
-class PropelDatabase extends Database
+class PropelDatabase extends CreoleDatabase
 {
 	/**
-	 * Connect to the database. 
-	 * 
-	 * @since 1.0
-	 * @access public
-	 * @return void
-	 * @throws <b>DatabaseException</b> If a connection could not be created.
-	 * @author Dusty Matthews (dustym@agavi.org)
+	 * Stores the path of the configuration file that will be passed to
+	 * Propel::init() when using Propel autoloading magic
 	 */
-	public function connect ()
+	static $defaultConfigPath = null;
+
+	/**
+	 * Stores whether a Propel configuration file path has been explicitly set
+	 * as default for use with Propel::init() in database.ini
+	 */
+	static $defaultConfigPathSet = false;
+
+	/**
+	 * Returns the path to the config file that is passed to Propel::init() when
+	 * PropelAutoload.php is used in autoload.ini
+	 * @returns mixed The path if one has been set, otherwise null
+	 * @author David Zuelke (dz@bitxtender.com)
+	 */
+	public static function getDefaultConfigPath()
 	{
-		try {
-			// determine how to get our settings
-			$method = $this->getParameter('method', 'normal');
-			switch ($method) {
-				case 'normal':
-					$runtime = ConfigHandler::replaceConstants($this->getParameter('runtime',null));
-					break;
-				case 'server':
-					$runtime =& $_SERVER['runtime'];
-					break;
-				case 'env':
-					$runtime =& $_ENV['runtime'];
-					break;
-				default:
-					$error = 'Invalid PropelDatabase parameter retrieval method "%s"';
-					$error = sprintf($error, $method);
-					throw new DatabaseException($error);
-			}
-			// get propel class path
-			$classPath = ConfigHandler::replaceConstants($this->getParameter('classpath',null));
-			// set the include path to our Propel generated classes
-			if (!is_null($classPath)) {
-				set_include_path(get_include_path().PATH_SEPARATOR.$classPath);
-			}
+		return self::$defaultConfigPath;
+	}
 
-			require_once('creole/SQLException.php');
-			require_once('propel/Propel.php');
-			require_once('propel/util/Criteria.php');
-			require_once('propel/map/DatabaseMap.php');
+	/**
+	 * Sets the path to the config file that is passed to Propel::init() when
+	 * PropelAutoload.php is used in autoload.ini
+	 * @param string The path to the configuration file
+	 * @returns mixed The old path if one was set previously, otherwise null
+	 * @author David Zuelke (dz@bitxtender.com)
+	 */
+	protected static function setDefaultConfigPath($path)
+	{
+		$return = self::getDefaultConfigPath();
+		self::$defaultConfigPath = $path;
+		return $return;
+	}
 
-			// Everything looks good. Off to the races.
-			Propel::init($runtime);
-			$this->connection = Propel::getConnection();
-			$this->resource =& $this->connection->getResource();
-		} catch (SQLException $e) {
-			// the connection's foobar'd
-			throw new DatabaseException($e->toString());
+	/**
+	 * Returns whether a Propel configuration file path has been explicitly set
+	 * as default for use with Propel::init() in database.ini
+	 * @return bool true, if a Propel configuration file path has explicitely
+	 *              been set as default in database.ini, otherwise false
+	 * @author David Zuelke (dz@bitxtender.com)
+	 */
+	protected static function isDefaultConfigPathSet()
+	{
+		return self::$defaultConfigPathSet;
+	}
+
+	/**
+	 * Sets a flag indicating a Propel configuration file path has been
+	 * explicitly set as default for use with Propel::init() in database.ini
+	 * @return void
+	 * @author David Zuelke (dz@bitxtender.com)
+	 */
+	protected static function setDefaultConfigPathSet()
+	{
+		self::$defaultConfigPathSet = true;
+	}
+
+	/**
+	 * Load Propel config
+	 * 
+	 * @access puclic
+	 * @param array An associative array of initialization parameters.
+	 * @return void
+	 * @author David Zuelke (dz@bitxtender.com)
+	 */
+	public function initialize($parameters = null)
+	{
+		parent::initialize($parameters);
+		$configPath = $this->getParameter('config');
+		$datasource = $this->getParameter('datasource', null);
+		$use_as_default = $this->getParameter('use_as_default', false);
+		$config = require($configPath);
+		if($datasource === null || $datasource == 'default')
+		{
+			$datasource = $config['propel']['datasources']['default'];
 		}
+		foreach($config['propel']['datasources'][$datasource]['connection'] as $key => $value)
+		{
+			$this->setParameter($key, $value);
+		}
+		$this->setParameter('method', 'normal');
+		if(!self::isDefaultConfigPathSet())
+		{
+			self::setDefaultConfigPath($configPath);
+			if($use_as_default)
+			{
+				self::setDefaultConfigPathSet();
+			}
+		}
+	}
+
+	/**
+	 * Get the path to the Propel config file for this connection which has been
+	 * specified in databases.ini.
+	 * @access public
+	 * @return string The path to the Propel configuration file
+	 * @author David Zuelke (dz@bitxtender.com)
+	 */
+	public function getConfigPath()
+	{
+		return $this->getParameter('config');
 	}
 	
 	/**
@@ -83,7 +139,7 @@ class PropelDatabase extends Database
 	 * @throws <b>DatabaseException</b> If an error occurs while shutting down this database.
 	 * @author Dusty Matthews (dustym@agavi.org)
 	 */
-	public function shutdown ()
+	public function shutdown()
 	{
 		if ($this->connection !== null) {
 			@$this->connection->close();
