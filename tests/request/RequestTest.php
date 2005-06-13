@@ -48,28 +48,28 @@ class RequestTest extends UnitTestCase
 		$this->assertEqual(array('blah', 'blah2'), $this->_r->getAttributeNames());
 	}
 
-	public function getError()
+	public function testgetError()
 	{
 		$this->_r->setError('blah', 'blahval');
 		$this->assertEqual('blahval', $this->_r->getError('blah'));
 		$this->assertNull($this->_r->getError('bunk'));
 	}
 
-	public function getErrorNames()
+	public function testgetErrorNames()
 	{
 		$this->_r->setError('blah', 'blahval');
 		$this->_r->setError('blah2', 'blah2val');
 		$this->assertEqual(array('blah', 'blah2'), $this->_r->getErrorNames());
 	}
 
-	public function getErrors()
+	public function testgetErrors()
 	{
 		$this->_r->setError('blah', 'blahval');
 		$this->_r->setError('blah2', 'blah2val');
 		$this->assertEqual(array('blah'=>'blahval', 'blah2'=>'blah2val'), $this->_r->getErrors());
 	}
 
-	public function getMethod()
+	public function testgetMethod()
 	{
 		$this->assertNull($this->_r->getMethod());
 		$this->_r->setMethod(Request::GET);
@@ -133,14 +133,35 @@ class RequestTest extends UnitTestCase
 		$this->assertEqual('blahval', $this->_r->getAttribute('blah'));
 	}
 
-	public function setAttributeByRef()
+	public function testsetAttributeByRef()
 	{
 		$myval = 'blahval';
 		$this->_r->setAttributeByRef('blah', $myval);
 		$this->assertReference($myval, $this->_r->getAttribute('blah'));
 	}
 
-	public function setAttributes()
+	public function testappendAttribute()
+	{
+		$this->_r->appendAttribute('blah', 'blahval');
+		$this->assertEqual(array('blahval'), $this->_r->getAttribute('blah'));
+		$this->_r->appendAttribute('blah', 'blahval2');
+		$this->assertEqual(array('blahval','blahval2'), $this->_r->getAttribute('blah'));
+	}
+
+	public function testappendAttributeByRef()
+	{
+		$myval1 = 'jack';
+		$myval2 = 'bill';
+		$this->_r->appendAttributeByRef('blah', $myval1);
+		$out = $this->_r->getAttribute('blah');
+		$this->assertReference($myval1, $out[0]);
+		$this->_r->appendAttributeByRef('blah', $myval2);
+		$out = $this->_r->getAttribute('blah');
+		$this->assertReference($myval1, $out[0]);
+		$this->assertReference($myval2, $out[1]);
+	}
+
+	public function testsetAttributes()
 	{
 		$this->_r->setAttributes(array('blah'=>'blahval'));
 		$this->assertEqual('blahval', $this->_r->getAttribute('blah'));
@@ -149,13 +170,13 @@ class RequestTest extends UnitTestCase
 		$this->assertEqual('blah2val', $this->_r->getAttribute('blah2'));
 	}
 
-	public function setAttributesByRef()
+	public function testsetAttributesByRef()
 	{
 		$myval1 = 'blah';
 		$myval2 = 'blah2';
-		$this->_r->setAttributes(array('blah'=>$myval1));
+		$this->_r->setAttributes(array('blah'=>&$myval1));
 		$this->assertReference($myval1, $this->_r->getAttribute('blah'));
-		$this->_r->setAttributes(array('blah2'=>$myval2));
+		$this->_r->setAttributes(array('blah2'=>&$myval2));
 		$this->assertReference($myval1, $this->_r->getAttribute('blah'));
 		$this->assertReference($myval2, $this->_r->getAttribute('blah2'));
 	}

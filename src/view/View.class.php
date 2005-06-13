@@ -2,7 +2,10 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2005  Sean Kerr.                                       |
+// | Authors                                                                   |
+// |  Sean Kerr (skerr@mojavi.org)                                             |
+// |  Agavi Foundation (info@agavi.org)                                        |
+// | Copyright (c) 2003-2005  Authors                                          |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -22,7 +25,8 @@
  * @subpackage view
  *
  * @author    Sean Kerr (skerr@mojavi.org)
- * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
+ * @author    Agavi Foundation (info@agavi.org)
+ * @copyright (c) Authors
  * @since     0.9.0
  * @version   $Id$
  */
@@ -193,6 +197,20 @@ abstract class View extends AgaviObject
 	 * @since  0.9.0
 	 */
 	abstract function execute ();
+
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Indicates whether or not an attribute exists.
+	 *
+	 * @param string An attribute name.
+	 *
+	 * @return bool true, if the attribute exists, otherwise false.
+	 *
+	 * @author Bob Zoller (bob@agavi.org)
+	 * @since  0.9.1
+	 */
+	abstract function hasAttribute ($name);
 
 	// -------------------------------------------------------------------------
 
@@ -637,6 +655,21 @@ abstract class View extends AgaviObject
 	// -------------------------------------------------------------------------
 
 	/**
+	 * Append an attribute.
+	 *
+	 * @param string An attribute name.
+	 * @param mixed  An attribute value.
+	 *
+	 * @return void
+	 *
+	 * @author Bob Zoller (bob@agavi.org)
+	 * @since  0.9.1
+	 */
+	abstract function appendAttribute($name, $value);
+
+	// -------------------------------------------------------------------------
+
+	/**
 	 * Set an attribute by reference.
 	 *
 	 * @param string An attribute name.
@@ -648,6 +681,21 @@ abstract class View extends AgaviObject
 	 * @since  0.9.0
 	 */
 	abstract function setAttributeByRef ($name, &$value);
+
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Append an attribute by reference.
+	 *
+	 * @param string An attribute name.
+	 * @param mixed  A reference to an attribute value.
+	 *
+	 * @return void
+	 *
+	 * @author Bob Zoller (bob@agavi.org)
+	 * @since  0.9.1
+	 */
+	abstract function appendAttributeByRef($name, &$value);
 
 	// -------------------------------------------------------------------------
 

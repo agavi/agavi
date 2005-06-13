@@ -2,7 +2,10 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2005  Sean Kerr.                                       |
+// | Authors                                                                   |
+// |  Sean Kerr (skerr@mojavi.org)                                             |
+// |  Agavi Foundation (info@agavi.org)                                        |
+// | Copyright (c) 2003-2005  Authors                                          |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -23,7 +26,8 @@
  * @subpackage user
  *
  * @author    Sean Kerr (skerr@mojavi.org)
- * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
+ * @author    Agavi Foundation (info@agavi.org)
+ * @copyright (c) Authors
  * @since     0.9.0
  * @version   $Id$
  */
@@ -45,7 +49,7 @@ class User extends ParameterHolder
 	// | PRIVATE VARIABLES                                                     |
 	// +-----------------------------------------------------------------------+
 
-	private
+	protected
 		$attributes = null,
 		$context = null;
 
@@ -76,23 +80,25 @@ class User extends ParameterHolder
 	 *
 	 * @param string An attribute name.
 	 * @param string An attribute namespace.
+	 * @param mixed A default attribute value.
 	 *
 	 * @return mixed An attribute value, if the attribute exists, otherwise
 	 *               null.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
+	 * @author Bob Zoller (bob@agavi.org)
 	 * @since  0.9.0
 	 */
-	public function & getAttribute ($name, $ns = AG_USER_NAMESPACE)
+	public function & getAttribute ($name, $ns = AG_USER_NAMESPACE, $default=null)
 	{
 
-		$retval = null;
+		$retval =& $default;
 
 		if (isset($this->attributes[$ns]) &&
 			isset($this->attributes[$ns][$name]))
 		{
 
-			return $this->attributes[$ns][$name];
+			$retval =& $this->attributes[$ns][$name];
 
 		}
 
@@ -389,17 +395,45 @@ class User extends ParameterHolder
 	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  0.9.0
 	 */
-	public function setAttribute ($name, $value, $ns = AG_USER_NAMESPACE)
+	public function setAttribute($name, $value, $ns = AG_USER_NAMESPACE)
 	{
 
-		if (!isset($this->attributes[$ns]))
-		{
-
+		if (!isset($this->attributes[$ns])) {
 			$this->attributes[$ns] = array();
-
 		}
 
 		$this->attributes[$ns][$name] = $value;
+
+	}
+
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Append an attribute.
+	 *
+	 * If an attribute with the name already exists, it will be converted to an
+	 * array and the new value appended.
+	 *
+	 * @param string An attribute name.
+	 * @param mixed  An attribute value.
+	 * @param string An attribute namespace.
+	 *
+	 * @return void
+	 *
+	 * @author Bob Zoller (bob@agavi.org)
+	 * @since  0.9.1
+	 */
+	public function appendAttribute($name, $value, $ns = AG_USER_NAMESPACE)
+	{
+
+		if (!isset($this->attributes[$ns])) {
+			$this->attributes[$ns] = array();
+		}
+
+		if (!isset($this->attributes[$ns][$name]) || !is_array($this->attributes[$ns][$name])) {
+			settype($this->attributes[$ns][$name], 'array');
+		}
+		$this->attributes[$ns][$name][] = $value;
 
 	}
 
@@ -420,17 +454,45 @@ class User extends ParameterHolder
 	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  0.9.0
 	 */
-	public function setAttributeByRef ($name, &$value, $ns = AG_USER_NAMESPACE)
+	public function setAttributeByRef($name, &$value, $ns = AG_USER_NAMESPACE)
 	{
 
-		if (!isset($this->attributes[$ns]))
-		{
-
+		if (!isset($this->attributes[$ns])) {
 			$this->attributes[$ns] = array();
-
 		}
 
 		$this->attributes[$ns][$name] =& $value;
+
+	}
+
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Append an attribute by reference.
+	 *
+	 * If an attribute with the name already exists, it will be converted to an
+	 * array and the reference to the new value appended.
+	 *
+	 * @param string An attribute name.
+	 * @param mixed  A reference to an attribute value.
+	 * @param string An attribute namespace.
+	 *
+	 * @return void
+	 *
+	 * @author Bob Zoller (bob@agavi.org)
+	 * @since  0.9.1
+	 */
+	public function appendAttributeByRef($name, &$value, $ns = AG_USER_NAMESPACE)
+	{
+
+		if (!isset($this->attributes[$ns])) {
+			$this->attributes[$ns] = array();
+		}
+
+		if (!isset($this->attributes[$ns][$name]) || !is_array($this->attributes[$ns][$name])) {
+			settype($this->attributes[$ns][$name], 'array');
+		}
+		$this->attributes[$ns][$name][] =& $value;
 
 	}
 
