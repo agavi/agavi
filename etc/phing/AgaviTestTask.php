@@ -1,15 +1,21 @@
 <?php
 class AgaviTestTask extends Task {
-	private $glob = '*';
+	private $testdir = 'tests';
+	private $base_include = 'src:webapp'; // add ./src (core) and ./webapp (project) to the include path
 	private $reporter = 'text';
 	private $outfile = '';
 	private $exit = false;
 
-	public function setGlob($glob)
+	public function setTestdir($dir)
 	{
-		$this->glob = (string) $glob;
+		$this->testdir = (string) $dir;
 	}
 
+	public function setBaseInclude($include)
+	{
+		$this->base_include = (string) $include;
+	}
+	
 	public function setReporter($reporter)
 	{
 		$this->reporter = (string) $reporter;
@@ -27,8 +33,9 @@ class AgaviTestTask extends Task {
 
 	public function main()
 	{
-		if (!@require_once('simpletest/unit_tester.php')) {
-			throw new BuildException('Requires SimpleTest');
+		@include_once('simpletest/unit_tester.php');
+		if (!class_exists('SimpleTestCase', false)) {
+			throw new BuildException("\nRequires SimpleTest be accessible from your include path.\neg: include('simpletest/unit_tester.php');\nyour include path is currently set to: " . get_include_path() . ".\nsee http://sourceforge.net/projects/simpletest");
 		}
 		if ($this->outfile) {
 			if ((file_exists($this->outfile) && !is_writeable($this->outfile)) || (!file_exists($this->outfile) && !touch($this->outfile))) {
@@ -47,27 +54,50 @@ class AgaviTestTask extends Task {
 		}
 		$testcode = '
 <?php
-define("AGAVITESTGLOB", "'.$this->glob.'");
-define("AGAVITESTREPORTER", "'.$this->reporter.'");
+define("AGAVITESTREPORTER",	"' . $this->reporter. '");
+define("TESTDIR",						"' . $this->testdir . '");
+set_include_path(get_include_path() . ":' . $this->base_include . '");
+set_time_limit(0);
+
 require_once("simpletest/unit_tester.php");
 require_once("simpletest/reporter.php");
 require_once("simpletest/mock_objects.php");
-set_include_path(get_include_path().":src");
-set_time_limit(0);
 
-$test = new GroupTest("Agavi Test Suite");
-
-foreach (glob("tests/".AGAVITESTGLOB) as $dir) {
-	if (!is_dir($dir)) { continue; }
-	$group = &new GroupTest(basename($dir) . " Test Suite");
-	$files = glob("{$dir}/*Test*.php");
-	if (is_array($files)) {
-		foreach ($files as $file) {
-			$group->addTestFile($file);
-		}
-	}
-	$test->addTestCase($group);
+if ( !is_dir(TESTDIR) ) {
+	echo "No test dir: " . TESTDIR . "\n";
+	exit(1);
 }
+
+
+function isTest($name)
+{
+	return strpos($name, "Test.") ? true : strpos($name, "Tests.");
+}
+
+function isHidden($name)
+{
+	return ($name[0] == ".");
+}
+
+function findTests($path)
+{
+	$iterator = new RecursiveDirectoryIterator($path);
+	$group = new GroupTest(basename($iterator->getPath()) . " Test Suite");
+	while ($iterator->valid()) {
+		if ($iterator->isDir() && !$iterator->isDot() && !isHidden($iterator->getFilename())) {
+			if ($iterator->hasChildren() ) {
+				$group->addTestCase( findTests($iterator->getPathname()) );
+			}
+		} else if ($iterator->isFile() && isTest($iterator->getFilename())) { 
+			$group->addTestFile($iterator->getPathname());
+		}
+		$iterator->next();
+	}
+	return $group;
+}
+			  
+$test = new GroupTest("Agavi Test Suite");
+$test->addTestCase( findTests(TESTDIR) );
 
 if (strtolower(AGAVITESTREPORTER) == "html")
 	$rclass = "HTMLReporter";
@@ -81,7 +111,7 @@ exit($test->run(new $rclass()) ? 0 : 1);
 
 		if ($this->outfile) {
 			file_put_contents($this->outfile, stream_get_contents($pipes[1]));
-			$this->log("AgaviTest output left in: {$this->outfile}", PROJECT_MSG_INFO);
+			$this->log("AgaviTest output written to: {$this->outfile}", PROJECT_MSG_INFO);
 		} else {
 			$this->log(stream_get_contents($pipes[1]), PROJECT_MSG_INFO);
 		}
