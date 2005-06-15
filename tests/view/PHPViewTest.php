@@ -30,7 +30,7 @@ class PHPViewTest extends UnitTestCase
 
 	public function testdecorate()
 	{
-		$this->fail('Incomplete Test');
+		$this->assertTrue(0,'Incomplete Test');
 	}
 
 	public function testgetAttribute()
@@ -62,7 +62,7 @@ class PHPViewTest extends UnitTestCase
 
 	public function testrender()
 	{
-		$this->fail('Incomplete Test');
+		$this->assertTrue(0,'Incomplete Test');
 	}
 
 	public function testsetAttribute()

@@ -121,12 +121,12 @@ class UserTest extends UnitTestCase
 
 	public function testinitialize()
 	{
-		$this->fail('Incomplete Test');
+		$this->assertTrue(0,'Incomplete Test');
 	}
 
 	public function testnewInstance()
 	{
-		$this->fail('Incomplete Test');
+		$this->assertTrue(0,'Incomplete Test');
 	}
 
 	public function testremoveAttribute()
@@ -260,7 +260,7 @@ class UserTest extends UnitTestCase
 
 	public function testshutdown()
 	{
-		$this->fail('Incomplete Test');
+		$this->assertTrue(0,'Incomplete Test');
 	}
 
 }
