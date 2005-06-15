@@ -88,7 +88,7 @@ function findTests($path)
 			if ($iterator->hasChildren() ) {
 				$group->addTestCase( findTests($iterator->getPathname()) );
 			}
-		} else if ($iterator->isFile() && isTest($iterator->getFilename())) { 
+		} else if ($iterator->isFile() && isTest($iterator->getFilename()) && !isHidden($iterator->getFilename())) { 
 			$group->addTestFile($iterator->getPathname());
 		}
 		$iterator->next();
