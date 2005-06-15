@@ -558,9 +558,13 @@ abstract class Controller extends ParameterHolder
 		$config     = AG_CONFIG_DIR . '/filters.ini';
 		$moduleName = 'global';
 
-		if (!isset($list[$moduleName]) && is_readable($config))	{
-			// load global filters
-			require_once(ConfigCache::checkConfig('config/filters.ini'));
+		if (!isset($list[$moduleName])) {
+			if (is_readable($config))	{
+				// load global filters
+				require_once(ConfigCache::checkConfig('config/filters.ini'));
+			} else {
+				$list[$moduleName] = array();
+			}
 		}
 
 		// register filters
