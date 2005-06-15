@@ -1,8 +1,9 @@
 <?php
-class ErrorModule_ModuleUnavailablAction extends Action
+class ErrorModule_ModuleUnavailableAction extends Action
 {
 	public function execute()
 	{
+		echo "That module is unavailable";
 		return null;
 	}
 }

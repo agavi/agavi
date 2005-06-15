@@ -164,7 +164,7 @@ class MockController extends Controller {
 	// normally, the dispatch will stuff any parameters found into the request object 
 	// and forward to the requested module/action (or defaults) as well
 	// for testing, we will only initialize the controller for now. 
-	private $test;
+	protected $test;
 
 	// we need a reference to the test object to pass into our mocks, so we pass it into the constructor. 
 	public function __construct(&$test = null)
@@ -173,6 +173,8 @@ class MockController extends Controller {
 			die('The Mock Controller was created without passing a reference to what test we are testing!');
 		}
 		$this->test = $test;
+		$this->renderMode = View::RENDER_VAR; // normally defaults to RENDER_CLIENT
+
 	}
 	
 	// Create a new me and call this in your setup. 
@@ -190,7 +192,9 @@ class MockController extends Controller {
 	public function replaceActionStack()
 	{
 		$this->actionStack = $this->context->getActionStack();
+
 	}
+
 
 }
 

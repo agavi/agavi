@@ -9,6 +9,7 @@ class ControllerTest extends UnitTestCase
 	public function setUp()
 	{
 		$this->_controller = new MockController($this);
+		$this->_controller->setRenderMode(View::RENDER_VAR);
 		$this->_controller->dispatch();
 		$this->_context = $this->_controller->getContext();
 	}
@@ -29,10 +30,11 @@ class ControllerTest extends UnitTestCase
 		if (defined('AG_USE_DATABASE') && AG_USE_DATABASE) {
 			$this->assertIsA($this->_context->getDatabaseManager(), 'MockDatabaseManager');
 		} else {
-			$this->fail('Why is the Database Disabled');
+			$this->assertTrue(0,'Why is the Database Disabled?');
 			$this->assertNull($this->_context->getDatabaseManager());
 		}
-		
+		// View::RENDER_NONE(1), View::RENDER_CLIENT(2), View::RENDER_VAR(4)
+		$this->assertEqual(View::RENDER_VAR, $this->_controller->getRenderMode());
 	}
 
 	public function testactionExists()
@@ -46,11 +48,12 @@ class ControllerTest extends UnitTestCase
 	public function testforwardTooTheMaxThrowsException()
 	{
 		// tell our mocked actionstack to lie about it's size
-		$this->_context->getActionStack()->setReturnValue('getSize', 3);
+		$max = defined(AG_MAX_FORWARDS) ? AG_MAX_FORWARDS : 3;
+		$this->_context->getActionStack()->setReturnValue('getSize', $max);
 		$this->_context->getActionStack()->expectOnce('getSize', array());
 		try {
 			$this->_controller->forward('Test', 'Test');
-			$this->Fail('Expected ForwardException not thrown');
+			$this->assertTrue(0,'Expected ForwardException not thrown');
 		} catch (ForwardException $e) {
 			$this->assertWantedPattern('/too many forwards/i', $e->getMessage());
 		}
@@ -60,18 +63,28 @@ class ControllerTest extends UnitTestCase
 	public function testCantForwardToUnconfiguredModule()
 	{
 		try {
-			$this->_controller->forward('NoConfigModule', 'SomeAction');
-			$this->Fail('Expected ConfigurationException not thrown, there is only an empty module.ini there!');
-		} catch (ConfigurationException $e) {
-			$this->assertWantedPattern('/unreadable/i', $e->getMessage());
+			$this->_controller->forward('NoConfigModule', 'Some');
+			$this->assertTrue(0,'Expected ParseException not thrown, there is only an empty module.ini there!');
+		} catch (ParseException $e) {
+			$this->assertWantedPattern('/missing/i', $e->getMessage());
 		}
 	}
 
 	public function testForwardingToUnavailableModule()
 	{
-		$this->fail("Fixme: Setup a module in the fs and configure it to not be available, 
-		also configure Unavailable action under Error module for AG_MODULE_DISABLED_MODULE/ACTION pair settings.
-		");
+		// our controller isnt -really- a mock :( else something like this would have been nice. :)
+		// $this->_controller->expectOnce('forward', array(AG_MODULE_DISABLED_MODULE,AG_MODULE_DISABLED_ACTION));
+		/*
+		try {
+			$this->_controller->forward('UnavailableModule', 'Index');
+			$mod = $this->_context->getRequest()->getAttribute('requested_module');
+			$this->assertIdentical($mod, AG_MODULE_DISABLED_MODULE);
+			$this->assertWantedPattern('/module unavailable/i');
+		} catch (FactoryException $e) {
+			
+		}
+		*/
+		$this->assertTrue(0, 'Test forwarding to an unavilable module needs work');
 	}
 
 	public function testForwardingSuccessfully()
@@ -115,12 +128,11 @@ class ControllerTest extends UnitTestCase
 
 	public function testgetInstance()
 	{
-		$this->fail("Controllers shouldnt be singletons, down with the singleton controllers!
-		see: http://trac.agavi.org/trac.cgi/wiki/SmellsAndItches\n");
+		$this->assertTrue(0, 'Incomplete Test');
 		/*
 		try {
 			MockController::getInstance();
-			$this->fail('Expected ControllerException not thrown!');
+			$this->assertTrue(0,'Expected ControllerException not thrown!');
 		} catch (ControllerException $e) {
 			$this->pass('Received the Controller exception we were expecting.');
 		}
@@ -168,13 +180,13 @@ class ControllerTest extends UnitTestCase
 		$this->assertIsA(Controller::newInstance('MockController'), 'MockController');
 		try {
 			MockController::newInstance('Request');
-			$this->fail('Expected FactoryException not thrown!');
+			$this->assertTrue(0,'Expected FactoryException not thrown!');
 		} catch (FactoryException $e) {
 			$this->pass();
 		}
 		try {
 			MockController::newInstance('MockController');
-			$this->fail('Expected FactoryException not thrown!');
+			$this->assertTrue(0,'Expected FactoryException not thrown!');
 		} catch (FactoryException $e) {
 			$this->pass();
 		}
@@ -190,15 +202,15 @@ class ControllerTest extends UnitTestCase
 				$this->_controller->setRenderMode($value);
 				$this->pass();
 			} catch (RenderException $e) {
-				$this->fail('Caught unexpected RenderException!');
+				$this->assertTrue(0,'Caught unexpected RenderException!');
 			}
 		}
 		foreach ($bad as &$value) {
 			try {
 				$this->_controller->setRenderMode($value);
-				$this->fail('Expected RenderException not thrown!');
+				$this->assertTrue(0,'Expected RenderException not thrown!');
 			} catch (RenderException $e) {
-				$this->pass();
+				$this->pass('Appropriately caught a bad render mode.');
 			}
 		}
 	}
