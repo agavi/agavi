@@ -39,6 +39,28 @@ class LoggerManager extends AgaviObject
 	// +-----------------------------------------------------------------------+
 
 	/**
+	 * Initialize this LoggingManager.
+	 *
+	 * @return bool true, if initialization completes successfully, otherwise
+	 *              false.
+	 *
+	 * @throws <b>InitializationException</b> If an error occurs while
+	 *                                        initializing this LoggingManager.
+	 *
+	 * @author Sean Kerr (skerr@mojavi.org)
+	 * @since  0.9.0
+	 */
+	public static function initialize ()
+	{
+
+		// load database configuration
+		require_once(ConfigCache::checkConfig('config/logging.ini'));
+
+	}
+	
+	// -------------------------------------------------------------------------
+
+	/**
 	 * Retrieve a logger.
 	 *
 	 * @param string A logger name.

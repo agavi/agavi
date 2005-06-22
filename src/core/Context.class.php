@@ -199,6 +199,9 @@ class Context extends AgaviObject
 				self::$instance->databaseManager = new DatabaseManager();
 				self::$instance->databaseManager->initialize();
 			}
+			if (defined('AG_USE_LOGGING') && AG_USE_LOGGING) {
+				LoggerManager::initialize();
+			}
 			self::$instance->controller 			= $controller;
 			self::$instance->actionStack			= new ActionStack();
 		

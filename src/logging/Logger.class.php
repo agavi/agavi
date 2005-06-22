@@ -73,8 +73,14 @@ class Logger extends AgaviObject
 
 	private
 		$appenders    = array(),
-		$exitPriority = self::ERROR,
-		$priority     = self::WARN;
+		$exitPriority = null,
+		$priority     = null;
+
+	public function __construct()
+	{
+		$this->exitPriority = self::ERROR;
+		$this->priority = self::WARN;
+	}
 
 	// +-----------------------------------------------------------------------+
 	// | METHODS                                                               |
@@ -166,13 +172,7 @@ class Logger extends AgaviObject
 			foreach ($this->appenders as $appender)
 			{
 
-				// grab the layout for the current appender
-				$layout = $appender->getLayout();
-
-				// format our message and write it
-				$result = $layout->format($message);
-
-				$appender->write($result);
+				$appender->write($message);
 
 			}
 

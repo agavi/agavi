@@ -43,9 +43,24 @@ class FileAppender extends Appender
 	// | CONSTRUCTOR                                                           |
 	// +-----------------------------------------------------------------------+
 
+	public function initialize($params)
+	{
+		if (isset($params['file'])) {
+			touch($params['file']);
+		}
+	}
+
 	// +-----------------------------------------------------------------------+
 	// | METHODS                                                               |
 	// +-----------------------------------------------------------------------+
+
+	public function shutdown()
+	{
+	}
+
+	public function write(&$string)
+	{
+	}
 
 }
 
