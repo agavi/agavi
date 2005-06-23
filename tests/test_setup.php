@@ -1,39 +1,43 @@
 <?php
 // simpletest should be in your path
-require_once("simpletest/unit_tester.php");
-require_once("simpletest/reporter.php");
-require_once("simpletest/mock_objects.php");
+require_once('simpletest/unit_tester.php');
+require_once('simpletest/reporter.php');
+require_once('simpletest/mock_objects.php');
 
-$testing_app = file_exists('webapp') ? true : false;
-
-if (!defined('AG_APP_DIR') && $_ENV('AGAVI_INSTALLATION')) {
+// the agavi script will have defined the AG_APP_DIR, else we should attempt to find it. 
+if (!defined('AG_APP_DIR') && isset($_ENV['AGAVI_INSTALLATION'])) {
 	define('AG_APP_DIR', $_ENV['AGAVI_INSTALLATION']);
-} // eh.. maybe you have everything in your include path or helper aliens to fix things or sompn. *shrug* 
+} else if (file_exists('src/agavi.php')) {
+	// looks like we're here, then.
+	define('AG_APP_DIR', realpath('./src'));
+} else if (!defined('AG_APP_DIR')) {
+	die ('AG_APP_DIR undefined. Try using the agavi helper script.');
+}
 
+// Assume this is an agavi project if there's a webapp subdir, we'll look for classes in there too.
+if (file_exists($_SERVER['PWD_PATH'].'/webapp')) {
+	define('PROJECT_APP_DIR', $_SERVER['PWD_PATH'] . '/webapp');
+}
 
-function locateClasses($path, $prefix=false)
+ini_set('unserialize_callback_func', '__autoload');
+
+function locateClasses($path, $prefix=true)
 {
-	$iterator = new RecursiveDirectoryIterator($path);
+	$i = new ClassFinder($path);
 	$classes = 	array();
-	while ($iterator->valid()) {
-		if ($iterator->isDir() && !$iterator->isDot() && $iterator->getFilename() != '.svn') {
-			if ($iterator->hasChildren() ) {
-				$classes += locateClasses($iterator->getPathname());
+	while ( $i->valid() ) {
+		if ( $i->isDir() && !$i->isDot() && !$i->isHidden() ) {
+			if ( $i->hasChildren() ) {
+				$classes = array_merge( $classes, locateClasses( $i->getPathname() ) );
 			}
-		} else if ($iterator->isFile() && strrpos($iterator->getFilename(), ".class.php")) { 
-			$class = str_replace ('.class.php', '', $iterator->getFilename());
-			$classes[$class] = $iterator->getPathname();
-			if ($prefix) {
-				// add a 'prefixed' entry as well to catch possible cases where the name of the class is prefixed by the name of the module
-				// the module name should be the name of the parent's parent directory
-				// eg: /project/webapp/modules/Default/actions/IndexAction.class.php, the class name -might- be Default_IndexAction
-				$path = explode(PATH_SEPARATOR, $iterator->getPath());
-				print_r($path);
-				$module = 'bleh';
-				$classes[$module.'_'.$class] =& $classes[$class];
+		} else if ( $i->isClass() ) { 
+			$classes[$i->className()] = $i->getPathname();
+			if ($prefix && ($pname = $i->prefixedClassName())) {
+				echo "pname: $pname\n";
+				$classes[$pname] = $i->getPathname();
 			}
 		}
-		$iterator->next();
+		$i->next();
 	}
 	return $classes;
 }
@@ -41,29 +45,72 @@ function locateClasses($path, $prefix=false)
 
 function __autoload($class)
 {
+	$datefmt = 'c';
+	$cachedir = dirname(__FILE__);
+	$cache = $cachedir . '/classcache.inc';
 	static $classes;
-	$classcache = '/tmp/classcache.php'; // where we will maintain a cached copy of the class matchings
 	
-	if (!is_array($classes)) {
-		if (!file_exists($classcache)) {
-			$classes = locateClasses(AG_APP_DIR);
-			if (file_exists('webapp')) { 
-				$classes = array_merge((array) $classes, (array) locateClasses(AG_WEBAPP_DIR, true));
+	if (!is_array($classes) || !array_key_exists($class, $classes)) {
+		if (file_exists($cache)) {
+			include($cache); 
+			if (array_key_exists($class, $classes)) {
+				require_once($classes[$class]);
+				return;
 			}
-	  	file_put_contents('<?php $classes = '. var_export($classcache) . ';?>', $classes);
-		} else {
-			require_once($classcache);
+		}
+		$classes = locateClasses(AG_APP_DIR);
+		if (defined('PROJECT_APP_DIR')) { 
+			$classes = array_merge((array) $classes, (array) locateClasses(PROJECT_APP_DIR, true));
+		}
+		if (is_writable($cachedir)) {
+			$contents = "<?php\n//--Automagicly created ".date($datefmt)."\n//" .
+									(defined('PROJECT_APP_DIR') ? "includes {$_SERVER['CWD_NAME']} webapp classes.\n" : "no webapp classes included.\n") .
+									'$classes = ' .var_export($classes, true)."\n?>";
+			file_put_contents($cache, $contents);
+		}
+	}
+	require_once($classes[$class]);
+}
+
+class ClassFinder extends RecursiveDirectoryIterator
+{
+	protected $_classes,
+						$_path;
+	
+	public function __construct($path)
+	{
+		$this->_path = $path;
+		parent::__construct($path);
+	}
+	
+	public function isHidden()
+	{
+		$name = $this->getFilename();
+		return ($name{0} == ".");
+	}
+
+	public function isClass()
+	{
+		return ($this->isFile() && fnmatch("*.class.php", $this->getFilename()));
+	}
+
+	public function className()
+	{
+		return str_replace ('.class.php', '', $this->getFilename());
+	}
+
+	public function prefixedClassName()
+	{
+		$class = $this->className();
+		// /var/www/sites/project/webapp/modules/Default/actions/IndexAction.class.php, 
+		// the class might (_should_) be called Default_IndexAction, so we set an entry for that case too. 
+		$path = explode('/', $this->getPath());
+		$c = count($path);
+		if ($path[($c >= 3 ? $c-3 : 0)] == 'modules') {
+			$module = $path[($c-2)];
+			return ($module . '_' . $class);
 		}
 	}
 
-	if (array_key_exists($class, $classes)) {
-		require_once($classes[$class]);
-	}
 }
-
-class AbstractedUnitTestCase extends UnitTestCase
-{
-}
-
-
 ?>

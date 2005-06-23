@@ -7,7 +7,8 @@
 # Change this to reflect your environment if the default value doesn't work
 export PHING_COMMAND="phing"
 export AGAVI_INSTALLATION="@PEAR-DIR@/agavi"
-
+export PWD_PATH=$(pwd)
+export CWD_NAME=$(basename $PWD_PATH)
 
 # -------------------------------------------------------------------------
 # Do not change anything below this line unless you know what you're doing.
@@ -19,4 +20,4 @@ if (test -z "$PHING_COMMAND") ; then
 	export PHING_COMMAND=php
 fi
 
-$PHING_COMMAND -f ${AGAVI_INSTALLATION}/build.xml -Dproject.dir="`pwd`" -Dcwd_name="`basename \`pwd\``" $*
+$PHING_COMMAND -f ${AGAVI_INSTALLATION}/build.xml -Dagavi.dir="${AGAVI_INSTALLATION}" -Dproject.dir="${PWD_PATH}" -Dcwd_name="${CWD_NAME}" $*
