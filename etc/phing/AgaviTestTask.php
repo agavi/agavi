@@ -70,7 +70,7 @@ class AgaviTestTask extends Task {
 define("AG_APP_DIR",				"' . $this->agavidir . '");		// where the agavi installation resides
 define("TESTSDIR",					"' . $this->testdir . '");		// where the main tests dir resides
 define("REPORTER",					"' . $this->reporter . '");		// which reporter to use for reporting results
-define("STARTPOINT",				"' . ($this->startpoint ? $this->startpoint : $this->testdir) . '");	// where to begin looking for tests, relative to TESTSDIR
+define("STARTPOINT",				"' . ($this->startpoint ? $this->testdir ."/".$this->startpoint : $this->testdir) . '");	// where to begin looking for tests, relative to TESTSDIR
 
 set_include_path(get_include_path() . ":' . $this->base_include . '");
 set_time_limit(0);
@@ -115,7 +115,7 @@ function findTests($path, $title="Agavi")
 	}
 	return $group;
 }
-			  
+echo "Running tests found starting at ".STARTPOINT."\n";			  
 $test = findTests(STARTPOINT);
 switch (strtolower(REPORTER)) {
 	case "html":

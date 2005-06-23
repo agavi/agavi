@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
-
 <project name="agavi" basedir="." default="main">
-	<taskdef classname="AgaviTestTask" name="agavitest"/>
+	<taskdef classname="${agavi.dir}.etc.phing.AgaviTestTask" name="agavitest"/>
 
   <!-- fileset for -dist files -->
   <fileset dir="." id="distfiles">
@@ -18,7 +17,7 @@
 	</target>
 
 	<target name="test" description="run unit tests">
-		<agavitest exit="true" testdir="${project.dir}"/>
+		<agavitest exit="true" testdir="${project.dir}/tests" agavidir="${agavi.dir}" startpoint="${from}"/>
 	</target>
 
 	<target name="project" description="create a new project">
