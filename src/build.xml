@@ -17,7 +17,12 @@
 	</target>
 
 	<target name="test" description="run unit tests">
-		<agavitest exit="true" testdir="${project.dir}/tests" agavidir="${agavi.dir}" startpoint="${from}"/>
+		<property name="agavidir" value="${agavi.dir}" />
+	  <property name="testdir" value="${project.dir}/tests"  />
+	  <property name="from" value=""  />
+  	<property name="reporter" value="text"  />
+  	<property name="outfile" value=""  />
+		<agavitest exit="true" testdir="${project.dir}/tests" agavidir="${agavi.dir}" startpoint="${from}" reporter="${reporter}" outfile="${outfile}"/>
 	</target>
 
 	<target name="project" description="create a new project">

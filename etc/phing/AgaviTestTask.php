@@ -37,6 +37,9 @@ class AgaviTestTask extends Task {
 	public function setOutfile($outfile)
 	{
 		$this->outfile = (string) $outfile;
+		if (!empty($outfile)) {
+			echo "Testing output will be written to: $outfile\n";
+		}
 	}
 
 	public function setExit($bool)
@@ -50,8 +53,8 @@ class AgaviTestTask extends Task {
 		if (!class_exists('SimpleTestCase', false)) {
 			throw new BuildException("\nRequires SimpleTest be accessible from your include path.\neg: include('simpletest/unit_tester.php');\nyour include path is currently set to: " . get_include_path() . ".\nsee http://sourceforge.net/projects/simpletest");
 		}
-		if ($this->outfile) {
-			if ((file_exists($this->outfile) && !is_writeable($this->outfile)) || (!file_exists($this->outfile) && !touch($this->outfile))) {
+		if (!empty($this->outfile)) {
+			if (!is_writeable($this->outfile) || !touch($this->outfile)) {
 				throw new BuildException("Could not open/append to outfile: {$this->outfile}");
 			}
 		}
@@ -69,7 +72,7 @@ class AgaviTestTask extends Task {
 <?php
 define("AG_APP_DIR",				"' . $this->agavidir . '");		// where the agavi installation resides
 define("TESTSDIR",					"' . $this->testdir . '");		// where the main tests dir resides
-define("REPORTER",					"' . $this->reporter . '");		// which reporter to use for reporting results
+define("REPORTER",					"' . ($this->reporter ? $this->reporter : "text") . '");		// which reporter to use for reporting results
 define("STARTPOINT",				"' . ($this->startpoint ? $this->testdir ."/".$this->startpoint : $this->testdir) . '");	// where to begin looking for tests, relative to TESTSDIR
 
 set_include_path(get_include_path() . ":' . $this->base_include . '");
@@ -133,7 +136,7 @@ switch (strtolower(REPORTER)) {
 		fwrite($pipes[0], $testcode);
 		fclose($pipes[0]);
 
-		if ($this->outfile) {
+		if (!empty($this->outfile)) {
 			file_put_contents($this->outfile, stream_get_contents($pipes[1]));
 			$this->log("AgaviTest output written to: {$this->outfile}", PROJECT_MSG_INFO);
 		} else {
