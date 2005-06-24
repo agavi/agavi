@@ -35,7 +35,6 @@ class TestAction extends UnitTestCase
 		$this->_action->initialize($this->_context);
 		$c = $this->_action->getContext();
 		$this->assertReference($this->_context, $c);
-		$this->assertTrue(false);
 	}
 
 	public function testgetCredential()

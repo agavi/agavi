@@ -87,6 +87,7 @@ require_once("simpletest/reporter.php");
 require_once("simpletest/mock_objects.php");
 @include_once("simpletest/ui/colortext_reporter.php");
 @include_once(TESTSDIR . "/test_setup.php");
+@include_once(TESTSDIR . "/vimreporter.class.php");
 
 function isTest($name)
 {
@@ -121,6 +122,9 @@ function findTests($path, $title="Agavi")
 echo "Running tests found starting at ".STARTPOINT."\n";			  
 $test = findTests(STARTPOINT);
 switch (strtolower(REPORTER)) {
+	case "vim":
+		exit($test->run(new VIMReporter()) ? 0 : 1);
+		break;
 	case "html":
 		exit($test->run(new HTMLReporter()) ? 0 : 1);
 		break;

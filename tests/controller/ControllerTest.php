@@ -25,7 +25,7 @@ class ControllerTest extends UnitTestCase
 	{
 		$this->assertIsA($this->_controller, 'MockController');
 		$this->assertIsA($this->_controller->getContext(), 'Context');
-		$this->assertIsA($this->_context->getRequest(), 'MockWebRequest');
+		$this->assertIsA($this->_context->getRequest(), 'WebRequest');
 		
 		if (defined('AG_USE_DATABASE') && AG_USE_DATABASE) {
 			$this->assertIsA($this->_context->getDatabaseManager(), 'MockDatabaseManager');
@@ -47,10 +47,13 @@ class ControllerTest extends UnitTestCase
 
 	public function testforwardTooTheMaxThrowsException()
 	{
-		// tell our mocked actionstack to lie about it's size
-		$max = defined(AG_MAX_FORWARDS) ? AG_MAX_FORWARDS : 3;
-		$this->_context->getActionStack()->setReturnValue('getSize', $max);
-		$this->_context->getActionStack()->expectOnce('getSize', array());
+		$max = defined('AG_MAX_FORWARDS') ? AG_MAX_FORWARDS : 3;
+		// mock the actionStack
+		Mock::generate('ActionStack');
+		$myActionStack = new MockActionStack($this);
+		$myActionStack->setReturnValue('getSize', $max);
+		$myActionStack->expectOnce('getSize', array());
+		$this->_context->replaceObj('actionStack', $myActionStack);
 		try {
 			$this->_controller->forward('Test', 'Test');
 			$this->assertTrue(0,'Expected ForwardException not thrown');
@@ -72,29 +75,26 @@ class ControllerTest extends UnitTestCase
 
 	public function testForwardingToUnavailableModule()
 	{
-		// our controller isnt -really- a mock :( else something like this would have been nice. :)
-		// $this->_controller->expectOnce('forward', array(AG_MODULE_DISABLED_MODULE,AG_MODULE_DISABLED_ACTION));
-		/*
 		try {
 			$this->_controller->forward('UnavailableModule', 'Index');
-			$mod = $this->_context->getRequest()->getAttribute('requested_module');
+			$lastActionEntry = $this->_context->getActionStack()->getLastEntry();
+			$this->assertIsA($lastActionEntry, 'ActionStackEntry');
+			$view = $lastActionEntry->getPresentation();
+			$this->assertWantedPattern('/not available/i',$view);
+			$mod = $lastActionEntry->getModuleName();
 			$this->assertIdentical($mod, AG_MODULE_DISABLED_MODULE);
-			$this->assertWantedPattern('/module unavailable/i');
-		} catch (FactoryException $e) {
-			
+		} catch (ForwardException $e) {
+			$this->assertTrue(0, 'Test forwarding to an unavilable module needs work');
 		}
-		*/
-		$this->assertTrue(0, 'Test forwarding to an unavilable module needs work');
 	}
 
 	public function testForwardingSuccessfully()
 	{
-		// we actually want a real actionstack in place now.
-		MockContext::useRealActionStack();
 		$this->assertIsA($this->_controller->getActionStack(), 'ActionStack');
 		try {
 			$this->_controller->forward('Test', 'Test');
 		} catch (Exception $e) {
+			$this->fail('hullo');
 		}
 		
 	}
@@ -107,7 +107,7 @@ class ControllerTest extends UnitTestCase
 	public function testgetActionStack()
 	{
 		$as = $this->_controller->getActionStack();
-		$this->assertIsA($as, 'MockActionStack');
+		$this->assertIsA($as, 'ActionStack');
 	}
 
 	public function testgetContext()
@@ -149,7 +149,7 @@ class ControllerTest extends UnitTestCase
 
 	public function testgetRenderMode()
 	{
-		$this->assertEqual(View::RENDER_CLIENT, $this->_controller->getRenderMode());
+		$this->assertEqual(View::RENDER_VAR, $this->_controller->getRenderMode());
 		$this->_controller->setRenderMode(View::RENDER_NONE);
 		$this->assertEqual(View::RENDER_NONE, $this->_controller->getRenderMode());
 	}
