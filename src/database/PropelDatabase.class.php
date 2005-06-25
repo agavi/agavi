@@ -95,7 +95,7 @@ class PropelDatabase extends CreoleDatabase
 	public function initialize($parameters = null)
 	{
 		parent::initialize($parameters);
-		$configPath = $this->getParameter('config');
+		$configPath = ConfigHandler::replaceConstants($this->getParameter('config'));
 		$datasource = $this->getParameter('datasource', null);
 		$use_as_default = $this->getParameter('use_as_default', false);
 		$config = require($configPath);
@@ -129,21 +129,4 @@ class PropelDatabase extends CreoleDatabase
 	{
 		return $this->getParameter('config');
 	}
-	
-	/**
-	 * Execute the shutdown procedure. 
-	 * 
-	 * @since 1.0
-	 * @access public
-	 * @return void
-	 * @throws <b>DatabaseException</b> If an error occurs while shutting down this database.
-	 * @author Dusty Matthews (dustym@agavi.org)
-	 */
-	public function shutdown()
-	{
-		if ($this->connection !== null) {
-			@$this->connection->close();
-		}
-	}
 }
-?>
