@@ -87,7 +87,7 @@ require_once("simpletest/reporter.php");
 require_once("simpletest/mock_objects.php");
 @include_once("simpletest/ui/colortext_reporter.php");
 @include_once(TESTSDIR . "/test_setup.php");
-@include_once(TESTSDIR . "/vimreporter.class.php");
+@include_once("buildtools/simpletest/vimreporter.class.php");
 
 function isTest($name)
 {
