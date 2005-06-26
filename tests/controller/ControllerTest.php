@@ -9,6 +9,7 @@ class ControllerTest extends UnitTestCase
 	public function setUp()
 	{
 		$this->_controller = new MockController($this);
+		$this->_controller->setRenderMode(View::RENDER_VAR);
 		$this->_controller->dispatch();
 		$this->_context = $this->_controller->getContext();
 	}
@@ -24,15 +25,16 @@ class ControllerTest extends UnitTestCase
 	{
 		$this->assertIsA($this->_controller, 'MockController');
 		$this->assertIsA($this->_controller->getContext(), 'Context');
-		$this->assertIsA($this->_context->getRequest(), 'MockWebRequest');
+		$this->assertIsA($this->_context->getRequest(), 'WebRequest');
 		
 		if (defined('AG_USE_DATABASE') && AG_USE_DATABASE) {
 			$this->assertIsA($this->_context->getDatabaseManager(), 'MockDatabaseManager');
 		} else {
-			$this->fail('Why is the Database Disabled');
+			$this->assertTrue(0,'Why is the Database Disabled?');
 			$this->assertNull($this->_context->getDatabaseManager());
 		}
-		
+		// View::RENDER_NONE(1), View::RENDER_CLIENT(2), View::RENDER_VAR(4)
+		$this->assertEqual(View::RENDER_VAR, $this->_controller->getRenderMode());
 	}
 
 	public function testactionExists()
@@ -45,12 +47,16 @@ class ControllerTest extends UnitTestCase
 
 	public function testforwardTooTheMaxThrowsException()
 	{
-		// tell our mocked actionstack to lie about it's size
-		$this->_context->getActionStack()->setReturnValue('getSize', 3);
-		$this->_context->getActionStack()->expectOnce('getSize', array());
+		$max = defined('AG_MAX_FORWARDS') ? AG_MAX_FORWARDS : 3;
+		// mock the actionStack
+		Mock::generate('ActionStack');
+		$myActionStack = new MockActionStack($this);
+		$myActionStack->setReturnValue('getSize', $max);
+		$myActionStack->expectOnce('getSize', array());
+		$this->_context->replaceObj('actionStack', $myActionStack);
 		try {
 			$this->_controller->forward('Test', 'Test');
-			$this->Fail('Expected ForwardException not thrown');
+			$this->assertTrue(0,'Expected ForwardException not thrown');
 		} catch (ForwardException $e) {
 			$this->assertWantedPattern('/too many forwards/i', $e->getMessage());
 		}
@@ -60,28 +66,35 @@ class ControllerTest extends UnitTestCase
 	public function testCantForwardToUnconfiguredModule()
 	{
 		try {
-			$this->_controller->forward('NoConfigModule', 'SomeAction');
-			$this->Fail('Expected ConfigurationException not thrown, there is only an empty module.ini there!');
-		} catch (ConfigurationException $e) {
-			$this->assertWantedPattern('/unreadable/i', $e->getMessage());
+			$this->_controller->forward('NoConfigModule', 'Some');
+			$this->assertTrue(0,'Expected ParseException not thrown, there is only an empty module.ini there!');
+		} catch (ParseException $e) {
+			$this->assertWantedPattern('/missing/i', $e->getMessage());
 		}
 	}
 
 	public function testForwardingToUnavailableModule()
 	{
-		$this->fail("Fixme: Setup a module in the fs and configure it to not be available, 
-		also configure Unavailable action under Error module for AG_MODULE_DISABLED_MODULE/ACTION pair settings.
-		");
+		try {
+			$this->_controller->forward('UnavailableModule', 'Index');
+			$lastActionEntry = $this->_context->getActionStack()->getLastEntry();
+			$this->assertIsA($lastActionEntry, 'ActionStackEntry');
+			$view = $lastActionEntry->getPresentation();
+			$this->assertWantedPattern('/not available/i',$view);
+			$mod = $lastActionEntry->getModuleName();
+			$this->assertIdentical($mod, AG_MODULE_DISABLED_MODULE);
+		} catch (ForwardException $e) {
+			$this->assertTrue(0, 'Test forwarding to an unavilable module needs work');
+		}
 	}
 
 	public function testForwardingSuccessfully()
 	{
-		// we actually want a real actionstack in place now.
-		MockContext::useRealActionStack();
 		$this->assertIsA($this->_controller->getActionStack(), 'ActionStack');
 		try {
 			$this->_controller->forward('Test', 'Test');
 		} catch (Exception $e) {
+			$this->fail('hullo');
 		}
 		
 	}
@@ -94,7 +107,7 @@ class ControllerTest extends UnitTestCase
 	public function testgetActionStack()
 	{
 		$as = $this->_controller->getActionStack();
-		$this->assertIsA($as, 'MockActionStack');
+		$this->assertIsA($as, 'ActionStack');
 	}
 
 	public function testgetContext()
@@ -115,12 +128,11 @@ class ControllerTest extends UnitTestCase
 
 	public function testgetInstance()
 	{
-		$this->fail("Controllers shouldnt be singletons, down with the singleton controllers!
-		see: http://trac.agavi.org/trac.cgi/wiki/SmellsAndItches\n");
+		$this->assertTrue(0, 'Incomplete Test');
 		/*
 		try {
 			MockController::getInstance();
-			$this->fail('Expected ControllerException not thrown!');
+			$this->assertTrue(0,'Expected ControllerException not thrown!');
 		} catch (ControllerException $e) {
 			$this->pass('Received the Controller exception we were expecting.');
 		}
@@ -137,7 +149,7 @@ class ControllerTest extends UnitTestCase
 
 	public function testgetRenderMode()
 	{
-		$this->assertEqual(View::RENDER_CLIENT, $this->_controller->getRenderMode());
+		$this->assertEqual(View::RENDER_VAR, $this->_controller->getRenderMode());
 		$this->_controller->setRenderMode(View::RENDER_NONE);
 		$this->assertEqual(View::RENDER_NONE, $this->_controller->getRenderMode());
 	}
@@ -168,13 +180,13 @@ class ControllerTest extends UnitTestCase
 		$this->assertIsA(Controller::newInstance('MockController'), 'MockController');
 		try {
 			MockController::newInstance('Request');
-			$this->fail('Expected FactoryException not thrown!');
+			$this->assertTrue(0,'Expected FactoryException not thrown!');
 		} catch (FactoryException $e) {
 			$this->pass();
 		}
 		try {
 			MockController::newInstance('MockController');
-			$this->fail('Expected FactoryException not thrown!');
+			$this->assertTrue(0,'Expected FactoryException not thrown!');
 		} catch (FactoryException $e) {
 			$this->pass();
 		}
@@ -190,15 +202,15 @@ class ControllerTest extends UnitTestCase
 				$this->_controller->setRenderMode($value);
 				$this->pass();
 			} catch (RenderException $e) {
-				$this->fail('Caught unexpected RenderException!');
+				$this->assertTrue(0,'Caught unexpected RenderException!');
 			}
 		}
 		foreach ($bad as &$value) {
 			try {
 				$this->_controller->setRenderMode($value);
-				$this->fail('Expected RenderException not thrown!');
+				$this->assertTrue(0,'Expected RenderException not thrown!');
 			} catch (RenderException $e) {
-				$this->pass();
+				$this->pass('Appropriately caught a bad render mode.');
 			}
 		}
 	}

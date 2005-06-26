@@ -3,6 +3,8 @@ require_once dirname(__FILE__) . '/../mockContext.php';
 
 class SampleAction extends Action {
 	public function execute() {}
+
+	// public function registerValidator($validationManager){}
 }
 
 class TestAction extends UnitTestCase
@@ -67,7 +69,10 @@ class TestAction extends UnitTestCase
 
 	public function testregisterValidators()
 	{
-		$this->fail('Incomplete Test, unimplemented method. YAGNI?');
+		// FIXME:
+		// This method is meant to be implemented in the implemented action, if required. 
+		// We should provide an example implementation and test. 
+		$this->assertTrue(0,'registerValidators method not yet implemented, create an example implementation!');
 	}
 
 	public function testvalidate()

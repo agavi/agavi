@@ -9,7 +9,7 @@
   <property name="builddir" value="build" override="true" />
   <property name="srcdir"   value="${project.basedir}" override="true" />
 	<taskdef classname="etc.phing.AgaviPackageTask" name="agavipackage"/>
-	<taskdef classname="etc.phing.AgaviTestTask" name="agavitest"/>
+	<taskdef classname="src.buildtools.phing.AgaviTestTask" name="agavitest"/>
 
   <!-- fileset for -dist files -->
   <fileset dir="." id="distfiles">

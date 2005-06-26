@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-
 <project name="agavi" basedir="." default="main">
+	<taskdef classname="${agavi.dir}.buildtools.phing.AgaviTestTask" name="agavitest"/>
 
   <!-- fileset for -dist files -->
   <fileset dir="." id="distfiles">
@@ -13,28 +13,23 @@
 		<echo msg="  project    - create a project" />
 		<echo msg="  module     - create a module" />
 		<echo msg="  action     - create an action" />
+		<echo msg="  test       - run unit tests" />
 	</target>
 
-	<!-- test target -->
 	<target name="test" description="run unit tests">
-		<phpunit2>
-			<formatter type="xml" todir="reports"/>
-			<batchtest>
-				<fileset dir="tests">
-					<include name="**/*Test*.php"/>
-					<exclude name="**/sandbox/**"/>
-				</fileset>
-			</batchtest>
-		</phpunit2>
-		<phpunit2report infile="reports/testsuites.xml" format="frames" todir="reports/tests" styledir="etc"/>
-		<echo msg="PHPUnit2 test reports have been built in reports/tests."/>
+		<property name="agavidir" value="${agavi.dir}" />
+	  <property name="testdir" value="${project.dir}/tests"  />
+	  <property name="from" value=""  />
+  	<property name="reporter" value="text"  />
+  	<property name="outfile" value=""  />
+		<agavitest exit="true" testdir="${project.dir}/tests" agavidir="${agavi.dir}" startpoint="${from}" reporter="${reporter}" outfile="${outfile}"/>
 	</target>
 
 	<target name="project" description="create a new project">
 		<input propertyname="project.dir" promptChar="?" message="Full path to your new project (no trailing slash!)"/>
 		<mkdir dir="${project.dir}"/>
 		<mkdir dir="${project.dir}/www"/>
-		<copy file="code_templates/index.php.tmpl" tofile="${project.dir}/www/index.php">
+		<copy file="buildtools/code_templates/index.php.tmpl" tofile="${project.dir}/www/index.php">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">    
 					<token key="PATH_TO_AGAVI" value="${project.basedir}"/>
@@ -45,7 +40,7 @@
 		<mkdir dir="${project.dir}/www/modpub"/>
 		<mkdir dir="${project.dir}/webapp"/>
 		<mkdir dir="${project.dir}/webapp/cache"/>
-		<copy file="code_templates/config.php.tmpl" tofile="${project.dir}/webapp/config.php">
+		<copy file="buildtools/code_templates/config.php.tmpl" tofile="${project.dir}/webapp/config.php">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">    
 					<token key="PATH_TO_AGAVI" value="${project.basedir}"/>
@@ -55,7 +50,7 @@
 		</copy>
 		<mkdir dir="${project.dir}/webapp/config"/>
 		<copy todir="${project.dir}/webapp/config">
-			<fileset dir="code_templates/config">
+			<fileset dir="buildtools/code_templates/config">
 				<include name="*.ini"/>
 				<include name="*.conf"/>
 			</fileset>
@@ -64,9 +59,18 @@
 		<mkdir dir="${project.dir}/webapp/lib/models"/>
 		<mkdir dir="${project.dir}/webapp/modules"/>
 		<mkdir dir="${project.dir}/webapp/templates"/>
+
+		<!-- tests/ directory -->
+		<mkdir dir="${project.dir}/tests" />
+		<mkdir dir="${project.dir}/tests/lib" />
+		<mkdir dir="${project.dir}/tests/lib/models" />
+		<mkdir dir="${project.dir}/tests/modules" />
+		<copy file="buildtools/test_setup.php" tofile="${project.dir}/tests/test_setup.php" overwrite="true"/>
+		
 		<input propertyname="modules" promptChar="?" defaultValue="Default" message="Modules for your project (no whitespace, comma seperated)"/>
 		<foreach list="${modules}" param="module" target="buildmodule">
 			<property name="project.dir" value="${project.dir}/webapp" override="true"/>
+			<property name="test.dir" value="${project.dir}/tests" override="true"/>
 		</foreach>
 	</target>
 
@@ -82,17 +86,23 @@
 		<mkdir dir="${prefix}"/>
 		<mkdir dir="${prefix}actions"/>
 		<mkdir dir="${prefix}config"/>
-		<copy file="code_templates/module.ini.tmpl" tofile="${prefix}config/module.ini">
+		<copy file="buildtools/code_templates/module.ini.tmpl" tofile="${prefix}config/module.ini">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">    
 					<token key="MODULE" value="${module}"/>
 				</replacetokens>
 			</filterchain>
 		</copy>
-		<mkdir dir="${prefix}lib"/>
 		<mkdir dir="${prefix}models"/>
 		<mkdir dir="${prefix}templates"/>
 		<mkdir dir="${prefix}views"/>
+		
+		<property name="testprefix" value="${test.dir}/modules/${module}/"/>
+		<mkdir dir="${testprefix}"/>
+		<mkdir dir="${testprefix}actions"/>
+		<mkdir dir="${testprefix}models"/>
+		<mkdir dir="${testprefix}views"/>
+		
 		<input propertyname="actions" promptChar="?" defaultValue="Index" message="Actions for ${module} (no whitespace, comma seperated)"/>
 		<foreach list="${actions}" param="action" target="buildaction"/>
 		<input propertyname="models" promptChar="?" message="Models for ${module} (no whitespace, comma seperated)"/>
@@ -105,11 +115,12 @@
 		<property name="module" value="${cwd_name}"/>
 		<input propertyname="action" promptChar="?" defaultValue="Index" message="Action Name"/>
 		<property name="prefix" value="${project.dir}/"/>
+		<property name="testprefix" value="${test.dir}/"/>
 		<phingcall target="buildaction"/>
 	</target>
 
 	<target name="buildaction">
-		<copy file="code_templates/Action.class.php.tmpl" tofile="${prefix}actions/${action}Action.class.php">
+		<copy file="buildtools/code_templates/Action.class.php.tmpl" tofile="${prefix}actions/${action}Action.class.php">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">    
 					<token key="MODULE" value="${module}"/>
@@ -117,12 +128,22 @@
 				</replacetokens>
 			</filterchain>
 		</copy>
+		
+		<copy file="buildtools/code_templates/ActionTest.class.php.tmpl" tofile="${testprefix}actions/${action}ActionTest.class.php">
+			<filterchain>
+				<replacetokens begintoken="%%" endtoken="%%">    
+					<token key="MODULE" value="${module}"/>
+					<token key="ACTION" value="${action}"/>
+				</replacetokens>
+			</filterchain>
+		</copy>
+
 		<input propertyname="views" promptChar="?" defaultValue="Success" message="Views for ${action} (no whitespace, comma seperated)"/>
 		<foreach list="${views}" param="view" target="buildview"/>
 	</target>
 
 	<target name="buildview">
-		<copy file="code_templates/View.class.php.tmpl" tofile="${prefix}views/${action}${view}View.class.php">
+		<copy file="buildtools/code_templates/View.class.php.tmpl" tofile="${prefix}views/${action}${view}View.class.php">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">    
 					<token key="MODULE" value="${module}"/>
@@ -131,17 +152,29 @@
 				</replacetokens>
 			</filterchain>
 		</copy>
+
+		<copy file="buildtools/code_templates/ViewTest.class.php.tmpl" tofile="${testprefix}views/${action}${view}ViewTest.class.php">
+			<filterchain>
+				<replacetokens begintoken="%%" endtoken="%%">    
+					<token key="MODULE" value="${module}"/>
+					<token key="ACTION" value="${action}"/>
+					<token key="VIEW" value="${view}"/>
+				</replacetokens>
+			</filterchain>
+		</copy>
+		
 		<touch file="${prefix}templates/${action}${view}.php"/>
 	</target>
 
 	<target name="model" description="create a new model">
 		<input propertyname="model" promptChar="?" defaultValue="${module}" message="Model Name"/>
 		<property name="prefix" value="${project.dir}/"/>
+		<property name="testprefix" value="${test.dir}/"/>
 		<phingcall target="buildmodel"/>
 	</target>
 
 	<target name="buildmodel">
-		<copy file="code_templates/Model.class.php.tmpl" tofile="${prefix}models/${model}Model.class.php">
+		<copy file="buildtools/code_templates/Model.class.php.tmpl" tofile="${prefix}models/${model}Model.class.php">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">    
 					<token key="MODULE" value="${module}"/>
@@ -149,7 +182,15 @@
 				</replacetokens>
 			</filterchain>
 		</copy>
-		<delete file="${prefix}models/Model.class.php" quiet="true" failonerror="false" />
+
+		<copy file="buildtools/code_templates/ModelTest.class.php.tmpl" tofile="${prefix}models/${model}ModelTest.class.php">
+			<filterchain>
+				<replacetokens begintoken="%%" endtoken="%%">    
+					<token key="MODULE" value="${module}"/>
+					<token key="MODEL" value="${model}"/>
+				</replacetokens>
+			</filterchain>
+		</copy>
 	</target>
 
 </project>
