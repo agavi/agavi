@@ -69,7 +69,9 @@ function __autoload($class)
 			file_put_contents($cache, $contents);
 		}
 	}
-	require_once($classes[$class]);
+	if (array_key_exists($class, $classes)) {
+		require_once($classes[$class]);
+	}
 }
 
 class ClassFinder extends RecursiveDirectoryIterator
