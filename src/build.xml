@@ -65,7 +65,7 @@
 		<mkdir dir="${project.dir}/tests/lib" />
 		<mkdir dir="${project.dir}/tests/lib/models" />
 		<mkdir dir="${project.dir}/tests/modules" />
-		<copy file="buildtools/test_setup.php" to="${project.dir}/tests/test_setup.php" />
+		<copy file="buildtools/test_setup.php" tofile="${project.dir}/tests/test_setup.php" overwrite="true"/>
 		
 		<input propertyname="modules" promptChar="?" defaultValue="Default" message="Modules for your project (no whitespace, comma seperated)"/>
 		<foreach list="${modules}" param="module" target="buildmodule">
