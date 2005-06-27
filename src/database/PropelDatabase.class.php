@@ -15,6 +15,18 @@
 /**
  * An Agavi Database driver for Propel, derived from the native Creole driver. 
  * 
+ * <b>Optional parameters:</b>
+ *
+ * # <b>config</b>         - [none]    - path to the Propel runtime config file
+ * # <b>datasource</b>     - [default] - datasource to use for the connection
+ * # <b>use_as_default</b> - [false]   - use as default if multiple connections
+ *                                       are specified. The configuration file
+ *                                       that has been flagged using this param
+ *                                       is be used when Propel is initialized
+ *                                       via PropelAutoload. By default, the
+ *                                       last config file in database.ini will
+ *                                       be used.
+ *
  * @package agavi
  * @subpackage database
  * 
