@@ -5,7 +5,7 @@ class AgaviTestTask extends Task {
 					$testdir = 'tests',
 					$reporter = 'text',
 					$startpoint,
-					$base_include = 'src:webapp',
+					$base_include = array('src', 'webapp'),
 					$outfile = '',
 					$exit = false;
 
@@ -62,7 +62,7 @@ class AgaviTestTask extends Task {
 		$descriptorspec = array(
 			0 => array('pipe', 'r'),
 			1 => array('pipe', 'w'),
-			2 => array('file', '/dev/null', 'a')
+			2 => array('file', (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN' ? 'NUL' : '/dev/null'), 'a')
 		);
 		$process = proc_open($php, $descriptorspec, $pipes, getcwd());
 		if (!is_resource($process)) {
@@ -70,12 +70,12 @@ class AgaviTestTask extends Task {
 		}
 		$testcode = '
 <?php
-define("AG_APP_DIR",				"' . $this->agavidir . '");		// where the agavi installation resides
-define("TESTSDIR",					"' . $this->testdir . '");		// where the main tests dir resides
-define("REPORTER",					"' . ($this->reporter ? $this->reporter : "text") . '");		// which reporter to use for reporting results
-define("STARTPOINT",				"' . ($this->startpoint ? $this->testdir ."/".$this->startpoint : $this->testdir) . '");	// where to begin looking for tests, relative to TESTSDIR
+define("AG_APP_DIR",				\'' . $this->agavidir . '\');		// where the agavi installation resides
+define("TESTSDIR",					\'' . $this->testdir . '\');		// where the main tests dir resides
+define("REPORTER",					\'' . ($this->reporter ? $this->reporter : "text") . '\');		// which reporter to use for reporting results
+define("STARTPOINT",				\'' . ($this->startpoint ? $this->testdir ."/".$this->startpoint : $this->testdir) . '\');	// where to begin looking for tests, relative to TESTSDIR
 
-set_include_path(get_include_path() . ":' . $this->base_include . '");
+set_include_path(get_include_path() . "' . PATH_SEPARATOR . join(PATH_SEPARATOR, $this->base_include) . '");
 set_time_limit(0);
 
 if ( !is_dir(TESTSDIR) ) {
@@ -91,7 +91,7 @@ require_once("simpletest/mock_objects.php");
 
 function isTest($name)
 {
-	return fnmatch("*Test*php", $name);
+	return (bool) preg_match("/(.*)Test(.*)php/", $name);
 }
 
 function isHidden($name)

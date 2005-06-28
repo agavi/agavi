@@ -1,8 +1,4 @@
 <?php
-require_once('core/AgaviObject.class.php');
-require_once('action/Action.class.php');
-require_once('action/ActionStackEntry.class.php');
-require_once('action/ActionStack.class.php');
 
 class ASSampleAction extends Action
 {

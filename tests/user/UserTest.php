@@ -1,10 +1,4 @@
 <?php
-require_once('core/AgaviObject.class.php');
-require_once('util/ParameterHolder.class.php');
-require_once('exception/AgaviException.class.php');
-require_once('exception/InitializationException.class.php');
-require_once('exception/FactoryException.class.php');
-require_once('user/User.class.php');
 
 define('AG_USER_NAMESPACE', 'org/agavi');
 

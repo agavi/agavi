@@ -1,5 +1,4 @@
 <?php
-require_once('core/AgaviObject.class.php');
 
 class SampleAgaviObject extends AgaviObject
 {

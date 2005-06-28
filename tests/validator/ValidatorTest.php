@@ -1,6 +1,5 @@
 <?php
 require_once dirname(__FILE__) . '/../mockContext.php';
-require_once('validator/Validator.class.php');
 
 class SampleValidator extends Validator
 {

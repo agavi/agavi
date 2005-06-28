@@ -7,7 +7,8 @@
 		<include name="**/*-dist"/>
   </fileset>
 
-  <!-- main target -->
+  <!-- Main target, print publicised tasks -->
+	
 	<target name="main" description="main target">
 		<echo msg="available targets: " /> 
 		<echo msg="  project    - create a project" />
@@ -16,6 +17,8 @@
 		<echo msg="  test       - run unit tests" />
 	</target>
 
+	<!-- Unit Testing -->
+	
 	<target name="test" description="run unit tests">
 		<property name="agavidir" value="${agavi.dir}" />
 	  <property name="testdir" value="${project.dir}/tests"  />
@@ -25,6 +28,8 @@
 		<agavitest exit="true" testdir="${project.dir}/tests" agavidir="${agavi.dir}" startpoint="${from}" reporter="${reporter}" outfile="${outfile}"/>
 	</target>
 
+	<!-- Project creation -->
+	
 	<target name="project" description="create a new project">
 		<input propertyname="project.dir" promptChar="?" message="Full path to your new project (no trailing slash!)"/>
 		<mkdir dir="${project.dir}"/>
@@ -60,12 +65,7 @@
 		<mkdir dir="${project.dir}/webapp/modules"/>
 		<mkdir dir="${project.dir}/webapp/templates"/>
 
-		<!-- tests/ directory -->
-		<mkdir dir="${project.dir}/tests" />
-		<mkdir dir="${project.dir}/tests/lib" />
-		<mkdir dir="${project.dir}/tests/lib/models" />
-		<mkdir dir="${project.dir}/tests/modules" />
-		<copy file="buildtools/test_setup.php" tofile="${project.dir}/tests/test_setup.php" overwrite="true"/>
+		<phingcall target="projecttests" />
 		
 		<input propertyname="modules" promptChar="?" defaultValue="Default" message="Modules for your project (no whitespace, comma seperated)"/>
 		<foreach list="${modules}" param="module" target="buildmodule">
@@ -74,6 +74,17 @@
 		</foreach>
 	</target>
 
+	<target name="projecttests" description="create tests structure for project">
+		<!-- tests/ directory -->
+		<mkdir dir="${project.dir}/tests" />
+		<mkdir dir="${project.dir}/tests/lib" />
+		<mkdir dir="${project.dir}/tests/lib/models" />
+		<mkdir dir="${project.dir}/tests/modules" />
+		<copy file="buildtools/test_setup.php" tofile="${project.dir}/tests/test_setup.php" overwrite="true"/>
+	</target>
+
+	<!-- Module creation -->
+	
 	<target name="module" description="create a new module">
 		<available file="${project.dir}/modules" type="dir" property="is_webapp" value="true"/>
 		<fail unless="is_webapp" message="Must be called in the root of a webapp directory."/>
@@ -97,16 +108,22 @@
 		<mkdir dir="${prefix}templates"/>
 		<mkdir dir="${prefix}views"/>
 		
-		<property name="testprefix" value="${test.dir}/modules/${module}/"/>
-		<mkdir dir="${testprefix}"/>
-		<mkdir dir="${testprefix}actions"/>
-		<mkdir dir="${testprefix}models"/>
-		<mkdir dir="${testprefix}views"/>
+		<phingcall target="buildmoduletests"/>	
 		
 		<input propertyname="actions" promptChar="?" defaultValue="Index" message="Actions for ${module} (no whitespace, comma seperated)"/>
 		<foreach list="${actions}" param="action" target="buildaction"/>
 		<input propertyname="models" promptChar="?" message="Models for ${module} (no whitespace, comma seperated)"/>
 		<foreach list="${models}" param="model" target="buildmodel"/>
+	</target>
+
+	<target name="buildmoduletests">
+		<available file="${project.dir}/tests" type="dir" property="has_tests" value="true"/>
+		
+		<property name="testprefix" value="${test.dir}/modules/${module}/"/>
+		<mkdir dir="${testprefix}"/>
+		<mkdir dir="${testprefix}actions"/>
+		<mkdir dir="${testprefix}models"/>
+		<mkdir dir="${testprefix}views"/>
 	</target>
 
 	<target name="action" description="create a new action">
@@ -118,6 +135,8 @@
 		<property name="testprefix" value="${test.dir}/"/>
 		<phingcall target="buildaction"/>
 	</target>
+	
+	<!-- Action creation -->
 
 	<target name="buildaction">
 		<copy file="buildtools/code_templates/Action.class.php.tmpl" tofile="${prefix}actions/${action}Action.class.php">
@@ -128,7 +147,12 @@
 				</replacetokens>
 			</filterchain>
 		</copy>
-		
+		<phingcall target="buildactiontests"/>
+		<input propertyname="views" promptChar="?" defaultValue="Success" message="Views for ${action} (no whitespace, comma seperated)"/>
+		<foreach list="${views}" param="view" target="buildview"/>
+	</target>
+
+	<target name="buildactiontests">
 		<copy file="buildtools/code_templates/ActionTest.class.php.tmpl" tofile="${testprefix}actions/${action}ActionTest.class.php">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">    
@@ -137,11 +161,10 @@
 				</replacetokens>
 			</filterchain>
 		</copy>
-
-		<input propertyname="views" promptChar="?" defaultValue="Success" message="Views for ${action} (no whitespace, comma seperated)"/>
-		<foreach list="${views}" param="view" target="buildview"/>
 	</target>
 
+	<!-- View creation -->
+	
 	<target name="buildview">
 		<copy file="buildtools/code_templates/View.class.php.tmpl" tofile="${prefix}views/${action}${view}View.class.php">
 			<filterchain>
@@ -152,7 +175,11 @@
 				</replacetokens>
 			</filterchain>
 		</copy>
+		<phingcall target="buildviewtests"/>
+		<touch file="${prefix}templates/${action}${view}.php"/>
+	</target>
 
+	<target name="buildviewtests">
 		<copy file="buildtools/code_templates/ViewTest.class.php.tmpl" tofile="${testprefix}views/${action}${view}ViewTest.class.php">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">    
@@ -162,10 +189,10 @@
 				</replacetokens>
 			</filterchain>
 		</copy>
-		
-		<touch file="${prefix}templates/${action}${view}.php"/>
 	</target>
 
+	<!-- Model creation -->
+	
 	<target name="model" description="create a new model">
 		<input propertyname="model" promptChar="?" defaultValue="${module}" message="Model Name"/>
 		<property name="prefix" value="${project.dir}/"/>
@@ -182,7 +209,10 @@
 				</replacetokens>
 			</filterchain>
 		</copy>
+		<phingcall target="buildmodeltests" />
+	</target>
 
+	<target name="buildmodeltests">
 		<copy file="buildtools/code_templates/ModelTest.class.php.tmpl" tofile="${prefix}models/${model}ModelTest.class.php">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">    
@@ -192,5 +222,7 @@
 			</filterchain>
 		</copy>
 	</target>
+
+	<!-- Fin -->
 
 </project>
