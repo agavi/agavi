@@ -93,7 +93,7 @@ class ClassFinder extends RecursiveDirectoryIterator
 
 	public function isClass()
 	{
-		return ($this->isFile() && fnmatch("*.class.php", $this->getFilename()));
+		return ($this->isFile() && preg_match("/(.*)\.class\.php$/", $this->getFilename()));
 	}
 
 	public function className()

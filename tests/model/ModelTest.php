@@ -1,7 +1,6 @@
 <?php
 require_once dirname(__FILE__) . '/../mockContext.php';
 
-require_once('model/Model.class.php');
 
 class ModelSampleModel extends Model {}
 
