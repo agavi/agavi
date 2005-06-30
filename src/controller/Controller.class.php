@@ -39,8 +39,7 @@ abstract class Controller extends ParameterHolder
 		$request         = null,
 		$securityFilter  = null,
 		$storage         = null,
-		$user            = null,
-		$executionFilter = null;
+		$user            = null;
 
 	protected
 		$context         = null;
@@ -214,7 +213,7 @@ abstract class Controller extends ParameterHolder
 				}
 
 				// register the execution filter
-				$execFilter = new $this->executionFilter();
+				$execFilter = new ExecutionFilter();
 
 				$execFilter->initialize($this->context);
 				$filterChain->register($execFilter);
@@ -347,7 +346,6 @@ abstract class Controller extends ParameterHolder
 	 *               otherwise null.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @author David Zuelke (dz@bitxtender.com)
 	 * @since  0.9.0
 	 */
 	public function getGlobalModel ($modelName)
@@ -367,19 +365,6 @@ abstract class Controller extends ParameterHolder
 
 		$class = $modelName . 'Model';
 
-		for($cls = $class; $cls = get_parent_class($cls); null)
-		{
-			if(strtolower($cls) == 'singletonmodel')
-			{
-				$model = call_user_func(array($class, 'getInstance'), $class);
-				$model->initialize($this->getContext());
-				return $model;
-			}
-			elseif(strtolower($cls) == 'model')
-			{
-				break;
-			}
-		}
 		// create model instance and initialize it
 		$model = new $class();
 		$model->initialize($this->context);
@@ -426,7 +411,6 @@ abstract class Controller extends ParameterHolder
 	 *               otherwise null.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @author David Zuelke (dz@bitxtender.com)
 	 * @since  0.9.0
 	 */
 	public function getModel ($moduleName, $modelName)
@@ -444,21 +428,9 @@ abstract class Controller extends ParameterHolder
 
 		if (class_exists($moduleClass, false))
 		{
-			$class = $moduleClass;
-		}
 
-		for($cls = $class; $cls = get_parent_class($cls); null)
-		{
-			if(strtolower($cls) == 'singletonmodel')
-			{
-				$model = call_user_func(array($class, 'getInstance'), $class);
-				$model->initialize($this->getContext());
-				return $model;
-			}
-			elseif(strtolower($cls) == 'model')
-			{
-				break;
-			}
+			$class = $moduleClass;
+
 		}
 
 		// create model instance and initialize it
@@ -640,23 +612,6 @@ abstract class Controller extends ParameterHolder
 			$filterChain->register($filter);
 		}
 
-	}
-
-	// -------------------------------------------------------------------------
-
-	/**
-	 * Set the name of the ExecutionFilter class that is used in forward()
-	 *
-	 * @param string The class name of the ExecutionFilter to use
-	 *
-	 * @return void
-	 *
-	 * @author David Zuelke (dz@bitxtender.com)
-	 * @since  0.10.0
-	 */
-	public function setExecutionFilter($className)
-	{
-		$this->executionFilter = $className;
 	}
 
 	// -------------------------------------------------------------------------

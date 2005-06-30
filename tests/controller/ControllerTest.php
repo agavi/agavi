@@ -119,21 +119,11 @@ class ControllerTest extends UnitTestCase
 	public function testgetGlobalModel()
 	{
 		$this->assertIsA($this->_controller->getGlobalModel('Sample'), 'SampleModel');
-		$this->assertIsA($this->_controller->getGlobalModel('SingletonSample'), 'SingletonSampleModel');
-		$firstSingleton = $this->_controller->getGlobalModel('SingletonSample');
-		$firstSingleton->setFoo('bar');
-		$secondSingleton = $this->_controller->getGlobalModel('SingletonSample');
-		$this->assertEqual($firstSingleton->getFoo(), $secondSingleton->getFoo());
 	}
 	
 	public function testgetGlobalModel_recursive()
 	{
 		$this->assertIsA($this->_controller->getGlobalModel('SampleRecursive'), 'SampleRecursiveModel');
-		$this->assertIsA($this->_controller->getGlobalModel('SingletonSampleRecursive'), 'SingletonSampleRecursiveModel');
-		$firstSingleton = $this->_controller->getGlobalModel('SingletonSampleRecursive');
-		$firstSingleton->setFoo('bar');
-		$secondSingleton = $this->_controller->getGlobalModel('SingletonSampleRecursive');
-		$this->assertEqual($firstSingleton->getFoo(), $secondSingleton->getFoo());
 	}
 
 	public function testgetInstance()
@@ -155,12 +145,6 @@ class ControllerTest extends UnitTestCase
 	{
 		$this->assertIsA($this->_controller->getModel('Test', 'Test'), 'Test_TestModel');
 		$this->assertIsA($this->_controller->getModel('Test', 'Test2'), 'Test2Model');
-		$this->assertIsA($this->_controller->getModel('Test', 'SingletonTest'), 'Test_SingletonTestModel');
-		$this->assertIsA($this->_controller->getModel('Test', 'SingletonTest2'), 'SingletonTest2Model');
-		$firstSingleton = $this->_controller->getModel('Test', 'SingletonTest');
-		$firstSingleton->setFoo('bar');
-		$secondSingleton = $this->_controller->getModel('Test', 'SingletonTest');
-		$this->assertEqual($firstSingleton->getFoo(), $secondSingleton->getFoo());
 	}
 
 	public function testgetRenderMode()
