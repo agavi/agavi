@@ -54,7 +54,7 @@ class FactoryConfigHandler extends IniConfigHandler
 		$required_controllers = array('Controller');
   
   	// These factories must be defined. 
-  	$required_factories = array('request', 'storage', 'user', 'security_filter');
+  	$required_factories = array('request', 'storage', 'user', 'security_filter', 'execution_filter');
   
 		// set our required categories list and initialize our handler
 		$categories = array('required_categories' => $required_controllers);
@@ -94,7 +94,7 @@ class FactoryConfigHandler extends IniConfigHandler
 				switch ($factory) {
 					case 'request':
 						$instances[] = sprintf("\tself::\$instance->request = " .  "Request::newInstance('%s');", $class);
-						$inits[] = sprintf("\tself::\$instance->request->initialize(self::\$instance, " .  "%s);", $parameters);
+						$inits[] = sprintf("\tself::\$instance->request->initialize(self::\$instance, %s);", $parameters);
 						break;
 					case 'security_filter':
 						$tmp = "\n\tif (AG_USE_SECURITY) {\n" .
@@ -105,11 +105,14 @@ class FactoryConfigHandler extends IniConfigHandler
 						break;
 					case 'storage':
 						$instances[] = sprintf("\tself::\$instance->storage = Storage::newInstance('%s');", $class);
-						$inits[] = sprintf("\tself::\$instance->storage->initialize(self::\$instance, " . "%s);", $parameters);
+						$inits[] = sprintf("\tself::\$instance->storage->initialize(self::\$instance, %s);", $parameters);
 						break;
 					case 'user':
 						$instances[] = sprintf("\tself::\$instance->user = User::newInstance('%s');", $class);
 						$inits[] = sprintf("\tself::\$instance->user->initialize(self::\$instance, %s);", $parameters);
+						break;
+					case 'execution_filter':
+						$inits[] = sprintf("\tself::\$instance->controller->setExecutionFilter('%s');", $class);
 						break;
 					default:
 					 continue;
