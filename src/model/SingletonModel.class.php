@@ -12,13 +12,14 @@
 // |   indent-tabs-mode: t                                                     |
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
+
 /**
  * An extension to Model, but for implementation as a Singleton
  * 
  * @package agavi
- * @subpackage database
+ * @subpackage model
  * 
- * @since 1.0 
+ * @since 0.10.0 
  * @author Agavi Foundation (info@agavi.org)
  * @author David Zuelke (dz@bitxtender.com)
  * @version $Id$
@@ -32,8 +33,9 @@
 
 		public static function getInstance($className)
 		{
-			if(!isset(self::$instance[$className]))
-				self::$instance[$className] = new $className();
-			return self::$instance[$className];
+			$lowerClassName = strtolower($className);
+			if(!isset(self::$instance[$lowerClassName]))
+				self::$instance[$lowerClassName] = new $className();
+			return self::$instance[$lowerClassName];
 		}
 	}
