@@ -214,7 +214,7 @@ abstract class Controller extends ParameterHolder
 				}
 
 				// register the execution filter
-				$execFilter = new ExecutionFilter();
+				$execFilter = new $this->executionFilter();
 
 				$execFilter->initialize($this->context);
 				$filterChain->register($execFilter);
