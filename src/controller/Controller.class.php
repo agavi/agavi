@@ -346,6 +346,7 @@ abstract class Controller extends ParameterHolder
 	 *               otherwise null.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
+	 * @author David Zuelke (dz@bitxtender.com)
 	 * @since  0.9.0
 	 */
 	public function getGlobalModel ($modelName)
@@ -365,6 +366,19 @@ abstract class Controller extends ParameterHolder
 
 		$class = $modelName . 'Model';
 
+		for($cls = $class; $cls = get_parent_class($cls); null)
+		{
+			if(strtolower($cls) == 'singletonmodel')
+			{
+				$model = call_user_func(array($class, 'getInstance'), $class);
+				$model->initialize($this->getContext());
+				return $model;
+			}
+			elseif(strtolower($cls) == 'model')
+			{
+				break;
+			}
+		}
 		// create model instance and initialize it
 		$model = new $class();
 		$model->initialize($this->context);
@@ -411,6 +425,7 @@ abstract class Controller extends ParameterHolder
 	 *               otherwise null.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
+	 * @author David Zuelke (dz@bitxtender.com)
 	 * @since  0.9.0
 	 */
 	public function getModel ($moduleName, $modelName)
@@ -428,9 +443,21 @@ abstract class Controller extends ParameterHolder
 
 		if (class_exists($moduleClass, false))
 		{
-
 			$class = $moduleClass;
+		}
 
+		for($cls = $class; $cls = get_parent_class($cls); null)
+		{
+			if(strtolower($cls) == 'singletonmodel')
+			{
+				$model = call_user_func(array($class, 'getInstance'), $class);
+				$model->initialize($this->getContext());
+				return $model;
+			}
+			elseif(strtolower($cls) == 'model')
+			{
+				break;
+			}
 		}
 
 		// create model instance and initialize it
