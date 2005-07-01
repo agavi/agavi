@@ -38,6 +38,8 @@ class FileAppender extends Appender
 	// +-----------------------------------------------------------------------+
 	// | PRIVATE VARIABLES                                                     |
 	// +-----------------------------------------------------------------------+
+	private $_handle = null;
+	private $_filename = '';
 
 	// +-----------------------------------------------------------------------+
 	// | CONSTRUCTOR                                                           |
@@ -46,7 +48,10 @@ class FileAppender extends Appender
 	public function initialize($params)
 	{
 		if (isset($params['file'])) {
-			touch($params['file']);
+			$this->_filename = $params['file'];
+			if (!$this->_handle = fopen($this->_filename, 'a')) {
+				throw new AgaviException("Cannot open file ({$this->_filename})");
+			}
 		}
 	}
 
@@ -56,10 +61,16 @@ class FileAppender extends Appender
 
 	public function shutdown()
 	{
+		if ($this->_handle) {
+			fclose($this->_handle);
+		}
 	}
 
 	public function write(&$string)
 	{
+		if (fwrite($this->_handle, $string) === FALSE) {
+			throw new AgaviException("Cannot write to file ({$this->_filename})");
+		}
 	}
 
 }

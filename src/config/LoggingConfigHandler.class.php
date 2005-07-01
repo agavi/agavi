@@ -208,7 +208,7 @@ class LoggingConfigHandler extends IniConfigHandler
 	
 				switch (strtoupper($match[1])) {
 					case 'PARAM':
-						$entry['params'][$match[2]] = $this->literalize($this->replacePath($this->replaceConstants($value)));
+						$entry['params'][$match[2]] = $this->replacePath($this->replaceConstants($value));
 						break;
 					case 'CLASS':
 						$entry['class'] = $value;
