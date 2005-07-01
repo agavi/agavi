@@ -1,10 +1,4 @@
 <?php
-require_once('core/AgaviObject.class.php');
-require_once('util/ParameterHolder.class.php');
-require_once('exception/AgaviException.class.php');
-require_once('exception/FactoryException.class.php');
-require_once('view/View.class.php');
-require_once('view/PHPView.class.php');
 
 class SamplePHPView extends PHPView
 {
@@ -30,7 +24,7 @@ class PHPViewTest extends UnitTestCase
 
 	public function testdecorate()
 	{
-		$this->fail('Incomplete Test');
+		$this->assertTrue(0,'Incomplete Test');
 	}
 
 	public function testgetAttribute()
@@ -62,7 +56,7 @@ class PHPViewTest extends UnitTestCase
 
 	public function testrender()
 	{
-		$this->fail('Incomplete Test');
+		$this->assertTrue(0,'Incomplete Test');
 	}
 
 	public function testsetAttribute()

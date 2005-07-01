@@ -58,7 +58,39 @@ class ValidatorManager extends AgaviObject
 		$this->names  = array();
 
 	}
+	
+	
+	// -------------------------------------------------------------------------
 
+	/**
+	 * Encapsulation method to return the groups array
+	 *
+	 * @return array of validator groups, or NULL if none have been registered
+	 *
+	 * @author Graeme Foster
+	 * @since  1.0.0
+	 */
+	public function getGroups()
+	{
+		return $this->groups;
+	} 
+	
+
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Encapsulation method to return the names array
+	 *
+	 * @return array of validator names, or NULL if none have been registered
+	 *
+	 * @author Graeme Foster
+	 * @since  1.0.0
+	 */
+	public function getNames()
+	{
+		return $this->names;
+	} 
+	
 	// -------------------------------------------------------------------------
 
 	/**

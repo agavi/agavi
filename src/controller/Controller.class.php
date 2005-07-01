@@ -164,14 +164,14 @@ abstract class Controller extends ParameterHolder
 
 		// create an instance of the action
 		$actionInstance = $this->getAction($moduleName, $actionName);
-
+		
 		// add a new action stack entry
 		$this->actionStack->addEntry($moduleName, $actionName, $actionInstance);
 
 		// include the module configuration
 		ConfigCache::import(AG_MODULE_DIR . '/' . $moduleName . '/config/module.ini');
-
-		if (constant('MOD_' . strtoupper($moduleName) . '_ENABLED')) {
+		$enabled_str = 'MOD_' . strtoupper($moduleName) . '_ENABLED';
+		if (defined($enabled_str) && constant($enabled_str)) {
 			
 			// check for a module config.php
 			$moduleConfig = AG_MODULE_DIR . '/' . $moduleName . '/config.php';
@@ -558,9 +558,13 @@ abstract class Controller extends ParameterHolder
 		$config     = AG_CONFIG_DIR . '/filters.ini';
 		$moduleName = 'global';
 
-		if (!isset($list[$moduleName]) && is_readable($config))	{
-			// load global filters
-			require_once(ConfigCache::checkConfig('config/filters.ini'));
+		if (!isset($list[$moduleName])) {
+			if (is_readable($config))	{
+				// load global filters
+				require_once(ConfigCache::checkConfig('config/filters.ini'));
+			} else {
+				$list[$moduleName] = array();
+			}
 		}
 
 		// register filters

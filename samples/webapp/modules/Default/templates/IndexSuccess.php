@@ -1,6 +1,6 @@
 <?php require_once(AG_MODULE_DIR . '/Default/templates/includes/header.php'); ?>
 
-Agavi has debugging mode on by default, which means it's recompiling every
+Agavi has debugging mode on by default, which means it's reparsing every
 single configuration file on each request. You may experience a slow loading
 page while this is happening. Debugging mode should stay on if you plan on
 developing for this installation. Otherwise you can turn it off.

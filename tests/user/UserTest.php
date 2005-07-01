@@ -1,10 +1,4 @@
 <?php
-require_once('core/AgaviObject.class.php');
-require_once('util/ParameterHolder.class.php');
-require_once('exception/AgaviException.class.php');
-require_once('exception/InitializationException.class.php');
-require_once('exception/FactoryException.class.php');
-require_once('user/User.class.php');
 
 define('AG_USER_NAMESPACE', 'org/agavi');
 
@@ -121,12 +115,12 @@ class UserTest extends UnitTestCase
 
 	public function testinitialize()
 	{
-		$this->fail('Incomplete Test');
+		$this->assertTrue(0,'Incomplete Test');
 	}
 
 	public function testnewInstance()
 	{
-		$this->fail('Incomplete Test');
+		$this->assertTrue(0,'Incomplete Test');
 	}
 
 	public function testremoveAttribute()
@@ -260,7 +254,7 @@ class UserTest extends UnitTestCase
 
 	public function testshutdown()
 	{
-		$this->fail('Incomplete Test');
+		$this->assertTrue(0,'Incomplete Test');
 	}
 
 }

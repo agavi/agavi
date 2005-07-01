@@ -19,10 +19,29 @@
  * @package agavi
  *
  * @author    Sean Kerr (skerr@mojavi.org)
- * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
+ * @author    Mike Vincent (mike@agavi.org)
+ * @copyright (c) authors
  * @since     0.9.0
  * @version   $Id$
  */
+
+/**
+ * Minimum requirement check
+ * 
+ * Things arent going to work unless we're running with php5,
+ * so dont assume we are. 
+ *
+ * @author Mike Vincent (mike@agavi.org)
+ * @since  0.9.0
+ */
+
+define('MINIMUM_VER_PHP', '5.0.0');
+
+if ( !version_compare(PHP_VERSION, MINIMUM_VER_PHP, 'ge') ) {
+	die ('You must be using PHP version 5 or greater.');
+}
+
+
 
 /**
  * Handles autoloading of classes that have been specified in autoload.ini.

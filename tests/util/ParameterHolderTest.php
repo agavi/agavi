@@ -1,6 +1,4 @@
 <?php
-require_once('core/AgaviObject.class.php');
-require_once('util/ParameterHolder.class.php');
 
 class SampleParameterHolder extends ParameterHolder {}
 

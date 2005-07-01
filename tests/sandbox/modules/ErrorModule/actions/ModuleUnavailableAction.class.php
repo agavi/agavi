@@ -1,9 +1,9 @@
 <?php
-class ErrorModule_ModuleUnavailablAction extends Action
+class ErrorModule_ModuleUnavailableAction extends Action
 {
 	public function execute()
 	{
-		return null;
+		return View::SUCCESS;
 	}
 }
 

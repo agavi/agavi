@@ -1,8 +1,4 @@
 <?php
-require_once('core/AgaviObject.class.php');
-require_once('util/ParameterHolder.class.php');
-require_once('validator/Validator.class.php');
-require_once('validator/NumberValidator.class.php');
 
 class NumberValidatorTest extends UnitTestCase
 {
