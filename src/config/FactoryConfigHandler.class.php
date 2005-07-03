@@ -112,7 +112,7 @@ class FactoryConfigHandler extends IniConfigHandler
 						$inits[] = sprintf("\tself::\$instance->user->initialize(self::\$instance, %s);", $parameters);
 						break;
 					case 'execution_filter':
-						$inits[] = sprintf("\tself::\$instance->controller->setExecutionFilter('%s');", $class);
+						$inits[] = sprintf("\tself::\$instance->controller->setExecutionFilterClassName('%s');", $class);
 						break;
 					default:
 					 continue;
