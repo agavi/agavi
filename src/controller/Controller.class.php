@@ -39,7 +39,8 @@ abstract class Controller extends ParameterHolder
 		$request         = null,
 		$securityFilter  = null,
 		$storage         = null,
-		$user            = null;
+		$user            = null,
+		$executionFilterClassName = null;
 
 	protected
 		$context         = null;
@@ -213,7 +214,7 @@ abstract class Controller extends ParameterHolder
 				}
 
 				// register the execution filter
-				$execFilter = new ExecutionFilter();
+				$execFilter = new $this->executionFilterClassName();
 
 				$execFilter->initialize($this->context);
 				$filterChain->register($execFilter);
@@ -537,6 +538,24 @@ abstract class Controller extends ParameterHolder
 	{
 		$this->context = Context::getInstance($this);
 	}
+
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Set the name of the ExecutionFilter class that is used in forward()
+	 *
+	 * @param string The class name of the ExecutionFilter to use
+	 *
+	 * @return void
+	 *
+	 * @author David Zuelke (dz@bitxtender.com)
+	 * @since  0.10.0
+	 */
+	public function setExecutionFilterClassName($className)
+	{
+		$this->executionFilterClassName = $className;
+	}
+
 	// -------------------------------------------------------------------------
 
 	/**
