@@ -42,7 +42,7 @@ class PassthruLayout extends Layout
 	 */
 	public function & format ($message)
 	{
-		return $message;
+		return sprintf('%s', $message->__toString());
 	}
 
 }

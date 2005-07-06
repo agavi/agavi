@@ -97,7 +97,7 @@ abstract class Appender extends AgaviObject
 	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  0.9.0
 	 */
-	abstract function write (&$data);
+	abstract function write ($message);
 
 }
 

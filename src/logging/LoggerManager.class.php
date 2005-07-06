@@ -204,6 +204,13 @@ class LoggerManager extends AgaviObject
 
 	}
 
+	public static function log(Message $message)
+	{
+		foreach (self::$loggers as $logger) {
+			$logger->log($message);
+		}
+	}
+
 	// -------------------------------------------------------------------------
 
 	/**

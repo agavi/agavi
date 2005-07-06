@@ -66,9 +66,10 @@ class FileAppender extends Appender
 		}
 	}
 
-	public function write(&$string)
+	public function write($message)
 	{
-		if (fwrite($this->_handle, $string) === FALSE) {
+		$str = sprintf("%s\n", $this->getLayout()->format($message));
+		if (fwrite($this->_handle, $str) === FALSE) {
 			throw new AgaviException("Cannot write to file ({$this->_filename})");
 		}
 	}

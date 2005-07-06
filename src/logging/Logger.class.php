@@ -73,12 +73,10 @@ class Logger extends AgaviObject
 
 	private
 		$appenders    = array(),
-		$exitPriority = null,
 		$priority     = null;
 
 	public function __construct()
 	{
-		$this->exitPriority = self::ERROR;
 		$this->priority = self::WARN;
 	}
 
@@ -103,26 +101,6 @@ class Logger extends AgaviObject
 		$retval = null;
 
 		return $retval;
-
-	}
-
-	// -------------------------------------------------------------------------
-
-	/**
-	 * Retrieve the exit priority level.
-	 *
-	 * This is the priority level required in order to immediately exit the
-	 * request.
-	 *
-	 * @return int The exit priority level.
-	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
-	 */
-	public function getExitPriority ()
-	{
-
-		return $this->exitPriority;
 
 	}
 
@@ -158,34 +136,18 @@ class Logger extends AgaviObject
 	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  0.9.0
 	 */
-	public function log ($message)
+	public function log (Message $message)
 	{
 
 		// get message priority
-		$msgPriority = $message->getAttribute('p');
+		$msgPriority = $message->getParameter('p');
 
 		if ($msgPriority >= $this->priority || $this->priority < 1)
 		{
-
-			// loop through our appenders and grab their layouts
-			// then format the message and write it to the appender
 			foreach ($this->appenders as $appender)
 			{
-
 				$appender->write($message);
-
 			}
-
-		}
-
-		// to exit or not to exit, that is the question
-		if ($this->exitPriority > 0 && $msgPriority >= $this->exitPriority)
-		{
-
-			Controller::getInstance()->shutdown();
-
-			exit;
-
 		}
 
 	}
@@ -265,25 +227,6 @@ class Logger extends AgaviObject
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Set the exit priority level.
-	 *
-	 * @param int An exit priority level.
-	 *
-	 * @return void
-	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
-	 */
-	public function setExitPriority ($priority)
-	{
-
-		$this->exitPriority = $priority;
-
-	}
-
-	// -------------------------------------------------------------------------
-
-	/**
 	 * Set the priority level.
 	 *
 	 * @param int A priority level.
@@ -316,9 +259,7 @@ class Logger extends AgaviObject
 		// loop through our appenders and shut them all down
 		foreach ($this->appenders as $appender)
 		{
-
 			$appender->shutdown();
-
 		}
 
 	}

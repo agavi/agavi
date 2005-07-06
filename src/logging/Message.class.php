@@ -31,6 +31,21 @@ class Message extends ParameterHolder
 	// | METHODS                                                               |
 	// +-----------------------------------------------------------------------+
 
+	public function __construct($message = '', $level = Logger::INFO)
+	{
+		$this->setParameter('m', $message);
+		$this->setParameter('p', $level);
+	}
+
+	public function log()
+	{
+		LoggerManager::log($this);
+	}
+	
+	public function __toString()
+	{
+		return (string) $this->getParameter('m');
+	}
 }
 
 ?>
