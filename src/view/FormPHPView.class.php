@@ -210,7 +210,7 @@ abstract class FormPHPView extends PHPView
 	 * @author Mike Vincent (mike@agavi.org)
 	 * @since  3.0.0
 	 */
-	public function formTextArea($name, $label = '', $parms = array(), $labelparms = array())
+	public function formTextarea($name, $label = '', $parms = array(), $labelparms = array())
 	{
 		$retval = '';
 		if (isset($parms['value'])) {
