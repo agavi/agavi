@@ -225,10 +225,11 @@ class LoggerManager extends AgaviObject
 	{
 
 		// loop through our loggers and shut them all down
-		foreach (self::$loggers as $logger)
+		foreach (self::$loggers as $name => $logger)
 		{
 
 			$logger->shutdown();
+			unset(self::$loggers[$name]);
 
 		}
 

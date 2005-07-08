@@ -38,8 +38,8 @@ class FileAppender extends Appender
 	// +-----------------------------------------------------------------------+
 	// | PRIVATE VARIABLES                                                     |
 	// +-----------------------------------------------------------------------+
-	private $_handle = null;
-	private $_filename = '';
+	protected $_handle = null;
+	protected $_filename = '';
 
 	// +-----------------------------------------------------------------------+
 	// | CONSTRUCTOR                                                           |
@@ -49,9 +49,6 @@ class FileAppender extends Appender
 	{
 		if (isset($params['file'])) {
 			$this->_filename = $params['file'];
-			if (!$this->_handle = fopen($this->_filename, 'a')) {
-				throw new AgaviException("Cannot open file ({$this->_filename})");
-			}
 		}
 	}
 
@@ -59,9 +56,19 @@ class FileAppender extends Appender
 	// | METHODS                                                               |
 	// +-----------------------------------------------------------------------+
 
+	protected function _getHandle()
+	{
+		if (is_null($this->_handle)) {
+			if (!$this->_handle = fopen($this->_filename, 'a')) {
+				throw new LoggingException("Cannot open file ({$this->_filename})");
+			}
+		}
+		return $this->_handle;
+	}
+
 	public function shutdown()
 	{
-		if ($this->_handle) {
+		if (!is_null($this->_handle)) {
 			fclose($this->_handle);
 		}
 	}
@@ -69,8 +76,8 @@ class FileAppender extends Appender
 	public function write($message)
 	{
 		$str = sprintf("%s\n", $this->getLayout()->format($message));
-		if (fwrite($this->_handle, $str) === FALSE) {
-			throw new AgaviException("Cannot write to file ({$this->_filename})");
+		if (fwrite($this->_getHandle(), $str) === FALSE) {
+			throw new LoggingException("Cannot write to file ({$this->_filename})");
 		}
 	}
 

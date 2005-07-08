@@ -27,14 +27,10 @@
 class Message extends ParameterHolder
 {
 
-	// +-----------------------------------------------------------------------+
-	// | METHODS                                                               |
-	// +-----------------------------------------------------------------------+
-
-	public function __construct($message = '', $level = Logger::INFO)
+	public function __construct($message = null, $priority = Logger::INFO)
 	{
 		$this->setParameter('m', $message);
-		$this->setParameter('p', $level);
+		$this->setParameter('p', $priority);
 	}
 
 	public function log()
@@ -44,8 +40,34 @@ class Message extends ParameterHolder
 	
 	public function __toString()
 	{
-		return (string) $this->getParameter('m');
+		return(is_array($this->getParameter('m')) ? implode("\n", $this->getParameter('a')) : (string) $this->getParameter('m'));
 	}
+
+	public function setMessage($message)
+	{
+		$this->setParameter('m', $message);
+	}
+
+	public function appendMessage($message)
+	{
+		$this->appendParameter('m', $message);
+	}
+	
+	public function setPriority($priority)
+	{
+		$this->setParameter('p', $priority);
+	}
+
+	public function getPriority()
+	{
+		return $this->getParameter('p');
+	}
+
+	public function getMessage()
+	{
+		return $this->getParameter('m');
+	}
+
 }
 
 ?>

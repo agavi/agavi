@@ -85,48 +85,6 @@ class Logger extends AgaviObject
 	// +-----------------------------------------------------------------------+
 
 	/**
-	 * Retrieve an appender.
-	 *
-	 * @param string An appender name.
-	 *
-	 * @return Appender An Appender, if an appender with the name exists,
-	 *                  otherwise null.
-	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
-	 */
-	public function getAppender ($name)
-	{
-
-		$retval = null;
-
-		return $retval;
-
-	}
-
-	// -------------------------------------------------------------------------
-
-	/**
-	 * Retrieve the priority level.
-	 *
-	 * This is the priority level required before a message will be written
-	 * to the log.
-	 *
-	 * @return int The priority level.
-	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
-	 */
-	public function getPriority ()
-	{
-
-		return $this->priority;
-
-	}
-
-	// -------------------------------------------------------------------------
-
-	/**
 	 * Log a message.
 	 *
 	 * @param Message A Message instance.
@@ -140,7 +98,7 @@ class Logger extends AgaviObject
 	{
 
 		// get message priority
-		$msgPriority = $message->getParameter('p');
+		$msgPriority = $message->getPriority();
 
 		if ($msgPriority >= $this->priority || $this->priority < 1)
 		{
@@ -149,40 +107,6 @@ class Logger extends AgaviObject
 				$appender->write($message);
 			}
 		}
-
-	}
-
-	// -------------------------------------------------------------------------
-
-	/**
-	 * Remove an appender.
-	 *
-	 * This does not shutdown the appender. The shutdown method must be called
-	 * manually.
-	 *
-	 * @param string An appender name.
-	 *
-	 * @return Appender An Appender, if one with the name exists, otherwise
-	 *                  null.
-	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
-	 */
-	public function removeAppender ($name)
-	{
-
-		if (isset($this->appenders[$name]))
-		{
-
-			$retval = $this->appenders[$name];
-
-			unset($this->appenders[$name]);
-
-			return $retval;
-
-		}
-
-		return null;
 
 	}
 

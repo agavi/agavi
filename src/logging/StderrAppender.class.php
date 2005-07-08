@@ -24,7 +24,7 @@
  * @since     0.9.0
  * @version   $Id$
  */
-class StderrAppender extends Appender
+class StderrAppender extends FileAppender
 {
 
 	// +-----------------------------------------------------------------------+
@@ -42,6 +42,12 @@ class StderrAppender extends Appender
 	// +-----------------------------------------------------------------------+
 	// | CONSTRUCTOR                                                           |
 	// +-----------------------------------------------------------------------+
+
+	public function initialize($params)
+	{
+		$params['file'] = 'php://stderr';
+		return parent::initialize($params);
+	}
 
 	// +-----------------------------------------------------------------------+
 	// | METHODS                                                               |

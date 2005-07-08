@@ -24,7 +24,7 @@
  * @since     0.9.0
  * @version   $Id$
  */
-class StdoutAppender extends Appender
+class StdoutAppender extends FileAppender
 {
 
 	// +-----------------------------------------------------------------------+
@@ -42,6 +42,12 @@ class StdoutAppender extends Appender
 	// +-----------------------------------------------------------------------+
 	// | CONSTRUCTOR                                                           |
 	// +-----------------------------------------------------------------------+
+
+	public function initialize($params)
+	{
+		$params['file'] = 'php://stdout';
+		return parent::initialize($params);
+	}
 
 	// +-----------------------------------------------------------------------+
 	// | METHODS                                                               |
