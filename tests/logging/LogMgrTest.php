@@ -1,12 +1,12 @@
 <?php
 require_once dirname(__FILE__) . '/../mockContext.php';
 
-class LogMgr 
+class AgaviLogMgr 
 {
-	const FATAL		= 1,
-				ERROR		=	2,
-				WARNING	= 3,
-				INFO 		= 4,
+	const FATAL		= 10,
+				ERROR		=	20,
+				WARNING	= 30,
+				INFO 		= 40,
 				DEBUG		= 999;
 
 	private static 
@@ -32,14 +32,14 @@ class LogMgr
 		return count(self::$loggers);
 	}
 
-	public static function logEvent($message, $priority = Logger::INFO)
+	public static function log($message, $priority = Logger::INFO)
 	{
 		if (count(self::$loggers)) {
 			foreach (self::$loggers as $logger) {
 				$logger->log($message, $priority);
 			}
 		} else {
-			throw new LoggingException('No Loggers Established');
+			// throw new LoggingException('No Loggers Established');
 		}
 	}
 
@@ -52,7 +52,7 @@ class LogMgr
 
 }
 
-class FileLogger
+class AgaviFileLogger
 {
 	private $context,
 					$filename;
@@ -67,27 +67,35 @@ class FileLogger
 	{
 		file_put_contents($this->filename, "[$priority] $message\n");
 	}
+
+	public function shutdown()
+	{
+		file_put_contents($this->filename, '[shutdown] Closing log.' . date('Y/m/d h:i')."\n");
+	}
 }
 
 class LogMgrTest extends UnitTestCase
 {
+	private $file1, $file2;
+	
+	public function setUp()
+	{
+		$this->file1 = '/tmp/logtest1';
+		$this->file2 = '/tmp/logtest2';
+		@unlink($this->file1);
+		@unlink($this->file2);
+	}
+	
 	public function testLogMgr()
 	{
-		$logfile = '/tmp/logtest';
-		$logfile2 = '/tmp/logtest2';
-		@unlink($logfile);
-		@unlink($logfile2);
-		//$LM = new LogMgr();
-		//$this->assertIsA($LM, 'LogMgr');
-		
-		$this->assertEqual(1,LogMgr::addLogger('FileLogger', array('filename' => $logfile)));
-		$this->assertEqual(2,LogMgr::addLogger('FileLogger', array('filename' => $logfile2)));
-		$this->assertFalse(file_exists($logfile));
-		$this->assertFalse(file_exists($logfile2));
+		$this->assertEqual(1,AgaviLogMgr::addLogger('AgaviFileLogger', array('filename' => $this->file1)));
+		$this->assertEqual(2,AgaviLogMgr::addLogger('AgaviFileLogger', array('filename' => $this->file2)));
+		$this->assertFalse(file_exists($this->file1));
+		$this->assertFalse(file_exists($this->file2));
 		LogMgr::logEvent('Something Happened');
-		$this->assertTrue(file_exists($logfile));
-		$this->assertTrue(file_exists($logfile2));
-		$this->AssertWantedPattern('/Something Happened/i', file_get_contents($logfile));
-		$this->AssertWantedPattern('/Something Happened/i', file_get_contents($logfile2));
+		$this->assertTrue(file_exists($this->file1));
+		$this->assertTrue(file_exists($this->file2));
+		$this->AssertWantedPattern('/Something Happened/i', file_get_contents($this->file1));
+		$this->AssertWantedPattern('/Something Happened/i', file_get_contents($this->file2));
 	}
 }
