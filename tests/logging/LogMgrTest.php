@@ -92,7 +92,7 @@ class LogMgrTest extends UnitTestCase
 		$this->assertEqual(2,AgaviLogMgr::addLogger('AgaviFileLogger', array('filename' => $this->file2)));
 		$this->assertFalse(file_exists($this->file1));
 		$this->assertFalse(file_exists($this->file2));
-		LogMgr::logEvent('Something Happened');
+		AgaviLogMgr::log('Something Happened');
 		$this->assertTrue(file_exists($this->file1));
 		$this->assertTrue(file_exists($this->file2));
 		$this->AssertWantedPattern('/Something Happened/i', file_get_contents($this->file1));
