@@ -62,6 +62,7 @@ class MockContext extends Context {
 		if (!isset(self::$instance)) {
 			$class = __CLASS__;
 			self::$instance = new $class;
+
 		
 			if (AG_USE_DATABASE) { 
 				if (class_exists('DatabaseManager')) { // trigger autoload
@@ -73,6 +74,7 @@ class MockContext extends Context {
 				}
 			}
 			self::$instance->controller 			= $controller;
+			self::$instance->controller->setExecutionFilterClassName('ExecutionFilter');
 			self::$instance->actionStack			= new ActionStack($test);
 			// In the live getInstance we would do this.. 
 			// require_once(ConfigCache::checkConfig('config/factories.ini'));
