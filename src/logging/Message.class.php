@@ -40,7 +40,7 @@ class Message extends ParameterHolder
 	
 	public function __toString()
 	{
-		return(is_array($this->getParameter('m')) ? implode("\n", $this->getParameter('a')) : (string) $this->getParameter('m'));
+		return(is_array($this->getParameter('m')) ? implode("\n", $this->getParameter('m')) : (string) $this->getParameter('m'));
 	}
 
 	public function setMessage($message)
