@@ -147,6 +147,7 @@ class AgaviException extends Exception
 				// grab the class name from the file
 				// (this only works with properly named classes)
 				$tClass = Toolkit::extractClassName($traceData[$i]['file']);
+				$tType      = $traceData[$i]['type'];
 
 				$tFile      = $traceData[$i]['file'];
 				$tFunction  = $traceData[$i]['function'];
@@ -155,7 +156,7 @@ class AgaviException extends Exception
 				if ($tClass != null)
 				{
 
-				    $tFunction = $tClass . '::' . $tFunction . '()';
+				    $tFunction = $tClass . $tType . $tFunction . '()';
 
 				} else
 				{
