@@ -31,6 +31,18 @@ abstract class Appender extends AgaviObject
 	private $layout = null;
 
 	/**
+	 * Initialize the object.
+	 *
+	 * @return void
+	 *
+	 * @author Bob Zoller (bob@agavi.org)
+	 * @since  0.9.1
+	 */
+	abstract function initialize($params);
+
+	// -------------------------------------------------------------------------
+
+	/**
 	 * Retrieve the layout.
 	 *
 	 * @return Layout A Layout instance, if one has been set, otherwise null.
@@ -50,7 +62,7 @@ abstract class Appender extends AgaviObject
 	 *
 	 * @param Layout A Layout instance.
 	 *
-	 * @return void
+	 * @return Appender
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  0.9.0
@@ -58,6 +70,7 @@ abstract class Appender extends AgaviObject
 	public function setLayout ($layout)
 	{
 		$this->layout = $layout;
+		return $this;
 	}
 
 	// -------------------------------------------------------------------------

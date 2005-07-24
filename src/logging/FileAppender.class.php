@@ -89,7 +89,8 @@ class FileAppender extends Appender
 	 * 
 	 * @param Message
 	 * 
-	 * @throws <b>LoggingException</b> if file cannot be written.
+	 * @throws <b>LoggingException</b> if no Layout is set or the file
+	 *         cannot be written.
 	 * 
 	 * @return void
 	 * 
@@ -98,6 +99,10 @@ class FileAppender extends Appender
 	 */
 	public function write($message)
 	{
+		if ($layout = $this->getLayout() === null) {
+			throw new LoggingException('No Layout set');
+		}
+
 		$str = sprintf("%s\n", $this->getLayout()->format($message));
 		if (fwrite($this->_getHandle(), $str) === FALSE) {
 			throw new LoggingException("Cannot write to file ({$this->_filename})");
