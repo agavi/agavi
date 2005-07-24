@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2005  Sean Kerr.                                       |
+// | Copyright (c) 2003-2005 Agavi Foundation.                                 |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -21,16 +21,12 @@
  * @subpackage logging
  *
  * @author    Sean Kerr (skerr@mojavi.org)
- * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
+ * @copyright (c) Authors
  * @since     0.9.0
  * @version   $Id$
  */
 class Logger extends AgaviObject
 {
-
-	// +-----------------------------------------------------------------------+
-	// | CONSTANTS                                                             |
-	// +-----------------------------------------------------------------------+
 
 	/**
 	 * Debug level.
@@ -67,22 +63,24 @@ class Logger extends AgaviObject
 	 */
 	const FATAL = 5000;
 
-	// +-----------------------------------------------------------------------+
-	// | PRIVATE VARIABLES                                                     |
-	// +-----------------------------------------------------------------------+
-
 	private
 		$appenders    = array(),
 		$priority     = null;
 
+	/**
+	 * Constructor.
+	 * 
+	 * @return void
+	 * 
+	 * @author Bob Zoller (bob@agavi.org)
+	 * @since 0.9.1
+	 */
 	public function __construct()
 	{
 		$this->priority = self::WARN;
 	}
 
-	// +-----------------------------------------------------------------------+
-	// | METHODS                                                               |
-	// +-----------------------------------------------------------------------+
+	// -------------------------------------------------------------------------
 
 	/**
 	 * Log a message.
@@ -96,7 +94,6 @@ class Logger extends AgaviObject
 	 */
 	public function log (Message $message)
 	{
-
 		// get message priority
 		$msgPriority = $message->getPriority();
 
@@ -107,7 +104,6 @@ class Logger extends AgaviObject
 				$appender->write($message);
 			}
 		}
-
 	}
 
 	// -------------------------------------------------------------------------
@@ -130,14 +126,10 @@ class Logger extends AgaviObject
 	 */
 	public function setAppender ($name, $appender)
 	{
-
 		if (!isset($this->appenders[$name]))
 		{
-
 			$this->appenders[$name] = $appender;
-
 			return;
-
 		}
 
 		// appender already exists
@@ -145,7 +137,6 @@ class Logger extends AgaviObject
 		$error = sprintf($error, $name);
 
 		throw new LoggingException($error);
-
 	}
 
 	// -------------------------------------------------------------------------
@@ -162,9 +153,7 @@ class Logger extends AgaviObject
 	 */
 	public function setPriority ($priority)
 	{
-
 		$this->priority = $priority;
-
 	}
 
 	// -------------------------------------------------------------------------
@@ -179,13 +168,11 @@ class Logger extends AgaviObject
 	 */
 	public function shutdown ()
 	{
-
 		// loop through our appenders and shut them all down
 		foreach ($this->appenders as $appender)
 		{
 			$appender->shutdown();
 		}
-
 	}
 
 }

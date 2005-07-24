@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2005  Sean Kerr.                                       |
+// | Copyright (c) 2003-2005 Agavi Foundation.                                 |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -14,44 +14,34 @@
 // +---------------------------------------------------------------------------+
 
 /**
- *
+ * StderrAppender appends Messages to the stderr.
  *
  * @package    agavi
  * @subpackage logging
  *
- * @author    Sean Kerr (skerr@mojavi.org)
- * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
- * @since     0.9.0
+ * @author    Bob Zoller (bob@agavi.org)
+ * @copyright (c) Authors
+ * @since     0.9.1
  * @version   $Id$
  */
 class StderrAppender extends FileAppender
 {
 
-	// +-----------------------------------------------------------------------+
-	// | CONSTANTS                                                             |
-	// +-----------------------------------------------------------------------+
-
-	// +-----------------------------------------------------------------------+
-	// | PUBLIC VARIABLES                                                      |
-	// +-----------------------------------------------------------------------+
-
-	// +-----------------------------------------------------------------------+
-	// | PRIVATE VARIABLES                                                     |
-	// +-----------------------------------------------------------------------+
-
-	// +-----------------------------------------------------------------------+
-	// | CONSTRUCTOR                                                           |
-	// +-----------------------------------------------------------------------+
-
+	/**
+	 * Initialize the object.
+	 * 
+	 * @param array An array of parameters.
+	 * 
+	 * @return mixed
+	 * 
+	 * @author Bob Zoller (bob@agavi.org)
+	 * @since 0.9.1
+	 */
 	public function initialize($params)
 	{
 		$params['file'] = 'php://stderr';
 		return parent::initialize($params);
 	}
-
-	// +-----------------------------------------------------------------------+
-	// | METHODS                                                               |
-	// +-----------------------------------------------------------------------+
 
 }
 

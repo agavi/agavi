@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2005  Sean Kerr.                                       |
+// | Copyright (c) 2003-2005 Agavi Foundation.                                 |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -14,37 +14,32 @@
 // +---------------------------------------------------------------------------+
 
 /**
- *
+ * FileAppender appends Messages to a given file.
  *
  * @package    agavi
  * @subpackage logging
  *
- * @author    Sean Kerr (skerr@mojavi.org)
- * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
- * @since     0.9.0
+ * @author    Bob Zoller (bob@agavi.org)
+ * @copyright (c) Authors
+ * @since     0.9.1
  * @version   $Id$
  */
 class FileAppender extends Appender
 {
 
-	// +-----------------------------------------------------------------------+
-	// | CONSTANTS                                                             |
-	// +-----------------------------------------------------------------------+
-
-	// +-----------------------------------------------------------------------+
-	// | PUBLIC VARIABLES                                                      |
-	// +-----------------------------------------------------------------------+
-
-	// +-----------------------------------------------------------------------+
-	// | PRIVATE VARIABLES                                                     |
-	// +-----------------------------------------------------------------------+
 	protected $_handle = null;
 	protected $_filename = '';
 
-	// +-----------------------------------------------------------------------+
-	// | CONSTRUCTOR                                                           |
-	// +-----------------------------------------------------------------------+
-
+	/**
+	 * Initialize the FileAppender.
+	 * 
+	 * @param array An array of parameters.
+	 * 
+	 * @return void
+	 * 
+	 * @author Bob Zoller (bob@agavi.org)
+	 * @since 0.9.1
+	 */
 	public function initialize($params)
 	{
 		if (isset($params['file'])) {
@@ -52,10 +47,16 @@ class FileAppender extends Appender
 		}
 	}
 
-	// +-----------------------------------------------------------------------+
-	// | METHODS                                                               |
-	// +-----------------------------------------------------------------------+
-
+	/**
+	 * Retrieve the file handle for this FileAppender.
+	 * 
+	 * @throws <b>LoggingException</b> if file cannot be opened for appending.
+	 * 
+	 * @return integer
+	 * 
+	 * @author Bob Zoller (bob@agavi.org)
+	 * @since 0.9.1
+	 */
 	protected function _getHandle()
 	{
 		if (is_null($this->_handle)) {
@@ -66,6 +67,16 @@ class FileAppender extends Appender
 		return $this->_handle;
 	}
 
+	/**
+	 * Execute the shutdown procedure.
+	 * 
+	 * If open, close the filehandle.
+	 * 
+	 * return void
+	 * 
+	 * @author Bob Zoller (bob@agavi.org)
+	 * @since 0.9.1
+	 */
 	public function shutdown()
 	{
 		if (!is_null($this->_handle)) {
@@ -73,6 +84,18 @@ class FileAppender extends Appender
 		}
 	}
 
+	/**
+	 * Write a Message to the file.
+	 * 
+	 * @param Message
+	 * 
+	 * @throws <b>LoggingException</b> if file cannot be written.
+	 * 
+	 * @return void
+	 * 
+	 * @author Bob Zoller (bob@agavi.org)
+	 * @since 0.9.1
+	 */
 	public function write($message)
 	{
 		$str = sprintf("%s\n", $this->getLayout()->format($message));

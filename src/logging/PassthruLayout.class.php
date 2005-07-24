@@ -14,6 +14,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
+ * PassthruLayout is a Layout that will return the Message text unaltered.
  *
  * @package    agavi
  * @subpackage logging
@@ -26,10 +27,6 @@
 class PassthruLayout extends Layout
 {
 
-	// +-----------------------------------------------------------------------+
-	// | METHODS                                                               |
-	// +-----------------------------------------------------------------------+
-
 	/**
 	 * Format a message.
 	 *
@@ -40,7 +37,7 @@ class PassthruLayout extends Layout
 	 * @author Bob Zoller (bob@agavi.org)
 	 * @since  0.9.1
 	 */
-	public function & format ($message)
+	public function &format ($message)
 	{
 		return sprintf('%s', $message->__toString());
 	}
