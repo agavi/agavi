@@ -25,17 +25,18 @@
  * @version $Id$
  */
 
-	abstract class SingletonModel extends Model
+abstract class SingletonModel extends Model
+{
+	protected static $instance = array();
+
+	protected final function __construct() { }
+	protected final function __clone() { }
+
+	public static function getInstance($className)
 	{
-		protected static $instance = array();
-
-		protected function __construct() { }
-
-		public static function getInstance($className)
-		{
-			$lowerClassName = strtolower($className);
-			if(!isset(self::$instance[$lowerClassName]))
-				self::$instance[$lowerClassName] = new $className();
-			return self::$instance[$lowerClassName];
-		}
+		$lowerClassName = strtolower($className);
+		if (!isset(self::$instance[$lowerClassName]))
+			self::$instance[$lowerClassName] = new $className();
+		return self::$instance[$lowerClassName];
 	}
+}

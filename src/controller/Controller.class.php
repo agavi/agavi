@@ -367,21 +367,11 @@ abstract class Controller extends ParameterHolder
 
 		$class = $modelName . 'Model';
 
-		for($cls = $class; $cls = get_parent_class($cls); null)
-		{
-			if(strtolower($cls) == 'singletonmodel')
-			{
-				$model = call_user_func(array($class, 'getInstance'), $class);
-				$model->initialize($this->getContext());
-				return $model;
-			}
-			elseif(strtolower($cls) == 'model')
-			{
-				break;
-			}
+		if (Toolkit::isSubClass($class, 'SingletonModel')) {
+			$model = call_user_func(array($class, 'getInstance'), $class);
+		} else {
+			$model = new $class();
 		}
-		// create model instance and initialize it
-		$model = new $class();
 		$model->initialize($this->context);
 
 		return $model;
@@ -432,9 +422,7 @@ abstract class Controller extends ParameterHolder
 	public function getModel ($moduleName, $modelName)
 	{
 
-		$file = AG_MODULE_DIR . '/' . $moduleName . '/models/' . $modelName .
-				'Model.class.php';
-
+		$file = AG_MODULE_DIR . '/' . $moduleName . '/models/' . $modelName .	'Model.class.php';
 		require_once($file);
 
 		$class = $modelName . 'Model';
@@ -442,31 +430,19 @@ abstract class Controller extends ParameterHolder
 		// fix for same name classes
 		$moduleClass = $moduleName . '_' . $class;
 
-		if (class_exists($moduleClass, false))
-		{
+		if (class_exists($moduleClass, false)) {
 			$class = $moduleClass;
 		}
 
-		for($cls = $class; $cls = get_parent_class($cls); null)
-		{
-			if(strtolower($cls) == 'singletonmodel')
-			{
-				$model = call_user_func(array($class, 'getInstance'), $class);
-				$model->initialize($this->getContext());
-				return $model;
-			}
-			elseif(strtolower($cls) == 'model')
-			{
-				break;
-			}
+		if (Toolkit::isSubClass($class, 'SingletonModel')) {
+			$model = call_user_func(array($class, 'getInstance'), $class);
+		} else {
+			$model = new $class();
 		}
-
-		// create model instance and initialize it
-		$model = new $class();
 		$model->initialize($this->context);
 
 		return $model;
-
+			
 	}
 
 	// -------------------------------------------------------------------------

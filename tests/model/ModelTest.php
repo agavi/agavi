@@ -3,19 +3,6 @@ require_once dirname(__FILE__) . '/../mockContext.php';
 
 class ModelSampleModel extends Model {}
 
-class SingletonModelSampleModel extends SingletonModel
-{
-	public $foo = null;
-	public function setFoo($value)
-	{
-		$this->foo = $value;
-	}
-	public function getFoo()
-	{
-		return $this->foo;
-	}
-}
-
 class TestModel extends UnitTestCase
 {
 	private $_model = null,
@@ -51,12 +38,5 @@ class TestModel extends UnitTestCase
 		$this->assertReference($this->_context, $mc);
 	}
 
-	public function testsingleton()
-	{
-		$firstSingleton = SingletonModelSampleModel::getInstance('SingletonModelSampleModel');
-		$firstSingleton->setFoo('bar');
-		$secondSingleton = SingletonModelSampleModel::getInstance('SingletonModelSampleModel');
-		$this->assertEqual($firstSingleton->getFoo(), $secondSingleton->getFoo());
-	}
 }
 ?>
