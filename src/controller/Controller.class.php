@@ -344,10 +344,12 @@ abstract class Controller extends ParameterHolder
 	 * @param string A model name.
 	 *
 	 * @return Model A Model implementation instance, if the model exists,
-	 *               otherwise null.
+	 *               otherwise null. If the model implements an initialize
+	 *               method, it will be called with an instance of the Context.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @author David Zuelke (dz@bitxtender.com)
+	 * @author Mike Vincent (mike@agavi.org)
 	 * @since  0.9.0
 	 */
 	public function getGlobalModel ($modelName)
@@ -372,7 +374,9 @@ abstract class Controller extends ParameterHolder
 		} else {
 			$model = new $class();
 		}
-		$model->initialize($this->context);
+		if (method_exists($model, 'initialize')) {
+			$model->initialize($this->context);
+		}
 
 		return $model;
 
@@ -413,10 +417,13 @@ abstract class Controller extends ParameterHolder
 	 * @param string A model name.
 	 *
 	 * @return Model A Model implementation instance, if the model exists,
-	 *               otherwise null.
+	 *               otherwise null. If the model implements an initialize
+	 *               method, it will be called with an instance of the Context.
+	 *
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @author David Zuelke (dz@bitxtender.com)
+	 * @author Mike Vincent (mike@agavi.org)
 	 * @since  0.9.0
 	 */
 	public function getModel ($moduleName, $modelName)
@@ -439,7 +446,10 @@ abstract class Controller extends ParameterHolder
 		} else {
 			$model = new $class();
 		}
-		$model->initialize($this->context);
+
+		if (method_exists($model, 'initialize')) {
+			$model->initialize($this->context);
+		}
 
 		return $model;
 			
