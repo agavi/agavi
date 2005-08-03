@@ -36,7 +36,7 @@ abstract class SmartyView extends View
 	private static
 		$smarty = null;
 
-	public function initialize(Context $context)
+	public function initialize($context)
 	{
 		$this->smarty = new Smarty();
 		$this->smarty->clear_all_assign();
