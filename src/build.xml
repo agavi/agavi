@@ -153,6 +153,7 @@
 	</target>
 
 	<target name="buildactiontests">
+		<property name="testprefix" value="${test.dir}/modules/${module}/"/>
 		<copy file="buildtools/code_templates/ActionTest.class.php.tmpl" tofile="${testprefix}actions/${action}ActionTest.class.php">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">    
@@ -180,6 +181,7 @@
 	</target>
 
 	<target name="buildviewtests">
+		<property name="testprefix" value="${test.dir}/modules/${module}/"/>
 		<copy file="buildtools/code_templates/ViewTest.class.php.tmpl" tofile="${testprefix}views/${action}${view}ViewTest.class.php">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">    
@@ -213,7 +215,8 @@
 	</target>
 
 	<target name="buildmodeltests">
-		<copy file="buildtools/code_templates/ModelTest.class.php.tmpl" tofile="${prefix}models/${model}ModelTest.class.php">
+		<property name="testprefix" value="${test.dir}/modules/${module}/"/>
+		<copy file="buildtools/code_templates/ModelTest.class.php.tmpl" tofile="${testprefix}models/${model}ModelTest.class.php">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">    
 					<token key="MODULE" value="${module}"/>

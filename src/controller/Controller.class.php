@@ -537,12 +537,12 @@ abstract class Controller extends ParameterHolder
 		$this->maxForwards = defined('AG_MAX_FORWARDS') ? AG_MAX_FORWARDS : 20;
 	
 		$this->loadContext();
-		$this->actionStack 			=& $this->context->getActionStack();
-		$this->request 					=& $this->context->getRequest();
-		$this->user 						=& $this->context->getUser();
-		$this->databaseManager 	=& $this->context->getDatabaseManager();
-		$this->securityFilter 	=& $this->context->getSecurityFilter();
-		$this->storage 					=& $this->context->getStorage();
+		$this->actionStack 			= $this->context->getActionStack();
+		$this->request 					= $this->context->getRequest();
+		$this->user 						= $this->context->getUser();
+		$this->databaseManager 	= $this->context->getDatabaseManager();
+		$this->securityFilter 	= $this->context->getSecurityFilter();
+		$this->storage 					= $this->context->getStorage();
 		
 		register_shutdown_function(array($this, 'shutdown'));
 	}
