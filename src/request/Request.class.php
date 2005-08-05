@@ -157,6 +157,23 @@ abstract class Request extends ParameterHolder
 	// -------------------------------------------------------------------------
 
 	/**
+	 * Retrieve an array of attributes.
+	 *
+	 * @return array An associative array of attributes.
+	 *
+	 * @author Bob Zoller (bob@agavi.org)
+	 * @since  0.9.1
+	 */
+	public function getAttributes ()
+	{
+
+		return $this->attributes;
+
+	}
+
+	// -------------------------------------------------------------------------
+
+	/**
 	 * Retrieve an array of attribute names.
 	 *
 	 * @return array An indexed array of attribute names.
