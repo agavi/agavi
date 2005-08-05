@@ -36,6 +36,13 @@ class RequestTest extends UnitTestCase
 		$this->assertNull($this->_r->getAttribute('bunk'));
 	}
 
+	public function testgetAttributes()
+	{
+		$attribs = array('name1'=>'value1','name2'=>'value2');
+		$this->_r->setAttributes($attribs);
+		$this->assertEqual($attribs, $this->_r->getAttributes());
+	}
+
 	public function testgetAttributeNames()
 	{
 		$this->_r->setAttribute('blah', 'blahval');
