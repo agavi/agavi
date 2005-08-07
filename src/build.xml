@@ -143,13 +143,14 @@
 
 	<!-- Action creation -->
 	<target name="action" description="create a new action">
-		<fixpaths base="${project.dir}"/>
+		<fixpaths base="${project.dir}" defaultmodule="true"/>
 		<!--
 		<available file="${module.dir}/config/module.ini" property="is_module" value="true"/>
 		<fail unless="is_module" message="Must be called in the root of a module directory."/>
 		-->
 		<listModules webapp="${webapp.dir}" property="current.modules"/>
-		<input propertyname="module" promptChar="?" validArgs="${current.modules}" message="Make the action for which module? "/>
+		
+		<input propertyname="module" promptChar="?" validArgs="${current.modules}" defaultValue="${default.module}" message="Make the action for which module? "/>
 		<input propertyname="action" promptChar="?" defaultValue="Index" message="Action Name"/>
 		<phingcall target="buildaction">
 			<property name="module.dir" value="${webapp.dir}/modules/${module}"/>

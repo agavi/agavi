@@ -3,7 +3,8 @@ class AgaviFixPathsTask extends Task {
 	private $base,
 					$depth=5,
 					$newproject = false,
-					$testing=false;
+					$parseModulePath = false,
+					$testing = false;
 
 	public function setBase($base) {
 		$this->base = $base;
@@ -13,12 +14,29 @@ class AgaviFixPathsTask extends Task {
 		$this->depth = (int) $depth;
 	}
 	
+	public function setDefaultmodule($boolean) {
+		$this->parseModulePath = (boolean) $boolean;
+	}
+	
 	public function setNew($boolean) {
 		$this->newproject = (boolean) $boolean;
 	}
 	
 	public function setTesting($boolean) {
 		$this->testing = (boolean) $boolean;
+	}
+	
+	private function getModule() {
+		$module = '';
+		for ($i=0; $i <= 4; $i++) {
+			$r = str_repeat('../', $i);
+			if (file_exists($this->base . '/' . $r . 'modules')) {
+				$relative = str_repeat('../', $i - 2);
+				$module =  basename(realpath($this->base . '/' . $relative));
+				// echo "found module! ($i) [" . realpath($this->base . '/' . $relative) ."] $module\n";
+			}
+		}
+		return $module;
 	}
 
 	private function getDir($pattern = '/webapp') {
@@ -40,6 +58,9 @@ class AgaviFixPathsTask extends Task {
 			$this->project->setProperty('project.dir', $pdir);
 			$this->project->setProperty('webapp.dir', realpath($pdir) . '/webapp');
 			$this->project->setProperty('tests.dir', realpath($pdir) . '/tests');
+			if ($this->parseModulePath) {
+				$this->project->setProperty('default.module', $this->getModule());
+			}
 		} else {
 			throw new BuildException('Unable to determine the location of the project directory based on: '. $this->base);
 		}
