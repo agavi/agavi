@@ -101,32 +101,27 @@ abstract class Request extends ParameterHolder
 	 *
 	 * @param array An indexed array of parameter names to extract.
 	 *
-	 * @return array An associative array of parameters and their values. If
-	 *               a specified parameter doesn't exist an empty string will
-	 *               be returned for its value.
+	 * @return array An associative array of parameters and their values. 
+	 *               If a specified parameter doesn't exist then it's value 
+	 *               will be null. Also note that the value is a reference
+	 *               to the parameter's value.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
+	 * @author Mike Vincent (mike@agavi.org)
 	 * @since  0.9.0
 	 */
 	public function & extractParameters ($names)
 	{
 
 		$array = array();
-
-		foreach ($this->parameters as $key => &$value)
-		{
-
-			if (in_array($key, $names))
-			{
-
-				$array[$key] =& $value;
-
+		foreach ((array) $names as $name) {
+			if (array_key_exists($name, $this->parameters)) {
+				$array[$name] = &$this->parameters[$name];
+			} else {
+				$array[$name] = null;
 			}
-
 		}
-
 		return $array;
-
 	}
 
 	// -------------------------------------------------------------------------
