@@ -43,8 +43,8 @@ class RequestTest extends UnitTestCase
 		$this->assertIdentical(array('One'=>'1'), $this->_r->extractParameters(array('One')));
 
 		// Test that we're working with references
-		$ref1	= &$this->_r->extractParameters(array('One'));
-		$ref2 = &$this->_r->extractParameters(array('One'));
+		$ref1	= $this->_r->extractParameters(array('One'));
+		$ref2 = $this->_r->extractParameters(array('One'));
 		$this->assertReference($ref1['One'], $ref2['One']);
 		$this->assertIdentical($ref1['One'], $ref2['One']);
 		
@@ -56,7 +56,7 @@ class RequestTest extends UnitTestCase
 		$this->assertReference($ref1['One'], $ref2['One']);
 		$this->assertIdentical($ref1['One'], $ref2['One']);
 		
-		$ref3 = &$this->_r->extractParameters(array('One'));
+		$ref3 = $this->_r->extractParameters(array('One'));
 		$this->assertIdentical($ref1['One'], $ref3['One']);
 		$this->assertReference($ref1['One'], $ref3['One']);
 		$this->assertIdentical($ref2['One'], $ref3['One']);
