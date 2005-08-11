@@ -1,7 +1,6 @@
 <?php
 require_once dirname(__FILE__) . '/../mockContext.php';
 
-
 class ModelSampleModel extends Model {}
 
 class TestModel extends UnitTestCase
@@ -38,5 +37,6 @@ class TestModel extends UnitTestCase
 		$mc = $this->_model->getContext();
 		$this->assertReference($this->_context, $mc);
 	}
+
 }
 ?>
