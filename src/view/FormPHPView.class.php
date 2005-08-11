@@ -210,7 +210,7 @@ abstract class FormPHPView extends PHPView
 	 * @author Mike Vincent (mike@agavi.org)
 	 * @since  3.0.0
 	 */
-	public function formTextArea($name, $label = '', $parms = array(), $labelparms = array())
+	public function formTextarea($name, $label = '', $parms = array(), $labelparms = array())
 	{
 		$retval = '';
 		if (isset($parms['value'])) {
@@ -261,7 +261,7 @@ abstract class FormPHPView extends PHPView
 			// Start the tag
 			$value = is_array($i) ? $i[0] : $i;
 			$options .= '<option value="' . $value . '"';
-			if ((is_array($i) && isset($i[2])) || (count($input) == 1) || ($selected && in_array($value, $selected))) {
+			if ((is_array($i) && !empty($i[2])) || (count($input) == 1) || ($selected && in_array($value, $selected))) {
 				$options .= ' selected';
 			}
 			$options .= '>';

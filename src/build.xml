@@ -1,15 +1,12 @@
 <?xml version="1.0"?>
+<!--
+	The Agavi Helper Script
+	...helping automate some of the more mundane tasks of development
+-->
 <project name="agavi" basedir="." default="main">
-	<taskdef classname="${agavi.dir}.buildtools.phing.AgaviTestTask" name="agavitest"/>
-
-  <!-- fileset for -dist files -->
-  <fileset dir="." id="distfiles">
-		<include name="**/*-dist"/>
-  </fileset>
-
-  <!-- Main target, print publicised tasks -->
-	
-	<target name="main" description="main target">
+  
+	<!-- Main target, print publicised tasks -->
+	<target name="main" description="Help Menu">
 		<echo msg="available targets: " /> 
 		<echo msg="  project    - create a project" />
 		<echo msg="  module     - create a module" />
@@ -17,98 +14,114 @@
 		<echo msg="  test       - run unit tests" />
 	</target>
 
-	<!-- Unit Testing -->
+	<!-- define the location of our tasks -->
+	<taskdef classname="${agavi.dir}.buildtools.phing.AgaviTestTask" name="agavitest"/>
+	<taskdef classname="${agavi.dir}.buildtools.phing.AgaviFixPathsTask" name="fixpaths"/>
+	<taskdef classname="${agavi.dir}.buildtools.phing.AgaviListModulesTask" name="listModules"/>
+
+	<property name="webapp.dir" value=""/>
+	<property name="tests.dir" value=""/>
 	
+  <!-- fileset for -dist files -->
+  <fileset dir="." id="distfiles">
+		<include name="**/*-dist"/>
+  </fileset>
+	
+	<!-- Unit Testing -->
 	<target name="test" description="run unit tests">
+		<fixpaths base="${project.dir}" testing="true"/>
 		<property name="agavidir" value="${agavi.dir}" />
-	  <property name="testdir" value="${project.dir}/tests"  />
+	  <property name="testdir" value="${tests.dir}"  />
 	  <property name="from" value=""  />
   	<property name="reporter" value="text"  />
   	<property name="outfile" value=""  />
-		<agavitest exit="true" testdir="${project.dir}/tests" agavidir="${agavi.dir}" startpoint="${from}" reporter="${reporter}" outfile="${outfile}"/>
+		<agavitest exit="true" testdir="${tests.dir}" agavidir="${agavi.dir}" startpoint="${from}" reporter="${reporter}" outfile="${outfile}"/>
 	</target>
 
 	<!-- Project creation -->
-	
 	<target name="project" description="create a new project">
 		<input propertyname="project.dir" promptChar="?" message="Full path to your new project (no trailing slash!)"/>
 		<mkdir dir="${project.dir}"/>
+		<fixpaths base="${project.dir}" new="true"/>
+		<echo msg="project dir: ${project.dir}, webapp dir: ${webapp.dir}, tests dir: ${tests.dir}"/>
+		<mkdir dir="${project.dir}"/>
+		<mkdir dir="${webapp.dir}"/>
 		<mkdir dir="${project.dir}/www"/>
 		<copy file="buildtools/code_templates/index.php.tmpl" tofile="${project.dir}/www/index.php">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">    
-					<token key="PATH_TO_AGAVI" value="${project.basedir}"/>
-					<token key="PATH_TO_PROJECT" value="${project.dir}/webapp"/>
+					<token key="PATH_TO_AGAVI" value="${agavi.dir}"/> <!-- was project.basedir -->
+					<token key="PATH_TO_PROJECT" value="${webapp.dir}"/>
 				</replacetokens>
 			</filterchain>
 		</copy>
 		<mkdir dir="${project.dir}/www/modpub"/>
-		<mkdir dir="${project.dir}/webapp"/>
-		<mkdir dir="${project.dir}/webapp/cache"/>
-		<copy file="buildtools/code_templates/config.php.tmpl" tofile="${project.dir}/webapp/config.php">
+		<mkdir dir="${webapp.dir}/cache"/>
+		<copy file="buildtools/code_templates/config.php.tmpl" tofile="${webapp.dir}/config.php">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">    
-					<token key="PATH_TO_AGAVI" value="${project.basedir}"/>
-					<token key="PATH_TO_PROJECT" value="${project.dir}/webapp"/>
+					<token key="PATH_TO_AGAVI" value="${agavi.dir}"/>
+					<token key="PATH_TO_PROJECT" value="${webapp.dir}"/>
 				</replacetokens>
 			</filterchain>
 		</copy>
-		<mkdir dir="${project.dir}/webapp/config"/>
-		<copy todir="${project.dir}/webapp/config">
+		<mkdir dir="${webapp.dir}/config"/>
+		<copy todir="${webapp.dir}/config">
 			<fileset dir="buildtools/code_templates/config">
 				<include name="*.ini"/>
 				<include name="*.conf"/>
 			</fileset>
 		</copy>
-		<mkdir dir="${project.dir}/webapp/lib"/>
-		<mkdir dir="${project.dir}/webapp/lib/models"/>
-		<mkdir dir="${project.dir}/webapp/modules"/>
-		<mkdir dir="${project.dir}/webapp/templates"/>
+		<mkdir dir="${webapp.dir}/lib"/>
+		<mkdir dir="${webapp.dir}/lib/models"/>
+		<mkdir dir="${webapp.dir}/modules"/>
+		<mkdir dir="${webapp.dir}/templates"/>
 
 		<phingcall target="projecttests" />
 		
 		<input propertyname="modules" promptChar="?" defaultValue="Default" message="Modules for your project (no whitespace, comma seperated)"/>
-		<foreach list="${modules}" param="module" target="buildmodule">
-			<property name="project.dir" value="${project.dir}/webapp" override="true"/>
-			<property name="test.dir" value="${project.dir}/tests" override="true"/>
-		</foreach>
+		<foreach list="${modules}" param="module" target="buildmodule"/>
 	</target>
-
-	<target name="projecttests" description="create tests structure for project">
-		<!-- tests/ directory -->
-		<mkdir dir="${project.dir}/tests" />
-		<mkdir dir="${project.dir}/tests/lib" />
-		<mkdir dir="${project.dir}/tests/lib/models" />
-		<mkdir dir="${project.dir}/tests/modules" />
-		<copy file="buildtools/test_setup.php" tofile="${project.dir}/tests/test_setup.php" overwrite="true"/>
-	</target>
-
-	<!-- Module creation -->
 	
-	<target name="module" description="create a new module">
-		<available file="${project.dir}/modules" type="dir" property="is_webapp" value="true"/>
-		<fail unless="is_webapp" message="Must be called in the root of a webapp directory."/>
+	<!-- create tests directory structure which mimics the webapp structure -->
+	<target name="projecttests" description="create tests structure for project">
+		<fixpaths base="${project.dir}"/>
+		<mkdir dir="${tests.dir}" />
+		<mkdir dir="${tests.dir}/lib" />
+		<mkdir dir="${tests.dir}/lib/models" />
+		<mkdir dir="${tests.dir}/modules" />
+		<copy file="buildtools/test_setup.php" tofile="${tests.dir}/test_setup.php" overwrite="true"/>
+	</target>
+	
+	<!-- Module creation -->
+	<!-- create a new module in an existing project -->
+	<target name="module" description="create a new module in an existing project.">
+		<fixpaths base="${project.dir}"/>
+		<available file="${webapp.dir}/modules" type="dir" property="is_webapp" value="true"/>
+		<fail unless="is_webapp" message="Must be called in the root of a webapp directory. (${webapp.dir})"/>
 		<input propertyname="module" promptChar="?" message="Module Name"/>
 		<phingcall target="buildmodule"/>
 	</target>
 
 	<target name="buildmodule">
-		<property name="prefix" value="${project.dir}/modules/${module}/"/>
-		<mkdir dir="${prefix}"/>
-		<mkdir dir="${prefix}actions"/>
-		<mkdir dir="${prefix}config"/>
-		<copy file="buildtools/code_templates/module.ini.tmpl" tofile="${prefix}config/module.ini">
+		<property name="module.dir" value="${webapp.dir}/modules/${module}"/>
+		<mkdir dir="${module.dir}"/>
+		<mkdir dir="${module.dir}/actions"/>
+		<mkdir dir="${module.dir}/config"/>
+		<copy file="buildtools/code_templates/module.ini.tmpl" tofile="${module.dir}/config/module.ini">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">    
 					<token key="MODULE" value="${module}"/>
 				</replacetokens>
 			</filterchain>
 		</copy>
-		<mkdir dir="${prefix}models"/>
-		<mkdir dir="${prefix}templates"/>
-		<mkdir dir="${prefix}views"/>
+		<mkdir dir="${module.dir}/models"/>
+		<mkdir dir="${module.dir}/templates"/>
+		<mkdir dir="${module.dir}/views"/>
 		
-		<phingcall target="buildmoduletests"/>	
+		<phingcall target="buildmoduletests">
+			<property name="module" value="${module}"/>
+		</phingcall>
 		
 		<input propertyname="actions" promptChar="?" defaultValue="Index" message="Actions for ${module} (no whitespace, comma seperated)"/>
 		<foreach list="${actions}" param="action" target="buildaction"/>
@@ -117,29 +130,36 @@
 	</target>
 
 	<target name="buildmoduletests">
-		<available file="${project.dir}/tests" type="dir" property="has_tests" value="true"/>
-		
-		<property name="testprefix" value="${test.dir}/modules/${module}/"/>
-		<mkdir dir="${testprefix}"/>
-		<mkdir dir="${testprefix}actions"/>
-		<mkdir dir="${testprefix}models"/>
-		<mkdir dir="${testprefix}views"/>
+		<fixpaths base="${project.dir}"/>
+		<property name="moduletests.dir" value="${tests.dir}/modules/${module}"/>
+		<mkdir dir="${moduletests.dir}"/>
+		<available file="${moduletests.dir}" type="dir" property="has_tests" value="true"/>
+		<fail unless="has_tests" message="Project's tests directory not found."/>
+
+		<mkdir dir="${moduletests.dir}/actions"/>
+		<mkdir dir="${moduletests.dir}/models"/>
+		<mkdir dir="${moduletests.dir}/views"/>
 	</target>
 
+	<!-- Action creation -->
 	<target name="action" description="create a new action">
-		<available file="${project.dir}/config/module.ini" property="is_module" value="true"/>
+		<fixpaths base="${project.dir}" defaultmodule="true"/>
+		<!--
+		<available file="${module.dir}/config/module.ini" property="is_module" value="true"/>
 		<fail unless="is_module" message="Must be called in the root of a module directory."/>
-		<property name="module" value="${cwd_name}"/>
+		-->
+		<listModules webapp="${webapp.dir}" property="current.modules"/>
+		
+		<input propertyname="module" promptChar="?" validArgs="${current.modules}" defaultValue="${default.module}" message="Make the action for which module? "/>
 		<input propertyname="action" promptChar="?" defaultValue="Index" message="Action Name"/>
-		<property name="prefix" value="${project.dir}/"/>
-		<property name="testprefix" value="${test.dir}/"/>
-		<phingcall target="buildaction"/>
+		<phingcall target="buildaction">
+			<property name="module.dir" value="${webapp.dir}/modules/${module}"/>
+			<property name="moduletests.dir" value="${tests.dir}/modules/${module}"/>
+		</phingcall>
 	</target>
 	
-	<!-- Action creation -->
-
 	<target name="buildaction">
-		<copy file="buildtools/code_templates/Action.class.php.tmpl" tofile="${prefix}actions/${action}Action.class.php">
+		<copy file="buildtools/code_templates/Action.class.php.tmpl" tofile="${module.dir}/actions/${action}Action.class.php">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">    
 					<token key="MODULE" value="${module}"/>
@@ -147,13 +167,19 @@
 				</replacetokens>
 			</filterchain>
 		</copy>
-		<phingcall target="buildactiontests"/>
-		<input propertyname="views" promptChar="?" defaultValue="Success" message="Views for ${action} (no whitespace, comma seperated)"/>
+		<phingcall target="buildactiontests">
+			<property name="moduletests.dir" value="${tests.dir}/modules/${module}"/>
+		</phingcall>
+		<input propertyname="views" promptChar="?" defaultValue="Success,Error" message="Views for ${action} (no whitespace, comma seperated)"/>
 		<foreach list="${views}" param="view" target="buildview"/>
 	</target>
 
 	<target name="buildactiontests">
-		<copy file="buildtools/code_templates/ActionTest.class.php.tmpl" tofile="${testprefix}actions/${action}ActionTest.class.php">
+		<available file="${moduletests.dir}" type="dir" property="has_actiontests" value="true"/>
+		<fail unless="has_actiontests" message="Could not find action tests directory: ${moduletests.dir}"/>
+		<mkdir dir="${moduletests.dir}/actions"/>
+	
+		<copy file="buildtools/code_templates/ActionTest.class.php.tmpl" tofile="${moduletests.dir}/actions/${action}ActionTest.class.php" overwrite="false">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">    
 					<token key="MODULE" value="${module}"/>
@@ -164,9 +190,8 @@
 	</target>
 
 	<!-- View creation -->
-	
 	<target name="buildview">
-		<copy file="buildtools/code_templates/View.class.php.tmpl" tofile="${prefix}views/${action}${view}View.class.php">
+		<copy file="buildtools/code_templates/View.class.php.tmpl" tofile="${module.dir}/views/${action}${view}View.class.php">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">    
 					<token key="MODULE" value="${module}"/>
@@ -175,12 +200,18 @@
 				</replacetokens>
 			</filterchain>
 		</copy>
-		<phingcall target="buildviewtests"/>
-		<touch file="${prefix}templates/${action}${view}.php"/>
+		<touch file="${module.dir}/templates/${action}${view}.php"/>
+		<phingcall target="buildviewtests">
+			<property name="moduletests.dir" value="${tests.dir}/modules/${module}"/>
+		</phingcall>
 	</target>
 
 	<target name="buildviewtests">
-		<copy file="buildtools/code_templates/ViewTest.class.php.tmpl" tofile="${testprefix}views/${action}${view}ViewTest.class.php">
+		<mkdir dir="${moduletests.dir}/views"/>
+		<available file="${moduletests.dir}/views" type="dir" property="has_viewtests" value="true"/>
+		<fail unless="has_viewtests" message="Could not find view tests directory."/>
+		
+		<copy file="buildtools/code_templates/ViewTest.class.php.tmpl" tofile="${moduletests.dir}/views/${action}${view}ViewTest.class.php" overwrite="false">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">    
 					<token key="MODULE" value="${module}"/>
@@ -192,16 +223,13 @@
 	</target>
 
 	<!-- Model creation -->
-	
 	<target name="model" description="create a new model">
 		<input propertyname="model" promptChar="?" defaultValue="${module}" message="Model Name"/>
-		<property name="prefix" value="${project.dir}/"/>
-		<property name="testprefix" value="${test.dir}/"/>
 		<phingcall target="buildmodel"/>
 	</target>
 
 	<target name="buildmodel">
-		<copy file="buildtools/code_templates/Model.class.php.tmpl" tofile="${prefix}models/${model}Model.class.php">
+		<copy file="buildtools/code_templates/Model.class.php.tmpl" tofile="${module.dir}/models/${model}Model.class.php">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">    
 					<token key="MODULE" value="${module}"/>
@@ -209,11 +237,17 @@
 				</replacetokens>
 			</filterchain>
 		</copy>
-		<phingcall target="buildmodeltests" />
+		<phingcall target="buildmodeltests">
+			<property name="moduletests.dir" value="${tests.dir}/modules/${module}"/>
+		</phingcall>
 	</target>
 
 	<target name="buildmodeltests">
-		<copy file="buildtools/code_templates/ModelTest.class.php.tmpl" tofile="${prefix}models/${model}ModelTest.class.php">
+		<mkdir dir="${moduletests.dir}/models"/>
+		<available file="${moduletests.dir}/models" type="dir" property="has_modeltests" value="true"/>
+		<fail unless="has_modeltests" message="Could not find model tests directory. (${moduletests.dir}/models)"/>
+		
+		<copy file="buildtools/code_templates/ModelTest.class.php.tmpl" tofile="${moduletests.dir}/models/${model}ModelTest.class.php" overwrite="false">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">    
 					<token key="MODULE" value="${module}"/>

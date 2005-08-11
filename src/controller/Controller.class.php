@@ -39,7 +39,8 @@ abstract class Controller extends ParameterHolder
 		$request         = null,
 		$securityFilter  = null,
 		$storage         = null,
-		$user            = null;
+		$user            = null,
+		$executionFilterClassName = null;
 
 	protected
 		$context         = null;
@@ -213,7 +214,7 @@ abstract class Controller extends ParameterHolder
 				}
 
 				// register the execution filter
-				$execFilter = new ExecutionFilter();
+				$execFilter = new $this->executionFilterClassName();
 
 				$execFilter->initialize($this->context);
 				$filterChain->register($execFilter);
@@ -343,9 +344,12 @@ abstract class Controller extends ParameterHolder
 	 * @param string A model name.
 	 *
 	 * @return Model A Model implementation instance, if the model exists,
-	 *               otherwise null.
+	 *               otherwise null. If the model implements an initialize
+	 *               method, it will be called with an instance of the Context.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
+	 * @author David Zuelke (dz@bitxtender.com)
+	 * @author Mike Vincent (mike@agavi.org)
 	 * @since  0.9.0
 	 */
 	public function getGlobalModel ($modelName)
@@ -365,9 +369,14 @@ abstract class Controller extends ParameterHolder
 
 		$class = $modelName . 'Model';
 
-		// create model instance and initialize it
-		$model = new $class();
-		$model->initialize($this->context);
+		if (Toolkit::isSubClass($class, 'SingletonModel')) {
+			$model = call_user_func(array($class, 'getInstance'), $class);
+		} else {
+			$model = new $class();
+		}
+		if (method_exists($model, 'initialize')) {
+			$model->initialize($this->context);
+		}
 
 		return $model;
 
@@ -408,17 +417,19 @@ abstract class Controller extends ParameterHolder
 	 * @param string A model name.
 	 *
 	 * @return Model A Model implementation instance, if the model exists,
-	 *               otherwise null.
+	 *               otherwise null. If the model implements an initialize
+	 *               method, it will be called with an instance of the Context.
+	 *
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
+	 * @author David Zuelke (dz@bitxtender.com)
+	 * @author Mike Vincent (mike@agavi.org)
 	 * @since  0.9.0
 	 */
 	public function getModel ($moduleName, $modelName)
 	{
 
-		$file = AG_MODULE_DIR . '/' . $moduleName . '/models/' . $modelName .
-				'Model.class.php';
-
+		$file = AG_MODULE_DIR . '/' . $moduleName . '/models/' . $modelName .	'Model.class.php';
 		require_once($file);
 
 		$class = $modelName . 'Model';
@@ -426,19 +437,22 @@ abstract class Controller extends ParameterHolder
 		// fix for same name classes
 		$moduleClass = $moduleName . '_' . $class;
 
-		if (class_exists($moduleClass, false))
-		{
-
+		if (class_exists($moduleClass, false)) {
 			$class = $moduleClass;
-
 		}
 
-		// create model instance and initialize it
-		$model = new $class();
-		$model->initialize($this->context);
+		if (Toolkit::isSubClass($class, 'SingletonModel')) {
+			$model = call_user_func(array($class, 'getInstance'), $class);
+		} else {
+			$model = new $class();
+		}
+
+		if (method_exists($model, 'initialize')) {
+			$model->initialize($this->context);
+		}
 
 		return $model;
-
+			
 	}
 
 	// -------------------------------------------------------------------------
@@ -523,12 +537,12 @@ abstract class Controller extends ParameterHolder
 		$this->maxForwards = defined('AG_MAX_FORWARDS') ? AG_MAX_FORWARDS : 20;
 	
 		$this->loadContext();
-		$this->actionStack 			=& $this->context->getActionStack();
-		$this->request 					=& $this->context->getRequest();
-		$this->user 						=& $this->context->getUser();
-		$this->databaseManager 	=& $this->context->getDatabaseManager();
-		$this->securityFilter 	=& $this->context->getSecurityFilter();
-		$this->storage 					=& $this->context->getStorage();
+		$this->actionStack 			= $this->context->getActionStack();
+		$this->request 					= $this->context->getRequest();
+		$this->user 						= $this->context->getUser();
+		$this->databaseManager 	= $this->context->getDatabaseManager();
+		$this->securityFilter 	= $this->context->getSecurityFilter();
+		$this->storage 					= $this->context->getStorage();
 		
 		register_shutdown_function(array($this, 'shutdown'));
 	}
@@ -537,6 +551,24 @@ abstract class Controller extends ParameterHolder
 	{
 		$this->context = Context::getInstance($this);
 	}
+
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Set the name of the ExecutionFilter class that is used in forward()
+	 *
+	 * @param string The class name of the ExecutionFilter to use
+	 *
+	 * @return void
+	 *
+	 * @author David Zuelke (dz@bitxtender.com)
+	 * @since  0.10.0
+	 */
+	public function setExecutionFilterClassName($className)
+	{
+		$this->executionFilterClassName = $className;
+	}
+
 	// -------------------------------------------------------------------------
 
 	/**

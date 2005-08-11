@@ -98,6 +98,49 @@ class Toolkit extends AgaviObject
 
 	}
 
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Get the heritage of a class
+	 *
+	 * @param string $class A class to examine
+	 *
+	 * @return array of classnames in the classes ancestry
+	 *
+	 * @author Mike Vincent (mike@agavi.org)
+	 * @since  0.10.0
+	 */
+	public static function classHeritage($class)
+	{
+		$heritage = array();
+		while ($class != '') {
+			$class = get_parent_class($class);
+			if ($class) {
+				array_unshift($heritage, $class);
+			} 
+		} 
+		return $heritage;
+	}
+	
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Determine if a class is a subclass of another class
+	 *
+	 * @param string $class A potential child class
+	 * @param string $parent A potential parent class
+	 *
+	 * @return bool true, if the path is absolute, otherwise false.
+	 *
+	 * @author Mike Vincent (mike@agavi.org)
+	 * @since  0.10.0
+	 */
+	public static function isSubClass($class, $parent)
+	{
+		return in_array($parent, self::classHeritage($class));
+		
+	}
+
 }
 
 ?>

@@ -25,8 +25,44 @@ class RequestTest extends UnitTestCase
 
 	public function testextractParameters()
 	{
-		$this->_r->setParameter('blah', 'blahval');
-		$this->assertEqual(array('blah'=>'blahval'), $this->_r->extractParameters(array('blah')));
+		$p = array(
+			'One' => '1',
+			'Two' => 'Too',
+			'Three' => '3eee',
+			'Four' => 'foh');
+		$this->_r->setParameters($p);
+		$this->assertIdentical(array('One'=>'1'), $this->_r->extractParameters(array('One')));
+		$this->assertIdentical(array('Two'=>'Too'), $this->_r->extractParameters(array('Two')));
+		$this->assertIdentical(array('Four'=>'foh', 'Five' => null), $this->_r->extractParameters(array('Four','Five')));
+		
+		// what happens if we forget to contain the args within an array? ;) 
+		// - Since it's casted to an array it snags only the first arg
+		$this->assertIdentical(array('heh'=>null), $this->_r->extractParameters('heh'));
+		$this->assertIdentical(array('heh'=>null), $this->_r->extractParameters('heh', 'hah'));
+		$this->assertIdentical(array(), $this->_r->extractParameters(array()));
+		$this->assertIdentical(array('One'=>'1'), $this->_r->extractParameters(array('One')));
+
+		// Test that we're working with references
+		$ref1	= $this->_r->extractParameters(array('One'));
+		$ref2 = $this->_r->extractParameters(array('One'));
+		$this->assertReference($ref1['One'], $ref2['One']);
+		$this->assertIdentical($ref1['One'], $ref2['One']);
+		
+		$ref1['One'] = 'Wun';
+		$this->assertReference($ref1['One'], $ref2['One']);
+		$this->assertIdentical($ref1['One'], $ref2['One']);
+		
+		$this->_r->setParameter('One', 'AndOnly');
+		$this->assertReference($ref1['One'], $ref2['One']);
+		$this->assertIdentical($ref1['One'], $ref2['One']);
+		
+		$ref3 = $this->_r->extractParameters(array('One'));
+		$this->assertIdentical($ref1['One'], $ref3['One']);
+		$this->assertReference($ref1['One'], $ref3['One']);
+		$this->assertIdentical($ref2['One'], $ref3['One']);
+		$this->assertIdentical('AndOnly', $ref3['One']);
+		$this->assertIdentical('AndOnly', $ref1['One']);
+		
 	}
 
 	public function testgetAttribute()
@@ -34,6 +70,13 @@ class RequestTest extends UnitTestCase
 		$this->_r->setAttribute('blah', 'blahval');
 		$this->assertEqual('blahval', $this->_r->getAttribute('blah'));
 		$this->assertNull($this->_r->getAttribute('bunk'));
+	}
+
+	public function testgetAttributes()
+	{
+		$attribs = array('name1'=>'value1','name2'=>'value2');
+		$this->_r->setAttributes($attribs);
+		$this->assertEqual($attribs, $this->_r->getAttributes());
 	}
 
 	public function testgetAttributeNames()
