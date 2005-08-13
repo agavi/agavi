@@ -143,7 +143,7 @@ abstract class SmartyView extends View
 		return $retval;
 	}
 
-	protected function & decorate(&$content)
+	public function & decorate(&$content)
 	{
 		// call our parent decorate() method
 		parent::decorate($content);
