@@ -1,5 +1,5 @@
 <?php
-require_once dirname(__FILE__) . '/../mockContext.php';
+require_once dirname(__FILE__) . '/../test_environment.php';
 require_once 'validator/ValidatorManager.class.php';
 
 class TestValidatorManager extends UnitTestCase 
@@ -10,9 +10,8 @@ class TestValidatorManager extends UnitTestCase
 	
 	public function setUp()
 	{
-		$this->_controller = new MockController($this);
-		$this->_controller->dispatch();
-		$this->_context = $this->_controller->getContext();
+		$this->_context = Context::getInstance();
+		$this->_controller = $this->_context->getController();
 		
 		$this->_vm = new ValidatorManager();
 		$this->_vm->initialize($this->_context);		
@@ -23,7 +22,6 @@ class TestValidatorManager extends UnitTestCase
 		$this->_controller = null;
 		$this->_vm = null;
 		$this->_vmProphlyaxis = null;
-		$this->_context->cleanSlate();
 		$this->_context = null;
 	}
 

@@ -78,7 +78,7 @@ abstract class Storage extends ParameterHolder
 		if ($parameters != null)
 		{
 
-			$this->parameters = array_merge($this->parameters, $parameters);
+			$this->parameters = array_merge($this->parameters, (array) $parameters);
 
 		}
 

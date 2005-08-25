@@ -43,7 +43,8 @@ class Context extends AgaviObject
 		$storage         = null,
 		$user            = null;
 	protected static
-		$instance				= null;
+		$instances			= null,
+		$profiles				= array();
 
 	// +-----------------------------------------------------------------------+
 	// | METHODS                                                               |
@@ -189,7 +190,8 @@ class Context extends AgaviObject
 	 * @author Mike Vincent (mike@agavi.org)
 	 * @since  0.9.0
 	 */
-	public static function getInstance(&$controller)
+	/* Old implementation
+	public static function getInstance($controller)
 	{
 		if (!isset(self::$instance)) {
 			$class = __CLASS__;
@@ -206,6 +208,81 @@ class Context extends AgaviObject
 		}
 		return self::$instance;
 	}
+	*/
+	
+	public static function getInstance($profile = 'default')
+	{
+		$profile = strtolower($profile);
+		if (!isset(self::$instances[$profile])) {
+			$class = __CLASS__;
+			self::$instances[$profile] = new $class;
+			self::$instances[$profile]->initialize($profile);
+		}
+		return self::$instances[$profile];
+	}
+
+	public function initialize($profile, $overides = array())
+	{
+		static $profiles;
+		if (!$profiles) {
+			$profiles = array_change_key_case(include(ConfigCache::checkConfig('config/contexts.ini')),CASE_LOWER);
+		}
+		$profile = strtolower($profile);
+		
+		if (isset($profiles[$profile])) {
+			$params = array_merge($profiles[$profile], array_change_key_case((array) $this->overides, CASE_LOWER));
+		} else {
+			throw new ConfigurationException("Invalid or undefined Context name ($profile).");
+		}
+		
+		$required = array('action_stack', 'request', 'storage', 'controller', 'execution_filter');
+		if (AG_USE_SECURITY) {
+			$required[] = 'user';
+			$required[] = 'security_filter';
+		}
+		if (AG_USE_DATABASE) {
+			$required[] = 'database_manager';
+		}
+
+		if ($missing = array_diff($required, array_keys($params))) {
+			throw new ConfigurationException("Missing required definition(s) (".implode(', ',$missing).") in [$profile] section of contexts.ini");
+		}
+	
+		
+		foreach ($required as $req) {	
+			switch ($req) {
+				case 'action_stack':
+					$this->actionStack = new $params['action_stack']();
+					break;
+				case 'database_manager':
+					$this->databaseManager = new $params['database_manager']();
+					$this->databaseManager->initialize();
+					break;
+				case 'request':
+					$this->request = Request::newInstance($params['request']);
+					break;
+				case 'storage':
+					$this->storage = Storage::newInstance($params['storage']);
+					$this->storage->initialize($this, $parameters);
+					break;
+				case 'user':
+					$this->user = User::newInstance($params['user']);
+					$this->user->initialize($this, $parameters);
+					break;
+				case 'security_filter':
+					$this->securityFilter = SecurityFilter::newInstance($params['security_filter']);
+					$this->securityFilter->initialize($this, $parameters);
+					break;
+			}
+		}
+		$this->controller = Controller::newInstance($params['controller']);
+		$this->controller->initialize($this);
+		$this->controller->setExecutionFilterClassName($params['execution_filter']); 
+		$this->request->initialize($this);
+	}
+	
+	// We could even add a method to switch contexts on the fly..
+	
 
 	// -------------------------------------------------------------------------
 

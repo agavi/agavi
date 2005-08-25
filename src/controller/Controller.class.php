@@ -32,21 +32,13 @@ abstract class Controller extends ParameterHolder
 	// +-----------------------------------------------------------------------+
 
 	private
-		$actionStack     = null,
-		$databaseManager = null,
 		$maxForwards     = 20,
 		$renderMode      = View::RENDER_CLIENT,
-		$request         = null,
-		$securityFilter  = null,
-		$storage         = null,
-		$user            = null,
 		$executionFilterClassName = null;
 
 	protected
 		$context         = null;
 
-	private static
-		$instance = null;
 
 	// +-----------------------------------------------------------------------+
 	// | METHODS                                                               |
@@ -109,7 +101,7 @@ abstract class Controller extends ParameterHolder
 		$actionName = preg_replace('/[^a-z0-9\-_\/]+/i', '', $actionName);
 		$moduleName = preg_replace('/[^a-z0-9\-_]+/i', '', $moduleName);
 
-		if ($this->actionStack->getSize() >= $this->maxForwards) {
+		if ($this->getActionStack()->getSize() >= $this->maxForwards) {
 			throw new ForwardException('Too many forwards have been detected for this request');
 		}
 
@@ -140,8 +132,8 @@ abstract class Controller extends ParameterHolder
 
 			// track the requested module so we have access to the data
 			// in the error 404 page
-			$this->request->setAttribute('requested_action', $actionName);
-			$this->request->setAttribute('requested_module', $moduleName);
+			$this->context->getRequest()->setAttribute('requested_action', $actionName);
+			$this->context->getRequest()->setAttribute('requested_module', $moduleName);
 
 			// switch to error 404 action
 			$moduleName = AG_ERROR_404_MODULE;
@@ -167,7 +159,7 @@ abstract class Controller extends ParameterHolder
 		$actionInstance = $this->getAction($moduleName, $actionName);
 		
 		// add a new action stack entry
-		$this->actionStack->addEntry($moduleName, $actionName, $actionInstance);
+		$this->getActionStack()->addEntry($moduleName, $actionName, $actionInstance);
 
 		// include the module configuration
 		ConfigCache::import(AG_MODULE_DIR . '/' . $moduleName . '/config/module.ini');
@@ -193,7 +185,7 @@ abstract class Controller extends ParameterHolder
 					// does this action require security?
 					if (AG_USE_SECURITY && $actionInstance->isSecure()) {
 
-						if (!($this->user instanceof SecurityUser)) {
+						if (!($this->context->getUser() instanceof SecurityUser)) {
 							$error = 'Security is enabled, but your User ' .
 							         'implementation isn\'t a sub-class of ' .
 							         'SecurityUser';
@@ -203,7 +195,7 @@ abstract class Controller extends ParameterHolder
 						}
 
 						// register security filter
-						$filterChain->register($this->securityFilter);
+						$filterChain->register($this->context->getSecurityFilter());
 
 					}
 					
@@ -315,7 +307,7 @@ abstract class Controller extends ParameterHolder
 	public function getActionStack ()
 	{
 
-		return $this->actionStack;
+		return $this->context->getActionStack();
 
 	}
 
@@ -400,10 +392,13 @@ abstract class Controller extends ParameterHolder
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  0.9.0
+	 * @deprecated
 	 */
 	public static function getInstance ()
 	{
-
+		$error = 'Controller::getInstance deprecated, use newInstance method instead.';
+		throw new ControllerException($error);
+/*
 		if (isset(self::$instance)) {
 			return self::$instance;
 		}
@@ -411,7 +406,7 @@ abstract class Controller extends ParameterHolder
 		// an instance of the controller has not been created
 		$error = 'A Controller implementation instance has not been created';
 		throw new ControllerException($error);
-
+*/
 	}
 
 	// -------------------------------------------------------------------------
@@ -532,30 +527,19 @@ abstract class Controller extends ParameterHolder
 	/**
 	 * Initialize this controller.
 	 *
+	 * @param Context object
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @author Mike Vincent (mike@agavi.org)
 	 * @since  0.9.0
 	 */
-	protected function initialize ()
+	public function initialize (Context $context)
 	{
 		$this->maxForwards = defined('AG_MAX_FORWARDS') ? AG_MAX_FORWARDS : 20;
-	
-		$this->loadContext();
-		$this->actionStack 			= $this->context->getActionStack();
-		$this->request 					= $this->context->getRequest();
-		$this->user 						= $this->context->getUser();
-		$this->databaseManager 	= $this->context->getDatabaseManager();
-		$this->securityFilter 	= $this->context->getSecurityFilter();
-		$this->storage 					= $this->context->getStorage();
+		$this->context = $context;
 		
 		register_shutdown_function(array($this, 'shutdown'));
-	}
-
-	protected function loadContext()
-	{
-		$this->context = Context::getInstance($this);
 	}
 
 	// -------------------------------------------------------------------------
@@ -707,60 +691,17 @@ abstract class Controller extends ParameterHolder
 	 * @throws <b>FactoryException</b> If a new controller implementation
 	 *                                 instance cannot be created.
 	 *
+	 * @author Mike Vincent (mike@agavi.org)
 	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  0.9.0
 	 */
 	public static function newInstance ($class)
 	{
-
-		try
-		{
-
-			if (!isset(self::$instance))
-			{
-
-				// the class exists
-				$object = new $class();
-
-				if (!($object instanceof Controller))
-				{
-
-				    // the class name is of the wrong type
-				    $error = 'Class "%s" is not of the type Controller';
-				    $error = sprintf($error, $class);
-
-				    throw new FactoryException($error);
-
-				}
-
-				// set our singleton instance
-				self::$instance = $object;
-
-				return $object;
-
-			} else {
-
-				$type = get_class(self::$instance);
-				// an instance has already been created
-				$error = 'A Controller implementation instance has already been created';
-				throw new FactoryException($error);
-
-			}
-
-		} catch (AgaviException $e) {
-
-			$e->printStackTrace();
-
-		} catch (Exception $e)
-		{
-
-			// most likely an exception from a third-party library
-			$e = new AgaviException($e->getMessage());
-
-			$e->printStackTrace();
-
-		}
-
+		if (class_exists($class) && Toolkit::isSubClass($class, 'Controller')) {
+			return new $class();
+		} 
+		$error = "Class ($class) doesnt exist or is not a Controller.";
+		throw new FactoryException($error);
 	}
 
 	// -------------------------------------------------------------------------
@@ -810,16 +751,15 @@ abstract class Controller extends ParameterHolder
 	 */
 	public function shutdown ()
 	{
-
-		$this->user->shutdown();
-
+		if ($user = $this->context->getUser()) {
+			$user->shutdown();
+		}
 		session_write_close();
-
-		$this->storage->shutdown();
-		$this->request->shutdown();
+		$this->context->getStorage()->shutdown();
+		$this->context->getRequest()->shutdown();
 
 		if (AG_USE_DATABASE) {
-			$this->databaseManager->shutdown();
+			$this->context->getDatabaseManager()->shutdown();
 		}
 
 	}

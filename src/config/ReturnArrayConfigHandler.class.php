@@ -68,15 +68,11 @@
 				$parts = explode('.', $key);
 				$ref =& $output;
 				$count = count($parts);
-				for($i = 0; $i < $count; $i++)
-				{
+				for ($i = 0; $i < $count; $i++)	{
 					$partKey = $parts[$i];
-					if(($i + 1) == $count)
-					{
+					if(($i + 1) == $count) {
 						$ref[$partKey] = $value;
-					}
-					else
-					{
+					}	else {
 						$ref =& $ref[$partKey];
 					}
 				}
