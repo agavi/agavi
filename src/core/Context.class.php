@@ -230,7 +230,7 @@ class Context extends AgaviObject
 		$profile = strtolower($profile);
 		
 		if (isset($profiles[$profile])) {
-			$params = array_merge($profiles[$profile], array_change_key_case((array) $this->overides, CASE_LOWER));
+			$params = array_merge($profiles[$profile], array_change_key_case((array) $overides, CASE_LOWER));
 		} else {
 			throw new ConfigurationException("Invalid or undefined Context name ($profile).");
 		}
@@ -250,35 +250,47 @@ class Context extends AgaviObject
 	
 		
 		foreach ($required as $req) {	
+			$args = $class = null;
 			switch ($req) {
 				case 'action_stack':
-					$this->actionStack = new $params['action_stack']();
+					$this->actionStack = new $params[$req](); 
 					break;
 				case 'database_manager':
-					$this->databaseManager = new $params['database_manager']();
-					$this->databaseManager->initialize();
+					$class = $params[$req];
+					$args = isset($params[$req .'.param']) ? $params[$req . '.param'] : null;
+					$this->databaseManager = new $class();
+					$this->databaseManager->initialize($args);
 					break;
 				case 'request':
-					$this->request = Request::newInstance($params['request']);
+					$class = $params[$req];
+					$this->request = Request::newInstance($class);
 					break;
 				case 'storage':
-					$this->storage = Storage::newInstance($params['storage']);
-					$this->storage->initialize($this, $parameters);
+					$class = $params[$req];
+					$args = isset($params[$req .'.param']) ? $params[$req . '.param'] : null;
+					$this->storage = Storage::newInstance($class);
+					$this->storage->initialize($this, $args);
 					break;
 				case 'user':
-					$this->user = User::newInstance($params['user']);
-					$this->user->initialize($this, $parameters);
+					$class = $params[$req];
+					$args = isset($params[$req .'.param']) ? $params[$req . '.param'] : null;
+					$this->user = User::newInstance($class);
+					$this->user->initialize($this, $args);
 					break;
 				case 'security_filter':
-					$this->securityFilter = SecurityFilter::newInstance($params['security_filter']);
-					$this->securityFilter->initialize($this, $parameters);
+					$class = $params[$req];
+					$args = isset($params[$req .'.param']) ? $params[$req . '.param'] : null;
+					$this->securityFilter = SecurityFilter::newInstance($class);
+					$this->securityFilter->initialize($this, $args);
 					break;
 			}
 		}
 		$this->controller = Controller::newInstance($params['controller']);
-		$this->controller->initialize($this);
+		$args = isset($params['controller.param']) ? $params['controller.param'] : null;
+		$this->controller->initialize($this, $args);
 		$this->controller->setExecutionFilterClassName($params['execution_filter']); 
-		$this->request->initialize($this);
+		$args = isset($params['controller.param']) ? $params['request.param'] : null;
+		$this->request->initialize($this, $args);
 	}
 	
 	// We could even add a method to switch contexts on the fly..

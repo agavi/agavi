@@ -1,6 +1,21 @@
 <?php
 require_once dirname(__FILE__) . '/../test_environment.php';
-//require_once dirname(__FILE__) . '/../mockContext.php';
+class MockSessionStorage extends Storage
+{
+	public function & read($key)
+	{
+	}
+	public function & remove($key)
+	{
+	}
+	public function shutdown()
+	{
+	}
+	public function write($key, &$data)
+	{
+	}
+}
+
 
 class ContextTest extends UnitTestCase 
 {
@@ -30,6 +45,14 @@ class ContextTest extends UnitTestCase
 		$b = Context::getInstance();
 		$this->assertCopy($a, $b);
 		
+	}
+
+	public function testCanReinitializeContextWithOverides()
+	{
+		$context = Context::getInstance();
+		Mock::generate('SessionStorage');
+		$context->initialize('default', array('storage' => 'MockSessionStorage'));
+		$this->assertIsA($context->getStorage(), 'MockSessionStorage');
 	}
 
 
