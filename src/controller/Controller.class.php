@@ -347,6 +347,8 @@ abstract class Controller extends ParameterHolder
 	 *               otherwise null. If the model implements an initialize
 	 *               method, it will be called with an instance of the Context.
 	 *
+	 * @throws AutloadException if class is ultimately not found.
+	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @author David Zuelke (dz@bitxtender.com)
 	 * @author Mike Vincent (mike@agavi.org)
@@ -355,31 +357,35 @@ abstract class Controller extends ParameterHolder
 	public function getGlobalModel ($modelName)
 	{
 
-		$file = AG_LIB_DIR . '/models/' . $modelName . 'Model.class.php';
-
-			if(file_exists($file)) {
+		$class = $modelName . 'Model';
+		
+		if (!class_exists($class, false)) {
+			$file = AG_LIB_DIR . '/models/' . $modelName . 'Model.class.php';
+			if (file_exists($file)) {
 				require_once($file);
 			} else {
 				$pattern = AG_LIB_DIR . '/' . '*' . '/models/' . $modelName . 'Model.class.php';
-				$files = glob($pattern);
-
-				// only include the first file found
-				require_once($files[0]);
+				if ($files = glob($pattern)) {
+					// only include the first file found
+					require_once($files[0]);
+				}
 			}
-
-		$class = $modelName . 'Model';
-
-		if (Toolkit::isSubClass($class, 'SingletonModel')) {
-			$model = call_user_func(array($class, 'getInstance'), $class);
-		} else {
-			$model = new $class();
-		}
-		if (method_exists($model, 'initialize')) {
-			$model->initialize($this->context);
 		}
 
-		return $model;
-
+		// if the above code didnt find the class, allow autoload to fire as a last ditch attempt to find it
+		if (class_exists($class)) {
+			if (Toolkit::isSubClass($class, 'SingletonModel')) {
+				$model = call_user_func(array($class, 'getInstance'), $class);
+			} else {
+				$model = new $class();
+			}
+			if (method_exists($model, 'initialize')) {
+				$model->initialize($this->context);
+			}
+			return $model;
+		} 
+		// we'll never actually get here, but what the hay. 
+		return null;
 	}
 
 	// -------------------------------------------------------------------------

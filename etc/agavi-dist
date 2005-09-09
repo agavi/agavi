@@ -1,12 +1,21 @@
 #!/bin/sh
-
 # ------------------------------------------------------------------------
 # The agavi build script for Unix based systems
+# 
+# If using svn..
+# Copy into your path somewhere, (cp agavi-dist ~/bin)
+# change it's name to 'agavi', (mv ~/bin/agavi-dist ~/bin/agavi)
+# fix the AGAVI_INSTALLATION variable as noted below, (sed -i 's#@PEAR-DIR@/agavi#/var/www/agavi/src#' ~/bin/agavi)
+# then type 'agavi', (agavi)
+# happyness ensues.
 # ------------------------------------------------------------------------
+
+# If using svn, AGAVI_INSTALLATION should point to the full path of your src dir. 
+# eg: if agavi is checked out to /var/www/agavi, this should be set to /var/www/agavi/src
+export AGAVI_INSTALLATION="@PEAR-DIR@/agavi" 
 
 # Change this to reflect your environment if the default value doesn't work
 export PHING_COMMAND="phing"
-export AGAVI_INSTALLATION="@PEAR-DIR@/agavi"
 export PWD_PATH=$(pwd)
 export CWD_NAME=$(basename $PWD_PATH)
 
