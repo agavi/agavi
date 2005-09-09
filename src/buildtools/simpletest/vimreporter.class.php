@@ -31,12 +31,29 @@ class VIMReporter extends TextReporter
 					', Exceptions: ' . $this->getExceptionCount() ."\n";
 	}
 
+/* when we do a -Dfrom=model, we dont get the group line...
+ * 1) True assertion got False at line [51]
+ *         in testGenerate
+ *         in PropelFormTest
+ *         in /var/www/sites/agavi-trunk/tests/model/PropelFormTest.php
+ */
+
+/* 1) True assertion got False at line [51]
+ *        in testGenerate
+ *        in PropelFormTest
+ *        in /var/www/sites/agavi-trunk/tests/model/PropelFormTest.php
+ *        in Tests Test Suite
+ */
 	public function paintFail($message)
 	{
 		$this->_fails++;
 		$breadcrumb = $this->getTestList();
 		array_shift($breadcrumb);
-		list($group, $file, $class, $method) = $breadcrumb;
+		if (count($breadcrumb) > 3) {
+			list($group, $file, $class, $method) = $breadcrumb;
+		} else {
+			list($file, $class, $method) = $breadcrumb;
+		}
 		preg_match('/^(.*)at\ line\ \[(\d+)\]$/', $message, $matches);	
 		echo  'Failure #'. $this->getFailCount() .') '.
 					"Line: #{$matches[2]} File: $file " .
