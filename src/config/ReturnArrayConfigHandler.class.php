@@ -35,17 +35,18 @@ class ReturnArrayConfigHandler extends IniConfigHandler
 	 */
 	public function &execute($config)
 	{
+		$real_booleans = (in_array($this->getParameter('real_booleans', false), array('false', 'off', 'no')));
 		$ini = $this->parseIni($config);
 		if(count($ini) != count($ini, COUNT_RECURSIVE))
 		{
 			foreach($ini as $section => $values)
 			{
-				$ini[$section] = self::addDimensions($values);
+				$ini[$section] = self::addDimensions($values, $real_booleans);
 			}
 		}
 		else
 		{
-			$ini = self::addDimensions($ini);
+			$ini = self::addDimensions($ini, $real_booleans);
 		}
 		$return = "<?php return " . var_export($ini, true) . ";?>";
 		return $return;
@@ -56,17 +57,20 @@ class ReturnArrayConfigHandler extends IniConfigHandler
 	 * dimensional array
 	 * 
 	 * @param array The one-dimensional input array
+	 * @param bool Convert boolean strings to literal boolean values
 	 * @return array The transformed version of the input array
 	 * @author David Zülke (dz@bitxtender.com)
 	 * @since  0.10.0
 	 */
-	public static function addDimensions($input)
+	public static function addDimensions($input, $real_booleans=false)
 	{
 		$output = array();
-		foreach($input as $key => $value)
-		{
+		foreach ($input as $key => $value)	{
+			if ($real_booleans) {
+				$value = self::real_booleans($value);
+			}
 			// param.something = sompn         ; $array['param'] = array('something' => 'sompn');
-			// key.param.something = sompnToo  ; $array['key.param'] = array('something' => 'sompnToo');
+			// key.param.somethin$this->g = sompnToo  ; $array['key.param'] = array('something' => 'sompnToo');
 			// so basically, take the chunk following the last dot as the new baby key (something), everything prior is the parent key (param/key.param)
 			// think that even works out for the numeric indexed arrays
 			$lastDot = strrpos($key, '.');
@@ -80,4 +84,17 @@ class ReturnArrayConfigHandler extends IniConfigHandler
 		}
 		return $output;
 	}
+
+	public static function real_booleans($value) 
+	{
+		$bool_false = array('false', 'off', 'no');
+		$bool_true = array('true', 'on', 'yes');
+		if (in_array(strtolower($value), $bool_false)) {
+			return false;
+		} else if (in_array(strtolower($value), $bool_true)) {
+			return true;
+		}
+		return $value;
+	}
+	
 }

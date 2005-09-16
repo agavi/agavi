@@ -42,5 +42,24 @@ class ReturnArrayConfigHandlerTest extends UnitTestCase
 		$ex_dotted = '<?php return '. var_export($dotted_array, true) .';?>';
 		$this->assertIdentical($dotted, $ex_dotted);
 	}
+
+	public function testBooleanValuesParsedCorrectly()
+	{
+		$RACH = new ReturnArrayConfigHandler();
+		$this->assertIsA($RACH, 'ReturnArrayConfigHandler');
+		
+		$cfg_array = include(ConfigCache::checkConfig('config/RACHwithBools.ini'));
+		$this->assertTrue(is_array($cfg_array));
+		foreach ($cfg_array['truths'] as $key => $val) {
+			$this->assertTrue(is_bool($val));
+			$this->assertTrue($val);
+		}
+		foreach ($cfg_array['nots'] as $key => $val) {
+			$this->assertTrue(is_bool($val));
+			$this->assertFalse($val);
+		}
+		$this->assertFalse(is_bool($cfg_array['notbool']['one']));
+	}
+
 }
 ?>
