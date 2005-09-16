@@ -1,22 +1,6 @@
 <?php
 require_once dirname(__FILE__) . '/../test_environment.php';
 
-class MockSessionStorage extends Storage
-{
-	public function & read($key)
-	{
-	}
-	public function & remove($key)
-	{
-	}
-	public function shutdown()
-	{
-	}
-	public function write($key, &$data)
-	{
-	}
-}
-
 class ControllerTest extends UnitTestCase
 {
 	private $_controller = null, 
@@ -24,7 +8,7 @@ class ControllerTest extends UnitTestCase
 
 	public function setUp()
 	{
-		$this->_context = Context::getInstance('testing');
+		$this->_context = Context::getInstance();
 		$this->_controller = $this->_context->getController();
 		$this->_controller->setRenderMode(View::RENDER_VAR);
 	}

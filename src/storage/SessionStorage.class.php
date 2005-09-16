@@ -56,20 +56,13 @@ class SessionStorage extends Storage
 	public function initialize ($context, $parameters = null)
 	{
 
-		// initialize parent
 		parent::initialize($context, $parameters);
 
-		// set session name
 		$sessionName = $this->getParameter('session_name', 'Agavi');
-
 		session_name($sessionName);
-
-		if ($this->getParameter('auto_start', true))
-		{
-
-			// start our session
+		
+		if ($this->getParameter('auto_start', true)) {
 			session_start();
-
 		}
 
 	}
@@ -94,13 +87,9 @@ class SessionStorage extends Storage
 
 		$retval = null;
 
-		if (isset($_SESSION[$key]))
-		{
-
+		if (isset($_SESSION[$key]))	{
 			$retval =& $_SESSION[$key];
-
 		}
-
 		return $retval;
 
 	}
