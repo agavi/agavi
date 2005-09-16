@@ -42,7 +42,7 @@ abstract class SmartyView extends View
 		$this->smarty->clear_all_assign();
 		$this->smarty->clear_config();
 		$this->smarty->config_dir   = AG_CONFIG_DIR;
-		$this->smarty->cache_dir    = AG_CACHE_DIR;
+		$this->smarty->cache_dir    = defined(SMARTY_CACHE_DIR) ? SMARTY_CACHE_DIR : AG_CACHE_DIR;
 		$this->smarty->plugins_dir  = array("plugins","plugins_local");
 
 		return(parent::initialize($context));
