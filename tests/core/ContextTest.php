@@ -48,6 +48,10 @@ class ContextTest extends UnitTestCase
 		$context = Context::getInstance();
 		$context->initialize('default', array('storage' => 'TestSessionStorage'));
 		$this->assertIsA($context->getStorage(), 'TestSessionStorage');
+		Mock::generate('ActionStack');	
+		$context->initialize('default', array('action_stack' => 'MockActionStack'));
+		$this->assertIsA($context->getActionStack(), 'MockActionStack');
+		
 	}
 
 

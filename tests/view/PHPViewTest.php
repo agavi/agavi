@@ -22,11 +22,6 @@ class PHPViewTest extends UnitTestCase
 		$this->assertEqual(array(), $this->_v->getAttributeNames());
 	}
 
-	public function testdecorate()
-	{
-		$this->assertTrue(0,'Incomplete Test');
-	}
-
 	public function testgetAttribute()
 	{
 		$this->_v->setAttribute('blah', 'blahval');
@@ -56,7 +51,27 @@ class PHPViewTest extends UnitTestCase
 
 	public function testrender()
 	{
-		$this->assertTrue(0,'Incomplete Test');
+		Mock::generate('ActionStack');
+		Mock::generate('ActionStackEntry');
+		
+		$context = Context::getInstance()->initialize('default', array('action_stack' => 'MockActionStack'));
+		$context->getController()->setRenderMode(View::RENDER_VAR);
+		
+		// create a mock entry to add to the stack...
+		$ase = new MockActionStackEntry();
+		$ase->setReturnValue('getModuleName', 'Test');
+		$ase->setReturnValue('getActionName', 'Test');
+
+		// get the mock action stack and tell it to return our mock when asked for the last entry
+		$as = $context->getActionStack();
+		$as->setReturnReference('getLastEntry', $ase);
+		$as->expectOnce('getLastEntry');
+		
+		$view = new SamplePHPView();
+		$view->initialize($context);
+		$view->setTemplate('viewtest.php');
+		$rendered = $view->render();
+		$this->assertWantedPattern('/view test success/i', $rendered);
 	}
 
 	public function testsetAttribute()

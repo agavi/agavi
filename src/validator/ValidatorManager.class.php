@@ -52,9 +52,7 @@ class ValidatorManager extends AgaviObject
 	public function clear ()
 	{
 
-		$this->groups = null;
 		$this->groups = array();
-		$this->names  = null;
 		$this->names  = array();
 
 	}

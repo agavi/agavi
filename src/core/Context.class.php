@@ -221,7 +221,7 @@ class Context extends AgaviObject
 		return self::$instances[$profile];
 	}
 
-	public function initialize($profile, $overides = array())
+	public function initialize($profile = 'default', $overides = array())
 	{
 		static $profiles;
 		$profile = strtolower($profile);
@@ -267,12 +267,11 @@ class Context extends AgaviObject
 			throw new ConfigurationException("Missing required definition(s) (".implode(', ',$missing).") in [$profile] section of contexts.ini");
 		}
 	
-		
 		foreach ($required as $req) {	
 			$args = $class = null;
 			switch ($req) {
 				case 'action_stack':
-					$this->actionStack = is_object($params[$req]) ? $params[$req] : new $params[$req](); 
+					$this->actionStack = new $params[$req](); 
 					break;
 				case 'database_manager':
 					$class = $params[$req];
@@ -310,6 +309,8 @@ class Context extends AgaviObject
 		$this->controller->setExecutionFilterClassName($params['execution_filter']); 
 		$args = isset($params['controller.param']) ? $params['request.param'] : null;
 		$this->request->initialize($this, $args);
+
+		return $this;
 	}
 	
 	// We could even add a method to switch contexts on the fly..

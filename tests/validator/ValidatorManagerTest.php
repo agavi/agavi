@@ -1,6 +1,12 @@
 <?php
 require_once dirname(__FILE__) . '/../test_environment.php';
-require_once 'validator/ValidatorManager.class.php';
+class PseudoValidator extends Validator
+{
+	public function execute(&$value, &$error)
+	{
+		return true;
+	}
+}
 
 class TestValidatorManager extends UnitTestCase 
 {
@@ -21,14 +27,23 @@ class TestValidatorManager extends UnitTestCase
 	{
 		$this->_controller = null;
 		$this->_vm = null;
-		$this->_vmProphlyaxis = null;
 		$this->_context = null;
 	}
 
 
 	public function testinitialize()
 	{
+		$context = Context::getInstance();
+		$vm = new ValidatorManager();
 		$this->assertIsA($this->_vm, 'ValidatorManager');
+		
+		$vm->initialize($this->_context);
+		$groups = $vm->getGroups();
+		$names = $vm->getNames();
+		$this->assertEqual(0, count($groups));
+		$this->assertEqual(0, count($names));
+		$this->assertTrue(is_array($names));
+		$this->assertTrue(is_array($groups));
 	}
 
 	public function testregisterName()
@@ -112,18 +127,34 @@ class TestValidatorManager extends UnitTestCase
 		$this->assertEqual($names[$nameParent][$nameChild]['validators'], array(), 'validators entry default');
 		$this->assertEqual(count($names[$nameParent]), 3, 'parent array has _is_parent + 2 entries');
 
-		$this->assertTrue(0,'Need to add group');
+		$name = "My Test #3";
+		$group = 'TestGroup';
+		$this->_vm->registerName($name,false,'Optional',null,$group,false);
+		$groups = $this->_vm->getGroups();
+		$this->assertTrue(isset($groups[$group]));
+		$this->assertFalse($groups[$group]['_force']);
+		$this->assertIdentical($name, $groups[$group][0]);
 	}	// end of testregisterName()
 	
 
 	public function testregisterValidator()
 	{
-		$this->assertTrue(0,'Incomplete Test');
+		$validator = new PseudoValidator();
+		$this->_vm->registerValidator('pseudo', $validator);
+		$names = $this->_vm->getNames();
+		$this->assertEqual(1, count($names));
+		$this->assertTrue(isset($names['pseudo']));
+		
 	}
 
 	public function testexecute()
 	{
-		$this->assertTrue(0,'Incomplete Test');
+		$validator = new PseudoValidator();
+		$this->_vm->registerValidator('pseudo', $validator);
+		$names = $this->_vm->getNames();
+		$this->assertEqual(1, count($names));
+		$this->assertTrue(isset($names['pseudo']));
+		$this->assertTrue($this->_vm->execute());
 	}
 
 	public function testclear()

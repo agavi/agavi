@@ -1,6 +1,7 @@
 <?php
-
-define('AG_USER_NAMESPACE', 'org/agavi');
+if (!defined('AG_USER_NAMESPACE')) {
+	define('AG_USER_NAMESPACE', 'org/agavi');
+}	
 
 class SampleUser extends User
 {
@@ -21,7 +22,8 @@ class UserTest extends UnitTestCase
 	public function setUp()
 	{
 		$this->_u = new SampleUser();
-		$this->_u->initialize('fakecontext');
+		$context = Context::getInstance();
+		$this->_u->initialize($context);
 	}
 
 	public function testclearAttributes()
@@ -84,7 +86,11 @@ class UserTest extends UnitTestCase
 
 	public function testgetContext()
 	{
-		$this->assertEqual('fakecontext', $this->_u->getContext());
+		$ctx_1 = Context::getInstance();
+		$ctx_2 = $this->_u->getContext();
+		$this->assertIsA($ctx_1, 'Context');
+		$this->assertIsA($ctx_2, 'Context');
+		$this->assertReference($ctx_1, $ctx_2);
 	}
 
 	public function testhasAttribute()
@@ -115,12 +121,19 @@ class UserTest extends UnitTestCase
 
 	public function testinitialize()
 	{
-		$this->assertTrue(0,'Incomplete Test');
+		$context = Context::getInstance();
+		$user = new User();
+		$user->initialize($context);
+		$this->assertIsA($user, 'User');
+		$u_ctx = $user->getContext();
+		$this->assertReference($context, $u_ctx);
+		$this->assertNull($user->getAttributeNames());
 	}
 
 	public function testnewInstance()
 	{
-		$this->assertTrue(0,'Incomplete Test');
+		$user = User::newInstance('User');
+		$this->assertIsA($user,'User');
 	}
 
 	public function testremoveAttribute()
@@ -254,6 +267,7 @@ class UserTest extends UnitTestCase
 
 	public function testshutdown()
 	{
+		// What we would test here, is set some attributes and verify they are saved in the session
 		$this->assertTrue(0,'Incomplete Test');
 	}
 
