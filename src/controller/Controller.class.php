@@ -398,15 +398,6 @@ abstract class Controller extends ParameterHolder
 	{
 		$error = 'Controller::getInstance deprecated, use newInstance method instead.';
 		throw new ControllerException($error);
-/*
-		if (isset(self::$instance)) {
-			return self::$instance;
-		}
-
-		// an instance of the controller has not been created
-		$error = 'A Controller implementation instance has not been created';
-		throw new ControllerException($error);
-*/
 	}
 
 	// -------------------------------------------------------------------------

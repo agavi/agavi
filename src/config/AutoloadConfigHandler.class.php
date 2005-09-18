@@ -66,9 +66,8 @@ class AutoloadConfigHandler extends IniConfigHandler
 		{
 
 			$file = $this->replaceConstants($file);
-			$file = $this->replacePath($file);
 
-			if (!is_readable($file))
+			if (!@fopen($file, 'r', true))
 			{
 
 				// the class path doesn't exist

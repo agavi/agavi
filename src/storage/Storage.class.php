@@ -99,12 +99,10 @@ abstract class Storage extends ParameterHolder
 	 */
 	public static function newInstance ($class)
 	{
-		if (class_exists($class)) {
-			$object = new $class();
+		$object = new $class();
 
-			if (!$object instanceof Storage) {
-				throw new FactoryException("Class \"$class\" is not of the type Storage");
-			}
+		if (!$object instanceof Storage) {
+			throw new FactoryException("Class \"$class\" is not of the type Storage");
 		}
 		return $object;
 	}
