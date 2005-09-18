@@ -184,32 +184,12 @@ class Context extends AgaviObject
 	/**
 	 * Retrieve the Context instance.
 	 *
-	 * @param Controller reference to the controller instance.
-	 * @return Context instance of the current Context
+	 * @param string name corresponding to a section of the config
+	 * @return Context instance of the requested name
 	 *
 	 * @author Mike Vincent (mike@agavi.org)
 	 * @since  0.9.0
 	 */
-	/* Old implementation
-	public static function getInstance($controller)
-	{
-		if (!isset(self::$instance)) {
-			$class = __CLASS__;
-			self::$instance = new $class;
-		
-			if (defined('AG_USE_DATABASE') && AG_USE_DATABASE) {
-				self::$instance->databaseManager = new DatabaseManager();
-				self::$instance->databaseManager->initialize();
-			}
-			self::$instance->controller 			= $controller;
-			self::$instance->actionStack			= new ActionStack();
-		
-			require_once(ConfigCache::checkConfig('config/factories.ini'));
-		}
-		return self::$instance;
-	}
-	*/
-	
 	public static function getInstance($profile = 'default')
 	{
 		$profile = strtolower($profile);
@@ -220,7 +200,17 @@ class Context extends AgaviObject
 		}
 		return self::$instances[$profile];
 	}
-
+	
+	/**
+	 * (re)Initialize the Context instance.
+	 *
+	 * @param string name corresponding to a section of the config
+	 * @param array overides, key => class 
+	 * @return Context instance
+	 *
+	 * @author Mike Vincent (mike@agavi.org)
+	 * @since  0.10.0
+	 */
 	public function initialize($profile = 'default', $overides = array())
 	{
 		static $profiles;
