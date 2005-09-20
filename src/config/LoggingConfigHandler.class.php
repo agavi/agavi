@@ -214,7 +214,7 @@ class LoggingConfigHandler extends IniConfigHandler
 			$entry['layout'] = $ini[$appender]['layout'];
 			$entry['params'] = ParameterParser::parse($ini[$appender]);
 
-			$appenders[$appender] = &$entry;
+			$appenders[$appender] = $entry;
 		}
 	}
 
@@ -232,7 +232,7 @@ class LoggingConfigHandler extends IniConfigHandler
 			$entry['class'] = $ini[$layout]['class'];
 			$entry['params'] = ParameterParser::parse($ini[$layout]);
 
-			$layouts[$layout] = &$entry;
+			$layouts[$layout] = $entry;
 		}
 	}
 
