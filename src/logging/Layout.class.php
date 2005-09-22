@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2005  Sean Kerr.                                       |
+// | Copyright (c) 2003-2005 Agavi Foundation.                                 |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -20,23 +20,27 @@
  * @subpackage logging
  *
  * @author    Sean Kerr (skerr@mojavi.org)
- * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
+ * @copyright (c) Authors
  * @since     0.9.0
  * @version   $Id$
  */
 abstract class Layout extends AgaviObject
 {
 
-	// +-----------------------------------------------------------------------+
-	// | PRIVATE VARIABLES                                                     |
-	// +-----------------------------------------------------------------------+
+	private $layout = null;
 
-	private
-		$layout = null;
-
-	// +-----------------------------------------------------------------------+
-	// | METHODS                                                               |
-	// +-----------------------------------------------------------------------+
+	/**
+	 * Initialize the Layout.
+	 * 
+	 * @access public
+	 * @param array An array of parameters.
+	 * @return void
+	 * @author Veikko Mäkinen (mail@veikkomakinen.co)
+	 */
+	public function initialize($params)
+	{
+		/* empty so we're not required to override this */
+	}
 
 	/**
 	 * Format a message.
@@ -62,9 +66,7 @@ abstract class Layout extends AgaviObject
 	 */
 	public function getLayout ()
 	{
-
 		return $this->layout;
-
 	}
 
 	// -------------------------------------------------------------------------
@@ -81,9 +83,7 @@ abstract class Layout extends AgaviObject
 	 */
 	public function setLayout ($layout)
 	{
-
 		$this->layout = $layout;
-
 	}
 
 }

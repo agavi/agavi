@@ -193,6 +193,32 @@ abstract class ParameterHolder extends AgaviObject
 	// -------------------------------------------------------------------------
 
 	/**
+	 * Append a parameter.
+	 * 
+	 * If this parameter is already set, convert it to an array and append the
+	 * new value.  If not, set the new value like normal.
+	 *
+	 * @param string A parameter name.
+	 * @param mixed  A parameter value.
+	 *
+	 * @return void
+	 *
+	 * @author Bob Zoller (bob@agavi.org)
+	 * @since  0.9.1
+	 */
+	public function appendParameter($name, $value)
+	{
+
+		if (!isset($this->parameters[$name]) || !is_array($this->parameters[$name])) {
+			settype($this->parameters[$name], 'array');
+		}
+		$this->parameters[$name][] = $value;
+
+	}
+
+	// -------------------------------------------------------------------------
+
+	/**
 	 * Set a parameter by reference.
 	 *
 	 * If a parameter with the name already exists the value will be
@@ -210,6 +236,32 @@ abstract class ParameterHolder extends AgaviObject
 	{
 
 		$this->parameters[$name] =& $value;
+
+	}
+
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Append a parameter by reference.
+	 * 
+	 * If this parameter is already set, convert it to an array and append the
+	 * reference to the new value.  If not, set the new value like normal.
+	 *
+	 * @param string A parameter name.
+	 * @param mixed  A reference to a parameter value.
+	 *
+	 * @return void
+	 *
+	 * @author Bob Zoller (bob@agavi.org)
+	 * @since  0.9.1
+	 */
+	public function appendParameterByRef($name, &$value)
+	{
+
+		if (!isset($this->parameters[$name]) || !is_array($this->parameters[$name])) {
+			settype($this->parameters[$name], 'array');
+		}
+		$this->parameters[$name][] =& $value;
 
 	}
 

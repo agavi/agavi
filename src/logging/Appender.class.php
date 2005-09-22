@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2005  Sean Kerr.                                       |
+// | Copyright (c) 2003-2005 Agavi Foundation.                                 |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -20,24 +20,27 @@
  * @package    agavi
  * @subpackage logging
  *
- * @author    Sean Kerr (skerr@mojavi.org)
- * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
- * @since     0.9.0
+ * @author    Bob Zoller (bob@agavi.org)
+ * @copyright (c) Authors
+ * @since     0.9.1
  * @version   $Id$
  */
 abstract class Appender extends AgaviObject
 {
 
-	// +-----------------------------------------------------------------------+
-	// | PRIVATE VARIABLES                                                     |
-	// +-----------------------------------------------------------------------+
+	private $layout = null;
 
-	private
-		$layout = null;
+	/**
+	 * Initialize the object.
+	 *
+	 * @return void
+	 *
+	 * @author Bob Zoller (bob@agavi.org)
+	 * @since  0.9.1
+	 */
+	abstract function initialize($params);
 
-	// +-----------------------------------------------------------------------+
-	// | METHODS                                                               |
-	// +-----------------------------------------------------------------------+
+	// -------------------------------------------------------------------------
 
 	/**
 	 * Retrieve the layout.
@@ -49,9 +52,7 @@ abstract class Appender extends AgaviObject
 	 */
 	public function getLayout ()
 	{
-
 		return $this->layout;
-
 	}
 
 	// -------------------------------------------------------------------------
@@ -61,16 +62,15 @@ abstract class Appender extends AgaviObject
 	 *
 	 * @param Layout A Layout instance.
 	 *
-	 * @return void
+	 * @return Appender
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  0.9.0
 	 */
 	public function setLayout ($layout)
 	{
-
 		$this->layout = $layout;
-
+		return $this;
 	}
 
 	// -------------------------------------------------------------------------
@@ -97,7 +97,7 @@ abstract class Appender extends AgaviObject
 	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  0.9.0
 	 */
-	abstract function write (&$data);
+	abstract function write ($message);
 
 }
 

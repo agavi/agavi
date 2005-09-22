@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2005  Sean Kerr.                                       |
+// | Copyright (c) 2003-2005 Agavi Foundation                                  |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -14,22 +14,18 @@
 // +---------------------------------------------------------------------------+
 
 /**
- *
+ * PassthruLayout is a Layout that will return the Message text unaltered.
  *
  * @package    agavi
  * @subpackage logging
  *
- * @author    Sean Kerr (skerr@mojavi.org)
- * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
- * @since     0.9.0
- * @version   $Id$
+ * @author    Bob Zoller (bob@agavi.org)
+ * @copyright (c) Authors
+ * @since     0.9.1
+ * @version   $Id: PatternLayout.class.php 87 2005-06-03 21:19:23Z bob $
  */
-class PatternLayout extends Layout
+class PassthruLayout extends Layout
 {
-
-	// +-----------------------------------------------------------------------+
-	// | METHODS                                                               |
-	// +-----------------------------------------------------------------------+
 
 	/**
 	 * Format a message.
@@ -38,12 +34,12 @@ class PatternLayout extends Layout
 	 *
 	 * @return string A formatted message.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author Bob Zoller (bob@agavi.org)
+	 * @since  0.9.1
 	 */
-	public function & format ($message)
+	public function &format ($message)
 	{
-
+		return sprintf('%s', $message->__toString());
 	}
 
 }

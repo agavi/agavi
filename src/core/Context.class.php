@@ -299,6 +299,10 @@ class Context extends AgaviObject
 		$this->controller->setExecutionFilterClassName($params['execution_filter']); 
 		$args = isset($params['controller.param']) ? $params['request.param'] : null;
 		$this->request->initialize($this, $args);
+		
+		if (defined('AG_USE_LOGGING') && AG_USE_LOGGING) {
+			LoggerManager::initialize();
+		}
 
 		return $this;
 	}
