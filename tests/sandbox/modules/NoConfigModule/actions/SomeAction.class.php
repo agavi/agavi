@@ -1,9 +1,9 @@
 <?php
-class SomeAction extends Action
+class NoConfigModule_SomeAction extends Action
 {
 	public function execute()
 	{
-		return null;
+		return View::SUCCESS;
 	}
 }
 

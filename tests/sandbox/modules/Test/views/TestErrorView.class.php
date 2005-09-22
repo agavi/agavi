@@ -1,10 +1,10 @@
 <?php
 
-class TestErrorView extends PHPView
+class Test_TestErrorView extends PHPView
 {
 	public function execute()
 	{
-		return null;
+		$this->setTemplate('testerror.php');
 	}
 }
 

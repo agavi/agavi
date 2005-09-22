@@ -271,9 +271,7 @@ class User extends ParameterHolder
 		}
 
 		// read data from storage
-		$this->attributes = $this->getContext()
-						         ->getStorage()
-						         ->read(self::ATTRIBUTE_NAMESPACE);
+		$this->attributes = $context->getStorage()->read(self::ATTRIBUTE_NAMESPACE);
 
 		if ($this->attributes == null)
 		{
@@ -578,9 +576,7 @@ class User extends ParameterHolder
 	{
 
 		// write attributes to the storage
-		$this->getContext()
-			 ->getStorage()
-			 ->write(self::ATTRIBUTE_NAMESPACE, $this->attributes);
+		$this->getContext()->getStorage()->write(self::ATTRIBUTE_NAMESPACE, $this->attributes);
 
 	}
 
