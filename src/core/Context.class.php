@@ -248,7 +248,7 @@ class Context extends AgaviObject
 		if (AG_USE_DATABASE) {
 			$required[] = 'database_manager';
 		}
-		$required = $required + array('action_stack', 'request', 'storage', 'controller', 'execution_filter');
+		$required = array_merge($required, array('action_stack', 'request', 'storage', 'controller', 'execution_filter'));
 		if (AG_USE_SECURITY) {
 			$required[] = 'user';
 			$required[] = 'security_filter';
