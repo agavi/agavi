@@ -244,13 +244,14 @@ class Context extends AgaviObject
 			throw new ConfigurationException("Invalid or undefined Context name ($profile).");
 		}
 		
-		$required = array('action_stack', 'request', 'storage', 'controller', 'execution_filter');
+		$required = array();
+		if (AG_USE_DATABASE) {
+			$required[] = 'database_manager';
+		}
+		$required = $required + array('action_stack', 'request', 'storage', 'controller', 'execution_filter');
 		if (AG_USE_SECURITY) {
 			$required[] = 'user';
 			$required[] = 'security_filter';
-		}
-		if (AG_USE_DATABASE) {
-			$required[] = 'database_manager';
 		}
 
 		if ($missing = array_diff($required, array_keys($params))) {

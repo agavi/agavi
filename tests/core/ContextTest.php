@@ -29,6 +29,7 @@ class ContextTest extends UnitTestCase
 		
 		$this->assertIsA(Context::getInstance()->getActionStack(), $cfg[$default]['action_stack']);
 		$this->assertIsA(Context::getInstance()->getRequest(), $cfg[$default]['request']);
+		$this->assertIsA(Context::getInstance()->getDatabaseManager(), $cfg[$default]['database_manager']);
 	}
 
 	public function testGetAlternateContextInstance()
@@ -51,7 +52,6 @@ class ContextTest extends UnitTestCase
 		Mock::generate('ActionStack');	
 		$context->initialize('default', array('action_stack' => 'MockActionStack'));
 		$this->assertIsA($context->getActionStack(), 'MockActionStack');
-		
 	}
 
 
