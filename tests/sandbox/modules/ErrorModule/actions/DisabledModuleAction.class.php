@@ -1,5 +1,5 @@
 <?php
-class ErrorModule_SomeAction extends Action
+class ErrorModule_DisabledModuleAction extends Action
 {
 	public function execute()
 	{

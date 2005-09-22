@@ -1,5 +1,5 @@
 <?php
-require_once dirname(__FILE__) . '/../mockContext.php';
+require_once dirname(__FILE__) . '/../test_environment.php';
 
 class SampleValidator extends Validator
 {
@@ -14,9 +14,8 @@ class ValidatorTest extends UnitTestCase
 					
 	public function setUp()
 	{
-		$this->_controller = new MockController($this);
-		$this->_controller->dispatch();
-		$this->_context = $this->_controller->getContext();
+		$this->_context = Context::getInstance();
+		$this->_controller = $this->_context->getController();
 		
 		$this->_validator = new SampleValidator();
 	}
@@ -25,7 +24,6 @@ class ValidatorTest extends UnitTestCase
 	{
 		$this->_validator = null;
 		$this->_controller = null;
-		$this->_context->cleanSlate();
 		$this->_context = null;
 	}
 
@@ -33,7 +31,7 @@ class ValidatorTest extends UnitTestCase
 	{
 		$this->assertNull($this->_validator->getContext());
 		$this->assertTrue($this->_validator->initialize($this->_context));
-		$this->assertTrue($this->_validator->getContext() instanceof MockContext );
+		$this->assertTrue($this->_validator->getContext() instanceof Context );
 	}
 
 	public function testinitializeWithParameters()

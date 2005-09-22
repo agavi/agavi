@@ -75,11 +75,8 @@ abstract class Storage extends ParameterHolder
 
 		$this->context = $context;
 
-		if ($parameters != null)
-		{
-
-			$this->parameters = array_merge($this->parameters, $parameters);
-
+		if ($parameters != null) {
+			$this->parameters = array_merge($this->parameters, (array) $parameters);
 		}
 
 	}
@@ -97,27 +94,17 @@ abstract class Storage extends ParameterHolder
 	 *                                 cannot be created.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
+	 * @author Mike Vincent (mike@agavi.org)
 	 * @since  0.9.0
 	 */
 	public static function newInstance ($class)
 	{
-
-		// the class exists
 		$object = new $class();
 
-		if (!($object instanceof Storage))
-		{
-
-			// the class name is of the wrong type
-			$error = 'Class "%s" is not of the type Storage';
-			$error = sprintf($error, $class);
-
-			throw new FactoryException($error);
-
+		if (!$object instanceof Storage) {
+			throw new FactoryException("Class \"$class\" is not of the type Storage");
 		}
-
 		return $object;
-
 	}
 
 	// -------------------------------------------------------------------------

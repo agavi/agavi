@@ -1,5 +1,5 @@
 <?php
-require_once dirname(__FILE__) . '/../mockContext.php';
+require_once dirname(__FILE__) . '/../test_environment.php';
 
 class SampleAction extends Action {
 	public function execute() {}
@@ -15,9 +15,8 @@ class TestAction extends UnitTestCase
 
 	public function setUp()
 	{
-		$this->_controller = new MockController($this);
-		$this->_controller->dispatch();
-		$this->_context = $this->_controller->getContext();
+		$this->_context = Context::getInstance();
+		$this->_controller = $this->_context->getController();
 		
 		$this->_action = new SampleAction();
 	}
@@ -26,7 +25,6 @@ class TestAction extends UnitTestCase
 	{
 		$this->_controller = null;
 		$this->_action = null;
-		$this->_context->cleanSlate();
 		$this->_context = null;
 	}
 

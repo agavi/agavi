@@ -57,12 +57,6 @@ class ConsoleController extends Controller
 			// set the console parameters
 			$this->setParametersByRef($params);
 
-			// initialize the controller
-			$this->initialize();
-
-			// get the application context
-			$context = $this->getContext();
-
 			// determine our module and action
 			$moduleName = (defined('AG_CONSOLE_MODULE') ? AG_CONSOLE_MODULE : AG_DEFAULT_MODULE);
 			$actionName = (defined('AG_CONSOLE_ACTION') ? AG_CONSOLE_ACTION : null);
@@ -83,8 +77,8 @@ class ConsoleController extends Controller
 			}
 
 			// set the module and action in the Request parameters
-			$this->getContext()->getRequest()->setParameter(AG_MODULE_ACCESSOR, $moduleName);
-			$this->getContext()->getRequest()->setParameter(AG_ACTION_ACCESSOR, $actionName);
+			$this->context->getRequest()->setParameter(AG_MODULE_ACCESSOR, $moduleName);
+			$this->context->getRequest()->setParameter(AG_ACTION_ACCESSOR, $actionName);
 
 			// make the first request
 			$this->forward($moduleName, $actionName);

@@ -33,7 +33,7 @@ function locateClasses($path, $prefix=true)
 		} else if ( $i->isClass() ) { 
 			$classes[$i->className()] = $i->getPathname();
 			if ($prefix && ($pname = $i->prefixedClassName())) {
-				echo "pname: $pname\n";
+				// echo "pname: $pname\n";
 				$classes[$pname] = $i->getPathname();
 			}
 		}
