@@ -114,14 +114,14 @@ class ValidatorManager extends AgaviObject
 							continue;
 						}
 
-						if ($subdata['validation_status'] == true && !$this->validate($subname, $subdata, $name)) {
+						if (isset($subdata['validation_status']) && $subdata['validation_status'] == true && !$this->validate($subname, $subdata, $name)) {
 							// validation failed
 							$retval = false;
 						}
 					}
 				} else {
 					// single parameter
-					if ($data['validation_status'] == true && !$this->validate($name, $data, null)) {
+					if (isset($data['validation_status']) && $data['validation_status'] == true && !$this->validate($name, $data, null)) {
 						// validation failed
 						$retval = false;
 					}
