@@ -30,6 +30,19 @@ abstract class Layout extends AgaviObject
 	private $layout = null;
 
 	/**
+	 * Initialize the Layout.
+	 * 
+	 * @access public
+	 * @param array An array of parameters.
+	 * @return void
+	 * @author Veikko Mäkinen (mail@veikkomakinen.co)
+	 */
+	public function initialize($params)
+	{
+		/* empty so we're not required to override this */
+	}
+
+	/**
 	 * Format a message.
 	 *
 	 * @param Message A Message instance.

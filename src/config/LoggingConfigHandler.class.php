@@ -120,27 +120,20 @@ class LoggingConfigHandler extends IniConfigHandler
 	 * @param array  A validators array.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
+	 * @author Bob Zoller (bob@agavi.org)
+	 * @author Veikko Mäkinen (mail@veikkomakinen.com
 	 * @since  0.9.0
 	 */
 	private function generateRegistration(&$data, &$loggers, &$appenders, &$layouts)
 	{
 
-		/*
-		$layout = new $appender['layout']['class'];
-		...
-		$appender = new $appender['class'];
-		$appender->setLayout($layout);
-		...
-		$logger = new Logger;
-		$logger->setAppender($appender_name, $appender);
-		...
-		LoggerManager::setLogger($name, $logger);
-		...
-		*/
-
 		foreach ($layouts as $name => &$layout) {
 			$str = '$%s = new %s;';
 			$data[] = sprintf($str, strtolower($name), $layout['class']);
+			if (isset($layout['params'])) {
+				$str = '$%s->initialize(%s);';
+				$data[] = sprintf($str, strtolower($name), $layout['params']);
+			}
 		}
 
 		foreach ($appenders as $name => &$appender) {
