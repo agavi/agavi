@@ -14,38 +14,34 @@
 // +---------------------------------------------------------------------------+
 
 /**
- *
+ * StdoutAppender appends a Message to stdout.
  *
  * @package    agavi
  * @subpackage logging
  *
- * @author    Sean Kerr (skerr@mojavi.org)
- * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
- * @since     0.9.0
+ * @author    Bob Zoller (bob@agavi.org)
+ * @copyright (c) Authors
+ * @since     0.9.1
  * @version   $Id$
  */
-class StdoutAppender extends Appender
+class StdoutAppender extends FileAppender
 {
 
-	// +-----------------------------------------------------------------------+
-	// | CONSTANTS                                                             |
-	// +-----------------------------------------------------------------------+
-
-	// +-----------------------------------------------------------------------+
-	// | PUBLIC VARIABLES                                                      |
-	// +-----------------------------------------------------------------------+
-
-	// +-----------------------------------------------------------------------+
-	// | PRIVATE VARIABLES                                                     |
-	// +-----------------------------------------------------------------------+
-
-	// +-----------------------------------------------------------------------+
-	// | CONSTRUCTOR                                                           |
-	// +-----------------------------------------------------------------------+
-
-	// +-----------------------------------------------------------------------+
-	// | METHODS                                                               |
-	// +-----------------------------------------------------------------------+
+	/**
+	 * Initialize the object.
+	 * 
+	 * @param array An array of parameters.
+	 * 
+	 * @return mixed
+	 * 
+	 * @author Bob Zoller (bob@agavi.org)
+	 * @since 0.9.1
+	 */
+	public function initialize($params)
+	{
+		$params['file'] = 'php://stdout';
+		return parent::initialize($params);
+	}
 
 }
 

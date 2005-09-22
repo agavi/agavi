@@ -145,7 +145,7 @@ abstract class ConfigHandler extends ParameterHolder
 		} else if (!is_numeric($value))
 		{
 
-			$value = str_replace($keys, $reps, $value);
+			$value = str_replace($keys, $reps, self::replaceConstants($value));
 
 			return "'" . $value . "'";
 

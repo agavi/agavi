@@ -58,7 +58,8 @@ class ReturnArrayConfigHandlerTest extends UnitTestCase
 			$this->assertTrue(is_bool($val));
 			$this->assertFalse($val);
 		}
-		$this->assertFalse(is_bool($cfg_array['notbool']['one']));
+		$this->assertTrue(is_bool($cfg_array['nots']['One']));
+		$this->assertFalse($cfg_array['nots']['One']);
 	}
 
 }

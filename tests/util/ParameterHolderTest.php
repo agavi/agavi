@@ -91,6 +91,27 @@ class ParameterHolderTest extends UnitTestCase
 		$this->assertReference($val2, $this->_ph->getParameter('name2'));
 	}
 
+	public function testappendParameter()
+	{
+		$this->_ph->appendParameter('blah', 'blahval');
+		$this->assertEqual(array('blahval'), $this->_ph->getParameter('blah'));
+		$this->_ph->appendParameter('blah', 'blahval2');
+		$this->assertEqual(array('blahval','blahval2'), $this->_ph->getParameter('blah'));
+	}
+
+	public function testappendParameterByRef()
+	{
+		$myval1 = 'jack';
+		$myval2 = 'bill';
+		$this->_ph->appendParameterByRef('blah', $myval1);
+		$out = $this->_ph->getParameter('blah');
+		$this->assertReference($myval1, $out[0]);
+		$this->_ph->appendParameterByRef('blah', $myval2);
+		$out = $this->_ph->getParameter('blah');
+		$this->assertReference($myval1, $out[0]);
+		$this->assertReference($myval2, $out[1]);
+	}
+
 }
 
 ?>

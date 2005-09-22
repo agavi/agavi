@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2005  Sean Kerr.                                       |
+// | Copyright (c) 2003-2005 Agavi Foundation.                                 |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -14,38 +14,18 @@
 // +---------------------------------------------------------------------------+
 
 /**
- *
+ * MailAppender appends Message objects to an email.
  *
  * @package    agavi
  * @subpackage logging
  *
- * @author     Sean Kerr (skerr@mojavi.org)
- * @copyright  (c) Sean Kerr, {@link http://www.mojavi.org}
- * @since      0.9.0
+ * @author     Bob Zoller (bob@agavi.org)
+ * @copyright  (c) Authors
+ * @since      0.9.1
  * @version    $Id$
  */
 class MailAppender extends Appender
 {
-
-	// +-----------------------------------------------------------------------+
-	// | CONSTANTS                                                             |
-	// +-----------------------------------------------------------------------+
-
-	// +-----------------------------------------------------------------------+
-	// | PUBLIC VARIABLES                                                      |
-	// +-----------------------------------------------------------------------+
-
-	// +-----------------------------------------------------------------------+
-	// | PRIVATE VARIABLES                                                     |
-	// +-----------------------------------------------------------------------+
-
-	// +-----------------------------------------------------------------------+
-	// | CONSTRUCTOR                                                           |
-	// +-----------------------------------------------------------------------+
-
-	// +-----------------------------------------------------------------------+
-	// | METHODS                                                               |
-	// +-----------------------------------------------------------------------+
 
 }
 

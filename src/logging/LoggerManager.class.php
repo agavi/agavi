@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2005  Sean Kerr.                                       |
+// | Copyright (c) 2003-2005 Agavi Foundation.                                 |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -27,16 +27,27 @@
 class LoggerManager extends AgaviObject
 {
 
-	// +-----------------------------------------------------------------------+
-	// | PRIVATE VARIABLES                                                     |
-	// +-----------------------------------------------------------------------+
+	private static $loggers = array();
 
-	private static
-		$loggers = array();
-
-	// +-----------------------------------------------------------------------+
-	// | METHODS                                                               |
-	// +-----------------------------------------------------------------------+
+	/**
+	 * Initialize this LoggingManager.
+	 *
+	 * @return bool true, if initialization completes successfully, otherwise
+	 *              false.
+	 *
+	 * @throws <b>InitializationException</b> If an error occurs while
+	 *                                        initializing this LoggingManager.
+	 *
+	 * @author Sean Kerr (skerr@mojavi.org)
+	 * @since  0.9.0
+	 */
+	public static function initialize ()
+	{
+		// load database configuration
+		require_once(ConfigCache::checkConfig('config/logging.ini'));
+	}
+	
+	// -------------------------------------------------------------------------
 
 	/**
 	 * Retrieve a logger.
@@ -51,16 +62,11 @@ class LoggerManager extends AgaviObject
 	 */
 	public static function getLogger ($name = 'default')
 	{
-
 		if (isset(self::$loggers[$name]))
 		{
-
 			return self::$loggers[$name];
-
 		}
-
 		return null;
-
 	}
 
 	// -------------------------------------------------------------------------
@@ -75,9 +81,7 @@ class LoggerManager extends AgaviObject
 	 */
 	public static function getLoggerNames ()
 	{
-
 		return array_keys(self::$loggers);
-
 	}
 
 	// -------------------------------------------------------------------------
@@ -94,9 +98,7 @@ class LoggerManager extends AgaviObject
 	 */
 	public static function hasLogger ($name)
 	{
-
 		return isset(self::$loggers[$name]);
-
 	}
 
 	// -------------------------------------------------------------------------
@@ -121,28 +123,19 @@ class LoggerManager extends AgaviObject
 
 		if (isset(self::$loggers[$name]))
 		{
-
 			if ($name != 'default')
 			{
-
 				$retval = self::$loggers[$name];
-
 				unset(self::$loggers[$name]);
-
 			} else
 			{
-
 				// cannot remove the default logger
 				$error = 'Cannot remove the default logger';
-
 				throw new LoggingException($error);
-
 			}
-
 		}
 
 		return $retval;
-
 	}
 
 	// -------------------------------------------------------------------------
@@ -164,14 +157,10 @@ class LoggerManager extends AgaviObject
 	 */
 	public static function setLogger ($name, $logger)
 	{
-
 		if (!isset(self::$loggers[$name]))
 		{
-
 			self::$loggers[$name] = $logger;
-
 			return;
-
 		}
 
 		// logger already exists
@@ -179,7 +168,33 @@ class LoggerManager extends AgaviObject
 		$error = sprintf($error, $name);
 
 		throw new LoggingException($error);
+	}
 
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Log a Message.
+	 * 
+	 * @param Message The Message to log.
+	 * @param string Optional logger to log to.
+	 * 
+	 * @return void
+	 * @throws LoggingException if the logger was not found.
+	 * 
+	 * @author Bob Zoller (bob@agavi.org)
+	 * @since 0.9.1
+	 */
+	public static function log(Message $message, $logger = null)
+	{
+		if (is_null($logger)) {
+			foreach (self::$loggers as $logger) {
+				$logger->log($message);
+			}
+		} else if (!is_null($logger = self::getLogger($logger))) {
+			$logger->log($message);
+		} else {
+			throw new LoggingException("{$logger} Logger is not configured.");
+		}
 	}
 
 	// -------------------------------------------------------------------------
@@ -194,15 +209,12 @@ class LoggerManager extends AgaviObject
 	 */
 	public static function shutdown ()
 	{
-
 		// loop through our loggers and shut them all down
-		foreach (self::$loggers as $logger)
+		foreach (self::$loggers as $name => $logger)
 		{
-
 			$logger->shutdown();
-
+			unset(self::$loggers[$name]);
 		}
-
 	}
 
 }
