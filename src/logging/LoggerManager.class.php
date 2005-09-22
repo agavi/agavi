@@ -176,16 +176,24 @@ class LoggerManager extends AgaviObject
 	 * Log a Message.
 	 * 
 	 * @param Message The Message to log.
+	 * @param string Optional logger to log to.
 	 * 
 	 * @return void
+	 * @throws LoggingException if the logger was not found.
 	 * 
 	 * @author Bob Zoller (bob@agavi.org)
 	 * @since 0.9.1
 	 */
-	public static function log(Message $message)
+	public static function log(Message $message, $logger = null)
 	{
-		foreach (self::$loggers as $logger) {
+		if (is_null($logger)) {
+			foreach (self::$loggers as $logger) {
+				$logger->log($message);
+			}
+		} else if (!is_null($logger = self::getLogger($logger))) {
 			$logger->log($message);
+		} else {
+			throw new LoggingException("{$logger} Logger is not configured.");
 		}
 	}
 
