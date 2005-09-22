@@ -143,11 +143,6 @@ class ControllerTest extends UnitTestCase
 		$firstSingleton->setFoo('bar');
 		$secondSingleton = $controller->getGlobalModel('SingletonSample');
 		$this->assertEqual($firstSingleton->getFoo(), $secondSingleton->getFoo());
-		$this->assertIsA($this->_controller->getGlobalModel('SingletonSample'), 'SingletonSampleModel');
-		$firstSingleton = $this->_controller->getGlobalModel('SingletonSample');
-		$firstSingleton->setFoo('bar');
-		$secondSingleton = $this->_controller->getGlobalModel('SingletonSample');
-		$this->assertEqual($firstSingleton->getFoo(), $secondSingleton->getFoo());
 	}
 	
 	public function testGetGlobalModel_recursive()
@@ -158,11 +153,6 @@ class ControllerTest extends UnitTestCase
 		$firstSingleton = $controller->getGlobalModel('SingletonSampleRecursive');
 		$firstSingleton->setFoo('bar');
 		$secondSingleton = $controller->getGlobalModel('SingletonSampleRecursive');
-		$this->assertEqual($firstSingleton->getFoo(), $secondSingleton->getFoo());
-		$this->assertIsA($this->_controller->getGlobalModel('SingletonSampleRecursive'), 'SingletonSampleRecursiveModel');
-		$firstSingleton = $this->_controller->getGlobalModel('SingletonSampleRecursive');
-		$firstSingleton->setFoo('bar');
-		$secondSingleton = $this->_controller->getGlobalModel('SingletonSampleRecursive');
 		$this->assertEqual($firstSingleton->getFoo(), $secondSingleton->getFoo());
 	}
 
@@ -182,12 +172,6 @@ class ControllerTest extends UnitTestCase
 		$firstSingleton = $controller->getModel('Test', 'SingletonTest');
 		$firstSingleton->setFoo('bar');
 		$secondSingleton = $controller->getModel('Test', 'SingletonTest');
-		$this->assertEqual($firstSingleton->getFoo(), $secondSingleton->getFoo());
-		$this->assertIsA($this->_controller->getModel('Test', 'SingletonTest'), 'Test_SingletonTestModel');
-		$this->assertIsA($this->_controller->getModel('Test', 'SingletonTest2'), 'SingletonTest2Model');
-		$firstSingleton = $this->_controller->getModel('Test', 'SingletonTest');
-		$firstSingleton->setFoo('bar');
-		$secondSingleton = $this->_controller->getModel('Test', 'SingletonTest');
 		$this->assertEqual($firstSingleton->getFoo(), $secondSingleton->getFoo());
 	}
 
