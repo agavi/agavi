@@ -47,36 +47,22 @@ class PageWebController extends WebController
 	public function dispatch ($moduleName, $actionName, $parameters = null)
 	{
 
-		try
-		{
-
-			// initialize the controller
-			$this->initialize();
-
-			// set parameters
-			if ($parameters != null)
-			{
-
-				$this->getContext()
-				     ->getRequest()
-				     ->setParametersByRef($parameters);
-
+		try {
+			
+			if ($parameters != null) {
+				$this->context->getRequest()->setParametersByRef($parameters);
 			}
 
 			// make the first request
 			$this->forward($moduleName, $actionName);
 
-		} catch (AgaviException $e)
-		{
-
+		} catch (AgaviException $e) {
 			$e->printStackTrace();
 
-		} catch (Exception $e)
-		{
+		} catch (Exception $e) {
 
 			// most likely an exception from a third-party library
 			$e = new AgaviException($e->getMessage());
-
 			$e->printStackTrace();
 
 		}

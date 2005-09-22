@@ -4,7 +4,7 @@ class UnavailableModule_IndexSuccessView extends PHPView
 {
 	public function execute()
 	{
-		return null;
+		$this->setTemplate('index_success.php');
 	}
 }
 

@@ -26,61 +26,75 @@
  * @version   $Id$
  */
 
-	class ReturnArrayConfigHandler extends IniConfigHandler
+class ReturnArrayConfigHandler extends IniConfigHandler
+{
+	/**
+	 * @see IniConfigHandler::execute()
+	 * @author David Zülke (dz@bitxtender.com)
+	 * @since  0.10.0
+	 */
+	public function &execute($config)
 	{
-		/**
-		 * @see IniConfigHandler::execute()
-		 * @author David Zülke (dz@bitxtender.com)
-		 * @since  0.10.0
-		 */
-		public function &execute($config)
+		$real_booleans = (in_array($this->getParameter('real_booleans', false), array('false', 'off', 'no')));
+		$ini = $this->parseIni($config);
+		if(count($ini) != count($ini, COUNT_RECURSIVE))
 		{
-			$ini = $this->parseIni($config);
-			if(count($ini) != count($ini, COUNT_RECURSIVE))
+			foreach($ini as $section => $values)
 			{
-				foreach($ini as $section => $values)
-				{
-					$ini[$section] = self::addDimensions($values);
-				}
+				$ini[$section] = self::addDimensions($values, $real_booleans);
 			}
-			else
-			{
-				$ini = self::addDimensions($ini);
-			}
-			$return = "<?php return " . var_export($ini, true) . ";";
-			return $return;
 		}
-
-		/**
-		 * Helper method to convert keys.like.these in ini files to a multi-
-		 * dimensional array
-		 * 
-		 * @param array The one-dimensional input array
-		 * @return array The transformed version of the input array
-		 * @author David Zülke (dz@bitxtender.com)
-		 * @since  0.10.0
-		 */
-		public static function addDimensions($input)
+		else
 		{
-			$output = array();
-			foreach($input as $key => $value)
-			{
-				$parts = explode('.', $key);
-				$ref =& $output;
-				$count = count($parts);
-				for($i = 0; $i < $count; $i++)
-				{
-					$partKey = $parts[$i];
-					if(($i + 1) == $count)
-					{
-						$ref[$partKey] = $value;
-					}
-					else
-					{
-						$ref =& $ref[$partKey];
-					}
-				}
-			}
-			return $output;
+			$ini = self::addDimensions($ini, $real_booleans);
 		}
+		$return = "<?php return " . var_export($ini, true) . ";?>";
+		return $return;
 	}
+
+	/**
+	 * Helper method to convert keys.like.these in ini files to a multi-
+	 * dimensional array
+	 * 
+	 * @param array The one-dimensional input array
+	 * @param bool Convert boolean strings to literal boolean values
+	 * @return array The transformed version of the input array
+	 * @author David Zülke (dz@bitxtender.com)
+	 * @since  0.10.0
+	 */
+	public static function addDimensions($input, $real_booleans=false)
+	{
+		$output = array();
+		foreach ($input as $key => $value)	{
+			if ($real_booleans) {
+				$value = self::real_booleans($value);
+			}
+			// param.something = sompn         ; $array['param'] = array('something' => 'sompn');
+			// key.param.somethin$this->g = sompnToo  ; $array['key.param'] = array('something' => 'sompnToo');
+			// so basically, take the chunk following the last dot as the new baby key (something), everything prior is the parent key (param/key.param)
+			// think that even works out for the numeric indexed arrays
+			$lastDot = strrpos($key, '.');
+			if ($lastDot !== false) {
+				$parentKey = substr($key, 0, $lastDot);
+				$childKey = substr($key, $lastDot + 1);
+				$output[$parentKey] = isset($output[$parentKey]) ? array_merge($output[$parentKey], array($childKey => $value)) : array($childKey => $value);
+			} else {
+				$output[$key] = $value;
+			}
+		}
+		return $output;
+	}
+
+	public static function real_booleans($value) 
+	{
+		$bool_false = array('false', 'off', 'no');
+		$bool_true = array('true', 'on', 'yes');
+		if (in_array(strtolower($value), $bool_false)) {
+			return false;
+		} else if (in_array(strtolower($value), $bool_true)) {
+			return true;
+		}
+		return $value;
+	}
+	
+}

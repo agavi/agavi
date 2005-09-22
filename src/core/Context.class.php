@@ -43,7 +43,8 @@ class Context extends AgaviObject
 		$storage         = null,
 		$user            = null;
 	protected static
-		$instance				= null;
+		$instances			= null,
+		$profiles				= array();
 
 	// +-----------------------------------------------------------------------+
 	// | METHODS                                                               |
@@ -183,29 +184,127 @@ class Context extends AgaviObject
 	/**
 	 * Retrieve the Context instance.
 	 *
-	 * @param Controller reference to the controller instance.
-	 * @return Context instance of the current Context
+	 * @param string name corresponding to a section of the config
+	 * @return Context instance of the requested name
 	 *
 	 * @author Mike Vincent (mike@agavi.org)
 	 * @since  0.9.0
 	 */
-	public static function getInstance(&$controller)
+	public static function getInstance($profile = 'default')
 	{
-		if (!isset(self::$instance)) {
+		$profile = strtolower($profile);
+		if (!isset(self::$instances[$profile])) {
 			$class = __CLASS__;
-			self::$instance = new $class;
-		
-			if (defined('AG_USE_DATABASE') && AG_USE_DATABASE) {
-				self::$instance->databaseManager = new DatabaseManager();
-				self::$instance->databaseManager->initialize();
-			}
-			self::$instance->controller 			= $controller;
-			self::$instance->actionStack			= new ActionStack();
-		
-			require_once(ConfigCache::checkConfig('config/factories.ini'));
+			self::$instances[$profile] = new $class;
+			self::$instances[$profile]->initialize($profile);
 		}
-		return self::$instance;
+		return self::$instances[$profile];
 	}
+	
+	/**
+	 * (re)Initialize the Context instance.
+	 *
+	 * @param string name corresponding to a section of the config
+	 * @param array overides, key => class 
+	 * @return Context instance
+	 *
+	 * @author Mike Vincent (mike@agavi.org)
+	 * @since  0.10.0
+	 */
+	public function initialize($profile = 'default', $overides = array())
+	{
+		static $profiles;
+		$profile = strtolower($profile);
+		
+		if (!$profiles) {
+			$profiles = array_change_key_case(include(ConfigCache::checkConfig('config/contexts.ini')), CASE_LOWER);
+			$default = $profiles['contexts']['default'];
+			if ($default && isset($profiles['default']) && $default != 'default') {
+				$error = 'You have a specified "'.$default.'" should be the default Context, ' 
+							 . 'but you also have a section named "default".';
+				throw new ConfigurationException("Invalid or undefined Context name ($profile).");
+			} else if ($default && !isset($profiles['default'])) {
+				$profiles['default'] =& $profiles[$default];
+			}
+			
+			// fix default references to Context instance
+			if ($profile == 'default' && $profile != $default) {
+				// we're working with the 'default' Context instance, 
+				// and our default profile isnt named 'default', make a reference 
+				self::$instances[$default] =& self::$instances[$profile];
+			} else if ($profile != 'default' && $profile == $default) {
+				// we asked for the default Context by it's name, make a reference
+				self::$instances['default'] =& self::$instances[$profile];
+			}
+		}
+		
+		if (isset($profiles[$profile])) {
+			$params = array_merge($profiles[$profile], array_change_key_case((array) $overides, CASE_LOWER));
+		} else {
+			throw new ConfigurationException("Invalid or undefined Context name ($profile).");
+		}
+		
+		$required = array('action_stack', 'request', 'storage', 'controller', 'execution_filter');
+		if (AG_USE_SECURITY) {
+			$required[] = 'user';
+			$required[] = 'security_filter';
+		}
+		if (AG_USE_DATABASE) {
+			$required[] = 'database_manager';
+		}
+
+		if ($missing = array_diff($required, array_keys($params))) {
+			throw new ConfigurationException("Missing required definition(s) (".implode(', ',$missing).") in [$profile] section of contexts.ini");
+		}
+	
+		foreach ($required as $req) {	
+			$args = $class = null;
+			switch ($req) {
+				case 'action_stack':
+					$this->actionStack = new $params[$req](); 
+					break;
+				case 'database_manager':
+					$class = $params[$req];
+					$args = isset($params[$req .'.param']) ? $params[$req . '.param'] : null;
+					$this->databaseManager = new $class();
+					$this->databaseManager->initialize($args);
+					break;
+				case 'request':
+					$class = $params[$req];
+					$this->request = Request::newInstance($class);
+					break;
+				case 'storage':
+					$class = $params[$req];
+					$args = isset($params[$req .'.param']) ? $params[$req . '.param'] : null;
+					$this->storage = Storage::newInstance($class);
+					$this->storage->initialize($this, $args);
+					break;
+				case 'user':
+					$class = $params[$req];
+					$args = isset($params[$req .'.param']) ? $params[$req . '.param'] : null;
+					$this->user = User::newInstance($class);
+					$this->user->initialize($this, $args);
+					break;
+				case 'security_filter':
+					$class = $params[$req];
+					$args = isset($params[$req .'.param']) ? $params[$req . '.param'] : null;
+					$this->securityFilter = SecurityFilter::newInstance($class);
+					$this->securityFilter->initialize($this, $args);
+					break;
+			}
+		}
+		$this->controller = Controller::newInstance($params['controller']);
+		$args = isset($params['controller.param']) ? $params['controller.param'] : null;
+		$this->controller->initialize($this, $args);
+		$this->controller->setExecutionFilterClassName($params['execution_filter']); 
+		$args = isset($params['controller.param']) ? $params['request.param'] : null;
+		$this->request->initialize($this, $args);
+
+		return $this;
+	}
+	
+	// We could even add a method to switch contexts on the fly..
+	
 
 	// -------------------------------------------------------------------------
 

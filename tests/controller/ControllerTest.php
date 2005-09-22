@@ -1,88 +1,89 @@
 <?php
-require_once dirname(__FILE__) . '/../mockContext.php';
+require_once dirname(__FILE__) . '/../test_environment.php';
 
 class ControllerTest extends UnitTestCase
 {
-	private $_controller = null, 
-					$_context = null;
 
 	public function setUp()
 	{
-		$this->_controller = new MockController($this);
-		$this->_controller->setRenderMode(View::RENDER_VAR);
-		$this->_controller->dispatch();
-		$this->_context = $this->_controller->getContext();
-	}
-
-	public function tearDown()
-	{
-		$this->_controller = null;
-		$this->_context->cleanSlate();
-		$this->_context = null;
+		// ReInitialize the Context between tests to start fresh
+		$this->_context = Context::getInstance()->initialize('default');
 	}
 
 	public function testNewController()
 	{
-		$this->assertIsA($this->_controller, 'MockController');
-		$this->assertIsA($this->_controller->getContext(), 'Context');
-		$this->assertIsA($this->_context->getRequest(), 'WebRequest');
-		
-		if (defined('AG_USE_DATABASE') && AG_USE_DATABASE) {
-			$this->assertIsA($this->_context->getDatabaseManager(), 'MockDatabaseManager');
-		} else {
-			$this->assertTrue(0,'Why is the Database Disabled?');
-			$this->assertNull($this->_context->getDatabaseManager());
-		}
-		// View::RENDER_NONE(1), View::RENDER_CLIENT(2), View::RENDER_VAR(4)
-		$this->assertEqual(View::RENDER_VAR, $this->_controller->getRenderMode());
+		$controller = Context::getInstance()->getController();
+		$this->assertIsA($controller, 'FrontWebController');
+		$this->assertIsA($controller->getContext(), 'Context');
+		$ctx1 = $controller->getContext();
+		$ctx2 = Context::getInstance();
+		$this->assertReference($ctx1, $ctx2);
 	}
 
 	public function testactionExists()
 	{
-		// actionExists actually checks the filesystem
-		$this->assertTrue($this->_controller->actionExists('Test', 'Test'));
-		$this->assertFalse($this->_controller->actionExists('Test', 'Bunk'));
-		$this->assertFalse($this->_controller->actionExists('Bunk', 'Bunk'));
+		// actionExists actually checks the filesystem, 
+		$this->assertTrue(file_exists(AG_WEBAPP_DIR . '/modules/Test/actions/TestAction.class.php'));
+		$this->assertFalse(file_exists(AG_WEBAPP_DIR . '/modules/Test/actions/BunkAction.class.php'));
+		$this->assertFalse(file_exists(AG_WEBAPP_DIR . '/modules/Bunk/actions/BunkAction.class.php'));
+		$controller = Context::getInstance()->getController();
+		$this->assertTrue($controller->actionExists('Test', 'Test'));
+		$this->assertFalse($controller->actionExists('Test', 'Bunk'));
+		$this->assertFalse($controller->actionExists('Bunk', 'Bunk'));
 	}
 
 	public function testforwardTooTheMaxThrowsException()
 	{
-		$max = defined('AG_MAX_FORWARDS') ? AG_MAX_FORWARDS : 3;
-		// mock the actionStack
-		Mock::generate('ActionStack');
-		$myActionStack = new MockActionStack($this);
-		$myActionStack->setReturnValue('getSize', $max);
-		$myActionStack->expectOnce('getSize', array());
-		$this->_context->replaceObj('actionStack', $myActionStack);
-		try {
-			$this->_controller->forward('Test', 'Test');
-			$this->assertTrue(0,'Expected ForwardException not thrown');
-		} catch (ForwardException $e) {
-			$this->assertWantedPattern('/too many forwards/i', $e->getMessage());
+			
+		if (!defined('AG_MAX_FORWARDS')) {
+			define('AG_MAX_FORWARDS', 20);
 		}
-		$this->_context->getActionStack()->tally();
+		$controller = Context::getInstance()->getController();
+		$controller->setRenderMode(View::RENDER_VAR);
+		for ($i=0; $i<= AG_MAX_FORWARDS; $i++) {
+			try {
+				$controller->forward('Test', 'Test');
+				if ($i >= AG_MAX_FORWARDS) {
+					$this->assertTrue(0,'Expected ForwardException not thrown');
+				}
+			} catch (ForwardException $fe) {
+				$this->assertWantedPattern('/too many forwards/i', $fe->getMessage());
+			}
+		}
 	}
 	
 	public function testCantForwardToUnconfiguredModule()
 	{
+		$controller = Context::getInstance()->getController();
+		$controller->setRenderMode(View::RENDER_VAR);
 		try {
-			$this->_controller->forward('NoConfigModule', 'Some');
+			$controller->forward('NoConfigModule', 'Some');
 			$this->assertTrue(0,'Expected ParseException not thrown, there is only an empty module.ini there!');
 		} catch (ParseException $e) {
 			$this->assertWantedPattern('/missing/i', $e->getMessage());
 		}
 	}
 
-	public function testForwardingToUnavailableModule()
+	public function testForwardingToDisabledModule()
 	{
+		if (!defined('AG_MODULE_DISABLED_MODULE')) {
+			define('AG_MODULE_DISABLED_MODULE', 'ErrorModule');
+			define('AG_MODULE_DISABLED_ACTION', 'DisabledModule');
+		}
+		$controller = Context::getInstance()->getController();
+		$controller->setRenderMode(View::RENDER_VAR);
 		try {
-			$this->_controller->forward('UnavailableModule', 'Index');
-			$lastActionEntry = $this->_context->getActionStack()->getLastEntry();
+			$mode = $controller->getRenderMode();
+			$this->assertIdentical(View::RENDER_VAR, $mode);
+			$controller->forward('UnavailableModule', 'Index');
+			$lastActionEntry = $controller->getActionStack()->getLastEntry();
 			$this->assertIsA($lastActionEntry, 'ActionStackEntry');
 			$view = $lastActionEntry->getPresentation();
-			$this->assertWantedPattern('/not available/i',$view);
-			$mod = $lastActionEntry->getModuleName();
-			$this->assertIdentical($mod, AG_MODULE_DISABLED_MODULE);
+			$this->assertWantedPattern('/module has been disabled/i',$view);
+			$module = $lastActionEntry->getModuleName();
+			$action = $lastActionEntry->getActionName();
+			$this->assertIdentical(AG_MODULE_DISABLED_MODULE, $module);
+			$this->assertIdentical(AG_MODULE_DISABLED_ACTION, $action);
 		} catch (ForwardException $e) {
 			$this->assertTrue(0, 'Test forwarding to an unavilable module needs work');
 		}
@@ -90,35 +91,58 @@ class ControllerTest extends UnitTestCase
 
 	public function testForwardingSuccessfully()
 	{
-		$this->assertIsA($this->_controller->getActionStack(), 'ActionStack');
+		$context = Context::getInstance();
+		$context->getController()->setRenderMode(View::RENDER_VAR);
 		try {
-			$this->_controller->forward('Test', 'Test');
-		} catch (Exception $e) {
-			$this->fail('hullo');
+			$context->getController()->forward('Test', 'Test');
+			$lastActionEntry = $context->getActionStack()->getLastEntry();
+			$this->assertIsA($lastActionEntry, 'ActionStackEntry');
+			$view = $lastActionEntry->getPresentation();
+			$this->assertWantedPattern('/test successful/i',$view);
+			$module = $lastActionEntry->getModuleName();
+			$action = $lastActionEntry->getActionName();
+			$this->assertIdentical('Test', $module);
+			$this->assertIdentical('Test', $action);
+		} catch (ForwardException $e) {
+			$this->assertTrue(0, 'Test forwarding to an unavilable module needs work');
 		}
 		
 	}
 
-	public function testgetAction()
+	public function testGetActionFromModule()
 	{
-		$this->assertIsA($this->_controller->getAction('Test', 'Test'), 'Test_TestAction');
+		$action = Context::getInstance()->getController()->getAction('Test', 'Test');
+		$this->assertIsA($action, 'Test_TestAction');
+		$this->assertIsA($action, 'Action');
 	}
 
-	public function testgetActionStack()
+	public function testGetActionStack()
 	{
-		$as = $this->_controller->getActionStack();
-		$this->assertIsA($as, 'ActionStack');
+		$con_as = Context::getInstance()->getController()->getActionStack();
+		$ctx_as = Context::getInstance()->getActionStack();
+		$this->assertIsA($con_as, 'ActionStack');
+		$this->assertIsA($ctx_as, 'ActionStack');
+		$this->assertReference($ctx_as, $con_as);
 	}
 
-	public function testgetContext()
+	public function testGetContext()
 	{
-		$c = $this->_controller->getContext();
-		$this->assertIsA($c, 'Context');
+		$ctx1 = Context::getInstance();
+		$ctx2 = Context::getInstance()->getController()->getContext();
+		$this->assertIsA($ctx1, 'Context');
+		$this->assertIsA($ctx2, 'Context');
+		$this->assertReference($ctx1, $ctx2);
 	}
 
-	public function testgetGlobalModel()
+	public function testGetGlobalModel()
 	{
-		$this->assertIsA($this->_controller->getGlobalModel('Sample'), 'SampleModel');
+		$controller = Context::getInstance()->getController();
+		$this->assertIsA($controller->getGlobalModel('Sample'), 'SampleModel');
+		$this->assertIsA($controller->getGlobalModel('SingletonSample'), 'SingletonSampleModel');
+		$firstSingleton = $controller->getGlobalModel('SingletonSample');
+		$firstSingleton->setFoo('bar');
+		$secondSingleton = $controller->getGlobalModel('SingletonSample');
+		$this->assertEqual($firstSingleton->getFoo(), $secondSingleton->getFoo());
 		$this->assertIsA($this->_controller->getGlobalModel('SingletonSample'), 'SingletonSampleModel');
 		$firstSingleton = $this->_controller->getGlobalModel('SingletonSample');
 		$firstSingleton->setFoo('bar');
@@ -126,9 +150,15 @@ class ControllerTest extends UnitTestCase
 		$this->assertEqual($firstSingleton->getFoo(), $secondSingleton->getFoo());
 	}
 	
-	public function testgetGlobalModel_recursive()
+	public function testGetGlobalModel_recursive()
 	{
-		$this->assertIsA($this->_controller->getGlobalModel('SampleRecursive'), 'SampleRecursiveModel');
+		$controller = Context::getInstance()->getController();
+		$this->assertIsA($controller->getGlobalModel('SampleRecursive'), 'SampleRecursiveModel');
+		$this->assertIsA($controller->getGlobalModel('SingletonSampleRecursive'), 'SingletonSampleRecursiveModel');
+		$firstSingleton = $controller->getGlobalModel('SingletonSampleRecursive');
+		$firstSingleton->setFoo('bar');
+		$secondSingleton = $controller->getGlobalModel('SingletonSampleRecursive');
+		$this->assertEqual($firstSingleton->getFoo(), $secondSingleton->getFoo());
 		$this->assertIsA($this->_controller->getGlobalModel('SingletonSampleRecursive'), 'SingletonSampleRecursiveModel');
 		$firstSingleton = $this->_controller->getGlobalModel('SingletonSampleRecursive');
 		$firstSingleton->setFoo('bar');
@@ -136,25 +166,23 @@ class ControllerTest extends UnitTestCase
 		$this->assertEqual($firstSingleton->getFoo(), $secondSingleton->getFoo());
 	}
 
-	public function testgetInstance()
+	public function testGetInstance()
 	{
-		$this->assertTrue(0, 'Incomplete Test');
-		/*
-		try {
-			MockController::getInstance();
-			$this->assertTrue(0,'Expected ControllerException not thrown!');
-		} catch (ControllerException $e) {
-			$this->pass('Received the Controller exception we were expecting.');
-		}
-		$this->_controller = Controller::newInstance('ConsoleController');
-		$this->assertIdentical($this->_controller, MockController::getInstance());
-		*/
+		$controller = Context::getInstance()->getController();
+		$this->assertIsA($controller, 'Controller');
 	}
 
-	public function testgetModel()
+	public function testGetModel()
 	{
-		$this->assertIsA($this->_controller->getModel('Test', 'Test'), 'Test_TestModel');
-		$this->assertIsA($this->_controller->getModel('Test', 'Test2'), 'Test2Model');
+		$controller = Context::getInstance()->getController();
+		$this->assertIsA($controller->getModel('Test', 'Test'), 'Test_TestModel');
+		$this->assertIsA($controller->getModel('Test', 'Test2'), 'Test2Model');
+		$this->assertIsA($controller->getModel('Test', 'SingletonTest'), 'Test_SingletonTestModel');
+		$this->assertIsA($controller->getModel('Test', 'SingletonTest2'), 'SingletonTest2Model');
+		$firstSingleton = $controller->getModel('Test', 'SingletonTest');
+		$firstSingleton->setFoo('bar');
+		$secondSingleton = $controller->getModel('Test', 'SingletonTest');
+		$this->assertEqual($firstSingleton->getFoo(), $secondSingleton->getFoo());
 		$this->assertIsA($this->_controller->getModel('Test', 'SingletonTest'), 'Test_SingletonTestModel');
 		$this->assertIsA($this->_controller->getModel('Test', 'SingletonTest2'), 'SingletonTest2Model');
 		$firstSingleton = $this->_controller->getModel('Test', 'SingletonTest');
@@ -163,59 +191,48 @@ class ControllerTest extends UnitTestCase
 		$this->assertEqual($firstSingleton->getFoo(), $secondSingleton->getFoo());
 	}
 
-	public function testgetRenderMode()
+	public function testSetGetRenderMode()
 	{
-		$this->assertEqual(View::RENDER_VAR, $this->_controller->getRenderMode());
-		$this->_controller->setRenderMode(View::RENDER_NONE);
-		$this->assertEqual(View::RENDER_NONE, $this->_controller->getRenderMode());
+		$controller = Context::getInstance()->getController();
+		$this->assertEqual(View::RENDER_CLIENT, $controller->getRenderMode());
+		
+		$controller->setRenderMode(View::RENDER_VAR);
+		$this->assertEqual(View::RENDER_VAR, $controller->getRenderMode());
+		
+		$controller->setRenderMode(View::RENDER_NONE);
+		$this->assertEqual(View::RENDER_NONE, $controller->getRenderMode());
 	}
 
-	public function testgetView()
+	public function testGetView()
 	{
-		$this->assertIsA($this->_controller->getView('Test', 'TestSuccess'), 'Test_TestSuccessView');
-		$this->assertIsA($this->_controller->getView('Test', 'TestError'), 'TestErrorView');
+		$controller = Context::getInstance()->getController();
+		$this->assertIsA($controller->getView('Test', 'TestSuccess'), 'Test_TestSuccessView');
+		$this->assertIsA($controller->getView('Test', 'TestError'), 'Test_TestErrorView');
 	}
 
-	public function testmodelExists()
+	public function testModelExists()
 	{
-		$this->assertTrue($this->_controller->modelExists('Test', 'Test'));
-		$this->assertFalse($this->_controller->modelExists('Test', 'Bunk'));
-		$this->assertFalse($this->_controller->modelExists('Bunk', 'Bunk'));
+		$controller = Context::getInstance()->getController();
+		$this->assertTrue($controller->modelExists('Test', 'Test'));
+		$this->assertFalse($controller->modelExists('Test', 'Bunk'));
+		$this->assertFalse($controller->modelExists('Bunk', 'Bunk'));
 	}
 
-	public function testmoduleExists()
+	public function testModuleExists()
 	{
-		$this->assertTrue($this->_controller->moduleExists('Test'));
-		$this->assertFalse($this->_controller->moduleExists('Bunk'));
+		$controller = Context::getInstance()->getController();
+		$this->assertTrue($controller->moduleExists('Test'));
+		$this->assertFalse($controller->moduleExists('Bunk'));
 	}
 
-	public function testnewInstance()
+	public function testSetRenderMode()
 	{
-
-		/*
-		$this->assertIsA(Controller::newInstance('MockController'), 'MockController');
-		try {
-			MockController::newInstance('Request');
-			$this->assertTrue(0,'Expected FactoryException not thrown!');
-		} catch (FactoryException $e) {
-			$this->pass();
-		}
-		try {
-			MockController::newInstance('MockController');
-			$this->assertTrue(0,'Expected FactoryException not thrown!');
-		} catch (FactoryException $e) {
-			$this->pass();
-		}
-		*/
-	}
-
-	public function testsetRenderMode()
-	{
+		$controller = Context::getInstance()->getController();
 		$good = array(View::RENDER_CLIENT, View::RENDER_VAR, VIEW::RENDER_NONE);
 		$bad = array(932940, null, '');
 		foreach ($good as &$value) {
 			try {
-				$this->_controller->setRenderMode($value);
+				$controller->setRenderMode($value);
 				$this->pass();
 			} catch (RenderException $e) {
 				$this->assertTrue(0,'Caught unexpected RenderException!');
@@ -223,7 +240,7 @@ class ControllerTest extends UnitTestCase
 		}
 		foreach ($bad as &$value) {
 			try {
-				$this->_controller->setRenderMode($value);
+				$controller->setRenderMode($value);
 				$this->assertTrue(0,'Expected RenderException not thrown!');
 			} catch (RenderException $e) {
 				$this->pass('Appropriately caught a bad render mode.');
@@ -231,20 +248,18 @@ class ControllerTest extends UnitTestCase
 		}
 	}
 
-	public function testshutdown()
+	public function testViewExists()
 	{
-	}
-
-	public function testviewExists()
-	{
-		$this->assertTrue($this->_controller->viewExists('Test', 'TestSuccess'));
-		$this->assertFalse($this->_controller->viewExists('Test', 'Bunk'));
-		$this->assertFalse($this->_controller->viewExists('Bunk', 'Bunk'));
+		$controller = Context::getInstance()->getController();
+		$this->assertTrue($controller->viewExists('Test', 'TestSuccess'));
+		$this->assertFalse($controller->viewExists('Test', 'Bunk'));
+		$this->assertFalse($controller->viewExists('Bunk', 'Bunk'));
 	}
 
 	public function inCLI()
 	{
-		$this->assertEqual((php_sapi_name() == 'cli'), $this->_controller->inCLI());
+		$controller = Context::getInstance()->getController();
+		$this->assertEqual((php_sapi_name() == 'cli'), $controller->inCLI());
 	}
 
 }

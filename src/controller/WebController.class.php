@@ -123,16 +123,14 @@ abstract class WebController extends Controller
 	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  0.9.0
 	 */
-	protected function initialize ()
+	public function initialize (Context $context)
 	{
 
 		// initialize parent
-		parent::initialize();
+		parent::initialize($context);
 
 		// set our content type
-		$this->contentType = $this->getContext()
-						          ->getRequest()
-						          ->getParameter('ctype', AG_CONTENT_TYPE);
+		$this->contentType = $this->context->getRequest()->getParameter('ctype', AG_CONTENT_TYPE);
 
 	}
 

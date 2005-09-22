@@ -49,19 +49,9 @@ class FrontWebController extends WebController
 
 		try
 		{
-
-			// initialize the controller
-			$this->initialize();
-
-			// get the application context
-			$context = $this->getContext();
-
 			// determine our module and action
-			$moduleName = $context->getRequest()
-						          ->getParameter(AG_MODULE_ACCESSOR);
-
-			$actionName = $context->getRequest()
-						          ->getParameter(AG_ACTION_ACCESSOR);
+			$moduleName = $this->context->getRequest()->getParameter(AG_MODULE_ACCESSOR);
+			$actionName = $this->context->getRequest()->getParameter(AG_ACTION_ACCESSOR);
 
 			if ($moduleName == null)
 			{
