@@ -6,21 +6,20 @@
 require_once('%%PATH_TO_PROJECT%%/config.php');
 
 // +---------------------------------------------------------------------------+
-// | An absolute filesystem path to the agavi/agavi.php script.              |
+// | An absolute filesystem path to the agavi/agavi.php script.                |
 // +---------------------------------------------------------------------------+
 require_once('%%PATH_TO_AGAVI%%/agavi.php');
 
 // +---------------------------------------------------------------------------+
-// | Create our controller. For this file we're going to use a front           |
-// | controller pattern. This pattern allows us to specify module and action   |
-// | GET/POST parameters and it automatically detects them and finds the       |
-// | expected action.                                                          |
+// | Get the default configured context, and call it's controller's dispatch   |
+// | method.                                                                   |
 // +---------------------------------------------------------------------------+
-$controller = Controller::newInstance('FrontWebController');
-
-// +---------------------------------------------------------------------------+
-// | Dispatch our request.                                                     |
-// +---------------------------------------------------------------------------+
-$controller->dispatch();
-
+try {
+	Context::getInstance()->getController()->dispatch();
+} catch (AgaviException $e) {
+	$e->printStackTrace();
+} catch (Exception $e) {
+	// unknown exception
+	$e->printStackTrace(new AgaviException($e->getMessage()));
+}
 ?>
