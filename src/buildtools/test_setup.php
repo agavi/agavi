@@ -3,6 +3,9 @@
 require_once('simpletest/unit_tester.php');
 require_once('simpletest/reporter.php');
 require_once('simpletest/mock_objects.php');
+if (!defined('AG_TEST_CACHE_DIR')) {
+	define('AG_TEST_CACHE_DIR', false); // set to a path where you want to write the cache to, to enable caching the class locations
+}
 
 // the agavi script will have defined the AG_APP_DIR, else we should attempt to find it. 
 if (!defined('AG_APP_DIR') && isset($_ENV['AGAVI_INSTALLATION'])) {
@@ -46,12 +49,12 @@ function locateClasses($path, $prefix=true)
 function __autoload($class)
 {
 	$datefmt = 'c';
-	$cachedir = dirname(__FILE__);
+	$cachedir = AG_TEST_CACHE_DIR;
 	$cache = $cachedir . '/classcache.inc';
 	static $classes;
 	
 	if (!is_array($classes) || !array_key_exists($class, $classes)) {
-		if (file_exists($cache)) {
+		if ($cachedir && file_exists($cache)) {
 			include($cache); 
 			if (array_key_exists($class, $classes)) {
 				require_once($classes[$class]);
@@ -62,7 +65,7 @@ function __autoload($class)
 		if (defined('PROJECT_APP_DIR')) { 
 			$classes = array_merge((array) $classes, (array) locateClasses(PROJECT_APP_DIR, true));
 		}
-		if (is_writable($cachedir)) {
+		if ($cachedir && is_writable($cachedir)) {
 			$contents = "<?php\n//--Automagicly created ".date($datefmt)."\n//" .
 									(defined('PROJECT_APP_DIR') ? "includes {$_SERVER['CWD_NAME']} webapp classes.\n" : "no webapp classes included.\n") .
 									'$classes = ' .var_export($classes, true)."\n?>";

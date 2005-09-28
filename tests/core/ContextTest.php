@@ -26,6 +26,9 @@ class ContextTest extends UnitTestCase
 		
 		$e = Context::getInstance('test1'); // different animal
 		$this->assertCopy($a, $e);
+		$f = Context::getInstance(); // we should be getting the default (test) not the last (test1)
+		$this->assertReference($a, $f);
+		$this->assertCopy($e, $f);
 		
 		$this->assertIsA(Context::getInstance()->getActionStack(), $cfg[$default]['action_stack']);
 		$this->assertIsA(Context::getInstance()->getRequest(), $cfg[$default]['request']);

@@ -109,8 +109,10 @@ function findTests($path, $title="Agavi")
 	$group = new GroupTest("$title Test Suite");
 	while ($iterator->valid()) {
 		if ($iterator->isDir() && !$iterator->isDot() && !isHidden($iterator->getFilename())) {
-			if ($iterator->hasChildren() ) {
-				$group->addTestCase( findTests($iterator->getPathname(), ucfirst(basename($iterator->getPath()))) );
+			if ($iterator->hasChildren()) {
+				// pass by reference work-around
+				$tests =& findTests($iterator->getPathname(), ucfirst(basename($iterator->getPath())));
+				$group->addTestCase($tests);
 			}
 		} else if ($iterator->isFile() && isTest($iterator->getFilename()) && !isHidden($iterator->getFilename())) { 
 			$group->addTestFile($iterator->getPathname());
