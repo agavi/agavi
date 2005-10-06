@@ -1,6 +1,23 @@
 <?php
 require_once dirname(__FILE__) . '/../test_environment.php';
 
+// pseudo class used in test
+class TestSessionStorage extends Storage
+{
+	public function & read($key)
+	{
+	}
+	public function & remove($key)
+	{
+	}
+	public function shutdown()
+	{
+	}
+	public function write($key, &$data)
+	{
+	}
+}
+
 class ContextTest extends UnitTestCase 
 {
 	public function setup()

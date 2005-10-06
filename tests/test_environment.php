@@ -27,19 +27,4 @@ define('AG_CONTENT_TYPE', 'html');
 // define('AG_MAX_FORWARDS', 3);
 
 
-class TestSessionStorage extends Storage
-{
-	public function & read($key)
-	{
-	}
-	public function & remove($key)
-	{
-	}
-	public function shutdown()
-	{
-	}
-	public function write($key, &$data)
-	{
-	}
-}
 ?>
