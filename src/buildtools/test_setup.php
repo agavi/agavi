@@ -36,7 +36,6 @@ function locateClasses($path, $prefix=true)
 		} else if ( $i->isClass() ) { 
 			$classes[$i->className()] = $i->getPathname();
 			if ($prefix && ($pname = $i->prefixedClassName())) {
-				// echo "pname: $pname\n";
 				$classes[$pname] = $i->getPathname();
 			}
 		}
@@ -53,10 +52,10 @@ function __autoload($class)
 	$cache = $cachedir . '/classcache.inc';
 	static $classes;
 	
-	if (!is_array($classes) || !array_key_exists($class, $classes)) {
+	if (!is_array($classes) || !isset($classes[$class])) {
 		if ($cachedir && file_exists($cache)) {
 			include($cache); 
-			if (array_key_exists($class, $classes)) {
+			if (isset($classes[$class])) {
 				require_once($classes[$class]);
 				return;
 			}
@@ -66,13 +65,13 @@ function __autoload($class)
 			$classes = array_merge((array) $classes, (array) locateClasses(PROJECT_APP_DIR, true));
 		}
 		if ($cachedir && is_writable($cachedir)) {
-			$contents = "<?php\n//--Automagicly created ".date($datefmt)."\n//" .
-									(defined('PROJECT_APP_DIR') ? "includes {$_SERVER['CWD_NAME']} webapp classes.\n" : "no webapp classes included.\n") .
+			$contents = "<?php\n// --Automagicly created ".date($datefmt)."\n//" .
+									(defined('PROJECT_APP_DIR') ? " includes classes located in {$_SERVER['CWD_NAME']}/webapp, too.\n" : "no webapp classes included.\n") .
 									'$classes = ' .var_export($classes, true)."\n?>";
 			file_put_contents($cache, $contents);
 		}
 	}
-	if (array_key_exists($class, $classes)) {
+	if (isset($classes[$class])) {
 		require_once($classes[$class]);
 	}
 }

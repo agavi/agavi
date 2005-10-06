@@ -85,8 +85,9 @@ if ( !is_dir(TESTSDIR) ) {
 require_once("simpletest/unit_tester.php");
 require_once("simpletest/reporter.php");
 require_once("simpletest/mock_objects.php");
+@include_once(TESTSDIR . "/test_environment.php"); // we probably defined our webapp location, etc in here. 
+require_once(AG_APP_DIR . "/buildtools/test_setup.php");
 @include_once("simpletest/ui/colortext_reporter.php");
-@include_once(TESTSDIR . "/test_setup.php");
 @include_once("buildtools/simpletest/vimreporter.class.php");
 
 function isTest($name)
