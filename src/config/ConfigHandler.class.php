@@ -166,22 +166,27 @@ abstract class ConfigHandler extends ParameterHolder
 	 * @return string The new value.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
+	 * @author Johan Mjönes(johan.mjones@ongame.co)
 	 * @since  0.9.0
 	 */
 	public static function & replaceConstants ($value)
 	{
-
-		static
-			$keys = array('%AG_APP_DIR%', '%AG_LIB_DIR%', '%AG_MODULE_DIR%',
-						  '%AG_WEBAPP_DIR%'),
-
-			$reps = array(AG_APP_DIR, AG_LIB_DIR, AG_MODULE_DIR,
-						  AG_WEBAPP_DIR);
-
-		$value = str_replace($keys, $reps, $value);
+		$newvalue = $value;
+		do {
+			$value = $newvalue;
+			$newvalue = preg_replace_callback(
+				'/\%(\w+?)\%/',
+				create_function(
+					'$match',
+					'$constant = $match[1]; ' .
+					'return (defined($constant) ? constant($constant) : "%".$constant."%");'
+				),
+				$value,
+				1
+			);
+		} while ($newvalue != $value);
 
 		return $value;
-
 	}
 
 	// -------------------------------------------------------------------------

@@ -49,7 +49,6 @@ abstract class ParameterHolder extends AgaviObject
 	public function clearParameters ()
 	{
 
-		$this->parameters = null;
 		$this->parameters = array();
 
 	}

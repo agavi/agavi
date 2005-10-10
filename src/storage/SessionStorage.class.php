@@ -61,6 +61,10 @@ class SessionStorage extends Storage
 		$sessionName = $this->getParameter('session_name', 'Agavi');
 		session_name($sessionName);
 		
+		if ($sessionId = $this->getParameter('session_id')) {
+			session_id($sessionId);
+		}
+		
 		if ($this->getParameter('auto_start', true)) {
 			session_start();
 		}

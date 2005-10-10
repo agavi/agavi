@@ -54,8 +54,9 @@ class ConsoleController extends Controller
 
 		try {
 
-			// set the console parameters
-			$this->setParametersByRef($params);
+			if (is_array($params)) {
+				$this->setParametersByRef($params);
+			}
 
 			// determine our module and action
 			$moduleName = (defined('AG_CONSOLE_MODULE') ? AG_CONSOLE_MODULE : AG_DEFAULT_MODULE);

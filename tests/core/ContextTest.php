@@ -1,6 +1,23 @@
 <?php
 require_once dirname(__FILE__) . '/../test_environment.php';
 
+// pseudo class used in test
+class TestSessionStorage extends Storage
+{
+	public function & read($key)
+	{
+	}
+	public function & remove($key)
+	{
+	}
+	public function shutdown()
+	{
+	}
+	public function write($key, &$data)
+	{
+	}
+}
+
 class ContextTest extends UnitTestCase 
 {
 	public function setup()
@@ -26,9 +43,13 @@ class ContextTest extends UnitTestCase
 		
 		$e = Context::getInstance('test1'); // different animal
 		$this->assertCopy($a, $e);
+		$f = Context::getInstance(); // we should be getting the default (test) not the last (test1)
+		$this->assertReference($a, $f);
+		$this->assertCopy($e, $f);
 		
 		$this->assertIsA(Context::getInstance()->getActionStack(), $cfg[$default]['action_stack']);
 		$this->assertIsA(Context::getInstance()->getRequest(), $cfg[$default]['request']);
+		$this->assertIsA(Context::getInstance()->getDatabaseManager(), $cfg[$default]['database_manager']);
 	}
 
 	public function testGetAlternateContextInstance()
@@ -51,7 +72,6 @@ class ContextTest extends UnitTestCase
 		Mock::generate('ActionStack');	
 		$context->initialize('default', array('action_stack' => 'MockActionStack'));
 		$this->assertIsA($context->getActionStack(), 'MockActionStack');
-		
 	}
 
 

@@ -85,8 +85,9 @@ if ( !is_dir(TESTSDIR) ) {
 require_once("simpletest/unit_tester.php");
 require_once("simpletest/reporter.php");
 require_once("simpletest/mock_objects.php");
+@include_once(TESTSDIR . "/test_environment.php"); // we probably defined our webapp location, etc in here. 
+require_once(AG_APP_DIR . "/buildtools/test_setup.php");
 @include_once("simpletest/ui/colortext_reporter.php");
-@include_once(TESTSDIR . "/test_setup.php");
 @include_once("buildtools/simpletest/vimreporter.class.php");
 
 function isTest($name)
@@ -109,8 +110,10 @@ function findTests($path, $title="Agavi")
 	$group = new GroupTest("$title Test Suite");
 	while ($iterator->valid()) {
 		if ($iterator->isDir() && !$iterator->isDot() && !isHidden($iterator->getFilename())) {
-			if ($iterator->hasChildren() ) {
-				$group->addTestCase( findTests($iterator->getPathname(), ucfirst(basename($iterator->getPath()))) );
+			if ($iterator->hasChildren()) {
+				// pass by reference work-around
+				$tests =& findTests($iterator->getPathname(), ucfirst(basename($iterator->getPath())));
+				$group->addTestCase($tests);
 			}
 		} else if ($iterator->isFile() && isTest($iterator->getFilename()) && !isHidden($iterator->getFilename())) { 
 			$group->addTestFile($iterator->getPathname());

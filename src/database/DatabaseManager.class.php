@@ -88,6 +88,7 @@ class DatabaseManager extends AgaviObject
 
 		// load database configuration
 		require_once(ConfigCache::checkConfig('config/databases.ini'));
+		return true;
 
 	}
 

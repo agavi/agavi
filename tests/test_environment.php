@@ -1,8 +1,12 @@
 <?php
-// Define some path constants for our sandboxed test environment
-
 error_reporting(E_ALL); // simpletest isnt STRICT compliant :(
 
+// set this to location you want to write the cache of class locations to enable caching (eg: dirname(__FILE__), make sure it's writable )
+if (!defined('AG_TEST_CACHE_DIR')) {
+	define('AG_TEST_CACHE_DIR', false); 
+}
+
+// Define some path constants for our sandboxed test environment
 define('AG_WEBAPP_DIR',	dirname(__FILE__) . '/sandbox');
 define('AG_CONFIG_DIR',	AG_WEBAPP_DIR . '/config');
 define('AG_CACHE_DIR',	AG_WEBAPP_DIR . '/cache');
@@ -23,19 +27,4 @@ define('AG_CONTENT_TYPE', 'html');
 // define('AG_MAX_FORWARDS', 3);
 
 
-class TestSessionStorage extends Storage
-{
-	public function & read($key)
-	{
-	}
-	public function & remove($key)
-	{
-	}
-	public function shutdown()
-	{
-	}
-	public function write($key, &$data)
-	{
-	}
-}
 ?>
