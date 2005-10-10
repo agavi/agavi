@@ -61,8 +61,8 @@ abstract class ConfigHandler extends ParameterHolder
 	 *
 	 * @return string Data to be written to a cache file.
 	 *
-	 * @throws <b>ConfigurationException</b> If a requested configuration file
-	 *                                       does not exist or is not readable.
+	 * @throws <b>UnreadableException</b> If a requested configuration file
+	 *                                    does not exist or is not readable.
 	 * @throws <b>ParseException</b> If a requested configuration file is
 	 *                               improperly formatted.
 	 *

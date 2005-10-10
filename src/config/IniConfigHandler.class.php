@@ -40,8 +40,8 @@ abstract class IniConfigHandler extends ConfigHandler
 	 *
 	 * @return string A parsed .ini configuration.
 	 *
-	 * @throws <b>ConfigurationException</b> If a requested configuration file
-	 *                                       does not exist or is not readable.
+	 * @throws <b>UnreadableException</b> If a requested configuration file
+	 *                                    does not exist or is not readable.
 	 * @throws <b>ParseException</b> If a requested configuration file is
 	 *                               improperly formatted.
 	 *
@@ -52,7 +52,7 @@ abstract class IniConfigHandler extends ConfigHandler
 	{
 		if (!is_readable($config)) {
 			$error = 'Configuration file "' . $config . '" does not exist or is not readable';
-			throw new ConfigurationException($error);
+			throw new UnreadableException($error);
 		}
 
 		// parse our config
