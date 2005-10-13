@@ -205,13 +205,13 @@ class Context extends AgaviObject
 	 * (re)Initialize the Context instance.
 	 *
 	 * @param string name corresponding to a section of the config
-	 * @param array overides, key => class 
+	 * @param array overrides, key => class 
 	 * @return Context instance
 	 *
 	 * @author Mike Vincent (mike@agavi.org)
 	 * @since  0.10.0
 	 */
-	public function initialize($profile = 'default', $overides = array())
+	public function initialize($profile = 'default', $overrides = array())
 	{
 		static $profiles;
 		$profile = strtolower($profile);
@@ -239,7 +239,7 @@ class Context extends AgaviObject
 		}
 		
 		if (isset($profiles[$profile])) {
-			$params = array_merge($profiles[$profile], array_change_key_case((array) $overides, CASE_LOWER));
+			$params = array_merge($profiles[$profile], array_change_key_case((array) $overrides, CASE_LOWER));
 		} else {
 			throw new ConfigurationException("Invalid or undefined Context name ($profile).");
 		}
@@ -298,7 +298,7 @@ class Context extends AgaviObject
 		$args = isset($params['controller.param']) ? $params['controller.param'] : null;
 		$this->controller->initialize($this, $args);
 		$this->controller->setExecutionFilterClassName($params['execution_filter']); 
-		$args = isset($params['controller.param']) ? $params['request.param'] : null;
+		$args = isset($params['request.param']) ? $params['request.param'] : null;
 		$this->request->initialize($this, $args);
 		
 		if (defined('AG_USE_LOGGING') && AG_USE_LOGGING) {
