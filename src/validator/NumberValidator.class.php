@@ -107,7 +107,7 @@ class NumberValidator extends Validator
 
 		$min = $this->getParameter('min');
 
-		if ($min != null && $value < $min)
+		if ($min !== null && $value < $min)
 		{
 
 			// too small
@@ -119,7 +119,7 @@ class NumberValidator extends Validator
 
 		$max = $this->getParameter('max');
 
-		if ($max != null && $value > $max)
+		if ($max !== null && $value > $max)
 		{
 
 			// too large
