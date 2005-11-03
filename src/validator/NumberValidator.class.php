@@ -27,7 +27,7 @@
  *                                                 input is too small.
  * # <b>nan_error</b>  - [Input is not a number] - Default error message when
  *                                                 input is not a number.
- * # <b>type</b>       - [Any]                   - Type of number (Any, Float).
+ * # <b>type</b>       - [Any]                   - Type of number (Any, Float, Int).
  * # <b>type_error</b> - [Input is not a number] - An error message to use when
  *                                                 input is not a number.
  *
@@ -89,6 +89,20 @@ class NumberValidator extends Validator
 			// cast our value to a float
 			$value = (float) $value;
 
+		}
+		elseif ('int' == $type) {
+
+			// cast the value first to int and then back to string to enforce 
+			// a string comparison and override implicit conversion rules. 
+			$cast = (int) $value;
+			if ( ((string)$cast) !== ((string)$value)) {
+
+				$error = $this->getParameter('type_error');
+				return false;
+			}
+
+			// cast our value to an int
+			$value = $cast;
 		}
 
 		$min = $this->getParameter('min');
