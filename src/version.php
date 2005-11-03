@@ -32,7 +32,7 @@ define('AG_APP_MINOR_VERSION', '10');
 
 define('AG_APP_MICRO_VERSION', '0');
 
-define('AG_APP_BRANCH',        'trunk');
+define('AG_APP_BRANCH',        'v-dogg');
 
 define('AG_APP_STATUS',        'DEV');
 
