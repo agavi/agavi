@@ -29,6 +29,13 @@ class WebRequest extends Request
 {
 
 	// +-----------------------------------------------------------------------+
+	// | PROTECTED DATA                                                        |
+	// +-----------------------------------------------------------------------+
+
+	protected
+		$config;
+
+	// +-----------------------------------------------------------------------+
 	// | METHODS                                                               |
 	// +-----------------------------------------------------------------------+
 
@@ -346,6 +353,12 @@ class WebRequest extends Request
 	public function initialize ($context, $parameters = null)
 	{
 
+		$this->config = array();
+		$this->config['cookie_lifetime'] = isset($parameters['cookie_lifetime']) ? $parameters['cookie_lifetime'] : 0;
+		$this->config['cookie_path']     = isset($parameters['cookie_path'])     ? $parameters['cookie_path']     : "/";
+		$this->config['cookie_domain']   = isset($parameters['cookie_domain'])   ? $parameters['cookie_domain']   : "";
+		$this->config['cookie_secure']   = isset($parameters['cookie_secure'])   ? $parameters['cookie_secure']   : 0;
+
 		if (isset($_SERVER['REQUEST_METHOD']))
 		{
 
@@ -541,6 +554,66 @@ class WebRequest extends Request
 
 		// nothing to do here
 
+	}
+
+	/**
+	 * Retrieve a value stored into a cookie.
+	 *
+	 * @param string A cookie name.
+	 * @param mixed A default value.
+	 *
+	 * @return mixed The value from the cookie, if such a cookie exists, otherwise
+	 *               null.
+	 *
+	 * @author Veikko Makinen (mail@veikkomakinen.com)
+	 * @since  0.10.0-DEV
+	 */
+	public function getCookie($name, $default=null)
+	{
+		$retval = $default;
+
+		if (isset($_COOKIE[$name])) {
+			$retval = $_COOKIE[$name];
+		}
+		return $retval;
+	}
+
+	/**
+	 * Send a cookie. Note that cookies are sent as HTTP headers and thus
+	 * must be sent before any output from the application.
+	 *
+	 * @param string A cookie name.
+	 * @param mixed Data to store into a cookie. If null or empty cookie will be tried to be removed.
+	 * @param array Cookie parameters (parameters from config or defaults are used for any missing parameters).
+	 *
+	 *
+	 * @return boolean true if headers hadn't been sent and cookie was set, otherwise false.
+	 *
+	 * @author Veikko Makinen (mail@veikkomakinen.com)
+	 * @since  0.10.0-DEV
+	 */
+	public function setCookie($name, $value, $parameters=null)
+	{
+		if (!headers_sent()) {
+
+			$lifetime = isset($parameters['lifetime']) ? $parameters['lifetime'] : $this->config['cookie_lifetime'];
+			$path     = isset($parameters['path'])     ? $parameters['path']     : $this->config['cookie_path'];
+			$domain   = isset($parameters['domain'])   ? $parameters['domain']   : $this->config['cookie_domain'];
+			$secure   = isset($parameters['secure'])   ? $parameters['secure']   : $this->config['cookie_secure'];
+
+			//do we want to set expiration time or not?
+			$expire = ($lifetime != 0) ? time() + $lifetime : 0;
+
+			setcookie($name, $value, $expire, $path, $domain, $secure);
+
+			return true;
+
+		}
+		else {
+
+			return false;
+
+		}
 	}
 
 }
