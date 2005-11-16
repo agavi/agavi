@@ -73,17 +73,17 @@ function __autoload ($class)
 		require_once($config);
 	}
 
-	if (!isset($classes[$class])) {
-		// unspecified class
-		$error = 'Autoloading of class "%s" failed';
-		$error = sprintf($error, $class);
-		$e     = new AutoloadException($error);
-
-		$e->printStackTrace();
+	if (isset($classes[$class])) {
+		// class exists, let's include it
+		require_once($classes[$class]);
 	}
+	/*	
 
-	// class exists, let's include it
-	require_once($classes[$class]);
+		If the class doesn't exist in autoload.ini there's not a lot we can do. Because 
+		PHP's class_exists resorts to __autoload we cannot throw exceptions
+		for this might break some 3rd party lib autoloading mechanism.
+
+	*/
 
 }
 
