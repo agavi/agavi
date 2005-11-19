@@ -93,23 +93,51 @@ class BasicSecurityUser extends SecurityUser
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Indicates whether or not this user has a credential.
 	 *
-	 * @param mixed Credential data.
+	 * @param mixed Credential data. Either a string, or an array of credentials
+	 *              which are all required. If these individual credentials are
+	 *              again an array of credentials, one or more of these sub-
+	 *              credentials will be required.
 	 *
 	 * @return bool true, if this user has the credential, otherwise false.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
+	 * @author David Zuelke (dz@bitxtender.com)
 	 * @since  0.9.0
 	 */
 	public function hasCredential ($credential)
 	{
-
-		return (in_array($credential, $this->credentials));
-
+		if(is_array($credential))
+		{
+			$credentials = (array)$credential;
+			foreach($credentials as $credential)
+			{
+				if(is_array($credential))
+				{
+					foreach($credential as $subcred)
+					{
+						if(in_array($subcred, $this->credentials))
+						{
+							continue 2;
+						}
+					}
+					return false;
+				}
+				else
+				{
+					if(!in_array($credential, $this->credentials))
+					{
+						return false;
+					}
+				}
+			}
+			return true;
+		}
+		else
+		{
+			return (in_array($credential, $this->credentials));
+		}
 	}
 
 	// -------------------------------------------------------------------------
