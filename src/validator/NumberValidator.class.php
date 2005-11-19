@@ -27,7 +27,7 @@
  *                                                 input is too small.
  * # <b>nan_error</b>  - [Input is not a number] - Default error message when
  *                                                 input is not a number.
- * # <b>type</b>       - [Any]                   - Type of number (Any, Float).
+ * # <b>type</b>       - [Any]                   - Type of number (Any, Int[eger], Float).
  * # <b>type_error</b> - [Input is not a number] - An error message to use when
  *                                                 input is not a number.
  *
@@ -61,58 +61,40 @@ class NumberValidator extends Validator
 	public function execute (&$value, &$error)
 	{
 
-		if (!is_numeric($value))
-		{
-
-			// it's NaN, what nerve!
+		if (!is_numeric($value)) {
 			$error = $this->getParameter('nan_error');
-
 			return false;
-
 		}
 
-		$type = strtolower($this->getParameter('type'));
+		switch (strtolower($this->getParameter('type'))) {
+			case 'float':
+				if (substr_count($value, '.') != 1) {
+					$error = $this->getParameter('type_error');
+					return false;
+				}
+				$value = (float) $value;
+				break;
 
-		if ($type == 'float')
-		{
-
-			if (substr_count($value, '.') != 1)
-			{
-
-				// value isn't a float, shazbot!
-				$error = $this->getParameter('type_error');
-
-				return false;
-
-			}
-
-			// cast our value to a float
-			$value = (float) $value;
-
+			case 'int':
+			case 'integer':
+				if (!preg_match('/^\d+$/', $value)) {
+					$error = $this->getParameter('type_error');
+					return false;
+				}
+				$value = (int) $value;
+				break;
 		}
 
 		$min = $this->getParameter('min');
-
-		if ($min != null && $value < $min)
-		{
-
-			// too small
+		if ($min != null && $value < $min) { // too small
 			$error = $this->getParameter('min_error');
-
 			return false;
-
 		}
 
 		$max = $this->getParameter('max');
-
-		if ($max != null && $value > $max)
-		{
-
-			// too large
+		if ($max != null && $value > $max) { // too large
 			$error = $this->getParameter('max_error');
-
 			return false;
-
 		}
 
 		return true;
@@ -149,17 +131,10 @@ class NumberValidator extends Validator
 		parent::initialize($context, $parameters);
 
 		// check user-specified parameters
-		$type = strtolower($this->getParameter('type'));
-
-		if ($type != 'any' && $type != 'float')
-		{
-
-			// unknown type
+		if (!in_array(strtolower($this->getParameter('type')), array('any', 'float', 'int', 'integer'))) { // unknown type
 			$error = 'Unknown number type "%s" in NumberValidator';
 			$error = sprintf($error, $this->getParameter('type'));
-
 			throw new ValidatorException($error);
-
 		}
 
 		return true;
