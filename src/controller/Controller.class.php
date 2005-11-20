@@ -267,6 +267,7 @@ abstract class Controller extends ParameterHolder
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @author Mike Vincent (mike@agavi.org)
+	 * @author David Zuelke (dz@bitxtender.com)
 	 * @since  0.9.0
 	 */
 	public function getAction ($moduleName, $actionName)
@@ -277,14 +278,21 @@ abstract class Controller extends ParameterHolder
 			require_once($file);
 		}
 		
+		$longActionName = $actionName;
+
 		// Nested action check?
 		$position = strrpos($actionName, '/');
 		if ($position > -1) {
+			$longActionName = str_replace('/', '_', $actionName);
 			$actionName = substr($actionName, $position + 1);
 		}
 
-		if (class_exists($moduleName . '_' . $actionName . 'Action', false)) {
+		if (class_exists($moduleName . '_' . $longActionName . 'Action', false)) {
+			$class = $moduleName . '_' . $longActionName . 'Action';
+		} elseif (class_exists($moduleName . '_' . $actionName . 'Action', false)) {
 			$class = $moduleName . '_' . $actionName . 'Action';
+		} elseif (class_exists($longActionName . 'Action', false)) {
+			$class = $longActionName . 'Action';
 		} else {
 			$class = $actionName . 'Action';
 		}
@@ -478,6 +486,8 @@ abstract class Controller extends ParameterHolder
 	 *              otherwise null.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
+	 * @author Mike Vincent (mike@agavi.org)
+	 * @author David Zuelke (dz@bitxtender.com)
 	 * @since  0.9.0
 	 */
 	public function getView ($moduleName, $viewName)
@@ -488,25 +498,24 @@ abstract class Controller extends ParameterHolder
 
 		require_once($file);
 
-		$position = strrpos($viewName, '/');
+		$longViewName = $viewName;
 
+		$position = strrpos($viewName, '/');
 		if ($position > -1)
 		{
-
+			$longViewName = str_replace('/', '_', $viewName);
 			$viewName = substr($viewName, $position + 1);
-
 		}
 
-		$class = $viewName . 'View';
 
-		// fix for same name classes
-		$moduleClass = $moduleName . '_' . $class;
-
-		if (class_exists($moduleClass, false))
-		{
-
-			$class = $moduleClass;
-
+		if (class_exists($moduleName . '_' . $longViewName . 'View', false)) {
+			$class = $moduleName . '_' . $longViewName . 'View';
+		} elseif (class_exists($moduleName . '_' . $viewName . 'View', false)) {
+			$class = $moduleName . '_' . $viewName . 'View';
+		} elseif (class_exists($longViewName . 'View', false)) {
+			$class = $longViewName . 'View';
+		} else {
+			$class = $viewName . 'View';
 		}
 
 		return new $class();
