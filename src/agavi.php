@@ -119,6 +119,7 @@ try {
 	require_once(AG_APP_DIR . '/exception/AutoloadException.class.php');
 	require_once(AG_APP_DIR . '/exception/CacheException.class.php');
 	require_once(AG_APP_DIR . '/exception/ConfigurationException.class.php');
+	require_once(AG_APP_DIR . '/exception/UnreadableException.class.php');
 	require_once(AG_APP_DIR . '/exception/ParseException.class.php');
 	require_once(AG_APP_DIR . '/util/Toolkit.class.php');
 
