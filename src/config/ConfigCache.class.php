@@ -128,10 +128,6 @@ class ConfigCache extends AgaviObject
 		// the full filename path to the config, which might not be what we were given.
 		$filename = Toolkit::isPathAbsolute($config) ? $config : AG_WEBAPP_DIR . '/' . $config;
 
-		if(AG_CHECK_CONFIGS && !AG_DEBUG) {
-			return self::getCacheName($config);
-		}
-
 		if (!is_readable($filename)) {
 			throw new UnreadableException('Configuration file "' . $filename . '" does not exist or is unreadable.');
 		}

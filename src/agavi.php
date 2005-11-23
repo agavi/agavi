@@ -89,7 +89,20 @@ function __autoload ($class)
 
 try {
 
+	// set default error reporting and debug modes if none specified
+	if(!defined('AG_ERROR_REPORTING')) {
+		define('AG_ERROR_REPORTING', E_ALL | E_STRICT);
+	}
 	error_reporting(AG_ERROR_REPORTING);
+
+	if(!defined('AG_DEBUG')) {
+		define('AG_DEBUG', false);
+	}
+
+	// bail out if AG_WEBAPP_DIR was not defined before including this file
+	if(!defined('AG_WEBAPP_DIR')) {
+		trigger_error('Constant AG_WEBAPP_DIR not defined, terminating...', E_USER_ERROR);
+	}
 
 	// ini settings
 	ini_set('arg_separator.output',      '&amp;');
@@ -101,13 +114,21 @@ try {
 	if(!defined('AG_APP_DIR')) {
 		define('AG_APP_DIR', dirname(__FILE__));
 	}
-	if(!defined('AG_CHECK_CONFIGS')) {
-		define('AG_CHECK_CONFIGS', true);
+	if(!defined('AG_CACHE_DIR')) {
+		define('AG_CACHE_DIR', AG_WEBAPP_DIR . '/cache');
 	}
-	define('AG_CONFIG_DIR',   AG_WEBAPP_DIR . '/config');
-	define('AG_LIB_DIR',      AG_WEBAPP_DIR . '/lib');
-	define('AG_MODULE_DIR',   AG_WEBAPP_DIR . '/modules');
-	define('AG_TEMPLATE_DIR', AG_WEBAPP_DIR . '/templates');
+	if(!defined('AG_CONFIG_DIR')) {
+		define('AG_CONFIG_DIR', AG_WEBAPP_DIR . '/config');
+	}
+	if(!defined('AG_LIB_DIR')) {
+		define('AG_LIB_DIR', AG_WEBAPP_DIR . '/lib');
+	}
+	if(!defined('AG_MODULE_DIR')) {
+		define('AG_MODULE_DIR', AG_WEBAPP_DIR . '/modules');
+	}
+	if(!defined('AG_TEMPLATE_DIR')) {
+		define('AG_TEMPLATE_DIR', AG_WEBAPP_DIR . '/templates');
+	}
 
 	// required files
 	require_once(AG_APP_DIR . '/version.php');
