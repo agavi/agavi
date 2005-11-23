@@ -37,13 +37,14 @@ abstract class Controller extends ParameterHolder
 		$executionFilterClassName = null;
 
 	protected
-		$context         = null;
+		$context         = null,
+		$shutdownList	 = null;
 
 
 	// +-----------------------------------------------------------------------+
 	// | METHODS                                                               |
 	// +-----------------------------------------------------------------------+
-	
+
 	/**
 	 *
 	 * The dispatch method must be implemented
@@ -53,7 +54,7 @@ abstract class Controller extends ParameterHolder
 	 *		forward to the requested module/action
 	 */
 	abstract function dispatch();
-	
+
 	/**
 	 * Indicates whether or not a module has a specific action.
 	 *
@@ -157,7 +158,7 @@ abstract class Controller extends ParameterHolder
 
 		// create an instance of the action
 		$actionInstance = $this->getAction($moduleName, $actionName);
-		
+
 		// add a new action stack entry
 		$this->getActionStack()->addEntry($moduleName, $actionName, $actionInstance);
 
@@ -165,7 +166,7 @@ abstract class Controller extends ParameterHolder
 		ConfigCache::import(AG_MODULE_DIR . '/' . $moduleName . '/config/module.ini');
 		$enabled_str = 'MOD_' . strtoupper($moduleName) . '_ENABLED';
 		if (defined($enabled_str) && constant($enabled_str)) {
-			
+
 			// check for a module config.php
 			$moduleConfig = AG_MODULE_DIR . '/' . $moduleName . '/config.php';
 			if (is_readable($moduleConfig)) {
@@ -189,7 +190,7 @@ abstract class Controller extends ParameterHolder
 							$error = 'Security is enabled, but your User ' .
 							         'implementation isn\'t a sub-class of ' .
 							         'SecurityUser';
-							
+
 							throw new SecurityException($error);
 
 						}
@@ -198,7 +199,7 @@ abstract class Controller extends ParameterHolder
 						$filterChain->register($this->context->getSecurityFilter());
 
 					}
-					
+
 					// load filters
 					$this->loadGlobalFilters($filterChain);
 					$this->loadModuleFilters($filterChain);
@@ -272,11 +273,11 @@ abstract class Controller extends ParameterHolder
 	public function getAction ($moduleName, $actionName)
 	{
 		$file = AG_MODULE_DIR . '/' . $moduleName . '/actions/' . $actionName . 'Action.class.php';
-		
+
 		if (file_exists($file)) {
 			require_once($file);
 		}
-		
+
 		// Nested action check?
 		$position = strrpos($actionName, '/');
 		if ($position > -1) {
@@ -350,7 +351,7 @@ abstract class Controller extends ParameterHolder
 	{
 
 		$class = $modelName . 'Model';
-		
+
 		if (!class_exists($class, false)) {
 			$file = AG_LIB_DIR . '/models/' . $modelName . 'Model.class.php';
 			if (file_exists($file)) {
@@ -375,8 +376,8 @@ abstract class Controller extends ParameterHolder
 				$model->initialize($this->context);
 			}
 			return $model;
-		} 
-		// we'll never actually get here, but what the hay. 
+		}
+		// we'll never actually get here, but what the hay.
 		return null;
 	}
 
@@ -444,7 +445,7 @@ abstract class Controller extends ParameterHolder
 		}
 
 		return $model;
-			
+
 	}
 
 	// -------------------------------------------------------------------------
@@ -529,7 +530,7 @@ abstract class Controller extends ParameterHolder
 	{
 		$this->maxForwards = defined('AG_MAX_FORWARDS') ? AG_MAX_FORWARDS : 20;
 		$this->context = $context;
-		
+
 		register_shutdown_function(array($this, 'shutdown'));
 	}
 
@@ -690,7 +691,7 @@ abstract class Controller extends ParameterHolder
 	{
 		if (class_exists($class) && Toolkit::isSubClass($class, 'Controller')) {
 			return new $class();
-		} 
+		}
 		$error = "Class ($class) doesnt exist or is not a Controller.";
 		throw new FactoryException($error);
 	}
@@ -733,7 +734,32 @@ abstract class Controller extends ParameterHolder
 	// -------------------------------------------------------------------------
 
 	/**
+	 * Register a shutdown listener.
+	 * The object is notified when Controller is shutdown.
+	 *
+	 * All registered listeners are notified before framework core classes are shutdown
+	 * so among others User, Request and Database are at you disposal during shutdown.
+	 *
+	 * If you register an object twice it will be notified twice.
+	 *
+	 * @param ShutdownListener
+	 *
+	 * @return void
+	 *
+	 * @author Veikko Makinen (mail@veikkomakinen.com)
+	 * @since  0.10.0
+	 */
+	public function registerShutdownListener (ShutdownListener $obj)
+	{
+		$this->shutdownList[] = $obj;
+	}
+
+	// -------------------------------------------------------------------------
+
+	/**
 	 * Execute the shutdown procedure.
+	 *
+	 * All registered ShutdownListeners are notified before framework core classes are shutdown.
 	 *
 	 * @return void
 	 *
@@ -742,9 +768,17 @@ abstract class Controller extends ParameterHolder
 	 */
 	public function shutdown ()
 	{
+		//notify shutdown listeners
+		if (is_array($this->shutdownList)) {
+			foreach ($this->shutdownList as $sdListener) {
+				$sdListener->shutdown();
+			}
+		}
+
 		if ($user = $this->context->getUser()) {
 			$user->shutdown();
 		}
+
 		session_write_close();
 		$this->context->getStorage()->shutdown();
 		$this->context->getRequest()->shutdown();
