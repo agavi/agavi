@@ -65,11 +65,13 @@ class PDODatabase extends Database
 
 		try	{
 
-			$this->connection = new PDO($dsn);
+			$pdo_username = $this->getParameter('username');
+			$pdo_password = $this->getParameter('password');
+			$this->connection = new PDO($dsn, $pdo_username, $pdo_password);
 
 		} catch (PDOException $e)	{
 
-			throw new DatabaseException($e->getMessage());	
+			throw new DatabaseException($e->getMessage());
 
 		}
 
