@@ -11,6 +11,13 @@
 define('AG_DEBUG', true);
 
 // +---------------------------------------------------------------------------+
+// | Whether or not config cache files should be checked for up-to-dateness.   |
+// | Disabling this will generate no config caches at all and rely on all files|
+// | being already generated. Use with caution. Setting may be omitted.        |
+// +---------------------------------------------------------------------------+
+define('AG_CHECK_CONFIGS', true);
+
+// +---------------------------------------------------------------------------+
 // | The PHP error reporting level.                                            |
 // |                                                                           |
 // | See: http://www.php.net/error_reporting                                   |

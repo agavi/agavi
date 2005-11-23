@@ -101,6 +101,9 @@ try {
 	if(!defined('AG_APP_DIR')) {
 		define('AG_APP_DIR', dirname(__FILE__));
 	}
+	if(!defined('AG_CHECK_CONFIGS')) {
+		define('AG_CHECK_CONFIGS', true);
+	}
 	define('AG_CONFIG_DIR',   AG_WEBAPP_DIR . '/config');
 	define('AG_LIB_DIR',      AG_WEBAPP_DIR . '/lib');
 	define('AG_MODULE_DIR',   AG_WEBAPP_DIR . '/modules');
