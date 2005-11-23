@@ -74,7 +74,11 @@ class PDODatabase extends Database
 		}
 
 		// lets generate exceptions instead of silent failures
-		$this->connection->setAttribute(PDO_ATTR_ERRMODE, PDO_ERRMODE_EXCEPTION);
+		if (defined(PDO::ATTR_ERRMODE)) {
+			$this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		} else {
+			$this->connection->setAttribute(PDO_ATTR_ERRMODE, PDO_ERRMODE_EXCEPTION);
+		}
 
 	}
 
