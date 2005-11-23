@@ -117,7 +117,7 @@ class BasicSecurityUser extends SecurityUser
 				{
 					foreach($credential as $subcred)
 					{
-						if(in_array($subcred, $this->credentials))
+						if(in_array($subcred, $this->credentials, true))
 						{
 							continue 2;
 						}
@@ -126,7 +126,7 @@ class BasicSecurityUser extends SecurityUser
 				}
 				else
 				{
-					if(!in_array($credential, $this->credentials))
+					if(!in_array($credential, $this->credentials, true))
 					{
 						return false;
 					}
@@ -136,7 +136,7 @@ class BasicSecurityUser extends SecurityUser
 		}
 		else
 		{
-			return (in_array($credential, $this->credentials));
+			return (in_array($credential, $this->credentials, true));
 		}
 	}
 
