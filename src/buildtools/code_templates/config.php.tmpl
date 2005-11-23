@@ -18,17 +18,19 @@ define('AG_DEBUG', true);
 define('AG_ERROR_REPORTING', E_ALL | E_STRICT);
 
 // +---------------------------------------------------------------------------+
-// | An absolute filesystem path to the agavi package. This directory         |
-// | contains all the Agavi packages.                                         |
+// | An absolute filesystem path to the agavi package. This directory          |
+// | contains all the Agavi packages.                                          |
+// | If this property is not defined here, it will be auto-determined by Agavi.|
 // +---------------------------------------------------------------------------+
-define('AG_APP_DIR', '%%PATH_TO_AGAVI%%');
+// define('AG_APP_DIR', '%%PATH_TO_AGAVI%%');
 
 // +---------------------------------------------------------------------------+
 // | An absolute filesystem path to your web application directory. This       |
 // | directory is the root of your web application, which includes the core    |
 // | configuration files and related web application data.                     |
+// | You shouldn't have to change this usually since it's auto-determined.     |
 // +---------------------------------------------------------------------------+
-define('AG_WEBAPP_DIR', '%%PATH_TO_PROJECT%%');
+define('AG_WEBAPP_DIR', dirname(__FILE__));
 
 // +---------------------------------------------------------------------------+
 // | An absolute filesystem path to the directory where cache files will be    |
