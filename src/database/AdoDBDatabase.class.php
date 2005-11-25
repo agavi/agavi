@@ -32,12 +32,12 @@
  *                                      specified values. server reads the dsn
  *                                      string from $_SERVER['dsn'], env from 
  *                                      $_ENV['dsn'] (works like $_SERVER).
+ * # <b>username</b>   	   - [none]   - The database user.
  * # <b>password</b>       - [none]   - The database password.
  * # <b>persistent</b>     - [No]     - Indicates that the connection should
  *                                      persistent.
  * # <b>dbtype</b>         - [none]   - The type of database (mysql, pgsql,
  *                                      etc).
- * # <b>user</b>       	   - [none]   - The database user.
  *
  * @package    agavi
  * @subpackage database
@@ -81,7 +81,7 @@ class AdoDBDatabase extends Database
 					$host 	  = $this->getParameter('host', null);
 					$password = $this->getParameter('password', null);
 					$dbtype   = $this->getParameter('dbtype', null);
-					$user 	  = $this->getParameter('user', '');
+					$username = $this->getParameter('username', '');
 
 					break;
 
@@ -144,9 +144,9 @@ class AdoDBDatabase extends Database
 					
 				$this->connection = &ADONewConnection($dbtype);
 				if ($persistent)
-					$this->connection->PConnect($host, $user, $password, $database);
+					$this->connection->PConnect($host, $username, $password, $database);
 				else
-					$this->connection->Connect($host, $user, $password, $database);
+					$this->connection->Connect($host, $username, $password, $database);
 			}
 
 			// set default fetch mode to 'assoc'
