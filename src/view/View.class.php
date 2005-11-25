@@ -789,7 +789,7 @@ abstract class View extends AgaviObject
 	 *
 	 * @return void
 	 *
-	 * @author David Zülke (dz@bitxtender.com)
+	 * @author David Zuelke (dz@bitxtender.com)
 	 * @since  0.10.0
 	 */
 	public function clearDecorator()
@@ -854,7 +854,7 @@ abstract class View extends AgaviObject
 	 *
 	 * @return void
 	 *
-	 * @author David Zülke (dz@bitxtender.com)
+	 * @author David Zuelke (dz@bitxtender.com)
 	 * @since  0.10.0
 	 */
 	public function setSlots($slots)
@@ -869,7 +869,7 @@ abstract class View extends AgaviObject
 	 *
 	 * @return void
 	 *
-	 * @author David Zülke (dz@bitxtender.com)
+	 * @author David Zuelke (dz@bitxtender.com)
 	 * @since  0.10.0
 	 */
 	public function clearSlots()
