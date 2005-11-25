@@ -33,7 +33,7 @@
  *                                     persistent.
  * # <b>port</b>       - [none]      - TCP/IP port on which PostgreSQL is
  *                                     listening.
- * # <b>user</b>       - [none]      - The database user.
+ * # <b>username</b>   - [none]      - The database user.
  *
  * @package    agavi
  * @subpackage database
@@ -75,7 +75,7 @@ class PostgreSQLDatabase extends Database
 				$host     = $this->getParameter('host');
 				$password = $this->getParameter('password');
 				$port     = $this->getParameter('port');
-				$user     = $this->getParameter('user');
+				$user     = $this->getParameter('username');
 
 				// construct connection string
 				$string = (($database != null) ? (' dbname='   . $database) : '') .
