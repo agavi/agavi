@@ -165,7 +165,7 @@ class NumberValidator extends Validator
 		// check user-specified parameters
 		$type = strtolower($this->getParameter('type'));
 
-		if ($type != 'any' && $type != 'float')
+		if ($type != 'any' && $type != 'float' && $type != 'int')
 		{
 
 			// unknown type
