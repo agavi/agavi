@@ -21,6 +21,7 @@
  * @subpackage request
  *
  * @author    Sean Kerr (skerr@mojavi.org)
+ * @author    Veikko Makinen (mail@veikkomakinen.com)
  * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
  * @since     0.9.0
  * @version   $Id$
@@ -29,8 +30,77 @@ class WebRequest extends Request
 {
 
 	// +-----------------------------------------------------------------------+
+	// | PROTECTED VARIABLES                                                   |
+	// +-----------------------------------------------------------------------+
+
+	protected
+		$cookieConfig = null;
+
+	// +-----------------------------------------------------------------------+
 	// | METHODS                                                               |
 	// +-----------------------------------------------------------------------+
+
+	/**
+	 * Retrieve a value stored into a cookie.
+	 *
+	 * @param string A cookie name.
+	 * @param mixed A default value.
+	 *
+	 * @return mixed The value from the cookie, if such a cookie exists, otherwise
+	 *               null.
+	 *
+	 * @author Veikko Makinen (mail@veikkomakinen.com)
+	 * @since  0.10.0
+	 */
+	public function getCookie($name, $default=null)
+	{
+		$retval = $default;
+
+		if (isset($_COOKIE[$name])) {
+			$retval = $_COOKIE[$name];
+		}
+		return $retval;
+	}
+
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Send a cookie. Note that cookies are sent as HTTP headers and thus
+	 * must be sent before any output from the application.
+	 *
+	 * @param string A cookie name.
+	 * @param mixed Data to store into a cookie. If null or empty cookie will be tried to be removed.
+	 * @param array Cookie parameters (parameters from config or defaults are used for any missing parameters).
+	 *
+	 *
+	 * @return boolean true if headers hadn't been sent and cookie was set, otherwise false.
+	 *
+	 * @author Veikko Makinen (mail@veikkomakinen.com)
+	 * @since  0.10.0
+	 */
+	public function setCookie($name, $value, $parameters=null)
+	{
+		if (!headers_sent()) {
+
+			$lifetime = isset($parameters['lifetime']) ? $parameters['lifetime'] : $this->cookieConfig['cookie_lifetime'];
+			$path     = isset($parameters['path'])     ? $parameters['path']     : $this->cookieConfig['cookie_path'];
+			$domain   = isset($parameters['domain'])   ? $parameters['domain']   : $this->cookieConfig['cookie_domain'];
+			$secure   = isset($parameters['secure'])   ? $parameters['secure']   : $this->cookieConfig['cookie_secure'];
+
+			//do we want to set expiration time or not?
+			$expire = ($lifetime != 0) ? time() + $lifetime : 0;
+
+			setcookie($name, $value, $expire, $path, $domain, $secure);
+
+			return true;
+
+		}
+		else {
+
+			return false;
+
+		}
+	}
 
 	/**
 	 * Retrieve an array of file information.
@@ -341,10 +411,17 @@ class WebRequest extends Request
 	 *                                        initializing this Request.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
+	 * @author Veikko Makinen (mail@veikkomakinen.com)
 	 * @since  0.9.0
 	 */
 	public function initialize ($context, $parameters = null)
 	{
+
+		$this->cookieConfig = array();
+		$this->cookieConfig['cookie_lifetime'] = isset($parameters['cookie_lifetime']) ? $parameters['cookie_lifetime'] : 0;
+		$this->cookieConfig['cookie_path']     = isset($parameters['cookie_path'])     ? $parameters['cookie_path']     : "/";
+		$this->cookieConfig['cookie_domain']   = isset($parameters['cookie_domain'])   ? $parameters['cookie_domain']   : "";
+		$this->cookieConfig['cookie_secure']   = isset($parameters['cookie_secure'])   ? $parameters['cookie_secure']   : 0;
 
 		if (isset($_SERVER['REQUEST_METHOD']))
 		{
