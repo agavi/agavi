@@ -34,7 +34,7 @@ class WebRequest extends Request
 
 	protected
 		$config;
-
+		
 	// +-----------------------------------------------------------------------+
 	// | METHODS                                                               |
 	// +-----------------------------------------------------------------------+
@@ -566,7 +566,7 @@ class WebRequest extends Request
 	 *               null.
 	 *
 	 * @author Veikko Makinen (mail@veikkomakinen.com)
-	 * @since  0.10.0-DEV
+	 * @since  0.10.0
 	 */
 	public function getCookie($name, $default=null)
 	{
@@ -590,7 +590,7 @@ class WebRequest extends Request
 	 * @return boolean true if headers hadn't been sent and cookie was set, otherwise false.
 	 *
 	 * @author Veikko Makinen (mail@veikkomakinen.com)
-	 * @since  0.10.0-DEV
+	 * @since  0.10.0
 	 */
 	public function setCookie($name, $value, $parameters=null)
 	{
@@ -615,7 +615,7 @@ class WebRequest extends Request
 
 		}
 	}
-
+	
 }
 
 ?>
