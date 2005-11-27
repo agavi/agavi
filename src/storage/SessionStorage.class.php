@@ -17,6 +17,8 @@
  * SessionStorage allows you to store persistent Agavi data in the user
  * session.
  *
+ * <b>Optional parameters:</b>
+ *
  * # <b>auto_start</b>              - [Yes]   - Should session_start() automatically be
  *                                              called?
  * # <b>session_name</b>            - [Agavi] - The name of the session.
