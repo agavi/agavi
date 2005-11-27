@@ -78,14 +78,14 @@ class WebRequest extends Request
 	 * @author Veikko Makinen (mail@veikkomakinen.com)
 	 * @since  0.10.0
 	 */
-	public function setCookie($name, $value, $parameters=null)
+	public function setCookie($name, $value, $lifetime = null, $path = null, $domain = null, $secure = null)
 	{
 		if (!headers_sent()) {
 
-			$lifetime = isset($parameters['lifetime']) ? $parameters['lifetime'] : $this->cookieConfig['cookie_lifetime'];
-			$path     = isset($parameters['path'])     ? $parameters['path']     : $this->cookieConfig['cookie_path'];
-			$domain   = isset($parameters['domain'])   ? $parameters['domain']   : $this->cookieConfig['cookie_domain'];
-			$secure   = isset($parameters['secure'])   ? $parameters['secure']   : $this->cookieConfig['cookie_secure'];
+			$lifetime = isset($lifetime) ? $lifetime : $this->cookieConfig['lifetime'];
+			$path     = isset($path)     ? $path     : $this->cookieConfig['path'];
+			$domain   = isset($domain)   ? $domain   : $this->cookieConfig['domain'];
+			$secure   = isset($secure)   ? $secure   : $this->cookieConfig['secure'];
 
 			//do we want to set expiration time or not?
 			$expire = ($lifetime != 0) ? time() + $lifetime : 0;
@@ -418,10 +418,10 @@ class WebRequest extends Request
 	{
 
 		$this->cookieConfig = array();
-		$this->cookieConfig['cookie_lifetime'] = isset($parameters['cookie_lifetime']) ? $parameters['cookie_lifetime'] : 0;
-		$this->cookieConfig['cookie_path']     = isset($parameters['cookie_path'])     ? $parameters['cookie_path']     : "/";
-		$this->cookieConfig['cookie_domain']   = isset($parameters['cookie_domain'])   ? $parameters['cookie_domain']   : "";
-		$this->cookieConfig['cookie_secure']   = isset($parameters['cookie_secure'])   ? $parameters['cookie_secure']   : 0;
+		$this->cookieConfig['lifetime'] = isset($parameters['cookie_lifetime']) ? $parameters['cookie_lifetime'] : 0;
+		$this->cookieConfig['path']     = isset($parameters['cookie_path'])     ? $parameters['cookie_path']     : "/";
+		$this->cookieConfig['domain']   = isset($parameters['cookie_domain'])   ? $parameters['cookie_domain']   : "";
+		$this->cookieConfig['secure']   = isset($parameters['cookie_secure'])   ? $parameters['cookie_secure']   : 0;
 
 		if (isset($_SERVER['REQUEST_METHOD']))
 		{
