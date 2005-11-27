@@ -311,27 +311,6 @@ class AgaviException extends Exception
 			case 'plain':
 			default:
 
-				// print the exception info
-				echo $name . "\n\tMessage: " . $message . "\n\tCode: " . $code . "\n\tClass: " . $class . "\n\tFile: " . $file . "\n\tLine: " . $line . "\n";
-
-				if (count($trace) > 0)
-				{
-
-				    echo "Stack Trace:\n";
-
-				    foreach ($trace as $line)
-				    {
-
-						echo "\t$line\n";
-
-				    }
-
-				}
-
-				echo 'Agavi Version: ' . AG_APP_VERSION . "\nPHP Version: " . PHP_VERSION . "\n";
-
-				break;
-
 		}
 
 		exit;
