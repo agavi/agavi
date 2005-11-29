@@ -18,9 +18,12 @@
 	<taskdef classname="${agavi.dir}.buildtools.phing.AgaviTestTask" name="agavitest"/>
 	<taskdef classname="${agavi.dir}.buildtools.phing.AgaviFixPathsTask" name="fixpaths"/>
 	<taskdef classname="${agavi.dir}.buildtools.phing.AgaviListModulesTask" name="listModules"/>
+	<taskdef classname="${agavi.dir}.buildtools.phing.AgaviSubActionNameTask" name="subActionName"/>
 
 	<property name="webapp.dir" value=""/>
 	<property name="tests.dir" value=""/>
+
+	<property name="templates.dir" value="buildtools/code_templates" />
 	
   <!-- fileset for -dist files -->
   <fileset dir="." id="distfiles">
@@ -47,7 +50,7 @@
 		<mkdir dir="${project.dir}"/>
 		<mkdir dir="${webapp.dir}"/>
 		<mkdir dir="${project.dir}/www"/>
-		<copy file="buildtools/code_templates/index.php.tmpl" tofile="${project.dir}/www/index.php">
+		<copy file="${templates.dir}/index.php.tmpl" tofile="${project.dir}/www/index.php">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">    
 					<token key="PATH_TO_AGAVI" value="${agavi.dir}"/> <!-- was project.basedir -->
@@ -57,7 +60,7 @@
 		</copy>
 		<mkdir dir="${project.dir}/www/modpub"/>
 		<mkdir dir="${webapp.dir}/cache"/>
-		<copy file="buildtools/code_templates/config.php.tmpl" tofile="${webapp.dir}/config.php">
+		<copy file="${templates.dir}/config.php.tmpl" tofile="${webapp.dir}/config.php">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">    
 					<token key="PATH_TO_AGAVI" value="${agavi.dir}"/>
@@ -67,7 +70,7 @@
 		</copy>
 		<mkdir dir="${webapp.dir}/config"/>
 		<copy todir="${webapp.dir}/config">
-			<fileset dir="buildtools/code_templates/config">
+			<fileset dir="${templates.dir}/config">
 				<include name="*.ini"/>
 				<include name="*.conf"/>
 			</fileset>
@@ -108,7 +111,7 @@
 		<mkdir dir="${module.dir}"/>
 		<mkdir dir="${module.dir}/actions"/>
 		<mkdir dir="${module.dir}/config"/>
-		<copy file="buildtools/code_templates/module.ini.tmpl" tofile="${module.dir}/config/module.ini">
+		<copy file="${templates.dir}/module.ini.tmpl" tofile="${module.dir}/config/module.ini">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">    
 					<token key="MODULE" value="${module}"/>
@@ -159,18 +162,23 @@
 	</target>
 	
 	<target name="buildaction">
-		<copy file="buildtools/code_templates/Action.class.php.tmpl" tofile="${module.dir}/actions/${action}Action.class.php">
+		<subActionName/>
+		<copy file="${templates.dir}/Action.class.php.tmpl" tofile="${module.dir}/actions/${actionPath}Action.class.php">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">    
 					<token key="MODULE" value="${module}"/>
 					<token key="ACTION" value="${action}"/>
+					<token key="ACTION_NAME" value="${actionName}"/>
+					<token key="ACTION_PATH" value="${actionPath}"/>
+					<token key="ACTION_DIR" value="${actionDir}"/>
+					<token key="ACTION_FILE" value="${actionFile}"/>
 				</replacetokens>
 			</filterchain>
 		</copy>
 		<phingcall target="buildactiontests">
 			<property name="moduletests.dir" value="${tests.dir}/modules/${module}"/>
 		</phingcall>
-		<input propertyname="views" promptChar="?" defaultValue="Success,Error" message="Views for ${action} (no whitespace, comma seperated)"/>
+		<input propertyname="views" promptChar="?" defaultValue="Success,Error" message="Views for ${actionPath} (no whitespace, comma seperated)"/>
 		<foreach list="${views}" param="view" target="buildview"/>
 	</target>
 
@@ -179,11 +187,15 @@
 		<fail unless="has_actiontests" message="Could not find action tests directory: ${moduletests.dir}"/>
 		<mkdir dir="${moduletests.dir}/actions"/>
 	
-		<copy file="buildtools/code_templates/ActionTest.class.php.tmpl" tofile="${moduletests.dir}/actions/${action}ActionTest.class.php" overwrite="false">
+		<copy file="${templates.dir}/ActionTest.class.php.tmpl" tofile="${moduletests.dir}/actions/${actionPath}ActionTest.class.php" overwrite="false">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">    
 					<token key="MODULE" value="${module}"/>
 					<token key="ACTION" value="${action}"/>
+					<token key="ACTION_NAME" value="${actionName}"/>
+					<token key="ACTION_PATH" value="${actionPath}"/>
+					<token key="ACTION_DIR" value="${actionDir}"/>
+					<token key="ACTION_FILE" value="${actionFile}"/>
 				</replacetokens>
 			</filterchain>
 		</copy>
@@ -191,16 +203,32 @@
 
 	<!-- View creation -->
 	<target name="buildview">
-		<copy file="buildtools/code_templates/View.class.php.tmpl" tofile="${module.dir}/views/${action}${view}View.class.php">
+		<copy file="${templates.dir}/View.class.php.tmpl" tofile="${module.dir}/views/${actionPath}${view}View.class.php">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">    
 					<token key="MODULE" value="${module}"/>
 					<token key="ACTION" value="${action}"/>
+					<token key="ACTION_NAME" value="${actionName}"/>
+					<token key="ACTION_PATH" value="${actionPath}"/>
+					<token key="ACTION_DIR" value="${actionDir}"/>
+					<token key="ACTION_FILE" value="${actionFile}"/>
 					<token key="VIEW" value="${view}"/>
 				</replacetokens>
 			</filterchain>
 		</copy>
-		<touch file="${module.dir}/templates/${action}${view}.php"/>
+		<copy file="${templates.dir}/Template.php.tmpl" tofile="${module.dir}/templates/${actionPath}${view}.php">
+			<filterchain>
+				<replacetokens begintoken="%%" endtoken="%%">    
+					<token key="MODULE" value="${module}"/>
+					<token key="ACTION" value="${action}"/>
+					<token key="ACTION_NAME" value="${actionName}"/>
+					<token key="ACTION_PATH" value="${actionPath}"/>
+					<token key="ACTION_DIR" value="${actionDir}"/>
+					<token key="ACTION_FILE" value="${actionFile}"/>
+					<token key="VIEW" value="${view}"/>
+				</replacetokens>
+			</filterchain>
+		</copy>
 		<phingcall target="buildviewtests">
 			<property name="moduletests.dir" value="${tests.dir}/modules/${module}"/>
 		</phingcall>
@@ -211,11 +239,15 @@
 		<available file="${moduletests.dir}/views" type="dir" property="has_viewtests" value="true"/>
 		<fail unless="has_viewtests" message="Could not find view tests directory."/>
 		
-		<copy file="buildtools/code_templates/ViewTest.class.php.tmpl" tofile="${moduletests.dir}/views/${action}${view}ViewTest.class.php" overwrite="false">
+		<copy file="${templates.dir}/ViewTest.class.php.tmpl" tofile="${moduletests.dir}/views/${actionPath}${view}ViewTest.class.php" overwrite="false">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">    
 					<token key="MODULE" value="${module}"/>
 					<token key="ACTION" value="${action}"/>
+					<token key="ACTION_NAME" value="${actionName}"/>
+					<token key="ACTION_PATH" value="${actionPath}"/>
+					<token key="ACTION_DIR" value="${actionDir}"/>
+					<token key="ACTION_FILE" value="${actionFile}"/>
 					<token key="VIEW" value="${view}"/>
 				</replacetokens>
 			</filterchain>
@@ -229,7 +261,7 @@
 	</target>
 
 	<target name="buildmodel">
-		<copy file="buildtools/code_templates/Model.class.php.tmpl" tofile="${module.dir}/models/${model}Model.class.php">
+		<copy file="${templates.dir}/Model.class.php.tmpl" tofile="${module.dir}/models/${model}Model.class.php">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">    
 					<token key="MODULE" value="${module}"/>
@@ -247,7 +279,7 @@
 		<available file="${moduletests.dir}/models" type="dir" property="has_modeltests" value="true"/>
 		<fail unless="has_modeltests" message="Could not find model tests directory. (${moduletests.dir}/models)"/>
 		
-		<copy file="buildtools/code_templates/ModelTest.class.php.tmpl" tofile="${moduletests.dir}/models/${model}ModelTest.class.php" overwrite="false">
+		<copy file="${templates.dir}/ModelTest.class.php.tmpl" tofile="${moduletests.dir}/models/${model}ModelTest.class.php" overwrite="false">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">    
 					<token key="MODULE" value="${module}"/>

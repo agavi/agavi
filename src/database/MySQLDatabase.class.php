@@ -31,7 +31,7 @@
  * # <b>password</b>   - [none]      - The database password.
  * # <b>persistent</b> - [No]        - Indicates that the connection should be
  *                                     persistent.
- * # <b>user</b>       - [none]      - The database user.
+ * # <b>username</b>   - [none]      - The database user.
  *
  * @package    agavi
  * @subpackage database
@@ -71,7 +71,7 @@ class MySQLDatabase extends Database
 				$database = $this->getParameter('database');
 				$host     = $this->getParameter('host', 'localhost');
 				$password = $this->getParameter('password');
-				$user     = $this->getParameter('user');
+				$user     = $this->getParameter('username');
 
 				break;
 
@@ -174,7 +174,7 @@ class MySQLDatabase extends Database
 
 		// list of available parameters
 		$available = array('database', 'host', 'password', 'user');
-		
+
 		$parameters = array();
 
 		foreach ($available as $parameter)

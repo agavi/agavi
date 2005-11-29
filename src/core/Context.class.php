@@ -279,6 +279,9 @@ class Context extends AgaviObject
 					$args = isset($params[$req .'.param']) ? $params[$req . '.param'] : null;
 					$this->storage = Storage::newInstance($class);
 					$this->storage->initialize($this, $args);
+					if ($this->storage instanceof SessionStorage) {
+						$this->storage->autoStart();
+					}
 					break;
 				case 'user':
 					$class = $params[$req];

@@ -14,7 +14,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * Provides support for session storage using a PostgreSQL brand database.
+ * Provides support for session storage using a CreoleDb database abstraction layer.
  *
  * <b>Required parameters:</b>
  *
@@ -23,6 +23,8 @@
  *
  * <b>Optional parameters:</b>
  *
+ * # <b>database</b>     - [default]   - The database connection to use
+ *                                       (see databases.ini).
  * # <b>db_id_col</b>    - [sess_id]   - The database column in which the
  *                                       session id will be stored.
  * # <b>db_data_col</b>  - [sess_data] - The database column in which the
@@ -35,23 +37,19 @@
  * @subpackage storage
  *
  * @author    Sean Kerr (skerr@mojavi.org)
+ * @author    Veikko Mäkinen (mail@veikkomakinen.com)
  * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
- * @since     0.9.0
+ * @since     0.10.0
  * @version   $Id$
  */
-class PostgreSQLSessionStorage extends SessionStorage
+class CreoleSessionStorage extends SessionStorage
 {
 
-	// +-----------------------------------------------------------------------+
-	// | PRIVATE VARIABLES                                                     |
-	// +-----------------------------------------------------------------------+
-
-	private
-		$resource = null;
-
-	// +-----------------------------------------------------------------------+
-	// | METHODS                                                               |
-	// +-----------------------------------------------------------------------+
+	/**
+	 * Creole Database Connection
+	 * @var Connection
+	 */
+	protected $db;
 
 	/**
 	 * Initialize this Storage.
@@ -66,7 +64,8 @@ class PostgreSQLSessionStorage extends SessionStorage
 	 *                                        initializing this Storage.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author Veikko Mäkinen (mail@veikkomakinen.com)
+	 * @since  3.0.0
 	 */
 	public function initialize ($context, $parameters = null)
 	{
@@ -74,37 +73,35 @@ class PostgreSQLSessionStorage extends SessionStorage
 		// initialize the parent
 		parent::initialize($context, $parameters);
 
-		if (!$this->hasParameter('db_table'))
-		{
+		if (!$this->hasParameter('db_table')) {
 
 			// missing required 'db_table' parameter
 			$error = 'Factory configuration file is missing required ' .
-				     '"db_table" parameter for the Storage category';
+				'"db_table" parameter for the Storage category';
 
 			throw new InitializationException($error);
-
 		}
 
 		// use this object as the session handler
 		session_set_save_handler(array($this, 'sessionOpen'),
-						         array($this, 'sessionClose'),
-						         array($this, 'sessionRead'),
-						         array($this, 'sessionWrite'),
-						         array($this, 'sessionDestroy'),
-						         array($this, 'sessionGC'));
+				array($this, 'sessionClose'),
+				array($this, 'sessionRead'),
+				array($this, 'sessionWrite'),
+				array($this, 'sessionDestroy'),
+				array($this, 'sessionGC'));
 
 	}
 
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Close a session.
-	 *
-	 * @return bool true, if the session was closed, otherwise false.
-	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
-	 */
+	* Close a session.
+	*
+	* @return bool true, if the session was closed, otherwise false.
+	*
+	* @author Sean Kerr (skerr@mojavi.org)
+	* @since  3.0.0
+	*/
 	public function sessionClose ()
 	{
 
@@ -126,7 +123,8 @@ class PostgreSQLSessionStorage extends SessionStorage
 	 * @throws <b>DatabaseException</b> If the session cannot be destroyed.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author Veikko Mäkinen (mail@veikkomakinen.com)
+	 * @since  3.0.0
 	 */
 	public function sessionDestroy ($id)
 	{
@@ -135,25 +133,21 @@ class PostgreSQLSessionStorage extends SessionStorage
 		$db_table  = $this->getParameter('db_table');
 		$db_id_col = $this->getParameter('db_id_col', 'sess_id');
 
-		// cleanup the session id, just in case
-		$id = addslashes($id);
 
 		// delete the record associated with this id
 		$sql = 'DELETE FROM ' . $db_table . ' ' .
-			   'WHERE ' . $db_id_col . ' = \'' . $id . '\'';
+			'WHERE ' . $db_id_col . '=?';
 
-		if (@pg_query($this->resource, $sql))
-		{
-
-			return true;
-
+		try {
+			$stmt = $this->db->prepareStatement($sql);
+			$stmt->setString(1, $id);
+			$stmt->executeUpdate();
 		}
-
-		// failed to destroy session
-		$error = 'PostgreSQLSessionStorage cannot destroy session id "%s"';
-		$error = sprintf($error, $id);
-
-		throw new DatabaseException($error);
+		catch (SQLException $e) {
+			$error = 'Creole SQLException was thrown when trying to manipulate session data. ';
+			$error .= 'Message: ' . $e->getMessage();
+			throw new DatabaseException($error);
+		}
 
 	}
 
@@ -170,7 +164,8 @@ class PostgreSQLSessionStorage extends SessionStorage
 	 * @throws <b>DatabaseException</b> If any old sessions cannot be cleaned.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author Veikko Mäkinen (mail@veikkomakinen.com)
+	 * @since  3.0.0
 	 */
 	public function sessionGC ($lifetime)
 	{
@@ -184,19 +179,18 @@ class PostgreSQLSessionStorage extends SessionStorage
 
 		// delete the record associated with this id
 		$sql = 'DELETE FROM ' . $db_table . ' ' .
-			   'WHERE ' . $db_time_col . ' < ' . $lifetime;
+			'WHERE ' . $db_time_col . ' < ' . $time;
 
-		if (@pg_query($this->resource, $sql))
-		{
 
+		try {
+			$this->db->executeQuery($sql);
 			return true;
-
 		}
-
-		// failed to cleanup old sessions
-		$error = 'PostgreSQLSessionStorage cannot delete old sessions';
-
-		throw new DatabaseException($error);
+		catch (SQLException $e) {
+			$error = 'Creole SQLException was thrown when trying to manipulate session data. ';
+			$error .= 'Message: ' . $e->getMessage();
+			throw new DatabaseException($error);
+		}
 
 	}
 
@@ -215,7 +209,8 @@ class PostgreSQLSessionStorage extends SessionStorage
 	 *                                  not exist or cannot be created.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author Veikko Mäkinen (mail@veikkomakinen.com)
+	 * @since  3.0.0
 	 */
 	public function sessionOpen ($path, $name)
 	{
@@ -223,11 +218,19 @@ class PostgreSQLSessionStorage extends SessionStorage
 		// what database are we using?
 		$database = $this->getParameter('database', 'default');
 
-		// get the database resource
-		$this->resource = $this->getContext()
-						       ->getDatabaseManager()
-						       ->getDatabase($database)
-						       ->getResource();
+		$this->db = $this->getContext()->getDatabaseConnection($database);
+		if ($this->db == null || !$this->db instanceof Connection) {
+			$error = 'Creole dabatase connection doesn\'t exist. Unable to open session.';
+			throw new DatabaseException($error);
+		}
+
+		//force clean up before starting session
+		$cookieParams = session_get_cookie_params();
+		if ($cookieParams['lifetime'] > 0)
+		{
+			$this->sessionGC($cookieParams['lifetime']);
+		}
+
 
 		return true;
 
@@ -246,57 +249,48 @@ class PostgreSQLSessionStorage extends SessionStorage
 	 * @throws <b>DatabaseException</b> If the session cannot be read.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author Veikko Mäkinen (mail@veikkomakinen.com)
+	 * @since  3.0.0
 	 */
 	public function sessionRead ($id)
 	{
-
-		// get table/column
+		// get table/columns
 		$db_table    = $this->getParameter('db_table');
 		$db_data_col = $this->getParameter('db_data_col', 'sess_data');
 		$db_id_col   = $this->getParameter('db_id_col', 'sess_id');
 		$db_time_col = $this->getParameter('db_time_col', 'sess_time');
 
-		// cleanup the session id, just in case
-		$id = addslashes($id);
+		try {
+			$sql = 'SELECT ' . $db_data_col . ' ' .
+				'FROM ' . $db_table . ' ' .
+				'WHERE ' . $db_id_col . '=?';
 
-		// delete the record associated with this id
-		$sql = 'SELECT ' . $db_data_col . ' ' .
-			   'FROM ' . $db_table . ' ' .
-			   'WHERE ' . $db_id_col . ' = \'' . $id . '\'';
+			$stmt = $this->db->prepareStatement($sql);
+			$stmt->setString(1, $id);
 
-		$result = @pg_query($this->resource, $sql);
+			$dbRes = $stmt->executeQuery(ResultSet::FETCHMODE_NUM);
 
-		if ($result != false && @pg_num_rows($result) == 1)
-		{
-
-			// found the session
-			$data = pg_fetch_row($result);
-
-			return $data[0];
-
-		} else
-		{
-
-			// session does not exist, create it
-			$sql = 'INSERT INTO ' . $db_table . ' (' . $db_id_col . ', ' .
-				   $db_data_col . ', ' . $db_time_col . ') VALUES (' .
-				   '\'' . $id . '\', \'\', ' . time() . ')';
-
-			if (@pg_query($this->resource, $sql))
-			{
-
-			   return '';
-
+			if ($dbRes->next()) {
+				$data = $dbRes->getString(1);
+				return $data;
 			}
+			else {
+				// session does not exist, create it
+				$sql = 'INSERT INTO ' . $db_table . '('.$db_id_col.','.$db_data_col.','.$db_time_col;
+				$sql .= ') VALUES (?,?,?)';
 
-			// can't create record
-			$error = 'PostgreSQLSessionStorage cannot create new record for ' .
-				     'id "%s"';
-			$error = sprintf($error, $id);
-
+				$stmt = $this->db->prepareStatement($sql);
+				$stmt->setString(1, $id);
+				$stmt->setString(2, '');
+				$stmt->setInt(3, time());
+				$stmt->executeUpdate();
+				return '';
+			}
+		}
+		catch (SQLException $e) {
+			$error = 'Creole SQLException was thrown when trying to manipulate session data. ';
+			$error .= 'Message: ' . $e->getMessage();
 			throw new DatabaseException($error);
-
 		}
 
 	}
@@ -315,9 +309,10 @@ class PostgreSQLSessionStorage extends SessionStorage
 	 * @throws <b>DatabaseException</b> If the session data cannot be written.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author Veikko Mäkinen (mail@veikkomakinen.com)
+	 * @since  3.0.0
 	 */
-	public function sessionWrite ($id, &$data)
+	public function sessionWrite ($id, $data)
 	{
 
 		// get table/column
@@ -326,29 +321,23 @@ class PostgreSQLSessionStorage extends SessionStorage
 		$db_id_col   = $this->getParameter('db_id_col', 'sess_id');
 		$db_time_col = $this->getParameter('db_time_col', 'sess_time');
 
-		// cleanup the session id and data, just in case
-		$id   = addslashes($id);
-		$data = addslashes($data);
+		$sql = 'UPDATE ' . $db_table . ' SET ' . $db_data_col . '=?, ' . $db_time_col . ' = ' . time() .
+			' WHERE ' . $db_id_col . '=?';
 
-		// delete the record associated with this id
-		$sql = 'UPDATE ' . $db_table . ' ' .
-			   'SET ' . $db_data_col . ' = \'' . $data . '\', ' .
-			   $db_time_col . ' = ' . time() . ' ' .
-			   'WHERE ' . $db_id_col . ' = \'' . $id . '\'';
-
-		if (@pg_query($this->resource, $sql))
-		{
-
+		try {
+			$stmt = $this->db->prepareStatement($sql);
+			$stmt->setString(1, $data);
+			$stmt->setString(2, $id);
+			$stmt->executeUpdate();
 			return true;
-
 		}
 
-		// failed to write session data
-		$error = 'PostgreSQLSessionStorage cannot write session data for id ' .
-				 '"%s"';
-		$error = sprintf($error, $id);
+		catch (SQLException $e) {
+			$error = 'Creole SQLException was thrown when trying to manipulate session data. ';
+			$error .= 'Message: ' . $e->getMessage();
+		}
 
-		throw new DatabaseException($error);
+		return false;
 
 	}
 
@@ -360,7 +349,7 @@ class PostgreSQLSessionStorage extends SessionStorage
 	 * @return void
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @since  3.0.0
 	 */
 	public function shutdown ()
 	{

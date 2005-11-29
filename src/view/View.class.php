@@ -134,7 +134,7 @@ abstract class View extends AgaviObject
 	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  0.9.0
 	 */
-	protected function & decorate (&$content)
+	public function & decorate (&$content)
 	{
 
 		// alias controller
@@ -151,9 +151,9 @@ abstract class View extends AgaviObject
 
 		// loop through our slots, and replace them one-by-one in the
 		// decorator template
-		$slots =& $this->getSlots();
+		$slots = $this->getSlots();
 
-		foreach ($slots as $name => &$slot)
+		foreach ($slots as $name => $slot)
 		{
 
 			// grab this next forward's action stack index
@@ -331,7 +331,7 @@ abstract class View extends AgaviObject
 	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  0.9.0
 	 */
-	protected function & getSlots ()
+	public function getSlots ()
 	{
 
 		return $this->slots;
@@ -785,6 +785,23 @@ abstract class View extends AgaviObject
 	// -------------------------------------------------------------------------
 
 	/**
+	 * Clears out a previously assigned decorator template and directory
+	 *
+	 * @return void
+	 *
+	 * @author David Zuelke (dz@bitxtender.com)
+	 * @since  0.10.0
+	 */
+	public function clearDecorator()
+	{
+		$this->decoratorDirectory = null;
+		$this->decoratorTemplate  = null;
+		$this->decorator = false;
+	}
+
+	// -------------------------------------------------------------------------
+
+	/**
 	 * Set the template directory for this view.
 	 *
 	 * @param string An absolute filesystem path to a template directory.
@@ -825,6 +842,39 @@ abstract class View extends AgaviObject
 		$this->slots[$attributeName]['module_name'] = $moduleName;
 		$this->slots[$attributeName]['action_name'] = $actionName;
 
+	}
+
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Set an array of slots
+	 *
+	 * @see View::setSlot()
+	 * @param array An array of slots
+	 *
+	 * @return void
+	 *
+	 * @author David Zuelke (dz@bitxtender.com)
+	 * @since  0.10.0
+	 */
+	public function setSlots($slots)
+	{
+		$this->slots = $slots;
+	}
+
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Empties the slots array, clearing all previously registered slots
+	 *
+	 * @return void
+	 *
+	 * @author David Zuelke (dz@bitxtender.com)
+	 * @since  0.10.0
+	 */
+	public function clearSlots()
+	{
+		$this->slots = array();
 	}
 
 	// -------------------------------------------------------------------------

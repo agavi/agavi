@@ -71,7 +71,7 @@ abstract class PHPView extends View
 	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  0.9.0
 	 */
-	protected function & decorate (&$content)
+	public function & decorate (&$content)
 	{
 
 		// call our parent decorate() method

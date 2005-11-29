@@ -71,9 +71,6 @@ class MySQLSessionStorage extends SessionStorage
 	public function initialize ($context, $parameters = null)
 	{
 
-		// disable auto_start
-		$this->setParameter('auto_start', false);
-
 		// initialize the parent
 		parent::initialize($context, $parameters);
 
@@ -95,9 +92,6 @@ class MySQLSessionStorage extends SessionStorage
 						         array($this, 'sessionWrite'),
 						         array($this, 'sessionDestroy'),
 						         array($this, 'sessionGC'));
-
-		// start our session
-		session_start();
 
 	}
 

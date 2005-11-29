@@ -3,7 +3,7 @@
 // +---------------------------------------------------------------------------+
 // | An absolute filesystem path to our webapp/config.php script.              |
 // +---------------------------------------------------------------------------+
-require_once('%%PATH_TO_PROJECT%%/config.php');
+require_once('../webapp/config.php');
 
 // +---------------------------------------------------------------------------+
 // | An absolute filesystem path to the agavi/agavi.php script.                |
@@ -11,15 +11,7 @@ require_once('%%PATH_TO_PROJECT%%/config.php');
 require_once('%%PATH_TO_AGAVI%%/agavi.php');
 
 // +---------------------------------------------------------------------------+
-// | Get the default configured context, and call it's controller's dispatch   |
-// | method.                                                                   |
+// | Call the controller's dispatch method on the default context              |
 // +---------------------------------------------------------------------------+
-try {
-	Context::getInstance()->getController()->dispatch();
-} catch (AgaviException $e) {
-	$e->printStackTrace();
-} catch (Exception $e) {
-	// unknown exception
-	$e->printStackTrace(new AgaviException($e->getMessage()));
-}
+Context::getInstance()->getController()->dispatch();
 ?>

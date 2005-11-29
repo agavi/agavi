@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2005  Sean Kerr.                                       |
+// | Copyright (c) 2003-2005 Agavi Foundation.                                       |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -14,35 +14,25 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * Version initialization script.
  *
- * @package agavi
- * 
- * @author    Sean Kerr (skerr@mojavi.org)
- * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
- * @since     0.9.0
- * @version   $Id$
+ *
+ * @package    agavi
+ * @subpackage util
+ *
+ * @author    Veikko Makinen (mail@veikkomakinen.com)
+ * @copyright (c) Agavi Foundation, {@link http://www.agavi.org}
+ * @since     0.10.0
+ * @version   $Id: ConversionPattern.class.php 87 2005-06-03 21:19:23Z bob $
  */
+interface ShutdownListener
+{
 
-define('AG_APP_NAME',          'Agavi');
+	/**
+	 *
+	 *
+	 */
+	public function shutdown();
 
-define('AG_APP_MAJOR_VERSION', '0');
-
-define('AG_APP_MINOR_VERSION', '10');
-
-define('AG_APP_MICRO_VERSION', '0');
-
-define('AG_APP_BRANCH',        '');
-
-define('AG_APP_STATUS',        'RC1');
-
-define('AG_APP_VERSION',       AG_APP_MAJOR_VERSION . '.' .
-						       AG_APP_MINOR_VERSION . '.' .
-						       AG_APP_MICRO_VERSION . '-' . AG_APP_STATUS);
-
-define('AG_APP_URL',           'http://www.agavi.org');
-
-define('AG_APP_INFO',          AG_APP_NAME . ' ' . AG_APP_VERSION .
-						       ' (' . AG_APP_URL . ')');
+}
 
 ?>

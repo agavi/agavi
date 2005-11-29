@@ -117,8 +117,8 @@ class ConfigCache extends AgaviObject
 	 * @return string An absolute filesystem path to the cache filename
 	 *                associated with this specified configuration file.
 	 *
-	 * @throws <b>ConfigurationException</b> If a requested configuration file
-	 *                                       does not exist.
+	 * @throws <b>UnreadableException</b> If a requested configuration file
+	 *                                    does not exist.
 	 *
 	 * @author Sean Kerr (skerr@mojavi.org)
 	 * @since  0.9.0
@@ -129,7 +129,7 @@ class ConfigCache extends AgaviObject
 		$filename = Toolkit::isPathAbsolute($config) ? $config : AG_WEBAPP_DIR . '/' . $config;
 
 		if (!is_readable($filename)) {
-			throw new ConfigurationException('Configuration file "' . $filename . '" does not exist or is unreadable.');
+			throw new UnreadableException('Configuration file "' . $filename . '" does not exist or is unreadable.');
 		}
 
 		// the cache filename we'll be using
