@@ -107,9 +107,36 @@ class BasicSecurityUser extends SecurityUser
 	 */
 	public function hasCredential ($credential)
 	{
-
-		return (in_array($credential, $this->credentials));
-
+		if(is_array($credential))
+		{
+			$credentials = (array)$credential;
+			foreach($credentials as $credential)
+			{
+				if(is_array($credential))
+				{
+					foreach($credential as $subcred)
+					{
+						if(in_array($subcred, $this->credentials, true))
+						{
+							continue 2;
+						}
+					}
+					return false;
+				}
+				else
+				{
+					if(!in_array($credential, $this->credentials, true))
+					{
+						return false;
+					}
+				}
+			}
+			return true;
+		}
+		else
+		{
+			return (in_array($credential, $this->credentials, true));
+		}
 	}
 
 	// -------------------------------------------------------------------------
