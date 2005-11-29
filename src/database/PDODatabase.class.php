@@ -65,22 +65,16 @@ class PDODatabase extends Database
 
 		try	{
 
-			$pdo_username = $this->getParameter('username');
-			$pdo_password = $this->getParameter('password');
-			$this->connection = new PDO($dsn, $pdo_username, $pdo_password);
+			$this->connection = new PDO($dsn);
 
 		} catch (PDOException $e)	{
 
-			throw new DatabaseException($e->getMessage());
+			throw new DatabaseException($e->getMessage());	
 
 		}
 
 		// lets generate exceptions instead of silent failures
-		if (defined(PDO::ATTR_ERRMODE)) {
-			$this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-		} else {
-			$this->connection->setAttribute(PDO_ATTR_ERRMODE, PDO_ERRMODE_EXCEPTION);
-		}
+		$this->connection->setAttribute(PDO_ATTR_ERRMODE, PDO_ERRMODE_EXCEPTION);
 
 	}
 

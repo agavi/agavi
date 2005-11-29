@@ -785,23 +785,6 @@ abstract class View extends AgaviObject
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Clears out a previously assigned decorator template and directory
-	 *
-	 * @return void
-	 *
-	 * @author David Zuelke (dz@bitxtender.com)
-	 * @since  0.10.0
-	 */
-	public function clearDecorator()
-	{
-		$this->decoratorDirectory = null;
-		$this->decoratorTemplate  = null;
-		$this->decorator = false;
-	}
-
-	// -------------------------------------------------------------------------
-
-	/**
 	 * Set the template directory for this view.
 	 *
 	 * @param string An absolute filesystem path to a template directory.
@@ -842,39 +825,6 @@ abstract class View extends AgaviObject
 		$this->slots[$attributeName]['module_name'] = $moduleName;
 		$this->slots[$attributeName]['action_name'] = $actionName;
 
-	}
-
-	// -------------------------------------------------------------------------
-
-	/**
-	 * Set an array of slots
-	 *
-	 * @see View::setSlot()
-	 * @param array An array of slots
-	 *
-	 * @return void
-	 *
-	 * @author David Zuelke (dz@bitxtender.com)
-	 * @since  0.10.0
-	 */
-	public function setSlots($slots)
-	{
-		$this->slots = $slots;
-	}
-
-	// -------------------------------------------------------------------------
-
-	/**
-	 * Empties the slots array, clearing all previously registered slots
-	 *
-	 * @return void
-	 *
-	 * @author David Zuelke (dz@bitxtender.com)
-	 * @since  0.10.0
-	 */
-	public function clearSlots()
-	{
-		$this->slots = array();
 	}
 
 	// -------------------------------------------------------------------------

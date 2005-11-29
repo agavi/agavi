@@ -86,14 +86,14 @@ class ConsoleController extends Controller
 
 		} catch (AgaviException $e) {
 
-			$e->printStackTrace('plain');
+			$e->printStackTrace();
 
 		} catch (Exception $e) {
 
 			// most likely an exception from a third-party library
 			$e = new AgaviException($e->getMessage());
 
-			$e->printStackTrace('plain');
+			$e->printStackTrace();
 
 		}
 

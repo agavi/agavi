@@ -178,7 +178,7 @@ class CreoleDatabase extends Database
 			}
 
 			// get our resource
-			$this->resource = $this->connection->getResource();
+			$this->resource =& $this->connection->getResource();
 
 		} catch (SQLException $e)
 		{

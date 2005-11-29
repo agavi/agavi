@@ -3,7 +3,7 @@
 // +---------------------------------------------------------------------------+
 // | An absolute filesystem path to our webapp/config.php script.              |
 // +---------------------------------------------------------------------------+
-require_once('../webapp/config.php');
+require_once('INSERT PATH TO "webapp/config.php" HERE');
 
 // +---------------------------------------------------------------------------+
 // | An absolute filesystem path to the agavi/agavi.php script.              |

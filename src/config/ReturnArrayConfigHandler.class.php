@@ -20,17 +20,17 @@
  * @package    agavi
  * @subpackage config
  *
- * @author    David Zuelke (dz@bitxtender.com) {@link http://www.agavi.org}
+ * @author    David Zülke (dz@bitxtender.com) {@link http://www.agavi.org}
  * @copyright (c) authors
  * @since     0.10.0
- * @version   $Id$
+ * @version   $Id: ReturnArrayConfigHandler.class.php 314 2005-11-29 06:20:31Z bob $
  */
 
 class ReturnArrayConfigHandler extends IniConfigHandler
 {
 	/**
 	 * @see IniConfigHandler::execute()
-	 * @author David Zuelke (dz@bitxtender.com)
+	 * @author David Zülke (dz@bitxtender.com)
 	 * @since  0.10.0
 	 */
 	public function &execute($config)
@@ -59,7 +59,7 @@ class ReturnArrayConfigHandler extends IniConfigHandler
 	 * @param array The one-dimensional input array
 	 * @param bool Convert boolean strings to literal boolean values
 	 * @return array The transformed version of the input array
-	 * @author David Zuelke (dz@bitxtender.com)
+	 * @author David Zülke (dz@bitxtender.com)
 	 * @since  0.10.0
 	 */
 	public static function addDimensions($input, $real_booleans=false)

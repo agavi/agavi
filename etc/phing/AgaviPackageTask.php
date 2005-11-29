@@ -68,9 +68,11 @@ EOD;
 		));
 		$p2->setPackageType('php');
 		$p2->setPackage('agavi');
+		$p2->addMaintainer('lead', 'bob', 'Bob Zoller', 'bob@agavi.org');
+		$p2->addMaintainer('lead', 'mike', 'Mike Vincent', 'mike@agavi.org');
 		$p2->setChannel('pear.agavi.org');
-		$p2->setReleaseVersion('0.9.0');
-		$p2->setAPIVersion('0.9.0');
+		$p2->setReleaseVersion('0.10.0');
+		$p2->setAPIVersion('0.10.0');
 		$p2->setReleaseStability('alpha');
 		$p2->setAPIStability('alpha');
 		$p2->setSummary($shortDesc);
@@ -89,8 +91,6 @@ EOD;
 		$p2->setPearinstallerDep('1.4.0a12');
 		//$p2->addPackageDepWithUri('required', 'phing', 'http://phing.info/pear/phing-current.tgz');
 		$p2->setLicense('LGPL', 'http://www.gnu.org/copyleft/lesser.html');
-		$p2->addMaintainer('lead', 'bob', 'Bob Zoller', 'bob@agavi.org');
-		$p2->addMaintainer('lead', 'mike', 'Mike Vincent', 'mike@agavi.org');
 		$p2->generateContents();
 		$p2->addReplacement('scripts/agavi-dist', 'pear-config', '@PEAR-DIR@', 'php_dir');
 		$p2->addReplacement('scripts/agavi.bat-dist', 'pear-config', '@PEAR-DIR@', 'php_dir');
@@ -99,7 +99,7 @@ EOD;
 		
 		try {
 			$pkg->writePackageFile();
-			$p2->writePackageFile();
+		//	$p2->writePackageFile();
 		} catch (PEAR_Exception $e) {
 			$this->log("Oops!  Caught PEAR Exception: ".$e->getMessage());
 		}

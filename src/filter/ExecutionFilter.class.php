@@ -121,7 +121,7 @@ class ExecutionFilter extends Filter
 			$validated = $validatorManager->execute();
 
 			// process manual validation
-			if ($actionInstance->validate() && $validated)
+			if ($validated && $actionInstance->validate())
 			{
 
 				// execute the action

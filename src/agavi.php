@@ -73,36 +73,23 @@ function __autoload ($class)
 		require_once($config);
 	}
 
-	if (isset($classes[$class])) {
-		// class exists, let's include it
-		require_once($classes[$class]);
+	if (!isset($classes[$class])) {
+		// unspecified class
+		$error = 'Autoloading of class "%s" failed';
+		$error = sprintf($error, $class);
+		$e     = new AutoloadException($error);
+
+		$e->printStackTrace();
 	}
-	/*	
 
-		If the class doesn't exist in autoload.ini there's not a lot we can do. Because 
-		PHP's class_exists resorts to __autoload we cannot throw exceptions
-		for this might break some 3rd party lib autoloading mechanism.
-
-	*/
+	// class exists, let's include it
+	require_once($classes[$class]);
 
 }
 
 try {
 
-	// set default error reporting and debug modes if none specified
-	if(!defined('AG_ERROR_REPORTING')) {
-		define('AG_ERROR_REPORTING', E_ALL | E_STRICT);
-	}
 	error_reporting(AG_ERROR_REPORTING);
-
-	if(!defined('AG_DEBUG')) {
-		define('AG_DEBUG', false);
-	}
-
-	// bail out if AG_WEBAPP_DIR was not defined before including this file
-	if(!defined('AG_WEBAPP_DIR')) {
-		trigger_error('Constant AG_WEBAPP_DIR not defined, terminating...', E_USER_ERROR);
-	}
 
 	// ini settings
 	ini_set('arg_separator.output',      '&amp;');
@@ -111,24 +98,10 @@ try {
 	ini_set('unserialize_callback_func', '__autoload');
 
 	// define a few filesystem paths
-	if(!defined('AG_APP_DIR')) {
-		define('AG_APP_DIR', dirname(__FILE__));
-	}
-	if(!defined('AG_CACHE_DIR')) {
-		define('AG_CACHE_DIR', AG_WEBAPP_DIR . '/cache');
-	}
-	if(!defined('AG_CONFIG_DIR')) {
-		define('AG_CONFIG_DIR', AG_WEBAPP_DIR . '/config');
-	}
-	if(!defined('AG_LIB_DIR')) {
-		define('AG_LIB_DIR', AG_WEBAPP_DIR . '/lib');
-	}
-	if(!defined('AG_MODULE_DIR')) {
-		define('AG_MODULE_DIR', AG_WEBAPP_DIR . '/modules');
-	}
-	if(!defined('AG_TEMPLATE_DIR')) {
-		define('AG_TEMPLATE_DIR', AG_WEBAPP_DIR . '/templates');
-	}
+	define('AG_CONFIG_DIR',   AG_WEBAPP_DIR . '/config');
+	define('AG_LIB_DIR',      AG_WEBAPP_DIR . '/lib');
+	define('AG_MODULE_DIR',   AG_WEBAPP_DIR . '/modules');
+	define('AG_TEMPLATE_DIR', AG_WEBAPP_DIR . '/templates');
 
 	// required files
 	require_once(AG_APP_DIR . '/version.php');
@@ -146,7 +119,6 @@ try {
 	require_once(AG_APP_DIR . '/exception/AutoloadException.class.php');
 	require_once(AG_APP_DIR . '/exception/CacheException.class.php');
 	require_once(AG_APP_DIR . '/exception/ConfigurationException.class.php');
-	require_once(AG_APP_DIR . '/exception/UnreadableException.class.php');
 	require_once(AG_APP_DIR . '/exception/ParseException.class.php');
 	require_once(AG_APP_DIR . '/util/Toolkit.class.php');
 

@@ -9,11 +9,9 @@ REM Change this to reflect your environment if the default value doesn't work
 REM ------------------------------------------------------------------------
 
 set PHING_COMMAND=your\path\to\phing.bat
-REM e.g. set PHING_COMMAND=c:\webserv\php\phing
+REM e.g. PHING_COMMAND=c:\webserv\php\phing
 set AGAVI_INSTALLATION=path\to\agavi\src\dir
-REM e.g. set AGAVI_INSTALLATION=c:/htdocs/libs/agavi/src
-set TEMPLATES_DIR=%AGAVI_INSTALLATION%\buildtools\code_templates
-REM or set TEMPLATES_DIR=path\to\your\custom\code_templates_folder
+REM e.g. AGAVI_INSTALLATION=c:/htdocs/libs/agavi/src
 
 REM -------------------------------------------------------------------------
 REM Do not change anything below this line unless you know what you're doing.
@@ -106,4 +104,4 @@ REM	echo "WARNING: PHP_COMMAND environment not set. (Assuming phing on PATH)"
 REM	export PHING_COMMAND=php
 REM fi
 
-%PHING_COMMAND% -f "%AGAVI_INSTALLATION%/build.xml" -Dagavi.dir="%AGAVI_INSTALLATION%" -Dproject.dir="%PWD_PATH%" -Dtemplates.dir="%TEMPLATES_DIR%" -Dcwd_name="%CWD_NAME%" %*
+%PHING_COMMAND% -f "%AGAVI_INSTALLATION%/build.xml" -Dagavi.dir="%AGAVI_INSTALLATION%" -Dproject.dir="%PWD_PATH%" -Dcwd_name="%CWD_NAME%" %*
