@@ -256,8 +256,20 @@
 
 	<!-- Model creation -->
 	<target name="model" description="create a new model">
+		<fixpaths base="${project.dir}" defaultmodule="true"/>
+
+		<listModules webapp="${webapp.dir}" property="current.modules"/>
+		
+		<input propertyname="module" promptChar="?" validArgs="${current.modules}" defaultValue="${default.module}" message="Make the model for which module? "/>
+		<input propertyname="model" promptChar="?" message="Model Name"/>
+
+		<phingcall target="buildmodel">
+			<property name="module.dir" value="${webapp.dir}/modules/${module}"/>
+		</phingcall>
+		<!--
 		<input propertyname="model" promptChar="?" defaultValue="${module}" message="Model Name"/>
 		<phingcall target="buildmodel"/>
+		-->
 	</target>
 
 	<target name="buildmodel">

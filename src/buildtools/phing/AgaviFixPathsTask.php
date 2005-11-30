@@ -28,28 +28,34 @@ class AgaviFixPathsTask extends Task {
 	
 	private function getModule() {
 		$module = '';
-		for ($i=0; $i <= 4; $i++) {
-			$r = str_repeat('../', $i);
-			if (file_exists($this->base . '/' . $r . 'modules')) {
-				$relative = str_repeat('../', $i - 2);
-				$module =  basename(realpath($this->base . '/' . $relative));
-				// echo "found module! ($i) [" . realpath($this->base . '/' . $relative) ."] $module\n";
-			}
+		if (preg_match('#/webapp/modules/(.*?)(/.*)?$#', str_replace('\\', '/', $this->base), $matches)) {
+			$module = $matches[1];
 		}
 		return $module;
 	}
 
-	private function getDir($pattern = '/webapp') {
-		if ($this->newproject || file_exists($this->base . $pattern)) { 
+	private function getDir($pattern = '/webapp/modules') {
+		if ($this->newproject) { 
 			return realpath($this->base);
 		}
-		for ($i=0; $i <= $this->depth; $i++) {
-			if (file_exists($this->base . str_repeat('/../',$i) . $pattern)) {
-				return realpath($this->base . str_repeat('/../',$i));
+
+		$base = str_replace('\\', '/', $this->base);
+
+		$needle = implode('/', array_diff(explode('/', $pattern), explode('/', ($base{0} != '/' ? '/' : '') . $base)));
+
+		preg_match('#(.*?)' . $pattern . '#', $base . '/' . $needle, $matches);
+		
+		if (isset($matches[1]) && file_exists($matches[1] . $pattern)) {
+			return realpath($matches[1]);
+		} else {
+			// above the project root folder
+			if ($this->testing && $pattern != '/src/agavi.php') {
+				return $this->getDir('/src/agavi.php');
+			} else {
+				return false;
 			}
 		}
-		return ($this->testing && $pattern == '/webapp' ? $this->getDir('/src/agavi.php') : false);
-	}
+	} 
 
 	public function main() {
 		$pdir = $this->getDir();
