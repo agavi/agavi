@@ -350,7 +350,7 @@ abstract class XSLView extends View
 	 * @author Wes Hays (weshays@gbdev.com)
 	 * @since  0.10.0
 	 */
-	protected function &decorate(&$content)
+	public function &decorate(&$content)
 	{
 		return null;
 	}
