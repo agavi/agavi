@@ -17,7 +17,7 @@ Action and View class names now support more naming schemes for maximum efficenc
 
 ExecutionFilters are now user-definable in contexts.ini. This allows developers to build and use their own execution filters and integrate caching mechanisms and other features into the system core.
 
-Models can now be implemented as singletons. The framework will auto-detect singleton implementations if they extends SingletonModel instead of Model. Developers do not have to implement the getInstance() method, as the framework will take care of managing instances automatically.
+Models can now be implemented as singletons. The framework will auto-detect a singleton implementation if it extends SingletonModel instead of Model. Developers do not have to implement the getInstance() method, as the framework will take care of managing instances automatically.
 
 Security
 --------
@@ -35,7 +35,7 @@ Agavi 0.10.0 ships with new drivers for AdoDB and PDO. For detailed usage inform
 Also, Propel is now tightly integrated with the framework. The new PropelDatabase driver allows you to benefit from on-demand loading and initialization of Propel, as well as transparent access via Creole using the same configuration file.
 After enabling the autoloading mechanism in autoload.ini and registering a propel runtime configuration file in database.ini, including and initializing Propel by hand is no longer necessary; a call to getConnection() will retrieve a Creole connection instance which uses the same connection as Propel.
 For maximum flexibility and convenience, it is strongly recommended that you add the Criteria class and all of your OM Object and Peer classes to autoload.ini. This will also guarantee maximum performance.
-Please not that this new feature requires  Propel 1.2.0 or later and Creole 1.0.3 or later to work.
+Please note that this new feature requires  Propel 1.2.0 or later and Creole 1.0.3 or later to work.
 
 Logging
 -------
