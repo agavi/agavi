@@ -8,9 +8,9 @@ REM ------------------------------------------------------------------------
 REM Change this to reflect your environment if the default value doesn't work
 REM ------------------------------------------------------------------------
 
-set PHING_COMMAND=your\path\to\phing.bat
-REM e.g. set PHING_COMMAND=c:\webserv\php\phing
-set AGAVI_INSTALLATION=path\to\agavi\src\dir
+set PHING_COMMAND=phing
+REM e.g. set PHING_COMMAND=c:\webserv\php\phing.bat
+set AGAVI_INSTALLATION=@PEAR-DIR@/agavi
 REM e.g. set AGAVI_INSTALLATION=c:/htdocs/libs/agavi/src
 set TEMPLATES_DIR=%AGAVI_INSTALLATION%\buildtools\code_templates
 REM or set TEMPLATES_DIR=path\to\your\custom\code_templates_folder
