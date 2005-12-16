@@ -1,7 +1,11 @@
 AGAVI CHANGELOG
 ===============
 
-0.10.0 RC1 (November ??, 2005)
+0.10.0 RC2 (December ??, 2005)
+FIX: RELEASE_NOTES and INSTALL were missing in AgaviPackageTask
+
+
+0.10.0 RC1 (December 16, 2005)
 
 ADD: ShutdownListener support (Veikko)
 ADD: Cookie support for WebRequest (Veikko)
