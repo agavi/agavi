@@ -62,24 +62,24 @@ class ReturnArrayConfigHandler extends IniConfigHandler
 	 * @author David Zuelke (dz@bitxtender.com)
 	 * @since  0.10.0
 	 */
-	public static function addDimensions($input, $real_booleans=false)
+	public static function addDimensions($input, $real_booleans = false)
 	{
 		$output = array();
-		foreach ($input as $key => $value)	{
-			if ($real_booleans) {
+		foreach($input as $key => $value)
+		{
+			if($real_booleans) {
 				$value = self::real_booleans($value);
 			}
-			// param.something = sompn         ; $array['param'] = array('something' => 'sompn');
-			// key.param.somethin$this->g = sompnToo  ; $array['key.param'] = array('something' => 'sompnToo');
-			// so basically, take the chunk following the last dot as the new baby key (something), everything prior is the parent key (param/key.param)
-			// think that even works out for the numeric indexed arrays
-			$lastDot = strrpos($key, '.');
-			if ($lastDot !== false) {
-				$parentKey = substr($key, 0, $lastDot);
-				$childKey = substr($key, $lastDot + 1);
-				$output[$parentKey] = isset($output[$parentKey]) ? array_merge($output[$parentKey], array($childKey => $value)) : array($childKey => $value);
-			} else {
-				$output[$key] = $value;
+			$parts = explode('.', $key);
+			$ref =& $output;
+			$count = count($parts);
+			for($i = 0; $i < $count; $i++) {
+				$partKey = $parts[$i];
+				if(($i + 1) == $count) {
+					$ref[$partKey] = $value;
+				} else {
+					$ref =& $ref[$partKey];
+				}
 			}
 		}
 		return $output;
