@@ -26,6 +26,33 @@ return array('editor', 'tech'); // User must have "editor" and "tech" credential
 return array(array('male', 'female')); // User must have either "male" or "female" credential (or both... consider this sample a joke toolkit)
 return array('editor', array('tech', 'sports')); // only for Tech or Sports Editors. Or... you guessed it! Both.
 
+Configuration
+-------------
+A new ReturnArrayConfigHandler makes it easier to deal with home-made config files. It is able to convert keys of whatever depth to a multi-dimensional array and builds numeric arrays if you use numbers as keys:
+ [cfgsample]
+  foo.bar.one     = "yay"
+  foo.bar.two     = "hooray"
+  settings.0.name = "some"
+  settings.0.type = "thing"
+Will result in
+ array('cfgsample' => array(
+  'foo' => array(
+   'bar' => array(
+    'one' => 'yay',
+    'two' => 'hooray'
+   )
+  ),
+  'settings' => array(
+   0 => array(
+    'name' => 'some',
+    'type' => 'thing'
+   )
+  )
+ ))
+As usual, sections may be used (or not!). If you supply param.real_booleans = true, it will convert "true", "false", "yes", "no", "on" and "off" to their respective booleans. To get the contents of a config file, do
+ $config = include(ConfigHandler::checkConfig('path/to/my/config.ini'));
+As usual, you have to register the configuration file in config_handlers.ini. Use ReturnArrayConfigHandler as the handler name.
+
 Database
 --------
 As of Agavi 0.10.0, all database drivers will use "username" as the parameter name for storing the database user name. You might have to adapt your databases.ini settings accordingly if you are using a driver that previously used "user" as the parameter name.
