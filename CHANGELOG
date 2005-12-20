@@ -1,7 +1,7 @@
 AGAVI CHANGELOG
 ===============
 
-0.10.0 (December ??, 2005)
+0.10.0 (December 20, 2005)
 CHG: Updated TODO
 CHG: Bumped Version Numbers
 FIX: ReturnArrayConfigHandler did not convert foo.bar.baz keys into multi-dimensional arrays
