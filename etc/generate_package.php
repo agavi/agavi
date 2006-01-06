@@ -8,6 +8,8 @@ mkdir($tmpdir);
 exec("cd src && cp -Rp * {$tmpdir}");
 exec("cp CHANGELOG {$tmpdir}");
 exec("cp LICENSE {$tmpdir}");
+exec("cp INSTALL {$tmpdir}");
+exec("cp RELEASE_NOTES {$tmpdir}");
 exec("mkdir {$tmpdir}/scripts");
 exec("cp etc/agavi-dist {$tmpdir}/scripts");
 exec("cp etc/agavi.bat-dist {$tmpdir}/scripts");
@@ -91,7 +93,7 @@ $e = $packagexml->setOptions(array(
 		)
 	),
 	'platformexceptions' => array(
-		'scripts/agavi-dist' => '(*ix|*ux|darwin*|SunOS*)',
+		'scripts/agavi-dist' => '(*BSD|*ix|*ux|darwin*|SunOS*)',
 		'scripts/agavi.bat-dist' => 'windows'
 	),
 	'installexceptions' => array(
