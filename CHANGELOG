@@ -1,6 +1,10 @@
 AGAVI CHANGELOG
 ===============
 
+0.10.1 (January 6, 2006)
+FIX: Fixed critical bug that prevented parameters to be passed in config_handlers.ini
+
+
 0.10.0 (December 20, 2005)
 CHG: Updated TODO
 CHG: Bumped Version Numbers
