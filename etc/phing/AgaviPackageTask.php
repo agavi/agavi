@@ -61,7 +61,9 @@ EOD;
 			), 
 			'exceptions' => array(
 				'CHANGELOG' => 'doc',
-				'LICENSE' => 'doc'
+				'LICENSE' => 'doc',
+				'INSTALL' => 'doc',
+				'RELEASE_NOTES' => 'doc'
 			),
 			'installexceptions' => array(
 				'scripts/agavi-dist' => '/',
@@ -70,11 +72,13 @@ EOD;
 		));
 		$p2->setPackageType('php');
 		$p2->setPackage('agavi');
-		$p2->addMaintainer('lead', 'bob', 'Bob Zoller', 'bob@agavi.org');
-		$p2->addMaintainer('lead', 'mike', 'Mike Vincent', 'mike@agavi.org');
+		$p2->addMaintainer('developer', 'bob', 'Bob Zoller', 'bob@agavi.org');
+		$p2->addMaintainer('developer', 'mike', 'Mike Vincent', 'mike@agavi.org');
+		$p2->addMaintainer('developer', 'david', 'David Zuelke', 'dz@bitxtender.com');
+		$p2->addMaintainer('developer', 'v-dogg', 'Veikko Makinen', 'mail@veikkomakinen.com');
 		$p2->setChannel('pear.agavi.org');
-		$p2->setReleaseVersion('0.10.0');
-		$p2->setAPIVersion('0.10.0');
+		$p2->setReleaseVersion('0.10.1');
+		$p2->setAPIVersion('0.10.1');
 		$p2->setReleaseStability('alpha');
 		$p2->setAPIStability('alpha');
 		$p2->setSummary($shortDesc);
@@ -85,7 +89,7 @@ EOD;
 		$p2->addInstallAs('scripts/agavi.bat-dist', 'agavi.bat');
 		$p2->addIgnore('scripts/agavi-dist');
 		$p2->addRelease();
-		$p2->setOSInstallCondition('(*ix|*ux|darwin*|SunOS*)');
+		$p2->setOSInstallCondition('(*BSD|*ix|*ux|darwin*|SunOS*)');
 		$p2->addInstallAs('scripts/agavi-dist', 'agavi');
 		$p2->addIgnore('scripts/agavi.bat-dist');
 		$p2->addRole('*', 'php');

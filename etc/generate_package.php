@@ -45,7 +45,7 @@ EOD;
 $packagexml = new PEAR_PackageFileManager;
 $e = $packagexml->setOptions(array(
 	'baseinstalldir' => 'agavi',
-	'version' => '0.10.0',
+	'version' => '0.10.1',
 	'license' => 'LGPL',
 	'packagedirectory' => $tmpdir,
 	'state' => 'beta',
@@ -67,6 +67,8 @@ $e = $packagexml->setOptions(array(
 	'exceptions' => array(
 		'CHANGELOG' => 'doc',
 		'LICENSE' => 'doc',
+		'INSTALL' => 'doc',
+		'RELEASE_NOTES' => 'doc'
 	),
 	'installas' => array(
 		'scripts/agavi-dist' => 'agavi',
@@ -108,13 +110,25 @@ if (is_a($e, 'PEAR_Error')) {
 	exit;
 }
 
-$e = $packagexml->addMaintainer('bob', 'lead', 'Bob Zoller', 'bob@agavi.org');
+$e = $packagexml->addMaintainer('bob', 'developer', 'Bob Zoller', 'bob@agavi.org');
 if (is_a($e, 'PEAR_Error')) {
 	echo $e->getMessage();
 	exit;
 }
 
-$e = $packagexml->addMaintainer('mike', 'lead', 'Mike Vincent', 'mike@agavi.org');
+$e = $packagexml->addMaintainer('mike', 'developer', 'Mike Vincent', 'mike@agavi.org');
+if (is_a($e, 'PEAR_Error')) {
+	echo $e->getMessage();
+	exit;
+}
+
+$e = $packagexml->addMaintainer('david', 'developer', 'David Zuelke', 'dz@bitxtender.com');
+if (is_a($e, 'PEAR_Error')) {
+	echo $e->getMessage();
+	exit;
+}
+
+$e = $packagexml->addMaintainer('v-dogg', 'developer', 'Veikko Makinen', 'mail@veikkomakinen.com');
 if (is_a($e, 'PEAR_Error')) {
 	echo $e->getMessage();
 	exit;
