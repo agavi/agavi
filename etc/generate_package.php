@@ -112,6 +112,18 @@ if (is_a($e, 'PEAR_Error')) {
 	exit;
 }
 
+$e = $packagexml->addMaintainer('david', 'lead', 'David Zuelke', 'dz@bitxtender.com');
+if (is_a($e, 'PEAR_Error')) {
+	echo $e->getMessage();
+	exit;
+}
+
+$e = $packagexml->addMaintainer('v-dogg', 'developer', 'Veikko Makinen', 'mail@veikkomakinen.com');
+if (is_a($e, 'PEAR_Error')) {
+	echo $e->getMessage();
+	exit;
+}
+
 $e = $packagexml->addMaintainer('bob', 'developer', 'Bob Zoller', 'bob@agavi.org');
 if (is_a($e, 'PEAR_Error')) {
 	echo $e->getMessage();
@@ -119,18 +131,6 @@ if (is_a($e, 'PEAR_Error')) {
 }
 
 $e = $packagexml->addMaintainer('mike', 'developer', 'Mike Vincent', 'mike@agavi.org');
-if (is_a($e, 'PEAR_Error')) {
-	echo $e->getMessage();
-	exit;
-}
-
-$e = $packagexml->addMaintainer('david', 'developer', 'David Zuelke', 'dz@bitxtender.com');
-if (is_a($e, 'PEAR_Error')) {
-	echo $e->getMessage();
-	exit;
-}
-
-$e = $packagexml->addMaintainer('v-dogg', 'developer', 'Veikko Makinen', 'mail@veikkomakinen.com');
 if (is_a($e, 'PEAR_Error')) {
 	echo $e->getMessage();
 	exit;
