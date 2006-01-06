@@ -8,6 +8,8 @@ mkdir($tmpdir);
 exec("cd src && cp -Rp * {$tmpdir}");
 exec("cp CHANGELOG {$tmpdir}");
 exec("cp LICENSE {$tmpdir}");
+exec("cp INSTALL {$tmpdir}");
+exec("cp RELEASE_NOTES {$tmpdir}");
 exec("mkdir {$tmpdir}/scripts");
 exec("cp etc/agavi-dist {$tmpdir}/scripts");
 exec("cp etc/agavi.bat-dist {$tmpdir}/scripts");
@@ -45,7 +47,7 @@ EOD;
 $packagexml = new PEAR_PackageFileManager;
 $e = $packagexml->setOptions(array(
 	'baseinstalldir' => 'agavi',
-	'version' => '0.10.0',
+	'version' => '0.10.1',
 	'license' => 'LGPL',
 	'packagedirectory' => $tmpdir,
 	'state' => 'beta',
@@ -67,6 +69,8 @@ $e = $packagexml->setOptions(array(
 	'exceptions' => array(
 		'CHANGELOG' => 'doc',
 		'LICENSE' => 'doc',
+		'INSTALL' => 'doc',
+		'RELEASE_NOTES' => 'doc'
 	),
 	'installas' => array(
 		'scripts/agavi-dist' => 'agavi',
@@ -89,7 +93,7 @@ $e = $packagexml->setOptions(array(
 		)
 	),
 	'platformexceptions' => array(
-		'scripts/agavi-dist' => '(*ix|*ux|darwin*|SunOS*)',
+		'scripts/agavi-dist' => '(*BSD|*ix|*ux|darwin*|SunOS*)',
 		'scripts/agavi.bat-dist' => 'windows'
 	),
 	'installexceptions' => array(
@@ -108,13 +112,25 @@ if (is_a($e, 'PEAR_Error')) {
 	exit;
 }
 
-$e = $packagexml->addMaintainer('bob', 'lead', 'Bob Zoller', 'bob@agavi.org');
+$e = $packagexml->addMaintainer('bob', 'developer', 'Bob Zoller', 'bob@agavi.org');
 if (is_a($e, 'PEAR_Error')) {
 	echo $e->getMessage();
 	exit;
 }
 
-$e = $packagexml->addMaintainer('mike', 'lead', 'Mike Vincent', 'mike@agavi.org');
+$e = $packagexml->addMaintainer('mike', 'developer', 'Mike Vincent', 'mike@agavi.org');
+if (is_a($e, 'PEAR_Error')) {
+	echo $e->getMessage();
+	exit;
+}
+
+$e = $packagexml->addMaintainer('david', 'developer', 'David Zuelke', 'dz@bitxtender.com');
+if (is_a($e, 'PEAR_Error')) {
+	echo $e->getMessage();
+	exit;
+}
+
+$e = $packagexml->addMaintainer('v-dogg', 'developer', 'Veikko Makinen', 'mail@veikkomakinen.com');
 if (is_a($e, 'PEAR_Error')) {
 	echo $e->getMessage();
 	exit;
