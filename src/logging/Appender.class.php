@@ -26,7 +26,7 @@
  *
  * @version    $Id$
  */
-abstract class Appender extends AgaviObject
+abstract class Appender
 {
 
 	private $layout = null;

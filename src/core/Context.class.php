@@ -32,7 +32,7 @@
  *
  * @version    $Id$
  */
-class Context extends AgaviObject
+class Context
 {
 
 	protected

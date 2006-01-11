@@ -25,7 +25,7 @@
  *
  * @version    $Id$
  */
-abstract class Layout extends AgaviObject
+abstract class Layout
 {
 
 	private $layout = null;

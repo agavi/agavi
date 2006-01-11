@@ -27,7 +27,7 @@
  *
  * @version    $Id$
  */
-class ValidatorManager extends AgaviObject
+class ValidatorManager
 {
 
 	private

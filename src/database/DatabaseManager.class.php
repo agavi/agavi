@@ -28,7 +28,7 @@
  *
  * @version    $Id$
  */
-class DatabaseManager extends AgaviObject
+class DatabaseManager
 {
 
 	// +-----------------------------------------------------------------------+

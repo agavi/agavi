@@ -29,7 +29,7 @@
  *
  * @version    $Id$
  */
-abstract class Model extends AgaviObject
+abstract class Model
 {
 
 	// +-----------------------------------------------------------------------+

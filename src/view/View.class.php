@@ -29,7 +29,7 @@
  *
  * @version    $Id$
  */
-abstract class View extends AgaviObject
+abstract class View
 {
 
 	// +-----------------------------------------------------------------------+

@@ -28,7 +28,7 @@
  *
  * @version    $Id$
  */
-class ConfigCache extends AgaviObject
+class ConfigCache
 {
 
 	private static

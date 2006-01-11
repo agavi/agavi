@@ -27,7 +27,7 @@
  *
  * @version    $Id$
  */
-class ActionStack extends AgaviObject
+class ActionStack
 {
 
 	private

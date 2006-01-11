@@ -26,7 +26,7 @@
  *
  * @version    $Id$
  */
-class FilterChain extends AgaviObject
+class FilterChain
 {
 
 	private

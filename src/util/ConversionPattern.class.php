@@ -25,7 +25,7 @@
  *
  * @version    $Id$
  */
-class ConversionPattern extends AgaviObject
+class ConversionPattern
 {
 
 	// +-----------------------------------------------------------------------+

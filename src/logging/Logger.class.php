@@ -26,7 +26,7 @@
  *
  * @version    $Id$
  */
-class Logger extends AgaviObject
+class Logger
 {
 
 	/**

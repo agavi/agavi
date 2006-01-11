@@ -137,7 +137,6 @@ try {
 	require_once(AG_APP_DIR . '/version.php');
 
 	// required classes for this file and ConfigCache to run
-	require_once(AG_APP_DIR . '/core/AgaviObject.class.php');
 	require_once(AG_APP_DIR . '/util/ParameterHolder.class.php');
 	require_once(AG_APP_DIR . '/config/ConfigCache.class.php');
 	require_once(AG_APP_DIR . '/config/ConfigHandler.class.php');

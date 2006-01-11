@@ -27,7 +27,7 @@
  *
  * @version    $Id$
  */
-class ParameterParser extends AgaviObject
+class ParameterParser
 {
 
 	/**

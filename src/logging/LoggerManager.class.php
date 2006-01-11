@@ -25,7 +25,7 @@
  *
  * @version    $Id$
  */
-class LoggerManager extends AgaviObject
+class LoggerManager
 {
 
 	private static $loggers = array();

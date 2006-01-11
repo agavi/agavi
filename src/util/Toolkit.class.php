@@ -26,7 +26,7 @@
  *
  * @version    $Id$
  */
-class Toolkit extends AgaviObject
+class Toolkit
 {
 
 	/**

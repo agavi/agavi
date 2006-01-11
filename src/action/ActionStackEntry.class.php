@@ -27,7 +27,7 @@
  *
  * @version    $Id$
  */
-class ActionStackEntry extends AgaviObject
+class ActionStackEntry
 {
 
 	// +-----------------------------------------------------------------------+

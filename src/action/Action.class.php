@@ -28,7 +28,7 @@
  *
  * @version    $Id$
  */
-abstract class Action extends AgaviObject
+abstract class Action
 {
 
 	// +-----------------------------------------------------------------------+
