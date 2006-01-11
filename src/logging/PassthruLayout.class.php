@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2005 Agavi Foundation                                  |
+// | Copyright (c) 2003-2006 the Agavi Project                                 |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -19,10 +19,11 @@
  * @package    agavi
  * @subpackage logging
  *
- * @author    Bob Zoller (bob@agavi.org)
- * @copyright (c) Authors
- * @since     0.9.1
- * @version   $Id: PatternLayout.class.php 87 2005-06-03 21:19:23Z bob $
+ * @author     Bob Zoller <bob@agavi.org>
+ * @copyright  (c) Authors
+ * @since      0.10.0
+ *
+ * @version    $Id: PatternLayout.class.php 87 2005-06-03 21:19:23Z bob $
  */
 class PassthruLayout extends Layout
 {
@@ -30,12 +31,12 @@ class PassthruLayout extends Layout
 	/**
 	 * Format a message.
 	 *
-	 * @param Message A Message instance.
+	 * @param      Message A Message instance.
 	 *
-	 * @return string A formatted message.
+	 * @return     string A formatted message.
 	 *
-	 * @author Bob Zoller (bob@agavi.org)
-	 * @since  0.9.1
+	 * @author     Bob Zoller <bob@agavi.org>
+	 * @since      0.10.0
 	 */
 	public function &format ($message)
 	{

@@ -2,7 +2,8 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2005  Sean Kerr.                                       |
+// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -34,34 +35,31 @@
  * @package    agavi
  * @subpackage storage
  *
- * @author    Sean Kerr (skerr@mojavi.org)
- * @author    Veikko Makinen (mail@veikkomakinen.com)
- * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
- * @since     0.9.0
- * @version   $Id$
+ * @author     Sean Kerr <skerr@mojavi.org>
+ * @author     Veikko Makinen <mail@veikkomakinen.com>
+ * @copyright  (c) Authors
+ * @since      0.9.0
+ *
+ * @version    $Id$
  */
 class SessionStorage extends Storage
 {
 
-	// +-----------------------------------------------------------------------+
-	// | METHODS                                                               |
-	// +-----------------------------------------------------------------------+
-
 	/**
 	 * Initialize this Storage.
 	 *
-	 * @param Context A Context instance.
-	 * @param array   An associative array of initialization parameters.
+	 * @param      Context A Context instance.
+	 * @param      array   An associative array of initialization parameters.
 	 *
-	 * @return bool true, if initialization completes successfully, otherwise
-	 *              false.
+	 * @return     bool true, if initialization completes successfully,
+	 *                  otherwise false.
 	 *
-	 * @throws <b>InitializationException</b> If an error occurs while
-	 *                                        initializing this Storage.
+	 * @throws     <b>InitializationException</b> If an error occurs while
+	 *                                            initializing this Storage.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @author Veikko Makinen (mail@veikkomakinen.com)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     Veikko Makinen <mail@veikkomakinen.com>
+	 * @since      0.9.0
 	 */
 	public function initialize ($context, $parameters = null)
 	{
@@ -85,17 +83,15 @@ class SessionStorage extends Storage
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
-	 * Starts a session unless user has explicitly disabled auto start (see class's optional parameters)
-	 * or a session has already been started.
+	 * Starts a session unless user has explicitly disabled auto start (see
+	 * optional parameters) or a session has already been started.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @author Veikko Makinen (mail@veikkomakinen.com)
+	 * @author     Veikko Makinen <mail@veikkomakinen.com>
 	 *
-	 * @since  0.10.0
+	 * @since      0.10.0
 	 */
 	public function autoStart()
 	{
@@ -109,20 +105,18 @@ class SessionStorage extends Storage
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Read data from this storage.
 	 *
 	 * The preferred format for a key is directory style so naming conflicts can
 	 * be avoided.
 	 *
-	 * @param string A unique key identifying your data.
+	 * @param      string A unique key identifying your data.
 	 *
-	 * @return mixed Data associated with the key.
+	 * @return     mixed Data associated with the key.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function & read ($key)
 	{
@@ -136,20 +130,18 @@ class SessionStorage extends Storage
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Remove data from this storage.
 	 *
 	 * The preferred format for a key is directory style so naming conflicts can
 	 * be avoided.
 	 *
-	 * @param string A unique key identifying your data.
+	 * @param      string A unique key identifying your data.
 	 *
-	 * @return mixed Data associated with the key.
+	 * @return     mixed Data associated with the key.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function & remove ($key)
 	{
@@ -169,15 +161,13 @@ class SessionStorage extends Storage
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Execute the shutdown procedure.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function shutdown ()
 	{
@@ -186,21 +176,19 @@ class SessionStorage extends Storage
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Write data to this storage.
 	 *
 	 * The preferred format for a key is directory style so naming conflicts can
 	 * be avoided.
 	 *
-	 * @param string A unique key identifying your data.
-	 * @param mixed  Data associated with your key.
+	 * @param      string A unique key identifying your data.
+	 * @param      mixed  Data associated with your key.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function write ($key, &$data)
 	{

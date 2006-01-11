@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2005 Agavi Foundation                                  |
+// | Copyright (c) 2003-2006 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -42,25 +42,22 @@
  * @package    agavi
  * @subpackage database
  *
- * @author    Steven Weiss (info@code-factory.de)
- * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
- * @since     0.10.0
- * @version   $Id$
+ * @author     Steven Weiss (info@code-factory.de)
+ * @copyright  (c) Authors
+ * @since      0.10.0
+ *
+ * @version    $Id$
  */
 class AdoDBDatabase extends Database
 {
 
-	// +-----------------------------------------------------------------------+
-	// | METHODS                                                               |
-	// +-----------------------------------------------------------------------+
-
 	/**
 	 * Connect to the database.
 	 *
-	 * @throws <b>DatabaseException</b> If a connection could not be created.
+	 * @throws     <b>DatabaseException</b> If a connection could not be created
 	 *
-	 * @author Steven Weiss (info@code-factory.de)
-	 * @since  0.10.0
+	 * @author     Steven Weiss (info@code-factory.de)
+	 * @since      0.10.0
 	 */
 	public function connect ()
 	{
@@ -171,17 +168,15 @@ class AdoDBDatabase extends Database
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Load a DSN connection string from an existing array.
 	 *
-	 * @return array An associative array of connection parameters.
+	 * @return     array An associative array of connection parameters.
 	 *
-	 * @throws <b>DatabaseException</b> If the DSN string is not correct
+	 * @throws     <b>DatabaseException</b> If the DSN string is not correct.
 	 * 
-	 * @author Steven Weiss (info@code-factory.de)
-	 * @since  0.10.0
+	 * @author     Steven Weiss (info@code-factory.de)
+	 * @since      0.10.0
 	 */
 	private function loadDSN (&$array, $method)
 	{
@@ -193,18 +188,16 @@ class AdoDBDatabase extends Database
 		return $array['dsn'];		
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Execute the shutdown procedure.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @throws <b>DatabaseException</b> If an error occurs while shutting down
-	 *                                  this database.
+	 * @throws     <b>DatabaseException</b> If an error occurs while shutting
+	 *                                      down this database.
 	 *
-	 * @author Steven Weiss (info@code-factory.de)
-	 * @since  0.10.0
+	 * @author     Steven Weiss (info@code-factory.de)
+	 * @since      0.10.0
 	 */
 	public function shutdown ()
 	{

@@ -2,7 +2,8 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2005  Sean Kerr.                                       |
+// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -19,10 +20,11 @@
  * @package    agavi
  * @subpackage util
  *
- * @author    Sean Kerr (skerr@mojavi.org)
- * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
- * @since     0.9.0
- * @version   $Id$
+ * @author     Sean Kerr <skerr@mojavi.org>
+ * @copyright  (c) Authors
+ * @since      0.9.0
+ *
+ * @version    $Id$
  */
 abstract class ParameterHolder extends AgaviObject
 {
@@ -34,17 +36,13 @@ abstract class ParameterHolder extends AgaviObject
 	protected
 		$parameters = array();
 
-	// +-----------------------------------------------------------------------+
-	// | METHODS                                                               |
-	// +-----------------------------------------------------------------------+
-
 	/**
 	 * Clear all parameters associated with this request.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function clearParameters ()
 	{
@@ -53,19 +51,17 @@ abstract class ParameterHolder extends AgaviObject
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Retrieve a parameter.
 	 *
-	 * @param string A parameter name.
-	 * @param mixed  A default parameter value.
+	 * @param      string A parameter name.
+	 * @param      mixed  A default parameter value.
 	 *
-	 * @return mixed A parameter value, if the parameter exists, otherwise
+	 * @return     mixed A parameter value, if the parameter exists, otherwise
 	 *               null.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function & getParameter ($name, $default = null)
 	{
@@ -83,15 +79,13 @@ abstract class ParameterHolder extends AgaviObject
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Retrieve an array of parameter names.
 	 *
-	 * @return array An indexed array of parameter names.
+	 * @return     array An indexed array of parameter names.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function getParameterNames ()
 	{
@@ -100,15 +94,13 @@ abstract class ParameterHolder extends AgaviObject
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Retrieve an array of parameters.
 	 *
-	 * @return array An associative array of parameters.
+	 * @return     array An associative array of parameters.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function getParameters ()
 	{
@@ -117,17 +109,15 @@ abstract class ParameterHolder extends AgaviObject
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Indicates whether or not a parameter exists.
 	 *
-	 * @param string A parameter name.
+	 * @param      string A parameter name.
 	 *
-	 * @return bool true, if the parameter exists, otherwise false.
+	 * @return     bool true, if the parameter exists, otherwise false.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function hasParameter ($name)
 	{
@@ -136,18 +126,16 @@ abstract class ParameterHolder extends AgaviObject
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Remove a parameter.
 	 *
-	 * @param string A parameter name.
+	 * @param      string A parameter name.
 	 *
-	 * @return string A parameter value, if the parameter was removed,
+	 * @return     string A parameter value, if the parameter was removed,
 	 *                otherwise null.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function & removeParameter ($name)
 	{
@@ -167,20 +155,18 @@ abstract class ParameterHolder extends AgaviObject
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Set a parameter.
 	 *
 	 * If a parameter with the name already exists the value will be overridden.
 	 *
-	 * @param string A parameter name.
-	 * @param mixed  A parameter value.
+	 * @param      string A parameter name.
+	 * @param      mixed  A parameter value.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  2.0.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      2.0.0
 	 */
 	public function setParameter ($name, $value)
 	{
@@ -189,21 +175,19 @@ abstract class ParameterHolder extends AgaviObject
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Append a parameter.
 	 * 
 	 * If this parameter is already set, convert it to an array and append the
 	 * new value.  If not, set the new value like normal.
 	 *
-	 * @param string A parameter name.
-	 * @param mixed  A parameter value.
+	 * @param      string A parameter name.
+	 * @param      mixed  A parameter value.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @author Bob Zoller (bob@agavi.org)
-	 * @since  0.9.1
+	 * @author     Bob Zoller <bob@agavi.org>
+	 * @since      0.10.0
 	 */
 	public function appendParameter($name, $value)
 	{
@@ -215,21 +199,19 @@ abstract class ParameterHolder extends AgaviObject
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Set a parameter by reference.
 	 *
 	 * If a parameter with the name already exists the value will be
 	 * overridden.
 	 *
-	 * @param string A parameter name.
-	 * @param mixed  A reference to a parameter value.
+	 * @param      string A parameter name.
+	 * @param      mixed  A reference to a parameter value.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  2.0.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      2.0.0
 	 */
 	public function setParameterByRef ($name, &$value)
 	{
@@ -238,21 +220,19 @@ abstract class ParameterHolder extends AgaviObject
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Append a parameter by reference.
 	 * 
 	 * If this parameter is already set, convert it to an array and append the
 	 * reference to the new value.  If not, set the new value like normal.
 	 *
-	 * @param string A parameter name.
-	 * @param mixed  A reference to a parameter value.
+	 * @param      string A parameter name.
+	 * @param      mixed  A reference to a parameter value.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @author Bob Zoller (bob@agavi.org)
-	 * @since  0.9.1
+	 * @author     Bob Zoller <bob@agavi.org>
+	 * @since      0.10.0
 	 */
 	public function appendParameterByRef($name, &$value)
 	{
@@ -264,21 +244,19 @@ abstract class ParameterHolder extends AgaviObject
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Set an array of parameters.
 	 *
 	 * If an existing parameter name matches any of the keys in the supplied
 	 * array, the associated value will be overridden.
 	 *
-	 * @param array An associative array of parameters and their associated
+	 * @param      array An associative array of parameters and their associated
 	 *              values.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function setParameters ($parameters)
 	{
@@ -287,21 +265,19 @@ abstract class ParameterHolder extends AgaviObject
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Set an array of parameters by reference.
 	 *
 	 * If an existing parameter name matches any of the keys in the supplied
 	 * array, the associated value will be overridden.
 	 *
-	 * @param array An associative array of parameters and references to their
+	 * @param      array An associative array of parameters and references to their
 	 *              associated values.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function setParametersByRef (&$parameters)
 	{

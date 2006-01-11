@@ -2,7 +2,8 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2005  Sean Kerr.                                       |
+// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -16,13 +17,15 @@
 /**
  * Pre-initialization script.
  *
- * @package agavi
+ * @package    agavi
  *
- * @author    Sean Kerr (skerr@mojavi.org)
- * @author    Mike Vincent (mike@agavi.org)
- * @copyright (c) authors
- * @since     0.9.0
- * @version   $Id$
+ * @author     Sean Kerr <skerr@mojavi.org>
+ * @author     Mike Vincent <mike@agavi.org>
+ * @author     David Zuelke <dz@bitxtender.com>
+ * @copyright  (c) Authors
+ * @since      0.9.0
+ *
+ * @version    $Id$
  */
 
 /**
@@ -31,8 +34,8 @@
  * Things arent going to work unless we're running with php5,
  * so dont assume we are. 
  *
- * @author Mike Vincent (mike@agavi.org)
- * @since  0.9.0
+ * @author     Mike Vincent <mike@agavi.org>
+ * @since      0.9.0
  */
 
 define('MINIMUM_VER_PHP', '5.0.0');
@@ -46,12 +49,12 @@ if ( !version_compare(PHP_VERSION, MINIMUM_VER_PHP, 'ge') ) {
 /**
  * Handles autoloading of classes that have been specified in autoload.ini.
  *
- * @param string A class name.
+ * @param      string A class name.
  *
- * @return void
+ * @return     void
  *
- * @author Sean Kerr (skerr@mojavi.org)
- * @since  0.9.0
+ * @author     Sean Kerr <skerr@mojavi.org>
+ * @since      0.9.0
  */
 function __autoload ($class)
 {

@@ -2,10 +2,8 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Authors                                                                   |
-// |  Sean Kerr (skerr@mojavi.org)                                             |
-// |  Agavi Foundation (info@agavi.org)                                        |
-// | Copyright (c) 2003-2005  Authors                                          |
+// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -19,17 +17,17 @@
 require_once(AG_SMARTY_DIR.'/libs/Smarty.class.php');
 
 /**
- * $Id$
- *
  *
  * @package    agavi
  * @subpackage view
  *
- * @author    Sean Kerr (skerr@mojavi.org)
- * @author    zembla {@link http://forum.mojavi.org/index.php?showuser=329}
- * @author    Agavi Foundation (info@agavi.org)
- * @copyright (c) Authors, {@link http://www.agavi.org}
- * @since     0.9.0
+ * @author     Sean Kerr <skerr@mojavi.org>
+ * @author     zembla {@link http://forum.mojavi.org/index.php?showuser=329}
+ * @author     Agavi Project <info@agavi.org>
+ * @copyright  (c) Authors
+ * @since      0.9.0
+ *
+ * @version    $Id$
  */
 abstract class SmartyView extends View
 {

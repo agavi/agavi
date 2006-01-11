@@ -2,7 +2,8 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2005  Sean Kerr.                                       |
+// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -20,34 +21,27 @@
  * @package    agavi
  * @subpackage validator
  *
- * @author    Sean Kerr (skerr@mojavi.org)
- * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
- * @since     0.9.0
- * @version   $Id$
+ * @author     Sean Kerr <skerr@mojavi.org>
+ * @copyright  (c) Authors
+ * @since      0.9.0
+ *
+ * @version    $Id$
  */
 class ValidatorManager extends AgaviObject
 {
-
-	// +-----------------------------------------------------------------------+
-	// | PRIVATE VARIABLES                                                     |
-	// +-----------------------------------------------------------------------+
 
 	private
 		$groups  = array(),
 		$names   = array(),
 		$request = null;
 
-	// +-----------------------------------------------------------------------+
-	// | METHODS                                                               |
-	// +-----------------------------------------------------------------------+
-
 	/**
 	 * Clear this validator manager so it can be reused.
 	 *
 	 * @retun void
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function clear ()
 	{
@@ -58,15 +52,14 @@ class ValidatorManager extends AgaviObject
 	}
 	
 	
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Encapsulation method to return the groups array
 	 *
-	 * @return array of validator groups, or NULL if none have been registered
+	 * @return     mixed array of validator groups or NULL if none have been
+	 *                   registered.
 	 *
-	 * @author Graeme Foster
-	 * @since  1.0.0
+	 * @author     Graeme Foster
+	 * @since      0.9.0
 	 */
 	public function getGroups()
 	{
@@ -74,30 +67,28 @@ class ValidatorManager extends AgaviObject
 	} 
 	
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Encapsulation method to return the names array
 	 *
-	 * @return array of validator names, or NULL if none have been registered
+	 * @return     mixed array of validator names, or NULL if none have been 
+	 *                   registered
 	 *
-	 * @author Graeme Foster
-	 * @since  1.0.0
+	 * @author     Graeme Foster
+	 * @since      0.9.0
 	 */
 	public function getNames()
 	{
 		return $this->names;
 	} 
 	
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Execute all validators and determine the validation status.
 	 *
-	 * @return bool true, if validation completed successfully, otherwise false.
+	 * @return     bool true, if validation completed successfully, otherwise 
+	 *                  false.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function execute ()
 	{
@@ -141,17 +132,15 @@ class ValidatorManager extends AgaviObject
 	}
 
 	
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Initialize this validator manager.
 	 *
-	 * @param Context A context instance.
+	 * @param      Context A context instance.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function initialize ($context)
 	{
@@ -160,20 +149,19 @@ class ValidatorManager extends AgaviObject
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Register a file or parameter.
 	 *
-	 * @param string  A file or parameter name.
-	 * @param bool    The required status.
-	 * @param string  A required error message.
-	 * @param string  A parent array
-	 * @param string  A group name.
-	 * @param bool 		An unused(?) parameter, apparently meant to determine if the name is a parameter or filename.
+	 * @param      string  A file or parameter name.
+	 * @param      bool    The required status.
+	 * @param      string  A required error message.
+	 * @param      string  A parent array
+	 * @param      string  A group name.
+	 * @param      bool    An unused(?) parameter, apparently meant to determine 
+	 *                     if the name is a parameter or filename.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function registerName ($name, $required = true, $message = 'Required', $parent = null, $group = null, $isFile = false)
 	{
@@ -222,19 +210,17 @@ class ValidatorManager extends AgaviObject
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Register a validator for a file or parameter.
 	 *
-	 * @param string    A file or parameter name.
-	 * @param Validator A validator implementation instance.
-	 * @param string    A parent array name.
+	 * @param      string    A file or parameter name.
+	 * @param      Validator A validator implementation instance.
+	 * @param      string    A parent array name.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function registerValidator ($name, $validator, $parent = null)
 	{
@@ -255,19 +241,18 @@ class ValidatorManager extends AgaviObject
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Validate a file or parameter.
 	 *
-	 * @param string A file or parameter name.
-	 * @param array  Data associated with the file or parameter.
-	 * @param string A parent name.
+	 * @param      string A file or parameter name.
+	 * @param      array  Data associated with the file or parameter.
+	 * @param      string A parent name.
 	 *
-	 * @return bool true, if validation completes successfully, otherwise false.
+	 * @return     bool true, if validation completes successfully, otherwise 
+	 *                  false.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	private function validate (&$name, &$data, $parent)
 	{

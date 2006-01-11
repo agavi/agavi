@@ -2,7 +2,8 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2005  Sean Kerr.                                       |
+// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -21,10 +22,11 @@
  * @package    agavi
  * @subpackage action
  *
- * @author    Sean Kerr (skerr@mojavi.org)
- * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
- * @since     0.9.0
- * @version   $Id$
+ * @author     Sean Kerr <skerr@mojavi.org>
+ * @copyright  (c) Authors
+ * @since      0.9.0
+ *
+ * @version    $Id$
  */
 abstract class Action extends AgaviObject
 {
@@ -35,10 +37,6 @@ abstract class Action extends AgaviObject
 	
 	private
 		$context = null;
-
-	// +-----------------------------------------------------------------------+
-	// | METHODS                                                               |
-	// +-----------------------------------------------------------------------+
 
 	/**
 	 * Execute any application/business logic for this action.
@@ -51,28 +49,24 @@ abstract class Action extends AgaviObject
 	 * user account, a shopping cart, or even a something as simple as a
 	 * single product.
 	 *
-	 * @return mixed A string containing the view name associated with this
-	 *               action.
+	 * @return     mixed A string containing the view name associated with this
+	 *                   action.
+	 *                   Or an array with the following indices:
+	 *                   - The parent module of the view that will be executed.
+	 *                   - The view that will be executed.
 	 *
-	 *               Or an array with the following indices:
-	 *
-	 *               - The parent module of the view that will be executed.
-	 *               - The view that will be executed.
-	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	abstract function execute ();
-
-	// -------------------------------------------------------------------------
 
 	/**
 	 * Retrieve the current application context.
 	 *
-	 * @return Context The current Context instance.
+	 * @return     Context The current Context instance.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public final function getContext ()
 	{
@@ -81,15 +75,14 @@ abstract class Action extends AgaviObject
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Retrieve the credential required to access this action.
 	 *
-	 * @return mixed Data that indicates the level of security for this action.
+	 * @return     mixed Data that indicates the level of security for this 
+	 *                   action.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function getCredential ()
 	{
@@ -98,22 +91,18 @@ abstract class Action extends AgaviObject
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Retrieve the default view to be executed when a given request is not
 	 * served by this action.
 	 *
-	 * @return mixed A string containing the view name associated with this
-	 *               action.
+	 * @return     mixed A string containing the view name associated with this
+	 *                  action.
+	 *                  Or an array with the following indices:
+	 *                  - The parent module of the view that will be executed.
+	 *                  - The view that will be executed.
 	 *
-	 *               Or an array with the following indices:
-	 *
-	 *               - The parent module of the view that will be executed.
-	 *               - The view that will be executed.
-	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function getDefaultView ()
 	{
@@ -122,21 +111,18 @@ abstract class Action extends AgaviObject
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Retrieve the request methods on which this action will process
 	 * validation and execution.
 	 *
-	 * @return int One of the following values:
+	 * @return     int One of the following values:
+	 *                 - Request::GET
+	 *                 - Request::POST
+	 *                 - Request::NONE
 	 *
-	 *             - Request::GET
-	 *             - Request::POST
-	 *             - Request::NONE
-	 *
-	 * @see Request
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @see        Request
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function getRequestMethods ()
 	{
@@ -145,21 +131,17 @@ abstract class Action extends AgaviObject
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Execute any post-validation error application logic.
 	 *
-	 * @return mixed A string containing the view name associated with this
-	 *               action.
+	 * @return     mixed A string containing the view name associated with this
+	 *                   action.
+	 *                   Or an array with the following indices:
+	 *                   - The parent module of the view that will be executed.
+	 *                   - The view that will be executed.
 	 *
-	 *               Or an array with the following indices:
-	 *
-	 *               - The parent module of the view that will be executed.
-	 *               - The view that will be executed.
-	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  2.0.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      2.0.0
 	 */
 	public function handleError ()
 	{
@@ -168,18 +150,16 @@ abstract class Action extends AgaviObject
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Initialize this action.
 	 *
-	 * @param Context The current application context.
+	 * @param      Context The current application context.
 	 *
-	 * @return bool true, if initialization completes successfully, otherwise
-	 *              false.
+	 * @return     bool true, if initialization completes successfully, 
+	 *                  otherwise false.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  2.0.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      2.0.0
 	 */
 	public function initialize ($context)
 	{
@@ -190,15 +170,13 @@ abstract class Action extends AgaviObject
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Indicates that this action requires security.
 	 *
-	 * @return bool true, if this action requires security, otherwise false.
+	 * @return     bool true, if this action requires security, otherwise false.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function isSecure ()
 	{
@@ -207,32 +185,29 @@ abstract class Action extends AgaviObject
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Manually register validators for this action.
 	 *
-	 * @param ValidatorManager A ValidatorManager instance.
+	 * @param      ValidatorManager A ValidatorManager instance.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function registerValidators ($validatorManager)
 	{
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Manually validate files and parameters.
 	 *
-	 * @return bool true, if validation completes successfully, otherwise false.
+	 * @return     bool true, if validation completes successfully, otherwise 
+	 *                  false.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function validate ()
 	{

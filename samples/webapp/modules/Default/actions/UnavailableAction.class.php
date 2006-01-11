@@ -2,7 +2,8 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2005  Sean Kerr.                                       |
+// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -16,10 +17,6 @@
 class Default_UnavailableAction extends Action
 {
 
-	// +-----------------------------------------------------------------------+
-	// | METHODS                                                               |
-	// +-----------------------------------------------------------------------+
-
 	/**
 	 * Execute any application/business logic for this action.
 	 *
@@ -31,15 +28,17 @@ class Default_UnavailableAction extends Action
 	 * user account, a shopping cart, or even a something as simple as a
 	 * single product.
 	 *
-	 * @return mixed - A string containing the view name associated with this
-	 *                 action, or...
-	 *               - An array with three indices:
-	 *                 0. The parent module of the view that will be executed.
-	 *                 1. The parent action of the view that will be executed.
-	 *                 2. The view that will be executed.
+	 * @return     mixed - A string containing the view name associated with 
+	 *                     this action, or
+	 *                   - An array with three indices:
+	 *                     0. The parent module of the view that will be
+	 *                        executed.
+	 *                     1. The parent action of the view that will be
+	 *                        executed.
+	 *                     2. The view that will be executed.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function execute ()
 	{
@@ -49,21 +48,21 @@ class Default_UnavailableAction extends Action
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Retrieve the default view to be executed when a given request is not
 	 * served by this action.
 	 *
-	 * @return mixed - A string containing the view name associated with this
-	 *                 action, or...
-	 *               - An array with three indices:
-	 *                 0. The parent module of the view that will be executed.
-	 *                 1. The parent action of the view that will be executed.
-	 *                 2. The view that will be executed.
+	 * @return     mixed - A string containing the view name associated with 
+	 *                     this action, or
+	 *                   - An array with three indices:
+	 *                     0. The parent module of the view that will be
+	 *                        executed.
+	 *                     1. The parent action of the view that will be
+	 *                        executed.
+	 *                     2. The view that will be executed.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function getDefaultView ()
 	{
@@ -72,21 +71,19 @@ class Default_UnavailableAction extends Action
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Retrieve the request methods on which this action will process
 	 * validation and execution.
 	 *
-	 * @return int - Request::GET - Indicates that this action serves only GET
-	 *               requests, or...
-	 *             - Request::POST - Indicates that this action serves only POST
-	 *               requests, or...
-	 *             - Request::NONE - Indicates that this action serves no
-	 *               requests, or...
+	 * @return     int - Request::GET - Indicates this action serves only GET
+	 *                   requests, or
+	 *                 - Request::POST - Indicates this action serves only POST
+	 *                   requests, or
+	 *                 - Request::NONE - Indicates that this action serves no
+	 *                   requests.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function getRequestMethods ()
 	{

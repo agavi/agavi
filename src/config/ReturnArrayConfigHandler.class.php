@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2005 Agavi Foundation                                  |
+// | Copyright (c) 2003-2006 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -20,18 +20,20 @@
  * @package    agavi
  * @subpackage config
  *
- * @author    David Zuelke (dz@bitxtender.com) {@link http://www.agavi.org}
- * @copyright (c) authors
- * @since     0.10.0
- * @version   $Id$
+ * @author     David Zuelke <dz@bitxtender.com>
+ * @copyright  (c) Authors
+ * @since      0.10.0
+ *
+ * @version    $Id$
  */
 
 class ReturnArrayConfigHandler extends IniConfigHandler
 {
 	/**
-	 * @see IniConfigHandler::execute()
-	 * @author David Zuelke (dz@bitxtender.com)
-	 * @since  0.10.0
+	 * @see        IniConfigHandler::execute()
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.10.0
 	 */
 	public function &execute($config)
 	{
@@ -56,11 +58,13 @@ class ReturnArrayConfigHandler extends IniConfigHandler
 	 * Helper method to convert keys.like.these in ini files to a multi-
 	 * dimensional array
 	 * 
-	 * @param array The one-dimensional input array
-	 * @param bool Convert boolean strings to literal boolean values
-	 * @return array The transformed version of the input array
-	 * @author David Zuelke (dz@bitxtender.com)
-	 * @since  0.10.0
+	 * @param      array The one-dimensional input array
+	 * @param      bool Convert boolean strings to literal boolean values
+	 *
+	 * @return     array The transformed version of the input array
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.10.0
 	 */
 	public static function addDimensions($input, $real_booleans = false)
 	{

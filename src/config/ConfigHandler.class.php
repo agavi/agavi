@@ -2,7 +2,8 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2005  Sean Kerr.                                       |
+// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -21,28 +22,25 @@
  * @package    agavi
  * @subpackage config
  *
- * @author    Sean Kerr (skerr@mojavi.org)
- * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
- * @since     0.9.0
- * @version   $Id$
+ * @author     Sean Kerr <skerr@mojavi.org>
+ * @copyright  (c) Authors
+ * @since      0.9.0
+ *
+ * @version    $Id$
  */
 abstract class ConfigHandler extends ParameterHolder
 {
 
-	// +-----------------------------------------------------------------------+
-	// | METHODS                                                               |
-	// +-----------------------------------------------------------------------+
-
 	/**
 	 * Add a set of replacement values.
 	 *
-	 * @param string The old value.
-	 * @param string The new value which will replace the old value.
+	 * @param      string The old value.
+	 * @param      string The new value which will replace the old value.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function addReplacement ($oldValue, $newValue)
 	{
@@ -52,40 +50,36 @@ abstract class ConfigHandler extends ParameterHolder
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Execute this configuration handler.
 	 *
-	 * @param string An absolute filesystem path to a configuration file.
+	 * @param      string An absolute filesystem path to a configuration file.
 	 *
-	 * @return string Data to be written to a cache file.
+	 * @return     string Data to be written to a cache file.
 	 *
-	 * @throws <b>UnreadableException</b> If a requested configuration file
-	 *                                    does not exist or is not readable.
-	 * @throws <b>ParseException</b> If a requested configuration file is
-	 *                               improperly formatted.
+	 * @throws     <b>UnreadableException</b> If a requested configuration file
+	 *                                        does not exist or is not readable.
+	 * @throws     <b>ParseException</b> If a requested configuration file is
+	 *                                   improperly formatted.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	abstract function & execute ($config);
-
-	// -------------------------------------------------------------------------
 
 	/**
 	 * Initialize this ConfigHandler.
 	 *
-	 * @param array An associative array of initialization parameters.
+	 * @param      array An associative array of initialization parameters.
 	 *
-	 * @return bool true, if initialization completes successfully, otherwise
-	 *              false.
+	 * @return     bool true, if initialization completes successfully, 
+	                    otherwise false.
 	 *
-	 * @throws <b>InitializationException</b> If an error occurs while
-	 *                                        initializing this ConfigHandler.
+	 * @throws     <b>InitializationException</b> If an error occurs while
+	 *                                            initializing the ConfigHandler
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function initialize ($parameters = null)
 	{
@@ -99,17 +93,15 @@ abstract class ConfigHandler extends ParameterHolder
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Literalize a string value.
 	 *
-	 * @param string The value to literalize.
+	 * @param      string The value to literalize.
 	 *
-	 * @return string A literalized value.
+	 * @return     string A literalized value.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public static function literalize ($value)
 	{
@@ -156,18 +148,16 @@ abstract class ConfigHandler extends ParameterHolder
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Replace constant identifiers in a string.
 	 *
-	 * @param string The value on which to run the replacement procedure.
+	 * @param      string The value on which to run the replacement procedure.
 	 *
-	 * @return string The new value.
+	 * @return     string The new value.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @author Johan Mjönes(johan.mjones@ongame.co)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     Johan Mjones(johan.mjones@ongame.co)
+	 * @since      0.9.0
 	 */
 	public static function & replaceConstants ($value)
 	{
@@ -189,17 +179,15 @@ abstract class ConfigHandler extends ParameterHolder
 		return $value;
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Replace a relative filesystem path with an absolute one.
 	 *
-	 * @param string A relative filesystem path.
+	 * @param      string A relative filesystem path.
 	 *
-	 * @return string The new path.
+	 * @return     string The new path.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public static function & replacePath ($path)
 	{

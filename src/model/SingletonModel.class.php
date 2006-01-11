@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2005  Agavi Foundation                                 |
+// | Copyright (c) 2003-2005 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -16,13 +16,14 @@
 /**
  * An extension to Model, but for implementation as a Singleton
  * 
- * @package agavi
+ * @package    agavi
  * @subpackage model
  * 
- * @since 0.10.0 
- * @author Agavi Foundation (info@agavi.org)
- * @author David Zuelke (dz@bitxtender.com)
- * @version $Id$
+ * @since      0.10.0 
+ * @author     Agavi Project <info@agavi.org>
+ * @author     David Zuelke <dz@bitxtender.com>
+ *
+ * @version    $Id$
  */
 
 abstract class SingletonModel extends Model
@@ -40,3 +41,4 @@ abstract class SingletonModel extends Model
 		return self::$instance[$lowerClassName];
 	}
 }
+?>

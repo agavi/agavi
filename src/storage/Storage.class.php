@@ -2,7 +2,8 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2005  Sean Kerr.                                       |
+// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -19,10 +20,11 @@
  * @package    agavi
  * @subpackage storage
  *
- * @author    Sean Kerr (skerr@mojavi.org)
- * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
- * @since     0.9.0
- * @version   $Id$
+ * @author     Sean Kerr <skerr@mojavi.org>
+ * @copyright  (c) Authors
+ * @since      0.9.0
+ *
+ * @version    $Id$
  */
 abstract class Storage extends ParameterHolder
 {
@@ -34,17 +36,13 @@ abstract class Storage extends ParameterHolder
 	private
 		$context = null;
 
-	// +-----------------------------------------------------------------------+
-	// | METHODS                                                               |
-	// +-----------------------------------------------------------------------+
-
 	/**
 	 * Retrieve the current application context.
 	 *
-	 * @return Context A Context instance.
+	 * @return     Context A Context instance.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function getContext ()
 	{
@@ -53,22 +51,20 @@ abstract class Storage extends ParameterHolder
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Initialize this Storage.
 	 *
-	 * @param Context A Context instance.
-	 * @param array   An associative array of initialization parameters.
+	 * @param      Context A Context instance.
+	 * @param      array   An associative array of initialization parameters.
 	 *
-	 * @return bool true, if initialization completes successfully, otherwise
-	 *              false.
+	 * @return     bool true, if initialization completes successfully,
+	 *                  otherwise false.
 	 *
-	 * @throws <b>InitializationException</b> If an error occurs while
-	 *                                        initializing this Storage.
+	 * @throws     <b>InitializationException</b> If an error occurs while
+	 *                                            initializing this Storage.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function initialize ($context, $parameters = null)
 	{
@@ -81,21 +77,19 @@ abstract class Storage extends ParameterHolder
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Retrieve a new Storage implementation instance.
 	 *
-	 * @param string A Storage implementation name
+	 * @param      string A Storage implementation name
 	 *
-	 * @return Storage A Storage implementation instance.
+	 * @return     Storage A Storage implementation instance.
 	 *
-	 * @throws <b>FactoryException</b> If a storage implementation instance
-	 *                                 cannot be created.
+	 * @throws     <b>FactoryException</b> If a storage implementation instance
+	 *                                     cannot be created.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @author Mike Vincent (mike@agavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     Mike Vincent <mike@agavi.org>
+	 * @since      0.9.0
 	 */
 	public static function newInstance ($class)
 	{
@@ -107,27 +101,23 @@ abstract class Storage extends ParameterHolder
 		return $object;
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Read data from this storage.
 	 *
 	 * The preferred format for a key is directory style so naming conflicts can
 	 * be avoided.
 	 *
-	 * @param string A unique key identifying your data.
+	 * @param      string A unique key identifying your data.
 	 *
-	 * @return mixed Data associated with the key.
+	 * @return     mixed Data associated with the key.
 	 *
-	 * @throws <b>StorageException</b> If an error occurs while reading data from
-	 *                                 this storage.
+	 * @throws     <b>StorageException</b> If an error occurs while reading data
+	 *                                     from this storage.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	abstract function & read ($key);
-
-	// -------------------------------------------------------------------------
 
 	/**
 	 * Remove data from this storage.
@@ -135,34 +125,30 @@ abstract class Storage extends ParameterHolder
 	 * The preferred format for a key is directory style so naming conflicts can
 	 * be avoided.
 	 *
-	 * @param string A unique key identifying your data.
+	 * @param      string A unique key identifying your data.
 	 *
-	 * @return mixed Data associated with the key.
+	 * @return     mixed Data associated with the key.
 	 *
-	 * @throws <b>StorageException</b> If an error occurs while removing data from
-	 *                                 this storage.
+	 * @throws     <b>StorageException</b> If an error occurs while removing
+	 *                                     data from this storage.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	abstract function & remove ($key);
-
-	// -------------------------------------------------------------------------
 
 	/**
 	 * Execute the shutdown procedure.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @throws <b>StorageException</b> If an error occurs while shutting down
-	 *                                 this storage.
+	 * @throws     <b>StorageException</b> If an error occurs while shutting
+	 *                                     down this storage.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	abstract function shutdown ();
-
-	// -------------------------------------------------------------------------
 
 	/**
 	 * Write data to this storage.
@@ -170,16 +156,16 @@ abstract class Storage extends ParameterHolder
 	 * The preferred format for a key is directory style so naming conflicts can
 	 * be avoided.
 	 *
-	 * @param string A unique key identifying your data.
-	 * @param mixed  Data associated with your key.
+	 * @param      string A unique key identifying your data.
+	 * @param      mixed  Data associated with your key.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @throws <b>StorageException</b> If an error occurs while writing to this
-	 *                                 storage.
+	 * @throws     <b>StorageException</b> If an error occurs while writing to
+	 *                                     this storage.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	abstract function write ($key, &$data);
 

@@ -1,35 +1,45 @@
 <?php
 
+// +---------------------------------------------------------------------------+
+// | This file is part of the Agavi package.                                   |
+// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// |                                                                           |
+// | For the full copyright and license information, please view the LICENSE   |
+// | file that was distributed with this source code. You can also view the    |
+// | LICENSE file online at http://www.agavi.org/LICENSE.txt                   |
+// |   vi: set noexpandtab:                                                    |
+// |   Local Variables:                                                        |
+// |   indent-tabs-mode: t                                                     |
+// |   End:                                                                    |
+// +---------------------------------------------------------------------------+
+
 /**
  * A view that uses PHP to render templates, plus convenience methods for making form elements
  *
  * @package    agavi
  * @subpackage view
- * @abstract
  *
- * @author    Mike Vincent (mike@agavi.org)
- * @since     0.10.0
- * @version   $Id$
+ * @author     Mike Vincent <mike@agavi.org>
+ * @copyright  Authors
+ * @since      0.10.0
+ *
+ * @version    $Id$
  */
 abstract class FormPHPView extends PHPView
 {
 
 	private $_firstField = false;
 	
-	// +-----------------------------------------------------------------------+
-	// | METHODS                                                               |
-	// +-----------------------------------------------------------------------+
-
 
 	/**
 	 * Parse an associative array into a string suitable 
 	 * for use as attribute key/value pairs on a form element.
 	 *
-	 * @param	array $parms [eg: array('size' => '10') ]
-	 * @return string
+	 * @param      array $parms [eg: array('size' => '10') ]
+	 * @return     string
 	 *
-	 * @author Mike Vincent (mike@agavi.org)
-	 * @since  0.10.0
+	 * @author     Mike Vincent <mike@agavi.org>
+	 * @since      0.10.0
 	 */
 	public function parmsToString($parms, $allow_first = true)
 	{
@@ -52,12 +62,14 @@ abstract class FormPHPView extends PHPView
 	/**
 	 * Build a text <input> form element.
 	 *
-	 * @param string $name required name of the element
-	 * @param array $parms optional attributes to add to the element
-	 * @return string
+	 * @param      string required name of the element
+	 * @param      string label for the element
+	 * @param      array  optional attributes to add to the element
 	 *
-	 * @author Mike Vincent (mike@agavi.org)
-	 * @since  0.10.0
+	 * @return     string
+	 *
+	 * @author     Mike Vincent <mike@agavi.org>
+	 * @since      0.10.0
 	 */
 	public function formText($name, $label = '', $parms = array('type'=>'text'), $labelparms = array())
 	{
@@ -87,13 +99,14 @@ abstract class FormPHPView extends PHPView
 	/**
 	 * Build a hidden type <input> form element.
 	 *
-	 * @param string $name required name of the element
-	 * @param array $parms optional attributes to add to the element
-	 * @return string
+	 * @param      string required name of the element
+	 * @param      string label for the element
+	 * @param      array  optional attributes to add to the element
 	 *
-	 * @todo Need to take $label out of the parameter list.
-	 * @author Bob Zoller (bob@agavi.org)
-	 * @since  0.10.0
+	 * @return     string
+	 *
+	 * @author     Bob Zoller <bob@agavi.org>
+	 * @since      0.10.0
 	 */
 	public function formHidden($name, $label = '', $parms = array())
 	{
@@ -110,13 +123,14 @@ abstract class FormPHPView extends PHPView
 	/**
 	 * Build an image type <input> form element.
 	 *
-	 * @param string $name required name of the element
-	 * @param array $parms optional attributes to add to the element
-	 * @return string
+	 * @param      string required name of the element
+	 * @param      string label for the element
+	 * @param      array  optional attributes to add to the element
 	 *
-	 * @todo Need to take $label out of the parameter list.
-	 * @author Bob Zoller (bob@agavi.org)
-	 * @since  0.10.0
+	 * @return     string
+	 *
+	 * @author     Bob Zoller <bob@agavi.org>
+	 * @since      0.10.0
 	 */
 	public function formImage($name, $label = '', $parms = array())
 	{
@@ -128,13 +142,14 @@ abstract class FormPHPView extends PHPView
 	/**
 	 * Build a submit type <input> form element.
 	 *
-	 * @param string $name required name of the element
-	 * @param array $parms optional attributes to add to the element
-	 * @return string
+	 * @param      string required name of the element
+	 * @param      string label for the element
+	 * @param      array optional attributes to add to the element
 	 *
-	 * @todo Need to take $label out of the parameter list.
-	 * @author Mike Vincent (mike@agavi.org)
-	 * @since  0.10.0
+	 * @return     string
+	 *
+	 * @author     Mike Vincent <mike@agavi.org>
+	 * @since      0.10.0
 	 */
 	public function formSubmit($name, $label = '', $parms = array())
 	{
@@ -146,12 +161,14 @@ abstract class FormPHPView extends PHPView
 	/**
 	 * Build a button type <input> form element.
 	 *
-	 * @param string $name required name of the element
-	 * @param array $parms optional attributes to add to the element
-	 * @return string
+	 * @param      string required name of the element
+	 * @param      string label for the element
+	 * @param      array  optional attributes to add to the element
 	 *
-	 * @author Mike Vincent (mike@agavi.org)
-	 * @since  0.10.0
+	 * @return     string
+	 *
+	 * @author     Mike Vincent <mike@agavi.org>
+	 * @since      0.10.0
 	 */
 	public function formButton($name, $label = '', $parms = array(), $labelparms = array())
 	{
@@ -162,12 +179,14 @@ abstract class FormPHPView extends PHPView
 	/**
 	 * Build a radio type <input> form element.
 	 *
-	 * @param string $name required name of the element
-	 * @param array $parms optional attributes to add to the element
-	 * @return string
+	 * @param      string required name of the element
+	 * @param      string label for the element
+	 * @param      array  optional attributes to add to the element
 	 *
-	 * @author Mike Vincent (mike@agavi.org)
-	 * @since  0.10.0
+	 * @return     string
+	 *
+	 * @author     Mike Vincent <mike@agavi.org>
+	 * @since      0.10.0
 	 */
 	public function formRadio($name, $label = '', $parms = array(), $labelparms = array())
 	{
@@ -178,12 +197,14 @@ abstract class FormPHPView extends PHPView
 	/**
 	 * Build a checkbox type <input> form element.
 	 *
-	 * @param string $name required name of the element
-	 * @param array $parms optional attributes to add to the element
-	 * @return string
+	 * @param      string required name of the element
+	 * @param      string label for the element
+	 * @param      array  optional attributes to add to the element
 	 *
-	 * @author Mike Vincent (mike@agavi.org)
-	 * @since  0.10.0
+	 * @return     string
+	 *
+	 * @author     Mike Vincent <mike@agavi.org>
+	 * @since      0.10.0
 	 */
 	public function formCheckbox($name, $label = '', $parms = array(), $labelparms = array())
 	{
@@ -203,12 +224,14 @@ abstract class FormPHPView extends PHPView
 	/**
 	 * Build <textarea> form elements.
 	 *
-	 * @param string $name required name of the element
-	 * @param array $parms optional attributes to add to the element
-	 * @return string
+	 * @param      string required name of the element
+	 * @param      string label for the element
+	 * @param      array  optional attributes to add to the element
 	 *
-	 * @author Mike Vincent (mike@agavi.org)
-	 * @since  0.10.0
+	 * @return     string
+	 *
+	 * @author     Mike Vincent <mike@agavi.org>
+	 * @since      0.10.0
 	 */
 	public function formTextarea($name, $label = '', $parms = array(), $labelparms = array())
 	{
@@ -237,13 +260,16 @@ abstract class FormPHPView extends PHPView
 	/**
 	 * Parse an array into <option> elements.
 	 *
-	 * @param array $input array of values to be used as the value and label
-	 * @param array $input array of arrays of value/label pairs to be used as the value and label, with an optional 3rd element to toggle selection
-	 * @param array $selected array of values to determine selected options
-	 * @return string
+	 * @param      array $input array of values to be used as value and label
+	 * @param      array $input array of arrays of value/label pairs to be used 
+	 *                          as the value and label, with an optional 3rd 
+	 *                          element to toggle selection
+	 * @param      array $selected array of values to determine selected options
 	 *
-	 * @author Mike Vincent (mike@agavi.org)
-	 * @since  0.10.0
+	 * @return     string
+	 *
+	 * @author     Mike Vincent <mike@agavi.org>
+	 * @since      0.10.0
 	 */
 	private function selectOptions($input, $selected = false)
 	{
@@ -282,14 +308,16 @@ abstract class FormPHPView extends PHPView
 	 * options should be passed in the parms array as the 'options' key 
 	 * pass 'multiple' => true for a multiple type select
 	 *
-	 * @param string $name required name of the element
-	 * @param array $parms optional attributes to add to the element 
-	 *  one of the attributes should be named 'options' and be an array of options
-	 *  additionally, an array of selected values can be passed as $param['value'] = array('val1', 'val2', ...)
-	 * @return string
+	 * @param      string $name required name of the element
+	 * @param      array $parms optional attributes to add to the element 
+	 * one of the attributes should be named 'options and be an array of options
+	 *  additionally, an array of selected values can be passed as $param[value] 
+	 *  = array('val1, 'val2, ...)
 	 *
-	 * @author Mike Vincent (mike@agavi.org)
-	 * @since  0.10.0
+	 * @return     string
+	 *
+	 * @author     Mike Vincent <mike@agavi.org>
+	 * @since      0.10.0
 	 */
 	public function formSelect($name, $label = '', $parms = array(), $labelparms = array())
 	{
@@ -327,11 +355,12 @@ abstract class FormPHPView extends PHPView
 	/**
 	 * Build a <fieldset> tag
 	 *
-	 * @param string $legend optional legend text
-	 * @return string
+	 * @param      string $legend optional legend text
 	 *
-	 * @author Bob Zoller (bob@agavi.org)
-	 * @since  0.10.0
+	 * @return     string
+	 *
+	 * @author     Bob Zoller <bob@agavi.org>
+	 * @since      0.10.0
 	 */
 	public function formStartFieldset($legend = '', $parms = array())
 	{
@@ -343,10 +372,10 @@ abstract class FormPHPView extends PHPView
 	/**
 	 * Build a </fieldset> tag
 	 *
-	 * @return string
+	 * @return     string
 	 *
-	 * @author Bob Zoller (bob@agavi.org)
-	 * @since  0.10.0
+	 * @author     Bob Zoller <bob@agavi.org>
+	 * @since      0.10.0
 	 */
 	public function formEndFieldset()
 	{
@@ -356,13 +385,14 @@ abstract class FormPHPView extends PHPView
 	/**
 	 * Build a password field
 	 *
-	 * @param string $name required name of the element
-	 * @param string $label optional label for element
-	 * @param array $parms optional attributes to add to the element
-	 * @return string
+	 * @param      string required name of the element
+	 * @param      string label for the element
+	 * @param      array  optional attributes to add to the element
 	 *
-	 * @author Bob Zoller (bob@agavi.org)
-	 * @since  0.10.0
+	 * @return     string
+	 *
+	 * @author     Bob Zoller <bob@agavi.org>
+	 * @since      0.10.0
 	 */
 	public function formPassword($name, $label = '', $parms = array(), $labelparms = array())
 	{
@@ -373,10 +403,10 @@ abstract class FormPHPView extends PHPView
 	/**
 	 * Handle setting the class="first" on first element of a <fieldset>
 	 *
-	 * @return string
+	 * @return     string
 	 *
-	 * @author Bob Zoller (bob@agavi.org)
-	 * @since  0.10.0
+	 * @author     Bob Zoller <bob@agavi.org>
+	 * @since      0.10.0
 	 */
 	private function _isFirstField($allow_first)
 	{

@@ -2,7 +2,8 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2005  Sean Kerr.                                       |
+// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -31,16 +32,17 @@
  *                                       session data will be stored.
  * # <b>db_time_col</b>  - [sess_time] - The database column in which the
  *                                       session timestamp will be stored.
- * # <b>session_name</b> - [Agavi]    - The name of the session.
+ * # <b>session_name</b> - [Agavi]     - The name of the session.
  *
  * @package    agavi
  * @subpackage storage
  *
- * @author    Sean Kerr (skerr@mojavi.org)
- * @author    Veikko Mäkinen (mail@veikkomakinen.com)
- * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
- * @since     0.10.0
- * @version   $Id$
+ * @author     Sean Kerr <skerr@mojavi.org>
+ * @author     Veikko Makinen <mail@veikkomakinen.com>
+ * @copyright  (c) Authors
+ * @since      0.10.0
+ *
+ * @version    $Id$
  */
 class CreoleSessionStorage extends SessionStorage
 {
@@ -54,18 +56,18 @@ class CreoleSessionStorage extends SessionStorage
 	/**
 	 * Initialize this Storage.
 	 *
-	 * @param Context A Context instance.
-	 * @param array   An associative array of initialization parameters.
+	 * @param      Context A Context instance.
+	 * @param      array   An associative array of initialization parameters.
 	 *
-	 * @return bool true, if initialization completes successfully, otherwise
-	 *              false.
+	 * @return     bool true, if initialization completes successfully,
+	 *                  otherwise false.
 	 *
-	 * @throws <b>InitializationException</b> If an error occurs while
-	 *                                        initializing this Storage.
+	 * @throws     <b>InitializationException</b> If an error occurs while
+	 *                                            initializing this Storage.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @author Veikko Mäkinen (mail@veikkomakinen.com)
-	 * @since  3.0.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     Veikko Makinen <mail@veikkomakinen.com>
+	 * @since      0.10.0
 	 */
 	public function initialize ($context, $parameters = null)
 	{
@@ -92,15 +94,13 @@ class CreoleSessionStorage extends SessionStorage
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	* Close a session.
 	*
-	* @return bool true, if the session was closed, otherwise false.
+	* @return     bool true, if the session was closed, otherwise false.
 	*
-	* @author Sean Kerr (skerr@mojavi.org)
-	* @since  3.0.0
+	* @author     Sean Kerr <skerr@mojavi.org>
+	* @since      0.10.0
 	*/
 	public function sessionClose ()
 	{
@@ -110,21 +110,19 @@ class CreoleSessionStorage extends SessionStorage
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Destroy a session.
 	 *
-	 * @param string A session ID.
+	 * @param      string A session ID.
 	 *
-	 * @return bool true, if the session was destroyed, otherwise an exception
-	 *              is thrown.
+	 * @return     bool true, if the session was destroyed, otherwise an
+	 *                  exception is thrown.
 	 *
-	 * @throws <b>DatabaseException</b> If the session cannot be destroyed.
+	 * @throws     <b>DatabaseException</b> If the session cannot be destroyed.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @author Veikko Mäkinen (mail@veikkomakinen.com)
-	 * @since  3.0.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     Veikko Makinen <mail@veikkomakinen.com>
+	 * @since      0.10.0
 	 */
 	public function sessionDestroy ($id)
 	{
@@ -151,21 +149,19 @@ class CreoleSessionStorage extends SessionStorage
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Cleanup old sessions.
 	 *
-	 * @param int The lifetime of a session.
+	 * @param      int The lifetime of a session.
 	 *
-	 * @return bool true, if old sessions have been cleaned, otherwise an
-	 *              exception is thrown.
+	 * @return     bool true, if old sessions have been cleaned, otherwise an
+	 *                  exception is thrown.
 	 *
-	 * @throws <b>DatabaseException</b> If any old sessions cannot be cleaned.
+	 * @throws     <b>DatabaseException</b> If old sessions cannot be cleaned.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @author Veikko Mäkinen (mail@veikkomakinen.com)
-	 * @since  3.0.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     Veikko Makinen <mail@veikkomakinen.com>
+	 * @since      0.10.0
 	 */
 	public function sessionGC ($lifetime)
 	{
@@ -194,23 +190,21 @@ class CreoleSessionStorage extends SessionStorage
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Open a session.
 	 *
-	 * @param string
-	 * @param string
+	 * @param      string
+	 * @param      string
 	 *
-	 * @return bool true, if the session was opened, otherwise an exception is
-	 *              thrown.
+	 * @return     bool true, if the session was opened, otherwise an exception
+	 *                  is thrown.
 	 *
-	 * @throws <b>DatabaseException</b> If a connection with the database does
-	 *                                  not exist or cannot be created.
+	 * @throws     <b>DatabaseException</b> If a connection with the database
+	 *                                      does not exist or cannot be created.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @author Veikko Mäkinen (mail@veikkomakinen.com)
-	 * @since  3.0.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     Veikko Makinen <mail@veikkomakinen.com>
+	 * @since      0.10.0
 	 */
 	public function sessionOpen ($path, $name)
 	{
@@ -236,21 +230,19 @@ class CreoleSessionStorage extends SessionStorage
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Read a session.
 	 *
-	 * @param string A session ID.
+	 * @param      string A session ID.
 	 *
-	 * @return bool true, if the session was read, otherwise an exception is
-	 *              thrown.
+	 * @return     bool true, if the session was read, otherwise an exception is
+	 *                  thrown.
 	 *
-	 * @throws <b>DatabaseException</b> If the session cannot be read.
+	 * @throws     <b>DatabaseException</b> If the session cannot be read.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @author Veikko Mäkinen (mail@veikkomakinen.com)
-	 * @since  3.0.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     Veikko Makinen <mail@veikkomakinen.com>
+	 * @since      0.10.0
 	 */
 	public function sessionRead ($id)
 	{
@@ -295,22 +287,20 @@ class CreoleSessionStorage extends SessionStorage
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Write session data.
 	 *
-	 * @param string A session ID.
-	 * @param string A serialized chunk of session data.
+	 * @param      string A session ID.
+	 * @param      string A serialized chunk of session data.
 	 *
-	 * @return bool true, if the session was written, otherwise an exception is
-	 *              thrown.
+	 * @return     bool true, if the session was written, otherwise an exception
+	 *                  is thrown.
 	 *
-	 * @throws <b>DatabaseException</b> If the session data cannot be written.
+	 * @throws     <b>DatabaseException</b> If session data cannot be written.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @author Veikko Mäkinen (mail@veikkomakinen.com)
-	 * @since  3.0.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     Veikko Makinen <mail@veikkomakinen.com>
+	 * @since      0.10.0
 	 */
 	public function sessionWrite ($id, $data)
 	{
@@ -341,15 +331,13 @@ class CreoleSessionStorage extends SessionStorage
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Execute the shutdown procedure.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  3.0.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.10.0
 	 */
 	public function shutdown ()
 	{

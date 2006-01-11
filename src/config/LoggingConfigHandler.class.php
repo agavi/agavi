@@ -2,7 +2,8 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2005  Sean Kerr.                                       |
+// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -19,33 +20,30 @@
  * @package    agavi
  * @subpackage config
  *
- * @author    Sean Kerr (skerr@mojavi.org)
- * @author    Bob Zoller (bob@agavi.org)
- * @copyright (c) Authors
- * @since     0.9.1
- * @version   $Id$
+ * @author     Sean Kerr <skerr@mojavi.org>
+ * @author     Bob Zoller <bob@agavi.org>
+ * @copyright  (c) Authors
+ * @since      0.10.0
+ *
+ * @version    $Id$
  */
 class LoggingConfigHandler extends IniConfigHandler
 {
 
-	// +-----------------------------------------------------------------------+
-	// | METHODS                                                               |
-	// +-----------------------------------------------------------------------+
-
 	/**
 	 * Execute this configuration handler.
 	 *
-	 * @param string An absolute filesystem path to a configuration file.
+	 * @param      string An absolute filesystem path to a configuration file.
 	 *
-	 * @return string Data to be written to a cache file.
+	 * @return     string Data to be written to a cache file.
 	 *
-	 * @throws <b>UnreadableException</b> If a requested configuration file
-	 *                                    does not exist or is not readable.
-	 * @throws <b>ParseException</b> If a requested configuration file is
-	 *                               improperly formatted.
+	 * @throws     <b>UnreadableException</b> If a requested configuration file
+	 *                                        does not exist or is not readable.
+	 * @throws     <b>ParseException</b> If a requested configuration file is
+	 *                                   improperly formatted.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function & execute ($config)
 	{
@@ -108,21 +106,19 @@ class LoggingConfigHandler extends IniConfigHandler
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Generate raw cache data.
 	 *
-	 * @param string A request method.
-	 * @param array  The data array where our cache code will be appended.
-	 * @param array  An associative array of request method data.
-	 * @param array  An associative array of file/parameter data.
-	 * @param array  A validators array.
+	 * @param      string A request method.
+	 * @param      array  The data array where our cache code will be appended.
+	 * @param      array  An associative array of request method data.
+	 * @param      array  An associative array of file/parameter data.
+	 * @param      array  A validators array.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @author Bob Zoller (bob@agavi.org)
-	 * @author Veikko Mäkinen (mail@veikkomakinen.com
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     Bob Zoller <bob@agavi.org>
+	 * @author     Veikko Makinen (mail@veikkomakinen.com
+	 * @since      0.9.0
 	 */
 	private function generateRegistration(&$data, &$loggers, &$appenders, &$layouts)
 	{
@@ -164,24 +160,22 @@ class LoggingConfigHandler extends IniConfigHandler
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Load the linear list of attributes from the [appenders] category.
 	 *
-	 * @param string The configuration file name (for exception usage).
-	 * @param array  An associative array of request method data.
-	 * @param array  An associative array of file/parameter appenders in which to
-	 *               store loaded information.
-	 * @param array  An associative array of validator data.
-	 * @param array  The loaded ini configuration that we'll use for
-	 *               verification purposes.
-	 * @param string A comma delimited list of file/parameter names.
+	 * @param      string The configuration file name (for exception usage).
+	 * @param      array  An associative array of request method data.
+	 * @param      array  An associative array of file/parameter appenders in 
+	 *                    which to store loaded information.
+	 * @param      array  An associative array of validator data.
+	 * @param      array  The loaded ini configuration that we'll use for
+	 *                    verification purposes.
+	 * @param      string A comma delimited list of file/parameter names.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	private function loadAppenders(&$config, &$loggers, &$appenders, &$layouts, &$ini)
 	{
@@ -229,24 +223,22 @@ class LoggingConfigHandler extends IniConfigHandler
 		}
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Load all request methods and the file/parameter names that will be
 	 * validated from the [methods] category.
 	 *
-	 * @param string The configuration file name (for exception usage).
-	 * @param string A Logger "instance" name.
-	 * @param array  An associative array of request method data.
-	 * @param array  An associative array of file/parameter appenders in which to
-	 *               store loaded information.
-	 * @param array  The loaded ini configuration that we'll use for
-	 *               verification purposes.
+	 * @param      string The configuration file name (for exception usage).
+	 * @param      string A Logger "instance" name.
+	 * @param      array  An associative array of request method data.
+	 * @param      array  An associative array of file/parameter appenders in 
+	 *                    which to store loaded information.
+	 * @param      array  The loaded ini configuration that we'll use for
+	 *                    verification purposes.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	private function loadLogger(&$config, &$logger, &$loggers, &$appenders, &$ini, &$category)
 	{

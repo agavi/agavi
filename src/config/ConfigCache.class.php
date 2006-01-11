@@ -2,7 +2,8 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2005  Sean Kerr.                                       |
+// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -21,41 +22,34 @@
  * @package    agavi
  * @subpackage config
  *
- * @author    Sean Kerr (skerr@mojavi.org)
- * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
- * @since     0.9.0
- * @version   $Id$
+ * @author     Sean Kerr <skerr@mojavi.org>
+ * @copyright  (c) Authors
+ * @since      0.9.0
+ *
+ * @version    $Id$
  */
 class ConfigCache extends AgaviObject
 {
 
-	// +-----------------------------------------------------------------------+
-	// | PRIVATE VARIABLES                                                     |
-	// +-----------------------------------------------------------------------+
-
 	private static
 		$handlers = array();
-
-	// +-----------------------------------------------------------------------+
-	// | METHODS                                                               |
-	// +-----------------------------------------------------------------------+
 
 	/**
 	 * Load a configuration handler.
 	 *
-	 * @param string The handler to use when parsing a configuration file.
-	 * @param string An absolute filesystem path to a configuration file.
-	 * @param string An absolute filesystem path to the cache file that will be
-	 *               written.
+	 * @param      string The handler to use when parsing a configuration file.
+	 * @param      string An absolute filesystem path to a configuration file.
+	 * @param      string An absolute filesystem path to the cache file that 
+	 *                    will be written.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @throws <b>ConfigurationException</b> If a requested configuration file
-	 *                                       does not have an associated
-	 *                                       configuration handler.
+	 * @throws     <b>ConfigurationException</b> If a requested configuration 
+	 *                                           file does not have an 
+	 *                                           associated config handler.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	private static function callHandler ($handler, $config, $cache)
 	{
@@ -103,8 +97,6 @@ class ConfigCache extends AgaviObject
 		throw new ConfigurationException($error);
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Check to see if a configuration file has been modified and if so
 	 * recompile the cache file associated with it.
@@ -112,16 +104,16 @@ class ConfigCache extends AgaviObject
 	 * If the configuration file path is relative, the path itself is relative
 	 * to the Agavi AG_WEBAPP_DIR application setting.
 	 *
-	 * @param string A filesystem path to a configuration file.
+	 * @param      string A filesystem path to a configuration file.
 	 *
-	 * @return string An absolute filesystem path to the cache filename
-	 *                associated with this specified configuration file.
+	 * @return     string An absolute filesystem path to the cache filename
+	 *                    associated with this specified configuration file.
 	 *
-	 * @throws <b>UnreadableException</b> If a requested configuration file
-	 *                                    does not exist.
+	 * @throws     <b>UnreadableException</b> If a requested configuration file
+	 *                                        does not exist.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public static function checkConfig ($config)
 	{
@@ -144,15 +136,13 @@ class ConfigCache extends AgaviObject
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Clear all configuration cache files.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public static function clear ()
 	{
@@ -161,20 +151,18 @@ class ConfigCache extends AgaviObject
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Clear all configuration cache files.
 	 *
 	 * This method exists to prevent accidental deletion of non-cache directory
 	 * files.
 	 *
-	 * @param string An absolute filesystem path to a cache directory.
+	 * @param      string An absolute filesystem path to a cache directory.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	private static function clearCache ($directory)
 	{
@@ -206,17 +194,15 @@ class ConfigCache extends AgaviObject
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Convert a normal filename into a cache filename.
 	 *
-	 * @param string A normal filename.
+	 * @param      string A normal filename.
 	 *
-	 * @return string An absolute filesystem path to a cache filename.
+	 * @return     string An absolute filesystem path to a cache filename.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public static function getCacheName ($config)
 	{
@@ -232,21 +218,20 @@ class ConfigCache extends AgaviObject
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Import a configuration file.
 	 *
 	 * If the configuration file path is relative, the path itself is relative
 	 * to the Agavi AG_WEBAPP_DIR application setting.
 	 *
-	 * @param string A filesystem path to a configuration file.
-	 * @param bool   Only allow this configuration file to be included once per request?
+	 * @param      string A filesystem path to a configuration file.
+	 * @param      bool   Only allow this configuration file to be included once 
+	 *                    per request?
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public static function import ($config, $once = true)
 	{
@@ -260,18 +245,16 @@ class ConfigCache extends AgaviObject
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Load all configuration application and module level handlers.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @throws <b>ConfigurationException</b> If a configuration related error
-	 *                                       occurs.
+	 * @throws     <b>ConfigurationException</b> If a configuration related 
+	 *                                           error occurs.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	private static function loadConfigHandlers ()
 	{
@@ -338,21 +321,19 @@ class ConfigCache extends AgaviObject
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Write a cache file.
 	 *
-	 * @param string An absolute filesystem path to a configuration file.
-	 * @param string An absolute filesystem path to the cache file that will
-	 *               be written.
-	 * @param string Data to be written to the cache file.
-	 * @param string Should we append the data?
+	 * @param      string An absolute filesystem path to a configuration file.
+	 * @param      string An absolute filesystem path to the cache file that 
+	 *                    will be written.
+	 * @param      string Data to be written to the cache file.
+	 * @param      string Should we append the data?
 	 *
-	 * @throws <b>CacheException</b> If the cache file cannot be written.
+	 * @throws     <b>CacheException</b> If the cache file cannot be written.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	private static function writeCacheFile ($config, $cache, &$data, $append)
 	{

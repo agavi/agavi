@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2005 Agavi Foundation.                                 |
+// | Copyright (c) 2003-2006 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -20,10 +20,11 @@
  * @package    agavi
  * @subpackage logging
  *
- * @author    Bob Zoller (bob@agavi.org)
- * @copyright (c) Authors
- * @since     0.9.1
- * @version   $Id$
+ * @author     Bob Zoller <bob@agavi.org>
+ * @copyright  (c) Authors
+ * @since      0.10.0
+ *
+ * @version    $Id$
  */
 class Message extends ParameterHolder
 {
@@ -31,11 +32,11 @@ class Message extends ParameterHolder
 	/**
 	 * Constructor.
 	 * 
-	 * @param $message optional message
-	 * @param $priority optional priority level
+	 * @param      $message optional message
+	 * @param      $priority optional priority level
 	 * 
-	 * @author Bob Zoller (bob@agavi.org)
-	 * @since 0.9.1
+	 * @author     Bob Zoller <bob@agavi.org>
+	 * @since      0.10.0
 	 */
 	public function __construct($message = null, $priority = Logger::INFO)
 	{
@@ -48,8 +49,8 @@ class Message extends ParameterHolder
 	 * 
 	 * Convenience function to log this Message.
 	 * 
-	 * @author Bob Zoller (bob@agavi.org)
-	 * @since 0.9.1
+	 * @author     Bob Zoller <bob@agavi.org>
+	 * @since      0.10.0
 	 */
 	public function log()
 	{
@@ -59,10 +60,10 @@ class Message extends ParameterHolder
 	/**
 	 * toString method.
 	 * 
-	 * @return string
+	 * @return     string
 	 * 
-	 * @author Bob Zoller (bob@agavi.org)
-	 * @since 0.9.1
+	 * @author     Bob Zoller <bob@agavi.org>
+	 * @since      0.10.0
 	 */
 	public function __toString()
 	{
@@ -72,12 +73,12 @@ class Message extends ParameterHolder
 	/**
 	 * Set the message.
 	 * 
-	 * @param $message required
+	 * @param      $message required
 	 * 
-	 * @return Message
+	 * @return     Message
 	 * 
-	 * @author Bob Zoller (bob@agavi.org)
-	 * @since 0.9.1
+	 * @author     Bob Zoller <bob@agavi.org>
+	 * @since      0.10.0
 	 */
 	public function setMessage($message)
 	{
@@ -88,12 +89,12 @@ class Message extends ParameterHolder
 	/**
 	 * Append to the message.
 	 * 
-	 * @param $message required
+	 * @param      $message required
 	 * 
-	 * @return Message
+	 * @return     Message
 	 * 
-	 * @author Bob Zoller (bob@agavi.org)
-	 * @since 0.9.1
+	 * @author     Bob Zoller <bob@agavi.org>
+	 * @since      0.10.0
 	 */
 	public function appendMessage($message)
 	{
@@ -104,12 +105,12 @@ class Message extends ParameterHolder
 	/**
 	 * Set the priority.
 	 * 
-	 * @param $priority required
+	 * @param      $priority required
 	 * 
-	 * @return Message
+	 * @return     Message
 	 * 
-	 * @author Bob Zoller (bob@agavi.org)
-	 * @since 0.9.1
+	 * @author     Bob Zoller <bob@agavi.org>
+	 * @since      0.10.0
 	 */
 	public function setPriority($priority)
 	{
@@ -120,10 +121,10 @@ class Message extends ParameterHolder
 	/**
 	 * Get the priority.
 	 * 
-	 * @return mixed
+	 * @return     mixed
 	 * 
-	 * @author Bob Zoller (bob@agavi.org)
-	 * @since 0.9.1
+	 * @author     Bob Zoller <bob@agavi.org>
+	 * @since      0.10.0
 	 */
 	public function getPriority()
 	{
@@ -133,10 +134,10 @@ class Message extends ParameterHolder
 	/**
 	 * Get the message.
 	 * 
-	 * @return mixed
+	 * @return     mixed
 	 * 
-	 * @author Bob Zoller (bob@agavi.org)
-	 * @since 0.9.1
+	 * @author     Bob Zoller <bob@agavi.org>
+	 * @since      0.10.0
 	 */
 	public function getMessage()
 	{

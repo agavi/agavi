@@ -2,7 +2,8 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2005  Sean Kerr.                                       |
+// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -21,10 +22,11 @@
  * @package    agavi
  * @subpackage database
  *
- * @author    Sean Kerr (skerr@mojavi.org)
- * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
- * @since     0.9.0
- * @version   $Id$
+ * @author     Sean Kerr <skerr@mojavi.org>
+ * @copyright  (c) Authors
+ * @since      0.9.0
+ *
+ * @version    $Id$
  */
 class DatabaseManager extends AgaviObject
 {
@@ -36,20 +38,16 @@ class DatabaseManager extends AgaviObject
 	private
 		$databases = array();
 
-	// +-----------------------------------------------------------------------+
-	// | METHODS                                                               |
-	// +-----------------------------------------------------------------------+
-
 	/**
 	 * Retrieve the database connection associated with this Database
 	 * implementation.
 	 *
-	 * @param string A database name.
+	 * @param      string A database name.
 	 *
-	 * @return mixed A Database instance.
+	 * @return     mixed A Database instance.
 	 *
-	 * @throws <b>DatabaseException</b> If the requested database name does
-	 *                                  not exist.
+	 * @throws     <b>DatabaseException</b> If the requested database name does
+	 *                                      not exist.
 	 */
 	public function getDatabase ($name = 'default')
 	{
@@ -69,19 +67,18 @@ class DatabaseManager extends AgaviObject
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Initialize this DatabaseManager.
 	 *
-	 * @return bool true, if initialization completes successfully, otherwise
-	 *              false.
+	 * @return     bool true, if initialization completes successfully, 
+	 *                  otherwise false.
 	 *
-	 * @throws <b>InitializationException</b> If an error occurs while
-	 *                                        initializing this DatabaseManager.
+	 * @throws     <b>InitializationException</b> If an error occurs while
+	 *                                            initializing this 
+	 *                                            DatabaseManager.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function initialize ()
 	{
@@ -92,18 +89,16 @@ class DatabaseManager extends AgaviObject
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Execute the shutdown procedure.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @throws <b>DatabaseException</b> If an error occurs while shutting down
-	 *                                 this DatabaseManager.
+	 * @throws     <b>DatabaseException</b> If an error occurs while shutting 
+	 *                                      down this DatabaseManager.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function shutdown ()
 	{

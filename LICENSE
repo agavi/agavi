@@ -1,13 +1,13 @@
-Agavi -- an MVC framework for PHP.
+Agavi - an MVC framework for PHP.
 Authors
  Sean Kerr (skerr@mojavi.org)
- Agavi Foundation (info@agavi.org)
+ Agavi Project (info@agavi.org)
 Copyright (c) 2003-2005 Authors.
 
 For more information about Agavi, visit the homepage:
 http://www.agavi.org/ 
 
-Based on Mojavi r775 by Sean Kerr.
+Based on Mojavi3 r775 by Sean Kerr.
 For more information about Mojavi, visit the homepage:
 http://www.mojavi.org/
 

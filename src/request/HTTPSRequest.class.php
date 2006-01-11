@@ -1,11 +1,7 @@
 <?php
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Authors                                                                   |
-// |  Markus Lervik (markus.lervik@necora.fi)                                  |
-// |  David Zuelke (dz@bitxtender.com)                                          |
-// |  Agavi Foundation (info@agavi.org)                                        |
-// | Copyright (c) 2003-2005  Authors                                          |
+// | Copyright (c) 2003-2006 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -23,25 +19,24 @@
  * @package    agavi
  * @subpackage request
  *
- * @author    Markus Lervik (markus.lervik@necora.fi)
- * @author    David Zuelke (dz@bitxtender.com)
- * @copyright (c) authors
- * @since     0.10.0.0
+ * @author     Markus Lervik (markus.lervik@necora.fi)
+ * @author     David Zuelke <dz@bitxtender.com>
+ * @copyright  (c) Authors
+ * @since      0.10.0.0
+ *
+ * @version    $Id$
  */
 class HTTPSRequest extends WebRequest {
-
-	// +-----------------------------------------------------------------------+
-	// | METHODS                                                               |
-	// +-----------------------------------------------------------------------+
 
 	/**
 	 * Check wether or not the current request is over a secure connection
 	 * (HTTPS)
 	 *
-	 * @return bool true if HTTPS is on, false otherwise
-	 * @author Markus Lervik (markus.lervik@necora.fi)
-	 * @author David Zuelke (dz@bitxtender.com)
-	 * @since 0.10.0
+	 * @return     bool true if HTTPS is on, false otherwise
+	 *
+	 * @author     Markus Lervik (markus.lervik@necora.fi)
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.10.0
 	 */
 	public function isHTTPS()
 	{
@@ -50,15 +45,14 @@ class HTTPSRequest extends WebRequest {
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Check if the client certificate is a valid one
 	 *
-	 * @return bool true if the certificate is valid, false otherwise
-	 * @author Markus Lervik (markus.lervik@necora.fi)
-	 * @author David Zuelke (dz@bitxtender.com)
-	 * @since 0.10.0
+	 * @return     bool true if the certificate is valid, false otherwise
+	 *
+	 * @author     Markus Lervik (markus.lervik@necora.fi)
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.10.0
 	 */
 	public function hasValidClientCert()
 	{
@@ -73,10 +67,11 @@ class HTTPSRequest extends WebRequest {
 	 * Get the client CN (Common Name) field from the client X.509 certificate
 	 * if one is available
 	 *
-	 * @return mixed the CN field if it's available, otherwise null
-	 * @author Markus Lervik (markus.lervik@necora.fi)
-	 * @author David Zuelke (dz@bitxtender.com)
-	 * @since 0.10.0
+	 * @return     mixed the CN field if it's available, otherwise null
+	 *
+	 * @author     Markus Lervik (markus.lervik@necora.fi)
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.10.0
 	 */
 	public function getClientCertCN()
 	{
@@ -93,10 +88,11 @@ class HTTPSRequest extends WebRequest {
 	 * Get the client DN (Distinguished Name) field from the client X.509
 	 * certificate if one is available
 	 *
-	 * @return mixed the DN field if it's available, otherwise null
-	 * @author Markus Lervik (markus.lervik@necora.fi)
-	 * @author David Zuelke (dz@bitxtender.com)
-	 * @since 0.10.0
+	 * @return     mixed the DN field if it's available, otherwise null
+	 *
+	 * @author     Markus Lervik (markus.lervik@necora.fi)
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.10.0
 	 */
 	public function getClientCertDN()
 	{
@@ -107,16 +103,15 @@ class HTTPSRequest extends WebRequest {
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Get the client GN (General Name) field from the client X.509 certificate
 	 * if one is available
 	 *
-	 * @return mixed the GN field if it's available, otherwise null
-	 * @author Markus Lervik (markus.lervik@necora.fi)
-	 * @author David Zuelke (dz@bitxtender.com)
-	 * @since 0.10.0
+	 * @return     mixed the GN field if it's available, otherwise null
+	 *
+	 * @author     Markus Lervik (markus.lervik@necora.fi)
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.10.0
 	 */
 	public function getClientCertGN()
 	{
@@ -127,16 +122,15 @@ class HTTPSRequest extends WebRequest {
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Get the client SN (Subject Name) field from the client X.509 certificate
 	 * if one is available
 	 *
-	 * @return mixed the SN field if it's available, otherwise null
-	 * @author Markus Lervik (markus.lervik@necora.fi)
-	 * @author David Zuelke (dz@bitxtender.com)
-	 * @since 0.10.0
+	 * @return     mixed the SN field if it's available, otherwise null
+	 *
+	 * @author     Markus Lervik (markus.lervik@necora.fi)
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.10.0
 	 */
 	public function getClientCertSN()
 	{
@@ -147,16 +141,15 @@ class HTTPSRequest extends WebRequest {
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Get the client O (Organisation) field from the client X.509 certificate
 	 * if one is available
 	 *
-	 * @return mixed the O field if it's available, otherwise null
-	 * @author Markus Lervik (markus.lervik@necora.fi)
-	 * @author David Zuelke (dz@bitxtender.com)
-	 * @since 0.10.0
+	 * @return     mixed the O field if it's available, otherwise null
+	 *
+	 * @author     Markus Lervik (markus.lervik@necora.fi)
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.10.0
 	 */
 	public function getClientCertO()
 	{
@@ -167,16 +160,15 @@ class HTTPSRequest extends WebRequest {
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Get the client OU (Organisation Unit) field from the client X.509
 	 * certificate if one is available
 	 *
-	 * @return mixed the OU field if it's available, otherwise null
-	 * @author Markus Lervik (markus.lervik@necora.fi)
-	 * @author David Zuelke (dz@bitxtender.com)
-	 * @since 0.10.0
+	 * @return     mixed the OU field if it's available, otherwise null
+	 *
+	 * @author     Markus Lervik (markus.lervik@necora.fi)
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.10.0
 	 */
 	public function getClientCertOU()
 	{
@@ -187,16 +179,15 @@ class HTTPSRequest extends WebRequest {
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Get the date from which the client certificate is valid
 	 * if one is available
 	 *
-	 * @return mixed the date field if it's available, otherwise null
-	 * @author Markus Lervik (markus.lervik@necora.fi)
-	 * @author David Zuelke (dz@bitxtender.com)
-	 * @since 0.10.0
+	 * @return     mixed the date field if it's available, otherwise null
+	 *
+	 * @author     Markus Lervik (markus.lervik@necora.fi)
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.10.0
 	 */
 	public function getClientCertValidityStart()
 	{
@@ -207,16 +198,14 @@ class HTTPSRequest extends WebRequest {
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Get the date until which the client certificate is valid
 	 * if one is available
 	 *
-	 * @return mixed the date field if it's available, otherwise null
-	 * @author Markus Lervik (markus.lervik@necora.fi)
-	 * @author David Zuelke (dz@bitxtender.com)
-	 * @since 0.10.0
+	 * @return     mixed the date field if it's available, otherwise null
+	 * @author     Markus Lervik (markus.lervik@necora.fi)
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.10.0
 	 */
 	public function getClientCertValidityEnd()
 	{
@@ -227,16 +216,14 @@ class HTTPSRequest extends WebRequest {
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Get the cipher type used for this connection
 	 * if one is available
 	 *
-	 * @return mixed the cipher type if it's available, otherwise null
-	 * @author Markus Lervik (markus.lervik@necora.fi)
-	 * @author David Zuelke (dz@bitxtender.com)
-	 * @since 0.10.0
+	 * @return     mixed the cipher type if it's available, otherwise null
+	 * @author     Markus Lervik (markus.lervik@necora.fi)
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.10.0
 	 */
 	public function getSSLChipherType()
 	{
@@ -247,16 +234,14 @@ class HTTPSRequest extends WebRequest {
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Get the issuer DN (Distinguished Name) field from the issuer X.509
 	 * certificate if one is available
 	 *
-	 * @return mixed the DN field if it's available, otherwise null
-	 * @author Markus Lervik (markus.lervik@necora.fi)
-	 * @author David Zuelke (dz@bitxtender.com)
-	 * @since 0.10.0
+	 * @return     mixed the DN field if it's available, otherwise null
+	 * @author     Markus Lervik (markus.lervik@necora.fi)
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.10.0
 	 */
 	public function getIssuerCertDN()
 	{
@@ -267,16 +252,14 @@ class HTTPSRequest extends WebRequest {
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Get the issuer CN (Common Name) field from the issuer X.509 certificate
 	 * if one is available
 	 *
-	 * @return mixed the CN field if it's available, otherwise null
-	 * @author Markus Lervik (markus.lervik@necora.fi)
-	 * @author David Zuelke (dz@bitxtender.com)
-	 * @since 0.10.0
+	 * @return     mixed the CN field if it's available, otherwise null
+	 * @author     Markus Lervik (markus.lervik@necora.fi)
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.10.0
 	 */
 	public function getIssuerCertCN()
 	{
@@ -287,16 +270,14 @@ class HTTPSRequest extends WebRequest {
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Get the issuer C (Country) field from the issuer X.509 certificate
 	 * if one is available
 	 *
-	 * @return mixed the C field if it's available, otherwise null
-	 * @author Markus Lervik (markus.lervik@necora.fi)
-	 * @author David Zuelke (dz@bitxtender.com)
-	 * @since 0.10.0
+	 * @return     mixed the C field if it's available, otherwise null
+	 * @author     Markus Lervik (markus.lervik@necora.fi)
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.10.0
 	 */
 	public function getIssuerCertC()
 	{
@@ -307,16 +288,14 @@ class HTTPSRequest extends WebRequest {
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Get the issuer O (Organisation) field from the issuer X.509 certificate
 	 * if one is available
 	 *
-	 * @return mixed the O field if it's available, otherwise null
-	 * @author Markus Lervik (markus.lervik@necora.fi)
-	 * @author David Zuelke (dz@bitxtender.com)
-	 * @since 0.10.0
+	 * @return     mixed the O field if it's available, otherwise null
+	 * @author     Markus Lervik (markus.lervik@necora.fi)
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.10.0
 	 */
 	public function getIssuerCertO()
 	{
@@ -327,16 +306,14 @@ class HTTPSRequest extends WebRequest {
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Get the issuer OU (Organisation Unit) field from the issuer X.509
 	 * certificate if one is available
 	 *
-	 * @return mixed the OU field if it's available, otherwise null
-	 * @author Markus Lervik (markus.lervik@necora.fi)
-	 * @author David Zuelke (dz@bitxtender.com)
-	 * @since 0.10.0
+	 * @return     mixed the OU field if it's available, otherwise null
+	 * @author     Markus Lervik (markus.lervik@necora.fi)
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.10.0
 	 */
 	public function getIssuerCertOU()
 	{
@@ -347,16 +324,14 @@ class HTTPSRequest extends WebRequest {
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Get the issuer ST (State) field from the issuer X.509 certificate
 	 * if one is available
 	 *
-	 * @return mixed the ST field if it's available, otherwise null
-	 * @author Markus Lervik (markus.lervik@necora.fi)
-	 * @author David Zuelke (dz@bitxtender.com)
-	 * @since 0.10.0.0
+	 * @return     mixed the ST field if it's available, otherwise null
+	 * @author     Markus Lervik (markus.lervik@necora.fi)
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.10.0.0
 	 */
 	public function getIssuerCertST()
 	{

@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2005 Agavi Foundation.                                 |
+// | Copyright (c) 2003-2006 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -19,10 +19,11 @@
  * @package    agavi
  * @subpackage logging
  *
- * @author    Sean Kerr (skerr@mojavi.org)
- * @copyright (c) Authors
- * @since     0.9.0
- * @version   $Id$
+ * @author     Sean Kerr <skerr@mojavi.org>
+ * @copyright  (c) Authors
+ * @since      0.9.0
+ *
+ * @version    $Id$
  */
 abstract class Layout extends AgaviObject
 {
@@ -32,10 +33,12 @@ abstract class Layout extends AgaviObject
 	/**
 	 * Initialize the Layout.
 	 * 
-	 * @access public
-	 * @param array An array of parameters.
-	 * @return void
-	 * @author Veikko Mäkinen (mail@veikkomakinen.co)
+	 * @param      array An array of parameters.
+	 *
+	 * @return     void
+	 *
+	 * @author     Veikko Makinen <mail@veikkomakinen.com>
+	 * @since      0.10.0
 	 */
 	public function initialize($params)
 	{
@@ -45,41 +48,37 @@ abstract class Layout extends AgaviObject
 	/**
 	 * Format a message.
 	 *
-	 * @param Message A Message instance.
+	 * @param      Message A Message instance.
 	 *
-	 * @return string A formatted message.
+	 * @return     string A formatted message.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	abstract function & format ($message);
-
-	// -------------------------------------------------------------------------
 
 	/**
 	 * Retrieve the message layout.
 	 *
-	 * @return string A message layout.
+	 * @return     string A message layout.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function getLayout ()
 	{
 		return $this->layout;
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Set the message layout.
 	 *
-	 * @param string A message layout.
+	 * @param      string A message layout.
+	 *	
+	 * @return     void
 	 *
-	 * @return void
-	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function setLayout ($layout)
 	{

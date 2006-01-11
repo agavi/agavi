@@ -2,7 +2,8 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2005  Sean Kerr.                                       |
+// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -24,12 +25,12 @@
  * @package    agavi
  * @subpackage core
  *
- * @author    Sean Kerr (skerr@mojavi.org) {@link http://www.mojavi.org}
- * @author    Mike Vincent (mike@agavi.org) {@link http://www.agavi.org}
- * @copyright (c) authors 
- * @license		LGPL {@link http://www.agavi.org/LICENSE}
- * @since     0.9.0
- * @version   $Id$
+ * @author     Sean Kerr <skerr@mojavi.org>
+ * @author     Mike Vincent <mike@agavi.org>
+ * @copyright  (c) Authors
+ * @since      0.9.0
+ *
+ * @version    $Id$
  */
 class Context extends AgaviObject
 {
@@ -39,22 +40,18 @@ class Context extends AgaviObject
 		$controller      = null,
 		$databaseManager = null,
 		$request         = null,
-		$securityFilter	 = null,
+		$securityFilter  = null,
 		$storage         = null,
 		$user            = null;
 	protected static
-		$instances			= null,
-		$profiles				= array();
-
-	// +-----------------------------------------------------------------------+
-	// | METHODS                                                               |
-	// +-----------------------------------------------------------------------+
+		$instances       = null,
+		$profiles        = array();
 
 	/*
 	 * Clone method, overridden to prevent cloning, there can be only one. 
 	 *
-	 * @author Mike Vincent (mike@agavi.org)	
-	 * @since 0.9.0
+	 * @author     Mike Vincent <mike@agavi.org>	
+	 * @since      0.9.0
 	 */
 	public function __clone()
 	{
@@ -64,10 +61,11 @@ class Context extends AgaviObject
 	// -------------------------------------------------------------------------
 	
 	/*
-	 * Constuctor method, intentionally made private so the context cannot be created directly
+	 * Constuctor method, intentionally made private so the context cannot be 
+	 * created directly.
 	 *
-	 * @author Mike Vincent (mike@agavi.org)	
-	 * @since 0.9.0
+	 * @author     Mike Vincent <mike@agavi.org>	
+	 * @since      0.9.0
 	 */
 	protected function __construct() 
 	{
@@ -79,11 +77,11 @@ class Context extends AgaviObject
 	/**
 	 * Retrieve the action name for this context.
 	 *
-	 * @return string The currently executing action name, if one is set,
-	 *                otherwise null.
+	 * @return     string The currently executing action name, if one is set,
+	 *                    otherwise null.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function getActionName ()
 	{
@@ -100,26 +98,23 @@ class Context extends AgaviObject
 	/**
 	 * Retrieve the ActionStack.
 	 *
-	 * @return ActionStack the ActionStack instance
-	 *                
+	 * @return     ActionStack the ActionStack instance
 	 *
-	 * @author Mike Vincent (mike@agavi.org)
-	 * @since  0.9.0
+	 * @author     Mike Vincent <mike@agavi.org>
+	 * @since      0.9.0
 	 */
 	public function getActionStack()
 	{
 		return $this->actionStack;
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Retrieve the controller.
 	 *
-	 * @return Controller The current Controller implementation instance.
+	 * @return     Controller The current Controller implementation instance.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function getController ()
 	{
@@ -127,8 +122,6 @@ class Context extends AgaviObject
 		return $this->controller;
 
 	}
-
-	// -------------------------------------------------------------------------
 
 	/**
 	 * Retrieve a database connection from the database manager.
@@ -138,15 +131,15 @@ class Context extends AgaviObject
 	 *
 	 * If the AG_USE_DATABASE setting is off, this will return null.
 	 *
-	 * @param name A database name.
+	 * @param      name A database name.
 	 *
-	 * @return mixed A Database instance.
+	 * @return     mixed A Database instance.
 	 *
-	 * @throws <b>DatabaseException</b> If the requested database name does
-	 *                                  not exist.
+	 * @throws     <b>DatabaseException</b> If the requested database name does
+	 *                                      not exist.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function getDatabaseConnection ($name = 'default')
 	{
@@ -162,15 +155,13 @@ class Context extends AgaviObject
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Retrieve the database manager.
 	 *
-	 * @return DatabaseManager The current DatabaseManager instance.
+	 * @return     DatabaseManager The current DatabaseManager instance.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function getDatabaseManager ()
 	{
@@ -179,16 +170,15 @@ class Context extends AgaviObject
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Retrieve the Context instance.
 	 *
-	 * @param string name corresponding to a section of the config
-	 * @return Context instance of the requested name
+	 * @param      string name corresponding to a section of the config
 	 *
-	 * @author Mike Vincent (mike@agavi.org)
-	 * @since  0.9.0
+	 * @return     Context instance of the requested name
+	 *
+	 * @author     Mike Vincent <mike@agavi.org>
+	 * @since      0.9.0
 	 */
 	public static function getInstance($profile = 'default')
 	{
@@ -204,12 +194,13 @@ class Context extends AgaviObject
 	/**
 	 * (re)Initialize the Context instance.
 	 *
-	 * @param string name corresponding to a section of the config
-	 * @param array overrides, key => class 
-	 * @return Context instance
+	 * @param      string name corresponding to a section of the config
+	 * @param      array overrides, key => class
 	 *
-	 * @author Mike Vincent (mike@agavi.org)
-	 * @since  0.10.0
+	 * @return     Context instance
+	 *
+	 * @author     Mike Vincent <mike@agavi.org>
+	 * @since      0.10.0
 	 */
 	public function initialize($profile = 'default', $overrides = array())
 	{
@@ -314,16 +305,14 @@ class Context extends AgaviObject
 	// We could even add a method to switch contexts on the fly..
 	
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Retrieve the module directory for this context.
 	 *
-	 * @return string An absolute filesystem path to the directory of the
-	 *                currently executing module, if one is set, otherwise null.
+	 * @return     string An absolute filesystem path to the directory of the
+	 *                    currently executing module if set, otherwise null.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function getModuleDirectory ()
 	{
@@ -335,16 +324,14 @@ class Context extends AgaviObject
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Retrieve the module name for this context.
 	 *
-	 * @return string The currently executing module name, if one is set,
-	 *                otherwise null.
+	 * @return     string The currently executing module name, if one is set,
+	 *                    otherwise null.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function getModuleName ()
 	{
@@ -356,15 +343,13 @@ class Context extends AgaviObject
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Retrieve the request.
 	 *
-	 * @return Request The current Request implementation instance.
+	 * @return     Request The current Request implementation instance.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function getRequest ()
 	{
@@ -373,15 +358,14 @@ class Context extends AgaviObject
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Retrieve the securityFilter
 	 *
-	 * @return SecurityFilter The current SecurityFilter implementation instance.
+	 * @return     SecurityFilter The current SecurityFilter implementation 
+	 *                            instance.
 	 *
-	 * @author Mike Vincent (mike@agavi.org)
-	 * @since  0.9.0
+	 * @author     Mike Vincent <mike@agavi.org>
+	 * @since      0.9.0
 	 */
 	public function getSecurityFilter ()
 	{
@@ -390,15 +374,13 @@ class Context extends AgaviObject
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Retrieve the storage.
 	 *
-	 * @return Storage The current Storage implementation instance.
+	 * @return     Storage The current Storage implementation instance.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function getStorage ()
 	{
@@ -407,15 +389,13 @@ class Context extends AgaviObject
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Retrieve the user.
 	 *
-	 * @return User The current User implementation instance.
+	 * @return     User The current User implementation instance.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function getUser ()
 	{

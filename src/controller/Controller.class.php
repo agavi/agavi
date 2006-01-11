@@ -2,7 +2,8 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2005  Sean Kerr.                                       |
+// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -19,17 +20,14 @@
  * @package    agavi
  * @subpackage controller
  *
- * @author    Sean Kerr (skerr@mojavi.org)
- * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
- * @since     0.9.0
- * @version   $Id$
+ * @author     Sean Kerr <skerr@mojavi.org>
+ * @copyright  (c) Authors
+ * @since      0.9.0
+ *
+ * @version    $Id$
  */
 abstract class Controller extends ParameterHolder
 {
-
-	// +-----------------------------------------------------------------------+
-	// | PRIVATE VARIABLES                                                     |
-	// +-----------------------------------------------------------------------+
 
 	private
 		$maxForwards     = 20,
@@ -41,30 +39,26 @@ abstract class Controller extends ParameterHolder
 		$shutdownList	 = null;
 
 
-	// +-----------------------------------------------------------------------+
-	// | METHODS                                                               |
-	// +-----------------------------------------------------------------------+
-
 	/**
 	 *
 	 * The dispatch method must be implemented
 	 * it's expected to:
-	 *		put and parameters into the request object
-	 *		call the controller's initialize method
-	 *		forward to the requested module/action
+	 *	- put and parameters into the request object
+	 *	- call the controller's initialize method
+	 *	- forward to the requested module/action
 	 */
 	abstract function dispatch();
 
 	/**
 	 * Indicates whether or not a module has a specific action.
 	 *
-	 * @param string A module name.
-	 * @param string An action name.
+	 * @param      string A module name.
+	 * @param      string An action name.
 	 *
-	 * @return bool true, if the action exists, otherwise false.
+	 * @return     bool true, if the action exists, otherwise false.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function actionExists ($moduleName, $actionName)
 	{
@@ -72,28 +66,26 @@ abstract class Controller extends ParameterHolder
 		return is_readable($file);
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Forward the request to another action.
 	 *
-	 * @param string A module name.
-	 * @param string An action name.
+	 * @param      string A module name.
+	 * @param      string An action name.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @throws <b>ConfigurationException</b> If an invalid configuration setting
-	 *                                       has been found.
-	 * @throws <b>ForwardException</b> If an error occurs while forwarding the
-	 *                                 request.
-	 * @throws <b>InitializationException</b> If the action could not be
-	 *                                        initialized.
-	 * @throws <b>SecurityException</b> If the action requires security but
-	 *                                  the user implementation is not of type
-	 *                                  SecurityUser.
+	 * @throws     <b>ConfigurationException</b> If an invalid configuration 
+	 *                                           setting has been found.
+	 * @throws     <b>ForwardException</b> If an error occurs while forwarding
+	 *                                     the request.
+	 * @throws     <b>InitializationException</b> If the action could not be
+	 *                                            initialized.
+	 * @throws     <b>SecurityException</b> If the action requires security but
+	 *                                      the user implementation is not of
+	 *                                      type SecurityUser.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function forward ($moduleName, $actionName)
 	{
@@ -255,21 +247,19 @@ abstract class Controller extends ParameterHolder
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Retrieve an Action implementation instance.
 	 *
-	 * @param string A module name.
-	 * @param string An action name.
+	 * @param      string A module name.
+	 * @param      string An action name.
 	 *
-	 * @return Action An Action implementation instance, if the action exists,
-	 *                otherwise null.
+	 * @return     Action An Action implementation instance, if the action 
+	 *                    exists, otherwise null.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @author Mike Vincent (mike@agavi.org)
-	 * @author David Zuelke (dz@bitxtender.com)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     Mike Vincent <mike@agavi.org>
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.9.0
 	 */
 	public function getAction ($moduleName, $actionName)
 	{
@@ -302,16 +292,14 @@ abstract class Controller extends ParameterHolder
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Retrieve the action stack.
 	 *
-	 * @return ActionStack An ActionStack instance, if the action stack is
-	 *                     enabled, otherwise null.
+	 * @return     ActionStack An ActionStack instance, if the action stack is
+	 *                         enabled, otherwise null.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function getActionStack ()
 	{
@@ -320,15 +308,13 @@ abstract class Controller extends ParameterHolder
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Retrieve the current application context.
 	 *
-	 * @return Context A Context instance.
+	 * @return     Context A Context instance.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function getContext ()
 	{
@@ -337,23 +323,21 @@ abstract class Controller extends ParameterHolder
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Retrieve a global Model implementation instance.
 	 *
-	 * @param string A model name.
+	 * @param      string A model name.
 	 *
-	 * @return Model A Model implementation instance, if the model exists,
-	 *               otherwise null. If the model implements an initialize
-	 *               method, it will be called with an instance of the Context.
+	 * @return     Model A Model implementation instance, if the model exists,
+	 *                   otherwise null. If the model implements an initialize
+	 *                   method, it will be called with a Context instance.
 	 *
-	 * @throws AutloadException if class is ultimately not found.
+	 * @throws     AutloadException if class is ultimately not found.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @author David Zuelke (dz@bitxtender.com)
-	 * @author Mike Vincent (mike@agavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     Mike Vincent <mike@agavi.org>
+	 * @since      0.9.0
 	 */
 	public function getGlobalModel ($modelName)
 	{
@@ -389,18 +373,16 @@ abstract class Controller extends ParameterHolder
 		return null;
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Retrieve the singleton instance of this class.
 	 *
-	 * @return Controller A Controller implementation instance.
+	 * @return     Controller A Controller implementation instance.
 	 *
-	 * @throws <b>ControllerException</b> If a controller implementation
-	 *                                    instance has not been created.
+	 * @throws     <b>ControllerException</b> If a controller implementation
+	 *                                        instance has not been created.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 * @deprecated
 	 */
 	public static function getInstance ()
@@ -409,23 +391,21 @@ abstract class Controller extends ParameterHolder
 		throw new ControllerException($error);
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Retrieve a Model implementation instance.
 	 *
-	 * @param string A module name.
-	 * @param string A model name.
+	 * @param      string A module name.
+	 * @param      string A model name.
 	 *
-	 * @return Model A Model implementation instance, if the model exists,
-	 *               otherwise null. If the model implements an initialize
-	 *               method, it will be called with an instance of the Context.
+	 * @return     Model A Model implementation instance, if the model exists,
+	 *                   otherwise null. If the model implements an initialize
+	 *                   method, it will be called with a Context instance.
 	 *
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @author David Zuelke (dz@bitxtender.com)
-	 * @author Mike Vincent (mike@agavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     Mike Vincent <mike@agavi.org>
+	 * @since      0.9.0
 	 */
 	public function getModel ($moduleName, $modelName)
 	{
@@ -456,17 +436,15 @@ abstract class Controller extends ParameterHolder
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Retrieve the presentation rendering mode.
 	 *
-	 * @return int One of the following:
-	 *             - View::RENDER_CLIENT
-	 *             - View::RENDER_VAR
+	 * @return     int One of the following:
+	 *                 - View::RENDER_CLIENT
+	 *                 - View::RENDER_VAR
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function getRenderMode ()
 	{
@@ -475,21 +453,19 @@ abstract class Controller extends ParameterHolder
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Retrieve a View implementation instance.
 	 *
-	 * @param string A module name.
-	 * @param string A view name.
+	 * @param      string A module name.
+	 * @param      string A view name.
 	 *
-	 * @return View A View implementation instance, if the model exists,
-	 *              otherwise null.
+	 * @return     View A View implementation instance, if the model exists,
+	 *                  otherwise null.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @author Mike Vincent (mike@agavi.org)
-	 * @author David Zuelke (dz@bitxtender.com)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     Mike Vincent <mike@agavi.org>
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.9.0
 	 */
 	public function getView ($moduleName, $viewName)
 	{
@@ -523,17 +499,15 @@ abstract class Controller extends ParameterHolder
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Initialize this controller.
 	 *
-	 * @param Context object
-	 * @return void
+	 * @param      Context object
+	 * @return     void
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @author Mike Vincent (mike@agavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     Mike Vincent <mike@agavi.org>
+	 * @since      0.9.0
 	 */
 	public function initialize (Context $context)
 	{
@@ -543,34 +517,30 @@ abstract class Controller extends ParameterHolder
 		register_shutdown_function(array($this, 'shutdown'));
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Set the name of the ExecutionFilter class that is used in forward()
 	 *
-	 * @param string The class name of the ExecutionFilter to use
+	 * @param      string The class name of the ExecutionFilter to use
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @author David Zuelke (dz@bitxtender.com)
-	 * @since  0.10.0
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.10.0
 	 */
 	public function setExecutionFilterClassName($className)
 	{
 		$this->executionFilterClassName = $className;
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Load global filters.
 	 *
-	 * @param FilterChain A FilterChain instance.
+	 * @param      FilterChain A FilterChain instance.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	private function loadGlobalFilters ($filterChain)
 	{
@@ -597,17 +567,15 @@ abstract class Controller extends ParameterHolder
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Load module filters.
 	 *
-	 * @param FilterChain A FilterChain instance.
+	 * @param      FilterChain A FilterChain instance.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	private function loadModuleFilters ($filterChain)
 	{
@@ -637,18 +605,16 @@ abstract class Controller extends ParameterHolder
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Indicates whether or not a module has a specific model.
 	 *
-	 * @param string A module name.
-	 * @param string A model name.
+	 * @param      string A module name.
+	 * @param      string A model name.
 	 *
-	 * @return bool true, if the model exists, otherwise false.
+	 * @return     bool true, if the model exists, otherwise false.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function modelExists ($moduleName, $modelName)
 	{
@@ -659,17 +625,15 @@ abstract class Controller extends ParameterHolder
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Indicates whether or not a module exists.
 	 *
-	 * @param string A module name.
+	 * @param      string A module name.
 	 *
-	 * @return bool true, if the module exists, otherwise false.
+	 * @return     bool true, if the module exists, otherwise false.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function moduleExists ($moduleName)
 	{
@@ -680,21 +644,19 @@ abstract class Controller extends ParameterHolder
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Retrieve a new Controller implementation instance.
 	 *
-	 * @param string A Controller implementation name.
+	 * @param      string A Controller implementation name.
 	 *
-	 * @return Controller A Controller implementation instance.
+	 * @return     Controller A Controller implementation instance.
 	 *
-	 * @throws <b>FactoryException</b> If a new controller implementation
-	 *                                 instance cannot be created.
+	 * @throws     <b>FactoryException</b> If a new controller implementation
+	 *                                     instance cannot be created.
 	 *
-	 * @author Mike Vincent (mike@agavi.org)
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Mike Vincent <mike@agavi.org>
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public static function newInstance ($class)
 	{
@@ -705,19 +667,18 @@ abstract class Controller extends ParameterHolder
 		throw new FactoryException($error);
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Set the presentation rendering mode.
 	 *
-	 * @param int A rendering mode.
+	 * @param      int A rendering mode.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @throws <b>RenderException</b> - If an invalid render mode has been set.
+	 * @throws     <b>RenderException</b> - If an invalid render mode has been 
+	 *                                      set.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  2.0.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      2.0.0
 	 */
 	public function setRenderMode ($mode)
 	{
@@ -740,40 +701,38 @@ abstract class Controller extends ParameterHolder
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Register a shutdown listener.
 	 * The object is notified when Controller is shutdown.
 	 *
-	 * All registered listeners are notified before framework core classes are shutdown
-	 * so among others User, Request and Database are at you disposal during shutdown.
+	 * All registered listeners are notified before framework core classes are 
+	 * shutdown so among others User, Request and Database are at you disposal
+	 * during shutdown.
 	 *
 	 * If you register an object twice it will be notified twice.
 	 *
-	 * @param ShutdownListener
+	 * @param      ShutdownListener
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @author Veikko Makinen (mail@veikkomakinen.com)
-	 * @since  0.10.0
+	 * @author     Veikko Makinen <mail@veikkomakinen.com>
+	 * @since      0.10.0
 	 */
 	public function registerShutdownListener (ShutdownListener $obj)
 	{
 		$this->shutdownList[] = $obj;
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Execute the shutdown procedure.
 	 *
-	 * All registered ShutdownListeners are notified before framework core classes are shutdown.
+	 * All registered ShutdownListeners are notified before framework core
+	 * classes are shutdown.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function shutdown ()
 	{
@@ -798,18 +757,16 @@ abstract class Controller extends ParameterHolder
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Indicates whether or not a module has a specific view.
 	 *
-	 * @param string A module name.
-	 * @param string A view name.
+	 * @param      string A module name.
+	 * @param      string A view name.
 	 *
-	 * @return bool true, if the view exists, otherwise false.
+	 * @return     bool true, if the view exists, otherwise false.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function viewExists ($moduleName, $viewName)
 	{
@@ -824,10 +781,10 @@ abstract class Controller extends ParameterHolder
 	/**
 	 * Indicates whether or not we were called using the CLI version of PHP.
 	 *
-	 * @return bool true, if we're using cli, otherwise false.
+	 * @return     bool true, if we're using cli, otherwise false.
 	 *
-	 * @author Bob Zoller (bob@agavi.org)
-	 * @since  1.0
+	 * @author     Bob Zoller <bob@agavi.org>
+	 * @since      1.0
 	 */
 	public function inCLI()
 	{

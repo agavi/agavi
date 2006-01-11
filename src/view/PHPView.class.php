@@ -2,10 +2,8 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Authors                                                                   |
-// |  Sean Kerr (skerr@mojavi.org)                                             |
-// |  Agavi Foundation (info@agavi.org)                                        |
-// | Copyright (c) 2003-2005  Authors                                          |
+// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -22,33 +20,26 @@
  * @package    agavi
  * @subpackage view
  *
- * @author    Sean Kerr (skerr@mojavi.org)
- * @author    Agavi Foundation (info@agavi.org)
- * @copyright (c) Authors
- * @since     0.9.0
- * @version   $Id$
+ * @author     Sean Kerr <skerr@mojavi.org>
+ * @author     Agavi Project <info@agavi.org>
+ * @copyright  (c) Authors
+ * @since      0.9.0
+ *
+ * @version    $Id$
  */
 abstract class PHPView extends View
 {
 
-	// +-----------------------------------------------------------------------+
-	// | PRIVATE VARIABLES                                                     |
-	// +-----------------------------------------------------------------------+
-
 	private
 		$attributes = array();
-
-	// +-----------------------------------------------------------------------+
-	// | METHODS                                                               |
-	// +-----------------------------------------------------------------------+
 
 	/**
 	 * Clear all attributes associated with this view.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function clearAttributes ()
 	{
@@ -58,18 +49,16 @@ abstract class PHPView extends View
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Loop through all template slots and fill them in with the results of
 	 * presentation data.
 	 *
-	 * @param string A chunk of decorator content.
+	 * @param      string A chunk of decorator content.
 	 *
-	 * @return string A decorated template.
+	 * @return     string A decorated template.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function & decorate (&$content)
 	{
@@ -97,37 +86,33 @@ abstract class PHPView extends View
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Indicates whether or not an attribute exists.
 	 *
-	 * @param string An attribute name.
+	 * @param      string An attribute name.
 	 *
-	 * @return bool true, if the attribute exists, otherwise false.
+	 * @return     bool true, if the attribute exists, otherwise false.
 	 *
-	 * @author Bob Zoller (bob@agavi.org)
-	 * @since  0.9.1
+	 * @author     Bob Zoller <bob@agavi.org>
+	 * @since      0.10.0
 	 */
 	public function hasAttribute ($name)
 	{
 		return isset($this->attributes[$name]);
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Retrieve an attribute.
 	 *
-	 * @param string An attribute name.
-	 * @param mixed A default attribute value.
+	 * @param      string An attribute name.
+	 * @param      mixed A default attribute value.
 	 *
-	 * @return mixed An attribute value, if the attribute exists, otherwise
-	 *               null.
+	 * @return     mixed An attribute value, if the attribute exists, otherwise
+	 *                   null.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @author Bob Zoller (bob@agavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     Bob Zoller <bob@agavi.org>
+	 * @since      0.9.0
 	 */
 	public function & getAttribute ($name, $default=null)
 	{
@@ -141,15 +126,13 @@ abstract class PHPView extends View
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Retrieve an array of attribute names.
 	 *
-	 * @return array An indexed array of attribute names.
+	 * @return     array An indexed array of attribute names.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function getAttributeNames ()
 	{
@@ -158,14 +141,12 @@ abstract class PHPView extends View
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Retrieve the template engine associated with this view.
 	 *
 	 * Note: This will return null because PHP itself has no engine reference.
 	 *
-	 * @return null
+	 * @return     null
 	 */
 	public function & getEngine ()
 	{
@@ -176,18 +157,16 @@ abstract class PHPView extends View
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Remove an attribute.
 	 *
-	 * @param string An attribute name.
+	 * @param      string An attribute name.
 	 *
-	 * @return mixed An attribute value, if the attribute was removed,
-	 *               otherwise null.
+	 * @return     mixed An attribute value, if the attribute was removed,
+	 *                   otherwise null.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function & removeAttribute ($name)
 	{
@@ -207,20 +186,18 @@ abstract class PHPView extends View
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Render the presentation.
 	 *
 	 * When the controller render mode is View::RENDER_CLIENT, this method will
 	 * render the presentation directly to the client and null will be returned.
 	 *
-	 * @return string A string representing the rendered presentation, if
-	 *                the controller render mode is View::RENDER_VAR, otherwise
-	 *                null.
+	 * @return     string A string representing the rendered presentation, if
+	 *                    the controller render mode is View::RENDER_VAR,
+	 *                    otherwise null.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function & render ()
 	{
@@ -278,21 +255,19 @@ abstract class PHPView extends View
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Set an attribute.
 	 *
 	 * If an attribute with the name already exists the value will be
 	 * overridden.
 	 *
-	 * @param string An attribute name.
-	 * @param mixed  An attribute value.
+	 * @param      string An attribute name.
+	 * @param      mixed  An attribute value.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function setAttribute($name, $value)
 	{
@@ -301,21 +276,19 @@ abstract class PHPView extends View
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Append an attribute.
 	 *
 	 * If this attribute is already set, convert it to an array and append the
 	 * new value.  If not, set the new value like normal.
 	 *
-	 * @param string An attribute name.
-	 * @param mixed  An attribute value.
+	 * @param      string An attribute name.
+	 * @param      mixed  An attribute value.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @author Bob Zoller (bob@agavi.org)
-	 * @since  0.9.1
+	 * @author     Bob Zoller <bob@agavi.org>
+	 * @since      0.10.0
 	 */
 	public function appendAttribute($name, $value)
 	{
@@ -327,21 +300,19 @@ abstract class PHPView extends View
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Set an attribute by reference.
 	 *
 	 * If an attribute with the name already exists the value will be
 	 * overridden.
 	 *
-	 * @param string An attribute name.
-	 * @param mixed  A reference to an attribute value.
+	 * @param      string An attribute name.
+	 * @param      mixed  A reference to an attribute value.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function setAttributeByRef($name, &$value)
 	{
@@ -350,21 +321,19 @@ abstract class PHPView extends View
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Append an attribute by reference.
 	 * 
 	 * If this attribute is already set, convert it to an array and append the
 	 * reference to the new value.  If not, set the new value like normal.
 	 *
-	 * @param string An attribute name.
-	 * @param mixed  A reference to an attribute value.
+	 * @param      string An attribute name.
+	 * @param      mixed  A reference to an attribute value.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @author Bob Zoller (bob@agavi.org)
-	 * @since  0.9.1
+	 * @author     Bob Zoller <bob@agavi.org>
+	 * @since      0.10.0
 	 */
 	public function appendAttributeByRef($name, &$value)
 	{
@@ -376,21 +345,19 @@ abstract class PHPView extends View
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Set an array of attributes.
 	 *
 	 * If an existing attribute name matches any of the keys in the supplied
 	 * array, the associated value will be overridden.
 	 *
-	 * @param array An associative array of attributes and their associated
-	 *              values.
+	 * @param      array An associative array of attributes and their associated
+	 *                   values.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function setAttributes ($attributes)
 	{
@@ -399,21 +366,19 @@ abstract class PHPView extends View
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Set an array of attributes by reference.
 	 *
 	 * If an existing attribute name matches any of the keys in the supplied
 	 * array, the associated value will be overridden.
 	 *
-	 * @param array An associative array of attributes and references to their
-	 *              associated values.
+	 * @param      array An associative array of attributes and references to
+	 *                   their associated values.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function setAttributesByRef (&$attributes)
 	{

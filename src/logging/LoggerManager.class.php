@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2005 Agavi Foundation.                                 |
+// | Copyright (c) 2003-2006 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -19,9 +19,10 @@
  * @package    agavi
  * @subpackage logging
  *
- * @author     Sean Kerr (skerr@mojavi.org)
- * @copyright  (c) Sean Kerr, {@link http://www.mojavi.org}
+ * @author     Sean Kerr <skerr@mojavi.org>
+ * @copyright  (c) Authors
  * @since      0.9.0
+ *
  * @version    $Id$
  */
 class LoggerManager extends AgaviObject
@@ -32,14 +33,14 @@ class LoggerManager extends AgaviObject
 	/**
 	 * Initialize this LoggingManager.
 	 *
-	 * @return bool true, if initialization completes successfully, otherwise
-	 *              false.
+	 * @return     bool true, if initialization completes successfully,
+	 *                  otherwise false.
 	 *
-	 * @throws <b>InitializationException</b> If an error occurs while
-	 *                                        initializing this LoggingManager.
+	 * @throws     <b>InitializationException</b> If an error occurs while
+	 *                                            initializing a LoggingManager.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public static function initialize ()
 	{
@@ -47,18 +48,16 @@ class LoggerManager extends AgaviObject
 		require_once(ConfigCache::checkConfig('config/logging.ini'));
 	}
 	
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Retrieve a logger.
 	 *
-	 * @param string A logger name.
+	 * @param      string A logger name.
 	 *
-	 * @return Logger A Logger, if a logger with the name exists, otherwise
-	 *                null.
+	 * @return     Logger A Logger, if a logger with the name exists, otherwise
+	 *                    null.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public static function getLogger ($name = 'default')
 	{
@@ -69,52 +68,46 @@ class LoggerManager extends AgaviObject
 		return null;
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Retrieve a list of logger names.
 	 *
-	 * @return array An indexed array of logger names.
+	 * @return     array An indexed array of logger names.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public static function getLoggerNames ()
 	{
 		return array_keys(self::$loggers);
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Indicates that a logger exists.
 	 *
-	 * @param string A logger name.
+	 * @param      string A logger name.
 	 *
-	 * @return bool true, if the logger exists, otherwise false.
+	 * @return     bool true, if the logger exists, otherwise false.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public static function hasLogger ($name)
 	{
 		return isset(self::$loggers[$name]);
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Remove a logger.
 	 *
-	 * @param string A logger name.
+	 * @param      string A logger name.
 	 *
-	 * @return Logger A Logger, if the logger has been removed, otherwise null.
+	 * @return     Logger A Logger, if the logger has been removed, else null.
 	 *
-	 * @throws <b>LoggingException</b> If the logger name is 'default', which
-	 *                                 cannot be removed.
+	 * @throws     <b>LoggingException</b> If the logger name is default, which
+	 *                                     cannot be removed.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public static function & removeLogger ($name)
 	{
@@ -138,22 +131,21 @@ class LoggerManager extends AgaviObject
 		return $retval;
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Set a new logger instance.
 	 *
 	 * If a logger with the name already exists, an exception will be thrown.
 	 *
-	 * @param string A logger name.
-	 * @param Logger A Logger instance.
+	 * @param      string A logger name.
+	 * @param      Logger A Logger instance.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @throws <b>LoggingException</b> If a logger with the name already exists.
+	 * @throws     <b>LoggingException</b> If a logger with the name already 
+	 *                                     exists.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public static function setLogger ($name, $logger)
 	{
@@ -170,19 +162,17 @@ class LoggerManager extends AgaviObject
 		throw new LoggingException($error);
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Log a Message.
 	 * 
-	 * @param Message The Message to log.
-	 * @param string Optional logger to log to.
+	 * @param      Message The Message to log.
+	 * @param      string Optional logger to log to.
 	 * 
-	 * @return void
-	 * @throws LoggingException if the logger was not found.
+	 * @return     void
+	 * @throws     LoggingException if the logger was not found.
 	 * 
-	 * @author Bob Zoller (bob@agavi.org)
-	 * @since 0.9.1
+	 * @author     Bob Zoller <bob@agavi.org>
+	 * @since      0.10.0
 	 */
 	public static function log(Message $message, $logger = null)
 	{
@@ -197,15 +187,13 @@ class LoggerManager extends AgaviObject
 		}
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Execute the shutdown procedure.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public static function shutdown ()
 	{

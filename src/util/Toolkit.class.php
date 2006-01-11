@@ -2,7 +2,8 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2005  Sean Kerr.                                       |
+// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -19,28 +20,25 @@
  * @package    agavi
  * @subpackage util
  *
- * @author    Sean Kerr (skerr@mojavi.org)
- * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
- * @since     0.9.0
- * @version   $Id$
+ * @author     Sean Kerr <skerr@mojavi.org>
+ * @copyright  (c) Authors
+ * @since      0.9.0
+ *
+ * @version    $Id$
  */
 class Toolkit extends AgaviObject
 {
 
-	// +-----------------------------------------------------------------------+
-	// | METHODS                                                               |
-	// +-----------------------------------------------------------------------+
-
 	/**
 	 * Extract the class or interface name from filename.
 	 *
-	 * @param string A filename.
+	 * @param      string A filename.
 	 *
-	 * @return string A class or interface name, if one can be extracted,
+	 * @return     string A class or interface name, if one can be extracted,
 	 *                otherwise null.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public static function extractClassName ($filename)
 	{
@@ -67,17 +65,15 @@ class Toolkit extends AgaviObject
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Determine if a filesystem path is absolute.
 	 *
-	 * @param path A filesystem path.
+	 * @param      path A filesystem path.
 	 *
-	 * @return bool true, if the path is absolute, otherwise false.
+	 * @return     bool true, if the path is absolute, otherwise false.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public static function isPathAbsolute ($path)
 	{
@@ -98,17 +94,15 @@ class Toolkit extends AgaviObject
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Get the heritage of a class
 	 *
-	 * @param string $class A class to examine
+	 * @param      string $class A class to examine
 	 *
-	 * @return array of classnames in the classes ancestry
+	 * @return     array of classnames in the classes ancestry
 	 *
-	 * @author Mike Vincent (mike@agavi.org)
-	 * @since  0.10.0
+	 * @author     Mike Vincent <mike@agavi.org>
+	 * @since      0.10.0
 	 */
 	public static function classHeritage($class)
 	{
@@ -122,18 +116,16 @@ class Toolkit extends AgaviObject
 		return $heritage;
 	}
 	
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Determine if a class is a subclass of another class
 	 *
-	 * @param string $class A potential child class
-	 * @param string $parent A potential parent class
+	 * @param      string $class A potential child class
+	 * @param      string $parent A potential parent class
 	 *
-	 * @return bool true, if the path is absolute, otherwise false.
+	 * @return     bool true, if the path is absolute, otherwise false.
 	 *
-	 * @author Mike Vincent (mike@agavi.org)
-	 * @since  0.10.0
+	 * @author     Mike Vincent <mike@agavi.org>
+	 * @since      0.10.0
 	 */
 	public static function isSubClass($class, $parent)
 	{

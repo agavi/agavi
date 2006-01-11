@@ -2,7 +2,8 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2005  Sean Kerr.                                       |
+// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -19,10 +20,11 @@
  * @package    agavi
  * @subpackage user
  *
- * @author    Sean Kerr (skerr@mojavi.org)
- * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
- * @since     0.9.0
- * @version   $Id$
+ * @author     Sean Kerr <skerr@mojavi.org>
+ * @copyright  (c) Authors
+ * @since      0.9.0
+ *
+ * @version    $Id$
  */
 class BasicSecurityUser extends SecurityUser
 {
@@ -41,27 +43,19 @@ class BasicSecurityUser extends SecurityUser
 	 */
 	const CREDENTIAL_NAMESPACE = 'org/agavi/user/BasicSecurityUser/credentials';
 
-	// +-----------------------------------------------------------------------+
-	// | PRIVATE VARIABLES                                                     |
-	// +-----------------------------------------------------------------------+
-
 	private
 		$authenticated = null,
 		$credentials   = null;
 
-	// +-----------------------------------------------------------------------+
-	// | METHODS                                                               |
-	// +-----------------------------------------------------------------------+
-
 	/**
 	 * Add a credential to this user.
 	 *
-	 * @param mixed Credential data.
+	 * @param      mixed Credential data.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function addCredential ($credential)
 	{
@@ -75,15 +69,13 @@ class BasicSecurityUser extends SecurityUser
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Clear all credentials associated with this user.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function clearCredentials ()
 	{
@@ -96,15 +88,15 @@ class BasicSecurityUser extends SecurityUser
 	/**
 	 * Indicates whether or not this user has a credential.
 	 *
-	 * @param mixed Credential data. Either a string, or an array of credentials
-	 *              which are all required. If these individual credentials are
-	 *              again an array of credentials, one or more of these sub-
-	 *              credentials will be required.
+	 * @param      mixed Credential data. Either a string or an array of
+	 *                   credentials which are all required. If these individual
+	 *                   credentials are again an array of credentials, one or
+	 *                   more of these sub-credentials will be required.
 	 *
-	 * @return bool true, if this user has the credential, otherwise false.
+	 * @return     bool true, if this user has the credential, otherwise false.
 	 *
-	 * @author David Zuelke (dz@bitxtender.com)
-	 * @since  0.9.0
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.9.0
 	 */
 	public function hasCredential ($credential)
 	{
@@ -140,22 +132,20 @@ class BasicSecurityUser extends SecurityUser
 		}
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Initialize this User.
 	 *
-	 * @param Context A Context instance.
-	 * @param array   An associative array of initialization parameters.
+	 * @param      Context A Context instance.
+	 * @param      array   An associative array of initialization parameters.
 	 *
-	 * @return bool true, if initialization completes successfully, otherwise
-	 *              false.
+	 * @return     bool true, if initialization completes successfully,
+	 *                  otherwise false.
 	 *
-	 * @throws <b>InitializationException</b> If an error occurs while
-	 *                                        initializing this User.
+	 * @throws     <b>InitializationException</b> If an error occurs while
+	 *                                            initializing this User.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function initialize ($context, $parameters = null)
 	{
@@ -180,15 +170,13 @@ class BasicSecurityUser extends SecurityUser
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Indicates whether or not this user is authenticated.
 	 *
-	 * @return bool true, if this user is authenticated, otherwise false.
+	 * @return     bool true, if this user is authenticated, otherwise false.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function isAuthenticated ()
 	{
@@ -197,17 +185,15 @@ class BasicSecurityUser extends SecurityUser
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Remove a credential from this user.
 	 *
-	 * @param mixed Credential data.
+	 * @param      mixed Credential data.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function removeCredential ($credential)
 	{
@@ -236,17 +222,15 @@ class BasicSecurityUser extends SecurityUser
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Set the authenticated status of this user.
 	 *
-	 * @param bool A flag indicating the authenticated status of this user.
+	 * @param      bool A flag indicating the authenticated status of this user.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function setAuthenticated ($authenticated)
 	{
@@ -264,15 +248,13 @@ class BasicSecurityUser extends SecurityUser
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Execute the shutdown procedure.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function shutdown ()
 	{

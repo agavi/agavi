@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2005 Agavi Foundation.                                 |
+// | Copyright (c) 2003-2006 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -20,10 +20,11 @@
  * @package    agavi
  * @subpackage logging
  *
- * @author    Sean Kerr (skerr@mojavi.org)
- * @copyright (c) Authors
- * @since     0.9.0
- * @version   $Id$
+ * @author     Sean Kerr <skerr@mojavi.org>
+ * @copyright  (c) Authors
+ * @since      0.9.0
+ *
+ * @version    $Id$
  */
 class Logger extends AgaviObject
 {
@@ -31,35 +32,35 @@ class Logger extends AgaviObject
 	/**
 	 * Debug level.
 	 *
-	 * @since 0.9.0
+	 * @since      0.9.0
 	 */
 	const DEBUG = 1000;
 
 	/**
 	 * Error level.
 	 *
-	 * @since 0.9.0
+	 * @since      0.9.0
 	 */
 	const ERROR = 4000;
 
 	/**
 	 * Information level.
 	 *
-	 * @since 0.9.0
+	 * @since      0.9.0
 	 */
 	const INFO = 2000;
 
 	/**
 	 * Warning level.
 	 *
-	 * @since 0.9.0
+	 * @since      0.9.0
 	 */
 	const WARN = 3000;
 
 	/**
 	 * Fatal level.
 	 *
-	 * @since 0.9.0
+	 * @since      0.9.0
 	 */
 	const FATAL = 5000;
 
@@ -70,27 +71,25 @@ class Logger extends AgaviObject
 	/**
 	 * Constructor.
 	 * 
-	 * @return void
+	 * @return     void
 	 * 
-	 * @author Bob Zoller (bob@agavi.org)
-	 * @since 0.9.1
+	 * @author     Bob Zoller <bob@agavi.org>
+	 * @since      0.10.0
 	 */
 	public function __construct()
 	{
 		$this->priority = self::WARN;
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Log a message.
 	 *
-	 * @param Message A Message instance.
+	 * @param      Message A Message instance.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function log (Message $message)
 	{
@@ -106,23 +105,21 @@ class Logger extends AgaviObject
 		}
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Set an appender.
 	 *
 	 * If an appender with the name already exists, an exception will be thrown.
 	 *
-	 * @param string   An appender name.
-	 * @param Appender An Appender instance.
+	 * @param      string   An appender name.
+	 * @param      Appender An Appender instance.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @throws <b>LoggingException</b> If an appender with the name already
-	 *                                 exists.
+	 * @throws     <b>LoggingException</b> If an appender with the name already
+	 *                                     exists.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function setAppender ($name, $appender)
 	{
@@ -139,32 +136,28 @@ class Logger extends AgaviObject
 		throw new LoggingException($error);
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Set the priority level.
 	 *
-	 * @param int A priority level.
+	 * @param      int A priority level.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function setPriority ($priority)
 	{
 		$this->priority = $priority;
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Execute the shutdown procedure.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function shutdown ()
 	{

@@ -2,10 +2,8 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Authors                                                                   |
-// |  Sean Kerr (skerr@mojavi.org)                                             |
-// |  Bob Zoller (bob@agavi.org)                                               |
-// | Copyright (c) 2003-2005  Authors.                                         |
+// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -24,18 +22,15 @@
  * @package    agavi
  * @subpackage exception
  *
- * @author    Sean Kerr (skerr@mojavi.org)
- * @author    Bob Zoller (bob@agavi.org)
- * @copyright (c) Authors
- * @since     0.9.0
- * @version   $Id$
+ * @author     Sean Kerr <skerr@mojavi.org>
+ * @author     Bob Zoller <bob@agavi.org>
+ * @copyright  (c) Authors
+ * @since      0.9.0
+ *
+ * @version    $Id$
  */
 class AgaviException extends Exception
 {
-
-	// +-----------------------------------------------------------------------+
-	// | PRIVATE VARIABLES                                                     |
-	// +-----------------------------------------------------------------------+
 
 	private
 		$name = null;
@@ -47,11 +42,11 @@ class AgaviException extends Exception
 	/**
 	 * Class constructor.
 	 *
-	 * @param string The error message.
-	 * @param int    The error code.
+	 * @param      string The error message.
+	 * @param      int    The error code.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function __construct ($message = null, $code = 0)
 	{
@@ -62,17 +57,13 @@ class AgaviException extends Exception
 
 	}
 
-	// +-----------------------------------------------------------------------+
-	// | METHODS                                                               |
-	// +-----------------------------------------------------------------------+
-
 	/**
 	 * Retrieve the name of this exception.
 	 *
-	 * @return string This exception's name.
+	 * @return     string This exception's name.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function getName ()
 	{
@@ -81,19 +72,17 @@ class AgaviException extends Exception
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Print the stack trace for this exception.
 	 *
-	 * @param string The format you wish to use for printing. Options
-	 *               include:
-	 *               - html
-	 *               - plain
+	 * @param      string The format you wish to use for printing. Options
+	 *                    include:
+	 *                    - html
+	 *                    - plain
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @author Bob Zoller (bob@agavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     Bob Zoller <bob@agavi.org>
+	 * @since      0.9.0
 	 */
 	public function printStackTrace ($format = 'html')
 	{
@@ -338,15 +327,13 @@ class AgaviException extends Exception
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Set the name of this exception.
 	 *
-	 * @param string An exception name.
+	 * @param      string An exception name.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	protected function setName ($name)
 	{

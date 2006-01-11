@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2005 Agavi Foundation.                                 |
+// | Copyright (c) 2003-2006 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -19,10 +19,11 @@
  * @package    agavi
  * @subpackage logging
  *
- * @author    Bob Zoller (bob@agavi.org)
- * @copyright (c) Authors
- * @since     0.9.1
- * @version   $Id$
+ * @author     Bob Zoller <bob@agavi.org>
+ * @copyright  (c) Authors
+ * @since      0.10.0
+ *
+ * @version    $Id$
  */
 class FileAppender extends Appender
 {
@@ -33,12 +34,12 @@ class FileAppender extends Appender
 	/**
 	 * Initialize the FileAppender.
 	 * 
-	 * @param array An array of parameters.
+	 * @param      array An array of parameters.
 	 * 
-	 * @return void
+	 * @return     void
 	 * 
-	 * @author Bob Zoller (bob@agavi.org)
-	 * @since 0.9.1
+	 * @author     Bob Zoller <bob@agavi.org>
+	 * @since      0.10.0
 	 */
 	public function initialize($params)
 	{
@@ -50,12 +51,13 @@ class FileAppender extends Appender
 	/**
 	 * Retrieve the file handle for this FileAppender.
 	 * 
-	 * @throws <b>LoggingException</b> if file cannot be opened for appending.
+	 * @throws     <b>LoggingException</b> if file cannot be opened for 
+	 *                                     appending.
 	 * 
-	 * @return integer
+	 * @return     integer
 	 * 
-	 * @author Bob Zoller (bob@agavi.org)
-	 * @since 0.9.1
+	 * @author     Bob Zoller <bob@agavi.org>
+	 * @since      0.10.0
 	 */
 	protected function _getHandle()
 	{
@@ -74,8 +76,8 @@ class FileAppender extends Appender
 	 * 
 	 * return void
 	 * 
-	 * @author Bob Zoller (bob@agavi.org)
-	 * @since 0.9.1
+	 * @author     Bob Zoller <bob@agavi.org>
+	 * @since      0.10.0
 	 */
 	public function shutdown()
 	{
@@ -87,15 +89,15 @@ class FileAppender extends Appender
 	/**
 	 * Write a Message to the file.
 	 * 
-	 * @param Message
+	 * @param      Message
 	 * 
-	 * @throws <b>LoggingException</b> if no Layout is set or the file
-	 *         cannot be written.
+	 * @throws     <b>LoggingException</b> if no Layout is set or the file
+	 *                                     cannot be written.
 	 * 
-	 * @return void
+	 * @return     void
 	 * 
-	 * @author Bob Zoller (bob@agavi.org)
-	 * @since 0.9.1
+	 * @author     Bob Zoller <bob@agavi.org>
+	 * @since      0.10.0
 	 */
 	public function write($message)
 	{

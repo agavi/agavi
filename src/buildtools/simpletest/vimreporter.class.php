@@ -1,14 +1,30 @@
 <?php
+
+// +---------------------------------------------------------------------------+
+// | This file is part of the Agavi package.                                   |
+// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// |                                                                           |
+// | For the full copyright and license information, please view the LICENSE   |
+// | file that was distributed with this source code. You can also view the    |
+// | LICENSE file online at http://www.agavi.org/LICENSE.txt                   |
+// |   vi: set noexpandtab:                                                    |
+// |   Local Variables:                                                        |
+// |   indent-tabs-mode: t                                                     |
+// |   End:                                                                    |
+// +---------------------------------------------------------------------------+
+
 /**
  * Vim Reporter
  * 
  * Basicly just a simplified, condensed text reporter, 
  * certainly not pretty but more usefully formatted. :)
  *
- * @package Agavi
+ * @package    agavi
  * @subpackage UnitTester
- * @version 0.0.1 2005/06/23
- * @author Mike Vincent (mike@agavi.org)
+ *
+ * @author     Mike Vincent <mike@agavi.org>
+ *
+ * @version    $Id$
  */
 
 class VIMReporter extends TextReporter

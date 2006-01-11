@@ -2,7 +2,8 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2005  Sean Kerr.                                       |
+// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -36,25 +37,25 @@
  * @package    agavi
  * @subpackage database
  *
- * @author    Sean Kerr (skerr@mojavi.org)
- * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
- * @since     0.9.0
- * @version   $Id$
+ * @author     Agavi Project <info@agavi.org>
+ * @author     Sean Kerr <skerr@mojavi.org>
+ * @copyright  (c) Authors
+ * @copyright  (c) Authors
+ * @since      0.9.0
+ *
+ * @version    $Id$
  */
 class MySQLDatabase extends Database
 {
 
-	// +-----------------------------------------------------------------------+
-	// | METHODS                                                               |
-	// +-----------------------------------------------------------------------+
-
 	/**
 	 * Connect to the database.
 	 *
-	 * @throws <b>DatabaseException</b> If a connection could not be created.
+	 * @throws     <b>DatabaseException</b> If a connection could not be 
+	 *                                      created.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function connect ()
 	{
@@ -159,15 +160,13 @@ class MySQLDatabase extends Database
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Load connection parameters from an existing array.
 	 *
-	 * @return array An associative array of connection parameters.
+	 * @return     array An associative array of connection parameters.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	private function & loadParameters (&$array)
 	{
@@ -191,18 +190,16 @@ class MySQLDatabase extends Database
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Execute the shutdown procedure.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @throws <b>DatabaseException</b> If an error occurs while shutting down
-	 *                                 this database.
+	 * @throws     <b>DatabaseException</b> If an error occurs while shutting
+	 *                                      down this database.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function shutdown ()
 	{

@@ -2,10 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Authors                                                                   |
-// |  Wes Hays (weshays@gbdev.com)                                             |
-// |  Agavi Foundation (info@agavi.org)                                        |
-// | Copyright (c) 2003-2005  Authors                                          |
+// | Copyright (c) 2003-2006 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -20,10 +17,12 @@
  * @package    agavi
  * @subpackage view
  *
- * @author    Wes Hays (weshays@gbdev.com)
- * @author    Agavi Foundation (info@agavi.org)
- * @copyright (c) Authors, {@link http://www.agavi.org}
- * @since     0.10.0
+ * @author     Wes Hays <weshays@gbdev.com>
+ * @author     Agavi Project <info@agavi.org>
+ * @copyright  (c) Authors
+ * @since      0.10.0
+ *
+ * @version    $Id$
  */
 abstract class XSLView extends View
 {
@@ -37,20 +36,16 @@ abstract class XSLView extends View
 	private $rootNodeName = null;  // The name of the root node incase it is needed.
 
 
-	// +-----------------------------------------------------------------------+
-	// | METHODS                                                               |
-	// +-----------------------------------------------------------------------+
-
 	/**
 	 * Initialize this view.
 	 *
-	 * @param Context The current application context.
+	 * @param      Context The current application context.
 	 *
-	 * @return bool true, if initialization completes successfully, otherwise
-	 *              false.
+	 * @return     bool true, if initialization completes successfully,
+	 *                  otherwise false.
 	 *
-	 * @author Wes Hays (weshays@gbdev.com)
-	 * @since  0.10.0
+	 * @author     Wes Hays <weshays@gbdev.com>
+	 * @since      0.10.0
 	 */
 	public function initialize($context)
 	{
@@ -62,20 +57,19 @@ abstract class XSLView extends View
 		return (parent::initialize($context));
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Sets the DOMDocument to be used.
 	 * The default value is DOMDocument('1.0', 'iso-8859-1').
 	 *
-	 * @param DOMDocument $domDocument The DOMDocument to use.
-	 * @param string $rootNode (Optional) The name of the root node to use.  If not
-	 * specified then the root node will have a name of "rootnode".
+	 * @param      DOMDocument $domDocument The DOMDocument to use.
+	 * @param      string $rootNode (Optional) The name of the root node to use.  
+	 *                    If not specified then the root node will have a name
+	 *                    of "rootnode".
 	 *
-	 * @return True on success, otherwise false.
+	 * @return     True on success, otherwise false.
 	 *
-	 * @author Wes Hays (weshays@gbdev.com)
-	 * @since  0.10.0
+	 * @author     Wes Hays <weshays@gbdev.com>
+	 * @since      0.10.0
 	 */
 	public function setDomDocument($domDocument, $rootNode = 'rootnode')
 	{
@@ -93,36 +87,34 @@ abstract class XSLView extends View
 		return false;
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Append an attribute in the form of a DOMNode.
 	 *
-	 * @param string The name of the attribute.
-	 * @param mixed The value of the attribute in the form of a string or DOMNode.
+	 * @param      string The name of the attribute.
+	 * @param      mixed  The value of the attribute in the form of a string or 
+	 *                    DOMNode.
 	 *
-	 * @return True on success, otherwise false.
+	 * @return     True on success, otherwise false.
 	 *
-	 * @author Wes Hays (weshays@gbdev.com)
-	 * @since  0.10.0
+	 * @author     Wes Hays <weshays@gbdev.com>
+	 * @since      0.10.0
 	 */
 	public function appendAttribute($name, $value)
 	{
 		return $this->appendAttributeByRef($name, $value);
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Set an attribute by reference in the form of a DOMNode.
 	 *
-	 * @param string The name of the attribute.
-	 * @param mixed The value of the attribute in the form of a string or DOMNode.
+	 * @param      string The name of the attribute.
+	 * @param      mixed The value of the attribute in the form of a string or 
+	 *                   DOMNode.
 	 *
-	 * @return True on success, otherwise false.
+	 * @return     True on success, otherwise false.
 	 *
-	 * @author Wes Hays (weshays@gbdev.com)
-	 * @since  0.10.0
+	 * @author     Wes Hays <weshays@gbdev.com>
+	 * @since      0.10.0
 	 */
 	public function appendAttributeByRef($name, &$value)
 	{
@@ -140,15 +132,13 @@ abstract class XSLView extends View
 		return false;
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Clear all attributes associated with this view.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @author Wes Hays (weshays@gbdev.com)
-	 * @since  0.10.0
+	 * @author     Wes Hays <weshays@gbdev.com>
+	 * @since      0.10.0
 	 */
 	public function clearAttributes()
 	{
@@ -156,17 +146,15 @@ abstract class XSLView extends View
 		$this->rootNode = $this->domDoc->firstChild;
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Indicates whether or not an attribute exists in the rootnode.
 	 *
-	 * @param string The attribute name to check if it exists.
+	 * @param      string The attribute name to check if it exists.
 	 *
-	 * @return bool true, if the attribute exists, otherwise false.
+	 * @return     bool true, if the attribute exists, otherwise false.
 	 *
-	 * @author Wes Hays (weshays@gbdev.com)
-	 * @since  0.10.0
+	 * @author     Wes Hays <weshays@gbdev.com>
+	 * @since      0.10.0
 	 */
 	public function hasAttribute($name)
 	{
@@ -179,17 +167,15 @@ abstract class XSLView extends View
 		return false;
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Retrieve an attribute.
 	 *
-	 * @param string An attribute name.
+	 * @param      string An attribute name.
 	 *
-	 * @return DOMNodeList An attribute value.
+	 * @return     DOMNodeList An attribute value.
 	 *
-	 * @author Wes Hays (weshays@gbdev.com)
-	 * @since  0.10.0
+	 * @author     Wes Hays <weshays@gbdev.com>
+	 * @since      0.10.0
 	 */
 	public function &getAttribute($name)
 	{
@@ -197,15 +183,13 @@ abstract class XSLView extends View
 	return $retVal;
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Retrieve an array of attribute names.
 	 *
-	 * @return Array An indexed array of attribute names.
+	 * @return     Array An indexed array of attribute names.
 	 *
-	 * @author Wes Hays (weshays@gbdev.com)
-	 * @since  0.10.0
+	 * @author     Wes Hays <weshays@gbdev.com>
+	 * @since      0.10.0
 	 */
 	public function getAttributeNames()
 	{
@@ -218,18 +202,17 @@ abstract class XSLView extends View
 		return $retVal;
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Remove an attribute.  If there are multiple attributes with the same name
 	 * then they are all removed.
 	 *
-	 * @param string An attribute name.
+	 * @param      string An attribute name.
 	 *
-	 * @return Array An array of DOMNodes, if the attribute was removed, otherwise null.
+	 * @return     array An array of DOMNodes, if the attribute was removed, 
+	 *                   otherwise null.
 	 *
-	 * @author Wes Hays (weshays@gbdev.com)
-	 * @since  0.10.0
+	 * @author     Wes Hays <weshays@gbdev.com>
+	 * @since      0.10.0
 	 */
 	public function &removeAttribute($name)
 	{
@@ -243,38 +226,34 @@ abstract class XSLView extends View
 		return $retVal;
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Set an attribute.  If there are multiple attributes with the
 	 * same name then they all will be set to this value.
 	 *
-	 * @param string name The name of the attribute to set.
-	 * @param mixed value The value in the form of a string or DOMNode.
+	 * @param      string name The name of the attribute to set.
+	 * @param      mixed value The value in the form of a string or DOMNode.
 	 *
-	 * @return True on success, otherwise false.
+	 * @return     True on success, otherwise false.
 	 *
-	 * @author Wes Hays (weshays@gbdev.com)
-	 * @since  0.10.0
+	 * @author     Wes Hays <weshays@gbdev.com>
+	 * @since      0.10.0
 	 */
 	public function setAttribute($name, $value)
 	{
 	return $this->setAttributeByRef($name, $value);
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Set an attribute by reference.  If there are multiple attributes
 	 * with the same name then they all be set to this value.
 	 *
-	 * @param name The name of the attribute to set.
-	 * @param mixed The value in the form of a string or DOMNode.
+	 * @param      name  The name of the attribute to set.
+	 * @param      mixed The value in the form of a string or DOMNode.
 	 *
-	 * @return True on success, otherwise false.
+	 * @return     True on success, otherwise false.
 	 *
-	 * @author Wes Hays (weshays@gbdev.com)
-	 * @since  0.10.0
+	 * @author     Wes Hays <weshays@gbdev.com>
+	 * @since      0.10.0
 	 */
 	public function setAttributeByRef($name, &$value)
 	{
@@ -287,29 +266,25 @@ abstract class XSLView extends View
 		return true;
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Set an array of attributes. The array must be in the form:
 	 * $array['att1'] = 'value1';
 	 * $array['att2'] = DOMNode Object;
 	 * Any thing else will fail.
 	 *
-	 * @param array An associative array of attributes and their associated
-	 *              values.
+	 * @param      array An associative array of attributes and their associated
+	 *                   values.
 	 *
-	 * @return True if all set successfully, otherwise false.  If false
-	 * is returned then no attributes were set.
+	 * @return     bool True if all set successfully, otherwise false.  If false
+	 *                  is returned then no attributes were set.
 	 *
-	 * @author Wes Hays (weshays@gbdev.com)
-	 * @since  0.10.0
+	 * @author     Wes Hays <weshays@gbdev.com>
+	 * @since      0.10.0
 	 */
 	public function setAttributes($attributes)
 	{
 		return $this->setAttributesByRef($attributes);
 	}
-
-	// -------------------------------------------------------------------------
 
 	/**
 	 * Set an array of attributes by reference.
@@ -318,14 +293,14 @@ abstract class XSLView extends View
 	 * $array['att2'] = DOMNode Object;
 	 * Any thing else will fail.
 	 *
-	 * @param array An associative array of attributes and their associated
-	 *              values.
+	 * @param      array An associative array of attributes and their associated
+	 *                   values.
 	 *
-	 * @return True if all set successfully, otherwise false.  If false
-	 * is returned then no attributes were set.
+	 * @return     bool True if all set successfully, otherwise false.  If false
+	 *                  is returned then no attributes were set.
 	 *
-	 * @author Wes Hays (weshays@gbdev.com)
-	 * @since  0.10.0
+	 * @author     Wes Hays <weshays@gbdev.com>
+	 * @since      0.10.0
 	 */
 	public function setAttributesByRef(&$attributes)
 	{
@@ -338,39 +313,33 @@ abstract class XSLView extends View
 		return true;
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * This will return null for XSLView instances
 	 *
-	 * @param $context.
+	 * @param      $context.
 	 *
-	 * @return null.
+	 * @return     null.
 	 *
-	 * @author Wes Hays (weshays@gbdev.com)
-	 * @since  0.10.0
+	 * @author     Wes Hays <weshays@gbdev.com>
+	 * @since      0.10.0
 	 */
 	public function &decorate(&$content)
 	{
 		return null;
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Retrieve the template engine associated with this view.
 	 *
-	 * @return XSLTProcessor A template engine instance used for this class.
+	 * @return     XSLTProcessor A template engine instance used for this class.
 	 *
-	 * @author Wes Hays (weshays@gbdev.com)
-	 * @since  0.10.0
+	 * @author     Wes Hays <weshays@gbdev.com>
+	 * @since      0.10.0
 	 */
 	public function &getEngine()
 	{
 		return $this->xslProc;
 	}
-
-	// -------------------------------------------------------------------------
 
 	/**
 	 * Render the presentation.
@@ -378,12 +347,12 @@ abstract class XSLView extends View
 	 * When the controller render mode is View::RENDER_CLIENT, this method will
 	 * render the presentation directly to the client and null will be returned.
 	 *
-	 * @return string A string representing the rendered presentation, if
-	 *                the controller render mode is View::RENDER_VAR, otherwise
-	 *                null.
+	 * @return     string A string representing the rendered presentation, if
+	 *                    the controller render mode is View::RENDER_VAR,
+	 *                    otherwise null.
 	 *
-	 * @author Wes Hays (weshays@gbdev.com)
-	 * @since  0.10.0
+	 * @author     Wes Hays <weshays@gbdev.com>
+	 * @since      0.10.0
 	 */
 	public function &render()
 	{

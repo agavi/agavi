@@ -2,7 +2,8 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2005  Sean Kerr.                                       |
+// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -20,11 +21,12 @@
  * @package    agavi
  * @subpackage request
  *
- * @author    Sean Kerr (skerr@mojavi.org)
- * @author    Veikko Makinen (mail@veikkomakinen.com)
- * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
- * @since     0.9.0
- * @version   $Id$
+ * @author     Sean Kerr <skerr@mojavi.org>
+ * @author     Veikko Makinen <mail@veikkomakinen.com>
+ * @copyright  (c) Authors
+ * @since      0.9.0
+ *
+ * @version    $Id$
  */
 class WebRequest extends Request
 {
@@ -36,21 +38,17 @@ class WebRequest extends Request
 	protected
 		$cookieConfig = null;
 
-	// +-----------------------------------------------------------------------+
-	// | METHODS                                                               |
-	// +-----------------------------------------------------------------------+
-
 	/**
 	 * Retrieve a value stored into a cookie.
 	 *
-	 * @param string A cookie name.
-	 * @param mixed A default value.
+	 * @param      string A cookie name.
+	 * @param      mixed A default value.
 	 *
-	 * @return mixed The value from the cookie, if such a cookie exists, otherwise
-	 *               null.
+	 * @return     mixed The value from the cookie, if such a cookie exists,
+	 *                   otherwise null.
 	 *
-	 * @author Veikko Makinen (mail@veikkomakinen.com)
-	 * @since  0.10.0
+	 * @author     Veikko Makinen <mail@veikkomakinen.com>
+	 * @since      0.10.0
 	 */
 	public function getCookie($name, $default=null)
 	{
@@ -62,21 +60,21 @@ class WebRequest extends Request
 		return $retval;
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Send a cookie. Note that cookies are sent as HTTP headers and thus
 	 * must be sent before any output from the application.
 	 *
-	 * @param string A cookie name.
-	 * @param mixed Data to store into a cookie. If null or empty cookie will be tried to be removed.
-	 * @param array Cookie parameters (parameters from config or defaults are used for any missing parameters).
+	 * @param      string A cookie name.
+	 * @param      mixed Data to store into a cookie. If null or empty cookie
+	 *                   will be tried to be removed.
+	 * @param      array Cookie parameters (parameters from config or defaults
+	 *                   are used for any missing parameters).
 	 *
+	 * @return     boolean true if headers hadn't been sent and cookie was set,
+	 *                     otherwise false.
 	 *
-	 * @return boolean true if headers hadn't been sent and cookie was set, otherwise false.
-	 *
-	 * @author Veikko Makinen (mail@veikkomakinen.com)
-	 * @since  0.10.0
+	 * @author     Veikko Makinen <mail@veikkomakinen.com>
+	 * @since      0.10.0
 	 */
 	public function setCookie($name, $value, $lifetime = null, $path = null, $domain = null, $secure = null)
 	{
@@ -105,13 +103,13 @@ class WebRequest extends Request
 	/**
 	 * Retrieve an array of file information.
 	 *
-	 * @param string A file name
+	 * @param      string A file name
 	 *
-	 * @return array An associative array of file information, if the file
-	 *               exists, otherwise null.
+	 * @return     array An associative array of file information, if the file
+	 *                   exists, otherwise null.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function getFile ($name)
 	{
@@ -127,28 +125,25 @@ class WebRequest extends Request
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Retrieve a file error.
 	 *
-	 * @param string A file name.
+	 * @param      string A file name.
 	 *
-	 * @return int One of the following error codes:
+	 * @return     int One of the following error codes:
+	 *                 - <b>UPLOAD_ERR_OK</b>        (no error)
+	 *                 - <b>UPLOAD_ERR_INI_SIZE</b>  (the uploaded file exceeds
+	 *                                               upload_max_filesize
+	 *                                               directive in php.ini)
+	 *                 - <b>UPLOAD_ERR_FORM_SIZE</b> (the uploaded file exceeds
+	 *                                               MAX_FILE_SIZE directive
+	 *                                               specified in the HTML form)
+	 *                 - <b>UPLOAD_ERR_PARTIAL</b>   (the uploaded file was only
+	 *                                               partially uploaded)
+	 *                 - <b>UPLOAD_ERR_NO_FILE</b>   (no file was uploaded)
 	 *
-	 *             - <b>UPLOAD_ERR_OK</b>        (no error)
-	 *             - <b>UPLOAD_ERR_INI_SIZE</b>  (the uploaded file exceeds the
-	 *                                           upload_max_filesize directive
-	 *                                           in php.ini)
-	 *             - <b>UPLOAD_ERR_FORM_SIZE</b> (the uploaded file exceeds the
-	 *                                           MAX_FILE_SIZE directive that
-	 *                                           was specified in the HTML form)
-	 *             - <b>UPLOAD_ERR_PARTIAL</b>   (the uploaded file was only
-	 *                                           partially uploaded)
-	 *             - <b>UPLOAD_ERR_NO_FILE</b>   (no file was uploaded)
-	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function getFileError ($name)
 	{
@@ -164,17 +159,15 @@ class WebRequest extends Request
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Retrieve a file name.
 	 *
-	 * @param string A file name.
+	 * @param      string A file name.
 	 *
-	 * @return string A file name, if the file exists, otherwise null.
+	 * @return     string A file name, if the file exists, otherwise null.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function getFileName ($name)
 	{
@@ -190,15 +183,13 @@ class WebRequest extends Request
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Retrieve an array of file names.
 	 *
-	 * @return array An indexed array of file names.
+	 * @return     array An indexed array of file names.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function getFileNames ()
 	{
@@ -207,15 +198,13 @@ class WebRequest extends Request
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Retrieve an array of files.
 	 *
-	 * @return array An associative array of files.
+	 * @return     array An associative array of files.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function getFiles ()
 	{
@@ -224,17 +213,15 @@ class WebRequest extends Request
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Retrieve a file path.
 	 *
-	 * @param string A file name.
+	 * @param      string A file name.
 	 *
-	 * @return string A file path, if the file exists, otherwise null.
+	 * @return     string A file path, if the file exists, otherwise null.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function getFilePath ($name)
 	{
@@ -250,17 +237,15 @@ class WebRequest extends Request
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Retrieve a file size.
 	 *
-	 * @param string A file name.
+	 * @param      string A file name.
 	 *
-	 * @return int A file size, if the file exists, otherwise null.
+	 * @return     int A file size, if the file exists, otherwise null.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function getFileSize ($name)
 	{
@@ -276,20 +261,18 @@ class WebRequest extends Request
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Retrieve a file type.
 	 *
 	 * This may not be accurate. This is the mime-type sent by the browser
 	 * during the upload.
 	 *
-	 * @param string A file name.
+	 * @param      string A file name.
 	 *
-	 * @return string A file type, if the file exists, otherwise null.
+	 * @return     string A file type, if the file exists, otherwise null.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function getFileType ($name)
 	{
@@ -305,17 +288,15 @@ class WebRequest extends Request
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Indicates whether or not a file exists.
 	 *
-	 * @param string A file name.
+	 * @param      string A file name.
 	 *
-	 * @return bool true, if the file exists, otherwise false.
+	 * @return     bool true, if the file exists, otherwise false.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function hasFile ($name)
 	{
@@ -324,17 +305,15 @@ class WebRequest extends Request
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Indicates whether or not a file error exists.
 	 *
-	 * @param string A file name.
+	 * @param      string A file name.
 	 *
-	 * @return bool true, if the file error exists, otherwise false.
+	 * @return     bool true, if the file error exists, otherwise false.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function hasFileError ($name)
 	{
@@ -350,15 +329,13 @@ class WebRequest extends Request
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Indicates whether or not any file errors occured.
 	 *
-	 * @return bool true, if any file errors occured, otherwise false.
+	 * @return     bool true, if any file errors occured, otherwise false.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function hasFileErrors ()
 	{
@@ -379,15 +356,13 @@ class WebRequest extends Request
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Indicates whether or not any files exist.
 	 *
-	 * @return bool true, if any files exist, otherwise false.
+	 * @return     bool true, if any files exist, otherwise false.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function hasFiles ()
 	{
@@ -396,23 +371,21 @@ class WebRequest extends Request
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Initialize this Request.
 	 *
-	 * @param Context A Context instance.
-	 * @param array   An associative array of initialization parameters.
+	 * @param      Context A Context instance.
+	 * @param      array   An associative array of initialization parameters.
 	 *
-	 * @return bool true, if initialization completes successfully, otherwise
-	 *              false.
+	 * @return     bool true, if initialization completes successfully,
+	 *                  otherwise false.
 	 *
-	 * @throws <b>InitializationException</b> If an error occurs while
-	 *                                        initializing this Request.
+	 * @throws     <b>InitializationException</b> If an error occurs while
+	 *                                            initializing this Request.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @author Veikko Makinen (mail@veikkomakinen.com)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     Veikko Makinen <mail@veikkomakinen.com>
+	 * @since      0.9.0
 	 */
 	public function initialize ($context, $parameters = null)
 	{
@@ -455,15 +428,13 @@ class WebRequest extends Request
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Loads GET, PATH_INFO and POST data into the parameter list.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	private function loadParameters ()
 	{
@@ -514,27 +485,25 @@ class WebRequest extends Request
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Move an uploaded file.
 	 *
-	 * @param string A file name.
-	 * @param string An absolute filesystem path to where you would like the
-	 *               file moved. This includes the new filename as well, since
-	 *               uploaded files are stored with random names.
-	 * @param int    The octal mode to use for the new file.
-	 * @param bool   Indicates that we should make the directory before moving
-	 *               the file.
-	 * @param int    The octal mode to use when creating the directory.
+	 * @param      string A file name.
+	 * @param      string An absolute filesystem path to where you would like
+	 *                    the file moved. This includes the new filename, too,
+	 *                    since uploaded files are stored with random names.
+	 * @param      int    The octal mode to use for the new file.
+	 * @param      bool   Indicates that we should make the directory before
+	 *                    moving the file.
+	 * @param      int    The octal mode to use when creating the directory.
 	 *
-	 * @return bool true, if the file was moved, otherwise false.
+	 * @return     bool true, if the file was moved, otherwise false.
 	 *
-	 * @throws FileException If a major error occurs while attempting to move
-	 *                       the file.
+	 * @throws     FileException If a major error occurs while attempting to
+	 *                           move the file.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function moveFile ($name, $file, $fileMode = 0666, $create = true,
 						      $dirMode = 0777)
@@ -603,15 +572,13 @@ class WebRequest extends Request
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Execute the shutdown procedure.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function shutdown ()
 	{

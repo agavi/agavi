@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2005  Agavi Foundation                                 |
+// | Copyright (c) 2003-2006 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -32,35 +32,41 @@
  *                                       on connect(). This is for 0.9.0 B/C.
  * 
  *
- * @package agavi
+ * @package    agavi
  * @subpackage database
  * 
- * @since 0.9.0
- * @author Agavi Foundation (info@agavi.org)
- * @author David Zuelke (dz@bitxtender.com)
+ * @author     Agavi Project <info@agavi.org>
+ * @author     David Zuelke <dz@bitxtender.com>
+ * @since      0.9.0
+ *
+ * @version    $Id$
  */
 class PropelDatabase extends CreoleDatabase
 {
 	/**
 	 * Stores the path of the configuration file that will be passed to
 	 * Propel::init() when using Propel autoloading magic
-	 * @since 0.10.0
+	 *
+	 * @since      0.10.0
 	 */
-	static $defaultConfigPath = null;
+	private static $defaultConfigPath = null;
 
 	/**
 	 * Stores whether a Propel configuration file path has been explicitly set
 	 * as default for use with Propel::init() in database.ini
-	 * @since 0.10.0
+	 *
+	 * @since      0.10.0
 	 */
-	static $defaultConfigPathSet = false;
+	private static $defaultConfigPathSet = false;
 
 	/**
 	 * Returns the path to the config file that is passed to Propel::init() when
 	 * PropelAutoload.php is used in autoload.ini
-	 * @since 0.10.0
-	 * @returns mixed The path if one has been set, otherwise null
-	 * @author David Zuelke (dz@bitxtender.com)
+	 *
+	 * @return     mixed The path if one has been set, otherwise null
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.10.0
 	 */
 	public static function getDefaultConfigPath()
 	{
@@ -70,10 +76,13 @@ class PropelDatabase extends CreoleDatabase
 	/**
 	 * Sets the path to the config file that is passed to Propel::init() when
 	 * PropelAutoload.php is used in autoload.ini
-	 * @since 0.10.0
-	 * @param string The path to the configuration file
-	 * @returns mixed The old path if one was set previously, otherwise null
-	 * @author David Zuelke (dz@bitxtender.com)
+	 *
+	 * @param      string The path to the configuration file
+	 *
+	 * @return     mixed The old path if one was set previously, otherwise null
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.10.0
 	 */
 	protected static function setDefaultConfigPath($path)
 	{
@@ -85,10 +94,12 @@ class PropelDatabase extends CreoleDatabase
 	/**
 	 * Returns whether a Propel configuration file path has been explicitly set
 	 * as default for use with Propel::init() in database.ini
-	 * @since 0.10.0
-	 * @return bool true, if a Propel configuration file path has explicitely
+	 *
+	 * @return     bool true, if a Propel configuration file path has explicitely
 	 *              been set as default in database.ini, otherwise false
-	 * @author David Zuelke (dz@bitxtender.com)
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.10.0
 	 */
 	protected static function isDefaultConfigPathSet()
 	{
@@ -98,9 +109,11 @@ class PropelDatabase extends CreoleDatabase
 	/**
 	 * Sets a flag indicating a Propel configuration file path has been
 	 * explicitly set as default for use with Propel::init() in database.ini
-	 * @since 0.10.0
-	 * @return void
-	 * @author David Zuelke (dz@bitxtender.com)
+	 *
+	 * @return     void
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.10.0
 	 */
 	protected static function setDefaultConfigPathSet()
 	{
@@ -111,12 +124,14 @@ class PropelDatabase extends CreoleDatabase
 	 * Connect to the database.
 	 * This method is used only if param.use_autoload is false
 	 * 
-	 * @since 0.9.0
-	 * @access public
-	 * @return void
-	 * @throws <b>DatabaseException</b> If a connection could not be created.
-	 * @author Dusty Matthews (dustym@agavi.org)
-	 * @author David Zuelke (dz@bitxtender.com)
+	 * @return     void
+	 *
+	 * @throws     <b>DatabaseException</b> If a connection could not be 
+	 *                                      created.
+	 *
+	 * @author     Dusty Matthews <dustym@agavi.org>
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.9.0
 	 */
 	public function connect ()
 	{
@@ -166,11 +181,12 @@ class PropelDatabase extends CreoleDatabase
 	/**
 	 * Load Propel config
 	 * 
-	 * @since 0.10.0
-	 * @access puclic
-	 * @param array An associative array of initialization parameters.
-	 * @return void
-	 * @author David Zuelke (dz@bitxtender.com)
+	 * @param      array An associative array of initialization parameters.
+	 *
+	 * @return     void
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.10.0
 	 */
 	public function initialize($parameters = null)
 	{
@@ -205,10 +221,11 @@ class PropelDatabase extends CreoleDatabase
 	/**
 	 * Get the path to the Propel config file for this connection which has been
 	 * specified in databases.ini.
-	 * @since 0.10.0
-	 * @access public
-	 * @return string The path to the Propel configuration file
-	 * @author David Zuelke (dz@bitxtender.com)
+	 *
+	 * @return     string The path to the Propel configuration file
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.10.0
 	 */
 	public function getConfigPath()
 	{

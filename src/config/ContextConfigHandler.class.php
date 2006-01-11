@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2005 Agavi Foundation                                  |
+// | Copyright (c) 2003-2006 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -18,18 +18,20 @@
  * @package    agavi
  * @subpackage config
  *
- * @author    Veikko Makinen (mail@veikkomakinen.com) {@link http://www.agavi.org}
- * @copyright (c) authors
- * @since     0.10.0
- * @version   $Id: ReturnArrayConfigHandler.class.php 327 2005-12-18 16:10:25Z david $
+ * @author     Veikko Makinen <mail@veikkomakinen.com>
+ * @copyright  (c) Authors
+ * @since      0.10.0
+ *
+ * @version    $Id: ReturnArrayConfigHandler.class.php 327 2005-12-18 16:10:25Z david $
  */
 
 class ContextConfigHandler extends IniConfigHandler
 {
 	/**
-	 * @see IniConfigHandler::execute()
-	 * @author David Zuelke (dz@bitxtender.com)
-	 * @since  0.10.0
+	 * @see        IniConfigHandler::execute()
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.10.0
 	 */
 	public function &execute($config)
 	{
@@ -52,11 +54,13 @@ class ContextConfigHandler extends IniConfigHandler
 
 	/**
 	 *
-	 * @param array The one-dimensional input array
-	 * @param bool Convert boolean strings to literal boolean values
-	 * @return array The transformed version of the input array
-	 * @author David Zuelke (dz@bitxtender.com)
-	 * @since  0.10.0
+	 * @param      array The one-dimensional input array
+	 * @param      bool  Convert boolean strings to literal boolean values
+	 *
+	 * @return     array The transformed version of the input array
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.10.0
 	 */
 	public static function addDimensions($input, $real_booleans = false)
 	{
@@ -91,6 +95,16 @@ class ContextConfigHandler extends IniConfigHandler
 		return $output;
 	}
 
+	/**
+	 *
+	 * @param      value The value to convert to a boolean
+	 *
+	 * @return     mixed A bool if the given variable represents a boolean true
+	 *                   or false, original variable otherwise.
+	 * 
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.10.0
+	 */
 	public static function real_booleans($value)
 	{
 		$bool_false = array('false', 'off', 'no');

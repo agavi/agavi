@@ -2,10 +2,8 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Authors                                                                   |
-// |  Sean Kerr (skerr@mojavi.org)                                             |
-// |  Agavi Foundation (info@agavi.org)                                        |
-// | Copyright (c) 2003-2005  Authors                                          |
+// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -24,11 +22,12 @@
  * @package    agavi
  * @subpackage view
  *
- * @author    Sean Kerr (skerr@mojavi.org)
- * @author    Agavi Foundation (info@agavi.org)
- * @copyright (c) Authors
- * @since     0.9.0
- * @version   $Id$
+ * @author     Sean Kerr <skerr@mojavi.org>
+ * @author     Agavi Project <info@agavi.org>
+ * @copyright  (c) Authors
+ * @since      0.9.0
+ *
+ * @version    $Id$
  */
 abstract class View extends AgaviObject
 {
@@ -40,62 +39,58 @@ abstract class View extends AgaviObject
 	/**
 	 * Show an alert view.
 	 *
-	 * @since 0.9.0
+	 * @since      0.9.0
 	 */
 	const ALERT = 'Alert';
 
 	/**
 	 * Show an error view.
 	 *
-	 * @since 0.9.0
+	 * @since      0.9.0
 	 */
 	const ERROR = 'Error';
 
 	/**
 	 * Show a form input view.
 	 *
-	 * @since 0.9.0
+	 * @since      0.9.0
 	 */
 	const INPUT = 'Input';
 
 	/**
 	 * Skip view execution.
 	 *
-	 * @since 0.9.0
+	 * @since      0.9.0
 	 */
 	const NONE = null;
 
 	/**
 	 * Show a success view.
 	 *
-	 * @since 0.9.0
+	 * @since      0.9.0
 	 */
 	const SUCCESS = 'Success';
 
 	/**
 	 * Render the presentation to the client.
 	 *
-	 * @since 0.9.0
+	 * @since      0.9.0
 	 */
 	const RENDER_CLIENT = 2;
 
 	/**
 	 * Do not render the presentation.
 	 *
-	 * @since 0.9.0
+	 * @since      0.9.0
 	 */
 	const RENDER_NONE = 1;
 
 	/**
 	 * Render the presentation to a variable.
 	 *
-	 * @since 0.9.0
+	 * @since      0.9.0
 	 */
 	const RENDER_VAR = 4;
-
-	// +-----------------------------------------------------------------------+
-	// | PRIVATE VARIABLES                                                     |
-	// +-----------------------------------------------------------------------+
 
 	private
 		$context            = null,
@@ -107,32 +102,26 @@ abstract class View extends AgaviObject
 		$template           = null;
 
 
-	// +-----------------------------------------------------------------------+
-	// | METHODS                                                               |
-	// +-----------------------------------------------------------------------+
-
 	/**
 	 * Clear all attributes associated with this view.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	abstract function clearAttributes ();
-
-	// -------------------------------------------------------------------------
 
 	/**
 	 * Loop through all template slots and fill them in with the results of
 	 * presentation data.
 	 *
-	 * @param string A chunk of decorator content.
+	 * @param      string A chunk of decorator content.
 	 *
-	 * @return string A decorated template.
+	 * @return     string A decorated template.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function & decorate (&$content)
 	{
@@ -186,68 +175,58 @@ abstract class View extends AgaviObject
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Execute any presentation logic and set template attributes.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	abstract function execute ();
-
-	// -------------------------------------------------------------------------
 
 	/**
 	 * Indicates whether or not an attribute exists.
 	 *
-	 * @param string An attribute name.
+	 * @param      string An attribute name.
 	 *
-	 * @return bool true, if the attribute exists, otherwise false.
+	 * @return     bool true, if the attribute exists, otherwise false.
 	 *
-	 * @author Bob Zoller (bob@agavi.org)
-	 * @since  0.9.1
+	 * @author     Bob Zoller <bob@agavi.org>
+	 * @since      0.10.0
 	 */
 	abstract function hasAttribute ($name);
-
-	// -------------------------------------------------------------------------
 
 	/**
 	 * Retrieve an attribute.
 	 *
-	 * @param string An attribute name.
+	 * @param      string An attribute name.
 	 *
-	 * @return mixed An attribute value, if the attribute exists, otherwise
-	 *               null.
+	 * @return     mixed An attribute value, if the attribute exists, otherwise
+	 *                   null.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	abstract function & getAttribute ($name);
-
-	// -------------------------------------------------------------------------
 
 	/**
 	 * Retrieve an array of attribute names.
 	 *
-	 * @return array An indexed array of attribute names.
+	 * @return     array An indexed array of attribute names.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	abstract function getAttributeNames ();
-
-	// -------------------------------------------------------------------------
 
 	/**
 	 * Retrieve the current application context.
 	 *
-	 * @return Context The current Context instance.
+	 * @return     Context The current Context instance.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public final function getContext ()
 	{
@@ -256,16 +235,14 @@ abstract class View extends AgaviObject
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Retrieve this views decorator template directory.
 	 *
-	 * @return string An absolute filesystem path to this views decorator
-	 *                template directory.
+	 * @return     string An absolute filesystem path to this views decorator
+	 *                    template directory.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function getDecoratorDirectory ()
 	{
@@ -274,16 +251,14 @@ abstract class View extends AgaviObject
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Retrieve this views decorator template.
 	 *
-	 * @return string A template filename, if a template has been set, otherwise
-	 *                null.
+	 * @return     string A template filename, if a template has been set,
+	 *                    otherwise null.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function getDecoratorTemplate ()
 	{
@@ -292,16 +267,14 @@ abstract class View extends AgaviObject
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Retrieve this views template directory.
 	 *
-	 * @return string An absolute filesystem path to this views template
-	 *                directory.
+	 * @return     string An absolute filesystem path to this views template
+	 *                    directory.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function getDirectory ()
 	{
@@ -310,26 +283,22 @@ abstract class View extends AgaviObject
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Retrieve the template engine associated with this view.
 	 *
 	 * Note: This will return null for PHPView instances.
 	 *
-	 * @return mixed A template engine instance.
+	 * @return     mixed A template engine instance.
 	 */
 	abstract function & getEngine ();
-
-	// -------------------------------------------------------------------------
 
 	/**
 	 * Retrieve an array of specified slots for the decorator template.
 	 *
-	 * @return array An associative array of decorator slots.
+	 * @return     array An associative array of decorator slots.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function getSlots ()
 	{
@@ -338,16 +307,14 @@ abstract class View extends AgaviObject
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Retrieve this views template.
 	 *
-	 * @return string A template filename, if a template has been set, otherwise
-	 *                null.
+	 * @return     string A template filename, if a template has been set,
+	 *                    otherwise null.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function getTemplate ()
 	{
@@ -356,22 +323,20 @@ abstract class View extends AgaviObject
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Import parameter values and error messages from the request directly as
 	 * view attributes.
 	 *
-	 * @param array An indexed array of file/parameter names.
-	 * @param bool  Is this a list of files?
-	 * @param bool  Import error messages too?
-	 * @param bool  Run strip_tags() on attribute value?
-	 * @param bool  Run htmlspecialchars() on attribute value?
+	 * @param      array An indexed array of file/parameter names.
+	 * @param      bool  Is this a list of files?
+	 * @param      bool  Import error messages too?
+	 * @param      bool  Run strip_tags() on attribute value?
+	 * @param      bool  Run htmlspecialchars() on attribute value?
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function importAttributes ($names, $files = false, $errors = true,
 						              $stripTags = true, $specialChars = true)
@@ -497,18 +462,16 @@ abstract class View extends AgaviObject
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Initialize this view.
 	 *
-	 * @param Context The current application context.
+	 * @param      Context The current application context.
 	 *
-	 * @return bool true, if initialization completes successfully, otherwise
-	 *              false.
+	 * @return     bool true, if initialization completes successfully,
+	 *                  otherwise false.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  2.0.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      2.0.0
 	 */
 	public function initialize ($context)
 	{
@@ -526,15 +489,14 @@ abstract class View extends AgaviObject
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Indicates that this view is a decorating view.
 	 *
-	 * @return bool true, if this view is a decorating view, otherwise false.
+	 * @return     bool true, if this view is a decorating view, otherwise 
+	 *                  false.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function isDecorator ()
 	{
@@ -543,18 +505,16 @@ abstract class View extends AgaviObject
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Execute a basic pre-render check to verify all required variables exist
 	 * and that the template is readable.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @throws <b>RenderException</b> If the pre-render check fails.
+	 * @throws     <b>RenderException</b> If the pre-render check fails.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	protected function preRenderCheck ()
 	{
@@ -605,22 +565,18 @@ abstract class View extends AgaviObject
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Remove an attribute.
 	 *
-	 * @param string An attribute name.
+	 * @param      string An attribute name.
 	 *
-	 * @return mixed An attribute value, if the attribute was removed,
-	 *               otherwise null.
+	 * @return     mixed An attribute value, if the attribute was removed,
+	 *                   otherwise null.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	abstract function & removeAttribute ($name);
-
-	// -------------------------------------------------------------------------
 
 	/**
 	 * Render the presentation.
@@ -628,116 +584,102 @@ abstract class View extends AgaviObject
 	 * When the controller render mode is View::RENDER_CLIENT, this method will
 	 * render the presentation directly to the client and null will be returned.
 	 *
-	 * @return string A string representing the rendered presentation, if
-	 *                the controller render mode is View::RENDER_VAR, otherwise
-	 *                null.
+	 * @return     string A string representing the rendered presentation, if
+	 *                    the controller render mode is View::RENDER_VAR,
+	 *                    otherwise null.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	abstract function & render ();
-
-	// -------------------------------------------------------------------------
 
 	/**
 	 * Set an attribute.
 	 *
-	 * @param string An attribute name.
-	 * @param mixed  An attribute value.
+	 * @param      string An attribute name.
+	 * @param      mixed  An attribute value.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	abstract function setAttribute ($name, $value);
-
-	// -------------------------------------------------------------------------
 
 	/**
 	 * Append an attribute.
 	 *
-	 * @param string An attribute name.
-	 * @param mixed  An attribute value.
+	 * @param      string An attribute name.
+	 * @param      mixed  An attribute value.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @author Bob Zoller (bob@agavi.org)
-	 * @since  0.9.1
+	 * @author     Bob Zoller <bob@agavi.org>
+	 * @since      0.10.0
 	 */
 	abstract function appendAttribute($name, $value);
-
-	// -------------------------------------------------------------------------
 
 	/**
 	 * Set an attribute by reference.
 	 *
-	 * @param string An attribute name.
-	 * @param mixed  A reference to an attribute value.
+	 * @param      string An attribute name.
+	 * @param      mixed  A reference to an attribute value.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	abstract function setAttributeByRef ($name, &$value);
-
-	// -------------------------------------------------------------------------
 
 	/**
 	 * Append an attribute by reference.
 	 *
-	 * @param string An attribute name.
-	 * @param mixed  A reference to an attribute value.
+	 * @param      string An attribute name.
+	 * @param      mixed  A reference to an attribute value.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @author Bob Zoller (bob@agavi.org)
-	 * @since  0.9.1
+	 * @author     Bob Zoller <bob@agavi.org>
+	 * @since      0.10.0
 	 */
 	abstract function appendAttributeByRef($name, &$value);
-
-	// -------------------------------------------------------------------------
 
 	/**
 	 * Set an array of attributes.
 	 *
-	 * @param array An associative array of attributes and their associated
-	 *              values.
+	 * @param      array An associative array of attributes and their associated
+	 *                   values.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	abstract function setAttributes ($values);
-
-	// -------------------------------------------------------------------------
 
 	/**
 	 * Set an array of attributes by reference.
 	 *
-	 * @param array An associative array of attributes and references to their
-	 *              associated values.
+	 * @param      array An associative array of attributes and references to
+	 *                   their associated values.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	abstract function setAttributesByRef (&$values);
-
-	// -------------------------------------------------------------------------
 
 	/**
 	 * Set the decorator template directory for this view.
 	 *
-	 * @param string An absolute filesystem path to a template directory.
+	 * @param      string An absolute filesystem path to a template directory.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function setDecoratorDirectory ($directory)
 	{
@@ -746,20 +688,18 @@ abstract class View extends AgaviObject
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Set the decorator template for this view.
 	 *
 	 * If the template path is relative, it will be based on the currently
 	 * executing module's template sub-directory.
 	 *
-	 * @param string An absolute or relative filesystem path to a template.
+	 * @param      string An absolute or relative filesystem path to a template.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function setDecoratorTemplate ($template)
 	{
@@ -782,15 +722,13 @@ abstract class View extends AgaviObject
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Clears out a previously assigned decorator template and directory
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @author David Zuelke (dz@bitxtender.com)
-	 * @since  0.10.0
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.10.0
 	 */
 	public function clearDecorator()
 	{
@@ -799,17 +737,15 @@ abstract class View extends AgaviObject
 		$this->decorator = false;
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Set the template directory for this view.
 	 *
-	 * @param string An absolute filesystem path to a template directory.
+	 * @param      string An absolute filesystem path to a template directory.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function setDirectory ($directory)
 	{
@@ -818,22 +754,20 @@ abstract class View extends AgaviObject
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Set the module and action to be executed in place of a particular
 	 * template attribute.
 	 *
 	 * If a slot with the name already exists, it will be overridden.
 	 *
-	 * @param string A template attribute name.
-	 * @param string A module name.
-	 * @param string An action name.
+	 * @param      string A template attribute name.
+	 * @param      string A module name.
+	 * @param      string An action name.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function setSlot ($attributeName, $moduleName, $actionName)
 	{
@@ -844,40 +778,34 @@ abstract class View extends AgaviObject
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Set an array of slots
 	 *
-	 * @see View::setSlot()
-	 * @param array An array of slots
+	 * @see        View::setSlot()
+	 * @param      array An array of slots
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @author David Zuelke (dz@bitxtender.com)
-	 * @since  0.10.0
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.10.0
 	 */
 	public function setSlots($slots)
 	{
 		$this->slots = $slots;
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Empties the slots array, clearing all previously registered slots
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @author David Zuelke (dz@bitxtender.com)
-	 * @since  0.10.0
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.10.0
 	 */
 	public function clearSlots()
 	{
 		$this->slots = array();
 	}
-
-	// -------------------------------------------------------------------------
 
 	/**
 	 * Set the template for this view.
@@ -885,12 +813,12 @@ abstract class View extends AgaviObject
 	 * If the template path is relative, it will be based on the currently
 	 * executing module's template sub-directory.
 	 *
-	 * @param string An absolute or relative filesystem path to a template.
+	 * @param      string An absolute or relative filesystem path to a template.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function setTemplate ($template)
 	{

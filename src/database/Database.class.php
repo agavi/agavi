@@ -2,7 +2,8 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2005  Sean Kerr.                                       |
+// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -20,10 +21,11 @@
  * @package    agavi
  * @subpackage database
  *
- * @author    Sean Kerr (skerr@mojavi.org)
- * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
- * @since     0.9.0
- * @version   $Id$
+ * @author     Sean Kerr <skerr@mojavi.org>
+ * @copyright  (c) Authors
+ * @since      0.9.0
+ *
+ * @version    $Id$
  */
 abstract class Database extends ParameterHolder
 {
@@ -36,21 +38,16 @@ abstract class Database extends ParameterHolder
 		$connection = null,
 		$resource   = null;
 
-	// +-----------------------------------------------------------------------+
-	// | METHODS                                                               |
-	// +-----------------------------------------------------------------------+
-
 	/**
 	 * Connect to the database.
 	 *
-	 * @throws <b>DatabaseException</b> If a connection could not be created.
+	 * @throws     <b>DatabaseException</b> If a connection could not be 
+	 *                                      created.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	abstract function connect ();
-
-	// -------------------------------------------------------------------------
 
 	/**
 	 * Retrieve the database connection associated with this Database
@@ -59,9 +56,9 @@ abstract class Database extends ParameterHolder
 	 * When this is executed on a Database implementation that isn't an
 	 * abstraction layer, a copy of the resource will be returned.
 	 *
-	 * @return mixed A database connection.
+	 * @return     mixed A database connection.
 	 *
-	 * @throws <b>DatabaseException</b> If a connection could not be retrieved.
+	 * @throws     <b>DatabaseException</b> If a connection could not be retrieved.
 	 */
 	public function getConnection ()
 	{
@@ -77,15 +74,13 @@ abstract class Database extends ParameterHolder
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Retrieve a raw database resource associated with this Database
 	 * implementation.
 	 *
-	 * @return mixed A database resource.
+	 * @return     mixed A database resource.
 	 *
-	 * @throws <b>DatabaseException</b> If a resource could not be retrieved.
+	 * @throws     <b>DatabaseException</b> If a resource could not be retrieved.
 	 */
 	public function getResource ()
 	{
@@ -101,21 +96,19 @@ abstract class Database extends ParameterHolder
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Initialize this Database.
 	 *
-	 * @param array An associative array of initialization parameters.
+	 * @param      array An associative array of initialization parameters.
 	 *
-	 * @return bool true, if initialization completes successfully, otherwise
-	 *              false.
+	 * @return     bool true, if initialization completes successfully, 
+	 *                  otherwise false.
 	 *
-	 * @throws <b>InitializationException</b> If an error occurs while
-	 *                                        initializing this Database.
+	 * @throws     <b>InitializationException</b> If an error occurs while
+	 *                                            initializing this Database.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function initialize ($parameters = null)
 	{
@@ -129,18 +122,16 @@ abstract class Database extends ParameterHolder
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Execute the shutdown procedure.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @throws <b>DatabaseException</b> If an error occurs while shutting down
-	 *                                 this database.
+	 * @throws     <b>DatabaseException</b> If an error occurs while shutting 
+	 *                                      down this database.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	abstract function shutdown ();
 

@@ -2,7 +2,8 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2005  Sean Kerr.                                       |
+// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -29,28 +30,25 @@
  * @package    agavi
  * @subpackage filter
  *
- * @author    Sean Kerr (skerr@mojavi.org)
- * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
- * @since     0.9.0
- * @version   $Id$
+ * @author     Sean Kerr <skerr@mojavi.org>
+ * @copyright  (c) Authors
+ * @since      0.9.0
+ *
+ * @version    $Id$
  */
 class ExecutionTimeFilter extends Filter
 {
 
-	// +-----------------------------------------------------------------------+
-	// | METHODS                                                               |
-	// +-----------------------------------------------------------------------+
-
 	/**
 	 * Calculate the execution time.
 	 *
-	 * @param string The start microtime.
-	 * @param string The end microtime.
+	 * @param      string The start microtime.
+	 * @param      string The end microtime.
 	 *
-	 * @return double The execution time in seconds.
+	 * @return     double The execution time in seconds.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	private function calculateTime ($start, $end)
 	{
@@ -65,19 +63,17 @@ class ExecutionTimeFilter extends Filter
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Execute this filter.
 	 *
-	 * @param FilterChain The filter chain.
+	 * @param      FilterChain The filter chain.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @throws <b>FilterException</b> If an erro occurs during execution.
+	 * @throws     <b>FilterException</b> If an error occurs during execution.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function execute ($filterChain)
 	{
@@ -166,21 +162,20 @@ class ExecutionTimeFilter extends Filter
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Initialize this filter.
 	 *
-	 * @param Context The current application context.
-	 * @param array   An associative array of initialization parameters.
+	 * @param      Context The current application context.
+	 * @param      array   An associative array of initialization parameters.
 	 *
-	 * @return bool true, if initialization completes successfully, otherwise
-	 *              false.
+	 * @return     bool true, if initialization completes successfully, 
+	 *                  otherwise false.
 	 *
-	 * @throws <b>FilterException</b> If an error occurs during initialization.
+	 * @throws     <b>FilterException</b> If an error occurs during 
+	 *                                    initialization.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function initialize ($context, $parameters = null)
 	{

@@ -2,7 +2,8 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2005  Sean Kerr.                                       |
+// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -20,35 +21,28 @@
  * @package    agavi
  * @subpackage controller
  *
- * @author    Sean Kerr (skerr@mojavi.org)
- * @copyright (c) Sean Kerr, {@link http://www.mojavi.org}
- * @since     0.9.0
- * @version   $Id$
+ * @author     Sean Kerr <skerr@mojavi.org>
+ * @copyright  (c) Authors
+ * @since      0.9.0
+ *
+ * @version    $Id$
  */
 abstract class WebController extends Controller
 {
 
-	// +-----------------------------------------------------------------------+
-	// | PRIVATE VARIABLES                                                     |
-	// +-----------------------------------------------------------------------+
-
 	private
 		$contentType = null;
-
-	// +-----------------------------------------------------------------------+
-	// | METHODS                                                               |
-	// +-----------------------------------------------------------------------+
 
 	/**
 	 * Generate a formatted Agavi URL.
 	 *
-	 * @param string An existing URL for basing the parameters.
-	 * @param array  An associative array of URL parameters.
+	 * @param      string An existing URL for basing the parameters.
+	 * @param      array  An associative array of URL parameters.
 	 *
-	 * @return string A URL to a Agavi resource.
+	 * @return     string A URL to a Agavi resource.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function genURL ($url = null, $parameters = array())
 	{
@@ -96,15 +90,13 @@ abstract class WebController extends Controller
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Retrieve the requested content type.
 	 *
-	 * @return string A content type.
+	 * @return     string A content type.
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function getContentType ()
 	{
@@ -113,15 +105,13 @@ abstract class WebController extends Controller
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Initialize this controller.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function initialize (Context $context)
 	{
@@ -134,19 +124,17 @@ abstract class WebController extends Controller
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Redirect the request to another URL.
 	 *
-	 * @param string An existing URL.
-	 * @param int    A delay in seconds before redirecting. This only works on
-	 *               browsers that do not support the PHP header.
+	 * @param      string An existing URL.
+	 * @param      int    A delay in seconds before redirecting. This only works 
+	 *                    on browsers that do not support the PHP header.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function redirect ($url, $delay = 0)
 	{
@@ -171,17 +159,15 @@ abstract class WebController extends Controller
 
 	}
 
-	// -------------------------------------------------------------------------
-
 	/**
 	 * Set the content type for this request.
 	 *
-	 * @param string A content type.
+	 * @param      string A content type.
 	 *
-	 * @return void
+	 * @return     void
 	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function setContentType ($type)
 	{
