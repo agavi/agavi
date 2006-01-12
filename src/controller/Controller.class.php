@@ -176,7 +176,7 @@ abstract class Controller extends ParameterHolder
 					// global and module filters, otherwise skip them
 
 					// does this action require security?
-					if (AG_USE_SECURITY && ($actionInstance->isSecure() || $actionInstance->getCredential() !== null)) {
+					if (AG_USE_SECURITY && $actionInstance->isSecure()) {
 
 						if (!($this->context->getUser() instanceof SecurityUser)) {
 							$error = 'Security is enabled, but your User ' .
