@@ -64,14 +64,17 @@ class ContextTest extends UnitTestCase
 		
 	}
 
-	public function testCanReinitializeContextWithOverides()
+	public function testCanReinitializeContextWithOverrides()
 	{
 		$context = Context::getInstance();
 		$context->initialize('default', array('storage' => 'TestSessionStorage'));
 		$this->assertIsA($context->getStorage(), 'TestSessionStorage');
+/*
 		Mock::generate('ActionStack');	
 		$context->initialize('default', array('action_stack' => 'MockActionStack'));
 		$this->assertIsA($context->getActionStack(), 'MockActionStack');
+*/
+		$this->assertTrue(false, 'testCanReinitializeContextWithOverrides partially disabled for now because MockActionStack and MockActionEntry are not working');
 	}
 
 

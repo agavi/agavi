@@ -51,6 +51,8 @@ class PHPViewTest extends UnitTestCase
 
 	public function testrender()
 	{
+		$this->assertTrue(false, 'testrender disabled for now because MockActionStack and MockActionEntry are not working');
+/*
 		Mock::generate('ActionStack');
 		Mock::generate('ActionStackEntry');
 		
@@ -72,6 +74,7 @@ class PHPViewTest extends UnitTestCase
 		$view->setTemplate('viewtest.php');
 		$rendered = $view->render();
 		$this->assertWantedPattern('/view test success/i', $rendered);
+*/
 	}
 
 	public function testsetAttribute()
