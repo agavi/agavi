@@ -27,18 +27,42 @@ class ReturnArrayConfigHandlerTest extends UnitTestCase
 				'sub' => array(
 					'a' => 'apple',
 					'b' => 'bubble',
-					'c' => 'candy')),
+					'c' => 'candy'
+				)
+			),
 			'two' => array(
 				'type' => 'numeric',
-				'sub' => array('dot', 'dot dot', 'dot dot dot')),
+				'sub' => array('dot', 'dot dot', 'dot dot dot')
+			),
 			'three' => array(
 				'type' => 'withdots',
-				'three.sub' => array(
-					'a' => 'A',
-					'b' => 'B')),
+				'three' => array(
+					'sub' => array(
+						'a' => 'A',
+						'b' => 'B'
+					)
+				)
+			),
 			'four' => array(
 				'type' => 'moredots',
-				'four.sub' => array('dot', 'dot dot')));
+				'four' => array(
+					'sub' => array('dot', 'dot dot')
+				)
+			),
+			'five' => array(
+				'type' => 'numeric',
+				'sub' => array(
+					0 => array(
+						'foo' => 'first foo',
+						'bar' => 'first bar'
+					),
+					1 => array(
+						'foo' => 'second foo',
+						'bar' => 'second bar'
+					)
+				)
+			)
+		);
 		$ex_dotted = '<?php return '. var_export($dotted_array, true) .';?>';
 		$this->assertIdentical($dotted, $ex_dotted);
 	}

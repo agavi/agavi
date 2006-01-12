@@ -118,7 +118,7 @@ class UserTest extends UnitTestCase
 		$this->_u->setAttribute('blah', 'blahval', 'some/other/namespace');
 		$this->assertTrue($this->_u->hasAttributeNamespace('some/other/namespace'));
 	}
-
+	
 	public function testinitialize()
 	{
 		$context = Context::getInstance();
