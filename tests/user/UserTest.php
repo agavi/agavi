@@ -265,11 +265,5 @@ class UserTest extends UnitTestCase
 		$this->assertReference($myval2, $this->_u->getAttribute('blah2'));
 	}
 
-	public function testshutdown()
-	{
-		// What we would test here, is set some attributes and verify they are saved in the session
-		$this->assertTrue(0,'Incomplete Test');
-	}
-
 }
 ?>

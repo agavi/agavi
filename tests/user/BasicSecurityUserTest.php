@@ -51,6 +51,15 @@ class BasicSecurityUserTest extends UnitTestCase
 		$this->assertFalse($this->_u->hasCredential(array('test5', array('test2', 'test3'))));
 		$this->assertFalse($this->_u->hasCredential(array('test1', array('test5', 'test6'))));
 	}
+	
+	public function teststrictCredentialComparison()
+	{
+		$this->_u->clearCredentials();
+		$this->_u->addCredential("0");
+		$this->assertTrue($this->_u->hasCredential("0"));
+		$this->assertFalse($this->_u->hasCredential(0));
+		$this->assertFalse($this->_u->hasCredential(false));
+	}
 
 }
 ?>

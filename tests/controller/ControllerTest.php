@@ -240,7 +240,7 @@ class ControllerTest extends UnitTestCase
 		$this->assertFalse($controller->viewExists('Bunk', 'Bunk'));
 	}
 
-	public function inCLI()
+	public function testinCLI()
 	{
 		$controller = Context::getInstance()->getController();
 		$this->assertEqual((php_sapi_name() == 'cli'), $controller->inCLI());

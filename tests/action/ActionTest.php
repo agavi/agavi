@@ -65,14 +65,6 @@ class TestAction extends UnitTestCase
 		$this->assertFalse($this->_action->isSecure());
 	}
 
-	public function testregisterValidators()
-	{
-		// FIXME:
-		// This method is meant to be implemented in the implemented action, if required. 
-		// We should provide an example implementation and test. 
-		$this->assertTrue(0,'registerValidators method not yet implemented, create an example implementation!');
-	}
-
 	public function testvalidate()
 	{
 		$this->assertTrue($this->_action->validate());
