@@ -30,13 +30,13 @@ define('AG_APP_NAME',          'Agavi');
 
 define('AG_APP_MAJOR_VERSION', '0');
 
-define('AG_APP_MINOR_VERSION', '10');
+define('AG_APP_MINOR_VERSION', '11');
 
 define('AG_APP_MICRO_VERSION', '0');
 
-define('AG_APP_BRANCH',        '');
+define('AG_APP_BRANCH',        'trunk');
 
-define('AG_APP_STATUS',        'stable');
+define('AG_APP_STATUS',        'DEV');
 
 define('AG_APP_VERSION',       AG_APP_MAJOR_VERSION . '.' .
 						       AG_APP_MINOR_VERSION . '.' .
