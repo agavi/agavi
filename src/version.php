@@ -30,11 +30,11 @@ define('AG_APP_MAJOR_VERSION', '0');
 
 define('AG_APP_MINOR_VERSION', '10');
 
-define('AG_APP_MICRO_VERSION', '1');
+define('AG_APP_MICRO_VERSION', '2');
 
 define('AG_APP_BRANCH',        '0.10');
 
-define('AG_APP_STATUS',        'stable');
+define('AG_APP_STATUS',        'DEV');
 
 define('AG_APP_VERSION',       AG_APP_MAJOR_VERSION . '.' .
 						       AG_APP_MINOR_VERSION . '.' .
