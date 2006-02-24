@@ -435,9 +435,11 @@ class FixedPHPTAL extends PHPTAL
 {
 	public function setTemplate($path)
 	{
-		parent::setTemplate($path);
 		$this->_prepared = false;
-		$this->_functionName = 0;
+		$this->_functionName = null;
+		$this->_source = null;
+		parent::setTemplate($path);
 	}
 }
+
 ?>
