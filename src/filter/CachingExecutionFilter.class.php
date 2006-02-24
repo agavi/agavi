@@ -217,8 +217,7 @@ class CachingExecutionFilter extends ExecutionFilter
 
 		if(!isset($validatorManager)) {
 			// create validator manager
-			$validatorManager = new ValidatorManager();
-			$validatorManager->initialize($context);
+			$validatorManager = $context->getValidatorManager();
 		} else {
 			// clear the validator manager for reuse
 			$validatorManager->clear();

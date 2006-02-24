@@ -36,13 +36,15 @@ class Context
 {
 
 	protected
-		$actionStack     = null,
-		$controller      = null,
-		$databaseManager = null,
-		$request         = null,
-		$securityFilter  = null,
-		$storage         = null,
-		$user            = null;
+		$actionStack      = null,
+		$controller       = null,
+		$databaseManager  = null,
+		$loggerManager    = null,
+		$request          = null,
+		$securityFilter   = null,
+		$storage          = null,
+		$user             = null,
+		$validatorManager = null;
 	protected static
 		$instances       = null,
 		$profiles        = array();
@@ -192,6 +194,19 @@ class Context
 	}
 	
 	/**
+	 * Retrieve the LoggerManager
+	 *
+	 * @return     LoggerManager The current LoggerManager implementation instance
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getLoggerManager()
+	{
+		return $this->loggerManager;
+	}
+
+	/**
 	 * (re)Initialize the Context instance.
 	 *
 	 * @param      string name corresponding to a section of the config
@@ -239,11 +254,16 @@ class Context
 		if (AG_USE_DATABASE) {
 			$required[] = 'database_manager';
 		}
-		$required = array_merge($required, array('action_stack', 'request', 'storage', 'controller', 'execution_filter'));
+		// they have to be in this order; this is also why we're using array_merge()
+		$required = array_merge($required, array('action_stack', 'request', 'storage', 'controller', 'execution_filter', 'validator_manager'));
 		if (AG_USE_SECURITY) {
 			$required[] = 'user';
 			$required[] = 'security_filter';
 		}
+		if (defined('AG_USE_LOGGING') && AG_USE_LOGGING) {
+			$required[] = 'logger_manager';
+		}
+
 
 		if ($missing = array_diff($required, array_keys($params))) {
 			throw new ConfigurationException("Missing required definition(s) (".implode(', ',$missing).") in [$profile] section of contexts.ini");
@@ -251,23 +271,20 @@ class Context
 	
 		foreach ($required as $req) {	
 			$args = $class = null;
+			$class = $params[$req];
+			$args = isset($params[$req .'.param']) ? $params[$req . '.param'] : null;
 			switch ($req) {
 				case 'action_stack':
-					$this->actionStack = new $params[$req](); 
+					$this->actionStack = new $class(); 
 					break;
 				case 'database_manager':
-					$class = $params[$req];
-					$args = isset($params[$req .'.param']) ? $params[$req . '.param'] : null;
 					$this->databaseManager = new $class();
-					$this->databaseManager->initialize($args);
+					$this->databaseManager->initialize($this);
 					break;
 				case 'request':
-					$class = $params[$req];
 					$this->request = Request::newInstance($class);
 					break;
 				case 'storage':
-					$class = $params[$req];
-					$args = isset($params[$req .'.param']) ? $params[$req . '.param'] : null;
 					$this->storage = Storage::newInstance($class);
 					$this->storage->initialize($this, $args);
 					if ($this->storage instanceof SessionStorage) {
@@ -275,16 +292,20 @@ class Context
 					}
 					break;
 				case 'user':
-					$class = $params[$req];
-					$args = isset($params[$req .'.param']) ? $params[$req . '.param'] : null;
 					$this->user = User::newInstance($class);
 					$this->user->initialize($this, $args);
 					break;
 				case 'security_filter':
-					$class = $params[$req];
-					$args = isset($params[$req .'.param']) ? $params[$req . '.param'] : null;
 					$this->securityFilter = SecurityFilter::newInstance($class);
 					$this->securityFilter->initialize($this, $args);
+					break;
+				case 'logger_manager':
+					$this->loggerManager = new $class();
+					$this->loggerManager->initialize($this);
+					break;
+				case 'validator_manager':
+					$this->validatorManager = new $class();
+					$this->validatorManager->initialize($this);
 					break;
 			}
 		}
@@ -295,10 +316,6 @@ class Context
 		$args = isset($params['request.param']) ? $params['request.param'] : null;
 		$this->request->initialize($this, $args);
 		
-		if (defined('AG_USE_LOGGING') && AG_USE_LOGGING) {
-			LoggerManager::initialize();
-		}
-
 		return $this;
 	}
 	
@@ -403,6 +420,21 @@ class Context
 		return $this->user;
 
 	}
+	
+	/**
+	 * Retrieve the ValidatorManager
+	 *
+	 * @return     ValidatorManager The current ValidatorManager implementation
+	 *                              instance.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getValidatorManager()
+	{
+		return $this->validatorManager;
+	}
+
 
 }
 

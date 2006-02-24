@@ -18,6 +18,7 @@ define('AG_PATH_INFO_KEY', 'PATH_INFO');
 define('AG_AVAILABLE', 'On');
 define('AG_USE_DATABASE', true);
 define('AG_USE_SECURITY', true);
+define('AG_USE_LOGGING', true);
 define('AG_CONTENT_TYPE', 'html');
 
 // define('AG_ERROR_404_MODULE', 'ErrorModule');

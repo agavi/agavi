@@ -3,18 +3,26 @@ require_once dirname(__FILE__) . '/../test_environment.php';
 
 class DatabaseManagerTest extends UnitTestCase
 {
-	public function testInitialization()
+	private $_dbm = null,
+					$_context = null;
+	
+	public function setUp()
 	{
-		$DBM = new DatabaseManager();
-		$this->assertIsA($DBM, 'DatabaseManager');
-		$this->assertTrue(file_exists(AG_CONFIG_DIR . '/databases.ini'));
-		/*
-			$database = new PDODatabase();
-			$database->initialize(null);
-			$this->databases['default'] = $database;
-		*/
-			
-		$this->assertTrue($DBM->initialize());
+		$this->_context = Context::getInstance();
+		
+		$this->_dbm = $this->_context->getDatabaseManager();
+	}
+
+	public function tearDown()
+	{
+		$this->_dbm = null;
+		$this->_context = null;
+	}
+
+	public function testWhatever()
+	{
+		$this->assertIsA($this->_dbm, 'DatabaseManager');
+		$this->assertIsA($this->_dbm->getContext(), 'Context');
 	}
 
 }
