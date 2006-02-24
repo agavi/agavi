@@ -100,6 +100,19 @@ abstract class Storage extends ParameterHolder
 		}
 		return $object;
 	}
+	
+	/**
+	 * Executes code necessary to startup the storage (a session, for example).
+	 *
+	 * @return     bool true, if startup went fine, otherwise false
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	function startup()
+	{
+		return true;
+	}
 
 	/**
 	 * Read data from this storage.

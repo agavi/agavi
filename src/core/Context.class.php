@@ -287,9 +287,7 @@ class Context
 				case 'storage':
 					$this->storage = Storage::newInstance($class);
 					$this->storage->initialize($this, $args);
-					if ($this->storage instanceof SessionStorage) {
-						$this->storage->autoStart();
-					}
+					$this->storage->startup();
 					break;
 				case 'user':
 					$this->user = User::newInstance($class);
