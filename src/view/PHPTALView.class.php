@@ -426,7 +426,7 @@ abstract class PHPTALView extends View
 // as soon as this is fixed in PHPTAL SVN, we will remove the stub class and move the define and the require into initialize()
 
 if(!defined('PHPTAL_PHP_CODE_DESTINATION')) {
-	define('PHPTAL_PHP_CODE_DESTINATION', AG_CACHE_DIR);
+	define('PHPTAL_PHP_CODE_DESTINATION', AG_CACHE_DIR . '/');
 }
 
 require_once('PHPTAL.php');
