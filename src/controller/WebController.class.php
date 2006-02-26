@@ -146,7 +146,12 @@ abstract class WebController extends Controller
 	 */
 	public function getContentType()
 	{
-		return $this->getHttpHeader('Content-Type');
+		$retval = $this->getHttpHeader('Content-Type');
+		if(is_array($retval) && count($retval)) {
+			return $retval[0];
+		} else {
+			return null;
+		}
 	}
 	
 	/**
@@ -257,7 +262,7 @@ abstract class WebController extends Controller
 	 * Set a HTTP header for the response
 	 *
 	 * @param      string A HTTP header field name.
-	 * @param      string A HTTP header field value.
+	 * @param      array  A HTTP header field value, of an array of values.
 	 * @param      bool   If true, a header with that name will be oberwritten,
 	 *                    otherwise, the value will be appended.
 	 *
@@ -272,7 +277,11 @@ abstract class WebController extends Controller
 		if(!isset($this->headers[$name]) || $replace) {
 			$this->headers[$name] = array();
 		}
-		$this->headers[$name][] = $value;
+		if(is_array($value)) {
+			$this->headers[$name] = array_merge($this->headers[$name], $value);
+		} else {
+			$this->headers[$name][] = $value;
+		}
 	}
 
 	/**

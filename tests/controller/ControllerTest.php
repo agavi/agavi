@@ -292,6 +292,8 @@ class ControllerTest extends UnitTestCase
 		$this->assertEqual($controller->getHTTPHeader('sometest'), array('foo'));
 		$controller->setHTTPHeader('sometest', 'bar', false);
 		$this->assertEqual($controller->getHTTPHeader('sometest'), array('foo', 'bar'));
+		$controller->setHTTPHeader('multiple', array('first', 'second'));
+		$this->assertEqual($controller->getHTTPHeader('multiple'), array('first', 'second'));
 	}
 	
 	public function testgetHTTPStatusCode()
