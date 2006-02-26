@@ -72,8 +72,8 @@ class RequestTest extends UnitTestCase
 		$this->assertNull($this->_r->getAttribute('bunk'));
 
 		$this->_r->setAttribute('blah', 'otherblah', 'some/other/namespace');
-		$this->assertEqual('otherblah', $this->_r->getAttribute('blah', null, 'some/other/namespace'));
-		$this->assertNull($this->_r->getAttribute('bunk', null, 'some/other/namespace'));
+		$this->assertEqual('otherblah', $this->_r->getAttribute('blah', 'some/other/namespace'));
+		$this->assertNull($this->_r->getAttribute('bunk', 'some/other/namespace'));
 
 		$this->assertEqual('blahval', $this->_r->getAttribute('blah'));
 	}
@@ -246,7 +246,7 @@ class RequestTest extends UnitTestCase
 		$this->assertEqual('blahval', $this->_r->getAttribute('blah'));
 
 		$this->_r->setAttribute('blah', 'otherblah', 'some/other/namespace');
-		$this->assertEqual('otherblah', $this->_r->getAttribute('blah', null, 'some/other/namespace'));
+		$this->assertEqual('otherblah', $this->_r->getAttribute('blah', 'some/other/namespace'));
 
 		$this->assertEqual('blahval', $this->_r->getAttribute('blah'));
 	}
@@ -259,9 +259,9 @@ class RequestTest extends UnitTestCase
 		$this->assertEqual(array('blahval','blahval2'), $this->_r->getAttribute('blah'));
 
 		$this->_r->appendAttribute('blah', 'otherblah', 'some/other/namespace');
-		$this->assertEqual(array('otherblah'), $this->_r->getAttribute('blah', null, 'some/other/namespace'));
+		$this->assertEqual(array('otherblah'), $this->_r->getAttribute('blah', 'some/other/namespace'));
 		$this->_r->appendAttribute('blah', 'otherblah2', 'some/other/namespace');
-		$this->assertEqual(array('otherblah', 'otherblah2'), $this->_r->getAttribute('blah', null, 'some/other/namespace'));
+		$this->assertEqual(array('otherblah', 'otherblah2'), $this->_r->getAttribute('blah', 'some/other/namespace'));
 
 		$this->assertEqual(array('blahval','blahval2'), $this->_r->getAttribute('blah'));
 	}
@@ -274,7 +274,7 @@ class RequestTest extends UnitTestCase
 
 		$myval2 = 'otherblah';
 		$this->_r->setAttributeByRef('blah', $myval2, 'some/other/namespace');
-		$this->assertReference($myval2, $this->_r->getAttribute('blah', null, 'some/other/namespace'));
+		$this->assertReference($myval2, $this->_r->getAttribute('blah', 'some/other/namespace'));
 
 		$this->assertReference($myval, $this->_r->getAttribute('blah'));
 	}
@@ -294,10 +294,10 @@ class RequestTest extends UnitTestCase
 		$myval3 = 'jill';
 		$myval4 = 'jane';
 		$this->_r->appendAttributeByRef('blah', $myval3, 'some/other/namespace');
-		$out = $this->_r->getAttribute('blah', null, 'some/other/namespace');
+		$out = $this->_r->getAttribute('blah', 'some/other/namespace');
 		$this->assertReference($myval3, $out[0]);
 		$this->_r->appendAttributeByRef('blah', $myval4, 'some/other/namespace');
-		$out = $this->_r->getAttribute('blah', null, 'some/other/namespace');
+		$out = $this->_r->getAttribute('blah', 'some/other/namespace');
 		$this->assertReference($myval3, $out[0]);
 		$this->assertReference($myval4, $out[1]);
 
@@ -315,10 +315,10 @@ class RequestTest extends UnitTestCase
 		$this->assertEqual('blah2val', $this->_r->getAttribute('blah2'));
 
 		$this->_r->setAttributes(array('blah'=>'otherblah'), 'some/other/namespace');
-		$this->assertEqual('otherblah', $this->_r->getAttribute('blah', null, 'some/other/namespace'));
+		$this->assertEqual('otherblah', $this->_r->getAttribute('blah', 'some/other/namespace'));
 		$this->_r->setAttributes(array('blah2'=>'otherblah2'), 'some/other/namespace');
-		$this->assertEqual('otherblah', $this->_r->getAttribute('blah', null, 'some/other/namespace'));
-		$this->assertEqual('otherblah2', $this->_r->getAttribute('blah2', null, 'some/other/namespace'));
+		$this->assertEqual('otherblah', $this->_r->getAttribute('blah', 'some/other/namespace'));
+		$this->assertEqual('otherblah2', $this->_r->getAttribute('blah2', 'some/other/namespace'));
 
 		$this->assertEqual('blahval', $this->_r->getAttribute('blah'));
 		$this->assertEqual('blah2val', $this->_r->getAttribute('blah2'));
@@ -337,10 +337,10 @@ class RequestTest extends UnitTestCase
 		$myval3 = 'blah';
 		$myval4 = 'blah2';
 		$this->_r->setAttributes(array('blah'=>&$myval3), 'some/other/namespace');
-		$this->assertReference($myval3, $this->_r->getAttribute('blah', null, 'some/other/namespace'));
+		$this->assertReference($myval3, $this->_r->getAttribute('blah', 'some/other/namespace'));
 		$this->_r->setAttributes(array('blah2'=>&$myval4), 'some/other/namespace');
-		$this->assertReference($myval3, $this->_r->getAttribute('blah', null, 'some/other/namespace'));
-		$this->assertReference($myval4, $this->_r->getAttribute('blah2', null, 'some/other/namespace'));
+		$this->assertReference($myval3, $this->_r->getAttribute('blah', 'some/other/namespace'));
+		$this->assertReference($myval4, $this->_r->getAttribute('blah2', 'some/other/namespace'));
 
 		$this->assertReference($myval1, $this->_r->getAttribute('blah'));
 		$this->assertReference($myval2, $this->_r->getAttribute('blah2'));
