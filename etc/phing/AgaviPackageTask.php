@@ -88,13 +88,13 @@ EOD;
 		$p2->setPackage('agavi');
 		$p2->addMaintainer('developer', 'bob', 'Bob Zoller', 'bob@agavi.org');
 		$p2->addMaintainer('developer', 'mike', 'Mike Vincent', 'mike@agavi.org');
-		$p2->addMaintainer('developer', 'david', 'David Zuelke', 'dz@bitxtender.com');
+		$p2->addMaintainer('lead', 'david', 'David Zuelke', 'dz@bitxtender.com');
 		$p2->addMaintainer('developer', 'v-dogg', 'Veikko Makinen', 'mail@veikkomakinen.com');
 		$p2->setChannel('pear.agavi.org');
-		$p2->setReleaseVersion('0.10.1');
-		$p2->setAPIVersion('0.10.1');
+		$p2->setReleaseVersion('0.10.2');
+		$p2->setAPIVersion('0.10.2');
 		$p2->setReleaseStability('beta');
-		$p2->setAPIStability('beta');
+		$p2->setAPIStability('alpha');
 		$p2->setSummary($shortDesc);
 		$p2->setDescription($longDesc);
 		$p2->setNotes('See the CHANGELOG for full list of changes');
@@ -107,6 +107,9 @@ EOD;
 		$p2->addInstallAs('scripts/agavi-dist', 'agavi');
 		$p2->addIgnore('scripts/agavi.bat-dist');
 		$p2->addRole('*', 'php');
+		$p2->addPackageDepWithChannel( 'required', 'phing', 'pear.phing.info', '2.2.0RC1');
+		$p2->addPackageDepWithChannel( 'optional', 'creole', 'pear.phpdb.org', '1.1.0RC1');
+		$p2->addPackageDepWithChannel( 'optional', 'propel', 'pear.phpdb.org', '1.2.0RC1');
 		$p2->setPhpDep('5.0.0');
 		$p2->setPearinstallerDep('1.4.0a12');
 		//$p2->addPackageDepWithUri('required', 'phing', 'http://phing.info/pear/phing-current.tgz');
@@ -115,11 +118,11 @@ EOD;
 		$p2->addReplacement('scripts/agavi-dist', 'pear-config', '@PEAR-DIR@', 'php_dir');
 		$p2->addReplacement('scripts/agavi.bat-dist', 'pear-config', '@PEAR-DIR@', 'php_dir');
 		
-		$pkg = &$p2->exportCompatiblePackageFile1();
+//		$pkg = &$p2->exportCompatiblePackageFile1();
 		
 		try {
-			$pkg->writePackageFile();
-		//	$p2->writePackageFile();
+//			$pkg->writePackageFile();
+			$p2->writePackageFile();
 		} catch (PEAR_Exception $e) {
 			$this->log("Oops!  Caught PEAR Exception: ".$e->getMessage());
 		}
