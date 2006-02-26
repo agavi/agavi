@@ -1,6 +1,13 @@
 AGAVI CHANGELOG
 ===============
 
+0.10.2 (February 27, 2006)
+CHG: Changed to new PEAR package task, package.xml v2 format, using PEAR channel pear.agavi.org (David)
+CHG: Declared API stability alpha (David)
+FIX: Fixed PHP 5.0.5 / 5.1 return by reference problem in logging/PassthruLayout (Markus Lervik, David)
+FIX: Fixed incorrect Phing dependendy (David)
+
+
 0.10.1 (January 6, 2006)
 FIX: Fixed critical bug that prevented parameters to be passed in config_handlers.ini
 
