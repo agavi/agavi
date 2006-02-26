@@ -22,6 +22,7 @@ define('AG_USE_LOGGING', true);
 define('AG_CONTENT_TYPE', 'text/html');
 define('AG_USER_NAMESPACE', 'org/agavi');
 define('AG_REQUEST_NAMESPACE', 'org/agavi');
+define('AG_URL_FORMAT', 'GET');
 
 
 // define('AG_ERROR_404_MODULE', 'ErrorModule');

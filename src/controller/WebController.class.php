@@ -81,17 +81,28 @@ abstract class WebController extends Controller
 
 	/**
 	 * Generate a formatted Agavi URL.
+	 * You can also pass in arguments in reverse order.
 	 *
-	 * @param      string An existing URL for basing the parameters.
 	 * @param      array  An associative array of URL parameters.
+	 * @param      string An existing URL for basing the parameters.
 	 *
 	 * @return     string A URL to a Agavi resource.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
 	public function genURL ($url = null, $parameters = array())
 	{
+		if(is_array($url)) {
+			$tmp = null;
+			if(is_array($parameters)) {
+				$parameters = null;
+			}
+			$tmp = $url;
+			$url = $parameters;
+			$parameters = $tmp;
+		}
 
 		if ($url == null)
 		{

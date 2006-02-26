@@ -314,6 +314,15 @@ class ControllerTest extends UnitTestCase
 		$controller->setHTTPStatusCode(123);
 		$this->assertEqual($controller->getHTTPStatusCode(), '403');
 	}
+	
+	function testgenURL()
+	{
+		$controller = Context::getInstance()->getController();
+		$this->assertEqual($controller->genURL('index.php', array('foo' =>'bar')), 'index.php?foo=bar');
+		$this->assertEqual($controller->genURL(null, array('foo' =>'bar')), $_SERVER['SCRIPT_NAME'] . '?foo=bar');
+		$this->assertEqual($controller->genURL(array('foo' =>'bar'), 'index.php'), 'index.php?foo=bar');
+		$this->assertEqual($controller->genURL(array('foo' =>'bar')), $_SERVER['SCRIPT_NAME'] . '?foo=bar');
+	}
 }
 
 ?>
