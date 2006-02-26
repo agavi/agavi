@@ -42,7 +42,7 @@ class User extends ParameterHolder
 	 *
 	 * @since      0.9.0
 	 */
-	const ATTRIBUTE_NAMESPACE = 'org/agavi/user/User/attributes';
+	const ATTRIBUTE_NAMESPACE = 'org.agavi.user.User.attributes';
 
 	protected
 		$attributes = null,

@@ -36,12 +36,12 @@ class BasicSecurityUser extends SecurityUser
 	/**
 	 * The namespace under which authenticated status will be stored.
 	 */
-	const AUTH_NAMESPACE = 'org/agavi/user/BasicSecurityUser/authenticated';
+	const AUTH_NAMESPACE = 'org.agavi.user.BasicSecurityUser.authenticated';
 
 	/**
 	 * The namespace under which credentials will be stored.
 	 */
-	const CREDENTIAL_NAMESPACE = 'org/agavi/user/BasicSecurityUser/credentials';
+	const CREDENTIAL_NAMESPACE = 'org.agavi.user.BasicSecurityUser.credentials';
 
 	private
 		$authenticated = null,
