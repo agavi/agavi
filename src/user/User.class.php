@@ -127,6 +127,22 @@ class User extends ParameterHolder
 	 *
 	 * @return     array An associative array of attributes.
 	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function &getAttributes($ns = AG_USER_NAMESPACE)
+	{
+		$retval =& $this->getAttributeNamespace($ns);
+		return $retval;
+	}
+
+	/**
+	 * Retrieve all attributes within a namespace.
+	 *
+	 * @param      string An attribute namespace.
+	 *
+	 * @return     array An associative array of attributes.
+	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */

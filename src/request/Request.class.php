@@ -116,8 +116,8 @@ abstract class Request extends ParameterHolder
 	 * Retrieve an attribute.
 	 *
 	 * @param      string An attribute name.
-	 * @param      mixed  A default attribute value.
 	 * @param      string An attribute namespace.
+	 * @param      mixed  A default attribute value.
 	 *
 	 * @return     mixed An attribute value, if the attribute exists, otherwise
 	 *                   null.
@@ -127,7 +127,7 @@ abstract class Request extends ParameterHolder
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
-	public function &getAttribute($name, $default = null, $ns = AG_REQUEST_NAMESPACE)
+	public function &getAttribute($name, $ns = AG_REQUEST_NAMESPACE, $default = null)
 	{
 		$retval =& $default;
 
