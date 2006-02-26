@@ -451,7 +451,7 @@ abstract class WebController extends Controller
 	 */
 	public function setContentType($type)
 	{
-		$this->headers['Content-Type'] = $type;
+		$this->setHTTPHeader('Content-Type', $type);
 	}
 
 }
