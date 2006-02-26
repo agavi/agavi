@@ -418,9 +418,10 @@ abstract class Request extends ParameterHolder
 	 *                    null.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
-	public function & removeError ($name)
+	public function removeError ($name)
 	{
 
 		$retval = null;
@@ -428,7 +429,7 @@ abstract class Request extends ParameterHolder
 		if (isset($this->errors[$name]))
 		{
 
-			$retval =& $this->errors[$name];
+			$retval = $this->errors[$name];
 
 			unset($this->errors[$name]);
 
