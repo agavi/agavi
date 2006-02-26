@@ -13,6 +13,16 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
+/**
+ * @package    agavi
+ * @subpackage buildtools
+ *
+ * @author     Mike Vincent <mike@agavi.org>
+ * @copyright  (c) Authors
+ * @since      0.10.0
+ *
+ * @version    $Id$
+ */
 class AgaviFixPathsTask extends Task {
 	private $base,
 					$depth=5,

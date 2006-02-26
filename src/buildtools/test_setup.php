@@ -13,6 +13,17 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
+/**
+ * @package    agavi
+ * @subpackage buildtools
+ *
+ * @author     Mike Vincent <mike@agavi.org>
+ * @copyright  (c) Authors
+ * @since      0.9.0
+ *
+ * @version    $Id$
+ */
+
 // simpletest should be in your path
 require_once('simpletest/unit_tester.php');
 require_once('simpletest/reporter.php');

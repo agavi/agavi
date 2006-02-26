@@ -13,6 +13,16 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
+/**
+ * @package    agavi
+ * @subpackage buildtools
+ *
+ * @author     David Zuelke <dz@bitxtender.com>
+ * @copyright  (c) Authors
+ * @since      0.10.0
+ *
+ * @version    $Id$
+ */
 class AgaviSubActionNameTask extends Task
 {
 	public function main()
