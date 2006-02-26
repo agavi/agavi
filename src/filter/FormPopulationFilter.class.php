@@ -82,7 +82,7 @@ class FormPopulationFilter extends Filter
 			
 			$req = $this->getContext()->getRequest();
 			
-			if($req->getMethod() == Request::POST) {
+			if($req->getAttribute('populate', 'org.agavi.filter.FormPopulationFilter') === true || ($req->getMethod() == Request::POST && $req->getAttribute('populate', 'org.agavi.filter.FormPopulationFilter') !== false)) {
 				ob_start();
 				$filterChain->execute();
 				$output = ob_get_contents();
