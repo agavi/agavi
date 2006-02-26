@@ -245,7 +245,73 @@ class ControllerTest extends UnitTestCase
 		$controller = Context::getInstance()->getController();
 		$this->assertEqual((php_sapi_name() == 'cli'), $controller->inCLI());
 	}
+	
+	public function testgetContentType()
+	{
+		$controller = Context::getInstance()->getController();
+		$this->assertEqual($controller->getContentType(), AG_CONTENT_TYPE);
+	}
+	
+	public function testsetContentType()
+	{
+		$controller = Context::getInstance()->getController();
+		$ctype = $controller->getContentType();
+		$controller->setContentType('image/jpeg');
+		$this->assertEqual($controller->getContentType(), 'image/jpeg');
+		$controller->setContentType($ctype);
+	}
+	
+	public function testclearHTTPHeaders()
+	{
+		$controller = Context::getInstance()->getController();
+		$controller->clearHTTPHeaders();
+		$this->assertEqual($controller->getHTTPHeaders(), array());
+	}
+	
+	public function testgetHTTPHeader()
+	{
+		$controller = Context::getInstance()->getController();
+		$this->assertEqual($controller->getHTTPHeader('unset'), null);
+	}
 
+	public function testhasHTTPHeader()
+	{
+		$controller = Context::getInstance()->getController();
+		$controller->clearHTTPHeaders();
+		$controller->setHTTPHeader('testme', 'whatever');
+		$this->assertTrue($controller->hasHTTPHeader('testme'));
+		$this->assertFalse($controller->hasHTTPHeader('iamnotset'));
+	}
+	
+	public function testsetHTTPHeader()
+	{
+		$controller = Context::getInstance()->getController();
+		$controller->setHTTPHeader('sometest', 'fubar');
+		$this->assertEqual($controller->getHTTPHeader('sometest'), array('fubar'));
+		$controller->setHTTPHeader('sometest', 'foo');
+		$this->assertEqual($controller->getHTTPHeader('sometest'), array('foo'));
+		$controller->setHTTPHeader('sometest', 'bar', false);
+		$this->assertEqual($controller->getHTTPHeader('sometest'), array('foo', 'bar'));
+	}
+	
+	public function testgetHTTPStatusCode()
+	{
+		$controller = Context::getInstance()->getController();
+		$this->assertEqual($controller->getHTTPStatusCode(), null);
+	}
+	
+	public function testsetHTTPStatusCode()
+	{
+		$controller = Context::getInstance()->getController();
+		$controller->setHTTPStatusCode('404');
+		$this->assertEqual($controller->getHTTPStatusCode(), '404');
+		$controller->setHTTPStatusCode(403);
+		$this->assertEqual($controller->getHTTPStatusCode(), '403');
+		$controller->setHTTPStatusCode('123');
+		$this->assertEqual($controller->getHTTPStatusCode(), '403');
+		$controller->setHTTPStatusCode(123);
+		$this->assertEqual($controller->getHTTPStatusCode(), '403');
+	}
 }
 
 ?>

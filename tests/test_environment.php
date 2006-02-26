@@ -19,8 +19,10 @@ define('AG_AVAILABLE', 'On');
 define('AG_USE_DATABASE', true);
 define('AG_USE_SECURITY', true);
 define('AG_USE_LOGGING', true);
-define('AG_CONTENT_TYPE', 'html');
+define('AG_CONTENT_TYPE', 'text/html');
+define('AG_USER_NAMESPACE', 'org/agavi');
 define('AG_REQUEST_NAMESPACE', 'org/agavi');
+
 
 // define('AG_ERROR_404_MODULE', 'ErrorModule');
 // define('AG_ERROR_404_ACTION', 'Error404');
