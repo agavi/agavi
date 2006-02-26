@@ -63,7 +63,7 @@ abstract class Request extends ParameterHolder
 	 */
 	const CONSOLE = 8;
 
-	private
+	protected
 		$attributes = array(),
 		$errors     = array(),
 		$method     = null;
@@ -116,53 +116,95 @@ abstract class Request extends ParameterHolder
 	 * Retrieve an attribute.
 	 *
 	 * @param      string An attribute name.
-	 * @param      mixed A default attribute value.
+	 * @param      mixed  A default attribute value.
+	 * @param      string An attribute namespace.
 	 *
 	 * @return     mixed An attribute value, if the attribute exists, otherwise
 	 *                   null.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @author     Bob Zoller <bob@agavi.org>
+	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
-	public function & getAttribute($name, $default=null)
+	public function &getAttribute($name, $default = null, $ns = AG_REQUEST_NAMESPACE)
 	{
-		$retval = &$default;
+		$retval =& $default;
 
-		if (isset($this->attributes[$name])) {
-			$retval =& $this->attributes[$name];
+		if (isset($this->attributes[$ns]) && isset($this->attributes[$ns][$name])) {
+			$retval =& $this->attributes[$ns][$name];
 		}
+
 		return $retval;
 	}
 
 	/**
 	 * Retrieve an array of attributes.
 	 *
+	 * @param      string An attribute namespace.
+	 *
 	 * @return     array An associative array of attributes.
 	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.10.0
 	 */
-	public function getAttributes ()
+	public function &getAttributes($ns = AG_REQUEST_NAMESPACE)
 	{
-
-		return $this->attributes;
-
+		$retval =& $this->getAttributeNamespace($ns);
+		return $retval;
 	}
 
 	/**
 	 * Retrieve an array of attribute names.
 	 *
-	 * @return     array An indexed array of attribute names.
+	 * @param      string An attribute namespace.
+	 *
+	 * @return     array An indexed array of attribute names, if the namespace
+	 *                   exists, otherwise null.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getAttributeNames($ns = AG_REQUEST_NAMESPACE)
+	{
+		if(isset($this->attributes[$ns])) {
+			return array_keys($this->attributes[$ns]);
+		}
+		return null;
+	}
+
+	/**
+	 * Retrieve all attributes within a namespace.
+	 *
+	 * @param      string An attribute namespace.
+	 *
+	 * @return     array An associative array of attributes.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
+	 * @since      0.11.0
 	 */
-	public function getAttributeNames ()
+	public function &getAttributeNamespace($ns = AG_REQUEST_NAMESPACE)
 	{
+		$retval = null;
+		if(isset($this->attributes[$ns])) {
+			return $this->attributes[$ns];
+		}
+		return $retval;
+	}
 
+	/**
+	 * Retrieve an array of attribute namespaces.
+	 *
+	 * @return     array An indexed array of attribute namespaces.
+	 *
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getAttributeNamespaces()
+	{
 		return array_keys($this->attributes);
-
 	}
 
 	/**
@@ -243,16 +285,43 @@ abstract class Request extends ParameterHolder
 	 * Indicates whether or not an attribute exists.
 	 *
 	 * @param      string An attribute name.
+	 * @param      string An attribute namespace.
 	 *
 	 * @return     bool true, if the attribute exists, otherwise false.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
 	 */
-	public function hasAttribute ($name)
+	public function hasAttribute ($name, $ns = AG_REQUEST_NAMESPACE)
 	{
 
-		return isset($this->attributes[$name]);
+		if (isset($this->attributes[$ns]))
+		{
+
+			return isset($this->attributes[$ns][$name]);
+
+		}
+
+		return false;
+
+	}
+
+	/**
+	 * Indicates whether or not an attribute namespace exists.
+	 *
+	 * @param      string An attribute namespace.
+	 *
+	 * @return     bool true, if the namespace exists, otherwise false.
+	 *
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function hasAttributeNamespace ($ns)
+	{
+
+		return isset($this->attributes[$ns]);
 
 	}
 
@@ -341,35 +410,6 @@ abstract class Request extends ParameterHolder
 	}
 
 	/**
-	 * Remove an attribute.
-	 *
-	 * @param      string An attribute name.
-	 *
-	 * @return     mixed An attribute value, if the attribute was removed,
-	 *                   otherwise null.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public function & removeAttribute ($name)
-	{
-
-		$retval = null;
-
-		if (isset($this->attributes[$name]))
-		{
-
-			$retval =& $this->attributes[$name];
-
-			unset($this->attributes[$name]);
-
-		}
-
-		return $retval;
-
-	}
-
-	/**
 	 * Remove an error.
 	 *
 	 * @param      string An error name.
@@ -399,6 +439,61 @@ abstract class Request extends ParameterHolder
 	}
 
 	/**
+	 * Remove an attribute.
+	 *
+	 * @param      string An attribute name.
+	 * @param      string An attribute namespace.
+	 *
+	 * @return     mixed An attribute value, if the attribute was removed,
+	 *                   otherwise null.
+	 *
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.9.0
+	 */
+	public function & removeAttribute ($name, $ns = AG_REQUEST_NAMESPACE)
+	{
+
+		$retval = null;
+
+		if (isset($this->attributes[$ns]) &&
+			isset($this->attributes[$ns][$name]))
+		{
+
+			$retval =& $this->attributes[$ns][$name];
+
+			unset($this->attributes[$ns][$name]);
+
+		}
+
+		return $retval;
+
+	}
+
+	/**
+	 * Remove an attribute namespace and all of its associated attributes.
+	 *
+	 * @param      string An attribute namespace.
+	 *
+	 * @return     void
+	 *
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.10.0
+	 */
+	public function removeAttributeNamespace ($ns)
+	{
+
+		if (isset($this->attributes[$ns]))
+		{
+
+			unset($this->attributes[$ns]);
+
+		}
+
+	}
+
+	/**
 	 * Set an attribute.
 	 *
 	 * If an attribute with the name already exists the value will be
@@ -406,40 +501,52 @@ abstract class Request extends ParameterHolder
 	 *
 	 * @param      string An attribute name.
 	 * @param      mixed  An attribute value.
+	 * @param      string An attribute namespace.
 	 *
 	 * @return     void
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
-	public function setAttribute ($name, $value)
+	public function setAttribute($name, $value, $ns = AG_REQUEST_NAMESPACE)
 	{
 
-		$this->attributes[$name] = $value;
+		if (!isset($this->attributes[$ns])) {
+			$this->attributes[$ns] = array();
+		}
+
+		$this->attributes[$ns][$name] = $value;
 
 	}
 
 	/**
 	 * Append an attribute.
-	 * 
-	 * If this attribute is already set, convert it to an array and append the
-	 * new value.  If not, set the new value like normal.
+	 *
+	 * If an attribute with the name already exists, it will be converted to an
+	 * array and the new value appended.
 	 *
 	 * @param      string An attribute name.
 	 * @param      mixed  An attribute value.
+	 * @param      string An attribute namespace.
 	 *
 	 * @return     void
 	 *
 	 * @author     Bob Zoller <bob@agavi.org>
+	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.10.0
 	 */
-	public function appendAttribute($name, $value)
+	public function appendAttribute($name, $value, $ns = AG_REQUEST_NAMESPACE)
 	{
 
-		if (!isset($this->attributes[$name]) || !is_array($this->attributes[$name])) {
-			settype($this->attributes[$name], 'array');
+		if (!isset($this->attributes[$ns])) {
+			$this->attributes[$ns] = array();
 		}
-		$this->attributes[$name][] = $value;
+
+		if (!isset($this->attributes[$ns][$name]) || !is_array($this->attributes[$ns][$name])) {
+			settype($this->attributes[$ns][$name], 'array');
+		}
+		$this->attributes[$ns][$name][] = $value;
 
 	}
 
@@ -451,40 +558,52 @@ abstract class Request extends ParameterHolder
 	 *
 	 * @param      string An attribute name.
 	 * @param      mixed  A reference to an attribute value.
+	 * @param      string An attribute namespace.
 	 *
 	 * @return     void
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
-	public function setAttributeByRef($name, &$value)
+	public function setAttributeByRef($name, &$value, $ns = AG_REQUEST_NAMESPACE)
 	{
 
-		$this->attributes[$name] =& $value;
+		if (!isset($this->attributes[$ns])) {
+			$this->attributes[$ns] = array();
+		}
+
+		$this->attributes[$ns][$name] =& $value;
 
 	}
 
 	/**
 	 * Append an attribute by reference.
-	 * 
-	 * If this attribute is already set, convert it to an array and append the
-	 * reference to the new value.  If not, set the new value like normal.
+	 *
+	 * If an attribute with the name already exists, it will be converted to an
+	 * array and the reference to the new value appended.
 	 *
 	 * @param      string An attribute name.
 	 * @param      mixed  A reference to an attribute value.
+	 * @param      string An attribute namespace.
 	 *
 	 * @return     void
 	 *
 	 * @author     Bob Zoller <bob@agavi.org>
+	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.10.0
 	 */
-	public function appendAttributeByRef($name, &$value)
+	public function appendAttributeByRef($name, &$value, $ns = AG_REQUEST_NAMESPACE)
 	{
 
-		if (!isset($this->attributes[$name]) || !is_array($this->attributes[$name])) {
-			settype($this->attributes[$name], 'array');
+		if (!isset($this->attributes[$ns])) {
+			$this->attributes[$ns] = array();
 		}
-		$this->attributes[$name][] =& $value;
+
+		if (!isset($this->attributes[$ns][$name]) || !is_array($this->attributes[$ns][$name])) {
+			settype($this->attributes[$ns][$name], 'array');
+		}
+		$this->attributes[$ns][$name][] =& $value;
 
 	}
 
@@ -494,18 +613,28 @@ abstract class Request extends ParameterHolder
 	 * If an existing attribute name matches any of the keys in the supplied
 	 * array, the associated value will be overridden.
 	 *
-	 * @param      array An associative array of attributes and their associated
-	 *                   values.
+	 * @param      array  An associative array of attributes and their
+	 *                    associated values.
+	 * @param      string An attribute namespace.
 	 *
 	 * @return     void
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
-	public function setAttributes ($attributes)
+	public function setAttributes ($attributes, $ns = AG_REQUEST_NAMESPACE)
 	{
 
-		$this->attributes = array_merge($this->attributes, $attributes);
+		if (!isset($this->attributes[$ns]))
+		{
+
+			$this->attributes[$ns] = array();
+
+		}
+
+		$this->attributes[$ns] = array_merge($this->attributes[$ns],
+						                     $attributes);
 
 	}
 
@@ -515,21 +644,30 @@ abstract class Request extends ParameterHolder
 	 * If an existing attribute name matches any of the keys in the supplied
 	 * array, the associated value will be overridden.
 	 *
-	 * @param      array An associative array of attributes and references 
-	 *                   their associated values.
+	 * @param      array  An associative array of attributes and references to
+	 *                    their associated values.
+	 * @param      string An attribute namespace.
 	 *
 	 * @return     void
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
-	public function setAttributesByRef (&$attributes)
+	public function setAttributesByRef (&$attributes, $ns = AG_REQUEST_NAMESPACE)
 	{
+
+		if (!isset($this->attributes[$ns]))
+		{
+
+			$this->attributes[$ns] = array();
+
+		}
 
 		foreach ($attributes as $key => &$value)
 		{
 
-			$this->attributes[$key] =& $value;
+			$this->attributes[$ns][$key] =& $value;
 
 		}
 
