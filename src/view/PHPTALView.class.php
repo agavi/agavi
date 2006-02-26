@@ -29,6 +29,8 @@
  */
 abstract class PHPTALView extends View
 {
+	const CACHE_SUBDIR = 'templates/phptal';
+	
 	private
 		$_phptal = null;
 	private
@@ -426,7 +428,8 @@ abstract class PHPTALView extends View
 // as soon as this is fixed in PHPTAL SVN, we will remove the stub class and move the define and the require into initialize()
 
 if(!defined('PHPTAL_PHP_CODE_DESTINATION')) {
-	define('PHPTAL_PHP_CODE_DESTINATION', AG_CACHE_DIR . '/');
+	@mkdir(AG_CACHE_DIR . DIRECTORY_SEPARATOR . PHPTALView::CACHE_SUBDIR);
+	define('PHPTAL_PHP_CODE_DESTINATION', AG_CACHE_DIR . DIRECTORY_SEPARATOR . PHPTALView::CACHE_SUBDIR . DIRECTORY_SEPARATOR);
 }
 
 require_once('PHPTAL.php');

@@ -30,6 +30,8 @@
 
 class CachingExecutionFilter extends ExecutionFilter
 {
+	const CACHE_SUBDIR = 'content';
+	
 	/**
 	 * Check if a cache exists and is up-to-date
 	 *
@@ -45,7 +47,7 @@ class CachingExecutionFilter extends ExecutionFilter
 		foreach($groups as &$group) {
 			$group = base64_encode($group);
 		}
-		return is_readable(AG_CACHE_DIR . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $groups) . '.cefcache');
+		return is_readable(AG_CACHE_DIR . DIRECTORY_SEPARATOR . self::CACHE_SUBDIR . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $groups) . '.cefcache');
 	}
 	
 	/**
@@ -63,7 +65,7 @@ class CachingExecutionFilter extends ExecutionFilter
 		foreach($groups as &$group) {
 			$group = base64_encode($group);
 		}
-		return include(AG_CACHE_DIR . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $groups) . '.cefcache');
+		return include(AG_CACHE_DIR . DIRECTORY_SEPARATOR . self::CACHE_SUBDIR . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $groups) . '.cefcache');
 	}
 	
 	/**
@@ -82,8 +84,8 @@ class CachingExecutionFilter extends ExecutionFilter
 		foreach($groups as &$group) {
 			$group = base64_encode($group);
 		}
-		@mkdir(AG_CACHE_DIR . DIRECTORY_SEPARATOR  . implode(DIRECTORY_SEPARATOR , array_slice($groups, 0, -1)), 0777, true);
-		return file_put_contents(AG_CACHE_DIR . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $groups) . '.cefcache', '<' . '?' . 'php return ' . var_export($data, true) . ';');
+		@mkdir(AG_CACHE_DIR . DIRECTORY_SEPARATOR  . self::CACHE_SUBDIR . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR , array_slice($groups, 0, -1)), 0777, true);
+		return file_put_contents(AG_CACHE_DIR . DIRECTORY_SEPARATOR . self::CACHE_SUBDIR . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $groups) . '.cefcache', '<' . '?' . 'php return ' . var_export($data, true) . ';');
 	}
 	
 	/**
@@ -107,17 +109,11 @@ class CachingExecutionFilter extends ExecutionFilter
 		foreach($groups as &$group) {
 			$group = base64_encode($group);
 		}
-		$path = AG_CACHE_DIR . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $groups) . '.cefcache';
+		$path = AG_CACHE_DIR . DIRECTORY_SEPARATOR . self::CACHE_SUBDIR . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $groups) . '.cefcache';
 		if(is_file($path)) {
-			unlink($path);
+			Toolkit::clearCache($path);
 		} else {
-			foreach(new RecursiveIteratorIterator(new RecursiveDirectoryIterator(AG_CACHE_DIR . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, array_slice($groups, 0, -1))), $SPL_RIT_CHILD_FIRST) as $iterator) {
-				if($iterator->isDir()) {
-					rmdir($iterator->getPathname());
-				} elseif($iterator->isFile()) {
-					unlink($iterator->getPathname());
-				}
-			}
+			Toolkit::clearCache(self::CACHE_SUBDIR . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, array_slice($groups, 0, -1)));
 		}
 	}
 	

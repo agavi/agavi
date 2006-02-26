@@ -154,7 +154,7 @@ try {
 
 	// clear our cache if the conditions are right
 	if (AG_DEBUG)	{
-		ConfigCache::clear();
+		Toolkit::clearCache();
 	}
 
 	// load base settings

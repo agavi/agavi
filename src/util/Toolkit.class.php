@@ -133,6 +133,46 @@ class Toolkit
 		
 	}
 
+	/**
+	 * Deletes a specified path in the cache dir recursively. If a folder is given
+	 * the contents of this folder and all sub-folders get erased, but not the
+	 * folder itself.
+	 *
+	 * @param      string The path to remove
+	 *
+	 * @return     void
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public static function clearCache($path = '')
+	{
+		static $SPL_RIT_CHILD_FIRST = null;
+		if(!isset($SPL_RIT_CHILD_FIRST)) {
+			if(defined('RecursiveIteratorIterator::CHILD_FIRST')) {
+				$SPL_RIT_CHILD_FIRST = RecursiveIteratorIterator::CHILD_FIRST;
+			} else {
+				$SPL_RIT_CHILD_FIRST = RIT_CHILD_FIRST;
+			}
+		}
+		$path = str_replace('/', DIRECTORY_SEPARATOR, str_replace('\\', DIRECTORY_SEPARATOR, $path));
+		$path = realpath(AG_CACHE_DIR . DIRECTORY_SEPARATOR . $path);
+		if($path === false) {
+			return false;
+		}
+		if(is_file($path)) {
+			@unlink($path);
+		} else {
+			foreach(new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path), $SPL_RIT_CHILD_FIRST) as $iterator) {
+				if($iterator->isDir()) {
+					@rmdir($iterator->getPathname());
+				} elseif($iterator->isFile()) {
+					@unlink($iterator->getPathname());
+				}
+			}
+		}
+	}
+
 }
 
 ?>
