@@ -40,16 +40,6 @@ abstract class Controller extends ParameterHolder
 
 
 	/**
-	 *
-	 * The dispatch method must be implemented
-	 * it's expected to:
-	 *	- put and parameters into the request object
-	 *	- call the controller's initialize method
-	 *	- forward to the requested module/action
-	 */
-	abstract function dispatch();
-
-	/**
 	 * Indicates whether or not a module has a specific action.
 	 *
 	 * @param      string A module name.
