@@ -7,7 +7,7 @@ class FileAppenderTest extends UnitTestCase
 
 	public function setUp()
 	{
-		$this->_file = tempnam('/tmp', 'FOO');
+		$this->_file = tempnam('', 'FOO');
 		unlink($this->_file);
 		$this->_fa = new FileAppender();
 		$this->_fa->initialize(array('file'=>$this->_file));

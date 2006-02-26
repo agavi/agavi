@@ -18,8 +18,8 @@ class LoggerManagerTest extends UnitTestCase
 	{
 		$this->_context = Context::getInstance();
 		$this->_lm = $this->_context->getLoggerManager();
-		$this->_logfile = '/tmp/logtest';
-		$this->_logfile2 = '/tmp/logtest2';
+		$this->_logfile = tempnam('','logtest');
+		$this->_logfile2 = tempnam('', 'logtest2');
 		@unlink($this->_logfile);
 		@unlink($this->_logfile2);
 		$this->_pl = new PassthruLayout;
