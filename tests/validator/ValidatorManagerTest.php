@@ -11,39 +11,19 @@ class PseudoValidator extends Validator
 class TestValidatorManager extends UnitTestCase 
 {
 	private $_vm = null,
-					$_controller = null,
 					$_context = null;
 	
 	public function setUp()
 	{
 		$this->_context = Context::getInstance();
-		$this->_controller = $this->_context->getController();
 		
-		$this->_vm = new ValidatorManager();
-		$this->_vm->initialize($this->_context);		
+		$this->_vm = $this->_context->getValidatorManager();
 	}
 
 	public function tearDown()
 	{
-		$this->_controller = null;
 		$this->_vm = null;
 		$this->_context = null;
-	}
-
-
-	public function testinitialize()
-	{
-		$context = Context::getInstance();
-		$vm = new ValidatorManager();
-		$this->assertIsA($this->_vm, 'ValidatorManager');
-		
-		$vm->initialize($this->_context);
-		$groups = $vm->getGroups();
-		$names = $vm->getNames();
-		$this->assertEqual(0, count($groups));
-		$this->assertEqual(0, count($names));
-		$this->assertTrue(is_array($names));
-		$this->assertTrue(is_array($groups));
 	}
 
 	public function testregisterName()
@@ -139,6 +119,7 @@ class TestValidatorManager extends UnitTestCase
 
 	public function testregisterValidator()
 	{
+		$this->_vm->clear();
 		$validator = new PseudoValidator();
 		$this->_vm->registerValidator('pseudo', $validator);
 		$names = $this->_vm->getNames();

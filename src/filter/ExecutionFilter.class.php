@@ -61,8 +61,7 @@ class ExecutionFilter extends Filter
 			$controller = $context->getController();
 
 			// create validator manager
-			$validatorManager = new ValidatorManager();
-			$validatorManager->initialize($context);
+			$validatorManager = $context->getValidatorManager();
 
 		} else
 		{

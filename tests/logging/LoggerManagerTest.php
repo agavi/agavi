@@ -4,6 +4,8 @@ require_once dirname(__FILE__) . '/../test_environment.php';
 class LoggerManagerTest extends UnitTestCase
 {
 	private
+		$_context = null,
+		$_lm = null,
 		$_logfile = '',
 		$_logfile2 = '',
 		$_pl = null,
@@ -14,8 +16,10 @@ class LoggerManagerTest extends UnitTestCase
 
 	public function setUp()
 	{
-		$this->_logfile = '/tmp/logtest';
-		$this->_logfile2 = '/tmp/logtest2';
+		$this->_context = Context::getInstance();
+		$this->_lm = $this->_context->getLoggerManager();
+		$this->_logfile = tempnam('','logtest');
+		$this->_logfile2 = tempnam('', 'logtest2');
 		@unlink($this->_logfile);
 		@unlink($this->_logfile2);
 		$this->_pl = new PassthruLayout;
@@ -35,39 +39,41 @@ class LoggerManagerTest extends UnitTestCase
 
 	public function tearDown()
 	{
-		LoggerManager::shutdown();
+		$this->_lm->shutdown();
 		@unlink($this->_logfile);
 		@unlink($this->_logfile2);
+		$this->_lm = null;
+		$this->_context = null;
 	}
 
 	public function testgetLoggerNames()
 	{
-		$this->assertEqual(array(), LoggerManager::getLoggerNames());
-		LoggerManager::setLogger('logfile', $this->_l);
-		$this->assertEqual(array('logfile'), LoggerManager::getLoggerNames());
-		LoggerManager::setLogger('logfile2', $this->_l2);
-		$this->assertEqual(array('logfile', 'logfile2'), LoggerManager::getLoggerNames());
+		$this->assertEqual(array(), $this->_lm->getLoggerNames());
+		$this->_lm->setLogger('logfile', $this->_l);
+		$this->assertEqual(array('logfile'), $this->_lm->getLoggerNames());
+		$this->_lm->setLogger('logfile2', $this->_l2);
+		$this->assertEqual(array('logfile', 'logfile2'), $this->_lm->getLoggerNames());
 	}
 
 	public function testgetLogger()
 	{
-		LoggerManager::setLogger('default', $this->_l);
-		$this->assertIdentical($this->_l, LoggerManager::getLogger());
-		LoggerManager::setLogger('logfile2', $this->_l2);
-		$this->assertIdentical($this->_l, LoggerManager::getLogger('default'));
-		$this->assertIdentical($this->_l2, LoggerManager::getLogger('logfile2'));
+		$this->_lm->setLogger('default', $this->_l);
+		$this->assertIdentical($this->_l, $this->_lm->getLogger());
+		$this->_lm->setLogger('logfile2', $this->_l2);
+		$this->assertIdentical($this->_l, $this->_lm->getLogger('default'));
+		$this->assertIdentical($this->_l2, $this->_lm->getLogger('logfile2'));
 	}
 
 	public function testLog()
 	{
-		LoggerManager::setLogger('logfile', $this->_l);
-		LoggerManager::setLogger('logfile2', $this->_l2);
+		$this->_lm->setLogger('logfile', $this->_l);
+		$this->_lm->setLogger('logfile2', $this->_l2);
 		$this->assertFalse(file_exists($this->_logfile));
 		$this->assertFalse(file_exists($this->_logfile2));
-		LoggerManager::log(new Message('simple info message', Logger::INFO));
+		$this->_lm->log(new Message('simple info message', Logger::INFO));
 		$this->assertWantedPattern('/simple info message/', file_get_contents($this->_logfile));
 		$this->assertWantedPattern('/simple info message/', file_get_contents($this->_logfile2));
-		LoggerManager::log(new Message('simple debug message', Logger::DEBUG));
+		$this->_lm->log(new Message('simple debug message', Logger::DEBUG));
 		$this->assertNoUnwantedPattern('/simple debug message/', file_get_contents($this->_logfile));
 		$this->assertWantedPattern('/simple debug message/', file_get_contents($this->_logfile2));
 	}

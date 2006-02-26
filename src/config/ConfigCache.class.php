@@ -30,6 +30,8 @@
  */
 class ConfigCache
 {
+	
+	const CACHE_SUBDIR = 'cache';
 
 	private static
 		$handlers = array();
@@ -146,52 +148,21 @@ class ConfigCache
 	 */
 	public static function clear ()
 	{
-
-		self::clearCache(AG_CACHE_DIR);
-
+		Toolkit::clearCache(self::CACHE_SUBDIR);
 	}
 
 	/**
 	 * Clear all configuration cache files.
 	 *
-	 * This method exists to prevent accidental deletion of non-cache directory
-	 * files.
-	 *
-	 * @param      string An absolute filesystem path to a cache directory.
-	 *
 	 * @return     void
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
-	private static function clearCache ($directory)
+	private static function clearCache($directory = '')
 	{
-
-		// open a file point to the cache dir
-		$fp = opendir($directory);
-
-		// ignore names
-		$ignore = array('.', '..', 'CVS', '.svn');
-
-		while (($file = readdir($fp)) !== false) {
-			if (!in_array($file, $ignore)) {
-				if (is_dir($file)) {
-				    // recurse through directory
-				    self::clearCache($file);
-				    // delete the directory
-				    rmdir($file);
-				} else {
-				    // delete the file
-				    unlink($directory . '/' . $file);
-				}
-
-			}
-
-		}
-
-		// close file pointer
-		fclose($fp);
-
+		Toolkit::clearCache(self::CACHE_SUBDIR . DIRECTORY_SEPARATOR . $directory);
 	}
 
 	/**
@@ -214,7 +185,7 @@ class ConfigCache
 
 		// replace unfriendly filename characters with an underscore and postfix the name with a php extension
 		$config  = str_replace(array('\\', '/'), '_', $config) . '.php';
-		return AG_CACHE_DIR . '/' . $config;
+		return AG_CACHE_DIR . DIRECTORY_SEPARATOR . self::CACHE_SUBDIR . DIRECTORY_SEPARATOR . $config;
 
 	}
 
@@ -339,6 +310,8 @@ class ConfigCache
 	{
 
 		$flags = ($append) ? FILE_APPEND : 0;
+		
+		@mkdir(AG_CACHE_DIR . DIRECTORY_SEPARATOR . self::CACHE_SUBDIR);
 
 		if (@file_put_contents($cache, $data, $flags) === false)
 		{

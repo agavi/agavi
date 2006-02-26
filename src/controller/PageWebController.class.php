@@ -47,13 +47,18 @@ class PageWebController extends WebController
 
 		try {
 			
+			// so setting the headers works
+			ob_start();
+			
 			if ($parameters != null) {
 				$this->context->getRequest()->setParametersByRef($parameters);
 			}
 
 			// make the first request
 			$this->forward($moduleName, $actionName);
-
+			
+			$this->sendHTTPResponseHeaders();
+			
 		} catch (AgaviException $e) {
 			$e->printStackTrace();
 

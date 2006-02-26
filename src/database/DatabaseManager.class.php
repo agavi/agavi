@@ -22,6 +22,7 @@
  * @package    agavi
  * @subpackage database
  *
+ * @author     David Zuelke <dz@bitxtender.com>
  * @author     Sean Kerr <skerr@mojavi.org>
  * @copyright  (c) Authors
  * @since      0.9.0
@@ -31,12 +32,23 @@
 class DatabaseManager
 {
 
-	// +-----------------------------------------------------------------------+
-	// | PRIVATE DATA                                                          |
-	// +-----------------------------------------------------------------------+
-
 	private
 		$databases = array();
+	private
+		$context = null;
+
+	/**
+	 * Retrieve the current application context.
+	 *
+	 * @return     Context The current Context instance.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public final function getContext()
+	{
+		return $this->context;
+	}
 
 	/**
 	 * Retrieve the database connection associated with this Database
@@ -77,14 +89,18 @@ class DatabaseManager
 	 *                                            initializing this 
 	 *                                            DatabaseManager.
 	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function initialize ()
+	public function initialize($context)
 	{
+
+		$this->context = $context;
 
 		// load database configuration
 		require_once(ConfigCache::checkConfig('config/databases.ini'));
+
 		return true;
 
 	}

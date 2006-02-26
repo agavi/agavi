@@ -13,6 +13,16 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
+/**
+ * @package    agavi
+ * @subpackage buildtools
+ *
+ * @author     Mike Vincent <mike@agavi.org>
+ * @copyright  (c) Authors
+ * @since      0.9.0
+ *
+ * @version    $Id$
+ */
 class AgaviListModulesTask extends Task {
 	private $property,
 					$webapp;

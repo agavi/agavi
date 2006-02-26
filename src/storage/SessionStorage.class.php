@@ -87,22 +87,20 @@ class SessionStorage extends Storage
 	 * Starts a session unless user has explicitly disabled auto start (see
 	 * optional parameters) or a session has already been started.
 	 *
-	 * @return     void
+	 * @return     bool true, if startup went fine, otherwise false
 	 *
-	 * @author     Veikko Makinen <mail@veikkomakinen.com>
-	 *
-	 * @since      0.10.0
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
 	 */
-	public function autoStart()
+	public function startup()
 	{
-
 		// session_id is checked to ensure that a session has not been started already.
 		// This can happen if a class inheriting SessionStorage starts it in initialize method.
 		if ($this->getParameter('auto_start', true) && session_id() == '')
 		{
-			session_start();
+			return session_start();
 		}
-
+		return false;
 	}
 
 	/**

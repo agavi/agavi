@@ -22,6 +22,7 @@
  * @subpackage controller
  *
  * @author     Sean Kerr <skerr@mojavi.org>
+ * @author     David Zuelke <dz@bitxtender.com>
  * @copyright  (c) Authors
  * @since      0.9.0
  *
@@ -30,22 +31,78 @@
 abstract class WebController extends Controller
 {
 
-	private
-		$contentType = null;
+	protected
+		$httpStatusCodes = array(
+			'100' => "HTTP/1.1 100 Continue",
+			'101' => "HTTP/1.1 101 Switching Protocols",
+			'200' => "HTTP/1.1 200 OK",
+			'201' => "HTTP/1.1 201 Created",
+			'202' => "HTTP/1.1 202 Accepted",
+			'203' => "HTTP/1.1 203 Non-Authoritative Information",
+			'204' => "HTTP/1.1 204 No Content",
+			'205' => "HTTP/1.1 205 Reset Content",
+			'206' => "HTTP/1.1 206 Partial Content",
+			'300' => "HTTP/1.1 300 Multiple Choices",
+			'301' => "HTTP/1.1 301 Moved Permanently",
+			'302' => "HTTP/1.1 302 Found",
+			'303' => "HTTP/1.1 303 See Other",
+			'304' => "HTTP/1.1 304 Not Modified",
+			'305' => "HTTP/1.1 305 Use Proxy",
+			'307' => "HTTP/1.1 307 Temporary Redirect",
+			'400' => "HTTP/1.1 400 Bad Request",
+			'401' => "HTTP/1.1 401 Unauthorized",
+			'402' => "HTTP/1.1 402 Payment Required",
+			'403' => "HTTP/1.1 403 Forbidden",
+			'404' => "HTTP/1.1 404 Not Found",
+			'405' => "HTTP/1.1 405 Method Not Allowed",
+			'406' => "HTTP/1.1 406 Not Acceptable",
+			'407' => "HTTP/1.1 407 Proxy Authentication Required",
+			'408' => "HTTP/1.1 408 Request Time-out",
+			'409' => "HTTP/1.1 409 Conflict",
+			'410' => "HTTP/1.1 410 Gone",
+			'411' => "HTTP/1.1 411 Length Required",
+			'412' => "HTTP/1.1 412 Precondition Failed",
+			'413' => "HTTP/1.1 413 Request Entity Too Large",
+			'414' => "HTTP/1.1 414 Request-URI Too Large",
+			'415' => "HTTP/1.1 415 Unsupported Media Type",
+			'416' => "HTTP/1.1 416 Requested range not satisfiable",
+			'417' => "HTTP/1.1 417 Expectation Failed",
+			'500' => "HTTP/1.1 500 Internal Server Error",
+			'501' => "HTTP/1.1 501 Not Implemented",
+			'502' => "HTTP/1.1 502 Bad Gateway",
+			'503' => "HTTP/1.1 503 Service Unavailable",
+			'504' => "HTTP/1.1 504 Gateway Time-out",
+			'505' => "HTTP/1.1 505 HTTP Version not supported",
+		),
+		$httpStatusCode = null,
+		$httpHeaders = array(),
+		$cookieConfig = array(),
+		$cookies = array();
 
 	/**
 	 * Generate a formatted Agavi URL.
+	 * You can also pass in arguments in reverse order.
 	 *
-	 * @param      string An existing URL for basing the parameters.
 	 * @param      array  An associative array of URL parameters.
+	 * @param      string An existing URL for basing the parameters.
 	 *
 	 * @return     string A URL to a Agavi resource.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
 	public function genURL ($url = null, $parameters = array())
 	{
+		if(is_array($url)) {
+			$tmp = null;
+			if(is_array($parameters)) {
+				$parameters = null;
+			}
+			$tmp = $url;
+			$url = $parameters;
+			$parameters = $tmp;
+		}
 
 		if ($url == null)
 		{
@@ -91,18 +148,252 @@ abstract class WebController extends Controller
 	}
 
 	/**
-	 * Retrieve the requested content type.
+	 * Retrieve the content type set for the response.
 	 *
-	 * @return     string A content type.
+	 * @return     string A content type, or null if none is set.
 	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
-	public function getContentType ()
+	public function getContentType()
 	{
+		$retval = $this->getHttpHeader('Content-Type');
+		if(is_array($retval) && count($retval)) {
+			return $retval[0];
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Sets a HTTP status code for the response.
+	 *
+	 * @param      string A numeric HTTP status code between 100 and 505.
+	 *
+	 * @return     void
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function setHTTPStatusCode($code) {
+		$code = strval($code);
+		if(isset($this->httpStatusCodes[$code])) {
+			$this->httpStatusCode = $code;
+		}
+	}
 
-		return $this->contentType;
+	/**
+	 * Gets the HTTP status code set for the response.
+	 *
+	 * @return     string A numeric HTTP status code between 100 and 505, or null
+	                      if no status code has been set.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getHTTPStatusCode() {
+		return $this->httpStatusCode;
+	}
 
+	/**
+	 * Normalizes a HTTP header names
+	 *
+	 * @param      string A HTTP header name
+	 *
+	 * @return     string A normalized HTTP header name
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function normalizeHTTPHeaderName($name)
+	{
+		if(strtolower($name) == "etag") {
+			return "ETag";
+		} elseif(strtolower($name) == "www-authenticate") {
+			return "WWW-Authenticate";
+		} else {
+			return str_replace(' ', '-', ucwords(str_replace('-', ' ', strtolower($name))));
+		}
+	}
+
+	/**
+	 * Retrieve the HTTP header values set for the response.
+	 *
+	 * @param      string A HTTP header field name.
+	 *
+	 * @return     array All values set for that header, or null if no headers set
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getHTTPHeader($name)
+	{
+		$name = $this->normalizeHTTPHeaderName($name);
+		$retval = null;
+		if(isset($this->headers[$name])) {
+			$retval = $this->headers[$name];
+		}
+		return $retval;
+	}
+
+	/**
+	 * Retrieve the HTTP headers set for the response.
+	 *
+	 * @return     array An associative array of HTTP header names and values.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getHTTPHeaders()
+	{
+		return $this->headers;
+	}
+
+	/**
+	 * Check if an HTTP header has been set for the response.
+	 *
+	 * @param      string A HTTP header field name.
+	 *
+	 * @return     array All values set for that header, or null if no headers set
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function hasHTTPHeader($name)
+	{
+		$name = $this->normalizeHTTPHeaderName($name);
+		$retval = false;
+		if(isset($this->headers[$name])) {
+			$retval = true;
+		}
+		return $retval;
+	}
+
+	/**
+	 * Set a HTTP header for the response
+	 *
+	 * @param      string A HTTP header field name.
+	 * @param      array  A HTTP header field value, of an array of values.
+	 * @param      bool   If true, a header with that name will be oberwritten,
+	 *                    otherwise, the value will be appended.
+	 *
+	 * @return     void
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function setHTTPHeader($name, $value, $replace = true)
+	{
+		$name = $this->normalizeHTTPHeaderName($name);
+		if(!isset($this->headers[$name]) || $replace) {
+			$this->headers[$name] = array();
+		}
+		if(is_array($value)) {
+			$this->headers[$name] = array_merge($this->headers[$name], $value);
+		} else {
+			$this->headers[$name][] = $value;
+		}
+	}
+
+	/**
+	 * Send a cookie. Note that cookies are sent as HTTP headers and thus
+	 * must be sent before any output from the application.
+	 *
+	 * @param      string A cookie name.
+	 * @param      mixed Data to store into a cookie. If null or empty cookie
+	 *                   will be tried to be removed.
+	 * @param      array Cookie parameters (parameters from config or defaults
+	 *                   are used for any missing parameters).
+	 *
+	 * @return     void
+	 *
+	 * @author     Veikko Makinen <mail@veikkomakinen.com>
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function setCookie($name, $value, $lifetime = null, $path = null, $domain = null, $secure = null)
+	{
+		$lifetime = isset($lifetime) ? $lifetime : $this->cookieConfig['lifetime'];
+		$path     = isset($path)     ? $path     : $this->cookieConfig['path'];
+		$domain   = isset($domain)   ? $domain   : $this->cookieConfig['domain'];
+		$secure   = isset($secure)   ? $secure   : $this->cookieConfig['secure'];
+
+		//do we want to set expiration time or not?
+		$expire = ($lifetime != 0) ? time() + $lifetime : 0;
+
+		$this->cookies[$name] = array(
+			'value' => $value,
+			'expire' => $expire,
+			'path' => $path,
+			'domain' => $domain,
+			'secure' => $secure
+		);
+	}
+
+	/**
+	 * Remove the HTTP header set for the response
+	 *
+	 * @param      string A HTTP header field name.
+	 *
+	 * @return     mixed The removed header's value or null if header was not set.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function removeHTTPHeader($name)
+	{
+		$name = $this->normalizeHTTPHeaderName($name);
+		$retval = null;
+		if(isset($this->headers[$name])) {
+			$retval = $this->headers[$name];
+			unset($this->headers[$name]);
+		}
+		return $retval;
+	}
+
+	/**
+	 * Clears the HTTP headers set for this response.
+	 *
+	 * @return     void
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function clearHTTPHeaders()
+	{
+		$this->headers = array();
+	}
+	
+	/**
+	 * Sends HTTP Status code, headers and cookies
+	 *
+	 * @return     void
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function sendHTTPResponseHeaders()
+	{
+		// send HTTP status code
+		if(isset($this->httpStatusCode) && isset($this->httpStatusCodes[$this->httpStatusCode])) {
+			header($this->httpStatusCodes[$this->httpStatusCode]);
+		}
+		
+		// send headers
+		foreach($this->headers as $name => $values) {
+			foreach($values as $key => $value) {
+				if($key == 0) {
+					header($name . ': ' . $value);
+				} else {
+					header($name . ': ' . $value, false);
+				}
+			}
+		}
+		
+		// send cookies
+		foreach($this->cookies as $name => $values) {
+			setcookie($name, $values['value'], $values['expire'], $values['path'], $values['domain'], $values['secure']);
+		}
 	}
 
 	/**
@@ -111,6 +402,7 @@ abstract class WebController extends Controller
 	 * @return     void
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
 	public function initialize (Context $context)
@@ -119,8 +411,16 @@ abstract class WebController extends Controller
 		// initialize parent
 		parent::initialize($context);
 
+		$this->cookieConfig = array();
+		$this->cookieConfig['lifetime'] = isset($parameters['cookie_lifetime']) ? $parameters['cookie_lifetime'] : 0;
+		$this->cookieConfig['path']     = isset($parameters['cookie_path'])     ? $parameters['cookie_path']     : "/";
+		$this->cookieConfig['domain']   = isset($parameters['cookie_domain'])   ? $parameters['cookie_domain']   : "";
+		$this->cookieConfig['secure']   = isset($parameters['cookie_secure'])   ? $parameters['cookie_secure']   : 0;
+
 		// set our content type
-		$this->contentType = $this->context->getRequest()->getParameter('ctype', AG_CONTENT_TYPE);
+		if(defined('AG_CONTENT_TYPE')) {
+			$this->setContentType(AG_CONTENT_TYPE);
+		}
 
 	}
 
@@ -160,20 +460,18 @@ abstract class WebController extends Controller
 	}
 
 	/**
-	 * Set the content type for this request.
+	 * Set the content type for the response.
 	 *
 	 * @param      string A content type.
 	 *
 	 * @return     void
 	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
-	public function setContentType ($type)
+	public function setContentType($type)
 	{
-
-		$this->contentType = $type;
-
+		$this->setHTTPHeader('Content-Type', $type);
 	}
 
 }

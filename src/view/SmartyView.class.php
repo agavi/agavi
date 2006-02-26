@@ -31,6 +31,8 @@ require_once(AG_SMARTY_DIR.'/libs/Smarty.class.php');
  */
 abstract class SmartyView extends View
 {
+	const CACHE_SUBDIR = 'templates/smarty';
+	
 	private static
 		$smarty = null;
 
@@ -40,7 +42,12 @@ abstract class SmartyView extends View
 		$this->smarty->clear_all_assign();
 		$this->smarty->clear_config();
 		$this->smarty->config_dir   = AG_CONFIG_DIR;
-		$this->smarty->cache_dir    = defined('SMARTY_CACHE_DIR') ? SMARTY_CACHE_DIR : AG_CACHE_DIR;
+		if(defined('SMARTY_CACHE_DIR')) {
+			$this->smarty->cache_dir = SMARTY_CACHE_DIR;
+		} else {
+			@mkdir(AG_CACHE_DIR. DIRECTORY_SEPARATOR . self::CACHE_SUBDIR . DIRECTORY_SEPARATOR . 'smarty');
+			$this->smarty->cache_dir = AG_CACHE_DIR. DIRECTORY_SEPARATOR . self::CACHE_SUBDIR . DIRECTORY_SEPARATOR . 'smarty';
+		}
 		$this->smarty->plugins_dir  = array("plugins","plugins_local");
 
 		return(parent::initialize($context));

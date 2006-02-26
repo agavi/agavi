@@ -27,7 +27,7 @@ class ConfigCacheTest extends UnitTestCase
 	{
 		try {
 			$filename = ConfigCache::checkConfig('config/factories.ini');
-			$this->assertIdentical(AG_CACHE_DIR . '/config_factories.ini.php', $filename);
+			$this->assertIdentical(AG_CACHE_DIR . '/' . ConfigCache::CACHE_SUBDIR . '/config_factories.ini.php', $filename);
 			$this->assertTrue( file_exists($filename) );
 		} catch (ConfigurationException $e) {
 			$this->fail($e->getMessage());
@@ -46,10 +46,10 @@ class ConfigCacheTest extends UnitTestCase
 	public function testgetCacheName()
 	{
 		$name = 'bleh/blah.ini';	
-		$this->assertIdentical(AG_CACHE_DIR . '/bleh_blah.ini.php', ConfigCache::getCacheName($name) );
+		$this->assertIdentical(AG_CACHE_DIR . '/' . ConfigCache::CACHE_SUBDIR . '/bleh_blah.ini.php', ConfigCache::getCacheName($name) );
 		
 		$name = 'bleh\blah.ini';	
-		$this->assertIdentical(AG_CACHE_DIR . '/bleh_blah.ini.php', ConfigCache::getCacheName($name) );
+		$this->assertIdentical(AG_CACHE_DIR . '/' . ConfigCache::CACHE_SUBDIR . '/bleh_blah.ini.php', ConfigCache::getCacheName($name) );
 	}
 	
 	public function testimport()
@@ -62,7 +62,7 @@ class ConfigCacheTest extends UnitTestCase
 	
 	public function testclear()
 	{
-		$dummyfile = AG_CACHE_DIR . '/dummyfile.ini.php';
+		$dummyfile = AG_CACHE_DIR . '/' . ConfigCache::CACHE_SUBDIR . '/dummyfile.ini.php';
 		file_put_contents($dummyfile, 'Dummy file created in ' . __FILE__ . ' - ' . date('Y/m/d'));
 		$this->assertTrue( file_exists($dummyfile) );
 		ConfigCache::clear();

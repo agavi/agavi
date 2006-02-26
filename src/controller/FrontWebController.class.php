@@ -47,6 +47,10 @@ class FrontWebController extends WebController
 
 		try
 		{
+
+			// so setting the headers works
+			ob_start();
+			
 			// determine our module and action
 			$moduleName = $this->context->getRequest()->getParameter(AG_MODULE_ACCESSOR);
 			$actionName = $this->context->getRequest()->getParameter(AG_ACTION_ACCESSOR);
@@ -81,6 +85,9 @@ class FrontWebController extends WebController
 
 			// make the first request
 			$this->forward($moduleName, $actionName);
+
+			// output all headers for the response
+			$this->sendHTTPResponseHeaders();
 
 		} catch (AgaviException $e)
 		{

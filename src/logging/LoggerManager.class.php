@@ -28,7 +28,22 @@
 class LoggerManager
 {
 
-	private static $loggers = array();
+	private
+		$loggers = array(),
+		$context = null;
+
+	/**
+	 * Retrieve the current application context.
+	 *
+	 * @return     Context The current Context instance.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public final function getContext()
+	{
+		return $this->context;
+	}
 
 	/**
 	 * Initialize this LoggingManager.
@@ -39,11 +54,14 @@ class LoggerManager
 	 * @throws     <b>InitializationException</b> If an error occurs while
 	 *                                            initializing a LoggingManager.
 	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public static function initialize ()
+	public function initialize($context)
 	{
+		$this->context = $context;
+		
 		// load database configuration
 		require_once(ConfigCache::checkConfig('config/logging.ini'));
 	}
@@ -56,14 +74,15 @@ class LoggerManager
 	 * @return     Logger A Logger, if a logger with the name exists, otherwise
 	 *                    null.
 	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public static function getLogger ($name = 'default')
+	public function getLogger ($name = 'default')
 	{
-		if (isset(self::$loggers[$name]))
+		if (isset($this->loggers[$name]))
 		{
-			return self::$loggers[$name];
+			return $this->loggers[$name];
 		}
 		return null;
 	}
@@ -73,12 +92,13 @@ class LoggerManager
 	 *
 	 * @return     array An indexed array of logger names.
 	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public static function getLoggerNames ()
+	public function getLoggerNames ()
 	{
-		return array_keys(self::$loggers);
+		return array_keys($this->loggers);
 	}
 
 	/**
@@ -88,12 +108,13 @@ class LoggerManager
 	 *
 	 * @return     bool true, if the logger exists, otherwise false.
 	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public static function hasLogger ($name)
+	public function hasLogger ($name)
 	{
-		return isset(self::$loggers[$name]);
+		return isset($this->loggers[$name]);
 	}
 
 	/**
@@ -106,20 +127,21 @@ class LoggerManager
 	 * @throws     <b>LoggingException</b> If the logger name is default, which
 	 *                                     cannot be removed.
 	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public static function & removeLogger ($name)
+	public function & removeLogger ($name)
 	{
 
 		$retval = null;
 
-		if (isset(self::$loggers[$name]))
+		if (isset($this->loggers[$name]))
 		{
 			if ($name != 'default')
 			{
-				$retval = self::$loggers[$name];
-				unset(self::$loggers[$name]);
+				$retval = $this->loggers[$name];
+				unset($this->loggers[$name]);
 			} else
 			{
 				// cannot remove the default logger
@@ -144,14 +166,15 @@ class LoggerManager
 	 * @throws     <b>LoggingException</b> If a logger with the name already 
 	 *                                     exists.
 	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public static function setLogger ($name, $logger)
+	public function setLogger ($name, $logger)
 	{
-		if (!isset(self::$loggers[$name]))
+		if (!isset($this->loggers[$name]))
 		{
-			self::$loggers[$name] = $logger;
+			$this->loggers[$name] = $logger;
 			return;
 		}
 
@@ -171,13 +194,14 @@ class LoggerManager
 	 * @return     void
 	 * @throws     LoggingException if the logger was not found.
 	 * 
+	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.10.0
 	 */
-	public static function log(Message $message, $logger = null)
+	public function log(Message $message, $logger = null)
 	{
 		if (is_null($logger)) {
-			foreach (self::$loggers as $logger) {
+			foreach ($this->loggers as $logger) {
 				$logger->log($message);
 			}
 		} else if (!is_null($logger = self::getLogger($logger))) {
@@ -192,16 +216,17 @@ class LoggerManager
 	 *
 	 * @return     void
 	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public static function shutdown ()
+	public function shutdown ()
 	{
 		// loop through our loggers and shut them all down
-		foreach (self::$loggers as $name => $logger)
+		foreach ($this->loggers as $name => $logger)
 		{
 			$logger->shutdown();
-			unset(self::$loggers[$name]);
+			unset($this->loggers[$name]);
 		}
 	}
 

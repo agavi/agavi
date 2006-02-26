@@ -166,7 +166,7 @@ abstract class ParameterHolder
 	 * @return     void
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      2.0.0
+	 * @since      0.9.0
 	 */
 	public function setParameter ($name, $value)
 	{
@@ -211,7 +211,7 @@ abstract class ParameterHolder
 	 * @return     void
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      2.0.0
+	 * @since      0.9.0
 	 */
 	public function setParameterByRef ($name, &$value)
 	{

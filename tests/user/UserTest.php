@@ -1,6 +1,6 @@
 <?php
 if (!defined('AG_USER_NAMESPACE')) {
-	define('AG_USER_NAMESPACE', 'org/agavi');
+	define('AG_USER_NAMESPACE', 'org.agavi');
 }	
 
 class SampleUser extends User
@@ -82,6 +82,20 @@ class UserTest extends UnitTestCase
 		$this->assertEqual(array(AG_USER_NAMESPACE), $this->_u->getAttributeNamespaces());
 		$this->_u->setAttribute('blah', 'blahval', 'some/other/namespace');
 		$this->assertEqual(array(AG_USER_NAMESPACE, 'some/other/namespace'), $this->_u->getAttributeNamespaces());
+	}
+
+	public function testgetAttributes()
+	{
+		$this->_u->setAttribute('blah', 'blahval');
+		$this->_u->setAttribute('blah2', 'blah2val');
+		$this->assertEqual(array('blah'=>'blahval', 'blah2'=>'blah2val'), $this->_u->getAttributes());
+
+		$this->_u->setAttribute('blah', 'otherblah', 'some/other/namespace');
+		$this->assertEqual(array('blah'=>'otherblah'), $this->_u->getAttributes('some/other/namespace'));
+
+		$this->assertEqual(array('blah'=>'blahval', 'blah2'=>'blah2val'), $this->_u->getAttributes());
+
+		$this->assertNull($this->_u->getAttributes('/bunk/namespace'));
 	}
 
 	public function testgetContext()
