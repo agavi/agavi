@@ -141,7 +141,7 @@ abstract class Action
 	 *                   - The view that will be executed.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      2.0.0
+	 * @since      0.9.0
 	 */
 	public function handleError ()
 	{
@@ -159,7 +159,7 @@ abstract class Action
 	 *                  otherwise false.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      2.0.0
+	 * @since      0.9.0
 	 */
 	public function initialize ($context)
 	{

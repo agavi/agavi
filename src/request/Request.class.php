@@ -349,7 +349,7 @@ abstract class Request extends ParameterHolder
 	 * @return     bool true, if any error exist, otherwise false.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      2.0.0
+	 * @since      0.9.0
 	 */
 	public function hasErrors ()
 	{
@@ -705,7 +705,7 @@ abstract class Request extends ParameterHolder
 	 * @return     void
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      2.0.0
+	 * @since      0.9.0
 	 */
 	public function setErrors ($errors)
 	{
@@ -728,7 +728,7 @@ abstract class Request extends ParameterHolder
 	 *                                     invalid.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      2.0.0
+	 * @since      0.9.0
 	 */
 	public function setMethod ($method)
 	{

@@ -678,7 +678,7 @@ abstract class Controller extends ParameterHolder
 	 *                                      set.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      2.0.0
+	 * @since      0.9.0
 	 */
 	public function setRenderMode ($mode)
 	{
