@@ -82,9 +82,11 @@ class FormPopulationFilter extends Filter
 			
 			$req = $this->getContext()->getRequest();
 			
-			if($req->getAttribute('populate', 'org.agavi.filter.FormPopulationFilter') === true || ($req->getMethod() == Request::POST && $req->getAttribute('populate', 'org.agavi.filter.FormPopulationFilter') !== false)) {
-				ob_start();
-				$filterChain->execute();
+			ob_start();
+			$filterChain->execute();
+			if(!($req->getAttribute('populate', 'org.agavi.filter.FormPopulationFilter') === true || ($req->getMethod() == Request::POST && $req->getAttribute('populate', 'org.agavi.filter.FormPopulationFilter') !== false))) {
+				ob_end_flush();
+			} else {
 				$output = ob_get_contents();
 				ob_end_clean();
 				$doc = DOMDocument::loadHTML($output);
@@ -99,7 +101,7 @@ class FormPopulationFilter extends Filter
 					$baseHref = $baseHref['path'];
 					break;
 				}
-				foreach($xpath->query('//form[@method="post" and @action]') as $form) {
+				foreach($xpath->query('//form[@action]') as $form) {
 					$action = $form->getAttribute('action');
 					if(!($baseHref . $action == $_SERVER['REQUEST_URI'] || $baseHref . '/' . $action == $_SERVER['REQUEST_URI'] || (strpos($action, '/') == 0 && $action == $_SERVER['REQUEST_URI']))) {
 						continue;
@@ -191,8 +193,6 @@ class FormPopulationFilter extends Filter
 				} else {
 					echo $doc->saveHTML();
 				}
-			} else {
-				$filterChain->execute();
 			}
 		} else {
 			// we already loaded this filter, skip to the next filter
