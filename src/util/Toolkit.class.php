@@ -147,6 +147,7 @@ class Toolkit
 	 */
 	public static function clearCache($path = '')
 	{
+		$ignore = array('.', '..', '.svn', 'CVS');
 		static $SPL_RIT_CHILD_FIRST = null;
 		if(!isset($SPL_RIT_CHILD_FIRST)) {
 			if(defined('RecursiveIteratorIterator::CHILD_FIRST')) {
@@ -164,6 +165,10 @@ class Toolkit
 			@unlink($path);
 		} else {
 			foreach(new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path), $SPL_RIT_CHILD_FIRST) as $iterator) {
+				if(in_array($iterator->getFilename(), $ignore)) {
+					// don't remove ignored files or ignored folders and their contents
+					continue;
+				}
 				if($iterator->isDir()) {
 					@rmdir($iterator->getPathname());
 				} elseif($iterator->isFile()) {
