@@ -147,7 +147,7 @@ class Toolkit
 	 */
 	public static function clearCache($path = '')
 	{
-		$ignore = array('.', '..', '.svn', 'CVS');
+		$ignores = array('.', '..', '.svn', 'CVS');
 		static $SPL_RIT_CHILD_FIRST = null;
 		if(!isset($SPL_RIT_CHILD_FIRST)) {
 			if(defined('RecursiveIteratorIterator::CHILD_FIRST')) {
@@ -162,18 +162,29 @@ class Toolkit
 			return false;
 		}
 		if(is_file($path)) {
-			@unlink($path);
+			echo "unlink($path)";
 		} else {
 			foreach(new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path), $SPL_RIT_CHILD_FIRST) as $iterator) {
-				if(in_array($iterator->getFilename(), $ignore)) {
-					// don't remove ignored files or ignored folders and their contents
+				$continue = false;
+				if(in_array($iterator->getFilename(), $ignores)) {
+					$continue = true;
+				} else {
+					foreach($ignores as $ignore) {
+						if(strpos($iterator->getPathname(), '/' . $ignore . '/') !== false) {
+							$continue = true;
+							break;
+						}
+					}
+				}
+				if($continue) {
 					continue;
 				}
 				if($iterator->isDir()) {
-					@rmdir($iterator->getPathname());
+					echo "@rmdir(" . $iterator->getPathname() . ")";
 				} elseif($iterator->isFile()) {
-					@unlink($iterator->getPathname());
+					echo "@unlink(" . $iterator->getPathname() . ")";
 				}
+				echo "<br />";
 			}
 		}
 	}
