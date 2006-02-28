@@ -162,7 +162,7 @@ class Toolkit
 			return false;
 		}
 		if(is_file($path)) {
-			echo "unlink($path)";
+			@unlink($path);
 		} else {
 			foreach(new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path), $SPL_RIT_CHILD_FIRST) as $iterator) {
 				$continue = false;
@@ -180,11 +180,10 @@ class Toolkit
 					continue;
 				}
 				if($iterator->isDir()) {
-					echo "@rmdir(" . $iterator->getPathname() . ")";
+					@rmdir($iterator->getPathname());
 				} elseif($iterator->isFile()) {
-					echo "@unlink(" . $iterator->getPathname() . ")";
+					@unlink($iterator->getPathname());
 				}
-				echo "<br />";
 			}
 		}
 	}
