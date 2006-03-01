@@ -108,12 +108,12 @@ class FormPopulationFilter extends Filter
 					}
 					
 					// build the XPath query
-					$query = '//textarea[@name] | //select[@name] | //input[@name and not(@type)] | //input[@name and @type="text"] | //input[@name and @type="checkbox"] | //input[@name and @type="radio"]';
+					$query = 'descendant::textarea[@name] | descendant::select[@name] | descendant::input[@name and not(@type)] | descendant::input[@name and @type="text"] | descendant::input[@name and @type="checkbox"] | descendant::input[@name and @type="radio"]';
 					if($this->getParameter('include_password_inputs')) {
-						$query .= ' | //input[@name and @type="password"]';
+						$query .= ' | descendant::input[@name and @type="password"]';
 					}
 					if($this->getParameter('include_hidden_inputs')) {
-						$query .= ' | //input[@name and @type="hidden"]';
+						$query .= ' | descendant::input[@name and @type="hidden"]';
 					}
 
 					foreach($xpath->query($query, $form) as $element) {
@@ -127,7 +127,7 @@ class FormPopulationFilter extends Filter
 							}
 							if(($id = $element->getAttribute('id')) != '') {
 								// assign the class to all explicit labels
-								foreach($xpath->query('//label[@for="' . $id . '"]', $form) as $label) {
+								foreach($xpath->query('descendant::label[@for="' . $id . '"]', $form) as $label) {
 									$label->setAttribute('class', $label->getAttribute('class') . ' ' . $this->getParameter('error_class'));
 								}
 							}
@@ -156,7 +156,7 @@ class FormPopulationFilter extends Filter
 							
 							// select elements
 							// yes, we still use XPath because there could be OPTGROUPs
-							foreach($xpath->query('//option', $element) as $option) {
+							foreach($xpath->query('descendant::option', $element) as $option) {
 								$option->removeAttribute('selected');
 								if($req->hasParameter($element->getAttribute('name')) && $option->getAttribute('value') == $req->getParameter($element->getAttribute('name'))) {
 									$option->setAttribute('selected', 'selected');
