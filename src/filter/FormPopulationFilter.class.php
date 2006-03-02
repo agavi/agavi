@@ -108,10 +108,7 @@ class FormPopulationFilter extends Filter
 					}
 					
 					// build the XPath query
-					$query = 'descendant::textarea[@name] | descendant::select[@name] | descendant::input[@name and not(@type)] | descendant::input[@name and @type="text"] | descendant::input[@name and @type="checkbox"] | descendant::input[@name and @type="radio"]';
-					if($this->getParameter('include_password_inputs')) {
-						$query .= ' | descendant::input[@name and @type="password"]';
-					}
+					$query = 'descendant::textarea[@name] | descendant::select[@name] | descendant::input[@name and not(@type)] | descendant::input[@name and @type="text"] | descendant::input[@name and @type="checkbox"] | descendant::input[@name and @type="radio"] | descendant::input[@name and @type="password"]';
 					if($this->getParameter('include_hidden_inputs')) {
 						$query .= ' | descendant::input[@name and @type="hidden"]';
 					}
@@ -149,6 +146,14 @@ class FormPopulationFilter extends Filter
 								$element->removeAttribute('checked');
 								if($req->hasParameter($element->getAttribute('name')) && ($element->getAttribute('value') == $req->getParameter($element->getAttribute('name')) || !$element->hasAttribute('value'))) {
 									$element->setAttribute('checked', 'checked');
+								}
+								
+							} elseif($element->getAttribute('type') == 'password') {
+								
+								// passwords
+								$element->removeAttribute('value');
+								if($this->getParameter('include_password_inputs') && $req->hasParameter($element->getAttribute('name'))) {
+									$element->setAttribute('value', $req->getParameter($element->getAttribute('name')));
 								}
 							}
 							
