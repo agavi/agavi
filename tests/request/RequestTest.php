@@ -126,7 +126,7 @@ class RequestTest extends UnitTestCase
 
 		$this->assertEqual(array('blah'=>'blahval', 'blah2'=>'blah2val'), $this->_r->getAttributes());
 
-		$this->assertNull($this->_r->getAttributes('/bunk/namespace'));
+		$this->assertEqual(array(), $this->_r->getAttributes('/bunk/namespace'));
 	}
 
 	public function testgetError()
