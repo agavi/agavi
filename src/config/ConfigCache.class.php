@@ -31,7 +31,7 @@
 class ConfigCache
 {
 	
-	const CACHE_SUBDIR = 'cache';
+	const CACHE_SUBDIR = 'config';
 
 	private static
 		$handlers = array();

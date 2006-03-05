@@ -95,7 +95,7 @@ class UserTest extends UnitTestCase
 
 		$this->assertEqual(array('blah'=>'blahval', 'blah2'=>'blah2val'), $this->_u->getAttributes());
 
-		$this->assertNull($this->_u->getAttributes('/bunk/namespace'));
+		$this->assertEqual(array(), $this->_u->getAttributes('/bunk/namespace'));
 	}
 
 	public function testgetContext()

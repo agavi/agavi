@@ -147,6 +147,7 @@ class Toolkit
 	 */
 	public static function clearCache($path = '')
 	{
+		$ignores = array('.', '..', '.svn', 'CVS');
 		static $SPL_RIT_CHILD_FIRST = null;
 		if(!isset($SPL_RIT_CHILD_FIRST)) {
 			if(defined('RecursiveIteratorIterator::CHILD_FIRST')) {
@@ -164,6 +165,20 @@ class Toolkit
 			@unlink($path);
 		} else {
 			foreach(new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path), $SPL_RIT_CHILD_FIRST) as $iterator) {
+				$continue = false;
+				if(in_array($iterator->getFilename(), $ignores)) {
+					$continue = true;
+				} else {
+					foreach($ignores as $ignore) {
+						if(strpos($iterator->getPathname(), '/' . $ignore . '/') !== false) {
+							$continue = true;
+							break;
+						}
+					}
+				}
+				if($continue) {
+					continue;
+				}
 				if($iterator->isDir()) {
 					@rmdir($iterator->getPathname());
 				} elseif($iterator->isFile()) {
