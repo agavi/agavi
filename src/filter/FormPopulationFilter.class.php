@@ -14,9 +14,9 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * FormPopulationFilter automatically populates a form that is re-posted, which
- * usually happens when a View::INPUT is returned again after a POST request
- * because an error occured during validation.
+ * AgaviFormPopulationFilter automatically populates a form that is re-posted,
+ * which usually happens when a View::INPUT is returned again after a POST 
+ * request because an error occured during validation.
  * That means that developers don't have to fill in request parameters into
  * form elements in their templates anymore. Text inputs, selects, radios, they
  * all get set to the value the user selected before submitting the form.
@@ -59,16 +59,16 @@
  *
  * @version    $Id$
  */
-class FormPopulationFilter extends Filter
+class AgaviFormPopulationFilter extends AgaviFilter
 {
 	/**
 	 * Execute this filter.
 	 *
-	 * @param      FilterChain The filter chain.
+	 * @param      AgaviFilterChain The filter chain.
 	 *
 	 * @return     void
 	 *
-	 * @throws     <b>FilterException</b> If an error occurs during execution.
+	 * @throws     <b>AgaviFilterException</b> If an error occurs during execution.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
@@ -84,7 +84,7 @@ class FormPopulationFilter extends Filter
 			
 			ob_start();
 			$filterChain->execute();
-			if(!($req->getAttribute('populate', 'org.agavi.filter.FormPopulationFilter') === true || ($req->getMethod() == Request::POST && $req->getAttribute('populate', 'org.agavi.filter.FormPopulationFilter') !== false))) {
+			if(!($req->getAttribute('populate', 'org.agavi.filter.FormPopulationFilter') === true || ($req->getMethod() == AgaviRequest::POST && $req->getAttribute('populate', 'org.agavi.filter.FormPopulationFilter') !== false))) {
 				ob_end_flush();
 			} else {
 				$output = ob_get_contents();
@@ -208,13 +208,13 @@ class FormPopulationFilter extends Filter
 	/**
 	 * Initialize this filter.
 	 *
-	 * @param      Context The current application context.
-	 * @param      array   An associative array of initialization parameters.
+	 * @param      AgaviContext The current application context.
+	 * @param      array        An associative array of initialization parameters.
 	 *
 	 * @return     bool true, if initialization completes successfuly, otherwise
 	 *                  false.
 	 *
-	 * @throws     <b>FilterException</b> If an error occurs during initialization
+	 * @throws     <b>AgaviFilterException</b> If an error occurs during initialization
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0

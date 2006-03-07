@@ -15,8 +15,8 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * Context provides information about the current application context, such as
- * the module and action names and the module directory. 
+ * AgaviContext provides information about the current application context, 
+ * such as the module and action names and the module directory. 
  * It also serves as a gateway to the core pieces of the framework, allowing
  * objects with access to the context, to access other useful objects such as
  * the current controller, request, user, actionstack, databasemanager, storage,
@@ -32,7 +32,7 @@
  *
  * @version    $Id$
  */
-class Context
+class AgaviContext
 {
 
 	protected
@@ -100,7 +100,7 @@ class Context
 	/**
 	 * Retrieve the ActionStack.
 	 *
-	 * @return     ActionStack the ActionStack instance
+	 * @return     AgaviActionStack the ActionStack instance
 	 *
 	 * @author     Mike Vincent <mike@agavi.org>
 	 * @since      0.9.0
@@ -113,7 +113,7 @@ class Context
 	/**
 	 * Retrieve the controller.
 	 *
-	 * @return     Controller The current Controller implementation instance.
+	 * @return     AgaviController The current Controller implementation instance.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -135,10 +135,10 @@ class Context
 	 *
 	 * @param      name A database name.
 	 *
-	 * @return     mixed A Database instance.
+	 * @return     mixed A AgaviDatabase instance.
 	 *
-	 * @throws     <b>DatabaseException</b> If the requested database name does
-	 *                                      not exist.
+	 * @throws     <b>AgaviDatabaseException</b> If the requested database name does
+	 *                                           not exist.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -160,7 +160,7 @@ class Context
 	/**
 	 * Retrieve the database manager.
 	 *
-	 * @return     DatabaseManager The current DatabaseManager instance.
+	 * @return     AgaviDatabaseManager The current DatabaseManager instance.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -177,7 +177,7 @@ class Context
 	 *
 	 * @param      string name corresponding to a section of the config
 	 *
-	 * @return     Context instance of the requested name
+	 * @return     AgaviContext instance of the requested name
 	 *
 	 * @author     Mike Vincent <mike@agavi.org>
 	 * @since      0.9.0
@@ -196,7 +196,7 @@ class Context
 	/**
 	 * Retrieve the LoggerManager
 	 *
-	 * @return     LoggerManager The current LoggerManager implementation instance
+	 * @return     AgaviLoggerManager The current LoggerManager implementation instance
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
@@ -212,7 +212,7 @@ class Context
 	 * @param      string name corresponding to a section of the config
 	 * @param      array overrides, key => class
 	 *
-	 * @return     Context instance
+	 * @return     AgaviContext instance
 	 *
 	 * @author     Mike Vincent <mike@agavi.org>
 	 * @since      0.10.0
@@ -223,12 +223,12 @@ class Context
 		$profile = strtolower($profile);
 		
 		if (!$profiles) {
-			$profiles = array_change_key_case(include(ConfigCache::checkConfig('config/contexts.ini')), CASE_LOWER);
+			$profiles = array_change_key_case(include(AgaviConfigCache::checkConfig('config/contexts.ini')), CASE_LOWER);
 			$default = $profiles['contexts']['default'];
 			if ($default && isset($profiles['default']) && $default != 'default') {
 				$error = 'You have a specified "'.$default.'" should be the default Context, ' 
 							 . 'but you also have a section named "default".';
-				throw new ConfigurationException("Invalid or undefined Context name ($profile).");
+				throw new AgaviConfigurationException("Invalid or undefined Context name ($profile).");
 			} else if ($default && !isset($profiles['default'])) {
 				$profiles['default'] =& $profiles[$default];
 			}
@@ -247,7 +247,7 @@ class Context
 		if (isset($profiles[$profile])) {
 			$params = array_merge($profiles[$profile], array_change_key_case((array) $overrides, CASE_LOWER));
 		} else {
-			throw new ConfigurationException("Invalid or undefined Context name ($profile).");
+			throw new AgaviConfigurationException("Invalid or undefined Context name ($profile).");
 		}
 		
 		$required = array();
@@ -266,7 +266,7 @@ class Context
 
 
 		if ($missing = array_diff($required, array_keys($params))) {
-			throw new ConfigurationException("Missing required definition(s) (".implode(', ',$missing).") in [$profile] section of contexts.ini");
+			throw new AgaviConfigurationException("Missing required definition(s) (".implode(', ',$missing).") in [$profile] section of contexts.ini");
 		}
 	
 		foreach ($required as $req) {	
@@ -282,19 +282,19 @@ class Context
 					$this->databaseManager->initialize($this);
 					break;
 				case 'request':
-					$this->request = Request::newInstance($class);
+					$this->request = AgaviRequest::newInstance($class);
 					break;
 				case 'storage':
-					$this->storage = Storage::newInstance($class);
+					$this->storage = AgaviStorage::newInstance($class);
 					$this->storage->initialize($this, $args);
 					$this->storage->startup();
 					break;
 				case 'user':
-					$this->user = User::newInstance($class);
+					$this->user = AgaviUser::newInstance($class);
 					$this->user->initialize($this, $args);
 					break;
 				case 'security_filter':
-					$this->securityFilter = SecurityFilter::newInstance($class);
+					$this->securityFilter = AgaviSecurityFilter::newInstance($class);
 					$this->securityFilter->initialize($this, $args);
 					break;
 				case 'logger_manager':
@@ -307,7 +307,7 @@ class Context
 					break;
 			}
 		}
-		$this->controller = Controller::newInstance($params['controller']);
+		$this->controller = AgaviController::newInstance($params['controller']);
 		$args = isset($params['controller.param']) ? $params['controller.param'] : null;
 		$this->controller->initialize($this, $args);
 		$this->controller->setExecutionFilterClassName($params['execution_filter']); 
@@ -376,8 +376,8 @@ class Context
 	/**
 	 * Retrieve the securityFilter
 	 *
-	 * @return     SecurityFilter The current SecurityFilter implementation 
-	 *                            instance.
+	 * @return     AgaviSecurityFilter The current SecurityFilter implementation 
+	 *                                 instance.
 	 *
 	 * @author     Mike Vincent <mike@agavi.org>
 	 * @since      0.9.0
@@ -422,8 +422,8 @@ class Context
 	/**
 	 * Retrieve the ValidatorManager
 	 *
-	 * @return     ValidatorManager The current ValidatorManager implementation
-	 *                              instance.
+	 * @return     AgaviValidatorManager The current ValidatorManager implementation
+	 *                                   instance.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0

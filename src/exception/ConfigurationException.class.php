@@ -15,7 +15,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * ConfigurationException is thrown when the framework finds an error in a
+ * AgaviConfigurationException is thrown when the framework finds an error in a
  * configuration setting.
  *
  * @package    agavi
@@ -27,7 +27,7 @@
  *
  * @version    $Id$
  */
-class ConfigurationException extends AgaviException
+class AgaviConfigurationException extends AgaviException
 {
 
 	// +-----------------------------------------------------------------------+
@@ -48,7 +48,7 @@ class ConfigurationException extends AgaviException
 
 		parent::__construct($message, $code);
 
-		$this->setName('ConfigurationException');
+		$this->setName('AgaviConfigurationException');
 
 	}
 

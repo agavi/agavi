@@ -15,7 +15,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * ParameterHolder provides a base class for managing parameters.
+ * AgaviParameterHolder provides a base class for managing parameters.
  *
  * @package    agavi
  * @subpackage util
@@ -26,7 +26,7 @@
  *
  * @version    $Id$
  */
-abstract class ParameterHolder
+abstract class AgaviParameterHolder
 {
 
 	// +-----------------------------------------------------------------------+

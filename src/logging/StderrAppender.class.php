@@ -14,7 +14,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * StderrAppender appends Messages to the stderr.
+ * AgaviStderrAppender appends an AgaviMessages to the stderr.
  *
  * @package    agavi
  * @subpackage logging
@@ -25,7 +25,7 @@
  *
  * @version    $Id$
  */
-class StderrAppender extends FileAppender
+class AgaviStderrAppender extends AgaviFileAppender
 {
 
 	/**

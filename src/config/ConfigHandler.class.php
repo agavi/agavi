@@ -15,9 +15,9 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * ConfigHandler allows a developer to create a custom formatted configuration
- * file pertaining to any information they like and still have it auto-generate
- * PHP code.
+ * AgaviConfigHandler allows a developer to create a custom formatted 
+ * configuration file pertaining to any information they like and still 
+ * have it auto-generate PHP code.
  *
  * @package    agavi
  * @subpackage config
@@ -28,7 +28,7 @@
  *
  * @version    $Id$
  */
-abstract class ConfigHandler extends ParameterHolder
+abstract class AgaviConfigHandler extends AgaviParameterHolder
 {
 
 	/**
@@ -57,10 +57,10 @@ abstract class ConfigHandler extends ParameterHolder
 	 *
 	 * @return     string Data to be written to a cache file.
 	 *
-	 * @throws     <b>UnreadableException</b> If a requested configuration file
-	 *                                        does not exist or is not readable.
-	 * @throws     <b>ParseException</b> If a requested configuration file is
-	 *                                   improperly formatted.
+	 * @throws     <b>AgaviUnreadableException</b> If a requested configuration file
+	 *                                             does not exist or is not readable.
+	 * @throws     <b>AgaviParseException</b> If a requested configuration file is
+	 *                                        improperly formatted.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -75,8 +75,8 @@ abstract class ConfigHandler extends ParameterHolder
 	 * @return     bool true, if initialization completes successfully, 
 	                    otherwise false.
 	 *
-	 * @throws     <b>InitializationException</b> If an error occurs while
-	 *                                            initializing the ConfigHandler
+	 * @throws     <b>AgaviInitializationException</b> If an error occurs while
+	 *                                                 initializing the ConfigHandler
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -192,7 +192,7 @@ abstract class ConfigHandler extends ParameterHolder
 	public static function & replacePath ($path)
 	{
 
-		if (!Toolkit::isPathAbsolute($path))
+		if (!AgaviToolkit::isPathAbsolute($path))
 		{
 
 			// not an absolute path so we'll prepend to it

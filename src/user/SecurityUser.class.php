@@ -15,7 +15,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * SecurityUser provides advanced security manipulation methods.
+ * AgaviSecurityUser provides advanced security manipulation methods.
  *
  * @package    agavi
  * @subpackage user
@@ -26,7 +26,7 @@
  *
  * @version    $Id$
  */
-abstract class SecurityUser extends User
+abstract class AgaviSecurityUser extends AgaviUser
 {
 
 	/**

@@ -15,8 +15,8 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * FactoryConfigHandler allows you to specify which factory implementation the
- * system will use.
+ * AgaviFactoryConfigHandler allows you to specify which factory implementation 
+ * the system will use.
  *
  * @package    agavi
  * @subpackage config
@@ -28,7 +28,7 @@
  *
  * @version    $Id$
  */
-class FactoryConfigHandler extends IniConfigHandler
+class AgaviFactoryConfigHandler extends AgaviIniConfigHandler
 {
 
 	/**
@@ -38,10 +38,10 @@ class FactoryConfigHandler extends IniConfigHandler
 	 *
 	 * @return     string Data to be written to a cache file.
 	 *
-	 * @throws     <b>UnreadableException</b> If a requested configuration file
-	 *                                        does not exist or is not readable.
-	 * @throws     <b>ParseException</b> If a requested configuration file is
-	 *                                   improperly formatted.
+	 * @throws     <b>AgaviUnreadableException</b> If a requested configuration file
+	 *                                             does not exist or is not readable.
+	 * @throws     <b>AgaviParseException</b> If a requested configuration file is
+	 *                                        improperly formatted.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -79,34 +79,34 @@ class FactoryConfigHandler extends IniConfigHandler
 				if (!array_key_exists($factory, $factories)) {
 	 				$error = 'Configuration file "%s" is missing "%s" key in "%s" category';
 					$error = sprintf($error, $config, $factory, $controllerName);
-					throw new ParseException($error);
+					throw new AgaviParseException($error);
 				}
 	
 				// Get class name
 				$class = $factories[$factory];
 	
 				// parse parameters
-				$parameters = ParameterParser::parse($factories, $factory .'.param');
+				$parameters = AgaviParameterParser::parse($factories, $factory .'.param');
 	
 				// append new data
 				switch ($factory) {
 					case 'request':
-						$instances[] = sprintf("\tself::\$instance->request = " .  "Request::newInstance('%s');", $class);
+						$instances[] = sprintf("\tself::\$instance->request = " .  "AgaviRequest::newInstance('%s');", $class);
 						$inits[] = sprintf("\tself::\$instance->request->initialize(self::\$instance, %s);", $parameters);
 						break;
 					case 'security_filter':
 						$tmp = "\n\tif (AG_USE_SECURITY) {\n" .
-						       "\t\tself::\$instance->securityFilter = SecurityFilter::newInstance('%s');\n" .
+						       "\t\tself::\$instance->securityFilter = AgaviSecurityFilter::newInstance('%s');\n" .
 						       "\t\tself::\$instance->securityFilter->initialize(self::\$instance);\n" .
 									 "\t}\n";
 						$inits[] = sprintf($tmp, $class, $parameters);
 						break;
 					case 'storage':
-						$instances[] = sprintf("\tself::\$instance->storage = Storage::newInstance('%s');", $class);
+						$instances[] = sprintf("\tself::\$instance->storage = AgaviStorage::newInstance('%s');", $class);
 						$inits[] = sprintf("\tself::\$instance->storage->initialize(self::\$instance, %s);", $parameters);
 						break;
 					case 'user':
-						$instances[] = sprintf("\tself::\$instance->user = User::newInstance('%s');", $class);
+						$instances[] = sprintf("\tself::\$instance->user = AgaviUser::newInstance('%s');", $class);
 						$inits[] = sprintf("\tself::\$instance->user->initialize(self::\$instance, %s);", $parameters);
 						break;
 					case 'execution_filter':
@@ -130,7 +130,7 @@ class FactoryConfigHandler extends IniConfigHandler
 						         '"%s"';
 						$error = sprintf($error, $config, $class, $file);
 	
-						throw new ParseException($error);
+						throw new AgaviParseException($error);
 		
 					}
 					$includes[] = sprintf("\trequire_once('%s');", $file);

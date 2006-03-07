@@ -29,7 +29,7 @@
  *
  * @version    $Id$
  */
-abstract class View
+abstract class AgaviView
 {
 
 	// +-----------------------------------------------------------------------+
@@ -223,7 +223,7 @@ abstract class View
 	/**
 	 * Retrieve the current application context.
 	 *
-	 * @return     Context The current Context instance.
+	 * @return     AgaviContext The current Context instance.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -465,7 +465,7 @@ abstract class View
 	/**
 	 * Initialize this view.
 	 *
-	 * @param      Context The current application context.
+	 * @param      AgaviContext The current application context.
 	 *
 	 * @return     bool true, if initialization completes successfully,
 	 *                  otherwise false.
@@ -511,7 +511,7 @@ abstract class View
 	 *
 	 * @return     void
 	 *
-	 * @throws     <b>RenderException</b> If the pre-render check fails.
+	 * @throws     <b>AgaviRenderException</b> If the pre-render check fails.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -525,7 +525,7 @@ abstract class View
 			// a template has not been set
 			$error = 'A template has not been set';
 
-			throw new RenderException($error);
+			throw new AgaviRenderException($error);
 
 		}
 
@@ -538,7 +538,7 @@ abstract class View
 			$error = 'The template "%s" does not exist or is unreadable';
 			$error = sprintf($error, $template);
 
-			throw new RenderException($error);
+			throw new AgaviRenderException($error);
 
 		}
 
@@ -557,7 +557,7 @@ abstract class View
 						 'unreadable';
 				$error = sprintf($error, $template);
 
-				throw new RenderException($error);
+				throw new AgaviRenderException($error);
 
 			}
 
@@ -781,7 +781,7 @@ abstract class View
 	/**
 	 * Set an array of slots
 	 *
-	 * @see        View::setSlot()
+	 * @see        AgaviView::setSlot()
 	 * @param      array An array of slots
 	 *
 	 * @return     void
@@ -823,7 +823,7 @@ abstract class View
 	public function setTemplate ($template)
 	{
 
-		if (Toolkit::isPathAbsolute($template))
+		if (AgaviToolkit::isPathAbsolute($template))
 		{
 
 			$this->directory = dirname($template);

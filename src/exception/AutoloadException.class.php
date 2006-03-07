@@ -15,7 +15,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AutoloadException is thrown when a class that has been required cannot be
+ * AgaviAutoloadException is thrown when a class that has been required cannot be
  * loaded.
  *
  * @package    agavi
@@ -27,7 +27,7 @@
  *
  * @version    $Id$
  */
-class AutoloadException extends AgaviException
+class AgaviAutoloadException extends AgaviException
 {
 
 	// +-----------------------------------------------------------------------+
@@ -48,7 +48,7 @@ class AutoloadException extends AgaviException
 
 		parent::__construct($message, $code);
 
-		$this->setName('AutoloadException');
+		$this->setName('AgaviAutoloadException');
 
 	}
 

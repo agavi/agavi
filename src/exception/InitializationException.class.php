@@ -15,7 +15,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * InitializationException is thrown when an initialization procedure fails.
+ * AgaviInitializationException is thrown when an initialization procedure fails.
  *
  * @package    agavi
  * @subpackage exception
@@ -26,7 +26,7 @@
  *
  * @version    $Id$
  */
-class InitializationException extends AgaviException
+class AgaviInitializationException extends AgaviException
 {
 
 	// +-----------------------------------------------------------------------+
@@ -47,7 +47,7 @@ class InitializationException extends AgaviException
 
 		parent::__construct($message, $code);
 
-		$this->setName('InitializationException');
+		$this->setName('AgaviInitializationException');
 
 	}
 

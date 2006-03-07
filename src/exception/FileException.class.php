@@ -15,7 +15,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * FileException is thrown when an error occurs while moving an uploaded file.
+ * AgaviFileException is thrown when an error occurs while moving an uploaded file.
  *
  * @package    agavi
  * @subpackage exception
@@ -26,7 +26,7 @@
  *
  * @version    $Id$
  */
-class FileException extends AgaviException
+class AgaviFileException extends AgaviException
 {
 
 	// +-----------------------------------------------------------------------+
@@ -47,7 +47,7 @@ class FileException extends AgaviException
 
 		parent::__construct($message, $code);
 
-		$this->setName('FileException');
+		$this->setName('AgaviFileException');
 
 	}
 

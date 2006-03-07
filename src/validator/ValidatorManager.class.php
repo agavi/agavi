@@ -15,7 +15,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * ValidatorManager provides management for request parameters and their
+ * AgaviValidatorManager provides management for request parameters and their
  * associated validators.
  *
  * @package    agavi
@@ -27,7 +27,7 @@
  *
  * @version    $Id$
  */
-class ValidatorManager
+class AgaviValidatorManager
 {
 
 	private
@@ -135,7 +135,7 @@ class ValidatorManager
 	/**
 	 * Initialize this validator manager.
 	 *
-	 * @param      Context A context instance.
+	 * @param      AgaviContext A context instance.
 	 *
 	 * @return     void
 	 *
@@ -213,9 +213,9 @@ class ValidatorManager
 	/**
 	 * Register a validator for a file or parameter.
 	 *
-	 * @param      string    A file or parameter name.
-	 * @param      Validator A validator implementation instance.
-	 * @param      string    A parent array name.
+	 * @param      string         A file or parameter name.
+	 * @param      AgaviValidator A validator implementation instance.
+	 * @param      string         A parent array name.
 	 *
 	 * @return     void
 	 *

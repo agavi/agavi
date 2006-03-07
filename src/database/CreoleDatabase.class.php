@@ -15,7 +15,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * CreoleDatabase provides connectivity for the Creole database abstraction
+ * AgaviCreoleDatabase provides connectivity for the Creole database abstraction
  * layer.
  *
  * <b>Optional parameters:</b>
@@ -54,14 +54,14 @@
  *
  * @version    $Id$
  */
-class CreoleDatabase extends Database
+class AgaviCreoleDatabase extends AgaviDatabase
 {
 
 	/**
 	 * Connect to the database.
 	 *
-	 * @throws     <b>DatabaseException</b> If a connection could not be 
-	 *                                      created.
+	 * @throws     <b>AgaviDatabaseException</b> If a connection could not be 
+	 *                                           created.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -106,7 +106,7 @@ class CreoleDatabase extends Database
 						$error = 'Database configuration specifies method ' .
 						         '"dsn", but is missing dsn parameter';
 
-						throw new DatabaseException($error);
+						throw new AgaviDatabaseException($error);
 
 				    }
 
@@ -135,7 +135,7 @@ class CreoleDatabase extends Database
 						     'method "%s"';
 				    $error = sprintf($error, $method);
 
-				    throw new DatabaseException($error);
+				    throw new AgaviDatabaseException($error);
 
 			}
 
@@ -183,7 +183,7 @@ class CreoleDatabase extends Database
 		{
 
 			// the connection's foobar'd
-			throw new DatabaseException($e->toString());
+			throw new AgaviDatabaseException($e->toString());
 
 		}
 
@@ -240,8 +240,8 @@ class CreoleDatabase extends Database
 	 *
 	 * @return     void
 	 *
-	 * @throws     <b>DatabaseException</b> If an error occurs while shutting 
-	 *                                      down this database.
+	 * @throws     <b>AgaviDatabaseException</b> If an error occurs while shutting 
+	 *                                           down this database.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0

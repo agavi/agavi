@@ -15,8 +15,8 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * EmailValidator verifies a parameter contains a value that qualifies as an
- * email address.
+ * AgaviEmailValidator verifies a parameter contains a value that qualifies as
+ * an email address.
  *
  * @package    agavi
  * @subpackage validator
@@ -28,7 +28,7 @@
  *
  * @version    $Id$
  */
-class EmailValidator extends Validator
+class AgaviEmailValidator extends AgaviValidator
 {
 
 	/**
@@ -55,8 +55,8 @@ class EmailValidator extends Validator
 	/**
 	 * Initialize this validator.
 	 *
-	 * @param      Context The current application context.
-	 * @param      array   An associative array of initialization parameters.
+	 * @param      AgaviContext The current application context.
+	 * @param      array        An associative array of initialization parameters.
 	 *
 	 * @return     bool true, if initialization completes successfully,
 	 *                  otherwise false.

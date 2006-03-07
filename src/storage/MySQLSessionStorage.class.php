@@ -41,7 +41,7 @@
  *
  * @version    $Id$
  */
-class MySQLSessionStorage extends SessionStorage
+class AgaviMySQLSessionStorage extends AgaviSessionStorage
 {
 
 	private
@@ -50,14 +50,14 @@ class MySQLSessionStorage extends SessionStorage
 	/**
 	 * Initialize this Storage.
 	 *
-	 * @param      Context A Context instance.
-	 * @param      array   An associative array of initialization parameters.
+	 * @param      AgaviContext A Context instance.
+	 * @param      array        An associative array of initialization parameters.
 	 *
 	 * @return     bool true, if initialization completes successfully,
 	 *                  othwerwise false.
 	 *
-	 * @throws     <b>InitializationException</b> If an error occurs while
-	 *                                            initializing this Storage.
+	 * @throws     <b>AgaviInitializationException</b> If an error occurs while
+	 *                                                 initializing this Storage.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -75,7 +75,7 @@ class MySQLSessionStorage extends SessionStorage
 			$error = 'Factory configuration file is missing required ' .
 				     '"db_table" parameter for the Storage category';
 
-			throw new InitializationException($error);
+			throw new AgaviInitializationException($error);
 
 		}
 
@@ -113,7 +113,7 @@ class MySQLSessionStorage extends SessionStorage
 	 * @return     bool true, if the session was destroyed, otherwise an
 	 *                  exception is thrown.
 	 *
-	 * @throws     <b>DatabaseException</b> If the session cannot be destroyed.
+	 * @throws     <b>AgaviDatabaseException</b> If the session cannot be destroyed.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -143,7 +143,7 @@ class MySQLSessionStorage extends SessionStorage
 		$error = 'MySQLSessionStorage cannot destroy session id "%s"';
 		$error = sprintf($error, $id);
 
-		throw new DatabaseException($error);
+		throw new AgaviDatabaseException($error);
 
 	}
 
@@ -155,7 +155,7 @@ class MySQLSessionStorage extends SessionStorage
 	 * @return     bool true, if old sessions have been cleaned, otherwise an
 	 *                  exception is thrown.
 	 *
-	 * @throws     <b>DatabaseException</b> If old sessions cannot be cleaned.
+	 * @throws     <b>AgaviDatabaseException</b> If old sessions cannot be cleaned.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -184,7 +184,7 @@ class MySQLSessionStorage extends SessionStorage
 		// failed to cleanup old sessions
 		$error = 'MySQLSessionStorage cannot delete old sessions';
 
-		throw new DatabaseException($error);
+		throw new AgaviDatabaseException($error);
 
 	}
 
@@ -197,8 +197,8 @@ class MySQLSessionStorage extends SessionStorage
 	 * @return     bool true, if the session was opened, otherwise an exception is
 	 *              thrown.
 	 *
-	 * @throws     <b>DatabaseException</b> If a connection with the database
-	 *                                      does not exist or cannot be created.
+	 * @throws     <b>AgaviDatabaseException</b> If a connection with the database
+	 *                                           does not exist or cannot be created.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -227,7 +227,7 @@ class MySQLSessionStorage extends SessionStorage
 	 * @return     bool true, if the session was read, otherwise an exception is
 	 *                  thrown.
 	 *
-	 * @throws     <b>DatabaseException</b> If the session cannot be read.
+	 * @throws     <b>AgaviDatabaseException</b> If the session cannot be read.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -278,7 +278,7 @@ class MySQLSessionStorage extends SessionStorage
 			$error = 'MySQLSessionStorage cannot create new record for id "%s"';
 			$error = sprintf($error, $id);
 
-			throw new DatabaseException($error);
+			throw new AgaviDatabaseException($error);
 
 		}
 
@@ -293,7 +293,7 @@ class MySQLSessionStorage extends SessionStorage
 	 * @return     bool true, if the session was written, otherwise an exception
 	 *                  is thrown.
 	 *
-	 * @throws     <b>DatabaseException</b> If the session data cannot be written.
+	 * @throws     <b>AgaviDatabaseException</b> If the session data cannot be written.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -328,7 +328,7 @@ class MySQLSessionStorage extends SessionStorage
 		$error = 'MySQLSessionStorage cannot write session data for id "%s"';
 		$error = sprintf($error, $id);
 
-		throw new DatabaseException($error);
+		throw new AgaviDatabaseException($error);
 
 	}
 

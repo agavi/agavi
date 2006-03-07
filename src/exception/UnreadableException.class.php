@@ -14,7 +14,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * UnreadableException is thrown when a configuration file could not be found or is unreadable.
+ * AgaviUnreadableException is thrown when a configuration file could not be found or is unreadable.
  *
  * @package    agavi
  * @subpackage exception
@@ -25,7 +25,7 @@
  *
  * @version    $Id$
  */
-class UnreadableException extends ConfigurationException
+class AgaviUnreadableException extends AgaviConfigurationException
 {
 
 	// +-----------------------------------------------------------------------+
@@ -46,7 +46,7 @@ class UnreadableException extends ConfigurationException
 
 		parent::__construct($message, $code);
 
-		$this->setName('UnreadableException');
+		$this->setName('AgaviUnreadableException');
 
 	}
 

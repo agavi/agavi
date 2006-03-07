@@ -15,7 +15,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * User wraps a client session and provides accessor methods for user
+ * AgaviUser wraps a client session and provides accessor methods for user
  * attributes. It also makes storing and retrieving multiple page form data
  * rather easy by allowing user attributes to be stored in namespaces, which
  * help organize data.
@@ -30,7 +30,7 @@
  *
  * @version    $Id$
  */
-class User extends ParameterHolder
+class AgaviUser extends AgaviParameterHolder
 {
 
 	// +-----------------------------------------------------------------------+
@@ -241,14 +241,14 @@ class User extends ParameterHolder
 	/**
 	 * Initialize this User.
 	 *
-	 * @param      Context A Context instance.
-	 * @param      array   An associative array of initialization parameters.
+	 * @param      AgaviContext A Context instance.
+	 * @param      array        An associative array of initialization parameters.
 	 *
 	 * @return     bool true, if initialization completes successfully,
 	 *                  otherwise false.
 	 *
-	 * @throws     <b>InitializationException</b> If an error occurs while
-	 *                                            initializing this User.
+	 * @throws     <b>AgaviInitializationException</b> If an error occurs while
+	 *                                                 initializing this User.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -283,10 +283,10 @@ class User extends ParameterHolder
 	 *
 	 * @param      string A User implementation name
 	 *
-	 * @return     User A User implementation instance.
+	 * @return     AgaviUser A User implementation instance.
 	 *
-	 * @throws     <b>FactoryException</b> If a user implementation instance
-	 *                                     cannot be created.
+	 * @throws     <b>AgaviFactoryException</b> If a user implementation instance
+	 *                                          cannot be created.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -297,14 +297,14 @@ class User extends ParameterHolder
 		// the class exists
 		$object = new $class();
 
-		if (!($object instanceof User))
+		if (!($object instanceof AgaviUser))
 		{
 
 			// the class name is of the wrong type
 			$error = 'Class "%s" is not of the type User';
 			$error = sprintf($error, $class);
 
-			throw new FactoryException($error);
+			throw new AgaviFactoryException($error);
 
 		}
 

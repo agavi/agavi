@@ -27,7 +27,7 @@
  *
  * @version    $Id$
  */
-abstract class PHPView extends View
+abstract class AgaviPHPView extends AgaviView
 {
 
 	private
@@ -214,13 +214,13 @@ abstract class PHPView extends View
 		// template
 		$template =& $this->attributes;
 
-		if ($mode == View::RENDER_CLIENT && !$this->isDecorator())
+		if ($mode == AgaviView::RENDER_CLIENT && !$this->isDecorator())
 		{
 
 			// render directly to the client
 			require($this->getDirectory() . '/' . $this->getTemplate());
 
-		} else if ($mode != View::RENDER_NONE)
+		} else if ($mode != AgaviView::RENDER_NONE)
 		{
 
 			// render to variable
@@ -240,7 +240,7 @@ abstract class PHPView extends View
 
 			}
 
-			if ($mode == View::RENDER_CLIENT)
+			if ($mode == AgaviView::RENDER_CLIENT)
 			{
 
 				echo $retval;

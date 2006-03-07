@@ -14,7 +14,7 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
-class Default_SecureSuccessView extends PHPView
+class Default_SecureSuccessView extends AgaviPHPView
 {
 
 	/**

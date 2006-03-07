@@ -15,8 +15,8 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * Database is a base abstraction class that allows you to setup any type of
- * database connection via a configuration file.
+ * AgaviDatabase is a base abstraction class that allows you to setup any type
+ * of database connection via a configuration file.
  *
  * @package    agavi
  * @subpackage database
@@ -27,7 +27,7 @@
  *
  * @version    $Id$
  */
-abstract class Database extends ParameterHolder
+abstract class AgaviDatabase extends AgaviParameterHolder
 {
 
 	// +-----------------------------------------------------------------------+
@@ -41,8 +41,8 @@ abstract class Database extends ParameterHolder
 	/**
 	 * Connect to the database.
 	 *
-	 * @throws     <b>DatabaseException</b> If a connection could not be 
-	 *                                      created.
+	 * @throws     <b>AgaviDatabaseException</b> If a connection could not be 
+	 *                                           created.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -58,7 +58,7 @@ abstract class Database extends ParameterHolder
 	 *
 	 * @return     mixed A database connection.
 	 *
-	 * @throws     <b>DatabaseException</b> If a connection could not be retrieved.
+	 * @throws     <b>AgaviDatabaseException</b> If a connection could not be retrieved.
 	 */
 	public function getConnection ()
 	{
@@ -80,7 +80,7 @@ abstract class Database extends ParameterHolder
 	 *
 	 * @return     mixed A database resource.
 	 *
-	 * @throws     <b>DatabaseException</b> If a resource could not be retrieved.
+	 * @throws     <b>AgaviDatabaseException</b> If a resource could not be retrieved.
 	 */
 	public function getResource ()
 	{
@@ -104,8 +104,8 @@ abstract class Database extends ParameterHolder
 	 * @return     bool true, if initialization completes successfully, 
 	 *                  otherwise false.
 	 *
-	 * @throws     <b>InitializationException</b> If an error occurs while
-	 *                                            initializing this Database.
+	 * @throws     <b>AgaviInitializationException</b> If an error occurs while
+	 *                                                 initializing this Database.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -127,8 +127,8 @@ abstract class Database extends ParameterHolder
 	 *
 	 * @return     void
 	 *
-	 * @throws     <b>DatabaseException</b> If an error occurs while shutting 
-	 *                                      down this database.
+	 * @throws     <b>AgaviDatabaseException</b> If an error occurs while shutting 
+	 *                                           down this database.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0

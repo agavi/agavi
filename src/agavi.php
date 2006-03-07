@@ -65,7 +65,7 @@ function __autoload ($class)
 	if (!isset($classes)) {
 		try	{
 			// include the list of autoload classes
-			$config = ConfigCache::checkConfig('config/autoload.ini');
+			$config = AgaviConfigCache::checkConfig('config/autoload.ini');
 		} catch (AgaviException $e) {
 			$e->printStackTrace();
 		} catch (Exception $e) {
@@ -154,14 +154,14 @@ try {
 
 	// clear our cache if the conditions are right
 	if (AG_DEBUG)	{
-		Toolkit::clearCache();
+		AgaviToolkit::clearCache();
 	}
 
 	// load base settings
-	ConfigCache::import('config/settings.ini');
+	AgaviConfigCache::import('config/settings.ini');
 
 	// required classes for the framework
-	ConfigCache::import('config/compile.conf');
+	AgaviConfigCache::import('config/compile.conf');
 
 } catch (AgaviException $e) {
 	$e->printStackTrace();

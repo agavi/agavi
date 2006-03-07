@@ -15,7 +15,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * ValidatorException is thrown when an error occurs in a validator.
+ * AgaviValidatorException is thrown when an error occurs in a validator.
  *
  * @package    agavi
  * @subpackage exception
@@ -26,7 +26,7 @@
  *
  * @version    $Id$
  */
-class ValidatorException extends AgaviException
+class AgaviValidatorException extends AgaviException
 {
 
 	// +-----------------------------------------------------------------------+
@@ -47,7 +47,7 @@ class ValidatorException extends AgaviException
 
 		parent::__construct($message, $code);
 
-		$this->setName('ValidatorException');
+		$this->setName('AgaviValidatorException');
 
 	}
 

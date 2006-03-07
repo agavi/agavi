@@ -15,7 +15,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * Toolkit provides basic utility methods.
+ * AgaviToolkit provides basic utility methods.
  *
  * @package    agavi
  * @subpackage util
@@ -26,7 +26,7 @@
  *
  * @version    $Id$
  */
-class Toolkit
+class AgaviToolkit
 {
 
 	/**

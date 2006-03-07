@@ -15,7 +15,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * DatabaseConfigHandler allows you to setup database connections in a
+ * AgaviDatabaseConfigHandler allows you to setup database connections in a
  * configuration file that will be created for you automatically upon first
  * request.
  *
@@ -24,12 +24,11 @@
  *
  * @author     Sean Kerr <skerr@mojavi.org>
  * @copyright  (c) Authors
- * @copyright  (c) Authors
  * @since      0.9.0
  *
  * @version    $Id$
  */
-class DatabaseConfigHandler extends IniConfigHandler
+class AgaviDatabaseConfigHandler extends AgaviIniConfigHandler
 {
 
 	/**
@@ -39,10 +38,10 @@ class DatabaseConfigHandler extends IniConfigHandler
 	 *
 	 * @return     string Data to be written to a cache file.
 	 *
-	 * @throws     <b>UnreadableException</b> If a requested configuration file
-	 *                                        does not exist or is not readable.
-	 * @throws     <b>ParseException</b> If a requested configuration file is
-	 *                                   improperly formatted.
+	 * @throws     <b>AgaviUnreadableException</b> If a requested configuration file
+	 *                                             does not exist or is not readable.
+	 * @throws     <b>AgaviParseException</b> If a requested configuration file is
+	 *                                        improperly formatted.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -78,7 +77,7 @@ class DatabaseConfigHandler extends IniConfigHandler
 						 'registered category "%s"';
 				$error = sprintf($error, $config, $value);
 
-				throw new ParseException($error);
+				throw new AgaviParseException($error);
 
 			}
 
@@ -91,7 +90,7 @@ class DatabaseConfigHandler extends IniConfigHandler
 						 'category "%s"';
 				$error = sprintf($error, $config, $value);
 
-				throw new ParseException($error);
+				throw new AgaviParseException($error);
 
 			}
 
@@ -109,7 +108,7 @@ class DatabaseConfigHandler extends IniConfigHandler
 				     'database configuration';
 			$error = sprintf($error, $config);
 
-			throw new ParseException($error);
+			throw new AgaviParseException($error);
 
 		}
 
@@ -133,7 +132,7 @@ class DatabaseConfigHandler extends IniConfigHandler
 						 '"%s" with missing class key';
 				$error = sprintf($error, $config, $category);
 
-				throw new ParseException($error);
+				throw new AgaviParseException($error);
 
 			}
 
@@ -155,7 +154,7 @@ class DatabaseConfigHandler extends IniConfigHandler
 						     'with nonexistent or unreadable file "%s"';
 				    $error = sprintf($error, $config, $class, $file);
 
-				    throw new ParseException($error);
+				    throw new AgaviParseException($error);
 
 				}
 
@@ -166,7 +165,7 @@ class DatabaseConfigHandler extends IniConfigHandler
 			}
 
 			// parse parameters
-			$parameters =& ParameterParser::parse($keys);
+			$parameters =& AgaviParameterParser::parse($keys);
 
 			// append new data
 			$tmp = "\$database = new %s();\n" .

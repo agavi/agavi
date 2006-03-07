@@ -15,8 +15,8 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * ForwardException is thrown when an error occurs while attempting to forward
- * the request.
+ * AgaviForwardException is thrown when an error occurs while attempting to 
+ * forward the request.
  *
  * @package    agavi
  * @subpackage exception
@@ -27,7 +27,7 @@
  *
  * @version    $Id$
  */
-class ForwardException extends AgaviException
+class AgaviForwardException extends AgaviException
 {
 
 	// +-----------------------------------------------------------------------+
@@ -48,7 +48,7 @@ class ForwardException extends AgaviException
 
 		parent::__construct($message, $code);
 
-		$this->setName('ForwardException');
+		$this->setName('AgaviForwardException');
 
 	}
 

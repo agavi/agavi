@@ -14,7 +14,7 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
-class Default_ModuleDisabledSuccessView extends PHPView
+class Default_ModuleDisabledSuccessView extends AgaviPHPView
 {
 
 	/**

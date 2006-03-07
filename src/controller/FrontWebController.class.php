@@ -15,7 +15,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * FrontWebController allows you to centralize your entry point in your web
+ * AgaviFrontWebController allows you to centralize your entry point in your web
  * application, but at the same time allow for any module and action combination
  * to be requested.
  *
@@ -28,7 +28,7 @@
  *
  * @version    $Id$
  */
-class FrontWebController extends WebController
+class AgaviFrontWebController extends AgaviWebController
 {
 
 	/**

@@ -15,7 +15,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * PostgreSQLDatabase provides connectivity for the PostgreSQL brand database.
+ * AgaviPostgreSQLDatabase provides connectivity for the PostgreSQL brand database.
  *
  * <b>Optional parameters:</b>
  *
@@ -45,14 +45,14 @@
  *
  * @version    $Id$
  */
-class PostgreSQLDatabase extends Database
+class AgaviPostgreSQLDatabase extends AgaviDatabase
 {
 
 	/**
 	 * Connect to the database.
 	 *
-	 * @throws     <b>DatabaseException</b> If a connection could not be 
-	 *                                      created.
+	 * @throws     <b>AgaviDatabaseException</b> If a connection could not be 
+	 *                                           created.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -102,11 +102,11 @@ class PostgreSQLDatabase extends Database
 			default:
 
 				// who knows what the user wants...
-				$error = 'Invalid PostgreSQLDatabase parameter retrieval ' .
+				$error = 'Invalid AgaviPostgreSQLDatabase parameter retrieval ' .
 						 'method "%s"';
 				$error = sprintf($error, $method);
 
-				throw new DatabaseException($error);
+				throw new AgaviDatabaseException($error);
 
 		}
 
@@ -121,9 +121,9 @@ class PostgreSQLDatabase extends Database
 		{
 
 			// the connection's foobar'd
-			$error = 'Failed to create a PostgreSQLDatabase connection';
+			$error = 'Failed to create a AgaviPostgreSQLDatabase connection';
 
-			throw new DatabaseException($error);
+			throw new AgaviDatabaseException($error);
 
 		}
 
@@ -166,8 +166,8 @@ class PostgreSQLDatabase extends Database
 	 *
 	 * @return     void
 	 *
-	 * @throws     <b>DatabaseException</b> If an error occurs while shutting
-	 *                                      down this database.
+	 * @throws     <b>AgaviDatabaseException</b> If an error occurs while shutting
+	 *                                           down this database.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0

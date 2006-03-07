@@ -15,7 +15,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * DatabaseException is thrown when a database related error occurs.
+ * AgaviDatabaseException is thrown when a database related error occurs.
  *
  * @package    agavi
  * @subpackage exception
@@ -26,7 +26,7 @@
  *
  * @version    $Id$
  */
-class DatabaseException extends AgaviException
+class AgaviDatabaseException extends AgaviException
 {
 
 	// +-----------------------------------------------------------------------+
@@ -47,7 +47,7 @@ class DatabaseException extends AgaviException
 
 		parent::__construct($message, $code);
 
-		$this->setName('DatabaseException');
+		$this->setName('AgaviDatabaseException');
 
 	}
 

@@ -14,7 +14,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * StdoutAppender appends a Message to stdout.
+ * AgaviStdoutAppender appends an AgaviMessage to stdout.
  *
  * @package    agavi
  * @subpackage logging
@@ -25,7 +25,7 @@
  *
  * @version    $Id$
  */
-class StdoutAppender extends FileAppender
+class AgaviStdoutAppender extends AgaviFileAppender
 {
 
 	/**

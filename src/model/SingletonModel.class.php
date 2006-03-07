@@ -14,7 +14,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * An extension to Model, but for implementation as a Singleton
+ * An extension to AgaviModel, but for implementation as a Singleton
  * 
  * @package    agavi
  * @subpackage model
@@ -26,7 +26,7 @@
  * @version    $Id$
  */
 
-abstract class SingletonModel extends Model
+abstract class AgaviSingletonModel extends AgaviModel
 {
 	protected static $instance = array();
 

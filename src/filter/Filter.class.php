@@ -15,7 +15,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * Filter provides a way for you to intercept incoming requests or outgoing
+ * AgaviFilter provides a way for you to intercept incoming requests or outgoing
  * responses.
  *
  * @package    agavi
@@ -27,7 +27,7 @@
  *
  * @version    $Id$
  */
-abstract class Filter extends ParameterHolder
+abstract class AgaviFilter extends AgaviParameterHolder
 {
 
 	private
@@ -36,7 +36,7 @@ abstract class Filter extends ParameterHolder
 	/**
 	 * Execute this filter.
 	 *
-	 * @param      FilterChain A FilterChain instance.
+	 * @param      AgaviFilterChain A FilterChain instance.
 	 *
 	 * @return     void
 	 *
@@ -48,7 +48,7 @@ abstract class Filter extends ParameterHolder
 	/**
 	 * Retrieve the current application context.
 	 *
-	 * @return     Context The current Context instance.
+	 * @return     AgaviContext The current Context instance.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -63,14 +63,14 @@ abstract class Filter extends ParameterHolder
 	/**
 	 * Initialize this Filter.
 	 *
-	 * @param      Context The current application context.
-	 * @param      array   An associative array of initialization parameters.
+	 * @param      AgaviContext The current application context.
+	 * @param      array        An associative array of initialization parameters.
 	 *
 	 * @return     bool true, if initialization completes successfully, 
 	 *                  otherwise false.
 	 *
-	 * @throws     <b>InitializationException</b> If an error occurs while
-	 *                                            initializing this Filter.
+	 * @throws     <b>AgaviInitializationException</b> If an error occurs while
+	 *                                                 initializing this Filter.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0

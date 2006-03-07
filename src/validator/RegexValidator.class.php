@@ -15,7 +15,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * RegexValidator allows you to match a value against a regular expression
+ * AgaviRegexValidator allows you to match a value against a regular expression
  * pattern.
  *
  * <b>Required parameters:</b>
@@ -40,7 +40,7 @@
  *
  * @version    $Id$
  */
-class RegexValidator extends Validator
+class AgaviRegexValidator extends AgaviValidator
 {
 
 	/**
@@ -78,8 +78,8 @@ class RegexValidator extends Validator
 	/**
 	 * Initialize this validator.
 	 *
-	 * @param      Context The current application context.
-	 * @param      array   An associative array of initialization parameters.
+	 * @param      AgaviContext The current application context.
+	 * @param      array        An associative array of initialization parameters.
 	 *
 	 * @return     bool true, if initialization completes successfully,
 	 *                  otherwise false.
@@ -106,7 +106,7 @@ class RegexValidator extends Validator
 			$error = 'Please specify a PCRE regular expression pattern for ' .
 				     'your registered RegexValidator';
 
-			throw new ValidatorException($error);
+			throw new AgaviValidatorException($error);
 
 		}
 

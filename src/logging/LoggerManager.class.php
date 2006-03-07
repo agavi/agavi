@@ -14,7 +14,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * LoggerManager provides accessibility and management of all loggers.
+ * AgaviLoggerManager provides accessibility and management of all loggers.
  *
  * @package    agavi
  * @subpackage logging
@@ -25,7 +25,7 @@
  *
  * @version    $Id$
  */
-class LoggerManager
+class AgaviLoggerManager
 {
 
 	private
@@ -35,7 +35,7 @@ class LoggerManager
 	/**
 	 * Retrieve the current application context.
 	 *
-	 * @return     Context The current Context instance.
+	 * @return     AgaviContext The current Context instance.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
@@ -46,13 +46,13 @@ class LoggerManager
 	}
 
 	/**
-	 * Initialize this LoggingManager.
+	 * Initialize this AgaviLoggingManager.
 	 *
 	 * @return     bool true, if initialization completes successfully,
 	 *                  otherwise false.
 	 *
-	 * @throws     <b>InitializationException</b> If an error occurs while
-	 *                                            initializing a LoggingManager.
+	 * @throws     <b>AgaviInitializationException</b> If an error occurs while
+	 *                                                 initializing a LoggingManager.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @author     Sean Kerr <skerr@mojavi.org>
@@ -63,7 +63,7 @@ class LoggerManager
 		$this->context = $context;
 		
 		// load database configuration
-		require_once(ConfigCache::checkConfig('config/logging.ini'));
+		require_once(AgaviConfigCache::checkConfig('config/logging.ini'));
 	}
 	
 	/**
@@ -71,8 +71,8 @@ class LoggerManager
 	 *
 	 * @param      string A logger name.
 	 *
-	 * @return     Logger A Logger, if a logger with the name exists, otherwise
-	 *                    null.
+	 * @return     AgaviLogger A Logger, if a logger with the name exists, 
+	 *                         otherwise null.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @author     Sean Kerr <skerr@mojavi.org>
@@ -122,10 +122,10 @@ class LoggerManager
 	 *
 	 * @param      string A logger name.
 	 *
-	 * @return     Logger A Logger, if the logger has been removed, else null.
+	 * @return     AgaviLogger A Logger, if the logger has been removed, else null.
 	 *
-	 * @throws     <b>LoggingException</b> If the logger name is default, which
-	 *                                     cannot be removed.
+	 * @throws     <b>AgaviLoggingException</b> If the logger name is default, which
+	 *                                          cannot be removed.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @author     Sean Kerr <skerr@mojavi.org>
@@ -146,7 +146,7 @@ class LoggerManager
 			{
 				// cannot remove the default logger
 				$error = 'Cannot remove the default logger';
-				throw new LoggingException($error);
+				throw new AgaviLoggingException($error);
 			}
 		}
 
@@ -158,13 +158,13 @@ class LoggerManager
 	 *
 	 * If a logger with the name already exists, an exception will be thrown.
 	 *
-	 * @param      string A logger name.
-	 * @param      Logger A Logger instance.
+	 * @param      string      A logger name.
+	 * @param      AgaviLogger A Logger instance.
 	 *
 	 * @return     void
 	 *
-	 * @throws     <b>LoggingException</b> If a logger with the name already 
-	 *                                     exists.
+	 * @throws     <b>AgaviLoggingException</b> If a logger with the name already 
+	 *                                          exists.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @author     Sean Kerr <skerr@mojavi.org>
@@ -182,23 +182,23 @@ class LoggerManager
 		$error = 'A logger with the name "%s" is already registered';
 		$error = sprintf($error, $name);
 
-		throw new LoggingException($error);
+		throw new AgaviLoggingException($error);
 	}
 
 	/**
 	 * Log a Message.
 	 * 
-	 * @param      Message The Message to log.
+	 * @param      AgaviMessage The Message to log.
 	 * @param      string Optional logger to log to.
 	 * 
 	 * @return     void
-	 * @throws     LoggingException if the logger was not found.
+	 * @throws     AgaviLoggingException if the logger was not found.
 	 * 
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.10.0
 	 */
-	public function log(Message $message, $logger = null)
+	public function log(AgaviMessage $message, $logger = null)
 	{
 		if (is_null($logger)) {
 			foreach ($this->loggers as $logger) {
@@ -207,7 +207,7 @@ class LoggerManager
 		} else if (!is_null($logger = self::getLogger($logger))) {
 			$logger->log($message);
 		} else {
-			throw new LoggingException("{$logger} Logger is not configured.");
+			throw new AgaviLoggingException("{$logger} Logger is not configured.");
 		}
 	}
 

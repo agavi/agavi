@@ -14,7 +14,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * Logger provides an easy way to manage multiple log destinations and write
+ * AgaviLogger provides an easy way to manage multiple log destinations and write
  * to them all simultaneously.
  *
  * @package    agavi
@@ -26,7 +26,7 @@
  *
  * @version    $Id$
  */
-class Logger
+class AgaviLogger
 {
 
 	/**
@@ -84,14 +84,14 @@ class Logger
 	/**
 	 * Log a message.
 	 *
-	 * @param      Message A Message instance.
+	 * @param      AgaviMessage A Message instance.
 	 *
 	 * @return     void
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function log (Message $message)
+	public function log (AgaviMessage $message)
 	{
 		// get message priority
 		$msgPriority = $message->getPriority();
@@ -110,13 +110,13 @@ class Logger
 	 *
 	 * If an appender with the name already exists, an exception will be thrown.
 	 *
-	 * @param      string   An appender name.
-	 * @param      Appender An Appender instance.
+	 * @param      string        An appender name.
+	 * @param      AgaviAppender An Appender instance.
 	 *
 	 * @return     void
 	 *
-	 * @throws     <b>LoggingException</b> If an appender with the name already
-	 *                                     exists.
+	 * @throws     <b>AgaviLoggingException</b> If an appender with the name already
+	 *                                          exists.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -133,7 +133,7 @@ class Logger
 		$error = 'An appender with the name "%s" is already registered';
 		$error = sprintf($error, $name);
 
-		throw new LoggingException($error);
+		throw new AgaviLoggingException($error);
 	}
 
 	/**

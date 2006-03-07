@@ -15,7 +15,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * SecurityException is thrown when a security related error occurs.
+ * AgaviSecurityException is thrown when a security related error occurs.
  *
  * @package    agavi
  * @subpackage exception
@@ -26,7 +26,7 @@
  *
  * @version    $Id$
  */
-class SecurityException extends AgaviException
+class AgaviSecurityException extends AgaviException
 {
 
 	// +-----------------------------------------------------------------------+
@@ -47,7 +47,7 @@ class SecurityException extends AgaviException
 
 		parent::__construct($message, $code);
 
-		$this->setName('SecurityException');
+		$this->setName('AgaviSecurityException');
 
 	}
 

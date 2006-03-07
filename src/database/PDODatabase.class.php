@@ -14,7 +14,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * PDODatabase provides connectivity for the PDO database abstraction layer.
+ * AgaviPDODatabase provides connectivity for the PDO database abstraction layer.
  *
  * @package    agavi
  * @subpackage database
@@ -26,13 +26,13 @@
  *
  * @version    $Id$
  */
-class PDODatabase extends Database
+class AgaviPDODatabase extends AgaviDatabase
 {
 
 	/**
 	 * Connect to the database.
 	 *
-	 * @throws     <b>DatabaseException</b> If a connection could not be created
+	 * @throws     <b>AgaviDatabaseException</b> If a connection could not be created
 	 *
 	 * @author     Daniel Swarbrick (daniel@pressure.net.nz)
 	 * @since      0.9.0
@@ -56,7 +56,7 @@ class PDODatabase extends Database
 					$error = 'Database configuration specifies method ' .
 						 '"dsn", but is missing dsn parameter';
 
-					throw new DatabaseException($error);
+					throw new AgaviDatabaseException($error);
 
 				}
 
@@ -72,7 +72,7 @@ class PDODatabase extends Database
 
 		} catch (PDOException $e)	{
 
-			throw new DatabaseException($e->getMessage());
+			throw new AgaviDatabaseException($e->getMessage());
 
 		}
 
@@ -90,8 +90,8 @@ class PDODatabase extends Database
 	 *
 	 * @return     void
 	 *
-	 * @throws     <b>DatabaseException</b> If an error occurs while shutting
-	 *                                      down this database.
+	 * @throws     <b>AgaviDatabaseException</b> If an error occurs while shutting
+	 *                                           down this database.
 	 *
 	 * @author     Daniel Swarbrick (daniel@pressure.net.nz)
 	 * @since      0.9.0

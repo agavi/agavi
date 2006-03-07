@@ -15,9 +15,9 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * IniConfigHandler is a base class for .ini configuration handlers. This class
- * provides a central location for parsing ini files and detecting required
- * categories.
+ * AgaviIniConfigHandler is a base class for .ini configuration handlers. 
+ * This class provides a central location for parsing ini files and 
+ * detecting required categories.
  *
  * @package    agavi
  * @subpackage config
@@ -28,7 +28,7 @@
  *
  * @version    $Id$
  */
-abstract class IniConfigHandler extends ConfigHandler
+abstract class AgaviIniConfigHandler extends AgaviConfigHandler
 {
 
 	/**
@@ -38,10 +38,10 @@ abstract class IniConfigHandler extends ConfigHandler
 	 *
 	 * @return     string A parsed .ini configuration.
 	 *
-	 * @throws     <b>UnreadableException</b> If a requested configuration file
-	 *                                        does not exist or is not readable.
-	 * @throws     <b>ParseException</b> If a requested configuration file is
-	 *                                   improperly formatted.
+	 * @throws     <b>AgaviUnreadableException</b> If a requested configuration file
+	 *                                             does not exist or is not readable.
+	 * @throws     <b>AgaviParseException</b> If a requested configuration file is
+	 *                                        improperly formatted.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -50,7 +50,7 @@ abstract class IniConfigHandler extends ConfigHandler
 	{
 		if (!is_readable($config)) {
 			$error = 'Configuration file "' . $config . '" does not exist or is not readable';
-			throw new UnreadableException($error);
+			throw new AgaviUnreadableException($error);
 		}
 
 		// parse our config
@@ -58,7 +58,7 @@ abstract class IniConfigHandler extends ConfigHandler
 
 		if ($ini === false)	{
 			$error = 'Configuration file "' . $config . '" could not be parsed';
-			throw new ParseException($error);
+			throw new AgaviParseException($error);
 		}
 
 		// get a list of the required categories
@@ -68,7 +68,7 @@ abstract class IniConfigHandler extends ConfigHandler
 			foreach ($categories as $category) {
 				if (!isset($ini[$category])) {
 			    $error = 'Configuration file "' . $config . '" is missing "' . $category . '" category';
-			    throw new ParseException($error);
+			    throw new AgaviParseException($error);
 				}
 
 			}

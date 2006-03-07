@@ -15,7 +15,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * ParseException is thrown when a parsing procedure fails to complete
+ * AgaviParseException is thrown when a parsing procedure fails to complete
  * successfully.
  *
  * @package    agavi
@@ -27,7 +27,7 @@
  *
  * @version    $Id$
  */
-class ParseException extends ConfigurationException
+class AgaviParseException extends AgaviConfigurationException
 {
 
 	// +-----------------------------------------------------------------------+
@@ -48,7 +48,7 @@ class ParseException extends ConfigurationException
 
 		parent::__construct($message, $code);
 
-		$this->setName('ParseException');
+		$this->setName('AgaviParseException');
 
 	}
 

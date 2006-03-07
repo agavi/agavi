@@ -15,8 +15,8 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * ModuleConfigHandler reads module configuration files to determine the status
- * of a module.
+ * AgaviModuleConfigHandler reads module configuration files to determine the 
+ * status of a module.
  *
  * @package    agavi
  * @subpackage config
@@ -27,7 +27,7 @@
  *
  * @version    $Id$
  */
-class ModuleConfigHandler extends IniConfigHandler
+class AgaviModuleConfigHandler extends AgaviIniConfigHandler
 {
 
 	/**
@@ -37,10 +37,10 @@ class ModuleConfigHandler extends IniConfigHandler
 	 *
 	 * @return     string Data to be written to a cache file.
 	 *
-	 * @throws     <b>UnreadableException</b> If a requested configuration file
-	 *                                        does not exist or is not readable.
-	 * @throws     <b>ParseException</b> If a requested configuration file is
-	 *                                   improperly formatted.
+	 * @throws     <b>AgaviUnreadableException</b> If a requested configuration file
+	 *                                             does not exist or is not readable.
+	 * @throws     <b>AgaviParseException</b> If a requested configuration file is
+	 *                                        improperly formatted.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -65,7 +65,7 @@ class ModuleConfigHandler extends IniConfigHandler
 				     '"module" with missing "NAME" key';
 			$error = sprintf($error, $config);
 
-			throw new ParseException($error);
+			throw new AgaviParseException($error);
 
 		}
 

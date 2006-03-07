@@ -15,7 +15,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * NumberValidator verifies a parameter is a number and allows you to apply
+ * AgaviNumberValidator verifies a parameter is a number and allows you to apply
  * size constraints.
  *
  * <b>Optional parameters:</b>
@@ -41,7 +41,7 @@
  *
  * @version    $Id$
  */
-class NumberValidator extends Validator
+class AgaviNumberValidator extends AgaviValidator
 {
 
 	/**
@@ -116,8 +116,8 @@ class NumberValidator extends Validator
 	/**
 	 * Initialize this validator.
 	 *
-	 * @param      Context The current application context.
-	 * @param      array   An associative array of initialization parameters.
+	 * @param      AgaviContext The current application context.
+	 * @param      array        An associative array of initialization parameters.
 	 *
 	 * @return     bool true, if initialization completes successfully,
 	 *                  otherwise false.
@@ -149,7 +149,7 @@ class NumberValidator extends Validator
 			// unknown type
 			$error = 'Unknown number type "%s" in NumberValidator';
 			$error = sprintf($error, $this->getParameter('type'));
-			throw new ValidatorException($error);
+			throw new AgaviValidatorException($error);
 		}
 
 		return true;

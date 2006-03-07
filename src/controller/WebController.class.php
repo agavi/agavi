@@ -15,7 +15,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * WebController provides web specific methods to Controller such as, url
+ * AgaviWebController provides web specific methods to Controller such as, url
  * redirection.
  *
  * @package    agavi
@@ -28,7 +28,7 @@
  *
  * @version    $Id$
  */
-abstract class WebController extends Controller
+abstract class AgaviWebController extends AgaviController
 {
 
 	protected
@@ -405,7 +405,7 @@ abstract class WebController extends Controller
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
-	public function initialize (Context $context)
+	public function initialize (AgaviContext $context)
 	{
 
 		// initialize parent

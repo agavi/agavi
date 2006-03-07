@@ -14,7 +14,8 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * PassthruLayout is a Layout that will return the Message text unaltered.
+ * AgaviPassthruLayout is an AgaviLayout that will return the AgaviMessage text 
+ * unaltered.
  *
  * @package    agavi
  * @subpackage logging
@@ -25,13 +26,13 @@
  *
  * @version    $Id: PatternLayout.class.php 87 2005-06-03 21:19:23Z bob $
  */
-class PassthruLayout extends Layout
+class AgaviPassthruLayout extends AgaviLayout
 {
 
 	/**
 	 * Format a message.
 	 *
-	 * @param      Message A Message instance.
+	 * @param      AgaviMessage A AgaviMessage instance.
 	 *
 	 * @return     string A formatted message.
 	 *

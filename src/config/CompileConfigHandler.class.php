@@ -15,8 +15,8 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * CompileConfigHandler gathers multiple files and puts them into a single file.
- * Upon creation of the new file, all comments and blank lines are removed.
+ * AgaviCompileConfigHandler gathers multiple files and puts them into a single
+ * file. Upon creation of the new file, all comments and blank lines are removed.
  *
  * @package    agavi
  * @subpackage config
@@ -27,7 +27,7 @@
  *
  * @version    $Id$
  */
-class CompileConfigHandler extends ConfigHandler
+class AgaviCompileConfigHandler extends AgaviConfigHandler
 {
 
 	/**
@@ -37,10 +37,10 @@ class CompileConfigHandler extends ConfigHandler
 	 *
 	 * @return     string Data to be written to a cache file.
 	 *
-	 * @throws     <b>UnreadableException</b> If a requested configuration file
-	 *                                        does not exist or is not readable.
-	 * @throws     <b>ParseException</b> If a requested configuration file is
-	 *                                   improperly formatted.
+	 * @throws     <b>AgaviUnreadableException</b> If a requested configuration file
+	 *                                             does not exist or is not readable.
+	 * @throws     <b>AgaviParseException</b> If a requested configuration file is
+	 *                                        improperly formatted.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -56,7 +56,7 @@ class CompileConfigHandler extends ConfigHandler
 				     'readable';
 			$error = sprintf($error, $config);
 
-			throw new UnreadableException($error);
+			throw new AgaviUnreadableException($error);
 
 		}
 
@@ -70,7 +70,7 @@ class CompileConfigHandler extends ConfigHandler
 			$error = 'Configuration file "%s" could not be parsed';
 			$error = sprintf($error, $config);
 
-			throw new ParseException($error);
+			throw new AgaviParseException($error);
 
 		}
 
@@ -100,7 +100,7 @@ class CompileConfigHandler extends ConfigHandler
 						     'or unreadable file "%s"';
 				    $error = sprintf($error, $config, $file);
 
-				    throw new ParseException($error);
+				    throw new AgaviParseException($error);
 
 				}
 

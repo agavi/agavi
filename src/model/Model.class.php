@@ -15,10 +15,10 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * Model provides a convention for separating business logic from application
- * logic. When using a model you're providing a globally accessible API for
- * other modules to access, which will boost interoperability among modules in
- * your web application.
+ * AgaviModel provides a convention for separating business logic from 
+ * application logic. When using a model you're providing a globally accessible
+ * API for other modules to access, which will boost interoperability among 
+ * modules in your web application.
  *
  * @package    agavi
  * @subpackage model
@@ -29,7 +29,7 @@
  *
  * @version    $Id$
  */
-abstract class Model
+abstract class AgaviModel
 {
 
 	// +-----------------------------------------------------------------------+
@@ -41,7 +41,7 @@ abstract class Model
 	/**
 	 * Retrieve the current application context.
 	 *
-	 * @return     Context The current Context instance.
+	 * @return     AgaviContext The current Context instance.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -56,7 +56,7 @@ abstract class Model
 	/**
 	 * Initialize this model.
 	 *
-	 * @param      Context The current application context.
+	 * @param      AgaviContext The current application context.
 	 *
 	 * @return     bool true, if initialization completes successfully, 
 	 *                  otherwise false.

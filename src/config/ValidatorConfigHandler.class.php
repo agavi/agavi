@@ -15,7 +15,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * ValidatorConfigHandler allows you to register validators with the system.
+ * AgaviValidatorConfigHandler allows you to register validators with the system.
  *
  * @package    agavi
  * @subpackage config
@@ -26,7 +26,7 @@
  *
  * @version    $Id$
  */
-class ValidatorConfigHandler extends IniConfigHandler
+class AgaviValidatorConfigHandler extends AgaviIniConfigHandler
 {
 
 	/**
@@ -36,10 +36,10 @@ class ValidatorConfigHandler extends IniConfigHandler
 	 *
 	 * @return     string Data to be written to a cache file.
 	 *
-	 * @throws     <b>UnreadableException</b> If a requested configuration file
-	 *                                        does not exist or is not readable.
-	 * @throws     <b>ParseException</b> If a requested configuration file is
-	 *                                   improperly formatted.
+	 * @throws     <b>AgaviUnreadableException</b> If a requested configuration file
+	 *                                             does not exist or is not readable.
+	 * @throws     <b>AgaviParseException</b> If a requested configuration file is
+	 *                                        improperly formatted.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -77,7 +77,7 @@ class ValidatorConfigHandler extends IniConfigHandler
 							 'request method "%s"';
 					$error = sprintf($error, $config, $method);
 
-					throw new ParseException($method);
+					throw new AgaviParseException($method);
 
 				}
 
@@ -253,7 +253,7 @@ class ValidatorConfigHandler extends IniConfigHandler
 				$error = 'Configuration file "%s" specifies invalid key "%s"';
 				$error = sprintf($error, $config, $key);
 
-				throw new ParseException($error);
+				throw new AgaviParseException($error);
 
 			}
 
@@ -275,7 +275,7 @@ class ValidatorConfigHandler extends IniConfigHandler
 							 'parent "%s" or subname "%s"';
 					$error = sprintf($error, $config, $parent, $subname);
 
-					throw new ParseException($error);
+					throw new AgaviParseException($error);
 
 				}
 
@@ -290,7 +290,7 @@ class ValidatorConfigHandler extends IniConfigHandler
 					$error = 'Configuration file "%s" specifies unregistered ' . 'name "%s"';
 					$error = sprintf($error, $config, $name);
 
-					throw new ParseException($error);
+					throw new AgaviParseException($error);
 
 				}
 
@@ -367,7 +367,7 @@ class ValidatorConfigHandler extends IniConfigHandler
 						 'attribute';
 				$error = sprintf($error, $config, $name);
 
-				throw new ParseException($error);
+				throw new AgaviParseException($error);
 
 			}
 
@@ -410,7 +410,7 @@ class ValidatorConfigHandler extends IniConfigHandler
 						 'with invalid file/parameter name "%s"';
 				$error = sprintf($error, $config, $method, $name);
 
-				throw new ParseException($error);
+				throw new AgaviParseException($error);
 
 			} else {
 
@@ -488,7 +488,7 @@ class ValidatorConfigHandler extends IniConfigHandler
 						 'validator "%s"';
 				$error = sprintf($error, $config, $validator);
 
-				throw new ParseException($error);
+				throw new AgaviParseException($error);
 
 			}
 
@@ -506,7 +506,7 @@ class ValidatorConfigHandler extends IniConfigHandler
 						 '"%s" with missing class key';
 				$error = sprintf($error, $config, $validator);
 
-				throw new ParseException($error);
+				throw new AgaviParseException($error);
 
 			}
 
@@ -533,7 +533,7 @@ class ValidatorConfigHandler extends IniConfigHandler
 							 'file "%s"';
 					$error = sprintf($error, $config, $validator, $file);
 
-					throw new ParseException($error);
+					throw new AgaviParseException($error);
 
 				}
 
@@ -542,7 +542,7 @@ class ValidatorConfigHandler extends IniConfigHandler
 			}
 
 			// parse parameters
-			$parameters = ParameterParser::parse($ini[$validator]);
+			$parameters = AgaviParameterParser::parse($ini[$validator]);
 
 			$validators[$validator]['parameters'] = $parameters;
 

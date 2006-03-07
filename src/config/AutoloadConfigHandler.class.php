@@ -15,7 +15,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AutoloadConfigHandler allows you to specify a list of classes that will
+ * AgaviAutoloadConfigHandler allows you to specify a list of classes that will
  * automatically be included for you upon first use.
  *
  * @package    agavi
@@ -27,7 +27,7 @@
  *
  * @version    $Id$
  */
-class AutoloadConfigHandler extends IniConfigHandler
+class AgaviAutoloadConfigHandler extends AgaviIniConfigHandler
 {
 
 	/**
@@ -37,10 +37,10 @@ class AutoloadConfigHandler extends IniConfigHandler
 	 *
 	 * @return     string Data to be written to a cache file.
 	 *
-	 * @throws     <b>UnreadableException</b> If a requested configuration file
-	 *                                        does not exist or is not readable.
-	 * @throws     <b>ParseException</b> If a requested configuration file is
-	 *                                   improperly formatted.
+	 * @throws     <b>AgaviUnreadableException</b> If a requested configuration file
+	 *                                             does not exist or is not readable.
+	 * @throws     <b>AgaviParseException</b> If a requested configuration file is
+	 *                                        improperly formatted.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -73,7 +73,7 @@ class AutoloadConfigHandler extends IniConfigHandler
 						 'nonexistent or unreadable file "%s"';
 				$error = sprintf($error, $config, $class, $file);
 
-				throw new ParseException($error);
+				throw new AgaviParseException($error);
 
 			}
 

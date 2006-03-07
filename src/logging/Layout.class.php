@@ -14,7 +14,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * Layout allows you to specify a message layout for log messages.
+ * AgaviLayout allows you to specify a message layout for log messages.
  *
  * @package    agavi
  * @subpackage logging
@@ -25,7 +25,7 @@
  *
  * @version    $Id$
  */
-abstract class Layout
+abstract class AgaviLayout
 {
 
 	private $layout = null;
@@ -48,7 +48,7 @@ abstract class Layout
 	/**
 	 * Format a message.
 	 *
-	 * @param      Message A Message instance.
+	 * @param      AgaviMessage A Message instance.
 	 *
 	 * @return     string A formatted message.
 	 *

@@ -15,9 +15,9 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * ExecutionTimeFilter tracks the length of time it takes for an entire request
- * to be served starting with the dispatch and ending when the last action
- * request has been served.
+ * AgaviExecutionTimeFilter tracks the length of time it takes for an entire
+ * request to be served starting with the dispatch and ending when the last 
+ * action request has been served.
  *
  * <b>Optional parameters:</b>
  *
@@ -36,7 +36,7 @@
  *
  * @version    $Id$
  */
-class ExecutionTimeFilter extends Filter
+class AgaviExecutionTimeFilter extends AgaviFilter
 {
 
 	/**
@@ -66,11 +66,11 @@ class ExecutionTimeFilter extends Filter
 	/**
 	 * Execute this filter.
 	 *
-	 * @param      FilterChain The filter chain.
+	 * @param      AgaviFilterChain The filter chain.
 	 *
 	 * @return     void
 	 *
-	 * @throws     <b>FilterException</b> If an error occurs during execution.
+	 * @throws     <b>AgaviFilterException</b> If an error occurs during execution.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -165,14 +165,14 @@ class ExecutionTimeFilter extends Filter
 	/**
 	 * Initialize this filter.
 	 *
-	 * @param      Context The current application context.
-	 * @param      array   An associative array of initialization parameters.
+	 * @param      AgaviContext The current application context.
+	 * @param      array        An associative array of initialization parameters.
 	 *
 	 * @return     bool true, if initialization completes successfully, 
 	 *                  otherwise false.
 	 *
-	 * @throws     <b>FilterException</b> If an error occurs during 
-	 *                                    initialization.
+	 * @throws     <b>AgaviFilterException</b> If an error occurs during 
+	 *                                         initialization.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0

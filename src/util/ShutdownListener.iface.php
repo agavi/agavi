@@ -24,7 +24,7 @@
  *
  * @version    $Id: ConversionPattern.class.php 87 2005-06-03 21:19:23Z bob $
  */
-interface ShutdownListener
+interface AgaviShutdownListener
 {
 
 	/**

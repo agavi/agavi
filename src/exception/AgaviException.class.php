@@ -93,7 +93,7 @@ class AgaviException extends Exception
 
 		// exception related properties
 		$class     = ($this->getFile() != null)
-				     ? Toolkit::extractClassName($this->getFile()) : 'N/A';
+				     ? AgaviToolkit::extractClassName($this->getFile()) : 'N/A';
 
 		$class     = ($class != '')
 				     ? $class : 'N/A';
@@ -135,7 +135,7 @@ class AgaviException extends Exception
 
 				// grab the class name from the file
 				// (this only works with properly named classes)
-				$tClass = Toolkit::extractClassName($traceData[$i]['file']);
+				$tClass = AgaviToolkit::extractClassName($traceData[$i]['file']);
 				$tType      = isset($traceData[$i]['type']) ? $traceData[$i]['type'] : '::';
 
 				$tFile      = $traceData[$i]['file'];

@@ -15,8 +15,8 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * DefineConfigHandler allows you to turn ini categories and key/value pairs
- * into defined PHP values.
+ * AgaviDefineConfigHandler allows you to turn ini categories and key/value
+ * pairs into defined PHP values.
  *
  * <b>Optional initialization parameters:</b>
  *
@@ -31,7 +31,7 @@
  *
  * @version    $Id$
  */
-class DefineConfigHandler extends IniConfigHandler
+class AgaviDefineConfigHandler extends AgaviIniConfigHandler
 {
 
 	/**
@@ -41,10 +41,10 @@ class DefineConfigHandler extends IniConfigHandler
 	 *
 	 * @return     string Data to be written to a cache file.
 	 *
-	 * @throws     <b>UnreadableException</b> If a requested configuration file
-	 *                                        does not exist or is not readable.
-	 * @throws     <b>ParseException</b> If a requested configuration file is
-	 *                                   improperly formatted.
+	 * @throws     <b>AgaviUnreadableException</b> If a requested configuration file
+	 *                                             does not exist or is not readable.
+	 * @throws     <b>AgaviParseException</b> If a requested configuration file is
+	 *                                        improperly formatted.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0

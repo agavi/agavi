@@ -15,8 +15,8 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * FactoryException is thrown when an error occurs while attempting to create
- * a new factory implementation instance.
+ * AgaviFactoryException is thrown when an error occurs while attempting to 
+ * create a new factory implementation instance.
  *
  * @package    agavi
  * @subpackage exception
@@ -27,7 +27,7 @@
  *
  * @version    $Id$
  */
-class FactoryException extends AgaviException
+class AgaviFactoryException extends AgaviException
 {
 
 	// +-----------------------------------------------------------------------+
@@ -48,7 +48,7 @@ class FactoryException extends AgaviException
 
 		parent::__construct($message, $code);
 
-		$this->setName('FactoryException');
+		$this->setName('AgaviFactoryException');
 
 	}
 

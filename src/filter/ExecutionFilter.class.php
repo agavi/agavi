@@ -15,8 +15,8 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * ExecutionFilter is the last filter registered for each filter chain. This
- * filter does all action and view execution.
+ * AgaviExecutionFilter is the last filter registered for each filter chain.
+ * This filter does all action and view execution.
  *
  * @package    agavi
  * @subpackage filter
@@ -27,20 +27,20 @@
  *
  * @version    $Id$
  */
-class ExecutionFilter extends Filter
+class AgaviExecutionFilter extends AgaviFilter
 {
 
 	/**
 	 * Execute this filter.
 	 *
-	 * @param      FilterChain The filter chain.
+	 * @param      AgaviFilterChain The filter chain.
 	 *
 	 * @return     void
 	 *
-	 * @throws     <b>InitializeException</b> If an error occurs during view
-	 *                                        initialization.
-	 * @throws     <b>ViewException</b>       If an error occurs while executing
-	 *                                        the view.
+	 * @throws     <b>AgaviInitializeException</b> If an error occurs during view
+	 *                                             initialization.
+	 * @throws     <b>AgaviViewException</b>       If an error occurs while executing
+	 *                                             the view.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -107,7 +107,7 @@ class ExecutionFilter extends Filter
 				$validationConfig = 'modules/' . $moduleName .
 						            '/validate/' . $actionName . '.ini';
 
-				require(ConfigCache::checkConfig($validationConfig));
+				require(AgaviConfigCache::checkConfig($validationConfig));
 
 			}
 
@@ -134,7 +134,7 @@ class ExecutionFilter extends Filter
 
 		}
 
-		if ($viewName != View::NONE)
+		if ($viewName != AgaviView::NONE)
 		{
 
 			if (is_array($viewName))
@@ -165,7 +165,7 @@ class ExecutionFilter extends Filter
 
 				$error = sprintf($error, $moduleName, $viewName, $file);
 
-				throw new ViewException($error);
+				throw new AgaviViewException($error);
 
 			}
 
@@ -183,7 +183,7 @@ class ExecutionFilter extends Filter
 				// action entry which was retrieved from the execution chain
 				$viewData =& $viewInstance->render();
 
-				if ($controller->getRenderMode() == View::RENDER_VAR)
+				if ($controller->getRenderMode() == AgaviView::RENDER_VAR)
 				{
 
 				    $actionEntry->setPresentation($viewData);
@@ -198,7 +198,7 @@ class ExecutionFilter extends Filter
 						 'view "%sView"';
 				$error = sprintf($error, $moduleName, $viewName);
 
-				throw new InitializationException($error);
+				throw new AgaviInitializationException($error);
 
 			}
 

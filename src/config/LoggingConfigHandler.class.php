@@ -15,7 +15,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * LoggingConfigHandler allows you to register loggers with the system.
+ * AgaviLoggingConfigHandler allows you to register loggers with the system.
  *
  * @package    agavi
  * @subpackage config
@@ -27,7 +27,7 @@
  *
  * @version    $Id$
  */
-class LoggingConfigHandler extends IniConfigHandler
+class AgaviLoggingConfigHandler extends AgaviIniConfigHandler
 {
 
 	/**
@@ -37,10 +37,10 @@ class LoggingConfigHandler extends IniConfigHandler
 	 *
 	 * @return     string Data to be written to a cache file.
 	 *
-	 * @throws     <b>UnreadableException</b> If a requested configuration file
-	 *                                        does not exist or is not readable.
-	 * @throws     <b>ParseException</b> If a requested configuration file is
-	 *                                   improperly formatted.
+	 * @throws     <b>AgaviUnreadableException</b> If a requested configuration file
+	 *                                             does not exist or is not readable.
+	 * @throws     <b>AgaviParseException</b> If a requested configuration file is
+	 *                                        improperly formatted.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -73,7 +73,7 @@ class LoggingConfigHandler extends IniConfigHandler
 				$error = 'Configuration file "%s" specifies previously ' .
 				  'registered category "%s"';
 				$error = sprintf($error, $config, $value);
-				throw new ParseException($error);
+				throw new AgaviParseException($error);
 			}
 
 			// see if we have the category registered for this logger
@@ -82,7 +82,7 @@ class LoggingConfigHandler extends IniConfigHandler
 				$error = 'Configuration file "%s" specified nonexistent ' .
 				  'category "%s"';
 				$error = sprintf($error, $config, $value);
-				throw new ParseException($error);
+				throw new AgaviParseException($error);
 			}
 
 			$this->loadLogger($config, $key, $loggers, $appenders, $ini, $value);
@@ -184,7 +184,7 @@ class LoggingConfigHandler extends IniConfigHandler
 			if (!isset($ini[$appender]['class']) || !isset($ini[$appender]['layout'])) {
 				$error = 'Configuration file "%s" has section "%s" without a class/layout key';
 				$error = sprintf($error, $config, $appender);
-				throw new ParseException($error);
+				throw new AgaviParseException($error);
 			}
 
 			$entry = array();
@@ -193,13 +193,13 @@ class LoggingConfigHandler extends IniConfigHandler
 				$error = 'Configuration file "%s" specifies layout ' .
 						 '"%s", but it has no section';
 				$error = sprintf($error, $config, $ini[$appender]['layout']);
-				throw new ParseException($error);
+				throw new AgaviParseException($error);
 			}
 			if (!isset($layouts[$ini[$appender]['layout']])) {
 				$layouts[$ini[$appender]['layout']] = null;
 			}
 			$entry['layout'] = $ini[$appender]['layout'];
-			$entry['params'] = ParameterParser::parse($ini[$appender]);
+			$entry['params'] = AgaviParameterParser::parse($ini[$appender]);
 
 			$appenders[$appender] = $entry;
 		}
@@ -212,12 +212,12 @@ class LoggingConfigHandler extends IniConfigHandler
 			if (!isset($ini[$layout]['class'])) {
 				$error = 'Configuration file "%s" has section "%s" without a class key';
 				$error = sprintf($error, $config, $layout);
-				throw new ParseException($error);
+				throw new AgaviParseException($error);
 			}
 
 			$entry = array();
 			$entry['class'] = $ini[$layout]['class'];
-			$entry['params'] = ParameterParser::parse($ini[$layout]);
+			$entry['params'] = AgaviParameterParser::parse($ini[$layout]);
 
 			$layouts[$layout] = $entry;
 		}
@@ -248,7 +248,7 @@ class LoggingConfigHandler extends IniConfigHandler
 				$error = 'Configuration file "%s" specifies logger ' .
 						 '"%s", with missing/empty class key';
 				$error = sprintf($error, $config, $category);
-				throw new ParseException($error);
+				throw new AgaviParseException($error);
 		}
 
 		if (!isset($ini[$category]['appenders']) || (trim($ini[$category]['appenders']) == '')) {
@@ -256,7 +256,7 @@ class LoggingConfigHandler extends IniConfigHandler
 				$error = 'Configuration file "%s" specifies logger ' .
 						 '"%s", with missing/empty appenders key';
 				$error = sprintf($error, $config, $category);
-				throw new ParseException($error);
+				throw new AgaviParseException($error);
 		}
 
 		$loggers[$logger]['class'] = $ini[$category]['class'];
@@ -274,7 +274,7 @@ class LoggingConfigHandler extends IniConfigHandler
 				$error = 'Configuration file "%s" specifies appender ' .
 						 '"%s", but it has no section';
 				$error = sprintf($error, $config, $name);
-				throw new ParseException($error);
+				throw new AgaviParseException($error);
 			}
 
 			if (!isset($appenders[$name])) {
@@ -289,7 +289,7 @@ class LoggingConfigHandler extends IniConfigHandler
 			$loggers[$logger]['priority'] = $ini[$category]['priority'];
 		}
 
-		$loggers[$logger]['params'] =& ParameterParser::parse($ini[$category]);
+		$loggers[$logger]['params'] =& AgaviParameterParser::parse($ini[$category]);
 
 	}
 

@@ -14,8 +14,8 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * CachingExecutionFilter is a ExecutionFilter implementation that allows the
- * caching of the output of Actions based on various parameters.
+ * AgaviCachingExecutionFilter is a ExecutionFilter implementation that allows
+ * the caching of the output of Actions based on various parameters.
  *
  * @package    agavi
  * @subpackage filter
@@ -28,7 +28,7 @@
  * @version    $Id$
  */
 
-class CachingExecutionFilter extends ExecutionFilter
+class AgaviCachingExecutionFilter extends AgaviExecutionFilter
 {
 	const CACHE_SUBDIR = 'content';
 	
@@ -111,9 +111,9 @@ class CachingExecutionFilter extends ExecutionFilter
 		}
 		$path = AG_CACHE_DIR . DIRECTORY_SEPARATOR . self::CACHE_SUBDIR . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $groups) . '.cefcache';
 		if(is_file($path)) {
-			Toolkit::clearCache($path);
+			AgaviToolkit::clearCache($path);
 		} else {
-			Toolkit::clearCache(self::CACHE_SUBDIR . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, array_slice($groups, 0, -1)));
+			AgaviToolkit::clearCache(self::CACHE_SUBDIR . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, array_slice($groups, 0, -1)));
 		}
 	}
 	
@@ -201,7 +201,7 @@ class CachingExecutionFilter extends ExecutionFilter
 		if(!isset($config[$moduleName])) {
 			try {
 				$config[$moduleName] = null;
-				$configFile = ConfigCache::checkConfig(AG_MODULE_DIR . '/' . $moduleName . '/config/caching.ini');
+				$configFile = AgaviConfigCache::checkConfig(AG_MODULE_DIR . '/' . $moduleName . '/config/caching.ini');
 				$config[$moduleName] = include($configFile);
 			} catch(Exception $e) {
 			}
@@ -266,7 +266,7 @@ class CachingExecutionFilter extends ExecutionFilter
 					$viewData =& $viewInstance->decorate($viewData);
 				}
 				
-				if($controller->getRenderMode() == View::RENDER_VAR) {
+				if($controller->getRenderMode() == AgaviView::RENDER_VAR) {
 					$actionEntry->setPresentation($viewData);
 				} else {
 					echo $viewData;
@@ -291,7 +291,7 @@ class CachingExecutionFilter extends ExecutionFilter
 					// do NOT use require_once
 					$validationConfig = 'modules/' . $moduleName .
 													'/validate/' . $actionName . '.ini';
-					require(ConfigCache::checkConfig($validationConfig));
+					require(AgaviConfigCache::checkConfig($validationConfig));
 				}
 
 				// manually load validators
@@ -308,7 +308,7 @@ class CachingExecutionFilter extends ExecutionFilter
 				}
 			}
 			$returnedViewName = $viewName;
-			if($viewName != View::NONE) {
+			if($viewName != AgaviView::NONE) {
 				if(is_array($viewName)) {
 					// we're going to use an entirely different action for this view
 					$moduleName = $viewName[0];
@@ -325,7 +325,7 @@ class CachingExecutionFilter extends ExecutionFilter
 					$error = 'Module "%s" does not contain the view "%sView" or ' .
 							 'the file "%s" is unreadable';
 					$error = sprintf($error, $moduleName, $viewName, $file);
-					throw new ViewException($error);
+					throw new AgaviViewException($error);
 				}
 				// get the view instance
 				$viewInstance = $controller->getView($moduleName, $viewName);
@@ -355,7 +355,7 @@ class CachingExecutionFilter extends ExecutionFilter
 						$viewInstance->setDecoratorDirectory($output['decorator']['directory']);
 						$viewInstance->setSlots($output['decorator']['slots']);
 						$viewData =& $viewInstance->decorate($viewData);
-						if($controller->getRenderMode() == View::RENDER_CLIENT) {
+						if($controller->getRenderMode() == AgaviView::RENDER_CLIENT) {
 							echo $viewData;
 							$viewData = null;
 						}
@@ -377,7 +377,7 @@ class CachingExecutionFilter extends ExecutionFilter
 					}
 					ob_end_flush();
 					
-					if($controller->getRenderMode() == View::RENDER_VAR) {
+					if($controller->getRenderMode() == AgaviView::RENDER_VAR) {
 						$actionEntry->setPresentation($viewData);
 						$output['content'] = $viewData;
 					}
@@ -410,7 +410,7 @@ class CachingExecutionFilter extends ExecutionFilter
 					$error = 'View initialization failed for module "%s", ' .
 							 'view "%sView"';
 					$error = sprintf($error, $moduleName, $viewName);
-					throw new InitializationException($error);
+					throw new AgaviInitializationException($error);
 				}
 			}
 			// --------------------------------------------------------------

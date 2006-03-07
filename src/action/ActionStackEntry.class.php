@@ -27,7 +27,7 @@
  *
  * @version    $Id$
  */
-class ActionStackEntry
+class AgaviActionStackEntry
 {
 
 	// +-----------------------------------------------------------------------+
@@ -50,7 +50,7 @@ class ActionStackEntry
 	 *
 	 * @param      string A module name.
 	 * @param      string An action name.
-	 * @param      Action An action implementation instance.
+	 * @param      AgaviAction An action implementation instance.
 	 *
 	 * @return     void
 	 *
@@ -85,7 +85,7 @@ class ActionStackEntry
 	/**
 	 * Retrieve this entry's action instance.
 	 *
-	 * @return     Action An action implementation instance.
+	 * @return     AgaviAction An action implementation instance.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -132,7 +132,7 @@ class ActionStackEntry
 	 * Retrieve this entry's rendered view presentation.
 	 *
 	 * This will only exist if the view has processed and the render mode
-	 * is set to View::RENDER_VAR.
+	 * is set to AgaviView::RENDER_VAR.
 	 *
 	 * @return     string An action name.
 	 *

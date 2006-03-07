@@ -28,7 +28,7 @@
  *
  * @version    $Id$
  */
-abstract class Action
+abstract class AgaviAction
 {
 
 	// +-----------------------------------------------------------------------+
@@ -63,7 +63,7 @@ abstract class Action
 	/**
 	 * Retrieve the current application context.
 	 *
-	 * @return     Context The current Context instance.
+	 * @return     AgaviContext The current Context instance.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -107,7 +107,7 @@ abstract class Action
 	public function getDefaultView ()
 	{
 
-		return View::INPUT;
+		return AgaviView::INPUT;
 
 	}
 
@@ -116,9 +116,9 @@ abstract class Action
 	 * validation and execution.
 	 *
 	 * @return     int One of the following values:
-	 *                 - Request::GET
-	 *                 - Request::POST
-	 *                 - Request::NONE
+	 *                 - AgaviRequest::GET
+	 *                 - AgaviRequest::POST
+	 *                 - AgaviRequest::NONE
 	 *
 	 * @see        Request
 	 * @author     Sean Kerr <skerr@mojavi.org>
@@ -127,7 +127,7 @@ abstract class Action
 	public function getRequestMethods ()
 	{
 
-		return Request::GET | Request::POST | Request::NONE;
+		return AgaviRequest::GET | AgaviRequest::POST | AgaviRequest::NONE;
 
 	}
 
@@ -146,14 +146,14 @@ abstract class Action
 	public function handleError ()
 	{
 
-		return View::ERROR;
+		return AgaviView::ERROR;
 
 	}
 
 	/**
 	 * Initialize this action.
 	 *
-	 * @param      Context The current application context.
+	 * @param      AgaviContext The current application context.
 	 *
 	 * @return     bool true, if initialization completes successfully, 
 	 *                  otherwise false.
@@ -188,7 +188,7 @@ abstract class Action
 	/**
 	 * Manually register validators for this action.
 	 *
-	 * @param      ValidatorManager A ValidatorManager instance.
+	 * @param      AgaviValidatorManager A ValidatorManager instance.
 	 *
 	 * @return     void
 	 *

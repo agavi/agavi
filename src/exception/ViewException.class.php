@@ -15,7 +15,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * ViewException is thrown when an error occurs in a view.
+ * AgaviViewException is thrown when an error occurs in a view.
  *
  * @package    agavi
  * @subpackage exception
@@ -26,7 +26,7 @@
  *
  * @version    $Id$
  */
-class ViewException extends AgaviException
+class AgaviViewException extends AgaviException
 {
 
 	// +-----------------------------------------------------------------------+
@@ -47,7 +47,7 @@ class ViewException extends AgaviException
 
 		parent::__construct($message, $code);
 
-		$this->setName('ViewException');
+		$this->setName('AgaviViewException');
 
 	}
 

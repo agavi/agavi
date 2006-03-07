@@ -41,7 +41,7 @@
  *
  * @version    $Id$
  */
-class PropelDatabase extends CreoleDatabase
+class AgaviPropelDatabase extends AgaviCreoleDatabase
 {
 	/**
 	 * Stores the path of the configuration file that will be passed to
@@ -126,8 +126,8 @@ class PropelDatabase extends CreoleDatabase
 	 * 
 	 * @return     void
 	 *
-	 * @throws     <b>DatabaseException</b> If a connection could not be 
-	 *                                      created.
+	 * @throws     <b>AgaviDatabaseException</b> If a connection could not be 
+	 *                                           created.
 	 *
 	 * @author     Dusty Matthews <dustym@agavi.org>
 	 * @author     David Zuelke <dz@bitxtender.com>
@@ -145,7 +145,7 @@ class PropelDatabase extends CreoleDatabase
 			$method = $this->getParameter('method', 'normal');
 			switch ($method) {
 				case 'normal':
-					$runtime = ConfigHandler::replaceConstants($this->getParameter('config', null));
+					$runtime = AgaviConfigHandler::replaceConstants($this->getParameter('config', null));
 					break;
 				case 'server':
 					$runtime =& $_SERVER[$this->getParameter('config')];
@@ -156,10 +156,10 @@ class PropelDatabase extends CreoleDatabase
 				default:
 					$error = 'Invalid PropelDatabase parameter retrieval method "%s"';
 					$error = sprintf($error, $method);
-					throw new DatabaseException($error);
+					throw new AgaviDatabaseException($error);
 			}
 			// get propel class path
-			$classPath = ConfigHandler::replaceConstants($this->getParameter('classpath',null));
+			$classPath = AgaviConfigHandler::replaceConstants($this->getParameter('classpath',null));
 			// set the include path to our Propel generated classes
 			if (!is_null($classPath)) {
 				set_include_path(get_include_path().PATH_SEPARATOR.$classPath);
@@ -174,7 +174,7 @@ class PropelDatabase extends CreoleDatabase
 			$this->resource =& $this->connection->getResource();
 		} catch (SQLException $e) {
 			// the connection's foobar'd
-			throw new DatabaseException($e->toString());
+			throw new AgaviDatabaseException($e->toString());
 		}
 	}
 
@@ -194,7 +194,7 @@ class PropelDatabase extends CreoleDatabase
 		$useAutoload = $this->getParameter('use_autoload', true);
 		if($useAutoload)
 		{
-			$configPath = ConfigHandler::replaceConstants($this->getParameter('config'));
+			$configPath = AgaviConfigHandler::replaceConstants($this->getParameter('config'));
 			$datasource = $this->getParameter('datasource', null);
 			$use_as_default = $this->getParameter('use_as_default', false);
 			$config = require($configPath);

@@ -15,8 +15,8 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * WebRequest provides additional support for web-only client requests such as
- * cookie and file manipulation.
+ * AgaviWebRequest provides additional support for web-only client requests 
+ * such as cookie and file manipulation.
  *
  * @package    agavi
  * @subpackage request
@@ -28,7 +28,7 @@
  *
  * @version    $Id$
  */
-class WebRequest extends Request
+class AgaviWebRequest extends AgaviRequest
 {
 
 	// +-----------------------------------------------------------------------+
@@ -334,14 +334,14 @@ class WebRequest extends Request
 	/**
 	 * Initialize this Request.
 	 *
-	 * @param      Context A Context instance.
-	 * @param      array   An associative array of initialization parameters.
+	 * @param      AgaviContext A Context instance.
+	 * @param      array        An associative array of initialization parameters.
 	 *
 	 * @return     bool true, if initialization completes successfully,
 	 *                  otherwise false.
 	 *
-	 * @throws     <b>InitializationException</b> If an error occurs while
-	 *                                            initializing this Request.
+	 * @throws     <b>AgaviInitializationException</b> If an error occurs while
+	 *                                                 initializing this Request.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @author     Veikko Makinen <mail@veikkomakinen.com>
@@ -453,8 +453,8 @@ class WebRequest extends Request
 	 *
 	 * @return     bool true, if the file was moved, otherwise false.
 	 *
-	 * @throws     FileException If a major error occurs while attempting to
-	 *                           move the file.
+	 * @throws     AgaviFileException If a major error occurs while attempting
+	 *                                to move the file.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -482,7 +482,7 @@ class WebRequest extends Request
 				    $error = 'Failed to create file upload directory "%s"';
 				    $error = sprintf($error, $directory);
 
-				    throw new FileException($error);
+				    throw new AgaviFileException($error);
 
 				}
 
@@ -497,7 +497,7 @@ class WebRequest extends Request
 				$error = 'File upload path "%s" exists, but is not a directory';
 				$error = sprintf($error, $directory);
 
-				throw new FileException($error);
+				throw new AgaviFileException($error);
 
 			} else if (!is_writable($directory))
 			{
@@ -506,7 +506,7 @@ class WebRequest extends Request
 				$error = 'File upload path "%s" is not writable';
 				$error = sprintf($error, $directory);
 
-				throw new FileException($error);
+				throw new AgaviFileException($error);
 
 			}
 

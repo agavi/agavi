@@ -15,7 +15,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * MySQLDatabase provides connectivity for the MySQL brand database.
+ * AgaviMySQLDatabase provides connectivity for the MySQL brand database.
  *
  * <b>Optional parameters:</b>
  *
@@ -45,14 +45,14 @@
  *
  * @version    $Id$
  */
-class MySQLDatabase extends Database
+class AgaviMySQLDatabase extends AgaviDatabase
 {
 
 	/**
 	 * Connect to the database.
 	 *
-	 * @throws     <b>DatabaseException</b> If a connection could not be 
-	 *                                      created.
+	 * @throws     <b>AgaviDatabaseException</b> If a connection could not be 
+	 *                                           created.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -97,11 +97,11 @@ class MySQLDatabase extends Database
 			default:
 
 				// who knows what the user wants...
-				$error = 'Invalid MySQLDatabase parameter retrieval method ' .
+				$error = 'Invalid AgaviMySQLDatabase parameter retrieval method ' .
 						 '"%s"';
 				$error = sprintf($error, $method);
 
-				throw new DatabaseException($error);
+				throw new AgaviDatabaseException($error);
 
 		}
 
@@ -135,9 +135,9 @@ class MySQLDatabase extends Database
 		{
 
 			// the connection's foobar'd
-			$error = 'Failed to create a MySQLDatabase connection';
+			$error = 'Failed to create a AgaviMySQLDatabase connection';
 
-			throw new DatabaseException($error);
+			throw new AgaviDatabaseException($error);
 
 		}
 
@@ -147,10 +147,10 @@ class MySQLDatabase extends Database
 		{
 
 			// can't select the database
-			$error = 'Failed to select MySQLDatabase "%s"';
+			$error = 'Failed to select AgaviMySQLDatabase "%s"';
 			$error = sprintf($error, $database);
 
-			throw new DatabaseException($error);
+			throw new AgaviDatabaseException($error);
 
 		}
 
@@ -195,8 +195,8 @@ class MySQLDatabase extends Database
 	 *
 	 * @return     void
 	 *
-	 * @throws     <b>DatabaseException</b> If an error occurs while shutting
-	 *                                      down this database.
+	 * @throws     <b>AgaviDatabaseException</b> If an error occurs while shutting
+	 *                                           down this database.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0

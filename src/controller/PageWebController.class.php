@@ -15,8 +15,8 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * PageWebController allows you to dispatch a request by specifying a module
- * and action name in the dispatch() method.
+ * AgaviPageWebController allows you to dispatch a request by specifying a 
+ * module and action name in the dispatch() method.
  *
  * @package    agavi
  * @subpackage controller
@@ -27,7 +27,7 @@
  *
  * @version    $Id$
  */
-class PageWebController extends WebController
+class AgaviPageWebController extends AgaviWebController
 {
 
 	/**

@@ -15,7 +15,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * ControllerException is thrown when a requested Controller implementation
+ * AgaviControllerException is thrown when a requested Controller implementation
  * doesn't exist.
  *
  * @package    agavi
@@ -27,7 +27,7 @@
  *
  * @version    $Id$
  */
-class ControllerException extends AgaviException
+class AgaviControllerException extends AgaviException
 {
 
 	// +-----------------------------------------------------------------------+
@@ -48,7 +48,7 @@ class ControllerException extends AgaviException
 
 		parent::__construct($message, $code);
 
-		$this->setName('ControllerException');
+		$this->setName('AgaviControllerException');
 
 	}
 

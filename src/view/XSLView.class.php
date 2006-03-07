@@ -24,7 +24,7 @@
  *
  * @version    $Id$
  */
-abstract class XSLView extends View
+abstract class AgaviXSLView extends AgaviView
 {
 	// +-----------------------------------------------------------------------+
 	// | PRIVATE VARIABLES                                                     |
@@ -39,7 +39,7 @@ abstract class XSLView extends View
 	/**
 	 * Initialize this view.
 	 *
-	 * @param      Context The current application context.
+	 * @param      AgaviContext The current application context.
 	 *
 	 * @return     bool true, if initialization completes successfully,
 	 *                  otherwise false.
@@ -368,9 +368,9 @@ abstract class XSLView extends View
 
 		$xhtml = $this->xslProc->transformToXML($this->domDoc);
 
-		if($mode == View::RENDER_CLIENT) {
+		if($mode == AgaviView::RENDER_CLIENT) {
 			echo $xhtml;
-		} else if($mode == View::RENDER_VAR) {
+		} else if($mode == AgaviView::RENDER_VAR) {
 			$retVal = $xhtml;
 		}
 

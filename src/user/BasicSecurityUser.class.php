@@ -15,7 +15,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * BasicSecurityUser will handle any type of data as a credential.
+ * AgaviBasicSecurityUser will handle any type of data as a credential.
  *
  * @package    agavi
  * @subpackage user
@@ -26,7 +26,7 @@
  *
  * @version    $Id$
  */
-class BasicSecurityUser extends SecurityUser
+class AgaviBasicSecurityUser extends AgaviSecurityUser
 {
 
 	// +-----------------------------------------------------------------------+
@@ -135,14 +135,14 @@ class BasicSecurityUser extends SecurityUser
 	/**
 	 * Initialize this User.
 	 *
-	 * @param      Context A Context instance.
-	 * @param      array   An associative array of initialization parameters.
+	 * @param      AgaviContext A Context instance.
+	 * @param      array        An associative array of initialization parameters.
 	 *
 	 * @return     bool true, if initialization completes successfully,
 	 *                  otherwise false.
 	 *
-	 * @throws     <b>InitializationException</b> If an error occurs while
-	 *                                            initializing this User.
+	 * @throws     <b>AgaviInitializationException</b> If an error occurs while
+	 *                                                 initializing this User.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0

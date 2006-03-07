@@ -15,7 +15,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * Storage allows you to customize the way Agavi stores its persistent data.
+ * AgaviStorage allows you to customize the way Agavi stores its persistent data.
  *
  * @package    agavi
  * @subpackage storage
@@ -26,7 +26,7 @@
  *
  * @version    $Id$
  */
-abstract class Storage extends ParameterHolder
+abstract class AgaviStorage extends AgaviParameterHolder
 {
 
 	// +-----------------------------------------------------------------------+
@@ -39,7 +39,7 @@ abstract class Storage extends ParameterHolder
 	/**
 	 * Retrieve the current application context.
 	 *
-	 * @return     Context A Context instance.
+	 * @return     AgaviContext A Context instance.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -54,14 +54,14 @@ abstract class Storage extends ParameterHolder
 	/**
 	 * Initialize this Storage.
 	 *
-	 * @param      Context A Context instance.
-	 * @param      array   An associative array of initialization parameters.
+	 * @param      AgaviContext A Context instance.
+	 * @param      array        An associative array of initialization parameters.
 	 *
 	 * @return     bool true, if initialization completes successfully,
 	 *                  otherwise false.
 	 *
-	 * @throws     <b>InitializationException</b> If an error occurs while
-	 *                                            initializing this Storage.
+	 * @throws     <b>AgaviInitializationException</b> If an error occurs while
+	 *                                                 initializing this Storage.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -82,10 +82,10 @@ abstract class Storage extends ParameterHolder
 	 *
 	 * @param      string A Storage implementation name
 	 *
-	 * @return     Storage A Storage implementation instance.
+	 * @return     AgaviStorage A Storage implementation instance.
 	 *
-	 * @throws     <b>FactoryException</b> If a storage implementation instance
-	 *                                     cannot be created.
+	 * @throws     <b>AgaviFactoryException</b> If a storage implementation instance
+	 *                                          cannot be created.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @author     Mike Vincent <mike@agavi.org>
@@ -95,8 +95,8 @@ abstract class Storage extends ParameterHolder
 	{
 		$object = new $class();
 
-		if (!$object instanceof Storage) {
-			throw new FactoryException("Class \"$class\" is not of the type Storage");
+		if (!$object instanceof AgaviStorage) {
+			throw new AgaviFactoryException("Class \"$class\" is not of the type Storage");
 		}
 		return $object;
 	}
@@ -124,8 +124,8 @@ abstract class Storage extends ParameterHolder
 	 *
 	 * @return     mixed Data associated with the key.
 	 *
-	 * @throws     <b>StorageException</b> If an error occurs while reading data
-	 *                                     from this storage.
+	 * @throws     <b>AgaviStorageException</b> If an error occurs while reading data
+	 *                                          from this storage.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -142,8 +142,8 @@ abstract class Storage extends ParameterHolder
 	 *
 	 * @return     mixed Data associated with the key.
 	 *
-	 * @throws     <b>StorageException</b> If an error occurs while removing
-	 *                                     data from this storage.
+	 * @throws     <b>AgaviStorageException</b> If an error occurs while removing
+	 *                                          data from this storage.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -155,8 +155,8 @@ abstract class Storage extends ParameterHolder
 	 *
 	 * @return     void
 	 *
-	 * @throws     <b>StorageException</b> If an error occurs while shutting
-	 *                                     down this storage.
+	 * @throws     <b>AgaviStorageException</b> If an error occurs while shutting
+	 *                                          down this storage.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -174,8 +174,8 @@ abstract class Storage extends ParameterHolder
 	 *
 	 * @return     void
 	 *
-	 * @throws     <b>StorageException</b> If an error occurs while writing to
-	 *                                     this storage.
+	 * @throws     <b>AgaviStorageException</b> If an error occurs while writing to
+	 *                                          this storage.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0

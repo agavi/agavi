@@ -32,6 +32,6 @@
  */
 
 	require_once('propel/Propel.php');
-	Propel::init(PropelDatabase::getDefaultConfigPath());
+	Propel::init(AgaviPropelDatabase::getDefaultConfigPath());
 
 ?>

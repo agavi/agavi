@@ -14,7 +14,7 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
-class Default_SecureAction extends Action
+class Default_SecureAction extends AgaviAction
 {
 
 	/**
@@ -67,7 +67,7 @@ class Default_SecureAction extends Action
 	public function getDefaultView ()
 	{
 
-		return View::SUCCESS;
+		return AgaviView::SUCCESS;
 
 	}
 
@@ -75,11 +75,11 @@ class Default_SecureAction extends Action
 	 * Retrieve the request methods on which this action will process
 	 * validation and execution.
 	 *
-	 * @return     int - Request::GET - Indicates this action serves only GET
+	 * @return     int - AgaviRequest::GET - Indicates this action serves only GET
 	 *                   requests, or
-	 *                 - Request::POST - Indicates this action serves only POST
+	 *                 - AgaviRequest::POST - Indicates this action serves only POST
 	 *                   requests, or
-	 *                 - Request::NONE - Indicates that this action serves no
+	 *                 - AgaviRequest::NONE - Indicates that this action serves no
 	 *                   requests.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
@@ -88,7 +88,7 @@ class Default_SecureAction extends Action
 	public function getRequestMethods ()
 	{
 
-		return Request::NONE;
+		return AgaviRequest::NONE;
 
 	}
 

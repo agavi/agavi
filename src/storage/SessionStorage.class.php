@@ -15,7 +15,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * SessionStorage allows you to store persistent Agavi data in the user
+ * AgaviSessionStorage allows you to store persistent Agavi data in the user
  * session.
  *
  * <b>Optional parameters:</b>
@@ -42,20 +42,20 @@
  *
  * @version    $Id$
  */
-class SessionStorage extends Storage
+class AgaviSessionStorage extends AgaviStorage
 {
 
 	/**
 	 * Initialize this Storage.
 	 *
-	 * @param      Context A Context instance.
-	 * @param      array   An associative array of initialization parameters.
+	 * @param      AgaviContext A Context instance.
+	 * @param      array        An associative array of initialization parameters.
 	 *
 	 * @return     bool true, if initialization completes successfully,
 	 *                  otherwise false.
 	 *
-	 * @throws     <b>InitializationException</b> If an error occurs while
-	 *                                            initializing this Storage.
+	 * @throws     <b>AgaviInitializationException</b> If an error occurs while
+	 *                                                 initializing this Storage.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @author     Veikko Makinen <mail@veikkomakinen.com>

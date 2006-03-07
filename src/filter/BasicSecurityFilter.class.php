@@ -15,10 +15,10 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * BasicSecurityFilter checks security by calling the getCredential() method
- * of the action. Once the credential has been acquired, BasicSecurityFilter
- * verifies the user has the same credential by calling the hasCredential()
- * method of SecurityUser.
+ * AgaviBasicSecurityFilter checks security by calling the getCredential() 
+ * method of the action. Once the credential has been acquired, 
+ * AgaviBasicSecurityFilter verifies the user has the same credential 
+ * by calling the hasCredential() method of SecurityUser.
  *
  * @package    agavi
  * @subpackage filter
@@ -29,13 +29,13 @@
  *
  * @version    $Id$
  */
-class BasicSecurityFilter extends SecurityFilter
+class AgaviBasicSecurityFilter extends AgaviSecurityFilter
 {
 
 	/**
 	 * Execute this filter.
 	 *
-	 * @param      FilterChain A FilterChain instance.
+	 * @param      AgaviFilterChain A FilterChain instance.
 	 *
 	 * @return     void
 	 *

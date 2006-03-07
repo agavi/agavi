@@ -14,9 +14,9 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * Request provides methods for manipulating client request information such
- * as attributes, errors and parameters. It is also possible to manipulate the
- * request method originally sent by the user.
+ * AgaviRequest provides methods for manipulating client request information
+ * such as attributes, errors and parameters. It is also possible to manipulate
+ * the request method originally sent by the user.
  *
  * @package    agavi
  * @subpackage request
@@ -28,7 +28,7 @@
  *
  * @version    $Id$
  */
-abstract class Request extends ParameterHolder
+abstract class AgaviRequest extends AgaviParameterHolder
 {
 
 	// +-----------------------------------------------------------------------+
@@ -271,9 +271,9 @@ abstract class Request extends ParameterHolder
 	 * Retrieve this request's method.
 	 *
 	 * @return     int One of the following constants:
-	 *                 - Request::GET
-	 *                 - Request::POST
-	 *                 - Request::CONSOLE
+	 *                 - AgaviRequest::GET
+	 *                 - AgaviRequest::POST
+	 *                 - AgaviRequest::CONSOLE
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -365,14 +365,14 @@ abstract class Request extends ParameterHolder
 	/**
 	 * Initialize this Request.
 	 *
-	 * @param      Context A Context instance.
-	 * @param      array   An associative array of initialization parameters.
+	 * @param      AgaviContext A Context instance.
+	 * @param      array        An associative array of initialization parameters.
 	 *
 	 * @return     bool true, if initialization completes successfully
 	 *                  otherwise false.
 	 *
-	 * @throws     <b>InitializationException</b> If an error occurs while
-	 *                                            initializing this Request.
+	 * @throws     <b>AgaviInitializationException</b> If an error occurs while
+	 *                                                 initializing this Request.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -384,10 +384,10 @@ abstract class Request extends ParameterHolder
 	 *
 	 * @param      string A Request implementation name.
 	 *
-	 * @return     Request A Request implementation instance.
+	 * @return     AgaviRequest A Request implementation instance.
 	 *
-	 * @throws     <b>FactoryException</b> If a request implementation instance
-	 *                                     cannot be created.
+	 * @throws     <b>AgaviFactoryException</b> If a request implementation instance
+	 *                                          cannot be created.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -398,14 +398,14 @@ abstract class Request extends ParameterHolder
 		// the class exists
 		$object = new $class();
 
-		if (!($object instanceof Request))
+		if (!($object instanceof AgaviRequest))
 		{
 
 			// the class name is of the wrong type
 			$error = 'Class "%s" is not of the type Request';
 			$error = sprintf($error, $class);
 
-			throw new FactoryException($error);
+			throw new AgaviFactoryException($error);
 
 		}
 
@@ -722,14 +722,14 @@ abstract class Request extends ParameterHolder
 	 * Set the request method.
 	 *
 	 * @param      int One of the following constants:
-	 *                 - Request::GET
-	 *                 - Request::POST
-	 *                 - Request::CONSOLE
+	 *                 - AgaviRequest::GET
+	 *                 - AgaviRequest::POST
+	 *                 - AgaviRequest::CONSOLE
 	 *
 	 * @return     void
 	 *
 	 * @throws     <b>AgaviException</b> - If the specified request method is
-	 *                                     invalid.
+	 *                                          invalid.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0

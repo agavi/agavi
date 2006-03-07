@@ -14,7 +14,7 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
-class Default_LoginAction extends Action
+class Default_LoginAction extends AgaviAction
 {
 
 	/**
@@ -43,7 +43,7 @@ class Default_LoginAction extends Action
 	public function execute ()
 	{
 
-		return View::INPUT;
+		return AgaviView::INPUT;
 
 	}
 
@@ -66,7 +66,7 @@ class Default_LoginAction extends Action
 	public function getDefaultView ()
 	{
 
-		return View::INPUT;
+		return AgaviView::INPUT;
 
 	}
 

@@ -15,9 +15,9 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * ConfigCache allows you to customize the format of a configuration file to
- * make it easy-to-use, yet still provide a PHP formatted result for direct
- * inclusion into your modules.
+ * AgaviConfigCache allows you to customize the format of a configuration 
+ * file to make it easy-to-use, yet still provide a PHP formatted result 
+ * for direct inclusion into your modules.
  *
  * @package    agavi
  * @subpackage config
@@ -28,7 +28,7 @@
  *
  * @version    $Id$
  */
-class ConfigCache
+class AgaviConfigCache
 {
 	
 	const CACHE_SUBDIR = 'config';
@@ -46,9 +46,9 @@ class ConfigCache
 	 *
 	 * @return     void
 	 *
-	 * @throws     <b>ConfigurationException</b> If a requested configuration 
-	 *                                           file does not have an 
-	 *                                           associated config handler.
+	 * @throws     <b>AgaviConfigurationException</b> If a requested configuration 
+	 *                                                file does not have an 
+	 *                                                associated config handler.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -96,7 +96,7 @@ class ConfigCache
 		// we do not have a registered handler for this file
 		$error = 'Configuration file "%s" does not have a registered handler';
 		$error = sprintf($error, $config);
-		throw new ConfigurationException($error);
+		throw new AgaviConfigurationException($error);
 	}
 
 	/**
@@ -111,8 +111,8 @@ class ConfigCache
 	 * @return     string An absolute filesystem path to the cache filename
 	 *                    associated with this specified configuration file.
 	 *
-	 * @throws     <b>UnreadableException</b> If a requested configuration file
-	 *                                        does not exist.
+	 * @throws     <b>AgaviUnreadableException</b> If a requested configuration file
+	 *                                             does not exist.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -120,10 +120,10 @@ class ConfigCache
 	public static function checkConfig ($config)
 	{
 		// the full filename path to the config, which might not be what we were given.
-		$filename = Toolkit::isPathAbsolute($config) ? $config : AG_WEBAPP_DIR . '/' . $config;
+		$filename = AgaviToolkit::isPathAbsolute($config) ? $config : AG_WEBAPP_DIR . '/' . $config;
 
 		if (!is_readable($filename)) {
-			throw new UnreadableException('Configuration file "' . $filename . '" does not exist or is unreadable.');
+			throw new AgaviUnreadableException('Configuration file "' . $filename . '" does not exist or is unreadable.');
 		}
 
 		// the cache filename we'll be using
@@ -148,7 +148,7 @@ class ConfigCache
 	 */
 	public static function clear ()
 	{
-		Toolkit::clearCache(self::CACHE_SUBDIR);
+		AgaviToolkit::clearCache(self::CACHE_SUBDIR);
 	}
 
 	/**
@@ -162,7 +162,7 @@ class ConfigCache
 	 */
 	private static function clearCache($directory = '')
 	{
-		Toolkit::clearCache(self::CACHE_SUBDIR . DIRECTORY_SEPARATOR . $directory);
+		AgaviToolkit::clearCache(self::CACHE_SUBDIR . DIRECTORY_SEPARATOR . $directory);
 	}
 
 	/**
@@ -221,8 +221,8 @@ class ConfigCache
 	 *
 	 * @return     void
 	 *
-	 * @throws     <b>ConfigurationException</b> If a configuration related 
-	 *                                           error occurs.
+	 * @throws     <b>AgaviConfigurationException</b> If a configuration related 
+	 *                                                error occurs.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -231,11 +231,11 @@ class ConfigCache
 	{
 
 		// manually create our config_handlers.ini handler
-		self::$handlers['config_handlers.ini'] = new RootConfigHandler();
+		self::$handlers['config_handlers.ini'] = new AgaviRootConfigHandler();
 		self::$handlers['config_handlers.ini']->initialize();
 
 		// application configuration handlers
-		require_once(ConfigCache::checkConfig('config/config_handlers.ini'));
+		require_once(AgaviConfigCache::checkConfig('config/config_handlers.ini'));
 
 		// module level configuration handlers
 
@@ -269,7 +269,7 @@ class ConfigCache
 						$config = 'modules/' . $directory .
 						          '/config/config_handlers.ini';
 
-						require_once(ConfigCache::checkConfig($config));
+						require_once(AgaviConfigCache::checkConfig($config));
 
 				    }
 
@@ -286,7 +286,7 @@ class ConfigCache
 			$error = 'Module directory "%s" does not exist or is not readable';
 			$error = sprintf($error, AG_MODULE_DIR);
 
-			throw new ConfigurationException($error);
+			throw new AgaviConfigurationException($error);
 
 		}
 
@@ -301,7 +301,7 @@ class ConfigCache
 	 * @param      string Data to be written to the cache file.
 	 * @param      string Should we append the data?
 	 *
-	 * @throws     <b>CacheException</b> If the cache file cannot be written.
+	 * @throws     <b>AgaviCacheException</b> If the cache file cannot be written.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -321,7 +321,7 @@ class ConfigCache
 				     'configuration file "%s"';
 			$error = sprintf($error, $cache, $config);
 
-			throw new CacheException($error);
+			throw new AgaviCacheException($error);
 
 		}
 

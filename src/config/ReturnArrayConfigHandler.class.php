@@ -14,7 +14,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * ReturnArrayConfigHandler allows you to retrieve the contents of a config
+ * AgaviReturnArrayConfigHandler allows you to retrieve the contents of a config
  * file as an array
  *
  * @package    agavi
@@ -27,10 +27,10 @@
  * @version    $Id$
  */
 
-class ReturnArrayConfigHandler extends IniConfigHandler
+class AgaviReturnArrayConfigHandler extends AgaviIniConfigHandler
 {
 	/**
-	 * @see        IniConfigHandler::execute()
+	 * @see        AgaviIniConfigHandler::execute()
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.10.0

@@ -15,7 +15,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * RenderException is thrown when a view's pre-render check fails.
+ * AgaviRenderException is thrown when a view's pre-render check fails.
  *
  * @package    agavi
  * @subpackage exception
@@ -26,7 +26,7 @@
  *
  * @version    $Id$
  */
-class RenderException extends AgaviException
+class AgaviRenderException extends AgaviException
 {
 
 	// +-----------------------------------------------------------------------+
@@ -47,7 +47,7 @@ class RenderException extends AgaviException
 
 		parent::__construct($message, $code);
 
-		$this->setName('RenderException');
+		$this->setName('AgaviRenderException');
 
 	}
 

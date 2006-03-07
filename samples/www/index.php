@@ -13,5 +13,5 @@ require_once('INSERT PATH TO "agavi/agavi.php" HERE');
 // +---------------------------------------------------------------------------+
 // | Call the controller's dispatch method on the default context              |
 // +---------------------------------------------------------------------------+
-Context::getInstance()->getController()->dispatch();
+AgaviContext::getInstance()->getController()->dispatch();
 ?>

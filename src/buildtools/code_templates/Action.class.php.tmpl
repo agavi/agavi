@@ -1,6 +1,6 @@
 <?php
 
-class %%MODULE%%_%%ACTION_NAME%%Action extends Action
+class %%MODULE%%_%%ACTION_NAME%%Action extends AgaviAction
 {
 
 	/**
@@ -43,7 +43,7 @@ class %%MODULE%%_%%ACTION_NAME%%Action extends Action
 	public function getDefaultView ()
 	{
 
-		return View::SUCCESS;
+		return AgaviView::SUCCESS;
 
 	}
 
@@ -51,18 +51,18 @@ class %%MODULE%%_%%ACTION_NAME%%Action extends Action
 	 * Retrieve the request methods on which this action will process
 	 * validation and execution.
 	 *
-	 * @return     int - Request::GET - Indicates that this action serves only GET
+	 * @return     int - AgaviRequest::GET - Indicates that this action serves only GET
 	 *               requests, or...
-	 *             - Request::POST - Indicates that this action serves only POST
+	 *             - AgaviRequest::POST - Indicates that this action serves only POST
 	 *               requests, or...
-	 *             - Request::NONE - Indicates that this action serves no
+	 *             - AgaviRequest::NONE - Indicates that this action serves no
 	 *               requests, or...
 	 *
 	 */
 	public function getRequestMethods ()
 	{
 
-		return Request::NONE;
+		return AgaviRequest::NONE;
 
 	}
 

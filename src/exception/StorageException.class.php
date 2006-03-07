@@ -15,8 +15,8 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * StorageException is thrown when a requested Storage implementation doesn't
- * exist or data cannot be read from or written to the storage.
+ * AgaviStorageException is thrown when a requested Storage implementation 
+ * doesn't exist or data cannot be read from or written to the storage.
  *
  * @package    agavi
  * @subpackage exception
@@ -27,7 +27,7 @@
  *
  * @version    $Id$
  */
-class StorageException extends AgaviException
+class AgaviStorageException extends AgaviException
 {
 
 	// +-----------------------------------------------------------------------+
@@ -48,7 +48,7 @@ class StorageException extends AgaviException
 
 		parent::__construct($message, $code);
 
-		$this->setName('StorageException');
+		$this->setName('AgaviStorageException');
 
 	}
 

@@ -27,7 +27,7 @@
  *
  * @version    $Id$
  */
-abstract class PHPTALView extends View
+abstract class AgaviPHPTALView extends AgaviView
 {
 	const CACHE_SUBDIR = 'templates/phptal';
 	
@@ -55,7 +55,7 @@ abstract class PHPTALView extends View
 	/**
 	 * Initialize this view.
 	 *
-	 * @param      Context The current application context.
+	 * @param      AgaviContext The current application context.
 	 *
 	 * @return     bool true, if initialization completes successfully,
 	 *                  otherwise false.
@@ -97,10 +97,10 @@ abstract class PHPTALView extends View
 		$this->getEngine()->setTemplate($this->getTemplate());
 		$this->updateTemplateAttributes();
 		
-		if ($mode == View::RENDER_CLIENT && !$this->isDecorator()) {
+		if ($mode == AgaviView::RENDER_CLIENT && !$this->isDecorator()) {
 			// render directly to the client
 			echo $this->getEngine()->execute();
-		} else if ($mode != View::RENDER_NONE) {
+		} else if ($mode != AgaviView::RENDER_NONE) {
 			// render to variable
 			$retval = $this->getEngine()->execute();
 			// now render our decorator template, if one exists
@@ -108,7 +108,7 @@ abstract class PHPTALView extends View
 				$retval = $this->decorate($retval);
 			}
 
-			if ($mode == View::RENDER_CLIENT) {
+			if ($mode == AgaviView::RENDER_CLIENT) {
 				echo($retval);
 				$retval = null;
 			}

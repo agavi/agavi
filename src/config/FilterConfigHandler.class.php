@@ -15,7 +15,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * FilterConfigHandler allows you to register filters with the system.
+ * AgaviFilterConfigHandler allows you to register filters with the system.
  *
  * @package    agavi
  * @subpackage config
@@ -26,7 +26,7 @@
  *
  * @version    $Id$
  */
-class FilterConfigHandler extends IniConfigHandler
+class AgaviFilterConfigHandler extends AgaviIniConfigHandler
 {
 
 	/**
@@ -36,10 +36,10 @@ class FilterConfigHandler extends IniConfigHandler
 	 *
 	 * @return     string Data to be written to a cache file.
 	 *
-	 * @throws     <b>UnreadableException</b> If a requested configuration file
-	 *                                        does not exist or is not readable.
-	 * @throws     <b>ParseException</b> If a requested configuration file is
-	 *                                   improperly formatted.
+	 * @throws     <b>AgaviUnreadableException</b> If a requested configuration file
+	 *                                             does not exist or is not readable.
+	 * @throws     <b>AgaviParseException</b> If a requested configuration file is
+	 *                                        improperly formatted.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -66,7 +66,7 @@ class FilterConfigHandler extends IniConfigHandler
 						 '"%s" with missing class key';
 				$error = sprintf($error, $config, $category);
 
-				throw new ParseException($error);
+				throw new AgaviParseException($error);
 
 			}
 
@@ -88,7 +88,7 @@ class FilterConfigHandler extends IniConfigHandler
 						     'with nonexistent or unreadable file "%s"';
 				    $error = sprintf($error, $config, $class, $file);
 
-				    throw new ParseException($error);
+				    throw new AgaviParseException($error);
 
 				}
 
@@ -99,7 +99,7 @@ class FilterConfigHandler extends IniConfigHandler
 			}
 
 			// parse parameters
-			$parameters =& ParameterParser::parse($keys);
+			$parameters =& AgaviParameterParser::parse($keys);
 
 			// append new data
 			$tmp = "\$filter = new %s();\n" .

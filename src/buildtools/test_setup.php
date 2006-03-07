@@ -25,9 +25,9 @@
  */
 
 // simpletest should be in your path
-require_once('simpletest/unit_tester.php');
-require_once('simpletest/reporter.php');
-require_once('simpletest/mock_objects.php');
+#require_once('simpletest/unit_tester.php');
+#require_once('simpletest/reporter.php');
+#require_once('simpletest/mock_objects.php');
 if (!defined('AG_TEST_CACHE_DIR')) {
 	define('AG_TEST_CACHE_DIR', false); // set to a path where you want to write the cache to, to enable caching the class locations
 }
@@ -47,7 +47,9 @@ if (file_exists($_SERVER['PWD_PATH'].'/webapp')) {
 	define('PROJECT_APP_DIR', $_SERVER['PWD_PATH'] . '/webapp');
 }
 
-ini_set('unserialize_callback_func', '__autoload');
+ini_set('unserialize_callback_func', 'test__autoload');
+
+spl_autoload_register('test__autoload');
 
 function locateClasses($path, $prefix=true)
 {
@@ -70,8 +72,12 @@ function locateClasses($path, $prefix=true)
 }
 
 
-function __autoload($class)
+function test__autoload($class)
 {
+	if(substr($class, 0, 5) == 'Agavi' && $class != 'AgaviException') {
+		$class = substr($class, 5);
+	}
+
 	$datefmt = 'c';
 	$cachedir = AG_TEST_CACHE_DIR;
 	$cache = $cachedir . '/classcache.inc';

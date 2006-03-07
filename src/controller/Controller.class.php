@@ -15,7 +15,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * Controller directs application flow.
+ * AgaviController directs application flow.
  *
  * @package    agavi
  * @subpackage controller
@@ -26,12 +26,12 @@
  *
  * @version    $Id$
  */
-abstract class Controller extends ParameterHolder
+abstract class AgaviController extends AgaviParameterHolder
 {
 
 	private
 		$maxForwards     = 20,
-		$renderMode      = View::RENDER_CLIENT,
+		$renderMode      = AgaviView::RENDER_CLIENT,
 		$executionFilterClassName = null;
 
 	protected
@@ -64,15 +64,15 @@ abstract class Controller extends ParameterHolder
 	 *
 	 * @return     void
 	 *
-	 * @throws     <b>ConfigurationException</b> If an invalid configuration 
-	 *                                           setting has been found.
-	 * @throws     <b>ForwardException</b> If an error occurs while forwarding
-	 *                                     the request.
-	 * @throws     <b>InitializationException</b> If the action could not be
-	 *                                            initialized.
-	 * @throws     <b>SecurityException</b> If the action requires security but
-	 *                                      the user implementation is not of
-	 *                                      type SecurityUser.
+	 * @throws     <b>AgaviConfigurationException</b> If an invalid configuration 
+	 *                                                setting has been found.
+	 * @throws     <b>AgaviForwardException</b> If an error occurs while forwarding
+	 *                                          the request.
+	 * @throws     <b>AgaviInitializationException</b> If the action could not be
+	 *                                                 initialized.
+	 * @throws     <b>AgaviSecurityException</b> If the action requires security but
+	 *                                           the user implementation is not of
+	 *                                           type SecurityUser.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -85,7 +85,7 @@ abstract class Controller extends ParameterHolder
 		$moduleName = preg_replace('/[^a-z0-9\-_]+/i', '', $moduleName);
 
 		if ($this->getActionStack()->getSize() >= $this->maxForwards) {
-			throw new ForwardException('Too many forwards have been detected for this request');
+			throw new AgaviForwardException('Too many forwards have been detected for this request');
 		}
 
 		if (!AG_AVAILABLE) {
@@ -104,7 +104,7 @@ abstract class Controller extends ParameterHolder
 
 				$error = sprintf($error, $moduleName, $actionName);
 
-				throw new ConfigurationException($error);
+				throw new AgaviConfigurationException($error);
 
 			}
 
@@ -132,7 +132,7 @@ abstract class Controller extends ParameterHolder
 
 				$error = sprintf($error, $moduleName, $actionName);
 
-				throw new ConfigurationException($error);
+				throw new AgaviConfigurationException($error);
 
 			}
 
@@ -145,7 +145,7 @@ abstract class Controller extends ParameterHolder
 		$this->getActionStack()->addEntry($moduleName, $actionName, $actionInstance);
 
 		// include the module configuration
-		ConfigCache::import(AG_MODULE_DIR . '/' . $moduleName . '/config/module.ini');
+		AgaviConfigCache::import(AG_MODULE_DIR . '/' . $moduleName . '/config/module.ini');
 		$enabled_str = 'MOD_' . strtoupper($moduleName) . '_ENABLED';
 		if (defined($enabled_str) && constant($enabled_str)) {
 
@@ -159,7 +159,7 @@ abstract class Controller extends ParameterHolder
 			if ($actionInstance->initialize($this->context)) {
 
 				// create a new filter chain
-				$filterChain = new FilterChain();
+				$filterChain = new AgaviFilterChain();
 
 				if (AG_AVAILABLE) {
 					// the application is available so we'll register
@@ -168,12 +168,12 @@ abstract class Controller extends ParameterHolder
 					// does this action require security?
 					if (AG_USE_SECURITY && $actionInstance->isSecure()) {
 
-						if (!($this->context->getUser() instanceof SecurityUser)) {
+						if (!($this->context->getUser() instanceof AgaviSecurityUser)) {
 							$error = 'Security is enabled, but your User ' .
 							         'implementation isn\'t a sub-class of ' .
 							         'SecurityUser';
 
-							throw new SecurityException($error);
+							throw new AgaviSecurityException($error);
 
 						}
 
@@ -206,7 +206,7 @@ abstract class Controller extends ParameterHolder
 
 				$error = sprintf($error, $moduleName, $actionName);
 
-				throw new InitializationException($error);
+				throw new AgaviInitializationException($error);
 
 			}
 
@@ -227,7 +227,7 @@ abstract class Controller extends ParameterHolder
 
 				$error = sprintf($error, $moduleName, $actionName);
 
-				throw new ConfigurationException($error);
+				throw new AgaviConfigurationException($error);
 
 			}
 
@@ -243,8 +243,8 @@ abstract class Controller extends ParameterHolder
 	 * @param      string A module name.
 	 * @param      string An action name.
 	 *
-	 * @return     Action An Action implementation instance, if the action 
-	 *                    exists, otherwise null.
+	 * @return     AgaviAction An Action implementation instance, if the action 
+	 *                         exists, otherwise null.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @author     Mike Vincent <mike@agavi.org>
@@ -285,8 +285,8 @@ abstract class Controller extends ParameterHolder
 	/**
 	 * Retrieve the action stack.
 	 *
-	 * @return     ActionStack An ActionStack instance, if the action stack is
-	 *                         enabled, otherwise null.
+	 * @return     AgaviActionStack An ActionStack instance, if the action stack is
+	 *                              enabled, otherwise null.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -301,7 +301,7 @@ abstract class Controller extends ParameterHolder
 	/**
 	 * Retrieve the current application context.
 	 *
-	 * @return     Context A Context instance.
+	 * @return     AgaviContext A Context instance.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -318,11 +318,11 @@ abstract class Controller extends ParameterHolder
 	 *
 	 * @param      string A model name.
 	 *
-	 * @return     Model A Model implementation instance, if the model exists,
-	 *                   otherwise null. If the model implements an initialize
-	 *                   method, it will be called with a Context instance.
+	 * @return     AgaviModel A Model implementation instance, if the model exists,
+	 *                        otherwise null. If the model implements an initialize
+	 *                        method, it will be called with a Context instance.
 	 *
-	 * @throws     AutloadException if class is ultimately not found.
+	 * @throws     AgaviAutloadException if class is ultimately not found.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @author     David Zuelke <dz@bitxtender.com>
@@ -349,7 +349,7 @@ abstract class Controller extends ParameterHolder
 
 		// if the above code didnt find the class, allow autoload to fire as a last ditch attempt to find it
 		if (class_exists($class)) {
-			if (Toolkit::isSubClass($class, 'SingletonModel')) {
+			if (AgaviToolkit::isSubClass($class, 'AgaviSingletonModel')) {
 				$model = call_user_func(array($class, 'getInstance'), $class);
 			} else {
 				$model = new $class();
@@ -366,10 +366,10 @@ abstract class Controller extends ParameterHolder
 	/**
 	 * Retrieve the singleton instance of this class.
 	 *
-	 * @return     Controller A Controller implementation instance.
+	 * @return     AgaviController A Controller implementation instance.
 	 *
-	 * @throws     <b>ControllerException</b> If a controller implementation
-	 *                                        instance has not been created.
+	 * @throws     <b>AgaviControllerException</b> If a controller implementation
+	 *                                             instance has not been created.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -377,8 +377,8 @@ abstract class Controller extends ParameterHolder
 	 */
 	public static function getInstance ()
 	{
-		$error = 'Controller::getInstance deprecated, use newInstance method instead.';
-		throw new ControllerException($error);
+		$error = 'AgaviController::getInstance deprecated, use newInstance method instead.';
+		throw new AgaviControllerException($error);
 	}
 
 	/**
@@ -387,9 +387,9 @@ abstract class Controller extends ParameterHolder
 	 * @param      string A module name.
 	 * @param      string A model name.
 	 *
-	 * @return     Model A Model implementation instance, if the model exists,
-	 *                   otherwise null. If the model implements an initialize
-	 *                   method, it will be called with a Context instance.
+	 * @return     AgaviModel A Model implementation instance, if the model exists,
+	 *                        otherwise null. If the model implements an initialize
+	 *                        method, it will be called with a Context instance.
 	 *
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
@@ -412,7 +412,7 @@ abstract class Controller extends ParameterHolder
 			$class = $moduleClass;
 		}
 
-		if (Toolkit::isSubClass($class, 'SingletonModel')) {
+		if (AgaviToolkit::isSubClass($class, 'AgaviSingletonModel')) {
 			$model = call_user_func(array($class, 'getInstance'), $class);
 		} else {
 			$model = new $class();
@@ -430,8 +430,8 @@ abstract class Controller extends ParameterHolder
 	 * Retrieve the presentation rendering mode.
 	 *
 	 * @return     int One of the following:
-	 *                 - View::RENDER_CLIENT
-	 *                 - View::RENDER_VAR
+	 *                 - AgaviView::RENDER_CLIENT
+	 *                 - AgaviView::RENDER_VAR
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -449,8 +449,8 @@ abstract class Controller extends ParameterHolder
 	 * @param      string A module name.
 	 * @param      string A view name.
 	 *
-	 * @return     View A View implementation instance, if the model exists,
-	 *                  otherwise null.
+	 * @return     AgaviView A View implementation instance, if the model exists,
+	 *                       otherwise null.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @author     Mike Vincent <mike@agavi.org>
@@ -492,14 +492,14 @@ abstract class Controller extends ParameterHolder
 	/**
 	 * Initialize this controller.
 	 *
-	 * @param      Context object
+	 * @param      AgaviContext object
 	 * @return     void
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @author     Mike Vincent <mike@agavi.org>
 	 * @since      0.9.0
 	 */
-	public function initialize (Context $context)
+	public function initialize (AgaviContext $context)
 	{
 		$this->maxForwards = defined('AG_MAX_FORWARDS') ? AG_MAX_FORWARDS : 20;
 		$this->context = $context;
@@ -525,7 +525,7 @@ abstract class Controller extends ParameterHolder
 	/**
 	 * Load global filters.
 	 *
-	 * @param      FilterChain A FilterChain instance.
+	 * @param      AgaviFilterChain A FilterChain instance.
 	 *
 	 * @return     void
 	 *
@@ -544,7 +544,7 @@ abstract class Controller extends ParameterHolder
 		if (!isset($list[$moduleName])) {
 			if (is_readable($config))	{
 				// load global filters
-				require_once(ConfigCache::checkConfig('config/filters.ini'));
+				require_once(AgaviConfigCache::checkConfig('config/filters.ini'));
 			} else {
 				$list[$moduleName] = array();
 			}
@@ -560,7 +560,7 @@ abstract class Controller extends ParameterHolder
 	/**
 	 * Load module filters.
 	 *
-	 * @param      FilterChain A FilterChain instance.
+	 * @param      AgaviFilterChain A FilterChain instance.
 	 *
 	 * @return     void
 	 *
@@ -580,7 +580,7 @@ abstract class Controller extends ParameterHolder
 			// we haven't loaded a filter list for this module yet
 			$config = AG_MODULE_DIR . '/' . $moduleName . '/config/filters.ini';
 			if (is_readable($config)) {
-				require_once(ConfigCache::checkConfig($config));
+				require_once(AgaviConfigCache::checkConfig($config));
 			} else {
 				// add an emptry array for this module since no filters
 				// exist
@@ -639,10 +639,10 @@ abstract class Controller extends ParameterHolder
 	 *
 	 * @param      string A Controller implementation name.
 	 *
-	 * @return     Controller A Controller implementation instance.
+	 * @return     AgaviController A Controller implementation instance.
 	 *
-	 * @throws     <b>FactoryException</b> If a new controller implementation
-	 *                                     instance cannot be created.
+	 * @throws     <b>AgaviFactoryException</b> If a new controller implementation
+	 *                                          instance cannot be created.
 	 *
 	 * @author     Mike Vincent <mike@agavi.org>
 	 * @author     Sean Kerr <skerr@mojavi.org>
@@ -650,11 +650,11 @@ abstract class Controller extends ParameterHolder
 	 */
 	public static function newInstance ($class)
 	{
-		if (class_exists($class) && Toolkit::isSubClass($class, 'Controller')) {
+		if (class_exists($class) && AgaviToolkit::isSubClass($class, 'AgaviController')) {
 			return new $class();
 		}
 		$error = "Class ($class) doesnt exist or is not a Controller.";
-		throw new FactoryException($error);
+		throw new AgaviFactoryException($error);
 	}
 
 	/**
@@ -664,8 +664,8 @@ abstract class Controller extends ParameterHolder
 	 *
 	 * @return     void
 	 *
-	 * @throws     <b>RenderException</b> - If an invalid render mode has been 
-	 *                                      set.
+	 * @throws     <b>AgaviRenderException</b> - If an invalid render mode has been 
+	 *                                           set.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -673,8 +673,8 @@ abstract class Controller extends ParameterHolder
 	public function setRenderMode ($mode)
 	{
 
-		if ($mode == View::RENDER_CLIENT || $mode == View::RENDER_VAR ||
-			$mode == View::RENDER_NONE)
+		if ($mode == AgaviView::RENDER_CLIENT || $mode == AgaviView::RENDER_VAR ||
+			$mode == AgaviView::RENDER_NONE)
 		{
 
 			$this->renderMode = $mode;
@@ -687,7 +687,7 @@ abstract class Controller extends ParameterHolder
 		$error = 'Invalid rendering mode: %s';
 		$error = sprintf($error, $mode);
 
-		throw new RenderException($error);
+		throw new AgaviRenderException($error);
 
 	}
 
@@ -701,14 +701,14 @@ abstract class Controller extends ParameterHolder
 	 *
 	 * If you register an object twice it will be notified twice.
 	 *
-	 * @param      ShutdownListener
+	 * @param      AgaviShutdownListener
 	 *
 	 * @return     void
 	 *
 	 * @author     Veikko Makinen <mail@veikkomakinen.com>
 	 * @since      0.10.0
 	 */
-	public function registerShutdownListener (ShutdownListener $obj)
+	public function registerShutdownListener (AgaviShutdownListener $obj)
 	{
 		$this->shutdownList[] = $obj;
 	}

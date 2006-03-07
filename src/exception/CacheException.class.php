@@ -15,7 +15,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * CacheException is thrown when ConfigCache fails to execute properly.
+ * AgaviCacheException is thrown when ConfigCache fails to execute properly.
  *
  * @package    agavi
  * @subpackage exception
@@ -26,7 +26,7 @@
  *
  * @version    $Id$
  */
-class CacheException extends AgaviException
+class AgaviCacheException extends AgaviException
 {
 
 	// +-----------------------------------------------------------------------+
@@ -47,7 +47,7 @@ class CacheException extends AgaviException
 
 		parent::__construct($message, $code);
 
-		$this->setName('CacheException');
+		$this->setName('AgaviCacheException');
 
 	}
 

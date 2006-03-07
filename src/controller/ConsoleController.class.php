@@ -15,7 +15,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * ConsoleController allows you to centralize your entry point in your web
+ * AgaviConsoleController allows you to centralize your entry point in your web
  * application, but at the same time allow for any module and action combination
  * to be requested.
  *
@@ -29,7 +29,7 @@
  *
  * @version    $Id$
  */
-class ConsoleController extends Controller
+class AgaviConsoleController extends AgaviController
 {
 
 	/**

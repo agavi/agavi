@@ -14,8 +14,8 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * ConsoleRequest provides support for console-only request information such as
- * command-line parameters.
+ * AgaviConsoleRequest provides support for console-only request information
+ * such as command-line parameters.
  * 
  * @package    agavi
  * @subpackage request
@@ -26,20 +26,20 @@
  *
  * @version    $Id$
  */
-class ConsoleRequest extends Request
+class AgaviConsoleRequest extends AgaviRequest
 {
 
 	/**
 	 * Initialize this Request.
 	 *
-	 * @param      Context A Context instance.
-	 * @param      array   An associative array of initialization parameters.
+	 * @param      AgaviContext A Context instance.
+	 * @param      array        An associative array of initialization parameters.
 	 *
 	 * @return     bool true, if initialization completes successfully,
 	 *                  otherwise false.
 	 *
-	 * @throws     <b>InitializationException</b> If an error occurs while
-	 *                                            initializing this Request.
+	 * @throws     <b>AgaviInitializationException</b> If an error occurs while
+	 *                                                 initializing this Request.
 	 *
 	 * @author     Agavi Project <info@agavi.org>
 	 * @since      0.9.0
@@ -58,7 +58,7 @@ class ConsoleRequest extends Request
 	/**
 	 * Loads command line parameters into the parameter list.
 	 *
-	 * @param      Context $context
+	 * @param      AgaviContext $context
 	 * @return     void
 	 *
 	 * @author     Agavi Project <info@agavi.org>

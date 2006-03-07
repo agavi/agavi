@@ -29,7 +29,7 @@ require_once(AG_SMARTY_DIR.'/libs/Smarty.class.php');
  *
  * @version    $Id$
  */
-abstract class SmartyView extends View
+abstract class AgaviSmartyView extends AgaviView
 {
 	const CACHE_SUBDIR = 'templates/smarty';
 	
@@ -128,10 +128,10 @@ abstract class SmartyView extends View
 		$this->getEngine()->template_dir = $this->getDirectory();
 		$this->getEngine()->compile_dir  = AG_SMARTY_CACHE_DIR;
 
-		if ($mode == View::RENDER_CLIENT && !$this->isDecorator()) {
+		if ($mode == AgaviView::RENDER_CLIENT && !$this->isDecorator()) {
 			// render directly to the client
 			$this->getEngine()->display($this->getTemplate());
-		} else if ($mode != View::RENDER_NONE) {
+		} else if ($mode != AgaviView::RENDER_NONE) {
 			// render to variable
 			$retval = $this->getEngine()->fetch($this->getTemplate());
 
@@ -140,7 +140,7 @@ abstract class SmartyView extends View
 				$retval =& $this->decorate($retval);
 			}
 
-			if ($mode == View::RENDER_CLIENT) {
+			if ($mode == AgaviView::RENDER_CLIENT) {
 				echo($retval);
 				$retval = null;
 			}
