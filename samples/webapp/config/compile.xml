@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
++----------------------------------------------------------------------------+
+| This file is part of the Agavi package.                                    |
+| Copyright (c) 2006 the Agavi Project                                       |
+| -------------------------------------------------------------------------- |
+| AGAVI COMPILE CONFIGURATION                                                |
+| -------------------------------------------------------------------------- |
+| Any file in here will be stripped of comments and blank lines and will be  |
+| loaded into a single cache file.                                           |
+|                                                                            |
+| NOTE: When you change one of your classes it will not be reflected in the  |
+|       cache file until you remove the cache file or you change the         |
+|       modified time of this file.                                          |
+| -------------------------------------------------------------------------- |
+| KEYWORDS:                                                                  |
+|                                                                            |
+| The following keywords may exist:                                          |
+|                                                                            |
+| 1. %AG_APP_DIR%                                                            |
+| 2. %AG_LIB_DIR%                                                            |
+| 3. %AG_MODULE_DIR%                                                         |
+| 4. %AG_WEBAPP_DIR%                                                         |
++----------------------------------------------------------------------------+
+
++----------------------------------------------------------------------------+
+| Core Agavi classes.                                                        |
++----------------------------------------------------------------------------+
+-->
+<configurations>
+	<configuration>
+		<compiles>
+			<compile>%AG_APP_DIR%/action/Action.class.php</compile>
+			<compile>%AG_APP_DIR%/action/ActionStack.class.php</compile>
+			<compile>%AG_APP_DIR%/action/ActionStackEntry.class.php</compile>
+			<compile>%AG_APP_DIR%/core/Context.class.php</compile>
+			<compile>%AG_APP_DIR%/controller/Controller.class.php</compile>
+			<compile>%AG_APP_DIR%/filter/Filter.class.php</compile>
+			<compile>%AG_APP_DIR%/filter/ExecutionFilter.class.php</compile>
+			<compile>%AG_APP_DIR%/filter/FilterChain.class.php</compile>
+			<compile>%AG_APP_DIR%/logging/Appender.class.php</compile>
+			<compile>%AG_APP_DIR%/logging/Layout.class.php</compile>
+			<compile>%AG_APP_DIR%/logging/Logger.class.php</compile>
+			<compile>%AG_APP_DIR%/logging/LoggerManager.class.php</compile>
+			<compile>%AG_APP_DIR%/logging/Message.class.php</compile>
+			<compile>%AG_APP_DIR%/logging/PassthruLayout.class.php</compile>
+			<compile>%AG_APP_DIR%/request/Request.class.php</compile>
+			<compile>%AG_APP_DIR%/storage/Storage.class.php</compile>
+			<compile>%AG_APP_DIR%/user/User.class.php</compile>
+			<compile>%AG_APP_DIR%/validator/Validator.class.php</compile>
+			<compile>%AG_APP_DIR%/validator/ValidatorManager.class.php</compile>
+			<compile>%AG_APP_DIR%/view/View.class.php</compile>
+		</compiles>
+	</configuration>
+	<!--
+		+----------------------------------------------------------------------------+
+		| You shouldn't add any custom files to this file. Do so at your own risk.   |
+		+----------------------------------------------------------------------------+
+	-->
+</configurations>
