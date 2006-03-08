@@ -2,7 +2,7 @@
 <!--
 +----------------------------------------------------------------------------+
 | This file is part of the Agavi package.                                    |
-| Copyright (c) 2003-2006 the Agavi Project.                                 |
+| Copyright (c) 2006 the Agavi Project.                                      |
 | -------------------------------------------------------------------------- |
 | AGAVI AUTO LOAD CONFIGURATION                                              |
 | -------------------------------------------------------------------------- |
@@ -20,111 +20,109 @@
 | 4. %AG_WEBAPP_DIR%                                                         |
 +----------------------------------------------------------------------------+
 -->
-<autoloads>
-	<autoload>
-		<!-- Agavi Interfaces -->
-		<interfaces>
-			<!-- agavi/util -->
-			<interface name="AgaviShutdownListener">%AG_APP_DIR%/util/ShutdownListener.iface.php</entry>
-		</interfaces>
+<configurations>
+	<configuration>
+		<autoloads>
+			<!-- Agavi Interfaces -->
 
-		<!-- Agavi Classes -->
-		<classes>
+			<!-- agavi/util -->
+			<autoload name="AgaviShutdownListener">%AG_APP_DIR%/util/ShutdownListener.iface.php</entry>
+
 			<!-- agavi/config -->
-			<class name="AgaviCompileConfigHandler">%AG_APP_DIR%/config/CompileConfigHandler.class.php</class>
-			<class name="AgaviContextConfigHandler">%AG_APP_DIR%/config/ContextConfigHandler.class.php</class>
-			<class name="AgaviDatabaseConfigHandler">%AG_APP_DIR%/config/DatabaseConfigHandler.class.php</class>
-			<class name="AgaviDefineConfigHandler">%AG_APP_DIR%/config/DefineConfigHandler.class.php</class>
-			<class name="AgaviFactoryConfigHandler">%AG_APP_DIR%/config/FactoryConfigHandler.class.php</class>
-			<class name="AgaviFilterConfigHandler">%AG_APP_DIR%/config/FilterConfigHandler.class.php</class>
-			<class name="AgaviLoggingConfigHandler">%AG_APP_DIR%/config/LoggingConfigHandler.class.php</class>
-			<class name="AgaviModuleConfigHandler">%AG_APP_DIR%/config/ModuleConfigHandler.class.php</class>
-			<class name="AgaviReturnArrayConfigHandler">%AG_APP_DIR%/config/ReturnArrayConfigHandler.class.php</class>
-			<class name="AgaviValidatorConfigHandler">%AG_APP_DIR%/config/ValidatorConfigHandler.class.php</class>
+			<autoload name="AgaviCompileConfigHandler">%AG_APP_DIR%/config/CompileConfigHandler.class.php</autoload>
+			<autoload name="AgaviContextConfigHandler">%AG_APP_DIR%/config/ContextConfigHandler.class.php</autoload>
+			<autoload name="AgaviDatabaseConfigHandler">%AG_APP_DIR%/config/DatabaseConfigHandler.class.php</autoload>
+			<autoload name="AgaviDefineConfigHandler">%AG_APP_DIR%/config/DefineConfigHandler.class.php</autoload>
+			<autoload name="AgaviFactoryConfigHandler">%AG_APP_DIR%/config/FactoryConfigHandler.class.php</autoload>
+			<autoload name="AgaviFilterConfigHandler">%AG_APP_DIR%/config/FilterConfigHandler.class.php</autoload>
+			<autoload name="AgaviLoggingConfigHandler">%AG_APP_DIR%/config/LoggingConfigHandler.class.php</autoload>
+			<autoload name="AgaviModuleConfigHandler">%AG_APP_DIR%/config/ModuleConfigHandler.class.php</autoload>
+			<autoload name="AgaviReturnArrayConfigHandler">%AG_APP_DIR%/config/ReturnArrayConfigHandler.class.php</autoload>
+			<autoload name="AgaviValidatorConfigHandler">%AG_APP_DIR%/config/ValidatorConfigHandler.class.php</autoload>
 
 			<!-- agavi/controller -->
-			<class name="AgaviConsoleController">%AG_APP_DIR%/controller/ConsoleController.class.php</class>
-			<class name="AgaviFrontWebController">%AG_APP_DIR%/controller/FrontWebController.class.php</class>
-			<class name="AgaviPageWebController">%AG_APP_DIR%/controller/PageWebController.class.php</class>
-			<class name="AgaviWebController">%AG_APP_DIR%/controller/WebController.class.php</class>
+			<autoload name="AgaviConsoleController">%AG_APP_DIR%/controller/ConsoleController.class.php</autoload>
+			<autoload name="AgaviFrontWebController">%AG_APP_DIR%/controller/FrontWebController.class.php</autoload>
+			<autoload name="AgaviPageWebController">%AG_APP_DIR%/controller/PageWebController.class.php</autoload>
+			<autoload name="AgaviWebController">%AG_APP_DIR%/controller/WebController.class.php</autoload>
 
 			<!-- agavi/database -->
-			<class name="AgaviAdoDBDatabase">%AG_APP_DIR%/database/AdoDBDatabase.class.php</class>
-			<class name="AgaviCreoleDatabase">%AG_APP_DIR%/database/CreoleDatabase.class.php</class>
-			<class name="AgaviDatabase">%AG_APP_DIR%/database/Database.class.php</class>
-			<class name="AgaviDatabaseManager">%AG_APP_DIR%/database/DatabaseManager.class.php</class>
-			<class name="AgaviMySQLDatabase">%AG_APP_DIR%/database/MySQLDatabase.class.php</class>
-			<class name="AgaviPDODatabase">%AG_APP_DIR%/database/PDODatabase.class.php</class>
-			<class name="AgaviPostgreSQLDatabase">%AG_APP_DIR%/database/PostgreSQLDatabase.class.php</class>
-			<class name="AgaviPropelDatabase">%AG_APP_DIR%/database/PropelDatabase.class.php</class>
-			<class name="Propel">%AG_APP_DIR%/database/PropelAutoload.php</class>
+			<autoload name="AgaviAdoDBDatabase">%AG_APP_DIR%/database/AdoDBDatabase.class.php</autoload>
+			<autoload name="AgaviCreoleDatabase">%AG_APP_DIR%/database/CreoleDatabase.class.php</autoload>
+			<autoload name="AgaviDatabase">%AG_APP_DIR%/database/Database.class.php</autoload>
+			<autoload name="AgaviDatabaseManager">%AG_APP_DIR%/database/DatabaseManager.class.php</autoload>
+			<autoload name="AgaviMySQLDatabase">%AG_APP_DIR%/database/MySQLDatabase.class.php</autoload>
+			<autoload name="AgaviPDODatabase">%AG_APP_DIR%/database/PDODatabase.class.php</autoload>
+			<autoload name="AgaviPostgreSQLDatabase">%AG_APP_DIR%/database/PostgreSQLDatabase.class.php</autoload>
+			<autoload name="AgaviPropelDatabase">%AG_APP_DIR%/database/PropelDatabase.class.php</autoload>
+			<autoload name="Propel">%AG_APP_DIR%/database/PropelAutoload.php</autoload>
 
 			<!-- agavi/exception -->
-			<class name="AgaviControllerException">%AG_APP_DIR%/exception/ControllerException.class.php</class>
-			<class name="AgaviDatabaseException">%AG_APP_DIR%/exception/DatabaseException.class.php</class>
-			<class name="AgaviFactoryException">%AG_APP_DIR%/exception/FactoryException.class.php</class>
-			<class name="AgaviFileException">%AG_APP_DIR%/exception/FileException.class.php</class>
-			<class name="AgaviFilterException">%AG_APP_DIR%/exception/FilterException.class.php</class>
-			<class name="AgaviForwardException">%AG_APP_DIR%/exception/ForwardException.class.php</class>
-			<class name="AgaviInitializationException">%AG_APP_DIR%/exception/InitializationException.class.php</class>
-			<class name="AgaviLoggingException">%AG_APP_DIR%/exception/LoggingException.class.php</class>
-			<class name="AgaviRenderException">%AG_APP_DIR%/exception/RenderException.class.php</class>
-			<class name="AgaviStorageException">%AG_APP_DIR%/exception/StorageException.class.php</class>
-			<class name="AgaviSecurityException">%AG_APP_DIR%/exception/SecurityException.class.php</class>
-			<class name="AgaviValidatorException">%AG_APP_DIR%/exception/ValidatorException.class.php</class>
-			<class name="AgaviViewException">%AG_APP_DIR%/exception/ViewException.class.php</class>
+			<autoload name="AgaviControllerException">%AG_APP_DIR%/exception/ControllerException.class.php</autoload>
+			<autoload name="AgaviDatabaseException">%AG_APP_DIR%/exception/DatabaseException.class.php</autoload>
+			<autoload name="AgaviFactoryException">%AG_APP_DIR%/exception/FactoryException.class.php</autoload>
+			<autoload name="AgaviFileException">%AG_APP_DIR%/exception/FileException.class.php</autoload>
+			<autoload name="AgaviFilterException">%AG_APP_DIR%/exception/FilterException.class.php</autoload>
+			<autoload name="AgaviForwardException">%AG_APP_DIR%/exception/ForwardException.class.php</autoload>
+			<autoload name="AgaviInitializationException">%AG_APP_DIR%/exception/InitializationException.class.php</autoload>
+			<autoload name="AgaviLoggingException">%AG_APP_DIR%/exception/LoggingException.class.php</autoload>
+			<autoload name="AgaviRenderException">%AG_APP_DIR%/exception/RenderException.class.php</autoload>
+			<autoload name="AgaviStorageException">%AG_APP_DIR%/exception/StorageException.class.php</autoload>
+			<autoload name="AgaviSecurityException">%AG_APP_DIR%/exception/SecurityException.class.php</autoload>
+			<autoload name="AgaviValidatorException">%AG_APP_DIR%/exception/ValidatorException.class.php</autoload>
+			<autoload name="AgaviViewException">%AG_APP_DIR%/exception/ViewException.class.php</autoload>
 
 			<!-- agavi/filter -->
-			<class name="AgaviBasicSecurityFilter">%AG_APP_DIR%/filter/BasicSecurityFilter.class.php</class>
-			<class name="AgaviCachingExecutionFilter">%AG_APP_DIR%/filter/CachingExecutionFilter.class.php</class>
-			<class name="AgaviExecutionTimeFilter">%AG_APP_DIR%/filter/ExecutionTimeFilter.class.php</class>
-			<class name="AgaviFormPopulationFilter">%AG_APP_DIR%/filter/FormPopulationFilter.class.php</class>
-			<class name="AgaviSecurityFilter">%AG_APP_DIR%/filter/SecurityFilter.class.php</class>
+			<autoload name="AgaviBasicSecurityFilter">%AG_APP_DIR%/filter/BasicSecurityFilter.class.php</autoload>
+			<autoload name="AgaviCachingExecutionFilter">%AG_APP_DIR%/filter/CachingExecutionFilter.class.php</autoload>
+			<autoload name="AgaviExecutionTimeFilter">%AG_APP_DIR%/filter/ExecutionTimeFilter.class.php</autoload>
+			<autoload name="AgaviFormPopulationFilter">%AG_APP_DIR%/filter/FormPopulationFilter.class.php</autoload>
+			<autoload name="AgaviSecurityFilter">%AG_APP_DIR%/filter/SecurityFilter.class.php</autoload>
 
 			<!-- agavi/logging -->
-			<class name="AgaviAppender">%AG_APP_DIR%/logging/Appender.class.php</class>
-			<class name="AgaviFileAppender">%AG_APP_DIR%/logging/FileAppender.class.php</class>
-			<class name="AgaviLayout">%AG_APP_DIR%/logging/Layout.class.php</class>
-			<class name="AgaviLogger">%AG_APP_DIR%/logging/Logger.class.php</class>
-			<class name="AgaviLoggerManager">%AG_APP_DIR%/logging/LoggerManager.class.php</class>
-			<class name="AgaviMessage">%AG_APP_DIR%/logging/Message.class.php</class>
-			<class name="AgaviPassthruLayout">%AG_APP_DIR%/logging/PassthruLayout.class.php</class>
-			<class name="AgaviStderrAppender">%AG_APP_DIR%/logging/StderrAppender.class.php</class>
-			<class name="AgaviStdoutAppender">%AG_APP_DIR%/logging/StdoutAppender.class.php</class>
+			<autoload name="AgaviAppender">%AG_APP_DIR%/logging/Appender.class.php</autoload>
+			<autoload name="AgaviFileAppender">%AG_APP_DIR%/logging/FileAppender.class.php</autoload>
+			<autoload name="AgaviLayout">%AG_APP_DIR%/logging/Layout.class.php</autoload>
+			<autoload name="AgaviLogger">%AG_APP_DIR%/logging/Logger.class.php</autoload>
+			<autoload name="AgaviLoggerManager">%AG_APP_DIR%/logging/LoggerManager.class.php</autoload>
+			<autoload name="AgaviMessage">%AG_APP_DIR%/logging/Message.class.php</autoload>
+			<autoload name="AgaviPassthruLayout">%AG_APP_DIR%/logging/PassthruLayout.class.php</autoload>
+			<autoload name="AgaviStderrAppender">%AG_APP_DIR%/logging/StderrAppender.class.php</autoload>
+			<autoload name="AgaviStdoutAppender">%AG_APP_DIR%/logging/StdoutAppender.class.php</autoload>
 
 			<!-- agavi/model -->
-			<class name="AgaviModel">%AG_APP_DIR%/model/Model.class.php</class>
-			<class name="AgaviSingletonModel">%AG_APP_DIR%/model/SingletonModel.class.php</class>
+			<autoload name="AgaviModel">%AG_APP_DIR%/model/Model.class.php</autoload>
+			<autoload name="AgaviSingletonModel">%AG_APP_DIR%/model/SingletonModel.class.php</autoload>
 
 			<!-- agavi/request -->
-			<class name="AgaviConsoleRequest">%AG_APP_DIR%/request/ConsoleRequest.class.php</class>
-			<class name="AgaviHTTPSRequest">%AG_APP_DIR%/request/HTTPSRequest.class.php</class>
-			<class name="AgaviWebRequest">%AG_APP_DIR%/request/WebRequest.class.php</class>
+			<autoload name="AgaviConsoleRequest">%AG_APP_DIR%/request/ConsoleRequest.class.php</autoload>
+			<autoload name="AgaviHTTPSRequest">%AG_APP_DIR%/request/HTTPSRequest.class.php</autoload>
+			<autoload name="AgaviWebRequest">%AG_APP_DIR%/request/WebRequest.class.php</autoload>
 
 			<!-- agavi/storage -->
-			<class name="AgaviCreoleSessionStorage">%AG_APP_DIR%/storage/CreoleSessionStorage.class.php</class>
-			<class name="AgaviMySQLSessionStorage">%AG_APP_DIR%/storage/MySQLSessionStorage.class.php</class>
-			<class name="AgaviPostgreSQLSessionStorage">%AG_APP_DIR%/storage/PostgreSQLSessionStorage.class.php</class>
-			<class name="AgaviSessionStorage">%AG_APP_DIR%/storage/SessionStorage.class.php</class>
+			<autoload name="AgaviCreoleSessionStorage">%AG_APP_DIR%/storage/CreoleSessionStorage.class.php</autoload>
+			<autoload name="AgaviMySQLSessionStorage">%AG_APP_DIR%/storage/MySQLSessionStorage.class.php</autoload>
+			<autoload name="AgaviPostgreSQLSessionStorage">%AG_APP_DIR%/storage/PostgreSQLSessionStorage.class.php</autoload>
+			<autoload name="AgaviSessionStorage">%AG_APP_DIR%/storage/SessionStorage.class.php</autoload>
 
 			<!-- agavi/user -->
-			<class name="AgaviBasicSecurityUser">%AG_APP_DIR%/user/BasicSecurityUser.class.php</class>
-			<class name="AgaviSecurityUser">%AG_APP_DIR%/user/SecurityUser.class.php</class>
+			<autoload name="AgaviBasicSecurityUser">%AG_APP_DIR%/user/BasicSecurityUser.class.php</autoload>
+			<autoload name="AgaviSecurityUser">%AG_APP_DIR%/user/SecurityUser.class.php</autoload>
 
 			<!-- agavi/validator -->
-			<class name="AgaviDateValidator">%AG_APP_DIR%/validator/DateValidator.class.php</class>
-			<class name="AgaviEmailValidator">%AG_APP_DIR%/validator/EmailValidator.class.php</class>
-			<class name="AgaviNumberValidator">%AG_APP_DIR%/validator/NumberValidator.class.php</class>
-			<class name="AgaviRegexValidator">%AG_APP_DIR%/validator/RegexValidator.class.php</class>
-			<class name="AgaviStringValidator">%AG_APP_DIR%/validator/StringValidator.class.php</class>
+			<autoload name="AgaviDateValidator">%AG_APP_DIR%/validator/DateValidator.class.php</autoload>
+			<autoload name="AgaviEmailValidator">%AG_APP_DIR%/validator/EmailValidator.class.php</autoload>
+			<autoload name="AgaviNumberValidator">%AG_APP_DIR%/validator/NumberValidator.class.php</autoload>
+			<autoload name="AgaviRegexValidator">%AG_APP_DIR%/validator/RegexValidator.class.php</autoload>
+			<autoload name="AgaviStringValidator">%AG_APP_DIR%/validator/StringValidator.class.php</autoload>
 
 			<!-- agavi/view -->
-			<class name="AgaviPHPTALView">%AG_APP_DIR%/view/PHPTALView.class.php</class>
-			<class name="AgaviPHPView">%AG_APP_DIR%/view/PHPView.class.php</class>
-			<class name="AgaviSmartyView">%AG_APP_DIR%/view/SmartyView.class.php</class>
-			<class name="AgaviXSLView">%AG_APP_DIR%/view/XSLView.class.php</class>
-		</classes>
-	</autoload>
+			<autoload name="AgaviPHPTALView">%AG_APP_DIR%/view/PHPTALView.class.php</autoload>
+			<autoload name="AgaviPHPView">%AG_APP_DIR%/view/PHPView.class.php</autoload>
+			<autoload name="AgaviSmartyView">%AG_APP_DIR%/view/SmartyView.class.php</autoload>
+			<autoload name="AgaviXSLView">%AG_APP_DIR%/view/XSLView.class.php</autoload>
+		</autoloads>
+	</configuration>
 
 	<!--
 		+------------------------------------------------------------------------+
@@ -137,10 +135,10 @@
 		+------------------------------------------------------------------------+
 	-->
 	<!-- example for a list of autoloads that is only used in the "debug" context
-	<autoload context="debug">
-		<classes>
-			<class name="MyCustomClass">%AG_WEBAPP_DIR%/lib/MyCustomClass.class.php</class>
-		</classes>
-	</autoload>
+	<configuration context="debug">
+		<autoloads>
+			<autoload name="MyCustomClass">%AG_WEBAPP_DIR%/lib/MyCustomClass.class.php</autoload>
+		</autoloads>
+	</configuration>
 	--->
-</autoloads>
+</configurations>
