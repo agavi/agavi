@@ -34,7 +34,7 @@ abstract class SmartyView extends View
 	const COMPILE_SUBDIR = 'smarty';
 	const CACHE_DIR = 'content';
 
-	private static
+	protected static
 		$smarty = null;
 
 	public function initialize($context)
@@ -123,7 +123,10 @@ abstract class SmartyView extends View
 
 	public function setAttributesByRef(&$attributes)
 	{
-		$this->smarty->assign_by_ref($attributes);
+		foreach ($attributes as $key => &$value)
+		{
+			$this->setAttributeByRef($key, $value);
+		}
 	}
 
 	public function & getEngine()
