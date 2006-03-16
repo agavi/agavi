@@ -106,7 +106,9 @@ try {
 
 	// ini settings
 	ini_set('arg_separator.output',      '&amp;');
-	ini_set('display_errors',            1);
+	if(AG_DEBUG) {
+		ini_set('display_errors',            1);
+	}
 	ini_set('magic_quotes_runtime',      0);
 	ini_set('unserialize_callback_func', '__autoload');
 
