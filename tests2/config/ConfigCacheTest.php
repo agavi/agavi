@@ -26,7 +26,7 @@ class ConfigCacheTest extends AgaviTestCase
 	{
 		try {
 			$filename = AgaviConfigCache::checkConfig('config/factories.ini');
-			$this->assertSame(AG_CACHE_DIR . DIRECTORY_SEPARATOR . AgaviConfigCache::CACHE_SUBDIR . DIRECTORY_SEPARATOR . 'config_factories.ini.php', $filename);
+			$this->assertSame(AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . AgaviConfigCache::CACHE_SUBDIR . DIRECTORY_SEPARATOR . 'config_factories.ini.php', $filename);
 			$this->assertTrue( file_exists($filename) );
 		} catch (AgaviConfigurationException $e) {
 			$this->fail($e->getMessage());
@@ -45,10 +45,10 @@ class ConfigCacheTest extends AgaviTestCase
 	public function testgetCacheName()
 	{
 		$name = 'bleh/blah.ini';	
-		$this->assertEquals(AG_CACHE_DIR . DIRECTORY_SEPARATOR . AgaviConfigCache::CACHE_SUBDIR . DIRECTORY_SEPARATOR . 'bleh_blah.ini.php', AgaviConfigCache::getCacheName($name) );
+		$this->assertEquals(AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . AgaviConfigCache::CACHE_SUBDIR . DIRECTORY_SEPARATOR . 'bleh_blah.ini.php', AgaviConfigCache::getCacheName($name) );
 		
 		$name = 'bleh\blah.ini';	
-		$this->assertEquals(AG_CACHE_DIR . DIRECTORY_SEPARATOR . AgaviConfigCache::CACHE_SUBDIR . DIRECTORY_SEPARATOR . 'bleh_blah.ini.php', AgaviConfigCache::getCacheName($name) );
+		$this->assertEquals(AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . AgaviConfigCache::CACHE_SUBDIR . DIRECTORY_SEPARATOR . 'bleh_blah.ini.php', AgaviConfigCache::getCacheName($name) );
 	}
 	
 	public function testimport()
@@ -61,7 +61,7 @@ class ConfigCacheTest extends AgaviTestCase
 	
 	public function testclear()
 	{
-		$dummyfile = AG_CACHE_DIR . '/' . AgaviConfigCache::CACHE_SUBDIR . '/dummyfile.ini.php';
+		$dummyfile = AgaviConfig::get('core.cache_dir') . '/' . AgaviConfigCache::CACHE_SUBDIR . '/dummyfile.ini.php';
 		file_put_contents($dummyfile, 'Dummy file created in ' . __FILE__ . ' - ' . date('Y/m/d'));
 		$this->assertTrue( file_exists($dummyfile) );
 		AgaviConfigCache::clear();

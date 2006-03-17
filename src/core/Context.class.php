@@ -131,7 +131,7 @@ class AgaviContext
 	 * This is a shortcut to manually getting a connection from an existing
 	 * database implementation instance.
 	 *
-	 * If the AG_USE_DATABASE setting is off, this will return null.
+	 * If the core.use_database setting is off, this will return null.
 	 *
 	 * @param      name A database name.
 	 *
@@ -251,16 +251,16 @@ class AgaviContext
 		}
 		
 		$required = array();
-		if (AG_USE_DATABASE) {
+		if(AgaviConfig::get('core.use_database', false)) {
 			$required[] = 'database_manager';
 		}
 		// they have to be in this order; this is also why we're using array_merge()
 		$required = array_merge($required, array('action_stack', 'request', 'storage', 'controller', 'execution_filter', 'validator_manager'));
-		if (AG_USE_SECURITY) {
+		if (AgaviConfig::get('core.use_security', true)) {
 			$required[] = 'user';
 			$required[] = 'security_filter';
 		}
-		if (defined('AG_USE_LOGGING') && AG_USE_LOGGING) {
+		if(AgaviConfig::get('core.use_logging', false)) {
 			$required[] = 'logger_manager';
 		}
 
@@ -335,7 +335,7 @@ class AgaviContext
 		// get the last action stack entry
 		$actionEntry = $this->actionStack->getLastEntry();
 
-		return AG_MODULE_DIR . '/' . $actionEntry->getModuleName();
+		return AgaviConfig::get('core.modules_dir') . '/' . $actionEntry->getModuleName();
 
 	}
 

@@ -2,28 +2,26 @@
 error_reporting(E_ALL); // simpletest isnt STRICT compliant :(
 
 // set this to location you want to write the cache of class locations to enable caching (eg: dirname(__FILE__), make sure it's writable )
-if (!defined('AG_TEST_CACHE_DIR')) {
-	define('AG_TEST_CACHE_DIR', false); 
-}
+
+AgaviConfig::set('tests.cache_dir', false, false);
 
 // Define some path constants for our sandboxed test environment
-define('AG_WEBAPP_DIR',	dirname(__FILE__) . '/sandbox');
-define('AG_CONFIG_DIR',	AG_WEBAPP_DIR . '/config');
-define('AG_CACHE_DIR',	AG_WEBAPP_DIR . '/cache');
-define('AG_LIB_DIR',		AG_WEBAPP_DIR . '/lib');
-define('AG_MODULE_DIR',	AG_WEBAPP_DIR . '/modules/');
+AgaviConfig::set('core.webapp_dir', dirname(__FILE__) . '/sandbox');
+AgaviConfig::set('core.config_dir', AgaviConfig::get('core.webapp_dir') . '/config');
+AgaviConfig::set('core.cache_dir', AgaviConfig::get('core.webapp_dir') . '/cache');
+AgaviConfig::set('core.lib_dir', AgaviConfig::get('core.webapp_dir') . '/lib');
+AgaviConfig::set('core.modules_dir', AgaviConfig::get('core.webapp_dir') . '/modules/');
 
-define('AG_PATH_INFO_ARRAY', 'SERVER');
-define('AG_PATH_INFO_KEY', 'PATH_INFO');
-define('AG_AVAILABLE', 'On');
-define('AG_USE_DATABASE', true);
-define('AG_USE_SECURITY', true);
-define('AG_USE_LOGGING', true);
-define('AG_CONTENT_TYPE', 'text/html');
-define('AG_USER_NAMESPACE', 'org.agavi');
-define('AG_REQUEST_NAMESPACE', 'org.agavi');
-define('AG_URL_FORMAT', 'GET');
-
+AgaviConfig::set('request.path_info_array', 'SERVER');
+AgaviConfig::set('request.path_info_key', 'PATH_INFO');
+AgaviConfig::set('core.available', 'On');
+AgaviConfig::set('core.use_database', true);
+AgaviConfig::set('core.use_security', true);
+AgaviConfig::set('core.use_logging', true);
+AgaviConfig::set('controller.content_type', 'text/html');
+AgaviConfig::set('user.default_namespace', 'org.agavi');
+AgaviConfig::set('user.request_namespace', 'org.agavi');
+AgaviConfig::set('request.url_format', 'GET');
 
 // define('AG_ERROR_404_MODULE', 'ErrorModule');
 // define('AG_ERROR_404_ACTION', 'Error404');

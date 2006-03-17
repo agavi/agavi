@@ -47,7 +47,7 @@ class AgaviCachingExecutionFilter extends AgaviExecutionFilter
 		foreach($groups as &$group) {
 			$group = base64_encode($group);
 		}
-		return is_readable(AG_CACHE_DIR . DIRECTORY_SEPARATOR . self::CACHE_SUBDIR . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $groups) . '.cefcache');
+		return is_readable(AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . self::CACHE_SUBDIR . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $groups) . '.cefcache');
 	}
 	
 	/**
@@ -65,7 +65,7 @@ class AgaviCachingExecutionFilter extends AgaviExecutionFilter
 		foreach($groups as &$group) {
 			$group = base64_encode($group);
 		}
-		return include(AG_CACHE_DIR . DIRECTORY_SEPARATOR . self::CACHE_SUBDIR . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $groups) . '.cefcache');
+		return include(AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . self::CACHE_SUBDIR . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $groups) . '.cefcache');
 	}
 	
 	/**
@@ -84,8 +84,8 @@ class AgaviCachingExecutionFilter extends AgaviExecutionFilter
 		foreach($groups as &$group) {
 			$group = base64_encode($group);
 		}
-		@mkdir(AG_CACHE_DIR . DIRECTORY_SEPARATOR  . self::CACHE_SUBDIR . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR , array_slice($groups, 0, -1)), 0777, true);
-		return file_put_contents(AG_CACHE_DIR . DIRECTORY_SEPARATOR . self::CACHE_SUBDIR . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $groups) . '.cefcache', '<' . '?' . 'php return ' . var_export($data, true) . ';');
+		@mkdir(AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR  . self::CACHE_SUBDIR . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR , array_slice($groups, 0, -1)), 0777, true);
+		return file_put_contents(AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . self::CACHE_SUBDIR . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $groups) . '.cefcache', '<' . '?' . 'php return ' . var_export($data, true) . ';');
 	}
 	
 	/**
@@ -109,7 +109,7 @@ class AgaviCachingExecutionFilter extends AgaviExecutionFilter
 		foreach($groups as &$group) {
 			$group = base64_encode($group);
 		}
-		$path = AG_CACHE_DIR . DIRECTORY_SEPARATOR . self::CACHE_SUBDIR . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $groups) . '.cefcache';
+		$path = AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . self::CACHE_SUBDIR . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $groups) . '.cefcache';
 		if(is_file($path)) {
 			AgaviToolkit::clearCache($path);
 		} else {
@@ -201,7 +201,7 @@ class AgaviCachingExecutionFilter extends AgaviExecutionFilter
 		if(!isset($config[$moduleName])) {
 			try {
 				$config[$moduleName] = null;
-				$configFile = AgaviConfigCache::checkConfig(AG_MODULE_DIR . '/' . $moduleName . '/config/caching.ini');
+				$configFile = AgaviConfigCache::checkConfig(AgaviConfig::get('core.modules_dir') . '/' . $moduleName . '/config/caching.ini');
 				$config[$moduleName] = include($configFile);
 			} catch(Exception $e) {
 			}
@@ -284,7 +284,7 @@ class AgaviCachingExecutionFilter extends AgaviExecutionFilter
 				// set default validated status
 				$validated = true;
 				// get the current action validation configuration
-				$validationConfig = AG_MODULE_DIR . '/' . $moduleName .
+				$validationConfig = AgaviConfig::get('core.modules_dir') . '/' . $moduleName .
 											'/validate/' . $actionName . '.ini';
 				if(is_readable($validationConfig)) {
 					// load validation configuration
@@ -320,7 +320,7 @@ class AgaviCachingExecutionFilter extends AgaviExecutionFilter
 				// display this view
 				if(!$controller->viewExists($moduleName, $viewName)) {
 					// the requested view doesn't exist
-					$file = AG_MODULE_DIR . '/' . $moduleName . '/views/' .
+					$file = AgaviConfig::get('core.modules_dir') . '/' . $moduleName . '/views/' .
 							$viewName . 'View.class.php';
 					$error = 'Module "%s" does not contain the view "%sView" or ' .
 							 'the file "%s" is unreadable';

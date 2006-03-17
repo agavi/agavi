@@ -1,7 +1,6 @@
 <?php
-if (!defined('AG_USER_NAMESPACE')) {
-	define('AG_USER_NAMESPACE', 'org.agavi');
-}	
+
+AgaviConfig::set('user.default_namespace', 'org.agavi', false);
 
 class SampleUser extends AgaviUser
 {
@@ -79,9 +78,9 @@ class UserTest extends AgaviTestCase
 	{
 		$this->assertEquals(array(), $this->_u->getAttributeNamespaces());
 		$this->_u->setAttribute('blah', 'blahval');
-		$this->assertEquals(array(AG_USER_NAMESPACE), $this->_u->getAttributeNamespaces());
+		$this->assertEquals(array(AgaviConfig::get('user.default_namespace')), $this->_u->getAttributeNamespaces());
 		$this->_u->setAttribute('blah', 'blahval', 'some/other/namespace');
-		$this->assertEquals(array(AG_USER_NAMESPACE, 'some/other/namespace'), $this->_u->getAttributeNamespaces());
+		$this->assertEquals(array(AgaviConfig::get('user.default_namespace'), 'some/other/namespace'), $this->_u->getAttributeNamespaces());
 	}
 
 	public function testgetAttributes()
@@ -125,9 +124,9 @@ class UserTest extends AgaviTestCase
 
 	public function testhasAttributeNamespace()
 	{
-		$this->assertFalse($this->_u->hasAttributeNamespace(AG_USER_NAMESPACE));
+		$this->assertFalse($this->_u->hasAttributeNamespace(AgaviConfig::get('user.default_namespace')));
 		$this->_u->setAttribute('blah', 'blahval');
-		$this->assertTrue($this->_u->hasAttributeNamespace(AG_USER_NAMESPACE));
+		$this->assertTrue($this->_u->hasAttributeNamespace(AgaviConfig::get('user.default_namespace')));
 		$this->assertFalse($this->_u->hasAttributeNamespace('some/other/namespace'));
 		$this->_u->setAttribute('blah', 'blahval', 'some/other/namespace');
 		$this->assertTrue($this->_u->hasAttributeNamespace('some/other/namespace'));
@@ -169,8 +168,8 @@ class UserTest extends AgaviTestCase
 	public function testremoveAttributeNamespace()
 	{
 		$this->_u->setAttribute('blah', 'blahval');
-		$this->_u->removeAttributeNamespace(AG_USER_NAMESPACE);
-		$this->assertFalse($this->_u->hasAttributeNamespace(AG_USER_NAMESPACE));
+		$this->_u->removeAttributeNamespace(AgaviConfig::get('user.default_namespace'));
+		$this->assertFalse($this->_u->hasAttributeNamespace(AgaviConfig::get('user.default_namespace')));
 	}
 
 	public function testsetAttribute()

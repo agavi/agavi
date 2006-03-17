@@ -95,7 +95,7 @@ class AgaviFactoryConfigHandler extends AgaviIniConfigHandler
 						$inits[] = sprintf("\tself::\$instance->request->initialize(self::\$instance, %s);", $parameters);
 						break;
 					case 'security_filter':
-						$tmp = "\n\tif (AG_USE_SECURITY) {\n" .
+						$tmp = "\n\tif (AgaviConfig::get('core.use_security')) {\n" .
 						       "\t\tself::\$instance->securityFilter = AgaviSecurityFilter::newInstance('%s');\n" .
 						       "\t\tself::\$instance->securityFilter->initialize(self::\$instance);\n" .
 									 "\t}\n";

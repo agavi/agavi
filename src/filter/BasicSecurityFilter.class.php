@@ -79,7 +79,7 @@ class AgaviBasicSecurityFilter extends AgaviSecurityFilter
 			{
 
 				// the user doesn't have access, exit stage left
-				$controller->forward(AG_SECURE_MODULE, AG_SECURE_ACTION);
+				$controller->forward(AgaviConfig::get('actions.secure_module'), AgaviConfig::get('actions.secure_action'));
 
 			}
 
@@ -87,7 +87,7 @@ class AgaviBasicSecurityFilter extends AgaviSecurityFilter
 		{
 
 			// the user is not authenticated
-			$controller->forward(AG_LOGIN_MODULE, AG_LOGIN_ACTION);
+			$controller->forward(AgaviConfig::get('actions.login_module'), AgaviConfig::get('actions.login_action'));
 
 		}
 

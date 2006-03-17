@@ -1,7 +1,6 @@
 <?php
-if (!defined('AG_USER_NAMESPACE')) {
-	define('AG_USER_NAMESPACE', 'org.agavi');
-}	
+
+AgaviConfig::set('user.default_namespace', 'org.agavi', false);
 
 class SampleSecurityUser extends AgaviBasicSecurityUser
 {

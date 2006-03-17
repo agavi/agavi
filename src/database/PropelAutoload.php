@@ -16,7 +16,7 @@
  * A file that serves as the autoload file for class Propel
  * Use this line in autoload.ini to enable the magic:
  * <code>
- *   Propel      = "%AG_APP_DIR%/database/PropelAutoload.php"
+ *   Propel      = "%core.app_dir%/database/PropelAutoload.php"
  * </code>
  * Whenever you want to use Propel now, it will automatically be setup for you
  * using the configuration file you specified in database.ini

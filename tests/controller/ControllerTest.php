@@ -23,9 +23,9 @@ class ControllerTest extends UnitTestCase
 	public function testactionExists()
 	{
 		// actionExists actually checks the filesystem, 
-		$this->assertTrue(file_exists(AG_WEBAPP_DIR . '/modules/Test/actions/TestAction.class.php'));
-		$this->assertFalse(file_exists(AG_WEBAPP_DIR . '/modules/Test/actions/BunkAction.class.php'));
-		$this->assertFalse(file_exists(AG_WEBAPP_DIR . '/modules/Bunk/actions/BunkAction.class.php'));
+		$this->assertTrue(file_exists(AgaviConfig::get('core.webapp_dir') . '/modules/Test/actions/TestAction.class.php'));
+		$this->assertFalse(file_exists(AgaviConfig::get('core.webapp_dir') . '/modules/Test/actions/BunkAction.class.php'));
+		$this->assertFalse(file_exists(AgaviConfig::get('core.webapp_dir') . '/modules/Bunk/actions/BunkAction.class.php'));
 		$controller = Context::getInstance()->getController();
 		$this->assertTrue($controller->actionExists('Test', 'Test'));
 		$this->assertFalse($controller->actionExists('Test', 'Bunk'));
@@ -35,15 +35,13 @@ class ControllerTest extends UnitTestCase
 	public function testforwardTooTheMaxThrowsException()
 	{
 			
-		if (!defined('AG_MAX_FORWARDS')) {
-			define('AG_MAX_FORWARDS', 20);
-		}
+		AgaviConfig::set('controller.max_fowards', 20, false);
 		$controller = Context::getInstance()->getController();
 		$controller->setRenderMode(View::RENDER_VAR);
-		for ($i=0; $i<= AG_MAX_FORWARDS; $i++) {
+		for ($i=0; $i<= AgaviConfig::get('controller.max_forwards'); $i++) {
 			try {
 				$controller->forward('Test', 'Test');
-				if ($i >= AG_MAX_FORWARDS) {
+				if ($i >= AgaviConfig::get('controller.max_forwards')) {
 					$this->assertTrue(0,'Expected ForwardException not thrown');
 				}
 			} catch (ForwardException $fe) {
@@ -66,10 +64,9 @@ class ControllerTest extends UnitTestCase
 
 	public function testForwardingToDisabledModule()
 	{
-		if (!defined('AG_MODULE_DISABLED_MODULE')) {
-			define('AG_MODULE_DISABLED_MODULE', 'ErrorModule');
-			define('AG_MODULE_DISABLED_ACTION', 'DisabledModule');
-		}
+		AgaviConfig::set('actions.module_disabled_module', 'ErrorModule', false);
+		AgaviConfig::set('actions.module_disabled_action', 'DisabledModule', false);
+		
 		$controller = Context::getInstance()->getController();
 		$controller->setRenderMode(View::RENDER_VAR);
 		try {
@@ -82,8 +79,8 @@ class ControllerTest extends UnitTestCase
 			$this->assertWantedPattern('/module has been disabled/i',$view);
 			$module = $lastActionEntry->getModuleName();
 			$action = $lastActionEntry->getActionName();
-			$this->assertIdentical(AG_MODULE_DISABLED_MODULE, $module);
-			$this->assertIdentical(AG_MODULE_DISABLED_ACTION, $action);
+			$this->assertIdentical(AgaviConfig::get('actions.module_disabled_module'), $module);
+			$this->assertIdentical(AgaviConfig::get('actions.module_disabled_action'), $action);
 		} catch (ForwardException $e) {
 			$this->assertTrue(0, 'Test forwarding to an unavilable module needs work');
 		}
@@ -249,7 +246,7 @@ class ControllerTest extends UnitTestCase
 	public function testgetContentType()
 	{
 		$controller = Context::getInstance()->getController();
-		$this->assertEqual($controller->getContentType(), AG_CONTENT_TYPE);
+		$this->assertEqual($controller->getContentType(), AgaviConfig::get('controller.content_type'));
 	}
 	
 	public function testsetContentType()

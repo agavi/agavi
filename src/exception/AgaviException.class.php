@@ -278,7 +278,7 @@ class AgaviException extends Exception
 						  </tr>
 						  <tr>
 						      <td class="title">Agavi Version:</td>
-						      <td>' . AG_APP_VERSION . '</td>
+						      <td>' . AgaviConfig::get('agavi.version') . '</td>
 						  </tr>
 						  <tr>
 						      <td class="title">PHP Version:</td>
@@ -317,7 +317,7 @@ class AgaviException extends Exception
 
 				}
 
-				echo 'Agavi Version: ' . AG_APP_VERSION . "\nPHP Version: " . PHP_VERSION . "\n";
+				echo 'Agavi Version: ' . AgaviConfig::get('agavi.version') . "\nPHP Version: " . PHP_VERSION . "\n";
 
 				break;
 

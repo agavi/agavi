@@ -111,7 +111,7 @@ abstract class AgaviWebController extends AgaviController
 
 		}
 
-		if (AG_URL_FORMAT == 'PATH')
+		if (AgaviConfig::get('request.url_format') == 'PATH')
 		{
 
 			// use PATH format
@@ -411,6 +411,8 @@ abstract class AgaviWebController extends AgaviController
 		// initialize parent
 		parent::initialize($context);
 
+		ini_set('arg_separator.output', AgaviConfig::get('php.arg_separator.output', '&amp;'));
+
 		$this->cookieConfig = array();
 		$this->cookieConfig['lifetime'] = isset($parameters['cookie_lifetime']) ? $parameters['cookie_lifetime'] : 0;
 		$this->cookieConfig['path']     = isset($parameters['cookie_path'])     ? $parameters['cookie_path']     : "/";
@@ -418,9 +420,7 @@ abstract class AgaviWebController extends AgaviController
 		$this->cookieConfig['secure']   = isset($parameters['cookie_secure'])   ? $parameters['cookie_secure']   : 0;
 
 		// set our content type
-		if(defined('AG_CONTENT_TYPE')) {
-			$this->setContentType(AG_CONTENT_TYPE);
-		}
+		$this->setContentType(AgaviConfig::get('controller.content_type', 'text/html'));
 
 	}
 

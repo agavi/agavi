@@ -104,7 +104,7 @@ class AgaviConfigCache
 	 * recompile the cache file associated with it.
 	 *
 	 * If the configuration file path is relative, the path itself is relative
-	 * to the Agavi AG_WEBAPP_DIR application setting.
+	 * to the Agavi "core.webapp_dir" application setting.
 	 *
 	 * @param      string A filesystem path to a configuration file.
 	 *
@@ -120,7 +120,7 @@ class AgaviConfigCache
 	public static function checkConfig ($config)
 	{
 		// the full filename path to the config, which might not be what we were given.
-		$filename = AgaviToolkit::isPathAbsolute($config) ? $config : AG_WEBAPP_DIR . '/' . $config;
+		$filename = AgaviToolkit::isPathAbsolute($config) ? $config : AgaviConfig::get('core.webapp_dir') . '/' . $config;
 
 		if (!is_readable($filename)) {
 			throw new AgaviUnreadableException('Configuration file "' . $filename . '" does not exist or is unreadable.');
@@ -185,7 +185,7 @@ class AgaviConfigCache
 
 		// replace unfriendly filename characters with an underscore and postfix the name with a php extension
 		$config  = str_replace(array('\\', '/'), '_', $config) . '.php';
-		return AG_CACHE_DIR . DIRECTORY_SEPARATOR . self::CACHE_SUBDIR . DIRECTORY_SEPARATOR . $config;
+		return AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . self::CACHE_SUBDIR . DIRECTORY_SEPARATOR . $config;
 
 	}
 
@@ -193,7 +193,7 @@ class AgaviConfigCache
 	 * Import a configuration file.
 	 *
 	 * If the configuration file path is relative, the path itself is relative
-	 * to the Agavi AG_WEBAPP_DIR application setting.
+	 * to the Agavi "core.webapp_dir" application setting.
 	 *
 	 * @param      string A filesystem path to a configuration file.
 	 * @param      bool   Only allow this configuration file to be included once 
@@ -240,12 +240,12 @@ class AgaviConfigCache
 		// module level configuration handlers
 
 		// make sure our modules directory exists
-		if (is_readable(AG_MODULE_DIR))	{
+		if (is_readable(AgaviConfig::get('core.modules_dir')))	{
 			// ignore names
 			$ignore = array('.', '..', 'CVS', '.svn');
 
 			// create a file pointer to the module dir
-			$fp = opendir(AG_MODULE_DIR);
+			$fp = opendir(AgaviConfig::get('core.modules_dir'));
 
 			// loop through the directory and grab the modules
 			while (($directory = readdir($fp)) !== false)	{
@@ -253,7 +253,7 @@ class AgaviConfigCache
 				if (!in_array($directory, $ignore))
 				{
 
-				    $config = AG_MODULE_DIR . '/' . $directory . '/config/config_handlers.ini';
+				    $config = AgaviConfig::get('core.modules_dir') . '/' . $directory . '/config/config_handlers.ini';
 
 				    if (is_readable($config)) {
 
@@ -284,7 +284,7 @@ class AgaviConfigCache
 
 			// module directory doesn't exist or isn't readable
 			$error = 'Module directory "%s" does not exist or is not readable';
-			$error = sprintf($error, AG_MODULE_DIR);
+			$error = sprintf($error, AgaviConfig::get('core.modules_dir'));
 
 			throw new AgaviConfigurationException($error);
 
@@ -311,7 +311,7 @@ class AgaviConfigCache
 
 		$flags = ($append) ? FILE_APPEND : 0;
 		
-		@mkdir(AG_CACHE_DIR . DIRECTORY_SEPARATOR . self::CACHE_SUBDIR);
+		@mkdir(AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . self::CACHE_SUBDIR);
 
 		if (@file_put_contents($cache, $data, $flags) === false)
 		{

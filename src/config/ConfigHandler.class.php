@@ -196,7 +196,7 @@ abstract class AgaviConfigHandler extends AgaviParameterHolder
 		{
 
 			// not an absolute path so we'll prepend to it
-			$path = AG_WEBAPP_DIR . '/' . $path;
+			$path = AgaviConfig::get('core.webapp_dir') . '/' . $path;
 
 		}
 

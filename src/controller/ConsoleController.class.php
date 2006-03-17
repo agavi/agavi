@@ -31,7 +31,23 @@
  */
 class AgaviConsoleController extends AgaviController
 {
+	/**
+	 * Initialize this controller.
+	 *
+	 * @return     void
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function initialize(AgaviContext $context)
+	{
 
+		// initialize parent
+		parent::initialize($context);
+
+		ini_set('arg_separator.output', AgaviConfig::get('php.arg_separator.output', '&'));
+	}
+	
 	/**
 	 * Dispatch a request.
 	 *
@@ -54,15 +70,15 @@ class AgaviConsoleController extends AgaviController
 			}
 
 			// determine our module and action
-			$moduleName = (defined('AG_CONSOLE_MODULE') ? AG_CONSOLE_MODULE : AG_DEFAULT_MODULE);
-			$actionName = (defined('AG_CONSOLE_ACTION') ? AG_CONSOLE_ACTION : null);
+			$moduleName = (AgaviConfig::has('console.module') ? AgaviConfig::get('console.module') : AgaviConfig::get('actions.default_module'));
+			$actionName = (AgaviConfig::has('console.action') ? AgaviConfig::get('console.action') : null);
 
 			if ($actionName == null) {
 
 				// no action has been specified
-				if ($moduleName == AG_DEFAULT_MODULE) {
+				if ($moduleName == AgaviConfig::get('actions.default_module')) {
 
-					$actionName = AG_DEFAULT_ACTION;
+					$actionName = AgaviConfig::get('actions.default_action');
 
 				} else if ($this->actionExists($moduleName, 'Index')) {
 
@@ -73,8 +89,8 @@ class AgaviConsoleController extends AgaviController
 			}
 
 			// set the module and action in the Request parameters
-			$this->context->getRequest()->setParameter(AG_MODULE_ACCESSOR, $moduleName);
-			$this->context->getRequest()->setParameter(AG_ACTION_ACCESSOR, $actionName);
+			$this->context->getRequest()->setParameter(AgaviConfig::get('request.module_accessor'), $moduleName);
+			$this->context->getRequest()->setParameter(AgaviConfig::get('request.action_accessor'), $actionName);
 
 			// make the first request
 			$this->forward($moduleName, $actionName);

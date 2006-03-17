@@ -3,7 +3,6 @@
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
 // | Copyright (c) 2003-2006 the Agavi Project.                                |
-// | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -19,32 +18,40 @@
  *
  * @package    agavi
  * 
- * @author     Sean Kerr <skerr@mojavi.org>
+ * @author     David Zuelke <dz@bitxtender.com>
  * @copyright  (c) Authors
  * @since      0.9.0
  *
  * @version    $Id$
  */
 
-define('AG_APP_NAME',          'Agavi');
+AgaviConfig::set('agavi.name', 'Agavi');
 
-define('AG_APP_MAJOR_VERSION', '0');
+AgaviConfig::set('agavi.major_version', '0');
+AgaviConfig::set('agavi.minor_version', '11');
+AgaviConfig::set('agavi.micro_version', '0');
+AgaviConfig::set('agavi.status', 'DEV');
+AgaviConfig::set('agavi.branch', 'trunk');
 
-define('AG_APP_MINOR_VERSION', '11');
+AgaviConfig::set('agavi.version',
+	AgaviConfig::get('agavi.major_version') . '.' .
+	AgaviConfig::get('agavi.minor_version') . '.' .
+	AgaviConfig::get('agavi.micro_version') . 
+	AgaviConfig::has('agavi.status')
+		? '-' . AgaviConfig::get('agavi.status')
+		: ''
+);
 
-define('AG_APP_MICRO_VERSION', '0');
+AgaviConfig::set('agavi.release',
+	AgaviConfig::get('agavi.name') . ' ' .
+	AgaviConfig::get('agavi.version')
+);
 
-define('AG_APP_BRANCH',        'trunk');
+AgaviConfig::set('agavi.url', 'http://www.agavi.org');
 
-define('AG_APP_STATUS',        'DEV');
-
-define('AG_APP_VERSION',       AG_APP_MAJOR_VERSION . '.' .
-						       AG_APP_MINOR_VERSION . '.' .
-						       AG_APP_MICRO_VERSION . '-' . AG_APP_STATUS);
-
-define('AG_APP_URL',           'http://www.agavi.org');
-
-define('AG_APP_INFO',          AG_APP_NAME . ' ' . AG_APP_VERSION .
-						       ' (' . AG_APP_URL . ')');
+AgaviConfig::set('agavi_info',
+	AgaviConfig::get('agavi.release') . ' (' .
+	AgaviConfig::get('agavi.url') . ')'
+);
 
 ?>

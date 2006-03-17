@@ -52,7 +52,7 @@ abstract class AgaviController extends AgaviParameterHolder
 	 */
 	public function actionExists ($moduleName, $actionName)
 	{
-		$file = AG_MODULE_DIR . '/' . $moduleName . '/actions/' . $actionName . 'Action.class.php';
+		$file = AgaviConfig::get('core.modules_dir') . '/' . $moduleName . '/actions/' . $actionName . 'Action.class.php';
 		return is_readable($file);
 	}
 
@@ -88,19 +88,19 @@ abstract class AgaviController extends AgaviParameterHolder
 			throw new AgaviForwardException('Too many forwards have been detected for this request');
 		}
 
-		if (!AG_AVAILABLE) {
+		if (!AgaviConfig::get('core.available', false)) {
 
 			// application is unavailable
-			$moduleName = AG_UNAVAILABLE_MODULE;
-			$actionName = AG_UNAVAILABLE_ACTION;
+			$moduleName = AgaviConfig::get('actions.unavailable_module');
+			$actionName = AgaviConfig::get('actions.unavailable_action');
 
 			if (!$this->actionExists($moduleName, $actionName))
 			{
 
 				// cannot find unavailable module/action
 				$error = 'Invalid configuration settings: ' .
-						 'AG_UNAVAILABLE_MODULE "%s", ' .
-						 'AG_UNAVAILABLE_ACTION "%s"';
+						 'actions.unavailable_module "%s", ' .
+						 'actions.unavailable_action "%s"';
 
 				$error = sprintf($error, $moduleName, $actionName);
 
@@ -119,16 +119,16 @@ abstract class AgaviController extends AgaviParameterHolder
 			$this->context->getRequest()->setAttribute('requested_module', $moduleName);
 
 			// switch to error 404 action
-			$moduleName = AG_ERROR_404_MODULE;
-			$actionName = AG_ERROR_404_ACTION;
+			$moduleName = AgaviConfig::get('actions.404_module');
+			$actionName = AgaviConfig::get('actions.404_action');
 
 			if (!$this->actionExists($moduleName, $actionName))
 			{
 
 				// cannot find unavailable module/action
 				$error = 'Invalid configuration settings: ' .
-						 'AG_ERROR_404_MODULE "%s", ' .
-						 'AG_ERROR_404_ACTION "%s"';
+						 'actions.404_module "%s", ' .
+						 'actions.404_action "%s"';
 
 				$error = sprintf($error, $moduleName, $actionName);
 
@@ -145,12 +145,12 @@ abstract class AgaviController extends AgaviParameterHolder
 		$this->getActionStack()->addEntry($moduleName, $actionName, $actionInstance);
 
 		// include the module configuration
-		AgaviConfigCache::import(AG_MODULE_DIR . '/' . $moduleName . '/config/module.ini');
+		AgaviConfigCache::import(AgaviConfig::get('core.modules_dir') . '/' . $moduleName . '/config/module.ini');
 		$enabled_str = 'MOD_' . strtoupper($moduleName) . '_ENABLED';
 		if (defined($enabled_str) && constant($enabled_str)) {
 
 			// check for a module config.php
-			$moduleConfig = AG_MODULE_DIR . '/' . $moduleName . '/config.php';
+			$moduleConfig = AgaviConfig::get('core.modules_dir') . '/' . $moduleName . '/config.php';
 			if (is_readable($moduleConfig)) {
 				require_once($moduleConfig);
 			}
@@ -161,12 +161,12 @@ abstract class AgaviController extends AgaviParameterHolder
 				// create a new filter chain
 				$filterChain = new AgaviFilterChain();
 
-				if (AG_AVAILABLE) {
+				if(AgaviConfig::get('core.available', false)) {
 					// the application is available so we'll register
 					// global and module filters, otherwise skip them
 
 					// does this action require security?
-					if (AG_USE_SECURITY && $actionInstance->isSecure()) {
+					if(AgaviConfig::get('core.use_security', false) && $actionInstance->isSecure()) {
 
 						if (!($this->context->getUser() instanceof AgaviSecurityUser)) {
 							$error = 'Security is enabled, but your User ' .
@@ -214,16 +214,16 @@ abstract class AgaviController extends AgaviParameterHolder
 		{
 
 			// module is disabled
-			$moduleName = AG_MODULE_DISABLED_MODULE;
-			$actionName = AG_MODULE_DISABLED_ACTION;
+			$moduleName = AgaviConfig::get('actions.module_disabled_module');
+			$actionName = AgaviConfig::get('actions.module_disabled_action');
 
 			if (!$this->actionExists($moduleName, $actionName))
 			{
 
 				// cannot find mod disabled module/action
 				$error = 'Invalid configuration settings: ' .
-						 'AG_MODULE_DISABLED_MODULE "%s", ' .
-						 'AG_MODULE_DISABLED_ACTION "%s"';
+						 'actions.module_disabled_module "%s", ' .
+						 'actions.module_disabled_action "%s"';
 
 				$error = sprintf($error, $moduleName, $actionName);
 
@@ -253,7 +253,7 @@ abstract class AgaviController extends AgaviParameterHolder
 	 */
 	public function getAction ($moduleName, $actionName)
 	{
-		$file = AG_MODULE_DIR . '/' . $moduleName . '/actions/' . $actionName . 'Action.class.php';
+		$file = AgaviConfig::get('core.modules_dir') . '/' . $moduleName . '/actions/' . $actionName . 'Action.class.php';
 
 		if (file_exists($file)) {
 			require_once($file);
@@ -335,11 +335,11 @@ abstract class AgaviController extends AgaviParameterHolder
 		$class = $modelName . 'Model';
 
 		if (!class_exists($class, false)) {
-			$file = AG_LIB_DIR . '/models/' . $modelName . 'Model.class.php';
+			$file = AgaviConfig::get('core.lib_dir') . '/models/' . $modelName . 'Model.class.php';
 			if (file_exists($file)) {
 				require_once($file);
 			} else {
-				$pattern = AG_LIB_DIR . '/' . '*' . '/models/' . $modelName . 'Model.class.php';
+				$pattern = AgaviConfig::get('core.lib_dir') . '/' . '*' . '/models/' . $modelName . 'Model.class.php';
 				if ($files = glob($pattern)) {
 					// only include the first file found
 					require_once($files[0]);
@@ -400,7 +400,7 @@ abstract class AgaviController extends AgaviParameterHolder
 	public function getModel ($moduleName, $modelName)
 	{
 
-		$file = AG_MODULE_DIR . '/' . $moduleName . '/models/' . $modelName .	'Model.class.php';
+		$file = AgaviConfig::get('core.modules_dir') . '/' . $moduleName . '/models/' . $modelName .	'Model.class.php';
 		require_once($file);
 
 		$class = $modelName . 'Model';
@@ -460,7 +460,7 @@ abstract class AgaviController extends AgaviParameterHolder
 	public function getView ($moduleName, $viewName)
 	{
 
-		$file = AG_MODULE_DIR . '/' . $moduleName . '/views/' . $viewName .
+		$file = AgaviConfig::get('core.modules_dir') . '/' . $moduleName . '/views/' . $viewName .
 				'View.class.php';
 
 		require_once($file);
@@ -501,7 +501,7 @@ abstract class AgaviController extends AgaviParameterHolder
 	 */
 	public function initialize (AgaviContext $context)
 	{
-		$this->maxForwards = defined('AG_MAX_FORWARDS') ? AG_MAX_FORWARDS : 20;
+		$this->maxForwards = AgaviConfig::get('controller.max_forwards', 20);
 		$this->context = $context;
 
 		register_shutdown_function(array($this, 'shutdown'));
@@ -538,13 +538,13 @@ abstract class AgaviController extends AgaviParameterHolder
 		static $list = array();
 
 		// grab our global filter ini and preset the module name
-		$config     = AG_CONFIG_DIR . '/filters.ini';
+		$config     = AgaviConfig::get('core.config_dir') . '/filters.ini';
 		$moduleName = 'global';
 
 		if (!isset($list[$moduleName])) {
 			if (is_readable($config))	{
 				// load global filters
-				require_once(AgaviConfigCache::checkConfig('config/filters.ini'));
+				require_once(AgaviConfigCache::checkConfig($config));
 			} else {
 				$list[$moduleName] = array();
 			}
@@ -578,7 +578,7 @@ abstract class AgaviController extends AgaviParameterHolder
 
 		if (!isset($list[$moduleName]))	{
 			// we haven't loaded a filter list for this module yet
-			$config = AG_MODULE_DIR . '/' . $moduleName . '/config/filters.ini';
+			$config = AgaviConfig::get('core.modules_dir') . '/' . $moduleName . '/config/filters.ini';
 			if (is_readable($config)) {
 				require_once(AgaviConfigCache::checkConfig($config));
 			} else {
@@ -609,7 +609,7 @@ abstract class AgaviController extends AgaviParameterHolder
 	public function modelExists ($moduleName, $modelName)
 	{
 
-		$file = AG_MODULE_DIR . '/' . $moduleName . '/models/' . $modelName .	'Model.class.php';
+		$file = AgaviConfig::get('core.modules_dir') . '/' . $moduleName . '/models/' . $modelName .	'Model.class.php';
 
 		return is_readable($file);
 
@@ -628,7 +628,7 @@ abstract class AgaviController extends AgaviParameterHolder
 	public function moduleExists ($moduleName)
 	{
 
-		$file = AG_MODULE_DIR . '/' . $moduleName . '/config/module.ini';
+		$file = AgaviConfig::get('core.modules_dir') . '/' . $moduleName . '/config/module.ini';
 
 		return is_readable($file);
 
@@ -741,7 +741,7 @@ abstract class AgaviController extends AgaviParameterHolder
 		$this->context->getStorage()->shutdown();
 		$this->context->getRequest()->shutdown();
 
-		if (AG_USE_DATABASE) {
+		if (AgaviConfig::get('core.use_database')) {
 			$this->context->getDatabaseManager()->shutdown();
 		}
 
@@ -761,7 +761,7 @@ abstract class AgaviController extends AgaviParameterHolder
 	public function viewExists ($moduleName, $viewName)
 	{
 
-		$file = AG_MODULE_DIR . '/' . $moduleName . '/views/' . $viewName .
+		$file = AgaviConfig::get('core.modules_dir') . '/' . $moduleName . '/views/' . $viewName .
 				'View.class.php';
 
 		return is_readable($file);

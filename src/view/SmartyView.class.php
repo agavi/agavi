@@ -14,7 +14,6 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
-require_once(AG_SMARTY_DIR.'/libs/Smarty.class.php');
 
 /**
  *
@@ -31,23 +30,40 @@ require_once(AG_SMARTY_DIR.'/libs/Smarty.class.php');
  */
 abstract class AgaviSmartyView extends AgaviView
 {
-	const CACHE_SUBDIR = 'templates/smarty';
-	
-	private static
+	const COMPILE_DIR = 'templates';
+	const COMPILE_SUBDIR = 'smarty';
+	const CACHE_DIR = 'content';
+
+	protected static
 		$smarty = null;
 
 	public function initialize($context)
 	{
+		if (!class_exists('Smarty')) {
+
+			// if SMARTY_DIR constant is defined, we'll use it
+			if ( defined('SMARTY_DIR') ) {
+				require(SMARTY_DIR . 'Smarty.class.php');
+			}
+			// otherwise we resort to include_path
+			else {
+				require('Smarty.class.php');
+			}
+		}
+
 		$this->smarty = new Smarty();
 		$this->smarty->clear_all_assign();
 		$this->smarty->clear_config();
-		$this->smarty->config_dir   = AG_CONFIG_DIR;
-		if(defined('SMARTY_CACHE_DIR')) {
-			$this->smarty->cache_dir = SMARTY_CACHE_DIR;
-		} else {
-			@mkdir(AG_CACHE_DIR. DIRECTORY_SEPARATOR . self::CACHE_SUBDIR . DIRECTORY_SEPARATOR . 'smarty');
-			$this->smarty->cache_dir = AG_CACHE_DIR. DIRECTORY_SEPARATOR . self::CACHE_SUBDIR . DIRECTORY_SEPARATOR . 'smarty';
-		}
+		$this->smarty->config_dir = AgaviConfig::get('core.config_dir');
+
+		$compileDir = AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . self::COMPILE_DIR . DIRECTORY_SEPARATOR . self::COMPILE_SUBDIR;
+		@mkdir($compileDir, null, true);
+		$this->smarty->compile_dir = $compileDir;
+
+		$cacheDir = AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . self::CACHE_DIR;
+		@mkdir($cacheDir, null, true);
+		$this->smarty->cache_dir = $cacheDir;
+
 		$this->smarty->plugins_dir  = array("plugins","plugins_local");
 
 		return(parent::initialize($context));
@@ -107,7 +123,10 @@ abstract class AgaviSmartyView extends AgaviView
 
 	public function setAttributesByRef(&$attributes)
 	{
-		$this->smarty->assign_by_ref($attributes);
+		foreach ($attributes as $key => &$value)
+		{
+			$this->setAttributeByRef($key, $value);
+		}
 	}
 
 	public function & getEngine()
@@ -126,7 +145,6 @@ abstract class AgaviSmartyView extends AgaviView
 		$mode = $this->getContext()->getController()->getRenderMode();
 
 		$this->getEngine()->template_dir = $this->getDirectory();
-		$this->getEngine()->compile_dir  = AG_SMARTY_CACHE_DIR;
 
 		if ($mode == AgaviView::RENDER_CLIENT && !$this->isDecorator()) {
 			// render directly to the client

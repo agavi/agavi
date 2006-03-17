@@ -157,7 +157,7 @@ class AgaviToolkit
 			}
 		}
 		$path = str_replace('/', DIRECTORY_SEPARATOR, str_replace('\\', DIRECTORY_SEPARATOR, $path));
-		$path = realpath(AG_CACHE_DIR . DIRECTORY_SEPARATOR . $path);
+		$path = realpath(AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . $path);
 		if($path === false) {
 			return false;
 		}

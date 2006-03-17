@@ -397,7 +397,7 @@ class AgaviWebRequest extends AgaviRequest
 		$this->setParametersByRef($_GET);
 
 		// parse PATH_INFO
-		switch (AG_PATH_INFO_ARRAY)
+		switch (AgaviConfig::get('request.path_info_array'))
 		{
 
 			case 'SERVER':
@@ -412,10 +412,10 @@ class AgaviWebRequest extends AgaviRequest
 
 		}
 
-		if (isset($pathArray[AG_PATH_INFO_KEY]))
+		if (isset($pathArray[AgaviConfig::get('request.path_info_key')]))
 		{
 
-			$array = explode('/', trim($pathArray[AG_PATH_INFO_KEY], '/'));
+			$array = explode('/', trim($pathArray[AgaviConfig::get('request.path_info_key')], '/'));
 			$count = count($array);
 
 			for ($i = 0; $i < $count; $i++)

@@ -35,7 +35,7 @@ class Default_ModuleDisabledSuccessView extends AgaviPHPView
 		$this->setAttribute('title', 'Module Disabled');
 
 		// build our menu
-		require_once(AG_MODULE_DIR . '/Default/lib/build_menu.php');
+		require_once(AgaviConfig::get('core.modules_dir') . '/Default/lib/build_menu.php');
 
 	}
 

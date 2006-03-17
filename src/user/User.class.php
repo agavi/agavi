@@ -78,9 +78,12 @@ class AgaviUser extends AgaviParameterHolder
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.9.0
 	 */
-	public function & getAttribute ($name, $ns = AG_USER_NAMESPACE, $default=null)
+	public function & getAttribute ($name, $ns = null, $default=null)
 	{
-
+		if($ns === null) {
+			$ns = AgaviConfig::get('user.default_namespace');
+		}
+		
 		$retval =& $default;
 
 		if (isset($this->attributes[$ns]) &&
@@ -106,9 +109,12 @@ class AgaviUser extends AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function getAttributeNames ($ns = AG_USER_NAMESPACE)
+	public function getAttributeNames ($ns = null)
 	{
-
+		if($ns === null) {
+			$ns = AgaviConfig::get('user.default_namespace');
+		}
+		
 		if (isset($this->attributes[$ns]))
 		{
 
@@ -130,8 +136,12 @@ class AgaviUser extends AgaviParameterHolder
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function &getAttributes($ns = AG_USER_NAMESPACE)
+	public function &getAttributes($ns = null)
 	{
+		if($ns === null) {
+			$ns = AgaviConfig::get('user.default_namespace');
+		}
+		
 		$retval = array();
 		if(isset($this->attributes[$ns])) {
 			return $this->attributes[$ns];
@@ -150,9 +160,12 @@ class AgaviUser extends AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function & getAttributeNamespace ($ns = AG_USER_NAMESPACE)
+	public function & getAttributeNamespace ($ns = null)
 	{
-
+		if($ns === null) {
+			$ns = AgaviConfig::get('user.default_namespace');
+		}
+		
 		$retval = null;
 
 		if (isset($this->attributes[$ns]))
@@ -207,9 +220,12 @@ class AgaviUser extends AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function hasAttribute ($name, $ns = AG_USER_NAMESPACE)
+	public function hasAttribute ($name, $ns = null)
 	{
-
+		if($ns === null) {
+			$ns = AgaviConfig::get('user.default_namespace');
+		}
+		
 		if (isset($this->attributes[$ns]))
 		{
 
@@ -324,9 +340,12 @@ class AgaviUser extends AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function & removeAttribute ($name, $ns = AG_USER_NAMESPACE)
+	public function & removeAttribute ($name, $ns = null)
 	{
-
+		if($ns === null) {
+			$ns = AgaviConfig::get('user.default_namespace');
+		}
+		
 		$retval = null;
 
 		if (isset($this->attributes[$ns]) &&
@@ -380,9 +399,12 @@ class AgaviUser extends AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function setAttribute($name, $value, $ns = AG_USER_NAMESPACE)
+	public function setAttribute($name, $value, $ns = null)
 	{
-
+		if($ns === null) {
+			$ns = AgaviConfig::get('user.default_namespace');
+		}
+		
 		if (!isset($this->attributes[$ns])) {
 			$this->attributes[$ns] = array();
 		}
@@ -406,9 +428,12 @@ class AgaviUser extends AgaviParameterHolder
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.10.0
 	 */
-	public function appendAttribute($name, $value, $ns = AG_USER_NAMESPACE)
+	public function appendAttribute($name, $value, $ns = null)
 	{
-
+		if($ns === null) {
+			$ns = AgaviConfig::get('user.default_namespace');
+		}
+		
 		if (!isset($this->attributes[$ns])) {
 			$this->attributes[$ns] = array();
 		}
@@ -435,9 +460,12 @@ class AgaviUser extends AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function setAttributeByRef($name, &$value, $ns = AG_USER_NAMESPACE)
+	public function setAttributeByRef($name, &$value, $ns = null)
 	{
-
+		if($ns === null) {
+			$ns = AgaviConfig::get('user.default_namespace');
+		}
+		
 		if (!isset($this->attributes[$ns])) {
 			$this->attributes[$ns] = array();
 		}
@@ -461,9 +489,12 @@ class AgaviUser extends AgaviParameterHolder
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.10.0
 	 */
-	public function appendAttributeByRef($name, &$value, $ns = AG_USER_NAMESPACE)
+	public function appendAttributeByRef($name, &$value, $ns = null)
 	{
-
+		if($ns === null) {
+			$ns = AgaviConfig::get('user.default_namespace');
+		}
+		
 		if (!isset($this->attributes[$ns])) {
 			$this->attributes[$ns] = array();
 		}
@@ -490,9 +521,12 @@ class AgaviUser extends AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function setAttributes ($attributes, $ns = AG_USER_NAMESPACE)
+	public function setAttributes ($attributes, $ns = null)
 	{
-
+		if($ns === null) {
+			$ns = AgaviConfig::get('user.default_namespace');
+		}
+		
 		if (!isset($this->attributes[$ns]))
 		{
 
@@ -520,9 +554,12 @@ class AgaviUser extends AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function setAttributesByRef (&$attributes, $ns = AG_USER_NAMESPACE)
+	public function setAttributesByRef (&$attributes, $ns = null)
 	{
-
+		if($ns === null) {
+			$ns = AgaviConfig::get('user.default_namespace');
+		}
+		
 		if (!isset($this->attributes[$ns]))
 		{
 

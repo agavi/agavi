@@ -73,10 +73,10 @@ class AgaviTestTask2 extends PHPUnit2Task {
 
 	public function main()
 	{
-		define("AG_APP_DIR",	$this->agavidir);		// where the agavi installation resides
-		define("TESTSDIR",		$this->testdir);		// where the main tests dir resides
-		define("REPORTER",		($this->reporter ? $this->reporter : 'text'));		// which reporter to use for reporting results
-		define("STARTPOINT",	($this->startpoint ? $this->testdir . '/' . $this->startpoint : $this->testdir));	// where to begin looking for tests, relative to TESTSDIR
+		AgaviConfig::set("core.app_dir", $this->agavidir); // where the agavi installation resides
+		AgaviConfig::set("tests.dir", $this->testdir); // where the main tests dir resides
+		AgaviConfig::set("tests.reporter", ($this->reporter ? $this->reporter : "text")); // which reporter to use for reporting results
+		AgaviConfig::set("tests.startpoint", ($this->startpoint ? $this->testdir ."/".$this->startpoint : $this->testdir)); // where to begin looking for tests, relative to TESTSDIR
 
 		foreach($this->base_include as $k => $v) {
 			$this->base_include[$k] = realpath($this->agavidir . '/../' . $v);
@@ -84,15 +84,15 @@ class AgaviTestTask2 extends PHPUnit2Task {
 		set_include_path(get_include_path() . PATH_SEPARATOR . join(PATH_SEPARATOR, $this->base_include));
 		set_time_limit(0);
 
-		@include_once(TESTSDIR . "/test_environment.php"); // we probably defined our webapp location, etc in here. 
-		require_once(AG_APP_DIR . "/buildtools/test_setup.php");
+		@include_once(AgaviConfig::get('tests.dir') . "/test_environment.php"); // we probably defined our webapp location, etc in here. 
+		require_once(AgaviConfig::get('core.app_dir') . "/buildtools/test_setup.php");
 
 		if (!empty($this->outfile)) {
 			if (!is_writeable($this->outfile) || !touch($this->outfile)) {
 				throw new BuildException("Could not open/append to outfile: {$this->outfile}");
 			}
 		}
-include(AG_APP_DIR . "../tests2/AgaviTestCase.class.php");
+		include(AgaviConfig::get('core.app_dir') . "../tests2/AgaviTestCase.class.php");
 		return parent::main();
 /*
 function findTests($path, $title="Agavi")

@@ -428,8 +428,8 @@ abstract class AgaviPHPTALView extends AgaviView
 // as soon as this is fixed in PHPTAL SVN, we will remove the stub class and move the define and the require into initialize()
 
 if(!defined('PHPTAL_PHP_CODE_DESTINATION')) {
-	@mkdir(AG_CACHE_DIR . DIRECTORY_SEPARATOR . PHPTALView::CACHE_SUBDIR);
-	define('PHPTAL_PHP_CODE_DESTINATION', AG_CACHE_DIR . DIRECTORY_SEPARATOR . PHPTALView::CACHE_SUBDIR . DIRECTORY_SEPARATOR);
+	@mkdir(AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . PHPTALView::CACHE_SUBDIR);
+	define('PHPTAL_PHP_CODE_DESTINATION', AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . PHPTALView::CACHE_SUBDIR . DIRECTORY_SEPARATOR);
 }
 
 require_once('PHPTAL.php');

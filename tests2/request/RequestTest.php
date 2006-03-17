@@ -110,9 +110,9 @@ class RequestTest extends AgaviTestCase
 	{
 		$this->assertEquals(array(), $this->_r->getAttributeNamespaces());
 		$this->_r->setAttribute('blah', 'blahval');
-		$this->assertEquals(array(AG_REQUEST_NAMESPACE), $this->_r->getAttributeNamespaces());
+		$this->assertEquals(array(AgaviConfig::get('request.default_namespace')), $this->_r->getAttributeNamespaces());
 		$this->_r->setAttribute('blah', 'blahval', 'some/other/namespace');
-		$this->assertEquals(array(AG_REQUEST_NAMESPACE, 'some/other/namespace'), $this->_r->getAttributeNamespaces());
+		$this->assertEquals(array(AgaviConfig::get('request.default_namespace'), 'some/other/namespace'), $this->_r->getAttributeNamespaces());
 	}
 
 	public function testgetAttributes()
@@ -175,9 +175,9 @@ class RequestTest extends AgaviTestCase
 
 	public function testhasAttributeNamespace()
 	{
-		$this->assertFalse($this->_r->hasAttributeNamespace(AG_REQUEST_NAMESPACE));
+		$this->assertFalse($this->_r->hasAttributeNamespace(AgaviConfig::get('request.default_namespace')));
 		$this->_r->setAttribute('blah', 'blahval');
-		$this->assertTrue($this->_r->hasAttributeNamespace(AG_REQUEST_NAMESPACE));
+		$this->assertTrue($this->_r->hasAttributeNamespace(AgaviConfig::get('request.default_namespace')));
 		$this->assertFalse($this->_r->hasAttributeNamespace('some/other/namespace'));
 		$this->_r->setAttribute('blah', 'blahval', 'some/other/namespace');
 		$this->assertTrue($this->_r->hasAttributeNamespace('some/other/namespace'));
@@ -235,8 +235,8 @@ class RequestTest extends AgaviTestCase
 	public function testremoveAttributeNamespace()
 	{
 		$this->_r->setAttribute('blah', 'blahval');
-		$this->_r->removeAttributeNamespace(AG_REQUEST_NAMESPACE);
-		$this->assertFalse($this->_r->hasAttributeNamespace(AG_REQUEST_NAMESPACE));
+		$this->_r->removeAttributeNamespace(AgaviConfig::get('request.default_namespace'));
+		$this->assertFalse($this->_r->hasAttributeNamespace(AgaviConfig::get('request.default_namespace')));
 	}
 
 	public function testsetAttribute()

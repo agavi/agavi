@@ -470,6 +470,7 @@ abstract class AgaviView
 	 * @return     bool true, if initialization completes successfully,
 	 *                  otherwise false.
 	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
@@ -480,9 +481,8 @@ abstract class AgaviView
 
 		// set the currently executing module's template directory as the
 		// default template directory
-		$module = $context->getModuleName();
+		$this->decoratorDirectory = $context->getModuleDirectory() .'/templates';
 
-		$this->decoratorDirectory = AG_MODULE_DIR . '/' . $module .'/templates';
 		$this->directory          = $this->decoratorDirectory;
 
 		return true;

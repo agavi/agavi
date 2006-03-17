@@ -52,14 +52,14 @@ class AgaviFrontWebController extends AgaviWebController
 			ob_start();
 			
 			// determine our module and action
-			$moduleName = $this->context->getRequest()->getParameter(AG_MODULE_ACCESSOR);
-			$actionName = $this->context->getRequest()->getParameter(AG_ACTION_ACCESSOR);
+			$moduleName = $this->context->getRequest()->getParameter(AgaviConfig::get('request.module_accessor'));
+			$actionName = $this->context->getRequest()->getParameter(AgaviConfig::get('request.action_accessor'));
 
 			if ($moduleName == null)
 			{
 
 				// no module has been specified
-				$moduleName = AG_DEFAULT_MODULE;
+				$moduleName = AgaviConfig::get('actions.default_module');
 
 			}
 
@@ -77,7 +77,7 @@ class AgaviFrontWebController extends AgaviWebController
 				{
 
 				    // use the default action
-				    $actionName = AG_DEFAULT_ACTION;
+				    $actionName = AgaviConfig::get('actions.default_action');
 
 				}
 
