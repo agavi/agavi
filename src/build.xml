@@ -15,10 +15,10 @@
 	</target>
 
 	<!-- define the location of our tasks -->
-	<taskdef classname="${agavi.dir}.buildtools.phing.AgaviTestTask" name="agavitest"/>
-	<taskdef classname="${agavi.dir}.buildtools.phing.AgaviFixPathsTask" name="fixpaths"/>
-	<taskdef classname="${agavi.dir}.buildtools.phing.AgaviListModulesTask" name="listModules"/>
-	<taskdef classname="${agavi.dir}.buildtools.phing.AgaviSubActionNameTask" name="subActionName"/>
+	<taskdef classname="buildtools.phing.AgaviTestTask" classpath="${agavi.dir}" name="agavitest"/>
+	<taskdef classname="${agavi.dir}.buildtools.phing.AgaviFixPathsTask" classpath="${agavi.dir}" name="fixpaths"/>
+	<taskdef classname="${agavi.dir}.buildtools.phing.AgaviListModulesTask" classpath="${agavi.dir}" name="listModules"/>
+	<taskdef classname="${agavi.dir}.buildtools.phing.AgaviSubActionNameTask" classpath="${agavi.dir}" name="subActionName"/>
 
 	<property name="webapp.dir" value=""/>
 	<property name="tests.dir" value=""/>
