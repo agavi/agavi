@@ -181,14 +181,8 @@
 | or documentation.                                                          |
 | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
 | KEYWORDS:                                                                  |
-|                                                                            |
-| The following keywords may exist in file or param values as well as the    |
-| category.                                                                  |
-|                                                                            |
-| 1. %AG_APP_DIR%                                                            |
-| 2. %AG_LIB_DIR%                                                            |
-| 3. %AG_MODULE_DIR%                                                         |
-| 4. %AG_WEBAPP_DIR%                                                         |
+| You may reference any configuration directive by enclosing the name in     |
+| "%" signs. Example: %core.app_dir%                                         |
 +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
 -->
 <configurations>
