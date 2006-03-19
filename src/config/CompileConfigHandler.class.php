@@ -22,6 +22,7 @@
  * @subpackage config
  *
  * @author     Sean Kerr <skerr@mojavi.org>
+ * @author     Dominik del Bondio <ddb@bitxtender.com>
  * @copyright  (c) Authors
  * @since      0.9.0
  *
@@ -43,74 +44,34 @@ class AgaviCompileConfigHandler extends AgaviConfigHandler
 	 *                                        improperly formatted.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.9.0
 	 */
 	public function & execute ($config)
 	{
+		$conf = AgaviConfigCache::parseConfig($config, false);
 
-		if (!is_readable($config))
-		{
-
-			// can't read the configuration
-			$error = 'Configuration file "%s" does not exist or is not ' .
-				     'readable';
-			$error = sprintf($error, $config);
-
-			throw new AgaviUnreadableException($error);
-
-		}
-
-		// load the entire file
-		$files = @file($config);
-
-		if ($files === false)
-		{
-
-			// configuration couldn't be parsed
-			$error = 'Configuration file "%s" could not be parsed';
-			$error = sprintf($error, $config);
-
-			throw new AgaviParseException($error);
-
-		}
-
-		// init our data
 		$data = '';
 
 		// let's do our fancy work
-		foreach ($files as &$file)
-		{
+		foreach($conf->configurations[0]->compiles as $compileFile) {
 
-			$file = trim($file);
+			$file = trim($compileFile->getValue());
 
-			if (strlen($file) > 0 && substr($file, 0, 1) != ';')
-			{
+			$file = $this->replaceConstants($file);
+			$file = $this->replacePath($file);
 
-				// we'll assume this is a file since the line does not start
-				// with a semi-colon (used for commenting)
-
-				$file = $this->replaceConstants($file);
-				$file = $this->replacePath($file);
-
-				if (!is_readable($file))
-				{
-
-				    // file doesn't exist
-				    $error = 'Configuration file "%s" specifies nonexistent ' .
-						     'or unreadable file "%s"';
-				    $error = sprintf($error, $config, $file);
-
-				    throw new AgaviParseException($error);
-
-				}
-
-				$contents = @file_get_contents($file);
-
-				// append file data
-				$data .= "\n" . $contents;
-
+			if(!is_readable($file)) {
+				// file doesn't exist
+				$error = 'Configuration file "%s" specifies nonexistent ' . 'or unreadable file "%s"';
+				$error = sprintf($error, $config, $file);
+				throw new AgaviParseException($error);
 			}
 
+			$contents = @file_get_contents($file);
+
+			// append file data
+			$data .= "\n" . $contents;
 		}
 
 		// replace windows and mac format with unix format
