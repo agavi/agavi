@@ -30,7 +30,35 @@
 	</target>
 
 	<target name="package" description="build pear package">
-		<agavipackage dir="build"/>
+		<!-- prepare -->
+		<delete dir="${builddir}" includeemptydirs="true" verbose="true" failonerror="false" />
+		<mkdir dir="${builddir}" />
+		<copy todir="${builddir}" >
+			<fileset dir="src/">
+				<exclude name="**/*.svn" />
+				<include name="**/**" />
+			</fileset>
+		</copy>
+		<copy file="CHANGELOG" todir="${builddir}" />
+		<copy file="RELEASE_NOTES" todir="${builddir}" />
+		<copy file="INSTALL" todir="${builddir}" />
+		<copy file="LICENSE" todir="${builddir}" />
+		<mkdir dir="${builddir}/scripts" />
+		<copy file="etc/agavi-dist" todir="${builddir}/scripts" />
+		<copy file="etc/agavi.bat-dist" todir="${builddir}/scripts" />
+
+		<!-- generate package.xml -->
+		<agavipackage dir="${builddir}" />
+
+		<!-- fix package.xml -->
+		<reflexive file="${builddir}/package.xml"> 
+			<filterchain>
+				<replaceregexp>
+					<regexp pattern="role=&quot;data&quot;" replace="role=&quot;php&quot;" />
+				</replaceregexp>
+			</filterchain>
+		</reflexive>
+		<echo msg="package.xml generated to '${builddir}'. Use &quot;pear package&quot; to create the package." />
 	</target>
 
 	<target name="test" description="run test suite">
