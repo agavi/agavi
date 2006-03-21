@@ -23,9 +23,28 @@
 +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
 -->
 <configurations>
-	<!--
-		+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
-		| You shouldn't add any custom files to this file. Do so at your own risk.   |
-		+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
-	-->
+	<configuration>
+		<compiles>
+			<compile>%core.app_dir%/action/Action.class.php</compile>
+			<compile>%core.app_dir%/action/ActionStack.class.php</compile>
+			<compile>%core.app_dir%/action/ActionStackEntry.class.php</compile>
+			<compile>%core.app_dir%/core/Context.class.php</compile>
+			<compile>%core.app_dir%/controller/Controller.class.php</compile>
+			<compile>%core.app_dir%/filter/Filter.class.php</compile>
+			<compile>%core.app_dir%/filter/ExecutionFilter.class.php</compile>
+			<compile>%core.app_dir%/filter/FilterChain.class.php</compile>
+			<compile>%core.app_dir%/logging/Appender.class.php</compile>
+			<compile>%core.app_dir%/logging/Layout.class.php</compile>
+			<compile>%core.app_dir%/logging/Logger.class.php</compile>
+			<compile>%core.app_dir%/logging/LoggerManager.class.php</compile>
+			<compile>%core.app_dir%/logging/Message.class.php</compile>
+			<compile>%core.app_dir%/logging/PassthruLayout.class.php</compile>
+			<compile>%core.app_dir%/request/Request.class.php</compile>
+			<compile>%core.app_dir%/storage/Storage.class.php</compile>
+			<compile>%core.app_dir%/user/User.class.php</compile>
+			<compile>%core.app_dir%/validator/Validator.class.php</compile>
+			<compile>%core.app_dir%/validator/ValidatorManager.class.php</compile>
+			<compile>%core.app_dir%/view/View.class.php</compile>
+		</compiles>
+	</configuration>
 </configurations>
