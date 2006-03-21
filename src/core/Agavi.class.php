@@ -49,6 +49,12 @@ class Agavi
 	{
 		try {
 			
+			if(AgaviConfig::has('core.environment') && AgaviConfig::isReadonly('core.environment')) {
+				$environment = AgaviConfig::get('core.environment');
+			} else {
+				AgaviConfig::set('core.environment', $environment, true, true);
+			}
+			
 			AgaviConfig::set('core.debug', false, false);
 			
 			if(!AgaviConfig::has('core.webapp_dir')) {
