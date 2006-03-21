@@ -47,6 +47,7 @@ AgaviConfig::set('core.app_dir', dirname(__FILE__), false);
 
 // required files
 require_once(AgaviConfig::get('core.app_dir') . '/version.php');
+require_once(AgaviConfig::get('core.app_dir') . '/core/Agavi.php');
 
 
 
