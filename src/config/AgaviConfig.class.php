@@ -30,6 +30,8 @@ class AgaviConfig
 {
 	private static $config = array();
 	
+	private static $readonlies = array();
+	
 	/**
 	 * Get a configuration value.
 	 *
@@ -70,20 +72,27 @@ class AgaviConfig
 	 * @param      string The name of the configuration directive.
 	 * @param      mixed  The configuration value.
 	 * @param      bool   Whether or not an existing value should be overwritten.
+	 * @param      bool   Whether or not this value should be read-only once set.
 	 *
 	 * @return     bool   Whether or not the configuration directive has been set.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public static function set($name, $value, $overwrite = true)
+	public static function set($name, $value, $overwrite = true, $readonly = false)
 	{
-		if(!$overwrite && isset(self::$config[$name])) {
-			return false;
-		} else {
+		$retval = false;
+		if(!(!$overwrite && isset(self::$config[$name]))) {
 			self::$config[$name] = $value;
-			return true;
+			if($readonly) {
+				self::$readonlies[$name] = $value;
+			}
+			$retval = true;
 		}
+		if($readonly) {
+			self::$readonlies[$name] = self::$config[$name];
+		}
+		return $retval;
 	}
 	
 	/**
@@ -91,23 +100,23 @@ class AgaviConfig
 	 *
 	 * @param      string The name of the configuration directive.
 	 *
-	 * @return     mixed The value that has been removed.
+	 * @return     bool true, if removed successfuly, false otherwise.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public static function remove($name)
 	{
-		$retval = null;
-		if(isset(self::$config[$name])) {
-			$retval = self::$config[$name];
+		$retval = false;
+		if(isset(self::$config[$name]) && !isset(self::$readonlies[$name])) {
 			unset(self::$config[$name]);
+			$retval = true;
 		}
 		return $retval;
 	}
 	
 	/**
-	 * Get a configuration value.
+	 * Import a list of configuration directives.
 	 *
 	 * @param      string The name of the configuration directive.
 	 *
@@ -118,7 +127,7 @@ class AgaviConfig
 	 */
 	public static function import($data)
 	{
-		self::$config = array_merge(self::$config, $data);
+		self::$config = array_merge(array_merge(self::$config, $data), self::$readonlies);
 	}
 	
 	/**
@@ -144,7 +153,8 @@ class AgaviConfig
 	 */
 	public static function clear()
 	{
-		self::$config = array();
+		$restore = array_intersect_assoc(self::$readonlies, self::$config);
+		self::$config = $restore;
 	}
 }
 ?>
