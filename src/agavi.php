@@ -47,7 +47,7 @@ AgaviConfig::set('core.app_dir', dirname(__FILE__), false);
 
 // required files
 require(AgaviConfig::get('core.app_dir') . '/version.php');
-require(AgaviConfig::get('core.app_dir') . '/core/Agavi.php');
+require(AgaviConfig::get('core.app_dir') . '/core/Agavi.class.php');
 
 
 
@@ -64,7 +64,7 @@ require(AgaviConfig::get('core.app_dir') . '/core/Agavi.php');
  */
 function __autoload($class)
 {
-	if (isset(Agavi::$autoloads[$class])) {
+	if(isset(Agavi::$autoloads[$class])) {
 		// class exists, let's include it
 		require($autoloads[$class]);
 	}
