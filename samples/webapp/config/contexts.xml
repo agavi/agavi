@@ -32,18 +32,12 @@
 		<database_manager>
 			<class>AgaviDatabaseManager</class>
 		</database_manager>
-		<execution_filter>
-			<class>AgaviExecutionFilter</class>
-		</execution_filter>
 		<logger_manager>
 			<class>AgaviLoggerManager</class>
 		</logger_manager>
 		<request>
 			<class>AgaviWebRequest</class>
 		</request>
-		<security_filter>
-			<class>AgaviSecurityFilter</class>
-		</security_filter>
 		<storage>
 			<class>AgaviSessionStorage</class>
 		</storage>

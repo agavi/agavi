@@ -44,6 +44,20 @@
 +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
 -->
 <configurations>
+	
+	<configuration>
+		
+		<execution_filter>
+			<class>AgaviExecutionFilter</class>
+		</execution_filter>
+		
+		<security_filter>
+			<class>AgaviSecurityFilter</class>
+		</security_filter>
+		
+	</configuration>
+	
+	
 	<configuration environment="debug" context="web">
 		<filters>
 			
@@ -57,6 +71,7 @@
 		</filters>
 	</configuration>
 	
+	
 	<configuration context="web">
 		<filters>
 			
@@ -65,6 +80,15 @@
 			</filter>
 			
 		</filters>
+	</configuration>
+	
+	
+	<configuration environment="production">
+		
+		<execution_filter>
+			<class>AgaviCachingExecutionFilter</class>
+		</execution_filter>
+		
 	</configuration>
 	
 </configurations>
