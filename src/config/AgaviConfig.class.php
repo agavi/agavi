@@ -52,7 +52,7 @@ class AgaviConfig
 	}
 	
 	/**
-	 * Check if a configuration directive has been set
+	 * Check if a configuration directive has been set.
 	 *
 	 * @param      string The name of the configuration directive.
 	 *
@@ -64,6 +64,21 @@ class AgaviConfig
 	public static function has($name)
 	{
 		return isset(self::$config[$name]);
+	}
+	
+	/**
+	 * Check if a configuration directive has been set as read-only.
+	 *
+	 * @param      string The name of the configuration directive.
+	 *
+	 * @return     bool
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public static function isReadonly($name)
+	{
+		return isset(self::$readonlies[$name]);
 	}
 	
 	/**
