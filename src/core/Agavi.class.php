@@ -52,6 +52,8 @@ class Agavi
 			
 			AgaviConfig::set('core.config_dir', AgaviConfig::get('core.webapp_dir') . '/config', false);
 			
+			AgaviConfig::set('core.system_config_dir', AgaviConfig::get('core.app_dir') . '/config/defaults', false);
+			
 			AgaviConfig::set('core.lib_dir', AgaviConfig::get('core.lib_dir') . '/lib');
 			
 			AgaviConfig::set('core.modules_dir', AgaviConfig::get('core.webapp_dir') . '/modules');
