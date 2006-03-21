@@ -66,7 +66,7 @@ function __autoload($class)
 {
 	if(isset(Agavi::$autoloads[$class])) {
 		// class exists, let's include it
-		require($autoloads[$class]);
+		require(Agavi::$autoloads[$class]);
 	}
 	
 	/*	
