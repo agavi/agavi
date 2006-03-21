@@ -28,6 +28,14 @@
 class Agavi
 {
 	/**
+	 * An associative arrays of classes (keys) and filenames (values) used by __autoload
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public static $autoloads = array();
+	
+	/**
 	 * Startup the Agavi core
 	 *
 	 * @param      string environment the environment to use for this session
@@ -98,6 +106,32 @@ class Agavi
 			$e = new AgaviException($e->getMessage());
 			$e->printStackTrace();
 		}
+	}
+	
+	/**
+	 * Get a list of classes and their file names available in __autoload()
+	 *
+	 * @return     array an array of autoloads
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public static function getAutoloads()
+	{
+		return self::$autoloads;
+	}
+	
+	/**
+	 * Set a list of classes and their file names available in __autoload()
+	 *
+	 * @param      array the list of autoloads to set
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public static function setAutoloads($autoloads)
+	{
+		self::$autoloads = $autoloads;
 	}
 }
 
