@@ -61,7 +61,7 @@
 		</settings>
 	</configuration>
 	
-	<configuration name="development">
+	<configuration environment="development">
 		<settings>
 			<setting name="debug">true</setting>
 		</settings>
