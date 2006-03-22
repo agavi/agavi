@@ -103,7 +103,7 @@ class FormPopulationFilter extends Filter
 				}
 				foreach($xpath->query('//form[@action]') as $form) {
 					$action = $form->getAttribute('action');
-					if(!($baseHref . $action == $_SERVER['REQUEST_URI'] || $baseHref . '/' . $action == $_SERVER['REQUEST_URI'] || (strpos($action, '/') == 0 && $action == $_SERVER['REQUEST_URI']))) {
+					if(!($baseHref . $action == $_SERVER['REQUEST_URI'] || $baseHref . '/' . $action == $_SERVER['REQUEST_URI'] || (strpos($action, '/') === 0 && $action == $_SERVER['REQUEST_URI']) || (strlen($_SERVER['REQUEST_URI']) == strrpos($_SERVER['REQUEST_URI'], $action) + strlen($action)))) {
 						continue;
 					}
 					
