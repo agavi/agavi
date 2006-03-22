@@ -92,7 +92,7 @@ class FormPopulationFilter extends Filter
 				$doc = DOMDocument::loadHTML($output);
 				$hasXmlProlog = false;
 				if(preg_match('#<\?xml.*?\?>#iuU', $output)) {
-					$hasXmlProlog;
+					$hasXmlProlog = true;
 				}
 				$xpath = new DomXPath($doc);
 				$baseHref = '';
