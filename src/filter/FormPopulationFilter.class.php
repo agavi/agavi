@@ -181,7 +181,7 @@ class FormPopulationFilter extends Filter
 						
 					}
 				}
-				if((strtolower($this->getParameter('force_output_mode')) == 'xhtml' || ($doc->doctype && strpos($doc->doctype->publicId, '-//W3C//DTD XHTML') == 0)) && ($this->getParameter('force_output_mode') && strtolower($this->getParameter('force_output_mode')) != 'html')) {
+				if(strtolower($this->getParameter('force_output_mode')) == 'xhtml' || ($doc->doctype && stripos($doc->doctype->publicId, '-//W3C//DTD XHTML') === 0 && strtolower($this->getParameter('force_output_mode')) != 'html')) {
 					$out = $doc->saveXML();
 					if($this->getParameter('cdata_fix')) {
 						// these are ugly fixes so inline style and script blocks still work. better don't use them with XHTML to avoid trouble
