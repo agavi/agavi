@@ -165,11 +165,11 @@ abstract class AgaviConfigHandler extends AgaviParameterHolder
 		do {
 			$value = $newvalue;
 			$newvalue = preg_replace_callback(
-				'/\%(\w+?)\%/',
+				'/\%([\w\.]+?)\%/',
 				create_function(
 					'$match',
 					'$constant = $match[1]; ' .
-					'return (defined($constant) ? constant($constant) : "%".$constant."%");'
+					'return (AgaviConfig::has($constant) ? AgaviConfig::get($constant) : "%".$constant."%");'
 				),
 				$value,
 				1
