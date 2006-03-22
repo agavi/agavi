@@ -119,16 +119,16 @@ abstract class AgaviController extends AgaviParameterHolder
 			$this->context->getRequest()->setAttribute('requested_module', $moduleName);
 
 			// switch to error 404 action
-			$moduleName = AgaviConfig::get('actions.404_module');
-			$actionName = AgaviConfig::get('actions.404_action');
+			$moduleName = AgaviConfig::get('actions.error_404_module');
+			$actionName = AgaviConfig::get('actions.error_404_action');
 
 			if (!$this->actionExists($moduleName, $actionName))
 			{
 
 				// cannot find unavailable module/action
 				$error = 'Invalid configuration settings: ' .
-						 'actions.404_module "%s", ' .
-						 'actions.404_action "%s"';
+						 'actions.error_404_module "%s", ' .
+						 'actions.error_404_action "%s"';
 
 				$error = sprintf($error, $moduleName, $actionName);
 

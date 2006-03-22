@@ -4,9 +4,9 @@
 | This file is part of the Agavi package.                                    |
 | Copyright (c) 2006 the Agavi Project                                       |
 | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
-| AGAVI CONTEXTS CONFIGURATION                                               |
+| AGAVI FACTORIES CONFIGURATION                                              |
 | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
-| each context must define:                                                  |
+| The default configuration must at least define:                            |
 |                                                                            |
 |  action_stack          - The ActionStack class implementation.             |
 |  controller            - The Controller class implementation.              |
@@ -17,35 +17,60 @@
 |  ** security_filter    - The SecurityFilter class implementation.          |
 |  ** user               - The User class implementation.                    |
 |                                                                            |
-| * if USE_DATABASE is turned on in the settings.ini config                  |
-| ** if USE_SECURITY is turned on in the settings.ini config                 |
+| * if "core.use_database" is turned on in the settings.xml config           |
+| ** if "core.use_security" is turned on in the settings.xml config          |
 +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
 -->
-<contexts default="web">
-	<context name="web">
+<configurations>
+	
+	<configuration>
+		
 		<action_stack>
 			<class>AgaviActionStack</class>
 		</action_stack>
+		
 		<controller>
 			<class>AgaviFrontWebController</class>
+			<settings>
+				<setting name="content_type">text/html</setting>
+			</settings>
 		</controller>
+		
 		<database_manager>
 			<class>AgaviDatabaseManager</class>
 		</database_manager>
+		
 		<logger_manager>
 			<class>AgaviLoggerManager</class>
 		</logger_manager>
+		
 		<request>
 			<class>AgaviWebRequest</class>
+			<settings>
+				<setting name="default_namespace">org.agavi</setting>
+				<setting name="module_accessor">module</setting>
+				<setting name="action_accessor">action</setting>
+				<setting name="url_format">GET</setting>
+				<setting name="path_info_array">SERVER</setting>
+				<setting name="path_info_key">PATH_INFO</setting>
+			</settings>
 		</request>
+		
 		<storage>
 			<class>AgaviSessionStorage</class>
 		</storage>
+		
 		<user>
 			<class>AgaviBasicSecurityUser</class>
+			<settings>
+				<setting name="default_namespace">org.agavi</setting>
+			</settings>
 		</user>
+		
 		<validator_manager>
 			<class>AgaviValidatorManager</class>
 		</validator_manager>
-	</context>
-</contexts>
+		
+	</configuration>
+	
+</configurations>

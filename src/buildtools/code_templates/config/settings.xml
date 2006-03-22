@@ -13,67 +13,57 @@
 -->
 <configurations>
 	<configuration>
-		<default_actions>
+		
+		<system_actions>
 			
-			<default_action name="default">
+			<system_action name="default">
 				<module>Default</module>
 				<action>Index</action>
-			</default_action>
+			</system_action>
 			
-			<default_action name="404">
+			<system_action name="error_404">
 				<module>Default</module>
 				<action>Error404</action>
-			</default_action>
+			</system_action>
 			
-			<default_action name="login">
+			<system_action name="login">
 				<module>Default</module>
 				<action>Login</action>
-			</default_action>
+			</system_action>
 			
-			<default_action name="module_disabled">
+			<system_action name="module_disabled">
 				<module>Default</module>
 				<action>ModuleDisabled</action>
-			</default_action>
+			</system_action>
 			
-			<default_action name="secure">
+			<system_action name="secure">
 				<module>Default</module>
 				<action>Secure</action>
-			</default_action>
+			</system_action>
 			
-			<default_action name="unavailable">
+			<system_action name="unavailable">
 				<module>Default</module>
 				<action>Unavailable></action>
-			</default_action>
+			</system_action>
 			
-		</default_actions>
+		</system_actions>
 		
 		<settings>
-			<setting name="core.webapp_name">My Project</setting>
+			<setting name="webapp_name">My Project</setting>
 			
-			<setting name="core.available">true</setting>
-			<setting name="core.debug">false</setting>
-			<setting name="core.modpub">/modpub</setting>
+			<setting name="available">true</setting>
+			<setting name="debug">false</setting>
+			<setting name="modpub">/modpub</setting>
 			
 			<setting name="use_database">false</setting>
 			<setting name="use_logging">false</setting>
 			<setting name="use_security">true</setting>
-			
-			<setting name="request.module_accessor">module</setting>
-			<setting name="request.action_accessor">action</setting>
-			<setting name="request.url_format">GET</setting>
-			<setting name="request.path_info_array">SERVER</setting>
-			<setting name="request.path_info_key">PATH_INFO</setting>
-			
-			<setting name="controller.content_type">text/html</setting>
-			
-			<setting name="user.default_namespace">org.agavi</setting>
-			<setting name="request.default_namespace">org.agavi</setting>
 		</settings>
 	</configuration>
 	
 	<configuration name="development">
 		<settings>
-			<setting name="core.debug">true</setting>
+			<setting name="debug">true</setting>
 		</settings>
 	</configuration>
 	

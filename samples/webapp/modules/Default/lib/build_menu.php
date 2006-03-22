@@ -19,7 +19,7 @@
 // menu links
 $links = array();
 $links['default_action']         = array(AgaviConfig::get('actions.default_module'),         AgaviConfig::get('actions.default_action'));
-$links['error_404_action']       = array(AgaviConfig::get('actions.404_module'),             AgaviConfig::get('actions.404_action'));
+$links['error_404_action']       = array(AgaviConfig::get('actions.error_404_module'),             AgaviConfig::get('actions.error_404_action'));
 $links['login_action']           = array(AgaviConfig::get('actions.login_module'),           AgaviConfig::get('actions.login_action'));
 $links['module_disabled_action'] = array(AgaviConfig::get('actions.module_disabled_module'), AgaviConfig::get('actions.module_disabled_action'));
 $links['secure_action']          = array(AgaviConfig::get('actions.secure_module'),          AgaviConfig::get('actions.secure_action'));
