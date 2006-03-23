@@ -87,7 +87,7 @@ class AgaviXmlConfigParser extends AgaviConfigParser
 			if ($node->nodeType == XML_ELEMENT_NODE) {
 				$vh = new AgaviConfigValueHolder();
 				$vh->setName($node->nodeName);
-				if ($isSingular) {
+				if($isSingular) {
 					$parentVh->appendChildren($vh);
 				} else {
 					$parentVh->addChildren($node->tagName, $vh);
@@ -102,7 +102,15 @@ class AgaviXmlConfigParser extends AgaviConfigParser
 					$vh->setValue($node->nodeValue);
 				}
 
-				$singularNodeName = AgaviInflector::singularize($node->tagName);
+				$tagName = $node->tagName;
+				$tagNameStart = '';
+				if(($lastUScore = strrpos($tagName, '_')) !== false) {
+					$lastUScore++;
+					$tagNameStart = substr($tagName, 0, $lastUScore);
+					$tagName = substr($tagName, $lastUScore);
+				}
+
+				$singularNodeName = $tagNameStart . AgaviInflector::singularize($tagName);
 				$singularNodes = $this->xpath->query($singularNodeName, $node);
 				// there is at least one child with the singularized version of this tag name so we take them
 				// to create an indexed array in the parent valueholder
