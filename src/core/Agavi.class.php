@@ -100,10 +100,10 @@ class Agavi
 			}
 
 			// load base settings
-			AgaviConfigCache::import(AgaviConfig::get('core.config_dir') . '/settings.ini');
+			AgaviConfigCache::import(AgaviConfig::get('core.config_dir') . '/settings.xml');
 
 			// required classes for the framework
-			AgaviConfigCache::import(AgaviConfig::get('core.config_dir') . '/compile.conf');
+			AgaviConfigCache::import(AgaviConfig::get('core.config_dir') . '/compile.xml');
 
 		} catch (AgaviException $e) {
 			$e->printStackTrace();
