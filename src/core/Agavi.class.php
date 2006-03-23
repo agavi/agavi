@@ -82,10 +82,7 @@ class Agavi
 			require_once(AgaviConfig::get('core.app_dir') . '/util/ParameterHolder.class.php');
 			require_once(AgaviConfig::get('core.app_dir') . '/config/ConfigCache.class.php');
 			require_once(AgaviConfig::get('core.app_dir') . '/config/ConfigHandler.class.php');
-			require_once(AgaviConfig::get('core.app_dir') . '/config/ParameterParser.class.php');
-			require_once(AgaviConfig::get('core.app_dir') . '/config/IniConfigHandler.class.php');
 			require_once(AgaviConfig::get('core.app_dir') . '/config/AutoloadConfigHandler.class.php');
-			require_once(AgaviConfig::get('core.app_dir') . '/config/RootConfigHandler.class.php');
 			require_once(AgaviConfig::get('core.app_dir') . '/exception/AgaviException.class.php');
 			require_once(AgaviConfig::get('core.app_dir') . '/exception/AutoloadException.class.php');
 			require_once(AgaviConfig::get('core.app_dir') . '/exception/CacheException.class.php');
