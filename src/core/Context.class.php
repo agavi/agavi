@@ -179,11 +179,16 @@ class AgaviContext
 	 *
 	 * @return     AgaviContext instance of the requested name
 	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @author     Mike Vincent <mike@agavi.org>
 	 * @since      0.9.0
 	 */
-	public static function getInstance($profile = 'default')
+	public static function getInstance($profile = null)
 	{
+		if($profile === null) {
+			$profile = AgaviConfig::get('core.default_context', 'stdctx');
+		}
 		$profile = strtolower($profile);
 		if (!isset(self::$instances[$profile])) {
 			$class = __CLASS__;
@@ -214,13 +219,21 @@ class AgaviContext
 	 *
 	 * @return     AgaviContext instance
 	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @author     Mike Vincent <mike@agavi.org>
 	 * @since      0.10.0
 	 */
-	public function initialize($profile = 'default', $overrides = array())
+	public function initialize($profile = null, $overrides = array())
 	{
-		static $profiles;
+		if($profile === null) {
+			$profile = AgaviConfig::get('core.default_context', 'stdctx');
+		}
 		$profile = strtolower($profile);
+		
+		$this->name = $profile;
+		
+		static $profiles;
 		
 		include(AgaviConfigCache::checkConfig(AgaviConfig::get('core.config_dir') . '/factories.xml', $profile));
 		
@@ -229,7 +242,21 @@ class AgaviContext
 	
 	// We could even add a method to switch contexts on the fly..
 	
-
+	/**
+	 * Retrieve the module directory for this context.
+	 *
+	 * @return     string An absolute filesystem path to the directory of the
+	 *                    currently executing module if set, otherwise null.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getName()
+	{
+		return $this->name;
+	}
+	
+	
 	/**
 	 * Retrieve the module directory for this context.
 	 *

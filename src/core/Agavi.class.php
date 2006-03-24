@@ -52,6 +52,9 @@ class Agavi
 			if(AgaviConfig::has('core.environment') && AgaviConfig::isReadonly('core.environment')) {
 				$environment = AgaviConfig::get('core.environment');
 			} else {
+				if($environment === null) {
+					$environment = 'stdenv';
+				}
 				AgaviConfig::set('core.environment', $environment, true, true);
 			}
 			
