@@ -53,7 +53,7 @@ class AgaviConfigCache
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	private static function callHandler($handler, $config, $cache)
+	private static function callHandler($handler, $config, $cache, $context)
 	{
 
 		if(count(self::$handlers) == 0) {
@@ -67,13 +67,13 @@ class AgaviConfigCache
 		if(isset(self::$handlers[$handler])) {
 			// we have a handler associated with the full configuration path
 			// call the handler and retrieve the cache data
-			$data = self::$handlers[$handler]->execute($config);
+			$data = self::$handlers[$handler]->execute($config, $context);
 			self::writeCacheFile($config, $cache, $data, false);
 			return;
 		} elseif(isset(self::$handlers[$basename])) {
 			// we have a handler associated with the configuration base name
 			// call the handler and retrieve the cache data
-			$data = self::$handlers[$basename]->execute($config);
+			$data = self::$handlers[$basename]->execute($config, $context);
 			self::writeCacheFile($config, $cache, $data, false);
 			return;
 		} else {
@@ -85,7 +85,7 @@ class AgaviConfigCache
 
 				if(preg_match($pattern, $handler)) {
 					// call the handler and retrieve the cache data
-					$data = $handlerInstance->execute($config);
+					$data = $handlerInstance->execute($config, $context);
 					self::writeCacheFile($config, $cache, $data, false);
 					return;
 				}
@@ -116,7 +116,7 @@ class AgaviConfigCache
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public static function checkConfig ($config)
+	public static function checkConfig ($config, $context = null)
 	{
 		// the full filename path to the config, which might not be what we were given.
 		$filename = AgaviToolkit::isPathAbsolute($config) ? $config : AgaviConfig::get('core.webapp_dir') . '/' . $config;
@@ -126,11 +126,11 @@ class AgaviConfigCache
 		}
 
 		// the cache filename we'll be using
-		$cache = self::getCacheName($config);
+		$cache = self::getCacheName($config, $context);
 
 		if (!is_readable($cache) || filemtime($filename) > filemtime($cache))	{
 			// configuration file has changed so we need to reparse it
-			self::callHandler($config, $filename, $cache);
+			self::callHandler($config, $filename, $cache, $context);
 		}
 
 		return $cache;
@@ -174,8 +174,9 @@ class AgaviConfigCache
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public static function getCacheName ($config)
+	public static function getCacheName ($config, $context = null)
 	{
+		$environment = AgaviConfig::get('core.environment');
 
 		if (strlen($config) > 3 && ctype_alpha($config{0}) &&	$config{1} == ':' && ($config{2} == '\\' || $config{2} == '/')) {
 			// file is a windows absolute path, strip off the drive letter
@@ -183,7 +184,7 @@ class AgaviConfigCache
 		}
 
 		// replace unfriendly filename characters with an underscore and postfix the name with a php extension
-		$config  = str_replace(array('\\', '/'), '_', $config) . '.php';
+		$config  = str_replace(array('\\', '/'), '_', $config) . '_' . $environment . '_' . $context . '.php';
 		return AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . self::CACHE_SUBDIR . DIRECTORY_SEPARATOR . $config;
 
 	}
