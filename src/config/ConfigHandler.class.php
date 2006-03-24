@@ -108,7 +108,7 @@ abstract class AgaviConfigHandler extends AgaviParameterHolder
 
 		if($value == null) {
 			// null value
-			return 'null';
+			return null;
 		}
 
 		// lowercase our value for comparison
@@ -129,7 +129,7 @@ abstract class AgaviConfigHandler extends AgaviParameterHolder
 
 			$value = str_replace($keys, $reps, self::replaceConstants($value));
 
-			return "'" . $value . "'";
+			return $value;
 
 		}
 
