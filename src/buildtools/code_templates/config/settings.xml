@@ -43,7 +43,7 @@
 			
 			<system_action name="unavailable">
 				<module>Default</module>
-				<action>Unavailable></action>
+				<action>Unavailable</action>
 			</system_action>
 			
 		</system_actions>

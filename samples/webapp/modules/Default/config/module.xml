@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+| This file is part of the Agavi package.                                    |
+| Copyright (c) 2006 the Agavi Project.                                      |
+| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
+| MODULE INFORMATION FILE                                                    |
+| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
+| KEYWORDS:                                                                  |
+| You may reference any configuration directive by enclosing the name in     |
+| "%" signs. Example: %core.app_dir%                                         |
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+-->
+<configurations>
+	<configuration>
+		<enabled>On</enabled>
+		<title>Default Agavi Module</title>
+		<version>0.1</version>
+		<name>Default</name>
+		<authors>
+			<author>Sean Kerr (skerr@mojavi.org)</author>
+		</authors>
+		<homepage>http://www.agavi.org</homepage>
+		<update_url></update_url>
+		<description>An example module</description>
+	</configuration>
+</configurations>
