@@ -35,7 +35,7 @@ class AgaviReturnArrayConfigHandler extends AgaviIniConfigHandler
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.10.0
 	 */
-	public function &execute($config)
+	public function execute($config, $context = null)
 	{
 		$real_booleans = (in_array($this->getParameter('real_booleans', false), array('false', 'off', 'no')));
 		$ini = $this->parseIni($config);

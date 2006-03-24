@@ -44,7 +44,7 @@ class AgaviFilterConfigHandler extends AgaviIniConfigHandler
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function & execute ($config)
+	public function execute($config, $context = null)
 	{
 
 		// parse the ini

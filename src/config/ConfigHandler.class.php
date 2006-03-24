@@ -42,7 +42,7 @@ abstract class AgaviConfigHandler extends AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function addReplacement ($oldValue, $newValue)
+	public function addReplacement($oldValue, $newValue)
 	{
 
 		$this->oldValues[] = $oldValue;
@@ -54,6 +54,7 @@ abstract class AgaviConfigHandler extends AgaviParameterHolder
 	 * Execute this configuration handler.
 	 *
 	 * @param      string An absolute filesystem path to a configuration file.
+	 * @param      string Name of the executing context (if any).
 	 *
 	 * @return     string Data to be written to a cache file.
 	 *
@@ -65,7 +66,7 @@ abstract class AgaviConfigHandler extends AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	abstract function & execute ($config);
+	abstract function execute($config, $context = null);
 
 	/**
 	 * Initialize this ConfigHandler.
@@ -81,16 +82,11 @@ abstract class AgaviConfigHandler extends AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function initialize ($parameters = null)
+	public function initialize($parameters = null)
 	{
-
-		if ($parameters != null)
-		{
-
+		if($parameters != null) {
 			$this->parameters = array_merge($this->parameters, $parameters);
-
 		}
-
 	}
 
 	/**
@@ -103,39 +99,33 @@ abstract class AgaviConfigHandler extends AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public static function literalize ($value)
+	public static function literalize($value)
 	{
 
 		static
 			$keys = array("\\", "%'", "'"),
 			$reps = array("\\\\", "\"", "\\'");
 
-		if ($value == null)
-		{
-
+		if($value == null) {
 			// null value
 			return 'null';
-
 		}
 
 		// lowercase our value for comparison
 		$value  = trim($value);
 		$lvalue = strtolower($value);
 
-		if ($lvalue == 'on' || $lvalue == 'yes' || $lvalue == 'true')
-		{
+		if($lvalue == 'on' || $lvalue == 'yes' || $lvalue == 'true') {
 
 			// replace values 'on' and 'yes' with a boolean true value
 			return 'true';
 
-		} else if ($lvalue == 'off' || $lvalue == 'no' || $lvalue == 'false')
-		{
+		} elseif($lvalue == 'off' || $lvalue == 'no' || $lvalue == 'false') {
 
 			// replace values 'off' and 'no' with a boolean false value
 			return 'false';
 
-		} else if (!is_numeric($value))
-		{
+		} elseif(!is_numeric($value)) {
 
 			$value = str_replace($keys, $reps, self::replaceConstants($value));
 
@@ -159,7 +149,7 @@ abstract class AgaviConfigHandler extends AgaviParameterHolder
 	 * @author     Johan Mjones(johan.mjones@ongame.co)
 	 * @since      0.9.0
 	 */
-	public static function & replaceConstants ($value)
+	public static function replaceConstants($value)
 	{
 		$newvalue = $value;
 		do {
@@ -189,19 +179,14 @@ abstract class AgaviConfigHandler extends AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public static function & replacePath ($path)
+	public static function replacePath($path)
 	{
-
-		if (!AgaviToolkit::isPathAbsolute($path))
-		{
-
+		if(!AgaviToolkit::isPathAbsolute($path)) {
 			// not an absolute path so we'll prepend to it
 			$path = AgaviConfig::get('core.webapp_dir') . '/' . $path;
-
 		}
 
 		return $path;
-
 	}
 
 }

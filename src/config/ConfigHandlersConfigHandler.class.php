@@ -45,7 +45,7 @@ class AgaviConfigHandlersConfigHandler extends AgaviConfigHandler
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function & execute ($config)
+	public function execute($config, $context = null)
 	{
 		$data = $this->parseFile($config);
 		if(($sysConfDir = AgaviConfig::get('core.system_config_dir'))) {
@@ -71,12 +71,16 @@ class AgaviConfigHandlersConfigHandler extends AgaviConfigHandler
 
 		// init our data arrays
 		$data     = array();
+		$environment = AgaviConfig::get('core.environment');
 
 		foreach($conf->configurations as $config)
 		{
-			$context = 0;
-			if($config->hasAttribute('context'))
-				$context = $config->getAttribute('context');
+			$env = $environment;
+			if($config->hasAttribute('environment'))
+				$env = $config->getAttribute('environment');
+
+			if($env != $environment)
+				continue;
 
 			// let's do our fancy work
 			foreach($config->handlers as $handler) {

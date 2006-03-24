@@ -45,7 +45,7 @@ class AgaviModuleConfigHandler extends AgaviIniConfigHandler
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function & execute ($config)
+	public function execute($config, $context = null)
 	{
 
 		// set our required categories list and initialize our handler

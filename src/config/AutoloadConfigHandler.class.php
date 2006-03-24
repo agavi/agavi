@@ -40,6 +40,7 @@ class AgaviAutoloadConfigHandler extends AgaviConfigHandler
 	 * Execute this configuration handler.
 	 *
 	 * @param      string An absolute filesystem path to a configuration file.
+	 * @param      string Name of the executing context (if any).
 	 *
 	 * @return     string Data to be written to a cache file.
 	 *
@@ -52,10 +53,9 @@ class AgaviAutoloadConfigHandler extends AgaviConfigHandler
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.9.0
 	 */
-	public function & execute($config)
+	public function execute($config, $context = null)
 	{
 
-var_dump($config);
 		$data = $this->parseFile($config);
 		if(($sysConfDir = AgaviConfig::get('core.system_config_dir'))) {
 			$data = array_merge($data, $this->parseFile($sysConfDir . '/autoload.xml'));
@@ -84,8 +84,8 @@ var_dump($config);
 		foreach($conf->configurations as $config)
 		{
 			$env = $environment;
-			if($config->hasAttribute('context'))
-				$env = $config->getAttribute('context');
+			if($config->hasAttribute('environment'))
+				$env = $config->getAttribute('environment');
 
 			// let's do our fancy work
 			foreach($config->autoloads as $entry) {
@@ -104,8 +104,6 @@ var_dump($config);
 				}
 				fclose($fp);
 
-				//$tmp    = "\$classes['%s'] = '%s';";
-				//$data[$context][] = sprintf($tmp, $class, $file);
 				if($env == $environment)
 					$data[$class] = $file;
 			}

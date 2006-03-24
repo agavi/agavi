@@ -47,7 +47,7 @@ class AgaviCompileConfigHandler extends AgaviConfigHandler
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.9.0
 	 */
-	public function & execute ($config)
+	public function execute($config, $context = null)
 	{
 		$data = '';
 

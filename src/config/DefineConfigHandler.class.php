@@ -49,23 +49,27 @@ class AgaviDefineConfigHandler extends AgaviConfigHandler
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function & execute ($config)
+	public function execute($config, $context = null)
 	{
 
 		$conf = AgaviConfigCache::parseConfig($config, false);
 
 		// init our data array
 		$data = array();
+		$environment = AgaviConfig::get('core.environment');
 
 		foreach($conf->configurations as $config)
 		{
-			$environment = 0;
-			if($config->hasAttribute('name'))
-				$environment = $config->getAttribute('name');
+			$env = $environment;
+			if($config->hasAttribute('environment'))
+				$env = $config->getAttribute('environment');
+
+			if($env != $environment)
+				continue;
 
 			// let's do our fancy work
-			if($config->hasChildren('default_actions')) {
-				foreach($config->default_actions->getChildren() as $action) {
+			if($config->hasChildren('system_actions')) {
+				foreach($config->system_actions->getChildren() as $action) {
 					$name = $action->getAttribute('name');
 					$data[sprintf('actions.%s_module', $name)] = $action->module->getValue();
 					$data[sprintf('actions.%s_action', $name)] = $action->action->getValue();

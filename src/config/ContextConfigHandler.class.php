@@ -25,7 +25,7 @@
  * @version    $Id: ReturnArrayConfigHandler.class.php 327 2005-12-18 16:10:25Z david $
  */
 
-class AgaviContextConfigHandler extends AgaviIniConfigHandler
+class AgaviContextConfigHandler extends AgaviConfigHandler
 {
 	/**
 	 * @see        IniConfigHandler::execute()

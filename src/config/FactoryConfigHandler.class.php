@@ -28,7 +28,7 @@
  *
  * @version    $Id$
  */
-class AgaviFactoryConfigHandler extends AgaviIniConfigHandler
+class AgaviFactoryConfigHandler extends AgaviConfigHandler
 {
 
 	/**
@@ -46,111 +46,97 @@ class AgaviFactoryConfigHandler extends AgaviIniConfigHandler
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function & execute ($config)
+	public function execute($config, $context = null)
 	{
-  	// We need to at least have a base controller defined
-		$required_controllers = array('Controller');
-  
-  	// These factories must be defined. 
-  	$required_factories = array('request', 'storage', 'user', 'security_filter', 'execution_filter');
-  
-		// set our required categories list and initialize our handler
-		$categories = array('required_categories' => $required_controllers);
-		$this->initialize($categories);
-  
-		// parse the ini
-		$ini = $this->parseIni($config);
-  
-  	// Reverse the order of the controllers
-  	$ini = array_reverse($ini, true);
-  
-		// init our data and includes arrays
-  	$controllers = array();
-  
-  	// check that every controller has the right paramers
-  	foreach($ini as $controllerName => $factories) {
-   		// init our data and includes arrays
-	  	$includes  = array();
-	  	$inits     = array();
-	  	$instances = array();
-  
-   		// Build all classes  
-   		foreach($required_factories as $factory) {
-				if (!array_key_exists($factory, $factories)) {
-	 				$error = 'Configuration file "%s" is missing "%s" key in "%s" category';
-					$error = sprintf($error, $config, $factory, $controllerName);
-					throw new AgaviParseException($error);
-				}
-	
-				// Get class name
-				$class = $factories[$factory];
-	
-				// parse parameters
-				$parameters = AgaviParameterParser::parse($factories, $factory .'.param');
-	
-				// append new data
-				switch ($factory) {
-					case 'request':
-						$instances[] = sprintf("\tself::\$instance->request = " .  "AgaviRequest::newInstance('%s');", $class);
-						$inits[] = sprintf("\tself::\$instance->request->initialize(self::\$instance, %s);", $parameters);
-						break;
-					case 'security_filter':
-						$tmp = "\n\tif (AgaviConfig::get('core.use_security')) {\n" .
-						       "\t\tself::\$instance->securityFilter = AgaviSecurityFilter::newInstance('%s');\n" .
-						       "\t\tself::\$instance->securityFilter->initialize(self::\$instance);\n" .
-									 "\t}\n";
-						$inits[] = sprintf($tmp, $class, $parameters);
-						break;
-					case 'storage':
-						$instances[] = sprintf("\tself::\$instance->storage = AgaviStorage::newInstance('%s');", $class);
-						$inits[] = sprintf("\tself::\$instance->storage->initialize(self::\$instance, %s);", $parameters);
-						break;
-					case 'user':
-						$instances[] = sprintf("\tself::\$instance->user = AgaviUser::newInstance('%s');", $class);
-						$inits[] = sprintf("\tself::\$instance->user->initialize(self::\$instance, %s);", $parameters);
-						break;
-					case 'execution_filter':
-						$inits[] = sprintf("\tself::\$instance->controller->setExecutionFilterClassName('%s');", $class);
-						break;
-					default:
-					 continue;
-				}
-
-				if (isset($factories[$factory.'.file'])) {
-					// we have a file to include
-					$file =& $factories[$factory.'.file'];
-					$file =  $this->replaceConstants($file);
-					$file =  $this->replacePath($file);
-	
-					if (!is_readable($file)) {
-		
-						// factory file doesn't exist
-						$error = 'Configuration file "%s" specifies class ' .
-						         '"%s" with nonexistent or unreadable file ' .
-						         '"%s"';
-						$error = sprintf($error, $config, $class, $file);
-	
-						throw new AgaviParseException($error);
-		
-					}
-					$includes[] = sprintf("\trequire_once('%s');", $file);
-		
-				}
-			}
-  	
-			$tmp = "if (self::\$instance->controller instanceof $controllerName)\n{\n%s\n%s\n%s\n\treturn;\n}";
-			$controllers[] = sprintf($tmp, implode("\n", $includes), implode("\n", $instances), implode("\n", $inits));
+		if($context == null) {
+			$context = '';
 		}
-	
+
+		// parse the config file
+		$conf = AgaviConfigCache::parseConfig($config);
+
+		$data = array();
+		foreach($conf->configurations as $cfg)
+		{
+			$code = array();
+
+			$ctx = $context;
+			if($cfg->hasAttribute('context'))
+				$ctx = $cfg->getAttribute('context');
+
+			$requiredItems = array('action_stack', 'controller', 'database_manager', 'logger_manager', 'request', 'storage', 'user', 'validator_manager');
+			$definedItems = array_keys($cfg->getChildren());
+			if(count($missingItems = array_diff($requiredItems, $definedItems)) > 0) {
+					$error = 'Configuration file "%s" is missing key(s) %s';
+					$error = sprintf($error, $config, implode(' ', $missingItems));
+					throw new AgaviParseException($error);
+			}
+			
+
+			// The order of this initialisiation code is fixed, to not change
+
+			if(AgaviConfig::get('core.use_database', false)) {
+				$code[] = '$this->databaseManager = new ' . $cfg->database_manager->class->getValue() . '();';
+				$code[] = '$this->databaseManager->initialize($this);';
+			}
+
+			// Actionstack
+			$code[] = '$this->actionStack = new ' . $cfg->action_stack->class->getValue() . '();';
+
+			// Request
+			$code[] = '$this->request = AgaviRequest::newInstance("' . $cfg->request->class->getValue() . '");';
+
+			// Storage
+			$code[] = '$this->storage = AgaviStorage::newInstance("' . $cfg->storage->class->getValue() . '");';
+			$code[] = '$this->storage->initialize($this, ' . $this->getSettings($cfg->storage) . ');';
+			$code[] = '$this->storage->startup();';
+
+			// ValidatorManager
+			$code[] = '$this->validatorManager = new ' . $cfg->validator_manager->class->getValue() . '();';
+			$code[] = '$this->validatorManager->initialize($this);';
+
+			// User
+			if(AgaviConfig::get('core.use_security', true)) {
+				$code[] = '$this->user = AgaviUser::newInstance("' . $cfg->user->class->getValue() . '");';
+				$code[] = '$this->user->initialize($this, ' . $this->getSettings($cfg->user) . ');';
+			}
+
+			// LoggerManager
+			if(AgaviConfig::get('core.use_logging', false)) {
+				$code[] = '$this->loggerManager = new ' . $cfg->logger_manager->class->getValue() . '();';
+				$code[] = '$this->loggerManager->initialize($this);';
+
+			}
+
+			// Controller 
+			$code[] = '$this->controller = AgaviController::newInstance("' . $cfg->controller->class->getValue() . '");';
+			$code[] = '$this->controller->initialize($this, ' . $this->getSettings($cfg->controller) . ');';
+		
+			$code[] = '$this->request->initialize($this, ' . $this->getSettings($cfg->request) . ');';
+
+			var_dump($code);
+		}
+
+
 		// compile data
 		$retval = "<?php\n" .
-		"// auth-generated by FactoryConfigHandler\n" .
+		"// auto-generated by FactoryConfigHandler\n" .
 		"// date: %s\n%s\n?>";
-		$retval = sprintf($retval, date('m/d/Y H:i:s'),
-		implode("\n", $controllers));
+		$retval = sprintf($retval, date('m/d/Y H:i:s'), implode("\n", $code));
 
 		return $retval;
 
+	}
+
+	protected function getSettings($itemNode)
+	{
+		$data = array();
+		if($itemNode->hasChildren('settings')) {
+			foreach($itemNode->settings as $node) {
+				$data[$node->getAttribute('name')] = $node->getValue();
+			}
+		}
+		return var_export($data, true);
 	}
 
 }
