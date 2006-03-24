@@ -33,7 +33,7 @@ class Agavi
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public static $autoloads = array();
+	public static $autoloads = null;
 	
 	/**
 	 * Startup the Agavi core

@@ -30,12 +30,6 @@
  */
 class AgaviAutoloadConfigHandler extends AgaviConfigHandler
 {
-	public function initialize()
-	{
-		// this is the first handler to be created, make sure we load the autoload data before anything else
-		include(AgaviConfigCache::checkConfig(AgaviConfig::get('core.config_dir') . '/autoload.xml'));
-	}
-
 	/**
 	 * Execute this configuration handler.
 	 *

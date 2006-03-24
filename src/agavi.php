@@ -64,6 +64,9 @@ require(AgaviConfig::get('core.app_dir') . '/core/Agavi.class.php');
  */
 function __autoload($class)
 {
+	if(Agavi::$autoloads === null) {
+		include(AgaviConfigCache::checkConfig(AgaviConfig::get('core.config_dir') . '/autoload.xml'));
+	}
 	if(isset(Agavi::$autoloads[$class])) {
 		// class exists, let's include it
 		require(Agavi::$autoloads[$class]);
