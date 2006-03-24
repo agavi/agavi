@@ -118,12 +118,12 @@ abstract class AgaviConfigHandler extends AgaviParameterHolder
 		if($lvalue == 'on' || $lvalue == 'yes' || $lvalue == 'true') {
 
 			// replace values 'on' and 'yes' with a boolean true value
-			return 'true';
+			return true;
 
 		} elseif($lvalue == 'off' || $lvalue == 'no' || $lvalue == 'false') {
 
 			// replace values 'off' and 'no' with a boolean false value
-			return 'false';
+			return false;
 
 		} elseif(!is_numeric($value)) {
 

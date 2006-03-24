@@ -113,8 +113,6 @@ class AgaviFactoryConfigHandler extends AgaviConfigHandler
 			$code[] = '$this->controller->initialize($this, ' . $this->getSettings($cfg->controller) . ');';
 		
 			$code[] = '$this->request->initialize($this, ' . $this->getSettings($cfg->request) . ');';
-
-			var_dump($code);
 		}
 
 

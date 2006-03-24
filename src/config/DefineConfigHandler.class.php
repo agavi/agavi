@@ -78,7 +78,7 @@ class AgaviDefineConfigHandler extends AgaviConfigHandler
 
 			foreach($config->settings as $setting)
 			{
-				$data[$setting->getAttribute('name')] = $this->literalize($this->replaceConstants($setting->getValue()));
+				$data['core.' . $setting->getAttribute('name')] = $this->literalize($this->replaceConstants($setting->getValue()));
 			}
 
 		}

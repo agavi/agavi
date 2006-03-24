@@ -95,16 +95,16 @@ class Agavi
 			require_once(AgaviConfig::get('core.app_dir') . '/exception/ParseException.class.php');
 			require_once(AgaviConfig::get('core.app_dir') . '/util/Toolkit.class.php');
 
-			// clear our cache if the conditions are right
-			if(AgaviConfig::get('core.debug'))	{
-				AgaviToolkit::clearCache();
-			}
-
 			// load base settings
 			AgaviConfigCache::import(AgaviConfig::get('core.config_dir') . '/settings.xml');
 
 			// required classes for the framework
 			AgaviConfigCache::import(AgaviConfig::get('core.config_dir') . '/compile.xml');
+
+			// clear our cache if the conditions are right
+			if(AgaviConfig::get('core.debug'))	{
+				AgaviToolkit::clearCache();
+			}
 
 		} catch (AgaviException $e) {
 			$e->printStackTrace();
