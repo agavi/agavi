@@ -37,9 +37,9 @@ AgaviConfig::set('agavi.version',
 	AgaviConfig::get('agavi.major_version') . '.' .
 	AgaviConfig::get('agavi.minor_version') . '.' .
 	AgaviConfig::get('agavi.micro_version') . 
-	AgaviConfig::has('agavi.status')
+	(AgaviConfig::has('agavi.status')
 		? '-' . AgaviConfig::get('agavi.status')
-		: ''
+		: '')
 );
 
 AgaviConfig::set('agavi.release',
