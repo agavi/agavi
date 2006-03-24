@@ -98,13 +98,16 @@ class Agavi
 			// load base settings
 			AgaviConfigCache::import(AgaviConfig::get('core.config_dir') . '/settings.xml');
 
-			// required classes for the framework
-			AgaviConfigCache::import(AgaviConfig::get('core.config_dir') . '/compile.xml');
-
 			// clear our cache if the conditions are right
 			if(AgaviConfig::get('core.debug'))	{
 				AgaviToolkit::clearCache();
+
+				// load base settings
+				AgaviConfigCache::import(AgaviConfig::get('core.config_dir') . '/settings.xml');
 			}
+
+			// required classes for the framework
+			AgaviConfigCache::import(AgaviConfig::get('core.config_dir') . '/compile.xml');
 
 		} catch (AgaviException $e) {
 			$e->printStackTrace();
