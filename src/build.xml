@@ -104,8 +104,7 @@
 		<available file="${templates.dir}/config" property="templates.dir.current" value="${templates.dir}" />				
 		<copy todir="${webapp.dir}/config">
 			<fileset dir="${templates.dir.current}/config">
-				<include name="*.ini"/>
-				<include name="*.conf"/>
+				<include name="*.xml"/>
 			</fileset>
 		</copy>
 		<mkdir dir="${webapp.dir}/lib"/>
@@ -145,8 +144,8 @@
 		<mkdir dir="${module.dir}/actions"/>
 		<mkdir dir="${module.dir}/config"/>
 		<property name="templates.dir.current" value="${templates.dir.default}"  override="true" />
-		<available file="${templates.dir}/module.ini.tmpl" property="templates.dir.current" value="${templates.dir}" />
-		<copy file="${templates.dir.current}/module.ini.tmpl" tofile="${module.dir}/config/module.ini">
+		<available file="${templates.dir}/module.xml.tmpl" property="templates.dir.current" value="${templates.dir}" />
+		<copy file="${templates.dir.current}/module.xml.tmpl" tofile="${module.dir}/config/module.xml">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">    
 					<token key="MODULE" value="${module}"/>
@@ -183,7 +182,7 @@
 	<target name="action" description="create a new action">
 		<fixpaths base="${project.dir}" defaultmodule="true"/>
 		<!--
-		<available file="${module.dir}/config/module.ini" property="is_module" value="true"/>
+		<available file="${module.dir}/config/module.xml" property="is_module" value="true"/>
 		<fail unless="is_module" message="Must be called in the root of a module directory."/>
 		-->
 		<listModules webapp="${webapp.dir}" property="current.modules"/>
