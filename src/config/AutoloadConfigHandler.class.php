@@ -75,14 +75,15 @@ class AgaviAutoloadConfigHandler extends AgaviConfigHandler
 
 		$data = array();
 		$environment = AgaviConfig::get('core.environment');
-		foreach($conf->configurations as $config)
+		foreach($conf->configurations as $cfg)
 		{
-			$env = $environment;
-			if($config->hasAttribute('environment'))
-				$env = $config->getAttribute('environment');
+			$env = $cfg->hasAttribute('environment') ? $cfg->getAttribute('environment') : $environment;
+
+			if($env != $environment)
+				continue;
 
 			// let's do our fancy work
-			foreach($config->autoloads as $entry) {
+			foreach($cfg->autoloads as $entry) {
 
 				$file = $this->replaceConstants($entry->getValue());
 				$class = $entry->getAttribute('name');
@@ -98,8 +99,7 @@ class AgaviAutoloadConfigHandler extends AgaviConfigHandler
 				}
 				fclose($fp);
 
-				if($env == $environment)
-					$data[$class] = $file;
+				$data[$class] = $file;
 			}
 		}
 		return $data;

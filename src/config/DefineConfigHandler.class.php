@@ -58,25 +58,23 @@ class AgaviDefineConfigHandler extends AgaviConfigHandler
 		$data = array();
 		$environment = AgaviConfig::get('core.environment');
 
-		foreach($conf->configurations as $config)
+		foreach($conf->configurations as $cfg)
 		{
-			$env = $environment;
-			if($config->hasAttribute('environment'))
-				$env = $config->getAttribute('environment');
+			$env = $cfg->hasAttribute('environment') ? $cfg->getAttribute('environment') : $environment;
 
 			if($env != $environment)
 				continue;
 
 			// let's do our fancy work
-			if($config->hasChildren('system_actions')) {
-				foreach($config->system_actions->getChildren() as $action) {
+			if($cfg->hasChildren('system_actions')) {
+				foreach($cfg->system_actions->getChildren() as $action) {
 					$name = $action->getAttribute('name');
 					$data[sprintf('actions.%s_module', $name)] = $action->module->getValue();
 					$data[sprintf('actions.%s_action', $name)] = $action->action->getValue();
 				}
 			}
 
-			foreach($config->settings as $setting)
+			foreach($cfg->settings as $setting)
 			{
 				$data['core.' . $setting->getAttribute('name')] = $this->literalize($this->replaceConstants($setting->getValue()));
 			}

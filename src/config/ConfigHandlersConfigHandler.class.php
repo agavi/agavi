@@ -73,17 +73,15 @@ class AgaviConfigHandlersConfigHandler extends AgaviConfigHandler
 		$data     = array();
 		$environment = AgaviConfig::get('core.environment');
 
-		foreach($conf->configurations as $config)
+		foreach($conf->configurations as $cfg)
 		{
-			$env = $environment;
-			if($config->hasAttribute('environment'))
-				$env = $config->getAttribute('environment');
+			$env = $cfg->hasAttribute('environment') ? $cfg->getAttribute('environment') : $environment;
 
 			if($env != $environment)
 				continue;
 
 			// let's do our fancy work
-			foreach($config->handlers as $handler) {
+			foreach($cfg->handlers as $handler) {
 				$parameters = 'null';
 				$pattern = $handler->getAttribute('pattern');
 				if($pattern == '%core.config_dir%/autoload.xml')
