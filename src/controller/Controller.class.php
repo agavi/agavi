@@ -145,9 +145,9 @@ abstract class AgaviController extends AgaviParameterHolder
 		$this->getActionStack()->addEntry($moduleName, $actionName, $actionInstance);
 
 		// include the module configuration
-		AgaviConfigCache::import(AgaviConfig::get('core.modules_dir') . '/' . $moduleName . '/config/module.ini');
+		AgaviConfigCache::import(AgaviConfig::get('core.modules_dir') . '/' . $moduleName . '/config/module.xml');
 		$enabled_str = 'MOD_' . strtoupper($moduleName) . '_ENABLED';
-		if (defined($enabled_str) && constant($enabled_str)) {
+		if(AgaviConfig::get('modules.' . strtolower($moduleName) . '.enabled')) {
 
 			// check for a module config.php
 			$moduleConfig = AgaviConfig::get('core.modules_dir') . '/' . $moduleName . '/config.php';
@@ -538,7 +538,7 @@ abstract class AgaviController extends AgaviParameterHolder
 		static $list = array();
 
 		// grab our global filter ini and preset the module name
-		$config     = AgaviConfig::get('core.config_dir') . '/filters.ini';
+		$config     = AgaviConfig::get('core.config_dir') . '/filters.xml';
 		$moduleName = 'global';
 
 		if (!isset($list[$moduleName])) {
