@@ -81,7 +81,7 @@ class AgaviConfigCache
 			// this basename
 			foreach (self::$handlers as $key => $handlerInstance)	{
 				// replace wildcard chars in the configuration and create the pattern
-				$pattern = sprintf('#%s#', strtr($key, array('.' => '\.', '*' => '.*?')));
+				$pattern = sprintf('#%s#', str_replace('\*', '.*?', preg_quote($key)));
 
 				if(preg_match($pattern, $handler)) {
 					// call the handler and retrieve the cache data
@@ -237,7 +237,6 @@ class AgaviConfigCache
 		require_once(AgaviConfig::get('core.app_dir') . '/config/XmlConfigParser.class.php');
 
 		// manually create our config_handlers.ini handler
-		//self::$handlers['config_handlers.ini'] = new AgaviRootConfigHandler();
 		self::$handlers['config_handlers.xml'] = new AgaviConfigHandlersConfigHandler();
 		self::$handlers['config_handlers.xml']->initialize();
 
