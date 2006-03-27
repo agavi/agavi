@@ -241,7 +241,7 @@ class AgaviConfigCache
 		self::$handlers['config_handlers.xml']->initialize();
 
 		// application configuration handlers
-		require_once(AgaviConfigCache::checkConfig('config/config_handlers.xml'));
+		require_once(AgaviConfigCache::checkConfig(AgaviConfig::get('core.config_dir') . '/config_handlers.xml'));
 
 		// module level configuration handlers
 		// are gone :)
