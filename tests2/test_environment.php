@@ -10,7 +10,7 @@ AgaviConfig::set('core.webapp_dir', dirname(__FILE__) . '/sandbox');
 AgaviConfig::set('core.config_dir', AgaviConfig::get('core.webapp_dir') . '/config');
 AgaviConfig::set('core.cache_dir', AgaviConfig::get('core.webapp_dir') . '/cache');
 AgaviConfig::set('core.lib_dir', AgaviConfig::get('core.webapp_dir') . '/lib');
-AgaviConfig::set('core.modules_dir', AgaviConfig::get('core.webapp_dir') . '/modules/');
+AgaviConfig::set('core.module_dir', AgaviConfig::get('core.webapp_dir') . '/modules/');
 
 AgaviConfig::set('request.path_info_array', 'SERVER');
 AgaviConfig::set('request.path_info_key', 'PATH_INFO');

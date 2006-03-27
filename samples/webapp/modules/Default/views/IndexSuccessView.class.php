@@ -35,7 +35,7 @@ class Default_IndexSuccessView extends AgaviPHPView
 		$this->setAttribute('title', 'Default Action');
 
 		// build our menu
-		require_once(AgaviConfig::get('core.modules_dir') . '/Default/lib/build_menu.php');
+		require_once(AgaviConfig::get('core.module_dir') . '/Default/lib/build_menu.php');
 
 	}
 

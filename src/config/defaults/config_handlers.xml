@@ -110,19 +110,19 @@
 				| names or the system may cease to function.                                 |
 				+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
 			-->
-			<handler pattern="%core.modules_dir%/*/config/autoload.xml">
+			<handler pattern="%core.module_dir%/*/config/autoload.xml">
 				<class>AgaviAutoloadConfigHandler</class>
 			</handler>
 
-			<handler pattern="%core.modules_dir%/*/config/caching.xml">
+			<handler pattern="%core.module_dir%/*/config/caching.xml">
 				<class>AgaviReturnArrayConfigHandler</class>
 			</handler>
 
-			<handler pattern="%core.modules_dir%/*/config/module.xml">
+			<handler pattern="%core.module_dir%/*/config/module.xml">
 				<class>AgaviModuleConfigHandler</class>
 			</handler>
 
-			<handler pattern="%core.modules_dir%/*/validate/*.xml">
+			<handler pattern="%core.module_dir%/*/validate/*.xml">
 				<class>AgaviValidatorConfigHandler</class>
 			</handler>
 		</handlers>

@@ -52,7 +52,7 @@ abstract class AgaviController extends AgaviParameterHolder
 	 */
 	public function actionExists ($moduleName, $actionName)
 	{
-		$file = AgaviConfig::get('core.modules_dir') . '/' . $moduleName . '/actions/' . $actionName . 'Action.class.php';
+		$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/actions/' . $actionName . 'Action.class.php';
 		return is_readable($file);
 	}
 
@@ -145,12 +145,12 @@ abstract class AgaviController extends AgaviParameterHolder
 		$this->getActionStack()->addEntry($moduleName, $actionName, $actionInstance);
 
 		// include the module configuration
-		AgaviConfigCache::import(AgaviConfig::get('core.modules_dir') . '/' . $moduleName . '/config/module.xml');
+		AgaviConfigCache::import(AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/config/module.xml');
 		$enabled_str = 'MOD_' . strtoupper($moduleName) . '_ENABLED';
 		if(AgaviConfig::get('modules.' . strtolower($moduleName) . '.enabled')) {
 
 			// check for a module config.php
-			$moduleConfig = AgaviConfig::get('core.modules_dir') . '/' . $moduleName . '/config.php';
+			$moduleConfig = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/config.php';
 			if (is_readable($moduleConfig)) {
 				require_once($moduleConfig);
 			}
@@ -253,7 +253,7 @@ abstract class AgaviController extends AgaviParameterHolder
 	 */
 	public function getAction ($moduleName, $actionName)
 	{
-		$file = AgaviConfig::get('core.modules_dir') . '/' . $moduleName . '/actions/' . $actionName . 'Action.class.php';
+		$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/actions/' . $actionName . 'Action.class.php';
 
 		if (file_exists($file)) {
 			require_once($file);
@@ -400,7 +400,7 @@ abstract class AgaviController extends AgaviParameterHolder
 	public function getModel ($moduleName, $modelName)
 	{
 
-		$file = AgaviConfig::get('core.modules_dir') . '/' . $moduleName . '/models/' . $modelName .	'Model.class.php';
+		$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/models/' . $modelName .	'Model.class.php';
 		require_once($file);
 
 		$class = $modelName . 'Model';
@@ -460,7 +460,7 @@ abstract class AgaviController extends AgaviParameterHolder
 	public function getView ($moduleName, $viewName)
 	{
 
-		$file = AgaviConfig::get('core.modules_dir') . '/' . $moduleName . '/views/' . $viewName .
+		$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/views/' . $viewName .
 				'View.class.php';
 
 		require_once($file);
@@ -578,7 +578,7 @@ abstract class AgaviController extends AgaviParameterHolder
 
 		if (!isset($list[$moduleName]))	{
 			// we haven't loaded a filter list for this module yet
-			$config = AgaviConfig::get('core.modules_dir') . '/' . $moduleName . '/config/filters.ini';
+			$config = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/config/filters.ini';
 			if (is_readable($config)) {
 				require_once(AgaviConfigCache::checkConfig($config));
 			} else {
@@ -609,7 +609,7 @@ abstract class AgaviController extends AgaviParameterHolder
 	public function modelExists ($moduleName, $modelName)
 	{
 
-		$file = AgaviConfig::get('core.modules_dir') . '/' . $moduleName . '/models/' . $modelName .	'Model.class.php';
+		$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/models/' . $modelName .	'Model.class.php';
 
 		return is_readable($file);
 
@@ -628,7 +628,7 @@ abstract class AgaviController extends AgaviParameterHolder
 	public function moduleExists ($moduleName)
 	{
 
-		$file = AgaviConfig::get('core.modules_dir') . '/' . $moduleName . '/config/module.ini';
+		$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/config/module.ini';
 
 		return is_readable($file);
 
@@ -761,7 +761,7 @@ abstract class AgaviController extends AgaviParameterHolder
 	public function viewExists ($moduleName, $viewName)
 	{
 
-		$file = AgaviConfig::get('core.modules_dir') . '/' . $moduleName . '/views/' . $viewName .
+		$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/views/' . $viewName .
 				'View.class.php';
 
 		return is_readable($file);

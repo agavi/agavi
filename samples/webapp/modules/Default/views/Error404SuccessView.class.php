@@ -44,7 +44,7 @@ class Default_Error404SuccessView extends AgaviPHPView
 		$this->setAttribute('requested_action', $request->getAttribute('requested_action'));
 
 		// build our menu
-		require_once(AgaviConfig::get('core.modules_dir') . '/Default/lib/build_menu.php');
+		require_once(AgaviConfig::get('core.module_dir') . '/Default/lib/build_menu.php');
 
 	}
 

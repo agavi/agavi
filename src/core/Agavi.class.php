@@ -73,9 +73,9 @@ class Agavi
 			
 			AgaviConfig::set('core.lib_dir', AgaviConfig::get('core.lib_dir') . '/lib');
 			
-			AgaviConfig::set('core.modules_dir', AgaviConfig::get('core.webapp_dir') . '/modules');
+			AgaviConfig::set('core.module_dir', AgaviConfig::get('core.webapp_dir') . '/modules');
 			
-			AgaviConfig::set('core.templates_dir', AgaviConfig::get('core.templates_dir') . '/templates');
+			AgaviConfig::set('core.template_dir', AgaviConfig::get('core.template_dir') . '/templates');
 			
 			// ini settings
 			ini_set('magic_quotes_runtime', AgaviConfig::get('php.magic_quotes_runtime', false));

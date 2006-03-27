@@ -73,8 +73,8 @@
 	+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
 	<configuration environment="development">
 		<handlers>
-			<handler pattern="%core.modules_dir%/CoolModule/config/cool.xml">
-				<class file="%core.modules_dir%/CoolModule/lib/CoolConfigurationHandler.class.php">CoolConfigHandler</class>
+			<handler pattern="%core.module_dir%/CoolModule/config/cool.xml">
+				<class file="%core.module_dir%/CoolModule/lib/CoolConfigurationHandler.class.php">CoolConfigHandler</class>
 				<params>
 					<title>Cool Module</title>
 					<items>

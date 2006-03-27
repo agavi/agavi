@@ -96,7 +96,7 @@ class AgaviExecutionFilter extends AgaviFilter
 			$validated = true;
 
 			// get the current action validation configuration
-			$validationConfig = AgaviConfig::get('core.modules_dir') . '/' . $moduleName .
+			$validationConfig = AgaviConfig::get('core.module_dir') . '/' . $moduleName .
 						        '/validate/' . $actionName . '.ini';
 
 			if (is_readable($validationConfig))
@@ -157,7 +157,7 @@ class AgaviExecutionFilter extends AgaviFilter
 			{
 
 				// the requested view doesn't exist
-				$file = AgaviConfig::get('core.modules_dir') . '/' . $moduleName . '/views/' .
+				$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/views/' .
 						$viewName . 'View.class.php';
 
 				$error = 'Module "%s" does not contain the view "%sView" or ' .

@@ -272,7 +272,7 @@ class AgaviContext
 		// get the last action stack entry
 		$actionEntry = $this->actionStack->getLastEntry();
 
-		return AgaviConfig::get('core.modules_dir') . '/' . $actionEntry->getModuleName();
+		return AgaviConfig::get('core.module_dir') . '/' . $actionEntry->getModuleName();
 
 	}
 

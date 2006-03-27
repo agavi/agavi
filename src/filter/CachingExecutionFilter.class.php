@@ -201,7 +201,7 @@ class AgaviCachingExecutionFilter extends AgaviExecutionFilter
 		if(!isset($config[$moduleName])) {
 			try {
 				$config[$moduleName] = null;
-				$configFile = AgaviConfigCache::checkConfig(AgaviConfig::get('core.modules_dir') . '/' . $moduleName . '/config/caching.ini');
+				$configFile = AgaviConfigCache::checkConfig(AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/config/caching.ini');
 				$config[$moduleName] = include($configFile);
 			} catch(Exception $e) {
 			}
@@ -284,7 +284,7 @@ class AgaviCachingExecutionFilter extends AgaviExecutionFilter
 				// set default validated status
 				$validated = true;
 				// get the current action validation configuration
-				$validationConfig = AgaviConfig::get('core.modules_dir') . '/' . $moduleName .
+				$validationConfig = AgaviConfig::get('core.module_dir') . '/' . $moduleName .
 											'/validate/' . $actionName . '.ini';
 				if(is_readable($validationConfig)) {
 					// load validation configuration
@@ -320,7 +320,7 @@ class AgaviCachingExecutionFilter extends AgaviExecutionFilter
 				// display this view
 				if(!$controller->viewExists($moduleName, $viewName)) {
 					// the requested view doesn't exist
-					$file = AgaviConfig::get('core.modules_dir') . '/' . $moduleName . '/views/' .
+					$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/views/' .
 							$viewName . 'View.class.php';
 					$error = 'Module "%s" does not contain the view "%sView" or ' .
 							 'the file "%s" is unreadable';
