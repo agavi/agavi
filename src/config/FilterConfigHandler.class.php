@@ -96,8 +96,6 @@ class AgaviFilterConfigHandler extends AgaviIniConfigHandler
 			}
 		}
 
-		var_dump($filters);
-
 		$data = array();
 		$data[] = '$this->setExecutionFilterClassName("' . $filters['execution_filter'] . '");';
 
