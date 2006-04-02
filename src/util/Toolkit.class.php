@@ -147,7 +147,7 @@ class Toolkit
 	 */
 	public static function clearCache($path = '')
 	{
-		$ignores = array('.', '..', '.svn', 'CVS');
+		$ignores = array('.', '..', '.svn', 'CVS', '_darcs', '.arch-params', '.monotone', '.bzr');
 		static $SPL_RIT_CHILD_FIRST = null;
 		if(!isset($SPL_RIT_CHILD_FIRST)) {
 			if(defined('RecursiveIteratorIterator::CHILD_FIRST')) {
