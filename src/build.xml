@@ -201,10 +201,7 @@
 		<fail unless="has_actiontests" message="Could not find action tests directory: ${moduletests.dir}"/>
 		<mkdir dir="${moduletests.dir}/actions"/>
 	
-		<echo msg="${templates.dir.current}" />
-		<echo msg="${templates.dir.default}" />
 		<property name="templates.dir.current" value="${templates.dir.default}" override="true" />
-		<echo msg="${templates.dir.current}" />
 		<available file="${templates.dir}/ActionTest.class.php.tmpl" property="templates.dir.current" value="${templates.dir}" />
 		<available file="${templates.dir}/modules/${module}/ActionTest.class.php.tmpl" property="templates.dir.current" value="${templates.dir}/modules/${module}" />				
 		<copy file="${templates.dir.current}/ActionTest.class.php.tmpl" tofile="${moduletests.dir}/actions/${actionPath}ActionTest.class.php" overwrite="false">
@@ -240,8 +237,8 @@
 			</filterchain>
 		</copy>
 		<property name="templates.dir.current" value="${templates.dir.default}" override="true" />
-		<available file="${templates.dir}/Template.class.php.tmpl" property="templates.dir.current" value="${templates.dir}" />
-		<available file="${templates.dir}/modules/${module}/Template.class.php.tmpl" property="templates.dir.current" value="${templates.dir}/modules/${module}" />				
+		<available file="${templates.dir}/Template.php.tmpl" property="templates.dir.current" value="${templates.dir}" />
+		<available file="${templates.dir}/modules/${module}/Template.php.tmpl" property="templates.dir.current" value="${templates.dir}/modules/${module}" />				
 		<copy file="${templates.dir.current}/Template.php.tmpl" tofile="${module.dir}/templates/${actionPath}${view}.php">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">    
