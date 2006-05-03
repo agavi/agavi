@@ -40,6 +40,8 @@ class AgaviContext
 		$controller       = null,
 		$databaseManager  = null,
 		$loggerManager    = null,
+		$outputType       = null,
+		$outputTypes      = array(),
 		$request          = null,
 		$securityFilter   = null,
 		$storage          = null,

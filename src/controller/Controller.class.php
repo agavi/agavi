@@ -36,8 +36,68 @@ abstract class AgaviController extends AgaviParameterHolder
 
 	protected
 		$context         = null,
-		$shutdownList	 = null;
+		$shutdownList    = null,
+		$outputType      = null,
+		$outputTypes     = array();
 
+	/**
+	 * Sets an output type for this response.
+	 *
+	 * @param      string The output type name.
+	 *
+	 * @return     void
+	 *
+	 * @throws     <b>AgaviException</b> If the given output type doesnt exist.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function setOutputType($outputType)
+	{
+		if(isset($this->outputTypes[$outputType])) {
+			$this->outputType = $outputType;
+			return;
+		} else {
+			throw new AgaviException('Output Type "' . $outputType . '" has not been configured.');
+		}
+	}
+
+	/**
+	 * Retrieves the output type name set for this response.
+	 *
+	 * @return     string The name of the output type.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getOutputType()
+	{
+		return $this->outputType;
+	}
+
+	/**
+	 * Retrieve configuration details about an output type.
+	 *
+	 * @param      string The output type name.
+	 *
+	 * @return     array An associative array of output type settings and params.
+	 *
+	 * @throws     <b>AgaviException</b> If the given output type doesnt exist.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getOutputTypeInfo($outputType = null)
+	{
+		if($outputType === null) {
+			$outputType = $this->outputType;
+		}
+		if(isset($this->outputTypes[$outputType])) {
+			return $this->outputTypes[$outputType];
+		} else {
+			throw new AgaviException('Output Type "' . $outputType . '" has not been configured.');
+		}
+	}
 
 	/**
 	 * Indicates whether or not a module has a specific action.
@@ -146,7 +206,7 @@ abstract class AgaviController extends AgaviParameterHolder
 
 		// include the module configuration
 		AgaviConfigCache::import(AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/config/module.xml');
-		$enabled_str = 'MOD_' . strtoupper($moduleName) . '_ENABLED';
+
 		if(AgaviConfig::get('modules.' . strtolower($moduleName) . '.enabled')) {
 
 			// check for a module config.php
@@ -503,6 +563,9 @@ abstract class AgaviController extends AgaviParameterHolder
 	{
 		$this->maxForwards = AgaviConfig::get('controller.max_forwards', 20);
 		$this->context = $context;
+		
+		$cfg = AgaviConfig::get('core.config_dir') . '/output_types.xml';
+		require_once(AgaviConfigCache::checkConfig($cfg, $context->getName()));
 
 		register_shutdown_function(array($this, 'shutdown'));
 	}

@@ -27,7 +27,7 @@
  */
 abstract class AgaviInflector
 {
-	protected static $singularMatches		= array(
+	protected static $singularMatches = array(
 		'/move$/i' => 'moves',
 		'/sex$/i' => 'sexes',
 		'/child$/i' => 'children',
@@ -53,7 +53,7 @@ abstract class AgaviInflector
 		'/$/' => 's',
 	);
 
-	protected static $pluralMatches			= array(
+	protected static $pluralMatches = array(
 		'/moves$/i' => 'move',
 		'/sexes$/i' => 'sex',
 		'/children$/i' => 'child',
@@ -85,7 +85,7 @@ abstract class AgaviInflector
 		'/s$/i' => '',
 	);
 
-	protected static $uncountables			= array(
+	protected static $uncountables = array(
 		'equipment',
 		'information',
 		'rice',
@@ -108,11 +108,11 @@ abstract class AgaviInflector
 	 */
 	public static function singularize($word)
 	{
-		if (in_array($word, self::$uncountables)) {
+		if(in_array($word, self::$uncountables)) {
 			return $word;
 		}
 
-		foreach (self::$pluralMatches as $regexp => $replacement) {
+		foreach(self::$pluralMatches as $regexp => $replacement) {
 			if (preg_match($regexp, $word)) {
 				$word = preg_replace($regexp, $replacement, $word);
 				break;
@@ -133,11 +133,11 @@ abstract class AgaviInflector
 	 */
 	public static function pluralize($word)
 	{
-		if (in_array($word, self::$uncountables)) {
+		if(in_array($word, self::$uncountables)) {
 			return $word;
 		}
 
-		foreach (self::$singularMatches as $regexp => $replacement) {
+		foreach(self::$singularMatches as $regexp => $replacement) {
 			if (preg_match($regexp, $word)) {
 				$word = preg_replace($regexp, $replacement, $word);
 				break;

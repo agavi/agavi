@@ -28,7 +28,7 @@
  *
  * @version    $Id$
  */
-abstract class AgaviRequest extends AgaviParameterHolder
+abstract class AgaviRequest extends AgaviAttributeHolder
 {
 
 	// +-----------------------------------------------------------------------+
@@ -66,22 +66,20 @@ abstract class AgaviRequest extends AgaviParameterHolder
 	protected
 		$attributes = array(),
 		$errors     = array(),
-		$method     = null;
+		$method     = null,
+		$context    = null;
 
 	/**
-	 * Clear all attributes associated with this request.
+	 * Retrieve the current application context.
 	 *
-	 * @return     void
+	 * @return     Context A Context instance.
 	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
 	 */
-	public function clearAttributes ()
+	public function getContext()
 	{
-
-		$this->attributes = null;
-		$this->attributes = array();
-
+		return $this->context;
 	}
 
 	/**
@@ -98,9 +96,8 @@ abstract class AgaviRequest extends AgaviParameterHolder
 	 * @author     Mike Vincent <mike@agavi.org>
 	 * @since      0.9.0
 	 */
-	public function & extractParameters ($names)
+	public function & extractParameters($names)
 	{
-
 		$array = array();
 		foreach ((array) $names as $name) {
 			if (array_key_exists($name, $this->parameters)) {
@@ -113,121 +110,6 @@ abstract class AgaviRequest extends AgaviParameterHolder
 	}
 
 	/**
-	 * Retrieve an attribute.
-	 *
-	 * @param      string An attribute name.
-	 * @param      string An attribute namespace.
-	 * @param      mixed  A default attribute value.
-	 *
-	 * @return     mixed An attribute value, if the attribute exists, otherwise
-	 *                   null.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @author     Bob Zoller <bob@agavi.org>
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.9.0
-	 */
-	public function &getAttribute($name, $ns = null, $default = null)
-	{
-		if($ns === null) {
-			$ns = AgaviConfig::get('request.default_namespace');
-		}
-		
-		$retval =& $default;
-
-		if (isset($this->attributes[$ns]) && isset($this->attributes[$ns][$name])) {
-			$retval =& $this->attributes[$ns][$name];
-		}
-
-		return $retval;
-	}
-
-	/**
-	 * Retrieve an array of attributes.
-	 *
-	 * @param      string An attribute namespace.
-	 *
-	 * @return     array An associative array of attributes.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @author     Bob Zoller <bob@agavi.org>
-	 * @since      0.10.0
-	 */
-	public function &getAttributes($ns = null)
-	{
-		if($ns === null) {
-			$ns = AgaviConfig::get('request.default_namespace');
-		}
-		
-		$retval = array();
-		if(isset($this->attributes[$ns])) {
-			return $this->attributes[$ns];
-		}
-		return $retval;
-	}
-
-	/**
-	 * Retrieve an array of attribute names.
-	 *
-	 * @param      string An attribute namespace.
-	 *
-	 * @return     array An indexed array of attribute names, if the namespace
-	 *                   exists, otherwise null.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function getAttributeNames($ns = null)
-	{
-		if($ns === null) {
-			$ns = AgaviConfig::get('request.default_namespace');
-		}
-		
-		if(isset($this->attributes[$ns])) {
-			return array_keys($this->attributes[$ns]);
-		}
-		return null;
-	}
-
-	/**
-	 * Retrieve all attributes within a namespace.
-	 *
-	 * @param      string An attribute namespace.
-	 *
-	 * @return     array An associative array of attributes if the namespace
-	 *                   exists, otherwise null.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.11.0
-	 */
-	public function &getAttributeNamespace($ns = null)
-	{
-		if($ns === null) {
-			$ns = AgaviConfig::get('request.default_namespace');
-		}
-		
-		$retval = null;
-		if(isset($this->attributes[$ns])) {
-			return $this->attributes[$ns];
-		}
-		return $retval;
-	}
-
-	/**
-	 * Retrieve an array of attribute namespaces.
-	 *
-	 * @return     array An indexed array of attribute namespaces.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function getAttributeNamespaces()
-	{
-		return array_keys($this->attributes);
-	}
-
-	/**
 	 * Retrieve an error message.
 	 *
 	 * @param      string An error name.
@@ -237,9 +119,8 @@ abstract class AgaviRequest extends AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function getError ($name)
+	public function getError($name)
 	{
-
 		$retval = null;
 
 		if (isset($this->errors[$name]))
@@ -250,7 +131,6 @@ abstract class AgaviRequest extends AgaviParameterHolder
 		}
 
 		return $retval;
-
 	}
 
 	/**
@@ -261,11 +141,9 @@ abstract class AgaviRequest extends AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function getErrorNames ()
+	public function getErrorNames()
 	{
-
 		return array_keys($this->errors);
-
 	}
 
 	/**
@@ -276,11 +154,9 @@ abstract class AgaviRequest extends AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function getErrors ()
+	public function getErrors()
 	{
-
 		return $this->errors;
-
 	}
 
 	/**
@@ -294,53 +170,9 @@ abstract class AgaviRequest extends AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function getMethod ()
+	public function getMethod()
 	{
-
 		return $this->method;
-
-	}
-
-	/**
-	 * Indicates whether or not an attribute exists.
-	 *
-	 * @param      string An attribute name.
-	 * @param      string An attribute namespace.
-	 *
-	 * @return     bool true, if the attribute exists, otherwise false.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function hasAttribute ($name, $ns = null)
-	{
-		if($ns === null) {
-			$ns = AgaviConfig::get('request.default_namespace');
-		}
-		
-		if(isset($this->attributes[$ns]))
-		{
-			return isset($this->attributes[$ns][$name]);
-		}
-		
-		return false;
-	}
-
-	/**
-	 * Indicates whether or not an attribute namespace exists.
-	 *
-	 * @param      string An attribute namespace.
-	 *
-	 * @return     bool true, if the namespace exists, otherwise false.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function hasAttributeNamespace ($ns)
-	{
-		return isset($this->attributes[$ns]);
 	}
 
 	/**
@@ -353,7 +185,7 @@ abstract class AgaviRequest extends AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function hasError ($name)
+	public function hasError($name)
 	{
 		return isset($this->errors[$name]);
 	}
@@ -367,7 +199,7 @@ abstract class AgaviRequest extends AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function hasErrors ()
+	public function hasErrors()
 	{
 		return (count($this->errors) > 0);
 	}
@@ -384,10 +216,17 @@ abstract class AgaviRequest extends AgaviParameterHolder
 	 * @throws     <b>AgaviInitializationException</b> If an error occurs while
 	 *                                                 initializing this Request.
 	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
-	abstract function initialize ($context, $parameters = null);
+	function initialize($context, $parameters = null)
+	{
+		$this->context = $context;
+		
+		$this->defaultNamespace = AgaviConfig::get('request.default_namespace', $this->defaultNamespace);
+		
+		return true;
+	}
 
 	/**
 	 * Retrieve a new Request implementation instance.
@@ -402,9 +241,8 @@ abstract class AgaviRequest extends AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public static function newInstance ($class)
+	public static function newInstance($class)
 	{
-
 		// the class exists
 		$object = new $class();
 
@@ -420,7 +258,6 @@ abstract class AgaviRequest extends AgaviParameterHolder
 		}
 
 		return $object;
-
 	}
 
 	/**
@@ -435,9 +272,8 @@ abstract class AgaviRequest extends AgaviParameterHolder
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
-	public function removeError ($name)
+	public function removeError($name)
 	{
-
 		$retval = null;
 
 		if (isset($this->errors[$name]))
@@ -450,263 +286,6 @@ abstract class AgaviRequest extends AgaviParameterHolder
 		}
 
 		return $retval;
-
-	}
-
-	/**
-	 * Remove an attribute.
-	 *
-	 * @param      string An attribute name.
-	 * @param      string An attribute namespace.
-	 *
-	 * @return     mixed An attribute value, if the attribute was removed,
-	 *                   otherwise null.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.9.0
-	 */
-	public function & removeAttribute ($name, $ns = null)
-	{
-		if($ns === null) {
-			$ns = AgaviConfig::get('request.default_namespace');
-		}
-		
-		$retval = null;
-
-		if (isset($this->attributes[$ns]) &&
-			isset($this->attributes[$ns][$name]))
-		{
-
-			$retval =& $this->attributes[$ns][$name];
-
-			unset($this->attributes[$ns][$name]);
-
-		}
-
-		return $retval;
-
-	}
-
-	/**
-	 * Remove an attribute namespace and all of its associated attributes.
-	 *
-	 * @param      string An attribute namespace.
-	 *
-	 * @return     void
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.10.0
-	 */
-	public function removeAttributeNamespace ($ns)
-	{
-
-		if (isset($this->attributes[$ns]))
-		{
-
-			unset($this->attributes[$ns]);
-
-		}
-
-	}
-
-	/**
-	 * Set an attribute.
-	 *
-	 * If an attribute with the name already exists the value will be
-	 * overridden.
-	 *
-	 * @param      string An attribute name.
-	 * @param      mixed  An attribute value.
-	 * @param      string An attribute namespace.
-	 *
-	 * @return     void
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.9.0
-	 */
-	public function setAttribute($name, $value, $ns = null)
-	{
-		if($ns === null) {
-			$ns = AgaviConfig::get('request.default_namespace');
-		}
-		
-		if (!isset($this->attributes[$ns])) {
-			$this->attributes[$ns] = array();
-		}
-
-		$this->attributes[$ns][$name] = $value;
-
-	}
-
-	/**
-	 * Append an attribute.
-	 *
-	 * If an attribute with the name already exists, it will be converted to an
-	 * array and the new value appended.
-	 *
-	 * @param      string An attribute name.
-	 * @param      mixed  An attribute value.
-	 * @param      string An attribute namespace.
-	 *
-	 * @return     void
-	 *
-	 * @author     Bob Zoller <bob@agavi.org>
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.10.0
-	 */
-	public function appendAttribute($name, $value, $ns = null)
-	{
-		if($ns === null) {
-			$ns = AgaviConfig::get('request.default_namespace');
-		}
-		
-		if (!isset($this->attributes[$ns])) {
-			$this->attributes[$ns] = array();
-		}
-
-		if (!isset($this->attributes[$ns][$name]) || !is_array($this->attributes[$ns][$name])) {
-			settype($this->attributes[$ns][$name], 'array');
-		}
-		$this->attributes[$ns][$name][] = $value;
-
-	}
-
-	/**
-	 * Set an attribute by reference.
-	 *
-	 * If an attribute with the name already exists the value will be
-	 * overridden.
-	 *
-	 * @param      string An attribute name.
-	 * @param      mixed  A reference to an attribute value.
-	 * @param      string An attribute namespace.
-	 *
-	 * @return     void
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.9.0
-	 */
-	public function setAttributeByRef($name, &$value, $ns = null)
-	{
-		if($ns === null) {
-			$ns = AgaviConfig::get('request.default_namespace');
-		}
-		
-		if (!isset($this->attributes[$ns])) {
-			$this->attributes[$ns] = array();
-		}
-
-		$this->attributes[$ns][$name] =& $value;
-
-	}
-
-	/**
-	 * Append an attribute by reference.
-	 *
-	 * If an attribute with the name already exists, it will be converted to an
-	 * array and the reference to the new value appended.
-	 *
-	 * @param      string An attribute name.
-	 * @param      mixed  A reference to an attribute value.
-	 * @param      string An attribute namespace.
-	 *
-	 * @return     void
-	 *
-	 * @author     Bob Zoller <bob@agavi.org>
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.10.0
-	 */
-	public function appendAttributeByRef($name, &$value, $ns = null)
-	{
-		if($ns === null) {
-			$ns = AgaviConfig::get('request.default_namespace');
-		}
-		
-		if (!isset($this->attributes[$ns])) {
-			$this->attributes[$ns] = array();
-		}
-
-		if (!isset($this->attributes[$ns][$name]) || !is_array($this->attributes[$ns][$name])) {
-			settype($this->attributes[$ns][$name], 'array');
-		}
-		$this->attributes[$ns][$name][] =& $value;
-
-	}
-
-	/**
-	 * Set an array of attributes.
-	 *
-	 * If an existing attribute name matches any of the keys in the supplied
-	 * array, the associated value will be overridden.
-	 *
-	 * @param      array  An associative array of attributes and their
-	 *                    associated values.
-	 * @param      string An attribute namespace.
-	 *
-	 * @return     void
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.9.0
-	 */
-	public function setAttributes ($attributes, $ns = null)
-	{
-		if($ns === null) {
-			$ns = AgaviConfig::get('request.default_namespace');
-		}
-		
-		if (!isset($this->attributes[$ns]))
-		{
-
-			$this->attributes[$ns] = array();
-
-		}
-
-		$this->attributes[$ns] = array_merge($this->attributes[$ns],
-						                     $attributes);
-
-	}
-
-	/**
-	 * Set an array of attributes by reference.
-	 *
-	 * If an existing attribute name matches any of the keys in the supplied
-	 * array, the associated value will be overridden.
-	 *
-	 * @param      array  An associative array of attributes and references to
-	 *                    their associated values.
-	 * @param      string An attribute namespace.
-	 *
-	 * @return     void
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.9.0
-	 */
-	public function setAttributesByRef (&$attributes, $ns = null)
-	{
-		if($ns === null) {
-			$ns = AgaviConfig::get('request.default_namespace');
-		}
-		
-		if (!isset($this->attributes[$ns]))
-		{
-
-			$this->attributes[$ns] = array();
-
-		}
-
-		foreach ($attributes as $key => &$value)
-		{
-
-			$this->attributes[$ns][$key] =& $value;
-
-		}
-
 	}
 
 	/**
@@ -720,11 +299,9 @@ abstract class AgaviRequest extends AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function setError ($name, $message)
+	public function setError($name, $message)
 	{
-
 		$this->errors[$name] = $message;
-
 	}
 
 
@@ -742,11 +319,9 @@ abstract class AgaviRequest extends AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function setErrors ($errors)
+	public function setErrors($errors)
 	{
-
 		$this->errors = array_merge($this->errors, $errors);
-
 	}
 
 	/**
@@ -765,9 +340,8 @@ abstract class AgaviRequest extends AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function setMethod ($method)
+	public function setMethod($method)
 	{
-
 		if ($method == self::GET || $method == self::POST || $method == self::CONSOLE)
 		{
 
@@ -782,7 +356,6 @@ abstract class AgaviRequest extends AgaviParameterHolder
 		$error = sprintf($error, $method);
 
 		throw new AgaviException($error);
-
 	}
 
 	/**
@@ -793,7 +366,7 @@ abstract class AgaviRequest extends AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	abstract function shutdown ();
+	abstract function shutdown();
 
 }
 

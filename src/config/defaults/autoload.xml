@@ -30,6 +30,7 @@
 			<autoload name="AgaviFilterConfigHandler">%core.app_dir%/config/FilterConfigHandler.class.php</autoload>
 			<autoload name="AgaviLoggingConfigHandler">%core.app_dir%/config/LoggingConfigHandler.class.php</autoload>
 			<autoload name="AgaviModuleConfigHandler">%core.app_dir%/config/ModuleConfigHandler.class.php</autoload>
+			<autoload name="AgaviOutputTypeConfigHandler">%core.app_dir%/config/AgaviOutputTypeConfigHandler.class.php</autoload>
 			<autoload name="AgaviReturnArrayConfigHandler">%core.app_dir%/config/ReturnArrayConfigHandler.class.php</autoload>
 			<autoload name="AgaviValidatorConfigHandler">%core.app_dir%/config/ValidatorConfigHandler.class.php</autoload>
 
@@ -87,6 +88,12 @@
 			<autoload name="AgaviModel">%core.app_dir%/model/Model.class.php</autoload>
 			<autoload name="AgaviSingletonModel">%core.app_dir%/model/SingletonModel.class.php</autoload>
 
+			<!-- agavi/renderer -->
+			<autoload name="AgaviPHPTALRenderer">%core.app_dir%/renderer/AgaviPHPTALRenderer.class.php</autoload>
+			<autoload name="AgaviPHPRenderer">%core.app_dir%/renderer/AgaviPHPRenderer.class.php</autoload>
+			<autoload name="AgaviSmartyRenderer">%core.app_dir%/renderer/AgaviSmartyRenderer.class.php</autoload>
+			<autoload name="AgaviXSLRenderer">%core.app_dir%/renderer/AgaviXSLRenderer.class.php</autoload>
+
 			<!-- agavi/request -->
 			<autoload name="AgaviConsoleRequest">%core.app_dir%/request/ConsoleRequest.class.php</autoload>
 			<autoload name="AgaviHTTPSRequest">%core.app_dir%/request/HTTPSRequest.class.php</autoload>
@@ -108,12 +115,6 @@
 			<autoload name="AgaviNumberValidator">%core.app_dir%/validator/NumberValidator.class.php</autoload>
 			<autoload name="AgaviRegexValidator">%core.app_dir%/validator/RegexValidator.class.php</autoload>
 			<autoload name="AgaviStringValidator">%core.app_dir%/validator/StringValidator.class.php</autoload>
-
-			<!-- agavi/view -->
-			<autoload name="AgaviPHPTALView">%core.app_dir%/view/PHPTALView.class.php</autoload>
-			<autoload name="AgaviPHPView">%core.app_dir%/view/PHPView.class.php</autoload>
-			<autoload name="AgaviSmartyView">%core.app_dir%/view/SmartyView.class.php</autoload>
-			<autoload name="AgaviXSLView">%core.app_dir%/view/XSLView.class.php</autoload>
 		</autoloads>
 	</configuration>
 </configurations>

@@ -97,6 +97,10 @@
 				<class>AgaviFilterConfigHandler</class>
 			</handler>
 
+			<handler pattern="%core.config_dir%/output_types.xml">
+				<class>AgaviOutputTypeConfigHandler</class>
+			</handler>
+
 			<handler pattern="%core.config_dir%/logging.xml">
 				<class>AgaviLoggingConfigHandler</class>
 			</handler>

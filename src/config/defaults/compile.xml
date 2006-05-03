@@ -39,9 +39,11 @@
 			<compile>%core.app_dir%/logging/LoggerManager.class.php</compile>
 			<compile>%core.app_dir%/logging/Message.class.php</compile>
 			<compile>%core.app_dir%/logging/PassthruLayout.class.php</compile>
+			<compile>%core.app_dir%/renderer/AgaviRenderer.class.php</compile>
 			<compile>%core.app_dir%/request/Request.class.php</compile>
 			<compile>%core.app_dir%/storage/Storage.class.php</compile>
 			<compile>%core.app_dir%/user/User.class.php</compile>
+			<compile>%core.app_dir%/util/AgaviAttributeHolder.class.php</compile>
 			<compile>%core.app_dir%/validator/Validator.class.php</compile>
 			<compile>%core.app_dir%/validator/ValidatorManager.class.php</compile>
 			<compile>%core.app_dir%/view/View.class.php</compile>

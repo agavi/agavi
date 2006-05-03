@@ -107,7 +107,7 @@ abstract class AgaviAction
 	public function getDefaultView ()
 	{
 
-		return AgaviView::INPUT;
+		return 'Input';
 
 	}
 
@@ -146,7 +146,7 @@ abstract class AgaviAction
 	public function handleError ()
 	{
 
-		return AgaviView::ERROR;
+		return 'Error';
 
 	}
 

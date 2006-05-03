@@ -379,6 +379,10 @@ abstract class AgaviWebController extends AgaviController
 			header($this->httpStatusCodes[$this->httpStatusCode]);
 		}
 		
+		if($this->getContentType() === null && isset($this->outputTypes[$this->outputType]['parameters']['Content-Type'])) {
+			$this->setContentType($this->outputTypes[$this->outputType]['parameters']['Content-Type']);
+		}
+		
 		// send headers
 		foreach($this->headers as $name => $values) {
 			foreach($values as $key => $value) {
@@ -420,7 +424,7 @@ abstract class AgaviWebController extends AgaviController
 		$this->cookieConfig['secure']   = isset($parameters['cookie_secure'])   ? $parameters['cookie_secure']   : 0;
 
 		// set our content type
-		$this->setContentType(AgaviConfig::get('controller.content_type', 'text/html'));
+//		$this->setContentType(AgaviConfig::get('controller.content_type', 'text/html'));
 
 	}
 

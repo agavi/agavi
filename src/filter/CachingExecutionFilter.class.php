@@ -308,7 +308,7 @@ class AgaviCachingExecutionFilter extends AgaviExecutionFilter
 				}
 			}
 			$returnedViewName = $viewName;
-			if($viewName != AgaviView::NONE) {
+			if($viewName != null) {
 				if(is_array($viewName)) {
 					// we're going to use an entirely different action for this view
 					$moduleName = $viewName[0];

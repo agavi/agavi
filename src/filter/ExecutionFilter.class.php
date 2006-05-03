@@ -134,7 +134,7 @@ class AgaviExecutionFilter extends AgaviFilter
 
 		}
 
-		if ($viewName != AgaviView::NONE)
+		if ($viewName != null)
 		{
 
 			if (is_array($viewName))
@@ -177,11 +177,33 @@ class AgaviExecutionFilter extends AgaviFilter
 			{
 
 				// view initialization completed successfully
-				$viewInstance->execute();
+				$renderer = $viewInstance->execute();
+				
+				if($renderer === null) {
+					while(true) {
+						$oti= $controller->getOutputTypeInfo();
+						$renderer = new $oti['renderer']();
+						if(isset($oti['extension'])) {
+							$renderer->setExtension($oti['extension']);
+						}
+						$renderer->setView($viewInstance);
 
-				// render the view and if data is returned, stick it in the
-				// action entry which was retrieved from the execution chain
-				$viewData =& $viewInstance->render();
+						try {
+							// render the view and if data is returned, stick it in the
+							// action entry which was retrieved from the execution chain
+							$viewData =& $renderer->render();
+							break;
+						} catch(AgaviRenderException $e) {
+							if(isset($oti['fallback'])) {
+								$controller->setOutputType($oti['fallback']);
+							} else {
+								throw $e;
+							}
+						}
+					}
+				} else {
+					$viewData =& $renderer->render();
+				}
 
 				if ($controller->getRenderMode() == AgaviView::RENDER_VAR)
 				{
