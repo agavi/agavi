@@ -63,12 +63,39 @@ class AgaviOutputTypeConfigHandler extends AgaviConfigHandler
 			if($ctx != $context) {
 					continue;
 			}
+			
+			$otnames = array();
+			foreach($cfg->output_types as $outputType) {
+				if(!$outputType->hasAttribute('name')) {
+					throw new AgaviConfigurationException('No name specified for an Output Type in ' . $config);
+				}
+				$otname = $outputType->getAttribute('name');
+				if(in_array($otname, $otnames)) {
+					throw new AgaviConfigurationException('Duplicate Output Type "' . $otname . '" in ' . $config);
+				}
+				if(!isset($outputType->renderer)) {
+					throw new AgaviConfigurationException('No renderer specified for Output Type "' . $outputType->getAttribute('name') . '" in ' . $config);
+				}
+				$otnames[] = $otname;
+			}
+			
+			if(!$cfg->output_types->hasAttribute('default')) {
+				throw new AgaviConfigurationException('No default Output Type specified in ' . $config);
+			}
+			
+			if(!in_array($cfg->output_types->getAttribute('default'), $otnames)) {
+				throw new AgaviConfigurationException('Non-existent Output Type "' . $cfg->output_types->getAttribute('default') . '" specified as default in ' . $config);
+			}
 
 			foreach($cfg->output_types as $outputType) {
 				$code .= "\$this->outputTypes['" . $outputType->getAttribute('name') . "'] = array(\n";
 				$code .= "  'renderer' => '" . $outputType->renderer->getValue() . "',\n";
 				if($outputType->hasAttribute('fallback')) {
-					$code .= "  'fallback' => '" . ($outputType->getAttribute('fallback') == 'default' ? $cfg->output_types->getAttribute('default') : $outputType->getAttribute('fallback')) . "', \n";
+					$fallback = $outputType->getAttribute('fallback');
+					if(!in_array($fallback, $otnames)) {
+						throw new AgaviConfigurationException('Output Type "' . $outputType->getAttribute('name') . '" is configured to fall back to non-existent Output Type "' . $fallback . '" in ' . $config);
+					}
+					$code .= "  'fallback' => '" . ($fallback == 'default' ? $cfg->output_types->getAttribute('default') : $fallback) . "', \n";
 				}
 				if($outputType->renderer->hasAttribute('extension')) {
 					$code .= "  'extension' => '" . $outputType->renderer->getAttribute('extension') . "', \n";
