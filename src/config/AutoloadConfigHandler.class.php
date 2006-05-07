@@ -52,7 +52,7 @@ class AgaviAutoloadConfigHandler extends AgaviConfigHandler
 
 		$data = $this->parseFile($config);
 		if(($sysConfDir = AgaviConfig::get('core.system_config_dir'))) {
-			$data = array_merge($data, $this->parseFile($sysConfDir . '/autoload.xml'));
+			$data = array_merge($this->parseFile($sysConfDir . '/autoload.xml'), $data);
 		}
 
 		$code = 'Agavi::setAutoloads(' . var_export($data, true) . ');';

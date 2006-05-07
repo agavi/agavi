@@ -49,7 +49,7 @@ class AgaviConfigHandlersConfigHandler extends AgaviConfigHandler
 	{
 		$data = $this->parseFile($config);
 		if(($sysConfDir = AgaviConfig::get('core.system_config_dir'))) {
-			$data = array_merge($data, $this->parseFile($sysConfDir . '/config_handlers.xml'));
+			$data = array_merge($this->parseFile($sysConfDir . '/config_handlers.xml'), $data);
 		}
 
 
