@@ -32,7 +32,7 @@
 		<controller>
 			<class>AgaviFrontWebController</class>
 			<settings>
-				<setting name="content_type">text/html</setting>
+				<setting name="max_forwards">20</setting>
 			</settings>
 		</controller>
 		

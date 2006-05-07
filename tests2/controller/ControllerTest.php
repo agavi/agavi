@@ -238,12 +238,6 @@ class ControllerTest extends AgaviTestCase
 		$this->assertEquals((php_sapi_name() == 'cli'), $controller->inCLI());
 	}
 	
-	public function testgetContentType()
-	{
-		$controller = AgaviContext::getInstance()->getController();
-		$this->assertEquals($controller->getContentType(), AgaviConfig::get('controller.content_type'));
-	}
-	
 	public function testsetContentType()
 	{
 		$controller = AgaviContext::getInstance()->getController();

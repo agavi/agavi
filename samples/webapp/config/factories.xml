@@ -31,9 +31,6 @@
 		
 		<controller>
 			<class>AgaviFrontWebController</class>
-			<settings>
-				<setting name="content_type">text/html</setting>
-			</settings>
 		</controller>
 		
 		<database_manager>

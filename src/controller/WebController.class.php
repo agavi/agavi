@@ -423,9 +423,6 @@ abstract class AgaviWebController extends AgaviController
 		$this->cookieConfig['domain']   = isset($parameters['cookie_domain'])   ? $parameters['cookie_domain']   : "";
 		$this->cookieConfig['secure']   = isset($parameters['cookie_secure'])   ? $parameters['cookie_secure']   : 0;
 
-		// set our content type
-//		$this->setContentType(AgaviConfig::get('controller.content_type', 'text/html'));
-
 	}
 
 	/**

@@ -18,7 +18,6 @@ AgaviConfig::set('core.available', 'On');
 AgaviConfig::set('core.use_database', true);
 AgaviConfig::set('core.use_security', true);
 AgaviConfig::set('core.use_logging', true);
-AgaviConfig::set('controller.content_type', 'text/html');
 AgaviConfig::set('user.default_namespace', 'org.agavi');
 AgaviConfig::set('user.request_namespace', 'org.agavi');
 AgaviConfig::set('request.url_format', 'GET');

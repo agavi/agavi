@@ -243,12 +243,6 @@ class ControllerTest extends UnitTestCase
 		$this->assertEqual((php_sapi_name() == 'cli'), $controller->inCLI());
 	}
 	
-	public function testgetContentType()
-	{
-		$controller = Context::getInstance()->getController();
-		$this->assertEqual($controller->getContentType(), AgaviConfig::get('controller.content_type'));
-	}
-	
 	public function testsetContentType()
 	{
 		$controller = Context::getInstance()->getController();
