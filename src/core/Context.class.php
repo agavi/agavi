@@ -188,16 +188,24 @@ class AgaviContext
 	 */
 	public static function getInstance($profile = null)
 	{
-		if($profile === null) {
-			$profile = AgaviConfig::get('core.default_context', 'stdctx');
+		try {
+			if($profile === null) {
+				$profile = AgaviConfig::get('core.default_context', 'stdctx');
+			}
+			$profile = strtolower($profile);
+			if (!isset(self::$instances[$profile])) {
+				$class = __CLASS__;
+				self::$instances[$profile] = new $class;
+				self::$instances[$profile]->initialize($profile);
+			}
+			return self::$instances[$profile];
+		} catch (AgaviException $e) {
+			$e->printStackTrace();
+		} catch (Exception $e) {
+			// unknown exception
+			$e = new AgaviException($e->getMessage());
+			$e->printStackTrace();
 		}
-		$profile = strtolower($profile);
-		if (!isset(self::$instances[$profile])) {
-			$class = __CLASS__;
-			self::$instances[$profile] = new $class;
-			self::$instances[$profile]->initialize($profile);
-		}
-		return self::$instances[$profile];
 	}
 	
 	/**
