@@ -93,7 +93,7 @@ class AgaviTestTask extends Task {
 		}
 		$testcode = '
 <?php
-AgaviConfig::set("core.app_dir", "' . $this->agavidir . '"); // where the agavi installation resides
+AgaviConfig::set("core.agavi_dir", "' . $this->agavidir . '"); // where the agavi installation resides
 AgaviConfig::set("tests.dir", "' . $this->testdir . '"); // where the main tests dir resides
 AgaviConfig::set("tests.reporter", "' . ($this->reporter ? $this->reporter : "text") . '"); // which reporter to use for reporting results
 AgaviConfig::set("tests.startpoint", "' . ($this->startpoint ? $this->testdir ."/".$this->startpoint : $this->testdir) . '"); // where to begin looking for tests, relative to TESTSDIR
@@ -109,7 +109,7 @@ require_once("simpletest/unit_tester.php");
 require_once("simpletest/reporter.php");
 require_once("simpletest/mock_objects.php");
 @include_once(AgaviConfig::get("tests.dir") . "/test_environment.php"); // we probably defined our webapp location, etc in here. 
-require_once(AgaviConfig::get("core.app_dir") . "/buildtools/test_setup.php");
+require_once(AgaviConfig::get("core.agavi_dir") . "/buildtools/test_setup.php");
 @include_once("simpletest/ui/colortext_reporter.php");
 @include_once("buildtools/simpletest/vimreporter.class.php");
 

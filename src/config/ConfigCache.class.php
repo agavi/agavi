@@ -231,10 +231,10 @@ class AgaviConfigCache
 	{
 		// since we only need the parser and handlers when the config is not cached
 		// it is sufficient to include them at this stage 
-		require_once(AgaviConfig::get('core.app_dir') . '/config/ConfigHandlersConfigHandler.class.php');
-		require_once(AgaviConfig::get('core.app_dir') . '/config/ConfigValueHolder.class.php');
-		require_once(AgaviConfig::get('core.app_dir') . '/config/ConfigParser.class.php');
-		require_once(AgaviConfig::get('core.app_dir') . '/config/XmlConfigParser.class.php');
+		require_once(AgaviConfig::get('core.agavi_dir') . '/config/ConfigHandlersConfigHandler.class.php');
+		require_once(AgaviConfig::get('core.agavi_dir') . '/config/ConfigValueHolder.class.php');
+		require_once(AgaviConfig::get('core.agavi_dir') . '/config/ConfigParser.class.php');
+		require_once(AgaviConfig::get('core.agavi_dir') . '/config/XmlConfigParser.class.php');
 
 		// manually create our config_handlers.ini handler
 		self::$handlers['config_handlers.xml'] = new AgaviConfigHandlersConfigHandler();

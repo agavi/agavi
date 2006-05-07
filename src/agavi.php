@@ -43,11 +43,11 @@ if(!version_compare(PHP_VERSION, AgaviConfig::get('core.minimum_php_version'), '
 }
 
 // define a few filesystem paths
-AgaviConfig::set('core.app_dir', dirname(__FILE__), false);
+AgaviConfig::set('core.agavi_dir', dirname(__FILE__), false);
 
 // required files
-require(AgaviConfig::get('core.app_dir') . '/version.php');
-require(AgaviConfig::get('core.app_dir') . '/core/Agavi.class.php');
+require(AgaviConfig::get('core.agavi_dir') . '/version.php');
+require(AgaviConfig::get('core.agavi_dir') . '/core/Agavi.class.php');
 
 
 

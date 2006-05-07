@@ -73,7 +73,7 @@ class AgaviTestTask2 extends PHPUnit2Task {
 
 	public function main()
 	{
-		AgaviConfig::set("core.app_dir", $this->agavidir); // where the agavi installation resides
+		AgaviConfig::set("core.agavi_dir", $this->agavidir); // where the agavi installation resides
 		AgaviConfig::set("tests.dir", $this->testdir); // where the main tests dir resides
 		AgaviConfig::set("tests.reporter", ($this->reporter ? $this->reporter : "text")); // which reporter to use for reporting results
 		AgaviConfig::set("tests.startpoint", ($this->startpoint ? $this->testdir ."/".$this->startpoint : $this->testdir)); // where to begin looking for tests, relative to TESTSDIR
@@ -85,14 +85,14 @@ class AgaviTestTask2 extends PHPUnit2Task {
 		set_time_limit(0);
 
 		@include_once(AgaviConfig::get('tests.dir') . "/test_environment.php"); // we probably defined our webapp location, etc in here. 
-		require_once(AgaviConfig::get('core.app_dir') . "/buildtools/test_setup.php");
+		require_once(AgaviConfig::get('core.agavi_dir') . "/buildtools/test_setup.php");
 
 		if (!empty($this->outfile)) {
 			if (!is_writeable($this->outfile) || !touch($this->outfile)) {
 				throw new BuildException("Could not open/append to outfile: {$this->outfile}");
 			}
 		}
-		include(AgaviConfig::get('core.app_dir') . "../tests2/AgaviTestCase.class.php");
+		include(AgaviConfig::get('core.agavi_dir') . "../tests2/AgaviTestCase.class.php");
 		return parent::main();
 /*
 function findTests($path, $title="Agavi")

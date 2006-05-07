@@ -31,14 +31,14 @@
 
 AgaviConfig::set('tests.cache_dir', false, false);
 
-// the agavi script will have defined core.app_dir, else we should attempt to find it. 
-if (!AgaviConfig::has('core.app_dir') && isset($_ENV['AGAVI_INSTALLATION'])) {
-	AgaviConfig::set('core.app_dir', $_ENV['AGAVI_INSTALLATION']);
+// the agavi script will have defined core.agavi_dir, else we should attempt to find it. 
+if (!AgaviConfig::has('core.agavi_dir') && isset($_ENV['AGAVI_INSTALLATION'])) {
+	AgaviConfig::set('core.agavi_dir', $_ENV['AGAVI_INSTALLATION']);
 } else if (file_exists('src/agavi.php')) {
 	// looks like we're here, then.
-	AgaviConfig::set('core.app_dir', realpath('./src'));
-} else if (!AgaviConfig::has('core.app_dir')) {
-	die ('core.app_dir undefined. Try using the agavi helper script.');
+	AgaviConfig::set('core.agavi_dir', realpath('./src'));
+} else if (!AgaviConfig::has('core.agavi_dir')) {
+	die ('core.agavi_dir undefined. Try using the agavi helper script.');
 }
 
 // Assume this is an agavi project if there's a webapp subdir, we'll look for classes in there too.
@@ -90,7 +90,7 @@ function test__autoload($class)
 				return;
 			}
 		}
-		$classes = locateClasses(AgaviConfig::get('core.app_dir'));
+		$classes = locateClasses(AgaviConfig::get('core.agavi_dir'));
 		if(AgaviConfig::has('core.webapp_dir')) { 
 			$classes = array_merge((array) $classes, (array) locateClasses(AgaviConfig::get('core.webapp_dir'), true));
 		}

@@ -23,7 +23,7 @@
 |                                                                            |
 | 1. A category with an absolute filesystem path should never exist unless a |
 |    configuration file that is used within the application exists outside   |
-|    of both "core.app_dir" and "core.webapp_dir" Agavi application settings.|
+|    of both "core.agavi_dir" and "core.webapp_dir" Agavi application settings.|
 |                                                                            |
 | 2. Registered handlers with a parameter list should be registered with a   |
 |    relative path so the parameters do not get carried over to another      |
@@ -58,7 +58,7 @@
 | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
 | KEYWORDS:                                                                  |
 | You may reference any configuration directive by enclosing the name in     |
-| "%" signs. Example: %core.app_dir%                                         |
+| "%" signs. Example: %core.agavi_dir%                                         |
 +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
 -->
 <configurations>

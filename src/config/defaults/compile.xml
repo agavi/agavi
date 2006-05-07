@@ -15,7 +15,7 @@
 | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
 | KEYWORDS:                                                                  |
 | You may reference any configuration directive by enclosing the name in     |
-| "%" signs. Example: %core.app_dir%                                         |
+| "%" signs. Example: %core.agavi_dir%                                         |
 +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
 
 +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
@@ -25,28 +25,28 @@
 <configurations>
 	<configuration>
 		<compiles>
-			<compile>%core.app_dir%/action/Action.class.php</compile>
-			<compile>%core.app_dir%/action/ActionStack.class.php</compile>
-			<compile>%core.app_dir%/action/ActionStackEntry.class.php</compile>
-			<compile>%core.app_dir%/core/Context.class.php</compile>
-			<compile>%core.app_dir%/controller/Controller.class.php</compile>
-			<compile>%core.app_dir%/filter/Filter.class.php</compile>
-			<compile>%core.app_dir%/filter/ExecutionFilter.class.php</compile>
-			<compile>%core.app_dir%/filter/FilterChain.class.php</compile>
-			<compile>%core.app_dir%/logging/Appender.class.php</compile>
-			<compile>%core.app_dir%/logging/Layout.class.php</compile>
-			<compile>%core.app_dir%/logging/Logger.class.php</compile>
-			<compile>%core.app_dir%/logging/LoggerManager.class.php</compile>
-			<compile>%core.app_dir%/logging/Message.class.php</compile>
-			<compile>%core.app_dir%/logging/PassthruLayout.class.php</compile>
-			<compile>%core.app_dir%/renderer/AgaviRenderer.class.php</compile>
-			<compile>%core.app_dir%/request/Request.class.php</compile>
-			<compile>%core.app_dir%/storage/Storage.class.php</compile>
-			<compile>%core.app_dir%/user/User.class.php</compile>
-			<compile>%core.app_dir%/util/AgaviAttributeHolder.class.php</compile>
-			<compile>%core.app_dir%/validator/Validator.class.php</compile>
-			<compile>%core.app_dir%/validator/ValidatorManager.class.php</compile>
-			<compile>%core.app_dir%/view/View.class.php</compile>
+			<compile>%core.agavi_dir%/action/Action.class.php</compile>
+			<compile>%core.agavi_dir%/action/ActionStack.class.php</compile>
+			<compile>%core.agavi_dir%/action/ActionStackEntry.class.php</compile>
+			<compile>%core.agavi_dir%/core/Context.class.php</compile>
+			<compile>%core.agavi_dir%/controller/Controller.class.php</compile>
+			<compile>%core.agavi_dir%/filter/Filter.class.php</compile>
+			<compile>%core.agavi_dir%/filter/ExecutionFilter.class.php</compile>
+			<compile>%core.agavi_dir%/filter/FilterChain.class.php</compile>
+			<compile>%core.agavi_dir%/logging/Appender.class.php</compile>
+			<compile>%core.agavi_dir%/logging/Layout.class.php</compile>
+			<compile>%core.agavi_dir%/logging/Logger.class.php</compile>
+			<compile>%core.agavi_dir%/logging/LoggerManager.class.php</compile>
+			<compile>%core.agavi_dir%/logging/Message.class.php</compile>
+			<compile>%core.agavi_dir%/logging/PassthruLayout.class.php</compile>
+			<compile>%core.agavi_dir%/renderer/AgaviRenderer.class.php</compile>
+			<compile>%core.agavi_dir%/request/Request.class.php</compile>
+			<compile>%core.agavi_dir%/storage/Storage.class.php</compile>
+			<compile>%core.agavi_dir%/user/User.class.php</compile>
+			<compile>%core.agavi_dir%/util/AgaviAttributeHolder.class.php</compile>
+			<compile>%core.agavi_dir%/validator/Validator.class.php</compile>
+			<compile>%core.agavi_dir%/validator/ValidatorManager.class.php</compile>
+			<compile>%core.agavi_dir%/view/View.class.php</compile>
 		</compiles>
 	</configuration>
 </configurations>
