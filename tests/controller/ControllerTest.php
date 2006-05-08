@@ -13,7 +13,7 @@ class ControllerTest extends UnitTestCase
 	public function testNewController()
 	{
 		$controller = Context::getInstance()->getController();
-		$this->assertIsA($controller, 'FrontWebController');
+		$this->assertIsA($controller, 'WebController');
 		$this->assertIsA($controller->getContext(), 'Context');
 		$ctx1 = $controller->getContext();
 		$ctx2 = Context::getInstance();

@@ -115,6 +115,19 @@ abstract class AgaviController extends AgaviParameterHolder
 		$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/actions/' . $actionName . 'Action.class.php';
 		return is_readable($file);
 	}
+	
+	/**
+	 * Dispatch a request
+	 *
+	 * @param      array An associative array of parameters to be set.
+	 *
+	 * @return     void
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
+	 */
+	abstract public function dispatch($parameters = array());
 
 	/**
 	 * Forward the request to another action.

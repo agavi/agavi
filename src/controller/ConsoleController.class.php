@@ -60,7 +60,7 @@ class AgaviConsoleController extends AgaviController
 	 * @author     Agavi Project <info@agavi.org>
 	 * @since      0.9.0
 	 */
-	public function dispatch ($params=null)
+	public function dispatch ($params = array())
 	{
 
 		try {

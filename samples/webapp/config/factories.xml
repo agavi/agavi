@@ -30,7 +30,7 @@
 		</action_stack>
 		
 		<controller>
-			<class>AgaviFrontWebController</class>
+			<class>AgaviWebController</class>
 		</controller>
 		
 		<database_manager>

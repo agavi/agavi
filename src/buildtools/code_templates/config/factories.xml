@@ -30,10 +30,7 @@
 		</action_stack>
 		
 		<controller>
-			<class>AgaviFrontWebController</class>
-			<settings>
-				<setting name="max_forwards">20</setting>
-			</settings>
+			<class>AgaviWebController</class>
 		</controller>
 		
 		<database_manager>

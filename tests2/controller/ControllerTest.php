@@ -12,7 +12,7 @@ class ControllerTest extends AgaviTestCase
 	public function testNewController()
 	{
 		$controller = AgaviContext::getInstance()->getController();
-		$this->assertType('AgaviFrontWebController', $controller);
+		$this->assertType('AgaviWebController', $controller);
 		$this->assertType('AgaviContext', $controller->getContext());
 		$ctx1 = $controller->getContext();
 		$ctx2 = AgaviContext::getInstance();

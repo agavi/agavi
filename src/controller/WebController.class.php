@@ -28,7 +28,7 @@
  *
  * @version    $Id$
  */
-abstract class AgaviWebController extends AgaviController
+class AgaviWebController extends AgaviController
 {
 
 	protected
@@ -78,6 +78,56 @@ abstract class AgaviWebController extends AgaviController
 		$httpHeaders = array(),
 		$cookieConfig = array(),
 		$cookies = array();
+		
+	/**
+	 * Acts as a front web controller unless module and action names are given as
+	 * parameters.
+	 *
+	 * @see        Controller::dispatch()
+	 */
+	public function dispatch($parameters = array())
+	{
+		try {
+			// so setting the headers works
+			ob_start();
+			
+			if($parameters != null) {
+				$this->context->getRequest()->setParametersByRef($parameters);
+			}
+			
+			// determine our module and action
+			$moduleName = $this->context->getRequest()->getParameter(AgaviConfig::get('request.module_accessor'));
+			$actionName = $this->context->getRequest()->getParameter(AgaviConfig::get('request.action_accessor'));
+
+			if($moduleName == null) {
+				// no module has been specified
+				$moduleName = AgaviConfig::get('actions.default_module');
+			}
+
+			if($actionName == null) {
+				// no action has been specified
+				if ($this->actionExists($moduleName, 'Index')) {
+					// an Index action exists
+					$actionName = 'Index';
+				} else {
+					// use the default action
+					$actionName = AgaviConfig::get('actions.default_action');
+				}
+			}
+
+			// make the first request
+			$this->forward($moduleName, $actionName);
+
+			// output all headers for the response
+			$this->sendHTTPResponseHeaders();
+		} catch(AgaviException $e) {
+			$e->printStackTrace();
+		} catch(Exception $e) {
+			// most likely an exception from a third-party library
+			$e = new AgaviException($e->getMessage());
+			$e->printStackTrace();
+		}
+	}
 
 	/**
 	 * Generate a formatted Agavi URL.

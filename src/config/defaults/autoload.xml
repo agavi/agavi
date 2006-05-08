@@ -36,8 +36,6 @@
 
 			<!-- agavi/controller -->
 			<autoload name="AgaviConsoleController">%core.agavi_dir%/controller/ConsoleController.class.php</autoload>
-			<autoload name="AgaviFrontWebController">%core.agavi_dir%/controller/FrontWebController.class.php</autoload>
-			<autoload name="AgaviPageWebController">%core.agavi_dir%/controller/PageWebController.class.php</autoload>
 			<autoload name="AgaviWebController">%core.agavi_dir%/controller/WebController.class.php</autoload>
 
 			<!-- agavi/database -->
