@@ -65,7 +65,12 @@ require(AgaviConfig::get('core.agavi_dir') . '/core/Agavi.class.php');
 function __autoload($class)
 {
 	if(Agavi::$autoloads === null) {
-		include(AgaviConfigCache::checkConfig(AgaviConfig::get('core.config_dir') . '/autoload.xml'));
+		// catch parse errors of autoload.xml
+		try {
+			include(AgaviConfigCache::checkConfig(AgaviConfig::get('core.config_dir') . '/autoload.xml'));
+		} catch(Exception $e) {
+			trigger_error($e->getMessage(), E_USER_ERROR);
+		}
 	}
 	if(isset(Agavi::$autoloads[$class])) {
 		// class exists, let's include it
