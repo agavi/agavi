@@ -49,7 +49,7 @@ class DateValidator extends Validator
 	 */
 	public function execute (&$value, &$error)
 	{
-		if (empty($value) || (strtotime($value) == -1)) {
+		if(empty($value) || strtotime($value) === false || strtotime($value) === -1) {
 			$error = $this->getParameter('error');
 			return false;
 		}
