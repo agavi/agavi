@@ -53,6 +53,10 @@
 			</settings>
 		</request>
 		
+		<routing>
+			<class>AgaviRouting</class>
+		</routing>
+		
 		<storage>
 			<class>AgaviSessionStorage</class>
 		</storage>

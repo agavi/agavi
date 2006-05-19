@@ -52,7 +52,11 @@
 				<setting name="path_info_key">PATH_INFO</setting>
 			</settings>
 		</request>
-		
+
+		<routing>
+			<class>AgaviRouting</class>
+		</routing>
+
 		<storage>
 			<class>AgaviSessionStorage</class>
 		</storage>

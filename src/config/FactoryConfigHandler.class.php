@@ -86,6 +86,9 @@ class AgaviFactoryConfigHandler extends AgaviConfigHandler
 			// Request
 			$code[] = '$this->request = AgaviRequest::newInstance("' . $cfg->request->class->getValue() . '");';
 
+			// Request
+			$code[] = '$this->routing = new ' . $cfg->routing->class->getValue() . '();';
+
 			// Storage
 			$code[] = '$this->storage = AgaviStorage::newInstance("' . $cfg->storage->class->getValue() . '");';
 			$code[] = '$this->storage->initialize($this, ' . $this->getSettings($cfg->storage) . ');';

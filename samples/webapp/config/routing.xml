@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
++нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн+
+| This file is part of the Agavi package.                                    |
+| Copyright (c) 2006 the Agavi Project.                                      |
+| нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн |
+| AGAVI AUTO LOAD CONFIGURATION                                              |
+| нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн |
+| Any file listed here will automatically be loaded by PHP when the class is |
+| first accessed. This means you do not manually have to include it in your  |
+| files.                                                                     |
+| нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн |
+| KEYWORDS:                                                                  |
+|                                                                            |
+| The following keywords may exist in file or param values:                  |
+|                                                                            |
+| 1. %AG_APP_DIR%                                                            |
+| 2. %AG_LIB_DIR%                                                            |
+| 3. %AG_MODULE_DIR%                                                         |
+| 4. %AG_WEBAPP_DIR%                                                         |
++нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн+
+-->
+<!--
+
+RewriteRule ^(de|en)$     $1/ [L,R]
+RewriteRule ^(de|en)/(.*) $2  [E=LANG:$1,S=4]
+
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule (.*) - [L,S=3]
+
+RewriteRule _layout/icons/([0-9]+/([0-9a-fA-F]{6}|gradient)/.*) _layout/icons/thumbnail.php [L,S=2]
+
+RewriteCond %{REQUEST_URI} !^/(de|en)/?$
+RewriteCond %{REQUEST_URI} !^/(de|en)/.*
+RewriteCond %{ENV:LANG} ^$
+RewriteCond %{ENV:REDIRECT_LANG} ^$
+RewriteCond %{ENV:REDIRECT_REDIRECT_LANG} ^$
+RewriteCond %{HTTP_COOKIE} .*mylst_language=(de|en|fr).*
+RewriteRule (.*) %1/$1 [R,L]
+
+RewriteCond %{REQUEST_URI} !^/(de|en)/?$
+RewriteCond %{REQUEST_URI} !^/(de|en)/.*
+RewriteCond %{ENV:LANG} ^$
+RewriteCond %{ENV:REDIRECT_LANG} ^$
+RewriteCond %{ENV:REDIRECT_REDIRECT_LANG} ^$
+RewriteRule (.*) de/$1 [R,L]
+
+RewriteRule ^my/?$                  index.php?module=frontend&action=mylst.Index [QSA,NC,L]
+RewriteRule ^my/remember/([0-9]+)/? index.php?module=frontend&action=mylst.Index&id=$1&addFavorite=1 [QSA,NC,L]
+RewriteRule ^my/remove/([0-9]+)/?   index.php?module=frontend&action=mylst.Index&id=$1&removeFavorite=1 [QSA,NC,L]
+
+-->
+<!--
+<route pattern=".*/rss" stopping="false">
+  <output_type>rss</output_type>
+</route>
+<route pattern="/products">
+  ...
+   <routes>
+      <route pattern="/view">
+
+
+<route pattern="/view/(id:\d+)/?" />
+<route pattern="(.+)/rss" stopping="no" output_type="rss" />
+<route pattern="/list" />
+<route pattern="/latest" />
+
+
+imply == route davorhaengen
+
+-->
+<configurations>
+	<configuration>
+		<defaultroute>
+		</defaultroute>
+		<routes>
+			<route name="products1" pattern="/products1">
+				<routes>
+					<route name="foo" pattern="^/foo" imply="true" cut="true" stopping="false" />
+					<route name="bar" pattern="^/bar" imply="false" cut="true" stopping="false" />
+					<route name="view" pattern="/view" />
+				</routes>
+			</route>
+
+			<route pattern="/products2">
+				<routes>
+					<route pattern="/foo$" imply="true" cut="true" stopping="false" />
+					<route name="bar" pattern="/bar$" imply="false" cut="true" stopping="false" />
+					<route name="view2" pattern="/view" />
+				</routes>
+			</route>
+
+
+			<route name="lang" pattern="/(lang:de|en|fr)" imply="true" cut="true" stopping="false" callback="xxx" onmatch="xxx" onnomatch="xxx" />
+			<route name="rss" pattern="/rss$" stopping="false" cut="true" output_type="rss" />
+			<route name="products" pattern="/products">
+				<parameters>
+					<parameter name="module" value="Products" />
+				</parameters>
+				<routes>
+					<route name="ott" pattern="/bar$" imply="true" stopping="false" />
+					<route name="viewProduct" pattern="/view">
+						<parameters>
+							<parameter name="action" value="View" />
+						</parameters>
+					</route>
+				</routes>
+			</route>
+			<route name="views" pattern="/(module:view)/(action:[a-z]+)/(id:[0-9]+)/(fName:[a-zA-Z0-9_-]+).(sfx:html)">
+				<ignores>
+					<ignore>sfx</ignore>
+					<ignore>fName</ignore>
+				</ignores>
+				<defaults>
+					<default for="sfx" value="html" />
+				</defaults>
+			</route>
+		</routes>
+	</configuration>
+
+	<!--
+		+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн+
+		| Custom Classes                                                         |
+		| нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн |
+		| Any classes you see fit that might be of use, such as classes that     |
+		| used in a session that must exist when the session unserializes its    |
+		| data. Another good example is a custom factory implementation such as  |
+		| a controller or user.                                                  |
+		+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн+
+	-->
+	<!-- example for a list of autoloads that is only used in the "debug" context
+	<configuration context="debug">
+		<autoloads>
+			<autoload name="MyCustomClass">%AG_WEBAPP_DIR%/lib/MyCustomClass.class.php</autoload>
+		</autoloads>
+	</configuration>
+	/modules/Default/actions/IndexAction.class.php
+	-->
+</configurations>

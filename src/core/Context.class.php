@@ -43,6 +43,7 @@ class AgaviContext
 		$outputType       = null,
 		$outputTypes      = array(),
 		$request          = null,
+		$routing          = null,
 		$securityFilter   = null,
 		$storage          = null,
 		$user             = null,
@@ -246,6 +247,7 @@ class AgaviContext
 		static $profiles;
 		
 		include(AgaviConfigCache::checkConfig(AgaviConfig::get('core.config_dir') . '/factories.xml', $profile));
+		include(AgaviConfigCache::checkConfig(AgaviConfig::get('core.config_dir') . '/routing.xml', $profile));
 		
 		return $this;
 	}
@@ -318,6 +320,19 @@ class AgaviContext
 
 		return $this->request;
 
+	}
+
+	/**
+	 * Retrieve the routing.
+	 *
+	 * @return     AgaviRouting The current Routing implementation instance.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getRouting()
+	{
+		return $this->routing;
 	}
 
 	/**

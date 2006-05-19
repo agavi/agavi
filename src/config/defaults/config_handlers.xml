@@ -104,6 +104,11 @@
 			<handler pattern="%core.config_dir%/logging.xml">
 				<class>AgaviLoggingConfigHandler</class>
 			</handler>
+
+			<handler pattern="%core.config_dir%/routing.xml">
+				<class>AgaviRoutingConfigHandler</class>
+			</handler>
+
 			<!--
 				+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
 				| Global Agavi configuration handlers.                                       |

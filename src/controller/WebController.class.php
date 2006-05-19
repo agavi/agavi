@@ -91,6 +91,10 @@ class AgaviWebController extends AgaviController
 			// so setting the headers works
 			ob_start();
 			
+
+			$this->context->getRequest()->setParameters($this->context->getRouting()->matchRoute($_SERVER['REQUEST_URI']));
+
+
 			if($parameters != null) {
 				$this->context->getRequest()->setParametersByRef($parameters);
 			}
