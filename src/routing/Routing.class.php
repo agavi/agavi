@@ -87,7 +87,7 @@ class AgaviRouting
 	}
 
 	public function genUrl($route, $params = array())
-	{var_dump($this->routes);
+	{
 		$routes = explode('+', $route);
 		$route = $routes[0];
 		unset($routes[0]);
