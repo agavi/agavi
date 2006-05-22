@@ -38,6 +38,11 @@ class AgaviContext
 	protected
 		$actionStack      = null,
 		$controller       = null,
+		$classNames       = array(
+			'execution_filter' => null,
+			'filter_chain' => null,
+			'security_filter' => null
+		),
 		$databaseManager  = null,
 		$loggerManager    = null,
 		$outputType       = null,

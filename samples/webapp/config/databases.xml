@@ -191,19 +191,19 @@
 			
 			<database name="postgres">
 				<class>AgaviPostgreSQLDatabase</class>
-				<params>
-					<param name="host">localhost</param>
-					<param name="user">username</param>
-					<param name="password">passphrase</param>
-					<param name="database">sample</param>
-				</params>
+				<parameters>
+					<parameter name="host">localhost</parameter>
+					<parameter name="user">username</parameter>
+					<parameter name="password">passphrase</parameter>
+					<parameter name="database">sample</parameter>
+				</parameters>
 			</database>
 			
 			<database name="propel">
 				<class>AgaviPropelDatabase</class>
-				<params>
-					<param name="config">%core.webapp_dir%/config/project-conf.php</param>
-				</params>
+				<parameters>
+					<parameter name="config">%core.webapp_dir%/config/project-conf.php</parameter>
+				</parameters>
 			</database>
 			
 		</databases>

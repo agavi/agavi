@@ -174,7 +174,7 @@ abstract class AgaviRenderer
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	protected function preRenderCheck()
+	public function preRenderCheck()
 	{
 		$view = $this->getView();
 		

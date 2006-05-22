@@ -75,13 +75,9 @@
 		<handlers>
 			<handler pattern="%core.module_dir%/CoolModule/config/cool.xml">
 				<class file="%core.module_dir%/CoolModule/lib/CoolConfigurationHandler.class.php">CoolConfigHandler</class>
-				<params>
-					<title>Cool Module</title>
-					<items>
-						<item>Array Value #1</item>
-						<item>Array Value #2</item>
-					</items>
-				</params>
+				<parameters>
+					<parameter name="title">Cool Module</parameter>
+				</parameters>
 			</handler>
 		</handlers>
 	</configuration>

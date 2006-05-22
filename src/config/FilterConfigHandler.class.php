@@ -20,13 +20,13 @@
  * @package    agavi
  * @subpackage config
  *
- * @author     Sean Kerr <skerr@mojavi.org>
+ * @author     David Zülke <dz@bitxtender.com>
  * @copyright  (c) Authors
  * @since      0.9.0
  *
  * @version    $Id$
  */
-class AgaviFilterConfigHandler extends AgaviIniConfigHandler
+class AgaviFilterConfigHandler extends AgaviConfigHandler
 {
 	protected function getItemParameters($itemNode, $oldValues = array())
 	{
@@ -60,46 +60,30 @@ class AgaviFilterConfigHandler extends AgaviIniConfigHandler
 		// parse the config file
 		$conf = AgaviConfigCache::parseConfig($config, false);
 
-		$filters = array(
-			'filters' => array(),
-			'execution_filter' => '',
-			'security_filter' => array('class' => '', 'params' => array()),
-			);
 		$environment = AgaviConfig::get('core.environment');
-		foreach($conf->configurations as $cfg) {
-			$env = $cfg->hasAttribute('environment') ? $cfg->getAttribute('environment') : $environment;
-			$ctx = $cfg->hasAttribute('context') ? $cfg->getAttribute('context') : $context;
-
-			if($env != $environment || $ctx != $context)
-				continue;
-
-			if($cfg->hasChildren('execution_filter')) {
-				$filters['execution_filter'] = $cfg->execution_filter->class->getValue();
-			}
-
-			if($cfg->hasChildren('security_filter')) {
-				if($cfg->execution_filter->hasChildren('class'))
-					$filters['security_filter']['class'] = $cfg->execution_filter->class->getValue();
-				$filters['security_filter']['params'] = $this->getItemParameters($cfg->execution_filter, $filters['security_filter']['params']);
-			}
+		
+		$configs = $this->orderConfigurations($conf->configurations, $environment, $context);
+		
+		$filters = array();
+		
+		foreach($configs as $cfg) {
 
 			if($cfg->hasChildren('filters')) {
 				foreach($cfg->filters as $filter) {
 					$name = $filter->getAttribute('name');
-					if(!isset($filters['filters'][$name]))
-						$filters['filters'][$name] = array('params' => array());
+					if(!isset($filters[$name]))
+						$filters[$name] = array('params' => array());
 
 					if($filter->hasChildren('class'))
-						$filters['filters'][$name]['class'] = $filter->class->getValue();
-					$filters['filters'][$name]['params'] = $this->getItemParameters($filter, $filters['filters'][$name]['params']);
+						$filters[$name]['class'] = $filter->class->getValue();
+					$filters[$name]['params'] = $this->getItemParameters($filter, $filters['filters'][$name]['params']);
 				}
 			}
 		}
-
+		
 		$data = array();
-		$data[] = '$this->setExecutionFilterClassName("' . $filters['execution_filter'] . '");';
 
-		foreach($filters['filters'] as $filter) {
+		foreach($filters as $filter) {
 			$data[] = '$filter = new ' . $filter['class'] . '();';
 			$data[] = '$filter->initialize($this->context, ' . var_export($filter['params'], true) . ');';
 			$data[] = '$filters[] = $filter;';

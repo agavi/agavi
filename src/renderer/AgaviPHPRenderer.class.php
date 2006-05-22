@@ -97,9 +97,6 @@ class AgaviPHPRenderer extends AgaviRenderer
 	{
 		$retval = null;
 
-		// execute pre-render check
-		$this->preRenderCheck();
-
 		$view = $this->getView();
 
 		// get the render mode

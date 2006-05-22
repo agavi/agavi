@@ -77,7 +77,7 @@
 			return isset($this->__attributes[$name]);
 		}
 
-		public function getAttribute($name)
+		public function getAttribute($name, $default = null)
 		{
 			return $this->__attributes[$name];
 		}

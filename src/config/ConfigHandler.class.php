@@ -188,6 +188,47 @@ abstract class AgaviConfigHandler extends AgaviParameterHolder
 
 		return $path;
 	}
+	
+	/**
+	 * Returns a properly ordered array of AgaviConfigValueHolder configuration
+	 * elements for given env and context.
+	 *
+	 * @param      AgaviConfigValueHolder The root config element
+	 * @param      string                 An environment name.
+	 * @param      string                 A context name.
+	 *
+	 * @return     array An array of ConfigValueHolder configuration elements.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public static function orderConfigurations(AgaviConfigValueHolder $configurations, $environment, $context = null)
+	{
+		$configs = array();
+		
+		foreach($configurations as $cfg) {
+			if(!$cfg->hasAttribute('environment') && !$cfg->hasAttribute('context')) {
+				$configs[] = $cfg;
+			}
+		}
+		foreach($configurations as $cfg) {
+			if($cfg->hasAttribute('environment') && $cfg->getAttribute('environment') == $environment && !$cfg->hasAttribute('context')) {
+				$configs[] = $cfg;
+			}
+		}
+		foreach($configurations as $cfg) {
+			if($cfg->hasAttribute('environment') && $cfg->hasAttribute('context') && $cfg->getAttribute('context') == $context) {
+				$configs[] = $cfg;
+			}
+		}
+		foreach($configurations as $cfg) {
+			if($cfg->hasAttribute('environment') && $cfg->getAttribute('environment') == $environment && $cfg->hasAttribute('context') && $cfg->getAttribute('context') == $context) {
+				$configs[] = $cfg;
+			}
+		}
+		
+		return $configs;
+	}
 
 }
 

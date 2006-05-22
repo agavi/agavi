@@ -12,26 +12,32 @@
 +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
 -->
 <configurations>
+	
 	<configuration>
 		<output_types default="html">
+			
 			<output_type name="html">
 				<renderer>AgaviPHPRenderer</renderer>
 				<parameters>
 					<parameter name="Content-Type">text/html; charset=UTF-8</parameter>
 				</parameters>
 			</output_type>
+			
 			<output_type name="html_print" fallback="html">
 				<renderer extension="-print.php" ignore_slots="true">AgaviPHPRenderer</renderer>
 				<parameters>
 					<parameter name="Content-Type">text/html; charset=UTF-8</parameter>
 				</parameters>
 			</output_type>
+			
 			<output_type name="xml">
 				<renderer extension=".xml.php" ignore_decorators="true">AgaviPHPRenderer</renderer>
 				<parameters>
 					<parameter name="Content-Type">text/xml</parameter>
 				</parameters>
 			</output_type>
+			
 		</output_types>
 	</configuration>
+	
 </configurations>

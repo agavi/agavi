@@ -12,14 +12,18 @@
 +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
 -->
 <configurations>
+	
 	<configuration>
 		<output_types default="html">
+			
 			<output_type name="html">
 				<renderer>AgaviPHPRenderer</renderer>
 				<parameters>
 					<parameter name="Content-Type">text/html</parameter>
 				</parameters>
 			</output_type>
+			
 		</output_types>
 	</configuration>
+	
 </configurations>

@@ -189,21 +189,23 @@ class AgaviExecutionFilter extends AgaviFilter
 						$renderer->setView($viewInstance);
 
 						try {
-							// render the view and if data is returned, stick it in the
-							// action entry which was retrieved from the execution chain
-							$viewData =& $renderer->render();
+							// run the pre-render check to see if the template is there
+							$renderer->preRenderCheck();
 							break;
 						} catch(AgaviRenderException $e) {
 							if(isset($oti['fallback'])) {
+								// template not found, but there's a fallback specified, so let's try that one
 								$controller->setOutputType($oti['fallback']);
 							} else {
 								throw $e;
 							}
 						}
 					}
-				} else {
-					$viewData =& $renderer->render();
 				}
+				
+				// render the view and if data is returned, stick it in the
+				// action entry which was retrieved from the execution chain
+				$viewData =& $renderer->render();
 
 				if ($controller->getRenderMode() == AgaviView::RENDER_VAR)
 				{

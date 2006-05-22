@@ -64,7 +64,7 @@ class AgaviFactoryConfigHandler extends AgaviConfigHandler
 			if($cfg->hasAttribute('context'))
 				$ctx = $cfg->getAttribute('context');
 
-			$requiredItems = array('action_stack', 'controller', 'database_manager', 'logger_manager', 'request', 'storage', 'user', 'validator_manager');
+			$requiredItems = array('action_stack', 'controller', 'database_manager', 'execution_filter', 'filter_chain', 'logger_manager', 'request', 'storage', 'user', 'validator_manager');
 			$definedItems = array_keys($cfg->getChildren());
 			if(count($missingItems = array_diff($requiredItems, $definedItems)) > 0) {
 					$error = 'Configuration file "%s" is missing key(s) %s';
@@ -75,6 +75,14 @@ class AgaviFactoryConfigHandler extends AgaviConfigHandler
 
 			// The order of this initialisiation code is fixed, to not change
 
+			// Class names for ExecutionFilter, FilterChain and SecurityFilter
+			$code[] = '$this->classNames["execution_filter"] = "' . $cfg->execution_filter->class->getValue() . '";';
+			$code[] = '$this->classNames["filter_chain"] = "' . $cfg->filter_chain->class->getValue() . '";';
+			if(isset($cfg->security_filter)) {
+				$code[] = '$this->classNames["security_filter"] = "' . $cfg->security_filter->class->getValue() . '";';
+			}
+
+			// Database
 			if(AgaviConfig::get('core.use_database', false)) {
 				$code[] = '$this->databaseManager = new ' . $cfg->database_manager->class->getValue() . '();';
 				$code[] = '$this->databaseManager->initialize($this);';
