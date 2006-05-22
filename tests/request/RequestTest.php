@@ -110,9 +110,9 @@ class RequestTest extends UnitTestCase
 	{
 		$this->assertEqual(array(), $this->_r->getAttributeNamespaces());
 		$this->_r->setAttribute('blah', 'blahval');
-		$this->assertEqual(array(AgaviConfig::get('request.default_namespace')), $this->_r->getAttributeNamespaces());
+		$this->assertEqual(array($this->_r->getDefaultNamespace()), $this->_r->getAttributeNamespaces());
 		$this->_r->setAttribute('blah', 'blahval', 'some/other/namespace');
-		$this->assertEqual(array(AgaviConfig::get('request.default_namespace'), 'some/other/namespace'), $this->_r->getAttributeNamespaces());
+		$this->assertEqual(array($this->_r->getDefaultNamespace(), 'some/other/namespace'), $this->_r->getAttributeNamespaces());
 	}
 
 	public function testgetAttributes()
@@ -175,9 +175,9 @@ class RequestTest extends UnitTestCase
 
 	public function testhasAttributeNamespace()
 	{
-		$this->assertFalse($this->_r->hasAttributeNamespace(AgaviConfig::get('request.default_namespace')));
+		$this->assertFalse($this->_r->hasAttributeNamespace($this->_r->getDefaultNamespace()));
 		$this->_r->setAttribute('blah', 'blahval');
-		$this->assertTrue($this->_r->hasAttributeNamespace(AgaviConfig::get('request.default_namespace')));
+		$this->assertTrue($this->_r->hasAttributeNamespace($this->_r->getDefaultNamespace()));
 		$this->assertFalse($this->_r->hasAttributeNamespace('some/other/namespace'));
 		$this->_r->setAttribute('blah', 'blahval', 'some/other/namespace');
 		$this->assertTrue($this->_r->hasAttributeNamespace('some/other/namespace'));
@@ -236,8 +236,8 @@ class RequestTest extends UnitTestCase
 	public function testremoveAttributeNamespace()
 	{
 		$this->_r->setAttribute('blah', 'blahval');
-		$this->_r->removeAttributeNamespace(AgaviConfig::get('request.default_namespace'));
-		$this->assertFalse($this->_r->hasAttributeNamespace(AgaviConfig::get('request.default_namespace')));
+		$this->_r->removeAttributeNamespace($this->_r->getDefaultNamespace());
+		$this->assertFalse($this->_r->hasAttributeNamespace($this->_r->getDefaultNamespace()));
 	}
 
 	public function testsetAttribute()

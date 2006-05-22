@@ -102,6 +102,11 @@ class AgaviContext
 		return $actionEntry->getActionName();
 
 	}
+	
+	public function getClassName($for)
+	{
+		return $this->classNames[$for];
+	}
 
 	// -------------------------------------------------------------------------
 	
@@ -252,7 +257,6 @@ class AgaviContext
 		static $profiles;
 		
 		include(AgaviConfigCache::checkConfig(AgaviConfig::get('core.config_dir') . '/factories.xml', $profile));
-		include(AgaviConfigCache::checkConfig(AgaviConfig::get('core.config_dir') . '/routing.xml', $profile));
 		
 		return $this;
 	}

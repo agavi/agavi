@@ -19,9 +19,10 @@
  * application.
  *
  * @package    agavi
- * @subpackage controller
+ * @subpackage routing
  *
  * @author     Dominik del Bondio <ddb@bitxtender.com>
+ * @author     David Zuelke <dz@bitxtender.com>
  * @copyright  (c) Authors
  * @since      0.11.0
  *
@@ -33,10 +34,20 @@ class AgaviRouting
 	const ANCHOR_START = 1;
 	const ANCHOR_END = 2;
 	protected $routes = array();
+	
+	public function initialize($context)
+	{
+		$this->context = $context;
+	}
+	
+	public function getContext()
+	{
+		return $this->context;
+	}
 
 	public function addRoute($route, $options = array(), $parent = null)
 	{
-		$defaultOpts = array('name' => uniqid (rand()), 'stopping' => true, 'output_type' => null, 'parameters' => array(), 'ignores' => array(), 'defaults' => array(), 'childs' => array(), 'onmatch' => null, 'onnomatch' => null, 'imply' => false, 'cut' => false, 'parent' => $parent, 'reverseStr' => '', 'nostops' => array(), 'anchor' => self::ANCHOR_NONE);
+		$defaultOpts = array('name' => uniqid (rand()), 'stopping' => true, 'output_type' => null, 'module' => null, 'action' => null, 'parameters' => array(), 'ignores' => array(), 'defaults' => array(), 'childs' => array(), 'onmatch' => null, 'onnomatch' => null, 'imply' => false, 'cut' => false, 'parent' => $parent, 'reverseStr' => '', 'nostops' => array(), 'anchor' => self::ANCHOR_NONE);
 
 		// set the default options + user opts
 		$options = array_merge($defaultOpts, $options);
@@ -155,6 +166,9 @@ class AgaviRouting
 	public function matchRoute($input)
 	{
 		$vars = array();
+		
+		$ma = $this->context->getRequest()->getModuleAccessor();
+		$aa = $this->context->getRequest()->getActionAccessor();
 
 //		$routes = array_keys($this->routes);
 
@@ -187,7 +201,15 @@ class AgaviRouting
 					foreach($route[1] as $param) {
 						$vars[$param] = $match[$param][0];
 					}
-
+					
+					if($opts['module']) {
+						$vars[$ma] = $opts['module'];
+					}
+					
+					if($opts['action']) {
+						$vars[$aa] = $opts['action'];
+					}
+					
 					foreach($opts['parameters'] as $key => $value) {
 						$vars[$key] = $value;
 					}

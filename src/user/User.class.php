@@ -50,6 +50,19 @@ class AgaviUser extends AgaviAttributeHolder
 	}
 
 	/**
+	 * Retrieve the Storage namespace
+	 *
+	 * @return     string The Storage namespace
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getStorageNamespace()
+	{
+		return $this->storageNamespace;
+	}
+
+	/**
 	 * Initialize this User.
 	 *
 	 * @param      AgaviContext A Context instance.
@@ -69,9 +82,13 @@ class AgaviUser extends AgaviAttributeHolder
 	{
 		$this->context = $context;
 
-		$this->defaultNamespace = AgaviConfig::get('user.default_namespace', $this->defaultNamespace);
-
-		$this->storageNamespace = AgaviConfig::get('user.storage_namespace', $this->storageNamespace);
+		if(isset($parameters['default_namespace'])) {
+			$this->defaultNamespace = $parameters['default_namespace'];
+		}
+		
+		if(isset($parameters['storage_namespace'])) {
+			$this->storageNamespace = $parameters['storage_namespace'];
+		}
 
 		if($parameters != null)
 		{

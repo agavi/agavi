@@ -51,14 +51,6 @@
 		
 		<request>
 			<class>AgaviWebRequest</class>
-			<parameters>
-				<parameter name="default_namespace">org.agavi</parameter>
-				<parameter name="module_accessor">module</parameter>
-				<parameter name="action_accessor">action</parameter>
-				<parameter name="url_format">GET</parameter>
-				<parameter name="path_info_array">SERVER</parameter>
-				<parameter name="path_info_key">PATH_INFO</parameter>
-			</parameters>
 		</request>
 
 		<routing>
@@ -75,9 +67,6 @@
 		
 		<user>
 			<class>AgaviBasicSecurityUser</class>
-			<parameters>
-				<parameter name="default_namespace">org.agavi</parameter>
-			</parameters>
 		</user>
 		
 		<validator_manager>

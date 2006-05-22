@@ -38,8 +38,21 @@ abstract class AgaviAttributeHolder extends AgaviParameterHolder
 		$attributes = array(),
 		$defaultNamespace = 'org.agavi';
 
+	/*
+	 * Get the default namespace name
+	 *
+	 * @return     string The default namespace name
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getDefaultNamespace()
+	{
+		return $this->defaultNamespace;
+	}
+
 	/**
-	 * Clear all attributes associated with this user.
+	 * Clear all attributes.
 	 *
 	 * @return     void
 	 *

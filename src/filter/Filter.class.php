@@ -30,7 +30,7 @@
 abstract class AgaviFilter extends AgaviParameterHolder
 {
 
-	private
+	protected
 		$context = null;
 
 	/**

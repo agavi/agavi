@@ -349,6 +349,8 @@ class AgaviWebRequest extends AgaviRequest
 	 */
 	public function initialize ($context, $parameters = null)
 	{
+		
+		parent::initialize($context, $parameters);
 
 		if (isset($_SERVER['REQUEST_METHOD']))
 		{

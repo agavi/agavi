@@ -30,6 +30,7 @@
 			<compile>%core.agavi_dir%/action/ActionStackEntry.class.php</compile>
 			<compile>%core.agavi_dir%/core/Context.class.php</compile>
 			<compile>%core.agavi_dir%/controller/Controller.class.php</compile>
+			<compile>%core.agavi_dir%/filter/AgaviDispatchFilter.class.php</compile>
 			<compile>%core.agavi_dir%/filter/Filter.class.php</compile>
 			<compile>%core.agavi_dir%/filter/ExecutionFilter.class.php</compile>
 			<compile>%core.agavi_dir%/filter/FilterChain.class.php</compile>

@@ -31,8 +31,7 @@ abstract class AgaviController extends AgaviParameterHolder
 
 	private
 		$maxForwards     = 20,
-		$renderMode      = AgaviView::RENDER_CLIENT,
-		$executionFilterClassName = null;
+		$renderMode      = AgaviView::RENDER_CLIENT;
 
 	protected
 		$context         = null,
@@ -127,7 +126,22 @@ abstract class AgaviController extends AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	abstract public function dispatch($parameters = array());
+	public function dispatch($parameters = array())
+	{
+		// create a new filter chain
+		$fccn = $this->context->getClassName('filter_chain');
+		$filterChain = new $fccn();
+
+		// register the dispatch filter
+		$dfcn = $this->context->getClassName('dispatch_filter');
+		$dispatchFilter = new $dfcn();
+
+		$dispatchFilter->initialize($this->context);
+		$filterChain->register($dispatchFilter);
+		
+		// go, go, go!
+		$filterChain->execute();
+	}
 
 	/**
 	 * Forward the request to another action.
@@ -232,7 +246,8 @@ abstract class AgaviController extends AgaviParameterHolder
 			if ($actionInstance->initialize($this->context)) {
 
 				// create a new filter chain
-				$filterChain = new AgaviFilterChain();
+				$fccn = $this->context->getClassName('filter_chain');
+				$filterChain = new $fccn();
 
 				if(AgaviConfig::get('core.available', false)) {
 					// the application is available so we'll register
@@ -262,7 +277,8 @@ abstract class AgaviController extends AgaviParameterHolder
 				}
 
 				// register the execution filter
-				$execFilter = new $this->executionFilterClassName();
+				$efcn = $this->context->getClassName('execution_filter');
+				$execFilter = new $efcn();
 
 				$execFilter->initialize($this->context);
 				$filterChain->register($execFilter);
@@ -581,21 +597,6 @@ abstract class AgaviController extends AgaviParameterHolder
 		require_once(AgaviConfigCache::checkConfig($cfg, $context->getName()));
 
 		register_shutdown_function(array($this, 'shutdown'));
-	}
-
-	/**
-	 * Set the name of the ExecutionFilter class that is used in forward()
-	 *
-	 * @param      string The class name of the ExecutionFilter to use
-	 *
-	 * @return     void
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.10.0
-	 */
-	public function setExecutionFilterClassName($className)
-	{
-		$this->executionFilterClassName = $className;
 	}
 
 	/**

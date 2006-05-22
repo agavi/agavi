@@ -89,6 +89,8 @@ class AgaviRoutingConfigHandler extends AgaviConfigHandler
 			if($route->hasAttribute('stopping'))			$opts['stopping']			= $this->literalize($route->getAttribute('stopping'));
 			if($route->hasAttribute('name'))					$opts['name']					= $route->getAttribute('name');
 			if($route->hasAttribute('output_type'))		$opts['output_type']	= $route->getAttribute('output_type');
+			if($route->hasAttribute('module'))				$opts['module']				= $route->getAttribute('module');
+			if($route->hasAttribute('action'))				$opts['action']				= $route->getAttribute('action');
 			if($route->hasAttribute('onmatch'))				$opts['onmatch']			= $route->getAttribute('onmatch');
 			if($route->hasAttribute('onnonmatch'))		$opts['onnonmatch']		= $route->getAttribute('onnonmatch');
 
@@ -100,13 +102,13 @@ class AgaviRoutingConfigHandler extends AgaviConfigHandler
 
 			if($route->hasChildren('defaults')) {
 				foreach($route->defaults as $default) {
-					$opts['defaults'][$default->getAttribute('for')] = $default->getAttribute('value');
+					$opts['defaults'][$default->getAttribute('for')] = $default->getValue();
 				}
 			}
 
 			if($route->hasChildren('parameters')) {
 				foreach($route->parameters as $parameter) {
-					$opts['parameters'][$parameter->getAttribute('name')] = $parameter->getAttribute('value');
+					$opts['parameters'][$parameter->getAttribute('name')] = $parameter->getValue();
 				}
 			}
 

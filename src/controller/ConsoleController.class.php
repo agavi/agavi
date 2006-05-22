@@ -87,13 +87,14 @@ class AgaviConsoleController extends AgaviController
 
 				}
 			}
+			
+			$request = $this->context->getRequest();
 
 			// set the module and action in the Request parameters
-			$this->context->getRequest()->setParameter(AgaviConfig::get('request.module_accessor'), $moduleName);
-			$this->context->getRequest()->setParameter(AgaviConfig::get('request.action_accessor'), $actionName);
+			$request->setParameter($request->getModuleAccessor(), $moduleName);
+			$request->setParameter($request->getActionAccessor(), $actionName);
 
-			// make the first request
-			$this->forward($moduleName, $actionName);
+			parent::dispatch($parameters);
 
 		} catch (AgaviException $e) {
 

@@ -1,6 +1,4 @@
 <?php
-AgaviConfig::set('user.default_namespace', 'org.agavi', false);
-
 class SampleSecurityUser extends BasicSecurityUser
 {
 	public function initialize($context, $parameters=null)

@@ -91,18 +91,18 @@ class AgaviWebController extends AgaviController
 			// so setting the headers works
 			ob_start();
 			
-
-			$this->context->getRequest()->setParameters($this->context->getRouting()->matchRoute($_SERVER['REQUEST_URI']));
-
-
+			$request = $this->context->getRequest();
+			
+			$request->setParameters($this->context->getRouting()->matchRoute($_SERVER['REQUEST_URI']));
+			
 			if($parameters != null) {
-				$this->context->getRequest()->setParametersByRef($parameters);
+				$request->setParametersByRef($parameters);
 			}
 			
 			// determine our module and action
-			$moduleName = $this->context->getRequest()->getParameter(AgaviConfig::get('request.module_accessor'));
-			$actionName = $this->context->getRequest()->getParameter(AgaviConfig::get('request.action_accessor'));
-
+			$moduleName = $request->getParameter($request->getModuleAccessor());
+			$actionName = $request->getParameter($request->getActionAccessor());
+			
 			if($moduleName == null) {
 				// no module has been specified
 				$moduleName = AgaviConfig::get('actions.default_module');
@@ -118,9 +118,8 @@ class AgaviWebController extends AgaviController
 					$actionName = AgaviConfig::get('actions.default_action');
 				}
 			}
-
-			// make the first request
-			$this->forward($moduleName, $actionName);
+			
+			parent::dispatch($parameters);
 
 			// output all headers for the response
 			$this->sendHTTPResponseHeaders();

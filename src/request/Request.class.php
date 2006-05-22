@@ -67,7 +67,9 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 		$attributes = array(),
 		$errors     = array(),
 		$method     = null,
-		$context    = null;
+		$context    = null,
+		$moduleAccessor = 'module',
+		$actionAccessor = 'action';
 
 	/**
 	 * Retrieve the current application context.
@@ -223,7 +225,16 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	{
 		$this->context = $context;
 		
-		$this->defaultNamespace = AgaviConfig::get('request.default_namespace', $this->defaultNamespace);
+		if(isset($parameters['default_namespace'])) {
+			$this->defaultNamespace = $parameters['default_namespace'];
+		}
+		
+		if(isset($parameters['module_accessor'])) {
+			$this->moduleAccessor = $parameters['module_accessor'];
+		}
+		if(isset($parameters['action_accessor'])) {
+			$this->actionAccessor = $parameters['action_accessor'];
+		}
 		
 		return true;
 	}
@@ -342,13 +353,9 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	 */
 	public function setMethod($method)
 	{
-		if ($method == self::GET || $method == self::POST || $method == self::CONSOLE)
-		{
-
+		if ($method == self::GET || $method == self::POST || $method == self::CONSOLE) {
 			$this->method = $method;
-
 			return;
-
 		}
 
 		// invalid method type
@@ -356,6 +363,32 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 		$error = sprintf($error, $method);
 
 		throw new AgaviException($error);
+	}
+	
+	/**
+	 * Get the name of the request parameter that defines which module to use.
+	 *
+	 * @return     string The module accessor name.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getModuleAccessor()
+	{
+		return $this->moduleAccessor;
+	}
+
+	/**
+	 * Get the name of the request parameter that defines which action to use.
+	 *
+	 * @return     string The action accessor name.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getActionAccessor()
+	{
+		return $this->actionAccessor;
 	}
 
 	/**

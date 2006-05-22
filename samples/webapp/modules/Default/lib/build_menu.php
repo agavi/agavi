@@ -27,14 +27,18 @@ $links['unavailable_action']     = array(AgaviConfig::get('actions.unavailable_m
 
 // get the controller
 $controller = $this->getContext()->getController();
+$request = $this->getContext()->getRequest();
+
+$ma = $request->getModuleAccessor();
+$aa = $request->getActionAccessor();
 
 // loop through our links and format them
 foreach ($links as $key => &$parameters)
 {
 
 	$parameters = array(
-		AgaviConfig::get('request.module_accessor') => $parameters[0],
-		AgaviConfig::get('request.action_accessor') => $parameters[1]
+		$ma => $parameters[0],
+		$aa => $parameters[1]
 	);
 
 	$links[$key] = $controller->genURL(null, $parameters);

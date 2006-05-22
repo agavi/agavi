@@ -1,6 +1,4 @@
 <?php
-AgaviConfig::set('user.default_namespace', 'org.agavi', false);
-
 class SampleUser extends User
 {
 	public function initialize($context, $parameters=null)
@@ -77,9 +75,9 @@ class UserTest extends UnitTestCase
 	{
 		$this->assertEqual(array(), $this->_u->getAttributeNamespaces());
 		$this->_u->setAttribute('blah', 'blahval');
-		$this->assertEqual(array(AgaviConfig::get('user.default_namespace')), $this->_u->getAttributeNamespaces());
+		$this->assertEqual(array($this->_u->getDefaultNamespace()), $this->_u->getAttributeNamespaces());
 		$this->_u->setAttribute('blah', 'blahval', 'some/other/namespace');
-		$this->assertEqual(array(AgaviConfig::get('user.default_namespace'), 'some/other/namespace'), $this->_u->getAttributeNamespaces());
+		$this->assertEqual(array($this->_u->getDefaultNamespace(), 'some/other/namespace'), $this->_u->getAttributeNamespaces());
 	}
 
 	public function testgetAttributes()
@@ -123,9 +121,9 @@ class UserTest extends UnitTestCase
 
 	public function testhasAttributeNamespace()
 	{
-		$this->assertFalse($this->_u->hasAttributeNamespace(AgaviConfig::get('user.default_namespace')));
+		$this->assertFalse($this->_u->hasAttributeNamespace($this->_u->getDefaultNamespace()));
 		$this->_u->setAttribute('blah', 'blahval');
-		$this->assertTrue($this->_u->hasAttributeNamespace(AgaviConfig::get('user.default_namespace')));
+		$this->assertTrue($this->_u->hasAttributeNamespace($this->_u->getDefaultNamespace()));
 		$this->assertFalse($this->_u->hasAttributeNamespace('some/other/namespace'));
 		$this->_u->setAttribute('blah', 'blahval', 'some/other/namespace');
 		$this->assertTrue($this->_u->hasAttributeNamespace('some/other/namespace'));
@@ -167,8 +165,8 @@ class UserTest extends UnitTestCase
 	public function testremoveAttributeNamespace()
 	{
 		$this->_u->setAttribute('blah', 'blahval');
-		$this->_u->removeAttributeNamespace(AgaviConfig::get('user.default_namespace'));
-		$this->assertFalse($this->_u->hasAttributeNamespace(AgaviConfig::get('user.default_namespace')));
+		$this->_u->removeAttributeNamespace($this->_u->getDefaultNamespace());
+		$this->assertFalse($this->_u->hasAttributeNamespace($this->_u->getDefaultNamespace()));
 	}
 
 	public function testsetAttribute()
