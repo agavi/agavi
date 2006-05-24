@@ -48,16 +48,10 @@ class AgaviModuleConfigHandler extends AgaviConfigHandler
 	public function execute($config, $context = null)
 	{
 		// parse the config file
-		$conf = AgaviConfigCache::parseConfig($config, false);
+		$configurations = $this->orderConfigurations(AgaviConfigCache::parseConfig($config, false)->configurations, AgaviConfig::get('core.environment'), $context);
 
 		$data = array();
-		$environment = AgaviConfig::get('core.environment');
-		foreach($conf->configurations as $cfg) {
-			$env = $cfg->hasAttribute('environment') ? $cfg->getAttribute('environment') : $environment;
-
-			if($env != $environment)
-				continue;
-
+		foreach($configurations as $cfg) {
 			$authors = array();
 			foreach($cfg->authors as $author) {
 				if($author->hasAttribute('email')) {

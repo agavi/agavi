@@ -52,19 +52,12 @@ class AgaviDefineConfigHandler extends AgaviConfigHandler
 	public function execute($config, $context = null)
 	{
 
-		$conf = AgaviConfigCache::parseConfig($config, false);
+		$configurations = $this->orderConfigurations(AgaviConfigCache::parseConfig($config, false)->configurations, AgaviConfig::get('core.environment'));
 
 		// init our data array
 		$data = array();
-		$environment = AgaviConfig::get('core.environment');
 
-		foreach($conf->configurations as $cfg)
-		{
-			$env = $cfg->hasAttribute('environment') ? $cfg->getAttribute('environment') : $environment;
-
-			if($env != $environment)
-				continue;
-
+		foreach($configurations as $cfg) {
 			// let's do our fancy work
 			if($cfg->hasChildren('system_actions')) {
 				foreach($cfg->system_actions->getChildren() as $action) {
@@ -78,7 +71,6 @@ class AgaviDefineConfigHandler extends AgaviConfigHandler
 			{
 				$data['core.' . $setting->getAttribute('name')] = $this->literalize($this->replaceConstants($setting->getValue()));
 			}
-
 		}
 
 		$code = 'AgaviConfig::import(' . var_export($data, true) . ');';

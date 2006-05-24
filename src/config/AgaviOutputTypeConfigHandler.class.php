@@ -48,22 +48,10 @@ class AgaviOutputTypeConfigHandler extends AgaviConfigHandler
 	public function execute($config, $context = null)
 	{
 		// parse the config file
-		$conf = AgaviConfigCache::parseConfig($config, false);
+		$configurations = $this->orderConfigurations(AgaviConfigCache::parseConfig($config, false)->configurations, AgaviConfig::get('core.environment'), $context);
 
 		$code = '';
-		$environment = AgaviConfig::get('core.environment');
-		foreach($conf->configurations as $cfg) {
-			$env = $cfg->hasAttribute('environment') ? $cfg->getAttribute('environment') : $environment;
-
-			if($env != $environment) {
-				continue;
-			}
-				
-			$ctx = $cfg->hasAttribute('context') ? $cfg->getAttribute('context') : $context;
-			if($ctx != $context) {
-					continue;
-			}
-			
+		foreach($configurations as $cfg) {
 			$otnames = array();
 			foreach($cfg->output_types as $outputType) {
 				if(!$outputType->hasAttribute('name')) {
@@ -78,11 +66,11 @@ class AgaviOutputTypeConfigHandler extends AgaviConfigHandler
 				}
 				$otnames[] = $otname;
 			}
-			
+		
 			if(!$cfg->output_types->hasAttribute('default')) {
 				throw new AgaviConfigurationException('No default Output Type specified in ' . $config);
 			}
-			
+		
 			if(!in_array($cfg->output_types->getAttribute('default'), $otnames)) {
 				throw new AgaviConfigurationException('Non-existent Output Type "' . $cfg->output_types->getAttribute('default') . '" specified as default in ' . $config);
 			}

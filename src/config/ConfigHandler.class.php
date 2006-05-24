@@ -30,6 +30,30 @@
  */
 abstract class AgaviConfigHandler extends AgaviParameterHolder
 {
+	/*
+	 * Retrieve the parameter node values of the given item's parameters element.
+	 *
+	 * @param      ConfigValueHolder The node that contains a parameters chiild.
+	 * @param      array             As associative array of parameters that will
+	 *                               be overwritten if appropriate.
+	 * @param      boolean           Whether or not values should be literalized.
+	 *
+	 * @return     array An associative array of parameters
+	 *
+	 * @author     Dominik del Bondio
+	 * @since      0.11.0
+	 */
+	protected function getItemParameters($itemNode, $oldValues = array(), $literalize = true)
+	{
+		$data = array();
+		if($itemNode->hasChildren('parameters')) {
+			foreach($itemNode->parameters as $node) {
+				$data[$node->getAttribute('name')] = $literalize ? $this->literalize($node->getValue()) : $node->getValue();
+			}
+		}
+		$data = array_merge($oldValues, $data);
+		return $data;
+	}
 
 	/**
 	 * Add a set of replacement values.
@@ -202,7 +226,7 @@ abstract class AgaviConfigHandler extends AgaviParameterHolder
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public static function orderConfigurations(AgaviConfigValueHolder $configurations, $environment, $context = null)
+	public static function orderConfigurations(AgaviConfigValueHolder $configurations, $environment = null, $context = null)
 	{
 		$configs = array();
 		
@@ -212,17 +236,17 @@ abstract class AgaviConfigHandler extends AgaviParameterHolder
 			}
 		}
 		foreach($configurations as $cfg) {
-			if($cfg->hasAttribute('environment') && $cfg->getAttribute('environment') == $environment && !$cfg->hasAttribute('context')) {
+			if($environment !== null && $cfg->hasAttribute('environment') && in_array($environment, explode(' ', $cfg->getAttribute('environment'))) && !$cfg->hasAttribute('context')) {
 				$configs[] = $cfg;
 			}
 		}
 		foreach($configurations as $cfg) {
-			if($cfg->hasAttribute('environment') && $cfg->hasAttribute('context') && $cfg->getAttribute('context') == $context) {
+			if(!$cfg->hasAttribute('environment') && $context !== null && $cfg->hasAttribute('context') && in_array($context, explode(' ', $cfg->getAttribute('context')))) {
 				$configs[] = $cfg;
 			}
 		}
 		foreach($configurations as $cfg) {
-			if($cfg->hasAttribute('environment') && $cfg->getAttribute('environment') == $environment && $cfg->hasAttribute('context') && $cfg->getAttribute('context') == $context) {
+			if($environment !== null && $cfg->hasAttribute('environment') && in_array($environment, explode(' ', $cfg->getAttribute('environment'))) && $context !== null && $cfg->hasAttribute('context') && in_array($context, explode(' ', $cfg->getAttribute('context')))) {
 				$configs[] = $cfg;
 			}
 		}

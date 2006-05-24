@@ -28,18 +28,6 @@
  */
 class AgaviFilterConfigHandler extends AgaviConfigHandler
 {
-	protected function getItemParameters($itemNode, $oldValues = array())
-	{
-		$data = array();
-		if($itemNode->hasChildren('parameters')) {
-			foreach($itemNode->parameters as $node) {
-				$data[$node->getAttribute('name')] = $this->literalize($node->getValue());
-			}
-		}
-		$data = array_merge($oldValues, $data);
-		return $data;
-	}
-
 	/**
 	 * Execute this configuration handler.
 	 *
@@ -58,13 +46,12 @@ class AgaviFilterConfigHandler extends AgaviConfigHandler
 	public function execute($config, $context = null)
 	{
 		// parse the config file
-		$conf = AgaviConfigCache::parseConfig($config, false);
 
-		$configs = $this->orderConfigurations($conf->configurations, AgaviConfig::get('core.environment'), $context);
+		$configurations = $this->orderConfigurations(AgaviConfigCache::parseConfig($config, false)->configurations, AgaviConfig::get('core.environment'), $context);
 		
 		$filters = array();
 		
-		foreach($configs as $cfg) {
+		foreach($configurations as $cfg) {
 
 			if($cfg->hasChildren('filters')) {
 				foreach($cfg->filters as $filter) {

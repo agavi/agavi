@@ -70,17 +70,10 @@ class AgaviAutoloadConfigHandler extends AgaviConfigHandler
 	protected function parseFile($config)
 	{
 		// parse the config file
-		$conf = AgaviConfigCache::parseConfig($config, false);
+		$configurations = $this->orderConfigurations(AgaviConfigCache::parseConfig($config, false)->configurations, AgaviConfig::get('core.environment'));
 
 		$data = array();
-		$environment = AgaviConfig::get('core.environment');
-		foreach($conf->configurations as $cfg)
-		{
-			$env = $cfg->hasAttribute('environment') ? $cfg->getAttribute('environment') : $environment;
-
-			if($env != $environment)
-				continue;
-
+		foreach($configurations as $cfg) {
 			// let's do our fancy work
 			foreach($cfg->autoloads as $entry) {
 

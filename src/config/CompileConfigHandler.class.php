@@ -67,32 +67,30 @@ class AgaviCompileConfigHandler extends AgaviConfigHandler
 
 	protected function parseFile($config)
 	{
-		$conf = AgaviConfigCache::parseConfig($config, false);
+		$configurations = $this->orderConfigurations(AgaviConfigCache::parseConfig($config, false)->configurations, AgaviConfig::get('core.environment'));
 
 		$data = '';
 
-		if(!isset($conf->configurations[0]))
-			return $data;
-
 		// let's do our fancy work
-		foreach($conf->configurations[0]->compiles as $compileFile) {
+		foreach($configurations as $configuration) {
+			foreach($configuration->compiles as $compileFile) {
+				$file = trim($compileFile->getValue());
 
-			$file = trim($compileFile->getValue());
+				$file = $this->replaceConstants($file);
+				$file = $this->replacePath($file);
 
-			$file = $this->replaceConstants($file);
-			$file = $this->replacePath($file);
+				if(!is_readable($file)) {
+					// file doesn't exist
+					$error = 'Configuration file "%s" specifies nonexistent ' . 'or unreadable file "%s"';
+					$error = sprintf($error, $config, $file);
+					throw new AgaviParseException($error);
+				}
 
-			if(!is_readable($file)) {
-				// file doesn't exist
-				$error = 'Configuration file "%s" specifies nonexistent ' . 'or unreadable file "%s"';
-				$error = sprintf($error, $config, $file);
-				throw new AgaviParseException($error);
+				$contents = @file_get_contents($file);
+
+				// append file data
+				$data .= "\n" . $contents;
 			}
-
-			$contents = @file_get_contents($file);
-
-			// append file data
-			$data .= "\n" . $contents;
 		}
 
 		// replace windows and mac format with unix format

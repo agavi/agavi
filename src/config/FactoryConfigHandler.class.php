@@ -53,12 +53,10 @@ class AgaviFactoryConfigHandler extends AgaviConfigHandler
 		}
 
 		// parse the config file
-		$conf = AgaviConfigCache::parseConfig($config);
-
-		$data = array();
-		foreach($conf->configurations as $cfg)
-		{
-			$code = array();
+		$configurations = $this->orderConfigurations(AgaviConfigCache::parseConfig($config)->configurations, AgaviConfig::get('core.environment'), $context);
+		
+		$code = array();
+		foreach($configurations as $cfg) {
 
 			$ctx = $context;
 			if($cfg->hasAttribute('context'))
@@ -71,7 +69,7 @@ class AgaviFactoryConfigHandler extends AgaviConfigHandler
 					$error = sprintf($error, $config, implode(' ', $missingItems));
 					throw new AgaviParseException($error);
 			}
-			
+		
 
 			// The order of this initialisiation code is fixed, to not change
 
@@ -120,10 +118,10 @@ class AgaviFactoryConfigHandler extends AgaviConfigHandler
 			// Controller 
 			$code[] = '$this->controller = AgaviController::newInstance("' . $cfg->controller->class->getValue() . '");';
 			$code[] = '$this->controller->initialize($this, ' . $this->getSettings($cfg->controller) . ');';
-		
+	
 			// Init Request
 			$code[] = '$this->request->initialize($this, ' . $this->getSettings($cfg->request) . ');';
-			
+		
 			if(isset($cfg->routing)) {
 				// Routing
 				$code[] = '$this->routing = new ' . $cfg->routing->class->getValue() . '();';
@@ -131,7 +129,6 @@ class AgaviFactoryConfigHandler extends AgaviConfigHandler
 				$code[] = 'include(AgaviConfigCache::checkConfig(AgaviConfig::get("core.config_dir") . "/routing.xml", $profile));';
 			}
 		}
-
 
 		// compile data
 		$retval = "<?php\n" .
