@@ -48,28 +48,13 @@ class AgaviExecutionFilter extends AgaviFilter
 	public function execute ($filterChain)
 	{
 
-		static
-			$context,
-			$controller,
-			$validatorManager;
-
-		if (!isset($context))
-		{
-
-			// get the context and controller
-			$context    = $this->getContext();
-			$controller = $context->getController();
-
-			// create validator manager
-			$validatorManager = $context->getValidatorManager();
-
-		} else
-		{
-
-			// clear the validator manager for reuse
-			$validatorManager->clear();
-
-		}
+		// get the context and controller
+		$context    = $this->getContext();
+		$controller = $context->getController();
+		// create validator manager
+		$validatorManager = $context->getValidatorManager();
+		// clear the validator manager for reuse
+		$validatorManager->clear();
 
 		// get the current action instance
 		$actionEntry    = $controller->getActionStack()->getLastEntry();
