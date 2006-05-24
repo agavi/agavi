@@ -71,11 +71,11 @@ class Agavi
 			
 			AgaviConfig::set('core.system_config_dir', AgaviConfig::get('core.agavi_dir') . '/config/defaults', false);
 			
-			AgaviConfig::set('core.lib_dir', AgaviConfig::get('core.lib_dir') . '/lib');
+			AgaviConfig::set('core.lib_dir', AgaviConfig::get('core.webapp_dir') . '/lib', false);
 			
-			AgaviConfig::set('core.module_dir', AgaviConfig::get('core.webapp_dir') . '/modules');
+			AgaviConfig::set('core.module_dir', AgaviConfig::get('core.webapp_dir') . '/modules', false);
 			
-			AgaviConfig::set('core.template_dir', AgaviConfig::get('core.template_dir') . '/templates');
+			AgaviConfig::set('core.template_dir', AgaviConfig::get('core.template_dir') . '/templates', false);
 			
 			// ini settings
 			ini_set('magic_quotes_runtime', AgaviConfig::get('php.magic_quotes_runtime', false));
@@ -116,32 +116,6 @@ class Agavi
 			$e = new AgaviException($e->getMessage());
 			$e->printStackTrace();
 		}
-	}
-	
-	/**
-	 * Get a list of classes and their file names available in __autoload()
-	 *
-	 * @return     array an array of autoloads
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public static function getAutoloads()
-	{
-		return self::$autoloads;
-	}
-	
-	/**
-	 * Set a list of classes and their file names available in __autoload()
-	 *
-	 * @param      array the list of autoloads to set
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public static function setAutoloads($autoloads)
-	{
-		self::$autoloads = $autoloads;
 	}
 }
 

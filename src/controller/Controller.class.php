@@ -233,6 +233,13 @@ abstract class AgaviController extends AgaviParameterHolder
 
 		// include the module configuration
 		AgaviConfigCache::import(AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/config/module.xml');
+		
+		$oldAutoloads = null;
+		$moduleAutoload = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/config/autoload.xml';
+		if(is_readable($moduleAutoload)) {
+			$oldAutoloads = Agavi::$autoloads;
+			include(AgaviConfigCache::checkConfig($moduleAutoload));
+		}
 
 		if(AgaviConfig::get('modules.' . strtolower($moduleName) . '.enabled')) {
 
@@ -297,6 +304,10 @@ abstract class AgaviController extends AgaviParameterHolder
 
 				throw new AgaviInitializationException($error);
 
+			}
+			
+			if($oldAutoloads !== null) {
+				Agavi::$autoloads = $oldAutoloads;
 			}
 
 		} else
@@ -730,7 +741,7 @@ abstract class AgaviController extends AgaviParameterHolder
 		if (class_exists($class) && AgaviToolkit::isSubClass($class, 'AgaviController')) {
 			return new $class();
 		}
-		$error = "Class ($class) doesnt exist or is not a Controller.";
+		$error = "Class ($class) doesn't exist or is not a Controller.";
 		throw new AgaviFactoryException($error);
 	}
 
