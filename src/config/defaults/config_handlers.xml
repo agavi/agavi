@@ -93,7 +93,15 @@
 				<class>AgaviDatabaseConfigHandler</class>
 			</handler>
 
-			<handler pattern="%core.config_dir%/filters.xml">
+			<handler pattern="%core.config_dir%/action_filters.xml">
+				<class>AgaviFilterConfigHandler</class>
+			</handler>
+
+			<handler pattern="%core.config_dir%/global_filters.xml">
+				<class>AgaviFilterConfigHandler</class>
+			</handler>
+
+			<handler pattern="%core.config_dir%/rendering_filters.xml">
 				<class>AgaviFilterConfigHandler</class>
 			</handler>
 
@@ -125,6 +133,14 @@
 
 			<handler pattern="%core.module_dir%/*/config/caching.xml">
 				<class>AgaviReturnArrayConfigHandler</class>
+			</handler>
+
+			<handler pattern="%core.module_dir%/*/config/action_filters.xml">
+				<class>AgaviFilterConfigHandler</class>
+			</handler>
+
+			<handler pattern="%core.module_dir%/*/config/rendering_filters.xml">
+				<class>AgaviFilterConfigHandler</class>
 			</handler>
 
 			<handler pattern="%core.module_dir%/*/config/module.xml">

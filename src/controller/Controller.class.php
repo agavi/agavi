@@ -30,14 +30,23 @@ abstract class AgaviController extends AgaviParameterHolder
 {
 
 	private
-		$maxForwards     = 20,
-		$renderMode      = AgaviView::RENDER_CLIENT;
+		$maxForwards  = 20,
+		$renderMode   = AgaviView::RENDER_CLIENT;
 
 	protected
-		$context         = null,
-		$shutdownList    = null,
-		$outputType      = null,
-		$outputTypes     = array();
+		$context      = null,
+		$shutdownList = null,
+		$outputType   = null,
+		$outputTypes  = array(),
+		$filters      = array(
+			'global' => array(),
+			'action' => array(
+				'*' => null
+			),
+			'rendering' => array(
+				'*' => null
+			)
+		);
 
 	/**
 	 * Sets an output type for this response.
@@ -131,11 +140,12 @@ abstract class AgaviController extends AgaviParameterHolder
 		// create a new filter chain
 		$fccn = $this->context->getClassName('filter_chain');
 		$filterChain = new $fccn();
-
+		
+		$this->loadFilters($filterChain, 'global');
+		
 		// register the dispatch filter
 		$dfcn = $this->context->getClassName('dispatch_filter');
 		$dispatchFilter = new $dfcn();
-
 		$dispatchFilter->initialize($this->context);
 		$filterChain->register($dispatchFilter);
 		
@@ -278,8 +288,8 @@ abstract class AgaviController extends AgaviParameterHolder
 					}
 
 					// load filters
-					$this->loadGlobalFilters($filterChain);
-					$this->loadModuleFilters($filterChain);
+					$this->loadFilters($filterChain, 'action');
+					$this->loadFilters($filterChain, 'action', $moduleName);
 
 				}
 
@@ -609,78 +619,48 @@ abstract class AgaviController extends AgaviParameterHolder
 
 		register_shutdown_function(array($this, 'shutdown'));
 	}
-
+	
 	/**
-	 * Load global filters.
+	 * Load filters.
 	 *
 	 * @param      AgaviFilterChain A FilterChain instance.
+	 * @param      string           "global", "action" or "rendering".
+	 * @param      string           A module name, or "*" for the generic config.
 	 *
 	 * @return     void
 	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
 	 */
-	private function loadGlobalFilters ($filterChain)
+	protected function loadFilters(AgaviFilterChain $filterChain, $which = 'global', $module = null)
 	{
-
-		static $list = array();
-
-		// grab our global filter ini and preset the module name
-		$config     = AgaviConfig::get('core.config_dir') . '/filters.xml';
-		$moduleName = 'global';
-
-		if (!isset($list[$moduleName])) {
-			if (is_readable($config))	{
-				// load global filters
-				require_once(AgaviConfigCache::checkConfig($config));
+		if($module === null) {
+			$module = '*';
+		}
+		
+		if(($which != 'global' && !isset($this->filters[$which][$module])) || $which == 'global' && $this->filters[$which] == null) {
+			if($which == 'global') {
+				$this->filters[$which] = array();
+				$filters =& $this->filters[$which];
 			} else {
-				$list[$moduleName] = array();
+				$this->filters[$which][$module] = array();
+				$filters =& $this->filters[$which][$module];
+			}
+			$config = ($module == '*' ? AgaviConfig::get('core.config_dir') : AgaviConfig::get('core.module_dir') . '/' . $module . '/config') . '/' . $which . '_filters.xml';
+			if(is_readable($config)) {
+				require_once(AgaviConfigCache::checkConfig($config));
+			}
+		} else {
+			if($which == 'global') {
+				$filters =& $this->filters[$which];
+			} else {
+				$filters =& $this->filters[$which][$module];
 			}
 		}
-
-		// register filters
-		foreach ($list[$moduleName] as $filter)	{
+		
+		foreach($filters as $filter) {
 			$filterChain->register($filter);
 		}
-
-	}
-
-	/**
-	 * Load module filters.
-	 *
-	 * @param      AgaviFilterChain A FilterChain instance.
-	 *
-	 * @return     void
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	private function loadModuleFilters ($filterChain)
-	{
-
-		// filter list cache file
-		static $list = array();
-
-		// get the module name
-		$moduleName = $this->context->getModuleName();
-
-		if (!isset($list[$moduleName]))	{
-			// we haven't loaded a filter list for this module yet
-			$config = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/config/filters.ini';
-			if (is_readable($config)) {
-				require_once(AgaviConfigCache::checkConfig($config));
-			} else {
-				// add an emptry array for this module since no filters
-				// exist
-				$list[$moduleName] = array();
-			}
-		}
-
-		// register filters
-		foreach ($list[$moduleName] as $filter)	{
-			$filterChain->register($filter);
-		}
-
 	}
 
 	/**

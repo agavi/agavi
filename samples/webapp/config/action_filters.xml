@@ -4,7 +4,7 @@
 | This file is part of the Agavi package.                                    |
 | Copyright (c) 2006 the Agavi Project                                       |
 | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
-| AGAVI GLOBAL FILTER CONFIGURATION                                          |
+| AGAVI ACTION FILTER CONFIGURATION                                          |
 | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
 | A category must exist for each filter you wish to load. The category name  |
 | itself is meaningless, but should be named after the filter it             |
@@ -45,7 +45,7 @@
 -->
 <configurations>
 	
-	<configuration environment="debug" context="web">
+	<configuration environment="development">
 		<filters>
 			
 			<filter name="ExecutionTimeFilter">
@@ -59,7 +59,7 @@
 	</configuration>
 	
 	
-	<configuration context="web">
+	<configuration>
 		<filters>
 			
 			<filter name="FormPopulationFilter">
