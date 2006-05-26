@@ -233,5 +233,21 @@ abstract class AgaviRenderer
 	 * @since      0.9.0
 	 */
 	abstract function & render();
+	
+	/**
+	 * Execute the Renderer.
+	 *
+	 * This method is called by the rendering FilterChain.
+	 * It puts the returned data into the View (if appropriate)
+	 *
+	 * @return     void
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function execute($filterChain)
+	{
+		$viewData =& $this->render();
+		$this->getView()->setData($viewData);
+	}
 
 }

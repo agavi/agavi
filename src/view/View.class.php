@@ -60,7 +60,8 @@ abstract class AgaviView extends AgaviAttributeHolder
 		$decoratorTemplate  = null,
 		$directory          = null,
 		$slots              = array(),
-		$template           = null;
+		$template           = null,
+		$viewData           = null;
 
 
 	/**
@@ -514,6 +515,32 @@ abstract class AgaviView extends AgaviAttributeHolder
 
 		}
 
+	}
+
+	/*
+	 * Sets data returned by the renderer
+	 *
+	 * @param      string The view data
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function setData($viewData)
+	{
+		$this->data = $viewData;
+	}
+
+	/*
+	 * Sets data returned by the renderer
+	 *
+	 * @return     string The view data
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getData()
+	{
+		return $this->viewData;
 	}
 
 }

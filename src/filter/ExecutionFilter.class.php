@@ -67,16 +67,12 @@ class AgaviExecutionFilter extends AgaviFilter
 		// get the request method
 		$method = $context->getRequest()->getMethod();
 
-		if (($actionInstance->getRequestMethods() & $method) != $method)
-		{
-
+		if (($actionInstance->getRequestMethods() & $method) != $method) {
 			// this action will skip validation/execution for this method
 			// get the default view
 			$viewName = $actionInstance->getDefaultView();
 
-		} else
-		{
-
+		} else {
 			// set default validated status
 			$validated = true;
 
@@ -84,16 +80,13 @@ class AgaviExecutionFilter extends AgaviFilter
 			$validationConfig = AgaviConfig::get('core.module_dir') . '/' . $moduleName .
 						        '/validate/' . $actionName . '.ini';
 
-			if (is_readable($validationConfig))
-			{
-
+			if (is_readable($validationConfig)) {
 				// load validation configuration
 				// do NOT use require_once
 				$validationConfig = 'modules/' . $moduleName .
 						            '/validate/' . $actionName . '.ini';
 
 				require(AgaviConfigCache::checkConfig($validationConfig));
-
 			}
 
 			// manually load validators
@@ -103,44 +96,27 @@ class AgaviExecutionFilter extends AgaviFilter
 			$validated = $validatorManager->execute();
 
 			// process manual validation
-			if ($actionInstance->validate() && $validated)
-			{
-
+			if ($actionInstance->validate() && $validated) {
 				// execute the action
 				$viewName = $actionInstance->execute();
-
-			} else
-			{
-
+			} else {
 				// validation failed
 				$viewName = $actionInstance->handleError();
-
 			}
-
 		}
 
-		if ($viewName != null)
-		{
-
-			if (is_array($viewName))
-			{
-
+		if ($viewName != null) {
+			if (is_array($viewName)) {
 				// we're going to use an entirely different action for this view
 				$moduleName = $viewName[0];
 				$viewName   = $viewName[1];
-
-			} else
-			{
-
+			} else {
 				// use a view related to this action
 				$viewName = $actionName . $viewName;
-
 			}
 
 			// display this view
-			if (!$controller->viewExists($moduleName, $viewName))
-			{
-
+			if (!$controller->viewExists($moduleName, $viewName)) {
 				// the requested view doesn't exist
 				$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/views/' .
 						$viewName . 'View.class.php';
@@ -151,16 +127,13 @@ class AgaviExecutionFilter extends AgaviFilter
 				$error = sprintf($error, $moduleName, $viewName, $file);
 
 				throw new AgaviViewException($error);
-
 			}
 
 			// get the view instance
 			$viewInstance = $controller->getView($moduleName, $viewName);
 
 			// initialize the view
-			if ($viewInstance->initialize($context))
-			{
-
+			if ($viewInstance->initialize($context)) {
 				// view initialization completed successfully
 				$renderer = $viewInstance->execute();
 				
@@ -188,27 +161,32 @@ class AgaviExecutionFilter extends AgaviFilter
 					}
 				}
 				
-				// render the view and if data is returned, stick it in the
-				// action entry which was retrieved from the execution chain
-				$viewData =& $renderer->render();
+				// create a new filter chain
+				$fccn = $context->getClassName('filter_chain');
+				$filterChain = new $fccn();
 
-				if ($controller->getRenderMode() == AgaviView::RENDER_VAR)
-				{
+				$controller->loadFilters($filterChain, 'rendering');
+				$controller->loadFilters($filterChain, 'rendering', $moduleName);
 
-				    $actionEntry->setPresentation($viewData);
+				// register the renderer as the last filter
+				$filterChain->register($renderer);
 
+				// go, go, go!
+				$filterChain->execute();
+				
+				// get the data from the view (the renderer put it there)
+				$viewData = $viewInstance->getData();
+				
+				if ($controller->getRenderMode() == AgaviView::RENDER_VAR) {
+					$actionEntry->setPresentation($viewData);
 				}
 
-			} else
-			{
-
+			} else {
 				// view failed to initialize
 				$error = 'View initialization failed for module "%s", ' .
 						 'view "%sView"';
 				$error = sprintf($error, $moduleName, $viewName);
-
 				throw new AgaviInitializationException($error);
-
 			}
 
 		}

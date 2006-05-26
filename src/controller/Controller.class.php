@@ -632,7 +632,7 @@ abstract class AgaviController extends AgaviParameterHolder
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	protected function loadFilters(AgaviFilterChain $filterChain, $which = 'global', $module = null)
+	public function loadFilters(AgaviFilterChain $filterChain, $which = 'global', $module = null)
 	{
 		if($module === null) {
 			$module = '*';
