@@ -55,7 +55,7 @@ class AgaviFactoryConfigHandler extends AgaviConfigHandler
 		// parse the config file
 		$configurations = $this->orderConfigurations(AgaviConfigCache::parseConfig($config)->configurations, AgaviConfig::get('core.environment'), $context);
 		
-		$code = array();
+		$data = array();
 		foreach($configurations as $cfg) {
 
 			$ctx = $context;
@@ -63,70 +63,91 @@ class AgaviFactoryConfigHandler extends AgaviConfigHandler
 				$ctx = $cfg->getAttribute('context');
 
 			$requiredItems = array('action_stack', 'controller', 'database_manager', 'dispatch_filter', 'execution_filter', 'filter_chain', 'logger_manager', 'request', 'storage', 'user', 'validator_manager');
-			$definedItems = array_keys($cfg->getChildren());
-			if(count($missingItems = array_diff($requiredItems, $definedItems)) > 0) {
-					$error = 'Configuration file "%s" is missing key(s) %s';
-					$error = sprintf($error, $config, implode(' ', $missingItems));
-					throw new AgaviParseException($error);
-			}
 		
 
-			// The order of this initialisiation code is fixed, to not change
 
 			// Class names for ExecutionFilter, FilterChain and SecurityFilter
-			$code[] = '$this->classNames["dispatch_filter"] = "' . $cfg->dispatch_filter->class->getValue() . '";';
-			$code[] = '$this->classNames["execution_filter"] = "' . $cfg->execution_filter->class->getValue() . '";';
-			$code[] = '$this->classNames["filter_chain"] = "' . $cfg->filter_chain->class->getValue() . '";';
+			if(isset($cfg->dispatch_filter))		$data['dispatch_filter'] = '$this->classNames["dispatch_filter"] = "' . $cfg->dispatch_filter->class->getValue() . '";';
+			if(isset($cfg->execution_filter))		$data['execution_filter'] = '$this->classNames["execution_filter"] = "' . $cfg->execution_filter->class->getValue() . '";';
+			if(isset($cfg->filter_chain))				$data['filter_chain'] = '$this->classNames["filter_chain"] = "' . $cfg->filter_chain->class->getValue() . '";';
 			if(isset($cfg->security_filter)) {
-				$code[] = '$this->classNames["security_filter"] = "' . $cfg->security_filter->class->getValue() . '";';
+				$data['security_filter'] = '$this->classNames["security_filter"] = "' . $cfg->security_filter->class->getValue() . '";';
 			}
 
 			// Database
-			if(AgaviConfig::get('core.use_database', false)) {
-				$code[] = '$this->databaseManager = new ' . $cfg->database_manager->class->getValue() . '();';
-				$code[] = '$this->databaseManager->initialize($this);';
+			if(AgaviConfig::get('core.use_database', false) && isset($cfg->database_manager)) {
+				$data['database_manager'] = '$this->databaseManager = new ' . $cfg->database_manager->class->getValue() . '();' . "\n" .
+																		'$this->databaseManager->initialize($this);';
 			}
 
 			// Actionstack
-			$code[] = '$this->actionStack = new ' . $cfg->action_stack->class->getValue() . '();';
+			if(isset($cfg->action_stack))				$data['action_stack'] = '$this->actionStack = new ' . $cfg->action_stack->class->getValue() . '();';
 
 			// Request
-			$code[] = '$this->request = AgaviRequest::newInstance("' . $cfg->request->class->getValue() . '");';
+			if(isset($cfg->request)) {
+				$data['request'] = '$this->request = AgaviRequest::newInstance("' . $cfg->request->class->getValue() . '");';
+				// Init Request
+				$data['init_request'] = '$this->request->initialize($this, ' . $this->getSettings($cfg->request) . ');';
+			}
 
 			// Storage
-			$code[] = '$this->storage = AgaviStorage::newInstance("' . $cfg->storage->class->getValue() . '");';
-			$code[] = '$this->storage->initialize($this, ' . $this->getSettings($cfg->storage) . ');';
-			$code[] = '$this->storage->startup();';
+			if(isset($cfg->storage)) {
+				$data['storage'] = '$this->storage = AgaviStorage::newInstance("' . $cfg->storage->class->getValue() . '");' . "\n" .
+														'$this->storage->initialize($this, ' . $this->getSettings($cfg->storage) . ');' . "\n" .
+														'$this->storage->startup();';
+			}
 
 			// ValidatorManager
-			$code[] = '$this->validatorManager = new ' . $cfg->validator_manager->class->getValue() . '();';
-			$code[] = '$this->validatorManager->initialize($this);';
+			if(isset($cfg->validator_manager)) {
+				$data['validator_manager'] = '$this->validatorManager = new ' . $cfg->validator_manager->class->getValue() . '();' . "\n" .
+																			'$this->validatorManager->initialize($this);';
+			}
 
 			// User
-			if(AgaviConfig::get('core.use_security', true)) {
-				$code[] = '$this->user = AgaviUser::newInstance("' . $cfg->user->class->getValue() . '");';
-				$code[] = '$this->user->initialize($this, ' . $this->getSettings($cfg->user) . ');';
+			if(AgaviConfig::get('core.use_security', true) && isset($cfg->user)) {
+				$data['user'] = '$this->user = AgaviUser::newInstance("' . $cfg->user->class->getValue() . '");' . "\n" .
+												'$this->user->initialize($this, ' . $this->getSettings($cfg->user) . ');';
 			}
 
 			// LoggerManager
-			if(AgaviConfig::get('core.use_logging', false)) {
-				$code[] = '$this->loggerManager = new ' . $cfg->logger_manager->class->getValue() . '();';
-				$code[] = '$this->loggerManager->initialize($this);';
+			if(AgaviConfig::get('core.use_logging', false) && isset($cfg->logger_manager)) {
+				$data['logger_manager'] = '$this->loggerManager = new ' . $cfg->logger_manager->class->getValue() . '();' . "\n" .
+																	'$this->loggerManager->initialize($this);';
 
 			}
 
 			// Controller 
-			$code[] = '$this->controller = AgaviController::newInstance("' . $cfg->controller->class->getValue() . '");';
-			$code[] = '$this->controller->initialize($this, ' . $this->getSettings($cfg->controller) . ');';
-	
-			// Init Request
-			$code[] = '$this->request->initialize($this, ' . $this->getSettings($cfg->request) . ');';
+			if(isset($cfg->controller)) {
+				$data['controller'] = '$this->controller = AgaviController::newInstance("' . $cfg->controller->class->getValue() . '");' . "\n" .
+															'$this->controller->initialize($this, ' . $this->getSettings($cfg->controller) . ');';
+			}
+				
 		
 			if(isset($cfg->routing)) {
 				// Routing
-				$code[] = '$this->routing = new ' . $cfg->routing->class->getValue() . '();';
-				$code[] = '$this->routing->initialize($this);';
-				$code[] = 'include(AgaviConfigCache::checkConfig(AgaviConfig::get("core.config_dir") . "/routing.xml", $profile));';
+				$data['routing'] = '$this->routing = new ' . $cfg->routing->class->getValue() . '();' . "\n" .
+														'$this->routing->initialize($this);' . "\n" .
+														'include(AgaviConfigCache::checkConfig(AgaviConfig::get("core.config_dir") . "/routing.xml", $profile));';
+			}
+		}
+
+		// The order of this initialisiation code is fixed, to not change
+
+		// name => required?
+		$requiredItems = array('dispatch_filter' => true, 'execution_filter' => true, 'filter_chain' => true, 'security_filter' => false, 'database_manager' => false, 'action_stack' => true, 
+					'request' => true, 'storage' => true, 'validator_manager' => true, 'user' => false, 'logger_manager' => false, 'controller' => true, 'init_request' => true, 'routing' => false);
+
+		$code = '';
+
+		foreach($requiredItems as $item => $required) {
+			if($required && !isset($data[$item])) {
+				$error = 'Configuration file "%s" is missing an entry for %s in the current configuration';
+				$error = sprintf($error, $config, $item);
+				throw new AgaviParseException($error);
+			}
+
+			if(isset($data[$item])) {
+				$code .= $data[$item] . "\n";
 			}
 		}
 
@@ -134,7 +155,7 @@ class AgaviFactoryConfigHandler extends AgaviConfigHandler
 		$retval = "<?php\n" .
 		"// auto-generated by FactoryConfigHandler\n" .
 		"// date: %s\n%s\n?>";
-		$retval = sprintf($retval, date('m/d/Y H:i:s'), implode("\n", $code));
+		$retval = sprintf($retval, date('m/d/Y H:i:s'), $code);
 
 		return $retval;
 
