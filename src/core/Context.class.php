@@ -210,12 +210,8 @@ class AgaviContext
 				self::$instances[$profile]->initialize($profile);
 			}
 			return self::$instances[$profile];
-		} catch (AgaviException $e) {
-			$e->printStackTrace();
 		} catch (Exception $e) {
-			// unknown exception
-			$e = new AgaviException($e->getMessage());
-			$e->printStackTrace();
+			AgaviException::printStackTrace($e);
 		}
 	}
 	

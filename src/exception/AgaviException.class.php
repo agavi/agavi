@@ -31,47 +31,6 @@
  */
 class AgaviException extends Exception
 {
-
-	private
-		$name = null;
-
-	// +-----------------------------------------------------------------------+
-	// | CONSTRUCTOR                                                           |
-	// +-----------------------------------------------------------------------+
-
-	/**
-	 * Class constructor.
-	 *
-	 * @param      string The error message.
-	 * @param      int    The error code.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public function __construct ($message = null, $code = 0)
-	{
-
-		parent::__construct($message, $code);
-
-		$this->setName('AgaviException');
-
-	}
-
-	/**
-	 * Retrieve the name of this exception.
-	 *
-	 * @return     string This exception's name.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public function getName ()
-	{
-
-		return $this->name;
-
-	}
-
 	/**
 	 * Print the stack trace for this exception.
 	 *
@@ -84,36 +43,33 @@ class AgaviException extends Exception
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.9.0
 	 */
-	public function printStackTrace ($format = 'html')
+	public static function printStackTrace(Exception $e, AgaviContext $context = null)
 	{
-		if (function_exists('__agavi_printStackTrace')) {
-			__agavi_printStackTrace($this, $format);
-			exit;
-		}
-
 		// exception related properties
-		$class     = ($this->getFile() != null)
-				     ? AgaviToolkit::extractClassName($this->getFile()) : 'N/A';
+		$class     = ($e->getFile() != null)
+				     ? AgaviToolkit::extractClassName($e->getFile()) : 'N/A';
 
 		$class     = ($class != '')
 				     ? $class : 'N/A';
 
-		$code      = ($this->getCode() > 0)
-				     ? $this->getCode() : 'N/A';
+		$code      = ($e->getCode() > 0)
+				     ? $e->getCode() : 'N/A';
 
-		$file      = ($this->getFile() != null)
-				     ? $this->getFile() : 'N/A';
+		$file      = ($e->getFile() != null)
+				     ? $e->getFile() : 'N/A';
 
-		$line      = ($this->getLine() != null)
-				     ? $this->getLine() : 'N/A';
+		$line      = ($e->getLine() != null)
+				     ? $e->getLine() : 'N/A';
 
-		$message   = ($this->getMessage() != null)
-				     ? $this->getMessage() : 'N/A';
+		$message   = ($e->getMessage() != null)
+				     ? $e->getMessage() : 'N/A';
 
-		$name      = $this->getName();
+		$name      = get_class($e);
 
-		$traceData = $this->getTrace();
+		$traceData = $e->getTrace();
 		$trace     = array();
+		
+		$format = 'html';
 
 		// lower-case the format to avoid sensitivity issues
 		$format = strtolower($format);
@@ -326,22 +282,6 @@ class AgaviException extends Exception
 		exit;
 
 	}
-
-	/**
-	 * Set the name of this exception.
-	 *
-	 * @param      string An exception name.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	protected function setName ($name)
-	{
-
-		$this->name = $name;
-
-	}
-
 }
 
 ?>

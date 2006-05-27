@@ -93,7 +93,8 @@ class AgaviWebController extends AgaviController
 			
 			$request = $this->context->getRequest();
 			
-			$request->setParameters($this->context->getRouting()->matchRoute($_SERVER['REQUEST_URI']));
+			// match routes and set matched routes as request attributes
+			$request->setAttributes($this->context->getRouting()->matchRoute($_SERVER['REQUEST_URI']), 'org.agavi.routing.matchedRoutes');
 			
 			if($parameters != null) {
 				$request->setParametersByRef($parameters);
@@ -123,12 +124,8 @@ class AgaviWebController extends AgaviController
 
 			// output all headers for the response
 			$this->sendHTTPResponseHeaders();
-		} catch(AgaviException $e) {
-			$e->printStackTrace();
-		} catch(Exception $e) {
-			// most likely an exception from a third-party library
-			$e = new AgaviException($e->getMessage());
-			$e->printStackTrace();
+		} catch (Exception $e) {
+			AgaviException::printStackTrace($e, $this->getContext());
 		}
 	}
 

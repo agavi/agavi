@@ -34,20 +34,21 @@ class AgaviRouting
 	const ANCHOR_START = 1;
 	const ANCHOR_END = 2;
 	protected $routes = array();
+	private $context = null;
 	
-	public function initialize($context)
+	public function initialize(AgaviContext $context)
 	{
 		$this->context = $context;
 	}
 	
-	public function getContext()
+	public final function getContext()
 	{
 		return $this->context;
 	}
 
 	public function addRoute($route, $options = array(), $parent = null)
 	{
-		$defaultOpts = array('name' => uniqid (rand()), 'stopping' => true, 'output_type' => null, 'module' => null, 'action' => null, 'parameters' => array(), 'ignores' => array(), 'defaults' => array(), 'childs' => array(), 'onmatch' => null, 'onnomatch' => null, 'imply' => false, 'cut' => false, 'parent' => $parent, 'reverseStr' => '', 'nostops' => array(), 'anchor' => self::ANCHOR_NONE);
+		$defaultOpts = array('name' => uniqid (rand()), 'stopping' => true, 'output_type' => null, 'module' => null, 'action' => null, 'parameters' => array(), 'ignores' => array(), 'defaults' => array(), 'childs' => array(), 'callback' => null, 'imply' => false, 'cut' => false, 'parent' => $parent, 'reverseStr' => '', 'nostops' => array(), 'anchor' => self::ANCHOR_NONE);
 
 		// set the default options + user opts
 		$options = array_merge($defaultOpts, $options);
@@ -64,23 +65,23 @@ class AgaviRouting
 		
 		// if we are a child route, we need add this route as a child to the parent
 		if($parent !== null) {
-			foreach($this->routes[$parent][2]['childs'] as $name) {
+			foreach($this->routes[$parent]['opt']['childs'] as $name) {
 				$route = $this->routes[$name];
-				if(!$route[2]['stopping']) {
+				if(!$route['opt']['stopping']) {
 					$options['nostops'][] = $name;
 				}
 			}
-			$this->routes[$parent][2]['childs'][] = $routeName;
+			$this->routes[$parent]['opt']['childs'][] = $routeName;
 		} else {
 			foreach($this->routes as $name => $route) {
-				if(!$route[2]['stopping'] && !$route[2]['parent']) {
+				if(!$route['opt']['stopping'] && !$route['opt']['parent']) {
 					$options['nostops'][] = $name;
 				}
 			}
 		}
 
 
-		$route = array($regexp, $params, $options);
+		$route = array('rxp' => $regexp, 'par' => $params, 'opt' => $options);
 		$this->routes[$routeName] = $route;
 
 		return $routeName;
@@ -104,7 +105,7 @@ class AgaviRouting
 		unset($routes[0]);
 		$myRoutes = array();
 		foreach($routes as $r) {
-			$myRoutes[$r] = 1;
+			$myRoutes[$r] = true;
 		}
 
 		$url = '';
@@ -113,33 +114,33 @@ class AgaviRouting
 			$parent = $route;
 			do {
 				$r = $this->routes[$parent];
-				$defaults = array_merge($defaults, $r[2]['defaults']);
+				$defaults = array_merge($defaults, $r['opt']['defaults']);
 
-				if($r[2]['anchor'] & self::ANCHOR_START || $r[2]['anchor'] == self::ANCHOR_NONE) {
-					$url = $r[2]['reverseStr'] . $url;
+				if($r['opt']['anchor'] & self::ANCHOR_START || $r['opt']['anchor'] == self::ANCHOR_NONE) {
+					$url = $r['opt']['reverseStr'] . $url;
 				} else {
-					$url = $url . $r[2]['reverseStr'];
+					$url = $url . $r['opt']['reverseStr'];
 				}
 
-				foreach(array_reverse($r[2]['nostops']) as $noStop) {
+				foreach(array_reverse($r['opt']['nostops']) as $noStop) {
 					$myR = $this->routes[$noStop];
 					if(isset($myRoutes[$noStop])) {
 						unset($myRoutes[$noStop]);
-					} elseif(!$myR[2]['imply']) {
+					} elseif(!$myR['opt']['imply']) {
 						continue;
 					}
 
-					$defaults = array_merge($defaults, $myR[2]['defaults']);
-					if($myR[2]['anchor'] & self::ANCHOR_START || $myR[2]['anchor'] == self::ANCHOR_NONE) {
-						$url = $myR[2]['reverseStr'] . $url;
+					$defaults = array_merge($defaults, $myR['opt']['defaults']);
+					if($myR['opt']['anchor'] & self::ANCHOR_START || $myR['opt']['anchor'] == self::ANCHOR_NONE) {
+						$url = $myR['opt']['reverseStr'] . $url;
 					} else {
-						$url = $url . $myR[2]['reverseStr'];
+						$url = $url . $myR['opt']['reverseStr'];
 					}
 				}
 
-				$parent = $r[2]['parent'];
+				$parent = $r['opt']['parent'];
 
-				//if($r[2]['stopping']
+				//if($r['opt]['stopping']
 			} while($parent);
 
 		} else {
@@ -166,6 +167,8 @@ class AgaviRouting
 	public function matchRoute($input)
 	{
 		$vars = array();
+		$ot = null;
+		$matchedRoutes = array();
 		
 		$ma = $this->context->getRequest()->getModuleAccessor();
 		$aa = $this->context->getRequest()->getActionAccessor();
@@ -174,7 +177,7 @@ class AgaviRouting
 
 		// get all top level routes
 		foreach($this->routes as $name => $route) {
-			if(!$route[2]['parent']) {
+			if(!$route['opt']['parent']) {
 				$routes[] = $name;
 			}
 		}
@@ -187,18 +190,17 @@ class AgaviRouting
 			$routes = array_pop($routeStack);
 			foreach($routes as $key) {
 				$route = $this->routes[$key];
-				$opts = $route[2];
-				if(preg_match($route[0], $input, $match, PREG_OFFSET_CAPTURE)) {
-					if($opts['onmatch']) {
-					}
+				$opts = $route['opt'];
+				if(preg_match($route['rxp'], $input, $match, PREG_OFFSET_CAPTURE)) {
+					$matchedRoutes[] = $route['opt']['name'];
 
 					foreach($match as $name => $m) {
 						if(is_string($name) && !isset($opts['defaults'][$name])) {
-							$this->routes[$key][2]['defaults'][$name] = $m[0];
+							$this->routes[$key]['opt']['defaults'][$name] = $m[0];
 						}
 					}
 
-					foreach($route[1] as $param) {
+					foreach($route['par'] as $param) {
 						$vars[$param] = $match[$param][0];
 					}
 					
@@ -215,7 +217,7 @@ class AgaviRouting
 					}
 
 					if($opts['output_type']) {
-						$vars['output_type'] = $opts['output_type'];
+						$ot = $opts['output_type'];
 					}
 
 					if($opts['cut']) {
@@ -238,12 +240,20 @@ class AgaviRouting
 						break;
 					}
 
-				} else if($opts['onnomatch']) {
 				}
 			}
 		} while(count($routeStack) > 0);
-
-		return $vars;
+		
+		// set the output type if necessary
+		if($ot !== null) {
+			$this->getContext()->getController()->setOutputType($ot);
+		}
+		
+		// put the vars into the request
+		$this->getContext()->getRequest()->setParameters($vars);
+		
+		// return a list of matched route names
+		return $matchedRoutes;
 	}
 
 
@@ -254,7 +264,7 @@ class AgaviRouting
 		$reverseStr = '';
 
 		$anchor = 0;
-		$anchor |= ($str[0] == '^') ? self::ANCHOR_START : 0;
+		$anchor |= (substr($str, 0, 1) == '^') ? self::ANCHOR_START : 0;
 		$anchor |= (substr($str, -1) == '$') ? self::ANCHOR_END : 0;
 
 		$str = substr($str, (int)$anchor & self::ANCHOR_START, $anchor & self::ANCHOR_END ? -1 : strlen($str));

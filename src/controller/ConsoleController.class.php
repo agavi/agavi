@@ -96,17 +96,8 @@ class AgaviConsoleController extends AgaviController
 
 			parent::dispatch($parameters);
 
-		} catch (AgaviException $e) {
-
-			$e->printStackTrace('plain');
-
 		} catch (Exception $e) {
-
-			// most likely an exception from a third-party library
-			$e = new AgaviException($e->getMessage());
-
-			$e->printStackTrace('plain');
-
+			AgaviException::printStackTrace($e, $this->getContext());
 		}
 
 	}

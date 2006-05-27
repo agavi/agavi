@@ -109,12 +109,8 @@ class Agavi
 			// required classes for the framework
 			AgaviConfigCache::import(AgaviConfig::get('core.config_dir') . '/compile.xml');
 
-		} catch (AgaviException $e) {
-			$e->printStackTrace();
 		} catch (Exception $e) {
-			// unknown exception
-			$e = new AgaviException($e->getMessage());
-			$e->printStackTrace();
+			AgaviException::printStackTrace($e);
 		}
 	}
 }
