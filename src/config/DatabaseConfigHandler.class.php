@@ -23,12 +23,13 @@
  * @subpackage config
  *
  * @author     Sean Kerr <skerr@mojavi.org>
+ * @author     Dominik del Bondio <ddb@bitxtender.com>
  * @copyright  (c) Authors
  * @since      0.9.0
  *
  * @version    $Id$
  */
-class AgaviDatabaseConfigHandler extends AgaviIniConfigHandler
+class AgaviDatabaseConfigHandler extends AgaviConfigHandler
 {
 
 	/**
@@ -44,151 +45,93 @@ class AgaviDatabaseConfigHandler extends AgaviIniConfigHandler
 	 *                                        improperly formatted.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.9.0
 	 */
 	public function execute($config, $context = null)
 	{
+		// parse the config file
+		$configurations = $this->orderConfigurations(AgaviConfigCache::parseConfig($config, false)->configurations, AgaviConfig::get('core.environment'), $context);
 
-		// set our required categories list and initialize our handler
-		$categories = array('required_categories' => array('databases'));
-
-		$this->initialize($categories);
-
-		// parse the ini
-		$ini = $this->parseIni($config);
-
-		// init our data and includes arrays
-		$data      = array();
 		$databases = array();
-		$includes  = array();
-
-		// get a list of database connections
-		foreach ($ini['databases'] as $key => &$value)
-		{
-
-			$value = trim($value);
-
-			// is this category already registered?
-			if (in_array($value, $databases))
-			{
-
-				// this category is already registered
-				$error = 'Configuration file "%s" specifies previously ' .
-						 'registered category "%s"';
-				$error = sprintf($error, $config, $value);
+		$default = null;
+		foreach($configurations as $cfg) {
+			// make sure we have a default database exists
+			if(!$cfg->databases->hasAttribute('default') && $default === null) {
+				// missing default database
+				$error = 'Configuration file "%s" must specify a default database configuration';
+				$error = sprintf($error, $config);
 
 				throw new AgaviParseException($error);
-
 			}
+			$default = $cfg->databases->getAttribute('default');
 
-			// see if we have the category registered for this database
-			if (!isset($ini[$value]))
-			{
+			// let's do our fancy work
+			foreach($cfg->databases as $db) {
+				$name = $db->getAttribute('name');
 
-				// missing required key
-				$error = 'Configuration file "%s" specifies nonexistent ' .
-						 'category "%s"';
-				$error = sprintf($error, $config, $value);
+				if(!isset($databases[$name])) {
+					$databases[$name] = array('params' => array(), 'file' => null);
 
-				throw new AgaviParseException($error);
+					if(!isset($db->class)) {
+						$error = 'Configuration file "%s" specifies category "%s" with missing class key';
+						$error = sprintf($error, $config, $category);
 
+						throw new AgaviParseException($error);
+					}
+				}
+
+				$databases[$name]['class'] = isset($db->class) ? $db->class->getValue() : null;
+				$databases[$name]['file'] = isset($db->file) ? $db->file->getValue() : null;
+
+				$databases[$name]['params'] = $this->getItemParameters($db, $databases[$name]['params']);
 			}
-
-			// add this database
-			$databases[$key] = $value;
-
 		}
 
-		// make sure we have a default database registered
-		if (!isset($databases['default']))
-		{
+		$data = array();
+		$includes = array();
 
-			// missing default database
-			$error = 'Configuration file "%s" must specify a default ' .
-				     'database configuration';
-			$error = sprintf($error, $config);
+		foreach($databases as $name => &$db) {
 
-			throw new AgaviParseException($error);
-
-		}
-
-		// let's do our fancy work
-		foreach ($ini as $category => &$keys)
-		{
-
-			if (!in_array($category, $databases))
-			{
-
-				// skip this unspecified category
-				continue;
-
-			}
-
-			if (!isset($keys['class']))
-			{
-
-				// missing class key
-				$error = 'Configuration file "%s" specifies category ' .
-						 '"%s" with missing class key';
-				$error = sprintf($error, $config, $category);
-
-				throw new AgaviParseException($error);
-
-			}
-
-			$class =& $keys['class'];
-
-			if (isset($keys['file']))
-			{
-
+			if($db['file'] !== null) {
 				// we have a file to include
-				$file =& $keys['file'];
+				$file =& $db['file'];
 				$file =  $this->replaceConstants($file);
 				$file =  $this->replacePath($file);
 
-				if (!is_readable($file))
-				{
+				if(!is_readable($file)) {
+					// database file doesn't exist
+					$error = 'Configuration file "%s" specifies class "%s" with nonexistent or unreadable file "%s"';
+					$error = sprintf($error, $config, $db['class'], $file);
 
-				    // database file doesn't exist
-				    $error = 'Configuration file "%s" specifies class "%s" ' .
-						     'with nonexistent or unreadable file "%s"';
-				    $error = sprintf($error, $config, $class, $file);
-
-				    throw new AgaviParseException($error);
-
+					throw new AgaviParseException($error);
 				}
 
-				// append our data
 				$tmp        = "require_once('%s');";
-				$includes[] = sprintf($tmp, $file);
-
+				$include[]  = sprintf($tmp, $file);
 			}
 
-			// parse parameters
-			$parameters =& AgaviParameterParser::parse($keys);
 
 			// append new data
 			$tmp = "\$database = new %s();\n" .
-				   "\$database->initialize(%s);\n" .
-				   "\$this->databases['%s'] = \$database;";
+							"\$database->initialize(%s);\n" .
+							"\$this->databases['%s'] = \$database;";
 
-			$data[] = sprintf($tmp, $class, $parameters,
-						      array_search($category, $databases));
+			$data[] = sprintf($tmp, $db['class'], var_export($db['params'], true), $name);
 
 		}
 
+		$data[] = sprintf("\$this->databases['default'] = \$this->databases['%s'];", $default);
+
 		// compile data
 		$retval = "<?php\n" .
-				"// auth-generated by DatabaseConfigHandler\n" .
+				"// auto-generated by DatabaseConfigHandler\n" .
 				"// date: %s\n%s\n%s\n?>";
 
-		$retval = sprintf($retval, date('m/d/Y H:i:s'),
-						  implode("\n", $includes), implode("\n", $data));
+		$retval = sprintf($retval, date('m/d/Y H:i:s'), implode("\n", $includes), implode("\n", $data));
 
 		return $retval;
-
 	}
-
 }
 
 ?>
