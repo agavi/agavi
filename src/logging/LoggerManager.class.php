@@ -63,7 +63,7 @@ class AgaviLoggerManager
 		$this->context = $context;
 		
 		// load database configuration
-		require_once(AgaviConfigCache::checkConfig('config/logging.ini'));
+		require_once(AgaviConfigCache::checkConfig(AgaviConfig::get('core.config_dir') . '/logging.xml'));
 	}
 	
 	/**

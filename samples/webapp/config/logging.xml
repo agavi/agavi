@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+| This file is part of the Agavi package.                                    |
+| Copyright (c) 2006 the Agavi Project.                                      |
+| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
+| OUTPUT TYPE CONFIGURATION                                                  |
+| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
+| KEYWORDS:                                                                  |
+| You may reference any configuration directive by enclosing the name in     |
+| "%" signs. Example: %core.agavi_dir%                                         |
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+-->
+<configurations>
+	
+	<configuration>
+		<loggers>
+			<logger name="default">
+				<class>AgaviLogger</class>
+				<priority>AgaviLogger::INFO</priority>
+				<appenders>
+					<appender>InfoSyslogAppender</appender>
+					<appender>MyAppLogAppender</appender>
+				</appenders>
+			</logger>
+
+			<logger name="error">
+				<class>AgaviLogger</class>
+				<priority>AgaviLogger::ERROR</priority>
+				<appenders>
+					<appender>ErrorSyslogAppender</appender>
+					<appender>MyAppErrorLogAppender</appender>
+				</appenders>
+			</logger>
+		</loggers>
+		<appenders>
+			<appender name="InfoSyslogAppender">
+				<class>SyslogAppender</class>
+				<layout>MyPassthruLayout</layout>
+				<parameters>
+					<parameter name="priority">LOG_INFO</parameter>
+				</parameters>
+			</appender>
+
+			<appender name="ErrorSyslogAppender">
+				<class>SyslogAppender</class>
+				<layout>MyPassthruLayout</layout>
+				<parameters>
+					<parameter name="priority">LOG_ERROR</parameter>
+				</parameters>
+			</appender>
+
+			<appender name="MyAppLogAppender">
+				<class>AgaviFileAppender</class>
+				<layout>MyPassthruLayout</layout>
+				<parameters>
+					<parameter name="file">%core.webapp_dir%/log/myapp.log</parameter>
+				</parameters>
+			</appender>
+
+			<appender name="MyAppErrorLogAppender">
+				<class>AgaviFileAppender</class>
+				<layout>MyPassthruLayout</layout>
+				<parameters>
+					<parameter name="file">%core.webapp_dir%/log/myapp_error.log</parameter>
+				</parameters>
+			</appender>
+		</appenders>
+		<layouts>
+			<layout name="MyPassthruLayout">
+				<class>AgaviPassthruLayout</class>
+			</layout>
+		</layouts>
+	</configuration>
+
+</configurations>
