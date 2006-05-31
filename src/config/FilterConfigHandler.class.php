@@ -54,7 +54,7 @@ class AgaviFilterConfigHandler extends AgaviConfigHandler
 		foreach($configurations as $cfg) {
 			if($cfg->hasChildren('filters')) {
 				foreach($cfg->filters as $filter) {
-					$name = $filter->getAttribute('name', md5(microtime()));
+					$name = $filter->getAttribute('name', uniqid(mt_rand()));
 					
 					if(!isset($filters[$name])) {
 						$filters[$name] = array('params' => array(), 'enabled' => $this->literalize($filter->getAttribute('enabled', true)));
