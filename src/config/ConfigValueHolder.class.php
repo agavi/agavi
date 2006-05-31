@@ -79,7 +79,8 @@
 
 		public function getAttribute($name, $default = null)
 		{
-			return $this->__attributes[$name];
+
+			return isset($this->__attributes[$name]) ? $this->__attributes[$name] : $default;
 		}
 
 		public function getAttributes()

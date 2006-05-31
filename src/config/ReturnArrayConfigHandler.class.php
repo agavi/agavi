@@ -27,7 +27,7 @@
  * @version    $Id$
  */
 
-class AgaviReturnArrayConfigHandler extends AgaviIniConfigHandler
+class AgaviReturnArrayConfigHandler extends AgaviConfigHandler
 {
 	/**
 	 * @see        AgaviIniConfigHandler::execute()
@@ -37,21 +37,45 @@ class AgaviReturnArrayConfigHandler extends AgaviIniConfigHandler
 	 */
 	public function execute($config, $context = null)
 	{
-		$real_booleans = (in_array($this->getParameter('real_booleans', false), array('false', 'off', 'no')));
-		$ini = $this->parseIni($config);
-		if(count($ini) != count($ini, COUNT_RECURSIVE))
-		{
-			foreach($ini as $section => $values)
-			{
-				$ini[$section] = self::addDimensions($values, $real_booleans);
+		$configurations = AgaviConfigCache::parseConfig($config, false);
+
+		$data = array();
+		$env = AgaviConfig::get('core.environment');
+		foreach($configurations as $cfg) {
+			if(($cfg->hasAttribute('environment') && $cfg->getAttribute('environment') != $env) || ($context !== null && $cfg->hasAttribute('context') && $cfg->getAttribute('context') != $context))
+				continue;
+
+			$data = $this->convertToArray($cfg);
+		}
+
+		$return = "<?php return " . var_export($data, true) . ";?>";
+		return $return;
+
+	}
+
+	protected function convertToArray($item, $append = false)
+	{
+		$data = array();
+
+		if(!$item->hasChildren()) {
+			$data = $item->getValue();
+		} else {
+			foreach($item->getChildren() as $key => $child) {
+				if(is_int($key) && !$child->hasAttribute('name')) {
+					$data[] = $this->convertToArray($child);
+				} else {
+					$name = $child->hasAttribute('name') ? $child->getAttribute('name') : $child->getName();
+					$data[$name] = $this->convertToArray($child);
+				}
 			}
 		}
-		else
-		{
-			$ini = self::addDimensions($ini, $real_booleans);
+
+		foreach($item->getAttributes() as $name => $value) {
+			if(!isset($data[$name])) {
+				$data[$name] = $this->literalize($value);
+			}
 		}
-		$return = "<?php return " . var_export($ini, true) . ";?>";
-		return $return;
+		return $data;
 	}
 
 	/**
