@@ -54,12 +54,18 @@ class AgaviFilterConfigHandler extends AgaviConfigHandler
 		foreach($configurations as $cfg) {
 			if($cfg->hasChildren('filters')) {
 				foreach($cfg->filters as $filter) {
-					$name = $filter->getAttribute('name');
-					if(!isset($filters[$name]))
-						$filters[$name] = array('params' => array());
+					$name = $filter->getAttribute('name', md5(microtime()));
+					
+					if(!isset($filters[$name])) {
+						$filters[$name] = array('params' => array(), 'enabled' => $this->literalize($filter->getAttribute('enabled', true)));
+					} else {
+						$filters[$name]['enabled'] = $this->literalize($filter->getAttribute('enabled', $filters[$name]['enabled']));
+					}
 
-					if($filter->hasChildren('class'))
+					if($filter->hasChildren('class')) {
 						$filters[$name]['class'] = $filter->class->getValue();
+					}
+					
 					$filters[$name]['params'] = $this->getItemParameters($filter, $filters[$name]['params']);
 				}
 			}
@@ -68,9 +74,14 @@ class AgaviFilterConfigHandler extends AgaviConfigHandler
 		$data = array();
 
 		foreach($filters as $filter) {
-			$data[] = '$filter = new ' . $filter['class'] . '();';
-			$data[] = '$filter->initialize($this->context, ' . var_export($filter['params'], true) . ');';
-			$data[] = '$filters[] = $filter;';
+			if(!isset($filter['class'])) {
+				throw new AgaviConfigurationException('No class name specified for filter "' . $filter['name'] . '" in ' . $config);
+			}
+			if($filter['enabled']) {
+				$data[] = '$filter = new ' . $filter['class'] . '();';
+				$data[] = '$filter->initialize($this->context, ' . var_export($filter['params'], true) . ');';
+				$data[] = '$filters[] = $filter;';
+			}
 		}
 
 		// compile data

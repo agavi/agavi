@@ -134,6 +134,10 @@ abstract class AgaviConfigHandler extends AgaviParameterHolder
 			// null value
 			return null;
 		}
+		
+		if(!is_string($value)) {
+			return $value;
+		}
 
 		// lowercase our value for comparison
 		$value  = trim($value);
