@@ -696,7 +696,7 @@ abstract class AgaviController extends AgaviParameterHolder
 	public function moduleExists ($moduleName)
 	{
 
-		$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/config/module.ini';
+		$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/config/module.xml';
 
 		return is_readable($file);
 
