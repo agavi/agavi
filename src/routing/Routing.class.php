@@ -33,8 +33,9 @@ class AgaviRouting
 	const ANCHOR_NONE = 0;
 	const ANCHOR_START = 1;
 	const ANCHOR_END = 2;
-	protected $routes = array();
-	private $context = null;
+	protected $routes = array(),
+						$callbacks = array(),
+						$context = null;
 	
 	public function initialize(AgaviContext $context)
 	{
@@ -113,8 +114,8 @@ class AgaviRouting
 		if(isset($this->routes[$route])) {
 			$parent = $route;
 			do {
-				$r = $this->routes[$parent];
-				$defaults = array_merge($defaults, $r['opt']['defaults']);
+				$r =& $this->routes[$parent];
+				$myDefaults = $r['opt']['defaults'];
 
 				if($r['opt']['anchor'] & self::ANCHOR_START || $r['opt']['anchor'] == self::ANCHOR_NONE) {
 					$url = $r['opt']['reverseStr'] . $url;
@@ -130,7 +131,7 @@ class AgaviRouting
 						continue;
 					}
 
-					$defaults = array_merge($defaults, $myR['opt']['defaults']);
+					$myDefaults = array_merge($myDefaults, $myR['opt']['defaults']);
 					if($myR['opt']['anchor'] & self::ANCHOR_START || $myR['opt']['anchor'] == self::ANCHOR_NONE) {
 						$url = $myR['opt']['reverseStr'] . $url;
 					} else {
@@ -138,9 +139,19 @@ class AgaviRouting
 					}
 				}
 
+				if(isset($r['opt']['callback'])) {
+					if(!isset($r['cb'])) {
+						$cb = $r['opt']['callback'];
+						$r['cb'] = new $cb();
+						$r['cb']->initialize($this->getContext(), $r);
+					}
+					$myDefaults = $r['cb']->onGenerate($myDefaults);
+				}
+
+				$defaults = array_merge($defaults, $myDefaults);
+
 				$parent = $r['opt']['parent'];
 
-				//if($r['opt]['stopping']
 			} while($parent);
 
 		} else {
@@ -190,20 +201,36 @@ class AgaviRouting
 			$routes = array_pop($routeStack);
 			foreach($routes as $key) {
 				$route = $this->routes[$key];
-				$opts = $route['opt'];
-				if(preg_match($route['rxp'], $input, $match, PREG_OFFSET_CAPTURE)) {
-					$matchedRoutes[] = $route['opt']['name'];
+				$opts =& $route['opt'];
+				if($opts['callback'] && !isset($route['cb'])) {
+					$cb = $opts['callback'];
+					$route['cb'] = new $cb();
+					$route['cb']->initialize($this->getContext(), $route);
+				}
 
-					foreach($match as $name => $m) {
-						if(is_string($name) && !isset($opts['defaults'][$name])) {
-							$this->routes[$key]['opt']['defaults'][$name] = $m[0];
-						}
+				if(preg_match($route['rxp'], $input, $match, PREG_OFFSET_CAPTURE)) {
+					foreach($opts['defaults'] as $key => $value) {
+						$vars[$key] = $value;
 					}
 
 					foreach($route['par'] as $param) {
 						$vars[$param] = $match[$param][0];
 					}
-					
+
+					if($opts['callback']) {
+						if(!$route['cb']->onMatched($vars)) {
+							continue;
+						}
+					}
+
+					$matchedRoutes[] = $opts['name'];
+
+					foreach($match as $name => $m) {
+						if(is_string($name) && !isset($opts['defaults'][$name])) {
+							$route['opt']['defaults'][$name] = $m[0];
+						}
+					}
+
 					if($opts['module']) {
 						$vars[$ma] = $opts['module'];
 					}
@@ -211,10 +238,7 @@ class AgaviRouting
 					if($opts['action']) {
 						$vars[$aa] = $opts['action'];
 					}
-					
-					foreach($opts['parameters'] as $key => $value) {
-						$vars[$key] = $value;
-					}
+
 
 					if($opts['output_type']) {
 						$ot = $opts['output_type'];
@@ -240,6 +264,10 @@ class AgaviRouting
 						break;
 					}
 
+				} else {
+					if($opts['callback']) {
+						$route['cb']->onNotMatched();
+					}
 				}
 			}
 		} while(count($routeStack) > 0);
