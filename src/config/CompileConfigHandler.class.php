@@ -107,7 +107,13 @@ class AgaviCompileConfigHandler extends AgaviConfigHandler
 					throw new AgaviParseException($error);
 				}
 
-				$contents = @file_get_contents($file);
+				if(AgaviConfig::get('core.debug', false)) {
+					// debug mode, just require() the files, makes for nicer stack traces
+					$contents = 'require(' . var_export($file, true) . ');';
+				} else {
+					// no debug mode, so make things fast
+					$contents = file_get_contents($file);
+				}
 
 				// append file data
 				$data[$file] = $contents;

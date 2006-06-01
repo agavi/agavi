@@ -25,13 +25,14 @@
 <configurations>
 	<configuration>
 		<compiles>
+			<compile>%core.agavi_dir%/util/AgaviAttributeHolder.class.php</compile>
 			<compile>%core.agavi_dir%/action/Action.class.php</compile>
 			<compile>%core.agavi_dir%/action/ActionStack.class.php</compile>
 			<compile>%core.agavi_dir%/action/ActionStackEntry.class.php</compile>
 			<compile>%core.agavi_dir%/core/Context.class.php</compile>
 			<compile>%core.agavi_dir%/controller/Controller.class.php</compile>
-			<compile>%core.agavi_dir%/filter/AgaviDispatchFilter.class.php</compile>
 			<compile>%core.agavi_dir%/filter/Filter.class.php</compile>
+			<compile>%core.agavi_dir%/filter/AgaviDispatchFilter.class.php</compile>
 			<compile>%core.agavi_dir%/filter/ExecutionFilter.class.php</compile>
 			<compile>%core.agavi_dir%/filter/FilterChain.class.php</compile>
 			<compile>%core.agavi_dir%/logging/Appender.class.php</compile>
@@ -44,7 +45,6 @@
 			<compile>%core.agavi_dir%/request/Request.class.php</compile>
 			<compile>%core.agavi_dir%/storage/Storage.class.php</compile>
 			<compile>%core.agavi_dir%/user/User.class.php</compile>
-			<compile>%core.agavi_dir%/util/AgaviAttributeHolder.class.php</compile>
 			<compile>%core.agavi_dir%/validator/Validator.class.php</compile>
 			<compile>%core.agavi_dir%/validator/ValidatorManager.class.php</compile>
 			<compile>%core.agavi_dir%/view/View.class.php</compile>
