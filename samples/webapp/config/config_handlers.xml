@@ -61,7 +61,7 @@
 | "%" signs. Example: %core.agavi_dir%                                         |
 +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
 -->
-<configurations>
+<configurations parent="%core.system_config_dir%/config_handlers.xml">
 <!--
 	+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
 	| Register your custom configuration handlers here. Or register an existing  |

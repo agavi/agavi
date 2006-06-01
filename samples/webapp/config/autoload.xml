@@ -15,7 +15,7 @@
 | "%" signs. Example: %core.agavi_dir%                                         |
 +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
 -->
-<configurations>
+<configurations parent="%core.system_config_dir%/autoload.xml">
 	<!--
 		+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
 		| Custom Classes                                                         |

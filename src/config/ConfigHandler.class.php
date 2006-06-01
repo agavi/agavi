@@ -230,9 +230,16 @@ abstract class AgaviConfigHandler extends AgaviParameterHolder
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public static function orderConfigurations(AgaviConfigValueHolder $configurations, $environment = null, $context = null)
+	public static function orderConfigurations(AgaviConfigValueHolder $configurations, $environment = null, $context = null, $autoloadParser = true)
 	{
 		$configs = array();
+
+		if($configurations->hasAttribute('parent')) {
+			$parent = self::literalize($configurations->getAttribute('parent'));
+			$parentConfigs = self::orderConfigurations(AgaviConfigCache::parseConfig($parent, $autoloadParser)->configurations, $environment, $context, $autoloadParser);
+			$configs = array_merge($configs, $parentConfigs);
+		}
+
 		
 		foreach($configurations as $cfg) {
 			if(!$cfg->hasAttribute('environment') && !$cfg->hasAttribute('context')) {

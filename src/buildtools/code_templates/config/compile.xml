@@ -22,7 +22,7 @@
 | Core Agavi classes.                                                        |
 +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
 -->
-<configurations>
+<configurations parent="%core.system_config_dir%/compile.xml">
 	<!--
 		+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
 		| You shouldn't add any custom files to this file. Do so at your own risk.   |
