@@ -37,6 +37,10 @@
 			<class>AgaviDatabaseManager</class>
 		</database_manager>
 		
+		<dispatch_filter>
+			<class>AgaviDispatchFilter</class>
+		</dispatch_filter>
+		
 		<execution_filter>
 			<class>AgaviExecutionFilter</class>
 		</execution_filter>
@@ -54,7 +58,7 @@
 		</request>
 
 		<routing>
-			<class>AgaviRouting</class>
+			<class>AgaviWebRouting</class>
 		</routing>
 
 		<security_filter>

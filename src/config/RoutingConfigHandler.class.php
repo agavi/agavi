@@ -47,6 +47,8 @@ class AgaviRoutingConfigHandler extends AgaviConfigHandler
 	 */
 	public function execute($config, $context = null)
 	{
+		$routing = AgaviContext::getInstance($context)->getRouting();
+
 		if($context == null) {
 			$context = '';
 		}
@@ -54,7 +56,8 @@ class AgaviRoutingConfigHandler extends AgaviConfigHandler
 		// parse the config file
 		$configurations = $this->orderConfigurations(AgaviConfigCache::parseConfig($config)->configurations, AgaviConfig::get('core.environment'), $context);
 
-		$routing = new AgaviRouting();
+		// clear the routing
+		$routing->importRoutes(array());
 		$data = array();
 		
 		foreach($configurations as $cfg)

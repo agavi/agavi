@@ -28,14 +28,15 @@
  *
  * @version    $Id$
  */
-class AgaviRouting
+abstract class AgaviRouting
 {
 	const ANCHOR_NONE = 0;
 	const ANCHOR_START = 1;
 	const ANCHOR_END = 2;
 	protected $routes = array(),
-						$callbacks = array(),
-						$context = null;
+						$context = null,
+						$input = null,
+						$prefix = '';
 	
 	public function initialize(AgaviContext $context)
 	{
@@ -45,6 +46,16 @@ class AgaviRouting
 	public final function getContext()
 	{
 		return $this->context;
+	}
+
+	public final function getInput()
+	{
+		return $this->input;
+	}
+
+	public final function getPrefix()
+	{
+		return $this->prefix;
 	}
 
 	public function addRoute($route, $options = array(), $parent = null)
@@ -172,11 +183,13 @@ class AgaviRouting
 		}
 
 		$url = str_replace($from, $to, $url);
-		return $url;
+		return $this->prefix . $url;
 	}
 
-	public function matchRoute($input)
+	public function matchRoute()
 	{
+		$input = $this->input;
+
 		$vars = array();
 		$ot = null;
 		$matchedRoutes = array();
@@ -208,7 +221,8 @@ class AgaviRouting
 					$route['cb']->initialize($this->getContext(), $route);
 				}
 
-				if(preg_match($route['rxp'], $input, $match, PREG_OFFSET_CAPTURE)) {
+				$match = array();
+				if($this->parseInput($route, $input, $match)) {
 					foreach($opts['defaults'] as $key => $value) {
 						$vars[$key] = $value;
 					}
@@ -284,6 +298,11 @@ class AgaviRouting
 		return $matchedRoutes;
 	}
 
+
+	protected function parseInput($route, $input, &$matches)
+	{
+		return preg_match($route['rxp'], $input, $matches, PREG_OFFSET_CAPTURE);
+	}
 
 	protected function parseRouteString($str)
 	{

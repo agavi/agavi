@@ -100,6 +100,8 @@
 
 			<!-- agavi/routing -->
 			<autoload name="AgaviRouting">%core.agavi_dir%/routing/Routing.class.php</autoload>
+			<autoload name="AgaviRoutingCallback">%core.agavi_dir%/routing/RoutingCallback.class.php</autoload>
+			<autoload name="AgaviWebRouting">%core.agavi_dir%/routing/AgaviWebRouting.class.php</autoload>
 
 			<!-- agavi/storage -->
 			<autoload name="AgaviCreoleSessionStorage">%core.agavi_dir%/storage/CreoleSessionStorage.class.php</autoload>
