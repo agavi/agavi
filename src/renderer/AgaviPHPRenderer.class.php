@@ -50,7 +50,9 @@ class AgaviPHPRenderer extends AgaviRenderer
 		
 		// alias the attributes array so it's directly accessible to the
 		// template
-		$template =& array_merge($view->getAttributes(), $this->output);
+		$attribs =& $view->getAttributes();
+		
+		$template =& array_merge($attribs, $this->output);
 
 		// render the decorator template and return the result
 		$decoratorTemplate = $view->getDecoratorDirectory() . '/' . $view->getDecoratorTemplate() . $this->getExtension();

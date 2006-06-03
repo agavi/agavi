@@ -26,67 +26,6 @@
  */
 abstract class AgaviXSLView extends AgaviView
 {
-	// +-----------------------------------------------------------------------+
-	// | PRIVATE VARIABLES                                                     |
-	// +-----------------------------------------------------------------------+
-	private $xslProc      = null;  // XSLTProcessor.
-	private $domDoc       = null;  // DomDocument.
-	private $rootNode     = null;  // The root node of the DomDocument.
-	private $rootNodeRS   = null;  // The copy of the initilization of the DomDocument incase a restart is needed.
-	private $rootNodeName = null;  // The name of the root node incase it is needed.
-
-
-	/**
-	 * Initialize this view.
-	 *
-	 * @param      AgaviContext The current application context.
-	 *
-	 * @return     bool true, if initialization completes successfully,
-	 *                  otherwise false.
-	 *
-	 * @author     Wes Hays <weshays@gbdev.com>
-	 * @since      0.10.0
-	 */
-	public function initialize($context)
-	{
-		$this->xslProc = new XSLTProcessor();
-
-		// initialize this object
-		if(!$this->setDomDocument(new DOMDocument('1.0', 'iso-8859-1'))) return false;
-
-		return (parent::initialize($context));
-	}
-
-	/**
-	 * Sets the DOMDocument to be used.
-	 * The default value is DOMDocument('1.0', 'iso-8859-1').
-	 *
-	 * @param      DOMDocument $domDocument The DOMDocument to use.
-	 * @param      string $rootNode (Optional) The name of the root node to use.  
-	 *                    If not specified then the root node will have a name
-	 *                    of "rootnode".
-	 *
-	 * @return     True on success, otherwise false.
-	 *
-	 * @author     Wes Hays <weshays@gbdev.com>
-	 * @since      0.10.0
-	 */
-	public function setDomDocument($domDocument, $rootNode = 'rootnode')
-	{
-		// Make sure that $domDocument is indeed a DomDocument.
-		if(($domDocument instanceof DOMDocument) && is_string($rootNode))
-		{
-			$this->domDoc       = $domDocument;
-			$this->rootNodeName = $rootNode;
-			$this->rootNode     = $this->domDoc->appendChild(new DOMElement($this->rootNodeName));
-			$this->domDocRS     = $this->domDoc->cloneNode(true);
-
-			return true;
-		}
-
-		return false;
-	}
-
 	/**
 	 * Append an attribute in the form of a DOMNode.
 	 *

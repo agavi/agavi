@@ -78,10 +78,19 @@ abstract class AgaviSmartyRenderer
 		// execute pre-render check
 		$this->preRenderCheck();
 
+		$engine = $this->getEngine();
+		$view = $this->getView();
+
 		// get the render mode
 		$mode = $this->getContext()->getController()->getRenderMode();
 
-		$this->getEngine()->template_dir = $this->getDirectory();
+		$engine->template_dir = $this->getDirectory();
+
+		$attribs = $view->getAttributesByRef();
+
+		foreach($attribs as $name => &$value) {
+			$engine->assign_by_ref($name, $value);
+		}
 
 		if ($mode == AgaviView::RENDER_CLIENT && !$this->isDecorator()) {
 			// render directly to the client

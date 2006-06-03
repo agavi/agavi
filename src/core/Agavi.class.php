@@ -28,7 +28,7 @@
 class Agavi
 {
 	/**
-	 * An associative arrays of classes (keys) and filenames (values) used by __autoload
+	 * An associative arrays of class and file names used by __autoload().
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
@@ -38,9 +38,7 @@ class Agavi
 	/**
 	 * Startup the Agavi core
 	 *
-	 * @param      string environment the environment to use for this session
-	 *
-	 * @throws     AgaviException if an error occurs during the bootstrap sequence
+	 * @param      string environment the environment to use for this session.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
@@ -75,7 +73,7 @@ class Agavi
 			
 			AgaviConfig::set('core.module_dir', AgaviConfig::get('core.webapp_dir') . '/modules', false);
 			
-			AgaviConfig::set('core.template_dir', AgaviConfig::get('core.template_dir') . '/templates', false);
+			AgaviConfig::set('core.template_dir', AgaviConfig::get('core.webapp_dir') . '/templates', false);
 			
 			// ini settings
 			ini_set('magic_quotes_runtime', AgaviConfig::get('php.magic_quotes_runtime', false));

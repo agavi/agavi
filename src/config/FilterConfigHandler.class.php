@@ -62,8 +62,8 @@ class AgaviFilterConfigHandler extends AgaviConfigHandler
 						$filters[$name]['enabled'] = $this->literalize($filter->getAttribute('enabled', $filters[$name]['enabled']));
 					}
 
-					if($filter->hasChildren('class')) {
-						$filters[$name]['class'] = $filter->class->getValue();
+					if($filter->hasAttribute('class')) {
+						$filters[$name]['class'] = $filter->getAttribute('class');
 					}
 					
 					$filters[$name]['params'] = $this->getItemParameters($filter, $filters[$name]['params']);

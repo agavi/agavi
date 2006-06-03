@@ -26,35 +26,35 @@ class BasicSecurityUserTest extends UnitTestCase
 	{
 		$this->_u->clearCredentials();
 		$this->_u->addCredential('test1');
-		$this->assertTrue($this->_u->hasCredential('test1'));
+		$this->assertTrue($this->_u->hasCredentials('test1'));
 		$this->_u->addCredential('test2');
-		$this->assertTrue($this->_u->hasCredential('test2'));
+		$this->assertTrue($this->_u->hasCredentials('test2'));
 	}
 	
-	public function testhasCredential()
+	public function testhasCredentials()
 	{
 		$this->_u->clearCredentials();
 		$this->_u->addCredential('test1');
 		$this->_u->addCredential('test2');
 		$this->_u->addCredential('test3');
 		$this->_u->addCredential('test4');
-		$this->assertTrue($this->_u->hasCredential('test1'));
-		$this->assertTrue($this->_u->hasCredential(array('test2', 'test3')));
-		$this->assertTrue($this->_u->hasCredential(array('test1', array('test2', 'test3'))));
-		$this->assertTrue($this->_u->hasCredential(array('test1', array('test2', 'test5'))));
-		$this->assertFalse($this->_u->hasCredential('test5'));
-		$this->assertFalse($this->_u->hasCredential(array('test2', 'test5')));
-		$this->assertFalse($this->_u->hasCredential(array('test5', array('test2', 'test3'))));
-		$this->assertFalse($this->_u->hasCredential(array('test1', array('test5', 'test6'))));
+		$this->assertTrue($this->_u->hasCredentials('test1'));
+		$this->assertTrue($this->_u->hasCredentials(array('test2', 'test3')));
+		$this->assertTrue($this->_u->hasCredentials(array('test1', array('test2', 'test3'))));
+		$this->assertTrue($this->_u->hasCredentials(array('test1', array('test2', 'test5'))));
+		$this->assertFalse($this->_u->hasCredentials('test5'));
+		$this->assertFalse($this->_u->hasCredentials(array('test2', 'test5')));
+		$this->assertFalse($this->_u->hasCredentials(array('test5', array('test2', 'test3'))));
+		$this->assertFalse($this->_u->hasCredentials(array('test1', array('test5', 'test6'))));
 	}
 	
 	public function teststrictCredentialComparison()
 	{
 		$this->_u->clearCredentials();
 		$this->_u->addCredential("0");
-		$this->assertTrue($this->_u->hasCredential("0"));
-		$this->assertFalse($this->_u->hasCredential(0));
-		$this->assertFalse($this->_u->hasCredential(false));
+		$this->assertTrue($this->_u->hasCredentials("0"));
+		$this->assertFalse($this->_u->hasCredentials(0));
+		$this->assertFalse($this->_u->hasCredentials(false));
 	}
 
 }

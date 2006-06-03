@@ -48,60 +48,6 @@ class AgaviConsoleController extends AgaviController
 		ini_set('arg_separator.output', AgaviConfig::get('php.arg_separator.output', '&'));
 	}
 	
-	/**
-	 * Dispatch a request.
-	 *
-	 * This will determine which module and action to use by request parameters
-	 * specified by the user.
-	 *
-	 * @return     void
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @author     Agavi Project <info@agavi.org>
-	 * @since      0.9.0
-	 */
-	public function dispatch ($params = array())
-	{
-
-		try {
-
-			if (is_array($params)) {
-				$this->setParametersByRef($params);
-			}
-
-			// determine our module and action
-			$moduleName = (AgaviConfig::has('console.module') ? AgaviConfig::get('console.module') : AgaviConfig::get('actions.default_module'));
-			$actionName = (AgaviConfig::has('console.action') ? AgaviConfig::get('console.action') : null);
-
-			if ($actionName == null) {
-
-				// no action has been specified
-				if ($moduleName == AgaviConfig::get('actions.default_module')) {
-
-					$actionName = AgaviConfig::get('actions.default_action');
-
-				} else if ($this->actionExists($moduleName, 'Index')) {
-
-					// an Index action exists
-					$actionName = 'Index';
-
-				}
-			}
-			
-			$request = $this->context->getRequest();
-
-			// set the module and action in the Request parameters
-			$request->setParameter($request->getModuleAccessor(), $moduleName);
-			$request->setParameter($request->getActionAccessor(), $actionName);
-
-			parent::dispatch($parameters);
-
-		} catch (Exception $e) {
-			AgaviException::printStackTrace($e, $this->getContext());
-		}
-
-	}
-
 }
 
 ?>

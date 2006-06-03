@@ -15,10 +15,10 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviBasicSecurityFilter checks security by calling the getCredential() 
+ * AgaviBasicSecurityFilter checks security by calling the getCredentials() 
  * method of the action. Once the credential has been acquired, 
  * AgaviBasicSecurityFilter verifies the user has the same credential 
- * by calling the hasCredential() method of SecurityUser.
+ * by calling the hasCredentials() method of SecurityUser.
  *
  * @package    agavi
  * @subpackage filter
@@ -56,7 +56,7 @@ class AgaviBasicSecurityFilter extends AgaviSecurityFilter
 		$actionInstance = $actionEntry->getActionInstance();
 
 		// get the credential required for this action
-		$credential = $actionInstance->getCredential();
+		$credential = $actionInstance->getCredentials();
 
 		// credentials can be anything you wish; a string, array, object, etc.
 		// as long as you add the same exact data to the user as a credential,
@@ -69,7 +69,7 @@ class AgaviBasicSecurityFilter extends AgaviSecurityFilter
 		{
 
 			// the user is authenticated
-			if ($credential === null || $user->hasCredential($credential))
+			if ($credential === null || $user->hasCredentialss($credential))
 			{
 
 				// the user has access, continue

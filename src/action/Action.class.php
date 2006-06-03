@@ -39,28 +39,6 @@ abstract class AgaviAction
 		$context = null;
 
 	/**
-	 * Execute any application/business logic for this action.
-	 *
-	 * In a typical database-driven application, execute() handles application
-	 * logic itself and then proceeds to create a model instance. Once the model
-	 * instance is initialized it handles all business logic for the action.
-	 *
-	 * A model should represent an entity in your application. This could be a
-	 * user account, a shopping cart, or even a something as simple as a
-	 * single product.
-	 *
-	 * @return     mixed A string containing the view name associated with this
-	 *                   action.
-	 *                   Or an array with the following indices:
-	 *                   - The parent module of the view that will be executed.
-	 *                   - The view that will be executed.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	abstract function execute ();
-
-	/**
 	 * Retrieve the current application context.
 	 *
 	 * @return     AgaviContext The current Context instance.
@@ -68,11 +46,9 @@ abstract class AgaviAction
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public final function getContext ()
+	public final function getContext()
 	{
-
 		return $this->context;
-
 	}
 
 	/**
@@ -84,51 +60,9 @@ abstract class AgaviAction
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function getCredential ()
+	public function getCredentials()
 	{
-
 		return null;
-
-	}
-
-	/**
-	 * Retrieve the default view to be executed when a given request is not
-	 * served by this action.
-	 *
-	 * @return     mixed A string containing the view name associated with this
-	 *                  action.
-	 *                  Or an array with the following indices:
-	 *                  - The parent module of the view that will be executed.
-	 *                  - The view that will be executed.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public function getDefaultView ()
-	{
-
-		return 'Input';
-
-	}
-
-	/**
-	 * Retrieve the request methods on which this action will process
-	 * validation and execution.
-	 *
-	 * @return     int One of the following values:
-	 *                 - AgaviRequest::GET
-	 *                 - AgaviRequest::POST
-	 *                 - AgaviRequest::NONE
-	 *
-	 * @see        Request
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public function getRequestMethods ()
-	{
-
-		return AgaviRequest::GET | AgaviRequest::POST | AgaviRequest::NONE;
-
 	}
 
 	/**
@@ -143,11 +77,9 @@ abstract class AgaviAction
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function handleError ()
+	public function handleError()
 	{
-
 		return 'Error';
-
 	}
 
 	/**
@@ -161,13 +93,10 @@ abstract class AgaviAction
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function initialize ($context)
+	public function initialize(AgaviContext $context)
 	{
-
 		$this->context = $context;
-
 		return true;
-
 	}
 
 	/**
@@ -178,11 +107,9 @@ abstract class AgaviAction
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function isSecure ()
+	public function isSecure()
 	{
-
 		return false;
-
 	}
 
 	/**
@@ -195,9 +122,8 @@ abstract class AgaviAction
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function registerValidators ($validatorManager)
+	public function registerValidators($validatorManager)
 	{
-
 	}
 
 	/**
@@ -209,11 +135,9 @@ abstract class AgaviAction
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function validate ()
+	public function validate()
 	{
-
 		return true;
-
 	}
 
 }

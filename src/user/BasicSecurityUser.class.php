@@ -98,7 +98,7 @@ class AgaviBasicSecurityUser extends AgaviSecurityUser
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
-	public function hasCredential ($credential)
+	public function hasCredentials ($credential)
 	{
 		if(is_array($credential))
 		{
@@ -198,7 +198,7 @@ class AgaviBasicSecurityUser extends AgaviSecurityUser
 	public function removeCredential ($credential)
 	{
 
-		if ($this->hasCredential($credential))
+		if ($this->hasCredentials($credential))
 		{
 
 			// we have the credential, now we have to find it

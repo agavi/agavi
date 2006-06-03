@@ -345,43 +345,31 @@ class AgaviWebRequest extends AgaviRequest
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @author     Veikko Makinen <mail@veikkomakinen.com>
+	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
 	public function initialize ($context, $parameters = null)
 	{
-		
 		parent::initialize($context, $parameters);
-
-		if (isset($_SERVER['REQUEST_METHOD']))
-		{
-
-			switch ($_SERVER['REQUEST_METHOD'])
-			{
-
+		
+		$getMethod = isset($parameters['GET_method_name']) ? $parameters['GET_method_name'] : 'read';
+		if(isset($_SERVER['REQUEST_METHOD'])) {
+			switch($_SERVER['REQUEST_METHOD']) {
 				case 'GET':
-				    $this->setMethod(self::GET);
+				    $this->setMethod($getMethod);
 				    break;
-
 				case 'POST':
-				    $this->setMethod(self::POST);
+				    $this->setMethod(isset($parameters['POST_method_name']) ? $parameters['POST_method_name'] : 'write');
 				    break;
-
 				default:
-				    $this->setMethod(self::GET);
-
+				    $this->setMethod($getMethod);
 			}
-
-		} else
-		{
-
+		} else {
 			// set the default method
-			$this->setMethod(self::GET);
-
+			$this->setMethod($getMethod);
 		}
-
 		// load parameters from GET/PATH_INFO/POST
 		$this->loadParameters();
-
 	}
 
 	/**
@@ -390,55 +378,16 @@ class AgaviWebRequest extends AgaviRequest
 	 * @return     void
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
-	private function loadParameters ()
+	private function loadParameters()
 	{
-
 		// merge GET parameters
 		$this->setParametersByRef($_GET);
 
-		// parse PATH_INFO
-		switch (AgaviConfig::get('request.path_info_array'))
-		{
-
-			case 'SERVER':
-
-				$pathArray =& $_SERVER;
-				break;
-
-			case 'ENV':
-			default:
-
-				$pathArray =& $_ENV;
-
-		}
-
-		if (isset($pathArray[AgaviConfig::get('request.path_info_key')]))
-		{
-
-			$array = explode('/', trim($pathArray[AgaviConfig::get('request.path_info_key')], '/'));
-			$count = count($array);
-
-			for ($i = 0; $i < $count; $i++)
-			{
-
-				// see if there's a value associated with this parameter,
-				// if not we're done with path data
-				if ($count > ($i + 1))
-				{
-
-				    $this->setParameterByRef($array[$i], $array[++$i]);
-
-				}
-
-			}
-
-		}
-
 		// merge POST parameters
 		$this->setParametersByRef($_POST);
-
 	}
 
 	/**

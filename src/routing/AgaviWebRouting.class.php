@@ -41,10 +41,54 @@ class AgaviWebRouting extends AgaviRouting
 			$sn = $_SERVER['SCRIPT_NAME'];
 
 			$this->prefix = '';
-			for($i = 0; isset($sn[$i]) && $sn[$i] == $ru[$i]; ++$i) {
+			for($i = 0; isset($sn[$i]) && isset($ru[$i]) && $sn[$i] == $ru[$i]; ++$i) {
 				$this->prefix .= $sn[$i];
 			}
 			$this->input = substr($ru, $i);
+		}
+	}
+	
+	/**
+	 * Generate a formatted Agavi URL.
+	 *
+	 * @param      string A route name.
+	 * @param      array  An associative array of URL parameters.
+	 *
+	 * @return     string
+	 *
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function gen($route, $params = array())
+	{
+		if(AgaviConfig::get('core.use_routing')) {
+			
+			return parent::gen($route, $params);
+			
+		} else {
+			
+			if ($url == null) {
+				$url = $_SERVER['SCRIPT_NAME'];
+			}
+
+			// use GET format
+			$divider  = '&';
+			$equals   = '=';
+			$url     .= '?';
+
+			// loop through the parameters
+			foreach ($parameters as $key => $value) {
+				$url .= urlencode($key) . $equals . urlencode($value) . $divider;
+			}
+
+			// strip off last divider character
+			$url = rtrim($url, $divider);
+
+			// replace &'s with &amp;
+			$url = str_replace('&', '&amp;', $url);
+
+			return $url;
 		}
 	}
 }

@@ -34,14 +34,14 @@ class TestAction extends AgaviTestCase
 		$this->assertReference($this->_context, $c);
 	}
 
-	public function testgetCredential()
+	public function testgetCredentials()
 	{
-		$this->assertNull($this->_action->getCredential());
+		$this->assertNull($this->_action->getCredentials());
 	}
 
-	public function testgetDefaultView()
+	public function testgetDefaultViewName()
 	{
-		$this->assertEquals(AgaviView::INPUT, $this->_action->getDefaultView());
+		$this->assertEquals(AgaviView::INPUT, $this->_action->getDefaultViewName());
 	}
 
 	public function testgetRequestMethods()

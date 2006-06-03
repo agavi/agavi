@@ -64,30 +64,32 @@ abstract class AgaviPHPTALRenderer
 		$retval = null;
 		
 		$this->preRenderCheck();
+		$engine = $this->getEngine();
+		$view = $this->getView();
 		
 		$mode = $this->getContext()->getController()->getRenderMode();
-		$this->getEngine()->setTemplateRepository($this->getDirectory());
-		$this->getEngine()->setTemplate($this->getTemplate());
+		$engine->setTemplateRepository($view->getDirectory());
+		$engine->setTemplate($view->getTemplate());
 		$this->updateTemplateAttributes();
 		
-		if ($mode == AgaviView::RENDER_CLIENT && !$this->isDecorator()) {
+		if($mode == AgaviView::RENDER_CLIENT && !$view->isDecorator()) {
 			// render directly to the client
-			echo $this->getEngine()->execute();
-		} else if ($mode != AgaviView::RENDER_NONE) {
+			echo $engine->execute();
+		} else if($mode != AgaviView::RENDER_NONE) {
 			// render to variable
-			$retval = $this->getEngine()->execute();
+			$retval = $engine->execute();
 			// now render our decorator template, if one exists
-			if ($this->isDecorator()) {
+			if($view->isDecorator()) {
 				$retval = $this->decorate($retval);
 			}
 
-			if ($mode == AgaviView::RENDER_CLIENT) {
-				echo($retval);
+			if($mode == AgaviView::RENDER_CLIENT) {
+				echo $retval;
 				$retval = null;
 			}
 		}
-		return $retval;
 		
+		return $retval;
 	}
 
 	/*
@@ -97,11 +99,12 @@ abstract class AgaviPHPTALRenderer
 	{
 		// call our parent decorate() method
 		parent::decorate($content);
+		$engine = $this->getEngine();
 
 		// render the decorator template and return the result
 		$decoratorTemplate = $this->getDecoratorDirectory() . '/' . $this->getDecoratorTemplate();
 
-		$this->getEngine()->setTemplate($decoratorTemplate);
+		$engine->setTemplate($decoratorTemplate);
 		
 		// TODO: fix this crap :)
 		/*
@@ -113,7 +116,7 @@ abstract class AgaviPHPTALRenderer
 		$this->updateTemplateAttributes();
 	
 
-		$retval = $this->getEngine()->execute();
+		$retval = $engine->execute();
 
 		return $retval;
 	}	
@@ -129,14 +132,16 @@ abstract class AgaviPHPTALRenderer
 	 */
 	private function updateTemplateAttributes()
 	{
+		$view = $this->getView();
+		$engine = $this->getEngine();
 		if($this->extractAttributes()) {
-			foreach($this->attributes as $key => $val) {
-				$this->getEngine()->set($key, $val);
+			foreach($view->getAttributes() as $key => $val) {
+				$engine->set($key, $val);
 			}
 		} else {
-			$this->getEngine()->set('template', $this->attributes);
+			$engine->set('template', $view->getAttributes());
 		}
-		$this->getEngine()->set('this', $this);
+		$engine->set('this', $this);
 	}
 	
 }

@@ -340,9 +340,9 @@ class AgaviMySQLSessionStorage extends AgaviSessionStorage
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function shutdown ()
+	public function shutdown()
 	{
-
+		parent::shutdown();
 	}
 
 }

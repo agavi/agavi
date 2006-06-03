@@ -18,9 +18,6 @@
 <configurations>
 	<configuration>
 		<autoloads>
-			<!-- agavi/util -->
-			<autoload name="AgaviShutdownListener">%core.agavi_dir%/util/ShutdownListener.iface.php</autoload>
-
 			<!-- agavi/config -->
 			<autoload name="AgaviCompileConfigHandler">%core.agavi_dir%/config/CompileConfigHandler.class.php</autoload>
 			<autoload name="AgaviContextConfigHandler">%core.agavi_dir%/config/ContextConfigHandler.class.php</autoload>

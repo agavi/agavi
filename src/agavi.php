@@ -45,6 +45,9 @@ if(!version_compare(PHP_VERSION, AgaviConfig::get('core.minimum_php_version'), '
 // define a few filesystem paths
 AgaviConfig::set('core.agavi_dir', dirname(__FILE__), false);
 
+// default exception template
+AgaviConfig::set('exception.default_template', AgaviConfig::get('core.agavi_dir') . '/exception/templates/shiny.php', false);
+
 // required files
 require(AgaviConfig::get('core.agavi_dir') . '/version.php');
 require(AgaviConfig::get('core.agavi_dir') . '/core/Agavi.class.php');

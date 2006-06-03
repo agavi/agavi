@@ -35,34 +35,6 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	// | CONSTANTS                                                             |
 	// +-----------------------------------------------------------------------+
 
-	/**
-	 * Process validation and execution for only GET requests.
-	 *
-	 * @since      0.9.0
-	 */
-	const GET = 2;
-
-	/**
-	 * Skip validation and execution for any request method.
-	 *
-	 * @since      0.9.0
-	 */
-	const NONE = 1;
-
-	/**
-	 * Process validation and execution for only POST requests.
-	 *
-	 * @since      0.9.0
-	 */
-	const POST = 4;
-
-	/**
-	 * Process validation and execution for only CONSOLE requests.
-	 *
-	 * @since      0.9.0
-	 */
-	const CONSOLE = 8;
-
 	protected
 		$attributes = array(),
 		$errors     = array(),
@@ -164,12 +136,10 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	/**
 	 * Retrieve this request's method.
 	 *
-	 * @return     int One of the following constants:
-	 *                 - AgaviRequest::GET
-	 *                 - AgaviRequest::POST
-	 *                 - AgaviRequest::CONSOLE
+	 * @return     string The request method name
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
 	public function getMethod()
@@ -338,31 +308,17 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	/**
 	 * Set the request method.
 	 *
-	 * @param      int One of the following constants:
-	 *                 - AgaviRequest::GET
-	 *                 - AgaviRequest::POST
-	 *                 - AgaviRequest::CONSOLE
+	 * @param      string The request method name.
 	 *
 	 * @return     void
 	 *
-	 * @throws     <b>AgaviException</b> - If the specified request method is
-	 *                                          invalid.
-	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
 	public function setMethod($method)
 	{
-		if ($method == self::GET || $method == self::POST || $method == self::CONSOLE) {
-			$this->method = $method;
-			return;
-		}
-
-		// invalid method type
-		$error = 'Invalid request method: %s';
-		$error = sprintf($error, $method);
-
-		throw new AgaviException($error);
+		$this->method = $method;
 	}
 	
 	/**

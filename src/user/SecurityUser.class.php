@@ -61,7 +61,7 @@ abstract class AgaviSecurityUser extends AgaviUser
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	abstract function hasCredential ($credential);
+	abstract function hasCredentials ($credential);
 
 	/**
 	 * Indicates whether or not this user is authenticated.

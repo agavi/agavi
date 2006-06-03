@@ -87,114 +87,13 @@ class AgaviWebController extends AgaviController
 	 */
 	public function dispatch($parameters = array())
 	{
-		try {
-			// so setting the headers works
-			ob_start();
-			
-			$request = $this->context->getRequest();
-			
-			// match routes and set matched routes as request attributes
-			$request->setAttributes($this->context->getRouting()->matchRoute($_SERVER['REQUEST_URI']), 'org.agavi.routing.matchedRoutes');
-			
-			if($parameters != null) {
-				$request->setParametersByRef($parameters);
-			}
-			
-			// determine our module and action
-			$moduleName = $request->getParameter($request->getModuleAccessor());
-			$actionName = $request->getParameter($request->getActionAccessor());
-			
-			if($moduleName == null) {
-				// no module has been specified
-				$moduleName = AgaviConfig::get('actions.default_module');
-			}
-
-			if($actionName == null) {
-				// no action has been specified
-				if ($this->actionExists($moduleName, 'Index')) {
-					// an Index action exists
-					$actionName = 'Index';
-				} else {
-					// use the default action
-					$actionName = AgaviConfig::get('actions.default_action');
-				}
-			}
-			
-			parent::dispatch($parameters);
-
-			// output all headers for the response
-			$this->sendHTTPResponseHeaders();
-		} catch (Exception $e) {
-			AgaviException::printStackTrace($e, $this->getContext());
-		}
-	}
-
-	/**
-	 * Generate a formatted Agavi URL.
-	 * You can also pass in arguments in reverse order.
-	 *
-	 * @param      array  An associative array of URL parameters.
-	 * @param      string An existing URL for basing the parameters.
-	 *
-	 * @return     string A URL to a Agavi resource.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.9.0
-	 */
-	public function genURL ($url = null, $parameters = array())
-	{
-		if(is_array($url)) {
-			$tmp = null;
-			if(is_array($parameters)) {
-				$parameters = null;
-			}
-			$tmp = $url;
-			$url = $parameters;
-			$parameters = $tmp;
-		}
-
-		if ($url == null)
-		{
-
-			$url = $_SERVER['SCRIPT_NAME'];
-
-		}
-
-		if (AgaviConfig::get('request.url_format') == 'PATH')
-		{
-
-			// use PATH format
-			$divider  = '/';
-			$equals   = '/';
-			$url     .= '/';
-
-		} else
-		{
-
-			// use GET format
-			$divider  = '&';
-			$equals   = '=';
-			$url     .= '?';
-
-		}
-
-		// loop through the parameters
-		foreach ($parameters as $key => &$value)
-		{
-
-			$url .= urlencode($key) . $equals . urlencode($value) . $divider;
-
-		}
-
-		// strip off last divider character
-		$url = rtrim($url, $divider);
-
-		// replace &'s with &amp;
-		$url = str_replace('&', '&amp;', $url);
-
-		return $url;
-
+		// so setting the headers works
+		ob_start();
+		
+		parent::dispatch($parameters);
+		
+		// output all headers for the response
+		$this->sendHTTPResponseHeaders();
 	}
 
 	/**

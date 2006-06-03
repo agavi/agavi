@@ -65,43 +65,60 @@ class AgaviExecutionFilter extends AgaviFilter
 		$actionName = $context->getActionName();
 
 		// get the request method
-		$method = $context->getRequest()->getMethod();
-
-		if (($actionInstance->getRequestMethods() & $method) != $method) {
+		$method = ucfirst(strtolower($context->getRequest()->getMethod()));
+		
+		$useGenericMethods = false;
+		$executeMethod = 'execute' . $method;
+		if(!method_exists($actionInstance, $executeMethod)) {
+			$executeMethod = 'execute';
+			$useGenericMethods = true;
+		}
+		
+		if($useGenericMethods && !method_exists($actionInstance, $executeMethod) ) {
 			// this action will skip validation/execution for this method
 			// get the default view
-			$viewName = $actionInstance->getDefaultView();
-
+			$viewName = $actionInstance->execute();
 		} else {
 			// set default validated status
 			$validated = true;
 
 			// get the current action validation configuration
-			$validationConfig = AgaviConfig::get('core.module_dir') . '/' . $moduleName .
-						        '/validate/' . $actionName . '.ini';
+			$validationConfig = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/validate/' . $actionName . '.ini';
 
 			if (is_readable($validationConfig)) {
 				// load validation configuration
 				// do NOT use require_once
-				$validationConfig = 'modules/' . $moduleName .
-						            '/validate/' . $actionName . '.ini';
+				$validationConfig = 'modules/' . $moduleName . '/validate/' . $actionName . '.ini';
 
 				require(AgaviConfigCache::checkConfig($validationConfig));
 			}
 
 			// manually load validators
-			$actionInstance->registerValidators($validatorManager);
+			$registerValidatorsMethod = 'register' . $method . 'Validators';
+			if(!method_exists($actionInstance, $registerValidatorsMethod)) {
+				$registerValidatorsMethod = 'registerValidators';
+			}
+			$actionInstance->$registerValidatorsMethod($validatorManager);
 
 			// process validators
 			$validated = $validatorManager->execute();
 
+			$validateMethod = 'validate' . $method;
+			if(!method_exists($actionInstance, $validateMethod)) {
+				$validateMethod = 'validate';
+			}
+
 			// process manual validation
-			if ($actionInstance->validate() && $validated) {
+			if ($actionInstance->$validateMethod() && $validated) {
 				// execute the action
-				$viewName = $actionInstance->execute();
+				$viewName = $actionInstance->$executeMethod();
 			} else {
 				// validation failed
-				$viewName = $actionInstance->handleError();
+				$handleErrorMethod = 'handle' . $method . 'Error';
+				if(!method_exists($actionInstance, $handleErrorMethod)) {
+					$handleErrorMethod = 'handleError';
+				}
+				$viewName = $actionInstance->$handleErrorMethod();
 			}
 		}
 

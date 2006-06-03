@@ -28,6 +28,8 @@
  */
 abstract class AgaviRenderer
 {
+	protected $context = null;
+	
 	/**
 	 * A string with the default template file extension, including the dot.
 	 */
@@ -43,6 +45,37 @@ abstract class AgaviRenderer
 	 * The View instance that belongs to this Renderer instance.
 	 */
 	protected $viewInstance = null;
+	
+	/**
+	 * Initialize this Renderer.
+	 *
+	 * @param      AgaviContext The current application context.
+	 * @param      array        An associative array of initialization parameters.
+	 *
+	 * @return     bool true, if initialization completes successfully,
+	 *                  otherwise false.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function initialize ($context, $parameters = array())
+	{
+		$this->context = $context;
+		return true;
+	}
+
+	/**
+	 * Retrieve the current application context.
+	 *
+	 * @return     AgaviContext The current Context instance.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public final function getContext()
+	{
+		return $this->context;
+	}
 	
 	/**
 	 * Get the template file extension

@@ -337,12 +337,12 @@ class AgaviCreoleSessionStorage extends AgaviSessionStorage
 	 *
 	 * @return     void
 	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.10.0
 	 */
-	public function shutdown ()
+	public function shutdown()
 	{
-
+		parent::shutdown();
 	}
 
 }

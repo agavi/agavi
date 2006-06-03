@@ -158,7 +158,7 @@ class AgaviCachingExecutionFilter extends AgaviExecutionFilter
 						$val = $context->getUser()->getAttribute($val);
 					break;
 					case 'user.credential':
-						$val = (int)$context->getUser()->hasCredential($val);
+						$val = (int)$context->getUser()->hasCredentials($val);
 					break;
 				}
 				if($val === null) {
@@ -279,7 +279,7 @@ class AgaviCachingExecutionFilter extends AgaviExecutionFilter
 			if(($actionInstance->getRequestMethods() & $method) != $method) {
 				// this action will skip validation/execution for this method
 				// get the default view
-				$viewName = $actionInstance->getDefaultView();
+				$viewName = $actionInstance->getDefaultViewName();
 			} else {
 				// set default validated status
 				$validated = true;

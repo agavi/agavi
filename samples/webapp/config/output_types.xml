@@ -17,21 +17,25 @@
 		<output_types default="html">
 			
 			<output_type name="html">
-				<renderer>AgaviPHPRenderer</renderer>
+				<renderer class="AgaviPHPRenderer" />
 				<parameters>
 					<parameter name="Content-Type">text/html; charset=UTF-8</parameter>
 				</parameters>
 			</output_type>
 			
 			<output_type name="html_print" fallback="html">
-				<renderer extension="-print.php" ignore_slots="true">AgaviPHPRenderer</renderer>
+				<renderer extension="-print.php" ignore_slots="true" class="AgaviPHPRenderer" />
 				<parameters>
 					<parameter name="Content-Type">text/html; charset=UTF-8</parameter>
 				</parameters>
 			</output_type>
 			
 			<output_type name="xml">
-				<renderer extension=".xml.php" ignore_decorators="true">AgaviPHPRenderer</renderer>
+				<renderer extension=".xml.php" ignore_decorators="true" class="AgaviXSLRenderer">
+					<parameters>
+						<parameter name="encoding">UTF-8</parameter>
+					</parameters>
+				</renderer>
 				<parameters>
 					<parameter name="Content-Type">text/xml</parameter>
 				</parameters>

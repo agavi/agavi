@@ -61,7 +61,7 @@ class AgaviOutputTypeConfigHandler extends AgaviConfigHandler
 				if(in_array($otname, $otnames)) {
 					throw new AgaviConfigurationException('Duplicate Output Type "' . $otname . '" in ' . $config);
 				}
-				if(!isset($outputType->renderer)) {
+				if(!isset($outputType->renderer) && !$outputType->renderer->getAttribute('class')) {
 					throw new AgaviConfigurationException('No renderer specified for Output Type "' . $outputType->getAttribute('name') . '" in ' . $config);
 				}
 				$otnames[] = $otname;

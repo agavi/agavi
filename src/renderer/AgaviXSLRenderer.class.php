@@ -28,6 +28,68 @@
  */
 abstract class AgaviXSLRenderer
 {
+	private $xslProc      = null;  // XSLTProcessor.
+	private $domDoc       = null;  // DomDocument.
+	private $rootNode     = null;  // The root node of the DomDocument.
+	private $rootNodeRS   = null;  // The copy of the initilization of the DomDocument incase a restart is needed.
+	private $rootNodeName = null;  // The name of the root node incase it is needed.
+
+	/**
+	 * Initialize this Renderer.
+	 *
+	 * @param      AgaviContext The current application context.
+	 * @param      array        An associative array of initialization parameters.
+	 *
+	 * @return     bool true, if initialization completes successfully,
+	 *                  otherwise false.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function initialize($context, $parameters = array())
+	{
+		$retval = parent::initialize();
+		
+		$this->xslProc = new XSLTProcessor();
+
+		// initialize this object
+		if(!$this->setDomDocument(new DOMDocument(isset($parameters['version']) ? $parameters['version'] : '1.0', isset($parameters['encoding']) ? $parameters['encoding'] : 'utf-8'), isset($parameters['root_node_name']) ? $parameters['root_node_name'] : 'rootnode')) {
+			 return false;
+		}
+
+		return $retval && true;
+	}
+
+	/**
+	 * Sets the DOMDocument to be used.
+	 * The default value is DOMDocument('1.0', 'iso-8859-1').
+	 *
+	 * @param      DOMDocument $domDocument The DOMDocument to use.
+	 * @param      string $rootNode (Optional) The name of the root node to use.  
+	 *                    If not specified then the root node will have a name
+	 *                    of "rootnode".
+	 *
+	 * @return     True on success, otherwise false.
+	 *
+	 * @author     Wes Hays <weshays@gbdev.com>
+	 * @since      0.10.0
+	 */
+	public function setDomDocument($domDocument, $rootNode = 'rootnode')
+	{
+		// Make sure that $domDocument is indeed a DomDocument.
+		if(($domDocument instanceof DOMDocument) && is_string($rootNode))
+		{
+			$this->domDoc       = $domDocument;
+			$this->rootNodeName = $rootNode;
+			$this->rootNode     = $this->domDoc->appendChild(new DOMElement($this->rootNodeName));
+			$this->domDocRS     = $this->domDoc->cloneNode(true);
+
+			return true;
+		}
+
+		return false;
+	}
+
 	/**
 	 * This will return null for XSLView instances
 	 *
@@ -51,7 +113,7 @@ abstract class AgaviXSLRenderer
 	 * @author     Wes Hays <weshays@gbdev.com>
 	 * @since      0.10.0
 	 */
-	public function &getEngine()
+	public function getEngine()
 	{
 		return $this->xslProc;
 	}
@@ -75,13 +137,16 @@ abstract class AgaviXSLRenderer
 
 		// execute pre-render check
 		$this->preRenderCheck();
+		
+		$view = $this->getView();
+		$engine = $this->getEngine();
 
 		// get the render mode
 		$mode = $this->getContext()->getController()->getRenderMode();
 
-		$this->xslProc->importStyleSheet(DOMDocument::load($this->getDecoratorDirectory() . '/' .$this->getTemplate()));
+		$engine->importStyleSheet(DOMDocument::load($view->getDecoratorDirectory() . '/' . $view->getTemplate()));
 
-		$xhtml = $this->xslProc->transformToXML($this->domDoc);
+		$xhtml = $engine->transformToXML($this->domDoc);
 
 		if($mode == AgaviView::RENDER_CLIENT) {
 			echo $xhtml;

@@ -48,8 +48,7 @@
 	<configuration environment="development">
 		<filters>
 			
-			<filter name="ExecutionTimeFilter">
-				<class>AgaviExecutionTimeFilter</class>
+			<filter name="ExecutionTimeFilter" class="AgaviExecutionTimeFilter">
 				<parameters>
 					<parameter name="comment">On</parameter>
 				</parameters>
@@ -62,9 +61,7 @@
 	<configuration>
 		<filters>
 			
-			<filter name="FormPopulationFilter">
-				<class>AgaviFormPopulationFilter</class>
-			</filter>
+			<filter name="FormPopulationFilter" class="AgaviFormPopulationFilter" />
 			
 		</filters>
 	</configuration>

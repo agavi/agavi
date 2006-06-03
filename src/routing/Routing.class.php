@@ -110,7 +110,7 @@ abstract class AgaviRouting
 		$this->routes = $routes;
 	}
 
-	public function genUrl($route, $params = array())
+	public function gen($route, $params = array())
 	{
 		$routes = explode('+', $route);
 		$route = $routes[0];
@@ -186,7 +186,7 @@ abstract class AgaviRouting
 		return $this->prefix . $url;
 	}
 
-	public function matchRoute()
+	public function execute()
 	{
 		$input = $this->input;
 
