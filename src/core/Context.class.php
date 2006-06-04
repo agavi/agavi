@@ -27,6 +27,7 @@
  *
  * @author     Sean Kerr <skerr@mojavi.org>
  * @author     Mike Vincent <mike@agavi.org>
+ * @author     David Zuelke <dz@bitxtender.com>
  * @copyright  (c) Authors
  * @since      0.9.0
  *
@@ -34,28 +35,69 @@
  */
 class AgaviContext
 {
-
-	protected
-		$actionStack      = null,
-		$controller       = null,
-		$classNames       = array(
-			'execution_filter' => null,
-			'filter_chain' => null,
-			'security_filter' => null
-		),
-		$databaseManager  = null,
-		$loggerManager    = null,
-		$outputType       = null,
-		$outputTypes      = array(),
-		$request          = null,
-		$routing          = null,
-		$securityFilter   = null,
-		$storage          = null,
-		$user             = null,
-		$validatorManager = null;
-	protected static
-		$instances       = null,
-		$profiles        = array();
+	/**
+	 * @var        AgaviActionStack An ActionStack instance.
+	 */
+	protected $actionStack = null;
+	
+	/**
+	 * @var        AgaviController A Controller instance.
+	 */
+	protected $controller = null;
+	
+	/**
+	 * @var        array An array of class names for frequently used factories.
+	 */
+	protected $classNames = array(
+		'execution_filter' => null,
+		'filter_chain' => null,
+		'security_filter' => null
+	);
+	
+	/**
+	 * @var        AgaviDatabaseManager A DatabaseManager instance.
+	 */
+	protected $databaseManager = null;
+	
+	/**
+	 * @var        AgaviLoggerManager A LoggerManager instance.
+	 */
+	protected $loggerManager = null;
+	
+	/**
+	 * @var        AgaviRequest A Request instance.
+	 */
+	protected $request = null;
+	
+	/**
+	 * @var        AgaviRouting A Routing instance.
+	 */
+	protected $routing = null;
+	
+	/**
+	 * @var        AgaviSecurityFilter A SecurityFilter instance.
+	 */
+	protected $securityFilter = null;
+	
+	/**
+	 * @var        AgaviStorage A Storage instance.
+	 */
+	protected $storage = null;
+	
+	/**
+	 * @var        AgaviUser A User instance.
+	 */
+	protected $user = null;
+	
+	/**
+	 * @var        AgaviValidatorManager A ValidatorManager instance.
+	 */
+	protected $validatorManager = null;
+	
+	/**
+	 * @var        array An array of Context instances.
+	 */
+	protected static $instances = null;
 
 	/*
 	 * Clone method, overridden to prevent cloning, there can be only one. 
@@ -68,9 +110,7 @@ class AgaviContext
 		trigger_error('Cloning the Context object is not allowed.', E_USER_ERROR);
 	}	
 
-	// -------------------------------------------------------------------------
-	
-	/*
+	/**
 	 * Constuctor method, intentionally made private so the context cannot be 
 	 * created directly.
 	 *
@@ -82,8 +122,6 @@ class AgaviContext
 		// Singleton, use Context::getInstance($controller) to get the instance
 	}
 
-	// -------------------------------------------------------------------------
-	
 	/**
 	 * Retrieve the action name for this context.
 	 *
@@ -93,23 +131,29 @@ class AgaviContext
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function getActionName ()
+	public function getActionName()
 	{
-
 		// get the last action stack entry
 		$actionEntry = $this->actionStack->getLastEntry();
 
 		return $actionEntry->getActionName();
-
 	}
 	
+	/**
+	 * Get a class name for repeatedly used factories such as FilterChains.
+	 *
+	 * @param      string The factory identifier.
+	 *
+	 * @return     string The class name.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public function getClassName($for)
 	{
 		return $this->classNames[$for];
 	}
 
-	// -------------------------------------------------------------------------
-	
 	/**
 	 * Retrieve the ActionStack.
 	 *
@@ -131,11 +175,9 @@ class AgaviContext
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function getController ()
+	public function getController()
 	{
-
 		return $this->controller;
-
 	}
 
 	/**
@@ -148,7 +190,7 @@ class AgaviContext
 	 *
 	 * @param      name A database name.
 	 *
-	 * @return     mixed A AgaviDatabase instance.
+	 * @return     mixed An AgaviDatabase instance.
 	 *
 	 * @throws     <b>AgaviDatabaseException</b> If the requested database name does
 	 *                                           not exist.
@@ -156,18 +198,11 @@ class AgaviContext
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function getDatabaseConnection ($name = 'default')
+	public function getDatabaseConnection($name = 'default')
 	{
-
-		if ($this->databaseManager != null)
-		{
-
+		if($this->databaseManager != null) {
 			return $this->databaseManager->getDatabase($name)->getConnection();
-
 		}
-
-		return null;
-
 	}
 
 	/**
@@ -178,11 +213,9 @@ class AgaviContext
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function getDatabaseManager ()
+	public function getDatabaseManager()
 	{
-
 		return $this->databaseManager;
-
 	}
 
 	/**
@@ -246,18 +279,15 @@ class AgaviContext
 		if($profile === null) {
 			$profile = AgaviConfig::get('core.default_context', 'stdctx');
 		}
+		
 		$profile = strtolower($profile);
 		
 		$this->name = $profile;
-		
-		static $profiles;
 		
 		include(AgaviConfigCache::checkConfig(AgaviConfig::get('core.config_dir') . '/factories.xml', $profile));
 		
 		return $this;
 	}
-	
-	// We could even add a method to switch contexts on the fly..
 	
 	/**
 	 * Retrieve the module directory for this context.
@@ -283,14 +313,12 @@ class AgaviContext
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function getModuleDirectory ()
+	public function getModuleDirectory()
 	{
-
 		// get the last action stack entry
 		$actionEntry = $this->actionStack->getLastEntry();
 
 		return AgaviConfig::get('core.module_dir') . '/' . $actionEntry->getModuleName();
-
 	}
 
 	/**
@@ -302,29 +330,25 @@ class AgaviContext
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function getModuleName ()
+	public function getModuleName()
 	{
-
 		// get the last action stack entry
 		$actionEntry = $this->actionStack->getLastEntry();
 
 		return $actionEntry->getModuleName();
-
 	}
 
 	/**
 	 * Retrieve the request.
 	 *
-	 * @return     Request The current Request implementation instance.
+	 * @return     AgaviRequest The current Request implementation instance.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function getRequest ()
+	public function getRequest()
 	{
-
 		return $this->request;
-
 	}
 
 	/**
@@ -349,41 +373,35 @@ class AgaviContext
 	 * @author     Mike Vincent <mike@agavi.org>
 	 * @since      0.9.0
 	 */
-	public function getSecurityFilter ()
+	public function getSecurityFilter()
 	{
-
 		return $this->securityFilter;
-
 	}
 
 	/**
 	 * Retrieve the storage.
 	 *
-	 * @return     Storage The current Storage implementation instance.
+	 * @return     AgaviStorage The current Storage implementation instance.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function getStorage ()
+	public function getStorage()
 	{
-
 		return $this->storage;
-
 	}
 
 	/**
 	 * Retrieve the user.
 	 *
-	 * @return     User The current User implementation instance.
+	 * @return     AgaviUser The current User implementation instance.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function getUser ()
+	public function getUser()
 	{
-
 		return $this->user;
-
 	}
 	
 	/**
@@ -399,8 +417,6 @@ class AgaviContext
 	{
 		return $this->validatorManager;
 	}
-
-
 }
 
 ?>
