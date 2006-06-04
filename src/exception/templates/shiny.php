@@ -1,7 +1,42 @@
 <?php
 
-$xhtml = (strpos($_SERVER['HTTP_ACCEPT'], 'application/xhtml+xml') !== false);
+// +---------------------------------------------------------------------------+
+// | This file is part of the Agavi package.                                   |
+// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// |                                                                           |
+// | For the full copyright and license information, please view the LICENSE   |
+// | file that was distributed with this source code. You can also view the    |
+// | LICENSE file online at http://www.agavi.org/LICENSE.txt                   |
+// |   vi: set noexpandtab:                                                    |
+// |   Local Variables:                                                        |
+// |   indent-tabs-mode: t                                                     |
+// |   End:                                                                    |
+// +---------------------------------------------------------------------------+
 
+/**
+ * A drop dead gorgeous exception template with eye candy embedded as inline SVG
+ *
+ * @package    agavi
+ * @subpackage exception
+ *
+ * @author     David Zuelke <dz@bitxtender.com>
+ * @copyright  (c) Authors
+ * @since      0.11.0
+ *
+ * @version    $Id$
+ */
+
+/*
+ * Build a list of parameters passed to a method. Example:
+ * array([object AgaviFilter], 'baz' => array(1, 2), 'log' => [resource stream])
+ *
+ * @param      array An (associative) array of variables.
+ *
+ * @return     string A string, possibly formatted using HTML "em" tags.
+ *
+ * @author     David Zuelke <dz@bitxtender.com>
+ * @since      0.11.0
+ */
 function buildParamList($params)
 {
 	$retval = array();
@@ -27,6 +62,8 @@ function buildParamList($params)
 	}
 	return implode(', ', $retval);
 }
+
+$xhtml = (strpos($_SERVER['HTTP_ACCEPT'], 'application/xhtml+xml') !== false);
 
 if($xhtml) {
 	header('Content-Type: application/xhtml+xml; charset=utf-8');
