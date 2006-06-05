@@ -323,7 +323,9 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	abstract function shutdown();
+	function shutdown()
+	{
+	}
 
 }
 

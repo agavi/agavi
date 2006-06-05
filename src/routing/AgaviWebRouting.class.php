@@ -91,6 +91,19 @@ class AgaviWebRouting extends AgaviRouting
 			return $url;
 		}
 	}
+	
+	public function execute()
+	{
+		$req = $this->getContext()->getRequest();
+		
+		// merge GET parameters
+		$req->setParametersByRef($_GET);
+		// merge POST parameters
+		$req->setParametersByRef($_POST);
+		
+		// the real deal
+		return parent::execute();
+	}
 }
 
 ?>

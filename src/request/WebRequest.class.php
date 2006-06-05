@@ -368,26 +368,6 @@ class AgaviWebRequest extends AgaviRequest
 			// set the default method
 			$this->setMethod($getMethod);
 		}
-		// load parameters from GET/PATH_INFO/POST
-		$this->loadParameters();
-	}
-
-	/**
-	 * Loads GET, PATH_INFO and POST data into the parameter list.
-	 *
-	 * @return     void
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.9.0
-	 */
-	private function loadParameters()
-	{
-		// merge GET parameters
-		$this->setParametersByRef($_GET);
-
-		// merge POST parameters
-		$this->setParametersByRef($_POST);
 	}
 
 	/**
@@ -476,22 +456,6 @@ class AgaviWebRequest extends AgaviRequest
 		return false;
 
 	}
-
-	/**
-	 * Execute the shutdown procedure.
-	 *
-	 * @return     void
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public function shutdown ()
-	{
-
-		// nothing to do here
-
-	}
-
 }
 
 ?>
