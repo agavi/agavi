@@ -65,7 +65,7 @@ class PHPViewTest extends AgaviTestCase
 		$ase->setReturnValue('getActionName', 'Test');
 
 		// get the mock action stack and tell it to return our mock when asked for the last entry
-		$as = $context->getActionStack();
+		$as = $context->getController()->getActionStack();
 		$as->setReturnReference('getLastEntry', $ase);
 		$as->expectOnce('getLastEntry');
 		

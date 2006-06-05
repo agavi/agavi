@@ -63,7 +63,7 @@ class AgaviConfigHandlersConfigHandler extends AgaviConfigHandler
 
 				$category = $this->replaceConstants($pattern);
 
-				$class = $handler->class->getValue();
+				$class = $handler->getAttribute('class');
 
 				if($handler->hasChildren('params')) {
 					$parameters = '';

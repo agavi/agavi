@@ -198,16 +198,6 @@ class RequestTest extends AgaviTestCase
 		$this->assertTrue($this->_r->hasErrors());
 	}
 
-	public function testnewInstance()
-	{
-		$this->assertType('SampleRequest', AgaviRequest::newInstance('SampleRequest'));
-		try {
-			AgaviRequest::newInstance('AgaviException');
-			$this->fail('Expected FactoryException not thrown.');
-		} catch (AgaviFactoryException $e) {
-		}
-	}
-
 	public function testremoveError()
 	{
 		$this->assertNull($this->_r->removeError('blah'));

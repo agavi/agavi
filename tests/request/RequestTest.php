@@ -198,17 +198,6 @@ class RequestTest extends UnitTestCase
 		$this->assertTrue($this->_r->hasErrors());
 	}
 
-	public function testnewInstance()
-	{
-		$this->assertIsA(Request::newInstance('SampleRequest'), 'SampleRequest');
-		try {
-			Request::newInstance('AgaviException');
-			$this->fail('Expected FactoryException not thrown.');
-		} catch (FactoryException $e) {
-			$this->pass();
-		}
-	}
-
 	public function testremoveError()
 	{
 		$this->assertNull($this->_r->removeError('blah'));

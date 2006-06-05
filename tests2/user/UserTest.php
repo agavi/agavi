@@ -140,12 +140,6 @@ class UserTest extends AgaviTestCase
 		$this->assertNull($user->getAttributeNames());
 	}
 
-	public function testnewInstance()
-	{
-		$user = AgaviUser::newInstance('AgaviUser');
-		$this->assertType('AgaviUser', $user);
-	}
-
 	public function testremoveAttribute()
 	{
 		$this->assertNull($this->_u->removeAttribute('blah'));

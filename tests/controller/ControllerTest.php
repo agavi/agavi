@@ -88,11 +88,11 @@ class ControllerTest extends UnitTestCase
 
 	public function testForwardingSuccessfully()
 	{
-		$context = Context::getInstance();
-		$context->getController()->setRenderMode(View::RENDER_VAR);
+		$controller = Context::getInstance()->getController();
+		$controller->setRenderMode(View::RENDER_VAR);
 		try {
-			$context->getController()->forward('Test', 'Test');
-			$lastActionEntry = $context->getActionStack()->getLastEntry();
+			$controller->forward('Test', 'Test');
+			$lastActionEntry = $controller->getActionStack()->getLastEntry();
 			$this->assertIsA($lastActionEntry, 'ActionStackEntry');
 			$view = $lastActionEntry->getPresentation();
 			$this->assertWantedPattern('/test successful/i',$view);
@@ -116,10 +116,7 @@ class ControllerTest extends UnitTestCase
 	public function testGetActionStack()
 	{
 		$con_as = Context::getInstance()->getController()->getActionStack();
-		$ctx_as = Context::getInstance()->getActionStack();
 		$this->assertIsA($con_as, 'ActionStack');
-		$this->assertIsA($ctx_as, 'ActionStack');
-		$this->assertReference($ctx_as, $con_as);
 	}
 
 	public function testGetContext()

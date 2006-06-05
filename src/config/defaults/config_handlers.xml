@@ -23,7 +23,7 @@
 |                                                                            |
 | 1. A category with an absolute filesystem path should never exist unless a |
 |    configuration file that is used within the application exists outside   |
-|    of both "core.agavi_dir" and "core.webapp_dir" Agavi application settings.|
+|    of "core.agavi_dir" and "core.webapp_dir" Agavi application settings.   |
 |                                                                            |
 | 2. Registered handlers with a parameter list should be registered with a   |
 |    relative path so the parameters do not get carried over to another      |
@@ -58,7 +58,7 @@
 | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
 | KEYWORDS:                                                                  |
 | You may reference any configuration directive by enclosing the name in     |
-| "%" signs. Example: %core.agavi_dir%                                         |
+| "%" signs. Example: %core.agavi_dir%                                       |
 +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
 -->
 <configurations>
@@ -73,49 +73,27 @@
 				| config/autoload.ini configuration file.                                    |
 				+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
 			-->
-			<handler pattern="%core.config_dir%/autoload.xml">
-				<class>AgaviAutoloadConfigHandler</class>
-			</handler>
+			<handler pattern="%core.config_dir%/autoload.xml" validate="%core.agavi_dir%/config/xsd/autoload.xsd" class="AgaviAutoloadConfigHandler" />
 
-			<handler pattern="%core.config_dir%/compile.xml">
-				<class>AgaviCompileConfigHandler</class>
-			</handler>
+			<handler pattern="%core.config_dir%/compile.xml" validate="%core.agavi_dir%/config/xsd/compile.xsd" class="AgaviCompileConfigHandler" />
 
-			<handler pattern="%core.config_dir%/settings.xml">
-				<class>AgaviDefineConfigHandler</class>
-			</handler>
+			<handler pattern="%core.config_dir%/settings.xml" validate="%core.agavi_dir%/config/xsd/settings.xsd" class="AgaviDefineConfigHandler" />
 
-			<handler pattern="%core.config_dir%/factories.xml">
-				<class>AgaviFactoryConfigHandler</class>
-			</handler>
+			<handler pattern="%core.config_dir%/factories.xml" validate="%core.agavi_dir%/config/xsd/factories.xsd" class="AgaviFactoryConfigHandler" />
 
-			<handler pattern="%core.config_dir%/databases.xml">
-				<class>AgaviDatabaseConfigHandler</class>
-			</handler>
+			<handler pattern="%core.config_dir%/databases.xml" validate="%core.agavi_dir%/config/xsd/databases.xsd" class="AgaviDatabaseConfigHandler" />
 
-			<handler pattern="%core.config_dir%/action_filters.xml">
-				<class>AgaviFilterConfigHandler</class>
-			</handler>
+			<handler pattern="%core.config_dir%/action_filters.xml" validate="%core.agavi_dir%/config/xsd/action_filters.xsd" class="AgaviFilterConfigHandler" />
 
-			<handler pattern="%core.config_dir%/global_filters.xml">
-				<class>AgaviFilterConfigHandler</class>
-			</handler>
+			<handler pattern="%core.config_dir%/global_filters.xml" validate="%core.agavi_dir%/config/xsd/global_filters.xsd" class="AgaviFilterConfigHandler" />
 
-			<handler pattern="%core.config_dir%/rendering_filters.xml">
-				<class>AgaviFilterConfigHandler</class>
-			</handler>
+			<handler pattern="%core.config_dir%/rendering_filters.xml" validate="%core.agavi_dir%/config/xsd/rendering_filters.xsd" class="AgaviFilterConfigHandler" />
 
-			<handler pattern="%core.config_dir%/output_types.xml">
-				<class>AgaviOutputTypeConfigHandler</class>
-			</handler>
+			<handler pattern="%core.config_dir%/output_types.xml" validate="%core.agavi_dir%/config/xsd/output_types.xsd" class="AgaviOutputTypeConfigHandler" />
 
-			<handler pattern="%core.config_dir%/logging.xml">
-				<class>AgaviLoggingConfigHandler</class>
-			</handler>
+			<handler pattern="%core.config_dir%/logging.xml" validate="%core.agavi_dir%/config/xsd/logging.xsd" class="AgaviLoggingConfigHandler" />
 
-			<handler pattern="%core.config_dir%/routing.xml">
-				<class>AgaviRoutingConfigHandler</class>
-			</handler>
+			<handler pattern="%core.config_dir%/routing.xml" validate="%core.agavi_dir%/config/xsd/routing.xsd" class="AgaviRoutingConfigHandler" />
 
 			<!--
 				+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
@@ -127,29 +105,17 @@
 				| names or the system may cease to function.                                 |
 				+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
 			-->
-			<handler pattern="%core.module_dir%/*/config/autoload.xml">
-				<class>AgaviAutoloadConfigHandler</class>
-			</handler>
+			<handler pattern="%core.module_dir%/*/config/autoload.xml" validate="%core.agavi_dir%/config/xsd/autoload.xsd" class="AgaviAutoloadConfigHandler" />
 
-			<handler pattern="%core.module_dir%/*/config/caching.xml">
-				<class>AgaviReturnArrayConfigHandler</class>
-			</handler>
+			<handler pattern="%core.module_dir%/*/config/caching.xml" validate="%core.agavi_dir%/config/xsd/caching.xsd" class="AgaviReturnArrayConfigHandler" />
 
-			<handler pattern="%core.module_dir%/*/config/action_filters.xml">
-				<class>AgaviFilterConfigHandler</class>
-			</handler>
+			<handler pattern="%core.module_dir%/*/config/action_filters.xml" validate="%core.agavi_dir%/config/xsd/action_filters.xsd" class="AgaviFilterConfigHandler" />
 
-			<handler pattern="%core.module_dir%/*/config/rendering_filters.xml">
-				<class>AgaviFilterConfigHandler</class>
-			</handler>
+			<handler pattern="%core.module_dir%/*/config/rendering_filters.xml" validate="%core.agavi_dir%/config/xsd/rendering_filters.xsd" class="AgaviFilterConfigHandler" />
 
-			<handler pattern="%core.module_dir%/*/config/module.xml">
-				<class>AgaviModuleConfigHandler</class>
-			</handler>
+			<handler pattern="%core.module_dir%/*/config/module.xml" validate="%core.agavi_dir%/config/xsd/module.xsd" class="AgaviModuleConfigHandler" />
 
-			<handler pattern="%core.module_dir%/*/validate/*.xml">
-				<class>AgaviValidatorConfigHandler</class>
-			</handler>
+			<handler pattern="%core.module_dir%/*/validate/*.xml" validate="%core.agavi_dir%/config/xsd/validator.xsd" class="AgaviValidatorConfigHandler" />
 		</handlers>
 	</configuration>
 </configurations>

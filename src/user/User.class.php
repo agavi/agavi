@@ -106,38 +106,6 @@ class AgaviUser extends AgaviAttributeHolder
 	}
 
 	/**
-	 * Retrieve a new User implementation instance.
-	 *
-	 * @param      string A User implementation name
-	 *
-	 * @return     AgaviUser A User implementation instance.
-	 *
-	 * @throws     <b>AgaviFactoryException</b> If a user implementation instance
-	 *                                          cannot be created.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public static function newInstance($class)
-	{
-		// the class exists
-		$object = new $class();
-
-		if (!($object instanceof AgaviUser))
-		{
-
-			// the class name is of the wrong type
-			$error = 'Class "%s" is not of the type User';
-			$error = sprintf($error, $class);
-
-			throw new AgaviFactoryException($error);
-
-		}
-
-		return $object;
-	}
-
-	/**
 	 * Execute the shutdown procedure.
 	 *
 	 * @return     void

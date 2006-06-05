@@ -33,6 +33,11 @@ abstract class AgaviController extends AgaviParameterHolder
 		$maxForwards  = 20,
 		$renderMode   = AgaviView::RENDER_CLIENT;
 
+	/**
+	 * @var        AgaviActionStack An ActionStack instance.
+	 */
+	protected $actionStack = null;
+
 	protected
 		$context      = null,
 		$outputType   = null,
@@ -46,6 +51,19 @@ abstract class AgaviController extends AgaviParameterHolder
 				'*' => null
 			)
 		);
+
+		/**
+		 * Retrieve the ActionStack.
+		 *
+		 * @return     AgaviActionStack the ActionStack instance
+		 *
+		 * @author     David Zuelke <dz@bitxtender.com>
+		 * @since      0.11.0
+		 */
+		public function getActionStack()
+		{
+			return $this->actionStack;
+		}
 
 	/**
 	 * Sets an output type for this response.
@@ -138,9 +156,11 @@ abstract class AgaviController extends AgaviParameterHolder
 		try {
 			
 			$request = $this->context->getRequest();
-		
-			// match routes and set matched routes as request attributes
-			$request->setAttributes($this->context->getRouting()->execute(), 'org.agavi.routing.matchedRoutes');
+			
+			if(AgaviConfig::get('core.use_routing')) {
+				// match routes and set matched routes as request attributes
+				$request->setAttributes($this->context->getRouting()->execute(), 'org.agavi.routing.matchedRoutes');
+			}
 		
 			if($parameters != null) {
 				$request->setParametersByRef($parameters);
@@ -357,6 +377,60 @@ abstract class AgaviController extends AgaviParameterHolder
 	}
 
 	/**
+	 * Retrieve the currently executing Action's name.
+	 *
+	 * @return     string The currently executing action name, if one is set,
+	 *                    otherwise null.
+	 *
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getActionName()
+	{
+		// get the last action stack entry
+		$actionEntry = $this->getActionStack()->getLastEntry();
+
+		return $actionEntry->getActionName();
+	}
+	
+	/**
+	 * Retrieve the currently executing Action's module directory.
+	 *
+	 * @return     string An absolute filesystem path to the directory of the
+	 *                    currently executing module if set, otherwise null.
+	 *
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getModuleDirectory()
+	{
+		// get the last action stack entry
+		$actionEntry = $this->getActionStack()->getLastEntry();
+
+		return AgaviConfig::get('core.module_dir') . '/' . $actionEntry->getModuleName();
+	}
+
+	/**
+	 * Retrieve the currently executing Action's module name.
+	 *
+	 * @return     string The currently executing module name, if one is set,
+	 *                    otherwise null.
+	 *
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getModuleName()
+	{
+		// get the last action stack entry
+		$actionEntry = $this->getActionStack()->getLastEntry();
+
+		return $actionEntry->getModuleName();
+	}
+
+	/**
 	 * Retrieve an Action implementation instance.
 	 *
 	 * @param      string A module name.
@@ -402,22 +476,6 @@ abstract class AgaviController extends AgaviParameterHolder
 	}
 
 	/**
-	 * Retrieve the action stack.
-	 *
-	 * @return     AgaviActionStack An ActionStack instance, if the action stack is
-	 *                              enabled, otherwise null.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public function getActionStack ()
-	{
-
-		return $this->context->getActionStack();
-
-	}
-
-	/**
 	 * Retrieve the current application context.
 	 *
 	 * @return     AgaviContext A Context instance.
@@ -429,119 +487,6 @@ abstract class AgaviController extends AgaviParameterHolder
 	{
 
 		return $this->context;
-
-	}
-
-	/**
-	 * Retrieve a global Model implementation instance.
-	 *
-	 * @param      string A model name.
-	 *
-	 * @return     AgaviModel A Model implementation instance, if the model exists,
-	 *                        otherwise null. If the model implements an initialize
-	 *                        method, it will be called with a Context instance.
-	 *
-	 * @throws     AgaviAutloadException if class is ultimately not found.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @author     Mike Vincent <mike@agavi.org>
-	 * @since      0.9.0
-	 */
-	public function getGlobalModel ($modelName)
-	{
-
-		$class = $modelName . 'Model';
-
-		if (!class_exists($class, false)) {
-			$file = AgaviConfig::get('core.lib_dir') . '/models/' . $modelName . 'Model.class.php';
-			if (file_exists($file)) {
-				require_once($file);
-			} else {
-				$pattern = AgaviConfig::get('core.lib_dir') . '/' . '*' . '/models/' . $modelName . 'Model.class.php';
-				if ($files = glob($pattern)) {
-					// only include the first file found
-					require_once($files[0]);
-				}
-			}
-		}
-
-		// if the above code didnt find the class, allow autoload to fire as a last ditch attempt to find it
-		if (class_exists($class)) {
-			if (AgaviToolkit::isSubClass($class, 'AgaviSingletonModel')) {
-				$model = call_user_func(array($class, 'getInstance'), $class);
-			} else {
-				$model = new $class();
-			}
-			if (method_exists($model, 'initialize')) {
-				$model->initialize($this->context);
-			}
-			return $model;
-		}
-		// we'll never actually get here, but what the hay.
-		return null;
-	}
-
-	/**
-	 * Retrieve the singleton instance of this class.
-	 *
-	 * @return     AgaviController A Controller implementation instance.
-	 *
-	 * @throws     <b>AgaviControllerException</b> If a controller implementation
-	 *                                             instance has not been created.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 * @deprecated
-	 */
-	public static function getInstance ()
-	{
-		$error = 'AgaviController::getInstance deprecated, use newInstance method instead.';
-		throw new AgaviControllerException($error);
-	}
-
-	/**
-	 * Retrieve a Model implementation instance.
-	 *
-	 * @param      string A module name.
-	 * @param      string A model name.
-	 *
-	 * @return     AgaviModel A Model implementation instance, if the model exists,
-	 *                        otherwise null. If the model implements an initialize
-	 *                        method, it will be called with a Context instance.
-	 *
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @author     Mike Vincent <mike@agavi.org>
-	 * @since      0.9.0
-	 */
-	public function getModel ($moduleName, $modelName)
-	{
-
-		$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/models/' . $modelName .	'Model.class.php';
-		require_once($file);
-
-		$class = $modelName . 'Model';
-
-		// fix for same name classes
-		$moduleClass = $moduleName . '_' . $class;
-
-		if (class_exists($moduleClass, false)) {
-			$class = $moduleClass;
-		}
-
-		if (AgaviToolkit::isSubClass($class, 'AgaviSingletonModel')) {
-			$model = call_user_func(array($class, 'getInstance'), $class);
-		} else {
-			$model = new $class();
-		}
-
-		if (method_exists($model, 'initialize')) {
-			$model->initialize($this->context);
-		}
-
-		return $model;
 
 	}
 
@@ -618,14 +563,16 @@ abstract class AgaviController extends AgaviParameterHolder
 	 * @author     Mike Vincent <mike@agavi.org>
 	 * @since      0.9.0
 	 */
-	public function initialize (AgaviContext $context)
+	public function initialize (AgaviContext $context, $parameters = array())
 	{
-		$this->maxForwards = AgaviConfig::get('controller.max_forwards', 20);
+		$this->maxForwards = isset($parameters['max_fowards']) ? $parameters['max_forwards'] : 20;
 		$this->context = $context;
+		$ascn = $context->getClassName('action_stack');
+		$this->actionStack = new $ascn();
 		
 		$cfg = AgaviConfig::get('core.config_dir') . '/output_types.xml';
 		require_once(AgaviConfigCache::checkConfig($cfg, $context->getName()));
-
+		
 		register_shutdown_function(array($this, 'shutdown'));
 	}
 	
@@ -709,29 +656,6 @@ abstract class AgaviController extends AgaviParameterHolder
 
 		return is_readable($file);
 
-	}
-
-	/**
-	 * Retrieve a new Controller implementation instance.
-	 *
-	 * @param      string A Controller implementation name.
-	 *
-	 * @return     AgaviController A Controller implementation instance.
-	 *
-	 * @throws     <b>AgaviFactoryException</b> If a new controller implementation
-	 *                                          instance cannot be created.
-	 *
-	 * @author     Mike Vincent <mike@agavi.org>
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public static function newInstance ($class)
-	{
-		if (class_exists($class) && AgaviToolkit::isSubClass($class, 'AgaviController')) {
-			return new $class();
-		}
-		$error = "Class ($class) doesn't exist or is not a Controller.";
-		throw new AgaviFactoryException($error);
 	}
 
 	/**

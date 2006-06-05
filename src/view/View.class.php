@@ -326,7 +326,7 @@ abstract class AgaviView extends AgaviAttributeHolder
 
 		// set the currently executing module's template directory as the
 		// default template directory
-		$this->decoratorDirectory = $context->getModuleDirectory() .'/templates';
+		$this->decoratorDirectory = $controller->getModuleDirectory() .'/templates';
 
 		$this->directory          = $this->decoratorDirectory;
 

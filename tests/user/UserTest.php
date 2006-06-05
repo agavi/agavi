@@ -140,12 +140,6 @@ class UserTest extends UnitTestCase
 		$this->assertNull($user->getAttributeNames());
 	}
 
-	public function testnewInstance()
-	{
-		$user = User::newInstance('User');
-		$this->assertIsA($user,'User');
-	}
-
 	public function testremoveAttribute()
 	{
 		$this->assertNull($this->_u->removeAttribute('blah'));

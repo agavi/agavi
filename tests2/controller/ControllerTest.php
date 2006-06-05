@@ -85,11 +85,11 @@ class ControllerTest extends AgaviTestCase
 
 	public function testForwardingSuccessfully()
 	{
-		$context = AgaviContext::getInstance();
-		$context->getController()->setRenderMode(AgaviView::RENDER_VAR);
+		$controller = AgaviContext::getInstance()->getController();
+		$controller->setRenderMode(AgaviView::RENDER_VAR);
 		try {
-			$context->getController()->forward('Test', 'Test');
-			$lastActionEntry = $context->getActionStack()->getLastEntry();
+			$controller->forward('Test', 'Test');
+			$lastActionEntry = $controller->getActionStack()->getLastEntry();
 			$this->assertType('AgaviActionStackEntry', $lastActionEntry);
 			$view = $lastActionEntry->getPresentation();
 			$this->assertRegexp('/test successful/i',$view);
@@ -113,10 +113,7 @@ class ControllerTest extends AgaviTestCase
 	public function testGetActionStack()
 	{
 		$con_as = AgaviContext::getInstance()->getController()->getActionStack();
-		$ctx_as = AgaviContext::getInstance()->getActionStack();
 		$this->assertType('AgaviActionStack', $con_as);
-		$this->assertType('AgaviActionStack', $ctx_as);
-		$this->assertReference($ctx_as, $con_as);
 	}
 
 	public function testGetContext()

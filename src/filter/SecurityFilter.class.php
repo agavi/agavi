@@ -30,40 +30,6 @@
 abstract class AgaviSecurityFilter extends AgaviFilter
 {
 
-	/**
-	 * Retrieve a new Controller implementation instance.
-	 *
-	 * @param      string A Controller implementation name.
-	 *
-	 * @return     AgaviController A Controller implementation instance.
-	 *
-	 * @throws     <b>AgaviFactoryException</b> If a security filter implementation
-	 *                                          instance cannot be created.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public static function newInstance ($class)
-	{
-
-		// the class exists
-		$object = new $class();
-
-		if (!($object instanceof AgaviSecurityFilter))
-		{
-
-			// the class name is of the wrong type
-			$error = 'Class "%s" is not of the type SecurityFilter';
-			$error = sprintf($error, $class);
-
-			throw new AgaviFactoryException($error);
-
-		}
-
-		return $object;
-
-	}
-
 }
 
 ?>

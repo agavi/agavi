@@ -58,76 +58,75 @@ class AgaviFactoryConfigHandler extends AgaviConfigHandler
 		$data = array();
 		foreach($configurations as $cfg) {
 
-			$ctx = $context;
-			if($cfg->hasAttribute('context'))
-				$ctx = $cfg->getAttribute('context');
-
 			$requiredItems = array('action_stack', 'controller', 'database_manager', 'dispatch_filter', 'execution_filter', 'filter_chain', 'logger_manager', 'request', 'storage', 'user', 'validator_manager');
-		
 
-
-			// Class names for ExecutionFilter, FilterChain and SecurityFilter
-			if(isset($cfg->dispatch_filter))		$data['dispatch_filter'] = '$this->classNames["dispatch_filter"] = "' . $cfg->dispatch_filter->class->getValue() . '";';
-			if(isset($cfg->execution_filter))		$data['execution_filter'] = '$this->classNames["execution_filter"] = "' . $cfg->execution_filter->class->getValue() . '";';
-			if(isset($cfg->filter_chain))				$data['filter_chain'] = '$this->classNames["filter_chain"] = "' . $cfg->filter_chain->class->getValue() . '";';
+			// Class names for ActionStack, DispatchFilter, ExecutionFilter, FilterChain and SecurityFilter
+			if(isset($cfg->action_stack)) {
+				$data['action_stack'] = '$this->classNames["action_stack"] = "' . $cfg->action_stack->getAttribute('class') . '";';
+			}
+			if(isset($cfg->dispatch_filter)) {
+				$data['dispatch_filter'] = '$this->classNames["dispatch_filter"] = "' . $cfg->dispatch_filter->getAttribute('class') . '";';
+			}
+			if(isset($cfg->execution_filter)) {
+				$data['execution_filter'] = '$this->classNames["execution_filter"] = "' . $cfg->execution_filter->getAttribute('class') . '";';
+			}
+			if(isset($cfg->filter_chain)) {
+				$data['filter_chain'] = '$this->classNames["filter_chain"] = "' . $cfg->filter_chain->getAttribute('class') . '";';
+			}
 			if(isset($cfg->security_filter)) {
-				$data['security_filter'] = '$this->classNames["security_filter"] = "' . $cfg->security_filter->class->getValue() . '";';
+				$data['security_filter'] = '$this->classNames["security_filter"] = "' . $cfg->security_filter->getAttribute('class') . '";';
 			}
 
 			// Database
 			if(AgaviConfig::get('core.use_database', false) && isset($cfg->database_manager)) {
-				$data['database_manager'] = '$this->databaseManager = new ' . $cfg->database_manager->class->getValue() . '();' . "\n" .
-																		'$this->databaseManager->initialize($this);';
+				$data['database_manager'] = '$this->databaseManager = new ' . $cfg->database_manager->getAttribute('class') . '();' . "\n" .
+																		'$this->databaseManager->initialize($this, ' . var_export($this->getItemParameters($cfg->database_manager), true) . ');';
 			}
-
-			// Actionstack
-			if(isset($cfg->action_stack))				$data['action_stack'] = '$this->actionStack = new ' . $cfg->action_stack->class->getValue() . '();';
 
 			// Request
 			if(isset($cfg->request)) {
-				$data['request'] = '$this->request = AgaviRequest::newInstance("' . $cfg->request->class->getValue() . '");';
+				$data['request'] = '$this->request = new ' . $cfg->request->getAttribute('class') . '();';
 				// Init Request
-				$data['init_request'] = '$this->request->initialize($this, ' . $this->getSettings($cfg->request) . ');';
+				$data['init_request'] = '$this->request->initialize($this, ' . var_export($this->getItemParameters($cfg->request), true) . ');';
 			}
 
 			// Storage
 			if(isset($cfg->storage)) {
-				$data['storage'] = '$this->storage = AgaviStorage::newInstance("' . $cfg->storage->class->getValue() . '");' . "\n" .
-														'$this->storage->initialize($this, ' . $this->getSettings($cfg->storage) . ');' . "\n" .
+				$data['storage'] = '$this->storage = new ' . $cfg->storage->getAttribute('class') . '();' . "\n" .
+														'$this->storage->initialize($this, ' . var_export($this->getItemParameters($cfg->storage), true) . ');' . "\n" .
 														'$this->storage->startup();';
 			}
 
 			// ValidatorManager
 			if(isset($cfg->validator_manager)) {
-				$data['validator_manager'] = '$this->validatorManager = new ' . $cfg->validator_manager->class->getValue() . '();' . "\n" .
-																			'$this->validatorManager->initialize($this);';
+				$data['validator_manager'] = '$this->validatorManager = new ' . $cfg->validator_manager->getAttribute('class') . '();' . "\n" .
+																			'$this->validatorManager->initialize($this, ' . var_export($this->getItemParameters($cfg->validator_manager), true) . ');';
 			}
 
 			// User
 			if(AgaviConfig::get('core.use_security', true) && isset($cfg->user)) {
-				$data['user'] = '$this->user = AgaviUser::newInstance("' . $cfg->user->class->getValue() . '");' . "\n" .
-												'$this->user->initialize($this, ' . $this->getSettings($cfg->user) . ');';
+				$data['user'] = '$this->user = new ' . $cfg->user->getAttribute('class') . '();' . "\n" .
+												'$this->user->initialize($this, ' . var_export($this->getItemParameters($cfg->user), true) . ');';
 			}
 
 			// LoggerManager
 			if(AgaviConfig::get('core.use_logging', false) && isset($cfg->logger_manager)) {
-				$data['logger_manager'] = '$this->loggerManager = new ' . $cfg->logger_manager->class->getValue() . '();' . "\n" .
-																	'$this->loggerManager->initialize($this);';
+				$data['logger_manager'] = '$this->loggerManager = new ' . $cfg->logger_manager->getAttribute('class') . '();' . "\n" .
+																	'$this->loggerManager->initialize($this, ' . var_export($this->getItemParameters($cfg->logger_manager), true) . ');';
 
 			}
 
 			// Controller 
 			if(isset($cfg->controller)) {
-				$data['controller'] = '$this->controller = AgaviController::newInstance("' . $cfg->controller->class->getValue() . '");' . "\n" .
-															'$this->controller->initialize($this, ' . $this->getSettings($cfg->controller) . ');';
+				$data['controller'] = '$this->controller = new ' . $cfg->controller->getAttribute('class') . '();' . "\n" .
+															'$this->controller->initialize($this, ' . var_export($this->getItemParameters($cfg->controller), true) . ');';
 			}
 				
 		
 			if(isset($cfg->routing)) {
 				// Routing
-				$data['routing'] = '$this->routing = new ' . $cfg->routing->class->getValue() . '();' . "\n" .
-														'$this->routing->initialize($this);' . "\n" .
-														'include(AgaviConfigCache::checkConfig(AgaviConfig::get("core.config_dir") . "/routing.xml", $profile));';
+				$data['routing'] = '$this->routing = new ' . $cfg->routing->getAttribute('class') . '();' . "\n" .
+														'$this->routing->initialize($this, ' . var_export($this->getItemParameters($cfg->routing), true) . ');' . "\n";
 			}
 		}
 
@@ -160,18 +159,6 @@ class AgaviFactoryConfigHandler extends AgaviConfigHandler
 		return $retval;
 
 	}
-
-	protected function getSettings($itemNode)
-	{
-		$data = array();
-		if($itemNode->hasChildren('parameters')) {
-			foreach($itemNode->parameters as $node) {
-				$data[$node->getAttribute('name')] = $node->getValue();
-			}
-		}
-		return var_export($data, true);
-	}
-
 }
 
 ?>

@@ -50,7 +50,7 @@ class ContextTest extends AgaviTestCase
 		$this->assertReference($a, $f);
 		$this->assertCopy($e, $f);
 		
-		$this->assertType($cfg[$default]['action_stack'], AgaviContext::getInstance()->getActionStack());
+		$this->assertType($cfg[$default]['action_stack'], AgaviContext::getInstance()->getController()->getActionStack());
 		$this->assertType($cfg[$default]['request'], AgaviContext::getInstance()->getRequest());
 		$this->assertType($cfg[$default]['database_manager'], AgaviContext::getInstance()->getDatabaseManager());
 	}
@@ -75,7 +75,7 @@ class ContextTest extends AgaviTestCase
 /*
 		Mock::generate('ActionStack');	
 		$context->initialize('default', array('action_stack' => 'MockActionStack'));
-		$this->assertType('MockActionStack', $context->getActionStack());
+		$this->assertType('MockActionStack', $context->getController()->getActionStack());
 */
 		$this->assertTrue(false, 'testCanReinitializeContextWithOverrides partially disabled for now because MockActionStack and MockActionEntry are not working');
 	}

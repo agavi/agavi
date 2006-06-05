@@ -358,11 +358,10 @@ class AgaviWebController extends AgaviController
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
-	public function initialize (AgaviContext $context)
+	public function initialize(AgaviContext $context, $parameters = array())
 	{
-
 		// initialize parent
-		parent::initialize($context);
+		parent::initialize($context, $parameters);
 
 		ini_set('arg_separator.output', AgaviConfig::get('php.arg_separator.output', '&amp;'));
 
@@ -371,7 +370,6 @@ class AgaviWebController extends AgaviController
 		$this->cookieConfig['path']     = isset($parameters['cookie_path'])     ? $parameters['cookie_path']     : "/";
 		$this->cookieConfig['domain']   = isset($parameters['cookie_domain'])   ? $parameters['cookie_domain']   : "";
 		$this->cookieConfig['secure']   = isset($parameters['cookie_secure'])   ? $parameters['cookie_secure']   : 0;
-
 	}
 
 	/**

@@ -78,30 +78,6 @@ abstract class AgaviStorage extends AgaviParameterHolder
 	}
 
 	/**
-	 * Retrieve a new Storage implementation instance.
-	 *
-	 * @param      string A Storage implementation name
-	 *
-	 * @return     AgaviStorage A Storage implementation instance.
-	 *
-	 * @throws     <b>AgaviFactoryException</b> If a storage implementation instance
-	 *                                          cannot be created.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @author     Mike Vincent <mike@agavi.org>
-	 * @since      0.9.0
-	 */
-	public static function newInstance ($class)
-	{
-		$object = new $class();
-
-		if (!$object instanceof AgaviStorage) {
-			throw new AgaviFactoryException("Class \"$class\" is not of the type Storage");
-		}
-		return $object;
-	}
-	
-	/**
 	 * Executes code necessary to startup the storage (a session, for example).
 	 *
 	 * @return     bool true, if startup went fine, otherwise false

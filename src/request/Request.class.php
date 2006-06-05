@@ -210,38 +210,6 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	}
 
 	/**
-	 * Retrieve a new Request implementation instance.
-	 *
-	 * @param      string A Request implementation name.
-	 *
-	 * @return     AgaviRequest A Request implementation instance.
-	 *
-	 * @throws     <b>AgaviFactoryException</b> If a request implementation instance
-	 *                                          cannot be created.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public static function newInstance($class)
-	{
-		// the class exists
-		$object = new $class();
-
-		if (!($object instanceof AgaviRequest))
-		{
-
-			// the class name is of the wrong type
-			$error = 'Class "%s" is not of the type Request';
-			$error = sprintf($error, $class);
-
-			throw new AgaviFactoryException($error);
-
-		}
-
-		return $object;
-	}
-
-	/**
 	 * Remove an error.
 	 *
 	 * @param      string An error name.

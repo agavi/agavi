@@ -191,8 +191,8 @@ class AgaviCachingExecutionFilter extends AgaviExecutionFilter
 		$actionEntry    = $controller->getActionStack()->getLastEntry();
 		$actionInstance = $actionEntry->getActionInstance();
 		// get the current action information
-		$moduleName = $context->getModuleName();
-		$actionName = $context->getActionName();
+		$moduleName = $controller->getModuleName();
+		$actionName = $controller->getActionName();
 		// get the request method
 		$method = $context->getRequest()->getMethod();
 		

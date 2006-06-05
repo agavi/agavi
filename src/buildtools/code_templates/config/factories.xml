@@ -27,57 +27,31 @@
 	
 	<configuration>
 		
-		<action_stack>
-			<class>AgaviActionStack</class>
-		</action_stack>
+		<action_stack class="AgaviActionStack" />
 		
-		<controller>
-			<class>AgaviWebController</class>
-		</controller>
+		<controller class="AgaviWebController" />
 		
-		<database_manager>
-			<class>AgaviDatabaseManager</class>
-		</database_manager>
+		<database_manager class="AgaviDatabaseManager" />
 		
-		<dispatch_filter>
-			<class>AgaviDispatchFilter</class>
-		</dispatch_filter>
+		<dispatch_filter class="AgaviDispatchFilter" />
 		
-		<execution_filter>
-			<class>AgaviExecutionFilter</class>
-		</execution_filter>
+		<execution_filter class="AgaviExecutionFilter" />
 		
-		<filter_chain>
-			<class>AgaviFilterChain</class>
-		</filter_chain>
+		<filter_chain class="AgaviFilterChain" />
 		
-		<logger_manager>
-			<class>AgaviLoggerManager</class>
-		</logger_manager>
+		<logger_manager class="AgaviLoggerManager" />
 		
-		<request>
-			<class>AgaviWebRequest</class>
-		</request>
+		<request class="AgaviWebRequest" />
 		
-		<security_filter>
-			<class>AgaviSecurityFilter</class>
-		</security_filter>
+		<security_filter class="AgaviSecurityFilter" />
 		
-		<routing>
-			<class>AgaviWebRouting</class>
-		</routing>
+		<routing class="AgaviWebRouting" />
 		
-		<storage>
-			<class>AgaviSessionStorage</class>
-		</storage>
+		<storage class="AgaviSessionStorage" />
 		
-		<user>
-			<class>AgaviBasicSecurityUser</class>
-		</user>
+		<user class="AgaviBasicSecurityUser" />
 		
-		<validator_manager>
-			<class>AgaviValidatorManager</class>
-		</validator_manager>
+		<validator_manager class="AgaviValidatorManager" />
 		
 	</configuration>
 	

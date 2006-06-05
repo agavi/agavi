@@ -36,11 +36,6 @@
 class AgaviContext
 {
 	/**
-	 * @var        AgaviActionStack An ActionStack instance.
-	 */
-	protected $actionStack = null;
-	
-	/**
 	 * @var        AgaviController A Controller instance.
 	 */
 	protected $controller = null;
@@ -123,23 +118,6 @@ class AgaviContext
 	}
 
 	/**
-	 * Retrieve the action name for this context.
-	 *
-	 * @return     string The currently executing action name, if one is set,
-	 *                    otherwise null.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public function getActionName()
-	{
-		// get the last action stack entry
-		$actionEntry = $this->actionStack->getLastEntry();
-
-		return $actionEntry->getActionName();
-	}
-	
-	/**
 	 * Get a class name for repeatedly used factories such as FilterChains.
 	 *
 	 * @param      string The factory identifier.
@@ -152,19 +130,6 @@ class AgaviContext
 	public function getClassName($for)
 	{
 		return $this->classNames[$for];
-	}
-
-	/**
-	 * Retrieve the ActionStack.
-	 *
-	 * @return     AgaviActionStack the ActionStack instance
-	 *
-	 * @author     Mike Vincent <mike@agavi.org>
-	 * @since      0.9.0
-	 */
-	public function getActionStack()
-	{
-		return $this->actionStack;
 	}
 
 	/**
@@ -290,10 +255,104 @@ class AgaviContext
 	}
 	
 	/**
-	 * Retrieve the module directory for this context.
+	 * Retrieve a global Model implementation instance.
 	 *
-	 * @return     string An absolute filesystem path to the directory of the
-	 *                    currently executing module if set, otherwise null.
+	 * @param      string A model name.
+	 *
+	 * @return     AgaviModel A Model implementation instance, if the model exists,
+	 *                        otherwise null. If the model implements an initialize
+	 *                        method, it will be called with a Context instance.
+	 *
+	 * @throws     AgaviAutloadException if class is ultimately not found.
+	 *
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     Mike Vincent <mike@agavi.org>
+	 * @since      0.9.0
+	 */
+	public function getGlobalModel ($modelName)
+	{
+
+		$class = $modelName . 'Model';
+
+		if (!class_exists($class, false)) {
+			$file = AgaviConfig::get('core.lib_dir') . '/models/' . $modelName . 'Model.class.php';
+			if (file_exists($file)) {
+				require_once($file);
+			} else {
+				$pattern = AgaviConfig::get('core.lib_dir') . '/' . '*' . '/models/' . $modelName . 'Model.class.php';
+				if ($files = glob($pattern)) {
+					// only include the first file found
+					require_once($files[0]);
+				}
+			}
+		}
+
+		// if the above code didnt find the class, allow autoload to fire as a last ditch attempt to find it
+		if (class_exists($class)) {
+			if (AgaviToolkit::isSubClass($class, 'AgaviSingletonModel')) {
+				$model = call_user_func(array($class, 'getInstance'), $class);
+			} else {
+				$model = new $class();
+			}
+			if (method_exists($model, 'initialize')) {
+				$model->initialize($this->context);
+			}
+			return $model;
+		}
+		// we'll never actually get here, but what the hay.
+		return null;
+	}
+
+	/**
+	 * Retrieve a Model implementation instance.
+	 *
+	 * @param      string A module name.
+	 * @param      string A model name.
+	 *
+	 * @return     AgaviModel A Model implementation instance, if the model exists,
+	 *                        otherwise null. If the model implements an initialize
+	 *                        method, it will be called with a Context instance.
+	 *
+	 *
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     Mike Vincent <mike@agavi.org>
+	 * @since      0.9.0
+	 */
+	public function getModel ($moduleName, $modelName)
+	{
+
+		$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/models/' . $modelName .	'Model.class.php';
+		require_once($file);
+
+		$class = $modelName . 'Model';
+
+		// fix for same name classes
+		$moduleClass = $moduleName . '_' . $class;
+
+		if (class_exists($moduleClass, false)) {
+			$class = $moduleClass;
+		}
+
+		if (AgaviToolkit::isSubClass($class, 'AgaviSingletonModel')) {
+			$model = call_user_func(array($class, 'getInstance'), $class);
+		} else {
+			$model = new $class();
+		}
+
+		if (method_exists($model, 'initialize')) {
+			$model->initialize($this->context);
+		}
+
+		return $model;
+
+	}
+
+	/**
+	 * Retrieve the name of this Context.
+	 *
+	 * @return     string A context name.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
@@ -303,41 +362,6 @@ class AgaviContext
 		return $this->name;
 	}
 	
-	
-	/**
-	 * Retrieve the module directory for this context.
-	 *
-	 * @return     string An absolute filesystem path to the directory of the
-	 *                    currently executing module if set, otherwise null.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public function getModuleDirectory()
-	{
-		// get the last action stack entry
-		$actionEntry = $this->actionStack->getLastEntry();
-
-		return AgaviConfig::get('core.module_dir') . '/' . $actionEntry->getModuleName();
-	}
-
-	/**
-	 * Retrieve the module name for this context.
-	 *
-	 * @return     string The currently executing module name, if one is set,
-	 *                    otherwise null.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public function getModuleName()
-	{
-		// get the last action stack entry
-		$actionEntry = $this->actionStack->getLastEntry();
-
-		return $actionEntry->getModuleName();
-	}
-
 	/**
 	 * Retrieve the request.
 	 *

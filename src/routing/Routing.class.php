@@ -41,6 +41,7 @@ abstract class AgaviRouting
 	public function initialize(AgaviContext $context)
 	{
 		$this->context = $context;
+		include(AgaviConfigCache::checkConfig(AgaviConfig::get("core.config_dir") . "/routing.xml", $context->getName()));
 	}
 	
 	public final function getContext()
@@ -347,7 +348,7 @@ abstract class AgaviRouting
 			$reverseStr = $str;
 		}
 
-		$rxStr = sprintf('!%s%s%s!', $anchor & self::ANCHOR_START ? '^' : '', $rxStr, $anchor & self::ANCHOR_END ? '$' : '');
+		$rxStr = sprintf('#%s%s%s#', $anchor & self::ANCHOR_START ? '^' : '', $rxStr, $anchor & self::ANCHOR_END ? '$' : '');
 		return array($rxStr, $reverseStr, $vars, $anchor);
 	}
 
