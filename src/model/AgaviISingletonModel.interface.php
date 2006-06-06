@@ -19,26 +19,14 @@
  * @package    agavi
  * @subpackage model
  * 
- * @since      0.10.0 
- * @author     Agavi Project <info@agavi.org>
+ * @since      0.11.0 
  * @author     David Zuelke <dz@bitxtender.com>
+ * @copyright  (c) Authors
  *
  * @version    $Id$
  */
-
-abstract class AgaviSingletonModel extends AgaviModel
+interface AgaviISingletonModel extends AgaviIModel
 {
-	protected static $instance = array();
-
-	protected final function __construct() { }
-	protected final function __clone() { }
-
-	public static function getInstance($className)
-	{
-		$lowerClassName = strtolower($className);
-		if (!isset(self::$instance[$lowerClassName]))
-			self::$instance[$lowerClassName] = new $className();
-		return self::$instance[$lowerClassName];
-	}
 }
+
 ?>

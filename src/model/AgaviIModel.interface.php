@@ -3,7 +3,6 @@
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
 // | Copyright (c) 2003-2006 the Agavi Project.                                |
-// | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -23,45 +22,15 @@
  * @package    agavi
  * @subpackage model
  *
- * @author     Sean Kerr <skerr@mojavi.org>
+ * @author     David Zuelke <dz@bitxtender.com>
  * @copyright  (c) Authors
- * @since      0.9.0
+ * @since      0.11.0
  *
  * @version    $Id$
  */
-abstract class AgaviModel implements AgaviIModel
+interface AgaviIModel
 {
-	/**
-	 * @var        AgaviContext A Context instance.
-	 */
-	private $context = null;
-
-	/**
-	 * Retrieve the current application context.
-	 *
-	 * @return     AgaviContext The current Context instance.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public final function getContext()
-	{
-		return $this->context;
-	}
-
-	/**
-	 * Initialize this model.
-	 *
-	 * @param      AgaviContext The current application context.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public function initialize(AgaviContext $context, $parameters = array())
-	{
-		$this->context = $context;
-	}
-
+	public function getContext();
 }
 
 ?>

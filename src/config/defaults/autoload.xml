@@ -82,7 +82,8 @@
 
 			<!-- agavi/model -->
 			<autoload name="AgaviModel">%core.agavi_dir%/model/Model.class.php</autoload>
-			<autoload name="AgaviSingletonModel">%core.agavi_dir%/model/SingletonModel.class.php</autoload>
+			<autoload name="AgaviIModel">%core.agavi_dir%/model/AgaviIModel.interface.php</autoload>
+			<autoload name="AgaviISingletonModel">%core.agavi_dir%/model/AgaviISingletonModel.interface.php</autoload>
 
 			<!-- agavi/renderer -->
 			<autoload name="AgaviPHPTALRenderer">%core.agavi_dir%/renderer/AgaviPHPTALRenderer.class.php</autoload>

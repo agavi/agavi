@@ -44,6 +44,8 @@ class AgaviContext
 	 * @var        array An array of class names for frequently used factories.
 	 */
 	protected $classNames = array(
+		'action_stack' => null,
+		'dispatch_filter' => null,
 		'execution_filter' => null,
 		'filter_chain' => null,
 		'security_filter' => null
@@ -92,7 +94,12 @@ class AgaviContext
 	/**
 	 * @var        array An array of Context instances.
 	 */
-	protected static $instances = null;
+	protected static $instances = array();
+	
+	/**
+	 * @var        array An array of SingletonModel instances.
+	 */
+	protected static $singletonModelInstances = array();
 
 	/*
 	 * Clone method, overridden to prevent cloning, there can be only one. 
@@ -254,93 +261,109 @@ class AgaviContext
 	 *
 	 * @param      string A model name.
 	 *
-	 * @return     AgaviModel A Model implementation instance, if the model exists,
-	 *                        otherwise null. If the model implements an initialize
-	 *                        method, it will be called with a Context instance.
+	 * @return     AgaviModel A Model implementation instance.
 	 *
 	 * @throws     AgaviAutloadException if class is ultimately not found.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @author     Mike Vincent <mike@agavi.org>
-	 * @since      0.9.0
+	 * @since      0.11.0
 	 */
-	public function getGlobalModel ($modelName)
+	public function getModel($modelName, $moduleName = null, $parameters = array())
 	{
-
 		$class = $modelName . 'Model';
-
-		if (!class_exists($class, false)) {
-			$file = AgaviConfig::get('core.lib_dir') . '/models/' . $modelName . 'Model.class.php';
-			if (file_exists($file)) {
-				require_once($file);
-			} else {
+		$rc = null;
+		
+		if($moduleName === null) {
+			// global model
+			// let's try to autoload that baby
+			if(!class_exists($class)) {
+				// it's not there. the hunt is on
+				$file = AgaviConfig::get('core.lib_dir') . '/models/' . $modelName . 'Model.class.php';
 				$pattern = AgaviConfig::get('core.lib_dir') . '/' . '*' . '/models/' . $modelName . 'Model.class.php';
-				if ($files = glob($pattern)) {
+				if(is_readable($file)) {
+					require_once($file);
+				} elseif($files = glob($pattern)) {
 					// only include the first file found
 					require_once($files[0]);
+				} else {
+					// nothing so far. our last chance: the model name, without a "Model" postfix
+					if(!class_exists($modelName)) {
+						throw new AgaviAutoloadException("Couldn't find class for Model " . $modelName);
+					} else {
+						$class = $modelName;
+						$rc = new ReflectionClass($class);
+						if(!$rc->implementsInterface('AgaviIModel')) {
+							throw new AgaviAutoloadException("Couldn't find class for Model " . $modelName);
+						}
+					}
+				}
+			}
+		} else {
+			// module model
+			// alternative name
+			$moduleClass = $moduleName . '_' . $class;
+			$moduleModelName = $moduleName . '_' . $modelName;
+			// let's try to autoload the baby
+			if(!class_exists($moduleClass) && !class_exists($class)) {
+				// it's not there. the hunt is on
+				$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/models/' . $modelName . 'Model.class.php';
+				if(is_readable($file)) {
+					require_once($file);
+					if(class_exists($moduleClass, false)) {
+						$class = $moduleClass;
+					}
+				} else {
+					// nothing so far. our last chance: the model name, without a "Model" postfix
+					if(!class_exists($moduleModelName) && !class_exists($modelName)) {
+						throw new AgaviAutoloadException("Couldn't find class for Model " . $modelName);
+					} else {
+						// it was autolaoded, which one is it?
+						if(class_exists($moduleModelName, false)) {
+							$class = $moduleModelName;
+						} else {
+							$class = $modelName;
+						}
+						$rc = new ReflectionClass($class);
+						if(!$rc->implementsInterface('AgaviIModel')) {
+							throw new AgaviAutoloadException("Couldn't find class for Model " . $modelName);
+						}
+					}
+				}
+			} else {
+				// it was autoloaded, which one is it?
+				if(class_exists($moduleClass, false)) {
+					$class = $moduleClass;
 				}
 			}
 		}
-
-		// if the above code didnt find the class, allow autoload to fire as a last ditch attempt to find it
-		if (class_exists($class)) {
-			if (AgaviToolkit::isSubClass($class, 'AgaviSingletonModel')) {
-				$model = call_user_func(array($class, 'getInstance'), $class);
-			} else {
-				$model = new $class();
-			}
-			if (method_exists($model, 'initialize')) {
-				$model->initialize($this->context);
-			}
-			return $model;
+		
+		// so if we're here, we found something, right? good.
+		if($rc === null) {
+			// no reflection class created yet.
+			$rc = new ReflectionClass($class);
 		}
-		// we'll never actually get here, but what the hay.
-		return null;
-	}
-
-	/**
-	 * Retrieve a Model implementation instance.
-	 *
-	 * @param      string A module name.
-	 * @param      string A model name.
-	 *
-	 * @return     AgaviModel A Model implementation instance, if the model exists,
-	 *                        otherwise null. If the model implements an initialize
-	 *                        method, it will be called with a Context instance.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @author     Mike Vincent <mike@agavi.org>
-	 * @since      0.9.0
-	 */
-	public function getModel ($moduleName, $modelName)
-	{
-
-		$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/models/' . $modelName .	'Model.class.php';
-		require_once($file);
-
-		$class = $modelName . 'Model';
-
-		// fix for same name classes
-		$moduleClass = $moduleName . '_' . $class;
-
-		if (class_exists($moduleClass, false)) {
-			$class = $moduleClass;
-		}
-
-		if (AgaviToolkit::isSubClass($class, 'AgaviSingletonModel')) {
-			$model = call_user_func(array($class, 'getInstance'), $class);
+		
+		if($rc->implementsInterface('AgaviISingletonModel')) {
+			// it's a singleton
+			if(!isset($this->singletonModelInstances[$class])) {
+				// no instance yet, so we create one
+				// we use this approach so we can pass constructor params, if given
+				$this->singletonModelInstances[$class] = call_user_func_array(array($rc, 'newInstance'), $parameters);
+			}
+			$model = $this->singletonModelInstances[$class];
 		} else {
-			$model = new $class();
+			// create an instance
+			// we use this approach so we can pass constructor params, if given
+			$model = call_user_func_array(array($rc, 'newInstance'), $parameters);
 		}
-
-		if (method_exists($model, 'initialize')) {
-			$model->initialize($this->context);
+		
+		if(method_exists($model, 'initialize')) {
+			// pass the constructor params again. dual use for the win
+			$model->initialize($this, $parameters);
 		}
-
+		
 		return $model;
-
 	}
 
 	/**
