@@ -22,7 +22,7 @@
       <xs:element name="authors">
         <xs:complexType>
           <xs:sequence>
-            <xs:element name="author" maxOccurs="unbounded" />
+            <xs:element name="author" maxOccurs="unbounded">
               <xs:complexType>
                 <xs:simpleContent>
                   <xs:extension base="xs:string">
