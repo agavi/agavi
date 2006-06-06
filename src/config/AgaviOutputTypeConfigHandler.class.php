@@ -85,6 +85,9 @@ class AgaviOutputTypeConfigHandler extends AgaviConfigHandler
 					}
 					$code .= "  'fallback' => '" . ($fallback == 'default' ? $cfg->output_types->getAttribute('default') : $fallback) . "', \n";
 				}
+				if($outputType->hasAttribute('exception')) {
+					$code .= "  'exception' => '" . $this->literalize($outputType->getAttribute('exception')) . "', \n";
+				}
 				if($outputType->renderer->hasAttribute('extension')) {
 					$code .= "  'extension' => '" . $outputType->renderer->getAttribute('extension') . "', \n";
 				}

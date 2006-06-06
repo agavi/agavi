@@ -38,6 +38,7 @@
       </xs:element>
     </xs:all>
     <xs:attribute name="name" type="xs:string" use="required" />
+    <xs:attribute name="exception" type="xs:string" />
     <xs:attribute name="fallback" type="xs:string" />
   </xs:complexType>
 

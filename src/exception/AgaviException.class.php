@@ -48,8 +48,12 @@ class AgaviException extends Exception
 		// clear all output buffers
 		while(@ob_end_clean());
 		
-		// include proper exception template
-		include(AgaviConfig::get('exception.default_template'));
+		if($context !== null && ($ctl = $context->getController()) !== null && ($oti = $ctl->getOutputTypeInfo()) !== null && isset($oti['exception'])) {
+			include($oti['exception']);
+		} else {
+			// include proper exception template
+			include(AgaviConfig::get('exception.default_template'));
+		}
 		
 		// bail out
 		exit;
