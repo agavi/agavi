@@ -514,7 +514,7 @@ if($fixedTrace[0]['file'] != $e->getFile() && $fixedTrace[0]['line'] != $e->getL
 <?php if($xhtml): ?>
 			<div style="position:absolute; top:-1.25em; left:-2em; height:5em; width:5em;"><svg:svg viewBox="3 0 43 43" preserveAspectRatio="xMaxYMax meet" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><svg:use xlink:href="#importantSign" /></svg:svg></div>
 <?php endif; ?>
-			<?=$e->getMessage()?>
+			<?=nl2br($e->getMessage())?>
 		</p>
 		<h3>Stack Trace</h3>
 		<ol>

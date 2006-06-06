@@ -352,8 +352,6 @@ class AgaviWebController extends AgaviController
 	/**
 	 * Initialize this controller.
 	 *
-	 * @return     void
-	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.9.0

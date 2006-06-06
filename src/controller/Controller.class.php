@@ -305,32 +305,31 @@ abstract class AgaviController extends AgaviParameterHolder
 			}
 
 			// initialize the action
-			if ($actionInstance->initialize($this->context)) {
-				// create a new filter chain
-				$fccn = $this->context->getClassName('filter_chain');
-				$filterChain = new $fccn();
+			$actionInstance->initialize($this->context);
+			// create a new filter chain
+			$fccn = $this->context->getClassName('filter_chain');
+			$filterChain = new $fccn();
 
-				if(AgaviConfig::get('core.available', false)) {
-					// the application is available so we'll register
-					// global and module filters, otherwise skip them
+			if(AgaviConfig::get('core.available', false)) {
+				// the application is available so we'll register
+				// action and module filters, otherwise skip them
 
-					// does this action require security?
-					if(AgaviConfig::get('core.use_security', false) && $actionInstance->isSecure()) {
+				// does this action require security?
+				if(AgaviConfig::get('core.use_security', false) && $actionInstance->isSecure()) {
 
-						if(!($this->context->getUser() instanceof AgaviSecurityUser)) {
-							$error = 'Security is enabled, but your User implementation isn\'t a sub-class of SecurityUser';
+					if(!($this->context->getUser() instanceof AgaviSecurityUser)) {
+						$error = 'Security is enabled, but your User implementation isn\'t a sub-class of SecurityUser';
 
-							throw new AgaviSecurityException($error);
-						}
-
-						// register security filter
-						$filterChain->register($this->context->getSecurityFilter());
+						throw new AgaviSecurityException($error);
 					}
 
-					// load filters
-					$this->loadFilters($filterChain, 'action');
-					$this->loadFilters($filterChain, 'action', $moduleName);
+					// register security filter
+					$filterChain->register($this->context->getSecurityFilter());
 				}
+
+				// load filters
+				$this->loadFilters($filterChain, 'action');
+				$this->loadFilters($filterChain, 'action', $moduleName);
 
 				// register the execution filter
 				$efcn = $this->context->getClassName('execution_filter');
@@ -557,7 +556,6 @@ abstract class AgaviController extends AgaviParameterHolder
 	 * Initialize this controller.
 	 *
 	 * @param      AgaviContext object
-	 * @return     void
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @author     Mike Vincent <mike@agavi.org>

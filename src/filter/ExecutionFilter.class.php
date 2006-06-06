@@ -77,7 +77,7 @@ class AgaviExecutionFilter extends AgaviFilter
 		if($useGenericMethods && !method_exists($actionInstance, $executeMethod) ) {
 			// this action will skip validation/execution for this method
 			// get the default view
-			$viewName = $actionInstance->execute();
+			$viewName = $actionInstance->getDefaultViewName();
 		} else {
 			// set default validated status
 			$validated = true;

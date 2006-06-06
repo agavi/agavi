@@ -82,9 +82,6 @@ class AgaviDatabaseManager
 	/**
 	 * Initialize this DatabaseManager.
 	 *
-	 * @return     bool true, if initialization completes successfully, 
-	 *                  otherwise false.
-	 *
 	 * @throws     <b>AgaviInitializationException</b> If an error occurs while
 	 *                                                 initializing this 
 	 *                                                 DatabaseManager.
@@ -93,16 +90,13 @@ class AgaviDatabaseManager
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function initialize($context)
+	public function initialize(AgaviContext $context, $parameters = array())
 	{
 
 		$this->context = $context;
 
 		// load database configuration
 		require_once(AgaviConfigCache::checkConfig(AgaviConfig::get('core.config_dir') . '/databases.xml'));
-
-		return true;
-
 	}
 
 	/**

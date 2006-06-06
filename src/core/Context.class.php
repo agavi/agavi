@@ -230,16 +230,13 @@ class AgaviContext
 	 * (re)Initialize the Context instance.
 	 *
 	 * @param      string name corresponding to a section of the config
-	 * @param      array overrides, key => class
-	 *
-	 * @return     AgaviContext instance
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @author     Mike Vincent <mike@agavi.org>
 	 * @since      0.10.0
 	 */
-	public function initialize($profile = null, $overrides = array())
+	public function initialize($profile = null)
 	{
 		if($profile === null) {
 			$profile = AgaviConfig::get('core.default_context', 'stdctx');
@@ -250,8 +247,6 @@ class AgaviContext
 		$this->name = $profile;
 		
 		include(AgaviConfigCache::checkConfig(AgaviConfig::get('core.config_dir') . '/factories.xml', $profile));
-		
-		return $this;
 	}
 	
 	/**

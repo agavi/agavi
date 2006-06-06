@@ -34,8 +34,6 @@ class AgaviConsoleController extends AgaviController
 	/**
 	 * Initialize this controller.
 	 *
-	 * @return     void
-	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */

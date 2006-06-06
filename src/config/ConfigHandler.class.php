@@ -128,20 +128,15 @@ abstract class AgaviConfigHandler extends AgaviParameterHolder
 	 *
 	 * @param      array An associative array of initialization parameters.
 	 *
-	 * @return     bool true, if initialization completes successfully, 
-	                    otherwise false.
-	 *
 	 * @throws     <b>AgaviInitializationException</b> If an error occurs while
 	 *                                                 initializing the ConfigHandler
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function initialize($parameters = null)
+	public function initialize($parameters = array())
 	{
-		if($parameters != null) {
-			$this->parameters = array_merge($this->parameters, $parameters);
-		}
+		$this->parameters = array_merge($this->parameters, $parameters);
 	}
 
 	/**

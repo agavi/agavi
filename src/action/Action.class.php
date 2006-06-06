@@ -87,16 +87,12 @@ abstract class AgaviAction
 	 *
 	 * @param      AgaviContext The current application context.
 	 *
-	 * @return     bool true, if initialization completes successfully, 
-	 *                  otherwise false.
-	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function initialize(AgaviContext $context)
+	public function initialize(AgaviContext $context, $parameters = array())
 	{
 		$this->context = $context;
-		return true;
 	}
 
 	/**
