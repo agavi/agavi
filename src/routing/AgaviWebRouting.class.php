@@ -81,7 +81,7 @@ class AgaviWebRouting extends AgaviRouting
 			$url     .= '?';
 
 			// loop through the parameters
-			foreach ($parameters as $key => $value) {
+			foreach ($params as $key => $value) {
 				$url .= urlencode($key) . $equals . urlencode($value) . $divider;
 			}
 
