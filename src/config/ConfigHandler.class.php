@@ -30,6 +30,37 @@
  */
 abstract class AgaviConfigHandler extends AgaviParameterHolder
 {
+	protected $validationFile = null;
+
+	/**
+	 * Retrieves the stored validation filename.
+	 *
+	 * @return     string An absolute filesystem path to a validation filename.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getValidationFile()
+	{
+		return $this->validationFile;
+	}
+
+	/**
+	 * Retrieves the stored validation filename.
+	 *
+	 * @param      string An absolute filesystem path to a validation filename.
+	 *
+	 * @return     string An absolute filesystem path to a cache filename.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function setValidationFile($filename)
+	{
+		$this->validationFile = $filename;
+	}
+
+
 	/*
 	 * Retrieve the parameter node values of the given item's parameters element.
 	 *
@@ -224,6 +255,7 @@ abstract class AgaviConfigHandler extends AgaviParameterHolder
 	 * @param      AgaviConfigValueHolder The root config element
 	 * @param      string                 An environment name.
 	 * @param      string                 A context name.
+	 * @param      bool                   Whether parser class should be autoloaded or not.
 	 *
 	 * @return     array An array of ConfigValueHolder configuration elements.
 	 *
@@ -236,7 +268,7 @@ abstract class AgaviConfigHandler extends AgaviParameterHolder
 
 		if($configurations->hasAttribute('parent')) {
 			$parent = self::literalize($configurations->getAttribute('parent'));
-			$parentConfigs = $this->orderConfigurations(AgaviConfigCache::parseConfig($parent, $autoloadParser)->configurations, $environment, $context, $autoloadParser);
+			$parentConfigs = $this->orderConfigurations(AgaviConfigCache::parseConfig($parent, $autoloadParser, $this->getValidationFile())->configurations, $environment, $context, $autoloadParser);
 			$configs = array_merge($configs, $parentConfigs);
 		}
 

@@ -45,7 +45,7 @@ class AgaviXmlConfigParser extends AgaviConfigParser
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function parse($config)
+	public function parse($config, $validationFile = null)
 	{
 		if (!is_readable($config)) {
 			$error = 'Configuration file "' . $config . '" does not exist or is not readable';
@@ -57,10 +57,22 @@ class AgaviXmlConfigParser extends AgaviConfigParser
 		$doc = DOMDocument::load($config);
 		restore_error_handler();
 		if(!($doc instanceof DOMDocument)) {
-			$error = 'Configuration file "' . $config . '" contains errors (' . implode("<br />\r\n", $this->errors) . ')';
+			$error = 'Configuration file "' . $config . '" contains errors (' . implode("\n", $this->errors) . ')';
 			throw new AgaviParseException($error);
 		}
 		$this->xpath = new DomXPath($doc);
+		if($validationFile) {
+			// TODO: check for file existance
+			$this->errors = array();
+			set_error_handler(array($this, 'errorHandler'));
+			if(!$doc->schemaValidate($validationFile)) {
+				restore_error_handler();
+				$error = 'Configuration file "' . $config . '" does not match the schema. The errors are: ' . "\n" . implode("\n", $this->errors);
+				throw new AgaviParseException($error);
+			} else {
+				restore_error_handler();
+			}
+		}
 
 		$rootRes = new AgaviConfigValueHolder();
 

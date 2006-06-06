@@ -48,7 +48,7 @@ class AgaviConfigHandlersConfigHandler extends AgaviConfigHandler
 	public function execute($config, $context = null)
 	{
 		// parse the config file
-		$configurations = $this->orderConfigurations(AgaviConfigCache::parseConfig($config, false)->configurations, AgaviConfig::get('core.environment'));
+		$configurations = $this->orderConfigurations(AgaviConfigCache::parseConfig($config, false, $this->getValidationFile())->configurations, AgaviConfig::get('core.environment'));
 
 		// init our data arrays
 		$data     = array();
@@ -102,6 +102,11 @@ class AgaviConfigHandlersConfigHandler extends AgaviConfigHandler
 					// since we have parameters we will need to init the handler
 					$tmp    = "self::\$handlers['%s']->initialize(%s);";
 					$data[] = sprintf($tmp, $category, $parameters);
+				}
+
+				if($handler->hasAttribute('validate')) {
+					$tmp    = "self::\$handlers['%s']->setValidationFile('%s');";
+					$data[] = sprintf($tmp, $category, $this->literalize($handler->getAttribute('validate')));
 				}
 			}
 		}

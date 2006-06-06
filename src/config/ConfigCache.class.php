@@ -239,6 +239,7 @@ class AgaviConfigCache
 		// manually create our config_handlers.ini handler
 		self::$handlers['config_handlers.xml'] = new AgaviConfigHandlersConfigHandler();
 		self::$handlers['config_handlers.xml']->initialize();
+		self::$handlers['config_handlers.xml']->setValidationFile(AgaviConfig::get('core.agavi_dir') . '/config/xsd/config_handlers.xsd');
 
 		// application configuration handlers
 		require_once(AgaviConfigCache::checkConfig(AgaviConfig::get('core.config_dir') . '/config_handlers.xml'));
@@ -284,7 +285,7 @@ class AgaviConfigCache
 
 
 
-	public static function parseConfig($config, $autoloadParser = true)
+	public static function parseConfig($config, $autoloadParser = true, $validateFile = null)
 	{
 		static $parsers = array();
 
@@ -302,7 +303,7 @@ class AgaviConfigCache
 			$parsers[$ext] = new $class();
 		}
 
-		return $parsers[$ext]->parse($config);
+		return $parsers[$ext]->parse($config, $validateFile);
 	}
 
 }
