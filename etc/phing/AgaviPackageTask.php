@@ -28,39 +28,25 @@ class AgaviPackageTask extends Task {
 		}
 		require_once('PEAR/Exception.php');
 		PEAR::setErrorHandling(PEAR_ERROR_CALLBACK,'PEAR_ErrorToPEAR_Exception');
-		if (!$this->dir) {
-			throw new BuildException('dir attribute is required!');
-		}
-		exec("rm -rf {$this->dir}");
-		if (!@mkdir($this->dir)) {
-			throw new BuildException("Could not make build directory: {$this->dir}");
+		if (!$this->dir || !file_exists($this->dir)) {
+			throw new BuildException('Build dir is not defined or does not exist.');
 		}
 
 		$this->log("Building package contents in: {$this->dir}", PROJECT_MSG_INFO);
 
-		exec("cp -Rp src/* {$this->dir}");
-		exec('find '.$this->dir.' -name ".svn" -type d -exec rm -rf {} \; 2>&1 >/dev/null');
-		copy('CHANGELOG', "{$this->dir}/CHANGELOG");
-		copy('RELEASE_NOTES', "{$this->dir}/RELEASE_NOTES");
-		copy('INSTALL', "{$this->dir}/INSTALL");
-		copy('LICENSE', "{$this->dir}/LICENSE");
-		mkdir("{$this->dir}/scripts");
-		copy('etc/agavi-dist', "{$this->dir}/scripts/agavi-dist");
-		copy('etc/agavi.bat-dist', "{$this->dir}/scripts/agavi.bat-dist");
-		
 		set_time_limit(0);
-		
+
 		// Modify short description. Try to keep under 80 chars width
 $shortDesc = <<<EOD
 PHP5 MVC Application Framework
 EOD;
-		
+
 		// Modify long description. Try to keep under 80 chars width
 $longDesc = <<<EOD
 Agavi is a fork of the Mojavi project.  It aims to provide an MVC
 application framework for PHP5.
 EOD;
-		
+
 		$p2 = new PEAR_PackageFileManager2;
 		$p2->setOptions(array(
 			'filelistgenerator' => 'file',
@@ -102,12 +88,12 @@ EOD;
 		$p2->setOSInstallCondition('windows');
 		$p2->addInstallAs('scripts/agavi.bat-dist', 'agavi.bat');
 		$p2->addIgnoreToRelease('scripts/agavi-dist');
-		
+
 		// and the next release... very cool, eh? how utterly stupid is that
 		$p2->addRelease();
 		$p2->addInstallAs('scripts/agavi-dist', 'agavi');
 		$p2->addIgnoreToRelease('scripts/agavi.bat-dist');
-		
+
 		$p2->addPackageDepWithChannel( 'required', 'phing', 'pear.phing.info', '2.2.0RC1');
 		$p2->addPackageDepWithChannel( 'optional', 'creole', 'pear.phpdb.org', '1.1.0RC1');
 		$p2->addPackageDepWithChannel( 'optional', 'propel_generator', 'pear.phpdb.org', '1.2.0RC1');
@@ -119,9 +105,9 @@ EOD;
 		$p2->addReplacement('scripts/agavi-dist', 'pear-config', '@PEAR-DIR@', 'php_dir');
 		$p2->addReplacement('scripts/agavi.bat-dist', 'pear-config', '@PEAR-DIR@', 'php_dir');
 		$p2->generateContents();
-		
+
 //		$pkg = &$p2->exportCompatiblePackageFile1();
-		
+
 		try {
 //			$pkg->writePackageFile();
 			$p2->writePackageFile();

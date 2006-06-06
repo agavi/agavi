@@ -20,9 +20,9 @@
 	<!-- define the location of our tasks -->
 	<taskdef classname="buildtools.phing.AgaviTestTask" classpath="${agavi.dir}" name="agavitest"/>
 	<taskdef classname="buildtools.phing.AgaviTestTask2" classpath="${agavi.dir}" name="agavitest2"/>
-	<taskdef classname="${agavi.dir}.buildtools.phing.AgaviFixPathsTask" classpath="${agavi.dir}" name="fixpaths"/>
-	<taskdef classname="${agavi.dir}.buildtools.phing.AgaviListModulesTask" classpath="${agavi.dir}" name="listModules"/>
-	<taskdef classname="${agavi.dir}.buildtools.phing.AgaviSubActionNameTask" classpath="${agavi.dir}" name="subActionName"/>
+	<taskdef classname="buildtools.phing.AgaviFixPathsTask" classpath="${agavi.dir}" name="fixpaths"/>
+	<taskdef classname="buildtools.phing.AgaviListModulesTask" classpath="${agavi.dir}" name="listModules"/>
+	<taskdef classname="buildtools.phing.AgaviSubActionNameTask" classpath="${agavi.dir}" name="subActionName"/>
 
 	<property name="webapp.dir" value=""/>
 	<property name="tests.dir" value=""/>
@@ -224,10 +224,7 @@
 		<fail unless="has_actiontests" message="Could not find action tests directory: ${moduletests.dir}"/>
 		<mkdir dir="${moduletests.dir}/actions"/>
 	
-		<echo msg="${templates.dir.current}" />
-		<echo msg="${templates.dir.default}" />
 		<property name="templates.dir.current" value="${templates.dir.default}" override="true" />
-		<echo msg="${templates.dir.current}" />
 		<available file="${templates.dir}/ActionTest.class.php.tmpl" property="templates.dir.current" value="${templates.dir}" />
 		<available file="${templates.dir}/modules/${module}/ActionTest.class.php.tmpl" property="templates.dir.current" value="${templates.dir}/modules/${module}" />				
 		<copy file="${templates.dir.current}/ActionTest.class.php.tmpl" tofile="${moduletests.dir}/actions/${actionPath}ActionTest.class.php" overwrite="false">
@@ -263,8 +260,8 @@
 			</filterchain>
 		</copy>
 		<property name="templates.dir.current" value="${templates.dir.default}" override="true" />
-		<available file="${templates.dir}/Template.class.php.tmpl" property="templates.dir.current" value="${templates.dir}" />
-		<available file="${templates.dir}/modules/${module}/Template.class.php.tmpl" property="templates.dir.current" value="${templates.dir}/modules/${module}" />				
+		<available file="${templates.dir}/Template.php.tmpl" property="templates.dir.current" value="${templates.dir}" />
+		<available file="${templates.dir}/modules/${module}/Template.php.tmpl" property="templates.dir.current" value="${templates.dir}/modules/${module}" />				
 		<copy file="${templates.dir.current}/Template.php.tmpl" tofile="${module.dir}/templates/${actionPath}${view}.php">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">    

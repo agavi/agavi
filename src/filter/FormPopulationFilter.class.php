@@ -90,7 +90,7 @@ class AgaviFormPopulationFilter extends AgaviFilter
 				$doc = DOMDocument::loadHTML($output);
 				$hasXmlProlog = false;
 				if(preg_match('#<\?xml.*?\?>#iuU', $output)) {
-					$hasXmlProlog;
+					$hasXmlProlog = true;
 				}
 				$xpath = new DomXPath($doc);
 				$baseHref = '';
@@ -101,7 +101,7 @@ class AgaviFormPopulationFilter extends AgaviFilter
 				}
 				foreach($xpath->query('//form[@action]') as $form) {
 					$action = $form->getAttribute('action');
-					if(!($baseHref . $action == $_SERVER['REQUEST_URI'] || $baseHref . '/' . $action == $_SERVER['REQUEST_URI'] || (strpos($action, '/') == 0 && $action == $_SERVER['REQUEST_URI']))) {
+					if(!($baseHref . $action == $_SERVER['REQUEST_URI'] || $baseHref . '/' . $action == $_SERVER['REQUEST_URI'] || (strpos($action, '/') === 0 && $action == $_SERVER['REQUEST_URI']) || (strlen($_SERVER['REQUEST_URI']) == strrpos($_SERVER['REQUEST_URI'], $action) + strlen($action)))) {
 						continue;
 					}
 					
@@ -179,7 +179,7 @@ class AgaviFormPopulationFilter extends AgaviFilter
 						
 					}
 				}
-				if((strtolower($this->getParameter('force_output_mode')) == 'xhtml' || ($doc->doctype && strpos($doc->doctype->publicId, '-//W3C//DTD XHTML') == 0)) && strtolower($this->getParameter('force_output_mode')) != 'html') {
+				if(strtolower($this->getParameter('force_output_mode')) == 'xhtml' || ($doc->doctype && stripos($doc->doctype->publicId, '-//W3C//DTD XHTML') === 0 && strtolower($this->getParameter('force_output_mode')) != 'html')) {
 					$out = $doc->saveXML();
 					if($this->getParameter('cdata_fix')) {
 						// these are ugly fixes so inline style and script blocks still work. better don't use them with XHTML to avoid trouble
