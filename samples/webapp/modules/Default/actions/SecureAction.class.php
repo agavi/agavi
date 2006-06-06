@@ -67,7 +67,7 @@ class Default_SecureAction extends AgaviAction
 	public function getDefaultViewName()
 	{
 
-		return AgaviView::SUCCESS;
+		return 'Success';
 
 	}
 

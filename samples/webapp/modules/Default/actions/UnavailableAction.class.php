@@ -67,7 +67,7 @@ class Default_UnavailableAction extends AgaviAction
 	public function getDefaultViewName()
 	{
 
-		return AgaviView::SUCCESS;
+		return 'Success';
 
 	}
 

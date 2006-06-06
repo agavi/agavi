@@ -27,7 +27,7 @@ class Default_UnavailableSuccessView extends AgaviPHPView
 	{
 
 		// set our template
-		$this->setTemplate('UnavailableSuccess.php');
+		$this->setTemplate('UnavailableSuccess');
 
 		// set the title
 		$this->setAttribute('title', 'Unavailable Action');

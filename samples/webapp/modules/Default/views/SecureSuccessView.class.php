@@ -27,7 +27,7 @@ class Default_SecureSuccessView extends AgaviPHPView
 	{
 
 		// set our template
-		$this->setTemplate('SecureSuccess.php');
+		$this->setTemplate('SecureSuccess');
 
 		// set the title
 		$this->setAttribute('title', 'Secure Action');

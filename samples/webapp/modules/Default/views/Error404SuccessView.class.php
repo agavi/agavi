@@ -30,7 +30,7 @@ class Default_Error404SuccessView extends AgaviPHPView
 		$request = $this->getContext()->getRequest();
 
 		// set our template
-		$this->setTemplate('Error404Success.php');
+		$this->setTemplate('Error404Success');
 
 		// set the title
 		$this->setAttribute('title', 'Error 404 Action');

@@ -27,7 +27,7 @@ class Default_LoginInputView extends AgaviPHPView
 	{
 
 		// set our template
-		$this->setTemplate('LoginInput.php');
+		$this->setTemplate('LoginInput');
 
 		// set the title
 		$this->setAttribute('title', 'Login Action');

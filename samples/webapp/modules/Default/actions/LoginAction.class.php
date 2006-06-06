@@ -43,7 +43,7 @@ class Default_LoginAction extends AgaviAction
 	public function execute ()
 	{
 
-		return AgaviView::INPUT;
+		return 'Input';
 
 	}
 
@@ -66,7 +66,7 @@ class Default_LoginAction extends AgaviAction
 	public function getDefaultViewName()
 	{
 
-		return AgaviView::INPUT;
+		return 'Input';
 
 	}
 

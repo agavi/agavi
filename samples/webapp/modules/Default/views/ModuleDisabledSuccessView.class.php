@@ -27,7 +27,7 @@ class Default_ModuleDisabledSuccessView extends AgaviPHPView
 	{
 
 		// set our template
-		$this->setTemplate('ModuleDisabledSuccess.php');
+		$this->setTemplate('ModuleDisabledSuccess');
 
 		// set the title
 		$this->setAttribute('title', 'Module Disabled');

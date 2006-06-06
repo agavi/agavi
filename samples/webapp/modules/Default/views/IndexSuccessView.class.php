@@ -27,7 +27,7 @@ class Default_IndexSuccessView extends AgaviPHPView
 	{
 
 		// set our template
-		$this->setTemplate('IndexSuccess.php');
+		$this->setTemplate('IndexSuccess');
 
 		// set the title
 		$this->setAttribute('title', 'Default Action');
