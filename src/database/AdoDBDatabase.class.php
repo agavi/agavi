@@ -143,7 +143,7 @@ class AgaviAdoDBDatabase extends AgaviDatabase
 				if ($persistent)
 					$this->connection->PConnect($host, $username, $password, $database);
 				else
-					$this->connection->Connect($host, $username, $password, $database);
+					$this->connection->NConnect($host, $username, $password, $database);
 			}
 
 			// set default fetch mode to 'assoc'
@@ -190,8 +190,6 @@ class AgaviAdoDBDatabase extends AgaviDatabase
 
 	/**
 	 * Execute the shutdown procedure.
-	 *
-	 * @return     void
 	 *
 	 * @throws     <b>AgaviDatabaseException</b> If an error occurs while shutting
 	 *                                           down this database.

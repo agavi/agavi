@@ -35,12 +35,10 @@ abstract class AgaviLayout
 	 * 
 	 * @param      array An array of parameters.
 	 *
-	 * @return     void
-	 *
 	 * @author     Veikko Makinen <mail@veikkomakinen.com>
 	 * @since      0.10.0
 	 */
-	public function initialize($params)
+	public function initialize($params = array())
 	{
 		/* empty so we're not required to override this */
 	}
@@ -75,7 +73,6 @@ abstract class AgaviLayout
 	 *
 	 * @param      string A message layout.
 	 *	
-	 * @return     void
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0

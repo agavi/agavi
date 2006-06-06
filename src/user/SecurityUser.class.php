@@ -34,8 +34,6 @@ abstract class AgaviSecurityUser extends AgaviUser
 	 *
 	 * @param      mixed Credential data.
 	 *
-	 * @return     void
-	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
@@ -43,8 +41,6 @@ abstract class AgaviSecurityUser extends AgaviUser
 
 	/**
 	 * Clear all credentials associated with this user.
-	 *
-	 * @return     void
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -78,8 +74,6 @@ abstract class AgaviSecurityUser extends AgaviUser
 	 *
 	 * @param      mixed Credential data.
 	 *
-	 * @return     void
-	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
@@ -89,8 +83,6 @@ abstract class AgaviSecurityUser extends AgaviUser
 	 * Set the authenticated status of this user.
 	 *
 	 * @param      bool A flag indicating the authenticated status of this user.
-	 *
-	 * @return     void
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0

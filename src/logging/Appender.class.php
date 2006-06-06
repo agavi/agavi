@@ -34,12 +34,10 @@ abstract class AgaviAppender
 	/**
 	 * Initialize the object.
 	 *
-	 * @return     void
-	 *
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.10.0
 	 */
-	abstract function initialize($params);
+	abstract function initialize($params = array());
 
 	/**
 	 * Retrieve the layout.
@@ -73,8 +71,6 @@ abstract class AgaviAppender
 	/**
 	 * Execute the shutdown procedure.
 	 *
-	 * @return     void
-	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
@@ -84,8 +80,6 @@ abstract class AgaviAppender
 	 * Write log data to this appender.
 	 *
 	 * @param      string Log data to be written.
-	 *
-	 * @return     void
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0

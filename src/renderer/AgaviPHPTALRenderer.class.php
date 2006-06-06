@@ -124,8 +124,6 @@ abstract class AgaviPHPTALRenderer
 	/**
 	 * Updates template attributes
 	 *
-	 * @return     void
-	 *
 	 * @author     Benjamin Muskalla <bm@bmuskalla.de>
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0

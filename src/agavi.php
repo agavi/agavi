@@ -59,8 +59,6 @@ require(AgaviConfig::get('core.agavi_dir') . '/core/Agavi.class.php');
  *
  * @param      string A class name.
  *
- * @return     void
- *
  * @author     David Zuelke <dz@bitxtender.com>
  * @author     Sean Kerr <skerr@mojavi.org>
  * @since      0.9.0

@@ -66,8 +66,6 @@ class AgaviFormPopulationFilter extends AgaviFilter
 	 *
 	 * @param      AgaviFilterChain The filter chain.
 	 *
-	 * @return     void
-	 *
 	 * @throws     <b>AgaviFilterException</b> If an error occurs during execution.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
@@ -211,15 +209,12 @@ class AgaviFormPopulationFilter extends AgaviFilter
 	 * @param      AgaviContext The current application context.
 	 * @param      array        An associative array of initialization parameters.
 	 *
-	 * @return     bool true, if initialization completes successfuly, otherwise
-	 *                  false.
-	 *
 	 * @throws     <b>AgaviFilterException</b> If an error occurs during initialization
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function initialize ($context, $parameters = null)
+	public function initialize(AgaviContext $context, $parameters = array())
 	{
 		// set defaults
 		$this->setParameter('cdata_fix', true);
@@ -230,7 +225,6 @@ class AgaviFormPopulationFilter extends AgaviFilter
 		$this->setParameter('remove_xml_prolog', true);
 		// initialize parent
 		parent::initialize($context, $parameters);
-		return true;
 	}
 }
 

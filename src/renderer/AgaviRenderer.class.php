@@ -52,16 +52,12 @@ abstract class AgaviRenderer
 	 * @param      AgaviContext The current application context.
 	 * @param      array        An associative array of initialization parameters.
 	 *
-	 * @return     bool true, if initialization completes successfully,
-	 *                  otherwise false.
-	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function initialize ($context, $parameters = array())
+	public function initialize(AgaviContext $context, $parameters = array())
 	{
 		$this->context = $context;
-		return true;
 	}
 
 	/**
@@ -200,8 +196,6 @@ abstract class AgaviRenderer
 	 * Execute a basic pre-render check to verify all required variables exist
 	 * and that the template is readable.
 	 *
-	 * @return     void
-	 *
 	 * @throws     <b>AgaviRenderException</b> If the pre-render check fails.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
@@ -273,7 +267,6 @@ abstract class AgaviRenderer
 	 * This method is called by the rendering FilterChain.
 	 * It puts the returned data into the View (if appropriate)
 	 *
-	 * @return     void
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */

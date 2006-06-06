@@ -35,8 +35,6 @@ class AgaviExecutionFilter extends AgaviFilter
 	 *
 	 * @param      AgaviFilterChain The filter chain.
 	 *
-	 * @return     void
-	 *
 	 * @throws     <b>AgaviInitializeException</b> If an error occurs during view
 	 *                                             initialization.
 	 * @throws     <b>AgaviViewException</b>       If an error occurs while executing
@@ -150,62 +148,53 @@ class AgaviExecutionFilter extends AgaviFilter
 			$viewInstance = $controller->getView($moduleName, $viewName);
 
 			// initialize the view
-			if ($viewInstance->initialize($context)) {
-				// view initialization completed successfully
-				$renderer = $viewInstance->execute();
-				
-				if($renderer === null) {
-					while(true) {
-						$oti= $controller->getOutputTypeInfo();
-						$renderer = new $oti['renderer']();
-						if(isset($oti['extension'])) {
-							$renderer->setExtension($oti['extension']);
-						}
-						$renderer->setView($viewInstance);
+			$viewInstance->initialize($context);
+			// view initialization completed successfully
+			$renderer = $viewInstance->execute();
+			
+			if($renderer === null) {
+				while(true) {
+					$oti= $controller->getOutputTypeInfo();
+					$renderer = new $oti['renderer']();
+					if(isset($oti['extension'])) {
+						$renderer->setExtension($oti['extension']);
+					}
+					$renderer->setView($viewInstance);
 
-						try {
-							// run the pre-render check to see if the template is there
-							$renderer->preRenderCheck();
-							break;
-						} catch(AgaviRenderException $e) {
-							if(isset($oti['fallback'])) {
-								// template not found, but there's a fallback specified, so let's try that one
-								$controller->setOutputType($oti['fallback']);
-							} else {
-								throw $e;
-							}
+					try {
+						// run the pre-render check to see if the template is there
+						$renderer->preRenderCheck();
+						break;
+					} catch(AgaviRenderException $e) {
+						if(isset($oti['fallback'])) {
+							// template not found, but there's a fallback specified, so let's try that one
+							$controller->setOutputType($oti['fallback']);
+						} else {
+							throw $e;
 						}
 					}
 				}
-				
-				// create a new filter chain
-				$fccn = $context->getClassName('filter_chain');
-				$filterChain = new $fccn();
-
-				$controller->loadFilters($filterChain, 'rendering');
-				$controller->loadFilters($filterChain, 'rendering', $moduleName);
-
-				// register the renderer as the last filter
-				$filterChain->register($renderer);
-
-				// go, go, go!
-				$filterChain->execute();
-				
-				// get the data from the view (the renderer put it there)
-				$viewData = $viewInstance->getData();
-				
-				if ($controller->getRenderMode() == AgaviView::RENDER_VAR) {
-					$actionEntry->setPresentation($viewData);
-				}
-
-			} else {
-				// view failed to initialize
-				$error = 'View initialization failed for module "%s", ' .
-						 'view "%sView"';
-				$error = sprintf($error, $moduleName, $viewName);
-				throw new AgaviInitializationException($error);
 			}
+			
+			// create a new filter chain
+			$fccn = $context->getClassName('filter_chain');
+			$filterChain = new $fccn();
 
+			$controller->loadFilters($filterChain, 'rendering');
+			$controller->loadFilters($filterChain, 'rendering', $moduleName);
+
+			// register the renderer as the last filter
+			$filterChain->register($renderer);
+
+			// go, go, go!
+			$filterChain->execute();
+			
+			// get the data from the view (the renderer put it there)
+			$viewData = $viewInstance->getData();
+			
+			if($controller->getRenderMode() == AgaviView::RENDER_VAR) {
+				$actionEntry->setPresentation($viewData);
+			}
 		}
 
 	}

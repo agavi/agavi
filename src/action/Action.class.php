@@ -90,7 +90,7 @@ abstract class AgaviAction
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function initialize(AgaviContext $context, $parameters = array())
+	public function initialize(AgaviContext $context)
 	{
 		$this->context = $context;
 	}
@@ -112,8 +112,6 @@ abstract class AgaviAction
 	 * Manually register validators for this action.
 	 *
 	 * @param      AgaviValidatorManager A ValidatorManager instance.
-	 *
-	 * @return     void
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0

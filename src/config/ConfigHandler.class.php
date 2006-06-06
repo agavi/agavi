@@ -45,22 +45,6 @@ abstract class AgaviConfigHandler extends AgaviParameterHolder
 		return $this->validationFile;
 	}
 
-	/**
-	 * Retrieves the stored validation filename.
-	 *
-	 * @param      string An absolute filesystem path to a validation filename.
-	 *
-	 * @return     string An absolute filesystem path to a cache filename.
-	 *
-	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function setValidationFile($filename)
-	{
-		$this->validationFile = $filename;
-	}
-
-
 	/*
 	 * Retrieve the parameter node values of the given item's parameters element.
 	 *
@@ -91,8 +75,6 @@ abstract class AgaviConfigHandler extends AgaviParameterHolder
 	 *
 	 * @param      string The old value.
 	 * @param      string The new value which will replace the old value.
-	 *
-	 * @return     void
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -134,8 +116,9 @@ abstract class AgaviConfigHandler extends AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function initialize($parameters = array())
+	public function initialize($validationFile = null, $parameters = array())
 	{
+		$this->validationFile = $validationFile;
 		$this->parameters = array_merge($this->parameters, $parameters);
 	}
 

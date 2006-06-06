@@ -29,7 +29,7 @@
  */
 class AgaviWebRouting extends AgaviRouting
 {
-	public function initialize(AgaviContext $context)
+	public function initialize(AgaviContext $context, $parameters = array())
 	{
 		parent::initialize($context);
 		$ru = ($p = strpos($_SERVER['REQUEST_URI'], '?')) === false ? $_SERVER['REQUEST_URI'] : substr($_SERVER['REQUEST_URI'], 0, $p);

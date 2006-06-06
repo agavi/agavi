@@ -38,7 +38,7 @@ abstract class AgaviRouting
 						$input = null,
 						$prefix = '';
 	
-	public function initialize(AgaviContext $context, $parameters)
+	public function initialize(AgaviContext $context, $parameters = array())
 	{
 		$this->context = $context;
 		include(AgaviConfigCache::checkConfig(AgaviConfig::get("core.config_dir") . "/routing.xml", $context->getName()));

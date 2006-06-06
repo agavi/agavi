@@ -119,8 +119,6 @@ class AgaviWebController extends AgaviController
 	 *
 	 * @param      string A numeric HTTP status code between 100 and 505.
 	 *
-	 * @return     void
-	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
@@ -226,8 +224,6 @@ class AgaviWebController extends AgaviController
 	 * @param      bool   If true, a header with that name will be oberwritten,
 	 *                    otherwise, the value will be appended.
 	 *
-	 * @return     void
-	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
@@ -253,8 +249,6 @@ class AgaviWebController extends AgaviController
 	 *                   will be tried to be removed.
 	 * @param      array Cookie parameters (parameters from config or defaults
 	 *                   are used for any missing parameters).
-	 *
-	 * @return     void
 	 *
 	 * @author     Veikko Makinen <mail@veikkomakinen.com>
 	 * @author     David Zuelke <dz@bitxtender.com>
@@ -303,8 +297,6 @@ class AgaviWebController extends AgaviController
 	/**
 	 * Clears the HTTP headers set for this response.
 	 *
-	 * @return     void
-	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
@@ -315,8 +307,6 @@ class AgaviWebController extends AgaviController
 	
 	/**
 	 * Sends HTTP Status code, headers and cookies
-	 *
-	 * @return     void
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
@@ -377,8 +367,6 @@ class AgaviWebController extends AgaviController
 	 * @param      int    A delay in seconds before redirecting. This only works 
 	 *                    on browsers that do not support the PHP header.
 	 *
-	 * @return     void
-	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
@@ -409,8 +397,6 @@ class AgaviWebController extends AgaviController
 	 * Set the content type for the response.
 	 *
 	 * @param      string A content type.
-	 *
-	 * @return     void
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.9.0

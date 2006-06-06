@@ -64,7 +64,7 @@ class AgaviEmailValidator extends AgaviValidator
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      1.0
 	 */
-	public function initialize($context, $parameters = null)
+	public function initialize(AgaviContext $context, $parameters = array())
 	{
 		$this->setParameter('error', 'Email is not valid.');
 		parent::initialize($context, $parameters);

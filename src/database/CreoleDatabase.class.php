@@ -238,8 +238,6 @@ class AgaviCreoleDatabase extends AgaviDatabase
 	/**
 	 * Execute the shutdown procedure.
 	 *
-	 * @return     void
-	 *
 	 * @throws     <b>AgaviDatabaseException</b> If an error occurs while shutting 
 	 *                                           down this database.
 	 *

@@ -20,8 +20,6 @@ class Default_UnavailableSuccessView extends AgaviPHPView
 	/**
 	 * Execute any presentation logic and set template attributes.
 	 *
-	 * @return     void
-	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */

@@ -125,7 +125,7 @@ class AgaviStringValidator extends AgaviValidator
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function initialize ($context, $parameters = null)
+	public function initialize(AgaviContext $context, $parameters = array())
 	{
 
 		// set defaults

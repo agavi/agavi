@@ -64,7 +64,7 @@ abstract class AgaviModel
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function initialize ($context)
+	public function initialize(AgaviContext $context)
 	{
 
 		$this->context = $context;

@@ -40,24 +40,19 @@ abstract class AgaviXSLRenderer
 	 * @param      AgaviContext The current application context.
 	 * @param      array        An associative array of initialization parameters.
 	 *
-	 * @return     bool true, if initialization completes successfully,
-	 *                  otherwise false.
-	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function initialize($context, $parameters = array())
+	public function initialize(AgaviContext $context, $parameters = array())
 	{
-		$retval = parent::initialize();
+		parent::initialize($context, $parameters);
 		
 		$this->xslProc = new XSLTProcessor();
 
 		// initialize this object
 		if(!$this->setDomDocument(new DOMDocument(isset($parameters['version']) ? $parameters['version'] : '1.0', isset($parameters['encoding']) ? $parameters['encoding'] : 'utf-8'), isset($parameters['root_node_name']) ? $parameters['root_node_name'] : 'rootnode')) {
-			 return false;
+			throw new AgaviInitializationException('Could not create DOM Document');
 		}
-
-		return $retval && true;
 	}
 
 	/**

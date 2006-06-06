@@ -135,8 +135,6 @@ class AgaviConfig
 	 *
 	 * @param      string The name of the configuration directive.
 	 *
-	 * @return     void
-	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
@@ -160,8 +158,6 @@ class AgaviConfig
 	
 	/**
 	 * Clear the configuration.
-	 *
-	 * @return     void
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0

@@ -68,9 +68,6 @@ class AgaviUser extends AgaviAttributeHolder
 	 * @param      AgaviContext A Context instance.
 	 * @param      array        An associative array of initialization parameters.
 	 *
-	 * @return     bool true, if initialization completes successfully,
-	 *                  otherwise false.
-	 *
 	 * @throws     <b>AgaviInitializationException</b> If an error occurs while
 	 *                                                 initializing this User.
 	 *
@@ -78,7 +75,7 @@ class AgaviUser extends AgaviAttributeHolder
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
-	public function initialize($context, $parameters = null)
+	public function initialize(AgaviContext $context, $parameters = array())
 	{
 		$this->context = $context;
 
@@ -90,16 +87,12 @@ class AgaviUser extends AgaviAttributeHolder
 			$this->storageNamespace = $parameters['storage_namespace'];
 		}
 
-		if($parameters != null)
-		{
-			$this->parameters = array_merge($this->parameters, $parameters);
-		}
+		$this->parameters = array_merge($this->parameters, $parameters);
 		
 		// read data from storage
 		$this->attributes = $context->getStorage()->read($this->storageNamespace);
 
-		if($this->attributes == null)
-		{
+		if($this->attributes == null) {
 			// initialize our attributes array
 			$this->attributes = array();
 		}
@@ -107,8 +100,6 @@ class AgaviUser extends AgaviAttributeHolder
 
 	/**
 	 * Execute the shutdown procedure.
-	 *
-	 * @return     void
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0

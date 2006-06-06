@@ -77,7 +77,7 @@ class AgaviOutputTypeConfigHandler extends AgaviConfigHandler
 
 			foreach($cfg->output_types as $outputType) {
 				$code .= "\$this->outputTypes['" . $outputType->getAttribute('name') . "'] = array(\n";
-				$code .= "  'renderer' => '" . $outputType->renderer->getValue() . "',\n";
+				$code .= "  'renderer' => '" . $outputType->renderer->getAttribute('class') . "',\n";
 				if($outputType->hasAttribute('fallback')) {
 					$fallback = $outputType->getAttribute('fallback');
 					if(!in_array($fallback, $otnames)) {

@@ -67,8 +67,6 @@ abstract class AgaviView extends AgaviAttributeHolder
 	/**
 	 * Execute any presentation logic and set template attributes.
 	 *
-	 * @return     void
-	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
@@ -177,8 +175,6 @@ abstract class AgaviView extends AgaviAttributeHolder
 	 * @param      bool  Import error messages too?
 	 * @param      bool  Run strip_tags() on attribute value?
 	 * @param      bool  Run htmlspecialchars() on attribute value?
-	 *
-	 * @return     void
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -312,26 +308,19 @@ abstract class AgaviView extends AgaviAttributeHolder
 	 *
 	 * @param      AgaviContext The current application context.
 	 *
-	 * @return     bool true, if initialization completes successfully,
-	 *                  otherwise false.
-	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function initialize ($context)
+	public function initialize(AgaviContext $context)
 	{
-
 		$this->context = $context;
 
 		// set the currently executing module's template directory as the
 		// default template directory
-		$this->decoratorDirectory = $controller->getModuleDirectory() .'/templates';
+		$this->decoratorDirectory = $context->getController()->getModuleDirectory() . '/templates'; 
 
 		$this->directory          = $this->decoratorDirectory;
-
-		return true;
-
 	}
 
 	/**
@@ -355,8 +344,6 @@ abstract class AgaviView extends AgaviAttributeHolder
 	 *
 	 * @param      string An absolute filesystem path to a template directory.
 	 *
-	 * @return     void
-	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
@@ -374,8 +361,6 @@ abstract class AgaviView extends AgaviAttributeHolder
 	 * executing module's template sub-directory.
 	 *
 	 * @param      string An absolute or relative filesystem path to a template.
-	 *
-	 * @return     void
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -404,8 +389,6 @@ abstract class AgaviView extends AgaviAttributeHolder
 	/**
 	 * Clears out a previously assigned decorator template and directory
 	 *
-	 * @return     void
-	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.10.0
 	 */
@@ -420,8 +403,6 @@ abstract class AgaviView extends AgaviAttributeHolder
 	 * Set the template directory for this view.
 	 *
 	 * @param      string An absolute filesystem path to a template directory.
-	 *
-	 * @return     void
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -443,8 +424,6 @@ abstract class AgaviView extends AgaviAttributeHolder
 	 * @param      string A module name.
 	 * @param      string An action name.
 	 *
-	 * @return     void
-	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
@@ -463,8 +442,6 @@ abstract class AgaviView extends AgaviAttributeHolder
 	 * @see        AgaviView::setSlot()
 	 * @param      array An array of slots
 	 *
-	 * @return     void
-	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.10.0
 	 */
@@ -475,8 +452,6 @@ abstract class AgaviView extends AgaviAttributeHolder
 
 	/**
 	 * Empties the slots array, clearing all previously registered slots
-	 *
-	 * @return     void
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.10.0
@@ -493,8 +468,6 @@ abstract class AgaviView extends AgaviAttributeHolder
 	 * executing module's template sub-directory.
 	 *
 	 * @param      string An absolute or relative filesystem path to a template.
-	 *
-	 * @return     void
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0

@@ -47,7 +47,7 @@ abstract class AgaviPHPTALView extends AgaviView
 	 * @author     Benjamin Muskalla <bm@bmuskalla.de>
 	 * @since      0.11.0
 	 */
-	public function initialize ($context)
+	public function initialize(AgaviContext $context)
 	{
 		
 		$this->_phptal = new FixedPHPTAL();
@@ -76,8 +76,6 @@ abstract class AgaviPHPTALView extends AgaviView
 	 
 	/**
 	 * Clear all attributes associated with this view.
-	 *
-	 * @return     void
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.11.0
@@ -183,8 +181,6 @@ abstract class AgaviPHPTALView extends AgaviView
 	 * @param      string An attribute name.
 	 * @param      mixed  An attribute value.
 	 *
-	 * @return     void
-	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.11.0
 	 */
@@ -203,8 +199,6 @@ abstract class AgaviPHPTALView extends AgaviView
 	 *
 	 * @param      string An attribute name.
 	 * @param      mixed  An attribute value.
-	 *
-	 * @return     void
 	 *
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.11.0
@@ -228,8 +222,6 @@ abstract class AgaviPHPTALView extends AgaviView
 	 * @param      string An attribute name.
 	 * @param      mixed  A reference to an attribute value.
 	 *
-	 * @return     void
-	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.11.0
 	 */
@@ -248,8 +240,6 @@ abstract class AgaviPHPTALView extends AgaviView
 	 *
 	 * @param      string An attribute name.
 	 * @param      mixed  A reference to an attribute value.
-	 *
-	 * @return     void
 	 *
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.11.0
@@ -273,8 +263,6 @@ abstract class AgaviPHPTALView extends AgaviView
 	 * @param      array An associative array of attributes and their associated
 	 *                   values.
 	 *
-	 * @return     void
-	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.11.0
 	 */
@@ -293,8 +281,6 @@ abstract class AgaviPHPTALView extends AgaviView
 	 *
 	 * @param      array An associative array of attributes and references to
 	 *                   their associated values.
-	 *
-	 * @return     void
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.11.0

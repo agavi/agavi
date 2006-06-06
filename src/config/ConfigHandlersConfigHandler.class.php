@@ -56,43 +56,13 @@ class AgaviConfigHandlersConfigHandler extends AgaviConfigHandler
 		foreach($configurations as $cfg) {
 			// let's do our fancy work
 			foreach($cfg->handlers as $handler) {
-				$parameters = 'null';
 				$pattern = $handler->getAttribute('pattern');
-				if($pattern == '%core.config_dir%/autoload.xml')
-					$parameters = '';
 
 				$category = $this->replaceConstants($pattern);
 
 				$class = $handler->getAttribute('class');
 
-				if($handler->hasChildren('params')) {
-					$parameters = '';
-
-					// create parameters
-					foreach($handler->params->getChildren() as $name => $param)
-					{
-						$name = $param->getName();
-						// if the parameter name needs to be retrieved from the name attribute of the tag
-						if($name == 'param' && $param->hasAttribute('name')) {
-							$name = $param->getAttribute('name');
-						}
-
-						// the parameter is an array of items
-						if($param->hasChildren()) {
-							$paramData = 'array(';
-							foreach($param->getChildren() as $child)
-							{
-								$paramData .= sprintf("'%s', ", $child->getValue());
-							}
-							$paramData .= ')';
-						} else {
-							$paramData = sprintf("'%s'", $param->getValue());
-						}
-						$parameters .= sprintf("'%s' => %s, ", $name, $paramData);
-					}
-
-					$parameters = sprintf('array(%s)', $parameters);
-				}
+				$parameters = $this->getItemParameters($handler);
 
 				// append new data
 				$tmp    = "self::\$handlers['%s'] = new %s();";
@@ -100,13 +70,8 @@ class AgaviConfigHandlersConfigHandler extends AgaviConfigHandler
 
 				if($parameters != 'null') {
 					// since we have parameters we will need to init the handler
-					$tmp    = "self::\$handlers['%s']->initialize(%s);";
-					$data[] = sprintf($tmp, $category, $parameters);
-				}
-
-				if($handler->hasAttribute('validate')) {
-					$tmp    = "self::\$handlers['%s']->setValidationFile('%s');";
-					$data[] = sprintf($tmp, $category, $this->literalize($handler->getAttribute('validate')));
+					$tmp    = "self::\$handlers['%s']->initialize(%s, %s);";
+					$data[] = sprintf($tmp, $category, var_export($this->literalize($handler->getAttribute('validate')), true), var_export($parameters, true));
 				}
 			}
 		}

@@ -68,8 +68,6 @@ class AgaviExecutionTimeFilter extends AgaviFilter
 	 *
 	 * @param      AgaviFilterChain The filter chain.
 	 *
-	 * @return     void
-	 *
 	 * @throws     <b>AgaviFilterException</b> If an error occurs during execution.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
@@ -168,27 +166,20 @@ class AgaviExecutionTimeFilter extends AgaviFilter
 	 * @param      AgaviContext The current application context.
 	 * @param      array        An associative array of initialization parameters.
 	 *
-	 * @return     bool true, if initialization completes successfully, 
-	 *                  otherwise false.
-	 *
 	 * @throws     <b>AgaviFilterException</b> If an error occurs during 
 	 *                                         initialization.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function initialize ($context, $parameters = null)
+	public function initialize(AgaviContext $context, $parameters = array())
 	{
-
 		// set defaults
 		$this->setParameter('comment', true);
 		$this->setParameter('replace', null);
 
 		// initialize parent
 		parent::initialize($context, $parameters);
-
-		return true;
-
 	}
 
 }

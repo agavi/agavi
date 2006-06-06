@@ -234,8 +234,6 @@ class AgaviValidatorConfigHandler extends AgaviIniConfigHandler
 	 *                    verification purposes.
 	 * @param      string A comma delimited list of file/parameter names.
 	 *
-	 * @return     void
-	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
@@ -341,8 +339,6 @@ class AgaviValidatorConfigHandler extends AgaviIniConfigHandler
 	 * @param      array  The loaded ini configuration that we'll use for
 	 *               verification purposes.
 	 * @param      string A comma delimited list of file/parameter names.
-	 *
-	 * @return     void
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -451,8 +447,6 @@ class AgaviValidatorConfigHandler extends AgaviIniConfigHandler
 	 *               verification purposes.
 	 * @param      string A comma delimited list of validator names.
 	 * @param      array  A file/parameter name entry.
-	 *
-	 * @return     void
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0

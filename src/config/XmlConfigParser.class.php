@@ -88,8 +88,6 @@ class AgaviXmlConfigParser extends AgaviConfigParser
 	 * @param      AgaviXmlValueHolder The storage for the info from the nodes
 	 * @param      bool Whether this list is the singular form of the parent node
 	 *
-	 * @return     void
-	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */

@@ -38,8 +38,6 @@ class AgaviValidatorManager
 	/**
 	 * Clear this validator manager so it can be reused.
 	 *
-	 * @retun void
-	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
@@ -137,16 +135,12 @@ class AgaviValidatorManager
 	 *
 	 * @param      AgaviContext A context instance.
 	 *
-	 * @return     void
-	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function initialize ($context)
+	public function initialize(AgaviContext $context, $parameters = array())
 	{
-
 		$this->request = $context->getRequest();
-
 	}
 
 	/**
@@ -216,8 +210,6 @@ class AgaviValidatorManager
 	 * @param      string         A file or parameter name.
 	 * @param      AgaviValidator A validator implementation instance.
 	 * @param      string         A parent array name.
-	 *
-	 * @return     void
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0

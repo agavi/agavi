@@ -38,8 +38,6 @@ class AgaviDispatchFilter extends AgaviFilter
 	 *
 	 * @param      AgaviFilterChain The filter chain.
 	 *
-	 * @return     void
-	 *
 	 * @throws     <b>AgaviFilterException</b> If an error occurs during execution.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>

@@ -2,7 +2,7 @@
 
 class SampleRequest extends Request
 {
-	public function initialize($context, $parameters = null) {}
+	public function initialize(AgaviContext $context, $parameters = array()) {}
 	public function shutdown() {}
 }
 

@@ -38,8 +38,6 @@ abstract class AgaviFilter extends AgaviParameterHolder
 	 *
 	 * @param      AgaviFilterChain A FilterChain instance.
 	 *
-	 * @return     void
-	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
@@ -66,29 +64,17 @@ abstract class AgaviFilter extends AgaviParameterHolder
 	 * @param      AgaviContext The current application context.
 	 * @param      array        An associative array of initialization parameters.
 	 *
-	 * @return     bool true, if initialization completes successfully, 
-	 *                  otherwise false.
-	 *
 	 * @throws     <b>AgaviInitializationException</b> If an error occurs while
 	 *                                                 initializing this Filter.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function initialize ($context, $parameters = null)
+	public function initialize(AgaviContext $context, $parameters = array())
 	{
-
 		$this->context = $context;
 
-		if ($parameters != null)
-		{
-
-			$this->parameters = array_merge($this->parameters, $parameters);
-
-		}
-
-		return true;
-
+		$this->parameters = array_merge($this->parameters, $parameters);
 	}
 
 }

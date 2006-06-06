@@ -56,13 +56,10 @@ class AgaviDateValidator extends AgaviValidator
 	 * @param      AgaviContext The current application context.
 	 * @param      array        An associative array of initialization parameters.
 	 *
-	 * @return     bool true, if initialization completes successfully,
-	 *                  otherwise false.
-	 *
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      1.0
 	 */
-	public function initialize ($context, $parameters = null)
+	public function initialize(AgaviContext $context, $parameters = array())
 	{
 		$this->setParameter('error', 'Date is not valid.');
 		parent::initialize($context, $parameters);

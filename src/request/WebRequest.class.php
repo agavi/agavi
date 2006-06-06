@@ -337,9 +337,6 @@ class AgaviWebRequest extends AgaviRequest
 	 * @param      AgaviContext A Context instance.
 	 * @param      array        An associative array of initialization parameters.
 	 *
-	 * @return     bool true, if initialization completes successfully,
-	 *                  otherwise false.
-	 *
 	 * @throws     <b>AgaviInitializationException</b> If an error occurs while
 	 *                                                 initializing this Request.
 	 *
@@ -348,7 +345,7 @@ class AgaviWebRequest extends AgaviRequest
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
-	public function initialize ($context, $parameters = null)
+	public function initialize(AgaviContext $context, $parameters = array())
 	{
 		parent::initialize($context, $parameters);
 		

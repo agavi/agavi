@@ -309,7 +309,6 @@ class AgaviContext
 	 *                        otherwise null. If the model implements an initialize
 	 *                        method, it will be called with a Context instance.
 	 *
-	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @author     Mike Vincent <mike@agavi.org>

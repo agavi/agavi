@@ -53,40 +53,34 @@ class AgaviPostgreSQLSessionStorage extends AgaviSessionStorage
 	 * @param      AgaviContext A Context instance.
 	 * @param      array        An associative array of initialization parameters.
 	 *
-	 * @return     bool true, if initialization completes successfully,
-	 *                  otherwise false.
-	 *
 	 * @throws     <b>AgaviInitializationException</b> If an error occurs while
 	 *                                                 initializing this Storage.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function initialize ($context, $parameters = null)
+	public function initialize(AgaviContext $context, $parameters = array())
 	{
-
 		// initialize the parent
 		parent::initialize($context, $parameters);
 
-		if (!$this->hasParameter('db_table'))
-		{
-
+		if(!$this->hasParameter('db_table')) {
 			// missing required 'db_table' parameter
 			$error = 'Factory configuration file is missing required ' .
 				     '"db_table" parameter for the Storage category';
 
 			throw new AgaviInitializationException($error);
-
 		}
 
 		// use this object as the session handler
-		session_set_save_handler(array($this, 'sessionOpen'),
-						         array($this, 'sessionClose'),
-						         array($this, 'sessionRead'),
-						         array($this, 'sessionWrite'),
-						         array($this, 'sessionDestroy'),
-						         array($this, 'sessionGC'));
-
+		session_set_save_handler(
+			array($this, 'sessionOpen'),
+			array($this, 'sessionClose'),
+			array($this, 'sessionRead'),
+			array($this, 'sessionWrite'),
+			array($this, 'sessionDestroy'),
+			array($this, 'sessionGC')
+		);
 	}
 
 	/**
@@ -336,8 +330,6 @@ class AgaviPostgreSQLSessionStorage extends AgaviSessionStorage
 
 	/**
 	 * Execute the shutdown procedure.
-	 *
-	 * @return     void
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0

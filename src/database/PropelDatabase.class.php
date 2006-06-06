@@ -110,8 +110,6 @@ class AgaviPropelDatabase extends AgaviCreoleDatabase
 	 * Sets a flag indicating a Propel configuration file path has been
 	 * explicitly set as default for use with Propel::init() in database.ini
 	 *
-	 * @return     void
-	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.10.0
 	 */
@@ -124,7 +122,6 @@ class AgaviPropelDatabase extends AgaviCreoleDatabase
 	 * Connect to the database.
 	 * This method is used only if param.use_autoload is false
 	 * 
-	 * @return     void
 	 *
 	 * @throws     <b>AgaviDatabaseException</b> If a connection could not be 
 	 *                                           created.
@@ -183,14 +180,12 @@ class AgaviPropelDatabase extends AgaviCreoleDatabase
 	 * 
 	 * @param      array An associative array of initialization parameters.
 	 *
-	 * @return     void
-	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.10.0
 	 */
-	public function initialize($parameters = null)
+	public function initialize(AgaviDatabaseManager $databaseManager, $parameters = array())
 	{
-		parent::initialize($parameters);
+		parent::initialize($databaseManager, $parameters);
 		$useAutoload = $this->getParameter('use_autoload', true);
 		if($useAutoload)
 		{

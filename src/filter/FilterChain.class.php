@@ -36,8 +36,6 @@ class AgaviFilterChain
 	/**
 	 * Execute the next filter in this chain.
 	 *
-	 * @return     void
-	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
@@ -61,8 +59,6 @@ class AgaviFilterChain
 	 * Register a filter with this chain.
 	 *
 	 * @param      AgaviFilter A Filter implementation instance.
-	 *
-	 * @return     void
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0

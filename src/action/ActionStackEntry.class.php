@@ -52,8 +52,6 @@ class AgaviActionStackEntry
 	 * @param      string An action name.
 	 * @param      AgaviAction An action implementation instance.
 	 *
-	 * @return     void
-	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
@@ -150,8 +148,6 @@ class AgaviActionStackEntry
 	 * Set the rendered presentation for this action.
 	 *
 	 * @param      string A rendered presentation.
-	 *
-	 * @return     void
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0

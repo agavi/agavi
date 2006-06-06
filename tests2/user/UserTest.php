@@ -1,7 +1,7 @@
 <?php
 class SampleUser extends AgaviUser
 {
-	public function initialize($context, $parameters=null)
+	public function initialize(AgaviContext $context, $parameters=null)
 	{
 		$this->context = $context;
 		if ($parameters != null) {

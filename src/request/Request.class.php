@@ -182,16 +182,13 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	 * @param      AgaviContext A Context instance.
 	 * @param      array        An associative array of initialization parameters.
 	 *
-	 * @return     bool true, if initialization completes successfully
-	 *                  otherwise false.
-	 *
 	 * @throws     <b>AgaviInitializationException</b> If an error occurs while
 	 *                                                 initializing this Request.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
-	function initialize($context, $parameters = null)
+	function initialize(AgaviContext $context, $parameters = array())
 	{
 		$this->context = $context;
 		
@@ -205,8 +202,6 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 		if(isset($parameters['action_accessor'])) {
 			$this->actionAccessor = $parameters['action_accessor'];
 		}
-		
-		return true;
 	}
 
 	/**
@@ -243,8 +238,6 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	 * @param      name    An error name.
 	 * @param      message An error message.
 	 *
-	 * @return     void
-	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
@@ -263,8 +256,6 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	 * @param      array An associative array of errors and their associated
 	 *                   messages.
 	 *
-	 * @return     void
-	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
@@ -277,8 +268,6 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	 * Set the request method.
 	 *
 	 * @param      string The request method name.
-	 *
-	 * @return     void
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @author     David Zuelke <dz@bitxtender.com>
@@ -317,8 +306,6 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 
 	/**
 	 * Execute the shutdown procedure.
-	 *
-	 * @return     void
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0

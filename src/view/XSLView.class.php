@@ -74,8 +74,6 @@ abstract class AgaviXSLView extends AgaviView
 	/**
 	 * Clear all attributes associated with this view.
 	 *
-	 * @return     void
-	 *
 	 * @author     Wes Hays <weshays@gbdev.com>
 	 * @since      0.10.0
 	 */

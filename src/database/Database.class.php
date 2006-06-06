@@ -35,6 +35,7 @@ abstract class AgaviDatabase extends AgaviParameterHolder
 	// +-----------------------------------------------------------------------+
 
 	protected
+		$databaseManager = null,
 		$connection = null,
 		$resource   = null;
 
@@ -48,6 +49,19 @@ abstract class AgaviDatabase extends AgaviParameterHolder
 	 * @since      0.9.0
 	 */
 	abstract function connect ();
+	
+	/**
+	 * Retrieve the Database Manager instance for this implementation.
+	 *
+	 * @return     AgaviDatabaseManager A Database Manager instance.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getDatabaseManager()
+	{
+		return $this->databaseManager;
+	}
 
 	/**
 	 * Retrieve the database connection associated with this Database
@@ -107,15 +121,15 @@ abstract class AgaviDatabase extends AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function initialize($parameters = array())
+	public function initialize(AgaviDatabaseManager $databaseManager, $parameters = array())
 	{
+		$this->databaseManager = $databaseManager;
+		
 		$this->parameters = array_merge($this->parameters, $parameters);
 	}
 
 	/**
 	 * Execute the shutdown procedure.
-	 *
-	 * @return     void
 	 *
 	 * @throws     <b>AgaviDatabaseException</b> If an error occurs while shutting 
 	 *                                           down this database.

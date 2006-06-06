@@ -54,8 +54,6 @@ abstract class AgaviAttributeHolder extends AgaviParameterHolder
 	/**
 	 * Clear all attributes.
 	 *
-	 * @return     void
-	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
@@ -270,8 +268,6 @@ abstract class AgaviAttributeHolder extends AgaviParameterHolder
 	 *
 	 * @param      string An attribute namespace.
 	 *
-	 * @return     void
-	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
@@ -292,8 +288,6 @@ abstract class AgaviAttributeHolder extends AgaviParameterHolder
 	 * @param      string An attribute name.
 	 * @param      mixed  An attribute value.
 	 * @param      string An attribute namespace.
-	 *
-	 * @return     void
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -320,8 +314,6 @@ abstract class AgaviAttributeHolder extends AgaviParameterHolder
 	 * @param      string An attribute name.
 	 * @param      mixed  An attribute value.
 	 * @param      string An attribute namespace.
-	 *
-	 * @return     void
 	 *
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.10.0
@@ -352,8 +344,6 @@ abstract class AgaviAttributeHolder extends AgaviParameterHolder
 	 * @param      mixed  A reference to an attribute value.
 	 * @param      string An attribute namespace.
 	 *
-	 * @return     void
-	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
@@ -379,8 +369,6 @@ abstract class AgaviAttributeHolder extends AgaviParameterHolder
 	 * @param      string An attribute name.
 	 * @param      mixed  A reference to an attribute value.
 	 * @param      string An attribute namespace.
-	 *
-	 * @return     void
 	 *
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.10.0
@@ -411,8 +399,6 @@ abstract class AgaviAttributeHolder extends AgaviParameterHolder
 	 *                    associated values.
 	 * @param      string An attribute namespace.
 	 *
-	 * @return     void
-	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
@@ -441,8 +427,6 @@ abstract class AgaviAttributeHolder extends AgaviParameterHolder
 	 * @param      array  An associative array of attributes and references to
 	 *                    their associated values.
 	 * @param      string An attribute namespace.
-	 *
-	 * @return     void
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0

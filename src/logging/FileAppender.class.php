@@ -36,14 +36,12 @@ class AgaviFileAppender extends AgaviAppender
 	 * 
 	 * @param      array An array of parameters.
 	 * 
-	 * @return     void
-	 * 
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.10.0
 	 */
-	public function initialize($params)
+	public function initialize($params = array())
 	{
-		if (isset($params['file'])) {
+		if(isset($params['file'])) {
 			$this->_filename = $params['file'];
 		}
 	}
@@ -74,8 +72,6 @@ class AgaviFileAppender extends AgaviAppender
 	 * 
 	 * If open, close the filehandle.
 	 * 
-	 * return void
-	 * 
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.10.0
 	 */
@@ -94,7 +90,6 @@ class AgaviFileAppender extends AgaviAppender
 	 * @throws     <b>AgaviLoggingException</b> if no Layout is set or the file
 	 *                                          cannot be written.
 	 * 
-	 * @return     void
 	 * 
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.10.0

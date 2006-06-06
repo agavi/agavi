@@ -51,9 +51,6 @@ class AgaviSessionStorage extends AgaviStorage
 	 * @param      AgaviContext A Context instance.
 	 * @param      array        An associative array of initialization parameters.
 	 *
-	 * @return     bool true, if initialization completes successfully,
-	 *                  otherwise false.
-	 *
 	 * @throws     <b>AgaviInitializationException</b> If an error occurs while
 	 *                                                 initializing this Storage.
 	 *
@@ -61,15 +58,14 @@ class AgaviSessionStorage extends AgaviStorage
 	 * @author     Veikko Makinen <mail@veikkomakinen.com>
 	 * @since      0.9.0
 	 */
-	public function initialize ($context, $parameters = null)
+	public function initialize(AgaviContext $context, $parameters = array())
 	{
-
 		parent::initialize($context, $parameters);
 
 		$sessionName = $this->getParameter('session_name', 'Agavi');
 		session_name($sessionName);
 
-		if ($sessionId = $this->getParameter('session_id')) {
+		if($sessionId = $this->getParameter('session_id')) {
 			session_id($sessionId);
 		}
 		
@@ -80,7 +76,6 @@ class AgaviSessionStorage extends AgaviStorage
 		$secure   = $this->getParameter('session_cookie_secure', $cookieDefaults['secure']);
 
 		session_set_cookie_params($lifetime, $path, $domain, $secure);
-
 	}
 
 	/**
@@ -162,8 +157,6 @@ class AgaviSessionStorage extends AgaviStorage
 	/**
 	 * Execute the shutdown procedure.
 	 *
-	 * @return     void
-	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
@@ -180,8 +173,6 @@ class AgaviSessionStorage extends AgaviStorage
 	 *
 	 * @param      string A unique key identifying your data.
 	 * @param      mixed  Data associated with your key.
-	 *
-	 * @return     void
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0

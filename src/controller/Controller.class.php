@@ -70,8 +70,6 @@ abstract class AgaviController extends AgaviParameterHolder
 	 *
 	 * @param      string The output type name.
 	 *
-	 * @return     void
-	 *
 	 * @throws     <b>AgaviException</b> If the given output type doesnt exist.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
@@ -146,8 +144,6 @@ abstract class AgaviController extends AgaviParameterHolder
 	 *
 	 * @param      array An associative array of parameters to be set.
 	 *
-	 * @return     void
-	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
@@ -212,8 +208,6 @@ abstract class AgaviController extends AgaviParameterHolder
 	 *
 	 * @param      string A module name.
 	 * @param      string An action name.
-	 *
-	 * @return     void
 	 *
 	 * @throws     <b>AgaviConfigurationException</b> If an invalid configuration 
 	 *                                                setting has been found.
@@ -289,7 +283,7 @@ abstract class AgaviController extends AgaviParameterHolder
 
 		// include the module configuration
 		AgaviConfigCache::import(AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/config/module.xml');
-		
+
 		$oldAutoloads = null;
 		$moduleAutoload = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/config/autoload.xml';
 		if(is_readable($moduleAutoload)) {
@@ -306,13 +300,14 @@ abstract class AgaviController extends AgaviParameterHolder
 
 			// initialize the action
 			$actionInstance->initialize($this->context);
+			
 			// create a new filter chain
 			$fccn = $this->context->getClassName('filter_chain');
 			$filterChain = new $fccn();
 
 			if(AgaviConfig::get('core.available', false)) {
 				// the application is available so we'll register
-				// action and module filters, otherwise skip them
+				// global and module filters, otherwise skip them
 
 				// does this action require security?
 				if(AgaviConfig::get('core.use_security', false) && $actionInstance->isSecure()) {
@@ -330,27 +325,18 @@ abstract class AgaviController extends AgaviParameterHolder
 				// load filters
 				$this->loadFilters($filterChain, 'action');
 				$this->loadFilters($filterChain, 'action', $moduleName);
-
-				// register the execution filter
-				$efcn = $this->context->getClassName('execution_filter');
-				$execFilter = new $efcn();
-
-				$execFilter->initialize($this->context);
-				$filterChain->register($execFilter);
-
-				// process the filter chain
-				$filterChain->execute();
-
-			} else {
-				// action failed to initialize
-				$error = 'Action initialization failed for module "%s", ' .
-						 'action "%s"';
-
-				$error = sprintf($error, $moduleName, $actionName);
-
-				throw new AgaviInitializationException($error);
 			}
-			
+
+			// register the execution filter
+			$efcn = $this->context->getClassName('execution_filter');
+			$execFilter = new $efcn();
+
+			$execFilter->initialize($this->context);
+			$filterChain->register($execFilter);
+
+			// process the filter chain
+			$filterChain->execute();
+
 			if($oldAutoloads !== null) {
 				Agavi::$autoloads = $oldAutoloads;
 			}
@@ -581,8 +567,6 @@ abstract class AgaviController extends AgaviParameterHolder
 	 * @param      string           "global", "action" or "rendering".
 	 * @param      string           A module name, or "*" for the generic config.
 	 *
-	 * @return     void
-	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
@@ -661,8 +645,6 @@ abstract class AgaviController extends AgaviParameterHolder
 	 *
 	 * @param      int A rendering mode.
 	 *
-	 * @return     void
-	 *
 	 * @throws     <b>AgaviRenderException</b> - If an invalid render mode has been 
 	 *                                           set.
 	 *
@@ -692,8 +674,6 @@ abstract class AgaviController extends AgaviParameterHolder
 
 	/**
 	 * Execute the shutdown procedure.
-	 *
-	 * @return     void
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0

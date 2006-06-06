@@ -48,9 +48,6 @@ class AgaviLoggerManager
 	/**
 	 * Initialize this AgaviLoggingManager.
 	 *
-	 * @return     bool true, if initialization completes successfully,
-	 *                  otherwise false.
-	 *
 	 * @throws     <b>AgaviInitializationException</b> If an error occurs while
 	 *                                                 initializing a LoggingManager.
 	 *
@@ -58,11 +55,11 @@ class AgaviLoggerManager
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function initialize($context)
+	public function initialize(AgaviContext $context, $parameters = array())
 	{
 		$this->context = $context;
 		
-		// load database configuration
+		// load logging configuration
 		require_once(AgaviConfigCache::checkConfig(AgaviConfig::get('core.config_dir') . '/logging.xml'));
 	}
 	
@@ -161,8 +158,6 @@ class AgaviLoggerManager
 	 * @param      string      A logger name.
 	 * @param      AgaviLogger A Logger instance.
 	 *
-	 * @return     void
-	 *
 	 * @throws     <b>AgaviLoggingException</b> If a logger with the name already 
 	 *                                          exists.
 	 *
@@ -191,7 +186,6 @@ class AgaviLoggerManager
 	 * @param      AgaviMessage The Message to log.
 	 * @param      string Optional logger to log to.
 	 * 
-	 * @return     void
 	 * @throws     AgaviLoggingException if the logger was not found.
 	 * 
 	 * @author     David Zuelke <dz@bitxtender.com>
@@ -213,8 +207,6 @@ class AgaviLoggerManager
 
 	/**
 	 * Execute the shutdown procedure.
-	 *
-	 * @return     void
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @author     Sean Kerr <skerr@mojavi.org>

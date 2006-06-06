@@ -40,8 +40,6 @@ class AgaviActionStack
 	 * @param      string An action name.
 	 * @param      AgaviAction An action implementation instance.
 	 *
-	 * @return     void
-	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */

@@ -71,7 +71,6 @@ class AgaviLogger
 	/**
 	 * Constructor.
 	 * 
-	 * @return     void
 	 * 
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.10.0
@@ -85,8 +84,6 @@ class AgaviLogger
 	 * Log a message.
 	 *
 	 * @param      AgaviMessage A Message instance.
-	 *
-	 * @return     void
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -112,8 +109,6 @@ class AgaviLogger
 	 *
 	 * @param      string        An appender name.
 	 * @param      AgaviAppender An Appender instance.
-	 *
-	 * @return     void
 	 *
 	 * @throws     <b>AgaviLoggingException</b> If an appender with the name already
 	 *                                          exists.
@@ -141,8 +136,6 @@ class AgaviLogger
 	 *
 	 * @param      int A priority level.
 	 *
-	 * @return     void
-	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
@@ -153,8 +146,6 @@ class AgaviLogger
 
 	/**
 	 * Execute the shutdown procedure.
-	 *
-	 * @return     void
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0

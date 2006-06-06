@@ -93,8 +93,6 @@ class AgaviCachingExecutionFilter extends AgaviExecutionFilter
 	 *
 	 * @param      array An array of cache groups
 	 *
-	 * @return     void
-	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */

@@ -112,25 +112,24 @@ class AgaviPostgreSQLDatabase extends AgaviDatabase
 
 		// let's see if we need a persistent connection
 		$persistent = $this->getParameter('persistent', false);
-		$connect    = ($persistent) ? 'pg_pconnect' : 'pg_connect';
 
-		$this->connection = @$connect($string);
+		if($persistent) {
+			$this->connection = pg_pconnect($string);
+		} else {
+			$this->connection = pg_connect($string, PGSQL_CONNECT_FORCE_NEW);
+		}
 
 		// make sure the connection went through
-		if ($this->connection === false)
-		{
-
+		if($this->connection === false) {
 			// the connection's foobar'd
 			$error = 'Failed to create a AgaviPostgreSQLDatabase connection';
 
 			throw new AgaviDatabaseException($error);
-
 		}
 
 		// since we're not an abstraction layer, we copy the connection
 		// to the resource
 		$this->resource =& $this->connection;
-
 	}
 
 	/**
@@ -163,8 +162,6 @@ class AgaviPostgreSQLDatabase extends AgaviDatabase
 
 	/**
 	 * Execute the shutdown procedure.
-	 *
-	 * @return     void
 	 *
 	 * @throws     <b>AgaviDatabaseException</b> If an error occurs while shutting
 	 *                                           down this database.

@@ -57,24 +57,17 @@ abstract class AgaviStorage extends AgaviParameterHolder
 	 * @param      AgaviContext A Context instance.
 	 * @param      array        An associative array of initialization parameters.
 	 *
-	 * @return     bool true, if initialization completes successfully,
-	 *                  otherwise false.
-	 *
 	 * @throws     <b>AgaviInitializationException</b> If an error occurs while
 	 *                                                 initializing this Storage.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function initialize ($context, $parameters = null)
+	public function initialize(AgaviContext $context, $parameters = array())
 	{
-
 		$this->context = $context;
 
-		if ($parameters != null) {
-			$this->parameters = array_merge($this->parameters, (array) $parameters);
-		}
-
+		$this->parameters = array_merge($this->parameters, (array) $parameters);
 	}
 
 	/**
@@ -129,8 +122,6 @@ abstract class AgaviStorage extends AgaviParameterHolder
 	/**
 	 * Execute the shutdown procedure.
 	 *
-	 * @return     void
-	 *
 	 * @throws     <b>AgaviStorageException</b> If an error occurs while shutting
 	 *                                          down this storage.
 	 *
@@ -147,8 +138,6 @@ abstract class AgaviStorage extends AgaviParameterHolder
 	 *
 	 * @param      string A unique key identifying your data.
 	 * @param      mixed  Data associated with your key.
-	 *
-	 * @return     void
 	 *
 	 * @throws     <b>AgaviStorageException</b> If an error occurs while writing to
 	 *                                          this storage.
