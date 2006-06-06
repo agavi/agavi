@@ -3,7 +3,6 @@
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
 // | Copyright (c) 2003-2006 the Agavi Project.                                |
-// | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -21,8 +20,8 @@
  * @package    agavi
  * @subpackage config
  *
- * @author     Sean Kerr <skerr@mojavi.org>
- * @author     Mike Vincent <mike@agavi.org>
+ * @author     David Zuelke <dz@bitxtender.com>
+ * @author     Dominik del Bondio <ddb@bitxtender.com>
  * @copyright  (c) Authors
  * @since      0.9.0
  *
@@ -43,7 +42,8 @@ class AgaviFactoryConfigHandler extends AgaviConfigHandler
 	 * @throws     <b>AgaviParseException</b> If a requested configuration file is
 	 *                                        improperly formatted.
 	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.9.0
 	 */
 	public function execute($config, $context = null)
