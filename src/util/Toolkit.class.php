@@ -168,7 +168,7 @@ class AgaviToolkit
 					$continue = true;
 				} else {
 					foreach($ignores as $ignore) {
-						if(strpos($iterator->getPathname(), '/' . $ignore . '/') !== false) {
+						if(strpos($iterator->getPathname(), DIRECTORY_SEPARATOR . $ignore . DIRECTORY_SEPARATOR) !== false) {
 							$continue = true;
 							break;
 						}
