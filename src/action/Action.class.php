@@ -133,6 +133,19 @@ abstract class AgaviAction
 	{
 		return true;
 	}
+	
+	/**
+	 * Get the default View name if this Action doesn't serve the Request method.
+	 *
+	 * @return     string A View name
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getDefaultViewName()
+	{
+		return 'Input';
+	}
 
 }
 
