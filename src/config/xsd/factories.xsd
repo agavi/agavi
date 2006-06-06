@@ -3,16 +3,17 @@
   <xs:element name="configurations" type="configurations" />
   <xs:complexType name="configurations">
     <xs:sequence>
-      <xs:element name="configuration" type="configuration" minOccurs="0" maxOccurs="unbounded" />
+      <xs:element name="configuration" minOccurs="0" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:group ref="factoryItems" />
+          </xs:sequence>
+          <xs:attribute name="environment" type="xs:string" />
+          <xs:attribute name="context" type="xs:string" />
+        </xs:complexType>
+      </xs:element>
     </xs:sequence>
     <xs:attribute name="parent" type="xs:string" />
-  </xs:complexType>
-  <xs:complexType name="configuration">
-    <xs:sequence>
-      <xs:group ref="factoryItems" />
-    </xs:sequence>
-    <xs:attribute name="environment" type="xs:string" />
-    <xs:attribute name="context" type="xs:string" />
   </xs:complexType>
   <xs:group name="factoryItems">
     <xs:all>
