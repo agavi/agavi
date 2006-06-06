@@ -69,6 +69,13 @@ if($xhtml) {
 	header('Content-Type: application/xhtml+xml; charset=utf-8');
 	echo '<?xml version="1.0" encoding="utf-8" standalone="no" ?>';
 }
+
+// fix stack trace in case it doesn't contain the exception origin as the first entry
+$fixedTrace = $e->getTrace();
+if($fixedTrace[0]['file'] != $e->getFile() && $fixedTrace[0]['line'] != $e->getLine()) {
+	$fixedTrace = array_merge(array('file' => $e->getFile(), 'line' => $e->getLine()), $fixedTrace);
+}
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"<?php if($xhtml): ?> xmlns:svg="http://www.w3.org/2000/svg"<?php endif; ?>>
@@ -511,7 +518,7 @@ if($xhtml) {
 		</p>
 		<h3>Stack Trace</h3>
 		<ol>
-<?php $i = 0; $highlights = array(); foreach($e->getTrace() as $trace): $i++; if(!isset($highlights[$trace['file']])) $highlights[$trace['file']] = explode('<br />', str_replace(array('<code><span style="color: #000000">', '</span>
+<?php $i = 0; $highlights = array(); foreach($fixedTrace as $trace): $i++; if(!isset($highlights[$trace['file']])) $highlights[$trace['file']] = explode('<br />', str_replace(array('<code><span style="color: #000000">', '</span>
 </code>', '&nbsp;'), array('', '', '&#160;'), highlight_string(str_replace('	', '  ', file_get_contents($trace['file'])), true))); ?>
 			<li id="frame<?=$i?>"<?php if($i > 1): ?> class="hidecode"<?php endif; ?>>at <?php if(isset($trace['args'])): ?><strong><?=$trace['class']?><?=$trace['type']?><?=$trace['function']?>(<?=buildParamList($trace['args'])?>)</strong><?php else: ?><em>exception origin</em><?php endif; ?><br />in <?=str_replace(
 			array(
