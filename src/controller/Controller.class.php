@@ -153,10 +153,8 @@ abstract class AgaviController extends AgaviParameterHolder
 			
 			$request = $this->context->getRequest();
 			
-			if(AgaviConfig::get('core.use_routing')) {
-				// match routes and set matched routes as request attributes
-				$request->setAttributes($this->context->getRouting()->execute(), 'org.agavi.routing.matchedRoutes');
-			}
+			// match routes and set matched routes as request attributes
+			$request->setAttributes($this->context->getRouting()->execute(), 'org.agavi.routing.matchedRoutes');
 		
 			if($parameters != null) {
 				$request->setParametersByRef($parameters);
@@ -182,7 +180,7 @@ abstract class AgaviController extends AgaviParameterHolder
 				}
 				$request->setParameter($request->getActionAccessor(), $actionName);
 			}
-		
+
 			// create a new filter chain
 			$fccn = $this->context->getClassName('filter_chain');
 			$filterChain = new $fccn();

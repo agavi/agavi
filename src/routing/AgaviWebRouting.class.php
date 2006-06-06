@@ -61,38 +61,65 @@ class AgaviWebRouting extends AgaviRouting
 	 */
 	public function gen($route, $params = array())
 	{
-		if(isset($this->routes['route'])) {
+		if(isset($this->routes[$route])) {
 			if(AgaviConfig::get('core.use_routing')) {
 				// the route exists and routing is enabled, the parent method handles it
 				return parent::gen($route, $params);
 			} else {
 				// the route exists, but we must create a normal index.php?foo=bar URL.
+
+				if(isset($this->routes[$route])) {
+					$defaults = array();
+					$parent = $route;
+					do {
+						$r =& $this->routes[$parent];
+						$myDefaults = $r['opt']['defaults'];
+
+						foreach(array_reverse($r['opt']['nostops']) as $noStop) {
+							$myR = $this->routes[$noStop];
+							if(!$myR['opt']['imply']) {
+								continue;
+							}
+
+							$myDefaults = array_merge($myDefaults, $myR['opt']['defaults']);
+						}
+
+						$defaults = array_merge($defaults, $myDefaults);
+						$parent = $r['opt']['parent'];
+
+					} while($parent);
+
+					$params = array_merge($defaults, $params);
+					$route = null;
+
+				}
 			}
-		} else {
-			// the route does not exist. we generate a normal index.php?foo=bar URL.
-			
-			if ($url == null) {
-				$url = $_SERVER['SCRIPT_NAME'];
-			}
-
-			// use GET format
-			$divider  = '&';
-			$equals   = '=';
-			$url     .= '?';
-
-			// loop through the parameters
-			foreach ($params as $key => $value) {
-				$url .= urlencode($key) . $equals . urlencode($value) . $divider;
-			}
-
-			// strip off last divider character
-			$url = rtrim($url, $divider);
-
-			// replace &'s with &amp;
-			$url = str_replace('&', '&amp;', $url);
-
-			return $url;
 		}
+		// the route does not exist. we generate a normal index.php?foo=bar URL.
+
+		$url = $route;
+
+		if ($url == null) {
+			$url = $_SERVER['SCRIPT_NAME'];
+		}
+
+		// use GET format
+		$divider  = '&';
+		$equals   = '=';
+		$url     .= '?';
+
+		// loop through the parameters
+		foreach ($params as $key => $value) {
+			$url .= urlencode($key) . $equals . urlencode($value) . $divider;
+		}
+
+		// strip off last divider character
+		$url = rtrim($url, $divider);
+
+		// replace &'s with &amp;
+		$url = str_replace('&', '&amp;', $url);
+
+		return $url;
 	}
 	
 	public function execute()

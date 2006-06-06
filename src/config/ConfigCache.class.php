@@ -236,7 +236,7 @@ class AgaviConfigCache
 		require_once(AgaviConfig::get('core.agavi_dir') . '/config/ConfigParser.class.php');
 		require_once(AgaviConfig::get('core.agavi_dir') . '/config/XmlConfigParser.class.php');
 
-		// manually create our config_handlers.ini handler
+		// manually create our config_handlers.xml handler
 		self::$handlers['config_handlers.xml'] = new AgaviConfigHandlersConfigHandler();
 		self::$handlers['config_handlers.xml']->initialize(AgaviConfig::get('core.agavi_dir') . '/config/xsd/config_handlers.xsd');
 

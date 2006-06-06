@@ -92,15 +92,15 @@ imply == route davorhaengen
 			<route name="lang" pattern="/(lang:de|en|fr)" imply="true" cut="true" stopping="false" />
 			<route name="rss" pattern="/rss$" stopping="false" cut="true" output_type="rss" />
 			<route name="products" pattern="/products">
-				<parameters>
-					<parameter name="module">Products"</parameter>
-				</parameters>
+				<defaults>
+					<default for="module">Products</default>
+				</defaults>
 				<routes>
 					<route name="ott" pattern="/bar$" imply="true" stopping="false" />
 					<route name="viewProduct" pattern="/view">
-						<parameters>
-							<parameter name="action">View</parameter>
-						</parameters>
+						<defaults>
+							<default for="action">View</default>
+						</defaults>
 					</route>
 				</routes>
 			</route>
