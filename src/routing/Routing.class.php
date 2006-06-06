@@ -194,6 +194,11 @@ abstract class AgaviRouting
 		$ot = null;
 		$matchedRoutes = array();
 		
+		if(!AgaviConfig::get('core.use_routing', false)) {
+			// routing disabled, bail out
+			return $matchedRoutes;
+		}
+		
 		$ma = $this->context->getRequest()->getModuleAccessor();
 		$aa = $this->context->getRequest()->getActionAccessor();
 
