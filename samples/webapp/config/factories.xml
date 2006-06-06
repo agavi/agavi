@@ -41,7 +41,7 @@
 		
 		<request class="AgaviWebRequest" />
 		
-		<security_filter class="AgaviSecurityFilter" />
+		<security_filter class="AgaviBasicSecurityFilter" />
 		
 		<routing class="AgaviWebRouting" />
 		

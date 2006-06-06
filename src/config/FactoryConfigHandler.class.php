@@ -57,24 +57,21 @@ class AgaviFactoryConfigHandler extends AgaviConfigHandler
 		
 		$data = array();
 		foreach($configurations as $cfg) {
-
-			$requiredItems = array('action_stack', 'controller', 'database_manager', 'dispatch_filter', 'execution_filter', 'filter_chain', 'logger_manager', 'request', 'storage', 'user', 'validator_manager');
-
 			// Class names for ActionStack, DispatchFilter, ExecutionFilter, FilterChain and SecurityFilter
 			if(isset($cfg->action_stack)) {
-				$data['action_stack'] = '$this->classNames["action_stack"] = "' . $cfg->action_stack->getAttribute('class') . '";';
+				$data['action_stack'] = '$this->factories["action_stack"] = array("class" => "' . $cfg->action_stack->getAttribute('class') . '", "parameters" => ' . var_export($this->getItemParameters($cfg->action_stack), true) . ');';
 			}
 			if(isset($cfg->dispatch_filter)) {
-				$data['dispatch_filter'] = '$this->classNames["dispatch_filter"] = "' . $cfg->dispatch_filter->getAttribute('class') . '";';
+				$data['dispatch_filter'] = '$this->factories["dispatch_filter"] = array("class" => "' . $cfg->dispatch_filter->getAttribute('class') . '", "parameters" => ' . var_export($this->getItemParameters($cfg->dispatch_filter), true) . ');';
 			}
 			if(isset($cfg->execution_filter)) {
-				$data['execution_filter'] = '$this->classNames["execution_filter"] = "' . $cfg->execution_filter->getAttribute('class') . '";';
+				$data['execution_filter'] = '$this->factories["execution_filter"] = array("class" => "' . $cfg->execution_filter->getAttribute('class') . '", "parameters" => ' . var_export($this->getItemParameters($cfg->execution_filter), true) . ');';
 			}
 			if(isset($cfg->filter_chain)) {
-				$data['filter_chain'] = '$this->classNames["filter_chain"] = "' . $cfg->filter_chain->getAttribute('class') . '";';
+				$data['filter_chain'] = '$this->factories["filter_chain"] = array("class" => "' . $cfg->filter_chain->getAttribute('class') . '", "parameters" => ' . var_export($this->getItemParameters($cfg->filter_chain), true) . ');';
 			}
 			if(isset($cfg->security_filter)) {
-				$data['security_filter'] = '$this->classNames["security_filter"] = "' . $cfg->security_filter->getAttribute('class') . '";';
+				$data['security_filter'] = '$this->factories["security_filter"] = array("class" => "' . $cfg->security_filter->getAttribute('class') . '", "parameters" => ' . var_export($this->getItemParameters($cfg->security_filter), true) . ');';
 			}
 
 			// Database
@@ -85,9 +82,8 @@ class AgaviFactoryConfigHandler extends AgaviConfigHandler
 
 			// Request
 			if(isset($cfg->request)) {
-				$data['request'] = '$this->request = new ' . $cfg->request->getAttribute('class') . '();';
-				// Init Request
-				$data['init_request'] = '$this->request->initialize($this, ' . var_export($this->getItemParameters($cfg->request), true) . ');';
+				$data['request'] = '$this->request = new ' . $cfg->request->getAttribute('class') . '();' . "\n" . 
+														'$this->request->initialize($this, ' . var_export($this->getItemParameters($cfg->request), true) . ');';
 			}
 
 			// Storage
@@ -134,7 +130,7 @@ class AgaviFactoryConfigHandler extends AgaviConfigHandler
 
 		// name => required?
 		$requiredItems = array('dispatch_filter' => true, 'execution_filter' => true, 'filter_chain' => true, 'security_filter' => false, 'database_manager' => false, 'action_stack' => true, 
-					'request' => true, 'storage' => true, 'validator_manager' => true, 'user' => false, 'logger_manager' => false, 'controller' => true, 'init_request' => true, 'routing' => false);
+					'storage' => true, 'validator_manager' => true, 'user' => false, 'logger_manager' => false, 'controller' => true, 'request' => true, 'routing' => false);
 
 		$code = '';
 

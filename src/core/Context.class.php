@@ -43,7 +43,7 @@ class AgaviContext
 	/**
 	 * @var        array An array of class names for frequently used factories.
 	 */
-	protected $classNames = array(
+	protected $factories = array(
 		'action_stack' => null,
 		'dispatch_filter' => null,
 		'execution_filter' => null,
@@ -70,11 +70,6 @@ class AgaviContext
 	 * @var        AgaviRouting A Routing instance.
 	 */
 	protected $routing = null;
-	
-	/**
-	 * @var        AgaviSecurityFilter A SecurityFilter instance.
-	 */
-	protected $securityFilter = null;
 	
 	/**
 	 * @var        AgaviStorage A Storage instance.
@@ -125,18 +120,18 @@ class AgaviContext
 	}
 
 	/**
-	 * Get a class name for repeatedly used factories such as FilterChains.
+	 * Get information on a frequently used class.
 	 *
 	 * @param      string The factory identifier.
 	 *
-	 * @return     string The class name.
+	 * @return     array An associative array (keys 'class' and 'parameters').
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function getClassName($for)
+	public function getFactoryInfo($for)
 	{
-		return $this->classNames[$for];
+		return $this->factories[$for];
 	}
 
 	/**
@@ -403,20 +398,6 @@ class AgaviContext
 	public function getRouting()
 	{
 		return $this->routing;
-	}
-
-	/**
-	 * Retrieve the securityFilter
-	 *
-	 * @return     AgaviSecurityFilter The current SecurityFilter implementation 
-	 *                                 instance.
-	 *
-	 * @author     Mike Vincent <mike@agavi.org>
-	 * @since      0.9.0
-	 */
-	public function getSecurityFilter()
-	{
-		return $this->securityFilter;
 	}
 
 	/**

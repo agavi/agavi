@@ -49,7 +49,10 @@ abstract class AgaviController extends AgaviParameterHolder
 			),
 			'rendering' => array(
 				'*' => null
-			)
+			),
+			'dispatch' => null,
+			'execution' => null,
+			'security' => null
 		);
 
 		/**
@@ -182,16 +185,13 @@ abstract class AgaviController extends AgaviParameterHolder
 			}
 
 			// create a new filter chain
-			$fccn = $this->context->getClassName('filter_chain');
-			$filterChain = new $fccn();
+			$fcfi = $this->context->getFactoryInfo('filter_chain');
+			$filterChain = new $fcfi['class']();
 		
 			$this->loadFilters($filterChain, 'global');
 		
 			// register the dispatch filter
-			$dfcn = $this->context->getClassName('dispatch_filter');
-			$dispatchFilter = new $dfcn();
-			$dispatchFilter->initialize($this->context);
-			$filterChain->register($dispatchFilter);
+			$filterChain->register($this->filters['dispatch']);
 		
 			// go, go, go!
 			$filterChain->execute();
@@ -300,8 +300,8 @@ abstract class AgaviController extends AgaviParameterHolder
 			$actionInstance->initialize($this->context);
 			
 			// create a new filter chain
-			$fccn = $this->context->getClassName('filter_chain');
-			$filterChain = new $fccn();
+			$fcfi = $this->context->getFactoryInfo('filter_chain');
+			$filterChain = new $fcfi['class']();
 
 			if(AgaviConfig::get('core.available', false)) {
 				// the application is available so we'll register
@@ -317,7 +317,7 @@ abstract class AgaviController extends AgaviParameterHolder
 					}
 
 					// register security filter
-					$filterChain->register($this->context->getSecurityFilter());
+					$filterChain->register($this->filters['security']);
 				}
 
 				// load filters
@@ -326,11 +326,7 @@ abstract class AgaviController extends AgaviParameterHolder
 			}
 
 			// register the execution filter
-			$efcn = $this->context->getClassName('execution_filter');
-			$execFilter = new $efcn();
-
-			$execFilter->initialize($this->context);
-			$filterChain->register($execFilter);
+			$filterChain->register($this->filters['execution']);
 
 			// process the filter chain
 			$filterChain->execute();
@@ -548,9 +544,25 @@ abstract class AgaviController extends AgaviParameterHolder
 	public function initialize (AgaviContext $context, $parameters = array())
 	{
 		$this->maxForwards = isset($parameters['max_fowards']) ? $parameters['max_forwards'] : 20;
+		
 		$this->context = $context;
-		$ascn = $context->getClassName('action_stack');
-		$this->actionStack = new $ascn();
+		
+		$asfi = $context->getFactoryInfo('action_stack');
+		$this->actionStack = new $asfi['class']();
+		
+		if(AgaviConfig::get('core.use_security', false)) {
+			$sffi = $context->getFactoryInfo('security_filter');
+			$this->filters['security'] = new $sffi['class']();
+			$this->filters['security']->initialize($this->context, $sffi['parameters']);
+		}
+		
+		$dffi = $this->context->getFactoryInfo('dispatch_filter');
+		$this->filters['dispatch'] = new $dffi['class']();
+		$this->filters['dispatch']->initialize($this->context, $dffi['parameters']);
+
+		$effi = $this->context->getFactoryInfo('execution_filter');
+		$this->filters['execution'] = new $effi['class']();
+		$this->filters['execution']->initialize($this->context, $effi['parameters']);
 		
 		$cfg = AgaviConfig::get('core.config_dir') . '/output_types.xml';
 		require_once(AgaviConfigCache::checkConfig($cfg, $context->getName()));

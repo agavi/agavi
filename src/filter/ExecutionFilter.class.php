@@ -177,8 +177,8 @@ class AgaviExecutionFilter extends AgaviFilter
 			}
 			
 			// create a new filter chain
-			$fccn = $context->getClassName('filter_chain');
-			$filterChain = new $fccn();
+			$fcfi = $context->getFactoryInfo('filter_chain');
+			$filterChain = new $fcfi['class']();
 
 			$controller->loadFilters($filterChain, 'rendering');
 			$controller->loadFilters($filterChain, 'rendering', $moduleName);
