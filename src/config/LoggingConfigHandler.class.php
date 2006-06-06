@@ -47,7 +47,7 @@ class AgaviLoggingConfigHandler extends AgaviIniConfigHandler
 	 */
 	public function execute($config, $context = null)
 	{
-		$configurations = $this->orderConfigurations(AgaviConfigCache::parseConfig($config, false)->configurations, AgaviConfig::get('core.environment'), $context);
+		$configurations = $this->orderConfigurations(AgaviConfigCache::parseConfig($config, false, $this->getValidationFile())->configurations, AgaviConfig::get('core.environment'), $context);
 
 		// init our data, includes, methods, appenders and appenders arrays
 		$data      = array();
@@ -59,15 +59,15 @@ class AgaviLoggingConfigHandler extends AgaviIniConfigHandler
 			if(isset($cfg->loggers)) {
 				foreach($cfg->loggers as $logger) {
 					$name = $logger->getAttribute('name');
-					$loggers[$name]['class'] = isset($logger->class) ? $logger->class->getValue() : null;
-					$loggers[$name]['priority'] = isset($logger->priority) ? $logger->priority->getValue() : null;
+					if(!isset($loggers[$name])) {
+						$loggers[$name] = array('class' => null, 'priority' => null, 'appenders' => array(), 'params' => array());
+					}
+					$loggers[$name]['class'] = $logger->hasAttribute('class') ? $logger->getAttribute('class') : $loggers[$name]['class'];
+					$loggers[$name]['priority'] = $logger->hasAttribute('priority') ? $logger->getAttribute('priority') : $loggers[$name]['priority'];
 					if(isset($logger->appenders)) {
 						foreach($logger->appenders as $appender) {
 							$loggers[$name]['appenders'][] = $appender->getValue();
 						}
-					}
-					if(!isset($loggers[$name]['params'])) {
-						$loggers[$name]['params'] = array();
 					}
 					$loggers[$name]['params'] = $this->getItemParameters($logger, $loggers[$name]['params']);
 				}
@@ -76,12 +76,12 @@ class AgaviLoggingConfigHandler extends AgaviIniConfigHandler
 			if(isset($cfg->appenders)) {
 				foreach($cfg->appenders as $appender) {
 					$name = $appender->getAttribute('name');
-					$appenders[$name]['class'] = isset($appender->class) ? $appender->class->getValue() : null;
-					$appenders[$name]['layout'] = isset($appender->layout) ? $appender->layout->getValue() : null;
-
-					if(!isset($appenders[$name]['params'])) {
-						$appenders[$name]['params'] = array();
+					if(!isset($appenders[$name])) {
+						$appenders[$name] = array('class' => null, 'layout' => null, 'params' => array());
 					}
+					$appenders[$name]['class'] = $appender->hasAttribute('class') ? $appender->getAttribute('class') : $appenders[$name]['class'];
+					$appenders[$name]['layout'] = $appender->hasAttribute('layout') ? $appender->getAttribute('layout') : $appenders[$name]['layout'];
+
 					$appenders[$name]['params'] = $this->getItemParameters($appender, $appenders[$name]['params']);
 				}
 			}
@@ -89,11 +89,11 @@ class AgaviLoggingConfigHandler extends AgaviIniConfigHandler
 			if(isset($cfg->layouts)) {
 				foreach($cfg->layouts as $layout) {
 					$name = $layout->getAttribute('name');
-					$layouts[$name]['class'] = isset($layout->class) ? $layout->class->getValue() : null;
-
-					if(!isset($layouts[$name]['params'])) {
-						$layouts[$name]['params'] = array();
+					if(!isset($layouts[$name])) {
+						$layouts[$name] = array('class' => null, 'params' => array());
 					}
+
+					$layouts[$name]['class'] = $layout->hasAttribute('class') ? $layout->getAttribute('class') : $layouts[$name]['class'];
 					$layouts[$name]['params'] = $this->getItemParameters($layout, $layouts[$name]['params']);
 				}
 			}

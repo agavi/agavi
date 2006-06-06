@@ -71,8 +71,6 @@ imply == route davorhaengen
 -->
 <configurations>
 	<configuration>
-		<defaultroute>
-		</defaultroute>
 		<routes>
 			<route name="products1" pattern="/products1">
 				<routes>
@@ -91,17 +89,17 @@ imply == route davorhaengen
 			</route>
 
 
-			<route name="lang" pattern="/(lang:de|en|fr)" imply="true" cut="true" stopping="false" callback="xxx" onmatch="xxx" onnomatch="xxx" />
+			<route name="lang" pattern="/(lang:de|en|fr)" imply="true" cut="true" stopping="false" />
 			<route name="rss" pattern="/rss$" stopping="false" cut="true" output_type="rss" />
 			<route name="products" pattern="/products">
 				<parameters>
-					<parameter name="module" value="Products" />
+					<parameter name="module">Products"</parameter>
 				</parameters>
 				<routes>
 					<route name="ott" pattern="/bar$" imply="true" stopping="false" />
 					<route name="viewProduct" pattern="/view">
 						<parameters>
-							<parameter name="action" value="View" />
+							<parameter name="action">View</parameter>
 						</parameters>
 					</route>
 				</routes>
@@ -112,7 +110,7 @@ imply == route davorhaengen
 					<ignore>fName</ignore>
 				</ignores>
 				<defaults>
-					<default for="sfx" value="html" />
+					<default for="sfx">html</default>
 				</defaults>
 			</route>
 		</routes>
