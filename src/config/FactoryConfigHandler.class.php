@@ -53,7 +53,7 @@ class AgaviFactoryConfigHandler extends AgaviConfigHandler
 		}
 
 		// parse the config file
-		$configurations = $this->orderConfigurations(AgaviConfigCache::parseConfig($config)->configurations, AgaviConfig::get('core.environment'), $context);
+		$configurations = $this->orderConfigurations(AgaviConfigCache::parseConfig($config, true, $this->getValidationFile())->configurations, AgaviConfig::get('core.environment'), $context);
 		
 		$data = array();
 		foreach($configurations as $cfg) {

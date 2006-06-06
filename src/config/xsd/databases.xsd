@@ -9,17 +9,31 @@
   </xs:complexType>
   <xs:complexType name="configuration">
     <xs:sequence>
-      <xs:element name="autoloads" type="autoloads" />
+      <xs:element name="databases" type="databases" />
     </xs:sequence>
     <xs:attribute name="environment" type="xs:string" />
     <xs:attribute name="context" type="xs:string" />
   </xs:complexType>
-  <xs:complexType name="autoloads">
+  <xs:complexType name="databases">
     <xs:sequence>
-      <xs:element name="autoload" type="autoload" maxOccurs="unbounded" />
+      <xs:element name="database" type="database" maxOccurs="unbounded" />
+    </xs:sequence>
+    <xs:attribute name="default" type="xs:string" />
+  </xs:complexType>
+  <xs:complexType name="database">
+    <xs:sequence>
+      <xs:element name="parameters" type="parameters" minOccurs="0" />
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string" use="required" />
+    <xs:attribute name="class" type="xs:string" />
+    <xs:attribute name="file" type="xs:string" />
+  </xs:complexType>
+  <xs:complexType name="parameters">
+    <xs:sequence>
+      <xs:element name="parameter" type="parameter" maxOccurs="unbounded" />
     </xs:sequence>
   </xs:complexType>
-  <xs:complexType name="autoload">
+  <xs:complexType name="parameter">
     <xs:simpleContent>
       <xs:extension base="xs:string">
         <xs:attribute name="name" type="xs:string" use="required" />

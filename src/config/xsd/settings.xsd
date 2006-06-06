@@ -8,18 +8,31 @@
     <xs:attribute name="parent" type="xs:string" />
   </xs:complexType>
   <xs:complexType name="configuration">
-    <xs:sequence>
-      <xs:element name="autoloads" type="autoloads" />
-    </xs:sequence>
+    <xs:all>
+      <xs:element name="system_actions" type="system_actions" minOccurs="0" />
+      <xs:element name="settings" type="settings" minOccurs="0" />
+    </xs:all>
     <xs:attribute name="environment" type="xs:string" />
     <xs:attribute name="context" type="xs:string" />
   </xs:complexType>
-  <xs:complexType name="autoloads">
+  <xs:complexType name="system_actions">
     <xs:sequence>
-      <xs:element name="autoload" type="autoload" maxOccurs="unbounded" />
+      <xs:element name="system_action" type="system_action" maxOccurs="unbounded" />
     </xs:sequence>
   </xs:complexType>
-  <xs:complexType name="autoload">
+  <xs:complexType name="system_action">
+    <xs:all>
+      <xs:element name="module" type="xs:string" />
+      <xs:element name="action" type="xs:string" />
+    </xs:all>
+    <xs:attribute name="name" type="xs:string" />
+  </xs:complexType>
+  <xs:complexType name="settings">
+    <xs:sequence>
+      <xs:element name="setting" type="setting" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="setting">
     <xs:simpleContent>
       <xs:extension base="xs:string">
         <xs:attribute name="name" type="xs:string" use="required" />

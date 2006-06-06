@@ -9,19 +9,32 @@
   </xs:complexType>
   <xs:complexType name="configuration">
     <xs:sequence>
-      <xs:element name="compiles" type="compiles" />
+      <xs:element name="filters" type="filters" />
     </xs:sequence>
     <xs:attribute name="environment" type="xs:string" />
     <xs:attribute name="context" type="xs:string" />
   </xs:complexType>
-  <xs:complexType name="compiles">
+  <xs:complexType name="filters">
     <xs:sequence>
-      <xs:element name="compile" type="compile" maxOccurs="unbounded" />
+      <xs:element name="filter" type="filter" maxOccurs="unbounded" />
     </xs:sequence>
   </xs:complexType>
-  <xs:complexType name="compile">
+  <xs:complexType name="filter">
+    <xs:sequence>
+      <xs:element name="parameters" type="parameters" minOccurs="0" />
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string" />
+    <xs:attribute name="class" type="xs:string" />
+  </xs:complexType>
+  <xs:complexType name="parameters">
+    <xs:sequence>
+      <xs:element name="parameter" type="parameter" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="parameter">
     <xs:simpleContent>
       <xs:extension base="xs:string">
+        <xs:attribute name="name" type="xs:string" use="required"/>
       </xs:extension>
     </xs:simpleContent>
   </xs:complexType>

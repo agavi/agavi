@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="configurations" type="configurations" />
+  <xs:complexType name="configurations">
+    <xs:sequence>
+      <xs:element name="configuration" type="configuration" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+    <xs:attribute name="parent" type="xs:string" />
+  </xs:complexType>
+  <xs:complexType name="configuration">
+    <xs:sequence>
+      <xs:group ref="factoryItems" />
+    </xs:sequence>
+    <xs:attribute name="environment" type="xs:string" />
+    <xs:attribute name="context" type="xs:string" />
+  </xs:complexType>
+  <xs:group name="factoryItems">
+    <xs:all>
+      <xs:element name="action_stack" minOccurs="0">
+        <xs:complexType>
+          <xs:attribute name="class" type="xs:string" use="required" />
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="controller" minOccurs="0">
+        <xs:complexType>
+          <xs:attribute name="class" type="xs:string" use="required" />
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="database_manager" minOccurs="0">
+        <xs:complexType>
+          <xs:attribute name="class" type="xs:string" use="required" />
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="dispatch_filter" minOccurs="0">
+        <xs:complexType>
+          <xs:attribute name="class" type="xs:string" use="required" />
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="execution_filter" minOccurs="0">
+        <xs:complexType>
+          <xs:attribute name="class" type="xs:string" use="required" />
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="filter_chain" minOccurs="0">
+        <xs:complexType>
+          <xs:attribute name="class" type="xs:string" use="required" />
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="logger_manager" minOccurs="0">
+        <xs:complexType>
+          <xs:attribute name="class" type="xs:string" use="required" />
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="request" minOccurs="0">
+        <xs:complexType>
+          <xs:attribute name="class" type="xs:string" use="required" />
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="security_filter" minOccurs="0">
+        <xs:complexType>
+          <xs:attribute name="class" type="xs:string" use="required" />
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="routing" minOccurs="0">
+        <xs:complexType>
+          <xs:attribute name="class" type="xs:string" use="required" />
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="storage" minOccurs="0">
+        <xs:complexType>
+          <xs:attribute name="class" type="xs:string" use="required" />
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="user" minOccurs="0">
+        <xs:complexType>
+          <xs:attribute name="class" type="xs:string" use="required" />
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="validator_manager" minOccurs="0">
+        <xs:complexType>
+          <xs:attribute name="class" type="xs:string" use="required" />
+        </xs:complexType>
+      </xs:element>
+    </xs:all>
+  </xs:group>
+</xs:schema>

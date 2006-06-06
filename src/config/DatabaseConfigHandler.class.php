@@ -51,7 +51,7 @@ class AgaviDatabaseConfigHandler extends AgaviConfigHandler
 	public function execute($config, $context = null)
 	{
 		// parse the config file
-		$configurations = $this->orderConfigurations(AgaviConfigCache::parseConfig($config, false)->configurations, AgaviConfig::get('core.environment'), $context);
+		$configurations = $this->orderConfigurations(AgaviConfigCache::parseConfig($config, false, $this->getValidationFile())->configurations, AgaviConfig::get('core.environment'), $context);
 
 		$databases = array();
 		$default = null;
@@ -73,7 +73,7 @@ class AgaviDatabaseConfigHandler extends AgaviConfigHandler
 				if(!isset($databases[$name])) {
 					$databases[$name] = array('params' => array(), 'file' => null);
 
-					if(!isset($db->class)) {
+					if(!$db->hasAttribute('class')) {
 						$error = 'Configuration file "%s" specifies category "%s" with missing class key';
 						$error = sprintf($error, $config, $category);
 
@@ -81,8 +81,8 @@ class AgaviDatabaseConfigHandler extends AgaviConfigHandler
 					}
 				}
 
-				$databases[$name]['class'] = isset($db->class) ? $db->class->getValue() : null;
-				$databases[$name]['file'] = isset($db->file) ? $db->file->getValue() : null;
+				$databases[$name]['class'] = $db->hasAttribute('class') ? $db->getAttribute('class') : $databases[$name]['class'];
+				$databases[$name]['file'] = $db->hasAttribute('file') ? $db->hasAttribute('file') : $databases[$name]['file'];
 
 				$databases[$name]['params'] = $this->getItemParameters($db, $databases[$name]['params']);
 			}

@@ -187,10 +187,8 @@
 -->
 <configurations>
 	<configuration>
-		<databases default="propel">
-			
-			<database name="postgres">
-				<class>AgaviPostgreSQLDatabase</class>
+		<databases default="postgres">
+			<database name="postgres" class="AgaviPostgreSQLDatabase">
 				<parameters>
 					<parameter name="host">localhost</parameter>
 					<parameter name="user">username</parameter>
@@ -198,14 +196,13 @@
 					<parameter name="database">sample</parameter>
 				</parameters>
 			</database>
-			
-			<database name="propel">
-				<class>AgaviPropelDatabase</class>
+<!--
+			<database name="propel" class="AgaviPropelDatabase">
 				<parameters>
 					<parameter name="config">%core.webapp_dir%/config/project-conf.php</parameter>
 				</parameters>
 			</database>
-			
+-->
 		</databases>
 	</configuration>
 </configurations>

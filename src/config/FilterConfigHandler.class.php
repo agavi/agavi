@@ -47,7 +47,7 @@ class AgaviFilterConfigHandler extends AgaviConfigHandler
 	{
 		// parse the config file
 
-		$configurations = $this->orderConfigurations(AgaviConfigCache::parseConfig($config, false)->configurations, AgaviConfig::get('core.environment'), $context);
+		$configurations = $this->orderConfigurations(AgaviConfigCache::parseConfig($config, false, $this->getValidationFile())->configurations, AgaviConfig::get('core.environment'), $context);
 		
 		$filters = array();
 		

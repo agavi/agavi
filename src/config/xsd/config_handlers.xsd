@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:element name="configurations" type="configurations">
-  </xs:element>
+  <xs:element name="configurations" type="configurations" />
+  <xs:complexType name="configurations">
+    <xs:sequence>
+      <xs:element name="configuration" type="configuration" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+    <xs:attribute name="parent" type="xs:string" />
+  </xs:complexType>
   <xs:complexType name="configuration">
     <xs:sequence>
       <xs:element name="handlers" type="handlers" />
@@ -14,17 +19,9 @@
       <xs:element name="handler" type="handler" maxOccurs="unbounded" />
     </xs:sequence>
   </xs:complexType>
-  <xs:complexType name="configurations">
-    <xs:sequence>
-      <xs:element name="configuration" type="configuration" maxOccurs="unbounded" />
-    </xs:sequence>
-    <xs:attribute name="parent" type="xs:string" />
-  </xs:complexType>
   <xs:complexType name="handler">
-    <xs:sequence>
-    </xs:sequence>
-    <xs:attribute name="pattern" type="xs:string" />
-    <xs:attribute name="class" type="xs:string" />
+    <xs:attribute name="pattern" type="xs:string" use="required" />
+    <xs:attribute name="class" type="xs:string" use="required" />
     <xs:attribute name="validate" type="xs:string" />
   </xs:complexType>
 </xs:schema>
