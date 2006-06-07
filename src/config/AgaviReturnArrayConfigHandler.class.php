@@ -37,7 +37,7 @@ class AgaviReturnArrayConfigHandler extends AgaviConfigHandler
 	 */
 	public function execute($config, $context = null)
 	{
-		$configurations = AgaviConfigCache::parseConfig($config, false);
+		$configurations = AgaviConfigCache::parseConfig($config, false, $this->getValidationFile());
 
 		$data = array();
 		$env = AgaviConfig::get('core.environment');
