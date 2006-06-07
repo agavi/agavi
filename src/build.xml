@@ -18,7 +18,6 @@
 	</target>
 
 	<!-- define the location of our tasks -->
-	<taskdef classname="buildtools.phing.AgaviTestTask" classpath="${agavi.dir}" name="agavitest"/>
 	<taskdef classname="buildtools.phing.AgaviTestTask2" classpath="${agavi.dir}" name="agavitest2"/>
 	<taskdef classname="buildtools.phing.AgaviFixPathsTask" classpath="${agavi.dir}" name="fixpaths"/>
 	<taskdef classname="buildtools.phing.AgaviListModulesTask" classpath="${agavi.dir}" name="listModules"/>
@@ -35,17 +34,6 @@
 		<include name="**/*-dist"/>
   </fileset>
 	
-	<!-- Unit Testing -->
-	<target name="test" description="run unit tests">
-		<fixpaths base="${project.dir}" testing="true"/>
-		<property name="agavidir" value="${agavi.dir}" />
-		<property name="testdir" value="${tests.dir}"  />
-		<property name="from" value=""  />
-		<property name="reporter" value="text"  />
-		<property name="outfile" value=""  />
-		<agavitest exit="true" testdir="${tests.dir}" agavidir="${agavi.dir}" startpoint="${from}" reporter="${reporter}" outfile="${outfile}"/>
-	</target>
-
 	<!-- New Unit Testing -->
 	<target name="test2" description="run PHPUnit2 unit tests">
 		<fixpaths base="${project.dir}" testing="true"/>

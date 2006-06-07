@@ -1,7 +1,0 @@
-<?
-
-class SampleModel extends Model
-{
-}
-
-?>
