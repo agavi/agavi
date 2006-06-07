@@ -26,7 +26,7 @@
  *
  * @version    $Id$
  */
-abstract class AgaviSmartyRenderer
+class AgaviSmartyRenderer
 {
 	const COMPILE_DIR = 'templates';
 	const COMPILE_SUBDIR = 'smarty';
