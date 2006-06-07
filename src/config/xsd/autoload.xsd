@@ -9,7 +9,6 @@
             <xs:element name="autoloads" type="autoloads" />
           </xs:sequence>
           <xs:attribute name="environment" type="xs:string" />
-          <xs:attribute name="context" type="xs:string" />
         </xs:complexType>
       </xs:element>
     </xs:sequence>

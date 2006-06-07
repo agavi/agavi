@@ -9,7 +9,6 @@
             <xs:element name="handlers" type="handlers" />
           </xs:sequence>
           <xs:attribute name="environment" type="xs:string" />
-          <xs:attribute name="context" type="xs:string" />
         </xs:complexType>
       </xs:element>
     </xs:sequence>

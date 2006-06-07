@@ -10,7 +10,6 @@
             <xs:element name="settings" type="settings" minOccurs="0" />
           </xs:all>
           <xs:attribute name="environment" type="xs:string" />
-          <xs:attribute name="context" type="xs:string" />
         </xs:complexType>
       </xs:element>
     </xs:sequence>
