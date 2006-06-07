@@ -14,7 +14,7 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
-class Default_LoginInputView extends AgaviPHPView
+class Default_LoginInputView extends AgaviView
 {
 
 	/**

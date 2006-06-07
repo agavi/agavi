@@ -14,7 +14,7 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
-class Default_Error404SuccessView extends AgaviPHPView
+class Default_Error404SuccessView extends AgaviView
 {
 
 	/**

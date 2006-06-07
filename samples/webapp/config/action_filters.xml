@@ -61,8 +61,7 @@
 	<configuration environment="fooBar">
 		<filters>
 			
-			<filter name="FormPopulationFilter" class="AgaviFormPopulationFilter">
-			</filter>
+			<filter name="FormPopulationFilter" class="AgaviFormPopulationFilter" enabled="false" />
 			
 		</filters>
 	</configuration>

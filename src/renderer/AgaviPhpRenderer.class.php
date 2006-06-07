@@ -26,7 +26,7 @@
  *
  * @version    $Id$
  */
-class AgaviPHPRenderer extends AgaviRenderer
+class AgaviPhpRenderer extends AgaviRenderer
 {
 	protected $extension = '.php';
 	

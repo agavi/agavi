@@ -9,65 +9,7 @@
 | Any file listed here will automatically be loaded by PHP when the class is |
 | first accessed. This means you do not manually have to include it in your  |
 | files.                                                                     |
-| нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн |
-| KEYWORDS:                                                                  |
-|                                                                            |
-| The following keywords may exist in file or param values:                  |
-|                                                                            |
-| 1. %AG_APP_DIR%                                                            |
-| 2. %AG_LIB_DIR%                                                            |
-| 3. %AG_MODULE_DIR%                                                         |
-| 4. %AG_WEBAPP_DIR%                                                         |
 +нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн+
--->
-<!--
-
-RewriteRule ^(de|en)$     $1/ [L,R]
-RewriteRule ^(de|en)/(.*) $2  [E=LANG:$1,S=4]
-
-RewriteCond %{REQUEST_FILENAME} -f
-RewriteRule (.*) - [L,S=3]
-
-RewriteRule _layout/icons/([0-9]+/([0-9a-fA-F]{6}|gradient)/.*) _layout/icons/thumbnail.php [L,S=2]
-
-RewriteCond %{REQUEST_URI} !^/(de|en)/?$
-RewriteCond %{REQUEST_URI} !^/(de|en)/.*
-RewriteCond %{ENV:LANG} ^$
-RewriteCond %{ENV:REDIRECT_LANG} ^$
-RewriteCond %{ENV:REDIRECT_REDIRECT_LANG} ^$
-RewriteCond %{HTTP_COOKIE} .*mylst_language=(de|en|fr).*
-RewriteRule (.*) %1/$1 [R,L]
-
-RewriteCond %{REQUEST_URI} !^/(de|en)/?$
-RewriteCond %{REQUEST_URI} !^/(de|en)/.*
-RewriteCond %{ENV:LANG} ^$
-RewriteCond %{ENV:REDIRECT_LANG} ^$
-RewriteCond %{ENV:REDIRECT_REDIRECT_LANG} ^$
-RewriteRule (.*) de/$1 [R,L]
-
-RewriteRule ^my/?$                  index.php?module=frontend&action=mylst.Index [QSA,NC,L]
-RewriteRule ^my/remember/([0-9]+)/? index.php?module=frontend&action=mylst.Index&id=$1&addFavorite=1 [QSA,NC,L]
-RewriteRule ^my/remove/([0-9]+)/?   index.php?module=frontend&action=mylst.Index&id=$1&removeFavorite=1 [QSA,NC,L]
-
--->
-<!--
-<route pattern=".*/rss" stopping="false">
-  <output_type>rss</output_type>
-</route>
-<route pattern="/products">
-  ...
-   <routes>
-      <route pattern="/view">
-
-
-<route pattern="/view/(id:\d+)/?" />
-<route pattern="(.+)/rss" stopping="no" output_type="rss" />
-<route pattern="/list" />
-<route pattern="/latest" />
-
-
-imply == route davorhaengen
-
 -->
 <configurations>
 	<configuration>
@@ -115,23 +57,4 @@ imply == route davorhaengen
 			</route>
 		</routes>
 	</configuration>
-
-	<!--
-		+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн+
-		| Custom Classes                                                         |
-		| нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн |
-		| Any classes you see fit that might be of use, such as classes that     |
-		| used in a session that must exist when the session unserializes its    |
-		| data. Another good example is a custom factory implementation such as  |
-		| a controller or user.                                                  |
-		+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн+
-	-->
-	<!-- example for a list of autoloads that is only used in the "debug" context
-	<configuration context="debug">
-		<autoloads>
-			<autoload name="MyCustomClass">%AG_WEBAPP_DIR%/lib/MyCustomClass.class.php</autoload>
-		</autoloads>
-	</configuration>
-	/modules/Default/actions/IndexAction.class.php
-	-->
 </configurations>

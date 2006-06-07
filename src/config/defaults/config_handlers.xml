@@ -77,7 +77,7 @@
 
 			<handler pattern="%core.config_dir%/compile.xml" validate="%core.agavi_dir%/config/xsd/compile.xsd" class="AgaviCompileConfigHandler" />
 
-			<handler pattern="%core.config_dir%/settings.xml" validate="%core.agavi_dir%/config/xsd/settings.xsd" class="AgaviDefineConfigHandler" />
+			<handler pattern="%core.config_dir%/settings.xml" validate="%core.agavi_dir%/config/xsd/settings.xsd" class="AgaviSettingConfigHandler" />
 
 			<handler pattern="%core.config_dir%/factories.xml" validate="%core.agavi_dir%/config/xsd/factories.xsd" class="AgaviFactoryConfigHandler" />
 

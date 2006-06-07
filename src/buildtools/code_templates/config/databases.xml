@@ -189,7 +189,7 @@
 	<configuration>
 		<databases default="propel">
 			
-			<database name="postgres" class="AgaviPostgreSQLDatabase">
+			<database name="postgres" class="AgaviPostgresqlDatabase">
 				<parameters>
 					<parameter name="host">localhost</parameter>
 					<parameter name="user">username</parameter>

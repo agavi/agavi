@@ -27,7 +27,7 @@
  *
  * @version    $Id$
  */
-abstract class AgaviPHPTALRenderer
+abstract class AgaviPhptalRenderer
 {
 	/**
 	 * Retrieve the PHPTAL instance

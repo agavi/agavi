@@ -13,8 +13,8 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviHTTPSRequest provides additional support for HTTPS client requests such
- * as SSL certificate inspection
+ * AgaviSecureWebRequest provides additional support for HTTPS client requests
+ * such as SSL certificate inspection.
  *
  * @package    agavi
  * @subpackage request
@@ -26,7 +26,7 @@
  *
  * @version    $Id$
  */
-class AgaviHTTPSRequest extends AgaviWebRequest {
+class AgaviSecureWebRequest extends AgaviWebRequest {
 
 	/**
 	 * Check wether or not the current request is over a secure connection

@@ -13,7 +13,7 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
-require_once(AgaviConfig::get('core.agavi_dir') . '/util/Inflector.class.php');
+require_once(AgaviConfig::get('core.agavi_dir') . '/util/AgaviInflector.class.php');
 
 /**
  * AgaviXmlConfigHandler allows you to retrieve the contents of a xml config

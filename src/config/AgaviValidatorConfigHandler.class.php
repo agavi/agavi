@@ -26,7 +26,7 @@
  *
  * @version    $Id$
  */
-class AgaviValidatorConfigHandler extends AgaviIniConfigHandler
+class AgaviValidatorConfigHandler extends AgaviConfigHandler
 {
 
 	/**

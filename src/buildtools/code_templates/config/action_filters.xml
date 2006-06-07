@@ -61,7 +61,7 @@
 	<configuration>
 		<filters>
 			
-			<filter name="FormPopulationFilter" class="AgaviFormPopulationFilter" />
+			<filter name="FormPopulationFilter" class="AgaviFormPopulationFilter" enabled="false" />
 			
 		</filters>
 	</configuration>

@@ -15,7 +15,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviMySQLDatabase provides connectivity for the MySQL brand database.
+ * AgaviMysqlDatabase provides connectivity for the MySQL brand database.
  *
  * <b>Optional parameters:</b>
  *
@@ -45,7 +45,7 @@
  *
  * @version    $Id$
  */
-class AgaviMySQLDatabase extends AgaviDatabase
+class AgaviMysqlDatabase extends AgaviDatabase
 {
 
 	/**

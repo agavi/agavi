@@ -26,7 +26,7 @@
  *
  * @version    $Id$
  */
-abstract class AgaviXSLRenderer
+abstract class AgaviXslRenderer
 {
 	private $xslProc      = null;  // XSLTProcessor.
 	private $domDoc       = null;  // DomDocument.

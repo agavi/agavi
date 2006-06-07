@@ -26,28 +26,28 @@
 	<configuration>
 		<compiles>
 			<compile>%core.agavi_dir%/util/AgaviAttributeHolder.class.php</compile>
-			<compile>%core.agavi_dir%/action/Action.class.php</compile>
-			<compile>%core.agavi_dir%/action/ActionStack.class.php</compile>
-			<compile>%core.agavi_dir%/action/ActionStackEntry.class.php</compile>
-			<compile>%core.agavi_dir%/core/Context.class.php</compile>
-			<compile>%core.agavi_dir%/controller/Controller.class.php</compile>
-			<compile>%core.agavi_dir%/filter/Filter.class.php</compile>
+			<compile>%core.agavi_dir%/action/AgaviAction.class.php</compile>
+			<compile>%core.agavi_dir%/action/AgaviActionStack.class.php</compile>
+			<compile>%core.agavi_dir%/action/AgaviActionStackEntry.class.php</compile>
+			<compile>%core.agavi_dir%/core/AgaviContext.class.php</compile>
+			<compile>%core.agavi_dir%/controller/AgaviController.class.php</compile>
+			<compile>%core.agavi_dir%/filter/AgaviFilter.class.php</compile>
 			<compile>%core.agavi_dir%/filter/AgaviDispatchFilter.class.php</compile>
-			<compile>%core.agavi_dir%/filter/ExecutionFilter.class.php</compile>
-			<compile>%core.agavi_dir%/filter/FilterChain.class.php</compile>
-			<compile>%core.agavi_dir%/logging/Appender.class.php</compile>
-			<compile>%core.agavi_dir%/logging/Layout.class.php</compile>
-			<compile>%core.agavi_dir%/logging/Logger.class.php</compile>
-			<compile>%core.agavi_dir%/logging/LoggerManager.class.php</compile>
-			<compile>%core.agavi_dir%/logging/Message.class.php</compile>
-			<compile>%core.agavi_dir%/logging/PassthruLayout.class.php</compile>
+			<compile>%core.agavi_dir%/filter/AgaviExecutionFilter.class.php</compile>
+			<compile>%core.agavi_dir%/filter/AgaviFilterChain.class.php</compile>
+			<compile>%core.agavi_dir%/logging/AgaviAppender.class.php</compile>
+			<compile>%core.agavi_dir%/logging/AgaviLayout.class.php</compile>
+			<compile>%core.agavi_dir%/logging/AgaviLogger.class.php</compile>
+			<compile>%core.agavi_dir%/logging/AgaviLoggerManager.class.php</compile>
+			<compile>%core.agavi_dir%/logging/AgaviMessage.class.php</compile>
+			<compile>%core.agavi_dir%/logging/AgaviPassthruLayout.class.php</compile>
 			<compile>%core.agavi_dir%/renderer/AgaviRenderer.class.php</compile>
-			<compile>%core.agavi_dir%/request/Request.class.php</compile>
-			<compile>%core.agavi_dir%/storage/Storage.class.php</compile>
-			<compile>%core.agavi_dir%/user/User.class.php</compile>
-			<compile>%core.agavi_dir%/validator/Validator.class.php</compile>
-			<compile>%core.agavi_dir%/validator/ValidatorManager.class.php</compile>
-			<compile>%core.agavi_dir%/view/View.class.php</compile>
+			<compile>%core.agavi_dir%/request/AgaviRequest.class.php</compile>
+			<compile>%core.agavi_dir%/storage/AgaviStorage.class.php</compile>
+			<compile>%core.agavi_dir%/user/AgaviUser.class.php</compile>
+			<compile>%core.agavi_dir%/validator/AgaviValidator.class.php</compile>
+			<compile>%core.agavi_dir%/validator/AgaviValidatorManager.class.php</compile>
+			<compile>%core.agavi_dir%/view/AgaviView.class.php</compile>
 		</compiles>
 	</configuration>
 </configurations>

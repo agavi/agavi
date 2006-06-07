@@ -15,7 +15,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviPostgreSQLDatabase provides connectivity for the PostgreSQL brand database.
+ * AgaviPostgresqlDatabase provides connectivity for the PostgreSQL brand database.
  *
  * <b>Optional parameters:</b>
  *
@@ -45,7 +45,7 @@
  *
  * @version    $Id$
  */
-class AgaviPostgreSQLDatabase extends AgaviDatabase
+class AgaviPostgresqlDatabase extends AgaviDatabase
 {
 
 	/**

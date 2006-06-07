@@ -14,7 +14,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviAdoDBDatabase provides connectivity for the AdoDB database abstraction
+ * AgaviAdodbDatabase provides connectivity for the AdoDB database abstraction
  * layer.
  *
  * <b>Optional parameters:</b>
@@ -48,7 +48,7 @@
  *
  * @version    $Id$
  */
-class AgaviAdoDBDatabase extends AgaviDatabase
+class AgaviAdodbDatabase extends AgaviDatabase
 {
 
 	/**

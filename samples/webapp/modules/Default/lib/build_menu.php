@@ -26,7 +26,7 @@ $links['secure_action']          = array(AgaviConfig::get('actions.secure_module
 $links['unavailable_action']     = array(AgaviConfig::get('actions.unavailable_module'),     AgaviConfig::get('actions.unavailable_action'));
 
 // get the controller
-$controller = $this->getContext()->getController();
+$context = $this->getContext();
 $request = $this->getContext()->getRequest();
 
 $ma = $request->getModuleAccessor();
@@ -41,7 +41,7 @@ foreach ($links as $key => &$parameters)
 		$aa => $parameters[1]
 	);
 
-	$links[$key] = $controller->genURL(null, $parameters);
+	$links[$key] = $context->getRouting()->gen(null, $parameters);
 
 }
 

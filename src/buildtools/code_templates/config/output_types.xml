@@ -17,7 +17,7 @@
 		<output_types default="html">
 			
 			<output_type name="html">
-				<renderer class="AgaviPHPRenderer" />
+				<renderer class="AgaviPhpRenderer" />
 				<parameters>
 					<parameter name="Content-Type">text/html</parameter>
 				</parameters>

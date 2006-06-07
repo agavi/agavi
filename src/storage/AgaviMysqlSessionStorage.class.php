@@ -41,7 +41,7 @@
  *
  * @version    $Id$
  */
-class AgaviMySQLSessionStorage extends AgaviSessionStorage
+class AgaviMysqlSessionStorage extends AgaviSessionStorage
 {
 
 	private
