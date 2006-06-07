@@ -29,47 +29,8 @@
  *
  * @version    $Id$
  */
-abstract class View
+abstract class AgaviView extends AgaviAttributeHolder
 {
-
-	// +-----------------------------------------------------------------------+
-	// | CONSTANTS                                                             |
-	// +-----------------------------------------------------------------------+
-
-	/**
-	 * Show an alert view.
-	 *
-	 * @since      0.9.0
-	 */
-	const ALERT = 'Alert';
-
-	/**
-	 * Show an error view.
-	 *
-	 * @since      0.9.0
-	 */
-	const ERROR = 'Error';
-
-	/**
-	 * Show a form input view.
-	 *
-	 * @since      0.9.0
-	 */
-	const INPUT = 'Input';
-
-	/**
-	 * Skip view execution.
-	 *
-	 * @since      0.9.0
-	 */
-	const NONE = null;
-
-	/**
-	 * Show a success view.
-	 *
-	 * @since      0.9.0
-	 */
-	const SUCCESS = 'Success';
 
 	/**
 	 * Render the presentation to the client.
@@ -99,86 +60,12 @@ abstract class View
 		$decoratorTemplate  = null,
 		$directory          = null,
 		$slots              = array(),
-		$template           = null;
+		$template           = null,
+		$viewData           = null;
 
-
-	/**
-	 * Clear all attributes associated with this view.
-	 *
-	 * @return     void
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	abstract function clearAttributes ();
-
-	/**
-	 * Loop through all template slots and fill them in with the results of
-	 * presentation data.
-	 *
-	 * @param      string A chunk of decorator content.
-	 *
-	 * @return     string A decorated template.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public function & decorate (&$content)
-	{
-
-		// alias controller
-		$controller = $this->getContext()->getController();
-
-		// get original render mode
-		$renderMode = $controller->getRenderMode();
-
-		// set render mode to var
-		$controller->setRenderMode(self::RENDER_VAR);
-
-		// grab the action stack
-		$actionStack = $controller->getActionStack();
-
-		// loop through our slots, and replace them one-by-one in the
-		// decorator template
-		$slots = $this->getSlots();
-
-		foreach ($slots as $name => $slot)
-		{
-
-			// grab this next forward's action stack index
-			$index = $actionStack->getSize();
-
-			// forward to the first slot action
-			$controller->forward($slot['module_name'],
-						         $slot['action_name']);
-
-			// grab the action entry from this forward
-			$actionEntry = $actionStack->getEntry($index);
-
-			// set the presentation data as a template attribute
-			$presentation =& $actionEntry->getPresentation();
-
-			$this->setAttributeByRef($name, $presentation);
-
-		}
-
-		// put render mode back
-		$controller->setRenderMode($renderMode);
-
-		// set the decorator content as an attribute
-		$this->setAttributeByRef('content', $content);
-
-		// return a null value to satisfy the requirement
-		$retval = null;
-
-		return $retval;
-
-	}
 
 	/**
 	 * Execute any presentation logic and set template attributes.
-	 *
-	 * @return     void
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -186,44 +73,9 @@ abstract class View
 	abstract function execute ();
 
 	/**
-	 * Indicates whether or not an attribute exists.
-	 *
-	 * @param      string An attribute name.
-	 *
-	 * @return     bool true, if the attribute exists, otherwise false.
-	 *
-	 * @author     Bob Zoller <bob@agavi.org>
-	 * @since      0.10.0
-	 */
-	abstract function hasAttribute ($name);
-
-	/**
-	 * Retrieve an attribute.
-	 *
-	 * @param      string An attribute name.
-	 *
-	 * @return     mixed An attribute value, if the attribute exists, otherwise
-	 *                   null.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	abstract function & getAttribute ($name);
-
-	/**
-	 * Retrieve an array of attribute names.
-	 *
-	 * @return     array An indexed array of attribute names.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	abstract function getAttributeNames ();
-
-	/**
 	 * Retrieve the current application context.
 	 *
-	 * @return     Context The current Context instance.
+	 * @return     AgaviContext The current Context instance.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -284,15 +136,6 @@ abstract class View
 	}
 
 	/**
-	 * Retrieve the template engine associated with this view.
-	 *
-	 * Note: This will return null for PHPView instances.
-	 *
-	 * @return     mixed A template engine instance.
-	 */
-	abstract function & getEngine ();
-
-	/**
 	 * Retrieve an array of specified slots for the decorator template.
 	 *
 	 * @return     array An associative array of decorator slots.
@@ -332,8 +175,6 @@ abstract class View
 	 * @param      bool  Import error messages too?
 	 * @param      bool  Run strip_tags() on attribute value?
 	 * @param      bool  Run htmlspecialchars() on attribute value?
-	 *
-	 * @return     void
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -465,28 +306,21 @@ abstract class View
 	/**
 	 * Initialize this view.
 	 *
-	 * @param      Context The current application context.
+	 * @param      AgaviContext The current application context.
 	 *
-	 * @return     bool true, if initialization completes successfully,
-	 *                  otherwise false.
-	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function initialize ($context)
+	public function initialize(AgaviContext $context)
 	{
-
 		$this->context = $context;
 
 		// set the currently executing module's template directory as the
 		// default template directory
-		$module = $context->getModuleName();
+		$this->decoratorDirectory = $context->getController()->getModuleDirectory() . '/templates'; 
 
-		$this->decoratorDirectory = AG_MODULE_DIR . '/' . $module .'/templates';
 		$this->directory          = $this->decoratorDirectory;
-
-		return true;
-
 	}
 
 	/**
@@ -506,177 +340,9 @@ abstract class View
 	}
 
 	/**
-	 * Execute a basic pre-render check to verify all required variables exist
-	 * and that the template is readable.
-	 *
-	 * @return     void
-	 *
-	 * @throws     <b>RenderException</b> If the pre-render check fails.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	protected function preRenderCheck ()
-	{
-
-		if ($this->template == null)
-		{
-
-			// a template has not been set
-			$error = 'A template has not been set';
-
-			throw new RenderException($error);
-
-		}
-
-		$template = $this->directory . '/' . $this->template;
-
-		if (!is_readable($template))
-		{
-
-			// the template isn't readable
-			$error = 'The template "%s" does not exist or is unreadable';
-			$error = sprintf($error, $template);
-
-			throw new RenderException($error);
-
-		}
-
-		// check to see if this is a decorator template
-		if ($this->decorator)
-		{
-
-			$template = $this->decoratorDirectory . '/' .
-						$this->decoratorTemplate;
-
-			if (!is_readable($template))
-			{
-
-				// the decorator template isn't readable
-				$error = 'The decorator template "%s" does not exist or is ' .
-						 'unreadable';
-				$error = sprintf($error, $template);
-
-				throw new RenderException($error);
-
-			}
-
-		}
-
-	}
-
-	/**
-	 * Remove an attribute.
-	 *
-	 * @param      string An attribute name.
-	 *
-	 * @return     mixed An attribute value, if the attribute was removed,
-	 *                   otherwise null.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	abstract function & removeAttribute ($name);
-
-	/**
-	 * Render the presentation.
-	 *
-	 * When the controller render mode is View::RENDER_CLIENT, this method will
-	 * render the presentation directly to the client and null will be returned.
-	 *
-	 * @return     string A string representing the rendered presentation, if
-	 *                    the controller render mode is View::RENDER_VAR,
-	 *                    otherwise null.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	abstract function & render ();
-
-	/**
-	 * Set an attribute.
-	 *
-	 * @param      string An attribute name.
-	 * @param      mixed  An attribute value.
-	 *
-	 * @return     void
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	abstract function setAttribute ($name, $value);
-
-	/**
-	 * Append an attribute.
-	 *
-	 * @param      string An attribute name.
-	 * @param      mixed  An attribute value.
-	 *
-	 * @return     void
-	 *
-	 * @author     Bob Zoller <bob@agavi.org>
-	 * @since      0.10.0
-	 */
-	abstract function appendAttribute($name, $value);
-
-	/**
-	 * Set an attribute by reference.
-	 *
-	 * @param      string An attribute name.
-	 * @param      mixed  A reference to an attribute value.
-	 *
-	 * @return     void
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	abstract function setAttributeByRef ($name, &$value);
-
-	/**
-	 * Append an attribute by reference.
-	 *
-	 * @param      string An attribute name.
-	 * @param      mixed  A reference to an attribute value.
-	 *
-	 * @return     void
-	 *
-	 * @author     Bob Zoller <bob@agavi.org>
-	 * @since      0.10.0
-	 */
-	abstract function appendAttributeByRef($name, &$value);
-
-	/**
-	 * Set an array of attributes.
-	 *
-	 * @param      array An associative array of attributes and their associated
-	 *                   values.
-	 *
-	 * @return     void
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	abstract function setAttributes ($values);
-
-	/**
-	 * Set an array of attributes by reference.
-	 *
-	 * @param      array An associative array of attributes and references to
-	 *                   their associated values.
-	 *
-	 * @return     void
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	abstract function setAttributesByRef (&$values);
-
-	/**
 	 * Set the decorator template directory for this view.
 	 *
 	 * @param      string An absolute filesystem path to a template directory.
-	 *
-	 * @return     void
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -696,15 +362,13 @@ abstract class View
 	 *
 	 * @param      string An absolute or relative filesystem path to a template.
 	 *
-	 * @return     void
-	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
 	public function setDecoratorTemplate ($template)
 	{
 
-		if (Toolkit::isPathAbsolute($template))
+		if (AgaviToolkit::isPathAbsolute($template))
 		{
 
 			$this->decoratorDirectory = dirname($template);
@@ -725,8 +389,6 @@ abstract class View
 	/**
 	 * Clears out a previously assigned decorator template and directory
 	 *
-	 * @return     void
-	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.10.0
 	 */
@@ -741,8 +403,6 @@ abstract class View
 	 * Set the template directory for this view.
 	 *
 	 * @param      string An absolute filesystem path to a template directory.
-	 *
-	 * @return     void
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -764,8 +424,6 @@ abstract class View
 	 * @param      string A module name.
 	 * @param      string An action name.
 	 *
-	 * @return     void
-	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
@@ -781,10 +439,8 @@ abstract class View
 	/**
 	 * Set an array of slots
 	 *
-	 * @see        View::setSlot()
+	 * @see        AgaviView::setSlot()
 	 * @param      array An array of slots
-	 *
-	 * @return     void
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.10.0
@@ -796,8 +452,6 @@ abstract class View
 
 	/**
 	 * Empties the slots array, clearing all previously registered slots
-	 *
-	 * @return     void
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.10.0
@@ -815,15 +469,13 @@ abstract class View
 	 *
 	 * @param      string An absolute or relative filesystem path to a template.
 	 *
-	 * @return     void
-	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
 	public function setTemplate ($template)
 	{
 
-		if (Toolkit::isPathAbsolute($template))
+		if (AgaviToolkit::isPathAbsolute($template))
 		{
 
 			$this->directory = dirname($template);
@@ -836,6 +488,32 @@ abstract class View
 
 		}
 
+	}
+
+	/*
+	 * Sets data returned by the renderer
+	 *
+	 * @param      string The view data
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function setData($viewData)
+	{
+		$this->data = $viewData;
+	}
+
+	/*
+	 * Sets data returned by the renderer
+	 *
+	 * @return     string The view data
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getData()
+	{
+		return $this->viewData;
 	}
 
 }

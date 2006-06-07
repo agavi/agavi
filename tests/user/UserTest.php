@@ -1,11 +1,7 @@
 <?php
-if (!defined('AG_USER_NAMESPACE')) {
-	define('AG_USER_NAMESPACE', 'org.agavi');
-}	
-
 class SampleUser extends User
 {
-	public function initialize($context, $parameters=null)
+	public function initialize(AgaviContext $context, $parameters=null)
 	{
 		$this->context = $context;
 		if ($parameters != null) {
@@ -79,9 +75,9 @@ class UserTest extends UnitTestCase
 	{
 		$this->assertEqual(array(), $this->_u->getAttributeNamespaces());
 		$this->_u->setAttribute('blah', 'blahval');
-		$this->assertEqual(array(AG_USER_NAMESPACE), $this->_u->getAttributeNamespaces());
+		$this->assertEqual(array($this->_u->getDefaultNamespace()), $this->_u->getAttributeNamespaces());
 		$this->_u->setAttribute('blah', 'blahval', 'some/other/namespace');
-		$this->assertEqual(array(AG_USER_NAMESPACE, 'some/other/namespace'), $this->_u->getAttributeNamespaces());
+		$this->assertEqual(array($this->_u->getDefaultNamespace(), 'some/other/namespace'), $this->_u->getAttributeNamespaces());
 	}
 
 	public function testgetAttributes()
@@ -125,9 +121,9 @@ class UserTest extends UnitTestCase
 
 	public function testhasAttributeNamespace()
 	{
-		$this->assertFalse($this->_u->hasAttributeNamespace(AG_USER_NAMESPACE));
+		$this->assertFalse($this->_u->hasAttributeNamespace($this->_u->getDefaultNamespace()));
 		$this->_u->setAttribute('blah', 'blahval');
-		$this->assertTrue($this->_u->hasAttributeNamespace(AG_USER_NAMESPACE));
+		$this->assertTrue($this->_u->hasAttributeNamespace($this->_u->getDefaultNamespace()));
 		$this->assertFalse($this->_u->hasAttributeNamespace('some/other/namespace'));
 		$this->_u->setAttribute('blah', 'blahval', 'some/other/namespace');
 		$this->assertTrue($this->_u->hasAttributeNamespace('some/other/namespace'));
@@ -142,12 +138,6 @@ class UserTest extends UnitTestCase
 		$u_ctx = $user->getContext();
 		$this->assertReference($context, $u_ctx);
 		$this->assertNull($user->getAttributeNames());
-	}
-
-	public function testnewInstance()
-	{
-		$user = User::newInstance('User');
-		$this->assertIsA($user,'User');
 	}
 
 	public function testremoveAttribute()
@@ -169,8 +159,8 @@ class UserTest extends UnitTestCase
 	public function testremoveAttributeNamespace()
 	{
 		$this->_u->setAttribute('blah', 'blahval');
-		$this->_u->removeAttributeNamespace(AG_USER_NAMESPACE);
-		$this->assertFalse($this->_u->hasAttributeNamespace(AG_USER_NAMESPACE));
+		$this->_u->removeAttributeNamespace($this->_u->getDefaultNamespace());
+		$this->assertFalse($this->_u->hasAttributeNamespace($this->_u->getDefaultNamespace()));
 	}
 
 	public function testsetAttribute()

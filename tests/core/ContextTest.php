@@ -47,7 +47,7 @@ class ContextTest extends UnitTestCase
 		$this->assertReference($a, $f);
 		$this->assertCopy($e, $f);
 		
-		$this->assertIsA(Context::getInstance()->getActionStack(), $cfg[$default]['action_stack']);
+		$this->assertIsA(Context::getInstance()->getController()->getActionStack(), $cfg[$default]['action_stack']);
 		$this->assertIsA(Context::getInstance()->getRequest(), $cfg[$default]['request']);
 		$this->assertIsA(Context::getInstance()->getDatabaseManager(), $cfg[$default]['database_manager']);
 	}
@@ -72,7 +72,7 @@ class ContextTest extends UnitTestCase
 /*
 		Mock::generate('ActionStack');	
 		$context->initialize('default', array('action_stack' => 'MockActionStack'));
-		$this->assertIsA($context->getActionStack(), 'MockActionStack');
+		$this->assertIsA($context->getController()->getActionStack(), 'MockActionStack');
 */
 		$this->assertTrue(false, 'testCanReinitializeContextWithOverrides partially disabled for now because MockActionStack and MockActionEntry are not working');
 	}

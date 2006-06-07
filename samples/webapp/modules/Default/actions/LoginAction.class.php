@@ -14,7 +14,7 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
-class Default_LoginAction extends Action
+class Default_LoginAction extends AgaviAction
 {
 
 	/**
@@ -43,7 +43,7 @@ class Default_LoginAction extends Action
 	public function execute ()
 	{
 
-		return View::INPUT;
+		return 'Input';
 
 	}
 
@@ -63,10 +63,10 @@ class Default_LoginAction extends Action
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function getDefaultView ()
+	public function getDefaultViewName()
 	{
 
-		return View::INPUT;
+		return 'Input';
 
 	}
 

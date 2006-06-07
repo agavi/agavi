@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2005 Agavi Project.                                       |
+// | Copyright (c) 2003-2005 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -14,25 +14,19 @@
 // +---------------------------------------------------------------------------+
 
 /**
- *
+ * An extension to AgaviModel, but for implementation as a Singleton
+ * 
  * @package    agavi
- * @subpackage util
- *
- * @author     Veikko Makinen <mail@veikkomakinen.com>
+ * @subpackage model
+ * 
+ * @since      0.11.0 
+ * @author     David Zuelke <dz@bitxtender.com>
  * @copyright  (c) Authors
- * @since      0.10.0
  *
- * @version    $Id: ConversionPattern.class.php 87 2005-06-03 21:19:23Z bob $
+ * @version    $Id$
  */
-interface ShutdownListener
+interface AgaviISingletonModel extends AgaviIModel
 {
-
-	/**
-	 *
-	 *
-	 */
-	public function shutdown();
-
 }
 
 ?>

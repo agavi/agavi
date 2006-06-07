@@ -15,7 +15,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * FilterChain manages registered filters for a specific context.
+ * AgaviFilterChain manages registered filters for a specific context.
  *
  * @package    agavi
  * @subpackage filter
@@ -26,7 +26,7 @@
  *
  * @version    $Id$
  */
-class FilterChain
+class AgaviFilterChain
 {
 
 	private
@@ -35,8 +35,6 @@ class FilterChain
 
 	/**
 	 * Execute the next filter in this chain.
-	 *
-	 * @return     void
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -60,9 +58,7 @@ class FilterChain
 	/**
 	 * Register a filter with this chain.
 	 *
-	 * @param      Filter A Filter implementation instance.
-	 *
-	 * @return     void
+	 * @param      AgaviFilter A Filter implementation instance.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0

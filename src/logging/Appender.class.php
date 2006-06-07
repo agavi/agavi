@@ -14,7 +14,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * Appender allows you to specify a destination for log data and provide
+ * AgaviAppender allows you to specify a destination for log data and provide
  * a custom layout for it, through which all log messages will be formatted.
  *
  * @package    agavi
@@ -26,7 +26,7 @@
  *
  * @version    $Id$
  */
-abstract class Appender
+abstract class AgaviAppender
 {
 
 	private $layout = null;
@@ -34,17 +34,15 @@ abstract class Appender
 	/**
 	 * Initialize the object.
 	 *
-	 * @return     void
-	 *
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.10.0
 	 */
-	abstract function initialize($params);
+	abstract function initialize($params = array());
 
 	/**
 	 * Retrieve the layout.
 	 *
-	 * @return     Layout A Layout instance, if it has been set, otherwise null.
+	 * @return     AgaviLayout A Layout instance, if it has been set, otherwise null.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -57,9 +55,9 @@ abstract class Appender
 	/**
 	 * Set the layout.
 	 *
-	 * @param      Layout A Layout instance.
+	 * @param      AgaviLayout A Layout instance.
 	 *
-	 * @return     Appender
+	 * @return     AgaviAppender
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -73,8 +71,6 @@ abstract class Appender
 	/**
 	 * Execute the shutdown procedure.
 	 *
-	 * @return     void
-	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
@@ -84,8 +80,6 @@ abstract class Appender
 	 * Write log data to this appender.
 	 *
 	 * @param      string Log data to be written.
-	 *
-	 * @return     void
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0

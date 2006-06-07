@@ -15,7 +15,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * ValidatorManager provides management for request parameters and their
+ * AgaviValidatorManager provides management for request parameters and their
  * associated validators.
  *
  * @package    agavi
@@ -27,7 +27,7 @@
  *
  * @version    $Id$
  */
-class ValidatorManager
+class AgaviValidatorManager
 {
 
 	private
@@ -37,8 +37,6 @@ class ValidatorManager
 
 	/**
 	 * Clear this validator manager so it can be reused.
-	 *
-	 * @retun void
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -135,18 +133,14 @@ class ValidatorManager
 	/**
 	 * Initialize this validator manager.
 	 *
-	 * @param      Context A context instance.
-	 *
-	 * @return     void
+	 * @param      AgaviContext A context instance.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function initialize ($context)
+	public function initialize(AgaviContext $context, $parameters = array())
 	{
-
 		$this->request = $context->getRequest();
-
 	}
 
 	/**
@@ -213,11 +207,9 @@ class ValidatorManager
 	/**
 	 * Register a validator for a file or parameter.
 	 *
-	 * @param      string    A file or parameter name.
-	 * @param      Validator A validator implementation instance.
-	 * @param      string    A parent array name.
-	 *
-	 * @return     void
+	 * @param      string         A file or parameter name.
+	 * @param      AgaviValidator A validator implementation instance.
+	 * @param      string         A parent array name.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0

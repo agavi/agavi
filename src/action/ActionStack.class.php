@@ -27,7 +27,7 @@
  *
  * @version    $Id$
  */
-class ActionStack
+class AgaviActionStack
 {
 
 	private
@@ -38,9 +38,7 @@ class ActionStack
 	 *
 	 * @param      string A module name.
 	 * @param      string An action name.
-	 * @param      Action An action implementation instance.
-	 *
-	 * @return     void
+	 * @param      AgaviAction An action implementation instance.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -49,7 +47,7 @@ class ActionStack
 	{
 
 		// create our action stack entry and add it to our stack
-		$actionEntry = new ActionStackEntry($moduleName, $actionName,
+		$actionEntry = new AgaviActionStackEntry($moduleName, $actionName,
 						                    $actionInstance);
 
 		$this->stack[] = $actionEntry;
@@ -61,7 +59,7 @@ class ActionStack
 	 *
 	 * @param      int An entry index.
 	 *
-	 * @return     ActionStackEntry An action stack entry implementation.
+	 * @return     AgaviActionStackEntry An action stack entry implementation.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -85,7 +83,7 @@ class ActionStack
 	/**
 	 * Retrieve the first entry.
 	 *
-	 * @return     ActionStackEntry An action stack entry implementation.
+	 * @return     AgaviActionStackEntry An action stack entry implementation.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -110,7 +108,7 @@ class ActionStack
 	/**
 	 * Retrieve the last entry.
 	 *
-	 * @return     ActionStackEntry An action stack entry implementation.
+	 * @return     AgaviActionStackEntry An action stack entry implementation.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0

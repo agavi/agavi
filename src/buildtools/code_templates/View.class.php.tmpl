@@ -1,19 +1,17 @@
 <?php
 
-class %%MODULE%%_%%ACTION_NAME%%%%VIEW%%View extends PHPView
+class %%MODULE%%_%%ACTION_NAME%%%%VIEW%%View extends AgaviView
 {
 
 	/**
 	 * Execute any presentation logic and set template attributes.
-	 *
-	 * @return     void
 	 *
 	 */
 	public function execute ()
 	{
 
 		// set our template
-		$this->setTemplate('%%ACTION_PATH%%%%VIEW%%.php');
+		$this->setTemplate('%%ACTION_PATH%%%%VIEW%%');
 
 		// set the title
 		$this->setAttribute('title', '%%ACTION%% Action');

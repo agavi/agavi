@@ -7,7 +7,7 @@ class ReturnArrayConfigHandlerTest extends UnitTestCase
 	{
 		$RACH = new ReturnArrayConfigHandler();
 		$this->assertIsA($RACH, 'ReturnArrayConfigHandler');
-		$simple = $RACH->execute(AG_CONFIG_DIR . '/RACHsimple.ini');
+		$simple = $RACH->execute(AgaviConfig::get('core.config_dir') . '/RACHsimple.ini');
 		$simple_array = array(
 			'section1' => array('One' => 'A', 'Two' => 'B', 'Three' => 'C'), 
 			'section2' => array('Three' => 'Z', 'Two' => 'Y', 'One' => 'X'));
@@ -20,7 +20,7 @@ class ReturnArrayConfigHandlerTest extends UnitTestCase
 		$RACH = new ReturnArrayConfigHandler();
 		$this->assertIsA($RACH, 'ReturnArrayConfigHandler');
 		
-		$dotted = $RACH->execute(AG_CONFIG_DIR . '/RACHwithDots.ini');
+		$dotted = $RACH->execute(AgaviConfig::get('core.config_dir') . '/RACHwithDots.ini');
 		$dotted_array = array(
 			'one' => array(
 				'type' => 'associative',

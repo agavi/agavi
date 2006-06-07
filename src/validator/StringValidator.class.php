@@ -15,7 +15,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * StringValidator allows you to apply string-related constraints to a
+ * AgaviStringValidator allows you to apply string-related constraints to a
  * parameter.
  *
  * <b>Optional parameters:</b>
@@ -47,7 +47,7 @@
  *
  * @version    $Id$
  */
-class StringValidator extends Validator
+class AgaviStringValidator extends AgaviValidator
 {
 
 	/**
@@ -116,8 +116,8 @@ class StringValidator extends Validator
 	/**
 	 * Initialize this validator.
 	 *
-	 * @param      Context The current application context.
-	 * @param      array   An associative array of initialization parameters.
+	 * @param      AgaviContext The current application context.
+	 * @param      array        An associative array of initialization parameters.
 	 *
 	 * @return     bool true, if initialization completes successfully,
 	 *                  otherwise false.
@@ -125,7 +125,7 @@ class StringValidator extends Validator
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function initialize ($context, $parameters = null)
+	public function initialize(AgaviContext $context, $parameters = array())
 	{
 
 		// set defaults

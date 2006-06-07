@@ -14,13 +14,11 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
-class Default_UnavailableSuccessView extends PHPView
+class Default_UnavailableSuccessView extends AgaviPHPView
 {
 
 	/**
 	 * Execute any presentation logic and set template attributes.
-	 *
-	 * @return     void
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -29,13 +27,13 @@ class Default_UnavailableSuccessView extends PHPView
 	{
 
 		// set our template
-		$this->setTemplate('UnavailableSuccess.php');
+		$this->setTemplate('UnavailableSuccess');
 
 		// set the title
 		$this->setAttribute('title', 'Unavailable Action');
 
 		// build our menu
-		require_once(AG_MODULE_DIR . '/Default/lib/build_menu.php');
+		require_once(AgaviConfig::get('core.module_dir') . '/Default/lib/build_menu.php');
 
 	}
 

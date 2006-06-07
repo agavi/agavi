@@ -1,0 +1,7 @@
+<?
+
+class SampleRecursiveModel extends AgaviModel
+{
+}
+
+?>

@@ -93,23 +93,23 @@ class AgaviTestTask extends Task {
 		}
 		$testcode = '
 <?php
-define("AG_APP_DIR",				\'' . $this->agavidir . '\');		// where the agavi installation resides
-define("TESTSDIR",					\'' . $this->testdir . '\');		// where the main tests dir resides
-define("REPORTER",					\'' . ($this->reporter ? $this->reporter : "text") . '\');		// which reporter to use for reporting results
-define("STARTPOINT",				\'' . ($this->startpoint ? $this->testdir ."/".$this->startpoint : $this->testdir) . '\');	// where to begin looking for tests, relative to TESTSDIR
+AgaviConfig::set("core.agavi_dir", "' . $this->agavidir . '"); // where the agavi installation resides
+AgaviConfig::set("tests.dir", "' . $this->testdir . '"); // where the main tests dir resides
+AgaviConfig::set("tests.reporter", "' . ($this->reporter ? $this->reporter : "text") . '"); // which reporter to use for reporting results
+AgaviConfig::set("tests.startpoint", "' . ($this->startpoint ? $this->testdir ."/".$this->startpoint : $this->testdir) . '"); // where to begin looking for tests, relative to TESTSDIR
 
 set_include_path(get_include_path() . "' . PATH_SEPARATOR . join(PATH_SEPARATOR, $this->base_include) . '");
 set_time_limit(0);
 
-if ( !is_dir(TESTSDIR) ) {
-	echo "Tests directory not found, expected: " . TESTSDIR . "\n";
+if ( !is_dir(AgaviConfig::get("tests.dir")) ) {
+	echo "Tests directory not found, expected: " . AgaviConfig::get("tests.dir") . "\n";
 	exit(1);
 }
 require_once("simpletest/unit_tester.php");
 require_once("simpletest/reporter.php");
 require_once("simpletest/mock_objects.php");
-@include_once(TESTSDIR . "/test_environment.php"); // we probably defined our webapp location, etc in here. 
-require_once(AG_APP_DIR . "/buildtools/test_setup.php");
+@include_once(AgaviConfig::get("tests.dir") . "/test_environment.php"); // we probably defined our webapp location, etc in here. 
+require_once(AgaviConfig::get("core.agavi_dir") . "/buildtools/test_setup.php");
 @include_once("simpletest/ui/colortext_reporter.php");
 @include_once("buildtools/simpletest/vimreporter.class.php");
 
@@ -145,9 +145,9 @@ function findTests($path, $title="Agavi")
 	}
 	return $group;
 }
-echo "Running tests found starting at ".STARTPOINT."\n";			  
-$test = findTests(STARTPOINT);
-switch (strtolower(REPORTER)) {
+echo "Running tests found starting at ". AgaviConfig::get("tests.startpoint") ."\n";			  
+$test = findTests(AgaviConfig::get("tests.startpoint"));
+switch (strtolower(AgaviConfig::get("tests.reporter"))) {
 	case "vim":
 		exit($test->run(new VIMReporter()) ? 0 : 1);
 		break;

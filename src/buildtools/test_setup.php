@@ -25,29 +25,30 @@
  */
 
 // simpletest should be in your path
-require_once('simpletest/unit_tester.php');
-require_once('simpletest/reporter.php');
-require_once('simpletest/mock_objects.php');
-if (!defined('AG_TEST_CACHE_DIR')) {
-	define('AG_TEST_CACHE_DIR', false); // set to a path where you want to write the cache to, to enable caching the class locations
-}
+#require_once('simpletest/unit_tester.php');
+#require_once('simpletest/reporter.php');
+#require_once('simpletest/mock_objects.php');
 
-// the agavi script will have defined the AG_APP_DIR, else we should attempt to find it. 
-if (!defined('AG_APP_DIR') && isset($_ENV['AGAVI_INSTALLATION'])) {
-	define('AG_APP_DIR', $_ENV['AGAVI_INSTALLATION']);
+AgaviConfig::set('tests.cache_dir', false, false);
+
+// the agavi script will have defined core.agavi_dir, else we should attempt to find it. 
+if (!AgaviConfig::has('core.agavi_dir') && isset($_ENV['AGAVI_INSTALLATION'])) {
+	AgaviConfig::set('core.agavi_dir', $_ENV['AGAVI_INSTALLATION']);
 } else if (file_exists('src/agavi.php')) {
 	// looks like we're here, then.
-	define('AG_APP_DIR', realpath('./src'));
-} else if (!defined('AG_APP_DIR')) {
-	die ('AG_APP_DIR undefined. Try using the agavi helper script.');
+	AgaviConfig::set('core.agavi_dir', realpath('./src'));
+} else if (!AgaviConfig::has('core.agavi_dir')) {
+	die ('core.agavi_dir undefined. Try using the agavi helper script.');
 }
 
 // Assume this is an agavi project if there's a webapp subdir, we'll look for classes in there too.
 if (file_exists($_SERVER['PWD_PATH'].'/webapp')) {
-	define('PROJECT_APP_DIR', $_SERVER['PWD_PATH'] . '/webapp');
+	AgaviConfig::set('core.weapp_dir', $_SERVER['PWD_PATH'] . '/webapp');
 }
 
-ini_set('unserialize_callback_func', '__autoload');
+ini_set('unserialize_callback_func', 'test__autoload');
+
+spl_autoload_register('test__autoload');
 
 function locateClasses($path, $prefix=true)
 {
@@ -70,10 +71,14 @@ function locateClasses($path, $prefix=true)
 }
 
 
-function __autoload($class)
+function test__autoload($class)
 {
+	if(substr($class, 0, 5) == 'Agavi' && $class != 'AgaviException') {
+		$class = substr($class, 5);
+	}
+
 	$datefmt = 'c';
-	$cachedir = AG_TEST_CACHE_DIR;
+	$cachedir = AgaviConfig::get('tests.cache_dir');
 	$cache = $cachedir . '/classcache.inc';
 	static $classes;
 	
@@ -85,13 +90,13 @@ function __autoload($class)
 				return;
 			}
 		}
-		$classes = locateClasses(AG_APP_DIR);
-		if (defined('PROJECT_APP_DIR')) { 
-			$classes = array_merge((array) $classes, (array) locateClasses(PROJECT_APP_DIR, true));
+		$classes = locateClasses(AgaviConfig::get('core.agavi_dir'));
+		if(AgaviConfig::has('core.webapp_dir')) { 
+			$classes = array_merge((array) $classes, (array) locateClasses(AgaviConfig::get('core.webapp_dir'), true));
 		}
 		if ($cachedir && is_writable($cachedir)) {
-			$contents = "<?php\n// --Automagicly created ".date($datefmt)."\n//" .
-									(defined('PROJECT_APP_DIR') ? " includes classes located in {$_SERVER['CWD_NAME']}/webapp, too.\n" : "no webapp classes included.\n") .
+			$contents = "<?php\n// --Automagically created ".date($datefmt)."\n//" .
+									(AgaviConfig::has('core.webapp_dir') ? " includes classes located in {$_SERVER['CWD_NAME']}/webapp, too.\n" : "no webapp classes included.\n") .
 									'$classes = ' .var_export($classes, true)."\n?>";
 			file_put_contents($cache, $contents);
 		}

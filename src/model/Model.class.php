@@ -15,10 +15,10 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * Model provides a convention for separating business logic from application
- * logic. When using a model you're providing a globally accessible API for
- * other modules to access, which will boost interoperability among modules in
- * your web application.
+ * AgaviModel provides a convention for separating business logic from 
+ * application logic. When using a model you're providing a globally accessible
+ * API for other modules to access, which will boost interoperability among 
+ * modules in your web application.
  *
  * @package    agavi
  * @subpackage model
@@ -29,48 +29,37 @@
  *
  * @version    $Id$
  */
-abstract class Model
+abstract class AgaviModel implements AgaviIModel
 {
-
-	// +-----------------------------------------------------------------------+
-	// | PRIVATE VARIABLES                                                     |
-	// +-----------------------------------------------------------------------+
-	private
-		$context = null;
+	/**
+	 * @var        AgaviContext A Context instance.
+	 */
+	private $context = null;
 
 	/**
 	 * Retrieve the current application context.
 	 *
-	 * @return     Context The current Context instance.
+	 * @return     AgaviContext The current Context instance.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public final function getContext ()
+	public final function getContext()
 	{
-
 		return $this->context;
-
 	}
 
 	/**
 	 * Initialize this model.
 	 *
-	 * @param      Context The current application context.
-	 *
-	 * @return     bool true, if initialization completes successfully, 
-	 *                  otherwise false.
+	 * @param      AgaviContext The current application context.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function initialize ($context)
+	public function initialize(AgaviContext $context, $parameters = array())
 	{
-
 		$this->context = $context;
-
-		return true;
-
 	}
 
 }

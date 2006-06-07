@@ -14,13 +14,11 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
-class Default_IndexSuccessView extends PHPView
+class Default_IndexSuccessView extends AgaviPHPView
 {
 
 	/**
 	 * Execute any presentation logic and set template attributes.
-	 *
-	 * @return     void
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -29,13 +27,13 @@ class Default_IndexSuccessView extends PHPView
 	{
 
 		// set our template
-		$this->setTemplate('IndexSuccess.php');
+		$this->setTemplate('IndexSuccess');
 
 		// set the title
 		$this->setAttribute('title', 'Default Action');
 
 		// build our menu
-		require_once(AG_MODULE_DIR . '/Default/lib/build_menu.php');
+		require_once(AgaviConfig::get('core.module_dir') . '/Default/lib/build_menu.php');
 
 	}
 

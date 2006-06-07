@@ -13,7 +13,7 @@ class ControllerTest extends UnitTestCase
 	public function testNewController()
 	{
 		$controller = Context::getInstance()->getController();
-		$this->assertIsA($controller, 'FrontWebController');
+		$this->assertIsA($controller, 'WebController');
 		$this->assertIsA($controller->getContext(), 'Context');
 		$ctx1 = $controller->getContext();
 		$ctx2 = Context::getInstance();
@@ -23,9 +23,9 @@ class ControllerTest extends UnitTestCase
 	public function testactionExists()
 	{
 		// actionExists actually checks the filesystem, 
-		$this->assertTrue(file_exists(AG_WEBAPP_DIR . '/modules/Test/actions/TestAction.class.php'));
-		$this->assertFalse(file_exists(AG_WEBAPP_DIR . '/modules/Test/actions/BunkAction.class.php'));
-		$this->assertFalse(file_exists(AG_WEBAPP_DIR . '/modules/Bunk/actions/BunkAction.class.php'));
+		$this->assertTrue(file_exists(AgaviConfig::get('core.webapp_dir') . '/modules/Test/actions/TestAction.class.php'));
+		$this->assertFalse(file_exists(AgaviConfig::get('core.webapp_dir') . '/modules/Test/actions/BunkAction.class.php'));
+		$this->assertFalse(file_exists(AgaviConfig::get('core.webapp_dir') . '/modules/Bunk/actions/BunkAction.class.php'));
 		$controller = Context::getInstance()->getController();
 		$this->assertTrue($controller->actionExists('Test', 'Test'));
 		$this->assertFalse($controller->actionExists('Test', 'Bunk'));
@@ -35,15 +35,13 @@ class ControllerTest extends UnitTestCase
 	public function testforwardTooTheMaxThrowsException()
 	{
 			
-		if (!defined('AG_MAX_FORWARDS')) {
-			define('AG_MAX_FORWARDS', 20);
-		}
+		AgaviConfig::set('controller.max_fowards', 20, false);
 		$controller = Context::getInstance()->getController();
 		$controller->setRenderMode(View::RENDER_VAR);
-		for ($i=0; $i<= AG_MAX_FORWARDS; $i++) {
+		for ($i=0; $i<= AgaviConfig::get('controller.max_forwards'); $i++) {
 			try {
 				$controller->forward('Test', 'Test');
-				if ($i >= AG_MAX_FORWARDS) {
+				if ($i >= AgaviConfig::get('controller.max_forwards')) {
 					$this->assertTrue(0,'Expected ForwardException not thrown');
 				}
 			} catch (ForwardException $fe) {
@@ -66,10 +64,9 @@ class ControllerTest extends UnitTestCase
 
 	public function testForwardingToDisabledModule()
 	{
-		if (!defined('AG_MODULE_DISABLED_MODULE')) {
-			define('AG_MODULE_DISABLED_MODULE', 'ErrorModule');
-			define('AG_MODULE_DISABLED_ACTION', 'DisabledModule');
-		}
+		AgaviConfig::set('actions.module_disabled_module', 'ErrorModule', false);
+		AgaviConfig::set('actions.module_disabled_action', 'DisabledModule', false);
+		
 		$controller = Context::getInstance()->getController();
 		$controller->setRenderMode(View::RENDER_VAR);
 		try {
@@ -82,8 +79,8 @@ class ControllerTest extends UnitTestCase
 			$this->assertWantedPattern('/module has been disabled/i',$view);
 			$module = $lastActionEntry->getModuleName();
 			$action = $lastActionEntry->getActionName();
-			$this->assertIdentical(AG_MODULE_DISABLED_MODULE, $module);
-			$this->assertIdentical(AG_MODULE_DISABLED_ACTION, $action);
+			$this->assertIdentical(AgaviConfig::get('actions.module_disabled_module'), $module);
+			$this->assertIdentical(AgaviConfig::get('actions.module_disabled_action'), $action);
 		} catch (ForwardException $e) {
 			$this->assertTrue(0, 'Test forwarding to an unavilable module needs work');
 		}
@@ -91,11 +88,11 @@ class ControllerTest extends UnitTestCase
 
 	public function testForwardingSuccessfully()
 	{
-		$context = Context::getInstance();
-		$context->getController()->setRenderMode(View::RENDER_VAR);
+		$controller = Context::getInstance()->getController();
+		$controller->setRenderMode(View::RENDER_VAR);
 		try {
-			$context->getController()->forward('Test', 'Test');
-			$lastActionEntry = $context->getActionStack()->getLastEntry();
+			$controller->forward('Test', 'Test');
+			$lastActionEntry = $controller->getActionStack()->getLastEntry();
 			$this->assertIsA($lastActionEntry, 'ActionStackEntry');
 			$view = $lastActionEntry->getPresentation();
 			$this->assertWantedPattern('/test successful/i',$view);
@@ -119,10 +116,7 @@ class ControllerTest extends UnitTestCase
 	public function testGetActionStack()
 	{
 		$con_as = Context::getInstance()->getController()->getActionStack();
-		$ctx_as = Context::getInstance()->getActionStack();
 		$this->assertIsA($con_as, 'ActionStack');
-		$this->assertIsA($ctx_as, 'ActionStack');
-		$this->assertReference($ctx_as, $con_as);
 	}
 
 	public function testGetContext()
@@ -244,12 +238,6 @@ class ControllerTest extends UnitTestCase
 	{
 		$controller = Context::getInstance()->getController();
 		$this->assertEqual((php_sapi_name() == 'cli'), $controller->inCLI());
-	}
-	
-	public function testgetContentType()
-	{
-		$controller = Context::getInstance()->getController();
-		$this->assertEqual($controller->getContentType(), AG_CONTENT_TYPE);
 	}
 	
 	public function testsetContentType()

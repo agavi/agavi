@@ -19,12 +19,14 @@
 
 	<!-- define the location of our tasks -->
 	<taskdef classname="buildtools.phing.AgaviTestTask" classpath="${agavi.dir}" name="agavitest"/>
+	<taskdef classname="buildtools.phing.AgaviTestTask2" classpath="${agavi.dir}" name="agavitest2"/>
 	<taskdef classname="buildtools.phing.AgaviFixPathsTask" classpath="${agavi.dir}" name="fixpaths"/>
 	<taskdef classname="buildtools.phing.AgaviListModulesTask" classpath="${agavi.dir}" name="listModules"/>
 	<taskdef classname="buildtools.phing.AgaviSubActionNameTask" classpath="${agavi.dir}" name="subActionName"/>
 
 	<property name="webapp.dir" value=""/>
 	<property name="tests.dir" value=""/>
+	<property name="tests2.dir" value="${agavi.dir}/../tests2/"/>
 
 	<property name="templates.dir.default" value="buildtools/code_templates" />
 	
@@ -37,11 +39,33 @@
 	<target name="test" description="run unit tests">
 		<fixpaths base="${project.dir}" testing="true"/>
 		<property name="agavidir" value="${agavi.dir}" />
-	  <property name="testdir" value="${tests.dir}"  />
-	  <property name="from" value=""  />
-  	<property name="reporter" value="text"  />
-  	<property name="outfile" value=""  />
+		<property name="testdir" value="${tests.dir}"  />
+		<property name="from" value=""  />
+		<property name="reporter" value="text"  />
+		<property name="outfile" value=""  />
 		<agavitest exit="true" testdir="${tests.dir}" agavidir="${agavi.dir}" startpoint="${from}" reporter="${reporter}" outfile="${outfile}"/>
+	</target>
+
+	<!-- New Unit Testing -->
+	<target name="test2" description="run PHPUnit2 unit tests">
+		<fixpaths base="${project.dir}" testing="true"/>
+		<property name="agavidir" value="${agavi.dir}" />
+		<property name="testdir" value="${tests2.dir}"  />
+		<property name="from" value=""  />
+		<property name="reporter" value="text"  />
+		<property name="outfile" value=""  />
+
+		<agavitest2 exit="true" testdir="${tests2.dir}" agavidir="${agavi.dir}" startpoint="${from}" reporter="${reporter}" outfile="${outfile}" printsummary="true" codecoverage="true">
+			<batchtest>
+				<fileset dir="${tests2.dir}">
+					<include name="**/*Test.php"/>
+					<exclude name="sandbox/**"/>
+					<exclude name="test_report/**"/>
+				</fileset>
+			</batchtest>
+			<formatter type="xml" todir="../tests2/test_report" outfile="logfile.xml"/>
+		</agavitest2>
+		<phpunit2report infile="../tests2/test_report/logfile.xml" format="noframes" todir="../tests2/test_report"/>
 	</target>
 
 	<!-- Project creation -->
@@ -80,8 +104,7 @@
 		<available file="${templates.dir}/config" property="templates.dir.current" value="${templates.dir}" />				
 		<copy todir="${webapp.dir}/config">
 			<fileset dir="${templates.dir.current}/config">
-				<include name="*.ini"/>
-				<include name="*.conf"/>
+				<include name="*.xml"/>
 			</fileset>
 		</copy>
 		<mkdir dir="${webapp.dir}/lib"/>
@@ -121,8 +144,8 @@
 		<mkdir dir="${module.dir}/actions"/>
 		<mkdir dir="${module.dir}/config"/>
 		<property name="templates.dir.current" value="${templates.dir.default}"  override="true" />
-		<available file="${templates.dir}/module.ini.tmpl" property="templates.dir.current" value="${templates.dir}" />
-		<copy file="${templates.dir.current}/module.ini.tmpl" tofile="${module.dir}/config/module.ini">
+		<available file="${templates.dir}/module.xml.tmpl" property="templates.dir.current" value="${templates.dir}" />
+		<copy file="${templates.dir.current}/module.xml.tmpl" tofile="${module.dir}/config/module.xml">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">    
 					<token key="MODULE" value="${module}"/>
@@ -159,7 +182,7 @@
 	<target name="action" description="create a new action">
 		<fixpaths base="${project.dir}" defaultmodule="true"/>
 		<!--
-		<available file="${module.dir}/config/module.ini" property="is_module" value="true"/>
+		<available file="${module.dir}/config/module.xml" property="is_module" value="true"/>
 		<fail unless="is_module" message="Must be called in the root of a module directory."/>
 		-->
 		<listModules webapp="${webapp.dir}" property="current.modules"/>

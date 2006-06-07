@@ -20,14 +20,13 @@
  * @package    agavi
  * @subpackage view
  *
- * @author     Benjamin Muskalla <bm@bmuskalla.de>
  * @author     Agavi Project <info@agavi.org>
  * @copyright  (c) Authors
  * @since      0.11.0
  *
  * @version    $Id$
  */
-abstract class PHPTALView extends View
+abstract class AgaviPHPTALView extends AgaviView
 {
 	const CACHE_SUBDIR = 'templates/phptal';
 	
@@ -37,25 +36,9 @@ abstract class PHPTALView extends View
 		$attributes = array();
 			
 	/**
-	 * Retrieve the PHPTAL instance
-	 *
-	 * @return     null
-	 *
-	 * @since      0.11.0
-	 */
-	public function & getEngine ()
-	{
-
-		$retval = $this->_phptal;
-
-		return $retval;
-
-	}	
-	
-	/**
 	 * Initialize this view.
 	 *
-	 * @param      Context The current application context.
+	 * @param      AgaviContext The current application context.
 	 *
 	 * @return     bool true, if initialization completes successfully,
 	 *                  otherwise false.
@@ -64,106 +47,12 @@ abstract class PHPTALView extends View
 	 * @author     Benjamin Muskalla <bm@bmuskalla.de>
 	 * @since      0.11.0
 	 */
-	public function initialize ($context)
+	public function initialize(AgaviContext $context)
 	{
 		
 		$this->_phptal = new FixedPHPTAL();
 
 		return(parent::initialize($context));
-	}
-	
-	/**
-	 * Render the presentation.
-	 *
-	 * When the controller render mode is View::RENDER_CLIENT, this method will
-	 * render the presentation directly to the client and null will be returned.
-	 *
-	 * @return     string A string representing the rendered presentation, if
-	 *                    the controller render mode is View::RENDER_VAR,
-	 *                    otherwise null.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @author     Benjamin Muskalla <bm@bmuskalla.de>
-	 * @since      0.11.0
-	 */
-	public function & render ()
-	{
-		$retval = null;
-		
-		$this->preRenderCheck();
-		
-		$mode = $this->getContext()->getController()->getRenderMode();
-		$this->getEngine()->setTemplateRepository($this->getDirectory());
-		$this->getEngine()->setTemplate($this->getTemplate());
-		$this->updateTemplateAttributes();
-		
-		if ($mode == View::RENDER_CLIENT && !$this->isDecorator()) {
-			// render directly to the client
-			echo $this->getEngine()->execute();
-		} else if ($mode != View::RENDER_NONE) {
-			// render to variable
-			$retval = $this->getEngine()->execute();
-			// now render our decorator template, if one exists
-			if ($this->isDecorator()) {
-				$retval = $this->decorate($retval);
-			}
-
-			if ($mode == View::RENDER_CLIENT) {
-				echo($retval);
-				$retval = null;
-			}
-		}
-		return $retval;
-		
-	}
-
-	/*
-	 * @see        View::decorate()
-	 */
-	public function & decorate(&$content)
-	{
-		// call our parent decorate() method
-		parent::decorate($content);
-
-		// render the decorator template and return the result
-		$decoratorTemplate = $this->getDecoratorDirectory() . '/' . $this->getDecoratorTemplate();
-
-		$this->getEngine()->setTemplate($decoratorTemplate);
-		
-		// TODO: fix this crap :)
-		/*
-		define('PHPTAL_FORCE_REPARSE', true);
-		$this->getEngine()->_prepared = false;
-		$this->getEngine()->_functionName = 0;	
-		*/
-		// set the template resources
-		$this->updateTemplateAttributes();
-	
-
-		$retval = $this->getEngine()->execute();
-
-		return $retval;
-	}	
-	
-	/**
-	 * Updates template attributes
-	 *
-	 * @return     void
-	 *
-	 * @author     Benjamin Muskalla <bm@bmuskalla.de>
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	private function updateTemplateAttributes()
-	{
-		if($this->extractAttributes()) {
-			foreach($this->attributes as $key => $val) {
-				$this->getEngine()->set($key, $val);
-			}
-		} else {
-			$this->getEngine()->set('template', $this->attributes);
-		}
-		$this->getEngine()->set('this', $this);
 	}
 	
 	/**
@@ -187,8 +76,6 @@ abstract class PHPTALView extends View
 	 
 	/**
 	 * Clear all attributes associated with this view.
-	 *
-	 * @return     void
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.11.0
@@ -294,8 +181,6 @@ abstract class PHPTALView extends View
 	 * @param      string An attribute name.
 	 * @param      mixed  An attribute value.
 	 *
-	 * @return     void
-	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.11.0
 	 */
@@ -314,8 +199,6 @@ abstract class PHPTALView extends View
 	 *
 	 * @param      string An attribute name.
 	 * @param      mixed  An attribute value.
-	 *
-	 * @return     void
 	 *
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.11.0
@@ -339,8 +222,6 @@ abstract class PHPTALView extends View
 	 * @param      string An attribute name.
 	 * @param      mixed  A reference to an attribute value.
 	 *
-	 * @return     void
-	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.11.0
 	 */
@@ -359,8 +240,6 @@ abstract class PHPTALView extends View
 	 *
 	 * @param      string An attribute name.
 	 * @param      mixed  A reference to an attribute value.
-	 *
-	 * @return     void
 	 *
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.11.0
@@ -384,8 +263,6 @@ abstract class PHPTALView extends View
 	 * @param      array An associative array of attributes and their associated
 	 *                   values.
 	 *
-	 * @return     void
-	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.11.0
 	 */
@@ -405,8 +282,6 @@ abstract class PHPTALView extends View
 	 * @param      array An associative array of attributes and references to
 	 *                   their associated values.
 	 *
-	 * @return     void
-	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.11.0
 	 */
@@ -420,28 +295,6 @@ abstract class PHPTALView extends View
 
 		}
 
-	}
-}
-
-
-// the following lines are a fix until PHPTAL has been changed so setTemplate() resets prepared and functionName.
-// as soon as this is fixed in PHPTAL SVN, we will remove the stub class and move the define and the require into initialize()
-
-if(!defined('PHPTAL_PHP_CODE_DESTINATION')) {
-	@mkdir(AG_CACHE_DIR . DIRECTORY_SEPARATOR . PHPTALView::CACHE_SUBDIR);
-	define('PHPTAL_PHP_CODE_DESTINATION', AG_CACHE_DIR . DIRECTORY_SEPARATOR . PHPTALView::CACHE_SUBDIR . DIRECTORY_SEPARATOR);
-}
-
-require_once('PHPTAL.php');
-
-class FixedPHPTAL extends PHPTAL
-{
-	public function setTemplate($path)
-	{
-		$this->_prepared = false;
-		$this->_functionName = null;
-		$this->_source = null;
-		parent::setTemplate($path);
 	}
 }
 

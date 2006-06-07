@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+| This file is part of the Agavi package.                                    |
+| Copyright (c) 2006 the Agavi Project.                                      |
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+| AGAVI CONFIGURATION HANDLER CONFIGURATION                                  |
+| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
+| CATEGORIES:                                                                |
+|                                                                            |
+| A category name must exist in the form of the configuration file base      |
+| name, which is the name of the file without the path, or must exist with a |
+| relative path to the configuration file. If a category exists with a       |
+| relative path, the path itself is relative to the "core.webapp_dir" Agavi  |
+| application setting.                                                       |
+|                                                                            |
+| In theory, you can have the two following categories: config.ini and       |
+| modules/MyModule/config/config.ini. However, a category with a path that   |
+| matches the requested configuration file exactly takes precedence over a   |
+| category with just the base name.                                          |
+|                                                                            |
+| NOTES:                                                                     |
+|                                                                            |
+| 1. A category with an absolute filesystem path should never exist unless a |
+|    configuration file that is used within the application exists outside   |
+|    of both "core.agavi_dir" and "core.webapp_dir" Agavi application settings.|
+|                                                                            |
+| 2. Registered handlers with a parameter list should be registered with a   |
+|    relative path so the parameters do not get carried over to another      |
+|    configuration file with the same base name.                             |
+| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
+| REQUIRED KEYS:                                                             |
+|                                                                            |
+| 1. class - The class name providing the custom implementation.             |
+|                                                                            |
+| OPTIONAL KEYS:                                                             |
+|                                                                            |
+| 1. file  - The filesystem path to the class file. If the path is relative, |
+|            it will be relative to the "core.webapp_dir" Agavi application  |
+|            setting.                                                        |
+| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
+| PARAMETER KEYS:                                                            |
+|                                                                            |
+| Parameter keys specify a parameter name and value to be passed to the      |
+| initialization method of the class instance. Any number of parameters can  |
+| be passed.                                                                 |
+|                                                                            |
+|     param.<name> = "<value>"                                               |
+|                                                                            |
+| Parameter keys can also be used to pass an array of values instead of a    |
+| single value.                                                              |
+|                                                                            |
+|     param.<name>.1 = "<value1>"                                            |
+|     param.<name>.2 = "<value2>"                                            |
+|                                                                            |
+| For a list of available parameters for a class, browse the class source    |
+| or documentation.                                                          |
+| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
+| KEYWORDS:                                                                  |
+| You may reference any configuration directive by enclosing the name in     |
+| "%" signs. Example: %core.agavi_dir%                                         |
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+-->
+<configurations parent="%core.system_config_dir%/config_handlers.xml">
+<!--
+	+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+	| Register your custom configuration handlers here. Or register an existing  |
+	| handler with a new filename! Registering handlers does not slow down the   |
+	| application because they are only loaded when a configuration file needs   |
+	| to be recompiled into a cache file. To be safe, you should register them   |
+	| with a relative path associated so they don't get confused with somebody   |
+	| elses module configuration files with the same base name.                  |
+	+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+	<configuration environment="development">
+		<handlers>
+			<handler pattern="%core.module_dir%/CoolModule/config/cool.xml">
+				<class file="%core.module_dir%/CoolModule/lib/CoolConfigurationHandler.class.php">CoolConfigHandler</class>
+				<parameters>
+					<parameter name="title">Cool Module</parameter>
+				</parameters>
+			</handler>
+		</handlers>
+	</configuration>
+-->
+</configurations>

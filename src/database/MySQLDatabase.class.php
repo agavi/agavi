@@ -15,7 +15,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * MySQLDatabase provides connectivity for the MySQL brand database.
+ * AgaviMySQLDatabase provides connectivity for the MySQL brand database.
  *
  * <b>Optional parameters:</b>
  *
@@ -45,14 +45,14 @@
  *
  * @version    $Id$
  */
-class MySQLDatabase extends Database
+class AgaviMySQLDatabase extends AgaviDatabase
 {
 
 	/**
 	 * Connect to the database.
 	 *
-	 * @throws     <b>DatabaseException</b> If a connection could not be 
-	 *                                      created.
+	 * @throws     <b>AgaviDatabaseException</b> If a connection could not be 
+	 *                                           created.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -97,67 +97,53 @@ class MySQLDatabase extends Database
 			default:
 
 				// who knows what the user wants...
-				$error = 'Invalid MySQLDatabase parameter retrieval method ' .
+				$error = 'Invalid AgaviMySQLDatabase parameter retrieval method ' .
 						 '"%s"';
 				$error = sprintf($error, $method);
 
-				throw new DatabaseException($error);
+				throw new AgaviDatabaseException($error);
 
 		}
 
 		// let's see if we need a persistent connection
 		$persistent = $this->getParameter('persistent', false);
-		$connect    = ($persistent) ? 'mysql_pconnect' : 'mysql_connect';
-
-		if ($password == null)
-		{
-
-			if ($user == null)
-			{
-
-				$this->connection = @$connect($host);
-
-			} else
-			{
-
-				$this->connection = @$connect($host, $user);
+		
+		if($password === null) {
+			if ($user === null) {
+				$args = array($host, null, null);
+			} else {
+				$args = array($host, $user, null);
 			}
-
-		} else
-		{
-
-			$this->connection = @$connect($host, $user, $password);
-
+		} else {
+			$args = array($host, $user, $password);
 		}
-
+		
+		if($persistent) {
+			$this->connection = call_user_func_array('mysql_pconnect', $args);
+		} else {
+			$this->connection = call_user_func_array('mysql_connect', $args + array(true));
+		}
+		
 		// make sure the connection went through
-		if ($this->connection === false)
-		{
-
+		if($this->connection === false) {
 			// the connection's foobar'd
-			$error = 'Failed to create a MySQLDatabase connection';
+			$error = 'Failed to create a AgaviMySQLDatabase connection';
 
-			throw new DatabaseException($error);
-
+			throw new AgaviDatabaseException($error);
 		}
 
 		// select our database
-		if ($database != null &&
-			!@mysql_select_db($database, $this->connection))
-		{
-
+		if($database !== null && !@mysql_select_db($database, $this->connection)) {
 			// can't select the database
-			$error = 'Failed to select MySQLDatabase "%s"';
+			$error = 'Failed to select AgaviMySQLDatabase "%s"';
 			$error = sprintf($error, $database);
 
-			throw new DatabaseException($error);
-
+			throw new AgaviDatabaseException($error);
 		}
 
 		// since we're not an abstraction layer, we copy the connection
 		// to the resource
 		$this->resource =& $this->connection;
-
 	}
 
 	/**
@@ -193,10 +179,8 @@ class MySQLDatabase extends Database
 	/**
 	 * Execute the shutdown procedure.
 	 *
-	 * @return     void
-	 *
-	 * @throws     <b>DatabaseException</b> If an error occurs while shutting
-	 *                                      down this database.
+	 * @throws     <b>AgaviDatabaseException</b> If an error occurs while shutting
+	 *                                           down this database.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0

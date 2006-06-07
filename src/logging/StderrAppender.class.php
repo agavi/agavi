@@ -14,7 +14,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * StderrAppender appends Messages to the stderr.
+ * AgaviStderrAppender appends an AgaviMessages to the stderr.
  *
  * @package    agavi
  * @subpackage logging
@@ -25,7 +25,7 @@
  *
  * @version    $Id$
  */
-class StderrAppender extends FileAppender
+class AgaviStderrAppender extends AgaviFileAppender
 {
 
 	/**
@@ -33,15 +33,13 @@ class StderrAppender extends FileAppender
 	 * 
 	 * @param      array An array of parameters.
 	 * 
-	 * @return     mixed
-	 * 
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.10.0
 	 */
-	public function initialize($params)
+	public function initialize($params = array())
 	{
 		$params['file'] = 'php://stderr';
-		return parent::initialize($params);
+		parent::initialize($params);
 	}
 
 }

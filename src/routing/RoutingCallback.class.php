@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2005 the Agavi Project.                                |
+// | Copyright (c) 2003-2006 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -14,31 +14,47 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * An extension to Model, but for implementation as a Singleton
- * 
+ * AgaviRoutingCallback allows you to provide callbacks into the routing
+ *
  * @package    agavi
- * @subpackage model
- * 
- * @since      0.10.0 
- * @author     Agavi Project <info@agavi.org>
- * @author     David Zuelke <dz@bitxtender.com>
+ * @subpackage routing
+ *
+ * @author     Dominik del Bondio <ddb@bitxtender.com>
+ * @copyright  (c) Authors
+ * @since      0.11.0
  *
  * @version    $Id$
  */
-
-abstract class SingletonModel extends Model
+abstract class AgaviRoutingCallback
 {
-	protected static $instance = array();
+	protected $context = null,
+						$route = null;
 
-	protected final function __construct() { }
-	protected final function __clone() { }
-
-	public static function getInstance($className)
+	public function initialize(AgaviContext $context, &$route)
 	{
-		$lowerClassName = strtolower($className);
-		if (!isset(self::$instance[$lowerClassName]))
-			self::$instance[$lowerClassName] = new $className();
-		return self::$instance[$lowerClassName];
+		$this->context = $context;
+		$this->route =& $route;
+	}
+
+	public final function getContext()
+	{
+		return $this->context;
+	}
+
+	public function onMatched(&$params)
+	{
+		return true;
+	}
+
+	public function onNotMatched()
+	{
+		return;
+	}
+
+	public function onGenerate($params)
+	{
+		return $params;
 	}
 }
+
 ?>

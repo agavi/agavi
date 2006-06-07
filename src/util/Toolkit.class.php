@@ -15,7 +15,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * Toolkit provides basic utility methods.
+ * AgaviToolkit provides basic utility methods.
  *
  * @package    agavi
  * @subpackage util
@@ -26,7 +26,7 @@
  *
  * @version    $Id$
  */
-class Toolkit
+class AgaviToolkit
 {
 
 	/**
@@ -140,8 +140,6 @@ class Toolkit
 	 *
 	 * @param      string The path to remove
 	 *
-	 * @return     void
-	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
@@ -157,7 +155,7 @@ class Toolkit
 			}
 		}
 		$path = str_replace('/', DIRECTORY_SEPARATOR, str_replace('\\', DIRECTORY_SEPARATOR, $path));
-		$path = realpath(AG_CACHE_DIR . DIRECTORY_SEPARATOR . $path);
+		$path = realpath(AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . $path);
 		if($path === false) {
 			return false;
 		}
@@ -170,7 +168,7 @@ class Toolkit
 					$continue = true;
 				} else {
 					foreach($ignores as $ignore) {
-						if(strpos($iterator->getPathname(), '/' . $ignore . '/') !== false) {
+						if(strpos($iterator->getPathname(), DIRECTORY_SEPARATOR . $ignore . DIRECTORY_SEPARATOR) !== false) {
 							$continue = true;
 							break;
 						}

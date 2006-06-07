@@ -15,8 +15,8 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * WebRequest provides additional support for web-only client requests such as
- * cookie and file manipulation.
+ * AgaviWebRequest provides additional support for web-only client requests 
+ * such as cookie and file manipulation.
  *
  * @package    agavi
  * @subpackage request
@@ -28,7 +28,7 @@
  *
  * @version    $Id$
  */
-class WebRequest extends Request
+class AgaviWebRequest extends AgaviRequest
 {
 
 	// +-----------------------------------------------------------------------+
@@ -334,109 +334,37 @@ class WebRequest extends Request
 	/**
 	 * Initialize this Request.
 	 *
-	 * @param      Context A Context instance.
-	 * @param      array   An associative array of initialization parameters.
+	 * @param      AgaviContext A Context instance.
+	 * @param      array        An associative array of initialization parameters.
 	 *
-	 * @return     bool true, if initialization completes successfully,
-	 *                  otherwise false.
-	 *
-	 * @throws     <b>InitializationException</b> If an error occurs while
-	 *                                            initializing this Request.
+	 * @throws     <b>AgaviInitializationException</b> If an error occurs while
+	 *                                                 initializing this Request.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @author     Veikko Makinen <mail@veikkomakinen.com>
+	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
-	public function initialize ($context, $parameters = null)
+	public function initialize(AgaviContext $context, $parameters = array())
 	{
-
-		if (isset($_SERVER['REQUEST_METHOD']))
-		{
-
-			switch ($_SERVER['REQUEST_METHOD'])
-			{
-
+		parent::initialize($context, $parameters);
+		
+		$getMethod = isset($parameters['GET_method_name']) ? $parameters['GET_method_name'] : 'read';
+		if(isset($_SERVER['REQUEST_METHOD'])) {
+			switch($_SERVER['REQUEST_METHOD']) {
 				case 'GET':
-				    $this->setMethod(self::GET);
+				    $this->setMethod($getMethod);
 				    break;
-
 				case 'POST':
-				    $this->setMethod(self::POST);
+				    $this->setMethod(isset($parameters['POST_method_name']) ? $parameters['POST_method_name'] : 'write');
 				    break;
-
 				default:
-				    $this->setMethod(self::GET);
-
+				    $this->setMethod($getMethod);
 			}
-
-		} else
-		{
-
+		} else {
 			// set the default method
-			$this->setMethod(self::GET);
-
+			$this->setMethod($getMethod);
 		}
-
-		// load parameters from GET/PATH_INFO/POST
-		$this->loadParameters();
-
-	}
-
-	/**
-	 * Loads GET, PATH_INFO and POST data into the parameter list.
-	 *
-	 * @return     void
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	private function loadParameters ()
-	{
-
-		// merge GET parameters
-		$this->setParametersByRef($_GET);
-
-		// parse PATH_INFO
-		switch (AG_PATH_INFO_ARRAY)
-		{
-
-			case 'SERVER':
-
-				$pathArray =& $_SERVER;
-				break;
-
-			case 'ENV':
-			default:
-
-				$pathArray =& $_ENV;
-
-		}
-
-		if (isset($pathArray[AG_PATH_INFO_KEY]))
-		{
-
-			$array = explode('/', trim($pathArray[AG_PATH_INFO_KEY], '/'));
-			$count = count($array);
-
-			for ($i = 0; $i < $count; $i++)
-			{
-
-				// see if there's a value associated with this parameter,
-				// if not we're done with path data
-				if ($count > ($i + 1))
-				{
-
-				    $this->setParameterByRef($array[$i], $array[++$i]);
-
-				}
-
-			}
-
-		}
-
-		// merge POST parameters
-		$this->setParametersByRef($_POST);
-
 	}
 
 	/**
@@ -453,8 +381,8 @@ class WebRequest extends Request
 	 *
 	 * @return     bool true, if the file was moved, otherwise false.
 	 *
-	 * @throws     FileException If a major error occurs while attempting to
-	 *                           move the file.
+	 * @throws     AgaviFileException If a major error occurs while attempting
+	 *                                to move the file.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -482,7 +410,7 @@ class WebRequest extends Request
 				    $error = 'Failed to create file upload directory "%s"';
 				    $error = sprintf($error, $directory);
 
-				    throw new FileException($error);
+				    throw new AgaviFileException($error);
 
 				}
 
@@ -497,7 +425,7 @@ class WebRequest extends Request
 				$error = 'File upload path "%s" exists, but is not a directory';
 				$error = sprintf($error, $directory);
 
-				throw new FileException($error);
+				throw new AgaviFileException($error);
 
 			} else if (!is_writable($directory))
 			{
@@ -506,7 +434,7 @@ class WebRequest extends Request
 				$error = 'File upload path "%s" is not writable';
 				$error = sprintf($error, $directory);
 
-				throw new FileException($error);
+				throw new AgaviFileException($error);
 
 			}
 
@@ -525,22 +453,6 @@ class WebRequest extends Request
 		return false;
 
 	}
-
-	/**
-	 * Execute the shutdown procedure.
-	 *
-	 * @return     void
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public function shutdown ()
-	{
-
-		// nothing to do here
-
-	}
-
 }
 
 ?>

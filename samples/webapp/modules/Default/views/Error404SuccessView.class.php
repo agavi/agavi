@@ -14,13 +14,11 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
-class Default_Error404SuccessView extends PHPView
+class Default_Error404SuccessView extends AgaviPHPView
 {
 
 	/**
 	 * Execute any presentation logic and set template attributes.
-	 *
-	 * @return     void
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -32,7 +30,7 @@ class Default_Error404SuccessView extends PHPView
 		$request = $this->getContext()->getRequest();
 
 		// set our template
-		$this->setTemplate('Error404Success.php');
+		$this->setTemplate('Error404Success');
 
 		// set the title
 		$this->setAttribute('title', 'Error 404 Action');
@@ -44,7 +42,7 @@ class Default_Error404SuccessView extends PHPView
 		$this->setAttribute('requested_action', $request->getAttribute('requested_action'));
 
 		// build our menu
-		require_once(AG_MODULE_DIR . '/Default/lib/build_menu.php');
+		require_once(AgaviConfig::get('core.module_dir') . '/Default/lib/build_menu.php');
 
 	}
 

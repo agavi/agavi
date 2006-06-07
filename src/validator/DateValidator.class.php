@@ -14,7 +14,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * DateValidator verifies a parameter is of a date format.
+ * AgaviDateValidator verifies a parameter is of a date format.
  *
  * @package    agavi
  * @subpackage validator
@@ -26,7 +26,7 @@
  *
  * @version    $Id$
  */
-class DateValidator extends Validator
+class AgaviDateValidator extends AgaviValidator
 {
 
 	/**
@@ -53,16 +53,13 @@ class DateValidator extends Validator
 	/**
 	 * Initialize this validator.
 	 *
-	 * @param      Context The current application context.
-	 * @param      array   An associative array of initialization parameters.
-	 *
-	 * @return     bool true, if initialization completes successfully,
-	 *                  otherwise false.
+	 * @param      AgaviContext The current application context.
+	 * @param      array        An associative array of initialization parameters.
 	 *
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      1.0
 	 */
-	public function initialize ($context, $parameters = null)
+	public function initialize(AgaviContext $context, $parameters = array())
 	{
 		$this->setParameter('error', 'Date is not valid.');
 		parent::initialize($context, $parameters);

@@ -15,7 +15,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AutoloadException is thrown when a class that has been required cannot be
+ * AgaviAutoloadException is thrown when a class that has been required cannot be
  * loaded.
  *
  * @package    agavi
@@ -27,31 +27,8 @@
  *
  * @version    $Id$
  */
-class AutoloadException extends AgaviException
+class AgaviAutoloadException extends AgaviException
 {
-
-	// +-----------------------------------------------------------------------+
-	// | CONSTRUCTOR                                                           |
-	// +-----------------------------------------------------------------------+
-
-	/**
-	 * Class constructor.
-	 *
-	 * @param      string The error message.
-	 * @param      int    The error code.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public function __construct ($message = null, $code = 0)
-	{
-
-		parent::__construct($message, $code);
-
-		$this->setName('AutoloadException');
-
-	}
-
 }
 
 ?>

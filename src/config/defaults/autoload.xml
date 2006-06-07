@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+| This file is part of the Agavi package.                                    |
+| Copyright (c) 2006 the Agavi Project.                                      |
+| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
+| AGAVI AUTO LOAD CONFIGURATION                                              |
+| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
+| Any file listed here will automatically be loaded by PHP when the class is |
+| first accessed. This means you do not manually have to include it in your  |
+| files.                                                                     |
+| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
+| KEYWORDS:                                                                  |
+| You may reference any configuration directive by enclosing the name in     |
+| "%" signs. Example: %core.agavi_dir%                                         |
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+-->
+<configurations>
+	<configuration>
+		<autoloads>
+			<!-- agavi/config -->
+			<autoload name="AgaviCompileConfigHandler">%core.agavi_dir%/config/CompileConfigHandler.class.php</autoload>
+			<autoload name="AgaviContextConfigHandler">%core.agavi_dir%/config/ContextConfigHandler.class.php</autoload>
+			<autoload name="AgaviDatabaseConfigHandler">%core.agavi_dir%/config/DatabaseConfigHandler.class.php</autoload>
+			<autoload name="AgaviDefineConfigHandler">%core.agavi_dir%/config/DefineConfigHandler.class.php</autoload>
+			<autoload name="AgaviFactoryConfigHandler">%core.agavi_dir%/config/FactoryConfigHandler.class.php</autoload>
+			<autoload name="AgaviFilterConfigHandler">%core.agavi_dir%/config/FilterConfigHandler.class.php</autoload>
+			<autoload name="AgaviLoggingConfigHandler">%core.agavi_dir%/config/LoggingConfigHandler.class.php</autoload>
+			<autoload name="AgaviModuleConfigHandler">%core.agavi_dir%/config/ModuleConfigHandler.class.php</autoload>
+			<autoload name="AgaviOutputTypeConfigHandler">%core.agavi_dir%/config/AgaviOutputTypeConfigHandler.class.php</autoload>
+			<autoload name="AgaviReturnArrayConfigHandler">%core.agavi_dir%/config/ReturnArrayConfigHandler.class.php</autoload>
+			<autoload name="AgaviRoutingConfigHandler">%core.agavi_dir%/config/RoutingConfigHandler.class.php</autoload>
+			<autoload name="AgaviValidatorConfigHandler">%core.agavi_dir%/config/ValidatorConfigHandler.class.php</autoload>
+
+			<!-- agavi/controller -->
+			<autoload name="AgaviConsoleController">%core.agavi_dir%/controller/ConsoleController.class.php</autoload>
+			<autoload name="AgaviWebController">%core.agavi_dir%/controller/WebController.class.php</autoload>
+
+			<!-- agavi/database -->
+			<autoload name="AgaviAdoDBDatabase">%core.agavi_dir%/database/AdoDBDatabase.class.php</autoload>
+			<autoload name="AgaviCreoleDatabase">%core.agavi_dir%/database/CreoleDatabase.class.php</autoload>
+			<autoload name="AgaviDatabase">%core.agavi_dir%/database/Database.class.php</autoload>
+			<autoload name="AgaviDatabaseManager">%core.agavi_dir%/database/DatabaseManager.class.php</autoload>
+			<autoload name="AgaviMySQLDatabase">%core.agavi_dir%/database/MySQLDatabase.class.php</autoload>
+			<autoload name="AgaviPDODatabase">%core.agavi_dir%/database/PDODatabase.class.php</autoload>
+			<autoload name="AgaviPostgreSQLDatabase">%core.agavi_dir%/database/PostgreSQLDatabase.class.php</autoload>
+			<autoload name="AgaviPropelDatabase">%core.agavi_dir%/database/PropelDatabase.class.php</autoload>
+			<autoload name="Propel">%core.agavi_dir%/database/PropelAutoload.php</autoload>
+
+			<!-- agavi/exception -->
+			<autoload name="AgaviControllerException">%core.agavi_dir%/exception/ControllerException.class.php</autoload>
+			<autoload name="AgaviDatabaseException">%core.agavi_dir%/exception/DatabaseException.class.php</autoload>
+			<autoload name="AgaviFactoryException">%core.agavi_dir%/exception/FactoryException.class.php</autoload>
+			<autoload name="AgaviFileException">%core.agavi_dir%/exception/FileException.class.php</autoload>
+			<autoload name="AgaviFilterException">%core.agavi_dir%/exception/FilterException.class.php</autoload>
+			<autoload name="AgaviForwardException">%core.agavi_dir%/exception/ForwardException.class.php</autoload>
+			<autoload name="AgaviInitializationException">%core.agavi_dir%/exception/InitializationException.class.php</autoload>
+			<autoload name="AgaviLoggingException">%core.agavi_dir%/exception/LoggingException.class.php</autoload>
+			<autoload name="AgaviRenderException">%core.agavi_dir%/exception/RenderException.class.php</autoload>
+			<autoload name="AgaviStorageException">%core.agavi_dir%/exception/StorageException.class.php</autoload>
+			<autoload name="AgaviSecurityException">%core.agavi_dir%/exception/SecurityException.class.php</autoload>
+			<autoload name="AgaviValidatorException">%core.agavi_dir%/exception/ValidatorException.class.php</autoload>
+			<autoload name="AgaviViewException">%core.agavi_dir%/exception/ViewException.class.php</autoload>
+
+			<!-- agavi/filter -->
+			<autoload name="AgaviBasicSecurityFilter">%core.agavi_dir%/filter/BasicSecurityFilter.class.php</autoload>
+			<autoload name="AgaviCachingExecutionFilter">%core.agavi_dir%/filter/CachingExecutionFilter.class.php</autoload>
+			<autoload name="AgaviExecutionTimeFilter">%core.agavi_dir%/filter/ExecutionTimeFilter.class.php</autoload>
+			<autoload name="AgaviFormPopulationFilter">%core.agavi_dir%/filter/FormPopulationFilter.class.php</autoload>
+			<autoload name="AgaviSecurityFilter">%core.agavi_dir%/filter/SecurityFilter.class.php</autoload>
+
+			<!-- agavi/logging -->
+			<autoload name="AgaviAppender">%core.agavi_dir%/logging/Appender.class.php</autoload>
+			<autoload name="AgaviFileAppender">%core.agavi_dir%/logging/FileAppender.class.php</autoload>
+			<autoload name="AgaviLayout">%core.agavi_dir%/logging/Layout.class.php</autoload>
+			<autoload name="AgaviLogger">%core.agavi_dir%/logging/Logger.class.php</autoload>
+			<autoload name="AgaviLoggerManager">%core.agavi_dir%/logging/LoggerManager.class.php</autoload>
+			<autoload name="AgaviMessage">%core.agavi_dir%/logging/Message.class.php</autoload>
+			<autoload name="AgaviPassthruLayout">%core.agavi_dir%/logging/PassthruLayout.class.php</autoload>
+			<autoload name="AgaviStderrAppender">%core.agavi_dir%/logging/StderrAppender.class.php</autoload>
+			<autoload name="AgaviStdoutAppender">%core.agavi_dir%/logging/StdoutAppender.class.php</autoload>
+
+			<!-- agavi/model -->
+			<autoload name="AgaviModel">%core.agavi_dir%/model/Model.class.php</autoload>
+			<autoload name="AgaviIModel">%core.agavi_dir%/model/AgaviIModel.interface.php</autoload>
+			<autoload name="AgaviISingletonModel">%core.agavi_dir%/model/AgaviISingletonModel.interface.php</autoload>
+
+			<!-- agavi/renderer -->
+			<autoload name="AgaviPHPTALRenderer">%core.agavi_dir%/renderer/AgaviPHPTALRenderer.class.php</autoload>
+			<autoload name="AgaviPHPRenderer">%core.agavi_dir%/renderer/AgaviPHPRenderer.class.php</autoload>
+			<autoload name="AgaviSmartyRenderer">%core.agavi_dir%/renderer/AgaviSmartyRenderer.class.php</autoload>
+			<autoload name="AgaviXSLRenderer">%core.agavi_dir%/renderer/AgaviXSLRenderer.class.php</autoload>
+
+			<!-- agavi/request -->
+			<autoload name="AgaviConsoleRequest">%core.agavi_dir%/request/ConsoleRequest.class.php</autoload>
+			<autoload name="AgaviHTTPSRequest">%core.agavi_dir%/request/HTTPSRequest.class.php</autoload>
+			<autoload name="AgaviWebRequest">%core.agavi_dir%/request/WebRequest.class.php</autoload>
+
+			<!-- agavi/routing -->
+			<autoload name="AgaviRouting">%core.agavi_dir%/routing/Routing.class.php</autoload>
+			<autoload name="AgaviRoutingCallback">%core.agavi_dir%/routing/RoutingCallback.class.php</autoload>
+			<autoload name="AgaviWebRouting">%core.agavi_dir%/routing/AgaviWebRouting.class.php</autoload>
+
+			<!-- agavi/storage -->
+			<autoload name="AgaviCreoleSessionStorage">%core.agavi_dir%/storage/CreoleSessionStorage.class.php</autoload>
+			<autoload name="AgaviMySQLSessionStorage">%core.agavi_dir%/storage/MySQLSessionStorage.class.php</autoload>
+			<autoload name="AgaviPostgreSQLSessionStorage">%core.agavi_dir%/storage/PostgreSQLSessionStorage.class.php</autoload>
+			<autoload name="AgaviSessionStorage">%core.agavi_dir%/storage/SessionStorage.class.php</autoload>
+
+			<!-- agavi/user -->
+			<autoload name="AgaviBasicSecurityUser">%core.agavi_dir%/user/BasicSecurityUser.class.php</autoload>
+			<autoload name="AgaviSecurityUser">%core.agavi_dir%/user/SecurityUser.class.php</autoload>
+
+			<!-- agavi/validator -->
+			<autoload name="AgaviDateValidator">%core.agavi_dir%/validator/DateValidator.class.php</autoload>
+			<autoload name="AgaviEmailValidator">%core.agavi_dir%/validator/EmailValidator.class.php</autoload>
+			<autoload name="AgaviNumberValidator">%core.agavi_dir%/validator/NumberValidator.class.php</autoload>
+			<autoload name="AgaviRegexValidator">%core.agavi_dir%/validator/RegexValidator.class.php</autoload>
+			<autoload name="AgaviStringValidator">%core.agavi_dir%/validator/StringValidator.class.php</autoload>
+		</autoloads>
+	</configuration>
+</configurations>

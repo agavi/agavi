@@ -15,7 +15,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * InitializationException is thrown when an initialization procedure fails.
+ * AgaviInitializationException is thrown when an initialization procedure fails.
  *
  * @package    agavi
  * @subpackage exception
@@ -26,31 +26,8 @@
  *
  * @version    $Id$
  */
-class InitializationException extends AgaviException
+class AgaviInitializationException extends AgaviException
 {
-
-	// +-----------------------------------------------------------------------+
-	// | CONSTRUCTOR                                                           |
-	// +-----------------------------------------------------------------------+
-
-	/**
-	 * Class constructor.
-	 *
-	 * @param      string The error message.
-	 * @param      int    The error code.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public function __construct ($message = null, $code = 0)
-	{
-
-		parent::__construct($message, $code);
-
-		$this->setName('InitializationException');
-
-	}
-
 }
 
 ?>

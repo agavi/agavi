@@ -15,7 +15,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * SecurityUser provides advanced security manipulation methods.
+ * AgaviSecurityUser provides advanced security manipulation methods.
  *
  * @package    agavi
  * @subpackage user
@@ -26,15 +26,13 @@
  *
  * @version    $Id$
  */
-abstract class SecurityUser extends User
+abstract class AgaviSecurityUser extends AgaviUser
 {
 
 	/**
 	 * Add a credential to this user.
 	 *
 	 * @param      mixed Credential data.
-	 *
-	 * @return     void
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -43,8 +41,6 @@ abstract class SecurityUser extends User
 
 	/**
 	 * Clear all credentials associated with this user.
-	 *
-	 * @return     void
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -61,7 +57,7 @@ abstract class SecurityUser extends User
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	abstract function hasCredential ($credential);
+	abstract function hasCredentials ($credential);
 
 	/**
 	 * Indicates whether or not this user is authenticated.
@@ -78,8 +74,6 @@ abstract class SecurityUser extends User
 	 *
 	 * @param      mixed Credential data.
 	 *
-	 * @return     void
-	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
@@ -89,8 +83,6 @@ abstract class SecurityUser extends User
 	 * Set the authenticated status of this user.
 	 *
 	 * @param      bool A flag indicating the authenticated status of this user.
-	 *
-	 * @return     void
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0

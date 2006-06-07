@@ -15,9 +15,9 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * ConfigCache allows you to customize the format of a configuration file to
- * make it easy-to-use, yet still provide a PHP formatted result for direct
- * inclusion into your modules.
+ * AgaviConfigCache allows you to customize the format of a configuration 
+ * file to make it easy-to-use, yet still provide a PHP formatted result 
+ * for direct inclusion into your modules.
  *
  * @package    agavi
  * @subpackage config
@@ -28,7 +28,7 @@
  *
  * @version    $Id$
  */
-class ConfigCache
+class AgaviConfigCache
 {
 	
 	const CACHE_SUBDIR = 'config';
@@ -46,17 +46,17 @@ class ConfigCache
 	 *
 	 * @return     void
 	 *
-	 * @throws     <b>ConfigurationException</b> If a requested configuration 
-	 *                                           file does not have an 
-	 *                                           associated config handler.
+	 * @throws     <b>AgaviConfigurationException</b> If a requested configuration 
+	 *                                                file does not have an 
+	 *                                                associated config handler.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	private static function callHandler ($handler, $config, $cache)
+	private static function callHandler($handler, $config, $cache, $context)
 	{
 
-		if (count(self::$handlers) == 0) {
+		if(count(self::$handlers) == 0) {
 			// we need to load the handlers first
 			self::loadConfigHandlers();
 		}
@@ -64,39 +64,38 @@ class ConfigCache
 		// grab the base name of the handler
 		$basename = basename($handler);
 
-		if (isset(self::$handlers[$handler])) {
+		if(isset(self::$handlers[$handler])) {
 			// we have a handler associated with the full configuration path
 			// call the handler and retrieve the cache data
-			$data =& self::$handlers[$handler]->execute($config);
+			$data = self::$handlers[$handler]->execute($config, $context);
 			self::writeCacheFile($config, $cache, $data, false);
 			return;
-		} else if (isset(self::$handlers[$basename]))	{
+		} elseif(isset(self::$handlers[$basename])) {
 			// we have a handler associated with the configuration base name
 			// call the handler and retrieve the cache data
-			$data =& self::$handlers[$basename]->execute($config);
+			$data = self::$handlers[$basename]->execute($config, $context);
 			self::writeCacheFile($config, $cache, $data, false);
 			return;
 		} else {
 			// let's see if we have any wildcard handlers registered that match
 			// this basename
 			foreach (self::$handlers as $key => $handlerInstance)	{
-				// replace wildcard chars in the configuration
-				$pattern = str_replace('.', '\.', $key);
-				$pattern = str_replace('*', '.*?', $pattern);
-				// create pattern from config
-				$pattern = '#' . $pattern . '#';
-				if (preg_match($pattern, $handler))	{
+				// replace wildcard chars in the configuration and create the pattern
+				$pattern = sprintf('#%s#', str_replace('\*', '.*?', preg_quote($key)));
+
+				if(preg_match($pattern, $handler)) {
 					// call the handler and retrieve the cache data
-					$data =& self::$handlers[$key]->execute($config);
+					$data = $handlerInstance->execute($config, $context);
 					self::writeCacheFile($config, $cache, $data, false);
 					return;
 				}
 			}
 		}
+
 		// we do not have a registered handler for this file
 		$error = 'Configuration file "%s" does not have a registered handler';
 		$error = sprintf($error, $config);
-		throw new ConfigurationException($error);
+		throw new AgaviConfigurationException($error);
 	}
 
 	/**
@@ -104,34 +103,34 @@ class ConfigCache
 	 * recompile the cache file associated with it.
 	 *
 	 * If the configuration file path is relative, the path itself is relative
-	 * to the Agavi AG_WEBAPP_DIR application setting.
+	 * to the Agavi "core.webapp_dir" application setting.
 	 *
 	 * @param      string A filesystem path to a configuration file.
 	 *
 	 * @return     string An absolute filesystem path to the cache filename
 	 *                    associated with this specified configuration file.
 	 *
-	 * @throws     <b>UnreadableException</b> If a requested configuration file
-	 *                                        does not exist.
+	 * @throws     <b>AgaviUnreadableException</b> If a requested configuration file
+	 *                                             does not exist.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public static function checkConfig ($config)
+	public static function checkConfig ($config, $context = null)
 	{
 		// the full filename path to the config, which might not be what we were given.
-		$filename = Toolkit::isPathAbsolute($config) ? $config : AG_WEBAPP_DIR . '/' . $config;
+		$filename = AgaviToolkit::isPathAbsolute($config) ? $config : AgaviConfig::get('core.webapp_dir') . '/' . $config;
 
 		if (!is_readable($filename)) {
-			throw new UnreadableException('Configuration file "' . $filename . '" does not exist or is unreadable.');
+			throw new AgaviUnreadableException('Configuration file "' . $filename . '" does not exist or is unreadable.');
 		}
 
 		// the cache filename we'll be using
-		$cache = self::getCacheName($config);
+		$cache = self::getCacheName($config, $context);
 
 		if (!is_readable($cache) || filemtime($filename) > filemtime($cache))	{
 			// configuration file has changed so we need to reparse it
-			self::callHandler($config, $filename, $cache);
+			self::callHandler($config, $filename, $cache, $context);
 		}
 
 		return $cache;
@@ -148,7 +147,7 @@ class ConfigCache
 	 */
 	public static function clear ()
 	{
-		Toolkit::clearCache(self::CACHE_SUBDIR);
+		AgaviToolkit::clearCache(self::CACHE_SUBDIR);
 	}
 
 	/**
@@ -162,7 +161,7 @@ class ConfigCache
 	 */
 	private static function clearCache($directory = '')
 	{
-		Toolkit::clearCache(self::CACHE_SUBDIR . DIRECTORY_SEPARATOR . $directory);
+		AgaviToolkit::clearCache(self::CACHE_SUBDIR . DIRECTORY_SEPARATOR . $directory);
 	}
 
 	/**
@@ -175,8 +174,9 @@ class ConfigCache
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public static function getCacheName ($config)
+	public static function getCacheName ($config, $context = null)
 	{
+		$environment = AgaviConfig::get('core.environment');
 
 		if (strlen($config) > 3 && ctype_alpha($config{0}) &&	$config{1} == ':' && ($config{2} == '\\' || $config{2} == '/')) {
 			// file is a windows absolute path, strip off the drive letter
@@ -184,8 +184,8 @@ class ConfigCache
 		}
 
 		// replace unfriendly filename characters with an underscore and postfix the name with a php extension
-		$config  = str_replace(array('\\', '/'), '_', $config) . '.php';
-		return AG_CACHE_DIR . DIRECTORY_SEPARATOR . self::CACHE_SUBDIR . DIRECTORY_SEPARATOR . $config;
+		$config  = str_replace(array('\\', '/'), '_', $config) . '_' . $environment . '_' . $context . '.php';
+		return AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . self::CACHE_SUBDIR . DIRECTORY_SEPARATOR . $config;
 
 	}
 
@@ -193,7 +193,7 @@ class ConfigCache
 	 * Import a configuration file.
 	 *
 	 * If the configuration file path is relative, the path itself is relative
-	 * to the Agavi AG_WEBAPP_DIR application setting.
+	 * to the Agavi "core.webapp_dir" application setting.
 	 *
 	 * @param      string A filesystem path to a configuration file.
 	 * @param      bool   Only allow this configuration file to be included once 
@@ -221,75 +221,30 @@ class ConfigCache
 	 *
 	 * @return     void
 	 *
-	 * @throws     <b>ConfigurationException</b> If a configuration related 
-	 *                                           error occurs.
+	 * @throws     <b>AgaviConfigurationException</b> If a configuration related 
+	 *                                                error occurs.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
 	private static function loadConfigHandlers ()
 	{
+		// since we only need the parser and handlers when the config is not cached
+		// it is sufficient to include them at this stage 
+		require_once(AgaviConfig::get('core.agavi_dir') . '/config/ConfigHandlersConfigHandler.class.php');
+		require_once(AgaviConfig::get('core.agavi_dir') . '/config/ConfigValueHolder.class.php');
+		require_once(AgaviConfig::get('core.agavi_dir') . '/config/ConfigParser.class.php');
+		require_once(AgaviConfig::get('core.agavi_dir') . '/config/XmlConfigParser.class.php');
 
-		// manually create our config_handlers.ini handler
-		self::$handlers['config_handlers.ini'] = new RootConfigHandler();
-		self::$handlers['config_handlers.ini']->initialize();
+		// manually create our config_handlers.xml handler
+		self::$handlers['config_handlers.xml'] = new AgaviConfigHandlersConfigHandler();
+		self::$handlers['config_handlers.xml']->initialize(AgaviConfig::get('core.agavi_dir') . '/config/xsd/config_handlers.xsd');
 
 		// application configuration handlers
-		require_once(ConfigCache::checkConfig('config/config_handlers.ini'));
+		require_once(AgaviConfigCache::checkConfig(AgaviConfig::get('core.config_dir') . '/config_handlers.xml'));
 
 		// module level configuration handlers
-
-		// make sure our modules directory exists
-		if (is_readable(AG_MODULE_DIR))	{
-			// ignore names
-			$ignore = array('.', '..', 'CVS', '.svn');
-
-			// create a file pointer to the module dir
-			$fp = opendir(AG_MODULE_DIR);
-
-			// loop through the directory and grab the modules
-			while (($directory = readdir($fp)) !== false)	{
-
-				if (!in_array($directory, $ignore))
-				{
-
-				    $config = AG_MODULE_DIR . '/' . $directory . '/config/config_handlers.ini';
-
-				    if (is_readable($config)) {
-
-						// initialize the root configuration handler with this
-						// module name
-						$params = array('module_level' => true,
-						                'module_name'  => $directory);
-
-						self::$handlers['config_handlers.ini']->initialize($params);
-
-						// replace module dir path with a special keyword that
-						// checkConfig knows how to use
-						$config = 'modules/' . $directory .
-						          '/config/config_handlers.ini';
-
-						require_once(ConfigCache::checkConfig($config));
-
-				    }
-
-				}
-
-			}
-
-			// close file pointer
-			fclose($fp);
-
-		} else {
-
-			// module directory doesn't exist or isn't readable
-			$error = 'Module directory "%s" does not exist or is not readable';
-			$error = sprintf($error, AG_MODULE_DIR);
-
-			throw new ConfigurationException($error);
-
-		}
-
+		// are gone :)
 	}
 
 	/**
@@ -301,7 +256,7 @@ class ConfigCache
 	 * @param      string Data to be written to the cache file.
 	 * @param      string Should we append the data?
 	 *
-	 * @throws     <b>CacheException</b> If the cache file cannot be written.
+	 * @throws     <b>AgaviCacheException</b> If the cache file cannot be written.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -311,7 +266,7 @@ class ConfigCache
 
 		$flags = ($append) ? FILE_APPEND : 0;
 		
-		@mkdir(AG_CACHE_DIR . DIRECTORY_SEPARATOR . self::CACHE_SUBDIR);
+		@mkdir(AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . self::CACHE_SUBDIR);
 
 		if (@file_put_contents($cache, $data, $flags) === false)
 		{
@@ -321,10 +276,33 @@ class ConfigCache
 				     'configuration file "%s"';
 			$error = sprintf($error, $cache, $config);
 
-			throw new CacheException($error);
+			throw new AgaviCacheException($error);
 
 		}
 
+	}
+
+
+
+	public static function parseConfig($config, $autoloadParser = true, $validateFile = null)
+	{
+		static $parsers = array();
+
+		$path = pathinfo($config);
+		$ext = ucfirst(strtolower($path['extension']));
+		if(!isset($parsers[$ext])) {
+			$class = $ext . 'ConfigParser';
+			if(!class_exists($class, $autoloadParser)) {
+				$class = 'Agavi' . $class;
+				if(!class_exists($class, $autoloadParser)) {
+					throw new AgaviConfigurationException('Couldn\'t find parser for file extension .' . $path['extension']);
+				}
+			}
+
+			$parsers[$ext] = new $class();
+		}
+
+		return $parsers[$ext]->parse($config, $validateFile);
 	}
 
 }

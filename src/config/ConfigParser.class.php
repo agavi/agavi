@@ -15,62 +15,38 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * PageWebController allows you to dispatch a request by specifying a module
- * and action name in the dispatch() method.
+ * AgaviConfigHandler allows a developer to create a custom formatted 
+ * configuration file format.
  *
  * @package    agavi
- * @subpackage controller
+ * @subpackage config
  *
- * @author     Sean Kerr <skerr@mojavi.org>
+ * @author     Dominik del Bondio <ddb@bitxtender.com>
  * @copyright  (c) Authors
- * @since      0.9.0
+ * @since      0.11.0
  *
  * @version    $Id$
  */
-class PageWebController extends WebController
+abstract class AgaviConfigParser
 {
 
 	/**
-	 * Dispatch a request.
+	 * Execute this configuration parser.
 	 *
-	 * @param      string A module name.
-	 * @param      string An action name.
-	 * @param      array  An associative array of parameters to be set.
+	 * @param      string An absolute filesystem path to a configuration file.
 	 *
-	 * @return     void
+	 * @return     AgaviConfigValueHolder Data to be written to a cache file.
 	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
+	 * @throws     <b>AgaviUnreadableException</b> If a requested configuration file
+	 *                                             does not exist or is not readable.
+	 * @throws     <b>AgaviParseException</b>      If a requested configuration file
+	 *                                             is improperly formatted.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
 	 */
-	public function dispatch ($moduleName, $actionName, $parameters = null)
-	{
+	public abstract function parse ($config);
 
-		try {
-			
-			// so setting the headers works
-			ob_start();
-			
-			if ($parameters != null) {
-				$this->context->getRequest()->setParametersByRef($parameters);
-			}
-
-			// make the first request
-			$this->forward($moduleName, $actionName);
-			
-			$this->sendHTTPResponseHeaders();
-			
-		} catch (AgaviException $e) {
-			$e->printStackTrace();
-
-		} catch (Exception $e) {
-
-			// most likely an exception from a third-party library
-			$e = new AgaviException($e->getMessage());
-			$e->printStackTrace();
-
-		}
-
-	}
 
 }
 

@@ -14,7 +14,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * StdoutAppender appends a Message to stdout.
+ * AgaviStdoutAppender appends an AgaviMessage to stdout.
  *
  * @package    agavi
  * @subpackage logging
@@ -25,7 +25,7 @@
  *
  * @version    $Id$
  */
-class StdoutAppender extends FileAppender
+class AgaviStdoutAppender extends AgaviFileAppender
 {
 
 	/**
@@ -33,15 +33,13 @@ class StdoutAppender extends FileAppender
 	 * 
 	 * @param      array An array of parameters.
 	 * 
-	 * @return     mixed
-	 * 
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.10.0
 	 */
-	public function initialize($params)
+	public function initialize($params = array())
 	{
 		$params['file'] = 'php://stdout';
-		return parent::initialize($params);
+		parent::initialize($params);
 	}
 
 }

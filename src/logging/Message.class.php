@@ -14,8 +14,8 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * Message, by default, holds a message and a priority level.  It is intended
- * to be passed to a Logger.
+ * AgaviMessage, by default, holds a message and a priority level.
+ * It is intended to be passed to a AgaviLogger.
  *
  * @package    agavi
  * @subpackage logging
@@ -26,7 +26,7 @@
  *
  * @version    $Id$
  */
-class Message extends ParameterHolder
+class AgaviMessage extends AgaviParameterHolder
 {
 
 	/**
@@ -38,7 +38,7 @@ class Message extends ParameterHolder
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.10.0
 	 */
-	public function __construct($message = null, $priority = Logger::INFO)
+	public function __construct($message = null, $priority = AgaviLogger::INFO)
 	{
 		$this->setParameter('m', $message);
 		$this->setParameter('p', $priority);
@@ -54,7 +54,7 @@ class Message extends ParameterHolder
 	 */
 	public function log()
 	{
-		LoggerManager::log($this);
+		AgaviLoggerManager::log($this);
 	}
 	
 	/**
@@ -75,7 +75,7 @@ class Message extends ParameterHolder
 	 * 
 	 * @param      $message required
 	 * 
-	 * @return     Message
+	 * @return     AgaviMessage
 	 * 
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.10.0
@@ -91,7 +91,7 @@ class Message extends ParameterHolder
 	 * 
 	 * @param      $message required
 	 * 
-	 * @return     Message
+	 * @return     AgaviMessage
 	 * 
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.10.0

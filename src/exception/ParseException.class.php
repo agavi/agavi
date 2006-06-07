@@ -15,7 +15,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * ParseException is thrown when a parsing procedure fails to complete
+ * AgaviParseException is thrown when a parsing procedure fails to complete
  * successfully.
  *
  * @package    agavi
@@ -27,31 +27,8 @@
  *
  * @version    $Id$
  */
-class ParseException extends ConfigurationException
+class AgaviParseException extends AgaviConfigurationException
 {
-
-	// +-----------------------------------------------------------------------+
-	// | CONSTRUCTOR                                                           |
-	// +-----------------------------------------------------------------------+
-
-	/**
-	 * Class constructor.
-	 *
-	 * @param      string The error message.
-	 * @param      int    The error code.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public function __construct ($message = null, $code = 0)
-	{
-
-		parent::__construct($message, $code);
-
-		$this->setName('ParseException');
-
-	}
-
 }
 
 ?>

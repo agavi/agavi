@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="configurations" type="configurations" />
+  <xs:complexType name="configurations">
+    <xs:sequence>
+      <xs:element name="configuration" minOccurs="0" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="compiles" type="compiles" />
+          </xs:sequence>
+          <xs:attribute name="environment" type="xs:string" />
+          <xs:attribute name="context" type="xs:string" />
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="parent" type="xs:string" />
+  </xs:complexType>
+
+  <xs:complexType name="compiles">
+    <xs:sequence>
+      <xs:element name="compile" type="compile" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="compile">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+</xs:schema>

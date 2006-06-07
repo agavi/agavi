@@ -28,7 +28,7 @@
  *
  * @version    $Id$
  */
-abstract class Action
+abstract class AgaviAction
 {
 
 	// +-----------------------------------------------------------------------+
@@ -39,40 +39,16 @@ abstract class Action
 		$context = null;
 
 	/**
-	 * Execute any application/business logic for this action.
-	 *
-	 * In a typical database-driven application, execute() handles application
-	 * logic itself and then proceeds to create a model instance. Once the model
-	 * instance is initialized it handles all business logic for the action.
-	 *
-	 * A model should represent an entity in your application. This could be a
-	 * user account, a shopping cart, or even a something as simple as a
-	 * single product.
-	 *
-	 * @return     mixed A string containing the view name associated with this
-	 *                   action.
-	 *                   Or an array with the following indices:
-	 *                   - The parent module of the view that will be executed.
-	 *                   - The view that will be executed.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	abstract function execute ();
-
-	/**
 	 * Retrieve the current application context.
 	 *
-	 * @return     Context The current Context instance.
+	 * @return     AgaviContext The current Context instance.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public final function getContext ()
+	public final function getContext()
 	{
-
 		return $this->context;
-
 	}
 
 	/**
@@ -84,51 +60,9 @@ abstract class Action
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function getCredential ()
+	public function getCredentials()
 	{
-
 		return null;
-
-	}
-
-	/**
-	 * Retrieve the default view to be executed when a given request is not
-	 * served by this action.
-	 *
-	 * @return     mixed A string containing the view name associated with this
-	 *                  action.
-	 *                  Or an array with the following indices:
-	 *                  - The parent module of the view that will be executed.
-	 *                  - The view that will be executed.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public function getDefaultView ()
-	{
-
-		return View::INPUT;
-
-	}
-
-	/**
-	 * Retrieve the request methods on which this action will process
-	 * validation and execution.
-	 *
-	 * @return     int One of the following values:
-	 *                 - Request::GET
-	 *                 - Request::POST
-	 *                 - Request::NONE
-	 *
-	 * @see        Request
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public function getRequestMethods ()
-	{
-
-		return Request::GET | Request::POST | Request::NONE;
-
 	}
 
 	/**
@@ -143,31 +77,22 @@ abstract class Action
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function handleError ()
+	public function handleError()
 	{
-
-		return View::ERROR;
-
+		return 'Error';
 	}
 
 	/**
 	 * Initialize this action.
 	 *
-	 * @param      Context The current application context.
-	 *
-	 * @return     bool true, if initialization completes successfully, 
-	 *                  otherwise false.
+	 * @param      AgaviContext The current application context.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function initialize ($context)
+	public function initialize(AgaviContext $context)
 	{
-
 		$this->context = $context;
-
-		return true;
-
 	}
 
 	/**
@@ -178,26 +103,21 @@ abstract class Action
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function isSecure ()
+	public function isSecure()
 	{
-
 		return false;
-
 	}
 
 	/**
 	 * Manually register validators for this action.
 	 *
-	 * @param      ValidatorManager A ValidatorManager instance.
-	 *
-	 * @return     void
+	 * @param      AgaviValidatorManager A ValidatorManager instance.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function registerValidators ($validatorManager)
+	public function registerValidators($validatorManager)
 	{
-
 	}
 
 	/**
@@ -209,11 +129,22 @@ abstract class Action
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function validate ()
+	public function validate()
 	{
-
 		return true;
-
+	}
+	
+	/**
+	 * Get the default View name if this Action doesn't serve the Request method.
+	 *
+	 * @return     string A View name
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getDefaultViewName()
+	{
+		return 'Input';
 	}
 
 }

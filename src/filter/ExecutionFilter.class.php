@@ -15,8 +15,8 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * ExecutionFilter is the last filter registered for each filter chain. This
- * filter does all action and view execution.
+ * AgaviExecutionFilter is the last filter registered for each filter chain.
+ * This filter does all action and view execution.
  *
  * @package    agavi
  * @subpackage filter
@@ -27,20 +27,18 @@
  *
  * @version    $Id$
  */
-class ExecutionFilter extends Filter
+class AgaviExecutionFilter extends AgaviFilter
 {
 
 	/**
 	 * Execute this filter.
 	 *
-	 * @param      FilterChain The filter chain.
+	 * @param      AgaviFilterChain The filter chain.
 	 *
-	 * @return     void
-	 *
-	 * @throws     <b>InitializeException</b> If an error occurs during view
-	 *                                        initialization.
-	 * @throws     <b>ViewException</b>       If an error occurs while executing
-	 *                                        the view.
+	 * @throws     <b>AgaviInitializeException</b> If an error occurs during view
+	 *                                             initialization.
+	 * @throws     <b>AgaviViewException</b>       If an error occurs while executing
+	 *                                             the view.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -48,116 +46,94 @@ class ExecutionFilter extends Filter
 	public function execute ($filterChain)
 	{
 
-		static
-			$context,
-			$controller,
-			$validatorManager;
-
-		if (!isset($context))
-		{
-
-			// get the context and controller
-			$context    = $this->getContext();
-			$controller = $context->getController();
-
-			// create validator manager
-			$validatorManager = $context->getValidatorManager();
-
-		} else
-		{
-
-			// clear the validator manager for reuse
-			$validatorManager->clear();
-
-		}
+		// get the context and controller
+		$context    = $this->getContext();
+		$controller = $context->getController();
+		// create validator manager
+		$validatorManager = $context->getValidatorManager();
+		// clear the validator manager for reuse
+		$validatorManager->clear();
 
 		// get the current action instance
 		$actionEntry    = $controller->getActionStack()->getLastEntry();
 		$actionInstance = $actionEntry->getActionInstance();
 
 		// get the current action information
-		$moduleName = $context->getModuleName();
-		$actionName = $context->getActionName();
+		$moduleName = $controller->getModuleName();
+		$actionName = $controller->getActionName();
 
 		// get the request method
-		$method = $context->getRequest()->getMethod();
-
-		if (($actionInstance->getRequestMethods() & $method) != $method)
-		{
-
+		$method = ucfirst(strtolower($context->getRequest()->getMethod()));
+		
+		$useGenericMethods = false;
+		$executeMethod = 'execute' . $method;
+		if(!method_exists($actionInstance, $executeMethod)) {
+			$executeMethod = 'execute';
+			$useGenericMethods = true;
+		}
+		
+		if($useGenericMethods && !method_exists($actionInstance, $executeMethod) ) {
 			// this action will skip validation/execution for this method
 			// get the default view
-			$viewName = $actionInstance->getDefaultView();
-
-		} else
-		{
-
+			$viewName = $actionInstance->getDefaultViewName();
+		} else {
 			// set default validated status
 			$validated = true;
 
 			// get the current action validation configuration
-			$validationConfig = AG_MODULE_DIR . '/' . $moduleName .
-						        '/validate/' . $actionName . '.ini';
+			$validationConfig = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/validate/' . $actionName . '.ini';
 
-			if (is_readable($validationConfig))
-			{
-
+			if (is_readable($validationConfig)) {
 				// load validation configuration
 				// do NOT use require_once
-				$validationConfig = 'modules/' . $moduleName .
-						            '/validate/' . $actionName . '.ini';
+				$validationConfig = 'modules/' . $moduleName . '/validate/' . $actionName . '.ini';
 
-				require(ConfigCache::checkConfig($validationConfig));
-
+				require(AgaviConfigCache::checkConfig($validationConfig));
 			}
 
 			// manually load validators
-			$actionInstance->registerValidators($validatorManager);
+			$registerValidatorsMethod = 'register' . $method . 'Validators';
+			if(!method_exists($actionInstance, $registerValidatorsMethod)) {
+				$registerValidatorsMethod = 'registerValidators';
+			}
+			$actionInstance->$registerValidatorsMethod($validatorManager);
 
 			// process validators
 			$validated = $validatorManager->execute();
 
-			// process manual validation
-			if ($actionInstance->validate() && $validated)
-			{
-
-				// execute the action
-				$viewName = $actionInstance->execute();
-
-			} else
-			{
-
-				// validation failed
-				$viewName = $actionInstance->handleError();
-
+			$validateMethod = 'validate' . $method;
+			if(!method_exists($actionInstance, $validateMethod)) {
+				$validateMethod = 'validate';
 			}
 
+			// process manual validation
+			if ($actionInstance->$validateMethod() && $validated) {
+				// execute the action
+				$viewName = $actionInstance->$executeMethod();
+			} else {
+				// validation failed
+				$handleErrorMethod = 'handle' . $method . 'Error';
+				if(!method_exists($actionInstance, $handleErrorMethod)) {
+					$handleErrorMethod = 'handleError';
+				}
+				$viewName = $actionInstance->$handleErrorMethod();
+			}
 		}
 
-		if ($viewName != View::NONE)
-		{
-
-			if (is_array($viewName))
-			{
-
+		if ($viewName != null) {
+			if (is_array($viewName)) {
 				// we're going to use an entirely different action for this view
 				$moduleName = $viewName[0];
 				$viewName   = $viewName[1];
-
-			} else
-			{
-
+			} else {
 				// use a view related to this action
 				$viewName = $actionName . $viewName;
-
 			}
 
 			// display this view
-			if (!$controller->viewExists($moduleName, $viewName))
-			{
-
+			if (!$controller->viewExists($moduleName, $viewName)) {
 				// the requested view doesn't exist
-				$file = AG_MODULE_DIR . '/' . $moduleName . '/views/' .
+				$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/views/' .
 						$viewName . 'View.class.php';
 
 				$error = 'Module "%s" does not contain the view "%sView" or ' .
@@ -165,43 +141,60 @@ class ExecutionFilter extends Filter
 
 				$error = sprintf($error, $moduleName, $viewName, $file);
 
-				throw new ViewException($error);
-
+				throw new AgaviViewException($error);
 			}
 
 			// get the view instance
 			$viewInstance = $controller->getView($moduleName, $viewName);
 
 			// initialize the view
-			if ($viewInstance->initialize($context))
-			{
+			$viewInstance->initialize($context);
+			// view initialization completed successfully
+			$renderer = $viewInstance->execute();
+			
+			if($renderer === null) {
+				while(true) {
+					$oti= $controller->getOutputTypeInfo();
+					$renderer = new $oti['renderer']();
+					if(isset($oti['extension'])) {
+						$renderer->setExtension($oti['extension']);
+					}
+					$renderer->setView($viewInstance);
 
-				// view initialization completed successfully
-				$viewInstance->execute();
-
-				// render the view and if data is returned, stick it in the
-				// action entry which was retrieved from the execution chain
-				$viewData =& $viewInstance->render();
-
-				if ($controller->getRenderMode() == View::RENDER_VAR)
-				{
-
-				    $actionEntry->setPresentation($viewData);
-
+					try {
+						// run the pre-render check to see if the template is there
+						$renderer->preRenderCheck();
+						break;
+					} catch(AgaviRenderException $e) {
+						if(isset($oti['fallback'])) {
+							// template not found, but there's a fallback specified, so let's try that one
+							$controller->setOutputType($oti['fallback']);
+						} else {
+							throw $e;
+						}
+					}
 				}
-
-			} else
-			{
-
-				// view failed to initialize
-				$error = 'View initialization failed for module "%s", ' .
-						 'view "%sView"';
-				$error = sprintf($error, $moduleName, $viewName);
-
-				throw new InitializationException($error);
-
 			}
+			
+			// create a new filter chain
+			$fcfi = $context->getFactoryInfo('filter_chain');
+			$filterChain = new $fcfi['class']();
 
+			$controller->loadFilters($filterChain, 'rendering');
+			$controller->loadFilters($filterChain, 'rendering', $moduleName);
+
+			// register the renderer as the last filter
+			$filterChain->register($renderer);
+
+			// go, go, go!
+			$filterChain->execute();
+			
+			// get the data from the view (the renderer put it there)
+			$viewData = $viewInstance->getData();
+			
+			if($controller->getRenderMode() == AgaviView::RENDER_VAR) {
+				$actionEntry->setPresentation($viewData);
+			}
 		}
 
 	}

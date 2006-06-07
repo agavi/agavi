@@ -15,7 +15,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * ConsoleController allows you to centralize your entry point in your web
+ * AgaviConsoleController allows you to centralize your entry point in your web
  * application, but at the same time allow for any module and action combination
  * to be requested.
  *
@@ -29,71 +29,22 @@
  *
  * @version    $Id$
  */
-class ConsoleController extends Controller
+class AgaviConsoleController extends AgaviController
 {
-
 	/**
-	 * Dispatch a request.
+	 * Initialize this controller.
 	 *
-	 * This will determine which module and action to use by request parameters
-	 * specified by the user.
-	 *
-	 * @return     void
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @author     Agavi Project <info@agavi.org>
-	 * @since      0.9.0
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
 	 */
-	public function dispatch ($params=null)
+	public function initialize(AgaviContext $context, $parameters = array())
 	{
+		// initialize parent
+		parent::initialize($context, $parameters);
 
-		try {
-
-			if (is_array($params)) {
-				$this->setParametersByRef($params);
-			}
-
-			// determine our module and action
-			$moduleName = (defined('AG_CONSOLE_MODULE') ? AG_CONSOLE_MODULE : AG_DEFAULT_MODULE);
-			$actionName = (defined('AG_CONSOLE_ACTION') ? AG_CONSOLE_ACTION : null);
-
-			if ($actionName == null) {
-
-				// no action has been specified
-				if ($moduleName == AG_DEFAULT_MODULE) {
-
-					$actionName = AG_DEFAULT_ACTION;
-
-				} else if ($this->actionExists($moduleName, 'Index')) {
-
-					// an Index action exists
-					$actionName = 'Index';
-
-				}
-			}
-
-			// set the module and action in the Request parameters
-			$this->context->getRequest()->setParameter(AG_MODULE_ACCESSOR, $moduleName);
-			$this->context->getRequest()->setParameter(AG_ACTION_ACCESSOR, $actionName);
-
-			// make the first request
-			$this->forward($moduleName, $actionName);
-
-		} catch (AgaviException $e) {
-
-			$e->printStackTrace('plain');
-
-		} catch (Exception $e) {
-
-			// most likely an exception from a third-party library
-			$e = new AgaviException($e->getMessage());
-
-			$e->printStackTrace('plain');
-
-		}
-
+		ini_set('arg_separator.output', AgaviConfig::get('php.arg_separator.output', '&'));
 	}
-
+	
 }
 
 ?>

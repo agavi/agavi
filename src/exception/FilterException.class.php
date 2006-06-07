@@ -15,8 +15,8 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * FilterException is thrown when an error occurs while attempting to initialize
- * or execute a filter.
+ * AgaviFilterException is thrown when an error occurs while attempting to 
+ * initialize or execute a filter.
  *
  * @package    agavi
  * @subpackage exception
@@ -27,31 +27,8 @@
  *
  * @version    $Id$
  */
-class FilterException extends AgaviException
+class AgaviFilterException extends AgaviException
 {
-
-	// +-----------------------------------------------------------------------+
-	// | CONSTRUCTOR                                                           |
-	// +-----------------------------------------------------------------------+
-
-	/**
-	 * Class constructor.
-	 *
-	 * @param      string The error message.
-	 * @param      int    The error code.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public function __construct ($message = null, $code = 0)
-	{
-
-		parent::__construct($message, $code);
-
-		$this->setName('FilterException');
-
-	}
-
 }
 
 ?>

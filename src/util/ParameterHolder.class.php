@@ -15,7 +15,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * ParameterHolder provides a base class for managing parameters.
+ * AgaviParameterHolder provides a base class for managing parameters.
  *
  * @package    agavi
  * @subpackage util
@@ -26,7 +26,7 @@
  *
  * @version    $Id$
  */
-abstract class ParameterHolder
+abstract class AgaviParameterHolder
 {
 
 	// +-----------------------------------------------------------------------+
@@ -38,8 +38,6 @@ abstract class ParameterHolder
 
 	/**
 	 * Clear all parameters associated with this request.
-	 *
-	 * @return     void
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -163,8 +161,6 @@ abstract class ParameterHolder
 	 * @param      string A parameter name.
 	 * @param      mixed  A parameter value.
 	 *
-	 * @return     void
-	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
@@ -183,8 +179,6 @@ abstract class ParameterHolder
 	 *
 	 * @param      string A parameter name.
 	 * @param      mixed  A parameter value.
-	 *
-	 * @return     void
 	 *
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.10.0
@@ -208,8 +202,6 @@ abstract class ParameterHolder
 	 * @param      string A parameter name.
 	 * @param      mixed  A reference to a parameter value.
 	 *
-	 * @return     void
-	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
@@ -228,8 +220,6 @@ abstract class ParameterHolder
 	 *
 	 * @param      string A parameter name.
 	 * @param      mixed  A reference to a parameter value.
-	 *
-	 * @return     void
 	 *
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.10.0
@@ -253,8 +243,6 @@ abstract class ParameterHolder
 	 * @param      array An associative array of parameters and their associated
 	 *              values.
 	 *
-	 * @return     void
-	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
@@ -273,8 +261,6 @@ abstract class ParameterHolder
 	 *
 	 * @param      array An associative array of parameters and references to their
 	 *              associated values.
-	 *
-	 * @return     void
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0

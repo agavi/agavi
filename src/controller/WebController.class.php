@@ -15,7 +15,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * WebController provides web specific methods to Controller such as, url
+ * AgaviWebController provides web specific methods to Controller such as, url
  * redirection.
  *
  * @package    agavi
@@ -28,7 +28,7 @@
  *
  * @version    $Id$
  */
-abstract class WebController extends Controller
+class AgaviWebController extends AgaviController
 {
 
 	protected
@@ -78,73 +78,22 @@ abstract class WebController extends Controller
 		$httpHeaders = array(),
 		$cookieConfig = array(),
 		$cookies = array();
-
+		
 	/**
-	 * Generate a formatted Agavi URL.
-	 * You can also pass in arguments in reverse order.
+	 * Acts as a front web controller unless module and action names are given as
+	 * parameters.
 	 *
-	 * @param      array  An associative array of URL parameters.
-	 * @param      string An existing URL for basing the parameters.
-	 *
-	 * @return     string A URL to a Agavi resource.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.9.0
+	 * @see        Controller::dispatch()
 	 */
-	public function genURL ($url = null, $parameters = array())
+	public function dispatch($parameters = array())
 	{
-		if(is_array($url)) {
-			$tmp = null;
-			if(is_array($parameters)) {
-				$parameters = null;
-			}
-			$tmp = $url;
-			$url = $parameters;
-			$parameters = $tmp;
-		}
-
-		if ($url == null)
-		{
-
-			$url = $_SERVER['SCRIPT_NAME'];
-
-		}
-
-		if (AG_URL_FORMAT == 'PATH')
-		{
-
-			// use PATH format
-			$divider  = '/';
-			$equals   = '/';
-			$url     .= '/';
-
-		} else
-		{
-
-			// use GET format
-			$divider  = '&';
-			$equals   = '=';
-			$url     .= '?';
-
-		}
-
-		// loop through the parameters
-		foreach ($parameters as $key => &$value)
-		{
-
-			$url .= urlencode($key) . $equals . urlencode($value) . $divider;
-
-		}
-
-		// strip off last divider character
-		$url = rtrim($url, $divider);
-
-		// replace &'s with &amp;
-		$url = str_replace('&', '&amp;', $url);
-
-		return $url;
-
+		// so setting the headers works
+		ob_start();
+		
+		parent::dispatch($parameters);
+		
+		// output all headers for the response
+		$this->sendHTTPResponseHeaders();
 	}
 
 	/**
@@ -169,8 +118,6 @@ abstract class WebController extends Controller
 	 * Sets a HTTP status code for the response.
 	 *
 	 * @param      string A numeric HTTP status code between 100 and 505.
-	 *
-	 * @return     void
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
@@ -277,8 +224,6 @@ abstract class WebController extends Controller
 	 * @param      bool   If true, a header with that name will be oberwritten,
 	 *                    otherwise, the value will be appended.
 	 *
-	 * @return     void
-	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
@@ -304,8 +249,6 @@ abstract class WebController extends Controller
 	 *                   will be tried to be removed.
 	 * @param      array Cookie parameters (parameters from config or defaults
 	 *                   are used for any missing parameters).
-	 *
-	 * @return     void
 	 *
 	 * @author     Veikko Makinen <mail@veikkomakinen.com>
 	 * @author     David Zuelke <dz@bitxtender.com>
@@ -354,8 +297,6 @@ abstract class WebController extends Controller
 	/**
 	 * Clears the HTTP headers set for this response.
 	 *
-	 * @return     void
-	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
@@ -367,8 +308,6 @@ abstract class WebController extends Controller
 	/**
 	 * Sends HTTP Status code, headers and cookies
 	 *
-	 * @return     void
-	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
@@ -377,6 +316,10 @@ abstract class WebController extends Controller
 		// send HTTP status code
 		if(isset($this->httpStatusCode) && isset($this->httpStatusCodes[$this->httpStatusCode])) {
 			header($this->httpStatusCodes[$this->httpStatusCode]);
+		}
+		
+		if($this->getContentType() === null && isset($this->outputTypes[$this->outputType]['parameters']['Content-Type'])) {
+			$this->setContentType($this->outputTypes[$this->outputType]['parameters']['Content-Type']);
 		}
 		
 		// send headers
@@ -399,29 +342,22 @@ abstract class WebController extends Controller
 	/**
 	 * Initialize this controller.
 	 *
-	 * @return     void
-	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
-	public function initialize (Context $context)
+	public function initialize(AgaviContext $context, $parameters = array())
 	{
-
 		// initialize parent
-		parent::initialize($context);
+		parent::initialize($context, $parameters);
+
+		ini_set('arg_separator.output', AgaviConfig::get('php.arg_separator.output', '&amp;'));
 
 		$this->cookieConfig = array();
 		$this->cookieConfig['lifetime'] = isset($parameters['cookie_lifetime']) ? $parameters['cookie_lifetime'] : 0;
 		$this->cookieConfig['path']     = isset($parameters['cookie_path'])     ? $parameters['cookie_path']     : "/";
 		$this->cookieConfig['domain']   = isset($parameters['cookie_domain'])   ? $parameters['cookie_domain']   : "";
 		$this->cookieConfig['secure']   = isset($parameters['cookie_secure'])   ? $parameters['cookie_secure']   : 0;
-
-		// set our content type
-		if(defined('AG_CONTENT_TYPE')) {
-			$this->setContentType(AG_CONTENT_TYPE);
-		}
-
 	}
 
 	/**
@@ -430,8 +366,6 @@ abstract class WebController extends Controller
 	 * @param      string An existing URL.
 	 * @param      int    A delay in seconds before redirecting. This only works 
 	 *                    on browsers that do not support the PHP header.
-	 *
-	 * @return     void
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -463,8 +397,6 @@ abstract class WebController extends Controller
 	 * Set the content type for the response.
 	 *
 	 * @param      string A content type.
-	 *
-	 * @return     void
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.9.0

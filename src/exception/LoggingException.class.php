@@ -15,7 +15,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * LoggingException is thrown when a logging related error occurs.
+ * AgaviLoggingException is thrown when a logging related error occurs.
  *
  * @package    agavi
  * @subpackage exception
@@ -26,31 +26,8 @@
  *
  * @version    $Id$
  */
-class LoggingException extends AgaviException
+class AgaviLoggingException extends AgaviException
 {
-
-	// +-----------------------------------------------------------------------+
-	// | CONSTRUCTOR                                                           |
-	// +-----------------------------------------------------------------------+
-
-	/**
-	 * Class constructor.
-	 *
-	 * @param      string The error message.
-	 * @param      int    The error code.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public function __construct ($message = null, $code = 0)
-	{
-
-		parent::__construct($message, $code);
-
-		$this->setName('LoggingException');
-
-	}
-
 }
 
 ?>

@@ -14,7 +14,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * PDODatabase provides connectivity for the PDO database abstraction layer.
+ * AgaviPDODatabase provides connectivity for the PDO database abstraction layer.
  *
  * @package    agavi
  * @subpackage database
@@ -26,86 +26,79 @@
  *
  * @version    $Id$
  */
-class PDODatabase extends Database
+class AgaviPDODatabase extends AgaviDatabase
 {
-
 	/**
 	 * Connect to the database.
 	 *
-	 * @throws     <b>DatabaseException</b> If a connection could not be created
+	 * @throws     <b>AgaviDatabaseException</b> If a connection could not be created
 	 *
 	 * @author     Daniel Swarbrick (daniel@pressure.net.nz)
 	 * @since      0.9.0
 	 */
-	public function connect ()
+	public function connect()
 	{
-
 		// determine how to get our parameters
 		$method = $this->getParameter('method', 'dsn');
 
 		// get parameters
-		switch ($method) {
+		switch($method) {
 
 			case 'dsn' :
 
 				$dsn = $this->getParameter('dsn');
 
-				if ($dsn == null) {
-
+				if($dsn == null) {
 					// missing required dsn parameter
 					$error = 'Database configuration specifies method ' .
 						 '"dsn", but is missing dsn parameter';
 
-					throw new DatabaseException($error);
-
+					throw new AgaviDatabaseException($error);
 				}
 
 				break;
-
 		}
 
-		try	{
-
+		try {
 			$pdo_username = $this->getParameter('username');
 			$pdo_password = $this->getParameter('password');
-			$this->connection = new PDO($dsn, $pdo_username, $pdo_password);
 
-		} catch (PDOException $e)	{
-
-			throw new DatabaseException($e->getMessage());
-
+			// let's see if we need a persistent connection
+			$persistent = $this->getParameter('persistent', false);
+			
+			if(defined('PDO::ATTR_PERSISTENT')) {
+				$pdo_options = array(PDO::ATTR_PERSISTENT => $persistent);
+			} else {
+				$pdo_options = array(PDO_ATTR_PERSISTENT => $persistent);
+			}
+			
+			$this->connection = new PDO($dsn, $pdo_username, $pdo_password, $pdo_options);
+			
+		} catch(PDOException $e) {
+			throw new AgaviDatabaseException($e->getMessage());
 		}
 
 		// lets generate exceptions instead of silent failures
-		if (defined('PDO::ATTR_ERRMODE')) {
+		if(defined('PDO::ATTR_ERRMODE')) {
 			$this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		} else {
 			$this->connection->setAttribute(PDO_ATTR_ERRMODE, PDO_ERRMODE_EXCEPTION);
 		}
-
 	}
 
 	/**
 	 * Execute the shutdown procedure.
 	 *
-	 * @return     void
-	 *
-	 * @throws     <b>DatabaseException</b> If an error occurs while shutting
-	 *                                      down this database.
+	 * @throws     <b>AgaviDatabaseException</b> If an error occurs while shutting
+	 *                                           down this database.
 	 *
 	 * @author     Daniel Swarbrick (daniel@pressure.net.nz)
 	 * @since      0.9.0
 	 */
-	public function shutdown ()
+	public function shutdown()
 	{
-
-		if ($this->connection !== null)	{
-
-			@$this->connection = null;
-
-		}
-
+		// assigning null to a previously open connection object causes a disconnect
+		$this->connection = null;
 	}
-
 }
 ?>

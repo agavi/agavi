@@ -15,7 +15,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * ParameterParser is used to take parameter lists in Agavi configuration
+ * AgaviParameterParser is used to take parameter lists in Agavi configuration
  * files and return them in literal array form.
  *
  * @package    agavi
@@ -27,7 +27,7 @@
  *
  * @version    $Id$
  */
-class ParameterParser
+class AgaviParameterParser
 {
 
 	/**
@@ -61,7 +61,7 @@ class ParameterParser
 			{
 
 				// literalize our value
-				$value = ConfigHandler::literalize($value);
+				$value = AgaviConfigHandler::literalize($value);
 
 				// we found a parameter, let's add this baby to our list
 				$parameter = substr($key, $length);

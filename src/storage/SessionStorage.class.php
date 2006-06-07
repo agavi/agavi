@@ -15,7 +15,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * SessionStorage allows you to store persistent Agavi data in the user
+ * AgaviSessionStorage allows you to store persistent Agavi data in the user
  * session.
  *
  * <b>Optional parameters:</b>
@@ -42,34 +42,30 @@
  *
  * @version    $Id$
  */
-class SessionStorage extends Storage
+class AgaviSessionStorage extends AgaviStorage
 {
 
 	/**
 	 * Initialize this Storage.
 	 *
-	 * @param      Context A Context instance.
-	 * @param      array   An associative array of initialization parameters.
+	 * @param      AgaviContext A Context instance.
+	 * @param      array        An associative array of initialization parameters.
 	 *
-	 * @return     bool true, if initialization completes successfully,
-	 *                  otherwise false.
-	 *
-	 * @throws     <b>InitializationException</b> If an error occurs while
-	 *                                            initializing this Storage.
+	 * @throws     <b>AgaviInitializationException</b> If an error occurs while
+	 *                                                 initializing this Storage.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @author     Veikko Makinen <mail@veikkomakinen.com>
 	 * @since      0.9.0
 	 */
-	public function initialize ($context, $parameters = null)
+	public function initialize(AgaviContext $context, $parameters = array())
 	{
-
 		parent::initialize($context, $parameters);
 
 		$sessionName = $this->getParameter('session_name', 'Agavi');
 		session_name($sessionName);
 
-		if ($sessionId = $this->getParameter('session_id')) {
+		if($sessionId = $this->getParameter('session_id')) {
 			session_id($sessionId);
 		}
 		
@@ -80,7 +76,6 @@ class SessionStorage extends Storage
 		$secure   = $this->getParameter('session_cookie_secure', $cookieDefaults['secure']);
 
 		session_set_cookie_params($lifetime, $path, $domain, $secure);
-
 	}
 
 	/**
@@ -162,16 +157,12 @@ class SessionStorage extends Storage
 	/**
 	 * Execute the shutdown procedure.
 	 *
-	 * @return     void
-	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
 	public function shutdown ()
 	{
-
-		// don't need a shutdown procedure because read/write do it in real-time
-
+		session_write_close();
 	}
 
 	/**
@@ -182,8 +173,6 @@ class SessionStorage extends Storage
 	 *
 	 * @param      string A unique key identifying your data.
 	 * @param      mixed  Data associated with your key.
-	 *
-	 * @return     void
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0

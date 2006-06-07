@@ -15,7 +15,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * Controller directs application flow.
+ * AgaviController directs application flow.
  *
  * @package    agavi
  * @subpackage controller
@@ -26,18 +26,104 @@
  *
  * @version    $Id$
  */
-abstract class Controller extends ParameterHolder
+abstract class AgaviController extends AgaviParameterHolder
 {
 
 	private
-		$maxForwards     = 20,
-		$renderMode      = View::RENDER_CLIENT,
-		$executionFilterClassName = null;
+		$maxForwards  = 20,
+		$renderMode   = AgaviView::RENDER_CLIENT;
+
+	/**
+	 * @var        AgaviActionStack An ActionStack instance.
+	 */
+	protected $actionStack = null;
 
 	protected
-		$context         = null,
-		$shutdownList	 = null;
+		$context      = null,
+		$outputType   = null,
+		$outputTypes  = array(),
+		$filters      = array(
+			'global' => array(),
+			'action' => array(
+				'*' => null
+			),
+			'rendering' => array(
+				'*' => null
+			),
+			'dispatch' => null,
+			'execution' => null,
+			'security' => null
+		);
 
+		/**
+		 * Retrieve the ActionStack.
+		 *
+		 * @return     AgaviActionStack the ActionStack instance
+		 *
+		 * @author     David Zuelke <dz@bitxtender.com>
+		 * @since      0.11.0
+		 */
+		public function getActionStack()
+		{
+			return $this->actionStack;
+		}
+
+	/**
+	 * Sets an output type for this response.
+	 *
+	 * @param      string The output type name.
+	 *
+	 * @throws     <b>AgaviException</b> If the given output type doesnt exist.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function setOutputType($outputType)
+	{
+		if(isset($this->outputTypes[$outputType])) {
+			$this->outputType = $outputType;
+			return;
+		} else {
+			throw new AgaviException('Output Type "' . $outputType . '" has not been configured.');
+		}
+	}
+
+	/**
+	 * Retrieves the output type name set for this response.
+	 *
+	 * @return     string The name of the output type.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getOutputType()
+	{
+		return $this->outputType;
+	}
+
+	/**
+	 * Retrieve configuration details about an output type.
+	 *
+	 * @param      string The output type name.
+	 *
+	 * @return     array An associative array of output type settings and params.
+	 *
+	 * @throws     <b>AgaviException</b> If the given output type doesnt exist.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getOutputTypeInfo($outputType = null)
+	{
+		if($outputType === null) {
+			$outputType = $this->outputType;
+		}
+		if(isset($this->outputTypes[$outputType])) {
+			return $this->outputTypes[$outputType];
+		} else {
+			throw new AgaviException('Output Type "' . $outputType . '" has not been configured.');
+		}
+	}
 
 	/**
 	 * Indicates whether or not a module has a specific action.
@@ -52,8 +138,67 @@ abstract class Controller extends ParameterHolder
 	 */
 	public function actionExists ($moduleName, $actionName)
 	{
-		$file = AG_MODULE_DIR . '/' . $moduleName . '/actions/' . $actionName . 'Action.class.php';
+		$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/actions/' . $actionName . 'Action.class.php';
 		return is_readable($file);
+	}
+	
+	/**
+	 * Dispatch a request
+	 *
+	 * @param      array An associative array of parameters to be set.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.9.0
+	 */
+	public function dispatch($parameters = array())
+	{
+		try {
+			
+			$request = $this->context->getRequest();
+			
+			// match routes and set matched routes as request attributes
+			$request->setAttributes($this->context->getRouting()->execute(), 'org.agavi.routing.matchedRoutes');
+		
+			if($parameters != null) {
+				$request->setParametersByRef($parameters);
+			}
+		
+			// determine our module and action
+			$moduleName = $request->getParameter($request->getModuleAccessor());
+			$actionName = $request->getParameter($request->getActionAccessor());
+		
+			if($moduleName == null) {
+				// no module has been specified
+				$moduleName = AgaviConfig::get('actions.default_module');
+				$request->setParameter($request->getModuleAccessor(), $moduleName);
+			}
+			if($actionName == null) {
+				// no action has been specified
+				if ($this->actionExists($moduleName, 'Index')) {
+					// an Index action exists
+					$actionName = 'Index';
+				} else {
+					// use the default action
+					$actionName = AgaviConfig::get('actions.default_action');
+				}
+				$request->setParameter($request->getActionAccessor(), $actionName);
+			}
+
+			// create a new filter chain
+			$fcfi = $this->context->getFactoryInfo('filter_chain');
+			$filterChain = new $fcfi['class']();
+		
+			$this->loadFilters($filterChain, 'global');
+		
+			// register the dispatch filter
+			$filterChain->register($this->filters['dispatch']);
+		
+			// go, go, go!
+			$filterChain->execute();
+			
+		} catch (Exception $e) {
+			AgaviException::printStackTrace($e, $this->getContext());
+		}
 	}
 
 	/**
@@ -62,54 +207,48 @@ abstract class Controller extends ParameterHolder
 	 * @param      string A module name.
 	 * @param      string An action name.
 	 *
-	 * @return     void
-	 *
-	 * @throws     <b>ConfigurationException</b> If an invalid configuration 
-	 *                                           setting has been found.
-	 * @throws     <b>ForwardException</b> If an error occurs while forwarding
-	 *                                     the request.
-	 * @throws     <b>InitializationException</b> If the action could not be
-	 *                                            initialized.
-	 * @throws     <b>SecurityException</b> If the action requires security but
-	 *                                      the user implementation is not of
-	 *                                      type SecurityUser.
+	 * @throws     <b>AgaviConfigurationException</b> If an invalid configuration 
+	 *                                                setting has been found.
+	 * @throws     <b>AgaviForwardException</b> If an error occurs while forwarding
+	 *                                          the request.
+	 * @throws     <b>AgaviInitializationException</b> If the action could not be
+	 *                                                 initialized.
+	 * @throws     <b>AgaviSecurityException</b> If the action requires security but
+	 *                                           the user implementation is not of
+	 *                                           type SecurityUser.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function forward ($moduleName, $actionName)
+	public function forward($moduleName, $actionName)
 	{
 
 		$actionName = str_replace('.', '/', $actionName);
 		$actionName = preg_replace('/[^a-z0-9\-_\/]+/i', '', $actionName);
 		$moduleName = preg_replace('/[^a-z0-9\-_]+/i', '', $moduleName);
 
-		if ($this->getActionStack()->getSize() >= $this->maxForwards) {
-			throw new ForwardException('Too many forwards have been detected for this request');
+		if($this->getActionStack()->getSize() >= $this->maxForwards) {
+			throw new AgaviForwardException('Too many forwards have been detected for this request');
 		}
 
-		if (!AG_AVAILABLE) {
+		if (!AgaviConfig::get('core.available', false)) {
 
 			// application is unavailable
-			$moduleName = AG_UNAVAILABLE_MODULE;
-			$actionName = AG_UNAVAILABLE_ACTION;
+			$moduleName = AgaviConfig::get('actions.unavailable_module');
+			$actionName = AgaviConfig::get('actions.unavailable_action');
 
-			if (!$this->actionExists($moduleName, $actionName))
-			{
-
+			if (!$this->actionExists($moduleName, $actionName)) {
 				// cannot find unavailable module/action
 				$error = 'Invalid configuration settings: ' .
-						 'AG_UNAVAILABLE_MODULE "%s", ' .
-						 'AG_UNAVAILABLE_ACTION "%s"';
+						 'actions.unavailable_module "%s", ' .
+						 'actions.unavailable_action "%s"';
 
 				$error = sprintf($error, $moduleName, $actionName);
 
-				throw new ConfigurationException($error);
-
+				throw new AgaviConfigurationException($error);
 			}
 
-		} else if (!$this->actionExists($moduleName, $actionName))
-		{
+		} elseif(!$this->actionExists($moduleName, $actionName)) {
 
 			// the requested action doesn't exist
 
@@ -119,23 +258,19 @@ abstract class Controller extends ParameterHolder
 			$this->context->getRequest()->setAttribute('requested_module', $moduleName);
 
 			// switch to error 404 action
-			$moduleName = AG_ERROR_404_MODULE;
-			$actionName = AG_ERROR_404_ACTION;
+			$moduleName = AgaviConfig::get('actions.error_404_module');
+			$actionName = AgaviConfig::get('actions.error_404_action');
 
-			if (!$this->actionExists($moduleName, $actionName))
-			{
-
+			if (!$this->actionExists($moduleName, $actionName)) {
 				// cannot find unavailable module/action
 				$error = 'Invalid configuration settings: ' .
-						 'AG_ERROR_404_MODULE "%s", ' .
-						 'AG_ERROR_404_ACTION "%s"';
+						 'actions.error_404_module "%s", ' .
+						 'actions.error_404_action "%s"';
 
 				$error = sprintf($error, $moduleName, $actionName);
 
-				throw new ConfigurationException($error);
-
+				throw new AgaviConfigurationException($error);
 			}
-
 		}
 
 		// create an instance of the action
@@ -145,96 +280,133 @@ abstract class Controller extends ParameterHolder
 		$this->getActionStack()->addEntry($moduleName, $actionName, $actionInstance);
 
 		// include the module configuration
-		ConfigCache::import(AG_MODULE_DIR . '/' . $moduleName . '/config/module.ini');
-		$enabled_str = 'MOD_' . strtoupper($moduleName) . '_ENABLED';
-		if (defined($enabled_str) && constant($enabled_str)) {
+		AgaviConfigCache::import(AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/config/module.xml');
 
+		$oldAutoloads = null;
+		$moduleAutoload = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/config/autoload.xml';
+		if(is_readable($moduleAutoload)) {
+			$oldAutoloads = Agavi::$autoloads;
+			include(AgaviConfigCache::checkConfig($moduleAutoload));
+		}
+
+		if(AgaviConfig::get('modules.' . strtolower($moduleName) . '.enabled')) {
 			// check for a module config.php
-			$moduleConfig = AG_MODULE_DIR . '/' . $moduleName . '/config.php';
+			$moduleConfig = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/config.php';
 			if (is_readable($moduleConfig)) {
 				require_once($moduleConfig);
 			}
 
 			// initialize the action
-			if ($actionInstance->initialize($this->context)) {
+			$actionInstance->initialize($this->context);
+			
+			// create a new filter chain
+			$fcfi = $this->context->getFactoryInfo('filter_chain');
+			$filterChain = new $fcfi['class']();
 
-				// create a new filter chain
-				$filterChain = new FilterChain();
+			if(AgaviConfig::get('core.available', false)) {
+				// the application is available so we'll register
+				// global and module filters, otherwise skip them
 
-				if (AG_AVAILABLE) {
-					// the application is available so we'll register
-					// global and module filters, otherwise skip them
+				// does this action require security?
+				if(AgaviConfig::get('core.use_security', false) && $actionInstance->isSecure()) {
 
-					// does this action require security?
-					if (AG_USE_SECURITY && $actionInstance->isSecure()) {
+					if(!($this->context->getUser() instanceof AgaviSecurityUser)) {
+						$error = 'Security is enabled, but your User implementation isn\'t a sub-class of SecurityUser';
 
-						if (!($this->context->getUser() instanceof SecurityUser)) {
-							$error = 'Security is enabled, but your User ' .
-							         'implementation isn\'t a sub-class of ' .
-							         'SecurityUser';
-
-							throw new SecurityException($error);
-
-						}
-
-						// register security filter
-						$filterChain->register($this->context->getSecurityFilter());
-
+						throw new AgaviSecurityException($error);
 					}
 
-					// load filters
-					$this->loadGlobalFilters($filterChain);
-					$this->loadModuleFilters($filterChain);
-
+					// register security filter
+					$filterChain->register($this->filters['security']);
 				}
 
-				// register the execution filter
-				$execFilter = new $this->executionFilterClassName();
-
-				$execFilter->initialize($this->context);
-				$filterChain->register($execFilter);
-
-				// process the filter chain
-				$filterChain->execute();
-
-			} else
-			{
-
-				// action failed to initialize
-				$error = 'Action initialization failed for module "%s", ' .
-						 'action "%s"';
-
-				$error = sprintf($error, $moduleName, $actionName);
-
-				throw new InitializationException($error);
-
+				// load filters
+				$this->loadFilters($filterChain, 'action');
+				$this->loadFilters($filterChain, 'action', $moduleName);
 			}
 
-		} else
-		{
+			// register the execution filter
+			$filterChain->register($this->filters['execution']);
 
+			// process the filter chain
+			$filterChain->execute();
+
+			if($oldAutoloads !== null) {
+				Agavi::$autoloads = $oldAutoloads;
+			}
+
+		} else {
 			// module is disabled
-			$moduleName = AG_MODULE_DISABLED_MODULE;
-			$actionName = AG_MODULE_DISABLED_ACTION;
+			$moduleName = AgaviConfig::get('actions.module_disabled_module');
+			$actionName = AgaviConfig::get('actions.module_disabled_action');
 
-			if (!$this->actionExists($moduleName, $actionName))
-			{
-
+			if(!$this->actionExists($moduleName, $actionName)) {
 				// cannot find mod disabled module/action
 				$error = 'Invalid configuration settings: ' .
-						 'AG_MODULE_DISABLED_MODULE "%s", ' .
-						 'AG_MODULE_DISABLED_ACTION "%s"';
+						 'actions.module_disabled_module "%s", ' .
+						 'actions.module_disabled_action "%s"';
 
 				$error = sprintf($error, $moduleName, $actionName);
 
-				throw new ConfigurationException($error);
-
+				throw new AgaviConfigurationException($error);
 			}
 
 			$this->forward($moduleName, $actionName);
-
 		}
+	}
 
+	/**
+	 * Retrieve the currently executing Action's name.
+	 *
+	 * @return     string The currently executing action name, if one is set,
+	 *                    otherwise null.
+	 *
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getActionName()
+	{
+		// get the last action stack entry
+		$actionEntry = $this->getActionStack()->getLastEntry();
+
+		return $actionEntry->getActionName();
+	}
+	
+	/**
+	 * Retrieve the currently executing Action's module directory.
+	 *
+	 * @return     string An absolute filesystem path to the directory of the
+	 *                    currently executing module if set, otherwise null.
+	 *
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getModuleDirectory()
+	{
+		// get the last action stack entry
+		$actionEntry = $this->getActionStack()->getLastEntry();
+
+		return AgaviConfig::get('core.module_dir') . '/' . $actionEntry->getModuleName();
+	}
+
+	/**
+	 * Retrieve the currently executing Action's module name.
+	 *
+	 * @return     string The currently executing module name, if one is set,
+	 *                    otherwise null.
+	 *
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getModuleName()
+	{
+		// get the last action stack entry
+		$actionEntry = $this->getActionStack()->getLastEntry();
+
+		return $actionEntry->getModuleName();
 	}
 
 	/**
@@ -243,8 +415,8 @@ abstract class Controller extends ParameterHolder
 	 * @param      string A module name.
 	 * @param      string An action name.
 	 *
-	 * @return     Action An Action implementation instance, if the action 
-	 *                    exists, otherwise null.
+	 * @return     AgaviAction An Action implementation instance, if the action 
+	 *                         exists, otherwise null.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @author     Mike Vincent <mike@agavi.org>
@@ -253,7 +425,7 @@ abstract class Controller extends ParameterHolder
 	 */
 	public function getAction ($moduleName, $actionName)
 	{
-		$file = AG_MODULE_DIR . '/' . $moduleName . '/actions/' . $actionName . 'Action.class.php';
+		$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/actions/' . $actionName . 'Action.class.php';
 
 		if (file_exists($file)) {
 			require_once($file);
@@ -283,25 +455,9 @@ abstract class Controller extends ParameterHolder
 	}
 
 	/**
-	 * Retrieve the action stack.
-	 *
-	 * @return     ActionStack An ActionStack instance, if the action stack is
-	 *                         enabled, otherwise null.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public function getActionStack ()
-	{
-
-		return $this->context->getActionStack();
-
-	}
-
-	/**
 	 * Retrieve the current application context.
 	 *
-	 * @return     Context A Context instance.
+	 * @return     AgaviContext A Context instance.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -314,124 +470,11 @@ abstract class Controller extends ParameterHolder
 	}
 
 	/**
-	 * Retrieve a global Model implementation instance.
-	 *
-	 * @param      string A model name.
-	 *
-	 * @return     Model A Model implementation instance, if the model exists,
-	 *                   otherwise null. If the model implements an initialize
-	 *                   method, it will be called with a Context instance.
-	 *
-	 * @throws     AutloadException if class is ultimately not found.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @author     Mike Vincent <mike@agavi.org>
-	 * @since      0.9.0
-	 */
-	public function getGlobalModel ($modelName)
-	{
-
-		$class = $modelName . 'Model';
-
-		if (!class_exists($class, false)) {
-			$file = AG_LIB_DIR . '/models/' . $modelName . 'Model.class.php';
-			if (file_exists($file)) {
-				require_once($file);
-			} else {
-				$pattern = AG_LIB_DIR . '/' . '*' . '/models/' . $modelName . 'Model.class.php';
-				if ($files = glob($pattern)) {
-					// only include the first file found
-					require_once($files[0]);
-				}
-			}
-		}
-
-		// if the above code didnt find the class, allow autoload to fire as a last ditch attempt to find it
-		if (class_exists($class)) {
-			if (Toolkit::isSubClass($class, 'SingletonModel')) {
-				$model = call_user_func(array($class, 'getInstance'), $class);
-			} else {
-				$model = new $class();
-			}
-			if (method_exists($model, 'initialize')) {
-				$model->initialize($this->context);
-			}
-			return $model;
-		}
-		// we'll never actually get here, but what the hay.
-		return null;
-	}
-
-	/**
-	 * Retrieve the singleton instance of this class.
-	 *
-	 * @return     Controller A Controller implementation instance.
-	 *
-	 * @throws     <b>ControllerException</b> If a controller implementation
-	 *                                        instance has not been created.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 * @deprecated
-	 */
-	public static function getInstance ()
-	{
-		$error = 'Controller::getInstance deprecated, use newInstance method instead.';
-		throw new ControllerException($error);
-	}
-
-	/**
-	 * Retrieve a Model implementation instance.
-	 *
-	 * @param      string A module name.
-	 * @param      string A model name.
-	 *
-	 * @return     Model A Model implementation instance, if the model exists,
-	 *                   otherwise null. If the model implements an initialize
-	 *                   method, it will be called with a Context instance.
-	 *
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @author     Mike Vincent <mike@agavi.org>
-	 * @since      0.9.0
-	 */
-	public function getModel ($moduleName, $modelName)
-	{
-
-		$file = AG_MODULE_DIR . '/' . $moduleName . '/models/' . $modelName .	'Model.class.php';
-		require_once($file);
-
-		$class = $modelName . 'Model';
-
-		// fix for same name classes
-		$moduleClass = $moduleName . '_' . $class;
-
-		if (class_exists($moduleClass, false)) {
-			$class = $moduleClass;
-		}
-
-		if (Toolkit::isSubClass($class, 'SingletonModel')) {
-			$model = call_user_func(array($class, 'getInstance'), $class);
-		} else {
-			$model = new $class();
-		}
-
-		if (method_exists($model, 'initialize')) {
-			$model->initialize($this->context);
-		}
-
-		return $model;
-
-	}
-
-	/**
 	 * Retrieve the presentation rendering mode.
 	 *
 	 * @return     int One of the following:
-	 *                 - View::RENDER_CLIENT
-	 *                 - View::RENDER_VAR
+	 *                 - AgaviView::RENDER_CLIENT
+	 *                 - AgaviView::RENDER_VAR
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -449,8 +492,8 @@ abstract class Controller extends ParameterHolder
 	 * @param      string A module name.
 	 * @param      string A view name.
 	 *
-	 * @return     View A View implementation instance, if the model exists,
-	 *                  otherwise null.
+	 * @return     AgaviView A View implementation instance, if the model exists,
+	 *                       otherwise null.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @author     Mike Vincent <mike@agavi.org>
@@ -460,7 +503,7 @@ abstract class Controller extends ParameterHolder
 	public function getView ($moduleName, $viewName)
 	{
 
-		$file = AG_MODULE_DIR . '/' . $moduleName . '/views/' . $viewName .
+		$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/views/' . $viewName .
 				'View.class.php';
 
 		require_once($file);
@@ -492,107 +535,80 @@ abstract class Controller extends ParameterHolder
 	/**
 	 * Initialize this controller.
 	 *
-	 * @param      Context object
-	 * @return     void
+	 * @param      AgaviContext object
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @author     Mike Vincent <mike@agavi.org>
 	 * @since      0.9.0
 	 */
-	public function initialize (Context $context)
+	public function initialize (AgaviContext $context, $parameters = array())
 	{
-		$this->maxForwards = defined('AG_MAX_FORWARDS') ? AG_MAX_FORWARDS : 20;
+		$this->maxForwards = isset($parameters['max_fowards']) ? $parameters['max_forwards'] : 20;
+		
 		$this->context = $context;
+		
+		$asfi = $context->getFactoryInfo('action_stack');
+		$this->actionStack = new $asfi['class']();
+		
+		if(AgaviConfig::get('core.use_security', false)) {
+			$sffi = $context->getFactoryInfo('security_filter');
+			$this->filters['security'] = new $sffi['class']();
+			$this->filters['security']->initialize($this->context, $sffi['parameters']);
+		}
+		
+		$dffi = $this->context->getFactoryInfo('dispatch_filter');
+		$this->filters['dispatch'] = new $dffi['class']();
+		$this->filters['dispatch']->initialize($this->context, $dffi['parameters']);
 
+		$effi = $this->context->getFactoryInfo('execution_filter');
+		$this->filters['execution'] = new $effi['class']();
+		$this->filters['execution']->initialize($this->context, $effi['parameters']);
+		
+		$cfg = AgaviConfig::get('core.config_dir') . '/output_types.xml';
+		require_once(AgaviConfigCache::checkConfig($cfg, $context->getName()));
+		
 		register_shutdown_function(array($this, 'shutdown'));
 	}
-
+	
 	/**
-	 * Set the name of the ExecutionFilter class that is used in forward()
+	 * Load filters.
 	 *
-	 * @param      string The class name of the ExecutionFilter to use
-	 *
-	 * @return     void
+	 * @param      AgaviFilterChain A FilterChain instance.
+	 * @param      string           "global", "action" or "rendering".
+	 * @param      string           A module name, or "*" for the generic config.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.10.0
+	 * @since      0.11.0
 	 */
-	public function setExecutionFilterClassName($className)
+	public function loadFilters(AgaviFilterChain $filterChain, $which = 'global', $module = null)
 	{
-		$this->executionFilterClassName = $className;
-	}
-
-	/**
-	 * Load global filters.
-	 *
-	 * @param      FilterChain A FilterChain instance.
-	 *
-	 * @return     void
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	private function loadGlobalFilters ($filterChain)
-	{
-
-		static $list = array();
-
-		// grab our global filter ini and preset the module name
-		$config     = AG_CONFIG_DIR . '/filters.ini';
-		$moduleName = 'global';
-
-		if (!isset($list[$moduleName])) {
-			if (is_readable($config))	{
-				// load global filters
-				require_once(ConfigCache::checkConfig('config/filters.ini'));
+		if($module === null) {
+			$module = '*';
+		}
+		
+		if(($which != 'global' && !isset($this->filters[$which][$module])) || $which == 'global' && $this->filters[$which] == null) {
+			if($which == 'global') {
+				$this->filters[$which] = array();
+				$filters =& $this->filters[$which];
 			} else {
-				$list[$moduleName] = array();
+				$this->filters[$which][$module] = array();
+				$filters =& $this->filters[$which][$module];
+			}
+			$config = ($module == '*' ? AgaviConfig::get('core.config_dir') : AgaviConfig::get('core.module_dir') . '/' . $module . '/config') . '/' . $which . '_filters.xml';
+			if(is_readable($config)) {
+				require_once(AgaviConfigCache::checkConfig($config));
+			}
+		} else {
+			if($which == 'global') {
+				$filters =& $this->filters[$which];
+			} else {
+				$filters =& $this->filters[$which][$module];
 			}
 		}
-
-		// register filters
-		foreach ($list[$moduleName] as $filter)	{
+		
+		foreach($filters as $filter) {
 			$filterChain->register($filter);
 		}
-
-	}
-
-	/**
-	 * Load module filters.
-	 *
-	 * @param      FilterChain A FilterChain instance.
-	 *
-	 * @return     void
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	private function loadModuleFilters ($filterChain)
-	{
-
-		// filter list cache file
-		static $list = array();
-
-		// get the module name
-		$moduleName = $this->context->getModuleName();
-
-		if (!isset($list[$moduleName]))	{
-			// we haven't loaded a filter list for this module yet
-			$config = AG_MODULE_DIR . '/' . $moduleName . '/config/filters.ini';
-			if (is_readable($config)) {
-				require_once(ConfigCache::checkConfig($config));
-			} else {
-				// add an emptry array for this module since no filters
-				// exist
-				$list[$moduleName] = array();
-			}
-		}
-
-		// register filters
-		foreach ($list[$moduleName] as $filter)	{
-			$filterChain->register($filter);
-		}
-
 	}
 
 	/**
@@ -609,7 +625,7 @@ abstract class Controller extends ParameterHolder
 	public function modelExists ($moduleName, $modelName)
 	{
 
-		$file = AG_MODULE_DIR . '/' . $moduleName . '/models/' . $modelName .	'Model.class.php';
+		$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/models/' . $modelName .	'Model.class.php';
 
 		return is_readable($file);
 
@@ -628,33 +644,10 @@ abstract class Controller extends ParameterHolder
 	public function moduleExists ($moduleName)
 	{
 
-		$file = AG_MODULE_DIR . '/' . $moduleName . '/config/module.ini';
+		$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/config/module.xml';
 
 		return is_readable($file);
 
-	}
-
-	/**
-	 * Retrieve a new Controller implementation instance.
-	 *
-	 * @param      string A Controller implementation name.
-	 *
-	 * @return     Controller A Controller implementation instance.
-	 *
-	 * @throws     <b>FactoryException</b> If a new controller implementation
-	 *                                     instance cannot be created.
-	 *
-	 * @author     Mike Vincent <mike@agavi.org>
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public static function newInstance ($class)
-	{
-		if (class_exists($class) && Toolkit::isSubClass($class, 'Controller')) {
-			return new $class();
-		}
-		$error = "Class ($class) doesnt exist or is not a Controller.";
-		throw new FactoryException($error);
 	}
 
 	/**
@@ -662,10 +655,8 @@ abstract class Controller extends ParameterHolder
 	 *
 	 * @param      int A rendering mode.
 	 *
-	 * @return     void
-	 *
-	 * @throws     <b>RenderException</b> - If an invalid render mode has been 
-	 *                                      set.
+	 * @throws     <b>AgaviRenderException</b> - If an invalid render mode has been 
+	 *                                           set.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -673,8 +664,8 @@ abstract class Controller extends ParameterHolder
 	public function setRenderMode ($mode)
 	{
 
-		if ($mode == View::RENDER_CLIENT || $mode == View::RENDER_VAR ||
-			$mode == View::RENDER_NONE)
+		if ($mode == AgaviView::RENDER_CLIENT || $mode == AgaviView::RENDER_VAR ||
+			$mode == AgaviView::RENDER_NONE)
 		{
 
 			$this->renderMode = $mode;
@@ -687,64 +678,28 @@ abstract class Controller extends ParameterHolder
 		$error = 'Invalid rendering mode: %s';
 		$error = sprintf($error, $mode);
 
-		throw new RenderException($error);
+		throw new AgaviRenderException($error);
 
-	}
-
-	/**
-	 * Register a shutdown listener.
-	 * The object is notified when Controller is shutdown.
-	 *
-	 * All registered listeners are notified before framework core classes are 
-	 * shutdown so among others User, Request and Database are at you disposal
-	 * during shutdown.
-	 *
-	 * If you register an object twice it will be notified twice.
-	 *
-	 * @param      ShutdownListener
-	 *
-	 * @return     void
-	 *
-	 * @author     Veikko Makinen <mail@veikkomakinen.com>
-	 * @since      0.10.0
-	 */
-	public function registerShutdownListener (ShutdownListener $obj)
-	{
-		$this->shutdownList[] = $obj;
 	}
 
 	/**
 	 * Execute the shutdown procedure.
 	 *
-	 * All registered ShutdownListeners are notified before framework core
-	 * classes are shutdown.
-	 *
-	 * @return     void
-	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function shutdown ()
+	public function shutdown()
 	{
-		//notify shutdown listeners
-		if (is_array($this->shutdownList)) {
-			foreach ($this->shutdownList as $sdListener) {
-				$sdListener->shutdown();
-			}
-		}
-
-		if ($user = $this->context->getUser()) {
+		if($user = $this->context->getUser()) {
 			$user->shutdown();
 		}
 
-		session_write_close();
 		$this->context->getStorage()->shutdown();
 		$this->context->getRequest()->shutdown();
 
-		if (AG_USE_DATABASE) {
+		if(AgaviConfig::get('core.use_database')) {
 			$this->context->getDatabaseManager()->shutdown();
 		}
-
 	}
 
 	/**
@@ -760,27 +715,9 @@ abstract class Controller extends ParameterHolder
 	 */
 	public function viewExists ($moduleName, $viewName)
 	{
-
-		$file = AG_MODULE_DIR . '/' . $moduleName . '/views/' . $viewName .
-				'View.class.php';
-
+		$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/views/' . $viewName . 'View.class.php';
 		return is_readable($file);
-
 	}
-
-	/**
-	 * Indicates whether or not we were called using the CLI version of PHP.
-	 *
-	 * @return     bool true, if we're using cli, otherwise false.
-	 *
-	 * @author     Bob Zoller <bob@agavi.org>
-	 * @since      1.0
-	 */
-	public function inCLI()
-	{
-		return php_sapi_name() == 'cli';
-	}
-
 }
 
 ?>

@@ -18,22 +18,28 @@
 
 // menu links
 $links = array();
-$links['default_action']         = array(AG_DEFAULT_MODULE,         AG_DEFAULT_ACTION);
-$links['error_404_action']       = array(AG_ERROR_404_MODULE,       AG_ERROR_404_ACTION);
-$links['login_action']           = array(AG_LOGIN_MODULE,           AG_LOGIN_ACTION);
-$links['module_disabled_action'] = array(AG_MODULE_DISABLED_MODULE, AG_MODULE_DISABLED_ACTION);
-$links['secure_action']          = array(AG_SECURE_MODULE,          AG_SECURE_ACTION);
-$links['unavailable_action']     = array(AG_UNAVAILABLE_MODULE,     AG_UNAVAILABLE_ACTION);
+$links['default_action']         = array(AgaviConfig::get('actions.default_module'),         AgaviConfig::get('actions.default_action'));
+$links['error_404_action']       = array(AgaviConfig::get('actions.error_404_module'),             AgaviConfig::get('actions.error_404_action'));
+$links['login_action']           = array(AgaviConfig::get('actions.login_module'),           AgaviConfig::get('actions.login_action'));
+$links['module_disabled_action'] = array(AgaviConfig::get('actions.module_disabled_module'), AgaviConfig::get('actions.module_disabled_action'));
+$links['secure_action']          = array(AgaviConfig::get('actions.secure_module'),          AgaviConfig::get('actions.secure_action'));
+$links['unavailable_action']     = array(AgaviConfig::get('actions.unavailable_module'),     AgaviConfig::get('actions.unavailable_action'));
 
 // get the controller
 $controller = $this->getContext()->getController();
+$request = $this->getContext()->getRequest();
+
+$ma = $request->getModuleAccessor();
+$aa = $request->getActionAccessor();
 
 // loop through our links and format them
 foreach ($links as $key => &$parameters)
 {
 
-	$parameters = array(AG_MODULE_ACCESSOR => $parameters[0],
-						AG_ACTION_ACCESSOR => $parameters[1]);
+	$parameters = array(
+		$ma => $parameters[0],
+		$aa => $parameters[1]
+	);
 
 	$links[$key] = $controller->genURL(null, $parameters);
 

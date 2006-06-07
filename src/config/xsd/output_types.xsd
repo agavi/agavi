@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="configurations" type="configurations" />
+  <xs:complexType name="configurations">
+    <xs:sequence>
+      <xs:element name="configuration" minOccurs="0" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="output_types" type="output_types" />
+          </xs:sequence>
+          <xs:attribute name="environment" type="xs:string" />
+          <xs:attribute name="context" type="xs:string" />
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="parent" type="xs:string" />
+  </xs:complexType>
+
+  <xs:complexType name="output_types">
+    <xs:sequence>
+      <xs:element name="output_type" type="output_type" maxOccurs="unbounded" />
+    </xs:sequence>
+    <xs:attribute name="default" type="xs:string" use="required" />
+  </xs:complexType>
+  <xs:complexType name="output_type">
+    <xs:all>
+      <xs:element name="parameters" type="parameters" minOccurs="0" />
+      <xs:element name="renderer">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="parameters" type="parameters" minOccurs="0" />
+          </xs:sequence>
+          <xs:attribute name="class" type="xs:string" use="required" />
+          <xs:attribute name="ignore_slots" type="xs:string" />
+          <xs:attribute name="ignore_decorators" type="xs:string" />
+          <xs:attribute name="extension" type="xs:string" />
+        </xs:complexType>
+      </xs:element>
+    </xs:all>
+    <xs:attribute name="name" type="xs:string" use="required" />
+    <xs:attribute name="exception" type="xs:string" />
+    <xs:attribute name="fallback" type="xs:string" />
+  </xs:complexType>
+
+  <xs:complexType name="parameters">
+    <xs:sequence>
+      <xs:element name="parameter" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:simpleContent>
+            <xs:extension base="xs:string">
+              <xs:attribute name="name" type="xs:string" use="required" />
+            </xs:extension>
+          </xs:simpleContent>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+</xs:schema>

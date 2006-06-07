@@ -15,10 +15,10 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * BasicSecurityFilter checks security by calling the getCredential() method
- * of the action. Once the credential has been acquired, BasicSecurityFilter
- * verifies the user has the same credential by calling the hasCredential()
- * method of SecurityUser.
+ * AgaviBasicSecurityFilter checks security by calling the getCredentials() 
+ * method of the action. Once the credential has been acquired, 
+ * AgaviBasicSecurityFilter verifies the user has the same credential 
+ * by calling the hasCredentials() method of SecurityUser.
  *
  * @package    agavi
  * @subpackage filter
@@ -29,15 +29,13 @@
  *
  * @version    $Id$
  */
-class BasicSecurityFilter extends SecurityFilter
+class AgaviBasicSecurityFilter extends AgaviSecurityFilter
 {
 
 	/**
 	 * Execute this filter.
 	 *
-	 * @param      FilterChain A FilterChain instance.
-	 *
-	 * @return     void
+	 * @param      AgaviFilterChain A FilterChain instance.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -56,7 +54,7 @@ class BasicSecurityFilter extends SecurityFilter
 		$actionInstance = $actionEntry->getActionInstance();
 
 		// get the credential required for this action
-		$credential = $actionInstance->getCredential();
+		$credential = $actionInstance->getCredentials();
 
 		// credentials can be anything you wish; a string, array, object, etc.
 		// as long as you add the same exact data to the user as a credential,
@@ -69,7 +67,7 @@ class BasicSecurityFilter extends SecurityFilter
 		{
 
 			// the user is authenticated
-			if ($credential === null || $user->hasCredential($credential))
+			if ($credential === null || $user->hasCredentialss($credential))
 			{
 
 				// the user has access, continue
@@ -79,7 +77,7 @@ class BasicSecurityFilter extends SecurityFilter
 			{
 
 				// the user doesn't have access, exit stage left
-				$controller->forward(AG_SECURE_MODULE, AG_SECURE_ACTION);
+				$controller->forward(AgaviConfig::get('actions.secure_module'), AgaviConfig::get('actions.secure_action'));
 
 			}
 
@@ -87,7 +85,7 @@ class BasicSecurityFilter extends SecurityFilter
 		{
 
 			// the user is not authenticated
-			$controller->forward(AG_LOGIN_MODULE, AG_LOGIN_ACTION);
+			$controller->forward(AgaviConfig::get('actions.login_module'), AgaviConfig::get('actions.login_action'));
 
 		}
 

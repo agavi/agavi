@@ -15,7 +15,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * DatabaseManager allows you to setup your database connectivity before the
+ * AgaviDatabaseManager allows you to setup your database connectivity before the
  * request is handled. This eliminates the need for a filter to manage database
  * connections.
  *
@@ -29,7 +29,7 @@
  *
  * @version    $Id$
  */
-class DatabaseManager
+class AgaviDatabaseManager
 {
 
 	private
@@ -40,7 +40,7 @@ class DatabaseManager
 	/**
 	 * Retrieve the current application context.
 	 *
-	 * @return     Context The current Context instance.
+	 * @return     AgaviContext The current Context instance.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
@@ -56,10 +56,10 @@ class DatabaseManager
 	 *
 	 * @param      string A database name.
 	 *
-	 * @return     mixed A Database instance.
+	 * @return     mixed A AgaviDatabase instance.
 	 *
-	 * @throws     <b>DatabaseException</b> If the requested database name does
-	 *                                      not exist.
+	 * @throws     <b>AgaviDatabaseException</b> If the requested database name does
+	 *                                           not exist.
 	 */
 	public function getDatabase ($name = 'default')
 	{
@@ -75,43 +75,35 @@ class DatabaseManager
 		$error = 'Database "%s" does not exist';
 		$error = sprintf($error, $name);
 
-		throw new DatabaseException($error);
+		throw new AgaviDatabaseException($error);
 
 	}
 
 	/**
 	 * Initialize this DatabaseManager.
 	 *
-	 * @return     bool true, if initialization completes successfully, 
-	 *                  otherwise false.
-	 *
-	 * @throws     <b>InitializationException</b> If an error occurs while
-	 *                                            initializing this 
-	 *                                            DatabaseManager.
+	 * @throws     <b>AgaviInitializationException</b> If an error occurs while
+	 *                                                 initializing this 
+	 *                                                 DatabaseManager.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function initialize($context)
+	public function initialize(AgaviContext $context, $parameters = array())
 	{
 
 		$this->context = $context;
 
 		// load database configuration
-		require_once(ConfigCache::checkConfig('config/databases.ini'));
-
-		return true;
-
+		require_once(AgaviConfigCache::checkConfig(AgaviConfig::get('core.config_dir') . '/databases.xml'));
 	}
 
 	/**
 	 * Execute the shutdown procedure.
 	 *
-	 * @return     void
-	 *
-	 * @throws     <b>DatabaseException</b> If an error occurs while shutting 
-	 *                                      down this DatabaseManager.
+	 * @throws     <b>AgaviDatabaseException</b> If an error occurs while shutting 
+	 *                                           down this DatabaseManager.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0

@@ -15,7 +15,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * LoggingConfigHandler allows you to register loggers with the system.
+ * AgaviLoggingConfigHandler allows you to register loggers with the system.
  *
  * @package    agavi
  * @subpackage config
@@ -27,7 +27,7 @@
  *
  * @version    $Id$
  */
-class LoggingConfigHandler extends IniConfigHandler
+class AgaviLoggingConfigHandler extends AgaviIniConfigHandler
 {
 
 	/**
@@ -37,24 +37,17 @@ class LoggingConfigHandler extends IniConfigHandler
 	 *
 	 * @return     string Data to be written to a cache file.
 	 *
-	 * @throws     <b>UnreadableException</b> If a requested configuration file
-	 *                                        does not exist or is not readable.
-	 * @throws     <b>ParseException</b> If a requested configuration file is
-	 *                                   improperly formatted.
+	 * @throws     <b>AgaviUnreadableException</b> If a requested configuration file
+	 *                                             does not exist or is not readable.
+	 * @throws     <b>AgaviParseException</b> If a requested configuration file is
+	 *                                        improperly formatted.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function & execute ($config)
+	public function execute($config, $context = null)
 	{
-
-		// set our required categories list and initialize our handler
-		$categories = array('required_categories' => array('loggers'));
-
-		$this->initialize($categories);
-
-		// parse the ini
-		$ini = $this->parseIni($config);
+		$configurations = $this->orderConfigurations(AgaviConfigCache::parseConfig($config, false, $this->getValidationFile())->configurations, AgaviConfig::get('core.environment'), $context);
 
 		// init our data, includes, methods, appenders and appenders arrays
 		$data      = array();
@@ -62,38 +55,77 @@ class LoggingConfigHandler extends IniConfigHandler
 		$appenders = array();
 		$layouts   = array();
 
-		// get a list of loggers and their registered appenders/params
-		foreach ($ini['loggers'] as $key => &$value) {
-
-			$value = trim($value);
-
-			// is this category already registered?
-			if (in_array($value, $loggers)) {
-				// this category is already registered
-				$error = 'Configuration file "%s" specifies previously ' .
-				  'registered category "%s"';
-				$error = sprintf($error, $config, $value);
-				throw new ParseException($error);
+		foreach($configurations as $cfg) {
+			if(isset($cfg->loggers)) {
+				foreach($cfg->loggers as $logger) {
+					$name = $logger->getAttribute('name');
+					if(!isset($loggers[$name])) {
+						$loggers[$name] = array('class' => null, 'priority' => null, 'appenders' => array(), 'params' => array());
+					}
+					$loggers[$name]['class'] = $logger->hasAttribute('class') ? $logger->getAttribute('class') : $loggers[$name]['class'];
+					$loggers[$name]['priority'] = $logger->hasAttribute('priority') ? $logger->getAttribute('priority') : $loggers[$name]['priority'];
+					if(isset($logger->appenders)) {
+						foreach($logger->appenders as $appender) {
+							$loggers[$name]['appenders'][] = $appender->getValue();
+						}
+					}
+					$loggers[$name]['params'] = $this->getItemParameters($logger, $loggers[$name]['params']);
+				}
 			}
 
-			// see if we have the category registered for this logger
-			if (!isset($ini[$value])) {
-				// missing required key
-				$error = 'Configuration file "%s" specified nonexistent ' .
-				  'category "%s"';
-				$error = sprintf($error, $config, $value);
-				throw new ParseException($error);
+			if(isset($cfg->appenders)) {
+				foreach($cfg->appenders as $appender) {
+					$name = $appender->getAttribute('name');
+					if(!isset($appenders[$name])) {
+						$appenders[$name] = array('class' => null, 'layout' => null, 'params' => array());
+					}
+					$appenders[$name]['class'] = $appender->hasAttribute('class') ? $appender->getAttribute('class') : $appenders[$name]['class'];
+					$appenders[$name]['layout'] = $appender->hasAttribute('layout') ? $appender->getAttribute('layout') : $appenders[$name]['layout'];
+
+					$appenders[$name]['params'] = $this->getItemParameters($appender, $appenders[$name]['params']);
+				}
 			}
 
-			$this->loadLogger($config, $key, $loggers, $appenders, $ini, $value);
+			if(isset($cfg->layouts)) {
+				foreach($cfg->layouts as $layout) {
+					$name = $layout->getAttribute('name');
+					if(!isset($layouts[$name])) {
+						$layouts[$name] = array('class' => null, 'params' => array());
+					}
 
+					$layouts[$name]['class'] = $layout->hasAttribute('class') ? $layout->getAttribute('class') : $layouts[$name]['class'];
+					$layouts[$name]['params'] = $this->getItemParameters($layout, $layouts[$name]['params']);
+				}
+			}
 		}
 
-		$this->loadAppenders($config, $loggers, $appenders, $layouts, $ini);
+		if(count($loggers) > 0) {
+			foreach($layouts as $name => $layout) {
+				$data[] = sprintf('$%s = new %s();', $name, $layout['class']);
+				if(count($layout['params']) > 0) {
+					$data[] = sprintf('$%s->initialize(%s);', $name, var_export($layout['params'], true));
+				}
+			}
 
-		$this->loadLayouts($config, $loggers, $appenders, $layouts, $ini);
+			foreach($appenders as $name => $appender) {
+				$data[] = sprintf('$%s = new %s();', $name, $appender['class']);
+				if(count($appender['params']) > 0) {
+					$data[] = sprintf('$%s->initialize(%s);', $name, var_export($appender['params'], true));
+				}
+				$data[] = sprintf('$%s->setLayout($%s);', $name, $appender['layout']);
+			}
 
-		$this->generateRegistration($data, $loggers, $appenders, $layouts);
+			foreach($loggers as $name => $logger) {
+				$data[] = sprintf('$%s = new %s();', $name, $logger['class']);
+				foreach($logger['appenders'] as $appender) {
+					$data[] = sprintf('$%s->setAppender("%s", $%s);', $name, $appender, $appender);
+				}
+				if($logger['priority'] !== null) {
+					$data[] = sprintf('$%s->setPriority(%s);', $name, $logger['priority']);
+				}
+				$data[] = sprintf('LoggerManager::setLogger("%s", $%s);', $name, $name);
+			}
+		}
 
 		// compile data
 		$retval = "<?php\n" .
@@ -103,193 +135,6 @@ class LoggingConfigHandler extends IniConfigHandler
 						  implode("\n", $data));
 
 		return $retval;
-
-	}
-
-	/**
-	 * Generate raw cache data.
-	 *
-	 * @param      string A request method.
-	 * @param      array  The data array where our cache code will be appended.
-	 * @param      array  An associative array of request method data.
-	 * @param      array  An associative array of file/parameter data.
-	 * @param      array  A validators array.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @author     Bob Zoller <bob@agavi.org>
-	 * @author     Veikko Makinen (mail@veikkomakinen.com
-	 * @since      0.9.0
-	 */
-	private function generateRegistration(&$data, &$loggers, &$appenders, &$layouts)
-	{
-
-		foreach ($layouts as $name => &$layout) {
-			$str = '$%s = new %s;';
-			$data[] = sprintf($str, strtolower($name), $layout['class']);
-			if (isset($layout['params'])) {
-				$str = '$%s->initialize(%s);';
-				$data[] = sprintf($str, strtolower($name), $layout['params']);
-			}
-		}
-
-		foreach ($appenders as $name => &$appender) {
-			$str = '$%s = new %s;';
-			$data[] = sprintf($str, strtolower($name), $appender['class']);
-			if (isset($appender['params'])) {
-				$str = '$%s->initialize(%s);';
-				$data[] = sprintf($str, strtolower($name), $appender['params']);
-			}
-			$str = '$%s->setLayout($%s);';
-			$data[] = sprintf($str, strtolower($name), strtolower($appender['layout']));
-		}
-
-		foreach ($loggers as $name => &$logger) {
-			$str = '$%s = new %s;';
-			$data[] = sprintf($str, strtolower($name), $logger['class']);
-			foreach ($logger['appenders'] as &$appender) {
-				$str = '$%s->setAppender("%s", $%s);';
-				$data[] = sprintf($str, strtolower($name), $appender, strtolower($appender));
-			}
-			if (isset($logger['priority'])) {
-				$str = '$%s->setPriority(%s);';
-				$data[] = sprintf($str, strtolower($name), $logger['priority']);
-			}
-			$str = 'LoggerManager::setLogger("%s", $%s);';
-			$data[] = sprintf($str, $name, strtolower($name));
-		}
-
-	}
-
-	/**
-	 * Load the linear list of attributes from the [appenders] category.
-	 *
-	 * @param      string The configuration file name (for exception usage).
-	 * @param      array  An associative array of request method data.
-	 * @param      array  An associative array of file/parameter appenders in 
-	 *                    which to store loaded information.
-	 * @param      array  An associative array of validator data.
-	 * @param      array  The loaded ini configuration that we'll use for
-	 *                    verification purposes.
-	 * @param      string A comma delimited list of file/parameter names.
-	 *
-	 * @return     void
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	private function loadAppenders(&$config, &$loggers, &$appenders, &$layouts, &$ini)
-	{
-
-		foreach (array_keys($appenders) as $appender) {
-			if (!isset($ini[$appender]['class']) || !isset($ini[$appender]['layout'])) {
-				$error = 'Configuration file "%s" has section "%s" without a class/layout key';
-				$error = sprintf($error, $config, $appender);
-				throw new ParseException($error);
-			}
-
-			$entry = array();
-			$entry['class'] = $ini[$appender]['class'];
-			if (!isset($ini[$ini[$appender]['layout']])) {
-				$error = 'Configuration file "%s" specifies layout ' .
-						 '"%s", but it has no section';
-				$error = sprintf($error, $config, $ini[$appender]['layout']);
-				throw new ParseException($error);
-			}
-			if (!isset($layouts[$ini[$appender]['layout']])) {
-				$layouts[$ini[$appender]['layout']] = null;
-			}
-			$entry['layout'] = $ini[$appender]['layout'];
-			$entry['params'] = ParameterParser::parse($ini[$appender]);
-
-			$appenders[$appender] = $entry;
-		}
-	}
-
-	private function loadLayouts(&$config, &$loggers, &$appenders, &$layouts, &$ini)
-	{
-
-		foreach (array_keys($layouts) as $layout) {
-			if (!isset($ini[$layout]['class'])) {
-				$error = 'Configuration file "%s" has section "%s" without a class key';
-				$error = sprintf($error, $config, $layout);
-				throw new ParseException($error);
-			}
-
-			$entry = array();
-			$entry['class'] = $ini[$layout]['class'];
-			$entry['params'] = ParameterParser::parse($ini[$layout]);
-
-			$layouts[$layout] = $entry;
-		}
-	}
-
-	/**
-	 * Load all request methods and the file/parameter names that will be
-	 * validated from the [methods] category.
-	 *
-	 * @param      string The configuration file name (for exception usage).
-	 * @param      string A Logger "instance" name.
-	 * @param      array  An associative array of request method data.
-	 * @param      array  An associative array of file/parameter appenders in 
-	 *                    which to store loaded information.
-	 * @param      array  The loaded ini configuration that we'll use for
-	 *                    verification purposes.
-	 *
-	 * @return     void
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	private function loadLogger(&$config, &$logger, &$loggers, &$appenders, &$ini, &$category)
-	{
-
-		if (!isset($ini[$category]['class']) || (trim($ini[$category]['class']) == '')) {
-				// missing/empty class key
-				$error = 'Configuration file "%s" specifies logger ' .
-						 '"%s", with missing/empty class key';
-				$error = sprintf($error, $config, $category);
-				throw new ParseException($error);
-		}
-
-		if (!isset($ini[$category]['appenders']) || (trim($ini[$category]['appenders']) == '')) {
-				// missing/empty appenders key
-				$error = 'Configuration file "%s" specifies logger ' .
-						 '"%s", with missing/empty appenders key';
-				$error = sprintf($error, $config, $category);
-				throw new ParseException($error);
-		}
-
-		$loggers[$logger]['class'] = $ini[$category]['class'];
-
-		// explode the list of names
-		$array = explode(',', $ini[$category]['appenders']);
-
-		// loop through the names
-		foreach ($array as $name) {
-			$name = trim($name);
-
-			// make sure we have the required status of this file or parameter
-			if (!isset($ini[$name])) {
-				// missing section
-				$error = 'Configuration file "%s" specifies appender ' .
-						 '"%s", but it has no section';
-				$error = sprintf($error, $config, $name);
-				throw new ParseException($error);
-			}
-
-			if (!isset($appenders[$name])) {
-				$appenders[$name] = array();
-			}
-
-			// add this appender to the current request method
-			$loggers[$logger]['appenders'][] = $name;
-		}
-
-		if (isset($ini[$category]['priority'])) {
-			$loggers[$logger]['priority'] = $ini[$category]['priority'];
-		}
-
-		$loggers[$logger]['params'] =& ParameterParser::parse($ini[$category]);
 
 	}
 

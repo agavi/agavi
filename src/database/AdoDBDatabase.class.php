@@ -14,7 +14,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AdoDBDatabase provides connectivity for the AdoDB database abstraction
+ * AgaviAdoDBDatabase provides connectivity for the AdoDB database abstraction
  * layer.
  *
  * <b>Optional parameters:</b>
@@ -48,13 +48,13 @@
  *
  * @version    $Id$
  */
-class AdoDBDatabase extends Database
+class AgaviAdoDBDatabase extends AgaviDatabase
 {
 
 	/**
 	 * Connect to the database.
 	 *
-	 * @throws     <b>DatabaseException</b> If a connection could not be created
+	 * @throws     <b>AgaviDatabaseException</b> If a connection could not be created
 	 *
 	 * @author     Steven Weiss (info@code-factory.de)
 	 * @since      0.10.0
@@ -91,7 +91,7 @@ class AdoDBDatabase extends Database
 						// missing required dsn parameter
 						$error = 'Database configuration specifies method "dsn", but is missing dsn parameter';
 
-						throw new DatabaseException($error);
+						throw new AgaviDatabaseException($error);
 					}
 
 					break;
@@ -116,7 +116,7 @@ class AdoDBDatabase extends Database
 					$error = 'Invalid AdoDBDatabase parameter retrieval method "%s"';
 					$error = sprintf($error, $method);
 
-					throw new DatabaseException($error);
+					throw new AgaviDatabaseException($error);
 
 			}
 
@@ -143,7 +143,7 @@ class AdoDBDatabase extends Database
 				if ($persistent)
 					$this->connection->PConnect($host, $username, $password, $database);
 				else
-					$this->connection->Connect($host, $username, $password, $database);
+					$this->connection->NConnect($host, $username, $password, $database);
 			}
 
 			// set default fetch mode to 'assoc'
@@ -162,7 +162,7 @@ class AdoDBDatabase extends Database
 		{
 
 			// the connection's foobar'd
-			throw new DatabaseException($e->getMessage());
+			throw new AgaviDatabaseException($e->getMessage());
 
 		}
 
@@ -173,7 +173,7 @@ class AdoDBDatabase extends Database
 	 *
 	 * @return     array An associative array of connection parameters.
 	 *
-	 * @throws     <b>DatabaseException</b> If the DSN string is not correct.
+	 * @throws     <b>AgaviDatabaseException</b> If the DSN string is not correct.
 	 * 
 	 * @author     Steven Weiss (info@code-factory.de)
 	 * @since      0.10.0
@@ -182,7 +182,7 @@ class AdoDBDatabase extends Database
 	{
 		if (!isset($array['dsn']) || !is_string($array['dsn']) || $array['dsn'] == '')
 		{
-			throw new DatabaseException('Database configuration specifies method "' . $method . '", but is missing dsn parameter');
+			throw new AgaviDatabaseException('Database configuration specifies method "' . $method . '", but is missing dsn parameter');
 		}
 
 		return $array['dsn'];		
@@ -191,10 +191,8 @@ class AdoDBDatabase extends Database
 	/**
 	 * Execute the shutdown procedure.
 	 *
-	 * @return     void
-	 *
-	 * @throws     <b>DatabaseException</b> If an error occurs while shutting
-	 *                                      down this database.
+	 * @throws     <b>AgaviDatabaseException</b> If an error occurs while shutting
+	 *                                           down this database.
 	 *
 	 * @author     Steven Weiss (info@code-factory.de)
 	 * @since      0.10.0

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+| This file is part of the Agavi package.                                    |
+| Copyright (c) 2006 the Agavi Project.                                      |
+| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
+| OUTPUT TYPE CONFIGURATION                                                  |
+| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
+| KEYWORDS:                                                                  |
+| You may reference any configuration directive by enclosing the name in     |
+| "%" signs. Example: %core.agavi_dir%                                         |
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+-->
+<configurations>
+	
+	<configuration>
+		<output_types default="html">
+			
+			<output_type name="html">
+				<renderer class="AgaviPHPRenderer" />
+				<parameters>
+					<parameter name="Content-Type">text/html; charset=UTF-8</parameter>
+				</parameters>
+			</output_type>
+			
+			<output_type name="html_print" fallback="html">
+				<renderer extension="-print.php" ignore_slots="true" class="AgaviPHPRenderer" />
+				<parameters>
+					<parameter name="Content-Type">text/html; charset=UTF-8</parameter>
+				</parameters>
+			</output_type>
+			
+			<output_type name="xml">
+				<renderer extension=".xml.php" ignore_decorators="true" class="AgaviXSLRenderer">
+					<parameters>
+						<parameter name="encoding">UTF-8</parameter>
+					</parameters>
+				</renderer>
+				<parameters>
+					<parameter name="Content-Type">text/xml</parameter>
+				</parameters>
+			</output_type>
+			
+		</output_types>
+	</configuration>
+	
+</configurations>

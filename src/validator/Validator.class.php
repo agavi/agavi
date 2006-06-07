@@ -15,7 +15,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * Validator allows you to apply constraints to user entered parameters.
+ * AgaviValidator allows you to apply constraints to user entered parameters.
  *
  * @package    agavi
  * @subpackage validator
@@ -26,7 +26,7 @@
  *
  * @version    $Id$
  */
-abstract class Validator extends ParameterHolder
+abstract class AgaviValidator extends AgaviParameterHolder
 {
 
 	private
@@ -49,7 +49,7 @@ abstract class Validator extends ParameterHolder
 	/**
 	 * Retrieve the current application context.
 	 *
-	 * @return     Context The current Context instance.
+	 * @return     AgaviContext The current Context instance.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -64,8 +64,8 @@ abstract class Validator extends ParameterHolder
 	/**
 	 * Initialize this validator.
 	 *
-	 * @param      Context The current application context.
-	 * @param      array   An associative array of initialization parameters.
+	 * @param      AgaviContext The current application context.
+	 * @param      array        An associative array of initialization parameters.
 	 *
 	 * @return     bool true, if initialization completes successfully,
 	 *                  otherwise false.
@@ -73,7 +73,7 @@ abstract class Validator extends ParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function initialize ($context, $parameters = null)
+	public function initialize(AgaviContext $context, $parameters = array())
 	{
 
 		$this->context = $context;

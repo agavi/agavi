@@ -15,7 +15,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * BasicSecurityUser will handle any type of data as a credential.
+ * AgaviBasicSecurityUser will handle any type of data as a credential.
  *
  * @package    agavi
  * @subpackage user
@@ -26,7 +26,7 @@
  *
  * @version    $Id$
  */
-class BasicSecurityUser extends SecurityUser
+class AgaviBasicSecurityUser extends AgaviSecurityUser
 {
 
 	// +-----------------------------------------------------------------------+
@@ -52,8 +52,6 @@ class BasicSecurityUser extends SecurityUser
 	 *
 	 * @param      mixed Credential data.
 	 *
-	 * @return     void
-	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
@@ -71,8 +69,6 @@ class BasicSecurityUser extends SecurityUser
 
 	/**
 	 * Clear all credentials associated with this user.
-	 *
-	 * @return     void
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -98,7 +94,7 @@ class BasicSecurityUser extends SecurityUser
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
-	public function hasCredential ($credential)
+	public function hasCredentials ($credential)
 	{
 		if(is_array($credential))
 		{
@@ -135,21 +131,20 @@ class BasicSecurityUser extends SecurityUser
 	/**
 	 * Initialize this User.
 	 *
-	 * @param      Context A Context instance.
-	 * @param      array   An associative array of initialization parameters.
+	 * @param      AgaviContext A Context instance.
+	 * @param      array        An associative array of initialization parameters.
 	 *
 	 * @return     bool true, if initialization completes successfully,
 	 *                  otherwise false.
 	 *
-	 * @throws     <b>InitializationException</b> If an error occurs while
-	 *                                            initializing this User.
+	 * @throws     <b>AgaviInitializationException</b> If an error occurs while
+	 *                                                 initializing this User.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function initialize ($context, $parameters = null)
+	public function initialize(AgaviContext $context, $parameters = array())
 	{
-
 		// initialize parent
 		parent::initialize($context, $parameters);
 
@@ -159,15 +154,11 @@ class BasicSecurityUser extends SecurityUser
 		$this->authenticated = $storage->read(self::AUTH_NAMESPACE);
 		$this->credentials   = $storage->read(self::CREDENTIAL_NAMESPACE);
 
-		if ($this->authenticated == null)
-		{
-
+		if($this->authenticated == null) {
 			// initialize our data
 			$this->authenticated = false;
 			$this->credentials   = array();
-
 		}
-
 	}
 
 	/**
@@ -190,15 +181,13 @@ class BasicSecurityUser extends SecurityUser
 	 *
 	 * @param      mixed Credential data.
 	 *
-	 * @return     void
-	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
 	public function removeCredential ($credential)
 	{
 
-		if ($this->hasCredential($credential))
+		if ($this->hasCredentials($credential))
 		{
 
 			// we have the credential, now we have to find it
@@ -227,8 +216,6 @@ class BasicSecurityUser extends SecurityUser
 	 *
 	 * @param      bool A flag indicating the authenticated status of this user.
 	 *
-	 * @return     void
-	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
@@ -250,8 +237,6 @@ class BasicSecurityUser extends SecurityUser
 
 	/**
 	 * Execute the shutdown procedure.
-	 *
-	 * @return     void
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0

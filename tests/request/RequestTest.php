@@ -2,7 +2,7 @@
 
 class SampleRequest extends Request
 {
-	public function initialize($context, $parameters = null) {}
+	public function initialize(AgaviContext $context, $parameters = array()) {}
 	public function shutdown() {}
 }
 
@@ -110,9 +110,9 @@ class RequestTest extends UnitTestCase
 	{
 		$this->assertEqual(array(), $this->_r->getAttributeNamespaces());
 		$this->_r->setAttribute('blah', 'blahval');
-		$this->assertEqual(array(AG_REQUEST_NAMESPACE), $this->_r->getAttributeNamespaces());
+		$this->assertEqual(array($this->_r->getDefaultNamespace()), $this->_r->getAttributeNamespaces());
 		$this->_r->setAttribute('blah', 'blahval', 'some/other/namespace');
-		$this->assertEqual(array(AG_REQUEST_NAMESPACE, 'some/other/namespace'), $this->_r->getAttributeNamespaces());
+		$this->assertEqual(array($this->_r->getDefaultNamespace(), 'some/other/namespace'), $this->_r->getAttributeNamespaces());
 	}
 
 	public function testgetAttributes()
@@ -175,9 +175,9 @@ class RequestTest extends UnitTestCase
 
 	public function testhasAttributeNamespace()
 	{
-		$this->assertFalse($this->_r->hasAttributeNamespace(AG_REQUEST_NAMESPACE));
+		$this->assertFalse($this->_r->hasAttributeNamespace($this->_r->getDefaultNamespace()));
 		$this->_r->setAttribute('blah', 'blahval');
-		$this->assertTrue($this->_r->hasAttributeNamespace(AG_REQUEST_NAMESPACE));
+		$this->assertTrue($this->_r->hasAttributeNamespace($this->_r->getDefaultNamespace()));
 		$this->assertFalse($this->_r->hasAttributeNamespace('some/other/namespace'));
 		$this->_r->setAttribute('blah', 'blahval', 'some/other/namespace');
 		$this->assertTrue($this->_r->hasAttributeNamespace('some/other/namespace'));
@@ -196,17 +196,6 @@ class RequestTest extends UnitTestCase
 		$this->assertFalse($this->_r->hasErrors());
 		$this->_r->setError('blah', 'blahval');
 		$this->assertTrue($this->_r->hasErrors());
-	}
-
-	public function testnewInstance()
-	{
-		$this->assertIsA(Request::newInstance('SampleRequest'), 'SampleRequest');
-		try {
-			Request::newInstance('AgaviException');
-			$this->fail('Expected FactoryException not thrown.');
-		} catch (FactoryException $e) {
-			$this->pass();
-		}
 	}
 
 	public function testremoveError()
@@ -236,8 +225,8 @@ class RequestTest extends UnitTestCase
 	public function testremoveAttributeNamespace()
 	{
 		$this->_r->setAttribute('blah', 'blahval');
-		$this->_r->removeAttributeNamespace(AG_REQUEST_NAMESPACE);
-		$this->assertFalse($this->_r->hasAttributeNamespace(AG_REQUEST_NAMESPACE));
+		$this->_r->removeAttributeNamespace($this->_r->getDefaultNamespace());
+		$this->assertFalse($this->_r->hasAttributeNamespace($this->_r->getDefaultNamespace()));
 	}
 
 	public function testsetAttribute()

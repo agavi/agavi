@@ -14,7 +14,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * FileAppender appends Messages to a given file.
+ * AgaviFileAppender appends AgaviMessages to a given file.
  *
  * @package    agavi
  * @subpackage logging
@@ -25,7 +25,7 @@
  *
  * @version    $Id$
  */
-class FileAppender extends Appender
+class AgaviFileAppender extends AgaviAppender
 {
 
 	protected $_handle = null;
@@ -36,14 +36,12 @@ class FileAppender extends Appender
 	 * 
 	 * @param      array An array of parameters.
 	 * 
-	 * @return     void
-	 * 
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.10.0
 	 */
-	public function initialize($params)
+	public function initialize($params = array())
 	{
-		if (isset($params['file'])) {
+		if(isset($params['file'])) {
 			$this->_filename = $params['file'];
 		}
 	}
@@ -51,8 +49,8 @@ class FileAppender extends Appender
 	/**
 	 * Retrieve the file handle for this FileAppender.
 	 * 
-	 * @throws     <b>LoggingException</b> if file cannot be opened for 
-	 *                                     appending.
+	 * @throws     <b>AgaviLoggingException</b> if file cannot be opened for 
+	 *                                          appending.
 	 * 
 	 * @return     integer
 	 * 
@@ -63,7 +61,7 @@ class FileAppender extends Appender
 	{
 		if (is_null($this->_handle)) {
 			if (!$this->_handle = fopen($this->_filename, 'a')) {
-				throw new LoggingException("Cannot open file ({$this->_filename})");
+				throw new AgaviLoggingException("Cannot open file ({$this->_filename})");
 			}
 		}
 		return $this->_handle;
@@ -73,8 +71,6 @@ class FileAppender extends Appender
 	 * Execute the shutdown procedure.
 	 * 
 	 * If open, close the filehandle.
-	 * 
-	 * return void
 	 * 
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.10.0
@@ -91,10 +87,9 @@ class FileAppender extends Appender
 	 * 
 	 * @param      Message
 	 * 
-	 * @throws     <b>LoggingException</b> if no Layout is set or the file
-	 *                                     cannot be written.
+	 * @throws     <b>AgaviLoggingException</b> if no Layout is set or the file
+	 *                                          cannot be written.
 	 * 
-	 * @return     void
 	 * 
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.10.0
@@ -102,12 +97,12 @@ class FileAppender extends Appender
 	public function write($message)
 	{
 		if ($layout = $this->getLayout() === null) {
-			throw new LoggingException('No Layout set');
+			throw new AgaviLoggingException('No Layout set');
 		}
 
 		$str = sprintf("%s\n", $this->getLayout()->format($message));
 		if (fwrite($this->_getHandle(), $str) === FALSE) {
-			throw new LoggingException("Cannot write to file ({$this->_filename})");
+			throw new AgaviLoggingException("Cannot write to file ({$this->_filename})");
 		}
 	}
 
