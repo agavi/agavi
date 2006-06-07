@@ -603,7 +603,7 @@ abstract class AgaviController extends AgaviParameterHolder
 			}
 			$config = ($module == '*' ? AgaviConfig::get('core.config_dir') : AgaviConfig::get('core.module_dir') . '/' . $module . '/config') . '/' . $which . '_filters.xml';
 			if(is_readable($config)) {
-				require_once(AgaviConfigCache::checkConfig($config));
+				require_once(AgaviConfigCache::checkConfig($config, $this->context->getName()));
 			}
 		} else {
 			if($which == 'global') {
