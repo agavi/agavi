@@ -280,7 +280,7 @@ abstract class AgaviController extends AgaviParameterHolder
 		$this->getActionStack()->addEntry($moduleName, $actionName, $actionInstance);
 
 		// include the module configuration
-		AgaviConfigCache::import(AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/config/module.xml');
+		AgaviConfigCache::import(AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/config/module.xml', true);
 
 		// save autoloads so we can restore them later
 		$oldAutoloads = Agavi::$autoloads;
