@@ -19,69 +19,122 @@
     <xs:all>
       <xs:element name="action_stack" minOccurs="0">
         <xs:complexType>
+          <xs:sequence>
+            <xs:element name="parameters" type="parameters" minOccurs="0" />
+          </xs:sequence>
           <xs:attribute name="class" type="xs:string" use="required" />
         </xs:complexType>
       </xs:element>
       <xs:element name="controller" minOccurs="0">
         <xs:complexType>
+          <xs:sequence>
+            <xs:element name="parameters" type="parameters" minOccurs="0" />
+          </xs:sequence>
           <xs:attribute name="class" type="xs:string" use="required" />
         </xs:complexType>
       </xs:element>
       <xs:element name="database_manager" minOccurs="0">
         <xs:complexType>
+          <xs:sequence>
+            <xs:element name="parameters" type="parameters" minOccurs="0" />
+          </xs:sequence>
           <xs:attribute name="class" type="xs:string" use="required" />
         </xs:complexType>
       </xs:element>
       <xs:element name="dispatch_filter" minOccurs="0">
         <xs:complexType>
+          <xs:sequence>
+            <xs:element name="parameters" type="parameters" minOccurs="0" />
+          </xs:sequence>
           <xs:attribute name="class" type="xs:string" use="required" />
         </xs:complexType>
       </xs:element>
       <xs:element name="execution_filter" minOccurs="0">
         <xs:complexType>
+          <xs:sequence>
+            <xs:element name="parameters" type="parameters" minOccurs="0" />
+          </xs:sequence>
           <xs:attribute name="class" type="xs:string" use="required" />
         </xs:complexType>
       </xs:element>
       <xs:element name="filter_chain" minOccurs="0">
         <xs:complexType>
+          <xs:sequence>
+            <xs:element name="parameters" type="parameters" minOccurs="0" />
+          </xs:sequence>
           <xs:attribute name="class" type="xs:string" use="required" />
         </xs:complexType>
       </xs:element>
       <xs:element name="logger_manager" minOccurs="0">
         <xs:complexType>
+          <xs:sequence>
+            <xs:element name="parameters" type="parameters" minOccurs="0" />
+          </xs:sequence>
           <xs:attribute name="class" type="xs:string" use="required" />
         </xs:complexType>
       </xs:element>
       <xs:element name="request" minOccurs="0">
         <xs:complexType>
+          <xs:sequence>
+            <xs:element name="parameters" type="parameters" minOccurs="0" />
+          </xs:sequence>
           <xs:attribute name="class" type="xs:string" use="required" />
         </xs:complexType>
       </xs:element>
       <xs:element name="security_filter" minOccurs="0">
         <xs:complexType>
+          <xs:sequence>
+            <xs:element name="parameters" type="parameters" minOccurs="0" />
+          </xs:sequence>
           <xs:attribute name="class" type="xs:string" use="required" />
         </xs:complexType>
       </xs:element>
       <xs:element name="routing" minOccurs="0">
         <xs:complexType>
+          <xs:sequence>
+            <xs:element name="parameters" type="parameters" minOccurs="0" />
+          </xs:sequence>
           <xs:attribute name="class" type="xs:string" use="required" />
         </xs:complexType>
       </xs:element>
       <xs:element name="storage" minOccurs="0">
         <xs:complexType>
+          <xs:sequence>
+            <xs:element name="parameters" type="parameters" minOccurs="0" />
+          </xs:sequence>
           <xs:attribute name="class" type="xs:string" use="required" />
         </xs:complexType>
       </xs:element>
       <xs:element name="user" minOccurs="0">
         <xs:complexType>
+          <xs:sequence>
+            <xs:element name="parameters" type="parameters" minOccurs="0" />
+          </xs:sequence>
           <xs:attribute name="class" type="xs:string" use="required" />
         </xs:complexType>
       </xs:element>
       <xs:element name="validator_manager" minOccurs="0">
         <xs:complexType>
+          <xs:sequence>
+            <xs:element name="parameters" type="parameters" minOccurs="0" />
+          </xs:sequence>
           <xs:attribute name="class" type="xs:string" use="required" />
         </xs:complexType>
       </xs:element>
     </xs:all>
   </xs:group>
+
+  <xs:complexType name="parameters">
+    <xs:sequence>
+      <xs:element name="parameter" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:simpleContent>
+            <xs:extension base="xs:string">
+              <xs:attribute name="name" type="xs:string" use="required" />
+            </xs:extension>
+          </xs:simpleContent>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
 </xs:schema>
