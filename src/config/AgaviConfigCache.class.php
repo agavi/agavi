@@ -204,9 +204,9 @@ class AgaviConfigCache
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public static function import ($config, $once = true)
+	public static function import ($config, $context = null, $once = true)
 	{
-		$cache = self::checkConfig($config);
+		$cache = self::checkConfig($config, $context);
 
 		if ($once) {
 			include_once($cache);
