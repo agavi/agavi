@@ -40,7 +40,11 @@ abstract class AgaviRouting
 	public function initialize(AgaviContext $context, $parameters = array())
 	{
 		$this->context = $context;
-		include(AgaviConfigCache::checkConfig(AgaviConfig::get("core.config_dir") . "/routing.xml", $context->getName()));
+		$cfg = AgaviConfig::get("core.config_dir") . "/routing.xml";
+		// allow missing routing.xml when routing is not enabled
+		if(AgaviConfig::get("core.use_routing", false) || is_readable($cfg)) {
+			include(AgaviConfigCache::checkConfig($cfg, $context->getName()));
+		}
 	}
 	
 	public final function getContext()
