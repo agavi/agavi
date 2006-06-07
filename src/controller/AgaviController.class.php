@@ -282,13 +282,21 @@ abstract class AgaviController extends AgaviParameterHolder
 		// include the module configuration
 		AgaviConfigCache::import(AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/config/module.xml');
 
-		$oldAutoloads = null;
-		$moduleAutoload = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/config/autoload.xml';
-		if(is_readable($moduleAutoload)) {
-			$oldAutoloads = Agavi::$autoloads;
-			include(AgaviConfigCache::checkConfig($moduleAutoload));
+		// save autoloads so we can restore them later
+		$oldAutoloads = Agavi::$autoloads;
+		
+		static $moduleAutoloads = array();
+		if(!isset($moduleAutoloads[$moduleName])) {
+			$moduleAutoloads[$moduleName] = array();
+			$moduleAutoload = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/config/autoload.xml';
+			if(is_readable($moduleAutoload)) {
+				include(AgaviConfigCache::checkConfig($moduleAutoload));
+				$moduleAutoloads[$moduleName] = Agavi::$autoloads;
+			}
+		} else {
+			Agavi::$autoloads = array_merge($moduleAutoloads[$moduleName], Agavi::$autoloads);
 		}
-
+		
 		if(AgaviConfig::get('modules.' . strtolower($moduleName) . '.enabled')) {
 			// check for a module config.php
 			$moduleConfig = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/config.php';
@@ -331,9 +339,8 @@ abstract class AgaviController extends AgaviParameterHolder
 			// process the filter chain
 			$filterChain->execute();
 
-			if($oldAutoloads !== null) {
-				Agavi::$autoloads = $oldAutoloads;
-			}
+			// restore autoloads
+			Agavi::$autoloads = $oldAutoloads;
 
 		} else {
 			// module is disabled
