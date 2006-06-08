@@ -74,8 +74,10 @@
 				+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
 			-->
 			<handler pattern="%core.config_dir%/autoload.xml" validate="%core.agavi_dir%/config/xsd/autoload.xsd" class="AgaviAutoloadConfigHandler" />
+			<handler pattern="%core.system_config_dir%/autoload.xml" validate="%core.agavi_dir%/config/xsd/autoload.xsd" class="AgaviAutoloadConfigHandler" />
 
 			<handler pattern="%core.config_dir%/compile.xml" validate="%core.agavi_dir%/config/xsd/compile.xsd" class="AgaviCompileConfigHandler" />
+			<handler pattern="%core.system_config_dir%/compile.xml" validate="%core.agavi_dir%/config/xsd/compile.xsd" class="AgaviCompileConfigHandler" />
 
 			<handler pattern="%core.config_dir%/settings.xml" validate="%core.agavi_dir%/config/xsd/settings.xsd" class="AgaviSettingConfigHandler" />
 
