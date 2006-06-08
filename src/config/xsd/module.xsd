@@ -15,10 +15,10 @@
   <xs:group name="moduleEntries">
     <xs:all>
       <xs:element name="enabled" type="xs:string" />
-      <xs:element name="title" type="xs:string" />
-      <xs:element name="version" type="xs:string" />
+      <xs:element name="title" type="xs:string" minOccurs="0" />
+      <xs:element name="version" type="xs:string" minOccurs="0" />
       <xs:element name="name" type="xs:string" />
-      <xs:element name="authors">
+      <xs:element name="authors" minOccurs="0">
         <xs:complexType>
           <xs:sequence>
             <xs:element name="author" maxOccurs="unbounded">
@@ -33,9 +33,9 @@
           </xs:sequence>
         </xs:complexType>
       </xs:element>
-      <xs:element name="homepage" type="xs:string" />
-      <xs:element name="update_url" type="xs:string" />
-      <xs:element name="description" type="xs:string" />
+      <xs:element name="homepage" type="xs:string" minOccurs="0" />
+      <xs:element name="update_url" type="xs:string" minOccurs="0" />
+      <xs:element name="description" type="xs:string" minOccurs="0" />
     </xs:all>
   </xs:group>
 </xs:schema>

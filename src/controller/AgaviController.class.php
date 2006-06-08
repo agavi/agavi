@@ -281,7 +281,11 @@ abstract class AgaviController extends AgaviParameterHolder
 
 		// include the module configuration
 		// laoded only once due to the way import() works
-		AgaviConfigCache::import(AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/config/module.xml', $this->context->getName());
+		if(is_readable(AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/config/module.xml')) {
+			AgaviConfigCache::import(AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/config/module.xml', $this->context->getName());
+		} else {
+			AgaviConfig::set('modules.' . strtolower($moduleName) . '.enabled', true);
+		}
 
 		// save autoloads so we can restore them later
 		$oldAutoloads = Agavi::$autoloads;

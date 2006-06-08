@@ -53,23 +53,35 @@ class AgaviModuleConfigHandler extends AgaviConfigHandler
 		$data = array();
 		foreach($configurations as $cfg) {
 			$authors = array();
-			foreach($cfg->authors as $author) {
-				if($author->hasAttribute('email')) {
-					$authors[$author->getAttribute('email')] = $author->getValue();
-				} else {
-					$authors[] = $author->getValue();
+			if(isset($cfg->authors)) {
+				foreach($cfg->authors as $author) {
+					if($author->hasAttribute('email')) {
+						$authors[$author->getAttribute('email')] = $author->getValue();
+					} else {
+						$authors[] = $author->getValue();
+					}
 				}
 			}
 
 			$name = strtolower($cfg->name->getValue());
 			$prefix = 'modules.' . $name . '.';
 			$data[$prefix . 'enabled']     = $this->literalize($cfg->enabled->getValue());
-			$data[$prefix . 'title']       = $cfg->title->getValue();
-			$data[$prefix . 'version']     = $cfg->version->getValue();
+			if(isset($cfg->title)) {
+				$data[$prefix . 'title']       = $cfg->title->getValue();
+			}
+			if(isset($cfg->version)) {
+				$data[$prefix . 'version']     = $cfg->version->getValue();
+			}
 			$data[$prefix . 'authors']     = $authors;
-			$data[$prefix . 'homepage']    = $cfg->homepage->getValue();
-			$data[$prefix . 'update_url']  = $cfg->update_url->getValue();
-			$data[$prefix . 'description'] = $cfg->description->getValue();
+			if(isset($cfg->homepage)) {
+				$data[$prefix . 'homepage']    = $cfg->homepage->getValue();
+			}
+			if(isset($cfg->update_url)) {
+				$data[$prefix . 'update_url']  = $cfg->update_url->getValue();
+			}
+			if(isset($cfg->description)) {
+				$data[$prefix . 'description'] = $cfg->description->getValue();
+			}
 		}
 
 		$code = 'AgaviConfig::import(' . var_export($data, true) . ');';
