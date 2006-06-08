@@ -43,7 +43,7 @@ if(!version_compare(PHP_VERSION, AgaviConfig::get('core.minimum_php_version'), '
 }
 
 // define a few filesystem paths
-AgaviConfig::set('core.agavi_dir', dirname(__FILE__), false);
+AgaviConfig::set('core.agavi_dir', dirname(__FILE__), true, true);
 
 // default exception template
 AgaviConfig::set('exception.default_template', AgaviConfig::get('core.agavi_dir') . '/exception/templates/shiny.php', false);
@@ -69,7 +69,14 @@ function __autoload($class)
 		Agavi::$autoloads = array();
 		// catch parse errors of autoload.xml
 		try {
-			include(AgaviConfigCache::checkConfig(AgaviConfig::get('core.config_dir') . '/autoload.xml'));
+			$cfg = AgaviConfig::get('core.config_dir') . '/autoload.xml';
+			if(!is_readable($cfg)) {
+				$cfg = $cfg = AgaviConfig::get('core.system_config_dir') . '/autoload.xml';
+				if(!is_readable($cfg)) {
+					return;
+				}
+			}
+			include(AgaviConfigCache::checkConfig($cfg));
 		} catch(Exception $e) {
 			trigger_error($e->getMessage(), E_USER_ERROR);
 		}

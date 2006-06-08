@@ -46,6 +46,18 @@ class Agavi
 	function bootstrap($environment = null)
 	{
 		try {
+			// required classes for this file and ConfigCache to run
+			require_once(AgaviConfig::get('core.agavi_dir') . '/util/AgaviParameterHolder.class.php');
+			require_once(AgaviConfig::get('core.agavi_dir') . '/config/AgaviConfigCache.class.php');
+			require_once(AgaviConfig::get('core.agavi_dir') . '/config/AgaviConfigHandler.class.php');
+			require_once(AgaviConfig::get('core.agavi_dir') . '/config/AgaviAutoloadConfigHandler.class.php');
+			require_once(AgaviConfig::get('core.agavi_dir') . '/exception/AgaviException.class.php');
+			require_once(AgaviConfig::get('core.agavi_dir') . '/exception/AgaviAutoloadException.class.php');
+			require_once(AgaviConfig::get('core.agavi_dir') . '/exception/AgaviCacheException.class.php');
+			require_once(AgaviConfig::get('core.agavi_dir') . '/exception/AgaviConfigurationException.class.php');
+			require_once(AgaviConfig::get('core.agavi_dir') . '/exception/AgaviUnreadableException.class.php');
+			require_once(AgaviConfig::get('core.agavi_dir') . '/exception/AgaviParseException.class.php');
+			require_once(AgaviConfig::get('core.agavi_dir') . '/util/AgaviToolkit.class.php');
 			
 			if(AgaviConfig::has('core.environment') && AgaviConfig::isReadonly('core.environment')) {
 				$environment = AgaviConfig::get('core.environment');
@@ -63,35 +75,22 @@ class Agavi
 			}
 			
 			// define a few filesystem paths
-			AgaviConfig::set('core.cache_dir', AgaviConfig::get('core.webapp_dir') . '/cache', false);
+			AgaviConfig::set('core.cache_dir', AgaviConfig::get('core.webapp_dir') . '/cache', false, true);
 			
-			AgaviConfig::set('core.config_dir', AgaviConfig::get('core.webapp_dir') . '/config', false);
+			AgaviConfig::set('core.config_dir', AgaviConfig::get('core.webapp_dir') . '/config', false, true);
 			
-			AgaviConfig::set('core.system_config_dir', AgaviConfig::get('core.agavi_dir') . '/config/defaults', false);
+			AgaviConfig::set('core.system_config_dir', AgaviConfig::get('core.agavi_dir') . '/config/defaults', false, true);
 			
-			AgaviConfig::set('core.lib_dir', AgaviConfig::get('core.webapp_dir') . '/lib', false);
+			AgaviConfig::set('core.lib_dir', AgaviConfig::get('core.webapp_dir') . '/lib', false, true);
 			
-			AgaviConfig::set('core.module_dir', AgaviConfig::get('core.webapp_dir') . '/modules', false);
+			AgaviConfig::set('core.module_dir', AgaviConfig::get('core.webapp_dir') . '/modules', false, true);
 			
-			AgaviConfig::set('core.template_dir', AgaviConfig::get('core.webapp_dir') . '/templates', false);
+			AgaviConfig::set('core.template_dir', AgaviConfig::get('core.webapp_dir') . '/templates', false, true);
 			
 			// ini settings
 			ini_set('magic_quotes_runtime', AgaviConfig::get('php.magic_quotes_runtime', false));
 			ini_set('unserialize_callback_func', AgaviConfig::get('php.unserialize_callback_func', '__autoload'));
 			
-			// required classes for this file and ConfigCache to run
-			require_once(AgaviConfig::get('core.agavi_dir') . '/util/AgaviParameterHolder.class.php');
-			require_once(AgaviConfig::get('core.agavi_dir') . '/config/AgaviConfigCache.class.php');
-			require_once(AgaviConfig::get('core.agavi_dir') . '/config/AgaviConfigHandler.class.php');
-			require_once(AgaviConfig::get('core.agavi_dir') . '/config/AgaviAutoloadConfigHandler.class.php');
-			require_once(AgaviConfig::get('core.agavi_dir') . '/exception/AgaviException.class.php');
-			require_once(AgaviConfig::get('core.agavi_dir') . '/exception/AgaviAutoloadException.class.php');
-			require_once(AgaviConfig::get('core.agavi_dir') . '/exception/AgaviCacheException.class.php');
-			require_once(AgaviConfig::get('core.agavi_dir') . '/exception/AgaviConfigurationException.class.php');
-			require_once(AgaviConfig::get('core.agavi_dir') . '/exception/AgaviUnreadableException.class.php');
-			require_once(AgaviConfig::get('core.agavi_dir') . '/exception/AgaviParseException.class.php');
-			require_once(AgaviConfig::get('core.agavi_dir') . '/util/AgaviToolkit.class.php');
-
 			// load base settings
 			AgaviConfigCache::import(AgaviConfig::get('core.config_dir') . '/settings.xml');
 
@@ -103,8 +102,12 @@ class Agavi
 				AgaviConfigCache::import(AgaviConfig::get('core.config_dir') . '/settings.xml');
 			}
 
+			$compile = AgaviConfig::get('core.config_dir') . '/compile.xml';
+			if(!is_readable($compile)) {
+				$compile = AgaviConfig::get('core.system_config_dir') . '/compile.xml';
+			}
 			// required classes for the framework
-			AgaviConfigCache::import(AgaviConfig::get('core.config_dir') . '/compile.xml');
+			AgaviConfigCache::import($compile);
 
 		} catch (Exception $e) {
 			AgaviException::printStackTrace($e);

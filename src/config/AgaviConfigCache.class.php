@@ -240,8 +240,12 @@ class AgaviConfigCache
 		self::$handlers['config_handlers.xml'] = new AgaviConfigHandlersConfigHandler();
 		self::$handlers['config_handlers.xml']->initialize(AgaviConfig::get('core.agavi_dir') . '/config/xsd/config_handlers.xsd');
 
+		$cfg = AgaviConfig::get('core.config_dir') . '/config_handlers.xml';
+		if(!is_readable($cfg)) {
+			$cfg = AgaviConfig::get('core.system_config_dir') . '/config_handlers.xml';
+		}
 		// application configuration handlers
-		require_once(AgaviConfigCache::checkConfig(AgaviConfig::get('core.config_dir') . '/config_handlers.xml'));
+		require_once(AgaviConfigCache::checkConfig($cfg));
 
 		// module level configuration handlers
 		// are gone :)
