@@ -27,22 +27,20 @@
  *
  * @version    $Id$
  */
-class AgaviPhptalRenderer
+class AgaviPhptalRenderer extends AgaviRenderer
 {
+	protected $extension = '.tal';
+	
 	/**
 	 * Retrieve the PHPTAL instance
 	 *
-	 * @return     null
+	 * @return     PHPTAL A PHPTAL instance.
 	 *
 	 * @since      0.11.0
 	 */
-	public function & getEngine ()
+	public function getEngine()
 	{
-
-		$retval = $this->_phptal;
-
-		return $retval;
-
+		return $this->_phptal;
 	}	
 	
 	/**
@@ -59,7 +57,7 @@ class AgaviPhptalRenderer
 	 * @author     Benjamin Muskalla <bm@bmuskalla.de>
 	 * @since      0.11.0
 	 */
-	public function & render ()
+	public function &render()
 	{
 		$retval = null;
 		
@@ -69,13 +67,13 @@ class AgaviPhptalRenderer
 		
 		$mode = $this->getContext()->getController()->getRenderMode();
 		$engine->setTemplateRepository($view->getDirectory());
-		$engine->setTemplate($view->getTemplate());
+		$engine->setTemplate($view->getTemplate() . $this->getExtension());
 		$this->updateTemplateAttributes();
 		
 		if($mode == AgaviView::RENDER_CLIENT && !$view->isDecorator()) {
 			// render directly to the client
 			echo $engine->execute();
-		} else if($mode != AgaviView::RENDER_NONE) {
+		} elseif($mode != AgaviView::RENDER_NONE) {
 			// render to variable
 			$retval = $engine->execute();
 			// now render our decorator template, if one exists
@@ -95,14 +93,14 @@ class AgaviPhptalRenderer
 	/*
 	 * @see        View::decorate()
 	 */
-	public function & decorate(&$content)
+	public function &decorate(&$content)
 	{
 		// call our parent decorate() method
 		parent::decorate($content);
 		$engine = $this->getEngine();
 
 		// render the decorator template and return the result
-		$decoratorTemplate = $this->getDecoratorDirectory() . '/' . $this->getDecoratorTemplate();
+		$decoratorTemplate = $this->getDecoratorDirectory() . '/' . $this->getDecoratorTemplate() . $this->getExtension();
 
 		$engine->setTemplate($decoratorTemplate);
 		
@@ -114,8 +112,7 @@ class AgaviPhptalRenderer
 		*/
 		// set the template resources
 		$this->updateTemplateAttributes();
-	
-
+		
 		$retval = $engine->execute();
 
 		return $retval;

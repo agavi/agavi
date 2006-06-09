@@ -26,14 +26,15 @@
  *
  * @version    $Id$
  */
-class AgaviSmartyRenderer
+class AgaviSmartyRenderer extends AgaviRenderer
 {
 	const COMPILE_DIR = 'templates';
 	const COMPILE_SUBDIR = 'smarty';
 	const CACHE_DIR = 'content';
 
-	protected static
-		$smarty = null;
+	protected $smarty = null;
+	
+	protected $extension = '.tpl';
 
 	public function getEngine()
 	{
@@ -41,14 +42,12 @@ class AgaviSmartyRenderer
 			return $this->smarty;
 		}
 		
-		if (!class_exists('Smarty')) {
-
-			// if SMARTY_DIR constant is defined, we'll use it
-			if ( defined('SMARTY_DIR') ) {
+		if(!class_exists('Smarty')) {
+			if(defined('SMARTY_DIR') ) {
+				// if SMARTY_DIR constant is defined, we'll use it
 				require(SMARTY_DIR . 'Smarty.class.php');
-			}
-			// otherwise we resort to include_path
-			else {
+			} else {
+				// otherwise we resort to include_path
 				require('Smarty.class.php');
 			}
 		}
@@ -57,13 +56,15 @@ class AgaviSmartyRenderer
 		$this->smarty->clear_all_assign();
 		$this->smarty->clear_config();
 		$this->smarty->config_dir = AgaviConfig::get('core.config_dir');
+		
+		$parentMode = fileperms(AgaviConfig::get('core.cache_dir'));
 
 		$compileDir = AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . self::COMPILE_DIR . DIRECTORY_SEPARATOR . self::COMPILE_SUBDIR;
-		@mkdir($compileDir, null, true);
+		@mkdir($compileDir, $parentMode, true);
 		$this->smarty->compile_dir = $compileDir;
 
 		$cacheDir = AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . self::CACHE_DIR;
-		@mkdir($cacheDir, null, true);
+		@mkdir($cacheDir, $parentMode, true);
 		$this->smarty->cache_dir = $cacheDir;
 
 		$this->smarty->plugins_dir  = array("plugins","plugins_local");
@@ -82,29 +83,27 @@ class AgaviSmartyRenderer
 		$view = $this->getView();
 
 		// get the render mode
-		$mode = $this->getContext()->getController()->getRenderMode();
+		$mode = $view->getContext()->getController()->getRenderMode();
 
-		$engine->template_dir = $this->getDirectory();
-
-		$attribs = $view->getAttributesByRef();
-
+		$attribs =& $view->getAttributes();
+		
 		foreach($attribs as $name => &$value) {
 			$engine->assign_by_ref($name, $value);
 		}
-
-		if ($mode == AgaviView::RENDER_CLIENT && !$this->isDecorator()) {
+		
+		if($mode == AgaviView::RENDER_CLIENT && !$view->isDecorator()) {
 			// render directly to the client
-			$this->getEngine()->display($this->getTemplate());
-		} else if ($mode != AgaviView::RENDER_NONE) {
+			$this->getEngine()->display($view->getDirectory() . '/' . $view->getTemplate() . $this->getExtension());
+		} elseif ($mode != AgaviView::RENDER_NONE) {
 			// render to variable
-			$retval = $this->getEngine()->fetch($this->getTemplate());
+			$retval = $this->getEngine()->fetch($view->getDirectory() . '/' . $view->getTemplate() . $this->getExtension());
 
 			// now render our decorator template, if one exists
-			if ($this->isDecorator()) {
+			if($view->isDecorator()) {
 				$retval =& $this->decorate($retval);
 			}
 
-			if ($mode == AgaviView::RENDER_CLIENT) {
+			if($mode == AgaviView::RENDER_CLIENT) {
 				echo($retval);
 				$retval = null;
 			}
@@ -116,11 +115,18 @@ class AgaviSmartyRenderer
 	{
 		// call our parent decorate() method
 		parent::decorate($content);
-
+		
+		$engine = $this->getEngine();
+		$view = $this->getView();
+		
+		foreach($this->output as $name => &$value) {
+			$engine->assign_by_ref($name, $value);
+		}
+		
 		// render the decorator template and return the result
-		$decoratorTemplate = $this->getDecoratorDirectory() . '/' . $this->getDecoratorTemplate();
+		$decoratorTemplate = $view->getDecoratorDirectory() . '/' . $view->getDecoratorTemplate() . $this->getExtension();
 
-		$retval = $this->getEngine()->fetch($decoratorTemplate);
+		$retval = $engine->fetch($decoratorTemplate);
 
 		return $retval;
 	}

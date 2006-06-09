@@ -26,13 +26,15 @@
  *
  * @version    $Id$
  */
-class AgaviXslRenderer
+class AgaviXslRenderer extends AgaviRenderer
 {
 	private $xslProc      = null;  // XSLTProcessor.
 	private $domDoc       = null;  // DomDocument.
 	private $rootNode     = null;  // The root node of the DomDocument.
 	private $rootNodeRS   = null;  // The copy of the initilization of the DomDocument incase a restart is needed.
 	private $rootNodeName = null;  // The name of the root node incase it is needed.
+	
+	protected $extension = '.xsl';
 
 	/**
 	 * Initialize this Renderer.
@@ -139,7 +141,7 @@ class AgaviXslRenderer
 		// get the render mode
 		$mode = $this->getContext()->getController()->getRenderMode();
 
-		$engine->importStyleSheet(DOMDocument::load($view->getDecoratorDirectory() . '/' . $view->getTemplate()));
+		$engine->importStyleSheet(DOMDocument::load($view->getDecoratorDirectory() . '/' . $view->getTemplate() . $this->getExtension()));
 
 		$xhtml = $engine->transformToXML($this->domDoc);
 

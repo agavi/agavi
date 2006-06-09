@@ -190,7 +190,7 @@ abstract class AgaviRenderer
 	 *
 	 * @return     mixed A template engine instance.
 	 */
-	abstract function & getEngine();
+	abstract function getEngine();
 
 	/**
 	 * Execute a basic pre-render check to verify all required variables exist
