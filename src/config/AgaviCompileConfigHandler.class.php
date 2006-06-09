@@ -75,16 +75,7 @@ class AgaviCompileConfigHandler extends AgaviConfigHandler
 					$contents = 'require(' . var_export($file, true) . ');';
 				} else {
 					// no debug mode, so make things fast
-					$contents = trim(file_get_contents($file));
-					
-					if(substr($contents, 0, 5) == '<?php') {
-						$contents = substr($contents, 5);
-					} elseif(substr($contents, 0, 2) == '<?') {
-						$contents = substr($contents, 2);
-					}
-					if(substr($contents, -2, 2) == '?>') {
-						$contents = substr($contents, 0, -2);
-					}
+					$contents = $this->formatFile(file_get_contents($file));
 				}
 
 				// append file data
@@ -93,10 +84,6 @@ class AgaviCompileConfigHandler extends AgaviConfigHandler
 		}
 		
 		$data = implode("\n", $data);
-
-		if(!AgaviConfig::get('core.debug', false)) {
-			$data = $this->formatFile($data);
-		}
 
 		// compile data
 		$retval = "<?php\n" .
@@ -118,7 +105,7 @@ class AgaviCompileConfigHandler extends AgaviConfigHandler
 	 * @author     David Zuelke (dz@bitxtender.com)
 	 * @since      0.11.0
 	 */
-	protected function formatFile ($data)
+	protected function formatFile($data)
 	{
 		// replace windows and mac format with unix format
 		$data = str_replace("\r\n", "\n", $data);
@@ -128,7 +115,7 @@ class AgaviCompileConfigHandler extends AgaviConfigHandler
 		
 		// I disabled this, it seems broken somehow. doesn't remove all <?php tags. - david
 		
-		if(function_exists('token_get_all_DISABLED_IT_BECAUSE_TOKENIZER_SEEMS_BROKEN')) {
+		if(function_exists('token_get_all')) {
 			$tokens = token_get_all($data);
 			$tokenized = null;
 			// has something been written to tokenized? If so, we can optionally append whitespace.
@@ -181,11 +168,17 @@ class AgaviCompileConfigHandler extends AgaviConfigHandler
 				}
 			}
 			$data = $tokenized;
-		} else {
-			// no tokenizer support, let's do some basic cleanup
-			$data = trim($data);
-			$data = preg_replace('/\s\?>\s<\?(php)?\s/u', '', $data);
+		} 
+		$data = trim($data);
+		if(substr($data, 0, 5) == '<?php') {
+			$data = substr($data, 5);
+		} elseif(substr($data, 0, 2) == '<?') {
+			$data = substr($data, 2);
 		}
+		if(substr($data, -2, 2) == '?>') {
+			$data = substr($data, 0, -2);
+		}
+		$data = preg_replace('/\s*\?>\s*<\?(php)?\s*/u', '', $data);
 
 		return $data;
 	}
