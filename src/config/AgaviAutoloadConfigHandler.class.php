@@ -56,12 +56,14 @@ class AgaviAutoloadConfigHandler extends AgaviConfigHandler
 		foreach($configurations as $cfg) {
 			// let's do our fancy work
 			foreach($cfg->autoloads as $entry) {
-
+				// we can have variables in the filename
 				$file = $this->replaceConstants($entry->getValue());
+				// if the filename is not absolute we assume its relative to the webapp dir
+				$file = $this->replacePath($file);
+
 				$class = $entry->getAttribute('name');
 
 				if(!($fp = @fopen($file, 'r', true))) {
-
 					// the class path doesn't exist
 					$error = 'Configuration file "%s" specifies class "%s" with ' .
 							 'nonexistent or unreadable file "%s"';

@@ -50,64 +50,81 @@ class AgaviOutputTypeConfigHandler extends AgaviConfigHandler
 		// parse the config file
 		$configurations = $this->orderConfigurations(AgaviConfigCache::parseConfig($config, false, $this->getValidationFile())->configurations, AgaviConfig::get('core.environment'), $context);
 
-		$code = '';
+		$data = array();
+		$defaultOt = null;
 		foreach($configurations as $cfg) {
 			$otnames = array();
 			foreach($cfg->output_types as $outputType) {
-				if(!$outputType->hasAttribute('name')) {
-					throw new AgaviConfigurationException('No name specified for an Output Type in ' . $config);
-				}
 				$otname = $outputType->getAttribute('name');
 				if(in_array($otname, $otnames)) {
 					throw new AgaviConfigurationException('Duplicate Output Type "' . $otname . '" in ' . $config);
 				}
-				if(!isset($outputType->renderer) && !$outputType->renderer->getAttribute('class')) {
-					throw new AgaviConfigurationException('No renderer specified for Output Type "' . $outputType->getAttribute('name') . '" in ' . $config);
-				}
 				$otnames[] = $otname;
 			}
-		
+
 			if(!$cfg->output_types->hasAttribute('default')) {
 				throw new AgaviConfigurationException('No default Output Type specified in ' . $config);
 			}
-		
+
 			if(!in_array($cfg->output_types->getAttribute('default'), $otnames)) {
 				throw new AgaviConfigurationException('Non-existent Output Type "' . $cfg->output_types->getAttribute('default') . '" specified as default in ' . $config);
 			}
 
 			foreach($cfg->output_types as $outputType) {
-				$code .= "\$this->outputTypes['" . $outputType->getAttribute('name') . "'] = array(\n";
-				$code .= "  'renderer' => '" . $outputType->renderer->getAttribute('class') . "',\n";
+				$name = $outputType->getAttribute('name');
+				$data[$name] = isset($data[$name]) ? $data[$name] : array('fallback' => $cfg->output_types->getAttribute('default'), 'parameters' => array(), 'renderer_parameters' => array());
+				$data[$name]['renderer'] = $outputType->renderer->getAttribute('class');
 				if($outputType->hasAttribute('fallback')) {
 					$fallback = $outputType->getAttribute('fallback');
 					if(!in_array($fallback, $otnames)) {
 						throw new AgaviConfigurationException('Output Type "' . $outputType->getAttribute('name') . '" is configured to fall back to non-existent Output Type "' . $fallback . '" in ' . $config);
 					}
-					$code .= "  'fallback' => '" . ($fallback == 'default' ? $cfg->output_types->getAttribute('default') : $fallback) . "', \n";
+					$data[$name]['fallback'] = $fallback == 'default' ? $cfg->output_types->getAttribute('default') : $fallback;
 				}
 				if($outputType->hasAttribute('exception')) {
-					$code .= "  'exception' => '" . $this->literalize($outputType->getAttribute('exception')) . "', \n";
+					$data[$name]['exception'] = $this->literalize($outputType->getAttribute('exception'));
 				}
 				if($outputType->renderer->hasAttribute('extension')) {
-					$code .= "  'extension' => '" . $outputType->renderer->getAttribute('extension') . "', \n";
+					$data[$name]['extension'] = $outputType->renderer->getAttribute('extension');
 				}
 				if($outputType->renderer->hasAttribute('ignore_decorators')) {
-					$code .= "  'ignore_decorators' => " . var_export($this->literalize($outputType->renderer->getAttribute('ignore_decorators')), true) . ",\n";
+					$data[$name]['ignore_decorators'] = $this->literalize($outputType->renderer->getAttribute('ignore_decorators'));
 				}
 				if($outputType->renderer->hasAttribute('ignore_slots')) {
-					$code .= "  'ignore_slots' => " . var_export($this->literalize($outputType->renderer->getAttribute('ignore_slots')), true) . ",\n";
+					$data[$name]['ignore_slots'] = $this->literalize($outputType->renderer->getAttribute('ignore_slots'));
 				}
-				if(isset($outputType->parameters) && $outputType->parameters->hasChildren()) {
-					$code .= "  'parameters' => array(\n";
-					foreach($outputType->parameters as $parameter) {
-						$code .= "    '" . $parameter->getAttribute('name') . "' => '" . $parameter->getValue() . "',\n";
-					}
-					$code .= "  )\n";
-				}
-				$code .= ");\n";
+				$data[$name]['renderer_parameters'] = $this->getItemParameters($outputType->renderer, $data[$name]['renderer_parameters']);
+				$data[$name]['parameters'] = $this->getItemParameters($outputType, $data[$name]['parameters']);
 			}
-			$code .= "\$this->outputType = '" . $cfg->output_types->getAttribute('default') . "';\n";
+
+			$defaultOt = $cfg->output_types->getAttribute('default');
 		}
+
+		$code = '';
+		foreach($data as $name => $ot) {
+			$code .= "\$this->outputTypes['" . $name . "'] = array(\n";
+			$code .= "  'renderer' => '" . $ot['renderer'] . "',\n";
+			if(isset($ot['fallback'])) {
+				$code .= "  'fallback' => '" . $ot['fallback'] . "', \n";
+			}
+			if(isset($ot['exception'])) {
+				$code .= "  'exception' => " . var_export($ot['exception'], true) . ", \n";
+			}
+			if(isset($ot['extension'])) {
+				$code .= "  'extension' => " . var_export($ot['extension'], true) . ", \n";
+			}
+			if(isset($ot['ignore_decorators'])) {
+				$code .= "  'ignore_decorators' => " . var_export($ot['ignore_decorators'], true) . ",\n";
+			}
+			if(isset($ot['ignore_slots'])) {
+				$code .= "  'ignore_slots' => " . var_export($ot['ignore_slots'], true) . ",\n";
+			}
+			$code .= "  'parameters' => " . var_export($ot['parameters'], true) . ",\n";
+			$code .= "  'renderer_parameters' => " . var_export($ot['renderer_parameters'], true) . ",\n";
+			$code .= ");\n";
+		}
+		$code .= "\$this->outputType = '" . $defaultOt . "';\n";
+
 
 		// compile data
 		$retval = "<?php\n" .

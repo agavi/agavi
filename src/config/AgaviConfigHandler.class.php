@@ -134,11 +134,6 @@ abstract class AgaviConfigHandler extends AgaviParameterHolder
 	 */
 	public static function literalize($value)
 	{
-
-		static
-			$keys = array("\\", "%'", "'"),
-			$reps = array("\\\\", "\"", "\\'");
-
 		if($value == null) {
 			// null value
 			return null;
@@ -164,9 +159,7 @@ abstract class AgaviConfigHandler extends AgaviParameterHolder
 
 		} elseif(!is_numeric($value)) {
 
-			$value = str_replace($keys, $reps, self::replaceConstants($value));
-
-			return $value;
+			return self::replaceConstants($value);
 
 		}
 
