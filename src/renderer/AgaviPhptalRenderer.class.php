@@ -137,7 +137,7 @@ class AgaviPhptalRenderer extends AgaviRenderer
 
 if(!defined('PHPTAL_PHP_CODE_DESTINATION')) {
 	define('PHPTAL_PHP_CODE_DESTINATION', AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . AgaviPhptalRenderer::COMPILE_DIR . DIRECTORY_SEPARATOR . AgaviPhptalRenderer::COMPILE_SUBDIR . DIRECTORY_SEPARATOR);
-	@mkdir(PHPTAL_PHP_CODE_DESTINATION);
+	@mkdir(PHPTAL_PHP_CODE_DESTINATION, fileperms(AgaviConfig::get('core.cache_dir')), true);
 }
 
 require_once('PHPTAL.php');
