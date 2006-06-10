@@ -326,7 +326,6 @@ abstract class AgaviRouting
 		$str = substr($str, (int)$anchor & self::ANCHOR_START, $anchor & self::ANCHOR_END ? -1 : strlen($str));
 
 		if(preg_match_all('#\\(:  ([^:]+[^\\\\]:)?  (?: ((?: [^:] | :[^)] )+) | ) :\\)#x', $str, $matches, PREG_SET_ORDER | PREG_OFFSET_CAPTURE)) {
-			var_dump($matches);
 			$lastOffset = 0;
 			$ret = '';
 			foreach($matches as $matchSet) {
