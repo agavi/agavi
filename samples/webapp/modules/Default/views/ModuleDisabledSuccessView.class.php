@@ -23,18 +23,14 @@ class Default_ModuleDisabledSuccessView extends AgaviView
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function execute ()
+	public function execute()
 	{
-
 		// set our template
 		$this->setTemplate('ModuleDisabledSuccess');
+		$this->setDecoratorTemplate('Master');
 
 		// set the title
 		$this->setAttribute('title', 'Module Disabled');
-
-		// build our menu
-		require_once(AgaviConfig::get('core.module_dir') . '/Default/lib/build_menu.php');
-
 	}
 
 }

@@ -1,5 +1,3 @@
-<?php require_once(AgaviConfig::get('core.module_dir') . '/Default/templates/includes/header.php'); ?>
-
 Agavi has debugging mode on by default, which means it's reparsing every
 single configuration file on each request. You may experience a slow loading
 page while this is happening. Debugging mode should stay on if you plan on
@@ -16,5 +14,3 @@ in your Agavi cache directory.
 your errors may be traced back to invalid configuration cache files, which is
 why it's suggested that you keep debugging on until your application is fully
 functioning.
-
-<?php require_once(AgaviConfig::get('core.module_dir') . '/Default/templates/includes/footer.php'); ?>

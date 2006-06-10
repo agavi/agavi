@@ -1,0 +1,14 @@
+# rename this file to .htaccess to remove the necessity to have index.php in front of routes
+# make sure mod_rewrite is on and AllowOverride settings are okay
+
+# these two aren't really necessary
+DirectoryIndex index.php
+Options -MultiViews -Indexes
+
+# enable rewrite engine
+RewriteEngine On
+
+# if requested url does not exist (i.e. it's likely an agavi route), pass it as path info to index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule (.*) /INSERT/WEBSERVER/PATH/TO/index.php/HERE/$1 [QSA,L]
+# e.g. RewriteRule (.*) /~dzuelke/_projects/agavi/trunk/samples/www/index.php/$1 [QSA,L]

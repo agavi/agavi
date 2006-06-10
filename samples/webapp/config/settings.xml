@@ -57,8 +57,8 @@
 			
 			<setting name="use_database">false</setting>
 			<setting name="use_logging">false</setting>
-			<setting name="use_routing">false</setting>
-			<setting name="use_security">true</setting>
+			<setting name="use_routing">true</setting>
+			<setting name="use_security">false</setting>
 		</settings>
 	</configuration>
 	

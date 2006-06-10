@@ -23,14 +23,14 @@ class Default_Error404SuccessView extends AgaviView
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function execute ()
+	public function execute()
 	{
-
 		// get the request
 		$request = $this->getContext()->getRequest();
 
 		// set our template
 		$this->setTemplate('Error404Success');
+		$this->setDecoratorTemplate('Master');
 
 		// set the title
 		$this->setAttribute('title', 'Error 404 Action');
@@ -40,10 +40,6 @@ class Default_Error404SuccessView extends AgaviView
 		// of a 404 error
 		$this->setAttribute('requested_module', $request->getAttribute('requested_module'));
 		$this->setAttribute('requested_action', $request->getAttribute('requested_action'));
-
-		// build our menu
-		require_once(AgaviConfig::get('core.module_dir') . '/Default/lib/build_menu.php');
-
 	}
 
 }
