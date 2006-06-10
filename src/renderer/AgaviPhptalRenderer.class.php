@@ -31,6 +31,11 @@ class AgaviPhptalRenderer extends AgaviRenderer
 {
 	protected $extension = '.tal';
 	
+	protected $_phptal = null;
+	
+	const COMPILE_DIR = 'templates';
+	const COMPILE_SUBDIR = 'phptal';
+
 	/**
 	 * Retrieve the PHPTAL instance
 	 *
@@ -40,8 +45,11 @@ class AgaviPhptalRenderer extends AgaviRenderer
 	 */
 	public function getEngine()
 	{
+		if($this->_phptal === null) {
+			$this->_phptal = new FixedPHPTAL();
+		}
 		return $this->_phptal;
-	}	
+	}
 	
 	/**
 	 * Render the presentation.
@@ -65,10 +73,13 @@ class AgaviPhptalRenderer extends AgaviRenderer
 		$engine = $this->getEngine();
 		$view = $this->getView();
 		
-		$mode = $this->getContext()->getController()->getRenderMode();
+		$mode = $view->getContext()->getController()->getRenderMode();
 		$engine->setTemplateRepository($view->getDirectory());
 		$engine->setTemplate($view->getTemplate() . $this->getExtension());
-		$this->updateTemplateAttributes();
+		foreach($view->getAttributes() as $key => $value) {
+			$engine->set($key, $value);
+		}
+		$engine->set('this', $this);
 		
 		if($mode == AgaviView::RENDER_CLIENT && !$view->isDecorator()) {
 			// render directly to the client
@@ -80,7 +91,7 @@ class AgaviPhptalRenderer extends AgaviRenderer
 			if($view->isDecorator()) {
 				$retval = $this->decorate($retval);
 			}
-
+			
 			if($mode == AgaviView::RENDER_CLIENT) {
 				echo $retval;
 				$retval = null;
@@ -98,56 +109,35 @@ class AgaviPhptalRenderer extends AgaviRenderer
 		// call our parent decorate() method
 		parent::decorate($content);
 		$engine = $this->getEngine();
-
-		// render the decorator template and return the result
-		$decoratorTemplate = $this->getDecoratorDirectory() . '/' . $this->getDecoratorTemplate() . $this->getExtension();
-
-		$engine->setTemplate($decoratorTemplate);
-		
-		// TODO: fix this crap :)
-		/*
-		define('PHPTAL_FORCE_REPARSE', true);
-		$this->getEngine()->_prepared = false;
-		$this->getEngine()->_functionName = 0;	
-		*/
-		// set the template resources
-		$this->updateTemplateAttributes();
-		
-		$retval = $engine->execute();
-
-		return $retval;
-	}	
-	
-	/**
-	 * Updates template attributes
-	 *
-	 * @author     Benjamin Muskalla <bm@bmuskalla.de>
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	private function updateTemplateAttributes()
-	{
 		$view = $this->getView();
-		$engine = $this->getEngine();
-		if($this->extractAttributes()) {
-			foreach($view->getAttributes() as $key => $val) {
-				$engine->set($key, $val);
-			}
-		} else {
-			$engine->set('template', $view->getAttributes());
+		
+		// render the decorator template and return the result
+		$engine->setTemplateRepository($view->getDecoratorDirectory());
+		$engine->setTemplate($view->getDecoratorTemplate() . $this->getExtension());
+		
+		// set the template resources
+		foreach($view->getAttributes() as $key => $value) {
+			$engine->set($key, $value);
+		}
+		foreach($this->output as $key => $value) {
+			$engine->set($key, $value);
 		}
 		$engine->set('this', $this);
+		
+		$retval = $engine->execute();
+		
+		return $retval;
 	}
-	
 }
 
 
-// the following lines are a fix until PHPTAL has been changed so setTemplate() resets prepared and functionName.
+// the following lines are a fix until PHPTAL has been changed so setTemplate() resets _prepared, _source and _functionName.
 // as soon as this is fixed in PHPTAL SVN, we will remove the stub class and move the define and the require into initialize()
+// 2006-06-10: still not fixed in PHPTAL 1.1.5...
 
 if(!defined('PHPTAL_PHP_CODE_DESTINATION')) {
-	@mkdir(AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . PHPTALView::CACHE_SUBDIR);
-	define('PHPTAL_PHP_CODE_DESTINATION', AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . PHPTALView::CACHE_SUBDIR . DIRECTORY_SEPARATOR);
+	define('PHPTAL_PHP_CODE_DESTINATION', AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . AgaviPhptalRenderer::COMPILE_DIR . DIRECTORY_SEPARATOR . AgaviPhptalRenderer::COMPILE_SUBDIR . DIRECTORY_SEPARATOR);
+	@mkdir(PHPTAL_PHP_CODE_DESTINATION);
 }
 
 require_once('PHPTAL.php');
