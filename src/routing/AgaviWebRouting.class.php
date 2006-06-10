@@ -42,7 +42,9 @@ class AgaviWebRouting extends AgaviRouting
 			$this->prefix = '';
 			for($i = 0; isset($sn[$i]) && isset($ru[$i]) && $sn[$i] == $ru[$i]; ++$i) {
 				$this->prefix .= $sn[$i];
+				$appendFrom = $i;
 			}
+			$this->prefix .= substr($_SERVER['SCRIPT_NAME'], $appendFrom + 1);
 			$this->input = substr($ru, $i);
 		}
 	}
