@@ -520,7 +520,7 @@ if($fixedTrace[0]['file'] != $e->getFile() && $fixedTrace[0]['line'] != $e->getL
 		<ol>
 <?php $i = 0; $highlights = array(); foreach($fixedTrace as $trace): $i++; if(!isset($highlights[$trace['file']])) $highlights[$trace['file']] = explode('<br />', str_replace(array('<code><span style="color: #000000">', '</span>
 </code>', '&nbsp;'), array('', '', '&#160;'), highlight_string(str_replace('	', '  ', file_get_contents($trace['file'])), true))); ?>
-			<li id="frame<?=$i?>"<?php if($i > 1): ?> class="hidecode"<?php endif; ?>>at <?php if(isset($trace['args'])): ?><strong><?php if(isset($trace['class'])): ?><?=$trace['class']?><?=$trace['type']?><?php endif; ?><?=$trace['function']?>(<?=buildParamList($trace['args'])?>)</strong><?php else: ?><em>exception origin</em><?php endif; ?><br />in <?=str_replace(
+			<li id="frame<?=$i?>"<?php if($i > 1): ?> class="hidecode"<?php endif; ?>>at <?php if($i > 1): ?><strong><?php if(isset($trace['class'])): ?><?=$trace['class']?><?=$trace['type']?><?php endif; ?><?=$trace['function']?><?php if(isset($trace['args'])): ?>(<?=buildParamList($trace['args'])?>)<?php endif; ?></strong><?php else: ?><em>exception origin</em><?php endif; ?><br />in <?=str_replace(
 			array(
 				'_' . AgaviConfig::get('core.module_dir'),
 				'_' . AgaviConfig::get('core.template_dir'),
