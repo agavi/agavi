@@ -86,8 +86,8 @@ class AgaviRoutingConfigHandler extends AgaviConfigHandler
 			if($route->hasAttribute('stopping'))			$opts['stopping']			= $this->literalize($route->getAttribute('stopping'));
 			if($route->hasAttribute('name'))					$opts['name']					= $route->getAttribute('name');
 			if($route->hasAttribute('output_type'))		$opts['output_type']	= $route->getAttribute('output_type');
-			if($route->hasAttribute('module'))				$opts['module']				= $route->getAttribute('module');
-			if($route->hasAttribute('action'))				$opts['action']				= $route->getAttribute('action');
+			if($route->hasAttribute('module'))				$opts['module']				= $this->literalize($route->getAttribute('module'));
+			if($route->hasAttribute('action'))				$opts['action']				= $this->literalize($route->getAttribute('action'));
 			if($route->hasAttribute('callback'))			$opts['callback']			= $route->getAttribute('callback');
 
 			if($route->hasChildren('ignores')) {
