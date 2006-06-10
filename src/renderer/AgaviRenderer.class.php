@@ -55,9 +55,10 @@ abstract class AgaviRenderer
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function initialize(AgaviContext $context, $parameters = array())
+	public function initialize(AgaviView $view, $parameters = array())
 	{
-		$this->context = $context;
+		$this->viewInstance = $view;
+		$this->context = $view->getContext();
 	}
 
 	/**
@@ -110,19 +111,6 @@ abstract class AgaviRenderer
 	public function getView()
 	{
 		return $this->viewInstance;
-	}
-	
-	/**
-	 * Set the View instance that belongs to this Renderer instance.
-	 *
-	 * @param      AgaviView An AgaviView instance
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function setView(AgaviView $viewInstance)
-	{
-		$this->viewInstance = $viewInstance;
 	}
 	
 	/**

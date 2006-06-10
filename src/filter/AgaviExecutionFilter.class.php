@@ -156,11 +156,10 @@ class AgaviExecutionFilter extends AgaviFilter
 				while(true) {
 					$oti= $controller->getOutputTypeInfo();
 					$renderer = new $oti['renderer']();
+					$renderer->initialize($viewInstance);
 					if(isset($oti['extension'])) {
 						$renderer->setExtension($oti['extension']);
 					}
-					$renderer->setView($viewInstance);
-
 					try {
 						// run the pre-render check to see if the template is there
 						$renderer->preRenderCheck();
