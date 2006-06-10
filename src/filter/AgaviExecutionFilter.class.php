@@ -147,7 +147,7 @@ class AgaviExecutionFilter extends AgaviFilter
 				while(true) {
 					$oti= $controller->getOutputTypeInfo();
 					$renderer = new $oti['renderer']();
-					$renderer->initialize($viewInstance);
+					$renderer->initialize($viewInstance, $oti['renderer_parameters']);
 					if(isset($oti['extension'])) {
 						$renderer->setExtension($oti['extension']);
 					}
