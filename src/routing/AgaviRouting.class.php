@@ -325,7 +325,8 @@ abstract class AgaviRouting
 
 		$str = substr($str, (int)$anchor & self::ANCHOR_START, $anchor & self::ANCHOR_END ? -1 : strlen($str));
 
-		if(preg_match_all('#\\(([^:]*):([^)]+)\\)#', $str, $matches, PREG_SET_ORDER | PREG_OFFSET_CAPTURE)) {
+		if(preg_match_all('#\\(:  ([^:]+[^\\\\]:)?  (?: ((?: [^:] | :[^)] )+) | ) :\\)#x', $str, $matches, PREG_SET_ORDER | PREG_OFFSET_CAPTURE)) {
+			var_dump($matches);
 			$lastOffset = 0;
 			$ret = '';
 			foreach($matches as $matchSet) {
@@ -334,7 +335,8 @@ abstract class AgaviRouting
 				$prefixStr = substr($str, $lastOffset, $matchOffset - $lastOffset);
 				$lastOffset = $matchOffset + $matchLen;
 
-				$paramName = $matchSet[1][0];
+				// strip the trailing :
+				$paramName = substr($matchSet[1][0], 0, -1);
 				if(strlen($paramName) > 0) {
 					$rxStr .= preg_quote($prefixStr) . sprintf('(?P<%s>%s)', $paramName, $matchSet[2][0]);
 					$reverseStr .= $prefixStr . sprintf('(:%s:)', $paramName);
