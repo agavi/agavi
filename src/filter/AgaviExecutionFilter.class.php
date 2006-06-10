@@ -29,7 +29,6 @@
  */
 class AgaviExecutionFilter extends AgaviFilter
 {
-
 	/**
 	 * Execute this filter.
 	 *
@@ -45,17 +44,15 @@ class AgaviExecutionFilter extends AgaviFilter
 	 */
 	public function execute ($filterChain)
 	{
-
-		// get the context and controller
-		$context    = $this->getContext();
+		// get the context, controller and validator manager
+		$context = $this->getContext();
 		$controller = $context->getController();
-		// create validator manager
 		$validatorManager = $context->getValidatorManager();
 		// clear the validator manager for reuse
 		$validatorManager->clear();
 
 		// get the current action instance
-		$actionEntry    = $controller->getActionStack()->getLastEntry();
+		$actionEntry = $controller->getActionStack()->getLastEntry();
 		$actionInstance = $actionEntry->getActionInstance();
 
 		// get the current action information
@@ -83,11 +80,10 @@ class AgaviExecutionFilter extends AgaviFilter
 			// get the current action validation configuration
 			$validationConfig = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/validate/' . $actionName . '.ini';
 
-			if (is_readable($validationConfig)) {
+			if(is_readable($validationConfig)) {
 				// load validation configuration
 				// do NOT use require_once
 				$validationConfig = 'modules/' . $moduleName . '/validate/' . $actionName . '.ini';
-
 				require(AgaviConfigCache::checkConfig($validationConfig));
 			}
 
@@ -107,7 +103,7 @@ class AgaviExecutionFilter extends AgaviFilter
 			}
 
 			// process manual validation
-			if ($actionInstance->$validateMethod() && $validated) {
+			if($actionInstance->$validateMethod() && $validated) {
 				// execute the action
 				$viewName = $actionInstance->$executeMethod();
 			} else {
@@ -120,8 +116,8 @@ class AgaviExecutionFilter extends AgaviFilter
 			}
 		}
 
-		if ($viewName != null) {
-			if (is_array($viewName)) {
+		if($viewName != null) {
+			if(is_array($viewName)) {
 				// we're going to use an entirely different action for this view
 				$moduleName = $viewName[0];
 				$viewName   = $viewName[1];
@@ -131,16 +127,11 @@ class AgaviExecutionFilter extends AgaviFilter
 			}
 
 			// display this view
-			if (!$controller->viewExists($moduleName, $viewName)) {
+			if(!$controller->viewExists($moduleName, $viewName)) {
 				// the requested view doesn't exist
-				$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/views/' .
-						$viewName . 'View.class.php';
-
-				$error = 'Module "%s" does not contain the view "%sView" or ' .
-						 'the file "%s" is unreadable';
-
+				$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/views/' . $viewName . 'View.class.php';
+				$error = 'Module "%s" does not contain the view "%sView" or the file "%s" is unreadable';
 				$error = sprintf($error, $moduleName, $viewName, $file);
-
 				throw new AgaviViewException($error);
 			}
 
@@ -195,9 +186,7 @@ class AgaviExecutionFilter extends AgaviFilter
 				$actionEntry->setPresentation($viewData);
 			}
 		}
-
 	}
-
 }
 
 ?>
