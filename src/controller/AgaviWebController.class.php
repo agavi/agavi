@@ -370,27 +370,24 @@ class AgaviWebController extends AgaviController
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function redirect ($url, $delay = 0)
+	public function redirect ($url)
 	{
-
-		// shutdown the controller
-		$this->shutdown();
-
 		// redirect
 		header('Location: ' . $url);
 
-		$echo = '<html>' .
-				'<head>' .
-				'<meta http-equiv="refresh" content="%d;url=%s"/>' .
-				'</head>' .
-				'</html>';
+		$echo = 
+			'<html>' .
+			'<head>' .
+			'<meta http-equiv="refresh" content="0;url=%s"/>' .
+			'</head>' .
+			'</html>'
+		;
 
-		$echo = sprintf($echo, $delay, $url);
+		$echo = sprintf($echo, $url);
 
 		echo $echo;
 
 		exit;
-
 	}
 
 	/**
