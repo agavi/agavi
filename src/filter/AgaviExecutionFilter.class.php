@@ -56,8 +56,8 @@ class AgaviExecutionFilter extends AgaviFilter
 		$actionInstance = $actionEntry->getActionInstance();
 
 		// get the current action information
-		$moduleName = $controller->getModuleName();
-		$actionName = $controller->getActionName();
+		$moduleName = $actionEntry->getModuleName();
+		$actionName = $actionEntry->getActionName();
 
 		// get the request method
 		$method = ucfirst(strtolower($context->getRequest()->getMethod()));
