@@ -28,45 +28,64 @@
  */
 abstract class AgaviController extends AgaviParameterHolder
 {
-
-	private
-		$maxForwards  = 20,
-		$renderMode   = AgaviView::RENDER_CLIENT;
+	/**
+	 * @var        int The maximum number of times this Controller will forward().
+	 */
+	protected $maxForwards  = 20;
+	
+	/**
+	 * @var        int The render mode, see AgaviView RENDER_* constants.
+	 */
+	protected $renderMode   = AgaviView::RENDER_CLIENT;
 
 	/**
 	 * @var        AgaviActionStack An ActionStack instance.
 	 */
 	protected $actionStack = null;
 
-	protected
-		$context      = null,
-		$outputType   = null,
-		$outputTypes  = array(),
-		$filters      = array(
-			'global' => array(),
-			'action' => array(
-				'*' => null
-			),
-			'rendering' => array(
-				'*' => null
-			),
-			'dispatch' => null,
-			'execution' => null,
-			'security' => null
-		);
+	/**
+	 * @var        AgaviContext A Context instance.
+	 */
+	protected $context = null;
+	
+	/**
+	 * @var        string The currently set Output Type.
+	 */
+	protected $outputType = null;
+	
+	/**
+	 * @var        array An array of registered Output Types.
+	 */
+	protected $outputTypes = array();
+	
+	/**
+	 * @var        array An array of filter instances for reuse.
+	 */
+	protected $filters = array(
+		'global' => array(),
+		'action' => array(
+			'*' => null
+		),
+		'rendering' => array(
+			'*' => null
+		),
+		'dispatch' => null,
+		'execution' => null,
+		'security' => null
+	);
 
-		/**
-		 * Retrieve the ActionStack.
-		 *
-		 * @return     AgaviActionStack the ActionStack instance
-		 *
-		 * @author     David Zuelke <dz@bitxtender.com>
-		 * @since      0.11.0
-		 */
-		public function getActionStack()
-		{
-			return $this->actionStack;
-		}
+	/**
+	 * Retrieve the ActionStack.
+	 *
+	 * @return     AgaviActionStack the ActionStack instance
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getActionStack()
+	{
+		return $this->actionStack;
+	}
 
 	/**
 	 * Sets an output type for this response.
@@ -136,7 +155,7 @@ abstract class AgaviController extends AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function actionExists ($moduleName, $actionName)
+	public function actionExists($moduleName, $actionName)
 	{
 		$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/actions/' . $actionName . 'Action.class.php';
 		return is_readable($file);
@@ -197,7 +216,7 @@ abstract class AgaviController extends AgaviParameterHolder
 			$filterChain->execute();
 			
 		} catch (Exception $e) {
-			AgaviException::printStackTrace($e, $this->getContext());
+			AgaviException::printStackTrace($e, $this->context);
 		}
 	}
 
@@ -227,29 +246,24 @@ abstract class AgaviController extends AgaviParameterHolder
 		$actionName = preg_replace('/[^a-z0-9\-_\/]+/i', '', $actionName);
 		$moduleName = preg_replace('/[^a-z0-9\-_]+/i', '', $moduleName);
 
-		if($this->getActionStack()->getSize() >= $this->maxForwards) {
+		if($this->actionStack->getSize() >= $this->maxForwards) {
 			throw new AgaviForwardException('Too many forwards have been detected for this request');
 		}
 
-		if (!AgaviConfig::get('core.available', false)) {
-
+		if(!AgaviConfig::get('core.available', false)) {
 			// application is unavailable
 			$moduleName = AgaviConfig::get('actions.unavailable_module');
 			$actionName = AgaviConfig::get('actions.unavailable_action');
 
-			if (!$this->actionExists($moduleName, $actionName)) {
+			if(!$this->actionExists($moduleName, $actionName)) {
 				// cannot find unavailable module/action
-				$error = 'Invalid configuration settings: ' .
-						 'actions.unavailable_module "%s", ' .
-						 'actions.unavailable_action "%s"';
-
+				$error = 'Invalid configuration settings: actions.unavailable_module "%s", actions.unavailable_action "%s"';
 				$error = sprintf($error, $moduleName, $actionName);
 
 				throw new AgaviConfigurationException($error);
 			}
 
 		} elseif(!$this->actionExists($moduleName, $actionName)) {
-
 			// the requested action doesn't exist
 
 			// track the requested module so we have access to the data
@@ -261,12 +275,9 @@ abstract class AgaviController extends AgaviParameterHolder
 			$moduleName = AgaviConfig::get('actions.error_404_module');
 			$actionName = AgaviConfig::get('actions.error_404_action');
 
-			if (!$this->actionExists($moduleName, $actionName)) {
+			if(!$this->actionExists($moduleName, $actionName)) {
 				// cannot find unavailable module/action
-				$error = 'Invalid configuration settings: ' .
-						 'actions.error_404_module "%s", ' .
-						 'actions.error_404_action "%s"';
-
+				$error = 'Invalid configuration settings: actions.error_404_module "%s", actions.error_404_action "%s"';
 				$error = sprintf($error, $moduleName, $actionName);
 
 				throw new AgaviConfigurationException($error);
@@ -277,7 +288,7 @@ abstract class AgaviController extends AgaviParameterHolder
 		$actionInstance = $this->getAction($moduleName, $actionName);
 
 		// add a new action stack entry
-		$this->getActionStack()->addEntry($moduleName, $actionName, $actionInstance);
+		$this->actionStack->addEntry($moduleName, $actionName, $actionInstance);
 
 		// include the module configuration
 		// laoded only once due to the way import() works
@@ -305,7 +316,7 @@ abstract class AgaviController extends AgaviParameterHolder
 		if(AgaviConfig::get('modules.' . strtolower($moduleName) . '.enabled')) {
 			// check for a module config.php
 			$moduleConfig = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/config.php';
-			if (is_readable($moduleConfig)) {
+			if(is_readable($moduleConfig)) {
 				require_once($moduleConfig);
 			}
 
@@ -380,7 +391,7 @@ abstract class AgaviController extends AgaviParameterHolder
 	public function getActionName()
 	{
 		// get the last action stack entry
-		$actionEntry = $this->getActionStack()->getLastEntry();
+		$actionEntry = $this->actionStack->getLastEntry();
 
 		return $actionEntry->getActionName();
 	}
@@ -398,7 +409,7 @@ abstract class AgaviController extends AgaviParameterHolder
 	public function getModuleDirectory()
 	{
 		// get the last action stack entry
-		$actionEntry = $this->getActionStack()->getLastEntry();
+		$actionEntry = $this->actionStack->getLastEntry();
 
 		return AgaviConfig::get('core.module_dir') . '/' . $actionEntry->getModuleName();
 	}
@@ -416,7 +427,7 @@ abstract class AgaviController extends AgaviParameterHolder
 	public function getModuleName()
 	{
 		// get the last action stack entry
-		$actionEntry = $this->getActionStack()->getLastEntry();
+		$actionEntry = $this->actionStack->getLastEntry();
 
 		return $actionEntry->getModuleName();
 	}
@@ -435,11 +446,11 @@ abstract class AgaviController extends AgaviParameterHolder
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
-	public function getAction ($moduleName, $actionName)
+	public function getAction($moduleName, $actionName)
 	{
 		$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/actions/' . $actionName . 'Action.class.php';
 
-		if (file_exists($file)) {
+		if(file_exists($file)) {
 			require_once($file);
 		}
 
@@ -447,23 +458,22 @@ abstract class AgaviController extends AgaviParameterHolder
 
 		// Nested action check?
 		$position = strrpos($actionName, '/');
-		if ($position > -1) {
+		if($position > -1) {
 			$longActionName = str_replace('/', '_', $actionName);
 			$actionName = substr($actionName, $position + 1);
 		}
 
-		if (class_exists($moduleName . '_' . $longActionName . 'Action', false)) {
+		if(class_exists($moduleName . '_' . $longActionName . 'Action', false)) {
 			$class = $moduleName . '_' . $longActionName . 'Action';
-		} elseif (class_exists($moduleName . '_' . $actionName . 'Action', false)) {
+		} elseif(class_exists($moduleName . '_' . $actionName . 'Action', false)) {
 			$class = $moduleName . '_' . $actionName . 'Action';
-		} elseif (class_exists($longActionName . 'Action', false)) {
+		} elseif(class_exists($longActionName . 'Action', false)) {
 			$class = $longActionName . 'Action';
 		} else {
 			$class = $actionName . 'Action';
 		}
 
 		return new $class();
-
 	}
 
 	/**
@@ -474,11 +484,9 @@ abstract class AgaviController extends AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function getContext ()
+	public function getContext()
 	{
-
 		return $this->context;
-
 	}
 
 	/**
@@ -491,11 +499,9 @@ abstract class AgaviController extends AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function getRenderMode ()
+	public function getRenderMode()
 	{
-
 		return $this->renderMode;
-
 	}
 
 	/**
@@ -512,48 +518,44 @@ abstract class AgaviController extends AgaviParameterHolder
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
-	public function getView ($moduleName, $viewName)
+	public function getView($moduleName, $viewName)
 	{
-
-		$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/views/' . $viewName .
-				'View.class.php';
+		$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/views/' . $viewName . 'View.class.php';
 
 		require_once($file);
 
 		$longViewName = $viewName;
 
 		$position = strrpos($viewName, '/');
-		if ($position > -1)
-		{
+		if($position > -1) {
 			$longViewName = str_replace('/', '_', $viewName);
 			$viewName = substr($viewName, $position + 1);
 		}
 
-
-		if (class_exists($moduleName . '_' . $longViewName . 'View', false)) {
+		if(class_exists($moduleName . '_' . $longViewName . 'View', false)) {
 			$class = $moduleName . '_' . $longViewName . 'View';
-		} elseif (class_exists($moduleName . '_' . $viewName . 'View', false)) {
+		} elseif(class_exists($moduleName . '_' . $viewName . 'View', false)) {
 			$class = $moduleName . '_' . $viewName . 'View';
-		} elseif (class_exists($longViewName . 'View', false)) {
+		} elseif(class_exists($longViewName . 'View', false)) {
 			$class = $longViewName . 'View';
 		} else {
 			$class = $viewName . 'View';
 		}
 
 		return new $class();
-
 	}
 
 	/**
 	 * Initialize this controller.
 	 *
-	 * @param      AgaviContext object
+	 * @param      AgaviContext A Context instance.
+	 * @param      array        An array of initialization parameters.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @author     Mike Vincent <mike@agavi.org>
 	 * @since      0.9.0
 	 */
-	public function initialize (AgaviContext $context, $parameters = array())
+	public function initialize(AgaviContext $context, $parameters = array())
 	{
 		$this->maxForwards = isset($parameters['max_fowards']) ? $parameters['max_forwards'] : 20;
 		
@@ -632,13 +634,11 @@ abstract class AgaviController extends AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function modelExists ($moduleName, $modelName)
+	public function modelExists($moduleName, $modelName)
 	{
-
 		$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/models/' . $modelName .	'Model.class.php';
 
 		return is_readable($file);
-
 	}
 
 	/**
@@ -651,13 +651,11 @@ abstract class AgaviController extends AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function moduleExists ($moduleName)
+	public function moduleExists($moduleName)
 	{
-
 		$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/config/module.xml';
 
 		return is_readable($file);
-
 	}
 
 	/**
@@ -671,17 +669,11 @@ abstract class AgaviController extends AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function setRenderMode ($mode)
+	public function setRenderMode($mode)
 	{
-
-		if ($mode == AgaviView::RENDER_CLIENT || $mode == AgaviView::RENDER_VAR ||
-			$mode == AgaviView::RENDER_NONE)
-		{
-
+		if($mode == AgaviView::RENDER_CLIENT || $mode == AgaviView::RENDER_VAR || $mode == AgaviView::RENDER_NONE) {
 			$this->renderMode = $mode;
-
 			return;
-
 		}
 
 		// invalid rendering mode type
@@ -689,7 +681,6 @@ abstract class AgaviController extends AgaviParameterHolder
 		$error = sprintf($error, $mode);
 
 		throw new AgaviRenderException($error);
-
 	}
 
 	/**
@@ -713,7 +704,7 @@ abstract class AgaviController extends AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function viewExists ($moduleName, $viewName)
+	public function viewExists($moduleName, $viewName)
 	{
 		$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/views/' . $viewName . 'View.class.php';
 		return is_readable($file);

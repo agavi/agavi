@@ -30,54 +30,71 @@
  */
 class AgaviWebController extends AgaviController
 {
-
-	protected
-		$httpStatusCodes = array(
-			'100' => "HTTP/1.1 100 Continue",
-			'101' => "HTTP/1.1 101 Switching Protocols",
-			'200' => "HTTP/1.1 200 OK",
-			'201' => "HTTP/1.1 201 Created",
-			'202' => "HTTP/1.1 202 Accepted",
-			'203' => "HTTP/1.1 203 Non-Authoritative Information",
-			'204' => "HTTP/1.1 204 No Content",
-			'205' => "HTTP/1.1 205 Reset Content",
-			'206' => "HTTP/1.1 206 Partial Content",
-			'300' => "HTTP/1.1 300 Multiple Choices",
-			'301' => "HTTP/1.1 301 Moved Permanently",
-			'302' => "HTTP/1.1 302 Found",
-			'303' => "HTTP/1.1 303 See Other",
-			'304' => "HTTP/1.1 304 Not Modified",
-			'305' => "HTTP/1.1 305 Use Proxy",
-			'307' => "HTTP/1.1 307 Temporary Redirect",
-			'400' => "HTTP/1.1 400 Bad Request",
-			'401' => "HTTP/1.1 401 Unauthorized",
-			'402' => "HTTP/1.1 402 Payment Required",
-			'403' => "HTTP/1.1 403 Forbidden",
-			'404' => "HTTP/1.1 404 Not Found",
-			'405' => "HTTP/1.1 405 Method Not Allowed",
-			'406' => "HTTP/1.1 406 Not Acceptable",
-			'407' => "HTTP/1.1 407 Proxy Authentication Required",
-			'408' => "HTTP/1.1 408 Request Time-out",
-			'409' => "HTTP/1.1 409 Conflict",
-			'410' => "HTTP/1.1 410 Gone",
-			'411' => "HTTP/1.1 411 Length Required",
-			'412' => "HTTP/1.1 412 Precondition Failed",
-			'413' => "HTTP/1.1 413 Request Entity Too Large",
-			'414' => "HTTP/1.1 414 Request-URI Too Large",
-			'415' => "HTTP/1.1 415 Unsupported Media Type",
-			'416' => "HTTP/1.1 416 Requested range not satisfiable",
-			'417' => "HTTP/1.1 417 Expectation Failed",
-			'500' => "HTTP/1.1 500 Internal Server Error",
-			'501' => "HTTP/1.1 501 Not Implemented",
-			'502' => "HTTP/1.1 502 Bad Gateway",
-			'503' => "HTTP/1.1 503 Service Unavailable",
-			'504' => "HTTP/1.1 504 Gateway Time-out",
-			'505' => "HTTP/1.1 505 HTTP Version not supported",
-		),
-		$httpStatusCode = null,
-		$httpHeaders = array(),
-		$cookieConfig = array(),
-		$cookies = array();
+	/**
+	 * @var        array An array of all HTTP status codes and their message.
+	 */
+	protected $httpStatusCodes = array(
+		'100' => "HTTP/1.1 100 Continue",
+		'101' => "HTTP/1.1 101 Switching Protocols",
+		'200' => "HTTP/1.1 200 OK",
+		'201' => "HTTP/1.1 201 Created",
+		'202' => "HTTP/1.1 202 Accepted",
+		'203' => "HTTP/1.1 203 Non-Authoritative Information",
+		'204' => "HTTP/1.1 204 No Content",
+		'205' => "HTTP/1.1 205 Reset Content",
+		'206' => "HTTP/1.1 206 Partial Content",
+		'300' => "HTTP/1.1 300 Multiple Choices",
+		'301' => "HTTP/1.1 301 Moved Permanently",
+		'302' => "HTTP/1.1 302 Found",
+		'303' => "HTTP/1.1 303 See Other",
+		'304' => "HTTP/1.1 304 Not Modified",
+		'305' => "HTTP/1.1 305 Use Proxy",
+		'307' => "HTTP/1.1 307 Temporary Redirect",
+		'400' => "HTTP/1.1 400 Bad Request",
+		'401' => "HTTP/1.1 401 Unauthorized",
+		'402' => "HTTP/1.1 402 Payment Required",
+		'403' => "HTTP/1.1 403 Forbidden",
+		'404' => "HTTP/1.1 404 Not Found",
+		'405' => "HTTP/1.1 405 Method Not Allowed",
+		'406' => "HTTP/1.1 406 Not Acceptable",
+		'407' => "HTTP/1.1 407 Proxy Authentication Required",
+		'408' => "HTTP/1.1 408 Request Time-out",
+		'409' => "HTTP/1.1 409 Conflict",
+		'410' => "HTTP/1.1 410 Gone",
+		'411' => "HTTP/1.1 411 Length Required",
+		'412' => "HTTP/1.1 412 Precondition Failed",
+		'413' => "HTTP/1.1 413 Request Entity Too Large",
+		'414' => "HTTP/1.1 414 Request-URI Too Large",
+		'415' => "HTTP/1.1 415 Unsupported Media Type",
+		'416' => "HTTP/1.1 416 Requested range not satisfiable",
+		'417' => "HTTP/1.1 417 Expectation Failed",
+		'500' => "HTTP/1.1 500 Internal Server Error",
+		'501' => "HTTP/1.1 501 Not Implemented",
+		'502' => "HTTP/1.1 502 Bad Gateway",
+		'503' => "HTTP/1.1 503 Service Unavailable",
+		'504' => "HTTP/1.1 504 Gateway Time-out",
+		'505' => "HTTP/1.1 505 HTTP Version not supported",
+	);
+	
+	/**
+	 * @var        int The HTTP status code to send for the response.
+	 */
+	protected $httpStatusCode = null;
+	
+	/**
+	 * @var        array The HTTP headers scheduled to be sent with the response.
+	 */
+	protected $httpHeaders = array();
+	
+	/**
+	 * @var        array The Cookie settings for this Request instance.
+	 */
+	protected $cookieConfig = array();
+	
+	/**
+	 * @var        array The Cookies scheduled to be sent with the response.
+	 */
+	protected $cookies = array();
 		
 	/**
 	 * Acts as a front web controller unless module and action names are given as
@@ -93,7 +110,7 @@ class AgaviWebController extends AgaviController
 		parent::dispatch($parameters);
 		
 		// output all headers for the response
-		$this->sendHTTPResponseHeaders();
+		$this->sendHttpResponseHeaders();
 	}
 
 	/**
@@ -122,7 +139,7 @@ class AgaviWebController extends AgaviController
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function setHTTPStatusCode($code) {
+	public function setHttpStatusCode($code) {
 		$code = strval($code);
 		if(isset($this->httpStatusCodes[$code])) {
 			$this->httpStatusCode = $code;
@@ -138,7 +155,7 @@ class AgaviWebController extends AgaviController
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function getHTTPStatusCode() {
+	public function getHttpStatusCode() {
 		return $this->httpStatusCode;
 	}
 
@@ -152,7 +169,7 @@ class AgaviWebController extends AgaviController
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function normalizeHTTPHeaderName($name)
+	public function normalizeHttpHeaderName($name)
 	{
 		if(strtolower($name) == "etag") {
 			return "ETag";
@@ -173,9 +190,9 @@ class AgaviWebController extends AgaviController
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function getHTTPHeader($name)
+	public function getHttpHeader($name)
 	{
-		$name = $this->normalizeHTTPHeaderName($name);
+		$name = $this->normalizeHttpHeaderName($name);
 		$retval = null;
 		if(isset($this->headers[$name])) {
 			$retval = $this->headers[$name];
@@ -191,7 +208,7 @@ class AgaviWebController extends AgaviController
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function getHTTPHeaders()
+	public function getHttpHeaders()
 	{
 		return $this->headers;
 	}
@@ -206,9 +223,9 @@ class AgaviWebController extends AgaviController
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function hasHTTPHeader($name)
+	public function hasHttpHeader($name)
 	{
-		$name = $this->normalizeHTTPHeaderName($name);
+		$name = $this->normalizeHttpHeaderName($name);
 		$retval = false;
 		if(isset($this->headers[$name])) {
 			$retval = true;
@@ -227,9 +244,9 @@ class AgaviWebController extends AgaviController
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function setHTTPHeader($name, $value, $replace = true)
+	public function setHttpHeader($name, $value, $replace = true)
 	{
-		$name = $this->normalizeHTTPHeaderName($name);
+		$name = $this->normalizeHttpHeaderName($name);
 		if(!isset($this->headers[$name]) || $replace) {
 			$this->headers[$name] = array();
 		}
@@ -283,9 +300,9 @@ class AgaviWebController extends AgaviController
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function removeHTTPHeader($name)
+	public function removeHttpHeader($name)
 	{
-		$name = $this->normalizeHTTPHeaderName($name);
+		$name = $this->normalizeHttpHeaderName($name);
 		$retval = null;
 		if(isset($this->headers[$name])) {
 			$retval = $this->headers[$name];
@@ -300,7 +317,7 @@ class AgaviWebController extends AgaviController
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function clearHTTPHeaders()
+	public function clearHttpHeaders()
 	{
 		$this->headers = array();
 	}
@@ -311,7 +328,7 @@ class AgaviWebController extends AgaviController
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function sendHTTPResponseHeaders()
+	public function sendHttpResponseHeaders()
 	{
 		// send HTTP status code
 		if(isset($this->httpStatusCode) && isset($this->httpStatusCodes[$this->httpStatusCode])) {
@@ -342,6 +359,9 @@ class AgaviWebController extends AgaviController
 	/**
 	 * Initialize this controller.
 	 *
+	 * @param      AgaviContext A Context instance.
+	 * @param      array        An array of initialization parameters.
+	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.9.0
@@ -370,7 +390,7 @@ class AgaviWebController extends AgaviController
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function redirect ($url)
+	public function redirect($url)
 	{
 		// redirect
 		header('Location: ' . $url);
@@ -382,7 +402,6 @@ class AgaviWebController extends AgaviController
 			'</head>' .
 			'</html>'
 		;
-
 		$echo = sprintf($echo, $url);
 
 		echo $echo;
@@ -400,7 +419,7 @@ class AgaviWebController extends AgaviController
 	 */
 	public function setContentType($type)
 	{
-		$this->setHTTPHeader('Content-Type', $type);
+		$this->setHttpHeader('Content-Type', $type);
 	}
 
 }
