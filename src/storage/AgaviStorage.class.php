@@ -72,15 +72,14 @@ abstract class AgaviStorage extends AgaviParameterHolder
 
 	/**
 	 * Executes code necessary to startup the storage (a session, for example).
-	 *
-	 * @return     bool true, if startup went fine, otherwise false
+	 * This code cannot be run in initialize(), because initialization has to
+	 * finish completely, for all instances, before a session can be created.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	function startup()
 	{
-		return true;
 	}
 
 	/**

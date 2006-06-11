@@ -578,8 +578,6 @@ abstract class AgaviController extends AgaviParameterHolder
 		
 		$cfg = AgaviConfig::get('core.config_dir') . '/output_types.xml';
 		require_once(AgaviConfigCache::checkConfig($cfg, $context->getName()));
-		
-		register_shutdown_function(array($this, 'shutdown'));
 	}
 	
 	/**
@@ -695,23 +693,13 @@ abstract class AgaviController extends AgaviParameterHolder
 	}
 
 	/**
-	 * Execute the shutdown procedure.
+	 * Execute the shutdown procedure for this controller.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
 	public function shutdown()
 	{
-		if($user = $this->context->getUser()) {
-			$user->shutdown();
-		}
-
-		$this->context->getStorage()->shutdown();
-		$this->context->getRequest()->shutdown();
-
-		if(AgaviConfig::get('core.use_database')) {
-			$this->context->getDatabaseManager()->shutdown();
-		}
 	}
 
 	/**

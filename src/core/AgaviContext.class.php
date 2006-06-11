@@ -249,6 +249,35 @@ class AgaviContext
 		$this->name = $profile;
 		
 		include(AgaviConfigCache::checkConfig(AgaviConfig::get('core.config_dir') . '/factories.xml', $profile));
+		
+		register_shutdown_function(array($this, 'shutdown'));
+	}
+	
+	/**
+	 * Shut down this Context and all related factories.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function shutdown()
+	{
+		$this->controller->shutdown();
+		
+		if($this->user) {
+			$this->user->shutdown();
+		}
+		
+		$this->storage->shutdown();
+		
+		$this->request->shutdown();
+		
+		if(AgaviConfig::get('core.use_logging')) {
+			$this->loggerManager->shutdown();
+		}
+		
+		if(AgaviConfig::get('core.use_database')) {
+			$this->databaseManager->shutdown();
+		}
 	}
 	
 	/**
