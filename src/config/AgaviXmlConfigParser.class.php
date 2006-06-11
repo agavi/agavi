@@ -47,8 +47,8 @@ class AgaviXmlConfigParser extends AgaviConfigParser
 	 */
 	public function parse($config, $validationFile = null)
 	{
-		if (!is_readable($config)) {
-			$error = 'Configuration file "' . $config . '" does not exist or is not readable';
+		if(!is_readable($config)) {
+			$error = 'Configuration file "' . $config . '" does not exist or is unreadable';
 			throw new AgaviUnreadableException($error);
 		}
 
@@ -57,7 +57,7 @@ class AgaviXmlConfigParser extends AgaviConfigParser
 		$doc = DOMDocument::load($config);
 		restore_error_handler();
 		if(!($doc instanceof DOMDocument)) {
-			$error = 'Configuration file "' . $config . '" contains errors (' . implode("\n", $this->errors) . ')';
+			$error = 'Configuration file "' . $config . '" could not be parsed, error' . (count($this->errors) > 1 ? 's' : '') . ' reported by DOM: ' . "\n\n" . implode("\n", $this->errors);
 			throw new AgaviParseException($error);
 		}
 		$this->xpath = new DomXPath($doc);
@@ -67,7 +67,7 @@ class AgaviXmlConfigParser extends AgaviConfigParser
 			set_error_handler(array($this, 'errorHandler'));
 			if(!$doc->schemaValidate($validationFile)) {
 				restore_error_handler();
-				$error = 'Configuration file "' . $config . '" does not match the schema. The errors are: ' . "\n" . implode("\n", $this->errors);
+				$error = 'XSD Validation of configuration file "' . $config . '" failed, error' . (count($this->errors) > 1 ? 's' : '') . ' reported by DOM: ' . "\n\n" . implode("\n", $this->errors);
 				throw new AgaviParseException($error);
 			} else {
 				restore_error_handler();
