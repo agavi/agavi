@@ -28,23 +28,37 @@
  */
 abstract class AgaviRenderer
 {
+	/**
+	 * @var        AgaviContext A Context instance.
+	 */
 	protected $context = null;
 	
 	/**
-	 * A string with the default template file extension, including the dot.
+	 * @var        string A string with the default template file extension,
+	 *                    including the dot.
 	 */
 	protected $extension = '';
 	
 	/**
-	 * An array containing the output of slots and, if a decorator is used, the
-	 * output of the content view.
+	 * @var        array An associative array containing the output of slots and
+	 *                   the output of the content view.
 	 */
 	protected $output = array();
 	
 	/**
-	 * The View instance that belongs to this Renderer instance.
+	 * @var        AgaviView The View instance that belongs to this Renderer.
 	 */
-	protected $viewInstance = null;
+	protected $view = null;
+	
+	/**
+	 * @var        string The name of the array that contains the template vars.
+	 */
+	protected $varName = 'template';
+	
+	/**
+	 * @var        bool Whether or not the template vars should be extracted.
+	 */
+	protected $extractVars = false;
 	
 	/**
 	 * Initialize this Renderer.
@@ -57,8 +71,14 @@ abstract class AgaviRenderer
 	 */
 	public function initialize(AgaviView $view, $parameters = array())
 	{
-		$this->viewInstance = $view;
+		$this->view = $view;
 		$this->context = $view->getContext();
+		if(isset($parameters['var_name'])) {
+			$this->varName = $parameters['var_name'];
+		}
+		if(isset($parameters['extract_vars'])) {
+			$this->extractVars = $parameters['extract_vars'];
+		}
 	}
 
 	/**
@@ -110,7 +130,7 @@ abstract class AgaviRenderer
 	 */
 	public function getView()
 	{
-		return $this->viewInstance;
+		return $this->view;
 	}
 	
 	/**
@@ -145,7 +165,7 @@ abstract class AgaviRenderer
 		// decorator template
 		$slots = $view->getSlots();
 
-		foreach ($slots as $name => $slot) {
+		foreach($slots as $name => $slot) {
 			// grab this next forward's action stack index
 			$index = $actionStack->getSize();
 

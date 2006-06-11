@@ -45,26 +45,23 @@ class AgaviPhpRenderer extends AgaviRenderer
 	{
 		// call our parent decorate() method
 		parent::decorate($content);
-
-		$view = $this->getView();
 		
-		// alias the attributes array so it's directly accessible to the
-		// template
-		$attribs =& $view->getAttributes();
+		// DO NOT USE VARIABLES IN HERE, THEY MIGHT INTERFERE WITH TEMPLATE VARS
 		
-		$template =& array_merge($attribs, $this->output);
-
+		if($this->extractVars) {
+			extract(array_merge($this->view->getAttributes(), $this->output), EXTR_REFS | EXTR_PREFIX_INVALID, '_');
+		} else {
+			${$this->varName} =& array_merge($this->view->getAttributes(), $this->output);
+		}
+		
 		// render the decorator template and return the result
-		$decoratorTemplate = $view->getDecoratorDirectory() . '/' . $view->getDecoratorTemplate() . $this->getExtension();
-
 		ob_start();
-
-		require($decoratorTemplate);
-
+		
+		require($this->view->getDecoratorDirectory() . '/' . $this->view->getDecoratorTemplate() . $this->getExtension());
+		
 		$retval = ob_get_contents();
-
 		ob_end_clean();
-
+		
 		return $retval;
 	}
 
@@ -92,42 +89,39 @@ class AgaviPhpRenderer extends AgaviRenderer
 	 */
 	public function & render()
 	{
-		$retval = null;
+		// DO NOT USE VARIABLES IN HERE, THEY MIGHT INTERFERE WITH TEMPLATE VARS
+		
+		if($this->extractVars) {
+			extract($this->view->getAttributes(), EXTR_REFS | EXTR_PREFIX_INVALID, '_');
+		} else {
+			${$this->varName} =& $this->view->getAttributes();
+		}
 
-		$view = $this->getView();
-
-		// get the render mode
-		$mode = $view->getContext()->getController()->getRenderMode();
-
-		// alias the attributes array so it's directly accessible to the
-		// template
-		$template =& $view->getAttributes();
-
-		if($mode == AgaviView::RENDER_CLIENT && !$view->isDecorator())
-		{
+		if($this->context->getController()->getRenderMode() == AgaviView::RENDER_CLIENT && !$this->view->isDecorator()) {
 			// render directly to the client
-			require($view->getDirectory() . '/' . $view->getTemplate() . $this->getExtension());
+			require($this->view->getDirectory() . '/' . $this->view->getTemplate() . $this->getExtension());
 			
-		} else if($mode != AgaviView::RENDER_NONE) {
+		} elseif($this->view->getContext()->getController()->getRenderMode() != AgaviView::RENDER_NONE) {
 			// render to variable
 			ob_start();
 
-			require($view->getDirectory() . '/' . $view->getTemplate() . $this->getExtension());
+			require($this->view->getDirectory() . '/' . $this->view->getTemplate() . $this->getExtension());
 
 			$retval = ob_get_contents();
-
 			ob_end_clean();
 
 			// now render our decorator template, if one exists
-			if($view->isDecorator()) {
+			if($this->view->isDecorator()) {
 				$retval =& $this->decorate($retval);
 			}
 
-			if($mode == AgaviView::RENDER_CLIENT) {
+			if($this->context->getController()->getRenderMode() == AgaviView::RENDER_CLIENT) {
 				echo $retval;
 
 				$retval = null;
 			}
+		} else {
+			$retval = null;
 		}
 
 		return $retval;

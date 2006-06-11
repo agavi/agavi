@@ -76,8 +76,12 @@ class AgaviPhptalRenderer extends AgaviRenderer
 		$mode = $view->getContext()->getController()->getRenderMode();
 		$engine->setTemplateRepository($view->getDirectory());
 		$engine->setTemplate($view->getTemplate() . $this->getExtension());
-		foreach($view->getAttributes() as $key => $value) {
-			$engine->set($key, $value);
+		if($this->extractVars) {
+			foreach($view->getAttributes() as $key => $value) {
+				$engine->set($key, $value);
+			}
+		} else {
+			$engine->set($this->varName, $view->getAttributes());
 		}
 		$engine->set('this', $this);
 		
@@ -116,11 +120,15 @@ class AgaviPhptalRenderer extends AgaviRenderer
 		$engine->setTemplate($view->getDecoratorTemplate() . $this->getExtension());
 		
 		// set the template resources
-		foreach($view->getAttributes() as $key => $value) {
-			$engine->set($key, $value);
-		}
-		foreach($this->output as $key => $value) {
-			$engine->set($key, $value);
+		if($this->extractVars) {
+			foreach($view->getAttributes() as $key => $value) {
+				$engine->set($key, $value);
+			}
+			foreach($this->output as $key => $value) {
+				$engine->set($key, $value);
+			}
+		} else {
+			$engine->set($this->varName, array_merge($view->getAttributes(), $this->output));
 		}
 		$engine->set('this', $this);
 		

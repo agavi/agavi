@@ -87,9 +87,14 @@ class AgaviSmartyRenderer extends AgaviRenderer
 
 		$attribs =& $view->getAttributes();
 		
-		foreach($attribs as $name => &$value) {
-			$engine->assign_by_ref($name, $value);
+		if($this->extractVars) {
+			foreach($attribs as $name => &$value) {
+				$engine->assign_by_ref($name, $value);
+			}
+		} else {
+			$engine->assign_by_ref($this->varName, $attribs);
 		}
+		$engine->assign_by_ref('this', $this);
 		
 		if($mode == AgaviView::RENDER_CLIENT && !$view->isDecorator()) {
 			// render directly to the client
@@ -119,14 +124,17 @@ class AgaviSmartyRenderer extends AgaviRenderer
 		$engine = $this->getEngine();
 		$view = $this->getView();
 		
-		foreach($this->output as $name => &$value) {
-			$engine->assign_by_ref($name, $value);
+		if($this->extractVars) {
+			foreach($this->output as $name => &$value) {
+				$engine->assign_by_ref($name, $value);
+			}
+		} else {
+			$engine->assign_by_ref($this->varName, array_merge($this->view->getAttributes(), $this->output));
 		}
+		$engine->assign_by_ref('this', $this);
 		
 		// render the decorator template and return the result
-		$decoratorTemplate = $view->getDecoratorDirectory() . '/' . $view->getDecoratorTemplate() . $this->getExtension();
-
-		$retval = $engine->fetch($decoratorTemplate);
+		$retval = $engine->fetch($view->getDecoratorDirectory() . '/' . $view->getDecoratorTemplate() . $this->getExtension());
 
 		return $retval;
 	}
