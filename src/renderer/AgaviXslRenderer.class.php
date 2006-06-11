@@ -47,6 +47,8 @@ class AgaviXslRenderer extends AgaviRenderer
 	 */
 	public function initialize(AgaviContext $context, $parameters = array())
 	{
+		throw new AgaviInitializationException("We're sorry, but the XSL Renderer is neither stable nor feature complete. If you'd like to contribute to Agavi and fix this problem, please join us on IRC, the Forums or the Mailing Lists");
+		
 		parent::initialize($context, $parameters);
 		
 		$this->xslProc = new XSLTProcessor();
