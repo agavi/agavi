@@ -98,7 +98,7 @@ class AgaviSmartyRenderer extends AgaviRenderer
 		
 		if($mode == AgaviView::RENDER_CLIENT && !$view->isDecorator()) {
 			// render directly to the client
-			$this->getEngine()->display($view->getDirectory() . '/' . $view->getTemplate() . $this->getExtension());
+			$this->context->getResponse()->setContent($this->getEngine()->fetch($view->getDirectory() . '/' . $view->getTemplate() . $this->getExtension()));
 		} elseif ($mode != AgaviView::RENDER_NONE) {
 			// render to variable
 			$retval = $this->getEngine()->fetch($view->getDirectory() . '/' . $view->getTemplate() . $this->getExtension());
@@ -109,7 +109,7 @@ class AgaviSmartyRenderer extends AgaviRenderer
 			}
 
 			if($mode == AgaviView::RENDER_CLIENT) {
-				echo($retval);
+				$this->context->getResponse()->setContent($retval);
 				$retval = null;
 			}
 		}

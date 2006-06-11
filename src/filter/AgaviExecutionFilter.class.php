@@ -143,9 +143,11 @@ class AgaviExecutionFilter extends AgaviFilter
 			// view initialization completed successfully
 			$renderer = $viewInstance->execute();
 			
+			$response = $context->getResponse();
+			
 			if($renderer === null) {
 				while(true) {
-					$oti= $controller->getOutputTypeInfo();
+					$oti= $response->getOutputTypeInfo();
 					$renderer = new $oti['renderer']();
 					$renderer->initialize($viewInstance, $oti['renderer_parameters']);
 					if(isset($oti['extension'])) {
@@ -158,7 +160,7 @@ class AgaviExecutionFilter extends AgaviFilter
 					} catch(AgaviRenderException $e) {
 						if(isset($oti['fallback'])) {
 							// template not found, but there's a fallback specified, so let's try that one
-							$controller->setOutputType($oti['fallback']);
+							$response->setOutputType($oti['fallback']);
 						} else {
 							throw $e;
 						}

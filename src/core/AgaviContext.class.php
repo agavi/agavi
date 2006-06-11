@@ -67,6 +67,11 @@ class AgaviContext
 	protected $request = null;
 	
 	/**
+	 * @var        AgaviResponse A Response instance.
+	 */
+	protected $response = null;
+	
+	/**
 	 * @var        AgaviRouting A Routing instance.
 	 */
 	protected $routing = null;
@@ -414,6 +419,19 @@ class AgaviContext
 	public function getRequest()
 	{
 		return $this->request;
+	}
+
+	/**
+	 * Retrieve the Response object.
+	 *
+	 * @return     AgaviResponse The current Response implementation instance.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getResponse()
+	{
+		return $this->response;
 	}
 
 	/**

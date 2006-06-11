@@ -43,6 +43,7 @@
 			<compile>%core.agavi_dir%/logging/AgaviPassthruLayout.class.php</compile>
 			<compile>%core.agavi_dir%/renderer/AgaviRenderer.class.php</compile>
 			<compile>%core.agavi_dir%/request/AgaviRequest.class.php</compile>
+			<compile>%core.agavi_dir%/response/AgaviResponse.class.php</compile>
 			<compile>%core.agavi_dir%/storage/AgaviStorage.class.php</compile>
 			<compile>%core.agavi_dir%/user/AgaviUser.class.php</compile>
 			<compile>%core.agavi_dir%/validator/AgaviValidator.class.php</compile>

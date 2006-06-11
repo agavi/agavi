@@ -17,7 +17,7 @@
   </xs:complexType>
   <xs:group name="factoryItems">
     <xs:all>
-      <xs:element name="action_stack" minOccurs="0">
+      <xs:element name="action_stack">
         <xs:complexType>
           <xs:sequence>
             <xs:element name="parameters" type="parameters" minOccurs="0" />
@@ -25,7 +25,7 @@
           <xs:attribute name="class" type="xs:string" use="required" />
         </xs:complexType>
       </xs:element>
-      <xs:element name="controller" minOccurs="0">
+      <xs:element name="controller">
         <xs:complexType>
           <xs:sequence>
             <xs:element name="parameters" type="parameters" minOccurs="0" />
@@ -41,7 +41,7 @@
           <xs:attribute name="class" type="xs:string" use="required" />
         </xs:complexType>
       </xs:element>
-      <xs:element name="dispatch_filter" minOccurs="0">
+      <xs:element name="dispatch_filter">
         <xs:complexType>
           <xs:sequence>
             <xs:element name="parameters" type="parameters" minOccurs="0" />
@@ -49,7 +49,7 @@
           <xs:attribute name="class" type="xs:string" use="required" />
         </xs:complexType>
       </xs:element>
-      <xs:element name="execution_filter" minOccurs="0">
+      <xs:element name="execution_filter">
         <xs:complexType>
           <xs:sequence>
             <xs:element name="parameters" type="parameters" minOccurs="0" />
@@ -57,7 +57,7 @@
           <xs:attribute name="class" type="xs:string" use="required" />
         </xs:complexType>
       </xs:element>
-      <xs:element name="filter_chain" minOccurs="0">
+      <xs:element name="filter_chain">
         <xs:complexType>
           <xs:sequence>
             <xs:element name="parameters" type="parameters" minOccurs="0" />
@@ -73,7 +73,23 @@
           <xs:attribute name="class" type="xs:string" use="required" />
         </xs:complexType>
       </xs:element>
-      <xs:element name="request" minOccurs="0">
+      <xs:element name="request">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="parameters" type="parameters" minOccurs="0" />
+          </xs:sequence>
+          <xs:attribute name="class" type="xs:string" use="required" />
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="response">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="parameters" type="parameters" minOccurs="0" />
+          </xs:sequence>
+          <xs:attribute name="class" type="xs:string" use="required" />
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="routing">
         <xs:complexType>
           <xs:sequence>
             <xs:element name="parameters" type="parameters" minOccurs="0" />
@@ -89,15 +105,7 @@
           <xs:attribute name="class" type="xs:string" use="required" />
         </xs:complexType>
       </xs:element>
-      <xs:element name="routing" minOccurs="0">
-        <xs:complexType>
-          <xs:sequence>
-            <xs:element name="parameters" type="parameters" minOccurs="0" />
-          </xs:sequence>
-          <xs:attribute name="class" type="xs:string" use="required" />
-        </xs:complexType>
-      </xs:element>
-      <xs:element name="storage" minOccurs="0">
+      <xs:element name="storage">
         <xs:complexType>
           <xs:sequence>
             <xs:element name="parameters" type="parameters" minOccurs="0" />
@@ -113,7 +121,7 @@
           <xs:attribute name="class" type="xs:string" use="required" />
         </xs:complexType>
       </xs:element>
-      <xs:element name="validator_manager" minOccurs="0">
+      <xs:element name="validator_manager">
         <xs:complexType>
           <xs:sequence>
             <xs:element name="parameters" type="parameters" minOccurs="0" />

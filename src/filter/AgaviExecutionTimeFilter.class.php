@@ -38,31 +38,6 @@
  */
 class AgaviExecutionTimeFilter extends AgaviFilter
 {
-
-	/**
-	 * Calculate the execution time.
-	 *
-	 * @param      string The start microtime.
-	 * @param      string The end microtime.
-	 *
-	 * @return     double The execution time in seconds.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	private function calculateTime ($start, $end)
-	{
-
-		$end   = explode(' ', $end);
-		$start = explode(' ', $start);
-
-		$end   = (float) $end[1] + (float) $end[0];
-		$start = (float) $start[1] + (float) $start[0];
-
-		return number_format($end - $start, 4);
-
-	}
-
 	/**
 	 * Execute this filter.
 	 *
@@ -73,91 +48,36 @@ class AgaviExecutionTimeFilter extends AgaviFilter
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function execute ($filterChain)
+	public function execute($filterChain)
 	{
-
-		static $loaded;
-
-		if (!isset($loaded))
-		{
-
-			// load the filter
-			$loaded = true;
-
-			// grab parameters
+		$context = $this->getContext();
+		
+		if($context->getController()->getActionStack()->getSize() == 1) {
+			
 			$comment = $this->getParameter('comment');
 			$replace = $this->getParameter('replace', false);
-
-			if ($replace)
-			{
-
-				// we have to buffer the output in order to replace
-				// the keywords
-
-				// track start time
-				$start = microtime();
-
-				// turn on buffering
-				ob_start();
-
-				// execute next filter
-				$filterChain->execute();
-
-				// grab buffer
-				$buffer = ob_get_contents();
-
-				// stop buffering
-				ob_end_clean();
-
-				// track end time
-				$end = microtime();
-
-				// calculate time
-				$time = $this->calculateTime($start, $end);
-
-				// replace keyword in buffer
-				$buffer = str_replace($replace, $time, $buffer);
-
-				// print the modified buffer to the client
-				echo $buffer;
-
-			} else
-			{
-
-				// we're not replacing any keywords so process normally
-
-				// track start time
-				$start = microtime();
-
-				// execute next filter
-				$filterChain->execute();
-
-				// track end time
-				$end = microtime();
-
-				// calculate time
-				$time = $this->calculateTime($start, $end);
-
-			}
-
-			// should we print an HTML comment?
-			if ($comment === true)
-			{
-
-				echo "\n\n";
-				echo '<!-- This page took ' . $time .
-				     ' seconds to process. -->';
-
-			}
-
-		} else
-		{
-
-			// we already loaded this filter, skip to the next filter
+			
+			$response = $context->getResponse();
+			
+			$start = microtime(true);
 			$filterChain->execute();
-
+			$time = (microtime(true) - $start);
+			
+			$output = $response->getContent();
+			
+			if($replace) {
+				$output = str_replace($replace, $time, $output);
+			}
+			
+			if($comment) {
+				$output = $output . "\n\n<!-- This page took " . $time . " seconds to process -->";
+			}
+			
+			$response->setContent($output);
+			
+		} else {
+			$filterChain->execute();
 		}
-
 	}
 
 	/**

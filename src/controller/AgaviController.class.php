@@ -49,16 +49,6 @@ abstract class AgaviController extends AgaviParameterHolder
 	protected $context = null;
 	
 	/**
-	 * @var        string The currently set Output Type.
-	 */
-	protected $outputType = null;
-	
-	/**
-	 * @var        array An array of registered Output Types.
-	 */
-	protected $outputTypes = array();
-	
-	/**
 	 * @var        array An array of filter instances for reuse.
 	 */
 	protected $filters = array(
@@ -85,63 +75,6 @@ abstract class AgaviController extends AgaviParameterHolder
 	public function getActionStack()
 	{
 		return $this->actionStack;
-	}
-
-	/**
-	 * Sets an output type for this response.
-	 *
-	 * @param      string The output type name.
-	 *
-	 * @throws     <b>AgaviException</b> If the given output type doesnt exist.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function setOutputType($outputType)
-	{
-		if(isset($this->outputTypes[$outputType])) {
-			$this->outputType = $outputType;
-			return;
-		} else {
-			throw new AgaviException('Output Type "' . $outputType . '" has not been configured.');
-		}
-	}
-
-	/**
-	 * Retrieves the output type name set for this response.
-	 *
-	 * @return     string The name of the output type.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function getOutputType()
-	{
-		return $this->outputType;
-	}
-
-	/**
-	 * Retrieve configuration details about an output type.
-	 *
-	 * @param      string The output type name.
-	 *
-	 * @return     array An associative array of output type settings and params.
-	 *
-	 * @throws     <b>AgaviException</b> If the given output type doesnt exist.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function getOutputTypeInfo($outputType = null)
-	{
-		if($outputType === null) {
-			$outputType = $this->outputType;
-		}
-		if(isset($this->outputTypes[$outputType])) {
-			return $this->outputTypes[$outputType];
-		} else {
-			throw new AgaviException('Output Type "' . $outputType . '" has not been configured.');
-		}
 	}
 
 	/**
@@ -214,6 +147,8 @@ abstract class AgaviController extends AgaviParameterHolder
 		
 			// go, go, go!
 			$filterChain->execute();
+			
+			$this->context->getResponse()->send();
 			
 		} catch (Exception $e) {
 			AgaviException::printStackTrace($e, $this->context);
@@ -577,9 +512,6 @@ abstract class AgaviController extends AgaviParameterHolder
 		$effi = $this->context->getFactoryInfo('execution_filter');
 		$this->filters['execution'] = new $effi['class']();
 		$this->filters['execution']->initialize($this->context, $effi['parameters']);
-		
-		$cfg = AgaviConfig::get('core.config_dir') . '/output_types.xml';
-		require_once(AgaviConfigCache::checkConfig($cfg, $context->getName()));
 	}
 	
 	/**

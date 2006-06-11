@@ -87,7 +87,7 @@ class AgaviPhptalRenderer extends AgaviRenderer
 		
 		if($mode == AgaviView::RENDER_CLIENT && !$view->isDecorator()) {
 			// render directly to the client
-			echo $engine->execute();
+			$this->context->getResponse()->setContent($engine->execute());
 		} elseif($mode != AgaviView::RENDER_NONE) {
 			// render to variable
 			$retval = $engine->execute();
@@ -97,7 +97,7 @@ class AgaviPhptalRenderer extends AgaviRenderer
 			}
 			
 			if($mode == AgaviView::RENDER_CLIENT) {
-				echo $retval;
+				$this->context->getResponse()->setContent($retval);
 				$retval = null;
 			}
 		}

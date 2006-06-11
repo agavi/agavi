@@ -213,7 +213,7 @@ abstract class AgaviRenderer
 	{
 		$view = $this->getView();
 		
-		$oti = $view->getContext()->getController()->getOutputTypeInfo();
+		$oti = $view->getContext()->getResponse()->getOutputTypeInfo();
 		if(isset($oti['ignore_decorators']) && $oti['ignore_decorators']) {
 			$view->clearDecorator();
 		}

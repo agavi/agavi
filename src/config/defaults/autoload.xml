@@ -95,6 +95,9 @@
 			<autoload name="AgaviSecureWebRequest">%core.agavi_dir%/request/AgaviSecureWebRequest.class.php</autoload>
 			<autoload name="AgaviWebRequest">%core.agavi_dir%/request/AgaviWebRequest.class.php</autoload>
 
+			<!-- agavi/response -->
+			<autoload name="AgaviWebResponse">%core.agavi_dir%/response/AgaviWebResponse.class.php</autoload>
+
 			<!-- agavi/routing -->
 			<autoload name="AgaviRouting">%core.agavi_dir%/routing/AgaviRouting.class.php</autoload>
 			<autoload name="AgaviRoutingCallback">%core.agavi_dir%/routing/AgaviRoutingCallback.class.php</autoload>

@@ -297,7 +297,7 @@ abstract class AgaviRouting
 		
 		// set the output type if necessary
 		if($ot !== null) {
-			$this->getContext()->getController()->setOutputType($ot);
+			$this->getContext()->getResponse()->setOutputType($ot);
 		}
 
 		// put the vars into the request

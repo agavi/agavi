@@ -78,7 +78,7 @@ class AgaviPhpRenderer extends AgaviRenderer
 	 * Render the presentation.
 	 *
 	 * When the controller render mode is View::RENDER_CLIENT, this method will
-	 * render the presentation directly to the client and null will be returned.
+	 * render the presentation directly to the Response and null will be returned.
 	 *
 	 * @return     string A string representing the rendered presentation, if
 	 *                    the controller render mode is View::RENDER_VAR,
@@ -98,8 +98,13 @@ class AgaviPhpRenderer extends AgaviRenderer
 		}
 
 		if($this->context->getController()->getRenderMode() == AgaviView::RENDER_CLIENT && !$this->view->isDecorator()) {
-			// render directly to the client
+			// render directly to the client via Response
+			ob_start();
+			
 			require($this->view->getDirectory() . '/' . $this->view->getTemplate() . $this->getExtension());
+			
+			$this->context->getRenderer()->setContent(ob_get_contents());
+			ob_end_clean();
 			
 		} elseif($this->view->getContext()->getController()->getRenderMode() != AgaviView::RENDER_NONE) {
 			// render to variable
@@ -116,7 +121,7 @@ class AgaviPhpRenderer extends AgaviRenderer
 			}
 
 			if($this->context->getController()->getRenderMode() == AgaviView::RENDER_CLIENT) {
-				echo $retval;
+				$this->context->getRenderer()->setContent($retval);
 
 				$retval = null;
 			}

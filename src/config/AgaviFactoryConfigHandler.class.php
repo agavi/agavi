@@ -145,8 +145,8 @@ class AgaviFactoryConfigHandler extends AgaviConfigHandler
 				$data['user']['class'] = $cfg->user->hasAttribute('class')? $cfg->user->getAttribute('class') : $data['user']['class'];
 				$data['user']['params'] = $this->getItemParameters($cfg->user, $data['user']['params']);
 
-				$data['user_code'] = '$this->user = new ' . $data['user']['class'] . '();' . "\n" .
-												'$this->user->initialize($this, ' . var_export($data['user']['params'], true) . ');';
+				$data['user_code'] =	'$this->user = new ' . $data['user']['class'] . '();' . "\n" .
+															'$this->user->initialize($this, ' . var_export($data['user']['params'], true) . ');';
 			}
 
 			// LoggerManager
@@ -155,8 +155,8 @@ class AgaviFactoryConfigHandler extends AgaviConfigHandler
 				$data['logger_manager']['class'] = $cfg->logger_manager->hasAttribute('class')? $cfg->logger_manager->getAttribute('class') : $data['logger_manager']['class'];
 				$data['logger_manager']['params'] = $this->getItemParameters($cfg->logger_manager, $data['logger_manager']['params']);
 
-				$data['logger_manager_code'] = '$this->loggerManager = new ' . $data['logger_manager']['class'] . '();' . "\n" .
-																	'$this->loggerManager->initialize($this, ' . var_export($data['logger_manager']['params'], true) . ');';
+				$data['logger_manager_code'] =	'$this->loggerManager = new ' . $data['logger_manager']['class'] . '();' . "\n" .
+																				'$this->loggerManager->initialize($this, ' . var_export($data['logger_manager']['params'], true) . ');';
 
 			}
 
@@ -166,8 +166,8 @@ class AgaviFactoryConfigHandler extends AgaviConfigHandler
 				$data['controller']['class'] = $cfg->controller->hasAttribute('class')? $cfg->controller->getAttribute('class') : $data['controller']['class'];
 				$data['controller']['params'] = $this->getItemParameters($cfg->controller, $data['controller']['params']);
 
-				$data['controller_code'] = '$this->controller = new ' . $data['controller']['class'] . '();' . "\n" .
-															'$this->controller->initialize($this, ' . var_export($data['controller']['params'], true) . ');';
+				$data['controller_code'] =	'$this->controller = new ' . $data['controller']['class'] . '();' . "\n" .
+																		'$this->controller->initialize($this, ' . var_export($data['controller']['params'], true) . ');';
 			}
 
 			// Routing
@@ -176,16 +176,38 @@ class AgaviFactoryConfigHandler extends AgaviConfigHandler
 				$data['routing']['class'] = $cfg->routing->hasAttribute('class')? $cfg->routing->getAttribute('class') : $data['routing']['class'];
 				$data['routing']['params'] = $this->getItemParameters($cfg->routing, $data['routing']['params']);
 
-				$data['routing_code'] = '$this->routing = new ' . $data['routing']['class'] . '();' . "\n" .
-														'$this->routing->initialize($this, ' . var_export($data['routing']['params'], true) . ');' . "\n";
+				$data['routing_code'] =	'$this->routing = new ' . $data['routing']['class'] . '();' . "\n" .
+																'$this->routing->initialize($this, ' . var_export($data['routing']['params'], true) . ');' . "\n";
+			}
+
+			// Response
+			if(isset($cfg->response)) {
+				$data['response'] = isset($data['response']) ? $data['response'] : array('class' => null, 'params' => array());
+				$data['response']['class'] = $cfg->response->hasAttribute('class')? $cfg->response->getAttribute('class') : $data['response']['class'];
+				$data['response']['params'] = $this->getItemParameters($cfg->response, $data['response']['params']);
+				$data['response_code'] =	'$this->response = new ' . $data['response']['class'] . '();' . "\n" .
+																	'$this->response->initialize($this, ' . var_export($data['response']['params'], true) . ');' . "\n";
 			}
 		}
 
 		// The order of this initialisiation code is fixed, to not change
-
 		// name => required?
-		$requiredItems = array('dispatch_filter' => true, 'execution_filter' => true, 'filter_chain' => true, 'security_filter' => false, 'database_manager' => false, 'action_stack' => true, 
-					'storage' => true, 'validator_manager' => true, 'user' => false, 'logger_manager' => false, 'controller' => true, 'request' => true, 'routing' => false);
+		$requiredItems = array(
+			'dispatch_filter' => true,
+			'execution_filter' => true,
+			'filter_chain' => true,
+			'security_filter' => false,
+			'database_manager' => false,
+			'action_stack' => true,
+			'storage' => true,
+			'validator_manager' => true,
+			'user' => false,
+			'logger_manager' => false,
+			'controller' => true,
+			'request' => true,
+			'routing' => true,
+			'response' => true
+		);
 
 		$code = '';
 

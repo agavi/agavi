@@ -123,7 +123,7 @@ class AgaviOutputTypeConfigHandler extends AgaviConfigHandler
 			$code .= "  'renderer_parameters' => " . var_export($ot['renderer_parameters'], true) . ",\n";
 			$code .= ");\n";
 		}
-		$code .= "\$this->outputType = '" . $defaultOt . "';\n";
+		$code .= "\$this->setOutputType('" . $defaultOt . "');\n";
 
 
 		// compile data
