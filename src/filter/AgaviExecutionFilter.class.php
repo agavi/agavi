@@ -70,7 +70,7 @@ class AgaviExecutionFilter extends AgaviFilter
 		$viewInstance->initialize($this->context);
 		// view initialization completed successfully
 		$viewInstance->execute();
-		
+		// get the renderer instance
 		$renderer = $viewInstance->getRenderer();
 		
 		// create a new filter chain
@@ -86,8 +86,10 @@ class AgaviExecutionFilter extends AgaviFilter
 		// go, go, go!
 		$filterChain->execute();
 		
+		$viewData =& $viewInstance->getData();
+		
 		if($controller->getRenderMode() == AgaviView::RENDER_VAR) {
-			$actionEntry->setPresentation($viewInstance->getData());
+			$actionEntry->setPresentation($viewData);
 		}
 	}
 	
