@@ -67,7 +67,7 @@ class AgaviBasicSecurityFilter extends AgaviSecurityFilter
 		{
 
 			// the user is authenticated
-			if ($credential === null || $user->hasCredentialss($credential))
+			if ($credential === null || $user->hasCredentials($credential))
 			{
 
 				// the user has access, continue
