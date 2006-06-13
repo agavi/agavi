@@ -97,15 +97,12 @@ class AgaviConfig
 	public static function set($name, $value, $overwrite = true, $readonly = false)
 	{
 		$retval = false;
-		if(!(!$overwrite && isset(self::$config[$name]))) {
+		if(($overwrite || !isset(self::$config[$name])) && !isset(self::$readonlies[$name])) {
 			self::$config[$name] = $value;
 			if($readonly) {
 				self::$readonlies[$name] = $value;
 			}
 			$retval = true;
-		}
-		if($readonly) {
-			self::$readonlies[$name] = self::$config[$name];
 		}
 		return $retval;
 	}
