@@ -490,7 +490,7 @@ abstract class AgaviView extends AgaviAttributeHolder
 
 	}
 
-	/*
+	/**
 	 * Sets data returned by the renderer
 	 *
 	 * @param      string The view data
@@ -503,7 +503,7 @@ abstract class AgaviView extends AgaviAttributeHolder
 		$this->data = $viewData;
 	}
 
-	/*
+	/**
 	 * Sets data returned by the renderer
 	 *
 	 * @return     string The view data

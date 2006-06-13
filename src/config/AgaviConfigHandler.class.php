@@ -45,7 +45,7 @@ abstract class AgaviConfigHandler extends AgaviParameterHolder
 		return $this->validationFile;
 	}
 
-	/*
+	/**
 	 * Retrieve the parameter node values of the given item's parameters element.
 	 *
 	 * @param      ConfigValueHolder The node that contains a parameters chiild.

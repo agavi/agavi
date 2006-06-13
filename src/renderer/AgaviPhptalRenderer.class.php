@@ -105,8 +105,8 @@ class AgaviPhptalRenderer extends AgaviRenderer
 		return $retval;
 	}
 
-	/*
-	 * @see        View::decorate()
+	/**
+	 * @see        AgaviRenderer::decorate()
 	 */
 	public function &decorate(&$content)
 	{

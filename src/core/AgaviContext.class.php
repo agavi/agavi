@@ -101,7 +101,7 @@ class AgaviContext
 	 */
 	protected static $singletonModelInstances = array();
 
-	/*
+	/**
 	 * Clone method, overridden to prevent cloning, there can be only one. 
 	 *
 	 * @author     Mike Vincent <mike@agavi.org>	
