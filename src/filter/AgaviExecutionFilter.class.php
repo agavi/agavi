@@ -34,10 +34,10 @@ class AgaviExecutionFilter extends AgaviFilter
 	 *
 	 * @param      AgaviFilterChain The filter chain.
 	 *
-	 * @throws     <b>AgaviInitializeException</b> If an error occurs during view
-	 *                                             initialization.
-	 * @throws     <b>AgaviViewException</b>       If an error occurs while executing
-	 *                                             the view.
+	 * @throws     <b>AgaviInitializationException</b> If an error occurs during
+	 *                                                 View initialization.
+	 * @throws     <b>AgaviViewException</b>           If an error occurs while
+	 *                                                 executing the View.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -141,32 +141,9 @@ class AgaviExecutionFilter extends AgaviFilter
 			// initialize the view
 			$viewInstance->initialize($context);
 			// view initialization completed successfully
-			$renderer = $viewInstance->execute();
+			$viewInstance->execute();
 			
-			$response = $context->getResponse();
-			
-			if($renderer === null) {
-				while(true) {
-					$oti= $response->getOutputTypeInfo();
-					$renderer = new $oti['renderer']();
-					$renderer->initialize($viewInstance, $oti['renderer_parameters']);
-					if(isset($oti['extension'])) {
-						$renderer->setExtension($oti['extension']);
-					}
-					try {
-						// run the pre-render check to see if the template is there
-						$renderer->preRenderCheck();
-						break;
-					} catch(AgaviRenderException $e) {
-						if(isset($oti['fallback'])) {
-							// template not found, but there's a fallback specified, so let's try that one
-							$response->setOutputType($oti['fallback']);
-						} else {
-							throw $e;
-						}
-					}
-				}
-			}
+			$renderer = $viewInstance->getRenderer();
 			
 			// create a new filter chain
 			$fcfi = $context->getFactoryInfo('filter_chain');
