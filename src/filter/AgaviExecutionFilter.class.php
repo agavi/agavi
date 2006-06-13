@@ -45,12 +45,76 @@ class AgaviExecutionFilter extends AgaviFilter
 	public function execute ($filterChain)
 	{
 		// get the context, controller and validator manager
-		$context = $this->getContext();
-		$controller = $context->getController();
-		$validatorManager = $context->getValidatorManager();
+		$controller = $this->context->getController();
+		
+		// get the current action instance
+		$actionEntry = $controller->getActionStack()->getLastEntry();
+		
+		// get the current action information
+		$moduleName = $actionEntry->getModuleName();
+		
+		
+		// execute the Action and get the View to execute
+		$viewName = $this->runAction($actionEntry);
+		
+		
+		if($viewName === null) {
+			// no View returned, so we don't render anything
+			return;
+		}
+
+		// get the view instance
+		$viewInstance = $controller->getView($moduleName, $viewName);
+
+		// initialize the view
+		$viewInstance->initialize($this->context);
+		// view initialization completed successfully
+		$viewInstance->execute();
+		
+		$renderer = $viewInstance->getRenderer();
+		
+		// create a new filter chain
+		$fcfi = $this->context->getFactoryInfo('filter_chain');
+		$filterChain = new $fcfi['class']();
+
+		$controller->loadFilters($filterChain, 'rendering');
+		$controller->loadFilters($filterChain, 'rendering', $moduleName);
+
+		// register the renderer as the last filter
+		$filterChain->register($renderer);
+
+		// go, go, go!
+		$filterChain->execute();
+		
+		// get the data from the view (the renderer put it there)
+		$viewData = $viewInstance->getData();
+		
+		if($controller->getRenderMode() == AgaviView::RENDER_VAR) {
+			$actionEntry->setPresentation($viewData);
+		}
+	}
+	
+	/**
+	 * Execute the Action
+	 *
+	 * @param      AgaviActionStackEntry The Action's ActionStackEntry.
+	 *
+	 * @return     mixed The processed View information returned by the Action.
+	 *
+	 * @throws     AgaviViewException If the returned View does not exist.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	protected function runAction(AgaviActionStackEntry $actionEntry)
+	{
+		$viewName = null;
+		
+		$controller = $this->context->getController();
+		$validatorManager = $this->context->getValidatorManager();
 		// clear the validator manager for reuse
 		$validatorManager->clear();
-
+		
 		// get the current action instance
 		$actionEntry = $controller->getActionStack()->getLastEntry();
 		$actionInstance = $actionEntry->getActionInstance();
@@ -58,9 +122,9 @@ class AgaviExecutionFilter extends AgaviFilter
 		// get the current action information
 		$moduleName = $actionEntry->getModuleName();
 		$actionName = $actionEntry->getActionName();
-
+		
 		// get the request method
-		$method = ucfirst(strtolower($context->getRequest()->getMethod()));
+		$method = ucfirst(strtolower($this->context->getRequest()->getMethod()));
 		
 		$useGenericMethods = false;
 		$executeMethod = 'execute' . $method;
@@ -115,56 +179,25 @@ class AgaviExecutionFilter extends AgaviFilter
 				$viewName = $actionInstance->$handleErrorMethod();
 			}
 		}
-
-		if($viewName != null) {
-			if(is_array($viewName)) {
-				// we're going to use an entirely different action for this view
-				$moduleName = $viewName[0];
-				$viewName   = $viewName[1];
-			} else {
-				// use a view related to this action
-				$viewName = $actionName . $viewName;
-			}
-
-			// display this view
-			if(!$controller->viewExists($moduleName, $viewName)) {
-				// the requested view doesn't exist
-				$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/views/' . $viewName . 'View.class.php';
-				$error = 'Module "%s" does not contain the view "%sView" or the file "%s" is unreadable';
-				$error = sprintf($error, $moduleName, $viewName, $file);
-				throw new AgaviViewException($error);
-			}
-
-			// get the view instance
-			$viewInstance = $controller->getView($moduleName, $viewName);
-
-			// initialize the view
-			$viewInstance->initialize($context);
-			// view initialization completed successfully
-			$viewInstance->execute();
-			
-			$renderer = $viewInstance->getRenderer();
-			
-			// create a new filter chain
-			$fcfi = $context->getFactoryInfo('filter_chain');
-			$filterChain = new $fcfi['class']();
-
-			$controller->loadFilters($filterChain, 'rendering');
-			$controller->loadFilters($filterChain, 'rendering', $moduleName);
-
-			// register the renderer as the last filter
-			$filterChain->register($renderer);
-
-			// go, go, go!
-			$filterChain->execute();
-			
-			// get the data from the view (the renderer put it there)
-			$viewData = $viewInstance->getData();
-			
-			if($controller->getRenderMode() == AgaviView::RENDER_VAR) {
-				$actionEntry->setPresentation($viewData);
-			}
+		
+		if(is_array($viewName)) {
+			// we're going to use an entirely different action for this view
+			$moduleName = $viewName[0];
+			$viewName   = $viewName[1];
+		} elseif($viewName !== null) {
+			// use a view related to this action
+			$viewName = $actionName . $viewName;
 		}
+		
+		if($viewName !== null && !$controller->viewExists($moduleName, $viewName)) {
+			// the requested view doesn't exist
+			$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/views/' . $viewName . 'View.class.php';
+			$error = 'Module "%s" does not contain the view "%sView" or the file "%s" is unreadable';
+			$error = sprintf($error, $moduleName, $viewName, $file);
+			throw new AgaviViewException($error);
+		}
+		
+		return $viewName;
 	}
 }
 
