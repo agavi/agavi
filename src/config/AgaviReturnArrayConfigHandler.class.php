@@ -37,15 +37,16 @@ class AgaviReturnArrayConfigHandler extends AgaviConfigHandler
 	 */
 	public function execute($config, $context = null)
 	{
-		$configurations = AgaviConfigCache::parseConfig($config, false, $this->getValidationFile());
-
+		$configurations = $this->orderConfigurations(AgaviConfigCache::parseConfig($config, false, $this->getValidationFile())->configurations, AgaviConfig::get('core.environment'), $context);
 		$data = array();
-		$env = AgaviConfig::get('core.environment');
 		foreach($configurations as $cfg) {
-			if(($cfg->hasAttribute('environment') && $cfg->getAttribute('environment') != $env) || ($context !== null && $cfg->hasAttribute('context') && $cfg->getAttribute('context') != $context))
-				continue;
-
-			$data = $this->convertToArray($cfg);
+			$data = array_merge_recursive($data, $this->convertToArray($cfg));
+		}
+		if(isset($data['environment'])) {
+			unset($data['environment']);
+		}
+		if(isset($data['context'])) {
+			unset($data['context']);
 		}
 
 		$return = "<?php return " . var_export($data, true) . ";?>";
@@ -77,53 +78,5 @@ class AgaviReturnArrayConfigHandler extends AgaviConfigHandler
 		}
 		return $data;
 	}
-
-	/**
-	 * Helper method to convert keys.like.these in ini files to a multi-
-	 * dimensional array
-	 * 
-	 * @param      array The one-dimensional input array
-	 * @param      bool Convert boolean strings to literal boolean values
-	 *
-	 * @return     array The transformed version of the input array
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.10.0
-	 */
-	public static function addDimensions($input, $real_booleans = false)
-	{
-		$output = array();
-		foreach($input as $key => $value)
-		{
-			if($real_booleans) {
-				$value = self::real_booleans($value);
-			}
-			$parts = explode('.', $key);
-			$ref =& $output;
-			$count = count($parts);
-			for($i = 0; $i < $count; $i++) {
-				$partKey = $parts[$i];
-				if(($i + 1) == $count) {
-					$ref[$partKey] = $value;
-				} else {
-					$ref =& $ref[$partKey];
-				}
-			}
-		}
-		return $output;
-	}
-
-	public static function real_booleans($value) 
-	{
-		$bool_false = array('false', 'off', 'no');
-		$bool_true = array('true', 'on', 'yes');
-		if (in_array(strtolower($value), $bool_false)) {
-			return false;
-		} else if (in_array(strtolower($value), $bool_true)) {
-			return true;
-		}
-		return $value;
-	}
-	
 }
 ?>
