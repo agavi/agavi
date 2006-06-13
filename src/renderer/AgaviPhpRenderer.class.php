@@ -103,7 +103,7 @@ class AgaviPhpRenderer extends AgaviRenderer
 			
 			require($this->view->getDirectory() . '/' . $this->view->getTemplate() . $this->getExtension());
 			
-			$this->context->getRenderer()->setContent(ob_get_contents());
+			$this->context->getResponse()->setContent(ob_get_contents());
 			ob_end_clean();
 			
 		} elseif($this->view->getContext()->getController()->getRenderMode() != AgaviView::RENDER_NONE) {
@@ -121,7 +121,7 @@ class AgaviPhpRenderer extends AgaviRenderer
 			}
 
 			if($this->context->getController()->getRenderMode() == AgaviView::RENDER_CLIENT) {
-				$this->context->getRenderer()->setContent($retval);
+				$this->context->getResponse()->setContent($retval);
 
 				$retval = null;
 			}
