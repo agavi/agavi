@@ -276,9 +276,9 @@ class AgaviConfigCache
 		{
 
 			// cannot write cache file
-			$error = 'Failed to write cache file "%s" generated from ' .
-				     'configuration file "%s"';
-			$error = sprintf($error, $cache, $config);
+			$error = 'Failed to write cache file "%s" generated from ' . 'configuration file "%s".';
+			$error .= "\n\n Please make sure the directory \"%s\" is writeable by the web server.";
+			$error = sprintf($error, $cache, $config, AgaviConfig::get('core.cache_dir'));
 
 			throw new AgaviCacheException($error);
 
