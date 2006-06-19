@@ -60,7 +60,7 @@ class AgaviWebController extends AgaviController
 	 */
 	public function redirect($url)
 	{
-		$r = $this->context->getResponse();
+		$r = $this->getResponse();
 		
 		if($r->isLocked()) {
 			throw new AgaviException('Response locked, cannot redirect.');
