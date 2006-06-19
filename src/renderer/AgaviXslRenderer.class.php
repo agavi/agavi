@@ -118,19 +118,13 @@ class AgaviXslRenderer extends AgaviRenderer
 	}
 
 	/**
-	 * Render the presentation.
+	 * Render the presentation to the Response.
 	 *
-	 * When the controller render mode is View::RENDER_CLIENT, this method will
-	 * render the presentation directly to the client and null will be returned.
-	 *
-	 * @return     string A string representing the rendered presentation, if
-	 *                    the controller render mode is View::RENDER_VAR,
-	 *                    otherwise null.
-	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @author     Wes Hays <weshays@gbdev.com>
-	 * @since      0.10.0
+	 * @since      0.11.0
 	 */
-	public function &render()
+	public function render()
 	{
 		$retVal = null;
 

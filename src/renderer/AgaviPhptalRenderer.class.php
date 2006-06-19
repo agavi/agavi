@@ -52,24 +52,16 @@ class AgaviPhptalRenderer extends AgaviRenderer
 	}
 	
 	/**
-	 * Render the presentation.
+	 * Render the presentation to the Response.
 	 *
-	 * When the controller render mode is View::RENDER_CLIENT, this method will
-	 * render the presentation directly to the client and null will be returned.
-	 *
-	 * @return     string A string representing the rendered presentation, if
-	 *                    the controller render mode is View::RENDER_VAR,
-	 *                    otherwise null.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @author     Benjamin Muskalla <bm@bmuskalla.de>
 	 * @since      0.11.0
 	 */
-	public function &render()
+	public function render()
 	{
 		$retval = null;
 		
-		$this->preRenderCheck();
 		$engine = $this->getEngine();
 		$view = $this->getView();
 		
@@ -87,7 +79,7 @@ class AgaviPhptalRenderer extends AgaviRenderer
 		
 		if($mode == AgaviView::RENDER_CLIENT && !$view->isDecorator()) {
 			// render directly to the client
-			$this->context->getResponse()->setContent($engine->execute());
+			$this->response->setContent($engine->execute());
 		} elseif($mode != AgaviView::RENDER_NONE) {
 			// render to variable
 			$retval = $engine->execute();
@@ -96,13 +88,8 @@ class AgaviPhptalRenderer extends AgaviRenderer
 				$retval = $this->decorate($retval);
 			}
 			
-			if($mode == AgaviView::RENDER_CLIENT) {
-				$this->context->getResponse()->setContent($retval);
-				$retval = null;
-			}
+			$this->response->setContent($retval);
 		}
-		
-		return $retval;
 	}
 
 	/**

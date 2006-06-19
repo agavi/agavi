@@ -28,31 +28,51 @@
  */
 class AgaviFilterChain
 {
+	/**
+	 * @var        array The elements in this chain.
+	 */
+	protected $chain = array();
+	
+	/**
+	 * @var        int The current position in the chain.
+	 */
+	protected $index = -1;
+	
+	/**
+	 * @var        AgaviRespinse The Response instance that is handed to filters.
+	 */
+	protected $response = null;
 
-	private
-		$chain = array(),
-		$index = -1;
-
+	/**
+	 * Initialize this Filter Chain.
+	 *
+	 * @param      AgaviResponse the Response instance for this Chain.
+	 * @param      array An array of initialization parameters.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function initialize(AgaviResponse $response, $parameters = array())
+	{
+		$this->response = $response;
+	}
+	
 	/**
 	 * Execute the next filter in this chain.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
-	public function execute ()
+	public function execute()
 	{
-
 		// skip to the next filter
 		$this->index++;
 
-		if ($this->index < count($this->chain))
-		{
-
+		if($this->index < count($this->chain)) {
 			// execute the next filter
-			$this->chain[$this->index]->execute($this);
-
+			$this->chain[$this->index]->execute($this, $this->response);
 		}
-
 	}
 
 	/**
@@ -63,11 +83,9 @@ class AgaviFilterChain
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function register ($filter)
+	public function register($filter)
 	{
-
 		$this->chain[] = $filter;
-
 	}
 
 }

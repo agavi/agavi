@@ -57,7 +57,7 @@ class AgaviFactoryConfigHandler extends AgaviConfigHandler
 		
 		$data = array();
 		foreach($configurations as $cfg) {
-			// Class names for ActionStack, DispatchFilter, ExecutionFilter, FilterChain and SecurityFilter
+			// Class names for ActionStack, DispatchFilter, ExecutionFilter, FilterChain, Response and SecurityFilter
 			if(isset($cfg->action_stack)) {
 				$data['action_stack'] = isset($data['action_stack']) ? $data['action_stack'] : array('class' => null, 'params' => array());
 				$data['action_stack']['class'] = $cfg->action_stack->hasAttribute('class')? $cfg->action_stack->getAttribute('class') : $data['action_stack']['class'];
@@ -88,6 +88,14 @@ class AgaviFactoryConfigHandler extends AgaviConfigHandler
 				$data['filter_chain']['params'] = $this->getItemParameters($cfg->filter_chain, $data['filter_chain']['params']);
 
 				$data['filter_chain_code'] = '$this->factories["filter_chain"] = array("class" => "' . $data['filter_chain']['class'] . '", "parameters" => ' . var_export($data['filter_chain']['params'], true) . ');';
+			}
+
+			// Response
+			if(isset($cfg->response)) {
+				$data['response'] = isset($data['response']) ? $data['response'] : array('class' => null, 'params' => array());
+				$data['response']['class'] = $cfg->response->hasAttribute('class')? $cfg->response->getAttribute('class') : $data['response']['class'];
+				$data['response']['params'] = $this->getItemParameters($cfg->response, $data['response']['params']);
+				$data['response_code'] = '$this->factories["response"] = array("class" => "' . $data['response']['class'] . '", "parameters" => ' . var_export($data['response']['params'], true) . ');';
 			}
 
 			if(isset($cfg->security_filter)) {
@@ -179,15 +187,6 @@ class AgaviFactoryConfigHandler extends AgaviConfigHandler
 				$data['routing_code'] =	'$this->routing = new ' . $data['routing']['class'] . '();' . "\n" .
 																'$this->routing->initialize($this, ' . var_export($data['routing']['params'], true) . ');' . "\n";
 			}
-
-			// Response
-			if(isset($cfg->response)) {
-				$data['response'] = isset($data['response']) ? $data['response'] : array('class' => null, 'params' => array());
-				$data['response']['class'] = $cfg->response->hasAttribute('class')? $cfg->response->getAttribute('class') : $data['response']['class'];
-				$data['response']['params'] = $this->getItemParameters($cfg->response, $data['response']['params']);
-				$data['response_code'] =	'$this->response = new ' . $data['response']['class'] . '();' . "\n" .
-																	'$this->response->initialize($this, ' . var_export($data['response']['params'], true) . ');' . "\n";
-			}
 		}
 
 		// The order of this initialisiation code is fixed, to not change
@@ -196,6 +195,7 @@ class AgaviFactoryConfigHandler extends AgaviConfigHandler
 			'dispatch_filter' => true,
 			'execution_filter' => true,
 			'filter_chain' => true,
+			'response' => true,
 			'security_filter' => false,
 			'database_manager' => false,
 			'action_stack' => true,
@@ -205,8 +205,7 @@ class AgaviFactoryConfigHandler extends AgaviConfigHandler
 			'logger_manager' => false,
 			'controller' => true,
 			'request' => true,
-			'routing' => true,
-			'response' => true
+			'routing' => true
 		);
 
 		$code = '';

@@ -30,27 +30,26 @@
  */
 class AgaviDispatchFilter extends AgaviFilter
 {
-
 	/**
 	 * Execute this filter.
 	 *
-	 * The DispatchFilter makes the first forward().
+	 * The DispatchFilter makes the first forward() call.
 	 *
 	 * @param      AgaviFilterChain The filter chain.
+	 * @param      AgaviResponse A Response instance.
 	 *
 	 * @throws     <b>AgaviFilterException</b> If an error occurs during execution.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function execute ($filterChain)
+	public function execute($filterChain, $response)
 	{
 		$request = $this->context->getRequest();
 		$moduleName = $request->getParameter($request->getModuleAccessor());
 		$actionName = $request->getParameter($request->getActionAccessor());
 		$this->context->getController()->forward($moduleName, $actionName);
 	}
-
 }
 
 ?>

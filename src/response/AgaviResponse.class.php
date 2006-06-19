@@ -48,16 +48,6 @@ abstract class AgaviResponse
 	protected $content = '';
 	
 	/**
-	 * @var        string The currently set Output Type.
-	 */
-	protected $outputType = null;
-	
-	/**
-	 * @var        array An array of registered Output Types.
-	 */
-	protected $outputTypes = array();
-	
-	/**
 	 * Retrieve the Context instance this Response object belongs to.
 	 *
 	 * @return     AgaviContext A Context instance.
@@ -82,9 +72,92 @@ abstract class AgaviResponse
 	public function initialize(AgaviContext $context, $parameters = array())
 	{
 		$this->context = $context;
+	}
+	
+	/**
+	 * Export the contents of this response.
+	 *
+	 * @return     array An array of data.
+	 *
+	 * @author     David Zuelke <du@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function export()
+	{
+		return array('content' => $this->getContent(), 'locked' => $this->isLocked());
+	}
+	
+	/**
+	 * Export the information data (e.g. HTTP Headers, Cookies) for this response.
+	 *
+	 * @return     array An array of data.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function exportInfo()
+	{
+		return array('locked' => $this->isLocked());
+	}
+	
+	/**
+	 * Import data for this response.
+	 *
+	 * @param      array An array of data.
+	 *
+	 * @return     bool Whether or not the operation was successful.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function import($data)
+	{
+		$retval = true;
+		if(isset($data['content'])) {
+			$retval = $this->setContent($data['content']);
+		}
+		if(isset($data['locked']) && $data['locked']) {
+			$this->lock();
+		}
+		return $retval;
+	}
+	
+	/**
+	 * Merge in data for this response.
+	 *
+	 * @param      array An array of data.
+	 *
+	 * @return     bool Whether or not the operation was successful.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function merge($data)
+	{
+		// do not lock the response even if $data has locked=true!
 		
-		$cfg = AgaviConfig::get('core.config_dir') . '/output_types.xml';
-		require_once(AgaviConfigCache::checkConfig($cfg, $context->getName()));
+		if(isset($data['content'])) {
+			return $this->appendContent($data['content']);
+		}
+	}
+	
+	/**
+	 * Append data to this response.
+	 *
+	 * @param      array An array of data.
+	 *
+	 * @return     bool Whether or not the operation was successful.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function append($data)
+	{
+		// do not lock the response even if $data has locked=true!
+		
+		if(isset($data['content'])) {
+			return $this->appendContent($data['content']);
+		}
 	}
 	
 	/**
@@ -140,9 +213,11 @@ abstract class AgaviResponse
 	}
 	
 	/**
-	 * Set the content for this Response
+	 * Set the content for this Response.
 	 *
 	 * @param      string The content to be sent in this Response.
+	 *
+	 * @return     bool Whether or not the operation was successful.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
@@ -152,11 +227,45 @@ abstract class AgaviResponse
 		if(!$this->locked && $content != $this->content) {
 			$this->content = $content;
 			$this->dirty = true;
+			return true;
 		}
+		return false;
+	}
+	
+	/**
+	 * Prepend content to the existing content for this Response.
+	 *
+	 * @param      string The content to be prepended to this Response.
+	 *
+	 * @return     bool Whether or not the operation was successful.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function prependContent($content)
+	{
+		return $this->setContent($content . $this->getContent());
+	}
+	
+	/**
+	 * Append content to the existing content for this Response.
+	 *
+	 * @param      string The content to be appended to this Response.
+	 *
+	 * @return     bool Whether or not the operation was successful.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function appendContent($content)
+	{
+		return $this->setContent($this->getContent() . $content);
 	}
 	
 	/**
 	 * Clear the content for this Response
+	 *
+	 * @return     bool Whether or not the operation was successful.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
@@ -167,7 +276,9 @@ abstract class AgaviResponse
 		if(!$this->locked && $this->content != $empty) {
 			$this->content = $empty;
 			$this->dirty = true;
+			return true;
 		}
+		return false;
 	}
 	
 	/**
@@ -195,63 +306,6 @@ abstract class AgaviResponse
 	public function sendContent()
 	{
 		echo $this->content;
-	}
-	
-	/**
-	 * Sets an output type for this response.
-	 *
-	 * @param      string The output type name.
-	 *
-	 * @throws     <b>AgaviException</b> If the given output type doesnt exist.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function setOutputType($outputType)
-	{
-		if(isset($this->outputTypes[$outputType])) {
-			$this->outputType = $outputType;
-			return;
-		} else {
-			throw new AgaviException('Output Type "' . $outputType . '" has not been configured.');
-		}
-	}
-	
-	/**
-	 * Retrieves the output type name set for this response.
-	 *
-	 * @return     string The name of the output type.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function getOutputType()
-	{
-		return $this->outputType;
-	}
-	
-	/**
-	 * Retrieve configuration details about an output type.
-	 *
-	 * @param      string The output type name.
-	 *
-	 * @return     array An associative array of output type settings and params.
-	 *
-	 * @throws     <b>AgaviException</b> If the given output type doesnt exist.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function getOutputTypeInfo($outputType = null)
-	{
-		if($outputType === null) {
-			$outputType = $this->outputType;
-		}
-		if(isset($this->outputTypes[$outputType])) {
-			return $this->outputTypes[$outputType];
-		} else {
-			throw new AgaviException('Output Type "' . $outputType . '" has not been configured.');
-		}
 	}
 }
 

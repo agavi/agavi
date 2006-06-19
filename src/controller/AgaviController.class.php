@@ -63,6 +63,21 @@ abstract class AgaviController extends AgaviParameterHolder
 		'execution' => null,
 		'security' => null
 	);
+	
+	/**
+	 * @var        string The currently set Output Type.
+	 */
+	protected $outputType = null;
+	
+	/**
+	 * @var        array An array of registered Output Types.
+	 */
+	protected $outputTypes = array();
+	
+	/**
+	 * @var        AgaviResponse The Response instance for this Controller.
+	 */
+	protected $response = null;
 
 	/**
 	 * Retrieve the ActionStack.
@@ -135,11 +150,12 @@ abstract class AgaviController extends AgaviParameterHolder
 				}
 				$request->setParameter($request->getActionAccessor(), $actionName);
 			}
-
+			
 			// create a new filter chain
 			$fcfi = $this->context->getFactoryInfo('filter_chain');
 			$filterChain = new $fcfi['class']();
-		
+			$filterChain->initialize($this->response, $fcfi['parameters']);
+			
 			$this->loadFilters($filterChain, 'global');
 		
 			// register the dispatch filter
@@ -148,7 +164,7 @@ abstract class AgaviController extends AgaviParameterHolder
 			// go, go, go!
 			$filterChain->execute();
 			
-			$this->context->getResponse()->send();
+			$this->response->send();
 			
 		} catch (Exception $e) {
 			AgaviException::printStackTrace($e, $this->context);
@@ -258,9 +274,15 @@ abstract class AgaviController extends AgaviParameterHolder
 			// initialize the action
 			$actionInstance->initialize($this->context);
 			
+			// create a new response instance for this action
+			$rfi = $this->context->getFactoryInfo('response');
+			$response = new $rfi['class'];
+			$response->initialize($this->context, $rfi['parameters']);
+
 			// create a new filter chain
 			$fcfi = $this->context->getFactoryInfo('filter_chain');
 			$filterChain = new $fcfi['class']();
+			$filterChain->initialize($response, $fcfi['parameters']);
 
 			if(AgaviConfig::get('core.available', false)) {
 				// the application is available so we'll register
@@ -289,7 +311,12 @@ abstract class AgaviController extends AgaviParameterHolder
 
 			// process the filter chain
 			$filterChain->execute();
-
+			
+			if($this->renderMode == AgaviView::RENDER_CLIENT) {
+				// add the output for this action to the global one
+				$this->getResponse()->append($response->export());
+			}
+			
 			// restore autoloads
 			Agavi::$autoloads = $oldAutoloads;
 
@@ -300,12 +327,8 @@ abstract class AgaviController extends AgaviParameterHolder
 
 			if(!$this->actionExists($moduleName, $actionName)) {
 				// cannot find mod disabled module/action
-				$error = 'Invalid configuration settings: ' .
-						 'actions.module_disabled_module "%s", ' .
-						 'actions.module_disabled_action "%s"';
-
+				$error = 'Invalid configuration settings: actions.module_disabled_module "%s", actions.module_disabled_action "%s"';
 				$error = sprintf($error, $moduleName, $actionName);
-
 				throw new AgaviConfigurationException($error);
 			}
 
@@ -425,6 +448,19 @@ abstract class AgaviController extends AgaviParameterHolder
 	}
 
 	/**
+	 * Retrieve the Response object.
+	 *
+	 * @return     AgaviResponse The current Response implementation instance.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getResponse()
+	{
+		return $this->response;
+	}
+
+	/**
 	 * Retrieve the presentation rendering mode.
 	 *
 	 * @return     int One of the following:
@@ -499,6 +535,13 @@ abstract class AgaviController extends AgaviParameterHolder
 		$asfi = $context->getFactoryInfo('action_stack');
 		$this->actionStack = new $asfi['class']();
 		
+		$rfi = $this->context->getFactoryInfo('response');
+		$this->response = new $rfi['class']();
+		$this->response->initialize($this->context, $rfi['parameters']);
+		
+		$cfg = AgaviConfig::get('core.config_dir') . '/output_types.xml';
+		require_once(AgaviConfigCache::checkConfig($cfg, $context->getName()));
+		
 		if(AgaviConfig::get('core.use_security', false)) {
 			$sffi = $context->getFactoryInfo('security_filter');
 			$this->filters['security'] = new $sffi['class']();
@@ -508,10 +551,11 @@ abstract class AgaviController extends AgaviParameterHolder
 		$dffi = $this->context->getFactoryInfo('dispatch_filter');
 		$this->filters['dispatch'] = new $dffi['class']();
 		$this->filters['dispatch']->initialize($this->context, $dffi['parameters']);
-
+		
 		$effi = $this->context->getFactoryInfo('execution_filter');
 		$this->filters['execution'] = new $effi['class']();
 		$this->filters['execution']->initialize($this->context, $effi['parameters']);
+		
 	}
 	
 	/**
@@ -640,6 +684,68 @@ abstract class AgaviController extends AgaviParameterHolder
 	{
 		$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/views/' . $viewName . 'View.class.php';
 		return is_readable($file);
+	}
+	
+	/**
+	 * Sets an output type for this response.
+	 *
+	 * @param      string The output type name.
+	 *
+	 * @return     bool Whether or not the operation was successful.
+	 *
+	 * @throws     <b>AgaviException</b> If the given output type doesnt exist.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function setOutputType($outputType)
+	{
+		if(isset($this->outputTypes[$outputType])) {
+			if(!$this->getResponse()->isLocked()) {
+				$this->outputType = $outputType;
+				return true;
+			}
+			return false;
+		} else {
+			throw new AgaviException('Output Type "' . $outputType . '" has not been configured.');
+		}
+	}
+	
+	/**
+	 * Retrieves the output type name set for this response.
+	 *
+	 * @return     string The name of the output type.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getOutputType()
+	{
+		return $this->outputType;
+	}
+	
+	/**
+	 * Retrieve configuration details about an output type.
+	 *
+	 * @param      string The output type name.
+	 *
+	 * @return     array An associative array of output type settings and params.
+	 *
+	 * @throws     <b>AgaviException</b> If the given output type doesnt exist.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getOutputTypeInfo($outputType = null)
+	{
+		if($outputType === null) {
+			$outputType = $this->outputType;
+		}
+		if(isset($this->outputTypes[$outputType])) {
+			return $this->outputTypes[$outputType];
+		} else {
+			throw new AgaviException('Output Type "' . $outputType . '" has not been configured.');
+		}
 	}
 }
 

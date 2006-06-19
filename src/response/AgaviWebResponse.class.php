@@ -55,22 +55,22 @@ class AgaviWebResponse extends AgaviResponse
 		'405' => "HTTP/1.1 405 Method Not Allowed",
 		'406' => "HTTP/1.1 406 Not Acceptable",
 		'407' => "HTTP/1.1 407 Proxy Authentication Required",
-		'408' => "HTTP/1.1 408 Request Time-out",
+		'408' => "HTTP/1.1 408 Request Timeout",
 		'409' => "HTTP/1.1 409 Conflict",
 		'410' => "HTTP/1.1 410 Gone",
 		'411' => "HTTP/1.1 411 Length Required",
 		'412' => "HTTP/1.1 412 Precondition Failed",
 		'413' => "HTTP/1.1 413 Request Entity Too Large",
-		'414' => "HTTP/1.1 414 Request-URI Too Large",
+		'414' => "HTTP/1.1 414 Request-URI Too Long",
 		'415' => "HTTP/1.1 415 Unsupported Media Type",
-		'416' => "HTTP/1.1 416 Requested range not satisfiable",
+		'416' => "HTTP/1.1 416 Requested Range Not Satisfiable",
 		'417' => "HTTP/1.1 417 Expectation Failed",
 		'500' => "HTTP/1.1 500 Internal Server Error",
 		'501' => "HTTP/1.1 501 Not Implemented",
 		'502' => "HTTP/1.1 502 Bad Gateway",
 		'503' => "HTTP/1.1 503 Service Unavailable",
-		'504' => "HTTP/1.1 504 Gateway Time-out",
-		'505' => "HTTP/1.1 505 HTTP Version not supported",
+		'504' => "HTTP/1.1 504 Gateway Timeout",
+		'505' => "HTTP/1.1 505 HTTP Version Not Supported",
 	);
 	
 	/**
@@ -124,25 +124,109 @@ class AgaviWebResponse extends AgaviResponse
 	}
 	
 	/**
-	 * Sets an output type for this response.
+	 * Export the contents of this response.
 	 *
-	 * @param      string The output type name.
+	 * @return     array An array of data.
 	 *
-	 * @throws     <b>AgaviException</b> If the given output type doesnt exist.
+	 * @author     David Zuelke <du@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function export()
+	{
+		return array_merge(parent::export(), array('httpStatusCode' => $this->getHttpStatusCode(), 'httpHeaders' => $this->getHttpHeaders(), 'cookies' => $this->cookies));
+	}
+	
+	/**
+	 * Export the information data (e.g. HTTP Headers, Cookies) for this response.
+	 *
+	 * @return     array An array of data.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function setOutputType($outputType)
+	public function exportInfo()
 	{
-		parent::setOutputType($outputType);
-		if(isset($this->outputTypes[$outputType]['parameters']['Content-Type'])) {
-			$this->setHttpHeader('Content-Type', $this->outputTypes[$outputType]['parameters']['Content-Type']);
-		} else {
-			$this->removeHttpHeader('Content-Type');
-		}
+		return array_merge(parent::exportInfo(), array('httpStatusCode' => $this->getHttpStatusCode(), 'httpHeaders' => $this->getHttpHeaders(), 'cookies' => $this->cookies));
 	}
-
+	
+	/**
+	 * Import data for this response.
+	 *
+	 * @param      array An array of data.
+	 *
+	 * @return     bool Whether or not the operation was successful.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function import($data)
+	{
+		$retval = parent::import($data);
+		if(!$this->locked) {
+			if(isset($data['httpStatusCode'])) {
+				$this->httpStatusCode = $data['httpStatusCode'];
+			}
+			if(isset($data['httpHeaders'])) {
+				$this->httpHeaders = $data['httpHeaders'];
+			}
+			if(isset($data['cookies'])) {
+				$this->cookies = $data['cookies'];
+			}
+			return $retval && true;
+		}
+		return $retval && false;
+	}
+	
+	/**
+	 * Merge in data for this response.
+	 *
+	 * @param      array An array of data.
+	 *
+	 * @return     bool Whether or not the operation was successful.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function merge($data)
+	{
+		$retval = parent::merge($data);
+		if(!$this->locked) {
+			if(isset($data['cookies'])) {
+				$this->cookies = array_merge($data['cookies'], $this->cookies);
+			}
+			return $retval && true;
+		}
+		return $retval && false;
+	}
+	
+	/**
+	 * Append data to this response.
+	 *
+	 * @param      array An array of data.
+	 *
+	 * @return     bool Whether or not the operation was successful.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function append($data)
+	{
+		$retval = parent::append($data);
+		if(!$this->locked) {
+			if(isset($data['httpStatusCode'])) {
+				$this->httpStatusCode = $data['httpStatusCode'];
+			}
+			if(isset($data['httpHeaders'])) {
+				$this->httpHeaders = array_merge($this->httpHeaders, $data['httpHeaders']);
+			}
+			if(isset($data['cookies'])) {
+				$this->cookies = array_merge($this->cookies, $data['cookies']);
+			}
+			return $retval && true;
+		}
+		return $retval && false;
+	}
+	
 	/**
 	 * Set the content type for the response.
 	 *
@@ -322,16 +406,9 @@ class AgaviWebResponse extends AgaviResponse
 		$domain   = isset($domain)   ? $domain   : $this->cookieConfig['domain'];
 		$secure   = isset($secure)   ? $secure   : $this->cookieConfig['secure'];
 
-		//do we want to set expiration time or not?
-		$expire = ($lifetime != 0) ? time() + $lifetime : 0;
-		
-		if($value === false || $value === null || $value === '') {
-			$expire = time() - 3600 * 24;
-		}
-
 		$this->cookies[$name] = array(
 			'value' => $value,
-			'expire' => $expire,
+			'lifetime' => $lifetime,
 			'path' => $path,
 			'domain' => $domain,
 			'secure' => $secure
@@ -383,8 +460,10 @@ class AgaviWebResponse extends AgaviResponse
 			header($this->httpStatusCodes[$this->httpStatusCode]);
 		}
 		
-		if($this->getContentType() === null && isset($this->outputTypes[$this->outputType]['parameters']['Content-Type'])) {
-			$this->setContentType($this->outputTypes[$this->outputType]['parameters']['Content-Type']);
+		$oti = $this->context->getController()->getOutputTypeInfo();
+		
+		if($this->getContentType() === null && isset($oti['parameters']['Content-Type'])) {
+			$this->setContentType($oti['parameters']['Content-Type']);
 		}
 		
 		// send headers
@@ -400,7 +479,14 @@ class AgaviWebResponse extends AgaviResponse
 		
 		// send cookies
 		foreach($this->cookies as $name => $values) {
-			setcookie($name, $values['value'], $values['expire'], $values['path'], $values['domain'], $values['secure']);
+			//do we want to set expiration time or not?
+			$expire = ($values['lifetime'] != 0) ? time() + $values['lifetime'] : 0;
+
+			if($values['value'] === false || $values['value'] === null || $values['value'] === '') {
+				$expire = time() - 3600 * 24;
+			}
+			
+			setcookie($name, $values['value'], $expire, $values['path'], $values['domain'], $values['secure']);
 		}
 	}
 

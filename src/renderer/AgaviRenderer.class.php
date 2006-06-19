@@ -34,6 +34,11 @@ abstract class AgaviRenderer
 	protected $context = null;
 	
 	/**
+	 @var          AgaviResponse A Response instance.
+	 */
+	protected $response = null;
+	
+	/**
 	 * @var        string A string with the default template file extension,
 	 *                    including the dot.
 	 */
@@ -151,43 +156,44 @@ abstract class AgaviRenderer
 		
 		// alias controller
 		$controller = $view->getContext()->getController();
-
+		
 		// get original render mode
 		$renderMode = $controller->getRenderMode();
-
+		
 		// set render mode to var
 		$controller->setRenderMode(AgaviView::RENDER_VAR);
-
+		
 		// grab the action stack
 		$actionStack = $controller->getActionStack();
-
+		
 		// loop through our slots, and replace them one-by-one in the
 		// decorator template
 		$slots = $view->getSlots();
-
+		
 		foreach($slots as $name => $slot) {
 			// grab this next forward's action stack index
 			$index = $actionStack->getSize();
-
+			
 			// forward to the first slot action
 			$controller->forward($slot['module_name'], $slot['action_name']);
-
-			// grab the action entry from this forward
-			$actionEntry = $actionStack->getEntry($index);
-
+			
+			$response = $actionStack->getEntry($index)->getPresentation();
+			
 			// set the presentation data as a template attribute
-			$this->output[$name] =& $actionEntry->getPresentation();
+			$this->output[$name] =& $response->getContent();
+			
+			$this->response->merge($response->exportInfo());
 		}
-
+		
 		// put render mode back
 		$controller->setRenderMode($renderMode);
-
+		
 		// set the decorator content as an attribute
 		$this->output['content'] =& $content;
-
+		
 		// return a null value to satisfy the requirement
 		$retval = null;
-
+		
 		return $retval;
 	}
 	
@@ -212,63 +218,62 @@ abstract class AgaviRenderer
 	public function preRenderCheck()
 	{
 		$view = $this->getView();
+		$oti = $this->context->getController()->getOutputTypeInfo();
 		
-		$oti = $view->getContext()->getResponse()->getOutputTypeInfo();
+		if($view->getTemplate() == null) {
+			// a template has not been set
+			$error = 'A template has not been set';
+			throw new AgaviRenderException($error);
+		}
+		
+		$template = $view->getDirectory() . '/' . $view->getTemplate() . $this->getExtension();
+		if(!is_readable($template)) {
+			// the template isn't readable
+			$error = 'The template "%s" does not exist or is unreadable';
+			$error = sprintf($error, $template);
+			throw new AgaviRenderException($error);
+		}
+
+		// check to see if this is a decorator template
+		if($view->isDecorator() && !(isset($oti['ignore_decorators']) && $oti['ignore_decorators'])) {
+			$template = $view->getDecoratorDirectory() . '/' . $view->getDecoratorTemplate() . $this->getExtension();
+			if(!is_readable($template)) {
+				// the decorator template isn't readable
+				$error = 'The decorator template "%s" does not exist or is unreadable';
+				$error = sprintf($error, $template);
+				throw new AgaviRenderException($error);
+			}
+		}
+
 		if(isset($oti['ignore_decorators']) && $oti['ignore_decorators']) {
 			$view->clearDecorator();
 		}
 		if(isset($oti['ignore_slots']) && $oti['ignore_slots']) {
 			$view->clearSlots();
 		}
-		
-		if($view->getTemplate() == null) {
-			// a template has not been set
-			$error = 'A template has not been set';
-
-			throw new AgaviRenderException($error);
-		}
-
-		$template = $view->getDirectory() . '/' . $view->getTemplate() . $this->getExtension();
-
-		if(!is_readable($template)) {
-			// the template isn't readable
-			$error = 'The template "%s" does not exist or is unreadable';
-			$error = sprintf($error, $template);
-
-			throw new AgaviRenderException($error);
-		}
-
-		// check to see if this is a decorator template
-		if($view->isDecorator()) {
-			
-			$template = $view->getDecoratorDirectory() . '/' . $view->getDecoratorTemplate() . $this->getExtension();
-
-			if(!is_readable($template)) {
-				// the decorator template isn't readable
-				$error = 'The decorator template "%s" does not exist or is ' .
-						 'unreadable';
-				$error = sprintf($error, $template);
-
-				throw new AgaviRenderException($error);
-			}
-		}
 	}
 
 	/**
-	 * Render the presentation.
+	 * Render the presentation to the Response.
 	 *
-	 * When the controller render mode is View::RENDER_CLIENT, this method will
-	 * render the presentation directly to the client and null will be returned.
-	 *
-	 * @return     string A string representing the rendered presentation, if
-	 *                    the controller render mode is View::RENDER_VAR,
-	 *                    otherwise null.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
 	 */
-	abstract function & render();
+	abstract function render();
 	
+	/**
+	 * Get the Response instance for this Renderer
+	 *
+	 * @return     AgaviResponse A Response instance.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getResponse()
+	{
+		return $this->response;
+	}
+
 	/**
 	 * Execute the Renderer.
 	 *
@@ -278,10 +283,11 @@ abstract class AgaviRenderer
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function execute($filterChain)
+	public function execute($filterChain, $response)
 	{
-		$viewData =& $this->render();
-		$this->getView()->setData($viewData);
+		$this->response = $response;
+		$this->render();
 	}
-
 }
+
+?>

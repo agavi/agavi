@@ -53,24 +53,53 @@ abstract class AgaviView extends AgaviAttributeHolder
 	 */
 	const RENDER_VAR = 4;
 
-	private
-		$context            = null,
-		$decorator          = false,
-		$decoratorDirectory = null,
-		$decoratorTemplate  = null,
-		$directory          = null,
-		$slots              = array(),
-		$template           = null,
-		$viewData           = null;
-
-
+	/**
+	 * @var        AgaviContext The Context instance this View belongs to.
+	 */
+	protected $context = null;
+	
+	/**
+	 * @var        AgaviResponse The Response object for this Action/View.
+	 */
+	protected $response = null;
+	
+	/**
+	 * @var        bool Whether or not this View is configured to use a decorator.
+	 */
+	protected $decorator = false;
+	
+	/**
+	 * @var        string The Decorator template directory.
+	 */
+	protected $decoratorDirectory = null;
+	
+	/**
+	 * @var        string The Decorator template filename.
+	 */
+	protected $decoratorTemplate = null;
+	
+	/**
+	 * @var        string The directory of the template.
+	 */
+	protected $directory = null;
+	
+	/**
+	 * @var        array The slots to be used in the Decorator.
+	 */
+	protected $slots = array();
+	
+	/**
+	 * @var        string The template filename.
+	 */
+	protected $template = null;
+	
 	/**
 	 * Execute any presentation logic and set template attributes.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	abstract function execute ();
+	abstract function execute();
 
 	/**
 	 * Retrieve the current application context.
@@ -80,11 +109,22 @@ abstract class AgaviView extends AgaviAttributeHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public final function getContext ()
+	public final function getContext()
 	{
-
 		return $this->context;
+	}
 
+	/**
+	 * Retrieve the Response instance for this View.
+	 *
+	 * @return     AgaviResponse The Response instance.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public final function getResponse()
+	{
+		return $this->response;
 	}
 
 	/**
@@ -96,11 +136,9 @@ abstract class AgaviView extends AgaviAttributeHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function getDecoratorDirectory ()
+	public function getDecoratorDirectory()
 	{
-
 		return $this->decoratorDirectory;
-
 	}
 
 	/**
@@ -112,11 +150,9 @@ abstract class AgaviView extends AgaviAttributeHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function getDecoratorTemplate ()
+	public function getDecoratorTemplate()
 	{
-
 		return $this->decoratorTemplate;
-
 	}
 
 	/**
@@ -128,11 +164,9 @@ abstract class AgaviView extends AgaviAttributeHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function getDirectory ()
+	public function getDirectory()
 	{
-
 		return $this->directory;
-
 	}
 
 	/**
@@ -143,11 +177,9 @@ abstract class AgaviView extends AgaviAttributeHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function getSlots ()
+	public function getSlots()
 	{
-
 		return $this->slots;
-
 	}
 
 	/**
@@ -159,168 +191,29 @@ abstract class AgaviView extends AgaviAttributeHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function getTemplate ()
+	public function getTemplate()
 	{
-
 		return $this->template;
-
-	}
-
-	/**
-	 * Import parameter values and error messages from the request directly as
-	 * view attributes.
-	 *
-	 * @param      array An indexed array of file/parameter names.
-	 * @param      bool  Is this a list of files?
-	 * @param      bool  Import error messages too?
-	 * @param      bool  Run strip_tags() on attribute value?
-	 * @param      bool  Run htmlspecialchars() on attribute value?
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public function importAttributes ($names, $files = false, $errors = true,
-						              $stripTags = true, $specialChars = true)
-	{
-
-		// alias $request to keep the code clean
-		$request = $this->context->getRequest();
-
-		// get our array
-		if ($files)
-		{
-
-			// file names
-			$array =& $request->getFiles();
-
-		} else
-		{
-
-			// parameter names
-			$array =& $request->getParameters();
-
-		}
-
-		// loop through our parameter names and import them
-		foreach ($names as &$name)
-		{
-
-			if (preg_match('/^([a-z0-9\-_]+)\{([a-z0-9\s\-_]+)\}$/i',
-						   $name, $match))
-			{
-
-				// we have a parent
-				$parent  = $match[1];
-				$subname = $match[2];
-
-				// load the file/parameter value for this attribute if one
-				// exists
-				if (isset($array[$parent]) && isset($array[$parent][$subname]))
-				{
-
-				    $value = $array[$parent][$subname];
-
-				    if ($stripTags)
-				    {
-
-						$value = strip_tags($value);
-
-				    }
-
-				    if ($specialChars)
-				    {
-
-						$value = htmlspecialchars($value);
-
-				    }
-
-				    $this->setAttribute($name, $value);
-
-				} else
-				{
-
-				    // set an empty value
-				    $this->setAttribute($name, '');
-
-				}
-
-			} else
-			{
-
-				// load the file/parameter value for this attribute if one
-				// exists
-				if (isset($array[$name]))
-				{
-
-				    $value = $array[$name];
-
-				    if ($stripTags)
-				    {
-
-						$value = strip_tags($value);
-
-				    }
-
-				    if ($specialChars)
-				    {
-
-						$value = htmlspecialchars($value);
-
-				    }
-
-				    $this->setAttribute($name, $value);
-
-				} else
-				{
-
-				    // set an empty value
-				    $this->setAttribute($name, '');
-
-				}
-
-			}
-
-			if ($errors)
-			{
-
-				if ($request->hasError($name))
-				{
-
-				    $this->setAttribute($name . '_error',
-						                $request->getError($name));
-
-				} else
-				{
-
-				    // set empty error
-				    $this->setAttribute($name . '_error', '');
-
-				}
-
-			}
-
-		}
-
 	}
 
 	/**
 	 * Initialize this view.
 	 *
-	 * @param      AgaviContext The current application context.
+	 * @param      AgaviResponse The Response for this Action/View.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function initialize(AgaviContext $context)
+	public function initialize(AgaviResponse $response)
 	{
-		$this->context = $context;
+		$this->context = $response->getContext();
+		
+		$this->response = $response;
 
 		// set the currently executing module's template directory as the
 		// default template directory
-		$this->decoratorDirectory = $context->getController()->getModuleDirectory() . '/templates'; 
-
-		$this->directory          = $this->decoratorDirectory;
+		$this->directory = $this->decoratorDirectory = $this->context->getController()->getModuleDirectory() . '/templates'; 
 	}
 
 	/**
@@ -332,11 +225,9 @@ abstract class AgaviView extends AgaviAttributeHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function isDecorator ()
+	public function isDecorator()
 	{
-
 		return $this->decorator;
-
 	}
 
 	/**
@@ -347,11 +238,9 @@ abstract class AgaviView extends AgaviAttributeHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function setDecoratorDirectory ($directory)
+	public function setDecoratorDirectory($directory)
 	{
-
 		$this->decoratorDirectory = $directory;
-
 	}
 
 	/**
@@ -365,25 +254,17 @@ abstract class AgaviView extends AgaviAttributeHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function setDecoratorTemplate ($template)
+	public function setDecoratorTemplate($template)
 	{
-
-		if (AgaviToolkit::isPathAbsolute($template))
-		{
-
+		if(AgaviToolkit::isPathAbsolute($template)) {
 			$this->decoratorDirectory = dirname($template);
 			$this->decoratorTemplate  = basename($template);
-
-		} else
-		{
-
+		} else {
 			$this->decoratorTemplate = $template;
-
 		}
 
 		// set decorator status
 		$this->decorator = true;
-
 	}
 
 	/**
@@ -407,11 +288,9 @@ abstract class AgaviView extends AgaviAttributeHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function setDirectory ($directory)
+	public function setDirectory($directory)
 	{
-
 		$this->directory = $directory;
-
 	}
 
 	/**
@@ -427,13 +306,12 @@ abstract class AgaviView extends AgaviAttributeHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function setSlot ($attributeName, $moduleName, $actionName)
+	public function setSlot($attributeName, $moduleName, $actionName)
 	{
-
-		$this->slots[$attributeName]                = array();
-		$this->slots[$attributeName]['module_name'] = $moduleName;
-		$this->slots[$attributeName]['action_name'] = $actionName;
-
+		$this->slots[$attributeName] = array(
+			'module_name' => $moduleName,
+			'action_name' => $actionName
+		);
 	}
 
 	/**
@@ -472,86 +350,14 @@ abstract class AgaviView extends AgaviAttributeHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function setTemplate ($template)
+	public function setTemplate($template)
 	{
-
-		if (AgaviToolkit::isPathAbsolute($template))
-		{
-
+		if(AgaviToolkit::isPathAbsolute($template)) {
 			$this->directory = dirname($template);
 			$this->template  = basename($template);
-
-		} else
-		{
-
+		} else {
 			$this->template = $template;
-
 		}
-
-	}
-
-	/**
-	 * Sets data returned by the renderer
-	 *
-	 * @param      string The view data
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function setData($viewData)
-	{
-		$this->data = $viewData;
-	}
-
-	/**
-	 * Sets data returned by the renderer
-	 *
-	 * @return     string The view data
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function getData()
-	{
-		return $this->viewData;
-	}
-
-	/**
-	 * Retrieve a freh Renderer instance to handle template rendering.
-	 *
-	 * @return     AgaviRenderer A Renderer instance.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function getRenderer()
-	{
-		$response = $this->context->getResponse();
-		
-		$renderer = null;
-		
-		while(true) {
-			$oti= $response->getOutputTypeInfo();
-			$renderer = new $oti['renderer']();
-			$renderer->initialize($this, $oti['renderer_parameters']);
-			if(isset($oti['extension'])) {
-				$renderer->setExtension($oti['extension']);
-			}
-			try {
-				// run the pre-render check to see if the template is there
-				$renderer->preRenderCheck();
-				break;
-			} catch(AgaviRenderException $e) {
-				if(isset($oti['fallback'])) {
-					// template not found, but there's a fallback specified, so let's try that one
-					$response->setOutputType($oti['fallback']);
-				} else {
-					throw $e;
-				}
-			}
-		}
-		
-		return $renderer;
 	}
 }
 

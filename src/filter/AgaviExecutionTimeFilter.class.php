@@ -42,13 +42,15 @@ class AgaviExecutionTimeFilter extends AgaviFilter
 	 * Execute this filter.
 	 *
 	 * @param      AgaviFilterChain The filter chain.
+	 * @param      AgaviResponse A Response instance.
 	 *
 	 * @throws     <b>AgaviFilterException</b> If an error occurs during execution.
 	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function execute($filterChain)
+	public function execute($filterChain, $response)
 	{
 		$context = $this->getContext();
 		
@@ -57,23 +59,20 @@ class AgaviExecutionTimeFilter extends AgaviFilter
 			$comment = $this->getParameter('comment');
 			$replace = $this->getParameter('replace', false);
 			
-			$response = $context->getResponse();
-			
 			$start = microtime(true);
 			$filterChain->execute();
 			$time = (microtime(true) - $start);
 			
-			$output = $response->getContent();
 			
 			if($replace) {
+				$output = $response->getContent();
 				$output = str_replace($replace, $time, $output);
+				$response->setContent($output);
 			}
 			
 			if($comment) {
-				$output = $output . "\n\n<!-- This page took " . $time . " seconds to process -->";
+				$response->appendContent("\n\n<!-- This page took " . $time . " seconds to process -->");
 			}
-			
-			$response->setContent($output);
 			
 		} else {
 			$filterChain->execute();

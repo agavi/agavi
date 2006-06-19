@@ -46,7 +46,7 @@ class AgaviException extends Exception
 	public static function printStackTrace(Exception $e, $context = null)
 	{
 		// throw away any response data that might be there
-		if($context !== null && ($r = $context->getResponse()) !== null) {
+		if($context !== null && ($c = $context->getController()) !== null && ($r = $c->getResponse()) !== null) {
 			if($r->isLocked()) {
 				// reponse is locked, so grab the output and discard it
 				ob_start();
@@ -58,7 +58,7 @@ class AgaviException extends Exception
 			}
 		}
 		
-		if($context !== null && ($r = $context->getResponse()) !== null && ($oti = $r->getOutputTypeInfo()) !== null && isset($oti['exception'])) {
+		if($context !== null && ($c = $context->getController()) !== null && ($r = $c->getResponse()) !== null && ($oti = $c->getOutputTypeInfo()) !== null && isset($oti['exception'])) {
 			include($oti['exception']);
 		} else {
 			// include proper exception template

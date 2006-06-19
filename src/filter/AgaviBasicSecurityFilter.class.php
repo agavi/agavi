@@ -31,18 +31,18 @@
  */
 class AgaviBasicSecurityFilter extends AgaviSecurityFilter
 {
-
 	/**
 	 * Execute this filter.
 	 *
 	 * @param      AgaviFilterChain A FilterChain instance.
+	 * @param      AgaviResponse A Response instance.
 	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function execute ($filterChain)
+	public function execute($filterChain, $response)
 	{
-
 		// get the cool stuff
 		$context    = $this->getContext();
 		$controller = $context->getController();
@@ -63,34 +63,22 @@ class AgaviBasicSecurityFilter extends AgaviSecurityFilter
 		// NOTE: the nice thing about the Action class is that getCredential()
 		//       is vague enough to describe any level of security and can be
 		//       used to retrieve such data and should never have to be altered
-		if ($user->isAuthenticated())
-		{
-
+		if($user->isAuthenticated()) {
 			// the user is authenticated
-			if ($credential === null || $user->hasCredentials($credential))
-			{
-
+			
+			if($credential === null || $user->hasCredentials($credential)) {
 				// the user has access, continue
 				$filterChain->execute();
-
-			} else
-			{
-
+			} else {
 				// the user doesn't have access, exit stage left
 				$controller->forward(AgaviConfig::get('actions.secure_module'), AgaviConfig::get('actions.secure_action'));
-
 			}
 
-		} else
-		{
-
+		} else {
 			// the user is not authenticated
 			$controller->forward(AgaviConfig::get('actions.login_module'), AgaviConfig::get('actions.login_action'));
-
 		}
-
 	}
-
 }
 
 ?>

@@ -33,6 +33,7 @@ class AgaviExecutionFilter extends AgaviFilter
 	 * Execute this filter.
 	 *
 	 * @param      AgaviFilterChain The filter chain.
+	 * @param      AgaviResponse A Response instance.
 	 *
 	 * @throws     <b>AgaviInitializationException</b> If an error occurs during
 	 *                                                 View initialization.
@@ -43,7 +44,7 @@ class AgaviExecutionFilter extends AgaviFilter
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function execute($filterChain)
+	public function execute($filterChain, $response)
 	{
 		// get the context, controller and validator manager
 		$controller = $this->context->getController();
@@ -67,15 +68,38 @@ class AgaviExecutionFilter extends AgaviFilter
 		$viewInstance = $controller->getView($viewModule, $viewName);
 
 		// initialize the view
-		$viewInstance->initialize($this->context);
+		$viewInstance->initialize($response);
+		
 		// view initialization completed successfully
 		$viewInstance->execute();
-		// get the renderer instance
-		$renderer = $viewInstance->getRenderer();
+		
+		$renderer = null;
+		
+		while(true) {
+			$oti = $controller->getOutputTypeInfo();
+			$renderer = new $oti['renderer']();
+			$renderer->initialize($viewInstance, $oti['renderer_parameters']);
+			if(isset($oti['extension'])) {
+				$renderer->setExtension($oti['extension']);
+			}
+			try {
+				// run the pre-render check to see if the template is there
+				$renderer->preRenderCheck();
+				break;
+			} catch(AgaviRenderException $e) {
+				if(isset($oti['fallback'])) {
+					// template not found, but there's a fallback specified, so let's try that one
+					$controller->setOutputType($oti['fallback']);
+				} else {
+					throw $e;
+				}
+			}
+		}
 		
 		// create a new filter chain
 		$fcfi = $this->context->getFactoryInfo('filter_chain');
 		$filterChain = new $fcfi['class']();
+		$filterChain->initialize($response, $fcfi['parameters']);
 
 		$controller->loadFilters($filterChain, 'rendering');
 		$controller->loadFilters($filterChain, 'rendering', $viewModule);
@@ -86,10 +110,8 @@ class AgaviExecutionFilter extends AgaviFilter
 		// go, go, go!
 		$filterChain->execute();
 		
-		$viewData =& $viewInstance->getData();
-		
 		if($controller->getRenderMode() == AgaviView::RENDER_VAR) {
-			$actionEntry->setPresentation($viewData);
+			$actionEntry->setPresentation($response);
 		}
 	}
 	
