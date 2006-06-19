@@ -22,6 +22,7 @@
  * @subpackage filter
  *
  * @author     Sean Kerr <skerr@mojavi.org>
+ * @author     David Zuelke <dz@bitxtender.com>
  * @copyright  (c) Authors
  * @since      0.9.0
  *
@@ -29,19 +30,21 @@
  */
 abstract class AgaviFilter extends AgaviParameterHolder
 {
-
-	protected
-		$context = null;
+	/**
+	 * @var        AgaviContext A Context instance.
+	 */
+	protected $context = null;
 
 	/**
 	 * Execute this filter.
 	 *
 	 * @param      AgaviFilterChain A FilterChain instance.
+	 * @param      AgaviResponse A Response instance.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	abstract function execute ($filterChain);
+	abstract function execute($filterChain, $response);
 
 	/**
 	 * Retrieve the current application context.
@@ -51,11 +54,9 @@ abstract class AgaviFilter extends AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public final function getContext ()
+	public final function getContext()
 	{
-
 		return $this->context;
-
 	}
 
 	/**
