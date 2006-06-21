@@ -190,6 +190,8 @@ if($fixedTrace[0]['file'] != $e->getFile() && $fixedTrace[0]['line'] != $e->getL
 			
 			code {
 				display:						block;
+				margin:							0;
+				padding:						0;
 			}
 <?php if($xhtml): ?>
 			
