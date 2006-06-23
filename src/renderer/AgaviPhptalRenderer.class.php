@@ -46,7 +46,14 @@ class AgaviPhptalRenderer extends AgaviRenderer
 	public function getEngine()
 	{
 		if($this->_phptal === null) {
-			$this->_phptal = new FixedPHPTAL();
+			if(!defined('PHPTAL_PHP_CODE_DESTINATION')) {
+				define('PHPTAL_PHP_CODE_DESTINATION', AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . AgaviPhptalRenderer::COMPILE_DIR . DIRECTORY_SEPARATOR . AgaviPhptalRenderer::COMPILE_SUBDIR . DIRECTORY_SEPARATOR);
+				@mkdir(PHPTAL_PHP_CODE_DESTINATION, fileperms(AgaviConfig::get('core.cache_dir')), true);
+			}
+			
+			require_once('PHPTAL.php');
+			
+			$this->_phptal = new PHPTAL();
 		}
 		return $this->_phptal;
 	}
@@ -67,6 +74,12 @@ class AgaviPhptalRenderer extends AgaviRenderer
 		
 		$mode = $view->getContext()->getController()->getRenderMode();
 		$engine->setTemplateRepository($view->getDirectory());
+		
+		// the following three lines are a fix until PHPTAL has been changed so setTemplate() resets _prepared, _source and _functionName.
+		// as soon as this is fixed in PHPTAL SVN, we will remove this ugly hack that relies on PHP being a little... well... ugly.
+		$engine->{"\0*\0_prepared"} = false;
+		$engine->{"\0*\0_functionName"} = null;
+		$engine->{"\0*\0_source"} = null;
 		$engine->setTemplate($view->getTemplate() . $this->getExtension());
 		if($this->extractVars) {
 			foreach($view->getAttributes() as $key => $value) {
@@ -104,6 +117,12 @@ class AgaviPhptalRenderer extends AgaviRenderer
 		
 		// render the decorator template and return the result
 		$engine->setTemplateRepository($view->getDecoratorDirectory());
+		
+		// the following three lines are a fix until PHPTAL has been changed so setTemplate() resets _prepared, _source and _functionName.
+		// as soon as this is fixed in PHPTAL SVN, we will remove this ugly hack that relies on PHP being a little... well... ugly.
+		$engine->{"\0*\0_prepared"} = false;
+		$engine->{"\0*\0_functionName"} = null;
+		$engine->{"\0*\0_source"} = null;
 		$engine->setTemplate($view->getDecoratorTemplate() . $this->getExtension());
 		
 		// set the template resources
@@ -125,25 +144,4 @@ class AgaviPhptalRenderer extends AgaviRenderer
 	}
 }
 
-
-// the following lines are a fix until PHPTAL has been changed so setTemplate() resets _prepared, _source and _functionName.
-// as soon as this is fixed in PHPTAL SVN, we will remove the stub class and move the define and the require into initialize()
-// 2006-06-10: still not fixed in PHPTAL 1.1.5...
-
-if(!defined('PHPTAL_PHP_CODE_DESTINATION')) {
-	define('PHPTAL_PHP_CODE_DESTINATION', AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . AgaviPhptalRenderer::COMPILE_DIR . DIRECTORY_SEPARATOR . AgaviPhptalRenderer::COMPILE_SUBDIR . DIRECTORY_SEPARATOR);
-	@mkdir(PHPTAL_PHP_CODE_DESTINATION, fileperms(AgaviConfig::get('core.cache_dir')), true);
-}
-
-require_once('PHPTAL.php');
-
-class FixedPHPTAL extends PHPTAL
-{
-	public function setTemplate($path)
-	{
-		$this->_prepared = false;
-		$this->_functionName = null;
-		$this->_source = null;
-		parent::setTemplate($path);
-	}
-}
+?>
