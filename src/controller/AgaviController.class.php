@@ -540,7 +540,7 @@ abstract class AgaviController extends AgaviParameterHolder
 		$this->response->initialize($this->context, $rfi['parameters']);
 		
 		$cfg = AgaviConfig::get('core.config_dir') . '/output_types.xml';
-		require_once(AgaviConfigCache::checkConfig($cfg, $context->getName()));
+		require(AgaviConfigCache::checkConfig($cfg, $context->getName()));
 		
 		if(AgaviConfig::get('core.use_security', false)) {
 			$sffi = $context->getFactoryInfo('security_filter');
