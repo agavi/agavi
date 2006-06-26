@@ -102,17 +102,17 @@
 		<div id="menu">
 			<h3>Actions</h3>
 			<ul>
-				<li><a href="<?=$r->gen('index')?>">Default Action</a></li>
-				<li><a href="<?=$r->gen('error_404')?>">Error 404 Action</a></li>
-				<li><a href="<?=$r->gen('login')?>">Login Action</a></li>
-				<li><a href="<?=$r->gen('module_disabled')?>">Module Disabled Action</a></li>
-				<li><a href="<?=$r->gen('secure')?>">Secure Action</a></li>
-				<li><a href="<?=$r->gen('unavailable')?>">Unavailable Action</a></li>
+				<li><a href="<?php echo $r->gen('index'); ?>">Default Action</a></li>
+				<li><a href="<?php echo $r->gen('error_404'); ?>">Error 404 Action</a></li>
+				<li><a href="<?php echo $r->gen('login'); ?>">Login Action</a></li>
+				<li><a href="<?php echo $r->gen('module_disabled'); ?>">Module Disabled Action</a></li>
+				<li><a href="<?php echo $r->gen('secure'); ?>">Secure Action</a></li>
+				<li><a href="<?php echo $r->gen('unavailable'); ?>">Unavailable Action</a></li>
 			</ul>
 		</div>
 		<div id="content">
-			<h2><?=$template['title']?></h2>
-<?=$template['content']?> 
+			<h2><?php echo $template['title']; ?></h2>
+<?php echo $template['content']; ?> 
 		</div>
 	</body>
 </html>

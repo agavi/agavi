@@ -204,7 +204,7 @@ if($fixedTrace[0]['file'] != $e->getFile() && $fixedTrace[0]['line'] != $e->getL
 	<body>
 <!--[if IE]>
 <object id="AdobeSVG" classid="clsid:78156a80-c6a1-4bbf-8e6a-3cd390eeb4e2"> </object>
-<?='<?import namespace="svg" urn="http://www.w3.org/2000/svg" implementation="#AdobeSVG"?>'?> 
+<?php echo '<?import namespace="svg" urn="http://www.w3.org/2000/svg" implementation="#AdobeSVG"?>'; ?> 
 <![endif]-->
 		<div id="svgDefinitions">
 <?php if($xhtml): ?>
@@ -503,7 +503,7 @@ if($fixedTrace[0]['file'] != $e->getFile() && $fixedTrace[0]['line'] != $e->getL
 <?php if($xhtml): ?>
 		<div style="float:right; margin:-6em -6em 0 0; width:10em; height:10em"><svg:svg viewBox="0 0 48 48" preserveAspectRatio="xMaxYMax meet" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><svg:use xlink:href="#exceptionSign" /></svg:svg></div>
 <?php endif; ?>
-		<h1><?=get_class($e)?></h1>
+		<h1><?php echo get_class($e); ?></h1>
 <?php if($e instanceof AgaviException): ?>
 		<p id="help"<?php if($xhtml): ?> class="nice"<?php endif; ?>>
 <?php if($xhtml): ?>
@@ -511,18 +511,18 @@ if($fixedTrace[0]['file'] != $e->getFile() && $fixedTrace[0]['line'] != $e->getL
 <?php endif; ?>
 			This is an internal Agavi exception. Please consult the documentation for assistance with solving this issue.</p>
 <?php endif; ?>
-		<p>An exception of type <strong><?=get_class($e)?></strong> was thrown, but did not get caught during the execution of the request. You will find information provided by the exception along with a stack trace below.</p>
+		<p>An exception of type <strong><?php echo get_class($e); ?></strong> was thrown, but did not get caught during the execution of the request. You will find information provided by the exception along with a stack trace below.</p>
 		<p id="message"<?php if($xhtml): ?> class="nice"<?php endif; ?>>
 <?php if($xhtml): ?>
 			<div style="position:absolute; top:-1.25em; left:-2em; height:5em; width:5em;"><svg:svg viewBox="3 0 43 43" preserveAspectRatio="xMaxYMax meet" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><svg:use xlink:href="#importantSign" /></svg:svg></div>
 <?php endif; ?>
-			<?=nl2br($e->getMessage())?>
+			<?php echo nl2br($e->getMessage()); ?>
 		</p>
 		<h3>Stack Trace</h3>
 		<ol>
 <?php $i = 0; $highlights = array(); foreach($fixedTrace as $trace): $i++; if(!isset($highlights[$trace['file']])) $highlights[$trace['file']] = explode('<br />', str_replace(array('<code><span style="color: #000000">', '</span>
 </code>', '&nbsp;'), array('', '', '&#160;'), highlight_string(str_replace('	', '  ', file_get_contents($trace['file'])), true))); ?>
-			<li id="frame<?=$i?>"<?php if($i > 1): ?> class="hidecode"<?php endif; ?>>at <?php if($i > 1): ?><strong><?php if(isset($trace['class'])): ?><?=$trace['class']?><?=$trace['type']?><?php endif; ?><?=$trace['function']?><?php if(isset($trace['args'])): ?>(<?=buildParamList($trace['args'])?>)<?php endif; ?></strong><?php else: ?><em>exception origin</em><?php endif; ?><br />in <?=str_replace(
+			<li id="frame<?php echo $i; ?>"<?php if($i > 1): ?> class="hidecode"<?php endif; ?>>at <?php if($i > 1): ?><strong><?php if(isset($trace['class'])): ?><?php echo $trace['class'], $trace['type']; ?><?php endif; ?><?php echo $trace['function']; ?><?php if(isset($trace['args'])): ?>(<?php echo buildParamList($trace['args']); ?>)<?php endif; ?></strong><?php else: ?><em>exception origin</em><?php endif; ?><br />in <?php echo str_replace(
 			array(
 				'_' . AgaviConfig::get('core.module_dir'),
 				'_' . AgaviConfig::get('core.template_dir'),
@@ -541,7 +541,7 @@ if($fixedTrace[0]['file'] != $e->getFile() && $fixedTrace[0]['line'] != $e->getL
 				'<abbr title="' . AgaviConfig::get('core.webapp_dir') . '">core.webapp_dir</abbr>',
 				'<abbr title="' . AgaviConfig::get('core.agavi_dir') . '">core.agavi_dir</abbr>',
 			), 
-'_' . $trace['file'])?> <a href="#frame<?=$i?>" class="toggle" title="Toggle source code snippet" onclick="this.parentNode.className = this.parentNode.className == 'hidecode' ? '' : 'hidecode'; return false;">line <?=$trace['line']?></a><ol start="<?=$start = $trace['line'] < 4 ? 1 : $trace['line'] - 3?>" style="padding-left:<?=strlen($start+6)*0.6+2?>em"><?php $lines = array_slice($highlights[$trace['file']], $start - 1, 7, true); 
+'_' . $trace['file']); ?> <a href="#frame<?php echo $i; ?>" class="toggle" title="Toggle source code snippet" onclick="this.parentNode.className = this.parentNode.className == 'hidecode' ? '' : 'hidecode'; return false;">line <?php echo $trace['line']; ?></a><ol start="<?php echo $start = $trace['line'] < 4 ? 1 : $trace['line'] - 3; ?>" style="padding-left:<?php echo strlen($start+6)*0.6+2; ?>em"><?php $lines = array_slice($highlights[$trace['file']], $start - 1, 7, true); 
 foreach($lines as $key => &$line) { if($key + 1 == $trace['line']): ?><li class="highlight"><?php if($xhtml): ?><div style="float:left; width:1em; height:1em; margin-left:-1.35em; background-color:#FFF;"><svg:svg viewBox="2 1 45 43" preserveAspectRatio="xMaxYMax meet" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><svg:use xlink:href="#stopSign" /></svg:svg></div><?php endif; else: ?><li><?php endif; ?><code><?php
 if($line == '') $line = '&#160;'; if(strpos($line, '</span>') === 0) $line = substr($line, 7); if(strpos($line, '</span>') < strpos($line, '<span') || strpos($line, '<span') === false) for($j = $key; $j >= 0; $j--) { if(($pos = strrpos($highlights[$trace['file']][$j], '<span')) !== false) { $line = substr($highlights[$trace['file']][$j], $pos, 29) . $line; break; }} if(strrpos($line, '</span>') < strrpos($line, '<span') || strpos($line, '</span>') === false) $line .= '</span>'; if(strpos($line, ' ', 20) == 29) $line = substr_replace($line, '&#160;', 29, 1); echo $line; 
 
@@ -552,11 +552,11 @@ if($line == '') $line = '&#160;'; if(strpos($line, '</span>') === 0) $line = sub
 		<h3>Version Information</h3>
 		<dl>
 			<dt>Agavi:</dt>
-			<dd><?=AgaviConfig::get('agavi.version')?></dd>
+			<dd><?php echo AgaviConfig::get('agavi.version'); ?></dd>
 			<dt>PHP:</dt>
-			<dd><?=phpversion()?></dd>
+			<dd><?php echo phpversion(); ?></dd>
 			<dt>System:</dt>
-			<dd><?=php_uname()?></dd>
+			<dd><?php echo php_uname(); ?></dd>
 		</dl>
 	</body>
 </html>
