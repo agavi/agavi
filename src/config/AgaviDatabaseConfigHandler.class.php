@@ -82,7 +82,7 @@ class AgaviDatabaseConfigHandler extends AgaviConfigHandler
 				}
 
 				$databases[$name]['class'] = $db->hasAttribute('class') ? $db->getAttribute('class') : $databases[$name]['class'];
-				$databases[$name]['file'] = $db->hasAttribute('file') ? $db->hasAttribute('file') : $databases[$name]['file'];
+				$databases[$name]['file'] = $db->hasAttribute('file') ? $db->getAttribute('file') : $databases[$name]['file'];
 
 				$databases[$name]['params'] = $this->getItemParameters($db, $databases[$name]['params']);
 			}
@@ -91,13 +91,14 @@ class AgaviDatabaseConfigHandler extends AgaviConfigHandler
 		$data = array();
 		$includes = array();
 
-		foreach($databases as $name => &$db) {
+		foreach($databases as $name => $db) {
 
 			if($db['file'] !== null) {
 				// we have a file to include
-				$file =& $db['file'];
+				$file =  $db['file'];
 				$file =  $this->replaceConstants($file);
 				$file =  $this->replacePath($file);
+				$file =  realpath($file);
 
 				if(!is_readable($file)) {
 					// database file doesn't exist
@@ -107,21 +108,21 @@ class AgaviDatabaseConfigHandler extends AgaviConfigHandler
 					throw new AgaviParseException($error);
 				}
 
-				$tmp        = "require_once('%s');";
-				$include[]  = sprintf($tmp, $file);
+				$tmp        = "require_once(%s);";
+				$includes[]  = sprintf($tmp, var_export($file, true));
 			}
 
 
 			// append new data
 			$tmp = "\$database = new %s();\n" .
 							"\$database->initialize(\$this, %s);\n" .
-							"\$this->databases['%s'] = \$database;";
+							"\$this->databases[%s] = \$database;";
 
-			$data[] = sprintf($tmp, $db['class'], var_export($db['params'], true), $name);
+			$data[] = sprintf($tmp, $db['class'], var_export($db['params'], true), var_export($name, true));
 
 		}
 
-		$data[] = sprintf("\$this->databases['default'] = \$this->databases['%s'];", $default);
+		$data[] = sprintf("\$this->databases['default'] = \$this->databases[%s];", var_export($default, true));
 
 		// compile data
 		$retval = "<?php\n" .

@@ -123,7 +123,7 @@ class AgaviLoggingConfigHandler extends AgaviConfigHandler
 				if($logger['priority'] !== null) {
 					$data[] = sprintf('$%s->setPriority(%s);', $name, $logger['priority']);
 				}
-				$data[] = sprintf('LoggerManager::setLogger("%s", $%s);', $name, $name);
+				$data[] = sprintf('AgaviLoggerManager::setLogger("%s", $%s);', $name, $name);
 			}
 		}
 

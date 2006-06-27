@@ -71,23 +71,6 @@ abstract class AgaviConfigHandler extends AgaviParameterHolder
 	}
 
 	/**
-	 * Add a set of replacement values.
-	 *
-	 * @param      string The old value.
-	 * @param      string The new value which will replace the old value.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public function addReplacement($oldValue, $newValue)
-	{
-
-		$this->oldValues[] = $oldValue;
-		$this->newValues[] = $newValue;
-
-	}
-
-	/**
 	 * Execute this configuration handler.
 	 *
 	 * @param      string An absolute filesystem path to a configuration file.
@@ -188,13 +171,13 @@ abstract class AgaviConfigHandler extends AgaviParameterHolder
 				'/\%([\w\.]+?)\%/',
 				create_function(
 					'$match',
-					'$constant = $match[1]; ' .
+					'$constant = $match[1];' .
 					'return (AgaviConfig::has($constant) ? AgaviConfig::get($constant) : "%".$constant."%");'
 				),
-				$value,
-				1
+				$value
 			);
-		} while ($newvalue != $value);
+
+		} while($newvalue != $value);
 
 		return $value;
 	}

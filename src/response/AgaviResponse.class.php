@@ -171,7 +171,7 @@ abstract class AgaviResponse
 	 */
 	public function isDirty()
 	{
-		return $this->dirty();
+		return $this->dirty;
 	}
 	
 	/**

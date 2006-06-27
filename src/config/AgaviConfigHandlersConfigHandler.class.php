@@ -58,19 +58,19 @@ class AgaviConfigHandlersConfigHandler extends AgaviConfigHandler
 			foreach($cfg->handlers as $handler) {
 				$pattern = $handler->getAttribute('pattern');
 
-				$category = $this->replaceConstants($pattern);
+				$category = var_export($this->replaceConstants($pattern), true);
 
 				$class = $handler->getAttribute('class');
 
 				$parameters = $this->getItemParameters($handler);
 
 				// append new data
-				$tmp    = "self::\$handlers['%s'] = new %s();";
+				$tmp    = "self::\$handlers[%s] = new %s();";
 				$data[] = sprintf($tmp, $category, $class);
 
 				if($parameters != 'null') {
 					// since we have parameters we will need to init the handler
-					$tmp    = "self::\$handlers['%s']->initialize(%s, %s);";
+					$tmp    = "self::\$handlers[%s]->initialize(%s, %s);";
 					$data[] = sprintf($tmp, $category, var_export($this->literalize($handler->getAttribute('validate')), true), var_export($parameters, true));
 				}
 			}
