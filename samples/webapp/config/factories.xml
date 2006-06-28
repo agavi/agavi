@@ -45,11 +45,11 @@
 		
 		<routing class="AgaviWebRouting" />
 		
-		<security_filter class="AgaviBasicSecurityFilter" />
+		<security_filter class="AgaviSecurityFilter" />
 		
 		<storage class="AgaviSessionStorage" />
 		
-		<user class="AgaviBasicSecurityUser" />
+		<user class="AgaviSecurityUser" />
 		
 		<validator_manager class="AgaviValidatorManager" />
 		
