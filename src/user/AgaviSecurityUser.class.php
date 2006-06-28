@@ -26,7 +26,7 @@
  *
  * @version    $Id$
  */
-class AgaviBasicSecurityUser extends AgaviUser implements AgaviISecurityUser
+class AgaviSecurityUser extends AgaviUser implements AgaviISecurityUser
 {
 
 	// +-----------------------------------------------------------------------+

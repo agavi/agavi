@@ -29,7 +29,7 @@
  *
  * @version    $Id$
  */
-class AgaviBasicSecurityFilter extends AgaviFilter implements AgaviIActionFilter, AgaviISecurityFilter
+class AgaviSecurityFilter extends AgaviFilter implements AgaviIActionFilter, AgaviISecurityFilter
 {
 	/**
 	 * Execute this filter.
