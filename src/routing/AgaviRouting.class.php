@@ -64,7 +64,17 @@ abstract class AgaviRouting
 
 	public function addRoute($route, $options = array(), $parent = null)
 	{
-		$defaultOpts = array('name' => uniqid (rand()), 'stopping' => true, 'output_type' => null, 'module' => null, 'action' => null, 'parameters' => array(), 'ignores' => array(), 'defaults' => array(), 'childs' => array(), 'callback' => null, 'imply' => false, 'cut' => false, 'parent' => $parent, 'reverseStr' => '', 'nostops' => array(), 'anchor' => self::ANCHOR_NONE);
+		// catch the old options from the route which has to be overwritten
+		if(isset($options['name']) && isset($this->routes[$options['name']])) {
+			$defaultOpts = $this->routes[$options['name']]['opt'];
+			if($parent === null) {
+				$parent = $defaultOpts['parent'];
+			} else {
+				$defaultOpts['parent'] = $parent;
+			}
+		} else {
+			$defaultOpts = array('name' => uniqid (rand()), 'stopping' => true, 'output_type' => null, 'module' => null, 'action' => null, 'parameters' => array(), 'ignores' => array(), 'defaults' => array(), 'childs' => array(), 'callback' => null, 'imply' => false, 'cut' => false, 'parent' => $parent, 'reverseStr' => '', 'nostops' => array(), 'anchor' => self::ANCHOR_NONE);
+		}
 
 		// set the default options + user opts
 		$options = array_merge($defaultOpts, $options);
@@ -78,7 +88,22 @@ abstract class AgaviRouting
 		}
 
 		$routeName = $options['name'];
-		
+
+
+
+		// check if 2 nodes with the same name in the same execution tree exist
+		foreach($this->routes as $name => $route) {
+			// if a route with this route as parent exist check if its really a child of our route
+			if($route['opt']['parent'] == $routeName && !in_array($name, $options['childs'])) {
+				throw new AgaviException('The route ' . $routeName . ' specifies a child route with the same name');
+			}
+		}
+
+		// direct childs/parents with the same name arent caught by the above check
+		if($routeName == $parent) {
+			throw new AgaviException('The route ' . $routeName . ' specifies a child route with the same name');
+		}
+
 		// if we are a child route, we need add this route as a child to the parent
 		if($parent !== null) {
 			foreach($this->routes[$parent]['opt']['childs'] as $name) {
@@ -267,7 +292,7 @@ abstract class AgaviRouting
 						$ot = $opts['output_type'];
 					}
 
-					if($opts['cut']) {
+					if($opts['cut'] || count($opts['childs'])) {
 						$ni = '';
 						// if the route didn't match from the start of the input preserve the 'prefix'
 						if($match[0][1] > 0) {
