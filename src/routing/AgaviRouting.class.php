@@ -151,11 +151,13 @@ abstract class AgaviRouting
 
 		$url = '';
 		$defaults = array();
+		$availableParams = array();
 		if(isset($this->routes[$route])) {
 			$parent = $route;
 			do {
 				$r =& $this->routes[$parent];
 				$myDefaults = $r['opt']['defaults'];
+				$availableParams += $r['par'];
 
 				if($r['opt']['anchor'] & self::ANCHOR_START || $r['opt']['anchor'] == self::ANCHOR_NONE) {
 					$url = $r['opt']['reverseStr'] . $url;
@@ -172,6 +174,7 @@ abstract class AgaviRouting
 					}
 
 					$myDefaults = array_merge($myDefaults, $myR['opt']['defaults']);
+					$availableParams += $myR['par'];
 					if($myR['opt']['anchor'] & self::ANCHOR_START || $myR['opt']['anchor'] == self::ANCHOR_NONE) {
 						$url = $myR['opt']['reverseStr'] . $url;
 					} else {
@@ -206,6 +209,15 @@ abstract class AgaviRouting
 
 		$from = array();
 		$to = array();
+
+		// remove not specified available parameters
+		foreach($availableParams as $name) {
+			if(!isset($params[$name])) {
+				$from[] = '(:' . $name . ':)';
+				$to[] = '';
+			}
+		}
+
 		foreach($params as $n => $p) {
 			$from[] = '(:' . $n . ':)';
 			$to[] = $p;
