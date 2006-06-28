@@ -350,6 +350,7 @@ abstract class AgaviRouting
 		return preg_match($route['rxp'], $input, $matches, PREG_OFFSET_CAPTURE);
 	}
 
+
 	protected function parseRouteString($str)
 	{
 		$vars = array();
@@ -362,42 +363,101 @@ abstract class AgaviRouting
 
 		$str = substr($str, (int)$anchor & self::ANCHOR_START, $anchor & self::ANCHOR_END ? -1 : strlen($str));
 
-		if(preg_match_all('#\\(:  ([^:]+[^\\\\]:)?  (?: ((?: [^:] | :[^)] )+) | ) :\\)#x', $str, $matches, PREG_SET_ORDER | PREG_OFFSET_CAPTURE)) {
-			$lastOffset = 0;
-			$ret = '';
-			foreach($matches as $matchSet) {
-				$matchLen = strlen($matchSet[0][0]);
-				$matchOffset = $matchSet[0][1];
-				$prefixStr = substr($str, $lastOffset, $matchOffset - $lastOffset);
-				$lastOffset = $matchOffset + $matchLen;
+		$rxChars = array('.', '\\', '+', '*', '?', '[', '^', ']', '$', '(', ')', '{', '}', '=', '!', '<', '>', '|', ':');
 
-				// strip the trailing :
-				$paramName = substr($matchSet[1][0], 0, -1);
-				if(strlen($paramName) > 0) {
-					$rxStr .= preg_quote($prefixStr) . sprintf('(?P<%s>%s)', $paramName, $matchSet[2][0]);
-					$reverseStr .= $prefixStr . sprintf('(:%s:)', $paramName);
+		$len = strlen($str);
+		$state = 'start';
+		$tmpStr = '';
+		$rxStartI = 0;
+		$rxName = '';
+		$parenthesisCount = 0;
+		// whether the regular expression is clean of any regular expression (\o/)
+		$cleanRx = true;
 
-					if(!in_array($paramName, $vars))
-						$vars[] = $paramName;
+		for($i = 0; $i < $len; ++$i) {
+			$atEnd = $i + 1 == $len;
+			$c = $str[$i];
+			if($state == 'start') {
+				// start of regular expression block
+				if($c == '(') {
+					$rxStr .= preg_quote($tmpStr);
+					$reverseStr .= $tmpStr;
+
+					$tmpStr = '';
+					$state = 'rxStart';
+					$rxStartI = $i;
+					$rxName = '';
+					$cleanRx = true;
 				} else {
-					$rxStr .= preg_quote($prefixStr) . sprintf('%s', $matchSet[2][0]);
-					$reverseStr .= $prefixStr;
+					$tmpStr .= $c;
+				}
+
+				if($atEnd) {
+					$rxStr .= preg_quote($tmpStr);
+					$reverseStr .= $tmpStr;
+				}
+			} elseif($state == 'rxStart') {
+				if($c == ':') {
+					$rxName = $tmpStr;
+
+					$tmpStr = '';
+					$state = 'rx';
+				} elseif(ctype_alnum($c) || $c == '_' || $c == '-') {
+					$tmpStr .= $c;
+				} else {
+					// restart scanning from '('
+					$i = $rxStartI;
+					$tmpStr = '';
+					$state = 'rx';
+				}
+
+				if($atEnd && $c != ')') {
+					throw new AgaviException('The pattern "' . $str . '" contains an unbalanced set of parenthesis');
+				}
+			} elseif($state == 'rx') {
+				if($c == '(') {
+					$cleanRx = false;
+					$tmpStr .= $c;
+					++$parenthesisCount;
+				} elseif($c == ')') {
+					if($parenthesisCount > 0) {
+						--$parenthesisCount;
+						$tmpStr .= $c;
+					} else {
+						// anonymous rx
+						if($rxName == '') {
+							$rxStr .= $tmpStr;
+							if($cleanRx) {
+								$reverseStr .= $tmpStr;
+							}
+						} else {
+							$rxStr .= sprintf('(?P<%s>%s)', $rxName, $tmpStr);
+							$reverseStr .= sprintf('(:%s:)', $rxName);
+
+							if(!in_array($rxName, $vars))
+								$vars[] = $rxName;
+						}
+
+						$tmpStr = '';
+						$state = 'start';
+					}
+				}
+				elseif(in_array($c, $rxChars)) {
+					$cleanRx = false;
+					$tmpStr .= $c;
+				} else {
+					$tmpStr .= $c;
+				}
+
+				if($atEnd && ($c != ')' || $parenthesisCount > 0)) {
+					throw new AgaviException('The pattern "' . $str . '" contains an unbalanced set of parenthesis');
 				}
 			}
-
-			if($lastOffset < strlen($str)) {
-				$rxStr .= preg_quote(substr($str, $lastOffset));
-				$reverseStr .= substr($str, $lastOffset);
-			}
-		} else {
-			$rxStr = preg_quote($str);
-			$reverseStr = $str;
 		}
 
 		$rxStr = sprintf('#%s%s%s#', $anchor & self::ANCHOR_START ? '^' : '', $rxStr, $anchor & self::ANCHOR_END ? '$' : '');
 		return array($rxStr, $reverseStr, $vars, $anchor);
 	}
-
 }
 
 ?>
