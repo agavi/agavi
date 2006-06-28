@@ -66,7 +66,21 @@ class AgaviWebRouting extends AgaviRouting
 		if(isset($this->routes[$route])) {
 			if(AgaviConfig::get('core.use_routing')) {
 				// the route exists and routing is enabled, the parent method handles it
-				return parent::gen($route, $params);
+
+				$append = '';
+
+				// get the parameters which are not defined in this route an append them as query string
+				$p = $params;
+				foreach($this->routes[$route]['par'] as $param) {
+					if(isset($p[$param])) {
+						unset($p[$param]);
+					}
+				}
+				if(count($p) > 0) {
+					$append = '?' . http_build_query($p);
+				}
+
+				return parent::gen($route, $params) . $append;
 			} else {
 				// the route exists, but we must create a normal index.php?foo=bar URL.
 
