@@ -28,23 +28,12 @@
  *
  * @version    $Id$
  */
-abstract class AgaviFilter extends AgaviParameterHolder
+abstract class AgaviFilter extends AgaviParameterHolder implements AgaviIFilter
 {
 	/**
 	 * @var        AgaviContext A Context instance.
 	 */
 	protected $context = null;
-
-	/**
-	 * Execute this filter.
-	 *
-	 * @param      AgaviFilterChain A FilterChain instance.
-	 * @param      AgaviResponse A Response instance.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	abstract function execute($filterChain, $response);
 
 	/**
 	 * Retrieve the current application context.

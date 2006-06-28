@@ -73,11 +73,16 @@ class AgaviFilterConfigHandler extends AgaviConfigHandler
 		
 		$data = array();
 
-		foreach($filters as $filter) {
+		foreach($filters as $name => $filter) {
 			if(!isset($filter['class'])) {
-				throw new AgaviConfigurationException('No class name specified for filter "' . $filter['name'] . '" in ' . $config);
+				throw new AgaviConfigurationException('No class name specified for filter "' . $name . '" in ' . $config);
 			}
 			if($filter['enabled']) {
+				$rc = new ReflectionClass($filter['class']);
+				$if = 'AgaviI' . ucfirst(strtolower(substr(basename($config), 0, strpos(basename($config), '_filters')))) . 'Filter';
+				if(!$rc->implementsInterface($if)) {
+					throw new AgaviFactoryException('Filter "' . $name . '" does not implement interface "' . $if . '"');
+				}
 				$data[] = '$filter = new ' . $filter['class'] . '();';
 				$data[] = '$filter->initialize($this->context, ' . var_export($filter['params'], true) . ');';
 				$data[] = '$filters[] = $filter;';

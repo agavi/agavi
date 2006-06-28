@@ -72,6 +72,11 @@ class AgaviFactoryConfigHandler extends AgaviConfigHandler
 				$data['dispatch_filter']['params'] = $this->getItemParameters($cfg->dispatch_filter, $data['dispatch_filter']['params']);
 
 				$data['dispatch_filter_code'] = '$this->factories["dispatch_filter"] = array("class" => "' . $data['dispatch_filter']['class'] . '", "parameters" => ' . var_export($data['dispatch_filter']['params'], true) . ');';
+				
+				$rc = new ReflectionClass($data['dispatch_filter']['class']);
+				if(!$rc->implementsInterface('AgaviIGlobalFilter')) {
+					throw new AgaviFactoryException('Specified Dispatch Filter does not implement interface "AgaviIGlobalFilter"');
+				}
 			}
 
 			if(isset($cfg->execution_filter)) {
@@ -80,6 +85,11 @@ class AgaviFactoryConfigHandler extends AgaviConfigHandler
 				$data['execution_filter']['params'] = $this->getItemParameters($cfg->execution_filter, $data['execution_filter']['params']);
 
 				$data['execution_filter_code'] = '$this->factories["execution_filter"] = array("class" => "' . $data['execution_filter']['class'] . '", "parameters" => ' . var_export($data['execution_filter']['params'], true) . ');';
+				
+				$rc = new ReflectionClass($data['execution_filter']['class']);
+				if(!$rc->implementsInterface('AgaviIActionFilter')) {
+					throw new AgaviFactoryException('Specified Execution Filter does not implement interface "AgaviIActionFilter"');
+				}
 			}
 
 			if(isset($cfg->filter_chain)) {
@@ -102,8 +112,12 @@ class AgaviFactoryConfigHandler extends AgaviConfigHandler
 				$data['security_filter'] = isset($data['security_filter']) ? $data['security_filter'] : array('class' => null, 'params' => array());
 				$data['security_filter']['class'] = $cfg->security_filter->hasAttribute('class')? $cfg->security_filter->getAttribute('class') : $data['security_filter']['class'];
 				$data['security_filter']['params'] = $this->getItemParameters($cfg->security_filter, $data['security_filter']['params']);
-
 				$data['security_filter_code'] = '$this->factories["security_filter"] = array("class" => "' . $data['security_filter']['class'] . '", "parameters" => ' . var_export($data['security_filter']['params'], true) . ');';
+				
+				$rc = new ReflectionClass($data['security_filter']['class']);
+				if(!$rc->implementsInterface('AgaviISecurityFilter') || !$rc->implementsInterface('AgaviIActionFilter')) {
+					throw new AgaviFactoryException('Specified Security Filter does not implement interfaces "AgaviISecurityFilter" and "AgaviIActionFilter"');
+				}
 			}
 
 			// Database
@@ -148,13 +162,20 @@ class AgaviFactoryConfigHandler extends AgaviConfigHandler
 			}
 
 			// User
-			if(AgaviConfig::get('core.use_security', true) && isset($cfg->user)) {
+			if(isset($cfg->user)) {
 				$data['user'] = isset($data['user']) ? $data['user'] : array('class' => null, 'params' => array());
 				$data['user']['class'] = $cfg->user->hasAttribute('class')? $cfg->user->getAttribute('class') : $data['user']['class'];
 				$data['user']['params'] = $this->getItemParameters($cfg->user, $data['user']['params']);
 
 				$data['user_code'] =	'$this->user = new ' . $data['user']['class'] . '();' . "\n" .
 															'$this->user->initialize($this, ' . var_export($data['user']['params'], true) . ');';
+				
+				if(AgaviConfig::get('core.use_security', false)) {
+					$rc = new ReflectionClass($data['user']['class']);
+					if(!$rc->implementsInterface('AgaviISecurityUser')) {
+						throw new AgaviFactoryException('Specified User does not implement interface "AgaviISecurityUser"');
+					}
+				}
 			}
 
 			// LoggerManager
@@ -196,13 +217,13 @@ class AgaviFactoryConfigHandler extends AgaviConfigHandler
 			'execution_filter' => true,
 			'filter_chain' => true,
 			'response' => true,
-			'security_filter' => false,
-			'database_manager' => false,
+			'security_filter' => AgaviConfig::get('core.use_security', false),
+			'database_manager' => AgaviConfig::get('core.use_database', false),
 			'action_stack' => true,
 			'storage' => true,
 			'validator_manager' => true,
-			'user' => false,
-			'logger_manager' => false,
+			'user' => true,
+			'logger_manager' => AgaviConfig::get('core.use_logging', false),
 			'controller' => true,
 			'request' => true,
 			'routing' => true

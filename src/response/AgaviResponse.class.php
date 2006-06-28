@@ -139,6 +139,7 @@ abstract class AgaviResponse
 		if(isset($data['content'])) {
 			return $this->appendContent($data['content']);
 		}
+		return true;
 	}
 	
 	/**
@@ -158,6 +159,7 @@ abstract class AgaviResponse
 		if(isset($data['content'])) {
 			return $this->appendContent($data['content']);
 		}
+		return true;
 	}
 	
 	/**

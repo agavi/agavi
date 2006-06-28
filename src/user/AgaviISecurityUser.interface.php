@@ -21,12 +21,13 @@
  * @subpackage user
  *
  * @author     Sean Kerr <skerr@mojavi.org>
+ * @author     David Zuelke <dz@bitxtender.com>
  * @copyright  (c) Authors
- * @since      0.9.0
+ * @since      0.11.0
  *
  * @version    $Id$
  */
-abstract class AgaviSecurityUser extends AgaviUser
+interface AgaviISecurityUser
 {
 
 	/**
@@ -35,17 +36,17 @@ abstract class AgaviSecurityUser extends AgaviUser
 	 * @param      mixed Credential data.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
+	 * @since      0.11.0
 	 */
-	abstract function addCredential ($credential);
+	public function addCredential($credential);
 
 	/**
 	 * Clear all credentials associated with this user.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
+	 * @since      0.11.0
 	 */
-	abstract function clearCredentials ();
+	public function clearCredentials();
 
 	/**
 	 * Indicates whether or not this user has a credential.
@@ -55,9 +56,9 @@ abstract class AgaviSecurityUser extends AgaviUser
 	 * @return     bool true, if this user has the credential, otherwise false.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
+	 * @since      0.11.0
 	 */
-	abstract function hasCredentials ($credential);
+	public function hasCredentials($credential);
 
 	/**
 	 * Indicates whether or not this user is authenticated.
@@ -65,9 +66,9 @@ abstract class AgaviSecurityUser extends AgaviUser
 	 * @return     bool true, if this user is authenticated, otherwise false.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
+	 * @since      0.11.0
 	 */
-	abstract function isAuthenticated ();
+	public function isAuthenticated();
 
 	/**
 	 * Remove a credential from this user.
@@ -75,9 +76,9 @@ abstract class AgaviSecurityUser extends AgaviUser
 	 * @param      mixed Credential data.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
+	 * @since      0.11.0
 	 */
-	abstract function removeCredential ($credential);
+	public function removeCredential($credential);
 
 	/**
 	 * Set the authenticated status of this user.
@@ -85,9 +86,9 @@ abstract class AgaviSecurityUser extends AgaviUser
 	 * @param      bool A flag indicating the authenticated status of this user.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
+	 * @since      0.11.0
 	 */
-	abstract function setAuthenticated ($authenticated);
+	public function setAuthenticated($authenticated);
 
 }
 

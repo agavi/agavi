@@ -59,7 +59,7 @@
  *
  * @version    $Id$
  */
-class AgaviFormPopulationFilter extends AgaviFilter
+class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilter
 {
 	/**
 	 * Execute this filter.
@@ -71,135 +71,126 @@ class AgaviFormPopulationFilter extends AgaviFilter
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function execute($filterChain)
+	public function execute(AgaviFilterChain $filterChain, AgaviResponse $response)
 	{
-		static $loaded;
+		$filterChain->execute($filterChain, $response);
+		
+		$req = $this->getContext()->getRequest();
+		
+		if(!($req->getAttribute('populate', 'org.agavi.filter.FormPopulationFilter') === true || (in_array($req->getMethod(), $this->getParameter('methods')) && $req->getAttribute('populate', 'org.agavi.filter.FormPopulationFilter') !== false))) {
+			return;
+		}
+		
+		$output = $response->getContent();
+		
+		$doc = DOMDocument::loadHTML($output);
+		$hasXmlProlog = false;
+		if(preg_match('#<\?xml.*?\?>#iuU', $output)) {
+			$hasXmlProlog = true;
+		}
+		$xpath = new DomXPath($doc);
+		$baseHref = '';
+		foreach($xpath->query('//head/base[@href]') as $base) {
+			$baseHref = parse_url($base->getAttribute('href'));
+			$baseHref = $baseHref['path'];
+			break;
+		}
+		foreach($xpath->query('//form[@action]') as $form) {
+			$action = $form->getAttribute('action');
+			if(!($baseHref . $action == $_SERVER['REQUEST_URI'] || $baseHref . '/' . $action == $_SERVER['REQUEST_URI'] || (strpos($action, '/') === 0 && $action == $_SERVER['REQUEST_URI']) || (strlen($_SERVER['REQUEST_URI']) == strrpos($_SERVER['REQUEST_URI'], $action) + strlen($action)))) {
+				continue;
+			}
+			
+			// build the XPath query
+			$query = 'descendant::textarea[@name] | descendant::select[@name] | descendant::input[@name and not(@type)] | descendant::input[@name and @type="text"] | descendant::input[@name and @type="checkbox"] | descendant::input[@name and @type="radio"] | descendant::input[@name and @type="password"]';
+			if($this->getParameter('include_hidden_inputs')) {
+				$query .= ' | descendant::input[@name and @type="hidden"]';
+			}
 
-		if(!isset($loaded)) {
-			$loaded = true;
-			
-			$req = $this->getContext()->getRequest();
-			
-			ob_start();
-			$filterChain->execute();
-			if(!($req->getAttribute('populate', 'org.agavi.filter.FormPopulationFilter') === true || ($req->getMethod() == AgaviRequest::POST && $req->getAttribute('populate', 'org.agavi.filter.FormPopulationFilter') !== false))) {
-				ob_end_flush();
-			} else {
-				$output = ob_get_contents();
-				ob_end_clean();
-				$doc = DOMDocument::loadHTML($output);
-				$hasXmlProlog = false;
-				if(preg_match('#<\?xml.*?\?>#iuU', $output)) {
-					$hasXmlProlog = true;
+			foreach($xpath->query($query, $form) as $element) {
+				
+				// there's an error with the element's name in the request? good. let's give the baby a class!
+				if($req->hasError($element->getAttribute('name'))) {
+					$element->setAttribute('class', $element->getAttribute('class') . ' ' . $this->getParameter('error_class'));
+					// assign the class to all implicit labels
+					foreach($xpath->query('ancestor::label[not(@for)]', $element) as $label) {
+						$label->setAttribute('class', $label->getAttribute('class') . ' ' . $this->getParameter('error_class'));
+					}
+					if(($id = $element->getAttribute('id')) != '') {
+						// assign the class to all explicit labels
+						foreach($xpath->query('descendant::label[@for="' . $id . '"]', $form) as $label) {
+							$label->setAttribute('class', $label->getAttribute('class') . ' ' . $this->getParameter('error_class'));
+						}
+					}
 				}
-				$xpath = new DomXPath($doc);
-				$baseHref = '';
-				foreach($xpath->query('//head/base[@href]') as $base) {
-					$baseHref = parse_url($base->getAttribute('href'));
-					$baseHref = $baseHref['path'];
-					break;
-				}
-				foreach($xpath->query('//form[@action]') as $form) {
-					$action = $form->getAttribute('action');
-					if(!($baseHref . $action == $_SERVER['REQUEST_URI'] || $baseHref . '/' . $action == $_SERVER['REQUEST_URI'] || (strpos($action, '/') === 0 && $action == $_SERVER['REQUEST_URI']) || (strlen($_SERVER['REQUEST_URI']) == strrpos($_SERVER['REQUEST_URI'], $action) + strlen($action)))) {
-						continue;
+				
+				if($element->nodeName == 'input') {
+					
+					if(!$element->hasAttribute('type') || $element->getAttribute('type') == 'text' || $element->getAttribute('type') == 'password' || $element->getAttribute('type') == 'hidden') {
+						
+						// text inputs
+						$element->removeAttribute('value');
+						if($req->hasParameter($element->getAttribute('name'))) {
+							$element->setAttribute('value', $req->getParameter($element->getAttribute('name')));
+						}
+						
+					} elseif($element->getAttribute('type') == 'checkbox' || $element->getAttribute('type') == 'radio') {
+						
+						// checkboxes and radios
+						$element->removeAttribute('checked');
+						if($req->hasParameter($element->getAttribute('name')) && ($element->getAttribute('value') == $req->getParameter($element->getAttribute('name')) || !$element->hasAttribute('value'))) {
+							$element->setAttribute('checked', 'checked');
+						}
+						
+					} elseif($element->getAttribute('type') == 'password') {
+						
+						// passwords
+						$element->removeAttribute('value');
+						if($this->getParameter('include_password_inputs') && $req->hasParameter($element->getAttribute('name'))) {
+							$element->setAttribute('value', $req->getParameter($element->getAttribute('name')));
+						}
 					}
 					
-					// build the XPath query
-					$query = 'descendant::textarea[@name] | descendant::select[@name] | descendant::input[@name and not(@type)] | descendant::input[@name and @type="text"] | descendant::input[@name and @type="checkbox"] | descendant::input[@name and @type="radio"] | descendant::input[@name and @type="password"]';
-					if($this->getParameter('include_hidden_inputs')) {
-						$query .= ' | descendant::input[@name and @type="hidden"]';
-					}
-
-					foreach($xpath->query($query, $form) as $element) {
-						
-						// there's an error with the element's name in the request? good. let's give the baby a class!
-						if($req->hasError($element->getAttribute('name'))) {
-							$element->setAttribute('class', $element->getAttribute('class') . ' ' . $this->getParameter('error_class'));
-							// assign the class to all implicit labels
-							foreach($xpath->query('ancestor::label[not(@for)]', $element) as $label) {
-								$label->setAttribute('class', $label->getAttribute('class') . ' ' . $this->getParameter('error_class'));
-							}
-							if(($id = $element->getAttribute('id')) != '') {
-								// assign the class to all explicit labels
-								foreach($xpath->query('descendant::label[@for="' . $id . '"]', $form) as $label) {
-									$label->setAttribute('class', $label->getAttribute('class') . ' ' . $this->getParameter('error_class'));
-								}
-							}
+				} elseif ($element->nodeName == 'select') {
+					
+					// select elements
+					// yes, we still use XPath because there could be OPTGROUPs
+					foreach($xpath->query('descendant::option', $element) as $option) {
+						$option->removeAttribute('selected');
+						if($req->hasParameter($element->getAttribute('name')) && $option->getAttribute('value') == $req->getParameter($element->getAttribute('name'))) {
+							$option->setAttribute('selected', 'selected');
 						}
-						
-						if($element->nodeName == 'input') {
-							
-							if(!$element->hasAttribute('type') || $element->getAttribute('type') == 'text' || $element->getAttribute('type') == 'password' || $element->getAttribute('type') == 'hidden') {
-								
-								// text inputs
-								$element->removeAttribute('value');
-								if($req->hasParameter($element->getAttribute('name'))) {
-									$element->setAttribute('value', $req->getParameter($element->getAttribute('name')));
-								}
-								
-							} elseif($element->getAttribute('type') == 'checkbox' || $element->getAttribute('type') == 'radio') {
-								
-								// checkboxes and radios
-								$element->removeAttribute('checked');
-								if($req->hasParameter($element->getAttribute('name')) && ($element->getAttribute('value') == $req->getParameter($element->getAttribute('name')) || !$element->hasAttribute('value'))) {
-									$element->setAttribute('checked', 'checked');
-								}
-								
-							} elseif($element->getAttribute('type') == 'password') {
-								
-								// passwords
-								$element->removeAttribute('value');
-								if($this->getParameter('include_password_inputs') && $req->hasParameter($element->getAttribute('name'))) {
-									$element->setAttribute('value', $req->getParameter($element->getAttribute('name')));
-								}
-							}
-							
-						} elseif ($element->nodeName == 'select') {
-							
-							// select elements
-							// yes, we still use XPath because there could be OPTGROUPs
-							foreach($xpath->query('descendant::option', $element) as $option) {
-								$option->removeAttribute('selected');
-								if($req->hasParameter($element->getAttribute('name')) && $option->getAttribute('value') == $req->getParameter($element->getAttribute('name'))) {
-									$option->setAttribute('selected', 'selected');
-								}
-							}
-							
-						} elseif($element->nodeName == 'textarea') {
-							
-							// textareas
-							foreach($element->childNodes as $cn) {
-								// remove all child nodes (= text nodes)
-								$element->removeChild($cn);
-							}
-							// append a new text node
-							$element->appendChild($doc->createTextNode($req->getParameter($element->getAttribute('name'))));
-						}
-						
 					}
+					
+				} elseif($element->nodeName == 'textarea') {
+					
+					// textareas
+					foreach($element->childNodes as $cn) {
+						// remove all child nodes (= text nodes)
+						$element->removeChild($cn);
+					}
+					// append a new text node
+					$element->appendChild($doc->createTextNode($req->getParameter($element->getAttribute('name'))));
 				}
-				if(strtolower($this->getParameter('force_output_mode')) == 'xhtml' || ($doc->doctype && stripos($doc->doctype->publicId, '-//W3C//DTD XHTML') === 0 && strtolower($this->getParameter('force_output_mode')) != 'html')) {
-					$out = $doc->saveXML();
-					if($this->getParameter('cdata_fix')) {
-						// these are ugly fixes so inline style and script blocks still work. better don't use them with XHTML to avoid trouble
-						$out = preg_replace('#<style([^>]*)>\s*<!\[CDATA\[#iuU', '<style\\1><!--/*--><![CDATA[/*><!--*/', $out);
-						$out = preg_replace('#\]\]></style>#iuU', '/*]]>*/--></style>', $out);
-						$out = preg_replace('#<script([^>]*)>\s*<!\[CDATA\[#iuU', '<script\\1><!--//--><![CDATA[//><!--', $out);
-						$out = preg_replace('#\]\]></script>#iuU', '//--><!]]></script>', $out);
-					}
-					if($this->getParameter('remove_xml_prolog') && !$hasXmlProlog) {
-						// there was no xml prolog in the document before, so we remove the one generated by DOM now
-						$out = preg_replace('#<\?xml.*?\?>\s#iuU', '', $out);
-					}
-					echo $out;
-				} else {
-					echo $doc->saveHTML();
-				}
+				
 			}
+		}
+		if(strtolower($this->getParameter('force_output_mode')) == 'xhtml' || ($doc->doctype && stripos($doc->doctype->publicId, '-//W3C//DTD XHTML') === 0 && strtolower($this->getParameter('force_output_mode')) != 'html')) {
+			$out = $doc->saveXML();
+			if($this->getParameter('cdata_fix')) {
+				// these are ugly fixes so inline style and script blocks still work. better don't use them with XHTML to avoid trouble
+				$out = preg_replace('#<style([^>]*)>\s*<!\[CDATA\[#iuU', '<style\\1><!--/*--><![CDATA[/*><!--*/', $out);
+				$out = preg_replace('#\]\]></style>#iuU', '/*]]>*/--></style>', $out);
+				$out = preg_replace('#<script([^>]*)>\s*<!\[CDATA\[#iuU', '<script\\1><!--//--><![CDATA[//><!--', $out);
+				$out = preg_replace('#\]\]></script>#iuU', '//--><!]]></script>', $out);
+			}
+			if($this->getParameter('remove_xml_prolog') && !$hasXmlProlog) {
+				// there was no xml prolog in the document before, so we remove the one generated by DOM now
+				$out = preg_replace('#<\?xml.*?\?>\s#iuU', '', $out);
+			}
+			$response->setContent($out);
 		} else {
-			// we already loaded this filter, skip to the next filter
-			$filterChain->execute();
+			$reponse->setContent($doc->saveHTML());
 		}
 	}
 
@@ -223,8 +214,11 @@ class AgaviFormPopulationFilter extends AgaviFilter
 		$this->setParameter('include_password_inputs', false);
 		$this->setParameter('include_hidden_inputs', false);
 		$this->setParameter('remove_xml_prolog', true);
+		$this->setParameter('methods', "");
 		// initialize parent
 		parent::initialize($context, $parameters);
+		// build array of request methods
+		$this->setParameter('methods', explode(' ', $this->getParameter('methods')));
 	}
 }
 

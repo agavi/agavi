@@ -27,7 +27,7 @@
  *
  * @version    $Id$
  */
-class AgaviExecutionFilter extends AgaviFilter
+class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 {
 	/**
 	 * Execute this filter.
@@ -44,7 +44,7 @@ class AgaviExecutionFilter extends AgaviFilter
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function execute($filterChain, $response)
+	public function execute(AgaviFilterChain $filterChain, AgaviResponse $response)
 	{
 		// get the context, controller and validator manager
 		$controller = $this->context->getController();
@@ -78,7 +78,8 @@ class AgaviExecutionFilter extends AgaviFilter
 		while(true) {
 			$oti = $controller->getOutputTypeInfo();
 			$renderer = new $oti['renderer']();
-			$renderer->initialize($viewInstance, $oti['renderer_parameters']);
+			$renderer->initialize($this->context, $oti['renderer_parameters']);
+			$renderer->setView($viewInstance);
 			if(isset($oti['extension'])) {
 				$renderer->setExtension($oti['extension']);
 			}
@@ -144,8 +145,8 @@ class AgaviExecutionFilter extends AgaviFilter
 		$moduleName = $actionEntry->getModuleName();
 		$actionName = $actionEntry->getActionName();
 		
-		// get the request method
-		$method = ucfirst(strtolower($this->context->getRequest()->getMethod()));
+		// get the (already formatted) request method
+		$method = $this->context->getRequest()->getMethod();
 		
 		$useGenericMethods = false;
 		$executeMethod = 'execute' . $method;

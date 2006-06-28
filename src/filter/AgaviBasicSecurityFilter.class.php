@@ -29,7 +29,7 @@
  *
  * @version    $Id$
  */
-class AgaviBasicSecurityFilter extends AgaviSecurityFilter
+class AgaviBasicSecurityFilter extends AgaviFilter implements AgaviIActionFilter, AgaviISecurityFilter
 {
 	/**
 	 * Execute this filter.
@@ -41,7 +41,7 @@ class AgaviBasicSecurityFilter extends AgaviSecurityFilter
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function execute($filterChain, $response)
+	public function execute(AgaviFilterChain $filterChain, AgaviResponse $response)
 	{
 		// get the cool stuff
 		$context    = $this->getContext();

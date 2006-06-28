@@ -66,7 +66,11 @@
 			<autoload name="AgaviCachingExecutionFilter">%core.agavi_dir%/filter/AgaviCachingExecutionFilter.class.php</autoload>
 			<autoload name="AgaviExecutionTimeFilter">%core.agavi_dir%/filter/AgaviExecutionTimeFilter.class.php</autoload>
 			<autoload name="AgaviFormPopulationFilter">%core.agavi_dir%/filter/AgaviFormPopulationFilter.class.php</autoload>
-			<autoload name="AgaviSecurityFilter">%core.agavi_dir%/filter/AgaviSecurityFilter.class.php</autoload>
+			<autoload name="AgaviIActionFilter">%core.agavi_dir%/filter/AgaviIActionFilter.interface.php</autoload>
+			<autoload name="AgaviIFilter">%core.agavi_dir%/filter/AgaviIFilter.interface.php</autoload>
+			<autoload name="AgaviIGlobalFilter">%core.agavi_dir%/filter/AgaviIGlobalFilter.interface.php</autoload>
+			<autoload name="AgaviIRenderingFilter">%core.agavi_dir%/filter/AgaviIRenderingFilter.interface.php</autoload>
+			<autoload name="AgaviISecurityFilter">%core.agavi_dir%/filter/AgaviISecurityFilter.interface.php</autoload>
 
 			<!-- agavi/logging -->
 			<autoload name="AgaviAppender">%core.agavi_dir%/logging/AgaviAppender.class.php</autoload>
@@ -111,7 +115,7 @@
 
 			<!-- agavi/user -->
 			<autoload name="AgaviBasicSecurityUser">%core.agavi_dir%/user/AgaviBasicSecurityUser.class.php</autoload>
-			<autoload name="AgaviSecurityUser">%core.agavi_dir%/user/AgaviSecurityUser.class.php</autoload>
+			<autoload name="AgaviISecurityUser">%core.agavi_dir%/user/AgaviISecurityUser.interface.php</autoload>
 
 			<!-- agavi/validator -->
 			<autoload name="AgaviDateValidator">%core.agavi_dir%/validator/AgaviDateValidator.class.php</autoload>

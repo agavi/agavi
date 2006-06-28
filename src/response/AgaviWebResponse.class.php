@@ -94,6 +94,26 @@ class AgaviWebResponse extends AgaviResponse
 	protected $cookies = array();
 	
 	/**
+	 * Initialize this Response.
+	 *
+	 * @param      AgaviContext A Context instance.
+	 * @param      array        An array of initialization parameters.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function initialize(AgaviContext $context, $parameters = array())
+	{
+		parent::initialize($context, $parameters);
+		
+		$this->cookieConfig = array(
+			'lifetime' => isset($parameters['cookie_lifetime']) ? $parameters['cookie_lifetime'] : 0,
+			'path'     => isset($parameters['cookie_path'])     ? $parameters['cookie_path']     : "/",
+			'domain'   => isset($parameters['cookie_domain'])   ? $parameters['cookie_domain']   : "",
+			'secure'   => isset($parameters['cookie_secure'])   ? $parameters['cookie_secure']   : 0
+		);
+	}
+	/**
 	 * Send all response data to the client.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
@@ -161,7 +181,6 @@ class AgaviWebResponse extends AgaviResponse
 	 */
 	public function import($data)
 	{
-		$retval = parent::import($data);
 		if(!$this->locked) {
 			if(isset($data['httpStatusCode'])) {
 				$this->httpStatusCode = $data['httpStatusCode'];
@@ -172,9 +191,10 @@ class AgaviWebResponse extends AgaviResponse
 			if(isset($data['cookies'])) {
 				$this->cookies = $data['cookies'];
 			}
-			return $retval && true;
+			return parent::import($data) && true;
 		}
-		return $retval && false;
+		parent::import($data);
+		return false;
 	}
 	
 	/**

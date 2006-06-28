@@ -2,8 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
-// | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
+// | Copyright (c) 2003-2005 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -15,21 +14,19 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviSecurityFilter provides a base class that classifies a filter as one that
- * handles security.
- *
+ * Security Filter interface. A SecurityFilter implementation must implement it.
+ * 
  * @package    agavi
  * @subpackage filter
- *
- * @author     Sean Kerr <skerr@mojavi.org>
+ * 
+ * @since      0.11.0 
+ * @author     David Zuelke <dz@bitxtender.com>
  * @copyright  (c) Authors
- * @since      0.9.0
  *
  * @version    $Id$
  */
-abstract class AgaviSecurityFilter extends AgaviFilter
+interface AgaviISecurityFilter extends AgaviIFilter
 {
-
 }
 
 ?>

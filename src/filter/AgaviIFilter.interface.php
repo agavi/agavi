@@ -3,7 +3,6 @@
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
 // | Copyright (c) 2003-2006 the Agavi Project.                                |
-// | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -15,9 +14,8 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviExecutionTimeFilter tracks the length of time it takes for an entire
- * request to be served starting with the dispatch and ending when the last 
- * action request has been served.
+ * AgaviFilter provides a way for you to intercept incoming requests or outgoing
+ * responses.
  *
  * @package    agavi
  * @subpackage filter
@@ -28,28 +26,42 @@
  *
  * @version    $Id$
  */
-class AgaviDispatchFilter extends AgaviFilter implements AgaviIGlobalFilter
+interface AgaviIFilter
 {
 	/**
 	 * Execute this filter.
 	 *
-	 * The DispatchFilter makes the first forward() call.
-	 *
-	 * @param      AgaviFilterChain The filter chain.
+	 * @param      AgaviFilterChain A FilterChain instance.
 	 * @param      AgaviResponse A Response instance.
 	 *
-	 * @throws     <b>AgaviFilterException</b> If an error occurs during execution.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.11.0
 	 */
-	public function execute(AgaviFilterChain $filterChain, AgaviResponse $response)
-	{
-		$request = $this->context->getRequest();
-		$moduleName = $request->getParameter($request->getModuleAccessor());
-		$actionName = $request->getParameter($request->getActionAccessor());
-		$this->context->getController()->forward($moduleName, $actionName);
-	}
+	public function execute(AgaviFilterChain $filterChain, AgaviResponse $response);
+
+	/**
+	 * Retrieve the current application context.
+	 *
+	 * @return     AgaviContext The current Context instance.
+	 *
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.11.0
+	 */
+	public function getContext();
+
+	/**
+	 * Initialize this Filter.
+	 *
+	 * @param      AgaviContext The current application context.
+	 * @param      array        An associative array of initialization parameters.
+	 *
+	 * @throws     <b>AgaviInitializationException</b> If an error occurs while
+	 *                                                 initializing this Filter.
+	 *
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.11.0
+	 */
+	public function initialize(AgaviContext $context, $parameters = array());
 }
 
 ?>

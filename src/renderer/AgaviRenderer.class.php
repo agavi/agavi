@@ -26,7 +26,7 @@
  *
  * @version    $Id$
  */
-abstract class AgaviRenderer
+abstract class AgaviRenderer implements AgaviIRenderingFilter
 {
 	/**
 	 * @var        AgaviContext A Context instance.
@@ -74,10 +74,9 @@ abstract class AgaviRenderer
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function initialize(AgaviView $view, $parameters = array())
+	public function initialize(AgaviContext $context, $parameters = array())
 	{
-		$this->view = $view;
-		$this->context = $view->getContext();
+		$this->context = $context;
 		if(isset($parameters['var_name'])) {
 			$this->varName = $parameters['var_name'];
 		}
@@ -125,6 +124,19 @@ abstract class AgaviRenderer
 		$this->extension = $extension;
 	}
 
+	/**
+	 * Set the View instance that belongs to this Renderer instance.
+	 *
+	 * @param      AgaviView An AgaviView instance
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function setView($view)
+	{
+		$this->view = $view;
+	}
+	
 	/**
 	 * Retrieve the View instance that belongs to this Renderer instance.
 	 *
@@ -283,7 +295,7 @@ abstract class AgaviRenderer
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function execute($filterChain, $response)
+	public function execute(AgaviFilterChain $filterChain, AgaviResponse $response)
 	{
 		$this->response = $response;
 		$this->render();

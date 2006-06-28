@@ -290,13 +290,6 @@ abstract class AgaviController extends AgaviParameterHolder
 
 				// does this action require security?
 				if(AgaviConfig::get('core.use_security', false) && $actionInstance->isSecure()) {
-
-					if(!($this->context->getUser() instanceof AgaviSecurityUser)) {
-						$error = 'Security is enabled, but your User implementation isn\'t a sub-class of SecurityUser';
-
-						throw new AgaviSecurityException($error);
-					}
-
 					// register security filter
 					$filterChain->register($this->filters['security']);
 				}
@@ -427,8 +420,10 @@ abstract class AgaviController extends AgaviParameterHolder
 			$class = $moduleName . '_' . $actionName . 'Action';
 		} elseif(class_exists($longActionName . 'Action', false)) {
 			$class = $longActionName . 'Action';
-		} else {
+		} elseif(class_exists($actionName . 'Action')) {
 			$class = $actionName . 'Action';
+		} else {
+			throw new AgaviException('Could not find Action "' . $actionName . '" for module "' . $moduleName . '"');
 		}
 
 		return new $class();

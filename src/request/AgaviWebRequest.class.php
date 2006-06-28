@@ -31,12 +31,20 @@
 class AgaviWebRequest extends AgaviRequest
 {
 
-	// +-----------------------------------------------------------------------+
-	// | PROTECTED VARIABLES                                                   |
-	// +-----------------------------------------------------------------------+
-
-	protected
-		$cookieConfig = null;
+	/**
+	 * Indicates whether or not a Cookie exists.
+	 *
+	 * @param      string A cookie name.
+	 *
+	 * @return     bool True, if a cookie with that name exists, otherwise false.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function hasCookie($name)
+	{
+		return isset($_COOKIE[$name]);
+	}
 
 	/**
 	 * Retrieve a value stored into a cookie.
