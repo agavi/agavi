@@ -96,7 +96,7 @@
 			</fileset>
 		</copy>
 		<mkdir dir="${webapp.dir}/lib"/>
-		<mkdir dir="${webapp.dir}/lib/models"/>
+		<mkdir dir="${webapp.dir}/models"/>
 		<mkdir dir="${webapp.dir}/modules"/>
 		<mkdir dir="${webapp.dir}/templates"/>
 

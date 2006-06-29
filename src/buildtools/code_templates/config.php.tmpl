@@ -46,10 +46,11 @@ AgaviConfig::set('core.webapp_dir', dirname(__FILE__));
 
 // +---------------------------------------------------------------------------+
 // | You may also modify the following other directives in this file:          |
-// |  - core.config_dir    (defaults to "<core.webapp_dir>/config")            |
-// |  - core.lib_dir       (defaults to "<core.webapp_dir>/lib")               |
-// |  - core.module_dir   (defaults to "<core.webapp_dir>/modules")           |
-// |  - core.template_dir (defaults to "<core.webapp_dir>/templates")         |
+// |  - core.config_dir   (defaults to "<core.webapp_dir>/config")             |
+// |  - core.lib_dir      (defaults to "<core.webapp_dir>/lib")                |
+// |  - core.model_dir    (defaults to "<core.webapp_dir>/model")              |
+// |  - core.module_dir   (defaults to "<core.webapp_dir>/modules")            |
+// |  - core.template_dir (defaults to "<core.webapp_dir>/templates")          |
 // +---------------------------------------------------------------------------+
 
 ?>

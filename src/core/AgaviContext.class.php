@@ -303,13 +303,9 @@ class AgaviContext
 			// let's try to autoload that baby
 			if(!class_exists($class)) {
 				// it's not there. the hunt is on
-				$file = AgaviConfig::get('core.lib_dir') . '/models/' . $modelName . 'Model.class.php';
-				$pattern = AgaviConfig::get('core.lib_dir') . '/' . '*' . '/models/' . $modelName . 'Model.class.php';
+				$file = AgaviConfig::get('core.model_dir') . '/' . $modelName . 'Model.class.php';
 				if(is_readable($file)) {
 					require_once($file);
-				} elseif($files = glob($pattern)) {
-					// only include the first file found
-					require_once($files[0]);
 				} else {
 					// nothing so far. our last chance: the model name, without a "Model" postfix
 					if(!class_exists($modelName)) {
