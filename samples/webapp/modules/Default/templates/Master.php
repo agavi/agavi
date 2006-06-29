@@ -1,8 +1,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 		<title>Default Agavi Module</title>
-		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
 		<style type="text/css">
 		body {
 			background-color: #FFFFFF;
@@ -93,18 +93,46 @@
 		* html #menu li {
 			margin-bottom: -5px;
 		}
+		
+		input.error, textarea.error {
+			background-color: #FFE0E0;
+		}
+		
+		label.error {
+			color: #D00;
+		}
+		
+		p.error {
+			padding:          0.5em;
+			border:           2px solid #D66;
+			background-color: #FFF0F0;
+			color:            #D00;
+		}
+		
+		p#loggedin {
+			float:   right;
+			margin:  0;
+			padding: 0.3em 1em 0.3em 0.3em;
+			border:  1px solid #DDD;
+			background-color: #EEE;
+		}
 
 		</style>
 	</head>
 	<body>
 <?php $r = $this->getContext()->getRouting()?>
 		<h1>Default Agavi Module</h1>
+<?php if($this->getContext()->getUser()->isAuthenticated()): ?>
+		<p id="loggedin">You are logged in. <a href="<?php echo $r->gen('logout'); ?>">Log Out</a></p>
+<?php endif; ?>
 		<div id="menu">
 			<h3>Actions</h3>
 			<ul>
 				<li><a href="<?php echo $r->gen('index'); ?>">Default Action</a></li>
 				<li><a href="<?php echo $r->gen('error_404'); ?>">Error 404 Action</a></li>
+<?php if(!$this->getContext()->getUser()->isAuthenticated()): ?>
 				<li><a href="<?php echo $r->gen('login'); ?>">Login Action</a></li>
+<?php endif; ?>
 				<li><a href="<?php echo $r->gen('module_disabled'); ?>">Module Disabled Action</a></li>
 				<li><a href="<?php echo $r->gen('secure'); ?>">Secure Action</a></li>
 				<li><a href="<?php echo $r->gen('unavailable'); ?>">Unavailable Action</a></li>
@@ -112,6 +140,9 @@
 		</div>
 		<div id="content">
 			<h2><?php echo $template['title']; ?></h2>
+			<?php $rq = $this->getContext()->getRequest(); if($rq->hasErrors()): foreach($rq->getErrors() as $error): ?>
+			<p class="error"><?php echo $error; ?></p>
+			<?php endforeach; endif; ?>
 <?php echo $template['content']; ?> 
 		</div>
 	</body>

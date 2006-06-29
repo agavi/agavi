@@ -14,7 +14,7 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
-class Default_LoginAction extends AgaviAction
+class Default_LogoutAction extends AgaviAction
 {
 	/**
 	 * This Action does not yet serve any Request methods.
@@ -49,36 +49,10 @@ class Default_LoginAction extends AgaviAction
 	 * execute*() being present, e.g. for a "write" Request, validateWrite() will
 	 * be run even if there is no executeWrite() method.
 	 */
-	public function executeWrite()
+	public function execute()
 	{
-		$req = $this->getContext()->getRequest();
-		$res = $this->getContext()->getController()->getResponse();
-		
-		try {
-			$this->getContext()->getUser()->login($req->getParameter('username'), $req->getParameter('password'));
-			return 'Success';
-		} catch(AgaviSecurityException $e) {
-			$req->setError($e->getMessage(), 'Wrong ' . ucfirst($e->getMessage()));
-			return 'Input';
-		}
-	}
-
-	/**
-	 * This method returns the View name in case the Action doesn't serve the
-	 * current Request method.
-	 *
-	 * !!!!!!!!!! DO NOT PUT ANY LOGIC INTO THIS METHOD !!!!!!!!!!
-	 *
-	 * @return     mixed - A string containing the view name associated with this
-	 *                     action, or...
-	 *                   - An array with two indices:
-	 *                     0. The parent module of the view that will be executed.
-	 *                     1. The view that will be executed.
-	 *
-	 */
-	public function getDefaultViewName()
-	{
-		return 'Input';
+		$this->getContext()->getUser()->logout();
+		return 'Success';
 	}
 }
 

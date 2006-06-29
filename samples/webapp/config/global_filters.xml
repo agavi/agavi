@@ -20,4 +20,19 @@
 +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
 -->
 <configurations>
+	
+	<configuration>
+		<filters>
+			
+			<filter name="AgaviSampleAppCookieLoginFilter" class="AgaviSampleAppCookieLoginFilter" />
+			
+			<filter name="FormPopulationFilter" class="AgaviFormPopulationFilter">
+				<parameters>
+					<parameter name="methods">write</parameter>
+				</parameters>
+			</filter>
+			
+		</filters>
+	</configuration>
+	
 </configurations>

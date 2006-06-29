@@ -14,25 +14,24 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
-class Default_LoginInputView extends AgaviView
+class Default_LogoutSuccessView extends AgaviView
 {
 
 	/**
 	 * Execute any presentation logic and set template attributes.
 	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
 	 */
 	public function execute()
 	{
 		// set our template
-		$this->setTemplate('LoginInput');
+		$this->setTemplate('LogoutSuccess');
 		$this->setDecoratorTemplate('Master');
 
 		// set the title
-		$this->setAttribute('title', 'Login Action');
+		$this->setAttribute('title', 'You are now logged out');
 		
-		// our login form is displayed. so let's remove that cookie thing there
 		$this->getContext()->getController()->getResponse()->setCookie('autologon[username]', false);
 		$this->getContext()->getController()->getResponse()->setCookie('autologon[password]', false);
 	}

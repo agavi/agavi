@@ -14,29 +14,36 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
-class Default_LoginInputView extends AgaviView
+class AgaviSampleAppCookieLoginFilter extends AgaviFilter implements AgaviIGlobalFilter
 {
-
 	/**
-	 * Execute any presentation logic and set template attributes.
+	 * Execute this filter.
 	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
+	 * @param      AgaviFilterChain The filter chain.
+	 *
+	 * @throws     <b>AgaviFilterException</b> If an error occurs during execution.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
 	 */
-	public function execute()
+	public function execute(AgaviFilterChain $filterChain, AgaviResponse $response)
 	{
-		// set our template
-		$this->setTemplate('LoginInput');
-		$this->setDecoratorTemplate('Master');
-
-		// set the title
-		$this->setAttribute('title', 'Login Action');
+		$req = $this->getContext()->getRequest();
+		$usr = $this->getContext()->getUser();
 		
-		// our login form is displayed. so let's remove that cookie thing there
-		$this->getContext()->getController()->getResponse()->setCookie('autologon[username]', false);
-		$this->getContext()->getController()->getResponse()->setCookie('autologon[password]', false);
+		if(!$usr->isAuthenticated() && $req->hasCookie('autologon')) {
+			$login = $req->getCookie('autologon');
+			try {
+				$usr->login($login['username'], $login['password']);
+			} catch(AgaviSecurityException $e) {
+				// login didn't work. that cookie sucks, delete it.
+				$response->setCookie('autologon[username]', false);
+				$response->setCookie('autologon[password]', false);
+			}
+		}
+		
+		$filterChain->execute($filterChain, $response);
 	}
-
 }
 
 ?>

@@ -57,13 +57,4 @@
 		</filters>
 	</configuration>
 	
-	
-	<configuration environment="fooBar">
-		<filters>
-			
-			<filter name="FormPopulationFilter" class="AgaviFormPopulationFilter" enabled="false" />
-			
-		</filters>
-	</configuration>
-	
 </configurations>

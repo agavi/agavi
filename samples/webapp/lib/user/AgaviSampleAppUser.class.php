@@ -14,29 +14,28 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
-class Default_LoginInputView extends AgaviView
+class AgaviSampleAppUser extends AgaviSecurityUser
 {
-
-	/**
-	 * Execute any presentation logic and set template attributes.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public function execute()
+	public function login($username, $password)
 	{
-		// set our template
-		$this->setTemplate('LoginInput');
-		$this->setDecoratorTemplate('Master');
-
-		// set the title
-		$this->setAttribute('title', 'Login Action');
+		if($username != 'Chuck Norris') {
+			throw new AgaviSecurityException('username');
+		}
 		
-		// our login form is displayed. so let's remove that cookie thing there
-		$this->getContext()->getController()->getResponse()->setCookie('autologon[username]', false);
-		$this->getContext()->getController()->getResponse()->setCookie('autologon[password]', false);
+		if($password != 'kick') {
+			throw new AgaviSecurityException('password');
+		}
+		
+		$this->setAuthenticated(true);
+		$this->clearCredentials();
+		$this->addCredential('admin');
 	}
-
+	
+	public function logout()
+	{
+		$this->clearCredentials();
+		$this->setAuthenticated(false);
+	}
 }
 
 ?>

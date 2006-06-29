@@ -49,7 +49,7 @@
 		
 		<storage class="AgaviSessionStorage" />
 		
-		<user class="AgaviSecurityUser" />
+		<user class="AgaviSampleAppUser" />
 		
 		<validator_manager class="AgaviValidatorManager" />
 		

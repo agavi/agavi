@@ -26,11 +26,11 @@
 		| a controller or user.                                                  |
 		+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
 	-->
-	<!-- example for a list of autoloads that is only used in the "production" environment
-	<configuration environment="production">
+	<configuration>
 		<autoloads>
-			<autoload name="MyCustomClass">%core.webapp_dir%/lib/MyCustomClass.class.php</autoload>
+			<autoload name="AgaviSampleAppCookieLoginFilter">%core.lib_dir%/filter/AgaviSampleAppCookieLoginFilter.class.php</autoload>
+			
+			<autoload name="AgaviSampleAppUser">%core.lib_dir%/user/AgaviSampleAppUser.class.php</autoload>
 		</autoloads>
 	</configuration>
-	-->
 </configurations>
