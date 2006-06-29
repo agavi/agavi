@@ -412,7 +412,7 @@ abstract class AgaviRouting
 				}
 
 				if($atEnd && $c != ')') {
-					throw new AgaviException('The pattern "' . $str . '" contains an unbalanced set of parenthesis');
+					throw new AgaviException('The pattern "' . $str . '" contains an unbalanced set of parentheses');
 				}
 			} elseif($state == 'rx') {
 				if($c == '(') {
@@ -450,7 +450,7 @@ abstract class AgaviRouting
 				}
 
 				if($atEnd && ($c != ')' || $parenthesisCount > 0)) {
-					throw new AgaviException('The pattern "' . $str . '" contains an unbalanced set of parenthesis');
+					throw new AgaviException('The pattern "' . $str . '" contains an unbalanced set of parentheses');
 				}
 			}
 		}
