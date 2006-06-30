@@ -126,7 +126,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 				
 				if($element->nodeName == 'input') {
 					
-					if(!$element->hasAttribute('type') || $element->getAttribute('type') == 'text' || $element->getAttribute('type') == 'password' || $element->getAttribute('type') == 'hidden') {
+					if(!$element->hasAttribute('type') || $element->getAttribute('type') == 'text' || $element->getAttribute('type') == 'hidden') {
 						
 						// text inputs
 						$element->removeAttribute('value');
@@ -212,7 +212,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 		$this->setParameter('error_class', 'error');
 		$this->setParameter('force_output_mode', false);
 		$this->setParameter('include_password_inputs', false);
-		$this->setParameter('include_hidden_inputs', false);
+		$this->setParameter('include_hidden_inputs', true);
 		$this->setParameter('remove_xml_prolog', true);
 		$this->setParameter('methods', "");
 		// initialize parent
