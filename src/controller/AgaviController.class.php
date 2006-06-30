@@ -105,6 +105,7 @@ abstract class AgaviController extends AgaviParameterHolder
 	 */
 	public function actionExists($moduleName, $actionName)
 	{
+		$actionName = str_replace('.', '/', $actionName);
 		$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/actions/' . $actionName . 'Action.class.php';
 		return is_readable($file);
 	}
@@ -399,6 +400,7 @@ abstract class AgaviController extends AgaviParameterHolder
 	 */
 	public function getAction($moduleName, $actionName)
 	{
+		$actionName = str_replace('.', '/', $actionName);
 		$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/actions/' . $actionName . 'Action.class.php';
 
 		if(file_exists($file)) {
@@ -423,7 +425,7 @@ abstract class AgaviController extends AgaviParameterHolder
 		} elseif(class_exists($actionName . 'Action')) {
 			$class = $actionName . 'Action';
 		} else {
-			throw new AgaviException('Could not find Action "' . $actionName . '" for module "' . $moduleName . '"');
+			throw new AgaviException('Could not find Action "' . $longActionName . '" for module "' . $moduleName . '"');
 		}
 
 		return new $class();
@@ -486,6 +488,7 @@ abstract class AgaviController extends AgaviParameterHolder
 	 */
 	public function getView($moduleName, $viewName)
 	{
+		$viewName = str_replace('.', '/', $viewName);
 		$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/views/' . $viewName . 'View.class.php';
 
 		require_once($file);
@@ -504,8 +507,10 @@ abstract class AgaviController extends AgaviParameterHolder
 			$class = $moduleName . '_' . $viewName . 'View';
 		} elseif(class_exists($longViewName . 'View', false)) {
 			$class = $longViewName . 'View';
-		} else {
+		} elseif(class_exists($viewName . 'View', false)) {
 			$class = $viewName . 'View';
+		} else {
+			throw new AgaviException('Could not find View "' . $longViewName . '" for module "' . $moduleName . '"');
 		}
 
 		return new $class();
@@ -677,6 +682,7 @@ abstract class AgaviController extends AgaviParameterHolder
 	 */
 	public function viewExists($moduleName, $viewName)
 	{
+		$viewName = str_replace('.', '/', $viewName);
 		$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/views/' . $viewName . 'View.class.php';
 		return is_readable($file);
 	}
