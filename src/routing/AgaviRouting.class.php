@@ -67,6 +67,12 @@ abstract class AgaviRouting
 		// catch the old options from the route which has to be overwritten
 		if(isset($options['name']) && isset($this->routes[$options['name']])) {
 			$defaultOpts = $this->routes[$options['name']]['opt'];
+
+			// when the parent is set and differs from the parent of the route to be overwritten bail out
+			if($parent !== null && $defaultOpts['parent'] != $parent) {
+				throw new AgaviException('You are trying to overwrite a route but are not staying in the same hierarchy');
+			}
+
 			if($parent === null) {
 				$parent = $defaultOpts['parent'];
 			} else {
@@ -76,9 +82,39 @@ abstract class AgaviRouting
 			$defaultOpts = array('name' => uniqid (rand()), 'stopping' => true, 'output_type' => null, 'module' => null, 'action' => null, 'parameters' => array(), 'ignores' => array(), 'defaults' => array(), 'childs' => array(), 'callback' => null, 'imply' => false, 'cut' => false, 'parent' => $parent, 'reverseStr' => '', 'nostops' => array(), 'anchor' => self::ANCHOR_NONE);
 		}
 
+		if(isset($options['defaults'])) {
+			foreach($options['defaults'] as $name => &$value) {
+				$val = $pre = $post = '';
+				if(preg_match('#(.*)\{(.*)\}(.*)#', $value, $match)) {
+					$pre = $match[1];
+					$val = $match[2];
+					$post = $match[3];
+				} else {
+					$val = $value;
+				}
+
+				$value = array(
+					'pre' => $pre,
+					'val' => $val,
+					'pos' => $post,
+				);
+			}
+		}
+
 		// set the default options + user opts
 		$options = array_merge($defaultOpts, $options);
-		list($regexp, $options['reverseStr'], $params, $options['anchor']) = $this->parseRouteString($route);
+		list($regexp, $options['reverseStr'], $routeParams, $options['anchor']) = $this->parseRouteString($route);
+
+		$params = array();
+
+		// transfer the parameters and fill available automatic defaults
+		foreach($routeParams as $name => $param) {
+			$params[] = $name;
+
+			if(!isset($options['defaults'][$name]) && ($param['pre'] || $param['val'] || $param['pos'])) {
+				$options['defaults'][$name] = $param;
+			}
+		}
 
 		// remove all ignore from the parameters in the route
 		foreach($options['ignores'] as $ignore) {
@@ -157,7 +193,7 @@ abstract class AgaviRouting
 			do {
 				$r =& $this->routes[$parent];
 				$myDefaults = $r['opt']['defaults'];
-				$availableParams += $r['par'];
+				$availableParams += $r['par'] + $r['opt']['ignores'];
 
 				if($r['opt']['anchor'] & self::ANCHOR_START || $r['opt']['anchor'] == self::ANCHOR_NONE) {
 					$url = $r['opt']['reverseStr'] . $url;
@@ -174,7 +210,7 @@ abstract class AgaviRouting
 					}
 
 					$myDefaults = array_merge($myDefaults, $myR['opt']['defaults']);
-					$availableParams += $myR['par'];
+					$availableParams += $myR['par'] + $myR['opt']['ignores'];
 					if($myR['opt']['anchor'] & self::ANCHOR_START || $myR['opt']['anchor'] == self::ANCHOR_NONE) {
 						$url = $myR['opt']['reverseStr'] . $url;
 					} else {
@@ -205,13 +241,26 @@ abstract class AgaviRouting
 			// TODO: error handling - we couldn't find some of the nonstopping rules
 		}
 
-		$params = array_merge($defaults, $params);
+		$np = array();
+
+		foreach($defaults as $name => $val) {
+			if(isset($params[$name])) {
+				$np[$name] = $val['pre'] . $params[$name] . $val['pos'];
+			} elseif($val['val']) {
+				// more then just pre or postfix
+				$np[$name] = $val['pre'] . $val['val'] . $val['pos'];
+			}
+		}
+		// get the remaining params too
+		$params = array_merge($params, $np);
+
+		// $params = array_merge($defaults, $params);
 
 		$from = array();
 		$to = array();
 
 		// remove not specified available parameters
-		foreach($availableParams as $name) {
+		foreach(array_unique($availableParams) as $name) {
 			if(!isset($params[$name])) {
 				$from[] = '(:' . $name . ':)';
 				$to[] = '';
@@ -269,12 +318,21 @@ abstract class AgaviRouting
 
 				$match = array();
 				if($this->parseInput($route, $input, $match)) {
+					$ign = array();
+					if(count($opts['ignores']) > 0) {
+						$ign = array_flip($opts['ignores']);
+					}
+
 					foreach($opts['defaults'] as $key => $value) {
-						$vars[$key] = $value;
+						if(!isset($ign[$key]) && $value['val']) {
+							$vars[$key] = $value['val'];
+						}
 					}
 
 					foreach($route['par'] as $param) {
-						$vars[$param] = $match[$param][0];
+						if(isset($match[$param]) && $match[$param][1] != -1) {
+							$vars[$param] = $match[$param][0];
+						}
 					}
 
 					if($opts['callback']) {
@@ -287,7 +345,7 @@ abstract class AgaviRouting
 
 					foreach($match as $name => $m) {
 						if(is_string($name) && !isset($opts['defaults'][$name])) {
-							$route['opt']['defaults'][$name] = $m[0];
+							$route['opt']['defaults'][$name]['val'] = $m[0];
 						}
 					}
 
@@ -363,20 +421,26 @@ abstract class AgaviRouting
 
 		$str = substr($str, (int)$anchor & self::ANCHOR_START, $anchor & self::ANCHOR_END ? -1 : strlen($str));
 
-		$rxChars = array('.', '\\', '+', '*', '?', '[', '^', ']', '$', '(', ')', '{', '}', '=', '!', '<', '>', '|', ':');
+		$rxChars = implode('', array('.', '\\', '+', '*', '?', '[', '^', ']', '$', '(', ')', '{', '}', '=', '!', '<', '>', '|', ':'));
 
 		$len = strlen($str);
 		$state = 'start';
 		$tmpStr = '';
-		$rxStartI = 0;
+
 		$rxName = '';
+		$rxInner = '';
+		$rxPrefix = '';
+		$rxPostfix = '';
 		$parenthesisCount = 0;
+		$bracketCount = 0;
+		$hasBrackets = false;
 		// whether the regular expression is clean of any regular expression (\o/)
 		$cleanRx = true;
 
 		for($i = 0; $i < $len; ++$i) {
 			$atEnd = $i + 1 == $len;
 			$c = $str[$i];
+
 			if($state == 'start') {
 				// start of regular expression block
 				if($c == '(') {
@@ -385,9 +449,10 @@ abstract class AgaviRouting
 
 					$tmpStr = '';
 					$state = 'rxStart';
-					$rxStartI = $i;
-					$rxName = '';
-					$cleanRx = true;
+					$rxName = $rxInner = $rxPrefix = $rxPostFix = '';
+					$parenthesisCount = 1;
+					$bracketCount = 0;
+					$hasBrackets = false;
 				} else {
 					$tmpStr .= $c;
 				}
@@ -397,66 +462,104 @@ abstract class AgaviRouting
 					$reverseStr .= $tmpStr;
 				}
 			} elseif($state == 'rxStart') {
-				if($c == ':') {
-					$rxName = $tmpStr;
-
-					$tmpStr = '';
-					$state = 'rx';
-				} elseif(ctype_alnum($c) || $c == '_' || $c == '-') {
-					$tmpStr .= $c;
-				} else {
-					// restart scanning from '('
-					$i = $rxStartI;
-					$tmpStr = '';
-					$state = 'rx';
-				}
-
-				if($atEnd && $c != ')') {
-					throw new AgaviException('The pattern "' . $str . '" contains an unbalanced set of parentheses');
-				}
-			} elseif($state == 'rx') {
-				if($c == '(') {
-					$cleanRx = false;
-					$tmpStr .= $c;
+				if($c == '{') {
+					++$bracketCount;
+					if($bracketCount == 1) {
+						$hasBrackets = true;
+						$rxPrefix = $tmpStr;
+						$tmpStr = '';
+					} else {
+						$tmpStr .= $c;
+					}
+				} elseif($c == '}') {
+					--$bracketCount;
+					if($bracketCount == 0) {
+						list($rxName, $rxInner) = $this->parseParameterDefinition($tmpStr);
+						$tmpStr = '';
+					} else {
+						$tmpStr .= $c;
+					}
+				} elseif($c == '(') {
 					++$parenthesisCount;
+					$tmpStr .= $c;
 				} elseif($c == ')') {
+					--$parenthesisCount;
 					if($parenthesisCount > 0) {
-						--$parenthesisCount;
 						$tmpStr .= $c;
 					} else {
-						// anonymous rx
-						if($rxName == '') {
-							$rxStr .= $tmpStr;
-							if($cleanRx) {
-								$reverseStr .= $tmpStr;
-							}
+						if($parenthesisCount < 0) {
+							throw new AgaviException('The pattern ' . $str . ' contains an unbalanced set of parentheses!');
+						}
+
+						if(!$hasBrackets) {
+							list($rxName, $rxInner) = $this->parseParameterDefinition($tmpStr);
 						} else {
-							$rxStr .= sprintf('(?P<%s>%s)', $rxName, $tmpStr);
+							if($bracketCount != 0) {
+								throw new AgaviException('The pattern ' . $str . ' contains an unbalanced set of brackets!');
+							}
+							$rxPostfix = $tmpStr;
+						}
+
+						if(!$rxName) {
+							$myRx = $rxPrefix . $rxInner . $rxPostfix;
+							// if the entire regular expression doesn't contain any regular expression character we can savely append it to the reverseStr
+							//if(strlen($myRx) == strcspn($myRx, $rxChars)) {
+							if(strpbrk($myRx, $rxChars) === false) {
+								$reverseStr .= $myRx;
+							}
+							$rxStr .= $rxPrefix . $rxInner . $rxPostfix;
+						} else {
+							$rxStr .= sprintf('(%s(?P<%s>%s)%s)', $rxPrefix, $rxName, $rxInner, $rxPostfix);
 							$reverseStr .= sprintf('(:%s:)', $rxName);
 
-							if(!in_array($rxName, $vars))
-								$vars[] = $rxName;
+							if(!isset($vars[$rxName])) {
+								if(strpbrk($rxPrefix, $rxChars) !== false) {
+									$rxPrefix = '';
+								}
+								if(strpbrk($rxInner, $rxChars) !== false) {
+									$rxInner = '';
+								}
+								if(strpbrk($rxPostfix, $rxChars) !== false) {
+									$rxPostfix = '';
+								}
+
+								$vars[$rxName] = array('pre' => $rxPrefix, 'val' => $rxInner, 'pos' => $rxPostfix);
+							}
 						}
 
 						$tmpStr = '';
-						$state = 'start';
+						$state = 'afterRx';
 					}
-				}
-				elseif(in_array($c, $rxChars)) {
-					$cleanRx = false;
-					$tmpStr .= $c;
 				} else {
 					$tmpStr .= $c;
 				}
 
-				if($atEnd && ($c != ')' || $parenthesisCount > 0)) {
-					throw new AgaviException('The pattern "' . $str . '" contains an unbalanced set of parentheses');
+				if($atEnd && $parenthesisCount != 0) {
+					throw new AgaviException('The pattern ' . $str . ' contains an unbalanced set of parentheses!');
 				}
+			} elseif($state == 'afterRx') {
+				if($c == '?') {
+					$rxStr .= $c;
+				} else {
+					// let the start state parse the char
+					--$i;
+				}
+
+				$state = 'start';
 			}
 		}
 
 		$rxStr = sprintf('#%s%s%s#', $anchor & self::ANCHOR_START ? '^' : '', $rxStr, $anchor & self::ANCHOR_END ? '$' : '');
 		return array($rxStr, $reverseStr, $vars, $anchor);
+	}
+
+	protected function parseParameterDefinition($def)
+	{
+		$name = '';
+		$rx = '';
+
+		preg_match('#([a-z0-9_-]+:)?(.*)#i', $def, $match);
+		return array(substr($match[1], 0, -1), $match[2]);
 	}
 }
 
