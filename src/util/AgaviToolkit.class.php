@@ -40,25 +40,17 @@ class AgaviToolkit
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public static function extractClassName ($filename)
+	public static function extractClassName($filename)
 	{
-
 		$retval = null;
 
-		if (self::isPathAbsolute($filename))
-		{
-
-			$filename = basename($filename);
-
-		}
+		$pathinfo = pathinfo($filename);
+		$filename = $pathinfo['basename'];
 
 		$pattern = '/(.*?)\.(class|interface)\.php/i';
 
-		if (preg_match($pattern, $filename, $match))
-		{
-
+		if(preg_match($pattern, $filename, $match)) {
 			$retval = $match[1];
-
 		}
 
 		return $retval;
@@ -75,23 +67,20 @@ class AgaviToolkit
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public static function isPathAbsolute ($path)
+	public static function isPathAbsolute($path)
 	{
 
-		if ($path{0} == '/' || $path{0} == '\\' ||
-			(strlen($path) > 3 && ctype_alpha($path{0}) &&
-			 $path{1} == ':' &&
-			 ($path{2} == '\\' || $path{2} == '/')
+		if($path[0] == '/' || $path[0] == '\\' ||
+			(
+				strlen($path) >= 3 && ctype_alpha($path[0]) &&
+				$path[1] == ':' &&
+				($path[2] == '\\' || $path[2] == '/')
 			)
-		   )
-		{
-
+		) {
 			return true;
-
 		}
 
 		return false;
-
 	}
 
 	/**
@@ -107,12 +96,12 @@ class AgaviToolkit
 	public static function classHeritage($class)
 	{
 		$heritage = array();
-		while ($class != '') {
+		while($class != '') {
 			$class = get_parent_class($class);
-			if ($class) {
+			if($class) {
 				array_unshift($heritage, $class);
-			} 
-		} 
+			}
+		}
 		return $heritage;
 	}
 	
@@ -130,7 +119,6 @@ class AgaviToolkit
 	public static function isSubClass($class, $parent)
 	{
 		return in_array($parent, self::classHeritage($class));
-		
 	}
 
 	/**
