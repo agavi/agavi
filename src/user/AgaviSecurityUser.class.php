@@ -186,27 +186,14 @@ class AgaviSecurityUser extends AgaviUser implements AgaviISecurityUser
 	 */
 	public function removeCredential ($credential)
 	{
-
-		if ($this->hasCredentials($credential))
-		{
-
+		if($this->hasCredentials($credential)) {
 			// we have the credential, now we have to find it
 			// let's not foreach here and do exact instance checks
 			// for future safety
-			for ($i = 0, $z = count($this->credentials); $i < $z; $i++)
-			{
-
-				if ($credential == $this->credentials[$i])
-				{
-
-				    // found it, let's nuke it
-				    unset($this->credentials[$i]);
-				    return;
-
-				}
-
+			if(($key = array_search($credential, $this->credentials, true)) !== false) {
+				// found it, let's nuke it
+				unset($this->credentials[$key]);
 			}
-
 		}
 
 	}
