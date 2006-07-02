@@ -72,8 +72,8 @@
         <para><command>pear install agavi/agavi-0.11.0</command></para>
       </section>
 
-      <section>
-        <title>By Hand</title>
+      <section id="sec-installation-by_hand">
+        <title id="sec-installation-by_hand-title">By Hand</title>
 
         <para>Installing Agavi by hand is the logical choice if you can't use
         <productname>PEAR</productname>, or if you want to bundle Agavi with
@@ -115,7 +115,8 @@
         <title>From SVN</title>
 
         <para>Public access to the <productname>Subversion</productname>
-        repository is possible via <uri>svn://svn.agavi.org/agavi</uri>. If
+        repository is possible via <ulink
+        url="svn://svn.agavi.org/agavi">svn://svn.agavi.org/agavi</ulink>. If
         you want to get the bleeding edge version, use
         <filename>/agavi/trunk</filename>. Specific releases are available
         through <filename>/agavi/tags</filename>. Also, you can get
@@ -131,7 +132,9 @@
         specific release into your own versioning control system.</para>
 
         <para>Once you have obtained a copy from the repository, you can
-        either follow the instructions in 2.2, or you package a
+        either follow the instructions in <xref
+        endterm="sec-installation-by_hand-title"
+        linkend="sec-installation-by_hand" />, or you package a
         <productname>PEAR</productname> release yourself for local
         installation by first running</para>
 
