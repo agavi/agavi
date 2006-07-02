@@ -55,11 +55,11 @@ abstract class AgaviAbstractOperatorValidator extends AgaviValidator
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
-	public function initialize (AgaviIfValidatorContainer $parent, $parameters = array())
+	public function initialize(AgaviIValidatorContainer $parent, $parameters = array())
 	{
 		parent::initialize($parent, $parameters);
 		
-		if ($this->asBool('skip_errors')) {
+		if($this->asBool('skip_errors')) {
 			/*
 			 * if the operator is configured to skip errors of the
 			 * child validators, a new error manager is created
@@ -76,7 +76,8 @@ abstract class AgaviAbstractOperatorValidator extends AgaviValidator
 	 * 
 	 * @return     string base path
 	 */
-	public function getBase () {
+	public function getBase()
+	{
 		// enfoce returning as string
 		return $this->CurBase->__asString();
 	}
@@ -95,7 +96,7 @@ abstract class AgaviAbstractOperatorValidator extends AgaviValidator
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
-	protected function checkValidSetup ()
+	protected function checkValidSetup()
 	{
 	}
 	
@@ -105,7 +106,7 @@ abstract class AgaviAbstractOperatorValidator extends AgaviValidator
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
-	public function shutdown ()
+	public function shutdown()
 	{
 		foreach ($this->Children as $child) {
 			$child->shutdown();
@@ -118,9 +119,9 @@ abstract class AgaviAbstractOperatorValidator extends AgaviValidator
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
-	public function clear ()
+	public function clear()
 	{
-		if ($this->asBool('skip_errors')) {
+		if($this->getParameter('skip_errors')) {
 			$this->ErrorManager->clear();
 		}
 		
@@ -137,7 +138,7 @@ abstract class AgaviAbstractOperatorValidator extends AgaviValidator
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
-	public function addChild (AgaviValidator $validator)
+	public function addChild(AgaviValidator $validator)
 	{
 		array_push($this->Children, $validator);
 	}
@@ -150,7 +151,7 @@ abstract class AgaviAbstractOperatorValidator extends AgaviValidator
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
-	public function getRequest ()
+	public function getRequest()
 	{
 		return $this->ParentContainer->getRequest();
 	}
@@ -163,7 +164,7 @@ abstract class AgaviAbstractOperatorValidator extends AgaviValidator
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
-	public function getDependencyManager ()
+	public function getDependencyManager()
 	{
 		return $this->ParentContainer->getDependencyManager();
 	}
@@ -179,7 +180,7 @@ abstract class AgaviAbstractOperatorValidator extends AgaviValidator
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
-	public function getErrorManager ()
+	public function getErrorManager()
 	{
 		return $this->ErrorManager;
 	}
@@ -195,7 +196,7 @@ abstract class AgaviAbstractOperatorValidator extends AgaviValidator
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
-	public function execute ()
+	public function execute()
 	{
 		// check if we have a valid setup of validators
 		$this->checkValidSetup();
