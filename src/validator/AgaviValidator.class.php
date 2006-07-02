@@ -3,7 +3,6 @@
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
 // | Copyright (c) 2003-2006 the Agavi Project.                                |
-// | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -42,24 +41,24 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	/**
 	 * validator error severity (the validator succeeded)
 	 */
-	const SUCCESS	= 0;
+	const SUCCESS = 0;
 
 	/**
 	 * validator error severity (validator failed but without impact on result
 	 * of whole validation process)
 	 */
-	const NONE	= 1;
+	const NONE = 1;
 
 	/**
 	 * validation error severity (validator failed but validation process continues)
 	 */
-	const ERROR	= 2;
+	const ERROR = 2;
 
 	/**
 	 * validation error severty (validator failed and validation process will
 	 * be aborted)
 	 */
-	const CRITICAL	= 3;
+	const CRITICAL = 3;
 
 	/**
 	 * @var        AgaviIValidatorContainer parent validator container (in
@@ -75,11 +74,14 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	/**
 	 * initializes the validator
 	 * 
-	 * @param      AgaviIValidatorContainer $parent parent validator container
-	 *                                              (mostly the validator manager)
-	 * @param      array                    $parameters parameters from the config file 
+	 * @param      AgaviIValidatorContainer parent validator container
+	 *                                      (mostly the validator manager)
+	 * @param      array                    parameters from the config file
+	 *
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
 	 */
-	public function initialize (AgaviIValidatorContainer $parent, $parameters = array())
+	public function initialize(AgaviIValidatorContainer $parent, $parameters = array())
 	{
 		$this->ParentContainer = $parent;
 		$this->setParameters($parameters);
@@ -96,8 +98,11 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 * the writer of a new validator.
 	 * 
 	 * @return     bool result of the validation
+	 *
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
 	 */
-	protected abstract function validate ();
+	protected abstract function validate();
 
 	/**
 	 * shuts down the validator
@@ -106,8 +111,11 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 * other activities before the validator is killed.
 	 * 
 	 * @see        AgaviValidatorManager::shutdown() 
+	 *
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
 	 */
-	public function shutdown ()
+	public function shutdown()
 	{
 	}
 
@@ -115,33 +123,12 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 * clears the validator for reuse
 	 * 
 	 * @see        AgaviValidatorManager::clear()
+	 *
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
 	 */
 	public function clear()
 	{
-	}
-
-	/**
-	 * interpretes a parameter as bool and returns the result
-	 * 
-	 * @param      string $name name of parameter
-	 * 
-	 * @return     bool parameter as bool
-	 */
-	protected function asBool ($name)
-	{
-		if (!$this->hasParameter($name)) {
-			return false;
-		}
-		
-		$value = $this->getParameter($name);
-		
-		if (in_array(strtolower($value), array('yes', 'true', 'y', 'on', '1'))) {
-			return true;
-		} elseif (in_array(strtolower($value), array('no', 'false', 'n', 'off', '0'))) {
-			return false;
-		} else {
-			return $value;
-		}
 	}
 
 	/**
@@ -154,8 +141,11 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 * @param      string $paramname name of parameter to fetch from request
 	 * 
 	 * @return     mixed input value from request
+	 *
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
 	 */
-	protected function getData ($paramname = 'param')
+	protected function getData($paramname = 'param')
 	{
 		return AgaviPath::getValueByPath(
 			$this->ParentContainer->getRequest()->getParameters(),
@@ -171,27 +161,28 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 * is tryed as an parameter and if even this fails, the stuff in
 	 * $backupError is sent.
 	 * 
-	 * @param      string $index name of parameter the message is saved in
-	 * @param      bool   $ignoreAsMessage do not use as error message even
-	 *                                     if error message is of type string
-	 * @param      array  $affectedFields array of fields that are affected
-	 *                                    by the error
-	 * @param      mixed  $backupError error value to be used if no other value
-	 *                                 was found
+	 * @param      string name of parameter the message is saved in
+	 * @param      bool   do not use as error message even
+	 *                    if error message is of type string
+	 * @param      array  array of fields that are affected by the error
+	 * @param      mixed  error value to be used if no other value was found
+	 *
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
 	 */
-	protected function throwError ($index = 'error', $ignoreAsMessage = false, $affectedFields = null, $backupError = null)
+	protected function throwError($index = 'error', $ignoreAsMessage = false, $affectedFields = null, $backupError = null)
 	{
-		if ($this->hasParameter($index)) {
+		if($this->hasParameter($index)) {
 			$error = $this->getParameter($index);
-		} elseif ($this->hasParameter('error')) {
+		} elseif($this->hasParameter('error')) {
 			$error = $index->getParameter('error');
 		} else {
 			$error = $backupError;
 		}
 		
-		if ($affectedFields == null) {
+		if($affectedFields == null) {
 			$affectedFields = $this->getAffacedFields();
-		} elseif (!is_array($affectedFields)) {
+		} elseif(!is_array($affectedFields)) {
 			$affectedFields = array($affectedFields);
 		}
 		
@@ -211,17 +202,20 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 * list of fields in the parameter 'affects'.
 	 * 
 	 * @return     array list of fields that are affected by an error
+	 *
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
 	 */
-	protected function getAffectedFields () {
+	protected function getAffectedFields() {
 		$fields = array();
-		if (strlen($this->getParameter('param'))) {
+		if(strlen($this->getParameter('param'))) {
 			array_push($fields, $this->getParameter('param'));
 		}
 		
-		if ($this->hasParameter('affects')) {
+		if($this->hasParameter('affects')) {
 			$f = explode(',', $this->getParameter('affects'));
-			foreach ($f as $n) {
-				if (!strlen($n)) {
+			foreach($f as $n) {
+				if(!strlen($n)) {
 					continue;
 				}
 				array_push($fields, $n);
@@ -242,11 +236,16 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 * the request because it pays attention to paths and otherwise you could
 	 * overwrite stuff you don't want to.
 	 * 
-	 * @param      mixed $value value to be exported
+	 * @param      mixed value to be exported
+	 *
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
 	 */
-	protected function export ($value)
+	protected function export($value)
 	{
-		if (!$this->hasParameter('export')) {return;}
+		if(!$this->hasParameter('export')) {
+			return;
+		}
 		
 		AgaviPath::setValueByPath(
 			$this->ParentContainer->getRequest()->getParameters(),
@@ -258,32 +257,35 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	/**
 	 * validates in the given base
 	 * 
-	 * @param      string $basedir base in with the input should be validated
+	 * @param      string base in with the input should be validated
 	 * 
 	 * @return     int self::SUCCESS if validation succeeded or given error severity 
+	 *
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
 	 */
-	protected function validateInBase ($basedir)
+	protected function validateInBase($basedir)
 	{
 		$base = new AgaviPath($basedir);
-		if ($base->length() == 0) {
+		if($base->length() == 0) {
 			// we have an empty base so we do the actual validation
-			if ($this->hasParameter('depends') and $this->ParentContainer->getDependencyManager()->checkDependencies($this->getParameter('depends'), $this->CurBase)) {
+			if($this->hasParameter('depends') and $this->ParentContainer->getDependencyManager()->checkDependencies($this->getParameter('depends'), $this->CurBase)) {
 				// dependencies not met, exit with success
 				return self::SUCCESS;
 			}
 
-			if (!$this->validate()) {
+			if(!$this->validate()) {
 				// validation failed, exit with configured error code
 				return self::mapErrorCode($this->getParameter('type'));
 			}
 
 			// put dependencies provided by this validator into manager
-			if ($this->hasParameter('provides')) {
+			if($this->hasParameter('provides')) {
 				$this->ParentContainer->getDependencyManager()->addDependTokens($this->getParameter('provides'), $this->CurBase);
 			}
 			return self::SUCCESS;
 
-		} elseif ($base->left() != '*') {
+		} elseif($base->left() != '*') {
 			/*
 			 * the next component in the base is no wildcard so we
 			 * just put it into our own base and validate further
@@ -313,17 +315,17 @@ abstract class AgaviValidator extends AgaviParameterHolder
 			$ret = self::SUCCESS;
 			
 			// validate in every name defined in the request
-			foreach (array_keys($array) as $name) {
+			foreach(array_keys($array) as $name) {
 				$this->CurBase->push($name);
 				$t = $this->validateInBase($base);
 				$this->CurBase->pop();
 				
-				if ($t == self::CRITICAL) {
+				if($t == self::CRITICAL) {
 					return $t;
 				}
 				
 				// memory the highest error severity
-				if ($t > $ret) {
+				if($t > $ret) {
 					$ret = $t;
 				}
 			}
@@ -336,8 +338,11 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 * executes the validator
 	 * 
 	 * @return     int validation result (see severity constants)
+	 *
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
 	 */
-	public function execute ()
+	public function execute()
 	{
 		$base = new AgaviPath($this->getParameter('base'));
 		
@@ -352,15 +357,18 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 * none     -> AgaviValidator::NONE
 	 * success  -> AgaviValidator::SUCCESS
 	 * 
-	 * @param      string $code error severity as string
+	 * @param      string error severity as string
 	 * 
 	 * @return     int error severity as in (see severity constants)
 	 * 
 	 * @throws     AgaviValidatorException throws exception if the input was no known severity
+	 *
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
 	 */
-	public static function mapErrorCode ($code)
+	public static function mapErrorCode($code)
 	{
-		switch (strtolower($code)) {
+		switch(strtolower($code)) {
 			case 'critical':
 				return self::CRITICAL;
 			case 'error':

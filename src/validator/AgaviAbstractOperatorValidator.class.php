@@ -3,7 +3,6 @@
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
 // | Copyright (c) 2003-2006 the Agavi Project.                                |
-// | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -49,10 +48,12 @@ abstract class AgaviAbstractOperatorValidator extends AgaviValidator
 	/**
 	 * initializes the operator
 	 * 
-	 * @param      AgaviIValidatorContainer $parent parent ValidatorContainer
-	 *                                              (mostly the ValidatorManager)
-	 * @param      array                    $parameters parameters from the
-	 *                                                  config file
+	 * @param      AgaviIValidatorContainer parent ValidatorContainer
+	 *                                      (mostly the ValidatorManager)
+	 * @param      array                    parameters from the config file
+	 *
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
 	 */
 	public function initialize (AgaviIfValidatorContainer $parent, $parameters = array())
 	{
@@ -90,6 +91,9 @@ abstract class AgaviAbstractOperatorValidator extends AgaviValidator
 	 * 
 	 * @throws     AgaviValidatorException quantity of child validators is
 	 *                                     invalid
+	 *
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
 	 */
 	protected function checkValidSetup ()
 	{
@@ -97,6 +101,9 @@ abstract class AgaviAbstractOperatorValidator extends AgaviValidator
 	
 	/**
 	 * shutdown method, for shutting down the model etc.
+	 *
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
 	 */
 	public function shutdown ()
 	{
@@ -107,6 +114,9 @@ abstract class AgaviAbstractOperatorValidator extends AgaviValidator
 	
 	/**
 	 * clears the self created error manager
+	 *
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
 	 */
 	public function clear ()
 	{
@@ -122,7 +132,10 @@ abstract class AgaviAbstractOperatorValidator extends AgaviValidator
 	/**
 	 * adds new child validator
 	 * 
-	 * @param      AgaviValidator $validator new child validator
+	 * @param      AgaviValidator new child validator
+	 *
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
 	 */
 	public function addChild (AgaviValidator $validator)
 	{
@@ -133,6 +146,9 @@ abstract class AgaviAbstractOperatorValidator extends AgaviValidator
 	 * get Request from parent
 	 * 
 	 * @return     AgaviRequest parent's request
+	 *
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
 	 */
 	public function getRequest ()
 	{
@@ -143,6 +159,9 @@ abstract class AgaviAbstractOperatorValidator extends AgaviValidator
 	 * get parent's dependency manager
 	 * 
 	 * @return     AgaviDependencyManager parent's dependency manager
+	 *
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
 	 */
 	public function getDependencyManager ()
 	{
@@ -156,6 +175,9 @@ abstract class AgaviAbstractOperatorValidator extends AgaviValidator
 	 * manager is returned and the parent will not be aware of thrown errors
 	 * 
 	 * @return     AgaviErrorManager parent's or local error manager
+	 *
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
 	 */
 	public function getErrorManager ()
 	{
@@ -169,6 +191,9 @@ abstract class AgaviAbstractOperatorValidator extends AgaviValidator
 	 * of child validators with checkValidSetup().
 	 * 
 	 * @return     int Result of validation (SUCCESS, NONE, ERROR, CRITICAL)
+	 *
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
 	 */
 	public function execute ()
 	{
