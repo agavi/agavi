@@ -15,8 +15,10 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviEmailValidator verifies if a parameter contains a value that qualifies
- * as an email address.
+ * AgaviXOROperatorValidator succeeds if only one of two sub-validators succeeded
+ *
+ * Parameters:
+ *   'skip_errors'  do not submit errors of child validators to validator manager
  *
  * @package    agavi
  * @subpackage validator
@@ -27,23 +29,34 @@
  *
  * @version    $Id$
  */
-class AgaviEmailValidator extends AgaviValidator
+class AgaviXOROperatorValidator extends AgaviAbstractOperatorValidator
 {
 	/**
-	 * validates the input
+	 * check if operator has other then exactly two child validators
 	 * 
-	 * @return     bool input is a valid email address
+	 * @throws     AgaviValidatorException operator has other then 2 child validators
 	 */
-	protected function validate()
+	protected function checkValidSetup ()
 	{
-		// TODO: check RFC for exact definition
-		if (!preg_match('/^([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-]+)*@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-]+)+$/', $this->getData())) {
+		if (count($this->Children) != 2) {
+			throw new AgaviValidatorException('XOR allows only exact 2 child validators');
+		}
+	}
+
+	/**
+	 * validates the operator by returning the by XOR compined result of the child validators
+	 * 
+	 * @return     bool true, if child validator failed 
+	 */
+	protected function validate ()
+	{
+		if (($this->Children[0]->execute() == AgaviValidator::SUCCESS) xor ($this->Children[1]->execute() == AgaviValidator::SUCCESS)) {
+			return true;
+		} else {
 			$this->throwError();
 			return false;
 		}
-		
-		return true;
-	}
+	}	
 }
 
 ?>

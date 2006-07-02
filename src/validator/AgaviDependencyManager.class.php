@@ -15,8 +15,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviEmailValidator verifies if a parameter contains a value that qualifies
- * as an email address.
+ * AgaviDependencyManager handles the dependencies in the validation process
  *
  * @package    agavi
  * @subpackage validator
@@ -27,23 +26,52 @@
  *
  * @version    $Id$
  */
-class AgaviEmailValidator extends AgaviValidator
+class AgaviDependencyManager
 {
 	/**
-	 * validates the input
-	 * 
-	 * @return     bool input is a valid email address
+	 * @var array already provided tokens
 	 */
-	protected function validate()
+	private $DepData = array();
+	
+	/**
+	 * clears the dependency cache
+	 */
+	public function clear ()
 	{
-		// TODO: check RFC for exact definition
-		if (!preg_match('/^([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-]+)*@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-]+)+$/', $this->getData())) {
-			$this->throwError();
-			return false;
+		$this->DepData = array();
+	}
+	
+	/**
+	 * checks whether a list dependencies are met
+	 * 
+	 * @param      array  $tokens list of dependencies that have to meet
+	 * @param      string $base base path to which all tokens are appended
+	 * 
+	 * @return     bool all dependencies are met
+	 */
+	public function checkDependencies ($tokens, $base = '')
+	{
+		foreach ($tokens AS $token) {
+			$p = new AgaviPath($base.'/'.$token);
+			if (!AgaviPath::getValueByPath($p)) {
+				return false;
+			}
 		}
 		
 		return true;
 	}
-}
 
+	/**
+	 * puts a list of tokens into the dependency cache
+	 * 
+	 * @param      array  $tokens list of new tokens
+	 * @param      string $base base path to which all tokens are appended
+	 */
+	public function addDependTokens ($tokens, $base = '') {
+		foreach ($tokens AS $token) {
+			$p = new AgaviPath($base.'/'.$token);
+			AgaviPath::setValueByPath($this->DepData, $p, true);
+		}
+	}
+}
 ?>

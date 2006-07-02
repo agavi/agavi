@@ -17,103 +17,38 @@
 /**
  * AgaviRegexValidator allows you to match a value against a regular expression
  * pattern.
- *
- * <b>Required parameters:</b>
- *
- * # <b>pattern</b> - [none] - A PCRE, preg_match() style regular expression
- *                             pattern.
- *
- * <b>Optional parameters:</b>
- *
- * # <b>match</b>       - [true]          - Indicates that the pattern must be
- *                                          matched or must not match.
- * # <b>match_error</b> - [Invalid input] - An error message to use when the
- *                                          input does not meet the regex
- *                                          specifications.
- *
+ * 
+ * Parameters:
+ *   'pattern'  PCRE to be used in preg_match
+ *   'match'    input should match or not
+ * 
  * @package    agavi
  * @subpackage validator
  *
- * @author     Sean Kerr <skerr@mojavi.org>
+ * @author     Uwe Mesecke <uwe@mesecke.net>
  * @copyright  (c) Authors
- * @since      0.9.0
+ * @since      0.11.0
  *
  * @version    $Id$
  */
 class AgaviRegexValidator extends AgaviValidator
 {
-
 	/**
-	 * Execute this validator.
-	 *
-	 * @param      string A parameter value.
-	 * @param      string An error message reference.
-	 *
-	 * @return     bool true, if this validator executes successfully, otherwise
-	 *                  false.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
+	 * validates the input
+	 * 
+	 * @return     bool true if input matches the pattern or not according to 'match'
 	 */
-	public function execute (&$value, &$error)
+	protected function validate ()
 	{
-
-		$match   = $this->getParameter('match');
-		$pattern = $this->getParameter('pattern');
-
-		if (($match && !preg_match($pattern, $value)) ||
-			(!$match && preg_match($pattern, $value)))
-		{
-
-			$error = $this->getParameter('match_error');
-
+		$result = preg_match($this->getParameter('pattern'), $this->getData());
+		
+		if ($result != $this->asBool('match')) {
+			$this->throwError();
 			return false;
-
 		}
-
+		
 		return true;
-
 	}
-
-	/**
-	 * Initialize this validator.
-	 *
-	 * @param      AgaviContext The current application context.
-	 * @param      array        An associative array of initialization parameters.
-	 *
-	 * @return     bool true, if initialization completes successfully,
-	 *                  otherwise false.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public function initialize(AgaviContext $context, $parameters = array())
-	{
-
-		// set defaults
-		$this->setParameter('match',       true);
-		$this->setParameter('match_error', 'Invalid input');
-		$this->setParameter('pattern',     null);
-
-		// initialize parent
-		parent::initialize($context, $parameters);
-
-		// check parameters
-		if ($this->getParameter('pattern') == null)
-		{
-
-			// no pattern specified
-			$error = 'Please specify a PCRE regular expression pattern for ' .
-				     'your registered RegexValidator';
-
-			throw new AgaviValidatorException($error);
-
-		}
-
-		return true;
-
-	}
-
 }
 
 ?>

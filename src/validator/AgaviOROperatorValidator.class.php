@@ -15,8 +15,11 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviEmailValidator verifies if a parameter contains a value that qualifies
- * as an email address.
+ * AgaviOROperatorValidator succeeds if at least one sub-validators succeeded
+ *
+ * Parameters:
+ *   'skip_errors'  do not submit errors of child validators to validator manager
+ *   'break'        break the execution of child validators after first success
  *
  * @package    agavi
  * @subpackage validator
@@ -27,23 +30,33 @@
  *
  * @version    $Id$
  */
-class AgaviEmailValidator extends AgaviValidator
+class AgaviOROperatorValidator extends AgaviAbstractOperatorValidator
 {
 	/**
-	 * validates the input
+	 * executes the child validators
 	 * 
-	 * @return     bool input is a valid email address
+	 * @return     bool true, if at least one child validator succeeded
 	 */
-	protected function validate()
+	protected function validate ()
 	{
-		// TODO: check RFC for exact definition
-		if (!preg_match('/^([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-]+)*@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-]+)+$/', $this->getData())) {
-			$this->throwError();
-			return false;
+		$return = FALSE;
+		
+		foreach ($this->children as $child) {
+			if ($child->execute() == AgaviValidator::SUCCESS) {
+				// if one child validator succeeds, the whole operator succeeds
+				$return = TRUE;
+				if  ($this->asBool('break')) {
+					break;
+				}
+			}
 		}
 		
-		return true;
-	}
+		if (!$return) {
+			$this->throwError();
+		}
+
+		return $return;
+	}	
 }
 
 ?>

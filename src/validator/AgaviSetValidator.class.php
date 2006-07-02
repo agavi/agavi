@@ -3,7 +3,6 @@
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
 // | Copyright (c) 2003-2006 the Agavi Project.                                |
-// | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -15,8 +14,10 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviEmailValidator verifies if a parameter contains a value that qualifies
- * as an email address.
+ * AgaviSetValidator only exports a value and always succeeds
+ * 
+ * Parameters:
+ *   'value'  value that should be exported
  *
  * @package    agavi
  * @subpackage validator
@@ -27,20 +28,16 @@
  *
  * @version    $Id$
  */
-class AgaviEmailValidator extends AgaviValidator
+class AgaviSetValidator extends AgaviValidator
 {
 	/**
-	 * validates the input
+	 * exports the value and returns true
 	 * 
-	 * @return     bool input is a valid email address
+	 * @return     bool allways returns true
 	 */
 	protected function validate()
 	{
-		// TODO: check RFC for exact definition
-		if (!preg_match('/^([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-]+)*@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-]+)+$/', $this->getData())) {
-			$this->throwError();
-			return false;
-		}
+		$this->export($this->getParameter('value'));
 		
 		return true;
 	}

@@ -15,8 +15,10 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviEmailValidator verifies if a parameter contains a value that qualifies
- * as an email address.
+ * AgaviNOTOperatorValidator succeeds if the sub-validator failed
+ *
+ * Parameters:
+ *   'skip_errors'  do not submit errors of child validators to validator manager
  *
  * @package    agavi
  * @subpackage validator
@@ -27,23 +29,34 @@
  *
  * @version    $Id$
  */
-class AgaviEmailValidator extends AgaviValidator
+class AgaviNOTOperatorValidator extends AgaviAbstractOperatorValidator
 {
 	/**
-	 * validates the input
+	 * check if operator has more then one child validator
 	 * 
-	 * @return     bool input is a valid email address
+	 * @throws     AgaviValidatorException operator has more then 1 child validator
 	 */
-	protected function validate()
+	protected function checkValidSetup ()
 	{
-		// TODO: check RFC for exact definition
-		if (!preg_match('/^([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-]+)*@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-]+)+$/', $this->getData())) {
+		if (count($this->Children) != 1) {
+			throw new AgaviValidatorException('NOT allows only 1 child validator');
+		}
+	}
+
+	/**
+	 * validates the operator by returning the inverse result of the child validator
+	 * 
+	 * @return     bool true, if child validator failed 
+	 */
+	protected function validate ()
+	{
+		if ($this->Children[0]->execute() != AgaviValidator::SUCCESS) {
+			return true;
+		} else {
 			$this->throwError();
 			return false;
 		}
-		
-		return true;
-	}
+	}	
 }
 
 ?>

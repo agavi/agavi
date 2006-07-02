@@ -3,7 +3,6 @@
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
 // | Copyright (c) 2003-2006 the Agavi Project.                                |
-// | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -15,8 +14,13 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviEmailValidator verifies if a parameter contains a value that qualifies
- * as an email address.
+ * AgaviIsUploadedImageValidator verifies a parameter is an uploaded image
+ * 
+ * Parameters:
+ *   'php_error'    error message when there was an php error with the file
+ *   'img_error'    error message when the file is no image according to exif_imagetype()
+ *   'format'       list of valid formats (gif,jpeg,png,bmp)
+ *   'format_error' image has none of the specified formats
  *
  * @package    agavi
  * @subpackage validator
@@ -27,22 +31,49 @@
  *
  * @version    $Id$
  */
-class AgaviEmailValidator extends AgaviValidator
+class AgaviIsUploadedImageValidator extends AgaviValidator
 {
 	/**
 	 * validates the input
 	 * 
-	 * @return     bool input is a valid email address
+	 * @return     bool file is valid image according to given parameters
 	 */
 	protected function validate()
 	{
-		// TODO: check RFC for exact definition
-		if (!preg_match('/^([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-]+)*@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-]+)+$/', $this->getData())) {
-			$this->throwError();
+		$name = $this->getData();
+		// TODO: use Request methods instead if $_FILES
+		if ($_FILES[$name]['error'] != UPLOAD_ERR_OK) {
+			$this->throwError('php_error');
 			return false;
 		}
 		
-		return true;
+		$type = exif_imagetype($_FILES[$name]['tmp_name']);
+		if ($type === FALSE) {
+			$this->throwError('img_error');
+			return false;
+		}
+		
+		if (!$this->hasParameter('format')) {
+			return true;
+		}
+		
+		$formats = array(
+			'gif'	=> 1,
+			'jpeg'	=> 2,
+			'jpg'	=> 2,
+			'png'	=> 3,
+			'bmp'	=> 6
+		);
+		
+		
+		foreach (split(',', $this->getParameter('format')) as $format) {
+			if ($formats[strtolower($format)] == $type) {
+				return true;
+			}
+		}
+		
+		$this->throwError('format_error');
+		return false;
 	}
 }
 

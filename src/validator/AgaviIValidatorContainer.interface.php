@@ -15,8 +15,8 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviEmailValidator verifies if a parameter contains a value that qualifies
- * as an email address.
+ * AgaviIValidatorContainer is an interface for classes which contains several
+ * child validators
  *
  * @package    agavi
  * @subpackage validator
@@ -27,23 +27,36 @@
  *
  * @version    $Id$
  */
-class AgaviEmailValidator extends AgaviValidator
+interface AgaviIfValidatorContainer
 {
 	/**
-	 * validates the input
+	 * adds a new validator to the list of children
 	 * 
-	 * @return     bool input is a valid email address
+	 * @param      AgaviValidator $validator new child
 	 */
-	protected function validate()
-	{
-		// TODO: check RFC for exact definition
-		if (!preg_match('/^([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-]+)*@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-]+)+$/', $this->getData())) {
-			$this->throwError();
-			return false;
-		}
-		
-		return true;
-	}
+	public function addChild (AgaviValidator $validator);
+	
+	/**
+	 * fetches the request
+	 * 
+	 * @return     AgaviRequest the request to be used by child validators
+	 */
+	public function getRequest ();
+	
+	/**
+	 * fetches the dependency manager
+	 * 
+	 * @return     AgaviDependencyManager the dependency manager to be used
+	 *                                    by child validators
+	 */
+	public function getDependencyManager ();
+	
+	/**
+	 * fetches the error manager
+	 * 
+	 * @return     AgaviErrorManager the error manager to be used by child
+	 *                               validators
+	 */
+	public function getErrorManager (); 
 }
-
 ?>

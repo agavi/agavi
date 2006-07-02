@@ -21,362 +21,196 @@
  * @package    agavi
  * @subpackage validator
  *
- * @author     Sean Kerr <skerr@mojavi.org>
+ * @author     Uwe Mesecke <uwe@mesecke.net>
  * @copyright  (c) Authors
- * @since      0.9.0
+ * @since      0.11.0
  *
  * @version    $Id$
  */
-class AgaviValidatorManager
-{
 
-	private
-		$groups  = array(),
-		$names   = array(),
-		$request = null;
+class AgaviValidatorManager extends AgaviAbstractValidatorManager implements AgaviIValidatorContainer
+{
+	/**
+	 * @var        AgaviDependencyManager dependency manager
+	 */
+	private $DependManager = null;
 
 	/**
-	 * Clear this validator manager so it can be reused.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
+	 * @var        AgaviRequest request
+	 */
+	private $Request = null;
+
+	/**
+	 * @var        AgaviErrorManager error manager
+	 */
+	private $ErrorManager = null;
+
+	/**
+	 * @var        array array of child validators
+	 */
+	private $Children = array();
+
+	/**
+	 * @var        AgaviContext context
+	 */
+	private $Context = null;
+
+	/**
+	 * initializes the manager
+	 * 
+	 * @param      AgaviContext $context contest
+	 * @param      array        $parameters parameters
+	 */
+	public function initialize (AgaviContext $context, $parameters = array())
+	{
+		$this->Context = $context;
+		$this->setParameters($parameters);
+		
+		$this->Request = $this->Context->getRequest();
+		$this->DependManager = new AgaviDependencyManager;
+		$this->ErrorManager = new AgaviErrorManager;
+	}
+	
+	/**
+	 * clears the validation manager for reuse
 	 */
 	public function clear ()
 	{
-
-		$this->groups = array();
-		$this->names  = array();
-
+		$this->DependencyManager->clear();
+		$this->ErrorManager->clear();
+		
+		foreach ($this->Children as $child) {
+			$child->clear();
+		}
 	}
 	
+	/**
+	 * adds a new child validator
+	 * 
+	 * @param      AgaviValidator $validator new child validator
+	 */
+	public function addChild (AgaviValidator $validator)
+	{
+		array_push($this->Children, $validator);
+	}
 	
 	/**
-	 * Encapsulation method to return the groups array
-	 *
-	 * @return     mixed array of validator groups or NULL if none have been
-	 *                   registered.
-	 *
-	 * @author     Graeme Foster
-	 * @since      0.9.0
+	 * returns the request
+	 * 
+	 * @return     AgaviRequest request
 	 */
-	public function getGroups()
+	public function getRequest ()
 	{
-		return $this->groups;
-	} 
+		return $this->Request;
+	}
 	
+	/**
+	 * returns the dependency manager
+	 * 
+	 * @return     AgaviDependencyManager dependency manager
+	 */
+	public function getDependencyManager ()
+	{
+		return $this->DependManager;
+	}
+	
+	/**
+	 * returns the error manager
+	 * 
+	 * @return     AgaviErrorManager error manager
+	 */
+	public function getErrorManager ()
+	{
+		return $this->ErrorManager;
+	}
 
 	/**
-	 * Encapsulation method to return the names array
-	 *
-	 * @return     mixed array of validator names, or NULL if none have been 
-	 *                   registered
-	 *
-	 * @author     Graeme Foster
-	 * @since      0.9.0
+	 * get the base path of the validator
+	 * 
+	 * @return     string base path
 	 */
-	public function getNames()
-	{
-		return $this->names;
-	} 
-	
+	public function getBase () {
+		return ($this->hasParameter('base')) ? $this->getParameter('base') : '/';
+	}
+
 	/**
-	 * Execute all validators and determine the validation status.
-	 *
-	 * @return     bool true, if validation completed successfully, otherwise 
-	 *                  false.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
+	 * starts the validation process
+	 * 
+	 * @return     bool true, if validation succeeded
 	 */
 	public function execute ()
 	{
+		$result = true;
 
-		$retval = true;
-		$pass = 1;
-
-		while (true) {
-			foreach ($this->names as $name => &$data)	{
-				if (isset($data['_is_parent'])) {
-					foreach ($data as $subname => &$subdata) {
-						if ($subname == '_is_parent') {
-							// this isn't an actual index, but more of a flag
-							continue;
-						}
-
-						if (isset($subdata['validation_status']) && $subdata['validation_status'] == true && !$this->validate($subname, $subdata, $name)) {
-							// validation failed
-							$retval = false;
-						}
-					}
-				} else {
-					// single parameter
-					if (isset($data['validation_status']) && $data['validation_status'] == true && !$this->validate($name, $data, null)) {
-						// validation failed
-						$retval = false;
-					}
-				}
+		foreach ($this->Children as $validator) {
+			$v_ret = $validator->execute();
+			switch ($v_ret) {
+				case AgaviValidator::SUCCESS:
+					continue 1;
+				case AgaviValidator::NONE:
+					continue 1;
+				case AgaviValidator::ERROR:
+					$result = false;
+					continue 1;
+				case AgaviValidator::CRITICAL:
+					$result = false;
+					break 1;
 			}
-			if (count($this->groups) == 0 || $pass == 2) {
-				break;
-			}
-
-			// increase our pass indicator
-			$pass++;
-
 		}
-
-		return $retval;
-
+		
+		return $result;
 	}
-
 	
 	/**
-	 * Initialize this validator manager.
-	 *
-	 * @param      AgaviContext A context instance.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
+	 * shuts down the validation system
 	 */
-	public function initialize(AgaviContext $context, $parameters = array())
+	public function shutdown ()
 	{
-		$this->request = $context->getRequest();
+		foreach ($this->Children as $child) {
+			$child->shutdown();
+		}
 	}
-
+	
 	/**
-	 * Register a file or parameter.
-	 *
-	 * @param      string  A file or parameter name.
-	 * @param      bool    The required status.
-	 * @param      string  A required error message.
-	 * @param      string  A parent array
-	 * @param      string  A group name.
-	 * @param      bool    An unused(?) parameter, apparently meant to determine 
-	 *                     if the name is a parameter or filename.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
+	 * registers an array of validators
+	 * 
+	 * @param      array $validators array of validators
 	 */
-	public function registerName ($name, $required = true, $message = 'Required', $parent = null, $group = null, $isFile = false)
+	public function registerValidators ($validators)
 	{
-		$entry                      = array();
-		$entry['group']             = null;
-		$entry['is_file']           = $isFile;
-		$entry['required']          = $required;
-		$entry['required_msg']      = $message;
-		$entry['validation_status'] = true;
-		$entry['validators']        = array();
-
-		if ($parent != null) {
-			// this parameter has a parent array
-			if (!isset($this->names[$parent])) {
-				// create the parent array
-				$this->names[$parent] = array('_is_parent' => true);
-			}
-			// register this parameter
-			$this->names[$parent][$name] =& $entry;
-		} else {
-
-			// no parent
-
-			// register this parameter
-			$this->names[$name] =& $entry;
-
+		foreach ($validators AS $validator) {
+			$this->addChild($validator);
 		}
-
-		if ($group != null) {
-
-			// set group
-			if (!isset($this->groups[$group])) {
-
-				// create our group
-				$this->groups[$group] = array('_force' => false);
-
-			}
-
-			// add this file/parameter name to the group
-			$this->groups[$group][] = $name;
-
-			// add a reference back to the group array to the file/param array
-			$entry['group'] =& $this->groups[$group];
-
-		}
-
 	}
-
+	
 	/**
-	 * Register a validator for a file or parameter.
-	 *
-	 * @param      string         A file or parameter name.
-	 * @param      AgaviValidator A validator implementation instance.
-	 * @param      string         A parent array name.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
+	 * returns the path to the validation config for a specific action
+	 * 
+	 * @param      string $module name of module
+	 * @param      string $action name of action
+	 * 
+	 * @return     string path to config file
 	 */
-	public function registerValidator ($name, $validator, $parent = null)
-	{
-
-		if ($parent != null)
-		{
-
-			// this parameter has a parent
-			$this->names[$parent][$name]['validators'][] = $validator;
-
-		} else
-		{
-
-			// no parent
-			$this->names[$name]['validators'][] = $validator;
-
-		}
-
+	public static function getConfigFilename ($module, $action) {
+		return AgaviConfig::get('agavi.webapp_dir') . '/modules/' . $module . '/validate/' . $action . '.xml';
 	}
-
+	
 	/**
-	 * Validate a file or parameter.
-	 *
-	 * @param      string A file or parameter name.
-	 * @param      array  Data associated with the file or parameter.
-	 * @param      string A parent name.
-	 *
-	 * @return     bool true, if validation completes successfully, otherwise 
-	 *                  false.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
+	 * fetches the error array from the error manager
+	 * 
+	 * @return     array error array
 	 */
-	private function validate (&$name, &$data, $parent)
-	{
-
-		// get defaults
-		$error     = null;
-		$errorName = null;
-		$force     = ($data['group'] != null) ? $data['group']['_force'] : true;
-		$retval    = true;
-		$value     = null;
-
-		// get our parameter value
-		if ($parent == null)
-		{
-
-			// normal file/parameter
-			$errorName = $name;
-
-			if ($data['is_file'])
-			{
-
-				// file
-				$value =& $this->request->getFile($name);
-
-			} else
-			{
-
-				// parameter
-				$value =& $this->request->getParameter($name);
-
-			}
-
-		} else
-		{
-
-			// we have a parent
-			$errorName = $parent . '{' . $name . '}';
-
-			if ($data['is_file'])
-			{
-
-				// file
-				$parent =& $this->request->getFile($parent);
-
-			} else
-			{
-
-				// parameter
-				$parent =& $this->request->getParameter($parent);
-
-			}
-
-			if ($parent != null && isset($parent[$name]))
-			{
-
-				$value =& $parent[$name];
-
-			}
-
-		}
-
-		// now for the dirty work
-		if ($value == null || strlen($value) == 0)
-		{
-
-			if (!$data['required'] || !$force)
-			{
-
-				// we don't have to validate it
-				$retval = true;
-
-			} else
-			{
-
-				// it's empty!
-				$error  = $data['required_msg'];
-				$retval = false;
-
-			}
-
-		} else
-		{
-
-			// time for the fun
-			$error = null;
-
-			// get group force status
-			if ($data['group'] != null)
-			{
-
-				// we set this because we do have a value for a parameter in
-				// this group
-				$data['group']['_force'] = true;
-				$force                   = true;
-
-			}
-
-			if (count($data['validators']) > 0)
-			{
-
-				// loop through our validators
-				foreach ($data['validators'] as $validator)
-				{
-
-				    if (!$validator->execute($value, $error))
-				    {
-
-						$retval = false;
-
-				    }
-
-				}
-
-			}
-
-		}
-
-		if (!$retval)
-		{
-
-			// set validation status
-			$data['validation_status'] = false;
-
-			// set the request error
-			$this->request->setError($errorName, $error);
-
-		}
-
-		return $retval;
-
+	public function getErrorArray () {
+		return $this->ErrorManager->getErrorArray();
 	}
-
+	
+	/**
+	 * fetches the error message from the error manager
+	 * 
+	 * @return     string error message
+	 */
+	public function getErrorMessage () {
+		return $this->ErrorManager->getErrorMessage();
+	}
 }
-
 ?>

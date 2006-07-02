@@ -14,57 +14,94 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviDateValidator verifies a parameter is of a date format.
+ * AgaviDateValidator verifies that a parameter is of a date format.
+ * 
+ * This validator checks of the date is in a valid format. Following formats
+ * are allowed:
+ *   * YYYY-MM-DD, YY-MM-DD, MM-DD
+ *   * DD.MM.YYYY, DD.MM.YY, DD.MM., DD., DD (seperators '.' or ' '; day and
+ *                                            month also single digit possible)
+ *   * MM/DD/YYYY, MM/DD (day and month also single digit possible)
+ * Omitted values are set to current infos (e.g. ommitting year sets date('Y')).
+ * 
+ * If parameter 'check' is true, the date is checked by checkdate() if its a real
+ * existing day. Optional the date can be exported in format YYYY-MM-DD.
+ * 
+ * Parameters:
+ *   'check'   check date if the specified day really exists
  *
  * @package    agavi
  * @subpackage validator
  *
- * @author     Sean Kerr <skerr@mojavi.org>
- * @author     Agavi Project <info@agavi.org>
+ * @author     Uwe Mesecke <uwe@mesecke.net>
  * @copyright  (c) Authors
- * @since      0.9.0
+ * @since      0.11.0
  *
  * @version    $Id$
  */
 class AgaviDateValidator extends AgaviValidator
 {
-
 	/**
-	 * Execute this validator.
-	 *
-	 * @param      mixed A file or parameter value/array.
-	 * @param      error An error message reference.
-	 *
-	 * @return     bool true, if this validator executes successfully, otherwise
-	 *                  false.
-	 *
-	 * @author     Bob Zoller <bzoller@agavi.org>
-	 * @since      1.0
+	 * validates the input
+	 * 
+	 * @return     bool true if the input was a valid date
 	 */
-	public function execute (&$value, &$error)
+	protected function validate ()
 	{
-		if(empty($value) || strtotime($value) === false || strtotime($value) === -1) {
-			$error = $this->getParameter('error');
+		$param = $this->getData();
+		// check YY(YY)-MM-DD
+		if (preg_match('/^(?:((?:\d{2})?\d{2})-)?(\d{2})-(\d{2})$/', $param, $matches)) {
+			if (count($matches) == 4) {
+				$year = $matches[1];
+				$month = $matches[2];
+				$day = $matches[3];
+			} else {
+				$year = date('Y');
+				$month = $matches[1];
+				$day = $matches[2];
+			}
+		// check DD.MM.YY(YY)
+		} elseif (preg_match('/^(\d{1,2})(?:[. ](\d{1,2})(?:[. ]((?:\d{2})?\d{2}))?)?[. ]?$/', $param, $matches)) {
+			$day = $matches[1];
+			if (isset($matches[2])) {
+				$month = $matches[2];
+			} else {
+				$month = date('m');
+			}
+			if (isset($matches[3])) {
+				$year = $matches[3];
+			} else {
+				$year = date('Y');
+			}
+		// check MM/DD/YY(YY)
+		} elseif (preg_match('/^(\d{1,2})\/(\d{1,2})(?:\/((?:\d{2})?\d{2}))?$/', $param, $matches)) {
+			$month = $matches[1];
+			$day = $matches[2];
+			if (sizeof($matches) > 3) {
+				$year = $matches[3];
+			} else {
+				$year = date('Y');
+			}
+		} else {
+			$this->throwError();
 			return false;
 		}
+		
+		if ($year < 70) {
+			$year += 2000;
+		} elseif ($year < 100) {
+			$year += 1900;
+		}
+		
+		if ($this->asBool('check') and !checkdate($month, $day, $year)) {
+			$this->throwError();
+			return false;
+		}
+		
+		$this->export(sprintf('%04d-%02d-%02d', $year, $month, $day));
+		
 		return true;
 	}
-
-	/**
-	 * Initialize this validator.
-	 *
-	 * @param      AgaviContext The current application context.
-	 * @param      array        An associative array of initialization parameters.
-	 *
-	 * @author     Bob Zoller <bob@agavi.org>
-	 * @since      1.0
-	 */
-	public function initialize(AgaviContext $context, $parameters = array())
-	{
-		$this->setParameter('error', 'Date is not valid.');
-		parent::initialize($context, $parameters);
-	}
-
 }
 
 ?>
