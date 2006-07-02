@@ -3,7 +3,6 @@
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
 // | Copyright (c) 2003-2006 the Agavi Project.                                |
-// | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -35,8 +34,11 @@ class AgaviDependencyManager
 	
 	/**
 	 * clears the dependency cache
+	 * 
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
 	 */
-	public function clear ()
+	public function clear()
 	{
 		$this->DepData = array();
 	}
@@ -44,16 +46,19 @@ class AgaviDependencyManager
 	/**
 	 * checks whether a list dependencies are met
 	 * 
-	 * @param      array  $tokens list of dependencies that have to meet
-	 * @param      string $base base path to which all tokens are appended
+	 * @param      array  list of dependencies that have to meet
+	 * @param      string base path to which all tokens are appended
 	 * 
 	 * @return     bool all dependencies are met
+	 * 
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
 	 */
-	public function checkDependencies ($tokens, $base = '')
+	public function checkDependencies($tokens, $base = '')
 	{
-		foreach ($tokens AS $token) {
+		foreach($tokens AS $token) {
 			$p = new AgaviPath($base.'/'.$token);
-			if (!AgaviPath::getValueByPath($p)) {
+			if(!AgaviPath::getValueByPath($p)) {
 				return false;
 			}
 		}
@@ -64,11 +69,14 @@ class AgaviDependencyManager
 	/**
 	 * puts a list of tokens into the dependency cache
 	 * 
-	 * @param      array  $tokens list of new tokens
-	 * @param      string $base base path to which all tokens are appended
+	 * @param      array  list of new tokens
+	 * @param      string base path to which all tokens are appended
+	 * 
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
 	 */
-	public function addDependTokens ($tokens, $base = '') {
-		foreach ($tokens AS $token) {
+	public function addDependTokens($tokens, $base = '') {
+		foreach($tokens AS $token) {
 			$p = new AgaviPath($base.'/'.$token);
 			AgaviPath::setValueByPath($this->DepData, $p, true);
 		}

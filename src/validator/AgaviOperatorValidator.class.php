@@ -75,6 +75,9 @@ abstract class AgaviOperatorValidator extends AgaviValidator
 	 * get the base path of the validator
 	 * 
 	 * @return     string base path
+	 * 
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
 	 */
 	public function getBase()
 	{
@@ -108,7 +111,7 @@ abstract class AgaviOperatorValidator extends AgaviValidator
 	 */
 	public function shutdown()
 	{
-		foreach ($this->Children as $child) {
+		foreach($this->Children as $child) {
 			$child->shutdown();
 		}
 	}
@@ -125,7 +128,7 @@ abstract class AgaviOperatorValidator extends AgaviValidator
 			$this->ErrorManager->clear();
 		}
 		
-		foreach ($this->Children as $child) {
+		foreach($this->Children as $child) {
 			$child->clear();
 		}
 	}
@@ -191,7 +194,7 @@ abstract class AgaviOperatorValidator extends AgaviValidator
 	 * Eexecutes the operators validate()-Method after checking the quantity
 	 * of child validators with checkValidSetup().
 	 * 
-	 * @return     int Result of validation (SUCCESS, NONE, ERROR, CRITICAL)
+	 * @return     int result of validation (SUCCESS, NONE, ERROR, CRITICAL)
 	 *
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0

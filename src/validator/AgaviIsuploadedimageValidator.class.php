@@ -37,23 +37,26 @@ class AgaviIsuploadedimageValidator extends AgaviValidator
 	 * validates the input
 	 * 
 	 * @return     bool file is valid image according to given parameters
+	 * 
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
 	 */
 	protected function validate()
 	{
 		$name = $this->getData();
 		// TODO: use Request methods instead if $_FILES
-		if ($_FILES[$name]['error'] != UPLOAD_ERR_OK) {
+		if($_FILES[$name]['error'] != UPLOAD_ERR_OK) {
 			$this->throwError('php_error');
 			return false;
 		}
 		
 		$type = exif_imagetype($_FILES[$name]['tmp_name']);
-		if ($type === FALSE) {
+		if($type === FALSE) {
 			$this->throwError('img_error');
 			return false;
 		}
 		
-		if (!$this->hasParameter('format')) {
+		if(!$this->hasParameter('format')) {
 			return true;
 		}
 		
@@ -66,8 +69,8 @@ class AgaviIsuploadedimageValidator extends AgaviValidator
 		);
 		
 		
-		foreach (split(',', $this->getParameter('format')) as $format) {
-			if ($formats[strtolower($format)] == $type) {
+		foreach(split(',', $this->getParameter('format')) as $format) {
+			if($formats[strtolower($format)] == $type) {
 				return true;
 			}
 		}

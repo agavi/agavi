@@ -138,7 +138,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 * use this method to fetch data from the request because it pays attention
 	 * to specified paths.
 	 * 
-	 * @param      string $paramname name of parameter to fetch from request
+	 * @param      string name of parameter to fetch from request
 	 * 
 	 * @return     mixed input value from request
 	 *
@@ -154,7 +154,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	}
 
 	/**
-	 * throws an error the to error manager
+	 * submits an error to the error manager
 	 * 
 	 * The stuff in the parameter specified in $index is submitted to the
 	 * error manager. If there is no parameter with this name, then 'error'

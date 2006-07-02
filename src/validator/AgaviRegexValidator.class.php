@@ -3,7 +3,6 @@
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
 // | Copyright (c) 2003-2006 the Agavi Project.                                |
-// | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -37,12 +36,15 @@ class AgaviRegexValidator extends AgaviValidator
 	 * validates the input
 	 * 
 	 * @return     bool true if input matches the pattern or not according to 'match'
+	 * 
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
 	 */
-	protected function validate ()
+	protected function validate()
 	{
 		$result = preg_match($this->getParameter('pattern'), $this->getData());
 		
-		if ($result != $this->asBool('match')) {
+		if($result != $this->asBool('match')) {
 			$this->throwError();
 			return false;
 		}

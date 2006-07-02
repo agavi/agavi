@@ -44,8 +44,8 @@ interface AgaviIValidatorManager
 	/**
 	 * initializes the validator manager
 	 * 
-	 * @param      AgaviContext $context the context
-	 * @param      array $parameters parameters for the validator manager 
+	 * @param      AgaviContext the context
+	 * @param      array        parameters for the validator manager 
 	 *
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0

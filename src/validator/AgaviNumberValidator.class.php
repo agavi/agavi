@@ -3,7 +3,6 @@
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
 // | Copyright (c) 2003-2006 the Agavi Project.                                |
-// | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -41,16 +40,19 @@ class AgaviNumberValidator extends AgaviValidator
 	 * validates the input
 	 * 
 	 * @return     bool input is valid number according to given parameters
+	 * 
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
 	 */
-	protected function validate () {
+	protected function validate() {
 		$value = $this->getData();
 		
-		if (!is_numeric($value)) {
+		if(!is_numeric($value)) {
 			$this->throwError();
 			return false;
 		}
 		
-		switch (strtolower($this->getParameter('type'))) {
+		switch(strtolower($this->getParameter('type'))) {
 			case 'int':
 			case 'integer':
 				if (!is_int($value)) {
@@ -69,12 +71,12 @@ class AgaviNumberValidator extends AgaviValidator
 				break;
 		}
 		
-		if ($$this->hasParameter('min') and $value < $this->getParameter('min')) {
+		if($$this->hasParameter('min') and $value < $this->getParameter('min')) {
 			$this->throwError('min_error');
 			return false;
 		}
 		
-		if ($$this->hasParameter('max') and $value > $this->getParameter('max')) {
+		if($$this->hasParameter('max') and $value > $this->getParameter('max')) {
 			$this->throwError('max_error');
 			return false;
 		}

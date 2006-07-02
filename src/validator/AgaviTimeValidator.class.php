@@ -41,17 +41,20 @@ class AgaviTimeValidator extends AgaviValidator
 	 * validates the input
 	 * 
 	 * @return     bool input is valid time
+	 * 
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
 	 */
 	protected function validate()
 	{
-		if (preg_match('/^(\d{1,2})(?:[.: -](\d{1,2})(?:[.: -](\d{1,2}))?)?$/', $this->getData(), $matches)) {
+		if(preg_match('/^(\d{1,2})(?:[.: -](\d{1,2})(?:[.: -](\d{1,2}))?)?$/', $this->getData(), $matches)) {
 			$hour = $matches[1];
-			if (sizeof($matches) > 2) {
+			if(sizeof($matches) > 2) {
 				$minute = $matches[2];
 			} else {
 				$minute = 0;
 			}
-			if (sizeof($matches) > 3) {
+			if(sizeof($matches) > 3) {
 				$second = $matches[3];
 			} else {
 				$second = 0;
@@ -61,7 +64,7 @@ class AgaviTimeValidator extends AgaviValidator
 			return false;
 		}
 
-		if ($this->asBool('check') and ($hour > 23 or $minute > 59 or $second > 59)) {
+		if($this->asBool('check') and ($hour > 23 or $minute > 59 or $second > 59)) {
 			$this->throwError();
 			return false;
 		}

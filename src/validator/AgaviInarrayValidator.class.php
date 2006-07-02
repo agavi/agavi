@@ -36,18 +36,21 @@ class AgaviInarrayValidator extends AgaviValidator
 	 * validates the input
 	 * 
 	 * @return     bool the value is in the array
+	 * 
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
 	 */
 	protected function validate()
 	{
 		$list = split($this->getParameter('sep'), $this->getParameter('values'));
 		$value = $this->getData();
 		
-		if (!$this->isBool('case')) {
+		if(!$this->isBool('case')) {
 			$value = strtolower($value);
 			$list = array_map(create_function('$a', 'return strtolower($a)'),$list);
 		}
 		
-		if (!in_array($this->getData(), $list)) {
+		if(!in_array($this->getData(), $list)) {
 			$this->throwError();
 			return false;
 		}

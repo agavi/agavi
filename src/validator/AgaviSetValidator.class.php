@@ -34,6 +34,9 @@ class AgaviSetValidator extends AgaviValidator
 	 * exports the value and returns true
 	 * 
 	 * @return     bool allways returns true
+	 * 
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
 	 */
 	protected function validate()
 	{

@@ -42,12 +42,16 @@ class AgaviMktimestampValidator extends AgaviValidator
 	 * @return     bool the timestamp is valid according to parameters
 	 * 
 	 * @throws     AgaviValidatorException date or time have invalid format
+	 * 
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
 	 */
-	protected function validate() {
-		if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $this->getData('date'))) {
+	protected function validate()
+	{
+		if(!preg_match('/^\d{4}-\d{2}-\d{2}$/', $this->getData('date'))) {
 			throw new AgaviValidatorException('input date has an invalid format');
 		}
-		if (!preg_match('/^\d{2}:\d{2}:\d{2}$/', $this->getData('time'))) {
+		if(!preg_match('/^\d{2}:\d{2}:\d{2}$/', $this->getData('time'))) {
 			throw new AgaviValidatorException('input time has an invalid format');
 		}
 		list($year, $month, $day) = split('-', $this->getData('date'));
@@ -55,19 +59,19 @@ class AgaviMktimestampValidator extends AgaviValidator
 		
 		$timestamp = mktime($hour, $minute, $second, $month, $day, $year);
 		
-		if ($timestamp < 0) {
+		if($timestamp < 0) {
 			$this->throwError();
 			return false;
 		}
 		
 		$this->export($timestamp);
 		
-		if ($this->hasParameter('past') and $timestamp >= time()) {
+		if($this->getParameter('past') and $timestamp >= time()) {
 			$this->throwError('past_error');
 			return false;
 		}
 		
-		if ($this->hasParameter('future') and $timestamp <= time()) {
+		if($this->getParameter('future') and $timestamp <= time()) {
 			$this->throwError('future_error');
 			return false;
 		}

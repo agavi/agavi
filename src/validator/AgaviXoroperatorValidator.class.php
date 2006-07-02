@@ -3,7 +3,6 @@
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
 // | Copyright (c) 2003-2006 the Agavi Project.                                |
-// | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -29,16 +28,19 @@
  *
  * @version    $Id$
  */
-class AgaviXorOperatorValidator extends AgaviAbstractOperatorValidator
+class AgaviXoroperatorValidator extends AgaviOperatorValidator
 {
 	/**
 	 * check if operator has other then exactly two child validators
 	 * 
 	 * @throws     AgaviValidatorException operator has other then 2 child validators
+	 * 
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
 	 */
-	protected function checkValidSetup ()
+	protected function checkValidSetup()
 	{
-		if (count($this->Children) != 2) {
+		if(count($this->Children) != 2) {
 			throw new AgaviValidatorException('XOR allows only exact 2 child validators');
 		}
 	}
@@ -47,10 +49,13 @@ class AgaviXorOperatorValidator extends AgaviAbstractOperatorValidator
 	 * validates the operator by returning the by XOR compined result of the child validators
 	 * 
 	 * @return     bool true, if child validator failed 
+	 * 
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
 	 */
-	protected function validate ()
+	protected function validate()
 	{
-		if (($this->Children[0]->execute() == AgaviValidator::SUCCESS) xor ($this->Children[1]->execute() == AgaviValidator::SUCCESS)) {
+		if(($this->Children[0]->execute() == AgaviValidator::SUCCESS) xor ($this->Children[1]->execute() == AgaviValidator::SUCCESS)) {
 			return true;
 		} else {
 			$this->throwError();

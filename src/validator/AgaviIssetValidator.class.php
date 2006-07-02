@@ -34,10 +34,13 @@ class AgaviIssetValidator extends AgaviValidator
 	 * validates the input
 	 * 
 	 * @return     bool the value is set
+	 * 
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
 	 */
 	protected function validate()
 	{
-		if ($this->parent->getRequest()->hasParameter($this->getParameter('param'))) {
+		if($this->parent->getRequest()->hasParameter($this->getParameter('param'))) {
 			$this->throwError();
 			return false;
 		}

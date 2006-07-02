@@ -3,7 +3,6 @@
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
 // | Copyright (c) 2003-2006 the Agavi Project.                                |
-// | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -29,16 +28,19 @@
  *
  * @version    $Id$
  */
-class AgaviNotOperatorValidator extends AgaviAbstractOperatorValidator
+class AgaviNotOperatorValidator extends AgaviOperatorValidator
 {
 	/**
 	 * check if operator has more then one child validator
 	 * 
 	 * @throws     AgaviValidatorException operator has more then 1 child validator
+	 * 
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
 	 */
-	protected function checkValidSetup ()
+	protected function checkValidSetup()
 	{
-		if (count($this->Children) != 1) {
+		if(count($this->Children) != 1) {
 			throw new AgaviValidatorException('NOT allows only 1 child validator');
 		}
 	}
@@ -47,10 +49,13 @@ class AgaviNotOperatorValidator extends AgaviAbstractOperatorValidator
 	 * validates the operator by returning the inverse result of the child validator
 	 * 
 	 * @return     bool true, if child validator failed 
+	 * 
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
 	 */
-	protected function validate ()
+	protected function validate()
 	{
-		if ($this->Children[0]->execute() != AgaviValidator::SUCCESS) {
+		if($this->Children[0]->execute() != AgaviValidator::SUCCESS) {
 			return true;
 		} else {
 			$this->throwError();

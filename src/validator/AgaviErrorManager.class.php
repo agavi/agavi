@@ -3,7 +3,6 @@
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
 // | Copyright (c) 2003-2006 the Agavi Project.                                |
-// | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -47,8 +46,11 @@ class AgaviErrorManager
 	
 	/**
 	 * clears the error manager
+	 * 
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
 	 */
-	public function clear ()
+	public function clear()
 	{
 		$this->ErrorArray = array();
 		$this->ErrorMessage = '';
@@ -58,19 +60,21 @@ class AgaviErrorManager
 	/**
 	 * submits an error from the validator
 	 * 
-	 * @param      string $validator name of validator that failed
-	 * @param      array  $fields affected input fields
-	 * @param      mixed  $error error stuff that should be saved
-	 * @param      int    $severity error severity
-	 * @param      bool   $ignoreAsMessage ignore error as error message
-	 *                                     even if type is string
+	 * @param      string name of validator that failed
+	 * @param      array  affected input fields
+	 * @param      mixed  error stuff that should be saved
+	 * @param      int    error severity
+	 * @param      bool   ignore error as error message even if type is string
+	 * 
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
 	 */
-	public function submitError ($validator, $error, $fields, $severity, $ignoreAsMessage = false)
+	public function submitError($validator, $error, $fields, $severity, $ignoreAsMessage = false)
 	{
-		if ($severity > $this->Result) {
+		if($severity > $this->Result) {
 			$this->Result = $severity;
 		}
-		if (is_string($error) and $this->ErrorMessage == '' and !$ignoreAsMessage) {
+		if(is_string($error) and $this->ErrorMessage == '' and !$ignoreAsMessage) {
 			$this->ErrorMessage = &$error;
 		}
 		
@@ -81,15 +85,15 @@ class AgaviErrorManager
 		);
 		
 		// fill input array
-		foreach ($fields AS $field) {
-			if (!isset($this->InputArray[$field])) {
+		foreach($fields AS $field) {
+			if(!isset($this->InputArray[$field])) {
 				$this->InputArray[$field] = array(
 					'message'	=> '',
 					'validators'	=> array()
 				);
 			}
 			
-			if (is_string($error) and $this->InputArray[$field]['message'] and !$ignoreAsMessage) {
+			if(is_string($error) and $this->InputArray[$field]['message'] and !$ignoreAsMessage) {
 				$this->InputArray[$field]['message'] = &$error;
 			}
 			
@@ -109,8 +113,11 @@ class AgaviErrorManager
 	 *   )
 	 * 
 	 * @return     array array of errors
+	 * 
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
 	 */
-	public function getErrorArrayByValidator ()
+	public function getErrorArrayByValidator()
 	{
 		return $this->ValidatorArray;
 	}
@@ -131,8 +138,11 @@ class AgaviErrorManager
 	 * <i>error message</i> is the first submitted error with type string.
 	 * 
 	 * @return     array array of errors
+	 * 
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
 	 */
-	public function getErrorArrayByInput ()
+	public function getErrorArrayByInput()
 	{
 		return $this->InputArray;
 	}
@@ -141,8 +151,11 @@ class AgaviErrorManager
 	 * returns error message
 	 * 
 	 * @return     string error message (first reportet error of type string)
+	 * 
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
 	 */
-	public function getErrorMessage ()
+	public function getErrorMessage()
 	{
 		return $this->ErrorMessage;
 	}
@@ -151,8 +164,11 @@ class AgaviErrorManager
 	 * returns the result (highest error severity)
 	 * 
 	 * @return     int return highes severity of reportet errors
+	 * 
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
 	 */
-	public function getResult ()
+	public function getResult()
 	{
 		return $this->Result;
 	}

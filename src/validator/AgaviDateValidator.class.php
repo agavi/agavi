@@ -45,13 +45,16 @@ class AgaviDateValidator extends AgaviValidator
 	 * validates the input
 	 * 
 	 * @return     bool true if the input was a valid date
+	 * 
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
 	 */
-	protected function validate ()
+	protected function validate()
 	{
 		$param = $this->getData();
 		// check YY(YY)-MM-DD
-		if (preg_match('/^(?:((?:\d{2})?\d{2})-)?(\d{2})-(\d{2})$/', $param, $matches)) {
-			if (count($matches) == 4) {
+		if(preg_match('/^(?:((?:\d{2})?\d{2})-)?(\d{2})-(\d{2})$/', $param, $matches)) {
+			if(count($matches) == 4) {
 				$year = $matches[1];
 				$month = $matches[2];
 				$day = $matches[3];
@@ -61,23 +64,23 @@ class AgaviDateValidator extends AgaviValidator
 				$day = $matches[2];
 			}
 		// check DD.MM.YY(YY)
-		} elseif (preg_match('/^(\d{1,2})(?:[. ](\d{1,2})(?:[. ]((?:\d{2})?\d{2}))?)?[. ]?$/', $param, $matches)) {
+		} elseif(preg_match('/^(\d{1,2})(?:[. ](\d{1,2})(?:[. ]((?:\d{2})?\d{2}))?)?[. ]?$/', $param, $matches)) {
 			$day = $matches[1];
-			if (isset($matches[2])) {
+			if(isset($matches[2])) {
 				$month = $matches[2];
 			} else {
 				$month = date('m');
 			}
-			if (isset($matches[3])) {
+			if(isset($matches[3])) {
 				$year = $matches[3];
 			} else {
 				$year = date('Y');
 			}
 		// check MM/DD/YY(YY)
-		} elseif (preg_match('/^(\d{1,2})\/(\d{1,2})(?:\/((?:\d{2})?\d{2}))?$/', $param, $matches)) {
+		} elseif(preg_match('/^(\d{1,2})\/(\d{1,2})(?:\/((?:\d{2})?\d{2}))?$/', $param, $matches)) {
 			$month = $matches[1];
 			$day = $matches[2];
-			if (sizeof($matches) > 3) {
+			if(sizeof($matches) > 3) {
 				$year = $matches[3];
 			} else {
 				$year = date('Y');
@@ -87,13 +90,13 @@ class AgaviDateValidator extends AgaviValidator
 			return false;
 		}
 		
-		if ($year < 70) {
+		if($year < 70) {
 			$year += 2000;
-		} elseif ($year < 100) {
+		} elseif($year < 100) {
 			$year += 1900;
 		}
 		
-		if ($this->asBool('check') and !checkdate($month, $day, $year)) {
+		if($this->getParameter('check') and !checkdate($month, $day, $year)) {
 			$this->throwError();
 			return false;
 		}

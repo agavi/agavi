@@ -3,7 +3,6 @@
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
 // | Copyright (c) 2003-2006 the Agavi Project.                                |
-// | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -58,10 +57,13 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	/**
 	 * initializes the manager
 	 * 
-	 * @param      AgaviContext $context contest
-	 * @param      array        $parameters parameters
+	 * @param      AgaviContext contest
+	 * @param      array        parameters
+	 * 
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
 	 */
-	public function initialize (AgaviContext $context, $parameters = array())
+	public function initialize(AgaviContext $context, $parameters = array())
 	{
 		$this->Context = $context;
 		$this->setParameters($parameters);
@@ -73,13 +75,16 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	
 	/**
 	 * clears the validation manager for reuse
+	 * 
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
 	 */
-	public function clear ()
+	public function clear()
 	{
 		$this->DependencyManager->clear();
 		$this->ErrorManager->clear();
 		
-		foreach ($this->Children as $child) {
+		foreach($this->Children as $child) {
 			$child->clear();
 		}
 	}
@@ -87,7 +92,10 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	/**
 	 * adds a new child validator
 	 * 
-	 * @param      AgaviValidator $validator new child validator
+	 * @param      AgaviValidator new child validator
+	 * 
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
 	 */
 	public function addChild (AgaviValidator $validator)
 	{
@@ -98,8 +106,11 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	 * returns the request
 	 * 
 	 * @return     AgaviRequest request
+	 * 
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
 	 */
-	public function getRequest ()
+	public function getRequest()
 	{
 		return $this->Request;
 	}
@@ -108,8 +119,11 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	 * returns the dependency manager
 	 * 
 	 * @return     AgaviDependencyManager dependency manager
+	 * 
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
 	 */
-	public function getDependencyManager ()
+	public function getDependencyManager()
 	{
 		return $this->DependManager;
 	}
@@ -118,8 +132,11 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	 * returns the error manager
 	 * 
 	 * @return     AgaviErrorManager error manager
+	 * 
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
 	 */
-	public function getErrorManager ()
+	public function getErrorManager()
 	{
 		return $this->ErrorManager;
 	}
@@ -128,6 +145,9 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	 * get the base path of the validator
 	 * 
 	 * @return     string base path
+	 * 
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
 	 */
 	public function getBase () {
 		return ($this->hasParameter('base')) ? $this->getParameter('base') : '/';
@@ -137,14 +157,17 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	 * starts the validation process
 	 * 
 	 * @return     bool true, if validation succeeded
+	 * 
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
 	 */
-	public function execute ()
+	public function execute()
 	{
 		$result = true;
 
-		foreach ($this->Children as $validator) {
+		foreach($this->Children as $validator) {
 			$v_ret = $validator->execute();
-			switch ($v_ret) {
+			switch($v_ret) {
 				case AgaviValidator::SUCCESS:
 					continue 1;
 				case AgaviValidator::NONE:
@@ -163,10 +186,13 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	
 	/**
 	 * shuts down the validation system
+	 * 
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
 	 */
-	public function shutdown ()
+	public function shutdown()
 	{
-		foreach ($this->Children as $child) {
+		foreach($this->Children as $child) {
 			$child->shutdown();
 		}
 	}
@@ -174,11 +200,14 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	/**
 	 * registers an array of validators
 	 * 
-	 * @param      array $validators array of validators
+	 * @param      array array of validators
+	 * 
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
 	 */
-	public function registerValidators ($validators)
+	public function registerValidators($validators)
 	{
-		foreach ($validators AS $validator) {
+		foreach($validators AS $validator) {
 			$this->addChild($validator);
 		}
 	}
@@ -195,8 +224,11 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	 *   )
 	 * 
 	 * @return     array array of errors
+	 * 
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
 	 */
-	public function getErrorArrayByValidator () {
+	public function getErrorArrayByValidator() {
 		return $this->ErrorManager->getErrorArrayByValidator();
 	}
 	
@@ -216,8 +248,11 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	 * <i>error message</i> is the first submitted error with type string.
 	 * 
 	 * @return     array array of errors
+	 * 
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
 	 */
-	public function getErrorArrayByInput () {
+	public function getErrorArrayByInput() {
 		return $this->ErrorManager->getErrorArrayByInput();
 	}
 	
@@ -225,8 +260,11 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	 * fetches the error message from the error manager
 	 * 
 	 * @return     string error message
+	 * 
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
 	 */
-	public function getErrorMessage () {
+	public function getErrorMessage() {
 		return $this->ErrorManager->getErrorMessage();
 	}
 }
