@@ -15,11 +15,10 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviANDOperatorValidator only succeeds if all sub-validators succeeded
- * 
+ * AgaviNOTOperatorValidator succeeds if the sub-validator failed
+ *
  * Parameters:
  *   'skip_errors'  do not submit errors of child validators to validator manager
- *   'break'        break the execution of child validators after first failure
  *
  * @package    agavi
  * @subpackage validator
@@ -30,29 +29,33 @@
  *
  * @version    $Id$
  */
-class AgaviANDOperatorValidator extends AgaviAbstractOperatorValidator
+class AgaviNotOperatorValidator extends AgaviAbstractOperatorValidator
 {
 	/**
-	 * 'validates' the operator by executing the child valdators
+	 * check if operator has more then one child validator
 	 * 
-	 * @return     bool true if all child validators resulted successful
+	 * @throws     AgaviValidatorException operator has more then 1 child validator
+	 */
+	protected function checkValidSetup ()
+	{
+		if (count($this->Children) != 1) {
+			throw new AgaviValidatorException('NOT allows only 1 child validator');
+		}
+	}
+
+	/**
+	 * validates the operator by returning the inverse result of the child validator
+	 * 
+	 * @return     bool true, if child validator failed 
 	 */
 	protected function validate ()
 	{
-		$return = TRUE;
-		
-		foreach ($this->children as $child) {
-			if ($child->execute() != AgaviValidator::SUCCESS) {
-				// if one validator fails, the whole operator fails
-				$return = FALSE;
-				$this->throwError();
-				if  ($this->asBool('break')) {
-					break;
-				}
-			}
+		if ($this->Children[0]->execute() != AgaviValidator::SUCCESS) {
+			return true;
+		} else {
+			$this->throwError();
+			return false;
 		}
-		
-		return $return;
 	}	
 }
 

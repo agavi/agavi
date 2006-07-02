@@ -15,10 +15,11 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviXOROperatorValidator succeeds if only one of two sub-validators succeeded
+ * AgaviOROperatorValidator succeeds if at least one sub-validators succeeded
  *
  * Parameters:
  *   'skip_errors'  do not submit errors of child validators to validator manager
+ *   'break'        break the execution of child validators after first success
  *
  * @package    agavi
  * @subpackage validator
@@ -29,33 +30,32 @@
  *
  * @version    $Id$
  */
-class AgaviXOROperatorValidator extends AgaviAbstractOperatorValidator
+class AgaviOrOperatorValidator extends AgaviAbstractOperatorValidator
 {
 	/**
-	 * check if operator has other then exactly two child validators
+	 * executes the child validators
 	 * 
-	 * @throws     AgaviValidatorException operator has other then 2 child validators
-	 */
-	protected function checkValidSetup ()
-	{
-		if (count($this->Children) != 2) {
-			throw new AgaviValidatorException('XOR allows only exact 2 child validators');
-		}
-	}
-
-	/**
-	 * validates the operator by returning the by XOR compined result of the child validators
-	 * 
-	 * @return     bool true, if child validator failed 
+	 * @return     bool true, if at least one child validator succeeded
 	 */
 	protected function validate ()
 	{
-		if (($this->Children[0]->execute() == AgaviValidator::SUCCESS) xor ($this->Children[1]->execute() == AgaviValidator::SUCCESS)) {
-			return true;
-		} else {
-			$this->throwError();
-			return false;
+		$return = FALSE;
+		
+		foreach ($this->children as $child) {
+			if ($child->execute() == AgaviValidator::SUCCESS) {
+				// if one child validator succeeds, the whole operator succeeds
+				$return = TRUE;
+				if  ($this->asBool('break')) {
+					break;
+				}
+			}
 		}
+		
+		if (!$return) {
+			$this->throwError();
+		}
+
+		return $return;
 	}	
 }
 

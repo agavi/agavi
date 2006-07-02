@@ -14,12 +14,13 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviInArrayValidator verifies whether an input is one of a set of values
+ * AgaviIsUploadedImageValidator verifies a parameter is an uploaded image
  * 
  * Parameters:
- *   'values'  list of values that form the array
- *   'sep'     seperator of values in the list
- *   'case'    verifies case sensitive if true
+ *   'php_error'    error message when there was an php error with the file
+ *   'img_error'    error message when the file is no image according to exif_imagetype()
+ *   'format'       list of valid formats (gif,jpeg,png,bmp)
+ *   'format_error' image has none of the specified formats
  *
  * @package    agavi
  * @subpackage validator
@@ -30,29 +31,49 @@
  *
  * @version    $Id$
  */
-class AgaviInArrayValidator extends AgaviValidator
+class AgaviIsuploadedimageValidator extends AgaviValidator
 {
 	/**
 	 * validates the input
 	 * 
-	 * @return     bool the value is in the array
+	 * @return     bool file is valid image according to given parameters
 	 */
 	protected function validate()
 	{
-		$list = split($this->getParameter('sep'), $this->getParameter('values'));
-		$value = $this->getData();
-		
-		if (!$this->isBool('case')) {
-			$value = strtolower($value);
-			$list = array_map(create_function('$a', 'return strtolower($a)'),$list);
-		}
-		
-		if (!in_array($this->getData(), $list)) {
-			$this->throwError();
+		$name = $this->getData();
+		// TODO: use Request methods instead if $_FILES
+		if ($_FILES[$name]['error'] != UPLOAD_ERR_OK) {
+			$this->throwError('php_error');
 			return false;
 		}
 		
-		return true;
+		$type = exif_imagetype($_FILES[$name]['tmp_name']);
+		if ($type === FALSE) {
+			$this->throwError('img_error');
+			return false;
+		}
+		
+		if (!$this->hasParameter('format')) {
+			return true;
+		}
+		
+		$formats = array(
+			'gif'	=> 1,
+			'jpeg'	=> 2,
+			'jpg'	=> 2,
+			'png'	=> 3,
+			'bmp'	=> 6
+		);
+		
+		
+		foreach (split(',', $this->getParameter('format')) as $format) {
+			if ($formats[strtolower($format)] == $type) {
+				return true;
+			}
+		}
+		
+		$this->throwError('format_error');
+		return false;
 	}
 }
 

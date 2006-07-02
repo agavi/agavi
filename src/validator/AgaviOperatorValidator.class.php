@@ -14,7 +14,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviAbstractOperatorValidator
+ * AgaviOperatorValidator
  * 
  * Operators group a couple if validators...
  * 
@@ -27,7 +27,7 @@
  *
  * @version    $Id$
  */
-abstract class AgaviAbstractOperatorValidator extends AgaviValidator
+abstract class AgaviOperatorValidator extends AgaviValidator
 {
 	/**
 	 * local error manager

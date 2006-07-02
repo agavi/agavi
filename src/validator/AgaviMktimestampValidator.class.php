@@ -34,7 +34,7 @@
  *
  * @version    $Id$
  */
-class AgaviMkTimestampValidator extends AgaviValidator
+class AgaviMktimestampValidator extends AgaviValidator
 {
 	/**
 	 * validates the input (builds and checks the timestamp)

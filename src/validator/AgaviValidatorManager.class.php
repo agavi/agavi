@@ -28,7 +28,7 @@
  * @version    $Id$
  */
 
-class AgaviValidatorManager extends AgaviAbstractValidatorManager implements AgaviIValidatorContainer
+class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValidatorManager, AgaviIValidatorContainer
 {
 	/**
 	 * @var        AgaviDependencyManager dependency manager
@@ -181,18 +181,6 @@ class AgaviValidatorManager extends AgaviAbstractValidatorManager implements Aga
 		foreach ($validators AS $validator) {
 			$this->addChild($validator);
 		}
-	}
-	
-	/**
-	 * returns the path to the validation config for a specific action
-	 * 
-	 * @param      string $module name of module
-	 * @param      string $action name of action
-	 * 
-	 * @return     string path to config file
-	 */
-	public static function getConfigFilename ($module, $action) {
-		return AgaviConfig::get('agavi.webapp_dir') . '/modules/' . $module . '/validate/' . $action . '.xml';
 	}
 	
 	/**
