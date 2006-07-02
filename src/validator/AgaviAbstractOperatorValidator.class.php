@@ -59,7 +59,7 @@ abstract class AgaviAbstractOperatorValidator extends AgaviValidator
 	{
 		parent::initialize($parent, $parameters);
 		
-		if($this->asBool('skip_errors')) {
+		if($this->getParameter('skip_errors')) {
 			/*
 			 * if the operator is configured to skip errors of the
 			 * child validators, a new error manager is created
