@@ -26,7 +26,7 @@
  *
  * @version    $Id$
  */
-interface AgaviIfValidatorContainer
+interface AgaviIValidatorContainer
 {
 	/**
 	 * adds a new validator to the list of children

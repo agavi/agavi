@@ -32,12 +32,7 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	/**
 	 * @var        AgaviDependencyManager dependency manager
 	 */
-	private $DependManager = null;
-
-	/**
-	 * @var        AgaviRequest request
-	 */
-	private $Request = null;
+	private $DependencyManager = null;
 
 	/**
 	 * @var        AgaviErrorManager error manager
@@ -68,11 +63,23 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 		$this->Context = $context;
 		$this->setParameters($parameters);
 		
-		$this->Request = $this->Context->getRequest();
-		$this->DependManager = new AgaviDependencyManager;
+		$this->DependencyManager = new AgaviDependencyManager;
 		$this->ErrorManager = new AgaviErrorManager;
 	}
 	
+	/**
+	 * Retrieve the current application context.
+	 *
+	 * @return     AgaviContext The current Context instance.
+	 *
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
+	 */
+	public function getContext()
+	{
+		return $this->Context;
+	}
+
 	/**
 	 * clears the validation manager for reuse
 	 * 
@@ -112,7 +119,7 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	 */
 	public function getRequest()
 	{
-		return $this->Request;
+		return $this->Context->getRequest();
 	}
 	
 	/**
@@ -125,7 +132,7 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	 */
 	public function getDependencyManager()
 	{
-		return $this->DependManager;
+		return $this->DependencyManager;
 	}
 	
 	/**
