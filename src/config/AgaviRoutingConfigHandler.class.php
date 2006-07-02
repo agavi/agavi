@@ -61,7 +61,9 @@ class AgaviRoutingConfigHandler extends AgaviConfigHandler
 		
 		foreach($configurations as $cfg)
 		{
-			$this->parseRoutes($routing, $cfg->routes);
+			if(isset($cfg->routes)) {
+				$this->parseRoutes($routing, $cfg->routes);
+			}
 		}
 
 		$code = '$this->importRoutes(' . var_export($routing->exportRoutes(), true) . ');';
