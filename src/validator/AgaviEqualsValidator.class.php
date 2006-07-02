@@ -46,7 +46,7 @@ class AgaviEqualsValidator extends AgaviValidator
 	 */
 	protected function validate()
 	{
-		$value = ($this->asBool('asparam')) ? $this->getData($this->getParameter('value')) : $this->getParameter('value');
+		$value = ($this->getParameter('asparam')) ? $this->getData($this->getParameter('value')) : $this->getParameter('value');
 		if($this->getData() != $value) {
 			$this->throwError();
 			return false;

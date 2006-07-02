@@ -44,7 +44,7 @@ class AgaviRegexValidator extends AgaviValidator
 	{
 		$result = preg_match($this->getParameter('pattern'), $this->getData());
 		
-		if($result != $this->asBool('match')) {
+		if($result != $this->getParameter('match')) {
 			$this->throwError();
 			return false;
 		}

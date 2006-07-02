@@ -64,7 +64,7 @@ class AgaviTimeValidator extends AgaviValidator
 			return false;
 		}
 
-		if($this->asBool('check') and ($hour > 23 or $minute > 59 or $second > 59)) {
+		if($this->getParameter('check') and ($hour > 23 or $minute > 59 or $second > 59)) {
 			$this->throwError();
 			return false;
 		}
