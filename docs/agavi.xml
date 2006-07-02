@@ -170,7 +170,61 @@
     <section>
       <title>Creating Your First Agavi Application</title>
 
-      <para></para>
+      <para>Once you have everything set up, create a new directory for your
+      application and, in there, run</para>
+
+      <para><command>agavi project</command></para>
+
+      <para>Follow the on-screen instructions. In case of doubt, confirm the
+      default values given by the wizard. You now likely have to change the
+      permissions for the cache folder so it's writeable to PHP or the web
+      server process:</para>
+
+      <para><command>chmod a+rwx webapp/cache</command></para>
+
+      <para>And that's it! You're done! Fire up your browser and point it to
+      the <filename>www</filename> directory of your application. If you see a
+      blank page, everything went fine. Of course, a blank page isn't really
+      satisfying or anything, so you might want to edit
+      <filename>webapp/modules/Default/templates/IndexSuccess.php</filename>
+      and put some text in there, like the infamous "Hello World". Back to the
+      browser and reload, et voila!</para>
+
+      <para>Since you're fiddling around a bit at this stage, it might be a
+      good idea to bootstrap the development environment instead of the
+      default one. To do this, open <filename>www/index.php</filename> and
+      change the bootstrap call accordingly:</para>
+
+      <para><programlisting>Agavi::bootstrap('development');</programlisting></para>
+
+      <para>If you want to add more Modules, Actions or Models to your
+      application, you can use the <command>agavi</command> script
+      again:</para>
+
+      <para><command>agavi module</command></para>
+
+      <para><command>agavi action</command></para>
+
+      <para><command>agavi model</command></para>
+
+      <para>The script uses code templates to generate all the files. You can
+      use your custom code templates, too. Just put them whereever you like
+      (look at <filename>src/buildtools</filename> to learn what templates
+      there are and what the structure and file names look like). Then, create
+      a new file called <filename>build.properties</filename> and add one line
+      to it:</para>
+
+      <para><programlisting>templates.dir = /my/project/path/mycodetemplates</programlisting>Of
+      course, you don't have to provide custom versions of
+      <emphasis>all</emphasis> code templates. Agavi will fall back to the
+      bundled templates if it couldn't find a specific one in the path you
+      specified.</para>
+
+      <para>Also, you can have per-module code templates. Add a
+      <filename>modules</filename> directory to your code templates folder,
+      and then add a new folder with the same name as the module. Now you can
+      add a code template in there, and it will only be used when generating
+      something for that specific module.</para>
     </section>
   </chapter>
 
