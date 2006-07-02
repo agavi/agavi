@@ -196,12 +196,41 @@ class AgaviValidatorManager extends AgaviAbstractValidatorManager implements Aga
 	}
 	
 	/**
-	 * fetches the error array from the error manager
+	 * returns the array of errors sorted by validator names
 	 * 
-	 * @return     array error array
+	 * Format:
+	 * 
+	 * array(
+	 *   <i>validatorName</i> => array(
+	 *     'error'  => <i>error</i>,
+	 *     'fields' => <i>array of field names</i>
+	 *   )
+	 * 
+	 * @return     array array of errors
 	 */
-	public function getErrorArray () {
-		return $this->ErrorManager->getErrorArray();
+	public function getErrorArrayByValidator () {
+		return $this->ErrorManager->getErrorArrayByValidator();
+	}
+	
+	/**
+	 * returns the array of errors sorted by input names
+	 * 
+	 * Format:
+	 * 
+	 * array(
+	 *   <i>fieldName</i> => array(
+	 *     'message'    => <i>error message</i>,
+	 *     'validators' => array(
+	 *       <i>validatorName</i> => <i>error</i>
+	 *     )
+	 * )
+	 * 
+	 * <i>error message</i> is the first submitted error with type string.
+	 * 
+	 * @return     array array of errors
+	 */
+	public function getErrorArrayByInput () {
+		return $this->ErrorManager->getErrorArrayByInput();
 	}
 	
 	/**
