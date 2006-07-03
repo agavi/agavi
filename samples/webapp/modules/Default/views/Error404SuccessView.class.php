@@ -40,6 +40,8 @@ class Default_Error404SuccessView extends AgaviView
 		// of a 404 error
 		$this->setAttribute('requested_module', $request->getAttribute('requested_module'));
 		$this->setAttribute('requested_action', $request->getAttribute('requested_action'));
+		
+		$this->getResponse()->setHttpStatusCode('404');
 	}
 
 }
