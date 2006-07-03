@@ -121,21 +121,21 @@
 	</head>
 	<body>
 <?php $r = $this->getContext()->getRouting()?>
-		<h1>Default Agavi Module</h1>
+		<h1>Agavi Sample Application</h1>
 <?php if($this->getContext()->getUser()->isAuthenticated()): ?>
 		<p id="loggedin">You are logged in. <a href="<?php echo $r->gen('logout'); ?>">Log Out</a></p>
 <?php endif; ?>
 		<div id="menu">
-			<h3>Actions</h3>
+			<h3>Menu</h3>
 			<ul>
-				<li><a href="<?php echo $r->gen('index'); ?>">Default Action</a></li>
-				<li><a href="<?php echo $r->gen('error_404'); ?>">Error 404 Action</a></li>
-<?php if(!$this->getContext()->getUser()->isAuthenticated()): ?>
-				<li><a href="<?php echo $r->gen('login'); ?>">Login Action</a></li>
-<?php endif; ?>
-				<li><a href="<?php echo $r->gen('module_disabled'); ?>">Module Disabled Action</a></li>
-				<li><a href="<?php echo $r->gen('secure'); ?>">Secure Action</a></li>
-				<li><a href="<?php echo $r->gen('unavailable'); ?>">Unavailable Action</a></li>
+				<li><a href="<?php echo $r->gen('index'); ?>">Home</a></li>
+				<?php if(!$this->getContext()->getUser()->isAuthenticated()): ?>
+								<li><a href="<?php echo $r->gen('login'); ?>">Login</a></li>
+				<?php endif; ?>
+				<li><a href="<?php echo $r->gen('secure'); ?>">A Secure Action</a></li>
+				<li><a href="<?php echo $r->gen('secure2'); ?>">Another Secure Action</a></li>
+				<li><a href="<?php echo $r->gen('asdjashdasd'); ?>">Call invalid URL</a></li>
+				<li><a href="<?php echo $r->gen('disabled'); ?>">Try Disabled Module</a></li>
 			</ul>
 		</div>
 		<div id="content">

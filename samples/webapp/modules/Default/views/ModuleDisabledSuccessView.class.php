@@ -30,7 +30,7 @@ class Default_ModuleDisabledSuccessView extends AgaviView
 		$this->setDecoratorTemplate('Master');
 
 		// set the title
-		$this->setAttribute('title', 'Module Disabled');
+		$this->setAttribute('title', 'This Module is Disabled');
 	}
 
 }

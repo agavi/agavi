@@ -14,20 +14,15 @@
 <configurations>
 	<configuration>
 		<routes>
-			<route name="unavailable" pattern="/unavailable" module="%actions.unavailable_module%" action="%actions.unavailable_action%" />
-			<route name="secure" pattern="/secure" module="%actions.secure_module%" action="%actions.secure_action%" />
-			<route name="module_disabled" pattern="/module_disabled" module="%actions.module_disabled_module%" action="%actions.module_disabled_action%" />
+			<route name="disabled" pattern="/disabled" module="Disabled" action="Index" />
 			<route name="login" pattern="/login" module="%actions.login_module%" action="%actions.login_action%">
 				<routes>
 					<route name="logout" pattern="/logout" module="%actions.login_module%" action="Logout" />
 				</routes>
 			</route>
+			<route name="secure2" pattern="/secure2" module="Default" action="Secure2" />
+			<route name="secure" pattern="/secure" module="Default" action="Secure1" />
 			<route name="index" pattern="^/$" module="%actions.default_module%" action="%actions.default_action%" />
-			<route name="error_404" pattern="/(foo:error_404)" module="%actions.error_404_module%" action="%actions.error_404_action%">
-				<defaults>
-					<default for="foo">error_404</default>
-				</defaults>
-			</route>
 		</routes>
 	</configuration>
 </configurations>
