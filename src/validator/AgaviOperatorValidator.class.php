@@ -27,7 +27,7 @@
  *
  * @version    $Id$
  */
-abstract class AgaviOperatorValidator extends AgaviValidator
+abstract class AgaviOperatorValidator extends AgaviValidator implements AgaviIValidatorContainer
 {
 	/**
 	 * local error manager
@@ -36,7 +36,7 @@ abstract class AgaviOperatorValidator extends AgaviValidator
 	 * an own instance of ErrorManager is created and given to the validators for reporting
 	 * errors instead of giving them the parent ValidatorContainer's error manager.
 	 * 
-	 * @var        ErrorManager ErrorManager for child validators
+	 * @var        AgaviErrorManager ErrorManager for child validators
 	 */
 	protected $ErrorManager = null;
 
@@ -46,7 +46,7 @@ abstract class AgaviOperatorValidator extends AgaviValidator
 	protected $Children = array();
 	
 	/**
-	 * initializes the operator
+	 * constructor
 	 * 
 	 * @param      AgaviIValidatorContainer parent ValidatorContainer
 	 *                                      (mostly the ValidatorManager)
@@ -55,16 +55,16 @@ abstract class AgaviOperatorValidator extends AgaviValidator
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
-	public function initialize(AgaviIValidatorContainer $parent, $parameters = array())
+	public function __construct(AgaviIValidatorContainer $parent, $parameters = array())
 	{
-		parent::initialize($parent, $parameters);
+		parent::__construct($parent, $parameters);
 		
 		if($this->getParameter('skip_errors')) {
 			/*
 			 * if the operator is configured to skip errors of the
 			 * child validators, a new error manager is created
 			 */
-			$this->ErrorManager = new ErrorManager;
+			$this->ErrorManager = new AgaviErrorManager;
 		} else {
 			// else the parent's error manager is taken
 			$this->ErrorManager = $this->ParentContainer->getErrorManager();
@@ -82,7 +82,7 @@ abstract class AgaviOperatorValidator extends AgaviValidator
 	public function getBase()
 	{
 		// enfoce returning as string
-		return $this->CurBase->__asString();
+		return $this->CurBase->__toString();
 	}
 
 	/**
@@ -144,6 +144,21 @@ abstract class AgaviOperatorValidator extends AgaviValidator
 	public function addChild(AgaviValidator $validator)
 	{
 		array_push($this->Children, $validator);
+	}
+	
+	/**
+	 * registers an array of validators
+	 * 
+	 * @param      array array of validators
+	 * 
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
+	 */
+	public function registerValidators($validators)
+	{
+		foreach($validators AS $validator) {
+			$this->addChild($validator);
+		}
 	}
 	
 	/**

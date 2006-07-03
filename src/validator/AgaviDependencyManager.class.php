@@ -57,8 +57,7 @@ class AgaviDependencyManager
 	public function checkDependencies($tokens, $base = '')
 	{
 		foreach($tokens AS $token) {
-			$p = new AgaviPath($base.'/'.$token);
-			if(!AgaviPath::getValueByPath($p)) {
+			if(!AgaviPath::getValueByPath($this->DepData, $base.'/'.$token)) {
 				return false;
 			}
 		}
@@ -77,8 +76,7 @@ class AgaviDependencyManager
 	 */
 	public function addDependTokens($tokens, $base = '') {
 		foreach($tokens AS $token) {
-			$p = new AgaviPath($base.'/'.$token);
-			AgaviPath::setValueByPath($this->DepData, $p, true);
+			AgaviPath::setValueByPath($this->DepData, $base.'/'.$token, true);
 		}
 	}
 }

@@ -72,7 +72,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	protected $CurBase = null;
 
 	/**
-	 * initializes the validator
+	 * constructor
 	 * 
 	 * @param      AgaviIValidatorContainer parent validator container
 	 *                                      (mostly the validator manager)
@@ -81,9 +81,15 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
-	public function initialize(AgaviIValidatorContainer $parent, $parameters = array())
+	public function __construct(AgaviIValidatorContainer $parent, $parameters = array())
 	{
 		$this->ParentContainer = $parent;
+		if (!is_array($parameters['depends'])) {
+			$parameters['depends'] = split(',', $this->getParameter('depends'));
+		}
+		if (!is_array($parameters['provides'])) {
+			$parameters['provides'] = split(',', $this->getParameter('provides'));
+		}
 		$this->setParameters($parameters);
 		$this->CurBase = new AgaviPath($parent->getBase());
 	}
@@ -181,7 +187,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 		}
 		
 		if($affectedFields == null) {
-			$affectedFields = $this->getAffacedFields();
+			$affectedFields = $this->getAffectedFields();
 		} elseif(!is_array($affectedFields)) {
 			$affectedFields = array($affectedFields);
 		}
@@ -276,7 +282,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 
 			if(!$this->validate()) {
 				// validation failed, exit with configured error code
-				return self::mapErrorCode($this->getParameter('type'));
+				return self::mapErrorCode($this->getParameter('severity'));
 			}
 
 			// put dependencies provided by this validator into manager
@@ -344,7 +350,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 */
 	public function execute()
 	{
-		$base = new AgaviPath($this->getParameter('base'));
+		$base = $this->getParameter('base');
 		
 		return $this->validateInBase($base);
 	}

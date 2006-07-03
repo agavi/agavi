@@ -97,6 +97,9 @@
 
 			<handler pattern="%core.config_dir%/routing.xml" validate="%core.agavi_dir%/config/xsd/routing.xsd" class="AgaviRoutingConfigHandler" />
 
+			<handler pattern="%core.config_dir%/validators.xml" validate="%core.agavi_dir%/config/xsd/validators.xsd" class="AgaviReturnArrayConfigHandler" />
+			<handler pattern="%core.system_config_dir%/validators.xml" validate="%core.agavi_dir%/config/xsd/validators.xsd" class="AgaviReturnArrayConfigHandler" />
+
 			<!--
 				+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
 				| Global Agavi configuration handlers.                                       |
@@ -117,7 +120,7 @@
 
 			<handler pattern="%core.module_dir%/*/config/module.xml" validate="%core.agavi_dir%/config/xsd/module.xsd" class="AgaviModuleConfigHandler" />
 
-			<handler pattern="%core.module_dir%/*/validate/*.xml" validate="%core.agavi_dir%/config/xsd/validator.xsd" class="AgaviValidatorConfigHandler" />
+			<handler pattern="%core.module_dir%/*/validate/*.xml" class="AgaviValidatorConfigHandler" />
 		</handlers>
 	</configuration>
 </configurations>

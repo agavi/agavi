@@ -40,7 +40,7 @@ class AgaviIssetValidator extends AgaviValidator
 	 */
 	protected function validate()
 	{
-		if($this->parent->getRequest()->hasParameter($this->getParameter('param'))) {
+		if($this->ParentContainer->getRequest()->hasParameter($this->getParameter('param'))) {
 			$this->throwError();
 			return false;
 		}
