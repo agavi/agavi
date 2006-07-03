@@ -33,8 +33,8 @@ class Default_LoginInputView extends AgaviView
 		$this->setAttribute('title', 'Login');
 		
 		// our login form is displayed. so let's remove that cookie thing there
-		$this->getContext()->getController()->getResponse()->setCookie('autologon[username]', false);
-		$this->getContext()->getController()->getResponse()->setCookie('autologon[password]', false);
+		$this->getResponse()->setCookie('autologon[username]', false);
+		$this->getResponse()->setCookie('autologon[password]', false);
 	}
 
 }

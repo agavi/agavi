@@ -52,7 +52,6 @@ class Default_LoginAction extends AgaviAction
 	public function executeWrite()
 	{
 		$req = $this->getContext()->getRequest();
-		$res = $this->getContext()->getController()->getResponse();
 		
 		try {
 			$this->getContext()->getUser()->login($req->getParameter('username'), $req->getParameter('password'));

@@ -33,7 +33,7 @@ class Default_LoginSuccessView extends AgaviView
 		$this->setAttribute('title', 'Login Successful');
 		
 		$req = $this->getContext()->getRequest();
-		$res = $this->getContext()->getController()->getResponse();
+		$res = $this->getResponse();
 		if($req->getParameter('remember')) {
 			$res->setCookie('autologon[username]', $req->getParameter('username'), 60*60*24*14);
 			$res->setCookie('autologon[password]', $req->getParameter('password'), 60*60*24*14);

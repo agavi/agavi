@@ -32,8 +32,8 @@ class Default_LogoutSuccessView extends AgaviView
 		// set the title
 		$this->setAttribute('title', 'Logout Successful');
 		
-		$this->getContext()->getController()->getResponse()->setCookie('autologon[username]', false);
-		$this->getContext()->getController()->getResponse()->setCookie('autologon[password]', false);
+		$this->getResponse()->setCookie('autologon[username]', false);
+		$this->getResponse()->setCookie('autologon[password]', false);
 	}
 
 }
