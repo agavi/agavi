@@ -452,7 +452,7 @@ abstract class AgaviController extends AgaviParameterHolder
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function getResponse()
+	protected final function getResponse()
 	{
 		return $this->response;
 	}
