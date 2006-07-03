@@ -36,7 +36,16 @@ abstract class AgaviRouting
 						$context = null,
 						$input = null,
 						$prefix = '';
-	
+
+	/**
+	 * Initialize the routing instance.
+	 *
+	 * @param      AgaviContext A Context instance.
+	 * @param      array        An array of initialization parameters.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public function initialize(AgaviContext $context, $parameters = array())
 	{
 		$this->context = $context;
@@ -46,22 +55,73 @@ abstract class AgaviRouting
 			include(AgaviConfigCache::checkConfig($cfg, $context->getName()));
 		}
 	}
-	
+
+	/**
+	 * Retrieve the current application context.
+	 *
+	 * @return     AgaviContext A Context instance.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public final function getContext()
 	{
 		return $this->context;
 	}
 
+	/**
+	 * Retrieve the input for this routing instance.
+	 *
+	 * @return     string The input.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public final function getInput()
 	{
 		return $this->input;
 	}
 
+	/**
+	 * Retrieve the prefix for this routing instance.
+	 *
+	 * @return     string The prefix.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public final function getPrefix()
 	{
 		return $this->prefix;
 	}
 
+	/**
+	 * Adds a route to this routing instance.
+	 *
+	 * @param      string A string with embedded regexp.
+	 * @param      array An array with options. The array can contain following
+	 *                   items:
+	 *                   <ul>
+	 *                    <li>name</li>
+	 *                    <li>stopping</li>
+	 *                    <li>output_type</li>
+	 *                    <li>module</li>
+	 *                    <li>action</li>
+	 *                    <li>parameters</li>
+	 *                    <li>ignores</li>
+	 *                    <li>defaults</li>
+	 *                    <li>childs</li>
+	 *                    <li>callback</li>
+	 *                    <li>imply</li>
+	 *                    <li>cut</li>
+	 *                   </ul>
+	 * @param      string The name of the parent route (if any).
+	 *
+	 * @return     string The name of the route.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public function addRoute($route, $options = array(), $parent = null)
 	{
 		// catch the old options from the route which has to be overwritten
@@ -164,17 +224,43 @@ abstract class AgaviRouting
 		return $routeName;
 	}
 
-
+	/**
+	 * Retrieve the internal representation of the route info.
+	 *
+	 * @return     array The info about all routes.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public function exportRoutes()
 	{
 		return $this->routes;
 	}
 
+	/**
+	 * Sets the internal representation of the route info.
+	 *
+	 * @param      array The info about all routes.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public function importRoutes($routes)
 	{
 		$this->routes = $routes;
 	}
 
+	/**
+	 * Generate a formatted Agavi URL.
+	 *
+	 * @param      string A route name.
+	 * @param      array  An associative array of URL parameters.
+	 *
+	 * @return     string
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public function gen($route, $params = array())
 	{
 		$routes = explode('+', $route);
@@ -276,6 +362,15 @@ abstract class AgaviRouting
 		return $this->prefix . $url;
 	}
 
+	/**
+	 * Matches the input against the routing info and sets the info as request 
+	 * parameter.
+	 *
+	 * @return     array All routes that matched.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public function execute()
 	{
 		$req = $this->context->getRequest();
@@ -411,13 +506,33 @@ abstract class AgaviRouting
 		return $matchedRoutes;
 	}
 
-
+	/**
+	 * Performs as match of the route against the input
+	 *
+	 * @param      array The route info array.
+	 * @param      string The input.
+	 * @param      array The array where the matches will be stored to.
+	 *
+	 * @return     bool Whether the regexp matched.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	protected function parseInput($route, $input, &$matches)
 	{
 		return preg_match($route['rxp'], $input, $matches, PREG_OFFSET_CAPTURE);
 	}
 
-
+	/**
+	 * Parses a route pattern string.
+	 *
+	 * @param      string The route pattern.
+	 *
+	 * @return     array The info for this route pattern.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	protected function parseRouteString($str)
 	{
 		$vars = array();
@@ -458,7 +573,7 @@ abstract class AgaviRouting
 
 					$tmpStr = '';
 					$state = 'rxStart';
-					$rxName = $rxInner = $rxPrefix = $rxPostFix = '';
+					$rxName = $rxInner = $rxPrefix = $rxPostfix = '';
 					$parenthesisCount = 1;
 					$bracketCount = 0;
 					$hasBrackets = false;
@@ -562,6 +677,16 @@ abstract class AgaviRouting
 		return array($rxStr, $reverseStr, $vars, $anchor);
 	}
 
+	/**
+	 * Parses an embedded regular expression in the route pattern string.
+	 *
+	 * @param      string The definition.
+	 *
+	 * @return     array The name and the regexp.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	protected function parseParameterDefinition($def)
 	{
 		$name = '';

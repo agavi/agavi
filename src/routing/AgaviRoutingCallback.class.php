@@ -30,6 +30,15 @@ abstract class AgaviRoutingCallback
 	protected $context = null,
 						$route = null;
 
+	/**
+	 * Initialize the callback instance.
+	 *
+	 * @param      AgaviContext A Context instance.
+	 * @param      array        An array with information about the route.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public function initialize(AgaviContext $context, &$route)
 	{
 		$this->context = $context;
