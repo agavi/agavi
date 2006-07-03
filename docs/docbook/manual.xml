@@ -238,19 +238,47 @@
     </section>
 
     <section>
-      <title>Environments and Contexts</title>
+      <title>Elements of an Application</title>
 
       <para></para>
+    </section>
+
+    <section>
+      <title>Environments and Contexts</title>
+
+      <para>The framework is started by bootstrapping an environment. Typical
+      environments would be "development", "testing" or "production". You may
+      configure any number of environments, but only one of them is used
+      during execution.</para>
+
+      <para>Environments allow for extremely fine-grained settings for each
+      machine an application is running on. The various Environments may have
+      different database configurations, logging settings and levels, debug
+      settings and even filters or factories. Also, each developer in a team
+      may have his own Environment for development, with his or her own
+      database settings etc. which eliminates the need for people constantly
+      having to change their settings, accidentially committing changed files
+      to SCM repositories or missing changes because configuration files were
+      set to <emphasis>ignore</emphasis>.</para>
+
+      <para>A Context encapsulates a running instance of the framework. While
+      any aspect of the framework, even system settings and autoloads may be
+      configured per Environment, you're a bit more restricted in Context
+      configuration, and that's intentional. A Context's job is to hold the
+      proper implementations that are needed to excecute the application in
+      the current <emphasis>context</emphasis> (therefore the name), such as
+      "web" for normal requests to an application through a browser, "xmlrpc"
+      for an XMLRPC interface of an application, or "console" for a Context
+      that exposes the application to the command line.</para>
+
+      <para>All configuration files support the configuration per Environment
+      and Context (if applicable) without any performance disadvantage - Agavi
+      compiles them into highly optimized variants for each Environment and
+      Context when needed for minimum overhead.</para>
     </section>
 
     <section>
       <title>How a Request is Processed</title>
-
-      <para></para>
-    </section>
-
-    <section>
-      <title>Elements of an Application</title>
 
       <para></para>
     </section>
