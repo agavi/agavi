@@ -31,6 +31,10 @@
  */
 abstract class AgaviView extends AgaviAttributeHolder
 {
+	/**
+	 * @since      0.9.0
+	 */
+	const NONE = null;
 
 	/**
 	 * Render the presentation to the client.
