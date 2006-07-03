@@ -30,7 +30,7 @@ class Default_UnavailableSuccessView extends AgaviView
 		$this->setDecoratorTemplate('Master');
 
 		// set the title
-		$this->setAttribute('title', 'Unavailable Action');
+		$this->setAttribute('title', 'This Application is Unavailable');
 	}
 
 }

@@ -1,0 +1,483 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
+<book>
+  <title>Agavi Manual</title>
+
+  <preface>
+    <title>Preface</title>
+
+    <para>Welcome to the <productname>Agavi</productname> Manual. This book
+    tries to serve you as the definitive guide to the
+    <productname>Agavi</productname> framework. It contains a "Getting
+    Started" guide, a comprehensive introduction to the concept and usage of
+    Agavi, a chapter with many examples and "best practices", and a reference
+    manual that documents all aspects of the framework.</para>
+  </preface>
+
+  <chapter>
+    <title>Getting Started</title>
+
+    <section>
+      <title>Introduction</title>
+
+      <para><productname>Agavi</productname> is a Web Application Framework
+      for <productname>PHP</productname> <productnumber>5</productnumber>.
+      While it lies in the nature of a framework to simplify the application
+      development process, Aagvi won't do that at any cost. The primary goals
+      are flexibility, cleanliness and stucture. You won't find HTML Form
+      helper methods in Agavi (because they aren't necessary, we have
+      something better, more on that later), and we use XML configuration
+      files because we believe that they offer better structuring abilites
+      than alternatives such as YAML. If you're looking for a solution that
+      assists you in serious high-end development, that has smart and
+      innovative solutions to common problems that haven't been solved
+      properly before, and that encourages and enforces a clean development
+      process to ensure your code remains maintainable and extensible, you've
+      come to the right place.</para>
+    </section>
+
+    <section>
+      <title>Installation</title>
+
+      <section>
+        <title>PEAR</title>
+
+        <para>Agavi uses a <productname>PEAR Channel</productname> for release
+        distribution. In order to be able to install releases via
+        <productname>PEAR</productname>, you have to discover the
+        <productname>Agavi PEAR Channel</productname> first:</para>
+
+        <para><command>pear channel-discover pear.agavi.org</command></para>
+
+        <para>Now you're ready to install Agavi:</para>
+
+        <para><command>pear install agavi/agavi</command></para>
+
+        <para>You now probably see an error message telling you that
+        <productname>PEAR</productname> was unable to install
+        <productname>Phing</productname>. Agavi needs
+        <productname>Phing</productname>, and tries to install it, but this
+        will fail if it doesn't know <productname>Phing's</productname>
+        Channel Server yet. Since discovering channels gets massively annoying
+        over time, you can tell <productname>PEAR</productname> to
+        automatically add channels as it comes across them:</para>
+
+        <para><command>pear config-set auto_discover 1</command></para>
+
+        <para>If you want to install all dependencies (i.e. including
+        <productname>Creole</productname> and
+        <productname>Propel</productname>), type:</para>
+
+        <para><command>pear install --alldeps agavi/agavi</command></para>
+
+        <para>If you're still having trouble installing things, you might have
+        to change your preferred state setting in
+        <productname>PEAR</productname>:</para>
+
+        <para><command>pear config-set preferred_state beta</command></para>
+
+        <para>Also, it is possible to obtain a specific version of
+        Agavi:</para>
+
+        <para><command>pear install agavi/agavi-0.11.0</command></para>
+      </section>
+
+      <section id="c1-installation-by_hand">
+        <title id="c1-installation-by_hand-title">By Hand</title>
+
+        <para>Installing Agavi by hand is the logical choice if you can't use
+        <productname>PEAR</productname>, or if you want to bundle Agavi with
+        your application. Go to the <emphasis>Downloads</emphasis> section on
+        the <ulink url="http://www.agavi.org">Agavi website</ulink> to get a
+        release. After unpacking the archive, you can put the
+        <filename>src</filename> folder into a folder of your choice and
+        adjust your include path accordingly. Don't forget to copy
+        <filename>etc/agavi-dist</filename> or
+        <filename>etc/agavi.bat-dist</filename> script to an
+        <filename>agavi</filename> or <filename>agavi.bat</filename>
+        executable into a convenient location so you can use the shell
+        commands for creating projects, modules, actions etc. Keep in mind
+        that you must edit the script and enter the path to your Agavi
+        installation (that's the <filename>src</filename> folder you copied
+        earlier) so everything works as intended.</para>
+
+        <para>The more usual case, however, will be that you're shipping Agavi
+        together with your application, either because you can't use
+        <productname>Phing</productname> to install Agavi in the production
+        environment, or because you want total control over what version of
+        Agavi is used. In this case, copy the <filename>src</filename> folder
+        to somewhere inside your application's directory structure (we
+        recommend a <filename>libs</filename> folder that holds all libraries
+        your app uses and that sits on the same level as the
+        <filename>webapp</filename> and <filename>www</filename> directories)
+        and give it a different name, <filename>agavi</filename> would stand
+        to reason. For that little extra something, copy the agavi-dist or
+        agavi.bat-dist script again, maybe to your application root. Your
+        <filename>www/index.php</filename> can then be changed to use a
+        relative path for including <filename>agavi.php</filename>, in our
+        case that'd be <filename>../libs/agavi/agavi.php</filename>. Agavi
+        will auto-determine and remember the path where it was loaded from,
+        and works without any changes to your environment's include
+        path.</para>
+      </section>
+
+      <section>
+        <title>From SVN</title>
+
+        <para>Public access to the <productname>Subversion</productname>
+        repository is possible via <ulink
+        url="svn://svn.agavi.org/agavi">svn://svn.agavi.org/agavi</ulink>. If
+        you want to get the bleeding edge version, use
+        <filename>/agavi/trunk</filename>. Specific releases are available
+        through <filename>/agavi/tags</filename>. Also, you can get
+        development versions of version branches (if applicable) via
+        <filename>/agavi/branches</filename>.</para>
+
+        <para>You can either perform an <command>svn checkout</command>, which
+        creates <filename>.svn</filename> folders that allow you to stay up to
+        date on changes in the repository via <command>svn update</command>,
+        or you can simply <command>svn export</command> the contents of the
+        repository without <productname>Subversion</productname> control
+        folders, which is a good idea for example when you want to export a
+        specific release into your own versioning control system.</para>
+
+        <para>Once you have obtained a copy from the repository, you can
+        either follow the instructions in <xref
+        endterm="c1-installation-by_hand-title"
+        linkend="c1-installation-by_hand" />, or you package a
+        <productname>PEAR</productname> release yourself for local
+        installation by first running</para>
+
+        <para><command>phing package</command></para>
+
+        <para>on the root directory of your checkout, followed by a</para>
+
+        <para><command>pear package</command></para>
+
+        <para>inside the <filename>build</filename> directory created by the
+        first command. This will write a <filename>.tgz</filename> file which
+        can be installed using PEAR.</para>
+      </section>
+    </section>
+
+    <section>
+      <title>The Sample Application</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Creating Your First Agavi Application</title>
+
+      <para>Once you have everything set up, create a new directory for your
+      application and, in there, run</para>
+
+      <para><command>agavi project</command></para>
+
+      <para>Follow the on-screen instructions. In case of doubt, confirm the
+      default values given by the wizard. You now likely have to change the
+      permissions for the cache folder so it's writeable to PHP or the web
+      server process:</para>
+
+      <para><command>chmod a+rwx webapp/cache</command></para>
+
+      <para>And that's it! You're done! Fire up your browser and point it to
+      the <filename>www</filename> directory of your application. If you see a
+      blank page, everything went fine. Of course, a blank page isn't really
+      satisfying or anything, so you might want to edit
+      <filename>webapp/modules/Default/templates/IndexSuccess.php</filename>
+      and put some text in there, like the infamous "Hello World". Back to the
+      browser and reload, et voila!</para>
+
+      <para>Since you're fiddling around a bit at this stage, it might be a
+      good idea to bootstrap the development environment instead of the
+      default one. To do this, open <filename>www/index.php</filename> and
+      change the bootstrap call accordingly:</para>
+
+      <para><programlisting>Agavi::bootstrap('development');</programlisting></para>
+
+      <para>If you want to add more Modules, Actions or Models to your
+      application, you can use the <command>agavi</command> script
+      again:</para>
+
+      <para><command>agavi module</command></para>
+
+      <para><command>agavi action</command></para>
+
+      <para><command>agavi model</command></para>
+
+      <para>The script uses code templates to generate all the files. You can
+      use your custom code templates, too. Just put them whereever you like
+      (look at <filename>src/buildtools</filename> to learn what templates
+      there are and what the structure and file names look like). Then, create
+      a new file called <filename>build.properties</filename> and add one line
+      to it:</para>
+
+      <para><programlisting>templates.dir = /my/project/path/mycodetemplates</programlisting>Of
+      course, you don't have to provide custom versions of
+      <emphasis>all</emphasis> code templates. Agavi will fall back to the
+      bundled templates if it couldn't find a specific one in the path you
+      specified.</para>
+
+      <para>Also, you can have per-module code templates. Add a
+      <filename>modules</filename> directory to your code templates folder,
+      and then add a new folder with the same name as the module. Now you can
+      add a code template in there, and it will only be used when generating
+      something for that specific module.</para>
+    </section>
+  </chapter>
+
+  <chapter>
+    <title>Agavi Basics</title>
+
+    <section>
+      <title>System Architecture</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Environments and Contexts</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>How a Request is Processed</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Elements of an Application</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Configuration</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Actions and Models</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Views, Renderers and Templates</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Request and Routing</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Output Types and Response</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Session Handling</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Validation</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Filters</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Databases</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Logging</title>
+
+      <para></para>
+    </section>
+  </chapter>
+
+  <chapter>
+    <title>Examples And Tutorials</title>
+
+    <section>
+      <title>Best Practices</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Populating and Validating Forms</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>User Authentication, Credentials, Cookie-Based Auto-Login</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Propel Integration</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Decorators and Slots</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Routing Examples</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Caching</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Serving Output Variants of the Same Content</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Adding an XMLRPC or Other Interface to Your Web
+      Application</title>
+
+      <para></para>
+    </section>
+  </chapter>
+
+  <chapter>
+    <title>Agavi Reference</title>
+
+    <section>
+      <title>Action</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Configuration</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Controller</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Core/Context</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Databases</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Exceptions</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Filters</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Logging</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Models</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Renderers</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Request</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Response</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Routing</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Storage</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>User</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Validation</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Views</title>
+
+      <para></para>
+    </section>
+  </chapter>
+</book>

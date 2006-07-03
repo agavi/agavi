@@ -28,10 +28,20 @@
  */
 class AgaviWebRouting extends AgaviRouting
 {
+	/**
+	 * Initialize the routing instance.
+	 *
+	 * @param      AgaviContext A Context instance.
+	 * @param      array        An array of initialization parameters.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public function initialize(AgaviContext $context, $parameters = array())
 	{
 		parent::initialize($context);
 		$ru = ($p = strpos($_SERVER['REQUEST_URI'], '?')) === false ? $_SERVER['REQUEST_URI'] : substr($_SERVER['REQUEST_URI'], 0, $p);
+		$ru = urldecode($ru);
 
 		if(isset($_SERVER['PATH_INFO'])) {
 			$this->prefix =  substr($ru, 0, -strlen($_SERVER['PATH_INFO']));
@@ -84,12 +94,16 @@ class AgaviWebRouting extends AgaviRouting
 			} else {
 				// the route exists, but we must create a normal index.php?foo=bar URL.
 
+				$req = $this->context->getRequest();
+
 				if(isset($this->routes[$route])) {
 					$defaults = array();
 					$parent = $route;
 					do {
 						$r =& $this->routes[$parent];
 						$myDefaults = $r['opt']['defaults'];
+						$myDefaults[$req->getModuleAccessor()] = $r['opt']['module'];
+						$myDefaults[$req->getActionAccessor()] = $r['opt']['action'];
 
 						foreach(array_reverse($r['opt']['nostops']) as $noStop) {
 							$myR = $this->routes[$noStop];

@@ -61,7 +61,9 @@ class AgaviRoutingConfigHandler extends AgaviConfigHandler
 		
 		foreach($configurations as $cfg)
 		{
-			$this->parseRoutes($routing, $cfg->routes);
+			if(isset($cfg->routes)) {
+				$this->parseRoutes($routing, $cfg->routes);
+			}
 		}
 
 		$code = '$this->importRoutes(' . var_export($routing->exportRoutes(), true) . ');';
@@ -76,7 +78,19 @@ class AgaviRoutingConfigHandler extends AgaviConfigHandler
 
 	}
 
-	protected function parseRoutes($routing, $routes, $parent = null)
+
+	/**
+	 * Takes a nested array of AgaviConfigValueHolder containing the routing
+	 * information and creates the routes in the given routing.
+	 *
+	 * @param      AgaviRouting The routing instance to create the routes in.
+	 * @param      array A possibly nested array of AgaviConfigValueHolders.
+	 * @param      string The name of the parent route (if any).
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	protected function parseRoutes(AgaviRouting $routing, $routes, $parent = null)
 	{
 		foreach($routes as $route) {
 			$pattern = $route->getAttribute('pattern');

@@ -29,6 +29,23 @@
 		<phpdoc title="Agavi Documentation" destdir="apidocs" sourcepath="src" output="HTML:frames:earthli"/>
 	</target>
 
+	<target name="manual-html" >
+		<mkdir dir="manual-html" />
+		<copy file="docs/lib/agavi-manual.css" todir="manual-html" overwrite="true" />
+		<xslt file="docs/docbook/manual.xml" todir="manual-html" style="docs/lib/agavi-manual-html.xsl" />
+	</target>
+
+	<target name="manual-html-onepage" >
+		<mkdir dir="manual-html" />
+		<copy file="docs/lib/agavi-manual.css" todir="manual-html" overwrite="true" />
+		<xslt file="docs/docbook/manual.xml" todir="manual-html" style="docs/lib/agavi-manual-html-onepage.xsl" />
+	</target>
+	
+	<target name="manual-fo" >
+		<mkdir dir="manual-fo" />
+		<xslt file="docs/docbook/manual.xml" tofile="manual-fo/manual.fo" style="docs/lib/agavi-manual-fo.xsl" />
+	</target>
+
 	<target name="package" description="build pear package">
 		<!-- prepare -->
 		<delete dir="${builddir}" includeemptydirs="true" verbose="true" failonerror="false" />

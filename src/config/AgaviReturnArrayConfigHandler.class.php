@@ -54,7 +54,17 @@ class AgaviReturnArrayConfigHandler extends AgaviConfigHandler
 
 	}
 
-	protected function convertToArray($item, $append = false)
+	/**
+	 * Converts an AgaviConfigValueHolder into an array.
+	 *
+	 * @param      AgaviConfigValueHolder The config value to convert.
+	 *
+	 * @return     array The config values as an array.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	protected function convertToArray(AgaviConfigValueHolder $item)
 	{
 		$data = array();
 

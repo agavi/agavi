@@ -59,6 +59,7 @@ abstract class AgaviInflector
 		'/children$/i' => 'child',
 		'/men$/i' => 'man',
 		'/people$/i' => 'person',
+		'/databases$/i'=> 'database',
 		'/(quiz)zes$/i' => '\1',
 		'/(matr)ices$/i' => '\1ix',
 		'/(vert|ind)ices$/i' => '\1ex',

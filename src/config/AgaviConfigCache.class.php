@@ -287,7 +287,24 @@ class AgaviConfigCache
 	}
 
 
-
+	/**
+	 * Parses a config file with the ConfigParser for the extension of the given
+	 * file.
+	 *
+	 * @param      string An absolute filesystem path to a configuration file.
+	 * @param      bool Whether the config parser class should be autoloaded if
+	 *                  the class doesn't exist.
+	 * @param      string A path to a validation file for this config file.
+	 *
+	 * @return     AgaviConfigValueHolder An abstract representation of the 
+	 *                                    config file.
+	 *
+	 * @throws     <b>AgaviConfigurationException</b> If the parser for the
+	 *             extension couldn't be found.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public static function parseConfig($config, $autoloadParser = true, $validateFile = null)
 	{
 		static $parsers = array();

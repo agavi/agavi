@@ -43,22 +43,22 @@ class AgaviException extends Exception
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.9.0
 	 */
-	public static function printStackTrace(Exception $e, $context = null)
+	public static function printStackTrace(Exception $e, $context = null, $response = null)
 	{
 		// throw away any response data that might be there
-		if($context !== null && ($c = $context->getController()) !== null && ($r = $c->getResponse()) !== null) {
-			if($r->isLocked()) {
+		if($context !== null && ($c = $context->getController()) !== null && $response !== null) {
+			if($response->isLocked()) {
 				// reponse is locked, so grab the output and discard it
 				ob_start();
-				$r->send();
+				$response->send();
 				ob_end_clean();
 			} else {
 				// not locked, we can clear the response
-				$r->clear();
+				$response->clear();
 			}
 		}
 		
-		if($context !== null && ($c = $context->getController()) !== null && ($r = $c->getResponse()) !== null && ($oti = $c->getOutputTypeInfo()) !== null && isset($oti['exception'])) {
+		if($context !== null && ($c = $context->getController()) !== null && $response !== null && ($oti = $c->getOutputTypeInfo()) !== null && isset($oti['exception'])) {
 			include($oti['exception']);
 		} else {
 			// include proper exception template

@@ -168,7 +168,7 @@ abstract class AgaviController extends AgaviParameterHolder
 			$this->response->send();
 			
 		} catch (Exception $e) {
-			AgaviException::printStackTrace($e, $this->context);
+			AgaviException::printStackTrace($e, $this->context, $this->getResponse());
 		}
 	}
 
@@ -204,6 +204,10 @@ abstract class AgaviController extends AgaviParameterHolder
 
 		if(!AgaviConfig::get('core.available', false)) {
 			// application is unavailable
+			$this->context->getRequest()->setAttributes(array(
+				'requested_module' => $moduleName,
+				'requested_action' => $actionName
+			), 'org.agavi.controller.forwards.unavailable');
 			$moduleName = AgaviConfig::get('actions.unavailable_module');
 			$actionName = AgaviConfig::get('actions.unavailable_action');
 
@@ -220,8 +224,10 @@ abstract class AgaviController extends AgaviParameterHolder
 
 			// track the requested module so we have access to the data
 			// in the error 404 page
-			$this->context->getRequest()->setAttribute('requested_action', $actionName);
-			$this->context->getRequest()->setAttribute('requested_module', $moduleName);
+			$this->context->getRequest()->setAttributes(array(
+				'requested_module' => $moduleName,
+				'requested_action' => $actionName
+			), 'org.agavi.controller.forwards.error_404');
 
 			// switch to error 404 action
 			$moduleName = AgaviConfig::get('actions.error_404_module');
@@ -316,6 +322,10 @@ abstract class AgaviController extends AgaviParameterHolder
 
 		} else {
 			// module is disabled
+			$this->context->getRequest()->setAttributes(array(
+				'requested_module' => $moduleName,
+				'requested_action' => $actionName
+			), 'org.agavi.controller.forwards.disabled');
 			$moduleName = AgaviConfig::get('actions.module_disabled_module');
 			$actionName = AgaviConfig::get('actions.module_disabled_action');
 
@@ -452,7 +462,7 @@ abstract class AgaviController extends AgaviParameterHolder
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function getResponse()
+	protected final function getResponse()
 	{
 		return $this->response;
 	}

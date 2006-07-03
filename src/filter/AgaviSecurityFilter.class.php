@@ -71,11 +71,19 @@ class AgaviSecurityFilter extends AgaviFilter implements AgaviIActionFilter, Aga
 				$filterChain->execute();
 			} else {
 				// the user doesn't have access, exit stage left
+				$request->setAttributes(array(
+					'requested_module' => $actionEntry->getModuleName(),
+					'requested_action' => $actionEntry->getActionName()
+				), 'org.agavi.controller.forwards.secure');
 				$controller->forward(AgaviConfig::get('actions.secure_module'), AgaviConfig::get('actions.secure_action'));
 			}
 
 		} else {
 			// the user is not authenticated
+			$request->setAttributes(array(
+				'requested_module' => $actionEntry->getModuleName(),
+				'requested_action' => $actionEntry->getActionName()
+			), 'org.agavi.controller.forwards.login');
 			$controller->forward(AgaviConfig::get('actions.login_module'), AgaviConfig::get('actions.login_action'));
 		}
 	}

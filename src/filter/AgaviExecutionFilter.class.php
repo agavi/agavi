@@ -59,7 +59,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 		// execute the Action and get the View to execute
 		list($viewModule, $viewName) = $this->runAction($actionEntry);
 		
-		if($viewName === null) {
+		if($viewName === AgaviView::NONE) {
 			// no View returned, so we don't render anything
 			return;
 		}
@@ -205,13 +205,16 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 			// we're going to use an entirely different action for this view
 			$viewModule = $viewName[0];
 			$viewName   = $viewName[1];
-		} elseif($viewName !== null) {
+		} elseif($viewName !== AgaviView::NONE) {
 			// use a view related to this action
 			$viewName = $actionName . $viewName;
 			$viewModule = $moduleName;
+		} else {
+			$viewName = AgaviView::NONE;
+			$viewModule = AgaviView::NONE;
 		}
 		
-		if($viewName !== null && !$controller->viewExists($viewModule, $viewName)) {
+		if($viewName !== AgaviView::NONE && !$controller->viewExists($viewModule, $viewName)) {
 			// the requested view doesn't exist
 			$file = AgaviConfig::get('core.module_dir') . '/' . $viewModule . '/views/' . $viewName . 'View.class.php';
 			$error = 'Module "%s" does not contain the view "%sView" or the file "%s" is unreadable';

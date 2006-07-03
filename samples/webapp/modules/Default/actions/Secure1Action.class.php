@@ -1,20 +1,6 @@
 <?php
 
-// +---------------------------------------------------------------------------+
-// | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
-// | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
-// |                                                                           |
-// | For the full copyright and license information, please view the LICENSE   |
-// | file that was distributed with this source code. You can also view the    |
-// | LICENSE file online at http://www.agavi.org/LICENSE.txt                   |
-// |   vi: set noexpandtab:                                                    |
-// |   Local Variables:                                                        |
-// |   indent-tabs-mode: t                                                     |
-// |   End:                                                                    |
-// +---------------------------------------------------------------------------+
-
-class Default_LoginAction extends AgaviAction
+class Default_Secure1Action extends AgaviAction
 {
 	/**
 	 * This Action does not yet serve any Request methods.
@@ -49,18 +35,10 @@ class Default_LoginAction extends AgaviAction
 	 * execute*() being present, e.g. for a "write" Request, validateWrite() will
 	 * be run even if there is no executeWrite() method.
 	 */
-	public function executeWrite()
-	{
-		$req = $this->getContext()->getRequest();
-		
-		try {
-			$this->getContext()->getUser()->login($req->getParameter('username'), $req->getParameter('password'));
-			return 'Success';
-		} catch(AgaviSecurityException $e) {
-			$req->setError($e->getMessage(), 'Wrong ' . ucfirst($e->getMessage()));
-			return 'Input';
-		}
-	}
+//	public function execute()
+//	{
+//		return 'Success';
+//	}
 
 	/**
 	 * This method returns the View name in case the Action doesn't serve the
@@ -77,7 +55,12 @@ class Default_LoginAction extends AgaviAction
 	 */
 	public function getDefaultViewName()
 	{
-		return 'Input';
+		return 'Success';
+	}
+	
+	public function isSecure()
+	{
+		return true;
 	}
 }
 
