@@ -136,6 +136,7 @@
 				<li><a href="<?php echo $r->gen('secure2'); ?>">Another Secure Action</a></li>
 				<li><a href="<?php echo $r->gen('asdjashdasd'); ?>">Call invalid URL</a></li>
 				<li><a href="<?php echo $r->gen('disabled'); ?>">Try Disabled Module</a></li>
+				<li><a href="<?php $products = array('nonsense', 'chainsaws', 'brains', 'viagra', 'mad coding skills'); echo $r->gen('search_engine_spam', array('name' => $products[array_rand($products)], 'id' => 4815162342)); ?>">Search Engine Spam</a></li>
 			</ul>
 		</div>
 		<div id="content">

@@ -22,6 +22,11 @@
 			</route>
 			<route name="secure2" pattern="/secure2" module="Default" action="Secure2" />
 			<route name="secure" pattern="/secure" module="Default" action="Secure1" />
+			<route name="search_engine_spam" pattern="/products(/buy-cheap-{name:[\S\s]+}-at-agavi-dot-org)?/(id:\d+)" module="Default" action="SearchEngineSpam">
+				<defaults>
+					<default for="name">/buy-cheap-{chainsaws}-at-agavi-dot-org</default>
+				</defaults>
+			</route>
 			<route name="index" pattern="^/$" module="%actions.default_module%" action="%actions.default_action%" />
 		</routes>
 	</configuration>

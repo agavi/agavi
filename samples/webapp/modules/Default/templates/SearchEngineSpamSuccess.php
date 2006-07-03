@@ -1,0 +1,1 @@
+<p>You just found the #1 place to buy <strong><?php echo $template['product_name']; ?></strong> at low prices!</p>
