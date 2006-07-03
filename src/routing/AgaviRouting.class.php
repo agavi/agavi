@@ -278,6 +278,8 @@ abstract class AgaviRouting
 
 	public function execute()
 	{
+		$req = $this->context->getRequest();
+		
 		$input = $this->input;
 
 		$vars = array();
@@ -289,8 +291,8 @@ abstract class AgaviRouting
 			return $matchedRoutes;
 		}
 		
-		$ma = $this->context->getRequest()->getModuleAccessor();
-		$aa = $this->context->getRequest()->getActionAccessor();
+		$ma = $req->getModuleAccessor();
+		$aa = $req->getActionAccessor();
 
 //		$routes = array_keys($this->routes);
 
@@ -313,7 +315,7 @@ abstract class AgaviRouting
 				if($opts['callback'] && !isset($route['cb'])) {
 					$cb = $opts['callback'];
 					$route['cb'] = new $cb();
-					$route['cb']->initialize($this->getContext(), $route);
+					$route['cb']->initialize($this->context, $route);
 				}
 
 				$match = array();
@@ -392,12 +394,19 @@ abstract class AgaviRouting
 		
 		// set the output type if necessary
 		if($ot !== null) {
-			$this->getContext()->getController()->setOutputType($ot);
+			$this->context->getController()->setOutputType($ot);
 		}
 
 		// put the vars into the request
-		$this->getContext()->getRequest()->setParameters($vars);
+		$req->setParameters($vars);
 		
+		if(count($matchedRoutes) == 0) {
+			// no routes matched, use 404 action
+			$req->setParameters(array(
+				$ma => AgaviConfig::get('actions.error_404_module'),
+				$aa => AgaviConfig::get('actions.error_404_action')
+			));
+		}
 		// return a list of matched route names
 		return $matchedRoutes;
 	}
