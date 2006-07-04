@@ -29,6 +29,16 @@
 class AgaviWebRouting extends AgaviRouting
 {
 	/**
+	 * @var        string The path to the application's root with trailing slash.
+	 */
+	protected $basePath = '';
+	
+	/**
+	 * @var        string The URL to the application's root with trailing slash.
+	 */
+	protected $baseHref = '';
+	
+	/**
 	 * Initialize the routing instance.
 	 *
 	 * @param      AgaviContext A Context instance.
@@ -40,7 +50,10 @@ class AgaviWebRouting extends AgaviRouting
 	public function initialize(AgaviContext $context, $parameters = array())
 	{
 		parent::initialize($context);
-		if(isset($_SERVER['ORIG_PATH_INFO'])) {
+		if(isset($_SERVER['HTTP_X_REWRITE_URL'])) {
+			// Microsoft IIS with ISAPI_Rewrite
+			$ru = $_SERVER['HTTP_X_REWRITE_URL'];
+		} elseif(isset($_SERVER['ORIG_PATH_INFO'])) {
 			// Microsoft IIS
 			$ru = $_SERVER['ORIG_PATH_INFO'];
 		} else {
@@ -67,6 +80,46 @@ class AgaviWebRouting extends AgaviRouting
 			$this->prefix .= substr($_SERVER['SCRIPT_NAME'], $appendFrom + 1);
 			$this->input = substr($ru, $i);
 		}
+		
+		if(isset($_SERVER['REDIRECT_URL']) || isset($_SERVER['HTTP_X_REWRITE_URL'])) {
+			// a rewrite happened
+			$this->basePath = $this->prefix . '/';
+		} else {
+			$this->basePath = dirname($this->prefix) . '/';
+		}
+		$this->basePath;
+		$this->baseHref = 
+			'http' . (isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on' ? 's' : '')  . '://' . 
+			$_SERVER['SERVER_NAME'] . 
+			(isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on' ? ($_SERVER['SERVER_PORT'] != 443 ? ':' . $_SERVER['SERVER_PORT'] : '') : ($_SERVER['SERVER_PORT'] != 80 ? ':' . $_SERVER['SERVER_PORT'] : '')) . 
+			$this->basePath;
+	}
+	
+	/**
+	 * Retrieve the base path where the application's root sits
+	 *
+	 * @return     string A path string, including a trailing slash.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getBasePath()
+	{
+		return $this->basePath;
+	}
+	
+	/**
+	 * Retrieve the full URL to the application's root.
+	 *
+	 * @return     string A URL string, including the protocol, the server port
+	  *                   (if necessary) and the path including a trailing slash.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getBaseHref()
+	{
+		return $this->baseHref;
 	}
 	
 	/**
