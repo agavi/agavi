@@ -28,35 +28,6 @@
  */
 class AgaviToolkit
 {
-
-	/**
-	 * Extract the class or interface name from filename.
-	 *
-	 * @param      string A filename.
-	 *
-	 * @return     string A class or interface name, if one can be extracted,
-	 *                otherwise null.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public static function extractClassName($filename)
-	{
-		$retval = null;
-
-		$pathinfo = pathinfo($filename);
-		$filename = $pathinfo['basename'];
-
-		$pattern = '/(.*?)\.(class|interface)\.php/i';
-
-		if(preg_match($pattern, $filename, $match)) {
-			$retval = $match[1];
-		}
-
-		return $retval;
-
-	}
-
 	/**
 	 * Determine if a filesystem path is absolute.
 	 *

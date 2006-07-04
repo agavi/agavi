@@ -44,18 +44,6 @@ class ToolkitTest extends AgaviTestCase
 		$this->assertFalse(AgaviToolkit::isPathAbsolute('s/foo/bar'));
 		$this->assertFalse(AgaviToolkit::isPathAbsolute('c:foo'));
 	}
-
-	public function testExtractClassName()
-	{
-		$this->assertEquals('AgaviInterface', AgaviToolkit::extractClassName('AgaviInterface.interface.php'));
-		$this->assertEquals('AgaviInterface', AgaviToolkit::extractClassName('AgaviInterface.class.php'));
-		$this->assertEquals('AgaviInterface', AgaviToolkit::extractClassName('/AgaviInterface.class.php'));
-		$this->assertEquals('AgaviInterface', AgaviToolkit::extractClassName('Interface/AgaviInterface.class.php'));
-		$this->assertEquals('AgaviInterface', AgaviToolkit::extractClassName('/Interface/AgaviInterface.class.php'));
-		$this->assertEquals('AgaviInterface', AgaviToolkit::extractClassName('/Interface//AgaviInterface.class.php'));
-		$this->assertEquals('AgaviInterface', AgaviToolkit::extractClassName('c:\\windows\\AgaviInterface.class.php'));
-		$this->assertEquals('AgaviInterface', AgaviToolkit::extractClassName('\\AgaviInterface.class.php'));
-	}
 }
 
 ?>
