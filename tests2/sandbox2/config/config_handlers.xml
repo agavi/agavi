@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+| This file is part of the Agavi package.                                    |
+| Copyright (c) 2006 the Agavi Project.                                      |
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+-->
+<configurations parent="%core.system_config_dir%/config_handlers.xml">
+	<configuration><!-- config/ConfigCacheTest:testimport -->
+		<handlers>
+			<handler pattern="%core.config_dir%/tests/importtest.xml" class="ImportTestHandler" />
+			<handler pattern="%core.config_dir%/tests/importtest_once.xml" class="ImportTestOnceHandler" />
+			<handler pattern="%core.config_dir%/tests/routing_*.xml" class="AgaviRoutingConfigHandler" />
+		</handlers>
+	</configuration>
+</configurations>

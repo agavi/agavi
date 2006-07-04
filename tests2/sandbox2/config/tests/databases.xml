@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+| This file is part of the Agavi package.                                    |
+| Copyright (c) 2006 the Agavi Project.                                      |
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+-->
+<configurations>
+	<configuration>
+		<databases default="test2">
+
+			<database name="test1" class="DCHTestDatabase">
+				<parameters>
+					<parameter name="host">localhost1</parameter>
+					<parameter name="user">username1</parameter>
+					<parameter name="config">%core.webapp_dir%/config/project-conf.php</parameter>
+				</parameters>
+			</database>
+			
+			<database name="test2" class="DCHTestDatabase2" file="%core.webapp_dir%/lib/config/DatabaseHandlerTestDatabase2.class.php">
+				<parameters>
+					<parameter name="host">localhost2</parameter>
+					<parameter name="user">username2</parameter>
+					<parameter name="config">%core.webapp_dir%/config/project-conf.php</parameter>
+				</parameters>
+			</database>
+		</databases>
+	</configuration>
+	<configuration environment="env1 env2">
+		<databases default="test1" />
+	</configuration>
+	<configuration environment="env2">
+		<databases default="test2">
+			<database name="test1">
+				<parameters>
+					<parameter name="user">testuser1</parameter>
+				</parameters>
+			</database>
+		</databases>
+	</configuration>
+</configurations>

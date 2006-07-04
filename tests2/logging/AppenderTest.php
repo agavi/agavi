@@ -2,7 +2,7 @@
 
 class SampleAppender extends AgaviAppender
 {
-	public function initialize($params) {}
+	public function initialize($params = array()) {}
 	public function shutdown() {}
 	public function write($message) {}
 }
@@ -10,7 +10,7 @@ class SampleAppender extends AgaviAppender
 class AppenderTest extends AgaviTestCase
 {
 
-	public function testgetsetLayout()
+	public function testGetSetLayout()
 	{
 		$a = new SampleAppender();
 		$this->assertNull($a->getLayout());

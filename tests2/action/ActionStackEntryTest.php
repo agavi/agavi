@@ -17,11 +17,6 @@ class ActionStackEntryTest extends AgaviTestCase
 		$this->_ase = new AgaviActionStackEntry('Sample', 'Index', $this->_a);
 	}
 
-	public function testNewActionStackEntry()
-	{
-		$this->assertTrue($this->_ase instanceof AgaviActionStackEntry);
-	}
-
 	public function testgetActionName()
 	{
 		$this->assertEquals('Index', $this->_ase->getActionName());
