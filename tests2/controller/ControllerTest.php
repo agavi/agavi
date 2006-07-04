@@ -91,7 +91,7 @@ class ControllerTest extends AgaviTestCase
 			$action = $lastActionEntry->getActionName();
 			$this->assertEquals(AgaviConfig::get('actions.module_disabled_module'), $module);
 			$this->assertEquals(AgaviConfig::get('actions.module_disabled_action'), $action);
-		} catch (ForwardException $e) {
+		} catch (AgaviForwardException $e) {
 			$this->assertTrue(0, 'Test forwarding to an unavilable module needs work');
 		}
 	}
