@@ -40,7 +40,17 @@ class AgaviWebRouting extends AgaviRouting
 	public function initialize(AgaviContext $context, $parameters = array())
 	{
 		parent::initialize($context);
-		$ru = ($p = strpos($_SERVER['REQUEST_URI'], '?')) === false ? $_SERVER['REQUEST_URI'] : substr($_SERVER['REQUEST_URI'], 0, $p);
+		if(isset($_SERVER['ORIG_PATH_INFO'])) {
+			// Microsoft IIS
+			$ru = $_SERVER['ORIG_PATH_INFO'];
+		} else {
+			// Apache
+			$ru = $_SERVER['REQUEST_URI'];
+		}
+		
+		if(($p = strpos($ru, '?')) !== false) {
+			$ru = substr($ru, 0, $p);
+		}
 		$ru = urldecode($ru);
 
 		if(isset($_SERVER['PATH_INFO'])) {
