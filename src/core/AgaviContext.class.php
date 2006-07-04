@@ -94,7 +94,7 @@ class AgaviContext
 	/**
 	 * @var        array An array of SingletonModel instances.
 	 */
-	protected static $singletonModelInstances = array();
+	protected $singletonModelInstances = array();
 
 	/**
 	 * Clone method, overridden to prevent cloning, there can be only one. 

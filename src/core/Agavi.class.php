@@ -43,7 +43,7 @@ class Agavi
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	function bootstrap($environment = null)
+	public static function bootstrap($environment = null)
 	{
 		try {
 			// required classes for this file and ConfigCache to run
