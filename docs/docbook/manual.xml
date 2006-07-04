@@ -159,6 +159,65 @@
         first command. This will write a <filename>.tgz</filename> file which
         can be installed using PEAR.</para>
       </section>
+
+      <section>
+        <title>Apache Web Server Configuration</title>
+
+        <para>Agavi doesn't require any changes to your Apache
+        configuration.</para>
+
+        <para>If you want to use the Routing without an
+        <filename>index.php</filename> part in the URL path, you need
+        mod_rewrite enabled, along with the respective AllowOverride options
+        set.</para>
+      </section>
+
+      <section>
+        <title>Microsoft IIS Configuration</title>
+
+        <para>Agavi doesn't require any changes to your IIS
+        configuration.</para>
+
+        <para>If you want to use the Routing, you'll have to disable a feature
+        of IIS that checks if a file exists before trying to execute it. To do
+        that, follow these steps:</para>
+
+        <para><orderedlist>
+            <listitem>
+              <para>Go to <guimenuitem>Control Panel</guimenuitem> -&gt;
+              <guimenuitem>Administrative Tools</guimenuitem> -&gt;
+              <guimenuitem>Internet Information Services</guimenuitem></para>
+            </listitem>
+
+            <listitem>
+              <para>Pick your Website entry from the list, right-click it, and
+              select <guimenuitem>Properties</guimenuitem></para>
+            </listitem>
+
+            <listitem>
+              <para>Choose the <guimenuitem>Home Directory</guimenuitem>
+              tab</para>
+            </listitem>
+
+            <listitem>
+              <para>Click the <guibutton>Configuration...</guibutton> button
+              near the bottom right of the box</para>
+            </listitem>
+
+            <listitem>
+              <para>Select the <filename>.php</filename> extension entry in
+              the list and click the <guibutton>Edit</guibutton> button</para>
+            </listitem>
+
+            <listitem>
+              <para>Disable the checkbox that controls the checking for file
+              existance function in the bottom left</para>
+            </listitem>
+          </orderedlist>If you want to use the Routing without an index.php
+        part in the URL path, you need a plugin for IIS that mimics
+        mod_rewrite's behavior, such as <ulink
+        url="http://www.isapirewrite.com/">ISAPI_Rewrite</ulink>.</para>
+      </section>
     </section>
 
     <section>
@@ -280,7 +339,50 @@
     <section>
       <title>How a Request is Processed</title>
 
-      <para></para>
+      <para>If you call a URL that is handled by www/index.php, Agavi will
+      bootstrap the specified (or default) Environment and then create an
+      instante of the specified (or default) Context (this instantiation sets
+      up all of the core components of the framework). Finally, the request is
+      dispatched from the Context's Controller instance.</para>
+
+      <para>The dispatch method first executes the routing (if enabled) to
+      determine the Module/Action that are to be executed. Then, a filter
+      chain containing all Global Filters is created, and the DispatchFilter
+      is added to that chain as the last element. Each filter will be called
+      in nested sequence, with the last filter being the DispatchFilter, which
+      calls the first forward to the requested Module and Action. After that,
+      the control passes back through the filters to the dispatch method,
+      which sends the Response contents and exits. Filters are given the
+      global Response as a parameter to work with, so they can modify content,
+      send Cookies and so on.</para>
+
+      <para>When a forward happens, Agavi does some checks to determine if the
+      requested Module/Action exists, if the Module the Action belongs to is
+      enabled and so on. Then, a filter chain is created, with the first
+      filter being the Security Filter if security is enabled. This filter
+      will forward unauthenticated users to the default "Login Action" if a
+      requested Action requires authentication, and also prevent access of
+      Actions a user doesn't have sufficient credentials for by forwarding to
+      the default "Secure Action". After that, the Action Filters are added to
+      the chain, followed by the Action Filters defined by the Action's
+      Module. The last filter in the chain is the Execution Filter, usually
+      either AgaviExecutionFilter or AgaviCachingExecutionFilter. Again, each
+      filter in the chain is called and may do modifications to the Response
+      instance, which is a new one for each Action that is processed and will
+      be merged to the global Response by the Controller once control returns
+      to the forward method.</para>
+
+      <para>The Execution Filter, once reached, will handle Validation, run
+      the Action (or skip execution if the Action doesn't serve the Request
+      method), determine the View to execute and then execute the View and,
+      after that, start the rendering of the output by creating another filter
+      chain containing all the defined Rendering Filters and, as the last
+      element, the designated Renderer instance that will take care of
+      rendering the template. This functionality might be extended by other
+      Execution Filter implementations; for example, the
+      CachingExecutionFilter will try to load a cached version of the Action
+      and skip execution altogether if possible, resulting in a massive
+      performance increase.</para>
     </section>
 
     <section>
@@ -328,7 +430,9 @@
     <section>
       <title>Filters</title>
 
-      <para></para>
+      <para>Each Filter calls the next one, making Filter Chains work like a
+      <ulink url="http://en.wikipedia.org/wiki/Matryoshka_doll">Matryoshka
+      Doll</ulink>.</para>
     </section>
 
     <section>
