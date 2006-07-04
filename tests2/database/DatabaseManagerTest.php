@@ -22,7 +22,8 @@ class DatabaseManagerTest extends AgaviTestCase
 	{
 		$this->assertType('AgaviDatabaseManager', $this->_dbm);
 		$this->assertType('AgaviContext', $this->_dbm->getContext());
-		$this->assertReference($this->_context, $this->_dbm->getContext());
+		$ctx_test = $this->_dbm->getContext();
+		$this->assertReference($this->_context, $ctx_test);
 	}
 
 }

@@ -31,6 +31,7 @@ class FilterConfigHandlerTest extends ConfigHandlerTestBase
 
 	public function testFilterConfigHandler()
 	{
+		$ctx = AgaviContext::getInstance();
 		$FCH = new AgaviFilterConfigHandler();
 
 		$filters = array();
@@ -43,11 +44,11 @@ class FilterConfigHandlerTest extends ConfigHandlerTestBase
 
 		$this->assertType('FCHTestFilter1', $filters[0]);
 		$this->assertSame(array('comment' => true), $filters[0]->params);
-		$this->assertReference(AgaviContext::getInstance(), $filters[0]->context);
+		$this->assertReference($ctx, $filters[0]->context);
 
 		$this->assertType('FCHTestFilter2', $filters[1]);
 		$this->assertSame(array(), $filters[1]->params);
-		$this->assertReference(AgaviContext::getInstance(), $filters[1]->context);
+		$this->assertReference($ctx, $filters[1]->context);
 	}
 }
 ?>

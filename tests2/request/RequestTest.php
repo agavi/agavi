@@ -17,7 +17,9 @@ class RequestTest extends AgaviTestCase
 
 	public function testGetInstance()
 	{
-		$this->assertReference(AgaviContext::getInstance(), $this->_r->getContext());
+		$ctx = AgaviContext::getInstance();
+		$ctx_test = $this->_r->getContext();
+		$this->assertReference($ctx, $ctx_test);
 	}
 
 	public function testExtractParameters()

@@ -14,7 +14,8 @@ class AppenderTest extends AgaviTestCase
 	{
 		$a = new SampleAppender();
 		$this->assertNull($a->getLayout());
-		$this->assertReference($a, $a->setLayout('bill'));
+		$a_test = $a->setLayout('bill');
+		$this->assertReference($a, $a_test);
 		$this->assertEquals('bill', $a->getLayout());
 	}
 

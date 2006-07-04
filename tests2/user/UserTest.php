@@ -19,7 +19,8 @@ class UserTest extends AgaviTestCase
 		$ctx = AgaviContext::getInstance();
 		$u = $this->_u;
 
-		$this->assertReference($ctx, $u->getContext());
+		$ctx_test = $u->getContext();
+		$this->assertReference($ctx, $ctx_test);
 		$this->assertEquals('org.agavi.user.User', $u->getStorageNamespace());
 
 		$u->initialize($ctx, array('default_namespace' => 'default.test.ns', 'storage_namespace' => 'storage.test.ns'));

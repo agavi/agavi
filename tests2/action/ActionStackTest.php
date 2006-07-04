@@ -33,16 +33,20 @@ class ActionStackTest extends AgaviTestCase
 		$this->assertType('AgaviActionStackEntry', $ase);
 		$this->assertEquals('Sample1', $ase->getModuleName());
 		$this->assertEquals('Index4', $ase->getActionName());
-		$this->assertReference($a, $ase->getActionInstance());
+		$ai = $ase->getActionInstance();
+		$this->assertReference($a, $ai);
 	}
 
 	public function testgetEntry()
 	{
 		$ase = $this->_as->getEntry(0);
 		$this->assertType('AgaviActionStackEntry', $ase);
-		$this->assertReference($this->_a1, $ase->getActionInstance());
-		$this->assertReference($this->_a2, $this->_as->getEntry(1)->getActionInstance());
-		$this->assertReference($this->_a3, $this->_as->getEntry(2)->getActionInstance());
+		$a1 = $ase->getActionInstance();
+		$a2 = $this->_as->getEntry(1)->getActionInstance();
+		$a3 = $this->_as->getEntry(2)->getActionInstance();
+		$this->assertReference($this->_a1, $a1);
+		$this->assertReference($this->_a2, $a2);
+		$this->assertReference($this->_a3, $a3);
 
 		// check for null return on invalid inputs
 		$this->assertNull($this->_as->getEntry(-1));
@@ -53,7 +57,8 @@ class ActionStackTest extends AgaviTestCase
 	{
 		$ase = $this->_as->getFirstEntry();
 		$this->assertType('AgaviActionStackEntry', $ase);
-		$this->assertReference($this->_a1, $ase->getActionInstance());
+		$a = $ase->getActionInstance();
+		$this->assertReference($this->_a1, $a);
 
 		// check for null return on empty chain 
 		$as = new AgaviActionStack();
@@ -64,7 +69,8 @@ class ActionStackTest extends AgaviTestCase
 	{
 		$ase = $this->_as->getLastEntry();
 		$this->assertType('AgaviActionStackEntry', $ase);
-		$this->assertReference($this->_a3, $ase->getActionInstance());
+		$a = $ase->getActionInstance();
+		$this->assertReference($this->_a3, $a);
 
 		// check for null return on empty chain 
 		$as = new AgaviActionStack();

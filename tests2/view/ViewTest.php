@@ -27,8 +27,10 @@ class ViewTest extends AgaviTestCase
 		$ctx = AgaviContext::getInstance();
 		$v = $this->_v;
 
-		$this->assertReference($ctx, $v->getContext());
-		$this->assertReference($this->_r, $v->getResponse());
+		$ctx_test = $v->getContext();
+		$r_test = $v->getResponse();
+		$this->assertReference($ctx, $ctx_test);
+		$this->assertReference($this->_r, $r_test);
 
 		$this->assertEquals($ctx->getController()->getModuleDirectory() . '/templates', $v->getDecoratorDirectory());
 		$this->assertEquals($ctx->getController()->getModuleDirectory() . '/templates', $v->getDirectory());

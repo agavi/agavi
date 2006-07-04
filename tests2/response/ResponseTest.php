@@ -23,7 +23,9 @@ class ResponseTest extends AgaviTestCase
 
 	public function testGetContext()
 	{
-		$this->assertReference(AgaviContext::getInstance(), $this->_r->getContext());
+		$ctx = AgaviContext::getInstance();
+		$ctx_test = $this->_r->getContext();
+		$this->assertReference($ctx, $ctx_test);
 	}
 
 	public function testSetGetContent()

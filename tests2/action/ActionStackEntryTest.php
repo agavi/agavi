@@ -24,7 +24,8 @@ class ActionStackEntryTest extends AgaviTestCase
 	
 	public function testgetActionInstance()
 	{
-		$this->assertReference($this->_a, $this->_ase->getActionInstance());
+		$a = $this->_ase->getActionInstance();
+		$this->assertReference($this->_a, $a);
 	}
 
 	public function testgetMicrotime()
@@ -44,7 +45,8 @@ class ActionStackEntryTest extends AgaviTestCase
 		$this->assertNull($this->_ase->getPresentation());
 		$p = 'bill';
 		$this->_ase->setPresentation($p);
-		$this->assertReference($p, $this->_ase->getPresentation());
+		$p_test =& $this->_ase->getPresentation();
+		$this->assertReference($p, $p_test);
 	}
 }
 ?>
