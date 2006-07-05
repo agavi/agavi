@@ -31,7 +31,7 @@
 abstract class AgaviFilter extends AgaviParameterHolder implements AgaviIFilter
 {
 	/**
-	 * @var        AgaviContext A Context instance.
+	 * @var        AgaviContext An AgaviContext instance.
 	 */
 	protected $context = null;
 

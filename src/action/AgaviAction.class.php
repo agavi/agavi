@@ -41,7 +41,7 @@ abstract class AgaviAction
 	/**
 	 * Retrieve the current application context.
 	 *
-	 * @return     AgaviContext The current Context instance.
+	 * @return     AgaviContext The current AgaviContext instance.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0

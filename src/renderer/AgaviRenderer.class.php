@@ -29,7 +29,7 @@
 abstract class AgaviRenderer implements AgaviIRenderingFilter
 {
 	/**
-	 * @var        AgaviContext A Context instance.
+	 * @var        AgaviContext An AgaviContext instance.
 	 */
 	protected $context = null;
 	
@@ -88,7 +88,7 @@ abstract class AgaviRenderer implements AgaviIRenderingFilter
 	/**
 	 * Retrieve the current application context.
 	 *
-	 * @return     AgaviContext The current Context instance.
+	 * @return     AgaviContext The current AgaviContext instance.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0

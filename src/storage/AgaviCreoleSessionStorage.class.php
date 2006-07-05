@@ -56,7 +56,7 @@ class AgaviCreoleSessionStorage extends AgaviSessionStorage
 	/**
 	 * Initialize this Storage.
 	 *
-	 * @param      AgaviContext A Context instance.
+	 * @param      AgaviContext An AgaviContext instance.
 	 * @param      array        An associative array of initialization parameters.
 	 *
 	 * @throws     <b>AgaviInitializationException</b> If an error occurs while
