@@ -42,7 +42,7 @@ function buildParamList($params)
 	$retval = array();
 	foreach($params as $key => $param) {
 		if(is_string($key)) {
-			$key = var_export($key, true) . ' => ';
+			$key = htmlentities(var_export($key, true) . ' => ');
 		} else {
 			$key = '';
 		}
@@ -57,7 +57,7 @@ function buildParamList($params)
 				$retval[] = $key . '[resource <em>' . get_resource_type($param) . '</em>]';
 				break;
 			default:
-				$retval[] = $key . var_export($param, true);
+				$retval[] = $key . htmlentities(var_export($param, true));
 		}
 	}
 	return implode(', ', $retval);
@@ -537,7 +537,7 @@ if(isset($fixedTrace[0]['file']) && $fixedTrace[0]['file'] != $e->getFile() && $
 <?php if($svg): ?>
 			<div style="position:absolute; top:-1.25em; left:-2em; height:5em; width:5em;"><svg:svg viewBox="3 0 43 43" preserveAspectRatio="xMaxYMax meet" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><svg:use xlink:href="#importantSign" /></svg:svg></div>
 <?php endif; ?>
-			<?php echo nl2br($e->getMessage()); ?>
+			<?php echo nl2br(htmlentities($e->getMessage())); ?>
 		</p>
 		<h3>Stack Trace</h3>
 		<ol>
