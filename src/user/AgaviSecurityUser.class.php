@@ -43,9 +43,15 @@ class AgaviSecurityUser extends AgaviUser implements AgaviISecurityUser
 	 */
 	const CREDENTIAL_NAMESPACE = 'org.agavi.user.BasicSecurityUser.credentials';
 
-	protected
-		$authenticated = null,
-		$credentials   = null;
+	/**
+	 * @var bool True if the user is authenticated, otherwise false
+	 */
+	protected $authenticated = null;
+	
+	/**
+	 * @var array An array of user credentials
+	 */
+	protected $credentials   = null;
 
 	/**
 	 * Add a credential to this user.

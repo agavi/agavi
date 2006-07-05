@@ -32,9 +32,16 @@
  */
 class AgaviUser extends AgaviAttributeHolder
 {
-	protected
-		$context = null,
-		$storageNamespace = 'org.agavi.user.User';
+
+	/**
+	 * @var AgaviContext An AgaviContext instance.
+	 */
+	protected $context = null;
+
+	/**
+	 * @var string Storage namespace where user attributes are put 
+	 */
+	protected $storageNamespace = 'org.agavi.user.User';
 
 	/**
 	 * Retrieve the current application context.
