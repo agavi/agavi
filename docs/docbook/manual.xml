@@ -299,7 +299,15 @@
     <section>
       <title>Elements of an Application</title>
 
-      <para></para>
+      <para>modules</para>
+
+      <para>actions</para>
+
+      <para>views and templates</para>
+
+      <para>models and global models</para>
+
+      <para>config files</para>
     </section>
 
     <section>
@@ -388,43 +396,66 @@
     <section>
       <title>Configuration</title>
 
-      <para></para>
-    </section>
-
-    <section>
-      <title>Actions and Models</title>
-
-      <para></para>
-    </section>
-
-    <section>
-      <title>Views, Renderers and Templates</title>
-
-      <para></para>
+      <para>explain xml format, cascaded configuration files, configuration
+      blocks and their context / environment parameters, overwriting of
+      settings, ReturnArrayConfigHandler, how configs are compiled</para>
     </section>
 
     <section>
       <title>Request and Routing</title>
 
-      <para></para>
+      <para>request parameters and attributes, attribute namespaces, errors,
+      cookies.</para>
+
+      <para>routing functionality, getting info from the routing, generating
+      urls</para>
+    </section>
+
+    <section>
+      <title>Actions and Models</title>
+
+      <para>what they do and contain (business logic at different
+      levels)</para>
+
+      <para>actions: execution, execution methods, serving request methods,
+      default view name, validation, security</para>
+    </section>
+
+    <section>
+      <title>Views, Renderers and Templates</title>
+
+      <para>what they do and contain (only presentational stuff)</para>
+
+      <para>views: execution, execution methods, where you set the output type
+      (initialize at the latest)</para>
+
+      <para>templates and renderers: engines, variable naming etc</para>
     </section>
 
     <section>
       <title>Output Types and Response</title>
 
-      <para></para>
+      <para>output types, what's the point of it, explain how easy it is to
+      add a new one etc</para>
+
+      <para>response: why they exist, whey they are isolated</para>
     </section>
 
     <section>
-      <title>Session Handling</title>
+      <title>Session Handling and Security</title>
 
-      <para></para>
+      <para>explain the storage, explain why you never use it directly</para>
+
+      <para>explain the user, how it works, what you can do with it, how you
+      do authentication, credentials etc</para>
     </section>
 
     <section>
       <title>Validation</title>
 
-      <para></para>
+      <para>why validation, how to validate, explain the drop-in character,
+      explain what it can also do (normalization etc), how sweet it is with
+      the FormPopulationFilter</para>
     </section>
 
     <section>
@@ -438,13 +469,15 @@
     <section>
       <title>Databases</title>
 
-      <para></para>
+      <para>how to retrieve a connection, why do it using the framework,
+      propel</para>
     </section>
 
     <section>
       <title>Logging</title>
 
-      <para></para>
+      <para>why logging, how to do it, levels, loggers, appenders,
+      layouts</para>
     </section>
   </chapter>
 
@@ -460,7 +493,7 @@
     <section>
       <title>Populating and Validating Forms</title>
 
-      <para></para>
+      <para>explain the FormPopulationFilter</para>
     </section>
 
     <section>
@@ -472,13 +505,51 @@
     <section>
       <title>Propel Integration</title>
 
-      <para></para>
+      <para>simple</para>
     </section>
 
     <section>
       <title>Decorators and Slots</title>
 
-      <para></para>
+      <para>why decorate, setting up slots, passing around data between
+      slots</para>
+    </section>
+
+    <section>
+      <title>Removing the "index.php" Part From URLs</title>
+
+      <para>You need mod_rewrite (or something similar for other web servers,
+      such as ISAPI_Rewrite for Microsoft IIS) to get rid of the "index.php"
+      part in incoming and generated URLs. Make sure mod_rewrite is enabled,
+      and create a <filename>.htaccess</filename> file in your
+      <filename>www</filename> directory with the following contents:</para>
+
+      <para><programlisting># enable rewrite engine
+RewriteEngine On
+
+# if requested url does not exist (i.e. it's likely an agavi route), pass it as path info to index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule (.*) /the/webserver/path/to/index.php/$1 [QSA,L]</programlisting></para>
+
+      <para>The RewriteCond is a condition that executes the following
+      RewriteRule if the requested filename (that is the incoming URL already
+      mapped to a filesystem name by Apache) does <emphasis>not</emphasis>
+      exist. If the requested URL exists, for instance, when an image on the
+      webserver is requested, Agavi won't be called. Otherwise, the framework
+      is started and the given URL is handed to Agavi as so-called Path Info
+      which the WebRouting will use to match a route.</para>
+
+      <para>The important thing is that you use the
+      <emphasis>external</emphasis> path to index.php here, i.e. the path that
+      you would have to enter in your web browser location bar to reach
+      <filename>index.php</filename>.</para>
+
+      <para>If you use ISAPI_Rewrite or another plugin for IIS, you can't use
+      the rewrite condition shown above since it's not supported. Instead, you
+      should create a RewriteCond that checks if the incoming URL does not
+      fall into a certain schema (e.g. doesn't begin with
+      <filename>/images</filename> and <filename>/css</filename> so these
+      don't get rewritten and handed to Agavi).</para>
     </section>
 
     <section>
@@ -490,20 +561,22 @@
     <section>
       <title>Caching</title>
 
-      <para></para>
+      <para>document the execution filter here, with examples, explanation of
+      how decorators are cached or not and slots can be included, variable
+      caching, groups, request methods, cache lifetime</para>
     </section>
 
     <section>
       <title>Serving Output Variants of the Same Content</title>
 
-      <para></para>
+      <para>a quick example using a LatestProductsAction or whatever</para>
     </section>
 
     <section>
       <title>Adding an XMLRPC or Other Interface to Your Web
       Application</title>
 
-      <para></para>
+      <para>walk people through the basic steps/ideas</para>
     </section>
   </chapter>
 
