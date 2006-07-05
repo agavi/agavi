@@ -44,7 +44,7 @@ abstract class AgaviController extends AgaviParameterHolder
 	protected $actionStack = null;
 
 	/**
-	 * @var        AgaviContext A Context instance.
+	 * @var        AgaviContext An AgaviContext instance.
 	 */
 	protected $context = null;
 	
@@ -444,7 +444,7 @@ abstract class AgaviController extends AgaviParameterHolder
 	/**
 	 * Retrieve the current application context.
 	 *
-	 * @return     AgaviContext A Context instance.
+	 * @return     AgaviContext An AgaviContext instance.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -529,7 +529,7 @@ abstract class AgaviController extends AgaviParameterHolder
 	/**
 	 * Initialize this controller.
 	 *
-	 * @param      AgaviContext A Context instance.
+	 * @param      AgaviContext An AgaviContext instance.
 	 * @param      array        An array of initialization parameters.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>

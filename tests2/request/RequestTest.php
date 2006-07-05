@@ -2,7 +2,6 @@
 
 class SampleRequest extends AgaviRequest
 {
-	public function initialize(AgaviContext $context, $parameters = array()) {}
 	public function shutdown() {}
 }
 
@@ -13,17 +12,17 @@ class RequestTest extends AgaviTestCase
 	public function setUp()
 	{
 		$this->_r = new SampleRequest();
+		$this->_r->initialize(AgaviContext::getInstance());
 	}
 
-	public function testclearAttributes()
+	public function testGetInstance()
 	{
-		$this->_r->setAttribute('blah', 'blahval');
-		$this->_r->setAttribute('blah2', 'blah2val');
-		$this->_r->clearAttributes();
-		$this->assertEquals(array(), $this->_r->getAttributeNames());
+		$ctx = AgaviContext::getInstance();
+		$ctx_test = $this->_r->getContext();
+		$this->assertReference($ctx, $ctx_test);
 	}
 
-	public function testextractParameters()
+	public function testExtractParameters()
 	{
 		$p = array(
 			'One' => '1',
@@ -65,125 +64,37 @@ class RequestTest extends AgaviTestCase
 		
 	}
 
-	public function testgetAttribute()
-	{
-		$this->_r->setAttribute('blah', 'blahval');
-		$this->assertEquals('blahval', $this->_r->getAttribute('blah'));
-		$this->assertNull($this->_r->getAttribute('bunk'));
 
-		$this->_r->setAttribute('blah', 'otherblah', 'some/other/namespace');
-		$this->assertEquals('otherblah', $this->_r->getAttribute('blah', 'some/other/namespace'));
-		$this->assertNull($this->_r->getAttribute('bunk', 'some/other/namespace'));
-
-		$this->assertEquals('blahval', $this->_r->getAttribute('blah'));
-	}
-
-	public function testgetAttributeNames()
-	{
-		$this->_r->setAttribute('blah', 'blahval');
-		$this->_r->setAttribute('blah2', 'blah2val');
-		$this->assertEquals(array('blah', 'blah2'), $this->_r->getAttributeNames());
-
-		$this->_r->setAttribute('blah', 'otherblah', 'some/other/namespace');
-		$this->assertEquals(array('blah'), $this->_r->getAttributeNames('some/other/namespace'));
-
-		$this->assertEquals(array('blah', 'blah2'), $this->_r->getAttributeNames());
-
-		$this->assertNull($this->_r->getAttributeNames('/bunk/namespace'));
-	}
-
-	public function testgetAttributeNamespace()
-	{
-		$this->_r->setAttribute('blah', 'blahval');
-		$this->_r->setAttribute('blah2', 'blah2val');
-		$this->assertEquals(array('blah'=>'blahval', 'blah2'=>'blah2val'), $this->_r->getAttributeNamespace());
-
-		$this->_r->setAttribute('blah', 'otherblah', 'some/other/namespace');
-		$this->assertEquals(array('blah'=>'otherblah'), $this->_r->getAttributeNamespace('some/other/namespace'));
-
-		$this->assertEquals(array('blah'=>'blahval', 'blah2'=>'blah2val'), $this->_r->getAttributeNamespace());
-
-		$this->assertNull($this->_r->getAttributeNamespace('/bunk/namespace'));
-	}
-
-	public function testgetAttributeNamespaces()
-	{
-		$this->assertEquals(array(), $this->_r->getAttributeNamespaces());
-		$this->_r->setAttribute('blah', 'blahval');
-		$this->assertEquals(array($this->_r->getDefaultNamespace()), $this->_r->getAttributeNamespaces());
-		$this->_r->setAttribute('blah', 'blahval', 'some/other/namespace');
-		$this->assertEquals(array($this->_r->getDefaultNamespace(), 'some/other/namespace'), $this->_r->getAttributeNamespaces());
-	}
-
-	public function testgetAttributes()
-	{
-		$this->_r->setAttribute('blah', 'blahval');
-		$this->_r->setAttribute('blah2', 'blah2val');
-		$this->assertEquals(array('blah'=>'blahval', 'blah2'=>'blah2val'), $this->_r->getAttributes());
-
-		$this->_r->setAttribute('blah', 'otherblah', 'some/other/namespace');
-		$this->assertEquals(array('blah'=>'otherblah'), $this->_r->getAttributes('some/other/namespace'));
-
-		$this->assertEquals(array('blah'=>'blahval', 'blah2'=>'blah2val'), $this->_r->getAttributes());
-
-		$this->assertEquals(array(), $this->_r->getAttributes('/bunk/namespace'));
-	}
-
-	public function testgetError()
+	public function testGetError()
 	{
 		$this->_r->setError('blah', 'blahval');
 		$this->assertEquals('blahval', $this->_r->getError('blah'));
 		$this->assertNull($this->_r->getError('bunk'));
 	}
 
-	public function testgetErrorNames()
+	public function testGetErrorNames()
 	{
 		$this->_r->setError('blah', 'blahval');
 		$this->_r->setError('blah2', 'blah2val');
 		$this->assertEquals(array('blah', 'blah2'), $this->_r->getErrorNames());
 	}
 
-	public function testgetErrors()
+	public function testGetErrors()
 	{
 		$this->_r->setError('blah', 'blahval');
 		$this->_r->setError('blah2', 'blah2val');
 		$this->assertEquals(array('blah'=>'blahval', 'blah2'=>'blah2val'), $this->_r->getErrors());
 	}
 
-	public function testgetMethod()
+	public function testSetGetMethod()
 	{
 		$this->assertNull($this->_r->getMethod());
-		$this->_r->setMethod(AgaviRequest::GET);
-		$this->assertEquals(AgaviRequest::GET, $this->_r->getMethod());
+		$this->_r->setMethod('Get');
+		$this->assertEquals('Get', $this->_r->getMethod());
 	}
 
-	public function testhasAttribute()
-	{
-		$this->assertFalse($this->_r->hasAttribute('blah'));
-		$this->_r->setAttribute('blah', 'blahval');
-		$this->assertTrue($this->_r->hasAttribute('blah'));
-		$this->assertFalse($this->_r->hasAttribute('bunk'));
-
-		$this->assertFalse($this->_r->hasAttribute('blah', 'some/other/namespace'));
-		$this->_r->setAttribute('blah', 'otherblah', 'some/other/namespace');
-		$this->assertTrue($this->_r->hasAttribute('blah', 'some/other/namespace'));
-		$this->assertFalse($this->_r->hasAttribute('bunk', 'some/other/namespace'));
-		$this->_r->removeAttribute('blah', 'some/other/namespace');
-
-		$this->assertTrue($this->_r->hasAttribute('blah'));
-	}
-
-	public function testhasAttributeNamespace()
-	{
-		$this->assertFalse($this->_r->hasAttributeNamespace($this->_r->getDefaultNamespace()));
-		$this->_r->setAttribute('blah', 'blahval');
-		$this->assertTrue($this->_r->hasAttributeNamespace($this->_r->getDefaultNamespace()));
-		$this->assertFalse($this->_r->hasAttributeNamespace('some/other/namespace'));
-		$this->_r->setAttribute('blah', 'blahval', 'some/other/namespace');
-		$this->assertTrue($this->_r->hasAttributeNamespace('some/other/namespace'));
-	}
 	
-	public function testhasError()
+	public function testHasError()
 	{
 		$this->assertFalse($this->_r->hasError('blah'));
 		$this->_r->setError('blah', 'blahval');
@@ -191,14 +102,14 @@ class RequestTest extends AgaviTestCase
 		$this->assertFalse($this->_r->hasError('bunk'));
 	}
 
-	public function testhasErrors()
+	public function testHasErrors()
 	{
 		$this->assertFalse($this->_r->hasErrors());
 		$this->_r->setError('blah', 'blahval');
 		$this->assertTrue($this->_r->hasErrors());
 	}
 
-	public function testremoveError()
+	public function testRemoveError()
 	{
 		$this->assertNull($this->_r->removeError('blah'));
 		$this->_r->setError('blah', 'blahval');
@@ -206,142 +117,13 @@ class RequestTest extends AgaviTestCase
 		$this->assertNull($this->_r->removeError('blah'));
 	}
 
-	public function testremoveAttribute()
-	{
-		$this->assertNull($this->_r->removeAttribute('blah'));
-		$this->_r->setAttribute('blah', 'blahval');
-		$this->assertEquals('blahval', $this->_r->removeAttribute('blah'));
-		$this->assertNull($this->_r->removeAttribute('blah'));
-		$this->_r->setAttribute('blah', 'blahval');
-
-		$this->assertNull($this->_r->removeAttribute('blah', 'some/other/namespace'));
-		$this->_r->setAttribute('blah', 'otherblah', 'some/other/namespace');
-		$this->assertEquals('otherblah', $this->_r->removeAttribute('blah', 'some/other/namespace'));
-		$this->assertNull($this->_r->removeAttribute('blah', 'some/other/namespace'));
-
-		$this->assertEquals('blahval', $this->_r->removeAttribute('blah'));
-	}
-
-	public function testremoveAttributeNamespace()
-	{
-		$this->_r->setAttribute('blah', 'blahval');
-		$this->_r->removeAttributeNamespace($this->_r->getDefaultNamespace());
-		$this->assertFalse($this->_r->hasAttributeNamespace($this->_r->getDefaultNamespace()));
-	}
-
-	public function testsetAttribute()
-	{
-		$this->_r->setAttribute('blah', 'blahval');
-		$this->assertEquals('blahval', $this->_r->getAttribute('blah'));
-
-		$this->_r->setAttribute('blah', 'otherblah', 'some/other/namespace');
-		$this->assertEquals('otherblah', $this->_r->getAttribute('blah', 'some/other/namespace'));
-
-		$this->assertEquals('blahval', $this->_r->getAttribute('blah'));
-	}
-
-	public function testappendAttribute()
-	{
-		$this->_r->appendAttribute('blah', 'blahval');
-		$this->assertEquals(array('blahval'), $this->_r->getAttribute('blah'));
-		$this->_r->appendAttribute('blah', 'blahval2');
-		$this->assertEquals(array('blahval','blahval2'), $this->_r->getAttribute('blah'));
-
-		$this->_r->appendAttribute('blah', 'otherblah', 'some/other/namespace');
-		$this->assertEquals(array('otherblah'), $this->_r->getAttribute('blah', 'some/other/namespace'));
-		$this->_r->appendAttribute('blah', 'otherblah2', 'some/other/namespace');
-		$this->assertEquals(array('otherblah', 'otherblah2'), $this->_r->getAttribute('blah', 'some/other/namespace'));
-
-		$this->assertEquals(array('blahval','blahval2'), $this->_r->getAttribute('blah'));
-	}
-
-	public function testsetAttributeByRef()
-	{
-		$myval = 'blahval';
-		$this->_r->setAttributeByRef('blah', $myval);
-		$this->assertReference($myval, $this->_r->getAttribute('blah'));
-
-		$myval2 = 'otherblah';
-		$this->_r->setAttributeByRef('blah', $myval2, 'some/other/namespace');
-		$this->assertReference($myval2, $this->_r->getAttribute('blah', 'some/other/namespace'));
-
-		$this->assertReference($myval, $this->_r->getAttribute('blah'));
-	}
-
-	public function testappendAttributeByRef()
-	{
-		$myval1 = 'jack';
-		$myval2 = 'bill';
-		$this->_r->appendAttributeByRef('blah', $myval1);
-		$out = $this->_r->getAttribute('blah');
-		$this->assertReference($myval1, $out[0]);
-		$this->_r->appendAttributeByRef('blah', $myval2);
-		$out = $this->_r->getAttribute('blah');
-		$this->assertReference($myval1, $out[0]);
-		$this->assertReference($myval2, $out[1]);
-
-		$myval3 = 'jill';
-		$myval4 = 'jane';
-		$this->_r->appendAttributeByRef('blah', $myval3, 'some/other/namespace');
-		$out = $this->_r->getAttribute('blah', 'some/other/namespace');
-		$this->assertReference($myval3, $out[0]);
-		$this->_r->appendAttributeByRef('blah', $myval4, 'some/other/namespace');
-		$out = $this->_r->getAttribute('blah', 'some/other/namespace');
-		$this->assertReference($myval3, $out[0]);
-		$this->assertReference($myval4, $out[1]);
-
-		$out = $this->_r->getAttribute('blah');
-		$this->assertReference($myval1, $out[0]);
-	}
-
-
-	public function testsetAttributes()
-	{
-		$this->_r->setAttributes(array('blah'=>'blahval'));
-		$this->assertEquals('blahval', $this->_r->getAttribute('blah'));
-		$this->_r->setAttributes(array('blah2'=>'blah2val'));
-		$this->assertEquals('blahval', $this->_r->getAttribute('blah'));
-		$this->assertEquals('blah2val', $this->_r->getAttribute('blah2'));
-
-		$this->_r->setAttributes(array('blah'=>'otherblah'), 'some/other/namespace');
-		$this->assertEquals('otherblah', $this->_r->getAttribute('blah', 'some/other/namespace'));
-		$this->_r->setAttributes(array('blah2'=>'otherblah2'), 'some/other/namespace');
-		$this->assertEquals('otherblah', $this->_r->getAttribute('blah', 'some/other/namespace'));
-		$this->assertEquals('otherblah2', $this->_r->getAttribute('blah2', 'some/other/namespace'));
-
-		$this->assertEquals('blahval', $this->_r->getAttribute('blah'));
-		$this->assertEquals('blah2val', $this->_r->getAttribute('blah2'));
-	}
-
-	public function testsetAttributesByRef()
-	{
-		$myval1 = 'blah';
-		$myval2 = 'blah2';
-		$this->_r->setAttributes(array('blah'=>&$myval1));
-		$this->assertReference($myval1, $this->_r->getAttribute('blah'));
-		$this->_r->setAttributes(array('blah2'=>&$myval2));
-		$this->assertReference($myval1, $this->_r->getAttribute('blah'));
-		$this->assertReference($myval2, $this->_r->getAttribute('blah2'));
-
-		$myval3 = 'blah';
-		$myval4 = 'blah2';
-		$this->_r->setAttributes(array('blah'=>&$myval3), 'some/other/namespace');
-		$this->assertReference($myval3, $this->_r->getAttribute('blah', 'some/other/namespace'));
-		$this->_r->setAttributes(array('blah2'=>&$myval4), 'some/other/namespace');
-		$this->assertReference($myval3, $this->_r->getAttribute('blah', 'some/other/namespace'));
-		$this->assertReference($myval4, $this->_r->getAttribute('blah2', 'some/other/namespace'));
-
-		$this->assertReference($myval1, $this->_r->getAttribute('blah'));
-		$this->assertReference($myval2, $this->_r->getAttribute('blah2'));
-	}
-
-	public function testsetError()
+	public function testSetError()
 	{
 		$this->_r->setError('blah', 'blahval');
 		$this->assertEquals('blahval', $this->_r->getError('blah'));
 	}
 
-	public function testsetErrors()
+	public function testSetErrors()
 	{
 		$this->_r->setErrors(array('blah'=>'blahval'));
 		$this->assertEquals('blahval', $this->_r->getError('blah'));
@@ -350,19 +132,18 @@ class RequestTest extends AgaviTestCase
 		$this->assertEquals('blah2val', $this->_r->getError('blah2'));
 	}
 
-	public function testsetMethod()
+	public function testGetModuleAccessor()
 	{
-		try {
-			$this->_r->setMethod(AgaviRequest::GET);
-		} catch (AgaviException $e) {
-			$this->fail('Unexpected AgaviException thrown: ' . $e->getMessage());
-		}
-		try {
-			$this->_r->setMethod(1012309213);
-			$this->fail('Expected AgaviException not thrown');
-		} catch (AgaviException $e) {
-		}
+		$this->assertEquals('module', $this->_r->getModuleAccessor());
+		$this->_r->initialize(AgaviContext::getInstance(), array('module_accessor' => 'moduleTest'));
+		$this->assertEquals('moduleTest', $this->_r->getModuleAccessor());
 	}
 
+	public function testGetActionAccessor()
+	{
+		$this->assertEquals('action', $this->_r->getActionAccessor());
+		$this->_r->initialize(AgaviContext::getInstance(), array('action_accessor' => 'actionTest'));
+		$this->assertEquals('actionTest', $this->_r->getActionAccessor());
+	}
 }
 ?>

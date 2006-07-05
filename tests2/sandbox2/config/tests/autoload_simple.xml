@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+| This file is part of the Agavi package.                                    |
+| Copyright (c) 2006 the Agavi Project.                                      |
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+-->
+<configurations>
+	<configuration>
+		<autoloads>
+			<autoload name="TestClass1">lib/config/autoload/test/Class1.class.php</autoload>
+			<autoload name="TestClass2">AutoloadHandlerTestClass.class.php</autoload>
+			<autoload name="TestClass3">AutoloadHandlerTestClass.class.php</autoload>
+		</autoloads>
+	</configuration>
+	<configuration>
+		<autoloads>
+			<autoload name="TestClass2">%core.webapp_dir%/lib/config/autoload/Test2.class.php</autoload>
+		</autoloads>
+	</configuration>
+</configurations>

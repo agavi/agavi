@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+| This file is part of the Agavi package.                                    |
+| Copyright (c) 2006 the Agavi Project                                       |
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+-->
+<configurations>
+	<configuration>
+		<action_stack class="AgaviActionStack" />
+		<controller class="AgaviWebController" />
+		<database_manager class="AgaviDatabaseManager" />
+		<dispatch_filter class="AgaviDispatchFilter" />
+		<execution_filter class="AgaviExecutionFilter" />
+		<filter_chain class="AgaviFilterChain" />
+		<logger_manager class="AgaviLoggerManager" />
+		<request class="AgaviWebRequest" />
+		<response class="AgaviWebResponse" />
+		<routing class="TestRouting" />
+		<security_filter class="AgaviSecurityFilter" />
+		<storage class="AgaviSessionStorage">
+			<parameters>
+				<parameter name="auto_start">false</parameter>
+			</parameters>
+		</storage>
+		<user class="AgaviSecurityUser" />
+		<validator_manager class="AgaviValidatorManager" />
+	</configuration>
+	<configuration context="test1">
+		<action_stack class="CTTestActionStack" />
+		<storage class="TestSessionStorage">
+		</storage>
+	</configuration>
+
+</configurations>

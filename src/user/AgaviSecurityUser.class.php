@@ -131,7 +131,7 @@ class AgaviSecurityUser extends AgaviUser implements AgaviISecurityUser
 	/**
 	 * Initialize this User.
 	 *
-	 * @param      AgaviContext A Context instance.
+	 * @param      AgaviContext An AgaviContext instance.
 	 * @param      array        An associative array of initialization parameters.
 	 *
 	 * @return     bool true, if initialization completes successfully,

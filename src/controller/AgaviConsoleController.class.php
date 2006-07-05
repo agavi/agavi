@@ -34,7 +34,7 @@ class AgaviConsoleController extends AgaviController
 	/**
 	 * Initialize this controller.
 	 *
-	 * @param      AgaviContext A Context instance.
+	 * @param      AgaviContext An AgaviContext instance.
 	 * @param      array        An array of initialization parameters.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>

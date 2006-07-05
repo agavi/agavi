@@ -7,7 +7,7 @@ class SampleLayout extends AgaviLayout
 
 class LayoutTest extends AgaviTestCase
 {
-	public function testgetsetLayout()
+	public function testGetSetLayout()
 	{
 		$layout = new SampleLayout;
 		$this->assertNull($layout->getLayout());

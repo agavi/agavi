@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+| This file is part of the Agavi package.                                    |
+| Copyright (c) 2006 the Agavi Project.                                      |
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+-->
+<configurations parent="%core.system_config_dir%/autoload.xml">
+	<configuration>
+		<autoloads>
+			<autoload name="TestRouting">%tests.dir%/sandbox2/lib/routing/TestRouting.class.php</autoload>
+			<!-- config/ConfigCacheTest -->
+			<autoload name="ImportTestHandler">%tests.dir%/sandbox2/lib/config/ImportTestHandler.class.php</autoload>
+			<autoload name="ImportTestOnceHandler">%tests.dir%/sandbox2/lib/config/ImportTestOnceHandler.class.php</autoload>
+			<autoload name="PtConfigParser">%tests.dir%/sandbox2/lib/config/ParseTestParser.class.php</autoload>
+
+
+		</autoloads>
+	</configuration>
+</configurations>

@@ -39,7 +39,7 @@ abstract class AgaviStorage extends AgaviParameterHolder
 	/**
 	 * Retrieve the current application context.
 	 *
-	 * @return     AgaviContext A Context instance.
+	 * @return     AgaviContext An AgaviContext instance.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -54,7 +54,7 @@ abstract class AgaviStorage extends AgaviParameterHolder
 	/**
 	 * Initialize this Storage.
 	 *
-	 * @param      AgaviContext A Context instance.
+	 * @param      AgaviContext An AgaviContext instance.
 	 * @param      array        An associative array of initialization parameters.
 	 *
 	 * @throws     <b>AgaviInitializationException</b> If an error occurs while

@@ -87,14 +87,14 @@ class AgaviContext
 	protected $validatorManager = null;
 	
 	/**
-	 * @var        array An array of Context instances.
+	 * @var        array An array of AgaviContext instances.
 	 */
 	protected static $instances = array();
 	
 	/**
 	 * @var        array An array of SingletonModel instances.
 	 */
-	protected static $singletonModelInstances = array();
+	protected $singletonModelInstances = array();
 
 	/**
 	 * Clone method, overridden to prevent cloning, there can be only one. 
@@ -104,7 +104,7 @@ class AgaviContext
 	 */
 	public function __clone()
 	{
-		trigger_error('Cloning the Context object is not allowed.', E_USER_ERROR);
+		trigger_error('Cloning the AgaviContext object is not allowed.', E_USER_ERROR);
 	}	
 
 	/**
@@ -186,7 +186,7 @@ class AgaviContext
 	}
 
 	/**
-	 * Retrieve the Context instance.
+	 * Retrieve the AgaviContext instance.
 	 *
 	 * @param      string name corresponding to a section of the config
 	 *
@@ -229,7 +229,7 @@ class AgaviContext
 	}
 
 	/**
-	 * (re)Initialize the Context instance.
+	 * (re)Initialize the AgaviContext instance.
 	 *
 	 * @param      string name corresponding to a section of the config
 	 *
@@ -254,7 +254,7 @@ class AgaviContext
 	}
 	
 	/**
-	 * Shut down this Context and all related factories.
+	 * Shut down this AgaviContext and all related factories.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+| This file is part of the Agavi package.                                    |
+| Copyright (c) 2006 the Agavi Project.                                      |
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+-->
+<configurations>
+	<configuration>
+		<loggers>
+			<logger name="test1" class="TestLogger1" priority="TestLogger::INFO">
+				<appenders>
+					<appender>appender1</appender>
+					<appender>appender2</appender>
+				</appenders>
+			</logger>
+
+			<logger name="test2" class="TestLogger2" priority="TestLogger::ERROR">
+				<appenders>
+					<appender>appender2</appender>
+					<appender>appender1</appender>
+					<appender>appender3</appender>
+				</appenders>
+			</logger>
+		</loggers>
+		<appenders>
+			<appender name="appender1" class="TestAppender1" layout="layout1">
+				<parameters>
+					<parameter name="param1">value1</parameter>
+					<parameter name="param2">value2</parameter>
+				</parameters>
+			</appender>
+
+			<appender name="appender2" class="TestAppender2" layout="layout1" />
+
+			<appender name="appender3" class="TestAppender3" layout="layout2">
+				<parameters>
+					<parameter name="file">%core.webapp_dir%/log/myapp.log</parameter>
+				</parameters>
+			</appender>
+		</appenders>
+		<layouts>
+			<layout name="layout1" class="TestLayout1">
+				<parameters>
+					<parameter name="param1">value1</parameter>
+					<parameter name="param2">value2</parameter>
+				</parameters>
+			</layout>
+			<layout name="layout2" class="TestLayout2" />
+		</layouts>
+
+	</configuration>
+</configurations>

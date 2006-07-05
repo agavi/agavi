@@ -46,7 +46,7 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	/**
 	 * Retrieve the current application context.
 	 *
-	 * @return     Context A Context instance.
+	 * @return     AgaviContext An AgaviContext instance.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
@@ -179,7 +179,7 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	/**
 	 * Initialize this Request.
 	 *
-	 * @param      AgaviContext A Context instance.
+	 * @param      AgaviContext An AgaviContext instance.
 	 * @param      array        An associative array of initialization parameters.
 	 *
 	 * @throws     <b>AgaviInitializationException</b> If an error occurs while

@@ -10,5 +10,6 @@ RewriteEngine On
 
 # if requested url does not exist (i.e. it's likely an agavi route), pass it as path info to index.php
 RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule (.*) /INSERT/WEBSERVER/PATH/TO/index.php/HERE/$1 [QSA,L]
 # e.g. RewriteRule (.*) /~dzuelke/_projects/agavi/trunk/samples/www/index.php/$1 [QSA,L]

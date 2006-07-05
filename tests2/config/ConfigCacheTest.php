@@ -24,13 +24,15 @@ class ConfigCacheTest extends AgaviTestCase
 
 	public function testCheckConfig()
 	{
-		try {
-			$filename = AgaviConfigCache::checkConfig('config/factories.ini');
-			$this->assertSame(AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . AgaviConfigCache::CACHE_SUBDIR . DIRECTORY_SEPARATOR . 'config_factories.ini.php', $filename);
-			$this->assertTrue( file_exists($filename) );
-		} catch (AgaviConfigurationException $e) {
-			$this->fail($e->getMessage());
-		}
+		$filename = AgaviConfigCache::checkConfig(AgaviConfig::get('core.config_dir') . '/factories.xml');
+
+		// TODO: do we need such a test at all?
+		// $this->assertSame(AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . AgaviConfigCache::CACHE_SUBDIR . DIRECTORY_SEPARATOR . 'config_factories.xml.php', $filename);
+		$cd = realpath(AgaviConfig::get('core.cache_dir'));
+		$fn = realpath($filename);
+		$this->assertSame($cd, substr($fn, 0, strlen($cd)));
+
+		$this->assertTrue( file_exists($filename) );
 		
 		try {
 			AgaviConfigCache::checkConfig('a file that doesnt exist');
@@ -44,19 +46,35 @@ class ConfigCacheTest extends AgaviTestCase
 
 	public function testgetCacheName()
 	{
-		$name = 'bleh/blah.ini';	
-		$this->assertEquals(AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . AgaviConfigCache::CACHE_SUBDIR . DIRECTORY_SEPARATOR . 'bleh_blah.ini.php', AgaviConfigCache::getCacheName($name) );
+		$env = AgaviConfig::get('core.environment');
+		$ctx = 'testContext';
+		$csd = AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . AgaviConfigCache::CACHE_SUBDIR . DIRECTORY_SEPARATOR;
+
+
+		$name = 'bleh/blah.xml';
+		$this->assertEquals($csd . 'bleh_blah.xml_' . $env . '_.php', AgaviConfigCache::getCacheName($name));
 		
-		$name = 'bleh\blah.ini';	
-		$this->assertEquals(AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . AgaviConfigCache::CACHE_SUBDIR . DIRECTORY_SEPARATOR . 'bleh_blah.ini.php', AgaviConfigCache::getCacheName($name) );
+		$name = 'bleh\\blah.xml';
+		$this->assertEquals($csd . 'bleh_blah.xml_' . $env . '_.php', AgaviConfigCache::getCacheName($name) );
+
+		$name = 'bleh/blah.xml';
+		$this->assertEquals($csd . 'bleh_blah.xml_' . $env . '_' . $ctx . '.php', AgaviConfigCache::getCacheName($name, $ctx) );
 	}
 	
 	public function testimport()
 	{
-		$this->assertFalse( defined('Sompn_loaded') );
-		AgaviConfigCache::import('config/sompn.ini');
-		$this->assertTrue( defined('Sompn_loaded') );
-			
+		$this->assertFalse( defined('ConfigCacheImportTest_included') );
+		AgaviConfigCache::import(AgaviConfig::get('core.config_dir') . '/tests/importtest.xml');
+		$this->assertTrue( defined('ConfigCacheImportTest_included') );
+
+		$GLOBALS["ConfigCacheImportTestOnce_included"] = false;
+		AgaviConfigCache::import(AgaviConfig::get('core.config_dir') . '/tests/importtest_once.xml', true);
+		$this->assertTrue( $GLOBALS["ConfigCacheImportTestOnce_included"] );
+
+		$GLOBALS["ConfigCacheImportTestOnce_included"] = false;
+		AgaviConfigCache::import(AgaviConfig::get('core.config_dir') . '/tests/importtest_once.xml', true);
+		$this->assertFalse( $GLOBALS["ConfigCacheImportTestOnce_included"] );
+
 	}
 	
 	public function testclear()
@@ -66,5 +84,22 @@ class ConfigCacheTest extends AgaviTestCase
 		$this->assertTrue( file_exists($dummyfile) );
 		AgaviConfigCache::clear();
 		$this->assertFalse( file_exists($dummyfile) );
+	}
+
+	public function testparseConfig()
+	{
+		$cfg = 'parseConfigTest.pt';
+		$validationFile = 'validFile.vf';
+
+		$exc = false;
+		try {
+			AgaviConfigCache::parseConfig($cfg, false);
+		} catch (AgaviConfigurationException $e) {
+			$exc = true;
+		}
+		if(!$exc) $this->fail('Did not get expected ConfigurationException?');
+
+		$this->assertSame($cfg . '---' . $validationFile, AgaviConfigCache::parseConfig($cfg, true, $validationFile));
+
 	}
 }

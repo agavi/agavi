@@ -39,7 +39,7 @@ class AgaviUser extends AgaviAttributeHolder
 	/**
 	 * Retrieve the current application context.
 	 *
-	 * @return     Context A Context instance.
+	 * @return     AgaviContext An AgaviContext instance.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -65,7 +65,7 @@ class AgaviUser extends AgaviAttributeHolder
 	/**
 	 * Initialize this User.
 	 *
-	 * @param      AgaviContext A Context instance.
+	 * @param      AgaviContext An AgaviContext instance.
 	 * @param      array        An associative array of initialization parameters.
 	 *
 	 * @throws     <b>AgaviInitializationException</b> If an error occurs while

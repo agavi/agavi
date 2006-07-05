@@ -28,7 +28,7 @@
 abstract class AgaviResponse
 {
 	/**
-	 * @var        AgaviContext A Context instance.
+	 * @var        AgaviContext An AgaviContext instance.
 	 */
 	protected $context = null;
 	
@@ -48,9 +48,9 @@ abstract class AgaviResponse
 	protected $content = '';
 	
 	/**
-	 * Retrieve the Context instance this Response object belongs to.
+	 * Retrieve the AgaviContext instance this Response object belongs to.
 	 *
-	 * @return     AgaviContext A Context instance.
+	 * @return     AgaviContext An AgaviContext instance.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
@@ -63,7 +63,7 @@ abstract class AgaviResponse
 	/**
 	 * Initialize this Response.
 	 *
-	 * @param      AgaviContext A Context instance.
+	 * @param      AgaviContext An AgaviContext instance.
 	 * @param      array        An array of initialization parameters.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>

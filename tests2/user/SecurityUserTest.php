@@ -1,17 +1,19 @@
 <?php
-class SampleSecurityUser extends AgaviBasicSecurityUser
+class SampleSecurityUser extends AgaviSecurityUser
 {
-	public function initialize(AgaviContext $context, $parameters=null)
+	public function initialize(AgaviContext $context, $parameters=array())
 	{
+		parent::initialize($context, $parameters);
 		$this->context = $context;
-		if ($parameters != null) {
+		
+		if(count($parameters)) {
 			$this->parameters = array_merge($this->parameters, $parameters);
 		}
 		$this->attributes = array();
 	}
 }
 
-class BasicSecurityUserTest extends AgaviTestCase
+class SecurityUserTest extends AgaviTestCase
 {
 	private $_u = null;
 
@@ -55,6 +57,40 @@ class BasicSecurityUserTest extends AgaviTestCase
 		$this->assertTrue($this->_u->hasCredentials("0"));
 		$this->assertFalse($this->_u->hasCredentials(0));
 		$this->assertFalse($this->_u->hasCredentials(false));
+	}
+
+	public function testRemoveCredential()
+	{
+		$this->_u->clearCredentials();
+		$this->_u->addCredential('test1');
+		$this->_u->addCredential('test2');
+		$this->_u->addCredential('test3');
+		$this->assertTrue($this->_u->hasCredentials(array('test1', 'test2', 'test3')));
+		$this->_u->removeCredential('test2');
+		$this->assertTrue($this->_u->hasCredentials(array('test3', 'test1')));
+		$this->assertFalse($this->_u->hasCredentials(array('test1', 'test2', 'test3')));
+		$this->assertFalse($this->_u->hasCredentials(array('test2')));
+		$this->_u->removeCredential('test1');
+		$this->assertTrue($this->_u->hasCredentials(array('test3')));
+		$this->assertFalse($this->_u->hasCredentials(array('test1')));
+		$this->_u->removeCredential('test3');
+		$this->assertFalse($this->_u->hasCredentials(array('test3')));
+	}
+
+	public function testSetIsAuthenticated()
+	{
+		$u = $this->_u;
+		$this->assertFalse($u->isAuthenticated());
+		$u->setAuthenticated(1);
+		$this->assertFalse($u->isAuthenticated());
+		$u->setAuthenticated(true);
+		$this->assertTrue($u->isAuthenticated());
+		$u->setAuthenticated(1);
+		$this->assertFalse($u->isAuthenticated());
+		$u->setAuthenticated(true);
+		$this->assertTrue($u->isAuthenticated());
+		$u->setAuthenticated(false);
+		$this->assertFalse($u->isAuthenticated());
 	}
 
 }

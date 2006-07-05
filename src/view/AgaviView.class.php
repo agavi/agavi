@@ -58,7 +58,7 @@ abstract class AgaviView extends AgaviAttributeHolder
 	const RENDER_VAR = 4;
 
 	/**
-	 * @var        AgaviContext The Context instance this View belongs to.
+	 * @var        AgaviContext The AgaviContext instance this View belongs to.
 	 */
 	protected $context = null;
 	
@@ -108,7 +108,7 @@ abstract class AgaviView extends AgaviAttributeHolder
 	/**
 	 * Retrieve the current application context.
 	 *
-	 * @return     AgaviContext The current Context instance.
+	 * @return     AgaviContext The current AgaviContext instance.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0

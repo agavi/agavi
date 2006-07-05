@@ -41,7 +41,7 @@ class AgaviPhpRenderer extends AgaviRenderer
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.11.0
 	 */
-	public function decorate(&$content)
+	public function & decorate(&$content)
 	{
 		// call our parent decorate() method
 		parent::decorate($content);
