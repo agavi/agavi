@@ -527,9 +527,23 @@
       <para><programlisting># enable rewrite engine
 RewriteEngine On
 
+RewriteBase /~dzuelke/_projects/agavi/trunk/samples/www/
+# e.g. RewriteBase /~dzuelke/_projects/agavi/trunk/samples/www/
+# usually just "/" if your application's www dir is the document root
+
 # if requested url does not exist (i.e. it's likely an agavi route), pass it as path info to index.php
+RewriteRule ^$ index.php/ [QSA,L]
 RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule (.*) /the/webserver/path/to/index.php/$1 [QSA,L]</programlisting></para>
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule (.*) index.php/$1 [QSA,L]
+</programlisting></para>
+
+      <para>The important thing is that you use the
+      <emphasis>external</emphasis> path to the <filename>www</filename>
+      directory as the RewriteBase, i.e. the path that you would have to enter
+      in your web browser location bar to reach the index page. If the
+      <filename>www</filename> directory is the document root, then the
+      RewriteBase is just <filename>/</filename>.</para>
 
       <para>The RewriteCond is a condition that executes the following
       RewriteRule if the requested filename (that is the incoming URL already
@@ -538,11 +552,6 @@ RewriteRule (.*) /the/webserver/path/to/index.php/$1 [QSA,L]</programlisting></p
       webserver is requested, Agavi won't be called. Otherwise, the framework
       is started and the given URL is handed to Agavi as so-called Path Info
       which the WebRouting will use to match a route.</para>
-
-      <para>The important thing is that you use the
-      <emphasis>external</emphasis> path to index.php here, i.e. the path that
-      you would have to enter in your web browser location bar to reach
-      <filename>index.php</filename>.</para>
 
       <para>If you use ISAPI_Rewrite or another plugin for IIS, you can't use
       the rewrite condition shown above since it's not supported. Instead, you
