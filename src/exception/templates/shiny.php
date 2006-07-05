@@ -79,6 +79,8 @@ if(strpos($_SERVER['HTTP_USER_AGENT'], 'AppleWebKit') !== false) {
 if($svg) {
 	header('Content-Type: application/xhtml+xml');
 	echo '<?xml version="1.0" encoding="utf-8" standalone="no" ?>';
+} else {
+	header('Content-Type: text/html');
 }
 
 // fix stack trace in case it doesn't contain the exception origin as the first entry

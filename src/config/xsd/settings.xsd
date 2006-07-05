@@ -8,6 +8,7 @@
           <xs:all>
             <xs:element name="system_actions" type="system_actions" minOccurs="0" />
             <xs:element name="settings" type="settings" minOccurs="0" />
+            <xs:element name="exception_templates" type="exception_templates" minOccurs="0" />
           </xs:all>
           <xs:attribute name="environment" type="xs:string" />
         </xs:complexType>
@@ -38,6 +39,19 @@
     <xs:simpleContent>
       <xs:extension base="xs:string">
         <xs:attribute name="name" type="xs:string" use="required" />
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:complexType name="exception_templates">
+    <xs:sequence>
+      <xs:element name="exception_template" type="exception_template" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="exception_template">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute name="context" type="xs:string" />
       </xs:extension>
     </xs:simpleContent>
   </xs:complexType>

@@ -66,6 +66,19 @@ class AgaviSettingConfigHandler extends AgaviConfigHandler
 			{
 				$data['core.' . $setting->getAttribute('name')] = $this->literalize($this->replaceConstants($setting->getValue()));
 			}
+			
+			if($cfg->hasChildren('exception_templates')) {
+				foreach($cfg->exception_templates->getChildren() as $exception_template) {
+					$tpl = $exception_template->getValue();
+					if($exception_template->hasAttribute('context')) {
+						foreach(explode(' ', $exception_template->getAttribute('context')) as $ctx) {
+							$data['exception.templates.' . trim($ctx)] = $tpl;
+						}
+					} else {
+						$data['exception.default_template'] = $tpl;
+					}
+				}
+			}
 		}
 
 		$code = 'AgaviConfig::import(' . var_export($data, true) . ');';
