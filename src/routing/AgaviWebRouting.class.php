@@ -80,6 +80,9 @@ class AgaviWebRouting extends AgaviRouting
 			$this->prefix .= substr($_SERVER['SCRIPT_NAME'], $appendFrom + 1);
 			$this->input = substr($ru, $i);
 		}
+		if(!$this->input) {
+			$this->input = "/";
+		}
 		
 		if(isset($_SERVER['REDIRECT_URL']) || isset($_SERVER['HTTP_X_REWRITE_URL'])) {
 			// a rewrite happened
