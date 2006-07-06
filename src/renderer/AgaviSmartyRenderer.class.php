@@ -69,6 +69,10 @@ class AgaviSmartyRenderer extends AgaviRenderer
 
 		$this->smarty->plugins_dir  = array("plugins","plugins_local");
 		
+		if(AgaviConfig::get('core.debug', false)) {
+			$this->smarty->debugging = true;
+		}
+		
 		return $this->smarty;
 	}
 
