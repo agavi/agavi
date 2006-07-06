@@ -373,12 +373,6 @@ abstract class AgaviRouting
 	 */
 	public function execute()
 	{
-		$req = $this->context->getRequest();
-		
-		$input = $this->input;
-
-		$vars = array();
-		$ot = null;
 		$matchedRoutes = array();
 		
 		if(!AgaviConfig::get('core.use_routing', false)) {
@@ -386,6 +380,12 @@ abstract class AgaviRouting
 			return $matchedRoutes;
 		}
 		
+		$req = $this->context->getRequest();
+		
+		$input = $this->input;
+
+		$vars = array();
+		$ot = null;
 		$ma = $req->getModuleAccessor();
 		$aa = $req->getActionAccessor();
 
