@@ -71,7 +71,12 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 		$viewInstance->initialize($response);
 		
 		// view initialization completed successfully
-		$viewInstance->execute();
+		$contextExecuteMethod = 'execute' . $this->context->getName();
+		if(method_exists($viewInstance, $contextExecuteMethod)) {
+			$viewInstance->$contextExecuteMethod();
+		} else {
+			$viewInstance->execute();
+		}
 		
 		$renderer = null;
 		
