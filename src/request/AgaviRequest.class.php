@@ -335,7 +335,7 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 				} elseif(is_numeric($key)) {
 					$key = intval($key);
 				}
-				if(isset($val[$key])) {
+				if(is_array($val) && isset($val[$key])) {
 					$val = $val[$key];
 				} else {
 					return $default;
@@ -365,7 +365,7 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 				} elseif(is_numeric($key)) {
 					$key = intval($key);
 				}
-				if(isset($val[$key])) {
+				if(is_array($val) && isset($val[$key])) {
 					$val = $val[$key];
 				} else {
 					return false;
