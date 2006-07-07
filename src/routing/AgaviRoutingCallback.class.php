@@ -50,7 +50,7 @@ abstract class AgaviRoutingCallback
 		return $this->context;
 	}
 
-	public function onMatched(&$params)
+	public function onMatched(&$parameters)
 	{
 		return true;
 	}
@@ -60,9 +60,9 @@ abstract class AgaviRoutingCallback
 		return;
 	}
 
-	public function onGenerate($params)
+	public function onGenerate($parameters)
 	{
-		return $params;
+		return $parameters;
 	}
 }
 
