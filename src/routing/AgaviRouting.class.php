@@ -321,6 +321,12 @@ abstract class AgaviRouting
 		$availableParams = array();
 		foreach($routes as $route) {
 			$r = $this->routes[$route];
+
+			// if the route has a source we shouldn't put its stuff in the generated string
+			if($r['opt']['source']) {
+				continue;
+			}
+
 			$myDefaults = $r['opt']['defaults'];
 			$availableParams += $r['par'] + $r['opt']['ignores'];
 
