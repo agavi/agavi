@@ -481,13 +481,19 @@ abstract class AgaviRouting
 					}
 
 					if($opts['cut'] || count($opts['childs'])) {
+						if($route['opt']['source'] !== null) {
+							$s =& $this->sources[$route['opt']['source']];
+						} else {
+							$s =& $input;
+						}
+						
 						$ni = '';
 						// if the route didn't match from the start of the input preserve the 'prefix'
 						if($match[0][1] > 0) {
-							$ni = substr($input, 0, $match[0][1]);
+							$ni = substr($s, 0, $match[0][1]);
 						}
-						$ni .= substr($input, $match[0][1] + strlen($match[0][0]));
-						$input = $ni;
+						$ni .= substr($s, $match[0][1] + strlen($match[0][0]));
+						$s = $ni;
 					}
 
 					if(count($opts['childs'])) {
@@ -541,7 +547,7 @@ abstract class AgaviRouting
 	 */
 	protected function parseInput($route, $input, &$matches)
 	{
-		if($route['opt']['source']) {
+		if($route['opt']['source'] !== null) {
 			$input = $this->sources[$route['opt']['source']];
 		}
 		return preg_match($route['rxp'], $input, $matches, PREG_OFFSET_CAPTURE);
