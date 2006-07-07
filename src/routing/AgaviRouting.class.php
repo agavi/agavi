@@ -252,6 +252,17 @@ abstract class AgaviRouting
 		$this->routes = $routes;
 	}
 
+	/**
+	 * Retrieves the routes which need to be taken into account when generating
+	 * the reverse string of a routing to be generated.
+	 *
+	 * @param      string  The route name(s, delimited by +) to calculate.
+	 *
+	 * @return     array A list of names of affected routes.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public function getAffectedRoutes($route)
 	{
 		$routes = explode('+', $route);
