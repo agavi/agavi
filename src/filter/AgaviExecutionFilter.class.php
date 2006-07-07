@@ -82,39 +82,46 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 		
 		while(true) {
 			$oti = $controller->getOutputTypeInfo();
-			$renderer = new $oti['renderer']();
-			$renderer->initialize($this->context, $oti['renderer_parameters']);
-			$renderer->setView($viewInstance);
-			if(isset($oti['extension'])) {
-				$renderer->setExtension($oti['extension']);
-			}
-			try {
-				// run the pre-render check to see if the template is there
-				$renderer->preRenderCheck();
-				break;
-			} catch(AgaviRenderException $e) {
-				if(isset($oti['fallback'])) {
-					// template not found, but there's a fallback specified, so let's try that one
-					$controller->setOutputType($oti['fallback']);
-				} else {
-					throw $e;
+			if($oti['renderer'] !== null) {
+				$renderer = new $oti['renderer']();
+				$renderer->initialize($this->context, $oti['renderer_parameters']);
+				$renderer->setView($viewInstance);
+				if(isset($oti['extension'])) {
+					$renderer->setExtension($oti['extension']);
 				}
+				try {
+					// run the pre-render check to see if the template is there
+					$renderer->preRenderCheck();
+					break;
+				} catch(AgaviRenderException $e) {
+					if(isset($oti['fallback'])) {
+						// template not found, but there's a fallback specified, so let's try that one
+						$controller->setOutputType($oti['fallback']);
+					} else {
+						throw $e;
+					}
+				}
+			} else {
+				$renderer = null;
+				break;
 			}
 		}
 		
-		// create a new filter chain
-		$fcfi = $this->context->getFactoryInfo('filter_chain');
-		$filterChain = new $fcfi['class']();
-		$filterChain->initialize($response, $fcfi['parameters']);
+		if($renderer !== null) {
+			// create a new filter chain
+			$fcfi = $this->context->getFactoryInfo('filter_chain');
+			$filterChain = new $fcfi['class']();
+			$filterChain->initialize($response, $fcfi['parameters']);
 
-		$controller->loadFilters($filterChain, 'rendering');
-		$controller->loadFilters($filterChain, 'rendering', $viewModule);
+			$controller->loadFilters($filterChain, 'rendering');
+			$controller->loadFilters($filterChain, 'rendering', $viewModule);
 
-		// register the renderer as the last filter
-		$filterChain->register($renderer);
+			// register the renderer as the last filter
+			$filterChain->register($renderer);
 
-		// go, go, go!
-		$filterChain->execute();
+			// go, go, go!
+			$filterChain->execute();
+		}
 		
 		if($controller->getRenderMode() == AgaviView::RENDER_VAR) {
 			$actionEntry->setPresentation($response);
