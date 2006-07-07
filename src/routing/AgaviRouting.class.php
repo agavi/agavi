@@ -35,6 +35,7 @@ abstract class AgaviRouting
 	protected $routes = array(),
 						$context = null,
 						$input = null,
+						$sources = array(),
 						$prefix = '';
 
 	/**
@@ -114,6 +115,7 @@ abstract class AgaviRouting
 	 *                    <li>callback</li>
 	 *                    <li>imply</li>
 	 *                    <li>cut</li>
+	 *                    <li>source</li>
 	 *                   </ul>
 	 * @param      string The name of the parent route (if any).
 	 *
@@ -139,7 +141,7 @@ abstract class AgaviRouting
 				$defaultOpts['parent'] = $parent;
 			}
 		} else {
-			$defaultOpts = array('name' => uniqid (rand()), 'stopping' => true, 'output_type' => null, 'module' => null, 'action' => null, 'parameters' => array(), 'ignores' => array(), 'defaults' => array(), 'childs' => array(), 'callback' => null, 'imply' => false, 'cut' => false, 'parent' => $parent, 'reverseStr' => '', 'nostops' => array(), 'anchor' => self::ANCHOR_NONE);
+			$defaultOpts = array('name' => uniqid (rand()), 'stopping' => true, 'output_type' => null, 'module' => null, 'action' => null, 'parameters' => array(), 'ignores' => array(), 'defaults' => array(), 'childs' => array(), 'callback' => null, 'imply' => false, 'cut' => false, 'source' => null, 'parent' => $parent, 'reverseStr' => '', 'nostops' => array(), 'anchor' => self::ANCHOR_NONE);
 		}
 
 		if(isset($options['defaults'])) {
@@ -250,6 +252,52 @@ abstract class AgaviRouting
 		$this->routes = $routes;
 	}
 
+	public function getAffectedRoutes($route)
+	{
+		$routes = explode('+', $route);
+
+		$route = $routes[0];
+		unset($routes[0]);
+		
+		$myRoutes = array();
+		foreach($routes as $r) {
+			$myRoutes[$r] = true;
+		}
+
+		$affectedRoutes = array();
+
+		if(isset($this->routes[$route])) {
+			$parent = $route;
+			do {
+				$affectedRoutes[] = $parent;
+				$r = $this->routes[$parent];
+
+				foreach(array_reverse($r['opt']['nostops']) as $noStop) {
+					$myR = $this->routes[$noStop];
+					if(isset($myRoutes[$noStop])) {
+						unset($myRoutes[$noStop]);
+					} elseif(!$myR['opt']['imply']) {
+						continue;
+					}
+
+					$affectedRoutes[] = $noStop;
+				}
+
+				$parent = $r['opt']['parent'];
+
+			} while($parent);
+		} else {
+			// TODO: error handling - route with the given name does not exist
+		}
+
+		if(count($myRoutes)) {
+			// TODO: error handling - we couldn't find some of the nonstopping rules
+		}
+
+		return $affectedRoutes;
+	}
+
+
 	/**
 	 * Generate a formatted Agavi URL.
 	 *
@@ -263,68 +311,35 @@ abstract class AgaviRouting
 	 */
 	public function gen($route, $params = array())
 	{
-		$routes = explode('+', $route);
-		$route = $routes[0];
-		unset($routes[0]);
-		$myRoutes = array();
-		foreach($routes as $r) {
-			$myRoutes[$r] = true;
+		$routes = $route;
+		if(is_string($route)) {
+			$routes = $this->getAffectedRoutes($routes);
 		}
 
 		$url = '';
 		$defaults = array();
 		$availableParams = array();
-		if(isset($this->routes[$route])) {
-			$parent = $route;
-			do {
-				$r =& $this->routes[$parent];
-				$myDefaults = $r['opt']['defaults'];
-				$availableParams += $r['par'] + $r['opt']['ignores'];
+		foreach($routes as $route) {
+			$r = $this->routes[$route];
+			$myDefaults = $r['opt']['defaults'];
+			$availableParams += $r['par'] + $r['opt']['ignores'];
 
-				if($r['opt']['anchor'] & self::ANCHOR_START || $r['opt']['anchor'] == self::ANCHOR_NONE) {
-					$url = $r['opt']['reverseStr'] . $url;
-				} else {
-					$url = $url . $r['opt']['reverseStr'];
+			if($r['opt']['anchor'] & self::ANCHOR_START || $r['opt']['anchor'] == self::ANCHOR_NONE) {
+				$url = $r['opt']['reverseStr'] . $url;
+			} else {
+				$url = $url . $r['opt']['reverseStr'];
+			}
+
+			if(isset($r['opt']['callback'])) {
+				if(!isset($r['cb'])) {
+					$cb = $r['opt']['callback'];
+					$r['cb'] = new $cb();
+					$r['cb']->initialize($this->getContext(), $r);
 				}
+				$myDefaults = $r['cb']->onGenerate($myDefaults);
+			}
 
-				foreach(array_reverse($r['opt']['nostops']) as $noStop) {
-					$myR = $this->routes[$noStop];
-					if(isset($myRoutes[$noStop])) {
-						unset($myRoutes[$noStop]);
-					} elseif(!$myR['opt']['imply']) {
-						continue;
-					}
-
-					$myDefaults = array_merge($myDefaults, $myR['opt']['defaults']);
-					$availableParams += $myR['par'] + $myR['opt']['ignores'];
-					if($myR['opt']['anchor'] & self::ANCHOR_START || $myR['opt']['anchor'] == self::ANCHOR_NONE) {
-						$url = $myR['opt']['reverseStr'] . $url;
-					} else {
-						$url = $url . $myR['opt']['reverseStr'];
-					}
-				}
-
-				if(isset($r['opt']['callback'])) {
-					if(!isset($r['cb'])) {
-						$cb = $r['opt']['callback'];
-						$r['cb'] = new $cb();
-						$r['cb']->initialize($this->getContext(), $r);
-					}
-					$myDefaults = $r['cb']->onGenerate($myDefaults);
-				}
-
-				$defaults = array_merge($defaults, $myDefaults);
-
-				$parent = $r['opt']['parent'];
-
-			} while($parent);
-
-		} else {
-			// TODO: error handling - route with the given name does not exist
-		}
-
-		if(count($myRoutes)) {
-			// TODO: error handling - we couldn't find some of the nonstopping rules
+			$defaults = array_merge($myDefaults, $defaults);
 		}
 
 		$np = array();
@@ -375,7 +390,7 @@ abstract class AgaviRouting
 	{
 		$matchedRoutes = array();
 		
-		if(!AgaviConfig::get('core.use_routing', false)) {
+		if(!AgaviConfig::get('core.use_routing', false) || count($this->routes) == 0) {
 			// routing disabled, bail out
 			return $matchedRoutes;
 		}
@@ -495,8 +510,8 @@ abstract class AgaviRouting
 		// put the vars into the request
 		$req->setParameters($vars);
 		
-		if(count($matchedRoutes) == 0) {
-			// no routes matched, use 404 action
+		if(!$req->hasParameter($ma) || !$req->hasParameter($aa)) {
+			// no route which supplied the required parameters matched, use 404 action
 			$req->setParameters(array(
 				$ma => AgaviConfig::get('actions.error_404_module'),
 				$aa => AgaviConfig::get('actions.error_404_action')
@@ -520,6 +535,9 @@ abstract class AgaviRouting
 	 */
 	protected function parseInput($route, $input, &$matches)
 	{
+		if($route['opt']['source']) {
+			$input = $this->sources[$route['opt']['source']];
+		}
 		return preg_match($route['rxp'], $input, $matches, PREG_OFFSET_CAPTURE);
 	}
 
@@ -550,6 +568,7 @@ abstract class AgaviRouting
 		$len = strlen($str);
 		$state = 'start';
 		$tmpStr = '';
+		$inEscape = false;
 
 		$rxName = '';
 		$rxInner = '';
@@ -563,7 +582,31 @@ abstract class AgaviRouting
 
 		for($i = 0; $i < $len; ++$i) {
 			$atEnd = $i + 1 == $len;
+
 			$c = $str[$i];
+
+			if(!$atEnd && !$inEscape && $c == '\\') {
+				$cNext = $str[$i + 1];
+
+				if(
+					($cNext == '\\') ||
+					($state == 'start' && $cNext == '(') ||
+					($state == 'rxStart' && in_array($cNext, array('(',')','{','}')))
+				) {
+					$inEscape = true;
+					continue;
+				}
+				if($state == 'afterRx' && $cNext == '?') {
+					$inEscape = false;
+					$state = 'start';
+					continue;
+				}
+			} elseif($inEscape) {
+				$tmpStr .= $c;
+				$inEscape = false;
+				continue;
+			}
+
 
 			if($state == 'start') {
 				// start of regular expression block
@@ -631,7 +674,7 @@ abstract class AgaviRouting
 							if(strpbrk($myRx, $rxChars) === false) {
 								$reverseStr .= $myRx;
 							}
-							$rxStr .= $rxPrefix . $rxInner . $rxPostfix;
+							$rxStr .= sprintf('(%s)', $myRx);
 						} else {
 							$rxStr .= sprintf('(%s(?P<%s>%s)%s)', $rxPrefix, $rxName, $rxInner, $rxPostfix);
 							$reverseStr .= sprintf('(:%s:)', $rxName);
