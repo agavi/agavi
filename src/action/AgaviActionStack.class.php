@@ -144,6 +144,17 @@ class AgaviActionStack
 		return count($this->stack);
 
 	}
+	
+	/**
+	 * Clear the stack.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function clear()
+	{
+		$this->stack = array();
+	}
 
 }
 
