@@ -141,7 +141,7 @@ abstract class AgaviRouting
 				$defaultOpts['parent'] = $parent;
 			}
 		} else {
-			$defaultOpts = array('name' => uniqid (rand()), 'stopping' => true, 'output_type' => null, 'module' => null, 'action' => null, 'parameters' => array(), 'ignores' => array(), 'defaults' => array(), 'childs' => array(), 'callback' => null, 'imply' => false, 'cut' => false, 'source' => null, 'parent' => $parent, 'reverseStr' => '', 'nostops' => array(), 'anchor' => self::ANCHOR_NONE);
+			$defaultOpts = array('name' => uniqid (rand()), 'stopping' => true, 'output_type' => null, 'module' => null, 'action' => null, 'parameters' => array(), 'ignores' => array(), 'defaults' => array(), 'childs' => array(), 'callback' => null, 'imply' => false, 'cut' => null, 'source' => null, 'parent' => $parent, 'reverseStr' => '', 'nostops' => array(), 'anchor' => self::ANCHOR_NONE);
 		}
 
 		if(isset($options['defaults'])) {
@@ -480,7 +480,7 @@ abstract class AgaviRouting
 						$ot = $opts['output_type'];
 					}
 
-					if($opts['cut'] || count($opts['childs'])) {
+					if($opts['cut'] || (count($opts['childs']) && $opts['cut'] === null)) {
 						if($route['opt']['source'] !== null) {
 							$s =& $this->sources[$route['opt']['source']];
 						} else {
