@@ -75,11 +75,6 @@ class AgaviPhptalRenderer extends AgaviRenderer
 		$mode = $view->getContext()->getController()->getRenderMode();
 		$engine->setTemplateRepository($view->getDirectory());
 		
-		// the following three lines are a fix until PHPTAL has been changed so setTemplate() resets _prepared, _source and _functionName.
-		// as soon as this is fixed in PHPTAL SVN, we will remove this ugly hack that relies on PHP being a little... well... ugly.
-		$engine->{"\0*\0_prepared"} = false;
-		$engine->{"\0*\0_functionName"} = null;
-		$engine->{"\0*\0_source"} = null;
 		$engine->setTemplate($view->getTemplate() . $this->getExtension());
 		if($this->extractVars) {
 			foreach($view->getAttributes() as $key => $value) {
@@ -118,11 +113,6 @@ class AgaviPhptalRenderer extends AgaviRenderer
 		// render the decorator template and return the result
 		$engine->setTemplateRepository($view->getDecoratorDirectory());
 		
-		// the following three lines are a fix until PHPTAL has been changed so setTemplate() resets _prepared, _source and _functionName.
-		// as soon as this is fixed in PHPTAL SVN, we will remove this ugly hack that relies on PHP being a little... well... ugly.
-		$engine->{"\0*\0_prepared"} = false;
-		$engine->{"\0*\0_functionName"} = null;
-		$engine->{"\0*\0_source"} = null;
 		$engine->setTemplate($view->getDecoratorTemplate() . $this->getExtension());
 		
 		// set the template resources
