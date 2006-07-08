@@ -314,6 +314,67 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	{
 	}
 
+	/**
+	 * @see        AgaviParameterHolder::getParameter()
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.9.0
+	 */
+	public function & getParameter($name, $default = null)
+	{
+		if(($pos = strpos($name, '[')) === false) {
+			$retval =& parent::getParameter($name, $default);
+			return $retval;
+		} else {
+			$array = explode('][', rtrim(ltrim(substr($name, $pos), '['), ']'));
+			$name = substr($name, 0, $pos);
+			$val = $this->getParameter($name);
+			foreach($array as $key) {
+				if($key == '') {
+					$key = 0;
+				} elseif(is_numeric($key)) {
+					$key = intval($key);
+				}
+				if(is_array($val) && isset($val[$key])) {
+					$val = $val[$key];
+				} else {
+					return $default;
+				}
+			}
+			return $val;
+		}
+	}
+
+	/**
+	 * @see        AgaviParameterHolder::hasParameter()
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.9.0
+	 */
+	public function hasParameter($name)
+	{
+		if(($pos = strpos($name, '[')) === false) {
+			return parent::hasParameter($name);
+		} else {
+			$array = explode('][', rtrim(ltrim(substr($name, $pos), '['), ']'));
+			$name = substr($name, 0, $pos);
+			$val = $this->getParameter($name);
+			foreach($array as $key) {
+				if($key == '') {
+					$key = 0;
+				} elseif(is_numeric($key)) {
+					$key = intval($key);
+				}
+				if(is_array($val) && isset($val[$key])) {
+					$val = $val[$key];
+				} else {
+					return false;
+				}
+			}
+			return true;
+		}
+	}
+
 }
 
 ?>

@@ -8,8 +8,12 @@ Options -MultiViews -Indexes
 # enable rewrite engine
 RewriteEngine On
 
+RewriteBase /WEBSERVER/PATH/TO/www/
+# e.g. RewriteBase /~dzuelke/_projects/agavi/trunk/samples/www/
+# usually just "/" if your application's www dir is the document root
+
 # if requested url does not exist (i.e. it's likely an agavi route), pass it as path info to index.php
+RewriteRule ^$ index.php/ [QSA,L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule (.*) /INSERT/WEBSERVER/PATH/TO/index.php/HERE/$1 [QSA,L]
-# e.g. RewriteRule (.*) /~dzuelke/_projects/agavi/trunk/samples/www/index.php/$1 [QSA,L]
+RewriteRule (.*) index.php/$1 [QSA,L]

@@ -73,7 +73,11 @@ class AgaviOutputTypeConfigHandler extends AgaviConfigHandler
 			foreach($cfg->output_types as $outputType) {
 				$name = $outputType->getAttribute('name');
 				$data[$name] = isset($data[$name]) ? $data[$name] : array_merge($cfg->output_types->getAttribute('default') != $name ? array('fallback' => $cfg->output_types->getAttribute('default')) : array(), array('parameters' => array(), 'renderer_parameters' => array()));
-				$data[$name]['renderer'] = $outputType->renderer->getAttribute('class');
+				if(isset($outputType->renderer)) {
+					$data[$name]['renderer'] = $outputType->renderer->getAttribute('class');
+				} else {
+					$data[$name]['renderer'] = null;
+				}
 				if($outputType->hasAttribute('fallback')) {
 					$fallback = $outputType->getAttribute('fallback');
 					if(!in_array($fallback, $otnames)) {
@@ -84,16 +88,18 @@ class AgaviOutputTypeConfigHandler extends AgaviConfigHandler
 				if($outputType->hasAttribute('exception')) {
 					$data[$name]['exception'] = $this->literalize($outputType->getAttribute('exception'));
 				}
-				if($outputType->renderer->hasAttribute('extension')) {
-					$data[$name]['extension'] = $outputType->renderer->getAttribute('extension');
+				if(isset($outputType->renderer)) {
+					if($outputType->renderer->hasAttribute('extension')) {
+						$data[$name]['extension'] = $outputType->renderer->getAttribute('extension');
+					}
+					if($outputType->renderer->hasAttribute('ignore_decorators')) {
+						$data[$name]['ignore_decorators'] = $this->literalize($outputType->renderer->getAttribute('ignore_decorators'));
+					}
+					if($outputType->renderer->hasAttribute('ignore_slots')) {
+						$data[$name]['ignore_slots'] = $this->literalize($outputType->renderer->getAttribute('ignore_slots'));
+					}
+					$data[$name]['renderer_parameters'] = $this->getItemParameters($outputType->renderer, $data[$name]['renderer_parameters']);
 				}
-				if($outputType->renderer->hasAttribute('ignore_decorators')) {
-					$data[$name]['ignore_decorators'] = $this->literalize($outputType->renderer->getAttribute('ignore_decorators'));
-				}
-				if($outputType->renderer->hasAttribute('ignore_slots')) {
-					$data[$name]['ignore_slots'] = $this->literalize($outputType->renderer->getAttribute('ignore_slots'));
-				}
-				$data[$name]['renderer_parameters'] = $this->getItemParameters($outputType->renderer, $data[$name]['renderer_parameters']);
 				$data[$name]['parameters'] = $this->getItemParameters($outputType, $data[$name]['parameters']);
 			}
 
@@ -101,28 +107,7 @@ class AgaviOutputTypeConfigHandler extends AgaviConfigHandler
 		}
 
 		$code = '';
-		foreach($data as $name => $ot) {
-			$code .= "\$this->outputTypes['" . $name . "'] = array(\n";
-			$code .= "  'renderer' => '" . $ot['renderer'] . "',\n";
-			if(isset($ot['fallback'])) {
-				$code .= "  'fallback' => '" . $ot['fallback'] . "', \n";
-			}
-			if(isset($ot['exception'])) {
-				$code .= "  'exception' => " . var_export($ot['exception'], true) . ", \n";
-			}
-			if(isset($ot['extension'])) {
-				$code .= "  'extension' => " . var_export($ot['extension'], true) . ", \n";
-			}
-			if(isset($ot['ignore_decorators'])) {
-				$code .= "  'ignore_decorators' => " . var_export($ot['ignore_decorators'], true) . ",\n";
-			}
-			if(isset($ot['ignore_slots'])) {
-				$code .= "  'ignore_slots' => " . var_export($ot['ignore_slots'], true) . ",\n";
-			}
-			$code .= "  'parameters' => " . var_export($ot['parameters'], true) . ",\n";
-			$code .= "  'renderer_parameters' => " . var_export($ot['renderer_parameters'], true) . ",\n";
-			$code .= ");\n";
-		}
+		$code .= "\$this->outputTypes = " . var_export($data, true) . ";\n";
 		$code .= "\$this->setOutputType('" . $defaultOt . "');\n";
 
 

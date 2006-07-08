@@ -124,6 +124,11 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 					}
 				}
 				
+				if(strpos($element->getAttribute('name'), '[]') !== false) {
+					// auto-generated index, we can't populate that
+					continue;
+				}
+				
 				if($element->nodeName == 'input') {
 					
 					if(!$element->hasAttribute('type') || $element->getAttribute('type') == 'text' || $element->getAttribute('type') == 'hidden') {

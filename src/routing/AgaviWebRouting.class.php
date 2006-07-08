@@ -83,6 +83,8 @@ class AgaviWebRouting extends AgaviRouting
 		if(!$this->input) {
 			$this->input = "/";
 		}
+
+		$this->sources = array('SERVER_NAME' => $_SERVER['SERVER_NAME']);
 		
 		if(isset($_SERVER['REDIRECT_URL']) || isset($_SERVER['HTTP_X_REWRITE_URL'])) {
 			// a rewrite happened
@@ -139,7 +141,9 @@ class AgaviWebRouting extends AgaviRouting
 	 */
 	public function gen($route, $params = array())
 	{
-		if(isset($this->routes[$route])) {
+		$routes = $this->getAffectedRoutes($route);
+
+		if(count($routes)) {
 			if(AgaviConfig::get('core.use_routing')) {
 				// the route exists and routing is enabled, the parent method handles it
 
@@ -147,48 +151,38 @@ class AgaviWebRouting extends AgaviRouting
 
 				// get the parameters which are not defined in this route an append them as query string
 				$p = $params;
-				foreach($this->routes[$route]['par'] as $param) {
-					if(isset($p[$param])) {
-						unset($p[$param]);
+				foreach($routes as $myRoute) {
+					foreach($this->routes[$myRoute]['par'] as $param) {
+						if(isset($p[$param])) {
+							unset($p[$param]);
+						}
 					}
 				}
+
 				if(count($p) > 0) {
 					$append = '?' . http_build_query($p);
 				}
 
-				return parent::gen($route, $params) . $append;
+				return parent::gen($routes, $params) . $append;
 			} else {
 				// the route exists, but we must create a normal index.php?foo=bar URL.
 
 				$req = $this->context->getRequest();
 
-				if(isset($this->routes[$route])) {
-					$defaults = array();
-					$parent = $route;
-					do {
-						$r =& $this->routes[$parent];
+				$defaults = array();
+				foreach($routes as $route) {
+					if(isset($this->routes[$route])) {
+						$r = $this->routes[$parent];
 						$myDefaults = $r['opt']['defaults'];
 						$myDefaults[$req->getModuleAccessor()] = $r['opt']['module'];
 						$myDefaults[$req->getActionAccessor()] = $r['opt']['action'];
 
-						foreach(array_reverse($r['opt']['nostops']) as $noStop) {
-							$myR = $this->routes[$noStop];
-							if(!$myR['opt']['imply']) {
-								continue;
-							}
-
-							$myDefaults = array_merge($myDefaults, $myR['opt']['defaults']);
-						}
-
-						$defaults = array_merge($defaults, $myDefaults);
-						$parent = $r['opt']['parent'];
-
-					} while($parent);
-
-					$params = array_merge($defaults, $params);
-					$route = null;
-
+						$defaults = array_merge($myDefaults, $defaults);
+					}
 				}
+
+				$params = array_merge($defaults, $params);
+				$route = null;
 			}
 		}
 		// the route does not exist. we generate a normal index.php?foo=bar URL.

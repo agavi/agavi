@@ -25,7 +25,7 @@
   <xs:complexType name="output_type">
     <xs:all>
       <xs:element name="parameters" type="parameters" minOccurs="0" />
-      <xs:element name="renderer">
+      <xs:element name="renderer" minOccurs="0">
         <xs:complexType>
           <xs:sequence>
             <xs:element name="parameters" type="parameters" minOccurs="0" />
