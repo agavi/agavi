@@ -34,11 +34,11 @@ class AgaviPath
 	/**
 	 * @var        bool is path absolut?
 	 */
-	private $Absolute = false;
+	protected $Absolute = false;
 	/**
 	 * @var        array path components (the directories) 
 	 */
-	private $Dirs = array();
+	protected $Dirs = array();
 	
 	/**
 	 * constructor
@@ -66,7 +66,7 @@ class AgaviPath
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
-	private function cleanPath()
+	protected function cleanPath()
 	{
 		$dirs = array();
 		foreach($this->Dirs as $dir) {
@@ -74,12 +74,12 @@ class AgaviPath
 				continue;
 			}
 			if($dir == '..') {
-				if(!count($this->Dirs) and !$this->Absolute) {
+				if(!count($dirs) and !$this->Absolute) {
 					array_push($dirs, $dir);
-				} elseif(count($this->Dirs) and $this->Dirs[count($this->Dirs)-1] == '..') {
+				} elseif(count($dirs) and $dirs[count($dirs)-1] == '..') {
 					array_push($dirs, $dir);
-				} elseif(count($this->Dirs)) {
-					array_pop($this->Dirs);
+				} elseif(count($dirs)) {
+					array_pop($dirs);
 				}
 
 				continue;
@@ -132,7 +132,7 @@ class AgaviPath
 	/**
 	 * returns the root component of the path
 	 * 
-	 * @param      bool prepent '/' when the path is absolut (defaults to false)
+	 * @param      bool prepend '/' when the path is absolut (defaults to false)
 	 * 
 	 * @return     string root component
 	 * 
@@ -141,9 +141,21 @@ class AgaviPath
 	 */
 	public function left($addSlashWhenAbsolute = false)
 	{
-		if($this->length()) {
-			return $this->Dirs[0];
-		} 
+		if(!$this->length()) {
+			return NULL;
+		}
+
+		$dir = $this->Dirs[0];
+		if($this->isAbsolute() and $addSlashWhenAbsolute) {
+			return '/'.$dir;
+		}
+
+		if(strval(intval($dir)) == $dir) {
+			return intval($dir);
+		}
+
+		return $dir;
+		 
 	}
 	
 	/**
@@ -160,7 +172,13 @@ class AgaviPath
 			return NULL;
 		}
 		
-		return array_pop($this->Dirs);
+		$dir = array_pop($this->Dirs);
+
+		if(strval(intval($dir)) == $dir) {
+			return intval($dir);
+		} else {
+			return $dir;
+		}
 	}
 	
 	/**
@@ -173,7 +191,7 @@ class AgaviPath
 	 */
 	public function push($path)
 	{
-		array_push($this->Dirs, array_filter(explode('/', $path), create_function('$a', 'return (strlen($a));')));
+		$this->Dirs = array_merge($this->Dirs, array_filter(explode('/', $path), create_function('$a', 'return (strlen($a));')));
 		$this->cleanPath();
 	}
 	
@@ -199,7 +217,11 @@ class AgaviPath
 			$this->Absolute = false;
 		}
 		
-		return $ret;
+		if(strval(intval($ret)) == $ret) {
+			return intval($ret);
+		} else {
+			return $ret;
+		}
 	}
 	
 	/**
@@ -229,7 +251,7 @@ class AgaviPath
 		$a = array(&$array);
 		$p = new AgaviPath($path);
 		
-		while($name = $p->shift()) {
+		while(($name = $p->shift()) !== NULL) {
 			if(!isset($a[count($a)-1][$name])) {
 				return $default;
 			}
@@ -264,14 +286,17 @@ class AgaviPath
 		$a = array(&$array);
 		$p = new AgaviPath($path);
 		
-		while($name = $p->shift()) {
-			if(!isset($a[count($a)-1][$name])) {
+		while($p->length() > 1) {
+			$name = $p->shift();
+			if(!is_array($a[count($a)-1])) {
+				$a[count($a)-1] = array($name => array());
+			} elseif(!isset($a[count($a)-1][$name])) {
 				$a[count($a)-1][$name] = array();
 			}
 			array_push($a, &$a[count($a)-1][$name]);
 		}
 		
-		$a[count($a)-1] = $value;
+		$a[count($a)-1][$p->shift()] = $value;
 	}
 }
 ?>

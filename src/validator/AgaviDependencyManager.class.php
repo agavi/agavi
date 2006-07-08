@@ -30,7 +30,7 @@ class AgaviDependencyManager
 	/**
 	 * @var array already provided tokens
 	 */
-	private $DepData = array();
+	protected $DepData = array();
 	
 	/**
 	 * clears the dependency cache

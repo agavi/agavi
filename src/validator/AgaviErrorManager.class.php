@@ -30,19 +30,19 @@ class AgaviErrorManager
 	/**
 	 * @var        array error messages sorted by validators
 	 */
-	private $ValidatorArray = array();
+	protected $ValidatorArray = array();
 	/**
 	 * @var        array error messages sorted by input fields
 	 */
-	private $InputArray = array();
+	protected $InputArray = array();
 	/**
 	 * @var        string first submitted error message of type string
 	 */
-	private $ErrorMessage = '';
+	protected $ErrorMessage = '';
 	/**
 	 * @var        int highest error severity in the container
 	 */
-	private $Result = AgaviValidator::SUCCESS;
+	protected $Result = AgaviValidator::SUCCESS;
 	
 	/**
 	 * clears the error manager
@@ -52,7 +52,8 @@ class AgaviErrorManager
 	 */
 	public function clear()
 	{
-		$this->ErrorArray = array();
+		$this->ValidatorArray = array();
+		$this->InputArray = array();
 		$this->ErrorMessage = '';
 		$this->Result = AgaviValidator::SUCCESS;
 	}
@@ -64,18 +65,30 @@ class AgaviErrorManager
 	 * @param      array  affected input fields
 	 * @param      mixed  error stuff that should be saved
 	 * @param      int    error severity
+	 * @param      string base path for validator and field names
 	 * @param      bool   ignore error as error message even if type is string
 	 * 
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
-	public function submitError($validator, $error, $fields, $severity, $ignoreAsMessage = false)
+	public function submitError($validator, $error, $fields, $severity, $base = '', $ignoreAsMessage = false)
 	{
 		if($severity > $this->Result) {
 			$this->Result = $severity;
 		}
 		if(is_string($error) and $this->ErrorMessage == '' and !$ignoreAsMessage) {
 			$this->ErrorMessage = &$error;
+		}
+		
+		if($validator[0] != '/' and $base != '') {
+			$p = new AgaviPath($base.'/'.$validator);
+			$validator = $p->__toString();
+		}
+		if($base != '') {
+			$fields = array_map(create_function(
+				'$a',
+				'if ($a[0] == \'/\') { return $a; } else {$p = new AgaviPath(\''.$base.'/'.'\'.$a); return $p->__toString();}'
+			), $fields);
 		}
 		
 		// fill validator array
@@ -93,7 +106,7 @@ class AgaviErrorManager
 				);
 			}
 			
-			if(is_string($error) and $this->InputArray[$field]['message'] and !$ignoreAsMessage) {
+			if(is_string($error) and $this->InputArray[$field]['message'] == '' and !$ignoreAsMessage) {
 				$this->InputArray[$field]['message'] = &$error;
 			}
 			

@@ -32,22 +32,22 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	/**
 	 * @var        AgaviDependencyManager dependency manager
 	 */
-	private $DependencyManager = null;
+	protected $DependencyManager = null;
 
 	/**
 	 * @var        AgaviErrorManager error manager
 	 */
-	private $ErrorManager = null;
+	protected $ErrorManager = null;
 
 	/**
 	 * @var        array array of child validators
 	 */
-	private $Children = array();
+	protected $Children = array();
 
 	/**
 	 * @var        AgaviContext context
 	 */
-	private $Context = null;
+	protected $Context = null;
 
 	/**
 	 * initializes the manager
@@ -65,6 +65,7 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 		
 		$this->DependencyManager = new AgaviDependencyManager;
 		$this->ErrorManager = new AgaviErrorManager;
+		$this->Children = array();
 	}
 	
 	/**
@@ -176,15 +177,15 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 			$v_ret = $validator->execute();
 			switch($v_ret) {
 				case AgaviValidator::SUCCESS:
-					continue 1;
+					continue 2;
 				case AgaviValidator::NONE:
-					continue 1;
+					continue 2;
 				case AgaviValidator::ERROR:
 					$result = false;
-					continue 1;
+					continue 2;
 				case AgaviValidator::CRITICAL:
 					$result = false;
-					break 1;
+					break 2;
 			}
 		}
 		
