@@ -41,17 +41,21 @@ class ValidatorManagerTest extends AgaviTestCase
 	
 	public function testclear()
 	{
-		$val = new DummyValidator($this->_vm);
-		$this->_vm->addChild($val);
+		$vm = new MyValidatorManager;
+		$vm->initialize($this->_context);
+		$val = new DummyValidator($vm);
+		$vm->addChild($val);
 		
-		$this->assertFalse($val->cleared);
-		$this->_vm->clear();
-		$this->assertTrue($val->cleared);
+		$this->assertFalse($val->shutdown);
+		$vm->clear();
+		$this->assertTrue($val->shutdown);
+		$this->assertEquals($vm->getChildren(), array());
 	}
 	
 	public function testaddChild()
 	{
-		$vm = new MyValidatorManager($this->_context);
+		$vm = new MyValidatorManager;
+		$vm->initialize($this->_context);
 		$val = new DummyValidator($vm);
 
 		$this->assertEquals($vm->getChildren(), array());
@@ -93,29 +97,40 @@ class ValidatorManagerTest extends AgaviTestCase
 		$val2->val_result = true;
 		
 		$this->_vm->registerValidators(array($val1, $val2));
-		
 		$this->assertTrue($this->_vm->execute());
 		$this->assertTrue($val1->validated);
 		$this->assertTrue($val2->validated);
-		
 		$this->_vm->clear();
+		$val1->clear();
+		$val2->clear();
+
 		$val1->val_result = false;
 		$val1->setParameter('severity', 'none');
+		$this->_vm->registerValidators(array($val1, $val2));
 		$this->assertTrue($this->_vm->execute());
 		$this->assertTrue($val1->validated);
 		$this->assertTrue($val2->validated);
-		
 		$this->_vm->clear();
+		$val1->clear();
+		$val2->clear();
+		
 		$val1->setParameter('severity', 'error');
+		$this->_vm->registerValidators(array($val1, $val2));
 		$this->assertFalse($this->_vm->execute());
 		$this->assertTrue($val1->validated);
 		$this->assertTrue($val2->validated);
-		
 		$this->_vm->clear();
+		$val1->clear();
+		$val2->clear();
+		
 		$val1->setParameter('severity', 'critical');
+		$this->_vm->registerValidators(array($val1, $val2));
 		$this->assertFalse($this->_vm->execute());
 		$this->assertTrue($val1->validated);
 		$this->assertFalse($val2->validated);
+		$this->_vm->clear();
+		$val1->clear();
+		$val2->clear();
 	}
 	
 	public function testshutdown()
@@ -134,6 +149,7 @@ class ValidatorManagerTest extends AgaviTestCase
 		$val2 = new DummyValidator($this->_vm);
 		
 		$vm = new MyValidatorManager;
+		$vm->initialize($this->_context);
 		$this->assertEquals($vm->getChildren(), array());
 		$vm->registerValidators(array($val1, $val2));
 		$this->assertEquals($vm->getChildren(), array($val1, $val2));

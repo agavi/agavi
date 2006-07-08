@@ -84,6 +84,10 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	/**
 	 * clears the validation manager for reuse
 	 * 
+	 * clears the validator manager by resetting the dependency and error
+	 * manager and removing all validators after calling their shutdown
+	 * method so they can do a save shutdown.
+	 * 
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
@@ -93,8 +97,10 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 		$this->ErrorManager->clear();
 		
 		foreach($this->Children as $child) {
-			$child->clear();
+			$child->shutdown();
 		}
+		
+		$this->Children = array();
 	}
 	
 	/**
