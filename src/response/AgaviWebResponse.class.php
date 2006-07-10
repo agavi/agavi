@@ -113,6 +113,7 @@ class AgaviWebResponse extends AgaviResponse
 			'secure'   => isset($parameters['cookie_secure'])   ? $parameters['cookie_secure']   : 0
 		);
 	}
+	
 	/**
 	 * Send all response data to the client.
 	 *
@@ -121,11 +122,13 @@ class AgaviWebResponse extends AgaviResponse
 	 */
 	public function send()
 	{
-		$this->sendHttpResponseHeaders();
+		if($this->dirty) {
+			$this->sendHttpResponseHeaders();
 		
-		$this->sendContent();
+			$this->sendContent();
 		
-		$this->dirty = false;
+			$this->dirty = false;
+		}
 	}
 	
 	/**
@@ -140,6 +143,7 @@ class AgaviWebResponse extends AgaviResponse
 			$this->clearContent();
 			$this->httpHeaders = array();
 			$this->cookies = array();
+			$this->dirty = false;
 		}
 	}
 	
@@ -475,6 +479,13 @@ class AgaviWebResponse extends AgaviResponse
 	 */
 	public function sendHttpResponseHeaders()
 	{
+		$file = $line = '';
+		if(headers_sent($file, $line)) {
+			throw new AgaviException('Headers already sent, output started in "' . $file . '" on line "' . $line . '"');
+		} else {
+			unset($file, $line);
+		}
+		
 		// send HTTP status code
 		if(isset($this->httpStatusCode) && isset($this->httpStatusCodes[$this->httpStatusCode])) {
 			header($this->httpStatusCodes[$this->httpStatusCode]);

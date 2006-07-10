@@ -53,6 +53,12 @@
 			<setting name="use_logging">false</setting>
 			<setting name="use_routing">false</setting>
 			<setting name="use_security">false</setting>
+			
 		</settings>
+		
+		<exception_templates>
+			<exception_template>%core.agavi_dir%/exception/templates/plaintext.php</exception_template>
+		</exception_templates>
+		
 	</configuration>
 </configurations>

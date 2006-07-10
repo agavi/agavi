@@ -15,7 +15,7 @@
 		<filter_chain class="AgaviFilterChain" />
 		<logger_manager class="AgaviLoggerManager" />
 		<request class="AgaviWebRequest" />
-		<response class="AgaviWebResponse" />
+		<response class="TestResponse" />
 		<routing class="TestRouting" />
 		<security_filter class="AgaviSecurityFilter" />
 		<storage class="AgaviSessionStorage">

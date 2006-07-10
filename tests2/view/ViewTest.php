@@ -16,7 +16,7 @@ class ViewTest extends AgaviTestCase
 		AgaviContext::getInstance()->initialize();
 		$request = AgaviContext::getInstance()->getRequest();
 		AgaviContext::getInstance()->getController()->dispatch(array($request->getModuleAccessor() => 'Test', $request->getActionAccessor() => 'Test'));
-		$this->_r = new AgaviWebResponse();
+		$this->_r = new NoHeadersAgaviWebResponse();
 		$this->_r->initialize(AgaviContext::getInstance());
 		$this->_v = new SampleView();
 		$this->_v->initialize($this->_r);
