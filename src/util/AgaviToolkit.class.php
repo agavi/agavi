@@ -119,15 +119,22 @@ class AgaviToolkit
 			return false;
 		}
 		if(is_file($path)) {
+			echo "unlinking: $path\n";
 			@unlink($path);
 		} else {
 			foreach(new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path), $SPL_RIT_CHILD_FIRST) as $iterator) {
+				// omg, thanks spl for always using forward slashes ... even on windows
+				$pathname = str_replace('/', DIRECTORY_SEPARATOR, str_replace('\\', DIRECTORY_SEPARATOR, $iterator->getPathname()));
 				$continue = false;
 				if(in_array($iterator->getFilename(), $ignores)) {
 					$continue = true;
 				} else {
 					foreach($ignores as $ignore) {
-						if(strpos($iterator->getPathname(), DIRECTORY_SEPARATOR . $ignore . DIRECTORY_SEPARATOR) !== false) {
+						if(strpos($pathname, DIRECTORY_SEPARATOR . $ignore . DIRECTORY_SEPARATOR) !== false) {
+							$continue = true;
+							break;
+						} elseif(strrpos($pathname, DIRECTORY_SEPARATOR . $ignore) == (strlen($pathname) - strlen(DIRECTORY_SEPARATOR . $ignore))) {
+							// if we hit the directory itself it wont include a trailing /
 							$continue = true;
 							break;
 						}
@@ -137,9 +144,11 @@ class AgaviToolkit
 					continue;
 				}
 				if($iterator->isDir()) {
-					@rmdir($iterator->getPathname());
+			echo "rmdir: ". $pathname . "\n";
+					@rmdir($pathname);
 				} elseif($iterator->isFile()) {
-					@unlink($iterator->getPathname());
+			echo "unlink: ". $pathname . "\n";
+					@unlink($pathname);
 				}
 			}
 		}
