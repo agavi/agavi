@@ -107,7 +107,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 			}
 		}
 		
-		if($renderer !== null) {
+		if($renderer !== null && $viewInstance->getTemplate() !== null) {
 			// create a new filter chain
 			$fcfi = $this->context->getFactoryInfo('filter_chain');
 			$filterChain = new $fcfi['class']();

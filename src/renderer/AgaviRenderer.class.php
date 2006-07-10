@@ -232,10 +232,9 @@ abstract class AgaviRenderer implements AgaviIRenderingFilter
 		$view = $this->getView();
 		$oti = $this->context->getController()->getOutputTypeInfo();
 		
-		if($view->getTemplate() == null) {
+		if($view->getTemplate() === null) {
 			// a template has not been set
-			$error = 'A template has not been set';
-			throw new AgaviRenderException($error);
+			return;
 		}
 		
 		$template = $view->getDirectory() . '/' . $view->getTemplate() . $this->getExtension();
