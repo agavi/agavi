@@ -119,7 +119,6 @@ class AgaviToolkit
 			return false;
 		}
 		if(is_file($path)) {
-			echo "unlinking: $path\n";
 			@unlink($path);
 		} else {
 			foreach(new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path), $SPL_RIT_CHILD_FIRST) as $iterator) {
@@ -144,10 +143,8 @@ class AgaviToolkit
 					continue;
 				}
 				if($iterator->isDir()) {
-			echo "rmdir: ". $pathname . "\n";
 					@rmdir($pathname);
 				} elseif($iterator->isFile()) {
-			echo "unlink: ". $pathname . "\n";
 					@unlink($pathname);
 				}
 			}
