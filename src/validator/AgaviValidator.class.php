@@ -133,18 +133,6 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	}
 
 	/**
-	 * clears the validator for reuse
-	 * 
-	 * @see        AgaviValidatorManager::clear()
-	 *
-	 * @author     Uwe Mesecke <uwe@mesecke.net>
-	 * @since      0.11.0
-	 */
-	public function clear()
-	{
-	}
-
-	/**
 	 * returns the specified input value
 	 * 
 	 * The given parameter is fetched from the request. You should _allways_

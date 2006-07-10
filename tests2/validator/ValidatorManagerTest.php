@@ -1,16 +1,6 @@
 <?php
 
-class DummyValidator extends AgaviValidator
-{
-	public $cleared = false;
-	public $val_result = true;
-	public $validated = false;
-	public $shutdown = false;
-	
-	protected function validate() { $this->validated = true; return $this->val_result; }
-	public function clear() { $this->cleared = true; $this->validated = false; $this->shutdown = false;}
-	public function shutdown() { $this->shutdown = true; }
-}
+require_once(dirname(__FILE__).'/inc/DummyValidator.class.php');
 
 class MyValidatorManager extends AgaviValidatorManager
 {
@@ -168,6 +158,11 @@ class ValidatorManagerTest extends AgaviTestCase
 	public function testgetErrorMessage()
 	{
 		$this->assertEquals($this->_vm->getErrorMessage(), $this->_vm->getErrorManager()->getErrorMessage());
+	}
+
+	public function testgetResult()
+	{
+		$this->assertEquals($this->_vm->getResult(), $this->_vm->getErrorManager()->getResult());
 	}
 }
 ?>

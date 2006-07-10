@@ -242,7 +242,8 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
-	public function getErrorArrayByValidator() {
+	public function getErrorArrayByValidator()
+	{
 		return $this->ErrorManager->getErrorArrayByValidator();
 	}
 	
@@ -266,7 +267,8 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
-	public function getErrorArrayByInput() {
+	public function getErrorArrayByInput()
+	{
 		return $this->ErrorManager->getErrorArrayByInput();
 	}
 	
@@ -278,8 +280,22 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
-	public function getErrorMessage() {
+	public function getErrorMessage()
+	{
 		return $this->ErrorManager->getErrorMessage();
 	}
+	
+	/**
+	 * returns the result from the error manager
+	 * 
+	 * @return     int result of the validation process
+	 * 
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
+	 */
+	public function getResult()
+	{
+		return $this->ErrorManager->getResult();
+	}	
 }
 ?>

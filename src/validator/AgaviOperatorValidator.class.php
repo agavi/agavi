@@ -117,23 +117,6 @@ abstract class AgaviOperatorValidator extends AgaviValidator implements AgaviIVa
 	}
 	
 	/**
-	 * clears the self created error manager
-	 *
-	 * @author     Uwe Mesecke <uwe@mesecke.net>
-	 * @since      0.11.0
-	 */
-	public function clear()
-	{
-		if($this->getParameter('skip_errors')) {
-			$this->ErrorManager->clear();
-		}
-		
-		foreach($this->Children as $child) {
-			$child->clear();
-		}
-	}
-	
-	/**
 	 * adds new child validator
 	 * 
 	 * @param      AgaviValidator new child validator
@@ -219,7 +202,18 @@ abstract class AgaviOperatorValidator extends AgaviValidator implements AgaviIVa
 		// check if we have a valid setup of validators
 		$this->checkValidSetup();
 		
-		return parent::execute();
+		$result = parent::execute();
+		if($result != AgaviValidator::SUCCESS and !$this->getParameter('skip_errors') and $this->getErrorManager()->getResult() == AgaviValidator::CRITICAL) {
+			/*
+			 * one of the child validators resulted with CRITICAL
+			 * we change our operator's result to CRITICAL, too so the
+			 * surrounding validator container is aware of the critical
+			 * result and can abort further validation... 
+			 */
+			$result = AgaviValidator::CRITICAL;
+		}
+		
+		return $result;
 	}
 }
 

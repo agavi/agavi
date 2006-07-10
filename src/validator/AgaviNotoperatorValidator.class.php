@@ -55,11 +55,12 @@ class AgaviNotOperatorValidator extends AgaviOperatorValidator
 	 */
 	protected function validate()
 	{
-		if($this->Children[0]->execute() != AgaviValidator::SUCCESS) {
-			return true;
-		} else {
+		$result = $this->Children[0]->execute();
+		if($result == AgaviValidator::CRITICAL or $result == AgaviValidator::SUCCESS) {
 			$this->throwError();
 			return false;
+		} else {
+			return true;
 		}
 	}	
 }
