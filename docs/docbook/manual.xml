@@ -24,7 +24,7 @@
       <para><productname>Agavi</productname> is a Web Application Framework
       for <productname>PHP</productname> <productnumber>5</productnumber>.
       While it lies in the nature of a framework to simplify the application
-      development process, Aagvi won't do that at any cost. The primary goals
+      development process, Agavi won't do that at any cost. The primary goals
       are flexibility, cleanliness and stucture. You won't find HTML Form
       helper methods in Agavi (because they aren't necessary, we have
       something better, more on that later), and we use XML configuration
