@@ -25,7 +25,7 @@
       for <productname>PHP</productname> <productnumber>5</productnumber>.
       While it lies in the nature of a framework to simplify the application
       development process, Agavi won't do that at any cost. The primary goals
-      are flexibility, cleanliness and stucture. You won't find HTML Form
+      are flexibility, cleanliness and structure. You won't find HTML Form
       helper methods in Agavi (because they aren't necessary, we have
       something better, more on that later), and we use XML configuration
       files because we believe that they offer better structuring abilites
@@ -324,7 +324,7 @@
       settings and even filters or factories. Also, each developer in a team
       may have his own Environment for development, with his or her own
       database settings etc. which eliminates the need for people constantly
-      having to change their settings, accidentially committing changed files
+      having to change their settings, accidentally committing changed files
       to SCM repositories or missing changes because configuration files were
       set to <emphasis>ignore</emphasis>.</para>
 
@@ -332,7 +332,7 @@
       any aspect of the framework, even system settings and autoloads may be
       configured per Environment, you're a bit more restricted in Context
       configuration, and that's intentional. A Context's job is to hold the
-      proper implementations that are needed to excecute the application in
+      proper implementations that are needed to execute the application in
       the current <emphasis>context</emphasis> (therefore the name), such as
       "web" for normal requests to an application through a browser, "xmlrpc"
       for an XMLRPC interface of an application, or "console" for a Context
@@ -397,9 +397,9 @@
     <section>
       <title>How a Request is Processed</title>
 
-      <para>If you call a URL that is handled by www/index.php, Agavi will
+      <para>If you call an URL that is handled by www/index.php, Agavi will
       bootstrap the specified (or default) Environment and then create an
-      instante of the specified (or default) Context (this instantiation sets
+      instance of the specified (or default) Context (this instantiation sets
       up all of the core components of the framework). Finally, the request is
       dispatched from the Context's Controller instance.</para>
 
@@ -420,7 +420,7 @@
       filter being the Security Filter if security is enabled. This filter
       will forward unauthenticated users to the default "Login Action" if a
       requested Action requires authentication, and also prevent access of
-      Actions a user doesn't have sufficient credentials for by forwarding to
+      Actions an user doesn't have sufficient credentials for by forwarding to
       the default "Secure Action". After that, the Action Filters are added to
       the chain, followed by the Action Filters defined by the Action's
       Module. The last filter in the chain is the Execution Filter, usually
