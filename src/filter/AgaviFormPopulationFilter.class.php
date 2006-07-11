@@ -84,8 +84,12 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 		$output = $response->getContent();
 		
 		$doc = DOMDocument::loadHTML($output);
+		
+		$encoding = strtolower($doc->encoding);
+		$utf8 = $encoding == 'utf-8';
+		
 		$hasXmlProlog = false;
-		if(preg_match('#<\?xml.*?\?>#iuU', $output)) {
+		if(preg_match('#<\?xml.*?\?>#iU' . ($utf8 ? 'u' : ''), $output)) {
 			$hasXmlProlog = true;
 		}
 		$xpath = new DomXPath($doc);
@@ -109,8 +113,19 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 
 			foreach($xpath->query($query, $form) as $element) {
 				
+				$name = $element->getAttribute('name');
+				if($encoding != 'utf-8') {
+					if($encoding == 'iso-8859-1') {
+						$name = utf8_decode($name);
+					} elseif(function_exists('iconv')) {
+						$name = iconv('UTF-8', $encoding, $name);
+					} else {
+						throw new AgaviException('No iconv module available, input encoding "' . $encoding . '" cannot be handled.');
+					}
+				}
+				
 				// there's an error with the element's name in the request? good. let's give the baby a class!
-				if($req->hasError($element->getAttribute('name'))) {
+				if($req->hasError($name)) {
 					$element->setAttribute('class', $element->getAttribute('class') . ' ' . $this->getParameter('error_class'));
 					// assign the class to all implicit labels
 					foreach($xpath->query('ancestor::label[not(@for)]', $element) as $label) {
@@ -124,9 +139,20 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 					}
 				}
 				
-				if(strpos($element->getAttribute('name'), '[]') !== false) {
+				if(strpos($name, '[]') !== false) {
 					// auto-generated index, we can't populate that
 					continue;
+				}
+				
+				$value = $req->getParameter($name);
+				if($encoding != 'utf-8') {
+					if($encoding == 'iso-8859-1') {
+						$value = utf8_encode($value);
+					} elseif(function_exists('iconv')) {
+						$value = iconv($encoding, 'UTF-8', $value);
+					} else {
+						throw new AgaviException('No iconv module available, input encoding "' . $encoding . '" cannot be handled.');
+					}
 				}
 				
 				if($element->nodeName == 'input') {
@@ -135,15 +161,15 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 						
 						// text inputs
 						$element->removeAttribute('value');
-						if($req->hasParameter($element->getAttribute('name'))) {
-							$element->setAttribute('value', $req->getParameter($element->getAttribute('name')));
+						if($req->hasParameter($name)) {
+							$element->setAttribute('value', $value);
 						}
 						
 					} elseif($element->getAttribute('type') == 'checkbox' || $element->getAttribute('type') == 'radio') {
 						
 						// checkboxes and radios
 						$element->removeAttribute('checked');
-						if($req->hasParameter($element->getAttribute('name')) && ($element->getAttribute('value') == $req->getParameter($element->getAttribute('name')) || !$element->hasAttribute('value'))) {
+						if($req->hasParameter($name) && ($element->getAttribute('value') == $req->getParameter($name) || !$element->hasAttribute('value'))) {
 							$element->setAttribute('checked', 'checked');
 						}
 						
@@ -151,8 +177,8 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 						
 						// passwords
 						$element->removeAttribute('value');
-						if($this->getParameter('include_password_inputs') && $req->hasParameter($element->getAttribute('name'))) {
-							$element->setAttribute('value', $req->getParameter($element->getAttribute('name')));
+						if($this->getParameter('include_password_inputs') && $req->hasParameter($name)) {
+							$element->setAttribute('value', $value);
 						}
 					}
 					
@@ -162,7 +188,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 					// yes, we still use XPath because there could be OPTGROUPs
 					foreach($xpath->query('descendant::option', $element) as $option) {
 						$option->removeAttribute('selected');
-						if($req->hasParameter($element->getAttribute('name')) && $option->getAttribute('value') == $req->getParameter($element->getAttribute('name'))) {
+						if($req->hasParameter($name) && $option->getAttribute('value') == $value) {
 							$option->setAttribute('selected', 'selected');
 						}
 					}
@@ -175,7 +201,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 						$element->removeChild($cn);
 					}
 					// append a new text node
-					$element->appendChild($doc->createTextNode($req->getParameter($element->getAttribute('name'))));
+					$element->appendChild($doc->createTextNode($value));
 				}
 				
 			}
@@ -184,14 +210,14 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 			$out = $doc->saveXML();
 			if($this->getParameter('cdata_fix')) {
 				// these are ugly fixes so inline style and script blocks still work. better don't use them with XHTML to avoid trouble
-				$out = preg_replace('#<style([^>]*)>\s*<!\[CDATA\[#iuU', '<style\\1><!--/*--><![CDATA[/*><!--*/', $out);
-				$out = preg_replace('#\]\]></style>#iuU', '/*]]>*/--></style>', $out);
-				$out = preg_replace('#<script([^>]*)>\s*<!\[CDATA\[#iuU', '<script\\1><!--//--><![CDATA[//><!--', $out);
-				$out = preg_replace('#\]\]></script>#iuU', '//--><!]]></script>', $out);
+				$out = preg_replace('#<style([^>]*)>\s*<!\[CDATA\[#iU' . ($utf8 ? 'u' : ''), '<style\\1><!--/*--><![CDATA[/*><!--*/', $out);
+				$out = preg_replace('#\]\]></style>#iU' . ($utf8 ? 'u' : ''), '/*]]>*/--></style>', $out);
+				$out = preg_replace('#<script([^>]*)>\s*<!\[CDATA\[#iU' . ($utf8 ? 'u' : ''), '<script\\1><!--//--><![CDATA[//><!--', $out);
+				$out = preg_replace('#\]\]></script>#iU' . ($utf8 ? 'u' : ''), '//--><!]]></script>', $out);
 			}
 			if($this->getParameter('remove_xml_prolog') && !$hasXmlProlog) {
 				// there was no xml prolog in the document before, so we remove the one generated by DOM now
-				$out = preg_replace('#<\?xml.*?\?>\s#iuU', '', $out);
+				$out = preg_replace('#<\?xml.*?\?>\s#iU' . ($utf8 ? 'u' : ''), '', $out);
 			}
 			$response->setContent($out);
 		} else {
