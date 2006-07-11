@@ -25,7 +25,7 @@
  *
  * @version    $Id$
  */
-abstract class AgaviResponse
+abstract class AgaviResponse extends AgaviParameterHolder
 {
 	/**
 	 * @var        AgaviContext An AgaviContext instance.
@@ -72,6 +72,7 @@ abstract class AgaviResponse
 	public function initialize(AgaviContext $context, $parameters = array())
 	{
 		$this->context = $context;
+		$this->parameters = array_merge($this->parameters, $parameters);
 	}
 	
 	/**

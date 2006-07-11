@@ -45,9 +45,9 @@ class AgaviInarrayValidator extends AgaviValidator
 		$list = split($this->getParameter('sep'), $this->getParameter('values'));
 		$value = $this->getData();
 		
-		if(!$this->isBool('case')) {
+		if(!$this->getParameter('case')) {
 			$value = strtolower($value);
-			$list = array_map(create_function('$a', 'return strtolower($a)'),$list);
+			$list = array_map(create_function('$a', 'return strtolower($a);'),$list);
 		}
 		
 		if(!in_array($this->getData(), $list)) {

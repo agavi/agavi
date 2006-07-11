@@ -104,11 +104,11 @@ class ValidatorTest extends AgaviTestCase
 		
 		$validator->throwError2('error2');
 		$err = $m->getErrorArrayByValidator();
-		$this->assertEquals($err['/foo/foobar']['error'], &$error2);
+		$this->assertEquals($err['/foo/foobar']['error'], $error2);
 		
 		$validator->throwError2('error3');
 		$err = $m->getErrorArrayByValidator();
-		$this->assertEquals($err['/foo/foobar']['error'], &$error1);
+		$this->assertEquals($err['/foo/foobar']['error'], $error1);
 		
 		$validator->setParameter('error', null);
 		$validator->throwError2('error3', false, null, 'backupError');

@@ -6,7 +6,7 @@ class WebResponseTest extends AgaviTestCase
 
 	public function setUp()
 	{
-		$this->_r = new AgaviWebResponse();
+		$this->_r = new NoHeadersAgaviWebResponse();
 		$this->_r->initialize(AgaviContext::getInstance());
 	}
 
@@ -17,12 +17,15 @@ class WebResponseTest extends AgaviTestCase
 		$r->setContent('content');
 		$this->assertTrue($r->isDirty());
 		ob_start();
-		$r->send();
+		try {
+			$r->send();
+		} catch(AgaviException $e) {
+			// discard exception about headers already sent
+		}
 		$content = ob_get_contents();
 		ob_end_clean();
 
-		// we get some nasty Cannot modify header information ... even in the console \o/
-		// $this->assertEquals('content', $content);
+		$this->assertEquals('content', $content);
 		$this->assertFalse($r->isDirty());
 	}
 

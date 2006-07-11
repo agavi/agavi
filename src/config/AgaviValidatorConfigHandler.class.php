@@ -111,8 +111,8 @@ class AgaviValidatorConfigHandler extends AgaviConfigHandler
 			
 			// setting up parameters
 			$parameters = array('severity' => $stdSeverity);
-			if(isset($defaultParameters[$class])) {
-				$parameters = array_merge($parameters, $defaultParameters[$class]);
+			if(isset($defaultParameters[$cfg->getAttribute('class')])) {
+				$parameters = array_merge($parameters, $defaultParameters[$cfg->getAttribute('class')]);
 			}
 			$parameters = array_merge($parameters, $cfg->getAttributes());
 			unset($parameters['class']);			

@@ -78,7 +78,7 @@ class OperatorValidatorTest extends AgaviTestCase
 	public function testgetErrorManager()
 	{
 		$v = new MyOperatorValidator($this->vm, array());
-		$this->assertTrue(is_a($v->getErrorManager(), 'AgaviErrorManager'));
+		$this->assertTrue($v->getErrorManager() instanceof AgaviErrorManager);
 	}
  
 	public function testgetBase()

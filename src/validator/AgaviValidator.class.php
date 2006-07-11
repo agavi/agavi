@@ -90,11 +90,11 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	public function __construct(AgaviIValidatorContainer $parent, $parameters = array())
 	{
 		$this->ParentContainer = $parent;
-		if (!is_array($parameters['depends'])) {
-			$parameters['depends'] = (strlen($parameters['depends'])) ? split(',', $parameters['depends']) : array();
+		if (!isset($parameters['depends']) or !is_array($parameters['depends'])) {
+			$parameters['depends'] = (isset($parameters['depends']) and strlen($parameters['depends'])) ? split(',', $parameters['depends']) : array();
 		}
-		if (!is_array($parameters['provides'])) {
-			$parameters['provides'] = (strlen($parameters['provides'])) ? split(',', $parameters['provides']) : array();
+		if (!isset($parameters['provides']) or !is_array($parameters['provides'])) {
+			$parameters['provides'] = (isset($parameters['provides']) and strlen($parameters['provides'])) ? split(',', $parameters['provides']) : array();
 		}
 		$this->setParameters($parameters);
 		$this->CurBase = new AgaviPath($parent->getBase());
@@ -148,8 +148,9 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 */
 	protected function getData($paramname = 'param')
 	{
+		$array = $this->ParentContainer->getRequest()->getParameters();
 		return AgaviPath::getValueByPath(
-			$this->ParentContainer->getRequest()->getParameters(),
+			$array,
 			$this->CurBase->__toString().'/'.$this->getParameter($paramname)
 		);
 	}
@@ -311,8 +312,9 @@ abstract class AgaviValidator extends AgaviParameterHolder
 			 * specified by our own base and validate in each of that
 			 * names
 			 */
-			$array = AgaviPath::getValueByPath(
-				$this->ParentContainer->getRequest()->getParameters(),
+			$array = $this->ParentContainer->getRequest()->getParameters();
+			$names = AgaviPath::getValueByPath(
+				$array,
 				$this->CurBase->__toString()
 			);
 			
@@ -322,7 +324,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 			$ret = self::SUCCESS;
 			
 			// validate in every name defined in the request
-			foreach(array_keys($array) as $name) {
+			foreach(array_keys($names) as $name) {
 				$this->CurBase->push($name);
 				$t = $this->validateInBase($base->__toString());
 				$this->CurBase->pop();

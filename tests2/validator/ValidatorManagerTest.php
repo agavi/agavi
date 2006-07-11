@@ -60,12 +60,12 @@ class ValidatorManagerTest extends AgaviTestCase
 	
 	public function testgetErrorManager()
 	{
-		$this->assertTrue(is_a($this->_vm->getErrorManager(), 'AgaviErrorManager'));
+		$this->assertTrue($this->_vm->getErrorManager() instanceof AgaviErrorManager);
 	}
  
 	public function testgetDependencyManager()
 	{
-		$this->assertTrue(is_a($this->_vm->getDependencyManager(), 'AgaviDependencyManager'));
+		$this->assertTrue($this->_vm->getDependencyManager() instanceof AgaviDependencyManager);
 	}
 	
 	public function testgetBase()

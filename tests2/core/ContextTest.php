@@ -109,7 +109,7 @@ class ContextTest extends AgaviTestCase
 	public function testGetFactoryInfo()
 	{
 		$ctx = AgaviContext::getInstance();
-		$info_ex = array('class' => 'AgaviWebResponse', 'parameters' => array());
+		$info_ex = array('class' => 'TestResponse', 'parameters' => array());
 		$this->assertSame($info_ex, $ctx->getFactoryInfo('response'));
 	}
 

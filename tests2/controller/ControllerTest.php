@@ -268,19 +268,19 @@ class ControllerTest extends AgaviTestCase
 		$controller = $this->_controller;
 
 		$info_ex = array(
-			'renderer' =>								'AgaviPhpRenderer',
 			'parameters' =>							array('Content-Type' => 'text/html'),
 			'renderer_parameters' =>		array(),
+			'renderer' =>								'AgaviPhpRenderer',
 		);
 
 		$info = $controller->getOutputTypeInfo();
 		$this->assertSame($info_ex, $info);
 
 		$info_ex = array(
-			'renderer' =>								'AgaviPhpRenderer',
 			'fallback' =>								'html',
 			'parameters' =>							array(),
 			'renderer_parameters' =>		array(),
+			'renderer' =>								'AgaviPhpRenderer',
 		);
 		$info = $controller->getOutputTypeInfo('test1');
 		$this->assertSame($info_ex, $info);

@@ -255,7 +255,7 @@ class AgaviPath
 			if(!isset($a[count($a)-1][$name])) {
 				return $default;
 			}
-			array_push($a, &$a[count($a)-1][$name]);
+			$a[] = &$a[count($a)-1][$name];
 		}
 		
 		return $a[count($a)-1];
@@ -293,7 +293,7 @@ class AgaviPath
 			} elseif(!isset($a[count($a)-1][$name])) {
 				$a[count($a)-1][$name] = array();
 			}
-			array_push($a, &$a[count($a)-1][$name]);
+			$a[] = &$a[count($a)-1][$name];
 		}
 		
 		$a[count($a)-1][$p->shift()] = $value;

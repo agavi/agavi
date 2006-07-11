@@ -354,8 +354,12 @@ abstract class AgaviView extends AgaviAttributeHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function setTemplate($template)
+	public function setTemplate($template = null)
 	{
+		if($template === null) {
+			$this->template = null;
+			return;
+		}
 		if(AgaviToolkit::isPathAbsolute($template)) {
 			$this->directory = dirname($template);
 			$this->template  = basename($template);

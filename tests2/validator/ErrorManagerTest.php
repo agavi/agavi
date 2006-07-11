@@ -42,7 +42,7 @@ class ErrorManagerTest extends AgaviTestCase
 		$error2 = 'foobar';
 		$em->submitError('foo2', $error2, array('test2', 'test3'), AgaviValidator::CRITICAL);
 		
-		$this->assertEquals($em->getErrorMessage(), &$error2);
+		$this->assertEquals($em->getErrorMessage(), $error2);
 		$this->assertEquals($em->getResult(), AgaviValidator::CRITICAL);
 		$this->assertEquals($em->getErrorArrayByValidator(), array(
 			'foo' => array('error' => &$error, 'fields' => array('test', 'test2')),
@@ -57,7 +57,7 @@ class ErrorManagerTest extends AgaviTestCase
 		$error3 = 'foobarfoo';
 		$em->submitError('foo3', $error3, array('test3', '/test4'), AgaviValidator::CRITICAL, '/test5');
 		
-		$this->assertEquals($em->getErrorMessage(), &$error2);
+		$this->assertEquals($em->getErrorMessage(), $error2);
 		$this->assertEquals($em->getResult(), AgaviValidator::CRITICAL);
 		$this->assertEquals($em->getErrorArrayByValidator(), array(
 			'foo' => array('error' => &$error, 'fields' => array('test', 'test2')),

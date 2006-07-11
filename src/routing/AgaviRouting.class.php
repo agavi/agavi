@@ -558,7 +558,7 @@ abstract class AgaviRouting
 	 */
 	protected function parseInput($route, $input, &$matches)
 	{
-		if($route['opt']['source'] !== null) {
+		if($route['opt']['source'] !== null && isset($this->sources[$route['opt']['source']])) {
 			$input = $this->sources[$route['opt']['source']];
 		}
 		return preg_match($route['rxp'], $input, $matches, PREG_OFFSET_CAPTURE);
