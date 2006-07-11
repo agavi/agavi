@@ -221,7 +221,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 			}
 			$response->setContent($out);
 		} else {
-			$reponse->setContent($doc->saveHTML());
+			$response->setContent($doc->saveHTML());
 		}
 	}
 
