@@ -220,7 +220,7 @@ class AgaviWebRouting extends AgaviRouting
 			return $path . $append;
 		} else {
 			$req = $this->context->getRequest();
-			return $req->getScheme() . '://'. $req->getAuthority() . $path . $append;
+			return $req->getUrlScheme() . '://'. $req->getUrlAuthority() . $path . $append;
 		}
 	}
 	
