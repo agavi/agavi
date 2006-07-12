@@ -30,7 +30,6 @@
  */
 class AgaviWebRequest extends AgaviRequest
 {
-
 	/**
 	 * Indicates whether or not a Cookie exists.
 	 *
@@ -61,10 +60,11 @@ class AgaviWebRequest extends AgaviRequest
 	public function getCookie($name, $default=null)
 	{
 		$retval = $default;
-
-		if (isset($_COOKIE[$name])) {
+		
+		if(isset($_COOKIE[$name])) {
 			$retval = $_COOKIE[$name];
 		}
+		
 		return $retval;
 	}
 
@@ -79,18 +79,13 @@ class AgaviWebRequest extends AgaviRequest
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function getFile ($name)
+	public function getFile($name)
 	{
-
-		if (isset($_FILES[$name]))
-		{
-
+		if(isset($_FILES[$name])) {
 			return $_FILES[$name];
-
 		}
-
+		
 		return null;
-
 	}
 
 	/**
@@ -113,18 +108,13 @@ class AgaviWebRequest extends AgaviRequest
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function getFileError ($name)
+	public function getFileError($name)
 	{
-
-		if (isset($_FILES[$name]))
-		{
-
+		if(isset($_FILES[$name])) {
 			return $_FILES[$name]['error'];
-
 		}
-
+		
 		return $retval;
-
 	}
 
 	/**
@@ -137,18 +127,13 @@ class AgaviWebRequest extends AgaviRequest
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function getFileName ($name)
+	public function getFileName($name)
 	{
-
-		if (isset($_FILES[$name]))
-		{
-
+		if(isset($_FILES[$name])) {
 			return $_FILES[$name]['name'];
-
 		}
-
+		
 		return null;
-
 	}
 
 	/**
@@ -159,11 +144,9 @@ class AgaviWebRequest extends AgaviRequest
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function getFileNames ()
+	public function getFileNames()
 	{
-
 		return array_keys($_FILES);
-
 	}
 
 	/**
@@ -174,11 +157,9 @@ class AgaviWebRequest extends AgaviRequest
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function getFiles ()
+	public function getFiles()
 	{
-
 		return $_FILES;
-
 	}
 
 	/**
@@ -191,18 +172,13 @@ class AgaviWebRequest extends AgaviRequest
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function getFilePath ($name)
+	public function getFilePath($name)
 	{
-
-		if (isset($_FILES[$name]))
-		{
-
+		if(isset($_FILES[$name])) {
 			return $_FILES[$name]['tmp_name'];
-
 		}
-
+		
 		return null;
-
 	}
 
 	/**
@@ -215,18 +191,13 @@ class AgaviWebRequest extends AgaviRequest
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function getFileSize ($name)
+	public function getFileSize($name)
 	{
-
-		if (isset($_FILES[$name]))
-		{
-
+		if(isset($_FILES[$name])) {
 			return $_FILES[$name]['size'];
-
 		}
-
+		
 		return null;
-
 	}
 
 	/**
@@ -242,18 +213,13 @@ class AgaviWebRequest extends AgaviRequest
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function getFileType ($name)
+	public function getFileType($name)
 	{
-
-		if (isset($_FILES[$name]))
-		{
-
+		if(isset($_FILES[$name])) {
 			return $_FILES[$name]['type'];
-
 		}
-
+		
 		return null;
-
 	}
 
 	/**
@@ -266,11 +232,9 @@ class AgaviWebRequest extends AgaviRequest
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function hasFile ($name)
+	public function hasFile($name)
 	{
-
 		return isset($_FILES[$name]);
-
 	}
 
 	/**
@@ -283,18 +247,13 @@ class AgaviWebRequest extends AgaviRequest
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function hasFileError ($name)
+	public function hasFileError($name)
 	{
-
-		if (isset($_FILES[$name]))
-		{
-
+		if(isset($_FILES[$name])) {
 			return ($_FILES[$name]['error'] != UPLOAD_ERR_OK);
-
 		}
-
+		
 		return false;
-
 	}
 
 	/**
@@ -305,23 +264,15 @@ class AgaviWebRequest extends AgaviRequest
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function hasFileErrors ()
+	public function hasFileErrors()
 	{
-
-		foreach ($_FILES as &$file)
-		{
-
-			if ($file['error'] != UPLOAD_ERR_OK)
-			{
-
+		foreach($_FILES as &$file) {
+			if($file['error'] != UPLOAD_ERR_OK) {
 				return true;
-
 			}
-
 		}
-
+		
 		return false;
-
 	}
 
 	/**
@@ -332,11 +283,9 @@ class AgaviWebRequest extends AgaviRequest
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function hasFiles ()
+	public function hasFiles()
 	{
-
 		return (count($_FILES) > 0);
-
 	}
 
 	/**
@@ -361,13 +310,13 @@ class AgaviWebRequest extends AgaviRequest
 		if(isset($_SERVER['REQUEST_METHOD'])) {
 			switch($_SERVER['REQUEST_METHOD']) {
 				case 'GET':
-				    $this->setMethod($getMethod);
-				    break;
+					$this->setMethod($getMethod);
+					break;
 				case 'POST':
-				    $this->setMethod(isset($parameters['POST_method_name']) ? $parameters['POST_method_name'] : 'write');
-				    break;
+					$this->setMethod(isset($parameters['POST_method_name']) ? $parameters['POST_method_name'] : 'write');
+					break;
 				default:
-				    $this->setMethod($getMethod);
+					$this->setMethod($getMethod);
 			}
 		} else {
 			// set the default method
@@ -395,71 +344,44 @@ class AgaviWebRequest extends AgaviRequest
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function moveFile ($name, $file, $fileMode = 0666, $create = true,
-						      $dirMode = 0777)
+	public function moveFile($name, $file, $fileMode = 0666, $create = true, $dirMode = 0777)
 	{
-
-		if (isset($_FILES[$name]) && $_FILES[$name]['error'] == UPLOAD_ERR_OK &&
-			$_FILES[$name]['size'] > 0)
-		{
-
+		if(isset($_FILES[$name]) && $_FILES[$name]['error'] == UPLOAD_ERR_OK && $_FILES[$name]['size'] > 0) {
 			// get our directory path from the destination filename
 			$directory = dirname($file);
-
-			if (!is_readable($directory))
-			{
-
+			if(!is_readable($directory)) {
 				$fmode = 0777;
-
-				if ($create && !@mkdir($directory, $dirMode, true))
-				{
-
-				    // failed to create the directory
-				    $error = 'Failed to create file upload directory "%s"';
-				    $error = sprintf($error, $directory);
-
-				    throw new AgaviFileException($error);
-
+				if($create && !@mkdir($directory, $dirMode, true)) {
+					// failed to create the directory
+					$error = 'Failed to create file upload directory "%s"';
+					$error = sprintf($error, $directory);
+					throw new AgaviFileException($error);
 				}
-
+				
 				// chmod the directory since it doesn't seem to work on
 				// recursive paths
 				@chmod($directory, $dirMode);
-
-			} else if (!is_dir($directory))
-			{
-
+			} elseif(!is_dir($directory)) {
 				// the directory path exists but it's not a directory
 				$error = 'File upload path "%s" exists, but is not a directory';
 				$error = sprintf($error, $directory);
 
 				throw new AgaviFileException($error);
-
-			} else if (!is_writable($directory))
-			{
-
+			} elseif(!is_writable($directory)) {
 				// the directory isn't writable
 				$error = 'File upload path "%s" is not writable';
 				$error = sprintf($error, $directory);
-
 				throw new AgaviFileException($error);
-
 			}
 
-			if (@move_uploaded_file($_FILES[$name]['tmp_name'], $file))
-			{
-
+			if(@move_uploaded_file($_FILES[$name]['tmp_name'], $file)) {
 				// chmod our file
 				@chmod($file, $fileMode);
-
+				
 				return true;
-
 			}
-
 		}
-
 		return false;
-
 	}
 }
 
