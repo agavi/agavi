@@ -184,7 +184,10 @@ class AgaviWebRouting extends AgaviRouting
 				foreach($routes as $route) {
 					if(isset($this->routes[$route])) {
 						$r = $this->routes[$route];
-						$myDefaults = $r['opt']['defaults'];
+
+						foreach($r['opt']['defaults'] as $key => $default) {
+							$myDefaults[$key] = $default['val'];
+						}
 						$myDefaults[$req->getModuleAccessor()] = $r['opt']['module'];
 						$myDefaults[$req->getActionAccessor()] = $r['opt']['action'];
 
