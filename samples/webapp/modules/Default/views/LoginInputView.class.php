@@ -39,13 +39,7 @@ class Default_LoginInputView extends AgaviView
 		if($this->getContext()->getRequest()->hasAttributeNamespace('org.agavi.controller.forwards.login')) {
 			// we were redirected to the login form by the controller because the requested action required security
 			// so store the input URL in the session for a redirect after login
-			$url = 
-				'http' . (isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on' ? 's' : '')  . '://' . 
-				$_SERVER['SERVER_NAME'] . 
-				(isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on' ? ($_SERVER['SERVER_PORT'] != 443 ? ':' . $_SERVER['SERVER_PORT'] : '') : ($_SERVER['SERVER_PORT'] != 80 ? ':' . $_SERVER['SERVER_PORT'] : '')) . 
-				$_SERVER['REQUEST_URI']
-			;
-			$this->getContext()->getUser()->setAttribute('redirect', $url, 'org.agavi.SampleApp.login');
+			$this->getContext()->getUser()->setAttribute('redirect', $this->getContext()->getRequest()->getUrl(), 'org.agavi.SampleApp.login');
 		} elseif($this->getContext()->getRequest()->getMethod() == 'read') {
 			// clear the redirect URL just to be sure
 			// but only if request method is "read", i.e. if the login form is served via GET!
