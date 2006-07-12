@@ -14,6 +14,7 @@
 <configurations>
 	<configuration>
 		<routes>
+			<route pattern="application/xhtml+xml" source="HTTP_ACCEPT" output_type="xhtml" stopping="false" />
 			<route name="disabled" pattern="/disabled" module="Disabled" action="Index" />
 			<route name="login" pattern="/login" module="%actions.login_module%" action="%actions.login_action%">
 				<routes>

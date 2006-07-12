@@ -23,6 +23,13 @@
 				</parameters>
 			</output_type>
 			
+			<output_type name="xhtml">
+				<renderer class="AgaviPhpRenderer" />
+				<parameters>
+					<parameter name="Content-Type">application/xhtml+xml; charset=UTF-8</parameter>
+				</parameters>
+			</output_type>
+			
 			<output_type name="html_print" fallback="html">
 				<renderer extension="-print.php" ignore_slots="true" class="AgaviPhpRenderer" />
 				<parameters>
