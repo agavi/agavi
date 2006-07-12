@@ -31,6 +31,132 @@
 class AgaviWebRequest extends AgaviRequest
 {
 	/**
+	 * Retrieve the scheme part of a request URL, typically the protocol.
+	 * Example: "http".
+	 *
+	 * @return     string The request URL scheme.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getUrlScheme()
+	{
+		return 'http' . (isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on' ? 's' : '');
+	}
+	
+	/**
+	 * Retrieve the request URL authority, typically host and port.
+	 * Example: "foo.example.com:8080".
+	 *
+	 * @param      bool Whether or not ports 80 (for HTTP) and 433 (for HTTPS)
+	 *                  should be included in the return string.
+	 *
+	 * @return     string The request URL authority.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getUrlAuthority($forcePort = false)
+	{
+		return
+			$_SERVER['SERVER_NAME'] .
+			
+			($forcePort == true
+				? (':' . $_SERVER['SERVER_PORT'])
+				: ($this->getUrlScheme() == 'https'
+					? ($_SERVER['SERVER_PORT'] != 443
+						? ':' . $_SERVER['SERVER_PORT']
+						: '')
+					: ($_SERVER['SERVER_PORT'] != 80
+						? ':' . $_SERVER['SERVER_PORT']
+						: '')
+				)
+			);
+	}
+	
+	/**
+	 * Retrieve the relative part of the request URL, i.e. path and query.
+	 * Example: "/foo/bar/baz?id=4815162342".
+	 *
+	 * @return     string The relative URL of the curent request.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getRelativeUrl()
+	{
+		if(isset($_SERVER['HTTP_X_REWRITE_URL'])) {
+			// Microsoft IIS with ISAPI_Rewrite
+			return $_SERVER['HTTP_X_REWRITE_URL'];
+		} elseif(isset($_SERVER['ORIG_PATH_INFO'])) {
+			// Microsoft IIS
+			return $_SERVER['ORIG_PATH_INFO'];
+		} else {
+			// Apache
+			return$_SERVER['REQUEST_URI'];
+		}
+	}
+	
+	/**
+	 * Retrieve the path part of the URL.
+	 * Example: "/foo/bar/baz".
+	 *
+	 * @return     string The path part of the URL.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getUrlPath()
+	{
+		$ru = $this->getRelativeUrl();
+		$pos = strpos($ru, '?');
+		if($pos !== false) {
+			return substr($ru, 0, strpos($ru, '?'));
+		} else {
+			return $ru;
+		}
+	}
+	
+	/**
+	 * Retrieve the query part of the URL.
+	 * Example: "id=4815162342".
+	 *
+	 * @return     string The query part of the URL, or an empty string.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getUrlQuery()
+	{
+		$ru = $this->getRelativeUrl();
+		$pos = strpos($ru, '?');
+		if($pos !== false) {
+			return substr($ru, $pos + 1);
+		} else {
+			return '';
+		}
+	}
+	
+	/**
+	 * Retrieve the full request URL, including protocol, server name, port (if
+	 * necessary), and request URI.
+	 * Example: "http://foo.example.com:8080/foo/bar/baz?id=4815162342".
+	 *
+	 * @return     string The URL of the curent request.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getUrl()
+	{
+		$query = $this->getUrlQuery();
+		return 
+			$this->getUrlScheme() . '://' . 
+			$this->getUrlAuthority() . 
+			$this->getRelativeUrl();
+	}
+	
+	/**
 	 * Indicates whether or not a Cookie exists.
 	 *
 	 * @param      string A cookie name.
