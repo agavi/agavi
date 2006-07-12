@@ -332,11 +332,11 @@
       any aspect of the framework, even system settings and autoloads may be
       configured per Environment, you're a bit more restricted in Context
       configuration, and that's intentional. A Context's job is to hold the
-      proper implementations that are needed to execute the application in
-      the current <emphasis>context</emphasis> (therefore the name), such as
-      "web" for normal requests to an application through a browser, "xmlrpc"
-      for an XMLRPC interface of an application, or "console" for a Context
-      that exposes the application to the command line.</para>
+      proper implementations that are needed to execute the application in the
+      current <emphasis>context</emphasis> (therefore the name), such as "web"
+      for normal requests to an application through a browser, "xmlrpc" for an
+      XMLRPC interface of an application, or "console" for a Context that
+      exposes the application to the command line.</para>
 
       <para>All configuration files support the configuration per Environment
       and Context (if applicable) without any performance disadvantage - Agavi
@@ -547,7 +547,21 @@
     </section>
 
     <section>
-      <title>User Authentication, Credentials, Cookie-Based Auto-Login</title>
+      <title>Cookie-Based Auto-Login</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Redirecting back to the originally requested page after
+      login</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Serving "application/xhtml+xml" to capable browsers
+      easily</title>
 
       <para></para>
     </section>
