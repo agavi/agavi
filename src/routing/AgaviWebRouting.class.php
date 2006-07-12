@@ -39,6 +39,14 @@ class AgaviWebRouting extends AgaviRouting
 	protected $baseHref = '';
 	
 	/**
+	 * @var        array An array of default options for gen()
+	 */
+	protected $defaultGenOptions = array(
+		'relative' => true,
+		'separator' => '&amp;'
+	);
+	
+	/**
 	 * Initialize the routing instance.
 	 *
 	 * @param      AgaviContext A Context instance.
@@ -131,7 +139,8 @@ class AgaviWebRouting extends AgaviRouting
 	 * Generate a formatted Agavi URL.
 	 *
 	 * @param      string A route name.
-	 * @param      array  An associative array of URL parameters.
+	 * @param      array  An associative array of parameters.
+	 * @param      array  An array of options.
 	 *
 	 * @return     string
 	 *
@@ -139,8 +148,10 @@ class AgaviWebRouting extends AgaviRouting
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function gen($route, $params = array())
+	public function gen($route, $params = array(), $options = array())
 	{
+		$options = array_merge($this->defaultGenOptions, $options);
+		
 		$routes = $this->getAffectedRoutes($route);
 
 		if(count($routes)) {
@@ -163,7 +174,7 @@ class AgaviWebRouting extends AgaviRouting
 					$append = '?' . http_build_query($p);
 				}
 
-				return parent::gen($routes, $params) . $append;
+				$path = parent::gen($routes, $params);
 			} else {
 				// the route exists, but we must create a normal index.php?foo=bar URL.
 
@@ -187,29 +198,30 @@ class AgaviWebRouting extends AgaviRouting
 		}
 		// the route does not exist. we generate a normal index.php?foo=bar URL.
 
-		$url = $route;
-
-		if ($url == null) {
-			$url = $_SERVER['SCRIPT_NAME'];
+		if($route === null) {
+			$path = $_SERVER['SCRIPT_NAME'];
+			$append = '?' . http_build_query($params);
+		} else {
+			if(!isset($path)) {
+				$path = $route;
+			}
+			if(!isset($append)) {
+				$append = '?' . http_build_query($params);
+			}
 		}
 
-		// use GET format
-		$divider  = '&';
-		$equals   = '=';
-		$url     .= '?';
-
-		// loop through the parameters
-		foreach ($params as $key => $value) {
-			$url .= urlencode($key) . $equals . urlencode($value) . $divider;
+		$aso = ini_get('arg_separator.output');
+		if($options['separator'] != $aso) {
+			// replace arg_separator.output's with given separator
+			$append = str_replace($aso, $options['separator'], $append);
 		}
-
-		// strip off last divider character
-		$url = rtrim($url, $divider);
-
-		// replace &'s with &amp;
-		$url = str_replace('&', '&amp;', $url);
-
-		return $url;
+		
+		if($options['relative']) {
+			return $path . $append;
+		} else {
+			$req = $this->context->getRequest();
+			return $req->getScheme() . '://'. $req->getAuthority() . $path . $append;
+		}
 	}
 	
 	public function execute()

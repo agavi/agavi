@@ -37,6 +37,14 @@ abstract class AgaviRouting
 						$input = null,
 						$sources = array(),
 						$prefix = '';
+	
+	/**
+	 * @var        array An array of default options for gen()
+	 */
+	protected $defaultGenOptions = array(
+		'relative' => true
+	);
+
 
 	/**
 	 * Initialize the routing instance.
@@ -313,14 +321,15 @@ abstract class AgaviRouting
 	 * Generate a formatted Agavi URL.
 	 *
 	 * @param      string A route name.
-	 * @param      array  An associative array of URL parameters.
+	 * @param      array  An associative array of parameters.
+	 * @param      array  An array of options.
 	 *
 	 * @return     string
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function gen($route, $params = array())
+	public function gen($route, $params = array(), $options = array())
 	{
 		$routes = $route;
 		if(is_string($route)) {
