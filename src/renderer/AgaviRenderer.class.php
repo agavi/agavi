@@ -61,6 +61,11 @@ abstract class AgaviRenderer implements AgaviIRenderingFilter
 	protected $varName = 'template';
 	
 	/**
+	 * @var        string The name of the array that contains the slot output.
+	 */
+	protected $slotsVarName = 'template';
+	
+	/**
 	 * @var        bool Whether or not the template vars should be extracted.
 	 */
 	protected $extractVars = false;
@@ -191,10 +196,14 @@ abstract class AgaviRenderer implements AgaviIRenderingFilter
 			
 			$response = $actionStack->getEntry($index)->getPresentation();
 			
-			// set the presentation data as a template attribute
-			$this->output[$name] =& $response->getContent();
+			if($response) {
+				// set the presentation data as a template attribute
+				$this->output[$name] =& $response->getContent();
 			
-			$this->response->merge($response->exportInfo());
+				$this->response->merge($response->exportInfo());
+			} else {
+				$this->output[$name] = null;
+			}
 		}
 		
 		// put render mode back
