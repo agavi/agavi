@@ -94,7 +94,7 @@ class AgaviWebRouting extends AgaviRouting
 
 		$this->sources = array_merge($this->sources, $_SERVER);
 		
-		if(isset($_SERVER['REDIRECT_URL']) || isset($_SERVER['HTTP_X_REWRITE_URL'])) {
+		if(isset($_SERVER['REDIRECT_URL']) || (isset($_SERVER['HTTP_X_REWRITE_URL']) && ($_SERVER['HTTP_X_REWRITE_URL'] != $_SERVER['ORIG_PATH_INFO']))) {
 			// a rewrite happened
 			$this->basePath = $this->prefix . '/';
 		} else {
