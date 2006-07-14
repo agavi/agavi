@@ -58,6 +58,7 @@ class AgaviWebRouting extends AgaviRouting
 	public function initialize(AgaviContext $context, $parameters = array())
 	{
 		parent::initialize($context);
+		$isReWritten = isset($_SERVER['REDIRECT_URL']) || (isset($_SERVER['HTTP_X_REWRITE_URL']) && ($_SERVER['HTTP_X_REWRITE_URL'] != $_SERVER['ORIG_PATH_INFO']));
 		if(isset($_SERVER['HTTP_X_REWRITE_URL'])) {
 			// Microsoft IIS with ISAPI_Rewrite
 			$ru = $_SERVER['HTTP_X_REWRITE_URL'];
@@ -85,7 +86,15 @@ class AgaviWebRouting extends AgaviRouting
 				$this->prefix .= $sn[$i];
 				$appendFrom = $i;
 			}
-			$this->prefix .= substr($_SERVER['SCRIPT_NAME'], $appendFrom + 1);
+			if(!$isReWritten) {
+				$this->prefix .= substr($_SERVER['SCRIPT_NAME'], $appendFrom + 1);
+			} else {
+				// if we have a rewritten url and the prefix ends with an / (so its a path) we push that / to the input
+				if(substr($this->prefix, -1) == '/') {
+					$this->prefix = substr($this->prefix, 0, -1);
+					$i--;
+				}
+			}
 			$this->input = substr($ru, $i);
 		}
 		if(!$this->input) {
@@ -94,7 +103,7 @@ class AgaviWebRouting extends AgaviRouting
 
 		$this->sources = array_merge($this->sources, $_SERVER);
 		
-		if(isset($_SERVER['REDIRECT_URL']) || (isset($_SERVER['HTTP_X_REWRITE_URL']) && ($_SERVER['HTTP_X_REWRITE_URL'] != $_SERVER['ORIG_PATH_INFO']))) {
+		if($isReWritten) {
 			// a rewrite happened
 			$this->basePath = $this->prefix . '/';
 		} else {

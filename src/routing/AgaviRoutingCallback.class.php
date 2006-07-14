@@ -60,9 +60,9 @@ abstract class AgaviRoutingCallback
 		return;
 	}
 
-	public function onGenerate($parameters)
+	public function onGenerate($defaultParameters, &$userParameters)
 	{
-		return $parameters;
+		return $defaultParameters;
 	}
 }
 
