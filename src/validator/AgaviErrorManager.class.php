@@ -30,19 +30,19 @@ class AgaviErrorManager
 	/**
 	 * @var        array error messages sorted by validators
 	 */
-	protected $ValidatorArray = array();
+	protected $validatorArray = array();
 	/**
 	 * @var        array error messages sorted by input fields
 	 */
-	protected $InputArray = array();
+	protected $inputArray = array();
 	/**
 	 * @var        string first submitted error message of type string
 	 */
-	protected $ErrorMessage = '';
+	protected $errorMessage = '';
 	/**
 	 * @var        int highest error severity in the container
 	 */
-	protected $Result = AgaviValidator::SUCCESS;
+	protected $result = AgaviValidator::SUCCESS;
 	
 	/**
 	 * clears the error manager
@@ -52,10 +52,10 @@ class AgaviErrorManager
 	 */
 	public function clear()
 	{
-		$this->ValidatorArray = array();
-		$this->InputArray = array();
-		$this->ErrorMessage = '';
-		$this->Result = AgaviValidator::SUCCESS;
+		$this->validatorArray = array();
+		$this->inputArray = array();
+		$this->errorMessage = '';
+		$this->result = AgaviValidator::SUCCESS;
 	}
 	
 	/**
@@ -73,11 +73,11 @@ class AgaviErrorManager
 	 */
 	public function submitError($validator, $error, $fields, $severity, $base = '', $ignoreAsMessage = false)
 	{
-		if($severity > $this->Result) {
-			$this->Result = $severity;
+		if($severity > $this->result) {
+			$this->result = $severity;
 		}
-		if(is_string($error) and $this->ErrorMessage == '' and !$ignoreAsMessage) {
-			$this->ErrorMessage = &$error;
+		if(is_string($error) and $this->errorMessage == '' and !$ignoreAsMessage) {
+			$this->errorMessage = &$error;
 		}
 		
 		if($validator[0] != '/' and $base != '') {
@@ -92,25 +92,25 @@ class AgaviErrorManager
 		}
 		
 		// fill validator array
-		$this->ValidatorArray[$validator] = array(
+		$this->validatorArray[$validator] = array(
 			'error'		=> &$error,
 			'fields'	=> $fields
 		);
 		
 		// fill input array
 		foreach($fields AS $field) {
-			if(!isset($this->InputArray[$field])) {
-				$this->InputArray[$field] = array(
+			if(!isset($this->inputArray[$field])) {
+				$this->inputArray[$field] = array(
 					'message'	=> '',
 					'validators'	=> array()
 				);
 			}
 			
-			if(is_string($error) and $this->InputArray[$field]['message'] == '' and !$ignoreAsMessage) {
-				$this->InputArray[$field]['message'] = &$error;
+			if(is_string($error) and $this->inputArray[$field]['message'] == '' and !$ignoreAsMessage) {
+				$this->inputArray[$field]['message'] = &$error;
 			}
 			
-			$this->InputArray[$field]['validators'][$validator] = &$error;
+			$this->inputArray[$field]['validators'][$validator] = &$error;
 		}
 	}
 	
@@ -132,7 +132,7 @@ class AgaviErrorManager
 	 */
 	public function getErrorArrayByValidator()
 	{
-		return $this->ValidatorArray;
+		return $this->validatorArray;
 	}
 	
 	/**
@@ -157,7 +157,7 @@ class AgaviErrorManager
 	 */
 	public function getErrorArrayByInput()
 	{
-		return $this->InputArray;
+		return $this->inputArray;
 	}
 	
 	/**
@@ -170,7 +170,7 @@ class AgaviErrorManager
 	 */
 	public function getErrorMessage()
 	{
-		return $this->ErrorMessage;
+		return $this->errorMessage;
 	}
 	
 	/**
@@ -183,7 +183,7 @@ class AgaviErrorManager
 	 */
 	public function getResult()
 	{
-		return $this->Result;
+		return $this->result;
 	}
 }
 ?>

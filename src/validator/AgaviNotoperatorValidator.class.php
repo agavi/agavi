@@ -40,7 +40,7 @@ class AgaviNotOperatorValidator extends AgaviOperatorValidator
 	 */
 	protected function checkValidSetup()
 	{
-		if(count($this->Children) != 1) {
+		if(count($this->children) != 1) {
 			throw new AgaviValidatorException('NOT allows only 1 child validator');
 		}
 	}
@@ -55,7 +55,7 @@ class AgaviNotOperatorValidator extends AgaviOperatorValidator
 	 */
 	protected function validate()
 	{
-		$result = $this->Children[0]->execute();
+		$result = $this->children[0]->execute();
 		if($result == AgaviValidator::CRITICAL or $result == AgaviValidator::SUCCESS) {
 			$this->throwError();
 			return false;

@@ -34,11 +34,11 @@ class AgaviPath
 	/**
 	 * @var        bool is path absolut?
 	 */
-	protected $Absolute = false;
+	protected $absolute = false;
 	/**
 	 * @var        array path components (the directories) 
 	 */
-	protected $Dirs = array();
+	protected $dirs = array();
 	
 	/**
 	 * constructor
@@ -54,8 +54,8 @@ class AgaviPath
 			return;
 		}
 		
-		$this->Absolute = ($path[0] == '/');
-		$this->Dirs = array_filter(explode('/', $path), create_function('$a', 'return (strlen($a));'));
+		$this->absolute = ($path[0] == '/');
+		$this->dirs = array_filter(explode('/', $path), create_function('$a', 'return (strlen($a));'));
 		
 		$this->cleanPath();
 	}
@@ -69,12 +69,12 @@ class AgaviPath
 	protected function cleanPath()
 	{
 		$dirs = array();
-		foreach($this->Dirs as $dir) {
+		foreach($this->dirs as $dir) {
 			if($dir == '' or $dir == '.') {
 				continue;
 			}
 			if($dir == '..') {
-				if(!count($dirs) and !$this->Absolute) {
+				if(!count($dirs) and !$this->absolute) {
 					array_push($dirs, $dir);
 				} elseif(count($dirs) and $dirs[count($dirs)-1] == '..') {
 					array_push($dirs, $dir);
@@ -87,7 +87,7 @@ class AgaviPath
 			array_push($dirs, $dir);
 		}
 		
-		$this->Dirs = $dirs;
+		$this->dirs = $dirs;
 	}
 	
 	/**
@@ -100,7 +100,7 @@ class AgaviPath
 	 */
 	public function isAbsolute()
 	{
-		return $this->Absolute;
+		return $this->absolute;
 	}
 	
 	/**
@@ -113,7 +113,7 @@ class AgaviPath
 	 */
 	public function __toString()
 	{
-		return (($this->Absolute) ? '/' : '').join('/', $this->Dirs);
+		return (($this->absolute) ? '/' : '').join('/', $this->dirs);
 	}
 	
 	/**
@@ -126,7 +126,7 @@ class AgaviPath
 	 */
 	public function length()
 	{
-		return count($this->Dirs);
+		return count($this->dirs);
 	}
 	
 	/**
@@ -142,10 +142,10 @@ class AgaviPath
 	public function left($addSlashWhenAbsolute = false)
 	{
 		if(!$this->length()) {
-			return NULL;
+			return null;
 		}
 
-		$dir = $this->Dirs[0];
+		$dir = $this->dirs[0];
 		if($this->isAbsolute() and $addSlashWhenAbsolute) {
 			return '/'.$dir;
 		}
@@ -168,11 +168,11 @@ class AgaviPath
 	 */
 	public function pop()
 	{
-		if(!count($this->Dirs)) {
-			return NULL;
+		if(!count($this->dirs)) {
+			return null;
 		}
 		
-		$dir = array_pop($this->Dirs);
+		$dir = array_pop($this->dirs);
 
 		if(strval(intval($dir)) == $dir) {
 			return intval($dir);
@@ -191,7 +191,7 @@ class AgaviPath
 	 */
 	public function push($path)
 	{
-		$this->Dirs = array_merge($this->Dirs, array_filter(explode('/', $path), create_function('$a', 'return (strlen($a));')));
+		$this->dirs = array_merge($this->dirs, array_filter(explode('/', $path), create_function('$a', 'return (strlen($a));')));
 		$this->cleanPath();
 	}
 	
@@ -206,15 +206,15 @@ class AgaviPath
 	 * @since      0.11.0
 	 */
 	public function shift($addSlashWhenAbsolute = false) {
-		if(!count($this->Dirs)) {
-			return NULL;
+		if(!count($this->dirs)) {
+			return null;
 		}
 		
-		$ret = array_shift($this->Dirs);
+		$ret = array_shift($this->dirs);
 		
-		if($this->Absolute) {
+		if($this->absolute) {
 			$ret = (($addSlashWhenAbsolute) ? '/' : '').$ret;
-			$this->Absolute = false;
+			$this->absolute = false;
 		}
 		
 		if(strval(intval($ret)) == $ret) {
@@ -241,7 +241,7 @@ class AgaviPath
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
-	public static function &getValueByPath(&$array, $path, $default = NULL)
+	public static function &getValueByPath(&$array, $path, $default = null)
 	{
 		/*
 		 * The array of references is a hack to avoid turning all
@@ -251,7 +251,7 @@ class AgaviPath
 		$a = array(&$array);
 		$p = new AgaviPath($path);
 		
-		while(($name = $p->shift()) !== NULL) {
+		while(($name = $p->shift()) !== null) {
 			if(!isset($a[count($a)-1][$name])) {
 				return $default;
 			}

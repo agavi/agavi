@@ -38,12 +38,12 @@ abstract class AgaviOperatorValidator extends AgaviValidator implements AgaviIVa
 	 * 
 	 * @var        AgaviErrorManager ErrorManager for child validators
 	 */
-	protected $ErrorManager = null;
+	protected $errorManager = null;
 
 	/**
 	 * @var        array child validators
 	 */
-	protected $Children = array();
+	protected $children = array();
 	
 	/**
 	 * constructor
@@ -64,10 +64,10 @@ abstract class AgaviOperatorValidator extends AgaviValidator implements AgaviIVa
 			 * if the operator is configured to skip errors of the
 			 * child validators, a new error manager is created
 			 */
-			$this->ErrorManager = new AgaviErrorManager;
+			$this->errorManager = new AgaviErrorManager();
 		} else {
 			// else the parent's error manager is taken
-			$this->ErrorManager = $this->ParentContainer->getErrorManager();
+			$this->errorManager = $this->parentContainer->getErrorManager();
 		}
 	}
 
@@ -82,7 +82,7 @@ abstract class AgaviOperatorValidator extends AgaviValidator implements AgaviIVa
 	public function getBase()
 	{
 		// enfoce returning as string
-		return $this->CurBase->__toString();
+		return $this->curBase->__toString();
 	}
 
 	/**
@@ -111,7 +111,7 @@ abstract class AgaviOperatorValidator extends AgaviValidator implements AgaviIVa
 	 */
 	public function shutdown()
 	{
-		foreach($this->Children as $child) {
+		foreach($this->children as $child) {
 			$child->shutdown();
 		}
 	}
@@ -126,7 +126,7 @@ abstract class AgaviOperatorValidator extends AgaviValidator implements AgaviIVa
 	 */
 	public function addChild(AgaviValidator $validator)
 	{
-		array_push($this->Children, $validator);
+		array_push($this->children, $validator);
 	}
 	
 	/**
@@ -154,7 +154,7 @@ abstract class AgaviOperatorValidator extends AgaviValidator implements AgaviIVa
 	 */
 	public function getRequest()
 	{
-		return $this->ParentContainer->getRequest();
+		return $this->parentContainer->getRequest();
 	}
 	
 	/**
@@ -167,7 +167,7 @@ abstract class AgaviOperatorValidator extends AgaviValidator implements AgaviIVa
 	 */
 	public function getDependencyManager()
 	{
-		return $this->ParentContainer->getDependencyManager();
+		return $this->parentContainer->getDependencyManager();
 	}
 	
 	/**
@@ -183,7 +183,7 @@ abstract class AgaviOperatorValidator extends AgaviValidator implements AgaviIVa
 	 */
 	public function getErrorManager()
 	{
-		return $this->ErrorManager;
+		return $this->errorManager;
 	}
 	
 	/**

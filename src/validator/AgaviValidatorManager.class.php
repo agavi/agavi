@@ -32,22 +32,22 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	/**
 	 * @var        AgaviDependencyManager dependency manager
 	 */
-	protected $DependencyManager = null;
+	protected $dependencyManager = null;
 
 	/**
 	 * @var        AgaviErrorManager error manager
 	 */
-	protected $ErrorManager = null;
+	protected $errorManager = null;
 
 	/**
 	 * @var        array array of child validators
 	 */
-	protected $Children = array();
+	protected $children = array();
 
 	/**
 	 * @var        AgaviContext context
 	 */
-	protected $Context = null;
+	protected $context = null;
 
 	/**
 	 * initializes the manager
@@ -60,12 +60,12 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	 */
 	public function initialize(AgaviContext $context, $parameters = array())
 	{
-		$this->Context = $context;
+		$this->context = $context;
 		$this->setParameters($parameters);
 		
-		$this->DependencyManager = new AgaviDependencyManager;
-		$this->ErrorManager = new AgaviErrorManager;
-		$this->Children = array();
+		$this->dependencyManager = new AgaviDependencyManager();
+		$this->errorManager = new AgaviErrorManager();
+		$this->children = array();
 	}
 	
 	/**
@@ -78,7 +78,7 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	 */
 	public function getContext()
 	{
-		return $this->Context;
+		return $this->context;
 	}
 
 	/**
@@ -93,14 +93,14 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	 */
 	public function clear()
 	{
-		$this->DependencyManager->clear();
-		$this->ErrorManager->clear();
+		$this->dependencyManager->clear();
+		$this->errorManager->clear();
 		
-		foreach($this->Children as $child) {
+		foreach($this->children as $child) {
 			$child->shutdown();
 		}
 		
-		$this->Children = array();
+		$this->children = array();
 	}
 	
 	/**
@@ -113,7 +113,7 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	 */
 	public function addChild (AgaviValidator $validator)
 	{
-		array_push($this->Children, $validator);
+		array_push($this->children, $validator);
 	}
 	
 	/**
@@ -126,7 +126,7 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	 */
 	public function getRequest()
 	{
-		return $this->Context->getRequest();
+		return $this->context->getRequest();
 	}
 	
 	/**
@@ -139,7 +139,7 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	 */
 	public function getDependencyManager()
 	{
-		return $this->DependencyManager;
+		return $this->dependencyManager;
 	}
 	
 	/**
@@ -152,7 +152,7 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	 */
 	public function getErrorManager()
 	{
-		return $this->ErrorManager;
+		return $this->errorManager;
 	}
 
 	/**
@@ -179,7 +179,7 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	{
 		$result = true;
 
-		foreach($this->Children as $validator) {
+		foreach($this->children as $validator) {
 			$v_ret = $validator->execute();
 			switch($v_ret) {
 				case AgaviValidator::SUCCESS:
@@ -206,7 +206,7 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	 */
 	public function shutdown()
 	{
-		foreach($this->Children as $child) {
+		foreach($this->children as $child) {
 			$child->shutdown();
 		}
 	}
@@ -244,7 +244,7 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	 */
 	public function getErrorArrayByValidator()
 	{
-		return $this->ErrorManager->getErrorArrayByValidator();
+		return $this->errorManager->getErrorArrayByValidator();
 	}
 	
 	/**
@@ -269,7 +269,7 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	 */
 	public function getErrorArrayByInput()
 	{
-		return $this->ErrorManager->getErrorArrayByInput();
+		return $this->errorManager->getErrorArrayByInput();
 	}
 	
 	/**
@@ -282,7 +282,7 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	 */
 	public function getErrorMessage()
 	{
-		return $this->ErrorManager->getErrorMessage();
+		return $this->errorManager->getErrorMessage();
 	}
 	
 	/**
@@ -295,7 +295,7 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	 */
 	public function getResult()
 	{
-		return $this->ErrorManager->getResult();
+		return $this->errorManager->getResult();
 	}	
 }
 ?>

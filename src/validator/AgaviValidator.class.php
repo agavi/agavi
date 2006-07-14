@@ -64,18 +64,18 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 * @var        AgaviIValidatorContainer parent validator container (in
 	 *                                      most cases the validator manager)
 	 */
-	protected $ParentContainer = null;
+	protected $parentContainer = null;
 
 	/**
 	 * @var        AgaviPath current base for input names, dependencies etc.
 	 */
-	protected $CurBase = null;
+	protected $curBase = null;
 	
 	/**
 	 * @var        array list of parameter names with names of affected fields
 	 *                   in case of failure of the validator (besides 'affects')
 	 */
-	protected $AffectedFieldNames = array();
+	protected $affectedFieldNames = array();
 
 	/**
 	 * constructor
@@ -89,7 +89,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 */
 	public function __construct(AgaviIValidatorContainer $parent, $parameters = array())
 	{
-		$this->ParentContainer = $parent;
+		$this->parentContainer = $parent;
 		if(!isset($parameters['depends']) or !is_array($parameters['depends'])) {
 			$parameters['depends'] = (isset($parameters['depends']) and strlen($parameters['depends'])) ? split(',', $parameters['depends']) : array();
 		}
@@ -97,8 +97,8 @@ abstract class AgaviValidator extends AgaviParameterHolder
 			$parameters['provides'] = (isset($parameters['provides']) and strlen($parameters['provides'])) ? split(',', $parameters['provides']) : array();
 		}
 		$this->setParameters($parameters);
-		$this->CurBase = new AgaviPath($parent->getBase());
-		$this->AffectedFieldNames = array('param');
+		$this->curBase = new AgaviPath($parent->getBase());
+		$this->affectedFieldNames = array('param');
 	}
 
 	/**
@@ -148,10 +148,10 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 */
 	protected function getData($paramname = 'param')
 	{
-		$array = $this->ParentContainer->getRequest()->getParameters();
+		$array = $this->parentContainer->getRequest()->getParameters();
 		return AgaviPath::getValueByPath(
 			$array,
-			$this->CurBase->__toString().'/'.$this->getParameter($paramname)
+			$this->curBase->__toString().'/'.$this->getParameter($paramname)
 		);
 	}
 
@@ -188,12 +188,12 @@ abstract class AgaviValidator extends AgaviParameterHolder
 			$affectedFields = array($affectedFields);
 		}
 		
-		$this->ParentContainer->getErrorManager()->submitError(
-			$this->CurBase->__toString().'/'.$this->getParameter('name'),
+		$this->parentContainer->getErrorManager()->submitError(
+			$this->curBase->__toString().'/'.$this->getParameter('name'),
 			$error,
 			$affectedFields,
 			self::mapErrorCode($this->getParameter('severity')),
-			$this->CurBase->__toString(),
+			$this->curBase->__toString(),
 			$ignoreAsMessage
 		);
 	}
@@ -202,7 +202,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 * returns a list of input fields that are per default affected by a failure of the validator
 	 * 
 	 * The list consists of the fields in the parameters that are lists in
-	 * AffectedFieldNames and the comma seperated list of fields in the
+	 * affectedFieldNames and the comma seperated list of fields in the
 	 * parameter 'affects'.
 	 * 
 	 * @return     array list of fields that are affected by an error
@@ -212,7 +212,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 */
 	protected function getAffectedFields() {
 		$fields = array();
-		$base = $this->CurBase->__toString();
+		$base = $this->curBase->__toString();
 
 		if($this->hasParameter('affects')) {
 			$f = explode(',', $this->getParameter('affects'));
@@ -224,7 +224,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 			}
 		}
 		
-		foreach($this->AffectedFieldNames as $name) {
+		foreach($this->affectedFieldNames as $name) {
 			array_push($fields, $this->getParameter($name));
 		}
 		
@@ -253,13 +253,13 @@ abstract class AgaviValidator extends AgaviParameterHolder
 			return;
 		}
 		
-		$array = $this->ParentContainer->getRequest()->getParameters();
+		$array = $this->parentContainer->getRequest()->getParameters();
 		AgaviPath::setValueByPath(
 			$array,
-			$this->CurBase->__toString().'/'.$this->getParameter('export'),
+			$this->curBase->__toString().'/'.$this->getParameter('export'),
 			$value
 		);
-		$this->ParentContainer->getRequest()->setParameters($array);
+		$this->parentContainer->getRequest()->setParameters($array);
 	}
 
 	/**
@@ -277,7 +277,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 		$base = new AgaviPath($basedir);
 		if($base->length() == 0) {
 			// we have an empty base so we do the actual validation
-			if(count($this->getParameter('depends')) > 0 and $this->ParentContainer->getDependencyManager()->checkDependencies($this->getParameter('depends'), $this->CurBase->__toString())) {
+			if(count($this->getParameter('depends')) > 0 and $this->parentContainer->getDependencyManager()->checkDependencies($this->getParameter('depends'), $this->curBase->__toString())) {
 				// dependencies not met, exit with success
 				return self::SUCCESS;
 			}
@@ -289,7 +289,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 
 			// put dependencies provided by this validator into manager
 			if(count($this->getParameter('provides')) > 0) {
-				$this->ParentContainer->getDependencyManager()->addDependTokens($this->getParameter('provides'), $this->CurBase->__toString());
+				$this->parentContainer->getDependencyManager()->addDependTokens($this->getParameter('provides'), $this->curBase->__toString());
 			}
 			return self::SUCCESS;
 
@@ -299,9 +299,9 @@ abstract class AgaviValidator extends AgaviParameterHolder
 			 * just put it into our own base and validate further
 			 * into the base. 
 			 */ 
-			$this->CurBase->push($base->shift());
+			$this->curBase->push($base->shift());
 			$ret = $this->validateInBase($base->__toString());
-			$this->CurBase->pop();
+			$this->curBase->pop();
 			
 			return $ret;
 
@@ -312,10 +312,10 @@ abstract class AgaviValidator extends AgaviParameterHolder
 			 * specified by our own base and validate in each of that
 			 * names
 			 */
-			$array = $this->ParentContainer->getRequest()->getParameters();
+			$array = $this->parentContainer->getRequest()->getParameters();
 			$names = AgaviPath::getValueByPath(
 				$array,
-				$this->CurBase->__toString()
+				$this->curBase->__toString()
 			);
 			
 			// throw the wildcard away
@@ -325,9 +325,9 @@ abstract class AgaviValidator extends AgaviParameterHolder
 			
 			// validate in every name defined in the request
 			foreach(array_keys($names) as $name) {
-				$this->CurBase->push($name);
+				$this->curBase->push($name);
 				$t = $this->validateInBase($base->__toString());
-				$this->CurBase->pop();
+				$this->curBase->pop();
 				
 				if($t == self::CRITICAL) {
 					return $t;

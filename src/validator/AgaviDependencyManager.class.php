@@ -30,7 +30,7 @@ class AgaviDependencyManager
 	/**
 	 * @var array already provided tokens
 	 */
-	protected $DepData = array();
+	protected $depData = array();
 	
 	/**
 	 * clears the dependency cache
@@ -40,7 +40,7 @@ class AgaviDependencyManager
 	 */
 	public function clear()
 	{
-		$this->DepData = array();
+		$this->depData = array();
 	}
 	
 	/**
@@ -57,7 +57,7 @@ class AgaviDependencyManager
 	public function checkDependencies($tokens, $base = '')
 	{
 		foreach($tokens as $token) {
-			if(!AgaviPath::getValueByPath($this->DepData, $base.'/'.$token)) {
+			if(!AgaviPath::getValueByPath($this->depData, $base.'/'.$token)) {
 				return false;
 			}
 		}
@@ -76,7 +76,7 @@ class AgaviDependencyManager
 	 */
 	public function addDependTokens($tokens, $base = '') {
 		foreach($tokens as $token) {
-			AgaviPath::setValueByPath($this->DepData, $base.'/'.$token, true);
+			AgaviPath::setValueByPath($this->depData, $base.'/'.$token, true);
 		}
 	}
 }

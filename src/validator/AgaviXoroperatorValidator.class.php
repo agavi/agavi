@@ -40,7 +40,7 @@ class AgaviXoroperatorValidator extends AgaviOperatorValidator
 	 */
 	protected function checkValidSetup()
 	{
-		if(count($this->Children) != 2) {
+		if(count($this->children) != 2) {
 			throw new AgaviValidatorException('XOR allows only exact 2 child validators');
 		}
 	}
@@ -55,12 +55,12 @@ class AgaviXoroperatorValidator extends AgaviOperatorValidator
 	 */
 	protected function validate()
 	{
-		$result1 = $this->Children[0]->execute();
+		$result1 = $this->children[0]->execute();
 		if($result1 == AgaviValidator::CRITICAL) {
 			$this->throwError();
 			return false;
 		}
-		$result2 = $this->Children[1]->execute();
+		$result2 = $this->children[1]->execute();
 		if($result2 == AgaviValidator::CRITICAL) {
 			$this->throwError();
 			return false;
