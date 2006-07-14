@@ -61,7 +61,7 @@ class AgaviValidatorConfigHandler extends AgaviConfigHandler
 			}
 			
 			foreach($cfg->defaults as $default) {
-				if (!isset($defaults[$default->getAttribute('name')])) {	
+				if(!isset($defaults[$default->getAttribute('name')])) {
 					$defaults[$default->getAttribute('name')] = array();
 				}
 				foreach($default->parameters as $param) {
@@ -115,7 +115,7 @@ class AgaviValidatorConfigHandler extends AgaviConfigHandler
 				$parameters = array_merge($parameters, $defaultParameters[$cfg->getAttribute('class')]);
 			}
 			$parameters = array_merge($parameters, $cfg->getAttributes());
-			unset($parameters['class']);			
+			unset($parameters['class']);
 			if(isset($cfg->parameters)) {
 				foreach($cfg->parameters as $parm) {
 					$parameters[$parm->getAttribute('name')] = $parm->getValue();

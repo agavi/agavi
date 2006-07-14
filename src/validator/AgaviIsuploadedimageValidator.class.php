@@ -51,7 +51,7 @@ class AgaviIsuploadedimageValidator extends AgaviValidator
 		}
 		
 		$type = exif_imagetype($_FILES[$name]['tmp_name']);
-		if($type === FALSE) {
+		if($type === false) {
 			$this->throwError('img_error');
 			return false;
 		}

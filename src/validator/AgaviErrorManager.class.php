@@ -87,7 +87,7 @@ class AgaviErrorManager
 		if($base != '') {
 			$fields = array_map(create_function(
 				'$a',
-				'if ($a[0] == \'/\') { return $a; } else {$p = new AgaviPath(\''.$base.'/'.'\'.$a); return $p->__toString();}'
+				'if($a[0] == \'/\') { return $a; } else {$p = new AgaviPath(\''.$base.'/'.'\'.$a); return $p->__toString();}'
 			), $fields);
 		}
 		

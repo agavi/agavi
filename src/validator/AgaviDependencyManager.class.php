@@ -56,7 +56,7 @@ class AgaviDependencyManager
 	 */
 	public function checkDependencies($tokens, $base = '')
 	{
-		foreach($tokens AS $token) {
+		foreach($tokens as $token) {
 			if(!AgaviPath::getValueByPath($this->DepData, $base.'/'.$token)) {
 				return false;
 			}
@@ -75,7 +75,7 @@ class AgaviDependencyManager
 	 * @since      0.11.0
 	 */
 	public function addDependTokens($tokens, $base = '') {
-		foreach($tokens AS $token) {
+		foreach($tokens as $token) {
 			AgaviPath::setValueByPath($this->DepData, $base.'/'.$token, true);
 		}
 	}

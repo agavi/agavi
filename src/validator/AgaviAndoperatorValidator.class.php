@@ -41,13 +41,13 @@ class AgaviAndOperatorValidator extends AgaviOperatorValidator
 	 */
 	protected function validate()
 	{
-		$return = TRUE;
+		$return = true;
 		
 		foreach($this->Children as $child) {
 			$result = $child->execute();
 			if($result != AgaviValidator::SUCCESS) {
 				// if one validator fails, the whole operator fails
-				$return = FALSE;
+				$return = false;
 				$this->throwError();
 				if($this->getParameter('break') or $result == AgaviValidator::CRITICAL) {
 					break;

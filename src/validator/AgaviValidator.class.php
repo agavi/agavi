@@ -90,10 +90,10 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	public function __construct(AgaviIValidatorContainer $parent, $parameters = array())
 	{
 		$this->ParentContainer = $parent;
-		if (!isset($parameters['depends']) or !is_array($parameters['depends'])) {
+		if(!isset($parameters['depends']) or !is_array($parameters['depends'])) {
 			$parameters['depends'] = (isset($parameters['depends']) and strlen($parameters['depends'])) ? split(',', $parameters['depends']) : array();
 		}
-		if (!isset($parameters['provides']) or !is_array($parameters['provides'])) {
+		if(!isset($parameters['provides']) or !is_array($parameters['provides'])) {
 			$parameters['provides'] = (isset($parameters['provides']) and strlen($parameters['provides'])) ? split(',', $parameters['provides']) : array();
 		}
 		$this->setParameters($parameters);
@@ -135,7 +135,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	/**
 	 * returns the specified input value
 	 * 
-	 * The given parameter is fetched from the request. You should _allways_
+	 * The given parameter is fetched from the request. You should _always_
 	 * use this method to fetch data from the request because it pays attention
 	 * to specified paths.
 	 * 

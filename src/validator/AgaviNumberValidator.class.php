@@ -55,7 +55,7 @@ class AgaviNumberValidator extends AgaviValidator
 		switch(strtolower($this->getParameter('type'))) {
 			case 'int':
 			case 'integer':
-				if (!is_int($value)) {
+				if(!is_int($value)) {
 					$this->throwError('type_error');
 					return false;
 				}
@@ -63,7 +63,7 @@ class AgaviNumberValidator extends AgaviValidator
 				break;
 			
 			case 'float':
-				if (!is_float($value)) {
+				if(!is_float($value)) {
 					$this->throwError('type_error');
 					return false;
 				}
