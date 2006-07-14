@@ -62,13 +62,26 @@ abstract class AgaviRenderer implements AgaviIRenderingFilter
 	
 	/**
 	 * @var        string The name of the array that contains the slot output.
+	 *                    Defaults to null, which means it'll be the identical to
+	 *                    the varName setting.
+	 *
+	 * @see        AgaviRenderer::$varName
 	 */
-	protected $slotsVarName = 'template';
+	protected $slotsVarName = null;
 	
 	/**
 	 * @var        bool Whether or not the template vars should be extracted.
 	 */
 	protected $extractVars = false;
+	
+	/**
+	 * @var        bool Whether or not the slot output vars should be extracted.
+	 *                  Defaults to null, which means it behaves according to the
+	 *                  extractVars setting.
+	 *
+	 * @see        AgaviRenderer::$extractVars
+	 */
+	protected $extractSlots = null;
 	
 	/**
 	 * Initialize this Renderer.
@@ -85,8 +98,17 @@ abstract class AgaviRenderer implements AgaviIRenderingFilter
 		if(isset($parameters['var_name'])) {
 			$this->varName = $parameters['var_name'];
 		}
+		if(isset($parameters['slots_var_name'])) {
+			$this->slotsVarName = $parameters['slots_var_name'];
+		}
 		if(isset($parameters['extract_vars'])) {
 			$this->extractVars = $parameters['extract_vars'];
+		}
+		if(isset($parameters['extract_slots'])) {
+			$this->extractSlots = $parameters['extract_slots'];
+		}
+		if($this->slotsVarName === null) {
+			$this->slotsVarName = $this->varName;
 		}
 	}
 
