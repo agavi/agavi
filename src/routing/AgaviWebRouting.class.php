@@ -183,7 +183,7 @@ class AgaviWebRouting extends AgaviRouting
 					$append = '?' . http_build_query($p);
 				}
 
-				$path = parent::gen($routes, $params);
+				$path = parent::gen($routes, array_map('rawurlencode', $params));
 			} else {
 				// the route exists, but we must create a normal index.php?foo=bar URL.
 
