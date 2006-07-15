@@ -39,6 +39,7 @@ class AgaviActionStackEntry
 		$actionName     = null,
 		$microtime      = null,
 		$moduleName     = null,
+		$parameters     = array(),
 		$presentation   = null;
 	
 	// +-----------------------------------------------------------------------+
@@ -55,13 +56,14 @@ class AgaviActionStackEntry
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function __construct ($moduleName, $actionName, $actionInstance)
+	public function __construct ($moduleName, $actionName, $actionInstance, $parameters = array())
 	{
 		
 		$this->actionName     = $actionName;
 		$this->actionInstance = $actionInstance;
 		$this->microtime      = microtime();
 		$this->moduleName     = $moduleName;
+		$this->parameters     = $parameters;
 		
 	}
 	
@@ -124,6 +126,32 @@ class AgaviActionStackEntry
 		
 		return $this->moduleName;
 	
+	}
+	
+	/**
+	 * Retrieve the request parameters for this Action.
+	 *
+	 * @return     array An array of request parameters for this Action.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getParameters()
+	{
+		return $this->parameters;
+	}
+	
+	/**
+	 * Set the request parameters for this Action.
+	 *
+	 * @param      array An array of request parameters for this Action.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function setParameters($parameters = array())
+	{
+		$this->parameters = $parameters;
 	}
 	
 	/**

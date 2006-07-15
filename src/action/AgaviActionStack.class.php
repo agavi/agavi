@@ -43,12 +43,12 @@ class AgaviActionStack
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function addEntry ($moduleName, $actionName, $actionInstance)
+	public function addEntry ($moduleName, $actionName, $actionInstance, $parameters)
 	{
 
 		// create our action stack entry and add it to our stack
 		$actionEntry = new AgaviActionStackEntry($moduleName, $actionName,
-						                    $actionInstance);
+						                    $actionInstance, $parameters);
 
 		$this->stack[] = $actionEntry;
 

@@ -246,7 +246,7 @@ abstract class AgaviController extends AgaviParameterHolder
 		$actionInstance = $this->getAction($moduleName, $actionName);
 
 		// add a new action stack entry
-		$this->actionStack->addEntry($moduleName, $actionName, $actionInstance);
+		$this->actionStack->addEntry($moduleName, $actionName, $actionInstance, $this->context->getRequest()->getParameters());
 
 		// include the module configuration
 		// laoded only once due to the way import() works
