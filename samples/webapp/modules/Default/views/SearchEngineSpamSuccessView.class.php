@@ -18,9 +18,6 @@ class Default_SearchEngineSpamSuccessView extends AgaviView
 
 		// set the title
 		$this->setAttribute('title', 'Congratulations!');
-		
-		$this->setAttribute('product_name', $this->getContext()->getRequest()->getParameter('name'));
-
 	}
 
 }
