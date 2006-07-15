@@ -267,21 +267,21 @@ class AgaviConfigCache
 	 */
 	private static function writeCacheFile ($config, $cache, &$data, $append)
 	{
-
+		$perms = fileperms(AgaviConfig::get('core.cache_dir')) ^ 0x4000;
+		
 		$flags = ($append) ? FILE_APPEND : 0;
 		
-		@mkdir(AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . self::CACHE_SUBDIR);
+		AgaviToolkit::mkdir(AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . self::CACHE_SUBDIR, $perms);
 
-		if (@file_put_contents($cache, $data, $flags) === false)
-		{
-
+		if(@file_put_contents($cache, $data, $flags) === false) {
 			// cannot write cache file
 			$error = 'Failed to write cache file "%s" generated from ' . 'configuration file "%s".';
 			$error .= "\n\n Please make sure the directory \"%s\" is writeable by the web server.";
 			$error = sprintf($error, $cache, $config, AgaviConfig::get('core.cache_dir'));
 
 			throw new AgaviCacheException($error);
-
+		} else {
+			chmod($cache, $perms);
 		}
 
 	}

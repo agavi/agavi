@@ -60,11 +60,11 @@ class AgaviSmartyRenderer extends AgaviRenderer
 		$parentMode = fileperms(AgaviConfig::get('core.cache_dir'));
 
 		$compileDir = AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . self::COMPILE_DIR . DIRECTORY_SEPARATOR . self::COMPILE_SUBDIR;
-		@mkdir($compileDir, $parentMode, true);
+		AgaviToolkit::mkdir($compileDir, $parentMode, true);
 		$this->smarty->compile_dir = $compileDir;
 
 		$cacheDir = AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . self::CACHE_DIR;
-		@mkdir($cacheDir, $parentMode, true);
+		AgaviToolkit::mkdir($cacheDir, $parentMode, true);
 		$this->smarty->cache_dir = $cacheDir;
 
 		$this->smarty->plugins_dir  = array("plugins","plugins_local");
