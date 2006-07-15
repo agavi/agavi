@@ -91,6 +91,33 @@ class AgaviToolkit
 	{
 		return in_array($parent, self::classHeritage($class));
 	}
+	
+	/**
+	 * Creates a directory without sucking at permissions.
+	 * PHP mkdir() doesn't do what you tell it to, it takes umask into account.
+	 *
+	 * @param      string   The path name.
+	 * @param      int      The mode. Really.
+	 * @param      bool     Recursive or not.
+	 * @param      resource A Context.
+	 *
+	 * @return     bool The mkdir return value.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public static function mkdir($path, $mode = 0777, $recursive = false, $context = null)
+	{
+		if($context !== null) {
+			$retval = @mkdir($path, $mode, $recursive, $context);
+		} else {
+			$retval = @mkdir($path, $mode, $recursive);
+		}
+		if($retval) {
+			chmod($path, $mode);
+		}
+		return $retval;
+	}
 
 	/**
 	 * Deletes a specified path in the cache dir recursively. If a folder is given
