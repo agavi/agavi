@@ -207,6 +207,10 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 			}
 		}
 		if(strtolower($this->getParameter('force_output_mode')) == 'xhtml' || ($doc->doctype && stripos($doc->doctype->publicId, '-//W3C//DTD XHTML') === 0 && strtolower($this->getParameter('force_output_mode')) != 'html')) {
+			// workaround for a bug in dom or something that results in two xmlns attributes being generated for the <html> element
+			foreach($xpath->query('//html') as $html) {
+				$html->removeAttribute('xmlns');
+			}
 			$out = $doc->saveXML();
 			if($this->getParameter('cdata_fix')) {
 				// these are ugly fixes so inline style and script blocks still work. better don't use them with XHTML to avoid trouble

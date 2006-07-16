@@ -48,7 +48,7 @@ class AgaviPhptalRenderer extends AgaviRenderer
 		if($this->_phptal === null) {
 			if(!defined('PHPTAL_PHP_CODE_DESTINATION')) {
 				define('PHPTAL_PHP_CODE_DESTINATION', AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . AgaviPhptalRenderer::COMPILE_DIR . DIRECTORY_SEPARATOR . AgaviPhptalRenderer::COMPILE_SUBDIR . DIRECTORY_SEPARATOR);
-				@mkdir(PHPTAL_PHP_CODE_DESTINATION, fileperms(AgaviConfig::get('core.cache_dir')), true);
+				AgaviToolkit::mkdir(PHPTAL_PHP_CODE_DESTINATION, fileperms(AgaviConfig::get('core.cache_dir')), true);
 			}
 			
 			require_once('PHPTAL.php');
@@ -115,17 +115,29 @@ class AgaviPhptalRenderer extends AgaviRenderer
 		
 		$engine->setTemplate($view->getDecoratorTemplate() . $this->getExtension());
 		
+		$toSet = array();
 		// set the template resources
 		if($this->extractVars) {
 			foreach($view->getAttributes() as $key => $value) {
 				$engine->set($key, $value);
 			}
+		} else {
+			$toSet =& $view->getAttributes();
+		}
+		
+		if($this->extractSlots === true || ($this->extractVars && $this->extractSlots !== false)) {
 			foreach($this->output as $key => $value) {
 				$engine->set($key, $value);
 			}
 		} else {
-			$engine->set($this->varName, array_merge($view->getAttributes(), $this->output));
+			if($this->varName == $this->slotsVarName) {
+				$toSet = array_merge($toSet, $this->output);
+			} else {
+				$engine->set($this->slotsVarName, $this->output);
+			}
 		}
+		$engine->set($this->varName, $toSet);
+		
 		$engine->set('this', $this);
 		
 		$retval = $engine->execute();

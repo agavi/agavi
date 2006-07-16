@@ -39,6 +39,14 @@ class AgaviWebRouting extends AgaviRouting
 	protected $baseHref = '';
 	
 	/**
+	 * @var        array An array of default options for gen()
+	 */
+	protected $defaultGenOptions = array(
+		'relative' => true,
+		'separator' => '&amp;'
+	);
+	
+	/**
 	 * Initialize the routing instance.
 	 *
 	 * @param      AgaviContext A Context instance.
@@ -50,6 +58,7 @@ class AgaviWebRouting extends AgaviRouting
 	public function initialize(AgaviContext $context, $parameters = array())
 	{
 		parent::initialize($context);
+		$isReWritten = isset($_SERVER['REDIRECT_URL']) || (isset($_SERVER['HTTP_X_REWRITE_URL']) && ($_SERVER['HTTP_X_REWRITE_URL'] != $_SERVER['ORIG_PATH_INFO']));
 		if(isset($_SERVER['HTTP_X_REWRITE_URL'])) {
 			// Microsoft IIS with ISAPI_Rewrite
 			$ru = $_SERVER['HTTP_X_REWRITE_URL'];
@@ -77,16 +86,24 @@ class AgaviWebRouting extends AgaviRouting
 				$this->prefix .= $sn[$i];
 				$appendFrom = $i;
 			}
-			$this->prefix .= substr($_SERVER['SCRIPT_NAME'], $appendFrom + 1);
+			if(!$isReWritten) {
+				$this->prefix .= substr($_SERVER['SCRIPT_NAME'], $appendFrom + 1);
+			} else {
+				// if we have a rewritten url and the prefix ends with an / (so its a path) we push that / to the input
+				if(substr($this->prefix, -1) == '/') {
+					$this->prefix = substr($this->prefix, 0, -1);
+					$i--;
+				}
+			}
 			$this->input = substr($ru, $i);
 		}
 		if(!$this->input) {
 			$this->input = "/";
 		}
 
-		$this->sources = array('SERVER_NAME' => $_SERVER['SERVER_NAME']);
+		$this->sources = array_merge($this->sources, $_SERVER);
 		
-		if(isset($_SERVER['REDIRECT_URL']) || isset($_SERVER['HTTP_X_REWRITE_URL'])) {
+		if($isReWritten) {
 			// a rewrite happened
 			$this->basePath = $this->prefix . '/';
 		} else {
@@ -131,7 +148,8 @@ class AgaviWebRouting extends AgaviRouting
 	 * Generate a formatted Agavi URL.
 	 *
 	 * @param      string A route name.
-	 * @param      array  An associative array of URL parameters.
+	 * @param      array  An associative array of parameters.
+	 * @param      array  An array of options.
 	 *
 	 * @return     string
 	 *
@@ -139,8 +157,10 @@ class AgaviWebRouting extends AgaviRouting
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function gen($route, $params = array())
+	public function gen($route, $params = array(), $options = array())
 	{
+		$options = array_merge($this->defaultGenOptions, $options);
+		
 		$routes = $this->getAffectedRoutes($route);
 
 		if(count($routes)) {
@@ -163,7 +183,7 @@ class AgaviWebRouting extends AgaviRouting
 					$append = '?' . http_build_query($p);
 				}
 
-				return parent::gen($routes, $params) . $append;
+				$path = parent::gen($routes, array_map('rawurlencode', $params));
 			} else {
 				// the route exists, but we must create a normal index.php?foo=bar URL.
 
@@ -172,10 +192,17 @@ class AgaviWebRouting extends AgaviRouting
 				$defaults = array();
 				foreach($routes as $route) {
 					if(isset($this->routes[$route])) {
-						$r = $this->routes[$parent];
-						$myDefaults = $r['opt']['defaults'];
-						$myDefaults[$req->getModuleAccessor()] = $r['opt']['module'];
-						$myDefaults[$req->getActionAccessor()] = $r['opt']['action'];
+						$r = $this->routes[$route];
+
+						foreach($r['opt']['defaults'] as $key => $default) {
+							$myDefaults[$key] = $default['val'];
+						}
+						if($r['opt']['module']) {
+							$myDefaults[$req->getModuleAccessor()] = $r['opt']['module'];
+						}
+						if($r['opt']['action']) {
+							$myDefaults[$req->getActionAccessor()] = $r['opt']['action'];
+						}
 
 						$defaults = array_merge($myDefaults, $defaults);
 					}
@@ -187,29 +214,30 @@ class AgaviWebRouting extends AgaviRouting
 		}
 		// the route does not exist. we generate a normal index.php?foo=bar URL.
 
-		$url = $route;
-
-		if ($url == null) {
-			$url = $_SERVER['SCRIPT_NAME'];
+		if($route === null) {
+			$path = $_SERVER['SCRIPT_NAME'];
+			$append = '?' . http_build_query($params);
+		} else {
+			if(!isset($path)) {
+				$path = $route;
+			}
+			if(!isset($append)) {
+				$append = '?' . http_build_query($params);
+			}
 		}
 
-		// use GET format
-		$divider  = '&';
-		$equals   = '=';
-		$url     .= '?';
-
-		// loop through the parameters
-		foreach ($params as $key => $value) {
-			$url .= urlencode($key) . $equals . urlencode($value) . $divider;
+		$aso = ini_get('arg_separator.output');
+		if($options['separator'] != $aso) {
+			// replace arg_separator.output's with given separator
+			$append = str_replace($aso, $options['separator'], $append);
 		}
-
-		// strip off last divider character
-		$url = rtrim($url, $divider);
-
-		// replace &'s with &amp;
-		$url = str_replace('&', '&amp;', $url);
-
-		return $url;
+		
+		if($options['relative']) {
+			return $path . $append;
+		} else {
+			$req = $this->context->getRequest();
+			return $req->getUrlScheme() . '://'. $req->getUrlAuthority() . $path . $append;
+		}
 	}
 	
 	public function execute()

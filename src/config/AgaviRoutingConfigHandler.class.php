@@ -123,6 +123,19 @@ class AgaviRoutingConfigHandler extends AgaviConfigHandler
 				}
 			}
 
+			if(isset($opts['name']) && $parent) {
+				if($opts['name'][0] == '.') {
+					$opts['name'] = $parent . $opts['name'];
+				}
+			}
+
+			if(isset($opts['action']) && $parent) {
+				if($opts['action'][0] == '.') {
+					$parentRoute = $routing->getRoute($parent);
+					$opts['action'] = $parentRoute['opt']['action'] . $opts['action'];
+				}
+			}
+
 			$name = $routing->addRoute($pattern, $opts, $parent);
 			if($route->hasChildren('routes')) {
 				$this->parseRoutes($routing, $route->routes, $name);

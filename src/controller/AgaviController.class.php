@@ -98,16 +98,29 @@ abstract class AgaviController extends AgaviParameterHolder
 	 * @param      string A module name.
 	 * @param      string An action name.
 	 *
-	 * @return     bool true, if the action exists, otherwise false.
+	 * @return     mixed  The actual name of the action (might be auto-resolved),
+	 *                    or false if no Action related to that name was found.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
-	public function actionExists($moduleName, $actionName)
+	public function actionExists($moduleName, $actionName = null)
 	{
 		$actionName = str_replace('.', '/', $actionName);
 		$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/actions/' . $actionName . 'Action.class.php';
-		return is_readable($file);
+		if(is_readable($file)) {
+			return $actionName;
+		} else {
+			// maybe it's a sub-action with the last portion omitted
+			$actionName .= '/Index';
+			$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/actions/' . $actionName . 'Action.class.php';
+			if(is_readable($file)) {
+				return $actionName;
+			} else {
+				return false;
+			}
+		}
 	}
 	
 	/**
@@ -142,7 +155,7 @@ abstract class AgaviController extends AgaviParameterHolder
 			}
 			if($actionName == null) {
 				// no action has been specified
-				if ($this->actionExists($moduleName, 'Index')) {
+				if($this->actionExists($moduleName, 'Index')) {
 					// an Index action exists
 					$actionName = 'Index';
 				} else {
@@ -191,7 +204,7 @@ abstract class AgaviController extends AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function forward($moduleName, $actionName)
+	public function forward($moduleName, $actionName = 'Index')
 	{
 
 		$actionName = str_replace('.', '/', $actionName);
@@ -241,6 +254,9 @@ abstract class AgaviController extends AgaviParameterHolder
 				throw new AgaviConfigurationException($error);
 			}
 		}
+		
+		// get the "real" action name, i.e. allow auto-resolving of sub-action IndexActions
+		$actionName = $this->actionExists($moduleName, $actionName);
 
 		// create an instance of the action
 		$actionInstance = $this->getAction($moduleName, $actionName);
