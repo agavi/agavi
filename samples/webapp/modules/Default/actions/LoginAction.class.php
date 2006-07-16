@@ -49,10 +49,10 @@ class Default_LoginAction extends AgaviAction
 	 * execute*() being present, e.g. for a "write" Request, validateWrite() will
 	 * be run even if there is no executeWrite() method.
 	 */
-	public function executeWrite($parameters = array())
+	public function executeWrite(AgaviParameterHolder $parameters)
 	{
 		try {
-			$this->getContext()->getUser()->login($parameters['username'], $parameters['password']);
+			$this->getContext()->getUser()->login($parameters->getParameter('username'), $parameters->getParameter('password'));
 			return 'Success';
 		} catch(AgaviSecurityException $e) {
 			$this->getContext()->getRequest()->setError($e->getMessage(), 'Wrong ' . ucfirst($e->getMessage()));

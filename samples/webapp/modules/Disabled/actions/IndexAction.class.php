@@ -35,7 +35,7 @@ class Disabled_IndexAction extends AgaviAction
 	 * execute*() being present, e.g. for a "write" Request, validateWrite() will
 	 * be run even if there is no executeWrite() method.
 	 */
-//	public function execute($parameters = array())
+//	public function execute(AgaviParameterHolder $parameters)
 //	{
 //		return 'Success';
 //	}

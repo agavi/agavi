@@ -23,7 +23,7 @@ class Default_LoginSuccessView extends AgaviView
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function execute($parameters = array())
+	public function execute(AgaviParameterHolder $parameters)
 	{
 		// set our template
 		$this->setTemplate('LoginSuccess');
@@ -34,9 +34,9 @@ class Default_LoginSuccessView extends AgaviView
 		
 		$req = $this->getContext()->getRequest();
 		$res = $this->getResponse();
-		if(isset($parameters['remember'])) {
-			$res->setCookie('autologon[username]', $parameters['username'], 60*60*24*14);
-			$res->setCookie('autologon[password]', $parameters['password'], 60*60*24*14);
+		if($parameters->hasParameter('remember')) {
+			$res->setCookie('autologon[username]', $parameters->getParameter('username'), 60*60*24*14);
+			$res->setCookie('autologon[password]', $parameters->getParameter('password'), 60*60*24*14);
 		}
 	}
 

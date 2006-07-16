@@ -7,7 +7,7 @@ class Disabled_IndexSuccessView extends AgaviView
 	 * Execute any presentation logic and set template attributes.
 	 *
 	 */
-	public function execute ($parameters = array())
+	public function execute(AgaviParameterHolder $parameters)
 	{
 		// forward all attributes
 		$this->setAttributes($this->getContext()->getRequest()->getAttributes());

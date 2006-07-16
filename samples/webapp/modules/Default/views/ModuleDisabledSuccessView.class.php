@@ -23,7 +23,7 @@ class Default_ModuleDisabledSuccessView extends AgaviView
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function execute($parameters = array())
+	public function execute(AgaviParameterHolder $parameters)
 	{
 		// set our template
 		$this->setTemplate('ModuleDisabledSuccess');
