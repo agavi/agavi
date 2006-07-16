@@ -18,7 +18,6 @@
 	</target>
 
 	<!-- define the location of our tasks -->
-	<taskdef classname="buildtools.phing.AgaviTestTask2" classpath="${agavi.dir}" name="agavitest2"/>
 	<taskdef classname="buildtools.phing.AgaviFixPathsTask" classpath="${agavi.dir}" name="fixpaths"/>
 	<taskdef classname="buildtools.phing.AgaviListModulesTask" classpath="${agavi.dir}" name="listModules"/>
 	<taskdef classname="buildtools.phing.AgaviSubActionNameTask" classpath="${agavi.dir}" name="subActionName"/>
@@ -34,28 +33,6 @@
 		<include name="**/*-dist"/>
   </fileset>
 	
-	<!-- New Unit Testing -->
-	<target name="test2" description="run PHPUnit2 unit tests">
-		<fixpaths base="${project.dir}" testing="true"/>
-		<property name="agavidir" value="${agavi.dir}" />
-		<property name="testdir" value="${tests2.dir}"  />
-		<property name="from" value=""  />
-		<property name="reporter" value="text"  />
-		<property name="outfile" value=""  />
-
-		<agavitest2 exit="true" testdir="${tests2.dir}" agavidir="${agavi.dir}" startpoint="${from}" reporter="${reporter}" outfile="${outfile}" printsummary="true" codecoverage="true">
-			<batchtest>
-				<fileset dir="${tests2.dir}">
-					<include name="**/*Test.php"/>
-					<exclude name="sandbox/**"/>
-					<exclude name="test_report/**"/>
-				</fileset>
-			</batchtest>
-			<formatter type="xml" todir="../tests2/test_report" outfile="logfile.xml"/>
-		</agavitest2>
-		<phpunit2report infile="../tests2/test_report/logfile.xml" format="noframes" todir="../tests2/test_report"/>
-	</target>
-
 	<!-- Project creation -->
 	<target name="project" description="create a new project">
 		<input propertyname="project.dir" promptChar="?" message="Full path to your new project (no trailing slash!)"/>

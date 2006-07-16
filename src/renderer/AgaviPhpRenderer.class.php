@@ -49,9 +49,18 @@ class AgaviPhpRenderer extends AgaviRenderer
 		// DO NOT USE VARIABLES IN HERE, THEY MIGHT INTERFERE WITH TEMPLATE VARS
 		
 		if($this->extractVars) {
-			extract(array_merge($this->view->getAttributes(), $this->output), EXTR_REFS | EXTR_PREFIX_INVALID, '_');
+			extract($this->view->getAttributes(), EXTR_REFS | EXTR_PREFIX_INVALID, '_');
 		} else {
-			${$this->varName} =& array_merge($this->view->getAttributes(), $this->output);
+			${$this->varName} =& $this->view->getAttributes();
+		}
+		
+		if($this->extractSlots === true || ($this->extractVars && $this->extractSlots !== false)) {
+			extract($this->output, EXTR_REFS | EXTR_PREFIX_INVALID, '_');
+		} else {
+			if(!isset(${$this->slotsVarName})) {
+				${$this->slotsVarName} = array();
+			}
+			${$this->slotsVarName} = array_merge(${$this->slotsVarName}, $this->output);
 		}
 		
 		// render the decorator template and return the result

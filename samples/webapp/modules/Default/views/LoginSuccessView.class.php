@@ -25,6 +25,20 @@ class Default_LoginSuccessView extends AgaviView
 	 */
 	public function execute()
 	{
+		$usr = $this->getContext()->getUser();
+		if($usr->hasAttribute('redirect', 'org.agavi.SampleApp.login')) {
+			// we need to redirect back to the action that caused the login form to pop up
+			// setting no template will mean no rendering is performed
+			// which is a good thing since we'll redirect anyways
+			// response will be locked, so no output will be added
+			// all action and global filters will still run back to Controller::dispatch()
+			// a redirect in 0.11 does NOT bail out immediately anymore!
+			$url = $usr->getAttribute('redirect', 'org.agavi.SampleApp.login');
+			$usr->removeAttribute('redirect', 'org.agavi.SampleApp.login');
+			$this->getContext()->getController()->redirect($url);
+			return;
+		}
+		
 		// set our template
 		$this->setTemplate('LoginSuccess');
 		$this->setDecoratorTemplate('Master');

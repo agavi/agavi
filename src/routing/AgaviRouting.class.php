@@ -37,6 +37,14 @@ abstract class AgaviRouting
 						$input = null,
 						$sources = array(),
 						$prefix = '';
+	
+	/**
+	 * @var        array An array of default options for gen()
+	 */
+	protected $defaultGenOptions = array(
+		'relative' => true
+	);
+
 
 	/**
 	 * Initialize the routing instance.
@@ -68,6 +76,22 @@ abstract class AgaviRouting
 	public final function getContext()
 	{
 		return $this->context;
+	}
+
+	/**
+	 * Retrieve the info about a named route for this routing instance.
+	 *
+	 * @return     mixed The route info or null if the route doesn't exist.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public final function getRoute($name)
+	{
+		if(!isset($this->routes[$name])) {
+			return null;
+		}
+		return $this->routes[$name];
 	}
 
 	/**
@@ -313,14 +337,15 @@ abstract class AgaviRouting
 	 * Generate a formatted Agavi URL.
 	 *
 	 * @param      string A route name.
-	 * @param      array  An associative array of URL parameters.
+	 * @param      array  An associative array of parameters.
+	 * @param      array  An array of options.
 	 *
 	 * @return     string
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function gen($route, $params = array())
+	public function gen($route, $params = array(), $options = array())
 	{
 		$routes = $route;
 		if(is_string($route)) {
@@ -330,6 +355,7 @@ abstract class AgaviRouting
 		$url = '';
 		$defaults = array();
 		$availableParams = array();
+		$firstRoute = true;
 		foreach($routes as $route) {
 			$r = $this->routes[$route];
 
@@ -341,10 +367,12 @@ abstract class AgaviRouting
 			$myDefaults = $r['opt']['defaults'];
 			$availableParams += $r['par'] + $r['opt']['ignores'];
 
-			if($r['opt']['anchor'] & self::ANCHOR_START || $r['opt']['anchor'] == self::ANCHOR_NONE) {
-				$url = $r['opt']['reverseStr'] . $url;
-			} else {
-				$url = $url . $r['opt']['reverseStr'];
+			if($firstRoute || $r['opt']['cut'] || (count($r['opt']['childs']) && $r['opt']['cut'] === null)) {
+				if($r['opt']['anchor'] & self::ANCHOR_START || $r['opt']['anchor'] == self::ANCHOR_NONE) {
+					$url = $r['opt']['reverseStr'] . $url;
+				} else {
+					$url = $url . $r['opt']['reverseStr'];
+				}
 			}
 
 			if(isset($r['opt']['callback'])) {
@@ -353,10 +381,11 @@ abstract class AgaviRouting
 					$r['cb'] = new $cb();
 					$r['cb']->initialize($this->getContext(), $r);
 				}
-				$myDefaults = $r['cb']->onGenerate($myDefaults);
+				$myDefaults = $r['cb']->onGenerate($myDefaults, $params);
 			}
 
 			$defaults = array_merge($myDefaults, $defaults);
+			$firstRoute = false;
 		}
 
 		$np = array();
