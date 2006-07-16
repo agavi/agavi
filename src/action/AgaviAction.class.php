@@ -77,7 +77,7 @@ abstract class AgaviAction
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function handleError()
+	public function handleError(AgaviParameterHolder $parameters)
 	{
 		return 'Error';
 	}

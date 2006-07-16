@@ -11,7 +11,8 @@ class ActionStackTest extends AgaviTestCase
 		$_a1   = null,
 		$_a2   = null,
 		$_a3   = null,
-		$_as   = null;
+		$_as   = null,
+		$_pars = array('foo' => 'foo', 'bar' => 'bar');
 
 	public function setUp()
 	{
@@ -19,20 +20,21 @@ class ActionStackTest extends AgaviTestCase
 		$this->_a2 = new ASSampleAction();
 		$this->_a3 = new ASSampleAction();
 		$this->_as = new AgaviActionStack();
-
-		$this->_as->addEntry('Sample', 'Index', $this->_a1);
-		$this->_as->addEntry('Sample', 'Index2', $this->_a2);
-		$this->_as->addEntry('Sample', 'Index3', $this->_a3);
+		
+		$this->_as->addEntry('Sample', 'Index', $this->_a1, $this->_pars);
+		$this->_as->addEntry('Sample', 'Index2', $this->_a2, $this->_pars);
+		$this->_as->addEntry('Sample', 'Index3', $this->_a3, $this->_pars);
 	}
 
 	public function testaddEntry()
 	{
 		$a = new ASSampleAction();
-		$this->_as->addEntry('Sample1', 'Index4', $a);
+		$this->_as->addEntry('Sample1', 'Index4', $a, $this->_pars);
 		$ase = $this->_as->getEntry(3);
 		$this->assertType('AgaviActionStackEntry', $ase);
 		$this->assertEquals('Sample1', $ase->getModuleName());
 		$this->assertEquals('Index4', $ase->getActionName());
+		$this->assertEquals($this->_pars, $ase->getParameters());
 		$ai = $ase->getActionInstance();
 		$this->assertReference($a, $ai);
 	}
