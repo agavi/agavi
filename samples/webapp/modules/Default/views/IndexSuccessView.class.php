@@ -23,7 +23,7 @@ class Default_IndexSuccessView extends AgaviView
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function execute()
+	public function execute($parameters = array())
 	{
 		// set our template
 		$this->setTemplate('IndexSuccess');

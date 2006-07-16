@@ -23,7 +23,7 @@ class Default_LogoutSuccessView extends AgaviView
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function execute()
+	public function execute($parameters = array())
 	{
 		// set our template
 		$this->setTemplate('LogoutSuccess');

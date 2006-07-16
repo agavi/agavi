@@ -49,7 +49,7 @@ class Default_Error404Action extends AgaviAction
 	 * execute*() being present, e.g. for a "write" Request, validateWrite() will
 	 * be run even if there is no executeWrite() method.
 	 */
-//	public function execute()
+//	public function execute($parameters = array())
 //	{
 //		return 'Success';
 //	}
