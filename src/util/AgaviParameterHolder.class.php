@@ -21,12 +21,13 @@
  * @subpackage util
  *
  * @author     Sean Kerr <skerr@mojavi.org>
+ * @author     David Zuelke <dz@bitxtender.com>
  * @copyright  (c) Authors
  * @since      0.9.0
  *
  * @version    $Id$
  */
-abstract class AgaviParameterHolder
+class AgaviParameterHolder
 {
 
 	// +-----------------------------------------------------------------------+
@@ -35,6 +36,19 @@ abstract class AgaviParameterHolder
 
 	protected
 		$parameters = array();
+		
+	/**
+	 * Constructor. Accepts an array of initial parameters as an argument.
+	 *
+	 * @param      array An array of parameters to be set right away.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function __construct($parameters = array())
+	{
+		$this->parameters = $parameters;
+	}
 
 	/**
 	 * Clear all parameters associated with this request.
