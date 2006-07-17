@@ -1,7 +1,7 @@
 <?php
 
 class SampleAction extends AgaviAction {
-	public function execute(){}
+	public function execute(AgaviParameterHolder $parameters){}
 }
 
 class ActionTest extends AgaviTestCase
@@ -44,7 +44,7 @@ class ActionTest extends AgaviTestCase
 
 	public function testhandleError()
 	{
-		$this->assertEquals('Error', $this->_action->handleError());
+		$this->assertEquals('Error', $this->_action->handleError(new AgaviParameterHolder()));
 	}
 
 	public function testisSecure()

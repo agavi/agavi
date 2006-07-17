@@ -37,7 +37,7 @@ class ControllerTest extends AgaviTestCase
 		$this->assertFalse(file_exists(AgaviConfig::get('core.webapp_dir') . '/modules/Test/actions/BunkAction.class.php'));
 		$this->assertFalse(file_exists(AgaviConfig::get('core.webapp_dir') . '/modules/Bunk/actions/BunkAction.class.php'));
 		$controller = $this->_controller;
-		$this->assertTrue($controller->actionExists('Test', 'Test'));
+		$this->assertEquals('Test', $controller->actionExists('Test', 'Test'));
 		$this->assertFalse($controller->actionExists('Test', 'Bunk'));
 		$this->assertFalse($controller->actionExists('Bunk', 'Bunk'));
 	}

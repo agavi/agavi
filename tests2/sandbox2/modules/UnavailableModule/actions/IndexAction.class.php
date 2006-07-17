@@ -2,7 +2,7 @@
 
 class UnavailableModule_IndexAction extends AgaviAction
 {
-	public function execute()
+	public function execute(AgaviParameterHolder $parameters)
 	{
 		return 'Success';
 	}

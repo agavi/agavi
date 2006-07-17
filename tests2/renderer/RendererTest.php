@@ -20,7 +20,7 @@ class TRTestSampleView extends AgaviView
 		$this->response = $response;
 	}
 
-	public function execute()
+	public function execute(AgaviParameterHolder $parameters)
 	{
 	}
 }

@@ -56,7 +56,7 @@ class AgaviActionStackEntry
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function __construct ($moduleName, $actionName, $actionInstance, $parameters = array())
+	public function __construct ($moduleName, $actionName, AgaviAction $actionInstance, AgaviParameterHolder $parameters)
 	{
 		
 		$this->actionName     = $actionName;
