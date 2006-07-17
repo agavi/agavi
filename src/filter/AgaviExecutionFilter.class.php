@@ -71,12 +71,11 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 		$viewInstance->initialize($response);
 		
 		// view initialization completed successfully
-		$contextExecuteMethod = 'execute' . $this->context->getName();
-		if(method_exists($viewInstance, $contextExecuteMethod)) {
-			$viewInstance->$contextExecuteMethod();
-		} else {
-			$viewInstance->execute();
+		$executeMethod = 'execute' . $this->context->getName();
+		if(!method_exists($viewInstance, $executeMethod)) {
+			$executeMethod = 'execute';
 		}
+		$viewInstance->$executeMethod($actionEntry->getParameters());
 		
 		$renderer = null;
 		
@@ -202,14 +201,14 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 			// process manual validation
 			if($actionInstance->$validateMethod() && $validated) {
 				// execute the action
-				$viewName = $actionInstance->$executeMethod();
+				$viewName = $actionInstance->$executeMethod($actionEntry->getParameters());
 			} else {
 				// validation failed
 				$handleErrorMethod = 'handle' . $method . 'Error';
 				if(!method_exists($actionInstance, $handleErrorMethod)) {
 					$handleErrorMethod = 'handleError';
 				}
-				$viewName = $actionInstance->$handleErrorMethod();
+				$viewName = $actionInstance->$handleErrorMethod($actionEntry->getParameters());
 			}
 		}
 		

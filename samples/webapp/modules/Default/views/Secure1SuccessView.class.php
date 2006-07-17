@@ -7,7 +7,7 @@ class Default_Secure1SuccessView extends AgaviView
 	 * Execute any presentation logic and set template attributes.
 	 *
 	 */
-	public function execute ()
+	public function execute(AgaviParameterHolder $parameters)
 	{
 		// forward all attributes
 		$this->setAttributes($this->getContext()->getRequest()->getAttributes());

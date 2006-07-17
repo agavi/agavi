@@ -103,7 +103,7 @@ abstract class AgaviView extends AgaviAttributeHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	abstract function execute();
+	abstract function execute(AgaviParameterHolder $parameters);
 
 	/**
 	 * Retrieve the current application context.

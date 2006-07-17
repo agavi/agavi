@@ -2,7 +2,7 @@
 
 class SampleView extends AgaviView
 {
-	public function execute() {}
+	public function execute(AgaviParameterHolder $parameters) {}
 }
 
 class ViewTest extends AgaviTestCase
