@@ -12,7 +12,7 @@ class ActionStackTest extends AgaviTestCase
 		$_a2   = null,
 		$_a3   = null,
 		$_as   = null,
-		$_pars = array('foo' => 'foo', 'bar' => 'bar');
+		$_pars = null;
 
 	public function setUp()
 	{
@@ -20,6 +20,7 @@ class ActionStackTest extends AgaviTestCase
 		$this->_a2 = new ASSampleAction();
 		$this->_a3 = new ASSampleAction();
 		$this->_as = new AgaviActionStack();
+		$this->_pars = new AgaviParameterHolder(array('foo' => 'foo', 'bar' => 'bar'));
 		
 		$this->_as->addEntry('Sample', 'Index', $this->_a1, $this->_pars);
 		$this->_as->addEntry('Sample', 'Index2', $this->_a2, $this->_pars);
