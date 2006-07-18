@@ -209,7 +209,7 @@ abstract class AgaviView extends AgaviAttributeHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function initialize(AgaviResponse $response)
+	public function initialize(AgaviResponse $response, $attributes = array())
 	{
 		$this->context = $response->getContext();
 		
@@ -219,7 +219,7 @@ abstract class AgaviView extends AgaviAttributeHolder
 		// default template directory
 		$this->directory = $this->decoratorDirectory = $this->context->getController()->getModuleDirectory() . '/templates';
 		
-		$this->setAttributes($this->getContext()->getRequest()->getAttributes());
+		$this->setAttributes($attributes);
 	}
 
 	/**

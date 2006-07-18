@@ -28,7 +28,7 @@
  *
  * @version    $Id$
  */
-abstract class AgaviAction
+abstract class AgaviAction extends AgaviAttributeHolder
 {
 
 	// +-----------------------------------------------------------------------+

@@ -68,14 +68,16 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 		$viewInstance = $controller->getView($viewModule, $viewName);
 
 		// initialize the view
-		$viewInstance->initialize($response);
+		$viewInstance->initialize($response, $actionEntry->getActionInstance()->getAttributes());
 		
+		$key = $this->context->getRequest()->lock();
 		// view initialization completed successfully
 		$executeMethod = 'execute' . $this->context->getName();
 		if(!method_exists($viewInstance, $executeMethod)) {
 			$executeMethod = 'execute';
 		}
 		$viewInstance->$executeMethod($actionEntry->getParameters());
+		$this->context->getRequest()->unlock($key);
 		
 		$renderer = null;
 		
@@ -199,6 +201,8 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 				$validateMethod = 'validate';
 			}
 
+			// prevent access to Request::getParameters()
+			$key = $this->context->getRequest()->lock();
 			// process manual validation
 			if($actionInstance->$validateMethod() && $validated) {
 				// execute the action
@@ -211,6 +215,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 				}
 				$viewName = $actionInstance->$handleErrorMethod($actionEntry->getParameters());
 			}
+			$this->context->getRequest()->unlock($key);
 		}
 		
 		if(is_array($viewName)) {

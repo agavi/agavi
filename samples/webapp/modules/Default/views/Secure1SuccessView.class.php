@@ -9,9 +9,6 @@ class Default_Secure1SuccessView extends AgaviView
 	 */
 	public function execute(AgaviParameterHolder $parameters)
 	{
-		// forward all attributes
-		$this->setAttributes($this->getContext()->getRequest()->getAttributes());
-
 		// set our template
 		$this->setTemplate('Secure1Success');
 		$this->setDecoratorTemplate('Master');
