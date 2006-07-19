@@ -36,8 +36,10 @@
  *                                      specify the value as in the settings.
  *                                      env reads them from $_ENV and works
  *                                      like $_SERVER.
- * # <b>no_assoc_lower</b> - [Off]    - Turn off portabilty of resultset
- *                                      field names.
+ * # <b>compat_assoc_lower</b> - [Off] - Always lowercase the indexes of assoc 
+ *                                      arrays
+ * # <b>compat_rtrim_string</b> - [Off] - Trim whitepace from end of string column 
+ *                                        types
  * # <b>password</b>       - [none]   - The database password.
  * # <b>persistent</b>     - [No]     - Indicates that the connection should
  *                                      persistent.
@@ -156,12 +158,14 @@ class AgaviCreoleDatabase extends AgaviDatabase
 			}
 
 			// set our flags
-			$noAssocLower = $this->getParameter('no_assoc_lower', false);
-			$persistent   = $this->getParameter('persistent', false);
+			$compatAssocLower  = $this->getParameter('compat_assoc_lower', false);
+			$compatRtrimString = $this->getParameter('compat_rtrim_string', false);
+			$persistent        = $this->getParameter('persistent', false);
 
 			$flags  = 0;
-			$flags |= ($noAssocLower) ? Creole::NO_ASSOC_LOWER : 0;
-			$flags |= ($persistent) ? Creole::PERSISTENT : 0;
+			$flags |= ($compatAssocLower)  ? Creole::COMPAT_ASSOC_LOWER  : 0;
+			$flags |= ($compatRtrimString) ? Creole::COMPAT_RTRIM_STRING : 0;
+			$flags |= ($persistent)        ? Creole::PERSISTENT          : 0;
 
 			// do the duuuurtay work, right thurr
 			if ($flags > 0)
