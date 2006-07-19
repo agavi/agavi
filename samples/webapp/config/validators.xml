@@ -7,6 +7,6 @@
 | AGAVI VALIDATORS CONFIGURATION                                             |
 +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
 -->
-<configurations parent="%core.system_config_dir%/validators.xml">
+<configurations>
 	<!-- custom validators and default parameters -->
 </configurations>
