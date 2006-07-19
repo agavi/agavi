@@ -99,6 +99,13 @@ class AgaviOutputTypeConfigHandler extends AgaviConfigHandler
 						$data[$name]['ignore_slots'] = $this->literalize($outputType->renderer->getAttribute('ignore_slots'));
 					}
 					$data[$name]['renderer_parameters'] = $this->getItemParameters($outputType->renderer, $data[$name]['renderer_parameters']);
+					if(isset($outputType->renderer->assigns)) {
+						$assigns = array();
+						foreach($outputType->renderer->assigns as $factory => $varname) {
+							$assigns[$factory] = $varname->getValue();
+						}
+						$data[$name]['renderer_parameters'] = array_merge($data[$name]['renderer_parameters'], array('assigns' =>$assigns));
+					}
 				}
 				$data[$name]['parameters'] = $this->getItemParameters($outputType, $data[$name]['parameters']);
 			}

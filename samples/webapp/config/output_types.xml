@@ -17,14 +17,28 @@
 		<output_types default="html">
 			
 			<output_type name="html">
-				<renderer class="AgaviPhpRenderer" />
+				<renderer class="AgaviPhpRenderer">
+					<assigns>
+						<routing>r</routing>
+						<request>req</request>
+						<controller>ctl</controller>
+						<user>usr</user>
+					</assigns>
+				</renderer>
 				<parameters>
 					<parameter name="Content-Type">text/html; charset=UTF-8</parameter>
 				</parameters>
 			</output_type>
 			
 			<output_type name="xhtml">
-				<renderer class="AgaviPhpRenderer" />
+				<renderer class="AgaviPhpRenderer">
+					<assigns>
+						<routing>r</routing>
+						<request>req</request>
+						<controller>ctl</controller>
+						<user>usr</user>
+					</assigns>
+				</renderer>
 				<parameters>
 					<parameter name="Content-Type">application/xhtml+xml; charset=UTF-8</parameter>
 				</parameters>

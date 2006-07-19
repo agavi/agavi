@@ -1,9 +1,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 	<head>
-		<meta http-equiv="Content-Type" content="<?php $oti = $this->getContext()->getController()->getOutputTypeInfo(); echo isset($oti['parameters']['Content-Type']) ? $oti['parameters']['Content-Type'] : 'text/html; charset=utf-8'; ?>"/>
+		<meta http-equiv="Content-Type" content="<?php $oti = $ctl->getOutputTypeInfo(); echo isset($oti['parameters']['Content-Type']) ? $oti['parameters']['Content-Type'] : 'text/html; charset=utf-8'; ?>"/>
 		<title>Default Agavi Module</title>
-		<base href="<?php echo $this->getContext()->getRouting()->getBaseHref(); ?>" />
+		<base href="<?php echo $r->getBaseHref(); ?>" />
 		<style type="text/css">
 		body {
 			background-color: #FFFFFF;
@@ -121,16 +121,15 @@
 		</style>
 	</head>
 	<body>
-<?php $r = $this->getContext()->getRouting()?>
 		<h1>Agavi Sample Application</h1>
-<?php if($this->getContext()->getUser()->isAuthenticated()): ?>
+<?php if($usr->isAuthenticated()): ?>
 		<p id="loggedin">You are logged in. <a href="<?php echo $r->gen('logout'); ?>">Log Out</a></p>
 <?php endif; ?>
 		<div id="menu">
 			<h3>Menu</h3>
 			<ul>
 				<li><a href="<?php echo $r->gen('index'); ?>">Home</a></li>
-				<?php if(!$this->getContext()->getUser()->isAuthenticated()): ?>
+				<?php if(!$usr->isAuthenticated()): ?>
 								<li><a href="<?php echo $r->gen('login'); ?>">Login</a></li>
 				<?php endif; ?>
 				<li><a href="<?php echo $r->gen('secure'); ?>">A Secure Action</a></li>
@@ -142,7 +141,7 @@
 		</div>
 		<div id="content">
 			<h2><?php echo $template['title']; ?></h2>
-			<?php $rq = $this->getContext()->getRequest(); if($rq->hasErrors()): foreach($rq->getErrors() as $error): ?>
+			<?php if($req->hasErrors()): foreach($req->getErrors() as $error): ?>
 			<p class="error"><?php echo $error; ?></p>
 			<?php endforeach; endif; ?>
 <?php echo $template['content']; ?> 

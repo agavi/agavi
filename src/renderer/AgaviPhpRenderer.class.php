@@ -63,6 +63,12 @@ class AgaviPhpRenderer extends AgaviRenderer
 			${$this->slotsVarName} = array_merge(${$this->slotsVarName}, $this->output);
 		}
 		
+		$collisions = array_intersect(array_keys($this->assigns), $this->view->getAttributeNames());
+		if(count($collisions)) {
+			throw new AgaviException('Could not import system objects due to variable name collisions ("' . implode('", "', $collisions) . '" already in use).');
+		}
+		extract($this->assigns);
+		
 		// render the decorator template and return the result
 		ob_start();
 		
@@ -99,6 +105,12 @@ class AgaviPhpRenderer extends AgaviRenderer
 			${$this->varName} =& $this->view->getAttributes();
 		}
 
+		$collisions = array_intersect(array_keys($this->assigns), $this->view->getAttributeNames());
+		if(count($collisions)) {
+			throw new AgaviException('Could not import system objects due to variable name collisions ("' . implode('", "', $collisions) . '" already in use).');
+		}
+		extract($this->assigns);
+		
 		if($this->context->getController()->getRenderMode() == AgaviView::RENDER_CLIENT && !$this->view->isDecorator()) {
 			// render directly to the client via Response
 			ob_start();
