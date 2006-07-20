@@ -54,10 +54,10 @@ class AgaviDependencyManager
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
-	public function checkDependencies($tokens, $base = '')
+	public function checkDependencies($tokens, AgaviVirtualArrayPath $base)
 	{
 		foreach($tokens as $token) {
-			if(!AgaviPath::getValueByPath($this->depData, $base.'/'.$token)) {
+			if(!$base->getValueByChildPath($token, $this->depData)) {
 				return false;
 			}
 		}
@@ -74,9 +74,9 @@ class AgaviDependencyManager
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
-	public function addDependTokens($tokens, $base = '') {
+	public function addDependTokens($tokens, AgaviVirtualArrayPath $base) {
 		foreach($tokens as $token) {
-			AgaviPath::setValueByPath($this->depData, $base.'/'.$token, true);
+			$base->setValueByChildPath($token, $this->depData, true);
 		}
 	}
 }

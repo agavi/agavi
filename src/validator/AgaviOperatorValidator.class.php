@@ -72,20 +72,6 @@ abstract class AgaviOperatorValidator extends AgaviValidator implements AgaviIVa
 	}
 
 	/**
-	 * get the base path of the validator
-	 * 
-	 * @return     string base path
-	 * 
-	 * @author     Uwe Mesecke <uwe@mesecke.net>
-	 * @since      0.11.0
-	 */
-	public function getBase()
-	{
-		// enfoce returning as string
-		return $this->curBase->__toString();
-	}
-
-	/**
 	 * method for checking if the setup of child validators is valid
 	 * 
 	 * Some operators (XOR and NOT) need a specific quantity of child
@@ -126,7 +112,7 @@ abstract class AgaviOperatorValidator extends AgaviValidator implements AgaviIVa
 	 */
 	public function addChild(AgaviValidator $validator)
 	{
-		array_push($this->children, $validator);
+		$this->children[] = $validator;
 	}
 	
 	/**

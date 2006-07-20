@@ -56,7 +56,7 @@ class AgaviNotOperatorValidator extends AgaviOperatorValidator
 	protected function validate()
 	{
 		$result = $this->children[0]->execute();
-		if($result == AgaviValidator::CRITICAL or $result == AgaviValidator::SUCCESS) {
+		if($result == AgaviValidator::CRITICAL || $result == AgaviValidator::SUCCESS) {
 			$this->throwError();
 			return false;
 		} else {

@@ -68,6 +68,17 @@ interface AgaviIValidatorContainer
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
-	public function getErrorManager(); 
+	public function getErrorManager();
+
+	/**
+	 * reports an error to the parent container
+	 * 
+	 * @param      AgaviValidator The validator where the error occured
+	 * @param      string         An error message
+	 * 
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function reportError(AgaviValidator $validator, $errorMsg);
 }
 ?>

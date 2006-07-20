@@ -71,34 +71,33 @@ class AgaviErrorManager
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
-	public function submitError($validator, $error, $fields, $severity, $base = '', $ignoreAsMessage = false)
+	public function submitError($validator, $error, $fields, $severity, AgaviVirtualArrayPath $base, $ignoreAsMessage = false)
 	{
 		if($severity > $this->result) {
 			$this->result = $severity;
 		}
 		if(is_string($error) and $this->errorMessage == '' and !$ignoreAsMessage) {
-			$this->errorMessage = &$error;
+			$this->errorMessage = $error;
 		}
 		
-		if($validator[0] != '/' and $base != '') {
-			$p = new AgaviPath($base.'/'.$validator);
-			$validator = $p->__toString();
+		if($validator[0] == '[' and $base->length()) {
+			$validator = $base->appendRetNew($validator)->__toString();
 		}
-		if($base != '') {
-			$fields = array_map(create_function(
-				'$a',
-				'if($a[0] == \'/\') { return $a; } else {$p = new AgaviPath(\''.$base.'/'.'\'.$a); return $p->__toString();}'
-			), $fields);
+
+		if($base->length()) {
+			foreach($fields as &$field) {
+				$field = $base->appendRetNew($field)->__toString();
+			}
 		}
 		
 		// fill validator array
 		$this->validatorArray[$validator] = array(
-			'error'		=> &$error,
+			'error'		=> $error,
 			'fields'	=> $fields
 		);
 		
 		// fill input array
-		foreach($fields AS $field) {
+		foreach($fields as $field) {
 			if(!isset($this->inputArray[$field])) {
 				$this->inputArray[$field] = array(
 					'message'	=> '',
@@ -107,10 +106,10 @@ class AgaviErrorManager
 			}
 			
 			if(is_string($error) and $this->inputArray[$field]['message'] == '' and !$ignoreAsMessage) {
-				$this->inputArray[$field]['message'] = &$error;
+				$this->inputArray[$field]['message'] = $error;
 			}
 			
-			$this->inputArray[$field]['validators'][$validator] = &$error;
+			$this->inputArray[$field]['validators'][$validator] = $error;
 		}
 	}
 	

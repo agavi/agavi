@@ -111,9 +111,9 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
-	public function addChild (AgaviValidator $validator)
+	public function addChild(AgaviValidator $validator)
 	{
-		array_push($this->children, $validator);
+		$this->children[] = $validator;
 	}
 	
 	/**
@@ -163,8 +163,8 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
-	public function getBase () {
-		return ($this->hasParameter('base')) ? $this->getParameter('base') : '/';
+	public function getBase() {
+		return new AgaviVirtualArrayPath($this->getParameter('base', ''));
 	}
 
 	/**
@@ -221,7 +221,7 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	 */
 	public function registerValidators($validators)
 	{
-		foreach($validators AS $validator) {
+		foreach($validators as $validator) {
 			$this->addChild($validator);
 		}
 	}
@@ -296,6 +296,31 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	public function getResult()
 	{
 		return $this->errorManager->getResult();
-	}	
+	}
+
+	/**
+	 * reports an error to the parent container
+	 * 
+	 * @param      AgaviValidator The validator where the error occured
+	 * @param      string         An error message
+	 * 
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 * @see        AgaviIValidatorContainer::reportError
+	 */
+	public function reportError(AgaviValidator $validator, $errorMsg, $affectedFields = null, $ignoreAsMessage = false)
+	{
+		if($validator->hasParameter('name') || $validator->getBase()->length()) {
+			$this->errorManager->submitError(
+				$validator->getBase()->pushRetNew($validator->getParameter('name'))->__toString(),
+				$errorMsg,
+				$affectedFields === null ? $validator->getAffectedFields() : (array) $affectedFields,
+				$validator->mapErrorCode($validator->getParameter('severity')),
+				$validator->getBase(),
+				$ignoreAsMessage
+			);
+		}
+
+	}
 }
 ?>
