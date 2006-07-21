@@ -57,6 +57,7 @@ class AgaviNotOperatorValidator extends AgaviOperatorValidator
 	{
 		$result = $this->children[0]->execute();
 		if($result == AgaviValidator::CRITICAL || $result == AgaviValidator::SUCCESS) {
+			$this->result = max(AgaviValidator::ERROR, $result);
 			$this->throwError();
 			return false;
 		} else {

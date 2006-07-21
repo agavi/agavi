@@ -30,20 +30,19 @@
 abstract class AgaviOperatorValidator extends AgaviValidator implements AgaviIValidatorContainer
 {
 	/**
-	 * local error manager
-	 * 
-	 * When the operator is configured to skip all errors produced by child validators then
-	 * an own instance of ErrorManager is created and given to the validators for reporting
-	 * errors instead of giving them the parent ValidatorContainer's error manager.
-	 * 
-	 * @var        AgaviErrorManager ErrorManager for child validators
-	 */
-	protected $errorManager = null;
-
-	/**
 	 * @var        array child validators
 	 */
 	protected $children = array();
+
+	/**
+	 * @var        array errors of child validators
+	 */
+	protected $errors = array();
+	
+	/**
+	 * @var        int highest error severity in the container
+	 */
+	protected $result = AgaviValidator::SUCCESS;
 	
 	/**
 	 * constructor
@@ -64,10 +63,8 @@ abstract class AgaviOperatorValidator extends AgaviValidator implements AgaviIVa
 			 * if the operator is configured to skip errors of the
 			 * child validators, a new error manager is created
 			 */
-			$this->errorManager = new AgaviErrorManager();
 		} else {
 			// else the parent's error manager is taken
-			$this->errorManager = $this->parentContainer->getErrorManager();
 		}
 	}
 
@@ -100,6 +97,58 @@ abstract class AgaviOperatorValidator extends AgaviValidator implements AgaviIVa
 		foreach($this->children as $child) {
 			$child->shutdown();
 		}
+	}
+	
+	/**
+	 * submits an error to the error manager
+	 * 
+	 * The stuff in the parameter specified in $index is submitted to the
+	 * error manager. If there is no parameter with this name, then 'error'
+	 * is tryed as an parameter and if even this fails, the stuff in
+	 * $backupError is sent.
+	 * 
+	 * @param      string name of parameter the message is saved in
+	 * @param      bool   do not use as error message even
+	 *                    if error message is of type string
+	 * @param      array  array of fields that are affected by the error
+	 * @param      mixed  error value to be used if no other value was found
+	 *
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
+	 */
+	protected function throwError($index = 'error', $backupError = null)
+	{
+		if($this->hasParameter($index)) {
+			$error = $this->getParameter($index);
+		} elseif($this->hasParameter('error')) {
+			$error = $this->getParameter('error');
+		} else {
+			$error = $backupError;
+		}
+
+		// if no error msg was supplied rethrow the child errors
+		if($error === null) {
+			foreach($this->errors as $childError) {
+				$this->parentContainer->reportError($childError[0], $childError[1]);
+			}
+		} else {
+			$this->parentContainer->reportError($this, $error);
+		}
+	}
+
+	/**
+	 * reports an error to the parent container
+	 * 
+	 * @param      AgaviValidator The validator where the error occured
+	 * @param      string         An error message
+	 * 
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 * @see        AgaviIValidatorContainer::reportError
+	 */
+	public function reportError(AgaviValidator $validator, $errorMsg)
+	{
+		$this->errors[] = array($validator, $errorMsg);
 	}
 	
 	/**
@@ -155,23 +204,20 @@ abstract class AgaviOperatorValidator extends AgaviValidator implements AgaviIVa
 	{
 		return $this->parentContainer->getDependencyManager();
 	}
-	
+
 	/**
-	 * get error manager
+	 * returns the result from the error manager
 	 * 
-	 * If the parameter 'skip_errors' is true, then a local created error
-	 * manager is returned and the parent will not be aware of thrown errors
+	 * @return     int result of the validation process
 	 * 
-	 * @return     AgaviErrorManager parent's or local error manager
-	 *
-	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function getErrorManager()
+	public function getResult()
 	{
-		return $this->errorManager;
+		return $this->result;
 	}
-	
+
 	/**
 	 * executes the validator
 	 * 
@@ -189,7 +235,7 @@ abstract class AgaviOperatorValidator extends AgaviValidator implements AgaviIVa
 		$this->checkValidSetup();
 		
 		$result = parent::execute();
-		if($result != AgaviValidator::SUCCESS and !$this->getParameter('skip_errors') and $this->getErrorManager()->getResult() == AgaviValidator::CRITICAL) {
+		if($result != AgaviValidator::SUCCESS && !$this->getParameter('skip_errors') && $this->result == AgaviValidator::CRITICAL) {
 			/*
 			 * one of the child validators resulted with CRITICAL
 			 * we change our operator's result to CRITICAL, too so the
