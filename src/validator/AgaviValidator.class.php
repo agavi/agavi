@@ -203,7 +203,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
-	protected function throwError($index = 'error', $ignoreAsMessage = false, $affectedFields = null, $backupError = null)
+	protected function throwError($index = 'error', $backupError = null)
 	{
 		if($this->hasParameter($index)) {
 			$error = $this->getParameter($index);
@@ -213,7 +213,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 			$error = $backupError;
 		}
 
-		$this->reportError($this, $error, $affectedFields, $ignoreAsMessage);
+		$this->reportError($this, $error);
 	}
 
 
@@ -227,9 +227,9 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 * @since      0.11.0
 	 * @see        AgaviIValidatorContainer::reportError
 	 */
-	public function reportError(AgaviValidator $validator, $errorMsg, $affectedFields = null, $ignoreAsMessage = false)
+	public function reportError(AgaviValidator $validator, $errorMsg)
 	{
-		$this->parentContainer->reportError($validator, $errorMsg, $affectedFields, $ignoreAsMessage);
+		$this->parentContainer->reportError($validator, $errorMsg);
 	}
 
 	/**
