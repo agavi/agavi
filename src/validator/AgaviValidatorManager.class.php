@@ -35,11 +35,6 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	protected $dependencyManager = null;
 
 	/**
-	 * @var        AgaviErrorManager error manager
-	 */
-	protected $errorManager = null;
-
-	/**
 	 * @var        array array of child validators
 	 */
 	protected $children = array();
@@ -48,6 +43,16 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	 * @var        AgaviContext context
 	 */
 	protected $context = null;
+
+	/**
+	 * @var        array array of errors
+	 */
+	protected $errors = array();
+
+	/**
+	 * @var        int highest error severity in the container
+	 */
+	protected $result = AgaviValidator::SUCCESS;
 
 	/**
 	 * initializes the manager
@@ -64,7 +69,6 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 		$this->setParameters($parameters);
 		
 		$this->dependencyManager = new AgaviDependencyManager();
-		$this->errorManager = new AgaviErrorManager();
 		$this->children = array();
 	}
 	
@@ -94,7 +98,9 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	public function clear()
 	{
 		$this->dependencyManager->clear();
-		$this->errorManager->clear();
+		$this->errors = array();
+		$this->result = AgaviValidator::SUCCESS;
+
 		
 		foreach($this->children as $child) {
 			$child->shutdown();
@@ -141,19 +147,6 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	{
 		return $this->dependencyManager;
 	}
-	
-	/**
-	 * returns the error manager
-	 * 
-	 * @return     AgaviErrorManager error manager
-	 * 
-	 * @author     Uwe Mesecke <uwe@mesecke.net>
-	 * @since      0.11.0
-	 */
-	public function getErrorManager()
-	{
-		return $this->errorManager;
-	}
 
 	/**
 	 * get the base path of the validator
@@ -178,9 +171,14 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	public function execute()
 	{
 		$result = true;
+		$this->result = AgaviValidator::SUCCESS;
 
 		foreach($this->children as $validator) {
 			$v_ret = $validator->execute();
+			if($v_ret > $this->result) {
+				$this->result = $v_ret;
+			}
+
 			switch($v_ret) {
 				case AgaviValidator::SUCCESS:
 					continue 2;
@@ -244,7 +242,12 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	 */
 	public function getErrorArrayByValidator()
 	{
-		return $this->errorManager->getErrorArrayByValidator();
+		$errors = array();
+		foreach($this->errors as $error) {
+			$errors[$error[0]->getName()] = array($error[1], $error[0]->getAffectedFields());
+		}
+
+		return $errors;
 	}
 	
 	/**
@@ -269,20 +272,17 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	 */
 	public function getErrorArrayByInput()
 	{
-		return $this->errorManager->getErrorArrayByInput();
-	}
-	
-	/**
-	 * fetches the error message from the error manager
-	 * 
-	 * @return     string error message
-	 * 
-	 * @author     Uwe Mesecke <uwe@mesecke.net>
-	 * @since      0.11.0
-	 */
-	public function getErrorMessage()
-	{
-		return $this->errorManager->getErrorMessage();
+		$errors = array();
+		foreach($this->errors as $error) {
+			foreach($error[0]->getAffectedFields() as $fieldName) {
+				if(!isset($errors[$fieldName])) {
+					$errors[$fieldName] = array('message' => $error[1], 'validators' => array());
+				}
+				$errors[$fieldName]['validators'][$error[0]->getName()] = $error[1];
+			}
+		}
+
+		return $errors;
 	}
 	
 	/**
@@ -295,7 +295,7 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	 */
 	public function getResult()
 	{
-		return $this->errorManager->getResult();
+		return $this->result;
 	}
 
 	/**
@@ -308,19 +308,9 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	 * @since      0.11.0
 	 * @see        AgaviIValidatorContainer::reportError
 	 */
-	public function reportError(AgaviValidator $validator, $errorMsg, $affectedFields = null, $ignoreAsMessage = false)
+	public function reportError(AgaviValidator $validator, $errorMsg)
 	{
-		if($validator->hasParameter('name') || $validator->getBase()->length()) {
-			$this->errorManager->submitError(
-				$validator->getBase()->pushRetNew($validator->getParameter('name'))->__toString(),
-				$errorMsg,
-				$affectedFields === null ? $validator->getAffectedFields() : (array) $affectedFields,
-				$validator->mapErrorCode($validator->getParameter('severity')),
-				$validator->getBase(),
-				$ignoreAsMessage
-			);
-		}
-
+		$this->errors[$validator->getName()] = array($validator, $errorMsg);
 	}
 }
 ?>
