@@ -58,17 +58,6 @@ interface AgaviIValidatorContainer
 	 * @since      0.11.0
 	 */
 	public function getDependencyManager();
-	
-	/**
-	 * fetches the error manager
-	 * 
-	 * @return     AgaviErrorManager the error manager to be used by child
-	 *                               validators
-	 * 
-	 * @author     Uwe Mesecke <uwe@mesecke.net>
-	 * @since      0.11.0
-	 */
-	public function getErrorManager();
 
 	/**
 	 * reports an error to the parent container
