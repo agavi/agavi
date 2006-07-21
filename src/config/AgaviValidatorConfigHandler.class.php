@@ -135,7 +135,7 @@ class AgaviValidatorConfigHandler extends AgaviConfigHandler
 
 		if(isset($validator->validators)) {
 			// create operator
-			$code[$name] = '$'.$name.' = new '.$class.'($'.$parent.', '.var_export($parameters, true).');' .
+			$code[$name] = '$'.$name.' = new '.$class.'($'.$parent.', '.var_export($parameters, true).', '.var_export($name, true).');' .
 											'$'.$parent.'->addChild($'.$name.');';
 
 			foreach($validator->validators as $v) {
@@ -144,7 +144,7 @@ class AgaviValidatorConfigHandler extends AgaviConfigHandler
 				// create child validators
 		} else {
 			// create new validator
-			$code[$name] = '$'.$parent.'->addChild(new '.$class.'($'.$parent.', '.var_export($parameters, true).'));';
+			$code[$name] = '$'.$parent.'->addChild(new '.$class.'($'.$parent.', '.var_export($parameters, true).', '.var_export($name, true).'));';
 		}
 		
 		return $code;
