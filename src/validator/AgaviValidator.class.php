@@ -359,9 +359,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 				}
 				
 				// remember the highest error severity
-				if($t > $ret) {
-					$ret = $t;
-				}
+				$ret = max($ret, $t);
 			}
 			
 			return $ret;

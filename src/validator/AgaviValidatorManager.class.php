@@ -175,9 +175,7 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 
 		foreach($this->children as $validator) {
 			$v_ret = $validator->execute();
-			if($v_ret > $this->result) {
-				$this->result = $v_ret;
-			}
+			$this->result = max($this->result, $v_ret);
 
 			switch($v_ret) {
 				case AgaviValidator::SUCCESS:
