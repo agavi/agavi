@@ -50,7 +50,8 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	const NONE = 1;
 
 	/**
-	 * validation error severity (validator failed but validation process continues)
+	 * validation error severity (validator failed but validation process
+	 * continues)
 	 */
 	const ERROR = 2;
 
@@ -77,6 +78,11 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 */
 	protected $affectedFieldNames = array();
 
+	/**
+	 * @var        string The name of this validator instance. This will either
+	 *                    be the user supplied name (if any) or a random string
+	 */
+	protected $name = null;
 
 	/**
 	 * Returns the base path of this validator.
@@ -92,6 +98,19 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	}
 
 	/**
+	 * Returns the name of this validator.
+	 * 
+	 * @return     string The name
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getName()
+	{
+		return $this->name;
+	}
+
+	/**
 	 * constructor
 	 * 
 	 * @param      AgaviIValidatorContainer parent validator container
@@ -101,7 +120,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
-	public function __construct(AgaviIValidatorContainer $parent, $parameters = array())
+	public function __construct(AgaviIValidatorContainer $parent, $parameters = array(), $name = '')
 	{
 		$this->parentContainer = $parent;
 		if(!isset($parameters['depends']) or !is_array($parameters['depends'])) {
@@ -113,6 +132,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 		$this->setParameters($parameters);
 		$this->curBase = clone $parent->getBase();
 		$this->affectedFieldNames = array('param');
+		$this->name = $name;
 	}
 
 	/**
@@ -213,7 +233,8 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	}
 
 	/**
-	 * returns a list of input fields that are per default affected by a failure of the validator
+	 * returns a list of input fields that are per default affected by a failure
+	 * of the validator
 	 * 
 	 * The list consists of the fields in the parameters that are lists in
 	 * affectedFieldNames and the comma seperated list of fields in the
@@ -277,7 +298,8 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 * 
 	 * @param      string base in with the input should be validated
 	 * 
-	 * @return     int self::SUCCESS if validation succeeded or given error severity 
+	 * @return     int self::SUCCESS if validation succeeded or given error
+	 *                 severity
 	 *
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
@@ -362,7 +384,8 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	}
 
 	/**
-	 * converts string severity codes into integer values (see severity constants)
+	 * converts string severity codes into integer values
+	 * (see severity constants)
 	 * 
 	 * critical -> AgaviValidator::CRITICAL
 	 * error    -> AgaviValidator::ERROR
@@ -373,7 +396,8 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 * 
 	 * @return     int error severity as in (see severity constants)
 	 * 
-	 * @throws     AgaviValidatorException throws exception if the input was no known severity
+	 * @throws     AgaviValidatorException throws exception if the input was no
+	 *                                     known severity
 	 *
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
