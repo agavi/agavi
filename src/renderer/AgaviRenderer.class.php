@@ -231,7 +231,7 @@ abstract class AgaviRenderer implements AgaviIRenderingFilter
 			
 			if($response) {
 				// set the presentation data as a template attribute
-				$this->output[$name] =& $response->getContent();
+				$this->output[$name] = $response->getContent();
 			
 				$this->response->merge($response->exportInfo());
 			} else {
