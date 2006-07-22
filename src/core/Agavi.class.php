@@ -25,7 +25,7 @@
  *
  * @version    $Id$
  */
-class Agavi
+final class Agavi
 {
 	/**
 	 * An associative arrays of class and file names used by __autoload().

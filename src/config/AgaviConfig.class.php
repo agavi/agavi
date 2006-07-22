@@ -26,7 +26,7 @@
  *
  * @version    $Id$
  */
-class AgaviConfig
+final class AgaviConfig
 {
 	private static $config = array();
 	

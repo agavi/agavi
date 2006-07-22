@@ -25,7 +25,7 @@
  *
  * @version    $Id$
  */
-abstract class AgaviInflector
+final class AgaviInflector
 {
 	protected static $singularMatches = array(
 		'/move$/i' => 'moves',

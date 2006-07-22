@@ -33,7 +33,7 @@
  *
  * @version    $Id$
  */
-class AgaviContext
+final class AgaviContext
 {
 	/**
 	 * @var        AgaviController A Controller instance.
