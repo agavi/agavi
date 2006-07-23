@@ -60,6 +60,12 @@
 			<setting name="use_routing">false</setting>
 			<setting name="use_security">true</setting>
 		</settings>
+
+		<exception_templates>
+			<exception_template>%core.agavi_dir%/exception/templates/shiny.php</exception_template>
+			<exception_template context="console">%core.agavi_dir%/exception/templates/plaintext.php</exception_template>
+		</exception_templates>
+
 	</configuration>
 	
 	<configuration environment="development">
