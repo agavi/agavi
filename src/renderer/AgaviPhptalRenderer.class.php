@@ -83,6 +83,15 @@ class AgaviPhptalRenderer extends AgaviRenderer
 		} else {
 			$engine->set($this->varName, $view->getAttributes());
 		}
+		
+		$collisions = array_intersect(array_keys($this->assigns), $this->view->getAttributeNames());
+		if(count($collisions)) {
+			throw new AgaviException('Could not import system objects due to variable name collisions ("' . implode('", "', $collisions) . '" already in use).');
+		}
+		foreach($this->assigns as $key => &$value) {
+			$engine->set($key, $value);
+		}
+		
 		$engine->set('this', $this);
 		
 		if($mode == AgaviView::RENDER_CLIENT && !$view->isDecorator()) {
@@ -126,7 +135,7 @@ class AgaviPhptalRenderer extends AgaviRenderer
 		}
 		
 		if($this->extractSlots === true || ($this->extractVars && $this->extractSlots !== false)) {
-			foreach($this->output as $key => $value) {
+			foreach($this->output as $key => &$value) {
 				$engine->set($key, $value);
 			}
 		} else {
@@ -137,6 +146,14 @@ class AgaviPhptalRenderer extends AgaviRenderer
 			}
 		}
 		$engine->set($this->varName, $toSet);
+		
+		$collisions = array_intersect(array_keys($this->assigns), $this->view->getAttributeNames());
+		if(count($collisions)) {
+			throw new AgaviException('Could not import system objects due to variable name collisions ("' . implode('", "', $collisions) . '" already in use).');
+		}
+		foreach($this->assigns as $key => $value) {
+			$engine->set($key, $value);
+		}
 		
 		$engine->set('this', $this);
 		

@@ -1,4 +1,4 @@
-<form action="<?php echo $this->getContext()->getRouting()->gen('login'); ?>" method="post">
+<form action="<?php echo $r->gen('login'); ?>" method="post">
 	<dl>
 		<dt><label for="fe-username">Username:</label></dt>
 		<dd><input type="text" name="username" id="fe-username" /></dd>

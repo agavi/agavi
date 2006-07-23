@@ -9,9 +9,6 @@ class Default_SearchEngineSpamSuccessView extends AgaviView
 	 */
 	public function execute(AgaviParameterHolder $parameters)
 	{
-		// forward all attributes
-		$this->setAttributes($this->getContext()->getRequest()->getAttributes());
-
 		// set our template
 		$this->setTemplate('SearchEngineSpamSuccess');
 		$this->setDecoratorTemplate('Master');

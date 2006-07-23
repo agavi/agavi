@@ -98,6 +98,15 @@ class AgaviSmartyRenderer extends AgaviRenderer
 		} else {
 			$engine->assign_by_ref($this->varName, $attribs);
 		}
+		
+		$collisions = array_intersect(array_keys($this->assigns), $this->view->getAttributeNames());
+		if(count($collisions)) {
+			throw new AgaviException('Could not import system objects due to variable name collisions ("' . implode('", "', $collisions) . '" already in use).');
+		}
+		foreach($this->assigns as $key => &$value) {
+			$engine->assign_by_ref($key, $value);
+		}
+		
 		$engine->assign_by_ref('this', $this);
 		
 		if($mode == AgaviView::RENDER_CLIENT && !$view->isDecorator()) {
@@ -135,6 +144,7 @@ class AgaviSmartyRenderer extends AgaviRenderer
 				$engine->assign_by_ref($this->slotsVarName, $this->output);
 			}
 		}
+		
 		$engine->assign_by_ref('this', $this);
 		
 		// render the decorator template and return the result

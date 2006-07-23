@@ -32,10 +32,15 @@
 class AgaviDatabaseManager
 {
 
-	private
-		$databases = array();
-	private
-		$context = null;
+	/**
+	 * @var        array An array of AgaviDatabases.
+	 */
+	protected $databases = array();
+
+	/**
+	 * @var        AgaviContext An AgaviContext instance.
+	 */
+	private $context = null;
 
 	/**
 	 * Retrieve the current application context.

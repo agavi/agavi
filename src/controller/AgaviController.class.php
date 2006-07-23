@@ -206,6 +206,7 @@ abstract class AgaviController extends AgaviParameterHolder
 	 */
 	public function forward($moduleName, $actionName = 'Index')
 	{
+		$request = $this->context->getRequest();
 
 		$actionName = str_replace('.', '/', $actionName);
 		$actionName = preg_replace('/[^a-z0-9\-_\/]+/i', '', $actionName);
@@ -217,7 +218,7 @@ abstract class AgaviController extends AgaviParameterHolder
 
 		if(!AgaviConfig::get('core.available', false)) {
 			// application is unavailable
-			$this->context->getRequest()->setAttributes(array(
+			$request->setAttributes(array(
 				'requested_module' => $moduleName,
 				'requested_action' => $actionName
 			), 'org.agavi.controller.forwards.unavailable');
@@ -237,7 +238,7 @@ abstract class AgaviController extends AgaviParameterHolder
 
 			// track the requested module so we have access to the data
 			// in the error 404 page
-			$this->context->getRequest()->setAttributes(array(
+			$request->setAttributes(array(
 				'requested_module' => $moduleName,
 				'requested_action' => $actionName
 			), 'org.agavi.controller.forwards.error_404');
@@ -262,7 +263,7 @@ abstract class AgaviController extends AgaviParameterHolder
 		$actionInstance = $this->getAction($moduleName, $actionName);
 
 		// add a new action stack entry
-		$this->actionStack->addEntry($moduleName, $actionName, $actionInstance, new AgaviParameterHolder($this->context->getRequest()->getParameters()));
+		$this->actionStack->addEntry($moduleName, $actionName, $actionInstance, new AgaviParameterHolder($request->getParameters()));
 
 		// include the module configuration
 		// laoded only once due to the way import() works
@@ -328,6 +329,9 @@ abstract class AgaviController extends AgaviParameterHolder
 			// process the filter chain
 			$filterChain->execute();
 			
+			// clear the global request attribute namespace containing attributes for the View
+			$request->removeAttributeNamespace($request->getDefaultNamespace());
+			
 			if($this->renderMode == AgaviView::RENDER_CLIENT) {
 				// add the output for this action to the global one
 				$this->getResponse()->append($response->export());
@@ -338,7 +342,7 @@ abstract class AgaviController extends AgaviParameterHolder
 
 		} else {
 			// module is disabled
-			$this->context->getRequest()->setAttributes(array(
+			$request->setAttributes(array(
 				'requested_module' => $moduleName,
 				'requested_action' => $actionName
 			), 'org.agavi.controller.forwards.disabled');

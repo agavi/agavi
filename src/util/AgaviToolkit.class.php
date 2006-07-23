@@ -26,7 +26,7 @@
  *
  * @version    $Id$
  */
-class AgaviToolkit
+final class AgaviToolkit
 {
 	/**
 	 * Determine if a filesystem path is absolute.

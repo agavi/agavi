@@ -47,23 +47,14 @@
 	
 	<configuration environment="development">
 		<filters>
-			
+
 			<filter name="ExecutionTimeFilter" class="AgaviExecutionTimeFilter">
 				<parameters>
 					<parameter name="comment">On</parameter>
 				</parameters>
 			</filter>
-			
+
 		</filters>
 	</configuration>
-	
-	
-	<configuration>
-		<filters>
-			
-			<filter name="FormPopulationFilter" class="AgaviFormPopulationFilter" enabled="false" />
-			
-		</filters>
-	</configuration>
-	
+
 </configurations>

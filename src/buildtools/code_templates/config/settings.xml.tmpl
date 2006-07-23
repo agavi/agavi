@@ -17,32 +17,32 @@
 		<system_actions>
 			
 			<system_action name="default">
-				<module>Default</module>
-				<action>Index</action>
+				<module>%%DEFAULT_MODULE%%</module>
+				<action>%%DEFAULT_ACTION%%</action>
 			</system_action>
 			
 			<system_action name="error_404">
-				<module>Default</module>
+				<module>%%DEFAULT_MODULE%%</module>
 				<action>Error404</action>
 			</system_action>
 			
 			<system_action name="login">
-				<module>Default</module>
+				<module>%%DEFAULT_MODULE%%</module>
 				<action>Login</action>
 			</system_action>
 			
 			<system_action name="module_disabled">
-				<module>Default</module>
+				<module>%%DEFAULT_MODULE%%</module>
 				<action>ModuleDisabled</action>
 			</system_action>
 			
 			<system_action name="secure">
-				<module>Default</module>
+				<module>%%DEFAULT_MODULE%%</module>
 				<action>Secure</action>
 			</system_action>
 			
 			<system_action name="unavailable">
-				<module>Default</module>
+				<module>%%DEFAULT_MODULE%%</module>
 				<action>Unavailable</action>
 			</system_action>
 			
@@ -57,9 +57,15 @@
 			
 			<setting name="use_database">false</setting>
 			<setting name="use_logging">false</setting>
-			<setting name="use_routing">false</setting>
+			<setting name="use_routing">true</setting>
 			<setting name="use_security">true</setting>
 		</settings>
+
+		<exception_templates>
+			<exception_template>%core.agavi_dir%/exception/templates/shiny.php</exception_template>
+			<exception_template context="console">%core.agavi_dir%/exception/templates/plaintext.php</exception_template>
+		</exception_templates>
+
 	</configuration>
 	
 	<configuration environment="development">

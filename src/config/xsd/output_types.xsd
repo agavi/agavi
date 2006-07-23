@@ -27,9 +27,10 @@
       <xs:element name="parameters" type="parameters" minOccurs="0" />
       <xs:element name="renderer" minOccurs="0">
         <xs:complexType>
-          <xs:sequence>
+          <xs:all>
             <xs:element name="parameters" type="parameters" minOccurs="0" />
-          </xs:sequence>
+            <xs:element name="assigns" type="assigns" minOccurs="0" />
+          </xs:all>
           <xs:attribute name="class" type="xs:string" use="required" />
           <xs:attribute name="ignore_slots" type="xs:string" />
           <xs:attribute name="ignore_decorators" type="xs:string" />
@@ -54,6 +55,15 @@
         </xs:complexType>
       </xs:element>
     </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="assigns">
+    <xs:all>
+      <xs:element name="controller" minOccurs="0" />
+      <xs:element name="routing" minOccurs="0" />
+      <xs:element name="request" minOccurs="0" />
+      <xs:element name="user" minOccurs="0" />
+    </xs:all>
   </xs:complexType>
 
 </xs:schema>

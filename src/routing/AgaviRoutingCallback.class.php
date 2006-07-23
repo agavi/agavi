@@ -27,8 +27,13 @@
  */
 abstract class AgaviRoutingCallback
 {
-	protected $context = null,
-						$route = null;
+	
+	/**
+	 * @var        AgaviContext An AgaviContext instance.
+	 */
+	protected $context = null;
+	
+	protected $route = null;
 
 	/**
 	 * Initialize the callback instance.
@@ -45,6 +50,13 @@ abstract class AgaviRoutingCallback
 		$this->route =& $route;
 	}
 
+	/**
+	 * Retrieve the current application context.
+	 *
+	 * @return     AgaviContext An AgaviContext instance.
+	 *
+	 * @since      0.10.0
+	 */
 	public final function getContext()
 	{
 		return $this->context;

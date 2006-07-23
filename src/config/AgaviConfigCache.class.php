@@ -28,7 +28,7 @@
  *
  * @version    $Id$
  */
-class AgaviConfigCache
+final class AgaviConfigCache
 {
 	
 	const CACHE_SUBDIR = 'config';

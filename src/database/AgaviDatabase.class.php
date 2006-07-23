@@ -34,10 +34,20 @@ abstract class AgaviDatabase extends AgaviParameterHolder
 	// | PROTECTED VARIABLES                                                   |
 	// +-----------------------------------------------------------------------+
 
-	protected
-		$databaseManager = null,
-		$connection = null,
-		$resource   = null;
+	/**
+	 * @var        AgaviDatabaseManager An AgaviDatabaseManager instance.
+	 */
+	protected $databaseManager = null;
+	
+	/**
+	 * @var        mixed A database connection
+	 */
+	protected $connection = null;
+
+	/**
+	 * @var        mixed A database resource.
+	 */
+	protected $resource = null;
 
 	/**
 	 * Connect to the database.
