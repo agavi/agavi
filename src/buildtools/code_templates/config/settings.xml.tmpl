@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+| This file is part of the Agavi package.                                    |
+| Copyright (c) 2006 the Agavi Project.                                      |
+| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
+| CORE AGAVI SETTINGS                                                        |
+| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
+| KEYWORDS:                                                                  |
+| You may reference any configuration directive by enclosing the name in     |
+| "%" signs. Example: %core.agavi_dir%                                         |
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+-->
+<configurations>
+	<configuration>
+		
+		<system_actions>
+			
+			<system_action name="default">
+				<module>%%DEFAULT_MODULE%%</module>
+				<action>%%DEFAULT_ACTION%%</action>
+			</system_action>
+			
+			<system_action name="error_404">
+				<module>%%DEFAULT_MODULE%%</module>
+				<action>Error404</action>
+			</system_action>
+			
+			<system_action name="login">
+				<module>%%DEFAULT_MODULE%%</module>
+				<action>Login</action>
+			</system_action>
+			
+			<system_action name="module_disabled">
+				<module>%%DEFAULT_MODULE%%</module>
+				<action>ModuleDisabled</action>
+			</system_action>
+			
+			<system_action name="secure">
+				<module>%%DEFAULT_MODULE%%</module>
+				<action>Secure</action>
+			</system_action>
+			
+			<system_action name="unavailable">
+				<module>%%DEFAULT_MODULE%%</module>
+				<action>Unavailable</action>
+			</system_action>
+			
+		</system_actions>
+		
+		<settings>
+			<setting name="webapp_name">My Project</setting>
+			
+			<setting name="available">true</setting>
+			<setting name="debug">false</setting>
+			<setting name="modpub">/modpub</setting>
+			
+			<setting name="use_database">false</setting>
+			<setting name="use_logging">false</setting>
+			<setting name="use_routing">true</setting>
+			<setting name="use_security">true</setting>
+		</settings>
+
+		<exception_templates>
+			<exception_template>%core.agavi_dir%/exception/templates/shiny.php</exception_template>
+			<exception_template context="console">%core.agavi_dir%/exception/templates/plaintext.php</exception_template>
+		</exception_templates>
+
+	</configuration>
+	
+	<configuration environment="development">
+		<settings>
+			<setting name="debug">true</setting>
+		</settings>
+	</configuration>
+	
+</configurations>

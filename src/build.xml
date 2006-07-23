@@ -164,7 +164,7 @@
 		<subActionName/>
 		<property name="templates.dir.current" value="${templates.dir.default}"  override="true" />
 		<available file="${templates.dir}/Action.class.php.tmpl" property="templates.dir.current" value="${templates.dir}" />
-		<available file="${templates.dir}/modules/${module}/Action.class.php.tmpl" property="templates.dir.current" value="${templates.dir}/modules/${module}" />				
+		<available file="${templates.dir}/modules/${module}/Action.class.php.tmpl" property="templates.dir.current" value="${templates.dir}/modules/${module}" />
 		<copy file="${templates.dir.current}/Action.class.php.tmpl" tofile="${module.dir}/actions/${actionPath}Action.class.php">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">    
@@ -177,6 +177,17 @@
 				</replacetokens>
 			</filterchain>
 		</copy>
+		
+		<available file="${templates.dir}/config/settings.xml.tmpl" property="templates.dir.current" value="${templates.dir}" />
+		<copy file="${templates.dir.current}/config/settings.xml.tmpl" tofile="${webapp.dir}/config/settings.xml" overwrite="false">
+			<filterchain>
+				<replacetokens begintoken="%%" endtoken="%%">    
+					<token key="DEFAULT_MODULE" value="${module}"/>
+					<token key="DEFAULT_ACTION" value="${action}"/>
+				</replacetokens>
+			</filterchain>
+		</copy>
+
 		<phingcall target="buildactiontests">
 			<property name="moduletests.dir" value="${tests.dir}/modules/${module}"/>
 		</phingcall>

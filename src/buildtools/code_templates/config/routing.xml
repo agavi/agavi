@@ -1,7 +1,7 @@
 <configurations>
 	<configuration>
 		<routes>
-			<route pattern="/" module="%actions.default_module%" action="%actions.default_action%" />
+			<route pattern="^/$" module="%actions.default_module%" action="%actions.default_action%" />
 		</routes>
 	</configuration>
 </configurations>
