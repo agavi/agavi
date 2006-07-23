@@ -98,11 +98,13 @@ class AgaviWebRouting extends AgaviRouting
 		
 		if($isReWritten) {
 			// a rewrite happened
-			$this->basePath = $this->prefix . '/';
+			$this->basePath = $this->prefix;
 		} else {
-			$this->basePath = dirname($this->prefix) . '/';
+			$this->basePath = str_replace('\\', '/', dirname($this->prefix));
 		}
-		$this->basePath;
+		if(substr($this->basePath, -1, 1) != '/') {
+			$this->basePath .= '/';
+		}
 		$this->baseHref = 
 			'http' . (isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on' ? 's' : '')  . '://' . 
 			$_SERVER['SERVER_NAME'] . 
