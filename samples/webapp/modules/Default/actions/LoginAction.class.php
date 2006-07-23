@@ -60,6 +60,11 @@ class Default_LoginAction extends AgaviAction
 		}
 	}
 
+	public function handleError(AgaviParameterHolder $parameters)
+	{
+		return 'Input';
+	}
+
 	/**
 	 * This method returns the View name in case the Action doesn't serve the
 	 * current Request method.

@@ -142,7 +142,7 @@
 		</div>
 		<div id="content">
 			<h2><?php echo $template['title']; ?></h2>
-			<?php $rq = $this->getContext()->getRequest(); if($rq->hasErrors()): foreach($rq->getErrors() as $error): ?>
+			<?php $rq = $this->getContext()->getRequest(); if($rq->hasErrors()): foreach($rq->getErrorMessages() as $error): ?>
 			<p class="error"><?php echo $error; ?></p>
 			<?php endforeach; endif; ?>
 <?php echo $template['content']; ?> 

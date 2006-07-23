@@ -190,7 +190,12 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 					break 2;
 			}
 		}
-		
+
+		$errors = $this->getErrorArrayByInput();
+		$errorsByValidator = $this->getErrorArrayByValidator();
+		$ns = 'org.agavi.validation.result';
+		$this->getContext()->getRequest()->setAttribute('errors', $errors, $ns);
+		$this->getContext()->getRequest()->setAttribute('errorsByValidator', $errorsByValidator, $ns);
 		return $result;
 	}
 	
@@ -255,9 +260,11 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	 * 
 	 * array(
 	 *   <i>fieldName</i> => array(
-	 *     'message'    => <i>error message</i>,
+	 *     'messages'    => array(
+	 *       <i>error message</i>
+	 *     )
 	 *     'validators' => array(
-	 *       <i>validatorName</i> => <i>error</i>
+	 *       <i>validatorName</i> => <i>validator</i>
 	 *     )
 	 * )
 	 * 
@@ -272,11 +279,26 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	{
 		$errors = array();
 		foreach($this->errors as $error) {
-			foreach($error[0]->getAffectedFields() as $fieldName) {
-				if(!isset($errors[$fieldName])) {
-					$errors[$fieldName] = array('message' => $error[1], 'validators' => array());
+			$affectedFields = $error[0]->getAffectedFields();
+			if(count($affectedFields) == 0) {
+				if(!isset($errors[''])) {
+					$errors[$fieldName] = array('messages' => array(), 'validators' => array());
 				}
-				$errors[$fieldName]['validators'][$error[0]->getName()] = $error[1];
+
+				if($error[1]) {
+					$errors['']['messages'][] = $error[1];
+				}
+				$errors['']['validators'][] = $error[0];
+			} else {
+				foreach($affectedFields as $fieldName) {
+					if(!isset($errors[$fieldName])) {
+						$errors[$fieldName] = array('messages' => array(), 'validators' => array());
+					}
+					if($error[1]) {
+						$errors[$fieldName]['messages'][] = $error[1];
+					}
+					$errors[$fieldName]['validators'][] = $error[0];
+				}
 			}
 		}
 
