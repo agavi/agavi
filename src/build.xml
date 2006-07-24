@@ -29,6 +29,8 @@
 
 	<property name="templates.dir.default" value="buildtools/code_templates" />
 
+	<property name="templates.suffix" value=".php" override="false"/>
+
   <!-- fileset for -dist files -->
   <fileset dir="." id="distfiles">
 		<include name="**/*-dist"/>
@@ -82,7 +84,7 @@
 
 		<input propertyname="modules" promptChar="?" defaultValue="Default" message="Modules for your project (no whitespace, comma seperated)"/>
 		<foreach list="${modules}" param="module" target="buildmodule"/>
-		
+
 		<phingcall target="defaultactions" />
 	</target>
 
@@ -166,11 +168,6 @@
 	<!-- Default actions -->
 	<target name="defaultactions" description="create a default action">
 		<fixpaths base="${project.dir}" />
-
-		<!-- testing -->
-		<property name="templates.dir.default" value="buildtools/code_templates" />
-		<property name="templates.dir.current" value="${templates.dir.default}" override="true" />
-		<property name="templates.suffix" value=".php" />
 
 		<!-- DEFAULT -->
 		<listModules webapp="${webapp.dir}" property="current.modules" defaultProperty="default.module"/>
