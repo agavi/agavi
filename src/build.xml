@@ -4,13 +4,13 @@
 	...helping automate some of the more mundane tasks of development
 -->
 <project name="agavi" basedir="." default="main">
-  
+
 	<!-- Load project specific build.properties if available -->
 	<property file="${project.dir}/build.properties" />
-		
+
 	<!-- Main target, print publicised tasks -->
 	<target name="main" description="Help Menu">
-		<echo msg="available targets: " /> 
+		<echo msg="available targets: " />
 		<echo msg="  project    - create a project" />
 		<echo msg="  module     - create a module" />
 		<echo msg="  action     - create an action" />
@@ -20,6 +20,7 @@
 	<!-- define the location of our tasks -->
 	<taskdef classname="buildtools.phing.AgaviFixPathsTask" classpath="${agavi.dir}" name="fixpaths"/>
 	<taskdef classname="buildtools.phing.AgaviListModulesTask" classpath="${agavi.dir}" name="listModules"/>
+	<taskdef classname="buildtools.phing.AgaviListActionsTask" classpath="${agavi.dir}" name="listActions"/>
 	<taskdef classname="buildtools.phing.AgaviSubActionNameTask" classpath="${agavi.dir}" name="subActionName"/>
 
 	<property name="webapp.dir" value=""/>
@@ -27,12 +28,12 @@
 	<property name="tests2.dir" value="${agavi.dir}/../tests2/"/>
 
 	<property name="templates.dir.default" value="buildtools/code_templates" />
-	
+
   <!-- fileset for -dist files -->
   <fileset dir="." id="distfiles">
 		<include name="**/*-dist"/>
   </fileset>
-	
+
 	<!-- Project creation -->
 	<target name="project" description="create a new project">
 		<input propertyname="project.dir" promptChar="?" message="Full path to your new project (no trailing slash!)"/>
@@ -46,7 +47,7 @@
 		<available file="${templates.dir}/index.php.tmpl" property="templates.dir.current" value="${templates.dir}" />
 		<copy file="${templates.dir.current}/index.php.tmpl" tofile="${project.dir}/www/index.php">
 			<filterchain>
-				<replacetokens begintoken="%%" endtoken="%%">    
+				<replacetokens begintoken="%%" endtoken="%%">
 					<token key="PATH_TO_AGAVI" value="${agavi.dir}"/> <!-- was project.basedir -->
 					<token key="PATH_TO_PROJECT" value="${webapp.dir}"/>
 				</replacetokens>
@@ -58,7 +59,7 @@
 		<available file="${templates.dir}/config.php.tmpl" property="templates.dir.current" value="${templates.dir}" />
 		<copy file="${templates.dir.current}/config.php.tmpl" tofile="${webapp.dir}/config.php">
 			<filterchain>
-				<replacetokens begintoken="%%" endtoken="%%">    
+				<replacetokens begintoken="%%" endtoken="%%">
 					<token key="PATH_TO_AGAVI" value="${agavi.dir}"/>
 					<token key="PATH_TO_PROJECT" value="${webapp.dir}"/>
 				</replacetokens>
@@ -66,7 +67,7 @@
 		</copy>
 		<mkdir dir="${webapp.dir}/config"/>
 		<property name="templates.dir.current" value="${templates.dir.default}" />
-		<available file="${templates.dir}/config" property="templates.dir.current" value="${templates.dir}" />				
+		<available file="${templates.dir}/config" property="templates.dir.current" value="${templates.dir}" />
 		<copy todir="${webapp.dir}/config">
 			<fileset dir="${templates.dir.current}/config">
 				<include name="*.xml"/>
@@ -78,11 +79,11 @@
 		<mkdir dir="${webapp.dir}/templates"/>
 
 		<phingcall target="projecttests" />
-		
+
 		<input propertyname="modules" promptChar="?" defaultValue="Default" message="Modules for your project (no whitespace, comma seperated)"/>
 		<foreach list="${modules}" param="module" target="buildmodule"/>
 	</target>
-	
+
 	<!-- create tests directory structure which mimics the webapp structure -->
 	<target name="projecttests" description="create tests structure for project">
 		<fixpaths base="${project.dir}"/>
@@ -92,7 +93,7 @@
 		<mkdir dir="${tests.dir}/modules" />
 		<copy file="buildtools/test_setup.php" tofile="${tests.dir}/test_setup.php" overwrite="true"/>
 	</target>
-	
+
 	<!-- Module creation -->
 	<!-- create a new module in an existing project -->
 	<target name="module" description="create a new module in an existing project.">
@@ -112,7 +113,7 @@
 		<available file="${templates.dir}/module.xml.tmpl" property="templates.dir.current" value="${templates.dir}" />
 		<copy file="${templates.dir.current}/module.xml.tmpl" tofile="${module.dir}/config/module.xml">
 			<filterchain>
-				<replacetokens begintoken="%%" endtoken="%%">    
+				<replacetokens begintoken="%%" endtoken="%%">
 					<token key="MODULE" value="${module}"/>
 				</replacetokens>
 			</filterchain>
@@ -120,11 +121,11 @@
 		<mkdir dir="${module.dir}/models"/>
 		<mkdir dir="${module.dir}/templates"/>
 		<mkdir dir="${module.dir}/views"/>
-		
+
 		<phingcall target="buildmoduletests">
 			<property name="module" value="${module}"/>
 		</phingcall>
-		
+
 		<input propertyname="actions" promptChar="?" defaultValue="Index" message="Actions for ${module} (no whitespace, comma seperated)"/>
 		<foreach list="${actions}" param="action" target="buildaction"/>
 		<input propertyname="models" promptChar="?" message="Models for ${module} (no whitespace, comma seperated)"/>
@@ -151,7 +152,7 @@
 		<fail unless="is_module" message="Must be called in the root of a module directory."/>
 		-->
 		<listModules webapp="${webapp.dir}" property="current.modules"/>
-		
+
 		<input propertyname="module" promptChar="?" validArgs="${current.modules}" defaultValue="${default.module}" message="Make the action for which module? "/>
 		<input propertyname="action" promptChar="?" defaultValue="Index" message="Action Name"/>
 		<phingcall target="buildaction">
@@ -159,7 +160,205 @@
 			<property name="moduletests.dir" value="${tests.dir}/modules/${module}"/>
 		</phingcall>
 	</target>
-	
+
+	<!-- Default actions -->
+	<target name="defaultactions" description="create a default action">
+		<fixpaths base="${project.dir}" defaultmodule="true"/>
+
+		<!-- testing -->
+		<property name="templates.dir.default" value="buildtools/code_templates" />
+		<property name="templates.dir.current" value="${templates.dir.default}" override="true" />
+		<property name="templates.suffix" value=".php" />
+
+		<!-- DEFAULT -->
+		<listModules webapp="${webapp.dir}" property="current.modules" defaultProperty="default.module"/>
+		<input propertyname="module.default" promptChar="?" validArgs="${current.modules}" defaultValue="${default.module}" message="Select the default module? "/>
+		<listActions moduleDir="${webapp.dir}/modules/${module.default}" property="current.actions" defaultProperty="default.action" />
+		<input propertyname="action.default" promptChar="?" validArgs="${current.actions}" defaultValue="${default.action}" message="Select the default action? "/>
+
+<!-- 404 -->
+		<listModules webapp="${webapp.dir}" property="current.modules" defaultProperty="default.module"/>
+		<input propertyname="module.404" promptChar="?" validArgs="${current.modules}" defaultValue="${default.module}" message="404 error module? "/>
+		<listActions moduleDir="${webapp.dir}/modules/${module.404}" property="current.actions" defaultProperty="default.action" />
+		<input propertyname="action.404" promptChar="?" defaultValue="Error404" message="404 error action (use an existing or create a new)? (${current.actions})"/>
+
+		<subActionName property="action.404" outputPropertyPrefix="404."/>
+
+		<!-- 404 action-->
+		<available file="${templates.dir}/default_actions/actions/Error404Action.class.php.tmpl" property="templates.dir.current" value="${templates.dir}" />
+		<copy file="${templates.dir.current}/default_actions/actions/Error404Action.class.php.tmpl" tofile="${webapp.dir}/modules/${module.404}/actions/${404.actionPath}Action.class.php" overwrite="false">
+			<filterchain>
+				<replacetokens begintoken="%%" endtoken="%%">
+					<token key="MODULE" value="${module.404}"/>
+					<token key="ACTION_NAME" value="${404.actionName}"/>
+				</replacetokens>
+			</filterchain>
+		</copy>
+
+		<!-- 404 view-->
+		<available file="${templates.dir}/default_actions/views/Error404SuccessView.class.php.tmpl" property="templates.dir.current" value="${templates.dir}" />
+		<copy file="${templates.dir.current}/default_actions/views/Error404SuccessView.class.php.tmpl" tofile="${webapp.dir}/modules/${module.404}/views/${404.actionPath}SuccessView.class.php" overwrite="false">
+			<filterchain>
+				<replacetokens begintoken="%%" endtoken="%%">
+					<token key="MODULE" value="${module.404}"/>
+					<token key="ACTION_NAME" value="${404.actionName}"/>
+					<token key="ACTION_PATH" value="${404.actionPath}"/>
+				</replacetokens>
+			</filterchain>
+		</copy>
+
+		<!-- 404 template -->
+		<available file="${templates.dir}/default_actions/templates/Error404Success${templates.suffix}" property="templates.dir.current" value="${templates.dir}" />
+		<copy file="${templates.dir.current}/default_actions/templates/Error404Success${templates.suffix}" tofile="${webapp.dir}/modules/${module.404}/templates/${404.actionPath}Success${templates.suffix}" overwrite="false" />
+
+<!-- Login -->
+		<listModules webapp="${webapp.dir}" property="current.modules" defaultProperty="default.module"/>
+		<input propertyname="module.login" promptChar="?" validArgs="${current.modules}" defaultValue="${default.module}" message="Login module? "/>
+		<listActions moduleDir="${webapp.dir}/modules/${module.login}" property="current.actions" defaultProperty="default.action" />
+		<input propertyname="action.login" promptChar="?" defaultValue="Login" message="Login action (use an existing or create a new)? (${current.actions})"/>
+
+		<subActionName property="action.login" outputPropertyPrefix="login."/>
+
+		<!-- Login action-->
+		<available file="${templates.dir}/default_actions/actions/LoginAction.class.php.tmpl" property="templates.dir.current" value="${templates.dir}" />
+		<copy file="${templates.dir.current}/default_actions/actions/LoginAction.class.php.tmpl" tofile="${webapp.dir}/modules/${module.login}/actions/${login.actionPath}Action.class.php" overwrite="false">
+			<filterchain>
+				<replacetokens begintoken="%%" endtoken="%%">
+					<token key="MODULE" value="${module.login}"/>
+					<token key="ACTION_NAME" value="${login.actionName}"/>
+				</replacetokens>
+			</filterchain>
+		</copy>
+
+<!-- Secure -->
+		<listModules webapp="${webapp.dir}" property="current.modules" defaultProperty="default.module"/>
+		<input propertyname="module.secure" promptChar="?" validArgs="${current.modules}" defaultValue="${default.module}" message="Secure module? "/>
+		<listActions moduleDir="${webapp.dir}/modules/${module.secure}" property="current.actions" defaultProperty="default.action" />
+		<input propertyname="action.secure" promptChar="?" defaultValue="Secure" message="Secure action (use an existing or create a new)? (${current.actions})"/>
+
+		<subActionName property="action.secure" outputPropertyPrefix="secure."/>
+
+		<!-- Secure action-->
+		<available file="${templates.dir}/default_actions/actions/SecureAction.class.php.tmpl" property="templates.dir.current" value="${templates.dir}" />
+		<copy file="${templates.dir.current}/default_actions/actions/SecureAction.class.php.tmpl" tofile="${webapp.dir}/modules/${module.secure}/actions/${secure.actionPath}Action.class.php" overwrite="false">
+			<filterchain>
+				<replacetokens begintoken="%%" endtoken="%%">
+					<token key="MODULE" value="${module.secure}"/>
+					<token key="ACTION_NAME" value="${secure.actionName}"/>
+				</replacetokens>
+			</filterchain>
+		</copy>
+
+		<!-- Secure view-->
+		<available file="${templates.dir}/default_actions/views/SecureSuccessView.class.php.tmpl" property="templates.dir.current" value="${templates.dir}" />
+		<copy file="${templates.dir.current}/default_actions/views/SecureSuccessView.class.php.tmpl" tofile="${webapp.dir}/modules/${module.secure}/views/${secure.actionPath}SuccessView.class.php" overwrite="false">
+			<filterchain>
+				<replacetokens begintoken="%%" endtoken="%%">
+					<token key="MODULE" value="${module.secure}"/>
+					<token key="ACTION_NAME" value="${secure.actionName}"/>
+					<token key="ACTION_PATH" value="${secure.actionPath}"/>
+				</replacetokens>
+			</filterchain>
+		</copy>
+
+		<!-- Secure template -->
+		<available file="${templates.dir}/default_actions/templates/SecureSuccess${templates.suffix}" property="templates.dir.current" value="${templates.dir}" />
+		<copy file="${templates.dir.current}/default_actions/templates/SecureSuccess${templates.suffix}" tofile="${webapp.dir}/modules/${module.login}/templates/${secure.actionPath}Success${templates.suffix}" overwrite="false" />
+
+<!-- Disabled -->
+		<listModules webapp="${webapp.dir}" property="current.modules" defaultProperty="default.module"/>
+		<input propertyname="module.disabled" promptChar="?" validArgs="${current.modules}" defaultValue="${default.module}" message="Module Disabled module? "/>
+		<listActions moduleDir="${webapp.dir}/modules/${module.disabled}" property="current.actions" defaultProperty="default.action" />
+		<input propertyname="action.disabled" promptChar="?" defaultValue="ModuleDisabled" message="Module Disabled action (use an existing or create a new)? (${current.actions})"/>
+
+		<subActionName property="action.disabled" outputPropertyPrefix="disabled."/>
+
+		<!-- Disabled action-->
+		<available file="${templates.dir}/default_actions/actions/ModuleDisabledAction.class.php.tmpl" property="templates.dir.current" value="${templates.dir}" />
+		<copy file="${templates.dir.current}/default_actions/actions/ModuleDisabledAction.class.php.tmpl" tofile="${webapp.dir}/modules/${module.disabled}/actions/${disabled.actionPath}Action.class.php" overwrite="false">
+			<filterchain>
+				<replacetokens begintoken="%%" endtoken="%%">
+					<token key="MODULE" value="${module.disabled}"/>
+					<token key="ACTION_NAME" value="${disabled.actionName}"/>
+				</replacetokens>
+			</filterchain>
+		</copy>
+
+		<!-- Disabled view-->
+		<available file="${templates.dir}/default_actions/views/ModuleDisabledSuccessView.class.php.tmpl" property="templates.dir.current" value="${templates.dir}" />
+		<copy file="${templates.dir.current}/default_actions/views/ModuleDisabledSuccessView.class.php.tmpl" tofile="${webapp.dir}/modules/${module.disabled}/views/${disabled.actionPath}SuccessView.class.php" overwrite="false">
+			<filterchain>
+				<replacetokens begintoken="%%" endtoken="%%">
+					<token key="MODULE" value="${module.disabled}"/>
+					<token key="ACTION_NAME" value="${disabled.actionName}"/>
+					<token key="ACTION_PATH" value="${disabled.actionPath}"/>
+				</replacetokens>
+			</filterchain>
+		</copy>
+
+		<!-- Disabled template -->
+		<available file="${templates.dir}/default_actions/templates/ModuleDisabledSuccess${templates.suffix}" property="templates.dir.current" value="${templates.dir}" />
+		<copy file="${templates.dir.current}/default_actions/templates/ModuleDisabledSuccess${templates.suffix}" tofile="${webapp.dir}/modules/${module.disabled}/templates/${disabled.actionPath}Success${templates.suffix}" overwrite="false" />
+
+<!-- Unavailable -->
+		<listModules webapp="${webapp.dir}" property="current.modules" defaultProperty="default.module"/>
+		<input propertyname="module.unavailable" promptChar="?" validArgs="${current.modules}" defaultValue="${default.module}" message="Unavailable module? "/>
+		<listActions moduleDir="${webapp.dir}/modules/${module.unavailable}" property="current.actions" defaultProperty="default.action" />
+		<input propertyname="action.unavailable" promptChar="?" defaultValue="Unavailable" message="Unavailable action (use an existing or create a new)? (${current.actions})"/>
+
+		<subActionName property="action.unavailable" outputPropertyPrefix="unavailable."/>
+
+		<!-- Unavailable action-->
+		<available file="${templates.dir}/default_actions/actions/UnavailableAction.class.php.tmpl" property="templates.dir.current" value="${templates.dir}" />
+		<copy file="${templates.dir.current}/default_actions/actions/UnavailableAction.class.php.tmpl" tofile="${webapp.dir}/modules/${module.unavailable}/actions/${unavailable.actionPath}Action.class.php" overwrite="false">
+			<filterchain>
+				<replacetokens begintoken="%%" endtoken="%%">
+					<token key="MODULE" value="${module.unavailable}"/>
+					<token key="ACTION_NAME" value="${unavailable.actionName}"/>
+				</replacetokens>
+			</filterchain>
+		</copy>
+
+		<!-- Unavailable view-->
+		<available file="${templates.dir}/default_actions/views/UnavailableSuccessView.class.php.tmpl" property="templates.dir.current" value="${templates.dir}" />
+		<copy file="${templates.dir.current}/default_actions/views/UnavailableSuccessView.class.php.tmpl" tofile="${webapp.dir}/modules/${module.unavailable}/views/${unavailable.actionPath}SuccessView.class.php" overwrite="false">
+			<filterchain>
+				<replacetokens begintoken="%%" endtoken="%%">
+					<token key="MODULE" value="${module.unavailable}"/>
+					<token key="ACTION_NAME" value="${unavailable.actionName}"/>
+					<token key="ACTION_PATH" value="${unavailable.actionPath}"/>
+				</replacetokens>
+			</filterchain>
+		</copy>
+
+		<!-- Unavailable template -->
+		<available file="${templates.dir}/default_actions/templates/UnavailableSuccess${templates.suffix}" property="templates.dir.current" value="${templates.dir}" />
+		<copy file="${templates.dir.current}/default_actions/templates/UnavailableSuccess${templates.suffix}" tofile="${webapp.dir}/modules/${module.unavailable}/templates/${unavailable.actionPath}Success${templates.suffix}" overwrite="false" />
+
+<!-- settings.xml -->
+		<available file="${templates.dir}/config/settings.xml.tmpl" property="templates.dir.current" value="${templates.dir}" />
+		<copy file="${templates.dir.current}/config/settings.xml.tmpl" tofile="${webapp.dir}/config/settings.xml" overwrite="false">
+			<filterchain>
+				<replacetokens begintoken="%%" endtoken="%%">
+					<token key="DEFAULT_MODULE" value="${module.default}"/>
+					<token key="DEFAULT_ACTION" value="${action.default}"/>
+					<token key="404_MODULE" value="${module.404}"/>
+					<token key="404_ACTION" value="${action.404}"/>
+					<token key="LOGIN_MODULE" value="${module.login}"/>
+					<token key="LOGIN_ACTION" value="${action.login}"/>
+					<token key="SECURE_MODULE" value="${module.secure}"/>
+					<token key="SECURE_ACTION" value="${action.secure}"/>
+					<token key="DISABLED_MODULE" value="${module.disabled}"/>
+					<token key="DISABLED_ACTION" value="${action.disabled}"/>
+					<token key="UNAVAILABLE_MODULE" value="${module.unavailable}"/>
+					<token key="UNAVAILABLE_ACTION" value="${action.unavailable}"/>
+				</replacetokens>
+			</filterchain>
+		</copy>
+
+
+	</target>
+
 	<target name="buildaction">
 		<subActionName/>
 		<property name="templates.dir.current" value="${templates.dir.default}"  override="true" />
@@ -167,23 +366,13 @@
 		<available file="${templates.dir}/modules/${module}/Action.class.php.tmpl" property="templates.dir.current" value="${templates.dir}/modules/${module}" />
 		<copy file="${templates.dir.current}/Action.class.php.tmpl" tofile="${module.dir}/actions/${actionPath}Action.class.php">
 			<filterchain>
-				<replacetokens begintoken="%%" endtoken="%%">    
+				<replacetokens begintoken="%%" endtoken="%%">
 					<token key="MODULE" value="${module}"/>
 					<token key="ACTION" value="${action}"/>
 					<token key="ACTION_NAME" value="${actionName}"/>
 					<token key="ACTION_PATH" value="${actionPath}"/>
 					<token key="ACTION_DIR" value="${actionDir}"/>
 					<token key="ACTION_FILE" value="${actionFile}"/>
-				</replacetokens>
-			</filterchain>
-		</copy>
-		
-		<available file="${templates.dir}/config/settings.xml.tmpl" property="templates.dir.current" value="${templates.dir}" />
-		<copy file="${templates.dir.current}/config/settings.xml.tmpl" tofile="${webapp.dir}/config/settings.xml" overwrite="false">
-			<filterchain>
-				<replacetokens begintoken="%%" endtoken="%%">    
-					<token key="DEFAULT_MODULE" value="${module}"/>
-					<token key="DEFAULT_ACTION" value="${action}"/>
 				</replacetokens>
 			</filterchain>
 		</copy>
@@ -199,13 +388,13 @@
 		<available file="${moduletests.dir}" type="dir" property="has_actiontests" value="true"/>
 		<fail unless="has_actiontests" message="Could not find action tests directory: ${moduletests.dir}"/>
 		<mkdir dir="${moduletests.dir}/actions"/>
-	
+
 		<property name="templates.dir.current" value="${templates.dir.default}" override="true" />
 		<available file="${templates.dir}/ActionTest.class.php.tmpl" property="templates.dir.current" value="${templates.dir}" />
-		<available file="${templates.dir}/modules/${module}/ActionTest.class.php.tmpl" property="templates.dir.current" value="${templates.dir}/modules/${module}" />				
+		<available file="${templates.dir}/modules/${module}/ActionTest.class.php.tmpl" property="templates.dir.current" value="${templates.dir}/modules/${module}" />
 		<copy file="${templates.dir.current}/ActionTest.class.php.tmpl" tofile="${moduletests.dir}/actions/${actionPath}ActionTest.class.php" overwrite="false">
 			<filterchain>
-				<replacetokens begintoken="%%" endtoken="%%">    
+				<replacetokens begintoken="%%" endtoken="%%">
 					<token key="MODULE" value="${module}"/>
 					<token key="ACTION" value="${action}"/>
 					<token key="ACTION_NAME" value="${actionName}"/>
@@ -221,10 +410,10 @@
 	<target name="buildview">
 		<property name="templates.dir.current" value="${templates.dir.default}" override="true" />
 		<available file="${templates.dir}/View.class.php.tmpl" property="templates.dir.current" value="${templates.dir}" />
-		<available file="${templates.dir}/modules/${module}/View.class.php.tmpl" property="templates.dir.current" value="${templates.dir}/modules/${module}" />		
+		<available file="${templates.dir}/modules/${module}/View.class.php.tmpl" property="templates.dir.current" value="${templates.dir}/modules/${module}" />
 		<copy file="${templates.dir.current}/View.class.php.tmpl" tofile="${module.dir}/views/${actionPath}${view}View.class.php">
 			<filterchain>
-				<replacetokens begintoken="%%" endtoken="%%">    
+				<replacetokens begintoken="%%" endtoken="%%">
 					<token key="MODULE" value="${module}"/>
 					<token key="ACTION" value="${action}"/>
 					<token key="ACTION_NAME" value="${actionName}"/>
@@ -237,10 +426,10 @@
 		</copy>
 		<property name="templates.dir.current" value="${templates.dir.default}" override="true" />
 		<available file="${templates.dir}/Template.php.tmpl" property="templates.dir.current" value="${templates.dir}" />
-		<available file="${templates.dir}/modules/${module}/Template.php.tmpl" property="templates.dir.current" value="${templates.dir}/modules/${module}" />				
+		<available file="${templates.dir}/modules/${module}/Template.php.tmpl" property="templates.dir.current" value="${templates.dir}/modules/${module}" />
 		<copy file="${templates.dir.current}/Template.php.tmpl" tofile="${module.dir}/templates/${actionPath}${view}.php">
 			<filterchain>
-				<replacetokens begintoken="%%" endtoken="%%">    
+				<replacetokens begintoken="%%" endtoken="%%">
 					<token key="MODULE" value="${module}"/>
 					<token key="ACTION" value="${action}"/>
 					<token key="ACTION_NAME" value="${actionName}"/>
@@ -260,13 +449,13 @@
 		<mkdir dir="${moduletests.dir}/views"/>
 		<available file="${moduletests.dir}/views" type="dir" property="has_viewtests" value="true"/>
 		<fail unless="has_viewtests" message="Could not find view tests directory."/>
-		
+
 		<property name="templates.dir.current" value="${templates.dir.default}" override="true" />
 		<available file="${templates.dir}/ViewTest.class.php.tmpl" property="templates.dir.current" value="${templates.dir}" />
-		<available file="${templates.dir}/modules/${module}/ViewTest.class.php.tmpl" property="templates.dir.current" value="${templates.dir}/modules/${module}" />				
+		<available file="${templates.dir}/modules/${module}/ViewTest.class.php.tmpl" property="templates.dir.current" value="${templates.dir}/modules/${module}" />
 		<copy file="${templates.dir.current}/ViewTest.class.php.tmpl" tofile="${moduletests.dir}/views/${actionPath}${view}ViewTest.class.php" overwrite="false">
 			<filterchain>
-				<replacetokens begintoken="%%" endtoken="%%">    
+				<replacetokens begintoken="%%" endtoken="%%">
 					<token key="MODULE" value="${module}"/>
 					<token key="ACTION" value="${action}"/>
 					<token key="ACTION_NAME" value="${actionName}"/>
@@ -284,7 +473,7 @@
 		<fixpaths base="${project.dir}" defaultmodule="true"/>
 
 		<listModules webapp="${webapp.dir}" property="current.modules"/>
-		
+
 		<input propertyname="module" promptChar="?" validArgs="${current.modules}" defaultValue="${default.module}" message="Make the model for which module? "/>
 		<input propertyname="model" promptChar="?" message="Model Name"/>
 
@@ -300,10 +489,10 @@
 	<target name="buildmodel">
 		<property name="templates.dir.current" value="${templates.dir.default}" override="true" />
 		<available file="${templates.dir}/Model.class.php.tmpl" property="templates.dir.current" value="${templates.dir}" />
-		<available file="${templates.dir}/modules/${module}/Model.class.php.tmpl" property="templates.dir.current" value="${templates.dir}/modules/${module}" />				
+		<available file="${templates.dir}/modules/${module}/Model.class.php.tmpl" property="templates.dir.current" value="${templates.dir}/modules/${module}" />
 		<copy file="${templates.dir.current}/Model.class.php.tmpl" tofile="${module.dir}/models/${model}Model.class.php">
 			<filterchain>
-				<replacetokens begintoken="%%" endtoken="%%">    
+				<replacetokens begintoken="%%" endtoken="%%">
 					<token key="MODULE" value="${module}"/>
 					<token key="MODEL" value="${model}"/>
 				</replacetokens>
@@ -318,13 +507,13 @@
 		<mkdir dir="${moduletests.dir}/models"/>
 		<available file="${moduletests.dir}/models" type="dir" property="has_modeltests" value="true"/>
 		<fail unless="has_modeltests" message="Could not find model tests directory. (${moduletests.dir}/models)"/>
-		
+
 		<property name="templates.dir.current" value="${templates.dir.default}" override="true" />
 		<available file="${templates.dir}/ModelTest.class.php.tmpl" property="templates.dir.current" value="${templates.dir}" />
-		<available file="${templates.dir}/modules/${module}/ModelTest.class.php.tmpl" property="templates.dir.current" value="${templates.dir}/modules/${module}" />				
+		<available file="${templates.dir}/modules/${module}/ModelTest.class.php.tmpl" property="templates.dir.current" value="${templates.dir}/modules/${module}" />
 		<copy file="${templates.dir.current}/ModelTest.class.php.tmpl" tofile="${moduletests.dir}/models/${model}ModelTest.class.php" overwrite="false">
 			<filterchain>
-				<replacetokens begintoken="%%" endtoken="%%">    
+				<replacetokens begintoken="%%" endtoken="%%">
 					<token key="MODULE" value="${module}"/>
 					<token key="MODEL" value="${model}"/>
 				</replacetokens>

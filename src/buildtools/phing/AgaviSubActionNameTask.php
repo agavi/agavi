@@ -25,9 +25,20 @@
  */
 class AgaviSubActionNameTask extends Task
 {
+	protected $property = 'action';
+	protected $outputPropertyPrefix = '';
+
+	public function setProperty($property) {
+		$this->property = $property;
+	}
+
+	public function setOutputpropertyprefix($prefix) {
+		$this->outputPropertyPrefix = $prefix;
+	}
+
 	public function main()
 	{
-		$action = $this->project->getProperty('action');
+		$action = $this->project->getProperty($this->property);
 		$actionPath = str_replace('.', '/', str_replace('\\', '/', $action));
 		$actionName = str_replace('/', '_', $actionPath);
 		$actionDir = '';
@@ -37,10 +48,10 @@ class AgaviSubActionNameTask extends Task
 			$actionDir = substr($actionPath, 0, $lastSlash);
 			$actionFile = substr($actionPath, $lastSlash + 1);
 		}
-		$this->project->setProperty('actionName', $actionName);
-		$this->project->setProperty('actionPath', $actionPath);
-		$this->project->setProperty('actionDir', $actionDir);
-		$this->project->setProperty('actionFile', $actionFile);
+		$this->project->setProperty($this->outputPropertyPrefix.'actionName', $actionName);
+		$this->project->setProperty($this->outputPropertyPrefix.'actionPath', $actionPath);
+		$this->project->setProperty($this->outputPropertyPrefix.'actionDir', $actionDir);
+		$this->project->setProperty($this->outputPropertyPrefix.'actionFile', $actionFile);
 	}
 }
 ?>
