@@ -12,11 +12,11 @@
   <configuration>
     <validators>
 
-      <validator class="string" name="usrname_to_short">
+      <validator class="string" name="username_too_short">
         <parameters>
           <parameter name="param">username</parameter>
           <parameter name="min">5</parameter>
-          <parameter name="min_error">The username you supplied is less than 5 characters long.</parameter>
+          <parameter name="min_error">The username you supplied is fewer than 5 characters long.</parameter>
         </parameters>
       </validator>
 
