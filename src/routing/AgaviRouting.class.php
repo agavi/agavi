@@ -466,7 +466,7 @@ abstract class AgaviRouting
 		{
 			$routes = array_pop($routeStack);
 			foreach($routes as $key) {
-				$route = $this->routes[$key];
+				$route =& $this->routes[$key];
 				$opts =& $route['opt'];
 				if($opts['callback'] && !isset($route['cb'])) {
 					$cb = $opts['callback'];
@@ -503,7 +503,7 @@ abstract class AgaviRouting
 
 					foreach($match as $name => $m) {
 						if(is_string($name) && !isset($opts['defaults'][$name])) {
-							$route['opt']['defaults'][$name]['val'] = $m[0];
+							$opts['defaults'][$name]['val'] = $m[0];
 						}
 					}
 
