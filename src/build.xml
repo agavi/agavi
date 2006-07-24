@@ -171,9 +171,9 @@
 
 		<!-- DEFAULT -->
 		<listModules webapp="${webapp.dir}" property="current.modules" defaultProperty="default.module"/>
-		<input propertyname="module.default" promptChar="?" validArgs="${current.modules}" defaultValue="${default.module}" message="Select the default module? "/>
+		<input propertyname="module.default" promptChar="?" validArgs="${current.modules}" defaultValue="${default.module}" message="Module of Default Action? "/>
 		<listActions moduleDir="${webapp.dir}/modules/${module.default}" property="current.actions" defaultProperty="default.action" />
-		<input propertyname="action.default" promptChar="?" validArgs="${current.actions}" defaultValue="${default.action}" message="Select the default action? "/>
+		<input propertyname="action.default" promptChar="?" validArgs="${current.actions}" defaultValue="${default.action}" message="Name of Default Action? "/>
 
 <!-- 404 -->
 		<listModules webapp="${webapp.dir}" property="current.modules" defaultProperty="default.module"/>
