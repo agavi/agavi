@@ -82,6 +82,8 @@
 
 		<input propertyname="modules" promptChar="?" defaultValue="Default" message="Modules for your project (no whitespace, comma seperated)"/>
 		<foreach list="${modules}" param="module" target="buildmodule"/>
+		
+		<phingcall target="defaultactions" />
 	</target>
 
 	<!-- create tests directory structure which mimics the webapp structure -->
@@ -163,7 +165,7 @@
 
 	<!-- Default actions -->
 	<target name="defaultactions" description="create a default action">
-		<fixpaths base="${project.dir}" defaultmodule="true"/>
+		<fixpaths base="${project.dir}" />
 
 		<!-- testing -->
 		<property name="templates.dir.default" value="buildtools/code_templates" />
