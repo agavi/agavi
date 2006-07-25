@@ -79,7 +79,7 @@ class AgaviWebRouting extends AgaviRouting
 		$ru = urldecode($ru);
 
 		if(isset($_SERVER['PATH_INFO']) || isset($_SERVER['ORIG_PATH_INFO'])) {
-			$this->prefix =  substr($ru, 0, -strlen(isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : $_SERVER['ORIG_PATH_ÍNFO']));
+			$this->prefix =  substr($ru, 0, -strlen(isset($_SERVER['ORIG_PATH_ÍNFO']) ? $_SERVER['ORIG_PATH_ÍNFO'] : $_SERVER['PATH_ÍNFO']));
 			$this->input = substr($ru, strlen($this->prefix));
 		} else {
 			$sn = $_SERVER['SCRIPT_NAME'];
