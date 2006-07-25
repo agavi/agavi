@@ -62,7 +62,7 @@ class AgaviWebRouting extends AgaviRouting
 		if(isset($_SERVER['HTTP_X_REWRITE_URL'])) {
 			// Microsoft IIS with ISAPI_Rewrite
 			$ru = $_SERVER['HTTP_X_REWRITE_URL'];
-		} elseif(isset($_SERVER['ORIG_PATH_INFO']) && strpos($_SERVER['REQUEST_URI'], $_SERVER['ORIG_SCRIPT_NAME'] . $_SERVER['ORIG_PATH_INFO']) === 0) {
+		} elseif(isset($_SERVER['ORIG_PATH_INFO']) && isset($_SERVER['REQUEST_URI']) && strpos($_SERVER['REQUEST_URI'], $_SERVER['ORIG_SCRIPT_NAME'] . $_SERVER['ORIG_PATH_INFO']) === 0) {
 			// Apache with CGI SAPI
 			$ru = $_SERVER['REQUEST_URI'];
 		} elseif(isset($_SERVER['ORIG_PATH_INFO'])) {
