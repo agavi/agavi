@@ -504,6 +504,9 @@ abstract class AgaviRouting
 
 					foreach($match as $name => $m) {
 						if(is_string($name) && !isset($opts['defaults'][$name])) {
+							if(!isset($opts['defaults'][$name])) {
+								$opts['defaults'][$name] = array('pre' => '', 'val' => '', 'pos' => '');
+							}
 							$opts['defaults'][$name]['val'] = $m[0];
 						}
 					}
