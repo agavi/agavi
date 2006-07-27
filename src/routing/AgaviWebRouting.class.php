@@ -43,7 +43,8 @@ class AgaviWebRouting extends AgaviRouting
 	 */
 	protected $defaultGenOptions = array(
 		'relative' => true,
-		'separator' => '&amp;'
+		'separator' => '&amp;',
+		'use_trans_sid' => true
 	);
 	
 	/**
@@ -157,11 +158,11 @@ class AgaviWebRouting extends AgaviRouting
 	 */
 	public function gen($route, $params = array(), $options = array())
 	{
-		if(defined('SID') && SID !== '') {
+		$options = array_merge($this->defaultGenOptions, $options);
+		
+		if(defined('SID') && SID !== '' && $options['use_trans_sid'] === true) {
 			$params = array_merge($params, array(session_name() => session_id()));
 		}
-		
-		$options = array_merge($this->defaultGenOptions, $options);
 		
 		$routes = $this->getAffectedRoutes($route);
 
