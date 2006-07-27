@@ -24,8 +24,9 @@
  * @version    $Id$
  */
 class AgaviListModulesTask extends Task {
-	private $property,
-					$webapp;
+	private 	$property,
+				$defaultProperty,
+				$webapp;
 
 	public function setWebapp($dir) {
 		$this->webapp = $dir;
@@ -34,11 +35,18 @@ class AgaviListModulesTask extends Task {
 	public function setProperty($property) {
 		$this->property = $property;
 	}
-	
+
+	public function setDefaultproperty($property) {
+		$this->defaultProperty = $property;
+	}
+
 	public function main() {
 		if ($this->webapp && $this->property) {
 			foreach (glob($this->webapp.'/modules/*', GLOB_ONLYDIR) as $path) {
 				$modules[] = basename($path);
+			}
+			if (isset($modules[0])) {
+				$this->project->setProperty($this->defaultProperty, $modules[0]);
 			}
 			$this->project->setProperty($this->property, implode(',', $modules));
 		} else {

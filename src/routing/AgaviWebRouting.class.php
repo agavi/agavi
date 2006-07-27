@@ -43,7 +43,8 @@ class AgaviWebRouting extends AgaviRouting
 	 */
 	protected $defaultGenOptions = array(
 		'relative' => true,
-		'separator' => '&amp;'
+		'separator' => '&amp;',
+		'use_trans_sid' => false
 	);
 	
 	/**
@@ -57,11 +58,14 @@ class AgaviWebRouting extends AgaviRouting
 	 */
 	public function initialize(AgaviContext $context, $parameters = array())
 	{
-		parent::initialize($context);
-		$isReWritten = isset($_SERVER['REDIRECT_URL']) || (isset($_SERVER['HTTP_X_REWRITE_URL']) && ($_SERVER['HTTP_X_REWRITE_URL'] != $_SERVER['ORIG_PATH_INFO']));
+		parent::initialize($context, $parameters);
+		$isReWritten = (isset($_SERVER['REDIRECT_URL']) && isset($_SERVER['PATH_INFO'])) || (isset($_SERVER['HTTP_X_REWRITE_URL']) && ($_SERVER['HTTP_X_REWRITE_URL'] != $_SERVER['ORIG_PATH_INFO']));
 		if(isset($_SERVER['HTTP_X_REWRITE_URL'])) {
 			// Microsoft IIS with ISAPI_Rewrite
 			$ru = $_SERVER['HTTP_X_REWRITE_URL'];
+		} elseif(isset($_SERVER['ORIG_PATH_INFO']) && isset($_SERVER['REQUEST_URI']) && strpos($_SERVER['REQUEST_URI'], $_SERVER['ORIG_SCRIPT_NAME'] . $_SERVER['ORIG_PATH_INFO']) === 0) {
+			// Apache with CGI SAPI
+			$ru = $_SERVER['REQUEST_URI'];
 		} elseif(isset($_SERVER['ORIG_PATH_INFO'])) {
 			// Microsoft IIS
 			$ru = $_SERVER['ORIG_PATH_INFO'];
@@ -75,8 +79,8 @@ class AgaviWebRouting extends AgaviRouting
 		}
 		$ru = urldecode($ru);
 
-		if(isset($_SERVER['PATH_INFO'])) {
-			$this->prefix =  substr($ru, 0, -strlen($_SERVER['PATH_INFO']));
+		if(isset($_SERVER['PATH_INFO']) || isset($_SERVER['ORIG_PATH_INFO'])) {
+			$this->prefix =  substr($ru, 0, -strlen(isset($_SERVER['ORIG_PATH_INFO']) ? $_SERVER['ORIG_PATH_INFO'] : $_SERVER['PATH_INFO']));
 			$this->input = substr($ru, strlen($this->prefix));
 		} else {
 			$sn = $_SERVER['SCRIPT_NAME'];
@@ -155,6 +159,10 @@ class AgaviWebRouting extends AgaviRouting
 	public function gen($route, $params = array(), $options = array())
 	{
 		$options = array_merge($this->defaultGenOptions, $options);
+		
+		if(defined('SID') && SID !== '' && $options['use_trans_sid'] === true) {
+			$params = array_merge($params, array(session_name() => session_id()));
+		}
 		
 		$routes = $this->getAffectedRoutes($route);
 
