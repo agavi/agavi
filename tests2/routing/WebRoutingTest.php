@@ -21,7 +21,7 @@ class WebRoutingTest extends AgaviTestCase
 		AgaviConfig::set('core.use_routing', true);
 	}
 	
-	public function testAutodetection()
+	protected function runTest()
 	{
 		$export = $this->export;
 		$_SERVER = $export['_SERVER'];
@@ -34,6 +34,7 @@ class WebRoutingTest extends AgaviTestCase
 		$this->assertEquals($export['baseHref'], $this->_r->getBaseHref(), '[' . $export['message'] . '] getBaseHref()');
 	}
 	
+
 	public function tearDown()
 	{
 		$_SERVER = $this->_SERVER;

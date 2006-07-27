@@ -19,7 +19,7 @@ class RoutingTests
 				$cases = include($d->path . $entry);
 				foreach($cases as $case) {
 					$tc = new WebRoutingTest();
-					$tc->setName('testAutodetection'); //$case['message']);
+					$tc->setName(str_replace('.', '_', $entry));
 					$tc->setExport($case);
 					//$suite->addTestSuite(new ReflectionClass($tc));
 					$suite->addTest($tc);
