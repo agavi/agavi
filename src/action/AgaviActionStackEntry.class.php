@@ -40,7 +40,8 @@ class AgaviActionStackEntry
 		$microtime      = null,
 		$moduleName     = null,
 		$parameters     = array(),
-		$presentation   = null;
+		$presentation   = null,
+		$next           = null;
 	
 	// +-----------------------------------------------------------------------+
 	// | METHODS                                                               |
@@ -186,7 +187,45 @@ class AgaviActionStackEntry
 		$this->presentation =& $presentation;
 		
 	}
-
+	
+	/**
+	 * Set the next entry that will be run after this Action finished.
+	 *
+	 * @param      AgaviActionStackEntry The entry to execute next.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function setNext($moduleName, $actionName, $parameters = array())
+	{
+		$this->next = array('moduleName' => $moduleName, 'actionName' => $actionName, 'parameters' => $parameters);
+	}
+	
+	/**
+	 * Check if this Action or a View specified another Action to run next.
+	 *
+	 * @return     bool Whether or not a next Action has been set.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function hasNext()
+	{
+		return is_array($this->next);
+	}
+	
+	/**
+	 * Get the Action that should be run after this one finished execution.
+	 *
+	 * @return     array An associative array of information on the next Action.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getNext()
+	{
+		return $this->next;
+	}
 }
 
 ?>

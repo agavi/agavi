@@ -263,7 +263,7 @@ abstract class AgaviController extends AgaviParameterHolder
 		$actionInstance = $this->getAction($moduleName, $actionName);
 
 		// add a new action stack entry
-		$this->actionStack->addEntry($moduleName, $actionName, $actionInstance, new AgaviParameterHolder($request->getParameters()));
+		$actionEntry = $this->actionStack->addEntry($moduleName, $actionName, $actionInstance, new AgaviParameterHolder($request->getParameters()));
 
 		// include the module configuration
 		// laoded only once due to the way import() works
@@ -332,7 +332,7 @@ abstract class AgaviController extends AgaviParameterHolder
 			// clear the global request attribute namespace containing attributes for the View
 			$request->removeAttributeNamespace($request->getDefaultNamespace());
 			
-			if($this->renderMode == AgaviView::RENDER_CLIENT) {
+			if($this->renderMode == AgaviView::RENDER_CLIENT && !$actionEntry->hasNext()) {
 				// add the output for this action to the global one
 				$this->getResponse()->append($response->export());
 			}
@@ -357,6 +357,12 @@ abstract class AgaviController extends AgaviParameterHolder
 			}
 
 			$this->forward($moduleName, $actionName);
+		}
+		
+		if($actionEntry->hasNext()) {
+			$next = $actionEntry->getNext();
+			$request->setParameters($next['parameters'] instanceof AgaviParameterHolder ? $next['parameters']->getParameters() : $next['parameters']);
+			$this->forward($next['moduleName'], $next['actionName']);
 		}
 	}
 

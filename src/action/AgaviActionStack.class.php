@@ -40,7 +40,10 @@ class AgaviActionStack
 	 * @param      string An action name.
 	 * @param      AgaviAction An action implementation instance.
 	 *
+	 * @return     ActionStackEntry The ActionStackEntry instance created.
+	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
 	public function addEntry ($moduleName, $actionName, AgaviAction $actionInstance, AgaviParameterHolder $parameters)
@@ -51,7 +54,8 @@ class AgaviActionStack
 						                    $actionInstance, $parameters);
 
 		$this->stack[] = $actionEntry;
-
+		
+		return $actionEntry;
 	}
 
 	/**
