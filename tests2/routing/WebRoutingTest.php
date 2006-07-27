@@ -7,6 +7,13 @@ class WebRoutingTest extends AgaviTestCase
 	protected $_SERVER = array();
 	protected $_ENV = array();
 
+	protected $export = array();
+
+	public function setExport($export)
+	{
+		$this->export = $export;
+	}
+
 	public function setUp()
 	{
 		$this->_SERVER = $_SERVER;
@@ -14,30 +21,19 @@ class WebRoutingTest extends AgaviTestCase
 		AgaviConfig::set('core.use_routing', true);
 	}
 	
-	private function runTestCase($exports)
+	public function testAutodetection()
 	{
-		foreach($exports as $export) {
-			$_SERVER = $export['_SERVER'];
-			$_ENV = $export['_ENV'];
-			$this->_r = new AgaviWebRouting();
-			$this->_r->initialize(AgaviContext::getInstance());
-			$this->assertEquals($export['prefix'], $this->_r->getPrefix(), '[' . $export['message'] . '] getPrefix()');
-			$this->assertEquals($export['input'], $this->_r->getInput(), '[' . $export['message'] . '] getInput()');
-			$this->assertEquals($export['basePath'], $this->_r->getBasePath(), '[' . $export['message'] . '] getBasePath()');
-			$this->assertEquals($export['baseHref'], $this->_r->getBaseHref(), '[' . $export['message'] . '] getBaseHref()');
-		}
+		$export = $this->export;
+		$_SERVER = $export['_SERVER'];
+		$_ENV = $export['_ENV'];
+		$this->_r = new AgaviWebRouting();
+		$this->_r->initialize(AgaviContext::getInstance());
+		$this->assertEquals($export['prefix'], $this->_r->getPrefix(), '[' . $export['message'] . '] getPrefix()');
+		$this->assertEquals($export['input'], $this->_r->getInput(), '[' . $export['message'] . '] getInput()');
+		$this->assertEquals($export['basePath'], $this->_r->getBasePath(), '[' . $export['message'] . '] getBasePath()');
+		$this->assertEquals($export['baseHref'], $this->_r->getBaseHref(), '[' . $export['message'] . '] getBaseHref()');
 	}
 	
-	public function testApacheModuleSubdir()
-	{
-		$this->runTestCase(include(dirname(__FILE__) . '/cases/wombert.php'));
-	}
-
-	public function testApacheModuleDocroot()
-	{
-		$this->runTestCase(include(dirname(__FILE__) . '/cases/wombert2.php'));
-	}
-
 	public function tearDown()
 	{
 		$_SERVER = $this->_SERVER;

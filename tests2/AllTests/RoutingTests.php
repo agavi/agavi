@@ -11,8 +11,24 @@ class RoutingTests
 
 		$suite->addTestSuite('RoutingTest');
 
-		$suite->addTestSuite('WebRoutingTest');
+		$webSuite = new PHPUnit2_Framework_TestSuite('WebRouting');
+		$d = dir("dirname(__FILE__) . '/../routing/cases/");
+		while(false !== ($entry = $d->read())) {
+			if(preg_match('#.*\\.case\\.php#i', $entry))
+			{
+				$cases = include($d->path . $entry);
+				foreach($cases as $case) {
+					$tc = new WebRoutingTest();
+					$tc->setName('testAutodetection'); //$case['message']);
+					$tc->setExport($case);
+					//$suite->addTestSuite(new ReflectionClass($tc));
+					$suite->addTest($tc);
+				}
+			}
+		}
+		$d->close();
 
+		//$suite->addTest($webSuite);
 		return $suite;
 	}
 }
