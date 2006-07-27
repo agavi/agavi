@@ -12,7 +12,7 @@ class RoutingTests
 		$suite->addTestSuite('RoutingTest');
 
 		$webSuite = new PHPUnit2_Framework_TestSuite('WebRouting');
-		$d = dir("dirname(__FILE__) . '/../routing/cases/");
+		$d = dir(dirname(__FILE__) . '/../routing/cases/');
 		while(false !== ($entry = $d->read())) {
 			if(preg_match('#.*\\.case\\.php#i', $entry))
 			{
