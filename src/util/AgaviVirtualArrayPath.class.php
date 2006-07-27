@@ -66,7 +66,7 @@ class AgaviVirtualArrayPath
 			$parts[] = substr($path, 0, $pos);
 		}
 
-		$parts = $this->getPartsFromPath($path);
+		$parts = AgaviArrayPathDefinition::getPartsFromPath($path);
 
 		$this->absolute = $parts['absolute'];
 		$this->parts = $parts['parts'];
@@ -188,7 +188,7 @@ class AgaviVirtualArrayPath
 	 */
 	public function push($path)
 	{
-		$parts = $this->getPartsFromPath($path);
+		$parts = AgaviArrayPathDefinition::getPartsFromPath($path);
 		$this->parts = array_merge($this->parts, $parts['parts']);
 	}
 
@@ -225,35 +225,16 @@ class AgaviVirtualArrayPath
 		return $ret;
 	}
 
-	public function &getValueFromArray(&$array, $default = null)
+	public function &getValue(&$array, $default = null)
 	{
-		$parts = $this->parts;
-
-		$a = &$array;
-
-		foreach($parts as $part)
-		{
-			if($part)
-			{
-				if(isset($a[$part])) {
-					$a = &$a[$part];
-				} else {
-					//throw new AgaviException('The part: ' . $part . ' does not exist in the given array');
-					return $default;
-				}
-			}
-		}
-
-		return $a;
+		return AgaviArrayPathDefinition::getValueFromArray($this->parts, $array, $default);
 	}
 
 	public function setValueFromArray(&$array, $value)
 	{
-		$oldValue =& $this->getValueFromArray($array);
-		$oldValue = $value;
+		AgaviArrayPathDefinition::setValueFromArray($this->parts, $array, $value);
 	}
 
-	
 	public function getValueByChildPath($path, $array, $default = null)
 	{
 		$p = $this->pushRetNew($path);
@@ -266,24 +247,6 @@ class AgaviVirtualArrayPath
 		$p = $this->pushRetNew($path);
 
 		return $p->setValueFromArray($array, $value);
-	}
-
-	protected function getPartsFromPath($path)
-	{
-		$parts = array();
-		$absolute = ($path[0] != '[');
-		if(($pos = strpos($path, '[')) === false) {
-			$parts[] = substr($path, 0, strlen($path));
-		}
-		else {
-			if($absolute) {
-				$parts[] = substr($path, 0, $pos);
-			}
-
-			$parts = array_merge($parts, explode('][', rtrim(ltrim(substr($path, $pos), '['), ']')));
-		}
-
-		return array('parts' => $parts, 'absolute' => $absolute);
 	}
 }
 ?>
