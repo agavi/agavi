@@ -59,7 +59,7 @@ class AgaviWebRouting extends AgaviRouting
 	public function initialize(AgaviContext $context, $parameters = array())
 	{
 		parent::initialize($context, $parameters);
-		$isReWritten = isset($_SERVER['REDIRECT_URL']) || (isset($_SERVER['HTTP_X_REWRITE_URL']) && ($_SERVER['HTTP_X_REWRITE_URL'] != $_SERVER['ORIG_PATH_INFO']));
+		$isReWritten = (isset($_SERVER['REDIRECT_URL']) && isset($_SERVER['PATH_INFO'])) || (isset($_SERVER['HTTP_X_REWRITE_URL']) && ($_SERVER['HTTP_X_REWRITE_URL'] != $_SERVER['ORIG_PATH_INFO']));
 		if(isset($_SERVER['HTTP_X_REWRITE_URL'])) {
 			// Microsoft IIS with ISAPI_Rewrite
 			$ru = $_SERVER['HTTP_X_REWRITE_URL'];
