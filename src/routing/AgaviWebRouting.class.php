@@ -44,7 +44,7 @@ class AgaviWebRouting extends AgaviRouting
 	protected $defaultGenOptions = array(
 		'relative' => true,
 		'separator' => '&amp;',
-		'use_trans_sid' => true
+		'use_trans_sid' => false
 	);
 	
 	/**
