@@ -61,7 +61,6 @@
 			'HTTP_ACCEPT_LANGUAGE' => 'de-de',
 			'HTTP_CONNECTION' => 'keep-alive',
 			'HTTP_HOST' => 'localhost',
-			'HTTP_IF_MODIFIED_SINCE' => 'Thu, 27 Jul 2006 14:44:22 GMT',
 			'HTTP_USER_AGENT' => 'Mozilla/5.0 (Macintosh; U; PPC Mac OS X; de-de) AppleWebKit/418.8 (KHTML, like Gecko) Safari/419.3',
 			'PATH' => '/bin:/sbin:/usr/bin:/usr/sbin:/usr/libexec:/System/Library/CoreServices',
 			'REMOTE_ADDR' => '127.0.0.1',
