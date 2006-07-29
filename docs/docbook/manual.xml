@@ -599,8 +599,7 @@ RewriteBase /~dzuelke/_projects/agavi/trunk/samples/www/
 RewriteRule ^$ index.php/ [QSA,L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule (.*) index.php/$1 [QSA,L]
-</programlisting></para>
+RewriteRule (.*) index.php/$1 [QSA,L]</programlisting></para>
 
       <para>The important thing is that you use the
       <emphasis>external</emphasis> path to the <filename>www</filename>
