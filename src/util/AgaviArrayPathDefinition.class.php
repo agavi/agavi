@@ -42,6 +42,48 @@ final class AgaviArrayPathDefinition
 	{
 	}
 
+	public static function &unsetValue($parts, &$array)
+	{
+		$a =& $array;
+
+		$c = count($parts);
+		for($i = 0; $i < $c; ++$i) {
+			$part = $parts[$i];
+			$last = ($i+1 == $c);
+			if($part) {
+				if(isset($a[$part])) {
+					if($last) {
+						$oldValue =& $a[$part];
+						unset($a[$part]);
+						return $oldValue;
+					} else {
+						$a =& $a[$part];
+					}
+				} else {
+					return null;
+				}
+			}
+		}
+	}
+
+
+	public static function hasValue($parts, &$array, $default = null)
+	{
+		$a = $array;
+
+		foreach($parts as $part) {
+			if($part) {
+				if(isset($a[$part])) {
+					$a = $a[$part];
+				} else {
+					return false;
+				}
+			}
+		}
+
+		return true;
+	}
+
 
 	public static function &getValueFromArray($parts, &$array, $default = null)
 	{

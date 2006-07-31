@@ -102,7 +102,7 @@ abstract class AgaviConfigHandler extends AgaviParameterHolder
 	public function initialize($validationFile = null, $parameters = array())
 	{
 		$this->validationFile = $validationFile;
-		$this->parameters = array_merge($this->parameters, $parameters);
+		$this->setParameters($parameters);
 	}
 
 	/**

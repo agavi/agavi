@@ -74,9 +74,9 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	public function & extractParameters($names)
 	{
 		$array = array();
-		foreach ((array) $names as $name) {
-			if (array_key_exists($name, $this->parameters)) {
-				$array[$name] = &$this->parameters[$name];
+		foreach((array) $names as $name) {
+			if($this->hasParameter($name)) {
+				$array[$name] = &$this->getValueByRef($name);
 			} else {
 				$array[$name] = null;
 			}

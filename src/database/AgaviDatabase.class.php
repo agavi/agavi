@@ -135,7 +135,7 @@ abstract class AgaviDatabase extends AgaviParameterHolder
 	{
 		$this->databaseManager = $databaseManager;
 		
-		$this->parameters = array_merge($this->parameters, $parameters);
+		$this->setParameters($parameters);
 	}
 
 	/**

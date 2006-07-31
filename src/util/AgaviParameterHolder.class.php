@@ -35,7 +35,7 @@ class AgaviParameterHolder
 	// +-----------------------------------------------------------------------+
 
 	protected
-		$parameters = array();
+		$parameters = null;
 		
 	/**
 	 * Constructor. Accepts an array of initial parameters as an argument.
@@ -47,7 +47,7 @@ class AgaviParameterHolder
 	 */
 	public function __construct($parameters = array())
 	{
-		$this->parameters = $parameters;
+		$this->parameters = new AgaviVirtualArray($parameters);
 	}
 
 	/**
@@ -56,10 +56,10 @@ class AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function clearParameters ()
+	public function clearParameters()
 	{
 
-		$this->parameters = array();
+		$this->parameters = new AgaviVirtualArray(array());
 
 	}
 
@@ -75,20 +75,9 @@ class AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function & getParameter ($name, $default = null)
+	public function & getParameter($name, $default = null)
 	{
-
-		$retval =& $default;
-
-		if (isset($this->parameters[$name]))
-		{
-
-			$retval =& $this->parameters[$name];
-
-		}
-
-		return $retval;
-
+		return $this->parameters->getValue($name, $default);
 	}
 
 	/**
@@ -99,10 +88,10 @@ class AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function getParameterNames ()
+	public function getParameterNames()
 	{
 
-		return array_keys($this->parameters);
+		return array_keys($this->parameters->getData());
 
 	}
 
@@ -114,10 +103,10 @@ class AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function getParameters ()
+	public function getParameters()
 	{
 
-		return $this->parameters;
+		return $this->parameters->getData();
 
 	}
 
@@ -131,11 +120,9 @@ class AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function hasParameter ($name)
+	public function hasParameter($name)
 	{
-
-		return isset($this->parameters[$name]);
-
+		return $this->parameters->hasValue($name);
 	}
 
 	/**
@@ -149,22 +136,9 @@ class AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function & removeParameter ($name)
+	public function & removeParameter($name)
 	{
-
-		$retval = null;
-
-		if (isset($this->parameters[$name]))
-		{
-
-			$retval =& $this->parameters[$name];
-
-			unset($this->parameters[$name]);
-
-		}
-
-		return $retval;
-
+		return $this->parameters->unsetValue($name);
 	}
 
 	/**
@@ -178,11 +152,9 @@ class AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function setParameter ($name, $value)
+	public function setParameter($name, $value)
 	{
-
-		$this->parameters[$name] = $value;
-
+		$this->parameters->setValue($name, $value);
 	}
 
 	/**
@@ -199,12 +171,11 @@ class AgaviParameterHolder
 	 */
 	public function appendParameter($name, $value)
 	{
-
-		if (!isset($this->parameters[$name]) || !is_array($this->parameters[$name])) {
-			settype($this->parameters[$name], 'array');
+		$var =& $this->parameters->getValue($name, array());
+		if(!is_array($var)) {
+			$var = (array) $var;
 		}
-		$this->parameters[$name][] = $value;
-
+		$var[] = $value;
 	}
 
 	/**
@@ -219,11 +190,9 @@ class AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function setParameterByRef ($name, &$value)
+	public function setParameterByRef($name, &$value)
 	{
-
-		$this->parameters[$name] =& $value;
-
+		$this->parameters->setValue($name, $value);
 	}
 
 	/**
@@ -240,12 +209,11 @@ class AgaviParameterHolder
 	 */
 	public function appendParameterByRef($name, &$value)
 	{
-
-		if (!isset($this->parameters[$name]) || !is_array($this->parameters[$name])) {
-			settype($this->parameters[$name], 'array');
+		$var =& $this->parameters->getValue($name, array());
+		if(!is_array($var)) {
+			$var = (array) $var;
 		}
-		$this->parameters[$name][] =& $value;
-
+		$var[] =& $value;
 	}
 
 	/**
@@ -260,11 +228,9 @@ class AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function setParameters ($parameters)
+	public function setParameters($parameters)
 	{
-
-		$this->parameters = array_merge($this->parameters, $parameters);
-
+		$this->parameters->setValues($parameters);
 	}
 
 	/**
@@ -279,16 +245,12 @@ class AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function setParametersByRef (&$parameters)
+	public function setParametersByRef(&$parameters)
 	{
-
 		foreach ($parameters as $key => &$value)
 		{
-
-			$this->parameters[$key] =& $value;
-
+			$this->parameters->setValue($key, $value);
 		}
-
 	}
 
 }

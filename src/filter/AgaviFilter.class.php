@@ -64,7 +64,7 @@ abstract class AgaviFilter extends AgaviParameterHolder implements AgaviIFilter
 	{
 		$this->context = $context;
 
-		$this->parameters = array_merge($this->parameters, $parameters);
+		$this->setParameters($parameters);
 	}
 
 }

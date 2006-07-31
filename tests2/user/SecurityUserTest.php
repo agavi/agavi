@@ -7,7 +7,7 @@ class SampleSecurityUser extends AgaviSecurityUser
 		$this->context = $context;
 		
 		if(count($parameters)) {
-			$this->parameters = array_merge($this->parameters, $parameters);
+			$this->setParameters($parameters);
 		}
 		$this->attributes = array();
 	}

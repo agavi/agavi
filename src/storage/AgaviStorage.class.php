@@ -67,7 +67,7 @@ abstract class AgaviStorage extends AgaviParameterHolder
 	{
 		$this->context = $context;
 
-		$this->parameters = array_merge($this->parameters, (array) $parameters);
+		$this->setParameters((array) $parameters);
 	}
 
 	/**
