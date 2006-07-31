@@ -60,6 +60,9 @@ class AgaviVirtualArray
 
 	public function hasValue($path)
 	{
+		if(isset($this->data[$path])) {
+			return true;
+		}
 		$parts = AgaviArrayPathDefinition::getPartsFromPath($path);
 		return AgaviArrayPathDefinition::hasValue($parts['parts'], $this->data);
 	}
