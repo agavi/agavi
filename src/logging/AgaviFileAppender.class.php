@@ -32,15 +32,18 @@ class AgaviFileAppender extends AgaviAppender
 	protected $_filename = '';
 
 	/**
-	 * Initialize the FileAppender.
-	 * 
-	 * @param      array An array of parameters.
-	 * 
+	 * Initialize the object.
+	 *
+	 * @param      AgaviContext An AgaviContext instance.
+	 * @param      array        An associative array of initialization parameters.
+	 *
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.10.0
 	 */
-	public function initialize($params = array())
+	function initialize(AgaviContext $context, $params = array())
 	{
+		parent::initialize($context, $params);
+
 		if(isset($params['file'])) {
 			$this->_filename = $params['file'];
 		}
@@ -48,12 +51,12 @@ class AgaviFileAppender extends AgaviAppender
 
 	/**
 	 * Retrieve the file handle for this FileAppender.
-	 * 
-	 * @throws     <b>AgaviLoggingException</b> if file cannot be opened for 
+	 *
+	 * @throws     <b>AgaviLoggingException</b> if file cannot be opened for
 	 *                                          appending.
-	 * 
+	 *
 	 * @return     integer
-	 * 
+	 *
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.10.0
 	 */
@@ -69,9 +72,9 @@ class AgaviFileAppender extends AgaviAppender
 
 	/**
 	 * Execute the shutdown procedure.
-	 * 
+	 *
 	 * If open, close the filehandle.
-	 * 
+	 *
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.10.0
 	 */
@@ -84,13 +87,13 @@ class AgaviFileAppender extends AgaviAppender
 
 	/**
 	 * Write a Message to the file.
-	 * 
+	 *
 	 * @param      Message
-	 * 
+	 *
 	 * @throws     <b>AgaviLoggingException</b> if no Layout is set or the file
 	 *                                          cannot be written.
-	 * 
-	 * 
+	 *
+	 *
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.10.0
 	 */

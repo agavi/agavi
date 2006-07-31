@@ -15,6 +15,7 @@
 		<echo msg="  module     - create a module" />
 		<echo msg="  action     - create an action" />
 		<echo msg="  test       - run unit tests" />
+		<echo msg="  help       - show info and help texts" />
 	</target>
 
 	<!-- define the location of our tasks -->
@@ -22,6 +23,7 @@
 	<taskdef classname="buildtools.phing.AgaviListModulesTask" classpath="${agavi.dir}" name="listModules"/>
 	<taskdef classname="buildtools.phing.AgaviListActionsTask" classpath="${agavi.dir}" name="listActions"/>
 	<taskdef classname="buildtools.phing.AgaviSubActionNameTask" classpath="${agavi.dir}" name="subActionName"/>
+	<taskdef classname="buildtools.phing.AgaviInfoTask" classpath="${agavi.dir}" name="agaviInfo"/>
 
 	<property name="webapp.dir" value=""/>
 	<property name="tests.dir" value=""/>
@@ -35,6 +37,10 @@
   <fileset dir="." id="distfiles">
 		<include name="**/*-dist"/>
   </fileset>
+
+  	<target name="help" description="show info and help texts" >
+  		<agaviInfo phing="${phing.version}" agavidir="${agavi.dir}" />
+  	</target>
 
 	<!-- Project creation -->
 	<target name="project" description="create a new project">

@@ -76,8 +76,18 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 		if(!method_exists($viewInstance, $executeMethod)) {
 			$executeMethod = 'execute';
 		}
-		$renderer = $viewInstance->$executeMethod($actionEntry->getParameters());
+		$retval = $viewInstance->$executeMethod($actionEntry->getParameters());
 		$this->context->getRequest()->unlock();
+		
+		if(is_array($retval) && count($retval) >= 2) {
+			// View returned another Action to foward to. Skip rendering and go there.
+			$response->clear();
+			$response->lock();
+			$actionEntry->setNext($retval[0], $retval[1], isset($retval[2]) ? $retval[2] : array());
+			return;
+		} else {
+			$renderer = $retval;
+		}
 		
 		if($renderer === null || !is_object($renderer) || !($renderer instanceof AgaviRenderer)) {
 			$renderer = null;
