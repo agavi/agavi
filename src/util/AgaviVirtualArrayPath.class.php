@@ -239,14 +239,14 @@ class AgaviVirtualArrayPath
 	{
 		$p = $this->pushRetNew($path);
 
-		return $p->getValueFromArray($array, $default);
+		return $p->getValue($array, $default);
 	}
 
 	public function setValueByChildPath($path, &$array, $value)
 	{
 		$p = $this->pushRetNew($path);
 
-		return $p->setValueFromArray($array, $value);
+		return $p->getValue($array, $value);
 	}
 }
 ?>
