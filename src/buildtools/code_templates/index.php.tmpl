@@ -20,5 +20,5 @@ Agavi::bootstrap('development');
 // +---------------------------------------------------------------------------+
 // | Call the controller's dispatch method on the default context              |
 // +---------------------------------------------------------------------------+
-AgaviContext::getInstance()->getController()->dispatch();
+AgaviContext::getInstance('web')->getController()->dispatch();
 ?>

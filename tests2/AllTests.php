@@ -14,8 +14,8 @@ include($testDir . '/../src/agavi.php');
 AgaviConfig::set("tests.dir", $testDir); // where the main tests dir resides
 AgaviConfig::set('core.webapp_dir', AgaviConfig::get('tests.dir') . "/sandbox2");
 
-Agavi::bootstrap();
-AgaviContext::getInstance();
+Agavi::bootstrap('testing');
+AgaviContext::getInstance('console');
 set_time_limit(0);
 
 class AllTests
