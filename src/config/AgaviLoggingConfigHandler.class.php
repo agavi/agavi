@@ -109,7 +109,7 @@ class AgaviLoggingConfigHandler extends AgaviConfigHandler
 
 			foreach($appenders as $name => $appender) {
 				$data[] = sprintf('$%s = new %s();', $name, $appender['class']);
-				$data[] = sprintf('$%s->initialize($this->getContext(), %s);', $name, var_export($appender['params'], true));
+				$data[] = sprintf('$%s->initialize($this->context, %s);', $name, var_export($appender['params'], true));
 				$data[] = sprintf('$%s->setLayout($%s);', $name, $appender['layout']);
 			}
 
