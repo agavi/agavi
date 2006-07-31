@@ -23,10 +23,10 @@ class LoggerManagerTest extends AgaviTestCase
 		@unlink($this->_logfile2);
 		$this->_pl = new AgaviPassthruLayout;
 		$this->_fa = new AgaviFileAppender;
-		$this->_fa->initialize(array('file' => $this->_logfile));
+		$this->_fa->initialize($this->_context, array('file' => $this->_logfile));
 		$this->_fa->setLayout($this->_pl);
 		$this->_fa2 = new AgaviFileAppender;
-		$this->_fa2->initialize(array('file' => $this->_logfile2));
+		$this->_fa2->initialize($this->_context, array('file' => $this->_logfile2));
 		$this->_fa2->setLayout($this->_pl);
 		$this->_l = new AgaviLogger;
 		$this->_l->setPriority(AgaviLogger::INFO);
