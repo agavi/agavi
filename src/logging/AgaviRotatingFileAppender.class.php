@@ -13,7 +13,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviRotateFileAppender extends AgaviFileAppender by enabling per-day log files
+ * AgaviRotatingFileAppender extends AgaviFileAppender by enabling per-day log files
  * and removing unwanted old log files.
  *
  * <b>Required parameters:</b>
@@ -38,10 +38,6 @@
 class AgaviRotatingFileAppender extends AgaviFileAppender
 {
 
-	/**
-	 *
-	 * @param unknown_type $params
-	 */
 	public function initialize($params = array())
 	{
 		$cycle = 7;
