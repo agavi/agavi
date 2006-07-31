@@ -27,7 +27,7 @@ class TestAppender
 	public $params = null;
 	public $layout = null;
 
-	public function initialize($params)
+	public function initialize(AgaviContext $context, $params)
 	{
 		$this->params = $params;
 	}
@@ -63,7 +63,7 @@ class LoggingConfigHandlerTest extends ConfigHandlerTestBase
 
 	public function setUp()
 	{
-		$this->context = $this;
+		$this->context = AgaviContext::getInstance('test');
 	}
 
 	public function testLoggingConfigHandler()
@@ -104,7 +104,7 @@ class LoggingConfigHandlerTest extends ConfigHandlerTestBase
 
 
 		$this->assertType('TestLayout1', $a2->layout);
-		$this->assertNull($a2->params);
+		$this->assertEquals(array(), $a2->params);
 
 
 		$this->assertType('TestLayout2', $a3->layout);
