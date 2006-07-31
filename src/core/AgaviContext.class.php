@@ -201,7 +201,10 @@ final class AgaviContext
 	{
 		try {
 			if($profile === null) {
-				$profile = AgaviConfig::get('core.default_context', 'stdctx');
+				$profile = AgaviConfig::get('core.default_context');
+				if($profile === null) {
+					trigger_error('You must supply an environment name to AgaviContext::getInstance() or set the name of the default environment to be used in the configuration directive "core.default_context".', E_USER_ERROR);
+				}
 			}
 			$profile = strtolower($profile);
 			if (!isset(self::$instances[$profile])) {

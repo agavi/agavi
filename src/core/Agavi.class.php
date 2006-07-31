@@ -63,7 +63,7 @@ final class Agavi
 				$environment = AgaviConfig::get('core.environment');
 			} else {
 				if($environment === null) {
-					$environment = 'stdenv';
+					trigger_error('You must supply an environment name to Agavi::bootstrap() or set the name of the default environment to be used in the configuration directive "core.environment".', E_USER_ERROR);
 				}
 				AgaviConfig::set('core.environment', $environment, true, true);
 			}

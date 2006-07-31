@@ -40,8 +40,8 @@ class ContextTest extends AgaviTestCase
 		$this->assertNotNull(AgaviContext::getInstance());
 		$this->assertType('AgaviContext', AgaviContext::getInstance());
 		$a = AgaviContext::getInstance();
-		$b = AgaviContext::getInstance('stdctx');
-		$c = AgaviContext::getInstance('StDcTX');
+		$b = AgaviContext::getInstance(AgaviConfig::get('core.default_context'));
+		$c = AgaviContext::getInstance(AgaviConfig::get('core.default_context'));
 		$d = AgaviContext::getInstance($default);
 		$this->assertReference($a, $b);
 		$this->assertReference($a, $c);
@@ -124,7 +124,7 @@ class ContextTest extends AgaviTestCase
 		$this->assertNull(AgaviContext::getInstance('test')->getDatabaseManager());
 
 		// clear the factories cache (needed since we are changing settings which are evaluated at compile time)
-		unlink(AgaviConfigCache::getCacheName(AgaviConfig::get('core.config_dir') . '/factories.xml', 'stdctx'));
+		unlink(AgaviConfigCache::getCacheName(AgaviConfig::get('core.config_dir') . '/factories.xml', AgaviConfig::get('core.default_context')));
 		AgaviConfig::set('core.use_database', true);
 		AgaviContext::getInstance('test')->initialize();
 		$this->assertType('AgaviDatabaseManager', AgaviContext::getInstance('test')->getDatabaseManager());
@@ -136,7 +136,7 @@ class ContextTest extends AgaviTestCase
 		$this->assertNull(AgaviContext::getInstance('test')->getLoggerManager());
 
 		// clear the factories cache (needed since we are changing settings which are evaluated at compile time)
-		unlink(AgaviConfigCache::getCacheName(AgaviConfig::get('core.config_dir') . '/factories.xml', 'stdctx'));
+		unlink(AgaviConfigCache::getCacheName(AgaviConfig::get('core.config_dir') . '/factories.xml', AgaviConfig::get('core.default_context')));
 		AgaviConfig::set('core.use_logging', true);
 		AgaviContext::getInstance('test')->initialize();
 		$this->assertType('AgaviLoggerManager', AgaviContext::getInstance('test')->getLoggerManager());
@@ -145,7 +145,7 @@ class ContextTest extends AgaviTestCase
 
 	public function testGetName()
 	{
-		$this->assertSame('stdctx', AgaviContext::getInstance('test')->getName());
+		$this->assertSame(AgaviConfig::get('core.default_context'), AgaviContext::getInstance('test')->getName());
 		$this->assertSame('test1', AgaviContext::getInstance('test1')->getName());
 	}
 
@@ -172,7 +172,7 @@ class ContextTest extends AgaviTestCase
 		$this->assertType('AgaviUser', AgaviContext::getInstance('test')->getUser());
 
 		// clear the factories cache (needed since we are changing settings which are evaluated at compile time)
-		unlink(AgaviConfigCache::getCacheName(AgaviConfig::get('core.config_dir') . '/factories.xml', 'stdctx'));
+		unlink(AgaviConfigCache::getCacheName(AgaviConfig::get('core.config_dir') . '/factories.xml', AgaviConfig::get('core.default_context')));
 		AgaviConfig::set('core.use_security', true);
 		AgaviContext::getInstance('test')->initialize();
 		$this->assertType('AgaviSecurityUser', AgaviContext::getInstance('test')->getUser());
