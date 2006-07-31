@@ -63,7 +63,13 @@ abstract class AgaviConfigHandler extends AgaviParameterHolder
 		$data = array();
 		if($itemNode->hasChildren('parameters')) {
 			foreach($itemNode->parameters as $node) {
-				$data[$node->getAttribute('name')] = $literalize ? $this->literalize($node->getValue()) : $node->getValue();
+				$name = $node->getAttribute('name');
+				if($node->hasChildren('parameters')) {
+					$data[$name] = (isset($oldValues[$name]) && is_array($oldValues[$name])) ? $oldValues[$name] : array();
+					$data[$name] = $this->getItemParameters($node, $data[$name], $literalize);
+				} else {
+					$data[$name] = $literalize ? $this->literalize($node->getValue()) : $node->getValue();
+				}
 			}
 		}
 		$data = array_merge($oldValues, $data);
