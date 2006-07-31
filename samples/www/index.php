@@ -11,9 +11,11 @@ require_once('INSERT PATH TO "agavi/agavi.php" HERE');
 require_once('../webapp/config.php');
 
 // +---------------------------------------------------------------------------+
-// | Initialize the framework. You may pass an environment name to this method |
+// | Initialize the framework. You may pass an environment name to this method.|
+// | By default the 'development' environment sets Agavi into a debug mode.    |
+// | In debug mode among other things the cache is cleaned on every request.   |
 // +---------------------------------------------------------------------------+
-Agavi::bootstrap();
+Agavi::bootstrap('development');
 
 // +---------------------------------------------------------------------------+
 // | Call the controller's dispatch method on the default context              |
