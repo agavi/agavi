@@ -91,7 +91,7 @@ final class AgaviArrayPathDefinition
 
 		foreach($parts as $part) {
 			if($part) {
-				if(isset($a[$part])) {
+				if(isset($a[$part]) && is_array($a)) {
 					$a = &$a[$part];
 				} else {
 					//throw new AgaviException('The part: ' . $part . ' does not exist in the given array');
