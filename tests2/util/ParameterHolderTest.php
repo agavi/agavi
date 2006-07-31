@@ -23,6 +23,11 @@ class ParameterHolderTest extends AgaviTestCase
 	{
 		$this->_ph->setParameter('name1', 'value1');
 		$this->assertEquals('value1', $this->_ph->getParameter('name1'));
+		$this->assertEquals(null, $this->_ph->getParameter('name1[sub]'));
+		
+		$this->_ph->setParameter('name2', array('sub' => 'value2'));
+		$this->assertEquals('value2', $this->_ph->getParameter('name2[sub]'));
+		$this->assertEquals(array('sub' => 'value2'), $this->_ph->getParameter('name2'));
 	}
 
 	public function testgetParameterNames()

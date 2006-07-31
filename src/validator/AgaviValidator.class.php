@@ -129,7 +129,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 		if(!isset($parameters['provides']) or !is_array($parameters['provides'])) {
 			$parameters['provides'] = (isset($parameters['provides']) and strlen($parameters['provides'])) ? split(',', $parameters['provides']) : array();
 		}
-		$this->setParameters($parameters);
+		parent::__construct($parameters);
 		$this->curBase = clone $parent->getBase();
 		$this->affectedFieldNames = array('param');
 		$this->name = $name;

@@ -75,8 +75,8 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	{
 		$array = array();
 		foreach((array) $names as $name) {
-			if($this->hasParameter($name)) {
-				$array[$name] = &$this->getValueByRef($name);
+			if(array_key_exists($name, $this->parameters)) {
+				$array[$name] = &$this->parameters[$name];
 			} else {
 				$array[$name] = null;
 			}
@@ -372,27 +372,8 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 		if($this->locked) {
 			throw new AgaviException('For security reasons, Request Parameters cannot be accessed directly. Please use the ParameterHolder object passed to your Action or View execute method to access Request Parameters.');
 		}
-		if(($pos = strpos($name, '[')) === false) {
-			$retval =& parent::getParameter($name, $default);
-			return $retval;
-		} else {
-			$array = explode('][', rtrim(ltrim(substr($name, $pos), '['), ']'));
-			$name = substr($name, 0, $pos);
-			$val = $this->getParameter($name);
-			foreach($array as $key) {
-				if($key == '') {
-					$key = 0;
-				} elseif(is_numeric($key)) {
-					$key = intval($key);
-				}
-				if(is_array($val) && isset($val[$key])) {
-					$val = $val[$key];
-				} else {
-					return $default;
-				}
-			}
-			return $val;
-		}
+		$retval =& parent::getParameter($name, $default);
+		return $retval;
 	}
 
 	/**
@@ -406,26 +387,7 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 		if($this->locked) {
 			throw new AgaviException('For security reasons, Request Parameters cannot be accessed directly. Please use the ParameterHolder object passed to your Action or View execute method to access Request Parameters.');
 		}
-		if(($pos = strpos($name, '[')) === false) {
-			return parent::hasParameter($name);
-		} else {
-			$array = explode('][', rtrim(ltrim(substr($name, $pos), '['), ']'));
-			$name = substr($name, 0, $pos);
-			$val = $this->getParameter($name);
-			foreach($array as $key) {
-				if($key == '') {
-					$key = 0;
-				} elseif(is_numeric($key)) {
-					$key = intval($key);
-				}
-				if(is_array($val) && isset($val[$key])) {
-					$val = $val[$key];
-				} else {
-					return false;
-				}
-			}
-			return true;
-		}
+		return parent::hasParameter($name);
 	}
 	
 

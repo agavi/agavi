@@ -77,8 +77,17 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 		
 		$req = $this->getContext()->getRequest();
 		
-		if(!($req->getAttribute('populate', 'org.agavi.filter.FormPopulationFilter') === true || (in_array($req->getMethod(), $this->getParameter('methods')) && $req->getAttribute('populate', 'org.agavi.filter.FormPopulationFilter') !== false))) {
+		$populate = $req->getAttribute('populate', 'org.agavi.filter.FormPopulationFilter');
+		if(!(is_array($populate) || (is_object($populate) && $populate instanceof AgaviParameterHolder) || (in_array($req->getMethod(), $this->getParameter('methods')) && $populate !== false))) {
 			return;
+		}
+		
+		if(is_array($populate)) {
+			$p = new AgaviParameterHolder($populate);
+		} elseif(is_object($populate) && $populate instanceof AgaviParameterHolder) {
+			$p = $populate;
+		} else {
+			$p = $req;
 		}
 		
 		$output = $response->getContent();
@@ -144,7 +153,13 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 					continue;
 				}
 				
-				$value = $req->getParameter($name);
+				$value = $p->getParameter($name);
+				
+				if(is_array($value)) {
+					// name didn't match exactly. skip.
+					continue;
+				}
+				
 				if($encoding != 'utf-8') {
 					if($encoding == 'iso-8859-1') {
 						$value = utf8_encode($value);
@@ -161,7 +176,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 						
 						// text inputs
 						$element->removeAttribute('value');
-						if($req->hasParameter($name)) {
+						if($p->hasParameter($name)) {
 							$element->setAttribute('value', $value);
 						}
 						
@@ -169,7 +184,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 						
 						// checkboxes and radios
 						$element->removeAttribute('checked');
-						if($req->hasParameter($name) && ($element->getAttribute('value') == $req->getParameter($name) || !$element->hasAttribute('value'))) {
+						if($p->hasParameter($name) && ($element->getAttribute('value') == $value || !$element->hasAttribute('value'))) {
 							$element->setAttribute('checked', 'checked');
 						}
 						
@@ -177,7 +192,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 						
 						// passwords
 						$element->removeAttribute('value');
-						if($this->getParameter('include_password_inputs') && $req->hasParameter($name)) {
+						if($this->getParameter('include_password_inputs') && $p->hasParameter($name)) {
 							$element->setAttribute('value', $value);
 						}
 					}
@@ -188,7 +203,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 					// yes, we still use XPath because there could be OPTGROUPs
 					foreach($xpath->query('descendant::option', $element) as $option) {
 						$option->removeAttribute('selected');
-						if($req->hasParameter($name) && $option->getAttribute('value') == $value) {
+						if($p->hasParameter($name) && $option->getAttribute('value') == $value) {
 							$option->setAttribute('selected', 'selected');
 						}
 					}

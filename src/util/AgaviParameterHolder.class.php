@@ -47,7 +47,7 @@ class AgaviParameterHolder
 	 */
 	public function __construct($parameters = array())
 	{
-		$this->parameters = new AgaviVirtualArray($parameters);
+		$this->parameters = $parameters;
 	}
 
 	/**
@@ -58,9 +58,7 @@ class AgaviParameterHolder
 	 */
 	public function clearParameters()
 	{
-
-		$this->parameters = new AgaviVirtualArray(array());
-
+		$this->parameters = array();
 	}
 
 	/**
@@ -77,7 +75,11 @@ class AgaviParameterHolder
 	 */
 	public function & getParameter($name, $default = null)
 	{
-		return $this->parameters->getValue($name, $default);
+		if(isset($this->parameters[$name])) {
+			return $this->parameters[$name];
+		}
+		$parts = AgaviArrayPathDefinition::getPartsFromPath($name);
+		return AgaviArrayPathDefinition::getValueFromArray($parts['parts'], $this->parameters, $default);
 	}
 
 	/**
@@ -90,9 +92,7 @@ class AgaviParameterHolder
 	 */
 	public function getParameterNames()
 	{
-
-		return array_keys($this->parameters->getData());
-
+		return array_keys($this->parameters);
 	}
 
 	/**
@@ -105,9 +105,7 @@ class AgaviParameterHolder
 	 */
 	public function getParameters()
 	{
-
-		return $this->parameters->getData();
-
+		return $this->parameters;
 	}
 
 	/**
@@ -122,7 +120,11 @@ class AgaviParameterHolder
 	 */
 	public function hasParameter($name)
 	{
-		return $this->parameters->hasValue($name);
+		if(isset($this->parameters[$name])) {
+			return true;
+		}
+		$parts = AgaviArrayPathDefinition::getPartsFromPath($name);
+		return AgaviArrayPathDefinition::hasValue($parts['parts'], $this->parameters);
 	}
 
 	/**
@@ -138,7 +140,8 @@ class AgaviParameterHolder
 	 */
 	public function & removeParameter($name)
 	{
-		return $this->parameters->unsetValue($name);
+		$parts = AgaviArrayPathDefinition::getPartsFromPath($name);
+		return AgaviArrayPathDefinition::unsetValue($parts['parts'], $this->parameters);
 	}
 
 	/**
@@ -154,7 +157,7 @@ class AgaviParameterHolder
 	 */
 	public function setParameter($name, $value)
 	{
-		$this->parameters->setValue($name, $value);
+		$this->parameters[$name] = $value;
 	}
 
 	/**
@@ -171,11 +174,10 @@ class AgaviParameterHolder
 	 */
 	public function appendParameter($name, $value)
 	{
-		$var =& $this->parameters->getValue($name, array());
-		if(!is_array($var)) {
-			$var = (array) $var;
+		if(!isset($this->parameters[$name]) || !is_array($this->parameters[$name])) {
+			settype($this->parameters[$name], 'array');
 		}
-		$var[] = $value;
+		$this->parameters[$name][] = $value;
 	}
 
 	/**
@@ -192,7 +194,7 @@ class AgaviParameterHolder
 	 */
 	public function setParameterByRef($name, &$value)
 	{
-		$this->parameters->setValue($name, $value);
+		$this->parameters[$name] =& $value;
 	}
 
 	/**
@@ -209,11 +211,10 @@ class AgaviParameterHolder
 	 */
 	public function appendParameterByRef($name, &$value)
 	{
-		$var =& $this->parameters->getValue($name, array());
-		if(!is_array($var)) {
-			$var = (array) $var;
+		if(!isset($this->parameters[$name]) || !is_array($this->parameters[$name])) {
+			settype($this->parameters[$name], 'array');
 		}
-		$var[] =& $value;
+		$this->parameters[$name][] =& $value;
 	}
 
 	/**
@@ -230,7 +231,7 @@ class AgaviParameterHolder
 	 */
 	public function setParameters($parameters)
 	{
-		$this->parameters->setValues($parameters);
+		$this->parameters = array_merge($this->parameters, $parameters);
 	}
 
 	/**
@@ -247,9 +248,8 @@ class AgaviParameterHolder
 	 */
 	public function setParametersByRef(&$parameters)
 	{
-		foreach ($parameters as $key => &$value)
-		{
-			$this->parameters->setValue($key, $value);
+		foreach ($parameters as $key => &$value) {
+			$this->parameters[$key] =& $value;
 		}
 	}
 
