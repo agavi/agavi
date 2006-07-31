@@ -38,7 +38,16 @@
 class AgaviRotatingFileAppender extends AgaviFileAppender
 {
 
-	public function initialize($params = array())
+	/**
+	 * Initialize the object.
+	 *
+	 * @param      AgaviContext An AgaviContext instance.
+	 * @param      array        An associative array of initialization parameters.
+	 *
+	 * @author     Bob Zoller <bob@agavi.org>
+	 * @since      0.11.0
+	 */
+	function initialize(AgaviContext $context, $params = array())
 	{
 		$cycle = 7;
 		$prefix = str_replace(' ', '_', AgaviConfig::get('core.webapp_name')).'-';
@@ -82,7 +91,7 @@ class AgaviRotatingFileAppender extends AgaviFileAppender
 
 		//it's all up to the parent after this
 		$params['file'] = $logfile;
-		parent::initialize($params);
+		parent::initialize($context, $params);
 	}
 
 }
