@@ -13,7 +13,7 @@ class ValidatorTest extends AgaviTestCase
 					
 	public function setUp()
 	{
-		$this->_context = AgaviContext::getInstance();
+		$this->_context = AgaviContext::getInstance('test');
 		$this->_controller = $this->_context->getController();
 		
 		$this->_validator = new SampleValidator();

@@ -15,7 +15,7 @@ class LoggerManagerTest extends AgaviTestCase
 
 	public function setUp()
 	{
-		$this->_context = AgaviContext::getInstance();
+		$this->_context = AgaviContext::getInstance('test');
 		$this->_lm = $this->_context->getLoggerManager();
 		$this->_logfile = tempnam('','logtest');
 		$this->_logfile2 = tempnam('', 'logtest2');

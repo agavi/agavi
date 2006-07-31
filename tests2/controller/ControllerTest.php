@@ -11,11 +11,11 @@ class ControllerTest extends AgaviTestCase
 	public function setUp()
 	{
 		// ReInitialize the Context between tests to start fresh
-		$this->_context = AgaviContext::getInstance();
+		$this->_context = AgaviContext::getInstance('test');
 		$this->_context->initialize();
 		//$this->_controller = new TestController();
-		$this->_controller = AgaviContext::getInstance()->getController();
-		$this->_controller->initialize(AgaviContext::getInstance(), array());
+		$this->_controller = AgaviContext::getInstance('test')->getController();
+		$this->_controller->initialize(AgaviContext::getInstance('test'), array());
 
 
 	}
@@ -26,7 +26,7 @@ class ControllerTest extends AgaviTestCase
 		$this->assertType('AgaviWebController', $controller);
 		$this->assertType('AgaviContext', $controller->getContext());
 		$ctx1 = $controller->getContext();
-		$ctx2 = AgaviContext::getInstance();
+		$ctx2 = AgaviContext::getInstance('test');
 		$this->assertReference($ctx1, $ctx2);
 	}
 
@@ -136,16 +136,16 @@ class ControllerTest extends AgaviTestCase
 
 	public function testGetContext()
 	{
-		$ctx1 = AgaviContext::getInstance();
-		$ctx2 = AgaviContext::getInstance()->getController()->getContext();
+		$ctx1 = AgaviContext::getInstance('test');
+		$ctx2 = AgaviContext::getInstance('test')->getController()->getContext();
 		$this->assertType('AgaviContext', $ctx1);
 		$this->assertType('AgaviContext', $ctx2);
 		$this->assertReference($ctx1, $ctx2);
 	}
 
-	public function testGetInstance()
+	public function testgetInstance()
 	{
-		$controller = AgaviContext::getInstance()->getController();
+		$controller = AgaviContext::getInstance('test')->getController();
 		$this->assertType('AgaviController', $controller);
 	}
 
@@ -297,7 +297,7 @@ class ControllerTest extends AgaviTestCase
 	// TODO: moved to AgaviResponse
 	public function testsetContentType()
 	{
-		$controller = AgaviContext::getInstance()->getController();
+		$controller = AgaviContext::getInstance('test')->getController();
 		$ctype = $controller->getContentType();
 		$controller->setContentType('image/jpeg');
 		$this->assertEquals($controller->getContentType(), 'image/jpeg');
@@ -306,20 +306,20 @@ class ControllerTest extends AgaviTestCase
 	
 	public function testclearHTTPHeaders()
 	{
-		$controller = AgaviContext::getInstance()->getController();
+		$controller = AgaviContext::getInstance('test')->getController();
 		$controller->clearHTTPHeaders();
 		$this->assertEquals($controller->getHTTPHeaders(), array());
 	}
 	
 	public function testgetHTTPHeader()
 	{
-		$controller = AgaviContext::getInstance()->getController();
+		$controller = AgaviContext::getInstance('test')->getController();
 		$this->assertEquals($controller->getHTTPHeader('unset'), null);
 	}
 
 	public function testhasHTTPHeader()
 	{
-		$controller = AgaviContext::getInstance()->getController();
+		$controller = AgaviContext::getInstance('test')->getController();
 		$controller->clearHTTPHeaders();
 		$controller->setHTTPHeader('testme', 'whatever');
 		$this->assertTrue($controller->hasHTTPHeader('testme'));
@@ -328,7 +328,7 @@ class ControllerTest extends AgaviTestCase
 	
 	public function testsetHTTPHeader()
 	{
-		$controller = AgaviContext::getInstance()->getController();
+		$controller = AgaviContext::getInstance('test')->getController();
 		$controller->setHTTPHeader('sometest', 'fubar');
 		$this->assertEquals($controller->getHTTPHeader('sometest'), array('fubar'));
 		$controller->setHTTPHeader('sometest', 'foo');
@@ -341,13 +341,13 @@ class ControllerTest extends AgaviTestCase
 	
 	public function testgetHTTPStatusCode()
 	{
-		$controller = AgaviContext::getInstance()->getController();
+		$controller = AgaviContext::getInstance('test')->getController();
 		$this->assertEquals($controller->getHTTPStatusCode(), null);
 	}
 	
 	public function testsetHTTPStatusCode()
 	{
-		$controller = AgaviContext::getInstance()->getController();
+		$controller = AgaviContext::getInstance('test')->getController();
 		$controller->setHTTPStatusCode('404');
 		$this->assertEquals($controller->getHTTPStatusCode(), '404');
 		$controller->setHTTPStatusCode(403);
@@ -361,7 +361,7 @@ class ControllerTest extends AgaviTestCase
 	// TODO: moved to routing
 	function testgenURL()
 	{
-		$routing = AgaviContext::getInstance()->getRouting();
+		$routing = AgaviContext::getInstance('test')->getRouting();
 		$this->assertEquals($controller->genURL('index.php', array('foo' =>'bar')), 'index.php?foo=bar');
 		$this->assertEquals($controller->genURL(null, array('foo' =>'bar')), $_SERVER['SCRIPT_NAME'] . '?foo=bar');
 		$this->assertEquals($controller->genURL(array('foo' =>'bar'), 'index.php'), 'index.php?foo=bar');

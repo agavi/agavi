@@ -32,16 +32,16 @@ class TestRenderer extends AgaviTestCase
 	public function setUp()
 	{
 		$rs = new AgaviWebResponse();
-		$rs->initialize(AgaviContext::getInstance());
+		$rs->initialize(AgaviContext::getInstance('test'));
 		$this->_v = new TRTestSampleView();
 		$this->_v->initialize($rs);
 		$this->_r = new TRTestSampleRenderer();
-		$this->_r->initialize(AgaviContext::getInstance());
+		$this->_r->initialize(AgaviContext::getInstance('test'));
 	}
 
 	public function testGetContext()
 	{
-		$this->assertReference(AgaviContext::getInstance(), $this->_r->getContext());
+		$this->assertReference(AgaviContext::getInstance('test'), $this->_r->getContext());
 	}
 
 	public function testSetGetExtension()

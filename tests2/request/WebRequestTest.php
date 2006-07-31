@@ -15,7 +15,7 @@ class WebRequestTest extends AgaviTestCase
 		$_SERVER['REQUEST_URI'] = '/foo/bar/baz?id=4815162342';
 		
 		$this->_r = new AgaviWebRequest();
-		$this->_r->initialize(AgaviContext::getInstance());
+		$this->_r->initialize(AgaviContext::getInstance('test'));
 	}
 	
 	public function testGetUrlScheme()

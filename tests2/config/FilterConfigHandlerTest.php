@@ -26,12 +26,12 @@ class FilterConfigHandlerTest extends ConfigHandlerTestBase
 
 	public function setUp()
 	{
-		$this->context = AgaviContext::getInstance();
+		$this->context = AgaviContext::getInstance('test');
 	}
 
 	public function testFilterConfigHandler()
 	{
-		$ctx = AgaviContext::getInstance();
+		$ctx = AgaviContext::getInstance('test');
 		$FCH = new AgaviFilterConfigHandler();
 
 		$filters = array();
