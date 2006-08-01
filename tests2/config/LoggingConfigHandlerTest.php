@@ -47,7 +47,7 @@ class TestLayout
 {
 	public $params = null;
 
-	public function initialize($params)
+	public function initialize(AgaviContext $context, $params)
 	{
 		$this->params = $params;
 	}
@@ -127,7 +127,7 @@ class LoggingConfigHandlerTest extends ConfigHandlerTestBase
 			$l1->params
 		);
 
-		$this->assertNull($l2->params);
+		$this->assertSame(array(), $l2->params);
 
 	}
 }

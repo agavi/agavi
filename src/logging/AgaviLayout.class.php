@@ -28,19 +28,41 @@
 abstract class AgaviLayout
 {
 
+	/**
+	 * @var        AgaviContext An AgaviContext instance.
+	 */
+	protected $context = null;
+
+	/**
+	 * @var        string A message layout.
+	 */
 	private $layout = null;
 
 	/**
 	 * Initialize the Layout.
-	 * 
-	 * @param      array An array of parameters.
+	 *
+	 * @param      AgaviContext An AgaviContext instance.
+	 * @param      array        An associative array of initialization parameters.
 	 *
 	 * @author     Veikko Makinen <mail@veikkomakinen.com>
 	 * @since      0.10.0
 	 */
-	public function initialize($params = array())
+	function initialize(AgaviContext $context, $params = array())
 	{
-		/* empty so we're not required to override this */
+		$this->context = $context;
+	}
+
+	/**
+	 * Retrieve the current application context.
+	 *
+	 * @return     AgaviContext An AgaviContext instance.
+	 *
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.10.0
+	 */
+	public function getContext()
+	{
+		return $this->context;
 	}
 
 	/**
@@ -72,7 +94,7 @@ abstract class AgaviLayout
 	 * Set the message layout.
 	 *
 	 * @param      string A message layout.
-	 *	
+	 *
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0

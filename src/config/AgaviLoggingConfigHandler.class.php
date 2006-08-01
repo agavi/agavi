@@ -102,9 +102,7 @@ class AgaviLoggingConfigHandler extends AgaviConfigHandler
 		if(count($loggers) > 0) {
 			foreach($layouts as $name => $layout) {
 				$data[] = sprintf('$%s = new %s();', $name, $layout['class']);
-				if(count($layout['params']) > 0) {
-					$data[] = sprintf('$%s->initialize(%s);', $name, var_export($layout['params'], true));
-				}
+				$data[] = sprintf('$%s->initialize($this->context, %s);', $name, var_export($layout['params'], true));
 			}
 
 			foreach($appenders as $name => $appender) {
