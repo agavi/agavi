@@ -28,9 +28,15 @@
 class AgaviLoggerManager
 {
 
-	private
-		$loggers = array(),
-		$context = null;
+	/**
+	 * @var        array An array of AgaviLoggers.
+	 */
+	protected $loggers = array();
+
+	/**
+	 * @var        AgaviContext An AgaviContext instance.
+	 */
+	protected $context = null;
 
 	/**
 	 * Retrieve the current application context.
@@ -58,17 +64,17 @@ class AgaviLoggerManager
 	public function initialize(AgaviContext $context, $parameters = array())
 	{
 		$this->context = $context;
-		
+
 		// load logging configuration
 		require(AgaviConfigCache::checkConfig(AgaviConfig::get('core.config_dir') . '/logging.xml', $context->getName()));
 	}
-	
+
 	/**
 	 * Retrieve a logger.
 	 *
 	 * @param      string A logger name.
 	 *
-	 * @return     AgaviLogger A Logger, if a logger with the name exists, 
+	 * @return     AgaviLogger A Logger, if a logger with the name exists,
 	 *                         otherwise null.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
@@ -158,7 +164,7 @@ class AgaviLoggerManager
 	 * @param      string      A logger name.
 	 * @param      AgaviLogger A Logger instance.
 	 *
-	 * @throws     <b>AgaviLoggingException</b> If a logger with the name already 
+	 * @throws     <b>AgaviLoggingException</b> If a logger with the name already
 	 *                                          exists.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
@@ -182,12 +188,12 @@ class AgaviLoggerManager
 
 	/**
 	 * Log a Message.
-	 * 
+	 *
 	 * @param      AgaviMessage The Message to log.
 	 * @param      string Optional logger to log to.
-	 * 
+	 *
 	 * @throws     AgaviLoggingException if the logger was not found.
-	 * 
+	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.10.0

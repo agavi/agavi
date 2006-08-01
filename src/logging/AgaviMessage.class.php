@@ -31,24 +31,24 @@ class AgaviMessage extends AgaviParameterHolder
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param      $message optional message
-	 * @param      $priority optional priority level
-	 * 
+	 * @param      $level optional priority level
+	 *
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.10.0
 	 */
-	public function __construct($message = null, $priority = AgaviLogger::INFO)
+	public function __construct($message = null, $level = AgaviLogger::INFO)
 	{
 		$this->setParameter('m', $message);
-		$this->setParameter('p', $priority);
+		$this->setParameter('l', $level);
 	}
 
 	/**
 	 * Log this Message.
-	 * 
+	 *
 	 * Convenience function to log this Message.
-	 * 
+	 *
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.10.0
 	 */
@@ -56,12 +56,12 @@ class AgaviMessage extends AgaviParameterHolder
 	{
 		AgaviLoggerManager::log($this);
 	}
-	
+
 	/**
 	 * toString method.
-	 * 
+	 *
 	 * @return     string
-	 * 
+	 *
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.10.0
 	 */
@@ -72,11 +72,11 @@ class AgaviMessage extends AgaviParameterHolder
 
 	/**
 	 * Set the message.
-	 * 
+	 *
 	 * @param      $message required
-	 * 
+	 *
 	 * @return     AgaviMessage
-	 * 
+	 *
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.10.0
 	 */
@@ -88,11 +88,11 @@ class AgaviMessage extends AgaviParameterHolder
 
 	/**
 	 * Append to the message.
-	 * 
+	 *
 	 * @param      $message required
-	 * 
+	 *
 	 * @return     AgaviMessage
-	 * 
+	 *
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.10.0
 	 */
@@ -101,41 +101,41 @@ class AgaviMessage extends AgaviParameterHolder
 		$this->appendParameter('m', $message);
 		return $this;
 	}
-	
+
 	/**
-	 * Set the priority.
-	 * 
-	 * @param      $priority required
-	 * 
+	 * Set the priority level.
+	 *
+	 * @param      $level required
+	 *
 	 * @return     Message
-	 * 
+	 *
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.10.0
 	 */
-	public function setPriority($priority)
+	public function setLevel($level)
 	{
-		$this->setParameter('p', $priority);
+		$this->setParameter('l', $level);
 		return $this;
 	}
 
 	/**
-	 * Get the priority.
-	 * 
-	 * @return     mixed
-	 * 
+	 * Get the priority level.
+	 *
+	 * @return     int
+	 *
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.10.0
 	 */
-	public function getPriority()
+	public function getLevel()
 	{
-		return $this->getParameter('p');
+		return $this->getParameter('l');
 	}
 
 	/**
 	 * Get the message.
-	 * 
+	 *
 	 * @return     mixed
-	 * 
+	 *
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.10.0
 	 */

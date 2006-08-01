@@ -6,13 +6,13 @@ class MessageTest extends AgaviTestCase
 	{
 		$message = new AgaviMessage();
 		$this->assertNull($message->getMessage());
-		$this->assertEquals(AgaviLogger::INFO, $message->getPriority());
+		$this->assertEquals(AgaviLogger::INFO, $message->getLevel());
 		$message = new AgaviMessage('test');
 		$this->assertEquals('test', $message->getMessage());
-		$this->assertEquals(AgaviLogger::INFO, $message->getPriority());
+		$this->assertEquals(AgaviLogger::INFO, $message->getLevel());
 		$message = new AgaviMessage('test', AgaviLogger::DEBUG);
 		$this->assertEquals('test', $message->getMessage());
-		$this->assertEquals(AgaviLogger::DEBUG, $message->getPriority());
+		$this->assertEquals(AgaviLogger::DEBUG, $message->getLevel());
 	}
 
 	public function testgetsetappendMessage()
@@ -34,13 +34,13 @@ class MessageTest extends AgaviTestCase
 		$this->assertEquals("test message\nanother line", $message->__toString());
 	}
 
-	public function testgetsetPriority()
+	public function testgetsetLevel()
 	{
 		$message = new AgaviMessage;
-		$message->setPriority(AgaviLogger::DEBUG);
-		$this->assertEquals(AgaviLogger::DEBUG, $message->getPriority());
-		$message->setPriority(AgaviLogger::INFO);
-		$this->assertEquals(AgaviLogger::INFO, $message->getPriority());
+		$message->setLevel(AgaviLogger::DEBUG);
+		$this->assertEquals(AgaviLogger::DEBUG, $message->getLevel());
+		$message->setLevel(AgaviLogger::INFO);
+		$this->assertEquals(AgaviLogger::INFO, $message->getLevel());
 	}
 
 }
