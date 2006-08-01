@@ -170,7 +170,7 @@
     <section>
       <title>How a Request is Processed</title>
 
-      <para>If you call an URL that is handled by www/index.php, Agavi will
+      <para>If you call an URL that is handled by pub/index.php, Agavi will
       bootstrap the specified (or default) Environment and then create an
       instance of the specified (or default) Context (this instantiation sets
       up all of the core components of the framework). Finally, the request is

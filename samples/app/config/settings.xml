@@ -49,7 +49,7 @@
 		</system_actions>
 		
 		<settings>
-			<setting name="webapp_name">My Project</setting>
+			<setting name="app_name">My Project</setting>
 			
 			<setting name="available">true</setting>
 			<setting name="debug">false</setting>

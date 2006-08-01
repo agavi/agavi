@@ -6,9 +6,9 @@
 require_once('INSERT PATH TO "agavi/agavi.php" HERE');
 
 // +---------------------------------------------------------------------------+
-// | An absolute filesystem path to our webapp/config.php script.              |
+// | An absolute filesystem path to our app/config.php script.                 |
 // +---------------------------------------------------------------------------+
-require_once('../webapp/config.php');
+require_once('../app/config.php');
 
 // +---------------------------------------------------------------------------+
 // | Initialize the framework. You may pass an environment name to this method.|
