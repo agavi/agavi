@@ -47,7 +47,7 @@ abstract class AgaviLayout
 	 * @author     Veikko Makinen <mail@veikkomakinen.com>
 	 * @since      0.10.0
 	 */
-	function initialize(AgaviContext $context, $params = array())
+	public function initialize(AgaviContext $context, $params = array())
 	{
 		$this->context = $context;
 	}

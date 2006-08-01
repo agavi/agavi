@@ -48,7 +48,7 @@ abstract class AgaviAppender
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.10.0
 	 */
-	function initialize(AgaviContext $context, $params = array())
+	public function initialize(AgaviContext $context, $params = array())
 	{
 		$this->context = $context;
 	}
