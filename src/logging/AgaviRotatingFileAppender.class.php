@@ -23,7 +23,7 @@
  * <b>Optional parameters:</b>
  *
  * # <b>cycle</b>  - [7]                 - Number of log files to keep.
- * # <b>prefix</b> - [core.webapp_name-] - Log filename prefix.
+ * # <b>prefix</b> - [core.app_name-] - Log filename prefix.
  * # <b>suffix</b> - [.log]              - Log filename suffix.
  *
  * @package    agavi
@@ -50,7 +50,7 @@ class AgaviRotatingFileAppender extends AgaviFileAppender
 	function initialize(AgaviContext $context, $params = array())
 	{
 		$cycle = 7;
-		$prefix = str_replace(' ', '_', AgaviConfig::get('core.webapp_name')).'-';
+		$prefix = str_replace(' ', '_', AgaviConfig::get('core.app_name')).'-';
 		$suffix = '.log';
 
 		if(!isset($params['dir'])) {

@@ -110,7 +110,7 @@
         to somewhere inside your application's directory structure (we
         recommend a <filename>libs</filename> folder that holds all libraries
         your app uses and that sits on the same level as the
-        <filename>webapp</filename> and <filename>www</filename> directories)
+        <filename>app</filename> and <filename>www</filename> directories)
         and give it a different name, <filename>agavi</filename> would stand
         to reason. For that little extra something, copy the agavi-dist or
         agavi.bat-dist script again, maybe to your application root. Your
@@ -239,13 +239,13 @@
       permissions for the cache folder so it's writeable to PHP or the web
       server process:</para>
 
-      <para><command>chmod a+rwx webapp/cache</command></para>
+      <para><command>chmod a+rwx app/cache</command></para>
 
       <para>And that's it! You're done! Fire up your browser and point it to
       the <filename>www</filename> directory of your application. If you see a
       blank page, everything went fine. Of course, a blank page isn't really
       satisfying or anything, so you might want to edit
-      <filename>webapp/modules/Default/templates/IndexSuccess.php</filename>
+      <filename>app/modules/Default/templates/IndexSuccess.php</filename>
       and put some text in there, like the infamous "Hello World". Back to the
       browser and reload, et voila!</para>
 
