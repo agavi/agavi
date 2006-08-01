@@ -9,11 +9,13 @@ class ActionStackEntryTest extends AgaviTestCase
 {
 	private
 		$_a   = null,
-		$_ase = null;
+		$_ase = null,
+		$_t = 0;
 
 	public function setUp()
 	{
 		$this->_a = new ASESampleAction();
+		$this->_t = microtime(true);
 		$this->_ase = new AgaviActionStackEntry('Sample', 'Index', $this->_a, new AgaviParameterHolder(array('foo' => 'foo', 'bar' => 'bar')));
 	}
 
@@ -32,7 +34,8 @@ class ActionStackEntryTest extends AgaviTestCase
 	{
 		$mt = $this->_ase->getMicrotime();
 		$this->assertNotNull($mt);
-		$this->assertTrue( is_string($mt) );
+		$this->assertTrue(is_float($mt));
+		$this->assertTrue($this->_t < $mt);
 	}
 
 	public function testgetModuleName()
@@ -43,9 +46,9 @@ class ActionStackEntryTest extends AgaviTestCase
 	public function testgetsetPresentation()
 	{
 		$this->assertNull($this->_ase->getPresentation());
-		$p = 'bill';
+		$p = new AgaviWebResponse();
 		$this->_ase->setPresentation($p);
-		$p_test =& $this->_ase->getPresentation();
+		$p_test = $this->_ase->getPresentation();
 		$this->assertReference($p, $p_test);
 	}
 	
