@@ -214,20 +214,22 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 			}
 
 			// prevent access to Request::getParameters()
-			$this->context->getRequest()->lock();
 			// process manual validation
 			if($actionInstance->$validateMethod() && $validated) {
 				// execute the action
+				$this->context->getRequest()->lock();
 				$viewName = $actionInstance->$executeMethod($actionEntry->getParameters());
+				$this->context->getRequest()->unlock();
 			} else {
 				// validation failed
 				$handleErrorMethod = 'handle' . $method . 'Error';
 				if(!method_exists($actionInstance, $handleErrorMethod)) {
 					$handleErrorMethod = 'handleError';
 				}
+				$this->context->getRequest()->lock();
 				$viewName = $actionInstance->$handleErrorMethod($actionEntry->getParameters());
+				$this->context->getRequest()->unlock();
 			}
-			$this->context->getRequest()->unlock();
 		}
 		
 		if(is_array($viewName)) {
