@@ -58,7 +58,9 @@ abstract class AgaviRouting
 	public function initialize(AgaviContext $context, $parameters = array())
 	{
 		$this->context = $context;
-		$this->defaultGenOptions = array_merge($this->defaultGenOptions, $parameters);
+		if(isset($parameters['generator'])) {
+			$this->defaultGenOptions = array_merge($this->defaultGenOptions, $parameters['generator']);
+		}
 		$cfg = AgaviConfig::get("core.config_dir") . "/routing.xml";
 		// allow missing routing.xml when routing is not enabled
 		if(AgaviConfig::get("core.use_routing", false) || is_readable($cfg)) {
