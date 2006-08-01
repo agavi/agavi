@@ -249,11 +249,9 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 		$this->setParameter('include_password_inputs', false);
 		$this->setParameter('include_hidden_inputs', true);
 		$this->setParameter('remove_xml_prolog', true);
-		$this->setParameter('methods', "");
+		$this->setParameter('methods', array());
 		// initialize parent
 		parent::initialize($context, $parameters);
-		// build array of request methods
-		$this->setParameter('methods', explode(' ', $this->getParameter('methods')));
 	}
 }
 

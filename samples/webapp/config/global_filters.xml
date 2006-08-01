@@ -28,7 +28,11 @@
 			
 			<filter name="FormPopulationFilter" class="AgaviFormPopulationFilter">
 				<parameters>
-					<parameter name="methods">write</parameter>
+					<parameter name="methods">
+						<parameters>
+							<parameter>write</parameter>
+						</parameters>
+					</parameter>
 				</parameters>
 			</filter>
 			
