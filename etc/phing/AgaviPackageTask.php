@@ -54,7 +54,7 @@ EOD;
 			'baseinstalldir' => 'agavi',
 			'ignore' => array(
 				'.svn/'
-			), 
+			),
 			'installexceptions' => array(
 				'scripts/agavi-dist' => '/',
 				'scripts/agavi.bat-dist' => '/'
@@ -75,8 +75,8 @@ EOD;
 		$p2->addMaintainer('lead', 'david', 'David Zuelke', 'dz@bitxtender.com');
 		$p2->addMaintainer('developer', 'v-dogg', 'Veikko Makinen', 'mail@veikkomakinen.com');
 		$p2->setChannel('pear.agavi.org');
-		$p2->setReleaseVersion('0.11-DEV');
-		$p2->setAPIVersion('0.11-DEV');
+		$p2->setReleaseVersion('0.11dev');
+		$p2->setAPIVersion('0.11dev');
 		$p2->setReleaseStability('alpha');
 		$p2->setAPIStability('alpha');
 		$p2->setSummary($shortDesc);
