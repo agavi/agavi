@@ -36,6 +36,45 @@ final class Agavi
 	public static $autoloads = null;
 	
 	/**
+	 * Handles autoloading of classes
+	 *
+	 * @param      string A class name.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public static function __autoload($class)
+	{
+		if(self::$autoloads === null) {
+			self::$autoloads = array();
+			// catch parse errors of autoload.xml
+			try {
+				$cfg = AgaviConfig::get('core.config_dir') . '/autoload.xml';
+				if(!is_readable($cfg)) {
+					$cfg = $cfg = AgaviConfig::get('core.system_config_dir') . '/autoload.xml';
+					if(!is_readable($cfg)) {
+						return;
+					}
+				}
+				include(AgaviConfigCache::checkConfig($cfg));
+			} catch(Exception $e) {
+				trigger_error($e->getMessage(), E_USER_ERROR);
+			}
+		}
+		
+		if(isset(self::$autoloads[$class])) {
+			// class exists, let's include it
+			require(self::$autoloads[$class]);
+		}
+		
+		/*	
+			If the class doesn't exist in autoload.xml there's not a lot we can do. Because 
+			PHP's class_exists resorts to __autoload we cannot throw exceptions
+			for this might break some 3rd party lib autoloading mechanism.
+		*/
+	}
+	
+	/**
 	 * Startup the Agavi core
 	 *
 	 * @param      string environment the environment to use for this session.
