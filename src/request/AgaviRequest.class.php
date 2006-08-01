@@ -367,7 +367,7 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
-	public function & getParameter($name, $default = null)
+	final public function & getParameter($name, $default = null)
 	{
 		if($this->locked) {
 			throw new AgaviException('For security reasons, Request Parameters cannot be accessed directly. Please use the ParameterHolder object passed to your Action or View execute method to access Request Parameters.');
@@ -382,7 +382,7 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
-	public function hasParameter($name)
+	final public function hasParameter($name)
 	{
 		if($this->locked) {
 			throw new AgaviException('For security reasons, Request Parameters cannot be accessed directly. Please use the ParameterHolder object passed to your Action or View execute method to access Request Parameters.');
@@ -394,7 +394,7 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	/**
 	 * @see        AgaviParameterHolder::clearParameters()
 	 */
-	public function clearParameters()
+	final public function clearParameters()
 	{
 		if($this->locked) {
 			throw new AgaviException('For security reasons, Request Parameters cannot be accessed directly. Please use the ParameterHolder object passed to your Action or View execute method to access Request Parameters.');
@@ -405,7 +405,7 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	/**
 	 * @see        AgaviParameterHolder::getParameterNames()
 	 */
-	public function getParameterNames()
+	final public function getParameterNames()
 	{
 		if($this->locked) {
 			throw new AgaviException('For security reasons, Request Parameters cannot be accessed directly. Please use the ParameterHolder object passed to your Action or View execute method to access Request Parameters.');
@@ -416,7 +416,7 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	/**
 	 * @see        AgaviParameterHolder::getParameters()
 	 */
-	public function getParameters()
+	final public function getParameters()
 	{
 		if($this->locked) {
 			throw new AgaviException('For security reasons, Request Parameters cannot be accessed directly. Please use the ParameterHolder object passed to your Action or View execute method to access Request Parameters.');
@@ -427,7 +427,7 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	/**
 	 * @see        AgaviParameterHolder::removeParameter()
 	 */
-	public function & removeParameter($name)
+	final public function & removeParameter($name)
 	{
 		if($this->locked) {
 			throw new AgaviException('For security reasons, Request Parameters cannot be accessed directly. Please use the ParameterHolder object passed to your Action or View execute method to access Request Parameters.');
@@ -439,7 +439,7 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	/**
 	 * @see        AgaviParameterHolder::setParameter()
 	 */
-	public function setParameter($name, $value)
+	final public function setParameter($name, $value)
 	{
 		if($this->locked) {
 			throw new AgaviException('For security reasons, Request Parameters cannot be accessed directly. Please use the ParameterHolder object passed to your Action or View execute method to access Request Parameters.');
@@ -450,7 +450,7 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	/**
 	 * @see        AgaviParameterHolder::appendParameter()
 	 */
-	public function appendParameter($name, $value)
+	final public function appendParameter($name, $value)
 	{
 		if($this->locked) {
 			throw new AgaviException('For security reasons, Request Parameters cannot be accessed directly. Please use the ParameterHolder object passed to your Action or View execute method to access Request Parameters.');
@@ -461,7 +461,7 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	/**
 	 * @see        AgaviParameterHolder::setParameterByRef()
 	 */
-	public function setParameterByRef($name, &$value)
+	final public function setParameterByRef($name, &$value)
 	{
 		if($this->locked) {
 			throw new AgaviException('For security reasons, Request Parameters cannot be accessed directly. Please use the ParameterHolder object passed to your Action or View execute method to access Request Parameters.');
@@ -472,7 +472,7 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	/**
 	 * @see        AgaviParameterHolder::appendParameterByRef()
 	 */
-	public function appendParameterByRef($name, &$value)
+	final public function appendParameterByRef($name, &$value)
 	{
 		if($this->locked) {
 			throw new AgaviException('For security reasons, Request Parameters cannot be accessed directly. Please use the ParameterHolder object passed to your Action or View execute method to access Request Parameters.');
@@ -483,7 +483,7 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	/**
 	 * @see        AgaviParameterHolder::setParameters()
 	 */
-	public function setParameters($parameters)
+	final public function setParameters($parameters)
 	{
 		if($this->locked) {
 			throw new AgaviException('For security reasons, Request Parameters cannot be accessed directly. Please use the ParameterHolder object passed to your Action or View execute method to access Request Parameters.');
@@ -494,7 +494,7 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	/**
 	 * @see        AgaviParameterHolder::setParametersByRef()
 	 */
-	public function setParametersByRef(&$parameters)
+	final public function setParametersByRef(&$parameters)
 	{
 		if($this->locked) {
 			throw new AgaviException('For security reasons, Request Parameters cannot be accessed directly. Please use the ParameterHolder object passed to your Action or View execute method to access Request Parameters.');
