@@ -5,7 +5,7 @@ class FCHTestBase
 {
 	public	$context,
 					$params;
-	public function initialize($ctx, $params)
+	public function initialize($ctx, $params = array())
 	{
 		$this->context = $ctx;
 		$this->params = $params;
