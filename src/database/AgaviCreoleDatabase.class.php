@@ -58,7 +58,6 @@
  */
 class AgaviCreoleDatabase extends AgaviDatabase
 {
-
 	/**
 	 * Connect to the database.
 	 *
@@ -68,93 +67,65 @@ class AgaviCreoleDatabase extends AgaviDatabase
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function connect ()
+	public function connect()
 	{
-
-		try
-		{
-
+		try {
 			// determine how to get our settings
 			$method = $this->getParameter('method', 'normal');
 
-			switch ($method)
-			{
-
+			switch($method) {
 				case 'normal':
-
-				    // get parameters normally, and all are required
-				    $database = $this->getParameter('database', null);
-				    $hostspec = $this->getParameter('hostspec', null);
-				    $password = $this->getParameter('password', null);
-				    $phptype  = $this->getParameter('phptype', null);
-				    $username = $this->getParameter('username', null);
-
-				    $dsn = array('database' => $database,
-						         'hostspec' => $hostspec,
-						         'password' => $password,
-						         'phptype'  => $phptype,
-						         'username' => $username);
-
-				    break;
+					// get parameters normally, and all are required
+					$database = $this->getParameter('database', null);
+					$hostspec = $this->getParameter('hostspec', null);
+					$password = $this->getParameter('password', null);
+					$phptype  = $this->getParameter('phptype', null);
+					$username = $this->getParameter('username', null);
+					$dsn = array(
+						'database' => $database,
+						'hostspec' => $hostspec,
+						'password' => $password,
+						'phptype'  => $phptype,
+						'username' => $username
+					);
+					break;
 
 				case 'dsn':
-
-				    $dsn = $this->getParameter('dsn');
-
-				    if ($dsn == null)
-				    {
-
+					$dsn = $this->getParameter('dsn');
+					if($dsn == null) {
 						// missing required dsn parameter
-						$error = 'Database configuration specifies method ' .
-						         '"dsn", but is missing dsn parameter';
-
+						$error = 'Database configuration specifies method "dsn", but is missing dsn parameter';
 						throw new AgaviDatabaseException($error);
-
-				    }
-
-				    break;
+					}
+					break;
 
 				case 'server':
-
-				    // construct a DSN connection string from existing $_SERVER
-				    // values
-				    $dsn =& $this->loadDSN($_SERVER);
-
-				    break;
+					// construct a DSN connection string from existing $_SERVER
+					// values
+					$dsn =& $this->loadDSN($_SERVER);
+					break;
 
 				case 'env':
-
-				    // construct a DSN connection string from existing $_ENV
-				    // values
-				    $dsn =& $this->loadDSN($_ENV);
-
-				    break;
+					// construct a DSN connection string from existing $_ENV
+					// values
+					$dsn =& $this->loadDSN($_ENV);
+					break;
 
 				default:
-
-				    // who knows what the user wants...
-				    $error = 'Invalid CreoleDatabase parameter retrieval ' .
-						     'method "%s"';
-				    $error = sprintf($error, $method);
-
-				    throw new AgaviDatabaseException($error);
-
+					// who knows what the user wants...
+					$error = 'Invalid CreoleDatabase parameter retrieval method "%s"';
+					$error = sprintf($error, $method);
+					throw new AgaviDatabaseException($error);
 			}
 
 			// get creole class path
 			$classPath = $this->getParameter('classpath');
 
 			// include the creole file
-			if ($classPath == null)
-			{
-
+			if($classPath == null) {
 				require_once('creole/Creole.php');
-
-			} else
-			{
-
+			} else {
 				require_once($classPath);
-
 			}
 
 			// set our flags
@@ -168,29 +139,19 @@ class AgaviCreoleDatabase extends AgaviDatabase
 			$flags |= ($persistent)        ? Creole::PERSISTENT          : 0;
 
 			// do the duuuurtay work, right thurr
-			if ($flags > 0)
-			{
-
+			if($flags > 0) {
 				$this->connection = Creole::getConnection($dsn, $flags);
-
-			} else
-			{
-
+			} else {
 				$this->connection = Creole::getConnection($dsn);
-
 			}
 
 			// get our resource
 			$this->resource = $this->connection->getResource();
-
-		} catch (SQLException $e)
-		{
-
+			
+		} catch(SQLException $e) {
 			// the connection's foobar'd
 			throw new AgaviDatabaseException($e->toString());
-
 		}
-
 	}
 
 	/**
@@ -201,42 +162,30 @@ class AgaviCreoleDatabase extends AgaviDatabase
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	private function & loadDSN (&$array)
+	private function loadDSN($array)
 	{
-
 		// determine if a dsn is set, otherwise use separate parameters
 		$dsn = $this->getParameter('dsn');
 
-		if ($dsn == null)
-		{
+		if($dsn == null) {
 
 			// list of available parameters
-			$available = array('database', 'hostspec', 'password', 'phptype',
-						       'username');
+			$available = array('database', 'hostspec', 'password', 'phptype', 'username');
 
 			$dsn = array();
 
 			// yes, i know variable variables are ugly, but let's avoid using
 			// an array for array's sake in this single spot in the source
-			foreach ($available as $parameter)
-			{
-
+			foreach($available as $parameter) {
 				$$parameter = $this->getParameter($parameter);
-
-				$dsn[$parameter] = ($$parameter != null)
-						           ? $array[$$parameter] : null;
-
+				$dsn[$parameter] = ($$parameter != null) ? $array[$$parameter] : null;
 			}
 
-		} else
-		{
-
+		} else {
 			$dsn = $array[$dsn];
-
 		}
 
 		return $dsn;
-
 	}
 
 	/**
@@ -248,18 +197,12 @@ class AgaviCreoleDatabase extends AgaviDatabase
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function shutdown ()
+	public function shutdown()
 	{
-
-		if ($this->connection !== null)
-		{
-
+		if ($this->connection !== null) {
 			@$this->connection->close();
-
 		}
-
 	}
-
 }
 
 ?>

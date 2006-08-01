@@ -47,7 +47,6 @@
  */
 class AgaviPostgresqlDatabase extends AgaviDatabase
 {
-
 	/**
 	 * Connect to the database.
 	 *
@@ -57,57 +56,43 @@ class AgaviPostgresqlDatabase extends AgaviDatabase
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function connect ()
+	public function connect()
 	{
-
 		// determine how to get our parameters
 		$method = $this->getParameter('method', 'normal');
 
 		// get parameters
-		switch ($method)
-		{
-
+		switch ($method) {
 			case 'normal':
-
 				// get parameters normally
 				$database = $this->getParameter('database');
 				$host     = $this->getParameter('host');
 				$password = $this->getParameter('password');
 				$port     = $this->getParameter('port');
 				$user     = $this->getParameter('username');
-
 				// construct connection string
 				$string = (($database != null) ? (' dbname='   . $database) : '') .
-						  (($host != null)     ? (' host='     . $host)     : '') .
-						  (($password != null) ? (' password=' . $password) : '') .
-						  (($port != null)     ? (' port='     . $port)     : '') .
-						  (($user != null)     ? (' user='     . $user)     : '');
-
+									(($host != null)     ? (' host='     . $host)     : '') .
+									(($password != null) ? (' password=' . $password) : '') .
+									(($port != null)     ? (' port='     . $port)     : '') .
+									(($user != null)     ? (' user='     . $user)     : '');
 				break;
 
 			case 'server':
-
 				// construct a connection string from existing $_SERVER values
 				$string = $this->loadParameters($_SERVER);
-
 				break;
 
 			case 'env':
-
 				// construct a connection string from existing $_ENV values
 				$string = $this->loadParameters($_ENV);
-
 				break;
 
 			default:
-
 				// who knows what the user wants...
-				$error = 'Invalid AgaviPostgreSQLDatabase parameter retrieval ' .
-						 'method "%s"';
+				$error = 'Invalid AgaviPostgreSQLDatabase parameter retrieval method "%s"';
 				$error = sprintf($error, $method);
-
 				throw new AgaviDatabaseException($error);
-
 		}
 
 		// let's see if we need a persistent connection
@@ -140,9 +125,8 @@ class AgaviPostgresqlDatabase extends AgaviDatabase
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	private function loadParameters (&$array)
+	private function loadParameters($array)
 	{
-
 		$database = $this->getParameter('database');
 		$host     = $this->getParameter('host');
 		$password = $this->getParameter('password');
@@ -151,13 +135,12 @@ class AgaviPostgresqlDatabase extends AgaviDatabase
 
 		// construct connection string
 		$string = (($database != null) ? (' dbname='   . $array[$database]) : '') .
-				  (($host != null)     ? (' host='     . $array[$host])     : '') .
-				  (($password != null) ? (' password=' . $array[$password]) : '') .
-				  (($port != null)     ? (' port='     . $array[$port])     : '') .
-				  (($user != null)     ? (' user='     . $array[$user])     : '');
+							(($host != null)     ? (' host='     . $array[$host])     : '') .
+							(($password != null) ? (' password=' . $array[$password]) : '') .
+							(($port != null)     ? (' port='     . $array[$port])     : '') .
+							(($user != null)     ? (' user='     . $array[$user])     : '');
 
 		return $string;
-
 	}
 
 	/**
@@ -169,18 +152,12 @@ class AgaviPostgresqlDatabase extends AgaviDatabase
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function shutdown ()
+	public function shutdown()
 	{
-
-		if ($this->connection != null)
-		{
-
+		if($this->connection != null) {
 			@pg_close($this->connection);
-
 		}
-
 	}
-
 }
 
 ?>
