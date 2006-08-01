@@ -4,7 +4,7 @@
 | This file is part of the Agavi package.                                    |
 | Copyright (c) 2006 the Agavi Project                                       |
 | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
-| AGAVI DATABASE CONNECTIVITY CONFIGURATION                                 |
+| AGAVI DATABASE CONNECTIVITY CONFIGURATION                                  |
 | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
 | CATEGORIES:                                                                |
 |                                                                            |
@@ -62,7 +62,7 @@
 | OPTIONAL KEYS:                                                             |
 |                                                                            |
 | 1. file  - The filesystem path to the class file. If the path is relative, |
-|            it will be relative to the AG_WEBAPP_DIR Agavi application     |
+|            it will be relative to the %core.app_dir% Agavi application     |
 |            setting.                                                        |
 | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
 | EXAMPLES:                                                                  |
@@ -144,7 +144,7 @@
 |                                                                            |
 |         class = "PropelDatabase"                                           |
 |                                                                            |
-|         param.config  = "%core.webapp_dir%/config/dbname-conf.php"         |
+|         param.config  = "%core.app_dir%/config/dbname-conf.php"            |
 |                                                                            |
 |         ; the following two are optional                                   |
 |         param.datasource = "another_datasource_in_the_runtime_config"      |
@@ -182,7 +182,7 @@
 | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
 | KEYWORDS:                                                                  |
 | You may reference any configuration directive by enclosing the name in     |
-| "%" signs. Example: %core.agavi_dir%                                         |
+| "%" signs. Example: %core.agavi_dir%                                       |
 +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
 -->
 <configurations>
@@ -200,7 +200,7 @@
 			
 			<database name="propel" class="AgaviPropelDatabase">
 				<parameters>
-					<parameter name="config">%core.webapp_dir%/config/project-conf.php</parameter>
+					<parameter name="config">%core.app_dir%/config/project-conf.php</parameter>
 				</parameters>
 			</database>
 			

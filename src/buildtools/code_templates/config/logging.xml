@@ -45,13 +45,13 @@
 
 			<appender name="MyAppLogAppender" class="AgaviFileAppender" layout="MyPassthruLayout">
 				<parameters>
-					<parameter name="file">%core.webapp_dir%/log/myapp.log</parameter>
+					<parameter name="file">%core.app_dir%/log/myapp.log</parameter>
 				</parameters>
 			</appender>
 
 			<appender name="MyAppErrorLogAppender" class="AgaviFileAppender" layout="MyPassthruLayout">
 				<parameters>
-					<parameter name="file">%core.webapp_dir%/log/myapp_error.log</parameter>
+					<parameter name="file">%core.app_dir%/log/myapp_error.log</parameter>
 				</parameters>
 			</appender>
 		</appenders>

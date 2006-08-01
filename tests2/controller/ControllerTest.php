@@ -33,9 +33,9 @@ class ControllerTest extends AgaviTestCase
 	public function testactionExists()
 	{
 		// actionExists actually checks the filesystem, 
-		$this->assertTrue(file_exists(AgaviConfig::get('core.webapp_dir') . '/modules/Test/actions/TestAction.class.php'));
-		$this->assertFalse(file_exists(AgaviConfig::get('core.webapp_dir') . '/modules/Test/actions/BunkAction.class.php'));
-		$this->assertFalse(file_exists(AgaviConfig::get('core.webapp_dir') . '/modules/Bunk/actions/BunkAction.class.php'));
+		$this->assertTrue(file_exists(AgaviConfig::get('core.app_dir') . '/modules/Test/actions/TestAction.class.php'));
+		$this->assertFalse(file_exists(AgaviConfig::get('core.app_dir') . '/modules/Test/actions/BunkAction.class.php'));
+		$this->assertFalse(file_exists(AgaviConfig::get('core.app_dir') . '/modules/Bunk/actions/BunkAction.class.php'));
 		$controller = $this->_controller;
 		$this->assertEquals('Test', $controller->actionExists('Test', 'Test'));
 		$this->assertFalse($controller->actionExists('Test', 'Bunk'));
@@ -236,7 +236,7 @@ class ControllerTest extends AgaviTestCase
 		$controller = $this->_controller;
 
 		$controller->forward('ErrorModule', 'Some');
-		$this->assertSame(AgaviConfig::get('core.webapp_dir') . '/modules/ErrorModule', $controller->getModuleDirectory());
+		$this->assertSame(AgaviConfig::get('core.app_dir') . '/modules/ErrorModule', $controller->getModuleDirectory());
 	}
 
 	public function testSetGetOutputType()

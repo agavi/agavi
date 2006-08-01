@@ -15,7 +15,7 @@
 	</configuration>
 	<configuration>
 		<autoloads>
-			<autoload name="TestClass2">%core.webapp_dir%/lib/config/autoload/Test2.class.php</autoload>
+			<autoload name="TestClass2">%core.app_dir%/lib/config/autoload/Test2.class.php</autoload>
 		</autoloads>
 	</configuration>
 </configurations>

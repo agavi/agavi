@@ -63,16 +63,7 @@ abstract class AgaviConfigHandler extends AgaviParameterHolder
 		$data = array();
 		if($itemNode->hasChildren('parameters')) {
 			foreach($itemNode->parameters as $node) {
-				if(!$node->hasAttribute('name')) {
-					// create a new entry in in the array and get they key of the new 
-					// created entry (the last in the array). The value doesn't matter
-					// since it will be overwritten anyways
-					$data[] = 0;
-					end($data);
-					$name = key($data);
-				} else {
-					$name = $node->getAttribute('name');
-				}
+				$name = $node->getAttribute('name');
 				if($node->hasChildren('parameters')) {
 					$data[$name] = (isset($oldValues[$name]) && is_array($oldValues[$name])) ? $oldValues[$name] : array();
 					$data[$name] = $this->getItemParameters($node, $data[$name], $literalize);
@@ -211,7 +202,7 @@ abstract class AgaviConfigHandler extends AgaviParameterHolder
 	{
 		if(!AgaviToolkit::isPathAbsolute($path)) {
 			// not an absolute path so we'll prepend to it
-			$path = AgaviConfig::get('core.webapp_dir') . '/' . $path;
+			$path = AgaviConfig::get('core.app_dir') . '/' . $path;
 		}
 
 		return $path;

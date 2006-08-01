@@ -3,25 +3,24 @@ require_once(dirname(__FILE__) . '/ConfigHandlerTestBase.php');
 
 class TestLogger
 {
-	const ERROR = 1;
-	const INFO = 2;
+	const INFO = 1;
+	const ERROR = 2;
 	public $appenders;
-	public $level;
+	public $priority;
 
 	public function setAppender($name, $appender)
 	{
 		$this->appenders[$name] = $appender;
 	}
 
-	public function setLevel($level)
+	public function setPriority($priority)
 	{
-		$this->level = $level;
+		$this->priority = $priority;
 	}
 }
 
 class TestLogger1 extends TestLogger { }
 class TestLogger2 extends TestLogger { }
-class TestLogger3 extends TestLogger { }
 
 class TestAppender
 {
@@ -48,7 +47,7 @@ class TestLayout
 {
 	public $params = null;
 
-	public function initialize(AgaviContext $context, $params)
+	public function initialize($params)
 	{
 		$this->params = $params;
 	}
@@ -75,10 +74,9 @@ class LoggingConfigHandlerTest extends ConfigHandlerTestBase
 
 		$test1 = AgaviLoggerManager::getLogger('test1');
 		$test2 = AgaviLoggerManager::getLogger('test2');
-		$test3 = AgaviLoggerManager::getLogger('test3');
 
 		$this->assertType('TestLogger1', $test1);
-		$this->assertSame(TestLogger::INFO, $test1->level);
+		$this->assertSame(TestLogger::INFO, $test1->priority);
 		$this->assertType('TestAppender1', $test1->appenders['appender1']);
 		$this->assertType('TestAppender2', $test1->appenders['appender2']);
 		$this->assertReference($test1->appenders['appender1'], $test2->appenders['appender1']);
@@ -86,13 +84,11 @@ class LoggingConfigHandlerTest extends ConfigHandlerTestBase
 
 
 		$this->assertType('TestLogger2', $test2);
-		$this->assertSame(TestLogger::ERROR, $test2->level);
+		$this->assertSame(TestLogger::ERROR, $test2->priority);
 		$this->assertType('TestAppender1', $test2->appenders['appender1']);
 		$this->assertType('TestAppender2', $test2->appenders['appender2']);
 		$this->assertType('TestAppender3', $test2->appenders['appender3']);
 
-		$this->assertType('TestLogger3', $test3);
-		$this->assertSame(TestLogger::INFO | TestLogger::ERROR, $test3->level);
 
 		$a1 = $test2->appenders['appender1'];
 		$a2 = $test2->appenders['appender2'];
@@ -113,7 +109,7 @@ class LoggingConfigHandlerTest extends ConfigHandlerTestBase
 
 		$this->assertType('TestLayout2', $a3->layout);
 		$this->assertSame(array(
-			'file' => AgaviConfig::get('core.webapp_dir') . '/log/myapp.log',
+			'file' => AgaviConfig::get('core.app_dir') . '/log/myapp.log',
 			),
 			$a3->params
 		);
@@ -131,7 +127,7 @@ class LoggingConfigHandlerTest extends ConfigHandlerTestBase
 			$l1->params
 		);
 
-		$this->assertSame(array(), $l2->params);
+		$this->assertNull($l2->params);
 
 	}
 }

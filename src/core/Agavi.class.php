@@ -109,24 +109,24 @@ final class Agavi
 			
 			AgaviConfig::set('core.debug', false, false);
 			
-			if(!AgaviConfig::has('core.webapp_dir')) {
-				throw new AgaviException('Configuration directive "core.webapp_dir" not defined, terminating...');
+			if(!AgaviConfig::has('core.app_dir')) {
+				throw new AgaviException('Configuration directive "core.app_dir" not defined, terminating...');
 			}
 			
 			// define a few filesystem paths
-			AgaviConfig::set('core.cache_dir', AgaviConfig::get('core.webapp_dir') . '/cache', false, true);
+			AgaviConfig::set('core.cache_dir', AgaviConfig::get('core.app_dir') . '/cache', false, true);
 			
-			AgaviConfig::set('core.config_dir', AgaviConfig::get('core.webapp_dir') . '/config', false, true);
+			AgaviConfig::set('core.config_dir', AgaviConfig::get('core.app_dir') . '/config', false, true);
 			
 			AgaviConfig::set('core.system_config_dir', AgaviConfig::get('core.agavi_dir') . '/config/defaults', false, true);
 			
-			AgaviConfig::set('core.lib_dir', AgaviConfig::get('core.webapp_dir') . '/lib', false, true);
+			AgaviConfig::set('core.lib_dir', AgaviConfig::get('core.app_dir') . '/lib', false, true);
 			
-			AgaviConfig::set('core.model_dir', AgaviConfig::get('core.webapp_dir') . '/models', false, true);
+			AgaviConfig::set('core.model_dir', AgaviConfig::get('core.app_dir') . '/models', false, true);
 			
-			AgaviConfig::set('core.module_dir', AgaviConfig::get('core.webapp_dir') . '/modules', false, true);
+			AgaviConfig::set('core.module_dir', AgaviConfig::get('core.app_dir') . '/modules', false, true);
 			
-			AgaviConfig::set('core.template_dir', AgaviConfig::get('core.webapp_dir') . '/templates', false, true);
+			AgaviConfig::set('core.template_dir', AgaviConfig::get('core.app_dir') . '/templates', false, true);
 			
 			// ini settings
 			ini_set('magic_quotes_runtime', AgaviConfig::get('php.magic_quotes_runtime', false));

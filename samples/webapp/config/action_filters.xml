@@ -18,7 +18,7 @@
 | OPTIONAL KEYS:                                                             |
 |                                                                            |
 | 1. file  - The filesystem path to the class file. If the path is relative, |
-|            it will be relative to the "core.webapp_dir" Agavi application  |
+|            it will be relative to the "core.app_dir" Agavi application     |
 |            setting.                                                        |
 | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
 | PARAMETER KEYS:                                                            |
@@ -40,7 +40,7 @@
 | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
 | KEYWORDS:                                                                  |
 | You may reference any configuration directive by enclosing the name in     |
-| "%" signs. Example: %core.agavi_dir%                                         |
+| "%" signs. Example: %core.agavi_dir%                                       |
 +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
 -->
 <configurations>

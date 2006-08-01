@@ -91,12 +91,12 @@ function test__autoload($class)
 			}
 		}
 		$classes = locateClasses(AgaviConfig::get('core.agavi_dir'));
-		if(AgaviConfig::has('core.webapp_dir')) { 
-			$classes = array_merge((array) $classes, (array) locateClasses(AgaviConfig::get('core.webapp_dir'), true));
+		if(AgaviConfig::has('core.app_dir')) { 
+			$classes = array_merge((array) $classes, (array) locateClasses(AgaviConfig::get('core.app_dir'), true));
 		}
 		if ($cachedir && is_writable($cachedir)) {
 			$contents = "<?php\n// --Automagically created ".date($datefmt)."\n//" .
-									(AgaviConfig::has('core.webapp_dir') ? " includes classes located in {$_SERVER['CWD_NAME']}/webapp, too.\n" : "no webapp classes included.\n") .
+									(AgaviConfig::has('core.app_dir') ? " includes classes located in {$_SERVER['CWD_NAME']}/webapp, too.\n" : "no webapp classes included.\n") .
 									'$classes = ' .var_export($classes, true)."\n?>";
 			file_put_contents($cache, $contents);
 		}

@@ -29,7 +29,7 @@
 // | You shouldn't have to change this usually since it's auto-determined.     |
 // | Agavi can't determine this automatically, so you always have to supply it.|
 // +---------------------------------------------------------------------------+
-AgaviConfig::set('core.webapp_dir', dirname(__FILE__));
+AgaviConfig::set('core.app_dir', dirname(__FILE__));
 
 // +---------------------------------------------------------------------------+
 // | An absolute filesystem path to the directory where cache files will be    |
@@ -40,17 +40,17 @@ AgaviConfig::set('core.webapp_dir', dirname(__FILE__));
 // |       to clean up *ALL* data in this directory.                           |
 // |                                                                           |
 // | This constant will be auto-set by Agavi if you do not supply it.          |
-// | The default value is: "<core.webapp_dir>/cache"                           |
+// | The default value is: "<core.app_dir>/cache"                              |
 // +---------------------------------------------------------------------------+
-// AgaviConfig::set('core.cache_dir', AgaviConfig::get('core.webapp_dir') . '/cache');
+// AgaviConfig::set('core.cache_dir', AgaviConfig::get('core.app_dir') . '/cache');
 
 // +---------------------------------------------------------------------------+
 // | You may also modify the following other directives in this file:          |
-// |  - core.config_dir   (defaults to "<core.webapp_dir>/config")             |
-// |  - core.lib_dir      (defaults to "<core.webapp_dir>/lib")                |
-// |  - core.model_dir    (defaults to "<core.webapp_dir>/model")              |
-// |  - core.module_dir   (defaults to "<core.webapp_dir>/modules")            |
-// |  - core.template_dir (defaults to "<core.webapp_dir>/templates")          |
+// |  - core.config_dir   (defaults to "<core.app_dir>/config")                |
+// |  - core.lib_dir      (defaults to "<core.app_dir>/lib")                   |
+// |  - core.model_dir    (defaults to "<core.app_dir>/model")                 |
+// |  - core.module_dir   (defaults to "<core.app_dir>/modules")               |
+// |  - core.template_dir (defaults to "<core.app_dir>/templates")             |
 // +---------------------------------------------------------------------------+
 
 ?>

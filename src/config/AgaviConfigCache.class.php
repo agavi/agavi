@@ -103,7 +103,7 @@ final class AgaviConfigCache
 	 * recompile the cache file associated with it.
 	 *
 	 * If the configuration file path is relative, the path itself is relative
-	 * to the Agavi "core.webapp_dir" application setting.
+	 * to the Agavi "core.app_dir" application setting.
 	 *
 	 * @param      string A filesystem path to a configuration file.
 	 *
@@ -119,7 +119,7 @@ final class AgaviConfigCache
 	public static function checkConfig ($config, $context = null)
 	{
 		// the full filename path to the config, which might not be what we were given.
-		$filename = AgaviToolkit::isPathAbsolute($config) ? $config : AgaviConfig::get('core.webapp_dir') . '/' . $config;
+		$filename = AgaviToolkit::isPathAbsolute($config) ? $config : AgaviConfig::get('core.app_dir') . '/' . $config;
 
 		if (!is_readable($filename)) {
 			throw new AgaviUnreadableException('Configuration file "' . $filename . '" does not exist or is unreadable.');
@@ -193,7 +193,7 @@ final class AgaviConfigCache
 	 * Import a configuration file.
 	 *
 	 * If the configuration file path is relative, the path itself is relative
-	 * to the Agavi "core.webapp_dir" application setting.
+	 * to the Agavi "core.app_dir" application setting.
 	 *
 	 * @param      string A filesystem path to a configuration file.
 	 * @param      bool   Only allow this configuration file to be included once 
