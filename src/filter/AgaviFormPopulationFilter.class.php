@@ -184,7 +184,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 						
 						// checkboxes and radios
 						$element->removeAttribute('checked');
-						if($p->hasParameter($name) && ($element->getAttribute('value') == $value || !$element->hasAttribute('value'))) {
+						if($p->hasParameter($name) && (($element->hasAttribute('value') && $element->getAttribute('value') == $value) || (!$element->hasAttribute('value') && $p->getParameter($name)))) {
 							$element->setAttribute('checked', 'checked');
 						}
 						
