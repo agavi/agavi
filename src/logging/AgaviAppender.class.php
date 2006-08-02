@@ -28,7 +28,6 @@
  */
 abstract class AgaviAppender
 {
-
 	/**
 	 * @var        AgaviContext An AgaviContext instance.
 	 */
@@ -74,7 +73,7 @@ abstract class AgaviAppender
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function getLayout ()
+	public function getLayout()
 	{
 		return $this->layout;
 	}
@@ -89,7 +88,7 @@ abstract class AgaviAppender
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function setLayout (AgaviLayout $layout)
+	public function setLayout(AgaviLayout $layout)
 	{
 		$this->layout = $layout;
 		return $this;
@@ -101,7 +100,7 @@ abstract class AgaviAppender
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	abstract function shutdown ();
+	abstract function shutdown();
 
 	/**
 	 * Write log data to this appender.
@@ -111,8 +110,7 @@ abstract class AgaviAppender
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	abstract function write ($message);
-
+	abstract function write($message);
 }
 
 ?>

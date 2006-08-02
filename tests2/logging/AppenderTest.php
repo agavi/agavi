@@ -2,7 +2,7 @@
 
 class Sample2Layout extends AgaviLayout
 {
-	public function & format($message){}
+	public function format($message){}
 }
 
 class SampleAppender extends AgaviAppender

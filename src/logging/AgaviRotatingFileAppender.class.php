@@ -37,20 +37,19 @@
  */
 class AgaviRotatingFileAppender extends AgaviFileAppender
 {
-
 	/**
 	 * Initialize the object.
 	 *
 	 * @param      AgaviContext An AgaviContext instance.
 	 * @param      array        An associative array of initialization parameters.
 	 *
-	 * @author     Bob Zoller <bob@agavi.org>
+	 * @author     Veikko Makinen <mail@veikkomakinen.com>
 	 * @since      0.11.0
 	 */
 	function initialize(AgaviContext $context, $params = array())
 	{
 		$cycle = 7;
-		$prefix = str_replace(' ', '_', AgaviConfig::get('core.app_name')).'-';
+		$prefix = str_replace(' ', '_', AgaviConfig::get('core.app_name')) . '-';
 		$suffix = '.log';
 
 		if(!isset($params['dir'])) {
@@ -73,27 +72,25 @@ class AgaviRotatingFileAppender extends AgaviFileAppender
 
 		$logfile = $dir . $prefix . date('Y-m-d') . $suffix;
 
-		if (!file_exists($logfile)) {
+		if(!file_exists($logfile)) {
 
 			// todays log file didn't exist so we need to create it
 			// and at the same time we'll remove all unwanted history files
 
 			$files = array();
-			foreach (glob($dir . $prefix . '*-*-*' . $suffix) as $filename) {
+			foreach(glob($dir . $prefix . '*-*-*' . $suffix) as $filename) {
 				$files[] = $filename;
 			}
 
-			while (count($files) > $cycle-1) { //-1 because todays file is not yet created
+			while(count($files) > $cycle-1) { //-1 because todays file is not yet created
 				unlink(array_shift($files));
 			}
-
 		}
 
 		//it's all up to the parent after this
 		$params['file'] = $logfile;
 		parent::initialize($context, $params);
 	}
-
 }
 
 ?>

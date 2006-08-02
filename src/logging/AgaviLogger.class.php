@@ -28,7 +28,6 @@
  */
 class AgaviLogger
 {
-
 	/**
 	 * Fatal level.
 	 *
@@ -64,14 +63,12 @@ class AgaviLogger
 	 */
 	const DEBUG = 16;
 
-
 	/**
 	 * All levels. (2^32-1)
 	 *
 	 * @since      0.11.0
 	 */
 	const ALL = 4294967295;
-
 
 	/**
 	 * @var        array An array of AgaviAppenders.
@@ -82,7 +79,6 @@ class AgaviLogger
 	 * @var        int Logging level.
 	 */
 	protected $level = 0;
-
 
 	/**
 	 * Constructor.
@@ -104,13 +100,13 @@ class AgaviLogger
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function log (AgaviMessage $message)
+	public function log(AgaviMessage $message)
 	{
 		// get message level
 		$msgLevel = $message->getLevel();
 
-		if ($this->level & $msgLevel) {
-			foreach ($this->appenders as $appender) {
+		if($this->level & $msgLevel) {
+			foreach($this->appenders as $appender) {
 				$appender->write($message);
 			}
 		}
@@ -130,10 +126,9 @@ class AgaviLogger
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function setAppender ($name, $appender)
+	public function setAppender($name, $appender)
 	{
-		if (!isset($this->appenders[$name]))
-		{
+		if(!isset($this->appenders[$name])) {
 			$this->appenders[$name] = $appender;
 			return;
 		}
@@ -141,7 +136,6 @@ class AgaviLogger
 		// appender already exists
 		$error = 'An appender with the name "%s" is already registered';
 		$error = sprintf($error, $name);
-
 		throw new AgaviLoggingException($error);
 	}
 
@@ -153,7 +147,7 @@ class AgaviLogger
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function setLevel ($level)
+	public function setLevel($level)
 	{
 		$this->level = $level;
 	}
@@ -164,15 +158,13 @@ class AgaviLogger
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function shutdown ()
+	public function shutdown()
 	{
 		// loop through our appenders and shut them all down
-		foreach ($this->appenders as $appender)
-		{
+		foreach($this->appenders as $appender) {
 			$appender->shutdown();
 		}
 	}
-
 }
 
 ?>

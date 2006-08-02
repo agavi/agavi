@@ -27,7 +27,6 @@
  */
 abstract class AgaviLayout
 {
-
 	/**
 	 * @var        AgaviContext An AgaviContext instance.
 	 */
@@ -75,7 +74,7 @@ abstract class AgaviLayout
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	abstract function & format ($message);
+	abstract function format($message);
 
 	/**
 	 * Retrieve the message layout.
@@ -85,7 +84,7 @@ abstract class AgaviLayout
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function getLayout ()
+	public function getLayout()
 	{
 		return $this->layout;
 	}
@@ -99,11 +98,10 @@ abstract class AgaviLayout
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function setLayout ($layout)
+	public function setLayout($layout)
 	{
 		$this->layout = $layout;
 	}
-
 }
 
 ?>

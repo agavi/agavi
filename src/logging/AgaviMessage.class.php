@@ -28,7 +28,6 @@
  */
 class AgaviMessage extends AgaviParameterHolder
 {
-
 	/**
 	 * Constructor.
 	 *
@@ -143,7 +142,6 @@ class AgaviMessage extends AgaviParameterHolder
 	{
 		return $this->getParameter('m');
 	}
-
 }
 
 ?>
