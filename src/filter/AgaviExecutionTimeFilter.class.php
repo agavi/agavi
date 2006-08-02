@@ -100,7 +100,6 @@ class AgaviExecutionTimeFilter extends AgaviFilter implements AgaviIActionFilter
 		// initialize parent
 		parent::initialize($context, $parameters);
 	}
-
 }
 
 ?>
