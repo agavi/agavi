@@ -28,10 +28,16 @@
  */
 final class AgaviConfig
 {
+	/**
+	 * @var        array
+	 */
 	private static $config = array();
-	
+
+	/**
+	 * @var        array
+	 */
 	private static $readonlies = array();
-	
+
 	/**
 	 * Get a configuration value.
 	 *
@@ -50,7 +56,7 @@ final class AgaviConfig
 			return $default;
 		}
 	}
-	
+
 	/**
 	 * Check if a configuration directive has been set.
 	 *
@@ -65,7 +71,7 @@ final class AgaviConfig
 	{
 		return isset(self::$config[$name]);
 	}
-	
+
 	/**
 	 * Check if a configuration directive has been set as read-only.
 	 *
@@ -80,7 +86,7 @@ final class AgaviConfig
 	{
 		return isset(self::$readonlies[$name]);
 	}
-	
+
 	/**
 	 * Set a configuration value.
 	 *
@@ -106,7 +112,7 @@ final class AgaviConfig
 		}
 		return $retval;
 	}
-	
+
 	/**
 	 * Remove a configuration value.
 	 *
@@ -126,7 +132,7 @@ final class AgaviConfig
 		}
 		return $retval;
 	}
-	
+
 	/**
 	 * Import a list of configuration directives.
 	 *
@@ -139,7 +145,7 @@ final class AgaviConfig
 	{
 		self::$config = array_merge(array_merge(self::$config, $data), self::$readonlies);
 	}
-	
+
 	/**
 	 * Get all configuration directives and values.
 	 *
@@ -152,7 +158,7 @@ final class AgaviConfig
 	{
 		return self::$config;
 	}
-	
+
 	/**
 	 * Clear the configuration.
 	 *

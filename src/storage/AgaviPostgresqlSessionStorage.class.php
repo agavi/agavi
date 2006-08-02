@@ -44,8 +44,10 @@
 class AgaviPostgresqlSessionStorage extends AgaviSessionStorage
 {
 
-	private
-		$resource = null;
+	/**
+	 * @var        mixed A postgresql database resource.
+	 */
+	private $resource = null;
 
 	/**
 	 * Initialize this Storage.
@@ -188,7 +190,7 @@ class AgaviPostgresqlSessionStorage extends AgaviSessionStorage
 	 * @param      string
 	 * @param      string
 	 *
-	 * @return     bool true, if the session was opened, otherwise an exception 
+	 * @return     bool true, if the session was opened, otherwise an exception
 	 *                  is thrown.
 	 *
 	 * @throws     <b>AgaviDatabaseException</b> If a connection with the database
