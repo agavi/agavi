@@ -130,7 +130,7 @@ final class AgaviConfig
 	/**
 	 * Import a list of configuration directives.
 	 *
-	 * @param      string The name of the configuration directive.
+	 * @param      string An array of configuration directives.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
