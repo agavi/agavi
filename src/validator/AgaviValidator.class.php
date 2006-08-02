@@ -98,6 +98,42 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	}
 
 	/**
+	 * Returns the "keys" in the path of the base
+	 * 
+	 * @return     array The keys from left to right
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getBaseKeys()
+	{
+		$keys = array();
+		$l = $this->curBase->length();
+		for($i = 1; $i < $l; ++$i) {
+			$keys[] = $this->curBase->get($i);
+		}
+
+		return $keys;
+	}
+
+	/**
+	 * Returns the last "keys" in the path of the base
+	 * 
+	 * @return     mixed The key
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getLastKey()
+	{
+		$base = $this->curBase;
+		if($base->length() == 0 || ($base->length() == 1 && $base->isAbsolute()))
+			return null;
+
+		return $base->get($base->length() - 1);
+	}
+
+	/**
 	 * Returns the name of this validator.
 	 * 
 	 * @return     string The name
@@ -130,7 +166,9 @@ abstract class AgaviValidator extends AgaviParameterHolder
 			$parameters['provides'] = (isset($parameters['provides']) and strlen($parameters['provides'])) ? split(',', $parameters['provides']) : array();
 		}
 		parent::__construct($parameters);
-		$this->curBase = clone $parent->getBase();
+		// we need a reference here, so when looping happens in a parent 
+		// we always have the right base
+		$this->curBase = $parent->getBase();
 		$this->affectedFieldNames = array('param');
 		$this->name = $name;
 	}
@@ -331,7 +369,10 @@ abstract class AgaviValidator extends AgaviParameterHolder
 			 * just put it into our own base and validate further
 			 * into the base. 
 			 */ 
-			$ret = $this->validateInBase($this->curBase->pushRetNew($base->shift()));
+
+			$this->curBase->push($base->shift());
+			$ret = $this->validateInBase($base);
+			$this->curBase->pop();
 
 			return $ret;
 
@@ -343,7 +384,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 			 * names
 			 */
 			$array = $this->parentContainer->getRequest()->getParameters();
-			$names = $this->curBase->getValueFromArray($array);
+			$names = $this->curBase->getValue($array, array());
 			
 			// throw the wildcard away
 			$base->shift();

@@ -127,6 +127,38 @@ class AgaviVirtualArrayPath
 	}
 	
 	/**
+	 * Returns the given component of the path
+	 * 
+	 * @param      int Position of the component
+	 * 
+	 * @return     string The component
+	 * 
+	 * @author     Dominik del Bondio <ddb@bitxtender.com
+	 * @since      0.11.0
+	 */
+	public function get($position)
+	{
+		if($position < 0 || $position >= $this->length()) {
+			return null;
+		}
+		if(!$this->length()) {
+			return null;
+		}
+
+		$part = $this->parts[0];
+
+		if(strval(intval($part)) == $part) {
+			$part = intval($part);
+		}
+
+		if(!$this->absolute && $addBracketsWhenRelative) {
+			$part = sprintf('[%s]', $part);
+		}
+
+		return $part;
+	}
+
+	/**
 	 * returns the root component of the path
 	 * 
 	 * @param      bool prepend '/' when the path is absolut (defaults to false)
