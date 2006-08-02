@@ -85,6 +85,26 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	}
 
 	/**
+	 * Retrieve the first error message for an error.
+	 *
+	 * @param      string An error name.
+	 *
+	 * @return     string The error message
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getErrorMessage($name)
+	{
+		$error = $this->getError($name);
+		if($error && count($error['messages'])) {
+			return $error['messages'][0];
+		}
+
+		return null;
+	}
+
+	/**
 	 * Retrieve an error message.
 	 *
 	 * @param      string An error name.
