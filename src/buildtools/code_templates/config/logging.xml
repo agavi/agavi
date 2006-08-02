@@ -12,53 +12,63 @@
 +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
 -->
 <configurations>
-	
+
 	<configuration>
-<!--
+
 		<loggers>
-			<logger name="default" class="AgaviLogger" priority="AgaviLogger::INFO">
+
+			<!-- logs only DEBUG messages -->
+			<logger name="debug" class="AgaviLogger" priority="AgaviLogger::DEBUG">
 				<appenders>
-					<appender>InfoSyslogAppender</appender>
-					<appender>MyAppLogAppender</appender>
+					<appender>DebugLogAppender</appender>
 				</appenders>
 			</logger>
 
-			<logger name="error" class="AgaviLogger" priority="AgaviLogger::ERROR">
+			<!-- logs only INFO messages -->
+			<logger name="default" class="AgaviLogger" priority="AgaviLogger::INFO">
 				<appenders>
-					<appender>ErrorSyslogAppender</appender>
-					<appender>MyAppErrorLogAppender</appender>
+					<appender>ApplicationLogAppender</appender>
+				</appenders>
+			</logger>
+
+			<!-- logs everything but DEBUG and INFO messages -->
+			<logger name="error" class="AgaviLogger" priority="AgaviLogger::ALL ^ AgaviLogger::DEBUG ^ AgaviLogger::INFO">
+				<appenders>
+					<appender>ErrorLogAppender</appender>
 				</appenders>
 			</logger>
 		</loggers>
 		<appenders>
-			<appender name="InfoSyslogAppender" class="SyslogAppender" layout="MyPassthruLayout">
+
+			<!--
+				Debug logs are rotated in a 7 day (AgaviRotatingFileAppender default) cycle
+				Use 'cycle' parameter to alter the cycle.
+			-->
+			<appender name="DebugLogAppender" class="AgaviRotatingFileAppender" layout="PassthruLayout">
 				<parameters>
-					<parameter name="priority">LOG_INFO</parameter>
+					<parameter name="dir">%core.app_dir%/log/</parameter>
+					<parameter name="prefix">debug-</parameter>
 				</parameters>
 			</appender>
 
-			<appender name="ErrorSyslogAppender" class="SyslogAppender" layout="MyPassthruLayout">
+			<appender name="ApplicationLogAppender" class="AgaviFileAppender" layout="PassthruLayout">
 				<parameters>
-					<parameter name="priority">LOG_ERROR</parameter>
+					<parameter name="file">%core.app_dir%/log/application.log</parameter>
 				</parameters>
 			</appender>
 
-			<appender name="MyAppLogAppender" class="AgaviFileAppender" layout="MyPassthruLayout">
+			<appender name="ErrorLogAppender" class="AgaviRotatingFileAppender" layout="PassthruLayout">
 				<parameters>
-					<parameter name="file">%core.app_dir%/log/myapp.log</parameter>
+					<parameter name="file">%core.app_dir%/log/error.log</parameter>
 				</parameters>
 			</appender>
 
-			<appender name="MyAppErrorLogAppender" class="AgaviFileAppender" layout="MyPassthruLayout">
-				<parameters>
-					<parameter name="file">%core.app_dir%/log/myapp_error.log</parameter>
-				</parameters>
-			</appender>
 		</appenders>
+
 		<layouts>
-			<layout name="MyPassthruLayout" class="AgaviPassthruLayout" />
+			<layout name="PassthruLayout" class="AgaviPassthruLayout" />
 		</layouts>
--->
+
 	</configuration>
 
 </configurations>
