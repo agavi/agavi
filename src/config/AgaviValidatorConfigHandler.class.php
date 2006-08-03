@@ -64,6 +64,7 @@ class AgaviValidatorConfigHandler extends AgaviConfigHandler
 			'set' => array('class' => 'AgaviSetValidator', 'parameters' => array()),
 			'string' => array('class' => 'AgaviStringValidator', 'parameters' => array('min' => '1')),
 			'time' => array('class' => 'AgaviTimeValidator', 'parameters' => array('check' => '1')),
+			'uploadedfile' => array('class' => 'AgaviUploadedFileValidator', 'parameters' => array()),
 			'xor' => array('class' => 'AgaviXoroperatorValidator', 'parameters' => array()),
 		);
 

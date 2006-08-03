@@ -141,6 +141,7 @@
 			<autoload name="AgaviSetValidator">%core.agavi_dir%/validator/AgaviSetValidator.class.php</autoload>
 			<autoload name="AgaviStringValidator">%core.agavi_dir%/validator/AgaviStringValidator.class.php</autoload>
 			<autoload name="AgaviTimeValidator">%core.agavi_dir%/validator/AgaviTimeValidator.class.php</autoload>
+			<autoload name="AgaviUploadedFileValidator">%core.agavi_dir%/validator/AgaviUploadedFileValidator.class.php</autoload>
 		</autoloads>
 	</configuration>
 </configurations>
