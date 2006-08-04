@@ -72,7 +72,7 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	public function initialize(AgaviContext $context, $parameters = array())
 	{
 		$this->context = $context;
-		$this->parameters = array_merge($this->parameters, $parameters);
+		$this->setParameters($parameters);
 	}
 	
 	/**

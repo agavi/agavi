@@ -58,16 +58,16 @@ interface AgaviIValidatorContainer
 	 * @since      0.11.0
 	 */
 	public function getDependencyManager();
-	
+
 	/**
-	 * fetches the error manager
+	 * reports an error to the parent container
 	 * 
-	 * @return     AgaviErrorManager the error manager to be used by child
-	 *                               validators
+	 * @param      AgaviValidator The validator where the error occured
+	 * @param      string         An error message
 	 * 
-	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function getErrorManager(); 
+	public function reportError(AgaviValidator $validator, $errorMsg);
 }
 ?>

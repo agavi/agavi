@@ -37,6 +37,26 @@
 class AgaviEqualsValidator extends AgaviValidator
 {
 	/**
+	 * returns a list of input fields that are per default affected by a failure
+	 * of the validator
+	 * 
+	 * @return     array list of fields that are affected by an error
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 * @see        AgaviValidator::getAffectedFields
+	 */
+	public function getAffectedFields() {
+		if($this->getParameter('asparam')) {
+			$fields = array_merge(parent::getAffectedFields(), array($this->getParameter('value')));
+
+			return array_unique($fields);
+		}
+
+		return parent::getAffectedFields();
+	}
+
+	/**
 	 * validates the input
 	 * 
 	 * @return     bool the input equals to given value
@@ -46,7 +66,8 @@ class AgaviEqualsValidator extends AgaviValidator
 	 */
 	protected function validate()
 	{
-		$value = ($this->getParameter('asparam')) ? $this->getData($this->getParameter('value')) : $this->getParameter('value');
+		$value = ($this->getParameter('asparam')) ? $this->getData('value') : $this->getParameter('value');
+
 		if($this->getData() != $value) {
 			$this->throwError();
 			return false;

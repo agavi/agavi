@@ -66,12 +66,12 @@ class AgaviMktimestampValidator extends AgaviValidator
 		
 		$this->export($timestamp);
 		
-		if($this->getParameter('past') and $timestamp >= time()) {
+		if($this->getParameter('past') && $timestamp >= time()) {
 			$this->throwError('past_error');
 			return false;
 		}
 		
-		if($this->getParameter('future') and $timestamp <= time()) {
+		if($this->getParameter('future') && $timestamp <= time()) {
 			$this->throwError('future_error');
 			return false;
 		}

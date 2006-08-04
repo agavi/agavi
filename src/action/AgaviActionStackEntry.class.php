@@ -144,7 +144,7 @@ class AgaviActionStackEntry
 	/**
 	 * Retrieve the request parameters for this Action.
 	 *
-	 * @return     array An array of request parameters for this Action.
+	 * @return     AgaviParameterHolder An AgaviParameterHolder of request parameters for this Action.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0

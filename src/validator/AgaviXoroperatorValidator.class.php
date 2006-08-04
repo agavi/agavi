@@ -57,14 +57,18 @@ class AgaviXoroperatorValidator extends AgaviOperatorValidator
 	{
 		$result1 = $this->children[0]->execute();
 		if($result1 == AgaviValidator::CRITICAL) {
+			$this->result = $result1;
 			$this->throwError();
 			return false;
 		}
 		$result2 = $this->children[1]->execute();
 		if($result2 == AgaviValidator::CRITICAL) {
+			$this->result = $result2;
 			$this->throwError();
 			return false;
 		}
+		$this->result = max($result1, $result2);
+
 		if(($result1 == AgaviValidator::SUCCESS) xor ($result2 == AgaviValidator::SUCCESS)) {
 			return true;
 		} else {

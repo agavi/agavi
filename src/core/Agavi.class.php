@@ -86,6 +86,7 @@ final class Agavi
 	{
 		try {
 			// required classes for this file and ConfigCache to run
+			require_once(AgaviConfig::get('core.agavi_dir') . '/util/AgaviVirtualArrayPath.class.php');
 			require_once(AgaviConfig::get('core.agavi_dir') . '/util/AgaviParameterHolder.class.php');
 			require_once(AgaviConfig::get('core.agavi_dir') . '/config/AgaviConfigCache.class.php');
 			require_once(AgaviConfig::get('core.agavi_dir') . '/config/AgaviConfigHandler.class.php');

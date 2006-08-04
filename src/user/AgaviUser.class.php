@@ -94,7 +94,7 @@ class AgaviUser extends AgaviAttributeHolder
 			$this->storageNamespace = $parameters['storage_namespace'];
 		}
 
-		$this->parameters = array_merge($this->parameters, $parameters);
+		$this->setParameters($parameters);
 		
 		// read data from storage
 		$this->attributes = $context->getStorage()->read($this->storageNamespace);
