@@ -18,21 +18,21 @@
 		<loggers>
 
 			<!-- logs only DEBUG messages -->
-			<logger name="debug" class="AgaviLogger" priority="AgaviLogger::DEBUG">
+			<logger name="debug" class="AgaviLogger" level="AgaviLogger::DEBUG">
 				<appenders>
 					<appender>DebugLogAppender</appender>
 				</appenders>
 			</logger>
 
 			<!-- logs only INFO messages -->
-			<logger name="default" class="AgaviLogger" priority="AgaviLogger::INFO">
+			<logger name="default" class="AgaviLogger" level="AgaviLogger::INFO">
 				<appenders>
 					<appender>ApplicationLogAppender</appender>
 				</appenders>
 			</logger>
 
 			<!-- logs everything but DEBUG and INFO messages -->
-			<logger name="error" class="AgaviLogger" priority="AgaviLogger::ALL ^ AgaviLogger::DEBUG ^ AgaviLogger::INFO">
+			<logger name="error" class="AgaviLogger" level="AgaviLogger::ALL ^ AgaviLogger::DEBUG ^ AgaviLogger::INFO">
 				<appenders>
 					<appender>ErrorLogAppender</appender>
 				</appenders>

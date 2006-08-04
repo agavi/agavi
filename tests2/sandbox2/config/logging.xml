@@ -6,18 +6,18 @@
 +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
 -->
 <configurations>
-	
+
 	<configuration>
 <!--
 		<loggers>
-			<logger name="default" class="AgaviLogger" priority="AgaviLogger::INFO">
+			<logger name="default" class="AgaviLogger" level="AgaviLogger::INFO">
 				<appenders>
 					<appender>InfoSyslogAppender</appender>
 					<appender>MyAppLogAppender</appender>
 				</appenders>
 			</logger>
 
-			<logger name="error" class="AgaviLogger" priority="AgaviLogger::ERROR">
+			<logger name="error" class="AgaviLogger" level="AgaviLogger::ERROR">
 				<appenders>
 					<appender>ErrorSyslogAppender</appender>
 					<appender>MyAppErrorLogAppender</appender>
@@ -27,13 +27,13 @@
 		<appenders>
 			<appender name="InfoSyslogAppender" class="SyslogAppender" layout="MyPassthruLayout">
 				<parameters>
-					<parameter name="priority">LOG_INFO</parameter>
+					<parameter name="level">LOG_INFO</parameter>
 				</parameters>
 			</appender>
 
 			<appender name="ErrorSyslogAppender" class="SyslogAppender" layout="MyPassthruLayout">
 				<parameters>
-					<parameter name="priority">LOG_ERROR</parameter>
+					<parameter name="level">LOG_ERROR</parameter>
 				</parameters>
 			</appender>
 
