@@ -31,18 +31,40 @@
 abstract class AgaviRequest extends AgaviAttributeHolder
 {
 
-	// +-----------------------------------------------------------------------+
-	// | CONSTANTS                                                             |
-	// +-----------------------------------------------------------------------+
+	/**
+	 * @var        array An associative array of attributes
+	 */
+	protected $attributes = array();
 
-	protected
-		$attributes = array(),
-		$errors     = array(),
-		$method     = null,
-		$context    = null,
-		$moduleAccessor = 'module',
-		$actionAccessor = 'action',
-		$locked = false;
+	/**
+	 * @var        array An associative array of errors
+	 */
+	protected $errors     = array();
+
+	/**
+	 * @var        string The request method name
+	 */
+	protected $method     = null;
+
+	/**
+	 * @var        AgaviContext An AgaviContext instance.
+	 */
+	protected $context    = null;
+
+	/**
+	 * @var        string The module accessor name.
+	 */
+	protected $moduleAccessor = 'module';
+
+	/**
+	 * @var        string The action accessor name.
+	 */
+	protected $actionAccessor = 'action';
+
+	/**
+	 * @var        bool A boolean value indicating whether or not the request is locked.
+	 */
+	protected $locked = false;
 
 	/**
 	 * Retrieve the current application context.
@@ -62,8 +84,8 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	 *
 	 * @param      array An indexed array of parameter names to extract.
 	 *
-	 * @return     array An associative array of parameters and their values. 
-	 *                   If a specified parameter doesn't exist then it's value 
+	 * @return     array An associative array of parameters and their values.
+	 *                   If a specified parameter doesn't exist then it's value
 	 *                   will be null. Also note that the value is a reference
 	 *                   to the parameter's value.
 	 *
@@ -192,11 +214,11 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	function initialize(AgaviContext $context, $parameters = array())
 	{
 		$this->context = $context;
-		
+
 		if(isset($parameters['default_namespace'])) {
 			$this->defaultNamespace = $parameters['default_namespace'];
 		}
-		
+
 		if(isset($parameters['module_accessor'])) {
 			$this->moduleAccessor = $parameters['module_accessor'];
 		}
@@ -278,7 +300,7 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	{
 		$this->method = $method;
 	}
-	
+
 	/**
 	 * Get the name of the request parameter that defines which module to use.
 	 *
@@ -381,7 +403,7 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 			return true;
 		}
 	}
-	
+
 
 	/**
 	 * @see        AgaviParameterHolder::clearParameters()
@@ -520,7 +542,7 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 			return false;
 		}
 	}
-	
+
 }
 
 ?>
