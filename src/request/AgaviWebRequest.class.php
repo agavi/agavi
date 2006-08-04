@@ -240,7 +240,7 @@ class AgaviWebRequest extends AgaviRequest
 			return $_FILES[$name]['error'];
 		}
 		
-		return $retval;
+		return UPLOAD_ERR_NO_FILE;
 	}
 
 	/**
