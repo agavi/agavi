@@ -31,17 +31,40 @@
 abstract class AgaviRequest extends AgaviAttributeHolder
 {
 
-	// +-----------------------------------------------------------------------+
-	// | CONSTANTS                                                             |
-	// +-----------------------------------------------------------------------+
+	/**
+	 * @var        array An associative array of attributes
+	 */
+	protected $attributes = array();
 
-	protected
-		$attributes = array(),
-		$errors     = array(),
-		$method     = null,
-		$context    = null,
-		$moduleAccessor = 'module',
-		$actionAccessor = 'action';
+	/**
+	 * @var        array An associative array of errors
+	 */
+	protected $errors     = array();
+
+	/**
+	 * @var        string The request method name
+	 */
+	protected $method     = null;
+
+	/**
+	 * @var        AgaviContext An AgaviContext instance.
+	 */
+	protected $context    = null;
+
+	/**
+	 * @var        string The module accessor name.
+	 */
+	protected $moduleAccessor = 'module';
+
+	/**
+	 * @var        string The action accessor name.
+	 */
+	protected $actionAccessor = 'action';
+
+	/**
+	 * @var        bool A boolean value indicating whether or not the request is locked.
+	 */
+	protected $locked = false;
 
 	/**
 	 * Retrieve the current application context.
@@ -61,8 +84,8 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	 *
 	 * @param      array An indexed array of parameter names to extract.
 	 *
-	 * @return     array An associative array of parameters and their values. 
-	 *                   If a specified parameter doesn't exist then it's value 
+	 * @return     array An associative array of parameters and their values.
+	 *                   If a specified parameter doesn't exist then it's value
 	 *                   will be null. Also note that the value is a reference
 	 *                   to the parameter's value.
 	 *
@@ -191,11 +214,11 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	function initialize(AgaviContext $context, $parameters = array())
 	{
 		$this->context = $context;
-		
+
 		if(isset($parameters['default_namespace'])) {
 			$this->defaultNamespace = $parameters['default_namespace'];
 		}
-		
+
 		if(isset($parameters['module_accessor'])) {
 			$this->moduleAccessor = $parameters['module_accessor'];
 		}
@@ -277,7 +300,7 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	{
 		$this->method = $method;
 	}
-	
+
 	/**
 	 * Get the name of the request parameter that defines which module to use.
 	 *
@@ -322,6 +345,9 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	 */
 	public function & getParameter($name, $default = null)
 	{
+		if($this->locked) {
+			throw new AgaviException('For security reasons, Request Parameters cannot be accessed directly. Please use the ParameterHolder object passed to your Action or View execute method to access Request Parameters.');
+		}
 		if(($pos = strpos($name, '[')) === false) {
 			$retval =& parent::getParameter($name, $default);
 			return $retval;
@@ -353,6 +379,9 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	 */
 	public function hasParameter($name)
 	{
+		if($this->locked) {
+			throw new AgaviException('For security reasons, Request Parameters cannot be accessed directly. Please use the ParameterHolder object passed to your Action or View execute method to access Request Parameters.');
+		}
 		if(($pos = strpos($name, '[')) === false) {
 			return parent::hasParameter($name);
 		} else {
@@ -372,6 +401,145 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 				}
 			}
 			return true;
+		}
+	}
+
+
+	/**
+	 * @see        AgaviParameterHolder::clearParameters()
+	 */
+	public function clearParameters()
+	{
+		if($this->locked) {
+			throw new AgaviException('For security reasons, Request Parameters cannot be accessed directly. Please use the ParameterHolder object passed to your Action or View execute method to access Request Parameters.');
+		}
+		parent::clearParameters();
+	}
+
+	/**
+	 * @see        AgaviParameterHolder::getParameterNames()
+	 */
+	public function getParameterNames()
+	{
+		if($this->locked) {
+			throw new AgaviException('For security reasons, Request Parameters cannot be accessed directly. Please use the ParameterHolder object passed to your Action or View execute method to access Request Parameters.');
+		}
+		return parent::getParameterNames();
+	}
+
+	/**
+	 * @see        AgaviParameterHolder::getParameters()
+	 */
+	public function getParameters()
+	{
+		if($this->locked) {
+			throw new AgaviException('For security reasons, Request Parameters cannot be accessed directly. Please use the ParameterHolder object passed to your Action or View execute method to access Request Parameters.');
+		}
+		return parent::getParameters();
+	}
+
+	/**
+	 * @see        AgaviParameterHolder::removeParameter()
+	 */
+	public function & removeParameter($name)
+	{
+		if($this->locked) {
+			throw new AgaviException('For security reasons, Request Parameters cannot be accessed directly. Please use the ParameterHolder object passed to your Action or View execute method to access Request Parameters.');
+		}
+		$retval =& parent::removeParameter($name);
+		return $retval;
+	}
+
+	/**
+	 * @see        AgaviParameterHolder::setParameter()
+	 */
+	public function setParameter($name, $value)
+	{
+		if($this->locked) {
+			throw new AgaviException('For security reasons, Request Parameters cannot be accessed directly. Please use the ParameterHolder object passed to your Action or View execute method to access Request Parameters.');
+		}
+		parent::setParameter($name, $value);
+	}
+
+	/**
+	 * @see        AgaviParameterHolder::appendParameter()
+	 */
+	public function appendParameter($name, $value)
+	{
+		if($this->locked) {
+			throw new AgaviException('For security reasons, Request Parameters cannot be accessed directly. Please use the ParameterHolder object passed to your Action or View execute method to access Request Parameters.');
+		}
+		parent::appendParameter($name, $value);
+	}
+
+	/**
+	 * @see        AgaviParameterHolder::setParameterByRef()
+	 */
+	public function setParameterByRef($name, &$value)
+	{
+		if($this->locked) {
+			throw new AgaviException('For security reasons, Request Parameters cannot be accessed directly. Please use the ParameterHolder object passed to your Action or View execute method to access Request Parameters.');
+		}
+		parent::setParameterByRef($name, $value);
+	}
+
+	/**
+	 * @see        AgaviParameterHolder::appendParameterByRef()
+	 */
+	public function appendParameterByRef($name, &$value)
+	{
+		if($this->locked) {
+			throw new AgaviException('For security reasons, Request Parameters cannot be accessed directly. Please use the ParameterHolder object passed to your Action or View execute method to access Request Parameters.');
+		}
+		parent::appendParameterByRef($name, $value);
+	}
+
+	/**
+	 * @see        AgaviParameterHolder::setParameters()
+	 */
+	public function setParameters($parameters)
+	{
+		if($this->locked) {
+			throw new AgaviException('For security reasons, Request Parameters cannot be accessed directly. Please use the ParameterHolder object passed to your Action or View execute method to access Request Parameters.');
+		}
+		parent::setParameters($parameters);
+	}
+
+	/**
+	 * @see        AgaviParameterHolder::setParametersByRef()
+	 */
+	public function setParametersByRef(&$parameters)
+	{
+		if($this->locked) {
+			throw new AgaviException('For security reasons, Request Parameters cannot be accessed directly. Please use the ParameterHolder object passed to your Action or View execute method to access Request Parameters.');
+		}
+		parent::setParametersByRef($parameters);
+	}
+
+	/**
+	 * Lock or unlock the Request so parameters can(not) be get or set anymore.
+	 *
+	 * @param      string The key to unlock, if the lock should be removed, or
+	 *                    null if the lock should be set.
+	 *
+	 * @return     mixed The key, if a lock was set, or a boolean value indicating
+	 *                   whether or not the unlocking was successful.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function toggleLock($key = null)
+	{
+		static $keys = array();
+		if($key === null) {
+			$this->locked = true;
+			return $this->keys[$this->context->getName()] = uniqid();
+		} else {
+			if(isset($this->keys[$this->context->getName()]) && $this->keys[$this->context->getName()] == $key) {
+				$this->locked = false;
+				return true;
+			}
+			return false;
 		}
 	}
 

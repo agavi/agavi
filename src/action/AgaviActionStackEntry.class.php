@@ -29,41 +29,62 @@
  */
 class AgaviActionStackEntry
 {
-
-	// +-----------------------------------------------------------------------+
-	// | PRIVATE VARIABLES                                                     |
-	// +-----------------------------------------------------------------------+
+	/**
+	 * @var        AgaviAction The Action instance that belongs to this entry.
+	 */
+	private $actionInstance = null;
 	
-	private
-		$actionInstance = null,
-		$actionName     = null,
-		$microtime      = null,
-		$moduleName     = null,
-		$parameters     = array(),
-		$presentation   = null;
+	/**
+	 * @var        string The name of the Action.
+	 */
+	private $actionName     = null;
 	
-	// +-----------------------------------------------------------------------+
-	// | METHODS                                                               |
-	// +-----------------------------------------------------------------------+
+	/**
+	 * @var        float The microtime at which this entry was created.
+	 */
+	private $microtime      = null;
+	
+	/**
+	 * @var        string The name of the Action's Module.
+	 */
+	private $moduleName     = null;
+	
+	/**
+	 * @var        AgaviParameterHolder A ParameterHoler instance containing the
+	 *                                  request parameters for this action.
+	 */
+	private $parameters     = null;
+	
+	/**
+	 * @var        AgaviResponse A response instance holding the Action's output.
+	 */
+	private $presentation   = null;
+	
+	/**
+	 * @var        array Information about the next Action to be executed, if any.
+	 */
+	private $next           = null;
 	
 	/**
 	 * Class constructor.
 	 *
-	 * @param      string A module name.
-	 * @param      string An action name.
-	 * @param      AgaviAction An action implementation instance.
+	 * @param      string               A module name.
+	 * @param      string               An action name.
+	 * @param      AgaviAction          An action implementation instance.
+	 * @param      AgaviParameterHolder A ParameterHoler instance containing the
+	 *                                  request parameters for this action.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function __construct ($moduleName, $actionName, AgaviAction $actionInstance, AgaviParameterHolder $parameters)
+	public function __construct($moduleName, $actionName, AgaviAction $actionInstance, AgaviParameterHolder $parameters)
 	{
 		
-		$this->actionName     = $actionName;
+		$this->actionName = $actionName;
 		$this->actionInstance = $actionInstance;
-		$this->microtime      = microtime();
-		$this->moduleName     = $moduleName;
-		$this->parameters     = $parameters;
+		$this->microtime = microtime(true);
+		$this->moduleName = $moduleName;
+		$this->parameters = $parameters;
 		
 	}
 	
@@ -75,11 +96,9 @@ class AgaviActionStackEntry
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function getActionName ()
+	public function getActionName()
 	{
-		
 		return $this->actionName;
-	
 	}
 	
 	/**
@@ -90,11 +109,9 @@ class AgaviActionStackEntry
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function getActionInstance ()
+	public function getActionInstance()
 	{
-		
 		return $this->actionInstance;
-	
 	}
 	
 	/**
@@ -106,11 +123,9 @@ class AgaviActionStackEntry
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function getMicrotime ()
+	public function getMicrotime()
 	{
-		
 		return $this->microtime;
-	
 	}
 	
 	/**
@@ -121,11 +136,9 @@ class AgaviActionStackEntry
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function getModuleName ()
+	public function getModuleName()
 	{
-		
 		return $this->moduleName;
-	
 	}
 	
 	/**
@@ -144,12 +157,12 @@ class AgaviActionStackEntry
 	/**
 	 * Set the request parameters for this Action.
 	 *
-	 * @param      array An array of request parameters for this Action.
+	 * @param      AgaviParameterHolder The request parameters for this Action.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function setParameters($parameters = array())
+	public function setParameters(AgaviParameterHolder $parameters)
 	{
 		$this->parameters = $parameters;
 	}
@@ -160,33 +173,71 @@ class AgaviActionStackEntry
 	 * This will only exist if the view has processed and the render mode
 	 * is set to AgaviView::RENDER_VAR.
 	 *
-	 * @return     string An action name.
+	 * @return     AgaviResponse The Response instance for this action.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
-	public function & getPresentation ()
+	public function getPresentation()
 	{
-		
 		return $this->presentation;
-	
 	}
 	
 	/**
 	 * Set the rendered presentation for this action.
 	 *
-	 * @param      string A rendered presentation.
+	 * @param      AgaviResponse A response holding the rendered presentation.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function setPresentation (&$presentation)
+	public function setPresentation(AgaviResponse $presentation)
 	{
-		
-		$this->presentation =& $presentation;
-		
+		$this->presentation = $presentation;
 	}
-
+	
+	/**
+	 * Set the next entry that will be run after this Action finished.
+	 *
+	 * @param      string The Module name of the Action to execute next.
+	 * @param      string The name of the Action to execute next.
+	 * @param      mixed  An AgaviParameterHolder instance or an array holding
+	 *                    request parameters to pass to that Action.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function setNext($moduleName, $actionName, $parameters = array())
+	{
+		$this->next = array('moduleName' => $moduleName, 'actionName' => $actionName, 'parameters' => $parameters);
+	}
+	
+	/**
+	 * Check if this Action or a View specified another Action to run next.
+	 *
+	 * @return     bool Whether or not a next Action has been set.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function hasNext()
+	{
+		return is_array($this->next);
+	}
+	
+	/**
+	 * Get the Action that should be run after this one finished execution.
+	 *
+	 * @return     array An associative array of information on the next Action.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getNext()
+	{
+		return $this->next;
+	}
 }
 
 ?>

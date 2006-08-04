@@ -27,21 +27,20 @@
  */
 class AgaviStdoutAppender extends AgaviFileAppender
 {
-
 	/**
 	 * Initialize the object.
-	 * 
-	 * @param      array An array of parameters.
-	 * 
+	 *
+	 * @param      AgaviContext An AgaviContext instance.
+	 * @param      array        An associative array of initialization parameters.
+	 *
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.10.0
 	 */
-	public function initialize($params = array())
+	function initialize(AgaviContext $context, $params = array())
 	{
 		$params['file'] = 'php://stdout';
-		parent::initialize($params);
+		parent::initialize($context, $params);
 	}
-
 }
 
 ?>

@@ -52,13 +52,13 @@ class AgaviFixPathsTask extends Task {
 	
 	private function getModule() {
 		$module = '';
-		if (preg_match('#/webapp/modules/(.*?)(/.*)?$#', str_replace('\\', '/', $this->base), $matches)) {
+		if (preg_match('#/app/modules/(.*?)(/.*)?$#', str_replace('\\', '/', $this->base), $matches)) {
 			$module = $matches[1];
 		}
 		return $module;
 	}
 
-	private function getDir($pattern = '/webapp/modules') {
+	private function getDir($pattern = '/app/modules') {
 		if ($this->newproject) { 
 			return realpath($this->base);
 		}
@@ -86,7 +86,7 @@ class AgaviFixPathsTask extends Task {
 		if ($pdir) {
 			echo "Project dir: $pdir\n";
 			$this->project->setProperty('project.dir', $pdir);
-			$this->project->setProperty('webapp.dir', realpath($pdir) . '/webapp');
+			$this->project->setProperty('app.dir', realpath($pdir) . '/app');
 			$this->project->setProperty('tests.dir', realpath($pdir) . '/tests');
 			if ($this->parseModulePath) {
 				$this->project->setProperty('default.module', $this->getModule());

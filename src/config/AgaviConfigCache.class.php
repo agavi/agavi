@@ -15,8 +15,8 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviConfigCache allows you to customize the format of a configuration 
- * file to make it easy-to-use, yet still provide a PHP formatted result 
+ * AgaviConfigCache allows you to customize the format of a configuration
+ * file to make it easy-to-use, yet still provide a PHP formatted result
  * for direct inclusion into your modules.
  *
  * @package    agavi
@@ -28,26 +28,28 @@
  *
  * @version    $Id$
  */
-class AgaviConfigCache
+final class AgaviConfigCache
 {
-	
+
 	const CACHE_SUBDIR = 'config';
 
-	private static
-		$handlers = array();
+	/**
+	 * @var        array An array of AgaviConfigHandlers
+	 */
+	private static $handlers = array();
 
 	/**
 	 * Load a configuration handler.
 	 *
 	 * @param      string The handler to use when parsing a configuration file.
 	 * @param      string An absolute filesystem path to a configuration file.
-	 * @param      string An absolute filesystem path to the cache file that 
+	 * @param      string An absolute filesystem path to the cache file that
 	 *                    will be written.
 	 *
 	 * @return     void
 	 *
-	 * @throws     <b>AgaviConfigurationException</b> If a requested configuration 
-	 *                                                file does not have an 
+	 * @throws     <b>AgaviConfigurationException</b> If a requested configuration
+	 *                                                file does not have an
 	 *                                                associated config handler.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
@@ -103,7 +105,7 @@ class AgaviConfigCache
 	 * recompile the cache file associated with it.
 	 *
 	 * If the configuration file path is relative, the path itself is relative
-	 * to the Agavi "core.webapp_dir" application setting.
+	 * to the Agavi "core.app_dir" application setting.
 	 *
 	 * @param      string A filesystem path to a configuration file.
 	 *
@@ -119,7 +121,7 @@ class AgaviConfigCache
 	public static function checkConfig ($config, $context = null)
 	{
 		// the full filename path to the config, which might not be what we were given.
-		$filename = AgaviToolkit::isPathAbsolute($config) ? $config : AgaviConfig::get('core.webapp_dir') . '/' . $config;
+		$filename = AgaviToolkit::isPathAbsolute($config) ? $config : AgaviConfig::get('core.app_dir') . '/' . $config;
 
 		if (!is_readable($filename)) {
 			throw new AgaviUnreadableException('Configuration file "' . $filename . '" does not exist or is unreadable.');
@@ -193,10 +195,10 @@ class AgaviConfigCache
 	 * Import a configuration file.
 	 *
 	 * If the configuration file path is relative, the path itself is relative
-	 * to the Agavi "core.webapp_dir" application setting.
+	 * to the Agavi "core.app_dir" application setting.
 	 *
 	 * @param      string A filesystem path to a configuration file.
-	 * @param      bool   Only allow this configuration file to be included once 
+	 * @param      bool   Only allow this configuration file to be included once
 	 *                    per request?
 	 *
 	 * @return     void
@@ -221,7 +223,7 @@ class AgaviConfigCache
 	 *
 	 * @return     void
 	 *
-	 * @throws     <b>AgaviConfigurationException</b> If a configuration related 
+	 * @throws     <b>AgaviConfigurationException</b> If a configuration related
 	 *                                                error occurs.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
@@ -230,7 +232,7 @@ class AgaviConfigCache
 	private static function loadConfigHandlers ()
 	{
 		// since we only need the parser and handlers when the config is not cached
-		// it is sufficient to include them at this stage 
+		// it is sufficient to include them at this stage
 		require_once(AgaviConfig::get('core.agavi_dir') . '/config/AgaviConfigHandlersConfigHandler.class.php');
 		require_once(AgaviConfig::get('core.agavi_dir') . '/config/AgaviConfigValueHolder.class.php');
 		require_once(AgaviConfig::get('core.agavi_dir') . '/config/AgaviConfigParser.class.php');
@@ -255,7 +257,7 @@ class AgaviConfigCache
 	 * Write a cache file.
 	 *
 	 * @param      string An absolute filesystem path to a configuration file.
-	 * @param      string An absolute filesystem path to the cache file that 
+	 * @param      string An absolute filesystem path to the cache file that
 	 *                    will be written.
 	 * @param      string Data to be written to the cache file.
 	 * @param      string Should we append the data?
@@ -268,9 +270,9 @@ class AgaviConfigCache
 	private static function writeCacheFile ($config, $cache, &$data, $append)
 	{
 		$perms = fileperms(AgaviConfig::get('core.cache_dir')) ^ 0x4000;
-		
+
 		$flags = ($append) ? FILE_APPEND : 0;
-		
+
 		AgaviToolkit::mkdir(AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . self::CACHE_SUBDIR, $perms);
 
 		if(@file_put_contents($cache, $data, $flags) === false) {
@@ -296,7 +298,7 @@ class AgaviConfigCache
 	 *                  the class doesn't exist.
 	 * @param      string A path to a validation file for this config file.
 	 *
-	 * @return     AgaviConfigValueHolder An abstract representation of the 
+	 * @return     AgaviConfigValueHolder An abstract representation of the
 	 *                                    config file.
 	 *
 	 * @throws     <b>AgaviConfigurationException</b> If the parser for the

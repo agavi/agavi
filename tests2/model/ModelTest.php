@@ -6,14 +6,14 @@ class TestAgaviModel extends AgaviTestCase
 {
 	public function testInitialize()
 	{
-		$context = AgaviContext::getInstance();
+		$context = AgaviContext::getInstance('test');
 		$model = new SampleModel();
 		$model->initialize($context);
 	}
 
 	public function testGetContext()
 	{
-		$context = AgaviContext::getInstance();
+		$context = AgaviContext::getInstance('test');
 		$model = new SampleModel();
 		$model->initialize($context);
 		$mContext = $model->getContext();

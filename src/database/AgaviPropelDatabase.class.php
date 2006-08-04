@@ -47,6 +47,8 @@ class AgaviPropelDatabase extends AgaviCreoleDatabase
 	 * Stores the path of the configuration file that will be passed to
 	 * Propel::init() when using Propel autoloading magic
 	 *
+	 * @var        string The filesystem path to the default runtime config.
+	 *
 	 * @since      0.10.0
 	 */
 	private static $defaultConfigPath = null;
@@ -54,6 +56,8 @@ class AgaviPropelDatabase extends AgaviCreoleDatabase
 	/**
 	 * Stores whether a Propel configuration file path has been explicitly set
 	 * as default for use with Propel::init() in database.ini
+	 *
+	 * @var        bool A flag indicating whether a default config path was set.
 	 *
 	 * @since      0.10.0
 	 */
@@ -133,8 +137,7 @@ class AgaviPropelDatabase extends AgaviCreoleDatabase
 	public function connect ()
 	{
 		$useAutoload = $this->getParameter('use_autoload', true);
-		if($useAutoload)
-		{
+		if($useAutoload) {
 			return parent::connect();
 		}
 		try {
@@ -158,7 +161,7 @@ class AgaviPropelDatabase extends AgaviCreoleDatabase
 			// get propel class path
 			$classPath = AgaviConfigHandler::replaceConstants($this->getParameter('classpath',null));
 			// set the include path to our Propel generated classes
-			if (!is_null($classPath)) {
+			if(!is_null($classPath)) {
 				set_include_path(get_include_path().PATH_SEPARATOR.$classPath);
 			}
 			require_once('creole/SQLException.php');
@@ -187,26 +190,21 @@ class AgaviPropelDatabase extends AgaviCreoleDatabase
 	{
 		parent::initialize($databaseManager, $parameters);
 		$useAutoload = $this->getParameter('use_autoload', true);
-		if($useAutoload)
-		{
+		if($useAutoload) {
 			$configPath = AgaviConfigHandler::replaceConstants($this->getParameter('config'));
 			$datasource = $this->getParameter('datasource', null);
 			$use_as_default = $this->getParameter('use_as_default', false);
 			$config = require($configPath);
-			if($datasource === null || $datasource == 'default')
-			{
+			if($datasource === null || $datasource == 'default') {
 				$datasource = $config['propel']['datasources']['default'];
 			}
-			foreach($config['propel']['datasources'][$datasource]['connection'] as $key => $value)
-			{
+			foreach($config['propel']['datasources'][$datasource]['connection'] as $key => $value) {
 				$this->setParameter($key, $value);
 			}
 			$this->setParameter('method', 'normal');
-			if(!self::isDefaultConfigPathSet())
-			{
+			if(!self::isDefaultConfigPathSet()) {
 				self::setDefaultConfigPath($configPath);
-				if($use_as_default)
-				{
+				if($use_as_default) {
 					self::setDefaultConfigPathSet();
 				}
 			}

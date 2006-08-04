@@ -6,7 +6,7 @@ class CHCHTestHandler extends AgaviConfigHandler
 	public	$validationFile,
 					$parameters;
 
-	public function initialize($vf, $params)
+	public function initialize($vf=null, $params=array())
 	{
 		$this->validationFile = $vf;
 		$this->parameters = $params;

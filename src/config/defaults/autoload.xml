@@ -75,6 +75,7 @@
 			<!-- agavi/logging -->
 			<autoload name="AgaviAppender">%core.agavi_dir%/logging/AgaviAppender.class.php</autoload>
 			<autoload name="AgaviFileAppender">%core.agavi_dir%/logging/AgaviFileAppender.class.php</autoload>
+			<autoload name="AgaviRotatingFileAppender">%core.agavi_dir%/logging/AgaviRotatingFileAppender.class.php</autoload>
 			<autoload name="AgaviLayout">%core.agavi_dir%/logging/AgaviLayout.class.php</autoload>
 			<autoload name="AgaviLogger">%core.agavi_dir%/logging/AgaviLogger.class.php</autoload>
 			<autoload name="AgaviLoggerManager">%core.agavi_dir%/logging/AgaviLoggerManager.class.php</autoload>

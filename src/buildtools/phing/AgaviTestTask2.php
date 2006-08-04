@@ -29,7 +29,7 @@ class AgaviTestTask2 extends PHPUnit2Task {
 					$testdir = 'tests2',
 					$reporter = 'text',
 					$startpoint,
-					$base_include = array('', 'src', 'webapp'),
+					$base_include = array('', 'src', 'app'),
 					$outfile = '',
 					$exit = false;
 
@@ -84,7 +84,7 @@ class AgaviTestTask2 extends PHPUnit2Task {
 		set_include_path(get_include_path() . PATH_SEPARATOR . join(PATH_SEPARATOR, $this->base_include));
 		set_time_limit(0);
 
-		@include_once(AgaviConfig::get('tests.dir') . "/test_environment.php"); // we probably defined our webapp location, etc in here. 
+		@include_once(AgaviConfig::get('tests.dir') . "/test_environment.php"); // we probably defined our app location, etc in here. 
 		require_once(AgaviConfig::get('core.agavi_dir') . "/buildtools/test_setup.php");
 
 		if (!empty($this->outfile)) {

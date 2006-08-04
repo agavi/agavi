@@ -15,7 +15,7 @@ class LoggerManagerTest extends AgaviTestCase
 
 	public function setUp()
 	{
-		$this->_context = AgaviContext::getInstance();
+		$this->_context = AgaviContext::getInstance('test');
 		$this->_lm = $this->_context->getLoggerManager();
 		$this->_logfile = tempnam('','logtest');
 		$this->_logfile2 = tempnam('', 'logtest2');
@@ -23,16 +23,16 @@ class LoggerManagerTest extends AgaviTestCase
 		@unlink($this->_logfile2);
 		$this->_pl = new AgaviPassthruLayout;
 		$this->_fa = new AgaviFileAppender;
-		$this->_fa->initialize(array('file' => $this->_logfile));
+		$this->_fa->initialize($this->_context, array('file' => $this->_logfile));
 		$this->_fa->setLayout($this->_pl);
 		$this->_fa2 = new AgaviFileAppender;
-		$this->_fa2->initialize(array('file' => $this->_logfile2));
+		$this->_fa2->initialize($this->_context, array('file' => $this->_logfile2));
 		$this->_fa2->setLayout($this->_pl);
 		$this->_l = new AgaviLogger;
-		$this->_l->setPriority(AgaviLogger::INFO);
+		$this->_l->setLevel(AgaviLogger::INFO);
 		$this->_l->setAppender('fa', $this->_fa);
 		$this->_l2 = new AgaviLogger;
-		$this->_l2->setPriority(AgaviLogger::DEBUG);
+		$this->_l2->setLevel(AgaviLogger::DEBUG | AgaviLogger::INFO);
 		$this->_l2->setAppender('fa2', $this->_fa2);
 	}
 
@@ -69,9 +69,13 @@ class LoggerManagerTest extends AgaviTestCase
 		$this->_lm->setLogger('logfile2', $this->_l2);
 		$this->assertFalse(file_exists($this->_logfile));
 		$this->assertFalse(file_exists($this->_logfile2));
+
+		//this should be logged by both
 		$this->_lm->log(new AgaviMessage('simple info message', AgaviLogger::INFO));
 		$this->assertRegexp('/simple info message/', file_get_contents($this->_logfile));
 		$this->assertRegexp('/simple info message/', file_get_contents($this->_logfile2));
+
+		//this should be logged only by l2
 		$this->_lm->log(new AgaviMessage('simple debug message', AgaviLogger::DEBUG));
 		$this->assertNotRegexp('/simple debug message/', file_get_contents($this->_logfile));
 		$this->assertRegexp('/simple debug message/', file_get_contents($this->_logfile2));

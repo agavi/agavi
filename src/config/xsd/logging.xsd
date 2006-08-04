@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:include schemaLocation="default_tags.xsd"/>
+
   <xs:element name="configurations" type="configurations" />
   <xs:complexType name="configurations">
     <xs:sequence>
@@ -43,7 +46,7 @@
     </xs:all>
     <xs:attribute name="name" type="xs:string" use="required" />
     <xs:attribute name="class" type="xs:string" />
-    <xs:attribute name="priority" type="xs:string" />
+    <xs:attribute name="level" type="xs:string" />
   </xs:complexType>
 
   <xs:complexType name="appenders">
@@ -70,20 +73,6 @@
           </xs:sequence>
           <xs:attribute name="name" type="xs:string" use="required" />
           <xs:attribute name="class" type="xs:string" />
-        </xs:complexType>
-      </xs:element>
-    </xs:sequence>
-  </xs:complexType>
-
-  <xs:complexType name="parameters">
-    <xs:sequence>
-      <xs:element name="parameter" maxOccurs="unbounded">
-        <xs:complexType>
-          <xs:simpleContent>
-            <xs:extension base="xs:string">
-              <xs:attribute name="name" type="xs:string" use="required" />
-            </xs:extension>
-          </xs:simpleContent>
         </xs:complexType>
       </xs:element>
     </xs:sequence>

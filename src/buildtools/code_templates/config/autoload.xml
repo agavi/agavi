@@ -29,7 +29,7 @@
 	<!-- example for a list of autoloads that is only used in the "production" environment
 	<configuration environment="production">
 		<autoloads>
-			<autoload name="MyCustomClass">%core.webapp_dir%/lib/MyCustomClass.class.php</autoload>
+			<autoload name="MyCustomClass">%core.app_dir%/lib/MyCustomClass.class.php</autoload>
 		</autoloads>
 	</configuration>
 	-->

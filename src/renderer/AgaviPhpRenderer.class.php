@@ -28,8 +28,12 @@
  */
 class AgaviPhpRenderer extends AgaviRenderer
 {
+	/**
+	 * @var        string A string with the default template file extension,
+	 *                    including the dot.
+	 */
 	protected $extension = '.php';
-	
+
 	/**
 	 * Loop through all template slots and fill them in with the results of
 	 * presentation data.
@@ -45,15 +49,15 @@ class AgaviPhpRenderer extends AgaviRenderer
 	{
 		// call our parent decorate() method
 		parent::decorate($content);
-		
+
 		// DO NOT USE VARIABLES IN HERE, THEY MIGHT INTERFERE WITH TEMPLATE VARS
-		
+
 		if($this->extractVars) {
 			extract($this->view->getAttributes(), EXTR_REFS | EXTR_PREFIX_INVALID, '_');
 		} else {
 			${$this->varName} =& $this->view->getAttributes();
 		}
-		
+
 		if($this->extractSlots === true || ($this->extractVars && $this->extractSlots !== false)) {
 			extract($this->output, EXTR_REFS | EXTR_PREFIX_INVALID, '_');
 		} else {
@@ -62,15 +66,21 @@ class AgaviPhpRenderer extends AgaviRenderer
 			}
 			${$this->slotsVarName} = array_merge(${$this->slotsVarName}, $this->output);
 		}
-		
+
+		$collisions = array_intersect(array_keys($this->assigns), $this->view->getAttributeNames());
+		if(count($collisions)) {
+			throw new AgaviException('Could not import system objects due to variable name collisions ("' . implode('", "', $collisions) . '" already in use).');
+		}
+		extract($this->assigns);
+
 		// render the decorator template and return the result
 		ob_start();
-		
+
 		require($this->view->getDecoratorDirectory() . '/' . $this->view->getDecoratorTemplate() . $this->getExtension());
-		
+
 		$retval = ob_get_contents();
 		ob_end_clean();
-		
+
 		return $retval;
 	}
 
@@ -92,22 +102,28 @@ class AgaviPhpRenderer extends AgaviRenderer
 	public function render()
 	{
 		// DO NOT USE VARIABLES IN HERE, THEY MIGHT INTERFERE WITH TEMPLATE VARS
-		
+
 		if($this->extractVars) {
 			extract($this->view->getAttributes(), EXTR_REFS | EXTR_PREFIX_INVALID, '_');
 		} else {
 			${$this->varName} =& $this->view->getAttributes();
 		}
 
+		$collisions = array_intersect(array_keys($this->assigns), $this->view->getAttributeNames());
+		if(count($collisions)) {
+			throw new AgaviException('Could not import system objects due to variable name collisions ("' . implode('", "', $collisions) . '" already in use).');
+		}
+		extract($this->assigns);
+
 		if($this->context->getController()->getRenderMode() == AgaviView::RENDER_CLIENT && !$this->view->isDecorator()) {
 			// render directly to the client via Response
 			ob_start();
-			
+
 			require($this->view->getDirectory() . '/' . $this->view->getTemplate() . $this->getExtension());
-			
+
 			$this->response->setContent(ob_get_contents());
 			ob_end_clean();
-			
+
 		} elseif($this->view->getContext()->getController()->getRenderMode() != AgaviView::RENDER_NONE) {
 			// render to variable
 			ob_start();

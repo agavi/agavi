@@ -20,14 +20,14 @@ class RoutingTest extends AgaviTestCase
 	public function setUp()
 	{
 		$this->_r = new SampleRouting();
-		$this->_r->initialize(AgaviContext::getInstance());
+		$this->_r->initialize(AgaviContext::getInstance('test'));
 		AgaviConfig::set('core.use_routing', true);
 
 	}
 
 	public function testGetContext()
 	{
-		$ctx = AgaviContext::getInstance();
+		$ctx = AgaviContext::getInstance('test');
 		$ctx_test = $this->_r->getContext();
 		$this->assertReference($ctx, $ctx_test);
 	}

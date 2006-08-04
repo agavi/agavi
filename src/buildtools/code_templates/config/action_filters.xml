@@ -18,7 +18,7 @@
 | OPTIONAL KEYS:                                                             |
 |                                                                            |
 | 1. file  - The filesystem path to the class file. If the path is relative, |
-|            it will be relative to the "core.webapp_dir" Agavi application  |
+|            it will be relative to the "core.app_dir" Agavi application  |
 |            setting.                                                        |
 | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
 | PARAMETER KEYS:                                                            |
@@ -47,23 +47,14 @@
 	
 	<configuration environment="development">
 		<filters>
-			
+
 			<filter name="ExecutionTimeFilter" class="AgaviExecutionTimeFilter">
 				<parameters>
 					<parameter name="comment">On</parameter>
 				</parameters>
 			</filter>
-			
+
 		</filters>
 	</configuration>
-	
-	
-	<configuration>
-		<filters>
-			
-			<filter name="FormPopulationFilter" class="AgaviFormPopulationFilter" enabled="false" />
-			
-		</filters>
-	</configuration>
-	
+
 </configurations>

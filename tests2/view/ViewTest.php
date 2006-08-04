@@ -13,22 +13,22 @@ class ViewTest extends AgaviTestCase
 
 	public function setUp()
 	{
-		AgaviContext::getInstance()->initialize();
-		$request = AgaviContext::getInstance()->getRequest();
+		AgaviContext::getInstance('test')->initialize();
+		$request = AgaviContext::getInstance('test')->getRequest();
 		
 		ob_start();
-		AgaviContext::getInstance()->getController()->dispatch(array($request->getModuleAccessor() => 'Test', $request->getActionAccessor() => 'Test'));
+		AgaviContext::getInstance('test')->getController()->dispatch(array($request->getModuleAccessor() => 'Test', $request->getActionAccessor() => 'Test'));
 		ob_end_clean();
 		
 		$this->_r = new NoHeadersAgaviWebResponse();
-		$this->_r->initialize(AgaviContext::getInstance());
+		$this->_r->initialize(AgaviContext::getInstance('test'));
 		$this->_v = new SampleView();
 		$this->_v->initialize($this->_r);
 	}
 
 	public function testInitialize()
 	{
-		$ctx = AgaviContext::getInstance();
+		$ctx = AgaviContext::getInstance('test');
 		$v = $this->_v;
 
 		$ctx_test = $v->getContext();

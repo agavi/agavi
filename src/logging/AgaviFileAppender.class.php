@@ -27,85 +27,93 @@
  */
 class AgaviFileAppender extends AgaviAppender
 {
-
-	protected $_handle = null;
-	protected $_filename = '';
+	/*
+	 * @var        The resource of the file this appender is writing to.
+	 */
+	protected $handle = null;
+	
+	/**
+	 * @var        The name of the file this appender is writing to.
+	 */
+	protected $filename = '';
 
 	/**
-	 * Initialize the FileAppender.
-	 * 
-	 * @param      array An array of parameters.
-	 * 
+	 * Initialize the object.
+	 *
+	 * @param      AgaviContext An AgaviContext instance.
+	 * @param      array        An associative array of initialization parameters.
+	 *
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.10.0
 	 */
-	public function initialize($params = array())
+	function initialize(AgaviContext $context, $params = array())
 	{
+		parent::initialize($context, $params);
+
 		if(isset($params['file'])) {
-			$this->_filename = $params['file'];
+			$this->filename = $params['file'];
 		}
 	}
 
 	/**
 	 * Retrieve the file handle for this FileAppender.
-	 * 
-	 * @throws     <b>AgaviLoggingException</b> if file cannot be opened for 
+	 *
+	 * @throws     <b>AgaviLoggingException</b> if file cannot be opened for
 	 *                                          appending.
-	 * 
+	 *
 	 * @return     integer
-	 * 
+	 *
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.10.0
 	 */
-	protected function _getHandle()
+	protected function getHandle()
 	{
-		if (is_null($this->_handle)) {
-			if (!$this->_handle = fopen($this->_filename, 'a')) {
-				throw new AgaviLoggingException("Cannot open file ({$this->_filename})");
+		if(is_null($this->handle)) {
+			if(!$this->handle = fopen($this->filename, 'a')) {
+				throw new AgaviLoggingException("Cannot open file (" . $this->filename . ")");
 			}
 		}
-		return $this->_handle;
+		return $this->handle;
 	}
 
 	/**
 	 * Execute the shutdown procedure.
-	 * 
+	 *
 	 * If open, close the filehandle.
-	 * 
+	 *
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.10.0
 	 */
 	public function shutdown()
 	{
-		if (!is_null($this->_handle)) {
-			fclose($this->_handle);
+		if(!is_null($this->handle)) {
+			fclose($this->handle);
 		}
 	}
 
 	/**
 	 * Write a Message to the file.
-	 * 
+	 *
 	 * @param      Message
-	 * 
+	 *
 	 * @throws     <b>AgaviLoggingException</b> if no Layout is set or the file
 	 *                                          cannot be written.
-	 * 
-	 * 
+	 *
+	 *
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.10.0
 	 */
 	public function write($message)
 	{
-		if ($layout = $this->getLayout() === null) {
+		if($layout = $this->getLayout() === null) {
 			throw new AgaviLoggingException('No Layout set');
 		}
 
 		$str = sprintf("%s\n", $this->getLayout()->format($message));
-		if (fwrite($this->_getHandle(), $str) === FALSE) {
-			throw new AgaviLoggingException("Cannot write to file ({$this->_filename})");
+		if(fwrite($this->getHandle(), $str) === FALSE) {
+			throw new AgaviLoggingException("Cannot write to file ( " . $this->filename . ")");
 		}
 	}
-
 }
 
 ?>

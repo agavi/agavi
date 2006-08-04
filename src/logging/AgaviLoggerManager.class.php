@@ -27,10 +27,15 @@
  */
 class AgaviLoggerManager
 {
+	/**
+	 * @var        array An array of AgaviLoggers.
+	 */
+	protected $loggers = array();
 
-	private
-		$loggers = array(),
-		$context = null;
+	/**
+	 * @var        AgaviContext An AgaviContext instance.
+	 */
+	protected $context = null;
 
 	/**
 	 * Retrieve the current application context.
@@ -58,27 +63,26 @@ class AgaviLoggerManager
 	public function initialize(AgaviContext $context, $parameters = array())
 	{
 		$this->context = $context;
-		
+
 		// load logging configuration
 		require(AgaviConfigCache::checkConfig(AgaviConfig::get('core.config_dir') . '/logging.xml', $context->getName()));
 	}
-	
+
 	/**
 	 * Retrieve a logger.
 	 *
 	 * @param      string A logger name.
 	 *
-	 * @return     AgaviLogger A Logger, if a logger with the name exists, 
+	 * @return     AgaviLogger A Logger, if a logger with the name exists,
 	 *                         otherwise null.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function getLogger ($name = 'default')
+	public function getLogger($name = 'default')
 	{
-		if (isset($this->loggers[$name]))
-		{
+		if(isset($this->loggers[$name])) {
 			return $this->loggers[$name];
 		}
 		return null;
@@ -93,7 +97,7 @@ class AgaviLoggerManager
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function getLoggerNames ()
+	public function getLoggerNames()
 	{
 		return array_keys($this->loggers);
 	}
@@ -109,7 +113,7 @@ class AgaviLoggerManager
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function hasLogger ($name)
+	public function hasLogger($name)
 	{
 		return isset($this->loggers[$name]);
 	}
@@ -128,25 +132,19 @@ class AgaviLoggerManager
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function & removeLogger ($name)
+	public function removeLogger($name)
 	{
-
 		$retval = null;
-
-		if (isset($this->loggers[$name]))
-		{
-			if ($name != 'default')
-			{
+		if(isset($this->loggers[$name])) {
+			if($name != 'default') {
 				$retval = $this->loggers[$name];
 				unset($this->loggers[$name]);
-			} else
-			{
+			} else {
 				// cannot remove the default logger
 				$error = 'Cannot remove the default logger';
 				throw new AgaviLoggingException($error);
 			}
 		}
-
 		return $retval;
 	}
 
@@ -158,17 +156,16 @@ class AgaviLoggerManager
 	 * @param      string      A logger name.
 	 * @param      AgaviLogger A Logger instance.
 	 *
-	 * @throws     <b>AgaviLoggingException</b> If a logger with the name already 
+	 * @throws     <b>AgaviLoggingException</b> If a logger with the name already
 	 *                                          exists.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function setLogger ($name, $logger)
+	public function setLogger($name, AgaviLogger $logger)
 	{
-		if (!isset($this->loggers[$name]))
-		{
+		if(!isset($this->loggers[$name])) {
 			$this->loggers[$name] = $logger;
 			return;
 		}
@@ -176,29 +173,28 @@ class AgaviLoggerManager
 		// logger already exists
 		$error = 'A logger with the name "%s" is already registered';
 		$error = sprintf($error, $name);
-
 		throw new AgaviLoggingException($error);
 	}
 
 	/**
 	 * Log a Message.
-	 * 
+	 *
 	 * @param      AgaviMessage The Message to log.
 	 * @param      string Optional logger to log to.
-	 * 
+	 *
 	 * @throws     AgaviLoggingException if the logger was not found.
-	 * 
+	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.10.0
 	 */
 	public function log(AgaviMessage $message, $logger = null)
 	{
-		if (is_null($logger)) {
-			foreach ($this->loggers as $logger) {
+		if(is_null($logger)) {
+			foreach($this->loggers as $logger) {
 				$logger->log($message);
 			}
-		} else if (!is_null($logger = self::getLogger($logger))) {
+		} elseif(!is_null($logger = self::getLogger($logger))) {
 			$logger->log($message);
 		} else {
 			throw new AgaviLoggingException("{$logger} Logger is not configured.");
@@ -212,16 +208,14 @@ class AgaviLoggerManager
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function shutdown ()
+	public function shutdown()
 	{
 		// loop through our loggers and shut them all down
-		foreach ($this->loggers as $name => $logger)
-		{
+		foreach($this->loggers as $name => $logger) {
 			$logger->shutdown();
 			unset($this->loggers[$name]);
 		}
 	}
-
 }
 
 ?>

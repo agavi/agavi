@@ -13,15 +13,15 @@
 				<parameters>
 					<parameter name="host">localhost1</parameter>
 					<parameter name="user">username1</parameter>
-					<parameter name="config">%core.webapp_dir%/config/project-conf.php</parameter>
+					<parameter name="config">%core.app_dir%/config/project-conf.php</parameter>
 				</parameters>
 			</database>
 			
-			<database name="test2" class="DCHTestDatabase2" file="%core.webapp_dir%/lib/config/DatabaseHandlerTestDatabase2.class.php">
+			<database name="test2" class="DCHTestDatabase2" file="%core.app_dir%/lib/config/DatabaseHandlerTestDatabase2.class.php">
 				<parameters>
 					<parameter name="host">localhost2</parameter>
 					<parameter name="user">username2</parameter>
-					<parameter name="config">%core.webapp_dir%/config/project-conf.php</parameter>
+					<parameter name="config">%core.app_dir%/config/project-conf.php</parameter>
 				</parameters>
 			</database>
 		</databases>

@@ -1,17 +1,17 @@
 <?php
+require_once(dirname(__FILE__) . '/ConfigHandlerTestBase.php');
 
-class ReturnArrayConfigHandlerTest extends AgaviTestCase
+class ReturnArrayConfigHandlerTest extends ConfigHandlerTestBase
 {
 	public function testParseMixed()
 	{
 		$RACH = new AgaviReturnArrayConfigHandler();
-		$simple = $RACH->execute(AgaviConfig::get('core.config_dir') . '/tests/rach_mixed.xml');
-		$simple_array = array(
+		$simple = $this->includeCode($RACH->execute(AgaviConfig::get('core.config_dir') . '/tests/rach_mixed.xml'));
+		$ex_simple = array(
 			'section1' => array('One' => 'A', 'Two' => 'B', 'Three' => 'C'), 
 			'section2' => array('Three' => 'Z', 'Two' => 'Y', 'One' => 'X'),
 			'section3' => array('Two' => '2', 'One' => '1', 'Three' => '3')
 		);
-		$ex_simple = '<?php return '. var_export($simple_array, true) .';?>';
 		$this->assertEquals($ex_simple, $simple);
 	}
 
@@ -19,12 +19,11 @@ class ReturnArrayConfigHandlerTest extends AgaviTestCase
 	public function testParseAttributes()
 	{
 		$RACH = new AgaviReturnArrayConfigHandler();
-		$simple = $RACH->execute(AgaviConfig::get('core.config_dir') . '/tests/rach_attributes.xml');
-		$simple_array = array(
+		$simple = $this->includeCode($RACH->execute(AgaviConfig::get('core.config_dir') . '/tests/rach_attributes.xml'));
+		$ex_simple = array(
 			'section1' => array('One' => 'A', 'Two' => 'B', 'Three' => 'C'), 
 			'section2' => array('Three' => AgaviConfig::get('core.config_dir'), 'Two' => false, 'One' => true),
 		);
-		$ex_simple = '<?php return '. var_export($simple_array, true) .';?>';
 		$this->assertEquals($ex_simple, $simple);
 	}
 
@@ -32,24 +31,23 @@ class ReturnArrayConfigHandlerTest extends AgaviTestCase
 	public function testParseTags()
 	{
 		$RACH = new AgaviReturnArrayConfigHandler();
-		$simple = $RACH->execute(AgaviConfig::get('core.config_dir') . '/tests/rach_tags.xml');
-		$simple_array = array(
+		$simple = $this->includeCode($RACH->execute(AgaviConfig::get('core.config_dir') . '/tests/rach_tags.xml'));
+		$ex_simple = array(
 			'section1' => array('One' => 'A', 'Two' => 'B', 'Three' => 'C'), 
 			'section2' => array('Three' => 'Z', 'Two' => 'Y', 'One' => 'X'),
 		);
-		$ex_simple = '<?php return '. var_export($simple_array, true) .';?>';
 		$this->assertEquals($ex_simple, $simple);
 	}
 
 	public function testParseComplex()
 	{
 		$RACH = new AgaviReturnArrayConfigHandler();
-		$simple = $RACH->execute(AgaviConfig::get('core.config_dir') . '/tests/rach_complex.xml');
+		$simple = $this->includeCode($RACH->execute(AgaviConfig::get('core.config_dir') . '/tests/rach_complex.xml'));
 
-		$simple_array = array(
+		$ex_simple = array(
 			'cachings' => array(
 				'Browse' => array(
-					'action' => '%core.webapp_dir%',
+					'action' => '%core.app_dir%',
 					'groups' => array(
 						'categories' => array('name' => 'categories'),
 						'id' => array('name' => 'id', 'source' => 'request.parameter'),
@@ -71,8 +69,7 @@ class ReturnArrayConfigHandlerTest extends AgaviTestCase
 				),
 			),
 		);
-		$ex_simple = '<?php return '. var_export($simple_array, true) .';?>';
-		$this->assertEquals($ex_simple, $simple);
+		$this->assertEquals(var_export($ex_simple,1), var_export($simple,1));
 	}
 }
 ?>

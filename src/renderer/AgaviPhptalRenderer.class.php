@@ -29,10 +29,17 @@
  */
 class AgaviPhptalRenderer extends AgaviRenderer
 {
+	/**
+	 * @var        string A string with the default template file extension,
+	 *                    including the dot.
+	 */
 	protected $extension = '.tal';
-	
+
+	/**
+	 * @var        PHPTAL PHPTAL template engine.
+	 */
 	protected $_phptal = null;
-	
+
 	const COMPILE_DIR = 'templates';
 	const COMPILE_SUBDIR = 'phptal';
 
@@ -50,14 +57,14 @@ class AgaviPhptalRenderer extends AgaviRenderer
 				define('PHPTAL_PHP_CODE_DESTINATION', AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . AgaviPhptalRenderer::COMPILE_DIR . DIRECTORY_SEPARATOR . AgaviPhptalRenderer::COMPILE_SUBDIR . DIRECTORY_SEPARATOR);
 				AgaviToolkit::mkdir(PHPTAL_PHP_CODE_DESTINATION, fileperms(AgaviConfig::get('core.cache_dir')), true);
 			}
-			
+
 			require_once('PHPTAL.php');
-			
+
 			$this->_phptal = new PHPTAL();
 		}
 		return $this->_phptal;
 	}
-	
+
 	/**
 	 * Render the presentation to the Response.
 	 *
@@ -68,13 +75,13 @@ class AgaviPhptalRenderer extends AgaviRenderer
 	public function render()
 	{
 		$retval = null;
-		
+
 		$engine = $this->getEngine();
 		$view = $this->getView();
-		
+
 		$mode = $view->getContext()->getController()->getRenderMode();
 		$engine->setTemplateRepository($view->getDirectory());
-		
+
 		$engine->setTemplate($view->getTemplate() . $this->getExtension());
 		if($this->extractVars) {
 			foreach($view->getAttributes() as $key => $value) {
@@ -83,8 +90,17 @@ class AgaviPhptalRenderer extends AgaviRenderer
 		} else {
 			$engine->set($this->varName, $view->getAttributes());
 		}
+
+		$collisions = array_intersect(array_keys($this->assigns), $this->view->getAttributeNames());
+		if(count($collisions)) {
+			throw new AgaviException('Could not import system objects due to variable name collisions ("' . implode('", "', $collisions) . '" already in use).');
+		}
+		foreach($this->assigns as $key => &$value) {
+			$engine->set($key, $value);
+		}
+
 		$engine->set('this', $this);
-		
+
 		if($mode == AgaviView::RENDER_CLIENT && !$view->isDecorator()) {
 			// render directly to the client
 			$this->response->setContent($engine->execute());
@@ -95,7 +111,7 @@ class AgaviPhptalRenderer extends AgaviRenderer
 			if($view->isDecorator()) {
 				$retval = $this->decorate($retval);
 			}
-			
+
 			$this->response->setContent($retval);
 		}
 	}
@@ -109,12 +125,12 @@ class AgaviPhptalRenderer extends AgaviRenderer
 		parent::decorate($content);
 		$engine = $this->getEngine();
 		$view = $this->getView();
-		
+
 		// render the decorator template and return the result
 		$engine->setTemplateRepository($view->getDecoratorDirectory());
-		
+
 		$engine->setTemplate($view->getDecoratorTemplate() . $this->getExtension());
-		
+
 		$toSet = array();
 		// set the template resources
 		if($this->extractVars) {
@@ -124,9 +140,9 @@ class AgaviPhptalRenderer extends AgaviRenderer
 		} else {
 			$toSet =& $view->getAttributes();
 		}
-		
+
 		if($this->extractSlots === true || ($this->extractVars && $this->extractSlots !== false)) {
-			foreach($this->output as $key => $value) {
+			foreach($this->output as $key => &$value) {
 				$engine->set($key, $value);
 			}
 		} else {
@@ -137,11 +153,19 @@ class AgaviPhptalRenderer extends AgaviRenderer
 			}
 		}
 		$engine->set($this->varName, $toSet);
-		
+
+		$collisions = array_intersect(array_keys($this->assigns), $this->view->getAttributeNames());
+		if(count($collisions)) {
+			throw new AgaviException('Could not import system objects due to variable name collisions ("' . implode('", "', $collisions) . '" already in use).');
+		}
+		foreach($this->assigns as $key => $value) {
+			$engine->set($key, $value);
+		}
+
 		$engine->set('this', $this);
-		
+
 		$retval = $engine->execute();
-		
+
 		return $retval;
 	}
 }

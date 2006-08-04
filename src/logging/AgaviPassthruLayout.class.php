@@ -28,7 +28,6 @@
  */
 class AgaviPassthruLayout extends AgaviLayout
 {
-
 	/**
 	 * Format a message.
 	 *
@@ -39,12 +38,10 @@ class AgaviPassthruLayout extends AgaviLayout
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.10.0
 	 */
-	public function &format ($message)
+	public function format($message)
 	{
-		$return = sprintf('%s', $message->__toString());
-		return $return;
+		return $message->__toString();
 	}
-
 }
 
 ?>

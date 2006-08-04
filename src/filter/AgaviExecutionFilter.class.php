@@ -68,41 +68,55 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 		$viewInstance = $controller->getView($viewModule, $viewName);
 
 		// initialize the view
-		$viewInstance->initialize($response);
+		$viewInstance->initialize($response, $actionEntry->getActionInstance()->getAttributes());
 		
 		// view initialization completed successfully
 		$executeMethod = 'execute' . $this->context->getName();
 		if(!method_exists($viewInstance, $executeMethod)) {
 			$executeMethod = 'execute';
 		}
-		$viewInstance->$executeMethod($actionEntry->getParameters());
+		$key = $this->context->getRequest()->toggleLock();
+		$retval = $viewInstance->$executeMethod($actionEntry->getParameters());
+		$this->context->getRequest()->toggleLock($key);
 		
-		$renderer = null;
+		if(is_array($retval) && count($retval) >= 2) {
+			// View returned another Action to foward to. Skip rendering and go there.
+			$response->clear();
+			$response->lock();
+			$actionEntry->setNext($retval[0], $retval[1], isset($retval[2]) ? $retval[2] : array());
+			return;
+		} else {
+			$renderer = $retval;
+		}
 		
-		while(true) {
-			$oti = $controller->getOutputTypeInfo();
-			if($oti['renderer'] !== null) {
-				$renderer = new $oti['renderer']();
-				$renderer->initialize($this->context, $oti['renderer_parameters']);
-				$renderer->setView($viewInstance);
-				if(isset($oti['extension'])) {
-					$renderer->setExtension($oti['extension']);
-				}
-				try {
-					// run the pre-render check to see if the template is there
-					$renderer->preRenderCheck();
-					break;
-				} catch(AgaviRenderException $e) {
-					if(isset($oti['fallback'])) {
-						// template not found, but there's a fallback specified, so let's try that one
-						$controller->setOutputType($oti['fallback']);
-					} else {
-						throw $e;
+		if($renderer === null || !is_object($renderer) || !($renderer instanceof AgaviRenderer)) {
+			$renderer = null;
+		
+			while(true) {
+				$oti = $controller->getOutputTypeInfo();
+				if($oti['renderer'] !== null) {
+					$renderer = new $oti['renderer']();
+					$renderer->initialize($this->context, $oti['renderer_parameters']);
+					$renderer->setView($viewInstance);
+					if(isset($oti['extension'])) {
+						$renderer->setExtension($oti['extension']);
 					}
+					try {
+						// run the pre-render check to see if the template is there
+						$renderer->preRenderCheck();
+						break;
+					} catch(AgaviRenderException $e) {
+						if(isset($oti['fallback'])) {
+							// template not found, but there's a fallback specified, so let's try that one
+							$controller->setOutputType($oti['fallback']);
+						} else {
+							throw $e;
+						}
+					}
+				} else {
+					$renderer = null;
+					break;
 				}
-			} else {
-				$renderer = null;
-				break;
 			}
 		}
 		
@@ -198,17 +212,22 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 				$validateMethod = 'validate';
 			}
 
+			// prevent access to Request::getParameters()
 			// process manual validation
 			if($actionInstance->$validateMethod() && $validated) {
 				// execute the action
+				$key = $this->context->getRequest()->toggleLock();
 				$viewName = $actionInstance->$executeMethod($actionEntry->getParameters());
+				$this->context->getRequest()->toggleLock($key);
 			} else {
 				// validation failed
 				$handleErrorMethod = 'handle' . $method . 'Error';
 				if(!method_exists($actionInstance, $handleErrorMethod)) {
 					$handleErrorMethod = 'handleError';
 				}
+				$key = $this->context->getRequest()->toggleLock();
 				$viewName = $actionInstance->$handleErrorMethod($actionEntry->getParameters());
+				$this->context->getRequest()->toggleLock($key);
 			}
 		}
 		

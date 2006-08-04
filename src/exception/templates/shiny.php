@@ -77,10 +77,10 @@ if(strpos($_SERVER['HTTP_USER_AGENT'], 'AppleWebKit') !== false) {
 }
 
 if($svg) {
-	header('Content-Type: application/xhtml+xml');
+	header('Content-Type: application/xhtml+xml; charset=utf-8');
 	echo '<?xml version="1.0" encoding="utf-8" standalone="no" ?>';
 } else {
-	header('Content-Type: text/html');
+	header('Content-Type: text/html; charset=utf-8');
 }
 
 // fix stack trace in case it doesn't contain the exception origin as the first entry
@@ -545,13 +545,13 @@ if(isset($fixedTrace[0]['file']) && $fixedTrace[0]['file'] != $e->getFile() && $
 </code>', '&nbsp;'), array('', '', '&#160;'), highlight_string(str_replace('	', '  ', file_get_contents($trace['file'])), true))); ?>
 			<li id="frame<?php echo $i; ?>"<?php if($i > 1): ?> class="hidecode"<?php endif; ?>>at <?php if($i > 1): ?><strong><?php if(isset($trace['class'])): ?><?php echo $trace['class'], htmlspecialchars($trace['type']); ?><?php endif; ?><?php echo $trace['function']; ?><?php if(isset($trace['args'])): ?>(<?php echo buildParamList($trace['args']); ?>)<?php endif; ?></strong><?php else: ?><em>exception origin</em><?php endif; ?><br />in <?php echo str_replace(
 			array(
-				'_' . AgaviConfig::get('core.module_dir'),
-				'_' . AgaviConfig::get('core.template_dir'),
-				'_' . AgaviConfig::get('core.config_dir'),
-				'_' . AgaviConfig::get('core.cache_dir'),
-				'_' . AgaviConfig::get('core.lib_dir'),
-				'_' . AgaviConfig::get('core.webapp_dir'),
-				'_' . AgaviConfig::get('core.agavi_dir')
+				'_' . AgaviConfig::get('core.module_dir', 'something totally random'),
+				'_' . AgaviConfig::get('core.template_dir', 'something totally random'),
+				'_' . AgaviConfig::get('core.config_dir', 'something totally random'),
+				'_' . AgaviConfig::get('core.cache_dir', 'something totally random'),
+				'_' . AgaviConfig::get('core.lib_dir', 'something totally random'),
+				'_' . AgaviConfig::get('core.app_dir', 'something totally random'),
+				'_' . AgaviConfig::get('core.agavi_dir', 'something totally random')
 			), 
 			array(
 				'<abbr title="' . AgaviConfig::get('core.module_dir') . '">core.module_dir</abbr>',
@@ -559,7 +559,7 @@ if(isset($fixedTrace[0]['file']) && $fixedTrace[0]['file'] != $e->getFile() && $
 				'<abbr title="' . AgaviConfig::get('core.config_dir') . '">core.config_dir</abbr>',
 				'<abbr title="' . AgaviConfig::get('core.cache_dir') . '">core.cache_dir</abbr>',
 				'<abbr title="' . AgaviConfig::get('core.lib_dir') . '">core.lib_dir</abbr>',
-				'<abbr title="' . AgaviConfig::get('core.webapp_dir') . '">core.webapp_dir</abbr>',
+				'<abbr title="' . AgaviConfig::get('core.app_dir') . '">core.webapp_dir</abbr>',
 				'<abbr title="' . AgaviConfig::get('core.agavi_dir') . '">core.agavi_dir</abbr>',
 			), 
 '_' . $trace['file']); ?> <a href="#frame<?php echo $i; ?>" class="toggle" title="Toggle source code snippet" onclick="this.parentNode.className = this.parentNode.className == 'hidecode' ? '' : 'hidecode'; return false;">line <?php echo $trace['line']; ?></a><ol start="<?php echo $start = $trace['line'] < 4 ? 1 : $trace['line'] - 3; ?>" style="padding-left:<?php echo strlen($start+6)*0.6+2; ?>em"><?php $lines = array_slice($highlights[$trace['file']], $start - 1, 7, true); 

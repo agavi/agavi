@@ -32,8 +32,15 @@ class AgaviSmartyRenderer extends AgaviRenderer
 	const COMPILE_SUBDIR = 'smarty';
 	const CACHE_DIR = 'content';
 
+	/**
+	 * @var        Smarty Smarty template engine.
+	 */
 	protected $smarty = null;
-	
+
+	/**
+	 * @var        string A string with the default template file extension,
+	 *                    including the dot.
+	 */
 	protected $extension = '.tpl';
 
 	public function getEngine()
@@ -41,7 +48,7 @@ class AgaviSmartyRenderer extends AgaviRenderer
 		if($this->smarty) {
 			return $this->smarty;
 		}
-		
+
 		if(!class_exists('Smarty')) {
 			if(defined('SMARTY_DIR') ) {
 				// if SMARTY_DIR constant is defined, we'll use it
@@ -56,7 +63,7 @@ class AgaviSmartyRenderer extends AgaviRenderer
 		$this->smarty->clear_all_assign();
 		$this->smarty->clear_config();
 		$this->smarty->config_dir = AgaviConfig::get('core.config_dir');
-		
+
 		$parentMode = fileperms(AgaviConfig::get('core.cache_dir'));
 
 		$compileDir = AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . self::COMPILE_DIR . DIRECTORY_SEPARATOR . self::COMPILE_SUBDIR;
@@ -68,11 +75,11 @@ class AgaviSmartyRenderer extends AgaviRenderer
 		$this->smarty->cache_dir = $cacheDir;
 
 		$this->smarty->plugins_dir  = array("plugins","plugins_local");
-		
+
 		if(AgaviConfig::get('core.debug', false)) {
 			$this->smarty->debugging = true;
 		}
-		
+
 		return $this->smarty;
 	}
 
@@ -90,7 +97,7 @@ class AgaviSmartyRenderer extends AgaviRenderer
 		$mode = $view->getContext()->getController()->getRenderMode();
 
 		$attribs =& $view->getAttributes();
-		
+
 		if($this->extractVars) {
 			foreach($attribs as $name => &$value) {
 				$engine->assign_by_ref($name, $value);
@@ -98,8 +105,17 @@ class AgaviSmartyRenderer extends AgaviRenderer
 		} else {
 			$engine->assign_by_ref($this->varName, $attribs);
 		}
+
+		$collisions = array_intersect(array_keys($this->assigns), $this->view->getAttributeNames());
+		if(count($collisions)) {
+			throw new AgaviException('Could not import system objects due to variable name collisions ("' . implode('", "', $collisions) . '" already in use).');
+		}
+		foreach($this->assigns as $key => &$value) {
+			$engine->assign_by_ref($key, $value);
+		}
+
 		$engine->assign_by_ref('this', $this);
-		
+
 		if($mode == AgaviView::RENDER_CLIENT && !$view->isDecorator()) {
 			// render directly to the client
 			$this->response->setContent($this->getEngine()->fetch($view->getDirectory() . '/' . $view->getTemplate() . $this->getExtension()));
@@ -120,10 +136,10 @@ class AgaviSmartyRenderer extends AgaviRenderer
 	{
 		// call our parent decorate() method
 		parent::decorate($content);
-		
+
 		$engine = $this->getEngine();
 		$view = $this->getView();
-		
+
 		if($this->extractSlots === true || ($this->extractVars && $this->extractSlots !== false)) {
 			foreach($this->output as $name => &$value) {
 				$engine->assign_by_ref($name, $value);
@@ -135,8 +151,9 @@ class AgaviSmartyRenderer extends AgaviRenderer
 				$engine->assign_by_ref($this->slotsVarName, $this->output);
 			}
 		}
+
 		$engine->assign_by_ref('this', $this);
-		
+
 		// render the decorator template and return the result
 		$retval = $engine->fetch($view->getDecoratorDirectory() . '/' . $view->getDecoratorTemplate() . $this->getExtension());
 

@@ -12,6 +12,7 @@
 // |   indent-tabs-mode: t                                                     |
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
+
 /**
  * A file that serves as the autoload file for class Propel
  * Use this line in autoload.ini to enable the magic:
@@ -19,19 +20,19 @@
  *   Propel      = "%core.agavi_dir%/database/PropelAutoload.php"
  * </code>
  * Whenever you want to use Propel now, it will automatically be setup for you
- * using the configuration file you specified in database.ini
+ * using the configuration file you specified in database.xml
  * 
  * @package    agavi
  * @subpackage database
  * 
- * @author     Agavi Project <info@agavi.org>
  * @author     David Zuelke <dz@bitxtender.com>
+ * @copyright  (c) Authors
  * @since      0.10.0
  *
  * @version    $Id$
  */
 
-	require_once('propel/Propel.php');
-	Propel::init(AgaviPropelDatabase::getDefaultConfigPath());
+require_once('propel/Propel.php');
+Propel::init(AgaviPropelDatabase::getDefaultConfigPath());
 
 ?>

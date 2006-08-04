@@ -12,12 +12,12 @@ class RequestTest extends AgaviTestCase
 	public function setUp()
 	{
 		$this->_r = new SampleRequest();
-		$this->_r->initialize(AgaviContext::getInstance());
+		$this->_r->initialize(AgaviContext::getInstance('test'));
 	}
 
-	public function testGetInstance()
+	public function testgetInstance()
 	{
-		$ctx = AgaviContext::getInstance();
+		$ctx = AgaviContext::getInstance('test');
 		$ctx_test = $this->_r->getContext();
 		$this->assertReference($ctx, $ctx_test);
 	}
@@ -135,14 +135,14 @@ class RequestTest extends AgaviTestCase
 	public function testGetModuleAccessor()
 	{
 		$this->assertEquals('module', $this->_r->getModuleAccessor());
-		$this->_r->initialize(AgaviContext::getInstance(), array('module_accessor' => 'moduleTest'));
+		$this->_r->initialize(AgaviContext::getInstance('test'), array('module_accessor' => 'moduleTest'));
 		$this->assertEquals('moduleTest', $this->_r->getModuleAccessor());
 	}
 
 	public function testGetActionAccessor()
 	{
 		$this->assertEquals('action', $this->_r->getActionAccessor());
-		$this->_r->initialize(AgaviContext::getInstance(), array('action_accessor' => 'actionTest'));
+		$this->_r->initialize(AgaviContext::getInstance('test'), array('action_accessor' => 'actionTest'));
 		$this->assertEquals('actionTest', $this->_r->getActionAccessor());
 	}
 }

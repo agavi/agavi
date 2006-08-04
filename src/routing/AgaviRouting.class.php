@@ -58,6 +58,9 @@ abstract class AgaviRouting
 	public function initialize(AgaviContext $context, $parameters = array())
 	{
 		$this->context = $context;
+		if(isset($parameters['generator'])) {
+			$this->defaultGenOptions = array_merge($this->defaultGenOptions, $parameters['generator']);
+		}
 		$cfg = AgaviConfig::get("core.config_dir") . "/routing.xml";
 		// allow missing routing.xml when routing is not enabled
 		if(AgaviConfig::get("core.use_routing", false) || is_readable($cfg)) {
@@ -182,7 +185,7 @@ abstract class AgaviRouting
 				$value = array(
 					'pre' => $pre,
 					'val' => $val,
-					'pos' => $post,
+					'post' => $post,
 				);
 			}
 		}
@@ -197,7 +200,7 @@ abstract class AgaviRouting
 		foreach($routeParams as $name => $param) {
 			$params[] = $name;
 
-			if(!isset($options['defaults'][$name]) && ($param['pre'] || $param['val'] || $param['pos'])) {
+			if(!isset($options['defaults'][$name]) && ($param['pre'] || $param['val'] || $param['post'])) {
 				$options['defaults'][$name] = $param;
 			}
 		}
@@ -392,10 +395,10 @@ abstract class AgaviRouting
 
 		foreach($defaults as $name => $val) {
 			if(isset($params[$name])) {
-				$np[$name] = $val['pre'] . $params[$name] . $val['pos'];
+				$np[$name] = $val['pre'] . $params[$name] . $val['post'];
 			} elseif($val['val']) {
 				// more then just pre or postfix
-				$np[$name] = $val['pre'] . $val['val'] . $val['pos'];
+				$np[$name] = $val['pre'] . $val['val'] . $val['post'];
 			}
 		}
 		// get the remaining params too
@@ -466,7 +469,7 @@ abstract class AgaviRouting
 		{
 			$routes = array_pop($routeStack);
 			foreach($routes as $key) {
-				$route = $this->routes[$key];
+				$route =& $this->routes[$key];
 				$opts =& $route['opt'];
 				if($opts['callback'] && !isset($route['cb'])) {
 					$cb = $opts['callback'];
@@ -503,7 +506,10 @@ abstract class AgaviRouting
 
 					foreach($match as $name => $m) {
 						if(is_string($name) && !isset($opts['defaults'][$name])) {
-							$route['opt']['defaults'][$name]['val'] = $m[0];
+							if(!isset($opts['defaults'][$name])) {
+								$opts['defaults'][$name] = array('pre' => '', 'val' => '', 'post' => '');
+							}
+							$opts['defaults'][$name]['val'] = $m[0];
 						}
 					}
 
@@ -742,7 +748,7 @@ abstract class AgaviRouting
 									$rxPostfix = '';
 								}
 
-								$vars[$rxName] = array('pre' => $rxPrefix, 'val' => $rxInner, 'pos' => $rxPostfix);
+								$vars[$rxName] = array('pre' => $rxPrefix, 'val' => $rxInner, 'post' => $rxPostfix);
 							}
 						}
 

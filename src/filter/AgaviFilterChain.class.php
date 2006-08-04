@@ -87,7 +87,6 @@ class AgaviFilterChain
 	{
 		$this->chain[] = $filter;
 	}
-
 }
 
 ?>

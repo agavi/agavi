@@ -84,6 +84,11 @@ abstract class AgaviRenderer implements AgaviIRenderingFilter
 	protected $extractSlots = null;
 	
 	/**
+	 * @var        array An array of objects to be exported for use in templates.
+	 */
+	protected $assigns = array();
+	
+	/**
 	 * Initialize this Renderer.
 	 *
 	 * @param      AgaviContext The current application context.
@@ -109,6 +114,12 @@ abstract class AgaviRenderer implements AgaviIRenderingFilter
 		}
 		if($this->slotsVarName === null) {
 			$this->slotsVarName = $this->varName;
+		}
+		if(isset($parameters['assigns'])) {
+			foreach($parameters['assigns'] as $factory => $var) {
+				$getter = 'get' . $factory;
+				$this->assigns[$var] = $this->context->$getter();
+			}
 		}
 	}
 
@@ -220,7 +231,7 @@ abstract class AgaviRenderer implements AgaviIRenderingFilter
 			
 			if($response) {
 				// set the presentation data as a template attribute
-				$this->output[$name] =& $response->getContent();
+				$this->output[$name] = $response->getContent();
 			
 				$this->response->merge($response->exportInfo());
 			} else {

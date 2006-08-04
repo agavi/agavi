@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+| This file is part of the Agavi package.                                    |
+| Copyright (c) 2006 the Agavi Project.                                      |
+| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
+| AGAVI ROUTING CONFIGURATION                                                |
+| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
+| Routes allow input to the application to be redirected based on arguments  |
+| sent via URIs, command-line arguments, or other input devices. Routes work |
+| essentially like mod_rewrite, allowing modules, actions, output types, and |
+| other settings to be determined based upon a single input line.            |
+|                                                                            |
+| To enable routing, change the "use_routing" setting to "true" in           |
+| settings.xml.                                                              |
+| Please keep in mind that even with routing disabled, it is still possible  |
+| to generate URLs to routes specified here; Agavi will then produce         |
+| alternative URLs (typically index.php?foo=bar etc for WebRouting).         |
+| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
+| KEYWORDS:                                                                  |
+| You may reference any configuration directive by enclosing the name in     |
+| "%" signs. Example: %actions.login_module%                                 |
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+-->
+<configurations>
+	<configuration>
+		<routes>
+			<route pattern="application/xhtml+xml" source="HTTP_ACCEPT" output_type="xhtml" stopping="false" />
+			<route name="disabled" pattern="/disabled" module="Disabled" action="Index" />
+			<route name="login" pattern="/login" module="%actions.login_module%" action="%actions.login_action%">
+				<routes>
+					<route name="logout" pattern="/logout" module="%actions.login_module%" action="Logout" />
+				</routes>
+			</route>
+			<route name="secure2" pattern="/secure2" module="Default" action="Secure2" />
+			<route name="secure" pattern="/secure" module="Default" action="Secure1" />
+			<route name="search_engine_spam" pattern="/products(/buy-cheap-{name:[\S\s]+}-at-agavi-dot-org)?/(id:\d+)" module="Default" action="SearchEngineSpam">
+				<defaults>
+					<default for="name">/buy-cheap-{chainsaws}-at-agavi-dot-org</default>
+				</defaults>
+			</route>
+			<route name="index" pattern="^/$" module="%actions.default_module%" action="%actions.default_action%" />
+		</routes>
+	</configuration>
+</configurations>

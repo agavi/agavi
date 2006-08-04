@@ -12,7 +12,8 @@ abstract class ConfigHandlerTestBase extends AgaviTestCase
 	protected function includeCode($code)
 	{
 		$file = $this->getIncludeFile($code);
-		include($file);
+		$ret = include($file);
 		unlink($file);
+		return $ret;
 	}
 }

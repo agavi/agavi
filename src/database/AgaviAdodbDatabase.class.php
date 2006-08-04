@@ -50,72 +50,54 @@
  */
 class AgaviAdodbDatabase extends AgaviDatabase
 {
-
 	/**
 	 * Connect to the database.
 	 *
-	 * @throws     <b>AgaviDatabaseException</b> If a connection could not be created
+	 * @throws     <b>AgaviDatabaseException</b> If no connection could be created
 	 *
-	 * @author     Steven Weiss (info@code-factory.de)
+	 * @author     Steven Weiss <info@code-factory.de>
 	 * @since      0.10.0
 	 */
-	public function connect ()
+	public function connect()
 	{
-
-		try
-		{
-
+		try {
 			// determine how to get our settings
 			$method = $this->getParameter('method', 'normal');
 
-			switch ($method)
-			{
+			switch($method) {
 
 				case 'normal':
-
 					// get parameters normally, and all are required
 					$database = $this->getParameter('database', null);
 					$host 	  = $this->getParameter('host', null);
 					$password = $this->getParameter('password', null);
 					$dbtype   = $this->getParameter('dbtype', null);
 					$username = $this->getParameter('username', '');
-
 					break;
 
 				case 'dsn':
-
 					$dsn = $this->getParameter('dsn');
-
-					if ($dsn == null)
-					{
+					if($dsn == null) {
 						// missing required dsn parameter
 						$error = 'Database configuration specifies method "dsn", but is missing dsn parameter';
-
 						throw new AgaviDatabaseException($error);
 					}
-
 					break;
 
 				case 'server':
-
 					// construct a DSN connection string from existing $_SERVER values
 					$dsn = $this->loadDSN($_SERVER, $method);
-
 					break;
 
 				case 'env':
-
 					// construct a DSN connection string from existing $_ENV values
 					$dsn = $this->loadDSN($_ENV, $method);
-
 					break;
 
 				default:
-
 					// who knows what the user wants...
 					$error = 'Invalid AdoDBDatabase parameter retrieval method "%s"';
 					$error = sprintf($error, $method);
-
 					throw new AgaviDatabaseException($error);
 
 			}
@@ -124,31 +106,28 @@ class AgaviAdodbDatabase extends AgaviDatabase
 			$classPath = $this->getParameter('classpath', 'adodb');
 
 			$error_reporting = error_reporting(error_reporting() & ~E_STRICT);
-			require_once("$classPath/adodb-exceptions.inc.php");
-			require_once("$classPath/adodb.inc.php");
+			require_once($classPath . "/adodb-exceptions.inc.php");
+			require_once($classPath . "/adodb.inc.php");
 			$error_reporting = error_reporting($error_reporting);
 
-
 			// connect to our lovely database ;-)
-			if (isset($dsn) && $dsn != "")
-			{
+			if(isset($dsn) && $dsn != "") {
 				$this->connection = &ADONewConnection($dsn);
 			}
-			else 
-			{
+			else  {
 				// set our flags
 				$persistent = $this->getParameter('persistent', false);
 					
 				$this->connection = &ADONewConnection($dbtype);
-				if ($persistent)
+				if($persistent) {
 					$this->connection->PConnect($host, $username, $password, $database);
-				else
+				} else {
 					$this->connection->NConnect($host, $username, $password, $database);
+				}
 			}
 
 			// set default fetch mode to 'assoc'
 			$ADODB_FETCH_MODE = ADODB_FETCH_ASSOC;
-
 
 			// NOTE:
 			// note that my AdoDB-version was build with PHP4 and _connectionID is documented as private. 
@@ -156,16 +135,10 @@ class AgaviAdodbDatabase extends AgaviDatabase
 			// directly! so beware that this will break when AdoDB is ported to PHP5 and _connectionID will be
 			// declared as private. hopefully the developers will add an accessor function :-/
 			$this->resource = $this->connection->_connectionID;
-
-		}
-		catch (ADODB_Exception $e)
-		{
-
+		} catch (ADODB_Exception $e) {
 			// the connection's foobar'd
 			throw new AgaviDatabaseException($e->getMessage());
-
 		}
-
 	}
 
 	/**
@@ -175,17 +148,15 @@ class AgaviAdodbDatabase extends AgaviDatabase
 	 *
 	 * @throws     <b>AgaviDatabaseException</b> If the DSN string is not correct.
 	 * 
-	 * @author     Steven Weiss (info@code-factory.de)
+	 * @author     Steven Weiss <info@code-factory.de>
 	 * @since      0.10.0
 	 */
-	private function loadDSN (&$array, $method)
+	private function loadDSN($array, $method)
 	{
-		if (!isset($array['dsn']) || !is_string($array['dsn']) || $array['dsn'] == '')
-		{
+		if(!isset($array['dsn']) || !is_string($array['dsn']) || $array['dsn'] == '') {
 			throw new AgaviDatabaseException('Database configuration specifies method "' . $method . '", but is missing dsn parameter');
 		}
-
-		return $array['dsn'];		
+		return $array['dsn'];
 	}
 
 	/**
@@ -194,21 +165,15 @@ class AgaviAdodbDatabase extends AgaviDatabase
 	 * @throws     <b>AgaviDatabaseException</b> If an error occurs while shutting
 	 *                                           down this database.
 	 *
-	 * @author     Steven Weiss (info@code-factory.de)
+	 * @author     Steven Weiss <info@code-factory.de>
 	 * @since      0.10.0
 	 */
-	public function shutdown ()
+	public function shutdown()
 	{
-
-		if ($this->connection !== null)
-		{
-
+		if($this->connection !== null) {
 			@$this->connection->Close();
-
 		}
-
 	}
-
 }
 
 ?>

@@ -13,10 +13,10 @@ class TRTestSampleRenderer extends AgaviRenderer
 
 class TRTestSampleView extends AgaviView
 {
-	public function initialize(AgaviResponse $response)
+	public function initialize(AgaviResponse $response, $attributes = array())
 	{
 		$this->context = $response->getContext();
-		
+
 		$this->response = $response;
 	}
 
@@ -32,16 +32,16 @@ class TestRenderer extends AgaviTestCase
 	public function setUp()
 	{
 		$rs = new AgaviWebResponse();
-		$rs->initialize(AgaviContext::getInstance());
+		$rs->initialize(AgaviContext::getInstance('test'));
 		$this->_v = new TRTestSampleView();
 		$this->_v->initialize($rs);
 		$this->_r = new TRTestSampleRenderer();
-		$this->_r->initialize(AgaviContext::getInstance());
+		$this->_r->initialize(AgaviContext::getInstance('test'));
 	}
 
 	public function testGetContext()
 	{
-		$this->assertReference(AgaviContext::getInstance(), $this->_r->getContext());
+		$this->assertReference(AgaviContext::getInstance('test'), $this->_r->getContext());
 	}
 
 	public function testSetGetExtension()
@@ -58,7 +58,7 @@ class TestRenderer extends AgaviTestCase
 		$this->assertNull($r->getView());
 		$r->setView($this->_v);
 		$this->assertReference($this->_v, $this->_r->getView());
-		
+
 		$v = new TRTestSampleView();
 		$r->setView($v);
 		$this->assertReference($v, $this->_r->getView());

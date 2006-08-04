@@ -43,7 +43,8 @@ class AgaviWebRouting extends AgaviRouting
 	 */
 	protected $defaultGenOptions = array(
 		'relative' => true,
-		'separator' => '&amp;'
+		'separator' => '&amp;',
+		'use_trans_sid' => false
 	);
 	
 	/**
@@ -57,11 +58,14 @@ class AgaviWebRouting extends AgaviRouting
 	 */
 	public function initialize(AgaviContext $context, $parameters = array())
 	{
-		parent::initialize($context);
-		$isReWritten = isset($_SERVER['REDIRECT_URL']) || (isset($_SERVER['HTTP_X_REWRITE_URL']) && ($_SERVER['HTTP_X_REWRITE_URL'] != $_SERVER['ORIG_PATH_INFO']));
+		parent::initialize($context, $parameters);
+		$isReWritten = (isset($_SERVER['REDIRECT_URL']) && isset($_SERVER['PATH_INFO'])) || (isset($_SERVER['HTTP_X_REWRITE_URL']) && ($_SERVER['HTTP_X_REWRITE_URL'] != $_SERVER['ORIG_PATH_INFO']));
 		if(isset($_SERVER['HTTP_X_REWRITE_URL'])) {
 			// Microsoft IIS with ISAPI_Rewrite
 			$ru = $_SERVER['HTTP_X_REWRITE_URL'];
+		} elseif(isset($_SERVER['ORIG_PATH_INFO']) && isset($_SERVER['REQUEST_URI']) && strpos($_SERVER['REQUEST_URI'], $_SERVER['ORIG_SCRIPT_NAME'] . $_SERVER['ORIG_PATH_INFO']) === 0) {
+			// Apache with CGI SAPI
+			$ru = $_SERVER['REQUEST_URI'];
 		} elseif(isset($_SERVER['ORIG_PATH_INFO'])) {
 			// Microsoft IIS
 			$ru = $_SERVER['ORIG_PATH_INFO'];
@@ -75,8 +79,8 @@ class AgaviWebRouting extends AgaviRouting
 		}
 		$ru = urldecode($ru);
 
-		if(isset($_SERVER['PATH_INFO'])) {
-			$this->prefix =  substr($ru, 0, -strlen($_SERVER['PATH_INFO']));
+		if(isset($_SERVER['PATH_INFO']) || isset($_SERVER['ORIG_PATH_INFO'])) {
+			$this->prefix =  substr($ru, 0, -strlen(isset($_SERVER['ORIG_PATH_INFO']) ? $_SERVER['ORIG_PATH_INFO'] : $_SERVER['PATH_INFO']));
 			$this->input = substr($ru, strlen($this->prefix));
 		} else {
 			$sn = $_SERVER['SCRIPT_NAME'];
@@ -86,15 +90,8 @@ class AgaviWebRouting extends AgaviRouting
 				$this->prefix .= $sn[$i];
 				$appendFrom = $i;
 			}
-			if(!$isReWritten) {
-				$this->prefix .= substr($_SERVER['SCRIPT_NAME'], $appendFrom + 1);
-			} else {
-				// if we have a rewritten url and the prefix ends with an / (so its a path) we push that / to the input
-				if(substr($this->prefix, -1) == '/') {
-					$this->prefix = substr($this->prefix, 0, -1);
-					$i--;
-				}
-			}
+
+			$this->prefix .= substr($_SERVER['SCRIPT_NAME'], $appendFrom + 1);
 			$this->input = substr($ru, $i);
 		}
 		if(!$this->input) {
@@ -105,11 +102,13 @@ class AgaviWebRouting extends AgaviRouting
 		
 		if($isReWritten) {
 			// a rewrite happened
-			$this->basePath = $this->prefix . '/';
+			$this->basePath = $this->prefix;
 		} else {
-			$this->basePath = dirname($this->prefix) . '/';
+			$this->basePath = str_replace('\\', '/', dirname($this->prefix));
 		}
-		$this->basePath;
+		if(substr($this->basePath, -1, 1) != '/') {
+			$this->basePath .= '/';
+		}
 		$this->baseHref = 
 			'http' . (isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on' ? 's' : '')  . '://' . 
 			$_SERVER['SERVER_NAME'] . 
@@ -161,6 +160,10 @@ class AgaviWebRouting extends AgaviRouting
 	{
 		$options = array_merge($this->defaultGenOptions, $options);
 		
+		if(defined('SID') && SID !== '' && $options['use_trans_sid'] === true) {
+			$params = array_merge($params, array(session_name() => session_id()));
+		}
+		
 		$routes = $this->getAffectedRoutes($route);
 
 		if(count($routes)) {
@@ -189,10 +192,13 @@ class AgaviWebRouting extends AgaviRouting
 
 				$req = $this->context->getRequest();
 
+				// we collect the default parameters from the route and make sure 
+				// new parameters don't overwrite already defined parameters
 				$defaults = array();
 				foreach($routes as $route) {
 					if(isset($this->routes[$route])) {
 						$r = $this->routes[$route];
+						$myDefaults = array();
 
 						foreach($r['opt']['defaults'] as $key => $default) {
 							$myDefaults[$key] = $default['val'];

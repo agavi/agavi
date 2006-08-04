@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:include schemaLocation="default_tags.xsd"/>  
+
   <xs:element name="configurations" type="configurations" />
   <xs:complexType name="configurations">
     <xs:sequence>
@@ -27,9 +30,10 @@
       <xs:element name="parameters" type="parameters" minOccurs="0" />
       <xs:element name="renderer" minOccurs="0">
         <xs:complexType>
-          <xs:sequence>
+          <xs:all>
             <xs:element name="parameters" type="parameters" minOccurs="0" />
-          </xs:sequence>
+            <xs:element name="assigns" type="assigns" minOccurs="0" />
+          </xs:all>
           <xs:attribute name="class" type="xs:string" use="required" />
           <xs:attribute name="ignore_slots" type="xs:string" />
           <xs:attribute name="ignore_decorators" type="xs:string" />
@@ -42,18 +46,13 @@
     <xs:attribute name="fallback" type="xs:string" />
   </xs:complexType>
 
-  <xs:complexType name="parameters">
-    <xs:sequence>
-      <xs:element name="parameter" maxOccurs="unbounded">
-        <xs:complexType>
-          <xs:simpleContent>
-            <xs:extension base="xs:string">
-              <xs:attribute name="name" type="xs:string" use="required" />
-            </xs:extension>
-          </xs:simpleContent>
-        </xs:complexType>
-      </xs:element>
-    </xs:sequence>
+  <xs:complexType name="assigns">
+    <xs:all>
+      <xs:element name="controller" minOccurs="0" />
+      <xs:element name="routing" minOccurs="0" />
+      <xs:element name="request" minOccurs="0" />
+      <xs:element name="user" minOccurs="0" />
+    </xs:all>
   </xs:complexType>
 
 </xs:schema>
