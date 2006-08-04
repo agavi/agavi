@@ -14,13 +14,11 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviRegexValidator allows you to match a value against a regular expression
- * pattern.
+ * AgaviIssetValidator verifies a parameter is set
  * 
- * Parameters:
- *   'pattern'  PCRE to be used in preg_match
- *   'match'    input should match or not
- * 
+ * The content of the input value is not varified in any manner, it is only
+ * checked if the input value exists. (see isset() in PHP)
+ *
  * @package    agavi
  * @subpackage validator
  *
@@ -30,21 +28,19 @@
  *
  * @version    $Id$
  */
-class AgaviRegexValidator extends AgaviValidator
+class AgaviIssetValidator extends AgaviValidator
 {
 	/**
 	 * validates the input
 	 * 
-	 * @return     bool true if input matches the pattern or not according to 'match'
+	 * @return     bool the value is set
 	 * 
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
 	protected function validate()
 	{
-		$result = preg_match($this->getParameter('pattern'), $this->getData());
-		
-		if($result != $this->getParameter('match')) {
+		if($this->parentContainer->getRequest()->hasParameter($this->getParameter('param'))) {
 			$this->throwError();
 			return false;
 		}

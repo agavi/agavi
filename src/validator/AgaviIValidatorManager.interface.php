@@ -14,43 +14,61 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviRegexValidator allows you to match a value against a regular expression
- * pattern.
+ * abstract superclass for ValidatorManagers
  * 
- * Parameters:
- *   'pattern'  PCRE to be used in preg_match
- *   'match'    input should match or not
+ * AgaviIValidatorManager is the interface for all ValidatorManagers
+ * which control validation of request parameters, provide error messages and handle
+ * the creation and management of the validators
  * 
  * @package    agavi
  * @subpackage validator
- *
+ * 
  * @author     Uwe Mesecke <uwe@mesecke.net>
  * @copyright  (c) Authors
- * @since      0.11.0
- *
- * @version    $Id$
+ * @since      0.11
+ * 
+ * @version:   $Id$  
  */
-class AgaviRegexValidator extends AgaviValidator
+interface AgaviIValidatorManager
 {
 	/**
-	 * validates the input
-	 * 
-	 * @return     bool true if input matches the pattern or not according to 'match'
-	 * 
+	 * Retrieve the current application context.
+	 *
+	 * @return     AgaviContext The current Context instance.
+	 *
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
-	protected function validate()
-	{
-		$result = preg_match($this->getParameter('pattern'), $this->getData());
-		
-		if($result != $this->getParameter('match')) {
-			$this->throwError();
-			return false;
-		}
-		
-		return true;
-	}
+	public function getContext();
+
+	/**
+	 * initializes the validator manager
+	 * 
+	 * @param      AgaviContext the context
+	 * @param      array        parameters for the validator manager 
+	 *
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
+	 */
+	public function initialize(AgaviContext $context, $parameters = array());
+
+	/**
+	 * clears the validator manager for reuse
+	 *
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
+	 */
+	public function clear();
+
+	/**
+	 * starts the validation process and returns the result
+	 * 
+	 * @return     bool result of validation process
+	 *
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
+	 */
+	public function execute();
 }
 
 ?>

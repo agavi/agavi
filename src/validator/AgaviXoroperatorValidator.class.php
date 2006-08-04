@@ -14,13 +14,11 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviRegexValidator allows you to match a value against a regular expression
- * pattern.
- * 
+ * AgaviXOROperatorValidator succeeds if only one of two sub-validators succeeded
+ *
  * Parameters:
- *   'pattern'  PCRE to be used in preg_match
- *   'match'    input should match or not
- * 
+ *   'skip_errors'  do not submit errors of child validators to validator manager
+ *
  * @package    agavi
  * @subpackage validator
  *
@@ -30,27 +28,54 @@
  *
  * @version    $Id$
  */
-class AgaviRegexValidator extends AgaviValidator
+class AgaviXoroperatorValidator extends AgaviOperatorValidator
 {
 	/**
-	 * validates the input
+	 * check if operator has other then exactly two child validators
 	 * 
-	 * @return     bool true if input matches the pattern or not according to 'match'
+	 * @throws     AgaviValidatorException operator has other then 2 child validators
+	 * 
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
+	 */
+	protected function checkValidSetup()
+	{
+		if(count($this->children) != 2) {
+			throw new AgaviValidatorException('XOR allows only exact 2 child validators');
+		}
+	}
+
+	/**
+	 * validates the operator by returning the by XOR compined result of the child validators
+	 * 
+	 * @return     bool true, if child validator failed 
 	 * 
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
 	protected function validate()
 	{
-		$result = preg_match($this->getParameter('pattern'), $this->getData());
-		
-		if($result != $this->getParameter('match')) {
+		$result1 = $this->children[0]->execute();
+		if($result1 == AgaviValidator::CRITICAL) {
+			$this->result = $result1;
 			$this->throwError();
 			return false;
 		}
-		
-		return true;
-	}
+		$result2 = $this->children[1]->execute();
+		if($result2 == AgaviValidator::CRITICAL) {
+			$this->result = $result2;
+			$this->throwError();
+			return false;
+		}
+		$this->result = max($result1, $result2);
+
+		if(($result1 == AgaviValidator::SUCCESS) xor ($result2 == AgaviValidator::SUCCESS)) {
+			return true;
+		} else {
+			$this->throwError();
+			return false;
+		}
+	}	
 }
 
 ?>

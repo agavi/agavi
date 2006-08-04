@@ -189,12 +189,11 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 			$validated = true;
 
 			// get the current action validation configuration
-			$validationConfig = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/validate/' . $actionName . '.ini';
+			$validationConfig = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/validate/' . $actionName . '.xml';
 
 			if(is_readable($validationConfig)) {
 				// load validation configuration
 				// do NOT use require_once
-				$validationConfig = 'modules/' . $moduleName . '/validate/' . $actionName . '.ini';
 				require(AgaviConfigCache::checkConfig($validationConfig));
 			}
 

@@ -75,8 +75,8 @@ class AllTests
 		require_once($testDir . '/UtilTests.php');
 		$suite->addTest(UtilTests::suite());
 
-		require_once($testDir . '/ValidatorTests.php');
-		$suite->addTest(ValidatorTests::suite());
+		// require_once($testDir . '/ValidatorTests.php');
+		// $suite->addTest(ValidatorTests::suite());
 
 		require_once($testDir . '/ViewTests.php');
 		$suite->addTest(ViewTests::suite());

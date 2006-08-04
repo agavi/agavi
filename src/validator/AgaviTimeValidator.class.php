@@ -14,12 +14,17 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviRegexValidator allows you to match a value against a regular expression
- * pattern.
+ * AgaviTimeValidator verifies a parameter is a valid time
  * 
+ * Formats:
+ *   * HH:MM:SS, HH:MM, HH
+ *   single digits possible, not specified parts are filled with '00', possible
+ *   seperators: '.', ':', ' ' and '-'
+ *
  * Parameters:
- *   'pattern'  PCRE to be used in preg_match
- *   'match'    input should match or not
+ *   'check'  check if input is valid time
+ * 
+ * exports time in format HH:MM:SS
  * 
  * @package    agavi
  * @subpackage validator
@@ -30,24 +35,41 @@
  *
  * @version    $Id$
  */
-class AgaviRegexValidator extends AgaviValidator
+class AgaviTimeValidator extends AgaviValidator
 {
 	/**
 	 * validates the input
 	 * 
-	 * @return     bool true if input matches the pattern or not according to 'match'
+	 * @return     bool input is valid time
 	 * 
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
 	protected function validate()
 	{
-		$result = preg_match($this->getParameter('pattern'), $this->getData());
-		
-		if($result != $this->getParameter('match')) {
+		if(preg_match('/^(\d{1,2})(?:[.: -](\d{1,2})(?:[.: -](\d{1,2}))?)?$/', $this->getData(), $matches)) {
+			$hour = $matches[1];
+			if(sizeof($matches) > 2) {
+				$minute = $matches[2];
+			} else {
+				$minute = 0;
+			}
+			if(sizeof($matches) > 3) {
+				$second = $matches[3];
+			} else {
+				$second = 0;
+			}
+		} else {
 			$this->throwError();
 			return false;
 		}
+
+		if($this->getParameter('check') and ($hour > 23 or $minute > 59 or $second > 59)) {
+			$this->throwError();
+			return false;
+		}
+		
+		$this->export(sprintf('%02d:%02d:%02d', $hour, $minute, $second));
 		
 		return true;
 	}

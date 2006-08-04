@@ -14,13 +14,12 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviRegexValidator allows you to match a value against a regular expression
- * pattern.
- * 
+ * AgaviOROperatorValidator succeeds if at least one sub-validators succeeded
+ *
  * Parameters:
- *   'pattern'  PCRE to be used in preg_match
- *   'match'    input should match or not
- * 
+ *   'skip_errors'  do not submit errors of child validators to validator manager
+ *   'break'        break the execution of child validators after first success
+ *
  * @package    agavi
  * @subpackage validator
  *
@@ -30,27 +29,42 @@
  *
  * @version    $Id$
  */
-class AgaviRegexValidator extends AgaviValidator
+class AgaviOroperatorValidator extends AgaviOperatorValidator
 {
 	/**
-	 * validates the input
+	 * executes the child validators
 	 * 
-	 * @return     bool true if input matches the pattern or not according to 'match'
+	 * @return     bool true, if at least one child validator succeeded
 	 * 
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
 	protected function validate()
 	{
-		$result = preg_match($this->getParameter('pattern'), $this->getData());
+		$return = false;
 		
-		if($result != $this->getParameter('match')) {
-			$this->throwError();
-			return false;
+		foreach($this->children as $child) {
+			$result = $child->execute();
+			$this->result = max($this->result, $result);
+
+			if($result == AgaviValidator::SUCCESS) {
+				// if one child validator succeeds, the whole operator succeeds
+				$return = true;
+				$this->result = $result;
+				if($this->getParameter('break')) {
+					break;
+				}
+			} elseif($result == AgaviValidator::CRITICAL) {
+				break;
+			}
 		}
 		
-		return true;
-	}
+		if(!$return) {
+			$this->throwError();
+		}
+
+		return $return;
+	}	
 }
 
 ?>

@@ -14,13 +14,8 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviRegexValidator allows you to match a value against a regular expression
- * pattern.
- * 
- * Parameters:
- *   'pattern'  PCRE to be used in preg_match
- *   'match'    input should match or not
- * 
+ * AgaviDependencyManager handles the dependencies in the validation process
+ *
  * @package    agavi
  * @subpackage validator
  *
@@ -30,27 +25,59 @@
  *
  * @version    $Id$
  */
-class AgaviRegexValidator extends AgaviValidator
+class AgaviDependencyManager
 {
 	/**
-	 * validates the input
-	 * 
-	 * @return     bool true if input matches the pattern or not according to 'match'
+	 * @var array already provided tokens
+	 */
+	protected $depData = array();
+	
+	/**
+	 * clears the dependency cache
 	 * 
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
-	protected function validate()
+	public function clear()
 	{
-		$result = preg_match($this->getParameter('pattern'), $this->getData());
-		
-		if($result != $this->getParameter('match')) {
-			$this->throwError();
-			return false;
+		$this->depData = array();
+	}
+	
+	/**
+	 * checks whether a list dependencies are met
+	 * 
+	 * @param      array  list of dependencies that have to meet
+	 * @param      string base path to which all tokens are appended
+	 * 
+	 * @return     bool all dependencies are met
+	 * 
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
+	 */
+	public function checkDependencies($tokens, AgaviVirtualArrayPath $base)
+	{
+		foreach($tokens as $token) {
+			if(!$base->getValueByChildPath($token, $this->depData)) {
+				return false;
+			}
 		}
 		
 		return true;
 	}
-}
 
+	/**
+	 * puts a list of tokens into the dependency cache
+	 * 
+	 * @param      array  list of new tokens
+	 * @param      string base path to which all tokens are appended
+	 * 
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
+	 */
+	public function addDependTokens($tokens, AgaviVirtualArrayPath $base) {
+		foreach($tokens as $token) {
+			$base->setValueByChildPath($token, $this->depData, true);
+		}
+	}
+}
 ?>

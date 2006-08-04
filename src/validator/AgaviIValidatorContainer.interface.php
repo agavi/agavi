@@ -14,13 +14,9 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviRegexValidator allows you to match a value against a regular expression
- * pattern.
- * 
- * Parameters:
- *   'pattern'  PCRE to be used in preg_match
- *   'match'    input should match or not
- * 
+ * AgaviIValidatorContainer is an interface for classes which contains several
+ * child validators
+ *
  * @package    agavi
  * @subpackage validator
  *
@@ -30,27 +26,48 @@
  *
  * @version    $Id$
  */
-class AgaviRegexValidator extends AgaviValidator
+interface AgaviIValidatorContainer
 {
 	/**
-	 * validates the input
+	 * adds a new validator to the list of children
 	 * 
-	 * @return     bool true if input matches the pattern or not according to 'match'
+	 * @param      AgaviValidator new child
 	 * 
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
-	protected function validate()
-	{
-		$result = preg_match($this->getParameter('pattern'), $this->getData());
-		
-		if($result != $this->getParameter('match')) {
-			$this->throwError();
-			return false;
-		}
-		
-		return true;
-	}
-}
+	public function addChild(AgaviValidator $validator);
+	
+	/**
+	 * fetches the request
+	 * 
+	 * @return     AgaviRequest the request to be used by child validators
+	 * 
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
+	 */
+	public function getRequest();
+	
+	/**
+	 * fetches the dependency manager
+	 * 
+	 * @return     AgaviDependencyManager the dependency manager to be used
+	 *                                    by child validators
+	 * 
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
+	 */
+	public function getDependencyManager();
 
+	/**
+	 * reports an error to the parent container
+	 * 
+	 * @param      AgaviValidator The validator where the error occured
+	 * @param      string         An error message
+	 * 
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function reportError(AgaviValidator $validator, $errorMsg);
+}
 ?>

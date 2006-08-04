@@ -14,13 +14,11 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviRegexValidator allows you to match a value against a regular expression
- * pattern.
+ * AgaviSetValidator only exports a value and always succeeds
  * 
  * Parameters:
- *   'pattern'  PCRE to be used in preg_match
- *   'match'    input should match or not
- * 
+ *   'value'  value that should be exported
+ *
  * @package    agavi
  * @subpackage validator
  *
@@ -30,24 +28,19 @@
  *
  * @version    $Id$
  */
-class AgaviRegexValidator extends AgaviValidator
+class AgaviSetValidator extends AgaviValidator
 {
 	/**
-	 * validates the input
+	 * exports the value and returns true
 	 * 
-	 * @return     bool true if input matches the pattern or not according to 'match'
+	 * @return     bool allways returns true
 	 * 
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
 	protected function validate()
 	{
-		$result = preg_match($this->getParameter('pattern'), $this->getData());
-		
-		if($result != $this->getParameter('match')) {
-			$this->throwError();
-			return false;
-		}
+		$this->export($this->getParameter('value'));
 		
 		return true;
 	}

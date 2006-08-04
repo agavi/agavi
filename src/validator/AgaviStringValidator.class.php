@@ -3,7 +3,6 @@
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
 // | Copyright (c) 2003-2006 the Agavi Project.                                |
-// | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -17,133 +16,48 @@
 /**
  * AgaviStringValidator allows you to apply string-related constraints to a
  * parameter.
- *
- * <b>Optional parameters:</b>
- *
- * # <b>insensitive</b>  - [false]              - Whether or not the value check
- *                                                against the array of values is
- *                                                case-insensitive. <b>Note:</b>
- *                                                When using this option, values
- *                                                in the values array must be
- *                                                entered in lower-case.
- * # <b>max</b>          - [none]               - Maximum string length.
- * # <b>max_error</b>    - [Input is too long]  - An error message to use when
- *                                                input is too long.
- * # <b>min</b>          - [none]               - Minimum string length.
- * # <b>min_error</b>    - [Input is too short] - An error message to use when
- *                                                input is too short.
- * # <b>values</b>       - [none]               - An array of values the input
- *                                                is allowed to match.
- * # <b>values_error</b> - [Invalid selection]  - An error message to use when
- *                                                input does not match a value
- *                                                listed in the values array.
+ * 
+ * Parameters:
+ *   'min'       string should be at least this long
+ *   'min_error' error message when string is shorter then 'min'
+ *   'max'       string should be at most this long
+ *   'max_error' error message when string is longer then 'max'
  *
  * @package    agavi
  * @subpackage validator
  *
- * @author     Sean Kerr <skerr@mojavi.org>
+ * @author     Uwe Mesecke <uwe@mesecke.net>
  * @copyright  (c) Authors
- * @since      0.9.0
+ * @since      0.11.0
  *
  * @version    $Id$
  */
 class AgaviStringValidator extends AgaviValidator
 {
-
 	/**
-	 * Execute this validator.
-	 *
-	 * @param      mixed A parameter value.
-	 * @param      error An error message reference.
-	 *
-	 * @return     bool true, if this validator executes successfully, otherwise
-	 *                  false.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
+	 * validates the input
+	 * 
+	 * @return     bool true, if the string is valid according to the given parameters
+	 * 
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
 	 */
-	public function execute (&$value, &$error)
+	protected function validate()
 	{
-
-		$min = $this->getParameter('min');
-
-		if ($min != null && strlen($value) < $min)
-		{
-
-			// too short
-			$error = $this->getParameter('min_error');
-
+		$value = $this->getData();
+		
+		if($this->hasParameter('min') and strlen($value) < $this->getParameter('min')) {
+			$this->throwError('min_error');
 			return false;
-
 		}
-
-		$max = $this->getParameter('max');
-
-		if ($max != null && strlen($value) > $max)
-		{
-
-			// too long
-			$error = $this->getParameter('max_error');
-
+		
+		if($this->hasParameter('max') and strlen($value) > $this->getParameter('max')) {
+			$this->throwError('max_error');
 			return false;
-
 		}
-
-		$values = $this->getParameter('values');
-
-		if ($values != null)
-		{
-
-			$insensitive = $this->getParameter('insensitive');
-			$lvalue      = ($insensitive) ? strtolower($value) : $value;
-
-			if (!in_array($lvalue, $values))
-			{
-
-				// can't find a match
-				$error = $this->getParameter('values_error');
-
-				return false;
-
-			}
-
-		}
-
+		
 		return true;
-
 	}
-
-	/**
-	 * Initialize this validator.
-	 *
-	 * @param      AgaviContext The current application context.
-	 * @param      array        An associative array of initialization parameters.
-	 *
-	 * @return     bool true, if initialization completes successfully,
-	 *                  otherwise false.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public function initialize(AgaviContext $context, $parameters = array())
-	{
-
-		// set defaults
-		$this->setParameter('insensitive',  false);
-		$this->setParameter('max',          null);
-		$this->setParameter('max_error',    'Input is too long');
-		$this->setParameter('min',          null);
-		$this->setParameter('min_error',    'Input is too short');
-		$this->setParameter('values',       null);
-		$this->setParameter('values_error', 'Invalid selection');
-
-		// initialize parent
-		parent::initialize($context, $parameters);
-
-		return true;
-
-	}
-
 }
 
 ?>

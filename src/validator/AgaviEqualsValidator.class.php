@@ -14,13 +14,17 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviRegexValidator allows you to match a value against a regular expression
- * pattern.
+ * AgaviEqualsValidator verifies if a parameter equals to a given value
+ * 
+ * The input is compared to a value and the validator fails if they differ.
+ * When the parameter 'asparam' is true, the content in 'value' is taken as a
+ * parameter name and the check is performed against it's value otherwise the
+ * content in 'value' is taken.
  * 
  * Parameters:
- *   'pattern'  PCRE to be used in preg_match
- *   'match'    input should match or not
- * 
+ *   'value'   value which the input should equals to
+ *   'asparam' takes value in 'value' as name of input in request
+ *
  * @package    agavi
  * @subpackage validator
  *
@@ -30,21 +34,41 @@
  *
  * @version    $Id$
  */
-class AgaviRegexValidator extends AgaviValidator
+class AgaviEqualsValidator extends AgaviValidator
 {
+	/**
+	 * returns a list of input fields that are per default affected by a failure
+	 * of the validator
+	 * 
+	 * @return     array list of fields that are affected by an error
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 * @see        AgaviValidator::getAffectedFields
+	 */
+	public function getAffectedFields() {
+		if($this->getParameter('asparam')) {
+			$fields = array_merge(parent::getAffectedFields(), array($this->getParameter('value')));
+
+			return array_unique($fields);
+		}
+
+		return parent::getAffectedFields();
+	}
+
 	/**
 	 * validates the input
 	 * 
-	 * @return     bool true if input matches the pattern or not according to 'match'
+	 * @return     bool the input equals to given value
 	 * 
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
 	protected function validate()
 	{
-		$result = preg_match($this->getParameter('pattern'), $this->getData());
-		
-		if($result != $this->getParameter('match')) {
+		$value = ($this->getParameter('asparam')) ? $this->getData('value') : $this->getParameter('value');
+
+		if($this->getData() != $value) {
 			$this->throwError();
 			return false;
 		}

@@ -14,13 +14,14 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviRegexValidator allows you to match a value against a regular expression
- * pattern.
+ * AgaviIsUploadedImageValidator verifies a parameter is an uploaded image
  * 
  * Parameters:
- *   'pattern'  PCRE to be used in preg_match
- *   'match'    input should match or not
- * 
+ *   'php_error'    error message when there was an php error with the file
+ *   'img_error'    error message when the file is no image according to exif_imagetype()
+ *   'format'       list of valid formats (gif,jpeg,png,bmp)
+ *   'format_error' image has none of the specified formats
+ *
  * @package    agavi
  * @subpackage validator
  *
@@ -30,26 +31,52 @@
  *
  * @version    $Id$
  */
-class AgaviRegexValidator extends AgaviValidator
+class AgaviIsuploadedimageValidator extends AgaviValidator
 {
 	/**
 	 * validates the input
 	 * 
-	 * @return     bool true if input matches the pattern or not according to 'match'
+	 * @return     bool file is valid image according to given parameters
 	 * 
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
 	protected function validate()
 	{
-		$result = preg_match($this->getParameter('pattern'), $this->getData());
-		
-		if($result != $this->getParameter('match')) {
-			$this->throwError();
+		$name = $this->getData();
+		// TODO: use Request methods instead if $_FILES
+		if($_FILES[$name]['error'] != UPLOAD_ERR_OK) {
+			$this->throwError('php_error');
 			return false;
 		}
 		
-		return true;
+		$type = exif_imagetype($_FILES[$name]['tmp_name']);
+		if($type === false) {
+			$this->throwError('img_error');
+			return false;
+		}
+		
+		if(!$this->hasParameter('format')) {
+			return true;
+		}
+		
+		$formats = array(
+			'gif'	=> 1,
+			'jpeg'	=> 2,
+			'jpg'	=> 2,
+			'png'	=> 3,
+			'bmp'	=> 6
+		);
+		
+		
+		foreach(split(',', $this->getParameter('format')) as $format) {
+			if($formats[strtolower($format)] == $type) {
+				return true;
+			}
+		}
+		
+		$this->throwError('format_error');
+		return false;
 	}
 }
 

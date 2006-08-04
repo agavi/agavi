@@ -14,13 +14,13 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviRegexValidator allows you to match a value against a regular expression
- * pattern.
+ * AgaviInArrayValidator verifies whether an input is one of a set of values
  * 
  * Parameters:
- *   'pattern'  PCRE to be used in preg_match
- *   'match'    input should match or not
- * 
+ *   'values'  list of values that form the array
+ *   'sep'     seperator of values in the list
+ *   'case'    verifies case sensitive if true
+ *
  * @package    agavi
  * @subpackage validator
  *
@@ -30,21 +30,27 @@
  *
  * @version    $Id$
  */
-class AgaviRegexValidator extends AgaviValidator
+class AgaviInarrayValidator extends AgaviValidator
 {
 	/**
 	 * validates the input
 	 * 
-	 * @return     bool true if input matches the pattern or not according to 'match'
+	 * @return     bool the value is in the array
 	 * 
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
 	protected function validate()
 	{
-		$result = preg_match($this->getParameter('pattern'), $this->getData());
+		$list = split($this->getParameter('sep'), $this->getParameter('values'));
+		$value = $this->getData();
 		
-		if($result != $this->getParameter('match')) {
+		if(!$this->getParameter('case')) {
+			$value = strtolower($value);
+			$list = array_map(create_function('$a', 'return strtolower($a);'),$list);
+		}
+		
+		if(!in_array($this->getData(), $list)) {
 			$this->throwError();
 			return false;
 		}

@@ -14,13 +14,11 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviRegexValidator allows you to match a value against a regular expression
- * pattern.
- * 
+ * AgaviNOTOperatorValidator succeeds if the sub-validator failed
+ *
  * Parameters:
- *   'pattern'  PCRE to be used in preg_match
- *   'match'    input should match or not
- * 
+ *   'skip_errors'  do not submit errors of child validators to validator manager
+ *
  * @package    agavi
  * @subpackage validator
  *
@@ -30,27 +28,42 @@
  *
  * @version    $Id$
  */
-class AgaviRegexValidator extends AgaviValidator
+class AgaviNotOperatorValidator extends AgaviOperatorValidator
 {
 	/**
-	 * validates the input
+	 * check if operator has more then one child validator
 	 * 
-	 * @return     bool true if input matches the pattern or not according to 'match'
+	 * @throws     AgaviValidatorException operator has more then 1 child validator
+	 * 
+	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @since      0.11.0
+	 */
+	protected function checkValidSetup()
+	{
+		if(count($this->children) != 1) {
+			throw new AgaviValidatorException('NOT allows only 1 child validator');
+		}
+	}
+
+	/**
+	 * validates the operator by returning the inverse result of the child validator
+	 * 
+	 * @return     bool true, if child validator failed 
 	 * 
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
 	protected function validate()
 	{
-		$result = preg_match($this->getParameter('pattern'), $this->getData());
-		
-		if($result != $this->getParameter('match')) {
+		$result = $this->children[0]->execute();
+		if($result == AgaviValidator::CRITICAL || $result == AgaviValidator::SUCCESS) {
+			$this->result = max(AgaviValidator::ERROR, $result);
 			$this->throwError();
 			return false;
+		} else {
+			return true;
 		}
-		
-		return true;
-	}
+	}	
 }
 
 ?>
