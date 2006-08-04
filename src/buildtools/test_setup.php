@@ -41,9 +41,9 @@ if (!AgaviConfig::has('core.agavi_dir') && isset($_ENV['AGAVI_INSTALLATION'])) {
 	die ('core.agavi_dir undefined. Try using the agavi helper script.');
 }
 
-// Assume this is an agavi project if there's a webapp subdir, we'll look for classes in there too.
-if (file_exists($_SERVER['PWD_PATH'].'/webapp')) {
-	AgaviConfig::set('core.weapp_dir', $_SERVER['PWD_PATH'] . '/webapp');
+// Assume this is an agavi project if there's a app subdir, we'll look for classes in there too.
+if (file_exists($_SERVER['PWD_PATH'].'/app')) {
+	AgaviConfig::set('core.app_dir', $_SERVER['PWD_PATH'] . '/app');
 }
 
 ini_set('unserialize_callback_func', 'test__autoload');
@@ -91,12 +91,12 @@ function test__autoload($class)
 			}
 		}
 		$classes = locateClasses(AgaviConfig::get('core.agavi_dir'));
-		if(AgaviConfig::has('core.webapp_dir')) { 
-			$classes = array_merge((array) $classes, (array) locateClasses(AgaviConfig::get('core.webapp_dir'), true));
+		if(AgaviConfig::has('core.app_dir')) { 
+			$classes = array_merge((array) $classes, (array) locateClasses(AgaviConfig::get('core.app_dir'), true));
 		}
 		if ($cachedir && is_writable($cachedir)) {
 			$contents = "<?php\n// --Automagically created ".date($datefmt)."\n//" .
-									(AgaviConfig::has('core.webapp_dir') ? " includes classes located in {$_SERVER['CWD_NAME']}/webapp, too.\n" : "no webapp classes included.\n") .
+									(AgaviConfig::has('core.app_dir') ? " includes classes located in {$_SERVER['CWD_NAME']}/app, too.\n" : "no app classes included.\n") .
 									'$classes = ' .var_export($classes, true)."\n?>";
 			file_put_contents($cache, $contents);
 		}
@@ -136,7 +136,7 @@ class ClassFinder extends RecursiveDirectoryIterator
 	public function prefixedClassName()
 	{
 		$class = $this->className();
-		// /var/www/sites/project/webapp/modules/Default/actions/IndexAction.class.php, 
+		// /var/www/sites/project/app/modules/Default/actions/IndexAction.class.php, 
 		// the class might (_should_) be called Default_IndexAction, so we set an entry for that case too. 
 		$path = explode('/', $this->getPath());
 		$c = count($path);

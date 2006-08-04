@@ -20,7 +20,7 @@ class SecurityUserTest extends AgaviTestCase
 	public function setUp()
 	{
 		$this->_u = new SampleSecurityUser();
-		$context = AgaviContext::getInstance();
+		$context = AgaviContext::getInstance('test');
 		$this->_u->initialize($context);
 	}
 

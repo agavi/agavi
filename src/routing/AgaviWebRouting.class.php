@@ -192,10 +192,13 @@ class AgaviWebRouting extends AgaviRouting
 
 				$req = $this->context->getRequest();
 
+				// we collect the default parameters from the route and make sure 
+				// new parameters don't overwrite already defined parameters
 				$defaults = array();
 				foreach($routes as $route) {
 					if(isset($this->routes[$route])) {
 						$r = $this->routes[$route];
+						$myDefaults = array();
 
 						foreach($r['opt']['defaults'] as $key => $default) {
 							$myDefaults[$key] = $default['val'];

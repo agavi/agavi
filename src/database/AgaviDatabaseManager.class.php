@@ -31,7 +31,6 @@
  */
 class AgaviDatabaseManager
 {
-
 	/**
 	 * @var        array An array of AgaviDatabases.
 	 */
@@ -63,25 +62,19 @@ class AgaviDatabaseManager
 	 *
 	 * @return     mixed A AgaviDatabase instance.
 	 *
-	 * @throws     <b>AgaviDatabaseException</b> If the requested database name does
-	 *                                           not exist.
+	 * @throws     <b>AgaviDatabaseException</b> If the requested database name
+	 *                                           does not exist.
 	 */
-	public function getDatabase ($name = 'default')
+	public function getDatabase($name = 'default')
 	{
-
-		if (isset($this->databases[$name]))
-		{
-
+		if(isset($this->databases[$name])) {
 			return $this->databases[$name];
-
 		}
 
 		// nonexistent database name
 		$error = 'Database "%s" does not exist';
 		$error = sprintf($error, $name);
-
 		throw new AgaviDatabaseException($error);
-
 	}
 
 	/**
@@ -97,7 +90,6 @@ class AgaviDatabaseManager
 	 */
 	public function initialize(AgaviContext $context, $parameters = array())
 	{
-
 		$this->context = $context;
 
 		// load database configuration
@@ -113,19 +105,13 @@ class AgaviDatabaseManager
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function shutdown ()
+	public function shutdown()
 	{
-
 		// loop through databases and shutdown connections
-		foreach ($this->databases as $database)
-		{
-
+		foreach($this->databases as $database) {
 			$database->shutdown();
-
 		}
-
 	}
-
 }
 
 ?>

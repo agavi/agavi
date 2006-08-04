@@ -58,10 +58,10 @@ class AgaviAutoloadConfigHandler extends AgaviConfigHandler
 			foreach($cfg->autoloads as $entry) {
 				// we can have variables in the filename
 				$file = $this->replaceConstants($entry->getValue());
-				// we need the filename w/o webapp dir prepended since the file could 
+				// we need the filename w/o app dir prepended since the file could 
 				// be placed in the include path
 				$originalFile = $file;
-				// if the filename is not absolute we assume its relative to the webapp dir
+				// if the filename is not absolute we assume its relative to the app dir
 				$file = $this->replacePath($file);
 
 				$class = $entry->getAttribute('name');

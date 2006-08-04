@@ -47,7 +47,7 @@ class ReturnArrayConfigHandlerTest extends ConfigHandlerTestBase
 		$ex_simple = array(
 			'cachings' => array(
 				'Browse' => array(
-					'action' => '%core.webapp_dir%',
+					'action' => '%core.app_dir%',
 					'groups' => array(
 						'categories' => array('name' => 'categories'),
 						'id' => array('name' => 'id', 'source' => 'request.parameter'),

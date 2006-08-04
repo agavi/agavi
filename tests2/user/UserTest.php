@@ -10,13 +10,13 @@ class UserTest extends AgaviTestCase
 	public function setUp()
 	{
 		$this->_u = new SampleUser();
-		$context = AgaviContext::getInstance();
+		$context = AgaviContext::getInstance('test');
 		$this->_u->initialize($context);
 	}
 
 	public function testInitialize()
 	{
-		$ctx = AgaviContext::getInstance();
+		$ctx = AgaviContext::getInstance('test');
 		$u = $this->_u;
 
 		$ctx_test = $u->getContext();

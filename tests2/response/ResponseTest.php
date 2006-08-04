@@ -18,12 +18,12 @@ class ResponseTest extends AgaviTestCase
 	public function setUp()
 	{
 		$this->_r = new SampleResponse();
-		$this->_r->initialize(AgaviContext::getInstance());
+		$this->_r->initialize(AgaviContext::getInstance('test'));
 	}
 
 	public function testGetContext()
 	{
-		$ctx = AgaviContext::getInstance();
+		$ctx = AgaviContext::getInstance('test');
 		$ctx_test = $this->_r->getContext();
 		$this->assertReference($ctx, $ctx_test);
 	}

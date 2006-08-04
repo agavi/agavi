@@ -2,14 +2,15 @@
 
 class FileAppenderTest extends AgaviTestCase
 {
-	private $_file, $_fa;
+	private $_file, $_fa, $_context;
 
 	public function setUp()
 	{
+		$this->_context = AgaviContext::getInstance('test');
 		$this->_file = tempnam('', 'FOO');
 		unlink($this->_file);
 		$this->_fa = new AgaviFileAppender();
-		$this->_fa->initialize(array('file'=>$this->_file));
+		$this->_fa->initialize($this->_context, array('file'=>$this->_file));
 		$this->_fa->setLayout(new AgaviPassthruLayout());
 	}
 	

@@ -54,7 +54,7 @@ EOD;
 			'baseinstalldir' => 'agavi',
 			'ignore' => array(
 				'.svn/'
-			), 
+			),
 			'installexceptions' => array(
 				'scripts/agavi-dist' => '/',
 				'scripts/agavi.bat-dist' => '/'
@@ -70,13 +70,12 @@ EOD;
 		));
 		$p2->setPackageType('php');
 		$p2->setPackage('agavi');
-		$p2->addMaintainer('developer', 'bob', 'Bob Zoller', 'bob@agavi.org');
-		$p2->addMaintainer('developer', 'mike', 'Mike Vincent', 'mike@agavi.org');
 		$p2->addMaintainer('lead', 'david', 'David Zuelke', 'dz@bitxtender.com');
+		$p2->addMaintainer('developer', 'dominik', 'Dominik del Bondio', 'ddb@bitxtender.com');
 		$p2->addMaintainer('developer', 'v-dogg', 'Veikko Makinen', 'mail@veikkomakinen.com');
 		$p2->setChannel('pear.agavi.org');
-		$p2->setReleaseVersion('0.11-DEV');
-		$p2->setAPIVersion('0.11-DEV');
+		$p2->setReleaseVersion('0.11dev');
+		$p2->setAPIVersion('0.11dev');
 		$p2->setReleaseStability('alpha');
 		$p2->setAPIStability('alpha');
 		$p2->setSummary($shortDesc);
@@ -94,22 +93,19 @@ EOD;
 		$p2->addInstallAs('scripts/agavi-dist', 'agavi');
 		$p2->addIgnoreToRelease('scripts/agavi.bat-dist');
 
-		$p2->addPackageDepWithChannel( 'required', 'phing', 'pear.phing.info', '2.2.0RC1');
+		$p2->addPackageDepWithChannel( 'required', 'phing', 'pear.phing.info', '2.2.0RC3');
 		$p2->addPackageDepWithChannel( 'optional', 'creole', 'pear.phpdb.org', '1.1.0RC1');
-		$p2->addPackageDepWithChannel( 'optional', 'propel_generator', 'pear.phpdb.org', '1.2.0RC1');
-		$p2->addPackageDepWithChannel( 'optional', 'propel_runtime', 'pear.phpdb.org', '1.2.0RC1');
+		$p2->addPackageDepWithChannel( 'optional', 'propel_generator', 'pear.phpdb.org', '1.2.0RC2');
+		$p2->addPackageDepWithChannel( 'optional', 'propel_runtime', 'pear.phpdb.org', '1.2.0RC2');
 		$p2->setPhpDep('5.0.0');
 		$p2->setPearinstallerDep('1.4.0');
-		//$p2->addPackageDepWithUri('required', 'phing', 'http://phing.info/pear/phing-current.tgz');
 		$p2->setLicense('LGPL', 'http://www.gnu.org/copyleft/lesser.html');
 		$p2->addReplacement('scripts/agavi-dist', 'pear-config', '@PEAR-DIR@', 'php_dir');
 		$p2->addReplacement('scripts/agavi.bat-dist', 'pear-config', '@PEAR-DIR@', 'php_dir');
 		$p2->generateContents();
 
-//		$pkg = &$p2->exportCompatiblePackageFile1();
 
 		try {
-//			$pkg->writePackageFile();
 			$p2->writePackageFile();
 		} catch (PEAR_Exception $e) {
 			$this->log("Oops!  Caught PEAR Exception: ".$e->getMessage());

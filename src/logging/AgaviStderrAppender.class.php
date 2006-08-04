@@ -27,7 +27,6 @@
  */
 class AgaviStderrAppender extends AgaviFileAppender
 {
-
 	/**
 	 * Initialize the object.
 	 *
@@ -42,7 +41,6 @@ class AgaviStderrAppender extends AgaviFileAppender
 		$params['file'] = 'php://stderr';
 		parent::initialize($context, $params);
 	}
-
 }
 
 ?>

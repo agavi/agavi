@@ -28,56 +28,68 @@
  */
 class AgaviLogger
 {
-
 	/**
-	 * Debug level.
+	 * Fatal level.
 	 *
 	 * @since      0.9.0
 	 */
-	const DEBUG = 1000;
+	const FATAL = 1;
 
 	/**
 	 * Error level.
 	 *
 	 * @since      0.9.0
 	 */
-	const ERROR = 4000;
-
-	/**
-	 * Information level.
-	 *
-	 * @since      0.9.0
-	 */
-	const INFO = 2000;
+	const ERROR = 2;
 
 	/**
 	 * Warning level.
 	 *
 	 * @since      0.9.0
 	 */
-	const WARN = 3000;
+	const WARN = 4;
 
 	/**
-	 * Fatal level.
+	 * Information level.
 	 *
 	 * @since      0.9.0
 	 */
-	const FATAL = 5000;
+	const INFO = 8;
 
-	private
-		$appenders    = array(),
-		$priority     = null;
+	/**
+	 * Debug level.
+	 *
+	 * @since      0.9.0
+	 */
+	const DEBUG = 16;
+
+	/**
+	 * All levels. (2^32-1)
+	 *
+	 * @since      0.11.0
+	 */
+	const ALL = 4294967295;
+
+	/**
+	 * @var        array An array of AgaviAppenders.
+	 */
+	protected $appenders = array();
+
+	/**
+	 * @var        int Logging level.
+	 */
+	protected $level = 0;
 
 	/**
 	 * Constructor.
-	 * 
-	 * 
+	 *
+	 *
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.10.0
 	 */
 	public function __construct()
 	{
-		$this->priority = self::WARN;
+		$this->level = self::WARN;
 	}
 
 	/**
@@ -88,15 +100,13 @@ class AgaviLogger
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function log (AgaviMessage $message)
+	public function log(AgaviMessage $message)
 	{
-		// get message priority
-		$msgPriority = $message->getPriority();
+		// get message level
+		$msgLevel = $message->getLevel();
 
-		if ($msgPriority >= $this->priority || $this->priority < 1)
-		{
-			foreach ($this->appenders as $appender)
-			{
+		if($this->level & $msgLevel) {
+			foreach($this->appenders as $appender) {
 				$appender->write($message);
 			}
 		}
@@ -116,10 +126,9 @@ class AgaviLogger
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function setAppender ($name, $appender)
+	public function setAppender($name, $appender)
 	{
-		if (!isset($this->appenders[$name]))
-		{
+		if(!isset($this->appenders[$name])) {
 			$this->appenders[$name] = $appender;
 			return;
 		}
@@ -127,21 +136,20 @@ class AgaviLogger
 		// appender already exists
 		$error = 'An appender with the name "%s" is already registered';
 		$error = sprintf($error, $name);
-
 		throw new AgaviLoggingException($error);
 	}
 
 	/**
-	 * Set the priority level.
+	 * Set the level.
 	 *
-	 * @param      int A priority level.
+	 * @param      int A log level.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function setPriority ($priority)
+	public function setLevel($level)
 	{
-		$this->priority = $priority;
+		$this->level = $level;
 	}
 
 	/**
@@ -150,15 +158,13 @@ class AgaviLogger
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function shutdown ()
+	public function shutdown()
 	{
 		// loop through our appenders and shut them all down
-		foreach ($this->appenders as $appender)
-		{
+		foreach($this->appenders as $appender) {
 			$appender->shutdown();
 		}
 	}
-
 }
 
 ?>

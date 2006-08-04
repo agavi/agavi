@@ -5,9 +5,21 @@
       <xs:element name="parameter" maxOccurs="unbounded">
         <xs:complexType mixed="true">
           <xs:sequence minOccurs="1" maxOccurs="1">
-            <xs:element name="parameters" type="parameters" minOccurs="0" />
+            <xs:element name="parameters" type="innerParameters" minOccurs="0" />
           </xs:sequence>
           <xs:attribute name="name" type="xs:string" use="required" />
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="innerParameters">
+    <xs:sequence>
+      <xs:element name="parameter" maxOccurs="unbounded">
+        <xs:complexType mixed="true">
+          <xs:sequence minOccurs="1" maxOccurs="1">
+            <xs:element name="parameters" type="innerParameters" minOccurs="0" />
+          </xs:sequence>
+          <xs:attribute name="name" type="xs:string" use="optional" />
         </xs:complexType>
       </xs:element>
     </xs:sequence>

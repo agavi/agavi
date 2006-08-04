@@ -44,8 +44,10 @@
 class AgaviMysqlSessionStorage extends AgaviSessionStorage
 {
 
-	private
-		$resource = null;
+	/**
+	 * @var        mixed A mysql database resource.
+	 */
+	private $resource = null;
 
 	/**
 	 * Initialize this Storage.

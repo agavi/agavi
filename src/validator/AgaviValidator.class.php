@@ -62,6 +62,11 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	const CRITICAL = 3;
 
 	/**
+	 * @var        AgaviContext An AgaviContext instance.
+	 */
+	private $context = null;
+
+	/**
 	 * @var        AgaviIValidatorContainer parent validator container (in
 	 *                                      most cases the validator manager)
 	 */

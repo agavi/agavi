@@ -28,12 +28,36 @@
  */
 class AgaviXslRenderer extends AgaviRenderer
 {
-	private $xslProc      = null;  // XSLTProcessor.
-	private $domDoc       = null;  // DomDocument.
-	private $rootNode     = null;  // The root node of the DomDocument.
-	private $rootNodeRS   = null;  // The copy of the initilization of the DomDocument incase a restart is needed.
-	private $rootNodeName = null;  // The name of the root node incase it is needed.
-	
+	/**
+	 * @var        XSLTProcessor
+	 */
+	private $xslProc      = null;
+
+	/**
+	 * @var        DomDocument
+	 */
+	private $domDoc       = null;
+
+	/**
+	 * @var        DomNode The root node of the DomDocument.
+	 */
+	private $rootNode     = null;
+
+	/**
+	 * @var        DomNode The copy of the initilization of the DomDocument incase a restart is needed.
+	 */
+	private $rootNodeRS   = null;
+
+	/**
+	 * @var        string The name of the root node incase it is needed.
+	 */
+	private $rootNodeName = null;
+
+
+	/**
+	 * @var        string A string with the default template file extension,
+	 *                    including the dot.
+	 */
 	protected $extension = '.xsl';
 
 	/**
@@ -48,9 +72,9 @@ class AgaviXslRenderer extends AgaviRenderer
 	public function initialize(AgaviContext $context, $parameters = array())
 	{
 		throw new AgaviInitializationException("We're sorry, but the XSL Renderer is neither stable nor feature complete. If you'd like to contribute to Agavi and fix this problem, please join us on IRC, the Forums or the Mailing Lists");
-		
+
 		parent::initialize($context, $parameters);
-		
+
 		$this->xslProc = new XSLTProcessor();
 
 		// initialize this object
@@ -64,7 +88,7 @@ class AgaviXslRenderer extends AgaviRenderer
 	 * The default value is DOMDocument('1.0', 'iso-8859-1').
 	 *
 	 * @param      DOMDocument $domDocument The DOMDocument to use.
-	 * @param      string $rootNode (Optional) The name of the root node to use.  
+	 * @param      string $rootNode (Optional) The name of the root node to use.
 	 *                    If not specified then the root node will have a name
 	 *                    of "rootnode".
 	 *
@@ -130,7 +154,7 @@ class AgaviXslRenderer extends AgaviRenderer
 
 		// execute pre-render check
 		$this->preRenderCheck();
-		
+
 		$view = $this->getView();
 		$engine = $this->getEngine();
 

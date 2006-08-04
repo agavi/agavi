@@ -27,7 +27,6 @@
  */
 class AgaviStdoutAppender extends AgaviFileAppender
 {
-
 	/**
 	 * Initialize the object.
 	 *
@@ -42,7 +41,6 @@ class AgaviStdoutAppender extends AgaviFileAppender
 		$params['file'] = 'php://stdout';
 		parent::initialize($context, $params);
 	}
-
 }
 
 ?>

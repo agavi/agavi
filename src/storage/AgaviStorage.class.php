@@ -33,8 +33,10 @@ abstract class AgaviStorage extends AgaviParameterHolder
 	// | PRIVATE DATA                                                          |
 	// +-----------------------------------------------------------------------+
 
-	private
-		$context = null;
+	/**
+	 * @var        AgaviContext An AgaviContext instance.
+	 */
+	private $context = null;
 
 	/**
 	 * Retrieve the current application context.

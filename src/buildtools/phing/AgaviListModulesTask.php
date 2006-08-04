@@ -26,10 +26,10 @@
 class AgaviListModulesTask extends Task {
 	private 	$property,
 				$defaultProperty,
-				$webapp;
+				$app;
 
-	public function setWebapp($dir) {
-		$this->webapp = $dir;
+	public function setApp($dir) {
+		$this->app = $dir;
 	}
 
 	public function setProperty($property) {
@@ -41,8 +41,8 @@ class AgaviListModulesTask extends Task {
 	}
 
 	public function main() {
-		if ($this->webapp && $this->property) {
-			foreach (glob($this->webapp.'/modules/*', GLOB_ONLYDIR) as $path) {
+		if ($this->app && $this->property) {
+			foreach (glob($this->app.'/modules/*', GLOB_ONLYDIR) as $path) {
 				$modules[] = basename($path);
 			}
 			if (isset($modules[0])) {
@@ -50,7 +50,7 @@ class AgaviListModulesTask extends Task {
 			}
 			$this->project->setProperty($this->property, implode(',', $modules));
 		} else {
-			throw new BuildException('You must pass the path of the Webapp directory and give a property name to hold the list.');
+			throw new BuildException('You must pass the path of the app directory and give a property name to hold the list.');
 		}
 	}
 }

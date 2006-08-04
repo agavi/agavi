@@ -36,6 +36,45 @@ final class Agavi
 	public static $autoloads = null;
 	
 	/**
+	 * Handles autoloading of classes
+	 *
+	 * @param      string A class name.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public static function __autoload($class)
+	{
+		if(self::$autoloads === null) {
+			self::$autoloads = array();
+			// catch parse errors of autoload.xml
+			try {
+				$cfg = AgaviConfig::get('core.config_dir') . '/autoload.xml';
+				if(!is_readable($cfg)) {
+					$cfg = $cfg = AgaviConfig::get('core.system_config_dir') . '/autoload.xml';
+					if(!is_readable($cfg)) {
+						return;
+					}
+				}
+				include(AgaviConfigCache::checkConfig($cfg));
+			} catch(Exception $e) {
+				trigger_error($e->getMessage(), E_USER_ERROR);
+			}
+		}
+		
+		if(isset(self::$autoloads[$class])) {
+			// class exists, let's include it
+			require(self::$autoloads[$class]);
+		}
+		
+		/*	
+			If the class doesn't exist in autoload.xml there's not a lot we can do. Because 
+			PHP's class_exists resorts to __autoload we cannot throw exceptions
+			for this might break some 3rd party lib autoloading mechanism.
+		*/
+	}
+	
+	/**
 	 * Startup the Agavi core
 	 *
 	 * @param      string environment the environment to use for this session.
@@ -64,31 +103,31 @@ final class Agavi
 				$environment = AgaviConfig::get('core.environment');
 			} else {
 				if($environment === null) {
-					$environment = 'stdenv';
+					throw new AgaviException('You must supply an environment name to Agavi::bootstrap() or set the name of the default environment to be used in the configuration directive "core.environment".');
 				}
 				AgaviConfig::set('core.environment', $environment, true, true);
 			}
 			
 			AgaviConfig::set('core.debug', false, false);
 			
-			if(!AgaviConfig::has('core.webapp_dir')) {
-				throw new AgaviException('Configuration directive "core.webapp_dir" not defined, terminating...');
+			if(!AgaviConfig::has('core.app_dir')) {
+				throw new AgaviException('Configuration directive "core.app_dir" not defined, terminating...');
 			}
 			
 			// define a few filesystem paths
-			AgaviConfig::set('core.cache_dir', AgaviConfig::get('core.webapp_dir') . '/cache', false, true);
+			AgaviConfig::set('core.cache_dir', AgaviConfig::get('core.app_dir') . '/cache', false, true);
 			
-			AgaviConfig::set('core.config_dir', AgaviConfig::get('core.webapp_dir') . '/config', false, true);
+			AgaviConfig::set('core.config_dir', AgaviConfig::get('core.app_dir') . '/config', false, true);
 			
 			AgaviConfig::set('core.system_config_dir', AgaviConfig::get('core.agavi_dir') . '/config/defaults', false, true);
 			
-			AgaviConfig::set('core.lib_dir', AgaviConfig::get('core.webapp_dir') . '/lib', false, true);
+			AgaviConfig::set('core.lib_dir', AgaviConfig::get('core.app_dir') . '/lib', false, true);
 			
-			AgaviConfig::set('core.model_dir', AgaviConfig::get('core.webapp_dir') . '/models', false, true);
+			AgaviConfig::set('core.model_dir', AgaviConfig::get('core.app_dir') . '/models', false, true);
 			
-			AgaviConfig::set('core.module_dir', AgaviConfig::get('core.webapp_dir') . '/modules', false, true);
+			AgaviConfig::set('core.module_dir', AgaviConfig::get('core.app_dir') . '/modules', false, true);
 			
-			AgaviConfig::set('core.template_dir', AgaviConfig::get('core.webapp_dir') . '/templates', false, true);
+			AgaviConfig::set('core.template_dir', AgaviConfig::get('core.app_dir') . '/templates', false, true);
 			
 			// ini settings
 			ini_set('magic_quotes_runtime', AgaviConfig::get('php.magic_quotes_runtime', false));

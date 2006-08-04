@@ -43,14 +43,14 @@
 		</system_actions>
 		
 		<settings>
-			<setting name="webapp_name">Test Project</setting>
+			<setting name="app_name">Test Project</setting>
 			
 			<setting name="available">true</setting>
 			<setting name="debug">true</setting>
 			<setting name="modpub">/modpub</setting>
 			
 			<setting name="use_database">false</setting>
-			<setting name="use_logging">false</setting>
+			<setting name="use_logging">true</setting>
 			<setting name="use_routing">false</setting>
 			<setting name="use_security">false</setting>
 			

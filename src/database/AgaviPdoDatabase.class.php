@@ -43,19 +43,14 @@ class AgaviPdoDatabase extends AgaviDatabase
 
 		// get parameters
 		switch($method) {
-
 			case 'dsn' :
-
 				$dsn = $this->getParameter('dsn');
-
 				if($dsn == null) {
 					// missing required dsn parameter
 					$error = 'Database configuration specifies method ' .
 						 '"dsn", but is missing dsn parameter';
-
 					throw new AgaviDatabaseException($error);
 				}
-
 				break;
 		}
 

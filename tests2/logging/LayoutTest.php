@@ -2,7 +2,7 @@
 
 class SampleLayout extends AgaviLayout
 {
-	public function & format($message){}
+	public function format($message){}
 }
 
 class LayoutTest extends AgaviTestCase

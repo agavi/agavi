@@ -11,7 +11,7 @@
 | A category name must exist in the form of the configuration file base      |
 | name, which is the name of the file without the path, or must exist with a |
 | relative path to the configuration file. If a category exists with a       |
-| relative path, the path itself is relative to the "core.webapp_dir" Agavi  |
+| relative path, the path itself is relative to the "core.app_dir" Agavi     |
 | application setting.                                                       |
 |                                                                            |
 | In theory, you can have the two following categories: config.ini and       |
@@ -23,7 +23,7 @@
 |                                                                            |
 | 1. A category with an absolute filesystem path should never exist unless a |
 |    configuration file that is used within the application exists outside   |
-|    of "core.agavi_dir" and "core.webapp_dir" Agavi application settings.   |
+|    of "core.agavi_dir" and "core.app_dir" Agavi application settings.      |
 |                                                                            |
 | 2. Registered handlers with a parameter list should be registered with a   |
 |    relative path so the parameters do not get carried over to another      |
@@ -36,7 +36,7 @@
 | OPTIONAL KEYS:                                                             |
 |                                                                            |
 | 1. file  - The filesystem path to the class file. If the path is relative, |
-|            it will be relative to the "core.webapp_dir" Agavi application  |
+|            it will be relative to the "core.app_dir" Agavi application     |
 |            setting.                                                        |
 | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
 | PARAMETER KEYS:                                                            |

@@ -71,13 +71,13 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 		$viewInstance->initialize($response, $actionEntry->getActionInstance()->getAttributes());
 		
 		// view initialization completed successfully
-		$this->context->getRequest()->lock();
 		$executeMethod = 'execute' . $this->context->getName();
 		if(!method_exists($viewInstance, $executeMethod)) {
 			$executeMethod = 'execute';
 		}
+		$key = $this->context->getRequest()->toggleLock();
 		$retval = $viewInstance->$executeMethod($actionEntry->getParameters());
-		$this->context->getRequest()->unlock();
+		$this->context->getRequest()->toggleLock($key);
 		
 		if(is_array($retval) && count($retval) >= 2) {
 			// View returned another Action to foward to. Skip rendering and go there.
@@ -213,20 +213,22 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 			}
 
 			// prevent access to Request::getParameters()
-			$this->context->getRequest()->lock();
 			// process manual validation
 			if($actionInstance->$validateMethod() && $validated) {
 				// execute the action
+				$key = $this->context->getRequest()->toggleLock();
 				$viewName = $actionInstance->$executeMethod($actionEntry->getParameters());
+				$this->context->getRequest()->toggleLock($key);
 			} else {
 				// validation failed
 				$handleErrorMethod = 'handle' . $method . 'Error';
 				if(!method_exists($actionInstance, $handleErrorMethod)) {
 					$handleErrorMethod = 'handleError';
 				}
+				$key = $this->context->getRequest()->toggleLock();
 				$viewName = $actionInstance->$handleErrorMethod($actionEntry->getParameters());
+				$this->context->getRequest()->toggleLock($key);
 			}
-			$this->context->getRequest()->unlock();
 		}
 		
 		if(is_array($viewName)) {

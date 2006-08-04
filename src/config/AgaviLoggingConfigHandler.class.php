@@ -60,10 +60,10 @@ class AgaviLoggingConfigHandler extends AgaviConfigHandler
 				foreach($cfg->loggers as $logger) {
 					$name = $logger->getAttribute('name');
 					if(!isset($loggers[$name])) {
-						$loggers[$name] = array('class' => null, 'priority' => null, 'appenders' => array(), 'params' => array());
+						$loggers[$name] = array('class' => null, 'level' => null, 'appenders' => array(), 'params' => array());
 					}
 					$loggers[$name]['class'] = $logger->hasAttribute('class') ? $logger->getAttribute('class') : $loggers[$name]['class'];
-					$loggers[$name]['priority'] = $logger->hasAttribute('priority') ? $logger->getAttribute('priority') : $loggers[$name]['priority'];
+					$loggers[$name]['level'] = $logger->hasAttribute('level') ? $logger->getAttribute('level') : $loggers[$name]['level'];
 					if(isset($logger->appenders)) {
 						foreach($logger->appenders as $appender) {
 							$loggers[$name]['appenders'][] = $appender->getValue();
@@ -102,14 +102,12 @@ class AgaviLoggingConfigHandler extends AgaviConfigHandler
 		if(count($loggers) > 0) {
 			foreach($layouts as $name => $layout) {
 				$data[] = sprintf('$%s = new %s();', $name, $layout['class']);
-				if(count($layout['params']) > 0) {
-					$data[] = sprintf('$%s->initialize(%s);', $name, var_export($layout['params'], true));
-				}
+				$data[] = sprintf('$%s->initialize($this->context, %s);', $name, var_export($layout['params'], true));
 			}
 
 			foreach($appenders as $name => $appender) {
 				$data[] = sprintf('$%s = new %s();', $name, $appender['class']);
-				$data[] = sprintf('$%s->initialize($this->getContext(), %s);', $name, var_export($appender['params'], true));
+				$data[] = sprintf('$%s->initialize($this->context, %s);', $name, var_export($appender['params'], true));
 				$data[] = sprintf('$%s->setLayout($%s);', $name, $appender['layout']);
 			}
 
@@ -118,8 +116,8 @@ class AgaviLoggingConfigHandler extends AgaviConfigHandler
 				foreach($logger['appenders'] as $appender) {
 					$data[] = sprintf('$%s->setAppender("%s", $%s);', $name, $appender, $appender);
 				}
-				if($logger['priority'] !== null) {
-					$data[] = sprintf('$%s->setPriority(%s);', $name, $logger['priority']);
+				if($logger['level'] !== null) {
+					$data[] = sprintf('$%s->setLevel(%s);', $name, $logger['level']);
 				}
 				$data[] = sprintf('AgaviLoggerManager::setLogger("%s", $%s);', $name, $name);
 			}

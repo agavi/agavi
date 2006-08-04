@@ -7,7 +7,7 @@ class WebResponseTest extends AgaviTestCase
 	public function setUp()
 	{
 		$this->_r = new NoHeadersAgaviWebResponse();
-		$this->_r->initialize(AgaviContext::getInstance());
+		$this->_r->initialize(AgaviContext::getInstance('test'));
 	}
 
 	public function testSend()

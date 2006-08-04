@@ -52,46 +52,23 @@ AgaviConfig::set('exception.default_template', AgaviConfig::get('core.agavi_dir'
 require(AgaviConfig::get('core.agavi_dir') . '/version.php');
 require(AgaviConfig::get('core.agavi_dir') . '/core/Agavi.class.php');
 
-
-
-/**
- * Handles autoloading of classes
- *
- * @param      string A class name.
- *
- * @author     David Zuelke <dz@bitxtender.com>
- * @author     Sean Kerr <skerr@mojavi.org>
- * @since      0.9.0
- */
-function __autoload($class)
-{
-	if(Agavi::$autoloads === null) {
-		Agavi::$autoloads = array();
-		// catch parse errors of autoload.xml
-		try {
-			$cfg = AgaviConfig::get('core.config_dir') . '/autoload.xml';
-			if(!is_readable($cfg)) {
-				$cfg = $cfg = AgaviConfig::get('core.system_config_dir') . '/autoload.xml';
-				if(!is_readable($cfg)) {
-					return;
-				}
-			}
-			include(AgaviConfigCache::checkConfig($cfg));
-		} catch(Exception $e) {
-			trigger_error($e->getMessage(), E_USER_ERROR);
-		}
+// set up our __autoload
+if(function_exists('spl_autoload_register')) {
+	spl_autoload_register(array('Agavi', '__autoload'));
+} else {
+	/**
+	 * Handles autoloading of classes
+	 *
+	 * @param      string A class name.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
+	 */
+	function __autoload($class)
+	{
+		Agavi::__autoload($class);
 	}
-	if(isset(Agavi::$autoloads[$class])) {
-		// class exists, let's include it
-		require(Agavi::$autoloads[$class]);
-	}
-	
-	/*	
-		If the class doesn't exist in autoload.xml there's not a lot we can do. Because 
-		PHP's class_exists resorts to __autoload we cannot throw exceptions
-		for this might break some 3rd party lib autoloading mechanism.
-	*/
-
 }
 
 ?>

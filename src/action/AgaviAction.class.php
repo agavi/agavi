@@ -30,13 +30,10 @@
  */
 abstract class AgaviAction extends AgaviAttributeHolder
 {
-
-	// +-----------------------------------------------------------------------+
-	// | PRIVATE VARIABLES                                                     |
-	// +-----------------------------------------------------------------------+
-	
-	private
-		$context = null;
+	/**
+	 * @var        AgaviContext An AgaviContext instance.
+	 */
+	private $context = null;
 
 	/**
 	 * Retrieve the current application context.
@@ -67,6 +64,9 @@ abstract class AgaviAction extends AgaviAttributeHolder
 
 	/**
 	 * Execute any post-validation error application logic.
+	 *
+	 * @param      AgaviParameterHolder A parameter holder containing the filtered
+	 *                                  request parameters for this Action.
 	 *
 	 * @return     mixed A string containing the view name associated with this
 	 *                   action.
@@ -146,7 +146,6 @@ abstract class AgaviAction extends AgaviAttributeHolder
 	{
 		return 'Input';
 	}
-
 }
 
 ?>

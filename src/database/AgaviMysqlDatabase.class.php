@@ -47,7 +47,6 @@
  */
 class AgaviMysqlDatabase extends AgaviDatabase
 {
-
 	/**
 	 * Connect to the database.
 	 *
@@ -57,52 +56,40 @@ class AgaviMysqlDatabase extends AgaviDatabase
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function connect ()
+	public function connect()
 	{
-
 		// determine how to get our
 		$method = $this->getParameter('method', 'normal');
 
-		switch ($method)
-		{
-
+		switch($method) {
 			case 'normal':
-
 				// get parameters normally
 				$database = $this->getParameter('database');
 				$host     = $this->getParameter('host', 'localhost');
 				$password = $this->getParameter('password');
 				$user     = $this->getParameter('username');
-
 				break;
 
 			case 'server':
-
 				// construct a connection string from existing $_SERVER values
 				// and extract them to local scope
 				$parameters =& $this->loadParameters($_SERVER);
 				extract($parameters);
-
 				break;
 
 			case 'env':
-
 				// construct a connection string from existing $_ENV values
 				// and extract them to local scope
 				$string =& $this->loadParameters($_ENV);
 				extract($parameters);
-
 				break;
 
 			default:
-
 				// who knows what the user wants...
 				$error = 'Invalid AgaviMySQLDatabase parameter retrieval method ' .
 						 '"%s"';
 				$error = sprintf($error, $method);
-
 				throw new AgaviDatabaseException($error);
-
 		}
 
 		// let's see if we need a persistent connection
@@ -128,7 +115,6 @@ class AgaviMysqlDatabase extends AgaviDatabase
 		if($this->connection === false) {
 			// the connection's foobar'd
 			$error = 'Failed to create a AgaviMySQLDatabase connection';
-
 			throw new AgaviDatabaseException($error);
 		}
 
@@ -137,7 +123,6 @@ class AgaviMysqlDatabase extends AgaviDatabase
 			// can't select the database
 			$error = 'Failed to select AgaviMySQLDatabase "%s"';
 			$error = sprintf($error, $database);
-
 			throw new AgaviDatabaseException($error);
 		}
 
@@ -154,26 +139,19 @@ class AgaviMysqlDatabase extends AgaviDatabase
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	private function & loadParameters (&$array)
+	private function loadParameters($array)
 	{
-
 		// list of available parameters
 		$available = array('database', 'host', 'password', 'user');
 
 		$parameters = array();
 
-		foreach ($available as $parameter)
-		{
-
+		foreach($available as $parameter) {
 			$$parameter = $this->getParameter($parameter);
-
-			$parameters[$parameter] = ($$parameter != null)
-						              ? $array[$$parameter] : null;
-
+			$parameters[$parameter] = ($$parameter != null) ? $array[$$parameter] : null;
 		}
 
 		return $parameters;
-
 	}
 
 	/**
@@ -185,18 +163,12 @@ class AgaviMysqlDatabase extends AgaviDatabase
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function shutdown ()
+	public function shutdown()
 	{
-
-		if ($this->connection != null)
-		{
-
+		if($this->connection != null) {
 			@mysql_close($this->connection);
-
 		}
-
 	}
-
 }
 
 ?>

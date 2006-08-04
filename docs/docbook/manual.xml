@@ -110,11 +110,11 @@
         to somewhere inside your application's directory structure (we
         recommend a <filename>libs</filename> folder that holds all libraries
         your app uses and that sits on the same level as the
-        <filename>webapp</filename> and <filename>www</filename> directories)
+        <filename>app</filename> and <filename>pub</filename> directories)
         and give it a different name, <filename>agavi</filename> would stand
         to reason. For that little extra something, copy the agavi-dist or
         agavi.bat-dist script again, maybe to your application root. Your
-        <filename>www/index.php</filename> can then be changed to use a
+        <filename>pub/index.php</filename> can then be changed to use a
         relative path for including <filename>agavi.php</filename>, in our
         case that'd be <filename>../libs/agavi/agavi.php</filename>. Agavi
         will auto-determine and remember the path where it was loaded from,
@@ -239,19 +239,19 @@
       permissions for the cache folder so it's writeable to PHP or the web
       server process:</para>
 
-      <para><command>chmod a+rwx webapp/cache</command></para>
+      <para><command>chmod a+rwx app/cache</command></para>
 
       <para>And that's it! You're done! Fire up your browser and point it to
-      the <filename>www</filename> directory of your application. If you see a
+      the <filename>pub</filename> directory of your application. If you see a
       blank page, everything went fine. Of course, a blank page isn't really
       satisfying or anything, so you might want to edit
-      <filename>webapp/modules/Default/templates/IndexSuccess.php</filename>
+      <filename>app/modules/Default/templates/IndexSuccess.php</filename>
       and put some text in there, like the infamous "Hello World". Back to the
       browser and reload, et voila!</para>
 
       <para>Since you're fiddling around a bit at this stage, it might be a
       good idea to bootstrap the development environment instead of the
-      default one. To do this, open <filename>www/index.php</filename> and
+      default one. To do this, open <filename>pub/index.php</filename> and
       change the bootstrap call accordingly:</para>
 
       <para><programlisting>Agavi::bootstrap('development');</programlisting></para>
@@ -397,7 +397,7 @@
     <section>
       <title>How a Request is Processed</title>
 
-      <para>If you call an URL that is handled by www/index.php, Agavi will
+      <para>If you call an URL that is handled by pub/index.php, Agavi will
       bootstrap the specified (or default) Environment and then create an
       instance of the specified (or default) Context (this instantiation sets
       up all of the core components of the framework). Finally, the request is
@@ -586,14 +586,14 @@
       such as ISAPI_Rewrite for Microsoft IIS) to get rid of the "index.php"
       part in incoming and generated URLs. Make sure mod_rewrite is enabled,
       and create a <filename>.htaccess</filename> file in your
-      <filename>www</filename> directory with the following contents:</para>
+      <filename>pub</filename> directory with the following contents:</para>
 
       <para><programlisting># enable rewrite engine
 RewriteEngine On
 
-RewriteBase /~dzuelke/_projects/agavi/trunk/samples/www/
-# e.g. RewriteBase /~dzuelke/_projects/agavi/trunk/samples/www/
-# usually just "/" if your application's www dir is the document root
+RewriteBase /~dzuelke/_projects/agavi/trunk/samples/pub/
+# e.g. RewriteBase /~dzuelke/_projects/agavi/trunk/samples/pub/
+# usually just "/" if your application's pub dir is the document root
 
 # if requested url does not exist (i.e. it's likely an agavi route), pass it as path info to index.php
 RewriteRule ^$ index.php/ [QSA,L]
@@ -602,10 +602,10 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule (.*) index.php/$1 [QSA,L]</programlisting></para>
 
       <para>The important thing is that you use the
-      <emphasis>external</emphasis> path to the <filename>www</filename>
+      <emphasis>external</emphasis> path to the <filename>pub</filename>
       directory as the RewriteBase, i.e. the path that you would have to enter
       in your web browser location bar to reach the index page. If the
-      <filename>www</filename> directory is the document root, then the
+      <filename>pub</filename> directory is the document root, then the
       RewriteBase is just <filename>/</filename>.</para>
 
       <para>The RewriteCond is a condition that executes the following

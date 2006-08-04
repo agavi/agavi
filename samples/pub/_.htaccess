@@ -9,8 +9,8 @@ Options -MultiViews -Indexes
 RewriteEngine On
 
 RewriteBase /WEBSERVER/PATH/TO/www/
-# e.g. RewriteBase /~dzuelke/_projects/agavi/trunk/samples/www/
-# usually just "/" if your application's www dir is the document root
+# e.g. RewriteBase /~dzuelke/_projects/agavi/trunk/samples/pub/
+# usually just "/" if your application's pub dir is the document root
 
 # if requested url does not exist (i.e. it's likely an agavi route), pass it as path info to index.php
 RewriteRule ^$ index.php/ [QSA,L]

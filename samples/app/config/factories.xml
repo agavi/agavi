@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+| This file is part of the Agavi package.                                    |
+| Copyright (c) 2006 the Agavi Project                                       |
+| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
+| AGAVI FACTORIES CONFIGURATION                                              |
+| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
+| The default configuration must at least define:                            |
+|                                                                            |
+|  action_stack          - The ActionStack class implementation.             |
+|  controller            - The Controller class implementation.              |
+|  execution_filter      - The ExecutionFilter class implementation.         |
+|  request               - The Request class implementation.                 |
+|  storage               - The Storage class implementation.                 |
+|  * database_manager    - The DatabaseManager class implementation.         |
+|  ** security_filter    - The SecurityFilter class implementation.          |
+|  ** user               - The User class implementation.                    |
+|                                                                            |
+| * if "core.use_database" is turned on in the parameters.xml config           |
+| ** if "core.use_security" is turned on in the parameters.xml config          |
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+-->
+<configurations>
+	
+	<configuration>
+		
+		<action_stack class="AgaviActionStack" />
+		
+		<controller class="AgaviWebController" />
+		
+		<database_manager class="AgaviDatabaseManager" />
+		
+		<dispatch_filter class="AgaviDispatchFilter" />
+		
+		<execution_filter class="AgaviExecutionFilter" />
+		
+		<filter_chain class="AgaviFilterChain" />
+		
+		<logger_manager class="AgaviLoggerManager" />
+		
+		<request class="AgaviWebRequest" />
+		
+		<response class="AgaviWebResponse" />
+		
+		<routing class="AgaviWebRouting" />
+		
+		<security_filter class="AgaviSecurityFilter" />
+		
+		<storage class="AgaviSessionStorage" />
+		
+		<user class="AgaviSampleAppUser" />
+		
+		<validator_manager class="AgaviValidatorManager" />
+		
+	</configuration>
+	
+</configurations>

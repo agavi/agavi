@@ -29,11 +29,6 @@
  */
 abstract class AgaviDatabase extends AgaviParameterHolder
 {
-
-	// +-----------------------------------------------------------------------+
-	// | PROTECTED VARIABLES                                                   |
-	// +-----------------------------------------------------------------------+
-
 	/**
 	 * @var        AgaviDatabaseManager An AgaviDatabaseManager instance.
 	 */
@@ -58,7 +53,7 @@ abstract class AgaviDatabase extends AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	abstract function connect ();
+	abstract function connect();
 	
 	/**
 	 * Retrieve the Database Manager instance for this implementation.
@@ -84,18 +79,13 @@ abstract class AgaviDatabase extends AgaviParameterHolder
 	 *
 	 * @throws     <b>AgaviDatabaseException</b> If a connection could not be retrieved.
 	 */
-	public function getConnection ()
+	public function getConnection()
 	{
-
-		if ($this->connection == null)
-		{
-
+		if($this->connection == null) {
 			$this->connect();
-
 		}
 
 		return $this->connection;
-
 	}
 
 	/**
@@ -104,20 +94,15 @@ abstract class AgaviDatabase extends AgaviParameterHolder
 	 *
 	 * @return     mixed A database resource.
 	 *
-	 * @throws     <b>AgaviDatabaseException</b> If a resource could not be retrieved.
+	 * @throws     <b>AgaviDatabaseException</b> If no resource could be retrieved
 	 */
-	public function getResource ()
+	public function getResource()
 	{
-
-		if ($this->resource == null)
-		{
-
+		if($this->resource == null) {
 			$this->connect();
-
 		}
 
 		return $this->resource;
-
 	}
 
 	/**
@@ -147,8 +132,7 @@ abstract class AgaviDatabase extends AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	abstract function shutdown ();
-
+	abstract function shutdown();
 }
 
 ?>

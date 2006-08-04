@@ -30,7 +30,7 @@ class DatabaseConfigHandlerTest extends ConfigHandlerTestBase
 		$params_ex = array(
 			'host' => 'localhost1',
 			'user' => 'username1',
-			'config' => AgaviConfig::get('core.webapp_dir') . '/config/project-conf.php',
+			'config' => AgaviConfig::get('core.app_dir') . '/config/project-conf.php',
 		);
 		$this->assertSame($params_ex, $this->databases['test1']->params);
 
@@ -38,7 +38,7 @@ class DatabaseConfigHandlerTest extends ConfigHandlerTestBase
 		$params_ex = array(
 			'host' => 'localhost2',
 			'user' => 'username2',
-			'config' => AgaviConfig::get('core.webapp_dir') . '/config/project-conf.php',
+			'config' => AgaviConfig::get('core.app_dir') . '/config/project-conf.php',
 		);
 		$this->assertSame($params_ex, $this->databases['test2']->params);
 
