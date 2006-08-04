@@ -15,12 +15,14 @@ class FCHTestBase
 class FCHTestActionStack			extends FCHTestBase {}
 class FCHTestController				extends FCHTestBase {}
 class FCHTestDispatchFilter		extends FCHTestBase implements AgaviIGlobalFilter {
+	public function executeOnce(AgaviFilterChain $filterChain, AgaviResponse $response) {}
 	public function execute(AgaviFilterChain $filterChain, AgaviResponse $response) {}
 	public function getContext() {}
 	public function initialize(AgaviContext $context, $parameters = array()) {}
 }
 
 class FCHTestExecutionFilter	extends FCHTestBase implements AgaviIActionFilter {
+	public function executeOnce(AgaviFilterChain $filterChain, AgaviResponse $response) {}
 	public function execute(AgaviFilterChain $filterChain, AgaviResponse $response) {}
 	public function getContext() {}
 	public function initialize(AgaviContext $context, $parameters = array()) {}
@@ -40,6 +42,7 @@ class FCHTestValidatorManager	extends FCHTestBase {}
 
 class FCHTestDBManager				extends FCHTestBase {}
 class FCHTestSecurityFilter		extends FCHTestBase implements AgaviIActionFilter, AgaviISecurityFilter {
+	public function executeOnce(AgaviFilterChain $filterChain, AgaviResponse $response) {}
 	public function execute(AgaviFilterChain $filterChain, AgaviResponse $response) {}
 	public function getContext() {}
 	public function initialize(AgaviContext $context, $parameters = array()) {}

@@ -36,7 +36,7 @@
  *
  * @version    $Id$
  */
-class AgaviExecutionTimeFilter extends AgaviFilter implements AgaviIActionFilter
+class AgaviExecutionTimeFilter extends AgaviFilter implements AgaviIGlobalFilter, AgaviIActionFilter
 {
 	/**
 	 * Execute this filter.
@@ -50,7 +50,7 @@ class AgaviExecutionTimeFilter extends AgaviFilter implements AgaviIActionFilter
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function execute(AgaviFilterChain $filterChain, AgaviResponse $response)
+	public function executeOnce(AgaviFilterChain $filterChain, AgaviResponse $response)
 	{
 		$context = $this->getContext();
 		

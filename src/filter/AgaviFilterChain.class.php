@@ -29,6 +29,17 @@
 class AgaviFilterChain
 {
 	/**
+	 * @var        array An array to keep track of filter execution.
+	 */
+	protected static $filterLog;
+	
+	/**
+	 * @var        string The unique key to access the list of filters and their
+	 *                    execution count for this filter chain's Context.
+	 */
+	protected $filterLogKey = '';
+	
+	/**
 	 * @var        array The elements in this chain.
 	 */
 	protected $chain = array();
@@ -55,6 +66,7 @@ class AgaviFilterChain
 	public function initialize(AgaviResponse $response, $parameters = array())
 	{
 		$this->response = $response;
+		$this->filterLogKey = $response->getContext()->getName();
 	}
 	
 	/**
@@ -71,7 +83,13 @@ class AgaviFilterChain
 
 		if($this->index < count($this->chain)) {
 			// execute the next filter
-			$this->chain[$this->index]->execute($this, $this->response);
+			$filter = $this->chain[$this->index];
+			$count = ++self::$filterLog[$this->filterLogKey][get_class($filter)];
+			if($count == 1) {
+				$filter->executeOnce($this, $this->response);
+			} else {
+				$filter->execute($this, $this->response);
+			}
 		}
 	}
 
@@ -86,6 +104,7 @@ class AgaviFilterChain
 	public function register($filter)
 	{
 		$this->chain[] = $filter;
+		self::$filterLog[$this->filterLogKey][get_class($filter)] = 0;
 	}
 }
 

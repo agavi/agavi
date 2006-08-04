@@ -12,6 +12,7 @@ class FCHTestFilter1 implements AgaviIFilter
 		$this->params = $params;
 	}
 
+	public function executeOnce(AgaviFilterChain $filterChain, AgaviResponse $response) {}
 	public function execute(AgaviFilterChain $filterChain, AgaviResponse $response) {}
 	public function getContext() {}
 }

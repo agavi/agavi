@@ -59,7 +59,7 @@
  *
  * @version    $Id$
  */
-class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilter
+class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilter, AgaviIActionFilter
 {
 	/**
 	 * Execute this filter.
@@ -71,7 +71,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function execute(AgaviFilterChain $filterChain, AgaviResponse $response)
+	public function executeOnce(AgaviFilterChain $filterChain, AgaviResponse $response)
 	{
 		$filterChain->execute($filterChain, $response);
 		

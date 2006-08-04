@@ -66,6 +66,34 @@ abstract class AgaviFilter extends AgaviParameterHolder implements AgaviIFilter
 
 		$this->setParameters($parameters);
 	}
+	
+	/**
+	 * The default "execute once" method, which just calls the regular one.
+	 *
+	 * @param      AgaviFilterChain A FilterChain instance.
+	 * @param      AgaviResponse A Response instance.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function executeOnce(AgaviFilterChain $filterChain, AgaviResponse $response)
+	{
+		$this->execute($filterChain, $response);
+	}
+	
+	/**
+	 * The default "execute" method, which just calls continues in the chain.
+	 *
+	 * @param      AgaviFilterChain A FilterChain instance.
+	 * @param      AgaviResponse A Response instance.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function execute(AgaviFilterChain $filterChain, AgaviResponse $response)
+	{
+		$filterChain->execute($filterChain, $response);
+	}
 }
 
 ?>

@@ -336,6 +336,20 @@ abstract class AgaviRenderer implements AgaviIRenderingFilter
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
+	public function executeOnce(AgaviFilterChain $filterChain, AgaviResponse $response)
+	{
+		$this->execute($filterChain, $response);
+	}
+
+	/**
+	 * Execute the Renderer.
+	 *
+	 * This method is called by the rendering FilterChain.
+	 * It puts the returned data into the View (if appropriate)
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public function execute(AgaviFilterChain $filterChain, AgaviResponse $response)
 	{
 		$this->response = $response;

@@ -29,6 +29,17 @@
 interface AgaviIFilter
 {
 	/**
+	 * Execute this filter for the first time in this context.
+	 *
+	 * @param      AgaviFilterChain A FilterChain instance.
+	 * @param      AgaviResponse A Response instance.
+	 *
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.11.0
+	 */
+	public function executeOnce(AgaviFilterChain $filterChain, AgaviResponse $response);
+
+	/**
 	 * Execute this filter.
 	 *
 	 * @param      AgaviFilterChain A FilterChain instance.
