@@ -27,12 +27,15 @@
  */
 abstract class AgaviRoutingCallback
 {
-	
+
 	/**
 	 * @var        AgaviContext An AgaviContext instance.
 	 */
 	protected $context = null;
-	
+
+	/**
+	 * @var        array An array with information about the route.
+	 */
 	protected $route = null;
 
 	/**

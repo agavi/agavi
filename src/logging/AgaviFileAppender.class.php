@@ -27,11 +27,11 @@
  */
 class AgaviFileAppender extends AgaviAppender
 {
-	/*
+	/**
 	 * @var        The resource of the file this appender is writing to.
 	 */
 	protected $handle = null;
-	
+
 	/**
 	 * @var        The name of the file this appender is writing to.
 	 */
