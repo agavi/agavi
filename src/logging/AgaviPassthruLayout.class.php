@@ -24,7 +24,7 @@
  * @copyright  (c) Authors
  * @since      0.10.0
  *
- * @version    $Id: PatternLayout.class.php 87 2005-06-03 21:19:23Z bob $
+ * @version    $Id$
  */
 class AgaviPassthruLayout extends AgaviLayout
 {

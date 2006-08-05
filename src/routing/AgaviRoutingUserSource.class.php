@@ -23,7 +23,7 @@
  * @copyright  (c) Authors
  * @since      0.11.0
  *
- * @version    $Id: AgaviRoutingCallback.class.php 795 2006-07-22 09:18:07Z v-dogg $
+ * @version    $Id$
  */
 class AgaviRoutingUserSource implements AgaviIRoutingSource
 {

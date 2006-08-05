@@ -28,7 +28,7 @@
  * @copyright  (c) Authors
  * @since      0.11.0
  *
- * @version    $Id: AgaviIsuploadedimageValidator.class.php 743 2006-07-14 19:49:22Z dominik $
+ * @version    $Id$
  */
 class AgaviUploadedFileValidator extends AgaviValidator
 {

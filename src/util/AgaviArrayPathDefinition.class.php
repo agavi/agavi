@@ -28,7 +28,7 @@
  * @copyright  (c) Authors
  * @since      0.11.0
  *
- * @version    $Id: AgaviVirtualArrayPath.class.php 782 2006-07-20 23:49:36Z dominik $
+ * @version    $Id$
  */
 final class AgaviArrayPathDefinition
 {
