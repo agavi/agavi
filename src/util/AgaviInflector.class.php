@@ -27,6 +27,9 @@
  */
 final class AgaviInflector
 {
+	/**
+	 * @var        array singular => plural mapping
+	 */
 	protected static $singularMatches = array(
 		'/move$/i' => 'moves',
 		'/sex$/i' => 'sexes',
@@ -53,6 +56,9 @@ final class AgaviInflector
 		'/$/' => 's',
 	);
 
+	/**
+	 * @var        array plurar => singular mapping
+	 */
 	protected static $pluralMatches = array(
 		'/moves$/i' => 'move',
 		'/sexes$/i' => 'sex',
@@ -86,6 +92,9 @@ final class AgaviInflector
 		'/s$/i' => '',
 	);
 
+	/**
+	 * @var        array An array of uncountable nouns
+	 */
 	protected static $uncountables = array(
 		'equipment',
 		'information',

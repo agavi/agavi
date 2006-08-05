@@ -30,13 +30,11 @@
 class AgaviParameterHolder
 {
 
-	// +-----------------------------------------------------------------------+
-	// | PROTECTED DATA                                                        |
-	// +-----------------------------------------------------------------------+
+	/**
+	 * @var        array An array of parameters
+	 */
+	protected $parameters = null;
 
-	protected
-		$parameters = null;
-		
 	/**
 	 * Constructor. Accepts an array of initial parameters as an argument.
 	 *
@@ -162,7 +160,7 @@ class AgaviParameterHolder
 
 	/**
 	 * Append a parameter.
-	 * 
+	 *
 	 * If this parameter is already set, convert it to an array and append the
 	 * new value.  If not, set the new value like normal.
 	 *
@@ -199,7 +197,7 @@ class AgaviParameterHolder
 
 	/**
 	 * Append a parameter by reference.
-	 * 
+	 *
 	 * If this parameter is already set, convert it to an array and append the
 	 * reference to the new value.  If not, set the new value like normal.
 	 *

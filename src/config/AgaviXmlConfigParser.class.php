@@ -31,7 +31,12 @@ require_once(AgaviConfig::get('core.agavi_dir') . '/util/AgaviInflector.class.ph
 
 class AgaviXmlConfigParser extends AgaviConfigParser
 {
+
+	/**
+	 * @var        array An array of parsing errors
+	 */
 	protected $errors = array();
+
 	public function errorHandler($errno, $errstr, $errfile, $errline)
 	{
 		$this->errors[] = $errstr;

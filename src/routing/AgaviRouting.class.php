@@ -32,12 +32,32 @@ abstract class AgaviRouting
 	const ANCHOR_NONE = 0;
 	const ANCHOR_START = 1;
 	const ANCHOR_END = 2;
-	protected $routes = array(),
-						$context = null,
-						$input = null,
-						$sources = array(),
-						$prefix = '';
-	
+
+	/**
+	 * @var        array An array of route information
+	 */
+	protected $routes = array();
+
+	/**
+	 * @var        AgaviContext An AgaviContext instance.
+	 */
+	protected $context = null;
+
+	/**
+	 * @var        string Route input.
+	 */
+	protected $input = null;
+
+	/**
+	 * @var        array An array of AgaviRoutingArraySource.
+	 */
+	protected $sources = array();
+
+	/**
+	 * @var        string Route prefix to use with gen()
+	 */
+	protected $prefix = '';
+
 	/**
 	 * @var        array An array of default options for gen()
 	 */
@@ -299,7 +319,7 @@ abstract class AgaviRouting
 
 		$route = $routes[0];
 		unset($routes[0]);
-		
+
 		$myRoutes = array();
 		foreach($routes as $r) {
 			$myRoutes[$r] = true;
@@ -430,7 +450,7 @@ abstract class AgaviRouting
 	}
 
 	/**
-	 * Matches the input against the routing info and sets the info as request 
+	 * Matches the input against the routing info and sets the info as request
 	 * parameter.
 	 *
 	 * @return     array All routes that matched.
@@ -441,14 +461,14 @@ abstract class AgaviRouting
 	public function execute()
 	{
 		$matchedRoutes = array();
-		
+
 		if(!AgaviConfig::get('core.use_routing', false) || count($this->routes) == 0) {
 			// routing disabled, bail out
 			return $matchedRoutes;
 		}
-		
+
 		$req = $this->context->getRequest();
-		
+
 		$input = $this->input;
 
 		$vars = array();
@@ -519,7 +539,7 @@ abstract class AgaviRouting
 					if($opts['module']) {
 						$vars[$ma] = $opts['module'];
 					}
-					
+
 					if($opts['action']) {
 						$vars[$aa] = $opts['action'];
 					}
@@ -535,7 +555,7 @@ abstract class AgaviRouting
 						} else {
 							$s =& $input;
 						}
-						
+
 						$ni = '';
 						// if the route didn't match from the start of the input preserve the 'prefix'
 						if($match[0][1] > 0) {
@@ -562,7 +582,7 @@ abstract class AgaviRouting
 				}
 			}
 		} while(count($routeStack) > 0);
-		
+
 		// set the output type if necessary
 		if($ot !== null) {
 			$this->context->getController()->setOutputType($ot);
@@ -570,7 +590,7 @@ abstract class AgaviRouting
 
 		// put the vars into the request
 		$req->setParameters($vars);
-		
+
 		if(!$req->hasParameter($ma) || !$req->hasParameter($aa)) {
 			// no route which supplied the required parameters matched, use 404 action
 			$req->setParameters(array(

@@ -15,8 +15,8 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviConfigHandler allows a developer to create a custom formatted 
- * configuration file pertaining to any information they like and still 
+ * AgaviConfigHandler allows a developer to create a custom formatted
+ * configuration file pertaining to any information they like and still
  * have it auto-generate PHP code.
  *
  * @package    agavi
@@ -30,6 +30,9 @@
  */
 abstract class AgaviConfigHandler extends AgaviParameterHolder
 {
+	/**
+	 * @var        string An absolute filesystem path to a validation filename.
+	 */
 	protected $validationFile = null;
 
 	/**
@@ -64,7 +67,7 @@ abstract class AgaviConfigHandler extends AgaviParameterHolder
 		if($itemNode->hasChildren('parameters')) {
 			foreach($itemNode->parameters as $node) {
 				if(!$node->hasAttribute('name')) {
-					// create a new entry in in the array and get they key of the new 
+					// create a new entry in in the array and get they key of the new
 					// created entry (the last in the array). The value doesn't matter
 					// since it will be overwritten anyways
 					$data[] = 0;
@@ -136,7 +139,7 @@ abstract class AgaviConfigHandler extends AgaviParameterHolder
 			// null value
 			return null;
 		}
-		
+
 		if(!is_string($value)) {
 			return $value;
 		}
@@ -216,7 +219,7 @@ abstract class AgaviConfigHandler extends AgaviParameterHolder
 
 		return $path;
 	}
-	
+
 	/**
 	 * Returns a properly ordered array of AgaviConfigValueHolder configuration
 	 * elements for given env and context.
@@ -241,7 +244,7 @@ abstract class AgaviConfigHandler extends AgaviParameterHolder
 			$configs = array_merge($configs, $parentConfigs);
 		}
 
-		
+
 		foreach($configurations as $cfg) {
 			if(!$cfg->hasAttribute('environment') && !$cfg->hasAttribute('context')) {
 				$configs[] = $cfg;
@@ -262,7 +265,7 @@ abstract class AgaviConfigHandler extends AgaviParameterHolder
 				$configs[] = $cfg;
 			}
 		}
-		
+
 		return $configs;
 	}
 
