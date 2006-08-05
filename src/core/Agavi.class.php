@@ -151,7 +151,7 @@ final class Agavi
 			// required classes for the framework
 			AgaviConfigCache::import($compile);
 
-		} catch (Exception $e) {
+		} catch(Exception $e) {
 			AgaviException::printStackTrace($e);
 		}
 	}

@@ -199,7 +199,7 @@ class AgaviCreoleDatabase extends AgaviDatabase
 	 */
 	public function shutdown()
 	{
-		if ($this->connection !== null) {
+		if($this->connection !== null) {
 			@$this->connection->close();
 		}
 	}

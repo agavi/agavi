@@ -29,7 +29,6 @@
  */
 abstract class AgaviConfigParser
 {
-
 	/**
 	 * Execute this configuration parser.
 	 *
@@ -45,8 +44,7 @@ abstract class AgaviConfigParser
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public abstract function parse ($config);
-
+	public abstract function parse($config);
 
 }
 

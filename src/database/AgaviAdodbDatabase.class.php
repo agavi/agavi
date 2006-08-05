@@ -135,7 +135,7 @@ class AgaviAdodbDatabase extends AgaviDatabase
 			// directly! so beware that this will break when AdoDB is ported to PHP5 and _connectionID will be
 			// declared as private. hopefully the developers will add an accessor function :-/
 			$this->resource = $this->connection->_connectionID;
-		} catch (ADODB_Exception $e) {
+		} catch(ADODB_Exception $e) {
 			// the connection's foobar'd
 			throw new AgaviDatabaseException($e->getMessage());
 		}

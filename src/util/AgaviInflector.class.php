@@ -114,7 +114,7 @@ final class AgaviInflector
 		}
 
 		foreach(self::$pluralMatches as $regexp => $replacement) {
-			if (preg_match($regexp, $word)) {
+			if(preg_match($regexp, $word)) {
 				$word = preg_replace($regexp, $replacement, $word);
 				break;
 			}
@@ -139,7 +139,7 @@ final class AgaviInflector
 		}
 
 		foreach(self::$singularMatches as $regexp => $replacement) {
-			if (preg_match($regexp, $word)) {
+			if(preg_match($regexp, $word)) {
 				$word = preg_replace($regexp, $replacement, $word);
 				break;
 			}

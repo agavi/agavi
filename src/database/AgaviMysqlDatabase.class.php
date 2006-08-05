@@ -96,7 +96,7 @@ class AgaviMysqlDatabase extends AgaviDatabase
 		$persistent = $this->getParameter('persistent', false);
 		
 		if($password === null) {
-			if ($user === null) {
+			if($user === null) {
 				$args = array($host, null, null);
 			} else {
 				$args = array($host, $user, null);

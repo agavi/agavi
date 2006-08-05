@@ -81,7 +81,7 @@ final class AgaviConfigCache
 		} else {
 			// let's see if we have any wildcard handlers registered that match
 			// this basename
-			foreach (self::$handlers as $key => $handlerInstance)	{
+			foreach(self::$handlers as $key => $handlerInstance)	{
 				// replace wildcard chars in the configuration and create the pattern
 				$pattern = sprintf('#%s#', str_replace('\*', '.*?', preg_quote($key)));
 
@@ -123,14 +123,14 @@ final class AgaviConfigCache
 		// the full filename path to the config, which might not be what we were given.
 		$filename = AgaviToolkit::isPathAbsolute($config) ? $config : AgaviConfig::get('core.app_dir') . '/' . $config;
 
-		if (!is_readable($filename)) {
+		if(!is_readable($filename)) {
 			throw new AgaviUnreadableException('Configuration file "' . $filename . '" does not exist or is unreadable.');
 		}
 
 		// the cache filename we'll be using
 		$cache = self::getCacheName($config, $context);
 
-		if (!is_readable($cache) || filemtime($filename) > filemtime($cache))	{
+		if(!is_readable($cache) || filemtime($filename) > filemtime($cache))	{
 			// configuration file has changed so we need to reparse it
 			self::callHandler($config, $filename, $cache, $context);
 		}
@@ -180,7 +180,7 @@ final class AgaviConfigCache
 	{
 		$environment = AgaviConfig::get('core.environment');
 
-		if (strlen($config) > 3 && ctype_alpha($config{0}) &&	$config{1} == ':' && ($config{2} == '\\' || $config{2} == '/')) {
+		if(strlen($config) > 3 && ctype_alpha($config{0}) &&	$config{1} == ':' && ($config{2} == '\\' || $config{2} == '/')) {
 			// file is a windows absolute path, strip off the drive letter
 			$config = substr($config, 3);
 		}
@@ -210,7 +210,7 @@ final class AgaviConfigCache
 	{
 		$cache = self::checkConfig($config, $context);
 
-		if ($once) {
+		if($once) {
 			include_once($cache);
 		} else {
 			include($cache);

@@ -28,7 +28,6 @@
  */
 abstract class AgaviStorage extends AgaviParameterHolder
 {
-
 	// +-----------------------------------------------------------------------+
 	// | PRIVATE DATA                                                          |
 	// +-----------------------------------------------------------------------+
@@ -46,11 +45,9 @@ abstract class AgaviStorage extends AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function getContext ()
+	final public function getContext()
 	{
-
 		return $this->context;
-
 	}
 
 	/**
@@ -100,7 +97,7 @@ abstract class AgaviStorage extends AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	abstract function & read ($key);
+	abstract function & read($key);
 
 	/**
 	 * Remove data from this storage.
@@ -118,7 +115,7 @@ abstract class AgaviStorage extends AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	abstract function & remove ($key);
+	abstract function & remove($key);
 
 	/**
 	 * Execute the shutdown procedure.
@@ -129,7 +126,7 @@ abstract class AgaviStorage extends AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	abstract function shutdown ();
+	abstract function shutdown();
 
 	/**
 	 * Write data to this storage.
@@ -146,8 +143,7 @@ abstract class AgaviStorage extends AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	abstract function write ($key, &$data);
-
+	abstract function write($key, &$data);
 }
 
 ?>

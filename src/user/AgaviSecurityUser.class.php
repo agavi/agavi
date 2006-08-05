@@ -61,16 +61,11 @@ class AgaviSecurityUser extends AgaviUser implements AgaviISecurityUser
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function addCredential ($credential)
+	public function addCredential($credential)
 	{
-
-		if (!in_array($credential, $this->credentials))
-		{
-
+		if(!in_array($credential, $this->credentials)) {
 			$this->credentials[] = $credential;
-
 		}
-
 	}
 
 	/**
@@ -79,12 +74,10 @@ class AgaviSecurityUser extends AgaviUser implements AgaviISecurityUser
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function clearCredentials ()
+	public function clearCredentials()
 	{
-
 		$this->credentials = null;
 		$this->credentials = array();
-
 	}
 
 	/**
@@ -100,37 +93,27 @@ class AgaviSecurityUser extends AgaviUser implements AgaviISecurityUser
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
-	public function hasCredentials ($credential)
+	public function hasCredentials($credential)
 	{
-		if(is_array($credential))
-		{
+		if(is_array($credential)) {
 			$credentials = (array)$credential;
-			foreach($credentials as $credential)
-			{
-				if(is_array($credential))
-				{
-					foreach($credential as $subcred)
-					{
-						if(in_array($subcred, $this->credentials, true))
-						{
+			foreach($credentials as $credential) {
+				if(is_array($credential)) {
+					foreach($credential as $subcred) {
+						if(in_array($subcred, $this->credentials, true)) {
 							continue 2;
 						}
 					}
 					return false;
-				}
-				else
-				{
-					if(!in_array($credential, $this->credentials, true))
-					{
+				} else {
+					if(!in_array($credential, $this->credentials, true)) {
 						return false;
 					}
 				}
 			}
 			return true;
-		}
-		else
-		{
-			return (in_array($credential, $this->credentials, true));
+		} else {
+			return in_array($credential, $this->credentials, true);
 		}
 	}
 
@@ -175,11 +158,9 @@ class AgaviSecurityUser extends AgaviUser implements AgaviISecurityUser
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function isAuthenticated ()
+	public function isAuthenticated()
 	{
-
 		return $this->authenticated;
-
 	}
 
 	/**
@@ -190,7 +171,7 @@ class AgaviSecurityUser extends AgaviUser implements AgaviISecurityUser
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function removeCredential ($credential)
+	public function removeCredential($credential)
 	{
 		if($this->hasCredentials($credential)) {
 			// we have the credential, now we have to find it
@@ -201,7 +182,6 @@ class AgaviSecurityUser extends AgaviUser implements AgaviISecurityUser
 				unset($this->credentials[$key]);
 			}
 		}
-
 	}
 
 	/**
@@ -212,20 +192,15 @@ class AgaviSecurityUser extends AgaviUser implements AgaviISecurityUser
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function setAuthenticated ($authenticated)
+	public function setAuthenticated($authenticated)
 	{
-
-		if ($authenticated === true)
-		{
-
+		if($authenticated === true) {
 			$this->authenticated = true;
 
 			return;
-
 		}
 
 		$this->authenticated = false;
-
 	}
 
 	/**
@@ -234,11 +209,9 @@ class AgaviSecurityUser extends AgaviUser implements AgaviISecurityUser
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function shutdown ()
+	public function shutdown()
 	{
-
-		$storage = $this->getContext()
-						->getStorage();
+		$storage = $this->getContext()->getStorage();
 
 		// write credentials to the storage
 		$storage->write(self::AUTH_NAMESPACE,       $this->authenticated);
@@ -246,9 +219,7 @@ class AgaviSecurityUser extends AgaviUser implements AgaviISecurityUser
 
 		// call the parent shutdown method
 		parent::shutdown();
-
 	}
-
 }
 
 ?>

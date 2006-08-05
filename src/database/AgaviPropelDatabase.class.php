@@ -172,7 +172,7 @@ class AgaviPropelDatabase extends AgaviCreoleDatabase
 			Propel::init($runtime);
 			$this->connection = Propel::getConnection();
 			$this->resource =& $this->connection->getResource();
-		} catch (SQLException $e) {
+		} catch(SQLException $e) {
 			// the connection's foobar'd
 			throw new AgaviDatabaseException($e->toString());
 		}

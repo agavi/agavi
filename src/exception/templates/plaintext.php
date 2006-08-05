@@ -61,10 +61,10 @@ by the exception along with a stack trace below.
 <?php
 foreach ($fixedTrace as $no => $trace) {
 	echo "$no: ";
-	if (isset($trace['file'])) { echo $trace['file']; }
+	if(isset($trace['file'])) { echo $trace['file']; }
 	else { echo "Unknown file" ; }
 
-	if (isset($trace['line'])) { echo " (line: " .$trace['line'] .')'; }
+	if(isset($trace['line'])) { echo " (line: " .$trace['line'] .')'; }
 	else { echo "(Unknown line)"; }
 	echo "\n";
 }

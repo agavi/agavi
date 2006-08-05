@@ -93,8 +93,8 @@ class AgaviXmlConfigParser extends AgaviConfigParser
 	 */
 	protected function parseNodes($nodes, AgaviConfigValueHolder $parentVh, $isSingular = false)
 	{
-		foreach ($nodes as $node) {
-			if ($node->nodeType == XML_ELEMENT_NODE) {
+		foreach($nodes as $node) {
+			if($node->nodeType == XML_ELEMENT_NODE) {
 				$vh = new AgaviConfigValueHolder();
 				$vh->setName($node->nodeName);
 				if($isSingular) {
@@ -103,12 +103,12 @@ class AgaviXmlConfigParser extends AgaviConfigParser
 					$parentVh->addChildren($node->tagName, $vh);
 				}
 
-				foreach ($node->attributes as $attribute) {
+				foreach($node->attributes as $attribute) {
 					$vh->setAttribute($attribute->name, $attribute->value);
 				}
 
 				// there are no child nodes so we set the node text contents as the value for the valueholder
-				if ($this->xpath->query('*', $node)->length == 0) {
+				if($this->xpath->query('*', $node)->length == 0) {
 					$vh->setValue($node->nodeValue);
 				}
 
@@ -124,10 +124,10 @@ class AgaviXmlConfigParser extends AgaviConfigParser
 				$singularNodes = $this->xpath->query($singularNodeName, $node);
 				// there is at least one child with the singularized version of this tag name so we take them
 				// to create an indexed array in the parent valueholder
-				if ($singularNodes->length > 0) {
+				if($singularNodes->length > 0) {
 					$this->parseNodes($singularNodes, $vh, true);
 				} else {
-					if ($node->hasChildNodes()) {
+					if($node->hasChildNodes()) {
 						$this->parseNodes($node->childNodes, $vh);
 					}
 				}

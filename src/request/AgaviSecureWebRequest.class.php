@@ -76,7 +76,7 @@ class AgaviSecureWebRequest extends AgaviWebRequest {
 	public function getClientCertCN()
 	{
 
-		if (isset($_SERVER['SSL_CLIENT_S_DN_CN'])) {
+		if(isset($_SERVER['SSL_CLIENT_S_DN_CN'])) {
 			return $_SERVER['SSL_CLIENT_S_DN_CN'];
 		}
 
@@ -97,7 +97,7 @@ class AgaviSecureWebRequest extends AgaviWebRequest {
 	public function getClientCertDN()
 	{
 
-		if (isset($_SERVER['SSL_CLIENT_S_DN'])) {
+		if(isset($_SERVER['SSL_CLIENT_S_DN'])) {
 			return $_SERVER['SSL_CLIENT_S_DN'];
 		}
 
@@ -116,7 +116,7 @@ class AgaviSecureWebRequest extends AgaviWebRequest {
 	public function getClientCertGN()
 	{
 
-		if (isset($_SERVER['SSL_CLIENT_S_DN_G'])) {
+		if(isset($_SERVER['SSL_CLIENT_S_DN_G'])) {
 			return $_SERVER['SSL_CLIENT_S_DN_G'];
 		}
 
@@ -135,7 +135,7 @@ class AgaviSecureWebRequest extends AgaviWebRequest {
 	public function getClientCertSN()
 	{
 
-		if (isset($_SERVER['SSL_CLIENT_S_DN_S'])) {
+		if(isset($_SERVER['SSL_CLIENT_S_DN_S'])) {
 			return $_SERVER['SSL_CLIENT_S_DN_S'];
 		}
 
@@ -154,7 +154,7 @@ class AgaviSecureWebRequest extends AgaviWebRequest {
 	public function getClientCertO()
 	{
 
-		if (isset($_SERVER['SSL_CLIENT_S_DN_O'])) {
+		if(isset($_SERVER['SSL_CLIENT_S_DN_O'])) {
 			return $_SERVER['SSL_CLIENT_S_DN_O'];
 		}
 
@@ -173,7 +173,7 @@ class AgaviSecureWebRequest extends AgaviWebRequest {
 	public function getClientCertOU()
 	{
 
-		if (isset($_SERVER['SSL_CLIENT_S_DN_OU'])) {
+		if(isset($_SERVER['SSL_CLIENT_S_DN_OU'])) {
 			return $_SERVER['SSL_CLIENT_S_DN_OU'];
 		}
 
@@ -192,7 +192,7 @@ class AgaviSecureWebRequest extends AgaviWebRequest {
 	public function getClientCertValidityStart()
 	{
 
-		if (isset($_SERVER['SSL_CLIENT_V_START'])) {
+		if(isset($_SERVER['SSL_CLIENT_V_START'])) {
 			return $_SERVER['SSL_CLIENT_V_START'];
 		}
 
@@ -210,7 +210,7 @@ class AgaviSecureWebRequest extends AgaviWebRequest {
 	public function getClientCertValidityEnd()
 	{
 
-		if (isset($_SERVER['SSL_CLIENT_V_END'])) {
+		if(isset($_SERVER['SSL_CLIENT_V_END'])) {
 			return $_SERVER['SSL_CLIENT_V_END'];
 		}
 
@@ -228,7 +228,7 @@ class AgaviSecureWebRequest extends AgaviWebRequest {
 	public function getSSLChipherType()
 	{
 
-		if (isset($_SERVER['SSL_CIPHER'])) {
+		if(isset($_SERVER['SSL_CIPHER'])) {
 			return $_SERVER['SSL_CIPHER'];
 		}
 
@@ -246,7 +246,7 @@ class AgaviSecureWebRequest extends AgaviWebRequest {
 	public function getIssuerCertDN()
 	{
 
-		if (isset($_SERVER['SSL_CLIENT_I_DN'])) {
+		if(isset($_SERVER['SSL_CLIENT_I_DN'])) {
 			return $_SERVER['SSL_CLIENT_I_DN'];
 		}
 
@@ -264,7 +264,7 @@ class AgaviSecureWebRequest extends AgaviWebRequest {
 	public function getIssuerCertCN()
 	{
 
-		if (isset($_SERVER['SSL_CLIENT_I_CN'])) {
+		if(isset($_SERVER['SSL_CLIENT_I_CN'])) {
 			return $_SERVER['SSL_CLIENT_I_CN'];
 		}
 
@@ -282,7 +282,7 @@ class AgaviSecureWebRequest extends AgaviWebRequest {
 	public function getIssuerCertC()
 	{
 
-		if (isset($_SERVER['SSL_CLIENT_I_C'])) {
+		if(isset($_SERVER['SSL_CLIENT_I_C'])) {
 			return $_SERVER['SSL_CLIENT_I_C'];
 		}
 
@@ -300,7 +300,7 @@ class AgaviSecureWebRequest extends AgaviWebRequest {
 	public function getIssuerCertO()
 	{
 
-		if (isset($_SERVER['SSL_CLIENT_I_O'])) {
+		if(isset($_SERVER['SSL_CLIENT_I_O'])) {
 			return $_SERVER['SSL_CLIENT_I_O'];
 		}
 
@@ -318,7 +318,7 @@ class AgaviSecureWebRequest extends AgaviWebRequest {
 	public function getIssuerCertOU()
 	{
 
-		if (isset($_SERVER['SSL_CLIENT_I_OU'])) {
+		if(isset($_SERVER['SSL_CLIENT_I_OU'])) {
 			return $_SERVER['SSL_CLIENT_I_OU'];
 		}
 
@@ -336,7 +336,7 @@ class AgaviSecureWebRequest extends AgaviWebRequest {
 	public function getIssuerCertST()
 	{
 
-		if (isset($_SERVER['SSL_CLIENT_I_ST'])) {
+		if(isset($_SERVER['SSL_CLIENT_I_ST'])) {
 			return $_SERVER['SSL_CLIENT_I_ST'];
 		}
 

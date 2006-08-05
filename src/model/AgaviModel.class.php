@@ -61,7 +61,6 @@ abstract class AgaviModel implements AgaviIModel
 	{
 		$this->context = $context;
 	}
-
 }
 
 ?>

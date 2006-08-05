@@ -44,7 +44,6 @@
  */
 class AgaviSessionStorage extends AgaviStorage
 {
-
 	/**
 	 * Initialize this Storage.
 	 *
@@ -93,8 +92,7 @@ class AgaviSessionStorage extends AgaviStorage
 	{
 		// session_id is checked to ensure that a session has not been started already.
 		// This can happen if a class inheriting SessionStorage starts it in initialize method.
-		if($this->getParameter('auto_start', true) && session_id() == '')
-		{
+		if($this->getParameter('auto_start', true) && session_id() == '') {
 			session_start();
 		}
 	}
@@ -112,16 +110,13 @@ class AgaviSessionStorage extends AgaviStorage
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function & read ($key)
+	public function & read($key)
 	{
-
 		$retval = null;
-
-		if (isset($_SESSION[$key]))	{
+		if(isset($_SESSION[$key]))	{
 			$retval =& $_SESSION[$key];
 		}
 		return $retval;
-
 	}
 
 	/**
@@ -137,22 +132,16 @@ class AgaviSessionStorage extends AgaviStorage
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function & remove ($key)
+	public function & remove($key)
 	{
-
 		$retval = null;
 
-		if (isset($_SESSION[$key]))
-		{
-
+		if(isset($_SESSION[$key])) {
 			$retval =& $_SESSION[$key];
-
 			unset($_SESSION[$key]);
-
 		}
 
 		return $retval;
-
 	}
 
 	/**
@@ -161,7 +150,7 @@ class AgaviSessionStorage extends AgaviStorage
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function shutdown ()
+	public function shutdown()
 	{
 		session_write_close();
 	}
@@ -178,13 +167,10 @@ class AgaviSessionStorage extends AgaviStorage
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function write ($key, &$data)
+	public function write($key, &$data)
 	{
-
 		$_SESSION[$key] =& $data;
-
 	}
-
 }
 
 ?>

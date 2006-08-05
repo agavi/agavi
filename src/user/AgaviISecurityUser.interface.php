@@ -29,7 +29,6 @@
  */
 interface AgaviISecurityUser
 {
-
 	/**
 	 * Add a credential to this user.
 	 *

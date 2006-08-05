@@ -85,7 +85,7 @@ abstract class AgaviAttributeHolder extends AgaviParameterHolder
 		
 		$retval =& $default;
 
-		if (isset($this->attributes[$ns]) &&
+		if(isset($this->attributes[$ns]) &&
 			isset($this->attributes[$ns][$name]))
 		{
 
@@ -113,7 +113,7 @@ abstract class AgaviAttributeHolder extends AgaviParameterHolder
 			$ns = $this->defaultNamespace;
 		}
 		
-		if (isset($this->attributes[$ns]))
+		if(isset($this->attributes[$ns]))
 		{
 
 			return array_keys($this->attributes[$ns]);
@@ -165,7 +165,7 @@ abstract class AgaviAttributeHolder extends AgaviParameterHolder
 		
 		$retval = null;
 
-		if (isset($this->attributes[$ns]))
+		if(isset($this->attributes[$ns]))
 		{
 
 			return $this->attributes[$ns];
@@ -205,7 +205,7 @@ abstract class AgaviAttributeHolder extends AgaviParameterHolder
 			$ns = $this->defaultNamespace;
 		}
 		
-		if (isset($this->attributes[$ns]))
+		if(isset($this->attributes[$ns]))
 		{
 
 			return isset($this->attributes[$ns][$name]);
@@ -250,7 +250,7 @@ abstract class AgaviAttributeHolder extends AgaviParameterHolder
 		
 		$retval = null;
 
-		if (isset($this->attributes[$ns]) &&
+		if(isset($this->attributes[$ns]) &&
 			isset($this->attributes[$ns][$name]))
 		{
 
@@ -273,7 +273,7 @@ abstract class AgaviAttributeHolder extends AgaviParameterHolder
 	 */
 	public function removeAttributeNamespace($ns)
 	{
-		if (isset($this->attributes[$ns]))
+		if(isset($this->attributes[$ns]))
 		{
 			unset($this->attributes[$ns]);
 		}
@@ -298,7 +298,7 @@ abstract class AgaviAttributeHolder extends AgaviParameterHolder
 			$ns = $this->defaultNamespace;
 		}
 		
-		if (!isset($this->attributes[$ns])) {
+		if(!isset($this->attributes[$ns])) {
 			$this->attributes[$ns] = array();
 		}
 
@@ -324,11 +324,11 @@ abstract class AgaviAttributeHolder extends AgaviParameterHolder
 			$ns = $this->defaultNamespace;
 		}
 		
-		if (!isset($this->attributes[$ns])) {
+		if(!isset($this->attributes[$ns])) {
 			$this->attributes[$ns] = array();
 		}
 
-		if (!isset($this->attributes[$ns][$name]) || !is_array($this->attributes[$ns][$name])) {
+		if(!isset($this->attributes[$ns][$name]) || !is_array($this->attributes[$ns][$name])) {
 			settype($this->attributes[$ns][$name], 'array');
 		}
 		$this->attributes[$ns][$name][] = $value;
@@ -353,7 +353,7 @@ abstract class AgaviAttributeHolder extends AgaviParameterHolder
 			$ns = $this->defaultNamespace;
 		}
 		
-		if (!isset($this->attributes[$ns])) {
+		if(!isset($this->attributes[$ns])) {
 			$this->attributes[$ns] = array();
 		}
 
@@ -379,11 +379,11 @@ abstract class AgaviAttributeHolder extends AgaviParameterHolder
 			$ns = $this->defaultNamespace;
 		}
 		
-		if (!isset($this->attributes[$ns])) {
+		if(!isset($this->attributes[$ns])) {
 			$this->attributes[$ns] = array();
 		}
 
-		if (!isset($this->attributes[$ns][$name]) || !is_array($this->attributes[$ns][$name])) {
+		if(!isset($this->attributes[$ns][$name]) || !is_array($this->attributes[$ns][$name])) {
 			settype($this->attributes[$ns][$name], 'array');
 		}
 		$this->attributes[$ns][$name][] =& $value;
@@ -408,7 +408,7 @@ abstract class AgaviAttributeHolder extends AgaviParameterHolder
 			$ns = $this->defaultNamespace;
 		}
 		
-		if (!isset($this->attributes[$ns]))
+		if(!isset($this->attributes[$ns]))
 		{
 
 			$this->attributes[$ns] = array();
@@ -437,14 +437,14 @@ abstract class AgaviAttributeHolder extends AgaviParameterHolder
 			$ns = $this->defaultNamespace;
 		}
 		
-		if (!isset($this->attributes[$ns]))
+		if(!isset($this->attributes[$ns]))
 		{
 
 			$this->attributes[$ns] = array();
 
 		}
 
-		foreach ($attributes as $key => &$value)
+		foreach($attributes as $key => &$value)
 		{
 
 			$this->attributes[$ns][$key] =& $value;

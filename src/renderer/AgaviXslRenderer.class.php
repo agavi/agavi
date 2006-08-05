@@ -100,8 +100,7 @@ class AgaviXslRenderer extends AgaviRenderer
 	public function setDomDocument($domDocument, $rootNode = 'rootnode')
 	{
 		// Make sure that $domDocument is indeed a DomDocument.
-		if(($domDocument instanceof DOMDocument) && is_string($rootNode))
-		{
+		if(($domDocument instanceof DOMDocument) && is_string($rootNode)) {
 			$this->domDoc       = $domDocument;
 			$this->rootNodeName = $rootNode;
 			$this->rootNode     = $this->domDoc->appendChild(new DOMElement($this->rootNodeName));

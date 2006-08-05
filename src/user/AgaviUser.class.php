@@ -32,7 +32,6 @@
  */
 class AgaviUser extends AgaviAttributeHolder
 {
-
 	/**
 	 * @var        AgaviContext An AgaviContext instance.
 	 */

@@ -119,7 +119,7 @@ class AgaviSmartyRenderer extends AgaviRenderer
 		if($mode == AgaviView::RENDER_CLIENT && !$view->isDecorator()) {
 			// render directly to the client
 			$this->response->setContent($this->getEngine()->fetch($view->getDirectory() . '/' . $view->getTemplate() . $this->getExtension()));
-		} elseif ($mode != AgaviView::RENDER_NONE) {
+		} elseif($mode != AgaviView::RENDER_NONE) {
 			// render to variable
 			$retval = $this->getEngine()->fetch($view->getDirectory() . '/' . $view->getTemplate() . $this->getExtension());
 

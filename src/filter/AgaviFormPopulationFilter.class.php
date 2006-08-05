@@ -197,7 +197,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 						}
 					}
 					
-				} elseif ($element->nodeName == 'select') {
+				} elseif($element->nodeName == 'select') {
 					
 					// select elements
 					// yes, we still use XPath because there could be OPTGROUPs

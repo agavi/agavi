@@ -180,7 +180,7 @@ abstract class AgaviController extends AgaviParameterHolder
 			
 			$this->response->send();
 			
-		} catch (Exception $e) {
+		} catch(Exception $e) {
 			AgaviException::printStackTrace($e, $this->context, $this->getResponse());
 		}
 	}

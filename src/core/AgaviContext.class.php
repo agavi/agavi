@@ -207,13 +207,13 @@ final class AgaviContext
 				}
 			}
 			$profile = strtolower($profile);
-			if (!isset(self::$instances[$profile])) {
+			if(!isset(self::$instances[$profile])) {
 				$class = __CLASS__;
 				self::$instances[$profile] = new $class;
 				self::$instances[$profile]->initialize($profile);
 			}
 			return self::$instances[$profile];
-		} catch (Exception $e) {
+		} catch(Exception $e) {
 			AgaviException::printStackTrace($e);
 		}
 	}
