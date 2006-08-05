@@ -95,6 +95,9 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	 */
 	public function & extractParameters($names)
 	{
+		if($this->locked) {
+			throw new AgaviException('For security reasons, Request Parameters cannot be accessed directly. Please use the ParameterHolder object passed to your Action or View execute method to access Request Parameters.');
+		}
 		$array = array();
 		foreach((array) $names as $name) {
 			if(array_key_exists($name, $this->parameters)) {
