@@ -80,36 +80,6 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	}
 
 	/**
-	 * Extract parameter values from the request.
-	 *
-	 * @param      array An indexed array of parameter names to extract.
-	 *
-	 * @return     array An associative array of parameters and their values.
-	 *                   If a specified parameter doesn't exist then it's value
-	 *                   will be null. Also note that the value is a reference
-	 *                   to the parameter's value.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @author     Mike Vincent <mike@agavi.org>
-	 * @since      0.9.0
-	 */
-	public function & extractParameters($names)
-	{
-		if($this->locked) {
-			throw new AgaviException('For security reasons, Request Parameters cannot be accessed directly. Please use the ParameterHolder object passed to your Action or View execute method to access Request Parameters.');
-		}
-		$array = array();
-		foreach((array) $names as $name) {
-			if(array_key_exists($name, $this->parameters)) {
-				$array[$name] = &$this->parameters[$name];
-			} else {
-				$array[$name] = null;
-			}
-		}
-		return $array;
-	}
-
-	/**
 	 * Retrieve the first error message for an error.
 	 *
 	 * @param      string An error name.
