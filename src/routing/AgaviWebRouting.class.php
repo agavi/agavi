@@ -98,7 +98,7 @@ class AgaviWebRouting extends AgaviRouting
 			$this->input = "/";
 		}
 
-		$this->sources = array_merge($this->sources, $_SERVER);
+		$this->sources['_SERVER'] = new AgaviRoutingArraySource($_SERVER);
 		
 		if($isReWritten) {
 			// a rewrite happened

@@ -104,8 +104,11 @@
 			<autoload name="AgaviWebResponse">%core.agavi_dir%/response/AgaviWebResponse.class.php</autoload>
 
 			<!-- agavi/routing -->
+			<autoload name="AgaviIRoutingSource">%core.agavi_dir%/routing/AgaviIRoutingSource.interface.php</autoload>
 			<autoload name="AgaviRouting">%core.agavi_dir%/routing/AgaviRouting.class.php</autoload>
+			<autoload name="AgaviRoutingArraySource">%core.agavi_dir%/routing/AgaviRoutingArraySource.class.php</autoload>
 			<autoload name="AgaviRoutingCallback">%core.agavi_dir%/routing/AgaviRoutingCallback.class.php</autoload>
+			<autoload name="AgaviRoutingUserSource">%core.agavi_dir%/routing/AgaviRoutingUserSource.class.php</autoload>
 			<autoload name="AgaviWebRouting">%core.agavi_dir%/routing/AgaviWebRouting.class.php</autoload>
 
 			<!-- agavi/storage -->

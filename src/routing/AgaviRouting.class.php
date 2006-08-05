@@ -66,6 +66,9 @@ abstract class AgaviRouting
 		if(AgaviConfig::get("core.use_routing", false) || is_readable($cfg)) {
 			include(AgaviConfigCache::checkConfig($cfg, $context->getName()));
 		}
+
+		$this->sources['_ENV'] = new AgaviRoutingArraySource($_ENV);
+		$this->sources['user'] = new AgaviRoutingUserSource($this->getContext()->getUser());
 	}
 
 	/**
@@ -593,8 +596,21 @@ abstract class AgaviRouting
 	 */
 	protected function parseInput($route, $input, &$matches)
 	{
-		if($route['opt']['source'] !== null && isset($this->sources[$route['opt']['source']])) {
-			$input = $this->sources[$route['opt']['source']];
+		if($route['opt']['source'] !== null) {
+			$parts = AgaviArrayPathDefinition::getPartsFromPath($route['opt']['source']);
+			$partArray = $parts['parts'];
+			$count = count($partArray);
+			if($count > 0 && isset($this->sources[$partArray[0]])) {
+				$input = $this->sources[$partArray[0]];
+				if($count > 1) {
+					array_shift($partArray);
+					if(is_array($input)) {
+						$input = AgaviArrayPathDefinition::getValue($partArray, $input);
+					} elseif($input instanceof AgaviIRoutingSource) {
+						$input = $input->getSource($partArray);
+					}
+				}
+			}
 		}
 		return preg_match($route['rxp'], $input, $matches, PREG_OFFSET_CAPTURE);
 	}
