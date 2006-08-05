@@ -134,7 +134,7 @@ class AgaviPropelDatabase extends AgaviCreoleDatabase
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
-	public function connect ()
+	public function connect()
 	{
 		$useAutoload = $this->getParameter('use_autoload', true);
 		if($useAutoload) {

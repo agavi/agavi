@@ -118,7 +118,7 @@ final class AgaviConfigCache
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public static function checkConfig ($config, $context = null)
+	public static function checkConfig($config, $context = null)
 	{
 		// the full filename path to the config, which might not be what we were given.
 		$filename = AgaviToolkit::isPathAbsolute($config) ? $config : AgaviConfig::get('core.app_dir') . '/' . $config;
@@ -147,7 +147,7 @@ final class AgaviConfigCache
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public static function clear ()
+	public static function clear()
 	{
 		AgaviToolkit::clearCache(self::CACHE_SUBDIR);
 	}
@@ -176,7 +176,7 @@ final class AgaviConfigCache
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public static function getCacheName ($config, $context = null)
+	public static function getCacheName($config, $context = null)
 	{
 		$environment = AgaviConfig::get('core.environment');
 
@@ -206,7 +206,7 @@ final class AgaviConfigCache
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public static function import ($config, $context = null, $once = true)
+	public static function import($config, $context = null, $once = true)
 	{
 		$cache = self::checkConfig($config, $context);
 
@@ -229,7 +229,7 @@ final class AgaviConfigCache
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	private static function loadConfigHandlers ()
+	private static function loadConfigHandlers()
 	{
 		// since we only need the parser and handlers when the config is not cached
 		// it is sufficient to include them at this stage
@@ -267,7 +267,7 @@ final class AgaviConfigCache
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	private static function writeCacheFile ($config, $cache, &$data, $append)
+	private static function writeCacheFile($config, $cache, &$data, $append)
 	{
 		$perms = fileperms(AgaviConfig::get('core.cache_dir')) ^ 0x4000;
 
