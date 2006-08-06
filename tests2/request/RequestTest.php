@@ -22,49 +22,6 @@ class RequestTest extends AgaviTestCase
 		$this->assertReference($ctx, $ctx_test);
 	}
 
-	public function testExtractParameters()
-	{
-		$p = array(
-			'One' => '1',
-			'Two' => 'Too',
-			'Three' => '3eee',
-			'Four' => 'foh');
-		$this->_r->setParameters($p);
-		$this->assertEquals(array('One'=>'1'), $this->_r->extractParameters(array('One')));
-		$this->assertEquals(array('Two'=>'Too'), $this->_r->extractParameters(array('Two')));
-		$this->assertEquals(array('Four'=>'foh', 'Five' => null), $this->_r->extractParameters(array('Four','Five')));
-		
-		// what happens if we forget to contain the args within an array? ;) 
-		// - Since it's casted to an array it snags only the first arg
-		$this->assertEquals(array('heh'=>null), $this->_r->extractParameters('heh'));
-		$this->assertEquals(array('heh'=>null), $this->_r->extractParameters('heh', 'hah'));
-		$this->assertEquals(array(), $this->_r->extractParameters(array()));
-		$this->assertEquals(array('One'=>'1'), $this->_r->extractParameters(array('One')));
-
-		// Test that we're working with references
-		$ref1	= $this->_r->extractParameters(array('One'));
-		$ref2 = $this->_r->extractParameters(array('One'));
-		$this->assertReference($ref1['One'], $ref2['One']);
-		$this->assertEquals($ref1['One'], $ref2['One']);
-		
-		$ref1['One'] = 'Wun';
-		$this->assertReference($ref1['One'], $ref2['One']);
-		$this->assertEquals($ref1['One'], $ref2['One']);
-		
-		$this->_r->setParameter('One', 'AndOnly');
-		$this->assertReference($ref1['One'], $ref2['One']);
-		$this->assertEquals($ref1['One'], $ref2['One']);
-		
-		$ref3 = $this->_r->extractParameters(array('One'));
-		$this->assertEquals($ref1['One'], $ref3['One']);
-		$this->assertReference($ref1['One'], $ref3['One']);
-		$this->assertEquals($ref2['One'], $ref3['One']);
-		$this->assertEquals('AndOnly', $ref3['One']);
-		$this->assertEquals('AndOnly', $ref1['One']);
-		
-	}
-
-
 	public function testGetError()
 	{
 		$this->_r->setError('blah', 'blahval');
