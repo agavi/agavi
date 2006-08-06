@@ -89,7 +89,7 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function getErrorMessage($name)
+	public function getFirstErrorMessage($name = null)
 	{
 		$error = $this->getError($name);
 		if($error && count($error['messages'])) {
@@ -316,7 +316,7 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 		$storedErrors =& $this->getAttribute('errors', 'org.agavi.validation.result', array());
 		foreach($errors as $name => $error) {
 			if(!isset($storedErrors[$name])) {
-				$name = array('messages' => array(), 'validators' => array());
+				$storedErrors[$name] = array('messages' => array(), 'validators' => array());
 			}
 			if(!is_array($error)) {
 				$storedErrors[$name]['messages'][] = $error;
