@@ -36,7 +36,7 @@ abstract class AgaviAppender
 	/**
 	 * @var        AgaviLayout An AgaviLayout instance.
 	 */
-	private $layout = null;
+	protected $layout = null;
 
 	/**
 	 * Initialize the object.

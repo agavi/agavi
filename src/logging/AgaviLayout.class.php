@@ -35,7 +35,7 @@ abstract class AgaviLayout
 	/**
 	 * @var        string A message layout.
 	 */
-	private $layout = null;
+	protected $layout = null;
 
 	/**
 	 * Initialize the Layout.

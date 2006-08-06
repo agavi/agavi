@@ -64,7 +64,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	/**
 	 * @var        AgaviContext An AgaviContext instance.
 	 */
-	private $context = null;
+	protected $context = null;
 
 	/**
 	 * @var        AgaviIValidatorContainer parent validator container (in

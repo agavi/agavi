@@ -46,7 +46,7 @@ class AgaviPostgresqlSessionStorage extends AgaviSessionStorage
 	/**
 	 * @var        mixed A postgresql database resource.
 	 */
-	private $resource = null;
+	protected $resource = null;
 
 	/**
 	 * Initialize this Storage.
