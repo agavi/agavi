@@ -148,23 +148,33 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 					}
 				}
 				
-				if(strpos($name, '[]') !== false) {
+				if($braces = strpos($name, '[]') !== false && ($braces != strlen($name) -3 && $element->nodeName != 'select')) {
 					// auto-generated index, we can't populate that
 					continue;
 				}
 				
 				$value = $p->getParameter($name);
 				
-				if(is_array($value)) {
+				if(is_array($value) && $element->nodeName != 'select') {
 					// name didn't match exactly. skip.
 					continue;
 				}
 				
 				if($encoding != 'utf-8') {
 					if($encoding == 'iso-8859-1') {
-						$value = utf8_encode($value);
+						if(is_array($value)) {
+							$value = array_map('utf8_encode', $value);
+						} else {
+							$value = utf8_encode($value);
+						}
 					} elseif(function_exists('iconv')) {
-						$value = iconv($encoding, 'UTF-8', $value);
+						if(is_array($value)) {
+							foreach($value as &$val) {
+								$val = iconv($encoding, 'UTF-8', $val);
+							}
+						} else {
+							$value = iconv($encoding, 'UTF-8', $value);
+						}
 					} else {
 						throw new AgaviException('No iconv module available, input encoding "' . $encoding . '" cannot be handled.');
 					}
@@ -198,12 +208,12 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 					}
 					
 				} elseif($element->nodeName == 'select') {
-					
+					$multiple = $element->hasAttribute('multiple');
 					// select elements
 					// yes, we still use XPath because there could be OPTGROUPs
 					foreach($xpath->query('descendant::option', $element) as $option) {
 						$option->removeAttribute('selected');
-						if($p->hasParameter($name) && $option->getAttribute('value') == $value) {
+						if($p->hasParameter($name) && ($option->getAttribute('value') == $value || ($multiple && is_array($value) && in_array($option->getAttribute('value'), $value)))) {
 							$option->setAttribute('selected', 'selected');
 						}
 					}
