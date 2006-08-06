@@ -55,7 +55,7 @@ class AgaviRoutingArraySource implements AgaviIRoutingSource
 	 */
 	public function getSource($parts)
 	{
-		return AgaviArrayPathDefinition::getValue($parts, $this->data);
+		return AgaviArrayPathDefinition::getValueFromArray($parts, $this->data);
 	}
 }
 
