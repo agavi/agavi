@@ -3,20 +3,18 @@
 // pseudo class used in test
 class TestSessionStorage extends AgaviStorage
 {
-	public function & read($key)
+	public function read($key)
 	{
-		$ret = null;
-		return $ret;
+		return null;
 	}
-	public function & remove($key)
+	public function remove($key)
 	{
-		$ret = null;
-		return $ret;
+		return null;
 	}
 	public function shutdown()
 	{
 	}
-	public function write($key, &$data)
+	public function write($key, $data)
 	{
 	}
 }

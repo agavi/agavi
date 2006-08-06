@@ -110,13 +110,12 @@ class AgaviSessionStorage extends AgaviStorage
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function & read($key)
+	public function read($key)
 	{
-		$retval = null;
-		if(isset($_SESSION[$key]))	{
-			$retval =& $_SESSION[$key];
+		if(isset($_SESSION[$key])) {
+			return $_SESSION[$key];
 		}
-		return $retval;
+		return null;
 	}
 
 	/**
@@ -132,12 +131,12 @@ class AgaviSessionStorage extends AgaviStorage
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function & remove($key)
+	public function remove($key)
 	{
 		$retval = null;
 
 		if(isset($_SESSION[$key])) {
-			$retval =& $_SESSION[$key];
+			$retval = $_SESSION[$key];
 			unset($_SESSION[$key]);
 		}
 
@@ -167,9 +166,9 @@ class AgaviSessionStorage extends AgaviStorage
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function write($key, &$data)
+	public function write($key, $data)
 	{
-		$_SESSION[$key] =& $data;
+		$_SESSION[$key] = $data;
 	}
 }
 

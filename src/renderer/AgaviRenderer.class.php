@@ -200,7 +200,7 @@ abstract class AgaviRenderer implements AgaviIRenderingFilter
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function & decorate(&$content)
+	public function decorate($content)
 	{
 		$view = $this->getView();
 		

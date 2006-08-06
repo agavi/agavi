@@ -122,7 +122,7 @@ class AgaviXslRenderer extends AgaviRenderer
 	 * @author     Wes Hays <weshays@gbdev.com>
 	 * @since      0.10.0
 	 */
-	public function &decorate(&$content)
+	public function decorate($content)
 	{
 		return null;
 	}

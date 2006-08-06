@@ -119,7 +119,7 @@ class AgaviPhptalRenderer extends AgaviRenderer
 	/**
 	 * @see        AgaviRenderer::decorate()
 	 */
-	public function &decorate(&$content)
+	public function decorate($content)
 	{
 		// call our parent decorate() method
 		parent::decorate($content);

@@ -132,7 +132,7 @@ class AgaviSmartyRenderer extends AgaviRenderer
 		}
 	}
 
-	public function & decorate(&$content)
+	public function decorate($content)
 	{
 		// call our parent decorate() method
 		parent::decorate($content);
