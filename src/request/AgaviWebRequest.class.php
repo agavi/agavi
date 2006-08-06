@@ -432,21 +432,25 @@ class AgaviWebRequest extends AgaviRequest
 	{
 		parent::initialize($context, $parameters);
 		
-		$getMethod = isset($parameters['GET_method_name']) ? $parameters['GET_method_name'] : 'read';
+		$methods = array('GET' => 'read', 'POST' => 'write');
+		if(isset($parameters['method_names'])) {
+			$methods = array_merge($methods, (array) $parameters['method_names']);
+		}
+		
 		if(isset($_SERVER['REQUEST_METHOD'])) {
 			switch($_SERVER['REQUEST_METHOD']) {
 				case 'GET':
-					$this->setMethod($getMethod);
+					$this->setMethod($methods['GET']);
 					break;
 				case 'POST':
-					$this->setMethod(isset($parameters['POST_method_name']) ? $parameters['POST_method_name'] : 'write');
+					$this->setMethod($methods['POST']);
 					break;
 				default:
-					$this->setMethod($getMethod);
+					$this->setMethod($methods['GET']);
 			}
 		} else {
 			// set the default method
-			$this->setMethod($getMethod);
+			$this->setMethod($methods['GET']);
 		}
 	}
 
