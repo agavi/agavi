@@ -73,14 +73,14 @@ class AgaviMysqlDatabase extends AgaviDatabase
 			case 'server':
 				// construct a connection string from existing $_SERVER values
 				// and extract them to local scope
-				$parameters =& $this->loadParameters($_SERVER);
+				$parameters = $this->loadParameters($_SERVER);
 				extract($parameters);
 				break;
 
 			case 'env':
 				// construct a connection string from existing $_ENV values
 				// and extract them to local scope
-				$string =& $this->loadParameters($_ENV);
+				$string = $this->loadParameters($_ENV);
 				extract($parameters);
 				break;
 

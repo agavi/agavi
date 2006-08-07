@@ -135,7 +135,7 @@ class AgaviPhpRenderer extends AgaviRenderer
 
 			// now render our decorator template, if one exists
 			if($this->view->isDecorator()) {
-				$retval =& $this->decorate($retval);
+				$retval = $this->decorate($retval);
 			}
 
 			$this->response->setContent($retval);

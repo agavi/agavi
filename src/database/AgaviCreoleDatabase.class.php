@@ -102,13 +102,13 @@ class AgaviCreoleDatabase extends AgaviDatabase
 				case 'server':
 					// construct a DSN connection string from existing $_SERVER
 					// values
-					$dsn =& $this->loadDSN($_SERVER);
+					$dsn = $this->loadDSN($_SERVER);
 					break;
 
 				case 'env':
 					// construct a DSN connection string from existing $_ENV
 					// values
-					$dsn =& $this->loadDSN($_ENV);
+					$dsn = $this->loadDSN($_ENV);
 					break;
 
 				default:

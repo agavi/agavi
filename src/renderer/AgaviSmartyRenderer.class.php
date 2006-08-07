@@ -125,7 +125,7 @@ class AgaviSmartyRenderer extends AgaviRenderer
 
 			// now render our decorator template, if one exists
 			if($view->isDecorator()) {
-				$retval =& $this->decorate($retval);
+				$retval = $this->decorate($retval);
 			}
 
 			$this->response->setContent($retval);

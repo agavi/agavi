@@ -148,10 +148,10 @@ class AgaviPropelDatabase extends AgaviCreoleDatabase
 					$runtime = AgaviConfigHandler::replaceConstants($this->getParameter('config', null));
 					break;
 				case 'server':
-					$runtime =& $_SERVER[$this->getParameter('config')];
+					$runtime = $_SERVER[$this->getParameter('config')];
 					break;
 				case 'env':
-					$runtime =& $_ENV[$this->getParameter('config')];
+					$runtime = $_ENV[$this->getParameter('config')];
 					break;
 				default:
 					$error = 'Invalid PropelDatabase parameter retrieval method "%s"';

@@ -243,7 +243,7 @@ abstract class AgaviRenderer implements AgaviIRenderingFilter
 		$controller->setRenderMode($renderMode);
 		
 		// set the decorator content as an attribute
-		$this->output['content'] =& $content;
+		$this->output['content'] = $content;
 		
 		// return a null value to satisfy the requirement
 		$retval = null;
