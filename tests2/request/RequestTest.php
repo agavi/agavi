@@ -40,7 +40,13 @@ class RequestTest extends AgaviTestCase
 	{
 		$this->_r->setError('blah', 'blahval');
 		$this->_r->setError('blah2', 'blah2val');
-		$this->assertEquals(array('blah'=>'blahval', 'blah2'=>'blah2val'), $this->_r->getErrors());
+		$this->_r->setError('blah2', 'blah2val2');
+		$errorsEx = array(
+			'blah' => array('messages' => array('blahval'), 'validators' => array()),
+			'blah2' => array('messages' => array('blah2val', 'blah2val2'), 'validators' => array()),
+		);
+
+		$this->assertEquals($errorsEx, $this->_r->getErrors());
 	}
 
 	public function testSetGetMethod()
@@ -70,7 +76,7 @@ class RequestTest extends AgaviTestCase
 	{
 		$this->assertNull($this->_r->removeError('blah'));
 		$this->_r->setError('blah', 'blahval');
-		$this->assertEquals('blahval', $this->_r->removeError('blah'));
+		$this->assertEquals(array('messages' => array('blahval'), 'validators' => array()), $this->_r->removeError('blah'));
 		$this->assertNull($this->_r->removeError('blah'));
 	}
 

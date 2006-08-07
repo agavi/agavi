@@ -79,33 +79,13 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 		return $this->context;
 	}
 
-	/**
-	 * Retrieve the first error message for an error.
-	 *
-	 * @param      string An error name.
-	 *
-	 * @return     string The error message
-	 *
-	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function getFirstErrorMessage($name = null)
-	{
-		$error = $this->getError($name);
-		if($error && count($error['messages'])) {
-			return $error['messages'][0];
-		}
-
-		return null;
-	}
 
 	/**
 	 * Retrieve an error message.
 	 *
 	 * @param      string An error name.
 	 *
-	 * @return     array An array with the error messages (key 'messages')
-	 *                   and the validators (key 'validators') which failed
+	 * @return     string The error message.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
@@ -116,8 +96,8 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 		$errors = $this->getAttribute('errors', 'org.agavi.validation.result', array());
 		$retval = null;
 
-		if(isset($errors[$name])) {
-			$retval = $errors[$name];
+		if(isset($errors[$name]['messages'][0])) {
+			$retval = $errors[$name]['messages'][0];
 		}
 
 		return $retval;
@@ -144,41 +124,64 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	/**
 	 * Retrieve an array of errors.
 	 *
-	 * @return     array An associative array of errors.
+	 * @param      string An optional error name.
+	 *
+	 * @return     array An associative array of errors(if no name was given) as
+	 *                   an array with the error messages (key 'messages') and
+	 *                   the validators (key 'validators') which failed.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.9.0
 	 */
-	public function getErrors()
+	public function getErrors($name = null)
 	{
-		return $this->getAttribute('errors', 'org.agavi.validation.result', array());
+		$errors = $this->getAttribute('errors', 'org.agavi.validation.result', array());
+		if($name === null) {
+			return $errors;
+		} else {
+			return isset($errors[$name]) ? $errors[$name] : null;
+		}
 	}
 
 	/**
-	 * Retrieve an array of errors.
+	 * Retrieve an array of error Messages.
 	 *
-	 * @return     array An associative array of errors.
+	 * @param      string An optional error name.
 	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @return     array An indexed array of error messages (if a name was given)
+	 *                   or an indexed array in this format:
+	 *                   array('message' => string, 'errors' => array(string))
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @since      0.9.0
+	 * @since      0.11.0
 	 */
-	public function getErrorMessages()
+	public function getErrorMessages($name = null)
 	{
 		$errors = $this->getAttribute('errors', 'org.agavi.validation.result', array());
-		$msgs = array();
-		$i = 0;
-		foreach($errors as $error) {
-			foreach($error['messages'] as $message) {
-				if(!isset($msgs[$message])) {
-					$msgs[$message] = $i;
-					++$i;
+
+		if($name !== null) {
+			return isset($errors[$name]['messages']) ? $errors[$name]['messages'] : null;
+		} else {
+			$msgs = array();
+
+			foreach($errors as $errorName => $error) {
+				foreach($error['messages'] as $message) {
+					if(!isset($msgs[$message])) {
+						$msgs[$message] = array();
+					}
+					$msgs[$message][] = $errorName;
 				}
 			}
-		}
 
-		return array_flip($msgs);
+			$retMsgs = array();
+			$i = 0;
+			foreach($msgs as $message => $errorNames) {
+				$retMsgs[$i] = array('message' => $message, 'errors' => $errorNames);
+				++$i;
+			}
+			return $retMsgs;
+		}
 	}
 
 	/**
@@ -293,7 +296,15 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	 */
 	public function setError($name, $message)
 	{
-		$errors =& $this->getAttribute('errors', 'org.agavi.validation.result', array());
+		// set the attribute first if it doesn't exist, else we will not a proper 
+		// reference to the attribute.
+		if(!$this->hasAttribute('errors', 'org.agavi.validation.result')) {
+			$this->setAttribute('errors', array(), 'org.agavi.validation.result');
+		}
+		$errors =& $this->getAttribute('errors', 'org.agavi.validation.result');
+		if(!isset($errors[$name])) {
+			$errors[$name] = array('messages' => array(), 'validators' => array());
+		}
 		$errors[$name]['messages'][] = $message;
 	}
 
@@ -302,7 +313,7 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	 * Set an array of errors
 	 *
 	 * If an existing error name matches any of the keys in the supplied
-	 * array, the associated message will be overridden.
+	 * array, the associated message will be appended to the messages array.
 	 *
 	 * @param      array An associative array of errors and their associated
 	 *                   messages.
@@ -313,6 +324,11 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	 */
 	public function setErrors($errors)
 	{
+		// set the attribute first if it doesn't exist, else we will not a proper 
+		// reference to the attribute.
+		if(!$this->hasAttribute('errors', 'org.agavi.validation.result')) {
+			$this->setAttribute('errors', array(), 'org.agavi.validation.result');
+		}
 		$storedErrors =& $this->getAttribute('errors', 'org.agavi.validation.result', array());
 		foreach($errors as $name => $error) {
 			if(!isset($storedErrors[$name])) {

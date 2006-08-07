@@ -141,8 +141,8 @@
 		</div>
 		<div id="content">
 			<h2><?php echo $template['title']; ?></h2>
-			<?php if($req->hasErrors()): foreach($req->getErrors() as $error): ?>
-			<p class="error"><?php echo $error; ?></p>
+			<?php if($req->hasErrors()): foreach($req->getErrorMessages() as $error): ?>
+			<p class="error"><?php echo $error['message']; ?></p>
 			<?php endforeach; endif; ?>
 <?php echo $template['content']; ?> 
 		</div>
