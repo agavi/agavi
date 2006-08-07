@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+| This file is part of the Agavi package.																		 |
+| Copyright (c) 2006 the Agavi Project.																			 |
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+| AGAVI VALIDATORS CONFIGURATION																						 |
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+-->
+<configurations>
+	<!-- custom validators and default parameters -->
+	<configuration>
+		<validators>
+
+			<validator class="string" name="username_too_short">
+				<parameters>
+					<parameter name="param">username</parameter>
+					<parameter name="min">5</parameter>
+					<parameter name="min_error">The username you supplied is fewer than 5 characters long.</parameter>
+				</parameters>
+			</validator>
+
+		</validators>
+	</configuration>
+</configurations>
