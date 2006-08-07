@@ -20,6 +20,8 @@
  * @subpackage renderer
  *
  * @author     David Zuelke <dz@bitxtender.com>
+ * @author     Noah Fontes <impl@cynigram.com>
+ * @author     Wes Hays <weshays@gbdev.com>
  * @author     Agavi Project <info@agavi.org>
  * @copyright  (c) Authors
  * @since      0.11.0
@@ -29,149 +31,321 @@
 class AgaviXslRenderer extends AgaviRenderer
 {
 	/**
-	 * @var        XSLTProcessor
+	 * @var	       XSLTProcessor Processor for loading XSL templates.
 	 */
-	private $xslProc      = null;
-
+	protected $xslEngine            = null;
+	
 	/**
-	 * @var        DomDocument
+	 * @var        DOMDocument The document containing the content.
 	 */
-	private $domDoc       = null;
-
+	protected $xmlEngine            = null;
+	
 	/**
-	 * @var        DomNode The root node of the DomDocument.
+	 * @var        XMLNode The root XML node.
 	 */
-	private $rootNode     = null;
-
+	protected $xmlEngineRoot        = null;
+	
 	/**
-	 * @var        DomNode The copy of the initilization of the DomDocument incase a restart is needed.
+	 * @var        XMLNode The attributes XML node.
 	 */
-	private $rootNodeRS   = null;
-
+	protected $xmlEngineAttributes  = null;
+	
 	/**
-	 * @var        string The name of the root node incase it is needed.
+	 * @var        XMLNode The slots XML node.
 	 */
-	private $rootNodeName = null;
-
-
+	protected $xmlEngineSlots       = null;
+	
+	/**
+	 * @var        array Errors that may have accumulated while parsing
+	 *                   an XML file.
+	 */
+	protected $errors               = array();
+	
 	/**
 	 * @var        string A string with the default template file extension,
 	 *                    including the dot.
 	 */
-	protected $extension = '.xsl';
-
+	protected $extension            = '.xsl';
+	
+	/**
+	 * @var        string The plural form of the template variable name.
+	 */
+	protected $pluralVarName        = '';
+	
+	/**
+	 * @var        string The singular form of the template variable name.
+	 */
+	protected $singularVarName      = '';
+	
+	/**
+	 * @var        string The plural form of the slots variable name.
+	 */
+	protected $pluralSlotsVarName   = '';
+	
+	/**
+	 * @var        string The singular form of the slots variable name.
+	 */
+	protected $singularSlotsVarName = '';
+	
 	/**
 	 * Initialize this Renderer.
 	 *
-	 * @param      AgaviContext The current application context.
-	 * @param      array        An associative array of initialization parameters.
+	 * @param      AgaviContext The context to use.
+	 * @param      array An associative array of initialization parameters.
 	 *
+	 * @author     Noah Fontes <impl@cynigram.com>
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function initialize(AgaviContext $context, $parameters = array())
 	{
-		throw new AgaviInitializationException("We're sorry, but the XSL Renderer is neither stable nor feature complete. If you'd like to contribute to Agavi and fix this problem, please join us on IRC, the Forums or the Mailing Lists");
-
 		parent::initialize($context, $parameters);
 
-		$this->xslProc = new XSLTProcessor();
+		$this->xslEngine = new XSLTProcessor();
 
-		// initialize this object
-		if(!$this->setDomDocument(new DOMDocument(isset($parameters['version']) ? $parameters['version'] : '1.0', isset($parameters['encoding']) ? $parameters['encoding'] : 'utf-8'), isset($parameters['root_node_name']) ? $parameters['root_node_name'] : 'rootnode')) {
+		if(!($this->xmlEngine =
+			new DOMDocument(
+				isset($parameters['version']) ? $parameters['version'] : '1.0',
+				isset($parameters['encoding']) ? $parameters['encoding'] : 'utf-8'
+			)
+		)) {
 			throw new AgaviInitializationException('Could not create DOM Document');
 		}
-	}
-
-	/**
-	 * Sets the DOMDocument to be used.
-	 * The default value is DOMDocument('1.0', 'iso-8859-1').
-	 *
-	 * @param      DOMDocument $domDocument The DOMDocument to use.
-	 * @param      string $rootNode (Optional) The name of the root node to use.
-	 *                    If not specified then the root node will have a name
-	 *                    of "rootnode".
-	 *
-	 * @return     True on success, otherwise false.
-	 *
-	 * @author     Wes Hays <weshays@gbdev.com>
-	 * @since      0.10.0
-	 */
-	public function setDomDocument($domDocument, $rootNode = 'rootnode')
-	{
-		// Make sure that $domDocument is indeed a DomDocument.
-		if(($domDocument instanceof DOMDocument) && is_string($rootNode)) {
-			$this->domDoc       = $domDocument;
-			$this->rootNodeName = $rootNode;
-			$this->rootNode     = $this->domDoc->appendChild(new DOMElement($this->rootNodeName));
-			$this->domDocRS     = $this->domDoc->cloneNode(true);
-
-			return true;
+		
+		$this->xmlEngineRoot = $this->xmlEngine->appendChild(new DOMElement('data'));
+		
+		if($this->extractVars || $this->extractSlots) {
+			throw new AgaviInitializationException('The XSL renderer cannot support the extraction of variables for templating');
 		}
-
-		return false;
+		
+		$this->pluralVarName = $this->varName;
+		$this->singularVarName = AgaviInflector::singularize($this->varName);
+		if($this->singularVarName === $this->pluralVarName) {
+			// Oh dear, we got them backwards!
+			$this->singularVarName = $this->varName;
+			$this->pluralVarName = AgaviInflector::pluralize($this->varName);
+		}
+		
+		$this->xmlEngineAttributes = $this->xmlEngineRoot->appendChild(new DOMElement($this->pluralVarName));
+		
+		if($this->slotsVarName !== $this->varName) {
+			$this->pluralSlotsVarName = $this->slotsVarName;
+			$this->singularSlotsVarName = AgaviInflector::singularize($this->slotsVarName);
+			if($this->singularSlotsVarName === $this->pluralSlotsVarName) {
+				// Backwards again!
+				$this->singularSlotsVarName = $this->slotsVarName;
+				$this->pluralSlotsVarName = AgaviInflector::pluralize($this->slotsVarName);
+			}
+			
+			$this->xmlEngineSlots = $this->xmlEngineRoot->appendChild(new DOMElement($this->pluralSlotsVarName));
+		}
+		
 	}
-
+	
 	/**
-	 * This will return null for XSLView instances
+	 * Catches errors triggered by XSL and XML classes.
 	 *
-	 * @param      $context.
+	 * @param      int The error's level.
+	 * @param      string The error's message.
 	 *
-	 * @return     null.
+	 * @return     null
 	 *
+	 * @author     Noah Fontes <impl@cynigram.com>
+	 * @since      0.11.0
+	 */
+	public function xmlErrorHandler($errno, $errstr)
+	{
+		$this->errors[] = $errstr;
+	}
+	
+	/**
+	 * Loop through all template slots and fill them in with the results of
+	 * presentation data.
+	 *
+	 * @param      string A chunk of decorator content.
+	 * @param      bool True to load the view's attributes into the XML
+	 *                  template, or false to load only the slot output. 
+	 *
+	 * @return     string A decorated template.
+	 *
+	 * @author     Noah Fontes <impl@cynigram.com>
 	 * @author     Wes Hays <weshays@gbdev.com>
 	 * @since      0.10.0
 	 */
-	public function decorate($content)
+	public function decorate(&$content, $setAttributes = true)
 	{
-		return null;
+		parent::decorate($content);
+		
+		if($setAttributes === true) {
+			$this->setXml($this->xmlEngineAttributes, $this->singularVarName, $this->view->getAttributes());
+		}
+		
+		if($this->xmlEngineSlots !== null) {
+			$this->setXml($this->xmlEngineSlots, $this->singularSlotsVarName, $this->output);
+		}
+		else {
+			$this->setXml($this->xmlEngineAttributes, $this->singularVarName, $this->output);
+		}
+		
+		$template = $this->view->getDecoratorDirectory() . '/' . $this->view->getDecoratorTemplate() . $this->getExtension();
+		
+		// Try to load the document
+		$this->errors = array();
+		set_error_handler(array($this, 'xmlErrorHandler'));
+		$document = new DOMDocument();
+		$document->load($template);
+		restore_error_handler();
+		
+		if(count($this->errors)) {
+			$error = 'The template "%s" could not be loaded by DOM<ul><li>%s</li></ul>';
+			$error = sprintf($error, $template, implode('</li><li>', $this->errors));
+			
+			throw new AgaviRenderException($error);
+		}
+		
+		// Try to parse the stylesheet
+		$this->errors = array();
+		set_error_handler(array($this, 'xmlErrorHandler'));
+		$this->xslEngine->importStyleSheet($document);
+		restore_error_handler();
+		
+		if(count($this->errors)) {
+			$error = 'The template "%s" contained invalid XSLT rules<ul><li>%s</li></ul>';
+			$error = sprintf($error, $template, implode('</li><li>', $this->errors));
+			
+			throw new AgaviRenderException($error);
+		}
+		
+		$output = $this->xslEngine->transformToDoc($this->xmlEngine);
+		
+		$output->version = $this->xmlEngine->version;
+		$output->encoding = $this->xmlEngine->encoding;
+		
+		return $output->saveXML();
+	}
+	
+	/**
+	 * Appends data recursively to the XML document.
+	 *
+	 * @param      DOMNode The element to append to.
+	 * @param      array The attributes to add to the XML document.
+	 *
+	 * @return     null
+	 *
+	 * @author     Noah Fontes <impl@cynigram.com>
+	 * @since      0.11.0
+	 */
+	protected function setXml(DOMNode $element, $tag, $data)
+	{
+		foreach($data as $name => $value) {
+			$newElement = $element->appendChild(new DOMElement($tag));
+			$newElement->setAttribute('name', $name);
+			
+			if($value instanceof DOMNode) {
+				for($node = $value->firstChild;
+					$node;
+					$node = $node->nextSibling
+				) {
+					$newElement->appendChild(
+						$this->xmlEngine->importNode(
+							$node, true
+						)
+					);
+				}
+			} elseif(is_array($value) || is_object($value)) {
+				$newElementAttributes = $newElement->appendChild(new DOMElement($tag));
+				$this->setXml($newElementAttributes, $value);
+			} else {
+				$newElement->appendChild(new DOMCDATASection((string)$value));				
+			}
+		}
 	}
 
 	/**
 	 * Retrieve the template engine associated with this view.
 	 *
-	 * @return     XSLTProcessor A template engine instance used for this class.
+	 * @return     XSLTProcessor A template engine instance used for this
+	 *                           class.
 	 *
+	 * @author     Noah Fontes <impl@cynigram.com>
 	 * @author     Wes Hays <weshays@gbdev.com>
 	 * @since      0.10.0
 	 */
 	public function getEngine()
 	{
-		return $this->xslProc;
+		return $this->xslEngine;
 	}
 
 	/**
 	 * Render the presentation to the Response.
 	 *
+	 * @return     null
+	 *
+	 * @author     Noah Fontes <impl@cynigram.com>
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @author     Wes Hays <weshays@gbdev.com>
 	 * @since      0.11.0
 	 */
 	public function render()
 	{
-		$retVal = null;
-
-		// execute pre-render check
-		$this->preRenderCheck();
-
-		$view = $this->getView();
-		$engine = $this->getEngine();
-
-		// get the render mode
-		$mode = $this->getContext()->getController()->getRenderMode();
-
-		$engine->importStyleSheet(DOMDocument::load($view->getDecoratorDirectory() . '/' . $view->getTemplate() . $this->getExtension()));
-
-		$xhtml = $engine->transformToXML($this->domDoc);
-
-		if($mode == AgaviView::RENDER_CLIENT) {
-			echo $xhtml;
-		} else if($mode == AgaviView::RENDER_VAR) {
-			$retVal = $xhtml;
+		$template = $this->view->getDirectory() . '/' . $this->view->getTemplate() . $this->getExtension();
+		
+		// Try to load the document
+		$this->errors = array();
+		set_error_handler(array($this, 'xmlErrorHandler'));
+		$document = new DOMDocument();
+		$document->load($template);
+		restore_error_handler();
+		
+		if(count($this->errors)) {
+			$error = 'The template "%s" could not be loaded by DOM<ul><li>%s</li></ul>';
+			$error = sprintf($error, $template, implode('</li><li>', $this->errors));
+			
+			throw new AgaviRenderException($error);
 		}
-
-		return $retVal;
+		
+		// Try to parse the stylesheet
+		$this->errors = array();
+		set_error_handler(array($this, 'xmlErrorHandler'));
+		$this->xslEngine->importStyleSheet($document);
+		restore_error_handler();
+		
+		if(count($this->errors)) {
+			$error = 'The template "%s" contained invalid XSLT rules<ul><li>%s</li></ul>';
+			$error = sprintf($error, $template, implode('</li><li>', $this->errors));
+			
+			throw new AgaviRenderException($error);
+		}
+		
+		$this->setXml($this->xmlEngineAttributes, $this->singularVarName, $this->view->getAttributes());
+		$output = $this->xslEngine->transformToDoc($this->xmlEngine);
+		
+		if($this->context->getController()->getRenderMode() == AgaviView::RENDER_CLIENT) {
+			if($this->view->isDecorator()) {
+				$display = '';
+				for($node = $output->firstChild;
+					$node;
+					$node = $node->nextSibling
+				) {
+					$display .= $output->saveXML($node);
+				}
+				
+				$this->response->setContent($this->decorate($display, false));
+			} else {
+				$output->version = $this->xmlEngine->version;
+				$output->encoding = $this->xmlEngine->encoding;
+				
+				$this->response->setContent($output->saveXML());
+			}
+		} elseif($this->context->getController()->getRenderMode() == AgaviView::RENDER_VAR) {
+			for($node = $output->firstChild;
+				$node;
+				$node = $node->nextSibling
+			) {
+				$this->response->appendContent($output->saveXML($node));
+			}
+		}
 	}
-
-	// -------------------------------------------------------------------------
 }
+
+?>
