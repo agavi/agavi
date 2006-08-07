@@ -90,6 +90,12 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	protected $name = null;
 
 	/**
+	 * @var        AgaviParameterHolder The parameters which should be validated
+	 *                                  in the current validation run.
+	 */
+	protected $validationParameters = null;
+
+	/**
 	 * Returns the base path of this validator.
 	 * 
 	 * @return     AgaviVirtualArrayPath The basepath of this validator
@@ -225,7 +231,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 */
 	protected function getData($paramname = 'param')
 	{
-		$array = $this->parentContainer->getRequest()->getParameters();
+		$array = $this->validationParameters->getParameters();
 		return $this->curBase->getValueByChildPath($this->getParameter($paramname), $array);
 	}
 
@@ -331,9 +337,9 @@ abstract class AgaviValidator extends AgaviParameterHolder
 			return;
 		}
 		
-		$array = $this->parentContainer->getRequest()->getParameters();
+		$array = $this->validationParameters->getParameters();
 		$this->curBase->setValueByChildPath($this->getParameter('export'), $array, $value);
-		$this->parentContainer->getRequest()->setParameters($array);
+		$this->validationParameters->setParameters($array);
 	}
 
 	/**
@@ -388,7 +394,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 			 * specified by our own base and validate in each of that
 			 * names
 			 */
-			$array = $this->parentContainer->getRequest()->getParameters();
+			$array = $this->validationParameters->getParameters();
 			$names = $this->curBase->getValue($array, array());
 			
 			// throw the wildcard away
@@ -415,13 +421,16 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	/**
 	 * executes the validator
 	 * 
+	 * @param      AgaviParameterHolder The parameters which should be validated
+	 * 
 	 * @return     int validation result (see severity constants)
 	 *
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
-	public function execute()
+	public function execute(AgaviParameterHolder $parameters)
 	{
+		$this->validationParameters = $parameters;
 		$base = new AgaviVirtualArrayPath($this->getParameter('base'));
 		
 		return $this->validateInBase($base);

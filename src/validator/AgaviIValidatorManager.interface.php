@@ -63,12 +63,14 @@ interface AgaviIValidatorManager
 	/**
 	 * starts the validation process and returns the result
 	 * 
+	 * @param      AgaviParameterHolder The parameters which should be validated
+	 * 
 	 * @return     bool result of validation process
 	 *
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
-	public function execute();
+	public function execute(AgaviParameterHolder $parameters);
 }
 
 ?>

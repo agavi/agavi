@@ -163,19 +163,27 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	/**
 	 * starts the validation process
 	 * 
+	 * @param      AgaviParameterHolder The parameters which should be validated
+	 * 
 	 * @return     bool true, if validation succeeded
 	 * 
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
-	public function execute()
+	public function execute(AgaviParameterHolder $parameters)
 	{
 		$result = true;
 		$this->result = AgaviValidator::SUCCESS;
 
+		$allSucceededFields = array();
 		foreach($this->children as $validator) {
-			$v_ret = $validator->execute();
+			$affectedFields = $validator->getAffectedFields();
+			$v_ret = $validator->execute($parameters);
 			$this->result = max($this->result, $v_ret);
+
+			if($v_ret == AgaviValidator::SUCCESS) {
+				$allSucceededFields = array_merge($affectedFields, $allSucceededFields);
+			}
 
 			switch($v_ret) {
 				case AgaviValidator::SUCCESS:
@@ -188,6 +196,23 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 				case AgaviValidator::CRITICAL:
 					$result = false;
 					break 2;
+			}
+		}
+
+		$mode = $this->getParameter('mode', 'normal');
+		if(count($this->children) == 0 && $mode == 'strict') {
+			// strict mode and no validators defined -> clear the parameters
+			$parameters->clearParameters();
+		}
+
+		if($mode == 'strict' || $mode == 'tainted') {
+			$ma = $this->getContext()->getRequest()->getModuleAccessor();
+			$aa = $this->getContext()->getRequest()->getActionAccessor();
+			$asf = array_flip($allSucceededFields);
+			foreach($parameters->getParameters() as $name => $param) {
+				if(!isset($asf[$name]) && $name != $ma && $name != $aa) {
+					$parameters->removeParameter($name);
+				}
 			}
 		}
 
