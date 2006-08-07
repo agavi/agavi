@@ -37,12 +37,36 @@ class AgaviXmlConfigParser extends AgaviConfigParser
 	 */
 	protected $errors = array();
 
+	/**
+	 * @var        DomXPath A DomXPath instance used to parse this document.
+	 */
+	protected $xpath = null;
+	
+	/**
+	 * @var        string The encoding of the file that's being parsed here.
+	 */
+	protected $encoding = 'utf-8';
+	
+	/**
+	 * @var        string The name of the config file we're parsing.
+	 */
+	protected $config = '';
+
+	/**
+	 * The error handler to catch DOM errors so they can be thrown as exceptions.
+	 *
+	 * @param      int    The error level.
+	 * @param      string The error string.
+	 * @param      string The file where the error occured.
+	 * @param      int    The line where the error occured.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public function errorHandler($errno, $errstr, $errfile, $errline)
 	{
 		$this->errors[] = $errstr;
 	}
-
-	protected $xpath = null;
 
 	/**
 	 * @see        AgaviConfigParser::parse()
@@ -56,6 +80,8 @@ class AgaviXmlConfigParser extends AgaviConfigParser
 			$error = 'Configuration file "' . $config . '" does not exist or is unreadable';
 			throw new AgaviUnreadableException($error);
 		}
+		
+		$this->config = $config;
 
 		// suppress errors from dom, ppl should use a proper xml editor to validate their files atm ...
 		set_error_handler(array($this, 'errorHandler'));
@@ -65,6 +91,7 @@ class AgaviXmlConfigParser extends AgaviConfigParser
 			$error = 'Configuration file "' . $config . '" could not be parsed, error' . (count($this->errors) > 1 ? 's' : '') . ' reported by DOM: ' . "\n\n" . implode("\n", $this->errors);
 			throw new AgaviParseException($error);
 		}
+		$this->encoding = strtolower($doc->encoding);
 		$this->xpath = new DomXPath($doc);
 		if($validationFile) {
 			// TODO: check for file existance
@@ -101,20 +128,20 @@ class AgaviXmlConfigParser extends AgaviConfigParser
 		foreach($nodes as $node) {
 			if($node->nodeType == XML_ELEMENT_NODE) {
 				$vh = new AgaviConfigValueHolder();
-				$vh->setName($node->nodeName);
+				$vh->setName($this->convertEncoding($node->nodeName));
 				if($isSingular) {
 					$parentVh->appendChildren($vh);
 				} else {
-					$parentVh->addChildren($node->tagName, $vh);
+					$parentVh->addChildren($this->convertEncoding($node->tagName), $vh);
 				}
 
 				foreach($node->attributes as $attribute) {
-					$vh->setAttribute($attribute->name, $attribute->value);
+					$vh->setAttribute($this->convertEncoding($attribute->name), $this->convertEncoding($attribute->value));
 				}
 
 				// there are no child nodes so we set the node text contents as the value for the valueholder
 				if($this->xpath->query('*', $node)->length == 0) {
-					$vh->setValue($node->nodeValue);
+					$vh->setValue($this->convertEncoding($node->nodeValue));
 				}
 
 				$tagName = $node->tagName;
@@ -137,6 +164,29 @@ class AgaviXmlConfigParser extends AgaviConfigParser
 					}
 				}
 			}
+		}
+	}
+	
+	/**
+	 * Handle encoding for a value, i.e. translate from UTF-8 if necessary.
+	 *
+	 * @param      string A UTF-8 string value from the DomDocument.
+	 *
+	 * @return     string A value in the correct encoding of the parsed document.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	protected function convertEncoding($value)
+	{
+		if($this->encoding == 'utf-8') {
+			return $value;
+		} elseif($this->encoding == 'iso-8859-1') {
+			return utf8_decode($value);
+		} elseif(function_exists('iconv')) {
+			return iconv('UTF-8', $this->encoding, $value);
+		} else {
+			throw new AgaviParseException('No iconv module available, configuration file "' . $this->config . '" with input encoding "' . $this->encoding . '" cannot be parsed.');
 		}
 	}
 }
