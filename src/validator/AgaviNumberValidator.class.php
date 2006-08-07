@@ -55,7 +55,8 @@ class AgaviNumberValidator extends AgaviValidator
 		switch(strtolower($this->getParameter('type'))) {
 			case 'int':
 			case 'integer':
-				if(!is_int($value)) {
+				$temp = (int) $value;
+				if(((string)$temp) !== ((string)$value) ) {
 					$this->throwError('type_error');
 					return false;
 				}
@@ -71,12 +72,12 @@ class AgaviNumberValidator extends AgaviValidator
 				break;
 		}
 		
-		if($$this->hasParameter('min') and $value < $this->getParameter('min')) {
+		if($this->hasParameter('min') and $value < $this->getParameter('min')) {
 			$this->throwError('min_error');
 			return false;
 		}
 		
-		if($$this->hasParameter('max') and $value > $this->getParameter('max')) {
+		if($this->hasParameter('max') and $value > $this->getParameter('max')) {
 			$this->throwError('max_error');
 			return false;
 		}
