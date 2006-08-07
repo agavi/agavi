@@ -60,7 +60,8 @@ final class AgaviArrayPathDefinition
 						$a =& $a[$part];
 					}
 				} else {
-					return null;
+					$retval = null;
+					return $retval;
 				}
 			}
 		}
