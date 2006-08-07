@@ -64,7 +64,7 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	/**
 	 * @var        bool A boolean value indicating whether or not the request is locked.
 	 */
-	protected $locked = false;
+	private $locked = false;
 
 	/**
 	 * Retrieve the current application context.
@@ -545,13 +545,13 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function toggleLock($key = null)
+	final public function toggleLock($key = null)
 	{
 		static $keys = array();
-		if($key === null) {
+		if(!$this->locked && $key === null) {
 			$this->locked = true;
 			return $this->keys[$this->context->getName()] = uniqid();
-		} else {
+		} elseif($this->locked) {
 			if(isset($this->keys[$this->context->getName()]) && $this->keys[$this->context->getName()] == $key) {
 				$this->locked = false;
 				return true;
@@ -559,7 +559,6 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 			return false;
 		}
 	}
-
 }
 
 ?>
