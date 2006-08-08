@@ -96,6 +96,9 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 		
 		$encoding = strtolower($doc->encoding);
 		$utf8 = $encoding == 'utf-8';
+		if(!$utf8 && $encoding != 'iso-8859-1' && !function_exists('iconv')) {
+			throw new AgaviException('No iconv module available, input encoding "' . $encoding . '" cannot be handled.');
+		}
 		
 		$hasXmlProlog = false;
 		if(preg_match('#<\?xml.*?\?>#iU' . ($utf8 ? 'u' : ''), $output)) {
@@ -123,13 +126,11 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 			foreach($xpath->query($query, $form) as $element) {
 				
 				$name = $element->getAttribute('name');
-				if($encoding != 'utf-8') {
+				if(!$utf8) {
 					if($encoding == 'iso-8859-1') {
 						$name = utf8_decode($name);
-					} elseif(function_exists('iconv')) {
-						$name = iconv('UTF-8', $encoding, $name);
 					} else {
-						throw new AgaviException('No iconv module available, input encoding "' . $encoding . '" cannot be handled.');
+						$name = iconv('UTF-8', $encoding, $name);
 					}
 				}
 				
@@ -160,14 +161,14 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 					continue;
 				}
 				
-				if($encoding != 'utf-8') {
+				if(!$utf8) {
 					if($encoding == 'iso-8859-1') {
 						if(is_array($value)) {
 							$value = array_map('utf8_encode', $value);
 						} else {
 							$value = utf8_encode($value);
 						}
-					} elseif(function_exists('iconv')) {
+					} else {
 						if(is_array($value)) {
 							foreach($value as &$val) {
 								$val = iconv($encoding, 'UTF-8', $val);
@@ -175,8 +176,6 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 						} else {
 							$value = iconv($encoding, 'UTF-8', $value);
 						}
-					} else {
-						throw new AgaviException('No iconv module available, input encoding "' . $encoding . '" cannot be handled.');
 					}
 				}
 				
