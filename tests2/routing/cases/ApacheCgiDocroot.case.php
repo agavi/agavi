@@ -35,6 +35,8 @@
 			'PATH_INFO' => '',
 			'PATH_TRANSLATED' => '',
 		),
+		'_GET' => array(
+		),
 		'_SERVER' => array (
 			'PATH' => '/usr/local/bin:/usr/bin:/bin',
 			'DOCUMENT_ROOT' => '/www/asiakkaat/veikkoma/public_html',
@@ -106,6 +108,8 @@
 			'PATH_INFO' => '',
 			'PATH_TRANSLATED' => '',
 		),
+		'_GET' => array(
+		),
 		'_SERVER' => array (
 			'PATH' => '/usr/local/bin:/usr/bin:/bin',
 			'DOCUMENT_ROOT' => '/www/asiakkaat/veikkoma/public_html',
@@ -174,6 +178,8 @@
 			'ORIG_SCRIPT_FILENAME' => '/www/asiakkaat/veikkoma/public_html/index.php',
 			'PATH_INFO' => '',
 			'PATH_TRANSLATED' => '',
+		),
+		'_GET' => array(
 		),
 		'_SERVER' => array (
 			'PATH' => '/usr/local/bin:/usr/bin:/bin',
@@ -247,6 +253,8 @@
 			'ORIG_SCRIPT_NAME' => '/index.php',
 			'ORIG_SCRIPT_FILENAME' => '/www/asiakkaat/veikkoma/public_html/index.php',
 		),
+		'_GET' => array(
+		),
 		'_SERVER' => array (
 			'PATH' => '/usr/local/bin:/usr/bin:/bin',
 			'DOCUMENT_ROOT' => '/www/asiakkaat/veikkoma/public_html',
@@ -319,6 +327,8 @@
 			'ORIG_PATH_INFO' => '/fubar',
 			'ORIG_SCRIPT_NAME' => '/index.php',
 			'ORIG_SCRIPT_FILENAME' => '/www/asiakkaat/veikkoma/public_html/index.php',
+		),
+		'_GET' => array(
 		),
 		'_SERVER' => array (
 			'PATH' => '/usr/local/bin:/usr/bin:/bin',
@@ -394,6 +404,8 @@
 			'PATH_INFO' => '',
 			'PATH_TRANSLATED' => '',
 		),
+		'_GET' => array(
+		),
 		'_SERVER' => array (
 			'PATH' => '/usr/local/bin:/usr/bin:/bin',
 			'DOCUMENT_ROOT' => '/www/asiakkaat/veikkoma/public_html',
@@ -466,6 +478,8 @@
 			'ORIG_SCRIPT_FILENAME' => '/www/asiakkaat/veikkoma/public_html/index.php',
 			'PATH_INFO' => '',
 			'PATH_TRANSLATED' => '',
+		),
+		'_GET' => array(
 		),
 		'_SERVER' => array (
 			'PATH' => '/usr/local/bin:/usr/bin:/bin',
@@ -540,6 +554,8 @@
 			'ORIG_SCRIPT_FILENAME' => '/www/asiakkaat/veikkoma/public_html/index.php',
 			'PATH_INFO' => '',
 			'PATH_TRANSLATED' => '',
+		),
+		'_GET' => array(
 		),
 		'_SERVER' => array (
 			'PATH' => '/usr/local/bin:/usr/bin:/bin',

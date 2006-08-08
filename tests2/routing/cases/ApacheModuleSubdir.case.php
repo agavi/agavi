@@ -11,6 +11,8 @@
 			'SHLVL' => '3',
 			'_' => '/usr/sbin/httpd',
 		),
+		'_GET' => array(
+		),
 		'_SERVER' => array (
 			'DOCUMENT_ROOT' => '/Library/WebServer/Documents',
 			'HTTP_ACCEPT' => '*/*',
@@ -54,6 +56,8 @@
 			'SHLVL' => '3',
 			'_' => '/usr/sbin/httpd',
 		),
+		'_GET' => array(
+		),
 		'_SERVER' => array (
 			'DOCUMENT_ROOT' => '/Library/WebServer/Documents',
 			'HTTP_ACCEPT' => '*/*',
@@ -95,6 +99,8 @@
 			'SHLVL' => '3',
 			'_' => '/usr/sbin/httpd',
 		),
+		'_GET' => array(
+		),
 		'_SERVER' => array (
 			'DOCUMENT_ROOT' => '/Library/WebServer/Documents',
 			'HTTP_ACCEPT' => '*/*',
@@ -135,6 +141,8 @@
 			'PWD' => '/',
 			'SHLVL' => '3',
 			'_' => '/usr/sbin/httpd',
+		),
+		'_GET' => array(
 		),
 		'_SERVER' => array (
 			'DOCUMENT_ROOT' => '/Library/WebServer/Documents',
@@ -178,6 +186,8 @@
 			'SHLVL' => '3',
 			'_' => '/usr/sbin/httpd',
 		),
+		'_GET' => array(
+		),
 		'_SERVER' => array (
 			'DOCUMENT_ROOT' => '/Library/WebServer/Documents',
 			'HTTP_ACCEPT' => '*/*',
@@ -219,6 +229,8 @@
 			'PWD' => '/',
 			'SHLVL' => '3',
 			'_' => '/usr/sbin/httpd',
+		),
+		'_GET' => array(
 		),
 		'_SERVER' => array (
 			'DOCUMENT_ROOT' => '/Library/WebServer/Documents',
@@ -264,6 +276,8 @@
 			'SHLVL' => '3',
 			'_' => '/usr/sbin/httpd',
 		),
+		'_GET' => array(
+		),
 		'_SERVER' => array (
 			'DOCUMENT_ROOT' => '/Library/WebServer/Documents',
 			'HTTP_ACCEPT' => '*/*',
@@ -307,6 +321,8 @@
 			'PWD' => '/',
 			'SHLVL' => '3',
 			'_' => '/usr/sbin/httpd',
+		),
+		'_GET' => array(
 		),
 		'_SERVER' => array (
 			'DOCUMENT_ROOT' => '/Library/WebServer/Documents',
