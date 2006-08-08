@@ -287,8 +287,8 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	/**
 	 * Set an error.
 	 *
-	 * @param      name    An error name.
-	 * @param      message An error message.
+	 * @param      string An error name.
+	 * @param      string An error message.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
