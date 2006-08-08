@@ -16,8 +16,8 @@
 			'HTTP_USER_AGENT' => 'Mozilla/5.0 (Macintosh; U; PPC Mac OS X; de-de) AppleWebKit/418.8 (KHTML, like Gecko) Safari/419.3',
 			'REDIRECT_STATUS' => '200',
 			'REDIRECT_URL' => '/testing/david/norewrite/',
-			'REMOTE_ADDR' => '88.64.0.245',
-			'REMOTE_PORT' => '52635',
+			'REMOTE_ADDR' => '88.64.13.5',
+			'REMOTE_PORT' => '62109',
 			'SCRIPT_FILENAME' => '/www/asiakkaat/veikkoma/public_html/testing/david/norewrite/index.php',
 			'SERVER_ADDR' => '123.123.123.123',
 			'SERVER_ADMIN' => 'test@agavi.org',
@@ -35,7 +35,7 @@
 			'PATH_INFO' => '',
 			'PATH_TRANSLATED' => '',
 		),
-		'_GET' => array(
+		'_GET' => array (
 		),
 		'_SERVER' => array (
 			'PATH' => '/usr/local/bin:/usr/bin:/bin',
@@ -48,8 +48,8 @@
 			'HTTP_USER_AGENT' => 'Mozilla/5.0 (Macintosh; U; PPC Mac OS X; de-de) AppleWebKit/418.8 (KHTML, like Gecko) Safari/419.3',
 			'REDIRECT_STATUS' => '200',
 			'REDIRECT_URL' => '/testing/david/norewrite/',
-			'REMOTE_ADDR' => '88.64.0.245',
-			'REMOTE_PORT' => '52635',
+			'REMOTE_ADDR' => '88.64.13.5',
+			'REMOTE_PORT' => '62109',
 			'SCRIPT_FILENAME' => '/www/asiakkaat/veikkoma/public_html/testing/david/norewrite/index.php',
 			'SERVER_ADDR' => '123.123.123.123',
 			'SERVER_ADMIN' => 'test@agavi.org',
@@ -67,7 +67,7 @@
 			'PATH_INFO' => '',
 			'PATH_TRANSLATED' => '',
 			'PHP_SELF' => '/testing/david/norewrite/index.php',
-			'REQUEST_TIME' => 1154028751,
+			'REQUEST_TIME' => 1155053682,
 			'argv' => 
 			array (
 			),
@@ -89,8 +89,8 @@
 			'HTTP_CONNECTION' => 'keep-alive',
 			'HTTP_HOST' => 'www.veikkomakinen.com',
 			'HTTP_USER_AGENT' => 'Mozilla/5.0 (Macintosh; U; PPC Mac OS X; de-de) AppleWebKit/418.8 (KHTML, like Gecko) Safari/419.3',
-			'REMOTE_ADDR' => '88.64.0.245',
-			'REMOTE_PORT' => '53061',
+			'REMOTE_ADDR' => '88.64.13.5',
+			'REMOTE_PORT' => '62188',
 			'SCRIPT_FILENAME' => '/www/asiakkaat/veikkoma/public_html/testing/david/norewrite/index.php',
 			'SERVER_ADDR' => '123.123.123.123',
 			'SERVER_ADMIN' => 'test@agavi.org',
@@ -108,7 +108,7 @@
 			'PATH_INFO' => '',
 			'PATH_TRANSLATED' => '',
 		),
-		'_GET' => array(
+		'_GET' => array (
 		),
 		'_SERVER' => array (
 			'PATH' => '/usr/local/bin:/usr/bin:/bin',
@@ -119,8 +119,8 @@
 			'HTTP_CONNECTION' => 'keep-alive',
 			'HTTP_HOST' => 'www.veikkomakinen.com',
 			'HTTP_USER_AGENT' => 'Mozilla/5.0 (Macintosh; U; PPC Mac OS X; de-de) AppleWebKit/418.8 (KHTML, like Gecko) Safari/419.3',
-			'REMOTE_ADDR' => '88.64.0.245',
-			'REMOTE_PORT' => '53061',
+			'REMOTE_ADDR' => '88.64.13.5',
+			'REMOTE_PORT' => '62188',
 			'SCRIPT_FILENAME' => '/www/asiakkaat/veikkoma/public_html/testing/david/norewrite/index.php',
 			'SERVER_ADDR' => '123.123.123.123',
 			'SERVER_ADMIN' => 'test@agavi.org',
@@ -138,7 +138,7 @@
 			'PATH_INFO' => '',
 			'PATH_TRANSLATED' => '',
 			'PHP_SELF' => '/testing/david/norewrite/index.php',
-			'REQUEST_TIME' => 1154031861,
+			'REQUEST_TIME' => 1155054103,
 			'argv' => 
 			array (
 			),
@@ -160,8 +160,8 @@
 			'HTTP_CONNECTION' => 'keep-alive',
 			'HTTP_HOST' => 'www.veikkomakinen.com',
 			'HTTP_USER_AGENT' => 'Mozilla/5.0 (Macintosh; U; PPC Mac OS X; de-de) AppleWebKit/418.8 (KHTML, like Gecko) Safari/419.3',
-			'REMOTE_ADDR' => '88.64.0.245',
-			'REMOTE_PORT' => '53068',
+			'REMOTE_ADDR' => '88.64.13.5',
+			'REMOTE_PORT' => '62190',
 			'SCRIPT_FILENAME' => '/www/asiakkaat/veikkoma/public_html/testing/david/norewrite/index.php',
 			'SERVER_ADDR' => '123.123.123.123',
 			'SERVER_ADMIN' => 'test@agavi.org',
@@ -179,7 +179,8 @@
 			'PATH_INFO' => '',
 			'PATH_TRANSLATED' => '',
 		),
-		'_GET' => array(
+		'_GET' => array (
+			'foo' => 'bar',
 		),
 		'_SERVER' => array (
 			'PATH' => '/usr/local/bin:/usr/bin:/bin',
@@ -190,8 +191,8 @@
 			'HTTP_CONNECTION' => 'keep-alive',
 			'HTTP_HOST' => 'www.veikkomakinen.com',
 			'HTTP_USER_AGENT' => 'Mozilla/5.0 (Macintosh; U; PPC Mac OS X; de-de) AppleWebKit/418.8 (KHTML, like Gecko) Safari/419.3',
-			'REMOTE_ADDR' => '88.64.0.245',
-			'REMOTE_PORT' => '53068',
+			'REMOTE_ADDR' => '88.64.13.5',
+			'REMOTE_PORT' => '62190',
 			'SCRIPT_FILENAME' => '/www/asiakkaat/veikkoma/public_html/testing/david/norewrite/index.php',
 			'SERVER_ADDR' => '123.123.123.123',
 			'SERVER_ADMIN' => 'test@agavi.org',
@@ -209,7 +210,7 @@
 			'PATH_INFO' => '',
 			'PATH_TRANSLATED' => '',
 			'PHP_SELF' => '/testing/david/norewrite/index.php',
-			'REQUEST_TIME' => 1154031953,
+			'REQUEST_TIME' => 1155054133,
 			'argv' => 
 			array (
 				0 => 'foo=bar',
@@ -232,8 +233,8 @@
 			'HTTP_CONNECTION' => 'keep-alive',
 			'HTTP_HOST' => 'www.veikkomakinen.com',
 			'HTTP_USER_AGENT' => 'Mozilla/5.0 (Macintosh; U; PPC Mac OS X; de-de) AppleWebKit/418.8 (KHTML, like Gecko) Safari/419.3',
-			'REMOTE_ADDR' => '88.64.0.245',
-			'REMOTE_PORT' => '53075',
+			'REMOTE_ADDR' => '88.64.13.5',
+			'REMOTE_PORT' => '62199',
 			'SCRIPT_FILENAME' => '/www/asiakkaat/veikkoma/public_html/testing/david/norewrite/index.php',
 			'SERVER_ADDR' => '123.123.123.123',
 			'SERVER_ADMIN' => 'test@agavi.org',
@@ -253,7 +254,7 @@
 			'ORIG_SCRIPT_NAME' => '/testing/david/norewrite/index.php',
 			'ORIG_SCRIPT_FILENAME' => '/www/asiakkaat/veikkoma/public_html/testing/david/norewrite/index.php',
 		),
-		'_GET' => array(
+		'_GET' => array (
 		),
 		'_SERVER' => array (
 			'PATH' => '/usr/local/bin:/usr/bin:/bin',
@@ -264,8 +265,8 @@
 			'HTTP_CONNECTION' => 'keep-alive',
 			'HTTP_HOST' => 'www.veikkomakinen.com',
 			'HTTP_USER_AGENT' => 'Mozilla/5.0 (Macintosh; U; PPC Mac OS X; de-de) AppleWebKit/418.8 (KHTML, like Gecko) Safari/419.3',
-			'REMOTE_ADDR' => '88.64.0.245',
-			'REMOTE_PORT' => '53075',
+			'REMOTE_ADDR' => '88.64.13.5',
+			'REMOTE_PORT' => '62199',
 			'SCRIPT_FILENAME' => '/www/asiakkaat/veikkoma/public_html/testing/david/norewrite/index.php',
 			'SERVER_ADDR' => '123.123.123.123',
 			'SERVER_ADMIN' => 'test@agavi.org',
@@ -285,7 +286,7 @@
 			'ORIG_SCRIPT_NAME' => '/testing/david/norewrite/index.php',
 			'ORIG_SCRIPT_FILENAME' => '/www/asiakkaat/veikkoma/public_html/testing/david/norewrite/index.php',
 			'PHP_SELF' => '/testing/david/norewrite/index.php',
-			'REQUEST_TIME' => 1154032038,
+			'REQUEST_TIME' => 1155054183,
 			'argv' => 
 			array (
 			),
@@ -307,8 +308,8 @@
 			'HTTP_CONNECTION' => 'keep-alive',
 			'HTTP_HOST' => 'www.veikkomakinen.com',
 			'HTTP_USER_AGENT' => 'Mozilla/5.0 (Macintosh; U; PPC Mac OS X; de-de) AppleWebKit/418.8 (KHTML, like Gecko) Safari/419.3',
-			'REMOTE_ADDR' => '88.64.0.245',
-			'REMOTE_PORT' => '53081',
+			'REMOTE_ADDR' => '88.64.13.5',
+			'REMOTE_PORT' => '62201',
 			'SCRIPT_FILENAME' => '/www/asiakkaat/veikkoma/public_html/testing/david/norewrite/index.php',
 			'SERVER_ADDR' => '123.123.123.123',
 			'SERVER_ADMIN' => 'test@agavi.org',
@@ -328,7 +329,8 @@
 			'ORIG_SCRIPT_NAME' => '/testing/david/norewrite/index.php',
 			'ORIG_SCRIPT_FILENAME' => '/www/asiakkaat/veikkoma/public_html/testing/david/norewrite/index.php',
 		),
-		'_GET' => array(
+		'_GET' => array (
+			'foo' => 'bar',
 		),
 		'_SERVER' => array (
 			'PATH' => '/usr/local/bin:/usr/bin:/bin',
@@ -339,8 +341,8 @@
 			'HTTP_CONNECTION' => 'keep-alive',
 			'HTTP_HOST' => 'www.veikkomakinen.com',
 			'HTTP_USER_AGENT' => 'Mozilla/5.0 (Macintosh; U; PPC Mac OS X; de-de) AppleWebKit/418.8 (KHTML, like Gecko) Safari/419.3',
-			'REMOTE_ADDR' => '88.64.0.245',
-			'REMOTE_PORT' => '53081',
+			'REMOTE_ADDR' => '88.64.13.5',
+			'REMOTE_PORT' => '62201',
 			'SCRIPT_FILENAME' => '/www/asiakkaat/veikkoma/public_html/testing/david/norewrite/index.php',
 			'SERVER_ADDR' => '123.123.123.123',
 			'SERVER_ADMIN' => 'test@agavi.org',
@@ -360,7 +362,7 @@
 			'ORIG_SCRIPT_NAME' => '/testing/david/norewrite/index.php',
 			'ORIG_SCRIPT_FILENAME' => '/www/asiakkaat/veikkoma/public_html/testing/david/norewrite/index.php',
 			'PHP_SELF' => '/testing/david/norewrite/index.php',
-			'REQUEST_TIME' => 1154032096,
+			'REQUEST_TIME' => 1155054202,
 			'argv' => 
 			array (
 				0 => 'foo=bar',
@@ -374,6 +376,9 @@
 		'prefix' => '/testing/david/rewrite',
 		'basePath' => '/testing/david/rewrite/',
 		'baseHref' => 'http://www.veikkomakinen.com/testing/david/rewrite/',
+		'init' => array(
+			'path_info_parameter' => '123qwe'
+		),
 		'_ENV' => array (
 			'PATH' => '/usr/local/bin:/usr/bin:/bin',
 			'DOCUMENT_ROOT' => '/www/asiakkaat/veikkoma/public_html',
@@ -383,10 +388,11 @@
 			'HTTP_CONNECTION' => 'keep-alive',
 			'HTTP_HOST' => 'www.veikkomakinen.com',
 			'HTTP_USER_AGENT' => 'Mozilla/5.0 (Macintosh; U; PPC Mac OS X; de-de) AppleWebKit/418.8 (KHTML, like Gecko) Safari/419.3',
+			'REDIRECT_QUERY_STRING' => '123qwe=/',
 			'REDIRECT_STATUS' => '200',
 			'REDIRECT_URL' => '/testing/david/rewrite/',
-			'REMOTE_ADDR' => '88.64.0.245',
-			'REMOTE_PORT' => '53352',
+			'REMOTE_ADDR' => '88.64.13.5',
+			'REMOTE_PORT' => '62253',
 			'SCRIPT_FILENAME' => '/www/asiakkaat/veikkoma/public_html/testing/david/rewrite/index.php',
 			'SERVER_ADDR' => '123.123.123.123',
 			'SERVER_ADMIN' => 'test@agavi.org',
@@ -396,7 +402,7 @@
 			'GATEWAY_INTERFACE' => 'CGI/1.1',
 			'SERVER_PROTOCOL' => 'HTTP/1.1',
 			'REQUEST_METHOD' => 'GET',
-			'QUERY_STRING' => '',
+			'QUERY_STRING' => '123qwe=/',
 			'REQUEST_URI' => '/testing/david/rewrite/',
 			'SCRIPT_NAME' => '/testing/david/rewrite/index.php',
 			'ORIG_SCRIPT_NAME' => '/testing/david/rewrite/index.php',
@@ -404,7 +410,8 @@
 			'PATH_INFO' => '',
 			'PATH_TRANSLATED' => '',
 		),
-		'_GET' => array(
+		'_GET' => array (
+			'123qwe' => '/',
 		),
 		'_SERVER' => array (
 			'PATH' => '/usr/local/bin:/usr/bin:/bin',
@@ -415,10 +422,11 @@
 			'HTTP_CONNECTION' => 'keep-alive',
 			'HTTP_HOST' => 'www.veikkomakinen.com',
 			'HTTP_USER_AGENT' => 'Mozilla/5.0 (Macintosh; U; PPC Mac OS X; de-de) AppleWebKit/418.8 (KHTML, like Gecko) Safari/419.3',
+			'REDIRECT_QUERY_STRING' => '123qwe=/',
 			'REDIRECT_STATUS' => '200',
 			'REDIRECT_URL' => '/testing/david/rewrite/',
-			'REMOTE_ADDR' => '88.64.0.245',
-			'REMOTE_PORT' => '53352',
+			'REMOTE_ADDR' => '88.64.13.5',
+			'REMOTE_PORT' => '62253',
 			'SCRIPT_FILENAME' => '/www/asiakkaat/veikkoma/public_html/testing/david/rewrite/index.php',
 			'SERVER_ADDR' => '123.123.123.123',
 			'SERVER_ADMIN' => 'test@agavi.org',
@@ -428,7 +436,7 @@
 			'GATEWAY_INTERFACE' => 'CGI/1.1',
 			'SERVER_PROTOCOL' => 'HTTP/1.1',
 			'REQUEST_METHOD' => 'GET',
-			'QUERY_STRING' => '',
+			'QUERY_STRING' => '123qwe=/',
 			'REQUEST_URI' => '/testing/david/rewrite/',
 			'SCRIPT_NAME' => '/testing/david/rewrite/index.php',
 			'ORIG_SCRIPT_NAME' => '/testing/david/rewrite/index.php',
@@ -436,11 +444,12 @@
 			'PATH_INFO' => '',
 			'PATH_TRANSLATED' => '',
 			'PHP_SELF' => '/testing/david/rewrite/index.php',
-			'REQUEST_TIME' => 1154034996,
+			'REQUEST_TIME' => 1155054382,
 			'argv' => 
 			array (
+				0 => '123qwe=/',
 			),
-			'argc' => 0,
+			'argc' => 1,
 		)
 	),
 	array(
@@ -449,6 +458,9 @@
 		'prefix' => '/testing/david/rewrite',
 		'basePath' => '/testing/david/rewrite/',
 		'baseHref' => 'http://www.veikkomakinen.com/testing/david/rewrite/',
+		'init' => array(
+			'path_info_parameter' => '123qwe'
+		),
 		'_ENV' => array (
 			'PATH' => '/usr/local/bin:/usr/bin:/bin',
 			'DOCUMENT_ROOT' => '/www/asiakkaat/veikkoma/public_html',
@@ -458,10 +470,11 @@
 			'HTTP_CONNECTION' => 'keep-alive',
 			'HTTP_HOST' => 'www.veikkomakinen.com',
 			'HTTP_USER_AGENT' => 'Mozilla/5.0 (Macintosh; U; PPC Mac OS X; de-de) AppleWebKit/418.8 (KHTML, like Gecko) Safari/419.3',
+			'REDIRECT_QUERY_STRING' => '123qwe=fubar',
 			'REDIRECT_STATUS' => '200',
 			'REDIRECT_URL' => '/testing/david/rewrite/fubar',
-			'REMOTE_ADDR' => '88.64.0.245',
-			'REMOTE_PORT' => '53448',
+			'REMOTE_ADDR' => '88.64.13.5',
+			'REMOTE_PORT' => '62273',
 			'SCRIPT_FILENAME' => '/www/asiakkaat/veikkoma/public_html/testing/david/rewrite/index.php',
 			'SERVER_ADDR' => '123.123.123.123',
 			'SERVER_ADMIN' => 'test@agavi.org',
@@ -471,7 +484,7 @@
 			'GATEWAY_INTERFACE' => 'CGI/1.1',
 			'SERVER_PROTOCOL' => 'HTTP/1.1',
 			'REQUEST_METHOD' => 'GET',
-			'QUERY_STRING' => '',
+			'QUERY_STRING' => '123qwe=fubar',
 			'REQUEST_URI' => '/testing/david/rewrite/fubar',
 			'SCRIPT_NAME' => '/testing/david/rewrite/index.php',
 			'ORIG_SCRIPT_NAME' => '/testing/david/rewrite/index.php',
@@ -479,7 +492,8 @@
 			'PATH_INFO' => '',
 			'PATH_TRANSLATED' => '',
 		),
-		'_GET' => array(
+		'_GET' => array (
+			'123qwe' => 'fubar',
 		),
 		'_SERVER' => array (
 			'PATH' => '/usr/local/bin:/usr/bin:/bin',
@@ -490,10 +504,11 @@
 			'HTTP_CONNECTION' => 'keep-alive',
 			'HTTP_HOST' => 'www.veikkomakinen.com',
 			'HTTP_USER_AGENT' => 'Mozilla/5.0 (Macintosh; U; PPC Mac OS X; de-de) AppleWebKit/418.8 (KHTML, like Gecko) Safari/419.3',
+			'REDIRECT_QUERY_STRING' => '123qwe=fubar',
 			'REDIRECT_STATUS' => '200',
 			'REDIRECT_URL' => '/testing/david/rewrite/fubar',
-			'REMOTE_ADDR' => '88.64.0.245',
-			'REMOTE_PORT' => '53448',
+			'REMOTE_ADDR' => '88.64.13.5',
+			'REMOTE_PORT' => '62273',
 			'SCRIPT_FILENAME' => '/www/asiakkaat/veikkoma/public_html/testing/david/rewrite/index.php',
 			'SERVER_ADDR' => '123.123.123.123',
 			'SERVER_ADMIN' => 'test@agavi.org',
@@ -503,7 +518,7 @@
 			'GATEWAY_INTERFACE' => 'CGI/1.1',
 			'SERVER_PROTOCOL' => 'HTTP/1.1',
 			'REQUEST_METHOD' => 'GET',
-			'QUERY_STRING' => '',
+			'QUERY_STRING' => '123qwe=fubar',
 			'REQUEST_URI' => '/testing/david/rewrite/fubar',
 			'SCRIPT_NAME' => '/testing/david/rewrite/index.php',
 			'ORIG_SCRIPT_NAME' => '/testing/david/rewrite/index.php',
@@ -511,11 +526,12 @@
 			'PATH_INFO' => '',
 			'PATH_TRANSLATED' => '',
 			'PHP_SELF' => '/testing/david/rewrite/index.php',
-			'REQUEST_TIME' => 1154035981,
+			'REQUEST_TIME' => 1155054608,
 			'argv' => 
 			array (
+				0 => '123qwe=fubar',
 			),
-			'argc' => 0,
+			'argc' => 1,
 		)
 	),
 	array(
@@ -524,6 +540,9 @@
 		'prefix' => '/testing/david/rewrite',
 		'basePath' => '/testing/david/rewrite/',
 		'baseHref' => 'http://www.veikkomakinen.com/testing/david/rewrite/',
+		'init' => array(
+			'path_info_parameter' => '123qwe'
+		),
 		'_ENV' => array (
 			'PATH' => '/usr/local/bin:/usr/bin:/bin',
 			'DOCUMENT_ROOT' => '/www/asiakkaat/veikkoma/public_html',
@@ -533,11 +552,11 @@
 			'HTTP_CONNECTION' => 'keep-alive',
 			'HTTP_HOST' => 'www.veikkomakinen.com',
 			'HTTP_USER_AGENT' => 'Mozilla/5.0 (Macintosh; U; PPC Mac OS X; de-de) AppleWebKit/418.8 (KHTML, like Gecko) Safari/419.3',
-			'REDIRECT_QUERY_STRING' => 'foo=bar',
+			'REDIRECT_QUERY_STRING' => '123qwe=fubar&foo=bar',
 			'REDIRECT_STATUS' => '200',
 			'REDIRECT_URL' => '/testing/david/rewrite/fubar',
-			'REMOTE_ADDR' => '88.64.0.245',
-			'REMOTE_PORT' => '53455',
+			'REMOTE_ADDR' => '88.64.13.5',
+			'REMOTE_PORT' => '62275',
 			'SCRIPT_FILENAME' => '/www/asiakkaat/veikkoma/public_html/testing/david/rewrite/index.php',
 			'SERVER_ADDR' => '123.123.123.123',
 			'SERVER_ADMIN' => 'test@agavi.org',
@@ -547,7 +566,7 @@
 			'GATEWAY_INTERFACE' => 'CGI/1.1',
 			'SERVER_PROTOCOL' => 'HTTP/1.1',
 			'REQUEST_METHOD' => 'GET',
-			'QUERY_STRING' => 'foo=bar',
+			'QUERY_STRING' => '123qwe=fubar&foo=bar',
 			'REQUEST_URI' => '/testing/david/rewrite/fubar?foo=bar',
 			'SCRIPT_NAME' => '/testing/david/rewrite/index.php',
 			'ORIG_SCRIPT_NAME' => '/testing/david/rewrite/index.php',
@@ -555,7 +574,9 @@
 			'PATH_INFO' => '',
 			'PATH_TRANSLATED' => '',
 		),
-		'_GET' => array(
+		'_GET' => array (
+			'123qwe' => 'fubar',
+			'foo' => 'bar',
 		),
 		'_SERVER' => array (
 			'PATH' => '/usr/local/bin:/usr/bin:/bin',
@@ -566,11 +587,11 @@
 			'HTTP_CONNECTION' => 'keep-alive',
 			'HTTP_HOST' => 'www.veikkomakinen.com',
 			'HTTP_USER_AGENT' => 'Mozilla/5.0 (Macintosh; U; PPC Mac OS X; de-de) AppleWebKit/418.8 (KHTML, like Gecko) Safari/419.3',
-			'REDIRECT_QUERY_STRING' => 'foo=bar',
+			'REDIRECT_QUERY_STRING' => '123qwe=fubar&foo=bar',
 			'REDIRECT_STATUS' => '200',
 			'REDIRECT_URL' => '/testing/david/rewrite/fubar',
-			'REMOTE_ADDR' => '88.64.0.245',
-			'REMOTE_PORT' => '53455',
+			'REMOTE_ADDR' => '88.64.13.5',
+			'REMOTE_PORT' => '62275',
 			'SCRIPT_FILENAME' => '/www/asiakkaat/veikkoma/public_html/testing/david/rewrite/index.php',
 			'SERVER_ADDR' => '123.123.123.123',
 			'SERVER_ADMIN' => 'test@agavi.org',
@@ -580,7 +601,7 @@
 			'GATEWAY_INTERFACE' => 'CGI/1.1',
 			'SERVER_PROTOCOL' => 'HTTP/1.1',
 			'REQUEST_METHOD' => 'GET',
-			'QUERY_STRING' => 'foo=bar',
+			'QUERY_STRING' => '123qwe=fubar&foo=bar',
 			'REQUEST_URI' => '/testing/david/rewrite/fubar?foo=bar',
 			'SCRIPT_NAME' => '/testing/david/rewrite/index.php',
 			'ORIG_SCRIPT_NAME' => '/testing/david/rewrite/index.php',
@@ -588,12 +609,95 @@
 			'PATH_INFO' => '',
 			'PATH_TRANSLATED' => '',
 			'PHP_SELF' => '/testing/david/rewrite/index.php',
-			'REQUEST_TIME' => 1154036049,
+			'REQUEST_TIME' => 1155054625,
 			'argv' => 
 			array (
-				0 => 'foo=bar',
+				0 => '123qwe=fubar&foo=bar',
 			),
 			'argc' => 1,
 		)
 	),
+	array(
+		'message' => 'Sub-directory, rewritten, called path with query and overwrote path info query param',
+		'input' => '/fubar',
+		'prefix' => '/testing/david/rewrite',
+		'basePath' => '/testing/david/rewrite/',
+		'baseHref' => 'http://www.veikkomakinen.com/testing/david/rewrite/',
+		'init' => array(
+			'path_info_parameter' => '123qwe'
+		),
+		'_ENV' => array (
+			'PATH' => '/usr/local/bin:/usr/bin:/bin',
+			'DOCUMENT_ROOT' => '/www/asiakkaat/veikkoma/public_html',
+			'HTTP_ACCEPT' => '*/*',
+			'HTTP_ACCEPT_ENCODING' => 'gzip, deflate',
+			'HTTP_ACCEPT_LANGUAGE' => 'de-de',
+			'HTTP_CONNECTION' => 'keep-alive',
+			'HTTP_HOST' => 'www.veikkomakinen.com',
+			'HTTP_USER_AGENT' => 'Mozilla/5.0 (Macintosh; U; PPC Mac OS X; de-de) AppleWebKit/418.8 (KHTML, like Gecko) Safari/419.3',
+			'REDIRECT_QUERY_STRING' => '123qwe=fubar&foo=bar&123qwe=as%20df',
+			'REDIRECT_STATUS' => '200',
+			'REDIRECT_URL' => '/testing/david/rewrite/fubar',
+			'REMOTE_ADDR' => '88.64.13.5',
+			'REMOTE_PORT' => '62313',
+			'SCRIPT_FILENAME' => '/www/asiakkaat/veikkoma/public_html/testing/david/rewrite/index.php',
+			'SERVER_ADDR' => '123.123.123.123',
+			'SERVER_ADMIN' => 'test@agavi.org',
+			'SERVER_NAME' => 'www.veikkomakinen.com',
+			'SERVER_PORT' => '80',
+			'SERVER_SOFTWARE' => 'Apache/1.3.34',
+			'GATEWAY_INTERFACE' => 'CGI/1.1',
+			'SERVER_PROTOCOL' => 'HTTP/1.1',
+			'REQUEST_METHOD' => 'GET',
+			'QUERY_STRING' => '123qwe=fubar&foo=bar&123qwe=as%20df',
+			'REQUEST_URI' => '/testing/david/rewrite/fubar?foo=bar&123qwe=as%20df',
+			'SCRIPT_NAME' => '/testing/david/rewrite/index.php',
+			'ORIG_SCRIPT_NAME' => '/testing/david/rewrite/index.php',
+			'ORIG_SCRIPT_FILENAME' => '/www/asiakkaat/veikkoma/public_html/testing/david/rewrite/index.php',
+			'PATH_INFO' => '',
+			'PATH_TRANSLATED' => '',
+		),
+		'_GET' => array (
+			'123qwe' => 'as df',
+			'foo' => 'bar',
+		),
+		'_SERVER' => array (
+			'PATH' => '/usr/local/bin:/usr/bin:/bin',
+			'DOCUMENT_ROOT' => '/www/asiakkaat/veikkoma/public_html',
+			'HTTP_ACCEPT' => '*/*',
+			'HTTP_ACCEPT_ENCODING' => 'gzip, deflate',
+			'HTTP_ACCEPT_LANGUAGE' => 'de-de',
+			'HTTP_CONNECTION' => 'keep-alive',
+			'HTTP_HOST' => 'www.veikkomakinen.com',
+			'HTTP_USER_AGENT' => 'Mozilla/5.0 (Macintosh; U; PPC Mac OS X; de-de) AppleWebKit/418.8 (KHTML, like Gecko) Safari/419.3',
+			'REDIRECT_QUERY_STRING' => '123qwe=fubar&foo=bar&123qwe=as%20df',
+			'REDIRECT_STATUS' => '200',
+			'REDIRECT_URL' => '/testing/david/rewrite/fubar',
+			'REMOTE_ADDR' => '88.64.13.5',
+			'REMOTE_PORT' => '62313',
+			'SCRIPT_FILENAME' => '/www/asiakkaat/veikkoma/public_html/testing/david/rewrite/index.php',
+			'SERVER_ADDR' => '123.123.123.123',
+			'SERVER_ADMIN' => 'test@agavi.org',
+			'SERVER_NAME' => 'www.veikkomakinen.com',
+			'SERVER_PORT' => '80',
+			'SERVER_SOFTWARE' => 'Apache/1.3.34',
+			'GATEWAY_INTERFACE' => 'CGI/1.1',
+			'SERVER_PROTOCOL' => 'HTTP/1.1',
+			'REQUEST_METHOD' => 'GET',
+			'QUERY_STRING' => '123qwe=fubar&foo=bar&123qwe=as%20df',
+			'REQUEST_URI' => '/testing/david/rewrite/fubar?foo=bar&123qwe=as%20df',
+			'SCRIPT_NAME' => '/testing/david/rewrite/index.php',
+			'ORIG_SCRIPT_NAME' => '/testing/david/rewrite/index.php',
+			'ORIG_SCRIPT_FILENAME' => '/www/asiakkaat/veikkoma/public_html/testing/david/rewrite/index.php',
+			'PATH_INFO' => '',
+			'PATH_TRANSLATED' => '',
+			'PHP_SELF' => '/testing/david/rewrite/index.php',
+			'REQUEST_TIME' => 1155055040,
+			'argv' => 
+			array (
+				0 => '123qwe=fubar&foo=bar&123qwe=as%20df',
+			),
+			'argc' => 1,
+		)
+	)
 );
