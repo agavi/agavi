@@ -110,9 +110,9 @@
         to somewhere inside your application's directory structure (we
         recommend a <filename>libs</filename> folder that holds all libraries
         your app uses and that sits on the same level as the
-        <filename>app</filename> and <filename>pub</filename> directories)
-        and give it a different name, <filename>agavi</filename> would stand
-        to reason. For that little extra something, copy the agavi-dist or
+        <filename>app</filename> and <filename>pub</filename> directories) and
+        give it a different name, <filename>agavi</filename> would stand to
+        reason. For that little extra something, copy the agavi-dist or
         agavi.bat-dist script again, maybe to your application root. Your
         <filename>pub/index.php</filename> can then be changed to use a
         relative path for including <filename>agavi.php</filename>, in our
@@ -245,8 +245,8 @@
       the <filename>pub</filename> directory of your application. If you see a
       blank page, everything went fine. Of course, a blank page isn't really
       satisfying or anything, so you might want to edit
-      <filename>app/modules/Default/templates/IndexSuccess.php</filename>
-      and put some text in there, like the infamous "Hello World". Back to the
+      <filename>app/modules/Default/templates/IndexSuccess.php</filename> and
+      put some text in there, like the infamous "Hello World". Back to the
       browser and reload, et voila!</para>
 
       <para>Since you're fiddling around a bit at this stage, it might be a
@@ -600,6 +600,28 @@ RewriteRule ^$ index.php/ [QSA,L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule (.*) index.php/$1 [QSA,L]</programlisting></para>
+
+      <caution>
+        <para>If you are running Apache with PHP as CGI, you cannot rewrite to
+        a PHP file and pass path info. In this case, we have to resort to a
+        query parameter to pass the incoming path to Agavi. To do that, change
+        the two rewrite rules to:</para>
+
+        <para><programlisting>RewriteRule ^$ index.php?something=/ [QSA,L]</programlisting>and</para>
+
+        <para><programlisting>RewriteRule (.*) index.php?something=/$1 [QSA,L]</programlisting>Then,
+        tell the WebRouting that you're using this rewrite method in
+        <filename>factories.xml</filename>:</para>
+
+        <para><programlisting>&lt;routing class="AgaviWebRouting"&gt;
+  &lt;parameters&gt;
+    &lt;parameter name="path_info_parameter"&gt;something&lt;/parameter&gt;
+  &lt;/parameters&gt;
+&lt;/routing&gt;</programlisting>Of course, you are free to use whatever you
+        prefer as the parameter name. It will not be set as a Request
+        parameter, unless the user actually supplies a parameter with this
+        name.</para>
+      </caution>
 
       <para>The important thing is that you use the
       <emphasis>external</emphasis> path to the <filename>pub</filename>
