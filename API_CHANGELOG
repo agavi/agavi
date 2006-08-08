@@ -1,0 +1,119 @@
+AGAVI API CHANGELOG
+===================
+
+0.11.0 Beta 1 (August ??, 2006)
+
+API Changes:
+ action/
+  AgaviAction:
+!   execute* & validate* & handleError: They now take the parameters (in form of a AgaviParameterHolder) as parameter and shouldn't access the request parameters directly anymore
+    execute & validate: its not required to define (execute|validate) anymore, but instead you can define execute(Read|Write|...) for each input method you want to handle
+!   getCredential: renamed to getCredentials()
+!   getDefaultView: renamed to getDefaultViewName()
+!   getRequestMethods: gone, this is now handled by the existance of (execute|validate)(Read|Write|...) methods
+
+  AgaviActionStack:
+!   addEntry: has a new parameter(AgaviParameterHolder) which stores the request parameters for that action entry
+    clear: a new function to clear the action stack
+
+  AgaviActionStackEntry:
+!   __construct: has a new parameter(AgaviParameterHolder) which stores the request parameters for this action entry
+    getParameters: a new method to retrieve the parameters
+    setParameters: a new method to set the parameters
+!   getPresentation: returns an AgaviResponse instead of a string now
+!   setPresentation: has an AgaviResponse instead of a string as parameter now
+    setNext: a new method to set the next action which should be executed
+    hasNext: a new method to check if a next action is set
+    getNext: a new method to retrieve the next action
+
+
+ config/
+  The entire config management has been adjusted to support different 
+  configuration formats. The new AgaviConfigValueHolder class represenets a
+  tree like data structure which gets created by the parsers for the specific
+  configuration formats.
+
+  IniConfigHandler:
+!   is completely replaced by AgaviConfigHandler (which is independant of the config format)
+
+  AgaviConfig:
+    a new class for storing the configuration entries for the framework in a "registry"
+
+  AgaviConfigCache:
+    checkConfig: a new optional string parameter for specifying the context
+    clearCache: the directory parameter is now optional
+    getCacheName: a new optional string parameter for specifying the context
+!   import: a string parameter specifying the the context as been inserted at position 2 (so once is now the 3. parameter)
+    parseConfig: a new method to parse a configuration file with the parser defined for its extension
+
+  AgaviConfigHandler:
+!   addReplacement: removed
+    execute: has the context name as a new string parameter (defaults to null)
+!   initialize: now takes the new validation file path as the first parameter and the parameters as the second
+!   literalize: returns the php value now instead of a php "code" representation
+!   replaceConstants: doesn't return any constants anymore but instead values from the AgaviConfig registry
+    orderConfigurations: a new method to order the configuration blocks and taking environment and context parameters into account
+    getItemParameters: a new method to get the parameters entries of a configuration node
+
+  AgaviConfigValueHolder
+    a new class representing a configuration value (with attributes and childs or a value)
+
+  AgaviParameterParser:
+!   removed, not needed anymore
+
+ controller/
+  FrontWebController & PageWebController:
+!   removed, these cases are now handled by the general controller and the routing
+
+  AgaviController:
+    dispatch: now already implemented here and takes parameters as parameter
+    actionExists: the actionName is now optional and there is 'auto resolving' in place
+    forward: the actionName is now optional (defaults to Index)
+!   getGlobalModel & getModel: this is now handled by AgaviContext::getModel
+!   getInstance: removed, now handled via the AgaviContext instance
+    initialize: new parameters parameter
+!   setExecutionFilterClassName: removed, this is now handled via the configuration
+    loadFilters: new method to load the filters into a filterchain
+!   newInstance: removed now handled via the AgaviContext instance
+!   registerShutdownListener: removed
+!   inCLI: removed
+
+  AgaviWebController:
+!   genUrl: removed, this is now done via AgaviRouting::gen()
+    getContentType: moved to AgaviController
+    setContentType: moved to AgaviController
+    initalize: now takes parameters as second parameter
+!   redirect: removed delay parameter
+
+ core/
+  AgaviObject:
+!   removed, not needed anymore
+
+  AgaviContext:
+!   getActionName: moved to AgaviController
+!   getActionStack: moved to AgaviController
+!   getInstance: if you don't pass the profile parameter you have to set core.default_context in config
+!   initialize: the overrides parameter is gone
+!   getModuleDirectory: moved to AgaviController
+!   getModuleName: moved to AgaviController
+!   getSecurityFilter: removed
+    getRouting: new method
+    getValidationManager: new method
+    getFactoryInfo: new method
+
+ datebase/
+  All the database class names have been renamed to be proper camelcased (no more ...MySQL...)
+
+  AgaviDatabase:
+    getDatabaseManager: new method
+!   initialize: now takes the databasemanager as first parameter and the parameters as second (they were the only params)
+
+  AgaviDatabaseManager:
+!   initiliaze: now takes the context and optional parameters as parameter
+
+ exception:
+  AgaviException:
+!   getName: removed
+!   setName: removed
+!   printStackTrace: format parameter gone and 3 new parameters now
+
