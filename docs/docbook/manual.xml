@@ -2,17 +2,19 @@
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
 "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
 <book>
-  <title>Agavi Manual</title>
+  <title>The Definitive Guide to Agavi</title>
 
   <preface>
     <title>Preface</title>
 
-    <para>Welcome to the <productname>Agavi</productname> Manual. This book
+    <para>Welcome to the <productname>Agavi</productname> manual. This book
     tries to serve you as the definitive guide to the
     <productname>Agavi</productname> framework. It contains a "Getting
     Started" guide, a comprehensive introduction to the concept and usage of
-    Agavi, a chapter with many examples and "best practices", and a reference
-    manual that documents all aspects of the framework.</para>
+    Agavi, and a reference manual that documents all aspects of the framework.
+    A separate "Best Practices" book accompanies this guide. Also, there's the
+    "Introduction to Agavi" book, which gives you an idea of the philosophy
+    behind Agavi, and the way it works as a "big picture".</para>
   </preface>
 
   <chapter>
@@ -223,7 +225,15 @@
     <section>
       <title>The Sample Application</title>
 
-      <para></para>
+      <para>Agavi comes with a (very simple) sample application. To make it
+      work, all you have to do is adjust
+      <filename>samples/pub/index.php</filename> to point to
+      <filename>agavi.php</filename>, whereever it's installed. Then, fire it
+      up in your browser and play around with it.</para>
+
+      <para>While not overly complex, the sample application's code should
+      give you a basic understanding of what a software project in Agavi would
+      look like in terms of structure.</para>
     </section>
 
     <section>
@@ -528,149 +538,6 @@
 
       <para>why logging, how to do it, levels, loggers, appenders,
       layouts</para>
-    </section>
-  </chapter>
-
-  <chapter>
-    <title>Examples And Tutorials</title>
-
-    <section>
-      <title>Best Practices</title>
-
-      <para></para>
-    </section>
-
-    <section>
-      <title>Populating and Validating Forms</title>
-
-      <para>explain the FormPopulationFilter</para>
-    </section>
-
-    <section>
-      <title>Cookie-Based Auto-Login</title>
-
-      <para></para>
-    </section>
-
-    <section>
-      <title>Redirecting back to the originally requested page after
-      login</title>
-
-      <para></para>
-    </section>
-
-    <section>
-      <title>Serving "application/xhtml+xml" to capable browsers
-      easily</title>
-
-      <para></para>
-    </section>
-
-    <section>
-      <title>Propel Integration</title>
-
-      <para>simple</para>
-    </section>
-
-    <section>
-      <title>Decorators and Slots</title>
-
-      <para>why decorate, setting up slots, passing around data between
-      slots</para>
-    </section>
-
-    <section>
-      <title>Removing the "index.php" Part From URLs</title>
-
-      <para>You need mod_rewrite (or something similar for other web servers,
-      such as ISAPI_Rewrite for Microsoft IIS) to get rid of the "index.php"
-      part in incoming and generated URLs. Make sure mod_rewrite is enabled,
-      and create a <filename>.htaccess</filename> file in your
-      <filename>pub</filename> directory with the following contents:</para>
-
-      <para><programlisting># enable rewrite engine
-RewriteEngine On
-
-RewriteBase /~dzuelke/_projects/agavi/trunk/samples/pub/
-# e.g. RewriteBase /~dzuelke/_projects/agavi/trunk/samples/pub/
-# usually just "/" if your application's pub dir is the document root
-
-# if requested url does not exist (i.e. it's likely an agavi route), pass it as path info to index.php
-RewriteRule ^$ index.php/ [QSA,L]
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule (.*) index.php/$1 [QSA,L]</programlisting></para>
-
-      <caution>
-        <para>If you are running Apache with PHP as CGI, you cannot rewrite to
-        a PHP file and pass path info. In this case, we have to resort to a
-        query parameter to pass the incoming path to Agavi. To do that, change
-        the two rewrite rules to:</para>
-
-        <para><programlisting>RewriteRule ^$ index.php?something=/ [QSA,L]</programlisting>and</para>
-
-        <para><programlisting>RewriteRule (.*) index.php?something=/$1 [QSA,L]</programlisting>Then,
-        tell the WebRouting that you're using this rewrite method in
-        <filename>factories.xml</filename>:</para>
-
-        <para><programlisting>&lt;routing class="AgaviWebRouting"&gt;
-  &lt;parameters&gt;
-    &lt;parameter name="path_info_parameter"&gt;something&lt;/parameter&gt;
-  &lt;/parameters&gt;
-&lt;/routing&gt;</programlisting>Of course, you are free to use whatever you
-        prefer as the parameter name. It will not be set as a Request
-        parameter, unless the user actually supplies a parameter with this
-        name.</para>
-      </caution>
-
-      <para>The important thing is that you use the
-      <emphasis>external</emphasis> path to the <filename>pub</filename>
-      directory as the RewriteBase, i.e. the path that you would have to enter
-      in your web browser location bar to reach the index page. If the
-      <filename>pub</filename> directory is the document root, then the
-      RewriteBase is just <filename>/</filename>.</para>
-
-      <para>The RewriteCond is a condition that executes the following
-      RewriteRule if the requested filename (that is the incoming URL already
-      mapped to a filesystem name by Apache) does <emphasis>not</emphasis>
-      exist. If the requested URL exists, for instance, when an image on the
-      webserver is requested, Agavi won't be called. Otherwise, the framework
-      is started and the given URL is handed to Agavi as so-called Path Info
-      which the WebRouting will use to match a route.</para>
-
-      <para>If you use ISAPI_Rewrite or another plugin for IIS, you can't use
-      the rewrite condition shown above since it's not supported. Instead, you
-      should create a RewriteCond that checks if the incoming URL does not
-      fall into a certain schema (e.g. doesn't begin with
-      <filename>/images</filename> and <filename>/css</filename> so these
-      don't get rewritten and handed to Agavi).</para>
-    </section>
-
-    <section>
-      <title>Routing Examples</title>
-
-      <para></para>
-    </section>
-
-    <section>
-      <title>Caching</title>
-
-      <para>document the execution filter here, with examples, explanation of
-      how decorators are cached or not and slots can be included, variable
-      caching, groups, request methods, cache lifetime</para>
-    </section>
-
-    <section>
-      <title>Serving Output Variants of the Same Content</title>
-
-      <para>a quick example using a LatestProductsAction or whatever</para>
-    </section>
-
-    <section>
-      <title>Adding an XMLRPC or Other Interface to Your Web
-      Application</title>
-
-      <para>walk people through the basic steps/ideas</para>
     </section>
   </chapter>
 
