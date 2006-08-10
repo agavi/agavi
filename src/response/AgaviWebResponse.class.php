@@ -110,7 +110,8 @@ class AgaviWebResponse extends AgaviResponse
 			'lifetime' => isset($parameters['cookie_lifetime']) ? $parameters['cookie_lifetime'] : 0,
 			'path'     => isset($parameters['cookie_path'])     ? $parameters['cookie_path']     : "/",
 			'domain'   => isset($parameters['cookie_domain'])   ? $parameters['cookie_domain']   : "",
-			'secure'   => isset($parameters['cookie_secure'])   ? $parameters['cookie_secure']   : 0
+			'secure'   => isset($parameters['cookie_secure'])   ? $parameters['cookie_secure']   : false,
+			'httpOnly' => isset($parameters['cookie_httponly']) ? $parameters['cookie_httponly'] : false
 		);
 	}
 	
@@ -423,19 +424,21 @@ class AgaviWebResponse extends AgaviResponse
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function setCookie($name, $value, $lifetime = null, $path = null, $domain = null, $secure = null)
+	public function setCookie($name, $value, $lifetime = null, $path = null, $domain = null, $secure = null, $httpOnly = false)
 	{
 		$lifetime = isset($lifetime) ? $lifetime : $this->cookieConfig['lifetime'];
 		$path     = isset($path)     ? $path     : $this->cookieConfig['path'];
 		$domain   = isset($domain)   ? $domain   : $this->cookieConfig['domain'];
 		$secure   = isset($secure)   ? $secure   : $this->cookieConfig['secure'];
+		$httpOnly = isset($httpOnly) ? $httpOnly : $this->cookieConfig['httpOnly'];
 
 		$this->cookies[$name] = array(
 			'value' => $value,
 			'lifetime' => $lifetime,
 			'path' => $path,
 			'domain' => $domain,
-			'secure' => $secure
+			'secure' => $secure,
+			'httpOnly' => $httpOnly
 		);
 	}
 
@@ -517,7 +520,7 @@ class AgaviWebResponse extends AgaviResponse
 				$expire = time() - 3600 * 24;
 			}
 			
-			setcookie($name, $values['value'], $expire, $values['path'], $values['domain'], $values['secure']);
+			setcookie($name, $values['value'], $expire, $values['path'], $values['domain'], $values['secure'], $values['httpOnly']);
 		}
 	}
 
