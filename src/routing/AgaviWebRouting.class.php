@@ -97,6 +97,7 @@ class AgaviWebRouting extends AgaviRouting
 	 */
 	protected function getStringBase($baseString, $compString, &$equalAmount = 0)
 	{
+		$equalAmount = 0;
 		$base = '';
 		for($i = 0; isset($baseString[$i]) && isset($compString[$i]) && $baseString[$i] == $compString[$i]; ++$i) {
 			$base .= $baseString[$i];
