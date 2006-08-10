@@ -1,6 +1,7 @@
 <?php return array(
 	array(
 		'message' => 'Sub-directory, no rewrite, called directory',
+		'parseMethod' => 'parseApacheModuleNoRewrite',
 		'input' => '/',
 		'prefix' => '/~dzuelke/rw/index.php',
 		'basePath' => '/~dzuelke/rw/',
@@ -46,6 +47,7 @@
 	),
 	array(
 		'message' => 'Sub-directory, no rewrite, called index.php',
+		'parseMethod' => 'parseApacheModuleNoRewrite',
 		'input' => '/',
 		'prefix' => '/~dzuelke/rw/index.php',
 		'basePath' => '/~dzuelke/rw/',
@@ -89,6 +91,7 @@
 	),
 	array(
 		'message' => 'Sub-directory, no rewrite, called index.php with query',
+		'parseMethod' => 'parseApacheModuleNoRewrite',
 		'input' => '/',
 		'prefix' => '/~dzuelke/rw/index.php',
 		'basePath' => '/~dzuelke/rw/',
@@ -132,6 +135,7 @@
 	),
 	array(
 		'message' => 'Sub-directory, no rewrite, called index.php with path info',
+		'parseMethod' => 'parseApacheModuleNoRewrite',
 		'input' => '/fubar',
 		'prefix' => '/~dzuelke/rw/index.php',
 		'basePath' => '/~dzuelke/rw/',
@@ -176,6 +180,7 @@
 	),
 	array(
 		'message' => 'Sub-directory, no rewrite, called index.php with path info and query',
+		'parseMethod' => 'parseApacheModuleNoRewrite',
 		'input' => '/fubar',
 		'prefix' => '/~dzuelke/rw/index.php',
 		'basePath' => '/~dzuelke/rw/',
@@ -220,6 +225,7 @@
 	),
 	array(
 		'message' => 'Sub-directory, rewritten, called directory',
+		'parseMethod' => 'parseApacheModuleRewrite',
 		'input' => '/',
 		'prefix' => '/~dzuelke/rw',
 		'basePath' => '/~dzuelke/rw/',
@@ -266,6 +272,7 @@
 	),
 	array(
 		'message' => 'Sub-directory, rewritten, called path',
+		'parseMethod' => 'parseApacheModuleRewrite',
 		'input' => '/fubar',
 		'prefix' => '/~dzuelke/rw',
 		'basePath' => '/~dzuelke/rw/',
@@ -312,6 +319,7 @@
 	),
 	array(
 		'message' => 'Sub-directory, rewritten, called path with query',
+		'parseMethod' => 'parseApacheModuleRewrite',
 		'input' => '/fubar',
 		'prefix' => '/~dzuelke/rw',
 		'basePath' => '/~dzuelke/rw/',

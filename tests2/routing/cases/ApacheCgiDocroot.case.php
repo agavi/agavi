@@ -1,6 +1,7 @@
 <?php return array(
 	array(
 		'message' => 'Document root, no rewrite, called root',
+		'parseMethod' => 'parseApacheCgiNoRewrite',
 		'input' => '/',
 		'prefix' => '/index.php',
 		'basePath' => '/',
@@ -68,7 +69,7 @@
 			'PATH_TRANSLATED' => '',
 			'PHP_SELF' => '/index.php',
 			'REQUEST_TIME' => 1155056471,
-			'argv' => 
+			'argv' =>
 			array (
 			),
 			'argc' => 0,
@@ -76,6 +77,7 @@
 	),
 	array(
 		'message' => 'Document root, no rewrite, called index.php',
+		'parseMethod' => 'parseApacheCgiNoRewrite',
 		'input' => '/',
 		'prefix' => '/index.php',
 		'basePath' => '/',
@@ -139,7 +141,7 @@
 			'PATH_TRANSLATED' => '',
 			'PHP_SELF' => '/index.php',
 			'REQUEST_TIME' => 1155057474,
-			'argv' => 
+			'argv' =>
 			array (
 			),
 			'argc' => 0,
@@ -147,6 +149,7 @@
 	),
 	array(
 		'message' => 'Document root, no rewrite, called index.php with query',
+		'parseMethod' => 'parseApacheCgiNoRewrite',
 		'input' => '/',
 		'prefix' => '/index.php',
 		'basePath' => '/',
@@ -211,7 +214,7 @@
 			'PATH_TRANSLATED' => '',
 			'PHP_SELF' => '/index.php',
 			'REQUEST_TIME' => 1155057505,
-			'argv' => 
+			'argv' =>
 			array (
 				0 => 'foo=bar',
 			),
@@ -220,6 +223,7 @@
 	),
 	array(
 		'message' => 'Document root, no rewrite, called index.php with path info',
+		'parseMethod' => 'parseApacheCgiNoRewrite',
 		'input' => '/fubar',
 		'prefix' => '/index.php',
 		'basePath' => '/',
@@ -287,7 +291,7 @@
 			'ORIG_SCRIPT_FILENAME' => '/www/asiakkaat/veikkoma/public_html/index.php',
 			'PHP_SELF' => '/index.php',
 			'REQUEST_TIME' => 1155057535,
-			'argv' => 
+			'argv' =>
 			array (
 			),
 			'argc' => 0,
@@ -295,6 +299,7 @@
 	),
 	array(
 		'message' => 'Document root, no rewrite, called index.php with path info and query',
+		'parseMethod' => 'parseApacheCgiNoRewrite',
 		'input' => '/fubar',
 		'prefix' => '/index.php',
 		'basePath' => '/',
@@ -363,7 +368,7 @@
 			'ORIG_SCRIPT_FILENAME' => '/www/asiakkaat/veikkoma/public_html/index.php',
 			'PHP_SELF' => '/index.php',
 			'REQUEST_TIME' => 1155057551,
-			'argv' => 
+			'argv' =>
 			array (
 				0 => 'foo=bar',
 			),
@@ -372,6 +377,7 @@
 	),
 	array(
 		'message' => 'Document root, rewritten, called root',
+		'parseMethod' => 'parseApacheCgiRewrite',
 		'input' => '/',
 		'prefix' => '',
 		'basePath' => '/',
@@ -445,7 +451,7 @@
 			'PATH_TRANSLATED' => '',
 			'PHP_SELF' => '/index.php',
 			'REQUEST_TIME' => 1155061808,
-			'argv' => 
+			'argv' =>
 			array (
 				0 => '123qwe=/',
 			),
@@ -454,6 +460,7 @@
 	),
 	array(
 		'message' => 'Document root, rewritten, called path',
+		'parseMethod' => 'parseApacheCgiRewrite',
 		'input' => '/fubar',
 		'prefix' => '',
 		'basePath' => '/',
@@ -527,7 +534,7 @@
 			'PATH_TRANSLATED' => '',
 			'PHP_SELF' => '/index.php',
 			'REQUEST_TIME' => 1155061824,
-			'argv' => 
+			'argv' =>
 			array (
 				0 => '123qwe=/fubar',
 			),
@@ -536,6 +543,7 @@
 	),
 	array(
 		'message' => 'Document root, rewritten, called path with query',
+		'parseMethod' => 'parseApacheCgiRewrite',
 		'input' => '/fubar',
 		'prefix' => '',
 		'basePath' => '/',
@@ -610,7 +618,7 @@
 			'PATH_TRANSLATED' => '',
 			'PHP_SELF' => '/index.php',
 			'REQUEST_TIME' => 1155061847,
-			'argv' => 
+			'argv' =>
 			array (
 				0 => '123qwe=/fubar&foo=bar',
 			),

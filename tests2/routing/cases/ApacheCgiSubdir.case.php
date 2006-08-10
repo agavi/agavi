@@ -1,6 +1,7 @@
 <?php return array(
 	array(
 		'message' => 'Sub-directory, no rewrite, called directory',
+		'parseMethod' => 'parseApacheCgiNoRewrite',
 		'input' => '/',
 		'prefix' => '/testing/david/norewrite/index.php',
 		'basePath' => '/testing/david/norewrite/',
@@ -68,7 +69,7 @@
 			'PATH_TRANSLATED' => '',
 			'PHP_SELF' => '/testing/david/norewrite/index.php',
 			'REQUEST_TIME' => 1155053682,
-			'argv' => 
+			'argv' =>
 			array (
 			),
 			'argc' => 0,
@@ -76,6 +77,7 @@
 	),
 	array(
 		'message' => 'Sub-directory, no rewrite, called index.php',
+		'parseMethod' => 'parseApacheCgiNoRewrite',
 		'input' => '/',
 		'prefix' => '/testing/david/norewrite/index.php',
 		'basePath' => '/testing/david/norewrite/',
@@ -139,7 +141,7 @@
 			'PATH_TRANSLATED' => '',
 			'PHP_SELF' => '/testing/david/norewrite/index.php',
 			'REQUEST_TIME' => 1155054103,
-			'argv' => 
+			'argv' =>
 			array (
 			),
 			'argc' => 0,
@@ -147,6 +149,7 @@
 	),
 	array(
 		'message' => 'Sub-directory, no rewrite, called index.php with query',
+		'parseMethod' => 'parseApacheCgiNoRewrite',
 		'input' => '/',
 		'prefix' => '/testing/david/norewrite/index.php',
 		'basePath' => '/testing/david/norewrite/',
@@ -211,7 +214,7 @@
 			'PATH_TRANSLATED' => '',
 			'PHP_SELF' => '/testing/david/norewrite/index.php',
 			'REQUEST_TIME' => 1155054133,
-			'argv' => 
+			'argv' =>
 			array (
 				0 => 'foo=bar',
 			),
@@ -220,6 +223,7 @@
 	),
 	array(
 		'message' => 'Sub-directory, no rewrite, called index.php with path info',
+		'parseMethod' => 'parseApacheCgiNoRewrite',
 		'input' => '/fubar',
 		'prefix' => '/testing/david/norewrite/index.php',
 		'basePath' => '/testing/david/norewrite/',
@@ -287,7 +291,7 @@
 			'ORIG_SCRIPT_FILENAME' => '/www/asiakkaat/veikkoma/public_html/testing/david/norewrite/index.php',
 			'PHP_SELF' => '/testing/david/norewrite/index.php',
 			'REQUEST_TIME' => 1155054183,
-			'argv' => 
+			'argv' =>
 			array (
 			),
 			'argc' => 0,
@@ -295,6 +299,7 @@
 	),
 	array(
 		'message' => 'Sub-directory, no rewrite, called index.php with path info and query',
+		'parseMethod' => 'parseApacheCgiNoRewrite',
 		'input' => '/fubar',
 		'prefix' => '/testing/david/norewrite/index.php',
 		'basePath' => '/testing/david/norewrite/',
@@ -363,7 +368,7 @@
 			'ORIG_SCRIPT_FILENAME' => '/www/asiakkaat/veikkoma/public_html/testing/david/norewrite/index.php',
 			'PHP_SELF' => '/testing/david/norewrite/index.php',
 			'REQUEST_TIME' => 1155054202,
-			'argv' => 
+			'argv' =>
 			array (
 				0 => 'foo=bar',
 			),
@@ -372,6 +377,7 @@
 	),
 	array(
 		'message' => 'Sub-directory, rewritten, called directory',
+		'parseMethod' => 'parseApacheCgiRewrite',
 		'input' => '/',
 		'prefix' => '/testing/david/rewrite',
 		'basePath' => '/testing/david/rewrite/',
@@ -445,7 +451,7 @@
 			'PATH_TRANSLATED' => '',
 			'PHP_SELF' => '/testing/david/rewrite/index.php',
 			'REQUEST_TIME' => 1155054382,
-			'argv' => 
+			'argv' =>
 			array (
 				0 => '123qwe=/',
 			),
@@ -454,6 +460,7 @@
 	),
 	array(
 		'message' => 'Sub-directory, rewritten, called path',
+		'parseMethod' => 'parseApacheCgiRewrite',
 		'input' => '/fubar',
 		'prefix' => '/testing/david/rewrite',
 		'basePath' => '/testing/david/rewrite/',
@@ -527,7 +534,7 @@
 			'PATH_TRANSLATED' => '',
 			'PHP_SELF' => '/testing/david/rewrite/index.php',
 			'REQUEST_TIME' => 1155055722,
-			'argv' => 
+			'argv' =>
 			array (
 				0 => '123qwe=/fubar',
 			),
@@ -536,6 +543,7 @@
 	),
 	array(
 		'message' => 'Sub-directory, rewritten, called path with query',
+		'parseMethod' => 'parseApacheCgiRewrite',
 		'input' => '/fubar',
 		'prefix' => '/testing/david/rewrite',
 		'basePath' => '/testing/david/rewrite/',
@@ -610,7 +618,7 @@
 			'PATH_TRANSLATED' => '',
 			'PHP_SELF' => '/testing/david/rewrite/index.php',
 			'REQUEST_TIME' => 1155055752,
-			'argv' => 
+			'argv' =>
 			array (
 				0 => '123qwe=/fubar&foo=bar',
 			),
@@ -619,6 +627,7 @@
 	),
 	array(
 		'message' => 'Sub-directory, rewritten, called path with query and overwrote path info query param',
+		'parseMethod' => 'parseApacheCgiRewrite',
 		'input' => '/fubar',
 		'prefix' => '/testing/david/rewrite',
 		'basePath' => '/testing/david/rewrite/',
@@ -695,7 +704,7 @@
 			'PATH_TRANSLATED' => '',
 			'PHP_SELF' => '/testing/david/rewrite/index.php',
 			'REQUEST_TIME' => 1155055802,
-			'argv' => 
+			'argv' =>
 			array (
 				0 => '123qwe=/fubar&foo=bar&123qwe=as%20df',
 			),
@@ -704,6 +713,7 @@
 	),
 	array(
 		'message' => 'Sub-directory, rewritten, called path (contains %20) with query',
+		'parseMethod' => 'parseApacheCgiRewrite',
 		'input' => '/fu/bar baz',
 		'prefix' => '/testing/david/rewrite',
 		'basePath' => '/testing/david/rewrite/',
@@ -778,7 +788,7 @@
 			'PATH_TRANSLATED' => '',
 			'PHP_SELF' => '/testing/david/rewrite/index.php',
 			'REQUEST_TIME' => 1155057280,
-			'argv' => 
+			'argv' =>
 			array (
 				0 => '123qwe=/fu/bar baz&foo=bar',
 			),

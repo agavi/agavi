@@ -3,7 +3,7 @@
 class WebRoutingTest extends AgaviTestCase
 {
 	protected $_r = null;
-	
+
 	protected $_SERVER = array();
 	protected $_ENV = array();
 	protected $_GET = array();
@@ -21,7 +21,7 @@ class WebRoutingTest extends AgaviTestCase
 		$this->_ENV = $_ENV;
 		AgaviConfig::set('core.use_routing', true);
 	}
-	
+
 	protected function runTest()
 	{
 		$export = $this->export;
@@ -30,12 +30,13 @@ class WebRoutingTest extends AgaviTestCase
 		$_GET = $export['_GET'];
 		$this->_r = new AgaviWebRouting();
 		$this->_r->initialize(AgaviContext::getInstance('test'), isset($export['init']) ? $export['init'] : array());
-		$this->assertEquals($export['prefix'], $this->_r->getPrefix(), '[' . $export['message'] . '] getPrefix()');
-		$this->assertEquals($export['input'], $this->_r->getInput(), '[' . $export['message'] . '] getInput()');
+		$this->assertEquals($export['parseMethod'], $this->_r->determineMethod(array()), '[' . $export['message'] . '] determineMethod()');
+		$this->assertEquals($export['prefix'], $this->_r->getPrefix(), '[' . $export['message'] . '] getPrefix() ('.$export['prefix'].':'.$this->_r->getPrefix().')');
+		$this->assertEquals($export['input'], $this->_r->getInput(), '[' . $export['message'] . '] getInput()('.$export['input'].':'.$this->_r->getInput().')');
 		$this->assertEquals($export['basePath'], $this->_r->getBasePath(), '[' . $export['message'] . '] getBasePath()');
 		$this->assertEquals($export['baseHref'], $this->_r->getBaseHref(), '[' . $export['message'] . '] getBaseHref()');
 	}
-	
+
 
 	public function tearDown()
 	{

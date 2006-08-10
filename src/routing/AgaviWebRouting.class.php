@@ -14,8 +14,8 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviWebRouting sets the prefix and input with some magic from the request 
- * uri and path_info 
+ * AgaviWebRouting sets the prefix and input with some magic from the request
+ * uri and path_info
  *
  * @package    agavi
  * @subpackage routing
@@ -32,12 +32,12 @@ class AgaviWebRouting extends AgaviRouting
 	 * @var        string The path to the application's root with trailing slash.
 	 */
 	protected $basePath = '';
-	
+
 	/**
 	 * @var        string The URL to the application's root with trailing slash.
 	 */
 	protected $baseHref = '';
-	
+
 	/**
 	 * @var        array An array of default options for gen()
 	 */
@@ -46,7 +46,11 @@ class AgaviWebRouting extends AgaviRouting
 		'separator' => '&amp;',
 		'use_trans_sid' => false
 	);
-	
+
+
+	protected $parseOptions = array();
+
+
 	/**
 	 * Initialize the routing instance.
 	 *
@@ -59,63 +63,204 @@ class AgaviWebRouting extends AgaviRouting
 	public function initialize(AgaviContext $context, $parameters = array())
 	{
 		parent::initialize($context, $parameters);
-		$isReWritten = (isset($_SERVER['REDIRECT_URL']) && isset($_SERVER['PATH_INFO'])) || (isset($_SERVER['HTTP_X_REWRITE_URL']) && ($_SERVER['HTTP_X_REWRITE_URL'] != $_SERVER['ORIG_PATH_INFO']));
-		if(isset($_SERVER['HTTP_X_REWRITE_URL'])) {
-			// Microsoft IIS with ISAPI_Rewrite
-			$ru = $_SERVER['HTTP_X_REWRITE_URL'];
-		} elseif(isset($_SERVER['ORIG_PATH_INFO']) && isset($_SERVER['REQUEST_URI']) && strpos($_SERVER['REQUEST_URI'], $_SERVER['ORIG_SCRIPT_NAME'] . $_SERVER['ORIG_PATH_INFO']) === 0) {
-			// Apache with CGI SAPI
-			$ru = $_SERVER['REQUEST_URI'];
-		} elseif(isset($_SERVER['ORIG_PATH_INFO'])) {
-			// Microsoft IIS
-			$ru = $_SERVER['ORIG_PATH_INFO'];
-		} else {
-			// Apache
-			$ru = $_SERVER['REQUEST_URI'];
+
+		if(isset($parameters['path_info_parameter'])) {
+			$this->parseOptions['path_info_parameter'] = $parameters['path_info_parameter'];
 		}
-		
+
+		parent::initialize($context, $parameters);
+
+		$parsingMethod = $this->determineMethod($parameters);
+
+		if (!method_exists($this, $parsingMethod)) {
+			throw new AgaviException('Trying to use non-existent method ('.$parsingMethod.') for routing information parsing.');
+		}
+
+		$this->$parsingMethod($parameters);
+
+	}
+
+	protected function getIsRewritten()
+	{
+		return (isset($_SERVER['REDIRECT_URL']) && isset($_SERVER['PATH_INFO']))
+			|| (isset($_SERVER['HTTP_X_REWRITE_URL']) && ($_SERVER['HTTP_X_REWRITE_URL'] != $_SERVER['ORIG_PATH_INFO']))
+			|| isset($this->parseOptions['path_info_parameter']);
+	}
+
+	public function determineMethod($parameters)
+	{
+		$isRewritten = $this->getIsRewritten();
+		$serverApi = '';
+
+		//figure out server api
+		if(isset($_SERVER['HTTP_X_REWRITE_URL'])) {
+			$serverApi = 'MsIis'; // Microsoft IIS with ISAPI_Rewrite
+		}
+		elseif(empty($_SERVER['PATH_INFO']) && empty($_SERVER['PATH_TRANSLATED'])) {
+			$serverApi = 'ApacheCgi'; // Apache with CGI SAPI
+			$isRewritten = isset($this->parseOptions['path_info_parameter']) && strpos($_SERVER['argv'][0], $this->parseOptions['path_info_parameter'])==0;
+		} elseif(isset($_SERVER['ORIG_PATH_INFO'])) {
+			$serverApi = 'MsIis'; // Microsoft IIS
+		} else {
+			$serverApi = 'ApacheModule'; // Apache
+		}
+
+		$parsingMethod = 'parse'.$serverApi . ($isRewritten ? '' : 'No') . 'Rewrite';
+
+		return $parsingMethod;
+	}
+
+	protected function serverUrl()
+	{
+		$protocol = 'http' . (isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on' ? 's' : '');
+		$name = $_SERVER['SERVER_NAME'];
+		$port = (isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on' ? ($_SERVER['SERVER_PORT'] != 443 ? ':' . $_SERVER['SERVER_PORT'] : '') : ($_SERVER['SERVER_PORT'] != 80 ? ':' . $_SERVER['SERVER_PORT'] : ''));
+		return $protocol . '://' . $name . $port;
+	}
+
+	protected function parseApacheModuleRewrite()
+	{
+
+		$ru = $_SERVER['REQUEST_URI'];
+
 		if(($p = strpos($ru, '?')) !== false) {
 			$ru = substr($ru, 0, $p);
 		}
 		$ru = urldecode($ru);
 
-		if(isset($_SERVER['PATH_INFO']) || isset($_SERVER['ORIG_PATH_INFO'])) {
-			$this->prefix =  substr($ru, 0, -strlen(isset($_SERVER['ORIG_PATH_INFO']) ? $_SERVER['ORIG_PATH_INFO'] : $_SERVER['PATH_INFO']));
-			$this->input = substr($ru, strlen($this->prefix));
-		} else {
-			$sn = $_SERVER['SCRIPT_NAME'];
+		$this->prefix =  substr($ru, 0, -strlen($_SERVER['PATH_INFO']));
+		$this->input = substr($ru, strlen($this->prefix));
 
-			$this->prefix = '';
-			for($i = 0; isset($sn[$i]) && isset($ru[$i]) && $sn[$i] == $ru[$i]; ++$i) {
-				$this->prefix .= $sn[$i];
-				$appendFrom = $i;
-			}
-
-			$this->prefix .= substr($_SERVER['SCRIPT_NAME'], $appendFrom + 1);
-			$this->input = substr($ru, $i);
-		}
 		if(!$this->input) {
 			$this->input = "/";
 		}
 
-		$this->sources['_SERVER'] = new AgaviRoutingArraySource($_SERVER);
-		
-		if($isReWritten) {
-			// a rewrite happened
-			$this->basePath = $this->prefix;
-		} else {
-			$this->basePath = str_replace('\\', '/', dirname($this->prefix));
-		}
+		$this->sources = array_merge($this->sources, $_SERVER);
+
+		$this->basePath = $this->prefix;
+
 		if(substr($this->basePath, -1, 1) != '/') {
 			$this->basePath .= '/';
 		}
-		$this->baseHref = 
-			'http' . (isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on' ? 's' : '')  . '://' . 
-			$_SERVER['SERVER_NAME'] . 
-			(isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on' ? ($_SERVER['SERVER_PORT'] != 443 ? ':' . $_SERVER['SERVER_PORT'] : '') : ($_SERVER['SERVER_PORT'] != 80 ? ':' . $_SERVER['SERVER_PORT'] : '')) . 
-			$this->basePath;
+
+		$this->baseHref = $this->serverUrl() . $this->basePath;
 	}
-	
+
+	protected function parseApacheModuleNoRewrite()
+	{
+
+		$ru = $_SERVER['REQUEST_URI'];
+
+		if(($p = strpos($ru, '?')) !== false) {
+			$ru = substr($ru, 0, $p);
+		}
+		$ru = urldecode($ru);
+
+		$sn = $_SERVER['SCRIPT_NAME'];
+
+		$this->prefix = '';
+		for($i = 0; isset($sn[$i]) && isset($ru[$i]) && $sn[$i] == $ru[$i]; ++$i) {
+			$this->prefix .= $sn[$i];
+			$appendFrom = $i;
+		}
+
+		$this->prefix .= substr($_SERVER['SCRIPT_NAME'], $appendFrom + 1);
+		$this->input = substr($ru, $i);
+
+		if(!$this->input) {
+			$this->input = "/";
+		}
+
+		$this->sources = array_merge($this->sources, $_SERVER);
+
+		$this->basePath = str_replace('\\', '/', dirname($this->prefix));
+
+		if(substr($this->basePath, -1, 1) != '/') {
+			$this->basePath .= '/';
+		}
+
+		$this->baseHref = $this->serverUrl() . $this->basePath;
+
+	}
+
+	protected function parseApacheCgiRewrite()
+	{
+		$reqUri = $_SERVER['REQUEST_URI'];
+
+		$pathParameter = $this->parseOptions['path_info_parameter'];
+
+		$pathStart = strpos($_SERVER['argv'][0], '=') + 1;
+		$firstAmpersand = strpos($_SERVER['argv'][0], '&');
+		if($firstAmpersand) {
+			$this->input = substr($_SERVER['argv'][0], $pathStart, $firstAmpersand-$pathStart);
+		}
+		else {
+			$this->input = substr($_SERVER['argv'][0], $pathStart);
+		}
+
+		if(!$this->input) {
+			$this->input = '/';
+		}
+
+		$sn = $_SERVER['SCRIPT_NAME'];
+
+		$this->prefix = '';
+		for($i = 0; isset($sn[$i]) && isset($reqUri[$i]) && $sn[$i] == $reqUri[$i]; ++$i) {
+			$this->prefix .= $sn[$i];
+		}
+
+		if(substr($this->prefix, -1, 1) == '/') {
+			$this->prefix = substr($this->prefix, 0, strlen($this->prefix)-1);
+		}
+
+		$this->basePath = $this->prefix;
+
+		if(substr($this->basePath, -1, 1) != '/') {
+			$this->basePath .= '/';
+		}
+
+		$this->baseHref = $this->serverUrl() . $this->basePath;
+
+	}
+
+	protected function parseApacheCgiNoRewrite()
+	{
+
+		$ru = $_SERVER['REQUEST_URI'];
+
+		if(($p = strpos($ru, '?')) !== false) {
+			$ru = substr($ru, 0, $p);
+		}
+		$ru = urldecode($ru);
+
+		$sn = $_SERVER['SCRIPT_NAME'];
+
+		$this->prefix = '';
+		for($i = 0; isset($sn[$i]) && isset($ru[$i]) && $sn[$i] == $ru[$i]; ++$i) {
+			$this->prefix .= $sn[$i];
+			$appendFrom = $i;
+		}
+
+		$this->prefix .= substr($_SERVER['SCRIPT_NAME'], $appendFrom + 1);
+		$this->input = substr($ru, $i);
+
+		if(!$this->input) {
+			$this->input = '/';
+		}
+
+		$this->sources = array_merge($this->sources, $_SERVER);
+
+		$this->basePath = str_replace('\\', '/', dirname($this->prefix));
+
+		if(substr($this->basePath, -1, 1) != '/') {
+			$this->basePath .= '/';
+		}
+
+		$this->baseHref = $this->serverUrl() . $this->basePath;
+
+	}
+
+
 	/**
 	 * Retrieve the base path where the application's root sits
 	 *
@@ -128,7 +273,7 @@ class AgaviWebRouting extends AgaviRouting
 	{
 		return $this->basePath;
 	}
-	
+
 	/**
 	 * Retrieve the full URL to the application's root.
 	 *
@@ -142,7 +287,7 @@ class AgaviWebRouting extends AgaviRouting
 	{
 		return $this->baseHref;
 	}
-	
+
 	/**
 	 * Generate a formatted Agavi URL.
 	 *
@@ -159,11 +304,11 @@ class AgaviWebRouting extends AgaviRouting
 	public function gen($route, $params = array(), $options = array())
 	{
 		$options = array_merge($this->defaultGenOptions, $options);
-		
+
 		if(defined('SID') && SID !== '' && $options['use_trans_sid'] === true) {
 			$params = array_merge($params, array(session_name() => session_id()));
 		}
-		
+
 		$routes = $this->getAffectedRoutes($route);
 
 		if(count($routes)) {
@@ -192,7 +337,7 @@ class AgaviWebRouting extends AgaviRouting
 
 				$req = $this->context->getRequest();
 
-				// we collect the default parameters from the route and make sure 
+				// we collect the default parameters from the route and make sure
 				// new parameters don't overwrite already defined parameters
 				$defaults = array();
 				foreach($routes as $route) {
@@ -237,7 +382,7 @@ class AgaviWebRouting extends AgaviRouting
 			// replace arg_separator.output's with given separator
 			$append = str_replace($aso, $options['separator'], $append);
 		}
-		
+
 		if($options['relative']) {
 			return $path . $append;
 		} else {
@@ -245,16 +390,16 @@ class AgaviWebRouting extends AgaviRouting
 			return $req->getUrlScheme() . '://'. $req->getUrlAuthority() . $path . $append;
 		}
 	}
-	
+
 	public function execute()
 	{
 		$req = $this->getContext()->getRequest();
-		
+
 		// merge GET parameters
 		$req->setParametersByRef($_GET);
 		// merge POST parameters
 		$req->setParametersByRef($_POST);
-		
+
 		// the real deal
 		return parent::execute();
 	}

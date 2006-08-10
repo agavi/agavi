@@ -1,6 +1,7 @@
 <?php return array(
 	array(
 		'message' => 'Document root, no rewrite, called root',
+		'parseMethod' => 'parseApacheModuleNoRewrite',
 		'input' => '/',
 		'prefix' => '/index.php',
 		'basePath' => '/',
@@ -46,6 +47,7 @@
 	),
 	array(
 		'message' => 'Document root, no rewrite, called index.php',
+		'parseMethod' => 'parseApacheModuleNoRewrite',
 		'input' => '/',
 		'prefix' => '/index.php',
 		'basePath' => '/',
@@ -89,6 +91,7 @@
 	),
 	array(
 		'message' => 'Document root, no rewrite, called index.php with query',
+		'parseMethod' => 'parseApacheModuleNoRewrite',
 		'input' => '/',
 		'prefix' => '/index.php',
 		'basePath' => '/',
@@ -132,6 +135,7 @@
 	),
 	array(
 		'message' => 'Document root, no rewrite, called index.php with path info',
+		'parseMethod' => 'parseApacheModuleNoRewrite',
 		'input' => '/fubar',
 		'prefix' => '/index.php',
 		'basePath' => '/',
@@ -176,6 +180,7 @@
 	),
 	array(
 		'message' => 'Document root, no rewrite, called index.php with path info and query',
+		'parseMethod' => 'parseApacheModuleNoRewrite',
 		'input' => '/fubar',
 		'prefix' => '/index.php',
 		'basePath' => '/',
@@ -220,6 +225,7 @@
 	),
 	array(
 		'message' => 'Document root, rewritten, called root',
+		'parseMethod' => 'parseApacheModuleRewrite',
 		'input' => '/',
 		'prefix' => '',
 		'basePath' => '/',
@@ -266,6 +272,7 @@
 	),
 	array(
 		'message' => 'Document root, rewritten, called path',
+		'parseMethod' => 'parseApacheModuleRewrite',
 		'input' => '/fubar',
 		'prefix' => '',
 		'basePath' => '/',
@@ -312,6 +319,7 @@
 	),
 	array(
 		'message' => 'Document root, rewritten, called path with query',
+		'parseMethod' => 'parseApacheModuleRewrite',
 		'input' => '/fubar',
 		'prefix' => '',
 		'basePath' => '/',
