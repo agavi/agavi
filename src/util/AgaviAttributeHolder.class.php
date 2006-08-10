@@ -61,7 +61,6 @@ abstract class AgaviAttributeHolder extends AgaviParameterHolder
 	 */
 	public function clearAttributes()
 	{
-		$this->attributes = null;
 		$this->attributes = array();
 	}
 

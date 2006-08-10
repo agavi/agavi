@@ -109,6 +109,7 @@ abstract class AgaviConfigHandler extends AgaviParameterHolder
 	/**
 	 * Initialize this ConfigHandler.
 	 *
+	 * @param      string The path to a validation file for this config handler.
 	 * @param      array An associative array of initialization parameters.
 	 *
 	 * @throws     <b>AgaviInitializationException</b> If an error occurs while

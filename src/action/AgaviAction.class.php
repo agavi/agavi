@@ -15,7 +15,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * Action allows you to separate application and business logic from your
+ * AgaviAction allows you to separate application and business logic from your
  * presentation. By providing a core set of methods used by the framework,
  * automation in the form of security and validation can occur.
  *

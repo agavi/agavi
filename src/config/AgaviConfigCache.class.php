@@ -108,6 +108,8 @@ final class AgaviConfigCache
 	 * to the Agavi "core.app_dir" application setting.
 	 *
 	 * @param      string A filesystem path to a configuration file.
+	 * @param      string An optional context name for which the config should be
+	 *                    read.
 	 *
 	 * @return     string An absolute filesystem path to the cache filename
 	 *                    associated with this specified configuration file.
