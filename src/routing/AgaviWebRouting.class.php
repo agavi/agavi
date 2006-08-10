@@ -80,6 +80,30 @@ class AgaviWebRouting extends AgaviRouting
 
 	}
 
+	/**
+	 * Returns the base for two strings (the part at the beginning of both which
+	 * is equal)
+	 *
+	 * @param      string The base string.
+	 * @param      string The string which should be compared to the base string.
+	 * @param      int    The number of characters which are equal.
+	 *
+	 * @return     string The equal part at the beginning of both strings.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	protected function getStringBase($baseString, $compString, &$equalAmount = 0)
+	{
+		$base = '';
+		for($i = 0; isset($baseString[$i]) && isset($compString[$i]) && $baseString[$i] == $compString[$i]; ++$i) {
+			$base .= $baseString[$i];
+			$equalAmount = $i;
+		}
+
+		return $base;
+	}
+
 	protected function getIsRewritten()
 	{
 		return (isset($_SERVER['REDIRECT_URL']) && isset($_SERVER['PATH_INFO']))
@@ -158,14 +182,10 @@ class AgaviWebRouting extends AgaviRouting
 
 		$sn = $_SERVER['SCRIPT_NAME'];
 
-		$this->prefix = '';
-		for($i = 0; isset($sn[$i]) && isset($ru[$i]) && $sn[$i] == $ru[$i]; ++$i) {
-			$this->prefix .= $sn[$i];
-			$appendFrom = $i;
-		}
+		$this->prefix = $this->getStringBase($sn, $ru, $appendFrom);
 
-		$this->prefix .= substr($_SERVER['SCRIPT_NAME'], $appendFrom + 1);
-		$this->input = substr($ru, $i);
+		$this->prefix .= substr($sn, $appendFrom + 1);
+		$this->input = substr($ru, $appendFrom + 1);
 
 		if(!$this->input) {
 			$this->input = "/";
@@ -204,10 +224,7 @@ class AgaviWebRouting extends AgaviRouting
 
 		$sn = $_SERVER['SCRIPT_NAME'];
 
-		$this->prefix = '';
-		for($i = 0; isset($sn[$i]) && isset($reqUri[$i]) && $sn[$i] == $reqUri[$i]; ++$i) {
-			$this->prefix .= $sn[$i];
-		}
+		$this->prefix = $this->getStringBase($sn, $reqUri);
 
 		if(substr($this->prefix, -1, 1) == '/') {
 			$this->prefix = substr($this->prefix, 0, strlen($this->prefix)-1);
@@ -235,14 +252,10 @@ class AgaviWebRouting extends AgaviRouting
 
 		$sn = $_SERVER['SCRIPT_NAME'];
 
-		$this->prefix = '';
-		for($i = 0; isset($sn[$i]) && isset($ru[$i]) && $sn[$i] == $ru[$i]; ++$i) {
-			$this->prefix .= $sn[$i];
-			$appendFrom = $i;
-		}
+		$this->prefix = $this->getStringBase($sn, $ru, $appendFrom);
 
-		$this->prefix .= substr($_SERVER['SCRIPT_NAME'], $appendFrom + 1);
-		$this->input = substr($ru, $i);
+		$this->prefix .= substr($sn, $appendFrom + 1);
+		$this->input = substr($ru, $appendFrom + 1);
 
 		if(!$this->input) {
 			$this->input = '/';
