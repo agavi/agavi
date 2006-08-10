@@ -78,6 +78,8 @@ class AgaviWebRouting extends AgaviRouting
 
 		$this->$parsingMethod($parameters);
 
+		$this->sources['_SERVER'] = new AgaviRoutingArraySource($_SERVER);
+
 	}
 
 	/**
@@ -159,8 +161,6 @@ class AgaviWebRouting extends AgaviRouting
 			$this->input = "/";
 		}
 
-		$this->sources = array_merge($this->sources, $_SERVER);
-
 		$this->basePath = $this->prefix;
 
 		if(substr($this->basePath, -1, 1) != '/') {
@@ -190,8 +190,6 @@ class AgaviWebRouting extends AgaviRouting
 		if(!$this->input) {
 			$this->input = "/";
 		}
-
-		$this->sources = array_merge($this->sources, $_SERVER);
 
 		$this->basePath = str_replace('\\', '/', dirname($this->prefix));
 
@@ -260,8 +258,6 @@ class AgaviWebRouting extends AgaviRouting
 		if(!$this->input) {
 			$this->input = '/';
 		}
-
-		$this->sources = array_merge($this->sources, $_SERVER);
 
 		$this->basePath = str_replace('\\', '/', dirname($this->prefix));
 
