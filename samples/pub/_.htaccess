@@ -20,4 +20,4 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule (.*) index.php/$1 [QSA,L]
 # if you're running Apache with CGI, use this instead and pass "123qwe" (or whatever you use) as the value for the WebRouting configuration parameter "path_info_parameter" in factories.xml
-# RewriteRule ^$ index.php?123qwe=/$1 [QSA,L]
+# RewriteRule (.*) index.php?123qwe=/$1 [QSA,L]
