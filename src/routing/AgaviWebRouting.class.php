@@ -106,6 +106,26 @@ class AgaviWebRouting extends AgaviRouting
 		return $base;
 	}
 
+	/*
+	 * Returns the requested url (the request uri without the query string) and
+	 * urldecodes it.
+	 *
+	 * @param      string The request URI
+	 *
+	 * @return     string The decoded URL
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	protected function getRequestUrl($requestUri)
+	{
+		if(($p = strpos($requestUri, '?')) !== false) {
+			$requestUri = substr($requestUri, 0, $p);
+		}
+
+		return urldecode($requestUri);
+	}
+
 	protected function getIsRewritten()
 	{
 		return (isset($_SERVER['REDIRECT_URL']) && isset($_SERVER['PATH_INFO']))
@@ -147,12 +167,7 @@ class AgaviWebRouting extends AgaviRouting
 	protected function parseApacheModuleRewrite()
 	{
 
-		$ru = $_SERVER['REQUEST_URI'];
-
-		if(($p = strpos($ru, '?')) !== false) {
-			$ru = substr($ru, 0, $p);
-		}
-		$ru = urldecode($ru);
+		$ru = $this->getRequestUrl($_SERVER['REQUEST_URI']);
 
 		$this->prefix =  substr($ru, 0, -strlen($_SERVER['PATH_INFO']));
 		$this->input = substr($ru, strlen($this->prefix));
@@ -173,12 +188,7 @@ class AgaviWebRouting extends AgaviRouting
 	protected function parseApacheModuleNoRewrite()
 	{
 
-		$ru = $_SERVER['REQUEST_URI'];
-
-		if(($p = strpos($ru, '?')) !== false) {
-			$ru = substr($ru, 0, $p);
-		}
-		$ru = urldecode($ru);
+		$ru = $this->getRequestUrl($_SERVER['REQUEST_URI']);
 
 		$sn = $_SERVER['SCRIPT_NAME'];
 
@@ -241,12 +251,7 @@ class AgaviWebRouting extends AgaviRouting
 	protected function parseApacheCgiNoRewrite()
 	{
 
-		$ru = $_SERVER['REQUEST_URI'];
-
-		if(($p = strpos($ru, '?')) !== false) {
-			$ru = substr($ru, 0, $p);
-		}
-		$ru = urldecode($ru);
+		$ru = $this->getRequestUrl($_SERVER['REQUEST_URI']);
 
 		$sn = $_SERVER['SCRIPT_NAME'];
 
