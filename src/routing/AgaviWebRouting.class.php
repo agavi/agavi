@@ -47,7 +47,9 @@ class AgaviWebRouting extends AgaviRouting
 		'use_trans_sid' => false
 	);
 
-
+	/**
+	 * @var        array An array of options for URL parsing
+	 */
 	protected $parseOptions = array();
 
 
@@ -127,6 +129,14 @@ class AgaviWebRouting extends AgaviRouting
 		return urldecode($requestUri);
 	}
 
+	/**
+	 * Indicates whether or not the incomming URL was rewritten or not.
+	 *
+	 * @return     bool True if the incomming URL was rewritten, otherwise false.
+	 *
+	 * @author     Veikko Mäkinen <mail@veikkomakinen.com>
+	 * @since      0.11.0
+	 */
 	protected function getIsRewritten()
 	{
 		return (isset($_SERVER['REDIRECT_URL']) && isset($_SERVER['PATH_INFO']))
@@ -134,6 +144,15 @@ class AgaviWebRouting extends AgaviRouting
 			|| isset($this->parseOptions['path_info_parameter']);
 	}
 
+	/**
+	 * Makes an educated guess about the proper parse method to be used
+	 * to handle the request parsing.
+	 *
+	 * @return     string The name of the parse method to be used.
+	 *
+	 * @author     Veikko Mäkinen <mail@veikkomakinen.com>
+	 * @since      0.11.0
+	 */
 	public function determineMethod($parameters)
 	{
 		$isRewritten = $this->getIsRewritten();
@@ -157,6 +176,14 @@ class AgaviWebRouting extends AgaviRouting
 		return $parsingMethod;
 	}
 
+	/**
+	 * Parses and returns a URL for the server.
+	 *
+	 * @return     string A URL for the server.
+	 *
+	 * @author     Veikko Mäkinen <mail@veikkomakinen.com>
+	 * @since      0.11.0
+	 */
 	protected function serverUrl()
 	{
 		$protocol = 'http' . (isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on' ? 's' : '');
@@ -165,6 +192,15 @@ class AgaviWebRouting extends AgaviRouting
 		return $protocol . '://' . $name . $port;
 	}
 
+	/**
+	 * Parses route information for PHP as Apache module
+	 * and mod_rewrite
+	 *
+	 * @return     void
+	 *
+	 * @author     Veikko Mäkinen <mail@veikkomakinen.com>
+	 * @since      0.11.0
+	 */
 	protected function parseApacheModuleRewrite()
 	{
 
@@ -186,6 +222,14 @@ class AgaviWebRouting extends AgaviRouting
 		$this->baseHref = $this->serverUrl() . $this->basePath;
 	}
 
+	/**
+	 * Parses route information for PHP as Apache module
+	 *
+	 * @return     void
+	 *
+	 * @author     Veikko Mäkinen <mail@veikkomakinen.com>
+	 * @since      0.11.0
+	 */
 	protected function parseApacheModuleNoRewrite()
 	{
 
@@ -212,6 +256,15 @@ class AgaviWebRouting extends AgaviRouting
 
 	}
 
+	/**
+	 * Parses route information for PHP as Apache CGI
+	 * and mod_rewrite
+	 *
+	 * @return     void
+	 *
+	 * @author     Veikko Mäkinen <mail@veikkomakinen.com>
+	 * @since      0.11.0
+	 */
 	protected function parseApacheCgiRewrite()
 	{
 		$reqUri = $_SERVER['REQUEST_URI'];
@@ -249,6 +302,14 @@ class AgaviWebRouting extends AgaviRouting
 
 	}
 
+	/**
+	 * Parses route information for PHP as Apache CGI
+	 *
+	 * @return     void
+	 *
+	 * @author     Veikko Mäkinen <mail@veikkomakinen.com>
+	 * @since      0.11.0
+	 */
 	protected function parseApacheCgiNoRewrite()
 	{
 
@@ -275,6 +336,31 @@ class AgaviWebRouting extends AgaviRouting
 
 	}
 
+	/**
+	 * Parses route information for MS IIS with ISAPI_Rewrite
+	 *
+	 * @return     void
+	 *
+	 * @author     Veikko Mäkinen <mail@veikkomakinen.com>
+	 * @since      0.11.0
+	 */
+	protected function parseMsIisRewrite()
+	{
+		throw new AgaviInitializationException('Unimplemented route parsing method.');
+	}
+
+	/**
+	 * Parses route information for MS IIS
+	 *
+	 * @return     void
+	 *
+	 * @author     Veikko Mäkinen <mail@veikkomakinen.com>
+	 * @since      0.11.0
+	 */
+	protected function parseMsIisNoRewrite()
+	{
+		throw new AgaviInitializationException('Unimplemented route parsing method.');
+	}
 
 	/**
 	 * Retrieve the base path where the application's root sits
