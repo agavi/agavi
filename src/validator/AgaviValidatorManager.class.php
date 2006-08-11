@@ -176,10 +176,18 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 		$this->result = AgaviValidator::SUCCESS;
 
 		$allSucceededFields = array();
+		$requestMethod = $this->getContext()->getRequest()->getMethod();
+		$executedValidators = 0;
 		foreach($this->children as $validator) {
-			$affectedFields = $validator->getAffectedFields();
+			if(!$validator->validatesInMethod($requestMethod)) {
+				continue;
+			}
+
+			++$executedValidators;
+
 			$v_ret = $validator->execute($parameters);
 			$this->result = max($this->result, $v_ret);
+			$affectedFields = $validator->getAffectedFields();
 
 			if($v_ret == AgaviValidator::SUCCESS) {
 				$allSucceededFields = array_merge($affectedFields, $allSucceededFields);
@@ -199,15 +207,25 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 			}
 		}
 
+		$ma = $this->getContext()->getRequest()->getModuleAccessor();
+		$aa = $this->getContext()->getRequest()->getActionAccessor();
+
 		$mode = $this->getParameter('mode', 'normal');
-		if(count($this->children) == 0 && $mode == 'strict') {
-			// strict mode and no validators defined -> clear the parameters
+
+		if($executedValidators == 0 && $mode == 'strict') {
+			// strict mode and no validators executed -> clear the parameters
+			$maParam = $parameters->getParameter($ma);
+			$aaParam = $parameters->getParameter($aa);
 			$parameters->clearParameters();
+			if($maParam) {
+				$parameters->setParameter($ma, $maParam);
+			}
+			if($aaParam) {
+				$parameters->setParameter($aa, $aaParam);
+			}
 		}
 
 		if($mode == 'strict' || $mode == 'tainted') {
-			$ma = $this->getContext()->getRequest()->getModuleAccessor();
-			$aa = $this->getContext()->getRequest()->getActionAccessor();
 			$asf = array_flip($allSucceededFields);
 			foreach($parameters->getParameters() as $name => $param) {
 				if(!isset($asf[$name]) && $name != $ma && $name != $aa) {

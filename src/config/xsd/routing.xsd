@@ -61,6 +61,7 @@
     <xs:attribute name="action" type="xs:string" />
     <xs:attribute name="callback" type="xs:string" />
     <xs:attribute name="source" type="xs:string" />
+    <xs:attribute name="method" type="xs:string" />
   </xs:complexType>
 
 </xs:schema>

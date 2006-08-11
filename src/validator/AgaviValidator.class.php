@@ -96,6 +96,11 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	protected $validationParameters = null;
 
 	/**
+	 * @var        array The request methods where this validator should validate
+	 */
+	protected $requestMethods = array();
+
+	/**
 	 * Returns the base path of this validator.
 	 * 
 	 * @return     AgaviVirtualArrayPath The basepath of this validator
@@ -157,6 +162,26 @@ abstract class AgaviValidator extends AgaviParameterHolder
 		return $this->name;
 	}
 
+
+	/**
+	 * Checks whether this validator validates in the given request method.
+	 *
+	 * @param      string The request method.
+	 *
+	 * @return     bool Whether the validator validates.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function validatesInMethod($requestMethod)
+	{
+		if(count($this->requestMethods) > 0) {
+			return in_array($requestMethod, $this->requestMethods);
+		} else {
+			return true;
+		}
+	}
+
 	/**
 	 * constructor
 	 * 
@@ -176,6 +201,13 @@ abstract class AgaviValidator extends AgaviParameterHolder
 		if(!isset($parameters['provides']) or !is_array($parameters['provides'])) {
 			$parameters['provides'] = (isset($parameters['provides']) and strlen($parameters['provides'])) ? split(',', $parameters['provides']) : array();
 		}
+
+		if(isset($parameters['method'])) {
+			foreach(explode('|', $parameters['method']) as $method) {
+				$this->requestMethods[] = trim($method);
+			}
+		}
+		
 		parent::__construct($parameters);
 		// we need a reference here, so when looping happens in a parent 
 		// we always have the right base

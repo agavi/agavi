@@ -194,7 +194,7 @@ abstract class AgaviRouting
 				$defaultOpts['parent'] = $parent;
 			}
 		} else {
-			$defaultOpts = array('name' => uniqid (rand()), 'stopping' => true, 'output_type' => null, 'module' => null, 'action' => null, 'parameters' => array(), 'ignores' => array(), 'defaults' => array(), 'childs' => array(), 'callback' => null, 'imply' => false, 'cut' => null, 'source' => null, 'parent' => $parent, 'reverseStr' => '', 'nostops' => array(), 'anchor' => self::ANCHOR_NONE);
+			$defaultOpts = array('name' => uniqid (rand()), 'stopping' => true, 'output_type' => null, 'module' => null, 'action' => null, 'parameters' => array(), 'ignores' => array(), 'defaults' => array(), 'childs' => array(), 'callback' => null, 'imply' => false, 'cut' => null, 'source' => null, 'method' => array(), 'parent' => $parent, 'reverseStr' => '', 'nostops' => array(), 'anchor' => self::ANCHOR_NONE);
 		}
 
 		if(isset($options['defaults'])) {
@@ -478,6 +478,7 @@ abstract class AgaviRouting
 		$ot = null;
 		$ma = $req->getModuleAccessor();
 		$aa = $req->getActionAccessor();
+		$requestMethod = $req->getMethod();
 
 //		$routes = array_keys($this->routes);
 
@@ -497,90 +498,92 @@ abstract class AgaviRouting
 			foreach($routes as $key) {
 				$route =& $this->routes[$key];
 				$opts =& $route['opt'];
-				if($opts['callback'] && !isset($route['cb'])) {
-					$cb = $opts['callback'];
-					$route['cb'] = new $cb();
-					$route['cb']->initialize($this->context, $route);
-				}
-
-				$match = array();
-				if($this->parseInput($route, $input, $match)) {
-					$ign = array();
-					if(count($opts['ignores']) > 0) {
-						$ign = array_flip($opts['ignores']);
+				if(count($opts['method']) == 0 || in_array($requestMethod, $opts['method'])) {
+					if($opts['callback'] && !isset($route['cb'])) {
+						$cb = $opts['callback'];
+						$route['cb'] = new $cb();
+						$route['cb']->initialize($this->context, $route);
 					}
 
-					foreach($opts['defaults'] as $key => $value) {
-						if(!isset($ign[$key]) && $value['val']) {
-							$vars[$key] = $value['val'];
+					$match = array();
+					if($this->parseInput($route, $input, $match)) {
+						$ign = array();
+						if(count($opts['ignores']) > 0) {
+							$ign = array_flip($opts['ignores']);
 						}
-					}
 
-					foreach($route['par'] as $param) {
-						if(isset($match[$param]) && $match[$param][1] != -1) {
-							$vars[$param] = $match[$param][0];
-						}
-					}
-
-					if($opts['callback']) {
-						if(!$route['cb']->onMatched($vars)) {
-							continue;
-						}
-					}
-
-					$matchedRoutes[] = $opts['name'];
-
-					foreach($match as $name => $m) {
-						if(is_string($name) && !isset($opts['defaults'][$name])) {
-							if(!isset($opts['defaults'][$name])) {
-								$opts['defaults'][$name] = array('pre' => '', 'val' => '', 'post' => '');
+						foreach($opts['defaults'] as $key => $value) {
+							if(!isset($ign[$key]) && $value['val']) {
+								$vars[$key] = $value['val'];
 							}
-							$opts['defaults'][$name]['val'] = $m[0];
-						}
-					}
-
-					if($opts['module']) {
-						$vars[$ma] = $opts['module'];
-					}
-
-					if($opts['action']) {
-						$vars[$aa] = $opts['action'];
-					}
-
-
-					if($opts['output_type']) {
-						$ot = $opts['output_type'];
-					}
-
-					if($opts['cut'] || (count($opts['childs']) && $opts['cut'] === null)) {
-						if($route['opt']['source'] !== null) {
-							$s =& $this->sources[$route['opt']['source']];
-						} else {
-							$s =& $input;
 						}
 
-						$ni = '';
-						// if the route didn't match from the start of the input preserve the 'prefix'
-						if($match[0][1] > 0) {
-							$ni = substr($s, 0, $match[0][1]);
+						foreach($route['par'] as $param) {
+							if(isset($match[$param]) && $match[$param][1] != -1) {
+								$vars[$param] = $match[$param][0];
+							}
 						}
-						$ni .= substr($s, $match[0][1] + strlen($match[0][0]));
-						$s = $ni;
-					}
 
-					if(count($opts['childs'])) {
-						// our childs need to be processed next and stop processing 'afterwards'
-						$routeStack[] = $opts['childs'];
-						break;
-					}
+						if($opts['callback']) {
+							if(!$route['cb']->onMatched($vars)) {
+								continue;
+							}
+						}
 
-					if($opts['stopping']) {
-						break;
-					}
+						$matchedRoutes[] = $opts['name'];
 
-				} else {
-					if($opts['callback']) {
-						$route['cb']->onNotMatched();
+						foreach($match as $name => $m) {
+							if(is_string($name) && !isset($opts['defaults'][$name])) {
+								if(!isset($opts['defaults'][$name])) {
+									$opts['defaults'][$name] = array('pre' => '', 'val' => '', 'post' => '');
+								}
+								$opts['defaults'][$name]['val'] = $m[0];
+							}
+						}
+
+						if($opts['module']) {
+							$vars[$ma] = $opts['module'];
+						}
+
+						if($opts['action']) {
+							$vars[$aa] = $opts['action'];
+						}
+
+
+						if($opts['output_type']) {
+							$ot = $opts['output_type'];
+						}
+
+						if($opts['cut'] || (count($opts['childs']) && $opts['cut'] === null)) {
+							if($route['opt']['source'] !== null) {
+								$s =& $this->sources[$route['opt']['source']];
+							} else {
+								$s =& $input;
+							}
+
+							$ni = '';
+							// if the route didn't match from the start of the input preserve the 'prefix'
+							if($match[0][1] > 0) {
+								$ni = substr($s, 0, $match[0][1]);
+							}
+							$ni .= substr($s, $match[0][1] + strlen($match[0][0]));
+							$s = $ni;
+						}
+
+						if(count($opts['childs'])) {
+							// our childs need to be processed next and stop processing 'afterwards'
+							$routeStack[] = $opts['childs'];
+							break;
+						}
+
+						if($opts['stopping']) {
+							break;
+						}
+
+					} else {
+						if($opts['callback']) {
+							$route['cb']->onNotMatched();
+						}
 					}
 				}
 			}
