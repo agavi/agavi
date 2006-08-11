@@ -60,7 +60,7 @@ RewriteRule (.*) index.php/$1 [QSA,L]</programlisting></para>
 
         <para><programlisting>RewriteRule ^$ index.php?something=/ [QSA,L]</programlisting>and</para>
 
-        <para><programlisting>RewriteRule (.*) index.php?somethiPuing=/$1 [QSA,L]</programlisting>Then,
+        <para><programlisting>RewriteRule (.*) index.php?something=/$1 [QSA,L]</programlisting>Then,
         tell the WebRouting that you're using this rewrite method in
         <filename>factories.xml</filename>:</para>
 
