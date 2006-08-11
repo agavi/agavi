@@ -86,6 +86,7 @@ class WebResponseTest extends AgaviTestCase
 					'path' => 'p2',
 					'domain' => 'd2',
 					'secure' => false,
+					'httpOnly' => false,
 				),
 				'cookie 1' => array(
 					'value' => 'value 1',
@@ -93,6 +94,7 @@ class WebResponseTest extends AgaviTestCase
 					'path' => 'p1',
 					'domain' => 'd1',
 					'secure' => false,
+					'httpOnly' => false,
 				),
 			),
 		);
@@ -125,6 +127,7 @@ class WebResponseTest extends AgaviTestCase
 					'path' => 'p1',
 					'domain' => 'd1',
 					'secure' => false,
+					'httpOnly' => false,
 				),
 				'cookie 2' => array(
 					'value' => 'value 3',
@@ -269,7 +272,8 @@ class WebResponseTest extends AgaviTestCase
 			'lifetime' => 0,
 			'path' => '/',
 			'domain' => '',
-			'secure' => 0,
+			'secure' => false,
+			'httpOnly' => false,
 		);
 		$r->setCookie('cookieName', 'value');
 		$info = $r->exportInfo();
@@ -288,7 +292,8 @@ class WebResponseTest extends AgaviTestCase
 			'lifetime' => 1000,
 			'path' => '',
 			'domain' => 'foo.bar',
-			'secure' => 1,
+			'secure' => true,
+			'httpOnly' => false,
 		);
 		$info = $r->exportInfo();
 		$this->assertEquals($info_ex, $info['cookies']['cookieName2']);

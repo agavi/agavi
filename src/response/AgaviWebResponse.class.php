@@ -429,8 +429,8 @@ class AgaviWebResponse extends AgaviResponse
 		$lifetime = isset($lifetime) ? $lifetime : $this->cookieConfig['lifetime'];
 		$path     = isset($path)     ? $path     : $this->cookieConfig['path'];
 		$domain   = isset($domain)   ? $domain   : $this->cookieConfig['domain'];
-		$secure   = isset($secure)   ? $secure   : $this->cookieConfig['secure'];
-		$httpOnly = isset($httpOnly) ? $httpOnly : $this->cookieConfig['httpOnly'];
+		$secure   = (bool) (isset($secure)   ? $secure   : $this->cookieConfig['secure']);
+		$httpOnly = (bool) (isset($httpOnly) ? $httpOnly : $this->cookieConfig['httpOnly']);
 
 		$this->cookies[$name] = array(
 			'value' => $value,
@@ -520,7 +520,11 @@ class AgaviWebResponse extends AgaviResponse
 				$expire = time() - 3600 * 24;
 			}
 			
-			setcookie($name, $values['value'], $expire, $values['path'], $values['domain'], $values['secure'], $values['httpOnly']);
+			if(version_compare(phpversion(), '5.2', 'ge')) {
+				setcookie($name, $values['value'], $expire, $values['path'], $values['domain'], $values['secure'], $values['httpOnly']);
+			} else {
+				setcookie($name, $values['value'], $expire, $values['path'], $values['domain'], $values['secure']);
+			}
 		}
 	}
 
