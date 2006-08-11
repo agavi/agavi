@@ -252,17 +252,17 @@ abstract class AgaviConfigHandler extends AgaviParameterHolder
 			}
 		}
 		foreach($configurations as $cfg) {
-			if($environment !== null && $cfg->hasAttribute('environment') && in_array($environment, explode(' ', $cfg->getAttribute('environment'))) && !$cfg->hasAttribute('context')) {
+			if($environment !== null && $cfg->hasAttribute('environment') && in_array($environment, array_map('trim', explode(' ', $cfg->getAttribute('environment')))) && !$cfg->hasAttribute('context')) {
 				$configs[] = $cfg;
 			}
 		}
 		foreach($configurations as $cfg) {
-			if(!$cfg->hasAttribute('environment') && $context !== null && $cfg->hasAttribute('context') && in_array($context, explode(' ', $cfg->getAttribute('context')))) {
+			if(!$cfg->hasAttribute('environment') && $context !== null && $cfg->hasAttribute('context') && in_array($context, array_map('trim', explode(' ', $cfg->getAttribute('context'))))) {
 				$configs[] = $cfg;
 			}
 		}
 		foreach($configurations as $cfg) {
-			if($environment !== null && $cfg->hasAttribute('environment') && in_array($environment, explode(' ', $cfg->getAttribute('environment'))) && $context !== null && $cfg->hasAttribute('context') && in_array($context, explode(' ', $cfg->getAttribute('context')))) {
+			if($environment !== null && $cfg->hasAttribute('environment') && in_array($environment, array_map('trim', explode(' ', $cfg->getAttribute('environment')))) && $context !== null && $cfg->hasAttribute('context') && in_array($context, array_map('trim', explode(' ', $cfg->getAttribute('context'))))) {
 				$configs[] = $cfg;
 			}
 		}

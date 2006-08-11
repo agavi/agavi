@@ -71,7 +71,7 @@ class AgaviSettingConfigHandler extends AgaviConfigHandler
 				foreach($cfg->exception_templates->getChildren() as $exception_template) {
 					$tpl = $exception_template->getValue();
 					if($exception_template->hasAttribute('context')) {
-						foreach(explode(' ', $exception_template->getAttribute('context')) as $ctx) {
+						foreach(array_map('trim', explode(' ', $exception_template->getAttribute('context'))) as $ctx) {
 							$data['exception.templates.' . trim($ctx)] = $this->replaceConstants($tpl);
 						}
 					} else {
