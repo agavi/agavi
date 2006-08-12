@@ -40,6 +40,37 @@
     </section>
 
     <section>
+      <title>Prerequisites</title>
+
+      <para>Agavi's minimum requirement is PHP version 5.0.0 or newer. DOM,
+      Reflection and SPL extensions are required, but should be enabled by
+      default, unless you're using one of these Linux distros made by
+      <emphasis role="strikethrough">stupid morons</emphasis> smart people who
+      think they know better.</para>
+
+      <para><note>
+          <para>It should be pointed out that Agavi is not a framework for
+          beginners. To leverage the functionality and the advantages of it's
+          structure and philosophy, a good knowledge of PHP is required, and
+          it's highly recommended that you are familiar with concepts such as
+          MVC, and (web) application development in general.</para>
+        </note>Also, you usually need a web server, such as Apache, unless you
+      only want to write a console application. Agavi should work fine with
+      all web servers that support PHP. Apache versions 1 and 2 and Microsoft
+      Internet Information Server have been tested and verified to be
+      compatible with the framework and it's components, such as the
+      routing.</para>
+
+      <para>If you want to install Agavi via PEAR, you do, obviously, need
+      PEAR installed. If you'd like to grab it straight from the SVN
+      repository, you'll need a Subversion client installed, of course. Either
+      way, we recommend you have Phing installed, because creating a project,
+      actions, view and all these things by hand becomes utterly annoying over
+      time, and the command line utility uses Phing to relieve you of that
+      burden.</para>
+    </section>
+
+    <section>
       <title>Installation</title>
 
       <section>
