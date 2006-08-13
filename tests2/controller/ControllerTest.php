@@ -277,7 +277,6 @@ class ControllerTest extends AgaviTestCase
 		$this->assertSame($info_ex, $info);
 
 		$info_ex = array(
-			'fallback' =>								'html',
 			'parameters' =>							array(),
 			'renderer_parameters' =>		array(),
 			'renderer' =>								'AgaviPhpRenderer',

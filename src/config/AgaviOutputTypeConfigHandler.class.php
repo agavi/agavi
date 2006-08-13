@@ -72,7 +72,7 @@ class AgaviOutputTypeConfigHandler extends AgaviConfigHandler
 
 			foreach($cfg->output_types as $outputType) {
 				$name = $outputType->getAttribute('name');
-				$data[$name] = isset($data[$name]) ? $data[$name] : array_merge($cfg->output_types->getAttribute('default') != $name ? array('fallback' => $cfg->output_types->getAttribute('default')) : array(), array('parameters' => array(), 'renderer_parameters' => array()));
+				$data[$name] = isset($data[$name]) ? $data[$name] : array('parameters' => array(), 'renderer_parameters' => array());
 				if(isset($outputType->renderer)) {
 					$data[$name]['renderer'] = $outputType->renderer->getAttribute('class');
 				} else {
