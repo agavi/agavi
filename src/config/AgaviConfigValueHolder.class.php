@@ -71,7 +71,8 @@
 		}
 
 		/**
-		 * Adds a named children to this value.
+		 * Adds a named children to this value. If a children with the same name
+		 * already exists the given value will be appended to the children.
 		 *
 		 * @param      string The name of the child.
 		 * @param      AgaviConfigValueHolder The child value.
@@ -81,8 +82,12 @@
 		 */
 		public function addChildren($name, $children)
 		{
-			$this->$name = $children;
-			$this->__childs[$name] = $children;
+			if(!$this->hasChildren($name)) {
+				$this->$name = $children;
+				$this->__childs[$name] = $children;
+			} else {
+				$this->appendChildren($children);
+			}
 		}
 
 		/**
