@@ -224,17 +224,19 @@ abstract class AgaviOperatorValidator extends AgaviValidator implements AgaviIVa
 	 * Eexecutes the operators validate()-Method after checking the quantity
 	 * of child validators with checkValidSetup().
 	 * 
+	 * @param      AgaviParameterHolder The parameters which should be validated
+	 *
 	 * @return     int result of validation (SUCCESS, NONE, ERROR, CRITICAL)
 	 *
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
-	public function execute()
+	public function execute(AgaviParameterHolder $parameters)
 	{
 		// check if we have a valid setup of validators
 		$this->checkValidSetup();
 		
-		$result = parent::execute();
+		$result = parent::execute($parameters);
 		if($result != AgaviValidator::SUCCESS && !$this->getParameter('skip_errors') && $this->result == AgaviValidator::CRITICAL) {
 			/*
 			 * one of the child validators resulted with CRITICAL

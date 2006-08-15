@@ -44,7 +44,7 @@ class AgaviAndOperatorValidator extends AgaviOperatorValidator
 		$return = true;
 		
 		foreach($this->children as $child) {
-			$result = $child->execute();
+			$result = $child->execute($this->validationParameters);
 			$this->result = max($result, $this->result);
 			if($result != AgaviValidator::SUCCESS) {
 				// if one validator fails, the whole operator fails

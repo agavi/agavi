@@ -339,11 +339,13 @@ abstract class AgaviValidator extends AgaviParameterHolder
 				array_push($fields, $n);
 			}
 		}
-		
+
 		foreach($this->affectedFieldNames as $name) {
-			array_push($fields, $this->getParameter($name));
+			if($this->hasParameter($name)) {
+				array_push($fields, $this->getParameter($name));
+			}
 		}
-		
+
 		return array_unique($fields);
 	}
 

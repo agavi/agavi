@@ -55,13 +55,13 @@ class AgaviXoroperatorValidator extends AgaviOperatorValidator
 	 */
 	protected function validate()
 	{
-		$result1 = $this->children[0]->execute();
+		$result1 = $this->children[0]->execute($this->validationParameters);
 		if($result1 == AgaviValidator::CRITICAL) {
 			$this->result = $result1;
 			$this->throwError();
 			return false;
 		}
-		$result2 = $this->children[1]->execute();
+		$result2 = $this->children[1]->execute($this->validationParameters);
 		if($result2 == AgaviValidator::CRITICAL) {
 			$this->result = $result2;
 			$this->throwError();
