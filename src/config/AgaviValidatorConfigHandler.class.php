@@ -90,8 +90,13 @@ class AgaviValidatorConfigHandler extends AgaviConfigHandler
 
 			if(isset($cfg->validators)) {
 				$stdSeverity = $cfg->validators->getAttribute('severity', 'error');
-				foreach($cfg->validators as $validator) {
-					$code = $this->getValidatorArray($validator, $code, $stdSeverity, 'validatorManager');
+				foreach($cfg->getChildren() as $validators) {
+					if($validators->getName() == 'validators') {
+						$stdMethod = $validators->getAttribute('method');
+						foreach($validators as $validator) {
+							$code = $this->getValidatorArray($validator, $code, $stdSeverity, 'validatorManager', $stdMethod);
+						}
+					}
 				}
 			}
 		}
@@ -118,19 +123,25 @@ class AgaviValidatorConfigHandler extends AgaviConfigHandler
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function getValidatorArray($validator, $code, $stdSeverity, $parent) {
+	public function getValidatorArray($validator, $code, $stdSeverity, $parent, $stdMethod)
+	{
 		if(!isset($this->classMap[$validator->getAttribute('class')])) {
-			//throw new AgaviValidatorException('unknown validator found: '.$cfg->getAttribute('class'));
-			return $code;
+			$class = $validator->getAttribute('class');
+			if(!class_exists($class)) {
+				throw new AgaviValidatorException('unknown validator found: ' . $class);
+			}
+			$this->classMap[$class] = array('class' => $class, 'parameters' => array());
 		} else {
 			$class = $this->classMap[$validator->getAttribute('class')]['class'];
 		}
 
 		// setting up parameters
-		$parameters = array('severity' => $validator->getAttribute('severity', $stdSeverity));
-		if($validator->hasAttribute('error')) {
-			$parameters['error'] = $validator->getAttribute('error');
-		}
+		$parameters = array(
+			'severity' => $validator->getAttribute('severity', $stdSeverity),
+			'method' => $validator->getAttribute('method', $stdMethod),
+			);
+
+		$stdMethod = $parameters['method'];
 		$name = $validator->getAttribute('name', uniqid('val'.rand()));
 
 		$parameters = array_merge($this->classMap[$validator->getAttribute('class')]['parameters'], $parameters);
@@ -143,8 +154,9 @@ class AgaviValidatorConfigHandler extends AgaviConfigHandler
 											'$'.$parent.'->addChild($'.$name.');';
 
 			$childSeverity = $validator->validators->getAttribute('severity', $stdSeverity);
+			$childMethod = $validator->validators->getAttribute('method', $stdMethod);
 			foreach($validator->validators as $v) {
-				$code = $this->getValidatorArray($v, $code, $childSeverity, $name);
+				$code = $this->getValidatorArray($v, $code, $childSeverity, $name, $childMethod);
 			}
 				// create child validators
 		} else {
