@@ -76,7 +76,7 @@ class AgaviPhpRenderer extends AgaviRenderer
 		// render the decorator template and return the result
 		ob_start();
 
-		require($this->view->getDecoratorDirectory() . '/' . $this->view->getDecoratorTemplate() . $this->getExtension());
+		require($this->view->getDecoratorDirectory() . '/' . $this->buildTemplateName($this->view->getDecoratorTemplate()));
 
 		$retval = ob_get_contents();
 		ob_end_clean();
@@ -119,7 +119,7 @@ class AgaviPhpRenderer extends AgaviRenderer
 			// render directly to the client via Response
 			ob_start();
 
-			require($this->view->getDirectory() . '/' . $this->view->getTemplate() . $this->getExtension());
+			require($this->view->getDirectory() . '/' . $this->buildTemplateName($this->view->getTemplate()));
 
 			$this->response->setContent(ob_get_contents());
 			ob_end_clean();
@@ -128,7 +128,7 @@ class AgaviPhpRenderer extends AgaviRenderer
 			// render to variable
 			ob_start();
 
-			require($this->view->getDirectory() . '/' . $this->view->getTemplate() . $this->getExtension());
+			require($this->view->getDirectory() . '/' . $this->buildTemplateName($this->view->getTemplate()));
 
 			$retval = ob_get_contents();
 			ob_end_clean();

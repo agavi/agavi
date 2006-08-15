@@ -82,7 +82,7 @@ class AgaviPhptalRenderer extends AgaviRenderer
 		$mode = $view->getContext()->getController()->getRenderMode();
 		$engine->setTemplateRepository($view->getDirectory());
 
-		$engine->setTemplate($view->getTemplate() . $this->getExtension());
+		$engine->setTemplate($this->buildTemplateName($view->getTemplate()));
 		if($this->extractVars) {
 			foreach($view->getAttributes() as $key => $value) {
 				$engine->set($key, $value);
@@ -129,7 +129,7 @@ class AgaviPhptalRenderer extends AgaviRenderer
 		// render the decorator template and return the result
 		$engine->setTemplateRepository($view->getDecoratorDirectory());
 
-		$engine->setTemplate($view->getDecoratorTemplate() . $this->getExtension());
+		$engine->setTemplate($this->buildTemplateName($view->getDecoratorTemplate()));
 
 		$toSet = array();
 		// set the template resources

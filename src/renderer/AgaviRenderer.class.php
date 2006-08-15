@@ -189,6 +189,28 @@ abstract class AgaviRenderer implements AgaviIRenderingFilter
 	}
 	
 	/**
+	 * Build a template name based on "literal" flag in the template info.
+	 * Depending on whether or not the "literal" flag is set, the file extension
+	 * for this Renderer instance will be appended ("literal" false) or not (true)
+	 *
+	 * @param      array The (decorator) template info given by the View.
+	 *
+	 * @return     string A template file name.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function buildTemplateName($templateData)
+	{
+		list($file, $literal) = $templateData;
+		if($literal) {
+			return $file;
+		} else {
+			return $file . $this->getExtension();
+		}
+	}
+	
+	/**
 	 * Loop through all template slots and fill them in with the results of
 	 * presentation data.
 	 *
@@ -279,7 +301,7 @@ abstract class AgaviRenderer implements AgaviIRenderingFilter
 			return;
 		}
 		
-		$template = $view->getDirectory() . '/' . $view->getTemplate() . $this->getExtension();
+		$template = $view->getDirectory() . '/' . $this->buildTemplateName($view->getTemplate());
 		if(!is_readable($template)) {
 			// the template isn't readable
 			$error = 'The template "%s" does not exist or is unreadable';
@@ -289,7 +311,7 @@ abstract class AgaviRenderer implements AgaviIRenderingFilter
 
 		// check to see if this is a decorator template
 		if($view->isDecorator() && !(isset($oti['ignore_decorators']) && $oti['ignore_decorators'])) {
-			$template = $view->getDecoratorDirectory() . '/' . $view->getDecoratorTemplate() . $this->getExtension();
+			$template = $view->getDecoratorDirectory() . '/' . $this->buildTemplateName($view->getDecoratorTemplate());
 			if(!is_readable($template)) {
 				// the decorator template isn't readable
 				$error = 'The decorator template "%s" does not exist or is unreadable';

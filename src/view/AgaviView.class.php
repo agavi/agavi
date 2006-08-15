@@ -78,7 +78,7 @@ abstract class AgaviView extends AgaviAttributeHolder
 	protected $decoratorDirectory = null;
 	
 	/**
-	 * @var        string The Decorator template filename.
+	 * @var        array An array containing decorator filename and "literal" flag
 	 */
 	protected $decoratorTemplate = null;
 	
@@ -93,7 +93,7 @@ abstract class AgaviView extends AgaviAttributeHolder
 	protected $slots = array();
 	
 	/**
-	 * @var        string The template filename.
+	 * @var        array An array containing template file name and "literal" flag
 	 */
 	protected $template = null;
 	
@@ -256,17 +256,20 @@ abstract class AgaviView extends AgaviAttributeHolder
 	 * executing module's template sub-directory.
 	 *
 	 * @param      string An absolute or relative filesystem path to a template.
+	 * @param      bool   If set to true, the template name will be forced, i.e.
+	 *                    no extension defined by the Renderer or in the Output
+	 *                    Type configuration will be appended.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function setDecoratorTemplate($template)
+	public function setDecoratorTemplate($template, $literal = false)
 	{
 		if(AgaviToolkit::isPathAbsolute($template)) {
 			$this->decoratorDirectory = dirname($template);
-			$this->decoratorTemplate  = basename($template);
+			$this->decoratorTemplate  = array(basename($template), $literal);
 		} else {
-			$this->decoratorTemplate = $template;
+			$this->decoratorTemplate = array($template, $literal);
 		}
 
 		// set decorator status
@@ -352,11 +355,14 @@ abstract class AgaviView extends AgaviAttributeHolder
 	 * executing module's template sub-directory.
 	 *
 	 * @param      string An absolute or relative filesystem path to a template.
+	 * @param      bool   If set to true, the template name will be forced, i.e.
+	 *                    no extension defined by the Renderer or in the Output
+	 *                    Type configuration will be appended.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function setTemplate($template = null)
+	public function setTemplate($template = null, $literal = false)
 	{
 		if($template === null) {
 			$this->template = null;
@@ -364,9 +370,9 @@ abstract class AgaviView extends AgaviAttributeHolder
 		}
 		if(AgaviToolkit::isPathAbsolute($template)) {
 			$this->directory = dirname($template);
-			$this->template  = basename($template);
+			$this->template  = array(basename($template), $literal);
 		} else {
-			$this->template = $template;
+			$this->template = array($template, $literal);
 		}
 	}
 }

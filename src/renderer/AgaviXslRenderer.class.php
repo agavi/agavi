@@ -187,7 +187,7 @@ class AgaviXslRenderer extends AgaviRenderer
 			$this->setXml($this->xmlEngineAttributes, $this->singularVarName, $this->output);
 		}
 		
-		$template = $this->view->getDecoratorDirectory() . '/' . $this->view->getDecoratorTemplate() . $this->getExtension();
+		$template = $this->view->getDecoratorDirectory() . '/' . $this->buildTemplateName($this->view->getDecoratorTemplate());
 		
 		// Try to load the document
 		$this->errors = array();
@@ -288,7 +288,7 @@ class AgaviXslRenderer extends AgaviRenderer
 	 */
 	public function render()
 	{
-		$template = $this->view->getDirectory() . '/' . $this->view->getTemplate() . $this->getExtension();
+		$template = $this->view->getDirectory() . '/' . $this->buildTemplateName($this->view->getTemplate());
 		
 		// Try to load the document
 		$this->errors = array();
