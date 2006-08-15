@@ -89,6 +89,8 @@ abstract class AgaviRouting
 
 		$this->sources['_ENV'] = new AgaviRoutingArraySource($_ENV);
 		
+		$this->sources['_SERVER'] = new AgaviRoutingArraySource($_SERVER);
+		
 		if(AgaviConfig::get('core.use_security')) {
 			$this->sources['user'] = new AgaviRoutingUserSource($this->getContext()->getUser());
 		}

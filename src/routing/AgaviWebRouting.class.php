@@ -79,9 +79,6 @@ class AgaviWebRouting extends AgaviRouting
 		}
 
 		$this->$parsingMethod($parameters);
-
-		$this->sources['_SERVER'] = new AgaviRoutingArraySource($_SERVER);
-
 	}
 
 	/**
