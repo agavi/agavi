@@ -66,6 +66,16 @@ class AgaviActionStackEntry
 	private $next           = null;
 	
 	/**
+	 * @var        string The name of the View returned by the Action.
+	 */
+	private $viewName       = null;
+	
+	/**
+	 * @var        string Name of the module of the View returned by the Action.
+	 */
+	private $viewModuleName = null;
+	
+	/**
 	 * Class constructor.
 	 *
 	 * @param      string               A module name.
@@ -139,6 +149,58 @@ class AgaviActionStackEntry
 	public function getModuleName()
 	{
 		return $this->moduleName;
+	}
+	
+	/**
+	 * Retrieve this entry's module name.
+	 *
+	 * @return     string A module name.
+	 *
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
+	 */
+	public function getViewName()
+	{
+		return $this->viewName;
+	}
+	
+	/**
+	 * Retrieve this entry's module name.
+	 *
+	 * @return     string A module name.
+	 *
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
+	 */
+	public function getViewModuleName()
+	{
+		return $this->viewModuleName;
+	}
+	
+	/**
+	 * Retrieve this entry's module name.
+	 *
+	 * @return     string A module name.
+	 *
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
+	 */
+	public function setViewName($viewName)
+	{
+		$this->viewName = $viewName;
+	}
+	
+	/**
+	 * Retrieve this entry's module name.
+	 *
+	 * @return     string A module name.
+	 *
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
+	 */
+	public function setViewModuleName($viewModuleName)
+	{
+		$this->viewModuleName = $viewModuleName;
 	}
 	
 	/**

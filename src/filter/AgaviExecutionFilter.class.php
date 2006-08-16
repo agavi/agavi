@@ -63,6 +63,9 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 			// no View returned, so we don't render anything
 			return;
 		}
+		
+		$actionEntry->setViewModuleName($viewModule);
+		$actionEntry->setViewName($viewName);
 
 		// get the view instance
 		$viewInstance = $controller->getView($viewModule, $viewName);
