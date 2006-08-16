@@ -29,6 +29,7 @@
 			<autoload name="AgaviReturnArrayConfigHandler">%core.agavi_dir%/config/AgaviReturnArrayConfigHandler.class.php</autoload>
 			<autoload name="AgaviRoutingConfigHandler">%core.agavi_dir%/config/AgaviRoutingConfigHandler.class.php</autoload>
 			<autoload name="AgaviSettingConfigHandler">%core.agavi_dir%/config/AgaviSettingConfigHandler.class.php</autoload>
+			<autoload name="AgaviTranslatorsConfigHandler">%core.agavi_dir%/config/AgaviTranslatorsConfigHandler.class.php</autoload>
 			<autoload name="AgaviValidatorConfigHandler">%core.agavi_dir%/config/AgaviValidatorConfigHandler.class.php</autoload>
 
 			<!-- agavi/controller -->
@@ -116,6 +117,10 @@
 			<autoload name="AgaviMysqlSessionStorage">%core.agavi_dir%/storage/AgaviMysqlSessionStorage.class.php</autoload>
 			<autoload name="AgaviPostgresqlSessionStorage">%core.agavi_dir%/storage/AgaviPostgresqlSessionStorage.class.php</autoload>
 			<autoload name="AgaviSessionStorage">%core.agavi_dir%/storage/AgaviSessionStorage.class.php</autoload>
+
+			<!-- agavi/translation -->
+			<autoload name="AgaviITranslator">%core.agavi_dir%/translation/AgaviITranslator.interface.php</autoload>
+			<autoload name="AgaviTranslationManager">%core.agavi_dir%/translation/AgaviTranslationManager.class.php</autoload>
 
 			<!-- agavi/user -->
 			<autoload name="AgaviISecurityUser">%core.agavi_dir%/user/AgaviISecurityUser.interface.php</autoload>
