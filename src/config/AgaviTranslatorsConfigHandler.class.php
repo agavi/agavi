@@ -67,15 +67,15 @@ class AgaviTranslatorsConfigHandler extends AgaviConfigHandler
 
 			$iface = $type;
 
-			if(!class_exists($iface) && class_exists(sprintf('Agavi%Translator', ucfirst($iface)))) {
-				$iface = sprintf('Agavi%Translator', ucfirst($iface));
+			if(!class_exists($iface) && class_exists(sprintf('Agavi%sTranslator', ucfirst($iface)))) {
+				$iface = sprintf('Agavi%sTranslator', ucfirst($iface));
 			} else {
 				$err = sprintf('The translator for the domain specifies an unknown translator "%s" for the domain "%s"', $type, $domain);
 				throw new AgaviConfigurationException($err);
 			}
 
 			$data[] = sprintf('$this->translators[%s] = new %s();', var_export($domain, true), $iface);
-			$data[] = sprintf('$this->translators[%s]->initiliaze($this->getContext(), %s);', var_export($domain, true), var_export($params, true));
+			$data[] = sprintf('$this->translators[%s]->initialize($this->getContext(), %s);', var_export($domain, true), var_export($params, true));
 		}
 
 
