@@ -196,7 +196,7 @@ abstract class AgaviRouting
 				$defaultOpts['parent'] = $parent;
 			}
 		} else {
-			$defaultOpts = array('name' => uniqid (rand()), 'stopping' => true, 'output_type' => null, 'module' => null, 'action' => null, 'parameters' => array(), 'ignores' => array(), 'defaults' => array(), 'childs' => array(), 'callback' => null, 'imply' => false, 'cut' => null, 'source' => null, 'method' => array(), 'parent' => $parent, 'reverseStr' => '', 'nostops' => array(), 'anchor' => self::ANCHOR_NONE);
+			$defaultOpts = array('name' => uniqid (rand()), 'stopping' => true, 'output_type' => null, 'module' => null, 'action' => null, 'parameters' => array(), 'ignores' => array(), 'defaults' => array(), 'childs' => array(), 'callback' => null, 'imply' => false, 'cut' => null, 'source' => null, 'method' => array(), 'locale' => null, 'parent' => $parent, 'reverseStr' => '', 'nostops' => array(), 'anchor' => self::ANCHOR_NONE);
 		}
 
 		if(isset($options['defaults'])) {
@@ -478,6 +478,7 @@ abstract class AgaviRouting
 
 		$vars = array();
 		$ot = null;
+		$locale = null;
 		$ma = $req->getModuleAccessor();
 		$aa = $req->getActionAccessor();
 		$requestMethod = $req->getMethod();
@@ -556,6 +557,10 @@ abstract class AgaviRouting
 							$ot = $opts['output_type'];
 						}
 
+						if($opts['locale']) {
+							$locale = $opts['locale'];
+						}
+
 						if($opts['cut'] || (count($opts['childs']) && $opts['cut'] === null)) {
 							if($route['opt']['source'] !== null) {
 								$s =& $this->sources[$route['opt']['source']];
@@ -594,6 +599,11 @@ abstract class AgaviRouting
 		// set the output type if necessary
 		if($ot !== null) {
 			$this->context->getController()->setOutputType($ot);
+		}
+
+		// set the locale if necessary
+		if($locale) {
+			$req->setLocale($locale);
 		}
 
 		// put the vars into the request

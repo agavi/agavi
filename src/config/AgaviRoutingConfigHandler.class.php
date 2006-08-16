@@ -105,6 +105,7 @@ class AgaviRoutingConfigHandler extends AgaviConfigHandler
 			if($route->hasAttribute('callback'))			$opts['callback']			= $route->getAttribute('callback');
 			if($route->hasAttribute('source'))				$opts['source']				= $route->getAttribute('source');
 			if($route->hasAttribute('method'))				$opts['method']				= array_map('trim', explode(' ', trim($route->getAttribute('method'))));
+			if($route->hasAttribute('locale'))				$opts['locale']				= $this->literalize($route->getAttribute('locale'));
 
 			if($route->hasChildren('ignores')) {
 				foreach($route->ignores as $ignore) {
