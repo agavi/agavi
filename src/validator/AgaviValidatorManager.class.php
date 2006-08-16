@@ -325,7 +325,7 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 			$affectedFields = $error[0]->getAffectedFields();
 			if(count($affectedFields) == 0) {
 				if(!isset($errors[''])) {
-					$errors[$fieldName] = array('messages' => array(), 'validators' => array());
+					$errors[''] = array('messages' => array(), 'validators' => array());
 				}
 
 				if($error[1]) {
