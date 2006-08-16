@@ -35,14 +35,19 @@ class AgaviTranslationManager
 	protected $context = null;
 
 	/**
-	 * @var        AgaviITranslator The translator implementation instance.
+	 * @var        array An array of the translator instances for the domains.
 	 */
-	protected $translator = null;
+	protected $translators = null;
 
 	/**
-	 * @var        string The current language.
+	 * @var        string The current locale.
 	 */
-	protected $currentLanguage = null;
+	protected $defaultLocale = null;
+
+	/**
+	 * @var        string The default domain which shall be used for translation.
+	 */
+	protected $defaultDomain = null;
 
 	/**
 	 * Initialize this TranslationManager.
@@ -57,30 +62,10 @@ class AgaviTranslationManager
 	{
 		$this->context = $context;
 
-		$obj = null;
-		if(isset($parameters['translator_interface'])) {
-			$iface = $parameters['translator_interface'];
-			if(class_exists($iface)) {
-				$obj = new $iface();
-			} elseif(class_exists(sprintf('Agavi%Translator', ucfirst($iface)))) {
-				$class = sprintf('Agavi%Translator', ucfirst($iface));
-				$obj = new $class();
-			}
-		} else {
-			// default translator 
-			$obj = new AgaviGettextTranslator();
-		}
+		require(AgaviConfigCache::checkConfig(AgaviConfig::get('core.config_dir') . '/translators.xml'));
 
-		$this->currentLanguage = isset($parameters['default_language']) ? $parameters['default_language'] : 'en_us';
-
-		if(!($obj instanceof AgaviITranslator)) {
-			throw new AgaviInitializationException('The translation interface implementation doesn\'t implement the AgaviITranslator interface');
-		}
-
-		$translatorParams = isset($parameters['translator_parameters']) ? $parameters['translator_parameters'] : array();
-		$obj->initialize($context, $translatorParams);
-
-		$this->translationInterface = $obj;
+		$this->defaultLocale = isset($parameters['default_locale']) ? $parameters['default_locale'] : 'en_us';
+		$this->defaultDomain = isset($parameters['default_domain']) ? $parameters['default_domain'] : '';
 	}
 
 	/**
@@ -97,33 +82,59 @@ class AgaviTranslationManager
 	}
 
 	/**
-	 * Sets the current language.
+	 * Sets the default locale.
 	 *
-	 * @param      string The language identifier.
-	 *
-	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function setLanguage($language)
-	{
-		$this->currentLangauge = $language;
-	}
-
-	/**
-	 * Retrieve the current language.
-	 *
-	 * @return     string The current language identifier.
+	 * @param      string The locale identifier.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function getLanguage()
+	public function setDefaultLocale($locale)
 	{
-		return $this->currentLangauge;
+		$this->defaultLocale = $locale;
 	}
 
 	/**
-	 * Translate a message into the current language.
+	 * Retrieve the default locale.
+	 *
+	 * @return     string The default locale identifier.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getDefaultLocale()
+	{
+		return $this->defaultLocale;
+	}
+
+	/**
+	 * Sets the default domain.
+	 *
+	 * @param      string The new default domain.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function setDefaultDomain($domain)
+	{
+		$this->defaultDomain = $domain;
+	}
+
+	/**
+	 * Retrieve the default domain.
+	 *
+	 * @return     string The default domain.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getDefaultDomain()
+	{
+		return $this->defaultDomain;
+	}
+
+	/**
+	 * Translate a message into the current locale.
 	 *
 	 * @param      string The message.
 	 *
@@ -132,9 +143,30 @@ class AgaviTranslationManager
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function _($message)
+	public function _($message, $domain = null, $locale = null, $parameters = null)
 	{
+		if($locale === null) {
+			$locale = $this->defaultLocale;
+		}
+		if($domain === null) {
+			$domain = $this->defaultDomain;
+		}
+		if($parameters === null) {
+		}
 
+		$domainParts = explode('.', $domain, 2);
+		$translatorDomain = $domainParts[0];
+		if(isset($this->translators[$translatorDomain])) {
+			$translatedMessage = $this->translators[$translatorDomain]->translate($message, $domain, $locale);
+			if(is_array($parameters)) {
+				$translatedMessage = vsprintf($translatedMessage, $parameters);
+			}
+		} else {
+			// TODO: select proper exception type
+			throw new AgaviException(sprintf('No translator exists for the domain "%s"', $translatorDomain));
+		}
+
+		return $translatedMessage;
 	}
 }
 
