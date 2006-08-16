@@ -40,22 +40,61 @@ class AgaviGettextTranslator extends AgaviBasicTranslator
 	{
 		parent::initialize($context);
 
+		if(isset($parameters['text_domains']) && is_array($parameters['text_domains'])) {
+			$first = true;
+			foreach($parameters['text_domains'] as $domain => $path) {
+				bindtextdomain($domain, $path);
+				if($first) {
+					textdomain($domain);
+					$first = false;
+				}
+			}
+		}
 	}
 
 	/**
 	 * Translates a message into the defined language.
 	 *
 	 * @param      string The message to be translated.
-	 * @param      string The language to which the message should be translated.
+	 * @param      string The domain of the message.
+	 * @param      string The locale to which the message should be translated.
 	 *
 	 * @return     string The translated message.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com
 	 * @since      0.11.0
 	 */
-	public function translate($message, $language)
+	public function translate($message, $domain, $locale)
 	{
+		if($locale) {
+			setlocale(LC_ALL, $locale);
+		}
+
+		if($domain) {
+			return dgettext($domain, $message);
+		} else {
+			return gettext($message);
+		}
+
+		if($locale) {
+			setlocale(LC_ALL, $this->getContext()->getRequest()->getLocale());
+		}
 	}
+
+	/**
+	 * This method gets called by the translation manager when the default locale
+	 * has been changed.
+	 *
+	 * @param      string The new default locale.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com
+	 * @since      0.11.0
+	 */
+	public function localeChanged($newLocale)
+	{
+		setlocale(LC_ALL, $newLocale);
+	}
+
 }
 
 ?>

@@ -58,6 +58,20 @@ abstract class AgaviBasicTranslator implements AgaviITranslator
 	{
 		$this->context = $context;
 	}
+
+	/**
+	 * This method gets called by the translation manager when the default locale
+	 * has been changed.
+	 *
+	 * @param      string The new default locale.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com
+	 * @since      0.11.0
+	 */
+	public function localeChanged($newLocale)
+	{
+	}
+
 }
 
 ?>

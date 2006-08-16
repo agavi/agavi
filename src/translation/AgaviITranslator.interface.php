@@ -53,14 +53,27 @@ interface AgaviITranslator
 	 * Translates a message into the defined language.
 	 *
 	 * @param      string The message to be translated.
-	 * @param      string The language to which the message should be translated.
+	 * @param      string The domain of the message.
+	 * @param      string The locale to which the message should be translated.
 	 *
 	 * @return     string The translated message.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com
 	 * @since      0.11.0
 	 */
-	public function translate($message, $language);
+	public function translate($message, $domain, $locale);
+
+	/**
+	 * This method gets called by the translation manager when the default locale
+	 * has been changed.
+	 *
+	 * @param      string The new default locale.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com
+	 * @since      0.11.0
+	 */
+	public function localeChanged($newLocale);
+
 }
 
 ?>

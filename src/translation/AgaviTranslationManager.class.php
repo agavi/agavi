@@ -63,9 +63,6 @@ class AgaviTranslationManager
 		$this->context = $context;
 
 		require(AgaviConfigCache::checkConfig(AgaviConfig::get('core.config_dir') . '/translators.xml'));
-
-		$this->defaultLocale = isset($parameters['default_locale']) ? $parameters['default_locale'] : 'en_us';
-		$this->defaultDomain = isset($parameters['default_domain']) ? $parameters['default_domain'] : '';
 	}
 
 	/**
@@ -82,16 +79,25 @@ class AgaviTranslationManager
 	}
 
 	/**
-	 * Sets the default locale.
+	 * Gets called when the locale of the request has changed.
+	 *
+	 * This method will call the localeChanged() callback of every assigned 
+	 * AgaviITranslator and stores the locale as default locale for each 
+	 * translation request.
 	 *
 	 * @param      string The locale identifier.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function setDefaultLocale($locale)
+	public function localeChanged($locale)
 	{
-		$this->defaultLocale = $locale;
+		if($locale != $this->defaultLocale) {
+			$this->defaultLocale = $locale;
+			foreach($this->translators as $translator) {
+				$translator->localeChanged($locale);
+			}
+		}
 	}
 
 	/**
@@ -145,9 +151,6 @@ class AgaviTranslationManager
 	 */
 	public function _($message, $domain = null, $locale = null, $parameters = null)
 	{
-		if($locale === null) {
-			$locale = $this->defaultLocale;
-		}
 		if($domain === null) {
 			$domain = $this->defaultDomain;
 		}
@@ -157,7 +160,7 @@ class AgaviTranslationManager
 		$domainParts = explode('.', $domain, 2);
 		$translatorDomain = $domainParts[0];
 		if(isset($this->translators[$translatorDomain])) {
-			$translatedMessage = $this->translators[$translatorDomain]->translate($message, $domain, $locale);
+			$translatedMessage = $this->translators[$translatorDomain]->translate($message, isset($domainParts[1]) ? $domainParts[1] : '', $locale);
 			if(is_array($parameters)) {
 				$translatedMessage = vsprintf($translatedMessage, $parameters);
 			}
