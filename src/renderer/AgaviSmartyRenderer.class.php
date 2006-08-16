@@ -155,7 +155,7 @@ class AgaviSmartyRenderer extends AgaviRenderer
 		$engine->assign_by_ref('this', $this);
 
 		// render the decorator template and return the result
-		$retval = $engine->fetch($view->getDecoratorDirectory() . '/' . $view->getDecoratorTemplate() . $this->getExtension());
+		$retval = $engine->fetch($view->getDecoratorDirectory() . '/' . $this->buildTemplateName($view->getDecoratorTemplate()));
 
 		return $retval;
 	}
