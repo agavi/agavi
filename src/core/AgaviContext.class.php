@@ -77,6 +77,12 @@ final class AgaviContext
 	protected $storage = null;
 	
 	/**
+	 * @var        AgaviTranslationManager A TranslationManager instance.
+	 * @since      0.11.0
+	 */
+	protected $translationManager = null;
+	
+	/**
 	 * @var        AgaviUser A User instance.
 	 */
 	protected $user = null;
@@ -439,6 +445,20 @@ final class AgaviContext
 	public function getStorage()
 	{
 		return $this->storage;
+	}
+
+	/**
+	 * Retrieve the translation manager.
+	 *
+	 * @return     AgaviTranslationManager The current TranslationManager
+	 *                                     implementation instance.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com
+	 * @since      0.11.0
+	 */
+	public function getTranslationManager()
+	{
+		return $this->translationManager;
 	}
 
 	/**

@@ -208,6 +208,17 @@ class AgaviFactoryConfigHandler extends AgaviConfigHandler
 				$data['routing_code'] =	'$this->routing = new ' . $data['routing']['class'] . '();' . "\n" .
 																'$this->routing->initialize($this, ' . var_export($data['routing']['params'], true) . ');' . "\n";
 			}
+
+			// Translation Manager
+			if(isset($cfg->translation_manager)) {
+				$data['translation_manager'] = isset($data['translation_manager']) ? $data['translation_manager'] : array('class' => null, 'params' => array());
+				$data['translation_manager']['class'] = $cfg->translation_manager->hasAttribute('class')? $cfg->translation_manager->getAttribute('class') : $data['translation_manager']['class'];
+				$data['translation_manager']['params'] = $this->getItemParameters($cfg->translation_manager, $data['translation_manager']['params']);
+
+				$data['translation_manager_code'] =	'$this->translationManager = new ' . $data['translation_manager']['class'] . '();' . "\n" .
+																'$this->translationManager->initialize($this, ' . var_export($data['translation_manager']['params'], true) . ');' . "\n";
+			}
+
 		}
 
 		// The order of this initialisiation code is fixed, to not change
@@ -226,7 +237,8 @@ class AgaviFactoryConfigHandler extends AgaviConfigHandler
 			'logger_manager' => AgaviConfig::get('core.use_logging', false),
 			'controller' => true,
 			'request' => true,
-			'routing' => true
+			'routing' => true,
+			'translation_manager' => AgaviConfig::get('core.use_translation', false),
 		);
 
 		$code = '';
