@@ -39,7 +39,7 @@ interface AgaviITranslator
 	public function getContext();
 
 	/**
-	 * Initialize this Filter.
+	 * Initialize this Translator.
 	 *
 	 * @param      AgaviContext The current application context.
 	 * @param      array        An associative array of initialization parameters
