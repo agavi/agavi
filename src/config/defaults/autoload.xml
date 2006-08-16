@@ -119,6 +119,8 @@
 			<autoload name="AgaviSessionStorage">%core.agavi_dir%/storage/AgaviSessionStorage.class.php</autoload>
 
 			<!-- agavi/translation -->
+			<autoload name="AgaviBasicTranslator">%core.agavi_dir%/translation/AgaviBasicTranslator.class.php</autoload>
+			<autoload name="AgaviGettextTranslator">%core.agavi_dir%/translation/AgaviGettextTranslator.class.php</autoload>
 			<autoload name="AgaviITranslator">%core.agavi_dir%/translation/AgaviITranslator.interface.php</autoload>
 			<autoload name="AgaviTranslationManager">%core.agavi_dir%/translation/AgaviTranslationManager.class.php</autoload>
 
