@@ -48,7 +48,10 @@ class AgaviTranslatorsConfigHandler extends AgaviConfigHandler
 
 		$translatorData = array();
 
+		$defaultDomain = '';
+
 		foreach($configurations as $cfg) {
+			$defaultDomain = $cfg->getAttribute('default_domain');
 			if(isset($cfg->translators)) {
 				foreach($cfg->translators as $translator) {
 					$domain = $translator->getAttribute('domain');
@@ -60,6 +63,10 @@ class AgaviTranslatorsConfigHandler extends AgaviConfigHandler
 				}
 			}
 		}
+
+		$data = array();
+
+		$data[] = sprintf('$this->defaultDomain = %s;', var_export($defaultDomain, true));
 
 		foreach($translatorData as $domain => $translator) {
 			$type = $translator['type'];

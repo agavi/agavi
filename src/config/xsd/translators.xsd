@@ -23,6 +23,7 @@
     <xs:sequence>
       <xs:element name="translator" type="translator" maxOccurs="unbounded" />
     </xs:sequence>
+    <xs:attribute name="default_domain" type="xs:string" use="required" />
   </xs:complexType>
   <xs:complexType name="translator">
     <xs:all>
