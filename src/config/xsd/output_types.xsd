@@ -51,7 +51,7 @@
       <xs:element name="controller" minOccurs="0" />
       <xs:element name="routing" minOccurs="0" />
       <xs:element name="request" minOccurs="0" />
-      <xs:element name="translation_manager" minOccurs="0" />
+      <xs:element name="translationManager" minOccurs="0" />
       <xs:element name="user" minOccurs="0" />
     </xs:all>
   </xs:complexType>
