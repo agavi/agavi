@@ -53,10 +53,10 @@ class AgaviTranslatorsConfigHandler extends AgaviConfigHandler
 				foreach($cfg->translators as $translator) {
 					$domain = $translator->getAttribute('domain');
 					if(!isset($translatorData[$domain])) {
-						$translatorData[$domain] = array('type' => $translator->getAttribute('type'), 'parameters' => array());
+						$translatorData[$domain] = array('type' => $translator->getAttribute('type'), 'params' => array());
 					}
 					$translatorData[$domain]['type'] = $translator->getAttribute('type', $translatorData[$domain]['type']);
-					$translatorData[$name]['params'] = $this->getItemParameters($translator, $translatorData[$name]['params']);
+					$translatorData[$domain]['params'] = $this->getItemParameters($translator, $translatorData[$domain]['params']);
 				}
 			}
 		}
