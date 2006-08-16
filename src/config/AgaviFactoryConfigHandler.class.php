@@ -235,10 +235,10 @@ class AgaviFactoryConfigHandler extends AgaviConfigHandler
 			'validator_manager' => true,
 			'user' => true,
 			'logger_manager' => AgaviConfig::get('core.use_logging', false),
+			'translation_manager' => AgaviConfig::get('core.use_translation', false),
 			'controller' => true,
 			'request' => true,
 			'routing' => true,
-			'translation_manager' => AgaviConfig::get('core.use_translation', false),
 		);
 
 		$code = '';
