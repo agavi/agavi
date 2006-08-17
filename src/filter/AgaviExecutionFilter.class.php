@@ -92,7 +92,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 			$renderer = $retval;
 		}
 		
-		if($renderer === null || !is_object($renderer) || !($renderer instanceof AgaviRenderer)) {
+		if(!($renderer instanceof AgaviRenderer)) {
 			$renderer = null;
 		
 			while(true) {

@@ -78,13 +78,13 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 		$req = $this->getContext()->getRequest();
 		
 		$populate = $req->getAttribute('populate', 'org.agavi.filter.FormPopulationFilter');
-		if(!(is_array($populate) || (is_object($populate) && $populate instanceof AgaviParameterHolder) || (in_array($req->getMethod(), $this->getParameter('methods')) && $populate !== false))) {
+		if(!(is_array($populate) || ($populate instanceof AgaviParameterHolder) || (in_array($req->getMethod(), $this->getParameter('methods')) && $populate !== false))) {
 			return;
 		}
 		
 		if(is_array($populate)) {
 			$p = new AgaviParameterHolder($populate);
-		} elseif(is_object($populate) && $populate instanceof AgaviParameterHolder) {
+		} elseif($populate instanceof AgaviParameterHolder) {
 			$p = $populate;
 		} else {
 			$p = $req;
