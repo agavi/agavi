@@ -302,7 +302,7 @@ final class AgaviContext
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function getModel($modelName, $moduleName = null, $parameters = array())
+	public function getModel($modelName, $moduleName = null, $parameters = null)
 	{
 		$class = $modelName . 'Model';
 		$rc = null;
@@ -314,7 +314,7 @@ final class AgaviContext
 				// it's not there. the hunt is on
 				$file = AgaviConfig::get('core.model_dir') . '/' . $modelName . 'Model.class.php';
 				if(is_readable($file)) {
-					require_once($file);
+					require($file);
 				} else {
 					// nothing so far. our last chance: the model name, without a "Model" postfix
 					if(!class_exists($modelName)) {
@@ -338,7 +338,7 @@ final class AgaviContext
 				// it's not there. the hunt is on
 				$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/models/' . $modelName . 'Model.class.php';
 				if(is_readable($file)) {
-					require_once($file);
+					require($file);
 					if(class_exists($moduleClass, false)) {
 						$class = $moduleClass;
 					}
@@ -368,8 +368,8 @@ final class AgaviContext
 		}
 		
 		// so if we're here, we found something, right? good.
-		if($rc === null) {
-			// no reflection class created yet.
+		
+		if(!$rc) {
 			$rc = new ReflectionClass($class);
 		}
 		
@@ -377,19 +377,34 @@ final class AgaviContext
 			// it's a singleton
 			if(!isset($this->singletonModelInstances[$class])) {
 				// no instance yet, so we create one
-				// we use this approach so we can pass constructor params, if given
-				$this->singletonModelInstances[$class] = call_user_func_array(array($rc, 'newInstance'), $parameters);
+				
+				if($parameters === null || $rc->getConstructor() === null) {
+					// it has an initialize() method, or no parameters were given, so we don't hand arguments to the constructor
+					$this->singletonModelInstances[$class] = new $class();
+				} else {
+					// we use this approach so we can pass constructor params or if it doesn't have an initialize() method
+					$this->singletonModelInstances[$class] = call_user_func_array(array($rc, 'newInstance'), $parameters);
+				}
 			}
 			$model = $this->singletonModelInstances[$class];
 		} else {
 			// create an instance
-			// we use this approach so we can pass constructor params, if given
-			$model = call_user_func_array(array($rc, 'newInstance'), $parameters);
+			if($parameters === null || $rc->getConstructor() === null) {
+				// it has an initialize() method, or no parameters were given, so we don't hand arguments to the constructor
+				$model = new $class();
+			} else {
+				// we use this approach so we can pass constructor params or if it doesn't have an initialize() method
+				$model = call_user_func_array(array($rc, 'newInstance'), $parameters);
+			}
 		}
 		
 		if(method_exists($model, 'initialize')) {
 			// pass the constructor params again. dual use for the win
-			$model->initialize($this, $parameters);
+			if($parameters !== null) {
+				$model->initialize($this, $parameters);
+			} else {
+				$model->initialize($this);
+			}
 		}
 		
 		return $model;
