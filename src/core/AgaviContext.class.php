@@ -400,11 +400,7 @@ final class AgaviContext
 		
 		if(method_exists($model, 'initialize')) {
 			// pass the constructor params again. dual use for the win
-			if($parameters !== null) {
-				$model->initialize($this, $parameters);
-			} else {
-				$model->initialize($this);
-			}
+			$model->initialize($this, (array) $parameters);
 		}
 		
 		return $model;
