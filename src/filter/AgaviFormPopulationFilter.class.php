@@ -136,15 +136,15 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 				
 				// there's an error with the element's name in the request? good. let's give the baby a class!
 				if($req->hasError($name)) {
-					$element->setAttribute('class', $element->getAttribute('class') . ' ' . $this->getParameter('error_class'));
+					$element->setAttribute('class', preg_replace('/\s*$/', $element->getAttribute('class'),  ' ' . $this->getParameter('error_class')));
 					// assign the class to all implicit labels
 					foreach($xpath->query('ancestor::label[not(@for)]', $element) as $label) {
-						$label->setAttribute('class', $label->getAttribute('class') . ' ' . $this->getParameter('error_class'));
+						$label->setAttribute('class', preg_replace('/\s*$/', $label->getAttribute('class'), ' ' . $this->getParameter('error_class')));
 					}
 					if(($id = $element->getAttribute('id')) != '') {
 						// assign the class to all explicit labels
 						foreach($xpath->query('descendant::label[@for="' . $id . '"]', $form) as $label) {
-							$label->setAttribute('class', $label->getAttribute('class') . ' ' . $this->getParameter('error_class'));
+							$label->setAttribute('class', preg_replace('/\s*$/', $label->getAttribute('class'), ' ' . $this->getParameter('error_class')));
 						}
 					}
 				}
