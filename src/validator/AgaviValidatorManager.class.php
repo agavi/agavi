@@ -56,10 +56,10 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 
 	/**
 	 * initializes the manager
-	 * 
+	 *
 	 * @param      AgaviContext contest
 	 * @param      array        parameters
-	 * 
+	 *
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
@@ -67,11 +67,11 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	{
 		$this->context = $context;
 		$this->setParameters($parameters);
-		
+
 		$this->dependencyManager = new AgaviDependencyManager();
 		$this->children = array();
 	}
-	
+
 	/**
 	 * Retrieve the current application context.
 	 *
@@ -87,11 +87,11 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 
 	/**
 	 * clears the validation manager for reuse
-	 * 
+	 *
 	 * clears the validator manager by resetting the dependency and error
 	 * manager and removing all validators after calling their shutdown
 	 * method so they can do a save shutdown.
-	 * 
+	 *
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
@@ -101,19 +101,19 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 		$this->errors = array();
 		$this->result = AgaviValidator::SUCCESS;
 
-		
+
 		foreach($this->children as $child) {
 			$child->shutdown();
 		}
-		
+
 		$this->children = array();
 	}
-	
+
 	/**
 	 * adds a new child validator
-	 * 
+	 *
 	 * @param      AgaviValidator new child validator
-	 * 
+	 *
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
@@ -121,12 +121,12 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	{
 		$this->children[] = $validator;
 	}
-	
+
 	/**
 	 * returns the request
-	 * 
+	 *
 	 * @return     AgaviRequest request
-	 * 
+	 *
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
@@ -134,12 +134,12 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	{
 		return $this->context->getRequest();
 	}
-	
+
 	/**
 	 * returns the dependency manager
-	 * 
+	 *
 	 * @return     AgaviDependencyManager dependency manager
-	 * 
+	 *
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
@@ -150,9 +150,9 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 
 	/**
 	 * get the base path of the validator
-	 * 
+	 *
 	 * @return     string base path
-	 * 
+	 *
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
@@ -162,11 +162,11 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 
 	/**
 	 * starts the validation process
-	 * 
+	 *
 	 * @param      AgaviParameterHolder The parameters which should be validated
-	 * 
+	 *
 	 * @return     bool true, if validation succeeded
-	 * 
+	 *
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
@@ -234,17 +234,30 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 			}
 		}
 
+		$ns = 'org.agavi.validation.result';
+
+		$prevErrors = $this->getContext()->getRequest()->getAttribute('errors', $ns);
+		$prevErrorsByValidator = $this->getContext()->getRequest()->getAttribute('errorsByValidator', $ns);
+
 		$errors = $this->getErrorArrayByInput();
 		$errorsByValidator = $this->getErrorArrayByValidator();
-		$ns = 'org.agavi.validation.result';
+
+		if (is_array($prevErrors)) {
+			$errors = array_merge($prevErrors, $errors);
+		}
+		if (is_array($prevErrorsByValidator)) {
+			$errorsByValidator = array_merge($prevErrorsByValidator, $errorsByValidator);
+		}
+
 		$this->getContext()->getRequest()->setAttribute('errors', $errors, $ns);
 		$this->getContext()->getRequest()->setAttribute('errorsByValidator', $errorsByValidator, $ns);
+
 		return $result;
 	}
-	
+
 	/**
 	 * shuts down the validation system
-	 * 
+	 *
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
@@ -254,12 +267,12 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 			$child->shutdown();
 		}
 	}
-	
+
 	/**
 	 * registers an array of validators
-	 * 
+	 *
 	 * @param      array array of validators
-	 * 
+	 *
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
@@ -269,20 +282,20 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 			$this->addChild($validator);
 		}
 	}
-	
+
 	/**
 	 * returns the array of errors sorted by validator names
-	 * 
+	 *
 	 * Format:
-	 * 
+	 *
 	 * array(
 	 *   <i>validatorName</i> => array(
 	 *     'error'  => <i>error</i>,
 	 *     'fields' => <i>array of field names</i>
 	 *   )
-	 * 
+	 *
 	 * @return     array array of errors
-	 * 
+	 *
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
@@ -295,12 +308,12 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 
 		return $errors;
 	}
-	
+
 	/**
 	 * returns the array of errors sorted by input names
-	 * 
+	 *
 	 * Format:
-	 * 
+	 *
 	 * array(
 	 *   <i>fieldName</i> => array(
 	 *     'messages'    => array(
@@ -310,11 +323,11 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	 *       <i>validatorName</i> => <i>validator</i>
 	 *     )
 	 * )
-	 * 
+	 *
 	 * <i>error message</i> is the first submitted error with type string.
-	 * 
+	 *
 	 * @return     array array of errors
-	 * 
+	 *
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
@@ -347,12 +360,12 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 
 		return $errors;
 	}
-	
+
 	/**
 	 * returns the result from the error manager
-	 * 
+	 *
 	 * @return     int result of the validation process
-	 * 
+	 *
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
@@ -363,10 +376,10 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 
 	/**
 	 * reports an error to the parent container
-	 * 
+	 *
 	 * @param      AgaviValidator The validator where the error occured
 	 * @param      string         An error message
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 * @see        AgaviIValidatorContainer::reportError
