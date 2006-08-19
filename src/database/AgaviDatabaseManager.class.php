@@ -93,7 +93,7 @@ class AgaviDatabaseManager
 		$this->context = $context;
 
 		// load database configuration
-		require_once(AgaviConfigCache::checkConfig(AgaviConfig::get('core.config_dir') . '/databases.xml'));
+		require(AgaviConfigCache::checkConfig(AgaviConfig::get('core.config_dir') . '/databases.xml'));
 	}
 
 	/**

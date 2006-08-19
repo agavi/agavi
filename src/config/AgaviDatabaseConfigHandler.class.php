@@ -82,7 +82,6 @@ class AgaviDatabaseConfigHandler extends AgaviConfigHandler
 				}
 
 				$databases[$name]['class'] = $db->hasAttribute('class') ? $db->getAttribute('class') : $databases[$name]['class'];
-				$databases[$name]['file'] = $db->hasAttribute('file') ? $db->getAttribute('file') : $databases[$name]['file'];
 
 				$databases[$name]['params'] = $this->getItemParameters($db, $databases[$name]['params']);
 			}
@@ -92,26 +91,6 @@ class AgaviDatabaseConfigHandler extends AgaviConfigHandler
 		$includes = array();
 
 		foreach($databases as $name => $db) {
-
-			if($db['file'] !== null) {
-				// we have a file to include
-				$file =  $db['file'];
-				$file =  $this->replaceConstants($file);
-				$file =  $this->replacePath($file);
-				$file =  realpath($file);
-
-				if(!is_readable($file)) {
-					// database file doesn't exist
-					$error = 'Configuration file "%s" specifies class "%s" with nonexistent or unreadable file "%s"';
-					$error = sprintf($error, $config, $db['class'], $file);
-
-					throw new AgaviParseException($error);
-				}
-
-				$tmp        = "require_once(%s);";
-				$includes[]  = sprintf($tmp, var_export($file, true));
-			}
-
 
 			// append new data
 			$tmp = "\$database = new %s();\n" .

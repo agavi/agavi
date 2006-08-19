@@ -436,11 +436,14 @@ abstract class AgaviController extends AgaviParameterHolder
 	 */
 	public function getAction($moduleName, $actionName)
 	{
+		static $loaded = array();
+		
 		$actionName = str_replace('.', '/', $actionName);
 		$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/actions/' . $actionName . 'Action.class.php';
 
-		if(file_exists($file)) {
-			require_once($file);
+		if(!isset($loaded[$file]) && file_exists($file)) {
+			require($file);
+			$loaded[$file] = true;
 		}
 
 		$longActionName = $actionName;
@@ -458,7 +461,7 @@ abstract class AgaviController extends AgaviParameterHolder
 			$class = $moduleName . '_' . $actionName . 'Action';
 		} elseif(class_exists($longActionName . 'Action', false)) {
 			$class = $longActionName . 'Action';
-		} elseif(class_exists($actionName . 'Action')) {
+		} elseif(class_exists($actionName . 'Action', false)) {
 			$class = $actionName . 'Action';
 		} else {
 			throw new AgaviException('Could not find Action "' . $longActionName . '" for module "' . $moduleName . '"');
@@ -524,10 +527,15 @@ abstract class AgaviController extends AgaviParameterHolder
 	 */
 	public function getView($moduleName, $viewName)
 	{
+		static $loaded;
+		
 		$viewName = str_replace('.', '/', $viewName);
 		$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/views/' . $viewName . 'View.class.php';
 
-		require_once($file);
+		if(!isset($loaded[$file]) && file_exists($file)) {
+			require($file);
+			$loaded[$file] = true;
+		}
 
 		$longViewName = $viewName;
 

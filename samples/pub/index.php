@@ -3,12 +3,12 @@
 // +---------------------------------------------------------------------------+
 // | An absolute filesystem path to the agavi/agavi.php script.                |
 // +---------------------------------------------------------------------------+
-require_once('INSERT PATH TO "agavi/agavi.php" HERE');
+require('INSERT PATH TO "agavi/agavi.php" HERE');
 
 // +---------------------------------------------------------------------------+
 // | An absolute filesystem path to our app/config.php script.                 |
 // +---------------------------------------------------------------------------+
-require_once('../app/config.php');
+require('../app/config.php');
 
 // +---------------------------------------------------------------------------+
 // | Initialize the framework. You may pass an environment name to this method.|

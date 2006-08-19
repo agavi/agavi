@@ -164,15 +164,12 @@ class AgaviPropelDatabase extends AgaviCreoleDatabase
 			if(!is_null($classPath)) {
 				set_include_path(get_include_path().PATH_SEPARATOR.$classPath);
 			}
-			require_once('creole/SQLException.php');
 			require_once('propel/Propel.php');
-			require_once('propel/util/Criteria.php');
-			require_once('propel/map/DatabaseMap.php');
 			// Everything looks good. Off to the races.
 			Propel::init($runtime);
 			$this->connection = Propel::getConnection();
 			$this->resource =& $this->connection->getResource();
-		} catch(SQLException $e) {
+		} catch(PropelException $e) {
 			// the connection's foobar'd
 			throw new AgaviDatabaseException($e->toString());
 		}

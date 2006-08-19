@@ -36,7 +36,7 @@ final class AgaviConfigCache
 	/**
 	 * @var        array An array of AgaviConfigHandlers
 	 */
-	private static $handlers = array();
+	private static $handlers = null;
 
 	/**
 	 * Load a configuration handler.
@@ -58,8 +58,9 @@ final class AgaviConfigCache
 	private static function callHandler($handler, $config, $cache, $context)
 	{
 
-		if(count(self::$handlers) == 0) {
+		if(self::$handlers === null) {
 			// we need to load the handlers first
+			self::$handlers = array();
 			self::loadConfigHandlers();
 		}
 
@@ -235,10 +236,10 @@ final class AgaviConfigCache
 	{
 		// since we only need the parser and handlers when the config is not cached
 		// it is sufficient to include them at this stage
-		require_once(AgaviConfig::get('core.agavi_dir') . '/config/AgaviConfigHandlersConfigHandler.class.php');
-		require_once(AgaviConfig::get('core.agavi_dir') . '/config/AgaviConfigValueHolder.class.php');
-		require_once(AgaviConfig::get('core.agavi_dir') . '/config/AgaviConfigParser.class.php');
-		require_once(AgaviConfig::get('core.agavi_dir') . '/config/AgaviXmlConfigParser.class.php');
+		require(AgaviConfig::get('core.agavi_dir') . '/config/AgaviConfigHandlersConfigHandler.class.php');
+		require(AgaviConfig::get('core.agavi_dir') . '/config/AgaviConfigValueHolder.class.php');
+		require(AgaviConfig::get('core.agavi_dir') . '/config/AgaviConfigParser.class.php');
+		require(AgaviConfig::get('core.agavi_dir') . '/config/AgaviXmlConfigParser.class.php');
 
 		// manually create our config_handlers.xml handler
 		self::$handlers['config_handlers.xml'] = new AgaviConfigHandlersConfigHandler();
@@ -249,7 +250,7 @@ final class AgaviConfigCache
 			$cfg = AgaviConfig::get('core.system_config_dir') . '/config_handlers.xml';
 		}
 		// application configuration handlers
-		require_once(AgaviConfigCache::checkConfig($cfg));
+		require(AgaviConfigCache::checkConfig($cfg));
 
 		// module level configuration handlers
 		// are gone :)

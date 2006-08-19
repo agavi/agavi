@@ -32,7 +32,9 @@
  * @version    $Id$
  */
 
-require_once('propel/Propel.php');
+// we don't need a _once here
+require('propel/Propel.php');
+
 Propel::init(AgaviPropelDatabase::getDefaultConfigPath());
 
 ?>

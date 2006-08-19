@@ -7,7 +7,7 @@
 -->
 <configurations>
 	<configuration>
-		<databases default="test2">
+		<databases default="test1">
 
 			<database name="test1" class="DCHTestDatabase">
 				<parameters>
@@ -17,13 +17,6 @@
 				</parameters>
 			</database>
 			
-			<database name="test2" class="DCHTestDatabase2" file="%core.app_dir%/lib/config/DatabaseHandlerTestDatabase2.class.php">
-				<parameters>
-					<parameter name="host">localhost2</parameter>
-					<parameter name="user">username2</parameter>
-					<parameter name="config">%core.app_dir%/config/project-conf.php</parameter>
-				</parameters>
-			</database>
 		</databases>
 	</configuration>
 	<configuration environment="env1 env2">

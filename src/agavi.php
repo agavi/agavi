@@ -28,7 +28,7 @@
  */
 
 // load the AgaviConfig class
-require_once(dirname(__FILE__) . '/config/AgaviConfig.class.php');
+require(dirname(__FILE__) . '/config/AgaviConfig.class.php');
 
 /*
 	Minimum requirement check
@@ -46,7 +46,7 @@ if(!version_compare(PHP_VERSION, AgaviConfig::get('core.minimum_php_version'), '
 AgaviConfig::set('core.agavi_dir', dirname(__FILE__), true, true);
 
 // default exception template
-AgaviConfig::set('exception.default_template', AgaviConfig::get('core.agavi_dir') . '/exception/templates/shiny.php', false);
+AgaviConfig::set('exception.default_template', AgaviConfig::get('core.agavi_dir') . '/exception/templates/shiny.php');
 
 // required files
 require(AgaviConfig::get('core.agavi_dir') . '/version.php');

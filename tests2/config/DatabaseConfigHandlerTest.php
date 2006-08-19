@@ -34,15 +34,7 @@ class DatabaseConfigHandlerTest extends ConfigHandlerTestBase
 		);
 		$this->assertSame($params_ex, $this->databases['test1']->params);
 
-		$this->assertType('DCHTestDatabase2', $this->databases['test2']);
-		$params_ex = array(
-			'host' => 'localhost2',
-			'user' => 'username2',
-			'config' => AgaviConfig::get('core.app_dir') . '/config/project-conf.php',
-		);
-		$this->assertSame($params_ex, $this->databases['test2']->params);
-
-		$this->assertReference($this->databases['test2'], $this->databases['default']);
+		$this->assertReference($this->databases['test1'], $this->databases['default']);
 	}
 
 	public function testOverwrite()
