@@ -430,7 +430,7 @@ abstract class AgaviRouting
 			}
 		}
 		// get the remaining params too
-		$params = array_merge($params, $np);
+		$params = array_merge($params, array_merge($np, array_filter($params, 'is_null')));
 
 		// $params = array_merge($defaults, $params);
 
