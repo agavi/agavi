@@ -247,7 +247,7 @@ abstract class AgaviRenderer implements AgaviIRenderingFilter
 			$index = $actionStack->getSize();
 			
 			// forward to the first slot action
-			$controller->forward($slot['module_name'], $slot['action_name']);
+			$controller->forward($slot['module_name'], $slot['action_name'], $slot['additional_params']);
 			
 			$response = $actionStack->getEntry($index)->getPresentation();
 			

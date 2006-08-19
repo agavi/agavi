@@ -66,7 +66,7 @@ class AgaviParameterHolder
 	 * @param      mixed  A default parameter value.
 	 *
 	 * @return     mixed A parameter value, if the parameter exists, otherwise
-	 *               null.
+	 *                   null.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -131,7 +131,7 @@ class AgaviParameterHolder
 	 * @param      string A parameter name.
 	 *
 	 * @return     string A parameter value, if the parameter was removed,
-	 *                otherwise null.
+	 *                    otherwise null.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -222,7 +222,7 @@ class AgaviParameterHolder
 	 * array, the associated value will be overridden.
 	 *
 	 * @param      array An associative array of parameters and their associated
-	 *              values.
+	 *                   values.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -239,14 +239,14 @@ class AgaviParameterHolder
 	 * array, the associated value will be overridden.
 	 *
 	 * @param      array An associative array of parameters and references to their
-	 *              associated values.
+	 *                   associated values.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
 	public function setParametersByRef(&$parameters)
 	{
-		foreach ($parameters as $key => &$value) {
+		foreach($parameters as $key => &$value) {
 			$this->parameters[$key] =& $value;
 		}
 	}

@@ -204,7 +204,7 @@ abstract class AgaviController extends AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function forward($moduleName, $actionName = 'Index')
+	public function forward($moduleName, $actionName = 'Index', $additionalParams = array())
 	{
 		$request = $this->context->getRequest();
 
@@ -263,7 +263,7 @@ abstract class AgaviController extends AgaviParameterHolder
 		$actionInstance = $this->getAction($moduleName, $actionName);
 
 		// add a new action stack entry
-		$actionEntry = $this->actionStack->addEntry($moduleName, $actionName, $actionInstance, new AgaviParameterHolder($request->getParameters()));
+		$actionEntry = $this->actionStack->addEntry($moduleName, $actionName, $actionInstance, new AgaviParameterHolder(array_merge($request->getParameters(), $additionalParams instanceof AgaviParameterHolder ? $additionalParams->getParameters() : (array) $additionalParams)));
 
 		// include the module configuration
 		// laoded only once due to the way import() works

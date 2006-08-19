@@ -315,11 +315,12 @@ abstract class AgaviView extends AgaviAttributeHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function setSlot($attributeName, $moduleName, $actionName)
+	public function setSlot($attributeName, $moduleName, $actionName, $additionalParams = array())
 	{
 		$this->slots[$attributeName] = array(
 			'module_name' => $moduleName,
-			'action_name' => $actionName
+			'action_name' => $actionName,
+			'additional_params' => $additionalParams,
 		);
 	}
 
