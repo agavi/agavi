@@ -176,6 +176,7 @@ class AgaviCachingExecutionFilter extends AgaviExecutionFilter
 	 */
 	public function execute($filterChain)
 	{
+		throw new AgaviException("I'm currently broken, and therefor utterly useless to you. Please don't beat me up. I'll be fixed before 0.11 is rolled, my developer promised me that. See you then, mate!\n\nOh and by the way... don't listen to what that 'caching.xsd' bloke tries to tell you, he has no idea that he's about to be retired early and replaced by something that doesn't suck as much.");
 		static $config = array();
 		static $context, $controller, $validatorManager;
 		
