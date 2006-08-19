@@ -42,7 +42,7 @@ function buildParamList($params)
 	$retval = array();
 	foreach($params as $key => $param) {
 		if(is_string($key)) {
-			$key = htmlentities(var_export($key, true) . ' => ');
+			$key = htmlspecialchars(var_export($key, true) . ' => ');
 		} else {
 			$key = '';
 		}
@@ -56,8 +56,11 @@ function buildParamList($params)
 			case 'resource':
 				$retval[] = $key . '[resource <em>' . get_resource_type($param) . '</em>]';
 				break;
+			case 'string':
+				$retval[] = $key . htmlspecialchars(var_export(strlen($param) > 51 ? substr_replace($param, ' … ', 25, -25) : $param, true));
+				break;
 			default:
-				$retval[] = $key . htmlentities(var_export($param, true));
+				$retval[] = $key . htmlspecialchars(var_export($param, true));
 		}
 	}
 	return implode(', ', $retval);
