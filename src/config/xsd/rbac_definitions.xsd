@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="configurations" type="configurations" />
+	<xs:complexType name="configurations">
+		<xs:sequence>
+			<xs:element name="configuration" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="roles" minOccurs="0" type="roles" />
+					</xs:sequence>
+					<xs:attribute name="environment" type="xs:string" />
+					<xs:attribute name="context" type="xs:string" />
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="parent" type="xs:string" />
+	</xs:complexType>
+
+	<xs:complexType name="roles">
+		<xs:sequence>
+			<xs:element name="role" type="role" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="role">
+		<xs:all>
+			<xs:element name="roles" type="roles" minOccurs="0" />
+			<xs:element name="permissions" type="permissions" minOccurs="1" />
+		</xs:all>
+		<xs:attribute name="name" type="xs:string" use="required" />
+	</xs:complexType>
+
+	<xs:complexType name="permissions">
+		<xs:sequence>
+			<xs:element maxOccurs="unbounded" name="permission">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:string" />
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+</xs:schema>

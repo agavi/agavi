@@ -26,6 +26,7 @@
 			<autoload name="AgaviLoggingConfigHandler">%core.agavi_dir%/config/AgaviLoggingConfigHandler.class.php</autoload>
 			<autoload name="AgaviModuleConfigHandler">%core.agavi_dir%/config/AgaviModuleConfigHandler.class.php</autoload>
 			<autoload name="AgaviOutputTypeConfigHandler">%core.agavi_dir%/config/AgaviOutputTypeConfigHandler.class.php</autoload>
+			<autoload name="AgaviRbacDefinitionConfigHandler">%core.agavi_dir%/config/AgaviRbacDefinitionConfigHandler.class.php</autoload>
 			<autoload name="AgaviReturnArrayConfigHandler">%core.agavi_dir%/config/AgaviReturnArrayConfigHandler.class.php</autoload>
 			<autoload name="AgaviRoutingConfigHandler">%core.agavi_dir%/config/AgaviRoutingConfigHandler.class.php</autoload>
 			<autoload name="AgaviSettingConfigHandler">%core.agavi_dir%/config/AgaviSettingConfigHandler.class.php</autoload>
@@ -127,6 +128,7 @@
 			<!-- agavi/user -->
 			<autoload name="AgaviISecurityUser">%core.agavi_dir%/user/AgaviISecurityUser.interface.php</autoload>
 			<autoload name="AgaviSecurityUser">%core.agavi_dir%/user/AgaviSecurityUser.class.php</autoload>
+			<autoload name="AgaviRbacSecurityUser">%core.agavi_dir%/user/AgaviRbacSecurityUser.class.php</autoload>
 
 			<!-- agavi/validator -->
 			<autoload name="AgaviIValidatorContainer">%core.agavi_dir%/validator/AgaviIValidatorContainer.interface.php</autoload>

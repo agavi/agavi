@@ -11,6 +11,7 @@ require_once(dirname(__FILE__) . '/../config/FactoryConfigHandlerTest.php');
 require_once(dirname(__FILE__) . '/../config/FilterConfigHandlerTest.php');
 require_once(dirname(__FILE__) . '/../config/LoggingConfigHandlerTest.php');
 require_once(dirname(__FILE__) . '/../config/ReturnArrayConfigHandlerTest.php');
+require_once(dirname(__FILE__) . '/../config/RbacdefinitionConfigHandlerTest.php');
 
 class ConfigTests
 {
@@ -30,6 +31,7 @@ class ConfigTests
 		$suite->addTestSuite('FilterConfigHandlerTest');
 		$suite->addTestSuite('LoggingConfigHandlerTest');
 		$suite->addTestSuite('ReturnArrayConfigHandlerTest');
+		$suite->addTestSuite('RbacdefinitionConfigHandlerTest');
 		return $suite;
 	}
 }

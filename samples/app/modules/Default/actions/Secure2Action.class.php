@@ -66,7 +66,7 @@ class Default_Secure2Action extends AgaviAction
 	public function getCredentials()
 	{
 		return array(
-			'a credential the user does not have!'
+			'photos.edit'
 		);
 	}
 }

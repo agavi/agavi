@@ -14,7 +14,7 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
-class AgaviSampleAppUser extends AgaviSecurityUser
+class AgaviSampleAppUser extends AgaviRbacSecurityUser
 {
 	public function login($username, $password)
 	{
@@ -28,7 +28,7 @@ class AgaviSampleAppUser extends AgaviSecurityUser
 		
 		$this->setAuthenticated(true);
 		$this->clearCredentials();
-		$this->addCredential('admin');
+		$this->grantRole('photographer');
 	}
 	
 	public function logout()

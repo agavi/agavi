@@ -95,6 +95,8 @@
 
 			<handler pattern="%core.config_dir%/logging.xml" validate="%core.agavi_dir%/config/xsd/logging.xsd" class="AgaviLoggingConfigHandler" />
 
+			<handler pattern="%core.config_dir%/rbac_definitions.xml" validate="%core.agavi_dir%/config/xsd/rbac_definitions.xsd" class="AgaviRbacDefinitionConfigHandler" />
+
 			<handler pattern="%core.config_dir%/routing.xml" validate="%core.agavi_dir%/config/xsd/routing.xsd" class="AgaviRoutingConfigHandler" />
 
 			<handler pattern="%core.config_dir%/translators.xml" validate="%core.agavi_dir%/config/xsd/translators.xsd" class="AgaviTranslatorsConfigHandler" />
