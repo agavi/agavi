@@ -408,7 +408,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 			}
 			return self::SUCCESS;
 
-		} elseif($base->left() != '') {
+		} elseif($base->left() !== '') {
 			/*
 			 * the next component in the base is no wildcard so we
 			 * just put it into our own base and validate further
