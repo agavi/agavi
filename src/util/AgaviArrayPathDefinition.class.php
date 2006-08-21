@@ -50,7 +50,10 @@ final class AgaviArrayPathDefinition
 		for($i = 0; $i < $c; ++$i) {
 			$part = $parts[$i];
 			$last = ($i+1 == $c);
-			if($part) {
+			if($part !== '' && $part !== null) {
+				if(is_numeric($part) && strpos($part, '.') === false && strpos($part, ',') === false && isset($a[intval($part)])) {
+					$part = intval($part);
+				}
 				if(isset($a[$part])) {
 					if($last) {
 						$oldValue =& $a[$part];
@@ -73,7 +76,10 @@ final class AgaviArrayPathDefinition
 		$a = $array;
 
 		foreach($parts as $part) {
-			if($part) {
+			if($part !== '' && $part !== null) {
+				if(is_numeric($part) && strpos($part, '.') === false && strpos($part, ',') === false && isset($a[intval($part)])) {
+					$part = intval($part);
+				}
 				if(isset($a[$part])) {
 					$a = $a[$part];
 				} else {
@@ -91,7 +97,10 @@ final class AgaviArrayPathDefinition
 		$a = &$array;
 
 		foreach($parts as $part) {
-			if($part) {
+			if($part !== '' && $part !== null) {
+				if(is_numeric($part) && strpos($part, '.') === false && strpos($part, ',') === false && isset($a[intval($part)])) {
+					$part = intval($part);
+				}
 				if(isset($a[$part]) && is_array($a)) {
 					$a = &$a[$part];
 				} else {
@@ -104,12 +113,15 @@ final class AgaviArrayPathDefinition
 		return $a;
 	}
 
-	public function setValueFromArray($parts, &$array, $value)
+	public static function setValueFromArray($parts, &$array, $value)
 	{
 		$a = &$array;
 
 		foreach($parts as $part) {
-			if($part) {
+			if($part !== '' && $part !== null) {
+				if(is_numeric($part) && strpos($part, '.') === false && strpos($part, ',') === false && isset($a[intval($part)])) {
+					$part = intval($part);
+				}
 				if(!isset($a[$part])) {
 					$a[$part] = array();
 				}
@@ -120,14 +132,13 @@ final class AgaviArrayPathDefinition
 		$a = $value;
 	}
 
-	public function getPartsFromPath($path)
+	public static function getPartsFromPath($path)
 	{
 		$parts = array();
 		$absolute = ($path[0] != '[');
 		if(($pos = strpos($path, '[')) === false) {
 			$parts[] = substr($path, 0, strlen($path));
-		}
-		else {
+		} else {
 			if($absolute) {
 				$parts[] = substr($path, 0, $pos);
 			}
