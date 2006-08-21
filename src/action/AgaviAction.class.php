@@ -51,7 +51,7 @@ abstract class AgaviAction extends AgaviAttributeHolder
 	/**
 	 * Retrieve the credential required to access this action.
 	 *
-	 * @return     mixed Data that indicates the level of security for this 
+	 * @return     mixed Data that indicates the level of security for this
 	 *                   action.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
@@ -116,24 +116,27 @@ abstract class AgaviAction extends AgaviAttributeHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function registerValidators($validatorManager)
+	public function registerValidators(AgaviValidatorManager $validatorManager)
 	{
 	}
 
 	/**
 	 * Manually validate files and parameters.
 	 *
-	 * @return     bool true, if validation completes successfully, otherwise 
+	 * @param      AgaviParameterHolder A parameter holder containing request
+	 *                                  parameters for this Action.
+	 *
+	 * @return     bool true, if validation completes successfully, otherwise
 	 *                  false.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function validate()
+	public function validate(AgaviParameterHolder $parameters)
 	{
 		return true;
 	}
-	
+
 	/**
 	 * Get the default View name if this Action doesn't serve the Request method.
 	 *

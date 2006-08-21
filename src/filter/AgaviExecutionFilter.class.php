@@ -48,22 +48,22 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 	{
 		// get the context, controller and validator manager
 		$controller = $this->context->getController();
-		
+
 		// get the current action instance
 		$actionEntry = $controller->getActionStack()->getLastEntry();
-		
+
 		// get the current action information
 		$moduleName = $actionEntry->getModuleName();
-		
-		
+
+
 		// execute the Action and get the View to execute
 		list($viewModule, $viewName) = $this->runAction($actionEntry);
-		
+
 		if($viewName === AgaviView::NONE) {
 			// no View returned, so we don't render anything
 			return;
 		}
-		
+
 		$actionEntry->setViewModuleName($viewModule);
 		$actionEntry->setViewName($viewName);
 
@@ -72,7 +72,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 
 		// initialize the view
 		$viewInstance->initialize($response, $actionEntry->getActionInstance()->getAttributes());
-		
+
 		// view initialization completed successfully
 		$executeMethod = 'execute' . $this->context->getName();
 		if(!method_exists($viewInstance, $executeMethod)) {
@@ -81,7 +81,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 		$key = $this->context->getRequest()->toggleLock();
 		$retval = $viewInstance->$executeMethod($actionEntry->getParameters());
 		$this->context->getRequest()->toggleLock($key);
-		
+
 		if(is_array($retval) && count($retval) >= 2) {
 			// View returned another Action to foward to. Skip rendering and go there.
 			$response->clear();
@@ -91,10 +91,10 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 		} else {
 			$renderer = $retval;
 		}
-		
+
 		if(!($renderer instanceof AgaviRenderer)) {
 			$renderer = null;
-		
+
 			while(true) {
 				$oti = $controller->getOutputTypeInfo();
 				if($oti['renderer'] !== null) {
@@ -122,7 +122,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 				}
 			}
 		}
-		
+
 		if($renderer !== null && $viewInstance->getTemplate() !== null) {
 			// create a new filter chain
 			$fcfi = $this->context->getFactoryInfo('filter_chain');
@@ -138,12 +138,12 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 			// go, go, go!
 			$filterChain->execute();
 		}
-		
+
 		if($controller->getRenderMode() == AgaviView::RENDER_VAR) {
 			$actionEntry->setPresentation($response);
 		}
 	}
-	
+
 	/**
 	 * Execute the Action
 	 *
@@ -159,12 +159,12 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 	protected function runAction(AgaviActionStackEntry $actionEntry)
 	{
 		$viewName = null;
-		
+
 		$controller = $this->context->getController();
 		$validatorManager = $this->context->getValidatorManager();
 		// clear the validator manager for reuse
 		$validatorManager->clear();
-		
+
 		// get the current action instance
 		$actionEntry = $controller->getActionStack()->getLastEntry();
 		$actionInstance = $actionEntry->getActionInstance();
@@ -172,17 +172,17 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 		// get the current action information
 		$moduleName = $actionEntry->getModuleName();
 		$actionName = $actionEntry->getActionName();
-		
+
 		// get the (already formatted) request method
 		$method = $this->context->getRequest()->getMethod();
-		
+
 		$useGenericMethods = false;
 		$executeMethod = 'execute' . $method;
 		if(!method_exists($actionInstance, $executeMethod)) {
 			$executeMethod = 'execute';
 			$useGenericMethods = true;
 		}
-		
+
 		if($useGenericMethods && !method_exists($actionInstance, $executeMethod) ) {
 			// this action will skip validation/execution for this method
 			// get the default view
@@ -217,7 +217,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 
 			// prevent access to Request::getParameters()
 			// process manual validation
-			if($actionInstance->$validateMethod() && $validated) {
+			if($actionInstance->$validateMethod($actionEntry->getParameters()) && $validated) {
 				// execute the action
 				$key = $this->context->getRequest()->toggleLock();
 				$viewName = $actionInstance->$executeMethod($actionEntry->getParameters());
@@ -233,7 +233,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 				$this->context->getRequest()->toggleLock($key);
 			}
 		}
-		
+
 		if(is_array($viewName)) {
 			// we're going to use an entirely different action for this view
 			$viewModule = $viewName[0];
@@ -246,7 +246,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 			$viewName = AgaviView::NONE;
 			$viewModule = AgaviView::NONE;
 		}
-		
+
 		if($viewName !== AgaviView::NONE && !$controller->viewExists($viewModule, $viewName)) {
 			// the requested view doesn't exist
 			$file = AgaviConfig::get('core.module_dir') . '/' . $viewModule . '/views/' . $viewName . 'View.class.php';
@@ -254,7 +254,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 			$error = sprintf($error, $viewModule, $viewName, $file);
 			throw new AgaviViewException($error);
 		}
-		
+
 		return array($viewModule, $viewName);
 	}
 }
