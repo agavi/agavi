@@ -75,6 +75,11 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 	{
 		$filterChain->execute($filterChain, $response);
 		
+		$outputTypes = $this->getParameter('output_types');
+		if(is_array($outputTypes) && !in_array($this->getContext()->getController()->getOutputType(), $outputTypes)) {
+			return;
+		}
+		
 		$req = $this->getContext()->getRequest();
 		
 		$populate = $req->getAttribute('populate', 'org.agavi.filter.FormPopulationFilter');
@@ -277,8 +282,12 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 		$this->setParameter('include_hidden_inputs', true);
 		$this->setParameter('remove_xml_prolog', true);
 		$this->setParameter('methods', array());
+		$this->setParameter('output_types', null);
+		
 		// initialize parent
 		parent::initialize($context, $parameters);
+		
+		$this->setParameter('methods', (array) $this->getParameter('methods'));
 	}
 }
 

@@ -61,6 +61,12 @@ class AgaviExecutionTimeFilter extends AgaviFilter implements AgaviIGlobalFilter
 			
 			$start = microtime(true);
 			$filterChain->execute();
+			
+			$outputTypes = $this->getParameter('output_types');
+			if(is_array($outputTypes) && !in_array($context->getController()->getOutputType(), $outputTypes)) {
+				return;
+			}
+			
 			$time = (microtime(true) - $start);
 			
 			
@@ -96,6 +102,7 @@ class AgaviExecutionTimeFilter extends AgaviFilter implements AgaviIGlobalFilter
 		// set defaults
 		$this->setParameter('comment', true);
 		$this->setParameter('replace', null);
+		$this->setParameter('output_types', null);
 
 		// initialize parent
 		parent::initialize($context, $parameters);
