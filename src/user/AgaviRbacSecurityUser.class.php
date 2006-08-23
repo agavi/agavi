@@ -117,6 +117,19 @@ class AgaviRbacSecurityUser extends AgaviSecurityUser implements AgaviISecurityU
 	}
 	
 	/**
+	 * Revoke all roles.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function revokeAllRoles()
+	{
+		foreach($this->roles as $role) {
+			$this->revokeRole($role);
+		}
+	}
+	
+	/**
 	 * Initialize this User.
 	 *
 	 * @param      AgaviContext An AgaviContext instance.

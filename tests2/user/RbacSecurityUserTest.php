@@ -27,6 +27,11 @@ class SimpleRbacSecurityUser extends AgaviRbacSecurityUser
 			)
 		);
 	}
+	
+	public function getCredentials()
+	{
+		return $this->credentials;
+	}
 }
 
 class RbacSecurityUserTest extends AgaviTestCase
@@ -65,6 +70,10 @@ class RbacSecurityUserTest extends AgaviTestCase
 		$this->_u->revokeRole('member');
 		$this->assertEquals($this->_u->getRoles(), array(2 => 'guest'));
 		$this->assertFalse($this->_u->hasCredentials('products.rate'));
+		
+		$this->_u->revokeAllRoles();
+		$this->assertEquals($this->_u->getRoles(), array());
+		$this->assertEquals($this->_u->getCredentials(), array());
 	}
 }
 ?>
