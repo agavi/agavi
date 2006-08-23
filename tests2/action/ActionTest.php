@@ -54,7 +54,7 @@ class ActionTest extends AgaviTestCase
 
 	public function testvalidate()
 	{
-		$this->assertTrue($this->_action->validate());
+		$this->assertTrue($this->_action->validate(new AgaviParameterHolder()));
 	}
 }
 ?>
