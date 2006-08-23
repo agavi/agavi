@@ -195,6 +195,14 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	public function __construct(AgaviIValidatorContainer $parent, $parameters = array(), $name = '')
 	{
 		$this->parentContainer = $parent;
+		
+		$from = $this;
+		while(!($from instanceof AgaviIValidatorManager)) {
+			$from = $from->getParentContainer();
+		}
+		$this->context = $from->getContext();
+		unset($from);
+		
 		if(!isset($parameters['depends']) or !is_array($parameters['depends'])) {
 			$parameters['depends'] = (isset($parameters['depends']) and strlen($parameters['depends'])) ? split(',', $parameters['depends']) : array();
 		}
@@ -214,6 +222,32 @@ abstract class AgaviValidator extends AgaviParameterHolder
 		$this->curBase = $parent->getBase();
 		$this->affectedFieldNames = array('param');
 		$this->name = $name;
+	}
+	
+	/**
+	 * Retrieve the current application context.
+	 *
+	 * @return     AgaviContext The current Context instance.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	final public function getContext()
+	{
+		return $this->context;
+	}
+
+	/**
+	 * Retrieve the parent container.
+	 *
+	 * @return     AgaviContext The current Context instance.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	final public function getParentContainer()
+	{
+		return $this->parentContainer;
 	}
 
 	/**

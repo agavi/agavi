@@ -24,9 +24,12 @@ class EmailValidatorWrapper extends AgaviEmailValidator
 
 class EmailValidatorTest extends AgaviTestCase
 {
+	protected $_vm, $validator;
+	
 	public function setUp()
 	{
-		$this->validator = new EmailValidatorWrapper(new AgaviValidatorManager());
+		$this->_vm = AgaviContext::getInstance('test')->getValidatorManager();
+		$this->validator = new EmailValidatorWrapper($this->_vm);
 	}
 
 	public function tearDown()
@@ -34,6 +37,11 @@ class EmailValidatorTest extends AgaviTestCase
 		unset($this->validator);
 	}
 
+	public function testgetContext()
+	{
+		$this->assertTrue($this->validator->getContext() instanceof AgaviContext);
+	}
+	
 	public function testexecute()
 	{
 		$good = array(
