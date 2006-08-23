@@ -101,6 +101,12 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	protected $requestMethods = array();
 
 	/**
+	 * @var        array The field names which have been validated by this 
+	 *                   validator
+	 */
+	protected $validatedFieldnames = array();
+
+	/**
 	 * Returns the base path of this validator.
 	 * 
 	 * @return     AgaviVirtualArrayPath The basepath of this validator
@@ -365,20 +371,24 @@ abstract class AgaviValidator extends AgaviParameterHolder
 		$base = $this->curBase->__toString();
 
 		if($this->hasParameter('affects')) {
-			$f = explode(',', $this->getParameter('affects'));
+			$f = array_map('trim', explode(' ', trim($this->getParameter('affects'))));
 			foreach($f as $n) {
 				if(!strlen($n)) {
 					continue;
 				}
-				array_push($fields, $n);
+				$fields[] = $n;
 			}
 		}
 
 		foreach($this->affectedFieldNames as $name) {
 			if($this->hasParameter($name)) {
-				array_push($fields, $this->getParameter($name));
+				$fields[] = $this->getParameter($name);
 			}
 		}
+
+		$fields = array_merge($fields, $this->validatedFieldnames);
+		// filter out empty strings
+		$fields = array_filter($fields, 'strlen');
 
 		return array_unique($fields);
 	}
@@ -426,10 +436,12 @@ abstract class AgaviValidator extends AgaviParameterHolder
 		$base = clone $base;
 		if($base->length() == 0) {
 			// we have an empty base so we do the actual validation
-			if(count($this->getParameter('depends')) > 0 and $this->parentContainer->getDependencyManager()->checkDependencies($this->getParameter('depends'), $this->curBase)) {
+			if(count($this->getParameter('depends')) > 0 && $this->parentContainer->getDependencyManager()->checkDependencies($this->getParameter('depends'), $this->curBase)) {
 				// dependencies not met, exit with success
 				return self::SUCCESS;
 			}
+
+			$this->validatedFieldnames[] = $this->curBase->__toString();
 
 			if(!$this->validate()) {
 				// validation failed, exit with configured error code
