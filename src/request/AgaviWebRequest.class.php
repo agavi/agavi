@@ -85,15 +85,15 @@ class AgaviWebRequest extends AgaviRequest
 	 */
 	public function getRelativeUrl()
 	{
-		if(isset($_SERVER['HTTP_X_REWRITE_URL'])) {
+		if(isset($_SERVER['HTTP_X_REWRITE_URL']) && strpos($_SERVER['SERVER_SOFTWARE'], 'Mircosoft-IIS') !== false) {
 			// Microsoft IIS with ISAPI_Rewrite
 			return $_SERVER['HTTP_X_REWRITE_URL'];
-		} elseif(isset($_SERVER['ORIG_PATH_INFO'])) {
+		} elseif(isset($_SERVER['ORIG_PATH_INFO']) && strpos($_SERVER['SERVER_SOFTWARE'], 'Mircosoft-IIS') !== false) {
 			// Microsoft IIS
 			return $_SERVER['ORIG_PATH_INFO'];
 		} else {
 			// Apache
-			return$_SERVER['REQUEST_URI'];
+			return $_SERVER['REQUEST_URI'];
 		}
 	}
 	
@@ -111,7 +111,7 @@ class AgaviWebRequest extends AgaviRequest
 		$ru = $this->getRelativeUrl();
 		$pos = strpos($ru, '?');
 		if($pos !== false) {
-			return substr($ru, 0, strpos($ru, '?'));
+			return substr($ru, 0, $pos);
 		} else {
 			return $ru;
 		}

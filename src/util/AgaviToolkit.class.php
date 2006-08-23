@@ -120,6 +120,30 @@ final class AgaviToolkit
 	}
 
 	/**
+	 * Returns the base for two strings (the part at the beginning of both which
+	 * is equal)
+	 *
+	 * @param      string The base string.
+	 * @param      string The string which should be compared to the base string.
+	 * @param      int    The number of characters which are equal.
+	 *
+	 * @return     string The equal part at the beginning of both strings.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public static function stringBase($baseString, $compString, &$equalAmount = 0)
+	{
+		$equalAmount = 0;
+		$base = '';
+		for($i = 0; isset($baseString[$i]) && isset($compString[$i]) && $baseString[$i] == $compString[$i]; ++$i) {
+			$base .= $baseString[$i];
+			$equalAmount = $i;
+		}
+		return $base;
+	}
+
+	/**
 	 * Deletes a specified path in the cache dir recursively. If a folder is given
 	 * the contents of this folder and all sub-folders get erased, but not the
 	 * folder itself.

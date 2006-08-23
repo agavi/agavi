@@ -52,6 +52,14 @@ class AgaviWebRouting extends AgaviRouting
 	 */
 	protected $parseOptions = array();
 
+	/**
+	 * @var        array An array of method names that can prepare the input data.
+	 */
+	protected $inputHandlers = array(
+		'handleApacheModule',
+		'handleApacheCgi',
+		'handleIis'
+	);
 
 	/**
 	 * Initialize the routing instance.
@@ -69,294 +77,158 @@ class AgaviWebRouting extends AgaviRouting
 		if(isset($parameters['path_info_parameter'])) {
 			$this->parseOptions['path_info_parameter'] = $parameters['path_info_parameter'];
 		}
-
-		parent::initialize($context, $parameters);
-
-		$parsingMethod = $this->determineMethod($parameters);
-
-		if (!method_exists($this, $parsingMethod)) {
-			throw new AgaviException('Trying to use non-existent method ('.$parsingMethod.') for routing information parsing.');
+		
+		if(!AgaviConfig::get("core.use_routing", false)) {
+			return;
 		}
-
-		$this->$parsingMethod($parameters);
+		
+		$parsed = $this->prepareInput();
+		
+		if(!$parsed) {
+			throw new AgaviException('No parser could be found to process the input. This might be due to your special Web Server or PHP configuration. Please refer to the manual for further assistance. As a quick workaround, disable the Routing - routes you specified can still be generated, the system will produce traditional URLs.');
+		}
+	}
+	
+	protected function prepareInput()
+	{
+		foreach($this->inputHandlers as $handler) {
+			if($this->$handler()) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
-	 * Returns the base for two strings (the part at the beginning of both which
-	 * is equal)
+	 * Parses route information for Apache as a module.
 	 *
-	 * @param      string The base string.
-	 * @param      string The string which should be compared to the base string.
-	 * @param      int    The number of characters which are equal.
-	 *
-	 * @return     string The equal part at the beginning of both strings.
-	 *
-	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	protected function getStringBase($baseString, $compString, &$equalAmount = 0)
-	{
-		$equalAmount = 0;
-		$base = '';
-		for($i = 0; isset($baseString[$i]) && isset($compString[$i]) && $baseString[$i] == $compString[$i]; ++$i) {
-			$base .= $baseString[$i];
-			$equalAmount = $i;
-		}
-
-		return $base;
-	}
-
-	/*
-	 * Returns the requested url (the request uri without the query string) and
-	 * urldecodes it.
-	 *
-	 * @param      string The request URI
-	 *
-	 * @return     string The decoded URL
-	 *
-	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	protected function getRequestUrl($requestUri)
-	{
-		if(($p = strpos($requestUri, '?')) !== false) {
-			$requestUri = substr($requestUri, 0, $p);
-		}
-
-		return urldecode($requestUri);
-	}
-
-	/**
-	 * Indicates whether or not the incomming URL was rewritten or not.
-	 *
-	 * @return     bool True if the incomming URL was rewritten, otherwise false.
+	 * @return     bool Whether or not the information could be parsed.
 	 *
 	 * @author     Veikko Mäkinen <mail@veikkomakinen.com>
+	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	protected function getIsRewritten()
+	protected function handleApacheModule()
 	{
-		return (isset($_SERVER['REDIRECT_URL']) && isset($_SERVER['PATH_INFO']))
-			|| (isset($_SERVER['HTTP_X_REWRITE_URL']) && ($_SERVER['HTTP_X_REWRITE_URL'] != $_SERVER['ORIG_PATH_INFO']))
-			|| isset($this->parseOptions['path_info_parameter']);
-	}
-
-	/**
-	 * Makes an educated guess about the proper parse method to be used
-	 * to handle the request parsing.
-	 *
-	 * @return     string The name of the parse method to be used.
-	 *
-	 * @author     Veikko Mäkinen <mail@veikkomakinen.com>
-	 * @since      0.11.0
-	 */
-	public function determineMethod($parameters)
-	{
-		$isRewritten = $this->getIsRewritten();
-		$serverApi = '';
-
-		//figure out server api
-		if(isset($_SERVER['HTTP_X_REWRITE_URL'])) {
-			$serverApi = 'MsIis'; // Microsoft IIS with ISAPI_Rewrite
+		if(isset($this->parseOptions['path_info_parameter']) || isset($_ENV['SERVER_SOFTWARE']) || !isset($_SERVER['SERVER_SOFTWARE']) || strpos($_SERVER['SERVER_SOFTWARE'], 'Apache') === false) {
+			return false;
 		}
-		elseif(empty($_SERVER['PATH_INFO']) && empty($_SERVER['PATH_TRANSLATED'])) {
-			$serverApi = 'ApacheCgi'; // Apache with CGI SAPI
-			$isRewritten = isset($this->parseOptions['path_info_parameter']) && strpos($_SERVER['argv'][0], $this->parseOptions['path_info_parameter'])==0;
-		} elseif(isset($_SERVER['ORIG_PATH_INFO'])) {
-			$serverApi = 'MsIis'; // Microsoft IIS
+		
+		$rq = $this->context->getRequest();
+		
+		$rewritten = (isset($_SERVER['REDIRECT_URL']) && isset($_SERVER['PATH_INFO']));
+		
+		$ru = urldecode($rq->getUrlPath());
+
+		if($rewritten) {
+			$this->prefix =  substr($ru, 0, -strlen($_SERVER['PATH_INFO']));
+			
+			$this->input = substr($ru, strlen($this->prefix));
+			
+			$this->basePath = $this->prefix;
 		} else {
-			$serverApi = 'ApacheModule'; // Apache
+			$sn = $_SERVER['SCRIPT_NAME'];
+
+			$this->prefix = AgaviToolkit::stringBase($sn, $ru, $appendFrom);
+			$this->prefix .= substr($sn, $appendFrom + 1);
+			
+			$this->input = substr($ru, $appendFrom + 1);
+			
+			$this->basePath = str_replace('\\', '/', dirname($this->prefix));
 		}
-
-		$parsingMethod = 'parse'.$serverApi . ($isRewritten ? '' : 'No') . 'Rewrite';
-
-		return $parsingMethod;
-	}
-
-	/**
-	 * Parses and returns a URL for the server.
-	 *
-	 * @return     string A URL for the server.
-	 *
-	 * @author     Veikko Mäkinen <mail@veikkomakinen.com>
-	 * @since      0.11.0
-	 */
-	protected function serverUrl()
-	{
-		$protocol = 'http' . (isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on' ? 's' : '');
-		$name = $_SERVER['SERVER_NAME'];
-		$port = (isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on' ? ($_SERVER['SERVER_PORT'] != 443 ? ':' . $_SERVER['SERVER_PORT'] : '') : ($_SERVER['SERVER_PORT'] != 80 ? ':' . $_SERVER['SERVER_PORT'] : ''));
-		return $protocol . '://' . $name . $port;
-	}
-
-	/**
-	 * Parses route information for PHP as Apache module
-	 * and mod_rewrite
-	 *
-	 * @return     void
-	 *
-	 * @author     Veikko Mäkinen <mail@veikkomakinen.com>
-	 * @since      0.11.0
-	 */
-	protected function parseApacheModuleRewrite()
-	{
-
-		$ru = $this->getRequestUrl($_SERVER['REQUEST_URI']);
-
-		$this->prefix =  substr($ru, 0, -strlen($_SERVER['PATH_INFO']));
-		$this->input = substr($ru, strlen($this->prefix));
-
+		
 		if(!$this->input) {
 			$this->input = "/";
 		}
-
-		$this->basePath = $this->prefix;
-
+		
 		if(substr($this->basePath, -1, 1) != '/') {
 			$this->basePath .= '/';
 		}
-
-		$this->baseHref = $this->serverUrl() . $this->basePath;
+		
+		$this->baseHref = $rq->getUrlScheme() . '://' . $rq->getUrlAuthority() . $this->basePath;
+		
+		return true;
 	}
-
+	
 	/**
-	 * Parses route information for PHP as Apache module
+	 * Parses route information for Apache as CGI.
 	 *
-	 * @return     void
+	 * @return     bool Whether or not the information could be parsed.
 	 *
 	 * @author     Veikko Mäkinen <mail@veikkomakinen.com>
+	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	protected function parseApacheModuleNoRewrite()
+	protected function handleApacheCgi()
 	{
-
-		$ru = $this->getRequestUrl($_SERVER['REQUEST_URI']);
-
+		if(!isset($_ENV['SERVER_SOFTWARE']) || !isset($_SERVER['SERVER_SOFTWARE']) || !empty($_SERVER['PATH_INFO']) || !empty($_SERVER['PATH_TRANSLATED']) || strpos($_SERVER['SERVER_SOFTWARE'], 'Apache') === false) {
+			return false;
+		}
+		
+		$rq = $this->context->getRequest();
+		
+		$rewritten = (isset($this->parseOptions['path_info_parameter']) && strpos($_SERVER['argv'][0], $this->parseOptions['path_info_parameter']) === 0);
+		
+		$ru = urldecode($rq->getUrlPath());
+		
 		$sn = $_SERVER['SCRIPT_NAME'];
-
-		$this->prefix = $this->getStringBase($sn, $ru, $appendFrom);
-
-		$this->prefix .= substr($sn, $appendFrom + 1);
-		$this->input = substr($ru, $appendFrom + 1);
-
-		if(!$this->input) {
-			$this->input = "/";
+		
+		$this->prefix = AgaviToolkit::stringBase($sn, $ru, $appendFrom);
+		
+		if($rewritten) {
+			if(substr($this->prefix, -1, 1) == '/') {
+				$this->prefix = substr($this->prefix, 0, strlen($this->prefix)-1);
+			}
+			
+			$pathStart = strpos($_SERVER['argv'][0], '=') + 1;
+			$firstAmpersand = strpos($_SERVER['argv'][0], '&');
+			if($firstAmpersand) {
+				$this->input = substr($_SERVER['argv'][0], $pathStart, $firstAmpersand-$pathStart);
+			}
+			else {
+				$this->input = substr($_SERVER['argv'][0], $pathStart);
+			}
+			
+			$this->basePath = $this->prefix;
+		} else {
+			$this->prefix .= substr($sn, $appendFrom + 1);
+			
+			$this->input = substr($ru, $appendFrom + 1);
+			
+			$this->basePath = str_replace('\\', '/', dirname($this->prefix));
 		}
-
-		$this->basePath = str_replace('\\', '/', dirname($this->prefix));
-
-		if(substr($this->basePath, -1, 1) != '/') {
-			$this->basePath .= '/';
-		}
-
-		$this->baseHref = $this->serverUrl() . $this->basePath;
-
-	}
-
-	/**
-	 * Parses route information for PHP as Apache CGI
-	 * and mod_rewrite
-	 *
-	 * @return     void
-	 *
-	 * @author     Veikko Mäkinen <mail@veikkomakinen.com>
-	 * @since      0.11.0
-	 */
-	protected function parseApacheCgiRewrite()
-	{
-		$reqUri = $_SERVER['REQUEST_URI'];
-
-		$pathParameter = $this->parseOptions['path_info_parameter'];
-
-		$pathStart = strpos($_SERVER['argv'][0], '=') + 1;
-		$firstAmpersand = strpos($_SERVER['argv'][0], '&');
-		if($firstAmpersand) {
-			$this->input = substr($_SERVER['argv'][0], $pathStart, $firstAmpersand-$pathStart);
-		}
-		else {
-			$this->input = substr($_SERVER['argv'][0], $pathStart);
-		}
-
+		
 		if(!$this->input) {
 			$this->input = '/';
 		}
-
-		$sn = $_SERVER['SCRIPT_NAME'];
-
-		$this->prefix = $this->getStringBase($sn, $reqUri);
-
-		if(substr($this->prefix, -1, 1) == '/') {
-			$this->prefix = substr($this->prefix, 0, strlen($this->prefix)-1);
-		}
-
-		$this->basePath = $this->prefix;
-
+		
 		if(substr($this->basePath, -1, 1) != '/') {
 			$this->basePath .= '/';
 		}
-
-		$this->baseHref = $this->serverUrl() . $this->basePath;
-
-	}
-
-	/**
-	 * Parses route information for PHP as Apache CGI
-	 *
-	 * @return     void
-	 *
-	 * @author     Veikko Mäkinen <mail@veikkomakinen.com>
-	 * @since      0.11.0
-	 */
-	protected function parseApacheCgiNoRewrite()
-	{
-
-		$ru = $this->getRequestUrl($_SERVER['REQUEST_URI']);
-
-		$sn = $_SERVER['SCRIPT_NAME'];
-
-		$this->prefix = $this->getStringBase($sn, $ru, $appendFrom);
-
-		$this->prefix .= substr($sn, $appendFrom + 1);
-		$this->input = substr($ru, $appendFrom + 1);
-
-		if(!$this->input) {
-			$this->input = '/';
-		}
-
-		$this->basePath = str_replace('\\', '/', dirname($this->prefix));
-
-		if(substr($this->basePath, -1, 1) != '/') {
-			$this->basePath .= '/';
-		}
-
-		$this->baseHref = $this->serverUrl() . $this->basePath;
-
-	}
-
-	/**
-	 * Parses route information for MS IIS with ISAPI_Rewrite
-	 *
-	 * @return     void
-	 *
-	 * @author     Veikko Mäkinen <mail@veikkomakinen.com>
-	 * @since      0.11.0
-	 */
-	protected function parseMsIisRewrite()
-	{
-		throw new AgaviInitializationException('Unimplemented route parsing method.');
+		
+		$this->baseHref = $rq->getUrlScheme() . '://' . $rq->getUrlAuthority() . $this->basePath;
+		
+		return true;
 	}
 
 	/**
 	 * Parses route information for MS IIS
 	 *
-	 * @return     void
+	 * @return     bool Whether or not the information could be parsed.
 	 *
 	 * @author     Veikko Mäkinen <mail@veikkomakinen.com>
+	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	protected function parseMsIisNoRewrite()
+	protected function handleIis()
 	{
-		throw new AgaviInitializationException('Unimplemented route parsing method.');
+		if(!isset($_SERVER['SERVER_SOFTWARE']) || strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') === false) {
+			return false;
+		}
+		
+		$rewritten = (isset($_SERVER['HTTP_X_REWRITE_URL']) && ($_SERVER['HTTP_X_REWRITE_URL'] != $_SERVER['ORIG_PATH_INFO']));
+		
+		throw new AgaviInitializationException('Unimplemented route parsing method for Microsoft Internet Information Server.');
 	}
 
 	/**

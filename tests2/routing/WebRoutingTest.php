@@ -30,7 +30,6 @@ class WebRoutingTest extends AgaviTestCase
 		$_GET = $export['_GET'];
 		$this->_r = new AgaviWebRouting();
 		$this->_r->initialize(AgaviContext::getInstance('test'), isset($export['init']) ? $export['init'] : array());
-		$this->assertEquals($export['parseMethod'], $this->_r->determineMethod(array()), '[' . $export['message'] . '] determineMethod()');
 		$this->assertEquals($export['prefix'], $this->_r->getPrefix(), '[' . $export['message'] . '] getPrefix() ('.$export['prefix'].':'.$this->_r->getPrefix().')');
 		$this->assertEquals($export['input'], $this->_r->getInput(), '[' . $export['message'] . '] getInput()('.$export['input'].':'.$this->_r->getInput().')');
 		$this->assertEquals($export['basePath'], $this->_r->getBasePath(), '[' . $export['message'] . '] getBasePath()');
