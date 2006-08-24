@@ -77,11 +77,6 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 */
 	protected $curBase = null;
 	
-	/**
-	 * @var        array list of parameter names with names of affected fields
-	 *                   in case of failure of the validator (besides 'affects')
-	 */
-	protected $affectedFieldNames = array();
 
 	/**
 	 * @var        string The name of this validator instance. This will either
@@ -226,7 +221,6 @@ abstract class AgaviValidator extends AgaviParameterHolder
 		// we need a reference here, so when looping happens in a parent 
 		// we always have the right base
 		$this->curBase = $parent->getBase();
-		$this->affectedFieldNames = array('param');
 		$this->name = $name;
 	}
 	
@@ -380,12 +374,6 @@ abstract class AgaviValidator extends AgaviParameterHolder
 			}
 		}
 
-		foreach($this->affectedFieldNames as $name) {
-			if($this->hasParameter($name)) {
-				$fields[] = $this->getParameter($name);
-			}
-		}
-
 		$fields = array_merge($fields, $this->validatedFieldnames);
 		// filter out empty strings
 		$fields = array_filter($fields, 'strlen');
@@ -441,7 +429,11 @@ abstract class AgaviValidator extends AgaviParameterHolder
 				return self::SUCCESS;
 			}
 
-			$this->validatedFieldnames[] = $this->curBase->__toString();
+			$fullPath = clone $this->curBase;
+			if($this->getParameter('param')) {
+				$fullPath->push($this->getParameter('param'));
+			}
+			$this->validatedFieldnames[] = $fullPath->__toString();
 
 			if(!$this->validate()) {
 				// validation failed, exit with configured error code
