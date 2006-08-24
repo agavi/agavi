@@ -97,7 +97,8 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 		
 		$output = $response->getContent();
 		
-		$doc = DOMDocument::loadHTML($output);
+		$doc = new DOMDocument();
+		$doc->loadHTML($output);
 		
 		$encoding = strtolower($doc->encoding);
 		$utf8 = $encoding == 'utf-8';
