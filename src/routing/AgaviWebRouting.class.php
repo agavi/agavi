@@ -77,18 +77,18 @@ class AgaviWebRouting extends AgaviRouting
 		if(isset($parameters['path_info_parameter'])) {
 			$this->parseOptions['path_info_parameter'] = $parameters['path_info_parameter'];
 		}
-		
+
 		if(!AgaviConfig::get("core.use_routing", false)) {
 			return;
 		}
-		
+
 		$parsed = $this->prepareInput();
-		
+
 		if(!$parsed) {
 			throw new AgaviException('No parser could be found to process the input. This might be due to your special Web Server or PHP configuration. Please refer to the manual for further assistance. As a quick workaround, disable the Routing - routes you specified can still be generated, the system will produce traditional URLs.');
 		}
 	}
-	
+
 	protected function prepareInput()
 	{
 		foreach($this->inputHandlers as $handler) {
@@ -113,43 +113,43 @@ class AgaviWebRouting extends AgaviRouting
 		if(isset($this->parseOptions['path_info_parameter']) || isset($_ENV['SERVER_SOFTWARE']) || !isset($_SERVER['SERVER_SOFTWARE']) || strpos($_SERVER['SERVER_SOFTWARE'], 'Apache') === false) {
 			return false;
 		}
-		
+
 		$rq = $this->context->getRequest();
-		
+
 		$rewritten = (isset($_SERVER['REDIRECT_URL']) && isset($_SERVER['PATH_INFO']));
-		
+
 		$ru = urldecode($rq->getUrlPath());
 
 		if($rewritten) {
 			$this->prefix =  substr($ru, 0, -strlen($_SERVER['PATH_INFO']));
-			
+
 			$this->input = substr($ru, strlen($this->prefix));
-			
+
 			$this->basePath = $this->prefix;
 		} else {
 			$sn = $_SERVER['SCRIPT_NAME'];
 
 			$this->prefix = AgaviToolkit::stringBase($sn, $ru, $appendFrom);
 			$this->prefix .= substr($sn, $appendFrom + 1);
-			
+
 			$this->input = substr($ru, $appendFrom + 1);
-			
+
 			$this->basePath = str_replace('\\', '/', dirname($this->prefix));
 		}
-		
+
 		if(!$this->input) {
 			$this->input = "/";
 		}
-		
+
 		if(substr($this->basePath, -1, 1) != '/') {
 			$this->basePath .= '/';
 		}
-		
+
 		$this->baseHref = $rq->getUrlScheme() . '://' . $rq->getUrlAuthority() . $this->basePath;
-		
+
 		return true;
 	}
-	
+
 	/**
 	 * Parses route information for Apache as CGI.
 	 *
@@ -164,22 +164,22 @@ class AgaviWebRouting extends AgaviRouting
 		if(!isset($_ENV['SERVER_SOFTWARE']) || !isset($_SERVER['SERVER_SOFTWARE']) || !empty($_SERVER['PATH_INFO']) || !empty($_SERVER['PATH_TRANSLATED']) || strpos($_SERVER['SERVER_SOFTWARE'], 'Apache') === false) {
 			return false;
 		}
-		
+
 		$rq = $this->context->getRequest();
-		
+
 		$rewritten = (isset($this->parseOptions['path_info_parameter']) && strpos($_SERVER['argv'][0], $this->parseOptions['path_info_parameter']) === 0);
-		
+
 		$ru = urldecode($rq->getUrlPath());
-		
+
 		$sn = $_SERVER['SCRIPT_NAME'];
-		
+
 		$this->prefix = AgaviToolkit::stringBase($sn, $ru, $appendFrom);
-		
+
 		if($rewritten) {
 			if(substr($this->prefix, -1, 1) == '/') {
 				$this->prefix = substr($this->prefix, 0, strlen($this->prefix)-1);
 			}
-			
+
 			$pathStart = strpos($_SERVER['argv'][0], '=') + 1;
 			$firstAmpersand = strpos($_SERVER['argv'][0], '&');
 			if($firstAmpersand) {
@@ -188,26 +188,26 @@ class AgaviWebRouting extends AgaviRouting
 			else {
 				$this->input = substr($_SERVER['argv'][0], $pathStart);
 			}
-			
+
 			$this->basePath = $this->prefix;
 		} else {
 			$this->prefix .= substr($sn, $appendFrom + 1);
-			
+
 			$this->input = substr($ru, $appendFrom + 1);
-			
+
 			$this->basePath = str_replace('\\', '/', dirname($this->prefix));
 		}
-		
+
 		if(!$this->input) {
 			$this->input = '/';
 		}
-		
+
 		if(substr($this->basePath, -1, 1) != '/') {
 			$this->basePath .= '/';
 		}
-		
+
 		$this->baseHref = $rq->getUrlScheme() . '://' . $rq->getUrlAuthority() . $this->basePath;
-		
+
 		return true;
 	}
 
@@ -225,9 +225,9 @@ class AgaviWebRouting extends AgaviRouting
 		if(!isset($_SERVER['SERVER_SOFTWARE']) || strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') === false) {
 			return false;
 		}
-		
+
 		$rewritten = (isset($_SERVER['HTTP_X_REWRITE_URL']) && ($_SERVER['HTTP_X_REWRITE_URL'] != $_SERVER['ORIG_PATH_INFO']));
-		
+
 		throw new AgaviInitializationException('Unimplemented route parsing method for Microsoft Internet Information Server.');
 	}
 
@@ -366,9 +366,9 @@ class AgaviWebRouting extends AgaviRouting
 		$req = $this->getContext()->getRequest();
 
 		// merge GET parameters
-		$req->setParametersByRef($_GET);
+		$req->setParameters($_GET);
 		// merge POST parameters
-		$req->setParametersByRef($_POST);
+		$req->setParameters($_POST);
 
 		// the real deal
 		return parent::execute();
