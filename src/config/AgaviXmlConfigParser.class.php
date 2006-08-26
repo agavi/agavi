@@ -90,7 +90,17 @@ class AgaviXmlConfigParser extends AgaviConfigParser
 			throw new AgaviParseException($error);
 		}
 		$this->encoding = strtolower($doc->encoding);
+		
+		$doc->xinclude();
+		
 		$this->xpath = new DomXPath($doc);
+		
+		// remove all xml:base attributes inserted by XIncludes
+		$nodes = $this->xpath->query('//@xml:base', $doc);
+		foreach($nodes as $node) {
+			$node->ownerElement->removeAttributeNode($node);
+		}
+		
 		if($validationFile) {
 			// TODO: check for file existance
 			$this->errors = array();
