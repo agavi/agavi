@@ -121,7 +121,7 @@ abstract class AgaviView extends AgaviAttributeHolder
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function onFallback(AgaviParameterHolder $parameters, $from, $to)
+	public function handleFallback(AgaviParameterHolder $parameters, $from, $to)
 	{
 	}
 

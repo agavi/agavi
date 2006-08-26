@@ -113,7 +113,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 							$from = $controller->getOutputType();
 							// template not found, but there's a fallback specified, so let's try that one
 							$controller->setOutputType($oti['fallback']);
-							$fbret = $viewInstance->onFallback($actionEntry->getParameters(), $from, $oti['fallback']);
+							$fbret = $viewInstance->handleFallback($actionEntry->getParameters(), $from, $oti['fallback']);
 							if($fbret instanceof AgaviRenderer) {
 								$renderer = $fbret;
 								break;
