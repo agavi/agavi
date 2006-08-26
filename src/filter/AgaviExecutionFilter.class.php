@@ -74,7 +74,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 		$viewInstance->initialize($response, $actionEntry->getActionInstance()->getAttributes());
 
 		// view initialization completed successfully
-		$executeMethod = 'execute' . $this->context->getName();
+		$executeMethod = 'execute' . $this->context->getController()->getOutputType();
 		if(!method_exists($viewInstance, $executeMethod)) {
 			$executeMethod = 'execute';
 		}
@@ -110,8 +110,19 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 						break;
 					} catch(AgaviRenderException $e) {
 						if(isset($oti['fallback'])) {
+							$from = $controller->getOutputType();
 							// template not found, but there's a fallback specified, so let's try that one
 							$controller->setOutputType($oti['fallback']);
+							$fbret = $viewInstance->onFallback($actionEntry->getParameters(), $from, $oti['fallback']);
+							if($fbret instanceof AgaviRenderer) {
+								$renderer = $fbret;
+								break;
+							} elseif(is_array($fbret) && count($fbret >= 2)) {
+								$response->clear();
+								$response->lock();
+								$actionEntry->setNext($fbret[0], $fbret[1], isset($fbret[2]) ? $fbret[2] : array());
+								return;
+							}
 						} else {
 							throw $e;
 						}
