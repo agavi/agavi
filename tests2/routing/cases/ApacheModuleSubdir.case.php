@@ -1,7 +1,6 @@
 <?php return array(
 	array(
 		'message' => 'Sub-directory, no rewrite, called directory',
-		'parseMethod' => 'parseApacheModuleNoRewrite',
 		'input' => '/',
 		'prefix' => '/~dzuelke/rw/index.php',
 		'basePath' => '/~dzuelke/rw/',
@@ -12,7 +11,7 @@
 			'SHLVL' => '3',
 			'_' => '/usr/sbin/httpd',
 		),
-		'_GET' => array(
+		'_GET' => array (
 		),
 		'_SERVER' => array (
 			'DOCUMENT_ROOT' => '/Library/WebServer/Documents',
@@ -26,13 +25,13 @@
 			'REDIRECT_STATUS' => '200',
 			'REDIRECT_URL' => '/~dzuelke/rw/',
 			'REMOTE_ADDR' => '127.0.0.1',
-			'REMOTE_PORT' => '50148',
+			'REMOTE_PORT' => '61679',
 			'SCRIPT_FILENAME' => '/Users/dzuelke/Sites/rw/index.php',
 			'SERVER_ADDR' => '127.0.0.1',
 			'SERVER_ADMIN' => '[no address given]',
 			'SERVER_NAME' => 'localhost',
 			'SERVER_PORT' => '80',
-			'SERVER_SIGNATURE' => '<ADDRESS>Apache/1.3.33 Server at localhost Port 80</ADDRESS>
+			'SERVER_SIGNATURE' => 'Apache/1.3.33 Server at 127.0.0.1 Port 80
 		',
 			'SERVER_SOFTWARE' => 'Apache/1.3.33 (Darwin) PHP/5.0.4',
 			'GATEWAY_INTERFACE' => 'CGI/1.1',
@@ -47,7 +46,6 @@
 	),
 	array(
 		'message' => 'Sub-directory, no rewrite, called index.php',
-		'parseMethod' => 'parseApacheModuleNoRewrite',
 		'input' => '/',
 		'prefix' => '/~dzuelke/rw/index.php',
 		'basePath' => '/~dzuelke/rw/',
@@ -58,7 +56,7 @@
 			'SHLVL' => '3',
 			'_' => '/usr/sbin/httpd',
 		),
-		'_GET' => array(
+		'_GET' => array (
 		),
 		'_SERVER' => array (
 			'DOCUMENT_ROOT' => '/Library/WebServer/Documents',
@@ -70,13 +68,13 @@
 			'HTTP_USER_AGENT' => 'Mozilla/5.0 (Macintosh; U; PPC Mac OS X; de-de) AppleWebKit/418.8 (KHTML, like Gecko) Safari/419.3',
 			'PATH' => '/bin:/sbin:/usr/bin:/usr/sbin:/usr/libexec:/System/Library/CoreServices',
 			'REMOTE_ADDR' => '127.0.0.1',
-			'REMOTE_PORT' => '50183',
+			'REMOTE_PORT' => '61692',
 			'SCRIPT_FILENAME' => '/Users/dzuelke/Sites/rw/index.php',
 			'SERVER_ADDR' => '127.0.0.1',
 			'SERVER_ADMIN' => '[no address given]',
 			'SERVER_NAME' => 'localhost',
 			'SERVER_PORT' => '80',
-			'SERVER_SIGNATURE' => '<ADDRESS>Apache/1.3.33 Server at localhost Port 80</ADDRESS>
+			'SERVER_SIGNATURE' => 'Apache/1.3.33 Server at 127.0.0.1 Port 80
 		',
 			'SERVER_SOFTWARE' => 'Apache/1.3.33 (Darwin) PHP/5.0.4',
 			'GATEWAY_INTERFACE' => 'CGI/1.1',
@@ -91,7 +89,6 @@
 	),
 	array(
 		'message' => 'Sub-directory, no rewrite, called index.php with query',
-		'parseMethod' => 'parseApacheModuleNoRewrite',
 		'input' => '/',
 		'prefix' => '/~dzuelke/rw/index.php',
 		'basePath' => '/~dzuelke/rw/',
@@ -102,7 +99,8 @@
 			'SHLVL' => '3',
 			'_' => '/usr/sbin/httpd',
 		),
-		'_GET' => array(
+		'_GET' => array (
+			'foo' => 'bar',
 		),
 		'_SERVER' => array (
 			'DOCUMENT_ROOT' => '/Library/WebServer/Documents',
@@ -114,13 +112,13 @@
 			'HTTP_USER_AGENT' => 'Mozilla/5.0 (Macintosh; U; PPC Mac OS X; de-de) AppleWebKit/418.8 (KHTML, like Gecko) Safari/419.3',
 			'PATH' => '/bin:/sbin:/usr/bin:/usr/sbin:/usr/libexec:/System/Library/CoreServices',
 			'REMOTE_ADDR' => '127.0.0.1',
-			'REMOTE_PORT' => '50193',
+			'REMOTE_PORT' => '61693',
 			'SCRIPT_FILENAME' => '/Users/dzuelke/Sites/rw/index.php',
 			'SERVER_ADDR' => '127.0.0.1',
 			'SERVER_ADMIN' => '[no address given]',
 			'SERVER_NAME' => 'localhost',
 			'SERVER_PORT' => '80',
-			'SERVER_SIGNATURE' => '<ADDRESS>Apache/1.3.33 Server at localhost Port 80</ADDRESS>
+			'SERVER_SIGNATURE' => 'Apache/1.3.33 Server at 127.0.0.1 Port 80
 		',
 			'SERVER_SOFTWARE' => 'Apache/1.3.33 (Darwin) PHP/5.0.4',
 			'GATEWAY_INTERFACE' => 'CGI/1.1',
@@ -135,7 +133,6 @@
 	),
 	array(
 		'message' => 'Sub-directory, no rewrite, called index.php with path info',
-		'parseMethod' => 'parseApacheModuleNoRewrite',
 		'input' => '/fubar',
 		'prefix' => '/~dzuelke/rw/index.php',
 		'basePath' => '/~dzuelke/rw/',
@@ -146,7 +143,7 @@
 			'SHLVL' => '3',
 			'_' => '/usr/sbin/httpd',
 		),
-		'_GET' => array(
+		'_GET' => array (
 		),
 		'_SERVER' => array (
 			'DOCUMENT_ROOT' => '/Library/WebServer/Documents',
@@ -158,13 +155,13 @@
 			'HTTP_USER_AGENT' => 'Mozilla/5.0 (Macintosh; U; PPC Mac OS X; de-de) AppleWebKit/418.8 (KHTML, like Gecko) Safari/419.3',
 			'PATH' => '/bin:/sbin:/usr/bin:/usr/sbin:/usr/libexec:/System/Library/CoreServices',
 			'REMOTE_ADDR' => '127.0.0.1',
-			'REMOTE_PORT' => '50224',
+			'REMOTE_PORT' => '61696',
 			'SCRIPT_FILENAME' => '/Users/dzuelke/Sites/rw/index.php',
 			'SERVER_ADDR' => '127.0.0.1',
 			'SERVER_ADMIN' => '[no address given]',
 			'SERVER_NAME' => 'localhost',
 			'SERVER_PORT' => '80',
-			'SERVER_SIGNATURE' => '<ADDRESS>Apache/1.3.33 Server at localhost Port 80</ADDRESS>
+			'SERVER_SIGNATURE' => 'Apache/1.3.33 Server at 127.0.0.1 Port 80
 		',
 			'SERVER_SOFTWARE' => 'Apache/1.3.33 (Darwin) PHP/5.0.4',
 			'GATEWAY_INTERFACE' => 'CGI/1.1',
@@ -180,7 +177,6 @@
 	),
 	array(
 		'message' => 'Sub-directory, no rewrite, called index.php with path info and query',
-		'parseMethod' => 'parseApacheModuleNoRewrite',
 		'input' => '/fubar',
 		'prefix' => '/~dzuelke/rw/index.php',
 		'basePath' => '/~dzuelke/rw/',
@@ -191,7 +187,8 @@
 			'SHLVL' => '3',
 			'_' => '/usr/sbin/httpd',
 		),
-		'_GET' => array(
+		'_GET' => array (
+			'foo' => 'bar',
 		),
 		'_SERVER' => array (
 			'DOCUMENT_ROOT' => '/Library/WebServer/Documents',
@@ -203,13 +200,13 @@
 			'HTTP_USER_AGENT' => 'Mozilla/5.0 (Macintosh; U; PPC Mac OS X; de-de) AppleWebKit/418.8 (KHTML, like Gecko) Safari/419.3',
 			'PATH' => '/bin:/sbin:/usr/bin:/usr/sbin:/usr/libexec:/System/Library/CoreServices',
 			'REMOTE_ADDR' => '127.0.0.1',
-			'REMOTE_PORT' => '50236',
+			'REMOTE_PORT' => '61698',
 			'SCRIPT_FILENAME' => '/Users/dzuelke/Sites/rw/index.php',
 			'SERVER_ADDR' => '127.0.0.1',
 			'SERVER_ADMIN' => '[no address given]',
 			'SERVER_NAME' => 'localhost',
 			'SERVER_PORT' => '80',
-			'SERVER_SIGNATURE' => '<ADDRESS>Apache/1.3.33 Server at localhost Port 80</ADDRESS>
+			'SERVER_SIGNATURE' => 'Apache/1.3.33 Server at 127.0.0.1 Port 80
 		',
 			'SERVER_SOFTWARE' => 'Apache/1.3.33 (Darwin) PHP/5.0.4',
 			'GATEWAY_INTERFACE' => 'CGI/1.1',
@@ -225,7 +222,6 @@
 	),
 	array(
 		'message' => 'Sub-directory, rewritten, called directory',
-		'parseMethod' => 'parseApacheModuleRewrite',
 		'input' => '/',
 		'prefix' => '/~dzuelke/rw',
 		'basePath' => '/~dzuelke/rw/',
@@ -236,7 +232,8 @@
 			'SHLVL' => '3',
 			'_' => '/usr/sbin/httpd',
 		),
-		'_GET' => array(
+		'_GET' => array (
+			'/' => '',
 		),
 		'_SERVER' => array (
 			'DOCUMENT_ROOT' => '/Library/WebServer/Documents',
@@ -245,34 +242,34 @@
 			'HTTP_ACCEPT_LANGUAGE' => 'de-de',
 			'HTTP_CONNECTION' => 'keep-alive',
 			'HTTP_HOST' => 'localhost',
+			'HTTP_IF_MODIFIED_SINCE' => 'Mon, 28 Aug 2006 14:35:30 GMT',
 			'HTTP_USER_AGENT' => 'Mozilla/5.0 (Macintosh; U; PPC Mac OS X; de-de) AppleWebKit/418.8 (KHTML, like Gecko) Safari/419.3',
 			'PATH' => '/bin:/sbin:/usr/bin:/usr/sbin:/usr/libexec:/System/Library/CoreServices',
+			'REDIRECT_QUERY_STRING' => '/',
 			'REDIRECT_STATUS' => '200',
 			'REDIRECT_URL' => '/~dzuelke/rw/',
 			'REMOTE_ADDR' => '127.0.0.1',
-			'REMOTE_PORT' => '50246',
+			'REMOTE_PORT' => '61701',
 			'SCRIPT_FILENAME' => '/Users/dzuelke/Sites/rw/index.php',
 			'SERVER_ADDR' => '127.0.0.1',
 			'SERVER_ADMIN' => '[no address given]',
 			'SERVER_NAME' => 'localhost',
 			'SERVER_PORT' => '80',
-			'SERVER_SIGNATURE' => '<ADDRESS>Apache/1.3.33 Server at localhost Port 80</ADDRESS>
+			'SERVER_SIGNATURE' => 'Apache/1.3.33 Server at 127.0.0.1 Port 80
 		',
 			'SERVER_SOFTWARE' => 'Apache/1.3.33 (Darwin) PHP/5.0.4',
 			'GATEWAY_INTERFACE' => 'CGI/1.1',
 			'SERVER_PROTOCOL' => 'HTTP/1.1',
 			'REQUEST_METHOD' => 'GET',
-			'QUERY_STRING' => '',
+			'QUERY_STRING' => '/',
 			'REQUEST_URI' => '/~dzuelke/rw/',
 			'SCRIPT_NAME' => '/~dzuelke/rw/index.php',
-			'PATH_INFO' => '/',
-			'PATH_TRANSLATED' => '/Library/WebServer/Documents/',
-			'PHP_SELF' => '/~dzuelke/rw/index.php/',
+			'PATH_TRANSLATED' => '/Users/dzuelke/Sites/rw/index.php',
+			'PHP_SELF' => '/~dzuelke/rw/index.php',
 		)
 	),
 	array(
 		'message' => 'Sub-directory, rewritten, called path',
-		'parseMethod' => 'parseApacheModuleRewrite',
 		'input' => '/fubar',
 		'prefix' => '/~dzuelke/rw',
 		'basePath' => '/~dzuelke/rw/',
@@ -283,7 +280,8 @@
 			'SHLVL' => '3',
 			'_' => '/usr/sbin/httpd',
 		),
-		'_GET' => array(
+		'_GET' => array (
+			'/fubar' => '',
 		),
 		'_SERVER' => array (
 			'DOCUMENT_ROOT' => '/Library/WebServer/Documents',
@@ -294,32 +292,31 @@
 			'HTTP_HOST' => 'localhost',
 			'HTTP_USER_AGENT' => 'Mozilla/5.0 (Macintosh; U; PPC Mac OS X; de-de) AppleWebKit/418.8 (KHTML, like Gecko) Safari/419.3',
 			'PATH' => '/bin:/sbin:/usr/bin:/usr/sbin:/usr/libexec:/System/Library/CoreServices',
+			'REDIRECT_QUERY_STRING' => '/fubar',
 			'REDIRECT_STATUS' => '200',
 			'REDIRECT_URL' => '/~dzuelke/rw/fubar',
 			'REMOTE_ADDR' => '127.0.0.1',
-			'REMOTE_PORT' => '50269',
+			'REMOTE_PORT' => '61703',
 			'SCRIPT_FILENAME' => '/Users/dzuelke/Sites/rw/index.php',
 			'SERVER_ADDR' => '127.0.0.1',
 			'SERVER_ADMIN' => '[no address given]',
 			'SERVER_NAME' => 'localhost',
 			'SERVER_PORT' => '80',
-			'SERVER_SIGNATURE' => '<ADDRESS>Apache/1.3.33 Server at localhost Port 80</ADDRESS>
+			'SERVER_SIGNATURE' => 'Apache/1.3.33 Server at 127.0.0.1 Port 80
 		',
 			'SERVER_SOFTWARE' => 'Apache/1.3.33 (Darwin) PHP/5.0.4',
 			'GATEWAY_INTERFACE' => 'CGI/1.1',
 			'SERVER_PROTOCOL' => 'HTTP/1.1',
 			'REQUEST_METHOD' => 'GET',
-			'QUERY_STRING' => '',
+			'QUERY_STRING' => '/fubar',
 			'REQUEST_URI' => '/~dzuelke/rw/fubar',
 			'SCRIPT_NAME' => '/~dzuelke/rw/index.php',
-			'PATH_INFO' => '/fubar',
-			'PATH_TRANSLATED' => '/Library/WebServer/Documents/fubar',
-			'PHP_SELF' => '/~dzuelke/rw/index.php/fubar',
+			'PATH_TRANSLATED' => '/Users/dzuelke/Sites/rw/index.php',
+			'PHP_SELF' => '/~dzuelke/rw/index.php',
 		)
 	),
 	array(
 		'message' => 'Sub-directory, rewritten, called path with query',
-		'parseMethod' => 'parseApacheModuleRewrite',
 		'input' => '/fubar',
 		'prefix' => '/~dzuelke/rw',
 		'basePath' => '/~dzuelke/rw/',
@@ -330,7 +327,9 @@
 			'SHLVL' => '3',
 			'_' => '/usr/sbin/httpd',
 		),
-		'_GET' => array(
+		'_GET' => array (
+			'/fubar' => '',
+			'foo' => 'bar',
 		),
 		'_SERVER' => array (
 			'DOCUMENT_ROOT' => '/Library/WebServer/Documents',
@@ -341,28 +340,76 @@
 			'HTTP_HOST' => 'localhost',
 			'HTTP_USER_AGENT' => 'Mozilla/5.0 (Macintosh; U; PPC Mac OS X; de-de) AppleWebKit/418.8 (KHTML, like Gecko) Safari/419.3',
 			'PATH' => '/bin:/sbin:/usr/bin:/usr/sbin:/usr/libexec:/System/Library/CoreServices',
-			'REDIRECT_QUERY_STRING' => 'foo=bar',
+			'REDIRECT_QUERY_STRING' => '/fubar&foo=bar',
 			'REDIRECT_STATUS' => '200',
 			'REDIRECT_URL' => '/~dzuelke/rw/fubar',
 			'REMOTE_ADDR' => '127.0.0.1',
-			'REMOTE_PORT' => '50289',
+			'REMOTE_PORT' => '61705',
 			'SCRIPT_FILENAME' => '/Users/dzuelke/Sites/rw/index.php',
 			'SERVER_ADDR' => '127.0.0.1',
 			'SERVER_ADMIN' => '[no address given]',
 			'SERVER_NAME' => 'localhost',
 			'SERVER_PORT' => '80',
-			'SERVER_SIGNATURE' => '<ADDRESS>Apache/1.3.33 Server at localhost Port 80</ADDRESS>
+			'SERVER_SIGNATURE' => 'Apache/1.3.33 Server at 127.0.0.1 Port 80
 		',
 			'SERVER_SOFTWARE' => 'Apache/1.3.33 (Darwin) PHP/5.0.4',
 			'GATEWAY_INTERFACE' => 'CGI/1.1',
 			'SERVER_PROTOCOL' => 'HTTP/1.1',
 			'REQUEST_METHOD' => 'GET',
-			'QUERY_STRING' => 'foo=bar',
+			'QUERY_STRING' => '/fubar&foo=bar',
 			'REQUEST_URI' => '/~dzuelke/rw/fubar?foo=bar',
 			'SCRIPT_NAME' => '/~dzuelke/rw/index.php',
-			'PATH_INFO' => '/fubar',
-			'PATH_TRANSLATED' => '/Library/WebServer/Documents/fubar',
-			'PHP_SELF' => '/~dzuelke/rw/index.php/fubar',
+			'PATH_TRANSLATED' => '/Users/dzuelke/Sites/rw/index.php',
+			'PHP_SELF' => '/~dzuelke/rw/index.php',
+		)
+	),
+	array(
+		'message' => 'Sub-directory, rewritten, called path with query',
+		'input' => '/fo o&ba+r',
+		'prefix' => '/~dzuelke/rw',
+		'basePath' => '/~dzuelke/rw/',
+		'baseHref' => 'http://localhost/~dzuelke/rw/',
+		'_ENV' => array (
+			'PATH' => '/bin:/sbin:/usr/bin:/usr/sbin:/usr/libexec:/System/Library/CoreServices',
+			'PWD' => '/',
+			'SHLVL' => '3',
+			'_' => '/usr/sbin/httpd',
+		),
+		'_GET' => array (
+			'/fo_o' => '',
+			'ba_r' => '',
+			'test' => 'foo bar baz',
+		),
+		'_SERVER' => array (
+			'DOCUMENT_ROOT' => '/Library/WebServer/Documents',
+			'HTTP_ACCEPT' => '*/*',
+			'HTTP_ACCEPT_ENCODING' => 'gzip, deflate',
+			'HTTP_ACCEPT_LANGUAGE' => 'de-de',
+			'HTTP_CONNECTION' => 'keep-alive',
+			'HTTP_HOST' => 'localhost',
+			'HTTP_USER_AGENT' => 'Mozilla/5.0 (Macintosh; U; PPC Mac OS X; de-de) AppleWebKit/418.8 (KHTML, like Gecko) Safari/419.3',
+			'PATH' => '/bin:/sbin:/usr/bin:/usr/sbin:/usr/libexec:/System/Library/CoreServices',
+			'REDIRECT_QUERY_STRING' => '/fo o&ba+r&test=foo%20bar+baz',
+			'REDIRECT_STATUS' => '200',
+			'REDIRECT_URL' => '/~dzuelke/rw/fo o&ba+r',
+			'REMOTE_ADDR' => '127.0.0.1',
+			'REMOTE_PORT' => '62438',
+			'SCRIPT_FILENAME' => '/Users/dzuelke/Sites/rw/index.php',
+			'SERVER_ADDR' => '127.0.0.1',
+			'SERVER_ADMIN' => '[no address given]',
+			'SERVER_NAME' => 'localhost',
+			'SERVER_PORT' => '80',
+			'SERVER_SIGNATURE' => 'Apache/1.3.33 Server at localhost Port 80
+		',
+			'SERVER_SOFTWARE' => 'Apache/1.3.33 (Darwin) PHP/5.0.4',
+			'GATEWAY_INTERFACE' => 'CGI/1.1',
+			'SERVER_PROTOCOL' => 'HTTP/1.1',
+			'REQUEST_METHOD' => 'GET',
+			'QUERY_STRING' => '/fo o&ba+r&test=foo%20bar+baz',
+			'REQUEST_URI' => '/~dzuelke/rw/fo%20o&ba+r?test=foo%20bar+baz',
+			'SCRIPT_NAME' => '/~dzuelke/rw/index.php',
+			'PATH_TRANSLATED' => '/Users/dzuelke/Sites/rw/index.php',
+			'PHP_SELF' => '/~dzuelke/rw/index.php',
 		)
 	),
 );

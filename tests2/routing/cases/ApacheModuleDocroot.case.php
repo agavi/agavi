@@ -12,7 +12,7 @@
 			'SHLVL' => '3',
 			'_' => '/usr/sbin/httpd',
 		),
-		'_GET' => array(
+		'_GET' => array (
 		),
 		'_SERVER' => array (
 			'DOCUMENT_ROOT' => '/Library/WebServer/Documents',
@@ -26,13 +26,13 @@
 			'REDIRECT_STATUS' => '200',
 			'REDIRECT_URL' => '/',
 			'REMOTE_ADDR' => '127.0.0.1',
-			'REMOTE_PORT' => '50390',
+			'REMOTE_PORT' => '62231',
 			'SCRIPT_FILENAME' => '/Library/WebServer/Documents/index.php',
 			'SERVER_ADDR' => '127.0.0.1',
 			'SERVER_ADMIN' => '[no address given]',
 			'SERVER_NAME' => 'localhost',
 			'SERVER_PORT' => '80',
-			'SERVER_SIGNATURE' => '<ADDRESS>Apache/1.3.33 Server at localhost Port 80</ADDRESS>
+			'SERVER_SIGNATURE' => 'Apache/1.3.33 Server at localhost Port 80
 		',
 			'SERVER_SOFTWARE' => 'Apache/1.3.33 (Darwin) PHP/5.0.4',
 			'GATEWAY_INTERFACE' => 'CGI/1.1',
@@ -58,7 +58,7 @@
 			'SHLVL' => '3',
 			'_' => '/usr/sbin/httpd',
 		),
-		'_GET' => array(
+		'_GET' => array (
 		),
 		'_SERVER' => array (
 			'DOCUMENT_ROOT' => '/Library/WebServer/Documents',
@@ -70,13 +70,13 @@
 			'HTTP_USER_AGENT' => 'Mozilla/5.0 (Macintosh; U; PPC Mac OS X; de-de) AppleWebKit/418.8 (KHTML, like Gecko) Safari/419.3',
 			'PATH' => '/bin:/sbin:/usr/bin:/usr/sbin:/usr/libexec:/System/Library/CoreServices',
 			'REMOTE_ADDR' => '127.0.0.1',
-			'REMOTE_PORT' => '50399',
+			'REMOTE_PORT' => '62231',
 			'SCRIPT_FILENAME' => '/Library/WebServer/Documents/index.php',
 			'SERVER_ADDR' => '127.0.0.1',
 			'SERVER_ADMIN' => '[no address given]',
 			'SERVER_NAME' => 'localhost',
 			'SERVER_PORT' => '80',
-			'SERVER_SIGNATURE' => '<ADDRESS>Apache/1.3.33 Server at localhost Port 80</ADDRESS>
+			'SERVER_SIGNATURE' => 'Apache/1.3.33 Server at localhost Port 80
 		',
 			'SERVER_SOFTWARE' => 'Apache/1.3.33 (Darwin) PHP/5.0.4',
 			'GATEWAY_INTERFACE' => 'CGI/1.1',
@@ -102,7 +102,8 @@
 			'SHLVL' => '3',
 			'_' => '/usr/sbin/httpd',
 		),
-		'_GET' => array(
+		'_GET' => array (
+			'foo' => 'bar',
 		),
 		'_SERVER' => array (
 			'DOCUMENT_ROOT' => '/Library/WebServer/Documents',
@@ -114,13 +115,13 @@
 			'HTTP_USER_AGENT' => 'Mozilla/5.0 (Macintosh; U; PPC Mac OS X; de-de) AppleWebKit/418.8 (KHTML, like Gecko) Safari/419.3',
 			'PATH' => '/bin:/sbin:/usr/bin:/usr/sbin:/usr/libexec:/System/Library/CoreServices',
 			'REMOTE_ADDR' => '127.0.0.1',
-			'REMOTE_PORT' => '50553',
+			'REMOTE_PORT' => '62234',
 			'SCRIPT_FILENAME' => '/Library/WebServer/Documents/index.php',
 			'SERVER_ADDR' => '127.0.0.1',
 			'SERVER_ADMIN' => '[no address given]',
 			'SERVER_NAME' => 'localhost',
 			'SERVER_PORT' => '80',
-			'SERVER_SIGNATURE' => '<ADDRESS>Apache/1.3.33 Server at localhost Port 80</ADDRESS>
+			'SERVER_SIGNATURE' => 'Apache/1.3.33 Server at localhost Port 80
 		',
 			'SERVER_SOFTWARE' => 'Apache/1.3.33 (Darwin) PHP/5.0.4',
 			'GATEWAY_INTERFACE' => 'CGI/1.1',
@@ -146,7 +147,7 @@
 			'SHLVL' => '3',
 			'_' => '/usr/sbin/httpd',
 		),
-		'_GET' => array(
+		'_GET' => array (
 		),
 		'_SERVER' => array (
 			'DOCUMENT_ROOT' => '/Library/WebServer/Documents',
@@ -158,13 +159,13 @@
 			'HTTP_USER_AGENT' => 'Mozilla/5.0 (Macintosh; U; PPC Mac OS X; de-de) AppleWebKit/418.8 (KHTML, like Gecko) Safari/419.3',
 			'PATH' => '/bin:/sbin:/usr/bin:/usr/sbin:/usr/libexec:/System/Library/CoreServices',
 			'REMOTE_ADDR' => '127.0.0.1',
-			'REMOTE_PORT' => '50561',
+			'REMOTE_PORT' => '62239',
 			'SCRIPT_FILENAME' => '/Library/WebServer/Documents/index.php',
 			'SERVER_ADDR' => '127.0.0.1',
 			'SERVER_ADMIN' => '[no address given]',
 			'SERVER_NAME' => 'localhost',
 			'SERVER_PORT' => '80',
-			'SERVER_SIGNATURE' => '<ADDRESS>Apache/1.3.33 Server at localhost Port 80</ADDRESS>
+			'SERVER_SIGNATURE' => 'Apache/1.3.33 Server at localhost Port 80
 		',
 			'SERVER_SOFTWARE' => 'Apache/1.3.33 (Darwin) PHP/5.0.4',
 			'GATEWAY_INTERFACE' => 'CGI/1.1',
@@ -191,7 +192,8 @@
 			'SHLVL' => '3',
 			'_' => '/usr/sbin/httpd',
 		),
-		'_GET' => array(
+		'_GET' => array (
+			'foo' => 'bar',
 		),
 		'_SERVER' => array (
 			'DOCUMENT_ROOT' => '/Library/WebServer/Documents',
@@ -203,13 +205,13 @@
 			'HTTP_USER_AGENT' => 'Mozilla/5.0 (Macintosh; U; PPC Mac OS X; de-de) AppleWebKit/418.8 (KHTML, like Gecko) Safari/419.3',
 			'PATH' => '/bin:/sbin:/usr/bin:/usr/sbin:/usr/libexec:/System/Library/CoreServices',
 			'REMOTE_ADDR' => '127.0.0.1',
-			'REMOTE_PORT' => '50569',
+			'REMOTE_PORT' => '62246',
 			'SCRIPT_FILENAME' => '/Library/WebServer/Documents/index.php',
 			'SERVER_ADDR' => '127.0.0.1',
 			'SERVER_ADMIN' => '[no address given]',
 			'SERVER_NAME' => 'localhost',
 			'SERVER_PORT' => '80',
-			'SERVER_SIGNATURE' => '<ADDRESS>Apache/1.3.33 Server at localhost Port 80</ADDRESS>
+			'SERVER_SIGNATURE' => 'Apache/1.3.33 Server at localhost Port 80
 		',
 			'SERVER_SOFTWARE' => 'Apache/1.3.33 (Darwin) PHP/5.0.4',
 			'GATEWAY_INTERFACE' => 'CGI/1.1',
@@ -236,7 +238,8 @@
 			'SHLVL' => '3',
 			'_' => '/usr/sbin/httpd',
 		),
-		'_GET' => array(
+		'_GET' => array (
+			'/' => '',
 		),
 		'_SERVER' => array (
 			'DOCUMENT_ROOT' => '/Library/WebServer/Documents',
@@ -247,27 +250,27 @@
 			'HTTP_HOST' => 'localhost',
 			'HTTP_USER_AGENT' => 'Mozilla/5.0 (Macintosh; U; PPC Mac OS X; de-de) AppleWebKit/418.8 (KHTML, like Gecko) Safari/419.3',
 			'PATH' => '/bin:/sbin:/usr/bin:/usr/sbin:/usr/libexec:/System/Library/CoreServices',
+			'REDIRECT_QUERY_STRING' => '/',
 			'REDIRECT_STATUS' => '200',
 			'REDIRECT_URL' => '/',
 			'REMOTE_ADDR' => '127.0.0.1',
-			'REMOTE_PORT' => '50577',
+			'REMOTE_PORT' => '62251',
 			'SCRIPT_FILENAME' => '/Library/WebServer/Documents/index.php',
 			'SERVER_ADDR' => '127.0.0.1',
 			'SERVER_ADMIN' => '[no address given]',
 			'SERVER_NAME' => 'localhost',
 			'SERVER_PORT' => '80',
-			'SERVER_SIGNATURE' => '<ADDRESS>Apache/1.3.33 Server at localhost Port 80</ADDRESS>
+			'SERVER_SIGNATURE' => 'Apache/1.3.33 Server at localhost Port 80
 		',
 			'SERVER_SOFTWARE' => 'Apache/1.3.33 (Darwin) PHP/5.0.4',
 			'GATEWAY_INTERFACE' => 'CGI/1.1',
 			'SERVER_PROTOCOL' => 'HTTP/1.1',
 			'REQUEST_METHOD' => 'GET',
-			'QUERY_STRING' => '',
+			'QUERY_STRING' => '/',
 			'REQUEST_URI' => '/',
 			'SCRIPT_NAME' => '/index.php',
-			'PATH_INFO' => '/',
-			'PATH_TRANSLATED' => '/Library/WebServer/Documents/',
-			'PHP_SELF' => '/index.php/',
+			'PATH_TRANSLATED' => '/Library/WebServer/Documents/index.php',
+			'PHP_SELF' => '/index.php',
 		)
 	),
 	array(
@@ -283,7 +286,8 @@
 			'SHLVL' => '3',
 			'_' => '/usr/sbin/httpd',
 		),
-		'_GET' => array(
+		'_GET' => array (
+			'/fubar' => '',
 		),
 		'_SERVER' => array (
 			'DOCUMENT_ROOT' => '/Library/WebServer/Documents',
@@ -294,27 +298,27 @@
 			'HTTP_HOST' => 'localhost',
 			'HTTP_USER_AGENT' => 'Mozilla/5.0 (Macintosh; U; PPC Mac OS X; de-de) AppleWebKit/418.8 (KHTML, like Gecko) Safari/419.3',
 			'PATH' => '/bin:/sbin:/usr/bin:/usr/sbin:/usr/libexec:/System/Library/CoreServices',
+			'REDIRECT_QUERY_STRING' => '/fubar',
 			'REDIRECT_STATUS' => '200',
 			'REDIRECT_URL' => '/fubar',
 			'REMOTE_ADDR' => '127.0.0.1',
-			'REMOTE_PORT' => '50621',
+			'REMOTE_PORT' => '62256',
 			'SCRIPT_FILENAME' => '/Library/WebServer/Documents/index.php',
 			'SERVER_ADDR' => '127.0.0.1',
 			'SERVER_ADMIN' => '[no address given]',
 			'SERVER_NAME' => 'localhost',
 			'SERVER_PORT' => '80',
-			'SERVER_SIGNATURE' => '<ADDRESS>Apache/1.3.33 Server at localhost Port 80</ADDRESS>
+			'SERVER_SIGNATURE' => 'Apache/1.3.33 Server at localhost Port 80
 		',
 			'SERVER_SOFTWARE' => 'Apache/1.3.33 (Darwin) PHP/5.0.4',
 			'GATEWAY_INTERFACE' => 'CGI/1.1',
 			'SERVER_PROTOCOL' => 'HTTP/1.1',
 			'REQUEST_METHOD' => 'GET',
-			'QUERY_STRING' => '',
+			'QUERY_STRING' => '/fubar',
 			'REQUEST_URI' => '/fubar',
 			'SCRIPT_NAME' => '/index.php',
-			'PATH_INFO' => '/fubar',
-			'PATH_TRANSLATED' => '/Library/WebServer/Documents/fubar',
-			'PHP_SELF' => '/index.php/fubar',
+			'PATH_TRANSLATED' => '/Library/WebServer/Documents/index.php',
+			'PHP_SELF' => '/index.php',
 		)
 	),
 	array(
@@ -330,7 +334,9 @@
 			'SHLVL' => '3',
 			'_' => '/usr/sbin/httpd',
 		),
-		'_GET' => array(
+		'_GET' => array (
+			'/fubar' => '',
+			'foo' => 'bar',
 		),
 		'_SERVER' => array (
 			'DOCUMENT_ROOT' => '/Library/WebServer/Documents',
@@ -341,28 +347,27 @@
 			'HTTP_HOST' => 'localhost',
 			'HTTP_USER_AGENT' => 'Mozilla/5.0 (Macintosh; U; PPC Mac OS X; de-de) AppleWebKit/418.8 (KHTML, like Gecko) Safari/419.3',
 			'PATH' => '/bin:/sbin:/usr/bin:/usr/sbin:/usr/libexec:/System/Library/CoreServices',
-			'REDIRECT_QUERY_STRING' => 'foo=bar',
+			'REDIRECT_QUERY_STRING' => '/fubar&foo=bar',
 			'REDIRECT_STATUS' => '200',
 			'REDIRECT_URL' => '/fubar',
 			'REMOTE_ADDR' => '127.0.0.1',
-			'REMOTE_PORT' => '50632',
+			'REMOTE_PORT' => '62256',
 			'SCRIPT_FILENAME' => '/Library/WebServer/Documents/index.php',
 			'SERVER_ADDR' => '127.0.0.1',
 			'SERVER_ADMIN' => '[no address given]',
 			'SERVER_NAME' => 'localhost',
 			'SERVER_PORT' => '80',
-			'SERVER_SIGNATURE' => '<ADDRESS>Apache/1.3.33 Server at localhost Port 80</ADDRESS>
+			'SERVER_SIGNATURE' => 'Apache/1.3.33 Server at localhost Port 80
 		',
 			'SERVER_SOFTWARE' => 'Apache/1.3.33 (Darwin) PHP/5.0.4',
 			'GATEWAY_INTERFACE' => 'CGI/1.1',
 			'SERVER_PROTOCOL' => 'HTTP/1.1',
 			'REQUEST_METHOD' => 'GET',
-			'QUERY_STRING' => 'foo=bar',
+			'QUERY_STRING' => '/fubar&foo=bar',
 			'REQUEST_URI' => '/fubar?foo=bar',
 			'SCRIPT_NAME' => '/index.php',
-			'PATH_INFO' => '/fubar',
-			'PATH_TRANSLATED' => '/Library/WebServer/Documents/fubar',
-			'PHP_SELF' => '/index.php/fubar',
+			'PATH_TRANSLATED' => '/Library/WebServer/Documents/index.php',
+			'PHP_SELF' => '/index.php',
 		)
 	),
 );

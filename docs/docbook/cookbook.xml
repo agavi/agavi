@@ -36,43 +36,39 @@
       <para>You need mod_rewrite (or something similar for other web servers,
       such as ISAPI_Rewrite for Microsoft IIS) to get rid of the "index.php"
       part in incoming and generated URLs. Make sure mod_rewrite is enabled,
-      and create a <filename>.htaccess</filename> file in your
-      <filename>pub</filename> directory with the following contents:</para>
+      and rename dist.htaccess in your <filename>pub</filename> directory
+      which has the the following contents:</para>
 
-      <para><programlisting># enable rewrite engine
-RewriteEngine On
+      <para><programlisting># rename this file to .htaccess to remove the necessity to have index.php in front of routes
+# make sure mod_rewrite is on and AllowOverride settings are okay
 
-RewriteBase /~dzuelke/_projects/agavi/trunk/samples/pub/
+# these two aren't really necessary
+DirectoryIndex index.php
+Options -MultiViews -Indexes
+
+&lt;IfDefine APACHE2&gt;
+AcceptPathInfo On
+&lt;/IfDefine&gt;
+
+&lt;IfModule mod_rewrite.c&gt;
+# enable rewrite engine
+RewriteEngine Off
+
+# ********** THIS IS THE ONLY SETTING YOU SHOULD HAVE TO CHANGE **********
+RewriteBase /WEBSERVER/PATH/TO/pub/
 # e.g. RewriteBase /~dzuelke/_projects/agavi/trunk/samples/pub/
 # usually just "/" if your application's pub dir is the document root
 
 # if requested url does not exist (i.e. it's likely an agavi route), pass it as path info to index.php
-RewriteRule ^$ index.php/ [QSA,L]
+RewriteRule ^$ index.php?/ [QSA,L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule (.*) index.php/$1 [QSA,L]</programlisting></para>
+RewriteRule (.*) index.php?/$1 [QSA,L]
+&lt;/IfModule&gt;</programlisting></para>
 
-      <important>
-        <para>If you are running Apache with PHP as CGI, you cannot rewrite to
-        a PHP file and pass path info. In this case, we have to resort to a
-        query parameter to pass the incoming path to Agavi. To do that, change
-        the two rewrite rules to:</para>
-
-        <para><programlisting>RewriteRule ^$ index.php?something=/ [QSA,L]</programlisting>and</para>
-
-        <para><programlisting>RewriteRule (.*) index.php?something=/$1 [QSA,L]</programlisting>Then,
-        tell the WebRouting that you're using this rewrite method in
-        <filename>factories.xml</filename>:</para>
-
-        <para><programlisting>&lt;routing class="AgaviWebRouting"&gt;
-  &lt;parameters&gt;
-    &lt;parameter name="path_info_parameter"&gt;something&lt;/parameter&gt;
-  &lt;/parameters&gt;
-&lt;/routing&gt;</programlisting>Of course, you are free to use whatever you
-        prefer as the parameter name. It will not be set as a Request
-        parameter, unless the user actually supplies a parameter with this
-        name.</para>
-      </important>
+      <para>All you must do is enable rewriting by setting RewriteEngine to
+      On, and change the rewrite base to point to your pub directory URL
+      path.</para>
 
       <para>The important thing is that you use the
       <emphasis>external</emphasis> path to the <filename>pub</filename>

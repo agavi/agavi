@@ -290,13 +290,6 @@
       put some text in there, like the infamous "Hello World". Back to the
       browser and reload, et voila!</para>
 
-      <para>Since you're fiddling around a bit at this stage, it might be a
-      good idea to bootstrap the development environment instead of the
-      default one. To do this, open <filename>pub/index.php</filename> and
-      change the bootstrap call accordingly:</para>
-
-      <para><programlisting>Agavi::bootstrap('development');</programlisting></para>
-
       <para>If you want to add more Modules, Actions or Models to your
       application, you can use the <command>agavi</command> script
       again:</para>
