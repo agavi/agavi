@@ -54,34 +54,28 @@ class AgaviExecutionTimeFilter extends AgaviFilter implements AgaviIGlobalFilter
 	{
 		$context = $this->getContext();
 		
-		if($context->getController()->getActionStack()->getSize() == 1) {
-			
-			$comment = $this->getParameter('comment');
-			$replace = $this->getParameter('replace', false);
-			
-			$start = microtime(true);
-			$filterChain->execute();
-			
-			$outputTypes = $this->getParameter('output_types');
-			if(is_array($outputTypes) && !in_array($context->getController()->getOutputType(), $outputTypes)) {
-				return;
-			}
-			
-			$time = (microtime(true) - $start);
-			
-			
-			if($replace) {
-				$output = $response->getContent();
-				$output = str_replace($replace, $time, $output);
-				$response->setContent($output);
-			}
-			
-			if($comment) {
-				$response->appendContent("\n\n<!-- This page took " . $time . " seconds to process -->");
-			}
-			
-		} else {
-			$filterChain->execute();
+		$comment = $this->getParameter('comment');
+		$replace = $this->getParameter('replace', false);
+		
+		$start = microtime(true);
+		$filterChain->execute();
+		
+		$outputTypes = $this->getParameter('output_types');
+		if(is_array($outputTypes) && !in_array($context->getController()->getOutputType(), $outputTypes)) {
+			return;
+		}
+		
+		$time = (microtime(true) - $start);
+		
+		
+		if($replace) {
+			$output = $response->getContent();
+			$output = str_replace($replace, $time, $output);
+			$response->setContent($output);
+		}
+		
+		if($comment) {
+			$response->appendContent("\n\n<!-- This page took " . $time . " seconds to process -->");
 		}
 	}
 
