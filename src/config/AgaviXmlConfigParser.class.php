@@ -91,7 +91,9 @@ class AgaviXmlConfigParser extends AgaviConfigParser
 		}
 		$this->encoding = strtolower($doc->encoding);
 		
-		$doc->xinclude();
+		// We must use the @ to prevent warnings when an XInclude fails
+		// I know that is not optimal, but we need this, so people can blindly include configs provided by modules, without everything breaking to smithereens by throwing an Exception if the module isn't actually there. XInclude is something advanced, and I expect people who use it to be able to hunt down the problem (incorrect path) when an XInclude just doesn't seem to work.
+		@$doc->xinclude();
 		
 		$this->xpath = new DomXPath($doc);
 		
