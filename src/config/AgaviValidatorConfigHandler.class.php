@@ -54,7 +54,7 @@ class AgaviValidatorConfigHandler extends AgaviConfigHandler
 		$this->classMap = array(
 			'and' => array('class' => 'AgaviAndoperatorValidator', 'parameters' => array('break' => '1')),
 			'date' => array('class' => 'AgaviDateValidator', 'parameters' => array('check' => '1')),
-			'email' => array('class' => 'AgaviEmaiValidator', 'parameters' => array()),
+			'email' => array('class' => 'AgaviEmailValidator', 'parameters' => array()),
 			'equals' => array('class' => 'AgaviEqualsValidator', 'parameters' => array()),
 			'inarray' => array('class' => 'AgaviInarrayValidator', 'parameters' => array('sep' => ',')),
 			'isset' => array('class' => 'AgaviIssetValidator', 'parameters' => array()),
