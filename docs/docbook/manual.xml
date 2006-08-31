@@ -202,7 +202,20 @@
         <para>If you want to use the Routing without an
         <filename>index.php</filename> part in the URL path, you need
         mod_rewrite enabled, along with the respective AllowOverride options
-        set.</para>
+        set. Refer to the "Removing the "index.php" Part From URLs" section in
+        the Cookbook for further instructions.</para>
+      </section>
+
+      <section>
+        <title>LightTPD Configuration</title>
+
+        <para>Agavi doesn't require any changes to your Lighty
+        configuration.</para>
+
+        <para>If you want to use the Routing without an
+        <filename>index.php</filename> part in the URL path, you need the
+        rewrite module enabled. Refer to the "Removing the "index.php" Part
+        From URLs" section in the Cookbook for further instructions.</para>
       </section>
 
       <section>
@@ -249,7 +262,9 @@
           </orderedlist>If you want to use the Routing without an index.php
         part in the URL path, you need a plugin for IIS that mimics
         mod_rewrite's behavior, such as <ulink
-        url="http://www.isapirewrite.com/">ISAPI_Rewrite</ulink>.</para>
+        url="http://www.isapirewrite.com/">ISAPI_Rewrite</ulink>. Refer to the
+        "Removing the "index.php" Part From URLs" section in the Cookbook for
+        further instructions.</para>
       </section>
     </section>
 

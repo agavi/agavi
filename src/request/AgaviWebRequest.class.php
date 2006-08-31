@@ -59,7 +59,7 @@ class AgaviWebRequest extends AgaviRequest
 	public function getUrlAuthority($forcePort = false)
 	{
 		return
-			$_SERVER['SERVER_NAME'] .
+			preg_replace('/\:' . preg_quote($_SERVER['SERVER_PORT']) . '$/', '', $_SERVER['SERVER_NAME']) .
 			
 			($forcePort == true
 				? (':' . $_SERVER['SERVER_PORT'])

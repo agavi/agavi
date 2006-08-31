@@ -33,13 +33,19 @@
     <section>
       <title>Removing the "index.php" Part From URLs</title>
 
-      <para>You need mod_rewrite (or something similar for other web servers,
-      such as ISAPI_Rewrite for Microsoft IIS) to get rid of the "index.php"
-      part in incoming and generated URLs. Make sure mod_rewrite is enabled,
-      and rename dist.htaccess in your <filename>pub</filename> directory
-      which has the the following contents:</para>
+      <para>You need mod_rewrite for Apache or something similar for other web
+      servers, such as ISAPI_Rewrite for Microsoft IIS to get rid of the
+      "index.php" part in incoming and generated URLs.</para>
 
-      <para><programlisting># rename this file to .htaccess to remove the necessity to have index.php in front of routes
+      <section>
+        <title>Apache with mod_rewrite</title>
+
+        <para>Make sure mod_rewrite is enabled and the required AllowOverride
+        settings are active, and rename <filename>dist.htaccess</filename> to
+        <filename>.htaccess</filename> in your <filename>pub</filename>
+        directory which has the the following contents:</para>
+
+        <para><programlisting># rename this file to .htaccess to remove the necessity to have index.php in front of routes
 # make sure mod_rewrite is on and AllowOverride settings are okay
 
 # these two aren't really necessary
@@ -66,31 +72,66 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule (.*) index.php?/$1 [QSA,L]
 &lt;/IfModule&gt;</programlisting></para>
 
-      <para>All you must do is enable rewriting by setting RewriteEngine to
-      On, and change the rewrite base to point to your pub directory URL
-      path.</para>
+        <para>All you must do is enable rewriting:</para>
 
-      <para>The important thing is that you use the
-      <emphasis>external</emphasis> path to the <filename>pub</filename>
-      directory as the RewriteBase, i.e. the path that you would have to enter
-      in your web browser location bar to reach the index page. If the
-      <filename>pub</filename> directory is the document root, then the
-      RewriteBase is just <filename>/</filename>.</para>
+        <para><programlisting>RewriteEngine On</programlisting></para>
 
-      <para>The RewriteCond is a condition that executes the following
-      RewriteRule if the requested filename (that is the incoming URL already
-      mapped to a filesystem name by Apache) does <emphasis>not</emphasis>
-      exist. If the requested URL exists, for instance, when an image on the
-      webserver is requested, Agavi won't be called. Otherwise, the framework
-      is started and the given URL is handed to Agavi as so-called Path Info
-      which the WebRouting will use to match a route.</para>
+        <para>and change the rewrite base to point to your pub directory URL
+        path:</para>
 
-      <para>If you use ISAPI_Rewrite or another plugin for IIS, you can't use
-      the rewrite condition shown above since it's not supported. Instead, you
-      should create a RewriteCond that checks if the incoming URL does not
-      fall into a certain schema (e.g. doesn't begin with
-      <filename>/images</filename> and <filename>/css</filename> so these
-      don't get rewritten and handed to Agavi).</para>
+        <para><programlisting>RewriteBase /projects/myproject/pub/</programlisting></para>
+
+        <para>The important thing is that you use the
+        <emphasis>external</emphasis> path to the <filename>pub</filename>
+        directory as the RewriteBase, i.e. the path that you would have to
+        enter in your web browser location bar to reach the index page. If the
+        <filename>pub</filename> directory is the document root, then the
+        RewriteBase is just <filename>/</filename>.</para>
+
+        <para>The RewriteCond is a condition that executes the following
+        RewriteRule if the requested filename (that is the incoming URL
+        already mapped to a filesystem name by Apache) does
+        <emphasis>not</emphasis> exist. If the requested URL exists, for
+        instance, when an image on the webserver is requested, Agavi won't be
+        called. Otherwise, the framework is started and the given URL is
+        handed to Agavi as so-called Path Info which the WebRouting will use
+        to match a route.</para>
+      </section>
+
+      <section>
+        <title>LightTPD</title>
+
+        <para>In your <filename>lighttpd.conf</filename>, add the following
+        lines (this example assumes that our project is in
+        <filename>/~cbrown/projects/win-a-baseball-match/</filename>):</para>
+
+        <para><programlisting>url.rewrite-once = ( 
+  "^<filename>/~cbrown/projects/win-a-baseball-match/</filename>pub/([^?]*)(?:\?(.*))?$" =&gt; "<filename>/~cbrown/projects/win-a-baseball-match/</filename>pub/index.php?/$1&amp;$2"
+)</programlisting></para>
+
+        <para>While the pattern looks a bit ugly-ish, it is strongly
+        recommended that you don't use your own in order for the routing to
+        work reliably. Don't worry, it's been engineered by a German, it won't
+        let you down.</para>
+
+        <para>However, we're not there yet. The pattern works and does it's
+        job, but unfortunately, it's a bit overzealus and will rewrite any
+        URL. That's not exactly what we want, because our images, stylesheets
+        and other static files must remain accessible. So we have to add
+        another rewrite that catches URLs that shouldn't be rewritten, in our
+        case any that begins on "modpub", "img", "css" or "files":</para>
+
+        <para><programlisting>url.rewrite-once = ( 
+  "^/~cbrown/projects/win-a-baseball-match/pub/(modpub|img|css|files).*" =&gt; "$0", 
+  "^<filename>/~cbrown/projects/win-a-baseball-match/</filename>pub/([^?]*)(?:\?(.*))?$" =&gt; "<filename>/~cbrown/projects/win-a-baseball-match/</filename>pub/index.php?/$1&amp;$2"
+)</programlisting></para>
+      </section>
+
+      <section>
+        <title>Microsoft IIS with ISAPI_Rewrite</title>
+
+        <para></para>
+      </section>
     </section>
 
     <section>
