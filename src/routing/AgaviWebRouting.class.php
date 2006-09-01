@@ -203,7 +203,7 @@ class AgaviWebRouting extends AgaviRouting
 			$this->prefix = AgaviToolkit::stringBase($sn, $ru['path'], $appendFrom);
 			$this->prefix .= substr($sn, $appendFrom + 1);
 			
-			$this->input = substr($ru['path'], $appendFrom + 1);
+			$this->input = rawurldecode(substr($ru['path'], $appendFrom + 1));
 			
 			$this->basePath = str_replace('\\', '/', dirname($this->prefix));
 		}
