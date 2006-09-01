@@ -91,7 +91,7 @@ class AgaviWebRouting extends AgaviRouting
 	}
 	
 	/**
-	 * Parses route information for Apache as a module.
+	 * Parses route information for Apache.
 	 *
 	 * @return     bool Whether or not the information could be parsed.
 	 *
@@ -156,7 +156,7 @@ class AgaviWebRouting extends AgaviRouting
 	}
 	
 	/**
-	 * Parses route information for Apache as a module.
+	 * Parses route information for Lighttpd.
 	 *
 	 * @return     bool Whether or not the information could be parsed.
 	 *
@@ -222,7 +222,7 @@ class AgaviWebRouting extends AgaviRouting
 	}
 	
 	/**
-	 * Parses route information for MS IIS
+	 * Parses route information for MS IIS.
 	 *
 	 * @return     bool Whether or not the information could be parsed.
 	 *
@@ -253,7 +253,6 @@ class AgaviWebRouting extends AgaviRouting
 		if($rewritten) {
 			$this->input = preg_replace('/' . preg_quote('&' . $ru['query'], '/') . '$/', '', $qs);
 			$this->basePath = $this->prefix = preg_replace('/' . preg_quote($this->input, '/') . '$/', '', $ru['path']);
-
 			$this->input = rawurldecode($this->input);
 			
 			// that was easy. now clean up $_GET and the Request
@@ -287,7 +286,6 @@ class AgaviWebRouting extends AgaviRouting
 		$this->baseHref = $rq->getUrlScheme() . '://' . $rq->getUrlAuthority() . $this->basePath;
 		
 		return true;
-
 	}
 
 	/**
