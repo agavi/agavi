@@ -48,15 +48,6 @@ class AgaviWebRouting extends AgaviRouting
 	);
 
 	/**
-	 * @var        array An array of method names that can prepare the input data.
-	 */
-	protected $inputHandlers = array(
-		'handleApache',
-		'handleLighttpd',
-		'handleIis'
-	);
-
-	/**
 	 * Initialize the routing instance.
 	 *
 	 * @param      AgaviContext A Context instance.
@@ -73,37 +64,6 @@ class AgaviWebRouting extends AgaviRouting
 			return;
 		}
 		
-		$parsed = $this->prepareInput();
-		
-		if(!$parsed) {
-			throw new AgaviException('No parser could be found to process the input. This might be due to your special Web Server or PHP configuration. Please refer to the manual for further assistance. As a quick workaround, disable the Routing - routes you specified can still be generated, the system will produce traditional URLs.');
-		}
-	}
-	
-	protected function prepareInput()
-	{
-		foreach($this->inputHandlers as $handler) {
-			if($this->$handler()) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	/**
-	 * Parses route information for Apache.
-	 *
-	 * @return     bool Whether or not the information could be parsed.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function handleApache()
-	{
-		if(!isset($_SERVER['SERVER_SOFTWARE']) || strpos($_SERVER['SERVER_SOFTWARE'], 'Apache') === false) {
-			return false;
-		}
-		
 		$rq = $this->context->getRequest();
 		
 		$ru = parse_url($rq->getRequestUri());
@@ -114,12 +74,18 @@ class AgaviWebRouting extends AgaviRouting
 			$ru['query'] = '';
 		}
 		
-		$qs = $_SERVER['QUERY_STRING'];
+		$qs = (isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : '');
 		
 		$rewritten = ($qs !== $ru['query']);
 		
 		if($rewritten) {
 			$this->input = preg_replace('/' . preg_quote('&' . $ru['query'], '/') . '$/', '', $qs);
+			
+			if(!isset($_SERVER['SERVER_SOFTWARE']) || strpos($_SERVER['SERVER_SOFTWARE'], 'Apache') === false) {
+				// don't do that for Apache, it's already rawurldecode()d there
+				$this->input = rawurldecode($this->input);
+			}
+			
 			$this->basePath = $this->prefix = preg_replace('/' . preg_quote($this->input, '/') . '$/', '', rawurldecode($ru['path']));
 			
 			// that was easy. now clean up $_GET and the Request
@@ -151,141 +117,6 @@ class AgaviWebRouting extends AgaviRouting
 		}
 		
 		$this->baseHref = $rq->getUrlScheme() . '://' . $rq->getUrlAuthority() . $this->basePath;
-		
-		return true;
-	}
-	
-	/**
-	 * Parses route information for Lighttpd.
-	 *
-	 * @return     bool Whether or not the information could be parsed.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function handleLighttpd()
-	{
-		if(!isset($_SERVER['SERVER_SOFTWARE']) || strpos($_SERVER['SERVER_SOFTWARE'], 'lighttpd') === false) {
-			return false;
-		}
-		
-		$rq = $this->context->getRequest();
-		
-		$ru = parse_url($rq->getRequestUri());
-		if(!isset($ru['path'])) {
-			$ru['path'] = '';
-		}
-		if(!isset($ru['query'])) {
-			$ru['query'] = '';
-		}
-		
-		$qs = $_SERVER['QUERY_STRING'];
-		
-		$rewritten = ($qs !== $ru['query']);
-		
-		if($rewritten) {
-			$this->input = preg_replace('/' . preg_quote('&' . $ru['query'], '/') . '$/', '', $qs);
-			$this->basePath = $this->prefix = preg_replace('/' . preg_quote($this->input, '/') . '$/', '', $ru['path']);
-			$this->input = rawurldecode($this->input);
-			
-			// that was easy. now clean up $_GET and the Request
-			parse_str($ru['query'], $parsedRuQuery);
-			parse_str($this->input, $parsedInput);
-			foreach(array_diff(array_keys($parsedInput), array_keys($parsedRuQuery)) as $unset) {
-				unset($_GET[$unset]);
-				if(!isset($_POST[$unset])) {
-					$rq->removeParameter($unset);
-				}
-			}
-		} else {
-			$sn = $_SERVER['SCRIPT_NAME'];
-			
-			$this->prefix = AgaviToolkit::stringBase($sn, $ru['path'], $appendFrom);
-			$this->prefix .= substr($sn, $appendFrom + 1);
-			
-			$this->input = rawurldecode(substr($ru['path'], $appendFrom + 1));
-			
-			$this->basePath = str_replace('\\', '/', dirname($this->prefix));
-		}
-		
-		if(!$this->input) {
-			$this->input = "/";
-		}
-		
-		if(substr($this->basePath, -1, 1) != '/') {
-			$this->basePath .= '/';
-		}
-		
-		$this->baseHref = $rq->getUrlScheme() . '://' . $rq->getUrlAuthority() . $this->basePath;
-		
-		return true;
-	}
-	
-	/**
-	 * Parses route information for MS IIS.
-	 *
-	 * @return     bool Whether or not the information could be parsed.
-	 *
-	 * @author     Veikko Mäkinen <mail@veikkomakinen.com>
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	protected function handleIis()
-	{
-		if(!isset($_SERVER['SERVER_SOFTWARE']) || strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') === false) {
-			return false;
-		}
-		
-		$rq = $this->context->getRequest();
-		
-		$ru = parse_url($rq->getRequestUri());
-		if(!isset($ru['path'])) {
-			$ru['path'] = '';
-		}
-		if(!isset($ru['query'])) {
-			$ru['query'] = '';
-		}
-		
-		$qs = $_SERVER['QUERY_STRING'];
-		
-		$rewritten = ($qs !== $ru['query']);
-		
-		if($rewritten) {
-			$this->input = preg_replace('/' . preg_quote('&' . $ru['query'], '/') . '$/', '', $qs);
-			$this->basePath = $this->prefix = preg_replace('/' . preg_quote($this->input, '/') . '$/', '', $ru['path']);
-			$this->input = rawurldecode($this->input);
-			
-			// that was easy. now clean up $_GET and the Request
-			parse_str($ru['query'], $parsedRuQuery);
-			parse_str($this->input, $parsedInput);
-			foreach(array_diff(array_keys($parsedInput), array_keys($parsedRuQuery)) as $unset) {
-				unset($_GET[$unset]);
-				if(!isset($_POST[$unset])) {
-					$rq->removeParameter($unset);
-				}
-			}
-		} else {
-			$sn = $_SERVER['SCRIPT_NAME'];
-			
-			$this->prefix = AgaviToolkit::stringBase($sn, $ru['path'], $appendFrom);
-			$this->prefix .= substr($sn, $appendFrom + 1);
-			
-			$this->input = rawurldecode(substr($ru['path'], $appendFrom + 1));
-			
-			$this->basePath = str_replace('\\', '/', dirname($this->prefix));
-		}
-		
-		if(!$this->input) {
-			$this->input = "/";
-		}
-		
-		if(substr($this->basePath, -1, 1) != '/') {
-			$this->basePath .= '/';
-		}
-		
-		$this->baseHref = $rq->getUrlScheme() . '://' . $rq->getUrlAuthority() . $this->basePath;
-		
-		return true;
 	}
 
 	/**
