@@ -221,6 +221,52 @@
 		)
 	),
 	array(
+		'message' => 'Sub-directory, no rewrite, called index.php with special path info and query',
+		'input' => '/fo o&ba+r',
+		'prefix' => '/~dzuelke/rw/index.php',
+		'basePath' => '/~dzuelke/rw/',
+		'baseHref' => 'http://localhost/~dzuelke/rw/',
+		'_ENV' => array (
+			'PATH' => '/bin:/sbin:/usr/bin:/usr/sbin:/usr/libexec:/System/Library/CoreServices',
+			'PWD' => '/',
+			'SHLVL' => '3',
+			'_' => '/usr/sbin/httpd',
+		),
+		'_GET' => array (
+			'test' => 'foo bar baz',
+		),
+		'_SERVER' => array (
+			'DOCUMENT_ROOT' => '/Library/WebServer/Documents',
+			'HTTP_ACCEPT' => '*/*',
+			'HTTP_ACCEPT_ENCODING' => 'gzip, deflate',
+			'HTTP_ACCEPT_LANGUAGE' => 'de-de',
+			'HTTP_CONNECTION' => 'keep-alive',
+			'HTTP_COOKIE' => 'Agavi=ljjevpuvgtg5rf9h0mq2i6gpu5',
+			'HTTP_HOST' => 'localhost',
+			'HTTP_USER_AGENT' => 'Mozilla/5.0 (Macintosh; U; PPC Mac OS X; de-de) AppleWebKit/418.8 (KHTML, like Gecko) Safari/419.3',
+			'PATH' => '/bin:/sbin:/usr/bin:/usr/sbin:/usr/libexec:/System/Library/CoreServices',
+			'REMOTE_ADDR' => '127.0.0.1',
+			'REMOTE_PORT' => '56982',
+			'SCRIPT_FILENAME' => '/Users/dzuelke/Sites/rw/index.php',
+			'SERVER_ADDR' => '127.0.0.1',
+			'SERVER_ADMIN' => '[no address given]',
+			'SERVER_NAME' => 'localhost',
+			'SERVER_PORT' => '80',
+			'SERVER_SIGNATURE' => 'Apache/1.3.33 Server at 127.0.0.1 Port 80
+		',
+			'SERVER_SOFTWARE' => 'Apache/1.3.33 (Darwin) PHP/5.0.4',
+			'GATEWAY_INTERFACE' => 'CGI/1.1',
+			'SERVER_PROTOCOL' => 'HTTP/1.1',
+			'REQUEST_METHOD' => 'GET',
+			'QUERY_STRING' => 'test=foo%20bar+baz',
+			'REQUEST_URI' => '/~dzuelke/rw/index.php/fo%20o&ba+r?test=foo%20bar+baz',
+			'SCRIPT_NAME' => '/~dzuelke/rw/index.php',
+			'PATH_INFO' => '/fo o&ba+r',
+			'PATH_TRANSLATED' => '/Library/WebServer/Documents/fo o&ba+r',
+			'PHP_SELF' => '/~dzuelke/rw/index.php/fo o&ba+r',
+		)
+	),
+	array(
 		'message' => 'Sub-directory, rewritten, called directory',
 		'input' => '/',
 		'prefix' => '/~dzuelke/rw',
@@ -364,7 +410,7 @@
 		)
 	),
 	array(
-		'message' => 'Sub-directory, rewritten, called path with query',
+		'message' => 'Sub-directory, rewritten, called special path with query',
 		'input' => '/fo o&ba+r',
 		'prefix' => '/~dzuelke/rw',
 		'basePath' => '/~dzuelke/rw/',
