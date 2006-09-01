@@ -106,7 +106,7 @@ class AgaviWebRouting extends AgaviRouting
 		
 		$rq = $this->context->getRequest();
 		
-		$ru = parse_url($rq->getRelativeUrl());
+		$ru = parse_url($rq->getRequestUri());
 		if(!isset($ru['path'])) {
 			$ru['path'] = '';
 		}
@@ -171,7 +171,7 @@ class AgaviWebRouting extends AgaviRouting
 		
 		$rq = $this->context->getRequest();
 		
-		$ru = parse_url($rq->getRelativeUrl());
+		$ru = parse_url($rq->getRequestUri());
 		if(!isset($ru['path'])) {
 			$ru['path'] = '';
 		}
@@ -236,9 +236,58 @@ class AgaviWebRouting extends AgaviRouting
 			return false;
 		}
 		
-		$rewritten = (isset($_SERVER['HTTP_X_REWRITE_URL']) && ($_SERVER['HTTP_X_REWRITE_URL'] != $_SERVER['ORIG_PATH_INFO']));
+		$rq = $this->context->getRequest();
 		
-		throw new AgaviInitializationException('Unimplemented route parsing method for Microsoft Internet Information Server.');
+		$ru = parse_url($rq->getRequestUri());
+		if(!isset($ru['path'])) {
+			$ru['path'] = '';
+		}
+		if(!isset($ru['query'])) {
+			$ru['query'] = '';
+		}
+		
+		$qs = $_SERVER['QUERY_STRING'];
+		
+		$rewritten = ($qs !== $ru['query']);
+		
+		if($rewritten) {
+			$this->input = preg_replace('/' . preg_quote('&' . $ru['query'], '/') . '$/', '', $qs);
+			$this->basePath = $this->prefix = preg_replace('/' . preg_quote($this->input, '/') . '$/', '', $ru['path']);
+
+			$this->input = rawurldecode($this->input);
+			
+			// that was easy. now clean up $_GET and the Request
+			parse_str($ru['query'], $parsedRuQuery);
+			parse_str($this->input, $parsedInput);
+			foreach(array_diff(array_keys($parsedInput), array_keys($parsedRuQuery)) as $unset) {
+				unset($_GET[$unset]);
+				if(!isset($_POST[$unset])) {
+					$rq->removeParameter($unset);
+				}
+			}
+		} else {
+			$sn = $_SERVER['SCRIPT_NAME'];
+			
+			$this->prefix = AgaviToolkit::stringBase($sn, $ru['path'], $appendFrom);
+			$this->prefix .= substr($sn, $appendFrom + 1);
+			
+			$this->input = rawurldecode(substr($ru['path'], $appendFrom + 1));
+			
+			$this->basePath = str_replace('\\', '/', dirname($this->prefix));
+		}
+		
+		if(!$this->input) {
+			$this->input = "/";
+		}
+		
+		if(substr($this->basePath, -1, 1) != '/') {
+			$this->basePath .= '/';
+		}
+		
+		$this->baseHref = $rq->getUrlScheme() . '://' . $rq->getUrlAuthority() . $this->basePath;
+		
+		return true;
+
 	}
 
 	/**

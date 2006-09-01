@@ -79,12 +79,14 @@ RewriteRule (.*) index.php?/$1 [QSA,L]
         <para>and change the rewrite base to point to your pub directory URL
         path:</para>
 
-        <para><programlisting>RewriteBase /projects/myproject/pub/</programlisting></para>
+        <para><programlisting>RewriteBase /~cbrown/projects/win-a-baseball-match/pub/</programlisting></para>
 
         <para>The important thing is that you use the
         <emphasis>external</emphasis> path to the <filename>pub</filename>
         directory as the RewriteBase, i.e. the path that you would have to
-        enter in your web browser location bar to reach the index page. If the
+        enter in your web browser location bar to reach the index page - in
+        our example, the project is located at
+        <filename>/~cbrown/projects/win-a-baseball-match/</filename>. If the
         <filename>pub</filename> directory is the document root, then the
         RewriteBase is just <filename>/</filename>.</para>
 
@@ -114,6 +116,8 @@ RewriteRule (.*) index.php?/$1 [QSA,L]
         work reliably. Don't worry, it's been engineered by a German, it won't
         let you down.</para>
 
+        <para>Restart Lighty, and everything should work.</para>
+
         <para>However, we're not there yet. The pattern works and does it's
         job, but unfortunately, it's a bit overzealus and will rewrite any
         URL. That's not exactly what we want, because our images, stylesheets
@@ -125,12 +129,49 @@ RewriteRule (.*) index.php?/$1 [QSA,L]
   "^/~cbrown/projects/win-a-baseball-match/pub/(modpub|img|css|files).*" =&gt; "$0", 
   "^<filename>/~cbrown/projects/win-a-baseball-match/</filename>pub/([^?]*)(?:\?(.*))?$" =&gt; "<filename>/~cbrown/projects/win-a-baseball-match/</filename>pub/index.php?/$1&amp;$2"
 )</programlisting></para>
+
+        <para>Don't forget to restart Lighty again for the changes to take
+        effect.</para>
       </section>
 
       <section>
         <title>Microsoft IIS with ISAPI_Rewrite</title>
 
-        <para></para>
+        <para>This example assumes you're using the Lite version of
+        ISAPI_Rewrite, which does not allow per-directory
+        <filename>htaccess.ini</filename> files - all rewrite rules have to be
+        put into the <filename>httpd.ini</filename> in the directory where
+        ISAPI_Rewrite was installed. For now, we use these rules (assuming
+        your project is sitting in
+        <filename>/users/cbrown/projects/win-a-baseball-match/</filename>):</para>
+
+        <para><programlisting>UriMatchPrefix /users/cbrown/projects/win-a-baseball-match/pub/
+UriFormatPrefix /users/cbrown/projects/win-a-baseball-match/pub/
+RewriteRule ([^?]*)(?:\?(.*))? index.php?/$1&amp;$2 [L]</programlisting></para>
+
+        <para>While the pattern looks a bit ugly-ish, it is strongly
+        recommended that you don't use your own in order for the routing to
+        work reliably. Don't worry, it's been engineered by a German, it won't
+        let you down.</para>
+
+        <para>Restart IIS, and everything should work.</para>
+
+        <para>However, we're not there yet. The pattern works and does it's
+        job, but unfortunately, it's a bit overzealus and will rewrite any
+        URL. That's not exactly what we want, because our images, stylesheets
+        and other static files must remain accessible. So we have to add a
+        rewrite condition that prevents rewriting for URLs that shouldn't be
+        rewritten, in our case any that begins on "modpub", "img", "css" or
+        "files":</para>
+
+        <para><programlisting>UriMatchPrefix /users/cbrown/projects/win-a-baseball-match/pub/
+UriFormatPrefix /users/cbrown/projects/win-a-baseball-match/pub/
+RewriteCond URL (?!modpub|img|css|files).*
+RewriteRule ([^?]*)(?:\?(.*))? index.php?/$1&amp;$2 [L]</programlisting></para>
+
+        <para>Don't forget to restart IIS again for the settings to take
+        effect (unless you'd like to wait until ISAPI_Rewrite figures out
+        something has changed, but that will take up to an hour).</para>
       </section>
     </section>
 

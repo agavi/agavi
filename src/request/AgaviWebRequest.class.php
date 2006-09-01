@@ -31,6 +31,41 @@
 class AgaviWebRequest extends AgaviRequest
 {
 	/**
+	 * @var        string The current URL scheme.
+	 */
+	protected $urlScheme = '';
+
+	/**
+	 * @var        string The current URL authority.
+	 */
+	protected $urlHost = '';
+
+	/**
+	 * @var        string The current URL authority.
+	 */
+	protected $urlPort = 0;
+
+	/**
+	 * @var        string The current URL path.
+	 */
+	protected $urlPath = '';
+
+	/**
+	 * @var        string The current URL query.
+	 */
+	protected $urlQuery = '';
+
+	/**
+	 * @var        string The current request URL (path and query).
+	 */
+	protected $requestUri = '';
+
+	/**
+	 * @var        string The current URL.
+	 */
+	protected $url = '';
+
+	/**
 	 * Retrieve the scheme part of a request URL, typically the protocol.
 	 * Example: "http".
 	 *
@@ -41,7 +76,33 @@ class AgaviWebRequest extends AgaviRequest
 	 */
 	public function getUrlScheme()
 	{
-		return 'http' . (isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on' ? 's' : '');
+		return $this->urlScheme;
+	}
+	
+	/**
+	 * Retrieve the hostname part of a request URL.
+	 *
+	 * @return     string The request URL hostname.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getUrlHost()
+	{
+		return $this->urlHost;
+	}
+	
+	/**
+	 * Retrieve the hostname part of a request URL.
+	 *
+	 * @return     string The request URL hostname.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getUrlPort()
+	{
+		return $this->urlPort;
 	}
 	
 	/**
@@ -58,20 +119,9 @@ class AgaviWebRequest extends AgaviRequest
 	 */
 	public function getUrlAuthority($forcePort = false)
 	{
-		return
-			preg_replace('/\:' . preg_quote($_SERVER['SERVER_PORT']) . '$/', '', $_SERVER['SERVER_NAME']) .
-			
-			($forcePort == true
-				? (':' . $_SERVER['SERVER_PORT'])
-				: ($this->getUrlScheme() == 'https'
-					? ($_SERVER['SERVER_PORT'] != 443
-						? ':' . $_SERVER['SERVER_PORT']
-						: '')
-					: ($_SERVER['SERVER_PORT'] != 80
-						? ':' . $_SERVER['SERVER_PORT']
-						: '')
-				)
-			);
+		$port = $this->getUrlPort();
+		$scheme = $this->getUrlScheme();
+		return $this->getUrlHost() . ($forcePort || ($scheme == 'https' && $port != 443) || ($scheme == 'http' && $port != 80) ? ':' . $port : '');
 	}
 	
 	/**
@@ -83,18 +133,9 @@ class AgaviWebRequest extends AgaviRequest
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function getRelativeUrl()
+	public function getRequestUri()
 	{
-		if(isset($_SERVER['HTTP_X_REWRITE_URL']) && strpos($_SERVER['SERVER_SOFTWARE'], 'Mircosoft-IIS') !== false) {
-			// Microsoft IIS with ISAPI_Rewrite
-			return $_SERVER['HTTP_X_REWRITE_URL'];
-		} elseif(isset($_SERVER['ORIG_PATH_INFO']) && strpos($_SERVER['SERVER_SOFTWARE'], 'Mircosoft-IIS') !== false) {
-			// Microsoft IIS
-			return $_SERVER['ORIG_PATH_INFO'];
-		} else {
-			// Apache
-			return $_SERVER['REQUEST_URI'];
-		}
+		return $this->requestUri;
 	}
 	
 	/**
@@ -108,13 +149,7 @@ class AgaviWebRequest extends AgaviRequest
 	 */
 	public function getUrlPath()
 	{
-		$ru = $this->getRelativeUrl();
-		$pos = strpos($ru, '?');
-		if($pos !== false) {
-			return substr($ru, 0, $pos);
-		} else {
-			return $ru;
-		}
+		return $this->urlPath;
 	}
 	
 	/**
@@ -128,13 +163,7 @@ class AgaviWebRequest extends AgaviRequest
 	 */
 	public function getUrlQuery()
 	{
-		$ru = $this->getRelativeUrl();
-		$pos = strpos($ru, '?');
-		if($pos !== false) {
-			return substr($ru, $pos + 1);
-		} else {
-			return '';
-		}
+		return $this->urlQuery;
 	}
 	
 	/**
@@ -149,11 +178,10 @@ class AgaviWebRequest extends AgaviRequest
 	 */
 	public function getUrl()
 	{
-		$query = $this->getUrlQuery();
 		return 
 			$this->getUrlScheme() . '://' . 
 			$this->getUrlAuthority() . 
-			$this->getRelativeUrl();
+			$this->getRequestUri();
 	}
 	
 	/**
@@ -452,6 +480,44 @@ class AgaviWebRequest extends AgaviRequest
 			// set the default method
 			$this->setMethod($methods['GET']);
 		}
+
+		$this->urlScheme = 'http' . (isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on' ? 's' : '');
+
+		if(isset($_SERVER['SERVER_PORT'])) {
+			$this->urlPort = intval($_SERVER['SERVER_PORT']);
+		}
+
+		if(isset($_SERVER['SERVER_NAME'])) {
+			$port = $this->getUrlPort();
+			if(preg_match_all('/\:/', preg_quote($_SERVER['SERVER_NAME']), $m) > 1) {
+				$this->urlHost = preg_replace('/\]\:' . preg_quote($port) . '$/', '', $_SERVER['SERVER_NAME']);
+			} else {
+				$this->urlHost = preg_replace('/\:' . preg_quote($port) . '$/', '', $_SERVER['SERVER_NAME']);
+			}
+		}
+
+		if(isset($_SERVER['HTTP_X_REWRITE_URL'])) {
+			// Microsoft IIS with ISAPI_Rewrite
+			$this->requestUri = $_SERVER['HTTP_X_REWRITE_URL'];
+		} elseif(!isset($_SERVER['REQUEST_URI']) && isset($_SERVER['SERVER_SOFTWARE']) && strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') !== false) {
+			// Microsoft IIS with PHP in CGI mode
+			$this->requestUri = $_SERVER['ORIG_PATH_INFO'] . (isset($_SERVER['QUERY_STRING']) && strlen($_SERVER['QUERY_STRING']) > 0 ? '?' . $_SERVER['QUERY_STRING'] : '');
+		} elseif(isset($_SERVER['REQUEST_URI'])) {
+			$this->requestUri = $_SERVER['REQUEST_URI'];
+		}
+
+		// Microsoft IIS with PHP in CGI mode
+		if(!isset($_SERVER['QUERY_STRING'])) {
+			$_SERVER['QUERY_STRING'] = '';
+		}
+		if(!isset($_SERVER['REQUEST_URI'])) {
+			$_SERVER['REQUEST_URI'] = $this->getRequestUri();
+		}
+
+		$parts = array_merge(array('path' => '', 'query' => ''), parse_url($this->getRequestUri()));
+		$this->urlPath = $parts['path'];
+		$this->urlQuery = $parts['query'];
+		unset($parts);
 	}
 
 	/**

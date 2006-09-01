@@ -38,9 +38,9 @@ class WebRequestTest extends AgaviTestCase
 		$this->assertEquals('id=4815162342', $this->_r->getUrlQuery());
 	}
 
-	public function testGetRelativeUrl()
+	public function testGetRequestUri()
 	{
-		$this->assertEquals('/foo/bar/baz?id=4815162342', $this->_r->getRelativeUrl());
+		$this->assertEquals('/foo/bar/baz?id=4815162342', $this->_r->getRequestUri());
 	}
 
 	public function testGetUrl()
