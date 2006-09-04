@@ -146,7 +146,8 @@ class AgaviSmartyRenderer extends AgaviRenderer
 			}
 		} else {
 			if($this->varName == $this->slotsVarName) {
-				$engine->assign_by_ref($this->varName, array_merge($this->view->getAttributes(), $this->output));
+				$slots = array_merge($this->view->getAttributes(), $this->output);
+				$engine->assign_by_ref($this->varName, $slots);
 			} else {
 				$engine->assign_by_ref($this->slotsVarName, $this->output);
 			}
