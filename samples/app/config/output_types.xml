@@ -37,6 +37,7 @@
 						<request>req</request>
 						<controller>ctl</controller>
 						<user>usr</user>
+						<translationManager>tm</translationManager>
 					</assigns>
 				</renderer>
 				<parameters>

@@ -40,7 +40,7 @@ class AgaviTranslationManager
 	protected $translators = null;
 
 	/**
-	 * @var        string The current locale.
+	 * @var        AgaviLocale The current locale.
 	 */
 	protected $defaultLocale = null;
 
@@ -48,6 +48,17 @@ class AgaviTranslationManager
 	 * @var        string The default domain which shall be used for translation.
 	 */
 	protected $defaultDomain = null;
+
+	/**
+	 * @var        array The available locales which have been defined in the 
+	                     translation.xml config file.
+	 */
+	protected $availableConfigLocales = array();
+
+	/**
+	 * @var        array All available locales.
+	 */
+	protected $availableLocales = array();
 
 	/**
 	 * Initialize this TranslationManager.
@@ -62,7 +73,8 @@ class AgaviTranslationManager
 	{
 		$this->context = $context;
 
-		require(AgaviConfigCache::checkConfig(AgaviConfig::get('core.config_dir') . '/translators.xml'));
+		require(AgaviConfigCache::checkConfig(AgaviConfig::get('core.config_dir') . '/translation.xml'));
+		$this->retrieveAvailableLocales();
 	}
 
 	/**
@@ -92,10 +104,19 @@ class AgaviTranslationManager
 	 */
 	public function localeChanged($locale)
 	{
+		if(!($locale instanceof AgaviLocale)) {
+			if(!isset($this->availableLocales[$locale])) {
+				throw new AgaviException('Trying to select unknown locale "' . $locale . '"');
+			}
+			$locale = $this->availableLocales[$locale];
+		}
+
 		if($locale != $this->defaultLocale) {
 			$this->defaultLocale = $locale;
-			foreach($this->translators as $translator) {
-				$translator->localeChanged($locale);
+			foreach($this->translators as $translatorList) {
+				foreach($translatorList as $translator) {
+					$translator->localeChanged($locale);
+				}
 			}
 		}
 	}
@@ -103,7 +124,7 @@ class AgaviTranslationManager
 	/**
 	 * Retrieve the default locale.
 	 *
-	 * @return     string The default locale identifier.
+	 * @return     AgaviLocale The default locale identifier.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
@@ -140,6 +161,51 @@ class AgaviTranslationManager
 	}
 
 	/**
+	 * Formats a currency in the current locale.
+	 *
+	 * @param      mixed The number to be formatted.
+	 *
+	 * @return     string The formatted number.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function _c($number, $domain = null, $locale = null)
+	{
+		if($domain === null) {
+			$domain = $this->defaultDomain;
+		}
+
+		$domainExtra = '';
+		$translator = $this->getTranslators($domain, $domainExtra);
+
+		return $translator['cur']->translate($number, $domainExtra, $locale);
+	}
+
+	/**
+	 * Formats a number in the current locale.
+	 *
+	 * @param      mixed The number to be formatted.
+	 *
+	 * @return     string The formatted number.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function _n($number, $domain = null, $locale = null)
+	{
+		if($domain === null) {
+			$domain = $this->defaultDomain;
+		}
+
+		$domainExtra = '';
+		$translator = $this->getTranslators($domain, $domainExtra);
+
+		return $translator['num']->translate($number, $domainExtra, $locale);
+	}
+
+
+	/**
 	 * Translate a message into the current locale.
 	 *
 	 * @param      string The message.
@@ -154,22 +220,35 @@ class AgaviTranslationManager
 		if($domain === null) {
 			$domain = $this->defaultDomain;
 		}
-		if($parameters === null) {
+
+		$domainExtra = '';
+		$translator = $this->getTranslators($domain, $domainExtra);
+
+		$translatedMessage = $translator['msg']->translate($message, $domainExtra, $locale);
+		if(is_array($parameters)) {
+			$translatedMessage = vsprintf($translatedMessage, $parameters);
 		}
 
+		return $translatedMessage;
+	}
+
+	protected function getTranslators($domain, &$domainExtra)
+	{
 		$domainParts = explode('.', $domain, 2);
 		$translatorDomain = $domainParts[0];
+		$domainExtra = isset($domainParts[1]) ? $domainParts[1] : '';
+
 		if(isset($this->translators[$translatorDomain])) {
-			$translatedMessage = $this->translators[$translatorDomain]->translate($message, isset($domainParts[1]) ? $domainParts[1] : '', $locale);
-			if(is_array($parameters)) {
-				$translatedMessage = vsprintf($translatedMessage, $parameters);
-			}
+			return $this->translators[$translatorDomain];
 		} else {
 			// TODO: select proper exception type
 			throw new AgaviException(sprintf('No translator exists for the domain "%s"', $translatorDomain));
 		}
+	}
 
-		return $translatedMessage;
+	protected function retrieveAvailableLocales()
+	{
+		$this->availableLocales = $this->availableConfigLocales;
 	}
 }
 

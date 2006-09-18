@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+| This file is part of the Agavi package.                                    |
+| Copyright (c) 2006 the Agavi Project.                                      |
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+-->
+<configurations>
+	<configuration>
+		<available_locales>
+			<available_locale identifier="de"> <!-- ldml_file="%core.ldlm_datadir%/localeinfo/de.xml" -->
+				<parameters>
+					<parameter name="numbers">
+						<parameters>
+							<parameter name="symbols">
+
+								<parameters>
+									<parameter name="decimal">.</parameter>
+									<parameter name="group">,</parameter>
+								</parameters>
+
+
+							</parameter>
+							<parameter name="decimalFormat">#,##0.###</parameter>
+						</parameters>
+					</parameter>
+				</parameters>
+			</available_locale>
+			<available_locale identifier="en_US">
+				<parameters>
+					<parameter name="numbers">
+						<parameters>
+							<parameter name="symbols">
+
+								<parameters>
+									<parameter name="decimal">.</parameter>
+									<parameter name="group">,</parameter>
+								</parameters>
+
+
+							</parameter>
+							<parameter name="decimalFormat">#,##0.###</parameter>
+						</parameters>
+					</parameter>
+				</parameters>
+			</available_locale>
+		</available_locales>
+		<translators default_domain="default">
+			<translator domain="default">
+				<message_translator type="AgaviSampleAppTranslator">
+					<parameters>
+						<parameter name="de">
+							<parameters>
+								<parameter name="menu">
+									<parameters>
+										<parameter name="Home">Daheim</parameter>
+										<parameter name="Login">Einloggen</parameter>
+										<parameter name="A Secure Action">Eine sichere Aktion</parameter>
+										<parameter name="Another Secure Action">Noch ne sichere Aktion</parameter>
+										<parameter name="Call invalid URL">Ungültige Url aufrufen</parameter>
+										<parameter name="Try Disabled Module">Deaktiviertes Modul ausprobieren</parameter>
+										<parameter name="Search Engine Spam">Suchmaschinenspam</parameter>
+									</parameters>
+								</parameter>
+							</parameters>
+						</parameter>
+					</parameters>
+				</message_translator>
+
+				<number_formatter type="number">
+				</number_formatter>
+
+				<currency_formatter type="number">
+					<parameters>
+						<parameter name="format">#,##0.00</parameter>
+					</parameters>
+				</currency_formatter>
+
+				<date_formatter type="date">
+				</date_formatter>
+			</translator>
+		</translators>
+	</configuration>
+</configurations>

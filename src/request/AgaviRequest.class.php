@@ -65,7 +65,7 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	 * @var        string The locale of this request.
 	 * @since      0.11.0
 	 */
-	protected $locale = false;
+	protected $locale = null;
 
 	/**
 	 * @var        bool A boolean value indicating whether or not the request is locked.
@@ -264,7 +264,9 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 			$this->actionAccessor = $parameters['action_accessor'];
 		}
 
-		$this->setLocale(AgaviConfig::get('core.default_locale', 'en_US'));
+		if(AgaviConfig::has('core.default_locale')) {
+			$this->setLocale(AgaviConfig::get('core.default_locale'));
+		}
 	}
 
 	/**

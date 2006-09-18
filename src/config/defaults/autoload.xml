@@ -30,7 +30,7 @@
 			<autoload name="AgaviReturnArrayConfigHandler">%core.agavi_dir%/config/AgaviReturnArrayConfigHandler.class.php</autoload>
 			<autoload name="AgaviRoutingConfigHandler">%core.agavi_dir%/config/AgaviRoutingConfigHandler.class.php</autoload>
 			<autoload name="AgaviSettingConfigHandler">%core.agavi_dir%/config/AgaviSettingConfigHandler.class.php</autoload>
-			<autoload name="AgaviTranslatorsConfigHandler">%core.agavi_dir%/config/AgaviTranslatorsConfigHandler.class.php</autoload>
+			<autoload name="AgaviTranslationConfigHandler">%core.agavi_dir%/config/AgaviTranslationConfigHandler.class.php</autoload>
 			<autoload name="AgaviValidatorConfigHandler">%core.agavi_dir%/config/AgaviValidatorConfigHandler.class.php</autoload>
 
 			<!-- agavi/controller -->
@@ -121,14 +121,21 @@
 
 			<!-- agavi/translation -->
 			<autoload name="AgaviBasicTranslator">%core.agavi_dir%/translation/AgaviBasicTranslator.class.php</autoload>
+			<autoload name="AgaviCurrencyFormatter">%core.agavi_dir%/translation/AgaviCurrencyFormatter.class.php</autoload>
+			<autoload name="AgaviDateFormatter">%core.agavi_dir%/translation/AgaviDateFormatter.class.php</autoload>
 			<autoload name="AgaviGettextTranslator">%core.agavi_dir%/translation/AgaviGettextTranslator.class.php</autoload>
 			<autoload name="AgaviITranslator">%core.agavi_dir%/translation/AgaviITranslator.interface.php</autoload>
+			<autoload name="AgaviLocale">%core.agavi_dir%/translation/AgaviLocale.class.php</autoload>
+			<autoload name="AgaviNumberFormatter">%core.agavi_dir%/translation/AgaviNumberFormatter.class.php</autoload>
 			<autoload name="AgaviTranslationManager">%core.agavi_dir%/translation/AgaviTranslationManager.class.php</autoload>
 
 			<!-- agavi/user -->
 			<autoload name="AgaviISecurityUser">%core.agavi_dir%/user/AgaviISecurityUser.interface.php</autoload>
 			<autoload name="AgaviSecurityUser">%core.agavi_dir%/user/AgaviSecurityUser.class.php</autoload>
 			<autoload name="AgaviRbacSecurityUser">%core.agavi_dir%/user/AgaviRbacSecurityUser.class.php</autoload>
+
+			<!-- agavi/util -->
+			<autoload name="AgaviDecimalFormatter">%core.agavi_dir%/util/AgaviDecimalFormatter.class.php</autoload>
 
 			<!-- agavi/validator -->
 			<autoload name="AgaviIValidatorContainer">%core.agavi_dir%/validator/AgaviIValidatorContainer.interface.php</autoload>

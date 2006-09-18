@@ -51,7 +51,13 @@
 		
 		<user class="AgaviSampleAppUser" />
 		
-		<validator_manager class="AgaviValidatorManager" />
+		<translation_manager class="AgaviTranslationManager" />
+		
+		<validator_manager class="AgaviValidatorManager">
+			<parameters>
+				<parameter name="mode">strict</parameter>
+			</parameters>
+		</validator_manager>
 		
 	</configuration>
 	

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:include schemaLocation="default_tags.xsd"/>  
+
+  <xs:element name="configurations" type="configurations" />
+  <xs:complexType name="configurations">
+    <xs:sequence>
+      <xs:element name="configuration" minOccurs="0" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:all>
+            <xs:element name="translators" type="translators" minOccurs="0"/>
+            <xs:element name="available_locales" type="available_locales" minOccurs="0"/>
+          </xs:all>
+          <xs:attribute name="environment" type="xs:string" />
+          <xs:attribute name="context" type="xs:string" />
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="parent" type="xs:string" />
+  </xs:complexType>
+
+  <xs:complexType name="translators">
+    <xs:sequence>
+      <xs:element name="translator" type="translator" maxOccurs="unbounded" />
+    </xs:sequence>
+    <xs:attribute name="default_domain" type="xs:string" use="required" />
+  </xs:complexType>
+  <xs:complexType name="translator">
+    <xs:all>
+      <xs:element name="message_translator" type="message_translator" minOccurs="0" />
+      <xs:element name="number_formatter" type="number_formatter" minOccurs="0" />
+      <xs:element name="currency_formatter" type="currency_formatter" minOccurs="0" />
+      <xs:element name="date_formatter" type="date_formatter" minOccurs="0" />
+    </xs:all>
+    <xs:attribute name="domain" type="xs:string" use="required" />
+  </xs:complexType>
+
+  <xs:complexType name="message_translator">
+    <xs:all>
+      <xs:element name="parameters" type="parameters" minOccurs="0" />
+    </xs:all>
+    <xs:attribute name="type" type="xs:string" />
+  </xs:complexType>
+  <xs:complexType name="number_formatter">
+    <xs:all>
+      <xs:element name="parameters" type="parameters" minOccurs="0" />
+    </xs:all>
+    <xs:attribute name="type" type="xs:string" />
+  </xs:complexType>
+  <xs:complexType name="currency_formatter">
+    <xs:all>
+      <xs:element name="parameters" type="parameters" minOccurs="0" />
+    </xs:all>
+    <xs:attribute name="type" type="xs:string" />
+  </xs:complexType>
+  <xs:complexType name="date_formatter">
+    <xs:all>
+      <xs:element name="parameters" type="parameters" minOccurs="0" />
+    </xs:all>
+    <xs:attribute name="type" type="xs:string" />
+  </xs:complexType>
+
+  <xs:complexType name="available_locales">
+    <xs:sequence>
+      <xs:element name="available_locale" type="available_locale" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="available_locale">
+    <xs:all>
+      <xs:element name="parameters" type="parameters" minOccurs="0" />
+    </xs:all>
+    <xs:attribute name="identifier" type="xs:string" use="required" />
+    <xs:attribute name="ldml_file" type="xs:string" />
+    <xs:attribute name="fallback" type="xs:string" />
+  </xs:complexType>
+
+</xs:schema>

@@ -128,15 +128,15 @@
 		<div id="menu">
 			<h3>Menu</h3>
 			<ul>
-				<li><a href="<?php echo $r->gen('index'); ?>">Home</a></li>
+				<li><a href="<?php echo $r->gen('index'); ?>"><?php echo $tm->_('Home', 'default.menu'); ?></a></li>
 				<?php if(!$usr->isAuthenticated()): ?>
-								<li><a href="<?php echo $r->gen('login'); ?>">Login</a></li>
+								<li><a href="<?php echo $r->gen('login'); ?>"><?php echo $tm->_('Login', 'default.menu'); ?></a></li>
 				<?php endif; ?>
-				<li><a href="<?php echo $r->gen('secure'); ?>">A Secure Action</a></li>
-				<li><a href="<?php echo $r->gen('secure2'); ?>">Another Secure Action</a></li>
-				<li><a href="<?php echo $r->gen('asdjashdasd'); ?>">Call invalid URL</a></li>
-				<li><a href="<?php echo $r->gen('disabled'); ?>">Try Disabled Module</a></li>
-				<li><a href="<?php echo $r->gen('search_engine_spam', array('name' => $products[array_rand($products = array('nonsense', 'chainsaws', 'brains', 'viagra', 'mad coding skills'))], 'id' => 4815162342)); ?>">Search Engine Spam</a></li>
+				<li><a href="<?php echo $r->gen('secure'); ?>"><?php echo $tm->_('A Secure Action', 'default.menu'); ?></a></li>
+				<li><a href="<?php echo $r->gen('secure2'); ?>"><?php echo $tm->_('Another Secure Action', 'default.menu'); ?></a></li>
+				<li><a href="<?php echo $r->gen('asdjashdasd'); ?>"><?php echo $tm->_('Call invalid URL', 'default.menu'); ?></a></li>
+				<li><a href="<?php echo $r->gen('disabled'); ?>"><?php echo $tm->_('Try Disabled Module', 'default.menu'); ?></a></li>
+				<li><a href="<?php echo $r->gen('search_engine_spam', array('name' => $products[array_rand($products = array('nonsense', 'chainsaws', 'brains', 'viagra', 'mad coding skills'))], 'id' => 4815162342)); ?>"><?php echo $tm->_('Search Engine Spam', 'default.menu'); ?></a></li>
 			</ul>
 		</div>
 		<div id="content">
