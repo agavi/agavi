@@ -106,6 +106,8 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 			throw new AgaviException('No iconv module available, input encoding "' . $encoding . '" cannot be handled.');
 		}
 		
+		$xhtml = (strtolower($this->getParameter('force_output_mode')) == 'xhtml' || ($doc->doctype && stripos($doc->doctype->publicId, '-//W3C//DTD XHTML') === 0 && strtolower($this->getParameter('force_output_mode')) != 'html'));
+		
 		$hasXmlProlog = false;
 		if(preg_match('#<\?xml.*?\?>#iU' . ($utf8 ? 'u' : ''), $output)) {
 			$hasXmlProlog = true;
@@ -231,12 +233,16 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 						$element->removeChild($cn);
 					}
 					// append a new text node
-					$element->appendChild($doc->createTextNode($value));
+					if($xhtml) {
+						$element->appendChild($doc->createCDATASection($value));
+					} else {
+						$element->appendChild($doc->createTextNode($value));
+					}
 				}
 				
 			}
 		}
-		if(strtolower($this->getParameter('force_output_mode')) == 'xhtml' || ($doc->doctype && stripos($doc->doctype->publicId, '-//W3C//DTD XHTML') === 0 && strtolower($this->getParameter('force_output_mode')) != 'html')) {
+		if($xhtml) {
 			// workaround for a bug in dom or something that results in two xmlns attributes being generated for the <html> element
 			foreach($xpath->query('//html') as $html) {
 				$html->removeAttribute('xmlns');
