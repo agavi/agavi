@@ -83,7 +83,7 @@ class AgaviDecimalFormatter
 	/**
 	 * @var        int The rounding mode
 	 */
-	protected $roundingMode = self::ROUND_SCIENTIFIC;
+	protected $roundingMode = AgaviDecimalFormatter::ROUND_SCIENTIFIC;
 
 
 	const ROUND_NONE = 0;
