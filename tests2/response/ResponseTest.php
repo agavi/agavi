@@ -138,20 +138,6 @@ class ResponseTest extends AgaviTestCase
 		$this->assertFalse($r->appendContent('content c'));
 		$this->assertEquals('content a' . 'content b', $r->getContent());
 	}
-
-	public function testSendContent()
-	{
-		$r = $this->_r;
-
-		ob_start();
-		$r->setContent('content');
-		$r->sendContent();
-
-		$content = ob_get_contents();
-		ob_end_clean();
-
-		$this->assertEquals('content', $content);
-	}
 }
 
 ?>

@@ -306,7 +306,7 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function sendContent()
+	protected function sendContent()
 	{
 		echo $this->content;
 	}

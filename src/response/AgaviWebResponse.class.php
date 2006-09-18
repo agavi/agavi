@@ -480,7 +480,7 @@ class AgaviWebResponse extends AgaviResponse
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function sendHttpResponseHeaders()
+	protected function sendHttpResponseHeaders()
 	{
 		$file = $line = '';
 		if(headers_sent($file, $line)) {
