@@ -73,7 +73,7 @@ class AgaviNumberFormatter extends AgaviDecimalFormatter implements AgaviITransl
 			$fn = $this;
 		}
 
-		$fn->formatNumber($message);
+		return $fn->formatNumber($message);
 	}
 
 	/**

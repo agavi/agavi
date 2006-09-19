@@ -75,7 +75,7 @@ class AgaviCurrencyFormatter extends AgaviDecimalFormatter implements AgaviITran
 			$fn = $this;
 		}
 
-		$fn->formatCurrency($message, $fn->getCurrencySymbol());
+		return $fn->formatCurrency($message, $fn->getCurrencySymbol());
 	}
 
 	/**
