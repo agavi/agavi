@@ -129,6 +129,9 @@
 			<autoload name="AgaviNumberFormatter">%core.agavi_dir%/translation/AgaviNumberFormatter.class.php</autoload>
 			<autoload name="AgaviTranslationManager">%core.agavi_dir%/translation/AgaviTranslationManager.class.php</autoload>
 
+			<!-- agavi/translation/gettext -->
+			<autoload name="AgaviGettextMoReader">%core.agavi_dir%/translation/gettext/AgaviGettextMoReader.class.php</autoload>
+
 			<!-- agavi/user -->
 			<autoload name="AgaviISecurityUser">%core.agavi_dir%/user/AgaviISecurityUser.interface.php</autoload>
 			<autoload name="AgaviSecurityUser">%core.agavi_dir%/user/AgaviSecurityUser.class.php</autoload>
