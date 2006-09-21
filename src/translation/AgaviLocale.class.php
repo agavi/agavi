@@ -157,6 +157,49 @@ class AgaviLocale
 		return $this->data['numbers']['decimalFormat'];
 	}
 
+
+	public static function parseLocaleIdentifier($identifier)
+	{
+		// the only important thing here is the forward assertion which is needed
+		// so it doesn't match the first character of the territory
+		$baseLocaleRx = '(?P<language>[^_@]{2,3})(?:_(?P<script>[^_@](?=@|_|$)|[^_@]{4,}))?(?:_(?P<territory>[^_@]{2,3}))?(?:_(?P<variant>[^@]+))?';
+		$optionsRx = '@(?P<options>.*)';
+
+		$localeRx = '#^(' . $baseLocaleRx . ')(' . $optionsRx . ')?$#';
+
+		$localeData = array(
+			'language' => null,
+			'script' => null,
+			'territory' => null,
+			'variant' => null,
+			'options' => array()
+		);
+
+		if(preg_match($localeRx, $identifier, $match)) {
+			$localeData['language'] = $match['language'];
+			if($match['script']) {
+				$localeData['script'] = $match['script'];
+			}
+			if($match['territory']) {
+				$localeData['territory'] = $match['territory'];
+			}
+			if($match['variant']) {
+				$localeData['variant'] = $match['variant'];
+			}
+
+			if($match['options']) {
+				$options = explode(',', $match['options']);
+				foreach($options as $option) {
+					$optData = explode('=', $option, 2);
+					$localeData['options'][$optData[0]] = $optData[1];
+				}
+			}
+		} else {
+			throw new AgaviException('Invalid locale identifier (' . $identifier . ') specified');
+		}
+
+		return $localeData;
+	}
 }
 
 ?>
