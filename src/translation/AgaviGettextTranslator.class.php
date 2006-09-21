@@ -27,6 +27,10 @@
  */
 class AgaviGettextTranslator extends AgaviBasicTranslator
 {
+	protected $domainPaths = array();
+
+	protected $domainData = array();
+
 	/**
 	 * Initialize this Filter.
 	 *
@@ -41,13 +45,8 @@ class AgaviGettextTranslator extends AgaviBasicTranslator
 		parent::initialize($context);
 
 		if(isset($parameters['text_domains']) && is_array($parameters['text_domains'])) {
-			$first = true;
 			foreach($parameters['text_domains'] as $domain => $path) {
-				bindtextdomain($domain, $path);
-				if($first) {
-					textdomain($domain);
-					$first = false;
-				}
+				$this->domainPaths[$domain] = $path;
 			}
 		}
 	}
@@ -67,18 +66,25 @@ class AgaviGettextTranslator extends AgaviBasicTranslator
 	public function translate($message, $domain, $locale)
 	{
 		if($locale) {
-			setlocale(LC_ALL, $locale);
+			$oldDomainData = $this->domainData;
+			$oldLocale = $this->locale;
+			$this->localeChanged($locale);
 		}
 
-		if($domain) {
-			return dgettext($domain, $message);
-		} else {
-			return gettext($message);
+		// load domain data from file
+		if(!isset($this->domainData[$domain])) {
+			$this->loadDomainData($domain);
 		}
+
+		$data = isset($this->domainData[$domain][$message]) ? $this->domainData[$domain][$message] : $message;
 
 		if($locale) {
-			setlocale(LC_ALL, $this->getContext()->getRequest()->getLocale());
+			$this->domainData = $oldDomainData;
+			$this->locale = $oldLocale;
 		}
+
+		return $data;
+
 	}
 
 	/**
@@ -92,7 +98,29 @@ class AgaviGettextTranslator extends AgaviBasicTranslator
 	 */
 	public function localeChanged($newLocale)
 	{
-		setlocale(LC_ALL, $newLocale);
+		$this->locale = $newLocale;
+		$this->domainData = array();
+	}
+
+	public function loadDomainData($domain)
+	{
+		if(!isset($this->domainPaths[$domain])) {
+			throw new AgaviException('Using domain "' . $domain . '" which has no path specified');
+		}
+
+		$localeName = $this->locale->getName();
+		$fileNameBases = AgaviLocale::getLookupPath($localeName);
+
+		$basePath = $this->domainPaths[$domain];
+
+		$data = array();
+
+		foreach($fileNameBases as $fileNameBase) {
+			$fileData = AgaviGettextMoReader::readFile($basePath . '/' . $fileNameBase . '.mo');
+			$data = array_merge($fileData, $data);
+		}
+
+		$this->domainData[$domain] = $data;
 	}
 
 }
