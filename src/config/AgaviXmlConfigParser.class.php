@@ -167,7 +167,7 @@ class AgaviXmlConfigParser extends AgaviConfigParser
 				// there is at least one child with the singularized version of this tag name so we take them
 				// to create an indexed array in the parent valueholder
 				if($singularNodes->length > 0) {
-					$this->parseNodes($singularNodes, $vh, true);
+					$this->parseNodes($node->childNodes, $vh, true);
 				} else {
 					if($node->hasChildNodes()) {
 						$this->parseNodes($node->childNodes, $vh);
