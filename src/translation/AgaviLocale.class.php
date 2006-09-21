@@ -177,17 +177,17 @@ class AgaviLocale
 
 		if(preg_match($localeRx, $identifier, $match)) {
 			$localeData['language'] = $match['language'];
-			if($match['script']) {
+			if(!empty($match['script'])) {
 				$localeData['script'] = $match['script'];
 			}
-			if($match['territory']) {
+			if(!empty($match['territory'])) {
 				$localeData['territory'] = $match['territory'];
 			}
-			if($match['variant']) {
+			if(!empty($match['variant'])) {
 				$localeData['variant'] = $match['variant'];
 			}
 
-			if($match['options']) {
+			if(!empty($match['options'])) {
 				$options = explode(',', $match['options']);
 				foreach($options as $option) {
 					$optData = explode('=', $option, 2);
@@ -210,17 +210,17 @@ class AgaviLocale
 		$paths[] = $path;
 
 		if($localeInfo['script']) {
-			$path = '_' . $localeInfo['script'];
+			$path .= '_' . $localeInfo['script'];
 			$paths[] = $path;
 		}
 
 		if($localeInfo['territory']) {
-			$path = '_' . $localeInfo['territory'];
+			$path .= '_' . $localeInfo['territory'];
 			$paths[] = $path;
 		}
 
 		if($localeInfo['variant']) {
-			$path = '_' . $localeInfo['variant'];
+			$path .= '_' . $localeInfo['variant'];
 			$paths[] = $path;
 		}
 
