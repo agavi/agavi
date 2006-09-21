@@ -200,6 +200,32 @@ class AgaviLocale
 
 		return $localeData;
 	}
+
+	public static function getLookupPath($localeIdentifier)
+	{
+		$localeInfo = self::parseLocaleIdentifier($localeIdentifier);
+
+		
+		$path = $localeInfo['language'];
+		$paths[] = $path;
+
+		if($localeInfo['script']) {
+			$path = '_' . $localeInfo['script'];
+			$paths[] = $path;
+		}
+
+		if($localeInfo['territory']) {
+			$path = '_' . $localeInfo['territory'];
+			$paths[] = $path;
+		}
+
+		if($localeInfo['variant']) {
+			$path = '_' . $localeInfo['variant'];
+			$paths[] = $path;
+		}
+
+		return array_reverse($paths);
+	}
 }
 
 ?>
