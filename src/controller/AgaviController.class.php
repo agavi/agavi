@@ -138,7 +138,7 @@ abstract class AgaviController extends AgaviParameterHolder
 			$request = $this->context->getRequest();
 			
 			// match routes and set matched routes as request attributes
-			$request->setAttributes($this->context->getRouting()->execute(), 'org.agavi.routing.matchedRoutes');
+			$request->setAttribute('matchedRoutes', $this->context->getRouting()->execute(), 'org.agavi.routing');
 		
 			if($parameters != null) {
 				$request->setParametersByRef($parameters);
