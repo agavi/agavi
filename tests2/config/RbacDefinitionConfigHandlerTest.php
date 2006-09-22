@@ -25,6 +25,16 @@ class RbacdefinitionConfigHandlerTest extends ConfigHandlerTestBase
 					2 => 'photos.lock',
 				),
 			),
+			'photomoderator' => 
+			array (
+				'parent' => 'member',
+				'permissions' => 
+				array (
+					0 => 'photos.edit',
+					1 => 'photos.delete',
+					2 => 'photos.unlock',
+				),
+			),
 			'member' => 
 			array (
 				'parent' => 'guest',

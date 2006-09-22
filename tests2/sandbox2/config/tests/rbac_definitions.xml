@@ -25,15 +25,13 @@
 									<permission>photos.lock</permission>
 								</permissions>
 							</role>
-							<roles>
-								<role name="photomoderator">
-									<permissions>
-										<permission>photos.edit</permission>
-										<permission>photos.delete</permission>
-										<permission>photos.unlock</permission>
-									</permissions>
-								</role>
-							</roles>
+							<role name="photomoderator">
+								<permissions>
+									<permission>photos.edit</permission>
+									<permission>photos.delete</permission>
+									<permission>photos.unlock</permission>
+								</permissions>
+							</role>
 						</roles>
 					</role>
 				</roles>
