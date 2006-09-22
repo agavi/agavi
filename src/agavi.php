@@ -55,7 +55,7 @@ require(AgaviConfig::get('core.agavi_dir') . '/core/Agavi.class.php');
 // set up our __autoload
 if(function_exists('spl_autoload_register')) {
 	spl_autoload_register(array('Agavi', '__autoload'));
-} else {
+} elseif(!function_exists('__autoload')) {
 	/**
 	 * Handles autoloading of classes
 	 *
