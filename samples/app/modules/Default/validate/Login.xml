@@ -20,6 +20,14 @@
 				</parameters>
 			</validator>
 
+			<validator class="string" name="password_non_existant">
+				<parameters>
+					<parameter name="param">password</parameter>
+					<parameter name="min">1</parameter>
+					<parameter name="min_error">Please supply a password.</parameter>
+				</parameters>
+			</validator>
+
 		</validators>
 	</configuration>
 </configurations>

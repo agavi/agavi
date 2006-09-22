@@ -434,9 +434,10 @@ abstract class AgaviValidator extends AgaviParameterHolder
 				$fullPath->push($this->getParameter('param'));
 			}
 
+			$this->validatedFieldnames[] = $fullPath->__toString();
+
 			if(!$this->validate()) {
 				// validation failed, exit with configured error code
-				$this->validatedFieldnames[] = $fullPath->__toString();
 				return self::mapErrorCode($this->getParameter('severity'));
 			}
 
