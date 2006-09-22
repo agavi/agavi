@@ -34,7 +34,7 @@
 
  * # <b>cdata_fix</b> - [true] - Fix generated CDATA delimiters in script and 
  *                               style blocks.
- * # <b>error_class</b>'- "error"'- The class name that is assigned to form 
+ * # <b>error_class</b> - "error" - The class name that is assigned to form 
  *                                  elements which didn't pass validation and 
  *                                  their labels.
  * # <b>force_output_mode</b> - [false] - If false, the output mode (XHTML or 
@@ -42,7 +42,7 @@
  *                                        document's DOCTYPE declaration. Set 
  *                                        this to "html" or "xhtml" to force 
  *                                        one of these output modes explicitly.
- * # <b>include_hidden_inputs</b> - [false]'- If hidden input fields should be 
+ * # <b>include_hidden_inputs</b> - [false] - If hidden input fields should be 
  *                                            re-populated.
  * # <b>include_password_inputs</b> - [false] - If password input fields should 
  *                                              be re-populated.
@@ -75,30 +75,60 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 	{
 		$filterChain->execute($filterChain, $response);
 		
-		$outputTypes = $this->getParameter('output_types');
-		if(is_array($outputTypes) && !in_array($this->getContext()->getController()->getOutputType(), $outputTypes)) {
-			return;
-		}
-		
 		$req = $this->getContext()->getRequest();
 		
-		$populate = $req->getAttribute('populate', 'org.agavi.filter.FormPopulationFilter');
-		if(!(is_array($populate) || ($populate instanceof AgaviParameterHolder) || (in_array($req->getMethod(), $this->getParameter('methods')) && $populate !== false))) {
+		$cfg = array_merge(array('populate' => null, 'skip' => null), $this->getParameters(), $req->getAttributes('org.agavi.filter.FormPopulationFilter'));
+		
+		if(is_array($cfg['output_types']) && !in_array($this->getContext()->getController()->getOutputType(), $cfg['output_types'])) {
 			return;
 		}
 		
-		if(is_array($populate)) {
-			$p = new AgaviParameterHolder($populate);
-		} elseif($populate instanceof AgaviParameterHolder) {
-			$p = $populate;
+		if(is_array($cfg['populate']) || $cfg['populate'] instanceof AgaviParameterHolder) {
+			$populate = $cfg['populate'];
+		} elseif(in_array($req->getMethod(), $cfg['methods']) && $cfg['populate'] !== false) {
+			$populate = $req;
 		} else {
-			$p = $req;
+			return;
 		}
 		
+		// if(is_array($cfg['skip'])) {
+		// 	$cfg['skip'] = new AgaviParameterHolder($cfg['skip']);
+		// } elseif(!($cfg['skip'] instanceof AgaviParameterHolder)) {
+		// 	$cfg['skip'] = new AgaviParameterHolder();
+		// }
+		// 
 		$output = $response->getContent();
 		
 		$doc = new DOMDocument();
-		$doc->loadHTML($output);
+		
+		$doc->substituteEntities = $cfg['dom_substitute_entities'];
+		$doc->resolveExternals   = $cfg['dom_resolve_externals'];
+		$doc->validateOnParse    = $cfg['dom_validate_on_parse'];
+		$doc->preserveWhiteSpace = $cfg['dom_preserve_white_space'];
+		$doc->formatOutput       = $cfg['dom_format_output'];
+		
+		$xhtml = (preg_match('/<!DOCTYPE[^>]+XHTML[^>]+/', $output) > 0 && strtolower($cfg['force_output_mode']) != 'html') || strtolower($cfg['force_output_mode']) == 'xhtml';
+		if($xhtml && $cfg['parse_xhtml_as_xml']) {
+			$doc->loadXML($output);
+			$xpath = new DomXPath($doc);
+			if($doc->documentElement->namespaceURI) {
+				$xpath->registerNamespace('html', $doc->documentElement->namespaceURI);
+				$ns = 'html:';
+			} else {
+				$ns = '';
+			}
+		} else {
+			$doc->loadHTML($output);
+			$xpath = new DomXPath($doc);
+			$ns = '';
+		}
+		$properXhtml = false;
+		foreach($xpath->query('//' . $ns . 'head/' . $ns . 'meta') as $meta) {
+			if(strtolower($meta->getAttribute('http-equiv')) == 'content-type' && strpos($meta->getAttribute('content'), 'application/xhtml+xml') !== false) {
+				$properXhtml = true;
+				break;
+			}
+		}
 		
 		$encoding = strtolower($doc->encoding);
 		$utf8 = $encoding == 'utf-8';
@@ -106,31 +136,41 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 			throw new AgaviException('No iconv module available, input encoding "' . $encoding . '" cannot be handled.');
 		}
 		
-		$xhtml = (strtolower($this->getParameter('force_output_mode')) == 'xhtml' || ($doc->doctype && stripos($doc->doctype->publicId, '-//W3C//DTD XHTML') === 0 && strtolower($this->getParameter('force_output_mode')) != 'html'));
-		
 		$hasXmlProlog = false;
-		if(preg_match('#<\?xml.*?\?>#iU' . ($utf8 ? 'u' : ''), $output)) {
+		if(preg_match('/<\?xml[^\?]*\?>/iU' . ($utf8 ? 'u' : ''), $output)) {
 			$hasXmlProlog = true;
 		}
-		$xpath = new DomXPath($doc);
 		$baseHref = '';
-		foreach($xpath->query('//head/base[@href]') as $base) {
+		foreach($xpath->query('//' . $ns . 'head/' . $ns . 'base[@href]') as $base) {
 			$baseHref = parse_url($base->getAttribute('href'));
 			$baseHref = $baseHref['path'];
 			break;
 		}
-		foreach($xpath->query('//form[@action]') as $form) {
-			$action = $form->getAttribute('action');
-			if(!($baseHref . $action == $_SERVER['REQUEST_URI'] || $baseHref . '/' . $action == $_SERVER['REQUEST_URI'] || (strpos($action, '/') === 0 && $action == $_SERVER['REQUEST_URI']) || (strlen($_SERVER['REQUEST_URI']) == strrpos($_SERVER['REQUEST_URI'], $action) + strlen($action)))) {
-				continue;
+		if(is_array($populate)) {
+			foreach(array_keys($populate) as $id) {
+				$query[] = '@id="' . $id . '"';
+			}
+			$query = '//' . $ns . 'form[' . implode(' or ', $query) . ']';
+		} else {
+			$query = '//' . $ns . 'form[@action]';
+		}
+		foreach($xpath->query($query) as $form) {
+			if($populate instanceof AgaviParameterHolder) {
+				$action = $form->getAttribute('action');
+				if(!($baseHref . $action == $_SERVER['REQUEST_URI'] || $baseHref . '/' . $action == $_SERVER['REQUEST_URI'] || (strpos($action, '/') === 0 && $action == $_SERVER['REQUEST_URI']) || (strlen($_SERVER['REQUEST_URI']) == strrpos($_SERVER['REQUEST_URI'], $action) + strlen($action)))) {
+					continue;
+				}
+				$p = $populate;
+			} else {
+				$p = $populate[$form->getAttribute('id')];
 			}
 			
 			// build the XPath query
-			$query = 'descendant::textarea[@name] | descendant::select[@name] | descendant::input[@name and not(@type)] | descendant::input[@name and @type="text"] | descendant::input[@name and @type="checkbox"] | descendant::input[@name and @type="radio"] | descendant::input[@name and @type="password"]';
-			if($this->getParameter('include_hidden_inputs')) {
-				$query .= ' | descendant::input[@name and @type="hidden"]';
+			$query = 'descendant::' . $ns . 'textarea[@name] | descendant::' . $ns . 'select[@name] | descendant::' . $ns . 'input[@name and (not(@type) or @type="text" or @type="checkbox" or @type="radio" or @type="password"';
+			if($cfg['include_hidden_inputs']) {
+				$query .= ' or @type="hidden"';
 			}
-
+			$query .= ')]';
 			foreach($xpath->query($query, $form) as $element) {
 				
 				$name = $element->getAttribute('name');
@@ -144,15 +184,15 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 				
 				// there's an error with the element's name in the request? good. let's give the baby a class!
 				if($req->hasError($name)) {
-					$element->setAttribute('class', preg_replace('/\s*$/', ' ' . $this->getParameter('error_class'), $element->getAttribute('class')));
+					$element->setAttribute('class', preg_replace('/\s*$/', ' ' . $cfg['error_class'], $element->getAttribute('class')));
 					// assign the class to all implicit labels
-					foreach($xpath->query('ancestor::label[not(@for)]', $element) as $label) {
-						$label->setAttribute('class', preg_replace('/\s*$/', ' ' . $this->getParameter('error_class'), $label->getAttribute('class')));
+					foreach($xpath->query('ancestor::' . $ns . 'label[not(@for)]', $element) as $label) {
+						$label->setAttribute('class', preg_replace('/\s*$/', ' ' . $cfg['error_class'], $label->getAttribute('class')));
 					}
 					if(($id = $element->getAttribute('id')) != '') {
 						// assign the class to all explicit labels
-						foreach($xpath->query('descendant::label[@for="' . $id . '"]', $form) as $label) {
-							$label->setAttribute('class', preg_replace('/\s*$/', ' ' . $this->getParameter('error_class'), $label->getAttribute('class')));
+						foreach($xpath->query('descendant::' . $ns . 'label[@for="' . $id . '"]', $form) as $label) {
+							$label->setAttribute('class', preg_replace('/\s*$/', ' ' . $cfg['error_class'], $label->getAttribute('class')));
 						}
 					}
 				}
@@ -209,7 +249,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 						
 						// passwords
 						$element->removeAttribute('value');
-						if($this->getParameter('include_password_inputs') && $p->hasParameter($name)) {
+						if($cfg['include_password_inputs'] && $p->hasParameter($name)) {
 							$element->setAttribute('value', $value);
 						}
 					}
@@ -218,7 +258,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 					$multiple = $element->hasAttribute('multiple');
 					// select elements
 					// yes, we still use XPath because there could be OPTGROUPs
-					foreach($xpath->query('descendant::option', $element) as $option) {
+					foreach($xpath->query('descendant::' . $ns . 'option', $element) as $option) {
 						$option->removeAttribute('selected');
 						if($p->hasParameter($name) && ($option->getAttribute('value') == $value || ($multiple && is_array($value) && in_array($option->getAttribute('value'), $value)))) {
 							$option->setAttribute('selected', 'selected');
@@ -233,7 +273,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 						$element->removeChild($cn);
 					}
 					// append a new text node
-					if($xhtml) {
+					if($xhtml && $properXhtml) {
 						$element->appendChild($doc->createCDATASection($value));
 					} else {
 						$element->appendChild($doc->createTextNode($value));
@@ -243,29 +283,33 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 			}
 		}
 		if($xhtml) {
-			// workaround for a bug in dom or something that results in two xmlns attributes being generated for the <html> element
-			foreach($xpath->query('//html') as $html) {
-				$html->removeAttribute('xmlns');
+			if(!$cfg['parse_xhtml_as_xml']) {
+				// workaround for a bug in dom or something that results in two xmlns attributes being generated for the <html> element
+				foreach($xpath->query('//html') as $html) {
+					$html->removeAttribute('xmlns');
+				}
 			}
 			$out = $doc->saveXML();
-			if($this->getParameter('cdata_fix')) {
+			if((!$cfg['parse_xhtml_as_xml'] || !$properXhtml) && $cfg['cdata_fix']) {
 				// these are ugly fixes so inline style and script blocks still work. better don't use them with XHTML to avoid trouble
-				$out = preg_replace('#<style([^>]*)>\s*<!\[CDATA\[#iU' . ($utf8 ? 'u' : ''), '<style\\1><!--/*--><![CDATA[/*><!--*/', $out);
-				$out = preg_replace('#\]\]></style>#iU' . ($utf8 ? 'u' : ''), '/*]]>*/--></style>', $out);
-				$out = preg_replace('#<script([^>]*)>\s*<!\[CDATA\[#iU' . ($utf8 ? 'u' : ''), '<script\\1><!--//--><![CDATA[//><!--', $out);
-				$out = preg_replace('#\]\]></script>#iU' . ($utf8 ? 'u' : ''), '//--><!]]></script>', $out);
+				$out = preg_replace('/<style([^>]*)>\s*<!\[CDATA\[/iU' . ($utf8 ? 'u' : ''), '<style$1><!--/*--><![CDATA[/*><!--*/', $out);
+				$out = preg_replace('/\]\]><\/style>/iU' . ($utf8 ? 'u' : ''), '/*]]>*/--></style>', $out);
+				$out = preg_replace('/<script([^>]*)>\s*<!\[CDATA\[/iU' . ($utf8 ? 'u' : ''), '<script$1><!--//--><![CDATA[//><!--', $out);
+				$out = preg_replace('/\]\]><\/script>/iU' . ($utf8 ? 'u' : ''), '//--><!]]></script>', $out);
 			}
-			if($this->getParameter('remove_xml_prolog') && !$hasXmlProlog) {
+			if($cfg['remove_auto_xml_prolog'] && !$hasXmlProlog) {
 				// there was no xml prolog in the document before, so we remove the one generated by DOM now
-				$out = preg_replace('#<\?xml.*?\?>\s+#iU' . ($utf8 ? 'u' : ''), '', $out);
-			} else {
+				$out = preg_replace('/<\?xml.*?\?>\s+/iU' . ($utf8 ? 'u' : ''), '', $out);
+			} elseif(!$cfg['parse_xhtml_as_xml']) {
 				// yes, DOM sucks and inserts another XML prolog _after_ the DOCTYPE... and it has two question marks at the end, not one, don't ask me why
-				$out = preg_replace('#<\?xml.*?\?\?>\s+#iU' . ($utf8 ? 'u' : ''), '', $out);
+				$out = preg_replace('/<\?xml.*?\?\?>\s+/iU' . ($utf8 ? 'u' : ''), '', $out);
 			}
 			$response->setContent($out);
 		} else {
 			$response->setContent($doc->saveHTML());
 		}
+		unset($xpath);
+		unset($doc);
 	}
 
 	/**
@@ -285,16 +329,25 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 		$this->setParameter('cdata_fix', true);
 		$this->setParameter('error_class', 'error');
 		$this->setParameter('force_output_mode', false);
+		$this->setParameter('parse_xhtml_as_xml', true);
 		$this->setParameter('include_password_inputs', false);
 		$this->setParameter('include_hidden_inputs', true);
-		$this->setParameter('remove_xml_prolog', true);
+		$this->setParameter('remove_auto_xml_prolog', true);
 		$this->setParameter('methods', array());
 		$this->setParameter('output_types', null);
+		$this->setParameter('dom_substitute_entities', false);
+		$this->setParameter('dom_resolve_externals', false);
+		$this->setParameter('dom_validate_on_parse', false);
+		$this->setParameter('dom_preserve_white_space', true);
+		$this->setParameter('dom_format_output', false);
 		
 		// initialize parent
 		parent::initialize($context, $parameters);
 		
 		$this->setParameter('methods', (array) $this->getParameter('methods'));
+		if($ot = $this->getParameter('output_types')) {
+			$this->setParameter('output_types', (array) $ot);
+		}
 	}
 }
 
