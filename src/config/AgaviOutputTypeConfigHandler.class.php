@@ -108,9 +108,9 @@ class AgaviOutputTypeConfigHandler extends AgaviConfigHandler
 					if(isset($outputType->renderer->assigns)) {
 						$assigns = array();
 						foreach($outputType->renderer->assigns as $factory => $varname) {
-							$assigns[$factory] = $varname->getValue();
+							$assigns[str_replace('_', '', $factory)] = $varname->getValue();
 						}
-						$data[$name]['renderer_parameters'] = array_merge($data[$name]['renderer_parameters'], array('assigns' =>$assigns));
+						$data[$name]['renderer_parameters'] = array_merge($data[$name]['renderer_parameters'], array('assigns' => $assigns));
 					}
 				}
 				$data[$name]['parameters'] = $this->getItemParameters($outputType, $data[$name]['parameters']);
