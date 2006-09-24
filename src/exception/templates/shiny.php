@@ -85,6 +85,7 @@ if($svg) {
 } else {
 	header('Content-Type: text/html; charset=utf-8');
 }
+header('HTTP/1.1 500 Internal Server Error');
 
 // fix stack trace in case it doesn't contain the exception origin as the first entry
 $fixedTrace = $e->getTrace();
