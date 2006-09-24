@@ -178,6 +178,39 @@ RewriteRule ([^?]*)(?:\?(.*))? index.php?/$1&amp;$2 [L]</programlisting></para>
     <section>
       <title>Serving "application/xhtml+xml" to capable browsers</title>
 
+      <caution>
+        <para>Serving XHTML as <code>application/xhtml+xml</code> might not be
+        a good idea under all circumstances. DOM changes the behavior
+        (<code>innerHTML</code> often does not work, and neither does
+        <code>document.write</code>; Element/Attribute names are not
+        normalized to upper-case; <code>document.createElement</code> does not
+        work, only <code>createElementNS</code> and so on), CSS is applied
+        slightly different, <code>&lt;script&gt;</code> and
+        <code>&lt;style&gt;</code> blocks must use <code>CDATA</code> sections
+        instead of HTML comments, Mozilla Gecko will not render documents
+        incrementally etc.</para>
+
+        <para>For more information on <code>application/xhtml+xml</code> vs
+        <code>text/html</code>, read the following documents:</para>
+
+        <para><itemizedlist>
+            <listitem>
+              <para><ulink
+              url="http://www.mozilla.org/docs/web-developer/faq.html#xhtmldiff">http://www.mozilla.org/docs/web-developer/faq.html#xhtmldiff</ulink></para>
+            </listitem>
+
+            <listitem>
+              <para><ulink
+              url="http://webkit.org/blog/?p=68">http://webkit.org/blog/?p=68</ulink></para>
+            </listitem>
+
+            <listitem>
+              <para><ulink
+              url="http://www.hixie.ch/advocacy/xhtml">http://www.hixie.ch/advocacy/xhtml</ulink></para>
+            </listitem>
+          </itemizedlist></para>
+      </caution>
+
       <para></para>
     </section>
 
