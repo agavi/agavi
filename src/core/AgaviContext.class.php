@@ -290,19 +290,22 @@ final class AgaviContext
 	}
 	
 	/**
-	 * Retrieve a global Model implementation instance.
+	 * Retrieve a Model implementation instance.
 	 *
 	 * @param      string A model name.
+	 * @param      string A module name, if the requested model is a module model,
+	 *                    or null for global models.
+	 * @param      array  An array of parameters to be passed to initialize() or
+	 *                    the constructor.
 	 *
 	 * @return     AgaviModel A Model implementation instance.
 	 *
 	 * @throws     AgaviAutloadException if class is ultimately not found.
 	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function getModel($modelName, $moduleName = null, $parameters = null)
+	public function getModel($modelName, $moduleName = null, array $parameters = null)
 	{
 		$class = $modelName . 'Model';
 		$rc = null;

@@ -65,7 +65,7 @@ class AgaviCreoleSessionStorage extends AgaviSessionStorage
 	 * @author     Veikko Makinen <mail@veikkomakinen.com>
 	 * @since      0.10.0
 	 */
-	public function initialize(AgaviContext $context, $parameters = array())
+	public function initialize(AgaviContext $context, array $parameters = array())
 	{
 		// initialize the parent
 		parent::initialize($context, $parameters);

@@ -6,7 +6,7 @@ class FCHTestFilter1 implements AgaviIFilter
 	public $context;
 	public $params;
 
-	public function initialize(AgaviContext $ctx, $params = array())
+	public function initialize(AgaviContext $ctx, array $params = array())
 	{
 		$this->context = $ctx;
 		$this->params = $params;

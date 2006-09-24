@@ -69,7 +69,7 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function initialize(AgaviContext $context, $parameters = array())
+	public function initialize(AgaviContext $context, array $parameters = array())
 	{
 		$this->context = $context;
 		$this->setParameters($parameters);
@@ -111,7 +111,7 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function import($data)
+	public function import(array $data)
 	{
 		$retval = true;
 		if(isset($data['content'])) {
@@ -133,7 +133,7 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function merge($data)
+	public function merge(array $data)
 	{
 		// do not lock the response even if $data has locked=true!
 		
@@ -153,7 +153,7 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function append($data)
+	public function append(array $data)
 	{
 		// do not lock the response even if $data has locked=true!
 		

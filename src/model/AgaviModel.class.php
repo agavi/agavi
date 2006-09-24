@@ -57,7 +57,7 @@ abstract class AgaviModel implements AgaviIModel
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function initialize(AgaviContext $context, $parameters = array())
+	public function initialize(AgaviContext $context, array $parameters = array())
 	{
 		$this->context = $context;
 	}

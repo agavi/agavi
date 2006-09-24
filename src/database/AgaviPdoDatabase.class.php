@@ -61,11 +61,7 @@ class AgaviPdoDatabase extends AgaviDatabase
 			// let's see if we need a persistent connection
 			$persistent = $this->getParameter('persistent', false);
 			
-			if(defined('PDO::ATTR_PERSISTENT')) {
-				$pdo_options = array(PDO::ATTR_PERSISTENT => $persistent);
-			} else {
-				$pdo_options = array(PDO_ATTR_PERSISTENT => $persistent);
-			}
+			$pdo_options = array(PDO::ATTR_PERSISTENT => $persistent);
 			
 			$this->connection = new PDO($dsn, $pdo_username, $pdo_password, $pdo_options);
 			
@@ -74,11 +70,7 @@ class AgaviPdoDatabase extends AgaviDatabase
 		}
 
 		// lets generate exceptions instead of silent failures
-		if(defined('PDO::ATTR_ERRMODE')) {
-			$this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-		} else {
-			$this->connection->setAttribute(PDO_ATTR_ERRMODE, PDO_ERRMODE_EXCEPTION);
-		}
+		$this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	}
 
 	/**

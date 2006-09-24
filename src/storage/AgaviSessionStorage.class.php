@@ -57,7 +57,7 @@ class AgaviSessionStorage extends AgaviStorage
 	 * @author     Veikko Makinen <mail@veikkomakinen.com>
 	 * @since      0.9.0
 	 */
-	public function initialize(AgaviContext $context, $parameters = array())
+	public function initialize(AgaviContext $context, array $parameters = array())
 	{
 		parent::initialize($context, $parameters);
 

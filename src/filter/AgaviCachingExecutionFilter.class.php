@@ -42,7 +42,7 @@ class AgaviCachingExecutionFilter extends AgaviExecutionFilter
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function checkCache($groups)
+	public function checkCache(array $groups)
 	{
 		foreach($groups as &$group) {
 			$group = base64_encode($group);
@@ -60,7 +60,7 @@ class AgaviCachingExecutionFilter extends AgaviExecutionFilter
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function readCache($groups)
+	public function readCache(array $groups)
 	{
 		foreach($groups as &$group) {
 			$group = base64_encode($group);
@@ -79,7 +79,7 @@ class AgaviCachingExecutionFilter extends AgaviExecutionFilter
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function writeCache($groups, $data)
+	public function writeCache(array $groups, $data)
 	{
 		foreach($groups as &$group) {
 			$group = base64_encode($group);
@@ -96,14 +96,8 @@ class AgaviCachingExecutionFilter extends AgaviExecutionFilter
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public static function clearCache($groups = array())
+	public static function clearCache(array $groups = array())
 	{
-		$SPL_RIT_CHILD_FIRST = null;
-		if(defined('RecursiveIteratorIterator::CHILD_FIRST')) {
-			$SPL_RIT_CHILD_FIRST = RecursiveIteratorIterator::CHILD_FIRST;
-		} else {
-			$SPL_RIT_CHILD_FIRST = RIT_CHILD_FIRST;
-		}
 		foreach($groups as &$group) {
 			$group = base64_encode($group);
 		}
@@ -127,7 +121,7 @@ class AgaviCachingExecutionFilter extends AgaviExecutionFilter
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function determineGroups($cfg, $moduleName, $actionName)
+	public function determineGroups(array $cfg, $moduleName, $actionName)
 	{
 		$context = $this->getContext();
 		
@@ -174,7 +168,7 @@ class AgaviCachingExecutionFilter extends AgaviExecutionFilter
 	/**
 	 * @see        ExecutionFilter::execute()
 	 */
-	public function execute($filterChain)
+	public function execute(AgaviFilterChain $filterChain)
 	{
 		throw new AgaviException("I'm currently broken, and therefor utterly useless to you. Please don't beat me up. I'll be fixed before 0.11 is rolled, my developer promised me that. See you then, mate!\n\nOh and by the way... don't listen to what that 'caching.xsd' bloke tries to tell you, he has no idea that he's about to be retired early and replaced by something that doesn't suck as much.");
 		static $config = array();

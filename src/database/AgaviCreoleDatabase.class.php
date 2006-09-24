@@ -162,7 +162,7 @@ class AgaviCreoleDatabase extends AgaviDatabase
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	private function loadDSN($array)
+	private function loadDSN(array $array)
 	{
 		// determine if a dsn is set, otherwise use separate parameters
 		$dsn = $this->getParameter('dsn');

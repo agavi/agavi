@@ -59,16 +59,7 @@ class AgaviListActionsTask extends Task {
 
 		$ignores = array('.', '..', '.svn', 'CVS', '_darcs', '.arch-params', '.monotone', '.bzr');
 
-		static $SPL_RIT_CHILD_FIRST = null;
-		if(!isset($SPL_RIT_CHILD_FIRST)) {
-			if(defined('RecursiveIteratorIterator::CHILD_FIRST')) {
-				$SPL_RIT_CHILD_FIRST = RecursiveIteratorIterator::CHILD_FIRST;
-			} else {
-				$SPL_RIT_CHILD_FIRST = RIT_CHILD_FIRST;
-			}
-		}
-
-		foreach(new RecursiveIteratorIterator(new RecursiveDirectoryIterator($this->moduleDir), $SPL_RIT_CHILD_FIRST) as $iterator) {
+		foreach(new RecursiveIteratorIterator(new RecursiveDirectoryIterator($this->moduleDir), RecursiveIteratorIterator::CHILD_FIRST) as $iterator) {
 			$pathname = str_replace('\\', '/', $iterator->getPathname());
 
 			$continue = false;

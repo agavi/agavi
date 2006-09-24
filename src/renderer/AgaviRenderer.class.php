@@ -97,7 +97,7 @@ abstract class AgaviRenderer implements AgaviIRenderingFilter
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function initialize(AgaviContext $context, $parameters = array())
+	public function initialize(AgaviContext $context, array $parameters = array())
 	{
 		$this->context = $context;
 		if(isset($parameters['var_name'])) {

@@ -139,7 +139,7 @@ class AgaviMysqlDatabase extends AgaviDatabase
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	private function loadParameters($array)
+	private function loadParameters(array $array)
 	{
 		// list of available parameters
 		$available = array('database', 'host', 'password', 'user');

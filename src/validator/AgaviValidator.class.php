@@ -193,7 +193,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
-	public function __construct(AgaviIValidatorContainer $parent, $parameters = array(), $name = '')
+	public function __construct(AgaviIValidatorContainer $parent, array $parameters = array(), $name = '')
 	{
 		$this->parentContainer = $parent;
 

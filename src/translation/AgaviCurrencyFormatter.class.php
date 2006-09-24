@@ -51,7 +51,7 @@ class AgaviCurrencyFormatter extends AgaviDecimalFormatter implements AgaviITran
 	/**
 	 * @see        AgaviITranslator::initialize()
 	 */
-	public function initialize(AgaviContext $context, $parameters = array())
+	public function initialize(AgaviContext $context, array $parameters = array())
 	{
 		$this->context = $context;
 		if(isset($parameters['format'])) {

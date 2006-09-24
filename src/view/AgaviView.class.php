@@ -229,7 +229,7 @@ abstract class AgaviView extends AgaviAttributeHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function initialize(AgaviResponse $response, $attributes = array())
+	public function initialize(AgaviResponse $response, array $attributes = array())
 	{
 		$this->context = $response->getContext();
 		

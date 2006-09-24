@@ -69,7 +69,7 @@ class AgaviTranslationManager
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function initialize(AgaviContext $context, $parameters = array())
+	public function initialize(AgaviContext $context, array $parameters = array())
 	{
 		$this->context = $context;
 
@@ -215,7 +215,7 @@ class AgaviTranslationManager
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function _($message, $domain = null, $locale = null, $parameters = null)
+	public function _($message, $domain = null, $locale = null, array $parameters = null)
 	{
 		if($domain === null) {
 			$domain = $this->defaultDomain;

@@ -43,7 +43,7 @@ class AgaviException extends Exception
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.9.0
 	 */
-	public static function printStackTrace(Exception $e, $context = null, $response = null)
+	public static function printStackTrace(Exception $e, AgaviContext $context = null, AgaviResponse $response = null)
 	{
 		// throw away any response data that might be there
 		if($context !== null && ($c = $context->getController()) !== null && $response !== null) {

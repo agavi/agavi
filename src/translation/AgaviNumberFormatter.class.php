@@ -48,7 +48,7 @@ class AgaviNumberFormatter extends AgaviDecimalFormatter implements AgaviITransl
 	/**
 	 * @see        AgaviITranslator::initialize()
 	 */
-	public function initialize(AgaviContext $context, $parameters = array())
+	public function initialize(AgaviContext $context, array $parameters = array())
 	{
 		$this->context = $context;
 		if($parameters instanceof AgaviLocale) {

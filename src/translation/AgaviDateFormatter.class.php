@@ -41,7 +41,7 @@ class AgaviDateFormatter implements AgaviITranslator
 	/**
 	 * @see        AgaviITranslator::initialize()
 	 */
-	public function initialize(AgaviContext $context, $parameters = array())
+	public function initialize(AgaviContext $context, array $parameters = array())
 	{
 		$this->context = $context;
 	}

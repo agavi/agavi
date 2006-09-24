@@ -151,7 +151,7 @@ class AgaviAdodbDatabase extends AgaviDatabase
 	 * @author     Steven Weiss <info@code-factory.de>
 	 * @since      0.10.0
 	 */
-	private function loadDSN($array, $method)
+	private function loadDSN(array $array, $method)
 	{
 		if(!isset($array['dsn']) || !is_string($array['dsn']) || $array['dsn'] == '') {
 			throw new AgaviDatabaseException('Database configuration specifies method "' . $method . '", but is missing dsn parameter');

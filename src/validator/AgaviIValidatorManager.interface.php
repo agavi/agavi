@@ -50,7 +50,7 @@ interface AgaviIValidatorManager
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
-	public function initialize(AgaviContext $context, $parameters = array());
+	public function initialize(AgaviContext $context, array $parameters = array());
 
 	/**
 	 * clears the validator manager for reuse

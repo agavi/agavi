@@ -75,7 +75,7 @@ abstract class AgaviRouting
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function initialize(AgaviContext $context, $parameters = array())
+	public function initialize(AgaviContext $context, array $parameters = array())
 	{
 		$this->context = $context;
 		if(isset($parameters['generator'])) {
@@ -179,7 +179,7 @@ abstract class AgaviRouting
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function addRoute($route, $options = array(), $parent = null)
+	public function addRoute($route, array $options = array(), $parent = null)
 	{
 		// catch the old options from the route which has to be overwritten
 		if(isset($options['name']) && isset($this->routes[$options['name']])) {
@@ -302,7 +302,7 @@ abstract class AgaviRouting
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function importRoutes($routes)
+	public function importRoutes(array $routes)
 	{
 		$this->routes = $routes;
 	}
@@ -376,7 +376,7 @@ abstract class AgaviRouting
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function gen($route, $params = array(), $options = array())
+	public function gen($route, array $params = array(), array $options = array())
 	{
 		$routes = $route;
 		if(is_string($route)) {
@@ -632,7 +632,7 @@ abstract class AgaviRouting
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	protected function parseInput($route, $input, &$matches)
+	protected function parseInput(array $route, $input, &$matches)
 	{
 		if($route['opt']['source'] !== null) {
 			$parts = AgaviArrayPathDefinition::getPartsFromPath($route['opt']['source']);

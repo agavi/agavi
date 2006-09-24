@@ -91,7 +91,7 @@ class AgaviExecutionTimeFilter extends AgaviFilter implements AgaviIGlobalFilter
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function initialize(AgaviContext $context, $parameters = array())
+	public function initialize(AgaviContext $context, array $parameters = array())
 	{
 		// set defaults
 		$this->setParameter('comment', true);

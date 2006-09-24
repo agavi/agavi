@@ -55,44 +55,6 @@ final class AgaviToolkit
 	}
 
 	/**
-	 * Get the heritage of a class
-	 *
-	 * @param      string $class A class to examine
-	 *
-	 * @return     array of classnames in the classes ancestry
-	 *
-	 * @author     Mike Vincent <mike@agavi.org>
-	 * @since      0.10.0
-	 */
-	public static function classHeritage($class)
-	{
-		$heritage = array();
-		while($class != '') {
-			$class = get_parent_class($class);
-			if($class) {
-				array_unshift($heritage, $class);
-			}
-		}
-		return $heritage;
-	}
-	
-	/**
-	 * Determine if a class is a subclass of another class
-	 *
-	 * @param      string $class A potential child class
-	 * @param      string $parent A potential parent class
-	 *
-	 * @return     bool true, if the path is absolute, otherwise false.
-	 *
-	 * @author     Mike Vincent <mike@agavi.org>
-	 * @since      0.10.0
-	 */
-	public static function isSubClass($class, $parent)
-	{
-		return in_array($parent, self::classHeritage($class));
-	}
-	
-	/**
 	 * Creates a directory without sucking at permissions.
 	 * PHP mkdir() doesn't do what you tell it to, it takes umask into account.
 	 *
@@ -156,14 +118,6 @@ final class AgaviToolkit
 	public static function clearCache($path = '')
 	{
 		$ignores = array('.', '..', '.svn', 'CVS', '_darcs', '.arch-params', '.monotone', '.bzr');
-		static $SPL_RIT_CHILD_FIRST = null;
-		if(!isset($SPL_RIT_CHILD_FIRST)) {
-			if(defined('RecursiveIteratorIterator::CHILD_FIRST')) {
-				$SPL_RIT_CHILD_FIRST = RecursiveIteratorIterator::CHILD_FIRST;
-			} else {
-				$SPL_RIT_CHILD_FIRST = RIT_CHILD_FIRST;
-			}
-		}
 		$path = str_replace('/', DIRECTORY_SEPARATOR, str_replace('\\', DIRECTORY_SEPARATOR, $path));
 		$path = realpath(AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . $path);
 		if($path === false) {
@@ -172,7 +126,7 @@ final class AgaviToolkit
 		if(is_file($path)) {
 			@unlink($path);
 		} else {
-			foreach(new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path), $SPL_RIT_CHILD_FIRST) as $iterator) {
+			foreach(new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path), RecursiveIteratorIterator::CHILD_FIRST) as $iterator) {
 				// omg, thanks spl for always using forward slashes ... even on windows
 				$pathname = str_replace('/', DIRECTORY_SEPARATOR, str_replace('\\', DIRECTORY_SEPARATOR, $iterator->getPathname()));
 				$continue = false;

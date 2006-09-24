@@ -46,28 +46,28 @@ class AgaviRotatingFileAppender extends AgaviFileAppender
 	 * @author     Veikko Makinen <mail@veikkomakinen.com>
 	 * @since      0.11.0
 	 */
-	function initialize(AgaviContext $context, $params = array())
+	function initialize(AgaviContext $context, array $parameters = array())
 	{
 		$cycle = 7;
 		$prefix = str_replace(' ', '_', AgaviConfig::get('core.app_name')) . '-';
 		$suffix = '.log';
 
-		if(!isset($params['dir'])) {
+		if(!isset($parameters['dir'])) {
 			throw new AgaviLoggingException('No directory defined for rotating logging.');
 		}
 
-		$dir = $params['dir'];
+		$dir = $parameters['dir'];
 
-		if(isset($params['cycle'])) {
-			$cycle = $params['cycle'];
+		if(isset($parameters['cycle'])) {
+			$cycle = $parameters['cycle'];
 		}
 
-		if(isset($params['prefix'])) {
-			$prefix = $params['prefix'];
+		if(isset($parameters['prefix'])) {
+			$prefix = $parameters['prefix'];
 		}
 
-		if(isset($params['suffix'])) {
-			$suffix = $params['suffix'];
+		if(isset($parameters['suffix'])) {
+			$suffix = $parameters['suffix'];
 		}
 
 		$logfile = $dir . $prefix . date('Y-m-d') . $suffix;
@@ -88,8 +88,8 @@ class AgaviRotatingFileAppender extends AgaviFileAppender
 		}
 
 		//it's all up to the parent after this
-		$params['file'] = $logfile;
-		parent::initialize($context, $params);
+		$parameters['file'] = $logfile;
+		parent::initialize($context, $parameters);
 	}
 }
 

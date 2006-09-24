@@ -40,7 +40,7 @@ class AgaviRoutingArraySource implements AgaviIRoutingSource
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function __construct($data)
+	public function __construct(array $data)
 	{
 		$this->data = $data;
 	}
@@ -53,7 +53,7 @@ class AgaviRoutingArraySource implements AgaviIRoutingSource
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function getSource($parts)
+	public function getSource(array $parts)
 	{
 		return AgaviArrayPathDefinition::getValueFromArray($parts, $this->data);
 	}

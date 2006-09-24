@@ -72,7 +72,7 @@ interface AgaviIFilter
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.11.0
 	 */
-	public function initialize(AgaviContext $context, $parameters = array());
+	public function initialize(AgaviContext $context, array $parameters = array());
 }
 
 ?>

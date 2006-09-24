@@ -42,7 +42,7 @@ final class AgaviArrayPathDefinition
 	{
 	}
 
-	public static function &unsetValue($parts, &$array)
+	public static function &unsetValue(array $parts, array &$array)
 	{
 		$a =& $array;
 
@@ -71,7 +71,7 @@ final class AgaviArrayPathDefinition
 	}
 
 
-	public static function hasValue($parts, &$array, $default = null)
+	public static function hasValue(array $parts, array &$array, $default = null)
 	{
 		$a = $array;
 
@@ -92,7 +92,7 @@ final class AgaviArrayPathDefinition
 	}
 
 
-	public static function &getValueFromArray($parts, &$array, $default = null)
+	public static function &getValueFromArray(array $parts, array &$array, $default = null)
 	{
 		$a = &$array;
 
@@ -113,7 +113,7 @@ final class AgaviArrayPathDefinition
 		return $a;
 	}
 
-	public static function setValueFromArray($parts, &$array, $value)
+	public static function setValueFromArray(array $parts, array &$array, $value)
 	{
 		$a = &$array;
 

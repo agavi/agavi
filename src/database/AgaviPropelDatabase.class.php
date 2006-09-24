@@ -183,7 +183,7 @@ class AgaviPropelDatabase extends AgaviCreoleDatabase
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.10.0
 	 */
-	public function initialize(AgaviDatabaseManager $databaseManager, $parameters = array())
+	public function initialize(AgaviDatabaseManager $databaseManager, array $parameters = array())
 	{
 		parent::initialize($databaseManager, $parameters);
 		$useAutoload = $this->getParameter('use_autoload', true);

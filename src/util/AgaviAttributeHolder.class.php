@@ -29,7 +29,6 @@
  */
 abstract class AgaviAttributeHolder extends AgaviParameterHolder
 {
-
 	/**
 	 * @var        array An array of attributes
 	 */
@@ -78,7 +77,7 @@ abstract class AgaviAttributeHolder extends AgaviParameterHolder
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.9.0
 	 */
-	public function & getAttribute($name, $ns = null, $default=null)
+	public function & getAttribute($name, $ns = null, $default = null)
 	{
 		if($ns === null) {
 			$ns = $this->defaultNamespace;
@@ -403,7 +402,7 @@ abstract class AgaviAttributeHolder extends AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function setAttributes($attributes, $ns = null)
+	public function setAttributes(array $attributes, $ns = null)
 	{
 		if($ns === null) {
 			$ns = $this->defaultNamespace;
@@ -432,7 +431,7 @@ abstract class AgaviAttributeHolder extends AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function setAttributesByRef(&$attributes, $ns = null)
+	public function setAttributesByRef(array &$attributes, $ns = null)
 	{
 		if($ns === null) {
 			$ns = $this->defaultNamespace;

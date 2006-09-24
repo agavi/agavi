@@ -102,7 +102,7 @@ class AgaviWebResponse extends AgaviResponse
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function initialize(AgaviContext $context, $parameters = array())
+	public function initialize(AgaviContext $context, array $parameters = array())
 	{
 		parent::initialize($context, $parameters);
 		
@@ -184,7 +184,7 @@ class AgaviWebResponse extends AgaviResponse
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function import($data)
+	public function import(array $data)
 	{
 		if(!$this->locked) {
 			if(isset($data['httpStatusCode'])) {
@@ -212,7 +212,7 @@ class AgaviWebResponse extends AgaviResponse
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function merge($data)
+	public function merge(array $data)
 	{
 		$retval = parent::merge($data);
 		if(!$this->locked) {
@@ -234,7 +234,7 @@ class AgaviWebResponse extends AgaviResponse
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function append($data)
+	public function append(array $data)
 	{
 		$retval = parent::append($data);
 		if(!$this->locked) {
@@ -391,7 +391,7 @@ class AgaviWebResponse extends AgaviResponse
 	 * Set a HTTP header for the response
 	 *
 	 * @param      string A HTTP header field name.
-	 * @param      array  A HTTP header field value, of an array of values.
+	 * @param      mixed  A HTTP header field value, of an array of values.
 	 * @param      bool   If true, a header with that name will be oberwritten,
 	 *                    otherwise, the value will be appended.
 	 *

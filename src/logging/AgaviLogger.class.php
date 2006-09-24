@@ -126,7 +126,7 @@ class AgaviLogger
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function setAppender($name, $appender)
+	public function setAppender($name, AgaviAppender $appender)
 	{
 		if(!isset($this->appenders[$name])) {
 			$this->appenders[$name] = $appender;

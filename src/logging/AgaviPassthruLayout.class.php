@@ -38,7 +38,7 @@ class AgaviPassthruLayout extends AgaviLayout
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.10.0
 	 */
-	public function format($message)
+	public function format(AgaviMessage $message)
 	{
 		return $message->__toString();
 	}

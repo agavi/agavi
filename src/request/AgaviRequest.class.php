@@ -249,7 +249,7 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
-	function initialize(AgaviContext $context, $parameters = array())
+	function initialize(AgaviContext $context, array $parameters = array())
 	{
 		$this->context = $context;
 
@@ -333,7 +333,7 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.9.0
 	 */
-	public function setErrors($errors)
+	public function setErrors(array $errors)
 	{
 		// set the attribute first if it doesn't exist, else we will not a proper 
 		// reference to the attribute.
@@ -525,7 +525,7 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	/**
 	 * @see        AgaviParameterHolder::setParameters()
 	 */
-	final public function setParameters($parameters)
+	final public function setParameters(array $parameters)
 	{
 		if($this->locked) {
 			throw new AgaviException('For security reasons, Request Parameters cannot be accessed directly. Please use the ParameterHolder object passed to your Action or View execute method to access Request Parameters.');
@@ -536,7 +536,7 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	/**
 	 * @see        AgaviParameterHolder::setParametersByRef()
 	 */
-	final public function setParametersByRef(&$parameters)
+	final public function setParametersByRef(array &$parameters)
 	{
 		if($this->locked) {
 			throw new AgaviException('For security reasons, Request Parameters cannot be accessed directly. Please use the ParameterHolder object passed to your Action or View execute method to access Request Parameters.');

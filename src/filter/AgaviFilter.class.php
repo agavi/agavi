@@ -60,7 +60,7 @@ abstract class AgaviFilter extends AgaviParameterHolder implements AgaviIFilter
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function initialize(AgaviContext $context, $parameters = array())
+	public function initialize(AgaviContext $context, array $parameters = array())
 	{
 		$this->context = $context;
 

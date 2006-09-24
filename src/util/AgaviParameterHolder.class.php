@@ -43,7 +43,7 @@ class AgaviParameterHolder
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function __construct($parameters = array())
+	public function __construct(array $parameters = array())
 	{
 		$this->parameters = $parameters;
 	}
@@ -227,7 +227,7 @@ class AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function setParameters($parameters)
+	public function setParameters(array $parameters)
 	{
 		$this->parameters = array_merge($this->parameters, $parameters);
 	}
@@ -244,7 +244,7 @@ class AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function setParametersByRef(&$parameters)
+	public function setParametersByRef(array &$parameters)
 	{
 		foreach($parameters as $key => &$value) {
 			$this->parameters[$key] =& $value;

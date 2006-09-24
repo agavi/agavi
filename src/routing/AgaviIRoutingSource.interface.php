@@ -35,7 +35,7 @@ interface AgaviIRoutingSource
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function getSource($parts);
+	public function getSource(array $parts);
 }
 
 ?>

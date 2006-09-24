@@ -46,7 +46,7 @@ abstract class AgaviLayout
 	 * @author     Veikko Makinen <mail@veikkomakinen.com>
 	 * @since      0.10.0
 	 */
-	public function initialize(AgaviContext $context, $params = array())
+	public function initialize(AgaviContext $context, array $parameters = array())
 	{
 		$this->context = $context;
 	}
@@ -74,7 +74,7 @@ abstract class AgaviLayout
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	abstract function format($message);
+	abstract function format(AgaviMessage $message);
 
 	/**
 	 * Retrieve the message layout.

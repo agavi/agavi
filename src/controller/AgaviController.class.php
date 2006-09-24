@@ -131,7 +131,7 @@ abstract class AgaviController extends AgaviParameterHolder
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
-	public function dispatch($parameters = array())
+	public function dispatch(array $parameters = array())
 	{
 		try {
 			
@@ -204,7 +204,7 @@ abstract class AgaviController extends AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function forward($moduleName, $actionName = 'Index', $additionalParams = array())
+	public function forward($moduleName, $actionName = 'Index', array $additionalParams = array())
 	{
 		$request = $this->context->getRequest();
 
@@ -570,7 +570,7 @@ abstract class AgaviController extends AgaviParameterHolder
 	 * @author     Mike Vincent <mike@agavi.org>
 	 * @since      0.9.0
 	 */
-	public function initialize(AgaviContext $context, $parameters = array())
+	public function initialize(AgaviContext $context, array $parameters = array())
 	{
 		$this->maxForwards = isset($parameters['max_fowards']) ? $parameters['max_forwards'] : 20;
 		

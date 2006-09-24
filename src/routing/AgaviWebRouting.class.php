@@ -56,7 +56,7 @@ class AgaviWebRouting extends AgaviRouting
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function initialize(AgaviContext $context, $parameters = array())
+	public function initialize(AgaviContext $context, array $parameters = array())
 	{
 		parent::initialize($context, $parameters);
 		
@@ -163,7 +163,7 @@ class AgaviWebRouting extends AgaviRouting
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function gen($route, $params = array(), $options = array())
+	public function gen($route, array $params = array(), array $options = array())
 	{
 		$options = array_merge($this->defaultGenOptions, $options);
 

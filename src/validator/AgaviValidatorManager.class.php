@@ -63,7 +63,7 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
-	public function initialize(AgaviContext $context, $parameters = array())
+	public function initialize(AgaviContext $context, array $parameters = array())
 	{
 		$this->context = $context;
 		$this->setParameters($parameters);
@@ -276,7 +276,7 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
-	public function registerValidators($validators)
+	public function registerValidators(array $validators)
 	{
 		foreach($validators as $validator) {
 			$this->addChild($validator);

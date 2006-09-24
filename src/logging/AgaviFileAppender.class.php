@@ -46,12 +46,12 @@ class AgaviFileAppender extends AgaviAppender
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.10.0
 	 */
-	function initialize(AgaviContext $context, $params = array())
+	function initialize(AgaviContext $context, array $parameters = array())
 	{
-		parent::initialize($context, $params);
+		parent::initialize($context, $parameters);
 
-		if(isset($params['file'])) {
-			$this->filename = $params['file'];
+		if(isset($parameters['file'])) {
+			$this->filename = $parameters['file'];
 		}
 	}
 
@@ -94,7 +94,7 @@ class AgaviFileAppender extends AgaviAppender
 	/**
 	 * Write a Message to the file.
 	 *
-	 * @param      Message
+	 * @param      mixed Message
 	 *
 	 * @throws     <b>AgaviLoggingException</b> if no Layout is set or the file
 	 *                                          cannot be written.
@@ -105,7 +105,7 @@ class AgaviFileAppender extends AgaviAppender
 	 */
 	public function write($message)
 	{
-		if($layout = $this->getLayout() === null) {
+		if(($layout = $this->getLayout()) === null) {
 			throw new AgaviLoggingException('No Layout set');
 		}
 

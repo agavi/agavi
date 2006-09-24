@@ -42,7 +42,7 @@ class AgaviLocale
 	protected $name = null;
 
 
-	public function initialize(AgaviContext $context, $name, $data = array())
+	public function initialize(AgaviContext $context, $name, array $data = array())
 	{
 		$this->context = $context;
 		$this->name = $name;

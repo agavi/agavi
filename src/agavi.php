@@ -30,14 +30,8 @@
 // load the AgaviConfig class
 require(dirname(__FILE__) . '/config/AgaviConfig.class.php');
 
-/*
-	Minimum requirement check
-	
-	Things arent going to work unless we're running with php5,
-	so dont assume we are. 
-*/
-AgaviConfig::set('core.minimum_php_version', '5.0.0');
-
+// check minimum PHP version
+AgaviConfig::set('core.minimum_php_version', '5.1.0');
 if(!version_compare(PHP_VERSION, AgaviConfig::get('core.minimum_php_version'), 'ge') ) {
 	die('You must be using PHP version ' . AgaviConfig::get('core.minimum_php_version') . ' or greater.');
 }
@@ -53,22 +47,6 @@ require(AgaviConfig::get('core.agavi_dir') . '/version.php');
 require(AgaviConfig::get('core.agavi_dir') . '/core/Agavi.class.php');
 
 // set up our __autoload
-if(function_exists('spl_autoload_register')) {
-	spl_autoload_register(array('Agavi', '__autoload'));
-} elseif(!function_exists('__autoload')) {
-	/**
-	 * Handles autoloading of classes
-	 *
-	 * @param      string A class name.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	function __autoload($class)
-	{
-		Agavi::__autoload($class);
-	}
-}
+spl_autoload_register(array('Agavi', '__autoload'));
 
 ?>

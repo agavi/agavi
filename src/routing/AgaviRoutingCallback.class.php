@@ -27,7 +27,6 @@
  */
 abstract class AgaviRoutingCallback
 {
-
 	/**
 	 * @var        AgaviContext An AgaviContext instance.
 	 */
@@ -47,7 +46,7 @@ abstract class AgaviRoutingCallback
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function initialize(AgaviContext $context, &$route)
+	public function initialize(AgaviContext $context, array &$route)
 	{
 		$this->context = $context;
 		$this->route =& $route;
@@ -65,7 +64,7 @@ abstract class AgaviRoutingCallback
 		return $this->context;
 	}
 
-	public function onMatched(&$parameters)
+	public function onMatched(array &$parameters)
 	{
 		return true;
 	}
@@ -75,7 +74,7 @@ abstract class AgaviRoutingCallback
 		return;
 	}
 
-	public function onGenerate($defaultParameters, &$userParameters)
+	public function onGenerate(array $defaultParameters, array &$userParameters)
 	{
 		return $defaultParameters;
 	}

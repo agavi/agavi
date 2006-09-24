@@ -145,7 +145,7 @@ class AgaviRbacSecurityUser extends AgaviSecurityUser implements AgaviISecurityU
 	 * @author     Harald Kirschner <mail@digitarald.de>
 	 * @since      0.11.0
 	 */
-	public function initialize(AgaviContext $context, $parameters = array())
+	public function initialize(AgaviContext $context, array $parameters = array())
 	{
 		parent::initialize($context, $parameters);
 

@@ -54,7 +54,7 @@ abstract class AgaviOperatorValidator extends AgaviValidator implements AgaviIVa
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
-	public function __construct(AgaviIValidatorContainer $parent, $parameters = array())
+	public function __construct(AgaviIValidatorContainer $parent, array $parameters = array())
 	{
 		parent::__construct($parent, $parameters);
 		
@@ -172,7 +172,7 @@ abstract class AgaviOperatorValidator extends AgaviValidator implements AgaviIVa
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
-	public function registerValidators($validators)
+	public function registerValidators(array $validators)
 	{
 		foreach($validators AS $validator) {
 			$this->addChild($validator);

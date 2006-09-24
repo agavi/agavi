@@ -2,12 +2,12 @@
 
 class Sample2Layout extends AgaviLayout
 {
-	public function format($message){}
+	public function format(AgaviMessage $message){}
 }
 
 class SampleAppender extends AgaviAppender
 {
-	public function initialize(AgaviContext $context, $params = array()) {}
+	public function initialize(AgaviContext $context, array $params = array()) {}
 	public function shutdown() {}
 	public function write($message) {}
 }

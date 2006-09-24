@@ -63,7 +63,7 @@ class AgaviFilterChain
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function initialize(AgaviResponse $response, $parameters = array())
+	public function initialize(AgaviResponse $response, array $parameters = array())
 	{
 		$this->response = $response;
 		$this->filterLogKey = $response->getContext()->getName();
@@ -101,7 +101,7 @@ class AgaviFilterChain
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function register($filter)
+	public function register(AgaviIFilter $filter)
 	{
 		$this->chain[] = $filter;
 		self::$filterLog[$this->filterLogKey][get_class($filter)] = 0;
