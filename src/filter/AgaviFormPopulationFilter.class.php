@@ -107,6 +107,11 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 		$doc->preserveWhiteSpace = $cfg['dom_preserve_white_space'];
 		$doc->formatOutput       = $cfg['dom_format_output'];
 		
+		$hasXmlProlog = false;
+		if(preg_match('/^<\?xml[^\?]*\?>/', $output)) {
+			$hasXmlProlog = true;
+		}
+		
 		$xhtml = (preg_match('/<!DOCTYPE[^>]+XHTML[^>]+/', $output) > 0 && strtolower($cfg['force_output_mode']) != 'html') || strtolower($cfg['force_output_mode']) == 'xhtml';
 		if($xhtml && $cfg['parse_xhtml_as_xml']) {
 			$doc->loadXML($output);
@@ -122,10 +127,20 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 			$xpath = new DomXPath($doc);
 			$ns = '';
 		}
+		
 		$properXhtml = false;
 		foreach($xpath->query('//' . $ns . 'head/' . $ns . 'meta') as $meta) {
-			if(strtolower($meta->getAttribute('http-equiv')) == 'content-type' && strpos($meta->getAttribute('content'), 'application/xhtml+xml') !== false) {
-				$properXhtml = true;
+			if(strtolower($meta->getAttribute('http-equiv')) == 'content-type') {
+				if($doc->encoding === null) {
+					if(preg_match('/charset=(.+)\s*$/i', $meta->getAttribute('content'), $matches)) {
+						$doc->encoding = $matches[1];
+					} else {
+						$doc->encoding = "utf-8";
+					}
+				}
+				if(strpos($meta->getAttribute('content'), 'application/xhtml+xml') !== false) {
+					$properXhtml = true;
+				}
 				break;
 			}
 		}
@@ -136,10 +151,6 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 			throw new AgaviException('No iconv module available, input encoding "' . $encoding . '" cannot be handled.');
 		}
 		
-		$hasXmlProlog = false;
-		if(preg_match('/<\?xml[^\?]*\?>/iU' . ($utf8 ? 'u' : ''), $output)) {
-			$hasXmlProlog = true;
-		}
 		$baseHref = '';
 		foreach($xpath->query('//' . $ns . 'head/' . $ns . 'base[@href]') as $base) {
 			$baseHref = parse_url($base->getAttribute('href'));
