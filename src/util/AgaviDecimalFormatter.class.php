@@ -159,7 +159,7 @@ class AgaviDecimalFormatter
 						} elseif($c == '-') {
 							$hasMinus = true;
 							$formatStr .= '%2$s';
-						} elseif($c == '$') {
+						} elseif($c == '¤') {
 							$hasCurrency = true;
 							$formatStr .= '%3$s';
 						} else {
