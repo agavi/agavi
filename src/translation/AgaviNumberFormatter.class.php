@@ -81,10 +81,10 @@ class AgaviNumberFormatter extends AgaviDecimalFormatter implements AgaviITransl
 	 */
 	public function localeChanged($newLocale)
 	{
-		$this->groupingSeperator = $newLocale->getNumberSymbolGroup();
-		$this->decimalSeperator = $newLocale->getNumberSymbolDecimal();
+		$this->groupingSeparator = $newLocale->getNumberSymbolGroup();
+		$this->decimalSeparator = $newLocale->getNumberSymbolDecimal();
 		if(!$this->hasCustomFormat) {
-			$this->parseFormatString($newLocale->getDecimalFormat());
+			$this->parseFormatString($newLocale->getDecimalFormat(0));
 		}
 	}
 }

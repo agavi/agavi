@@ -71,14 +71,14 @@ class AgaviDecimalFormatter
 	protected $groupingDistances = array();
 
 	/**
-	 * @var        string The grouping(thousands) seperator
+	 * @var        string The grouping(thousands) separator
 	 */
-	protected $groupingSeperator = ',';
+	protected $groupingSeparator = ',';
 
 	/**
-	 * @var        string The decimal seperator
+	 * @var        string The decimal separator
 	 */
-	protected $decimalSeperator = '.';
+	protected $decimalSeparator = '.';
 
 	/**
 	 * @var        int The rounding mode
@@ -239,7 +239,7 @@ class AgaviDecimalFormatter
 
 		// we chop of the first element of the grouping distance which is 
 		// either the the number of chars until the first ',' or the only element
-		// in case there was no grouping seperator specified (which means that 
+		// in case there was no grouping separator specified (which means that 
 		// there won't be grouping at all)
 		array_shift($groupingDistances);
 
@@ -395,7 +395,7 @@ class AgaviDecimalFormatter
 			$stepsSinceLastGroup = 0;
 			for($i = strlen($integralPart) - 1; $i >= 0; --$i) {
 				if($stepsSinceLastGroup == $gd[$gdPos]) {
-					$newIntegralPart .= $this->groupingSeperator;
+					$newIntegralPart .= $this->groupingSeparator;
 					$stepsSinceLastGroup = 0;
 					++$gdPos;
 				}
@@ -413,7 +413,7 @@ class AgaviDecimalFormatter
 
 		$number = $integralPart;
 		if(strlen($fractionalPart) > 0) {
-			$number .= $this->decimalSeperator . $fractionalPart;
+			$number .= $this->decimalSeparator . $fractionalPart;
 		}
 
 		if($isNegative && !$this->hasMinus) {
