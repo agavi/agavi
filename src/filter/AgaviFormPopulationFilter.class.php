@@ -151,12 +151,13 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 			throw new AgaviException('No iconv module available, input encoding "' . $encoding . '" cannot be handled.');
 		}
 		
-		$baseHref = '';
-		foreach($xpath->query('//' . $ns . 'head/' . $ns . 'base[@href]') as $base) {
-			$baseHref = parse_url($base->getAttribute('href'));
-			$baseHref = $baseHref['path'];
-			break;
+		$base = $xpath->query('//' . $ns . 'head/' . $ns . 'base[@href]');
+		if($base->length) {
+			$baseHref = $base->item(0)->getAttribute('href');
+		} else {
+			$baseHref = $req->getUrl();
 		}
+		$baseHref = substr($baseHref, 0, strrpos($baseHref, '/') + 1);
 		if(is_array($populate)) {
 			foreach(array_keys($populate) as $id) {
 				$query[] = '@id="' . $id . '"';
@@ -168,7 +169,12 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 		foreach($xpath->query($query) as $form) {
 			if($populate instanceof AgaviParameterHolder) {
 				$action = $form->getAttribute('action');
-				if(!($baseHref . $action == $_SERVER['REQUEST_URI'] || $baseHref . '/' . $action == $_SERVER['REQUEST_URI'] || (strpos($action, '/') === 0 && $action == $_SERVER['REQUEST_URI']) || (strlen($_SERVER['REQUEST_URI']) == strrpos($_SERVER['REQUEST_URI'], $action) + strlen($action)))) {
+				$ru = $req->getRequestUri();
+				if(!(
+					$action == $req->getUrl() || 
+					(strpos($action, '/') === 0 && preg_replace(array('#/./#', '#/.$#', '#[^\./]+/\.\.(/|\z)#'), array('/', '/', ''), $action) == $ru) ||
+					preg_replace(array('#/./#', '#/.$#', '#[^\./]+/\.\.(/|\z)#'), array('/', '/', ''), $baseHref . $action) == $ru
+				)) {
 					continue;
 				}
 				$p = $populate;
