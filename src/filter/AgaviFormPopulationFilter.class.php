@@ -91,12 +91,17 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 			return;
 		}
 		
-		// if(is_array($cfg['skip'])) {
-		// 	$cfg['skip'] = new AgaviParameterHolder($cfg['skip']);
-		// } elseif(!($cfg['skip'] instanceof AgaviParameterHolder)) {
-		// 	$cfg['skip'] = new AgaviParameterHolder();
-		// }
-		// 
+		$skip = null;
+		if($cfg['skip'] instanceof AgaviParameterHolder) {
+			$cfg['skip'] = $cfg['skip']->getParameters();
+		} elseif($cfg['skip'] !== null && !is_array($cfg['skip'])) {
+			$cfg['skip'] = null;
+		}
+		if($cfg['skip'] !== null && count($cfg['skip'])) {
+			$skip = '/(\A' . str_replace('\[\]', '\[[^\]]*\]', implode('|\A', array_map('preg_quote', $cfg['skip']))) . ')/';
+		}
+		
+		
 		$output = $response->getContent();
 		
 		$doc = new DOMDocument();
@@ -182,25 +187,70 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 				$p = $populate[$form->getAttribute('id')];
 			}
 			
+			// our array for remembering foo[] field's indices
+			$remember = array();
+			
 			// build the XPath query
-			$query = 'descendant::' . $ns . 'textarea[@name] | descendant::' . $ns . 'select[@name] | descendant::' . $ns . 'input[@name and (not(@type) or @type="text" or @type="checkbox" or @type="radio" or @type="password"';
+			$query = 'descendant::' . $ns . 'textarea[@name] | descendant::' . $ns . 'select[@name] | descendant::' . $ns . 'input[@name and (not(@type) or @type="text" or (@type="checkbox" and not(contains(@name, "[]"))) or (@type="checkbox" and contains(@name, "[]") and @value) or @type="radio" or @type="password"';
 			if($cfg['include_hidden_inputs']) {
 				$query .= ' or @type="hidden"';
 			}
 			$query .= ')]';
 			foreach($xpath->query($query, $form) as $element) {
 				
-				$name = $element->getAttribute('name');
-				if(!$utf8) {
-					if($encoding == 'iso-8859-1') {
-						$name = utf8_decode($name);
-					} else {
-						$name = iconv('UTF-8', $encoding, $name);
+				$pname = $name = $element->getAttribute('name');
+				
+				$checkValue = false;
+				if($element->getAttribute('type') == 'checkbox') {
+					if(($pos = strpos($pname, '[]')) && ($pos + 2 != strlen($pname))) {
+						// foo[][3] checkboxes etc not possible, [] must occur only once and at the end
+						continue;
+					} elseif($pos !== false) {
+						$checkValue = true;
+						$pname = substr($pname, 0, $pos);
+					}
+				} elseif(preg_match_all('/([^\[]+)?(?:\[([^\]]*)\])/', $pname, $matches)) {
+					$pname = $matches[1][0];
+					
+					for($i = 0; $i < count($matches[2]); $i++) {
+						$val = $matches[2][$i];
+						if((string)$matches[2][$i] === (string)(int)$matches[2][$i]) {
+							$val = (int)$val;
+						}
+						if(!isset($remember[$pname])) {
+							$add = ($val !== "" ? $val : 0);
+							if(is_int($add)) {
+								$remember[$pname] = $add;
+							}
+						} else {
+							if($val !== "") {
+								$add = $val;
+								if(is_int($val) && $add > $remember[$pname]) {
+									$remember[$pname] = $add;
+								}
+							} else {
+								$add = ++$remember[$pname];
+							}
+						}
+						$pname .= '[' . $add . ']';
 					}
 				}
 				
+				if(!$utf8) {
+					if($encoding == 'iso-8859-1') {
+						$pname = utf8_decode($pname);
+					} else {
+						$pname = iconv('UTF-8', $encoding, $pname);
+					}
+				}
+				
+				if($skip !== null && preg_match($skip . ($utf8 ? 'u' : ''), $pname . ($checkValue ? '[]' : ''))) {
+					// skip field
+					continue;
+				}
+				
 				// there's an error with the element's name in the request? good. let's give the baby a class!
-				if($req->hasError($name)) {
+				if($req->hasError($pname)) {
 					$element->setAttribute('class', preg_replace('/\s*$/', ' ' . $cfg['error_class'], $element->getAttribute('class')));
 					// assign the class to all implicit labels
 					foreach($xpath->query('ancestor::' . $ns . 'label[not(@for)]', $element) as $label) {
@@ -214,14 +264,9 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 					}
 				}
 				
-				if($braces = strpos($name, '[]') !== false && ($braces != strlen($name) -3 && $element->nodeName != 'select')) {
-					// auto-generated index, we can't populate that
-					continue;
-				}
+				$value = $p->getParameter($pname);
 				
-				$value = $p->getParameter($name);
-				
-				if(is_array($value) && $element->nodeName != 'select') {
+				if(is_array($value) && !($element->nodeName == 'select' || $checkValue)) {
 					// name didn't match exactly. skip.
 					continue;
 				}
@@ -250,7 +295,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 						
 						// text inputs
 						$element->removeAttribute('value');
-						if($p->hasParameter($name)) {
+						if($p->hasParameter($pname)) {
 							$element->setAttribute('value', $value);
 						}
 						
@@ -258,7 +303,22 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 						
 						// checkboxes and radios
 						$element->removeAttribute('checked');
-						if($p->hasParameter($name) && (($element->hasAttribute('value') && $element->getAttribute('value') == $value) || (!$element->hasAttribute('value') && $p->getParameter($name)))) {
+						
+						if($checkValue && is_array($value)) {
+							$eValue = $element->getAttribute('value');
+							if(!$utf8) {
+								if($encoding == 'iso-8859-1') {
+									$eValue = utf8_decode($eValue);
+								} else {
+									$eValue = iconv('UTF-8', $encoding, $eValue);
+								}
+							}
+							if(!in_array($eValue, $value)) {
+								continue;
+							} else {
+								$element->setAttribute('checked', 'checked');
+							}
+						} elseif($p->hasParameter($pname) && (($element->hasAttribute('value') && $element->getAttribute('value') == $value) || (!$element->hasAttribute('value') && $p->getParameter($pname)))) {
 							$element->setAttribute('checked', 'checked');
 						}
 						
@@ -266,7 +326,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 						
 						// passwords
 						$element->removeAttribute('value');
-						if($cfg['include_password_inputs'] && $p->hasParameter($name)) {
+						if($cfg['include_password_inputs'] && $p->hasParameter($pname)) {
 							$element->setAttribute('value', $value);
 						}
 					}
@@ -277,7 +337,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 					// yes, we still use XPath because there could be OPTGROUPs
 					foreach($xpath->query('descendant::' . $ns . 'option', $element) as $option) {
 						$option->removeAttribute('selected');
-						if($p->hasParameter($name) && ($option->getAttribute('value') == $value || ($multiple && is_array($value) && in_array($option->getAttribute('value'), $value)))) {
+						if($p->hasParameter($pname) && ($option->getAttribute('value') == $value || ($multiple && is_array($value) && in_array($option->getAttribute('value'), $value)))) {
 							$option->setAttribute('selected', 'selected');
 						}
 					}
