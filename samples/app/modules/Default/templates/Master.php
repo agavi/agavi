@@ -129,9 +129,9 @@
 			<h3>Menu</h3>
 			<ul>
 				<li><a href="<?php echo $r->gen('index'); ?>"><?php echo $tm->_('Home', 'default.menu'); ?></a></li>
-				<?php if(!$usr->isAuthenticated()): ?>
-								<li><a href="<?php echo $r->gen('login'); ?>"><?php echo $tm->_('Login', 'default.menu'); ?></a></li>
-				<?php endif; ?>
+<?php if(!$usr->isAuthenticated()): ?>
+				<li><a href="<?php echo $r->gen('login'); ?>"><?php echo $tm->_('Login', 'default.menu'); ?></a></li>
+<?php endif; ?>
 				<li><a href="<?php echo $r->gen('secure'); ?>"><?php echo $tm->_('A Secure Action', 'default.menu'); ?></a></li>
 				<li><a href="<?php echo $r->gen('secure2'); ?>"><?php echo $tm->_('Another Secure Action', 'default.menu'); ?></a></li>
 				<li><a href="<?php echo $r->gen('asdjashdasd'); ?>"><?php echo $tm->_('Call invalid URL', 'default.menu'); ?></a></li>
