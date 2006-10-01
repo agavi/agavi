@@ -52,7 +52,6 @@ class AgaviTranslationConfigHandler extends AgaviConfigHandler
 		$defaultDomain = '';
 
 		foreach($configurations as $cfg) {
-			$defaultDomain = $cfg->getAttribute('default_domain', $defaultDomain);
 
 			if(isset($cfg->available_locales)) {
 				foreach($cfg->available_locales as $locale) {
@@ -67,6 +66,7 @@ class AgaviTranslationConfigHandler extends AgaviConfigHandler
 			}
 
 			if(isset($cfg->translators)) {
+				$defaultDomain = $cfg->translators->getAttribute('default_domain', $defaultDomain);
 				foreach($cfg->translators as $translator) {
 					$domain = $translator->getAttribute('domain');
 					if(!isset($translatorData[$domain])) {
@@ -107,11 +107,9 @@ class AgaviTranslationConfigHandler extends AgaviConfigHandler
 		$data[] = sprintf('$this->defaultDomain = %s;', var_export($defaultDomain, true));
 
 		foreach($localeData as $locale) {
-			// TODO: parse ldml file and merge data with locale['params']
 			// TODO: fallback stuff
 
-			$data[] = sprintf('$this->availableConfigLocales[%s] = new AgaviLocale();', var_export($locale['name'], true));
-			$data[] = sprintf('$this->availableConfigLocales[%s]->initialize($this->getContext(), %s, %s);', var_export($locale['name'], true), var_export($locale['name'], true), var_export($locale['params'], true));
+			$data[] = sprintf('$this->availableConfigLocales[%s] = array(\'identifier\' => %s, \'identifierData\' => %s, \'parameters\' => %s);', var_export($locale['name'], true), var_export($locale['name'], true), var_export(AgaviLocale::parseLocaleIdentifier($locale['name']), true), var_export($locale['params'], true));
 		}
 
 		foreach($translatorData as $domain => $translator) {

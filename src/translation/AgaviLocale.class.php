@@ -42,7 +42,7 @@ class AgaviLocale
 	protected $name = null;
 
 
-	public function initialize(AgaviContext $context, $name, array $data = array())
+	public function initialize( $context, $name, array $data = array())
 	{
 		$this->context = $context;
 		$this->name = $name;
@@ -83,6 +83,28 @@ class AgaviLocale
 			? $this->data['locale']['variant']
 			: null;
 	}
+
+	public function getLocaleCurrency()
+	{
+		return isset($this->data['locale']['currency'])
+			? $this->data['locale']['currency']
+			: null;
+	}
+
+	public function getLocaleCalendar()
+	{
+		return isset($this->data['locale']['calendar'])
+			? $this->data['locale']['calendar']
+			: $this->getDefaultCalendar();
+	}
+
+	public function getLocaleTimeZone()
+	{
+		return isset($this->data['locale']['timezone'])
+			? $this->data['locale']['timezone']
+			: null;
+	}
+
 
 
 	///////////////////////////// locale names //////////////////////////////////
@@ -895,16 +917,15 @@ class AgaviLocale
 
 	public static function getLookupPath($localeIdentifier)
 	{
-		$localeInfo = self::parseLocaleIdentifier($localeIdentifier);
+		if(is_array($localeIdentifier)) {
+			$localeInfo = $localeIdentifier;
+		} else {
+			$localeInfo = self::parseLocaleIdentifier($localeIdentifier);
+		}
 
-		
+		$scriptPart = null;
 		$path = $localeInfo['language'];
 		$paths[] = $path;
-
-		if($localeInfo['script']) {
-			$path .= '_' . $localeInfo['script'];
-			$paths[] = $path;
-		}
 
 		if($localeInfo['territory']) {
 			$path .= '_' . $localeInfo['territory'];
@@ -914,6 +935,21 @@ class AgaviLocale
 		if($localeInfo['variant']) {
 			$path .= '_' . $localeInfo['variant'];
 			$paths[] = $path;
+		}
+
+		if($localeInfo['script']) {
+			$locPath = $localeInfo['language'] . '_' . $localeInfo['script'];
+			$paths[] = $locPath;
+
+			if($localeInfo['territory']) {
+				$locPath .= '_' . $localeInfo['territory'];
+				$paths[] = $locPath;
+			}
+
+			if($localeInfo['variant']) {
+				$locPath .= '_' . $localeInfo['variant'];
+				$paths[] = $locPath;
+			}
 		}
 
 		return array_reverse($paths);

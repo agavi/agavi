@@ -62,7 +62,7 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	protected $actionAccessor = 'action';
 
 	/**
-	 * @var        string The locale of this request.
+	 * @var        AgaviLocale The locale of this request.
 	 * @since      0.11.0
 	 */
 	protected $locale = null;
@@ -581,16 +581,16 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	 */
 	public function setLocale($locale)
 	{
-		$this->locale = $locale;
 		if(($tm = $this->getContext()->getTranslationManager())) {
-			$tm->localeChanged($locale);
+			$this->locale = $tm->getLocaleFromIdentifier($locale);
+			$tm->localeChanged($this->locale);
 		}
 	}
 
 	/**
 	 * Get the locale of the request.
 	 *
-	 * @return     string The locale.
+	 * @return     AgaviLocale The locale.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
