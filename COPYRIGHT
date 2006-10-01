@@ -1,5 +1,5 @@
-AGAVI LICENSE INFORMATION
-=========================
+AGAVI COPYRIGHT INFORMATION
+===========================
 
 
 Agavi
@@ -10,7 +10,11 @@ Agavi is originally based on Mojavi3 r775 by Sean Kerr.
 For more information about Agavi, visit the homepage:
 http://www.agavi.org/ 
 
-The corresponding license can be found in LICENSE-AGAVI.
+Authors
+ Sean Kerr (skerr@mojavi.org)
+ Agavi Project (info@agavi.org)
+
+Copyright (c) Authors.
 
 --
 
@@ -23,7 +27,7 @@ This software bundles a subset of the Unicode Common Locale Data Repository.
 Fore more information about the Unicode CLDR, visit the homepage:
 http://www.unicode.org/cldr/
 
-The corresponding license can be found in LICENSE-UNICODE_CLDR.
+Copyright © 1991-2006 Unicode, Inc. All rights reserved.
 
 --
 
@@ -37,7 +41,7 @@ or "Olson database".
 For more information about the Zoneinfo Database, visit the homepage:
 http://www.twinsun.com/tz/tz-link.htm
 
-The Zoneinfo Database is licensed as Public Domain.
+Copyright (c) Authors.
 
 --
 
@@ -48,8 +52,7 @@ Tango Icon Theme
 This software uses some icons from the Tango Desktop Project Icon Theme in their
 original SVG versions.
 
-
 For more information about the Tango Desktop Project, visit the homepage:
 http://tango.freedesktop.org/
 
-The corresponding license can be found in LICENSE-TANGO_DESKTOP_PROJECT.
+Copyright (c) Authors
