@@ -49,16 +49,9 @@ class AgaviWebController extends AgaviController
 	}
 
 	/**
-	 * Redirect the request to another URL.
-	 *
-	 * @param      string An existing URL.
-	 * @param      int    A delay in seconds before redirecting. This only works 
-	 *                    on browsers that do not support the PHP header.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
+	 * @see        AgaviController::redirect()
 	 */
-	public function redirect($url)
+	public function redirect($to)
 	{
 		$r = $this->getResponse();
 		
@@ -68,19 +61,16 @@ class AgaviWebController extends AgaviController
 		
 		$r->clear();
 		
-		$r->setHttpHeader('Location', $url);
-		
-		$html = 
-			'<html>' .
-			'<head>' .
-			'<meta http-equiv="refresh" content="0;url=%s"/>' .
-			'</head>' .
-			'</html>'
-		;
-		
-		$r->setContent(sprintf($html, $url));
+		$r->setHttpHeader('Location', $to);
 		
 		$r->lock();
+		
+		if($this->redirectResponse === null) {
+			$rfi = $this->context->getFactoryInfo('response');
+			$this->redirectResponse = new $rfi['class']();
+			$this->redirectResponse->initialize($this->context, $rfi['parameters']);
+		}
+		return $this->redirectResponse;
 	}
 }
 

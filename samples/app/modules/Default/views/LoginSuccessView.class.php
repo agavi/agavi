@@ -26,16 +26,32 @@ class Default_LoginSuccessView extends AgaviView
 	public function execute(AgaviParameterHolder $parameters)
 	{
 		$usr = $this->getContext()->getUser();
+		$url = false;
 		if($usr->hasAttribute('redirect', 'org.agavi.SampleApp.login')) {
-			// we need to redirect back to the action that caused the login form to pop up
-			// setting no template will mean no rendering is performed
-			// which is a good thing since we'll redirect anyways
-			// response will be locked, so no output will be added
-			// all action and global filters will still run back to Controller::dispatch()
-			// a redirect in 0.11 does NOT bail out immediately anymore!
+			/*
+				we need to redirect back to the action that caused the login form to
+				pop up. setting no template will mean no rendering is performed, which
+				is a good thing since we'll redirect anyway.
+				response will be locked, so no output will be added. the redirect does,
+				however, return a Response instance that can be used to set cookies etc.
+				action and global filters will still run back to Controller::dispatch(),
+				a redirect in 0.11 does NOT bail out immediately anymore!
+			*/
 			$url = $usr->getAttribute('redirect', 'org.agavi.SampleApp.login');
 			$usr->removeAttribute('redirect', 'org.agavi.SampleApp.login');
-			$this->getContext()->getController()->redirect($url);
+			$res = $this->getContext()->getController()->redirect($url);
+		} else {
+			$res = $this->getResponse();
+		}
+		
+		// set the autologon cookie if requested
+		if($parameters->hasParameter('remember')) {
+			$res->setCookie('autologon[username]', $parameters->getParameter('username'), 60*60*24*14);
+			$res->setCookie('autologon[password]', $parameters->getParameter('password'), 60*60*24*14);
+		}
+		
+		// we redirected, let's bail out
+		if($url !== false) {
 			return;
 		}
 		
@@ -45,12 +61,6 @@ class Default_LoginSuccessView extends AgaviView
 
 		// set the title
 		$this->setAttribute('title', 'Login Successful');
-		
-		$res = $this->getResponse();
-		if($parameters->hasParameter('remember')) {
-			$res->setCookie('autologon[username]', $parameters->getParameter('username'), 60*60*24*14);
-			$res->setCookie('autologon[password]', $parameters->getParameter('password'), 60*60*24*14);
-		}
 	}
 
 }

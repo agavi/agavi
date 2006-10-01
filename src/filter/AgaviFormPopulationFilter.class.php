@@ -75,6 +75,12 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 	{
 		$filterChain->execute($filterChain, $response);
 		
+		$output = $response->getContent();
+		
+		if(!$output) {
+			return;
+		}
+		
 		$req = $this->getContext()->getRequest();
 		
 		$cfg = array_merge(array('populate' => null, 'skip' => null), $this->getParameters(), $req->getAttributes('org.agavi.filter.FormPopulationFilter'));
@@ -101,8 +107,6 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 			$skip = '/(\A' . str_replace('\[\]', '\[[^\]]*\]', implode('|\A', array_map('preg_quote', $cfg['skip']))) . ')/';
 		}
 		
-		
-		$output = $response->getContent();
 		
 		$doc = new DOMDocument();
 		

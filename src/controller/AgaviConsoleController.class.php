@@ -48,6 +48,10 @@ class AgaviConsoleController extends AgaviController
 		ini_set('arg_separator.output', AgaviConfig::get('php.arg_separator.output', '&'));
 	}
 	
+	public function redirect($to)
+	{
+		throw new AgaviException('N/A');
+	}
 }
 
 ?>

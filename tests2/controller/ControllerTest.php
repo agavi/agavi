@@ -2,6 +2,10 @@
 
 class TestController extends AgaviController
 {
+	public function redirect($to)
+	{
+		throw new AgaviException('N/A');
+	}
 }
 
 class ControllerTest extends AgaviTestCase

@@ -33,11 +33,6 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	protected $context = null;
 	
 	/**
-	 * @var        bool Indicates new content has been set since the last output.
-	 */
-	protected $dirty = false;
-	
-	/**
 	 * @var        bool Indicates whether or not modifications are allowed.
 	 */
 	protected $locked = false;
@@ -164,20 +159,6 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	}
 	
 	/**
-	 * Indicates whether or not the Response is "dirty", i.e. if new content has
-	 * been set since the last sending of data.
-	 *
-	 * @return     bool
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function isDirty()
-	{
-		return $this->dirty;
-	}
-	
-	/**
 	 * Check if this Response is locked, i.e. whether or not new content and other
 	 * output information can be set.
 	 *
@@ -227,9 +208,8 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	 */
 	public function setContent($content)
 	{
-		if(!$this->locked && $content != $this->content) {
+		if(!$this->locked) {
 			$this->content = $content;
-			$this->dirty = true;
 			return true;
 		}
 		return false;
@@ -275,10 +255,8 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	 */
 	public function clearContent()
 	{
-		$empty = '';
-		if(!$this->locked && $this->content != $empty) {
-			$this->content = $empty;
-			$this->dirty = true;
+		if(!$this->locked) {
+			$this->content = '';
 			return true;
 		}
 		return false;

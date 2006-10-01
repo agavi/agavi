@@ -123,13 +123,8 @@ class AgaviWebResponse extends AgaviResponse
 	 */
 	public function send()
 	{
-		if($this->dirty) {
-			$this->sendHttpResponseHeaders();
-		
-			$this->sendContent();
-		
-			$this->dirty = false;
-		}
+		$this->sendHttpResponseHeaders();
+		$this->sendContent();
 	}
 	
 	/**
@@ -144,7 +139,6 @@ class AgaviWebResponse extends AgaviResponse
 			$this->clearContent();
 			$this->httpHeaders = array();
 			$this->cookies = array();
-			$this->dirty = false;
 		}
 	}
 	

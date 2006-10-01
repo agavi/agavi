@@ -27,6 +27,12 @@
 					<parameter name="min_error">Please supply a password.</parameter>
 				</parameters>
 			</validator>
+			
+			<validator class="isset" name="remember" severity="none">
+				<parameters>
+					<parameter name="param">remember</parameter>
+				</parameters>
+			</validator>
 
 		</validators>
 	</configuration>

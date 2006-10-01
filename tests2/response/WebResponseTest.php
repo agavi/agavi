@@ -15,7 +15,6 @@ class WebResponseTest extends AgaviTestCase
 		$r = $this->_r;
 
 		$r->setContent('content');
-		$this->assertTrue($r->isDirty());
 		ob_start();
 		try {
 			$r->send();
@@ -26,7 +25,6 @@ class WebResponseTest extends AgaviTestCase
 		ob_end_clean();
 
 		$this->assertEquals('content', $content);
-		$this->assertFalse($r->isDirty());
 	}
 
 	public function testClear()

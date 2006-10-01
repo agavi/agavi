@@ -4,11 +4,7 @@ class TestResponse extends AgaviResponse
 {
 	public function send()
 	{
-		if($this->dirty) {
-			$this->sendContent();
-		
-			$this->dirty = false;
-		}
+		$this->sendContent();
 	}
 	
 	/**
@@ -21,7 +17,6 @@ class TestResponse extends AgaviResponse
 	{
 		if(!$this->locked) {
 			$this->clearContent();
-			$this->dirty = false;
 		}
 	}
 }

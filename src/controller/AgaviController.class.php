@@ -78,6 +78,11 @@ abstract class AgaviController extends AgaviParameterHolder
 	 * @var        AgaviResponse The Response instance for this Controller.
 	 */
 	protected $response = null;
+	
+	/**
+	 * @var        AgaviResponse The Response to be used after redirects are set.
+	 */
+	protected $redirectResponse = null;
 
 	/**
 	 * Retrieve the ActionStack.
@@ -178,7 +183,12 @@ abstract class AgaviController extends AgaviParameterHolder
 			// go, go, go!
 			$filterChain->execute();
 			
-			$this->response->send();
+			if($this->redirectResponse instanceof AgaviResponse) {
+				$this->redirectResponse->append($this->response->export());
+				$this->redirectResponse->send();
+			} else {
+				$this->response->send();
+			}
 			
 		} catch(Exception $e) {
 			AgaviException::printStackTrace($e, $this->context, $this->getResponse());
@@ -365,6 +375,19 @@ abstract class AgaviController extends AgaviParameterHolder
 			$this->forward($next['moduleName'], $next['actionName']);
 		}
 	}
+	
+	/**
+	 * Redirect externally.
+	 *
+	 * @param      mixed Where to redirect.
+	 *
+	 * @return     AgaviResponse A reponse to work with since the others will be
+	 *                           locked down.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	abstract public function redirect($to);
 
 	/**
 	 * Retrieve the currently executing Action's name.
