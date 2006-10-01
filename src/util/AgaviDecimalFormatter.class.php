@@ -129,6 +129,7 @@ class AgaviDecimalFormatter
 
 		for($i = 0; $i < $len; ++$i) {
 			$c = $format[$i];
+			$cNext = (($i + 1) < $len) ? $format[$i + 1] : 0;
 
 			switch($state) {
 				case self::IN_POSTFIX:
@@ -159,7 +160,8 @@ class AgaviDecimalFormatter
 						} elseif($c == '-') {
 							$hasMinus = true;
 							$formatStr .= '%2$s';
-						} elseif($c == '¤') {
+						} elseif(/*$c == '¤'*/ ord($c) == 194 && ord($cNext) == 164) {
+							++$i;
 							$hasCurrency = true;
 							$formatStr .= '%3$s';
 						} else {
