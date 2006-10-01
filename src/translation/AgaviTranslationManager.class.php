@@ -80,7 +80,7 @@ class AgaviTranslationManager
 
 		include(AgaviConfigCache::checkConfig(AgaviConfig::get('core.config_dir') . '/translation.xml'));
 		$this->loadSupplementalData();
-		$this->retrieveAvailableLocales();
+		$this->loadAvailableLocales();
 	}
 
 	/**
@@ -238,6 +238,17 @@ class AgaviTranslationManager
 		return $translatedMessage;
 	}
 
+	/**
+	 * Returns the translators for a given domain.
+	 *
+	 * @param      string The domain.
+	 * @param      string The remaining part in the domain which didn't match
+	 *
+	 * @return     array An array of translators for the given domain
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	protected function getTranslators($domain, &$domainExtra)
 	{
 		$domainParts = explode('.', $domain, 2);
@@ -252,17 +263,40 @@ class AgaviTranslationManager
 		}
 	}
 
-	protected function retrieveAvailableLocales()
+	/**
+	 * Loads the available locales into the instance variable
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	protected function loadAvailableLocales()
 	{
 		$this->availableLocales = $this->availableConfigLocales;
 	}
 
+	/**
+	 * Loads the supplemental data into the instance variable
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	protected function loadSupplementalData()
 	{
 		$this->supplementalData = include(AgaviConfigCache::checkConfig(AgaviConfig::get('core.cldr_dir') . '/supplementalData.xml'));
 	}
 
 
+	/**
+	 * Returns a new AgaviLocale object from the given identifier.
+	 *
+	 * @param      string The locale identifier
+	 *
+	 * @return     AgaviLocale The locale instance which matches the available
+	 *                         locales most.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public function getLocaleFromIdentifier($identifier)
 	{
 		static $dataCache = array();

@@ -28,27 +28,47 @@
  */
 class AgaviLocale
 {
-
+	/**
+	 * @var        AgaviContext An AgaviContext instance.
+	 */
 	protected $context = null;
 
 	/**
-	 * @var        array The data
+	 * @var        array The data.
 	 */
 	protected $data = array();
 
 	/**
-	 * @var        string The name of this locale
+	 * @var        string The name of this locale.
 	 */
 	protected $name = null;
 
 
-	public function initialize( $context, $name, array $data = array())
+	/**
+	 * Initialize this Locale.
+	 *
+	 * @param      AgaviContext The current application context.
+	 * @param      string       The name of the locale
+	 * @param      array        An associative array of initialization parameters.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function initialize(AgaviContext $context, $name, array $data = array())
 	{
 		$this->context = $context;
 		$this->name = $name;
 		$this->data = $data;
 	}
 
+	/**
+	 * Returns the name of this locale
+	 *
+	 * @return     string The name.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public function getName()
 	{
 		return $this->name;
@@ -871,7 +891,16 @@ class AgaviLocale
 			: null;
 	}
 
-
+	/**
+	 * Parses a locale identifier and returns its parts.
+	 *
+	 * @param      string The locale identifier.
+	 *
+	 * @return     array The parts of the identifier
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public static function parseLocaleIdentifier($identifier)
 	{
 		// the only important thing here is the forward assertion which is needed
@@ -915,6 +944,18 @@ class AgaviLocale
 		return $localeData;
 	}
 
+	/**
+	 * Returns all file names which need to be considered for the given 
+	 * identifier. 
+	 *
+	 * @param      mixed The locale identifier or the result of 
+	 *                   AgaviLocale::parseLocaleIdentifier
+	 *
+	 * @return     array The filenames.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public static function getLookupPath($localeIdentifier)
 	{
 		if(is_array($localeIdentifier)) {

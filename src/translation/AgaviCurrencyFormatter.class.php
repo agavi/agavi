@@ -29,6 +29,9 @@
  */
 class AgaviCurrencyFormatter extends AgaviDecimalFormatter implements AgaviITranslator
 {
+	/**
+	 * @var        AgaviContext An AgaviContext instance.
+	 */
 	protected $context = null;
 
 	/**
@@ -37,6 +40,9 @@ class AgaviCurrencyFormatter extends AgaviDecimalFormatter implements AgaviITran
 	 */
 	protected $hasCustomFormat = false;
 
+	/**
+	 * @var        string The symbol which will be used as currency sign
+	 */
 	protected $currencySymbol = '';
 
 
@@ -95,6 +101,14 @@ class AgaviCurrencyFormatter extends AgaviDecimalFormatter implements AgaviITran
 		}
 	}
 
+	/**
+	 * Returns the current currency symbol.
+	 *
+	 * @return     string The currency symbol
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public function getCurrencySymbol()
 	{
 		return $this->currencySymbol;

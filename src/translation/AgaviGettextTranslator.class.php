@@ -27,8 +27,14 @@
  */
 class AgaviGettextTranslator extends AgaviBasicTranslator
 {
+	/**
+	 * @var        array The paths to the locale files indexed by domains
+	 */
 	protected $domainPaths = array();
 
+	/**
+	 * @var        array The data for each domain
+	 */
 	protected $domainData = array();
 
 	/**
@@ -102,6 +108,15 @@ class AgaviGettextTranslator extends AgaviBasicTranslator
 		$this->domainData = array();
 	}
 
+	/**
+	 * Loads the data from the data file for the given domain with the current 
+	 * locale.
+	 *
+	 * @param      string The domain to load the data for.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com
+	 * @since      0.11.0
+	 */
 	public function loadDomainData($domain)
 	{
 		if(!isset($this->domainPaths[$domain])) {

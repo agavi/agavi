@@ -28,6 +28,9 @@
  */
 class AgaviDateFormatter implements AgaviITranslator
 {
+	/**
+	 * @var        AgaviContext An AgaviContext instance.
+	 */
 	protected $context = null;
 
 	/**

@@ -28,6 +28,9 @@
  */
 class AgaviNumberFormatter extends AgaviDecimalFormatter implements AgaviITranslator
 {
+	/**
+	 * @var        AgaviContext An AgaviContext instance.
+	 */
 	protected $context = null;
 
 	/**
