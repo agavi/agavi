@@ -31,8 +31,8 @@ class AgaviMessage extends AgaviParameterHolder
 	/**
 	 * Constructor.
 	 *
-	 * @param      $message optional message
-	 * @param      $level optional priority level
+	 * @param      string optional message
+	 * @param      int    optional priority level
 	 *
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.10.0
@@ -44,22 +44,9 @@ class AgaviMessage extends AgaviParameterHolder
 	}
 
 	/**
-	 * Log this Message.
-	 *
-	 * Convenience function to log this Message.
-	 *
-	 * @author     Bob Zoller <bob@agavi.org>
-	 * @since      0.10.0
-	 */
-	public function log()
-	{
-		AgaviLoggerManager::log($this);
-	}
-
-	/**
 	 * toString method.
 	 *
-	 * @return     string
+	 * @return     string The message.
 	 *
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.10.0
@@ -72,7 +59,7 @@ class AgaviMessage extends AgaviParameterHolder
 	/**
 	 * Set the message.
 	 *
-	 * @param      $message required
+	 * @param      string The message to set.
 	 *
 	 * @return     AgaviMessage
 	 *
@@ -88,7 +75,7 @@ class AgaviMessage extends AgaviParameterHolder
 	/**
 	 * Append to the message.
 	 *
-	 * @param      $message required
+	 * @param      string Message to append.
 	 *
 	 * @return     AgaviMessage
 	 *
@@ -104,7 +91,7 @@ class AgaviMessage extends AgaviParameterHolder
 	/**
 	 * Set the priority level.
 	 *
-	 * @param      $level required
+	 * @param      int The priority level.
 	 *
 	 * @return     Message
 	 *
@@ -120,7 +107,7 @@ class AgaviMessage extends AgaviParameterHolder
 	/**
 	 * Get the priority level.
 	 *
-	 * @return     int
+	 * @return     int The priority level.
 	 *
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.10.0
@@ -133,7 +120,7 @@ class AgaviMessage extends AgaviParameterHolder
 	/**
 	 * Get the message.
 	 *
-	 * @return     mixed
+	 * @return     mixed The message.
 	 *
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.10.0
