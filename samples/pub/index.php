@@ -3,7 +3,7 @@
 // +---------------------------------------------------------------------------+
 // | An absolute filesystem path to the agavi/agavi.php script.                |
 // +---------------------------------------------------------------------------+
-require('../../src/agavi.php');
+require('INSERT PATH TO "agavi/agavi.php" HERE');
 
 // +---------------------------------------------------------------------------+
 // | An absolute filesystem path to our app/config.php script.                 |
