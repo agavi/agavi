@@ -156,8 +156,8 @@ class AgaviActionStackEntry
 	 *
 	 * @return     string A module name.
 	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
 	 */
 	public function getViewName()
 	{
@@ -169,8 +169,8 @@ class AgaviActionStackEntry
 	 *
 	 * @return     string A module name.
 	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
 	 */
 	public function getViewModuleName()
 	{
@@ -182,8 +182,8 @@ class AgaviActionStackEntry
 	 *
 	 * @return     string A module name.
 	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
 	 */
 	public function setViewName($viewName)
 	{
@@ -195,8 +195,8 @@ class AgaviActionStackEntry
 	 *
 	 * @return     string A module name.
 	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
 	 */
 	public function setViewModuleName($viewModuleName)
 	{
