@@ -54,107 +54,799 @@ class AgaviLocale
 		return $this->name;
 	}
 
-	public function getLanguage($languageId)
+	////////////////////////////// Locale data //////////////////////////////////
+
+	public function getLocaleLanguage()
 	{
-		if(!isset($this->data['languages'][$languageId])) {
-			if($this->fallbackLocale) {
-				$this->fallbackLocale->getLanguage($languageId);
-			}
-		}
-		return $this->data['languages'][$languageId];
+		return isset($this->data['locale']['language'])
+			? $this->data['locale']['language']
+			: null;
+	}
+
+	public function getLocaleTerritory()
+	{
+		return isset($this->data['locale']['territory'])
+			? $this->data['locale']['territory']
+			: null;
+	}
+
+	public function getLocaleScript()
+	{
+		return isset($this->data['locale']['script'])
+			? $this->data['locale']['script']
+			: null;
+	}
+
+	public function getLocaleVariant()
+	{
+		return isset($this->data['locale']['variant'])
+			? $this->data['locale']['variant']
+			: null;
 	}
 
 
-	public function getCountry($countryId)
+	///////////////////////////// locale names //////////////////////////////////
+
+
+	public function getLanguages()
 	{
-		return $this->data['countries'][$countryId];
+		return isset($this->data['displayNames']['languages'])
+			? $this->data['displayNames']['languages']
+			: null;
 	}
 
-	public function getCurrencySymbol($currencyId)
+	public function getLanguage($id)
 	{
-		return $this->data['currencies'][$currencyId]['symbol'];
+		return isset($this->data['displayNames']['languages'][$id])
+			? $this->data['displayNames']['languages'][$id]
+			: null;
 	}
 
-	public function getCurrency($currencyId)
+
+	public function getScripts()
 	{
-		return $this->data['currencies'][$currencyId]['name'];
+		return isset($this->data['displayNames']['scripts'])
+			? $this->data['displayNames']['scripts']
+			: null;
 	}
 
-	public function getTerritory($territoryId)
+	public function getScript($id)
 	{
-		return $this->data['territories'][$territoryId];
+		return isset($this->data['displayNames']['scripts'][$id])
+			? $this->data['displayNames']['scripts'][$id]
+			: null;
 	}
+
+
+	public function getTerritories()
+	{
+		return isset($this->data['displayNames']['territories'])
+			? $this->data['displayNames']['territories']
+			: null;
+	}
+
+	public function getTerritory($id)
+	{
+		return isset($this->data['displayNames']['territories'][$id])
+			? $this->data['displayNames']['territories'][$id]
+			: null;
+	}
+
+
+	public function getVariants()
+	{
+		return isset($this->data['displayNames']['variants'])
+			? $this->data['displayNames']['variants']
+			: null;
+	}
+
+	public function getVariant($id)
+	{
+		return isset($this->data['displayNames']['variants'][$id])
+			? $this->data['displayNames']['variants'][$id]
+			: null;
+	}
+
+
+	public function getMeasurementSystemNames()
+	{
+		return isset($this->data['displayNames']['measurementSystemNames'])
+			? $this->data['displayNames']['measurementSystemNames']
+			: null;
+	}
+
+	public function getMeasurementSystemName($id)
+	{
+		return isset($this->data['displayNames']['measurementSystemNames'][$id])
+			? $this->data['displayNames']['measurementSystemNames'][$id]
+			: null;
+	}
+
+
+	//////////////////////////////// layout /////////////////////////////////////
+
+
+	public function getLineOrientation()
+	{
+		return isset($this->data['layout']['orientation']['lines'])
+			? $this->data['layout']['orientation']['lines']
+			: null;
+	}
+
+	public function getCharacterOrientation()
+	{
+		return isset($this->data['layout']['orientation']['characters'])
+			? $this->data['layout']['orientation']['characters']
+			: null;
+	}
+
+
+	//////////////////////////////// delimiters /////////////////////////////////
+
+
+	public function getQuotationStart()
+	{
+		return isset($this->data['delimiters']['quotationStart'])
+			? $this->data['delimiters']['quotationStart']
+			: null;
+	}
+
+	public function getQuotationEnd()
+	{
+		return isset($this->data['delimiters']['quotationEnd'])
+			? $this->data['delimiters']['quotationEnd']
+			: null;
+	}
+
+	public function getAlternateQuotationStart()
+	{
+		return isset($this->data['delimiters']['altQuotationStart'])
+			? $this->data['delimiters']['altQuotationStart']
+			: null;
+	}
+
+	public function getAlternateQuotationEnd()
+	{
+		return isset($this->data['delimiters']['altQuotationEnd'])
+			? $this->data['delimiters']['altQuotationEnd']
+			: null;
+	}
+
+
+	//////////////////////////////// calendars //////////////////////////////////
+
+
+	public function getDefaultCalendar()
+	{
+		return isset($this->data['calendars']['default'])
+			? $this->data['calendars']['default']
+			: null;
+	}
+
+	public function getCalendarMonthsWide($calendar)
+	{
+		return isset($this->data['calendars'][$calendar]['months']['format']['wide'])
+			? $this->data['calendars'][$calendar]['months']['format']['wide']
+			: null;
+	}
+
+	public function getCalendarMonthWide($calendar, $month)
+	{
+		return isset($this->data['calendars'][$calendar]['months']['format']['wide'][$month])
+			? $this->data['calendars'][$calendar]['months']['format']['wide'][$month]
+			: null;
+	}
+
+	public function getCalendarMonthsAbbreviated($calendar)
+	{
+		return isset($this->data['calendars'][$calendar]['months']['format']['abbreviated'])
+			? $this->data['calendars'][$calendar]['months']['format']['abbreviated']
+			: null;
+	}
+
+	public function getCalendarMonthAbbreviated($calendar, $month)
+	{
+		return isset($this->data['calendars'][$calendar]['months']['format']['abbreviated'][$month])
+			? $this->data['calendars'][$calendar]['months']['format']['abbreviated'][$month]
+			: null;
+	}
+
+	public function getCalendarMonthsNarrow($calendar)
+	{
+		return isset($this->data['calendars'][$calendar]['months']['stand-alone']['narrow'])
+			? $this->data['calendars'][$calendar]['months']['stand-alone']['narrow']
+			: null;
+	}
+
+	public function getCalendarMonthNarrow($calendar, $month)
+	{
+		return isset($this->data['calendars'][$calendar]['months']['stand-alone']['narrow'][$month])
+			? $this->data['calendars'][$calendar]['months']['stand-alone']['narrow'][$month]
+			: null;
+	}
+
+
+	public function getCalendarDaysWide($calendar)
+	{
+		return isset($this->data['calendars'][$calendar]['days']['format']['wide'])
+			? $this->data['calendars'][$calendar]['days']['format']['wide']
+			: null;
+	}
+
+	public function getCalendarDayWide($calendar, $day)
+	{
+		return isset($this->data['calendars'][$calendar]['days']['format']['wide'][$day])
+			? $this->data['calendars'][$calendar]['days']['format']['wide'][$day]
+			: null;
+	}
+
+	public function getCalendarDaysAbbreviated($calendar)
+	{
+		return isset($this->data['calendars'][$calendar]['days']['format']['abbreviated'])
+			? $this->data['calendars'][$calendar]['days']['format']['abbreviated']
+			: null;
+	}
+
+	public function getCalendarDayAbbreviated($calendar, $day)
+	{
+		return isset($this->data['calendars'][$calendar]['days']['format']['abbreviated'][$day])
+			? $this->data['calendars'][$calendar]['days']['format']['abbreviated'][$day]
+			: null;
+	}
+
+	public function getCalendarDaysNarrow($calendar)
+	{
+		return isset($this->data['calendars'][$calendar]['days']['stand-alone']['narrow'])
+			? $this->data['calendars'][$calendar]['days']['stand-alone']['narrow']
+			: null;
+	}
+
+	public function getCalendarDayNarrow($calendar, $day)
+	{
+		return isset($this->data['calendars'][$calendar]['days']['stand-alone']['narrow'][$day])
+			? $this->data['calendars'][$calendar]['days']['stand-alone']['narrow'][$day]
+			: null;
+	}
+
+
+	public function getCalendarQuartersWide($calendar)
+	{
+		return isset($this->data['calendars'][$calendar]['quarters']['format']['wide'])
+			? $this->data['calendars'][$calendar]['quarters']['format']['wide']
+			: null;
+	}
+
+	public function getCalendarQuarterWide($calendar, $quarter)
+	{
+		return isset($this->data['calendars'][$calendar]['quarters']['format']['wide'][$quarter])
+			? $this->data['calendars'][$calendar]['quarters']['format']['wide'][$quarter]
+			: null;
+	}
+
+	public function getCalendarQuartersAbbreviated($calendar)
+	{
+		return isset($this->data['calendars'][$calendar]['quarters']['format']['abbreviated'])
+			? $this->data['calendars'][$calendar]['quarters']['format']['abbreviated']
+			: null;
+	}
+
+	public function getCalendarQuarterAbbreviated($calendar, $quater)
+	{
+		return isset($this->data['calendars'][$calendar]['quarters']['format']['abbreviated'][$quarter])
+			? $this->data['calendars'][$calendar]['quarters']['format']['abbreviated'][$quarter]
+			: null;
+	}
+
+	public function getCalendarQuartersNarrow($calendar)
+	{
+		return isset($this->data['calendars'][$calendar]['quarters']['stand-alone']['narrow'])
+			? $this->data['calendars'][$calendar]['quarters']['stand-alone']['narrow']
+			: null;
+	}
+
+	public function getCalendarQuarterNarrow($calendar, $quarter)
+	{
+		return isset($this->data['calendars'][$calendar]['quarters']['stand-alone']['narrow'][$quarter])
+			? $this->data['calendars'][$calendar]['quarters']['stand-alone']['narrow'][$quarter]
+			: null;
+	}
+
+
+	public function getCalendarAm($calendar)
+	{
+		return isset($this->data['calendars'][$calendar]['am'])
+			? $this->data['calendars'][$calendar]['am']
+			: null;
+	}
+
+	public function getCalendarPm($calendar)
+	{
+		return isset($this->data['calendars'][$calendar]['pm'])
+			? $this->data['calendars'][$calendar]['pm']
+			: null;
+	}
+
+
+	public function getCalendarErasWide($calendar)
+	{
+		return isset($this->data['calendars'][$calendar]['eras']['wide'])
+			? $this->data['calendars'][$calendar]['eras']['wide']
+			: null;
+	}
+
+	public function getCalendarEraWide($calendar, $era)
+	{
+		return isset($this->data['calendars'][$calendar]['eras']['wide'][$era])
+			? $this->data['calendars'][$calendar]['eras']['wide'][$era]
+			: null;
+	}
+
+	public function getCalendarErasAbbreviated($calendar)
+	{
+		return isset($this->data['calendars'][$calendar]['eras']['abbreviated'])
+			? $this->data['calendars'][$calendar]['eras']['abbreviated']
+			: null;
+	}
+
+	public function getCalendarEraAbbreviated($calendar, $era)
+	{
+		return isset($this->data['calendars'][$calendar]['eras']['abbreviated'][$era])
+			? $this->data['calendars'][$calendar]['eras']['abbreviated'][$era]
+			: null;
+	}
+
+	public function getCalendarErasNarrow($calendar)
+	{
+		return isset($this->data['calendars'][$calendar]['eras']['narrow'])
+			? $this->data['calendars'][$calendar]['eras']['narrow']
+			: null;
+	}
+
+	public function getCalendarEraNarrow($calendar, $era)
+	{
+		return isset($this->data['calendars'][$calendar]['eras']['narrow'][$era])
+			? $this->data['calendars'][$calendar]['eras']['narrow'][$era]
+			: null;
+	}
+
+	public function getCalendarDateFormatDefaultName($calendar)
+	{
+		return isset($this->data['calendars'][$calendar]['dateFormats']['default'])
+			? $this->data['calendars'][$calendar]['dateFormats']['default']
+			: null;
+	}
+
+	public function getCalendarDateFormats($calendar)
+	{
+		return isset($this->data['calendars'][$calendar]['dateFormats'])
+			? $this->data['calendars'][$calendar]['dateFormats']
+			: null;
+	}
+
+	public function getCalendarDateFormat($calendar, $id)
+	{
+		return isset($this->data['calendars'][$calendar]['dateFormats'][$id])
+			? $this->data['calendars'][$calendar]['dateFormats'][$id]
+			: null;
+	}
+
+	public function getCalendarDateFormatPattern($calendar, $id)
+	{
+		return isset($this->data['calendars'][$calendar]['dateFormats'][$id]['pattern'])
+			? $this->data['calendars'][$calendar]['dateFormats'][$id]['pattern']
+			: null;
+	}
+
+	public function getCalendarDateFormatDisplayName($calendar, $id)
+	{
+		return isset($this->data['calendars'][$calendar]['dateFormats'][$id]['displayName'])
+			? $this->data['calendars'][$calendar]['dateFormats'][$id]['displayName']
+			: null;
+	}
+
+	public function getCalendarTimeFormatDefaultName($calendar)
+	{
+		return isset($this->data['calendars'][$calendar]['timeFormats']['default'])
+			? $this->data['calendars'][$calendar]['timeFormats']['default']
+			: null;
+	}
+
+	public function getCalendarTimeFormats($calendar)
+	{
+		return isset($this->data['calendars'][$calendar]['timeFormats'])
+			? $this->data['calendars'][$calendar]['timeFormats']
+			: null;
+	}
+
+	public function getCalendarTimeFormat($calendar, $id)
+	{
+		return isset($this->data['calendars'][$calendar]['timeFormats'][$id])
+			? $this->data['calendars'][$calendar]['timeFormats'][$id]
+			: null;
+	}
+
+	public function getCalendarTimeFormatPattern($calendar, $id)
+	{
+		return isset($this->data['calendars'][$calendar]['timeFormats'][$id]['pattern'])
+			? $this->data['calendars'][$calendar]['timeFormats'][$id]['pattern']
+			: null;
+	}
+
+	public function getCalendarTimeFormatDisplayName($calendar, $id)
+	{
+		return isset($this->data['calendars'][$calendar]['timeFormats'][$id]['displayName'])
+			? $this->data['calendars'][$calendar]['timeFormats'][$id]['displayName']
+			: null;
+	}
+
+	public function getCalendarDateTimeFormatDefaultName($calendar)
+	{
+		return isset($this->data['calendars'][$calendar]['dateTimeFormats']['default'])
+			? $this->data['calendars'][$calendar]['dateTimeFormats']['default']
+			: null;
+	}
+
+	public function getCalendarDateTimeFormats($calendar)
+	{
+		return isset($this->data['calendars'][$calendar]['dateTimeFormats'])
+			? $this->data['calendars'][$calendar]['dateTimeFormats']
+			: null;
+	}
+
+	public function getCalendarDateTimeFormat($calendar, $id)
+	{
+		return isset($this->data['calendars'][$calendar]['dateTimeFormats'][$id])
+			? $this->data['calendars'][$calendar]['dateTimeFormats'][$id]
+			: null;
+	}
+
+	public function getCalendarDateTimeFormatPattern($calendar, $id)
+	{
+		return isset($this->data['calendars'][$calendar]['dateTimeFormats'][$id]['pattern'])
+			? $this->data['calendars'][$calendar]['dateTimeFormats'][$id]['pattern']
+			: null;
+	}
+
+	public function getCalendarDateTimeFormatDisplayName($calendar, $id)
+	{
+		return isset($this->data['calendars'][$calendar]['dateTimeFormats'][$id]['displayName'])
+			? $this->data['calendars'][$calendar]['dateTimeFormats'][$id]['displayName']
+			: null;
+	}
+
+
+	public function getCalendarFields($calendar, $id)
+	{
+		return isset($this->data['calendars'][$calendar]['fields'])
+			? $this->data['calendars'][$calendar]['fields']
+			: null;
+	}
+
+	public function getCalendarField($calendar, $id)
+	{
+		return isset($this->data['calendars'][$calendar]['fields'][$id])
+			? $this->data['calendars'][$calendar]['fields'][$id]
+			: null;
+	}
+
+	public function getCalendarFieldDisplayName($calendar, $id)
+	{
+		return isset($this->data['calendars'][$calendar]['fields'][$id]['displayName'])
+			? $this->data['calendars'][$calendar]['fields'][$id]['displayName']
+			: null;
+	}
+
+	public function getCalendarFieldRelatives($calendar, $id)
+	{
+		return isset($this->data['calendars'][$calendar]['fields'][$id]['relatives'])
+			? $this->data['calendars'][$calendar]['fields'][$id]['relatives']
+			: null;
+	}
+
+	public function getCalendarFieldRelative($calendar, $id, $rId)
+	{
+		return isset($this->data['calendars'][$calendar]['fields'][$id]['relatives'][$rId])
+			? $this->data['calendars'][$calendar]['fields'][$id]['relatives'][$rId]
+			: null;
+	}
+
+
+	public function getTimeZoneHourFormat()
+	{
+		return isset($this->data['timeZoneNames']['hourFormat'])
+			? $this->data['timeZoneNames']['hourFormat']
+			: null;
+	}
+
+	public function getTimeZoneHoursFormat()
+	{
+		return isset($this->data['timeZoneNames']['hoursFormat'])
+			? $this->data['timeZoneNames']['hoursFormat']
+			: null;
+	}
+
+	public function getTimeZoneGmtFormat()
+	{
+		return isset($this->data['timeZoneNames']['gmtFormat'])
+			? $this->data['timeZoneNames']['gmtFormat']
+			: null;
+	}
+
+	public function getTimeZoneRegionFormat()
+	{
+		return isset($this->data['timeZoneNames']['regionFormat'])
+			? $this->data['timeZoneNames']['regionFormat']
+			: null;
+	}
+
+	public function getTimeZoneFallbackFormat()
+	{
+		return isset($this->data['timeZoneNames']['fallbackFormat'])
+			? $this->data['timeZoneNames']['fallbackFormat']
+			: null;
+	}
+
+	public function getTimeZoneAbbreviationFormat()
+	{
+		return isset($this->data['timeZoneNames']['abbreviationFormat'])
+			? $this->data['timeZoneNames']['abbreviationFormat']
+			: null;
+	}
+
+	public function getTimeZoneLongGenericName($tz)
+	{
+		return isset($this->data['timeZoneNames']['zones'][$tz]['long']['generic'])
+			? $this->data['timeZoneNames']['zones'][$tz]['long']['generic']
+			: null;
+	}
+
+	public function getTimeZoneLongStandardName($tz)
+	{
+		return isset($this->data['timeZoneNames']['zones'][$tz]['long']['standard'])
+			? $this->data['timeZoneNames']['zones'][$tz]['long']['standard']
+			: null;
+	}
+
+	public function getTimeZoneLongDaylightName($tz)
+	{
+		return isset($this->data['timeZoneNames']['zones'][$tz]['long']['daylight'])
+			? $this->data['timeZoneNames']['zones'][$tz]['long']['daylight']
+			: null;
+	}
+
+	public function getTimeZoneShortGenericName($tz)
+	{
+		return isset($this->data['timeZoneNames']['zones'][$tz]['short']['generic'])
+			? $this->data['timeZoneNames']['zones'][$tz]['short']['generic']
+			: null;
+	}
+
+	public function getTimeZoneShortStandardName($tz)
+	{
+		return isset($this->data['timeZoneNames']['zones'][$tz]['short']['standard'])
+			? $this->data['timeZoneNames']['zones'][$tz]['short']['standard']
+			: null;
+	}
+
+	public function getTimeZoneShortDaylightName($tz)
+	{
+		return isset($this->data['timeZoneNames']['zones'][$tz]['short']['daylight'])
+			? $this->data['timeZoneNames']['zones'][$tz]['short']['daylight']
+			: null;
+	}
+
 
 	public function getNumberSymbolDecimal()
 	{
-		return $this->data['numbers']['symbols']['decimal'];
+		return isset($this->data['numbers']['symbols']['decimal'])
+			? $this->data['numbers']['symbols']['decimal']
+			: null;
 	}
 
 	public function getNumberSymbolGroup()
 	{
-		return $this->data['numbers']['symbols']['group'];
+		return isset($this->data['numbers']['symbols']['group'])
+			? $this->data['numbers']['symbols']['group']
+			: null;
 	}
 
 	public function getNumberSymbolList()
 	{
-		return $this->data['numbers']['symbols']['list'];
+		return isset($this->data['numbers']['symbols']['list'])
+			? $this->data['numbers']['symbols']['list']
+			: null;
 	}
 
-	public function getNumberSymbolPercent()
+	public function getNumberSymbolPercentSign()
 	{
-		return $this->data['numbers']['symbols']['percentSign'];
+		return isset($this->data['numbers']['symbols']['percentSign'])
+			? $this->data['numbers']['symbols']['percentSign']
+			: null;
 	}
 
 	public function getNumberSymbolZeroDigit()
 	{
-		return $this->data['numbers']['symbols']['nativeZeroDigit'];
+		return isset($this->data['numbers']['symbols']['nativeZeroDigit'])
+			? $this->data['numbers']['symbols']['nativeZeroDigit']
+			: null;
 	}
 
 	public function getNumberSymbolPatternDigit()
 	{
-		return $this->data['numbers']['symbols']['patterDigit'];
+		return isset($this->data['numbers']['symbols']['patternDigit'])
+			? $this->data['numbers']['symbols']['patternDigit']
+			: null;
 	}
 
-	public function getNumberSymbolPlus()
+	public function getNumberSymbolPlusSign()
 	{
-		return $this->data['numbers']['symbols']['plusSign'];
+		return isset($this->data['numbers']['symbols']['plusSign'])
+			? $this->data['numbers']['symbols']['plusSign']
+			: null;
 	}
 
-	public function getNumberSymbolMinus()
+	public function getNumberSymbolMinusSign()
 	{
-		return $this->data['numbers']['symbols']['minusSign'];
+		return isset($this->data['numbers']['symbols']['minusSign'])
+			? $this->data['numbers']['symbols']['minusSign']
+			: null;
 	}
 
 	public function getNumberSymbolExponential()
 	{
-		return $this->data['numbers']['symbols']['exponential'];
+		return isset($this->data['numbers']['symbols']['exponential'])
+			? $this->data['numbers']['symbols']['exponential']
+			: null;
 	}
 
 	public function getNumberSymbolPerMille()
 	{
-		return $this->data['numbers']['symbols']['perMille'];
+		return isset($this->data['numbers']['symbols']['perMille'])
+			? $this->data['numbers']['symbols']['perMille']
+			: null;
 	}
 
 	public function getNumberSymbolInfinity()
 	{
-		return $this->data['numbers']['symbols']['infinity'];
+		return isset($this->data['numbers']['symbols']['infinity'])
+			? $this->data['numbers']['symbols']['infinity']
+			: null;
 	}
 
 	public function getNumberSymbolNaN()
 	{
-		return $this->data['numbers']['symbols']['nan'];
+		return isset($this->data['numbers']['symbols']['nan'])
+			? $this->data['numbers']['symbols']['nan']
+			: null;
 	}
 
 
-	public function getCurrencyFormat()
+	public function getDecimalFormat($dfId)
 	{
-		return $this->data['numbers']['currencyFormat'];
+		return isset($this->data['numbers']['decimalFormats'][$dfId])
+			? $this->data['numbers']['decimalFormats'][$dfId]
+			: null;
+	}
+
+	public function getDecimalFormats()
+	{
+		return isset($this->data['numbers']['decimalFormats'])
+			? $this->data['numbers']['decimalFormats']
+			: null;
+	}
+
+	public function getScientificFormat($sfId)
+	{
+		return isset($this->data['numbers']['scientificFormats'][$sfId])
+			? $this->data['numbers']['scientificFormats'][$sfId]
+			: null;
+	}
+
+	public function getScientificFormats()
+	{
+		return isset($this->data['numbers']['scientificFormats'])
+			? $this->data['numbers']['scientificFormats']
+			: null;
+	}
+
+	public function getPercentFormat($dfId)
+	{
+		return isset($this->data['numbers']['percentFormats'][$pfId])
+			? $this->data['numbers']['percentFormats'][$pfId]
+			: null;
+	}
+
+	public function getPercentFormats()
+	{
+		return isset($this->data['numbers']['percentFormats'])
+			? $this->data['numbers']['percentFormats']
+			: null;
+	}
+
+	public function getCurrencyFormat($cfId)
+	{
+		return isset($this->data['numbers']['currencyFormats'][$cfId])
+			? $this->data['numbers']['currencyFormats'][$cfId]
+			: null;
+	}
+
+	public function getCurrencyFormats()
+	{
+		return isset($this->data['numbers']['currencyFormats'])
+			? $this->data['numbers']['currencyFormats']
+			: null;
 	}
 
 
-	public function getDecimalFormat()
+	public function getCurrencySpacingBeforeCurrencyCurrencyMatch()
 	{
-		return $this->data['numbers']['decimalFormat'];
+		return isset($this->data['numbers']['currencySpacing']['beforeCurrency']['currencyMatch'])
+			? $this->data['numbers']['currencySpacing']['beforeCurrency']['currencyMatch']
+			: null;
+	}
+
+	public function getCurrencySpacingBeforeCurrencySurroundingMatch()
+	{
+		return isset($this->data['numbers']['currencySpacing']['beforeCurrency']['surroundingMatch'])
+			? $this->data['numbers']['currencySpacing']['beforeCurrency']['surroundingMatch']
+			: null;
+	}
+
+	public function getCurrencySpacingBeforeCurrencyInsertBetween()
+	{
+		return isset($this->data['numbers']['currencySpacing']['beforeCurrency']['insertBetween'])
+			? $this->data['numbers']['currencySpacing']['beforeCurrency']['insertBetween']
+			: null;
+	}
+
+	public function getCurrencySpacingAfterCurrencyCurrencyMatch()
+	{
+		return isset($this->data['numbers']['currencySpacing']['afterCurrency']['currencyMatch'])
+			? $this->data['numbers']['currencySpacing']['afterCurrency']['currencyMatch']
+			: null;
+	}
+
+	public function getCurrencySpacingAfterCurrencySurroundingMatch()
+	{
+		return isset($this->data['numbers']['currencySpacing']['afterCurrency']['surroundingMatch'])
+			? $this->data['numbers']['currencySpacing']['afterCurrency']['surroundingMatch']
+			: null;
+	}
+
+	public function getCurrencySpacingAfterCurrencyInsertBetween()
+	{
+		return isset($this->data['numbers']['currencySpacing']['afterCurrency']['insertBetween'])
+			? $this->data['numbers']['currencySpacing']['afterCurrency']['insertBetween']
+			: null;
+	}
+
+
+	public function getCurrencies()
+	{
+		return isset($this->data['numbers']['currencies'])
+			? $this->data['numbers']['currencies']
+			: null;
+	}
+
+	public function getCurrency($cId)
+	{
+		return isset($this->data['numbers']['currencies'][$cId])
+			? $this->data['numbers']['currencies'][$cId]
+			: null;
+	}
+
+	public function getCurrencyDisplayName($cId)
+	{
+		return isset($this->data['numbers']['currencies'][$cId]['displayName'])
+			? $this->data['numbers']['currencies'][$cId]['displayName']
+			: null;
+	}
+
+	public function getCurrencySymbol($cId)
+	{
+		return isset($this->data['numbers']['currencies'][$cId]['symbol'])
+			? $this->data['numbers']['currencies'][$cId]['symbol']
+			: null;
 	}
 
 
