@@ -214,7 +214,7 @@ abstract class AgaviController extends AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function forward($moduleName, $actionName = 'Index', array $additionalParams = array())
+	public function forward($moduleName, $actionName = 'Index', $additionalParams = array())
 	{
 		$request = $this->context->getRequest();
 

@@ -78,19 +78,7 @@ class AgaviLogger
 	/**
 	 * @var        int Logging level.
 	 */
-	protected $level = 0;
-
-	/**
-	 * Constructor.
-	 *
-	 *
-	 * @author     Bob Zoller <bob@agavi.org>
-	 * @since      0.10.0
-	 */
-	public function __construct()
-	{
-		$this->level = self::WARN;
-	}
+	protected $level = AgaviLogger::WARN;
 
 	/**
 	 * Log a message.

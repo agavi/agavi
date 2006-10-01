@@ -270,7 +270,7 @@ class AgaviActionStackEntry
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function setNext($moduleName, $actionName, array $parameters = array())
+	public function setNext($moduleName, $actionName, $parameters = array())
 	{
 		$this->next = array('moduleName' => $moduleName, 'actionName' => $actionName, 'parameters' => $parameters);
 	}
