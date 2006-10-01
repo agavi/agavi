@@ -24,6 +24,7 @@
 			<autoload name="AgaviFactoryConfigHandler">%core.agavi_dir%/config/AgaviFactoryConfigHandler.class.php</autoload>
 			<autoload name="AgaviFilterConfigHandler">%core.agavi_dir%/config/AgaviFilterConfigHandler.class.php</autoload>
 			<autoload name="AgaviLdmlConfigHandler">%core.agavi_dir%/config/AgaviLdmlConfigHandler.class.php</autoload>
+			<autoload name="AgaviLdmlSupplementalConfigHandler">%core.agavi_dir%/config/AgaviLdmlSupplementalConfigHandler.class.php</autoload>
 			<autoload name="AgaviLoggingConfigHandler">%core.agavi_dir%/config/AgaviLoggingConfigHandler.class.php</autoload>
 			<autoload name="AgaviModuleConfigHandler">%core.agavi_dir%/config/AgaviModuleConfigHandler.class.php</autoload>
 			<autoload name="AgaviOutputTypeConfigHandler">%core.agavi_dir%/config/AgaviOutputTypeConfigHandler.class.php</autoload>
