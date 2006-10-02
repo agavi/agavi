@@ -393,7 +393,7 @@ class AgaviTranslationManager
 
 		$data = $dataCache[$identifier];
 		$locale = new AgaviLocale();
-		$locale->initialize(null, $identifier, $data);
+		$locale->initialize($this->context, $identifier, $data);
 
 		return $locale;
 	}

@@ -47,9 +47,7 @@ class AgaviLdmlConfigHandler extends AgaviConfigHandler
 	public function execute($config, $context = null)
 	{
 		$pathParts = pathinfo($config);
-
-		$lookupPaths = AgaviLocale::getLookupPath($pathParts['filename']);
-		//$lookupPaths[] = AgaviConfig::get('core.agavi_dir') . '/translation/data/localeinfo/root.xml';
+		$lookupPaths = AgaviLocale::getLookupPath(substr($pathParts['basename'], 0, -strlen($pathParts['extension'])-1));
 		$lookupPaths[] = 'root';
 
 		$data = array(
