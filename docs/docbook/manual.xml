@@ -216,6 +216,13 @@
         <filename>index.php</filename> part in the URL path, you need the
         rewrite module enabled. Refer to the "Removing the "index.php" Part
         From URLs" section in the Cookbook for further instructions.</para>
+
+        <tip>
+          <para>You may run into issues when using aliases via
+          <code>alias.url</code>. If routes are generated wrong or you see
+          other error messages, disable(!) the
+          <code>broken-scriptfilename</code> directive.</para>
+        </tip>
       </section>
 
       <section>
