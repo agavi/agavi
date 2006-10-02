@@ -108,7 +108,7 @@ class AgaviFactoryConfigHandler extends AgaviConfigHandler
 				$data['response_code'] = '$this->factories["response"] = array("class" => "' . $data['response']['class'] . '", "parameters" => ' . var_export($data['response']['params'], true) . ');';
 			}
 
-			if(isset($cfg->security_filter)) {
+			if(AgaviConfig::get('core.use_security', false) && isset($cfg->security_filter)) {
 				$data['security_filter'] = isset($data['security_filter']) ? $data['security_filter'] : array('class' => null, 'params' => array());
 				$data['security_filter']['class'] = $cfg->security_filter->hasAttribute('class')? $cfg->security_filter->getAttribute('class') : $data['security_filter']['class'];
 				$data['security_filter']['params'] = $this->getItemParameters($cfg->security_filter, $data['security_filter']['params']);
@@ -200,6 +200,7 @@ class AgaviFactoryConfigHandler extends AgaviConfigHandler
 			}
 
 			// Routing
+			// do _not_ check for core.use_routing here
 			if(isset($cfg->routing)) {
 				$data['routing'] = isset($data['routing']) ? $data['routing'] : array('class' => null, 'params' => array());
 				$data['routing']['class'] = $cfg->routing->hasAttribute('class')? $cfg->routing->getAttribute('class') : $data['routing']['class'];
@@ -210,7 +211,7 @@ class AgaviFactoryConfigHandler extends AgaviConfigHandler
 			}
 
 			// Translation Manager
-			if(isset($cfg->translation_manager)) {
+			if(AgaviConfig::get('core.use_translation', false) && isset($cfg->translation_manager)) {
 				$data['translation_manager'] = isset($data['translation_manager']) ? $data['translation_manager'] : array('class' => null, 'params' => array());
 				$data['translation_manager']['class'] = $cfg->translation_manager->hasAttribute('class')? $cfg->translation_manager->getAttribute('class') : $data['translation_manager']['class'];
 				$data['translation_manager']['params'] = $this->getItemParameters($cfg->translation_manager, $data['translation_manager']['params']);
