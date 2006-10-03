@@ -225,7 +225,7 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 			}
 		}
 
-		if($mode == 'strict' || $mode == 'tainted') {
+		if($mode == 'strict' || ($executedValidators > 0 && $mode == 'tainted')) {
 			$asf = array_flip($allSucceededFields);
 			foreach($parameters->getParameters() as $name => $param) {
 				if(!isset($asf[$name]) && $name != $ma && $name != $aa) {
