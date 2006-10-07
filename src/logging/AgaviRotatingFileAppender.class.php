@@ -46,7 +46,7 @@ class AgaviRotatingFileAppender extends AgaviFileAppender
 	 * @author     Veikko Makinen <mail@veikkomakinen.com>
 	 * @since      0.11.0
 	 */
-	function initialize(AgaviContext $context, array $parameters = array())
+	public function initialize(AgaviContext $context, array $parameters = array())
 	{
 		$cycle = 7;
 		$prefix = str_replace(' ', '_', AgaviConfig::get('core.app_name')) . '-';

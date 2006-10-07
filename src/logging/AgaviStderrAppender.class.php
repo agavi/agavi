@@ -36,7 +36,7 @@ class AgaviStderrAppender extends AgaviFileAppender
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.10.0
 	 */
-	function initialize(AgaviContext $context, array $parameters = array())
+	public function initialize(AgaviContext $context, array $parameters = array())
 	{
 		$parameters['file'] = 'php://stderr';
 		parent::initialize($context, $parameters);

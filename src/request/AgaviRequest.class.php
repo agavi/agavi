@@ -249,7 +249,7 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
-	function initialize(AgaviContext $context, array $parameters = array())
+	public function initialize(AgaviContext $context, array $parameters = array())
 	{
 		$this->context = $context;
 
@@ -399,7 +399,7 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	function shutdown()
+	public function shutdown()
 	{
 	}
 

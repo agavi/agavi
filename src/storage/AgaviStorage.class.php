@@ -77,7 +77,7 @@ abstract class AgaviStorage extends AgaviParameterHolder
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	function startup()
+	public function startup()
 	{
 	}
 

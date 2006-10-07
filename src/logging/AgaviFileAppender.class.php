@@ -46,7 +46,7 @@ class AgaviFileAppender extends AgaviAppender
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.10.0
 	 */
-	function initialize(AgaviContext $context, array $parameters = array())
+	public function initialize(AgaviContext $context, array $parameters = array())
 	{
 		parent::initialize($context, $parameters);
 
