@@ -518,6 +518,11 @@ class AgaviWebRequest extends AgaviRequest
 		$this->urlPath = $parts['path'];
 		$this->urlQuery = $parts['query'];
 		unset($parts);
+		
+		// merge GET parameters
+		$this->setParameters($_GET);
+		// merge POST parameters
+		$this->setParameters($_POST);
 	}
 
 	/**

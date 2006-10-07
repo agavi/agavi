@@ -252,19 +252,6 @@ class AgaviWebRouting extends AgaviRouting
 			return $req->getUrlScheme() . '://'. $req->getUrlAuthority() . $path . $append;
 		}
 	}
-
-	public function execute()
-	{
-		$req = $this->getContext()->getRequest();
-
-		// merge GET parameters
-		$req->setParameters($_GET);
-		// merge POST parameters
-		$req->setParameters($_POST);
-
-		// the real deal
-		return parent::execute();
-	}
 }
 
 ?>
