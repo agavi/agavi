@@ -45,6 +45,7 @@
 			<compile>%core.agavi_dir%/renderer/AgaviRenderer.class.php</compile>
 			<compile>%core.agavi_dir%/request/AgaviRequest.class.php</compile>
 			<compile>%core.agavi_dir%/response/AgaviResponse.class.php</compile>
+			<compile>%core.agavi_dir%/routing/AgaviRouting.class.php</compile>
 			<compile>%core.agavi_dir%/storage/AgaviStorage.class.php</compile>
 			<compile>%core.agavi_dir%/user/AgaviUser.class.php</compile>
 			<compile>%core.agavi_dir%/view/AgaviView.class.php</compile>

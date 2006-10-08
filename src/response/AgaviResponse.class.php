@@ -38,7 +38,7 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	protected $locked = false;
 	
 	/**
-	 * @var        string The content to send back to the client.
+	 * @var        mixed The content to send back to the client.
 	 */
 	protected $content = '';
 	
@@ -186,7 +186,7 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	/**
 	 * Retrieve the content set for this Response
 	 *
-	 * @return     string The content set in this Response.
+	 * @return     mixed The content set in this Response.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
@@ -199,7 +199,7 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	/**
 	 * Set the content for this Response.
 	 *
-	 * @param      string The content to be sent in this Response.
+	 * @param      mixed The content to be sent in this Response.
 	 *
 	 * @return     bool Whether or not the operation was successful.
 	 *
@@ -218,7 +218,7 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	/**
 	 * Prepend content to the existing content for this Response.
 	 *
-	 * @param      string The content to be prepended to this Response.
+	 * @param      mixed The content to be prepended to this Response.
 	 *
 	 * @return     bool Whether or not the operation was successful.
 	 *
@@ -233,7 +233,7 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	/**
 	 * Append content to the existing content for this Response.
 	 *
-	 * @param      string The content to be appended to this Response.
+	 * @param      mixed The content to be appended to this Response.
 	 *
 	 * @return     bool Whether or not the operation was successful.
 	 *

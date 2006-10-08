@@ -17,6 +17,13 @@ class Default_SearchEngineSpamSuccessView extends AgaviView
 		$this->setAttribute('title', 'Congratulations!');
 	}
 
+	/**
+	 * Execute any presentation logic for XMLRPC requests.
+	 */
+	public function executeXmlrpc(AgaviParameterHolder $parameters)
+	{
+		$this->getResponse()->setContent(array($this->getAttribute('product_price')));
+	}
 }
 
 ?>

@@ -13,7 +13,7 @@
 -->
 <configurations>
 	
-	<configuration>
+	<configuration context="web">
 		<output_types default="html">
 			
 			<output_type name="html">
@@ -46,24 +46,18 @@
 				</parameters>
 			</output_type>
 			
-			<output_type name="html_print" fallback="html">
-				<renderer extension="-print.php" ignore_slots="true" class="AgaviPhpRenderer" />
+		</output_types>
+	</configuration>
+	
+	<configuration context="xmlrpc">
+		<output_types default="xmlrpc">
+			
+			<output_type name="xmlrpc">
 				<parameters>
-					<parameter name="Content-Type">text/html; charset=UTF-8</parameter>
+					<parameter name="Content-Type">text/xml; charset=UTF-8</parameter>
 				</parameters>
 			</output_type>
-			
-			<output_type name="xml">
-				<renderer extension=".xml.php" ignore_decorators="true" class="AgaviXslRenderer">
-					<parameters>
-						<parameter name="encoding">UTF-8</parameter>
-					</parameters>
-				</renderer>
-				<parameters>
-					<parameter name="Content-Type">text/xml</parameter>
-				</parameters>
-			</output_type>
-			
+		
 		</output_types>
 	</configuration>
 	

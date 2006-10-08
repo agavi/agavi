@@ -20,6 +20,6 @@ Agavi::bootstrap('development');
 // +---------------------------------------------------------------------------+
 // | Call the controller's dispatch method on the default context              |
 // +---------------------------------------------------------------------------+
-AgaviContext::getInstance('web')->getController()->dispatch();
+AgaviContext::getInstance('xmlrpc')->getController()->dispatch();
 
 ?>

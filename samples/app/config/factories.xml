@@ -61,4 +61,14 @@
 		
 	</configuration>
 	
+	<configuration context="xmlrpc">
+		
+		<request class="AgaviXmlrpcepiphpRequest" />
+		
+		<response class="AgaviXmlrpcepiphpResponse" />
+		
+		<routing class="AgaviWebserviceRouting" />
+		
+	</configuration>
+	
 </configurations>

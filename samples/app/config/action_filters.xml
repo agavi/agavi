@@ -45,7 +45,7 @@
 -->
 <configurations>
 	
-	<configuration environment="development">
+	<configuration environment="development" context="web">
 		<filters>
 			
 			<filter name="ExecutionTimeFilter" class="AgaviExecutionTimeFilter">

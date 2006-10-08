@@ -21,7 +21,7 @@
 -->
 <configurations>
 	
-	<configuration>
+	<configuration context="web">
 		<filters>
 			
 			<filter name="AgaviSampleAppCookieLoginFilter" class="AgaviSampleAppCookieLoginFilter" />

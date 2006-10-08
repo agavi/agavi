@@ -103,17 +103,20 @@
 			<autoload name="AgaviConsoleRequest">%core.agavi_dir%/request/AgaviConsoleRequest.class.php</autoload>
 			<autoload name="AgaviSecureWebRequest">%core.agavi_dir%/request/AgaviSecureWebRequest.class.php</autoload>
 			<autoload name="AgaviWebRequest">%core.agavi_dir%/request/AgaviWebRequest.class.php</autoload>
+			<autoload name="AgaviWebserviceRequest">%core.agavi_dir%/request/AgaviWebserviceRequest.class.php</autoload>
+			<autoload name="AgaviXmlrpcepiphpRequest">%core.agavi_dir%/request/AgaviXmlrpcepiphpRequest.class.php</autoload>
 
 			<!-- agavi/response -->
 			<autoload name="AgaviWebResponse">%core.agavi_dir%/response/AgaviWebResponse.class.php</autoload>
+			<autoload name="AgaviXmlrpcepiphpResponse">%core.agavi_dir%/response/AgaviXmlrpcepiphpResponse.class.php</autoload>
 
 			<!-- agavi/routing -->
 			<autoload name="AgaviIRoutingSource">%core.agavi_dir%/routing/AgaviIRoutingSource.interface.php</autoload>
-			<autoload name="AgaviRouting">%core.agavi_dir%/routing/AgaviRouting.class.php</autoload>
 			<autoload name="AgaviRoutingArraySource">%core.agavi_dir%/routing/AgaviRoutingArraySource.class.php</autoload>
 			<autoload name="AgaviRoutingCallback">%core.agavi_dir%/routing/AgaviRoutingCallback.class.php</autoload>
 			<autoload name="AgaviRoutingUserSource">%core.agavi_dir%/routing/AgaviRoutingUserSource.class.php</autoload>
 			<autoload name="AgaviWebRouting">%core.agavi_dir%/routing/AgaviWebRouting.class.php</autoload>
+			<autoload name="AgaviWebserviceRouting">%core.agavi_dir%/routing/AgaviWebserviceRouting.class.php</autoload>
 
 			<!-- agavi/storage -->
 			<autoload name="AgaviCreoleSessionStorage">%core.agavi_dir%/storage/AgaviCreoleSessionStorage.class.php</autoload>

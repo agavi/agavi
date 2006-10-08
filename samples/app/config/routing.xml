@@ -23,7 +23,7 @@
 +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
 -->
 <configurations>
-	<configuration>
+	<configuration context="web">
 		<routes>
 			<route pattern="application/xhtml+xml" source="_SERVER[HTTP_ACCEPT]" output_type="xhtml" stopping="false" />
 			<route name="disabled" pattern="/disabled" module="Disabled" action="Index" />
@@ -40,6 +40,12 @@
 				</defaults>
 			</route>
 			<route name="index" pattern="^/$" module="%actions.default_module%" action="%actions.default_action%" />
+		</routes>
+	</configuration>
+	
+	<configuration context="xmlrpc">
+		<routes>
+			<route pattern="getItemPrice" module="Default" action="SearchEngineSpam" />
 		</routes>
 	</configuration>
 </configurations>
