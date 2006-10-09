@@ -54,7 +54,7 @@
 			
 			<output_type name="xmlrpc">
 				<parameters>
-					<parameter name="Content-Type">text/xml; charset=UTF-8</parameter>
+					<parameter name="encoding">UTF-8</parameter>
 				</parameters>
 			</output_type>
 		

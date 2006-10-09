@@ -17,7 +17,7 @@ class Default_SearchEngineSpamErrorView extends AgaviView
 	 */
 	public function executeXmlrpc(AgaviParameterHolder $parameters)
 	{
-		$this->getResponse()->setContent(array('faultCode' => 101, 'faultString' => 'Unknown Product "' . $parameters->getParameter('product') . '"'));
+		$this->getResponse()->setContent(array('faultCode' => 101, 'faultString' => 'Unknown Product "' . $this->getAttribute('product_name') . '"'));
 	}
 }
 

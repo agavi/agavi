@@ -44,7 +44,7 @@ class AgaviXmlrpcepiphpRequest extends AgaviWebserviceRequest
 	{
 		parent::initialize($context, $parameters);
 		
-		$decoded = xmlrpc_decode_request($this->input, $this->calledMethod);
+		$decoded = xmlrpc_decode_request($this->input, $this->calledMethod, isset($parameters['encoding']) ? $parameters['encoding'] : 'utf-8');
 		
 		if(count($decoded) == 1 && is_int($key = array_pop(array_keys($decoded))) && is_array($decoded[$key])) {
 			$decoded = $decoded[$key];

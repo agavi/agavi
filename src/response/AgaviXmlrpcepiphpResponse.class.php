@@ -105,9 +105,13 @@ class AgaviXmlrpcepiphpResponse extends AgaviResponse
 	 */
 	public function send()
 	{
-		$this->content = xmlrpc_encode_request(null, $this->content);
+		$oti = $this->context->getController()->getOutputTypeInfo();
 		
-		header('Content-Type: text/xml');
+		$outputOptions = array_merge(array('encoding' => 'utf-8', 'escaping' => array('markup', 'non-print')), isset($oti['parameters']['encoding']) ? array('encoding' => $oti['parameters']['encoding']) : array(), (array) $this->getParameter('output_options'));
+		
+		$this->content = xmlrpc_encode_request(null, $this->content, $outputOptions);
+		
+		header('Content-Type: text/xml; charset=' . $outputOptions['encoding']);
 		header('Content-Length: ' . strlen($this->content));
 		
 		$this->sendContent();
