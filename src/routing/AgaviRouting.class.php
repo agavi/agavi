@@ -159,7 +159,7 @@ abstract class AgaviRouting
 	 *                   items:
 	 *                   <ul>
 	 *                    <li>name</li>
-	 *                    <li>stopping</li>
+	 *                    <li>stop</li>
 	 *                    <li>output_type</li>
 	 *                    <li>module</li>
 	 *                    <li>action</li>
@@ -196,7 +196,7 @@ abstract class AgaviRouting
 				$defaultOpts['parent'] = $parent;
 			}
 		} else {
-			$defaultOpts = array('name' => uniqid (rand()), 'stopping' => true, 'output_type' => null, 'module' => null, 'action' => null, 'parameters' => array(), 'ignores' => array(), 'defaults' => array(), 'childs' => array(), 'callback' => null, 'imply' => false, 'cut' => null, 'source' => null, 'method' => array(), 'locale' => null, 'parent' => $parent, 'reverseStr' => '', 'nostops' => array(), 'anchor' => self::ANCHOR_NONE);
+			$defaultOpts = array('name' => uniqid (rand()), 'stop' => true, 'output_type' => null, 'module' => null, 'action' => null, 'parameters' => array(), 'ignores' => array(), 'defaults' => array(), 'childs' => array(), 'callback' => null, 'imply' => false, 'cut' => null, 'source' => null, 'method' => null, 'constraint' => array(), 'locale' => null, 'parent' => $parent, 'reverseStr' => '', 'nostops' => array(), 'anchor' => self::ANCHOR_NONE);
 		}
 
 		if(isset($options['defaults'])) {
@@ -261,14 +261,14 @@ abstract class AgaviRouting
 		if($parent !== null) {
 			foreach($this->routes[$parent]['opt']['childs'] as $name) {
 				$route = $this->routes[$name];
-				if(!$route['opt']['stopping']) {
+				if(!$route['opt']['stop']) {
 					$options['nostops'][] = $name;
 				}
 			}
 			$this->routes[$parent]['opt']['childs'][] = $routeName;
 		} else {
 			foreach($this->routes as $name => $route) {
-				if(!$route['opt']['stopping'] && !$route['opt']['parent']) {
+				if(!$route['opt']['stop'] && !$route['opt']['parent']) {
 					$options['nostops'][] = $name;
 				}
 			}
@@ -479,6 +479,7 @@ abstract class AgaviRouting
 		$vars = array();
 		$ot = null;
 		$locale = null;
+		$method = null;
 		$ma = $req->getModuleAccessor();
 		$aa = $req->getActionAccessor();
 		$requestMethod = $req->getMethod();
@@ -501,7 +502,7 @@ abstract class AgaviRouting
 			foreach($routes as $key) {
 				$route =& $this->routes[$key];
 				$opts =& $route['opt'];
-				if(count($opts['method']) == 0 || in_array($requestMethod, $opts['method'])) {
+				if(count($opts['constraint']) == 0 || in_array($requestMethod, $opts['constraint'])) {
 					if($opts['callback'] && !isset($route['cb'])) {
 						$cb = $opts['callback'];
 						$route['cb'] = new $cb();
@@ -561,6 +562,10 @@ abstract class AgaviRouting
 							$locale = $opts['locale'];
 						}
 
+						if($opts['method']) {
+							$method = $opts['method'];
+						}
+
 						if($opts['cut'] || (count($opts['childs']) && $opts['cut'] === null)) {
 							if($route['opt']['source'] !== null) {
 								$s =& $this->sources[$route['opt']['source']];
@@ -583,7 +588,7 @@ abstract class AgaviRouting
 							break;
 						}
 
-						if($opts['stopping']) {
+						if($opts['stop']) {
 							break;
 						}
 
@@ -604,6 +609,11 @@ abstract class AgaviRouting
 		// set the locale if necessary
 		if($locale) {
 			$req->setLocale($locale);
+		}
+
+		// set the request method if necessary
+		if($method) {
+			$req->setMethod($method);
 		}
 
 		// put the vars into the request
