@@ -105,6 +105,11 @@ class AgaviXmlrpcepiphpResponse extends AgaviResponse
 	 */
 	public function send()
 	{
+		$this->content = xmlrpc_encode_request(null, $this->content);
+		
+		header('Content-Type: text/xml');
+		header('Content-Length: ' . strlen($this->content));
+		
 		$this->sendContent();
 	}
 	
@@ -121,17 +126,6 @@ class AgaviXmlrpcepiphpResponse extends AgaviResponse
 			$this->httpHeaders = array();
 			$this->cookies = array();
 		}
-	}
-	
-	/**
-	 * Send the content for this response
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	protected function sendContent()
-	{
-		echo xmlrpc_encode_request(null, $this->content);
 	}
 }
 
