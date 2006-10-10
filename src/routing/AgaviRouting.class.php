@@ -537,7 +537,7 @@ abstract class AgaviRouting
 						$matchedRoutes[] = $opts['name'];
 
 						foreach($match as $name => $m) {
-							if(is_string($name) && !isset($opts['defaults'][$name])) {
+							if(is_string($name)) {
 								if(!isset($opts['defaults'][$name])) {
 									$opts['defaults'][$name] = array('pre' => '', 'val' => '', 'post' => '');
 								}
