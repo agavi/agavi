@@ -242,6 +242,13 @@ abstract class AgaviRouting
 
 		$routeName = $options['name'];
 
+		// parse all the setting values for dynamic variables
+		$options['action'] = $this->parseDynamicSet($options['action']);
+		$options['locale'] = $this->parseDynamicSet($options['locale']);
+		$options['method'] = $this->parseDynamicSet($options['method']);
+		$options['module'] = $this->parseDynamicSet($options['module']);
+		$options['output_type'] = $this->parseDynamicSet($options['output_type']);
+
 
 
 		// check if 2 nodes with the same name in the same execution tree exist
@@ -537,7 +544,7 @@ abstract class AgaviRouting
 						$matchedRoutes[] = $opts['name'];
 
 						foreach($match as $name => $m) {
-							if(is_string($name)) {
+							if(is_string($name) && !isset($opts['defaults'][$name])) {
 								if(!isset($opts['defaults'][$name])) {
 									$opts['defaults'][$name] = array('pre' => '', 'val' => '', 'post' => '');
 								}
@@ -546,24 +553,24 @@ abstract class AgaviRouting
 						}
 
 						if($opts['module']) {
-							$vars[$ma] = $opts['module'];
+							$vars[$ma] = is_array($opts['module']) ? $this->resolveDynamicSet($opts['module'], $match) : $opts['module'];
 						}
 
 						if($opts['action']) {
-							$vars[$aa] = $opts['action'];
+							$vars[$aa] = is_array($opts['action']) ? $this->resolveDynamicSet($opts['action'], $match) : $opts['action'];
 						}
 
 
 						if($opts['output_type']) {
-							$ot = $opts['output_type'];
+							$ot = is_array($opts['output_type']) ? $this->resolveDynamicSet($opts['output_type'], $match) : $opts['output_type'];
 						}
 
 						if($opts['locale']) {
-							$locale = $opts['locale'];
+							$locale = is_array($opts['locale']) ? $this->resolveDynamicSet($opts['locale'], $match) : $opts['locale'];
 						}
 
 						if($opts['method']) {
-							$method = $opts['method'];
+							$method = is_array($opts['method']) ? $this->resolveDynamicSet($opts['method'], $match) : $opts['method'];
 						}
 
 						if($opts['cut'] || (count($opts['childs']) && $opts['cut'] === null)) {
@@ -859,6 +866,46 @@ abstract class AgaviRouting
 
 		preg_match('#([a-z0-9_-]+:)?(.*)#i', $def, $match);
 		return array(substr($match[1], 0, -1), $match[2]);
+	}
+
+	protected function parseDynamicSet($definition)
+	{
+		if(!is_string($definition) || strlen($definition) < 2) {
+			return $definition;
+		}
+		// assume the entire definition is a variable
+		if($definition[0] == '$' && $definition[1] != '{') {
+			return array(
+				'str' => '%s',
+				'vars' => array(substr($definition, 1))
+			);
+		} elseif(strpos($definition, '${') !== false) {
+			$vars = array();
+			if(preg_match_all('#\$\{([a-z0-9_-]+)\}#i', $definition, $matches, PREG_SET_ORDER)) {
+				foreach($matches as $match) {
+					$vars[] = $match[1];
+				}
+			}
+			$definition = str_replace('%%', '%', $definition);
+			$definition = preg_replace('#\$\{([a-z0-9_-]+)\}#i', '%s', $definition);
+			return array(
+				'str' => $definition,
+				'vars' => $vars
+			);
+		// doesn't contain any dynamic variables
+		} else {
+			return $definition;
+		}
+	}
+
+	protected function resolveDynamicSet($definition, $parameters)
+	{
+		$vars = array();
+		foreach($definition['vars'] as $varName) {
+			$vars[] = isset($parameters[$varName]) ? $parameters[$varName][0] : '';
+		}
+
+		return vsprintf($definition['str'], $vars);
 	}
 }
 
