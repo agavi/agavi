@@ -89,6 +89,8 @@ class AgaviCurrencyFormatter extends AgaviDecimalFormatter implements AgaviITran
 	 */
 	public function localeChanged($newLocale)
 	{
+		$this->groupingSeparator = $newLocale->getNumberSymbolGroup();
+		$this->decimalSeparator = $newLocale->getNumberSymbolDecimal();
 		if(!$this->hasCustomFormat) {
 			$this->parseFormatString($newLocale->getCurrencyFormat('__default'));
 		}
