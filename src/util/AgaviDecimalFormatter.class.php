@@ -33,6 +33,8 @@ class AgaviDecimalFormatter
 	 */
 	protected $formatString = '';
 
+	protected $negativeFormatString = null;
+
 	/**
 	 * @var        int The minimum number of integrals displayed (will be padded
 	 *                 with 0 on the left)
@@ -105,6 +107,14 @@ class AgaviDecimalFormatter
 
 	public function parseFormatString($format)
 	{
+		if(($pos = strpos($format, ';')) !== false) {
+			$fullFormat = $format;
+			$format = substr($fullFormat, 0, $pos);
+			$negativeFormat = substr($fullFormat, $pos + 1);
+		} else {
+			$fullFormat = $format;
+			$negativeFormat = '-#';
+		}
 
 		$numberChars = array('0', '#', '.', ',');
 
@@ -157,9 +167,9 @@ class AgaviDecimalFormatter
 						if($c == '\'') {
 							$quoteStr = '';
 							$inQuote = true;
-						} elseif($c == '-') {
-							$hasMinus = true;
-							$formatStr .= '%2$s';
+//					} elseif($c == '-') {
+//						$hasMinus = true;
+//						$formatStr .= '%2$s';
 						} elseif(/*$c == '¤'*/ ord($c) == 194 && ord($cNext) == 164) {
 							++$i;
 							$hasCurrency = true;
@@ -249,9 +259,21 @@ class AgaviDecimalFormatter
 		$groupingDistances = array_reverse($groupingDistances);
 
 
+		if(($pos = strpos($negativeFormat, '-')) !== false) {
+			str_replace('-', '%2$s', $negativeFormat);
+		}
+		$hasMinus = true;
+		$negativeFormat = preg_replace('/[' . preg_quote(implode('', $numberChars)) . ']+/', $formatStr, $negativeFormat);
+		// replace the currency specifier from the old string if it was specified extra in the negative one
+		if(($pos = strpos($negativeFormat, /*'¤'*/ chr(194) . chr(164))) !== false) {
+			$negativeFormat = str_replace('%3$s', '', $negativeFormat);
+			$negativeFormat = str_replace(chr(194) . chr(164), '%3$s', $negativeFormat);
+		}
+
 		// store all info
 
 		$this->formatString = $formatStr;
+		$this->negativeFormatString = $negativeFormat;
 
 		$this->minShowedIntegrals = $minShowedIntegrals;
 		$this->minShowedFractionals = $minShowedFractionals;
@@ -427,12 +449,12 @@ class AgaviDecimalFormatter
 
 	public function formatNumber($number)
 	{
-		return vsprintf($this->formatString, $this->prepareNumber($number, ''));
+		return vsprintf(($number < 0) ? $this->negativeFormatString : $this->formatString, $this->prepareNumber($number, ''));
 	}
 
 	public function formatCurrency($number, $currencySymbol)
 	{
-		return vsprintf($this->formatString, $this->prepareNumber($number, $currencySymbol));
+		return vsprintf(($number < 0) ? $this->negativeFormatString : $this->formatString, $this->prepareNumber($number, $currencySymbol));
 	}
 }
 
