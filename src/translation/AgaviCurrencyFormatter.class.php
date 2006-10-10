@@ -76,7 +76,7 @@ class AgaviCurrencyFormatter extends AgaviDecimalFormatter implements AgaviITran
 	{
 		if($locale) {
 			$fn = clone $this;
-			$fn->localeChange($locale);
+			$fn->localeChanged($locale);
 		} else {
 			$fn = $this;
 		}

@@ -71,7 +71,7 @@ class AgaviNumberFormatter extends AgaviDecimalFormatter implements AgaviITransl
 	{
 		if($locale) {
 			$fn = clone $this;
-			$fn->localeChange($locale);
+			$fn->localeChanged($locale);
 		} else {
 			$fn = $this;
 		}
@@ -87,7 +87,7 @@ class AgaviNumberFormatter extends AgaviDecimalFormatter implements AgaviITransl
 		$this->groupingSeparator = $newLocale->getNumberSymbolGroup();
 		$this->decimalSeparator = $newLocale->getNumberSymbolDecimal();
 		if(!$this->hasCustomFormat) {
-			$this->parseFormatString($newLocale->getDecimalFormat(0));
+			$this->parseFormatString($newLocale->getDecimalFormat('__default'));
 		}
 	}
 }
