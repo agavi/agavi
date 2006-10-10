@@ -117,7 +117,7 @@ class AgaviTranslationManager
 			$locale = $this->availableLocales[$locale];
 		}
 
-		if($locale != $this->defaultLocale) {
+		if($locale !== $this->defaultLocale) {
 			$this->defaultLocale = $locale;
 			foreach($this->translators as $translatorList) {
 				foreach($translatorList as $translator) {
