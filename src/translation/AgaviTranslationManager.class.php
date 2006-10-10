@@ -181,7 +181,11 @@ class AgaviTranslationManager
 		if($domain === null) {
 			$domain = $this->defaultDomain;
 		}
-
+		
+		if(is_string($locale)) {
+			$locale = $this->getLocaleFromIdentifier($locale);
+		}
+		
 		$domainExtra = '';
 		$translator = $this->getTranslators($domain, $domainExtra);
 
@@ -203,7 +207,11 @@ class AgaviTranslationManager
 		if($domain === null) {
 			$domain = $this->defaultDomain;
 		}
-
+		
+		if(is_string($locale)) {
+			$locale = $this->getLocaleFromIdentifier($locale);
+		}
+		
 		$domainExtra = '';
 		$translator = $this->getTranslators($domain, $domainExtra);
 
@@ -226,7 +234,11 @@ class AgaviTranslationManager
 		if($domain === null) {
 			$domain = $this->defaultDomain;
 		}
-
+		
+		if(is_string($locale)) {
+			$locale = $this->getLocaleFromIdentifier($locale);
+		}
+		
 		$domainExtra = '';
 		$translator = $this->getTranslators($domain, $domainExtra);
 

@@ -52,7 +52,7 @@ class AgaviDateFormatter implements AgaviITranslator
 	/**
 	 * @see        AgaviITranslator::translate()
 	 */
-	public function translate($message, $domain, $locale)
+	public function translate($message, $domain, AgaviLocale $locale = null)
 	{
 		return $message;
 	}

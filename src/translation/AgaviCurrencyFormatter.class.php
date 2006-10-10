@@ -72,7 +72,7 @@ class AgaviCurrencyFormatter extends AgaviDecimalFormatter implements AgaviITran
 	/**
 	 * @see        AgaviITranslator::translate()
 	 */
-	public function translate($message, $domain, $locale)
+	public function translate($message, $domain, AgaviLocale $locale = null)
 	{
 		if($locale) {
 			$fn = clone $this;

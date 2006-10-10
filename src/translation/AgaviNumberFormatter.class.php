@@ -67,7 +67,7 @@ class AgaviNumberFormatter extends AgaviDecimalFormatter implements AgaviITransl
 	/**
 	 * @see        AgaviITranslator::translate()
 	 */
-	public function translate($message, $domain, $locale)
+	public function translate($message, $domain, AgaviLocale $locale = null)
 	{
 		if($locale) {
 			$fn = clone $this;
