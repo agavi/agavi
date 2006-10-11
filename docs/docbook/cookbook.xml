@@ -217,7 +217,54 @@ RewriteRule ([^?]*)(?:\?(.*))? index.php?/$1&amp;$2 [L]</programlisting></para>
     <section>
       <title>Propel Integration</title>
 
-      <para>simple</para>
+      <para>Agavi was the first framework to feature autoloading support for
+      Propel. This does not only include your model classes, but also Propel
+      itself - Propel will be loaded and initialized on demand, and only if
+      you access your data model. This JIT loading mechanism guarantees
+      maximum performance because it eliminates any overhead. You can then
+      simply use any of your model classes in the code, without having to
+      require or init Propel first or anything.</para>
+
+      <para><note>
+          <para>This requires at least Propel 1.2.0!</para>
+        </note>To set up the advanced Propel support, you have to follow two
+      simple steps:</para>
+
+      <section>
+        <title>Register the Runtime Configuration File</title>
+
+        <para>Go to <filename>databases.xml</filename> and insert a new
+        database configuration for your Propel model:</para>
+
+        <para><programlisting>&lt;database name="propel" class="AgaviPropelDatabase"&gt;
+	&lt;parameters&gt;
+		&lt;parameter name="config"&gt;%core.app_dir%/config/bookstore-conf.php&lt;/parameter&gt;
+	&lt;/parameters&gt;
+&lt;/database&gt;</programlisting></para>
+
+        <para><filename>bookstore-conf.php</filename> is the name of the
+        runtime configuration file Propel generated for you.</para>
+      </section>
+
+      <section>
+        <title>Add Your Object and Peer Classes to autoload.xml</title>
+
+        <para>For each Object and Peer, you now have to create an entry in
+        <filename>autoload.xml</filename> (this won't be necessary anymore
+        once Propel 1.3 is out):</para>
+
+        <para><programlisting>&lt;autoload name="Book"&gt;bookstore/Book.php&lt;/autoload&gt;
+&lt;autoload name="BookPeer"&gt;bookstore/BookPeer.php&lt;/autoload&gt;</programlisting>You
+        do not have to add the <filename>om/*.php</filename> files or the
+        <filename>map/*.php</filename> files!</para>
+
+        <para><note>
+            <para>It is a good idea to add the Criteria class to the list of
+            autoloads, too:</para>
+
+            <para><programlisting>&lt;autoload name="Criteria"&gt;propel/util/Criteria.php&lt;/autoload&gt;</programlisting></para>
+          </note></para>
+      </section>
     </section>
 
     <section>
