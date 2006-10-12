@@ -251,6 +251,21 @@ class AgaviTranslationManager
 	}
 
 	/**
+	 * Translate a singular/plural message into the current locale.
+	 *
+	 * @param      string The message.
+	 *
+	 * @return     string The translated message.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function __($singularMessage, $pluralMessage, $amount, $domain = null, $locale = null, array $parameters = null)
+	{
+		return $this->_(array($singularMessage, $pluralMessage, $amount), $domain, $locale, $parameters);
+	}
+
+	/**
 	 * Returns the translators for a given domain.
 	 *
 	 * @param      string The domain.
