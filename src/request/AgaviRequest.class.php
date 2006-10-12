@@ -597,7 +597,7 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	 */
 	public function getLocale()
 	{
-		$this->locale;
+		return $this->locale;
 	}
 
 }
