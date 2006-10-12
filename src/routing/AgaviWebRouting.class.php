@@ -39,6 +39,11 @@ class AgaviWebRouting extends AgaviRouting
 	protected $baseHref = '';
 
 	/**
+	 * @var        array The GET parameters that were passed in the URL.
+	 */
+	protected $inputParameters = array();
+	
+	/**
 	 * @var        array An array of default options for gen()
 	 */
 	protected $defaultGenOptions = array(
@@ -59,6 +64,8 @@ class AgaviWebRouting extends AgaviRouting
 	public function initialize(AgaviContext $context, array $parameters = array())
 	{
 		parent::initialize($context, $parameters);
+		
+		$this->inputParameters = $_GET;
 		
 		if(!AgaviConfig::get("core.use_routing", false)) {
 			return;
@@ -165,10 +172,19 @@ class AgaviWebRouting extends AgaviRouting
 	 */
 	public function gen($route, array $params = array(), array $options = array())
 	{
+		$req = $this->context->getRequest();
+		
 		$options = array_merge($this->defaultGenOptions, $options);
 
 		if(defined('SID') && SID !== '' && $options['use_trans_sid'] === true) {
 			$params = array_merge($params, array(session_name() => session_id()));
+		}
+		
+		if($route === null) {
+			if(AgaviConfig::get('core.use_routing')) {
+				$route = join('+', array_reverse($req->getAttribute('matchedRoutes', 'org.agavi.routing')));
+			}
+			$params = array_merge($this->inputParameters, $params);
 		}
 
 		$routes = $this->getAffectedRoutes($route);
@@ -196,8 +212,6 @@ class AgaviWebRouting extends AgaviRouting
 				$path = parent::gen($routes, array_merge(array_map('rawurlencode', $params), array_filter($params, 'is_null')));
 			} else {
 				// the route exists, but we must create a normal index.php?foo=bar URL.
-
-				$req = $this->context->getRequest();
 
 				// we collect the default parameters from the route and make sure
 				// new parameters don't overwrite already defined parameters
