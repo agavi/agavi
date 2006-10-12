@@ -196,7 +196,7 @@ abstract class AgaviRouting
 				$defaultOpts['parent'] = $parent;
 			}
 		} else {
-			$defaultOpts = array('name' => uniqid (rand()), 'stop' => true, 'output_type' => null, 'module' => null, 'action' => null, 'parameters' => array(), 'ignores' => array(), 'defaults' => array(), 'childs' => array(), 'callback' => null, 'imply' => false, 'cut' => null, 'source' => null, 'method' => null, 'constraint' => array(), 'locale' => null, 'parent' => $parent, 'reverseStr' => '', 'nostops' => array(), 'anchor' => self::ANCHOR_NONE);
+			$defaultOpts = array('name' => uniqid (rand()), 'stop' => true, 'output_type' => null, 'module' => null, 'action' => null, 'parameters' => array(), 'ignores' => array(), 'defaults' => array(), 'childs' => array(), 'callback' => null, 'imply' => false, 'cut' => null, 'source' => null, 'method' => null, 'constraint' => array(), 'locale' => null, 'pattern_parameters' => array(), 'parent' => $parent, 'reverseStr' => '', 'nostops' => array(), 'anchor' => self::ANCHOR_NONE);
 		}
 
 		if(isset($options['defaults'])) {
@@ -232,6 +232,8 @@ abstract class AgaviRouting
 				$options['defaults'][$name] = $param;
 			}
 		}
+
+		$options['pattern_parameters'] = $params;
 
 		// remove all ignore from the parameters in the route
 		foreach($options['ignores'] as $ignore) {
@@ -536,7 +538,21 @@ abstract class AgaviRouting
 						}
 
 						if($opts['callback']) {
-							if(!$route['cb']->onMatched($vars)) {
+							if(count($opts['ignores']) > 0) {
+								$cbVars = array();
+								// add ignored variables to the callback vars
+								foreach($vars as $name => &$var) {
+									$cbVars[$name] =& $var;
+								}
+								foreach($opts['ignores'] as $ignore) {
+									if(isset($match[$ignore]) && $match[$ignore][1] != -1) {
+										$cbVars[$ignore] = $match[$ignore][0];
+									}
+								}
+							} else {
+								$cbVars =& $vars;
+							}
+							if(!$route['cb']->onMatched($cbVars)) {
 								continue;
 							}
 						}

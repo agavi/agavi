@@ -182,7 +182,7 @@ class AgaviWebRouting extends AgaviRouting
 				// get the parameters which are not defined in this route an append them as query string
 				$p = $params;
 				foreach($routes as $myRoute) {
-					foreach($this->routes[$myRoute]['par'] as $param) {
+					foreach($this->routes[$myRoute]['opt']['pattern_parameters'] as $param) {
 						if(isset($p[$param])) {
 							unset($p[$param]);
 						}
