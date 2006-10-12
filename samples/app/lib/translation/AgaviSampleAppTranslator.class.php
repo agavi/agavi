@@ -58,7 +58,7 @@ class AgaviSampleAppTranslator extends AgaviBasicTranslator
 	 * @author     Dominik del Bondio <ddb@bitxtender.com
 	 * @since      0.11.0
 	 */
-	public function translate($message, $domain, $locale)
+	public function translate($message, $domain, AgaviLocale $locale = null)
 	{
 		if($locale) {
 			$localeName = $locale->getName();
