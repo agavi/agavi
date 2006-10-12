@@ -300,6 +300,17 @@ class AgaviTranslationManager
 	{
 		$this->availableLocales = $this->availableConfigLocales;
 	}
+	
+	/**
+	 * Returns the list of available locales.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getAvailableLocales()
+	{
+		return $this->availableLocales;
+	}
 
 	/**
 	 * Loads the supplemental data into the instance variable
