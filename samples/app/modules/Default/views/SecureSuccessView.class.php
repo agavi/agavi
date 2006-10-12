@@ -30,7 +30,7 @@ class Default_SecureSuccessView extends AgaviView
 		$this->setDecoratorTemplate('Master');
 
 		// set the title
-		$this->setAttribute('title', 'Permission Denied');
+		$this->setAttribute('title', $this->getContext()->getTranslationManager()->_('Permission Denied', 'default.ErrorActions'));
 	}
 
 }

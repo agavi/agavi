@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 	<head>
 		<meta http-equiv="Content-Type" content="<?php $oti = $ctl->getOutputTypeInfo(); echo isset($oti['parameters']['Content-Type']) ? $oti['parameters']['Content-Type'] : 'text/html; charset=utf-8'; ?>"/>
-		<title>Default Agavi Module</title>
+		<title><?php echo $tm->_('Default Agavi Module', 'default.layout'); ?></title>
 		<base href="<?php echo $r->getBaseHref(); ?>" />
 		<style type="text/css">
 		body {
@@ -110,10 +110,10 @@
 			color:            #D00;
 		}
 		
-		p#loggedin {
+		p.runin {
 			float:   right;
-			margin:  0;
-			padding: 0.3em 1em 0.3em 0.3em;
+			margin:  0 1em 1em 1em;
+			padding: 0.3em 0.5em;
 			border:  1px solid #DDD;
 			background-color: #EEE;
 		}
@@ -121,12 +121,24 @@
 		</style>
 	</head>
 	<body>
-		<h1>Agavi Sample Application</h1>
+		<h1><?php echo $tm->_('Agavi Sample Application', 'default.layout'); ?></h1>
+<?php
+$languages = array();
+foreach($tm->getAvailableLocales() as $locale) {
+	$languages[$locale['identifierData']['language']] = $locale['parameters']['description'];
+}
+
+$currentLanguage = $req->getLocale()->getLocaleLanguage();
+
+$otherLanguages = array_diff_key($languages, array($currentLanguage => null));
+
+?>
+		<p class="runin"><?php echo $tm->_('Current language:', 'default.layout'); ?> <a href="<?php echo $r->gen(null, array('language' => $currentLanguage)); ?>" hreflang="<?php echo $currentLanguage; ?>"><?php echo $languages[$currentLanguage]; ?></a>. <?php echo $tm->__('Alternative language:', 'Alternative languages:', count($otherLanguages), 'default.layout'); ?>: <?php foreach($otherLanguages as $key => $value): ?><a href="<?php echo $r->gen(null, array('language' => $key)); ?>" hreflang="<?php echo $key; ?>"><?php echo $value; ?></a><?php endforeach; ?></p>
 <?php if($usr->isAuthenticated()): ?>
-		<p id="loggedin">You are logged in. <a href="<?php echo $r->gen('logout'); ?>">Log Out</a></p>
+<p class="runin"><?php echo $tm->_('You are logged in.', 'default.layout'); ?> <a href="<?php echo $r->gen('logout'); ?>"><?php echo $tm->_('Log Out', 'default.layout'); ?></a></p>
 <?php endif; ?>
 		<div id="menu">
-			<h3>Menu</h3>
+			<h3><?php echo $tm->_('Menu', 'default.layout'); ?></h3>
 			<ul>
 				<li><a href="<?php echo $r->gen('index'); ?>"><?php echo $tm->_('Home', 'default.menu'); ?></a></li>
 <?php if(!$usr->isAuthenticated()): ?>

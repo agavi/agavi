@@ -14,7 +14,7 @@ class Default_Secure1SuccessView extends AgaviView
 		$this->setDecoratorTemplate('Master');
 
 		// set the title
-		$this->setAttribute('title', 'Secure Action');
+		$this->setAttribute('title', $this->getContext()->getTranslationManager()->_('Secure Action', 'default.Login'));
 
 	}
 

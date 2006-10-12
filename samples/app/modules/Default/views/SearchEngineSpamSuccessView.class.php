@@ -14,7 +14,7 @@ class Default_SearchEngineSpamSuccessView extends AgaviView
 		$this->setDecoratorTemplate('Master');
 
 		// set the title
-		$this->setAttribute('title', 'Congratulations!');
+		$this->setAttribute('title', $this->getContext()->getTranslationManager()->_('Congratulations!', 'default.SearchEngineSpam'));
 	}
 
 	/**

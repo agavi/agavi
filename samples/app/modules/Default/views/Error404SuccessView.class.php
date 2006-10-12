@@ -30,7 +30,7 @@ class Default_Error404SuccessView extends AgaviView
 		$this->setDecoratorTemplate('Master');
 
 		// set the title
-		$this->setAttribute('title', '404 Not Found');
+		$this->setAttribute('title', $this->getContext()->getTranslationManager()->_('404 Not Found', 'default.ErrorActions'));
 
 		$this->getResponse()->setHttpStatusCode('404');
 	}

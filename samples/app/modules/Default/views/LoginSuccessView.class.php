@@ -60,7 +60,7 @@ class Default_LoginSuccessView extends AgaviView
 		$this->setDecoratorTemplate('Master');
 
 		// set the title
-		$this->setAttribute('title', 'Login Successful');
+		$this->setAttribute('title', $this->getContext()->getTranslationManager()->_('Login Successful', 'default.Login'));
 	}
 
 }

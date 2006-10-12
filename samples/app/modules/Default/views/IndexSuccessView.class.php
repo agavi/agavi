@@ -30,7 +30,7 @@ class Default_IndexSuccessView extends AgaviView
 		$this->setDecoratorTemplate('Master');
 		
 		// set the title
-		$this->setAttribute('title', 'Welcome to the Agavi Sample Application');
+		$this->setAttribute('title', $this->getContext()->getTranslationManager()->_('Welcome to the Agavi Sample Application', 'default.layout'));
 	}
 
 }

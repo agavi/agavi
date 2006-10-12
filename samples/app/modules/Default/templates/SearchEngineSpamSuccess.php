@@ -1,11 +1,11 @@
-<p>You just found the #1 place to buy <strong><?php echo $template['product_name']; ?></strong> at low prices!</p>
+<p><?php echo $tm->_('You just found the #1 place to buy <strong>%s</strong> at low prices!', 'default.SearchEngineSpam', null, array($template['product_name'])); ?></p>
 <table>
 	<tr>
-		<th>Product Name</th>
-		<th>Price</th>
+		<th><?php echo $tm->_('Product Name', 'default.SearchEngineSpam'); ?></th>
+		<th><?php echo $tm->_('Price', 'default.SearchEngineSpam'); ?></th>
 	</tr>
 	<tr>
 		<td><?php echo $template['product_name']; ?></td>
-		<td><?php echo $template['product_price']?></td>
+		<td><?php echo $tm->_c($template['product_price']); ?></td>
 	</tr>
 </table>

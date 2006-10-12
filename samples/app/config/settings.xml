@@ -61,7 +61,7 @@
 			<setting name="use_security">true</setting>
 			<setting name="use_translation">true</setting>
 
-			<setting name="default_locale">de</setting>
+			<setting name="default_locale">en</setting>
 		</settings>
 
 		<exception_templates>
