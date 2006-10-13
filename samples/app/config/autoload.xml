@@ -31,8 +31,6 @@
 			<autoload name="AgaviSampleAppCookieLoginFilter">%core.lib_dir%/filter/AgaviSampleAppCookieLoginFilter.class.php</autoload>
 			
 			<autoload name="AgaviSampleAppUser">%core.lib_dir%/user/AgaviSampleAppUser.class.php</autoload>
-
-			<autoload name="AgaviSampleAppTranslator">%core.lib_dir%/translation/AgaviSampleAppTranslator.class.php</autoload>
 		</autoloads>
 	</configuration>
 </configurations>
