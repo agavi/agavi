@@ -1,15 +1,15 @@
-# translation of messages_de.po to German
+# translation of messages.pot to German
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 #
-# David Zülke <dzuelke@gmail.com>, 2006.
+# David Zülke <dz@bitxtender.com>, 2006.
 msgid ""
 msgstr ""
 "Project-Id-Version: messages_de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-10-12 23:57+0200\n"
 "PO-Revision-Date: 2006-10-13 00:38+0200\n"
-"Last-Translator: David Zülke <dzuelke@gmail.com>\n"
+"Last-Translator: David Zülke <dz@bitxtender.com>\n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
