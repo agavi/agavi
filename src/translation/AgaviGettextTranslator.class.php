@@ -73,7 +73,24 @@ class AgaviGettextTranslator extends AgaviBasicTranslator
 			$this->loadDomainData($domain);
 		}
 
-		$data = isset($this->domainData[$domain][$message]) ? $this->domainData[$domain][$message] : $message;
+		if(is_array($message)) {
+
+			$singularMsg = $message[0];
+			$pluralMsg = $message[1];
+			$count = $message[2];
+
+			if(isset($this->domainData[$domain][$singularMsg])) {
+				$pluralMsgs = explode(chr(0), $this->domainData[$domain][$singularMsg]);
+				// TODO: parse gettext Plural-Forms header and evaluate ...
+				$data = ($count != 1) ? $pluralMsgs[0] : $pluralMsgs[1];
+			} else {
+				$data = ($count != 1) ? $singularMsg : $pluralMsg;
+			}
+		} else {
+			$data = isset($this->domainData[$domain][$message]) ? $this->domainData[$domain][$message] : $message;
+		}
+
+		
 
 		if($locale) {
 			$this->domainData = $oldDomainData;
@@ -114,7 +131,7 @@ class AgaviGettextTranslator extends AgaviBasicTranslator
 			throw new AgaviException('Using domain "' . $domain . '" which has no path specified');
 		}
 
-		$localeName = $this->locale->getName();
+		$localeName = $this->locale->getIdentifier();
 		$fileNameBases = AgaviLocale::getLookupPath($localeName);
 
 		$basePath = $this->domainPaths[$domain];
