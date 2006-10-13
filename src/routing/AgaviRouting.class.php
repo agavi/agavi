@@ -560,7 +560,7 @@ abstract class AgaviRouting
 						$matchedRoutes[] = $opts['name'];
 
 						foreach($match as $name => $m) {
-							if(is_string($name) && !isset($opts['defaults'][$name])) {
+							if(is_string($name)) {
 								if(!isset($opts['defaults'][$name])) {
 									$opts['defaults'][$name] = array('pre' => '', 'val' => '', 'post' => '');
 								}
@@ -631,7 +631,7 @@ abstract class AgaviRouting
 
 		// set the locale if necessary
 		if($locale) {
-			$req->setLocale($locale);
+			$this->context->getTranslationManager()->setLocale($locale);
 		}
 
 		// set the request method if necessary
