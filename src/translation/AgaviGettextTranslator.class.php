@@ -82,7 +82,7 @@ class AgaviGettextTranslator extends AgaviBasicTranslator
 			if(isset($this->domainData[$domain][$singularMsg])) {
 				$pluralMsgs = explode(chr(0), $this->domainData[$domain][$singularMsg]);
 				// TODO: parse gettext Plural-Forms header and evaluate ...
-				$data = ($count != 1) ? $pluralMsgs[0] : $pluralMsgs[1];
+				$data = ($count != 1) ? $pluralMsgs[1] : $pluralMsgs[0];
 			} else {
 				$data = ($count != 1) ? $singularMsg : $pluralMsg;
 			}

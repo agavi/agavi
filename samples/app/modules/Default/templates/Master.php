@@ -133,7 +133,7 @@ $currentLanguage = $tm->getCurrentLocale()->getLocaleLanguage();
 $otherLanguages = array_diff_key($languages, array($currentLanguage => null));
 
 ?>
-		<p class="runin"><?php echo $tm->_('Current language:', 'default.layout'); ?> <a href="<?php echo $r->gen(null, array('language' => $currentLanguage)); ?>" hreflang="<?php echo $currentLanguage; ?>"><?php echo $languages[$currentLanguage]; ?></a>. <?php echo $tm->__('Alternative language:', 'Alternative languages:', count($otherLanguages), 'default.layout'); ?> <?php foreach($otherLanguages as $key => $value): ?><a href="<?php echo $r->gen(null, array('language' => $key)); ?>" hreflang="<?php echo $key; ?>"><?php echo $value; ?></a><?php endforeach; ?></p>
+		<p class="runin"><?php echo $tm->_('Current language:', 'default.layout'); ?> <a href="<?php echo $r->gen(null, array('language' => $currentLanguage)); ?>" hreflang="<?php echo $currentLanguage; ?>"><?php echo $languages[$currentLanguage]; ?></a>. <?php echo $tm->__('Alternative language:', 'Alternative languages:', count($otherLanguages), 'default.layout'); ?> <?php $first = true; foreach($otherLanguages as $key => $value): if(!$first) echo ', '; ?><a href="<?php echo $r->gen(null, array('language' => $key)); ?>" hreflang="<?php echo $key; ?>"><?php echo $value; ?></a><?php $first = false; endforeach; ?></p>
 <?php if($usr->isAuthenticated()): ?>
 <p class="runin"><?php echo $tm->_('You are logged in.', 'default.layout'); ?> <a href="<?php echo $r->gen('logout'); ?>"><?php echo $tm->_('Log Out', 'default.layout'); ?></a></p>
 <?php endif; ?>

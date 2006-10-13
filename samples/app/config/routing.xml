@@ -26,7 +26,7 @@
 	<configuration context="web">
 		<routes>
 			<!-- matches "/de" or "/en" at the beginning of the URL and uses either value to set the locale, with British Pounds Sterling as the currency. Execution will not stop if this route matches. If it matches, the matched fragment will be stripped from the input URL for the following routes. This route has the "imply" flag, which means that it will be included in generated routes even if the gen() call does not explicitly mention it. The matched "language" parameter will not be available as a request parameter in the code, because it's "ignore"d -->
-			<route pattern="^/(language:(de|en))" stop="false" imply="true" cut="true" locale="${language}@currency=GBP">
+			<route pattern="^/(language:(de|en|fi))" stop="false" imply="true" cut="true" locale="${language}@currency=GBP">
 				<defaults>
 					<default for="language">en</default>
 				</defaults>

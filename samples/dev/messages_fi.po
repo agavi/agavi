@@ -1,13 +1,14 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Agavi Sample App FI\n"
-"POT-Creation-Date: \n"
+"Project-Id-Version: Agavi Sample App, fi\n"
+"POT-Creation-Date: 2006-10-13 16:20+0200\n"
 "PO-Revision-Date: 2006-10-13 16:20+0200\n"
 "Last-Translator: Veikko Mäkinen\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: FINLAND\n"
 
 #: ../app/modules/Default/templates/Error404Success.php:1
