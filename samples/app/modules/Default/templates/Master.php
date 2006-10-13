@@ -128,7 +128,7 @@ foreach($tm->getAvailableLocales() as $locale) {
 	$languages[$locale['identifierData']['language']] = $locale['parameters']['description'];
 }
 
-$currentLanguage = $req->getLocale()->getLocaleLanguage();
+$currentLanguage = $tm->getCurrentLocale()->getLocaleLanguage();
 
 $otherLanguages = array_diff_key($languages, array($currentLanguage => null));
 
