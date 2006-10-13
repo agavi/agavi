@@ -8,7 +8,7 @@
 <configurations>
 	<configuration>
 		
-		<available_locales>
+		<available_locales default_locale="en_US">
 			<available_locale identifier="de_DE">
 				<parameters>
 					<parameter name="description">Deutsch</parameter>
