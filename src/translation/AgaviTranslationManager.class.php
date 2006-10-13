@@ -385,7 +385,7 @@ class AgaviTranslationManager
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	protected function getClosestMatchingLocale($identifier)
+	public function getClosestMatchingLocale($identifier)
 	{
 
 		// if a locale with the given identifier doesn't exist try to find the closest
