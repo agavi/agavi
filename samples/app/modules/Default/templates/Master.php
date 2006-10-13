@@ -125,10 +125,10 @@
 <?php
 $languages = array();
 foreach($tm->getAvailableLocales() as $locale) {
-	$languages[$locale['identifierData']['language']] = $locale['parameters']['description'];
+	$languages[$locale['identifierData']['language'] . '_' . $locale['identifierData']['territory']] = $locale['parameters']['description'];
 }
 
-$currentLanguage = $tm->getCurrentLocale()->getLocaleLanguage();
+$currentLanguage = $tm->getCurrentLocale()->getLocaleLanguage() . '_' . $tm->getCurrentLocale()->getLocaleTerritory();
 
 $otherLanguages = array_diff_key($languages, array($currentLanguage => null));
 
