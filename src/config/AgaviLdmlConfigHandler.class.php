@@ -676,7 +676,8 @@ array data format
 	{
 		$dataIdxName = $name . 's';
 
-		foreach($item as $itemContext) {
+		$items = $this->getChildsOrAlias($item);
+		foreach($items as $itemContext) {
 			if($itemContext->getName() == 'default') {
 				$data[$dataIdxName]['default'] = $itemContext->getAttribute('choice');
 			} elseif($itemContext->getName() == $name . 'Context') {
@@ -745,7 +746,8 @@ array data format
 	{
 		$dataIdxName = $name . 's';
 
-		foreach($this->getChildsOrAlias($item) as $itemLength) {
+		$items = $this->getChildsOrAlias($item);
+		foreach($items as $itemLength) {
 			if($itemLength->getName() == 'default') {
 				$data[$dataIdxName]['default'] = $itemLength->getAttribute('choice');
 			} elseif($itemLength->getName() == $name . 'Length') {
