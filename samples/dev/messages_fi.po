@@ -25,7 +25,7 @@ msgstr "Salasana:"
 
 #: ../app/modules/Default/templates/LoginInput.php:8
 msgid "Log me in automatically."
-msgstr "Kirjaudu sisään automaattisesti"
+msgstr "Kirjaudu sisään automaattisesti."
 
 #: ../app/modules/Default/templates/LoginInput.php:10
 #: ../app/modules/Default/templates/Master.php:145
@@ -56,12 +56,12 @@ msgstr "Kieli:"
 #: ../app/modules/Default/templates/Master.php:136
 msgid "Alternative language:"
 msgid_plural "Alternative languages:"
-msgstr[0] "Vaihtoehtoinen kieli"
-msgstr[1] "Vaihtoehtoiset kielet"
+msgstr[0] "Vaihtoehtoinen kieli:"
+msgstr[1] "Vaihtoehtoiset kielet:"
 
 #: ../app/modules/Default/templates/Master.php:138
 msgid "You are logged in."
-msgstr "Olet sisäänkirjautuneena"
+msgstr "Olet sisäänkirjautuneena."
 
 #: ../app/modules/Default/templates/Master.php:138
 msgid "Log Out"
@@ -85,7 +85,7 @@ msgstr "Toinen suojattu toiminto"
 
 #: ../app/modules/Default/templates/Master.php:149
 msgid "Call invalid URL"
-msgstr "Koita virheellistä URL:aa"
+msgstr "Koita virheellistä URL"
 
 #: ../app/modules/Default/templates/Master.php:150
 msgid "Try Disabled Module"

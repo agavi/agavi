@@ -66,7 +66,7 @@ msgstr "U bent aangemeld."
 
 #: ../app/modules/Default/templates/Master.php:138
 msgid "Log Out"
-msgstr "Afmelden."
+msgstr "Afmelden"
 
 #: ../app/modules/Default/templates/Master.php:141
 msgid "Menu"
