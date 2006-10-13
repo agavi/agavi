@@ -50,10 +50,12 @@ class AgaviTranslationConfigHandler extends AgaviConfigHandler
 		$localeData = array();
 
 		$defaultDomain = '';
+		$defaultLocale = null;
 
 		foreach($configurations as $cfg) {
 
 			if(isset($cfg->available_locales)) {
+				$defaultLocale = $cfg->available_locales->getAttribute('default_locale', $defaultLocale);
 				foreach($cfg->available_locales as $locale) {
 					$name = $locale->getAttribute('identifier');
 					if(!isset($localeData[$name])) {
@@ -105,6 +107,7 @@ class AgaviTranslationConfigHandler extends AgaviConfigHandler
 		$data = array();
 
 		$data[] = sprintf('$this->defaultDomain = %s;', var_export($defaultDomain, true));
+		$data[] = sprintf('$this->defaultLocaleIdentifier = %s;', var_export($defaultLocale, true));
 
 		foreach($localeData as $locale) {
 			// TODO: fallback stuff

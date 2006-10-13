@@ -62,12 +62,6 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	protected $actionAccessor = 'action';
 
 	/**
-	 * @var        AgaviLocale The locale of this request.
-	 * @since      0.11.0
-	 */
-	protected $locale = null;
-
-	/**
 	 * @var        bool A boolean value indicating whether or not the request is locked.
 	 */
 	private $locked = false;
@@ -262,10 +256,6 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 		}
 		if(isset($parameters['action_accessor'])) {
 			$this->actionAccessor = $parameters['action_accessor'];
-		}
-
-		if(AgaviConfig::has('core.default_locale')) {
-			$this->setLocale(AgaviConfig::get('core.default_locale'));
 		}
 	}
 
@@ -569,35 +559,6 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 			}
 			return false;
 		}
-	}
-
-	/**
-	 * Sets the locale of the request.
-	 *
-	 * @param      string The new locale.
-	 *
-	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function setLocale($locale)
-	{
-		if(($tm = $this->getContext()->getTranslationManager())) {
-			$this->locale = $tm->getLocaleFromIdentifier($locale);
-			$tm->localeChanged($this->locale);
-		}
-	}
-
-	/**
-	 * Get the locale of the request.
-	 *
-	 * @return     AgaviLocale The locale.
-	 *
-	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function getLocale()
-	{
-		return $this->locale;
 	}
 
 }

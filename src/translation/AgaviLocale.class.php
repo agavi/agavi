@@ -39,39 +39,39 @@ class AgaviLocale
 	protected $data = array();
 
 	/**
-	 * @var        string The name of this locale.
+	 * @var        string The identifier of this locale.
 	 */
-	protected $name = null;
+	protected $identifier = null;
 
 
 	/**
 	 * Initialize this Locale.
 	 *
 	 * @param      AgaviContext The current application context.
-	 * @param      string       The name of the locale
+	 * @param      string       The identifier of the locale
 	 * @param      array        An associative array of initialization parameters.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function initialize(AgaviContext $context, $name, array $data = array())
+	public function initialize(AgaviContext $context, $identifier, array $data = array())
 	{
 		$this->context = $context;
-		$this->name = $name;
+		$this->identifier = $identifier;
 		$this->data = $data;
 	}
 
 	/**
-	 * Returns the name of this locale
+	 * Returns the identifier of this locale
 	 *
-	 * @return     string The name.
+	 * @return     string The identifier.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function getName()
+	public function getIdentifier()
 	{
-		return $this->name;
+		return $this->identifier;
 	}
 
 	////////////////////////////// Locale data //////////////////////////////////
@@ -915,7 +915,8 @@ class AgaviLocale
 			'script' => null,
 			'territory' => null,
 			'variant' => null,
-			'options' => array()
+			'options' => array(),
+			'locale_str' => null,
 		);
 
 		if(preg_match($localeRx, $identifier, $match)) {
@@ -937,6 +938,8 @@ class AgaviLocale
 					$localeData['options'][$optData[0]] = $optData[1];
 				}
 			}
+
+			$localeData['locale_str'] = substr($identifier, 0, strcspn($identifier, '@'));
 		} else {
 			throw new AgaviException('Invalid locale identifier (' . $identifier . ') specified');
 		}

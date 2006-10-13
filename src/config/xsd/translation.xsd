@@ -65,6 +65,7 @@
     <xs:sequence>
       <xs:element name="available_locale" type="available_locale" maxOccurs="unbounded" />
     </xs:sequence>
+    <xs:attribute name="default_locale" type="xs:string" />
   </xs:complexType>
   <xs:complexType name="available_locale">
     <xs:all>
