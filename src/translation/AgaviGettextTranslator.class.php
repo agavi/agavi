@@ -38,7 +38,12 @@ class AgaviGettextTranslator extends AgaviBasicTranslator
 	protected $domainData = array();
 
 	/**
-	 * Initialize this Filter.
+	 * @var        string The name of the plural form function
+	 */
+	protected $pluralFormFunc = null;
+
+	/**
+	 * Initialize this Translator.
 	 *
 	 * @param      AgaviContext The current application context.
 	 * @param      array        An associative array of initialization parameters
@@ -74,20 +79,26 @@ class AgaviGettextTranslator extends AgaviBasicTranslator
 		}
 
 		if(is_array($message)) {
-
 			$singularMsg = $message[0];
 			$pluralMsg = $message[1];
 			$count = $message[2];
-
-			if(isset($this->domainData[$domain][$singularMsg])) {
-				$pluralMsgs = explode(chr(0), $this->domainData[$domain][$singularMsg]);
-				// TODO: parse gettext Plural-Forms header and evaluate ...
-				$data = ($count != 1) ? $pluralMsgs[1] : $pluralMsgs[0];
+			if($this->pluralFormFunc) {
+				$funcName = $this->pluralFormFunc;
+				$msgId = $funcName($count);
 			} else {
-				$data = ($count != 1) ? $singularMsg : $pluralMsg;
+				$msgId = ($count == 1) ? 1 : 0;
+			}
+
+			$msgKey = $singularMsg . chr(0) . $pluralMsg;
+
+			if(isset($this->domainData[$domain]['msgs'][$msgKey])) {
+				$pluralMsgs = explode(chr(0), $this->domainData[$domain]['msgs'][$msgKey]);
+				$data = $pluralMsgs[$msgId];
+			} else {
+				$data = ($msgId == 1) ? $singularMsg : $pluralMsg;
 			}
 		} else {
-			$data = isset($this->domainData[$domain][$message]) ? $this->domainData[$domain][$message] : $message;
+			$data = isset($this->domainData[$domain]['msgs'][$message]) ? $this->domainData[$domain]['msgs'][$message] : $message;
 		}
 
 		
@@ -146,7 +157,37 @@ class AgaviGettextTranslator extends AgaviBasicTranslator
 			}
 		}
 
-		$this->domainData[$domain] = $data;
+		$headers = array();
+
+		if(count($data)) {
+			$headerData = str_replace("\r", '', $data['']);
+			$headerLines = explode("\n", $headerData);
+			foreach($headerLines as $line) {
+				$values = explode(':', $line, 2);
+				// skip empty / invalid lines
+				if(count($values) == 2) {
+					$headers[$values[0]] = $values[1];
+				}
+			}
+		}
+
+		if(isset($headers['Plural-Forms'])) {
+			$pf = $headers['Plural-Forms'];
+			if(preg_match('#nplurals=\d+;\s+plural=(.*)$#', $pf, $match)) {
+				$funcCode = $match[1];
+				$validOpChars = array(' ', 'n', '!', '&', '|', '<', '>', '(', ')', '?', ':', ';', '=', '+', '*', '/', '%', '-');
+				if(preg_match('#[^\d' . preg_quote(implode('', $validOpChars)) . ']#', $funcCode, $errorMatch)) {
+					throw new AgaviException('Illegal character ' . $errorMatch[0] . ' in plural form ' . $funcCode);
+				}
+
+				$funcCode = 'return ' . str_replace('n', '$n', $funcCode);
+				$this->pluralFormFunc = create_function('$n', $funcCode);
+			}
+		}
+
+
+
+		$this->domainData[$domain] = array('headers' => $headers, 'msgs' => $data);
 	}
 
 }
