@@ -1,5 +1,5 @@
 <p><?php echo $tm->_('You just found the #1 place to buy <strong>%s</strong> at low prices!', 'default.SearchEngineSpam', null, array($template['product_name'])); ?></p>
-<table>
+<table border="1">
 	<tr>
 		<th><?php echo $tm->_('Product Name', 'default.SearchEngineSpam'); ?></th>
 		<th><?php echo $tm->_('Price', 'default.SearchEngineSpam'); ?></th>

@@ -1,5 +1,6 @@
+<?php $locale = $tm->getCurrentLocale(); ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $locale->getLocaleLanguage(); ?>" lang="<?php echo $locale->getLocaleLanguage(); ?>"<?php echo $locale->getCharacterOrientation() == 'right-to-left' ? ' dir="rtl"' : ''; ?>>
 	<head>
 		<meta http-equiv="Content-Type" content="<?php $oti = $ctl->getOutputTypeInfo(); echo isset($oti['parameters']['Content-Type']) ? $oti['parameters']['Content-Type'] : 'text/html; charset=utf-8'; ?>"/>
 		<title><?php echo $tm->_('Default Agavi Module', 'default.layout'); ?></title>
@@ -28,22 +29,22 @@
 			font-family:      arial, helvetica, sans-serif;
 			font-size:        2.0em;
 			letter-spacing:   0.03em;
-			margin:           0 0 15px 0;
-			padding:          10px 0 10px 15px;
+			margin:           0 0 0.5em 0;
+			padding:          0.3em 0.4em
 		}
 
 		#menu {
 			border:           solid 1px #505050;
 			float:            left;
-			margin-left:      15px;
-			width:            160px;
+			margin:           0 1em;
+			width:            14em;
 		}
 
 		#menu a {
 			background-color: #EAEAEA;
 			color:            #000000;
 			display:          block;
-			padding:          5px 0 5px 10px;
+			padding:          0.5em;
 			text-decoration:  none;
 		}
 
@@ -57,7 +58,7 @@
 			color:            #FFFFFF;
 			font-size:        1.3em;
 			margin:           0;
-			padding:          5px 0 5px 10px;
+			padding:          0.3em 0.5em;
 		}
 
 		#menu li {
@@ -71,14 +72,6 @@
 		#menu ul {
 			margin:  0;
 			padding: 0;
-		}
-
-		#title {
-			border-bottom:  solid 1px #373737;
-			color:          #373737;
-			font-size:      2.0em;
-			letter-spacing: 0.03em;
-			margin-bottom:  15px;
 		}
 
 		/* IE Windows hack */
@@ -124,16 +117,15 @@
 		<h1><?php echo $tm->_('Agavi Sample Application', 'default.layout'); ?></h1>
 <?php
 $languages = array();
-foreach($tm->getAvailableLocales() as $locale) {
-	$languages[$locale['identifierData']['language'] . '_' . $locale['identifierData']['territory']] = $locale['parameters']['description'];
+foreach($tm->getAvailableLocales() as $availableLocale) {
+	$languages[$availableLocale['identifier']] = $availableLocale['parameters']['description'];
 }
 
-$currentLanguage = $tm->getCurrentLocale()->getLocaleLanguage() . '_' . $tm->getCurrentLocale()->getLocaleTerritory();
+$currentLanguage = $locale->getIdentifier();
 
 $otherLanguages = array_diff_key($languages, array($currentLanguage => null));
-
 ?>
-		<p class="runin"><?php echo $tm->_('Current language:', 'default.layout'); ?> <a href="<?php echo $r->gen(null, array('language' => $currentLanguage)); ?>" hreflang="<?php echo $currentLanguage; ?>"><?php echo $languages[$currentLanguage]; ?></a>. <?php echo $tm->__('Alternative language:', 'Alternative languages:', count($otherLanguages), 'default.layout'); ?> <?php $first = true; foreach($otherLanguages as $key => $value): if(!$first) echo ', '; ?><a href="<?php echo $r->gen(null, array('language' => $key)); ?>" hreflang="<?php echo $key; ?>"><?php echo $value; ?></a><?php $first = false; endforeach; ?></p>
+		<p class="runin"><?php echo $tm->_('Current language:', 'default.layout'); ?> <a href="<?php echo $r->gen(null); ?>" hreflang="<?php echo $currentLanguage; ?>"><?php echo $languages[$currentLanguage]; ?></a>. <?php echo $tm->__('Alternative language:', 'Alternative languages:', count($otherLanguages), 'default.layout'); ?> <?php $first = true; foreach($otherLanguages as $key => $value): if(!$first) echo ', '; ?><a href="<?php echo $r->gen(null, array('locale' => $key)); ?>" hreflang="<?php echo $key; ?>"><?php echo $value; ?></a><?php $first = false; endforeach; ?></p>
 <?php if($usr->isAuthenticated()): ?>
 <p class="runin"><?php echo $tm->_('You are logged in.', 'default.layout'); ?> <a href="<?php echo $r->gen('logout'); ?>"><?php echo $tm->_('Log Out', 'default.layout'); ?></a></p>
 <?php endif; ?>
