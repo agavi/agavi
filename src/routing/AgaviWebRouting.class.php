@@ -65,8 +65,6 @@ class AgaviWebRouting extends AgaviRouting
 	{
 		parent::initialize($response, $parameters);
 		
-		$this->inputParameters = $_GET;
-		
 		if(!AgaviConfig::get("core.use_routing", false)) {
 			return;
 		}
@@ -118,6 +116,8 @@ class AgaviWebRouting extends AgaviRouting
 			
 			$this->basePath = str_replace('\\', '/', dirname($this->prefix));
 		}
+		
+		$this->inputParameters = $_GET;
 		
 		if(!$this->input) {
 			$this->input = "/";
