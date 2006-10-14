@@ -353,8 +353,8 @@ class AgaviTranslationManager
 	 */
 	protected function loadCurrentLocale()
 	{
-		if(!$this->currentLocale || $this->currentLocale->getIdentifier() != $this->getCurrentLocaleIdentifier()) {
-			$this->currentLocale = $this->getLocaleFromIdentifier($this->getCurrentLocaleIdentifier());
+		if(!$this->currentLocale || $this->currentLocale->getIdentifier() != $this->givenLocaleIdentifier) {
+			$this->currentLocale = $this->getLocaleFromIdentifier($this->givenLocaleIdentifier);
 			foreach($this->translators as $translatorList) {
 				foreach($translatorList as $translator) {
 					$translator->localeChanged($this->currentLocale);
