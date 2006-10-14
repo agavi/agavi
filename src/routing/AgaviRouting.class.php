@@ -44,6 +44,11 @@ abstract class AgaviRouting
 	protected $context = null;
 
 	/**
+	 * @var        AgaviResponse The global Response instance.
+	 */
+	protected $response = null;
+
+	/**
 	 * @var        string Route input.
 	 */
 	protected $input = null;
@@ -75,16 +80,18 @@ abstract class AgaviRouting
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function initialize(AgaviContext $context, array $parameters = array())
+	public function initialize(AgaviResponse $response, array $parameters = array())
 	{
-		$this->context = $context;
+		$this->response = $response;
+		$this->context = $response->getContext();
+		
 		if(isset($parameters['generator'])) {
 			$this->defaultGenOptions = array_merge($this->defaultGenOptions, $parameters['generator']);
 		}
 		$cfg = AgaviConfig::get("core.config_dir") . "/routing.xml";
 		// allow missing routing.xml when routing is not enabled
 		if(AgaviConfig::get("core.use_routing", false) || is_readable($cfg)) {
-			include(AgaviConfigCache::checkConfig($cfg, $context->getName()));
+			include(AgaviConfigCache::checkConfig($cfg, $this->context->getName()));
 		}
 
 		$this->sources['_ENV'] = new AgaviRoutingArraySource($_ENV);
@@ -92,7 +99,7 @@ abstract class AgaviRouting
 		$this->sources['_SERVER'] = new AgaviRoutingArraySource($_SERVER);
 		
 		if(AgaviConfig::get('core.use_security')) {
-			$this->sources['user'] = new AgaviRoutingUserSource($this->getContext()->getUser());
+			$this->sources['user'] = new AgaviRoutingUserSource($this->context->getUser());
 		}
 	}
 
@@ -419,7 +426,7 @@ abstract class AgaviRouting
 				if(!isset($r['cb'])) {
 					$cb = $r['opt']['callback'];
 					$r['cb'] = new $cb();
-					$r['cb']->initialize($this->getContext(), $r);
+					$r['cb']->initialize($this->response, $r);
 				}
 				$myDefaults = $r['cb']->onGenerate($myDefaults, $params);
 			}
@@ -515,7 +522,7 @@ abstract class AgaviRouting
 					if($opts['callback'] && !isset($route['cb'])) {
 						$cb = $opts['callback'];
 						$route['cb'] = new $cb();
-						$route['cb']->initialize($this->context, $route);
+						$route['cb']->initialize($this->response, $route);
 					}
 
 					$match = array();

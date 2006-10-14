@@ -36,9 +36,9 @@ class AgaviWebserviceRouting extends AgaviRouting
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function initialize(AgaviContext $context, array $parameters = array())
+	public function initialize(AgaviResponse $response, array $parameters = array())
 	{
-		parent::initialize($context, $parameters);
+		parent::initialize($response, $parameters);
 		
 		if(!AgaviConfig::get("core.use_routing", false)) {
 			return;

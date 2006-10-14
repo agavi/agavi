@@ -61,9 +61,9 @@ class AgaviWebRouting extends AgaviRouting
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function initialize(AgaviContext $context, array $parameters = array())
+	public function initialize(AgaviResponse $response, array $parameters = array())
 	{
-		parent::initialize($context, $parameters);
+		parent::initialize($response, $parameters);
 		
 		$this->inputParameters = $_GET;
 		
@@ -185,6 +185,7 @@ class AgaviWebRouting extends AgaviRouting
 				$route = join('+', array_reverse($req->getAttribute('matchedRoutes', 'org.agavi.routing')));
 			}
 			$params = array_merge($this->inputParameters, $params);
+			var_dump($params);
 		}
 
 		$routes = $this->getAffectedRoutes($route);

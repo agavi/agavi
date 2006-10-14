@@ -593,24 +593,22 @@ abstract class AgaviController extends AgaviParameterHolder
 	 * @author     Mike Vincent <mike@agavi.org>
 	 * @since      0.9.0
 	 */
-	public function initialize(AgaviContext $context, array $parameters = array())
+	public function initialize(AgaviResponse $response, array $parameters = array())
 	{
 		$this->maxForwards = isset($parameters['max_fowards']) ? $parameters['max_forwards'] : 20;
 		
-		$this->context = $context;
+		$this->response = $response;
 		
-		$asfi = $context->getFactoryInfo('action_stack');
+		$this->context = $response->getContext();
+		
+		$asfi = $this->context->getFactoryInfo('action_stack');
 		$this->actionStack = new $asfi['class']();
 		
-		$rfi = $this->context->getFactoryInfo('response');
-		$this->response = new $rfi['class']();
-		$this->response->initialize($this->context, $rfi['parameters']);
-		
 		$cfg = AgaviConfig::get('core.config_dir') . '/output_types.xml';
-		require(AgaviConfigCache::checkConfig($cfg, $context->getName()));
+		require(AgaviConfigCache::checkConfig($cfg, $this->context->getName()));
 		
 		if(AgaviConfig::get('core.use_security', false)) {
-			$sffi = $context->getFactoryInfo('security_filter');
+			$sffi = $this->context->getFactoryInfo('security_filter');
 			$this->filters['security'] = new $sffi['class']();
 			$this->filters['security']->initialize($this->context, $sffi['parameters']);
 		}

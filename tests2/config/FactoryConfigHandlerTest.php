@@ -10,10 +10,22 @@ class FCHTestBase
 		$this->context = $ctx;
 		$this->params = $params;
 	}
+	public function getContext()
+	{
+		return $this->context;
+	}
 }
 
 class FCHTestActionStack			extends FCHTestBase {}
-class FCHTestController				extends FCHTestBase {}
+class FCHTestController				extends FCHTestBase {
+	protected $response;
+	public function initialize($response, array $params = array())
+	{
+		$this->response = $response;
+		$this->context = $response->getContext();
+		$this->params = $params;
+	}
+}
 class FCHTestDispatchFilter		extends FCHTestBase implements AgaviIGlobalFilter {
 	public function executeOnce(AgaviFilterChain $filterChain, AgaviResponse $response) {}
 	public function execute(AgaviFilterChain $filterChain, AgaviResponse $response) {}
@@ -32,7 +44,15 @@ class FCHTestFilterChain			extends FCHTestBase {}
 class FCHTestLoggerManager		extends FCHTestBase {}
 class FCHTestRequest					extends FCHTestBase {}
 class FCHTestResponse					extends FCHTestBase {}
-class FCHTestRouting					extends FCHTestBase {}
+class FCHTestRouting					extends FCHTestBase {
+	protected $response;
+	public function initialize($response, array $params = array())
+	{
+		$this->response = $response;
+		$this->context = $response->getContext();
+		$this->params = $params;
+	}
+}
 class FCHTestStorage					extends FCHTestBase
 {
 	public $suCalled = false;

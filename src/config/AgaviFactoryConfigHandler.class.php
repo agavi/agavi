@@ -105,7 +105,9 @@ class AgaviFactoryConfigHandler extends AgaviConfigHandler
 				$data['response'] = isset($data['response']) ? $data['response'] : array('class' => null, 'params' => array());
 				$data['response']['class'] = $cfg->response->hasAttribute('class')? $cfg->response->getAttribute('class') : $data['response']['class'];
 				$data['response']['params'] = $this->getItemParameters($cfg->response, $data['response']['params']);
-				$data['response_code'] = '$this->factories["response"] = array("class" => "' . $data['response']['class'] . '", "parameters" => ' . var_export($data['response']['params'], true) . ');';
+				$data['response_code'] =	'$this->factories["response"] = array("class" => "' . $data['response']['class'] . '", "parameters" => ' . var_export($data['response']['params'], true) . ');' . "\n" . 
+																	'$response = new $this->factories["response"]["class"]();' . "\n" . 
+																	'$response->initialize($this, $this->factories["response"]["parameters"]);';
 			}
 
 			if(AgaviConfig::get('core.use_security', false) && isset($cfg->security_filter)) {
@@ -196,7 +198,7 @@ class AgaviFactoryConfigHandler extends AgaviConfigHandler
 				$data['controller']['params'] = $this->getItemParameters($cfg->controller, $data['controller']['params']);
 
 				$data['controller_code'] =	'$this->controller = new ' . $data['controller']['class'] . '();' . "\n" .
-																		'$this->controller->initialize($this, ' . var_export($data['controller']['params'], true) . ');';
+																		'$this->controller->initialize($response, ' . var_export($data['controller']['params'], true) . ');';
 			}
 
 			// Routing
@@ -207,7 +209,7 @@ class AgaviFactoryConfigHandler extends AgaviConfigHandler
 				$data['routing']['params'] = $this->getItemParameters($cfg->routing, $data['routing']['params']);
 
 				$data['routing_code'] =	'$this->routing = new ' . $data['routing']['class'] . '();' . "\n" .
-																'$this->routing->initialize($this, ' . var_export($data['routing']['params'], true) . ');' . "\n";
+																'$this->routing->initialize($response, ' . var_export($data['routing']['params'], true) . ');' . "\n";
 			}
 
 			// Translation Manager

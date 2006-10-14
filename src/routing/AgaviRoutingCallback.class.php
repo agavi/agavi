@@ -33,6 +33,11 @@ abstract class AgaviRoutingCallback
 	protected $context = null;
 
 	/**
+	 * @var        AgaviResponse The global Response instance.
+	 */
+	protected $response = null;
+	
+	/**
 	 * @var        array An array with information about the route.
 	 */
 	protected $route = null;
@@ -46,9 +51,10 @@ abstract class AgaviRoutingCallback
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function initialize(AgaviContext $context, array &$route)
+	public function initialize(AgaviResponse $response, array &$route)
 	{
-		$this->context = $context;
+		$this->response = $response;
+		$this->context = $response->getContext();
 		$this->route =& $route;
 	}
 
