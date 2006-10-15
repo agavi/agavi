@@ -139,8 +139,11 @@ class AgaviTranslationManager
 	 */
 	public function setLocale($identifier)
 	{
-		$this->givenLocaleIdentifier = $identifier;
 		$this->currentLocaleIdentifier = $this->getClosestMatchingLocale($identifier);
+		$givenData = AgaviLocale::parseLocaleIdentifier($identifier);
+		$actualData = AgaviLocale::parseLocaleIdentifier($this->currentLocaleIdentifier);
+		// construct the given name from the locale from the closest match and the options that were given to the requested locale identifer
+		$this->givenLocaleIdentifier = $actualData['locale_str'] . $givenData['option_str'];
 	}
 
 	/**
