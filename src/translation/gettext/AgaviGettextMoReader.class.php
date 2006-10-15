@@ -46,7 +46,7 @@ final class AgaviGettextMoReader
 			// big endian
 			$longPackChar = 'N';
 		} else {
-			throw new AgaviException('unknown .mo file header');
+			throw new AgaviException('Unknown .mo file header. Was: ' . $fileId);
 		}
 
 		$fileHeader = unpack($longPackChar . '*', substr($content, 4, 24));
