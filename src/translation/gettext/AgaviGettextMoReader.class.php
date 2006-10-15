@@ -65,22 +65,20 @@ final class AgaviGettextMoReader
 		$translatedOffsetPos = $translatedOffset;
 		$i = 0;
 
-		for($i = 0; $i < $numStrings; ++$i) {
-			$strings[self::getString($content, $originalOffsetPos, $longPackChar)] = self::getString($content, $translatedOffsetPos, $longPackChar);
+		if($numStrings > 0) {
+			$offsetLen = $numStrings * 8;
+			$origOffsets = unpack($longPackChar.'*', substr($content, $originalOffsetPos, $offsetLen));
+			$transOffsets = unpack($longPackChar.'*', substr($content, $translatedOffsetPos, $offsetLen));
 
-			$originalOffsetPos += 8;
-			$translatedOffsetPos += 8;
+			for($i = 0; $i < $numStrings; ++$i) {
+				$arrayIndex = ($i * 2) + 1;
+				$strings[substr($content, $origOffsets[$arrayIndex + 1], $origOffsets[$arrayIndex])] = substr($content, $transOffsets[$arrayIndex + 1], $transOffsets[$arrayIndex]);
+			}
 		}
 
 		return $strings;
 	}
 
-	protected static function getString($content, $infoOffset, $unpackCharLong)
-	{
-			$len = unpack($unpackCharLong, substr($content, $infoOffset, 4));
-			$offset = unpack($unpackCharLong, substr($content, $infoOffset + 4, 4));
-			return substr($content, $offset[1], $len[1]);
-	}
 }
 
 ?>
