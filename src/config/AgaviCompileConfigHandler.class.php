@@ -66,7 +66,7 @@ class AgaviCompileConfigHandler extends AgaviConfigHandler
 				if(!is_readable($file)) {
 					// file doesn't exist
 					$error = 'Configuration file "%s" specifies nonexistent ' . 'or unreadable file "%s"';
-					$error = sprintf($error, $config, $file);
+					$error = sprintf($error, $config, $compileFile->getValue());
 					throw new AgaviParseException($error);
 				}
 
