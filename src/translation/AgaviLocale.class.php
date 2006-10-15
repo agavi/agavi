@@ -917,6 +917,7 @@ class AgaviLocale
 			'variant' => null,
 			'options' => array(),
 			'locale_str' => null,
+			'option_str' => null,
 		);
 
 		if(preg_match($localeRx, $identifier, $match)) {
@@ -932,6 +933,8 @@ class AgaviLocale
 			}
 
 			if(!empty($match['options'])) {
+				$localeData['option_str'] = '@' . $match['options'];
+
 				$options = explode(',', $match['options']);
 				foreach($options as $option) {
 					$optData = explode('=', $option, 2);
