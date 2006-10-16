@@ -20,13 +20,13 @@ class AgaviSampleAppLanguageRoutingCallback extends AgaviRoutingCallback
 		$found = false;
 		// first, let's check if the locale is allowed
 		try {
-			$set = $this->getContext()->getTranslationManager()->getClosestMatchingLocale($parameters['locale']);
+			$set = $this->context->getTranslationManager()->getClosestMatchingLocale($parameters['locale']);
 			$found = true;
 		} catch(AgaviException $e) {
 			// not registered or ambigious locale... uncool!
 		}
 		if($found) {
-			$this->response->setCookie('locale', $parameters['locale']);
+			$this->response->setCookie('locale', $parameters['locale'], 60*60*24*30);
 		}
 		return $found;
 	}
