@@ -8,7 +8,7 @@
 <configurations>
 	<configuration>
 		
-		<available_locales default_locale="en_US">
+		<available_locales default_locale="en_US@currency=GBP">
 			<!-- German, Germany -->
 			<available_locale identifier="de_DE">
 				<parameters>
