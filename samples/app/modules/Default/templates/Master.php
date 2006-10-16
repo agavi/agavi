@@ -20,8 +20,13 @@ $rtl = ($locale->getCharacterOrientation() == 'right-to-left');
 		}
 
 		#content {
+<?php if($rtl): ?>
+			margin-left:  15px;
+			margin-right: 200px;
+<?php else: ?>
 			margin-left:  200px;
 			margin-right: 15px;
+<?php endif; ?>
 		}
 
 		h1 {
