@@ -102,6 +102,10 @@ class AgaviTranslationManager
 		include(AgaviConfigCache::checkConfig(AgaviConfig::get('core.config_dir') . '/translation.xml'));
 		$this->loadSupplementalData();
 		$this->loadAvailableLocales();
+		if($this->defaultLocaleIdentifier === null) {
+			throw new AgaviException('Tried to use the translation system without a default locale and without a locale set');
+		}
+		$this->setLocale($this->defaultLocaleIdentifier);
 	}
 
 	/**
@@ -172,12 +176,6 @@ class AgaviTranslationManager
 	 */
 	public function getCurrentLocaleIdentifier()
 	{
-		if($this->currentLocaleIdentifier === null) {
-			if($this->defaultLocaleIdentifier === null) {
-				throw new AgaviException('Tried to use the translation system without a default locale and without a locale set');
-			}
-			$this->setLocale($this->defaultLocaleIdentifier);
-		}
 		return $this->currentLocaleIdentifier;
 	}
 
