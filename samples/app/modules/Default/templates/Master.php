@@ -1,6 +1,9 @@
-<?php $locale = $tm->getCurrentLocale(); ?>
+<?php
+$locale = $tm->getCurrentLocale();
+$rtl = ($locale->getCharacterOrientation() == 'right-to-left');
+?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $locale->getLocaleLanguage(); ?>" lang="<?php echo $locale->getLocaleLanguage(); ?>"<?php echo $locale->getCharacterOrientation() == 'right-to-left' ? ' dir="rtl"' : ''; ?>>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $locale->getLocaleLanguage(); ?>" lang="<?php echo $locale->getLocaleLanguage(); ?>"<?php if($rtl): ?> dir="rtl"<?php endif; ?>>
 	<head>
 		<meta http-equiv="Content-Type" content="<?php $oti = $ctl->getOutputTypeInfo(); echo isset($oti['parameters']['Content-Type']) ? $oti['parameters']['Content-Type'] : 'text/html; charset=utf-8'; ?>"/>
 		<title><?php echo $tm->_('Default Agavi Module', 'default.layout'); ?></title>
@@ -32,10 +35,25 @@
 			margin:           0 0 0.5em 0;
 			padding:          0.3em 0.4em
 		}
+		
+		#languages {
+			position: absolute;
+			<?php if($rtl): ?>
+						left: 0;
+			<?php else: ?>
+						right: 0;
+			<?php endif; ?>
+			top: 0;
+			padding: 0.5em;
+		}
 
 		#menu {
 			border:           solid 1px #505050;
-			float:            left;
+<?php if($rtl): ?>
+			float: right;
+<?php else: ?>
+			float: left;
+<?php endif; ?>
 			margin:           0 1em;
 			width:            14em;
 		}
@@ -104,7 +122,11 @@
 		}
 		
 		p.runin {
-			float:   right;
+<?php if($rtl): ?>
+			float: left;
+<?php else: ?>
+			float: right;
+<?php endif; ?>
 			margin:  0 1em 1em 1em;
 			padding: 0.3em 0.5em;
 			border:  1px solid #DDD;
@@ -125,7 +147,7 @@ $currentLanguage = $tm->getCurrentLocaleIdentifier();
 
 $otherLanguages = array_diff_key($languages, array($currentLanguage => null));
 ?>
-		<p class="runin"><?php echo $tm->_('Current language:', 'default.layout'); ?> <a href="<?php echo $r->gen(null); ?>" hreflang="<?php echo $currentLanguage; ?>"><?php echo $languages[$currentLanguage]; ?></a>. <?php echo $tm->__('Alternative language:', 'Alternative languages:', count($otherLanguages), 'default.layout'); ?> <?php $first = true; foreach($otherLanguages as $key => $value): if(!$first) echo ', '; ?><a href="<?php echo $r->gen(null, array('locale' => $key)); ?>" hreflang="<?php echo $key; ?>"><?php echo $value; ?></a><?php $first = false; endforeach; ?></p>
+		<div id="languages"><?php echo $tm->_('Current language:', 'default.layout'); ?> <a href="<?php echo $r->gen(null); ?>" hreflang="<?php echo $currentLanguage; ?>"><?php echo $languages[$currentLanguage]; ?></a>.<br /><?php echo $tm->__('Alternative language:', 'Alternative languages:', count($otherLanguages), 'default.layout'); ?> <?php $first = true; foreach($otherLanguages as $key => $value): if(!$first) echo ', '; ?><a href="<?php echo $r->gen(null, array('locale' => $key)); ?>" hreflang="<?php echo $key; ?>"><?php echo $value; ?></a><?php $first = false; endforeach; ?></div>
 <?php if($usr->isAuthenticated()): ?>
 <p class="runin"><?php echo $tm->_('You are logged in.', 'default.layout'); ?> <a href="<?php echo $r->gen('logout'); ?>"><?php echo $tm->_('Log Out', 'default.layout'); ?></a></p>
 <?php endif; ?>
