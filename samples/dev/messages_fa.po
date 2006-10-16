@@ -129,7 +129,7 @@ msgstr "این برنامه در حال حاضر غیر قابل دسترس اس
 
 #: ../app/modules/Default/views/Error404SuccessView.class.php:33
 msgid "404 Not Found"
-msgstr "یافت نشد"
+msgstr "404 یافت نشد"
 
 #: ../app/modules/Default/views/IndexSuccessView.class.php:33
 msgid "Welcome to the Agavi Sample Application"
