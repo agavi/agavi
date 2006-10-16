@@ -153,7 +153,9 @@ class AgaviGettextTranslator extends AgaviBasicTranslator
 			$fileName = $basePath . '/' . $fileNameBase . '.mo';
 			if(is_readable($fileName)) {
 				$fileData = AgaviGettextMoReader::readFile($fileName);
-				$data = array_merge($fileData, $data);
+				
+				// instead of array_merge, which doesn't handle null bytes in keys properly. careful, the order matters here.
+				$data = $fileData + $data;
 			}
 		}
 
