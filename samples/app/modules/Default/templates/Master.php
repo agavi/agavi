@@ -38,11 +38,11 @@ $rtl = ($locale->getCharacterOrientation() == 'right-to-left');
 		
 		#languages {
 			position: absolute;
-			<?php if($rtl): ?>
-						left: 0;
-			<?php else: ?>
-						right: 0;
-			<?php endif; ?>
+<?php if($rtl): ?>
+			left: 0;
+<?php else: ?>
+			right: 0;
+<?php endif; ?>
 			top: 0;
 			padding: 0.5em;
 		}
