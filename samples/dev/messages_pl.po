@@ -6,158 +6,163 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"PO-Revision-Date: 2006-10-16 17:50+0100\n"
+"Last-Translator: Łukasz Dywicki <lukasz.dywicki@gmail.com>\n"
+"Language-Team: \n"
+"X-Poedit-Language: Polish\n"
+"X-Poedit-Country: POLAND\n"
 
 #: ../app/modules/Default/templates/Error404Success.php:1
 msgid "File not found."
-msgstr ""
+msgstr "Nie odnaleziono pliku."
 
 #: ../app/modules/Default/templates/LoginInput.php:3
 msgid "Username:"
-msgstr ""
+msgstr "Nazwa użytkownika"
 
 #: ../app/modules/Default/templates/LoginInput.php:5
 msgid "Password:"
-msgstr ""
+msgstr "Hasło"
 
 #: ../app/modules/Default/templates/LoginInput.php:8
 msgid "Log me in automatically."
-msgstr ""
+msgstr "Loguj mnie automatycznie"
 
 #: ../app/modules/Default/templates/LoginInput.php:10
 #: ../app/modules/Default/templates/Master.php:145
 #: ../app/modules/Default/views/LoginInputView.class.php:33
 msgid "Login"
-msgstr ""
+msgstr "Login"
 
 #: ../app/modules/Default/templates/LoginSuccess.php:1
 msgid "Thank you for logging in!"
-msgstr ""
+msgstr "Thank you for logging in!"
 
 #: ../app/modules/Default/templates/LogoutSuccess.php:1
 msgid "Thank you for logging out!"
-msgstr ""
+msgstr "Thank you for logging out!"
 
 #: ../app/modules/Default/templates/Master.php:5
 msgid "Default Agavi Module"
-msgstr ""
+msgstr "Domyślny moduł Agavi"
 
 #: ../app/modules/Default/templates/Master.php:124
 msgid "Agavi Sample Application"
-msgstr ""
+msgstr "Przykładowa aplikacja oparta na Agavi"
 
 #: ../app/modules/Default/templates/Master.php:136
 msgid "Current language:"
-msgstr ""
+msgstr "Obecny język:"
 
 #: ../app/modules/Default/templates/Master.php:136
 msgid "Alternative language:"
 msgid_plural "Alternative languages:"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Inny język:"
+msgstr[1] "Inne języki:"
+msgstr[2] "Inne języki:"
 
 #: ../app/modules/Default/templates/Master.php:138
 msgid "You are logged in."
-msgstr ""
+msgstr "Zostałeś zalogowany."
 
 #: ../app/modules/Default/templates/Master.php:138
 msgid "Log Out"
-msgstr ""
+msgstr "Wyloguj"
 
 #: ../app/modules/Default/templates/Master.php:141
 msgid "Menu"
-msgstr ""
+msgstr "Menu"
 
 #: ../app/modules/Default/templates/Master.php:143
 msgid "Home"
-msgstr ""
+msgstr "Strona domowa"
 
 #: ../app/modules/Default/templates/Master.php:147
 msgid "A Secure Action"
-msgstr ""
+msgstr "Chroniona akcja"
 
 #: ../app/modules/Default/templates/Master.php:148
 msgid "Another Secure Action"
-msgstr ""
+msgstr "Kolejna zabezpieczona akcja"
 
 #: ../app/modules/Default/templates/Master.php:149
 msgid "Call invalid URL"
-msgstr ""
+msgstr "Wywołaj nieprawidłowy URL"
 
 #: ../app/modules/Default/templates/Master.php:150
 msgid "Try Disabled Module"
-msgstr ""
+msgstr "Sprawdź wyłączony moduł"
 
 #: ../app/modules/Default/templates/Master.php:151
 msgid "Search Engine Spam"
-msgstr ""
+msgstr "Spamowanie wyszukiwarek"
 
 #: ../app/modules/Default/templates/ModuleDisabledSuccess.php:1
 msgid "I'm sorry, this module has been disabled."
-msgstr ""
+msgstr "Przepraszam, ten moduł został wyłączony."
 
 #: ../app/modules/Default/templates/SearchEngineSpamSuccess.php:1
 #, php-format
 msgid "You just found the #1 place to buy <strong>%s</strong> at low prices!"
-msgstr ""
+msgstr "Właśnie znalazłeś najtańsze miejsce na nabycie <strong>%s</strong>!"
 
 #: ../app/modules/Default/templates/SearchEngineSpamSuccess.php:4
 msgid "Product Name"
-msgstr ""
+msgstr "Nazwa produktu"
 
 #: ../app/modules/Default/templates/SearchEngineSpamSuccess.php:5
 msgid "Price"
-msgstr ""
+msgstr "Cena"
 
 #: ../app/modules/Default/templates/Secure1Success.php:1
 msgid "You found the secret!"
-msgstr ""
+msgstr "Znalazłeś skarb!"
 
 #: ../app/modules/Default/templates/Secure2Success.php:1
 msgid "You'll never see this."
-msgstr ""
+msgstr "Nigdy tego nie zobaczysz."
 
 #: ../app/modules/Default/templates/SecureSuccess.php:1
 msgid "You do not have sufficient credentials to execute this Action."
-msgstr ""
+msgstr "Nie masz wystarczająćych praw by wykonać tą akcję."
 
 #: ../app/modules/Default/templates/UnavailableSuccess.php:1
 msgid "This application is currently unavailable."
-msgstr ""
+msgstr "Aplikacja jest w tej chwili niedostępna"
 
 #: ../app/modules/Default/views/Error404SuccessView.class.php:33
 msgid "404 Not Found"
-msgstr ""
+msgstr "404 Nie znaleziono"
 
 #: ../app/modules/Default/views/IndexSuccessView.class.php:33
 msgid "Welcome to the Agavi Sample Application"
-msgstr ""
+msgstr "Witaj w przykładowej aplikacji Agavi"
 
 #: ../app/modules/Default/views/LoginSuccessView.class.php:63
 msgid "Login Successful"
-msgstr ""
+msgstr "Zalogowano"
 
 #: ../app/modules/Default/views/LogoutSuccessView.class.php:33
 msgid "Logout Successful"
-msgstr ""
+msgstr "Wylogowano"
 
 #: ../app/modules/Default/views/ModuleDisabledSuccessView.class.php:33
 msgid "This Module is Disabled"
-msgstr ""
+msgstr "Ten moduł jest wyłączony"
 
 #: ../app/modules/Default/views/SearchEngineSpamSuccessView.class.php:17
 msgid "Congratulations!"
-msgstr ""
+msgstr "Gratulujemy!"
 
 #: ../app/modules/Default/views/Secure1SuccessView.class.php:17
 #: ../app/modules/Default/views/Secure2SuccessView.class.php:17
 msgid "Secure Action"
-msgstr ""
+msgstr "Bezpieczna akcja"
 
 #: ../app/modules/Default/views/SecureSuccessView.class.php:33
 msgid "Permission Denied"
-msgstr ""
+msgstr "Dostęp zabroniony"
 
 #: ../app/modules/Default/views/UnavailableSuccessView.class.php:33
 msgid "This Application is Unavailable"
-msgstr ""
+msgstr "Ta aplikacja jest niedostępna"

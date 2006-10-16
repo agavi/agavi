@@ -45,6 +45,12 @@
 					<parameter name="description">Nederlands</parameter>
 				</parameters>
 			</available_locale>
+			<!-- Polish, Poland -->
+			<available_locale identifier="pl_PL">
+				<parameters>
+					<parameter name="description">Polski</parameter>
+				</parameters>
+			</available_locale>
 			<!-- Chinese Simplified, China (alias for zh_Hans_CN, Simplified Han) -->
 			<available_locale identifier="zh_CN">
 				<parameters>
