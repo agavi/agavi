@@ -195,7 +195,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 			$remember = array();
 			
 			// build the XPath query
-			$query = 'descendant::' . $ns . 'textarea[@name] | descendant::' . $ns . 'select[@name] | descendant::' . $ns . 'input[@name and (not(@type) or @type="text" or (@type="checkbox" and not(contains(@name, "[]"))) or (@type="checkbox" and contains(@name, "[]") and @value) or @type="radio" or @type="password"';
+			$query = 'descendant::' . $ns . 'textarea[@name] | descendant::' . $ns . 'select[@name] | descendant::' . $ns . 'input[@name and (not(@type) or @type="text" or (@type="checkbox" and not(contains(@name, "[]"))) or (@type="checkbox" and contains(@name, "[]") and @value) or @type="radio" or @type="password" or @type="file"';
 			if($cfg['include_hidden_inputs']) {
 				$query .= ' or @type="hidden"';
 			}
