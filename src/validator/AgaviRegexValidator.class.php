@@ -42,7 +42,7 @@ class AgaviRegexValidator extends AgaviValidator
 	 */
 	protected function validate()
 	{
-		$result = preg_match($this->getParameter('pattern'), $this->getData());
+		$result = preg_match($this->getParameter('pattern'), $this->getData($this->getArgument()));
 		
 		if($result != $this->getParameter('match')) {
 			$this->throwError();

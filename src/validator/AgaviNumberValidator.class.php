@@ -45,14 +45,14 @@ class AgaviNumberValidator extends AgaviValidator
 	 * @since      0.11.0
 	 */
 	protected function validate() {
-		$value = $this->getData();
+		$value = $this->getData($this->getArgument());
 
 		switch(strtolower($this->getParameter('type'))) {
 			case 'int':
 			case 'integer':
 				$temp = (int) $value;
 				if(((string)$temp) !== ((string)$value) ) {
-					$this->throwError('type_error');
+					$this->throwError('type');
 					return false;
 				}
 				
@@ -60,7 +60,7 @@ class AgaviNumberValidator extends AgaviValidator
 			
 			case 'float':
 				if(!is_numeric($value)) {
-					$this->throwError('type_error');
+					$this->throwError('type');
 					return false;
 				}
 				
@@ -68,12 +68,12 @@ class AgaviNumberValidator extends AgaviValidator
 		}
 
 		if($this->hasParameter('min') and $value < $this->getParameter('min')) {
-			$this->throwError('min_error');
+			$this->throwError('min');
 			return false;
 		}
 
 		if($this->hasParameter('max') and $value > $this->getParameter('max')) {
-			$this->throwError('max_error');
+			$this->throwError('max');
 			return false;
 		}
 		

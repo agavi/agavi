@@ -17,15 +17,18 @@
  * AgaviValidator allows you to validate input
  *
  * Parameters for use in most validators:
- *   'name'     name of validator
- *   'base'     base path for validation of arrays
- *   'param'    name of input parameter to validate
- *   'export'   destination for exportet data
- *   'depends'  list of dependencies needed by the validator
- *   'provides' list of dependencies the validator provides after success
- *   'severity' error severity in case of failure
- *   'error'    error message when validation fails
- *   'affects'  list of fields that are affected by an error
+ *   'name'       name of validator
+ *   'base'       base path for validation of arrays
+ *   'arguments'  an array of input parameter keys to validate
+ *   'export'     destination for exportet data
+ *   'depends'    list of dependencies needed by the validator
+ *   'provides'   list of dependencies the validator provides after success
+ *   'severity'   error severity in case of failure
+ *   'error'      error message when validation fails
+ *   'errors'     an array of errors with the reason as key
+ *   'affects'    list of fields that are affected by an error
+ *   'required'   if true the validator will fail when the input parameter is 
+ *                not set
  *
  * @package    agavi
  * @subpackage validator
@@ -212,7 +215,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 		}
 
 		if(isset($parameters['method'])) {
-			foreach(explode('|', $parameters['method']) as $method) {
+			foreach(explode(' ', $parameters['method']) as $method) {
 				$this->requestMethods[] = trim($method);
 			}
 		}
@@ -295,10 +298,64 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
-	protected function getData($paramname = 'param')
+	protected function getData($paramName)
 	{
 		$array = $this->validationParameters->getParameters();
-		return $this->curBase->getValueByChildPath($this->getParameter($paramname), $array);
+		return $this->curBase->getValueByChildPath($paramName, $array);
+	}
+
+	/**
+	 * Returns true if this validator has multiple arguments which need to be 
+	 * validated.
+	 *
+	 * @return     bool Whether this validator has multiple arguments or not.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	protected function hasMultipleArguments()
+	{
+		return count($this->getParameter('arguments')) > 1;
+	}
+
+	/**
+	 * Returns the first argument which should be validated.
+	 *
+	 * This method is to be used by validators which only expect 1 input
+	 * argument.
+	 *
+	 * @return     string The input argument name.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	protected function getArgument()
+	{
+		$argNames = $this->getParameter('arguments');
+		reset($argNames);
+		return current($argNames);
+	}
+
+	/**
+	 * 
+	 */
+	protected function getArguments()
+	{
+		return $this->getParameter('arguments');
+	}
+
+	protected function hasAllArgumentsSet()
+	{
+		$array = $this->validationParameters->getParameters();
+		$baseParts = $this->curBase->getParts();
+		foreach($this->getArguments() as $argument) {
+			$new = $this->curBase->pushRetNew($argument);
+			$pName = $this->curBase->pushRetNew($argument)->__toString();
+			if(!$this->validationParameters->hasParameter($pName)) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	/**
@@ -312,17 +369,21 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 * @param      string name of parameter the message is saved in
 	 * @param      bool   do not use as error message even
 	 *                    if error message is of type string
-	 * @param      array  array of fields that are affected by the error
-	 * @param      mixed  error value to be used if no other value was found
 	 *
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
-	protected function throwError($index = 'error', $backupError = null)
+	protected function throwError($index = null, $backupError = null)
 	{
-		if($this->hasParameter($index)) {
-			$error = $this->getParameter($index);
-		} elseif($this->hasParameter('error')) {
+		if($index !== null && $this->hasParameter('errors')) {
+			$errors = $this->getParameter('errors');
+			if(isset($errors[$index])) {
+				$this->reportError($this, $errors[$index]);
+				return;
+			}
+		}
+
+		if($this->hasParameter('error')) {
 			$error = $this->getParameter('error');
 		} else {
 			$error = $backupError;
@@ -360,7 +421,8 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
-	public function getAffectedFields() {
+	public function getAffectedFields()
+	{
 		$fields = array();
 		$base = $this->curBase->__toString();
 
@@ -429,16 +491,20 @@ abstract class AgaviValidator extends AgaviParameterHolder
 				return self::SUCCESS;
 			}
 
-			$fullPath = clone $this->curBase;
-			if($this->getParameter('param')) {
-				$fullPath->push($this->getParameter('param'));
+			foreach($this->getArguments() as $argument) {
+				$this->validatedFieldnames[] = $this->curBase->pushRetNew($argument)->__toString();
 			}
 
-			$this->validatedFieldnames[] = $fullPath->__toString();
-
-			if(!$this->validate()) {
-				// validation failed, exit with configured error code
-				return self::mapErrorCode($this->getParameter('severity'));
+			if($this->hasAllArgumentsSet()) {
+				if(!$this->validate()) {
+					// validation failed, exit with configured error code
+					return self::mapErrorCode($this->getParameter('severity'));
+				}
+			} else {
+				if($this->getParameter('required', true)) {
+					$this->throwError();
+					return self::mapErrorCode($this->getParameter('severity'));
+				}
 			}
 
 			// put dependencies provided by this validator into manager

@@ -42,7 +42,7 @@ class AgaviUploadedFileValidator extends AgaviValidator
 	 */
 	protected function validate()
 	{
-		$name = $this->getParameter('param');
+		$name = $this->getArgument();
 
 		$request = $this->parentContainer->getContext()->getRequest();
 
@@ -54,11 +54,11 @@ class AgaviUploadedFileValidator extends AgaviValidator
 		
 		$size = $request->getFileSize($name);
 		if($this->hasParameter('min_size') && $size < $this->getParameter('min_size')) {
-			$this->throwError('min_size_error');
+			$this->throwError('min_size');
 			return false;
 		}
 		if($this->hasParameter('max_size') && $size > $this->getParameter('max_size')) {
-			$this->throwError('max_size_error');
+			$this->throwError('max_size');
 			return false;
 		}
 
@@ -73,7 +73,7 @@ class AgaviUploadedFileValidator extends AgaviValidator
 			return true;
 		}
 
-		$this->throwError('extension_error');
+		$this->throwError('extension');
 		return false;
 	}
 }

@@ -123,7 +123,7 @@ class AgaviValidatorConfigHandler extends AgaviConfigHandler
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function getValidatorArray($validator, $code, $stdSeverity, $parent, $stdMethod)
+	public function getValidatorArray($validator, $code, $stdSeverity, $parent, $stdMethod, $stdRequired = true)
 	{
 		if(!isset($this->classMap[$validator->getAttribute('class')])) {
 			$class = $validator->getAttribute('class');
@@ -139,7 +139,8 @@ class AgaviValidatorConfigHandler extends AgaviConfigHandler
 		$parameters = array(
 			'severity' => $validator->getAttribute('severity', $stdSeverity),
 			'method' => $validator->getAttribute('method', $stdMethod),
-			);
+			'required' => $stdRequired,
+		);
 
 		$stdMethod = $parameters['method'];
 		$name = $validator->getAttribute('name', uniqid('val'.rand()));
@@ -147,6 +148,32 @@ class AgaviValidatorConfigHandler extends AgaviConfigHandler
 		$parameters = array_merge($this->classMap[$validator->getAttribute('class')]['parameters'], $parameters);
 		$parameters = array_merge($parameters, $validator->getAttributes());
 		$parameters = $this->getItemParameters($validator, $parameters);
+		if(isset($validator->arguments)) {
+			if($validator->arguments->hasAttribute('base')) {
+				$parameters['base'] = $validator->arguments->getAttribute('base');
+			}
+			$args = array();
+			foreach($validator->arguments as $argument) {
+				if($argument->hasAttribute('name')) {
+					$args[$argument->getAttribute('name')] = $argument->getValue();
+				} else {
+					$args[] = $argument->getValue();
+				}
+			}
+			$parameters['arguments'] = $args;
+		}
+		if(isset($validator->errors)) {
+			foreach($validator->errors as $error) {
+				if($error->hasAttribute('for')) {
+					$parameters['errors'][$error->getAttribute('for')] = $error->getValue();
+				} else {
+					$parameters['error'] = $error->getValue();
+				}
+			}
+		}
+		if($validator->hasAttribute('required')) {
+			$stdRequired = $parameters['required'] = $this->literalize($validator->getAttribute('required'));
+		}
 
 		if(isset($validator->validators)) {
 			// create operator
@@ -155,8 +182,12 @@ class AgaviValidatorConfigHandler extends AgaviConfigHandler
 
 			$childSeverity = $validator->validators->getAttribute('severity', $stdSeverity);
 			$childMethod = $validator->validators->getAttribute('method', $stdMethod);
+			$childRequired = $stdRequired;
+			if($validator->validators->hasAttribute('required')) {
+				$childRequired = $this->literalize($validator->validators->getAttribute('required'));
+			}
 			foreach($validator->validators as $v) {
-				$code = $this->getValidatorArray($v, $code, $childSeverity, $name, $childMethod);
+				$code = $this->getValidatorArray($v, $code, $childSeverity, $name, $childMethod, $childRequired);
 			}
 				// create child validators
 		} else {

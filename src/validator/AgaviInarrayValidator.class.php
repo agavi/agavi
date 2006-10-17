@@ -50,7 +50,7 @@ class AgaviInarrayValidator extends AgaviValidator
 			$list = array_map(create_function('$a', 'return strtolower($a);'),$list);
 		}
 		
-		if(!in_array($this->getData(), $list)) {
+		if(!in_array($this->getData($this->getArgument()), $list)) {
 			$this->throwError();
 			return false;
 		}

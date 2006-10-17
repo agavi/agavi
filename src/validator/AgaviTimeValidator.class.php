@@ -47,7 +47,7 @@ class AgaviTimeValidator extends AgaviValidator
 	 */
 	protected function validate()
 	{
-		if(preg_match('/^(\d{1,2})(?:[.: -](\d{1,2})(?:[.: -](\d{1,2}))?)?$/', $this->getData(), $matches)) {
+		if(preg_match('/^(\d{1,2})(?:[.: -](\d{1,2})(?:[.: -](\d{1,2}))?)?$/', $this->getData($this->getArgument()), $matches)) {
 			$hour = $matches[1];
 			if(sizeof($matches) > 2) {
 				$minute = $matches[2];

@@ -47,12 +47,6 @@ class AgaviEqualsValidator extends AgaviValidator
 	 * @see        AgaviValidator::getAffectedFields
 	 */
 	public function getAffectedFields() {
-		if($this->getParameter('asparam')) {
-			$fields = array_merge(parent::getAffectedFields(), array($this->getParameter('value')));
-
-			return array_unique($fields);
-		}
-
 		return parent::getAffectedFields();
 	}
 
@@ -66,11 +60,19 @@ class AgaviEqualsValidator extends AgaviValidator
 	 */
 	protected function validate()
 	{
-		$value = ($this->getParameter('asparam')) ? $this->getData('value') : $this->getParameter('value');
+		// if we have a value we compare all arguments to that value and report the 
+		// individual arguments that failed
+		if($this->hasParameter('value')) {
+			$value = $this->getParameter('value');
+		} else {
+			$value = $this->getData($this->getArgument());
+		}
 
-		if($this->getData() != $value) {
-			$this->throwError();
-			return false;
+		foreach($this->getArguments as $key => $argument) {
+			if($this->getData($argument) != $value) {
+				$this->throwError();
+				return false;
+			}
 		}
 		
 		return true;

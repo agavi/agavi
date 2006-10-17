@@ -44,15 +44,15 @@ class AgaviStringValidator extends AgaviValidator
 	 */
 	protected function validate()
 	{
-		$value = (string) $this->getData();
+		$value = (string) $this->getData($this->getArgument());
 
 		if($this->hasParameter('min') and strlen($value) < $this->getParameter('min')) {
-			$this->throwError('min_error');
+			$this->throwError('min');
 			return false;
 		}
 		
 		if($this->hasParameter('max') and strlen($value) > $this->getParameter('max')) {
-			$this->throwError('max_error');
+			$this->throwError('max');
 			return false;
 		}
 		

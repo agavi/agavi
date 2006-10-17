@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!--
 +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
-| This file is part of the Agavi package.																		 |
-| Copyright (c) 2006 the Agavi Project.																			 |
+| This file is part of the Agavi package.                                    |
+| Copyright (c) 2006 the Agavi Project.                                      |
 +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
-| AGAVI VALIDATORS CONFIGURATION																						 |
+| AGAVI VALIDATORS CONFIGURATION                                             |
 +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
 -->
 <configurations>
@@ -13,25 +13,33 @@
 		<validators>
 
 			<validator class="string" name="username_too_short">
+				<arguments>
+					<argument>username</argument>
+				</arguments>
+				<errors>
+					<error for="min">The username you supplied is fewer than 5 characters long.</error>
+				</errors>
 				<parameters>
-					<parameter name="param">username</parameter>
 					<parameter name="min">5</parameter>
-					<parameter name="min_error">The username you supplied is fewer than 5 characters long.</parameter>
 				</parameters>
 			</validator>
 
 			<validator class="string" name="password_non_existant">
+				<arguments>
+					<argument>password</argument>
+				</arguments>
+				<errors>
+					<error for="min">Please supply a password.</error>
+				</errors>
 				<parameters>
-					<parameter name="param">password</parameter>
 					<parameter name="min">1</parameter>
-					<parameter name="min_error">Please supply a password.</parameter>
 				</parameters>
 			</validator>
 			
-			<validator class="isset" name="remember" severity="none">
-				<parameters>
-					<parameter name="param">remember</parameter>
-				</parameters>
+			<validator class="isset" name="remember" required="false">
+				<arguments>
+					<argument>remember</argument>
+				</arguments>
 			</validator>
 
 		</validators>

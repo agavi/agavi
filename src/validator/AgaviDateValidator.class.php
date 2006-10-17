@@ -51,7 +51,7 @@ class AgaviDateValidator extends AgaviValidator
 	 */
 	protected function validate()
 	{
-		$param = $this->getData();
+		$param = $this->getData($this->getArgument());
 		// check YY(YY)-MM-DD
 		if(preg_match('/^(?:((?:\d{2})?\d{2})-)?(\d{2})-(\d{2})$/', $param, $matches)) {
 			if(count($matches) == 4) {

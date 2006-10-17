@@ -134,6 +134,10 @@ final class AgaviArrayPathDefinition
 
 	public static function getPartsFromPath($path)
 	{
+		if(strlen($path) == 0) {
+			return array('parts' => array(), 'absolute' => true);
+		}
+
 		$parts = array();
 		$absolute = ($path[0] != '[');
 		if(($pos = strpos($path, '[')) === false) {
