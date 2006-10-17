@@ -81,16 +81,6 @@ class AgaviOutputTypeConfigHandler extends AgaviConfigHandler
 				} else {
 					$data[$name]['renderer'] = null;
 				}
-				if($outputType->hasAttribute('fallback')) {
-					$fallback = $outputType->getAttribute('fallback');
-					if(!in_array($fallback, $otnames)) {
-						throw new AgaviConfigurationException('Output Type "' . $name . '" is configured to fall back to non-existent Output Type "' . $fallback . '" in ' . $config);
-					}
-					$data[$name]['fallback'] = $fallback == 'default' ? $cfg->output_types->getAttribute('default') : $fallback;
-					if(isset($data[$fallback]['fallback']) && $data[$fallback]['fallback'] == $name) {
-						throw new AgaviConfigurationException('Output Type "' . $name . '" is configured to fall back to Output Type "' . $fallback . '", which is configured to fall back to "' . $name . '", creating a possible infinite loop');
-					}
-				}
 				if($outputType->hasAttribute('exception')) {
 					$data[$name]['exception'] = $this->literalize($outputType->getAttribute('exception'));
 				}

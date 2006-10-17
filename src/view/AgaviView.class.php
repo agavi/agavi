@@ -107,23 +107,6 @@ abstract class AgaviView extends AgaviAttributeHolder
 	 * @since      0.9.0
 	 */
 	abstract function execute(AgaviParameterHolder $parameters);
-	
-	/**
-	 * Called whenever an Output Type fallback occurs.
-	 *
-	 * @param      AgaviParameterHolder The request parameters.
-	 * @param      string The Output Type the system is falling back from.
-	 * @param      string The Output Type the system is falling back to.
-	 *
-	 * @return     array An array of forwarding information in case a forward
-	 *                   should occur, otherwise null.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function handleFallback(AgaviParameterHolder $parameters, $from, $to)
-	{
-	}
 
 	/**
 	 * Retrieve the current application context.

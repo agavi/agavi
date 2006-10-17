@@ -95,42 +95,18 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 		if(!($renderer instanceof AgaviRenderer)) {
 			$renderer = null;
 
-			while(true) {
-				$oti = $controller->getOutputTypeInfo();
-				if($oti['renderer'] !== null) {
-					$renderer = new $oti['renderer']();
-					$renderer->initialize($this->context, $oti['renderer_parameters']);
-					$renderer->setView($viewInstance);
-					if(isset($oti['extension'])) {
-						$renderer->setExtension($oti['extension']);
-					}
-					try {
-						// run the pre-render check to see if the template is there
-						$renderer->preRenderCheck();
-						break;
-					} catch(AgaviRenderException $e) {
-						if(isset($oti['fallback'])) {
-							$from = $controller->getOutputType();
-							// template not found, but there's a fallback specified, so let's try that one
-							$controller->setOutputType($oti['fallback']);
-							$fbret = $viewInstance->handleFallback($actionEntry->getParameters(), $from, $oti['fallback']);
-							if($fbret instanceof AgaviRenderer) {
-								$renderer = $fbret;
-								break;
-							} elseif(is_array($fbret) && count($fbret >= 2)) {
-								$response->clear();
-								$response->lock();
-								$actionEntry->setNext($fbret[0], $fbret[1], isset($fbret[2]) ? $fbret[2] : array());
-								return;
-							}
-						} else {
-							throw $e;
-						}
-					}
-				} else {
-					$renderer = null;
-					break;
+			$oti = $controller->getOutputTypeInfo();
+			if($oti['renderer'] !== null) {
+				$renderer = new $oti['renderer']();
+				$renderer->initialize($this->context, $oti['renderer_parameters']);
+				$renderer->setView($viewInstance);
+				if(isset($oti['extension'])) {
+					$renderer->setExtension($oti['extension']);
 				}
+				// run the pre-render check to see if the template is there
+				$renderer->preRenderCheck();
+			} else {
+				$renderer = null;
 			}
 		}
 

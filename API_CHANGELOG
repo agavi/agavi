@@ -335,7 +335,6 @@ API Changes:
    AgaviView:
 !    all constants have been removed, simply use the strings now
     ADD:
-     handleFallback: new method
      getResponse: new method
 
     CHG:
