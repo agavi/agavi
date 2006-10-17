@@ -280,5 +280,10 @@ class AgaviVirtualArrayPath
 
 		return $p->setValueFromArray($array, $value);
 	}
+
+	public function getParts()
+	{
+		return $this->parts;
+	}
 }
 ?>
