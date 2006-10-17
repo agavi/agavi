@@ -2,7 +2,7 @@
 
 class Default_SearchEngineSpamAction extends AgaviAction
 {
-	public function execute(AgaviParameterHolder $parameters)
+	public function executeRead(AgaviParameterHolder $parameters)
 	{
 		$this->setAttribute('product_name', $parameters->getParameter('name'));
 		$price = $this->getContext()->getModel('AgaviSampleAppPriceFinder', 'Default')->getPriceByProductName($parameters->getParameter('name'));
