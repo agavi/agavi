@@ -71,7 +71,7 @@ final class AgaviArrayPathDefinition
 	}
 
 
-	public static function hasValue(array $parts, array &$array, $default = null)
+	public static function hasValue(array $parts, array &$array)
 	{
 		$a = $array;
 
