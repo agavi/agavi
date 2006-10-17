@@ -73,12 +73,7 @@
 	+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
 	<configuration environment="development">
 		<handlers>
-			<handler pattern="%core.module_dir%/CoolModule/config/cool.xml">
-				<class file="%core.module_dir%/CoolModule/lib/CoolConfigurationHandler.class.php">CoolConfigHandler</class>
-				<parameters>
-					<parameter name="title">Cool Module</parameter>
-				</parameters>
-			</handler>
+			<handler pattern="%core.module_dir%/CoolModule/config/cool.xml" validate="optional/path/to/schema.xsd" class="CoolConfigHandler" />
 		</handlers>
 	</configuration>
 -->
