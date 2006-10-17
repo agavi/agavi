@@ -6,10 +6,9 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"PO-Revision-Date: 2006-10-16 17:50+0100\n"
+"PO-Revision-Date: 2006-10-17 23:10+0100\n"
 "Last-Translator: Łukasz Dywicki <lukasz.dywicki@gmail.com>\n"
 "Language-Team: \n"
-"X-Poedit-Language: Polish\n"
 "X-Poedit-Country: POLAND\n"
 
 #: ../app/modules/Default/templates/Error404Success.php:1
@@ -18,15 +17,15 @@ msgstr "Nie odnaleziono pliku."
 
 #: ../app/modules/Default/templates/LoginInput.php:3
 msgid "Username:"
-msgstr "Nazwa użytkownika"
+msgstr "Nazwa użytkownika:"
 
 #: ../app/modules/Default/templates/LoginInput.php:5
 msgid "Password:"
-msgstr "Hasło"
+msgstr "Hasło:"
 
 #: ../app/modules/Default/templates/LoginInput.php:8
 msgid "Log me in automatically."
-msgstr "Loguj mnie automatycznie"
+msgstr "Loguj mnie automatycznie."
 
 #: ../app/modules/Default/templates/LoginInput.php:10
 #: ../app/modules/Default/templates/Master.php:145
@@ -36,11 +35,11 @@ msgstr "Login"
 
 #: ../app/modules/Default/templates/LoginSuccess.php:1
 msgid "Thank you for logging in!"
-msgstr "Thank you for logging in!"
+msgstr "Hej, właśnie zostałeś zalogowany!"
 
 #: ../app/modules/Default/templates/LogoutSuccess.php:1
 msgid "Thank you for logging out!"
-msgstr "Thank you for logging out!"
+msgstr "Żegnaj drogi użytkowniku!"
 
 #: ../app/modules/Default/templates/Master.php:5
 msgid "Default Agavi Module"
@@ -48,7 +47,7 @@ msgstr "Domyślny moduł Agavi"
 
 #: ../app/modules/Default/templates/Master.php:124
 msgid "Agavi Sample Application"
-msgstr "Przykładowa aplikacja oparta na Agavi"
+msgstr "Agavi, Przykładowa Aplikacja"
 
 #: ../app/modules/Default/templates/Master.php:136
 msgid "Current language:"
@@ -63,7 +62,7 @@ msgstr[2] "Inne języki:"
 
 #: ../app/modules/Default/templates/Master.php:138
 msgid "You are logged in."
-msgstr "Zostałeś zalogowany."
+msgstr "Jesteś zalogowany."
 
 #: ../app/modules/Default/templates/Master.php:138
 msgid "Log Out"
@@ -124,7 +123,7 @@ msgstr "Nigdy tego nie zobaczysz."
 
 #: ../app/modules/Default/templates/SecureSuccess.php:1
 msgid "You do not have sufficient credentials to execute this Action."
-msgstr "Nie masz wystarczająćych praw by wykonać tą akcję."
+msgstr "Nie masz wystarczających praw by wykonać tą akcję."
 
 #: ../app/modules/Default/templates/UnavailableSuccess.php:1
 msgid "This application is currently unavailable."
