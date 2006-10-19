@@ -89,6 +89,11 @@ abstract class AgaviRenderer implements AgaviIRenderingFilter
 	protected $assigns = array();
 	
 	/**
+	 * @var        array i18n template settings.
+	 */
+	protected $i18n = null;
+	
+	/**
 	 * Initialize this Renderer.
 	 *
 	 * @param      AgaviContext The current application context.
@@ -117,9 +122,12 @@ abstract class AgaviRenderer implements AgaviIRenderingFilter
 		}
 		if(isset($parameters['assigns'])) {
 			foreach($parameters['assigns'] as $factory => $var) {
-				$getter = 'get' . $factory;
+				$getter = 'get' . str_replace('_', '', $factory);
 				$this->assigns[$var] = $this->context->$getter();
 			}
+		}
+		if(isset($parameters['i18n'])) {
+			$this->i18n = array_merge(array('mode' => 'subdir', 'separator' => ''), $parameters['i18n']);
 		}
 	}
 
@@ -200,13 +208,13 @@ abstract class AgaviRenderer implements AgaviIRenderingFilter
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function buildTemplateName($templateData)
+	public function buildTemplateName($templateData, $extensionPrefix = '', $separator = '')
 	{
 		list($file, $literal) = $templateData;
 		if($literal) {
 			return $file;
 		} else {
-			return $file . $this->getExtension();
+			return $file . $separator . $extensionPrefix . $this->getExtension();
 		}
 	}
 	
@@ -301,12 +309,39 @@ abstract class AgaviRenderer implements AgaviIRenderingFilter
 			return;
 		}
 		
-		$template = $view->getDirectory() . '/' . $this->buildTemplateName($view->getTemplate());
-		if(!is_readable($template)) {
-			// the template isn't readable
-			$error = 'The template "%s" does not exist or is unreadable';
-			$error = sprintf($error, $template);
-			throw new AgaviRenderException($error);
+		$checks = array();
+		if(AgaviConfig::get('core.use_translation') && $this->i18n !== null) {
+			// TODO: I guess this could be a lil faster
+			foreach(AgaviLocale::getLookupPath($this->getContext()->getTranslationManager()->getCurrentLocaleIdentifier()) as $identifier) {
+				switch($this->i18n['mode']) {
+					case 'subdir':
+						$checks[] = $view->getDirectory() . '/' . $identifier . '/' . $this->buildTemplateName($view->getTemplate());
+						break;
+					case 'prefix':
+						$checks[] = $view->getDirectory() . '/' . $identifier . $this->i18n['separator'] . $this->buildTemplateName($view->getTemplate());
+						break;
+					case 'postfix':
+						$checks[] = $view->getDirectory() . '/' . $this->buildTemplateName($view->getTemplate(), $identifier, $this->i18n['separator']);
+						break;
+				}
+			}
+		}
+		$checks[] = $view->getDirectory() . '/' . $this->buildTemplateName($view->getTemplate());
+		
+		$template = '';
+		for($i = 0, $count = count($checks); $i < $count; $i++) {
+			$template = $checks[$i];
+			if(!is_readable($template)) {
+				if($i == $count -1) {
+					// the template isn't readable
+					$error = 'The template "%s" does not exist or is unreadable';
+					$error = sprintf($error, $template);
+					throw new AgaviRenderException($error);
+				}
+			} else {
+				$view->setTemplate($template, true);
+				break;
+			}
 		}
 
 		// check to see if this is a decorator template
