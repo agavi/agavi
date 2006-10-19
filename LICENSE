@@ -15,6 +15,21 @@ The corresponding license can be found in LICENSE-AGAVI.
 --
 
 
+International Components for Unicode
+------------------------------------
+
+This software contains a port of parts of the International Components for
+Unicode library.
+
+For more information about ICU, visit the homepages:
+http://www.ibm.com/software/globalization/icu/
+http://icu.sourceforge.net/
+
+The corresponding license can be found in LICENSE-ICU.
+
+--
+
+
 Unicode Common Locale Data Repository
 -------------------------------------
 
