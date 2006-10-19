@@ -31,7 +31,7 @@ msgstr "Loguj mnie automatycznie."
 #: ../app/modules/Default/templates/Master.php:145
 #: ../app/modules/Default/views/LoginInputView.class.php:33
 msgid "Login"
-msgstr "Login"
+msgstr "Logowanie"
 
 #: ../app/modules/Default/templates/LoginSuccess.php:1
 msgid "Thank you for logging in!"
