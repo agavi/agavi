@@ -51,6 +51,8 @@ class RoutingTest extends AgaviTestCase
 		$this->assertEquals('action3', $rq->getParameter('action'));
 		$this->assertEquals('child2', $rq->getParameter('bar'));
 
+		$r->loadConfig(AgaviConfig::get('core.config_dir') . '/tests/routing_simple.xml', 'test1');
+
 		$rq->clearParameters();
 		$r->setInput('/anchor/child4/nextChild');
 		$this->assertEquals(array('testWithChild', 't1child4'), $r->execute());
@@ -59,6 +61,8 @@ class RoutingTest extends AgaviTestCase
 		$this->assertEquals('action4', $rq->getParameter('action'));
 		$this->assertEquals('nextChild', $rq->getParameter('bar'));
 
+		$r->loadConfig(AgaviConfig::get('core.config_dir') . '/tests/routing_simple.xml', 'test1');
+
 		$rq->clearParameters();
 		$r->setInput('/anchor/child4/');
 		$this->assertEquals(array('testWithChild', 't1child4'), $r->execute());
@@ -66,6 +70,7 @@ class RoutingTest extends AgaviTestCase
 		$this->assertEquals('module4', $rq->getParameter('module'));
 		$this->assertEquals('action4', $rq->getParameter('action'));
 		$this->assertEquals('baz', $rq->getParameter('bar'));
+
 
 
 		$this->assertEquals('/anchor/child1', $r->gen('t1child1'));
@@ -84,6 +89,7 @@ class RoutingTest extends AgaviTestCase
 		$this->assertEquals('category1', $rq->getParameter('category'));
 		$this->assertEquals('MACHINE', $rq->getParameter('machine'));
 
+		$r->loadConfig(AgaviConfig::get('core.config_dir') . '/tests/routing_simple.xml', 'test2');
 		$rq->clearParameters();
 		$r->setInput('/parent/MACHINE/');
 		$this->assertEquals(array('test2parent', 'test2child1'), $r->execute());
@@ -91,6 +97,7 @@ class RoutingTest extends AgaviTestCase
 //		$this->assertEquals('', $rq->getParameter('category'));
 		$this->assertEquals('MACHINE', $rq->getParameter('machine'));
 
+		$r->loadConfig(AgaviConfig::get('core.config_dir') . '/tests/routing_simple.xml', 'test2');
 		$rq->clearParameters();
 		$r->setInput('/parent/MACHINE');
 		$this->assertEquals(array('test2parent', 'test2child1'), $r->execute());
