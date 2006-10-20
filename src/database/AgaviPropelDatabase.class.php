@@ -41,8 +41,27 @@
  *
  * @version    $Id$
  */
-class AgaviPropelDatabase extends AgaviCreoleDatabase
+class AgaviPropelDatabase extends AgaviDatabase
 {
+	/**
+	 * Stores the actual AgaviDatabase implementation (AgaviCreoleDatabase or 
+	 * AgaviPdoDatabase).
+	 *
+	 * @var        AgaviDatabase The AgaviDatabase instance used internally.
+	 *
+	 * @since      0.11.0
+	 */
+	protected $agaviDatabase = null;
+	
+	/**
+	 * An array of the classes in the runtime configuration classes list.
+	 *
+	 * @var        array An array of classes and their file names.
+	 *
+	 * @since      0.11.0
+	 */
+	protected $propelAutoloads = array();
+	
 	/**
 	 * Stores the path of the configuration file that will be passed to
 	 * Propel::init() when using Propel autoloading magic
@@ -138,7 +157,7 @@ class AgaviPropelDatabase extends AgaviCreoleDatabase
 	{
 		$useAutoload = $this->getParameter('use_autoload', true);
 		if($useAutoload) {
-			return parent::connect();
+			return $this->agaviDatabase->connect();
 		}
 		try {
 			// determine how to get our settings
@@ -176,6 +195,49 @@ class AgaviPropelDatabase extends AgaviCreoleDatabase
 	}
 
 	/**
+	 * Retrieve the database connection associated with this Database
+	 * implementation.
+	 *
+	 * When this is executed on a Database implementation that isn't an
+	 * abstraction layer, a copy of the resource will be returned.
+	 *
+	 * @return     mixed A database connection.
+	 *
+	 * @throws     <b>AgaviDatabaseException</b> If a connection could not be retrieved.
+	 *
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
+	 */
+	public function getConnection()
+	{
+		if($this->connection === null) {
+			$this->connection = $this->agaviDatabase->getConnection();
+		}
+
+		return parent::getConnection();;
+	}
+
+	/**
+	 * Retrieve a raw database resource associated with this Database
+	 * implementation.
+	 *
+	 * @return     mixed A database resource.
+	 *
+	 * @throws     <b>AgaviDatabaseException</b> If no resource could be retrieved
+	 *
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
+	 */
+	public function getResource()
+	{
+		if($this->resource === null) {
+			$this->resource = $this->agaviDatabase->getResource();
+		}
+
+		return parent::getConnection();
+	}
+
+	/**
 	 * Load Propel config
 	 * 
 	 * @param      array An associative array of initialization parameters.
@@ -187,24 +249,53 @@ class AgaviPropelDatabase extends AgaviCreoleDatabase
 	{
 		parent::initialize($databaseManager, $parameters);
 		$useAutoload = $this->getParameter('use_autoload', true);
+		$propel13 = false;
+		$configPath = AgaviConfigHandler::replaceConstants($this->getParameter('config'));
+		$datasource = $this->getParameter('datasource', null);
+		$use_as_default = $this->getParameter('use_as_default', false);
+		$config = require($configPath);
+		if($datasource === null || $datasource == 'default') {
+			$datasource = $config['propel']['datasources']['default'];
+		}
+		if(isset($config['propel']['datasources'][$datasource]['connection']['dsn'])) {
+			// it's Propel 1.3 or later, we wrap a PDO connection.
+			$this->agaviDatabase = new AgaviPdoDatabase();
+			$this->agaviDatabase->initialize($databaseManager, $parameters);
+		} else {
+			// Propel 1.1 or 1.2, so let's use Creole for the connection.
+			$this->agaviDatabase = new AgaviCreoleDatabase();
+			$this->agaviDatabase->initialize($databaseManager, $parameters);
+		}
 		if($useAutoload) {
-			$configPath = AgaviConfigHandler::replaceConstants($this->getParameter('config'));
-			$datasource = $this->getParameter('datasource', null);
-			$use_as_default = $this->getParameter('use_as_default', false);
-			$config = require($configPath);
-			if($datasource === null || $datasource == 'default') {
-				$datasource = $config['propel']['datasources']['default'];
-			}
 			foreach($config['propel']['datasources'][$datasource]['connection'] as $key => $value) {
-				$this->setParameter($key, $value);
+				$this->agaviDatabase->setParameter($key, $value);
 			}
-			$this->setParameter('method', 'normal');
+			$this->agaviDatabase->setParameter('method', 'normal');
 			if(!self::isDefaultConfigPathSet()) {
 				self::setDefaultConfigPath($configPath);
 				if($use_as_default) {
 					self::setDefaultConfigPathSet();
 				}
 			}
+			if(isset($config['propel']['classes'])) {
+				$this->propelAutoloads = $config['propel']['classes'];
+				spl_autoload_register(array($this, 'autoload'));
+			}
+		}
+	}
+	
+	/**
+	 * Autoloading function for Propel 1.3.
+	 *
+	 * @param      string The name of the class to autoload.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function autoload($className) {
+		if(isset($this->propelAutoloads[$className])) {
+			// it's a propel runtime class. autoload Propel, it will handle the rest.
+			class_exists('Propel');
 		}
 	}
 
@@ -221,4 +312,20 @@ class AgaviPropelDatabase extends AgaviCreoleDatabase
 	{
 		return $this->getParameter('config');
 	}
+
+	/**
+	 * Execute the shutdown procedure.
+	 *
+	 * @throws     <b>AgaviDatabaseException</b> If an error occurs while shutting 
+	 *                                           down this database.
+	 *
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
+	 */
+	public function shutdown()
+	{
+		$this->agaviDatabase->shutdown();
+	}
 }
+
+?>
