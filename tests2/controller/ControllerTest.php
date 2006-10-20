@@ -65,18 +65,6 @@ class ControllerTest extends AgaviTestCase
 		}
 	}
 	
-	public function testCantForwardToUnconfiguredModule()
-	{
-		$controller = $this->_controller;
-		$controller->setRenderMode(AgaviView::RENDER_VAR);
-		try {
-			$controller->forward('NoConfigModule', 'Some');
-			$this->assertTrue(0,'Expected ParseException not thrown, there is only an empty module.ini there!');
-		} catch (AgaviParseException $e) {
-			$this->assertRegexp('/Start tag expected/i', $e->getMessage());
-		}
-	}
-
 	public function testForwardingToDisabledModule()
 	{
 		AgaviConfig::set('actions.module_disabled_module', 'ErrorModule', false);
