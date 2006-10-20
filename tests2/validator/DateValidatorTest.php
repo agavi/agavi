@@ -10,7 +10,7 @@ class DateValidatorWrapper extends AgaviDateValidator
 		$this->data = $data;
 	}
 
-	public function getData($paramname = 'param')
+	public function getData($paramname)
 	{
 		return $this->data;
 	}

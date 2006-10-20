@@ -13,7 +13,7 @@ class TRTestSampleRenderer extends AgaviRenderer
 
 class TRTestSampleView extends AgaviView
 {
-	public function initialize(AgaviResponse $response, $attributes = array())
+	public function initialize(AgaviResponse $response, array $attributes = array())
 	{
 		$this->context = $response->getContext();
 

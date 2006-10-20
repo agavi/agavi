@@ -331,7 +331,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 */
 	protected function getArgument()
 	{
-		$argNames = $this->getParameter('arguments');
+		$argNames = $this->getParameter('arguments', array());
 		reset($argNames);
 		return current($argNames);
 	}
@@ -341,7 +341,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 */
 	protected function getArguments()
 	{
-		return $this->getParameter('arguments');
+		return $this->getParameter('arguments', array());
 	}
 
 	protected function hasAllArgumentsSet()

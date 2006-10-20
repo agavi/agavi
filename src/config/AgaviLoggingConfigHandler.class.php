@@ -119,7 +119,7 @@ class AgaviLoggingConfigHandler extends AgaviConfigHandler
 				if($logger['level'] !== null) {
 					$data[] = sprintf('$%s->setLevel(%s);', $name, $logger['level']);
 				}
-				$data[] = sprintf('AgaviLoggerManager::setLogger("%s", $%s);', $name, $name);
+				$data[] = sprintf('$this->context->getLoggerManager()->setLogger("%s", $%s);', $name, $name);
 			}
 		}
 

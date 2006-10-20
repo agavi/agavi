@@ -1,7 +1,7 @@
 <?php
 class SampleSecurityUser extends AgaviSecurityUser
 {
-	public function initialize(AgaviContext $context, $parameters=array())
+	public function initialize(AgaviContext $context, array $parameters = array())
 	{
 		parent::initialize($context, $parameters);
 		$this->context = $context;

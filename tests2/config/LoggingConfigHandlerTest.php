@@ -8,7 +8,7 @@ class TestLogger extends AgaviLogger
 	public $appenders;
 	public $level;
 
-	public function setAppender($name, $appender)
+	public function setAppender($name, AgaviAppender $appender)
 	{
 		$this->appenders[$name] = $appender;
 	}
@@ -23,39 +23,42 @@ class TestLogger1 extends TestLogger { }
 class TestLogger2 extends TestLogger { }
 class TestLogger3 extends TestLogger { }
 
-class TestAppender
+class TestAppender extends AgaviAppender
 {
 	public $params = null;
 	public $layout = null;
 
-	public function initialize(AgaviContext $context, $params)
+	public function initialize(AgaviContext $context, array $params = array())
 	{
 		$this->params = $params;
 	}
 
-	public function setLayout($layout)
+	public function setLayout(AgaviLayout $layout)
 	{
 		$this->layout = $layout;
 	}
 
+	public function shutdown() {}
+	public function write($message) {}
 }
 
 class TestAppender1 extends TestAppender { }
 class TestAppender2 extends TestAppender { }
 class TestAppender3 extends TestAppender { }
 
-class TestLayout
+class TestLayout extends AgaviLayout
 {
 	public $params = null;
 
-	public function initialize(AgaviContext $context, $params)
+	public function initialize(AgaviContext $context, array $params = array())
 	{
 		$this->params = $params;
 	}
+	public function format(AgaviMessage $message) {}
 }
 
 class TestLayout1 extends TestLayout { }
-class TestLayout2 extends TestAppender { }
+class TestLayout2 extends TestLayout { }
 
 
 class LoggingConfigHandlerTest extends ConfigHandlerTestBase
@@ -73,9 +76,9 @@ class LoggingConfigHandlerTest extends ConfigHandlerTestBase
 
 		$this->includeCode($LCH->execute(AgaviConfig::get('core.config_dir') . '/tests/logging.xml'));
 
-		$test1 = AgaviLoggerManager::getLogger('test1');
-		$test2 = AgaviLoggerManager::getLogger('test2');
-		$test3 = AgaviLoggerManager::getLogger('test3');
+		$test1 = $this->context->getLoggerManager()->getLogger('test1');
+		$test2 = $this->context->getLoggerManager()->getLogger('test2');
+		$test3 = $this->context->getLoggerManager()->getLogger('test3');
 
 		$this->assertType('TestLogger1', $test1);
 		$this->assertSame(TestLogger::INFO, $test1->level);

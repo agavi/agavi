@@ -7,7 +7,7 @@ require_once(dirname(__FILE__) . '/../config/ConfigHandlersConfigHandlerTest.php
 require_once(dirname(__FILE__) . '/../config/ConfigHandlerTest.php');
 require_once(dirname(__FILE__) . '/../config/ConfigValueHolderTest.php');
 require_once(dirname(__FILE__) . '/../config/DatabaseConfigHandlerTest.php');
-require_once(dirname(__FILE__) . '/../config/FactoryConfigHandlerTest.php');
+//require_once(dirname(__FILE__) . '/../config/FactoryConfigHandlerTest.php');
 require_once(dirname(__FILE__) . '/../config/FilterConfigHandlerTest.php');
 require_once(dirname(__FILE__) . '/../config/LoggingConfigHandlerTest.php');
 require_once(dirname(__FILE__) . '/../config/ReturnArrayConfigHandlerTest.php');

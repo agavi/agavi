@@ -1,4 +1,8 @@
 <?php
+
+date_default_timezone_set('Europe/Berlin');
+error_reporting(E_ALL | E_STRICT);
+
 if(!defined('PHPUnit2_MAIN_METHOD')) {
 	define('PHPUnit2_MAIN_METHOD', 'AllTests::main');
 }
