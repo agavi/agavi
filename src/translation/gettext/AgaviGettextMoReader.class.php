@@ -38,7 +38,8 @@ final class AgaviGettextMoReader
 
 		// WTF! php 5.1.2 (at least on my ubuntu box) returns 950412de0 (i have NO
 		// clue where the trailing 0 comes from, so cut it out again
-		$fileId = substr(array_pop(unpack('H*', substr($content, 0, 4))), 0, 8);
+		$unpacked = unpack('H*', substr($content, 0, 4));
+		$fileId = substr(array_pop($unpacked), 0, 8);
 
 		// little endian: V   big endian: N
 		if($fileId == 'de120495') {
