@@ -83,17 +83,26 @@ class AgaviXmlConfigParser extends AgaviConfigParser
 
 		// suppress errors from dom, ppl should use a proper xml editor to validate their files atm ...
 		set_error_handler(array($this, 'errorHandler'));
-		$doc = DOMDocument::load($config);
+		$doc = new DOMDocument();
+		$doc->load($config);
 		restore_error_handler();
 		if(!($doc instanceof DOMDocument)) {
 			$error = 'Configuration file "' . $config . '" could not be parsed, error' . (count($this->errors) > 1 ? 's' : '') . ' reported by DOM: ' . "\n\n" . implode("\n", $this->errors);
 			throw new AgaviParseException($error);
+		} else {
+			$this->errors = array();
 		}
 		$this->encoding = strtolower($doc->encoding);
 		
 		// We must use the @ to prevent warnings when an XInclude fails
 		// I know that is not optimal, but we need this, so people can blindly include configs provided by modules, without everything breaking to smithereens by throwing an Exception if the module isn't actually there. XInclude is something advanced, and I expect people who use it to be able to hunt down the problem (incorrect path) when an XInclude just doesn't seem to work.
-		@$doc->xinclude();
+		set_error_handler(array($this, 'errorHandler'));
+		$doc->xinclude(LIBXML_NOWARNING);
+		restore_error_handler();
+		if(count($this->errors)) {
+			$error = 'Configuration file "' . $config . '" could not be parsed, error' . (count($this->errors) > 1 ? 's' : '') . ' reported by DOM: ' . "\n\n" . implode("\n", $this->errors);
+			throw new AgaviParseException($error);
+		}
 		
 		$this->xpath = new DomXPath($doc);
 		
