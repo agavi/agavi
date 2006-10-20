@@ -78,10 +78,13 @@ abstract class AgaviDatabase extends AgaviParameterHolder
 	 * @return     mixed A database connection.
 	 *
 	 * @throws     <b>AgaviDatabaseException</b> If a connection could not be retrieved.
+	 *
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function getConnection()
 	{
-		if($this->connection == null) {
+		if($this->connection === null) {
 			$this->connect();
 		}
 
@@ -95,10 +98,13 @@ abstract class AgaviDatabase extends AgaviParameterHolder
 	 * @return     mixed A database resource.
 	 *
 	 * @throws     <b>AgaviDatabaseException</b> If no resource could be retrieved
+	 *
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function getResource()
 	{
-		if($this->resource == null) {
+		if($this->resource === null) {
 			$this->connect();
 		}
 
