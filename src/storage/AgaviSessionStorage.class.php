@@ -97,8 +97,16 @@ class AgaviSessionStorage extends AgaviStorage
 	{
 		// session_id is checked to ensure that a session has not been started already.
 		// This can happen if a class inheriting SessionStorage starts it in initialize method.
-		if($this->getParameter('auto_start', true) && session_id() == '') {
+		if($this->getParameter('auto_start', true)) {
 			session_start();
+			$params = session_get_cookie_params();
+			if($params['lifetime'] != 0) {
+				if(version_compare(phpversion(), '5.2', 'ge')) {
+					setcookie(session_name(), session_id(), time() + $params['lifetime'], $params['path'], $params['domain'], $params['secure'], $params['httponly']);
+				} else {
+					setcookie(session_name(), session_id(), time() + $params['lifetime'], $params['path'], $params['domain'], $params['secure']);
+				}
+			}
 		}
 	}
 
