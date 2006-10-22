@@ -83,8 +83,9 @@ class AgaviSessionStorage extends AgaviStorage
 	}
 
 	/**
-	 * Starts a session unless user has explicitly disabled auto start (see
-	 * optional parameters) or a session has already been started.
+	 * Starts a session unless a session has already been started.
+	 * The method will be called after initialization if auto_start is true.
+	 * If auto_start is false, this method must be called manually.
 	 * This code cannot be run in initialize(), because initialization has to
 	 * finish completely, for all instances, before a session can be created:
 	 * A Database Session Storage must initialize the parent, then itself, and
@@ -95,9 +96,7 @@ class AgaviSessionStorage extends AgaviStorage
 	 */
 	public function startup()
 	{
-		// session_id is checked to ensure that a session has not been started already.
-		// This can happen if a class inheriting SessionStorage starts it in initialize method.
-		if($this->getParameter('auto_start', true)) {
+		if(session_id() === '') {
 			session_start();
 			$params = session_get_cookie_params();
 			if($params['lifetime'] != 0) {

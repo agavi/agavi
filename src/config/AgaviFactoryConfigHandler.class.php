@@ -150,7 +150,7 @@ class AgaviFactoryConfigHandler extends AgaviConfigHandler
 
 				$data['storage_code'] =	'$this->storage = new ' . $data['storage']['class'] . '();' . "\n" .
 																'$this->storage->initialize($this, ' . var_export($data['storage']['params'], true) . ');' . "\n" .
-																'$this->storage->startup();';
+																'if($this->storage->getParameter("auto_start", true)) $this->storage->startup();';
 			}
 
 			// ValidatorManager
