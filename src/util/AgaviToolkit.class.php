@@ -156,6 +156,79 @@ final class AgaviToolkit
 		}
 	}
 
+	/**
+	 * Returns the method from the given definition list matching the given
+	 * parameters.
+	 *
+	 * @param      array  The definitions of the functions.
+	 * @param      array  The parameters which were passed to the function.
+	 *
+	 * @return     string The name of the function which matched.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public static function overloadHelper(array $definitions, array $parameters)
+	{
+		$countedDefs = array();
+		foreach($definitions as $def) {
+			$countedDefs[count($def['parameters'])][] = $def;
+		}
+
+		$paramCount = count($parameters);
+		if(!isset($countedDefs[$paramCount])) {
+			throw new AgaviException('overloadhelper couldn\'t find a matching method with the parameter count ' . $paramCount);
+		}
+		if(count($countedDefs[$paramCount]) > 1) {
+			$matchCount = 0;
+			$matchIndex = null;
+			foreach($countedDefs[$paramCount] as $key => $paramDef) {
+				$success = true;
+				for($i = 0; $i < $paramCount; ++$i) {
+					if(substr(gettype($parameters[$i]), 0, strlen($paramDef['parameters'][$i])) != $paramDef['parameters'][$i]) {
+						$success = false;
+						break;
+					}
+				}
+				if($success) {
+					++$matchCount;
+					$matchIndex = $key;
+				}
+			}
+			if($matchCount == 0) {
+				throw new AgaviException('overloadhelper couldn\'t find a matching method');
+			} elseif($matchCount > 1) {
+				throw new AgaviException('overloadhelper found ' . $matchCount . ' matching methods');
+			}
+			return $countedDefs[$paramCount][$key]['name'];
+		} else {
+			return $countedDefs[$paramCount][0]['name'];
+		}
+	}
+
+	/**
+	 * This function takes the numerator and divides it thru the denominator while
+	 * storing the remainder and returning the quotient.
+	 *
+	 * @param      float The numerator.
+	 * @param      int   The denominator.
+	 * @param      int   The remainder.
+	 *
+	 * @return     int   The floored quotient.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public static function floorDivide($numerator, $denominator, &$remainder)
+	{
+		if(intval($denominator) != $denominator) {
+			throw new AgaviException('AgaviToolkit::floorDivive works only for int denominators');
+		}
+		$quotient = floor($numerator / $denominator);
+		$remainder = (int) ($numerator - ($quotient * $denominator));
+
+		return $quotient;
+	}
 }
 
 ?>
