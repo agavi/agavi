@@ -206,6 +206,34 @@ class AgaviTranslationManager
 	}
 
 	/**
+	 * Formats a date in the current locale.
+	 *
+	 * @param      mixed The date to be formatted.
+	 *
+	 * @return     string The formatted date.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function _d($date, $domain = null, $locale = null)
+	{
+		if($domain === null) {
+			$domain = $this->defaultDomain;
+		}
+
+		if($locale === null) {
+			$this->loadCurrentLocale();
+		} elseif(is_string($locale)) {
+			$locale = $this->getLocaleFromIdentifier($locale);
+		}
+		
+		$domainExtra = '';
+		$translator = $this->getTranslators($domain, $domainExtra);
+
+		return $translator['date']->translate($date, $domainExtra, $locale);
+	}
+
+	/**
 	 * Formats a currency in the current locale.
 	 *
 	 * @param      mixed The number to be formatted.
@@ -508,6 +536,71 @@ class AgaviTranslationManager
 		$locale->initialize($this->context, $identifier, $data);
 
 		return $locale;
+	}
+
+	// TODO: implement properly!
+	public function getCurrentTimeZone()
+	{
+		return $this->createTimeZone('DEFAULT');
+	}
+
+	public function createTimeZone($id)
+	{
+		//We first try to lookup the zone ID in our system list.  If this
+		//fails, we try to parse it as a custom string GMT[+-]hh:mm.
+
+		$result = AgaviTimeZone::createSystemTimeZone($this, $id);
+
+		if(!$result) {
+			$result = AgaviTimeZone::createCustomTimeZone($this, $id);
+		}
+/*
+		if(!$result) {
+			$result = AgaviTimeZone::getGMT();
+		}
+*/
+
+		return $result;
+	}
+
+
+	public function createCalendar($type = null)
+	{
+		$locale = $this->getCurrentLocale();
+		$calendarType = null;
+		$zone = null;
+		if($type instanceof AgaviLocale) {
+			$locale = $type;
+		} elseif($type instanceof AgaviTimeZone) {
+			$zone = $type;
+		} elseif($type !== null) {
+			$calendarType = $type;
+		}
+
+		if(!$calendarType) {
+			$calendarType = $locale->getLocaleCalendar();
+			if(!$calendarType) {
+				$calendarType = 'gregorian';
+			}
+		}
+
+		switch($calendarType) {
+			case 'gregorian':
+				$c = new AgaviGregorianCalendar($this /* $locale */);
+				break;
+			default:
+				throw new AgaviException('Calendar type ' . $calendarType . ' not supported');
+		}
+
+
+		// Now, reset calendar to default state:
+		if($zone) {
+			$c->adoptTimeZone($zone); // TODO: Set the correct time zone
+		}
+
+		$c->setTime(AgaviCalendar::getNow()); // let the new calendar have the current time.
+
+		return $c;
 	}
 }
 

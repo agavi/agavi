@@ -26,12 +26,20 @@
  *
  * @version    $Id$
  */
-class AgaviDateFormatter implements AgaviITranslator
+class AgaviDateFormatter extends AgaviSimpleDateFormatter implements AgaviITranslator
 {
 	/**
 	 * @var        AgaviContext An AgaviContext instance.
 	 */
 	protected $context = null;
+
+	protected $locale = null;
+
+	protected $type = null;
+
+	protected $formatType = null;
+
+	protected $customFormat = null;
 
 	/**
 	 * @see        AgaviITranslator::getContext()
@@ -47,6 +55,22 @@ class AgaviDateFormatter implements AgaviITranslator
 	public function initialize(AgaviContext $context, array $parameters = array())
 	{
 		$this->context = $context;
+		$type = 'datetime';
+		$formatType = null;
+		if(isset($parameters['type']) && in_array($parameters['type'], array('date', 'time'))) {
+			$type = $parameters['type'];
+		}
+		if(isset($parameters['format'])) {
+			$format = $parameters['format'];
+			if(!in_array($format, array('full', 'long', 'medium', 'short'))) {
+				$this->customFormat = $format;
+				$this->parseFormatString($format);
+			} else {
+				$formatType = $format;
+			}
+		}
+		$this->type = $type;
+		$this->formatType = $formatType;
 	}
 
 	/**
@@ -54,7 +78,11 @@ class AgaviDateFormatter implements AgaviITranslator
 	 */
 	public function translate($message, $domain, AgaviLocale $locale = null)
 	{
-		return $message;
+		if(!$locale) {
+			$locale = $this->locale;
+		}
+
+		return $this->format($message, 'gregorian', $locale);
 	}
 
 	/**
@@ -62,6 +90,42 @@ class AgaviDateFormatter implements AgaviITranslator
 	 */
 	public function localeChanged($newLocale)
 	{
+		$this->locale = $newLocale;
+
+		if($this->customFormat === null) {
+			$formatName = $this->formatType;
+
+			
+			if($this->type == 'datetime' || $this->type == 'time') {
+				if($this->formatType === null) {
+					$formatName = $this->locale->getCalendarTimeFormatDefaultName('gregorian');
+				} else {
+					$formatName = $this->formatType;
+				}
+				$format = $timeFormat = $this->locale->getCalendarTimeFormatPattern('gregorian', $formatName);
+			}
+
+			if($this->type == 'datetime' || $this->type == 'date') {
+				if($this->formatType === null) {
+					$formatName = $this->locale->getCalendarDateFormatDefaultName('gregorian');
+				} else {
+					$formatName = $this->formatType;
+				}
+				$format = $dateFormat = $this->locale->getCalendarDateFormatPattern('gregorian', $formatName);
+			}
+
+			if($this->type == 'datetime') {
+				var_dump("asd");
+				$formatName = $this->locale->getCalendarDateTimeFormatDefaultName('gregorian');
+				$formatStr = $this->locale->getCalendarDateTimeFormat('gregorian', $formatName);
+				var_dump($formatStr);
+				$format = str_replace(array('{0}', '{1}'), array($timeFormat, $dateFormat), $formatStr);
+			}
+
+			var_dump($format);
+			$this->parseFormatString($format);
+//			$this->locale = $this->context = null;var_dump($this);
+		}
 	}
 }
 
