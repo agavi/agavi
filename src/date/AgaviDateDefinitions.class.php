@@ -358,6 +358,28 @@ final class AgaviDateDefinitions
 	const SATURDAY                = 7;
 
 
+	/** 
+	 * The number of milliseconds per second
+	 */
+	const MILLIS_PER_SECOND          = 1000.0;
+	/** 
+	 * The number of milliseconds per minute
+	 */
+	const MILLIS_PER_MINUTE          = 60000.0;
+	/**
+	 * The number of milliseconds per hour
+	 */
+	const MILLIS_PER_HOUR            = 3600000.0;
+	/**
+	 The number of milliseconds per day
+	 */
+	const MILLIS_PER_DAY             = 86400000.0;
+
+	/**
+	 The number of seconds per day
+	 */
+	const SECONDS_PER_DAY            = 86400;
+
 	private function __construct()
 	{
 	}
