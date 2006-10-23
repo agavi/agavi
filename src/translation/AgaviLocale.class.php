@@ -530,32 +530,17 @@ class AgaviLocale
 
 	public function getCalendarDateTimeFormats($calendar)
 	{
-		return isset($this->data['calendars'][$calendar]['dateTimeFormats'])
-			? $this->data['calendars'][$calendar]['dateTimeFormats']
+		return isset($this->data['calendars'][$calendar]['dateTimeFormats']['formats'])
+			? $this->data['calendars'][$calendar]['dateTimeFormats']['formats']
 			: null;
 	}
 
 	public function getCalendarDateTimeFormat($calendar, $id)
 	{
-		return isset($this->data['calendars'][$calendar]['dateTimeFormats'][$id])
-			? $this->data['calendars'][$calendar]['dateTimeFormats'][$id]
+		return isset($this->data['calendars'][$calendar]['dateTimeFormats']['formats'][$id])
+			? $this->data['calendars'][$calendar]['dateTimeFormats']['formats'][$id]
 			: null;
 	}
-
-	public function getCalendarDateTimeFormatPattern($calendar, $id)
-	{
-		return isset($this->data['calendars'][$calendar]['dateTimeFormats'][$id]['pattern'])
-			? $this->data['calendars'][$calendar]['dateTimeFormats'][$id]['pattern']
-			: null;
-	}
-
-	public function getCalendarDateTimeFormatDisplayName($calendar, $id)
-	{
-		return isset($this->data['calendars'][$calendar]['dateTimeFormats'][$id]['displayName'])
-			? $this->data['calendars'][$calendar]['dateTimeFormats'][$id]['displayName']
-			: null;
-	}
-
 
 	public function getCalendarFields($calendar, $id)
 	{

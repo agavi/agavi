@@ -63,6 +63,46 @@ class AgaviLdmlConfigHandler extends AgaviConfigHandler
 			}
 		}
 
+		$dayMap = array(
+										'sun' => AgaviDateDefinitions::SUNDAY,
+										'mon' => AgaviDateDefinitions::MONDAY,
+										'tue' => AgaviDateDefinitions::TUESDAY,
+										'wed' => AgaviDateDefinitions::WEDNESDAY,
+										'thu' => AgaviDateDefinitions::THURSDAY,
+										'fri' => AgaviDateDefinitions::FRIDAY,
+										'sat' => AgaviDateDefinitions::SATURDAY,
+		);
+
+		// fix the day indices for all day fields
+		foreach($data['calendars'] as $calKey => &$calValue) {
+			// skip the 'default' => '' key => value pair
+			if(is_array($calValue)) {
+				if(isset($calValue['days']['format'])) {
+					foreach($calValue['days']['format'] as $formatKey => &$formatValue) {
+						if(is_array($formatValue)) {
+							$newData = array();
+							foreach($formatValue as $day => $value) {
+								$newData[$dayMap[$day]] = $value;
+							}
+							$formatValue = $newData;
+						}
+					}
+				}
+
+				if(isset($calValue['days']['stand-alone'])) {
+					foreach($calValue['days']['stand-alone'] as $formatKey => &$formatValue) {
+						if(is_array($formatValue)) {
+							$newData = array();
+							foreach($formatValue as $day => $value) {
+								$newData[$dayMap[$day]] = $value;
+							}
+							$formatValue = $newData;
+						}
+					}
+				}
+			}
+		}
+
 		$code = array();
 		$code[] = 'return ' . var_export($data, true) . ';';
 
@@ -417,13 +457,13 @@ array data format
 
 						if(isset($calendar->dateTimeFormats)) {
 							$dtf = $calendar->dateTimeFormats;
-							$data['calendars'][$calendarName]['default'] = isset($dtf->default) ? $dtf->default->getAttribute('choice') : '__default';
+							$data['calendars'][$calendarName]['dateTimeFormats']['default'] = isset($dtf->default) ? $dtf->default->getAttribute('choice') : '__default';
 
 							$dtfItems = $this->getChildsOrAlias($dtf);
 							foreach($dtfItems as $item) {
 								if($item->getName() == 'dateTimeFormatLength') {
 									if(isset($item->dateTimeFormat->pattern)) {
-										$data['calendars'][$calendarName]['formats'][$item->getAttribute('type', '__default')] = $item->dateTimeFormat->pattern->getValue();
+										$data['calendars'][$calendarName]['dateTimeFormats']['formats'][$item->getAttribute('type', '__default')] = $item->dateTimeFormat->pattern->getValue();
 									} else {
 										throw new AgaviException('unknown child content in dateTimeFormatLength tag');
 									}
@@ -432,14 +472,14 @@ array data format
 										if($dateFormatItem->getName() != 'dateFormatItem') {
 											throw new AgaviException('unknown childtag "' . $dateFormatItem->getName() . '" in availableFormats tag');
 										}
-										$data['calendars'][$calendarName]['availableFormats'][$dateFormatItem->getAttribute('id')] = $dateFormatItem->getValue();
+										$data['calendars'][$calendarName]['dateTimeFormats']['availableFormats'][$dateFormatItem->getAttribute('id')] = $dateFormatItem->getValue();
 									}
 								} elseif($item->getName() == 'appendItems') {
 									foreach($item as $appendItem) {
 										if($appendItem->getName() != 'appendItem') {
 											throw new AgaviException('unknown childtag "' . $appendItem->getName() . '" in appendItems tag');
 										}
-										$data['calendars'][$calendarName]['appendItems'][$appendItem->getAttribute('request')] = $appendItem->getValue();
+										$data['calendars'][$calendarName]['dateTimeFormats']['appendItems'][$appendItem->getAttribute('request')] = $appendItem->getValue();
 									}
 								} elseif($item->getName() != 'default') {
 									throw new AgaviException('unknown childtag "' . $item->getName() . '" in dateTimeFormats tag');
