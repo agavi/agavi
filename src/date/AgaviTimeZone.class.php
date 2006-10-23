@@ -244,7 +244,7 @@ abstract class AgaviTimeZone
 				$locale = $this->translationManager->getCurrentLocale();
 			}
 		} else {
-			throw new AgaviException('Illegal arguments for AgaviTimeZone::getDisplayName');
+			throw new InvalidArgumentException('Illegal arguments for AgaviTimeZone::getDisplayName');
 		}
 
 

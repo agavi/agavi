@@ -747,7 +747,7 @@ class AgaviSimpleTimeZone extends AgaviTimeZone
 		// field) with fields ZONE_OFFSET and DST_OFFSET. We can't get rid of
 		// this method because it's public API. - liu 8/10/98
 		if($month < AgaviDateDefinitions::JANUARY || $month > AgaviDateDefinitions::DECEMBER) {
-				throw new AgaviException('[U_ILLEGAL_ARGUMENT_ERROR]');
+				throw new InvalidArgumentException('Month out of range');
 				return 0;
 		}
 
@@ -783,7 +783,7 @@ class AgaviSimpleTimeZone extends AgaviTimeZone
 		// field) with fields ZONE_OFFSET and DST_OFFSET. We can't get rid of
 		// this method because it's public API. - liu 8/10/98
 		if($month < AgaviDateDefinitions::JANUARY || $month > AgaviDateDefinitions::DECEMBER) {
-				throw new AgaviException('[U_ILLEGAL_ARGUMENT_ERROR]');
+				throw new InvalidArgumentException('Month out of range');
 				return -1;
 		}
 
@@ -828,7 +828,7 @@ class AgaviSimpleTimeZone extends AgaviTimeZone
 				|| $monthLength > 31
 				|| $prevMonthLength < 28
 				|| $prevMonthLength > 31) {
-				throw new AgaviException('[U_ILLEGAL_ARGUMENT_ERROR]');
+				throw new InvalidArgumentException('One of the supplied parameters is out of range');
 				return -1;
 		}
 
@@ -918,7 +918,7 @@ class AgaviSimpleTimeZone extends AgaviTimeZone
 	public function setDSTSavings($millisSavedDuringDST)
 	{
 		if($millisSavedDuringDST <= 0) {
-			throw new AgaviException('[U_ILLEGAL_ARGUMENT_ERROR]');
+			throw new InvalidArgumentException('The amount must be a positive number');
 		} else {
 			$this->dstSavings = $millisSavedDuringDST;
 		}
@@ -1048,7 +1048,7 @@ class AgaviSimpleTimeZone extends AgaviTimeZone
 		$this->decodeRules();
 
 		if($savingsDST <= 0) {
-			throw new AgaviException('[U_ILLEGAL_ARGUMENT_ERROR]');
+			throw new InvalidArgumentException('The DST savings amount must be a positive number');
 		}
 	}
 
@@ -1262,11 +1262,11 @@ class AgaviSimpleTimeZone extends AgaviTimeZone
 			$this->dstSavings = AgaviDateDefinitions::MILLIS_PER_HOUR;
 		}
 		if($this->startDay != 0) {
-			if($this->startMonth < AgaviDateDefinitions::JANUARY || startMonth > AgaviDateDefinitions::DECEMBER) {
-				throw new AgaviException('[U_ILLEGAL_ARGUMENT_ERROR]');
+			if($this->startMonth < AgaviDateDefinitions::JANUARY || $this->startMonth > AgaviDateDefinitions::DECEMBER) {
+				throw new InvalidArgumentException('startMonth out of range');
 			}
 			if($this->startTime < 0 || $this->startTime > AgaviDateDefinitions::MILLIS_PER_DAY || $this->startTimeMode < self::WALL_TIME || $this->startTimeMode > self::UTC_TIME) {
-				throw new AgaviException('[U_ILLEGAL_ARGUMENT_ERROR]');
+				throw new InvalidArgumentException('startTime out of range');
 			}
 			if($this->startDayOfWeek == 0) {
 				$this->startMode = self::DOM_MODE;
@@ -1283,15 +1283,15 @@ class AgaviSimpleTimeZone extends AgaviTimeZone
 					}
 				}
 				if($this->startDayOfWeek > AgaviDateDefinitions::SATURDAY) {
-					throw new AgaviException('[U_ILLEGAL_ARGUMENT_ERROR]');
+					throw new InvalidArgumentException('startDayOfWeek out of range');
 				}
 			}
 			if($this->startMode == self::DOW_IN_MONTH_MODE) {
 				if($this->startDay < -5 || $this->startDay > 5) {
-					throw new AgaviException('[U_ILLEGAL_ARGUMENT_ERROR]');
+					throw new AgaviException('startDay out of range');
 				}
 			} elseif($this->startDay < 1 || $this->startDay > self::$STATICMONTHLENGTH[$this->startMonth]) {
-				throw new AgaviException('[U_ILLEGAL_ARGUMENT_ERROR]');
+				throw new InvalidArgumentException('startDay out of range');
 			}
 		}
 	}
@@ -1310,10 +1310,10 @@ class AgaviSimpleTimeZone extends AgaviTimeZone
 		}
 		if($this->endDay != 0) {
 			if($this->endMonth < AgaviDateDefinitions::JANUARY || $this->endMonth > AgaviDateDefinitions::DECEMBER) {
-				throw new AgaviException('[U_ILLEGAL_ARGUMENT_ERROR]');
+				throw new InvalidArgumentException('endMonth out of range');
 			}
 			if($this->endTime < 0 || $this->endTime > AgaviDateDefinitions::MILLIS_PER_DAY || $this->endTimeMode < self::WALL_TIME || $this->endTimeMode > self::UTC_TIME) {
-				throw new AgaviException('[U_ILLEGAL_ARGUMENT_ERROR]');
+				throw new InvalidArgumentException('endTime out of range');
 			}
 			if($this->endDayOfWeek == 0) {
 				$this->endMode = self::DOM_MODE;
@@ -1330,15 +1330,15 @@ class AgaviSimpleTimeZone extends AgaviTimeZone
 					}
 				}
 				if($this->endDayOfWeek > AgaviDateDefinitions::SATURDAY) {
-					throw new AgaviException('[U_ILLEGAL_ARGUMENT_ERROR]');
+					throw new InvalidArgumentException('endDayOfWeek out of range');
 				}
 			}
 			if($this->endMode == self::DOW_IN_MONTH_MODE) {
 				if($this->endDay < -5 || $this->endDay > 5) {
-					throw new AgaviException('[U_ILLEGAL_ARGUMENT_ERROR]');
+					throw new InvalidArgumentException('endDay out of range');
 				}
 			} elseif($this->endDay < 1 || $this->endDay > self::$STATICMONTHLENGTH[$this->endMonth]) {
-				throw new AgaviException('[U_ILLEGAL_ARGUMENT_ERROR]');
+				throw new InvalidArgumentException('endDay out of range');
 			}
 		}
 	}

@@ -379,7 +379,7 @@ abstract class AgaviCalendar
 				break;
 
 			default:
-				throw new AgaviException('[U_ILLEGAL_ARGUMENT_ERROR] AgaviCalendar::add(): field not supported');
+				throw new InvalidArgumentException('AgaviCalendar::add(): field ' . $field . ' is not supported');
 				return;
 		}
 
@@ -757,7 +757,7 @@ abstract class AgaviCalendar
 				return;
 		default:
 				// Other fields cannot be rolled by this method
-				throw new AgaviException('[U_ILLEGAL_ARGUMENT_ERROR] AgaviCalendar::roll(). field cannot be rolled with this method');
+				throw new InvalidArgumentException('AgaviCalendar::roll(): field ' . $field . ' cannot be rolled with this method');
 		}
 	}
 
@@ -842,8 +842,9 @@ abstract class AgaviCalendar
 				} else {
 					$max <<= 1;
 					if($max < 0) {
+						// TODO: check if we can change this to float to support a larger range
 						// Field difference too large to fit into int32_t
-						throw new AgaviException('[U_ILLEGAL_ARGUMENT_ERROR]');
+						throw new InvalidArgumentException('The difference is to large to fit into an integer');
 					}
 				}
 			}
@@ -875,8 +876,9 @@ abstract class AgaviCalendar
 				} else {
 					$max <<= 1;
 					if($max == 0) {
+						// TODO: see above 
 						// Field difference too large to fit into int32_t
-						throw new AgaviException('[U_ILLEGAL_ARGUMENT_ERROR]');
+						throw new InvalidArgumentException('The difference is to large to fit into an integer');
 					}
 				}
 			}
@@ -3400,8 +3402,7 @@ abstract class AgaviCalendar
 				break;
 			case AgaviDateDefinitions::DAY_OF_WEEK_IN_MONTH:
 				if($this->internalGet($field) == 0) {
-					throw new AgaviException('[U_ILLEGAL_ARGUMENT_ERROR] Illegal argument error');
-					//status = U_ILLEGAL_ARGUMENT_ERROR; // "DAY_OF_WEEK_IN_MONTH cannot be zero"
+					throw new InvalidArgumentException('DAY_OF_WEEK_IN_MONTH cannot be zero');
 					return;
 				}
 				$this->validateField1($field, $this->getMinimum($field), $this->getMaximum($field));
@@ -3432,7 +3433,7 @@ abstract class AgaviCalendar
 	{
 		$value = $this->fFields[$field];
 		if($value < $min || $value > $max) {
-			throw new AgaviException('[U_ILLEGAL_ARGUMENT_ERROR] Illegal argument error. Field: ' . $field . '. Value ' . $value . ' is not within ' . $min . ' and ' . $max);
+			throw new InvalidArgumentException('Illegal argument error. Field: ' . $field . '. Value ' . $value . ' is not within ' . $min . ' and ' . $max);
 		}
 	}
 

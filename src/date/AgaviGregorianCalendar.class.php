@@ -86,7 +86,7 @@ class AgaviGregorianCalendar extends AgaviCalendar
 			$zone = $this->translationManager->getCurrentTimeZone();
 			$locale = $this->translationManager->getCurrentLocale();
 		} else {
-			throw new AgaviInvalidArgumentException('Object of type ' . get_class($zoneOrLocale) . ' was not expected');
+			throw new InvalidArgumentException('Object of type ' . get_class($zoneOrLocale) . ' was not expected');
 		}
 		parent::constructorOO($zone, $locale);
 
