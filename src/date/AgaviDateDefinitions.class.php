@@ -371,14 +371,34 @@ final class AgaviDateDefinitions
 	 */
 	const MILLIS_PER_HOUR            = 3600000.0;
 	/**
-	 The number of milliseconds per day
+	 * The number of milliseconds per day
 	 */
 	const MILLIS_PER_DAY             = 86400000.0;
+	/**
+	 * The number of milliseconds per week 
+	 */
+	const MILLIS_PER_WEEK            = 604800000.0; // 7 * MILLIS_PER_DAY
 
 	/**
-	 The number of seconds per day
+	 * The number of seconds per day
 	 */
 	const SECONDS_PER_DAY            = 86400;
+
+	/**
+	 * The start year of the epoch
+	 */
+	const EPOCH_YEAR                 = 1970;
+
+	/**
+	 * January the 1. in year 1 (Gregorian) as julian day
+	 */
+	const JAN_1_1_JULIAN_DAY         = 1721426.0;
+
+	/**
+	 * January 1, 1970 (Gregorian) as julian day
+	 */
+	const EPOCH_START_AS_JULIAN_DAY  = 2440588.0;
+
 
 	private function __construct()
 	{
