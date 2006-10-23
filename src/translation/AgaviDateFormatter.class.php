@@ -115,16 +115,12 @@ class AgaviDateFormatter extends AgaviSimpleDateFormatter implements AgaviITrans
 			}
 
 			if($this->type == 'datetime') {
-				var_dump("asd");
 				$formatName = $this->locale->getCalendarDateTimeFormatDefaultName('gregorian');
 				$formatStr = $this->locale->getCalendarDateTimeFormat('gregorian', $formatName);
-				var_dump($formatStr);
 				$format = str_replace(array('{0}', '{1}'), array($timeFormat, $dateFormat), $formatStr);
 			}
 
-			var_dump($format);
 			$this->parseFormatString($format);
-//			$this->locale = $this->context = null;var_dump($this);
 		}
 	}
 }
