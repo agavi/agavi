@@ -68,7 +68,7 @@ class AgaviEqualsValidator extends AgaviValidator
 			$value = $this->getData($this->getArgument());
 		}
 
-		foreach($this->getArguments as $key => $argument) {
+		foreach($this->getArguments() as $key => $argument) {
 			if($this->getData($argument) != $value) {
 				$this->throwError();
 				return false;
