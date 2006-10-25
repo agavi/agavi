@@ -214,7 +214,7 @@ class AgaviPropelDatabase extends AgaviDatabase
 			$this->connection = $this->agaviDatabase->getConnection();
 		}
 
-		return parent::getConnection();;
+		return parent::getConnection();
 	}
 
 	/**
@@ -234,7 +234,7 @@ class AgaviPropelDatabase extends AgaviDatabase
 			$this->resource = $this->agaviDatabase->getResource();
 		}
 
-		return parent::getConnection();
+		return parent::getResource();
 	}
 
 	/**
