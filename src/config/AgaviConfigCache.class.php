@@ -251,9 +251,6 @@ final class AgaviConfigCache
 		}
 		// application configuration handlers
 		require(AgaviConfigCache::checkConfig($cfg));
-
-		// module level configuration handlers
-		// are gone :)
 	}
 
 	/**
