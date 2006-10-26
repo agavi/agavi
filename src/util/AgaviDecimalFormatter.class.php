@@ -29,10 +29,19 @@
 class AgaviDecimalFormatter
 {
 	/**
+	 * @var        string The format string given by the user
+	 */
+	protected $originalFormatString = null;
+
+	/**
 	 * @var        string The format string which will be given to sprintf
 	 */
 	protected $formatString = '';
 
+	/**
+	 * @var        string The format string which will be given to sprintf if the 
+	 *                    number is negative
+	 */
 	protected $negativeFormatString = null;
 
 	/**
@@ -105,8 +114,15 @@ class AgaviDecimalFormatter
 		}
 	}
 
+	public function getFormatString()
+	{
+		return $this->originalFormatString;
+	}
+
 	public function parseFormatString($format)
 	{
+		$this->originalFormatString = $format;
+
 		if(($pos = strpos($format, ';')) !== false) {
 			$fullFormat = $format;
 			$format = substr($fullFormat, 0, $pos);
@@ -419,7 +435,9 @@ class AgaviDecimalFormatter
 			$stepsSinceLastGroup = 0;
 			for($i = strlen($integralPart) - 1; $i >= 0; --$i) {
 				if($stepsSinceLastGroup == $gd[$gdPos]) {
-					$newIntegralPart .= $this->groupingSeparator;
+					// we need to reverse the ggroupingSeparator here because else utf-8 
+					// encoded chars would end up in reverse order in the output string
+					$newIntegralPart .= strrev($this->groupingSeparator);
 					$stepsSinceLastGroup = 0;
 					++$gdPos;
 				}
