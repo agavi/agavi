@@ -165,7 +165,7 @@ $otherLanguages = array_diff_key($languages, array($currentLanguage => null));
 <?php endif; ?>
 				<li><a href="<?php echo $r->gen('secure'); ?>"><?php echo $tm->_('A Secure Action', 'default.menu'); ?></a></li>
 				<li><a href="<?php echo $r->gen('secure2'); ?>"><?php echo $tm->_('Another Secure Action', 'default.menu'); ?></a></li>
-				<li><a href="<?php echo $r->gen('asdjashdasd'); ?>"><?php echo $tm->_('Call invalid URL', 'default.menu'); ?></a></li>
+				<li><a href="<?php echo $r->gen('asdjashdasd'); ?>" onclick="return alert('<?php echo $tm->_('You will now be redirected to an invalid URL. If no rewrite rules are in place, this means you will see a standard 404 page of your web server, unless you configured an ErrorDocument 404 or some similar setting. If rewrite rules are in place (i.e. no index.php part in the URL), you will be shown the Agavi 404 document. This is correct and expected behavior.', 'default.menu'); ?>');"><?php echo $tm->_('Call invalid URL', 'default.menu'); ?></a></li>
 				<li><a href="<?php echo $r->gen('disabled'); ?>"><?php echo $tm->_('Try Disabled Module', 'default.menu'); ?></a></li>
 				<li><a href="<?php echo $r->gen('search_engine_spam', array('name' => $products[array_rand($products = array('nonsense', 'chainsaws', 'brains', 'viagra', 'mad coding skills'))], 'id' => 4815162342)); ?>"><?php echo $tm->_('Search Engine Spam', 'default.menu'); ?></a></li>
 			</ul>
