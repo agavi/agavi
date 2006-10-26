@@ -270,7 +270,7 @@
 
 		<!-- Secure template -->
 		<available file="${templates.dir}/default_actions/templates/SecureSuccess${templates.suffix}" property="templates.dir.current" value="${templates.dir}" />
-		<copy file="${templates.dir.current}/default_actions/templates/SecureSuccess${templates.suffix}" tofile="${app.dir}/modules/${module.login}/templates/${secure.actionPath}Success${templates.suffix}" overwrite="false" />
+		<copy file="${templates.dir.current}/default_actions/templates/SecureSuccess${templates.suffix}" tofile="${app.dir}/modules/${module.secure}/templates/${secure.actionPath}Success${templates.suffix}" overwrite="false" />
 
 <!-- Disabled -->
 		<listModules app="${app.dir}" property="current.modules" defaultProperty="default.module"/>
