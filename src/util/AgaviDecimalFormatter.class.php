@@ -110,16 +110,16 @@ class AgaviDecimalFormatter
 	public function __construct($format = null)
 	{
 		if($format) {
-			$this->parseFormatString($format);
+			$this->setFormat($format);
 		}
 	}
 
-	public function getFormatString()
+	public function getFormat()
 	{
 		return $this->originalFormatString;
 	}
 
-	public function parseFormatString($format)
+	public function setFormat($format)
 	{
 		$this->originalFormatString = $format;
 
@@ -435,7 +435,7 @@ class AgaviDecimalFormatter
 			$stepsSinceLastGroup = 0;
 			for($i = strlen($integralPart) - 1; $i >= 0; --$i) {
 				if($stepsSinceLastGroup == $gd[$gdPos]) {
-					// we need to reverse the ggroupingSeparator here because else utf-8 
+					// we need to reverse the groupingSeparator here because else utf-8 
 					// encoded chars would end up in reverse order in the output string
 					$newIntegralPart .= strrev($this->groupingSeparator);
 					$stepsSinceLastGroup = 0;
@@ -465,11 +465,32 @@ class AgaviDecimalFormatter
 		return array($number, $isNegative ? '-' : '', $currencySymbol);
 	}
 
+	/**
+	 * Formats the given number and returns the formatted result.
+	 *
+	 * @param      int|float The number to be formatted.
+	 *
+	 * @return     string    The number formatted in the desired format.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public function formatNumber($number)
 	{
 		return vsprintf(($number < 0) ? $this->negativeFormatString : $this->formatString, $this->prepareNumber($number, ''));
 	}
 
+	/**
+	 * Formats the given currency and returns the formatted result.
+	 *
+	 * @param      int|float The number to be formatted.
+	 * @param      string    The currency symbol to be used when formatting.
+	 *
+	 * @return     string    The currency formatted in the desired format.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public function formatCurrency($number, $currencySymbol)
 	{
 		return vsprintf(($number < 0) ? $this->negativeFormatString : $this->formatString, $this->prepareNumber($number, $currencySymbol));

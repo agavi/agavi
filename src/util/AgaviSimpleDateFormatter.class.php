@@ -36,7 +36,7 @@ class AgaviSimpleDateFormatter
 	public function __construct($format = null)
 	{
 		if($format) {
-			$this->parseFormatString($format);
+			$this->setFormat($format);
 		}
 	}
 
@@ -106,12 +106,12 @@ class AgaviSimpleDateFormatter
 
 	protected $tokenList;
 
-	public function parseFormatString($format)
+	public function setFormat($format)
 	{
 		$this->internalParseFormat($format, self::$defaultMap);
 	}
 
-	public function parseLocalizedFormatString($format)
+	public function setLocalizedFormat($format)
 	{
 
 	}

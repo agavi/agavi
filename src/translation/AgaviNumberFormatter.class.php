@@ -58,7 +58,7 @@ class AgaviNumberFormatter extends AgaviDecimalFormatter implements AgaviITransl
 			$this->localeChanged($parameters);
 		} else {
 			if(isset($parameters['format'])) {
-				$this->parseFormatString($parameters['format']);
+				$this->setFormat($parameters['format']);
 				$this->hasCustomFormat = true;
 			}
 		}
@@ -87,7 +87,7 @@ class AgaviNumberFormatter extends AgaviDecimalFormatter implements AgaviITransl
 		$this->groupingSeparator = $newLocale->getNumberSymbolGroup();
 		$this->decimalSeparator = $newLocale->getNumberSymbolDecimal();
 		if(!$this->hasCustomFormat) {
-			$this->parseFormatString($newLocale->getDecimalFormat('__default'));
+			$this->setFormat($newLocale->getDecimalFormat('__default'));
 		}
 	}
 }

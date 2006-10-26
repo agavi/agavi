@@ -61,7 +61,7 @@ class AgaviCurrencyFormatter extends AgaviDecimalFormatter implements AgaviITran
 	{
 		$this->context = $context;
 		if(isset($parameters['format'])) {
-			$this->parseFormatString($parameters['format']);
+			$this->setFormat($parameters['format']);
 			$this->hasCustomFormat = true;
 		}
 		if(isset($parameters['currency_symbol'])) {
@@ -92,7 +92,7 @@ class AgaviCurrencyFormatter extends AgaviDecimalFormatter implements AgaviITran
 		$this->groupingSeparator = $newLocale->getNumberSymbolGroup();
 		$this->decimalSeparator = $newLocale->getNumberSymbolDecimal();
 		if(!$this->hasCustomFormat) {
-			$this->parseFormatString($newLocale->getCurrencyFormat('__default'));
+			$this->setFormat($newLocale->getCurrencyFormat('__default'));
 		}
 		if($currency = $newLocale->getLocaleCurrency()) {
 			if($symbol = $newLocale->getCurrencySymbol($currency)) {

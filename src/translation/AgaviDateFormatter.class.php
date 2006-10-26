@@ -64,7 +64,7 @@ class AgaviDateFormatter extends AgaviSimpleDateFormatter implements AgaviITrans
 			$format = $parameters['format'];
 			if(!in_array($format, array('full', 'long', 'medium', 'short'))) {
 				$this->customFormat = $format;
-				$this->parseFormatString($format);
+				$this->setFormat($format);
 			} else {
 				$formatType = $format;
 			}
@@ -120,7 +120,7 @@ class AgaviDateFormatter extends AgaviSimpleDateFormatter implements AgaviITrans
 				$format = str_replace(array('{0}', '{1}'), array($timeFormat, $dateFormat), $formatStr);
 			}
 
-			$this->parseFormatString($format);
+			$this->setFormat($format);
 		}
 	}
 }
