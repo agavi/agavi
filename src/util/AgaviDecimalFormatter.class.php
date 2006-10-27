@@ -107,18 +107,43 @@ class AgaviDecimalFormatter
 	const IN_NUMBER = 2;
 	const IN_POSTFIX = 3;
 
+	/**
+	 * Constructs a new Decimalformatter with the optional format.
+	 *
+	 * @param      string The format (if any).
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public function __construct($format = null)
 	{
-		if($format) {
+		if($format !== null) {
 			$this->setFormat($format);
 		}
 	}
 
+	/**
+	 * Returns the format which is currently used to format numbers.
+	 *
+	 * @return     string The current format.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public function getFormat()
 	{
 		return $this->originalFormatString;
 	}
 
+	/**
+	 * Sets the format to be used for formatting numbers.
+	 * 
+	 *
+	 * @return     string The current format.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public function setFormat($format)
 	{
 		$this->originalFormatString = $format;
@@ -445,6 +470,10 @@ class AgaviDecimalFormatter
 				$newIntegralPart .= $integralPart[$i];
 				++$stepsSinceLastGroup;
 
+				// respect icu docs in regards to the interval (2 delimiter specifications and loop the 2nd)
+				if($gdPos > 1) {
+					$gdPos = 1;
+				}
 				if($gdPos >= $gdCount) {
 					$gdPos = 0;
 				}
