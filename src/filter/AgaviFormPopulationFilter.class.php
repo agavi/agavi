@@ -177,12 +177,13 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 		}
 		foreach($xpath->query($query) as $form) {
 			if($populate instanceof AgaviParameterHolder) {
-				$action = $form->getAttribute('action');
-				$ru = $req->getRequestUri();
+				$action = trim($form->getAttribute('action'));
+				$ruri = $req->getRequestUri();
+				$rurl = $req->getUrl();
 				if(!(
-					$action == $req->getUrl() || 
-					(strpos($action, '/') === 0 && preg_replace(array('#/./#', '#/.$#', '#[^\./]+/\.\.(/|\z)#'), array('/', '/', ''), $action) == $ru) ||
-					preg_replace(array('#/./#', '#/.$#', '#[^\./]+/\.\.(/|\z)#'), array('/', '/', ''), $baseHref . $action) == $ru
+					$action == $rurl || 
+					(strpos($action, '/') === 0 && preg_replace(array('#/\./#', '#/\.$#', '#[^\./]+/\.\.(/|\z)#', '#/{2,}#'), array('/', '/', '', '/'), $action) == $ruri) ||
+					preg_replace(array('#/\./#', '#/\.$#', '#[^\./]+/\.\.(/|\z)#', '#/{2,}#'), array('/', '/', '', '/'), $baseHref . $action) == $rurl
 				)) {
 					continue;
 				}
