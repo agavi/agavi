@@ -36,6 +36,12 @@ abstract class AgaviConfigHandler extends AgaviParameterHolder
 	protected $validationFile = null;
 
 	/**
+	 * @var        string A class name of the class which should be used to parse
+	 *                    Input files of this config handler.
+	 */
+	protected $parser = null;
+
+	/**
 	 * Retrieves the stored validation filename.
 	 *
 	 * @return     string An absolute filesystem path to a validation filename.
@@ -118,9 +124,10 @@ abstract class AgaviConfigHandler extends AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function initialize($validationFile = null, $parameters = array())
+	public function initialize($validationFile = null, $parser = null, $parameters = array())
 	{
 		$this->validationFile = $validationFile;
+		$this->parser = $parser;
 		$this->setParameters($parameters);
 	}
 
