@@ -72,7 +72,7 @@ class AgaviValidatorConfigHandler extends AgaviConfigHandler
 		);
 
 		// parse the config file
-		$configurations = $this->orderConfigurations(AgaviConfigCache::parseConfig($config, true, $this->getValidationFile())->configurations, AgaviConfig::get('core.environment'), $context);
+		$configurations = $this->orderConfigurations(AgaviConfigCache::parseConfig($config, true, $this->getValidationFile(), $this->parser)->configurations, AgaviConfig::get('core.environment'), $context);
 
 		$code = array();//array('lines' => array(), 'order' => array());
 

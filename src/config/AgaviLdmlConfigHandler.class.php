@@ -57,7 +57,7 @@ class AgaviLdmlConfigHandler extends AgaviConfigHandler
 		foreach(array_reverse($lookupPaths) as $basename) {
 			$filePath = $pathParts['dirname'] . '/' . $basename . '.' . $pathParts['extension'];
 			if(is_readable($filePath)) {
-				$ldmlTree = AgaviConfigCache::parseConfig($filePath, false, $this->getValidationFile());
+				$ldmlTree = AgaviConfigCache::parseConfig($filePath, false, $this->getValidationFile(), $this->parser);
 				$this->prepareParentInformation($ldmlTree);
 				$this->parseLdmlTree($ldmlTree->ldml, $data);
 			}

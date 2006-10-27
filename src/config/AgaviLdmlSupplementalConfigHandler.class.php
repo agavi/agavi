@@ -45,7 +45,7 @@ class AgaviLdmlSupplementalConfigHandler extends AgaviConfigHandler
 	 */
 	public function execute($config, $context = null)
 	{
-		$dataTree = AgaviConfigCache::parseConfig($config, false, $this->getValidationFile())->supplementalData;
+		$dataTree = AgaviConfigCache::parseConfig($config, false, $this->getValidationFile(), $this->parser)->supplementalData;
 
 		$parsedData = array();
 		$data = array();

@@ -51,7 +51,7 @@ class AgaviDatabaseConfigHandler extends AgaviConfigHandler
 	public function execute($config, $context = null)
 	{
 		// parse the config file
-		$configurations = $this->orderConfigurations(AgaviConfigCache::parseConfig($config, false, $this->getValidationFile())->configurations, AgaviConfig::get('core.environment'), $context);
+		$configurations = $this->orderConfigurations(AgaviConfigCache::parseConfig($config, false, $this->getValidationFile(), $this->parser)->configurations, AgaviConfig::get('core.environment'), $context);
 
 		$databases = array();
 		$default = null;

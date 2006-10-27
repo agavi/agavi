@@ -248,7 +248,7 @@ abstract class AgaviConfigHandler extends AgaviParameterHolder
 
 		if($configurations->hasAttribute('parent')) {
 			$parent = self::literalize($configurations->getAttribute('parent'));
-			$parentConfigs = $this->orderConfigurations(AgaviConfigCache::parseConfig($parent, $autoloadParser, $this->getValidationFile())->configurations, $environment, $context, $autoloadParser);
+			$parentConfigs = $this->orderConfigurations(AgaviConfigCache::parseConfig($parent, $autoloadParser, $this->getValidationFile(), $this->parser)->configurations, $environment, $context, $autoloadParser);
 			$configs = array_merge($configs, $parentConfigs);
 		}
 
