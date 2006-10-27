@@ -297,6 +297,7 @@ final class AgaviConfigCache
 	 * @param      bool Whether the config parser class should be autoloaded if
 	 *                  the class doesn't exist.
 	 * @param      string A path to a validation file for this config file.
+	 * @param      string A class name which specifies an parser to be used.
 	 *
 	 * @return     AgaviConfigValueHolder An abstract representation of the
 	 *                                    config file.
@@ -307,25 +308,30 @@ final class AgaviConfigCache
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public static function parseConfig($config, $autoloadParser = true, $validateFile = null)
+	public static function parseConfig($config, $autoloadParser = true, $validateFile = null, $parserClass = null)
 	{
 		static $parsers = array();
 
-		$path = pathinfo($config);
-		$ext = ucfirst(strtolower($path['extension']));
-		if(!isset($parsers[$ext])) {
-			$class = $ext . 'ConfigParser';
-			if(!class_exists($class, $autoloadParser)) {
-				$class = 'Agavi' . $class;
+		if($parserClass) {
+			$parser = new $parserClass();
+			$parser->parse($config, $validateFile);
+		} else {
+			$path = pathinfo($config);
+			$ext = ucfirst(strtolower($path['extension']));
+			if(!isset($parsers[$ext])) {
+				$class = $ext . 'ConfigParser';
 				if(!class_exists($class, $autoloadParser)) {
-					throw new AgaviConfigurationException('Couldn\'t find parser for file extension .' . $path['extension']);
+					$class = 'Agavi' . $class;
+					if(!class_exists($class, $autoloadParser)) {
+						throw new AgaviConfigurationException('Couldn\'t find parser for file extension .' . $path['extension']);
+					}
 				}
+
+				$parsers[$ext] = new $class();
 			}
 
-			$parsers[$ext] = new $class();
+			return $parsers[$ext]->parse($config, $validateFile);
 		}
-
-		return $parsers[$ext]->parse($config, $validateFile);
 	}
 
 }
