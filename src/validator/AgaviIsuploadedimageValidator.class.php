@@ -44,13 +44,15 @@ class AgaviIsuploadedimageValidator extends AgaviValidator
 	protected function validate()
 	{
 		$name = $this->getData();
-		// TODO: use Request methods instead if $_FILES
-		if($_FILES[$name]['error'] != UPLOAD_ERR_OK) {
+
+		$request = $this->parentContainer->getContext()->getRequest();
+
+		if($request->getFileError($name) != UPLOAD_ERR_OK) {
 			$this->throwError('php_error');
 			return false;
 		}
 		
-		$type = exif_imagetype($_FILES[$name]['tmp_name']);
+		$type = exif_imagetype($request->getFileName($name));
 		if($type === false) {
 			$this->throwError('img_error');
 			return false;

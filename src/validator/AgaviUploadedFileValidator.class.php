@@ -46,7 +46,6 @@ class AgaviUploadedFileValidator extends AgaviValidator
 
 		$request = $this->parentContainer->getContext()->getRequest();
 
-		// TODO: use Request methods instead if $_FILES
 		if($request->getFileError($name) != UPLOAD_ERR_OK) {
 			$this->throwError();
 			return false;
