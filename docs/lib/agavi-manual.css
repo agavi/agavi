@@ -68,6 +68,10 @@ code {
 	padding-right: 0.5em;
 }
 
+.strikethrough {
+	text-decoration: line-through;
+}
+
 hr {
 	display: none;
 }
