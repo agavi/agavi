@@ -17,7 +17,7 @@
 					<argument>username</argument>
 				</arguments>
 				<errors>
-					<error for="min">The username you supplied is fewer than 5 characters long.</error>
+					<error>The username you supplied is fewer than 5 characters long.</error>
 				</errors>
 				<parameters>
 					<parameter name="min">5</parameter>
@@ -29,7 +29,7 @@
 					<argument>password</argument>
 				</arguments>
 				<errors>
-					<error for="min">Please supply a password.</error>
+					<error>Please supply a password.</error>
 				</errors>
 				<parameters>
 					<parameter name="min">1</parameter>
