@@ -42,7 +42,7 @@
     <section>
       <title>Prerequisites</title>
 
-      <para>Agavi's minimum requirement is PHP version 5.0.0 or newer. DOM,
+      <para>Agavi's minimum requirement is PHP version 5.1.0 or newer. DOM,
       Reflection and SPL extensions are required, but should be enabled by
       default, unless you're using one of these Linux distros made by
       <emphasis role="strikethrough">stupid morons</emphasis> smart people who
@@ -56,9 +56,9 @@
           MVC, and (web) application development in general.</para>
         </note>Also, you usually need a web server, such as Apache, unless you
       only want to write a console application. Agavi should work fine with
-      all web servers that support PHP. Apache versions 1 and 2 and Microsoft
-      Internet Information Server have been tested and verified to be
-      compatible with the framework and it's components, such as the
+      all web servers that support PHP. Apache versions 1 and 2, LightTPD and
+      Microsoft Internet Information Server have been tested and verified to
+      be compatible with the framework and it's components, such as the
       routing.</para>
 
       <para>If you want to install Agavi via PEAR, you do, obviously, need
@@ -281,8 +281,10 @@
       <para>Agavi comes with a (very simple) sample application. To make it
       work, all you have to do is adjust
       <filename>samples/pub/index.php</filename> to point to
-      <filename>agavi.php</filename>, whereever it's installed. Then, fire it
-      up in your browser and play around with it.</para>
+      <filename>agavi.php</filename>, whereever it's installed, and maybe
+      change permissions of <filename>samples/app/cache</filename> so it's
+      writeable by your web server or PHP. Then, fire it up in your browser
+      and play around with it.</para>
 
       <para>While not overly complex, the sample application's code should
       give you a basic understanding of what a software project in Agavi would
