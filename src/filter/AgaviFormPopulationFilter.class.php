@@ -189,7 +189,11 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 				}
 				$p = $populate;
 			} else {
-				$p = $populate[$form->getAttribute('id')];
+				if(isset($populate[$form->getAttribute('id')]) && (($p = $populate[$form->getAttribute('id')]) instanceof AgaviParameterHolder)) {
+					$p = $populate[$form->getAttribute('id')];
+				} else {
+					continue;
+				}
 			}
 			
 			// our array for remembering foo[] field's indices
@@ -217,7 +221,12 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 				} elseif(preg_match_all('/([^\[]+)?(?:\[([^\]]*)\])/', $pname, $matches)) {
 					$pname = $matches[1][0];
 					
-					for($i = 0; $i < count($matches[2]); $i++) {
+					if($element->nodeName == 'select' && $multiple = $element->hasAttribute('multiple')) {
+						$count = count($matches[2]) - 1;
+					} else {
+						$count = count($matches[2]);
+					}
+					for($i = 0; $i < $count; $i++) {
 						$val = $matches[2][$i];
 						if((string)$matches[2][$i] === (string)(int)$matches[2][$i]) {
 							$val = (int)$val;
@@ -337,12 +346,11 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 					}
 					
 				} elseif($element->nodeName == 'select') {
-					$multiple = $element->hasAttribute('multiple');
 					// select elements
 					// yes, we still use XPath because there could be OPTGROUPs
 					foreach($xpath->query('descendant::' . $ns . 'option', $element) as $option) {
 						$option->removeAttribute('selected');
-						if($p->hasParameter($pname) && ($option->getAttribute('value') == $value || ($multiple && is_array($value) && in_array($option->getAttribute('value'), $value)))) {
+						if($p->hasParameter($pname) && ($option->getAttribute('value') === $value || ($multiple && is_array($value) && in_array($option->getAttribute('value'), $value)))) {
 							$option->setAttribute('selected', 'selected');
 						}
 					}
