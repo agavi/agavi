@@ -32,6 +32,8 @@
 			<autoload name="AgaviReturnArrayConfigHandler">%core.agavi_dir%/config/AgaviReturnArrayConfigHandler.class.php</autoload>
 			<autoload name="AgaviRoutingConfigHandler">%core.agavi_dir%/config/AgaviRoutingConfigHandler.class.php</autoload>
 			<autoload name="AgaviSettingConfigHandler">%core.agavi_dir%/config/AgaviSettingConfigHandler.class.php</autoload>
+			<autoload name="AgaviTimeZoneDataConfigHandler">%core.agavi_dir%/config/AgaviTimeZoneDataConfigHandler.class.php</autoload>
+			<autoload name="AgaviTimeZoneDataParser">%core.agavi_dir%/config/AgaviTimeZoneDataParser.class.php</autoload>
 			<autoload name="AgaviTranslationConfigHandler">%core.agavi_dir%/config/AgaviTranslationConfigHandler.class.php</autoload>
 			<autoload name="AgaviValidatorConfigHandler">%core.agavi_dir%/config/AgaviValidatorConfigHandler.class.php</autoload>
 
