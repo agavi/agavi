@@ -55,6 +55,21 @@ final class AgaviToolkit
 	}
 
 	/**
+	 * Normalizes a path to contain only '/' as path delimiter.
+	 *
+	 * @param      string The path to normalize.
+	 *
+	 * @return     string The unified bool The mkdir return value.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public static function normalizePath($path)
+	{
+		return str_replace('\\', '/', $path);
+	}
+
+	/**
 	 * Creates a directory without sucking at permissions.
 	 * PHP mkdir() doesn't do what you tell it to, it takes umask into account.
 	 *

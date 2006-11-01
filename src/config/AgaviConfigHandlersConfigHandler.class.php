@@ -58,7 +58,7 @@ class AgaviConfigHandlersConfigHandler extends AgaviConfigHandler
 			foreach($cfg->handlers as $handler) {
 				$pattern = $handler->getAttribute('pattern');
 
-				$category = var_export($this->replaceConstants($pattern), true);
+				$category = var_export(AgaviToolkit::normalizePath($this->replaceConstants($pattern)), true);
 
 				$class = $handler->getAttribute('class');
 
