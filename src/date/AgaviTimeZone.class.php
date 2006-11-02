@@ -441,11 +441,11 @@ abstract class AgaviTimeZone
 		$hours = 0;
 		$minutes = 0;
 		$negative = false;
-		if(preg_match('#GMT([+-]?)(\d{2}):?(\d{2})#', $id, $match)) {
+		if(preg_match('#GMT([+-]?)(\d{1,2}):?(\d{1,2})#', $id, $match)) {
 			$negative = $match[1] == '-';
 			$hours = $match[2];
 			$minutes = $match[3];
-		} elseif(preg_match('#GMT([+-]?)(\d{2})#', $id, $match)) {
+		} elseif(preg_match('#GMT([+-]?)(\d{1,2})#', $id, $match)) {
 			$negative = $match[1] == '-';
 			$hours = $match[2];
 		} else {
