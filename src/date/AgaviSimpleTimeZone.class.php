@@ -264,7 +264,7 @@ class AgaviSimpleTimeZone extends AgaviTimeZone
 	protected function constructorOISIIIIIIIIIII(AgaviTranslationManager $tm, $rawOffsetGMT, $id, $savingsStartMonth, $savingsStartDay, $savingsStartDayOfWeek, $savingsStartTime, $savingsStartTimeMode, $savingsEndMonth, $savingsEndDay, $savingsEndDayOfWeek, $savingsEndTime, $savingsEndTimeMode, $savingsDST)
 	{
 		parent::__construct($tm, $id);
-		construct($rawOffsetGMT, $savingsStartMonth, $savingsStartDay, $savingsStartDayOfWeek, $savingsStartTime, $savingsStartTimeMode, $savingsEndMonth, $savingsEndDay, $savingsEndDayOfWeek, $savingsEndTime, $savingsEndTimeMode, $savingsDST);
+		$this->construct($rawOffsetGMT, $savingsStartMonth, $savingsStartDay, $savingsStartDayOfWeek, $savingsStartTime, $savingsStartTimeMode, $savingsEndMonth, $savingsEndDay, $savingsEndDayOfWeek, $savingsEndTime, $savingsEndTimeMode, $savingsDST);
 	}
 
 	/**
@@ -1030,24 +1030,24 @@ class AgaviSimpleTimeZone extends AgaviTimeZone
 	private function construct($rawOffsetGMT, $startMonth, $startDay, $startDayOfWeek, $startTime, $startTimeMode, $endMonth, $endDay, $endDayOfWeek, $endTime, $endTimeMode, $dstSavings)
 	{
 		$this->rawOffset      = $rawOffsetGMT;
-		$this->startMonth     = $savingsStartMonth;
-		$this->startDay       = $savingsStartDay;
-		$this->startDayOfWeek = $savingsStartDayOfWeek;
-		$this->startTime      = $savingsStartTime;
-		$this->startTimeMode  = $savingsStartTimeMode;
-		$this->endMonth       = $savingsEndMonth;
-		$this->endDay         = $savingsEndDay;
-		$this->endDayOfWeek   = $savingsEndDayOfWeek;
-		$this->endTime        = $savingsEndTime;
-		$this->endTimeMode    = $savingsEndTimeMode;
-		$this->dstSavings     = $savingsDST;
+		$this->startMonth     = $startMonth;
+		$this->startDay       = $startDay;
+		$this->startDayOfWeek = $startDayOfWeek;
+		$this->startTime      = $startTime;
+		$this->startTimeMode  = $startTimeMode;
+		$this->endMonth       = $endMonth;
+		$this->endDay         = $endDay;
+		$this->endDayOfWeek   = $endDayOfWeek;
+		$this->endTime        = $endTime;
+		$this->endTimeMode    = $endTimeMode;
+		$this->dstSavings     = $dstSavings;
 		$this->startYear      = 0;
-		$this->startMode      = DOM_MODE;
-		$this->endMode        = DOM_MODE;
+		$this->startMode      = self::DOM_MODE;
+		$this->endMode        = self::DOM_MODE;
 
 		$this->decodeRules();
 
-		if($savingsDST <= 0) {
+		if($dstSavings <= 0) {
 			throw new InvalidArgumentException('The DST savings amount must be a positive number');
 		}
 	}
