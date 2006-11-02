@@ -709,7 +709,8 @@ class AgaviSimpleTimeZone extends AgaviTimeZone
 			),
 			$arguments
 		);
-		call_user_func_array(array($this, $fName), $arguments);
+
+		return call_user_func_array(array($this, $fName), $arguments);
 	}
 
 	/**
