@@ -135,13 +135,6 @@ class AgaviTimeZoneDataParser extends AgaviConfigParser
 		}
 
 		$this->prepareRules($rules);
-		foreach($this->rules as $name => $rule) {
-			echo "rule $name:\n";
-			foreach($rule['rules'] as $r) {
-				echo " rule ($r[time]  ".implode(',', array_keys($r))."): " . gmdate("d.m.Y H:i:s", $r['time']) . "\n";
-			}
-			echo "\n";
-		}
 		$zones = $this->generateDatatables($zones);
 
 		return array('zones' => $zones, 'links' => $links);
@@ -252,18 +245,15 @@ class AgaviTimeZoneDataParser extends AgaviConfigParser
 			if($until !== null) {
 				$untilDate = $this->dateStrToArray($until);
 				$untilTime = $this->getOnDate($untilDate['year'], $untilDate['month'], array('type' => 'date', 'date' => $untilDate['day'], 'day' => null), array('secondsInDay' => $untilDate['time']['seconds'], 'type' => $untilDate['time']['type']), $gmtOff, $dstOff);
-				var_dump("$until: $untilTime " . gmdate('d.m.Y H:i:s', $untilTime));
 			}
 
 			switch($rule['rule']['at']['type']) {
 				case 'wallclock':
-					var_dump('wallclock on ' . $name . ' (' . gmdate('d.m.Y H:i:s', $time) . '): ' . $lastDstOff . ' ' . $gmtOff);
 					$time -= $lastDstOff;
 					$time -= $gmtOff;
 					break;
 
 				case 'standard':
-					var_dump('standard on ' . $name . ' (' . gmdate('d.m.Y H:i:s', $time) . '):  ' . $gmtOff);
 					$time -= $gmtOff;
 					break;
 			}
@@ -284,8 +274,6 @@ class AgaviTimeZoneDataParser extends AgaviConfigParser
 						'dstOffset' => 0,
 						'name' => $insertRuleName,
 					);
-				} else {
-					var_dump("hit $from on $time " . gmdate('d.m.Y H:i:s', $time));
 				}
 				$firstHit = false;
 			}
@@ -356,7 +344,6 @@ class AgaviTimeZoneDataParser extends AgaviConfigParser
 					}
 
 					if($lastRuleEndTime !== null) {
-						var_dump("adding last role $format : $lastRuleEndTime " . gmdate("d.m.Y H:i:s", $lastRuleEndTime));
 						$myRules[] = array('time' => $lastRuleEndTime, 'rawOffset' => $gmtOff, 'dstOffset' => $dstOff, 'name' => $format);
 					} else {
 						// TODO: we probably don't need to add the first rule at all, check this!
