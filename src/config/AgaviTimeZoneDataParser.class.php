@@ -352,6 +352,7 @@ class AgaviTimeZoneDataParser extends AgaviConfigParser
 							$finalRule = array(
 								'type' => 'dynamic',
 								'offset' => $gmtOff,
+								'name' => $format,
 								'save' => $sr[$on]['save'],
 								'start' => array(
 									'month' => $sr[$on]['month'],
@@ -399,7 +400,7 @@ class AgaviTimeZoneDataParser extends AgaviConfigParser
 							}
 						}
 					} else {
-						$finalRule = array('type' => 'static', 'offset' => $gmtOff);
+						$finalRule = array('type' => 'static', 'name' => $format, 'offset' => $gmtOff);
 					}
 				}
 			}
