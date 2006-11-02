@@ -75,6 +75,22 @@ abstract class AgaviTimeZone
 	}
 
 
+
+	public function getOffset()
+	{
+		$arguments = func_get_args();
+		$fName = AgaviToolkit::overloadHelper(array(
+			array('name' => 'getOffsetIIIIII',
+						'parameters' => array('int', 'int', 'int', 'int', 'int', 'int')),
+			array('name' => 'getOffsetIIIIIII',
+						'parameters' => array('int', 'int', 'int', 'int', 'int', 'int', 'int')),
+			),
+			$arguments
+		);
+
+		return call_user_func_array(array($this, $fName), $arguments);
+	}
+
 	/**
 	 * Returns the time zone raw and GMT offset for the given moment
 	 * in time.  Upon return, local-millis = GMT-millis + rawOffset +
