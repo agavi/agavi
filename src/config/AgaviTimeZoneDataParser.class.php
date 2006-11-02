@@ -135,6 +135,13 @@ class AgaviTimeZoneDataParser extends AgaviConfigParser
 		}
 
 		$this->prepareRules($rules);
+		foreach($this->rules as $name => $rule) {
+			echo "rule $name:\n";
+			foreach($rule['rules'] as $r) {
+				echo " rule ($r[time]  ".implode(',', array_keys($r))."): " . gmdate("d.m.Y H:i:s", $r['time']) . "\n";
+			}
+			echo "\n";
+		}
 		$zones = $this->generateDatatables($zones);
 
 		return array('zones' => $zones, 'links' => $links);
@@ -147,6 +154,8 @@ class AgaviTimeZoneDataParser extends AgaviConfigParser
 		foreach($rules as $name => $ruleList) {
 			$activeRules = array();
 			$myRules = array();
+
+			$lastDstOff = 0;
 
 			$cnt = count($ruleList);
 			for($i = 0; $i < $cnt; ++$i) {
@@ -164,6 +173,16 @@ class AgaviTimeZoneDataParser extends AgaviConfigParser
 				// beyond we need to apply the active rules to all the missing years
 				do {
 					$needsBreak = false;
+
+					$hasNonFinalRules = false;
+					// check if we have any active rules which are not final, so we need to process the final ones too
+					foreach($activeRules as $activeRule) {
+						if($activeRule['endYear'] != self::MAX_YEAR_VALUE) {
+							$hasNonFinalRules = true;
+							break;
+						}
+					}
+
 					// remove all (still) active rules which don't apply anymore
 					foreach($activeRules as $activeRuleIdx => $activeRule) {
 						if(!is_numeric($activeRule['endYear'])) {
@@ -172,16 +191,17 @@ class AgaviTimeZoneDataParser extends AgaviConfigParser
 						if($activeRule['endYear'] < $year) {
 							unset($activeRules[$activeRuleIdx]);
 						// protect against generating final rules, they are handled in the timezone implementation
-						} elseif($year != $activeRule['startYear'] && $activeRule['endYear'] != self::MAX_YEAR_VALUE) {
+						} elseif($year != $activeRule['startYear'] && $hasNonFinalRules) {
 							// if the year is the start year this rule has already been processed for this year
-							$time = $this->getOnDate($year, $activeRule['month'], $activeRule['on'], $myRule['at'], 0, $dstOff);
+							$time = $this->getOnDate($year, $activeRule['month'], $activeRule['on'], $myRule['at'], 0, 0);
 							$myRules[] = array('time' => $time, 'rule' => $activeRule);
 						}
 					}
 
 					if($year == $myRule['startYear']) {
-						$time = $this->getOnDate($year, $myRule['month'], $myRule['on'], $myRule['at'], 0, $dstOff);
-						if($myRule['endYear'] != self::MAX_YEAR_VALUE) {
+						$time = $this->getOnDate($year, $myRule['month'], $myRule['on'], $myRule['at'], 0, 0);
+
+						if($myRule['endYear'] != self::MAX_YEAR_VALUE || $hasNonFinalRules) {
 							$myRules[] = array('time' => $time, 'rule' => $myRule);
 						}
 
@@ -217,6 +237,8 @@ class AgaviTimeZoneDataParser extends AgaviConfigParser
 			throw new IllegalArgumentException('No rule with the name ' . $name . ' exists');
 		}
 
+		$lastDstOff = 0;
+
 		$rules = array();
 		$lastUntilTime = $untilTime = null;
 		$firstHit = true;
@@ -230,29 +252,41 @@ class AgaviTimeZoneDataParser extends AgaviConfigParser
 			if($until !== null) {
 				$untilDate = $this->dateStrToArray($until);
 				$untilTime = $this->getOnDate($untilDate['year'], $untilDate['month'], array('type' => 'date', 'date' => $untilDate['day'], 'day' => null), array('secondsInDay' => $untilDate['time']['seconds'], 'type' => $untilDate['time']['type']), $gmtOff, $dstOff);
+				var_dump("$until: $untilTime " . gmdate('d.m.Y H:i:s', $untilTime));
 			}
 
-			switch($rule['rule']['on']['type']) {
+			switch($rule['rule']['at']['type']) {
 				case 'wallclock':
-					$time -= $stdOff;
-					// the missing break is intentional !
-				case 'standard':
+					var_dump('wallclock on ' . $name . ' (' . gmdate('d.m.Y H:i:s', $time) . '): ' . $lastDstOff . ' ' . $gmtOff);
+					$time -= $lastDstOff;
 					$time -= $gmtOff;
+					break;
+
+				case 'standard':
+					var_dump('standard on ' . $name . ' (' . gmdate('d.m.Y H:i:s', $time) . '):  ' . $gmtOff);
+					$time -= $gmtOff;
+					break;
 			}
+
+			$lastDstOff = $dstOff;
 
 			if($from !== null && $time < $from) {
 				$lastSkippedRule = $rule;
 				// if we need to skip the first few items until we reached the desired from
 				continue;
 			} elseif($firstHit) {
-				$insertRuleName = sprintf(is_array($format) ? $format[0] : $format, $lastSkippedRule !== null ? $lastSkippedRule['rule']['variablePart'] : '');
+				if($from != $time) {
+					$insertRuleName = sprintf(is_array($format) ? $format[0] : $format, $lastSkippedRule !== null ? $lastSkippedRule['rule']['variablePart'] : '');
 
-				$rules[] = array(
-					'time' => $from,
-					'rawOffset' => $gmtOff,
-					'dstOffset' => 0,
-					'name' => $insertRuleName,
-				);
+					$rules[] = array(
+						'time' => $from,
+						'rawOffset' => $gmtOff,
+						'dstOffset' => 0,
+						'name' => $insertRuleName,
+					);
+				} else {
+					var_dump("hit $from on $time " . gmdate('d.m.Y H:i:s', $time));
+				}
 				$firstHit = false;
 			}
 
@@ -322,6 +356,7 @@ class AgaviTimeZoneDataParser extends AgaviConfigParser
 					}
 
 					if($lastRuleEndTime !== null) {
+						var_dump("adding last role $format : $lastRuleEndTime " . gmdate("d.m.Y H:i:s", $lastRuleEndTime));
 						$myRules[] = array('time' => $lastRuleEndTime, 'rawOffset' => $gmtOff, 'dstOffset' => $dstOff, 'name' => $format);
 					} else {
 						// TODO: we probably don't need to add the first rule at all, check this!
@@ -679,7 +714,7 @@ class AgaviTimeZoneDataParser extends AgaviConfigParser
 
 		$at = $ruleColumns[6];
 		$lastAtChar = substr($at, -1);
-		$atType = 'wallClock';
+		$atType = 'wallclock';
 		if($lastAtChar == 'w') {
 			$at = substr($at, 0, -1);
 		} elseif($lastAtChar == 's') {
@@ -871,7 +906,7 @@ class AgaviTimeZoneDataParser extends AgaviConfigParser
 
 	protected function dateStrToArray($date)
 	{
-		$array = array('year' => 0, 'month' => 1, 'day' => 1, 'time' => array('type' => 'wallclock', 'seconds' => 0));
+		$array = array('year' => 0, 'month' => 0, 'day' => 1, 'time' => array('type' => 'wallclock', 'seconds' => 0));
 		if(preg_match('!(\d{4})(\s+[a-z0-9]+)?(\s+\d+)?(\s+\d[^\s]*)?!i', $date, $match)) {
 			$match = array_map('trim', $match);
 			$array['year'] = $match[1];
