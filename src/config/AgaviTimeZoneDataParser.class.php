@@ -324,20 +324,30 @@ class AgaviTimeZoneDataParser extends AgaviConfigParser
 					if($lastRuleEndTime !== null) {
 						$myRules[] = array('time' => $lastRuleEndTime, 'rawOffset' => $gmtOff, 'dstOffset' => $dstOff, 'name' => $format);
 					} else {
-						// TODO: !!
+						// TODO: we probably don't need to add the first rule at all, check this!
 					}
 
 					$lastRuleEndTime = $untilDateTime;
 				}
 
 				if($lastZoneRule) {
+					if(count($myRules) == 0) {
+						// this should actually never happen!
+						$lastRuleStartYear = self::MIN_YEAR_VALUE;
+					} else {
+						$cal = $this->getContext()->getTranslationManager()->createCalendar();
+						$cal->setTime($myRules[count($myRules) - 1]['time'] * AgaviDateDefinitions::MILLIS_PER_SECOND);
+						// + 1 because this specifies the first year in which the final rule will apply
+						$lastRuleStartYear = $cal->get(AgaviDateDefinitions::YEAR) + 1;
+					}
+
 					if($activeSubRules !== null) {
 						$cnt = count($activeSubRules);
 						if($cnt != 0 && $cnt != 2) {
 							throw new AgaviException('unexpected active rule count ' . $cnt);
 						}
 						if($cnt == 0) {
-							$finalRule = array('type' => 'none', 'offset' => $gmtOff);
+							$finalRule = array('type' => 'none', 'offset' => $gmtOff, 'startYear' => $lastRuleStartYear);
 						} else {
 							// normalize the keys
 							$on = 0;
@@ -368,6 +378,7 @@ class AgaviTimeZoneDataParser extends AgaviConfigParser
 									'time' => $sr[$off]['at']['secondsInDay'] * AgaviDateDefinitions::MILLIS_PER_SECOND,
 									'type' => AgaviSimpleTimeZone::WALL_TIME,
 								),
+								'startYear' => $lastRuleStartYear, 
 							);
 
 							for($i = 0; $i < count($sr); ++$i) {
@@ -400,7 +411,7 @@ class AgaviTimeZoneDataParser extends AgaviConfigParser
 							}
 						}
 					} else {
-						$finalRule = array('type' => 'static', 'name' => $format, 'offset' => $gmtOff);
+						$finalRule = array('type' => 'static', 'name' => $format, 'offset' => $gmtOff, 'startYear' => $lastRuleStartYear);
 					}
 				}
 			}
