@@ -549,13 +549,13 @@ array data format
 							$data['timeZoneNames']['zones'][$zoneName]['long']['daylight'] = $zone->long->daylight->getValue();
 						}
 						if(isset($zone->short->generic)) {
-							$data['timeZoneNames']['zones'][$zoneName]['short']['generic'] = $zone->long->generic->getValue();
+							$data['timeZoneNames']['zones'][$zoneName]['short']['generic'] = $zone->short->generic->getValue();
 						}
 						if(isset($zone->short->standard)) {
-							$data['timeZoneNames']['zones'][$zoneName]['short']['standard'] = $zone->long->standard->getValue();
+							$data['timeZoneNames']['zones'][$zoneName]['short']['standard'] = $zone->short->standard->getValue();
 						}
 						if(isset($zone->short->daylight)) {
-							$data['timeZoneNames']['zones'][$zoneName]['short']['daylight'] = $zone->long->daylight->getValue();
+							$data['timeZoneNames']['zones'][$zoneName]['short']['daylight'] = $zone->short->daylight->getValue();
 						}
 						if(isset($zone->exemplarCity)) {
 							$data['timeZoneNames']['zones'][$zoneName]['exemplarCity'] = $zone->exemplarCity->getValue();
