@@ -71,7 +71,7 @@ class AgaviIsuploadedimageValidator extends AgaviValidator
 		);
 		
 		
-		foreach(split(',', $this->getParameter('format')) as $format) {
+		foreach(explode(' ', $this->getParameter('format')) as $format) {
 			if($formats[strtolower($format)] == $type) {
 				return true;
 			}

@@ -54,8 +54,8 @@ class AgaviMktimestampValidator extends AgaviValidator
 		if(!preg_match('/^\d{2}:\d{2}:\d{2}$/', $this->getData('time'))) {
 			throw new AgaviValidatorException('input time has an invalid format');
 		}
-		list($year, $month, $day) = split('-', $this->getData('date'));
-		list($hour, $minute, $second) = split(':', $this->getData('time'));
+		list($year, $month, $day) = explode('-', $this->getData('date'));
+		list($hour, $minute, $second) = explode(':', $this->getData('time'));
 		
 		$timestamp = mktime($hour, $minute, $second, $month, $day, $year);
 		

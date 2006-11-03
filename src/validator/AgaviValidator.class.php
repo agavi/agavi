@@ -208,10 +208,10 @@ abstract class AgaviValidator extends AgaviParameterHolder
 		unset($from);
 
 		if(!isset($parameters['depends']) or !is_array($parameters['depends'])) {
-			$parameters['depends'] = (isset($parameters['depends']) and strlen($parameters['depends'])) ? split(',', $parameters['depends']) : array();
+			$parameters['depends'] = (isset($parameters['depends']) and strlen($parameters['depends'])) ? explode(' ', $parameters['depends']) : array();
 		}
 		if(!isset($parameters['provides']) or !is_array($parameters['provides'])) {
-			$parameters['provides'] = (isset($parameters['provides']) and strlen($parameters['provides'])) ? split(',', $parameters['provides']) : array();
+			$parameters['provides'] = (isset($parameters['provides']) and strlen($parameters['provides'])) ? explode(' ', $parameters['provides']) : array();
 		}
 
 		if(isset($parameters['method'])) {
