@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+| This file is part of the Agavi package.                                    |
+| Copyright (c) 2006 the Agavi Project.                                      |
+| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
+| CORE AGAVI SETTINGS                                                        |
+| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
+| KEYWORDS:                                                                  |
+| You may reference any configuration directive by enclosing the name in     |
+| "%" signs. Example: %core.agavi_dir%                                         |
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+-->
+<configurations>
+	<configuration>
+		<settings>
+			<setting name="app_name">My Project</setting>
+			
+			<setting name="available">true</setting>
+			<setting name="debug">true</setting>
+
+			<setting name="use_database">false</setting>
+			<setting name="use_logging">false</setting>
+			<setting name="use_routing">false</setting>
+			<setting name="use_security">false</setting>
+			<setting name="use_translation">true</setting>
+		</settings>
+
+		<exception_templates>
+			<exception_template>%core.agavi_dir%/exception/templates/plaintext.php</exception_template>
+		</exception_templates>
+
+	</configuration>
+
+</configurations>

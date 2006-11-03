@@ -9,6 +9,7 @@
   <property name="builddir" value="build" override="true" />
   <property name="srcdir"   value="${project.basedir}" override="true" />
 	<taskdef classname="etc.phing.AgaviPackageTask" name="agavipackage"/>
+	<taskdef classname="etc.phing.AgaviOlsonCompileTask" name="agaviolsoncompile"/>
 	<taskdef classname="src.buildtools.phing.AgaviTestTask" name="agavitest"/>
 
   <!-- fileset for -dist files -->
@@ -86,6 +87,10 @@
 		<delete dir="build" includeemptydirs="true" failonerror="true" />
 		<delete dir="apidocs" includeemptydirs="true" quiet="true" failonerror="false" />
 		<delete file="tests.html" includeemptydirs="true" quiet="true" failonerror="false" />
+	</target>
+
+	<target name="olson" description="build timezone datebase">
+		<agaviolsoncompile olsonDir="${srcdir}/etc/olson/tzdata2006k" outputDir="${srcdir}/src/translation/data/timezones" />
 	</target>
 
 	<target name="damagecontrol" description="damagecontrol target">
