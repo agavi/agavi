@@ -26,12 +26,13 @@
 	<taskdef classname="buildtools.phing.AgaviInfoTask" classpath="${agavi.dir}" name="agaviInfo"/>
 
 	<property name="app.dir" value=""/>
+	<property name="app.dirname" value="app" override="false"/>
 	<property name="tests.dir" value=""/>
 	<property name="tests2.dir" value="${agavi.dir}/../tests2/"/>
 
 	<property name="templates.dir.default" value="buildtools/code_templates" />
 
-	<property name="templates.suffix" value=".php" override="false"/>
+	<property name="template.extension" value=".php" override="false" />
 
   <!-- fileset for -dist files -->
   <fileset dir="." id="distfiles">
@@ -46,7 +47,7 @@
 	<target name="project" description="create a new project">
 		<input propertyname="project.dir" promptChar="?" message="Full path to your new project (no trailing slash!)"/>
 		<mkdir dir="${project.dir}"/>
-		<fixpaths base="${project.dir}" new="true"/>
+		<fixpaths base="${project.dir}" new="true" appdir="${app.dirname}"/>
 		<echo msg="project dir: ${project.dir}, app dir: ${app.dir}, tests dir: ${tests.dir}"/>
 		<mkdir dir="${project.dir}"/>
 		<mkdir dir="${app.dir}"/>
@@ -98,7 +99,7 @@
 
 	<!-- create tests directory structure which mimics the app structure -->
 	<target name="projecttests" description="create tests structure for project">
-		<fixpaths base="${project.dir}"/>
+		<fixpaths base="${project.dir}"/ appdir="${app.dirname}">
 		<mkdir dir="${tests.dir}" />
 		<mkdir dir="${tests.dir}/lib" />
 		<mkdir dir="${tests.dir}/lib/models" />
@@ -109,7 +110,7 @@
 	<!-- Module creation -->
 	<!-- create a new module in an existing project -->
 	<target name="module" description="create a new module in an existing project.">
-		<fixpaths base="${project.dir}"/>
+		<fixpaths base="${project.dir}" appdir="${app.dirname}"/>
 		<available file="${app.dir}/modules" type="dir" property="is_app" value="true"/>
 		<fail unless="is_app" message="Must be called in the root of an app directory. (${app.dir})"/>
 		<input propertyname="module" promptChar="?" message="Module Name"/>
@@ -145,7 +146,7 @@
 	</target>
 
 	<target name="buildmoduletests">
-		<fixpaths base="${project.dir}"/>
+		<fixpaths base="${project.dir}" appdir="${app.dirname}"/>
 		<property name="moduletests.dir" value="${tests.dir}/modules/${module}"/>
 		<mkdir dir="${moduletests.dir}"/>
 		<available file="${moduletests.dir}" type="dir" property="has_tests" value="true"/>
@@ -158,7 +159,7 @@
 
 	<!-- Action creation -->
 	<target name="action" description="create a new action">
-		<fixpaths base="${project.dir}" defaultmodule="true"/>
+		<fixpaths base="${project.dir}" defaultmodule="true" appdir="${app.dirname}"/>
 		<!--
 		<available file="${module.dir}/config/module.xml" property="is_module" value="true"/>
 		<fail unless="is_module" message="Must be called in the root of a module directory."/>
@@ -175,7 +176,7 @@
 
 	<!-- Default actions -->
 	<target name="defaultactions" description="create a default action">
-		<fixpaths base="${project.dir}" />
+		<fixpaths base="${project.dir}" appdir="${app.dirname}" />
 
 		<!-- DEFAULT -->
 		<listModules app="${app.dir}" property="current.modules" defaultProperty="default.module"/>
@@ -215,8 +216,8 @@
 		</copy>
 
 		<!-- 404 template -->
-		<available file="${templates.dir}/default_actions/templates/Error404Success${templates.suffix}" property="templates.dir.current" value="${templates.dir}" />
-		<copy file="${templates.dir.current}/default_actions/templates/Error404Success${templates.suffix}" tofile="${app.dir}/modules/${module.404}/templates/${404.actionPath}Success${templates.suffix}" overwrite="false" />
+		<available file="${templates.dir}/default_actions/templates/Error404Success${template.extension}" property="templates.dir.current" value="${templates.dir}" />
+		<copy file="${templates.dir.current}/default_actions/templates/Error404Success${template.extension}" tofile="${app.dir}/modules/${module.404}/templates/${404.actionPath}Success${template.extension}" overwrite="false" />
 
 <!-- Login -->
 		<listModules app="${app.dir}" property="current.modules" defaultProperty="default.module"/>
@@ -269,8 +270,8 @@
 		</copy>
 
 		<!-- Secure template -->
-		<available file="${templates.dir}/default_actions/templates/SecureSuccess${templates.suffix}" property="templates.dir.current" value="${templates.dir}" />
-		<copy file="${templates.dir.current}/default_actions/templates/SecureSuccess${templates.suffix}" tofile="${app.dir}/modules/${module.secure}/templates/${secure.actionPath}Success${templates.suffix}" overwrite="false" />
+		<available file="${templates.dir}/default_actions/templates/SecureSuccess${template.extension}" property="templates.dir.current" value="${templates.dir}" />
+		<copy file="${templates.dir.current}/default_actions/templates/SecureSuccess${template.extension}" tofile="${app.dir}/modules/${module.secure}/templates/${secure.actionPath}Success${template.extension}" overwrite="false" />
 
 <!-- Disabled -->
 		<listModules app="${app.dir}" property="current.modules" defaultProperty="default.module"/>
@@ -304,8 +305,8 @@
 		</copy>
 
 		<!-- Disabled template -->
-		<available file="${templates.dir}/default_actions/templates/ModuleDisabledSuccess${templates.suffix}" property="templates.dir.current" value="${templates.dir}" />
-		<copy file="${templates.dir.current}/default_actions/templates/ModuleDisabledSuccess${templates.suffix}" tofile="${app.dir}/modules/${module.disabled}/templates/${disabled.actionPath}Success${templates.suffix}" overwrite="false" />
+		<available file="${templates.dir}/default_actions/templates/ModuleDisabledSuccess${template.extension}" property="templates.dir.current" value="${templates.dir}" />
+		<copy file="${templates.dir.current}/default_actions/templates/ModuleDisabledSuccess${template.extension}" tofile="${app.dir}/modules/${module.disabled}/templates/${disabled.actionPath}Success${template.extension}" overwrite="false" />
 
 <!-- Unavailable -->
 		<listModules app="${app.dir}" property="current.modules" defaultProperty="default.module"/>
@@ -339,8 +340,8 @@
 		</copy>
 
 		<!-- Unavailable template -->
-		<available file="${templates.dir}/default_actions/templates/UnavailableSuccess${templates.suffix}" property="templates.dir.current" value="${templates.dir}" />
-		<copy file="${templates.dir.current}/default_actions/templates/UnavailableSuccess${templates.suffix}" tofile="${app.dir}/modules/${module.unavailable}/templates/${unavailable.actionPath}Success${templates.suffix}" overwrite="false" />
+		<available file="${templates.dir}/default_actions/templates/UnavailableSuccess${template.extension}" property="templates.dir.current" value="${templates.dir}" />
+		<copy file="${templates.dir.current}/default_actions/templates/UnavailableSuccess${template.extension}" tofile="${app.dir}/modules/${module.unavailable}/templates/${unavailable.actionPath}Success${template.extension}" overwrite="false" />
 
 <!-- settings.xml -->
 		<available file="${templates.dir}/config/settings.xml.tmpl" property="templates.dir.current" value="${templates.dir}" />
@@ -434,7 +435,7 @@
 		<property name="templates.dir.current" value="${templates.dir.default}" override="true" />
 		<available file="${templates.dir}/Template.php.tmpl" property="templates.dir.current" value="${templates.dir}" />
 		<available file="${templates.dir}/modules/${module}/Template.php.tmpl" property="templates.dir.current" value="${templates.dir}/modules/${module}" />
-		<copy file="${templates.dir.current}/Template.php.tmpl" tofile="${module.dir}/templates/${actionPath}${view}.php">
+		<copy file="${templates.dir.current}/Template${template.extension}.tmpl" tofile="${module.dir}/templates/${actionPath}${view}${template.extension}">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">
 					<token key="MODULE" value="${module}"/>
@@ -477,7 +478,7 @@
 
 	<!-- Model creation -->
 	<target name="model" description="create a new model">
-		<fixpaths base="${project.dir}" defaultmodule="true"/>
+		<fixpaths base="${project.dir}" defaultmodule="true" appdir="${app.dirname}"/>
 
 		<listModules app="${app.dir}" property="current.modules"/>
 
