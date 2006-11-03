@@ -87,6 +87,22 @@ class AgaviTranslationManager
 	protected $supplementalData;
 
 	/**
+	 * @var        array The list of available time zones.
+	 */
+	protected $timeZoneList = array();
+
+	/**
+	 * @var        array A cache for the time zone instances.
+	 */
+	protected $timeZoneCache = array();
+
+	/**
+	 * @var        string The default time zone. If not set this will be 
+	 *                    tried to be guessed.
+	 */
+	protected $defaultTimeZone = null;
+
+	/**
 	 * Initialize this TranslationManager.
 	 *
 	 * @param      AgaviContext The current application context.
@@ -101,6 +117,7 @@ class AgaviTranslationManager
 
 		include(AgaviConfigCache::checkConfig(AgaviConfig::get('core.config_dir') . '/translation.xml'));
 		$this->loadSupplementalData();
+		$this->loadTimeZoneData();
 		$this->loadAvailableLocales();
 		if($this->defaultLocaleIdentifier === null) {
 			throw new AgaviException('Tried to use the translation system without a default locale and without a locale set');
@@ -404,6 +421,17 @@ class AgaviTranslationManager
 	}
 
 	/**
+	 * Loads the time zone data.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	protected function loadTimeZoneData()
+	{
+		$this->timeZoneList = include(AgaviConfig::get('core.cldr_dir') . '/timezones/zonelist.php');
+	}
+
+	/**
 	 * Returns the identifier of the available locale which matches the given 
 	 * locale identifier most.
 	 *
@@ -538,29 +566,41 @@ class AgaviTranslationManager
 		return $locale;
 	}
 
-	// TODO: implement properly!
+	public function setDefaultTimeZone($id)
+	{
+		$this->defaultTimeZone = $id;
+	}
+
 	public function getCurrentTimeZone()
 	{
-		return $this->createTimeZone('DEFAULT');
+		if($this->defaultTimeZone !== null) {
+			$tz = $this->defaultTimeZone;
+		} else {
+			$tz = date_default_timezone_get();
+		}
+		return $this->createTimeZone($tz);
 	}
 
 	public function createTimeZone($id)
 	{
-		//We first try to lookup the zone ID in our system list.  If this
-		//fails, we try to parse it as a custom string GMT[+-]hh:mm.
-
-		$result = AgaviTimeZone::createSystemTimeZone($this, $id);
-
-		if(!$result) {
-			$result = AgaviTimeZone::createCustomTimeZone($this, $id);
+		if(!isset($this->timeZoneList[$id])) {
+			return AgaviTimeZone::createCustomTimeZone($this, $id);
 		}
-/*
-		if(!$result) {
-			$result = AgaviTimeZone::getGMT();
-		}
-*/
 
-		return $result;
+		if(!isset($this->timeZoneCache[$id])) {
+			$currId = $id;
+
+			// resolve links
+			while($this->timeZoneList[$currId]['type'] == 'link') {
+				$currId = $this->timeZoneList[$currId]['to'];
+			}
+
+			$zoneData = include(AgaviConfig::get('core.cldr_dir') . '/timezones/' . $this->timeZoneList[$currId]['filename']);
+
+			$this->timeZoneCache[$id] = new AgaviOlsonTimeZone($this, $id, $zoneData);
+		}
+
+		return $this->timeZoneCache[$id];
 	}
 
 
