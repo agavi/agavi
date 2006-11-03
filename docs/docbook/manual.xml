@@ -351,6 +351,25 @@
       and then add a new folder with the same name as the module. Now you can
       add a code template in there, and it will only be used when generating
       something for that specific module.</para>
+
+      <para>In addition to the templates directory, you can specify the
+      extension used for the page template files (like
+      <filename>IndexSuccess.php</filename>). The default extension is
+      <filename>.php</filename>. The extension is applied both to the code
+      template file name and to the name of the template that is written.
+      Example:</para>
+
+      <para><programlisting>template.extension = .tpl</programlisting>If you
+      create an action called "Index" and a view called "Success", the command
+      line script will copy <filename>Template.tpl.tmpl</filename> to
+      <filename>IndexSuccess.tpl</filename> for you.</para>
+
+      <para>In case you're migrating from an Agavi 0.10 project where the app
+      dir name is still <filename>webapp</filename>, or you simply don't want
+      that directory in your project to be called <filename>app</filename>,
+      you can customize this, too:</para>
+
+      <para><programlisting>app.dirname = webapp</programlisting></para>
     </section>
   </chapter>
 
