@@ -376,7 +376,7 @@ class AgaviTimeZoneDataParser extends AgaviConfigParser
 							$off = 1;
 							$sr = array_values($activeSubRules);
 
-							if($sr[0]['month'] > $sr[1]['month']) {
+							if($sr[1]['save'] > $sr[0]['save']) {
 								$on = 1;
 								$off = 0;
 							}
