@@ -38,27 +38,37 @@
 
   <xs:complexType name="message_translator">
     <xs:all>
+      <xs:element name="filters" type="filters" minOccurs="0" />
       <xs:element name="parameters" type="parameters" minOccurs="0" />
     </xs:all>
     <xs:attribute name="type" type="xs:string" />
   </xs:complexType>
   <xs:complexType name="number_formatter">
     <xs:all>
+      <xs:element name="filters" type="filters" minOccurs="0" />
       <xs:element name="parameters" type="parameters" minOccurs="0" />
     </xs:all>
     <xs:attribute name="type" type="xs:string" />
   </xs:complexType>
   <xs:complexType name="currency_formatter">
     <xs:all>
+      <xs:element name="filters" type="filters" minOccurs="0" />
       <xs:element name="parameters" type="parameters" minOccurs="0" />
     </xs:all>
     <xs:attribute name="type" type="xs:string" />
   </xs:complexType>
   <xs:complexType name="date_formatter">
     <xs:all>
+      <xs:element name="filters" type="filters" minOccurs="0" />
       <xs:element name="parameters" type="parameters" minOccurs="0" />
     </xs:all>
     <xs:attribute name="type" type="xs:string" />
+  </xs:complexType>
+
+  <xs:complexType name="filters">
+    <xs:sequence>
+      <xs:element name="filter" type="xs:string" />
+    </xs:sequence>
   </xs:complexType>
 
   <xs:complexType name="available_locales">

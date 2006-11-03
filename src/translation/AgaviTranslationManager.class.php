@@ -336,6 +336,11 @@ class AgaviTranslationManager
 		if(is_array($parameters)) {
 			$translatedMessage = vsprintf($translatedMessage, $parameters);
 		}
+		
+		$filters = $this->getTranslatorFilters($domain, $domainExtra);
+		foreach($filters['msg'] as $filter) {
+			$translatedMessage = call_user_func($filter, $translatedMessage);
+		}
 
 		return $translatedMessage;
 	}
@@ -374,6 +379,31 @@ class AgaviTranslationManager
 
 		if(isset($this->translators[$translatorDomain])) {
 			return $this->translators[$translatorDomain];
+		} else {
+			// TODO: select proper exception type
+			throw new AgaviException(sprintf('No translator exists for the domain "%s"', $translatorDomain));
+		}
+	}
+
+	/**
+	 * Returns the translator filters for a given domain.
+	 *
+	 * @param      string The domain.
+	 * @param      string The remaining part in the domain which didn't match
+	 *
+	 * @return     array An array of translators as keys and filters as an array
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	protected function getTranslatorFilters($domain, &$domainExtra)
+	{
+		$domainParts = explode('.', $domain, 2);
+		$translatorDomain = $domainParts[0];
+		$domainExtra = isset($domainParts[1]) ? $domainParts[1] : '';
+
+		if(isset($this->translatorFilters[$translatorDomain])) {
+			return $this->translatorFilters[$translatorDomain];
 		} else {
 			// TODO: select proper exception type
 			throw new AgaviException(sprintf('No translator exists for the domain "%s"', $translatorDomain));

@@ -75,10 +75,10 @@ class AgaviTranslationConfigHandler extends AgaviConfigHandler
 					$domain = $translator->getAttribute('domain');
 					if(!isset($translatorData[$domain])) {
 						$translatorData[$domain] = array(
-							'msg'  => array('type' => null, 'params' => array()),
-							'num'  => array('type' => null, 'params' => array()),
-							'cur'  => array('type' => null, 'params' => array()),
-							'date' => array('type' => null, 'params' => array()),
+							'msg'  => array('type' => null, 'filters' => array(), 'params' => array()),
+							'num'  => array('type' => null, 'filters' => array(), 'params' => array()),
+							'cur'  => array('type' => null, 'filters' => array(), 'params' => array()),
+							'date' => array('type' => null, 'filters' => array(), 'params' => array()),
 						);
 					}
 					$domainData =& $translatorData[$domain];
@@ -86,6 +86,18 @@ class AgaviTranslationConfigHandler extends AgaviConfigHandler
 					if(isset($translator->message_translator)) {
 						$domainData['msg']['type']   = $translator->message_translator->getAttribute('type', $domainData['msg']['type']);
 						$domainData['msg']['params'] = $this->getItemParameters($translator->message_translator, $domainData['msg']['params']);
+						if(isset($translator->message_translator->filters)) {
+							foreach($translator->message_translator->filters as $filter) {
+								$func = explode('::', $filter->getValue());
+								if(count($func) != 2) {
+									$func = $func[0];
+								}
+								if(!is_callable($func)) {
+									throw new AgaviConfigurationException('Non-existant or uncallable filter function "' . $filter->getValue() .  '" specified.');
+								}
+								$domainData['msg']['filters'][] = $func;
+							}
+						}
 					}
 
 					if(isset($translator->number_formatter)) {
@@ -163,11 +175,13 @@ class AgaviTranslationConfigHandler extends AgaviConfigHandler
 		$code = '';
 
 		$params = $data['params'];
+		$filters = $data['filters'];
 
 		$iface = $this->getCustomClassName($typeFormat, $data['type'], $domain);
 
 		$code .= sprintf('$this->translators[%s][%s] = new %s();', var_export($domain, true), var_export($type, true), $iface);
 		$code .= sprintf('$this->translators[%s][%s]->initialize($this->getContext(), %s);', var_export($domain, true), var_export($type, true), var_export($params, true));
+		$code .= sprintf('$this->translatorFilters[%s][%s] = %s;', var_export($domain, true), var_export($type, true), var_export($filters, true));
 
 		return $code;
 	}
