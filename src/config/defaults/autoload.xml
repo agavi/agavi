@@ -57,6 +57,7 @@
 			<autoload name="AgaviCalendarGrego">%core.agavi_dir%/date/AgaviCalendarGrego.class.php</autoload>
 			<autoload name="AgaviDateDefinitions">%core.agavi_dir%/date/AgaviDateDefinitions.class.php</autoload>
 			<autoload name="AgaviGregorianCalendar">%core.agavi_dir%/date/AgaviGregorianCalendar.class.php</autoload>
+			<autoload name="AgaviOlsonTimeZone">%core.agavi_dir%/date/AgaviOlsonTimeZone.class.php</autoload>
 			<autoload name="AgaviSimpleTimeZone">%core.agavi_dir%/date/AgaviSimpleTimeZone.class.php</autoload>
 			<autoload name="AgaviTimeZone">%core.agavi_dir%/date/AgaviTimeZone.class.php</autoload>
 
