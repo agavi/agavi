@@ -263,33 +263,45 @@ abstract class AgaviTimeZone
 			throw new InvalidArgumentException('Illegal arguments for AgaviTimeZone::getDisplayName');
 		}
 
+		$displayString = null;
 
-		$format = new SimpleDateFormat($style == self::LONG ? ZZZZ_STR : Z_STR, locale);
-
-		// Create a new SimpleTimeZone as a stand-in for this zone; the
-		// stand-in will have no DST, or all DST, but the same ID and offset,
-		// and hence the same display name.
-		// We don't cache these because they're small and cheap to create.
-		$tz = null;
 		if($daylight && $this->useDaylightTime()) {
-			// For the pure-DST zone, we use JANUARY and DECEMBER        
-			$savings = $this->getDSTSavings();
-			$tz = new AgaviSimpleTimeZone($this->translationManager, 
-																		$this->getRawOffset(), $this->getId(),
-																		AgaviDateDefinitions::JANUARY, 1, 0, 0,
-																		AgaviDateDefinitions::FEBRUARY, 1, 0, 0,
-																		$savings);
+			if($style == self::LONG) { 
+				$displayString = $locale->getTimeZoneLongDaylightName($this->getId());
+			} else {
+				$displayString = $locale->getTimeZoneShortDaylightName($this->getId());
+			}
 		} else {
-			$tz = new AgaviSimpleTimeZone($this->translationManager, $this->getRawOffset(), $this->getId());
+			if($style == self::LONG) { 
+				$displayString = $locale->getTimeZoneLongStandardName($this->getId());
+			} else {
+				$displayString = $locale->getTimeZoneShortStandardName($this->getId());
+			}
 		}
-		$format->applyPattern($style == self::LONG ? ZZZZ_STR : Z_STR);
-		$myCalendar = $format->getCalendar();
-		$myCalendar->setTimeZone($tz); // copy
-		
-		$pos = new FieldPosition(FieldPosition::DONT_CARE);
-		return $format->format(new UDate(864000000.0), $result, $pos); // Must use a valid date here.
+
+		if(!$displayString) {
+			$displayString = $this->getGmtString($daylight);
+		}
+
+		return $displayString;
 	}
 
+	protected function getGmtString($daylight)
+	{
+		$value = $this->getRawOffset() + ($daylight ? $this->getDSTSavings() : 0);
+
+		if($value < 0) {
+			$str = 'GMT-';
+			$value = -$value; // suppress the '-' sign for text display.
+		} else {
+			$str = 'GMT+';
+		}
+
+		$str .=		str_pad((int) ($value / AgaviDateDefinitions::MILLIS_PER_HOUR), 2, '0', STR_PAD_LEFT)
+						. ':'
+						. str_pad((int) (($value % AgaviDateDefinitions::MILLIS_PER_HOUR) / AgaviDateDefinitions::MILLIS_PER_MINUTE),  2, '0', STR_PAD_LEFT);
+		return $str;
+	}
 
 	/**
 	 * Queries if this time zone uses daylight savings time.
@@ -441,13 +453,24 @@ abstract class AgaviTimeZone
 		$hours = 0;
 		$minutes = 0;
 		$negative = false;
-		if(preg_match('#GMT([+-]?)(\d{1,2}):?(\d{1,2})#', $id, $match)) {
+		if(preg_match('#^GMT([+-]?)(\d{1,2}):(\d{1,2})$#', $id, $match)) {
 			$negative = $match[1] == '-';
 			$hours = $match[2];
 			$minutes = $match[3];
-		} elseif(preg_match('#GMT([+-]?)(\d{1,2})#', $id, $match)) {
+		} elseif(preg_match('#^GMT([+-]?)(\d{1,2})(\d{2})$#', $id, $match)) {
 			$negative = $match[1] == '-';
 			$hours = $match[2];
+			$minutes = $match[3];
+		} elseif(preg_match('#^GMT([+-]?)(\d{1,2})$#', $id, $match)) {
+			$negative = $match[1] == '-';
+			// Be strict about interpreting something as hh; it must be
+			// an offset < 30, and it must be one or two digits. Thus
+			// 0010 is interpreted as 00:10, but 10 is interpreted as 10:00.
+			if($match[2] < 30) {
+				$hours = $match[2];
+			} else {
+				$minutes = $match[2];
+			}
 		} else {
 			return null;
 		}
