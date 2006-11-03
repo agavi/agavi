@@ -51,11 +51,13 @@ class AgaviTranslationConfigHandler extends AgaviConfigHandler
 
 		$defaultDomain = '';
 		$defaultLocale = null;
+		$defaultTimeZone = null;
 
 		foreach($configurations as $cfg) {
 
 			if(isset($cfg->available_locales)) {
 				$defaultLocale = $cfg->available_locales->getAttribute('default_locale', $defaultLocale);
+				$defaultTimeZone = $cfg->available_locales->getAttribute('default_timezone', $defaultTimeZone);
 				foreach($cfg->available_locales as $locale) {
 					$name = $locale->getAttribute('identifier');
 					if(!isset($localeData[$name])) {
@@ -108,6 +110,7 @@ class AgaviTranslationConfigHandler extends AgaviConfigHandler
 
 		$data[] = sprintf('$this->defaultDomain = %s;', var_export($defaultDomain, true));
 		$data[] = sprintf('$this->defaultLocaleIdentifier = %s;', var_export($defaultLocale, true));
+		$data[] = sprintf('$this->defaultTimeZone = %s;', var_export($defaultTimeZone, true));
 
 		foreach($localeData as $locale) {
 			// TODO: fallback stuff
