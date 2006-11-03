@@ -90,7 +90,7 @@
 	</target>
 
 	<target name="olson" description="build timezone datebase">
-		<agaviolsoncompile olsonDir="${srcdir}/etc/olson/tzdata2006k" outputDir="${srcdir}/src/translation/data/timezones" />
+		<agaviolsoncompile olsonDir="${srcdir}/etc/olson/tzdata" outputDir="${srcdir}/src/translation/data/timezones" />
 	</target>
 
 	<target name="damagecontrol" description="damagecontrol target">
