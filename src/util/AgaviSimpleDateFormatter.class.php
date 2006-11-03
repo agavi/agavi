@@ -118,11 +118,14 @@ class AgaviSimpleDateFormatter
 
 	public function format($data, $cal, $locale)
 	{
+		$tzid = null;
 		if(is_array($data)) {
 			// array with data filled
 		} elseif(is_int($data)) {
 			// unix timestamp
 		} elseif($data instanceof AgaviCalendar) {
+			$tzid = $data->getTimeZone()->getId();
+
 			$dateData = array();
 			for($i = 0; $i < AgaviDateDefinitions::FIELD_COUNT; ++$i) {
 				$dateData[$i] = $data->get($i);
@@ -243,7 +246,42 @@ class AgaviSimpleDateFormatter
 					break;
 
 				case self::T_TIMEZONE:
-					// TODO
+				case self::T_TIMEZONE_WALL:
+					if(!$tzid) {
+						$out .= $this->getGmtZoneString($data);
+					} else {
+
+						$displayString = '';
+
+						if($token[0] == self::T_TIMEZONE_WALL) {
+							if($count < 4) {
+								$displayString = $locale->getTimeZoneShortGenericName($tzid);
+							} else {
+								$displayString = $locale->getTimeZoneLongGenericName($tzid);
+							}
+						} else {
+							if($data[AgaviDateDefinitions::DST_OFFSET] != 0) {
+								if($count < 4) {
+									$displayString = $locale->getTimeZoneShortDaylightName($tzid);
+								} else {
+									$displayString = $locale->getTimeZoneLongDaylightName($tzid);
+								}
+							} else {
+								if($count < 4) {
+									$displayString = $locale->getTimeZoneShortStandardName($tzid);
+								} else {
+									$displayString = $locale->getTimeZoneLongStandardName($tzid);
+								}
+							}
+						}
+
+						if(!$displayString) {
+							$out .= $this->getGmtZoneString($data);
+						} else {
+							$out .= $displayString;
+						}
+
+					}
 					break;
 
 				case self::T_ISO_YEAR:
@@ -277,11 +315,17 @@ class AgaviSimpleDateFormatter
 					break;
 
 				case self::T_TIMEZONE_RFC:
-					break;
+					$sign = '+';
 
-				case self::T_TIMEZONE_WALL:
-					break;
+					$value = ($data[AgaviDateDefinitions::ZONE_OFFSET] + $data[AgaviDateDefinitions::DST_OFFSET]) / AgaviDateDefinitions::MILLIS_PER_MINUTE;
+					if($value < 0) {
+						$value = -$value;
+						$sign = '-';
+					}
 
+					$value = ($value / 3) * 5 + ($value % 60); // minutes => KKmm
+					$out .= $sign . str_pad($value, 4, '0', STR_PAD_LEFT);
+					break;
 
 				case self::T_QUARTER:
 				case self::T_SA_QUARTER:
@@ -300,6 +344,22 @@ class AgaviSimpleDateFormatter
 		return $out;
 	}
 
+	protected function getGmtZoneString($data)
+	{
+		$value = $data[AgaviDateDefinitions::ZONE_OFFSET] + $data[AgaviDateDefinitions::DST_OFFSET];
+
+		if($value < 0) {
+			$str = 'GMT-';
+			$value = -$value; // suppress the '-' sign for text display.
+		} else {
+			$str = 'GMT+';
+		}
+
+		$str .=		str_pad((int) ($value / AgaviDateDefinitions::MILLIS_PER_HOUR), 2, '0', STR_PAD_LEFT)
+						. ':'
+						. str_pad((int) (($value % AgaviDateDefinitions::MILLIS_PER_HOUR) / AgaviDateDefinitions::MILLIS_PER_MINUTE),  2, '0', STR_PAD_LEFT);
+		return $str;
+	}
 
 	protected function internalParseFormat($format, $charToTokenMap)
 	{
