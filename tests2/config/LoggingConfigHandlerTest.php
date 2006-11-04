@@ -8,7 +8,7 @@ class TestLogger extends AgaviLogger
 	public $appenders;
 	public $level;
 
-	public function setAppender($name, AgaviAppender $appender)
+	public function setAppender($name, AgaviLoggerAppender $appender)
 	{
 		$this->appenders[$name] = $appender;
 	}
@@ -23,7 +23,7 @@ class TestLogger1 extends TestLogger { }
 class TestLogger2 extends TestLogger { }
 class TestLogger3 extends TestLogger { }
 
-class TestAppender extends AgaviAppender
+class TestAppender extends AgaviLoggerAppender
 {
 	public $params = null;
 	public $layout = null;
@@ -33,7 +33,7 @@ class TestAppender extends AgaviAppender
 		$this->params = $params;
 	}
 
-	public function setLayout(AgaviLayout $layout)
+	public function setLayout(AgaviLoggerLayout $layout)
 	{
 		$this->layout = $layout;
 	}
@@ -46,7 +46,7 @@ class TestAppender1 extends TestAppender { }
 class TestAppender2 extends TestAppender { }
 class TestAppender3 extends TestAppender { }
 
-class TestLayout extends AgaviLayout
+class TestLayout extends AgaviLoggerLayout
 {
 	public $params = null;
 
@@ -54,7 +54,7 @@ class TestLayout extends AgaviLayout
 	{
 		$this->params = $params;
 	}
-	public function format(AgaviMessage $message) {}
+	public function format(AgaviLoggerMessage $message) {}
 }
 
 class TestLayout1 extends TestLayout { }

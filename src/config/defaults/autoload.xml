@@ -88,16 +88,16 @@
 			<autoload name="AgaviSecurityFilter">%core.agavi_dir%/filter/AgaviSecurityFilter.class.php</autoload>
 
 			<!-- agavi/logging -->
-			<autoload name="AgaviAppender">%core.agavi_dir%/logging/AgaviAppender.class.php</autoload>
-			<autoload name="AgaviFileAppender">%core.agavi_dir%/logging/AgaviFileAppender.class.php</autoload>
-			<autoload name="AgaviRotatingFileAppender">%core.agavi_dir%/logging/AgaviRotatingFileAppender.class.php</autoload>
-			<autoload name="AgaviLayout">%core.agavi_dir%/logging/AgaviLayout.class.php</autoload>
+			<autoload name="AgaviLoggerAppender">%core.agavi_dir%/logging/AgaviLoggerAppender.class.php</autoload>
+			<autoload name="AgaviFileLoggerAppender">%core.agavi_dir%/logging/AgaviFileLoggerAppender.class.php</autoload>
+			<autoload name="AgaviRotatingFileLoggerAppender">%core.agavi_dir%/logging/AgaviRotatingFileLoggerAppender.class.php</autoload>
+			<autoload name="AgaviLoggerLayout">%core.agavi_dir%/logging/AgaviLoggerLayout.class.php</autoload>
 			<autoload name="AgaviLogger">%core.agavi_dir%/logging/AgaviLogger.class.php</autoload>
 			<autoload name="AgaviLoggerManager">%core.agavi_dir%/logging/AgaviLoggerManager.class.php</autoload>
-			<autoload name="AgaviMessage">%core.agavi_dir%/logging/AgaviMessage.class.php</autoload>
-			<autoload name="AgaviPassthruLayout">%core.agavi_dir%/logging/AgaviPassthruLayout.class.php</autoload>
-			<autoload name="AgaviStderrAppender">%core.agavi_dir%/logging/AgaviStderrAppender.class.php</autoload>
-			<autoload name="AgaviStdoutAppender">%core.agavi_dir%/logging/AgaviStdoutAppender.class.php</autoload>
+			<autoload name="AgaviLoggerMessage">%core.agavi_dir%/logging/AgaviLoggerMessage.class.php</autoload>
+			<autoload name="AgaviPassthruLoggerLayout">%core.agavi_dir%/logging/AgaviPassthruLoggerLayout.class.php</autoload>
+			<autoload name="AgaviStderrLoggerAppender">%core.agavi_dir%/logging/AgaviStderrLoggerAppender.class.php</autoload>
+			<autoload name="AgaviStdoutLoggerAppender">%core.agavi_dir%/logging/AgaviStdoutLoggerAppender.class.php</autoload>
 
 			<!-- agavi/model -->
 			<autoload name="AgaviModel">%core.agavi_dir%/model/AgaviModel.class.php</autoload>

@@ -1,8 +1,8 @@
 <?php
 
-class SampleLayout extends AgaviLayout
+class SampleLayout extends AgaviLoggerLayout
 {
-	public function format(AgaviMessage $message){}
+	public function format(AgaviLoggerMessage $message){}
 }
 
 class LayoutTest extends AgaviTestCase

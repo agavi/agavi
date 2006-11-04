@@ -37,20 +37,20 @@
 				</parameters>
 			</appender>
 
-			<appender name="MyAppLogAppender" class="AgaviFileAppender" layout="MyPassthruLayout">
+			<appender name="MyAppLogAppender" class="AgaviFileLoggerAppender" layout="MyPassthruLayout">
 				<parameters>
 					<parameter name="file">%core.app_dir%/log/myapp.log</parameter>
 				</parameters>
 			</appender>
 
-			<appender name="MyAppErrorLogAppender" class="AgaviFileAppender" layout="MyPassthruLayout">
+			<appender name="MyAppErrorLogAppender" class="AgaviFileLoggerAppender" layout="MyPassthruLayout">
 				<parameters>
 					<parameter name="file">%core.app_dir%/log/myapp_error.log</parameter>
 				</parameters>
 			</appender>
 		</appenders>
 		<layouts>
-			<layout name="MyPassthruLayout" class="AgaviPassthruLayout" />
+			<layout name="MyPassthruLayout" class="AgaviPassthruLoggerLayout" />
 		</layouts>
 -->
 	</configuration>

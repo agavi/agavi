@@ -179,7 +179,7 @@ class AgaviLoggerManager
 	/**
 	 * Log a Message.
 	 *
-	 * @param      AgaviMessage The Message to log.
+	 * @param      AgaviLoggerMessage The Message to log.
 	 * @param      string Optional logger to log to.
 	 *
 	 * @throws     AgaviLoggingException if the logger was not found.
@@ -188,7 +188,7 @@ class AgaviLoggerManager
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.10.0
 	 */
-	public function log(AgaviMessage $message, $logger = null)
+	public function log(AgaviLoggerMessage $message, $logger = null)
 	{
 		if(is_null($logger)) {
 			foreach($this->loggers as $logger) {

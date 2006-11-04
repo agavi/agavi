@@ -14,7 +14,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviPassthruLayout is an AgaviLayout that will return the AgaviMessage text 
+ * AgaviPassthruLoggerLayout is an AgaviLoggerLayout that will return the AgaviLoggerMessage text
  * unaltered.
  *
  * @package    agavi
@@ -26,19 +26,19 @@
  *
  * @version    $Id$
  */
-class AgaviPassthruLayout extends AgaviLayout
+class AgaviPassthruLoggerLayout extends AgaviLoggerLayout
 {
 	/**
 	 * Format a message.
 	 *
-	 * @param      AgaviMessage A AgaviMessage instance.
+	 * @param      AgaviLoggerMessage A AgaviLoggerMessage instance.
 	 *
 	 * @return     string A formatted message.
 	 *
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.10.0
 	 */
-	public function format(AgaviMessage $message)
+	public function format(AgaviLoggerMessage $message)
 	{
 		return $message->__toString();
 	}

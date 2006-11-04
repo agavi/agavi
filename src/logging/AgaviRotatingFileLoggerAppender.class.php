@@ -13,7 +13,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviRotatingFileAppender extends AgaviFileAppender by enabling per-day log files
+ * AgaviRotatingFileLoggerAppender extends AgaviFileLoggerAppender by enabling per-day log files
  * and removing unwanted old log files.
  *
  * <b>Required parameters:</b>
@@ -35,7 +35,7 @@
  *
  * @version    $Id$
  */
-class AgaviRotatingFileAppender extends AgaviFileAppender
+class AgaviRotatingFileLoggerAppender extends AgaviFileLoggerAppender
 {
 	/**
 	 * Initialize the object.

@@ -4,8 +4,8 @@ class PassthruLayoutTest extends AgaviTestCase
 {
 	public function testformat()
 	{
-		$layout = new AgaviPassthruLayout;
-		$message = new AgaviMessage('something');
+		$layout = new AgaviPassthruLoggerLayout;
+		$message = new AgaviLoggerMessage('something');
 		$this->assertEquals('something', $layout->format($message));
 	}
 }

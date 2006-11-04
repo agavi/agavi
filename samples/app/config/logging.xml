@@ -41,23 +41,23 @@
 		<appenders>
 
 			<!--
-				Debug logs are rotated in a 7 day (AgaviRotatingFileAppender default) cycle
+				Debug logs are rotated in a 7 day (AgaviRotatingFileLoggerAppender default) cycle
 				Use 'cycle' parameter to alter the cycle.
 			-->
-			<appender name="DebugLogAppender" class="AgaviRotatingFileAppender" layout="PassthruLayout">
+			<appender name="DebugLogAppender" class="AgaviRotatingFileLoggerAppender" layout="PassthruLayout">
 				<parameters>
 					<parameter name="dir">%core.app_dir%/log/</parameter>
 					<parameter name="prefix">debug-</parameter>
 				</parameters>
 			</appender>
 
-			<appender name="ApplicationLogAppender" class="AgaviFileAppender" layout="PassthruLayout">
+			<appender name="ApplicationLogAppender" class="AgaviFileLoggerAppender" layout="PassthruLayout">
 				<parameters>
 					<parameter name="file">%core.app_dir%/log/application.log</parameter>
 				</parameters>
 			</appender>
 
-			<appender name="ErrorLogAppender" class="AgaviRotatingFileAppender" layout="PassthruLayout">
+			<appender name="ErrorLogAppender" class="AgaviRotatingFileLoggerAppender" layout="PassthruLayout">
 				<parameters>
 					<parameter name="file">%core.app_dir%/log/error.log</parameter>
 				</parameters>
@@ -66,7 +66,7 @@
 		</appenders>
 
 		<layouts>
-			<layout name="PassthruLayout" class="AgaviPassthruLayout" />
+			<layout name="PassthruLayout" class="AgaviPassthruLoggerLayout" />
 		</layouts>
 
 	</configuration>

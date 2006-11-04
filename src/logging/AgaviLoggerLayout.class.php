@@ -14,7 +14,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviLayout allows you to specify a message layout for log messages.
+ * AgaviLoggerLayout allows you to specify a message layout for log messages.
  *
  * @package    agavi
  * @subpackage logging
@@ -25,7 +25,7 @@
  *
  * @version    $Id$
  */
-abstract class AgaviLayout
+abstract class AgaviLoggerLayout
 {
 	/**
 	 * @var        AgaviContext An AgaviContext instance.
@@ -67,14 +67,14 @@ abstract class AgaviLayout
 	/**
 	 * Format a message.
 	 *
-	 * @param      AgaviMessage A Message instance.
+	 * @param      AgaviLoggerMessage A Message instance.
 	 *
 	 * @return     string A formatted message.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	abstract function format(AgaviMessage $message);
+	abstract function format(AgaviLoggerMessage $message);
 
 	/**
 	 * Retrieve the message layout.

@@ -14,7 +14,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviAppender allows you to specify a destination for log data and provide
+ * AgaviLoggerAppender allows you to specify a destination for log data and provide
  * a custom layout for it, through which all log messages will be formatted.
  *
  * @package    agavi
@@ -26,7 +26,7 @@
  *
  * @version    $Id$
  */
-abstract class AgaviAppender
+abstract class AgaviLoggerAppender
 {
 	/**
 	 * @var        AgaviContext An AgaviContext instance.
@@ -34,7 +34,7 @@ abstract class AgaviAppender
 	protected $context = null;
 
 	/**
-	 * @var        AgaviLayout An AgaviLayout instance.
+	 * @var        AgaviLoggerLayout An AgaviLoggerLayout instance.
 	 */
 	protected $layout = null;
 
@@ -68,7 +68,7 @@ abstract class AgaviAppender
 	/**
 	 * Retrieve the layout.
 	 *
-	 * @return     AgaviLayout A Layout instance, if it has been set, otherwise null.
+	 * @return     AgaviLoggerLayout A Layout instance, if it has been set, otherwise null.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -81,14 +81,14 @@ abstract class AgaviAppender
 	/**
 	 * Set the layout.
 	 *
-	 * @param      AgaviLayout A Layout instance.
+	 * @param      AgaviLoggerLayout A Layout instance.
 	 *
-	 * @return     AgaviAppender
+	 * @return     AgaviLoggerAppender
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function setLayout(AgaviLayout $layout)
+	public function setLayout(AgaviLoggerLayout $layout)
 	{
 		$this->layout = $layout;
 		return $this;

@@ -14,7 +14,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviMessage, by default, holds a message and a priority level.
+ * AgaviLoggerMessage, by default, holds a message and a priority level.
  * It is intended to be passed to a AgaviLogger.
  *
  * @package    agavi
@@ -26,7 +26,7 @@
  *
  * @version    $Id$
  */
-class AgaviMessage extends AgaviParameterHolder
+class AgaviLoggerMessage extends AgaviParameterHolder
 {
 	/**
 	 * Constructor.
@@ -61,7 +61,7 @@ class AgaviMessage extends AgaviParameterHolder
 	 *
 	 * @param      string The message to set.
 	 *
-	 * @return     AgaviMessage
+	 * @return     AgaviLoggerMessage
 	 *
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.10.0
@@ -77,7 +77,7 @@ class AgaviMessage extends AgaviParameterHolder
 	 *
 	 * @param      string Message to append.
 	 *
-	 * @return     AgaviMessage
+	 * @return     AgaviLoggerMessage
 	 *
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.10.0

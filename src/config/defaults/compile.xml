@@ -36,12 +36,12 @@
 			<compile>%core.agavi_dir%/filter/AgaviDispatchFilter.class.php</compile>
 			<compile>%core.agavi_dir%/filter/AgaviExecutionFilter.class.php</compile>
 			<compile>%core.agavi_dir%/filter/AgaviFilterChain.class.php</compile>
-			<compile>%core.agavi_dir%/logging/AgaviAppender.class.php</compile>
-			<compile>%core.agavi_dir%/logging/AgaviLayout.class.php</compile>
+			<compile>%core.agavi_dir%/logging/AgaviLoggerAppender.class.php</compile>
+			<compile>%core.agavi_dir%/logging/AgaviLoggerLayout.class.php</compile>
 			<compile>%core.agavi_dir%/logging/AgaviLogger.class.php</compile>
 			<compile>%core.agavi_dir%/logging/AgaviLoggerManager.class.php</compile>
-			<compile>%core.agavi_dir%/logging/AgaviMessage.class.php</compile>
-			<compile>%core.agavi_dir%/logging/AgaviPassthruLayout.class.php</compile>
+			<compile>%core.agavi_dir%/logging/AgaviLoggerMessage.class.php</compile>
+			<compile>%core.agavi_dir%/logging/AgaviPassthruLoggerLayout.class.php</compile>
 			<compile>%core.agavi_dir%/renderer/AgaviRenderer.class.php</compile>
 			<compile>%core.agavi_dir%/request/AgaviRequest.class.php</compile>
 			<compile>%core.agavi_dir%/response/AgaviResponse.class.php</compile>

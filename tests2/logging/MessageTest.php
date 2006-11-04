@@ -4,20 +4,20 @@ class MessageTest extends AgaviTestCase
 {
 	public function testconstructor()
 	{
-		$message = new AgaviMessage();
+		$message = new AgaviLoggerMessage();
 		$this->assertNull($message->getMessage());
 		$this->assertEquals(AgaviLogger::INFO, $message->getLevel());
-		$message = new AgaviMessage('test');
+		$message = new AgaviLoggerMessage('test');
 		$this->assertEquals('test', $message->getMessage());
 		$this->assertEquals(AgaviLogger::INFO, $message->getLevel());
-		$message = new AgaviMessage('test', AgaviLogger::DEBUG);
+		$message = new AgaviLoggerMessage('test', AgaviLogger::DEBUG);
 		$this->assertEquals('test', $message->getMessage());
 		$this->assertEquals(AgaviLogger::DEBUG, $message->getLevel());
 	}
 
 	public function testgetsetappendMessage()
 	{
-		$message = new AgaviMessage();
+		$message = new AgaviLoggerMessage();
 		$message->setMessage('my message');
 		$this->assertEquals('my message', $message->getMessage());
 		$message->setMessage('my message 2');
@@ -28,7 +28,7 @@ class MessageTest extends AgaviTestCase
 
 	public function test__toString()
 	{
-		$message = new AgaviMessage('test message', AgaviLogger::INFO);
+		$message = new AgaviLoggerMessage('test message', AgaviLogger::INFO);
 		$this->assertEquals('test message', $message->__toString());
 		$message->appendMessage('another line');
 		$this->assertEquals("test message\nanother line", $message->__toString());
@@ -36,7 +36,7 @@ class MessageTest extends AgaviTestCase
 
 	public function testgetsetLevel()
 	{
-		$message = new AgaviMessage;
+		$message = new AgaviLoggerMessage;
 		$message->setLevel(AgaviLogger::DEBUG);
 		$this->assertEquals(AgaviLogger::DEBUG, $message->getLevel());
 		$message->setLevel(AgaviLogger::INFO);

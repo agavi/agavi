@@ -21,11 +21,11 @@ class LoggerManagerTest extends AgaviTestCase
 		$this->_logfile2 = tempnam('', 'logtest2');
 		@unlink($this->_logfile);
 		@unlink($this->_logfile2);
-		$this->_pl = new AgaviPassthruLayout;
-		$this->_fa = new AgaviFileAppender;
+		$this->_pl = new AgaviPassthruLoggerLayout;
+		$this->_fa = new AgaviFileLoggerAppender;
 		$this->_fa->initialize($this->_context, array('file' => $this->_logfile));
 		$this->_fa->setLayout($this->_pl);
-		$this->_fa2 = new AgaviFileAppender;
+		$this->_fa2 = new AgaviFileLoggerAppender;
 		$this->_fa2->initialize($this->_context, array('file' => $this->_logfile2));
 		$this->_fa2->setLayout($this->_pl);
 		$this->_l = new AgaviLogger;
@@ -71,12 +71,12 @@ class LoggerManagerTest extends AgaviTestCase
 		$this->assertFalse(file_exists($this->_logfile2));
 
 		//this should be logged by both
-		$this->_lm->log(new AgaviMessage('simple info message', AgaviLogger::INFO));
+		$this->_lm->log(new AgaviLoggerMessage('simple info message', AgaviLogger::INFO));
 		$this->assertRegexp('/simple info message/', file_get_contents($this->_logfile));
 		$this->assertRegexp('/simple info message/', file_get_contents($this->_logfile2));
 
 		//this should be logged only by l2
-		$this->_lm->log(new AgaviMessage('simple debug message', AgaviLogger::DEBUG));
+		$this->_lm->log(new AgaviLoggerMessage('simple debug message', AgaviLogger::DEBUG));
 		$this->assertNotRegexp('/simple debug message/', file_get_contents($this->_logfile));
 		$this->assertRegexp('/simple debug message/', file_get_contents($this->_logfile2));
 	}

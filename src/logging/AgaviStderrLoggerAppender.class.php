@@ -14,7 +14,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviStdoutAppender appends an AgaviMessage to stdout.
+ * AgaviStderrLoggerAppender appends an AgaviLoggerMessages to the stderr.
  *
  * @package    agavi
  * @subpackage logging
@@ -25,7 +25,7 @@
  *
  * @version    $Id$
  */
-class AgaviStdoutAppender extends AgaviFileAppender
+class AgaviStderrLoggerAppender extends AgaviFileLoggerAppender
 {
 	/**
 	 * Initialize the object.
@@ -38,7 +38,7 @@ class AgaviStdoutAppender extends AgaviFileAppender
 	 */
 	public function initialize(AgaviContext $context, array $parameters = array())
 	{
-		$parameters['file'] = 'php://stdout';
+		$parameters['file'] = 'php://stderr';
 		parent::initialize($context, $parameters);
 	}
 }

@@ -14,7 +14,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviFileAppender appends AgaviMessages to a given file.
+ * AgaviFileLoggerAppender appends AgaviLoggerMessages to a given file.
  *
  * @package    agavi
  * @subpackage logging
@@ -25,7 +25,7 @@
  *
  * @version    $Id$
  */
-class AgaviFileAppender extends AgaviAppender
+class AgaviFileLoggerAppender extends AgaviLoggerAppender
 {
 	/**
 	 * @var        The resource of the file this appender is writing to.

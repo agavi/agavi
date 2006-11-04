@@ -1,11 +1,11 @@
 <?php
 
-class Sample2Layout extends AgaviLayout
+class Sample2Layout extends AgaviLoggerLayout
 {
-	public function format(AgaviMessage $message){}
+	public function format(AgaviLoggerMessage $message){}
 }
 
-class SampleAppender extends AgaviAppender
+class SampleAppender extends AgaviLoggerAppender
 {
 	public function initialize(AgaviContext $context, array $params = array()) {}
 	public function shutdown() {}

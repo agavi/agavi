@@ -71,7 +71,7 @@ class AgaviLogger
 	const ALL = 4294967295;
 
 	/**
-	 * @var        array An array of AgaviAppenders.
+	 * @var        array An array of AgaviLoggerAppenders.
 	 */
 	protected $appenders = array();
 
@@ -83,12 +83,12 @@ class AgaviLogger
 	/**
 	 * Log a message.
 	 *
-	 * @param      AgaviMessage A Message instance.
+	 * @param      AgaviLoggerMessage A Message instance.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function log(AgaviMessage $message)
+	public function log(AgaviLoggerMessage $message)
 	{
 		// get message level
 		$msgLevel = $message->getLevel();
@@ -106,7 +106,7 @@ class AgaviLogger
 	 * If an appender with the name already exists, an exception will be thrown.
 	 *
 	 * @param      string        An appender name.
-	 * @param      AgaviAppender An Appender instance.
+	 * @param      AgaviLoggerAppender An Appender instance.
 	 *
 	 * @throws     <b>AgaviLoggingException</b> If an appender with the name already
 	 *                                          exists.
@@ -114,7 +114,7 @@ class AgaviLogger
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function setAppender($name, AgaviAppender $appender)
+	public function setAppender($name, AgaviLoggerAppender $appender)
 	{
 		if(!isset($this->appenders[$name])) {
 			$this->appenders[$name] = $appender;
