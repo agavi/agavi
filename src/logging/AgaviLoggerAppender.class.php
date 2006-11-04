@@ -14,8 +14,9 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviLoggerAppender allows you to specify a destination for log data and provide
- * a custom layout for it, through which all log messages will be formatted.
+ * AgaviLoggerAppender allows you to specify a destination for log data and 
+ * provide a custom layout for it, through which all log messages will be 
+ * formatted.
  *
  * @package    agavi
  * @subpackage logging
@@ -68,7 +69,8 @@ abstract class AgaviLoggerAppender
 	/**
 	 * Retrieve the layout.
 	 *
-	 * @return     AgaviLoggerLayout A Layout instance, if it has been set, otherwise null.
+	 * @return     AgaviLoggerLayout A Layout instance, if it has been set, 
+	 *                               otherwise null.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0

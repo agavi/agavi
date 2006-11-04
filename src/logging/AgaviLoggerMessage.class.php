@@ -93,7 +93,7 @@ class AgaviLoggerMessage extends AgaviParameterHolder
 	 *
 	 * @param      int The priority level.
 	 *
-	 * @return     Message
+	 * @return     AgaviLoggerMessage
 	 *
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.10.0

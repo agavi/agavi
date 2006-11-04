@@ -201,7 +201,9 @@ abstract class AgaviRenderer implements AgaviIRenderingFilter
 	 * Depending on whether or not the "literal" flag is set, the file extension
 	 * for this Renderer instance will be appended ("literal" false) or not (true)
 	 *
-	 * @param      array The (decorator) template info given by the View.
+	 * @param      array  The (decorator) template info given by the View.
+	 * @param      string The extension prefix.
+	 * @param      string The extension seperator.
 	 *
 	 * @return     string A template file name.
 	 *
@@ -390,6 +392,9 @@ abstract class AgaviRenderer implements AgaviIRenderingFilter
 	 * This method is called by the rendering FilterChain.
 	 * It puts the returned data into the View (if appropriate)
 	 *
+	 * @param      AgaviFilterChain The filter chain.
+	 * @param      AgaviResponse    The response.
+	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
@@ -403,6 +408,9 @@ abstract class AgaviRenderer implements AgaviIRenderingFilter
 	 *
 	 * This method is called by the rendering FilterChain.
 	 * It puts the returned data into the View (if appropriate)
+	 *
+	 * @param      AgaviFilterChain The filter chain.
+	 * @param      AgaviResponse    The response.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0

@@ -13,8 +13,8 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviRotatingFileLoggerAppender extends AgaviFileLoggerAppender by enabling per-day log files
- * and removing unwanted old log files.
+ * AgaviRotatingFileLoggerAppender extends AgaviFileLoggerAppender by enabling 
+ * per-day log files and removing unwanted old log files.
  *
  * <b>Required parameters:</b>
  *
@@ -23,7 +23,7 @@
  * <b>Optional parameters:</b>
  *
  * # <b>cycle</b>  - [7]                 - Number of log files to keep.
- * # <b>prefix</b> - [core.app_name-] - Log filename prefix.
+ * # <b>prefix</b> - [core.app_name-]    - Log filename prefix.
  * # <b>suffix</b> - [.log]              - Log filename suffix.
  *
  * @package    agavi

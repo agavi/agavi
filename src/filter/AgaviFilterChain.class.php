@@ -50,7 +50,7 @@ class AgaviFilterChain
 	protected $index = -1;
 	
 	/**
-	 * @var        AgaviRespinse The Response instance that is handed to filters.
+	 * @var        AgaviResponse The Response instance that is handed to filters.
 	 */
 	protected $response = null;
 
@@ -96,7 +96,7 @@ class AgaviFilterChain
 	/**
 	 * Register a filter with this chain.
 	 *
-	 * @param      AgaviFilter A Filter implementation instance.
+	 * @param      AgaviIFilter A Filter implementation instance.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0

@@ -61,7 +61,7 @@ class AgaviFileLoggerAppender extends AgaviLoggerAppender
 	 * @throws     <b>AgaviLoggingException</b> if file cannot be opened for
 	 *                                          appending.
 	 *
-	 * @return     integer
+	 * @return     resource The open file handle.
 	 *
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.10.0

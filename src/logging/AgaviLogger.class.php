@@ -14,8 +14,8 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviLogger provides an easy way to manage multiple log destinations and write
- * to them all simultaneously.
+ * AgaviLogger provides an easy way to manage multiple log destinations and 
+ * write to them all simultaneously.
  *
  * @package    agavi
  * @subpackage logging
@@ -105,11 +105,11 @@ class AgaviLogger
 	 *
 	 * If an appender with the name already exists, an exception will be thrown.
 	 *
-	 * @param      string        An appender name.
+	 * @param      string              An appender name.
 	 * @param      AgaviLoggerAppender An Appender instance.
 	 *
-	 * @throws     <b>AgaviLoggingException</b> If an appender with the name already
-	 *                                          exists.
+	 * @throws     <b>AgaviLoggingException</b> If an appender with the name 
+	 *                                          already exists.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0

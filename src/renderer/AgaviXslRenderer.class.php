@@ -148,8 +148,6 @@ class AgaviXslRenderer extends AgaviRenderer
 	 * @param      int The error's level.
 	 * @param      string The error's message.
 	 *
-	 * @return     null
-	 *
 	 * @author     Noah Fontes <impl@cynigram.com>
 	 * @since      0.11.0
 	 */
@@ -230,8 +228,6 @@ class AgaviXslRenderer extends AgaviRenderer
 	 * @param      DOMNode The element to append to.
 	 * @param      array The attributes to add to the XML document.
 	 *
-	 * @return     null
-	 *
 	 * @author     Noah Fontes <impl@cynigram.com>
 	 * @since      0.11.0
 	 */
@@ -264,8 +260,7 @@ class AgaviXslRenderer extends AgaviRenderer
 	/**
 	 * Retrieve the template engine associated with this view.
 	 *
-	 * @return     XSLTProcessor A template engine instance used for this
-	 *                           class.
+	 * @return     XSLTProcessor A template engine instance used for this class.
 	 *
 	 * @author     Noah Fontes <impl@cynigram.com>
 	 * @author     Wes Hays <weshays@gbdev.com>
@@ -278,8 +273,6 @@ class AgaviXslRenderer extends AgaviRenderer
 
 	/**
 	 * Render the presentation to the Response.
-	 *
-	 * @return     null
 	 *
 	 * @author     Noah Fontes <impl@cynigram.com>
 	 * @author     David Zuelke <dz@bitxtender.com>

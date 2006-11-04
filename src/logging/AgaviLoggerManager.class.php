@@ -53,8 +53,11 @@ class AgaviLoggerManager
 	/**
 	 * Initialize this AgaviLoggingManager.
 	 *
+	 * @param      AgaviContext An AgaviContext instance.
+	 * @param      array        An array of initialization parameters.
+	 *
 	 * @throws     <b>AgaviInitializationException</b> If an error occurs while
-	 *                                                 initializing a LoggingManager.
+	 *                                                 initializing this instance.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @author     Sean Kerr <skerr@mojavi.org>
@@ -123,10 +126,11 @@ class AgaviLoggerManager
 	 *
 	 * @param      string A logger name.
 	 *
-	 * @return     AgaviLogger A Logger, if the logger has been removed, else null.
+	 * @return     AgaviLogger A Logger, if the logger has been removed, else 
+	 *                         null.
 	 *
-	 * @throws     <b>AgaviLoggingException</b> If the logger name is default, which
-	 *                                          cannot be removed.
+	 * @throws     <b>AgaviLoggingException</b> If the logger name is default,
+	 *                                           which cannot be removed.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @author     Sean Kerr <skerr@mojavi.org>

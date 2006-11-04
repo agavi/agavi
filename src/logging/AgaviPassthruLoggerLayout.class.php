@@ -14,8 +14,8 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviPassthruLoggerLayout is an AgaviLoggerLayout that will return the AgaviLoggerMessage text
- * unaltered.
+ * AgaviPassthruLoggerLayout is an AgaviLoggerLayout that will return the 
+ * AgaviLoggerMessage text unaltered.
  *
  * @package    agavi
  * @subpackage logging
@@ -31,7 +31,7 @@ class AgaviPassthruLoggerLayout extends AgaviLoggerLayout
 	/**
 	 * Format a message.
 	 *
-	 * @param      AgaviLoggerMessage A AgaviLoggerMessage instance.
+	 * @param      AgaviLoggerMessage An AgaviLoggerMessage instance.
 	 *
 	 * @return     string A formatted message.
 	 *

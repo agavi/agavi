@@ -88,9 +88,12 @@ class AgaviPhpRenderer extends AgaviRenderer
 	 * Retrieve the template engine associated with this view.
 	 *
 	 * Note: This will return null because PHP itself has no engine reference.
+	 *
+	 * @return     null
 	 */
 	public function getEngine()
 	{
+		return null;
 	}
 
 	/**
