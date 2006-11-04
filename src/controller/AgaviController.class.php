@@ -200,16 +200,18 @@ abstract class AgaviController extends AgaviParameterHolder
 	 *
 	 * @param      string A module name.
 	 * @param      string An action name.
+	 * @param      array|AgaviParameterHolder Additional parameters which will be
+	 *                                        passed to the action.
 	 *
 	 * @throws     <b>AgaviConfigurationException</b> If an invalid configuration 
 	 *                                                setting has been found.
-	 * @throws     <b>AgaviForwardException</b> If an error occurs while forwarding
-	 *                                          the request.
+	 * @throws     <b>AgaviForwardException</b> If an error occurs while 
+	 *                                          forwarding the request.
 	 * @throws     <b>AgaviInitializationException</b> If the action could not be
 	 *                                                 initialized.
-	 * @throws     <b>AgaviSecurityException</b> If the action requires security but
-	 *                                           the user implementation is not of
-	 *                                           type SecurityUser.
+	 * @throws     <b>AgaviSecurityException</b> If the action requires security 
+	 *                                           but the user implementation is 
+	 *                                           not of type SecurityUser.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -704,8 +706,8 @@ abstract class AgaviController extends AgaviParameterHolder
 	 *
 	 * @param      int A rendering mode.
 	 *
-	 * @throws     <b>AgaviRenderException</b> - If an invalid render mode has been 
-	 *                                           set.
+	 * @throws     <b>AgaviRenderException</b> - If an invalid render mode has 
+	 *                                           been set.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -759,7 +761,8 @@ abstract class AgaviController extends AgaviParameterHolder
 	 *
 	 * @return     bool Whether or not the operation was successful.
 	 *
-	 * @throws     <b>AgaviException</b> If the given output type doesnt exist.
+	 * @throws     <b>AgaviConfigurationException</b> If the given output type 
+	 *                                                doesnt exist.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
@@ -773,7 +776,7 @@ abstract class AgaviController extends AgaviParameterHolder
 			}
 			return false;
 		} else {
-			throw new AgaviException('Output Type "' . $outputType . '" has not been configured.');
+			throw new AgaviConfigurationException('Output Type "' . $outputType . '" has not been configured.');
 		}
 	}
 	
@@ -797,7 +800,8 @@ abstract class AgaviController extends AgaviParameterHolder
 	 *
 	 * @return     array An associative array of output type settings and params.
 	 *
-	 * @throws     <b>AgaviException</b> If the given output type doesnt exist.
+	 * @throws     <b>AgaviConfigurationException</b> If the given output type 
+	 *                                                doesnt exist.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
@@ -810,7 +814,7 @@ abstract class AgaviController extends AgaviParameterHolder
 		if(isset($this->outputTypes[$outputType])) {
 			return $this->outputTypes[$outputType];
 		} else {
-			throw new AgaviException('Output Type "' . $outputType . '" has not been configured.');
+			throw new AgaviConfigurationException('Output Type "' . $outputType . '" has not been configured.');
 		}
 	}
 }

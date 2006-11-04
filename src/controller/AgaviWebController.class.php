@@ -33,8 +33,8 @@ class AgaviWebController extends AgaviController
 	/**
 	 * Initialize this controller.
 	 *
-	 * @param      AgaviContext An AgaviContext instance.
-	 * @param      array        An array of initialization parameters.
+	 * @param      AgaviResponse An AgaviResponse instance.
+	 * @param      array         An array of initialization parameters.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @author     David Zuelke <dz@bitxtender.com>
@@ -49,6 +49,10 @@ class AgaviWebController extends AgaviController
 	}
 
 	/**
+	 * Redirects to a given URL using the http Location header.
+	 *
+	 * @param      string The URL.
+	 *
 	 * @see        AgaviController::redirect()
 	 */
 	public function redirect($to)
