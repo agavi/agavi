@@ -34,13 +34,13 @@ class AgaviConsoleController extends AgaviController
 	/**
 	 * Initialize this controller.
 	 *
-	 * @param      AgaviContext An AgaviContext instance.
-	 * @param      array        An array of initialization parameters.
+	 * @param      AgaviResponse An AgaviResponse instance.
+	 * @param      array         An array of initialization parameters.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function initialize(AgaviContext $context, array $parameters = array())
+	public function initialize(AgaviResponse $reponse, array $parameters = array())
 	{
 		// initialize parent
 		parent::initialize($context, $parameters);
@@ -48,6 +48,9 @@ class AgaviConsoleController extends AgaviController
 		ini_set('arg_separator.output', AgaviConfig::get('php.arg_separator.output', '&'));
 	}
 	
+	/**
+	 * This method is not implemented in the console controller!
+	 */
 	public function redirect($to)
 	{
 		throw new AgaviException('N/A');
