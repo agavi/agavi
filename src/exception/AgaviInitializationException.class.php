@@ -15,7 +15,8 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviInitializationException is thrown when an initialization procedure fails.
+ * AgaviInitializationException is thrown when an initialization procedure 
+ * fails.
  *
  * @package    agavi
  * @subpackage exception

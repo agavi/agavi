@@ -15,7 +15,8 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviFileException is thrown when an error occurs while moving an uploaded file.
+ * AgaviFileException is thrown when an error occurs while moving an uploaded 
+ * file.
  *
  * @package    agavi
  * @subpackage exception

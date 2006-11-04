@@ -14,7 +14,8 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviPdoDatabase provides connectivity for the PDO database abstraction layer.
+ * AgaviPdoDatabase provides connectivity for the PDO database abstraction 
+ * layer.
  *
  * @package    agavi
  * @subpackage database
@@ -31,7 +32,8 @@ class AgaviPdoDatabase extends AgaviDatabase
 	/**
 	 * Connect to the database.
 	 *
-	 * @throws     <b>AgaviDatabaseException</b> If a connection could not be created
+	 * @throws     <b>AgaviDatabaseException</b> If a connection could not be 
+	 *                                           created.
 	 *
 	 * @author     Daniel Swarbrick (daniel@pressure.net.nz)
 	 * @since      0.9.0

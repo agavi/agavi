@@ -74,7 +74,7 @@ class AgaviPropelDatabase extends AgaviDatabase
 
 	/**
 	 * Stores whether a Propel configuration file path has been explicitly set
-	 * as default for use with Propel::init() in database.ini
+	 * as default for use with Propel::init() in database.xml
 	 *
 	 * @var        bool A flag indicating whether a default config path was set.
 	 *
@@ -84,7 +84,7 @@ class AgaviPropelDatabase extends AgaviDatabase
 
 	/**
 	 * Returns the path to the config file that is passed to Propel::init() when
-	 * PropelAutoload.php is used in autoload.ini
+	 * PropelAutoload.php is used in autoload.xml
 	 *
 	 * @return     mixed The path if one has been set, otherwise null
 	 *
@@ -98,7 +98,7 @@ class AgaviPropelDatabase extends AgaviDatabase
 
 	/**
 	 * Sets the path to the config file that is passed to Propel::init() when
-	 * PropelAutoload.php is used in autoload.ini
+	 * PropelAutoload.php is used in autoload.xml
 	 *
 	 * @param      string The path to the configuration file
 	 *
@@ -116,10 +116,10 @@ class AgaviPropelDatabase extends AgaviDatabase
 
 	/**
 	 * Returns whether a Propel configuration file path has been explicitly set
-	 * as default for use with Propel::init() in database.ini
+	 * as default for use with Propel::init() in database.xml
 	 *
 	 * @return     bool true, if a Propel configuration file path has explicitely
-	 *              been set as default in database.ini, otherwise false
+	 *                  been set as default in database.ini, otherwise false
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.10.0
@@ -131,7 +131,7 @@ class AgaviPropelDatabase extends AgaviDatabase
 
 	/**
 	 * Sets a flag indicating a Propel configuration file path has been
-	 * explicitly set as default for use with Propel::init() in database.ini
+	 * explicitly set as default for use with Propel::init() in database.xml
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.10.0
@@ -143,7 +143,7 @@ class AgaviPropelDatabase extends AgaviDatabase
 
 	/**
 	 * Connect to the database.
-	 * This method is used only if param.use_autoload is false
+	 * This method is used only if the <kbd>use_autoload</kbd> parameter is false
 	 * 
 	 *
 	 * @throws     <b>AgaviDatabaseException</b> If a connection could not be 
@@ -203,7 +203,8 @@ class AgaviPropelDatabase extends AgaviDatabase
 	 *
 	 * @return     mixed A database connection.
 	 *
-	 * @throws     <b>AgaviDatabaseException</b> If a connection could not be retrieved.
+	 * @throws     <b>AgaviDatabaseException</b> If a connection could not be
+	 *                                           retrieved.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -240,6 +241,7 @@ class AgaviPropelDatabase extends AgaviDatabase
 	/**
 	 * Load Propel config
 	 * 
+	 * @param      AgaviDatabaseManager The database manager of this instance.
 	 * @param      array An associative array of initialization parameters.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
@@ -301,7 +303,7 @@ class AgaviPropelDatabase extends AgaviDatabase
 
 	/**
 	 * Get the path to the Propel config file for this connection which has been
-	 * specified in databases.ini.
+	 * specified in databases.xml.
 	 *
 	 * @return     string The path to the Propel configuration file
 	 *
@@ -316,7 +318,7 @@ class AgaviPropelDatabase extends AgaviDatabase
 	/**
 	 * Execute the shutdown procedure.
 	 *
-	 * @throws     <b>AgaviDatabaseException</b> If an error occurs while shutting 
+	 * @throws     <b>AgaviDatabaseException</b> If an error occurs while shutting
 	 *                                           down this database.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>

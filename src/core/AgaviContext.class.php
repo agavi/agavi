@@ -122,7 +122,7 @@ final class AgaviContext
 	 */
 	protected function __construct() 
 	{
-		// Singleton, use Context::getInstance($controller) to get the instance
+		// Singleton, setting up the class happens in initialize()
 	}
 
 	/**
@@ -163,10 +163,10 @@ final class AgaviContext
 	 *
 	 * @param      name A database name.
 	 *
-	 * @return     mixed An AgaviDatabase instance.
+	 * @return     mixed A database connection.
 	 *
-	 * @throws     <b>AgaviDatabaseException</b> If the requested database name does
-	 *                                           not exist.
+	 * @throws     <b>AgaviDatabaseException</b> If the requested database name 
+	 *                                           does not exist.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -194,9 +194,13 @@ final class AgaviContext
 	/**
 	 * Retrieve the AgaviContext instance.
 	 *
-	 * @param      string name corresponding to a section of the config
+	 * If you don't supply a profile name this will try to return the context 
+	 * specified in the <kbd>core.default_context</kbd> setting.
 	 *
-	 * @return     AgaviContext instance of the requested name
+	 * @param      string A name corresponding to a section of the config
+	 *
+	 * @return     AgaviContext An context instance initialized with the 
+	 *                          settings of the requested context name
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     David Zuelke <dz@bitxtender.com>
@@ -227,7 +231,8 @@ final class AgaviContext
 	/**
 	 * Retrieve the LoggerManager
 	 *
-	 * @return     AgaviLoggerManager The current LoggerManager implementation instance
+	 * @return     AgaviLoggerManager The current LoggerManager implementation 
+	 *                                instance.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
@@ -240,7 +245,7 @@ final class AgaviContext
 	/**
 	 * (re)Initialize the AgaviContext instance.
 	 *
-	 * @param      string name corresponding to a section of the config
+	 * @param      string A name corresponding to a section of the config
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     David Zuelke <dz@bitxtender.com>
@@ -491,8 +496,8 @@ final class AgaviContext
 	/**
 	 * Retrieve the ValidatorManager
 	 *
-	 * @return     AgaviValidatorManager The current ValidatorManager implementation
-	 *                                   instance.
+	 * @return     AgaviValidatorManager The current ValidatorManager 
+	 *                                   implementation instance.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0

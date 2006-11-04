@@ -15,8 +15,8 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviAutoloadException is thrown when a class that has been required cannot be
- * loaded.
+ * AgaviAutoloadException is thrown when a class that has been required cannot
+ * be loaded.
  *
  * @package    agavi
  * @subpackage exception

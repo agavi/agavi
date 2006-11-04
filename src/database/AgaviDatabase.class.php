@@ -35,7 +35,7 @@ abstract class AgaviDatabase extends AgaviParameterHolder
 	protected $databaseManager = null;
 	
 	/**
-	 * @var        mixed A database connection
+	 * @var        mixed A database connection.
 	 */
 	protected $connection = null;
 
@@ -77,7 +77,8 @@ abstract class AgaviDatabase extends AgaviParameterHolder
 	 *
 	 * @return     mixed A database connection.
 	 *
-	 * @throws     <b>AgaviDatabaseException</b> If a connection could not be retrieved.
+	 * @throws     <b>AgaviDatabaseException</b> If a connection could not be 
+	 *                                           retrieved.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -114,6 +115,7 @@ abstract class AgaviDatabase extends AgaviParameterHolder
 	/**
 	 * Initialize this Database.
 	 *
+	 * @param      AgaviDatabaseManager The database manager of this instance.
 	 * @param      array An associative array of initialization parameters.
 	 *
 	 * @throws     <b>AgaviInitializationException</b> If an error occurs while
@@ -132,7 +134,7 @@ abstract class AgaviDatabase extends AgaviParameterHolder
 	/**
 	 * Execute the shutdown procedure.
 	 *
-	 * @throws     <b>AgaviDatabaseException</b> If an error occurs while shutting 
+	 * @throws     <b>AgaviDatabaseException</b> If an error occurs while shutting
 	 *                                           down this database.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>

@@ -34,10 +34,9 @@ class AgaviException extends Exception
 	/**
 	 * Print the stack trace for this exception.
 	 *
-	 * @param      string The format you wish to use for printing. Options
-	 *                    include:
-	 *                    - html
-	 *                    - plain
+	 * @param      Exception     The original exception.
+	 * @param      AgaviContext  The context instance.
+	 * @param      AgaviResponse The response instance.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @author     Bob Zoller <bob@agavi.org>

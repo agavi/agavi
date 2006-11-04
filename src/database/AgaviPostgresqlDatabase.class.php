@@ -15,7 +15,8 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviPostgresqlDatabase provides connectivity for the PostgreSQL brand database.
+ * AgaviPostgresqlDatabase provides connectivity for the PostgreSQL brand 
+ * database.
  *
  * <b>Optional parameters:</b>
  *
@@ -119,6 +120,8 @@ class AgaviPostgresqlDatabase extends AgaviDatabase
 
 	/**
 	 * Load connection parameters from an existing array.
+	 *
+	 * @param      array  An array containing the connection information.
 	 *
 	 * @return     string A connection string.
 	 *

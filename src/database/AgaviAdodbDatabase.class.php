@@ -144,6 +144,9 @@ class AgaviAdodbDatabase extends AgaviDatabase
 	/**
 	 * Load a DSN connection string from an existing array.
 	 *
+	 * @param      array  An array with the connection array at the 'dsn' index.
+	 * @param      string The connection parameter read method.
+	 *
 	 * @return     array An associative array of connection parameters.
 	 *
 	 * @throws     <b>AgaviDatabaseException</b> If the DSN string is not correct.

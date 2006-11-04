@@ -134,6 +134,8 @@ class AgaviMysqlDatabase extends AgaviDatabase
 	/**
 	 * Load connection parameters from an existing array.
 	 *
+	 * @param      array An array containing the connection information.
+	 *
 	 * @return     array An associative array of connection parameters.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>

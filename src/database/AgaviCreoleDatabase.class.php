@@ -38,8 +38,8 @@
  *                                      like $_SERVER.
  * # <b>compat_assoc_lower</b> - [Off] - Always lowercase the indexes of assoc 
  *                                      arrays
- * # <b>compat_rtrim_string</b> - [Off] - Trim whitepace from end of string column 
- *                                        types
+ * # <b>compat_rtrim_string</b> - [Off] - Trim whitepace from end of string 
+ *                                        column types
  * # <b>password</b>       - [none]   - The database password.
  * # <b>persistent</b>     - [No]     - Indicates that the connection should
  *                                      persistent.
@@ -157,6 +157,8 @@ class AgaviCreoleDatabase extends AgaviDatabase
 	/**
 	 * Load a DSN connection string from an existing array.
 	 *
+	 * @param      array  An array containing the connection information.
+	 *
 	 * @return     array An associative array of connection parameters.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
@@ -191,7 +193,7 @@ class AgaviCreoleDatabase extends AgaviDatabase
 	/**
 	 * Execute the shutdown procedure.
 	 *
-	 * @throws     <b>AgaviDatabaseException</b> If an error occurs while shutting 
+	 * @throws     <b>AgaviDatabaseException</b> If an error occurs while shutting
 	 *                                           down this database.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>

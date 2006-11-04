@@ -15,9 +15,9 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviDatabaseManager allows you to setup your database connectivity before the
- * request is handled. This eliminates the need for a filter to manage database
- * connections.
+ * AgaviDatabaseManager allows you to setup your database connectivity before 
+ * the request is handled. This eliminates the need for a filter to manage 
+ * database connections.
  *
  * @package    agavi
  * @subpackage database
@@ -80,6 +80,9 @@ class AgaviDatabaseManager
 	/**
 	 * Initialize this DatabaseManager.
 	 *
+	 * @param      AgaviContext An AgaviContext instance.
+	 * @param      array        An array of initialization parameters.
+	 *
 	 * @throws     <b>AgaviInitializationException</b> If an error occurs while
 	 *                                                 initializing this 
 	 *                                                 DatabaseManager.
@@ -99,7 +102,7 @@ class AgaviDatabaseManager
 	/**
 	 * Execute the shutdown procedure.
 	 *
-	 * @throws     <b>AgaviDatabaseException</b> If an error occurs while shutting 
+	 * @throws     <b>AgaviDatabaseException</b> If an error occurs while shutting
 	 *                                           down this DatabaseManager.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
