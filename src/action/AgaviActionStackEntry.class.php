@@ -152,9 +152,9 @@ class AgaviActionStackEntry
 	}
 	
 	/**
-	 * Retrieve this entry's module name.
+	 * Retrieve this entry's view name.
 	 *
-	 * @return     string A module name.
+	 * @return     string A view name.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
@@ -165,9 +165,10 @@ class AgaviActionStackEntry
 	}
 	
 	/**
-	 * Retrieve this entry's module name.
+	 * Retrieve this entry's view module name. This is the name of the module of 
+	 * the View returned by the Action.
 	 *
-	 * @return     string A module name.
+	 * @return     string A view module name.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
@@ -178,9 +179,9 @@ class AgaviActionStackEntry
 	}
 	
 	/**
-	 * Retrieve this entry's module name.
+	 * Set the module name for this entry.
 	 *
-	 * @return     string A module name.
+	 * @return     string A view name.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
@@ -191,9 +192,9 @@ class AgaviActionStackEntry
 	}
 	
 	/**
-	 * Retrieve this entry's module name.
+	 * Set the view module name for this entry.
 	 *
-	 * @return     string A module name.
+	 * @return     string A view module name.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
@@ -206,7 +207,8 @@ class AgaviActionStackEntry
 	/**
 	 * Retrieve the request parameters for this Action.
 	 *
-	 * @return     AgaviParameterHolder An AgaviParameterHolder of request parameters for this Action.
+	 * @return     AgaviParameterHolder An AgaviParameterHolder of request 
+	 *                                  parameters for this Action.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0

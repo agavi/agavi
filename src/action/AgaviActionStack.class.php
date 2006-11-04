@@ -81,7 +81,8 @@ class AgaviActionStack
 	/**
 	 * Retrieve the first entry.
 	 *
-	 * @return     AgaviActionStackEntry An action stack entry implementation.
+	 * @return     AgaviActionStackEntry An action stack entry implementation or 
+	 *                                   null if the action stack is empty.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -99,7 +100,8 @@ class AgaviActionStack
 	/**
 	 * Retrieve the last entry.
 	 *
-	 * @return     AgaviActionStackEntry An action stack entry implementation.
+	 * @return     AgaviActionStackEntry An action stack entry implementation or 
+	 *                                   null if the action stack is empty.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
