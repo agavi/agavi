@@ -31,13 +31,26 @@
 | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
 | REQUIRED KEYS:                                                             |
 |                                                                            |
-| 1. class - The class name providing the custom implementation.             |
 |                                                                            |
-| OPTIONAL KEYS:                                                             |
+| <handlers> Parent element for <handler>                                    |
+|   Includes:                                                                |
+|     1-n <handler> elements                                                 |
 |                                                                            |
-| 1. file  - The filesystem path to the class file. If the path is relative, |
+| <handler> Defines a configuration handler                                  |
+|   Attributes:                                                              |
+|     pattern : file path pattern                                            |
+|   Includes:                                                                |
+|     <class> element                                                        |
+|     optional parameters                                                    |
+|                                                                            |
+| <class> The implementation for this configuration handler                  |
+|   Attributes:                                                              |
+|     file : The filesystem path to the class file. If the path is relative, |
 |            it will be relative to the "core.app_dir" Agavi application     |
 |            setting.                                                        |
+|   Includes :                                                               |
+|     The class name providing the custom implementation.                    |
+|                                                                            |
 | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
 | PARAMETERS:                                                                |
 |                                                                            |
@@ -65,7 +78,7 @@
 |     </parameters>                                                          |
 |   </parameter>                                                             |
 | </parameters>                                                              |
-|                                                                            |                                                                            |
+|                                                                            |
 | For a list of available parameters for a class, browse the class source    |
 | or documentation.                                                          |
 | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
