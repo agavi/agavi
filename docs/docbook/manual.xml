@@ -562,20 +562,21 @@
         handled without the help of iconv.</para>
 
         <para>The root element of each configuration file is
-        &lt;configurations&gt;. It may have an optional attribute called
-        "parent" which can be used to specify the parent configuration file.
-        This root element must contain at least one &lt;configuration&gt;
-        element, which then contains the actual configuration
-        directives.</para>
+        <code>&lt;configurations&gt;</code>. It may have an optional attribute
+        called "parent" which can be used to specify the parent configuration
+        file. This root element must contain at least one
+        <code>&lt;configuration&gt;</code> element, which then contains the
+        actual configuration directives.</para>
 
-        <para>The reason why &lt;configurations&gt; contains
-        &lt;configuration&gt; elements is that a &lt;configuration&gt; block
-        can be specific to an environment, a context, or both. To achieve
-        this, pass a space separated list of names to the "enviroment" and/or
-        "context" attributes of the tag. This way, you can write very
-        fine-grained config files to change behavior according to the
-        situation. For example, the basic settings.xml file has different
-        settings per environment (example simplified):</para>
+        <para>The reason why <code>&lt;configurations&gt;</code> contains
+        <code>&lt;configuration&gt;</code> elements is that a
+        <code>&lt;configuration&gt;</code> block can be specific to an
+        environment, a context, or both. To achieve this, pass a space
+        separated list of names to the "enviroment" and/or "context"
+        attributes of the tag. This way, you can write very fine-grained
+        config files to change behavior according to the situation. For
+        example, the basic <filename>settings.xml</filename> file has
+        different settings per environment (example simplified):</para>
 
         <para><programlisting>&lt;configurations&gt;
   &lt;configuration&gt;
@@ -594,8 +595,8 @@
         Bootstrapping an environment or getting a context instance "activates"
         the environment or context. If you have declared settings specific to
         them, they'll be used. If not, the "global" settings (i.e. those in
-        &lt;configuration&gt; blocks without further attributes) take
-        effect.</para>
+        <code>&lt;configuration&gt;</code> blocks without further attributes)
+        take effect.</para>
 
         <para>Environment-specific settings overwrite generic ones,
         context-specific settings overwrite environment-specific ones, and
@@ -604,8 +605,9 @@
 
         <para>You'll also soon notice that for each element that may occur
         multiple times, the parent element is the plural form of the name.
-        &lt;route&gt; elements sit inside &lt;routes&gt;, &lt;mouse&gt;
-        elements inside &lt;mice&gt; and so on.</para>
+        <code>&lt;route&gt;</code> elements sit inside
+        <code>&lt;routes&gt;</code>, <code>&lt;mouse&gt;</code> elements
+        inside <code>&lt;mice&gt;</code> and so on.</para>
       </section>
 
       <section>
