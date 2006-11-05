@@ -681,6 +681,8 @@ class AgaviTranslationManager
 			if($cache) {
 				$this->timeZoneCache[$id] = $zone;
 			}
+		} else {
+			$zone = $this->timeZoneCache[$id];
 		}
 
 		return $zone; 
