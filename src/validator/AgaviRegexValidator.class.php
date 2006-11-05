@@ -33,9 +33,9 @@
 class AgaviRegexValidator extends AgaviValidator
 {
 	/**
-	 * validates the input
+	 * Validates the input.
 	 * 
-	 * @return     bool true if input matches the pattern or not according to 'match'
+	 * @return     bool True if input matches the pattern in 'match'.
 	 * 
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0

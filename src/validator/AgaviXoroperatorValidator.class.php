@@ -14,10 +14,11 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviXOROperatorValidator succeeds if only one of two sub-validators succeeded
+ * AgaviXOROperatorValidator succeeds if only one of two sub-validators 
+ * succeeded
  *
  * Parameters:
- *   'skip_errors'  do not submit errors of child validators to validator manager
+ *   'skip_errors'  don't submit errors of child validators to validator manager
  *
  * @package    agavi
  * @subpackage validator
@@ -31,9 +32,10 @@
 class AgaviXoroperatorValidator extends AgaviOperatorValidator
 {
 	/**
-	 * check if operator has other then exactly two child validators
+	 * Checks if this operator has a exactly 2 child validators.
 	 * 
-	 * @throws     AgaviValidatorException operator has other then 2 child validators
+	 * @throws     <b>AgaviValidatorException</b> If the operator doesn't have 
+	 *                                            exactly 2 child validators.
 	 * 
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
@@ -46,9 +48,10 @@ class AgaviXoroperatorValidator extends AgaviOperatorValidator
 	}
 
 	/**
-	 * validates the operator by returning the by XOR compined result of the child validators
+	 * Validates the operator by returning the by XORing the results of the child
+	 * validators.
 	 * 
-	 * @return     bool true, if child validator failed 
+	 * @return     bool True if exactly one child validator succeded.
 	 * 
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0

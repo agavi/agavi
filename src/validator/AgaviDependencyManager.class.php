@@ -28,12 +28,12 @@
 class AgaviDependencyManager
 {
 	/**
-	 * @var array already provided tokens
+	 * @var array already provided tokens.
 	 */
 	protected $depData = array();
 	
 	/**
-	 * clears the dependency cache
+	 * Clears the dependency cache.
 	 * 
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
@@ -44,10 +44,11 @@ class AgaviDependencyManager
 	}
 	
 	/**
-	 * checks whether a list dependencies are met
+	 * Checks whether a list of dependencies is met.
 	 * 
-	 * @param      array  list of dependencies that have to meet
-	 * @param      string base path to which all tokens are appended
+	 * @param      array  The list of dependencies that have to meet.
+	 * @param      AgaviVirtualArrayPath The base path to which all tokens are 
+	 *                                   appended.
 	 * 
 	 * @return     bool all dependencies are met
 	 * 
@@ -66,15 +67,17 @@ class AgaviDependencyManager
 	}
 
 	/**
-	 * puts a list of tokens into the dependency cache
+	 * Puts a list of tokens into the dependency cache.
 	 * 
-	 * @param      array  list of new tokens
-	 * @param      string base path to which all tokens are appended
+	 * @param      array  The list of new tokens.
+	 * @param      AgaviVirtualArrayPath The base path to which all tokens are 
+	 *                                   appended.
 	 * 
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
-	public function addDependTokens(array $tokens, AgaviVirtualArrayPath $base) {
+	public function addDependTokens(array $tokens, AgaviVirtualArrayPath $base)
+	{
 		foreach($tokens as $token) {
 			$base->setValueByChildPath($token, $this->depData, true);
 		}

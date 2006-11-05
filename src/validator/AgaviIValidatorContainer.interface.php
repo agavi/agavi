@@ -29,7 +29,7 @@
 interface AgaviIValidatorContainer
 {
 	/**
-	 * adds a new validator to the list of children
+	 * Adds a new validator to the list of children.
 	 * 
 	 * @param      AgaviValidator new child
 	 * 
@@ -39,9 +39,9 @@ interface AgaviIValidatorContainer
 	public function addChild(AgaviValidator $validator);
 	
 	/**
-	 * fetches the request
+	 * Fetches the request.
 	 * 
-	 * @return     AgaviRequest the request to be used by child validators
+	 * @return     AgaviRequest The request to be used by child validators.
 	 * 
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
@@ -49,10 +49,10 @@ interface AgaviIValidatorContainer
 	public function getRequest();
 	
 	/**
-	 * fetches the dependency manager
+	 * Fetches the dependency manager
 	 * 
-	 * @return     AgaviDependencyManager the dependency manager to be used
-	 *                                    by child validators
+	 * @return     AgaviDependencyManager The dependency manager to be used
+	 *                                    by child validators.
 	 * 
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
@@ -60,10 +60,10 @@ interface AgaviIValidatorContainer
 	public function getDependencyManager();
 
 	/**
-	 * reports an error to the parent container
+	 * Reports an error to the parent container.
 	 * 
-	 * @param      AgaviValidator The validator where the error occured
-	 * @param      string         An error message
+	 * @param      AgaviValidator The validator where the error occured.
+	 * @param      string         An error message.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0

@@ -18,7 +18,8 @@
  * 
  * Parameters:
  *   'php_error'    error message when there was an php error with the file
- *   'img_error'    error message when the file is no image according to exif_imagetype()
+ *   'img_error'    error message when the file is no image according to 
+ *                  exif_imagetype()
  *   'format'       list of valid formats (gif,jpeg,png,bmp)
  *   'format_error' image has none of the specified formats
  *
@@ -34,9 +35,9 @@
 class AgaviIsuploadedimageValidator extends AgaviValidator
 {
 	/**
-	 * validates the input
+	 * Validates the input.
 	 * 
-	 * @return     bool file is valid image according to given parameters
+	 * @return     bool File is valid image according to given parameters.
 	 * 
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0

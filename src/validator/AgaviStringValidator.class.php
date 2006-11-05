@@ -35,9 +35,10 @@
 class AgaviStringValidator extends AgaviValidator
 {
 	/**
-	 * validates the input
+	 * Validates the input.
 	 * 
-	 * @return     bool true, if the string is valid according to the given parameters
+	 * @return     bool True if the string is valid according to the given 
+	 *                  parameters
 	 * 
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0

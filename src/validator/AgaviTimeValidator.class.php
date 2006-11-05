@@ -38,9 +38,9 @@
 class AgaviTimeValidator extends AgaviValidator
 {
 	/**
-	 * validates the input
+	 * Validates the input.
 	 * 
-	 * @return     bool input is valid time
+	 * @return     bool The input is valid a time.
 	 * 
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0

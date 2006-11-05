@@ -29,9 +29,9 @@
 class AgaviEmailValidator extends AgaviValidator
 {
 	/**
-	 * validates the input
+	 * Validates the input.
 	 * 
-	 * @return     bool input is a valid email address
+	 * @return     bool The input is a valid email address.
 	 * 
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0

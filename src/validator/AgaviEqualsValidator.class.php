@@ -37,23 +37,9 @@
 class AgaviEqualsValidator extends AgaviValidator
 {
 	/**
-	 * returns a list of input fields that are per default affected by a failure
-	 * of the validator
+	 * Validates the input.
 	 * 
-	 * @return     array list of fields that are affected by an error
-	 *
-	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @since      0.11.0
-	 * @see        AgaviValidator::getAffectedFields
-	 */
-	public function getAffectedFields() {
-		return parent::getAffectedFields();
-	}
-
-	/**
-	 * validates the input
-	 * 
-	 * @return     bool the input equals to given value
+	 * @return     bool The input equals to given value.
 	 * 
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0

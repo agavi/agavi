@@ -17,8 +17,8 @@
  * AgaviOROperatorValidator succeeds if at least one sub-validators succeeded
  *
  * Parameters:
- *   'skip_errors'  do not submit errors of child validators to validator manager
- *   'break'        break the execution of child validators after first success
+ *   'skip_errors' do not submit errors of child validators to validator manager
+ *   'break'       break the execution of child validators after first success
  *
  * @package    agavi
  * @subpackage validator
@@ -32,9 +32,9 @@
 class AgaviOroperatorValidator extends AgaviOperatorValidator
 {
 	/**
-	 * executes the child validators
+	 * Executes the child validators.
 	 * 
-	 * @return     bool true, if at least one child validator succeeded
+	 * @return     bool True if at least one child validator succeeded.
 	 * 
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0

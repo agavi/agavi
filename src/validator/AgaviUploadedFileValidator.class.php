@@ -35,7 +35,7 @@ class AgaviUploadedFileValidator extends AgaviValidator
 	/**
 	 * Validates the input
 	 * 
-	 * @return     bool The file is valid according to given parameters
+	 * @return     bool The file is valid according to given parameters.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0

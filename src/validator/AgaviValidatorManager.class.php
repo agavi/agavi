@@ -30,35 +30,35 @@
 class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValidatorManager, AgaviIValidatorContainer
 {
 	/**
-	 * @var        AgaviDependencyManager dependency manager
+	 * @var        AgaviDependencyManager The dependency manager.
 	 */
 	protected $dependencyManager = null;
 
 	/**
-	 * @var        array array of child validators
+	 * @var        array An array of child validators.
 	 */
 	protected $children = array();
 
 	/**
-	 * @var        AgaviContext context
+	 * @var        AgaviContext The context instance.
 	 */
 	protected $context = null;
 
 	/**
-	 * @var        array array of errors
+	 * @var        array An array of errors.
 	 */
 	protected $errors = array();
 
 	/**
-	 * @var        int highest error severity in the container
+	 * @var        int The highest error severity in the container.
 	 */
 	protected $result = AgaviValidator::SUCCESS;
 
 	/**
-	 * initializes the manager
+	 * initializes the validator manager.
 	 *
-	 * @param      AgaviContext contest
-	 * @param      array        parameters
+	 * @param      AgaviContext The context instance.
+	 * @param      array        The initialization parameters.
 	 *
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
@@ -86,7 +86,7 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	}
 
 	/**
-	 * clears the validation manager for reuse
+	 * Clears the validation manager for reuse
 	 *
 	 * clears the validator manager by resetting the dependency and error
 	 * manager and removing all validators after calling their shutdown
@@ -110,9 +110,9 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	}
 
 	/**
-	 * adds a new child validator
+	 * Adds a new child validator.
 	 *
-	 * @param      AgaviValidator new child validator
+	 * @param      AgaviValidator The new child validator.
 	 *
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
@@ -123,9 +123,9 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	}
 
 	/**
-	 * returns the request
+	 * Returns the request.
 	 *
-	 * @return     AgaviRequest request
+	 * @return     AgaviRequest The request instance.
 	 *
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
@@ -136,9 +136,9 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	}
 
 	/**
-	 * returns the dependency manager
+	 * Returns the dependency manager.
 	 *
-	 * @return     AgaviDependencyManager dependency manager
+	 * @return     AgaviDependencyManager The dependency manager instance.
 	 *
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
@@ -149,23 +149,24 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	}
 
 	/**
-	 * get the base path of the validator
+	 * Gets the base path of the validator.
 	 *
-	 * @return     string base path
+	 * @return     AgaviVirtualArrayPath The base path.
 	 *
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
-	public function getBase() {
+	public function getBase()
+	{
 		return new AgaviVirtualArrayPath($this->getParameter('base', ''));
 	}
 
 	/**
-	 * starts the validation process
+	 * Starts the validation process.
 	 *
-	 * @param      AgaviParameterHolder The parameters which should be validated
+	 * @param      AgaviParameterHolder The parameters which should be validated.
 	 *
-	 * @return     bool true, if validation succeeded
+	 * @return     bool true, if validation succeeded.
 	 *
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
@@ -256,7 +257,7 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	}
 
 	/**
-	 * shuts down the validation system
+	 * Shuts the validation system down.
 	 *
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
@@ -269,9 +270,9 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	}
 
 	/**
-	 * registers an array of validators
+	 * Registers multiple validators.
 	 *
-	 * @param      array array of validators
+	 * @param      array An array of validators.
 	 *
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
@@ -284,7 +285,7 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	}
 
 	/**
-	 * returns the array of errors sorted by validator names
+	 * Returns the array of errors sorted by validator names
 	 *
 	 * Format:
 	 *
@@ -294,7 +295,7 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	 *     'fields' => <i>array of field names</i>
 	 *   )
 	 *
-	 * @return     array array of errors
+	 * @return     array An array of errors.
 	 *
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
@@ -310,7 +311,7 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	}
 
 	/**
-	 * returns the array of errors sorted by input names
+	 * Returns the array of errors sorted by input names
 	 *
 	 * Format:
 	 *
@@ -326,7 +327,7 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	 *
 	 * <i>error message</i> is the first submitted error with type string.
 	 *
-	 * @return     array array of errors
+	 * @return     array An array of errors.
 	 *
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
@@ -362,9 +363,9 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	}
 
 	/**
-	 * returns the result from the error manager
+	 * Returns the result from the error manager
 	 *
-	 * @return     int result of the validation process
+	 * @return     int The result of the validation process.
 	 *
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
@@ -375,10 +376,10 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	}
 
 	/**
-	 * reports an error to the parent container
+	 * Reports an error to the parent container.
 	 *
 	 * @param      AgaviValidator The validator where the error occured
-	 * @param      string         An error message
+	 * @param      string         The error message.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0

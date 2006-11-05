@@ -33,9 +33,9 @@
 class AgaviInarrayValidator extends AgaviValidator
 {
 	/**
-	 * validates the input
+	 * Validates the input.
 	 * 
-	 * @return     bool the value is in the array
+	 * @return     bool The value is in the array.
 	 * 
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0

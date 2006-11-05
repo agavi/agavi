@@ -31,9 +31,9 @@
 class AgaviSetValidator extends AgaviValidator
 {
 	/**
-	 * exports the value and returns true
+	 * Exports the value and returns true.
 	 * 
-	 * @return     bool allways returns true
+	 * @return     bool Always returns true.
 	 * 
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0

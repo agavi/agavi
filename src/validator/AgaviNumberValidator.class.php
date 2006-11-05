@@ -37,14 +37,15 @@
 class AgaviNumberValidator extends AgaviValidator
 {
 	/**
-	 * validates the input
+	 * Validates the input
 	 * 
-	 * @return     bool input is valid number according to given parameters
+	 * @return     bool The input is valid number according to given parameters.
 	 * 
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
-	protected function validate() {
+	protected function validate()
+	{
 		$value = $this->getData($this->getArgument());
 
 		switch(strtolower($this->getParameter('type'))) {

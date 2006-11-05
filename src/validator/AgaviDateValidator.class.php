@@ -24,8 +24,8 @@
  *   * MM/DD/YYYY, MM/DD (day and month also single digit possible)
  * Omitted values are set to current infos (e.g. ommitting year sets date('Y')).
  * 
- * If parameter 'check' is true, the date is checked by checkdate() if its a real
- * existing day. Optional the date can be exported in format YYYY-MM-DD.
+ * If parameter 'check' is true, the date is checked by checkdate() if its a
+ * real existing day. Optional the date can be exported in format YYYY-MM-DD.
  * 
  * Parameters:
  *   'check'   check date if the specified day really exists
@@ -42,9 +42,9 @@
 class AgaviDateValidator extends AgaviValidator
 {
 	/**
-	 * validates the input
+	 * Validates the input.
 	 * 
-	 * @return     bool true if the input was a valid date
+	 * @return     bool True if the input was a valid date.
 	 * 
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0

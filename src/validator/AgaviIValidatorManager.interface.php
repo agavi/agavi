@@ -17,8 +17,8 @@
  * abstract superclass for ValidatorManagers
  * 
  * AgaviIValidatorManager is the interface for all ValidatorManagers
- * which control validation of request parameters, provide error messages and handle
- * the creation and management of the validators
+ * which control validation of request parameters, provide error messages and
+ * handle the creation and management of the validators.
  * 
  * @package    agavi
  * @subpackage validator
@@ -42,10 +42,10 @@ interface AgaviIValidatorManager
 	public function getContext();
 
 	/**
-	 * initializes the validator manager
+	 * Initializes the validator manager
 	 * 
-	 * @param      AgaviContext the context
-	 * @param      array        parameters for the validator manager 
+	 * @param      AgaviContext The context.
+	 * @param      array        The parameters for this validator manager.
 	 *
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
@@ -53,7 +53,7 @@ interface AgaviIValidatorManager
 	public function initialize(AgaviContext $context, array $parameters = array());
 
 	/**
-	 * clears the validator manager for reuse
+	 * Clears the validator manager for reuse
 	 *
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
@@ -61,11 +61,11 @@ interface AgaviIValidatorManager
 	public function clear();
 
 	/**
-	 * starts the validation process and returns the result
+	 * Starts the validation process and returns the result
 	 * 
-	 * @param      AgaviParameterHolder The parameters which should be validated
+	 * @param      AgaviParameterHolder The parameters which should be validated.
 	 * 
-	 * @return     bool result of validation process
+	 * @return     bool The result of validation process.
 	 *
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0

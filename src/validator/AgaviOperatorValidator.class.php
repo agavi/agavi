@@ -30,26 +30,26 @@
 abstract class AgaviOperatorValidator extends AgaviValidator implements AgaviIValidatorContainer
 {
 	/**
-	 * @var        array child validators
+	 * @var        array The child validators.
 	 */
 	protected $children = array();
 
 	/**
-	 * @var        array errors of child validators
+	 * @var        array The errors of the child validators.
 	 */
 	protected $errors = array();
 	
 	/**
-	 * @var        int highest error severity in the container
+	 * @var        int The highest error severity in the container.
 	 */
 	protected $result = AgaviValidator::SUCCESS;
 	
 	/**
 	 * constructor
 	 * 
-	 * @param      AgaviIValidatorContainer parent ValidatorContainer
+	 * @param      AgaviIValidatorContainer The parent ValidatorContainer
 	 *                                      (mostly the ValidatorManager)
-	 * @param      array                    parameters from the config file
+	 * @param      array                    The parameters from the config file.
 	 *
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
@@ -69,15 +69,15 @@ abstract class AgaviOperatorValidator extends AgaviValidator implements AgaviIVa
 	}
 
 	/**
-	 * method for checking if the setup of child validators is valid
+	 * Method for checking the validity of child validators.
 	 * 
 	 * Some operators (XOR and NOT) need a specific quantity of child
 	 * validators so they implement an algorithm that checks of the setup
 	 * is valid. This method is run first when execute() is invoked and
 	 * should throw an exception if the setup is invalid.
 	 * 
-	 * @throws     AgaviValidatorException quantity of child validators is
-	 *                                     invalid
+	 * @throws     <b>AgaviValidatorException<b> If the  quantity of child 
+	 *                                           validators is invalid
 	 *
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
@@ -87,7 +87,7 @@ abstract class AgaviOperatorValidator extends AgaviValidator implements AgaviIVa
 	}
 	
 	/**
-	 * shutdown method, for shutting down the model etc.
+	 * Shutdown method, for shutting down the model etc.
 	 *
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
@@ -100,18 +100,17 @@ abstract class AgaviOperatorValidator extends AgaviValidator implements AgaviIVa
 	}
 	
 	/**
-	 * submits an error to the error manager
+	 * Submits an error to the error manager.
 	 * 
 	 * The stuff in the parameter specified in $index is submitted to the
 	 * error manager. If there is no parameter with this name, then 'error'
 	 * is tryed as an parameter and if even this fails, the stuff in
 	 * $backupError is sent.
 	 * 
-	 * @param      string name of parameter the message is saved in
-	 * @param      bool   do not use as error message even
-	 *                    if error message is of type string
-	 * @param      array  array of fields that are affected by the error
-	 * @param      mixed  error value to be used if no other value was found
+	 * @param      string The name of the error parameter to fetch the message 
+	 *                    from.
+	 * @param      string An default error message to be used if the given error 
+	 *                    has no message set.
 	 *
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
@@ -137,10 +136,10 @@ abstract class AgaviOperatorValidator extends AgaviValidator implements AgaviIVa
 	}
 
 	/**
-	 * reports an error to the parent container
+	 * Reports an error to the parent container.
 	 * 
-	 * @param      AgaviValidator The validator where the error occured
-	 * @param      string         An error message
+	 * @param      AgaviValidator The validator where the error occured.
+	 * @param      string         An error message.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
@@ -152,9 +151,9 @@ abstract class AgaviOperatorValidator extends AgaviValidator implements AgaviIVa
 	}
 	
 	/**
-	 * adds new child validator
+	 * Adds new child validator.
 	 * 
-	 * @param      AgaviValidator new child validator
+	 * @param      AgaviValidator The new child validator.
 	 *
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
@@ -165,9 +164,9 @@ abstract class AgaviOperatorValidator extends AgaviValidator implements AgaviIVa
 	}
 	
 	/**
-	 * registers an array of validators
+	 * Registers an array of validators.
 	 * 
-	 * @param      array array of validators
+	 * @param      array The array of validators.
 	 * 
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
@@ -180,9 +179,9 @@ abstract class AgaviOperatorValidator extends AgaviValidator implements AgaviIVa
 	}
 	
 	/**
-	 * get Request from parent
+	 * Gets the request from the parent.
 	 * 
-	 * @return     AgaviRequest parent's request
+	 * @return     AgaviRequest The parent's request.
 	 *
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
@@ -193,9 +192,9 @@ abstract class AgaviOperatorValidator extends AgaviValidator implements AgaviIVa
 	}
 	
 	/**
-	 * get parent's dependency manager
+	 * Gets parent's dependency manager.
 	 * 
-	 * @return     AgaviDependencyManager parent's dependency manager
+	 * @return     AgaviDependencyManager The parent's dependency manager.
 	 *
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
@@ -206,9 +205,9 @@ abstract class AgaviOperatorValidator extends AgaviValidator implements AgaviIVa
 	}
 
 	/**
-	 * returns the result from the error manager
+	 * Returns the result from the error manager.
 	 * 
-	 * @return     int result of the validation process
+	 * @return     int The result of the validation process.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
@@ -219,14 +218,14 @@ abstract class AgaviOperatorValidator extends AgaviValidator implements AgaviIVa
 	}
 
 	/**
-	 * executes the validator
+	 * Executes the validator.
 	 * 
-	 * Eexecutes the operators validate()-Method after checking the quantity
+	 * Executes the operators validate()-Method after checking the quantity
 	 * of child validators with checkValidSetup().
 	 * 
-	 * @param      AgaviParameterHolder The parameters which should be validated
+	 * @param      AgaviParameterHolder The parameters which should be validated.
 	 *
-	 * @return     int result of validation (SUCCESS, NONE, ERROR, CRITICAL)
+	 * @return     int The result of validation (SUCCESS, NONE, ERROR, CRITICAL).
 	 *
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0

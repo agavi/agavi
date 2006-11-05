@@ -17,7 +17,7 @@
  * AgaviNOTOperatorValidator succeeds if the sub-validator failed
  *
  * Parameters:
- *   'skip_errors'  do not submit errors of child validators to validator manager
+ *   'skip_errors' do not submit errors of child validators to validator manager
  *
  * @package    agavi
  * @subpackage validator
@@ -31,9 +31,10 @@
 class AgaviNotOperatorValidator extends AgaviOperatorValidator
 {
 	/**
-	 * check if operator has more then one child validator
+	 * Checks if operator has more then one child validator.
 	 * 
-	 * @throws     AgaviValidatorException operator has more then 1 child validator
+	 * @throws     <b>AgaviValidatorException</b> If the operator has more then 
+	 *                                            one child validator
 	 * 
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
@@ -46,9 +47,10 @@ class AgaviNotOperatorValidator extends AgaviOperatorValidator
 	}
 
 	/**
-	 * validates the operator by returning the inverse result of the child validator
+	 * Validates the operator by returning the inverse result of the child 
+	 * validator
 	 * 
-	 * @return     bool true, if child validator failed 
+	 * @return     bool True if the child validator failed.
 	 * 
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
