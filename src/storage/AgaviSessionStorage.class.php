@@ -29,7 +29,8 @@
  * # <b>session_cookie_domain</b>   - []      - The domain to set to the session cookie.
  * # <b>session_cookie_secure</b>   - []      - Whether or not the cookie should only be sent over secure connections
  *
- * All cookie parameters default to whatever PHP would otherwise use (ie. what's set in php.ini, .htaccess or elsewhere)
+ * All cookie parameters default to whatever PHP would otherwise use 
+ * (ie. what's set in php.ini, .htaccess or elsewhere)
  * (see {@link http://www.php.net/session-set-cookie-params})
  *
  * @package    agavi

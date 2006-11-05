@@ -54,7 +54,8 @@ interface AgaviITranslator
 	 *
 	 * @param      mixed       The message to be translated.
 	 * @param      string      The domain of the message.
-	 * @param      AgaviLocale The locale to which the message should be translated.
+	 * @param      AgaviLocale The locale to which the message should be 
+	 *                         translated.
 	 *
 	 * @return     string The translated message.
 	 *

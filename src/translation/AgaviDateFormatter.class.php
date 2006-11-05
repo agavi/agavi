@@ -33,12 +33,25 @@ class AgaviDateFormatter extends AgaviSimpleDateFormatter implements AgaviITrans
 	 */
 	protected $context = null;
 
+	/**
+	 * @var        AgaviLocale An AgaviLocale instance.
+	 */
 	protected $locale = null;
 
+	/**
+	 * @var        string The type of the formatter (date|time|datetime).
+	 */
 	protected $type = null;
 
+	/**
+	 * @var        string The format type (full|long|medium|short) if this is 
+	 *                    not a custom format.
+	 */
 	protected $formatType = null;
 
+	/**
+	 * @var        string The custom format string (if any).
+	 */
 	protected $customFormat = null;
 
 	/**

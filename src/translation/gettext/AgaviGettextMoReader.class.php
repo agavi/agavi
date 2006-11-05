@@ -31,6 +31,13 @@ final class AgaviGettextMoReader
 	/**
 	 * Parses a .mo file and returns the data as an array.
 	 * For the format see the gettext manual
+	 *
+	 * @param      string Full path to the .mo file.
+	 *
+	 * @return     array The translation data.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
 	 */
 	public static function readFile($filePath)
 	{

@@ -59,7 +59,6 @@ class AgaviTranslationManager
 	 */
 	protected $defaultLocaleIdentifier = null;
 
-
 	/**
 	 * @var        string The default domain which shall be used for translation.
 	 */
@@ -97,8 +96,8 @@ class AgaviTranslationManager
 	protected $timeZoneCache = array();
 
 	/**
-	 * @var        string The default time zone. If not set this will be 
-	 *                    tried to be guessed.
+	 * @var        string The default time zone. If not set the timezone php 
+	 *                    will be used as default.
 	 */
 	protected $defaultTimeZone = null;
 
@@ -226,6 +225,9 @@ class AgaviTranslationManager
 	 * Formats a date in the current locale.
 	 *
 	 * @param      mixed The date to be formatted.
+	 * @param      string The domain in which the date should be formatted.
+	 * @param      AgaviLocale The locale which should be used for formatting.
+	 *                         Defaults to the currently active locale.
 	 *
 	 * @return     string The formatted date.
 	 *
@@ -254,6 +256,9 @@ class AgaviTranslationManager
 	 * Formats a currency in the current locale.
 	 *
 	 * @param      mixed The number to be formatted.
+	 * @param      string The domain in which the date should be formatted.
+	 * @param      AgaviLocale The locale which should be used for formatting.
+	 *                         Defaults to the currently active locale.
 	 *
 	 * @return     string The formatted number.
 	 *
@@ -282,6 +287,9 @@ class AgaviTranslationManager
 	 * Formats a number in the current locale.
 	 *
 	 * @param      mixed The number to be formatted.
+	 * @param      string The domain in which the date should be formatted.
+	 * @param      AgaviLocale The locale which should be used for formatting.
+	 *                         Defaults to the currently active locale.
 	 *
 	 * @return     string The formatted number.
 	 *
@@ -310,7 +318,12 @@ class AgaviTranslationManager
 	/**
 	 * Translate a message into the current locale.
 	 *
-	 * @param      string The message.
+	 * @param      mixed  The message.
+	 * @param      string The domain in which the date should be formatted.
+	 * @param      AgaviLocale The locale which should be used for formatting.
+	 *                         Defaults to the currently active locale.
+	 * @param      array The parameters which should be used for sprintf on the 
+	 *                   translated string.
 	 *
 	 * @return     string The translated message.
 	 *
@@ -348,7 +361,14 @@ class AgaviTranslationManager
 	/**
 	 * Translate a singular/plural message into the current locale.
 	 *
-	 * @param      string The message.
+	 * @param      string The message for the singular form.
+	 * @param      string The message for the plural form.
+	 * @param      int    The amount for which the translation should happen.
+	 * @param      string The domain in which the date should be formatted.
+	 * @param      AgaviLocale The locale which should be used for formatting.
+	 *                         Defaults to the currently active locale.
+	 * @param      array The parameters which should be used for sprintf on the 
+	 *                   translated string.
 	 *
 	 * @return     string The translated message.
 	 *
@@ -596,11 +616,27 @@ class AgaviTranslationManager
 		return $locale;
 	}
 
+	/**
+	 * Sets the default time zone.
+	 *
+	 * @param      string The timezone identifier
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public function setDefaultTimeZone($id)
 	{
 		$this->defaultTimeZone = $id;
 	}
 
+	/**
+	 * Gets the instance of the current timezone.
+	 *
+	 * @return     AgaviTimeZone The current timezone instance.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public function getCurrentTimeZone()
 	{
 		if($this->defaultTimeZone !== null) {
@@ -611,13 +647,27 @@ class AgaviTranslationManager
 		return $this->createTimeZone($tz);
 	}
 
-	public function createTimeZone($id)
+	/**
+	 * Creates a new timezone instance for the given identifier.
+	 *
+	 * Please note that this method caches the results for each identifier, so
+	 * if you plan to modify the timezones returned by this method you need to 
+	 * clone them first. Alternatively you can set the cache parameter to false,
+	 * but this will mean the data for this timezone will be loaded from the 
+	 * hdd again.
+	 *
+	 * @return     AgaviTimeZone The timezone instance for the given id.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function createTimeZone($id, $cache = true)
 	{
 		if(!isset($this->timeZoneList[$id])) {
 			return AgaviTimeZone::createCustomTimeZone($this, $id);
 		}
 
-		if(!isset($this->timeZoneCache[$id])) {
+		if(!isset($this->timeZoneCache[$id]) || !$cache) {
 			$currId = $id;
 
 			// resolve links
@@ -627,13 +677,27 @@ class AgaviTranslationManager
 
 			$zoneData = include(AgaviConfig::get('core.cldr_dir') . '/timezones/' . $this->timeZoneList[$currId]['filename']);
 
-			$this->timeZoneCache[$id] = new AgaviOlsonTimeZone($this, $id, $zoneData);
+			$zone = new AgaviOlsonTimeZone($this, $id, $zoneData);
+			if($cache) {
+				$this->timeZoneCache[$id] = $zone;
+			}
 		}
 
-		return $this->timeZoneCache[$id];
+		return $zone; 
 	}
 
 
+	/**
+	 * Creates a new calendar instance with the current time set.
+	 *
+	 * @param      mixed This can be either an AgaviLocale, an AgaviTimeZone or
+	 *                   a string specifying the calendar type.
+	 *
+	 * @return     AgaviCalendar The current timezone instance.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public function createCalendar($type = null)
 	{
 		$locale = $this->getCurrentLocale();

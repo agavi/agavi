@@ -14,7 +14,8 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * Provides support for session storage using a CreoleDb database abstraction layer.
+ * Provides support for session storage using a CreoleDb database abstraction
+ * layer.
  *
  * <b>Required parameters:</b>
  *
@@ -108,7 +109,8 @@ class AgaviCreoleSessionStorage extends AgaviSessionStorage
 	 * @return     bool true, if the session was destroyed, otherwise an
 	 *                  exception is thrown.
 	 *
-	 * @throws     <b>AgaviDatabaseException</b> If the session cannot be destroyed.
+	 * @throws     <b>AgaviDatabaseException</b> If the session cannot be
+	 *                                           destroyed.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @author     Veikko Makinen <mail@veikkomakinen.com>
@@ -142,7 +144,8 @@ class AgaviCreoleSessionStorage extends AgaviSessionStorage
 	 * @return     bool true, if old sessions have been cleaned, otherwise an
 	 *                  exception is thrown.
 	 *
-	 * @throws     <b>AgaviDatabaseException</b> If old sessions cannot be cleaned.
+	 * @throws     <b>AgaviDatabaseException</b> If old sessions cannot be 
+	 *                                           cleaned.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @author     Veikko Makinen <mail@veikkomakinen.com>
@@ -172,14 +175,15 @@ class AgaviCreoleSessionStorage extends AgaviSessionStorage
 	/**
 	 * Open a session.
 	 *
-	 * @param      string
-	 * @param      string
+	 * @param      string The path is ignored.
+	 * @param      string The name is ignored.
 	 *
 	 * @return     bool true, if the session was opened, otherwise an exception
 	 *                  is thrown.
 	 *
 	 * @throws     <b>AgaviDatabaseException</b> If a connection with the database
-	 *                                           does not exist or cannot be created.
+	 *                                           does not exist or cannot be
+	 *                                           created.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @author     Veikko Makinen <mail@veikkomakinen.com>
@@ -265,7 +269,8 @@ class AgaviCreoleSessionStorage extends AgaviSessionStorage
 	 * @return     bool true, if the session was written, otherwise an exception
 	 *                  is thrown.
 	 *
-	 * @throws     <b>AgaviDatabaseException</b> If session data cannot be written.
+	 * @throws     <b>AgaviDatabaseException</b> If session data cannot be 
+	 *                                           written.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @author     Veikko Makinen <mail@veikkomakinen.com>

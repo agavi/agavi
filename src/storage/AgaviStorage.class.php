@@ -15,7 +15,8 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviStorage allows you to customize the way Agavi stores its persistent data.
+ * AgaviStorage allows you to customize the way Agavi stores its persistent 
+ * data.
  *
  * @package    agavi
  * @subpackage storage
@@ -91,8 +92,8 @@ abstract class AgaviStorage extends AgaviParameterHolder
 	 *
 	 * @return     mixed Data associated with the key.
 	 *
-	 * @throws     <b>AgaviStorageException</b> If an error occurs while reading data
-	 *                                          from this storage.
+	 * @throws     <b>AgaviStorageException</b> If an error occurs while reading
+	 *                                          data from this storage.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -137,8 +138,8 @@ abstract class AgaviStorage extends AgaviParameterHolder
 	 * @param      string A unique key identifying your data.
 	 * @param      mixed  Data associated with your key.
 	 *
-	 * @throws     <b>AgaviStorageException</b> If an error occurs while writing to
-	 *                                          this storage.
+	 * @throws     <b>AgaviStorageException</b> If an error occurs while writing
+	 *                                          to this storage.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
