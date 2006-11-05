@@ -210,6 +210,8 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 				
 				$pname = $name = $element->getAttribute('name');
 				
+				$multiple = $element->nodeName == 'select' && $element->hasAttribute('multiple');
+				
 				$checkValue = false;
 				if($element->getAttribute('type') == 'checkbox') {
 					if(($pos = strpos($pname, '[]')) && ($pos + 2 != strlen($pname))) {
@@ -222,7 +224,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 				} elseif(preg_match_all('/([^\[]+)?(?:\[([^\]]*)\])/', $pname, $matches)) {
 					$pname = $matches[1][0];
 					
-					if($element->nodeName == 'select' && $multiple = $element->hasAttribute('multiple')) {
+					if($multiple) {
 						$count = count($matches[2]) - 1;
 					} else {
 						$count = count($matches[2]);
