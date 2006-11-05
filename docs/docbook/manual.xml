@@ -532,9 +532,123 @@
     <section>
       <title>Configuration</title>
 
-      <para>explain xml format, cascaded configuration files, configuration
-      blocks and their context / environment parameters, overwriting of
-      settings, ReturnArrayConfigHandler, how configs are compiled</para>
+      <section>
+        <title>Basic Configuration Concepts</title>
+
+        <para>Agavi's standard configuration file format is XML, but you can
+        use any format you like for your custom files (you'll probably have to
+        write a parser, though). Each configuration file may also have a
+        parent, which is also read during compilation, and the two files get
+        merged together, with the child file overwriting settings from the
+        parent. Of course, the parent file may again reference a parent and so
+        on, which is an excellent way to easily enforce common settings etc
+        across projects.</para>
+
+        <para>All configuration files are compiled into a very efficient
+        format by their Configuration Handler to maximize performance. Once
+        this compilation has occured, the compiled version will be used until
+        the configuration file is modified. Then, the compilation will occur
+        again. If Agavi is running in debug mode, configuration files are
+        always re-compiled on each request.</para>
+      </section>
+
+      <section>
+        <title>General Format and Environment-/Context-Specific Blocks</title>
+
+        <para>Each configuration file should have an XML prolog. The default
+        encoding is UTF-8, but you can set any encoding you like; Agavi will
+        then translate encodings during compilation. Note that this requires
+        the iconv extension, unless you're using ISO-8859-1, which can be
+        handled without the help of iconv.</para>
+
+        <para>The root element of each configuration file is
+        &lt;configurations&gt;. It may have an optional attribute called
+        "parent" which can be used to specify the parent configuration file.
+        This root element must contain at least one &lt;configuration&gt;
+        element, which then contains the actual configuration
+        directives.</para>
+
+        <para>The reason why &lt;configurations&gt; contains
+        &lt;configuration&gt; elements is that a &lt;configuration&gt; block
+        can be specific to an environment, a context, or both. To achieve
+        this, pass a space separated list of names to the "enviroment" and/or
+        "context" attributes of the tag. This way, you can write very
+        fine-grained config files to change behavior according to the
+        situation. For example, the basic settings.xml file has different
+        settings per environment (example simplified):</para>
+
+        <para><programlisting>&lt;configurations&gt;
+  &lt;configuration&gt;
+    &lt;settings&gt;
+      &lt;setting name="debug"&gt;false&lt;/setting&gt;
+    &lt;/settings&gt;
+  &lt;/configuration&gt;
+  &lt;configuration environment="development"&gt;
+    &lt;settings&gt;
+      &lt;setting name="debug"&gt;true&lt;/setting&gt;
+    &lt;/settings&gt;
+  &lt;/configuration&gt;
+&lt;/configurations&gt;</programlisting>In this example, debug is always
+        disabled unless the environment is set to "development". Note that
+        environments and contexts do not have to be declared anywhere.
+        Bootstrapping an environment or getting a context instance "activates"
+        the environment or context. If you have declared settings specific to
+        them, they'll be used. If not, the "global" settings (i.e. those in
+        &lt;configuration&gt; blocks without further attributes) take
+        effect.</para>
+
+        <para>Environment-specific settings overwrite generic ones,
+        context-specific settings overwrite environment-specific ones, and
+        environment- and context-specific settings overwrite all of the
+        before.</para>
+
+        <para>You'll also soon notice that for each element that may occur
+        multiple times, the parent element is the plural form of the name.
+        &lt;route&gt; elements sit inside &lt;routes&gt;, &lt;mouse&gt;
+        elements inside &lt;mice&gt; and so on.</para>
+      </section>
+
+      <section>
+        <title>Parameter blocks</title>
+
+        <para>Many tags in configuration files accept a &lt;parameters&gt;
+        block as the child element which is usually used to specify
+        initialization arguments to the respective resource. Each
+        &lt;parameter&gt; inside the &lt;parameters&gt; container has a name,
+        specified via the attribute "name", and a value. This value can,
+        however, again be a &lt;parameters&gt; block. This inner block often
+        does not need name attributes for the &lt;parameter&gt; elements,
+        because it usually is simply a list of values for the parent
+        &lt;parameter&gt;. Here's an example:</para>
+
+        <para><programlisting>&lt;parameters&gt;
+  &lt;parameter name="firstparam"&gt;a value goes here&lt;/parameter&gt;
+  &lt;parameter name="secondparam"&gt;
+    &lt;parameters&gt;
+      &lt;parameter&gt;foo&lt;/parameter&gt;
+      &lt;parameter&gt;bar&lt;/parameter&gt;
+    &lt;/parameters&gt;
+  &lt;/parameter&gt;
+  &lt;parameter name="
+&lt;/parameters&gt;</programlisting></para>
+      </section>
+
+      <section>
+        <title>Value Substitution and Configuration Directives</title>
+
+        <para>Parameter blocks, but also many other attributes and values may
+        contain the name of a configuration directive, wrapped in percent
+        signs. The following parameter will contain the path name of the
+        project's app dir followed by "/fubar", because the directive is
+        expanded before assignment:</para>
+
+        <para><programlisting>&lt;parameter name="path"&gt;%core.app_dir%/fubar&lt;/parameter&gt;</programlisting>Also,
+        in parameter blocks and sometimes in other locations, boolean
+        expressions are expanded to actual boolean values:</para>
+
+        <para><programlisting>&lt;parameter name="use_logging"&gt;false&lt;/parameter&gt;</programlisting>Will
+        assign boolean false to the parameter "use_logging".</para>
+      </section>
     </section>
 
     <section>
