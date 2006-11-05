@@ -66,6 +66,8 @@
 |   </parameter>                                                             |
 | </parameters>                                                              |
 |                                                                            |
+| For a list of available parameters for a class, browse the class source    |
+| or documentation.                                                          |
 | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
 | KEYWORDS:                                                                  |
 | You may reference any configuration directive by enclosing the name in     |
