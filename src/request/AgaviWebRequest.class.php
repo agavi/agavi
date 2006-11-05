@@ -66,6 +66,11 @@ class AgaviWebRequest extends AgaviRequest
 	protected $url = '';
 
 	/**
+	 * @var        bool Indicates whether or not PUT was used to upload a file.
+	 */
+	protected $isHttpPutFile = false;
+
+	/**
 	 * Retrieve the scheme part of a request URL, typically the protocol.
 	 * Example: "http".
 	 *
@@ -460,7 +465,7 @@ class AgaviWebRequest extends AgaviRequest
 	{
 		parent::initialize($context, $parameters);
 		
-		$methods = array('GET' => 'read', 'POST' => 'write');
+		$methods = array('GET' => 'read', 'POST' => 'write', 'PUT' => 'create', 'DELETE' => 'remove');
 		if(isset($parameters['method_names'])) {
 			$methods = array_merge($methods, (array) $parameters['method_names']);
 		}
@@ -469,10 +474,43 @@ class AgaviWebRequest extends AgaviRequest
 			case 'POST':
 				$this->setMethod($methods['POST']);
 				break;
+			case 'PUT':
+				$this->setMethod($methods['PUT']);
+				break;
+			case 'DELETE':
+				$this->setMethod($methods['DELETE']);
+				break;
 			default:
 				$this->setMethod($methods['GET']);
 		}
-
+		
+		if($this->getMethod() == $methods['PUT']) {
+			// PUT. We now gotta set a flag for that and populate $_FILES manually
+			$this->isHttpPutFile = true;
+			
+			$putfile = tmpfile();
+			
+			stream_copy_to_stream(fopen("php://input", "rb"), $putFile);
+			
+			// for temp file name and size
+			$putFileInfo = array(
+				'stat' => fstat($putFile),
+				'meta_data' => stream_get_meta_data($putFile)
+			);
+			
+			$putFileName = isset($parameters['PUT_file_name']) ? $parameters['PUT_file_name'] : 'put_file';
+			
+			$_FILES = array(
+				$putFileName => array(
+					'name' => $putFileName,
+					'type' => 'application/octet-stream',
+					'size' => $putFileInfo['stat']['size'],
+					'tmp_name' => $putFileInfo['meta_data']['uri'],
+					'error' => UPLOAD_ERR_OK
+				)
+			);
+		}
+		
 		$this->urlScheme = 'http' . (isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on' ? 's' : '');
 
 		if(isset($_SERVER['SERVER_PORT'])) {
@@ -515,6 +553,26 @@ class AgaviWebRequest extends AgaviRequest
 		$this->setParameters($_GET);
 		// merge POST parameters
 		$this->setParameters($_POST);
+	}
+	
+	/**
+	 * Wrapper method for either move_uplaoded_file or HTTP PUT input handling.
+	 *
+	 * @param      string The name of the input file.
+	 * @param      string The name of the destination file.
+	 *
+	 * @return     bool Whether or not the operation was successful.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	protected function moveUploadedFile($source, $destination)
+	{
+		if($this->isHttpPutFile) {
+			return @rename($source, $destination);
+		} else {
+			return @move_uploaded_file($source, $destination);
+		}
 	}
 
 	/**
@@ -567,7 +625,7 @@ class AgaviWebRequest extends AgaviRequest
 				throw new AgaviFileException($error);
 			}
 
-			if(@move_uploaded_file($_FILES[$name]['tmp_name'], $file)) {
+			if($this->moveUploadedFile($_FILES[$name]['tmp_name'], $file)) {
 				// chmod our file
 				@chmod($file, $fileMode);
 				
