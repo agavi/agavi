@@ -89,11 +89,31 @@ class AgaviTimeZoneDataParser extends AgaviConfigParser
 		return $this->parseFile($config);
 	}
 
+	/**
+	 * Checks whether a line is all empty or only comment
+	 *
+	 * @param      string The line to check.
+	 *
+	 * @param      bool Whether the line is empty or only consists of a comment.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public static function commentFilter($line)
 	{
 		return !(strlen(trim($line)) == 0 || preg_match('!^\s*#!', $line));
 	}
 
+	/**
+	 * Parses the given file
+	 *
+	 * @param      string The full path to the file to parse.
+	 *
+	 * @return     array An array of zones and links.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	protected function parseFile($file)
 	{
 		$zoneLines = explode("\n", file_get_contents($file));
@@ -140,6 +160,15 @@ class AgaviTimeZoneDataParser extends AgaviConfigParser
 		return array('zones' => $zones, 'links' => $links);
 	}
 
+	/**
+	 * Prepares as much info for each internal rule as possible and set them in
+	 * $this->rules.
+	 *
+	 * @param      array The rules.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	protected function prepareRules($rules)
 	{
 		$finalRules = array();
@@ -215,6 +244,17 @@ class AgaviTimeZoneDataParser extends AgaviConfigParser
 		$this->rules = $finalRules;
 	}
 
+	/**
+	 * Comparison function for usort comparing the time of 2 rules.
+	 *
+	 * @param      array Parameter a
+	 * @param      array Parameter b
+	 *
+	 * @return     int 0 if the time equals -1 if a is smaller, 1 if b is smaller.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public static function ruleCmp($a, $b)
 	{
 		if($a['time'] == $b['time']) {
@@ -224,6 +264,21 @@ class AgaviTimeZoneDataParser extends AgaviConfigParser
 		return ($a['time'] < $b['time']) ? -1 : 1;
 	}
 
+	/**
+	 * Returns as rules with the given name within the given limits.
+	 *
+	 * @param      string The name of the ruleset.
+	 * @param      int    The lower time limit of the rules.
+	 * @param      string The upper time limit as string.
+	 * @param      int    The gmt offset to be used.
+	 * @param      string The dst format.
+	 *
+	 * @return     array  The rules which matched the criteria completely 
+	 *                    processed.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	protected function getRules($name, $from, $until, $gmtOff, $format)
 	{
 		if(!isset($this->rules[$name])) {
@@ -296,15 +351,21 @@ class AgaviTimeZoneDataParser extends AgaviConfigParser
 		return array('rules' => $rules, 'untilTime' => $lastUntilTime, 'activeRules' => $this->rules[$name]['activeRules']);
 	}
 
+	/**
+	 * Generates all the zone tables by processing their rules.
+	 *
+	 * @param      array The input zones tables.
+	 *
+	 * @return     array The processed zones.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	protected function generateDatatables($zones)
 	{
 		$zoneTables = array();
 
 		foreach($zones as $zone) {
-			if($zone['name'] != 'Europe/Dublin') {
-				//continue;
-			}
-
 			$start = true;
 			$myRules = array();
 			$finalRule = array();
@@ -466,6 +527,21 @@ class AgaviTimeZoneDataParser extends AgaviConfigParser
 		return $zoneTables;
 	}
 
+	/**
+	 * Returns the time specified by the input arguments.
+	 *
+	 * @param      int The year.
+	 * @param      int The month.
+	 * @param      array The date definition.
+	 * @param      array The at (time into the day) definition.
+	 * @param      int The gmt offset.
+	 * @param      int The dst offset.
+	 *
+	 * @return     int The unix timestamp.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	protected function getOnDate($year, $month, $dateDef, $atDef, $gmtOff, $dstOff)
 	{
 		static $cal = null;
@@ -498,7 +574,7 @@ class AgaviTimeZoneDataParser extends AgaviConfigParser
 		} else {
 			throw new AgaviException('Unknown on type ' . $dateDef['type']);
 		}
-		$time = $cal->getTime() / 1000;;
+		$time = $cal->getTime() / 1000;
 
 		$time += $atDef['secondsInDay'];
 		if($atDef['type'] == 'wallclock') {
@@ -511,7 +587,18 @@ class AgaviTimeZoneDataParser extends AgaviConfigParser
 		return $time;
 	}
 
-
+	/**
+	 * Splits a line into the amount of items requested according to the 
+	 * olson definition (which allows the last item to contain spaces)
+	 *
+	 * @param      string The line.
+	 * @param      int The amount of items.
+	 *
+	 * @return     array The items.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	protected function splitLine($line, $itemCount)
 	{
 		$line = trim($line);
@@ -648,6 +735,16 @@ class AgaviTimeZoneDataParser extends AgaviConfigParser
 	 *          "D" in "EST" or "EDT") of time zone abbreviations to
 	 *          be used when this rule is in effect.  If this field
 	 *          is -, the variable part is null.
+	 */
+	/**
+	 * Parses a rule.
+	 *
+	 * @param      array The columns of this rule.
+	 *
+	 * @return     array The parsed rule.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
 	 */
 	protected function parseRule($ruleColumns)
 	{
@@ -792,6 +889,16 @@ class AgaviTimeZoneDataParser extends AgaviConfigParser
 	 *        do, indicating that the next line is a further
 	 *        continuation.
 	 */
+	/**
+	 * Parses a zone.
+	 *
+	 * @param      array The lines of this zone.
+	 *
+	 * @return     array The parsed zone.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	protected function parseZone($zoneLines)
 	{
 		$indexBase = 0;
@@ -842,6 +949,16 @@ class AgaviTimeZoneDataParser extends AgaviConfigParser
 		return array('name' => $name, 'rules' => $rules);
 	}
 
+	/**
+	 * Determines the month definition from an abbrevation.
+	 *
+	 * @param      string The abbrevated month.
+	 *
+	 * @return     int The definition of this month from AgaviDateDefinitions.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	protected function getMonthFromAbbr($month)
 	{
 		static $months = array(AgaviDateDefinitions::JANUARY => 'january', AgaviDateDefinitions::FEBRUARY => 'february', AgaviDateDefinitions::MARCH => 'march', AgaviDateDefinitions::APRIL => 'april', AgaviDateDefinitions::MAY => 'may', AgaviDateDefinitions::JUNE => 'june', AgaviDateDefinitions::JULY => 'july', AgaviDateDefinitions::AUGUST => 'august', AgaviDateDefinitions::SEPTEMBER => 'september', AgaviDateDefinitions::OCTOBER => 'october', AgaviDateDefinitions::NOVEMBER => 'november', AgaviDateDefinitions::DECEMBER => 'december');
@@ -856,6 +973,16 @@ class AgaviTimeZoneDataParser extends AgaviConfigParser
 		return $month;
 	}
 
+	/**
+	 * Determines the day definition from an abbrevation.
+	 *
+	 * @param      string The abbrevated day.
+	 *
+	 * @return     int The definition of this day from AgaviDateDefinitions.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	protected function getDayFromAbbr($day)
 	{
 		static $days = array(AgaviDateDefinitions::SUNDAY => 'sunday', AgaviDateDefinitions::MONDAY => 'monday', AgaviDateDefinitions::TUESDAY => 'tuesday', AgaviDateDefinitions::WEDNESDAY => 'wednesday', AgaviDateDefinitions::THURSDAY => 'thursday', AgaviDateDefinitions::FRIDAY => 'friday', AgaviDateDefinitions::SATURDAY => 'saturday');
@@ -870,6 +997,16 @@ class AgaviTimeZoneDataParser extends AgaviConfigParser
 		return $day;
 	}
 
+	/**
+	 * Returns the seconds from a string in the hh:mm:ss format.
+	 *
+	 * @param      string The time as string.
+	 *
+	 * @return     int The seconds into the day defined by the input.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	protected function timeStrToSeconds($time)
 	{
 		if(preg_match('!^(-?)([0-9]{1,2})(\:[0-9]{1,2})?(\:[0-9]{1,2})?$!', $time, $match)) {
@@ -891,6 +1028,16 @@ class AgaviTimeZoneDataParser extends AgaviConfigParser
 		return $seconds;
 	}
 
+	/**
+	 * Parses a date string and returns its parts as array.
+	 *
+	 * @param      string The date as string.
+	 *
+	 * @return     array The parts of the date.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	protected function dateStrToArray($date)
 	{
 		$array = array('year' => 0, 'month' => 0, 'day' => 1, 'time' => array('type' => 'wallclock', 'seconds' => 0));

@@ -102,8 +102,9 @@ abstract class AgaviConfigHandler extends AgaviParameterHolder
 	 *
 	 * @return     string Data to be written to a cache file.
 	 *
-	 * @throws     <b>AgaviUnreadableException</b> If a requested configuration file
-	 *                                             does not exist or is not readable.
+	 * @throws     <b>AgaviUnreadableException</b> If a requested configuration
+	 *                                             file does not exist or is not
+	 *                                             readable.
 	 * @throws     <b>AgaviParseException</b> If a requested configuration file is
 	 *                                        improperly formatted.
 	 *
@@ -116,10 +117,12 @@ abstract class AgaviConfigHandler extends AgaviParameterHolder
 	 * Initialize this ConfigHandler.
 	 *
 	 * @param      string The path to a validation file for this config handler.
+	 * @param      string The parser class to use.
 	 * @param      array An associative array of initialization parameters.
 	 *
 	 * @throws     <b>AgaviInitializationException</b> If an error occurs while
-	 *                                                 initializing the ConfigHandler
+	 *                                                 initializing the
+	 *                                                 ConfigHandler
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -235,7 +238,8 @@ abstract class AgaviConfigHandler extends AgaviParameterHolder
 	 * @param      AgaviConfigValueHolder The root config element
 	 * @param      string                 An environment name.
 	 * @param      string                 A context name.
-	 * @param      bool                   Whether parser class should be autoloaded or not.
+	 * @param      bool                   Whether the parser class should be
+	 *                                    autoloaded or not.
 	 *
 	 * @return     array An array of ConfigValueHolder configuration elements.
 	 *

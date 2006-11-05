@@ -133,7 +133,8 @@ class AgaviXmlConfigParser extends AgaviConfigParser
 	}
 
 	/**
-	 * Iterates thru a list of nodes and stores to each node in the <b>XmlValueHolder</b>
+	 * Iterates thru a list of nodes and stores to each node in the 
+	 * <b>XmlValueHolder</b>
 	 *
 	 * @param      mixed An array or an object that can be iterated over
 	 * @param      AgaviXmlValueHolder The storage for the info from the nodes

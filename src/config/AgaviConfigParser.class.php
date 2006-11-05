@@ -36,10 +36,11 @@ abstract class AgaviConfigParser
 	 *
 	 * @return     AgaviConfigValueHolder Data to be written to a cache file.
 	 *
-	 * @throws     <b>AgaviUnreadableException</b> If a requested configuration file
-	 *                                             does not exist or is not readable.
-	 * @throws     <b>AgaviParseException</b>      If a requested configuration file
-	 *                                             is improperly formatted.
+	 * @throws     <b>AgaviUnreadableException</b> If a requested configuration
+	 *                                             file does not exist or is not
+	 *                                             readable.
+	 * @throws     <b>AgaviParseException</b>      If a requested configuration
+	 *                                             file is improperly formatted.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0

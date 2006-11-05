@@ -32,11 +32,13 @@ class AgaviLdmlSupplementalConfigHandler extends AgaviConfigHandler
 	 * Execute this configuration handler.
 	 *
 	 * @param      string An absolute filesystem path to a configuration file.
+	 * @param      string An optional context in which we are currently running.
 	 *
 	 * @return     string Data to be written to a cache file.
 	 *
-	 * @throws     <b>AgaviUnreadableException</b> If a requested configuration file
-	 *                                             does not exist or is not readable.
+	 * @throws     <b>AgaviUnreadableException</b> If a requested configuration
+	 *                                             file does not exist or is not
+	 *                                             readable.
 	 * @throws     <b>AgaviParseException</b> If a requested configuration file is
 	 *                                        improperly formatted.
 	 *

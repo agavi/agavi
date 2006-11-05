@@ -14,7 +14,8 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviValidatorConfigHandler allows you to register validators with the system.
+ * AgaviValidatorConfigHandler allows you to register validators with the
+ * system.
  *
  * @package    agavi
  * @subpackage config
@@ -37,11 +38,13 @@ class AgaviValidatorConfigHandler extends AgaviConfigHandler
 	 * Execute this configuration handler.
 	 *
 	 * @param      string An absolute filesystem path to a configuration file.
+	 * @param      string An optional context in which we are currently running.
 	 *
 	 * @return     string Data to be written to a cache file.
 	 *
-	 * @throws     <b>AgaviUnreadableException</b> If a requested configuration file
-	 *                                             does not exist or is not readable.
+	 * @throws     <b>AgaviUnreadableException</b> If a requested configuration
+	 *                                             file does not exist or is not
+	 *                                             readable.
 	 * @throws     <b>AgaviParseException</b> If a requested configuration file is
 	 *                                        improperly formatted.
 	 *
@@ -113,9 +116,13 @@ class AgaviValidatorConfigHandler extends AgaviConfigHandler
 	/**
 	 * Builds an array of php code strings, each of them creating a validator
 	 *
-	 * @param      array  ConfigValueHolders
-	 * @param      array  Name -> Class map
-	 * @param      string name of parent
+	 * @param      AgaviConfigValueHolder The value holder of this validator.
+	 * @param      array  The code of old validators (we simply overwrite "old" 
+	 *                    validators here).
+	 * @param      string The severity of the parent container.
+	 * @param      string The name of the parent container.
+	 * @param      string The method of the parent container.
+	 * @param      bool Whether the parent container is required.
 	 *
 	 * @return     array php code blocks that register the validators
 	 *

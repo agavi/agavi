@@ -158,9 +158,28 @@ class AgaviTranslationConfigHandler extends AgaviConfigHandler
 
 	}
 
+	/**
+	 * Tries to resolve the given class name. This first checks whether a class
+	 * given in $iface exists and if not whether one using the given format 
+	 * exists.
+	 *
+	 * @param      string The format string given to sprintf.
+	 * @param      string The class name we're looking for.
+	 * @param      string The domain in which this translator is specified. This
+	 *                    parameter is only used in the exception to ease 
+	 *                    debugging your configuration.
+	 *
+	 * @return     string Data class name.
+	 *
+	 * @throws     <b>AgaviConfigurationException</b> If the class couldn't be 
+	 *                                                resolved.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	protected function getCustomClassName($format, $iface, $domain)
 	{
-		if(class_exists(sprintf($format, ucfirst($iface)))) {
+		if(!class_exists($iface) && class_exists(sprintf($format, ucfirst($iface)))) {
 			$iface = sprintf($format, ucfirst($iface));
 		} elseif(!class_exists($iface)) {
 			$err = sprintf('The translator for the domain specifies an unknown translator "%s" for the domain "%s"', $iface, $domain);
@@ -170,6 +189,20 @@ class AgaviTranslationConfigHandler extends AgaviConfigHandler
 		return $iface;
 	}
 
+	/**
+	 * Generates the initialization code for the given translator in the given 
+	 * domain and returns it.
+	 *
+	 * @param      string The domain.
+	 * @param      string The type of the translator (msg|num|cur|date)
+	 * @param      string The format of the class names.
+	 * @param      array  The translator data.
+	 *
+	 * @return     string The code for type in the domain.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	protected function getInitializationCode($domain, $type, $typeFormat, $data)
 	{
 		$code = '';

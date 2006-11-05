@@ -45,8 +45,7 @@ final class AgaviConfigCache
 	 * @param      string An absolute filesystem path to a configuration file.
 	 * @param      string An absolute filesystem path to the cache file that
 	 *                    will be written.
-	 *
-	 * @return     void
+	 * @param      string The context which we're currently running.
 	 *
 	 * @throws     <b>AgaviConfigurationException</b> If a requested configuration
 	 *                                                file does not have an
@@ -115,8 +114,8 @@ final class AgaviConfigCache
 	 * @return     string An absolute filesystem path to the cache filename
 	 *                    associated with this specified configuration file.
 	 *
-	 * @throws     <b>AgaviUnreadableException</b> If a requested configuration file
-	 *                                             does not exist.
+	 * @throws     <b>AgaviUnreadableException</b> If a requested configuration 
+	 *                                             file does not exist.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -146,8 +145,6 @@ final class AgaviConfigCache
 	/**
 	 * Clear all configuration cache files.
 	 *
-	 * @return     void
-	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
@@ -159,7 +156,7 @@ final class AgaviConfigCache
 	/**
 	 * Clear all configuration cache files.
 	 *
-	 * @return     void
+	 * @param      string The subdirectory to clear in the cache directory.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @author     David Zuelke <dz@bitxtender.com>
@@ -174,6 +171,7 @@ final class AgaviConfigCache
 	 * Convert a normal filename into a cache filename.
 	 *
 	 * @param      string A normal filename.
+	 * @param      string A context name.
 	 *
 	 * @return     string An absolute filesystem path to a cache filename.
 	 *
@@ -202,10 +200,9 @@ final class AgaviConfigCache
 	 * to the Agavi "core.app_dir" application setting.
 	 *
 	 * @param      string A filesystem path to a configuration file.
+	 * @param      string A context name.
 	 * @param      bool   Only allow this configuration file to be included once
 	 *                    per request?
-	 *
-	 * @return     void
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -224,8 +221,6 @@ final class AgaviConfigCache
 
 	/**
 	 * Load all configuration application and module level handlers.
-	 *
-	 * @return     void
 	 *
 	 * @throws     <b>AgaviConfigurationException</b> If a configuration related
 	 *                                                error occurs.
@@ -261,7 +256,7 @@ final class AgaviConfigCache
 	 * @param      string An absolute filesystem path to the cache file that
 	 *                    will be written.
 	 * @param      string Data to be written to the cache file.
-	 * @param      string Should we append the data?
+	 * @param      bool   Should we append the data?
 	 *
 	 * @throws     <b>AgaviCacheException</b> If the cache file cannot be written.
 	 *

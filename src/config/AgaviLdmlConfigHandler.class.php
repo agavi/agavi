@@ -33,11 +33,13 @@ class AgaviLdmlConfigHandler extends AgaviConfigHandler
 	 * Execute this configuration handler.
 	 *
 	 * @param      string An absolute filesystem path to a configuration file.
+	 * @param      string An optional context in which we are currently running.
 	 *
 	 * @return     string Data to be written to a cache file.
 	 *
-	 * @throws     <b>AgaviUnreadableException</b> If a requested configuration file
-	 *                                             does not exist or is not readable.
+	 * @throws     <b>AgaviUnreadableException</b> If a requested configuration
+	 *                                             file does not exist or is not
+	 *                                             readable.
 	 * @throws     <b>AgaviParseException</b> If a requested configuration file is
 	 *                                        improperly formatted.
 	 *
@@ -115,6 +117,14 @@ class AgaviLdmlConfigHandler extends AgaviConfigHandler
 		return $retval;
 	}
 
+	/**
+	 * Prepares the parent information for the given ldml tree.
+	 *
+	 * @param      AgaviConfigValueHolder The ldml tree.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	protected function prepareParentInformation($ldmlTree)
 	{
 		$this->nodeRefs = array();
@@ -128,6 +138,14 @@ class AgaviLdmlConfigHandler extends AgaviConfigHandler
 		}
 	}
 
+	/**
+	 * Generates the parent information for the given ldml subtree.
+	 *
+	 * @param      AgaviConfigValueHolder The ldml node.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	protected function generateParentInformation($childList, &$nextId, $parentId)
 	{
 		foreach($childList as $child) {
@@ -312,6 +330,18 @@ array data format
 
 			
 */
+
+	/**
+	 * Generates the array used by AgaviLocale from an LDML tree.
+	 *
+	 * @param      AgaviConfigValueHolder The ldml tree.
+	 * @param      array The array to store the parsed data to.
+	 *
+	 * @return     array The array with the data.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public function parseLdmlTree($ldmlTree, &$data)
 	{
 
@@ -691,7 +721,18 @@ array data format
 		return $data;
 	}
 
-	protected function getTypeList($list, &$data, $intifyKeys = true)
+	/**
+	 * Gets the value of each node with a type attribute.
+	 *
+	 * @param      array List of AgaivConfigValueHolder items.
+	 * @param      array The array to store the parsed data to.
+	 *
+	 * @return     array The array with the data.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	protected function getTypeList($list, &$data)
 	{
 		// debug stuff to check if we missed any tags (lc = loop count)
 		$lc = 0;
@@ -712,6 +753,18 @@ array data format
 		return $data;
 	}
 
+	/**
+	 * Gets the calendar widths for the given item.
+	 *
+	 * @param      AgaivConfigValueHolder The item.
+	 * @param      string The name of item.
+	 * @param      array The array to store the parsed data to.
+	 *
+	 * @return     array The array with the data.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	protected function getCalendarWidth($item, $name, &$data)
 	{
 		$dataIdxName = $name . 's';
@@ -751,6 +804,18 @@ array data format
 		}
 	}
 
+	/**
+	 * Gets the date or time formats the given item.
+	 *
+	 * @param      AgaivConfigValueHolder The item.
+	 * @param      string The name of item.
+	 * @param      array The array to store the parsed data to.
+	 *
+	 * @return     array The array with the data.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	protected function getDateOrTimeFormats($item, $name, &$data)
 	{
 		$dataIdxName = $name . 's';
@@ -782,6 +847,18 @@ array data format
 		}
 	}
 
+	/**
+	 * Gets the number formats the given item.
+	 *
+	 * @param      AgaivConfigValueHolder The item.
+	 * @param      string The name of item.
+	 * @param      array The array to store the parsed data to.
+	 *
+	 * @return     array The array with the data.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	protected function getNumberFormats($item, $name, &$data)
 	{
 		$dataIdxName = $name . 's';
@@ -809,6 +886,17 @@ array data format
 		}
 	}
 
+	/**
+	 * Resolves the alias LDML tag.
+	 *
+	 * @param      AgaivConfigValueHolder The item.
+	 *
+	 * @return     mixed Either the item if there is no alias or the resolved 
+	 *                   alias.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	protected function getChildsOrAlias($item)
 	{
 		if(isset($item->alias)) {

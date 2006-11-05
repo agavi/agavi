@@ -62,7 +62,7 @@ final class AgaviConfig
 	 *
 	 * @param      string The name of the configuration directive.
 	 *
-	 * @return     bool
+	 * @return     bool Whether the directive was set.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
@@ -77,7 +77,7 @@ final class AgaviConfig
 	 *
 	 * @param      string The name of the configuration directive.
 	 *
-	 * @return     bool
+	 * @return     bool Whether the directive is read-only.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
