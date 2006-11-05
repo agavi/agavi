@@ -76,6 +76,12 @@ abstract class AgaviTimeZone
 
 
 
+	/**
+	 * TODO: document the overloads
+	 * 
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public function getOffset()
 	{
 		$arguments = func_get_args();
@@ -286,6 +292,16 @@ abstract class AgaviTimeZone
 		return $displayString;
 	}
 
+	/**
+	 * Returns the GMT+-hh:mm representation of this timezone.
+	 * 
+	 * @param      bool Whether dst is active.
+	 *
+	 * @return     string The formatted representation.
+	 * 
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	protected function getGmtString($daylight)
 	{
 		$value = $this->getRawOffset() + ($daylight ? $this->getDSTSavings() : 0);

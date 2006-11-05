@@ -28,13 +28,33 @@
  */
 abstract class AgaviCalendar
 {
+	/**
+	 * @var        AgaviTranslationManager The translation manager instance.
+	 * @since      0.11.0
+	 */
+
 	protected $translationManager;
 
+	/**
+	 * Returns the translation manager.
+	 *
+	 * @return     AgaviTranslationManager The translation manager.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public function getTranslationManager()
 	{
 		return $this->translationManager;
 	}
 
+	/**
+	 * Initialize the variables to default values.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     The ICU Project <http://icu.sourceforge.net>
+	 * @since      0.11.0
+	 */
 	protected function initVariables()
 	{
 		$this->fIsTimeSet = false;
@@ -47,6 +67,16 @@ abstract class AgaviCalendar
 		$this->fZone = null;
 	}
 
+	/**
+	 * Called by the overload handler in the constructor. 
+	 *
+	 * @param      AgaviTimeZone The timezone to use.
+	 * @param      AgaviLocale   The locale to use.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     The ICU Project <http://icu.sourceforge.net>
+	 * @since      0.11.0
+	 */
 	protected function constructorOO(AgaviTimeZone $zone, AgaviLocale $locale)
 	{
 		$this->translationManager = $zone->getTranslationManager();
@@ -2544,8 +2574,6 @@ abstract class AgaviCalendar
 
 
 	/**
-	 * @internal
-	 * 
 	 * @return     array
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>

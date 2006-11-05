@@ -1064,8 +1064,13 @@ return true;
 	 * millis are compared directly against the ruleMillis, so any
 	 * standard-daylight adjustments must be handled by the caller.
 	 *
-	 * @return  1 if the date is after the rule date, -1 if the date is before
-	 *          the rule date, or 0 if the date is equal to the rule date.
+	 * @return     int 1 if the date is after the rule date, -1 if the date is 
+	 *                 before the rule date, or 0 if the date is equal to the rule
+	 *                 date.
+	 * 
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @since      0.11.0
 	 */
 	private static function compareToRule($month, $monthLen, $prevMonthLen, $dayOfMonth, $dayOfWeek, $millis, $millisDelta, $ruleMode, $ruleMonth,  $ruleDayOfWeek, $ruleDay, $ruleMillis)
 	{
@@ -1230,6 +1235,10 @@ return true;
 	 * <P>
 	 * This method also recognizes a startDay or endDay of zero as indicating
 	 * no DST.
+	 * 
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @since      0.11.0
 	 */
 	private function decodeRules()
 	{
@@ -1237,30 +1246,34 @@ return true;
 		$this->decodeEndRule();
 	}
 
-/**
- * Decode the start rule and validate the parameters.  The parameters are
- * expected to be in encoded form, which represents the various rule modes
- * by negating or zeroing certain values.  Representation formats are:
- * <p>
- * <pre>
- *            DOW_IN_MONTH  DOM    DOW>=DOM  DOW<=DOM  no DST
- *            ------------  -----  --------  --------  ----------
- * month       0..11        same    same      same     don't care
- * day        -5..5         1..31   1..31    -1..-31   0
- * dayOfWeek   1..7         0      -1..-7    -1..-7    don't care
- * time        0..ONEDAY    same    same      same     don't care
- * </pre>
- * The range for month does not include UNDECIMBER since this class is
- * really specific to GregorianCalendar, which does not use that month.
- * The range for time includes ONEDAY (vs. ending at ONEDAY-1) because the
- * end rule is an exclusive limit point.  That is, the range of times that
- * are in DST include those >= the start and < the end.  For this reason,
- * it should be possible to specify an end of ONEDAY in order to include the
- * entire day.  Although this is equivalent to time 0 of the following day,
- * it's not always possible to specify that, for example, on December 31.
- * While arguably the start range should still be 0..ONEDAY-1, we keep
- * the start and end ranges the same for consistency.
- */
+	/**
+	 * Decode the start rule and validate the parameters.  The parameters are
+	 * expected to be in encoded form, which represents the various rule modes
+	 * by negating or zeroing certain values.  Representation formats are:
+	 * <p>
+	 * <pre>
+	 *            DOW_IN_MONTH  DOM    DOW>=DOM  DOW<=DOM  no DST
+	 *            ------------  -----  --------  --------  ----------
+	 * month       0..11        same    same      same     don't care
+	 * day        -5..5         1..31   1..31    -1..-31   0
+	 * dayOfWeek   1..7         0      -1..-7    -1..-7    don't care
+	 * time        0..ONEDAY    same    same      same     don't care
+	 * </pre>
+	 * The range for month does not include UNDECIMBER since this class is
+	 * really specific to GregorianCalendar, which does not use that month.
+	 * The range for time includes ONEDAY (vs. ending at ONEDAY-1) because the
+	 * end rule is an exclusive limit point.  That is, the range of times that
+	 * are in DST include those >= the start and < the end.  For this reason,
+	 * it should be possible to specify an end of ONEDAY in order to include the
+	 * entire day.  Although this is equivalent to time 0 of the following day,
+	 * it's not always possible to specify that, for example, on December 31.
+	 * While arguably the start range should still be 0..ONEDAY-1, we keep
+	 * the start and end ranges the same for consistency.
+	 * 
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @since      0.11.0
+	 */
 	private function decodeStartRule() 
 	{
 		$this->useDaylight = (($this->startDay != 0) && ($this->endDay != 0) ? true : false);
@@ -1306,7 +1319,12 @@ return true;
 	/**
 	 * Decode the end rule and validate the parameters.  This method is exactly
 	 * analogous to decodeStartRule().
-	 * @see decodeStartRule
+	 *
+	 * @see        AgaviSimpleTimeZone::decodeStartRule
+	 * 
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @since      0.11.0
 	 */
 	private function decodeEndRule() 
 	{

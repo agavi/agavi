@@ -32,7 +32,13 @@ class AgaviGregorianCalendar extends AgaviCalendar
 	//const kPapalCutover = (2299161.0 - kEpochStartAsJulianDay) * AgaviDateDefinitions::MILLIS_PER_DAY;
 	const PAPAL_CUTOVER      = -12219292800000.0;
 
-
+	/**
+	 * Constructor.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     The ICU Project <http://icu.sourceforge.net>
+	 * @since      0.11.0
+	 */
 	public function __construct()
 	{
 		$this->initVariables();
@@ -56,6 +62,13 @@ class AgaviGregorianCalendar extends AgaviCalendar
 		call_user_func_array(array($this, $fName), $arguments);
 	}
 
+	/**
+	 * Initialize all variables to default values.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     The ICU Project <http://icu.sourceforge.net>
+	 * @since      0.11.0
+	 */
 	protected function initVariables()
 	{
 		parent::initVariables();

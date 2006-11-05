@@ -78,6 +78,16 @@ class AgaviOlsonTimeZone extends AgaviTimeZone
 	const MAX_INT = 2147483647;
 	const MAX_DBL = AgaviCalendar::MAX_MILLIS;
 
+	/**
+	 * Constructor
+	 *
+	 * @see        AgaviOlsonTimeZone::constructor()
+	 * @see        AgaviOlsonTimeZone::constructorOSA()
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     The ICU Project <http://icu.sourceforge.net>
+	 * @since      0.11.0
+	 */
 	public function __construct()
 	{
 		$arguments = func_get_args();
@@ -96,8 +106,12 @@ class AgaviOlsonTimeZone extends AgaviTimeZone
 
 
 	/**
-	 * Default constructor.  Creates a time zone with an empty ID and
+	 * Default constructor. Creates a time zone with an empty ID and
 	 * a fixed GMT offset of zero.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     The ICU Project <http://icu.sourceforge.net>
+	 * @since      0.11.0
 	 */
 	protected function constructor()
 	{
@@ -111,21 +125,29 @@ class AgaviOlsonTimeZone extends AgaviTimeZone
 	/**
 	 * Construct a GMT+0 zone with no transitions.  This is done when a
 	 * constructor fails so the resultant object is well-behaved.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     The ICU Project <http://icu.sourceforge.net>
+	 * @since      0.11.0
 	 */
 	protected function constructEmpty()
 	{
 		$this->transitionCount = 0;
 		$this->transitions = array();
-		// TODO: this should probably contain at least item 
+		// TODO: this should probably contain at least one item
 		$this->types = array();
 	}
 
 	/**
-	 * Construct from a resource bundle
-	 * @param top the top-level zoneinfo resource bundle.  This is used
-	 * to lookup the rule that `res' may refer to, if there is one.
-	 * @param res the resource bundle of the zone to be constructed
-	 * @param ec input-output error code
+	 * Construct with info from an array.
+	 *
+	 * @param      AgaviTranslationManager The translation manager.
+	 * @param      string The id.
+	 * @param      array  The zone info data.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     The ICU Project <http://icu.sourceforge.net>
+	 * @since      0.11.0
 	 */
 	protected function constructorOSA(AgaviTranslationManager $tm, $id, array $zoneInfo)
 	{
@@ -168,6 +190,10 @@ class AgaviOlsonTimeZone extends AgaviTimeZone
 
 	/**
 	 * Returns true if the two TimeZone objects are equal.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     The ICU Project <http://icu.sourceforge.net>
+	 * @since      0.11.0
 	 */
 	function __is_equal($that)
 	{
@@ -179,7 +205,11 @@ class AgaviOlsonTimeZone extends AgaviTimeZone
 	}
 
 	/**
-	 * TimeZone API.
+	 * AgaviTimeZone API.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     The ICU Project <http://icu.sourceforge.net>
+	 * @since      0.11.0
 	 */
 	protected function getOffsetIIIIII($era, $year, $month, $dom, $dow, $millis)
 	{
@@ -191,7 +221,11 @@ class AgaviOlsonTimeZone extends AgaviTimeZone
 	}
 
 	/**
-	 * TimeZone API.
+	 * AgaviTimeZone API.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     The ICU Project <http://icu.sourceforge.net>
+	 * @since      0.11.0
 	 */
 	protected function getOffsetIIIIIII($era, $year, $month, $dom, $dow, $millis, $monthLength)
 	{
@@ -225,7 +259,11 @@ class AgaviOlsonTimeZone extends AgaviTimeZone
 	}
 
 	/**
-	 * TimeZone API.
+	 * AgaviTimeZone API.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     The ICU Project <http://icu.sourceforge.net>
+	 * @since      0.11.0
 	 */
 	public function getOffsetRef($date, $local, &$rawoff, &$dstoff)
 	{
@@ -262,9 +300,14 @@ class AgaviOlsonTimeZone extends AgaviTimeZone
 	}
 
 	/**
-	 * TimeZone API.
+	 * AgaviTimeZone API.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     The ICU Project <http://icu.sourceforge.net>
+	 * @since      0.11.0
 	 */
-	public function setRawOffset($offsetMillis) {
+	public function setRawOffset($offsetMillis)
+	{
 		// We don't support this operation, since OlsonTimeZones are
 		// immutable (except for the ID, which is in the base class).
 
@@ -273,6 +316,10 @@ class AgaviOlsonTimeZone extends AgaviTimeZone
 
 	/**
 	 * TimeZone API.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     The ICU Project <http://icu.sourceforge.net>
+	 * @since      0.11.0
 	 */
 	public function getRawOffset()
 	{
@@ -343,6 +390,10 @@ class AgaviOlsonTimeZone extends AgaviTimeZone
 
 	/**
 	 * TimeZone API.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     The ICU Project <http://icu.sourceforge.net>
+	 * @since      0.11.0
 	 */
 	public function useDaylightTime()
 	{
@@ -393,6 +444,10 @@ class AgaviOlsonTimeZone extends AgaviTimeZone
 
 	/**
 	 * TimeZone API.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     The ICU Project <http://icu.sourceforge.net>
+	 * @since      0.11.0
 	 */
 	public function getDSTSavings()
 	{
@@ -404,6 +459,10 @@ class AgaviOlsonTimeZone extends AgaviTimeZone
 
 	/**
 	 * TimeZone API.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     The ICU Project <http://icu.sourceforge.net>
+	 * @since      0.11.0
 	 */
 	public function inDaylightTime($date)
 	{
