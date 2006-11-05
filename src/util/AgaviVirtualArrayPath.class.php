@@ -33,18 +33,18 @@
 class AgaviVirtualArrayPath
 {
 	/**
-	 * @var        bool is path absolute?
+	 * @var        bool Is path absolute?
 	 */
 	protected $absolute = false;
 	/**
-	 * @var        array array components
+	 * @var        array Array components.
 	 */
 	protected $parts = array();
 	
 	/**
 	 * constructor
 	 * 
-	 * @param      string path to be handled by the object
+	 * @param      string The path to be handled by the object
 	 * 
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
@@ -73,9 +73,9 @@ class AgaviVirtualArrayPath
 	}
 	
 	/**
-	 * returns whether the path is absolute
+	 * Returns whether the path is absolute.
 	 * 
-	 * @return     bool path is optional
+	 * @return     bool True if the path is absolute.
 	 * 
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
@@ -86,9 +86,9 @@ class AgaviVirtualArrayPath
 	}
 	
 	/**
-	 * puts the path back into a string
+	 * Returns the string representation of the path.
 	 * 
-	 * @return     string path as string
+	 * @return     string The path as string.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
@@ -114,9 +114,9 @@ class AgaviVirtualArrayPath
 	}
 	
 	/**
-	 * returns the number of components the path has
+	 * Returns the number of components the path has.
 	 * 
-	 * @return     int number of components
+	 * @return     int The number of components.
 	 * 
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
@@ -127,11 +127,11 @@ class AgaviVirtualArrayPath
 	}
 	
 	/**
-	 * Returns the given component of the path
+	 * Returns the given component of the path.
 	 * 
-	 * @param      int Position of the component
+	 * @param      int Position of the component.
 	 * 
-	 * @return     string The component
+	 * @return     string The component at the given position.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com
 	 * @since      0.11.0
@@ -159,11 +159,12 @@ class AgaviVirtualArrayPath
 	}
 
 	/**
-	 * returns the root component of the path
+	 * Returns the root component of the path.
 	 * 
-	 * @param      bool prepend '/' when the path is absolut (defaults to false)
+	 * @param      bool Whether brackets should be added around the component if
+	 *                  this path is not absolute.
 	 * 
-	 * @return     string root component
+	 * @return     string The root component.
 	 * 
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
@@ -188,9 +189,9 @@ class AgaviVirtualArrayPath
 	}
 	
 	/**
-	 * returns the last component of the path and deletes it from the path
+	 * Returns the last component of the path and deletes it from the path.
 	 * 
-	 * @return     string last component
+	 * @return     string The last component.
 	 * 
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
@@ -211,9 +212,9 @@ class AgaviVirtualArrayPath
 	}
 	
 	/**
-	 * appends one or more components to the path
+	 * Appends one or more components to the path.
 	 * 
-	 * @param      string components to be added
+	 * @param      string The components to be added.
 	 * 
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
@@ -224,6 +225,14 @@ class AgaviVirtualArrayPath
 		$this->parts = array_merge($this->parts, $parts['parts']);
 	}
 
+	/**
+	 * Clones this path, appends one or more components to it and returns it.
+	 * 
+	 * @param      string the components to be added.
+	 * 
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public function pushRetNew($path)
 	{
 		$new = clone $this;
@@ -232,16 +241,18 @@ class AgaviVirtualArrayPath
 	}
 	
 	/**
-	 * returns the root component of the path and deletes it from the path
+	 * Returns the root component of the path and deletes it from the path.
 	 * 
-	 * @param      bool prepent '/' when the path is absolut (defaults to false)
+	 * @param      bool Whether brackets should be added around the component if
+	 *                  this path is not absolute.
 	 * 
-	 * @return     string root component
+	 * @return     string The root component.
 	 * 
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
-	public function shift($addBracketsWhenRelative = false) {
+	public function shift($addBracketsWhenRelative = false)
+	{
 		if(!$this->length()) {
 			return null;
 		}
@@ -257,16 +268,49 @@ class AgaviVirtualArrayPath
 		return $ret;
 	}
 
+	/**
+	 * Returns the value at the path of this instance in the given array.
+	 * 
+	 * @param      array The array to get the data from.
+	 * @param      mixed The default value to be used if the path doesn't exist.
+	 * 
+	 * @return     mixed The value at the path.
+	 * 
+	 * @author     Dominik del Bondio
+	 * @since      0.11.0
+	 */
 	public function &getValue(array &$array, $default = null)
 	{
 		return AgaviArrayPathDefinition::getValueFromArray($this->parts, $array, $default);
 	}
 
+	/**
+	 * Sets the value at the path of this instance in the given array.
+	 * 
+	 * @param      array The array to set the data in.
+	 * @param      mixed The value to be set.
+	 * 
+	 * @author     Dominik del Bondio
+	 * @since      0.11.0
+	 */
 	public function setValueFromArray(array &$array, $value)
 	{
 		AgaviArrayPathDefinition::setValueFromArray($this->parts, $array, $value);
 	}
 
+	/**
+	 * Returns the value at the given child path of this instance in the given 
+	 * array.
+	 * 
+	 * @param      string The child path appended to the path in this instance.
+	 * @param      array The array to get the data from.
+	 * @param      mixed The default value to be used if the path doesn't exist.
+	 * 
+	 * @return     mixed The value at the path.
+	 * 
+	 * @author     Dominik del Bondio
+	 * @since      0.11.0
+	 */
 	public function getValueByChildPath($path, array $array, $default = null)
 	{
 		$p = $this->pushRetNew($path);
@@ -274,13 +318,31 @@ class AgaviVirtualArrayPath
 		return $p->getValue($array, $default);
 	}
 
+	/**
+	 * Sets the value at the given child path of this instance in the given array.
+	 * 
+	 * @param      string The child path appended to the path in this instance.
+	 * @param      array The array to set the data in.
+	 * @param      mixed The value to be set.
+	 * 
+	 * @author     Dominik del Bondio
+	 * @since      0.11.0
+	 */
 	public function setValueByChildPath($path, array &$array, $value)
 	{
 		$p = $this->pushRetNew($path);
 
-		return $p->setValueFromArray($array, $value);
+		$p->setValueFromArray($array, $value);
 	}
 
+	/**
+	 * Returns the components of this path.
+	 *
+	 * @return     array The components
+	 * 
+	 * @author     Dominik del Bondio
+	 * @since      0.11.0
+	 */
 	public function getParts()
 	{
 		return $this->parts;

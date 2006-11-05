@@ -14,7 +14,11 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * The decimal formatter will format numbers according to a given format
+ * The decimal formatter will format numbers according to a given format.
+ *
+ * The format is close to the one used by 
+ * {@link http://icu.sourceforge.net/apiref/icu4c/classDecimalFormat.html ICU}.
+ * It consists of the following elements
  *
  * @package    agavi
  * @subpackage util
@@ -137,7 +141,6 @@ class AgaviDecimalFormatter
 
 	/**
 	 * Sets the format to be used for formatting numbers.
-	 * 
 	 *
 	 * @return     string The current format.
 	 *
@@ -326,6 +329,17 @@ class AgaviDecimalFormatter
 		$this->groupingDistances = $groupingDistances;
 	}
 
+	/**
+	 * Formats the given number with the information in this instance.
+	 *
+	 * @param      int|float A number to format.
+	 * @param      string    A currency symbol to be used.
+	 *
+	 * @return     array The number and some information in the desired format.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	protected function prepareNumber($number, $currencySymbol)
 	{
 		$isNegative = false;

@@ -33,6 +33,14 @@ class AgaviSimpleDateFormatter
 	 */
 	protected $formatString = '';
 
+	/**
+	 * Constructs a new date formatter.
+	 *
+	 * @param      string Format to be used for formatting.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public function __construct($format = null)
 	{
 		if($format) {
@@ -72,6 +80,10 @@ class AgaviSimpleDateFormatter
 	const T_QUARTER               = 27;
 	const T_SA_QUARTER            = 28;
 
+	/**
+	 * @var        array The default mapping of format characters to their 
+	 *                   meanings.
+	 */
 	protected static $defaultMap = array(
 		'G' => self::T_ERA,
 		'y' => self::T_YEAR,
@@ -104,19 +116,58 @@ class AgaviSimpleDateFormatter
 		'q' => self::T_SA_QUARTER,
 	);
 
+	/**
+	 * @var        array The list of tokens in the format.
+	 */
 	protected $tokenList;
 
+	/**
+	 * Sets the format which should be used.
+	 *
+	 * @param      string Format to be used for formatting.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public function setFormat($format)
 	{
 		$this->internalParseFormat($format, self::$defaultMap);
 	}
 
-	public function setLocalizedFormat($format)
+	/**
+	 * Sets the format which should be used. This will use the the format 
+	 * characters specified in the locale instead the default ones. 
+	 *
+	 * NOTE: this function is not implemented yet!
+	 *
+	 * @param      string Format to be used for formatting.
+	 * @param      AgaviLocale The locale.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function setLocalizedFormat($format, AgaviLocale $locale)
 	{
 
 	}
 
-	public function format($data, $cal, $locale)
+	/**
+	 * Formats a given date.
+	 *
+	 * @param      mixed The date. This can either be an array containing all the
+	 *                   needed info with the AgaviDateDefinitions constants as 
+	 *                   keys or an unix timestamp (doesn't work yet!) or an
+	 *                   AgaviCalendar instance.
+	 * @param      string The calendar type this date should be formatted in 
+	 *                    (this will usually be gregorian)
+	 * @param      AgaviLocale The locale to format the date in.
+	 *
+	 * @return     string The formatted date.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function format($data, $calendarType, $locale)
 	{
 		$tzid = null;
 		if(is_array($data)) {
@@ -146,11 +197,11 @@ class AgaviSimpleDateFormatter
 				case self::T_ERA:
 					$era = $data[AgaviDateDefinitions::ERA];
 					if($count == 4) {
-						$out .= $locale->getCalendarEraWide($cal, $era);
+						$out .= $locale->getCalendarEraWide($calendarType, $era);
 					} elseif($count == 5) {
-						$out .= $locale->getCalendarEraNarrow($cal, $era);
+						$out .= $locale->getCalendarEraNarrow($calendarType, $era);
 					} else {
-						$out .= $locale->getCalendarEraAbbreviated($cal, $era);
+						$out .= $locale->getCalendarEraAbbreviated($calendarType, $era);
 					}
 					break;
 
@@ -167,11 +218,11 @@ class AgaviSimpleDateFormatter
 				case self::T_SA_MONTH:
 					$month = $data[AgaviDateDefinitions::MONTH] + 1;
 					if($count == 3) {
-						$out .= $locale->getCalendarMonthAbbreviated($cal, $month);
+						$out .= $locale->getCalendarMonthAbbreviated($calendarType, $month);
 					} elseif($count == 4) {
-						$out .= $locale->getCalendarMonthWide($cal, $month);
+						$out .= $locale->getCalendarMonthWide($calendarType, $month);
 					} elseif($count == 5) {
-						$out .= $locale->getCalendarMonthNarrow($cal, $month);
+						$out .= $locale->getCalendarMonthNarrow($calendarType, $month);
 					} else {
 						$out .= str_pad($month, $count, '0', STR_PAD_LEFT);
 					}
@@ -204,11 +255,11 @@ class AgaviSimpleDateFormatter
 				case self::T_DAY_OF_WEEK:
 					$dow = $data[AgaviDateDefinitions::DAY_OF_WEEK];
 					if($count == 4) {
-						$out .= $locale->getCalendarDayWide($cal, $dow);
+						$out .= $locale->getCalendarDayWide($calendarType, $dow);
 					} elseif($count == 5) {
-						$out .= $locale->getCalendarDayNarrow($cal, $dow);
+						$out .= $locale->getCalendarDayNarrow($calendarType, $dow);
 					} else {
-						$out .= $locale->getCalendarDayAbbreviated($cal, $dow);
+						$out .= $locale->getCalendarDayAbbreviated($calendarType, $dow);
 					}
 					break;
 
@@ -231,9 +282,9 @@ class AgaviSimpleDateFormatter
 				case self::T_AM_PM:
 					$isPm = $data[AgaviDateDefinitions::AM_PM];
 					if($isPm) {
-						$out .= $locale->getCalendarPm($cal);
+						$out .= $locale->getCalendarPm($calendarType);
 					} else {
-						$out .= $locale->getCalendarAm($cal);
+						$out .= $locale->getCalendarAm($calendarType);
 					}
 					break;
 
@@ -292,11 +343,11 @@ class AgaviSimpleDateFormatter
 				case self::T_SA_LOCAL_DAY_OF_WEEK:
 					$dow = $data[AgaviDateDefinitions::DOW_LOCAL];
 					if($count == 4) {
-						$out .= $locale->getCalendarDayWide($cal, $dow);
+						$out .= $locale->getCalendarDayWide($calendarType, $dow);
 					} elseif($count == 5) {
-						$out .= $locale->getCalendarDayNarrow($cal, $dow);
+						$out .= $locale->getCalendarDayNarrow($calendarType, $dow);
 					} elseif($count == 3) {
-						$out .= $locale->getCalendarDayAbbreviated($cal, $dow);
+						$out .= $locale->getCalendarDayAbbreviated($calendarType, $dow);
 					} else {
 						$out .= str_pad($dow, $count, '0', STR_PAD_LEFT);
 					}
@@ -331,9 +382,9 @@ class AgaviSimpleDateFormatter
 				case self::T_SA_QUARTER:
 					$quarter = intval($data[AgaviDateDefinitions::MONTH] / 3);
 					if($count == 3) {
-						$out .= $locale->getCalendarQuarterAbbreviated($cal, $quarter);
+						$out .= $locale->getCalendarQuarterAbbreviated($calendarType, $quarter);
 					} elseif($count == 4) {
-						$out .= $locale->getCalendarQuarterWide($cal, $quarter);
+						$out .= $locale->getCalendarQuarterWide($calendarType, $quarter);
 					} else {
 						$out .= str_pad($quarter, $count, '0', STR_PAD_LEFT);
 					}
@@ -344,6 +395,16 @@ class AgaviSimpleDateFormatter
 		return $out;
 	}
 
+	/**
+	 * Returns the GMT-+hhmm string for a the offset given in data.
+	 *
+	 * @param      array Date information.
+	 *
+	 * @return     string The timezone string.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	protected function getGmtZoneString($data)
 	{
 		$value = $data[AgaviDateDefinitions::ZONE_OFFSET] + $data[AgaviDateDefinitions::DST_OFFSET];
@@ -361,6 +422,15 @@ class AgaviSimpleDateFormatter
 		return $str;
 	}
 
+	/**
+	 * Parses the format with the given character to token map.
+	 *
+	 * @param      string The format to parse.
+	 * @param      array  The character to token map.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	protected function internalParseFormat($format, $charToTokenMap)
 	{
 		$this->tokenList = array();

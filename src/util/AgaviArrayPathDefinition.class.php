@@ -42,6 +42,17 @@ final class AgaviArrayPathDefinition
 	{
 	}
 
+	/**
+	 * Unsets a value at the given path.
+	 *
+	 * @param      array The path divided into its individual parts.
+	 * @param      array The array we should operate on.
+	 *
+	 * @return     mixed The previosly stored value.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public static function &unsetValue(array $parts, array &$array)
 	{
 		$a =& $array;
@@ -71,6 +82,17 @@ final class AgaviArrayPathDefinition
 	}
 
 
+	/**
+	 * Checks whether the array has a value at the given path.
+	 *
+	 * @param      array The path divided into its individual parts.
+	 * @param      array The array we should operate on.
+	 *
+	 * @return     bool Whether the path exists in this array.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public static function hasValue(array $parts, array &$array)
 	{
 		$a = $array;
@@ -92,6 +114,18 @@ final class AgaviArrayPathDefinition
 	}
 
 
+	/**
+	 * Returns the value at the given path.
+	 *
+	 * @param      array The path divided into its individual parts.
+	 * @param      array The array we should operate on.
+	 * @param      mixed A default value if the path doesn't exist in the array.
+	 *
+	 * @return     mixed The value stored at the given path.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public static function &getValueFromArray(array $parts, array &$array, $default = null)
 	{
 		$a = &$array;
@@ -113,6 +147,16 @@ final class AgaviArrayPathDefinition
 		return $a;
 	}
 
+	/**
+	 * Sets the value at the given path.
+	 *
+	 * @param      array The path divided into its individual parts.
+	 * @param      array The array we should operate on.
+	 * @param      mixed The value.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public static function setValueFromArray(array $parts, array &$array, $value)
 	{
 		$a = &$array;
@@ -132,6 +176,16 @@ final class AgaviArrayPathDefinition
 		$a = $value;
 	}
 
+	/**
+	 * Returns an array with the single parts of the given path.
+	 *
+	 * @param      string The path.
+	 *
+	 * @return     array The parts of the given path.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public static function getPartsFromPath($path)
 	{
 		if(strlen($path) == 0) {
