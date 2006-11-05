@@ -216,8 +216,8 @@
 		</copy>
 
 		<!-- 404 template -->
-		<available file="${templates.dir}/default_actions/templates/Error404Success${template.extension}" property="templates.dir.current" value="${templates.dir}" />
-		<copy file="${templates.dir.current}/default_actions/templates/Error404Success${template.extension}" tofile="${app.dir}/modules/${module.404}/templates/${404.actionPath}Success${template.extension}" overwrite="false" />
+		<available file="${templates.dir}/default_actions/templates/Error404Success${template.extension}.tmpl" property="templates.dir.current" value="${templates.dir}" />
+		<copy file="${templates.dir.current}/default_actions/templates/Error404Success${template.extension}.tmpl" tofile="${app.dir}/modules/${module.404}/templates/${404.actionPath}Success${template.extension}" overwrite="false" />
 
 <!-- Login -->
 		<listModules app="${app.dir}" property="current.modules" defaultProperty="default.module"/>
@@ -270,8 +270,8 @@
 		</copy>
 
 		<!-- Secure template -->
-		<available file="${templates.dir}/default_actions/templates/SecureSuccess${template.extension}" property="templates.dir.current" value="${templates.dir}" />
-		<copy file="${templates.dir.current}/default_actions/templates/SecureSuccess${template.extension}" tofile="${app.dir}/modules/${module.secure}/templates/${secure.actionPath}Success${template.extension}" overwrite="false" />
+		<available file="${templates.dir}/default_actions/templates/SecureSuccess${template.extension}.tmpl" property="templates.dir.current" value="${templates.dir}" />
+		<copy file="${templates.dir.current}/default_actions/templates/SecureSuccess${template.extension}.tmpl" tofile="${app.dir}/modules/${module.secure}/templates/${secure.actionPath}Success${template.extension}" overwrite="false" />
 
 <!-- Disabled -->
 		<listModules app="${app.dir}" property="current.modules" defaultProperty="default.module"/>
@@ -305,8 +305,8 @@
 		</copy>
 
 		<!-- Disabled template -->
-		<available file="${templates.dir}/default_actions/templates/ModuleDisabledSuccess${template.extension}" property="templates.dir.current" value="${templates.dir}" />
-		<copy file="${templates.dir.current}/default_actions/templates/ModuleDisabledSuccess${template.extension}" tofile="${app.dir}/modules/${module.disabled}/templates/${disabled.actionPath}Success${template.extension}" overwrite="false" />
+		<available file="${templates.dir}/default_actions/templates/ModuleDisabledSuccess${template.extension}.tmpl" property="templates.dir.current" value="${templates.dir}" />
+		<copy file="${templates.dir.current}/default_actions/templates/ModuleDisabledSuccess${template.extension}.tmpl" tofile="${app.dir}/modules/${module.disabled}/templates/${disabled.actionPath}Success${template.extension}" overwrite="false" />
 
 <!-- Unavailable -->
 		<listModules app="${app.dir}" property="current.modules" defaultProperty="default.module"/>
@@ -340,8 +340,8 @@
 		</copy>
 
 		<!-- Unavailable template -->
-		<available file="${templates.dir}/default_actions/templates/UnavailableSuccess${template.extension}" property="templates.dir.current" value="${templates.dir}" />
-		<copy file="${templates.dir.current}/default_actions/templates/UnavailableSuccess${template.extension}" tofile="${app.dir}/modules/${module.unavailable}/templates/${unavailable.actionPath}Success${template.extension}" overwrite="false" />
+		<available file="${templates.dir}/default_actions/templates/UnavailableSuccess${template.extension}.tmpl" property="templates.dir.current" value="${templates.dir}" />
+		<copy file="${templates.dir.current}/default_actions/templates/UnavailableSuccess${template.extension}.tmpl" tofile="${app.dir}/modules/${module.unavailable}/templates/${unavailable.actionPath}Success${template.extension}" overwrite="false" />
 
 <!-- settings.xml -->
 		<available file="${templates.dir}/config/settings.xml.tmpl" property="templates.dir.current" value="${templates.dir}" />
