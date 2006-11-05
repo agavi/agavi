@@ -62,7 +62,8 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	protected $actionAccessor = 'action';
 
 	/**
-	 * @var        bool A boolean value indicating whether or not the request is locked.
+	 * @var        bool A boolean value indicating whether or not the request is 
+	 *                  locked.
 	 */
 	private $locked = false;
 

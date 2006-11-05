@@ -366,7 +366,7 @@ class AgaviWebResponse extends AgaviResponse
 	 *
 	 * @param      string A HTTP header field name.
 	 *
-	 * @return     array All values set for that header, or null if no headers set
+	 * @return     bool true if the header exists, false otherwise.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
@@ -411,8 +411,14 @@ class AgaviWebResponse extends AgaviResponse
 	 * @param      string A cookie name.
 	 * @param      mixed Data to store into a cookie. If null or empty cookie
 	 *                   will be tried to be removed.
-	 * @param      array Cookie parameters (parameters from config or defaults
-	 *                   are used for any missing parameters).
+	 * @param      int    The lifetime of the cookie in seconds. When you pass 0 
+	 *                    the cookie will be valid until the  browser gets closed.
+	 * @param      string The path on the server the cookie will be available on.
+	 * @param      string The domain the cookie is available on.
+	 * @param      bool   Indicates that the cookie should only be transmitted 
+	 *                    over a secure HTTPS connection.
+	 * @param      bool   Whether the cookie will be made accessible only through
+	 *                    the HTTP protocol.
 	 *
 	 * @author     Veikko Makinen <mail@veikkomakinen.com>
 	 * @author     David Zuelke <dz@bitxtender.com>

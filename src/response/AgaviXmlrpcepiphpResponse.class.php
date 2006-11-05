@@ -53,7 +53,7 @@ class AgaviXmlrpcepiphpResponse extends AgaviResponse
 	/**
 	 * Prepend content to the existing content for this Response.
 	 *
-	 * @param      mixed The content to be prepended to this Response.
+	 * @param      array The content to be prepended to this Response.
 	 *
 	 * @return     bool Whether or not the operation was successful.
 	 *
@@ -68,7 +68,7 @@ class AgaviXmlrpcepiphpResponse extends AgaviResponse
 	/**
 	 * Append content to the existing content for this Response.
 	 *
-	 * @param      mixed The content to be appended to this Response.
+	 * @param      array The content to be appended to this Response.
 	 *
 	 * @return     bool Whether or not the operation was successful.
 	 *

@@ -55,8 +55,8 @@ class AgaviWebRouting extends AgaviRouting
 	/**
 	 * Initialize the routing instance.
 	 *
-	 * @param      AgaviContext A Context instance.
-	 * @param      array        An array of initialization parameters.
+	 * @param      AgaviResponse An AgaviResponse instance.
+	 * @param      array         An array of initialization parameters.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
@@ -164,7 +164,7 @@ class AgaviWebRouting extends AgaviRouting
 	 * @param      array  An associative array of parameters.
 	 * @param      array  An array of options.
 	 *
-	 * @return     string
+	 * @return     string The generated URL.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @author     David Zuelke <dz@bitxtender.com>

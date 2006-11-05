@@ -420,7 +420,7 @@ class AgaviWebRequest extends AgaviRequest
 	 */
 	public function hasFileErrors()
 	{
-		foreach($_FILES as &$file) {
+		foreach($_FILES as $file) {
 			if($file['error'] != UPLOAD_ERR_OK) {
 				return true;
 			}

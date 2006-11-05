@@ -162,7 +162,7 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	 * Check if this Response is locked, i.e. whether or not new content and other
 	 * output information can be set.
 	 *
-	 * @return     bool
+	 * @return     bool Whether the response is locked.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0

@@ -74,8 +74,8 @@ abstract class AgaviRouting
 	/**
 	 * Initialize the routing instance.
 	 *
-	 * @param      AgaviContext A Context instance.
-	 * @param      array        An array of initialization parameters.
+	 * @param      AgaviResponse An AgaviResponse instance.
+	 * @param      array         An array of initialization parameters.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
@@ -729,7 +729,8 @@ abstract class AgaviRouting
 		$parenthesisCount = 0;
 		$bracketCount = 0;
 		$hasBrackets = false;
-		// whether the regular expression is clean of any regular expression (\o/)
+		// whether the regular expression is clean of any regular expression 
+		// so we can reverse generate it
 		$cleanRx = true;
 
 		for($i = 0; $i < $len; ++$i) {
@@ -891,6 +892,23 @@ abstract class AgaviRouting
 		return array(substr($match[1], 0, -1), $match[2]);
 	}
 
+	/**
+	 * Parses an argument passed to one of the 'setting attributes' for dynamic 
+	 * parts.
+	 *
+	 * To access variables in the setters one can either use '$variable' (so the 
+	 * variable name makes up the entire argument) or 'text${variable}text' to 
+	 * add additional text.
+	 *
+	 * @param      string The definition.
+	 *
+	 * @return     mixed Either the definition if it didn't contain any dynamic 
+	 *                   parts or an array containing the definition prepared for
+	 *                   sprintf use and the variables in the right order.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	protected function parseDynamicSet($definition)
 	{
 		if(!is_string($definition) || strlen($definition) < 2) {
@@ -921,6 +939,17 @@ abstract class AgaviRouting
 		}
 	}
 
+	/**
+	 * Resolves all variables in a prepared dynamic set definition.
+	 *
+	 * @param      array The definition of the dynamic argument.
+	 * @param      array The array to search for the variables in the argument.
+	 *
+	 * @return     string The resulting string.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	protected function resolveDynamicSet($definition, $parameters)
 	{
 		$vars = array();
