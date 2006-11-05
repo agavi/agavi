@@ -99,7 +99,7 @@
 
 	<!-- create tests directory structure which mimics the app structure -->
 	<target name="projecttests" description="create tests structure for project">
-		<fixpaths base="${project.dir}"/ appdir="${app.dirname}">
+		<fixpaths base="${project.dir}" appdir="${app.dirname}" />
 		<mkdir dir="${tests.dir}" />
 		<mkdir dir="${tests.dir}/lib" />
 		<mkdir dir="${tests.dir}/lib/models" />
