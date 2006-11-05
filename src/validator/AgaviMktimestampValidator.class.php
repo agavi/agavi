@@ -19,6 +19,8 @@
  * Parameters:
  *   'date'         date input in format YYYY-MM-DD
  *   'time'         time input in format HH:MM:SS
+ *   'date_error'   error message when date input has an invalid format
+ *   'time_error'   error message when time input has an invalid format
  *   'error'        error message when date and time form no valid timestamp
  *   'past'         check if timestamp is in the past
  *   'past_error'   error message when timestamp not in past
@@ -37,11 +39,11 @@
 class AgaviMktimestampValidator extends AgaviValidator
 {
 	/**
-	 * validates the input (builds and checks the timestamp)
+	 * Validates the input (builds and checks the timestamp).
 	 * 
-	 * @return     bool the timestamp is valid according to parameters
+	 * @return     bool The timestamp is valid according to parameters.
 	 * 
-	 * @throws     AgaviValidatorException date or time have invalid format
+	 * @throws     <b>AgaviValidatorException</b> date or time have invalid format
 	 * 
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
@@ -49,10 +51,12 @@ class AgaviMktimestampValidator extends AgaviValidator
 	protected function validate()
 	{
 		if(!preg_match('/^\d{4}-\d{2}-\d{2}$/', $this->getData('date'))) {
-			throw new AgaviValidatorException('input date has an invalid format');
+			$this->throwError('date');
+			return false;
 		}
 		if(!preg_match('/^\d{2}:\d{2}:\d{2}$/', $this->getData('time'))) {
-			throw new AgaviValidatorException('input time has an invalid format');
+			$this->throwError('time');
+			return false;
 		}
 		list($year, $month, $day) = explode('-', $this->getData('date'));
 		list($hour, $minute, $second) = explode(':', $this->getData('time'));
