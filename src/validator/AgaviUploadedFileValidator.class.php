@@ -19,7 +19,7 @@
  * Parameters:
  *   'min_size'     The minimum file size in byte
  *   'max_size'     The maximum file size in byte
- *   'extension'    list of valid extensions (delimited by ',')
+ *   'extension'    list of valid extensions (delimited by ' ')
  *
  * @package    agavi
  * @subpackage validator
@@ -68,7 +68,7 @@ class AgaviUploadedFileValidator extends AgaviValidator
 		$fileinfo = pathinfo($request->getFileName($name));
 		$ext = isset($fileinfo['extension']) ? $fileinfo['extension'] : '';
 
-		if(in_array($ext, explode(',', $this->getParameter('extension')))) {
+		if(in_array($ext, explode(' ', $this->getParameter('extension')))) {
 			return true;
 		}
 
