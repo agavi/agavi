@@ -7,9 +7,8 @@
 | AGAVI AUTO LOAD CONFIGURATION                                              |
 | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
 | Any file listed here will automatically be loaded by PHP when the class is |
-| first accessed (not in advance so you don't have to worry about            |
-| performance). This means you do not manually have to include it in your    |
-| files.                                                                     |
+| first accessed (not in advance so there's no performance hit). This means  |
+| you do not manually have to include it in your files.                      |
 | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
 | AUTOLOAD CONFIGURATION ELEMENTS & ATTRIBUTES:                              |
 |                                                                            |

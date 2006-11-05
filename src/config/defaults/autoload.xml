@@ -7,12 +7,26 @@
 | AGAVI AUTO LOAD CONFIGURATION                                              |
 | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
 | Any file listed here will automatically be loaded by PHP when the class is |
-| first accessed. This means you do not manually have to include it in your  |
-| files.                                                                     |
+| first accessed (not in advance so there's no performance hit). This means  |
+| you do not manually have to include it in your files.                      |
+| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
+| AUTOLOAD CONFIGURATION ELEMENTS & ATTRIBUTES:                              |
+|                                                                            |
+| <autoloads> Parent element for <autoload>                                  |
+|   Includes:                                                                |
+|     1-n <autoload> element                                                 |
+|                                                                            |
+| <autoload> Defines an autoload for a class                                 |
+|   Attributes:                                                              |
+|     name : Name of the class                                               |
+|   Includes:                                                                |
+|     A full path to the file to be loaded when the class is needed. You can |
+|     use KEYWORDS (see below) in the path.                                  |
+|                                                                            |
 | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
 | KEYWORDS:                                                                  |
 | You may reference any configuration directive by enclosing the name in     |
-| "%" signs. Example: %core.agavi_dir%                                         |
+| "%" signs. Example: %core.agavi_dir%                                       |
 +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
 -->
 <configurations>

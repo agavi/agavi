@@ -13,6 +13,18 @@
 |       cache file until you remove the cache file or you change the         |
 |       modified time of this file.                                          |
 | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
+| COMPILE CONFIGURATION ELEMENTS & ATTRIBUTES:                               |
+|                                                                            |
+| <compiles> Parent element for <compile>                                    |
+|   Includes:                                                                |
+|     1-n <compile> element                                                  |
+|                                                                            |
+| <compile>                                                                  |
+|   Includes:                                                                |
+|     A full path to the file to be added to the compilation. You can        |
+|     use KEYWORDS (see below) in the path.                                  |
+|                                                                            |
+| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
 | KEYWORDS:                                                                  |
 | You may reference any configuration directive by enclosing the name in     |
 | "%" signs. Example: %core.agavi_dir%                                       |
