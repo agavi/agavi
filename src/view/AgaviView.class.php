@@ -100,8 +100,8 @@ abstract class AgaviView extends AgaviAttributeHolder
 	/**
 	 * Execute any presentation logic and set template attributes.
 	 *
-	 * @return     array An array of forwarding information in case a forward
-	 *                   should occur, otherwise null.
+	 * @return     AgaviParameterHolder An array of forwarding information in case
+	 *                                  a forward should occur, otherwise null.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -207,6 +207,7 @@ abstract class AgaviView extends AgaviAttributeHolder
 	 * Initialize this view.
 	 *
 	 * @param      AgaviResponse The Response for this Action/View.
+	 * @param      array         The attributes for this View.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @author     Sean Kerr <skerr@mojavi.org>
@@ -314,6 +315,7 @@ abstract class AgaviView extends AgaviAttributeHolder
 	 * @param      string A template attribute name.
 	 * @param      string A module name.
 	 * @param      string An action name.
+	 * @param      array  An array of additional parameters.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -328,9 +330,10 @@ abstract class AgaviView extends AgaviAttributeHolder
 	}
 
 	/**
-	 * Set an array of slots
+	 * Set an array of slots.
 	 *
 	 * @see        AgaviView::setSlot()
+	 *
 	 * @param      array An array of slots
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
@@ -342,7 +345,7 @@ abstract class AgaviView extends AgaviAttributeHolder
 	}
 
 	/**
-	 * Empties the slots array, clearing all previously registered slots
+	 * Empties the slots array, clearing all previously registered slots.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.10.0
