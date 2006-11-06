@@ -8,7 +8,7 @@
 <configurations>
 	<configuration>
 		<handlers>
-			<handler pattern="%core.config_dir%/routing.xml" validate="%core.agavi_dir%/config/xsd/routing.xsd" class="CHCHTestHandler">
+			<handler pattern="%core.config_dir%/routing.xml" validate="%core.agavi_dir%/config/xsd/routing.xsd" class="CHCHTestHandler" parser="MyParserClass">
 				<parameters>
 					<parameter name="foo">bar</parameter>
 					<parameter name="dir">%core.agavi_dir%</parameter>

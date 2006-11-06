@@ -4,11 +4,13 @@ require_once(dirname(__FILE__) . '/ConfigHandlerTestBase.php');
 class CHCHTestHandler extends AgaviConfigHandler
 {
 	public	$validationFile,
+					$parser,
 					$parameters;
 
-	public function initialize($vf=null, $params=array())
+	public function initialize($vf=null, $parser = null, $params=array())
 	{
 		$this->validationFile = $vf;
+		$this->parser = $parser;
 		$this->parameters = $params;
 	}
 
@@ -23,7 +25,7 @@ class ConfigHandlersConfigHandlerTest extends ConfigHandlerTestBase
 
 	public function testConfigHandlersConfigHandler()
 	{
-		$hf = AgaviConfig::get('core.config_dir') . '/routing.xml';
+		$hf = AgaviToolkit::normalizePath(AgaviConfig::get('core.config_dir') . '/routing.xml');
 		$CHCH = new AgaviConfigHandlersConfigHandler();
 
 		$file = $this->getIncludeFile($CHCH->execute(AgaviConfig::get('core.config_dir') . '/tests/config_handlers.xml'));
@@ -34,6 +36,7 @@ class ConfigHandlersConfigHandlerTest extends ConfigHandlerTestBase
 		$this->assertTrue(isset(self::$handlers[$hf]));
 		$this->assertType('CHCHTestHandler', self::$handlers[$hf]);
 		$this->assertSame(AgaviConfig::get('core.agavi_dir') . '/config/xsd/routing.xsd', self::$handlers[$hf]->validationFile);
+		$this->assertSame('MyParserClass', self::$handlers[$hf]->parser);
 		$this->assertSame(array('foo' => 'bar', 'dir' => AgaviConfig::get('core.agavi_dir')) , self::$handlers[$hf]->parameters);
 	}
 
