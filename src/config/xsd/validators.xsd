@@ -26,8 +26,12 @@
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="validator">
+    <xs:all>
+      <xs:element name="parameters" type="parameters" minOccurs="0" />
+      <xs:element name="arguments" type="arguments" minOccurs="0"/>
+      <xs:element name="errors" type="arguments" minOccurs="0"/>
+    </xs:all>
     <xs:attribute name="name" type="xs:string" use="required" />
-    <xs:attribute name="class" type="xs:string" use="required" />
   </xs:complexType>
 
   <xs:complexType name="defaults">
@@ -36,12 +40,8 @@
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="default">
-    <xs:all>
-      <xs:element name="parameters" type="parameters" minOccurs="0" />
-      <xs:element name="arguments" type="arguments" minOccurs="0"/>
-      <xs:element name="errors" type="arguments" minOccurs="0"/>
-    </xs:all>
     <xs:attribute name="name" type="xs:string" use="required" />
+    <xs:attribute name="class" type="xs:string" use="required" />
   </xs:complexType>
 
   <xs:complexType name="arguments">
