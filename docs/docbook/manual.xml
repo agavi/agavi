@@ -289,6 +289,52 @@
       <para>While not overly complex, the sample application's code should
       give you a basic understanding of what a software project in Agavi would
       look like in terms of structure.</para>
+
+      <para>The sample app also supports XMLRPC. It exposes a method called
+      "getItemPrice" that can be used to retrieve the price for the products
+      the SearchEngineSpam action knows. Use the following script to test this
+      (needs curl and xmlrpc extensions):</para>
+
+      <para><programlisting>&lt;?php
+
+header('Content-Type: text/html; charset=utf-8');
+
+?&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;title&gt;test&lt;/title&gt;
+    &lt;meta http-equiv="Content-Type" value="text/html; charset=utf-8" /&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;pre&gt;
+&lt;?php
+$request = xmlrpc_encode_request('getItemPrice', array('name' =&gt; 'viagra'), array("encoding" =&gt; "utf-8", "escaping" =&gt; "markup"));
+
+$url = "http://localhost/path/to/the/samples/pub/xmlrpc.php";
+
+$header[] = "Content-type: text/xml; charset=utf-8";
+$header[] = "Content-length: ".strlen($request);
+
+$ch = curl_init();  
+curl_setopt($ch, CURLOPT_URL, $url);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
+curl_setopt($ch, CURLOPT_POSTFIELDS, $request);
+curl_setopt($ch, CURLOPT_HEADER, true);
+
+$data = curl_exec($ch);
+if(curl_errno($ch)) {
+  echo curl_error($ch);
+} else {
+  curl_close($ch);
+  echo htmlspecialchars($data);
+}
+
+?&gt;
+    &lt;/pre&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</programlisting></para>
     </section>
 
     <section>
