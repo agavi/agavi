@@ -40,6 +40,7 @@ class AllTests
 		$testDir = dirname(__FILE__) . '/AllTests';
 
 		$suite = new PHPUnit2_Framework_TestSuite('Agavi Framework');
+
 		require_once($testDir . '/ActionTests.php');
 		$suite->addTest(ActionTests::suite());
 
@@ -54,6 +55,9 @@ class AllTests
 
 		require_once($testDir . '/DatabaseTests.php');
 		$suite->addTest(DatabaseTests::suite());
+
+		require_once($testDir . '/DateTests.php');
+		$suite->addTest(DateTests::suite());
 
 		require_once($testDir . '/LoggingTests.php');
 		$suite->addTest(LoggingTests::suite());
@@ -84,7 +88,6 @@ class AllTests
 
 		require_once($testDir . '/ViewTests.php');
 		$suite->addTest(ViewTests::suite());
-
 
 		return $suite;
 	}

@@ -23,6 +23,7 @@
 				<parameter name="auto_start">false</parameter>
 			</parameters>
 		</storage>
+		<translation_manager class="AgaviTranslationManager" />
 		<user class="AgaviSecurityUser" />
 		<validator_manager class="AgaviValidatorManager" />
 	</configuration>

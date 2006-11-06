@@ -53,6 +53,7 @@
 			<setting name="use_logging">true</setting>
 			<setting name="use_routing">false</setting>
 			<setting name="use_security">false</setting>
+			<setting name="use_translation">true</setting>
 			
 		</settings>
 		
