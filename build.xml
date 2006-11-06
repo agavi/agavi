@@ -31,13 +31,21 @@
 	</target>
 
 	<target name="manual-html" >
-		<mkdir dir="manual-html" />
-		<copy file="docs/lib/agavi-manual.css" todir="manual-html" overwrite="true" />
-		<xslt file="docs/docbook/manual.xml" todir="manual-html" style="docs/lib/agavi-manual-html.xsl" />
+		<mkdir dir="manual/cookbook/html/multipage" />
+		<mkdir dir="manual/introduction/html/multipage" />
+		<mkdir dir="manual/manual/html/multipage" />
+		<copy file="docs/lib/agavi-manual.css" todir="manual/cookbook/html/multipage" overwrite="true" />
+		<copy file="docs/lib/agavi-manual.css" todir="manual/introduction/html/multipage" overwrite="true" />
+		<copy file="docs/lib/agavi-manual.css" todir="manual/manual/html/multipage" overwrite="true" />
+		<xslt todir="manual/cookbook/html/multipage" style="docs/lib/agavi-manual-html.xsl">
+			<fileset dir="docs/cookbook">
+				<include name="*.xml" />
+			</fileset>
+		</xslt>
 	</target>
 
 	<target name="manual-html-onepage" >
-		<mkdir dir="manual-html" />
+		<mkdir dir="manual/manual/html/onepage" />
 		<copy file="docs/lib/agavi-manual.css" todir="manual-html" overwrite="true" />
 		<xslt file="docs/docbook/manual.xml" todir="manual-html" style="docs/lib/agavi-manual-html-onepage.xsl" />
 	</target>
@@ -51,16 +59,31 @@
 		<!-- prepare -->
 		<delete dir="${builddir}" includeemptydirs="true" verbose="true" failonerror="false" />
 		<mkdir dir="${builddir}" />
-		<copy todir="${builddir}" >
+		<copy todir="${builddir}">
 			<fileset dir="src/">
 				<exclude name="**/*.svn" />
 				<include name="**/**" />
 			</fileset>
 		</copy>
+		<mkdir dir="${builddir}/samples" />
+		<copy todir="${builddir}/samples">
+			<fileset dir="samples/">
+				<exclude name="**/*.svn" />
+				<include name="**/**" />
+			</fileset>
+		</copy>
+		<copy file="API_CHANGELOG" todir="${builddir}" />
 		<copy file="CHANGELOG" todir="${builddir}" />
-		<copy file="RELEASE_NOTES" todir="${builddir}" />
+		<copy file="COPYRIGHT" todir="${builddir}" />
 		<copy file="INSTALL" todir="${builddir}" />
+		<copy file="KNOWN_ISSUES" todir="${builddir}" />
 		<copy file="LICENSE" todir="${builddir}" />
+		<copy file="LICENSE-AGAVI" todir="${builddir}" />
+		<copy file="LICENSE-ICU" todir="${builddir}" />
+		<copy file="LICENSE-TANGO_ICON_THEME" todir="${builddir}" />
+		<copy file="LICENSE-UNICODE_CLDR" todir="${builddir}" />
+		<copy file="RELEASE_NOTES" todir="${builddir}" />
+		<copy file="TODO" todir="${builddir}" />
 		<mkdir dir="${builddir}/scripts" />
 		<copy file="etc/agavi-dist" todir="${builddir}/scripts" />
 		<copy file="etc/agavi.bat-dist" todir="${builddir}/scripts" />
@@ -68,14 +91,6 @@
 		<!-- generate package.xml -->
 		<agavipackage dir="${builddir}" />
 
-		<!-- fix package.xml -->
-		<reflexive file="${builddir}/package.xml"> 
-			<filterchain>
-				<replaceregexp>
-					<regexp pattern="role=&quot;data&quot;" replace="role=&quot;php&quot;" />
-				</replaceregexp>
-			</filterchain>
-		</reflexive>
 		<echo msg="package.xml generated to '${builddir}'. Use &quot;pear package&quot; to create the package." />
 	</target>
 

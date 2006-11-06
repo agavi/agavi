@@ -43,8 +43,7 @@ EOD;
 
 		// Modify long description. Try to keep under 80 chars width
 $longDesc = <<<EOD
-Agavi is a fork of the Mojavi project.  It aims to provide an MVC
-application framework for PHP5.
+Agavi is a full-featured MVC-style framework for PHP5 with a strong focus on structure, code reusability and flexibility.
 EOD;
 
 		$p2 = new PEAR_PackageFileManager2;
@@ -55,17 +54,33 @@ EOD;
 			'ignore' => array(
 				'.svn/'
 			),
+			'dir_roles' => array(
+				'buildtools' => 'php',
+				'config' => 'php',
+				'translation' => 'php',
+				'samples' => 'data'
+			),
 			'installexceptions' => array(
 				'scripts/agavi-dist' => '/',
 				'scripts/agavi.bat-dist' => '/'
 			),
 			'exceptions' => array(
+				'API_CHANGELOG' => 'doc',
 				'CHANGELOG' => 'doc',
-				'LICENSE' => 'doc',
+				'COPYRIGHT' => 'doc',
 				'INSTALL' => 'doc',
+				'KNOWN_ISSUES' => 'doc',
+				'LICENSE' => 'doc',
+				'LICENSE-AGAVI' => 'doc',
+				'LICENSE-ICU' => 'doc',
+				'LICENSE-TANGO_ICON_THEME' => 'doc',
+				'LICENSE-UNICODE_CLDR' => 'doc',
 				'RELEASE_NOTES' => 'doc',
+				'TODO' => 'doc',
 				'scripts/agavi-dist' => 'script',
-				'scripts/agavi.bat-dist' => 'script'
+				'scripts/agavi.bat-dist' => 'script',
+				'build.xml' => 'php',
+				'config/xsd/' => 'php'
 			)
 		));
 		$p2->setPackageType('php');
@@ -74,10 +89,10 @@ EOD;
 		$p2->addMaintainer('developer', 'dominik', 'Dominik del Bondio', 'ddb@bitxtender.com');
 		$p2->addMaintainer('developer', 'v-dogg', 'Veikko Makinen', 'mail@veikkomakinen.com');
 		$p2->setChannel('pear.agavi.org');
-		$p2->setReleaseVersion('0.11dev');
-		$p2->setAPIVersion('0.11dev');
-		$p2->setReleaseStability('alpha');
-		$p2->setAPIStability('alpha');
+		$p2->setReleaseVersion('0.11.0RC1');
+		$p2->setAPIVersion('0.11.0RC1');
+		$p2->setReleaseStability('beta');
+		$p2->setAPIStability('beta');
 		$p2->setSummary($shortDesc);
 		$p2->setDescription($longDesc);
 		$p2->setNotes('See the CHANGELOG for full list of changes');
@@ -93,11 +108,11 @@ EOD;
 		$p2->addInstallAs('scripts/agavi-dist', 'agavi');
 		$p2->addIgnoreToRelease('scripts/agavi.bat-dist');
 
-		$p2->addPackageDepWithChannel( 'required', 'phing', 'pear.phing.info', '2.2.0RC3');
-		$p2->addPackageDepWithChannel( 'optional', 'creole', 'pear.phpdb.org', '1.1.0RC1');
-		$p2->addPackageDepWithChannel( 'optional', 'propel_generator', 'pear.phpdb.org', '1.2.0RC2');
-		$p2->addPackageDepWithChannel( 'optional', 'propel_runtime', 'pear.phpdb.org', '1.2.0RC2');
-		$p2->setPhpDep('5.0.0');
+		$p2->addPackageDepWithChannel( 'required', 'phing', 'pear.phing.info', '2.2.0');
+		$p2->addPackageDepWithChannel( 'optional', 'creole', 'pear.phpdb.org', '1.1.0');
+		$p2->addPackageDepWithChannel( 'optional', 'propel_generator', 'pear.phpdb.org', '1.2.0');
+		$p2->addPackageDepWithChannel( 'optional', 'propel_runtime', 'pear.phpdb.org', '1.2.0');
+		$p2->setPhpDep('5.1.0');
 		$p2->setPearinstallerDep('1.4.0');
 		$p2->setLicense('LGPL', 'http://www.gnu.org/copyleft/lesser.html');
 		$p2->addReplacement('scripts/agavi-dist', 'pear-config', '@PEAR-DIR@', 'php_dir');
