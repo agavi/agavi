@@ -70,11 +70,8 @@ class AgaviConfigHandlersConfigHandler extends AgaviConfigHandler
 				$tmp    = "self::\$handlers[%s] = new %s();";
 				$data[] = sprintf($tmp, $category, $class);
 
-				if($parameters != 'null') {
-					// since we have parameters we will need to init the handler
-					$tmp    = "self::\$handlers[%s]->initialize(%s, %s, %s);";
-					$data[] = sprintf($tmp, $category, var_export($this->literalize($handler->getAttribute('validate')), true), var_export($handler->getAttribute('parser'), true), var_export($parameters, true));
-				}
+				$tmp    = "self::\$handlers[%s]->initialize(%s, %s, %s);";
+				$data[] = sprintf($tmp, $category, var_export($this->literalize($handler->getAttribute('validate')), true), var_export($handler->getAttribute('parser'), true), var_export($parameters, true));
 			}
 		}
 
