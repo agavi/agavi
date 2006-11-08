@@ -38,6 +38,12 @@ class AgaviLoggerManager
 	protected $context = null;
 
 	/**
+	 * @var        string The name of the default logger.
+	 * @since      0.11.0
+	 */
+	protected $defaultLoggerName = null;
+
+	/**
 	 * Retrieve the current application context.
 	 *
 	 * @return     AgaviContext The current AgaviContext instance.
@@ -83,8 +89,11 @@ class AgaviLoggerManager
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function getLogger($name = 'default')
+	public function getLogger($name = null)
 	{
+		if($name === null) {
+			$name = $this->defaultLoggerName;
+		}
 		if(isset($this->loggers[$name])) {
 			return $this->loggers[$name];
 		}
@@ -140,7 +149,7 @@ class AgaviLoggerManager
 	{
 		$retval = null;
 		if(isset($this->loggers[$name])) {
-			if($name != 'default') {
+			if($name != $this->defaultLoggerName) {
 				$retval = $this->loggers[$name];
 				unset($this->loggers[$name]);
 			} else {
@@ -178,6 +187,38 @@ class AgaviLoggerManager
 		$error = 'A logger with the name "%s" is already registered';
 		$error = sprintf($error, $name);
 		throw new AgaviLoggingException($error);
+	}
+
+	/**
+	 * Returns the name of the default logger.
+	 *
+	 * @return     string The name of the default logger.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getDefaultLoggerName()
+	{
+		return $this->defaultLoggerName;
+	}
+
+	/**
+	 * Sets the default logger.
+	 *
+	 * @param      string      The name of the the default logger.
+	 *
+	 * @throws     <b>AgaviLoggingException<b> if the logger was not found.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function setDefaultLoggerName($name)
+	{
+		if(!isset($this->loggers[$name])) {
+			throw new AgaviLoggingException('A logger with the name ' . $name . ' does not exist');
+		}
+
+		$this->defaultLoggerName = $name;
 	}
 
 	/**

@@ -8,6 +8,7 @@ ADD: Add a CachingExecutionFilter (#78) (david)
 
 0.11.0 RC1 (November ??, 2006)
 
+ADD: Allow the default logger to have a different name then default (#351) (Dominik)
 ADD: Make app dir name and template extension configurable for agavi cmdline script (#348) (Veikko)
 ADD: Add Controller_ Request_ Response and Routing for handling RESTful requests (#332) (David)
 ADD: Add RBAC User implementation (#320) (David)

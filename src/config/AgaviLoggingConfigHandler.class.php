@@ -52,6 +52,7 @@ class AgaviLoggingConfigHandler extends AgaviConfigHandler
 		$configurations = $this->orderConfigurations(AgaviConfigCache::parseConfig($config, false, $this->getValidationFile(), $this->parser)->configurations, AgaviConfig::get('core.environment'), $context);
 
 		// init our data, includes, methods, appenders and appenders arrays
+		$defaultLogger = 'default';
 		$data      = array();
 		$loggers   = array();
 		$appenders = array();
@@ -59,6 +60,8 @@ class AgaviLoggingConfigHandler extends AgaviConfigHandler
 
 		foreach($configurations as $cfg) {
 			if(isset($cfg->loggers)) {
+				$defaultLogger = $cfg->loggers->getAttribute('default_logger', $defaultLogger);
+
 				foreach($cfg->loggers as $logger) {
 					$name = $logger->getAttribute('name');
 					if(!isset($loggers[$name])) {
@@ -123,6 +126,7 @@ class AgaviLoggingConfigHandler extends AgaviConfigHandler
 				}
 				$data[] = sprintf('$this->context->getLoggerManager()->setLogger("%s", $%s);', $name, $name);
 			}
+			$data[] = sprintf('$this->context->getLoggerManager()->setDefaultLoggerName(%s);', var_export($defaultLogger, true));
 		}
 
 		// compile data
