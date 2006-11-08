@@ -279,8 +279,8 @@ class AgaviPropelDatabase extends AgaviDatabase
 					self::setDefaultConfigPathSet();
 				}
 			}
-			if(isset($config['propel']['classes'])) {
-				$this->propelAutoloads = $config['propel']['classes'];
+			if(isset($config['propel']['datasources'][$datasource]['classes'])) {
+				$this->propelAutoloads = $config['propel']['datasources'][$datasource]['classes'];
 				spl_autoload_register(array($this, 'autoload'));
 			}
 		}
