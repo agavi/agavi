@@ -488,7 +488,7 @@ class AgaviWebRequest extends AgaviRequest
 			// PUT. We now gotta set a flag for that and populate $_FILES manually
 			$this->isHttpPutFile = true;
 			
-			$putfile = tmpfile();
+			$putFile = tmpfile();
 			
 			stream_copy_to_stream(fopen("php://input", "rb"), $putFile);
 			
