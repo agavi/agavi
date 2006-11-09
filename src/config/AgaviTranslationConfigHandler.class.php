@@ -76,9 +76,9 @@ class AgaviTranslationConfigHandler extends AgaviConfigHandler
 					if(!isset($translatorData[$domain])) {
 						$translatorData[$domain] = array(
 							'msg'  => array('type' => null, 'filters' => array(), 'params' => array()),
-							'num'  => array('type' => null, 'filters' => array(), 'params' => array()),
-							'cur'  => array('type' => null, 'filters' => array(), 'params' => array()),
-							'date' => array('type' => null, 'filters' => array(), 'params' => array()),
+							'num'  => array('type' => 'number', 'filters' => array(), 'params' => array()),
+							'cur'  => array('type' => 'currency', 'filters' => array(), 'params' => array()),
+							'date' => array('type' => 'date', 'filters' => array(), 'params' => array()),
 						);
 					}
 					$domainData =& $translatorData[$domain];
