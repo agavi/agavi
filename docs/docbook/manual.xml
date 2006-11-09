@@ -1036,7 +1036,7 @@ if(curl_errno($ch)) {
 
                 <listitem>
                   <para>action_stack, controller, database_manager,
-                  dispatch_filtr, execution_filter, filter_chain,
+                  dispatch_filter, execution_filter, filter_chain,
                   logger_manager, request, response, routing, security_filter,
                   storage, translation_manager, user, validator_manager</para>
                 </listitem>
