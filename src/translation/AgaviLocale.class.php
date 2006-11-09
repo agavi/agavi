@@ -372,7 +372,7 @@ class AgaviLocale
 			: null;
 	}
 
-	public function getCalendarQuarterAbbreviated($calendar, $quater)
+	public function getCalendarQuarterAbbreviated($calendar, $quarter)
 	{
 		return isset($this->data['calendars'][$calendar]['quarters']['format']['abbreviated'][$quarter])
 			? $this->data['calendars'][$calendar]['quarters']['format']['abbreviated'][$quarter]
