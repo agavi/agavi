@@ -685,7 +685,13 @@ if(curl_errno($ch)) {
 
         <para>Parameter blocks, but also many other attributes and values may
         contain the name of a configuration directive, wrapped in percent
-        signs. The following parameter will contain the path name of the
+        signs. <note>
+            <para>The expansion of the configuration directive happens at
+            compile time. This means that if you access a directive you set
+            via AgaviConfig::set before bootstrapping the value that was set
+            when compiling the configuration file will be used throughout all
+            requests.</para>
+          </note>The following parameter will contain the path name of the
         project's app dir followed by "/fubar", because the directive is
         expanded before assignment:</para>
 
@@ -805,7 +811,7 @@ if(curl_errno($ch)) {
       <para></para>
     </section>
 
-    <section>
+    <section id="ref_databases">
       <title>Databases</title>
 
       <para></para>
@@ -866,6 +872,19 @@ if(curl_errno($ch)) {
     </section>
 
     <section>
+      <title>Translation</title>
+
+      <para></para>
+
+      <section>
+        <title id="ref_translation_configuration">Configuration via
+        translation.xml</title>
+
+        <para></para>
+      </section>
+    </section>
+
+    <section>
       <title>User</title>
 
       <para></para>
@@ -881,6 +900,2077 @@ if(curl_errno($ch)) {
       <title>Views</title>
 
       <para></para>
+    </section>
+  </chapter>
+
+  <chapter>
+    <title>Configuration handler tag reference</title>
+
+    <section id="reference-configuration_tags-general">
+      <title>General Tags</title>
+
+      <para></para>
+
+      <section id="ref_configuration_keywords">
+        <title>Keywords</title>
+
+        <para>You may reference any configuration directive by enclosing the
+        name in "%" signs. Example: %core.agavi_dir%</para>
+      </section>
+
+      <section id="reference-configuration_tags-general_configurations">
+        <title>&lt;configurations&gt;</title>
+
+        <para>The &lt;configurations&gt; tag is the root tag of all Agavi XML
+        configuration files.</para>
+
+        <simplesect>
+          <title>Attributes</title>
+
+          <para><variablelist>
+              <varlistentry>
+                <term><optional>parent</optional></term>
+
+                <listitem>
+                  <para>A full path to a file which can be used to define
+                  default configuration options. You can use <link
+                  linkend="ref_configuration_keywords">keywords</link>
+                  here.</para>
+                </listitem>
+              </varlistentry>
+            </variablelist></para>
+        </simplesect>
+
+        <simplesect>
+          <title>Content</title>
+
+          <para><itemizedlist>
+              <listitem>
+                <para>0-n &lt;<link
+                linkend="reference-configuration_tags-general_configuration">configuration</link>&gt;</para>
+              </listitem>
+            </itemizedlist></para>
+        </simplesect>
+      </section>
+
+      <section id="reference-configuration_tags-general_configuration">
+        <title>&lt;configuration&gt;</title>
+
+        <para>Within the &lt;configuration&gt; block you can define
+        configuration options which are only effective in the
+        context/environment combination. Specifying one (or both) of the
+        attributes limits that block to both the context and environment
+        specified. You can actually define several configuration blocks in the
+        root tag. <note>
+            <para>Most configuration handlers allow selective overwriting of
+            single attributes. So you can define a <link
+            linkend="reference-configuration_tags-filterhandler_filters_filter">filter</link>
+            with all parameters it needs and just disable it for certain
+            contexts without having to specify the parameters or any of the
+            attributes your already specified again.</para>
+          </note></para>
+
+        <simplesect>
+          <title>Attributes</title>
+
+          <para><variablelist>
+              <varlistentry>
+                <term><optional>context</optional></term>
+
+                <listitem>
+                  <para>The name of the context for which this configuration
+                  block is valid.</para>
+                </listitem>
+              </varlistentry>
+
+              <varlistentry>
+                <term><optional>environment</optional></term>
+
+                <listitem>
+                  <para>The name of the environment this configuration block
+                  is valid in.</para>
+                </listitem>
+              </varlistentry>
+            </variablelist></para>
+        </simplesect>
+
+        <simplesect>
+          <title>Content</title>
+
+          <para>The available child tags depend on the configuration handler
+          which is used. <variablelist>
+              <varlistentry>
+                <term>autoload.xml</term>
+
+                <listitem>
+                  <para>autoloads</para>
+                </listitem>
+              </varlistentry>
+
+              <varlistentry>
+                <term>compile.xml</term>
+
+                <listitem>
+                  <para>compiles</para>
+                </listitem>
+              </varlistentry>
+
+              <varlistentry>
+                <term>config_handlers.xml</term>
+
+                <listitem>
+                  <para>handlers</para>
+                </listitem>
+              </varlistentry>
+
+              <varlistentry>
+                <term>databases.xml</term>
+
+                <listitem>
+                  <para>databases</para>
+                </listitem>
+              </varlistentry>
+
+              <varlistentry>
+                <term>factories.xml</term>
+
+                <listitem>
+                  <para>action_stack, controller, database_manager,
+                  dispatch_filtr, execution_filter, filter_chain,
+                  logger_manager, request, response, routing, security_filter,
+                  storage, translation_manager, user, validator_manager</para>
+                </listitem>
+              </varlistentry>
+
+              <varlistentry>
+                <term>*_filters.xml</term>
+
+                <listitem>
+                  <para>filters</para>
+                </listitem>
+              </varlistentry>
+
+              <varlistentry>
+                <term>logging.xml</term>
+
+                <listitem>
+                  <para>loggers, appenders, layout</para>
+                </listitem>
+              </varlistentry>
+
+              <varlistentry>
+                <term>module/config/module.xml</term>
+
+                <listitem>
+                  <para>enabled, title, version, name, authors, homepage,
+                  update_url, description</para>
+                </listitem>
+              </varlistentry>
+
+              <varlistentry>
+                <term>output_types.xml</term>
+
+                <listitem>
+                  <para>output_types</para>
+                </listitem>
+              </varlistentry>
+
+              <varlistentry>
+                <term>rbac_definitions.xml</term>
+
+                <listitem>
+                  <para>roles</para>
+                </listitem>
+              </varlistentry>
+
+              <varlistentry>
+                <term>routing.xml</term>
+
+                <listitem>
+                  <para>routes</para>
+                </listitem>
+              </varlistentry>
+
+              <varlistentry>
+                <term>settings.xml</term>
+
+                <listitem>
+                  <para>exception_templates, settings, system_actions</para>
+                </listitem>
+              </varlistentry>
+
+              <varlistentry>
+                <term>translation.xml</term>
+
+                <listitem>
+                  <para>available_locales, translators</para>
+                </listitem>
+              </varlistentry>
+
+              <varlistentry>
+                <term>validators.xml</term>
+
+                <listitem>
+                  <para>defaults, validators</para>
+                </listitem>
+              </varlistentry>
+            </variablelist></para>
+        </simplesect>
+      </section>
+    </section>
+
+    <section id="reference-configuration_tags-autoloadhandler">
+      <title>AutoloadConfigHandler Tags</title>
+
+      <para>The AutoloadConfigHandler allows you to define classes and their
+      files to be automatically loaded by PHP when the class is first accessed
+      (not in advance so there's no performance hit). This frees you from
+      manually including it in your files.<example>
+          <title>autoload.xml</title>
+
+          <para><programlisting>&lt;configurations parent="%core.system_config_dir%/autoload.xml"&gt;
+ &lt;configuration&gt;
+
+  &lt;autoloads&gt;
+   &lt;autoload name="AgaviSampleAppCookieLoginFilter"&gt;%core.lib_dir%/filter/AgaviSampleAppCookieLoginFilter.class.php&lt;/autoload&gt;
+   &lt;autoload name="AgaviSampleAppLanguageRoutingCallback"&gt;%core.lib_dir%/routing/AgaviSampleAppLanguageRoutingCallback.class.php&lt;/autoload&gt;
+   &lt;autoload name="AgaviSampleAppUser"&gt;%core.lib_dir%/user/AgaviSampleAppUser.class.php&lt;/autoload&gt;
+  &lt;/autoloads&gt;
+
+ &lt;/configuration&gt;
+&lt;/configurations&gt;</programlisting></para>
+        </example></para>
+
+      <para></para>
+
+      <section id="reference-configuration_tags-autoloadhandler_autoloads">
+        <title>&lt;autoloads&gt;</title>
+
+        <para>Parent element for &lt;autoload&gt;.</para>
+
+        <simplesect>
+          <title>Content</title>
+
+          <para><itemizedlist>
+              <listitem>
+                <para>0-n &lt;autoload&gt;</para>
+              </listitem>
+            </itemizedlist></para>
+        </simplesect>
+      </section>
+
+      <section id="reference-configuration_tags-autoloadhandler_autoloads_autoload">
+        <title>&lt;autoload&gt;</title>
+
+        <para>Defines an autoload for a class.</para>
+
+        <simplesect>
+          <title>Attributes</title>
+
+          <para><variablelist>
+              <varlistentry>
+                <term>name</term>
+
+                <listitem>
+                  <para>The name of the class.</para>
+                </listitem>
+              </varlistentry>
+            </variablelist></para>
+        </simplesect>
+
+        <simplesect>
+          <title>Content</title>
+
+          <para>The full path to the file to be loaded when the class is
+          needed. You can use <link
+          linkend="ref_configuration_keywords">keywords</link> here.</para>
+        </simplesect>
+      </section>
+    </section>
+
+    <section id="reference-configuration_tags-compilehandler">
+      <title>CompileConfigHandler Tags</title>
+
+      <para>The CompileConfigHandler enables you to combine several files
+      stripped of comments and blank lines into one single cache file. <note>
+          <para>When you change one of your classes it will not be reflected
+          in the cache file until you remove the cache file or you change the
+          modified time of this file.</para>
+        </note>The following example takes the files MyUtilityClass1 and
+      MyUtilityClass2 in the util/ directory of your application and appends
+      their contents to the content of base compile.xml cache file of
+      Agavi.<example>
+          <title>compile.xml</title>
+
+          <para><programlisting>&lt;configurations parent="%core.system_config_dir%/compile.xml"&gt;
+ &lt;configuration&gt;
+
+  &lt;compiles&gt;
+   &lt;compile&gt;%core.app_dir%/util/MyUtilityClass1.class.php&lt;/compile&gt;
+   &lt;compile&gt;%core.app_dir%/util/MyUtilityClass2.class.php&lt;/compile&gt;
+  &lt;/compiles&gt;
+
+ &lt;/configuration&gt;
+&lt;/configurations&gt;</programlisting></para>
+        </example></para>
+
+      <section id="reference-configuration_tags-compilehandler_compiles">
+        <title>&lt;compiles&gt;</title>
+
+        <para>Parent element for &lt;compile&gt;.</para>
+
+        <simplesect>
+          <title>Content</title>
+
+          <para><itemizedlist>
+              <listitem>
+                <para>0-n &lt;compile&gt;</para>
+              </listitem>
+            </itemizedlist></para>
+        </simplesect>
+      </section>
+
+      <section id="reference-configuration_tags-compilehandler_compiles_compile">
+        <title>&lt;compile&gt;</title>
+
+        <para></para>
+
+        <simplesect>
+          <title>Content</title>
+
+          <para>A full path to the file to be added to the compilation. You
+          can use <link linkend="ref_configuration_keywords">keywords</link>
+          here.</para>
+        </simplesect>
+      </section>
+    </section>
+
+    <section id="reference-configuration_tags-confighandlershandler">
+      <title>ConfigHandlersConfigHandler Tags</title>
+
+      <para>Allows you to define your own configuration files.</para>
+
+      <para>When you specify a relative path in the pattern the core.app_dir
+      setting is used as the base path. <note>
+          <para>When including the configuration file via
+          AgaviConfigCache::checkConfig you need to specify the path in the
+          same way as in the pattern (relative or absolute).</para>
+        </note><warning>
+          <para>When specifying the absolute path (which is the preferred way
+          for consistence) use the <link
+          linkend="ref_configuration_keywords">keywords</link> where
+          appropriate.</para>
+        </warning><example>
+          <title>config_handlers.xml</title>
+
+          <para><programlisting>&lt;configurations parent="%core.system_config_dir%/config_handlers.xml"&gt;
+ &lt;configuration&gt;
+
+  &lt;handlers&gt;
+   &lt;handler pattern="%core.module_dir%/*/config/rendering_filters.xml" validate="%core.agavi_dir%/config/xsd/filters.xsd" class="AgaviFilterConfigHandler" /&gt;
+   &lt;handler pattern="%core.module_dir%/*/config/module.xml" validate="%core.agavi_dir%/config/xsd/module.xsd" class="AgaviModuleConfigHandler" /&gt;
+   &lt;handler pattern="%core.module_dir%/*/validate/*.xml" class="AgaviValidatorConfigHandler" /&gt;
+  &lt;/handlers&gt;
+
+ &lt;/configuration&gt;
+&lt;/configurations&gt;
+</programlisting></para>
+        </example></para>
+
+      <section id="reference-configuration_tags-confighandlershandler_handlers">
+        <title>&lt;handlers&gt;</title>
+
+        <para>Parent element for &lt;handler&gt;.</para>
+
+        <simplesect>
+          <title>Content</title>
+
+          <para><itemizedlist>
+              <listitem>
+                <para>0-n &lt;handler&gt;</para>
+              </listitem>
+            </itemizedlist></para>
+        </simplesect>
+      </section>
+
+      <section id="reference-configuration_tags-confighandlershandler_handlers_handler">
+        <title>&lt;handler&gt;</title>
+
+        <para></para>
+
+        <simplesect>
+          <title>Attributes</title>
+
+          <para><variablelist>
+              <varlistentry>
+                <term>class</term>
+
+                <listitem>
+                  <para>The class (name) providing the handler implementation
+                  for files match the pattern.</para>
+                </listitem>
+              </varlistentry>
+
+              <varlistentry>
+                <term>pattern</term>
+
+                <listitem>
+                  <para>A file path pattern. Use * as a placeholder. You can
+                  use <link
+                  linkend="ref_configuration_keywords">keywords</link>
+                  here.</para>
+                </listitem>
+              </varlistentry>
+
+              <varlistentry>
+                <term><optional>parser</optional></term>
+
+                <listitem>
+                  <para>You can define an alternative parser class (name)
+                  here. Use this if you don't want to use the default parser
+                  (in sense of default parser for that extension, "autosensed"
+                  by agavi) for that configuration file.</para>
+                </listitem>
+              </varlistentry>
+
+              <varlistentry>
+                <term><optional>validate</optional></term>
+
+                <listitem>
+                  <para>A file path to a validation file (.xsd for .xml
+                  configuration files). You can use <link
+                  linkend="ref_configuration_keywords">keywords</link> here.
+                  If not specified the configuration file will not be
+                  validated before being passed to the configuration
+                  handler.</para>
+                </listitem>
+              </varlistentry>
+            </variablelist></para>
+        </simplesect>
+
+        <simplesect>
+          <title>Content</title>
+
+          <para><itemizedlist>
+              <listitem>
+                <para>0-1 &lt;parameters&gt;</para>
+              </listitem>
+            </itemizedlist></para>
+        </simplesect>
+      </section>
+    </section>
+
+    <section id="reference-configuration_tags-databasehandler">
+      <title>DatabaseConfigHandler Tags</title>
+
+      <para>Registers database connections with the system. You have to
+      specify a default connection to be used. The available parameters for
+      the different database types are explained in the <link
+      linkend="ref_databases">databases reference</link>.<example>
+          <title>databases.xml</title>
+
+          <para><programlisting>&lt;configurations&gt;
+ &lt;configuration&gt;
+
+  &lt;databases default="propel"&gt;
+   &lt;database name="postgres" class="AgaviPostgresqlDatabase"&gt;
+    &lt;parameters&gt;
+     &lt;parameter name="host"&gt;localhost&lt;/parameter&gt;
+     &lt;parameter name="username"&gt;username&lt;/parameter&gt;
+     &lt;parameter name="password"&gt;passphrase&lt;/parameter&gt;
+     &lt;parameter name="database"&gt;sample&lt;/parameter&gt;
+    &lt;/parameters&gt;
+   &lt;/database&gt;
+
+   &lt;database name="propel" class="AgaviPropelDatabase"&gt;
+    &lt;parameters&gt;
+     &lt;parameter name="config"&gt;%core.app_dir%/config/project-conf.php&lt;/parameter&gt;
+    &lt;/parameters&gt;
+   &lt;/database&gt;
+  &lt;/databases&gt;
+
+ &lt;/configuration&gt;
+&lt;/configurations&gt;
+</programlisting></para>
+        </example></para>
+
+      <section id="reference-configuration_tags-databasehandler_databases">
+        <title>&lt;databases&gt;</title>
+
+        <para>Parent element for &lt;database&gt;</para>
+
+        <simplesect>
+          <title>Attributes</title>
+
+          <para><variablelist>
+              <varlistentry>
+                <term>default</term>
+
+                <listitem>
+                  <para>The name (as specified in the name attribute of the
+                  &lt;database&gt; element) of the default database
+                  connection.</para>
+                </listitem>
+              </varlistentry>
+            </variablelist></para>
+        </simplesect>
+
+        <simplesect>
+          <title>Content</title>
+
+          <para><itemizedlist>
+              <listitem>
+                <para>1-n &lt;database&gt;</para>
+              </listitem>
+            </itemizedlist></para>
+        </simplesect>
+      </section>
+
+      <section id="reference-configuration_tags-databasehandler_databases_database">
+        <title>&lt;database&gt;</title>
+
+        <para>A database connection.</para>
+
+        <simplesect>
+          <title>Attributes</title>
+
+          <para><variablelist>
+              <varlistentry>
+                <term>class</term>
+
+                <listitem>
+                  <para>The class which implements the database
+                  connection.</para>
+                </listitem>
+              </varlistentry>
+
+              <varlistentry>
+                <term>name</term>
+
+                <listitem>
+                  <para>The name of this connection.</para>
+                </listitem>
+              </varlistentry>
+            </variablelist></para>
+        </simplesect>
+
+        <simplesect>
+          <title>Content</title>
+
+          <para><itemizedlist>
+              <listitem>
+                <para>0-1 &lt;parameters&gt;</para>
+              </listitem>
+            </itemizedlist></para>
+        </simplesect>
+      </section>
+    </section>
+
+    <section id="reference-configuration_tags-factoryhandler">
+      <title>FactoryConfigHandler Tags</title>
+
+      <para>In the FactoryConfigHandler all child tags have the same possible
+      attributes and child tags.</para>
+
+      <section>
+        <title>&lt;*&gt;</title>
+
+        <para>Available elements are <simplelist type="inline">
+            <member>action_stack</member>
+
+            <member>controller</member>
+
+            <member>database_manager</member>
+
+            <member>dispatch_filter</member>
+
+            <member>execution_filter</member>
+
+            <member>logger_manager</member>
+
+            <member>request</member>
+
+            <member>response</member>
+
+            <member>routing</member>
+
+            <member>security_filter</member>
+
+            <member>storage</member>
+
+            <member>translation_manager</member>
+
+            <member>user</member>
+
+            <member>validator_manager</member>
+          </simplelist></para>
+
+        <simplesect>
+          <title>Attributes</title>
+
+          <para><variablelist>
+              <varlistentry>
+                <term>class</term>
+
+                <listitem>
+                  <para>The implementing class.</para>
+                </listitem>
+              </varlistentry>
+            </variablelist></para>
+        </simplesect>
+
+        <simplesect>
+          <title>Content</title>
+
+          <para><itemizedlist>
+              <listitem>
+                <para>0-1 &lt;parameters&gt;</para>
+              </listitem>
+            </itemizedlist></para>
+        </simplesect>
+      </section>
+    </section>
+
+    <section id="reference-configuration_tags-filterhandler">
+      <title>FilterConfigHandler Tags</title>
+
+      <para></para>
+
+      <section id="reference-configuration_tags-filterhandler_filters">
+        <title>&lt;filters&gt;</title>
+
+        <para>Parent element for &lt;filter&gt;.</para>
+
+        <simplesect>
+          <title>Content</title>
+
+          <para><itemizedlist>
+              <listitem>
+                <para>0-n &lt;filter&gt;</para>
+              </listitem>
+            </itemizedlist></para>
+        </simplesect>
+      </section>
+
+      <section id="reference-configuration_tags-filterhandler_filters_filter">
+        <title>&lt;filter&gt;</title>
+
+        <para>Defines a filter.</para>
+
+        <simplesect>
+          <title>Attributes</title>
+
+          <para><variablelist>
+              <varlistentry>
+                <term>name</term>
+
+                <listitem>
+                  <para>The name of this filter.</para>
+                </listitem>
+              </varlistentry>
+
+              <varlistentry>
+                <term>class</term>
+
+                <listitem>
+                  <para>The class implementing this filter.</para>
+                </listitem>
+              </varlistentry>
+
+              <varlistentry>
+                <term><optional>enabled</optional></term>
+
+                <listitem>
+                  <para>Whether this filter should be enabled. Defaults to
+                  <emphasis>true</emphasis>.</para>
+                </listitem>
+              </varlistentry>
+            </variablelist></para>
+        </simplesect>
+
+        <simplesect>
+          <title>Content</title>
+
+          <para><itemizedlist>
+              <listitem>
+                <para>0-1 &lt;parameters&gt;</para>
+              </listitem>
+            </itemizedlist></para>
+        </simplesect>
+      </section>
+    </section>
+
+    <section id="reference-configuration_tags-logginghandler">
+      <title>LoggingConfigHandler Tags</title>
+
+      <para></para>
+
+      <section id="reference-configuration_tags-logginghandlers_loggers">
+        <title>&lt;loggers&gt;</title>
+
+        <para>Parent element for &lt;logger&gt;</para>
+
+        <simplesect>
+          <title>Attributes</title>
+
+          <para><variablelist>
+              <varlistentry>
+                <term><optional>default_logger</optional></term>
+
+                <listitem>
+                  <para>The name of the default logger. Defaults to
+                  <emphasis>default</emphasis>.</para>
+                </listitem>
+              </varlistentry>
+            </variablelist></para>
+        </simplesect>
+
+        <simplesect>
+          <title>Content</title>
+
+          <para><itemizedlist>
+              <listitem>
+                <para>0-n &lt;logger&gt;</para>
+              </listitem>
+            </itemizedlist></para>
+        </simplesect>
+      </section>
+
+      <section id="reference-configuration_tags-logginghandlers_loggers_logger">
+        <title>&lt;logger&gt;</title>
+
+        <para>Defines a logger instance.</para>
+
+        <simplesect>
+          <title>Attributes</title>
+
+          <para><variablelist>
+              <varlistentry>
+                <term>name</term>
+
+                <listitem>
+                  <para>The name of the logger instance.</para>
+                </listitem>
+              </varlistentry>
+
+              <varlistentry>
+                <term>class</term>
+
+                <listitem>
+                  <para>The class implementing this logger instance.</para>
+                </listitem>
+              </varlistentry>
+
+              <varlistentry>
+                <term><optional>level</optional></term>
+
+                <listitem>
+                  <para>The levels which should be logged. You need to
+                  specifiy the full constants names (AgaviLogger::DEBUG, ...)
+                  and can use bitwise operators to include several
+                  levels.</para>
+                </listitem>
+              </varlistentry>
+            </variablelist></para>
+        </simplesect>
+
+        <simplesect>
+          <title>Content</title>
+
+          <para><itemizedlist>
+              <listitem>
+                <para>1 &lt;<link
+                linkend="reference-configuration_tags-logginghandlers_loggers_logger_appenders">appenders</link>&gt;</para>
+              </listitem>
+            </itemizedlist></para>
+        </simplesect>
+      </section>
+
+      <section id="reference-configuration_tags-logginghandlers_loggers_logger_appenders">
+        <title>&lt;logger&gt;/&lt;appenders&gt;</title>
+
+        <para>Parent element for &lt;appender&gt;.</para>
+
+        <simplesect>
+          <title>Content</title>
+
+          <para><itemizedlist>
+              <listitem>
+                <para>1-n &lt;<link
+                linkend="reference-configuration_tags-logginghandlers_loggers_logger_appenders_appender">appender</link>&gt;</para>
+              </listitem>
+            </itemizedlist></para>
+        </simplesect>
+      </section>
+
+      <section id="reference-configuration_tags-logginghandlers_loggers_logger_appenders_appender">
+        <title>&lt;logger&gt;/&lt;appenders&gt;/&lt;appender&gt;</title>
+
+        <para></para>
+
+        <simplesect>
+          <title>Content</title>
+
+          <para>The name of the appender.</para>
+        </simplesect>
+      </section>
+
+      <section id="reference-configuration_tags-logginghandlers_appenders">
+        <title>&lt;appenders&gt;</title>
+
+        <para>Parent element for &lt;appender&gt;</para>
+
+        <simplesect>
+          <title>Content</title>
+
+          <para><itemizedlist>
+              <listitem>
+                <para>1-n &lt;appender&gt;</para>
+              </listitem>
+            </itemizedlist></para>
+        </simplesect>
+      </section>
+
+      <section id="reference-configuration_tags-logginghandlers_appenders_appender">
+        <title>&lt;appender&gt;</title>
+
+        <para>Defines an appender instance.</para>
+
+        <simplesect>
+          <title>Attributes</title>
+
+          <para><variablelist>
+              <varlistentry>
+                <term>name</term>
+
+                <listitem>
+                  <para>The name of this appender</para>
+                </listitem>
+              </varlistentry>
+
+              <varlistentry>
+                <term>class</term>
+
+                <listitem>
+                  <para>The implementing class.</para>
+                </listitem>
+              </varlistentry>
+
+              <varlistentry>
+                <term>layout</term>
+
+                <listitem>
+                  <para>The name of the layout which should be used.</para>
+                </listitem>
+              </varlistentry>
+            </variablelist></para>
+        </simplesect>
+
+        <simplesect>
+          <title>Content</title>
+
+          <para><itemizedlist>
+              <listitem>
+                <para>0-1 &lt;parameters&gt;</para>
+              </listitem>
+            </itemizedlist></para>
+        </simplesect>
+      </section>
+
+      <section id="reference-configuration_tags-logginghandlers_layouts">
+        <title>&lt;layouts&gt;</title>
+
+        <para>Parent element for &lt;layout&gt;.</para>
+
+        <simplesect>
+          <title>Content</title>
+
+          <para><itemizedlist>
+              <listitem>
+                <para>1-n &lt;layout&gt;</para>
+              </listitem>
+            </itemizedlist></para>
+        </simplesect>
+      </section>
+
+      <section id="reference-configuration_tags-logginghandlers_layouts_layout">
+        <title>&lt;layout&gt;</title>
+
+        <para>Defines a layout instance.</para>
+
+        <simplesect>
+          <title>Attributes</title>
+
+          <para><variablelist>
+              <varlistentry>
+                <term>name</term>
+
+                <listitem>
+                  <para>The name of this layout instance.</para>
+                </listitem>
+              </varlistentry>
+
+              <varlistentry>
+                <term>class</term>
+
+                <listitem>
+                  <para>The implementing class.</para>
+                </listitem>
+              </varlistentry>
+            </variablelist></para>
+        </simplesect>
+
+        <simplesect>
+          <title>Content</title>
+
+          <para><itemizedlist>
+              <listitem>
+                <para>0-1 &lt;parameters&gt;</para>
+              </listitem>
+            </itemizedlist></para>
+        </simplesect>
+      </section>
+    </section>
+
+    <section id="reference-configuration_tags-outputtypehandler">
+      <title>OutputTypeConfigHandler Tags</title>
+
+      <para></para>
+
+      <section>
+        <title
+        id="reference-configuration_tags-outputtypehandler_output_types">&lt;output_types&gt;</title>
+
+        <para>Parent element for &lt;output_type&gt;</para>
+
+        <simplesect>
+          <title>Attributes</title>
+
+          <para><variablelist>
+              <varlistentry>
+                <term>default</term>
+
+                <listitem>
+                  <para>The default output type.</para>
+                </listitem>
+              </varlistentry>
+            </variablelist></para>
+        </simplesect>
+
+        <simplesect>
+          <title>Content</title>
+
+          <para><itemizedlist>
+              <listitem>
+                <para>1-n &lt;output_type&gt;</para>
+              </listitem>
+            </itemizedlist></para>
+        </simplesect>
+      </section>
+
+      <section id="reference-configuration_tags-outputtypehandler_output_types_output_type">
+        <title>&lt;output_type&gt;</title>
+
+        <para>Defines an output type.</para>
+
+        <simplesect>
+          <title>Attributes</title>
+
+          <para><variablelist>
+              <varlistentry>
+                <term>name</term>
+
+                <listitem>
+                  <para>The name of this output type.</para>
+                </listitem>
+              </varlistentry>
+            </variablelist></para>
+        </simplesect>
+
+        <simplesect>
+          <title>Content</title>
+
+          <para><itemizedlist>
+              <listitem>
+                <para>1 &lt;renderer&gt;</para>
+              </listitem>
+
+              <listitem>
+                <para>0-1 &lt;parameters&gt;</para>
+              </listitem>
+            </itemizedlist></para>
+        </simplesect>
+      </section>
+
+      <section id="reference-configuration_tags-outputtypehandler_output_types_output_type_renderer">
+        <title>&lt;renderer&gt;</title>
+
+        <para>Defines the renderer and options.</para>
+
+        <simplesect>
+          <title>Attributes</title>
+
+          <para><variablelist>
+              <varlistentry>
+                <term>class</term>
+
+                <listitem>
+                  <para>The renderer class.</para>
+                </listitem>
+              </varlistentry>
+
+              <varlistentry>
+                <term><optional>extension</optional></term>
+
+                <listitem>
+                  <para>The extension of the template files. Defaults differ
+                  for each renderer.</para>
+                </listitem>
+              </varlistentry>
+
+              <varlistentry>
+                <term><optional>ignore_decorators</optional></term>
+
+                <listitem>
+                  <para>Whether to ignore any decorators for this output type.
+                  Defaults to <emphasis>false</emphasis>.</para>
+                </listitem>
+              </varlistentry>
+
+              <varlistentry>
+                <term><optional>ignore_slots</optional></term>
+
+                <listitem>
+                  <para>Whether to ignore any slots. Defaults to
+                  <emphasis>false</emphasis>.</para>
+                </listitem>
+              </varlistentry>
+            </variablelist></para>
+        </simplesect>
+
+        <simplesect>
+          <title>Content</title>
+
+          <para><itemizedlist>
+              <listitem>
+                <para>0-1 &lt;parameters&gt;</para>
+              </listitem>
+            </itemizedlist></para>
+        </simplesect>
+      </section>
+    </section>
+
+    <section>
+      <title>RbacDefinitionConfigHandler Tags</title>
+
+      <para></para>
+
+      <section>
+        <title>&lt;roles&gt;</title>
+
+        <para></para>
+
+        <simplesect>
+          <title>Attributes</title>
+
+          <para></para>
+        </simplesect>
+
+        <simplesect>
+          <title>Content</title>
+
+          <para></para>
+        </simplesect>
+      </section>
+
+      <section>
+        <title>&lt;role&gt;</title>
+
+        <para></para>
+
+        <simplesect>
+          <title>Attributes</title>
+
+          <para></para>
+        </simplesect>
+
+        <simplesect>
+          <title>Content</title>
+
+          <para></para>
+        </simplesect>
+      </section>
+
+      <section>
+        <title>&lt;permission&gt;</title>
+
+        <para></para>
+
+        <simplesect>
+          <title>Attributes</title>
+
+          <para></para>
+        </simplesect>
+
+        <simplesect>
+          <title>Content</title>
+
+          <para></para>
+        </simplesect>
+      </section>
+    </section>
+
+    <section id="reference-configuration_tags-routinghandler">
+      <title>RoutingConfigHandler Tags</title>
+
+      <para></para>
+
+      <section id="reference-configuration_tags-routinghandler_routes">
+        <title>&lt;routes&gt;</title>
+
+        <para>Parent element for &lt;route&gt;.</para>
+
+        <simplesect>
+          <title>Content</title>
+
+          <para><itemizedlist>
+              <listitem>
+                <para>0-n &lt;route&gt;</para>
+              </listitem>
+            </itemizedlist></para>
+        </simplesect>
+      </section>
+
+      <section id="reference-configuration_tags-routinghandler_routes_route">
+        <title>&lt;route&gt;</title>
+
+        <para>Defines a route to an module/action pair.</para>
+
+        <simplesect>
+          <title>Attributes</title>
+
+          <para><variablelist>
+              <varlistentry>
+                <term>name</term>
+
+                <listitem>
+                  <para>The name of this route.</para>
+                </listitem>
+              </varlistentry>
+
+              <varlistentry>
+                <term>pattern</term>
+
+                <listitem>
+                  <para>The pattern.</para>
+                </listitem>
+              </varlistentry>
+
+              <varlistentry>
+                <term><optional>module</optional></term>
+
+                <listitem>
+                  <para>The module which should be used when this route
+                  matches.</para>
+                </listitem>
+              </varlistentry>
+
+              <varlistentry>
+                <term><optional>action</optional></term>
+
+                <listitem>
+                  <para>The action which should be used when this route
+                  matches.</para>
+                </listitem>
+              </varlistentry>
+
+              <varlistentry>
+                <term><optional>locale</optional></term>
+
+                <listitem>
+                  <para>The locale to be set when this route matches.</para>
+                </listitem>
+              </varlistentry>
+
+              <varlistentry>
+                <term><optional>method</optional></term>
+
+                <listitem>
+                  <para>The request method to be set when this route
+                  matches.</para>
+                </listitem>
+              </varlistentry>
+
+              <varlistentry>
+                <term><optional>output_type</optional></term>
+
+                <listitem>
+                  <para>The output type to be set when this route
+                  matches.</para>
+                </listitem>
+              </varlistentry>
+
+              <varlistentry>
+                <term><optional>callback</optional></term>
+
+                <listitem>
+                  <para>A class name of a class implementing the
+                  AgaviRoutingCallback methods.</para>
+                </listitem>
+              </varlistentry>
+
+              <varlistentry>
+                <term><optional>constraint</optional></term>
+
+                <listitem>
+                  <para>The request method for which this route is
+                  valid.</para>
+                </listitem>
+              </varlistentry>
+
+              <varlistentry>
+                <term><optional>cut</optional></term>
+
+                <listitem>
+                  <para>Whether the matched pattern should be removed from the
+                  routing input when the route matches. Defaults to
+                  <emphasis>false</emphasis> when the route doesn't have
+                  children and to <emphasis>true</emphasis> otherwise.</para>
+                </listitem>
+              </varlistentry>
+
+              <varlistentry>
+                <term><optional>imply</optional></term>
+
+                <listitem>
+                  <para>Whether this route should always be generated in the
+                  output when using $routing-&gt;gen(). Defaults to
+                  <emphasis>false</emphasis>.</para>
+                </listitem>
+              </varlistentry>
+
+              <varlistentry>
+                <term><optional>stop</optional></term>
+
+                <listitem>
+                  <para>Whether execution of further routes should stop when
+                  this route matched. This can not be set to false for routes
+                  with child routes. Defaults to
+                  <emphasis>true</emphasis>.</para>
+                </listitem>
+              </varlistentry>
+
+              <varlistentry>
+                <term><optional>source</optional></term>
+
+                <listitem>
+                  <para>The source which should be used as the input for this
+                  route. Defaults to the request URI.</para>
+                </listitem>
+              </varlistentry>
+            </variablelist></para>
+        </simplesect>
+
+        <simplesect>
+          <title>Content</title>
+
+          <para><itemizedlist>
+              <listitem>
+                <para>0-1 &lt;defaults&gt;</para>
+              </listitem>
+
+              <listitem>
+                <para>0-1 &lt;ignores&gt;</para>
+              </listitem>
+
+              <listitem>
+                <para>0-1 &lt;parameters&gt;</para>
+              </listitem>
+            </itemizedlist></para>
+        </simplesect>
+      </section>
+
+      <section id="reference-configuration_tags-routinghandler_routes_route_ignores">
+        <title>&lt;ignores&gt;</title>
+
+        <para>Allows you to define which parameters from the pattern should be
+        included in the request parameters. Acts as parent element for
+        &lt;ignore&gt;</para>
+
+        <simplesect>
+          <title>Content</title>
+
+          <para><itemizedlist>
+              <listitem>
+                <para>1-n &lt;ignore&gt;</para>
+              </listitem>
+            </itemizedlist></para>
+        </simplesect>
+      </section>
+
+      <section id="reference-configuration_tags-routinghandler_routes_route_ignores_ignore">
+        <title>&lt;ignore&gt;</title>
+
+        <para>Defines a parameter to be ignored.</para>
+
+        <simplesect>
+          <title>Content</title>
+
+          <para>The name of the parameter to be ignored.</para>
+        </simplesect>
+      </section>
+
+      <section id="reference-configuration_tags-routinghandler_routes_route_defaults">
+        <title>&lt;defaults&gt;</title>
+
+        <para>Allows you to set default values for parameters of the pattern
+        to be used when generating a route. These values will also be set into
+        the request when the route matched but didn't contain a parameter with
+        the name for which this default exists.</para>
+
+        <para>Parent element for &lt;default&gt;</para>
+
+        <simplesect>
+          <title>Content</title>
+
+          <para><itemizedlist>
+              <listitem>
+                <para>1-n &lt;default&gt;</para>
+              </listitem>
+            </itemizedlist></para>
+        </simplesect>
+      </section>
+
+      <section id="reference-configuration_tags-routinghandler_routes_route_defaults_default">
+        <title>&lt;default&gt;</title>
+
+        <para>Defines a default.</para>
+
+        <simplesect>
+          <title>Attributes</title>
+
+          <para><variablelist>
+              <varlistentry>
+                <term>for</term>
+
+                <listitem>
+                  <para>The name of the parameter this default applies
+                  to.</para>
+                </listitem>
+              </varlistentry>
+            </variablelist></para>
+        </simplesect>
+
+        <simplesect>
+          <title>Content</title>
+
+          <para>The default value to be used. You can specify a default
+          pre-/postfix by wrapping the value into {} (for example:
+          "prefix{defaultValue}postfix").</para>
+        </simplesect>
+      </section>
+    </section>
+
+    <section id="reference-configuration_tags-settinghandler">
+      <title>SettingConfigHandler Tags</title>
+
+      <para></para>
+
+      <section id="reference-configuration_tags-settinghandler_exception_templates">
+        <title>&lt;exception_templates&gt;</title>
+
+        <para>Parent element for &lt;exception_template&gt;.</para>
+
+        <simplesect>
+          <title>Content</title>
+
+          <para><itemizedlist>
+              <listitem>
+                <para>1-n &lt;exception_template&gt;</para>
+              </listitem>
+            </itemizedlist></para>
+        </simplesect>
+      </section>
+
+      <section id="reference-configuration_tags-settinghandler_exception_templates_exception_template">
+        <title>&lt;exception_template&gt;</title>
+
+        <para>Defines the exception template to use.</para>
+
+        <simplesect>
+          <title>Attributes</title>
+
+          <para><variablelist>
+              <varlistentry>
+                <term><optional>context</optional></term>
+
+                <listitem>
+                  <para>Limits the template to the given context</para>
+                </listitem>
+              </varlistentry>
+            </variablelist></para>
+        </simplesect>
+
+        <simplesect>
+          <title>Content</title>
+
+          <para>The full path to the template. You can use <link
+          linkend="ref_configuration_keywords">keywords</link> here.</para>
+        </simplesect>
+      </section>
+
+      <section id="reference-configuration_tags-settinghandler_settings">
+        <title>&lt;settings&gt;</title>
+
+        <para>Parent element for &lt;setting&gt;</para>
+
+        <simplesect>
+          <title>Content</title>
+
+          <para><itemizedlist>
+              <listitem>
+                <para>1-n &lt;setting&gt;</para>
+              </listitem>
+            </itemizedlist></para>
+        </simplesect>
+      </section>
+
+      <section id="reference-configuration_tags-settinghandler_settings_setting">
+        <title>&lt;setting&gt;</title>
+
+        <para>Defines a setting. To access a setting in your code use
+        AgaviConfig::get('core.setting_name');</para>
+
+        <simplesect>
+          <title>Attributes</title>
+
+          <para><variablelist>
+              <varlistentry>
+                <term>name</term>
+
+                <listitem>
+                  <para>The name of the setting.</para>
+                </listitem>
+              </varlistentry>
+            </variablelist></para>
+        </simplesect>
+
+        <simplesect>
+          <title>Content</title>
+
+          <para>The value of the setting. You can use <link
+          linkend="ref_configuration_keywords">keywords</link> here.</para>
+        </simplesect>
+      </section>
+
+      <section id="reference-configuration_tags-settinghandler_system_actions">
+        <title>&lt;system_actions&gt;</title>
+
+        <para></para>
+
+        <simplesect>
+          <title>Attributes</title>
+
+          <para></para>
+        </simplesect>
+
+        <simplesect>
+          <title>Content</title>
+
+          <para></para>
+        </simplesect>
+      </section>
+
+      <section id="reference-configuration_tags-settinghandler_system_actions_system_action">
+        <title>&lt;system_action&gt;</title>
+
+        <para></para>
+
+        <simplesect>
+          <title>Attributes</title>
+
+          <para></para>
+        </simplesect>
+
+        <simplesect>
+          <title>Content</title>
+
+          <para></para>
+        </simplesect>
+      </section>
+    </section>
+
+    <section id="reference-configuration_tags-translationhandler">
+      <title>TranslationConfigHandler Tags</title>
+
+      <para></para>
+
+      <section id="reference-configuration_tags-translationhandler_available_locales">
+        <title>&lt;available_locales&gt;</title>
+
+        <para>Defines which locales are available for use by the
+        application.</para>
+
+        <para>Parent element for &lt;available_locale&gt;.</para>
+
+        <simplesect>
+          <title>Attributes</title>
+
+          <para><variablelist>
+              <varlistentry>
+                <term><optional>default_locale</optional></term>
+
+                <listitem>
+                  <para>Sets the default locale to be used.</para>
+                </listitem>
+              </varlistentry>
+
+              <varlistentry>
+                <term><optional>default_timezone</optional></term>
+
+                <listitem>
+                  <para>Sets the default timezone to be used by the Agavi
+                  calendar system. This doesn't affect the timezone setting of
+                  PHP.</para>
+                </listitem>
+              </varlistentry>
+            </variablelist></para>
+        </simplesect>
+
+        <simplesect>
+          <title>Content</title>
+
+          <para><itemizedlist>
+              <listitem>
+                <para>1-n &lt;available_locale&gt;</para>
+              </listitem>
+            </itemizedlist></para>
+        </simplesect>
+      </section>
+
+      <section id="reference-configuration_tags-translationhandler_available_locales_available_locale">
+        <title>&lt;available_locale&gt;</title>
+
+        <para>Defines an available locale.</para>
+
+        <simplesect>
+          <title>Attributes</title>
+
+          <para><variablelist>
+              <varlistentry>
+                <term>identifier</term>
+
+                <listitem>
+                  <para>The locale identifier.</para>
+                </listitem>
+              </varlistentry>
+            </variablelist></para>
+        </simplesect>
+
+        <simplesect>
+          <title>Content</title>
+
+          <para><itemizedlist>
+              <listitem>
+                <para>0-1 &lt;parameters&gt;</para>
+              </listitem>
+            </itemizedlist></para>
+        </simplesect>
+      </section>
+
+      <section id="reference-configuration_tags-translationhandler_translators">
+        <title>&lt;translators&gt;</title>
+
+        <para>Defines the translation domains.</para>
+
+        <para>Parent element for &lt;translator&gt;.</para>
+
+        <simplesect>
+          <title>Attributes</title>
+
+          <para><variablelist>
+              <varlistentry>
+                <term>default_domain</term>
+
+                <listitem>
+                  <para>The default domain used when translating.</para>
+                </listitem>
+              </varlistentry>
+            </variablelist></para>
+        </simplesect>
+
+        <simplesect>
+          <title>Content</title>
+
+          <para><itemizedlist>
+              <listitem>
+                <para>1-n &lt;translator&gt;</para>
+              </listitem>
+            </itemizedlist></para>
+        </simplesect>
+      </section>
+
+      <section id="reference-configuration_tags-translationhandler_translators_translator">
+        <title>&lt;translator&gt;</title>
+
+        <para>Defines a translation domain.</para>
+
+        <simplesect>
+          <title>Attributes</title>
+
+          <para><variablelist>
+              <varlistentry>
+                <term>domain</term>
+
+                <listitem>
+                  <para>The name of this domain.</para>
+                </listitem>
+              </varlistentry>
+            </variablelist></para>
+        </simplesect>
+
+        <simplesect>
+          <title>Content</title>
+
+          <para><itemizedlist>
+              <listitem>
+                <para>0-1 &lt;message_translator&gt;</para>
+              </listitem>
+
+              <listitem>
+                <para>0-1 &lt;number_formatter&gt;</para>
+              </listitem>
+
+              <listitem>
+                <para>0-1 &lt;currency_formatter&gt;</para>
+              </listitem>
+
+              <listitem>
+                <para>0-1 &lt;date_formatter&gt;</para>
+              </listitem>
+            </itemizedlist></para>
+        </simplesect>
+      </section>
+
+      <section id="reference-configuration_tags-translationhandler_translators_translator_message_translator">
+        <title>&lt;message_translator&gt;</title>
+
+        <para>Defines the translator to be used when translating strings in
+        this domain.</para>
+
+        <simplesect>
+          <title>Attributes</title>
+
+          <para><variablelist>
+              <varlistentry>
+                <term>type</term>
+
+                <listitem>
+                  <para>The type (class name for custom implementations) of
+                  this translator.</para>
+                </listitem>
+              </varlistentry>
+            </variablelist></para>
+        </simplesect>
+
+        <simplesect>
+          <title>Content</title>
+
+          <para><itemizedlist>
+              <listitem>
+                <para>0-1 &lt;parameters&gt;</para>
+              </listitem>
+
+              <listitem>
+                <para>0-1 &lt;filters&gt;</para>
+              </listitem>
+            </itemizedlist></para>
+
+          <para></para>
+        </simplesect>
+      </section>
+
+      <section id="reference-configuration_tags-translationhandler_translators_translator_number_formatter">
+        <title>&lt;number_formatter&gt;</title>
+
+        <para>Defines the formatter to be used when formatting numbers.</para>
+
+        <simplesect>
+          <title>Attributes</title>
+
+          <para><variablelist>
+              <varlistentry>
+                <term>type</term>
+
+                <listitem>
+                  <para>The type (class name for custom implementations) of
+                  this formatter.</para>
+                </listitem>
+              </varlistentry>
+            </variablelist></para>
+        </simplesect>
+
+        <simplesect>
+          <title>Content</title>
+
+          <para><itemizedlist>
+              <listitem>
+                <para>0-1 &lt;parameters&gt;</para>
+              </listitem>
+            </itemizedlist></para>
+        </simplesect>
+      </section>
+
+      <section id="reference-configuration_tags-translationhandler_translators_translator_currency_formatter">
+        <title>&lt;currency_formatter&gt;</title>
+
+        <para>Defines the formatter to be used when formatting
+        currencies.</para>
+
+        <simplesect>
+          <title>Attributes</title>
+
+          <para><variablelist>
+              <varlistentry>
+                <term>type</term>
+
+                <listitem>
+                  <para>The type (class name for custom implementations) of
+                  this formatter.</para>
+                </listitem>
+              </varlistentry>
+            </variablelist></para>
+        </simplesect>
+
+        <simplesect>
+          <title>Content</title>
+
+          <para><itemizedlist>
+              <listitem>
+                <para>0-1 &lt;parameters&gt;</para>
+              </listitem>
+            </itemizedlist></para>
+        </simplesect>
+      </section>
+
+      <section id="reference-configuration_tags-translationhandler_translators_translator_date_formatter">
+        <title>&lt;date_formatter&gt;</title>
+
+        <para>Defines the formatter to be used when formatting dates.</para>
+
+        <simplesect>
+          <title>Attributes</title>
+
+          <para><variablelist>
+              <varlistentry>
+                <term>type</term>
+
+                <listitem>
+                  <para>The type (class name for custom implementations) of
+                  this formatter.</para>
+                </listitem>
+              </varlistentry>
+            </variablelist></para>
+        </simplesect>
+
+        <simplesect>
+          <title>Content</title>
+
+          <para><itemizedlist>
+              <listitem>
+                <para>0-1 &lt;parameters&gt;</para>
+              </listitem>
+            </itemizedlist></para>
+        </simplesect>
+      </section>
+
+      <section id="reference-configuration_tags-translationhandler_filters">
+        <title>&lt;filters&gt;</title>
+
+        <para>Parent element for &lt;filter&gt;.</para>
+
+        <simplesect>
+          <title>Content</title>
+
+          <para><itemizedlist>
+              <listitem>
+                <para>1-n &lt;filter&gt;</para>
+              </listitem>
+            </itemizedlist></para>
+        </simplesect>
+      </section>
+
+      <section id="reference-configuration_tags-translationhandler_filters_filter">
+        <title>&lt;filter&gt;</title>
+
+        <para>Defines a filter for translator or formatter.</para>
+
+        <simplesect>
+          <title>Content</title>
+
+          <para>The function implementing this filter. You can define static
+          class methods by using the "class::method" syntax</para>
+        </simplesect>
+      </section>
+    </section>
+
+    <section id="reference-configuration_tags-validatorhandler">
+      <title>ValidatorConfigHandler Tags</title>
+
+      <para></para>
+
+      <section id="reference-configuration_tags-validatorhandler_validator_definitions">
+        <title>&lt;validator_definitions&gt;</title>
+
+        <para>Parent element for &lt;validator_definition&gt;.</para>
+
+        <simplesect>
+          <title>Content</title>
+
+          <para><itemizedlist>
+              <listitem>
+                <para>1-n &lt;validator_definition&gt;</para>
+              </listitem>
+            </itemizedlist></para>
+        </simplesect>
+      </section>
+
+      <section id="reference-configuration_tags-validatorhandler_validator_definitions_validator_definition">
+        <title>&lt;validator_definition&gt;</title>
+
+        <para>Defines an alias and default parameters for a validator.</para>
+
+        <simplesect>
+          <title>Attributes</title>
+
+          <para><variablelist>
+              <varlistentry>
+                <term>name</term>
+
+                <listitem>
+                  <para>A name which can be used instead of the class name
+                  when referring to this validator.</para>
+                </listitem>
+              </varlistentry>
+
+              <varlistentry>
+                <term>class</term>
+
+                <listitem>
+                  <para>The class implementing this validator.</para>
+                </listitem>
+              </varlistentry>
+            </variablelist></para>
+        </simplesect>
+
+        <simplesect>
+          <title>Content</title>
+
+          <para><itemizedlist>
+              <listitem>
+                <para>0-1 &lt;parameters&gt;</para>
+              </listitem>
+            </itemizedlist></para>
+        </simplesect>
+      </section>
+
+      <section id="reference-configuration_tags-validatorhandler_validators">
+        <title>&lt;validators&gt;</title>
+
+        <para>Parent element for &lt;validator&gt;</para>
+
+        <simplesect>
+          <title>Attributes</title>
+
+          <para><variablelist>
+              <varlistentry>
+                <term><optional>method</optional></term>
+
+                <listitem>
+                  <para>The method to limit the child validators to</para>
+                </listitem>
+              </varlistentry>
+
+              <varlistentry>
+                <term><optional>severity</optional></term>
+
+                <listitem>
+                  <para>The default severity of the child validators.</para>
+                </listitem>
+              </varlistentry>
+            </variablelist></para>
+        </simplesect>
+
+        <simplesect>
+          <title>Content</title>
+
+          <para><itemizedlist>
+              <listitem>
+                <para>1-n &lt;validator&gt;</para>
+              </listitem>
+            </itemizedlist></para>
+        </simplesect>
+      </section>
+
+      <section id="reference-configuration_tags-validatorhandler_validators_validator">
+        <title>&lt;validator&gt;</title>
+
+        <para>Defines a validator.</para>
+
+        <simplesect>
+          <title>Attributes</title>
+
+          <para><variablelist>
+              <varlistentry>
+                <term>name</term>
+
+                <listitem>
+                  <para>The name of this validator.</para>
+                </listitem>
+              </varlistentry>
+
+              <varlistentry>
+                <term>class</term>
+
+                <listitem>
+                  <para>The class or alias implementing this validator.</para>
+                </listitem>
+              </varlistentry>
+
+              <varlistentry>
+                <term><optional>method</optional></term>
+
+                <listitem>
+                  <para>The request method(s, delimited by space) in which
+                  this validator should be run.</para>
+                </listitem>
+              </varlistentry>
+
+              <varlistentry>
+                <term><optional>required</optional></term>
+
+                <listitem>
+                  <para>Whether the value is required.</para>
+                </listitem>
+              </varlistentry>
+
+              <varlistentry>
+                <term><optional>severity</optional></term>
+
+                <listitem>
+                  <para>The severity which will be used when this validator
+                  fails.</para>
+                </listitem>
+              </varlistentry>
+            </variablelist></para>
+        </simplesect>
+
+        <simplesect>
+          <title>Content</title>
+
+          <para><itemizedlist>
+              <listitem>
+                <para>0-1 &lt;arguments&gt;</para>
+              </listitem>
+
+              <listitem>
+                <para>0-1 &lt;errors&gt;</para>
+              </listitem>
+
+              <listitem>
+                <para>0-1 &lt;parameters&gt;</para>
+              </listitem>
+            </itemizedlist></para>
+        </simplesect>
+      </section>
+
+      <section id="reference-configuration_tags-validatorhandler_validators_validator_arguments">
+        <title>&lt;arguments&gt;</title>
+
+        <para>Parent element for &lt;argument&gt;</para>
+
+        <simplesect>
+          <title>Content</title>
+
+          <para><itemizedlist>
+              <listitem>
+                <para>1-n &lt;argument&gt;</para>
+              </listitem>
+            </itemizedlist></para>
+        </simplesect>
+      </section>
+
+      <section id="reference-configuration_tags-validatorhandler_validators_validator_arguments_argument">
+        <title>&lt;argument&gt;</title>
+
+        <para>Defines an argument to be validated.</para>
+
+        <simplesect>
+          <title>Attributes</title>
+
+          <para><variablelist>
+              <varlistentry>
+                <term><optional>name</optional></term>
+
+                <listitem>
+                  <para>The name of this argument (usage depends on the
+                  validator).</para>
+                </listitem>
+              </varlistentry>
+            </variablelist></para>
+        </simplesect>
+
+        <simplesect>
+          <title>Content</title>
+
+          <para>The name of the request parameter which contains the argument
+          to be validated</para>
+        </simplesect>
+      </section>
+
+      <section id="reference-configuration_tags-validatorhandler_validators_validator_errors">
+        <title>&lt;errors&gt;</title>
+
+        <para>Parent element for &lt;error&gt;</para>
+
+        <simplesect>
+          <title>Content</title>
+
+          <para><itemizedlist>
+              <listitem>
+                <para>1-n &lt;error&gt;</para>
+              </listitem>
+            </itemizedlist></para>
+        </simplesect>
+      </section>
+
+      <section id="reference-configuration_tags-validatorhandler_validators_validator_errors_error">
+        <title>&lt;error&gt;</title>
+
+        <para>Defines an error message.</para>
+
+        <simplesect>
+          <title>Attributes</title>
+
+          <para><variablelist>
+              <varlistentry>
+                <term><optional>for</optional></term>
+
+                <listitem>
+                  <para>Using the for attribute you can specify different
+                  error messages for different types of errors which depend on
+                  the validator used.</para>
+                </listitem>
+              </varlistentry>
+            </variablelist></para>
+        </simplesect>
+
+        <simplesect>
+          <title>Content</title>
+
+          <para>The error message.</para>
+        </simplesect>
+      </section>
     </section>
   </chapter>
 </book>
