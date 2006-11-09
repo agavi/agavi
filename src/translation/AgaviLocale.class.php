@@ -776,7 +776,7 @@ class AgaviLocale
 			: null;
 	}
 
-	public function getPercentFormat($dfId)
+	public function getPercentFormat($pfId)
 	{
 		return isset($this->data['numbers']['percentFormats'][$pfId])
 			? $this->data['numbers']['percentFormats'][$pfId]
