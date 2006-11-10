@@ -106,7 +106,7 @@ TODO: is_equal doesn't work yet
 		$this->myTestUsingBinarySearch($zone, $this->date(90, AgaviDateDefinitions::JUNE, 1), $this->date(90, AgaviDateDefinitions::DECEMBER, 31), $julyOne);
 
 		$this->assertFalse($zone->inDaylightTime($marchOne - 1000) || !$zone->inDaylightTime($marchOne), 'Start rule broken');
-		$this->assertFalse(!$zone->inDaylightTime($julyOne - 1000) || $zone->inDaylightTime($julyOnestatus), 'End rule broken');
+		$this->assertFalse(!$zone->inDaylightTime($julyOne - 1000) || $zone->inDaylightTime($julyOne), 'End rule broken');
 
 		$zone->setStartYear(1991);
 		$this->assertFalse($zone->inDaylightTime($marchOne) || $zone->inDaylightTime($julyOne - 1000), 'Start year broken');
