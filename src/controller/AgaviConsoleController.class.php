@@ -43,7 +43,7 @@ class AgaviConsoleController extends AgaviController
 	public function initialize(AgaviResponse $reponse, array $parameters = array())
 	{
 		// initialize parent
-		parent::initialize($context, $parameters);
+		parent::initialize($response, $parameters);
 
 		ini_set('arg_separator.output', AgaviConfig::get('php.arg_separator.output', '&'));
 	}
