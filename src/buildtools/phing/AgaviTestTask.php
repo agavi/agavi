@@ -87,6 +87,7 @@ class AgaviTestTask extends Task {
 			1 => array('pipe', 'w'),
 			2 => array('file', (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN' ? 'NUL' : '/dev/null'), 'a')
 		);
+		$pipes = array();
 		$process = proc_open($php, $descriptorspec, $pipes, getcwd());
 		if (!is_resource($process)) {
 			throw new BuildException("AgaviTest couldn't proc_open: {$php}", PROJECT_MSG_INFO);
