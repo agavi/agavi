@@ -41,7 +41,7 @@ class AgaviLoggerManager
 	 * @var        string The name of the default logger.
 	 * @since      0.11.0
 	 */
-	protected $defaultLoggerName = null;
+	protected $defaultLoggerName = 'default';
 
 	/**
 	 * Retrieve the current application context.
