@@ -56,7 +56,7 @@ class LoggerManagerTest extends AgaviTestCase
 
 	public function testgetLogger()
 	{
-		$this->_lm->setLogger('default', $this->_l);
+		$this->_lm->setLogger($this->_lm->getDefaultLoggerName(), $this->_l);
 		$this->assertEquals($this->_l, $this->_lm->getLogger());
 		$this->_lm->setLogger('logfile2', $this->_l2);
 		$this->assertEquals($this->_l, $this->_lm->getLogger('default'));

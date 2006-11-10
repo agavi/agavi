@@ -8,6 +8,13 @@
 <configurations>
 	<configuration>
 		<loggers>
+
+			<logger name="default" class="TestLogger3" level="TestLogger::DEBUG">
+				<appenders>
+					<appender>appender1</appender>
+				</appenders>
+			</logger>
+
 			<logger name="test1" class="TestLogger1" level="TestLogger::INFO">
 				<appenders>
 					<appender>appender1</appender>
@@ -28,6 +35,7 @@
 					<appender>appender1</appender>
 				</appenders>
 			</logger>
+
 
 		</loggers>
 		<appenders>
