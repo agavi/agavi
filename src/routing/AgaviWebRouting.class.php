@@ -94,6 +94,7 @@ class AgaviWebRouting extends AgaviRouting
 			$this->basePath = $this->prefix = preg_replace('/' . preg_quote($this->input, '/') . '$/', '', rawurldecode($ru['path']));
 			
 			// that was easy. now clean up $_GET and the Request
+			$parsedRuQuery = $parsedInput = '';
 			parse_str($ru['query'], $parsedRuQuery);
 			parse_str($this->input, $parsedInput);
 			foreach(array_diff(array_keys($parsedInput), array_keys($parsedRuQuery)) as $unset) {
@@ -105,6 +106,7 @@ class AgaviWebRouting extends AgaviRouting
 		} else {
 			$sn = $_SERVER['SCRIPT_NAME'];
 			
+			$appendFrom = 0;
 			$this->prefix = AgaviToolkit::stringBase($sn, $ru['path'], $appendFrom);
 			$this->prefix .= substr($sn, $appendFrom + 1);
 			
