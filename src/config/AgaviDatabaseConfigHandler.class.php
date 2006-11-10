@@ -76,8 +76,8 @@ class AgaviDatabaseConfigHandler extends AgaviConfigHandler
 					$databases[$name] = array('params' => array());
 
 					if(!$db->hasAttribute('class')) {
-						$error = 'Configuration file "%s" specifies category "%s" with missing class key';
-						$error = sprintf($error, $config, $category);
+						$error = 'Configuration file "%s" specifies database "%s" with missing class key';
+						$error = sprintf($error, $config, $name);
 
 						throw new AgaviParseException($error);
 					}
