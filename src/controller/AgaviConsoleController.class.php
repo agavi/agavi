@@ -40,7 +40,7 @@ class AgaviConsoleController extends AgaviController
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function initialize(AgaviResponse $reponse, array $parameters = array())
+	public function initialize(AgaviResponse $response, array $parameters = array())
 	{
 		// initialize parent
 		parent::initialize($response, $parameters);
