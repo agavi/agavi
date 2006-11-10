@@ -1050,7 +1050,6 @@ class AgaviGregorianCalendar extends AgaviCalendar
 	private function internalGetDefaultCenturyStartYear()
 	{
 		// lazy-evaluate systemDefaultCenturyStartYear
-		$needsUpdate;
 		// TODO: hook up with this
 		$needsUpdate = (self::$fgSystemDefaultCenturyStart == self::$fgSystemDefaultCentury);
 
