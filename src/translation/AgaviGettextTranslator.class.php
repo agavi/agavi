@@ -28,6 +28,11 @@
 class AgaviGettextTranslator extends AgaviBasicTranslator
 {
 	/**
+	 * @var        string A pattern for the path to the domain files.
+	 */
+	protected $domainPathPattern = null;
+
+	/**
 	 * @var        array The paths to the locale files indexed by domains
 	 */
 	protected $domainPaths = array();
@@ -59,6 +64,10 @@ class AgaviGettextTranslator extends AgaviBasicTranslator
 			foreach($parameters['text_domains'] as $domain => $path) {
 				$this->domainPaths[$domain] = $path;
 			}
+		}
+
+		if(isset($parameters['text_domain_pattern'])) {
+			$this->domainPathPattern = $parameters['text_domain_pattern'];
 		}
 	}
 
@@ -138,19 +147,29 @@ class AgaviGettextTranslator extends AgaviBasicTranslator
 	 */
 	public function loadDomainData($domain)
 	{
+		$localeName = $this->locale->getIdentifier();
+		$localeNameBases = AgaviLocale::getLookupPath($localeName);
+
 		if(!isset($this->domainPaths[$domain])) {
-			throw new AgaviException('Using domain "' . $domain . '" which has no path specified');
+			if(!$this->domainPathPattern) {
+				throw new AgaviException('Using domain "' . $domain . '" which has no path specified');
+			} else {
+				$basePath = $this->domainPathPattern;
+			}
+		} else {
+			$basePath = $this->domainPaths[$domain];
 		}
 
-		$localeName = $this->locale->getIdentifier();
-		$fileNameBases = AgaviLocale::getLookupPath($localeName);
-
-		$basePath = $this->domainPaths[$domain];
+		$replaceCount = 0;
+		$basePath = str_replace('${domain}', $domain, $basePath, $replaceCount);
 
 		$data = array();
 
-		foreach($fileNameBases as $fileNameBase) {
-			$fileName = $basePath . '/' . $fileNameBase . '.mo';
+		foreach($localeNameBases as $localeNameBase) {
+			$fileName = str_replace('${locale}', $localeNameBase, $basePath, $replaceCount);
+			if($replaceCount == 0) {
+				$fileName = $basePath . '/' . $localeNameBase . '.mo';
+			}
 			if(is_readable($fileName)) {
 				$fileData = AgaviGettextMoReader::readFile($fileName);
 				
