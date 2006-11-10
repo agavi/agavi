@@ -705,12 +705,18 @@ class AgaviTranslationManager
 		$locale = $this->getCurrentLocale();
 		$calendarType = null;
 		$zone = null;
+		$time = null;
 		if($type instanceof AgaviLocale) {
 			$locale = $type;
 		} elseif($type instanceof AgaviTimeZone) {
 			$zone = $type;
+		} elseif(is_int($type)) {
+			$time = $type * AgaviDateDefinitions::MILLIS_PER_SECOND;
 		} elseif($type !== null) {
 			$calendarType = $type;
+		}
+		if($time === null) {
+			$time = AgaviCalendar::getNow();
 		}
 
 		if(!$calendarType) {
@@ -734,7 +740,7 @@ class AgaviTranslationManager
 			$c->adoptTimeZone($zone); // TODO: Set the correct time zone
 		}
 
-		$c->setTime(AgaviCalendar::getNow()); // let the new calendar have the current time.
+		$c->setTime($time); // let the new calendar have the current time.
 
 		return $c;
 	}
