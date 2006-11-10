@@ -909,8 +909,6 @@ if(curl_errno($ch)) {
     <section id="reference-configuration_tags-general">
       <title>General Tags</title>
 
-      <para></para>
-
       <section id="ref_configuration_keywords">
         <title>Keywords</title>
 
@@ -1120,7 +1118,7 @@ if(curl_errno($ch)) {
     </section>
 
     <section id="reference-configuration_tags-autoloadhandler">
-      <title>AutoloadConfigHandler Tags</title>
+      <title>AutoloadConfigHandler Tags (autoload.xml)</title>
 
       <para>The AutoloadConfigHandler allows you to define classes and their
       files to be automatically loaded by PHP when the class is first accessed
@@ -1189,7 +1187,7 @@ if(curl_errno($ch)) {
     </section>
 
     <section id="reference-configuration_tags-compilehandler">
-      <title>CompileConfigHandler Tags</title>
+      <title>CompileConfigHandler Tags (compile.xml)</title>
 
       <para>The CompileConfigHandler enables you to combine several files
       stripped of comments and blank lines into one single cache file. <note>
@@ -1246,7 +1244,7 @@ if(curl_errno($ch)) {
     </section>
 
     <section id="reference-configuration_tags-confighandlershandler">
-      <title>ConfigHandlersConfigHandler Tags</title>
+      <title>ConfigHandlersConfigHandler Tags (config_handlers.xml)</title>
 
       <para>Allows you to define your own configuration files.</para>
 
@@ -1296,7 +1294,7 @@ if(curl_errno($ch)) {
       <section id="reference-configuration_tags-confighandlershandler_handlers_handler">
         <title>&lt;handler&gt;</title>
 
-        <para></para>
+        <para>Defines a configuration handler.</para>
 
         <simplesect>
           <title>Attributes</title>
@@ -1361,7 +1359,7 @@ if(curl_errno($ch)) {
     </section>
 
     <section id="reference-configuration_tags-databasehandler">
-      <title>DatabaseConfigHandler Tags</title>
+      <title>DatabaseConfigHandler Tags (databases.xml)</title>
 
       <para>Registers database connections with the system. You have to
       specify a default connection to be used. The available parameters for
@@ -1467,7 +1465,7 @@ if(curl_errno($ch)) {
     </section>
 
     <section id="reference-configuration_tags-factoryhandler">
-      <title>FactoryConfigHandler Tags</title>
+      <title>FactoryConfigHandler Tags (factories.xml)</title>
 
       <para>In the FactoryConfigHandler all child tags have the same possible
       attributes and child tags.</para>
@@ -1476,33 +1474,33 @@ if(curl_errno($ch)) {
         <title>&lt;*&gt;</title>
 
         <para>Available elements are <simplelist type="inline">
-            <member>action_stack</member>
+            <member>"action_stack"</member>
 
-            <member>controller</member>
+            <member>"controller"</member>
 
-            <member>database_manager</member>
+            <member>"database_manager"</member>
 
-            <member>dispatch_filter</member>
+            <member>"dispatch_filter"</member>
 
-            <member>execution_filter</member>
+            <member>"execution_filter"</member>
 
-            <member>logger_manager</member>
+            <member>"logger_manager"</member>
 
-            <member>request</member>
+            <member>"request"</member>
 
-            <member>response</member>
+            <member>"response"</member>
 
-            <member>routing</member>
+            <member>"routing"</member>
 
-            <member>security_filter</member>
+            <member>"security_filter"</member>
 
-            <member>storage</member>
+            <member>"storage"</member>
 
-            <member>translation_manager</member>
+            <member>"translation_manager"</member>
 
-            <member>user</member>
+            <member>"user"</member>
 
-            <member>validator_manager</member>
+            <member>"validator_manager"</member>
           </simplelist></para>
 
         <simplesect>
@@ -1532,9 +1530,14 @@ if(curl_errno($ch)) {
     </section>
 
     <section id="reference-configuration_tags-filterhandler">
-      <title>FilterConfigHandler Tags</title>
+      <title>FilterConfigHandler Tags (*_filters.xml)</title>
 
-      <para></para>
+      <para>You may use <filename>action_filters.xml</filename>,
+      <filename>global_filters.xml</filename> and
+      <filename>rendering_filters.xml</filename> to configure Action, global
+      or rendering filters. Action and rendering filters may also be specified
+      on a per-module basis by putting them into the
+      <filename>app/modules/ModuleName/config/</filename> folder.</para>
 
       <section id="reference-configuration_tags-filterhandler_filters">
         <title>&lt;filters&gt;</title>
@@ -1601,9 +1604,10 @@ if(curl_errno($ch)) {
     </section>
 
     <section id="reference-configuration_tags-logginghandler">
-      <title>LoggingConfigHandler Tags</title>
+      <title>LoggingConfigHandler Tags (logging.xml)</title>
 
-      <para></para>
+      <para>This configuration file is used to specify loggers, their
+      appenders and so on.</para>
 
       <section id="reference-configuration_tags-logginghandlers_loggers">
         <title>&lt;loggers&gt;</title>
@@ -1833,9 +1837,9 @@ if(curl_errno($ch)) {
     </section>
 
     <section id="reference-configuration_tags-outputtypehandler">
-      <title>OutputTypeConfigHandler Tags</title>
+      <title>OutputTypeConfigHandler Tags (output_types.xml)</title>
 
-      <para></para>
+      <para>Used to configure Output Types.</para>
 
       <section>
         <title
@@ -1961,69 +1965,86 @@ if(curl_errno($ch)) {
     </section>
 
     <section>
-      <title>RbacDefinitionConfigHandler Tags</title>
+      <title>RbacDefinitionConfigHandler Tags (e.g.
+      rbac_definitions.xml)</title>
 
-      <para></para>
+      <para>This config handler can parse simple RBAC role definition config
+      files.</para>
 
       <section>
         <title>&lt;roles&gt;</title>
 
-        <para></para>
-
-        <simplesect>
-          <title>Attributes</title>
-
-          <para></para>
-        </simplesect>
+        <para>Contains a list of roles.</para>
 
         <simplesect>
           <title>Content</title>
 
-          <para></para>
+          <para><itemizedlist>
+              <listitem>
+                <para>1-n &lt;role&gt;</para>
+              </listitem>
+            </itemizedlist></para>
         </simplesect>
       </section>
 
       <section>
         <title>&lt;role&gt;</title>
 
-        <para></para>
+        <para>Defines permissions and may contain child roles.</para>
 
         <simplesect>
           <title>Attributes</title>
 
-          <para></para>
+          <para><variablelist>
+              <varlistentry>
+                <term><optional>name</optional></term>
+
+                <listitem>
+                  <para>The name that identifies the role.</para>
+                </listitem>
+              </varlistentry>
+            </variablelist></para>
         </simplesect>
 
         <simplesect>
           <title>Content</title>
 
-          <para></para>
+          <para><itemizedlist>
+              <listitem>
+                <para>0-1 &lt;roles&gt;</para>
+              </listitem>
+
+              <listitem>
+                <para>1 &lt;pernissions&gt;</para>
+              </listitem>
+            </itemizedlist></para>
         </simplesect>
+      </section>
+
+      <section>
+        <title>&lt;permissions&gt;</title>
+
+        <para>Contains one or more permissions for a role.</para>
       </section>
 
       <section>
         <title>&lt;permission&gt;</title>
 
-        <para></para>
-
-        <simplesect>
-          <title>Attributes</title>
-
-          <para></para>
-        </simplesect>
+        <para>Specifies the name of a credential the user will be given when
+        he is assigned to the respective role.</para>
 
         <simplesect>
           <title>Content</title>
 
-          <para></para>
+          <para>The name of the credential the user will be given.</para>
         </simplesect>
       </section>
     </section>
 
     <section id="reference-configuration_tags-routinghandler">
-      <title>RoutingConfigHandler Tags</title>
+      <title>RoutingConfigHandler Tags (routing.xml)</title>
 
-      <para></para>
+      <para>Used to configure routing rules.</para>
 
       <section id="reference-configuration_tags-routinghandler_routes">
         <title>&lt;routes&gt;</title>
@@ -2272,7 +2293,7 @@ if(curl_errno($ch)) {
     </section>
 
     <section id="reference-configuration_tags-settinghandler">
-      <title>SettingConfigHandler Tags</title>
+      <title>SettingConfigHandler Tags (settings.xml)</title>
 
       <para></para>
 
@@ -2401,9 +2422,11 @@ if(curl_errno($ch)) {
     </section>
 
     <section id="reference-configuration_tags-translationhandler">
-      <title>TranslationConfigHandler Tags</title>
+      <title>TranslationConfigHandler Tags (translation.xml)</title>
 
-      <para></para>
+      <para>In this configuration file, you can configure the available
+      locales, translation domains as well as translators and their
+      settings.</para>
 
       <section id="reference-configuration_tags-translationhandler_available_locales">
         <title>&lt;available_locales&gt;</title>
@@ -2715,9 +2738,12 @@ if(curl_errno($ch)) {
     </section>
 
     <section id="reference-configuration_tags-validatorhandler">
-      <title>ValidatorConfigHandler Tags</title>
+      <title>ValidatorConfigHandler Tags (validate/*.xml)</title>
 
-      <para></para>
+      <para>Validation files sit inside
+      <filename>app/modules/ModuleName/validate/</filename>, with the file
+      name consisting of the Action name and the <filename>.xml</filename>
+      extension.</para>
 
       <section id="reference-configuration_tags-validatorhandler_validator_definitions">
         <title>&lt;validator_definitions&gt;</title>
