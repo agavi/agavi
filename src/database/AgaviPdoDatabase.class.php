@@ -60,13 +60,18 @@ class AgaviPdoDatabase extends AgaviDatabase
 			$pdo_username = $this->getParameter('username');
 			$pdo_password = $this->getParameter('password');
 
+			$pdo_options = array();
+
 			// let's see if we need a persistent connection
-			$persistent = $this->getParameter('persistent', false);
-			
-			$pdo_options = array(PDO::ATTR_PERSISTENT => $persistent);
-			
+			// take special care because the postgresql pdo driver bitterly complains
+			// when getting options passed.
+			if($this->hasParameter('persistent')) {
+				$persistent = $this->getParameter('persistent', false);
+				$pdo_options[PDO::ATTR_PERSISTENT] = $persistent;
+			}
+
 			$this->connection = new PDO($dsn, $pdo_username, $pdo_password, $pdo_options);
-			
+
 		} catch(PDOException $e) {
 			throw new AgaviDatabaseException($e->getMessage());
 		}
