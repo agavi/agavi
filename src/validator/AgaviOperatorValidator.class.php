@@ -225,7 +225,7 @@ abstract class AgaviOperatorValidator extends AgaviValidator implements AgaviIVa
 	 * 
 	 * @param      AgaviParameterHolder The parameters which should be validated.
 	 *
-	 * @return     int The result of validation (SUCCESS, NONE, ERROR, CRITICAL).
+	 * @return     int The result of validation (SUCCESS, NONE, NOTICE, ERROR, CRITICAL).
 	 *
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0

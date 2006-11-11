@@ -199,6 +199,8 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 					continue 2;
 				case AgaviValidator::NONE:
 					continue 2;
+				case AgaviValidator::NOTICE:
+					continue 2;
 				case AgaviValidator::ERROR:
 					$result = false;
 					continue 2;

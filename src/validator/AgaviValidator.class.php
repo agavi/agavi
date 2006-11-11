@@ -48,21 +48,27 @@ abstract class AgaviValidator extends AgaviParameterHolder
 
 	/**
 	 * validator error severity (validator failed but without impact on result
-	 * of whole validation process)
+	 * of whole validation process and completely silent)
 	 */
 	const NONE = 1;
+
+	/**
+	 * validator error severity (validator failed but without impact on result
+	 * of whole validation process)
+	 */
+	const NOTICE = 2;
 
 	/**
 	 * validation error severity (validator failed but validation process
 	 * continues)
 	 */
-	const ERROR = 2;
+	const ERROR = 3;
 
 	/**
 	 * validation error severty (validator failed and validation process will
 	 * be aborted)
 	 */
-	const CRITICAL = 3;
+	const CRITICAL = 4;
 
 	/**
 	 * @var        AgaviContext An AgaviContext instance.
@@ -422,7 +428,9 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 */
 	public function reportError(AgaviValidator $validator, $errorMsg)
 	{
-		$this->parentContainer->reportError($validator, $errorMsg);
+		if(self::mapErrorCode($this->getParameter('severity')) > self::NONE) {
+			$this->parentContainer->reportError($validator, $errorMsg);
+		}
 	}
 
 	/**
@@ -599,8 +607,9 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 *
 	 * critical -> AgaviValidator::CRITICAL
 	 * error    -> AgaviValidator::ERROR
+	 * notice   -> AgaviValidator::NOTICE
 	 * none     -> AgaviValidator::NONE
-	 * success  -> AgaviValidator::SUCCESS
+	 * success  -> not allowed to be specified by the user.
 	 *
 	 * @param      string The error severity as string.
 	 *
@@ -619,10 +628,10 @@ abstract class AgaviValidator extends AgaviParameterHolder
 				return self::CRITICAL;
 			case 'error':
 				return self::ERROR;
+			case 'notice':
+				return self::NOTICE;
 			case 'none':
 				return self::NONE;
-			case 'success':
-				return self::SUCCESS;
 			default:
 				throw new AgaviValidatorException('unknown error code: '.$code);
 		}
