@@ -170,19 +170,10 @@ class AgaviSimpleDateFormatter
 	public function format($data, $calendarType, $locale)
 	{
 		$tzid = null;
-		if(is_array($data)) {
-			// array with data filled
-		} elseif(is_int($data)) {
-			// unix timestamp
-		} elseif($data instanceof AgaviCalendar) {
+		if($data instanceof AgaviCalendar) {
 			$tzid = $data->getTimeZone()->getId();
-
-			$dateData = array();
-			for($i = 0; $i < AgaviDateDefinitions::FIELD_COUNT; ++$i) {
-				$dateData[$i] = $data->get($i);
-			}
-			$data = $dateData;
-		} else {
+			$data = $data->getAll();
+		} elseif(!is_array($data)) {
 			throw new AgaviException('Invalid argument ' . $data);
 		}
 		$out = '';

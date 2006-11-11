@@ -95,6 +95,11 @@ class AgaviDateFormatter extends AgaviSimpleDateFormatter implements AgaviITrans
 			$locale = $this->locale;
 		}
 
+		if(is_int($message)) {
+			// convert unix timestamp to calendar
+			$message = $this->context->getTranslationManager()->createCalendar($message);
+		}
+
 		return $this->format($message, 'gregorian', $locale);
 	}
 
