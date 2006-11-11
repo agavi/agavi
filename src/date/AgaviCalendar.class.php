@@ -1290,13 +1290,35 @@ abstract class AgaviCalendar
 		return $result;
 	}
 
+
+	/**
+	 * Gets all time field values. Recalculate the current time field
+	 * values if the time value has been changed by a call to setTime(). Return
+	 * zero for unset fields if any fields have been explicitly set by a call to
+	 * set(). To force a recomputation of all fields regardless of the previous
+	 * state, call complete().
+	 *
+	 * @return     array All fields of this instance.
+	 * 
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @since      0.11.0
+	 */
+	public function getAll()
+	{
+		// field values are only computed when actually requested; for more on when computation
+		// of various things happens, see the "data flow in Calendar" description at the top
+		// of this file
+		$this->complete();
+		return $this->fFields;
+	}
+
 	/**
 	 * Gets the value for a given time field. Recalculate the current time field
 	 * values if the time value has been changed by a call to setTime(). Return
 	 * zero for unset fields if any fields have been explicitly set by a call to
 	 * set(). To force a recomputation of all fields regardless of the previous
-	 * state, call complete(). This method is semantically const, but may alter
-	 * the object in memory.
+	 * state, call complete().
 	 *
 	 * @param      string The given time field.
 	 * 
@@ -1309,8 +1331,8 @@ abstract class AgaviCalendar
 	 */
 	public function get($field)
 	{
-    // field values are only computed when actually requested; for more on when computation
-    // of various things happens, see the "data flow in Calendar" description at the top
+		// field values are only computed when actually requested; for more on when computation
+		// of various things happens, see the "data flow in Calendar" description at the top
 		// of this file
 		$this->complete();
 		return $this->fFields[$field];
