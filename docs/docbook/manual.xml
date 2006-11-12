@@ -346,19 +346,17 @@ if(curl_errno($ch)) {
       <para><command>agavi project</command></para>
 
       <para>Follow the on-screen instructions. In case of doubt, confirm the
-      default values given by the wizard. You now likely have to change the
-      permissions for the cache folder so it's writeable to PHP or the web
-      server process:</para>
-
-      <para><command>chmod a+rwx app/cache</command></para>
+      default values given by the wizard.</para>
 
       <warning>
-        <para>"a+rwx" equals "0777" and means the cache directory and all
-        files in there will be read- and writeable by everyone. Remember that
-        the compiled configs will, for example, still contain your database
-        credentials in clear text. It might be a good idea to use the minimum
-        required permissions so the folder is readable only by PHP or the Web
-        Server. You have been warned.</para>
+        <para>Agavi sets the permissions on
+        <filename>yourproject/app/cache</filename> to "a+rwx", better known as
+        "0777", which means the cache directory and all files in there will be
+        read- and writeable by everyone. Remember that the compiled configs
+        will, for example, still contain your database credentials in clear
+        text. It might be a good idea to <command>chmod</command> the
+        directory to the minimum required permissions so the folder is
+        readable only by PHP or the Web Server. You have been warned.</para>
       </warning>
 
       <para>And that's it! You're done! Fire up your browser and point it to

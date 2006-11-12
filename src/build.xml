@@ -66,6 +66,7 @@
 		<copy file="${templates.dir.current}/dist.htaccess.tmpl" tofile="${project.dir}/pub/dist.htaccess" />
 		<mkdir dir="${project.dir}/pub/modpub"/>
 		<mkdir dir="${app.dir}/cache"/>
+		<chmod file="${app.dir}/cache" mode="777"/>
 		<property name="templates.dir.current" value="${templates.dir.default}"  override="true"  />
 		<available file="${templates.dir}/config.php.tmpl" property="templates.dir.current" value="${templates.dir}" />
 		<copy file="${templates.dir.current}/config.php.tmpl" tofile="${app.dir}/config.php">
