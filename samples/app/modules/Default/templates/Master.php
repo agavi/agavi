@@ -153,9 +153,7 @@ $currentLanguage = $tm->getCurrentLocaleIdentifier();
 $otherLanguages = array_diff_key($languages, array($currentLanguage => null));
 ?>
 		<div id="languages"><?php echo $tm->_('Current language:', 'default.layout'); ?> <a href="<?php echo $r->gen(null); ?>" hreflang="<?php echo $currentLanguage; ?>"><?php echo $languages[$currentLanguage]; ?></a>.<br /><?php echo $tm->__('Alternative language:', 'Alternative languages:', count($otherLanguages), 'default.layout'); ?> <?php $first = true; foreach($otherLanguages as $key => $value): if(!$first) echo ', '; ?><a href="<?php echo $r->gen(null, array('locale' => $key)); ?>" hreflang="<?php echo $key; ?>"><?php echo $value; ?></a><?php $first = false; endforeach; ?></div>
-<?php if($usr->isAuthenticated()): ?>
-<p class="runin"><?php echo $tm->_('You are logged in.', 'default.layout'); ?> <a href="<?php echo $r->gen('logout'); ?>"><?php echo $tm->_('Log Out', 'default.layout'); ?></a></p>
-<?php endif; ?>
+<p class="runin"><?php echo $tm->_d($tm->createCalendar()); ?>.<?php if($usr->isAuthenticated()): ?> <?php echo $tm->_('You are logged in.', 'default.layout'); ?> <a href="<?php echo $r->gen('logout'); ?>"><?php echo $tm->_('Log Out', 'default.layout'); ?></a><?php endif; ?></p>
 		<div id="menu">
 			<h3><?php echo $tm->_('Menu', 'default.layout'); ?></h3>
 			<ul>
@@ -175,7 +173,7 @@ $otherLanguages = array_diff_key($languages, array($currentLanguage => null));
 <?php if($req->hasErrors()): foreach($req->getErrorMessages() as $error): ?>
 			<p class="error"><?php echo $error['message']; ?></p>
 <?php endforeach; endif; ?>
-<?php echo $template['content']; ?> 
+<?php echo $template['content']; ?> <?=time()?>
 		</div>
 	</body>
 </html>

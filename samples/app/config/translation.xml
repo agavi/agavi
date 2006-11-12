@@ -86,7 +86,11 @@
 
 				<currency_formatter type="currency" />
 
-				<date_formatter type="date" />
+				<date_formatter type="date">
+					<parameters>
+						<parameter name="format">full</parameter>
+					</parameters>
+				</date_formatter>
 				
 			</translator>
 		</translators>
