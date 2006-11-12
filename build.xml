@@ -20,14 +20,42 @@
   <!-- main target -->
 	<target name="main" description="main target">
 		<echo msg="available targets: " /> 
-		<echo msg="  docs    : regenerate phpdocs   " />
-		<echo msg="  test    : run unit test suite  " />
-		<echo msg="  package : generate PEAR package" />
-		<echo msg="  clean   : clean out cruft      " />
+		<echo msg=" docs             : regenerate all documentation" />
+		<echo msg="  apidocs         : regenerate API docs" />
+		<echo msg="  manuals         : regenerate manuals" />
+		<echo msg=" packages         : generate all packages" />
+		<echo msg="  pagacke-zip     : generate .zip package" />
+		<echo msg="  package-pear    : generate PEAR package" />
+		<echo msg="  package-apidocs : generate API docs package" />
+		<echo msg="  package-manuals : generate manuals package" />
+		<echo msg=" test    : run unit test suite" />
+		<echo msg=" clean   : clean out cruft" />
 	</target>
 
-	<target name="docs" description="docs target">
+	<target name="docs" description="generate API docs and manuals">
+		<phingcall target="apidocs" />
+		<phingcall target="manuals" />
+	</target>
+	
+	<target name="apidocs" description="API docs">
 		<phpdoc title="Agavi Documentation" destdir="apidocs" sourcepath="src" output="HTML:frames:earthli"/>
+	</target>
+	
+	<target name="manuals" description="generate all manuals">
+		<phingcall target="manual-cookbook" />
+		<phingcall target="manual-introduction" />
+		<phingcall target="manual-manual" />
+		
+		<!-- the idea is that the output variant, e.g. html, html-onepage or fo, is passed in via build.properties or as a command line argument (phing manuals -Doutput=html_onepage or whatever) -->
+	</target>
+	
+	<target name="manual-cookbook">
+	</target>
+
+	<target name="manual-introduction">
+	</target>
+
+	<target name="manual-manual">
 	</target>
 
 	<target name="manual-html" >
@@ -54,8 +82,22 @@
 		<mkdir dir="manual-fo" />
 		<xslt file="docs/docbook/manual.xml" tofile="manual-fo/manual.fo" style="docs/lib/agavi-manual-fo.xsl" />
 	</target>
+	
+	<target name="package-zip">
+		<!-- zip a release package -->
+	</target>
+	
+	<target name="package-apidocs">
+		<phingcall target="apidocs" />
+		<!-- now zip that -->
+	</target>
 
-	<target name="package" description="build pear package">
+	<target name="package-manuals">
+		<phingcall target="manuals" />
+		<!-- now zip that -->
+	</target>
+
+	<target name="package-pear" description="build pear package">
 		<!-- prepare -->
 		<delete dir="${builddir}" includeemptydirs="true" verbose="true" failonerror="false" />
 		<mkdir dir="${builddir}" />
