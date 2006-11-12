@@ -19,7 +19,7 @@
 
   <!-- main target -->
 	<target name="main" description="main target">
-		<echo msg="available targets: " /> 
+		<echo msg="available targets: " />
 		<echo msg=" docs             : regenerate all documentation" />
 		<echo msg="  apidocs         : regenerate API docs" />
 		<echo msg="  manuals         : regenerate manuals" />
@@ -36,19 +36,19 @@
 		<phingcall target="apidocs" />
 		<phingcall target="manuals" />
 	</target>
-	
+
 	<target name="apidocs" description="API docs">
 		<phpdoc title="Agavi Documentation" destdir="apidocs" sourcepath="src" output="HTML:frames:earthli"/>
 	</target>
-	
+
 	<target name="manuals" description="generate all manuals">
 		<phingcall target="manual-cookbook" />
 		<phingcall target="manual-introduction" />
 		<phingcall target="manual-manual" />
-		
+
 		<!-- the idea is that the output variant, e.g. html, html-onepage or fo, is passed in via build.properties or as a command line argument (phing manuals -Doutput=html_onepage or whatever) -->
 	</target>
-	
+
 	<target name="manual-cookbook">
 	</target>
 
@@ -75,18 +75,29 @@
 	<target name="manual-html-onepage" >
 		<mkdir dir="manual/manual/html/onepage" />
 		<copy file="docs/lib/agavi-manual.css" todir="manual-html" overwrite="true" />
-		<xslt file="docs/docbook/manual.xml" todir="manual-html" style="docs/lib/agavi-manual-html-onepage.xsl" />
+		<!--xslt file="docs/docbook/manual.xml" todir="manual-html" style="docs/lib/agavi-manual-html-onepage.xsl"-->
+		<xslt file="docs/docbook/manual.xml" todir="manual-html" style="docs/lib/agavi-manual-html-onepage.xsl">
+			<param name="onechunk" expression="1" />
+			<param name="base.dir" expression="manual-html/" />
+			<param name="root.filename" expression="index-onepage" />
+			<param name="html.stylesheet" expression="agavi-manual.css" />
+			<param name="chunker.output.encoding" expression="UTF-8" />
+			<param name="id.warnings" expression="0" />
+			<param name="header.rule" expression="0" />
+			<param name="footer.rule" expression="0" />
+			<param name="suppress.navigation" expression="1" />
+		</xslt>
 	</target>
-	
+
 	<target name="manual-fo" >
 		<mkdir dir="manual-fo" />
 		<xslt file="docs/docbook/manual.xml" tofile="manual-fo/manual.fo" style="docs/lib/agavi-manual-fo.xsl" />
 	</target>
-	
+
 	<target name="package-zip">
 		<!-- zip a release package -->
 	</target>
-	
+
 	<target name="package-apidocs">
 		<phingcall target="apidocs" />
 		<!-- now zip that -->
