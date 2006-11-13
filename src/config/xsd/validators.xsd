@@ -31,7 +31,7 @@
     <xs:all>
       <xs:element name="parameters" type="parameters" minOccurs="0" />
       <xs:element name="arguments" type="arguments" minOccurs="0"/>
-      <xs:element name="errors" type="arguments" minOccurs="0"/>
+      <xs:element name="errors" type="errors" minOccurs="0"/>
     </xs:all>
     <xs:attribute name="name" type="xs:string" use="required" />
     <xs:attribute name="class" type="xs:string" />
@@ -42,7 +42,7 @@
 
   <xs:complexType name="validator_definitions">
     <xs:sequence>
-      <xs:element name="validator_definition" type="default" maxOccurs="unbounded" />
+      <xs:element name="validator_definition" type="validator_definition" maxOccurs="unbounded" />
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="validator_definition">
