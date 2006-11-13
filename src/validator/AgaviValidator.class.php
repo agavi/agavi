@@ -530,6 +530,9 @@ abstract class AgaviValidator extends AgaviParameterHolder
 				if($this->getParameter('required', true)) {
 					$this->throwError();
 					return self::mapErrorCode($this->getParameter('severity'));
+				} else {
+					// no reason to throw any error since it wouldn't be included anyways
+					return self::NONE;
 				}
 			}
 
