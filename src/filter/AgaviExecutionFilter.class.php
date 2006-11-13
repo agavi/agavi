@@ -103,14 +103,14 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 				if(isset($oti['extension'])) {
 					$renderer->setExtension($oti['extension']);
 				}
-				// run the pre-render check to see if the template is there
-				$renderer->preRenderCheck();
 			} else {
 				$renderer = null;
 			}
 		}
 
 		if($renderer !== null && $viewInstance->getTemplate() !== null) {
+			// run the pre-render check to see if the template is there
+			$renderer->preRenderCheck();
 			// create a new filter chain
 			$fcfi = $this->context->getFactoryInfo('filter_chain');
 			$filterChain = new $fcfi['class']();
