@@ -7,8 +7,8 @@
   <preface>
     <title>Preface</title>
 
-    <para><productname>Agavi</productname> is a Web Application Framework for
-    <productname>PHP</productname> <productnumber>5</productnumber>. While it
+    <para>Agavi is a Web Application Framework for
+    PHP 5. While it
     lies in the nature of a framework to simplify the application development
     process, Agavi won't do that at any cost. The primary goals are
     flexibility, cleanliness and structure. You won't find HTML Form helper

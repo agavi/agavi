@@ -7,9 +7,9 @@
   <preface>
     <title>Preface</title>
 
-    <para>Welcome to the <productname>Agavi</productname> manual. This book
+    <para>Welcome to the Agavi manual. This book
     tries to serve you as the definitive guide to the
-    <productname>Agavi</productname> framework. It contains a "Getting
+    Agavi framework. It contains a "Getting
     Started" guide, a comprehensive introduction to the concept and usage of
     Agavi, and a reference manual that documents all aspects of the framework.
     A separate "Best Practices" book accompanies this guide. Also, there's the
@@ -23,8 +23,8 @@
     <section>
       <title>Introduction</title>
 
-      <para><productname>Agavi</productname> is a Web Application Framework
-      for <productname>PHP</productname> <productnumber>5</productnumber>.
+      <para>Agavi is a Web Application Framework
+      for PHP 5.
       While it lies in the nature of a framework to simplify the application
       development process, Agavi won't do that at any cost. The primary goals
       are flexibility, cleanliness and structure. You won't find HTML Form
@@ -76,10 +76,10 @@
       <section>
         <title>PEAR</title>
 
-        <para>Agavi uses a <productname>PEAR Channel</productname> for release
+        <para>Agavi uses a PEAR Channel for release
         distribution. In order to be able to install releases via
-        <productname>PEAR</productname>, you have to discover the
-        <productname>Agavi PEAR Channel</productname> first:</para>
+        PEAR, you have to discover the
+        Agavi PEAR Channel first:</para>
 
         <para><command>pear channel-discover pear.agavi.org</command></para>
 
@@ -88,25 +88,25 @@
         <para><command>pear install agavi/agavi</command></para>
 
         <para>You now probably see an error message telling you that
-        <productname>PEAR</productname> was unable to install
-        <productname>Phing</productname>. Agavi needs
-        <productname>Phing</productname>, and tries to install it, but this
-        will fail if it doesn't know <productname>Phing's</productname>
+        PEAR was unable to install
+        Phing. Agavi needs
+        Phing, and tries to install it, but this
+        will fail if it doesn't know Phing's
         Channel Server yet. Since discovering channels gets massively annoying
-        over time, you can tell <productname>PEAR</productname> to
+        over time, you can tell PEAR to
         automatically add channels as it comes across them:</para>
 
         <para><command>pear config-set auto_discover 1</command></para>
 
         <para>If you want to install all dependencies (i.e. including
-        <productname>Creole</productname> and
-        <productname>Propel</productname>), type:</para>
+        Creole and
+        Propel), type:</para>
 
         <para><command>pear install --alldeps agavi/agavi</command></para>
 
         <para>If you're still having trouble installing things, you might have
         to change your preferred state setting in
-        <productname>PEAR</productname>:</para>
+        PEAR:</para>
 
         <para><command>pear config-set preferred_state beta</command></para>
 
@@ -120,7 +120,7 @@
         <title id="c1-installation-by_hand-title">By Hand</title>
 
         <para>Installing Agavi by hand is the logical choice if you can't use
-        <productname>PEAR</productname>, or if you want to bundle Agavi with
+        PEAR, or if you want to bundle Agavi with
         your application. Go to the <emphasis>Downloads</emphasis> section on
         the <ulink url="http://www.agavi.org">Agavi website</ulink> to get a
         release. After unpacking the archive, you can put the
@@ -137,7 +137,7 @@
 
         <para>The more usual case, however, will be that you're shipping Agavi
         together with your application, either because you can't use
-        <productname>Phing</productname> to install Agavi in the production
+        Phing to install Agavi in the production
         environment, or because you want total control over what version of
         Agavi is used. In this case, copy the <filename>src</filename> folder
         to somewhere inside your application's directory structure (we
@@ -158,7 +158,7 @@
       <section>
         <title>From SVN</title>
 
-        <para>Public access to the <productname>Subversion</productname>
+        <para>Public access to the Subversion
         repository is possible via <ulink
         url="svn://svn.agavi.org/agavi">svn://svn.agavi.org/agavi</ulink>. If
         you want to get the bleeding edge version, use
@@ -171,7 +171,7 @@
         creates <filename>.svn</filename> folders that allow you to stay up to
         date on changes in the repository via <command>svn update</command>,
         or you can simply <command>svn export</command> the contents of the
-        repository without <productname>Subversion</productname> control
+        repository without Subversion control
         folders, which is a good idea for example when you want to export a
         specific release into your own versioning control system.</para>
 
@@ -179,7 +179,7 @@
         either follow the instructions in <xref
         endterm="c1-installation-by_hand-title"
         linkend="c1-installation-by_hand" />, or you package a
-        <productname>PEAR</productname> release yourself for local
+        PEAR release yourself for local
         installation by first running</para>
 
         <para><command>phing package</command></para>
