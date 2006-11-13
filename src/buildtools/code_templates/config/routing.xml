@@ -25,6 +25,9 @@
 <configurations>
 	<configuration>
 		<routes>
+			<!-- this shows the welcome page after creating a project. remove it once you're done admiring it's shininess. -->
+			<route pattern="" module="%actions.default_module%" action="WelcomeToAgavi" />
+			
 			<route pattern="^/$" module="%actions.default_module%" action="%actions.default_action%" />
 		</routes>
 	</configuration>

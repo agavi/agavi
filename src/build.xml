@@ -178,12 +178,47 @@
 	<!-- Default actions -->
 	<target name="defaultactions" description="create a default action">
 		<fixpaths base="${project.dir}" appdir="${app.dirname}" />
-
+		
 		<!-- DEFAULT -->
 		<listModules app="${app.dir}" property="current.modules" defaultProperty="default.module"/>
 		<input propertyname="module.default" promptChar="?" validArgs="${current.modules}" defaultValue="${default.module}" message="Module of Default Action? "/>
 		<listActions moduleDir="${app.dir}/modules/${module.default}" property="current.actions" defaultProperty="default.action" />
 		<input propertyname="action.default" promptChar="?" validArgs="${current.actions}" defaultValue="${default.action}" message="Name of Default Action? "/>
+		
+
+		<!-- WELCOME action-->
+		<available file="${templates.dir}/default_actions/actions/WelcomeToAgaviAction.class.php.tmpl" property="templates.dir.current" value="${templates.dir}" />
+		<copy file="${templates.dir.current}/default_actions/actions/WelcomeToAgaviAction.class.php.tmpl" tofile="${app.dir}/modules/${module.default}/actions/WelcomeToAgaviAction.class.php" overwrite="false">
+			<filterchain>
+				<replacetokens begintoken="%%" endtoken="%%">
+					<token key="MODULE" value="${module.default}"/>
+					<token key="ACTION_NAME" value="WelcomeToAgavi"/>
+				</replacetokens>
+			</filterchain>
+		</copy>
+
+		<!-- WELCOME view-->
+		<available file="${templates.dir}/default_actions/views/WelcomeToAgaviSuccessView.class.php.tmpl" property="templates.dir.current" value="${templates.dir}" />
+		<copy file="${templates.dir.current}/default_actions/views/WelcomeToAgaviSuccessView.class.php.tmpl" tofile="${app.dir}/modules/${module.default}/views/WelcomeToAgaviSuccessView.class.php" overwrite="false">
+			<filterchain>
+				<replacetokens begintoken="%%" endtoken="%%">
+					<token key="MODULE" value="${module.default}"/>
+					<token key="ACTION_NAME" value="WelcomeToAgavi"/>
+					<token key="ACTION_PATH" value="WelcomeToAgavi"/>
+				</replacetokens>
+			</filterchain>
+		</copy>
+
+		<!-- WELCOME template -->
+		<available file="${templates.dir}/default_actions/templates/WelcomeToAgaviSuccess${template.extension}.tmpl" property="templates.dir.current" value="${templates.dir}" />
+		<copy file="${templates.dir.current}/default_actions/templates/WelcomeToAgaviSuccess${template.extension}.tmpl" tofile="${app.dir}/modules/${module.default}/templates/WelcomeToAgaviSuccess${template.extension}" overwrite="false" />
+		
+		<!-- WELCOME images -->
+		<available file="${templates.dir}/default_actions/data/plant.png" property="templates.dir.current" value="${templates.dir}" />
+		<copy file="${templates.dir.current}/default_actions/data/plant.png" tofile="${project.dir}/pub/plant.png" /> 
+		<available file="${templates.dir}/default_actions/data/bg.png" property="templates.dir.current" value="${templates.dir}" />
+		<copy file="${templates.dir.current}/default_actions/data/bg.png" tofile="${project.dir}/pub/bg.png" /> 
+		
 
 <!-- 404 -->
 		<listModules app="${app.dir}" property="current.modules" defaultProperty="default.module"/>

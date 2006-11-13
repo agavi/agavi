@@ -360,12 +360,24 @@ if(curl_errno($ch)) {
       </warning>
 
       <para>And that's it! You're done! Fire up your browser and point it to
-      the <filename>pub</filename> directory of your application. If you see a
-      blank page, everything went fine. Of course, a blank page isn't really
-      satisfying or anything, so you might want to edit
-      <filename>app/modules/Default/templates/IndexSuccess.php</filename> and
-      put some text in there, like the infamous "Hello World". Back to the
-      browser and reload, et voila!</para>
+      the <filename>pub</filename> directory of your application. You will see
+      a nice welcome page that tells you everyting worked fine. This note will
+      stay there until you remove the corresponding routing rule from
+      <filename>app/config/routing.xml</filename>. While you're at it, you can
+      also throw away the two <filename>.png</filename> files in pub/ that
+      belong to the welcome page, and, of course, the
+      <filename>WelcomeToAgaviAction.class.php</filename>,
+      <filename>WelcomeToAgaviSuccessView.class.php</filename> and
+      <filename>WelcomeToAgaviSuccess.php</filename> template. You're now good
+      to go and may add your own Actions. But before that, reload your browser
+      - a blank page appears! Time for the infamous "Hello, World" example -
+      open up the default action's template (remember, you entered the default
+      action's name during agavi project, but it usually is
+      <filename>IndexSuccess.php</filename> in the default module's templates
+      directory) and type some text. Back to the browser (you did remember to
+      save, right?), reload, and there it is, the text you entered! Well done,
+      that was the first step with Agavi, and the next ones will be just as
+      exciting.</para>
 
       <para>If you want to add more Modules, Actions or Models to your
       application, you can use the <command>agavi</command> script
