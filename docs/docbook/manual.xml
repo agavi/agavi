@@ -7,12 +7,11 @@
   <preface>
     <title>Preface</title>
 
-    <para>Welcome to the Agavi manual. This book
-    tries to serve you as the definitive guide to the
-    Agavi framework. It contains a "Getting
-    Started" guide, a comprehensive introduction to the concept and usage of
-    Agavi, and a reference manual that documents all aspects of the framework.
-    A separate "Best Practices" book accompanies this guide. Also, there's the
+    <para>Welcome to the Agavi manual. This book tries to serve you as the
+    definitive guide to the Agavi framework. It contains a "Getting Started"
+    guide, a comprehensive introduction to the concept and usage of Agavi, and
+    a reference manual that documents all aspects of the framework. A separate
+    "Best Practices" book accompanies this guide. Also, there's the
     "Introduction to Agavi" book, which gives you an idea of the philosophy
     behind Agavi, and the way it works as a "big picture".</para>
   </preface>
@@ -23,30 +22,28 @@
     <section>
       <title>Introduction</title>
 
-      <para>Agavi is a Web Application Framework
-      for PHP 5.
-      While it lies in the nature of a framework to simplify the application
-      development process, Agavi won't do that at any cost. The primary goals
-      are flexibility, cleanliness and structure. You won't find HTML Form
-      helper methods in Agavi (because they aren't necessary, we have
-      something better, more on that later), and we use XML configuration
-      files because we believe that they offer better structuring abilites
-      than alternatives such as YAML. If you're looking for a solution that
-      assists you in serious high-end development, that has smart and
-      innovative solutions to common problems that haven't been solved
-      properly before, and that encourages and enforces a clean development
-      process to ensure your code remains maintainable and extensible, you've
-      come to the right place.</para>
+      <para>Agavi is a Web Application Framework for PHP 5. While it lies in
+      the nature of a framework to simplify the application development
+      process, Agavi won't do that at any cost. The primary goals are
+      flexibility, cleanliness and structure. You won't find HTML Form helper
+      methods in Agavi (because they aren't necessary, we have something
+      better, more on that later), and we use XML configuration files because
+      we believe that they offer better structuring abilites than alternatives
+      such as YAML. If you're looking for a solution that assists you in
+      serious high-end development, that has smart and innovative solutions to
+      common problems that haven't been solved properly before, and that
+      encourages and enforces a clean development process to ensure your code
+      remains maintainable and extensible, you've come to the right
+      place.</para>
     </section>
 
     <section>
       <title>Prerequisites</title>
 
       <para>Agavi's minimum requirement is PHP version 5.1.0 or newer. DOM,
-      Reflection and SPL extensions are required, but should be enabled by
-      default, unless you're using one of these Linux distros made by
-      <emphasis role="strikethrough">stupid morons</emphasis> smart people who
-      think they know better.</para>
+      Reflection and SPL extensions are required, but are always enabled by
+      default, unless you're using one of these crappy Linux distros made by
+      "smart" people who think they know better.</para>
 
       <para><note>
           <para>It should be pointed out that Agavi is not a framework for
@@ -76,10 +73,9 @@
       <section>
         <title>PEAR</title>
 
-        <para>Agavi uses a PEAR Channel for release
-        distribution. In order to be able to install releases via
-        PEAR, you have to discover the
-        Agavi PEAR Channel first:</para>
+        <para>Agavi uses a PEAR Channel for release distribution. In order to
+        be able to install releases via PEAR, you have to discover the Agavi
+        PEAR Channel first:</para>
 
         <para><command>pear channel-discover pear.agavi.org</command></para>
 
@@ -87,26 +83,22 @@
 
         <para><command>pear install agavi/agavi</command></para>
 
-        <para>You now probably see an error message telling you that
-        PEAR was unable to install
-        Phing. Agavi needs
-        Phing, and tries to install it, but this
-        will fail if it doesn't know Phing's
-        Channel Server yet. Since discovering channels gets massively annoying
-        over time, you can tell PEAR to
-        automatically add channels as it comes across them:</para>
+        <para>You now probably see an error message telling you that PEAR was
+        unable to install Phing. Agavi needs Phing, and tries to install it,
+        but this will fail if it doesn't know Phing's Channel Server yet.
+        Since discovering channels gets massively annoying over time, you can
+        tell PEAR to automatically add channels as it comes across
+        them:</para>
 
         <para><command>pear config-set auto_discover 1</command></para>
 
-        <para>If you want to install all dependencies (i.e. including
-        Creole and
-        Propel), type:</para>
+        <para>If you want to install all dependencies (i.e. including Creole
+        and Propel), type:</para>
 
         <para><command>pear install --alldeps agavi/agavi</command></para>
 
         <para>If you're still having trouble installing things, you might have
-        to change your preferred state setting in
-        PEAR:</para>
+        to change your preferred state setting in PEAR:</para>
 
         <para><command>pear config-set preferred_state beta</command></para>
 
@@ -120,14 +112,13 @@
         <title id="c1-installation-by_hand-title">By Hand</title>
 
         <para>Installing Agavi by hand is the logical choice if you can't use
-        PEAR, or if you want to bundle Agavi with
-        your application. Go to the <emphasis>Downloads</emphasis> section on
-        the <ulink url="http://www.agavi.org">Agavi website</ulink> to get a
-        release. After unpacking the archive, you can put the
-        <filename>src</filename> folder into a folder of your choice and
-        adjust your include path accordingly. Don't forget to copy
-        <filename>etc/agavi-dist</filename> or
-        <filename>etc/agavi.bat-dist</filename> script to an
+        PEAR, or if you want to bundle Agavi with your application. Go to the
+        <emphasis>Downloads</emphasis> section on the <ulink
+        url="http://www.agavi.org">Agavi website</ulink> to get a release.
+        After unpacking the archive, you can put the <filename>src</filename>
+        folder into a folder of your choice and adjust your include path
+        accordingly. Don't forget to copy <filename>etc/agavi-dist</filename>
+        or <filename>etc/agavi.bat-dist</filename> script to an
         <filename>agavi</filename> or <filename>agavi.bat</filename>
         executable into a convenient location so you can use the shell
         commands for creating projects, modules, actions etc. Keep in mind
@@ -136,20 +127,19 @@
         earlier) so everything works as intended.</para>
 
         <para>The more usual case, however, will be that you're shipping Agavi
-        together with your application, either because you can't use
-        Phing to install Agavi in the production
-        environment, or because you want total control over what version of
-        Agavi is used. In this case, copy the <filename>src</filename> folder
-        to somewhere inside your application's directory structure (we
-        recommend a <filename>libs</filename> folder that holds all libraries
-        your app uses and that sits on the same level as the
-        <filename>app</filename> and <filename>pub</filename> directories) and
-        give it a different name, <filename>agavi</filename> would stand to
-        reason. For that little extra something, copy the agavi-dist or
-        agavi.bat-dist script again, maybe to your application root. Your
-        <filename>pub/index.php</filename> can then be changed to use a
-        relative path for including <filename>agavi.php</filename>, in our
-        case that'd be <filename>../libs/agavi/agavi.php</filename>. Agavi
+        together with your application, either because you can't use Phing to
+        install Agavi in the production environment, or because you want total
+        control over what version of Agavi is used. In this case, copy the
+        <filename>src</filename> folder to somewhere inside your application's
+        directory structure (we recommend a <filename>libs</filename> folder
+        that holds all libraries your app uses and that sits on the same level
+        as the <filename>app</filename> and <filename>pub</filename>
+        directories) and give it a different name, <filename>agavi</filename>
+        would stand to reason. For that little extra something, copy the
+        agavi-dist or agavi.bat-dist script again, maybe to your application
+        root. Your <filename>pub/index.php</filename> can then be changed to
+        use a relative path for including <filename>agavi.php</filename>, in
+        our case that'd be <filename>../libs/agavi/agavi.php</filename>. Agavi
         will auto-determine and remember the path where it was loaded from,
         and works without any changes to your environment's include
         path.</para>
@@ -158,8 +148,8 @@
       <section>
         <title>From SVN</title>
 
-        <para>Public access to the Subversion
-        repository is possible via <ulink
+        <para>Public access to the Subversion repository is possible via
+        <ulink
         url="svn://svn.agavi.org/agavi">svn://svn.agavi.org/agavi</ulink>. If
         you want to get the bleeding edge version, use
         <filename>/agavi/trunk</filename>. Specific releases are available
@@ -171,16 +161,15 @@
         creates <filename>.svn</filename> folders that allow you to stay up to
         date on changes in the repository via <command>svn update</command>,
         or you can simply <command>svn export</command> the contents of the
-        repository without Subversion control
-        folders, which is a good idea for example when you want to export a
-        specific release into your own versioning control system.</para>
+        repository without Subversion control folders, which is a good idea
+        for example when you want to export a specific release into your own
+        versioning control system.</para>
 
         <para>Once you have obtained a copy from the repository, you can
         either follow the instructions in <xref
         endterm="c1-installation-by_hand-title"
-        linkend="c1-installation-by_hand" />, or you package a
-        PEAR release yourself for local
-        installation by first running</para>
+        linkend="c1-installation-by_hand" />, or you package a PEAR release
+        yourself for local installation by first running</para>
 
         <para><command>phing package</command></para>
 
