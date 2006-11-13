@@ -137,7 +137,7 @@
 
 			<handler pattern="%core.module_dir%/*/config/module.xml" validate="%core.agavi_dir%/config/xsd/module.xsd" class="AgaviModuleConfigHandler" />
 
-			<handler pattern="%core.module_dir%/*/validate/*.xml" class="AgaviValidatorConfigHandler" />
+			<handler pattern="%core.module_dir%/*/validate/*.xml" class="AgaviValidatorConfigHandler" validate="%core.agavi_dir%/config/xsd/validators.xsd" />
 
 			<handler pattern="%core.cldr_dir%/locales/*.xml" class="AgaviLdmlConfigHandler" />
 			<handler pattern="%core.cldr_dir%/supplementalData.xml" class="AgaviLdmlSupplementalConfigHandler" />
