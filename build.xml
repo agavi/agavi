@@ -22,7 +22,7 @@
 		<echo msg="available targets: " />
 		<echo msg=" docs             : regenerate all documentation" />
 		<echo msg="  apidocs         : regenerate API docs" />
-		<echo msg="  manuals         : regenerate manuals" />
+		<echo msg="  manuals         : regenerate manuals (-Doutput=html|html-onepage|fo)" />
 		<echo msg=" packages         : generate all packages" />
 		<echo msg="  pagacke-zip     : generate .zip package" />
 		<echo msg="  package-pear    : generate PEAR package" />
@@ -42,44 +42,32 @@
 	</target>
 
 	<target name="manuals" description="generate all manuals">
-		<phingcall target="manual-cookbook" />
-		<phingcall target="manual-introduction" />
-		<phingcall target="manual-manual" />
-
-		<!-- the idea is that the output variant, e.g. html, html-onepage or fo, is passed in via build.properties or as a command line argument (phing manuals -Doutput=html_onepage or whatever) -->
+		<property name="output" value="html" override="false" />
+		<phingcall target="cookbook-${output}" />
+		<phingcall target="introduction-${output}" />
+		<phingcall target="guide-${output}" />
 	</target>
 
-	<target name="manual-cookbook">
+	<!--target name="manual-cookbook">
+		<phingcall target="cookbook-${output}" />
 	</target>
 
 	<target name="manual-introduction">
+		<phingcall target="introduction-${output}" />
 	</target>
 
-	<target name="manual-manual">
-	</target>
+	<target name="manual-guide">
+		<phingcall target="guide-${output}" />
+	</target-->
 
-	<target name="manual-html" >
-		<mkdir dir="manual/cookbook/html/multipage" />
-		<mkdir dir="manual/introduction/html/multipage" />
-		<mkdir dir="manual/manual/html/multipage" />
-		<copy file="docs/lib/agavi-manual.css" todir="manual/cookbook/html/multipage" overwrite="true" />
-		<copy file="docs/lib/agavi-manual.css" todir="manual/introduction/html/multipage" overwrite="true" />
-		<copy file="docs/lib/agavi-manual.css" todir="manual/manual/html/multipage" overwrite="true" />
-		<xslt todir="manual/cookbook/html/multipage" style="docs/lib/agavi-manual-html.xsl">
-			<fileset dir="docs/cookbook">
-				<include name="*.xml" />
-			</fileset>
-		</xslt>
-	</target>
-
-	<target name="manual-html-onepage" >
-		<mkdir dir="manual/manual/html/onepage" />
-		<copy file="docs/lib/agavi-manual.css" todir="manual-html" overwrite="true" />
-		<!--xslt file="docs/docbook/manual.xml" todir="manual-html" style="docs/lib/agavi-manual-html-onepage.xsl"-->
-		<xslt file="docs/docbook/manual.xml" todir="manual-html" style="docs/lib/agavi-manual-html-onepage.xsl">
-			<param name="onechunk" expression="1" />
-			<param name="base.dir" expression="manual-html/" />
-			<param name="root.filename" expression="index-onepage" />
+	<!-- Agavi Cookbook -->
+	<target name="cookbook-html" >
+		<mkdir dir="manuals/cookbook/html/multipage" />
+		<copy file="docs/lib/agavi-manual.css" todir="manuals/cookbook/html/multipage" overwrite="true" />
+		<xslt file="docs/docbook/cookbook.xml" todir="manuals/cookbook/html/multipage" style="docs/lib/agavi-manual-html.xsl">
+			<param name="onechunk" expression="0" />
+			<param name="base.dir" expression="manuals/cookbook/html/multipage/" /><!-- end slash required -->
+			<param name="root.filename" expression="index" />
 			<param name="html.stylesheet" expression="agavi-manual.css" />
 			<param name="chunker.output.encoding" expression="UTF-8" />
 			<param name="id.warnings" expression="0" />
@@ -89,9 +77,112 @@
 		</xslt>
 	</target>
 
-	<target name="manual-fo" >
-		<mkdir dir="manual-fo" />
-		<xslt file="docs/docbook/manual.xml" tofile="manual-fo/manual.fo" style="docs/lib/agavi-manual-fo.xsl" />
+	<target name="cookbook-html-onepage" >
+		<mkdir dir="manuals/cookbook/html/onepage" />
+		<copy file="docs/lib/agavi-manual.css" todir="manuals/cookbook/html/onepage" overwrite="true" />
+		<xslt file="docs/docbook/cookbook.xml" todir="manuals/cookbook/html/onepage" style="docs/lib/agavi-manual-html-onepage.xsl">
+			<param name="onechunk" expression="1" />
+			<param name="base.dir" expression="manuals/cookbook/html/onepage/" /><!-- end slash required -->
+			<param name="root.filename" expression="index" />
+			<param name="html.stylesheet" expression="agavi-manual.css" />
+			<param name="chunker.output.encoding" expression="UTF-8" />
+			<param name="id.warnings" expression="0" />
+			<param name="header.rule" expression="0" />
+			<param name="footer.rule" expression="0" />
+			<param name="suppress.navigation" expression="1" />
+		</xslt>
+	</target>
+
+	<!-- Introduction to Agavi -->
+	<target name="introduction-html" >
+		<mkdir dir="manuals/introduction/html/multipage" />
+		<copy file="docs/lib/agavi-manual.css" todir="manuals/introduction/html/multipage" overwrite="true" />
+		<xslt file="docs/docbook/introduction.xml" todir="manuals/introduction/html/multipage" style="docs/lib/agavi-manual-html.xsl">
+			<param name="onechunk" expression="0" />
+			<param name="base.dir" expression="manuals/introduction/html/multipage/" /><!-- end slash required -->
+			<param name="root.filename" expression="index" />
+			<param name="html.stylesheet" expression="agavi-manual.css" />
+			<param name="chunker.output.encoding" expression="UTF-8" />
+			<param name="id.warnings" expression="0" />
+			<param name="header.rule" expression="0" />
+			<param name="footer.rule" expression="0" />
+			<param name="suppress.navigation" expression="1" />
+		</xslt>
+	</target>
+
+	<target name="introduction-html-onepage" >
+		<mkdir dir="manuals/introduction/html/onepage" />
+		<copy file="docs/lib/agavi-manual.css" todir="manuals/introduction/html/onepage" overwrite="true" />
+		<xslt file="docs/docbook/introduction.xml" todir="manuals/introduction/html/onepage" style="docs/lib/agavi-manual-html-onepage.xsl">
+			<param name="onechunk" expression="1" />
+			<param name="base.dir" expression="manuals/introduction/html/onepage/" /><!-- end slash required -->
+			<param name="root.filename" expression="index" />
+			<param name="html.stylesheet" expression="agavi-manual.css" />
+			<param name="chunker.output.encoding" expression="UTF-8" />
+			<param name="id.warnings" expression="0" />
+			<param name="header.rule" expression="0" />
+			<param name="footer.rule" expression="0" />
+			<param name="suppress.navigation" expression="1" />
+		</xslt>
+	</target>
+
+	<!-- Definitive Guide -->
+	<target name="guide-html" >
+		<mkdir dir="manuals/guide/html/multipage" />
+		<copy file="docs/lib/agavi-manual.css" todir="manuals/guide/html/multipage" overwrite="true" />
+		<xslt file="docs/docbook/manual.xml" todir="manuals/guide/html/multipage" style="docs/lib/agavi-manual-html.xsl">
+			<param name="onechunk" expression="0" />
+			<param name="base.dir" expression="manuals/guide/html/multipage/" /><!-- end slash required -->
+			<param name="root.filename" expression="index" />
+			<param name="html.stylesheet" expression="agavi-manual.css" />
+			<param name="chunker.output.encoding" expression="UTF-8" />
+			<param name="id.warnings" expression="0" />
+			<param name="header.rule" expression="0" />
+			<param name="footer.rule" expression="0" />
+			<param name="suppress.navigation" expression="1" />
+		</xslt>
+	</target>
+
+	<target name="guide-html-onepage" >
+		<mkdir dir="manuals/guide/html/onepage" />
+		<copy file="docs/lib/agavi-manual.css" todir="manuals/guide/html/onepage" overwrite="true" />
+		<xslt file="docs/docbook/manual.xml" todir="manuals/guide/html/onepage" style="docs/lib/agavi-manual-html-onepage.xsl">
+			<param name="onechunk" expression="1" />
+			<param name="base.dir" expression="manuals/guide/html/onepage/" /><!-- end slash required -->
+			<param name="root.filename" expression="index" />
+			<param name="html.stylesheet" expression="agavi-manual.css" />
+			<param name="chunker.output.encoding" expression="UTF-8" />
+			<param name="id.warnings" expression="0" />
+			<param name="header.rule" expression="0" />
+			<param name="footer.rule" expression="0" />
+			<param name="suppress.navigation" expression="1" />
+		</xslt>
+	</target>
+
+	<!-- manuals FO -->
+
+	<target name="cookbook-fo" >
+		<mkdir dir="manuals/guide/fo" />
+		<xslt file="docs/docbook/manual.xml" tofile="manuals/guide/fo/cookbook.fo" style="docs/lib/agavi-manual-fo.xsl" >
+			<param name="base.dir" expression="manuals/guide/fo/" />
+			<param name="paper.type" expression="A4" />
+		</xslt>
+	</target>
+
+	<target name="introduction-fo" >
+		<mkdir dir="manuals/guide/fo" />
+		<xslt file="docs/docbook/manual.xml" tofile="manuals/guide/fo/introduction.fo" style="docs/lib/agavi-manual-fo.xsl" >
+			<param name="base.dir" expression="manuals/guide/fo/" />
+			<param name="paper.type" expression="A4" />
+		</xslt>
+	</target>
+
+	<target name="guide-fo" >
+		<mkdir dir="manuals/guide/fo" />
+		<xslt file="docs/docbook/manual.xml" tofile="manuals/guide/fo/guide.fo" style="docs/lib/agavi-manual-fo.xsl" >
+			<param name="base.dir" expression="manuals/guide/fo/" />
+			<param name="paper.type" expression="A4" />
+		</xslt>
 	</target>
 
 	<target name="package-zip">
@@ -152,6 +243,7 @@
 	</target>
 
 	<target name="clean" description="clean out the cruft">
+		<delete dir="manuals" includeemptydirs="true" failonerror="true" />
 		<delete dir="build" includeemptydirs="true" failonerror="true" />
 		<delete dir="apidocs" includeemptydirs="true" quiet="true" failonerror="false" />
 		<delete file="tests.html" includeemptydirs="true" quiet="true" failonerror="false" />

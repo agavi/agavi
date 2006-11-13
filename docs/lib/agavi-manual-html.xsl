@@ -3,11 +3,15 @@
 	xmlns:doc="http://nwalsh.com/xsl/documentation/1.0"
 	version="1.0"
 	exclude-result-prefixes="doc">
-                
-	<!-- common parameters -->
-	<xsl:import href="docs/lib/agavi-manual-html-common.xsl"/>
-                
-	<!-- root filename -->
-	<xsl:param name="root.filename">index</xsl:param>
+
+	<!-- path to DocBook-XSL stylesheet (absolute, relative to build.xml or URL) -->
+	<xsl:import href="http://docbook.sourceforge.net/release/xsl/current/xhtml/chunk.xsl" />
+	<!--xsl:import href="C:/workspace/xslt/1.71.0/xhtml/chunk.xsl" /-->
+
+	<xsl:template name="user.footer.content">
+		<div class="footer">
+			<p class="copyright">&#x00A9; Agavi Project</p>
+		</div>
+	</xsl:template>
 
 </xsl:stylesheet>

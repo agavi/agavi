@@ -6,10 +6,6 @@
 
 	<!-- path to DocBook-XSL stylesheet (absolute, relative to build.xml or URL) -->
 	<xsl:import href="http://docbook.sourceforge.net/release/xsl/current/fo/docbook.xsl" />
-	
-	<!-- output path (relative to build.xml) -->
-	<xsl:param name="base.dir">manual-fo/</xsl:param>
-	
-	<xsl:param name="paper.type">A4</xsl:param>
+	<!--xsl:import href="C:/workspace/xslt/1.71.0/fo/docbook.xsl" /-->
 
 </xsl:stylesheet>

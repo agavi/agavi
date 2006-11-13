@@ -4,10 +4,6 @@
 	version="1.0"
 	exclude-result-prefixes="doc">
 
-	<!-- common parameters -->
-
-	<!-- parameter reference http://docbook.sourceforge.net/release/xsl/current/doc/html/ -->
-
 	<!-- path to DocBook-XSL stylesheet (absolute, relative to build.xml or URL) -->
 	<xsl:import href="http://docbook.sourceforge.net/release/xsl/current/xhtml/chunk.xsl" />
 	<!--xsl:import href="../docbook-xsl-1.71.1/xhtml/chunk.xsl" /-->
