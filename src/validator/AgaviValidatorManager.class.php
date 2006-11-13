@@ -55,6 +55,23 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	protected $result = AgaviValidator::SUCCESS;
 
 	/**
+	 * All request variables are always available.
+	 */
+	const MODE_RELAXED = 'relaxed';
+
+	/**
+	 * All request variables are available when no validation defined else only 
+	 * validated request variables are available.
+	 */
+	const MODE_CONDITIONAL = 'conditional';
+
+	/**
+	 * Only validated request variables are available.
+	 */
+	const MODE_STRICT = 'strict';
+
+
+	/**
 	 * initializes the validator manager.
 	 *
 	 * @param      AgaviContext The context instance.
@@ -65,6 +82,14 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	 */
 	public function initialize(AgaviContext $context, array $parameters = array())
 	{
+		if(isset($parameters['mode'])) {
+			if(!in_array($parameters['mode'], array(self::MODE_RELAXED, self::MODE_CONDITIONAL, self::MODE_STRICT))) {
+				throw new AgaviConfigurationException('Invalid validation mode "' . $parameters['mode'] . '" specified');
+			}
+		} else {
+			$parameters['mode'] = self::MODE_RELAXED;
+		}
+
 		$this->context = $context;
 		$this->setParameters($parameters);
 
@@ -213,9 +238,9 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 		$ma = $this->getContext()->getRequest()->getModuleAccessor();
 		$aa = $this->getContext()->getRequest()->getActionAccessor();
 
-		$mode = $this->getParameter('mode', 'normal');
+		$mode = $this->getParameter('mode');
 
-		if($executedValidators == 0 && $mode == 'strict') {
+		if($executedValidators == 0 && $mode == self::MODE_STRICT) {
 			// strict mode and no validators executed -> clear the parameters
 			$maParam = $parameters->getParameter($ma);
 			$aaParam = $parameters->getParameter($aa);
@@ -228,7 +253,7 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 			}
 		}
 
-		if($mode == 'strict' || ($executedValidators > 0 && $mode == 'tainted')) {
+		if($mode == self::MODE_STRICT || ($executedValidators > 0 && $mode == self::MODE_CONDITIONAL)) {
 			$asf = array_flip($allSucceededFields);
 			foreach($parameters->getParameters() as $name => $param) {
 				if(!isset($asf[$name]) && $name != $ma && $name != $aa) {
