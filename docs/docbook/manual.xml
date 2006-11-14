@@ -722,21 +722,22 @@ if(curl_errno($ch)) {
       <para>Before we talk about Actions and Models in Agavi let's take a
       brief look at the MVC (Model-View-Controller) paradigm. The idea behind
       MVC is that the view (a presentation layer, user interface) and the
-      model (an object, or alike, that represents some some information about
-      to domain) should be de-coupled in such a way that the model is totally
-      independent of the view. In MVC this is achieved by putting a controller
-      between these two.</para>
+      model (an object, or alike, that represents some information about your
+      application domain) should be de-coupled in such a way that the model is
+      totally independent of the view. In MVC this is achieved by putting a
+      controller between these two (this is not entirely accurate and in any
+      case a simplification but we don't go into that).</para>
 
       <para>When looking at Agavi's classes it's easy to see what's the view
       part and where's the controller. Models are of course your own classes
       although they can derive from an AgaviModel class. But where do Actions
-      stand in this scheme? Orthodoxly they are a piece of the controller but
-      Agavi's Actions can be seen as the glue between the model and the
-      controller. The Controller decides what Action to trigger and after that
-      it's up to the Action to execute the proper domain logic. Some trivial
-      domain logic can reside in the action but to keep your application in
-      accordance with MVC the actual model part of your design should be
-      separated from the action.</para>
+      stand in this scheme? Orthodoxly they are a piece of the controller (or,
+      some could argue, the controller itself) but Agavi's Actions can be seen
+      as the glue between the model and the controller. The Controller decides
+      what Action to trigger and after that it's up to the Action to execute
+      the proper domain logic. Some trivial domain logic can reside in the
+      action but to keep your application in accordance with MVC the actual
+      model part of your design should be separated from the action.</para>
 
       <note>
         <para>Understanding the idea and the value of MVC is essential in all
@@ -782,8 +783,8 @@ if(curl_errno($ch)) {
 $myDog = $this-&gt;getContext()-&gt;getModel('Dog', 'Dogs', array('name'=&gt;'Nelli', 'breed'=&gt;'Novascotian retriever'));
 
 /* class SinglesBar implements AgaviISingletonModel */
-$model = $this-&gt;getContext()-&gt;getModel('SinglesBar'); //loads and initializes the model.
-$model2 = $this-&gt;getContext()-&gt;getModel('SinglesBar'); //return the same instance of SinglesBar as the line above.</programlisting>
+$bar1 = $this-&gt;getContext()-&gt;getModel('SinglesBar'); //loads and initializes the model.
+$bar2 = $this-&gt;getContext()-&gt;getModel('SinglesBar'); //returns the same instance of SinglesBar as the line above.</programlisting>
       </section>
 
       <section>
