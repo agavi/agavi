@@ -716,11 +716,82 @@ if(curl_errno($ch)) {
     <section>
       <title>Actions and Models</title>
 
-      <para>what they do and contain (business logic at different
-      levels)</para>
+      <para>(what they do and contain (business logic at different
+      levels))</para>
 
-      <para>actions: execution, execution methods, serving request methods,
-      default view name, validation, security</para>
+      <para>Before we talk about Actions and Models in Agavi let's take a
+      brief look at the MVC (Model-View-Controller) paradigm. The idea behind
+      MVC is that the view (a presentation layer, user interface) and the
+      model (an object, or alike, that represents some some information about
+      to domain) should be de-coupled in such a way that the model is totally
+      independent of the view. In MVC this is achieved by putting a controller
+      between these two.</para>
+
+      <para>When looking at Agavi's classes it's easy to see what's the view
+      part and where's the controller. Models are of course your own classes
+      although they can derive from an AgaviModel class. But where do Actions
+      stand in this scheme? Orthodoxly they are a piece of the controller but
+      Agavi's Actions can be seen as the glue between the model and the
+      controller. The Controller decides what Action to trigger and after that
+      it's up to the Action to execute the proper domain logic. Some trivial
+      domain logic can reside in the action but to keep your application in
+      accordance with MVC the actual model part of your design should be
+      separated from the action.</para>
+
+      <note>
+        <para>Understanding the idea and the value of MVC is essential in all
+        software designing. For an in-depth rationalization of MVC paradigm
+        you can consult Martin Fowler's Patterns of Enterprise Application
+        Architecture (ISBN 0321127420).</para>
+      </note>
+
+      <section>
+        <title>Models</title>
+
+        <para>As said before you write your own models for the application and
+        Agavi doesn't really mind how you do it (some people like to make
+        their models framework independent so that they can be used anywhere).
+        There are, however, a few things to point out that can make it easier
+        for you to use your models.</para>
+
+        <para>Firstly you can ask Agavi to handle the loading and the
+        initialization of a model. Agavi divides models into global models and
+        module models. Global models go into <filename>app/models/</filename>
+        and module models into
+        <filename>app/modules/MyModule/models/</filename>. An instance of a
+        model is retrieved using <methodname>getModel(string modelName [,
+        string moduleName] [, array parameters])</methodname> of the
+        <classname>AgaviContext</classname>. The first, and the only required,
+        parameter of that method is the name of your model class. The second
+        parameter is the name of the module where the model resides. Set/leave
+        it to <code>null</code> to retrieve a global model. If given, the
+        parameter array is passed to the initialization method of you model or
+        to the constructor if <methodname>initialize(array)</methodname> is
+        not defined.</para>
+
+        <para>Secondly you can make singleton models simply by implementing
+        <interfacename><classname>AgaviISingletonModel</classname></interfacename>.
+        No other changes are needed to your model. Agavi stores the instances
+        of your singleton models. To retrieve an instance, simply call
+        <methodname>getModel()</methodname> on the
+        <classname>AgaviContext</classname>.</para>
+
+        <para>Examples:</para>
+
+        <programlisting>/* Loads /app/modules/Dogs/models/Dog[Model].class.php and initializes it with a name and a breed. */
+$myDog = $this-&gt;getContext()-&gt;getModel('Dog', 'Dogs', array('name'=&gt;'Nelli', 'breed'=&gt;'Novascotian retriever'));
+
+/* class SinglesBar implements AgaviISingletonModel */
+$model = $this-&gt;getContext()-&gt;getModel('SinglesBar'); //loads and initializes the model.
+$model2 = $this-&gt;getContext()-&gt;getModel('SinglesBar'); //return the same instance of SinglesBar as the line above.</programlisting>
+      </section>
+
+      <section>
+        <title>Actions</title>
+
+        <para>(actions: execution, execution methods, serving request methods,
+        default view name, validation, security)</para>
+      </section>
     </section>
 
     <section>
