@@ -861,7 +861,76 @@ $bar2 = $this-&gt;getContext()-&gt;getModel('SinglesBar'); //returns the same in
     <section>
       <title>Action</title>
 
-      <para></para>
+      <para><variablelist>
+          <varlistentry>
+            <term>Naming</term>
+
+            <listitem>
+              <para><classname>[ModuleName_][SubSection_]NameAction</classname></para>
+
+              <para>Example:
+              <classname>MyModule_Sub_EditAction</classname></para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Execute Methods</term>
+
+            <listitem>
+              <para><methodname>execute[Method](AgaviParameterHolder
+              parameters)</methodname></para>
+
+              <para>Agavi tries to use the execute method specific to the
+              current request method (e.g.
+              <methodname>executeRead</methodname> or
+              <methodname>executeWrite</methodname>). If such a method is not
+              defined by the current action a generic execute is used. If that
+              doesn't exist either execution and validation is skiped and the
+              default view (returned by
+              <methodname>getDefaultViewName()</methodname>) is used.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Validation Methods</term>
+
+            <listitem>
+              <para><methodname>register[Method]Validators(AgaviValidatorManager
+              validatorManager)</methodname></para>
+
+              <para></para>
+
+              <para><methodname>validate[Method](AgaviParameterHolder
+              parameters)</methodname></para>
+
+              <para></para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Error Handlers</term>
+
+            <listitem>
+              <para></para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Default View Name</term>
+
+            <listitem>
+              <para></para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Request Parameters</term>
+
+            <listitem>
+              <para></para>
+            </listitem>
+          </varlistentry>
+        </variablelist></para>
     </section>
 
     <section>
