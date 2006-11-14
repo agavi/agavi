@@ -55,7 +55,7 @@
 		
 		<validator_manager class="AgaviValidatorManager">
 			<parameters>
-				<parameter name="mode">tainted</parameter>
+				<parameter name="mode">conditional</parameter>
 			</parameters>
 		</validator_manager>
 		
