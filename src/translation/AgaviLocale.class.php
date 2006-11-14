@@ -129,6 +129,48 @@ class AgaviLocale
 
 	///////////////////////////// locale names //////////////////////////////////
 
+	protected function generateCountryList()
+	{
+		if(!isset($this->data['displayNames']['territories'])) {
+			return;
+		}
+
+		$terrs = $this->data['displayNames']['territories'];
+
+		// we assume that the territories are the first items in the list
+		$i = 0;
+		foreach($terrs as $key => $val) {
+			// territories consist of 3 letter keys while countries only consist of 2 letter keys
+			if(strlen($key) == 2) {
+				break;
+			}
+			++$i;
+		}
+
+		$this->data['displayNames']['countries'] = array_slice($terrs, $i, count($terrs) - $i, true);
+	}
+
+	public function getCountries()
+	{
+		if(!isset($this->data['displayNames']['countries'])) {
+			$this->generateCountryList();
+		}
+
+		return isset($this->data['displayNames']['countries'])
+			? $this->data['displayNames']['countries']
+			: null;
+	}
+
+	public function getCountry($id)
+	{
+		if(!isset($this->data['displayNames']['countries'])) {
+			$this->generateCountryList();
+		}
+
+		return isset($this->data['displayNames']['countries'][$id])
+			? $this->data['displayNames']['countries'][$id]
+			: null;
+	}
 
 	public function getLanguages()
 	{
