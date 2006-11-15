@@ -24,9 +24,7 @@
     <xs:sequence>
       <xs:element name="validator" type="validator" maxOccurs="unbounded" />
     </xs:sequence>
-    <xs:attribute name="depends" type="xs:string" />
     <xs:attribute name="method" type="xs:string" />
-    <xs:attribute name="provides" type="xs:string" />
     <xs:attribute name="severity" type="xs:string" />
   </xs:complexType>
   <xs:complexType name="validator">
@@ -37,8 +35,10 @@
       <xs:element name="validators" type="validators" minOccurs="0"/>
     </xs:all>
     <xs:attribute name="name" type="xs:string" use="required" />
+    <xs:attribute name="affects" type="xs:string" />
     <xs:attribute name="class" type="xs:string" />
     <xs:attribute name="depends" type="xs:string" />
+    <xs:attribute name="export" type="xs:string" />
     <xs:attribute name="method" type="xs:string" />
     <xs:attribute name="provides" type="xs:string" />
     <xs:attribute name="severity" type="xs:string" />
