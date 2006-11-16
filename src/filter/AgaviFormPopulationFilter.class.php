@@ -213,7 +213,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 				$multiple = $element->nodeName == 'select' && $element->hasAttribute('multiple');
 				
 				$checkValue = false;
-				if($element->getAttribute('type') == 'checkbox') {
+				if($element->getAttribute('type') == 'checkbox' || $element->getAttribute('type') == 'radio') {
 					if(($pos = strpos($pname, '[]')) && ($pos + 2 != strlen($pname))) {
 						// foo[][3] checkboxes etc not possible, [] must occur only once and at the end
 						continue;
@@ -221,7 +221,8 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 						$checkValue = true;
 						$pname = substr($pname, 0, $pos);
 					}
-				} elseif(preg_match_all('/([^\[]+)?(?:\[([^\]]*)\])/', $pname, $matches)) {
+				}
+				if(preg_match_all('/([^\[]+)?(?:\[([^\]]*)\])/', $pname, $matches)) {
 					$pname = $matches[1][0];
 					
 					if($multiple) {
