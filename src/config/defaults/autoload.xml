@@ -91,7 +91,6 @@
 			<autoload name="AgaviViewException">%core.agavi_dir%/exception/AgaviViewException.class.php</autoload>
 
 			<!-- agavi/filter -->
-			<autoload name="AgaviCachingExecutionFilter">%core.agavi_dir%/filter/AgaviCachingExecutionFilter.class.php</autoload>
 			<autoload name="AgaviExecutionTimeFilter">%core.agavi_dir%/filter/AgaviExecutionTimeFilter.class.php</autoload>
 			<autoload name="AgaviFormPopulationFilter">%core.agavi_dir%/filter/AgaviFormPopulationFilter.class.php</autoload>
 			<autoload name="AgaviIActionFilter">%core.agavi_dir%/filter/AgaviIActionFilter.interface.php</autoload>
