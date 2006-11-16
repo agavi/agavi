@@ -54,8 +54,8 @@
     <xs:all>
       <xs:element name="parameters" type="parameters" minOccurs="0" />
     </xs:all>
-    <xs:attribute name="name" type="xs:string" use="required" />
-    <xs:attribute name="class" type="xs:string" use="required" />
+    <xs:attribute name="name" type="non_empty_string" use="required" />
+    <xs:attribute name="class" type="non_empty_string" use="required" />
   </xs:complexType>
 
   <xs:complexType name="arguments">
@@ -64,7 +64,7 @@
         <xs:complexType>
           <xs:simpleContent>
             <xs:extension base="xs:string">
-              <xs:attribute name="name" type="xs:string" use="optional"/>
+              <xs:attribute name="name" type="non_empty_string" use="optional"/>
             </xs:extension>
           </xs:simpleContent>
         </xs:complexType>
@@ -79,7 +79,7 @@
         <xs:complexType>
           <xs:simpleContent>
             <xs:extension base="xs:string">
-              <xs:attribute name="for" type="xs:string" use="optional"/>
+              <xs:attribute name="for" type="non_empty_string" use="optional"/>
             </xs:extension>
           </xs:simpleContent>
         </xs:complexType>
