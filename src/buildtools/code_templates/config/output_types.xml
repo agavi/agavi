@@ -47,7 +47,19 @@
 		<output_types default="html">
 
 			<output_type name="html">
-				<renderer class="AgaviPhpRenderer" />
+				<renderer class="AgaviPhpRenderer">
+					<parameters>
+						<parameter name="assigns">
+							<parameters>
+								<parameter name="routing">ro</parameter>
+								<parameter name="request">rq</parameter>
+								<parameter name="controller">ct</parameter>
+								<parameter name="user">us</parameter>
+								<parameter name="translation_manager">tm</parameter>
+							</parameters>
+						</parameter>
+					</parameters>
+				</renderer>
 				<parameters>
 					<parameter name="Content-Type">text/html</parameter>
 				</parameters>
