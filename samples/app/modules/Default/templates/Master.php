@@ -173,7 +173,7 @@ $otherLanguages = array_diff_key($languages, array($currentLanguage => null));
 <?php if($req->hasErrors()): foreach($req->getErrorMessages() as $error): ?>
 			<p class="error"><?php echo $error['message']; ?></p>
 <?php endforeach; endif; ?>
-<?php echo $template['content']; ?> <?=time()?>
+<?php echo $template['content']; ?>
 		</div>
 	</body>
 </html>
