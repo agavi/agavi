@@ -358,16 +358,20 @@ class AgaviDateFormat
 					break;
 
 				case self::T_TIMEZONE_RFC:
-					$sign = '+';
+					if($count > 3) {
+						$out .= $this->getGmtZoneString($data);
+					} else {
+						$sign = '+';
 
-					$value = ($data[AgaviDateDefinitions::ZONE_OFFSET] + $data[AgaviDateDefinitions::DST_OFFSET]) / AgaviDateDefinitions::MILLIS_PER_MINUTE;
-					if($value < 0) {
-						$value = -$value;
-						$sign = '-';
+						$value = ($data[AgaviDateDefinitions::ZONE_OFFSET] + $data[AgaviDateDefinitions::DST_OFFSET]) / AgaviDateDefinitions::MILLIS_PER_MINUTE;
+						if($value < 0) {
+							$value = -$value;
+							$sign = '-';
+						}
+
+						$value = ($value / 3) * 5 + ($value % 60); // minutes => KKmm
+						$out .= $sign . str_pad($value, 4, '0', STR_PAD_LEFT);
 					}
-
-					$value = ($value / 3) * 5 + ($value % 60); // minutes => KKmm
-					$out .= $sign . str_pad($value, 4, '0', STR_PAD_LEFT);
 					break;
 
 				case self::T_QUARTER:
