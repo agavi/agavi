@@ -461,17 +461,17 @@ array data format
 
 						if(isset($calendar->eras)) {
 							if(isset($calendar->eras->eraNames)) {
-								foreach($calendar->eras->eraNames as $era) {
+								foreach($this->getChildsOrAlias($calendar->eras->eraNames) as $era) {
 									$data['calendars'][$calendarName]['eras']['wide'][$era->getAttribute('type')] = $era->getValue();
 								}
 							}
 							if(isset($calendar->eras->eraAbbr)) {
-								foreach($calendar->eras->eraAbbr as $era) {
+								foreach($this->getChildsOrAlias($calendar->eras->eraAbbr) as $era) {
 									$data['calendars'][$calendarName]['eras']['abbreviated'][$era->getAttribute('type')] = $era->getValue();
 								}
 							}
 							if(isset($calendar->eras->eraNarrow)) {
-								foreach($calendar->eras->eraNarrow as $era) {
+								foreach($this->getChildsOrAlias($calendar->eras->eraNarrow) as $era) {
 									$data['calendars'][$calendarName]['eras']['narrow'][$era->getAttribute('type')] = $era->getValue();
 								}
 							}
