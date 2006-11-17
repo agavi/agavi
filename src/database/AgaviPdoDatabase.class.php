@@ -70,6 +70,12 @@ class AgaviPdoDatabase extends AgaviDatabase
 				$pdo_options[PDO::ATTR_PERSISTENT] = $persistent;
 			}
 
+			if($this->hasParameter('options') && is_array($opts = $this->getParameter('options'))) {
+				foreach($opts as $key => $value) {
+					$pdo_options[constant($key)] = $value;
+				}
+			}
+
 			$this->connection = new PDO($dsn, $pdo_username, $pdo_password, $pdo_options);
 
 		} catch(PDOException $e) {
