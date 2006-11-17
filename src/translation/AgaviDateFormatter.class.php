@@ -26,7 +26,7 @@
  *
  * @version    $Id$
  */
-class AgaviDateFormatter extends AgaviSimpleDateFormatter implements AgaviITranslator
+class AgaviDateFormatter extends AgaviDateFormat implements AgaviITranslator
 {
 	/**
 	 * @var        AgaviContext An AgaviContext instance.

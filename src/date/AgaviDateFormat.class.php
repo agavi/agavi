@@ -14,7 +14,8 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * The simple date formatter will format numbers according to a given format
+ * This class lets your format date and time according to a given format 
+ * definition.
  *
  * @package    agavi
  * @subpackage util
@@ -26,7 +27,7 @@
  *
  * @version    $Id$
  */
-class AgaviSimpleDateFormatter
+class AgaviDateFormat
 {
 	/**
 	 * @var        string The format string which will be given to sprintf

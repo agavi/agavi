@@ -69,6 +69,7 @@
 			<!-- agavi/date -->
 			<autoload name="AgaviCalendar">%core.agavi_dir%/date/AgaviCalendar.class.php</autoload>
 			<autoload name="AgaviCalendarGrego">%core.agavi_dir%/date/AgaviCalendarGrego.class.php</autoload>
+			<autoload name="AgaviDateFormat">%core.agavi_dir%/date/AgaviDateFormat.class.php</autoload>
 			<autoload name="AgaviDateDefinitions">%core.agavi_dir%/date/AgaviDateDefinitions.class.php</autoload>
 			<autoload name="AgaviGregorianCalendar">%core.agavi_dir%/date/AgaviGregorianCalendar.class.php</autoload>
 			<autoload name="AgaviOlsonTimeZone">%core.agavi_dir%/date/AgaviOlsonTimeZone.class.php</autoload>
@@ -169,7 +170,6 @@
 			<autoload name="AgaviRbacSecurityUser">%core.agavi_dir%/user/AgaviRbacSecurityUser.class.php</autoload>
 
 			<!-- agavi/util -->
-			<autoload name="AgaviSimpleDateFormatter">%core.agavi_dir%/util/AgaviSimpleDateFormatter.class.php</autoload>
 			<autoload name="AgaviDecimalFormatter">%core.agavi_dir%/util/AgaviDecimalFormatter.class.php</autoload>
 
 			<!-- agavi/validator -->
