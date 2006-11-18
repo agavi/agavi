@@ -62,6 +62,19 @@ class AgaviLocale
 	}
 
 	/**
+	 * Retrieve the current application context.
+	 *
+	 * @return     AgaviContext The current AgaviContext instance.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public final function getContext()
+	{
+		return $this->context;
+	}
+
+	/**
 	 * Returns the identifier of this locale
 	 *
 	 * @return     string The identifier.
