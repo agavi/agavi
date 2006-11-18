@@ -648,6 +648,29 @@ class AgaviTranslationManager
 	}
 
 	/**
+	 * Gets the territory id a (resolved) timezone id belongs to.
+	 *
+	 * @param      string The resolved timezone id.
+	 * @param      bool   Will receive whether the territory has multiple 
+	 *                    time zones
+	 *
+	 * @return     string The territory identifer or null.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getTimeZoneTerritory($id, &$hasMultipleZones = false)
+	{
+		if(isset($this->supplementalData['timezones']['territories'][$id])) {
+			$territory = $this->supplementalData['timezones']['territories'][$id];
+			$hasMultipleZones = isset($this->supplementalData['timezones']['multiZones'][$territory]);
+			return $territory;
+		}
+
+		return null;
+	}
+
+	/**
 	 * Creates a new timezone instance for the given identifier.
 	 *
 	 * Please note that this method caches the results for each identifier, so
