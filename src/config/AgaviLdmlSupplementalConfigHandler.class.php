@@ -99,6 +99,18 @@ class AgaviLdmlSupplementalConfigHandler extends AgaviConfigHandler
 			}
 		}
 
+		$data['timezones'] = array('territories');
+		$data['timezones']['multiZones'] = explode(' ', $dataTree->timezoneData->zoneFormatting->getAttribute('multizone'));
+
+		foreach($dataTree->timezoneData->zoneFormatting as $zoneItem) {
+			if($zoneItem->getName() == 'zoneItem') {
+				$zone = $zoneItem->getAttribute('type');
+				$territory = $zoneItem->getAttribute('territory');
+				$data['timezones']['territories'][$zone] = $territory;
+			} else {
+				throw new AgaviException('Invalid tag ' . $language->getName() . ' in zoneFormatting tag');
+			}
+		}
 
 		$code = array();
 		$code[] = 'return ' . var_export($data, true) . ';';
