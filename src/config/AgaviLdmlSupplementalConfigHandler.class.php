@@ -99,8 +99,10 @@ class AgaviLdmlSupplementalConfigHandler extends AgaviConfigHandler
 			}
 		}
 
-		$data['timezones'] = array('territories');
-		$data['timezones']['multiZones'] = explode(' ', $dataTree->timezoneData->zoneFormatting->getAttribute('multizone'));
+		$data['timezones'] = array('territories' => array(), 'multiZones' => array());
+		foreach(explode(' ', $dataTree->timezoneData->zoneFormatting->getAttribute('multizone')) as $zone) {
+			$data['timezones']['multiZones'][$zone] = true;
+		}
 
 		foreach($dataTree->timezoneData->zoneFormatting as $zoneItem) {
 			if($zoneItem->getName() == 'zoneItem') {
