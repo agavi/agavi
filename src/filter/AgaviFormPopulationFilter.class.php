@@ -155,7 +155,18 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 			}
 		}
 		
-		$encoding = strtolower($doc->encoding);
+		if(($encoding = $this->getParameter('force_encoding')) === false) {
+			if($doc->actualEncoding) {
+				$encoding = $doc->actualEncoding;
+			} elseif($doc->encoding) {
+				$encoding = $doc->encoding;
+			} else {
+				$encoding = $doc->encoding = 'utf-8';
+			}
+		} else {
+			$doc->encoding = $encoding;
+		}
+		$encoding = strtolower($encoding);
 		$utf8 = $encoding == 'utf-8';
 		if(!$utf8 && $encoding != 'iso-8859-1' && !function_exists('iconv')) {
 			throw new AgaviException('No iconv module available, input encoding "' . $encoding . '" cannot be handled.');
@@ -424,6 +435,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 		$this->setParameter('cdata_fix', true);
 		$this->setParameter('error_class', 'error');
 		$this->setParameter('force_output_mode', false);
+		$this->setParameter('force_encoding', false);
 		$this->setParameter('parse_xhtml_as_xml', true);
 		$this->setParameter('include_password_inputs', false);
 		$this->setParameter('include_hidden_inputs', true);
