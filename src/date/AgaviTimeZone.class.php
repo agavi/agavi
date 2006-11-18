@@ -42,6 +42,13 @@ abstract class AgaviTimeZone
 	 */
 	protected $id;
 
+	/**
+	 * @var        string The "resolved" id. This means if the original id pointed
+	 *                    to a link timezone this will contain the id of the 
+	 *                    timezone the link resolved to.
+	 */
+	protected $resolvedId = null;
+
 
 	/**
 	 * Returns the translation manager for this TimeZone.
@@ -212,9 +219,42 @@ abstract class AgaviTimeZone
 	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
 	 * @since      0.11.0
 	 */
-	public function setID($id)
+	public function setId($id)
 	{
 		$this->id = $id;
+	}
+
+
+	/**
+	 * Returns the resolved TimeZone's ID.
+	 *
+	 * @return     string This TimeZone's ID.
+	 * 
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @since      0.11.0
+	 */
+	public function getResolvedId()
+	{
+		if($this->resolvedId === null) {
+			return $this->id;
+		}
+
+		return $this->resolvedId;
+	}
+
+	/**
+	 * Sets the resolved TimeZone's ID.
+	 *
+	 * @param      string The resolved timezone ID.
+	 * 
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @since      0.11.0
+	 */
+	public function setResolvedId($id)
+	{
+		$this->resolvedId = $id;
 	}
 
 	/**

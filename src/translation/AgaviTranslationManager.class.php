@@ -678,6 +678,7 @@ class AgaviTranslationManager
 			$zoneData = include(AgaviConfig::get('core.cldr_dir') . '/timezones/' . $this->timeZoneList[$currId]['filename']);
 
 			$zone = new AgaviOlsonTimeZone($this, $id, $zoneData);
+			$zone->setResolvedId($currId);
 			if($cache) {
 				$this->timeZoneCache[$id] = $zone;
 			}
