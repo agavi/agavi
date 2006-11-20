@@ -244,7 +244,7 @@ class AgaviPdoSessionStorage extends AgaviSessionStorage
 			if($result = $stmt->fetch(PDO::FETCH_NUM)) {
 				$result = $result[0];
 				// pdo is returning the LOB as stream, so check if we had a lob (this seems to differ from db to db)
-				if(is_connection($result)) {
+				if(is_resource($result)) {
 					$result = stream_get_contents($result);
 				}
 				return $result;
