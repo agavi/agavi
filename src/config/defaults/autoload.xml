@@ -147,7 +147,6 @@
 			<autoload name="AgaviCreoleSessionStorage">%core.agavi_dir%/storage/AgaviCreoleSessionStorage.class.php</autoload>
 			<autoload name="AgaviMysqlSessionStorage">%core.agavi_dir%/storage/AgaviMysqlSessionStorage.class.php</autoload>
 			<autoload name="AgaviPdoSessionStorage">%core.agavi_dir%/storage/AgaviPdoSessionStorage.class.php</autoload>
-			<autoload name="AgaviPdoOracleSessionStorage">%core.agavi_dir%/storage/AgaviPdoOracleSessionStorage.class.php</autoload>
 			<autoload name="AgaviPostgresqlSessionStorage">%core.agavi_dir%/storage/AgaviPostgresqlSessionStorage.class.php</autoload>
 			<autoload name="AgaviSessionStorage">%core.agavi_dir%/storage/AgaviSessionStorage.class.php</autoload>
 

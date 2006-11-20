@@ -50,7 +50,7 @@ class AgaviPdoSessionStorage extends AgaviSessionStorage
 	/**
 	 * @var        mixed PDO Database Connection.
 	 */
-	protected $ressource;
+	protected $resource;
 
 	/**
 	 * Initialize this Storage.
@@ -130,7 +130,7 @@ class AgaviPdoSessionStorage extends AgaviSessionStorage
 		$sql = sprintf('DELETE FROM %s WHERE %s = ?', $db_table, $db_id_col);
 
 		try {
-			$stmt = $this->ressource->prepare($sql);
+			$stmt = $this->resource->prepare($sql);
 			$stmt->execute(array($id));
 		} catch(PDOException $e) {
 			$error = 'PDOException was thrown when trying to manipulate session data. Message: ' . $e->getMessage();
@@ -167,7 +167,7 @@ class AgaviPdoSessionStorage extends AgaviSessionStorage
 		$sql = sprintf('DELETE FROM %s  WHERE %s < %d', $db_table, $db_time_col, $time);
 
 		try {
-			$this->ressource->exec($sql);
+			$this->resource->exec($sql);
 			return true;
 		} catch(PDOException $e) {
 			$error = 'PDOException was thrown when trying to manipulate session data. Message: ' . $e->getMessage();
@@ -198,9 +198,9 @@ class AgaviPdoSessionStorage extends AgaviSessionStorage
 		// what database are we using?
 		$database = $this->getParameter('database', 'default');
 
-		$this->ressource = $this->getContext()->getDatabaseConnection($database);
-		if($this->ressource == null || !$this->ressource instanceof PDO) {
-			$error = 'PDO dabatase connection doesn\'t exist. Unable to open session.';
+		$this->resource = $this->getContext()->getDatabaseConnection($database);
+		if($this->resource === null || !$this->resource instanceof PDO) {
+			$error = 'Database connection "' . $database . '" could not be found or is not a PDO database connection.';
 			throw new AgaviDatabaseException($error);
 		}
 
@@ -239,7 +239,7 @@ class AgaviPdoSessionStorage extends AgaviSessionStorage
 		try {
 			$sql = sprintf('SELECT %s FROM %s WHERE %s = ?', $db_data_col, $db_table, $db_id_col);
 
-			$stmt = $this->ressource->prepare($sql);
+			$stmt = $this->resource->prepare($sql);
 			$stmt->execute(array($id));
 			if($result = $stmt->fetch(PDO::FETCH_NUM)) {
 				$result = $result[0];
@@ -253,7 +253,7 @@ class AgaviPdoSessionStorage extends AgaviSessionStorage
 			// session does not exist, create it
 			$sql = sprintf('INSERT INTO %s (%s, %s, %s) VALUES (?,?,?)', $db_table, $db_id_col, $db_data_col, $db_time_col);
 
-			$stmt = $this->ressource->prepare($sql);
+			$stmt = $this->resource->prepare($sql);
 			$stmt->execute(array($id, '', time()));
 			return '';
 		} catch(PDOException $e) {
@@ -286,18 +286,35 @@ class AgaviPdoSessionStorage extends AgaviSessionStorage
 		$db_data_col = $this->getParameter('db_data_col', 'sess_data');
 		$db_id_col   = $this->getParameter('db_id_col', 'sess_id');
 		$db_time_col = $this->getParameter('db_time_col', 'sess_time');
+		
+		$isOracle = $this->resource->getAttribute(PDO::ATTR_DRIVER_NAME) == 'oracle';
 
-		$sql = sprintf('UPDATE %s SET %s = ?, %s = ? WHERE %s = ?', $db_table, $db_data_col, $db_time_col, $db_id_col);
+		if($isOracle) {
+			$sql = sprintf('UPDATE %s SET %s = EMPTY_BLOB(), %s = :time WHERE %s = :id RETURNING %s INTO :data', $db_table, $db_data_col, $db_time_col, $db_id_col, $db_data_col);
+			$args = array();
+			
+			$sp = fopen('php://memory', 'r+');
+			fwrite($sp, $data);
+			rewind($sp);
+		} else {
+			$sql = sprintf('UPDATE %s SET %s = :data, %s = :time WHERE %s = :id', $db_table, $db_data_col, $db_time_col, $db_id_col);
+			$args = array();
+			
+			$sp = $data;
+		}
 
 		try {
 			$time = time();
-			$stmt = $this->ressource->prepare($sql);
-			$stmt->bindParam(1, $data, PDO::PARAM_LOB);
-			$stmt->bindParam(2, $time);
-			$stmt->bindParam(3, $id);
+			$stmt = $this->resource->prepare($sql);
+			$stmt->bindParam(':data', $sp, PDO::PARAM_LOB);
+			$stmt->bindParam(':time', $time);
+			$stmt->bindParam(':id', $id);
+			$this->resource->beginTransaction();
 			$stmt->execute();
+			$this->resource->commit();
 			return true;
 		} catch(PDOException $e) {
+			$this->resource->rollback();
 			$error = 'PDOException was thrown when trying to manipulate session data. Message: ' . $e->getMessage();
 			throw new AgaviDatabaseException($error);
 		}
