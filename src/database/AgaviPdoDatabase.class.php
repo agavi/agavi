@@ -69,22 +69,21 @@ class AgaviPdoDatabase extends AgaviDatabase
 
 			$this->connection = new PDO($dsn, $username, $password, $options);
 
+			// default connection attributes
+			$attributes = array(
+				// lets generate exceptions instead of silent failures
+				PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+			);
+			if($this->hasParameter('attributes')) {
+				foreach((array)$this->getParameter('attributes') as $key => $value) {
+					$attributes[is_string($key) && strpos($key, '::') ? constant($key) : $key] = is_string($value) && strpos($value, '::') ? constant($value) : $value;
+				}
+			}
+			foreach($attributes as $key => $value) {
+				$this->connection->setAttribute($key, $value);
+			}
 		} catch(PDOException $e) {
 			throw new AgaviDatabaseException($e->getMessage());
-		}
-		
-		// default connection attributes
-		$attributes = array(
-			// lets generate exceptions instead of silent failures
-			PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-		);
-		if($this->hasParameter('attributes')) {
-			foreach((array)$this->getParameter('attributes') as $key => $value) {
-				$attributes[is_string($key) && strpos($key, '::') ? constant($key) : $key] = is_string($value) && strpos($value, '::') ? constant($value) : $value;
-			}
-		}
-		foreach($attributes as $key => $value) {
-			$this->connection->setAttribute($key, $value);
 		}
 	}
 
