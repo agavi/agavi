@@ -112,6 +112,17 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	protected $validatedFieldnames = array();
 
 	/**
+	 * @var        array The name of the request parameters serving as argument to
+	 *                   this validator.
+	 */
+	protected $arguments = array();
+
+	/**
+	 * @var        array The error messages.
+	 */
+	protected $errorMessages = array();
+
+	/**
 	 * Returns the base path of this validator.
 	 *
 	 * @return     AgaviVirtualArrayPath The basepath of this validator
@@ -204,7 +215,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
-	public function __construct(AgaviIValidatorContainer $parent, array $parameters = array(), $name = '')
+	public function __construct(AgaviIValidatorContainer $parent, array $arguments, array $errors = array(), array $parameters = array(), $name = '')
 	{
 		$this->parentContainer = $parent;
 
@@ -214,6 +225,9 @@ abstract class AgaviValidator extends AgaviParameterHolder
 		}
 		$this->context = $from->getContext();
 		unset($from);
+
+		$this->arguments = $arguments;
+		$this->errorMessages = $errors;
 
 		if(!isset($parameters['depends']) or !is_array($parameters['depends'])) {
 			$parameters['depends'] = (isset($parameters['depends']) and strlen($parameters['depends'])) ? explode(' ', $parameters['depends']) : array();
@@ -323,7 +337,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 */
 	protected function hasMultipleArguments()
 	{
-		return count($this->getParameter('arguments')) > 1;
+		return count($this->arguments) > 1;
 	}
 
 	/**
@@ -339,7 +353,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 */
 	protected function getArgument()
 	{
-		$argNames = $this->getParameter('arguments', array());
+		$argNames = $this->arguments;
 		reset($argNames);
 		return current($argNames);
 	}
@@ -354,7 +368,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 */
 	protected function getArguments()
 	{
-		return $this->getParameter('arguments', array());
+		return $this->arguments;
 	}
 
 	/**
@@ -398,16 +412,11 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 */
 	protected function throwError($index = null, $backupError = null)
 	{
-		if($index !== null && $this->hasParameter('errors')) {
-			$errors = $this->getParameter('errors');
-			if(isset($errors[$index])) {
-				$this->reportError($this, $errors[$index]);
-				return;
-			}
-		}
-
-		if($this->hasParameter('error')) {
-			$error = $this->getParameter('error');
+		if($index !== null && isset($this->errorMessages[$index])) {
+			$error = $this->errorMessages[$index];
+		} elseif(isset($this->errorMessages[''])) {
+			// check if a default error exists.
+			$error = $this->errorMessages[''];
 		} else {
 			$error = $backupError;
 		}

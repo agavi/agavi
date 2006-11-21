@@ -149,6 +149,9 @@ class AgaviValidatorConfigHandler extends AgaviConfigHandler
 			'required' => $stdRequired,
 		);
 
+		$arguments = array();
+		$errors = array();
+
 		$stdMethod = $parameters['method'];
 		$name = $validator->getAttribute('name', uniqid('val'.rand()));
 
@@ -167,14 +170,14 @@ class AgaviValidatorConfigHandler extends AgaviConfigHandler
 					$args[] = $argument->getValue();
 				}
 			}
-			$parameters['arguments'] = $args;
+			$arguments = $args;
 		}
 		if(isset($validator->errors)) {
 			foreach($validator->errors as $error) {
 				if($error->hasAttribute('for')) {
-					$parameters['errors'][$error->getAttribute('for')] = $error->getValue();
+					$errors[$error->getAttribute('for')] = $error->getValue();
 				} else {
-					$parameters['error'] = $error->getValue();
+					$errors[''] = $error->getValue();
 				}
 			}
 		}
@@ -184,7 +187,7 @@ class AgaviValidatorConfigHandler extends AgaviConfigHandler
 
 		if(isset($validator->validators)) {
 			// create operator
-			$code[$name] = '$'.$name.' = new '.$class.'($'.$parent.', '.var_export($parameters, true).', '.var_export($name, true).');' .
+			$code[$name] = '$'.$name.' = new '.$class.'($'.$parent.', '.var_export($arguments, true).', '.var_export($errors, true).', '.var_export($parameters, true).', '.var_export($name, true).');' .
 											'$'.$parent.'->addChild($'.$name.');';
 
 			$childSeverity = $validator->validators->getAttribute('severity', $stdSeverity);
@@ -199,7 +202,7 @@ class AgaviValidatorConfigHandler extends AgaviConfigHandler
 				// create child validators
 		} else {
 			// create new validator
-			$code[$name] = '$'.$parent.'->addChild(new '.$class.'($'.$parent.', '.var_export($parameters, true).', '.var_export($name, true).'));';
+			$code[$name] = '$'.$parent.'->addChild(new '.$class.'($'.$parent.', '.var_export($arguments, true).', '.var_export($errors, true).', '.var_export($parameters, true).', '.var_export($name, true).'));';
 		}
 
 		return $code;

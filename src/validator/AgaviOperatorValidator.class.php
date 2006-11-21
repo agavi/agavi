@@ -54,9 +54,9 @@ abstract class AgaviOperatorValidator extends AgaviValidator implements AgaviIVa
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
-	public function __construct(AgaviIValidatorContainer $parent, array $parameters = array())
+	public function __construct(AgaviIValidatorContainer $parent, array $arguments, array $errors = array(), array $parameters = array())
 	{
-		parent::__construct($parent, $parameters);
+		parent::__construct($parent, $arguments, $errors, $parameters);
 		
 		if($this->getParameter('skip_errors')) {
 			/*
@@ -117,10 +117,11 @@ abstract class AgaviOperatorValidator extends AgaviValidator implements AgaviIVa
 	 */
 	protected function throwError($index = 'error', $backupError = null)
 	{
-		if($this->hasParameter($index)) {
-			$error = $this->getParameter($index);
-		} elseif($this->hasParameter('error')) {
-			$error = $this->getParameter('error');
+		if($index !== null && isset($this->errorMessages[$index])) {
+			$error = $this->errorMessages[$index];
+		} elseif(isset($this->errorMessages[''])) {
+			// check if a default error exists.
+			$error = $this->errorMessages[''];
 		} else {
 			$error = $backupError;
 		}
