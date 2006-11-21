@@ -31,7 +31,7 @@ class DateValidatorTest extends AgaviTestCase
 
 	public function setUp()
 	{
-		$this->validator = new DateValidatorWrapper(new AgaviValidatorManager());
+		$this->validator = new DateValidatorWrapper(new AgaviValidatorManager(), array());
 	}
 
 	public function test_validate()

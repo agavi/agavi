@@ -48,7 +48,7 @@ class ValidatorTest extends AgaviTestCase
 	public function testconstruct()
 	{
 		$this->_vm->setParameter('base', '/test');
-		$validator = new SampleValidator($this->_vm);
+		$validator = new SampleValidator($this->_vm, array());
 		$this->assertEquals($validator->getBase(), '/test');
 		$this->assertEquals($validator->getParameter('depends'), array());
 		$this->assertEquals($validator->getParameter('provides'), array());
@@ -60,12 +60,11 @@ class ValidatorTest extends AgaviTestCase
 		$parameters = array(
 			'depends'	=> 'test1,test2,test3',
 			'provides'	=> 'foo,bar',
-			'param'	=> 'test'
 		);
-		$validator = new SampleValidator($this->_vm, $parameters);
+		$validator = new SampleValidator($this->_vm, , array('test'), array(), $parameters);
 		$this->assertEquals($validator->getParameter('depends'), array('test1', 'test2', 'test3'));
 		$this->assertEquals($validator->getParameter('provides'), array('foo', 'bar'));
-		$this->assertEquals($validator->getParameter('param'), 'test');
+		$this->assertEquals($validator->getArgument(), 'test');
 	}
 	
 	public function testgetData()

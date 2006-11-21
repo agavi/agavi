@@ -8,10 +8,10 @@ class OroperatorValidatorTest extends AgaviTestCase
 	{
 		$vm = AgaviContext::getInstance()->getValidatorManager();
 		$vm->clear();
-		$o = new AgaviOroperatorValidator($vm, array('severity' => 'error'));
+		$o = new AgaviOroperatorValidator($vm, array(), array(), array('severity' => 'error'));
 		
-		$val1 = new DummyValidator($vm, array('severity' => 'error'));
-		$val2 = new DummyValidator($vm, array('severity' => 'error'));
+		$val1 = new DummyValidator($vm, array(), array(), array('severity' => 'error'));
+		$val2 = new DummyValidator($vm, array(), array(), array('severity' => 'error'));
 		$o->registerValidators(array($val1, $val2));
 		
 		// 1st test: both successful

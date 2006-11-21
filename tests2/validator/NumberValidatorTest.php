@@ -30,7 +30,7 @@ class NumberValidatorTest extends AgaviTestCase
 
 	public function setUp()
 	{
-		$this->validator = new NumberValidatorWrapper(new AgaviValidatorManager());
+		$this->validator = new NumberValidatorWrapper(new AgaviValidatorManager(), array());
 	}
 
 	public function test_float()
