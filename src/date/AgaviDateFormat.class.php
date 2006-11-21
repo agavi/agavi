@@ -75,7 +75,7 @@ class AgaviDateFormat
 	const T_MODIFIED_JD           = 21;
 	const T_MS_IN_DAY             = 22;
 	const T_TIMEZONE_RFC          = 23;
-	const T_TIMEZONE_WALL         = 24;
+	const T_TIMEZONE_GENERIC      = 24;
 	const T_SA_LOCAL_DAY_OF_WEEK  = 25;
 	const T_SA_MONTH              = 26;
 	const T_QUARTER               = 27;
@@ -110,7 +110,7 @@ class AgaviDateFormat
 		'g' => self::T_MODIFIED_JD,
 		'A' => self::T_MS_IN_DAY,
 		'Z' => self::T_TIMEZONE_RFC,
-		'v' => self::T_TIMEZONE_WALL,
+		'v' => self::T_TIMEZONE_GENERIC,
 		'c' => self::T_SA_LOCAL_DAY_OF_WEEK,
 		'L' => self::T_SA_MONTH,
 		'Q' => self::T_QUARTER,
@@ -170,9 +170,10 @@ class AgaviDateFormat
 	 */
 	public function format($data, $calendarType, $locale)
 	{
+		$tm = $locale->getContext()->getTranslationManager();
 		$tzid = null;
 		if($data instanceof AgaviCalendar) {
-			$tzid = $data->getTimeZone()->getId();
+			$tzid = $data->getTimeZone()->getResolvedId();
 			$data = $data->getAll();
 		} elseif(!is_array($data)) {
 			throw new AgaviException('Invalid argument ' . $data);
@@ -289,18 +290,25 @@ class AgaviDateFormat
 					break;
 
 				case self::T_TIMEZONE:
-				case self::T_TIMEZONE_WALL:
+				case self::T_TIMEZONE_GENERIC:
 					if(!$tzid) {
 						$out .= $this->getGmtZoneString($data);
 					} else {
 
 						$displayString = '';
 
-						if($token[0] == self::T_TIMEZONE_WALL) {
+						if($token[0] == self::T_TIMEZONE_GENERIC) {
 							if($count < 4) {
 								$displayString = $locale->getTimeZoneShortGenericName($tzid);
 							} else {
 								$displayString = $locale->getTimeZoneLongGenericName($tzid);
+							}
+							// if we don't have the generic data available
+							if(!$displayString && strlen($tzid) > 2 && strpos($tzid, '/') !== false && strncmp($tzid, 'Etc', 3) != 0) {
+								$hasMultiple = false;
+								$territory = $tm->getTimeZoneTerritory($tzid, $hasMultiple);
+								// TODO: there are lots of rules in the ldml spec which could be covered here too
+								$displayString = $tzid;
 							}
 						} else {
 							if($data[AgaviDateDefinitions::DST_OFFSET] != 0) {
