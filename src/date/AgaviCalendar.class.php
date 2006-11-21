@@ -215,6 +215,46 @@ abstract class AgaviCalendar
 		$this->setTimeInMillis($date);
 	}
 
+
+	/**
+	 * Gets this Calendar's time as unix timestamp. May involve recalculation of 
+	 * time due to previous calls to set time field values. The time specified is 
+	 * non-local UTC (GMT) time.
+	 *
+	 * @return     int The current time in UTC (GMT) time as unix timestamp.
+	 *
+	 * @throws     <b>OverflowException</b> when the date can't be represented by
+	 *                                      an unix timestamp.
+	 * 
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getUnixTimestamp()
+	{
+		$unixTime = floor($this->getTimeInMillis() / AgaviDateDefinitions::MILLIS_PER_SECOND);
+		$unixTimeInt = (int) $unixTime;
+		// lets check if the int can't represent the time anymore
+		if($unixTime != $unixTimeInt) {
+			throw new OverflowException('cannot convert the date ' . $this->get(AgaviDateDefinitions::YEAR) . '/' . $this->get(AgaviDateDefinitions::MONTH) . '/' . $this->get(AgaviDateDefinitions::DATE) . ' into a unix timestamp');
+		}
+		return $unixTimeInt;
+	}
+
+	/**
+	 * Sets this Calendar's current time with the given unix timestamp. The time 
+	 * specified  should be in non-local UTC (GMT) time.
+	 *
+	 * @param      int The given date in UTC (GMT) time.
+	 * 
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function setUnixTimestamp($timestamp)
+	{
+		$this->setTimeInMillis($timestamp * AgaviDateDefinitions::MILLIS_PER_SECOND);
+	}
+
+
 	public function __is_equal($that)
 	{
 		return $this->isEquivalentTo($that) && $this->getTimeInMillis() == $that->getTimeInMillis();
