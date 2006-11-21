@@ -437,7 +437,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 */
 	public function reportError(AgaviValidator $validator, $errorMsg)
 	{
-		if(self::mapErrorCode($this->getParameter('severity')) > self::NONE) {
+		if(self::mapErrorCode($this->getParameter('severity', 'error')) > self::NONE) {
 			$this->parentContainer->reportError($validator, $errorMsg);
 		}
 	}
@@ -533,12 +533,12 @@ abstract class AgaviValidator extends AgaviParameterHolder
 			if($this->hasAllArgumentsSet()) {
 				if(!$this->validate()) {
 					// validation failed, exit with configured error code
-					return self::mapErrorCode($this->getParameter('severity'));
+					return self::mapErrorCode($this->getParameter('severity', 'error'));
 				}
 			} else {
 				if($this->getParameter('required', true)) {
 					$this->throwError();
-					return self::mapErrorCode($this->getParameter('severity'));
+					return self::mapErrorCode($this->getParameter('severity', 'error'));
 				} else {
 					// no reason to throw any error since it wouldn't be included anyways
 					return self::NONE;
