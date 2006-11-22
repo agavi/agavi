@@ -86,33 +86,25 @@ class AgaviTranslationConfigHandler extends AgaviConfigHandler
 					if(isset($translator->message_translator)) {
 						$domainData['msg']['type']   = $translator->message_translator->getAttribute('type', $domainData['msg']['type']);
 						$domainData['msg']['params'] = $this->getItemParameters($translator->message_translator, $domainData['msg']['params']);
-						if(isset($translator->message_translator->filters)) {
-							foreach($translator->message_translator->filters as $filter) {
-								$func = explode('::', $filter->getValue());
-								if(count($func) != 2) {
-									$func = $func[0];
-								}
-								if(!is_callable($func)) {
-									throw new AgaviConfigurationException('Non-existant or uncallable filter function "' . $filter->getValue() .  '" specified.');
-								}
-								$domainData['msg']['filters'][] = $func;
-							}
-						}
+						$domainData['msg']['filters'] = $this->getFilters($translator->message_translator);
 					}
 
 					if(isset($translator->number_formatter)) {
 						$domainData['num']['type']   = $translator->number_formatter->getAttribute('type', $domainData['num']['type']);
 						$domainData['num']['params'] = $this->getItemParameters($translator->number_formatter, $domainData['num']['params']);
+						$domainData['num']['filters'] = $this->getFilters($translator->number_formatter);
 					}
 
 					if(isset($translator->currency_formatter)) {
 						$domainData['cur']['type']   = $translator->currency_formatter->getAttribute('type', $domainData['cur']['type']);
 						$domainData['cur']['params'] = $this->getItemParameters($translator->currency_formatter, $domainData['cur']['params']);
+						$domainData['cur']['filters'] = $this->getFilters($translator->currency_formatter);
 					}
 
 					if(isset($translator->date_formatter)) {
 						$domainData['date']['type']   = $translator->date_formatter->getAttribute('type', $domainData['date']['type']);
 						$domainData['date']['params'] = $this->getItemParameters($translator->date_formatter, $domainData['date']['params']);
+						$domainData['date']['filters'] = $this->getFilters($translator->date_formatter);
 					}
 				}
 			}
@@ -156,6 +148,34 @@ class AgaviTranslationConfigHandler extends AgaviConfigHandler
 
 		return $retval;
 
+	}
+	
+	/**
+	 * Builds a list of filters for a translator.
+	 *
+	 * @param      AgaviConfigValueHolder The Translator node.
+	 *
+	 * @return     array An array of filter definitions.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	protected function getFilters($translator)
+	{
+		$filters = array();
+		if(isset($translator->filters)) {
+			foreach($translator->filters as $filter) {
+				$func = explode('::', $filter->getValue());
+				if(count($func) != 2) {
+					$func = $func[0];
+				}
+				if(!is_callable($func)) {
+					throw new AgaviConfigurationException('Non-existant or uncallable filter function "' . $filter->getValue() .  '" specified.');
+				}
+				$filters[] = $func;
+			}
+		}
+		return $filters;
 	}
 
 	/**

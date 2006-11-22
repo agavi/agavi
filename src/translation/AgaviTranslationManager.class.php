@@ -249,7 +249,11 @@ class AgaviTranslationManager
 		$domainExtra = '';
 		$translator = $this->getTranslators($domain, $domainExtra);
 
-		return $translator['date']->translate($date, $domainExtra, $locale);
+		$retval = $translator['date']->translate($date, $domainExtra, $locale);
+		
+		$retval = $this->applyFilters($retval, $domain, 'date');
+		
+		return $retval;
 	}
 
 	/**
@@ -280,7 +284,11 @@ class AgaviTranslationManager
 		$domainExtra = '';
 		$translator = $this->getTranslators($domain, $domainExtra);
 
-		return $translator['cur']->translate($number, $domainExtra, $locale);
+		$retval = $translator['cur']->translate($number, $domainExtra, $locale);
+		
+		$retval = $this->applyFilters($retval, $domain, 'cur');
+		
+		return $retval;
 	}
 
 	/**
@@ -311,7 +319,11 @@ class AgaviTranslationManager
 		$domainExtra = '';
 		$translator = $this->getTranslators($domain, $domainExtra);
 
-		return $translator['num']->translate($number, $domainExtra, $locale);
+		$retval = $translator['num']->translate($number, $domainExtra, $locale);
+		
+		$retval = $this->applyFilters($retval, $domain, 'num');
+		
+		return $retval;
 	}
 
 
@@ -345,17 +357,14 @@ class AgaviTranslationManager
 		$domainExtra = '';
 		$translator = $this->getTranslators($domain, $domainExtra);
 
-		$translatedMessage = $translator['msg']->translate($message, $domainExtra, $locale);
+		$retval = $translator['msg']->translate($message, $domainExtra, $locale);
 		if(is_array($parameters)) {
-			$translatedMessage = vsprintf($translatedMessage, $parameters);
+			$retval = vsprintf($retval, $parameters);
 		}
 		
-		$filters = $this->getTranslatorFilters($domain, $domainExtra);
-		foreach($filters['msg'] as $filter) {
-			$translatedMessage = call_user_func($filter, $translatedMessage);
-		}
-
-		return $translatedMessage;
+		$retval = $this->applyFilters($retval, $domain, 'msg');
+		
+		return $retval;
 	}
 
 	/**
@@ -416,18 +425,18 @@ class AgaviTranslationManager
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	protected function getTranslatorFilters($domain, &$domainExtra)
+	protected function applyFilters($message, $domain, $type = 'msg')
 	{
 		$domainParts = explode('.', $domain, 2);
 		$translatorDomain = $domainParts[0];
-		$domainExtra = isset($domainParts[1]) ? $domainParts[1] : '';
 
-		if(isset($this->translatorFilters[$translatorDomain])) {
-			return $this->translatorFilters[$translatorDomain];
-		} else {
-			// TODO: select proper exception type
-			throw new AgaviException(sprintf('No translator exists for the domain "%s"', $translatorDomain));
+		if(isset($this->translatorFilters[$translatorDomain][$type])) {
+			foreach($this->translatorFilters[$translatorDomain][$type] as $filter) {
+				$message = call_user_func($filter, $message);
+			}
 		}
+		
+		return $message;
 	}
 
 	/**
