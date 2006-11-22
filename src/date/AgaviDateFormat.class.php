@@ -499,6 +499,434 @@ class AgaviDateFormat
 		}
 	}
 
+
+	/**
+	 * Parses a string into an calendar object. Note that this doesn't fallback to
+	 * the english locale.
+	 *
+	 * @param      string The string containing the date.
+	 * @param      AgaviLocale The locale which should be used for parsing local 
+	 *                         day, month, etc names.
+	 *
+	 * @return     AgaviCalendar The calendar object.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function parse($dateString, $locale)
+	{
+		$tm = $locale->getContext()->getTranslationManager();
+		$cal = $tm->createCalendar();
+
+		$calendarType = 'gregorian';
+		$datePos = 0;
+
+		$unprocessedTokens = array();
+		$data = array();
+
+		$tlCount = count($this->tokenList);
+		for($i = 0; $i < $tlCount; ++$i) {
+			if($datePos >= strlen($dateString)) {
+				// TODO: throw new ...
+				break;
+			}
+
+
+			$token = $this->tokenList[$i];
+			$type = $this->getTokenType($token);
+			// this and the next token are numbers
+			if($type == 'number' && $i + 1 < $tlCount && $this->getTokenType($this->tokenList[$i + 1]) == 'number') {
+				$unprocessedTokens = array($token);
+
+				// store all abutting numerical tokens for later processing
+				do {
+					++$i;
+					$unprocessedTokens[] = $this->tokenList[$i];
+				} while($i + 1 < $tlCount && $this->getTokenType($this->tokenList[$i + 1]) == 'number');
+
+
+				// retrieve the amount of number characters at our current parse position
+				$numberLen = strspn($dateString, '0123456789', $datePos);
+
+				// calculate the length the numbers should have from the tokens
+				$tokenReqLen = 0;
+				foreach($unprocessedTokens as $tk) {
+					$tokenReqLen += $tk[1];
+				}
+
+				// we mimic the ICU behaviour here which only decrements the count of 
+				// the first token (from ICU:  Take the pattern "HHmmss" as an example.
+				// We will try to parse 2/2/2 characters of the input text, then if that
+				// fails, 1/2/2.  We only adjust the width of the leftmost field; the
+				// others remain fixed.)
+				// I'm not sure why they are doing it that way since i think that 
+				// decrementing the next tokens when there still aren't enough numbers
+				// wouldn't do any harm (ok, maybe the algorithm is a little harder to
+				// implement ;) - Dominik
+
+				$diff = $tokenReqLen - $numberLen;
+				if($diff > 0) {
+					// use a reference here so we can simply store the new token length into $tLen
+					$tLen =& $unprocessedTokens[0][1];
+					if($diff >= $tLen - 1) {
+						$tLen -= $diff;
+					} else {
+						throw new AgaviException('Not enough digits given in "' . $dateString . '" at pos ' . $datePos . ' (expected ' . $tokenReqLen . ' digits)');
+					}
+				}
+
+				foreach($unprocessedTokens as $token) {
+					$dateField = $this->getDateFieldFromTokenType($token[0]);
+					if($dateField === null) {
+						throw new AgaviException('Token type ' . $token[0] . ' claims to be numerical but has no date field');
+					}
+
+					$number = (int) substr($dateString, $datePos, $token[1]);
+
+					$datePos += $token[1];
+					if($dateField == AgaviDateDefinitions::MONTH || $token[0] == AgaviDateFormat::T_HOUR_1_24 || $token[0] == AgaviDateFormat::T_HOUR_1_12) {
+						$number -= 1;
+					}
+					if(self::T_QUARTER == $token[0] || self::T_SA_QUARTER == $token[0]) {
+						// only set the quarter if the date hasn't been set on the calendar object
+						if(!$cal->_isSet(AgaviDateDefinitions::MONTH)) {
+							$cal->set($dateField, ($number - 1) * 3);
+						}
+					} else {
+						$cal->set($dateField, $number);
+					}
+				}
+			} elseif($type == 'number') {
+				$numberLen = strspn($dateString, '0123456789', $datePos);
+				$dateField = $this->getDateFieldFromTokenType($token[0]);
+				if($dateField === null) {
+					throw new AgaviException('Token type ' . $token[0] . ' claims to be numerical but has no date field');
+				}
+				$number = (int) substr($dateString, $datePos, $numberLen);
+
+				$datePos += $numberLen;
+				// since the month is 0-indexed in the calendar and 1-indexed in the
+				// cldr we need to substract 1 from the month
+				if($dateField == AgaviDateDefinitions::MONTH || $token[0] == AgaviDateFormat::T_HOUR_1_24 || $token[0] == AgaviDateFormat::T_HOUR_1_12) {
+					$number -= 1;
+				} elseif($token[0] == self::T_YEAR && $token[1] == 2 && $numberLen <= 2) {
+					if($number >= 40) {
+						$number += 1900;
+					} else {
+						$number += 2000;
+					}
+				}
+
+
+				if(self::T_QUARTER == $token[0] || self::T_SA_QUARTER == $token[0]) {
+					// only set the quarter if the date hasn't been set on the calendar object
+					if(!$cal->_isSet(AgaviDateDefinitions::MONTH)) {
+						$cal->set($dateField, ($number - 1) * 3);
+					}
+				} else {
+					$cal->set($dateField, $number);
+				}
+			} else { // $type == 'text'
+				$count = $token[1];
+				switch($token[0]) {
+					case self::T_TEXT:
+						if(substr_compare($dateString, $token[1], $datePos, strlen($token[1])) == 0) {
+							$datePos += strlen($token[1]);
+						} else {
+							throw new AgaviException('Unknown character in "' . $dateString . '" at pos ' . $datePos . ' (expected: "' . $token[1] . '", got: "' . substr($dateString, $datePos, strlen($token[1])) . '")');
+						}
+						break;
+
+					case self::T_ERA:
+					case self::T_DAY_OF_WEEK:
+					case self::T_LOCAL_DAY_OF_WEEK:
+					case self::T_SA_LOCAL_DAY_OF_WEEK:
+						$funcPrefix = '';
+
+						switch($token[0]) {
+							case self::T_ERA:
+								$funcPrefix = 'getCalendarEras';
+								$dataField = AgaviDateDefinitions::ERA;
+								break;
+							case self::T_DAY_OF_WEEK:
+								$funcPrefix = 'getCalendarDays';
+								$dataField = AgaviDateDefinitions::DAY_OF_WEEK;
+								break;
+
+							case self::T_LOCAL_DAY_OF_WEEK:
+							case self::T_SA_LOCAL_DAY_OF_WEEK:
+								$funcPrefix = 'getCalendarDays';
+								$dataField = AgaviDateDefinitions::DOW_LOCAL;
+								break;
+						}
+
+						if($count == 4) {
+							$items = $locale->{$funcPrefix . 'Wide'}($calendarType);
+						} elseif($count == 5) {
+							$items = $locale->{$funcPrefix . 'Narrow'}($calendarType);
+						} else {
+							$items = $locale->{$funcPrefix . 'Abbreviated'}($calendarType);
+						}
+						$item = null;
+						if($this->matchStringWithFallbacks($dateString, $items, $datePos, $item)) {
+							$cal->set($dataField, $item);
+						} else {
+							throw new AgaviException('Unknown character in "' . $dateString . '" at pos ' . $datePos . ' (expected one of: ' . implode(', ', $items) . ')');
+						}
+						break;
+
+					case self::T_AM_PM:
+						$items = array(
+							0 => $locale->getCalendarAm($calendarType),
+							1 => $locale->getCalendarPm($calendarType),
+						);
+
+						$item = null;
+						if($this->matchStringWithFallbacks($dateString, $items, $datePos, $item)) {
+							$cal->set(AgaviDateDefinitions::AM_PM, $item);
+						} else {
+							throw new AgaviException('Unknown character in "' . $dateString . '" at pos ' . $datePos . ' (expected one of: ' . implode(', ', $items) . ')');
+						}
+						break;
+
+					case self::T_TIMEZONE:
+					case self::T_TIMEZONE_GENERIC:
+					case self::T_TIMEZONE_RFC:
+						$remainder = substr($dateString, $datePos);
+						if(preg_match('#^(GMT)?(\+|-)?(\d{1,2}:\d{1,2}|\d{1,2}\d{1,2})#i', $remainder, $match)) {
+							$datePos += strlen($match[0]);
+							if(strtolower($match[1]) != 'gmt') {
+								$remainder = 'GMT' . $match[0];
+							} else {
+								$remainder = $match[0];
+							}
+							$tz = $tm->createTimeZone($remainder);
+						} else {
+							if($i + 1 != $tlCount && preg_match('#^([a-z/]+)#i', $remainder, $match)) {
+								$remainder = $match[0];
+							}
+							if(!($tz = $tm->createTimeZone($remainder))) {
+								// try to match a localized timezone string
+								$z = 0;
+								$localizedTzMap = array();
+								$idToTzMap = array();
+								$tzNames = $locale->getTimeZoneNames();
+								foreach($tzNames as $tzId => $tz) {
+									foreach($tz as $type => $names) {
+										if(is_array($names)) {
+											foreach($names as $name) {
+												$localizedTzMap[$z] = $name;
+												$idToTzMap[$z] = $tzId;
+												++$z;
+											}
+										}
+									}
+								}
+
+								$id = 0;
+								if($this->matchStringWithFallbacks($dateString, $localizedTzMap, $datePos, $id)) {
+									$tz = $tm->createTimeZone($idToTzMap[$id]);
+								} else {
+									throw new AgaviException('Unknown character in "' . $dateString . '" at pos ' . $datePos . ' (expected one of: ' . implode(', ', $localizedTzMap) . ')');
+								}
+							} else {
+								$datePos += strlen($remainder);
+							}
+						}
+
+						$cal->setTimeZone($tz);
+						break;
+
+
+					case self::T_MONTH:
+					case self::T_SA_MONTH:
+						if($count == 3) {
+							$months = $locale->getCalendarMonthsAbbreviated($calendarType);
+						} elseif($count == 4) {
+							$months = $locale->getCalendarMonthsWide($calendarType);
+						} elseif($count == 5) {
+							$months = $locale->getCalendarMonthsNarrow($calendarType);
+						}
+						$month = null;
+						if($this->matchStringWithFallbacks($dateString, $months, $datePos, $month)) {
+							$cal->set(AgaviDateDefinitions::MONTH, $month - 1);
+						} else {
+							throw new AgaviException('Unknown character in "' . $dateString . '" at pos ' . $datePos . ' (expected one of: ' . implode(', ', $months) . ')');
+						}
+
+						break;
+
+
+					case self::T_QUARTER:
+					case self::T_SA_QUARTER:
+						if($count == 3) {
+							$quarters = $locale->getCalendarQuartersAbbreviated($calendarType);
+						} elseif($count == 4) {
+							$quarters = $locale->getCalendarQuartersWide($calendarType);
+						} elseif($count == 5) {
+							$quarters = $locale->getCalendarQuartersNarrow($calendarType);
+						}
+						$quarter = null;
+						if($this->matchStringWithFallbacks($dateString, $quarters, $datePos, $quarter)) {
+							if(!$cal->_isSet(AgaviDateDefinitions::MONTH)) {
+								$cal->set(AgaviDateDefinitions::MONTH, ($quarter - 1) * 3);
+							}
+						} else {
+							throw new AgaviException('Unknown character in "' . $dateString . '" at pos ' . $datePos . ' (expected one of: ' . implode(', ', $quarters) . ')');
+						}
+						break;
+
+				}
+			}
+		}
+
+		return $cal;
+	}
+
+
+	/**
+	 * Returns the date field which is associated with the given token.
+	 *
+	 * @param      int The type of the token.
+	 *
+	 * @return     int The date field in the calendar for this token type.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	protected function getDateFieldFromTokenType($type)
+	{
+		$typeMap = array(
+			self::T_ERA                     => AgaviDateDefinitions::ERA,
+			self::T_YEAR                    => AgaviDateDefinitions::YEAR,
+			self::T_MONTH                   => AgaviDateDefinitions::MONTH,
+			self::T_SA_MONTH                => AgaviDateDefinitions::MONTH,
+			self::T_DATE                    => AgaviDateDefinitions::DATE,
+			self::T_HOUR_1_24               => AgaviDateDefinitions::HOUR_OF_DAY,
+			self::T_HOUR_0_23               => AgaviDateDefinitions::HOUR_OF_DAY,
+			self::T_MINUTE                  => AgaviDateDefinitions::MINUTE,
+			self::T_SECOND                  => AgaviDateDefinitions::SECOND,
+			self::T_FRACTIONAL_SECOND       => AgaviDateDefinitions::MILLISECOND,
+			self::T_DAY_OF_WEEK             => AgaviDateDefinitions::DAY_OF_WEEK,
+			self::T_DAY_OF_YEAR             => AgaviDateDefinitions::DAY_OF_YEAR,
+			self::T_DAY_OF_WEEK_IN_MONTH    => AgaviDateDefinitions::DAY_OF_WEEK_IN_MONTH,
+			self::T_WEEK_OF_YEAR            => AgaviDateDefinitions::WEEK_OF_YEAR,
+			self::T_WEEK_OF_MONTH           => AgaviDateDefinitions::WEEK_OF_MONTH,
+			self::T_AM_PM                   => AgaviDateDefinitions::AM_PM,
+			self::T_HOUR_1_12               => AgaviDateDefinitions::HOUR,
+			self::T_HOUR_0_11               => AgaviDateDefinitions::HOUR,
+			self::T_ISO_YEAR                => AgaviDateDefinitions::YEAR_WOY,
+			self::T_LOCAL_DAY_OF_WEEK       => AgaviDateDefinitions::DOW_LOCAL,
+			self::T_SA_LOCAL_DAY_OF_WEEK    => AgaviDateDefinitions::DOW_LOCAL,
+			self::T_EXTENDED_YEAR           => AgaviDateDefinitions::EXTENDED_YEAR,
+			self::T_MODIFIED_JD             => AgaviDateDefinitions::JULIAN_DAY,
+			self::T_MS_IN_DAY               => AgaviDateDefinitions::MILLISECONDS_IN_DAY,
+			self::T_QUARTER                 => AgaviDateDefinitions::MONTH,
+			self::T_SA_QUARTER              => AgaviDateDefinitions::MONTH,
+		);
+
+		if(isset($typeMap[$type])) {
+			return $typeMap[$type];
+		} else {
+			return null;
+		}
+	}
+
+	/**
+	 * Returns whether a string matches any of the given possibilities at the 
+	 * current offset.
+	 *
+	 * @param      string The string to be matched in.
+	 * @param      array  The possibilites which can match.
+	 * @param      int    The offset to match at in the input string.
+	 * @param      mixed  The key of the possibilities entry that matched.
+	 *
+	 * @return     bool Whether any possibility could be matched.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	protected function matchStringWithFallbacks($string, array $possibilities, &$offset, &$matchedKey)
+	{
+		// TODO: change this to match to longest match and not the first one.
+		foreach($possibilities as $key => $possibility) {
+			if(substr_compare($string, $possibility, $offset, strlen($possibility)) == 0) {
+				$offset += strlen($possibility);
+				$matchedKey = $key;
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Returns the type of a token
+	 *
+	 * @param      array The token.
+	 *
+	 * @return     string either 'text' or 'number'
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	protected function getTokenType($token)
+	{
+		$type = 'text';
+		$tok = $token[0];
+		$cnt = $token[1];
+
+		switch($tok) {
+			case self::T_YEAR:
+			case self::T_DATE:
+			case self::T_HOUR_1_24:
+			case self::T_HOUR_0_23:
+			case self::T_HOUR_1_12:
+			case self::T_HOUR_0_11:
+			case self::T_MINUTE:
+			case self::T_SECOND:
+			case self::T_DAY_OF_YEAR:
+			case self::T_DAY_OF_WEEK_IN_MONTH:
+			case self::T_WEEK_OF_YEAR:
+			case self::T_WEEK_OF_MONTH:
+			case self::T_ISO_YEAR:
+			case self::T_EXTENDED_YEAR:
+			case self::T_MODIFIED_JD:
+			case self::T_MS_IN_DAY:
+			case self::T_FRACTIONAL_SECOND:
+				// number
+				$type = 'number';
+				break;
+
+			case self::T_MONTH:
+			case self::T_SA_MONTH:
+			case self::T_LOCAL_DAY_OF_WEEK:
+			case self::T_SA_LOCAL_DAY_OF_WEEK:
+			case self::T_QUARTER:
+			case self::T_SA_QUARTER:
+				// string > 2
+				if($cnt > 2) {
+					$type = 'text';
+				} else {
+					$type = 'number';
+				}
+				break;
+
+			case self::T_TEXT:
+			case self::T_ERA:
+			case self::T_DAY_OF_WEEK:
+			case self::T_AM_PM:
+			case self::T_TIMEZONE:
+			case self::T_TIMEZONE_GENERIC:
+			case self::T_TIMEZONE_RFC:
+				$type = 'text';
+				// string
+				break;
+		}
+
+		return $type;
+	}
+
 }
 
 ?>
