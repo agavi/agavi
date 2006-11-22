@@ -630,7 +630,7 @@ class AgaviDateFormat
 				$count = $token[1];
 				switch($token[0]) {
 					case self::T_TEXT:
-						if(substr_compare($dateString, $token[1], $datePos, strlen($token[1])) == 0) {
+						if($i + 1 == $tlCount /* when the last token is text we can simply skip it */ || substr_compare($dateString, $token[1], $datePos, strlen($token[1])) == 0) {
 							$datePos += strlen($token[1]);
 						} else {
 							throw new AgaviException('Unknown character in "' . $dateString . '" at pos ' . $datePos . ' (expected: "' . $token[1] . '", got: "' . substr($dateString, $datePos, strlen($token[1])) . '")');
@@ -848,10 +848,13 @@ class AgaviDateFormat
 	 */
 	protected function matchStringWithFallbacks($string, array $possibilities, &$offset, &$matchedKey)
 	{
+		$strlen = strlen($string);
 		// TODO: change this to match to longest match and not the first one.
 		foreach($possibilities as $key => $possibility) {
-			if(substr_compare($string, $possibility, $offset, strlen($possibility)) == 0) {
-				$offset += strlen($possibility);
+			$possLen = strlen($possibility);
+			// avoid warning when $string is not long enough for the possibility
+			if($strlen >= ($offset + $possLen) && substr_compare($string, $possibility, $offset, $possLen) == 0) {
+				$offset += $possLen;
 				$matchedKey = $key;
 				return true;
 			}
