@@ -8,9 +8,9 @@
     <xs:sequence>
       <xs:element name="configuration" minOccurs="0" maxOccurs="unbounded">
         <xs:complexType>
-          <xs:sequence>
-            <xs:element name="validators" minOccurs="0" type="validators" />
-            <xs:element name="validator_definitions"  minOccurs="0" type="validator_definitions" />
+          <xs:sequence minOccurs="0" maxOccurs="unbounded" >
+            <xs:element name="validators" minOccurs="0" maxOccurs="unbounded" type="validators" />
+            <xs:element name="validator_definitions" minOccurs="0" type="validator_definitions" />
           </xs:sequence>
           <xs:attribute name="environment" type="xs:string" />
           <xs:attribute name="context" type="xs:string" />
