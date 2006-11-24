@@ -37,31 +37,31 @@
   </xs:complexType>
 
   <xs:complexType name="message_translator">
-    <xs:all>
+    <xs:sequence maxOccurs="unbounded">
       <xs:element name="filters" type="filters" minOccurs="0" />
-      <xs:element name="parameters" type="parameters" minOccurs="0" />
-    </xs:all>
+      <xs:group ref="parameters" />
+    </xs:sequence>
     <xs:attribute name="type" type="xs:string" />
   </xs:complexType>
   <xs:complexType name="number_formatter">
-    <xs:all>
+    <xs:sequence maxOccurs="unbounded">
       <xs:element name="filters" type="filters" minOccurs="0" />
-      <xs:element name="parameters" type="parameters" minOccurs="0" />
-    </xs:all>
+      <xs:group ref="parameters" />
+    </xs:sequence>
     <xs:attribute name="type" type="xs:string" />
   </xs:complexType>
   <xs:complexType name="currency_formatter">
-    <xs:all>
+    <xs:sequence maxOccurs="unbounded">
       <xs:element name="filters" type="filters" minOccurs="0" />
-      <xs:element name="parameters" type="parameters" minOccurs="0" />
-    </xs:all>
+      <xs:group ref="parameters" />
+    </xs:sequence>
     <xs:attribute name="type" type="xs:string" />
   </xs:complexType>
   <xs:complexType name="date_formatter">
-    <xs:all>
+    <xs:sequence maxOccurs="unbounded">
       <xs:element name="filters" type="filters" minOccurs="0" />
-      <xs:element name="parameters" type="parameters" minOccurs="0" />
-    </xs:all>
+      <xs:group ref="parameters" />
+    </xs:sequence>
     <xs:attribute name="type" type="xs:string" />
   </xs:complexType>
 
@@ -79,9 +79,9 @@
     <xs:attribute name="default_timezone" type="xs:string" />
   </xs:complexType>
   <xs:complexType name="available_locale">
-    <xs:all>
-      <xs:element name="parameters" type="parameters" minOccurs="0" />
-    </xs:all>
+    <xs:sequence>
+      <xs:group ref="parameters" />
+    </xs:sequence>
     <xs:attribute name="identifier" type="xs:string" use="required" />
     <xs:attribute name="ldml_file" type="xs:string" />
     <xs:attribute name="fallback" type="xs:string" />

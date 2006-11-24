@@ -24,9 +24,9 @@
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="handler">
-    <xs:all>
-      <xs:element name="parameters" type="parameters" minOccurs="0" />
-    </xs:all>
+    <xs:sequence>
+      <xs:group ref="parameters"/>
+    </xs:sequence>
     <xs:attribute name="pattern" type="xs:string" use="required" />
     <xs:attribute name="class" type="xs:string" use="required" />
     <xs:attribute name="validate" type="xs:string" />

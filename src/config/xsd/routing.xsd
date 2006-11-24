@@ -25,8 +25,8 @@
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="route">
-    <xs:all>
-      <xs:element name="parameters" type="parameters" minOccurs="0" />
+    <xs:sequence minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="parameters" />
       <xs:element name="ignores" minOccurs="0">
         <xs:complexType>
           <xs:sequence>
@@ -50,7 +50,7 @@
         </xs:complexType>
       </xs:element>
       <xs:element name="routes" type="routes" minOccurs="0" />
-    </xs:all>
+    </xs:sequence>
     <xs:attribute name="name" type="xs:string" />
     <xs:attribute name="pattern" type="xs:string" use="required" />
     <xs:attribute name="imply" type="xs:string" />

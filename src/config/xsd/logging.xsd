@@ -28,8 +28,8 @@
     <xs:attribute name="default_logger" type="xs:string" />
   </xs:complexType>
   <xs:complexType name="logger">
-    <xs:all>
-      <xs:element name="parameters" type="parameters" minOccurs="0" />
+    <xs:sequence maxOccurs="unbounded">
+      <xs:group ref="parameters" />
       <xs:element name="appenders" minOccurs="0">
         <xs:complexType>
           <xs:sequence>
@@ -44,7 +44,7 @@
           </xs:sequence>
         </xs:complexType>
       </xs:element>
-    </xs:all>
+    </xs:sequence>
     <xs:attribute name="name" type="xs:string" use="required" />
     <xs:attribute name="class" type="xs:string" />
     <xs:attribute name="level" type="xs:string" />
@@ -55,7 +55,7 @@
       <xs:element name="appender" maxOccurs="unbounded">
         <xs:complexType>
           <xs:sequence>
-            <xs:element name="parameters" type="parameters" minOccurs="0" />
+            <xs:group ref="parameters" />
           </xs:sequence>
           <xs:attribute name="name" type="xs:string" use="required" />
           <xs:attribute name="class" type="xs:string" />
@@ -70,7 +70,7 @@
       <xs:element name="layout" maxOccurs="unbounded">
         <xs:complexType>
           <xs:sequence>
-            <xs:element name="parameters" type="parameters" minOccurs="0" />
+            <xs:group ref="parameters" />
           </xs:sequence>
           <xs:attribute name="name" type="xs:string" use="required" />
           <xs:attribute name="class" type="xs:string" />
