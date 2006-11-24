@@ -19,14 +19,15 @@
     <xs:attribute name="parent" type="xs:string" />
   </xs:complexType>
 
-  <xs:complexType name="routes">
-    <xs:sequence>
-      <xs:element name="route" type="route" maxOccurs="unbounded" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="route">
-    <xs:sequence minOccurs="0" maxOccurs="unbounded">
-      <xs:group ref="parameters" />
+  <xs:group name="routes">
+    <xs:choice>
+      <xs:element name="routes" type="routes" minOccurs="0" />
+      <xs:element name="route" type="route" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:choice>
+  </xs:group>
+
+  <xs:group name="ignores">
+    <xs:choice>
       <xs:element name="ignores" minOccurs="0">
         <xs:complexType>
           <xs:sequence>
@@ -34,22 +35,46 @@
           </xs:sequence>
         </xs:complexType>
       </xs:element>
+      <xs:element name="ignore" type="xs:string" maxOccurs="unbounded" />
+    </xs:choice>
+  </xs:group>
+
+  <xs:element name="default">
+    <xs:complexType>
+     <xs:simpleContent>
+       <xs:extension base="xs:string">
+         <xs:attribute name="for" type="xs:string" use="required" />
+       </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+
+
+  <xs:group name="defaults">
+    <xs:choice>
       <xs:element name="defaults" minOccurs="0">
         <xs:complexType>
           <xs:sequence>
-            <xs:element name="default" maxOccurs="unbounded">
-              <xs:complexType>
-               <xs:simpleContent>
-                 <xs:extension base="xs:string">
-                   <xs:attribute name="for" type="xs:string" use="required" />
-                 </xs:extension>
-                </xs:simpleContent>
-              </xs:complexType>
-            </xs:element>
+            <xs:element ref="default" maxOccurs="unbounded" />
           </xs:sequence>
         </xs:complexType>
       </xs:element>
-      <xs:element name="routes" type="routes" minOccurs="0" />
+      <xs:element ref="default" minOccurs="0" maxOccurs="unbounded" />
+    </xs:choice>
+  </xs:group>
+
+  <xs:complexType name="routes">
+    <xs:sequence>
+      <xs:element name="route" type="route" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="route">
+    <xs:sequence minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="parameters" />
+      <xs:group ref="ignores" />
+      <xs:group ref="defaults" />
+      <xs:group ref="routes" />
     </xs:sequence>
     <xs:attribute name="name" type="xs:string" />
     <xs:attribute name="pattern" type="xs:string" use="required" />
