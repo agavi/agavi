@@ -717,6 +717,12 @@ class AgaviLocale
 			: null;
 	}
 
+	public function getTimeZoneNames()
+	{
+		return isset($this->data['timeZoneNames']['zones'])
+			? $this->data['timeZoneNames']['zones']
+			: array();
+	}
 
 	public function getNumberSymbolDecimal()
 	{
