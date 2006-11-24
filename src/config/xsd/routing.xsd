@@ -9,7 +9,7 @@
       <xs:element name="configuration" minOccurs="0" maxOccurs="unbounded">
         <xs:complexType>
           <xs:sequence>
-            <xs:element name="routes" type="routes" />
+            <xs:group ref="routes" />
           </xs:sequence>
           <xs:attribute name="environment" type="xs:string" />
           <xs:attribute name="context" type="xs:string" />
