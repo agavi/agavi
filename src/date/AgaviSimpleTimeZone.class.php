@@ -740,7 +740,7 @@ class AgaviSimpleTimeZone extends AgaviTimeZone
 	 */
 	public function getOffsetIIIIII($era, $year, $month, $day, $dayOfWeek, $millis)
 	{
-		// Check the month before indexing into STATICMONTHLENGTH. This
+		// Check the month before calling Grego::monthLength(). This
 		// duplicates the test that occurs in the 7-argument getOffset(),
 		// however, this is unavoidable. We don't mind because this method, in
 		// fact, should not be called; internal code should always call the
@@ -752,7 +752,7 @@ class AgaviSimpleTimeZone extends AgaviTimeZone
 				return 0;
 		}
 
-		return $this->getOffsetIIIIIII($era, $year, $month, $day, $dayOfWeek, $millis, self::$STATICMONTHLENGTH[$month]);
+		return $this->getOffsetIIIIIII($era, $year, $month, $day, $dayOfWeek, $millis, AgaviCalendarGrego::monthLength($year, $month));
 	}
 
 	/**
@@ -788,10 +788,7 @@ class AgaviSimpleTimeZone extends AgaviTimeZone
 				return -1;
 		}
 
-		// TODO FIX We don't handle leap years yet!
-		$prevMonthLength = ($month >= 1) ? self::$STATICMONTHLENGTH[$month - 1] : 31;
-
-		return $this->getOffsetIIIIIIII($era, $year, $month, $day, $dayOfWeek, $millis, $monthLength, $prevMonthLength);
+		return $this->getOffsetIIIIIIII($era, $year, $month, $day, $dayOfWeek, $millis, AgaviCalendarGrego::monthLength($year, $month), AgaviCalendarGrego::previousMonthLength($year, $month));
 	}
 
 	/**
@@ -1109,6 +1106,11 @@ return true;
 
 		// calculate the actual day of month for the rule
 		$ruleDayOfMonth = 0;
+		// Adjust the ruleDay to the monthLen, for non-leap year February 29 rule days.
+		if($ruleDay > $monthLen) {
+			$ruleDay = $monthLen;
+		}
+
 		switch($ruleMode) {
 			// if the mode is day-of-month, the day of month is given
 			case self::DOM_MODE:
@@ -1126,10 +1128,9 @@ return true;
 
 					// if ruleDay is negative (we assume it's not zero here), we have to 
 					// do the same calculation figuring backward from the last day of the 
-					// month. (STATICMONTHLENGTH gives us that last day.  We don't take 
-					// leap years into account, so this may not work right for February.)
+					// month.
 				} else {
-					// (again, this code is trusting that dayOfMonth and dayOfMonth are
+					// (again, this code is trusting that dayOfWeek and dayOfMonth are
 					// consistent with each other here, since we're using them to figure
 					// the day of week of the first of the month)
 					$ruleDayOfMonth = $monthLen + ($ruleDay + 1) * 7 - (7 + ($dayOfWeek + $monthLen - $dayOfMonth) - $ruleDayOfWeek) % 7;
