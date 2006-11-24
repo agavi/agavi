@@ -17,9 +17,10 @@
     <xs:sequence>
       <xs:element name="parameter" maxOccurs="unbounded">
         <xs:complexType mixed="true">
-          <xs:sequence minOccurs="1" maxOccurs="1">
+          <xs:choice minOccurs="1" maxOccurs="1">
             <xs:element name="parameters" type="innerParameters" minOccurs="0" />
-          </xs:sequence>
+            <xs:element name="parameter" type="innerParameter" minOccurs="0" maxOccurs="unbounded"/>
+          </xs:choice>
           <xs:attribute name="name" type="xs:string" use="required" />
         </xs:complexType>
       </xs:element>
@@ -37,5 +38,13 @@
         </xs:complexType>
       </xs:element>
     </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="innerParameter" mixed="true">
+    <xs:choice minOccurs="1" maxOccurs="1">
+      <xs:element name="parameters" type="innerParameters" minOccurs="0" />
+      <xs:element name="parameter" type="innerParameter" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:choice>
+    <xs:attribute name="name" type="xs:string" use="optional" />
   </xs:complexType>
 </xs:schema>
