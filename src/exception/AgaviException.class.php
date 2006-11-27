@@ -57,7 +57,10 @@ class AgaviException extends Exception
 			}
 		}
 		
-		if($context !== null && $tpl = AgaviConfig::get('exception.templates.' . $context->getName())) {
+		if($context !== null && ($c = $context->getController()) !== null && ($oti = $c->getOutputTypeInfo()) !== null && isset($oti['exception_template'])) { 
+			// an exception template was defined for this output type
+			include($oti['exception_template']); 
+		} elseif($context !== null && $tpl = AgaviConfig::get('exception.templates.' . $context->getName())) {
 			// a template was set for this context
 			include($tpl);
 		} else {

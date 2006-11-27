@@ -73,10 +73,13 @@ class AgaviSettingConfigHandler extends AgaviConfigHandler
 			
 			if($cfg->hasChildren('exception_templates')) {
 				foreach($cfg->exception_templates->getChildren() as $exception_template) {
-					$tpl = $exception_template->getValue();
+					$tpl = $this->replaceConstants($exception_template->getValue());
+					if(!is_readable($tpl)) {
+						throw new AgaviConfigurationException('Exception template "' . $tpl . '" does not exist or is unreadable');
+					}
 					if($exception_template->hasAttribute('context')) {
 						foreach(array_map('trim', explode(' ', $exception_template->getAttribute('context'))) as $ctx) {
-							$data['exception.templates.' . trim($ctx)] = $this->replaceConstants($tpl);
+							$data['exception.templates.' . $ctx] = $tpl;
 						}
 					} else {
 						$data['exception.default_template'] = $this->replaceConstants($tpl);

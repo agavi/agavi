@@ -93,8 +93,11 @@ class AgaviOutputTypeConfigHandler extends AgaviConfigHandler
 				} else {
 					$data[$name]['renderer'] = null;
 				}
-				if($outputType->hasAttribute('exception')) {
-					$data[$name]['exception'] = $this->literalize($outputType->getAttribute('exception'));
+				if($outputType->hasAttribute('exception_template')) {
+					$data[$name]['exception_template'] = $this->replaceConstants($outputType->getAttribute('exception_template'));
+					if(!is_readable($data[$name]['exception_template'])) {
+						throw new AgaviConfigurationException('Exception template "' . $data[$name]['exception_template'] . '" does not exist or is unreadable');
+					}
 				}
 				if(isset($outputType->renderer)) {
 				}

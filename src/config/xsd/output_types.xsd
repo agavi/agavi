@@ -41,7 +41,7 @@
       </xs:element>
     </xs:sequence>
     <xs:attribute name="name" type="php_label" use="required" />
-    <xs:attribute name="exception" type="xs:string" />
+    <xs:attribute name="exception_template" type="xs:string" />
   </xs:complexType>
 
 </xs:schema>
