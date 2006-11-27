@@ -9,8 +9,8 @@
       <xs:element name="configuration" minOccurs="0" maxOccurs="unbounded">
         <xs:complexType>
           <xs:sequence minOccurs="0" maxOccurs="unbounded" >
-            <xs:element name="validators" minOccurs="0" maxOccurs="unbounded" type="validators" />
-            <xs:element name="validator_definitions" minOccurs="0" type="validator_definitions" />
+            <xs:group ref="validators" minOccurs="0" maxOccurs="unbounded" />
+            <xs:group ref="validator_definitions" minOccurs="0" />
           </xs:sequence>
           <xs:attribute name="environment" type="xs:string" />
           <xs:attribute name="context" type="xs:string" />
@@ -27,12 +27,13 @@
     <xs:attribute name="method" type="xs:string" />
     <xs:attribute name="severity" type="xs:string" />
   </xs:complexType>
+
   <xs:complexType name="validator">
     <xs:sequence maxOccurs="unbounded">
       <xs:group ref="parameters" />
-      <xs:element name="arguments" type="arguments" minOccurs="0"/>
-      <xs:element name="errors" type="errors" minOccurs="0"/>
-      <xs:element name="validators" type="validators" minOccurs="0"/>
+      <xs:group ref="arguments" minOccurs="0"/>
+      <xs:group ref="errors" minOccurs="0"/>
+      <xs:group ref="validators" minOccurs="0"/>
     </xs:sequence>
     <xs:attribute name="name" type="xs:string" use="required" />
     <xs:attribute name="affects" type="xs:string" />
@@ -58,33 +59,64 @@
     <xs:attribute name="class" type="non_empty_string" use="required" />
   </xs:complexType>
 
+
+  <xs:complexType name="argument">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute name="name" type="non_empty_string" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
   <xs:complexType name="arguments">
     <xs:sequence>
-      <xs:element maxOccurs="unbounded" name="argument">
-        <xs:complexType>
-          <xs:simpleContent>
-            <xs:extension base="xs:string">
-              <xs:attribute name="name" type="non_empty_string" use="optional"/>
-            </xs:extension>
-          </xs:simpleContent>
-        </xs:complexType>
-      </xs:element>
+      <xs:element name="argument" type="argument" maxOccurs="unbounded" />
     </xs:sequence>
     <xs:attribute name="base" type="xs:string" use="optional" />
   </xs:complexType>
 
+  <xs:complexType name="error">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute name="for" type="non_empty_string" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
   <xs:complexType name="errors">
     <xs:sequence>
-      <xs:element maxOccurs="unbounded" name="error">
-        <xs:complexType>
-          <xs:simpleContent>
-            <xs:extension base="xs:string">
-              <xs:attribute name="for" type="non_empty_string" use="optional"/>
-            </xs:extension>
-          </xs:simpleContent>
-        </xs:complexType>
-      </xs:element>
+      <xs:element name="error" type="error" maxOccurs="unbounded" />
     </xs:sequence>
   </xs:complexType>
+
+  <xs:group name="validators">
+    <xs:choice>
+      <xs:element name="validators" type="validators" minOccurs="0" />
+      <xs:element name="validator" type="validator" minOccurs="0" maxOccurs="unbounded" />
+    </xs:choice>
+  </xs:group>
+
+  <xs:group name="validator_definitions">
+    <xs:choice>
+      <xs:element name="validator_definitions" type="validator_definitions" minOccurs="0" />
+      <xs:element name="validator_definition" type="validator_definition" minOccurs="0" maxOccurs="unbounded" />
+    </xs:choice>
+  </xs:group>
+
+  <xs:group name="errors">
+    <xs:choice>
+      <xs:element name="errors" type="errors" minOccurs="0" />
+      <xs:element name="error" type="error" minOccurs="0" maxOccurs="unbounded" />
+    </xs:choice>
+  </xs:group>
+
+
+  <xs:group name="arguments">
+    <xs:choice>
+      <xs:element name="arguments" type="arguments" minOccurs="0" />
+      <xs:element name="argument" type="argument" minOccurs="0" maxOccurs="unbounded" />
+    </xs:choice>
+  </xs:group>
+
 
 </xs:schema>

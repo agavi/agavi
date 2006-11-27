@@ -92,13 +92,20 @@ class AgaviValidatorConfigHandler extends AgaviConfigHandler
 			}
 
 			if(isset($cfg->validators)) {
-				$stdSeverity = $cfg->validators->getAttribute('severity', 'error');
+				$hasValidators = false;
 				foreach($cfg->getChildren() as $validators) {
 					if($validators->getName() == 'validators') {
+						$hasValidators = true;
+						$stdSeverity = $validators->getAttribute('severity', 'error');
 						$stdMethod = $validators->getAttribute('method');
 						foreach($validators as $validator) {
 							$code = $this->getValidatorArray($validator, $code, $stdSeverity, 'validatorManager', $stdMethod);
 						}
+					}
+				}
+				if(!$hasValidators) {
+					foreach($cfg->validators as $validator) {
+						$code = $this->getValidatorArray($validator, $code, 'error', 'validatorManager', null);
 					}
 				}
 			}
