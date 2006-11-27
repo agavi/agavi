@@ -177,6 +177,7 @@
 			<autoload name="AgaviValidatorManager">%core.agavi_dir%/validator/AgaviValidatorManager.class.php</autoload>
 			<autoload name="AgaviDependencyManager">%core.agavi_dir%/validator/AgaviDependencyManager.class.php</autoload>
 			<autoload name="AgaviValidator">%core.agavi_dir%/validator/AgaviValidator.class.php</autoload>
+			<autoload name="AgaviBaseFileValidator">%core.agavi_dir%/validator/AgaviBaseFileValidator.class.php</autoload>
 			<autoload name="AgaviOperatorValidator">%core.agavi_dir%/validator/AgaviOperatorValidator.class.php</autoload>
 			<autoload name="AgaviAndoperatorValidator">%core.agavi_dir%/validator/AgaviAndoperatorValidator.class.php</autoload>
 			<autoload name="AgaviOroperatorValidator">%core.agavi_dir%/validator/AgaviOroperatorValidator.class.php</autoload>
@@ -185,16 +186,16 @@
 			<autoload name="AgaviDateValidator">%core.agavi_dir%/validator/AgaviDateValidator.class.php</autoload>
 			<autoload name="AgaviEmailValidator">%core.agavi_dir%/validator/AgaviEmailValidator.class.php</autoload>
 			<autoload name="AgaviEqualsValidator">%core.agavi_dir%/validator/AgaviEqualsValidator.class.php</autoload>
+			<autoload name="AgaviFileValidator">%core.agavi_dir%/validator/AgaviFileValidator.class.php</autoload>
+			<autoload name="AgaviImageFileValidator">%core.agavi_dir%/validator/AgaviImageFileValidator.class.php</autoload>
 			<autoload name="AgaviInarrayValidator">%core.agavi_dir%/validator/AgaviInarrayValidator.class.php</autoload>
 			<autoload name="AgaviIssetValidator">%core.agavi_dir%/validator/AgaviIssetValidator.class.php</autoload>
-			<autoload name="AgaviIsuploadedimageValidator">%core.agavi_dir%/validator/AgaviIsuploadedimageValidator.class.php</autoload>
 			<autoload name="AgaviMktimestampValidator">%core.agavi_dir%/validator/AgaviMktimestampValidator.class.php</autoload>
 			<autoload name="AgaviNumberValidator">%core.agavi_dir%/validator/AgaviNumberValidator.class.php</autoload>
 			<autoload name="AgaviRegexValidator">%core.agavi_dir%/validator/AgaviRegexValidator.class.php</autoload>
 			<autoload name="AgaviSetValidator">%core.agavi_dir%/validator/AgaviSetValidator.class.php</autoload>
 			<autoload name="AgaviStringValidator">%core.agavi_dir%/validator/AgaviStringValidator.class.php</autoload>
 			<autoload name="AgaviTimeValidator">%core.agavi_dir%/validator/AgaviTimeValidator.class.php</autoload>
-			<autoload name="AgaviUploadedFileValidator">%core.agavi_dir%/validator/AgaviUploadedFileValidator.class.php</autoload>
 		</autoloads>
 	</configuration>
 </configurations>

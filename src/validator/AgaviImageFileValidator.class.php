@@ -14,14 +14,24 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviIsUploadedImageValidator verifies a parameter is an uploaded image
+ * AgaviImageFileValidator verifies a parameter is an uploaded image
  * 
  * Parameters:
- *   'php_error'    error message when there was an php error with the file
- *   'img_error'    error message when the file is no image according to 
- *                  exif_imagetype()
- *   'format'       list of valid formats (gif,jpeg,png,bmp)
- *   'format_error' image has none of the specified formats
+ *   'min_width'    The minimum width of the image
+ *   'max_width'    The maximum width of the image
+ *   'min_height'   The minimum height of the image
+ *   'max_height'   The maximum height of the image
+ *   'format'       list of valid formats (gif,jpeg,png,bmp,psd,swf)
+ *
+ * Errors:
+ *   'no_image'      The uploaded file is no image
+ *   'min_width'
+ *   'max_width'
+ *   'min_height'
+ *   'max_height'
+ *   'format'        The image was not in the required format
+ *
+ * @see        AgaviBaseFileValidator
  *
  * @package    agavi
  * @subpackage validator
@@ -32,7 +42,7 @@
  *
  * @version    $Id$
  */
-class AgaviIsuploadedimageValidator extends AgaviValidator
+class AgaviImageFileValidator  extends AgaviBaseFileValidator
 {
 	/**
 	 * Validates the input.
@@ -44,41 +54,62 @@ class AgaviIsuploadedimageValidator extends AgaviValidator
 	 */
 	protected function validate()
 	{
-		$name = $this->getData();
+		if(!parent::validate()) {
+			return false;
+		}
+
+		$name = $this->getArgument();
 
 		$request = $this->parentContainer->getContext()->getRequest();
 
-		if($request->getFileError($name) != UPLOAD_ERR_OK) {
-			$this->throwError('php_error');
-			return false;
-		}
-		
-		$type = exif_imagetype($request->getFileName($name));
+		$type = @getimagesize($request->getFilePath($name));
 		if($type === false) {
-			$this->throwError('img_error');
+			$this->throwError('no_image');
 			return false;
 		}
-		
+
+		list($width, $height, $imageType) = $type;
+
+		if($this->hasParameter('max_width') && $width > $this->getParameter('max_width')) {
+			$this->throwError('max_width');
+			return false;
+		}
+		if($this->hasParameter('min_width') && $width < $this->getParameter('min_width')) {
+			$this->throwError('min_width');
+			return false;
+		}
+
+		if($this->hasParameter('max_height') && $height > $this->getParameter('max_height')) {
+			$this->throwError('max_height');
+			return false;
+		}
+		if($this->hasParameter('min_height') && $height < $this->getParameter('min_height')) {
+			$this->throwError('min_height');
+			return false;
+		}
+
 		if(!$this->hasParameter('format')) {
 			return true;
 		}
 		
 		$formats = array(
-			'gif'	=> 1,
-			'jpeg'	=> 2,
-			'jpg'	=> 2,
-			'png'	=> 3,
-			'bmp'	=> 6
+			'gif'	=> IMAGETYPE_GIF,
+			'jpeg'	=> IMAGETYPE_JPEG,
+			'jpg'	=> IMAGETYPE_JPEG,
+			'png'	=> IMAGETYPE_PNG,
+			'bmp'	=> IMAGETYPE_BMP,
+			'psd' => IMAGETYPE_PSD,
+			'swf' => IMAGETYPE_SWF,
 		);
 		
 		
 		foreach(explode(' ', $this->getParameter('format')) as $format) {
-			if($formats[strtolower($format)] == $type) {
+			if($formats[strtolower($format)] == $imageType) {
 				return true;
 			}
 		}
 		
-		$this->throwError('format_error');
+		$this->throwError('format');
 		return false;
 	}
 }

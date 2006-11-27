@@ -14,12 +14,9 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviIsUploadedImageValidator verifies the size and extension of a file
+ * AgaviFileValidator verifies the size and extension of a file
  * 
- * Parameters:
- *   'min_size'     The minimum file size in byte
- *   'max_size'     The maximum file size in byte
- *   'extension'    list of valid extensions (delimited by ' ')
+ * @see        AgaviBaseFileValidator
  *
  * @package    agavi
  * @subpackage validator
@@ -30,7 +27,7 @@
  *
  * @version    $Id$
  */
-class AgaviUploadedFileValidator extends AgaviValidator
+class AgaviFileValidator extends AgaviBaseFileValidator
 {
 	/**
 	 * Validates the input
@@ -42,38 +39,7 @@ class AgaviUploadedFileValidator extends AgaviValidator
 	 */
 	protected function validate()
 	{
-		$name = $this->getArgument();
-
-		$request = $this->parentContainer->getContext()->getRequest();
-
-		if($request->getFileError($name) != UPLOAD_ERR_OK) {
-			$this->throwError();
-			return false;
-		}
-		
-		$size = $request->getFileSize($name);
-		if($this->hasParameter('min_size') && $size < $this->getParameter('min_size')) {
-			$this->throwError('min_size');
-			return false;
-		}
-		if($this->hasParameter('max_size') && $size > $this->getParameter('max_size')) {
-			$this->throwError('max_size');
-			return false;
-		}
-
-		if(!$this->hasParameter('extension')) {
-			return true;
-		}
-
-		$fileinfo = pathinfo($request->getFileName($name));
-		$ext = isset($fileinfo['extension']) ? $fileinfo['extension'] : '';
-
-		if(in_array($ext, explode(' ', $this->getParameter('extension')))) {
-			return true;
-		}
-
-		$this->throwError('extension');
-		return false;
+		return parent::validate();
 	}
 }
 

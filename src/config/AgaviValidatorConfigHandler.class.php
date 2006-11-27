@@ -59,9 +59,10 @@ class AgaviValidatorConfigHandler extends AgaviConfigHandler
 			'date' => array('class' => 'AgaviDateValidator', 'parameters' => array('check' => '1')),
 			'email' => array('class' => 'AgaviEmailValidator', 'parameters' => array()),
 			'equals' => array('class' => 'AgaviEqualsValidator', 'parameters' => array()),
+			'file' => array('class' => 'AgaviFileValidator', 'parameters' => array()),
+			'imagefile' => array('class' => 'AgaviImageFileValidator', 'parameters' => array()),
 			'inarray' => array('class' => 'AgaviInarrayValidator', 'parameters' => array('sep' => ',')),
 			'isset' => array('class' => 'AgaviIssetValidator', 'parameters' => array()),
-			'isuploadedimage' => array('class' => 'AgaviIsuploadedimageValidator', 'parameters' => array()),
 			'mktimestamp' => array('class' => 'AgaviMktimestampValidator', 'parameters' => array()),
 			'not' => array('class' => 'AgaviNotoperatorValidator', 'parameters' => array()),
 			'number' => array('class' => 'AgaviNumberValidator', 'parameters' => array('type' => 'int')),
@@ -70,7 +71,6 @@ class AgaviValidatorConfigHandler extends AgaviConfigHandler
 			'set' => array('class' => 'AgaviSetValidator', 'parameters' => array()),
 			'string' => array('class' => 'AgaviStringValidator', 'parameters' => array('min' => '1')),
 			'time' => array('class' => 'AgaviTimeValidator', 'parameters' => array('check' => '1')),
-			'uploadedfile' => array('class' => 'AgaviUploadedFileValidator', 'parameters' => array()),
 			'xor' => array('class' => 'AgaviXoroperatorValidator', 'parameters' => array()),
 		);
 
