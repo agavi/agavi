@@ -44,6 +44,7 @@
     <xs:attribute name="provides" type="xs:string" />
     <xs:attribute name="severity" type="xs:string" />
     <xs:attribute name="required" type="xs:string" />
+    <xs:attribute name="translation_domain" type="xs:string" />
   </xs:complexType>
 
   <xs:complexType name="validator_definitions">

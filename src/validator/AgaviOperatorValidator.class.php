@@ -132,6 +132,10 @@ abstract class AgaviOperatorValidator extends AgaviValidator implements AgaviIVa
 				$this->parentContainer->reportError($childError[0], $childError[1]);
 			}
 		} else {
+			if($this->hasParameter('translation_domain')) {
+				$error = $this->getContext()->getTranslationManager()->_($error, $this->getParameter('translation_domain'));
+			}
+
 			$this->parentContainer->reportError($this, $error);
 		}
 	}

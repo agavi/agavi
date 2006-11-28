@@ -421,6 +421,10 @@ abstract class AgaviValidator extends AgaviParameterHolder
 			$error = $backupError;
 		}
 
+		if($this->hasParameter('translation_domain')) {
+			$error = $this->getContext()->getTranslationManager()->_($error, $this->getParameter('translation_domain'));
+		}
+
 		$this->reportError($this, $error);
 	}
 
