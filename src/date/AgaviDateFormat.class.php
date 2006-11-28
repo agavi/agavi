@@ -494,7 +494,7 @@ class AgaviDateFormat
 								++$tokenIdx;
 							}
 						} else {
-							throw new AgaviException('Unknown pattern char "' . $c . '" (#'. ord($c) . ')');
+							throw new AgaviException('Unknown pattern char "' . $c . '" (#'. ord($c) . ') in format string "' . $format . '" at index ' . $i);
 						}
 					} else {
 						$this->tokenList[$tokenIdx] = array(self::T_TEXT, $c);
