@@ -158,6 +158,7 @@
 			<autoload name="AgaviITranslator">%core.agavi_dir%/translation/AgaviITranslator.interface.php</autoload>
 			<autoload name="AgaviLocale">%core.agavi_dir%/translation/AgaviLocale.class.php</autoload>
 			<autoload name="AgaviNumberFormatter">%core.agavi_dir%/translation/AgaviNumberFormatter.class.php</autoload>
+			<autoload name="AgaviSimpleTranslator">%core.agavi_dir%/translation/AgaviSimpleTranslator.class.php</autoload>
 			<autoload name="AgaviTranslationManager">%core.agavi_dir%/translation/AgaviTranslationManager.class.php</autoload>
 
 			<!-- agavi/translation/gettext -->
