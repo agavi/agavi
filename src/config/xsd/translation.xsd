@@ -49,6 +49,7 @@
       <xs:group ref="parameters" />
     </xs:sequence>
     <xs:attribute name="type" type="xs:string" />
+    <xs:attribute name="translation_domain" type="xs:string" />
   </xs:complexType>
   <xs:complexType name="currency_formatter">
     <xs:sequence maxOccurs="unbounded">
@@ -56,6 +57,7 @@
       <xs:group ref="parameters" />
     </xs:sequence>
     <xs:attribute name="type" type="xs:string" />
+    <xs:attribute name="translation_domain" type="xs:string" />
   </xs:complexType>
   <xs:complexType name="date_formatter">
     <xs:sequence maxOccurs="unbounded">
@@ -63,6 +65,7 @@
       <xs:group ref="parameters" />
     </xs:sequence>
     <xs:attribute name="type" type="xs:string" />
+    <xs:attribute name="translation_domain" type="xs:string" />
   </xs:complexType>
 
   <xs:complexType name="filters">

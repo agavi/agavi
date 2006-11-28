@@ -44,15 +44,14 @@ class AgaviDateFormatter extends AgaviDateFormat implements AgaviITranslator
 	protected $type = null;
 
 	/**
-	 * @var        string The format type (full|long|medium|short) if this is 
-	 *                    not a custom format.
-	 */
-	protected $formatType = null;
-
-	/**
 	 * @var        string The custom format string (if any).
 	 */
 	protected $customFormat = null;
+
+	/**
+	 * @var        string The translation domain to translate the format (if any).
+	 */
+	protected $translationDomain = null;
 
 	/**
 	 * @see        AgaviITranslator::getContext()
@@ -69,21 +68,18 @@ class AgaviDateFormatter extends AgaviDateFormat implements AgaviITranslator
 	{
 		$this->context = $context;
 		$type = 'datetime';
-		$formatType = null;
+
+		if(isset($parameters['translation_domain'])) {
+			$this->translationDomain = $parameters['translation_domain'];
+		}
 		if(isset($parameters['type']) && in_array($parameters['type'], array('date', 'time'))) {
 			$type = $parameters['type'];
 		}
 		if(isset($parameters['format'])) {
 			$format = $parameters['format'];
-			if(!in_array($format, array('full', 'long', 'medium', 'short'))) {
-				$this->customFormat = $format;
-				$this->setFormat($format);
-			} else {
-				$formatType = $format;
-			}
+			$this->customFormat = $format;
 		}
 		$this->type = $type;
-		$this->formatType = $formatType;
 	}
 
 	/**
@@ -111,35 +107,61 @@ class AgaviDateFormatter extends AgaviDateFormat implements AgaviITranslator
 		$this->locale = $newLocale;
 
 		if($this->customFormat === null) {
-			$formatName = $this->formatType;
-
-			
-			if($this->type == 'datetime' || $this->type == 'time') {
-				if($this->formatType === null) {
-					$formatName = $this->locale->getCalendarTimeFormatDefaultName('gregorian');
-				} else {
-					$formatName = $this->formatType;
-				}
-				$format = $timeFormat = $this->locale->getCalendarTimeFormatPattern('gregorian', $formatName);
+			$format = $this->resolveSpecifier(null, $this->type);
+			$this->setFormat($format);
+		} else {
+			$format = $this->customFormat;
+			if($this->translationDomain !== null) {
+				$format = $this->getContext()->getTranslationManager()->_($format, $this->translationDomain, $newLocale);
 			}
 
-			if($this->type == 'datetime' || $this->type == 'date') {
-				if($this->formatType === null) {
-					$formatName = $this->locale->getCalendarDateFormatDefaultName('gregorian');
-				} else {
-					$formatName = $this->formatType;
-				}
-				$format = $dateFormat = $this->locale->getCalendarDateFormatPattern('gregorian', $formatName);
-			}
-
-			if($this->type == 'datetime') {
-				$formatName = $this->locale->getCalendarDateTimeFormatDefaultName('gregorian');
-				$formatStr = $this->locale->getCalendarDateTimeFormat('gregorian', $formatName);
-				$format = str_replace(array('{0}', '{1}'), array($timeFormat, $dateFormat), $formatStr);
+			if($this->isDateSpecifier($format)) {
+				$format = $this->resolveSpecifier($format, $this->type);
 			}
 
 			$this->setFormat($format);
 		}
+	}
+
+	protected function resolveSpecifier($spec, $type)
+	{
+		if(!$type) {
+			$type = 'datetime';
+		}
+
+		if($type == 'datetime' || $type == 'time') {
+			if($spec === null) {
+				$formatName = $this->locale->getCalendarTimeFormatDefaultName('gregorian');
+			} else {
+				$formatName = $spec;
+			}
+			$format = $timeFormat = $this->locale->getCalendarTimeFormatPattern('gregorian', $formatName);
+		}
+
+		if($type == 'datetime' || $type == 'date') {
+			if($spec === null) {
+				$formatName = $this->locale->getCalendarDateFormatDefaultName('gregorian');
+			} else {
+				$formatName = $spec;
+			}
+
+			$format = $dateFormat = $this->locale->getCalendarDateFormatPattern('gregorian', $formatName);
+		}
+
+		if($type == 'datetime') {
+			$formatName = $this->locale->getCalendarDateTimeFormatDefaultName('gregorian');
+			$formatStr = $this->locale->getCalendarDateTimeFormat('gregorian', $formatName);
+			$format = str_replace(array('{0}', '{1}'), array($timeFormat, $dateFormat), $formatStr);
+		}
+
+		return $format;
+	}
+
+	protected function isDateSpecifier($format)
+	{
+		static $specifiers = array('full', 'long', 'medium', 'short');
+
+		return in_array($format, $specifiers);
 	}
 }
 

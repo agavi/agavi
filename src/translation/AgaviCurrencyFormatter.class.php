@@ -35,16 +35,19 @@ class AgaviCurrencyFormatter extends AgaviDecimalFormatter implements AgaviITran
 	protected $context = null;
 
 	/**
-	 * @var        bool Defines whether the formatter was initialized with a 
-	 *                  custom format
+	 * @var        string The custom format supplied by the user (if any).
 	 */
-	protected $hasCustomFormat = false;
+	protected $customFormat = null;
 
 	/**
 	 * @var        string The symbol which will be used as currency sign
 	 */
 	protected $currencySymbol = '';
 
+	/**
+	 * @var        string The translation domain to translate the format (if any).
+	 */
+	protected $translationDomain = null;
 
 	/**
 	 * @see        AgaviITranslator::getContext()
@@ -60,9 +63,15 @@ class AgaviCurrencyFormatter extends AgaviDecimalFormatter implements AgaviITran
 	public function initialize(AgaviContext $context, array $parameters = array())
 	{
 		$this->context = $context;
+		if(isset($parameters['translation_domain'])) {
+			$this->translationDomain = $parameters['translation_domain'];
+		}
 		if(isset($parameters['format'])) {
-			$this->setFormat($parameters['format']);
-			$this->hasCustomFormat = true;
+			$this->customFormat = $parameters['format'];
+			// if the translation domain is not set we don't have to delay parsing
+			if($this->translationDomain !== null) {
+				$this->setFormat($parameters['format']);
+			}
 		}
 		if(isset($parameters['currency_symbol'])) {
 			$this->currencySymbol = $parameters['currency_symbol'];
@@ -91,7 +100,11 @@ class AgaviCurrencyFormatter extends AgaviDecimalFormatter implements AgaviITran
 	{
 		$this->groupingSeparator = $newLocale->getNumberSymbolGroup();
 		$this->decimalSeparator = $newLocale->getNumberSymbolDecimal();
-		if(!$this->hasCustomFormat) {
+		if($this->customFormat) {
+			if($this->translationDomain !== null) {
+				$this->setFormat($this->getContext()->getTranslationManager()->_($this->customFormat, $this->translationDomain, $newLocale));
+			}
+		} else {
 			$this->setFormat($newLocale->getCurrencyFormat('__default'));
 		}
 		if($currency = $newLocale->getLocaleCurrency()) {

@@ -34,11 +34,14 @@ class AgaviNumberFormatter extends AgaviDecimalFormatter implements AgaviITransl
 	protected $context = null;
 
 	/**
-	 * @var        bool Defines whether the formatter was initialized with a 
-	 *                  custom format
+	 * @var        string The custom format supplied by the user (if any).
 	 */
-	protected $hasCustomFormat = false;
+	protected $customFormat = null;
 
+	/**
+	 * @var        string The translation domain to translate the format (if any).
+	 */
+	protected $translationDomain = null;
 
 	/**
 	 * @see        AgaviITranslator::getContext()
@@ -54,12 +57,14 @@ class AgaviNumberFormatter extends AgaviDecimalFormatter implements AgaviITransl
 	public function initialize(AgaviContext $context, array $parameters = array())
 	{
 		$this->context = $context;
-		if($parameters instanceof AgaviLocale) {
-			$this->localeChanged($parameters);
-		} else {
-			if(isset($parameters['format'])) {
+		if(isset($parameters['translation_domain'])) {
+			$this->translationDomain = $parameters['translation_domain'];
+		}
+		if(isset($parameters['format'])) {
+			$this->customFormat = $parameters['format'];
+			// if the translation domain is not set we don't have to delay parsing
+			if($this->translationDomain !== null) {
 				$this->setFormat($parameters['format']);
-				$this->hasCustomFormat = true;
 			}
 		}
 	}
@@ -86,7 +91,11 @@ class AgaviNumberFormatter extends AgaviDecimalFormatter implements AgaviITransl
 	{
 		$this->groupingSeparator = $newLocale->getNumberSymbolGroup();
 		$this->decimalSeparator = $newLocale->getNumberSymbolDecimal();
-		if(!$this->hasCustomFormat) {
+		if($this->customFormat) {
+			if($this->translationDomain !== null) {
+				$this->setFormat($this->getContext()->getTranslationManager()->_($this->customFormat, $this->translationDomain, $newLocale));
+			}
+		} else {
 			$this->setFormat($newLocale->getDecimalFormat('__default'));
 		}
 	}

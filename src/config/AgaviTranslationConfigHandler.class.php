@@ -90,18 +90,27 @@ class AgaviTranslationConfigHandler extends AgaviConfigHandler
 					}
 
 					if(isset($translator->number_formatter)) {
+						if($translator->number_formatter->hasAttribute('translation_domain')) {
+							$domainData['num']['params']['translation_domain'] = $translator->number_formatter->getAttribute('translation_domain');
+						}
 						$domainData['num']['type']   = $translator->number_formatter->getAttribute('type', $domainData['num']['type']);
 						$domainData['num']['params'] = $this->getItemParameters($translator->number_formatter, $domainData['num']['params']);
 						$domainData['num']['filters'] = $this->getFilters($translator->number_formatter);
 					}
 
 					if(isset($translator->currency_formatter)) {
+						if($translator->currency_formatter->hasAttribute('translation_domain')) {
+							$domainData['cur']['params']['translation_domain'] = $translator->currency_formatter->getAttribute('translation_domain');
+						}
 						$domainData['cur']['type']   = $translator->currency_formatter->getAttribute('type', $domainData['cur']['type']);
 						$domainData['cur']['params'] = $this->getItemParameters($translator->currency_formatter, $domainData['cur']['params']);
 						$domainData['cur']['filters'] = $this->getFilters($translator->currency_formatter);
 					}
 
 					if(isset($translator->date_formatter)) {
+						if($translator->date_formatter->hasAttribute('translation_domain')) {
+							$domainData['date']['params']['translation_domain'] = $translator->date_formatter->getAttribute('translation_domain');
+						}
 						$domainData['date']['type']   = $translator->date_formatter->getAttribute('type', $domainData['date']['type']);
 						$domainData['date']['params'] = $this->getItemParameters($translator->date_formatter, $domainData['date']['params']);
 						$domainData['date']['filters'] = $this->getFilters($translator->date_formatter);
