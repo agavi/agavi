@@ -30,6 +30,11 @@
 class AgaviDateFormat
 {
 	/**
+	 * @var        string The format string given by the user
+	 */
+	protected $originalFormatString = null;
+
+	/**
 	 * @var        string The format string which will be given to sprintf
 	 */
 	protected $formatString = '';
@@ -437,6 +442,11 @@ class AgaviDateFormat
 	 */
 	protected function internalParseFormat($format, $charToTokenMap)
 	{
+		if($this->originalFormatString == $format) {
+			return;
+		}
+		$this->originalFormatString = $format;
+
 		$this->tokenList = array();
 		$tokenIdx = 0;
 

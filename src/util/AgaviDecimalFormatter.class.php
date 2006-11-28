@@ -149,6 +149,11 @@ class AgaviDecimalFormatter
 	 */
 	public function setFormat($format)
 	{
+		if($this->originalFormatString == $format) {
+			// the given and the currently set format string are equal so we have nothing to do
+			return;
+		}
+
 		$this->originalFormatString = $format;
 
 		if(($pos = strpos($format, ';')) !== false) {
