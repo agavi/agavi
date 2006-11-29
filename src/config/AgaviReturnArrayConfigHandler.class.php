@@ -74,13 +74,15 @@ class AgaviReturnArrayConfigHandler extends AgaviConfigHandler
 	 */
 	protected function convertToArray(AgaviConfigValueHolder $item)
 	{
+		$singularParentName = AgaviInflector::singularize($item->getName());
+
 		$data = array();
 
 		if(!$item->hasChildren()) {
 			$data = $item->getValue();
 		} else {
 			foreach($item->getChildren() as $key => $child) {
-				if(is_int($key) && !$child->hasAttribute('name')) {
+				if((is_int($key) || $key == $singularParentName) && !$child->hasAttribute('name')) {
 					$data[] = $this->convertToArray($child);
 				} else {
 					$name = $child->hasAttribute('name') ? $child->getAttribute('name') : $child->getName();
