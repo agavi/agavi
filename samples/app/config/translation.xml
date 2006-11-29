@@ -82,12 +82,9 @@
 					</parameters>
 				</message_translator>
 
-				<number_formatter type="number" />
-
-				<currency_formatter type="currency" />
-
-				<date_formatter type="date">
+				<date_formatter>
 					<parameters>
+						<parameter name="type">date</parameter>
 						<parameter name="format">full</parameter>
 					</parameters>
 				</date_formatter>
