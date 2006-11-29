@@ -27,7 +27,7 @@
 		<translators default_domain="default">
 			<translator domain="default">
 				
-				<message_translator type="AgaviGettextTranslator">
+				<message_translator class="AgaviGettextTranslator">
 <!--					<parameters>
 						<parameter name="text_domains">
 							<parameters>
@@ -40,12 +40,6 @@
 						</parameter>
 					</parameters>
 -->				</message_translator>
-
-				<number_formatter type="number" />
-
-				<currency_formatter type="currency" />
-
-				<date_formatter type="date" />
 
 			</translator>
 		</translators>

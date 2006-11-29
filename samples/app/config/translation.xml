@@ -68,8 +68,9 @@
 		<translators default_domain="default">
 			<translator domain="default">
 				
-				<message_translator type="AgaviGettextTranslator">
+				<message_translator class="AgaviGettextTranslator">
 					<parameters>
+						<parameter name="store_calls">%core.cache_dir%/data</parameter>
 						<parameter name="text_domains">
 							<parameters>
 								<parameter name="menu">%core.app_dir%/data/i18n</parameter>
