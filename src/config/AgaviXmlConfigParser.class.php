@@ -113,7 +113,10 @@ class AgaviXmlConfigParser extends AgaviConfigParser
 		}
 		
 		if($validationFile) {
-			// TODO: check for file existance
+			if(!is_readable($validationFile)) {
+				$error = 'Validation file "' . $validationFile . '" for configuration file "' . $config . '" does not exist or is unreadable';
+				throw new AgaviUnreadableException($error);
+			}
 			$this->errors = array();
 			set_error_handler(array($this, 'errorHandler'));
 			if(!$doc->schemaValidate($validationFile)) {

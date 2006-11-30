@@ -174,7 +174,6 @@ class AgaviGregorianCalendar extends AgaviCalendar
 		// normalized cutover is in pure date milliseconds; it contains no time
 		// of day or timezone component, and it used to compare against other
 		// pure date values.
-		// TODO: check howto use date ...
 		$cutoverDay = (int) floor($this->fGregorianCutover / AgaviDateDefinitions::MILLIS_PER_DAY);
 		$this->fNormalizedGregorianCutover = $cutoverDay * AgaviDateDefinitions::MILLIS_PER_DAY;
 

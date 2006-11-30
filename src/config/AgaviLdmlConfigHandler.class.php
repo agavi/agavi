@@ -518,19 +518,15 @@ array data format
 						}
 
 						if(isset($calendar->fields)) {
-							if(isset($calendar->fields->alias)) {
-								throw new AgaviException('TODO: alias handling in calendar/fields');
-							} else {
-								foreach($calendar->fields as $field) {
-									$type = $field->getAttribute('type');
-									if(isset($field->displayName)) {
-										$data['calendars'][$calendarName]['fields'][$type]['displayName'] = $field->displayName->getValue();
-									}
-									if(isset($field->relative)) {
-										foreach($field as $relative) {
-											if($relative->getName() == 'relative') {
-												$data['calendars'][$calendarName]['fields'][$type]['relatives'][$relative->getAttribute('type')] = $relative->getValue();
-											}
+							foreach($this->getChildsOrAlias($calendar->fields) as $field) {
+								$type = $field->getAttribute('type');
+								if(isset($field->displayName)) {
+									$data['calendars'][$calendarName]['fields'][$type]['displayName'] = $field->displayName->getValue();
+								}
+								if(isset($field->relative)) {
+									foreach($field as $relative) {
+										if($relative->getName() == 'relative') {
+											$data['calendars'][$calendarName]['fields'][$type]['relatives'][$relative->getAttribute('type')] = $relative->getValue();
 										}
 									}
 								}
@@ -651,20 +647,14 @@ array data format
 				$cf = $nums->currencyFormats;
 
 
-				foreach($cf as $itemLength) {
-					if($itemLength->getName() == 'alias') {
-						throw new AgaviException('TODO: alias handling in calendar/fields');
-					} elseif($itemLength->getName() == 'default') {
+				foreach($this->getChildsOrAlias($cf) as $itemLength) {
+					if($itemLength->getName() == 'default') {
 						$data['numbers']['currencyFormats']['default'] = $itemLength->getAttribute('choice');
 					} elseif($itemLength->getName() == 'currencyFormatLength') {
 						$itemLengthName = $itemLength->getAttribute('type', '__default');
 
-						foreach($itemLength as $itemFormat) {
-							if($itemFormat->getName() == 'alias') {
-								// TODO: alias handling
-								throw new AgaviException('TODO: alias handling in calendar/fields');
-								continue;
-							} elseif($itemFormat->getName() == 'currencyFormat') {
+						foreach($this->getChildsOrAlias($itemLength) as $itemFormat) {
+							if($itemFormat->getName() == 'currencyFormat') {
 								if(isset($itemFormat->pattern)) {
 									$data['numbers']['currencyFormats'][$itemLengthName] = $itemFormat->pattern->getValue();
 								}
