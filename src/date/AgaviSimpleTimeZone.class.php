@@ -1050,8 +1050,7 @@ return true;
 		$this->decodeRules();
 
 		if($dstSavings <= 0) {
-			// TODO: check why this causes errors in australia/adelaide
-			//throw new InvalidArgumentException('The DST savings amount must be a positive number');
+			throw new InvalidArgumentException('The DST savings amount must be a positive number');
 		}
 	}
 
