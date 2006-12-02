@@ -111,12 +111,10 @@ abstract class AgaviAction extends AgaviAttributeHolder
 	/**
 	 * Manually register validators for this action.
 	 *
-	 * @param      AgaviValidatorManager A ValidatorManager instance.
-	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function registerValidators(AgaviValidatorManager $validatorManager)
+	public function registerValidators()
 	{
 	}
 

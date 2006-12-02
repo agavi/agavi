@@ -192,7 +192,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 			if(!method_exists($actionInstance, $registerValidatorsMethod)) {
 				$registerValidatorsMethod = 'registerValidators';
 			}
-			$actionInstance->$registerValidatorsMethod($validatorManager);
+			$actionInstance->$registerValidatorsMethod();
 
 			// process validators
 			$validated = $validatorManager->execute($actionEntry->getParameters());
