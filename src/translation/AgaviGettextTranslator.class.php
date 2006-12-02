@@ -46,6 +46,17 @@ class AgaviGettextTranslator extends AgaviBasicTranslator
 	 * @var        string The name of the plural form function
 	 */
 	protected $pluralFormFunc = null;
+	
+	/**
+	 * @var        bool Whether or not to write a file with all used translations
+	 *                  that can be parsed using xgettext.
+	 */
+	protected $storeTranslationCalls = false;
+	
+	/**
+	 * @var        string The folder to write translation call files to.
+	 */
+	protected $translationCallStoreDir = null;
 
 	/**
 	 * Initialize this Translator.
@@ -68,6 +79,12 @@ class AgaviGettextTranslator extends AgaviBasicTranslator
 
 		if(isset($parameters['text_domain_pattern'])) {
 			$this->domainPathPattern = $parameters['text_domain_pattern'];
+		}
+		
+		if(isset($parameters['store_calls'])) {
+			$this->storeTranslationCalls = true;
+			$this->translationCallStoreDir = $parameters['store_calls'];
+			AgaviToolkit::mkdir($parameters['store_calls'], 0777, true);
 		}
 	}
 
@@ -110,7 +127,16 @@ class AgaviGettextTranslator extends AgaviBasicTranslator
 			$data = isset($this->domainData[$domain]['msgs'][$message]) ? $this->domainData[$domain]['msgs'][$message] : $message;
 		}
 
-		
+		// in "devel" mode, write a gettext() or ngettext() call to a file for xgettext parsing
+		if($this->storeTranslationCalls) {
+			file_put_contents(
+				$this->translationCallStoreDir . DIRECTORY_SEPARATOR . $domain . '.php', 
+				"" . (is_array($message) ? 
+					('ngettext(' . var_export($message[0], true) . ', ' . var_export($message[1], true) . ', ' . var_export($message[2], true) . ')') :
+					('gettext(' . var_export($message, true) . ')')
+				) . ";\n",
+			FILE_APPEND);
+		}
 
 		if($locale) {
 			$this->domainData = $oldDomainData;
