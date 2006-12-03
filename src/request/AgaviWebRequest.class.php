@@ -126,7 +126,7 @@ class AgaviWebRequest extends AgaviRequest
 	{
 		$port = $this->getUrlPort();
 		$scheme = $this->getUrlScheme();
-		return $this->getUrlHost() . ($forcePort || ($scheme == 'https' && $port != 443) || ($scheme == 'http' && $port != 80) ? ':' . $port : '');
+		return $this->getUrlHost() . ($forcePort || AgaviToolkit::isPortNecessary($scheme, $port) ? ':' . $port : '');
 	}
 	
 	/**

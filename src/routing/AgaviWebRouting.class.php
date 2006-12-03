@@ -47,9 +47,22 @@ class AgaviWebRouting extends AgaviRouting
 	 * @var        array An array of default options for gen()
 	 */
 	protected $defaultGenOptions = array(
+		// relative or including scheme and authority
 		'relative' => true,
+		// separator, typically &amp; for HTML, & otherwise
 		'separator' => '&amp;',
-		'use_trans_sid' => false
+		// whether or not to append the SID if necessary
+		'use_trans_sid' => false,
+		// scheme, or true to include, or false to block
+		'scheme' => null,
+		// authority, or true to include, or false to block
+		'authority' => null,
+		// host, or true to include, or false to block
+		'host' => null,
+		// port, or true to include, or false to block
+		'port' => null,
+		// fragment identifier (#foo)
+		'fragment' => null
 	);
 
 	/**
@@ -262,12 +275,70 @@ class AgaviWebRouting extends AgaviRouting
 			$append = str_replace($aso, $options['separator'], $append);
 		}
 
-		if($options['relative']) {
-			return $path . $append;
-		} else {
+		$retval = $path . $append;
+
+		if(
+			!$options['relative'] || 
+			($options['relative'] && (
+				$options['scheme'] !== null || 
+				$options['authority'] !== null || 
+				$options['host'] !== null || 
+				$options['port'] !== null
+			))
+		) {
 			$req = $this->context->getRequest();
-			return $req->getUrlScheme() . '://'. $req->getUrlAuthority() . $path . $append;
+			
+			$scheme = null;
+			if($options['scheme'] !== false) {
+				$scheme = ($options['scheme'] === null ? $req->getUrlScheme() : $options['scheme']);
+			}
+			
+			$authority = '';
+			
+			if($options['authority'] === null) {
+				if(
+					($options['host'] !== null && $options['host'] !== false) && 
+					($options['port'] !== null && $options['port'] !== false)
+				) {
+					$authority = $req->getUrlAuthority();
+				} else {
+					if($options['host'] !== null && $options['host'] !== false) {
+						$authority = $options['host'];
+					} elseif($options['host'] === false) {
+						$authority = '';
+					} else {
+						$authority = $req->getUrlHost();
+					}
+					$port = null;
+					if($options['port'] !== null && $options['port'] !== false) {
+						if(AgaviToolkit::isPortNecessary($options['scheme'] !== null && $options['scheme'] !== false ? $options['scheme'] : $req->getUrlScheme(), $options['port'])) {
+							$port = $options['port'];
+						} else {
+							$port = null;
+						}
+					} elseif($options['port'] === false) {
+						$port = null;
+					} elseif($options['scheme'] === null) {
+						if(!AgaviToolkit::isPortNecessary($req->getUrlScheme(), $port = $req->getUrlPort())) {
+							$port = null;
+						}
+					}
+					if($port !== null) {
+						$authority .= ':' . $port;
+					}
+				}
+			} elseif($options['authority'] !== false) {
+				$authority = $options['authority'];
+			}
+			
+			$retval = ($scheme === null ? '' : $scheme . '://') . $authority . $retval;
 		}
+
+		if($options['fragment'] !== null) {
+			$retval .= '#' . $options['fragment'];
+		}
+		
+		return $retval;
 	}
 }
 

@@ -244,6 +244,35 @@ final class AgaviToolkit
 
 		return $quotient;
 	}
+	
+	/**
+	 * Determines whether a port declaration is necessary in a URL authority.
+	 *
+	 * @param      string The scheme (protocol identifier).
+	 * @param      int    The port.
+	 *
+	 * @return     bool True, if port must be included, otherwise false.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public static function isPortNecessary($scheme, $port)
+	{
+		static $protocolList = array(
+			'ftp' => 21,
+			'ssh' => 22,
+			'telnet' => 23,
+			'gopher' => 70,
+			'http' => 80,
+			'nttp' => 119,
+			'https' => 443,
+			'mms' => 1755,
+		);
+		if(isset($protocolList[$scheme = strtolower($scheme)]) && $protocolList[$scheme] === $port) {
+			return false;
+		}
+		return true;
+	}
 }
 
 ?>
