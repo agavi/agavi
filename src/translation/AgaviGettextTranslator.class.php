@@ -110,9 +110,9 @@ class AgaviGettextTranslator extends AgaviBasicTranslator
 			$count = $message[2];
 			if($this->pluralFormFunc) {
 				$funcName = $this->pluralFormFunc;
-				$msgId = $funcName($count);
+				$msgId = (int) $funcName($count);
 			} else {
-				$msgId = ($count == 1) ? 1 : 0;
+				$msgId = ($count == 1) ? 0 : 1;
 			}
 
 			$msgKey = $singularMsg . chr(0) . $pluralMsg;
@@ -121,7 +121,7 @@ class AgaviGettextTranslator extends AgaviBasicTranslator
 				$pluralMsgs = explode(chr(0), $this->domainData[$domain]['msgs'][$msgKey]);
 				$data = $pluralMsgs[$msgId];
 			} else {
-				$data = ($msgId == 1) ? $singularMsg : $pluralMsg;
+				$data = ($msgId == 0) ? $singularMsg : $pluralMsg;
 			}
 		} else {
 			$data = isset($this->domainData[$domain]['msgs'][$message]) ? $this->domainData[$domain]['msgs'][$message] : $message;
