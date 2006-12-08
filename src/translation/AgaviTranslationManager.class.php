@@ -752,6 +752,12 @@ class AgaviTranslationManager
 			$time = AgaviCalendar::getNow();
 		}
 
+		if(!$zone) {
+			if($locale->getLocaleTimeZone()) {
+				$zone = $this->createTimeZone($locale->getLocaleTimeZone());
+			}
+		}
+
 		if(!$calendarType) {
 			$calendarType = $locale->getLocaleCalendar();
 			if(!$calendarType) {

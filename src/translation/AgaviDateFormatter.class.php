@@ -100,6 +100,14 @@ class AgaviDateFormatter extends AgaviDateFormat implements AgaviITranslator
 			$message = $this->context->getTranslationManager()->createCalendar($message);
 		}
 
+		if(!($message instanceof AgaviCalendar)) {
+			throw new InvalidArgumentException('The date needs to be an int or AgaviCalendar instance');
+		}
+
+		if(($zoneId = $locale->getLocaleTimeZone()) && $locale !== $this->locale) {
+			$message->setTimeZone($this->context->getTranslationManager()->createTimeZone($zoneId));
+		}
+
 		return $fmt->format($message, 'gregorian', $locale);
 	}
 
