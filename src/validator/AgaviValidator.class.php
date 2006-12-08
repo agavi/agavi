@@ -575,8 +575,19 @@ abstract class AgaviValidator extends AgaviParameterHolder
 			 * specified by our own base and validate in each of that
 			 * names
 			 */
-			$array = $this->validationParameters->getParameters();
-			$names = $this->curBase->getValue($array, array());
+			$names = $this->getKeysInCurrentBase();
+
+			// if the names array is empty this means we need to throw an error since
+			// this means the input doesn't exist
+			if(count($names) == 0) {
+				if($this->getParameter('required', true)) {
+					$this->throwError();
+					return self::mapErrorCode($this->getParameter('severity', 'error'));
+				} else {
+					// no reason to throw any error since it wouldn't be included anyways
+					return self::NONE;
+				}
+			}
 
 			// throw the wildcard away
 			$base->shift();
@@ -584,7 +595,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 			$ret = self::SUCCESS;
 
 			// validate in every name defined in the request
-			foreach(array_keys($names) as $name) {
+			foreach($names as $name) {
 				$t = $this->validateInBase($base->pushRetNew($name));
 
 				if($t == self::CRITICAL) {
@@ -651,6 +662,23 @@ abstract class AgaviValidator extends AgaviParameterHolder
 			default:
 				throw new AgaviValidatorException('unknown error code: '.$code);
 		}
+	}
+
+
+	/**
+	 * Returns all available keys in the currently set base.
+	 *
+	 * @return     array The available keys.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com
+	 * @since      0.11.0
+	 */
+	protected function getKeysInCurrentBase()
+	{
+		$array = $this->validationParameters->getParameters();
+		$names = $this->curBase->getValue($array, array());
+
+		return array_keys($names);
 	}
 
 }

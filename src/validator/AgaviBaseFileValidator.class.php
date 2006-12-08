@@ -108,6 +108,27 @@ abstract class AgaviBaseFileValidator extends AgaviValidator
 
 		return true;
 	}
+
+	/**
+	 * Returns all available keys in the currently set base.
+	 *
+	 * @return     array The available keys.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com
+	 * @since      0.11.0
+	 */
+	protected function getKeysInCurrentBase()
+	{
+		$files = $this->getContext()->getRequest()->getFiles();
+		$array = array();
+		foreach($files as $name => $file) {
+			$array[$name] = $file['name'];
+		}
+
+		$names = $this->curBase->getValue($array, array());
+		return array_keys($names);
+	}
+
 }
 
 ?>
