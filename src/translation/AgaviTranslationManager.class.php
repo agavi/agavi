@@ -402,6 +402,10 @@ class AgaviTranslationManager
 	 */
 	protected function getTranslators($domain, &$domainExtra)
 	{
+		if($domain[0] == '.') {
+			$domain = $this->defaultDomain . $domain;
+		}
+
 		$domainParts = explode('.', $domain, 2);
 		$translatorDomain = $domainParts[0];
 		$domainExtra = isset($domainParts[1]) ? $domainParts[1] : '';
