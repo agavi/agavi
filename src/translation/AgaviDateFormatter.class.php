@@ -87,7 +87,11 @@ class AgaviDateFormatter extends AgaviDateFormat implements AgaviITranslator
 	 */
 	public function translate($message, $domain, AgaviLocale $locale = null)
 	{
-		if(!$locale) {
+		if($locale) {
+			$fmt = clone $this;
+			$fmt->localeChanged($locale);
+		} else {
+			$fmt = $this;
 			$locale = $this->locale;
 		}
 
@@ -96,7 +100,7 @@ class AgaviDateFormatter extends AgaviDateFormat implements AgaviITranslator
 			$message = $this->context->getTranslationManager()->createCalendar($message);
 		}
 
-		return $this->format($message, 'gregorian', $locale);
+		return $fmt->format($message, 'gregorian', $locale);
 	}
 
 	/**
