@@ -395,6 +395,34 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	}
 
 	/**
+	 * Retrieves the error message for the given index with fallback. 
+	 *
+	 * If the given index does not exist in the error messages array, it first 
+	 * checks if an unnamed error message exists and returns it or falls back the
+	 * the backup message.
+	 *
+	 * @param      string The name of the error.
+	 * @param      string The backup error message.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	protected function getErrorMessage($index = null, $backupMessage = null)
+	{
+		if($index !== null && isset($this->errorMessages[$index])) {
+			$error = $this->errorMessages[$index];
+		} elseif(isset($this->errorMessages[''])) {
+			// check if a default error exists.
+			$error = $this->errorMessages[''];
+		} else {
+			$error = $backupError;
+		}
+
+		return $error;
+	}
+
+
+	/**
 	 * Submits an error to the error manager.
 	 *
 	 * The stuff in the parameter specified in $index is submitted to the
@@ -412,14 +440,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 */
 	protected function throwError($index = null, $backupError = null)
 	{
-		if($index !== null && isset($this->errorMessages[$index])) {
-			$error = $this->errorMessages[$index];
-		} elseif(isset($this->errorMessages[''])) {
-			// check if a default error exists.
-			$error = $this->errorMessages[''];
-		} else {
-			$error = $backupError;
-		}
+		$error = $this->getErrorMessage($index, $backupError);
 
 		if($this->hasParameter('translation_domain')) {
 			$error = $this->getContext()->getTranslationManager()->_($error, $this->getParameter('translation_domain'));
@@ -534,15 +555,17 @@ abstract class AgaviValidator extends AgaviParameterHolder
 				$this->validatedFieldnames[] = $this->curBase->pushRetNew($argument)->__toString();
 			}
 
+			$errorCode = self::mapErrorCode($this->getParameter('severity', 'error'));
+
 			if($this->hasAllArgumentsSet()) {
 				if(!$this->validate()) {
 					// validation failed, exit with configured error code
-					return self::mapErrorCode($this->getParameter('severity', 'error'));
+					return $errorCode;
 				}
 			} else {
 				if($this->getParameter('required', true)) {
 					$this->throwError();
-					return self::mapErrorCode($this->getParameter('severity', 'error'));
+					return $errorCode;
 				} else {
 					// no reason to throw any error since it wouldn't be included anyways
 					return self::NONE;

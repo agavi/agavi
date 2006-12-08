@@ -115,16 +115,9 @@ abstract class AgaviOperatorValidator extends AgaviValidator implements AgaviIVa
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
-	protected function throwError($index = 'error', $backupError = null)
+	protected function throwError($index = null, $backupError = null)
 	{
-		if($index !== null && isset($this->errorMessages[$index])) {
-			$error = $this->errorMessages[$index];
-		} elseif(isset($this->errorMessages[''])) {
-			// check if a default error exists.
-			$error = $this->errorMessages[''];
-		} else {
-			$error = $backupError;
-		}
+		$error = $this->getErrorMessage($index, $backupError);
 
 		// if no error msg was supplied rethrow the child errors
 		if($error === null) {
