@@ -123,6 +123,12 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	protected $errorMessages = array();
 
 	/**
+	 * @var        string The last error index. When the validator throws an error
+	 *                    the index which was thrown is stored here.
+	 */
+	protected $lastErrorIndex = null;
+
+	/**
 	 * Returns the base path of this validator.
 	 *
 	 * @return     AgaviVirtualArrayPath The basepath of this validator
@@ -415,7 +421,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 			// check if a default error exists.
 			$error = $this->errorMessages[''];
 		} else {
-			$error = $backupError;
+			$error = $backupMessage;
 		}
 
 		return $error;
@@ -440,6 +446,8 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 */
 	protected function throwError($index = null, $backupError = null)
 	{
+		$this->lastErrorIndex = $index;
+
 		$error = $this->getErrorMessage($index, $backupError);
 
 		if($this->hasParameter('translation_domain')) {
@@ -551,32 +559,41 @@ abstract class AgaviValidator extends AgaviParameterHolder
 				return self::SUCCESS;
 			}
 
+			$fieldNames = array();
 			foreach($this->getArguments() as $argument) {
-				$this->validatedFieldnames[] = $this->curBase->pushRetNew($argument)->__toString();
+				$name = $this->curBase->pushRetNew($argument)->__toString();
+				$fieldNames[] = $name;
+				$this->validatedFieldnames[] = $name;
 			}
 
+			$result = self::SUCCESS;
 			$errorCode = self::mapErrorCode($this->getParameter('severity', 'error'));
 
 			if($this->hasAllArgumentsSet()) {
 				if(!$this->validate()) {
 					// validation failed, exit with configured error code
-					return $errorCode;
+					$result = $errorCode;
 				}
 			} else {
 				if($this->getParameter('required', true)) {
 					$this->throwError();
-					return $errorCode;
+					$result = $errorCode;
 				} else {
 					// no reason to throw any error since it wouldn't be included anyways
-					return self::NONE;
+					$result = self::NONE;
 				}
 			}
 
+			$vm = $this->getContext()->getValidatorManager();
+			foreach($fieldNames as $fieldName) {
+				$vm->addFieldResult($this, $fieldName, $result, $this->lastErrorIndex);
+			}
+
 			// put dependencies provided by this validator into manager
-			if(count($this->getParameter('provides')) > 0) {
+			if($result == self::SUCCESS && count($this->getParameter('provides')) > 0) {
 				$this->parentContainer->getDependencyManager()->addDependTokens($this->getParameter('provides'), $this->curBase);
 			}
-			return self::SUCCESS;
+			return $result;
 
 		} elseif($base->left() !== '') {
 			/*

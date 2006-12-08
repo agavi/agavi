@@ -50,6 +50,11 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	protected $errors = array();
 
 	/**
+	 * @var        array The results for each field which has been validated.
+	 */
+	protected $fieldResults = array();
+
+	/**
 	 * @var        int The highest error severity in the container.
 	 */
 	protected $result = AgaviValidator::SUCCESS;
@@ -416,5 +421,23 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	{
 		$this->errors[$validator->getName()] = array($validator, $errorMsg);
 	}
+
+	/**
+	 * Adds a validation result for a given field.
+	 *
+	 * @param      AgaviValidator The validator.
+	 * @param      string The name of the field which has been validated.
+	 * @param      int    The result of the validation.
+	 * @param      string The error index which has been thrown
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 * @see        AgaviIValidatorContainer::reportError
+	 */
+	public function addFieldResult(AgaviValidator $validator, $fieldName, $result, $errorIdx = null)
+	{
+		$this->fieldResults[$fieldName][] = array($validator->getName(), $result, $errorIdx);
+	}
+
 }
 ?>
