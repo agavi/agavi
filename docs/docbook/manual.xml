@@ -841,6 +841,205 @@ $bar2 = $this-&gt;getContext()-&gt;getModel('SinglesBar'); //returns the same in
     </section>
 
     <section>
+      <title>Internationalization</title>
+
+      <para>The i18n and l10n support in Agavi provides you with tools which
+      help you to easily make your application available to different
+      cultures. When internationalizing your application there are many things
+      to take care of. The <ulink url="http://en.wikipedia.org/wiki/I18N">I18N
+      page at Wikipedia</ulink> contains a list of what needs to be taken care
+      about. Agavi provides you an easy to use solution to most<footnote>
+          <para>Agavi currently helps you with the following
+          items:<itemizedlist>
+              <listitem>
+                <para>Language translation (text strings, entire
+                templates)</para>
+              </listitem>
+
+              <listitem>
+                <para>Formatting date and time</para>
+              </listitem>
+
+              <listitem>
+                <para>Formatting of numbers and currencies</para>
+              </listitem>
+
+              <listitem>
+                <para>Time zone support</para>
+              </listitem>
+
+              <listitem>
+                <para>Localized territory, country, language and currency
+                names</para>
+              </listitem>
+            </itemizedlist></para>
+        </footnote> of these points. Agavi can support these features because
+      we are bundling the <ulink url="http://www.unicode.org/cldr/">Unicode
+      Common Locale Data Repository</ulink> (CLDR) and the <ulink
+      url="www.twinsun.com/tz/tz-link.htm">"Olson" timezone database</ulink>
+      and making it available to applications. Agavi additionally includes a
+      port of the calendar functionality from the <ulink
+      url="http://icu.sourceforge.net">ICU project</ulink> which allows you to
+      handle and calculate with date and time in millisecond precision from
+      about 50000 BC to 50000 AD.</para>
+
+      <para>To distinguish between the different settings for each culture
+      Agavi uses the notion of locales. Each locale is uniquely defined by a
+      locale identifier (as defined in the <ulink
+      url="http://www.unicode.org/reports/tr35/#Identifiers">LDML
+      definition</ulink>). You can only access these locales which are <link
+      linkend="reference-translation-define_available_locales">defined as
+      being available to your application</link>. Before using any of the
+      <link linkend="reference-translation-translation_methods">translation
+      related methods</link> of the
+      <classname>AgaviTranslationManager</classname> you need to <link
+      linkend="reference-translation-set_current_locale">specify the currently
+      active locale</link> and at least one translation domain defining your
+      message translator and optionally a different number/currency/date
+      formatter or options to them. Currently Agavi only supports the
+      definition of translation strings by using <ulink
+      url="http://www.gnu.org/software/gettext/">gettext</ulink> as message
+      translator (This doesn't use the gettext functionaly of PHP tho, but a
+      custom parser for the .mo format used by gettext) but you can easily
+      <link linkend="reference-translation-custom_message_translators">write
+      your own custom message translators</link>.</para>
+
+      <section>
+        <title>translation domains?!</title>
+
+        <para>Translation domains allow you to define different translators or
+        different formats for the formatters. This allows you to define one
+        domain which would read the translation messages from the database and
+        another to read it from gettext. Or you can define different formats
+        which you want to use when formatting or parsing dates.<note>
+            <para>This should not be confused with gettexts text
+            domains!</para>
+          </note></para>
+      </section>
+
+      <section>
+        <title>Lets get started</title>
+
+        <para>To use the translation you have to enable
+        <code>use_translation</code> in your <filename>settings.xml</filename>
+        and set up your translation.xml.<example>
+            <title>translation.xml</title>
+
+            <para><programlisting>&lt;configurations&gt;
+ &lt;configuration&gt;
+  &lt;available_locales default_locale="en_US" default_timezone="Europe/London"&gt;
+   &lt;!-- English, United States --&gt;
+   &lt;available_locale identifier="en_US" /&gt;
+   &lt;!-- German, Germany and set the default currency to US Dollar --&gt;
+   &lt;available_locale identifier="de_DE@currency=USD" /&gt;
+  &lt;/available_locales&gt;
+
+  &lt;translators default_domain="frontend"&gt;
+
+   &lt;translator domain="frontend"&gt;
+    &lt;message_translator class="AgaviGettextTranslator"&gt;
+     &lt;!-- This would look for the gettext domain files in gettext compatible way --&gt;
+     &lt;parameter name="text_domain_pattern"&gt;%core.app_dir%/locales/frontend/${locale}/LC_MESSAGES/${domain}.mo&lt;/parameter&gt;
+    &lt;/message_translator&gt;
+   &lt;/translator&gt;
+
+   &lt;translator domain="backend"&gt;
+    &lt;message_translator class="AgaviGettextTranslator"&gt;
+     &lt;parameter name="text_domain_pattern"&gt;%core.app_dir%/locales/backend/${locale}/LC_MESSAGES/${domain}.mo&lt;/parameter&gt;
+    &lt;/message_translator&gt;
+
+    &lt;date_formatter&gt;
+     &lt;parameter name="format"&gt;full&lt;/parameter&gt;
+    &lt;/date_formatter&gt;
+   &lt;/translator&gt;
+  &lt;/translators&gt;
+ &lt;/configuration&gt;
+&lt;/configurations&gt;</programlisting>That this example defines 2 locales as
+            being available and "en_US" being the default locale should be
+            obvious. The not so ovious part is the "@currency=USD": you can
+            specify default options which will be used when the locale was
+            requested and the option was not set when the locale was
+            requested. You can also give parameters to the locales to set
+            extended information which can be <emphasis>queried</emphasis>
+            without loading the locale or <link
+            linkend="reference-translation-overwrite_cldr_data">overwrite the
+            cldr data</link> (not shown here).</para>
+
+            <para>The slightly larger block of the file defines 2 translation
+            domains: frontend (the default one) and backend. Both translators
+            are using the gettext implementation. The parameters differ for
+            each message translator implementation. To use the formatters with
+            the default format of each locale you don't have to configure
+            anything.</para>
+          </example>When everything is configured you can start using the the
+        _*() methods of the <classname>AgaviTranslationManager</classname>.
+        For the examples assume <varname>$tm</varname> is the
+        <classname>AgaviTranslationManager</classname> instance and
+        <code>de_DE</code> the current locale.<example>
+            <title>Translation message strings</title>
+
+            <para><programlisting>$tm-&gt;_('Your Message');
+#&gt; Deine Nachricht (default translation domain)
+
+$tm-&gt;_('%s said: I am your father %s!', 'backend', null, array('Darth Vader', 'Luke'));
+#&gt; Darth Vader sagte: Ich bin dein Vater Luke!
+
+$tm-&gt;_('Your Message', null, 'en_US');
+#&gt; Your Message
+
+$tm-&gt;__('%d registered user', '%d registered users', 3, 'backend', 'en_US', array(3));
+#&gt; 3 registered users</programlisting></para>
+          </example><example>
+            <title>Formatting currencies and numbers</title>
+
+            <para><programlisting>$tm-&gt;_c(5000);
+#&gt; 5.000,00 $
+
+$tm-&gt;_c(5000.12345);
+#&gt; 5.000,12 $
+
+$tm-&gt;_c('12345678901234567890.98765');
+#&gt; 12.345.678.901.234.567.890,99 $
+
+$tm-&gt;_c(5000.12345, null, 'en_US@currency=EUR');
+#&gt; €5,000.12
+
+$tm-&gt;_n(5000.00);
+#&gt; 5.000
+
+$tm-&gt;_n(5000.12345);
+#&gt; 5.000,12345
+
+$tm-&gt;_n("12345678901234567890.98765", 'backend', 'en_US');
+#&gt; 12,345,678,901,234,567,890.98765</programlisting></para>
+          </example><example>
+            <title>Formatting dates</title>
+
+            <para><programlisting>$tm-&gt;_d(time());
+#&gt; 08.12.2006 07:42:43
+
+$tm-&gt;_d(time(), null, 'en_US');
+#&gt; Dec 8, 2006 7:42:43 AM
+
+$tm-&gt;_d(time(), 'backend');
+#&gt; Freitag, 8. Dezember 2006 7:42 Uhr MEZ
+
+$tm-&gt;_d(time(), 'backend', '@timezone=Europe/London');
+#&gt; Freitag, 8. Dezember 2006 6:42 Uhr GMT+00:00
+
+$tm-&gt;_d(time(), 'backend', 'en_US@timezone=Europe/London');
+&gt;# Friday, December 8, 2006 6:42:43 AM Europe/London</programlisting></para>
+          </example></para>
+      </section>
+
+      <section>
+        <title></title>
+
+        <para></para>
+      </section>
+    </section>
+
+    <section>
       <title>Databases</title>
 
       <para>how to retrieve a connection, why do it using the framework,
@@ -1019,6 +1218,36 @@ $bar2 = $this-&gt;getContext()-&gt;getModel('SinglesBar'); //returns the same in
       <section>
         <title id="ref_translation_configuration">Configuration via
         translation.xml</title>
+
+        <para></para>
+      </section>
+
+      <section id="reference-translation-define_available_locales">
+        <title>Defining available locales</title>
+
+        <para></para>
+      </section>
+
+      <section id="reference-translation-set_current_locale">
+        <title>Setting the current locale</title>
+
+        <para></para>
+      </section>
+
+      <section id="reference-translation-translation_methods">
+        <title>Methods being used for translation</title>
+
+        <para></para>
+      </section>
+
+      <section id="reference-translation-custom_message_translators">
+        <title>Writing custom message translators</title>
+
+        <para></para>
+      </section>
+
+      <section id="reference-translation-overwrite_cldr_data">
+        <title>Overwriting the data from the CLDR</title>
 
         <para></para>
       </section>
