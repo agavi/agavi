@@ -562,7 +562,17 @@ class AgaviTranslationManager
 	 */
 	public function getLocaleFromIdentifier($identifier)
 	{
-		$idData = AgaviLocale::parseLocaleIdentifier($identifier);
+		// enable shortcut notation to only set options to the current locale
+		if($identifier[0] == '@' && $this->currentLocaleIdentifier) {
+			$idData = AgaviLocale::parseLocaleIdentifier($this->currentLocaleIdentifier);
+			$identifier = $idData['locale_str'] . $identifier;
+
+			$newIdData = AgaviLocale::parseLocaleIdentifier($identifier);
+			$idData['options'] = array_merge($idData['options'], $newIdData['options']);
+		} else {
+			$idData = AgaviLocale::parseLocaleIdentifier($identifier);
+		}
+		// this doesn't care about the options
 		$availableLocale = $this->availableLocales[$this->getClosestMatchingLocale($identifier)];
 
 		if(!isset($this->localeDataCache[$idData['locale_str']])) {
