@@ -543,6 +543,60 @@ class AgaviDecimalFormatter
 	{
 		return vsprintf(($number < 0) ? $this->negativeFormatString : $this->formatString, $this->prepareNumber($number, $currencySymbol));
 	}
+
+	/**
+	 * Returns the rounding mode.
+	 *
+	 * @return     int The rounding mode.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getRoundingMode()
+	{
+		return $this->roundingMode;
+	}
+
+	/**
+	 * Sets the rounding mode.
+	 *
+	 * @return     string The rounding mode.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function setRoundingMode($mode)
+	{
+		$this->roundingMode = $mode;
+	}
+
+
+	/**
+	 * Maps a string rounding mode definition to the rounding mode constants.
+	 *
+	 * @param      string    The mode string.
+	 *
+	 * @return     string    The rounding mode constant.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getRoundingModeFromString($mode)
+	{
+		static $map = array(
+			'none' => self::ROUND_NONE,
+			'scientific' => self::ROUND_SCIENTIFIC,
+			'financial' => self::ROUND_FINANCIAL,
+			'floor' => self::ROUND_FLOOR,
+			'ceil' => self::ROUND_CEIL,
+		);
+
+		if(!isset($map[$mode])) {
+			throw new InvalidArgumentException('Unknown rounding mode "' . $mode . '"');
+		}
+
+		return $map[$mode];
+	}
 }
 
 ?>
