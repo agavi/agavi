@@ -63,6 +63,9 @@ class AgaviCurrencyFormatter extends AgaviDecimalFormatter implements AgaviITran
 	public function initialize(AgaviContext $context, array $parameters = array())
 	{
 		$this->context = $context;
+		if(!empty($parameters['rounding_mode'])) {
+			$this->setRoundingMode($this->getRoundingModeFromString($parameters['rounding_mode']));
+		}
 		if(isset($parameters['translation_domain'])) {
 			$this->translationDomain = $parameters['translation_domain'];
 		}
