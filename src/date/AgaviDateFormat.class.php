@@ -231,7 +231,8 @@ class AgaviDateFormat
 					break;
 
 				case self::T_HOUR_1_24:
-					$out .= str_pad($data[AgaviDateDefinitions::HOUR_OF_DAY] + 1, $count, '0', STR_PAD_LEFT);
+					$hour = $data[AgaviDateDefinitions::HOUR_OF_DAY];
+					$out .= str_pad($hour == 0 ? 24 : $hour, $count, '0', STR_PAD_LEFT);
 					break;
 
 				case self::T_HOUR_0_23:
@@ -287,7 +288,8 @@ class AgaviDateFormat
 					break;
 
 				case self::T_HOUR_1_12:
-					$out .= str_pad($data[AgaviDateDefinitions::HOUR] + 1, $count, '0', STR_PAD_LEFT);
+					$hour = $data[AgaviDateDefinitions::HOUR];
+					$out .= str_pad($hour == 0 ? 12 : $hour, $count, '0', STR_PAD_LEFT);
 					break;
 
 				case self::T_HOUR_0_11:
@@ -594,8 +596,12 @@ class AgaviDateFormat
 					$number = (int) substr($dateString, $datePos, $token[1]);
 
 					$datePos += $token[1];
-					if($dateField == AgaviDateDefinitions::MONTH || $token[0] == AgaviDateFormat::T_HOUR_1_24 || $token[0] == AgaviDateFormat::T_HOUR_1_12) {
-						$number -= 1;
+					if($dateField == AgaviDateDefinitions::MONTH) {
+						if($token[0] == AgaviDateFormat::T_HOUR_1_24 && $number == 24) {
+							$number = 0;
+						} elseif($token[0] == AgaviDateFormat::T_HOUR_1_12 && $number == 12) {
+							$number = 0;
+						}
 					}
 					if(self::T_QUARTER == $token[0] || self::T_SA_QUARTER == $token[0]) {
 						// only set the quarter if the date hasn't been set on the calendar object
