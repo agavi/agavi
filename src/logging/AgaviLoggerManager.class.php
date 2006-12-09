@@ -235,14 +235,14 @@ class AgaviLoggerManager
 	 */
 	public function log(AgaviLoggerMessage $message, $logger = null)
 	{
-		if(is_null($logger)) {
+		if($logger === null) {
 			foreach($this->loggers as $logger) {
 				$logger->log($message);
 			}
-		} elseif(!is_null($logger = self::getLogger($logger))) {
+		} elseif(($logger = $this->getLogger($logger)) !== null) {
 			$logger->log($message);
 		} else {
-			throw new AgaviLoggingException("{$logger} Logger is not configured.");
+			throw new AgaviLoggingException('Logger "' . $logger . '" has not been configured.');
 		}
 	}
 
