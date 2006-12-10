@@ -215,7 +215,7 @@ class AgaviWebRouting extends AgaviRouting
 				$p = $params;
 				foreach($routes as $myRoute) {
 					foreach($this->routes[$myRoute]['opt']['pattern_parameters'] as $param) {
-						if(isset($p[$param])) {
+						if(array_key_exists($param, $p)) {
 							unset($p[$param]);
 						}
 					}
