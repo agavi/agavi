@@ -255,10 +255,16 @@ class AgaviLoggerManager
 	 */
 	public function shutdown()
 	{
+		$appenders = array();
 		// loop through our loggers and shut them all down
 		foreach($this->loggers as $name => $logger) {
+			$appenders = $appenders + $logger->getAppenders();
 			$logger->shutdown();
 			unset($this->loggers[$name]);
+		}
+		// loop through our appenders and shut them all down
+		foreach($appenders as $appender) {
+			$appender->shutdown();
 		}
 	}
 }

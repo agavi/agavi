@@ -128,6 +128,19 @@ class AgaviLogger
 	}
 
 	/**
+	 * Returns a list of appenders for this logger.
+	 *
+	 * @return     array An associative array of appender names and instances.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getAppenders()
+	{
+		return $this->appenders;
+	}
+
+	/**
 	 * Set the level.
 	 *
 	 * @param      int A log level.
@@ -148,10 +161,6 @@ class AgaviLogger
 	 */
 	public function shutdown()
 	{
-		// loop through our appenders and shut them all down
-		foreach($this->appenders as $appender) {
-			$appender->shutdown();
-		}
 	}
 }
 
