@@ -160,6 +160,7 @@ class AgaviValidatorConfigHandler extends AgaviConfigHandler
 		$errors = array();
 
 		$stdMethod = $parameters['method'];
+		$stdSeverity = $parameters['severity'];
 		$name = $validator->getAttribute('name', uniqid('val'.rand()));
 
 		$parameters = array_merge($this->classMap[$validator->getAttribute('class')]['parameters'], $parameters);
