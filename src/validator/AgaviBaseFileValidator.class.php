@@ -75,7 +75,11 @@ abstract class AgaviBaseFileValidator extends AgaviValidator
 		$request = $this->getContext()->getRequest();
 
 		foreach($this->getArguments() as $argument) {
-			$name = $argument;
+			if($argument) {
+				$name = $this->curBase->pushRetNew($argument)->__toString();
+			} else {
+				$name = $this->curBase->__toString();
+			}
 
 			if($request->getFileError($name) != UPLOAD_ERR_OK) {
 				$this->throwError('upload_failed');
@@ -119,13 +123,9 @@ abstract class AgaviBaseFileValidator extends AgaviValidator
 	 */
 	protected function getKeysInCurrentBase()
 	{
-		$files = $this->getContext()->getRequest()->getFiles();
-		$array = array();
-		foreach($files as $name => $file) {
-			$array[$name] = $file['name'];
-		}
+		$files = $this->getContext()->getRequest()->getFiles(false);
 
-		$names = $this->curBase->getValue($array, array());
+		$names = $this->curBase->getValue($files, array());
 		return array_keys($names);
 	}
 

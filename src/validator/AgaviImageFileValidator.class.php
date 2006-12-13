@@ -59,6 +59,11 @@ class AgaviImageFileValidator  extends AgaviBaseFileValidator
 		}
 
 		$name = $this->getArgument();
+		if($name) {
+			$name = $this->curBase->pushRetNew($name)->__toString();
+		} else {
+			$name = $this->curBase->__toString();
+		}
 
 		$request = $this->parentContainer->getContext()->getRequest();
 
