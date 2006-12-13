@@ -316,6 +316,12 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 							$value = iconv($encoding, 'UTF-8', $value);
 						}
 					}
+				} else {
+					if(is_array($value)) {
+						$value = array_map('strval', $value);
+					} else {
+						$value = (string) $value;
+					}
 				}
 				
 				if($element->nodeName == 'input') {
