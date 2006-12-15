@@ -44,6 +44,9 @@ class AgaviException extends Exception
 	 */
 	public static function printStackTrace(Exception $e, AgaviContext $context = null, AgaviResponse $response = null)
 	{
+		// discard any previous output waiting in the buffer
+		while(@ob_end_clean());
+		
 		// throw away any response data that might be there
 		if($context !== null && ($c = $context->getController()) !== null && $response !== null) {
 			if($response->isLocked()) {
