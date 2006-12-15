@@ -69,8 +69,8 @@ class AgaviFileLoggerAppender extends AgaviLoggerAppender
 	protected function getHandle()
 	{
 		if(is_null($this->handle)) {
-			if(!$this->handle = fopen($this->filename, 'a')) {
-				throw new AgaviLoggingException("Cannot open file (" . $this->filename . ")");
+			if(!is_writable(dirname($this->filename)) || (file_exists($this->filename) && !is_writable($this->filename)) || !$this->handle = fopen($this->filename, 'a')) {
+				throw new AgaviLoggingException('Cannot open file "' . $this->filename . '", please check permissions on file or directory.');
 			}
 		}
 		return $this->handle;
@@ -110,8 +110,8 @@ class AgaviFileLoggerAppender extends AgaviLoggerAppender
 		}
 
 		$str = sprintf("%s\n", $this->getLayout()->format($message));
-		if(fwrite($this->getHandle(), $str) === FALSE) {
-			throw new AgaviLoggingException("Cannot write to file ( " . $this->filename . ")");
+		if(fwrite($this->getHandle(), $str) === false) {
+			throw new AgaviLoggingException('Cannot write to file "' . $this->filename . '".');
 		}
 	}
 }
