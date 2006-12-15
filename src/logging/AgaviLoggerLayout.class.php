@@ -25,7 +25,7 @@
  *
  * @version    $Id$
  */
-abstract class AgaviLoggerLayout
+abstract class AgaviLoggerLayout extends AgaviParameterHolder
 {
 	/**
 	 * @var        AgaviContext An AgaviContext instance.
@@ -49,6 +49,7 @@ abstract class AgaviLoggerLayout
 	public function initialize(AgaviContext $context, array $parameters = array())
 	{
 		$this->context = $context;
+		$this->parameters = $parameters;
 	}
 
 	/**

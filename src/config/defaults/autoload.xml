@@ -110,6 +110,7 @@
 			<autoload name="AgaviLoggerManager">%core.agavi_dir%/logging/AgaviLoggerManager.class.php</autoload>
 			<autoload name="AgaviLoggerMessage">%core.agavi_dir%/logging/AgaviLoggerMessage.class.php</autoload>
 			<autoload name="AgaviPassthruLoggerLayout">%core.agavi_dir%/logging/AgaviPassthruLoggerLayout.class.php</autoload>
+			<autoload name="AgaviTimestampLoggerLayout">%core.agavi_dir%/logging/AgaviTimestampLoggerLayout.class.php</autoload>
 			<autoload name="AgaviStderrLoggerAppender">%core.agavi_dir%/logging/AgaviStderrLoggerAppender.class.php</autoload>
 			<autoload name="AgaviStdoutLoggerAppender">%core.agavi_dir%/logging/AgaviStdoutLoggerAppender.class.php</autoload>
 
