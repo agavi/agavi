@@ -67,7 +67,7 @@
     <xs:sequence>
       <xs:element name="logger" type="logger" maxOccurs="unbounded" />
     </xs:sequence>
-    <xs:attribute name="default_logger" type="xs:string" />
+    <xs:attribute name="default" type="xs:string" use="required" />
   </xs:complexType>
   <xs:complexType name="logger">
     <xs:sequence maxOccurs="unbounded">

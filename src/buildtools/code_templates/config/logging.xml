@@ -46,7 +46,7 @@
 
 	<configuration>
 
-		<loggers>
+		<loggers default="default">
 
 			<!-- logs only DEBUG messages -->
 			<logger name="debug" class="AgaviLogger" level="AgaviLogger::DEBUG">
