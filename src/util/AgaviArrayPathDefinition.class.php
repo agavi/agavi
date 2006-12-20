@@ -206,5 +206,40 @@ final class AgaviArrayPathDefinition
 
 		return array('parts' => $parts, 'absolute' => $absolute);
 	}
+
+
+	/**
+	 * Returns the flat key names of an array.
+	 *
+	 * This method calls itself recursivly to flatten the keys.
+	 *
+	 * @param      array The array which keys should be returned.
+	 * @param      string The prefix for the name (only for internal use).
+	 *
+	 * @return     array The flattened keys.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public static function getFlatKeyNames(array $array, $prefix = '')
+	{
+		$names = array();
+		foreach($array as $key => $value) {
+			if(!$prefix) {
+				// create the top node when no prefix was given
+				$name = $key;
+			} else {
+				$name = $prefix . '[' . $key . ']';
+			}
+
+			if(is_array($value)) {
+				$names = array_merge($names, AgaviArrayPathDefinition::getFlatKeyNames($value, $name));
+			} else {
+				$names[] = $name;
+			}
+		}
+		return $names;
+	}
+
 }
 ?>

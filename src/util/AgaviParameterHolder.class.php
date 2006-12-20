@@ -94,6 +94,21 @@ class AgaviParameterHolder
 	}
 
 	/**
+	 * Retrieve an array of flattened parameter names. This means when a parameter
+	 * is an array you wont get the name of the parameter in the result but 
+	 * instead all child keys appended to the name (like foo[0],foo[1][0], ...)
+	 *
+	 * @return     array An indexed array of parameter names.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getFlatParameterNames()
+	{
+		return AgaviArrayPathDefinition::getFlatKeyNames($this->parameters);
+	}
+
+	/**
 	 * Retrieve an array of parameters.
 	 *
 	 * @return     array An associative array of parameters.
