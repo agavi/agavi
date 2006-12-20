@@ -7,7 +7,7 @@
 -->
 <configurations>
 	<configuration>
-		<loggers>
+		<loggers default="default">
 
 			<logger name="default" class="TestLogger3" level="TestLogger::DEBUG">
 				<appenders>
