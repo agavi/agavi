@@ -99,10 +99,12 @@ class AgaviLoggingConfigHandler extends AgaviConfigHandler
 					$layouts[$name]['params'] = $this->getItemParameters($layout, $layouts[$name]['params']);
 				}
 			}
-			
-			$defaultLogger = $cfg->loggers->getAttribute('default');
-			if(!isset($loggers[$defaultLogger])) {
-				throw new AgaviConfigurationException(sprintf('Logger "%s" is configured as default, but does not exist.', $defaultLogger));
+
+			if(isset($cfg->loggers)) {
+				$defaultLogger = $cfg->loggers->getAttribute('default');
+				if(!isset($loggers[$defaultLogger])) {
+					throw new AgaviConfigurationException(sprintf('Logger "%s" is configured as default, but does not exist.', $defaultLogger));
+				}
 			}
 		}
 
