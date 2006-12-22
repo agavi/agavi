@@ -361,7 +361,7 @@ class AgaviVirtualArrayPath
 	{
 		$p = $this->pushRetNew($path);
 
-		return $p->hasValue($array, $value);
+		return $p->hasValue($array);
 	}
 
 	/**
