@@ -269,6 +269,19 @@ class AgaviVirtualArrayPath
 	}
 
 	/**
+	 * Checks if a value exists  at the path of this instance in the given array.
+	 * 
+	 * @param      array The array to check.
+	 * 
+	 * @author     Dominik del Bondio
+	 * @since      0.11.0
+	 */
+	public function hasValue(array &$array)
+	{
+		return AgaviArrayPathDefinition::hasValue($this->parts, $array);
+	}
+
+	/**
 	 * Returns the value at the path of this instance in the given array.
 	 * 
 	 * @param      array The array to get the data from.
@@ -333,6 +346,22 @@ class AgaviVirtualArrayPath
 		$p = $this->pushRetNew($path);
 
 		$p->setValueFromArray($array, $value);
+	}
+
+	/**
+	 * Checks if a value at the given child path exists in the given array.
+	 * 
+	 * @param      string The child path appended to the path in this instance.
+	 * @param      array The array to check.
+	 * 
+	 * @author     Dominik del Bondio
+	 * @since      0.11.0
+	 */
+	public function hasValueByChildPath($path, array &$array)
+	{
+		$p = $this->pushRetNew($path);
+
+		return $p->hasValue($array, $value);
 	}
 
 	/**
