@@ -95,14 +95,15 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	 */
 	public function getError($name)
 	{
-		$errors = $this->getAttribute('errors', 'org.agavi.validation.result', array());
-		$retval = null;
+		$vm = $this->getContext()->getValidatorManager();
+		$incidents = $vm->getFieldIncidents($name, AgaviValidator::NOTICE);
 
-		if(isset($errors[$name]['messages'][0])) {
-			$retval = $errors[$name]['messages'][0];
+		if(count($incidents) == 0) {
+			return null;
 		}
 
-		return $retval;
+		$errors = $incidents[0]->getErrors();
+		return $errors[0]->getMessage();
 	}
 
 	/**
@@ -116,11 +117,7 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	 */
 	public function getErrorNames()
 	{
-		$errors = $this->getAttribute('errors', 'org.agavi.validation.result', array());
-		if(isset($errors[''])) {
-			unset($errors['']);
-		}
-		return array_keys($errors);
+		return $this->getContext()->getValidatorManager()->getFailedFields();
 	}
 
 	/**
@@ -138,7 +135,25 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	 */
 	public function getErrors($name = null)
 	{
-		$errors = $this->getAttribute('errors', 'org.agavi.validation.result', array());
+		$vm = $this->getContext()->getValidatorManager();
+		$errors = array();
+
+		foreach($vm->getIncidents(AgaviValidator::NOTICE) as $incident) {
+			$validator = $incident->getValidator();
+			foreach($incident->getErrors() as $error) {
+				$msg = $error->getMessage();
+				foreach($error->getFields() as $field) {
+					if(!isset($errors[$field])) {
+						$errors[$field] = array('messages' => array(), 'validators' => array());
+					}
+					$errors[$field]['messages'][] = $msg;
+					if($validator) {
+						$errors[$field]['validators'][] = $validator->getName();
+					}
+				}
+			}
+		}
+
 		if($name === null) {
 			return $errors;
 		} else {
@@ -160,29 +175,28 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	 */
 	public function getErrorMessages($name = null)
 	{
-		$errors = $this->getAttribute('errors', 'org.agavi.validation.result', array());
+		$vm = $this->getContext()->getValidatorManager();
 
 		if($name !== null) {
-			return isset($errors[$name]['messages']) ? $errors[$name]['messages'] : null;
+			$incidents = $vm->getFieldIncidents($name, AgaviValidator::NOTICE);
+			$msgs = array();
+			foreach($incidents as $incident) {
+				foreach($incident->getErrors() as $error) {
+					$msgs[] = $error->getMessage();
+				}
+			}
+			return $msgs;
 		} else {
 			$msgs = array();
 
-			foreach($errors as $errorName => $error) {
-				foreach($error['messages'] as $message) {
-					if(!isset($msgs[$message])) {
-						$msgs[$message] = array();
-					}
-					$msgs[$message][] = $errorName;
+			$incidents = $vm->getIncidents(AgaviValidator::NOTICE);
+			$msgs = array();
+			foreach($incidents as $incident) {
+				foreach($incident->getErrors() as $error) {
+					$msgs[] = array('message' => $error->getMessage(), 'errors' => $error->getFields());
 				}
 			}
-
-			$retMsgs = array();
-			$i = 0;
-			foreach($msgs as $message => $errorNames) {
-				$retMsgs[$i] = array('message' => $message, 'errors' => $errorNames);
-				++$i;
-			}
-			return $retMsgs;
+			return $msgs;
 		}
 	}
 
@@ -213,8 +227,7 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	 */
 	public function hasError($name)
 	{
-		$errors = $this->getAttribute('errors', 'org.agavi.validation.result', array());
-		return isset($errors[$name]);
+		return $this->getContext()->getValidatorManager()->isFieldFailed($name);
 	}
 
 
@@ -229,7 +242,7 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	 */
 	public function hasErrors()
 	{
-		return (count($this->getAttribute('errors', 'org.agavi.validation.result', array())) > 0);
+		return $this->getContext()->getValidatorManager()->getResult() > AgaviValidator::NOTICE;
 	}
 
 	/**
@@ -261,53 +274,20 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	}
 
 	/**
-	 * Remove an error.
-	 *
-	 * @param      string An error name.
-	 *
-	 * @return     string An error message, if the error was removed, otherwise
-	 *                    null.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @since      0.9.0
-	 */
-	public function removeError($name)
-	{
-		$errors =& $this->getAttribute('errors', 'org.agavi.validation.result', array());
-		$retval = null;
-
-		if(isset($errors[$name])) {
-			$retval = $errors[$name];
-			unset($errors[$name]);
-		}
-
-		return $retval;
-	}
-
-	/**
 	 * Set an error.
 	 *
 	 * @param      string An error name.
 	 * @param      string An error message.
 	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.9.0
 	 */
 	public function setError($name, $message)
 	{
-		// set the attribute first if it doesn't exist, else we will not a proper 
-		// reference to the attribute.
-		if(!$this->hasAttribute('errors', 'org.agavi.validation.result')) {
-			$this->setAttribute('errors', array(), 'org.agavi.validation.result');
-		}
-		$errors =& $this->getAttribute('errors', 'org.agavi.validation.result');
-		if(!isset($errors[$name])) {
-			$errors[$name] = array('messages' => array(), 'validators' => array());
-		}
-		$errors[$name]['messages'][] = $message;
+		$vm = $this->getContext()->getValidatorManager();
+		$incident = new AgaviValidationIncident(null, AgaviValidator::ERROR);
+		$incident->addError(new AgaviValidationError($message, null, array($name)));
+		$vm->addIncident($incident);
 	}
 
 
@@ -320,28 +300,18 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	 * @param      array An associative array of errors and their associated
 	 *                   messages.
 	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.9.0
 	 */
 	public function setErrors(array $errors)
 	{
-		// set the attribute first if it doesn't exist, else we will not a proper 
-		// reference to the attribute.
-		if(!$this->hasAttribute('errors', 'org.agavi.validation.result')) {
-			$this->setAttribute('errors', array(), 'org.agavi.validation.result');
-		}
-		$storedErrors =& $this->getAttribute('errors', 'org.agavi.validation.result', array());
+		$vm = $this->getContext()->getValidatorManager();
+		$incident = new AgaviValidationIncident(null, AgaviValidator::ERROR);
 		foreach($errors as $name => $error) {
-			if(!isset($storedErrors[$name])) {
-				$storedErrors[$name] = array('messages' => array(), 'validators' => array());
-			}
-			if(!is_array($error)) {
-				$storedErrors[$name]['messages'][] = $error;
-			} else {
-				$storedErrors[$name]['messages'] = array_merge($storedErrors[$name]['messages'], $error);
-			}
+			$incident->addError(new AgaviValidationError($error, null, array($name)));
 		}
+
+		$vm->addIncident($incident);
 	}
 
 	/**

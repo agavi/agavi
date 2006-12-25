@@ -40,27 +40,40 @@
  */
 abstract class AgaviBaseFileValidator extends AgaviValidator
 {
+
 	/**
-	 * Returns whether all arguments are files in the request.
+	 * Returns whether all arguments are set in the validation input parameters.
+	 * Set means anything but empty string.
+	 *
+	 * @param      bool Whether an error should be thrown for each missing 
+	 *                  argument if this validator is required.
 	 *
 	 * @return     bool Whether the arguments are set.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	protected function hasAllArgumentsSet()
+	protected function checkAllArgumentsSet($throwError = true)
 	{
 		$request = $this->getContext()->getRequest();
+
+		$isRequired = $this->getParameter('required', true);
+		$result = true;
+
+		$array = $this->validationParameters->getParameters();
+		$baseParts = $this->curBase->getParts();
 		foreach($this->getArguments() as $argument) {
 			$new = $this->curBase->pushRetNew($argument);
 			$pName = $this->curBase->pushRetNew($argument)->__toString();
 			if(!$request->hasFile($pName)) {
-				return false;
+				if($throwError && $isRequired) {
+					$this->throwError(null, $pName);
+				}
+				$result = false;
 			}
 		}
-		return true;
+		return $result;
 	}
-
 
 	/**
 	 * Validates the input

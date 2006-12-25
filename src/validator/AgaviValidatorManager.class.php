@@ -45,11 +45,6 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	protected $context = null;
 
 	/**
-	 * @var        array An array of errors.
-	 */
-	protected $errors = array();
-
-	/**
 	 * @var        array The results for each field which has been validated.
 	 */
 	protected $fieldResults = array();
@@ -128,7 +123,8 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	public function clear()
 	{
 		$this->dependencyManager->clear();
-		$this->errors = array();
+		$this->fieldResults = array();
+		$this->incidents = array();
 		$this->result = AgaviValidator::SUCCESS;
 
 
@@ -150,19 +146,6 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	public function addChild(AgaviValidator $validator)
 	{
 		$this->children[] = $validator;
-	}
-
-	/**
-	 * Returns the request.
-	 *
-	 * @return     AgaviRequest The request instance.
-	 *
-	 * @author     Uwe Mesecke <uwe@mesecke.net>
-	 * @since      0.11.0
-	 */
-	public function getRequest()
-	{
-		return $this->context->getRequest();
 	}
 
 	/**
@@ -206,7 +189,6 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 		$result = true;
 		$this->result = AgaviValidator::SUCCESS;
 
-		$allSucceededFields = array();
 		$requestMethod = $this->getContext()->getRequest()->getMethod();
 		$executedValidators = 0;
 		foreach($this->children as $validator) {
@@ -218,11 +200,6 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 
 			$v_ret = $validator->execute($parameters);
 			$this->result = max($this->result, $v_ret);
-			$affectedFields = $validator->getAffectedFields();
-
-			if($v_ret == AgaviValidator::SUCCESS) {
-				$allSucceededFields = array_merge($affectedFields, $allSucceededFields);
-			}
 
 			switch($v_ret) {
 				case AgaviValidator::SUCCESS:
@@ -259,31 +236,13 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 		}
 
 		if($mode == self::MODE_STRICT || ($executedValidators > 0 && $mode == self::MODE_CONDITIONAL)) {
-			$asf = array_flip($allSucceededFields);
-			foreach($parameters->getParameters() as $name => $param) {
+			$asf = array_flip($this->getSucceededFields());
+			foreach($parameters->getFlatParameterNames() as $name) {
 				if(!isset($asf[$name]) && $name != $ma && $name != $aa) {
 					$parameters->removeParameter($name);
 				}
 			}
 		}
-
-		$ns = 'org.agavi.validation.result';
-
-		$prevErrors = $this->getContext()->getRequest()->getAttribute('errors', $ns);
-		$prevErrorsByValidator = $this->getContext()->getRequest()->getAttribute('errorsByValidator', $ns);
-
-		$errors = $this->getErrorArrayByInput();
-		$errorsByValidator = $this->getErrorArrayByValidator();
-
-		if (is_array($prevErrors)) {
-			$errors = array_merge($prevErrors, $errors);
-		}
-		if (is_array($prevErrorsByValidator)) {
-			$errorsByValidator = array_merge($prevErrorsByValidator, $errorsByValidator);
-		}
-
-		$this->getContext()->getRequest()->setAttribute('errors', $errors, $ns);
-		$this->getContext()->getRequest()->setAttribute('errorsByValidator', $errorsByValidator, $ns);
 
 		return $result;
 	}
@@ -317,84 +276,6 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	}
 
 	/**
-	 * Returns the array of errors sorted by validator names
-	 *
-	 * Format:
-	 *
-	 * array(
-	 *   <i>validatorName</i> => array(
-	 *     'error'  => <i>error</i>,
-	 *     'fields' => <i>array of field names</i>
-	 *   )
-	 *
-	 * @return     array An array of errors.
-	 *
-	 * @author     Uwe Mesecke <uwe@mesecke.net>
-	 * @since      0.11.0
-	 */
-	public function getErrorArrayByValidator()
-	{
-		$errors = array();
-		foreach($this->errors as $error) {
-			$errors[$error[0]->getName()] = array($error[1], $error[0]->getAffectedFields());
-		}
-
-		return $errors;
-	}
-
-	/**
-	 * Returns the array of errors sorted by input names
-	 *
-	 * Format:
-	 *
-	 * array(
-	 *   <i>fieldName</i> => array(
-	 *     'messages'    => array(
-	 *       <i>error message</i>
-	 *     )
-	 *     'validators' => array(
-	 *       <i>validatorName</i> => <i>validator</i>
-	 *     )
-	 * )
-	 *
-	 * <i>error message</i> is the first submitted error with type string.
-	 *
-	 * @return     array An array of errors.
-	 *
-	 * @author     Uwe Mesecke <uwe@mesecke.net>
-	 * @since      0.11.0
-	 */
-	public function getErrorArrayByInput()
-	{
-		$errors = array();
-		foreach($this->errors as $error) {
-			$affectedFields = $error[0]->getAffectedFields();
-			if(count($affectedFields) == 0) {
-				if(!isset($errors[''])) {
-					$errors[''] = array('messages' => array(), 'validators' => array());
-				}
-
-				if($error[1]) {
-					$errors['']['messages'][] = $error[1];
-				}
-				$errors['']['validators'][] = $error[0];
-			} else {
-				foreach($affectedFields as $fieldName) {
-					if(!isset($errors[$fieldName])) {
-						$errors[$fieldName] = array('messages' => array(), 'validators' => array());
-					}
-					if($error[1]) {
-						$errors[$fieldName]['messages'][] = $error[1];
-					}
-					$errors[$fieldName]['validators'][] = $error[0];
-				}
-			}
-		}
-
-		return $errors;
-	}
-
-	/**
 	 * Returns the result from the error manager
 	 *
 	 * @return     int The result of the validation process.
@@ -408,36 +289,310 @@ class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValida
 	}
 
 	/**
-	 * Reports an error to the parent container.
-	 *
-	 * @param      AgaviValidator The validator where the error occured
-	 * @param      string         The error message.
-	 *
-	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @since      0.11.0
-	 * @see        AgaviIValidatorContainer::reportError
-	 */
-	public function reportError(AgaviValidator $validator, $errorMsg)
-	{
-		$this->errors[$validator->getName()] = array($validator, $errorMsg);
-	}
-
-	/**
 	 * Adds a validation result for a given field.
 	 *
 	 * @param      AgaviValidator The validator.
 	 * @param      string The name of the field which has been validated.
 	 * @param      int    The result of the validation.
-	 * @param      string The error index which has been thrown
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
-	 * @see        AgaviIValidatorContainer::reportError
 	 */
-	public function addFieldResult(AgaviValidator $validator, $fieldName, $result, $errorIdx = null)
+	public function addFieldResult($validator, $fieldname, $result)
 	{
-		$this->fieldResults[$fieldName][] = array($validator->getName(), $result, $errorIdx);
+		$this->fieldResults[$fieldname][] = array($validator, $result);
 	}
 
+	/**
+	 * Will return the highest error code for a field. This can be optionally 
+	 * limited to the highest error code of an validator. If the field was not 
+	 * "touched" by a validator null is returned.
+	 *
+	 * @param      string The name of the field.
+	 * @param      string The Validator name
+	 *
+	 * @return     int The error code.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getFieldErrorCode($fieldname, $validatorName = null)
+	{
+		if(!isset($this->fieldResults[$fieldname])) {
+			return null;
+		}
+
+		$ec = AgaviValidator::NOT_PROCESSED;
+		foreach($this->fieldResults[$fieldname] as $result) {
+			if($validatorName === null || ($result[0] instanceof AgaviValidator && $result[0]->getName() == $validatorName)) {
+				$ec = max($ec, $result[1]);
+			}
+		}
+
+		return $ec;
+	}
+
+	/**
+	 * Checks whether a field has failed in any validator.
+	 *
+	 * @param      string The name of the field.
+	 *
+	 * @return     bool Whether the field has failed.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function isFieldFailed($fieldname)
+	{
+		$ec = $this->getFieldErrorCode($fieldname);
+		return ($ec > AgaviValidator::SUCCESS);
+	}
+
+	/**
+	 * Checks whether a field has been processed by a validator (this includes
+	 * fields which were skipped because their value was not set and the validator
+	 * was not required)
+	 *
+	 * @param      string The name of the field.
+	 *
+	 * @return     bool Whether the field was validated.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function isFieldValidated($fieldname)
+	{
+		return isset($this->fieldResults[$fieldname]);
+	}
+
+	/**
+	 * Returns all fields which succeeded in the validation. Includes fields which
+	 * were not processed (happens when the field is "not set" and the validator 
+	 * is not required)
+	 *
+	 * @return     array An array of field names.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getSucceededFields()
+	{
+		$names = array();
+		foreach($this->fieldResults as $name => $results) {
+			$ec = AgaviValidator::SUCCESS;
+			foreach($results as $result) {
+				$ec = max($ec, $result[1]);
+			}
+			if($ec <= AgaviValidator::SUCCESS) {
+				$names[] = $name;
+			}
+		}
+
+		return $names;
+	}
+
+
+	/**
+	 * Adds an incident to the validation result. This will automatically adjust
+	 * the field result table (which is required because one can still manually
+	 * add errors either via AgaviRequest::addError or by directly using this 
+	 * method)
+	 *
+	 * @param      AgaviValidationIncident The incident.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function addIncident(AgaviValidationIncident $incident)
+	{
+		// we need to add the fields to our fieldresults if they don't exist there 
+		// yet and adjust our result if needed (which only happens when this method
+		// is called not from a validator)
+		$severity = $incident->getSeverity();
+		if($severity > $this->result) {
+			$this->result = $severity;
+		}
+		foreach($incident->getFields() as $field) {
+			if(!isset($this->fieldResults[$field]) || $this->getFieldErrorCode($field) < $severity) {
+				$this->addFieldResult(null, $field, $incident->getSeverity());
+			}
+		}
+		$name = $incident->getValidator() ? $incident->getValidator()->getName() : '';
+		$this->incidents[$name][] = $incident;
+	}
+
+	/**
+	 * Checks if any incidents occured Returns all fields which succeeded in the 
+	 * validation. Includes fields which were not processed (happens when the 
+	 * field is "not set" and the validator is not required)
+	 *
+	 * @param      int The minimum severity which shall be checked for.
+	 *
+	 * @return     bool The result.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function hasIncidents($minSeverity = null)
+	{
+		if($minErrorCode === null) {
+			return count($this->incidents) > 0;
+		} else {
+			foreach($this->incidents as $validatorIncidents) {
+				foreach($validatorIncidents as $incident) {
+					if($incident->getSeverity() >= $minSeverity) {
+						return true;
+					}
+				}
+			}
+
+			return false;
+		}
+	}
+
+	/**
+	 * Returns all incidents which happened during the execution of the validaion.
+	 *
+	 * @param      int The minimum severity a returned incident needs to have.
+	 *
+	 * @return     array The incidents.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getIncidents($minSeverity = null)
+	{
+		$incidents = array();
+
+		foreach($this->incidents as $validatorIncidents) {
+			if($minSeverity === null) {
+				$incidents = array_merge($incidents, $validatorIncidents);
+			} else {
+				foreach($validatorIncidents as $incident) {
+					if($incident->getSeverity() >= $minSeverity) {
+						$incidents[] = $incident;
+					}
+				}
+			}
+		}
+		return $incidents;
+	}
+
+	/**
+	 * Returns all incidents of a given validator.
+	 *
+	 * @param      string The name of the validator.
+	 * @param      int The minimum severity a returned incident needs to have.
+	 *
+	 * @return     array The incidents.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getValidatorIncidents($validatorName, $minSeverity = null)
+	{
+		if(!isset($this->incidents[$validatorName])) {
+			return array();
+		}
+
+		if($minSeverity === null) {
+			return $this->incidents[$validatorName];
+		} else {
+			$incidents = array();
+			foreach($this->incidents[$validatorName] as $incident) {
+				if($incident->getSeverity() >= $minSeverity) {
+					$incidents[] = $incident;
+				}
+			}
+			return $incidents;
+		}
+	}
+
+	/**
+	 * Returns all incidents of a given field.
+	 *
+	 * @param      string The name of the field.
+	 * @param      int The minimum severity a returned incident needs to have.
+	 *
+	 * @return     array The incidents.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getFieldIncidents($fieldname, $minSeverity = null)
+	{
+		$incidents = array();
+		foreach($this->getIncidents($minSeverity) as $incident) {
+			if($incident->hasFieldError($fieldname)) {
+				$incidents[] = $incident;
+			}
+		}
+
+		return $incidents;
+	}
+
+	/**
+	 * Returns all errors of a given field.
+	 *
+	 * @param      string The name of the field.
+	 * @param      int The minimum severity a returned incident of the error 
+	 *                 needs to have.
+	 *
+	 * @return     array The incidents.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getFieldErrors($fieldname, $minSeverity = null)
+	{
+		$errors = array();
+		foreach($this->getIncidents($minSeverity) as $incident) {
+			$errors = array_merge($errors, $incident->getFieldErrors($fieldname));
+		}
+
+		return $errors;
+	}
+
+	/**
+	 * Returns all errors of a given field in a given validator.
+	 *
+	 * @param      string The name of the field.
+	 * @param      int The minimum severity a returned incident of the error 
+	 *                 needs to have.
+	 *
+	 * @return     array The incidents.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getValidatorFieldErrors($validatorName, $fieldname, $minSeverity = null)
+	{
+		$errors = array();
+		foreach($this->getValidatorIncidents($validatorName, $minSeverity) as $incident) {
+			$errors = array_merge($errors, $incident->getFieldErrors($fieldname));
+		}
+
+		return $errors;
+	}
+
+	/**
+	 * Returns all failed fields (this are all fields including those with 
+	 * severity none and notice).
+	 *
+	 * @return     array The names of the fields.
+	 * @param      int The minimum severity a field needs to have.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getFailedFields($minSeverity = null)
+	{
+		$fields = array();
+		foreach($this->getIncidents($minSeverity) as $incident) {
+			$fields = array_merge($fields, $incident->getFields());
+		}
+
+		return array_values(array_unique($fields));
+	}
 }
 ?>
