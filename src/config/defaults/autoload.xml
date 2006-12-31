@@ -178,6 +178,8 @@
 			<autoload name="AgaviIValidatorManager">%core.agavi_dir%/validator/AgaviIValidatorManager.interface.php</autoload>
 			<autoload name="AgaviValidatorManager">%core.agavi_dir%/validator/AgaviValidatorManager.class.php</autoload>
 			<autoload name="AgaviDependencyManager">%core.agavi_dir%/validator/AgaviDependencyManager.class.php</autoload>
+			<autoload name="AgaviValidationIncident">%core.agavi_dir%/validator/AgaviValidationIncident.class.php</autoload>
+			<autoload name="AgaviValidationError">%core.agavi_dir%/validator/AgaviValidationError.class.php</autoload>
 			<autoload name="AgaviValidator">%core.agavi_dir%/validator/AgaviValidator.class.php</autoload>
 			<autoload name="AgaviBaseFileValidator">%core.agavi_dir%/validator/AgaviBaseFileValidator.class.php</autoload>
 			<autoload name="AgaviOperatorValidator">%core.agavi_dir%/validator/AgaviOperatorValidator.class.php</autoload>
