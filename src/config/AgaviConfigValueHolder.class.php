@@ -179,14 +179,27 @@ class AgaviConfigValueHolder implements ArrayAccess, IteratorAggregate
 	/**
 	 * Returns the children of this value.
 	 *
+	 * @param      string Return only the childs matching this node (tag) name.
+	 *
 	 * @return     array An array with the childs of this value.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function getChildren()
+	public function getChildren($nodename = null)
 	{
-		return $this->_childs;
+		if($nodename === null) {
+			return $this->_childs;
+		} else {
+			$childs = array();
+			foreach($this->_childs as $child) {
+				if($child->getName() == $nodename) {
+					$childs[] = $child;
+				}
+			}
+
+			return $childs;
+		}
 	}
 
 	/**

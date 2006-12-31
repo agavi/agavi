@@ -65,9 +65,13 @@ class AgaviSettingConfigHandler extends AgaviConfigHandler
 			}
 
 			if(isset($cfg->settings)) {
-				foreach($cfg->settings as $setting)
-				{
-					$data['core.' . $setting->getAttribute('name')] = $this->literalize($setting->getValue());
+				$multiSettings = $cfg->getChildren('settings');
+				foreach($multiSettings as $settings) {
+					$prefix = $settings->getAttribute('prefix', 'core.');
+					foreach($settings as $setting)
+					{
+						$data[$prefix . $setting->getAttribute('name')] = $this->literalize($setting->getValue());
+					}
 				}
 			}
 			
