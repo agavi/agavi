@@ -97,7 +97,6 @@
 			<autoload name="AgaviIActionFilter">%core.agavi_dir%/filter/AgaviIActionFilter.interface.php</autoload>
 			<autoload name="AgaviIFilter">%core.agavi_dir%/filter/AgaviIFilter.interface.php</autoload>
 			<autoload name="AgaviIGlobalFilter">%core.agavi_dir%/filter/AgaviIGlobalFilter.interface.php</autoload>
-			<autoload name="AgaviIRenderingFilter">%core.agavi_dir%/filter/AgaviIRenderingFilter.interface.php</autoload>
 			<autoload name="AgaviISecurityFilter">%core.agavi_dir%/filter/AgaviISecurityFilter.interface.php</autoload>
 			<autoload name="AgaviSecurityFilter">%core.agavi_dir%/filter/AgaviSecurityFilter.class.php</autoload>
 

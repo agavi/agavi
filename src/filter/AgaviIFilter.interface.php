@@ -37,7 +37,7 @@ interface AgaviIFilter
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.11.0
 	 */
-	public function executeOnce(AgaviFilterChain $filterChain, AgaviResponse $response);
+	public function executeOnce(AgaviFilterChain $filterChain, AgaviExecutionContainer $container);
 
 	/**
 	 * Execute this filter.
@@ -48,7 +48,7 @@ interface AgaviIFilter
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.11.0
 	 */
-	public function execute(AgaviFilterChain $filterChain, AgaviResponse $response);
+	public function execute(AgaviFilterChain $filterChain, AgaviExecutionContainer $container);
 
 	/**
 	 * Retrieve the current application context.

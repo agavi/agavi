@@ -72,9 +72,12 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function executeOnce(AgaviFilterChain $filterChain, AgaviResponse $response)
+	public function executeOnce(AgaviFilterChain $filterChain, AgaviExecutionContainer $container)
 	{
-		$filterChain->execute($filterChain, $response);
+		$filterChain->execute($container);
+		
+		// cannot grab response before execute() has run since this may be a global filter
+		$response = $container->getResponse();
 		
 		$output = $response->getContent();
 		

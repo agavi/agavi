@@ -44,6 +44,7 @@
 			<compile>%core.agavi_dir%/action/AgaviActionStackEntry.class.php</compile>
 			<compile>%core.agavi_dir%/core/AgaviContext.class.php</compile>
 			<compile>%core.agavi_dir%/controller/AgaviController.class.php</compile>
+			<compile>%core.agavi_dir%/controller/AgaviExecutionContainer.class.php</compile>
 			<compile>%core.agavi_dir%/filter/AgaviFilter.class.php</compile>
 			<compile>%core.agavi_dir%/filter/AgaviDispatchFilter.class.php</compile>
 			<compile>%core.agavi_dir%/filter/AgaviExecutionFilter.class.php</compile>

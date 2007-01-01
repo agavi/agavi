@@ -103,19 +103,14 @@ class AgaviPhptalRenderer extends AgaviRenderer
 
 		$engine->set('this', $this);
 
-		if($mode == AgaviView::RENDER_CLIENT && !$view->isDecorator()) {
-			// render directly to the client
-			$this->response->setContent($engine->execute());
-		} elseif($mode != AgaviView::RENDER_NONE) {
-			// render to variable
-			$retval = $engine->execute();
-			// now render our decorator template, if one exists
-			if($view->isDecorator()) {
-				$retval = $this->decorate($retval);
-			}
-
-			$this->response->setContent($retval);
+		$retval = $engine->execute();
+		
+		// now render our decorator template, if one exists
+		if($view->isDecorator()) {
+			$retval = $this->decorate($retval);
 		}
+		
+		$this->response->setContent($retval);
 	}
 
 	/**

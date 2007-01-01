@@ -26,7 +26,7 @@ class AgaviSampleAppCookieLoginFilter extends AgaviFilter implements AgaviIGloba
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function execute(AgaviFilterChain $filterChain, AgaviResponse $response)
+	public function execute(AgaviFilterChain $filterChain, AgaviExecutionContainer $container)
 	{
 		$req = $this->getContext()->getRequest();
 		$usr = $this->getContext()->getUser();
@@ -42,7 +42,7 @@ class AgaviSampleAppCookieLoginFilter extends AgaviFilter implements AgaviIGloba
 			}
 		}
 		
-		$filterChain->execute($filterChain, $response);
+		$filterChain->execute($container);
 	}
 }
 

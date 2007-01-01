@@ -1634,7 +1634,7 @@ $tm-&gt;_d(time(), 'backend', 'en_US@timezone=Europe/London');
  &lt;configuration&gt;
 
   &lt;handlers&gt;
-   &lt;handler pattern="%core.module_dir%/*/config/rendering_filters.xml" validate="%core.agavi_dir%/config/xsd/filters.xsd" class="AgaviFilterConfigHandler" /&gt;
+   &lt;handler pattern="%core.module_dir%/*/config/action_filters.xml" validate="%core.agavi_dir%/config/xsd/filters.xsd" class="AgaviFilterConfigHandler" /&gt;
    &lt;handler pattern="%core.module_dir%/*/config/module.xml" validate="%core.agavi_dir%/config/xsd/module.xsd" class="AgaviModuleConfigHandler" /&gt;
    &lt;handler pattern="%core.module_dir%/*/validate/*.xml" class="AgaviValidatorConfigHandler" /&gt;
   &lt;/handlers&gt;
@@ -1901,11 +1901,10 @@ $tm-&gt;_d(time(), 'backend', 'en_US@timezone=Europe/London');
     <section id="reference-configuration_tags-filterhandler">
       <title>FilterConfigHandler Tags (*_filters.xml)</title>
 
-      <para>You may use <filename>action_filters.xml</filename>,
-      <filename>global_filters.xml</filename> and
-      <filename>rendering_filters.xml</filename> to configure Action, global
-      or rendering filters. Action and rendering filters may also be specified
-      on a per-module basis by putting them into the
+      <para>You may use <filename>action_filters.xml</filename> and
+      <filename>global_filters.xml</filename> to configure filters that wrap
+      either the global execution flow or individual actions. Action filters
+      may also be specified on a per-module basis by putting them into the
       <filename>app/modules/ModuleName/config/</filename> folder.</para>
 
       <section id="reference-configuration_tags-filterhandler_filters">

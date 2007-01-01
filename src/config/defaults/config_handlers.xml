@@ -102,8 +102,6 @@
 
 			<handler pattern="%core.config_dir%/global_filters.xml" validate="%core.agavi_dir%/config/xsd/filters.xsd" class="AgaviFilterConfigHandler" />
 
-			<handler pattern="%core.config_dir%/rendering_filters.xml" validate="%core.agavi_dir%/config/xsd/filters.xsd" class="AgaviFilterConfigHandler" />
-
 			<handler pattern="%core.config_dir%/output_types.xml" validate="%core.agavi_dir%/config/xsd/output_types.xsd" class="AgaviOutputTypeConfigHandler" />
 
 			<handler pattern="%core.config_dir%/logging.xml" validate="%core.agavi_dir%/config/xsd/logging.xsd" class="AgaviLoggingConfigHandler" />
@@ -132,8 +130,6 @@
 			<handler pattern="%core.module_dir%/*/config/caching.xml" validate="%core.agavi_dir%/config/xsd/caching.xsd" class="AgaviReturnArrayConfigHandler" />
 
 			<handler pattern="%core.module_dir%/*/config/action_filters.xml" validate="%core.agavi_dir%/config/xsd/filters.xsd" class="AgaviFilterConfigHandler" />
-
-			<handler pattern="%core.module_dir%/*/config/rendering_filters.xml" validate="%core.agavi_dir%/config/xsd/filters.xsd" class="AgaviFilterConfigHandler" />
 
 			<handler pattern="%core.module_dir%/*/config/module.xml" validate="%core.agavi_dir%/config/xsd/module.xsd" class="AgaviModuleConfigHandler" />
 

@@ -26,7 +26,7 @@
  *
  * @version    $Id$
  */
-abstract class AgaviRenderer implements AgaviIRenderingFilter
+abstract class AgaviRenderer
 {
 	/**
 	 * @var        AgaviContext An AgaviContext instance.
@@ -34,21 +34,10 @@ abstract class AgaviRenderer implements AgaviIRenderingFilter
 	protected $context = null;
 	
 	/**
-	 @var          AgaviResponse A Response instance.
-	 */
-	protected $response = null;
-	
-	/**
 	 * @var        string A string with the default template file extension,
 	 *                    including the dot.
 	 */
 	protected $extension = '';
-	
-	/**
-	 * @var        array An associative array containing the output of slots and
-	 *                   the output of the content view.
-	 */
-	protected $output = array();
 	
 	/**
 	 * @var        AgaviView The View instance that belongs to this Renderer.
@@ -221,69 +210,6 @@ abstract class AgaviRenderer implements AgaviIRenderingFilter
 	}
 	
 	/**
-	 * Loop through all template slots and fill them in with the results of
-	 * presentation data.
-	 *
-	 * @param      string A chunk of decorator content.
-	 *
-	 * @return     string A decorated template.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function decorate($content)
-	{
-		$view = $this->getView();
-		
-		// alias controller
-		$controller = $view->getContext()->getController();
-		
-		// get original render mode
-		$renderMode = $controller->getRenderMode();
-		
-		// set render mode to var
-		$controller->setRenderMode(AgaviView::RENDER_VAR);
-		
-		// grab the action stack
-		$actionStack = $controller->getActionStack();
-		
-		// loop through our slots, and replace them one-by-one in the
-		// decorator template
-		$slots = $view->getSlots();
-		
-		foreach($slots as $name => $slot) {
-			// grab this next forward's action stack index
-			$index = $actionStack->getSize();
-			
-			// forward to the first slot action
-			$controller->forward($slot['module_name'], $slot['action_name'], $slot['additional_params']);
-			
-			$response = $actionStack->getEntry($index)->getPresentation();
-			
-			if($response) {
-				// set the presentation data as a template attribute
-				$this->output[$name] = $response->getContent();
-			
-				$this->response->merge($response->exportInfo());
-			} else {
-				$this->output[$name] = null;
-			}
-		}
-		
-		// put render mode back
-		$controller->setRenderMode($renderMode);
-		
-		// set the decorator content as an attribute
-		$this->output['content'] = $content;
-		
-		// return a null value to satisfy the requirement
-		$retval = null;
-		
-		return $retval;
-	}
-	
-	/**
 	 * Retrieve the template engine associated with this view.
 	 *
 	 * Note: This will return null for PHPView instances.
@@ -371,55 +297,7 @@ abstract class AgaviRenderer implements AgaviIRenderingFilter
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	abstract function render();
-	
-	/**
-	 * Get the Response instance for this Renderer
-	 *
-	 * @return     AgaviResponse A Response instance.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function getResponse()
-	{
-		return $this->response;
-	}
-
-	/**
-	 * Execute the Renderer.
-	 *
-	 * This method is called by the rendering FilterChain.
-	 * It puts the returned data into the View (if appropriate)
-	 *
-	 * @param      AgaviFilterChain The filter chain.
-	 * @param      AgaviResponse    The response.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function executeOnce(AgaviFilterChain $filterChain, AgaviResponse $response)
-	{
-		$this->execute($filterChain, $response);
-	}
-
-	/**
-	 * Execute the Renderer.
-	 *
-	 * This method is called by the rendering FilterChain.
-	 * It puts the returned data into the View (if appropriate)
-	 *
-	 * @param      AgaviFilterChain The filter chain.
-	 * @param      AgaviResponse    The response.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function execute(AgaviFilterChain $filterChain, AgaviResponse $response)
-	{
-		$this->response = $response;
-		$this->render();
-	}
+	abstract public function render(array $templateInfo, array &$attributes, array &$slots = array());
 }
 
 ?>

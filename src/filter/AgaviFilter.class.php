@@ -76,9 +76,9 @@ abstract class AgaviFilter extends AgaviParameterHolder implements AgaviIFilter
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function executeOnce(AgaviFilterChain $filterChain, AgaviResponse $response)
+	public function executeOnce(AgaviFilterChain $filterChain, AgaviExecutionContainer $container)
 	{
-		$this->execute($filterChain, $response);
+		$this->execute($filterChain, $container);
 	}
 	
 	/**
@@ -90,9 +90,9 @@ abstract class AgaviFilter extends AgaviParameterHolder implements AgaviIFilter
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function execute(AgaviFilterChain $filterChain, AgaviResponse $response)
+	public function execute(AgaviFilterChain $filterChain, AgaviExecutionContainer $container)
 	{
-		$filterChain->execute($filterChain, $response);
+		$filterChain->execute($container);
 	}
 }
 

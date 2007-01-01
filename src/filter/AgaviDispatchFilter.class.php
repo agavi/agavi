@@ -43,12 +43,9 @@ class AgaviDispatchFilter extends AgaviFilter implements AgaviIGlobalFilter
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function execute(AgaviFilterChain $filterChain, AgaviResponse $response)
+	public function execute(AgaviFilterChain $filterChain, AgaviExecutionContainer $container)
 	{
-		$request = $this->context->getRequest();
-		$moduleName = $request->getParameter($request->getModuleAccessor());
-		$actionName = $request->getParameter($request->getActionAccessor());
-		$this->context->getController()->forward($moduleName, $actionName);
+		$container->execute();
 	}
 }
 

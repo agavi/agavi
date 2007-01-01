@@ -113,23 +113,17 @@ class AgaviSmartyRenderer extends AgaviRenderer
 		foreach($this->assigns as $key => &$value) {
 			$engine->assign_by_ref($key, $value);
 		}
-
+		
 		$engine->assign_by_ref('this', $this);
-
-		if($mode == AgaviView::RENDER_CLIENT && !$view->isDecorator()) {
-			// render directly to the client
-			$this->response->setContent($this->getEngine()->fetch($view->getDirectory() . '/' . $this->buildTemplateName($view->getTemplate())));
-		} elseif($mode != AgaviView::RENDER_NONE) {
-			// render to variable
-			$retval = $this->getEngine()->fetch($view->getDirectory() . '/' . $this->buildTemplateName($view->getTemplate()));
-
-			// now render our decorator template, if one exists
-			if($view->isDecorator()) {
-				$retval = $this->decorate($retval);
-			}
-
-			$this->response->setContent($retval);
+		
+		$retval = $this->getEngine()->fetch($view->getDirectory() . '/' . $this->buildTemplateName($view->getTemplate()));
+		
+		// now render our decorator template, if one exists
+		if($view->isDecorator()) {
+			$retval = $this->decorate($retval);
 		}
+		
+		$this->response->setContent($retval);
 	}
 
 	public function decorate($content)

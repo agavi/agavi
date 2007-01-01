@@ -50,7 +50,7 @@ class AgaviExecutionTimeFilter extends AgaviFilter implements AgaviIGlobalFilter
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function executeOnce(AgaviFilterChain $filterChain, AgaviResponse $response)
+	public function executeOnce(AgaviFilterChain $filterChain, AgaviExecutionContainer $container)
 	{
 		$context = $this->getContext();
 		
@@ -58,7 +58,10 @@ class AgaviExecutionTimeFilter extends AgaviFilter implements AgaviIGlobalFilter
 		$replace = $this->getParameter('replace', false);
 		
 		$start = microtime(true);
-		$filterChain->execute();
+		$filterChain->execute($container);
+		
+		// cannot grab response before execute() has run since this may be a global filter
+		$response = $container->getResponse();
 		
 		$outputTypes = $this->getParameter('output_types');
 		if(is_array($outputTypes) && !in_array($context->getController()->getOutputType(), $outputTypes)) {

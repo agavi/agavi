@@ -313,30 +313,21 @@ class AgaviXslRenderer extends AgaviRenderer
 		$this->setXml($this->xmlEngineAttributes, $this->singularVarName, $this->view->getAttributes());
 		$output = $this->xslEngine->transformToDoc($this->xmlEngine);
 		
-		if($this->context->getController()->getRenderMode() == AgaviView::RENDER_CLIENT) {
-			if($this->view->isDecorator()) {
-				$display = '';
-				for($node = $output->firstChild;
-					$node;
-					$node = $node->nextSibling
-				) {
-					$display .= $output->saveXML($node);
-				}
-				
-				$this->response->setContent($this->decorate($display, false));
-			} else {
-				$output->version = $this->xmlEngine->version;
-				$output->encoding = $this->xmlEngine->encoding;
-				
-				$this->response->setContent($output->saveXML());
-			}
-		} elseif($this->context->getController()->getRenderMode() == AgaviView::RENDER_VAR) {
+		if($this->view->isDecorator()) {
+			$display = '';
 			for($node = $output->firstChild;
 				$node;
 				$node = $node->nextSibling
 			) {
-				$this->response->appendContent($output->saveXML($node));
+				$display .= $output->saveXML($node);
 			}
+			
+			$this->response->setContent($this->decorate($display, false));
+		} else {
+			$output->version = $this->xmlEngine->version;
+			$output->encoding = $this->xmlEngine->encoding;
+				
+			$this->response->setContent($output->saveXML());
 		}
 	}
 }

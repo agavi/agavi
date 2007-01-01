@@ -41,7 +41,7 @@ class AgaviSecurityFilter extends AgaviFilter implements AgaviIActionFilter, Aga
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function execute(AgaviFilterChain $filterChain, AgaviResponse $response)
+	public function execute(AgaviFilterChain $filterChain, AgaviExecutionContainer $container)
 	{
 		// get the cool stuff
 		$context    = $this->getContext();
@@ -50,8 +50,7 @@ class AgaviSecurityFilter extends AgaviFilter implements AgaviIActionFilter, Aga
 		$user       = $context->getUser();
 
 		// get the current action instance
-		$actionEntry    = $controller->getActionStack()->getLastEntry();
-		$actionInstance = $actionEntry->getActionInstance();
+		$actionInstance = $container->getActionInstance();
 
 		// get the credential required for this action
 		$credential = $actionInstance->getCredentials();
@@ -68,23 +67,23 @@ class AgaviSecurityFilter extends AgaviFilter implements AgaviIActionFilter, Aga
 			
 			if($credential === null || $user->hasCredentials($credential)) {
 				// the user has access, continue
-				$filterChain->execute();
+				$filterChain->execute($container);
 			} else {
 				// the user doesn't have access, exit stage left
 				$request->setAttributes(array(
-					'requested_module' => $actionEntry->getModuleName(),
-					'requested_action' => $actionEntry->getActionName()
+					'requested_module' => $container->getModuleName(),
+					'requested_action' => $container->getActionName()
 				), 'org.agavi.controller.forwards.secure');
-				$controller->forward(AgaviConfig::get('actions.secure_module'), AgaviConfig::get('actions.secure_action'));
+				$controller->forward(new AgaviExecutionContainer(AgaviConfig::get('actions.secure_module'), AgaviConfig::get('actions.secure_action')));
 			}
 
 		} else {
 			// the user is not authenticated
 			$request->setAttributes(array(
-				'requested_module' => $actionEntry->getModuleName(),
-				'requested_action' => $actionEntry->getActionName()
+				'requested_module' => $container->getModuleName(),
+				'requested_action' => $container->getActionName()
 			), 'org.agavi.controller.forwards.login');
-			$controller->forward(AgaviConfig::get('actions.login_module'), AgaviConfig::get('actions.login_action'));
+			$controller->forward(new AgaviExecutionContainer(AgaviConfig::get('actions.login_module'), AgaviConfig::get('actions.login_action')));
 		}
 	}
 }
