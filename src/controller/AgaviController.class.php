@@ -98,8 +98,8 @@ abstract class AgaviController extends AgaviParameterHolder
 	
 	public function incNumForwards()
 	{
-		if(++$this->numForwards > $this->maxForwards) {
-			throw new AgaviForwardException('Too many forwards have been detected for this request.');
+		if(++$this->numForwards > $this->maxForwards && $this->maxForwards > 0) {
+			throw new AgaviForwardException('Too many forwards have been detected for this Context.');
 		}
 	}
 	
