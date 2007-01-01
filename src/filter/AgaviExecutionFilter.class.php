@@ -385,7 +385,6 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 					if($oti['renderer'] !== null) {
 						$renderer = new $oti['renderer']();
 						$renderer->initialize($this->context, $oti['renderer_parameters']);
-						$renderer->setView($viewInstance);
 						if(isset($oti['extension'])) {
 							$renderer->setExtension($oti['extension']);
 						}
@@ -408,9 +407,6 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 					$slots = $viewInstance->getSlots();
 
 					foreach($slots as $name => $slot) {
-						// grab this next forward's action stack index
-						$index = $actionStack->getSize();
-
 						$slotContainer = $controller->createExecutionContainer($slot['module_name'], $slot['action_name'], $slot['additional_params']);
 						$slotContainer->execute();
 						
@@ -419,7 +415,6 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 						if($response) {
 							// set the presentation data as a template attribute
 							$output[$name] = $response->getContent();
-
 							$this->response->merge($response->exportInfo());
 						} else {
 							$output[$name] = null;
