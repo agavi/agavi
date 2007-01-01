@@ -35,47 +35,6 @@ class AgaviPhpRenderer extends AgaviRenderer
 	protected $extension = '.php';
 
 	/**
-	 * Loop through all template slots and fill them in with the results of
-	 * presentation data.
-	 *
-	 * @param      string A chunk of decorator content.
-	 *
-	 * @return     string A decorated template.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.11.0
-	 */
-	public function decorate($content)
-	{
-		// call our parent decorate() method
-		parent::decorate($content);
-
-		// DO NOT USE VARIABLES IN HERE, THEY MIGHT INTERFERE WITH TEMPLATE VARS
-
-		if($this->extractVars) {
-			extract($this->view->getAttributes(), EXTR_REFS | EXTR_PREFIX_INVALID, '_');
-		} else {
-			${$this->varName} =& $this->view->getAttributes();
-		}
-
-		$collisions = array_intersect(array_keys($this->assigns), $this->view->getAttributeNames());
-		if(count($collisions)) {
-			throw new AgaviException('Could not import system objects due to variable name collisions ("' . implode('", "', $collisions) . '" already in use).');
-		}
-		extract($this->assigns);
-
-		// render the decorator template and return the result
-		ob_start();
-
-		require($this->view->getDecoratorDirectory() . '/' . $this->buildTemplateName($this->view->getDecoratorTemplate()));
-
-		$retval = ob_get_contents();
-		ob_end_clean();
-
-		return $retval;
-	}
-
-	/**
 	 * Retrieve the template engine associated with this view.
 	 *
 	 * Note: This will return null because PHP itself has no engine reference.
@@ -129,3 +88,5 @@ class AgaviPhpRenderer extends AgaviRenderer
 		return $retval;
 	}
 }
+
+?>

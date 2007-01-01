@@ -40,11 +40,6 @@ abstract class AgaviRenderer
 	protected $extension = '';
 	
 	/**
-	 * @var        AgaviView The View instance that belongs to this Renderer.
-	 */
-	protected $view = null;
-	
-	/**
 	 * @var        string The name of the array that contains the template vars.
 	 */
 	protected $varName = 'template';
@@ -159,32 +154,6 @@ abstract class AgaviRenderer
 		$this->extension = $extension;
 	}
 
-	/**
-	 * Set the View instance that belongs to this Renderer instance.
-	 *
-	 * @param      AgaviView An AgaviView instance
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function setView($view)
-	{
-		$this->view = $view;
-	}
-	
-	/**
-	 * Retrieve the View instance that belongs to this Renderer instance.
-	 *
-	 * @return     AgaviView An AgaviView instance
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function getView()
-	{
-		return $this->view;
-	}
-	
 	/**
 	 * Build a template name based on "literal" flag in the template info.
 	 * Depending on whether or not the "literal" flag is set, the file extension
