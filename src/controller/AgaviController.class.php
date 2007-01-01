@@ -118,8 +118,13 @@ abstract class AgaviController extends AgaviParameterHolder
 	 */
 	public function createExecutionContainer($moduleName, $actionName, array $parameters = array())
 	{
-		$container = new AgaviExecutionContainer();
-		$container->initialize($this->context, $moduleName, $actionName, $parameters);
+		// create a new filter chain
+		$ecfi = $this->context->getFactoryInfo('execution_container');
+		$container = new $ecfi['class']();
+		$container->initialize($this->context, $ecfi['parameters']);
+		$container->setModuleName($moduleName);
+		$container->setActionName($actionName);
+		$container->setParameters($parameters);
 		return $container;
 	}
 	
@@ -331,9 +336,6 @@ abstract class AgaviController extends AgaviParameterHolder
 		$this->response = $response;
 		
 		$this->context = $response->getContext();
-		
-		$asfi = $this->context->getFactoryInfo('action_stack');
-		$this->actionStack = new $asfi['class']();
 		
 		$cfg = AgaviConfig::get('core.config_dir') . '/output_types.xml';
 		require(AgaviConfigCache::checkConfig($cfg, $this->context->getName()));

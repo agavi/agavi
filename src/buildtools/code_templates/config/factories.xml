@@ -34,13 +34,13 @@
 	
 	<configuration>
 		
-		<action_stack class="AgaviActionStack" />
-		
 		<controller class="AgaviWebController" />
 		
 		<database_manager class="AgaviDatabaseManager" />
 		
 		<dispatch_filter class="AgaviDispatchFilter" />
+		
+		<execution_container class="AgaviExecutionContainer" />
 		
 		<execution_filter class="AgaviExecutionFilter" />
 		

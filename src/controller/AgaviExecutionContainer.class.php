@@ -79,17 +79,13 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	 * This will create an instance of the action and merge in request arguments.
 	 *
 	 * @param      AgaviContext The current Context instance.
+	 * @param      array        An array of initialization parameters.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function initialize(AgaviContext $context, $moduleName, $actionName, array $parameters = array())
+	public function initialize(AgaviContext $context, array $parameters = array())
 	{
-		$this->setModuleName($moduleName);
-		$this->setActionName($actionName);
-		
-		$this->setParameters($parameters);
-		
 		$this->microtime = microtime(true);
 		
 		$this->context = $context;

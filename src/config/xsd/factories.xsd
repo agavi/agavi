@@ -9,14 +9,6 @@
       <xs:element name="configuration" minOccurs="0" maxOccurs="unbounded">
         <xs:complexType>
 		    <xs:all>
-		      <xs:element name="action_stack" minOccurs="0">
-		        <xs:complexType>
-		          <xs:sequence>
-		            <xs:group ref="parameters" />
-		          </xs:sequence>
-		          <xs:attribute name="class" type="xs:string" use="required" />
-		        </xs:complexType>
-		      </xs:element>
 		      <xs:element name="controller" minOccurs="0">
 		        <xs:complexType>
 		          <xs:sequence>
@@ -34,6 +26,14 @@
 		        </xs:complexType>
 		      </xs:element>
 		      <xs:element name="dispatch_filter" minOccurs="0">
+		        <xs:complexType>
+		          <xs:sequence>
+		            <xs:group ref="parameters" />
+		          </xs:sequence>
+		          <xs:attribute name="class" type="xs:string" use="required" />
+		        </xs:complexType>
+		      </xs:element>
+		      <xs:element name="execution_container" minOccurs="0">
 		        <xs:complexType>
 		          <xs:sequence>
 		            <xs:group ref="parameters" />
