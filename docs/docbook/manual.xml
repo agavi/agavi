@@ -564,14 +564,7 @@ if(curl_errno($ch)) {
       <para>The Execution Filter, once reached, will handle Validation, run
       the Action (or skip execution if the Action doesn't serve the Request
       method), determine the View to execute and then execute the View and,
-      after that, start the rendering of the output by creating another filter
-      chain containing all the defined Rendering Filters and, as the last
-      element, the designated Renderer instance that will take care of
-      rendering the template. This functionality might be extended by other
-      Execution Filter implementations; for example, the
-      CachingExecutionFilter will try to load a cached version of the Action
-      and skip execution altogether if possible, resulting in a massive
-      performance increase.</para>
+      after that, start the rendering of the output.</para>
     </section>
 
     <section>

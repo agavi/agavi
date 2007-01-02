@@ -35,7 +35,7 @@ An Action does not use getRequestMethods() to indicate which request methods it 
 
 Inside Actions and Views, it is not possible to access request parameters directly. Instead, a ParameterHolder passed to the execute() method will contain the request parameters. The idea behind this decision is that these parameters are safe for use if they have been filtered and normalized by validation or by some generic preprocessing filter (which, for instance, could remove any XSS related stuff). Also, with any strict validation mode enabled, only those variables that have been validated will be available for use.
 
-Inside a controller's dispatch() method, global filters now run first. This finally allows to implement features such as cookie based auto-logins etc, and also guarantees that these filters modify the actual final output of a request. The now-called "Action Filters" are identical to filters in 0.10 and earlier. Also, it is now possible to filter the rendering of templates via rendering filters. The result of these rendering filters are also included in any caching.
+Inside a controller's dispatch() method, global filters now run first. This finally allows to implement features such as cookie based auto-logins etc, and also guarantees that these filters modify the actual final output of a request. The now-called "Action Filters" are identical to filters in 0.10 and earlier. 
 
 With the new concept of output types, Views may implement execute() methods specifically for an output type by containing an executeSomething() methods, with "something" being the name of the output type.
 
@@ -58,7 +58,7 @@ All configuration files use the XML format now. All configuration files are vali
 
 All configuration settings can either be valid under all situations, or only in one or more specific environments and/or contexts. This allows for very fine-grained control over what's happening. For instance, you can enable debug mode for the 'production' environment, or enable certain filters only in the 'web' context.
 
-'contexts.ini' is gone, and we re-introduced 'factories.xml'. New config files are 'output_types.xml', 'routing.xml' and 'translation.xml'. 'filters.xml' was split up into separate files for global-, rendering- and action filters.
+'contexts.ini' is gone, and we re-introduced 'factories.xml'. New config files are 'output_types.xml', 'routing.xml' and 'translation.xml'. 'filters.xml' was split up into separate files for global- and action filters.
 
 'autoload.xml' 'compile.xml' and 'config_handlers.xml' use the "global" Agavi configuration files as their parents so it's not necessary anymore to sync them after each upgrade of Agavi.
 
