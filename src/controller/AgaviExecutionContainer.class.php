@@ -29,54 +29,47 @@
 class AgaviExecutionContainer extends AgaviAttributeHolder
 {
 	/**
-	 * @var        AgaviAction The Action instance that belongs to this container.
-	 */
-	private $actionInstance = null;
-	
-	/**
-	 * @var        string The name of the Action.
-	 */
-	private $actionName = null;
-	
-	/**
-	 * @var        float The microtime at which this container was initialized.
-	 */
-	private $microtime = null;
-	
-	/**
 	 * @var        AgaviContext The context instance.
 	 */
-	private $context = null;
-	
-	/**
-	 * @var        string The name of the Action's Module.
-	 */
-	private $moduleName = null;
+	protected $context = null;
 	
 	/**
 	 * @var        AgaviResponse A response instance holding the Action's output.
 	 */
-	private $response = null;
+	protected $response = null;
 	
 	/**
-	 * @var        array Information about the next Action to be executed, if any.
+	 * @var        float The microtime at which this container was initialized.
 	 */
-	private $next = null;
+	protected $microtime = null;
 	
 	/**
-	 * @var        string The name of the View returned by the Action.
+	 * @var        AgaviAction The Action instance that belongs to this container.
 	 */
-	private $viewName = null;
+	protected $actionInstance = null;
+	
+	/**
+	 * @var        string The name of the Action's Module.
+	 */
+	protected $moduleName = null;
+	
+	/**
+	 * @var        string The name of the Action.
+	 */
+	protected $actionName = null;
 	
 	/**
 	 * @var        string Name of the module of the View returned by the Action.
 	 */
-	private $viewModuleName = null;
+	protected $viewModuleName = null;
 	
 	/**
-	 * Initialize the container.
-	 *
-	 * This will create an instance of the action and merge in request arguments.
+	 * @var        string The name of the View returned by the Action.
+	 */
+	protected $viewName = null;
+	
+	/**
+	 * Initialize the container. This will create a response instance.
 	 *
 	 * @param      AgaviContext The current Context instance.
 	 * @param      array        An array of initialization parameters.
@@ -96,6 +89,14 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 		$this->response->initialize($this->context, $rfi['parameters']);
 	}
 	
+	/**
+	 * Start execution.
+	 *
+	 * This will create an instance of the action and merge in request parameters.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public function execute()
 	{
 		$controller = $this->context->getController();
@@ -247,35 +248,30 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 		}
 	}
 	
+	/**
+	 * Get the Context.
+	 *
+	 * @return     AgaviContext The Context.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public function getContext()
 	{
 		return $this->context;
 	}
 	
 	/**
-	 * Retrieve this container's action name.
+	 * Retrieve this container's rendered view presentation.
 	 *
-	 * @return     string An action name.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function getActionName()
-	{
-		return $this->actionName;
-	}
-	
-	/**
-	 * Retrieve this container's action instance.
-	 *
-	 * @return     AgaviAction An action implementation instance.
+	 * @return     AgaviResponse The Response instance for this action.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function getActionInstance()
+	public function getResponse()
 	{
-		return $this->actionInstance;
+		return $this->response;
 	}
 	
 	/**
@@ -293,6 +289,19 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	}
 	
 	/**
+	 * Retrieve this container's action instance.
+	 *
+	 * @return     AgaviAction An action implementation instance.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getActionInstance()
+	{
+		return $this->actionInstance;
+	}
+	
+	/**
 	 * Retrieve this container's module name.
 	 *
 	 * @return     string A module name.
@@ -306,16 +315,16 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	}
 	
 	/**
-	 * Retrieve this container's view name.
+	 * Retrieve this container's action name.
 	 *
-	 * @return     string A view name.
+	 * @return     string An action name.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function getViewName()
+	public function getActionName()
 	{
-		return $this->viewName;
+		return $this->actionName;
 	}
 	
 	/**
@@ -330,6 +339,19 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	public function getViewModuleName()
 	{
 		return $this->viewModuleName;
+	}
+	
+	/**
+	 * Retrieve this container's view name.
+	 *
+	 * @return     string A view name.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getViewName()
+	{
+		return $this->viewName;
 	}
 	
 	/**
@@ -359,19 +381,6 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	}
 	
 	/**
-	 * Set the module name for this container.
-	 *
-	 * @return     string A view name.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function setViewName($viewName)
-	{
-		$this->viewName = $viewName;
-	}
-	
-	/**
 	 * Set the view module name for this container.
 	 *
 	 * @return     string A view module name.
@@ -385,71 +394,16 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	}
 	
 	/**
-	 * Retrieve this container's rendered view presentation.
+	 * Set the module name for this container.
 	 *
-	 * @return     AgaviResponse The Response instance for this action.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function getResponse()
-	{
-		return $this->response;
-	}
-	
-	/**
-	 * Set the rendered presentation for this action.
-	 *
-	 * @param      AgaviResponse A response holding the rendered presentation.
+	 * @return     string A view name.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function setResponse(AgaviResponse $response)
+	public function setViewName($viewName)
 	{
-		$this->response = $response;
-	}
-	
-	/**
-	 * Set the next container that will be run after this Action finished.
-	 *
-	 * @param      string The Module name of the Action to execute next.
-	 * @param      string The name of the Action to execute next.
-	 * @param      mixed  An AgaviParameterHolder instance or an array holding
-	 *                    request parameters to pass to that Action.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function setNext(AgaviExecutionContainer $container)
-	{
-		$this->next = $container;
-	}
-	
-	/**
-	 * Check if this Action or a View specified another Action to run next.
-	 *
-	 * @return     bool Whether or not a next Action has been set.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function hasNext()
-	{
-		return $this->next instanceof AgaviExecutionContainer;
-	}
-	
-	/**
-	 * Get the Action that should be run after this one finished execution.
-	 *
-	 * @return     AgaviExecutionContainer The container for the next action run.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function getNext()
-	{
-		return $this->next;
+		$this->viewName = $viewName;
 	}
 }
 

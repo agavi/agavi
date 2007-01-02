@@ -34,8 +34,8 @@ class AgaviSecurityFilter extends AgaviFilter implements AgaviIActionFilter, Aga
 	/**
 	 * Execute this filter.
 	 *
-	 * @param      AgaviFilterChain A FilterChain instance.
-	 * @param      AgaviResponse A Response instance.
+	 * @param      AgaviFilterChain        A FilterChain instance.
+	 * @param      AgaviExecutionContainer The current execution container.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @author     Sean Kerr <skerr@mojavi.org>

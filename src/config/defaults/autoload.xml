@@ -82,7 +82,6 @@
 			<autoload name="AgaviFactoryException">%core.agavi_dir%/exception/AgaviFactoryException.class.php</autoload>
 			<autoload name="AgaviFileException">%core.agavi_dir%/exception/AgaviFileException.class.php</autoload>
 			<autoload name="AgaviFilterException">%core.agavi_dir%/exception/AgaviFilterException.class.php</autoload>
-			<autoload name="AgaviForwardException">%core.agavi_dir%/exception/AgaviForwardException.class.php</autoload>
 			<autoload name="AgaviInitializationException">%core.agavi_dir%/exception/AgaviInitializationException.class.php</autoload>
 			<autoload name="AgaviLoggingException">%core.agavi_dir%/exception/AgaviLoggingException.class.php</autoload>
 			<autoload name="AgaviRenderException">%core.agavi_dir%/exception/AgaviRenderException.class.php</autoload>

@@ -194,8 +194,8 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 	/**
 	 * Execute this filter.
 	 *
-	 * @param      AgaviFilterChain The filter chain.
-	 * @param      AgaviResponse A Response instance.
+	 * @param      AgaviFilterChain        The filter chain.
+	 * @param      AgaviExecutionContainer The current execution container.
 	 *
 	 * @throws     <b>AgaviInitializationException</b> If an error occurs during
 	 *                                                 View initialization.
@@ -362,21 +362,8 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 					$executeMethod = 'execute';
 				}
 				$key = $request->toggleLock();
-				$retval = $viewInstance->$executeMethod($container);
+				$renderer = $viewInstance->$executeMethod($container);
 				$request->toggleLock($key);
-
-				if(is_array($retval) && count($retval) >= 2) {
-					// View returned another Action to foward to. Skip rendering and go there.
-					$response->clear();
-					$response->lock();
-					$container->setNext(new AgaviExecutionContainer($retval[0], $retval[1], isset($retval[2]) ? $retval[2] : array()));
-					return;
-				} elseif($retval instanceof AgaviExecutionContainer) {
-					$container->setNext($retval);
-					return;
-				} else {
-					$renderer = $retval;
-				}
 
 				if(!($renderer instanceof AgaviRenderer)) {
 					$renderer = null;
@@ -470,7 +457,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 	/**
 	 * Execute the Action
 	 *
-	 * @param      AgaviActionStackEntry The Action's ActionStackEntry.
+	 * @param      AgaviExecutionContainer The current execution container.
 	 *
 	 * @return     mixed The processed View information returned by the Action.
 	 *

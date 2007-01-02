@@ -70,8 +70,8 @@ abstract class AgaviFilter extends AgaviParameterHolder implements AgaviIFilter
 	/**
 	 * The default "execute once" method, which just calls the regular one.
 	 *
-	 * @param      AgaviFilterChain A FilterChain instance.
-	 * @param      AgaviResponse A Response instance.
+	 * @param      AgaviFilterChain        A FilterChain instance.
+	 * @param      AgaviExecutionContainer The current execution container.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
@@ -84,8 +84,8 @@ abstract class AgaviFilter extends AgaviParameterHolder implements AgaviIFilter
 	/**
 	 * The default "execute" method, which just calls continues in the chain.
 	 *
-	 * @param      AgaviFilterChain A FilterChain instance.
-	 * @param      AgaviResponse A Response instance.
+	 * @param      AgaviFilterChain        A FilterChain instance.
+	 * @param      AgaviExecutionContainer The current execution container.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0

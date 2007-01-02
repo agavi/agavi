@@ -31,7 +31,7 @@
 abstract class AgaviAction
 {
 	/**
-	 * @var        AgaviContext An AgaviContext instance.
+	 * @var        AgaviExecutionContainer This action's execution container.
 	 */
 	private $container = null;
 
@@ -53,6 +53,14 @@ abstract class AgaviAction
 		return $this->context;
 	}
 
+	/**
+	 * Retrieve the execution container for this action.
+	 *
+	 * @return     AgaviExecutionContainer This action's execution container.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public final function getContainer()
 	{
 		return $this->container;

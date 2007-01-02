@@ -57,6 +57,9 @@ abstract class AgaviView
 	 */
 	const RENDER_VAR = 4;
 
+	/**
+	 * @var        AgaviExecutionContainer This view's execution container.
+	 */
 	protected $container = null;
 	
 	/**
@@ -110,11 +113,6 @@ abstract class AgaviView
 	 */
 	abstract function execute(AgaviParameterHolder $parameters);
 
-	public final function getContainer()
-	{
-		return $this->container;
-	}
-
 	/**
 	 * Retrieve the current application context.
 	 *
@@ -126,6 +124,19 @@ abstract class AgaviView
 	public final function getContext()
 	{
 		return $this->context;
+	}
+
+	/**
+	 * Retrieve the execution container for this action.
+	 *
+	 * @return     AgaviExecutionContainer This action's execution container.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public final function getContainer()
+	{
+		return $this->container;
 	}
 
 	/**

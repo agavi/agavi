@@ -19,8 +19,7 @@
  * such as the module and action names and the module directory. 
  * It also serves as a gateway to the core pieces of the framework, allowing
  * objects with access to the context, to access other useful objects such as
- * the current controller, request, user, actionstack, databasemanager, storage,
- * and loggingmanager.
+ * the current controller, request, user, database manager etc.
  *
  * @package    agavi
  * @subpackage core
@@ -44,8 +43,8 @@ final class AgaviContext
 	 * @var        array An array of class names for frequently used factories.
 	 */
 	protected $factories = array(
-		'action_stack' => null,
 		'dispatch_filter' => null,
+		'execution_container' => null
 		'execution_filter' => null,
 		'filter_chain' => null,
 		'security_filter' => null

@@ -33,10 +33,10 @@ class AgaviDispatchFilter extends AgaviFilter implements AgaviIGlobalFilter
 	/**
 	 * Execute this filter.
 	 *
-	 * The DispatchFilter makes the first forward() call.
+	 * The DispatchFilter executes the execution container.
 	 *
-	 * @param      AgaviFilterChain The filter chain.
-	 * @param      AgaviResponse A Response instance.
+	 * @param      AgaviFilterChain        The filter chain.
+	 * @param      AgaviExecutionContainer The current execution container.
 	 *
 	 * @throws     <b>AgaviFilterException</b> If an error occurs during execution.
 	 *

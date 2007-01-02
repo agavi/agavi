@@ -20,6 +20,7 @@ class AgaviSampleAppCookieLoginFilter extends AgaviFilter implements AgaviIGloba
 	 * Execute this filter.
 	 *
 	 * @param      AgaviFilterChain The filter chain.
+	 * @param      AgaviExecutionContainer The current execution container.
 	 *
 	 * @throws     <b>AgaviFilterException</b> If an error occurs during execution.
 	 *

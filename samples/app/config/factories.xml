@@ -8,8 +8,8 @@
 | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
 | The default configuration must at least define:                            |
 |                                                                            |
-|  action_stack          - The ActionStack class implementation.             |
 |  controller            - The Controller class implementation.              |
+|  execution_container   - The ExecutionContainer class implementation.      |
 |  execution_filter      - The ExecutionFilter class implementation.         |
 |  request               - The Request class implementation.                 |
 |  storage               - The Storage class implementation.                 |

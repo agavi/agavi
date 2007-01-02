@@ -41,8 +41,8 @@ class AgaviExecutionTimeFilter extends AgaviFilter implements AgaviIGlobalFilter
 	/**
 	 * Execute this filter.
 	 *
-	 * @param      AgaviFilterChain The filter chain.
-	 * @param      AgaviResponse A Response instance.
+	 * @param      AgaviFilterChain        The filter chain.
+	 * @param      AgaviExecutionContainer The current execution container.
 	 *
 	 * @throws     <b>AgaviFilterException</b> If an error occurs during execution.
 	 *
@@ -60,7 +60,6 @@ class AgaviExecutionTimeFilter extends AgaviFilter implements AgaviIGlobalFilter
 		$start = microtime(true);
 		$filterChain->execute($container);
 		
-		// cannot grab response before execute() has run since this may be a global filter
 		$response = $container->getResponse();
 		
 		$outputTypes = $this->getParameter('output_types');

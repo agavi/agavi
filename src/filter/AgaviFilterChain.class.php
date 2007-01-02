@@ -72,6 +72,8 @@ class AgaviFilterChain
 	/**
 	 * Execute the next filter in this chain.
 	 *
+	 * @param      AgaviExecutionContainer The current execution container.
+	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.9.0

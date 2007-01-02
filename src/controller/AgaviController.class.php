@@ -29,14 +29,14 @@
 abstract class AgaviController extends AgaviParameterHolder
 {
 	/**
-	 * @var        int The number of forward() calls done so far.
+	 * @var        int The number of execution containers run so far.
 	 */
-	protected $numForwards = 0;
+	protected $numExecutions = 0;
 	
 	/**
-	 * @var        int The maximum number of times this Controller will forward().
+	 * @var        int The maximum number of execution container runs allowed.
 	 */
-	protected $maxForwards  = 20;
+	protected $maxExecutions = 20;
 	
 	/**
 	 * @var        AgaviContext An AgaviContext instance.
@@ -96,10 +96,19 @@ abstract class AgaviController extends AgaviParameterHolder
 		throw new AgaviControllerException(sprintf('Action "%s" in Module "%s" could not be found.', $actionName, $moduleName));
 	}
 	
-	public function incNumForwards()
+	/**
+	 * Increment the execution counter.
+	 * Will throw an exception if the maximum amount of runs is exceeded.
+	 *
+	 * @throws     AgaviControllerException If too many execution runs were made.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function countExecution()
 	{
-		if(++$this->numForwards > $this->maxForwards && $this->maxForwards > 0) {
-			throw new AgaviForwardException('Too many forwards have been detected for this Context.');
+		if(++$this->numExecutions > $this->maxExecutions && $this->maxExecutions > 0) {
+			throw new AgaviControllerException('Too many execution runs have been detected for this Context.');
 		}
 	}
 	
@@ -355,6 +364,16 @@ abstract class AgaviController extends AgaviParameterHolder
 		$this->filters['execution']->initialize($this->context, $effi['parameters']);
 	}
 	
+	/**
+	 * Get a filter.
+	 *
+	 * @param      string The name of the filter list section.
+	 *
+	 * @return     AgaviFilter A filter instance, or null.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public function getFilter($which)
 	{
 		return (isset($this->filters[$which]) ? $this->filters[$which] : null);
