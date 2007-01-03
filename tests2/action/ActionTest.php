@@ -16,7 +16,7 @@ class ActionTest extends AgaviTestCase
 		$this->_controller = $this->_context->getController();
 
 		$this->_action = new SampleAction();
-		$this->_action->initialize($this->_context);
+		$this->_action->initialize($this->_controller->createExecutionContainer('Foo', 'Bar'));
 	}
 
 	public function tearDown()

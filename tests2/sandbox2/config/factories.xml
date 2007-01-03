@@ -28,7 +28,6 @@
 		<validator_manager class="AgaviValidatorManager" />
 	</configuration>
 	<configuration context="test1">
-		<action_stack class="CTTestActionStack" />
 		<storage class="TestSessionStorage">
 		</storage>
 	</configuration>
