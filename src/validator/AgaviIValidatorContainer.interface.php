@@ -37,7 +37,17 @@ interface AgaviIValidatorContainer
 	 * @since      0.11.0
 	 */
 	public function addChild(AgaviValidator $validator);
-	
+
+	/**
+	 * Returns a named child validator.
+	 *
+	 * @param      AgaviValidator The child validator.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getChild($name);
+
 	/**
 	 * Fetches the dependency manager
 	 * 

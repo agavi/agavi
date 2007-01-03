@@ -109,9 +109,31 @@ abstract class AgaviOperatorValidator extends AgaviValidator implements AgaviIVa
 	 */
 	public function addChild(AgaviValidator $validator)
 	{
-		$this->children[] = $validator;
+		$name = $validator->getName();
+		if(isset($this->children[$name])) {
+			throw new IllegalArgumentException('A validator with the name "' . $name . '" already exists');
+		}
+
+		$this->children[$name] = $validator;
 	}
-	
+
+	/**
+	 * Returns a named child validator.
+	 *
+	 * @param      AgaviValidator The child validator.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getChild($name)
+	{
+		if(!isset($this->children[$name])) {
+			throw new IllegalArgumentException('A validator with the name "' . $name . '" does not exist');
+		}
+
+		return $this->children[$name];
+	}
+
 	/**
 	 * Registers an array of validators.
 	 * 
@@ -122,7 +144,7 @@ abstract class AgaviOperatorValidator extends AgaviValidator implements AgaviIVa
 	 */
 	public function registerValidators(array $validators)
 	{
-		foreach($validators AS $validator) {
+		foreach($validators as $validator) {
 			$this->addChild($validator);
 		}
 	}
