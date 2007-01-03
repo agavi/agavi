@@ -195,7 +195,7 @@ abstract class AgaviController extends AgaviParameterHolder
 			$container->getResponse()->send();
 			
 		} catch(Exception $e) {
-			if(isset($container) && $container instanceof AgaviExecutionContainer && $container->getResponse() instanceof AgaviResponse) {
+			if(isset($container) && $container instanceof AgaviExecutionContainer && ($response = $container->getResponse()) instanceof AgaviResponse) {
 				AgaviException::printStackTrace($e, $this->context, $response);
 			} else {
 				AgaviException::printStackTrace($e, $this->context);
