@@ -106,7 +106,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 		
 		$this->parameters = array_merge($request->getParameters(), $this->parameters);
 		
-		$controller->incNumForwards();
+		$controller->countExecution();
 		
 		$moduleName = $this->getModuleName();
 		$actionName = $this->getActionName();

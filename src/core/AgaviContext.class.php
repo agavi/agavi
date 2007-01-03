@@ -44,7 +44,7 @@ final class AgaviContext
 	 */
 	protected $factories = array(
 		'dispatch_filter' => null,
-		'execution_container' => null
+		'execution_container' => null,
 		'execution_filter' => null,
 		'filter_chain' => null,
 		'security_filter' => null
