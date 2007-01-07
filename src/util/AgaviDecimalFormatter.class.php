@@ -597,6 +597,46 @@ class AgaviDecimalFormatter
 
 		return $map[$mode];
 	}
+
+	/**
+	 * Parses a string into float or int.
+	 *
+	 * @param      string The input number string.
+	 *
+	 * @return     mixed The result if parsing was successfull or false when the 
+	 *                   input was no number.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public static function parse($string, $locale = null)
+	{
+		if($locale) {
+			$groupingSeparator = $locale->getNumberSymbolGroup();
+			$decimalSeparator = $locale->getNumberSymbolDecimal();
+		} else {
+			$groupingSeparator = ',';
+			$decimalSeparator = '.';
+		}
+
+		if(preg_match('#(?P<sign>\+|-)?(?P<num>[0-9' . preg_quote($groupingSeparator) . ']*)(' . preg_quote($decimalSeparator) . '(?P<dec>[0-9]+))?(e(?P<exp>(\+|-)?[0-9]+))?#', $string, $match)) {
+			$num = 0;
+			if(!empty($match['num'])) {
+				$num = $match['num'];
+			}
+			if(!empty($match['dec'])) {
+				$num += (float) ('0.' . $match['dec']);
+			}
+
+			if(!empty($match['exp'])) {
+				$num = $num * pow(10, $match['exp']);
+			}
+
+			return $num;
+		} else {
+			return false;
+		}
+	}
 }
 
 ?>
