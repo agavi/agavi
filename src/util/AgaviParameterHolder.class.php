@@ -116,7 +116,7 @@ class AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function getParameters()
+	public function & getParameters()
 	{
 		return $this->parameters;
 	}
