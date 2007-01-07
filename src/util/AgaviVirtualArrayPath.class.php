@@ -292,7 +292,7 @@ class AgaviVirtualArrayPath
 	 * @author     Dominik del Bondio
 	 * @since      0.11.0
 	 */
-	public function &getValue(array &$array, $default = null)
+	public function & getValue(array &$array, $default = null)
 	{
 		return AgaviArrayPathDefinition::getValueFromArray($this->parts, $array, $default);
 	}
@@ -324,7 +324,7 @@ class AgaviVirtualArrayPath
 	 * @author     Dominik del Bondio
 	 * @since      0.11.0
 	 */
-	public function getValueByChildPath($path, array $array, $default = null)
+	public function & getValueByChildPath($path, array &$array, $default = null)
 	{
 		$p = $this->pushRetNew($path);
 

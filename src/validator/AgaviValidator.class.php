@@ -324,9 +324,9 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
-	protected function getData($paramName)
+	protected function & getData($paramName)
 	{
-		$array = $this->validationParameters->getParameters();
+		$array =& $this->validationParameters->getParameters();
 		return $this->curBase->getValueByChildPath($paramName, $array);
 	}
 
@@ -494,9 +494,8 @@ abstract class AgaviValidator extends AgaviParameterHolder
 			return;
 		}
 
-		$array = $this->validationParameters->getParameters();
+		$array =& $this->validationParameters->getParameters();
 		$this->curBase->setValueByChildPath($this->getParameter('export'), $array, $value);
-		$this->validationParameters->setParameters($array);
 	}
 
 	/**
