@@ -46,13 +46,24 @@ class AgaviNumberValidator extends AgaviValidator
 	 */
 	protected function validate()
 	{
-		$value = $this->getData($this->getArgument());
+		$value =& $this->getData($this->getArgument());
+
+		$hasExtraChars = false;
+
+		if(!$this->getParameter('no_locale', false)) {
+			if($locale = $this->getParameter('in_locale')) {
+				$locale = $this->getContext()->getTranslationManager()->getLocaleFromIdentifier($locale);
+			} else {
+				$locale = $this->getContext()->getTranslationManager()->getCurrentLocale();
+			}
+
+			$value = AgaviDecimalFormatter::parse($value, $locale, $hasExtraChars);
+		}
 
 		switch(strtolower($this->getParameter('type'))) {
 			case 'int':
 			case 'integer':
-				$temp = (int) $value;
-				if(((string)$temp) !== ((string)$value) ) {
+				if(!is_int($value) || $hasExtraChars) {
 					$this->throwError('type');
 					return false;
 				}
@@ -60,12 +71,25 @@ class AgaviNumberValidator extends AgaviValidator
 				break;
 			
 			case 'float':
-				if(!is_numeric($value)) {
+				if(!is_float($value) || $hasExtraChars) {
 					$this->throwError('type');
 					return false;
 				}
 				
 				break;
+		}
+
+		switch(strtolower($this->getParameter('cast_to'))) {
+			case 'int':
+			case 'integer':
+				$value = (int) $value;
+				break;
+
+			case 'float':
+			case 'double':
+				$value = (float) $value;
+				break;
+
 		}
 
 		if($this->hasParameter('min') and $value < $this->getParameter('min')) {
