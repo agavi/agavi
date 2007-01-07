@@ -602,6 +602,9 @@ class AgaviDecimalFormatter
 	 * Parses a string into float or int.
 	 *
 	 * @param      string The input number string.
+	 * @param      AgaviLocale An optional locale to get the separators from.
+	 * @param      bool An out value indicating whether there were additional 
+	 *                  characters after the matched number.
 	 *
 	 * @return     mixed The result if parsing was successfull or false when the 
 	 *                   input was no number.
@@ -609,8 +612,10 @@ class AgaviDecimalFormatter
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public static function parse($string, $locale = null)
+	public static function parse($string, $locale = null, &$hasExtraChars = false)
 	{
+		$string = trim($string);
+
 		if($locale) {
 			$groupingSeparator = $locale->getNumberSymbolGroup();
 			$decimalSeparator = $locale->getNumberSymbolDecimal();
@@ -619,10 +624,16 @@ class AgaviDecimalFormatter
 			$decimalSeparator = '.';
 		}
 
-		if(preg_match('#(?P<sign>\+|-)?(?P<num>[0-9' . preg_quote($groupingSeparator) . ']*)(' . preg_quote($decimalSeparator) . '(?P<dec>[0-9]+))?(e(?P<exp>(\+|-)?[0-9]+))?#', $string, $match)) {
+		$rx = '#(?P<sign>\+|-)?(?P<num>[0-9' . preg_quote($groupingSeparator) . ']*)(' . preg_quote($decimalSeparator) . '(?P<dec>[0-9]+))?(e(?P<exp>(\+|-)?[0-9]+))?#';
+		if(preg_match($rx, $string, $match)) {
+
+			if(strlen($match[0]) < strlen($string)) {
+				$hasExtraChars = true;
+			}
+
 			$num = 0;
 			if(!empty($match['num'])) {
-				$num = $match['num'];
+				$num = str_replace($groupingSeparator, '', $match['num']);
 			}
 			if(!empty($match['dec'])) {
 				$num += (float) ('0.' . $match['dec']);
@@ -634,6 +645,9 @@ class AgaviDecimalFormatter
 
 			return $num;
 		} else {
+			if(strlen($string) > 0) {
+				$hasExtraChars = true;
+			}
 			return false;
 		}
 	}
