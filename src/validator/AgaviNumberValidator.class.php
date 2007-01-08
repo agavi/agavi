@@ -58,7 +58,16 @@ class AgaviNumberValidator extends AgaviValidator
 			}
 
 			$value = AgaviDecimalFormatter::parse($value, $locale, $hasExtraChars);
+		} else {
+			if(is_numeric($value)) {
+				if(((int) $value) == $value) {
+					$value = (int) $value;
+				} else {
+					$value = (float) $value;
+				}
+			}
 		}
+		
 
 		switch(strtolower($this->getParameter('type'))) {
 			case 'int':
@@ -71,7 +80,7 @@ class AgaviNumberValidator extends AgaviValidator
 				break;
 			
 			case 'float':
-				if(!is_float($value) || $hasExtraChars) {
+				if((!is_float($value) && !is_int($value)) || $hasExtraChars) {
 					$this->throwError('type');
 					return false;
 				}

@@ -633,7 +633,7 @@ class AgaviDecimalFormatter
 
 			$num = 0;
 			if(!empty($match['num'])) {
-				$num = str_replace($groupingSeparator, '', $match['num']);
+				$num = (int) str_replace($groupingSeparator, '', $match['num']);
 			}
 			if(!empty($match['dec'])) {
 				$num += (float) ('0.' . $match['dec']);
