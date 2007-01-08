@@ -521,7 +521,8 @@ class AgaviDateFormat
 	 *                         day, month, etc names.
 	 * @param      bool Whether the parsing should be strict. (not allowing 
 	 *                  numbers to exceed the defined length, not allowing missing
-	 *                  additional parts)
+	 *                  additional parts). The returned calendar object will be 
+	 *                  non-lenient.
 	 *
 	 * @return     AgaviCalendar The calendar object.
 	 *
@@ -532,6 +533,13 @@ class AgaviDateFormat
 	{
 		$tm = $locale->getContext()->getTranslationManager();
 		$cal = $tm->createCalendar();
+		$era = $cal->get(AgaviDateDefinitions::ERA);
+		$cal->clear();
+		$cal->set(AgaviDateDefinitions::ERA, $era);
+
+		if($strict) {
+			$cal->setLenient(false);
+		}
 
 		$calendarType = 'gregorian';
 		$datePos = 0;
@@ -806,8 +814,12 @@ class AgaviDateFormat
 			}
 		}
 
-		if($datePos < strlen($dateString) && $strict) {
-			throw new AgaviException('Input string "' . $dateString . '" has characters after the date');
+		if($strict) {
+			// calculate the time to get errors for invalid dates
+			$cal->getTime();
+			if($datePos < strlen($dateString)) {
+				throw new AgaviException('Input string "' . $dateString . '" has characters after the date');
+			}
 		}
 
 
