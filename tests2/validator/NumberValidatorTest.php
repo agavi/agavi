@@ -9,7 +9,7 @@ class NumberValidatorWrapper extends AgaviNumberValidator
 		$this->data = $data;
 	}
 
-	public function getData($paramname)
+	public function & getData($paramname)
 	{
 		return $this->data;
 	}
@@ -30,7 +30,8 @@ class NumberValidatorTest extends AgaviTestCase
 
 	public function setUp()
 	{
-		$this->validator = new NumberValidatorWrapper(new AgaviValidatorManager(), array());
+		$vm = AgaviContext::getInstance('test')->getValidatorManager();
+		$this->validator = new NumberValidatorWrapper($vm, array());
 	}
 
 	public function test_float()

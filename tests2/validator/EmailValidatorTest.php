@@ -10,7 +10,7 @@ class EmailValidatorWrapper extends AgaviEmailValidator
 		$this->data = $data;
 	}
 
-	public function getData($paramname)
+	public function & getData($paramname)
 	{
 		return $this->data;
 	}
