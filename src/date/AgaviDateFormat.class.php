@@ -519,13 +519,16 @@ class AgaviDateFormat
 	 * @param      string The string containing the date.
 	 * @param      AgaviLocale The locale which should be used for parsing local 
 	 *                         day, month, etc names.
+	 * @param      bool Whether the parsing should be strict. (not allowing 
+	 *                  numbers to exceed the defined length, not allowing missing
+	 *                  additional parts)
 	 *
 	 * @return     AgaviCalendar The calendar object.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function parse($dateString, $locale)
+	public function parse($dateString, $locale, $strict = false)
 	{
 		$tm = $locale->getContext()->getTranslationManager();
 		$cal = $tm->createCalendar();
@@ -539,7 +542,9 @@ class AgaviDateFormat
 		$tlCount = count($this->tokenList);
 		for($i = 0; $i < $tlCount; ++$i) {
 			if($datePos >= strlen($dateString)) {
-				// TODO: throw new ...
+				if($strict) {
+					throw new AgaviException('Input string "' . $dateString . '" is to short');
+				}
 				break;
 			}
 
@@ -618,6 +623,9 @@ class AgaviDateFormat
 				if($dateField === null) {
 					throw new AgaviException('Token type ' . $token[0] . ' claims to be numerical but has no date field');
 				}
+				if($strict && $numberLen > $token[1]) {
+					$numberLen = $token[1];
+				}
 				$number = (int) substr($dateString, $datePos, $numberLen);
 
 				$datePos += $numberLen;
@@ -646,8 +654,10 @@ class AgaviDateFormat
 				$count = $token[1];
 				switch($token[0]) {
 					case self::T_TEXT:
-						if($i + 1 == $tlCount /* when the last token is text we can simply skip it */ || substr_compare($dateString, $token[1], $datePos, strlen($token[1])) == 0) {
+						if(substr_compare($dateString, $token[1], $datePos, strlen($token[1])) == 0) {
 							$datePos += strlen($token[1]);
+						} elseif($i + 1 == $tlCount && !$strict) {
+							// when the last text token didn't match we don't do anything in non strict mode
 						} else {
 							throw new AgaviException('Unknown character in "' . $dateString . '" at pos ' . $datePos . ' (expected: "' . $token[1] . '", got: "' . substr($dateString, $datePos, strlen($token[1])) . '")');
 						}
@@ -795,6 +805,11 @@ class AgaviDateFormat
 				}
 			}
 		}
+
+		if($datePos < strlen($dateString) && $strict) {
+			throw new AgaviException('Input string "' . $dateString . '" has characters after the date');
+		}
+
 
 		return $cal;
 	}
