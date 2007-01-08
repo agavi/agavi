@@ -234,7 +234,6 @@ abstract class AgaviController extends AgaviParameterHolder
 	{
 		static $loaded = array();
 		
-		$actionName = str_replace('.', '/', $actionName);
 		$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/actions/' . $actionName . 'Action.class.php';
 
 		if(!isset($loaded[$file]) && file_exists($file)) {

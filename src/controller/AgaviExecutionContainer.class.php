@@ -102,8 +102,6 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 		$controller = $this->context->getController();
 		$request = $this->context->getRequest();
 		
-		$this->actionInstance = $controller->getAction($this->moduleName, $this->actionName);
-		
 		$this->parameters = array_merge($request->getParameters(), $this->parameters);
 		
 		$controller->countExecution();
@@ -158,7 +156,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 		$this->setModuleName($moduleName);
 		$this->setActionName($actionName);
 		
-		$actionInstance = $this->getActionInstance();
+		$this->actionInstance = $controller->getAction($this->moduleName, $this->actionName);
 		
 		// include the module configuration
 		// laoded only once due to the way import() works
@@ -191,7 +189,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 			}
 
 			// initialize the action
-			$actionInstance->initialize($this);
+			$this->actionInstance->initialize($this);
 			
 			// create a new filter chain
 			$fcfi = $this->context->getFactoryInfo('filter_chain');
@@ -203,7 +201,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 				// global and module filters, otherwise skip them
 
 				// does this action require security?
-				if(AgaviConfig::get('core.use_security', false) && $actionInstance->isSecure()) {
+				if(AgaviConfig::get('core.use_security', false) && $this->actionInstance->isSecure()) {
 					// register security filter
 					$filterChain->register($controller->getFilter('security'));
 				}
