@@ -486,6 +486,9 @@ class AgaviGregorianCalendar extends AgaviCalendar
 
 	protected function handleGetMonthLength($extendedYear, $month)
 	{
+		if(!isset(self::$kLeapMonthLength[$month])) {
+			return null;
+		}
 		return $this->isLeapYear($extendedYear) ? self::$kLeapMonthLength[$month] : self::$kMonthLength[$month];
 	}
 
