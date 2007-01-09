@@ -631,7 +631,7 @@ class AgaviDateFormat
 				if($dateField === null) {
 					throw new AgaviException('Token type ' . $token[0] . ' claims to be numerical but has no date field');
 				}
-				if($strict && $numberLen > $token[1]) {
+				if($strict && $numberLen > 2 && $numberLen > $token[1]) {
 					$numberLen = $token[1];
 				}
 				$number = (int) substr($dateString, $datePos, $numberLen);
