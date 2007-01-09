@@ -484,18 +484,24 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 * overwrite stuff you don't want to.
 	 *
 	 * @param      mixed The value to be exported.
+	 * @param      string An optional name which should be used for exporting 
+	 *                    instead of the export parameter.
 	 *
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
-	protected function export($value)
+	protected function export($value, $name = null)
 	{
-		if(!$this->getParameter('export')) {
+		if($name === null) {
+			$name = $this->getParameter('export');
+		}
+
+		if(!$name) {
 			return;
 		}
 
 		$array =& $this->validationParameters->getParameters();
-		$this->curBase->setValueByChildPath($this->getParameter('export'), $array, $value);
+		$this->curBase->setValueByChildPath($name, $array, $value);
 	}
 
 	/**
