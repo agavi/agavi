@@ -119,7 +119,7 @@ class AgaviDateFormatter extends AgaviDateFormat implements AgaviITranslator
 		$this->locale = $newLocale;
 
 		if($this->customFormat === null) {
-			$format = $this->resolveSpecifier(null, $this->type);
+			$format = $this->resolveSpecifier($this->locale, null, $this->type);
 			$this->setFormat($format);
 		} else {
 			$format = $this->customFormat;
@@ -128,14 +128,23 @@ class AgaviDateFormatter extends AgaviDateFormat implements AgaviITranslator
 			}
 
 			if($this->isDateSpecifier($format)) {
-				$format = $this->resolveSpecifier($format, $this->type);
+				$format = $this->resolveSpecifier($this->locale, $format, $this->type);
 			}
 
 			$this->setFormat($format);
 		}
 	}
 
-	protected function resolveSpecifier($spec, $type)
+	public static function resolveFormat($format, $locale, $type = 'datetime')
+	{
+		if(self::isDateSpecifier($format)) {
+			return self::resolveSpecifier($locale, $format, $type);
+		}
+
+		return $format;
+	}
+
+	protected static function resolveSpecifier($locale, $spec, $type)
 	{
 		if(!$type) {
 			$type = 'datetime';
@@ -143,33 +152,33 @@ class AgaviDateFormatter extends AgaviDateFormat implements AgaviITranslator
 
 		if($type == 'datetime' || $type == 'time') {
 			if($spec === null) {
-				$formatName = $this->locale->getCalendarTimeFormatDefaultName('gregorian');
+				$formatName = $locale->getCalendarTimeFormatDefaultName('gregorian');
 			} else {
 				$formatName = $spec;
 			}
-			$format = $timeFormat = $this->locale->getCalendarTimeFormatPattern('gregorian', $formatName);
+			$format = $timeFormat = $locale->getCalendarTimeFormatPattern('gregorian', $formatName);
 		}
 
 		if($type == 'datetime' || $type == 'date') {
 			if($spec === null) {
-				$formatName = $this->locale->getCalendarDateFormatDefaultName('gregorian');
+				$formatName = $locale->getCalendarDateFormatDefaultName('gregorian');
 			} else {
 				$formatName = $spec;
 			}
 
-			$format = $dateFormat = $this->locale->getCalendarDateFormatPattern('gregorian', $formatName);
+			$format = $dateFormat = $locale->getCalendarDateFormatPattern('gregorian', $formatName);
 		}
 
 		if($type == 'datetime') {
-			$formatName = $this->locale->getCalendarDateTimeFormatDefaultName('gregorian');
-			$formatStr = $this->locale->getCalendarDateTimeFormat('gregorian', $formatName);
+			$formatName = $locale->getCalendarDateTimeFormatDefaultName('gregorian');
+			$formatStr = $locale->getCalendarDateTimeFormat('gregorian', $formatName);
 			$format = str_replace(array('{0}', '{1}'), array($timeFormat, $dateFormat), $formatStr);
 		}
 
 		return $format;
 	}
 
-	protected function isDateSpecifier($format)
+	protected static function isDateSpecifier($format)
 	{
 		static $specifiers = array('full', 'long', 'medium', 'short');
 
