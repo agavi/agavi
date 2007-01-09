@@ -135,6 +135,20 @@ class AgaviDateFormatter extends AgaviDateFormat implements AgaviITranslator
 		}
 	}
 
+	/**
+	 * Resolves a given format (translates it to the given string of one of 
+	 * 'full', 'long', 'medium', 'short' or returns the format unmodified 
+	 * otherwise.
+	 *
+	 * @param      string The format string.
+	 * @param      AgaviLocale The locale to use for resolving.
+	 * @param      string The type (date, time or datetime).
+	 *
+	 * @return     string The resolved format.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public static function resolveFormat($format, $locale, $type = 'datetime')
 	{
 		if(self::isDateSpecifier($format)) {
@@ -144,6 +158,19 @@ class AgaviDateFormatter extends AgaviDateFormat implements AgaviITranslator
 		return $format;
 	}
 
+	/**
+	 * Resolves a given specifier ('full', 'long', 'medium', 'short' or null which
+	 * will use the default format).
+	 *
+	 * @param      AgaviLocale The locale to use for resolving.
+	 * @param      string The specifier.
+	 * @param      string The type (date, time or datetime).
+	 *
+	 * @return     string The format.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	protected static function resolveSpecifier($locale, $spec, $type)
 	{
 		if(!$type) {
@@ -178,6 +205,17 @@ class AgaviDateFormatter extends AgaviDateFormat implements AgaviITranslator
 		return $format;
 	}
 
+	/**
+	 * Checks whether a given string is a date specifier. (One of 'full', 'long',
+	 * 'medium', 'short')
+	 *
+	 * @param      string The specifier.
+	 *
+	 * @return     bool The result.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	protected static function isDateSpecifier($format)
 	{
 		static $specifiers = array('full', 'long', 'medium', 'short');
