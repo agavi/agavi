@@ -490,7 +490,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 */
 	protected function export($value)
 	{
-		if(!$this->hasParameter('export')) {
+		if(!$this->getParameter('export')) {
 			return;
 		}
 
