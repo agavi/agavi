@@ -501,7 +501,9 @@ abstract class AgaviValidator extends AgaviParameterHolder
 		}
 
 		$array =& $this->validationParameters->getParameters();
-		$this->curBase->setValueByChildPath($name, $array, $value);
+		$cp = $this->curBase->pushRetNew($name);
+		$cp->setValueFromArray($array, $value);
+		$this->getContext()->getValidatorManager()->addFieldResult($this, $cp->__toString(), AgaviValidator::NOT_PROCESSED);
 	}
 
 	/**
