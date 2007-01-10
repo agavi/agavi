@@ -108,7 +108,7 @@ class AgaviDateFormatter extends AgaviDateFormat implements AgaviITranslator
 			$message->setTimeZone($this->context->getTranslationManager()->createTimeZone($zoneId));
 		}
 
-		return $fmt->format($message, 'gregorian', $locale);
+		return $fmt->format($message, AgaviCalendar::GREGORIAN, $locale);
 	}
 
 	/**
@@ -173,32 +173,33 @@ class AgaviDateFormatter extends AgaviDateFormat implements AgaviITranslator
 	 */
 	protected static function resolveSpecifier($locale, $spec, $type)
 	{
+		$calendarType = AgaviCalendar::GREGORIAN;
 		if(!$type) {
 			$type = 'datetime';
 		}
 
 		if($type == 'datetime' || $type == 'time') {
 			if($spec === null) {
-				$formatName = $locale->getCalendarTimeFormatDefaultName('gregorian');
+				$formatName = $locale->getCalendarTimeFormatDefaultName($calendarType);
 			} else {
 				$formatName = $spec;
 			}
-			$format = $timeFormat = $locale->getCalendarTimeFormatPattern('gregorian', $formatName);
+			$format = $timeFormat = $locale->getCalendarTimeFormatPattern($calendarType, $formatName);
 		}
 
 		if($type == 'datetime' || $type == 'date') {
 			if($spec === null) {
-				$formatName = $locale->getCalendarDateFormatDefaultName('gregorian');
+				$formatName = $locale->getCalendarDateFormatDefaultName($calendarType);
 			} else {
 				$formatName = $spec;
 			}
 
-			$format = $dateFormat = $locale->getCalendarDateFormatPattern('gregorian', $formatName);
+			$format = $dateFormat = $locale->getCalendarDateFormatPattern($calendarType, $formatName);
 		}
 
 		if($type == 'datetime') {
-			$formatName = $locale->getCalendarDateTimeFormatDefaultName('gregorian');
-			$formatStr = $locale->getCalendarDateTimeFormat('gregorian', $formatName);
+			$formatName = $locale->getCalendarDateTimeFormatDefaultName($calendarType);
+			$formatStr = $locale->getCalendarDateTimeFormat($calendarType, $formatName);
 			$format = str_replace(array('{0}', '{1}'), array($timeFormat, $dateFormat), $formatStr);
 		}
 

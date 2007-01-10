@@ -775,12 +775,12 @@ class AgaviTranslationManager
 		if(!$calendarType) {
 			$calendarType = $locale->getLocaleCalendar();
 			if(!$calendarType) {
-				$calendarType = 'gregorian';
+				$calendarType = AgaviCalendar::GREGORIAN;
 			}
 		}
 
 		switch($calendarType) {
-			case 'gregorian':
+			case AgaviCalendar::GREGORIAN:
 				$c = new AgaviGregorianCalendar($this /* $locale */);
 				break;
 			default:
