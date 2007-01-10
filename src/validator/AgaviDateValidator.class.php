@@ -52,6 +52,17 @@
  *     'format'      see in 'formats' above.
  *   'arguments_format' A string which will be used as the format string for 
  *                 sprintf.
+ *   'min'         Either an string or an array. When its a string the the 
+ *                 its assumed to be in the format 'yyyy-MM-dd[ HH:mm:ss[.S]]'.
+ *                 When its an array it will take the minimum value from a 
+ *                 request field. These indizes apply:
+ *     'format'      A custom format string which should be used when the field 
+ *                   is an string.
+ *     'field'       The name of the field to use as minimum value (could be a 
+ *                   previous exported calendar object). Do NOT use unvalidated 
+ *                   fields here. Lax parsing will be used.
+ *                 This value is inclusive.
+ *   'max'         The same as min except that the max is exclusive.
  *
  * @package    agavi
  * @subpackage validator
@@ -100,7 +111,7 @@ class AgaviDateValidator extends AgaviValidator
 			try {
 				$cal->getTime();
 			} catch(Exception $e) {
-				$this->throwError();
+				$this->throwError('check');
 				return false;
 			}
 		} else {
@@ -142,7 +153,7 @@ class AgaviDateValidator extends AgaviValidator
 			}
 
 			if(!$matchedFormat) {
-				$this->throwError();
+				$this->throwError('format');
 				return false;
 			}
 		}
@@ -174,6 +185,28 @@ class AgaviDateValidator extends AgaviValidator
 			}
 		}
 
+		$defaultParseFormat = new AgaviDateFormat('yyyy-MM-dd HH:mm:ss.S');
+
+		if($this->hasParameter('min')) {
+			$min = $this->getMinOrMaxValue('min', $defaultParseFormat, $locale);
+
+			$isAfterEqual = $cal->after($min) || $cal->equals($min);
+			if(!$isAfterEqual) {
+				$this->throwError('min');
+				return false;
+			}
+		}
+
+		if($this->hasParameter('max')) {
+			$max = $this->getMinOrMaxValue('max', $defaultParseFormat, $locale);
+
+			$isBefore = $cal->before($max);
+			if(!$isBefore) {
+				$this->throwError('max');
+				return false;
+			}
+		}
+
 		if($this->hasParameter('export')) {
 			$export = $this->getParameter('export');
 			if(is_string($export)) {
@@ -189,6 +222,41 @@ class AgaviDateValidator extends AgaviValidator
 
 		return true;
 	}
+
+	/**
+	 * Returns the calendar object for a max or min definition.
+	 *
+	 * @param      string 'min' or 'max'
+	 * @param      AgaviDateFormat The default format when parsing strings.
+	 * @param      AgaviLocale The locale to use.
+	 *
+	 * @return     AgaviCalendar The calendar object storing the date.
+	 * 
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	protected function getMinOrMaxValue($minMax, $defaultParseFormat, $locale)
+	{
+		$format = $defaultParseFormat;
+
+		$minMax = $this->getParameter($minMax);
+		if(is_array($minMax)) {
+			$minMaxValue = $this->validationParameters->getParameter($minMax['field']);
+			if(!$minMaxValue instanceof AgaviCalendar) {
+				if(isset($minMax['format'])) {
+					$format = new AgaviDateFormat($minMax['format']);
+				}
+				$result = $format->parse($minMaxValue, $locale, false);
+			} else {
+				$result = $minMaxValue;
+			}
+		} else {
+			$result = $format->parse($minMax, $locale, false);
+		}
+
+		return $result;
+	}
+
 }
 
 ?>
