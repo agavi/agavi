@@ -155,14 +155,14 @@ class AgaviFactoryConfigHandler extends AgaviConfigHandler
 																'if($this->storage->getParameter("auto_start", true)) $this->storage->startup();';
 			}
 
-			// ValidatorManager
-			if(isset($cfg->validator_manager)) {
-				$data['validator_manager'] = isset($data['validator_manager']) ? $data['validator_manager'] : array('class' => null, 'params' => array());
-				$data['validator_manager']['class'] = $cfg->validator_manager->hasAttribute('class')? $cfg->validator_manager->getAttribute('class') : $data['validator_manager']['class'];
-				$data['validator_manager']['params'] = $this->getItemParameters($cfg->validator_manager, $data['validator_manager']['params']);
+			// ValidationManager
+			if(isset($cfg->validation_manager)) {
+				$data['validation_manager'] = isset($data['validation_manager']) ? $data['validation_manager'] : array('class' => null, 'params' => array());
+				$data['validation_manager']['class'] = $cfg->validation_manager->hasAttribute('class')? $cfg->validation_manager->getAttribute('class') : $data['validation_manager']['class'];
+				$data['validation_manager']['params'] = $this->getItemParameters($cfg->validation_manager, $data['validation_manager']['params']);
 
-				$data['validator_manager_code'] =	'$this->validatorManager = new ' . $data['validator_manager']['class'] . '();' . "\n" .
-																					'$this->validatorManager->initialize($this, ' . var_export($data['validator_manager']['params'], true) . ');';
+				$data['validation_manager_code'] =	'$this->validationManager = new ' . $data['validation_manager']['class'] . '();' . "\n" .
+																					'$this->validationManager->initialize($this, ' . var_export($data['validation_manager']['params'], true) . ');';
 			}
 
 			// User
@@ -243,7 +243,7 @@ class AgaviFactoryConfigHandler extends AgaviConfigHandler
 			'controller' => true,
 			'request' => true,
 			'routing' => true,
-			'validator_manager' => true,
+			'validation_manager' => true,
 		);
 
 		$code = '';

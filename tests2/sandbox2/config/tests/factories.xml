@@ -77,12 +77,12 @@
 			</parameters>
 		</storage>
 
-		<validator_manager class="FCHTestValidatorManager">
+		<validation_manager class="FCHTestValidationManager">
 			<parameters>
 				<parameter name="p1">v1</parameter>
 				<parameter name="p2">v2</parameter>
 			</parameters>
-		</validator_manager>
+		</validation_manager>
 
 
 

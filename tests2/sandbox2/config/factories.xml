@@ -25,7 +25,7 @@
 		</storage>
 		<translation_manager class="AgaviTranslationManager" />
 		<user class="AgaviSecurityUser" />
-		<validator_manager class="AgaviValidatorManager" />
+		<validation_manager class="AgaviValidationManager" />
 	</configuration>
 	<configuration context="test1">
 		<action_stack class="CTTestActionStack" />

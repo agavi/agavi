@@ -30,7 +30,7 @@ class NumberValidatorTest extends AgaviTestCase
 
 	public function setUp()
 	{
-		$vm = AgaviContext::getInstance('test')->getValidatorManager();
+		$vm = AgaviContext::getInstance('test')->getValidationManager();
 		$this->validator = new NumberValidatorWrapper($vm, array());
 	}
 

@@ -48,7 +48,7 @@ abstract class AgaviOperatorValidator extends AgaviValidator implements AgaviIVa
 	 * constructor
 	 * 
 	 * @param      AgaviIValidatorContainer The parent ValidatorContainer
-	 *                                      (mostly the ValidatorManager)
+	 *                                      (mostly the ValidationManager)
 	 * @param      array                    The parameters from the config file.
 	 *
 	 * @author     Uwe Mesecke <uwe@mesecke.net>

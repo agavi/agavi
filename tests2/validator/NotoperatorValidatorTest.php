@@ -6,7 +6,7 @@ class NotoperatorValidatorTest extends AgaviTestCase
 {
 	public function testvalidate()
 	{
-		$vm = AgaviContext::getInstance()->getValidatorManager();
+		$vm = AgaviContext::getInstance()->getValidationManager();
 		$vm->clear();
 		$o = new AgaviNotoperatorValidator($vm, array(), array(), array('severity' => 'error'));
 		
@@ -35,7 +35,7 @@ class NotoperatorValidatorTest extends AgaviTestCase
 	
 	public function testcheckValidSetup()
 	{
-		$vm = AgaviContext::getInstance()->getValidatorManager();
+		$vm = AgaviContext::getInstance()->getValidationManager();
 		$vm->clear();
 		$o = new AgaviNotoperatorValidator($vm, array(), array(), array('severity' => 'error'));
 		

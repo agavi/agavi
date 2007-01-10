@@ -14,7 +14,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviValidatorManager provides management for request parameters and their
+ * AgaviValidationManager provides management for request parameters and their
  * associated validators.
  *
  * @package    agavi
@@ -27,7 +27,7 @@
  * @version    $Id$
  */
 
-class AgaviValidatorManager extends AgaviParameterHolder implements AgaviIValidatorManager, AgaviIValidatorContainer
+class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValidationManager, AgaviIValidatorContainer
 {
 	/**
 	 * @var        AgaviDependencyManager The dependency manager.

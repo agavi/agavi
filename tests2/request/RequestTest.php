@@ -13,7 +13,7 @@ class RequestTest extends AgaviTestCase
 	{
 		$this->_r = new SampleRequest();
 		$this->_r->initialize(AgaviContext::getInstance('test'));
-		$this->_r->getContext()->getValidatorManager()->clear();
+		$this->_r->getContext()->getValidationManager()->clear();
 	}
 
 	public function testgetInstance()

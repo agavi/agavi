@@ -6,7 +6,7 @@ class XoroperatorValidatorTest extends AgaviTestCase
 {
 	public function testvalidate()
 	{
-		$vm = AgaviContext::getInstance()->getValidatorManager();
+		$vm = AgaviContext::getInstance()->getValidationManager();
 		$vm->clear();
 		$o = new AgaviXoroperatorValidator($vm, array(), array(), array('severity' => 'error'));
 		
@@ -74,7 +74,7 @@ class XoroperatorValidatorTest extends AgaviTestCase
 	
 	public function testcheckValidSetup()
 	{
-		$vm = AgaviContext::getInstance()->getValidatorManager();
+		$vm = AgaviContext::getInstance()->getValidationManager();
 		$vm->clear();
 		$o = new AgaviXoroperatorValidator($vm, array(), array(), array('severity' => 'error'));
 		

@@ -95,7 +95,7 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	 */
 	public function getError($name)
 	{
-		$vm = $this->getContext()->getValidatorManager();
+		$vm = $this->getContext()->getValidationManager();
 		$incidents = $vm->getFieldIncidents($name, AgaviValidator::NOTICE);
 
 		if(count($incidents) == 0) {
@@ -117,7 +117,7 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	 */
 	public function getErrorNames()
 	{
-		return $this->getContext()->getValidatorManager()->getFailedFields();
+		return $this->getContext()->getValidationManager()->getFailedFields();
 	}
 
 	/**
@@ -135,7 +135,7 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	 */
 	public function getErrors($name = null)
 	{
-		$vm = $this->getContext()->getValidatorManager();
+		$vm = $this->getContext()->getValidationManager();
 		$errors = array();
 
 		foreach($vm->getIncidents(AgaviValidator::NOTICE) as $incident) {
@@ -175,7 +175,7 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	 */
 	public function getErrorMessages($name = null)
 	{
-		$vm = $this->getContext()->getValidatorManager();
+		$vm = $this->getContext()->getValidationManager();
 
 		if($name !== null) {
 			$incidents = $vm->getFieldIncidents($name, AgaviValidator::NOTICE);
@@ -227,7 +227,7 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	 */
 	public function hasError($name)
 	{
-		return $this->getContext()->getValidatorManager()->isFieldFailed($name);
+		return $this->getContext()->getValidationManager()->isFieldFailed($name);
 	}
 
 
@@ -242,7 +242,7 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	 */
 	public function hasErrors()
 	{
-		return $this->getContext()->getValidatorManager()->getResult() > AgaviValidator::NOTICE;
+		return $this->getContext()->getValidationManager()->getResult() > AgaviValidator::NOTICE;
 	}
 
 	/**
@@ -284,7 +284,7 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	 */
 	public function setError($name, $message)
 	{
-		$vm = $this->getContext()->getValidatorManager();
+		$vm = $this->getContext()->getValidationManager();
 		$incident = new AgaviValidationIncident(null, AgaviValidator::ERROR);
 		$incident->addError(new AgaviValidationError($message, null, array($name)));
 		$vm->addIncident($incident);
@@ -305,7 +305,7 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	 */
 	public function setErrors(array $errors)
 	{
-		$vm = $this->getContext()->getValidatorManager();
+		$vm = $this->getContext()->getValidationManager();
 		$incident = new AgaviValidationIncident(null, AgaviValidator::ERROR);
 		foreach($errors as $name => $error) {
 			$incident->addError(new AgaviValidationError($error, null, array($name)));

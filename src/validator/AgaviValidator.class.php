@@ -224,7 +224,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 		$this->parentContainer = $parent;
 
 		$from = $this;
-		while(!($from instanceof AgaviIValidatorManager)) {
+		while(!($from instanceof AgaviIValidationManager)) {
 			$from = $from->getParentContainer();
 		}
 		$this->context = $from->getContext();
@@ -301,7 +301,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 * This method can be used in validators to shut down used models or
 	 * other activities before the validator is killed.
 	 *
-	 * @see        AgaviValidatorManager::shutdown()
+	 * @see        AgaviValidationManager::shutdown()
 	 *
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
@@ -503,7 +503,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 		$array =& $this->validationParameters->getParameters();
 		$cp = $this->curBase->pushRetNew($name);
 		$cp->setValueFromArray($array, $value);
-		$this->getContext()->getValidatorManager()->addFieldResult($this, $cp->__toString(), AgaviValidator::NOT_PROCESSED);
+		$this->getContext()->getValidationManager()->addFieldResult($this, $cp->__toString(), AgaviValidator::NOT_PROCESSED);
 	}
 
 	/**
@@ -549,7 +549,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 				}
 			}
 
-			$vm = $this->getContext()->getValidatorManager();
+			$vm = $this->getContext()->getValidationManager();
 			foreach($fieldnames as $fieldname) {
 				$vm->addFieldResult($this, $fieldname, $result);
 			}

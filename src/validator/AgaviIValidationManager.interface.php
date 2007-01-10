@@ -14,9 +14,9 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * abstract superclass for ValidatorManagers
+ * abstract superclass for ValidationManagers
  * 
- * AgaviIValidatorManager is the interface for all ValidatorManagers
+ * AgaviIValidationManager is the interface for all ValidationManagers
  * which control validation of request parameters, provide error messages and
  * handle the creation and management of the validators.
  * 
@@ -27,9 +27,9 @@
  * @copyright  (c) Authors
  * @since      0.11
  * 
- * @version:   $Id$  
+ * @version:   $Id$
  */
-interface AgaviIValidatorManager
+interface AgaviIValidationManager
 {
 	/**
 	 * Retrieve the current application context.
