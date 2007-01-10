@@ -39,6 +39,11 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	protected $response = null;
 	
 	/**
+	 * @var        AgaviOutputType The output type for this container.
+	 */
+	protected $outputType = null;
+	
+	/**
 	 * @var        float The microtime at which this container was initialized.
 	 */
 	protected $microtime = null;
@@ -87,6 +92,8 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 		$rfi = $this->context->getFactoryInfo('response');
 		$this->response = new $rfi['class'];
 		$this->response->initialize($this->context, $rfi['parameters']);
+		
+		$this->outputType = $context->getController()->getOutputType();
 	}
 	
 	/**
@@ -270,6 +277,19 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	public function getResponse()
 	{
 		return $this->response;
+	}
+	
+	/**
+	 * Retrieve the output type of this container.
+	 *
+	 * @return     AgaviOutputType The output type object.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getOutputType()
+	{
+		return $this->outputType;
 	}
 	
 	/**

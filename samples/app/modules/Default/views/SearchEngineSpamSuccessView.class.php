@@ -10,9 +10,11 @@ class Default_SearchEngineSpamSuccessView extends AgaviView
 	public function execute(AgaviParameterHolder $parameters)
 	{
 		// set our template
-		$this->setTemplate('SearchEngineSpamSuccess');
-		$this->setDecoratorTemplate('Master');
-
+		$this->addLayer('content', 'SearchEngineSpamSuccess');
+		$this->addLayer('decorator', 'Master');
+		
+		// set the content type
+		$this->setAttribute('_contentType', $this->container->getOutputType()->getParameter('Content-Type', 'text/html; charset=utf-8'));
 		// set the title
 		$this->setAttribute('title', $this->getContext()->getTranslationManager()->_('Congratulations!', 'default.SearchEngineSpam'));
 	}

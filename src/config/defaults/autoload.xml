@@ -118,6 +118,7 @@
 			<autoload name="AgaviISingletonModel">%core.agavi_dir%/model/AgaviISingletonModel.interface.php</autoload>
 
 			<!-- agavi/renderer -->
+			<autoload name="AgaviIReusableRenderer">%core.agavi_dir%/renderer/AgaviIReusableRenderer.interface.php</autoload>
 			<autoload name="AgaviPhptalRenderer">%core.agavi_dir%/renderer/AgaviPhptalRenderer.class.php</autoload>
 			<autoload name="AgaviPhpRenderer">%core.agavi_dir%/renderer/AgaviPhpRenderer.class.php</autoload>
 			<autoload name="AgaviSmartyRenderer">%core.agavi_dir%/renderer/AgaviSmartyRenderer.class.php</autoload>

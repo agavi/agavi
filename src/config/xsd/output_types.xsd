@@ -28,20 +28,25 @@
   <xs:complexType name="output_type">
     <xs:sequence maxOccurs="unbounded">
       <xs:group ref="parameters" />
-      <xs:element name="renderer" minOccurs="0">
-        <xs:complexType>
-          <xs:sequence>
-            <xs:group ref="parameters" />
-          </xs:sequence>
-          <xs:attribute name="class" type="xs:string" use="required" />
-          <xs:attribute name="ignore_slots" type="xs:string" />
-          <xs:attribute name="ignore_decorators" type="xs:string" />
-          <xs:attribute name="extension" type="xs:string" />
-        </xs:complexType>
-      </xs:element>
+      <xs:element name="renderers" type="renderers" minOccurs="0" />
     </xs:sequence>
     <xs:attribute name="name" type="php_label" use="required" />
     <xs:attribute name="exception_template" type="xs:string" />
+  </xs:complexType>
+
+  <xs:complexType name="renderers">
+    <xs:sequence>
+      <xs:element name="renderer" type="renderer" maxOccurs="unbounded" />
+    </xs:sequence>
+    <xs:attribute name="default" type="php_label" use="required" />
+  </xs:complexType>
+  <xs:complexType name="renderer">
+    <xs:sequence>
+      <xs:group ref="parameters" />
+    </xs:sequence>
+    <xs:attribute name="name" type="php_label" use="required" />
+    <xs:attribute name="class" type="php_label" use="required" />
+    <xs:attribute name="extension" type="xs:string" />
   </xs:complexType>
 
 </xs:schema>

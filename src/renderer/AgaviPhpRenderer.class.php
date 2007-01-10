@@ -26,7 +26,7 @@
  *
  * @version    $Id$
  */
-class AgaviPhpRenderer extends AgaviRenderer
+class AgaviPhpRenderer extends AgaviRenderer implements AgaviIReusableRenderer
 {
 	/**
 	 * @var        string A string with the default template file extension,
@@ -47,12 +47,23 @@ class AgaviPhpRenderer extends AgaviRenderer
 	}
 
 	/**
+	 * Reset the engine for re-use
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	protected function reset()
+	{
+		// nothing needs to be done for PHP
+	}
+	
+	/**
 	 * Render the presentation to the Response.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function render(array $templateInfo, array &$attributes, array &$slots = array())
+	public function render(AgaviTemplateLayer $layer, array &$attributes, array &$slots = array())
 	{
 		// DO NOT USE VARIABLES IN HERE, THEY MIGHT INTERFERE WITH TEMPLATE VARS
 		
@@ -80,7 +91,7 @@ class AgaviPhpRenderer extends AgaviRenderer
 		
 		ob_start();
 		
-		require($templateInfo['directory'] . '/' . $this->buildTemplateName($templateInfo['template']));
+		require($layer->getTemplateDir() . '/' . $this->buildTemplateName($layer->getTemplate()));
 		
 		$retval = ob_get_contents();
 		ob_end_clean();

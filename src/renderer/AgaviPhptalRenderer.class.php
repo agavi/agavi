@@ -27,7 +27,7 @@
  *
  * @version    $Id$
  */
-class AgaviPhptalRenderer extends AgaviRenderer
+class AgaviPhptalRenderer extends AgaviRenderer implements AgaviIReusableRenderer
 {
 	/**
 	 * @var        string A string with the default template file extension,
@@ -67,6 +67,16 @@ class AgaviPhptalRenderer extends AgaviRenderer
 		return $this->_phptal;
 	}
 
+	/**
+	 * Reset the engine for re-use
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	protected function reset()
+	{
+	}
+	
 	/**
 	 * Render the presentation to the Response.
 	 *

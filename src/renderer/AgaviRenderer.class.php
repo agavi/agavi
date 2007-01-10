@@ -142,19 +142,6 @@ abstract class AgaviRenderer
 	}
 	
 	/**
-	 * Set the template file extension
-	 *
-	 * @param      string The extension, including a leading dot.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function setExtension($extension)
-	{
-		$this->extension = $extension;
-	}
-
-	/**
 	 * Build a template name based on "literal" flag in the template info.
 	 * Depending on whether or not the "literal" flag is set, the file extension
 	 * for this Renderer instance will be appended ("literal" false) or not (true)
@@ -266,7 +253,7 @@ abstract class AgaviRenderer
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	abstract public function render(array $templateInfo, array &$attributes, array &$slots = array());
+	abstract public function render(AgaviTemplateLayer $layer, array &$attributes, array &$slots = array());
 }
 
 ?>

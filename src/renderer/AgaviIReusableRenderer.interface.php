@@ -3,7 +3,6 @@
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
 // | Copyright (c) 2003-2006 the Agavi Project.                                |
-// | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -14,30 +13,22 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
-class Default_LogoutSuccessView extends AgaviView
+/**
+ * This interface can be implemented by Renderers to indicate that their
+ * instances may be used more than once for rendering.
+ *
+ * @package    agavi
+ * @subpackage renderer
+ *
+ * @author     David Zuelke <dz@bitxtender.com>
+ * @author     Agavi Project <info@agavi.org>
+ * @copyright  (c) Authors
+ * @since      0.11.0
+ *
+ * @version    $Id$
+ */
+interface AgaviIReusableRenderer
 {
-
-	/**
-	 * Execute any presentation logic and set template attributes.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function execute(AgaviParameterHolder $parameters)
-	{
-		// set our template
-		$this->addLayer('content', 'LogoutSuccess');
-		$this->addLayer('decorator', 'Master');
-		
-		// set the content type
-		$this->setAttribute('_contentType', $this->container->getOutputType()->getParameter('Content-Type', 'text/html; charset=utf-8'));
-		// set the title
-		$this->setAttribute('title', $this->getContext()->getTranslationManager()->_('Logout Successful', 'default.Login'));
-		
-		$this->getResponse()->setCookie('autologon[username]', false);
-		$this->getResponse()->setCookie('autologon[password]', false);
-	}
-
 }
 
 ?>

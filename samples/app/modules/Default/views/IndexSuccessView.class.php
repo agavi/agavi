@@ -26,9 +26,11 @@ class Default_IndexSuccessView extends AgaviView
 	public function execute(AgaviParameterHolder $parameters)
 	{
 		// set our template
-		$this->setTemplate('IndexSuccess');
-		$this->setDecoratorTemplate('Master');
+		$this->addLayer('content', 'IndexSuccess');
+		$this->addLayer('decorator', 'Master');
 		
+		// set the content type
+		$this->setAttribute('_contentType', $this->container->getOutputType()->getParameter('Content-Type', 'text/html; charset=utf-8'));
 		// set the title
 		$this->setAttribute('title', $this->getContext()->getTranslationManager()->_('Welcome to the Agavi Sample Application', 'default.layout'));
 	}

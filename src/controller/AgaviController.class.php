@@ -483,60 +483,24 @@ abstract class AgaviController extends AgaviParameterHolder
 	}
 	
 	/**
-	 * Sets an output type for this response.
+	 * Retrieve an Output Type object
 	 *
-	 * @param      string The output type name.
+	 * @param      string The optional output type name.
 	 *
-	 * @throws     <b>AgaviConfigurationException</b> If the given output type 
-	 *                                                doesnt exist.
+	 * @return     AgaviOutputType An Output Type object.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function setOutputType($outputType)
+	public function getOutputType($name = null)
 	{
-		if(isset($this->outputTypes[$outputType])) {
-			$this->outputType = $outputType;
-		} else {
-			throw new AgaviConfigurationException('Output Type "' . $outputType . '" has not been configured.');
+		if($name === null) {
+			$name = $this->defaultOutputType;
 		}
-	}
-	
-	/**
-	 * Retrieves the output type name set for this response.
-	 *
-	 * @return     string The name of the output type.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function getOutputType()
-	{
-		return $this->outputType;
-	}
-	
-	/**
-	 * Retrieve configuration details about an output type.
-	 *
-	 * @param      string The output type name.
-	 *
-	 * @return     array An associative array of output type settings and params.
-	 *
-	 * @throws     <b>AgaviConfigurationException</b> If the given output type 
-	 *                                                doesnt exist.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function getOutputTypeInfo($outputType = null)
-	{
-		if($outputType === null) {
-			$outputType = $this->outputType;
-		}
-		if(isset($this->outputTypes[$outputType])) {
-			return $this->outputTypes[$outputType];
+		if(isset($this->outputTypes[$name])) {
+			return $this->outputTypes[$name];
 		} else {
-			throw new AgaviConfigurationException('Output Type "' . $outputType . '" has not been configured.');
+			throw new AgaviException('Output Type "' . $name . '" has not been configured.');
 		}
 	}
 }

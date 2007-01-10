@@ -28,7 +28,7 @@
  *
  * @version    $Id$
  */
-class AgaviXslRenderer extends AgaviRenderer
+class AgaviXslRenderer extends AgaviRenderer implements AgaviIReusableRenderer
 {
 	/**
 	 * @var	       XSLTProcessor Processor for loading XSL templates.
@@ -270,7 +270,17 @@ class AgaviXslRenderer extends AgaviRenderer
 	{
 		return $this->xslEngine;
 	}
-
+	
+	/**
+	 * Reset the engine for re-use
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	protected function reset()
+	{
+	}
+	
 	/**
 	 * Render the presentation to the Response.
 	 *

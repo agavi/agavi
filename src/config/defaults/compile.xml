@@ -43,6 +43,7 @@
 			<compile>%core.agavi_dir%/core/AgaviContext.class.php</compile>
 			<compile>%core.agavi_dir%/controller/AgaviController.class.php</compile>
 			<compile>%core.agavi_dir%/controller/AgaviExecutionContainer.class.php</compile>
+			<compile>%core.agavi_dir%/controller/AgaviOutputType.class.php</compile>
 			<compile>%core.agavi_dir%/filter/AgaviFilter.class.php</compile>
 			<compile>%core.agavi_dir%/filter/AgaviDispatchFilter.class.php</compile>
 			<compile>%core.agavi_dir%/filter/AgaviExecutionFilter.class.php</compile>
@@ -53,6 +54,7 @@
 			<compile>%core.agavi_dir%/routing/AgaviRouting.class.php</compile>
 			<compile>%core.agavi_dir%/storage/AgaviStorage.class.php</compile>
 			<compile>%core.agavi_dir%/user/AgaviUser.class.php</compile>
+			<compile>%core.agavi_dir%/view/AgaviTemplateLayer.class.php</compile>
 			<compile>%core.agavi_dir%/view/AgaviView.class.php</compile>
 		</compiles>
 	</configuration>

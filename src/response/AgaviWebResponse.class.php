@@ -494,11 +494,12 @@ class AgaviWebResponse extends AgaviResponse
 			header($this->httpStatusCodes[$this->httpStatusCode]);
 		}
 		
-		$oti = $this->context->getController()->getOutputTypeInfo();
-		
-		if($this->getContentType() === null && isset($oti['parameters']['Content-Type'])) {
-			$this->setContentType($oti['parameters']['Content-Type']);
-		}
+		// FIXME: this is not possible with the current infrastructure, and also a bit difficult to do... suggestions welcome
+		// $oti = $this->context->getController()->getOutputTypeInfo();
+		// 
+		// if($this->getContentType() === null && isset($oti['parameters']['Content-Type'])) {
+		// 	$this->setContentType($oti['parameters']['Content-Type']);
+		// }
 		
 		// send headers
 		foreach($this->httpHeaders as $name => $values) {

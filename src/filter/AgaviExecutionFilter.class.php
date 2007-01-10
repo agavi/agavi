@@ -364,59 +364,28 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 				$key = $request->toggleLock();
 				$renderer = $viewInstance->$executeMethod($container);
 				$request->toggleLock($key);
-
-				if(!($renderer instanceof AgaviRenderer)) {
-					$renderer = null;
-
-					$oti = $controller->getOutputTypeInfo();
-					if($oti['renderer'] !== null) {
-						$renderer = new $oti['renderer']();
-						$renderer->initialize($this->context, $oti['renderer_parameters']);
-						if(isset($oti['extension'])) {
-							$renderer->setExtension($oti['extension']);
-						}
-					} else {
-						$renderer = null;
-					}
-				}
 				
-				if($renderer !== null && $viewInstance->getTemplate() !== null) {
-					$output = array();
-					
-					$attributes =& $viewInstance->getAttributes();
-					
-					// run the pre-render check to see if the template is there
-					// TODO
-					// $renderer->preRenderCheck();
-
-					// loop through our slots, and replace them one-by-one in the
-					// decorator template
-					$slots = $viewInstance->getSlots();
-
-					foreach($slots as $name => $slot) {
-						$slotContainer = $controller->createExecutionContainer($slot['module_name'], $slot['action_name'], $slot['additional_params']);
+				$attributes =& $viewInstance->getAttributes();
+				
+				$output = array();
+				$nextOutput = null;
+				foreach($viewInstance->getLayers() as $layerName => $layer) {
+					foreach($layer->getSlots() as $slotName => $slotContainer) {
 						$slotContainer->execute();
-						
 						$response = $slotContainer->getResponse();
-						
 						if($response) {
 							// set the presentation data as a template attribute
 							$output[$name] = $response->getContent();
-							$this->response->merge($response->exportInfo());
+							// $response->merge($response->exportInfo());
 						} else {
 							$output[$name] = null;
 						}
 					}
-					
-					// go, go, go!
-					$output['content'] = $renderer->render(array('directory' => $viewInstance->getDirectory(), 'template' => $viewInstance->getTemplate()), $attributes, $output);
-					
-					if($viewInstance->isDecorator()) {
-						$container->getResponse()->setContent($renderer->render(array('directory' => $viewInstance->getDecoratorDirectory(), 'template' => $viewInstance->getDecoratorTemplate()), $attributes, $output));
-					} else {
-						$container->getResponse()->setContent($output['content']);
-					}
+					$nextOutput = $layer->getRenderer()->render($layer, $attributes, $output);
+					$output = array();
+					$output[$layerName] = $nextOutput;
 				}
+				$response->setContent($nextOutput);
 			}
 
 			if($isCacheable) {

@@ -26,7 +26,7 @@
  *
  * @version    $Id$
  */
-class AgaviSmartyRenderer extends AgaviRenderer
+class AgaviSmartyRenderer extends AgaviRenderer implements AgaviIReusableRenderer
 {
 	const COMPILE_DIR = 'templates';
 	const COMPILE_SUBDIR = 'smarty';
@@ -83,6 +83,17 @@ class AgaviSmartyRenderer extends AgaviRenderer
 		return $this->smarty;
 	}
 
+	/**
+	 * Reset the engine for re-use
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	protected function reset()
+	{
+		$this->smarty->clear_all_assign();
+	}
+	
 	public function render()
 	{
 		$retval = null;

@@ -26,9 +26,11 @@ class Default_LoginInputView extends AgaviView
 	public function execute(AgaviParameterHolder $parameters)
 	{
 		// set our template
-		$this->setTemplate('LoginInput');
-		$this->setDecoratorTemplate('Master');
-
+		$this->addLayer('content', 'LoginInput');
+		$this->addLayer('decorator', 'Master');
+		
+		// set the content type
+		$this->setAttribute('_contentType', $this->container->getOutputType()->getParameter('Content-Type', 'text/html; charset=utf-8'));
 		// set the title
 		$this->setAttribute('title', $this->getContext()->getTranslationManager()->_('Login', 'default.Login'));
 		
