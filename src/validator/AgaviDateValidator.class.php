@@ -16,24 +16,47 @@
 /**
  * AgaviDateValidator verifies that a parameter is of a date format.
  * 
- * This validator checks of the date is in a valid format. Following formats
- * are allowed:
- *   * YYYY-MM-DD, YY-MM-DD, MM-DD
- *   * DD.MM.YYYY, DD.MM.YY, DD.MM., DD., DD (seperators '.' or ' '; day and
- *                                            month also single digit possible)
- *   * MM/DD/YYYY, MM/DD (day and month also single digit possible)
- * Omitted values are set to current infos (e.g. ommitting year sets date('Y')).
- * 
- * If parameter 'check' is true, the date is checked by checkdate() if its a
- * real existing day. Optional the date can be exported in format YYYY-MM-DD.
+ * Arguments: 
+ *   This can be:
+ *    * a single argument which will then be parsed with the formats in the 
+ *      'formats' parameter.
+ *    * multiple arguments with the calendar constants 
+ *      (AgaviDateDefinitions::MONTH, etc) as key and the argument field as 
+ *      value.
+ *    * multiple arguments and the 'arguments_format' parameter defined. This
+ *      will use the string in 'arguments_format' as input string to sprintf and
+ *      will use the arguments in the given order as argument to sprintf.
  * 
  * Parameters:
- *   'check'   check date if the specified day really exists
+ *   'check'       check date if the specified day really exists
+ *   'formats'     an array of arrays with these keys:
+ *     'type'       The type of the string in 'format'.
+ *     'format'     The input string dependent on the type. These types are 
+ *                  allowed:
+ *                    format:   The value is a date format string.
+ *                    time:     The value is a time specifier (full,...) or null
+ *                    date:     The value is a date specifier or null
+ *                    datetime: The value is a date specifier or null
+ *                    translation_domain: The value will be translated in the 
+ *                              domain given in the 'translation_domain' key.
+ *                   
+ *     'locale'     The optional locale which will be used for this format.
+ *     'translation_domain' Only applicable when the type is translation_domain
+ *   'cast_to'     Only useful in combination with the export parameter.
+ *                 This can either be a string or an array. If its an string it 
+ *                 can be one of 'unix' (converts the date to a unix timestamp),
+ *                 'string' (converts it to a string using the default format), 
+ *                 'calendar' (will return the AgaviCalendar object).
+ *                 If it's an array it can have these keys:
+ *     'type'        The type of the format (format, time, date, datetime)
+ *     'format'      see in 'formats' above.
+ *   'arguments_format' A string which will be used as the format string for 
+ *                 sprintf.
  *
  * @package    agavi
  * @subpackage validator
  *
- * @author     Uwe Mesecke <uwe@mesecke.net>
+ * @author     Dominik del Bondio <ddb@bitxtender.com>
  * @copyright  (c) Authors
  * @since      0.11.0
  *
@@ -46,63 +69,124 @@ class AgaviDateValidator extends AgaviValidator
 	 * 
 	 * @return     bool True if the input was a valid date.
 	 * 
-	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	protected function validate()
 	{
-		$param = $this->getData($this->getArgument());
-		// check YY(YY)-MM-DD
-		if(preg_match('/^(?:((?:\d{2})?\d{2})-)?(\d{2})-(\d{2})$/', $param, $matches)) {
-			if(count($matches) == 4) {
-				$year = $matches[1];
-				$month = $matches[2];
-				$day = $matches[3];
-			} else {
-				$year = date('Y');
-				$month = $matches[1];
-				$day = $matches[2];
+		$tm = $this->getContext()->getTranslationManager();
+		$cal = null;
+
+		$check = $this->getParameter('check', true);
+		$locale = $this->hasParameter('locale') ? $tm->getLocaleFromIdentifier($this->getParameter('locale')) : $tm->getCurrentLocale();
+
+		if($this->hasMultipleArguments() && !$this->getParameter('arguments_format')) {
+			$cal = $tm->createCalendar();
+			$cal->clear();
+			$cal->setLenient(!$check);
+			foreach($this->getArguments() as $calField => $field) {
+				$param = $this->getData($field);
+				if(defined($calField)) {
+					$calField = constant($calField);
+
+					if($calField == AgaviDateDefinitions::MONTH) {
+						$param -= 1;
+					}
+
+					$cal->set($calField, (float) $param);
+				}
 			}
-		// check DD.MM.YY(YY)
-		} elseif(preg_match('/^(\d{1,2})(?:[. ](\d{1,2})(?:[. ]((?:\d{2})?\d{2}))?)?[. ]?$/', $param, $matches)) {
-			$day = $matches[1];
-			if(isset($matches[2])) {
-				$month = $matches[2];
-			} else {
-				$month = date('m');
-			}
-			if(isset($matches[3])) {
-				$year = $matches[3];
-			} else {
-				$year = date('Y');
-			}
-		// check MM/DD/YY(YY)
-		} elseif(preg_match('/^(\d{1,2})\/(\d{1,2})(?:\/((?:\d{2})?\d{2}))?$/', $param, $matches)) {
-			$month = $matches[1];
-			$day = $matches[2];
-			if(sizeof($matches) > 3) {
-				$year = $matches[3];
-			} else {
-				$year = date('Y');
+
+			try {
+				$cal->getTime();
+			} catch(Exception $e) {
+				$this->throwError();
+				return false;
 			}
 		} else {
-			$this->throwError();
-			return false;
+			if($argFormat = $this->getParameter('arguments_format')) {
+				$values = array();
+				foreach($this->getArguments() as $field) {
+					$values[] = $this->getData($field);
+				}
+				$param = vsprintf($argFormat, $values);
+			} else {
+				$param = $this->getData($this->getArgument());
+			}
+
+			$matchedFormat = false;
+			foreach($this->getParameter('formats', array()) as $item) {
+				$itemLocale = empty($item['locale']) ? $locale : $tm->getLocaleFromIdentifier($item['locale']);
+				$type = empty($item['type']) ? 'format' : $item['type'];
+
+				try {
+					if($type == 'format') {
+						$formatString = $item['format'];
+					} elseif($type == 'time' || $type == 'date' || $type == 'datetime') {
+						$format = isset($item['format']) ? $item['format'] : null;
+						$formatString = AgaviDateFormatter::resolveFormat($format, $itemLocale, $type);
+					} elseif($type == 'translation_domain') {
+						$td = $item['translation_domain'];
+						$formatString = $tm->_($item['format'], $td, $itemLocale);
+					}
+
+					$format = new AgaviDateFormat($formatString);
+					$cal = $format->parse($param, $itemLocale, $check);
+
+					// no exception got thrown so the parsing was successful
+					$matchedFormat = true;
+					break;
+				} catch(Exception $e) {
+					// nop
+				}
+			}
+
+			if(!$matchedFormat) {
+				$this->throwError();
+				return false;
+			}
 		}
-		
-		if($year < 70) {
-			$year += 2000;
-		} elseif($year < 100) {
-			$year += 1900;
+
+		$cal->setLenient(true);
+		$value = $cal;
+
+		if($cast = $this->getParameter('cast_to')) {
+			// an array means the user wants it custom formatted
+			if(is_array($cast)) {
+				$type = empty($cast['type']) ? 'format' : $cast['type'];
+				if($type == 'format') {
+					$formatString = $cast['format'];
+				} elseif($type == 'time' || $type == 'date' || $type == 'datetime') {
+					$format = isset($cast['format']) ? $cast['format'] : null;
+					$formatString = AgaviDateFormatter::resolveFormat($format, $locale, $type);
+				}
+
+				$format = new AgaviDateFormat($formatString);
+				$value = $format->format($cal, $cal->getType(), $locale);
+			} else {
+				if($cast == 'unix') {
+					$value = $cal->getUnixTimestamp();
+				} elseif($cast == 'string') {
+					$value = $tm->_d($cal);
+				} else {
+					$value = $cal;
+				}
+			}
 		}
-		
-		if($this->getParameter('check') and !checkdate($month, $day, $year)) {
-			$this->throwError();
-			return false;
+
+		if($this->hasParameter('export')) {
+			$export = $this->getParameter('export');
+			if(is_string($export)) {
+				$this->export($value);
+			} elseif(is_array($export)) {
+				foreach($export as $calField => $field) {
+					if(defined($calField)) {
+						$this->export($cal->get(constant($calField)), $field);
+					}
+				}
+			}
 		}
-		
-		$this->export(sprintf('%04d-%02d-%02d', $year, $month, $day));
-		
+
 		return true;
 	}
 }
