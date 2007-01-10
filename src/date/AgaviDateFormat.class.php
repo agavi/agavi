@@ -609,13 +609,24 @@ class AgaviDateFormat
 					$number = (int) substr($dateString, $datePos, $token[1]);
 
 					$datePos += $token[1];
-					if($dateField == AgaviDateDefinitions::MONTH) {
-						if($token[0] == AgaviDateFormat::T_HOUR_1_24 && $number == 24) {
-							$number = 0;
-						} elseif($token[0] == AgaviDateFormat::T_HOUR_1_12 && $number == 12) {
-							$number = 0;
+					if($dateField == AgaviDateDefinitions::HOUR_OF_DAY) {
+						if($token[0] == AgaviDateFormat::T_HOUR_1_24) {
+							if($number == 24) {
+								$number = 0;
+							} elseif($number > 0) {
+								$number -= 1;
+							}
+						} elseif($token[0] == AgaviDateFormat::T_HOUR_1_12) {
+							if($number == 12) {
+								$number = 0;
+							} elseif($number > 0) {
+								$number -= 1;
+							}
 						}
+					} elseif($dateField == AgaviDateDefinitions::MONTH && $number > 0) {
+						$number -= 1;
 					}
+
 					if(self::T_QUARTER == $token[0] || self::T_SA_QUARTER == $token[0]) {
 						// only set the quarter if the date hasn't been set on the calendar object
 						if(!$cal->_isSet(AgaviDateDefinitions::MONTH)) {
