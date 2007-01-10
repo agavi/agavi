@@ -28,6 +28,8 @@
  */
 abstract class AgaviCalendar
 {
+	const GREGORIAN = 'gregorian';
+
 	/**
 	 * @var        AgaviTranslationManager The translation manager instance.
 	 * @since      0.11.0
@@ -3594,6 +3596,16 @@ abstract class AgaviCalendar
 	 * @since      0.11.0
 	 */
 	public abstract function defaultCenturyStartYear();
+
+	/**
+	 * Returns the type of the implementing calendar.
+	 *
+	 * @return     string The type of this calendar (gegorian, ...)
+	 * 
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public abstract function getType();
 
 }
 ?>
