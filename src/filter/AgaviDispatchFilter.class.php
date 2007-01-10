@@ -45,7 +45,7 @@ class AgaviDispatchFilter extends AgaviFilter implements AgaviIGlobalFilter
 	 */
 	public function execute(AgaviFilterChain $filterChain, AgaviExecutionContainer $container)
 	{
-		$container->execute();
+		$container->setResponse($container->execute());
 	}
 }
 

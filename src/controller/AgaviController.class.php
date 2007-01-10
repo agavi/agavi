@@ -87,7 +87,7 @@ abstract class AgaviController extends AgaviParameterHolder
 			return $actionName;
 		} else {
 			// maybe it's a sub-action with the last portion omitted
-			$actionName .= '/Index';
+			$actionName .= ($actionName == '' ? '' : '/') . 'Index';
 			$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/actions/' . $actionName . 'Action.class.php';
 			if(is_readable($file)) {
 				return $actionName;
@@ -125,7 +125,7 @@ abstract class AgaviController extends AgaviParameterHolder
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function createExecutionContainer($moduleName, $actionName, array $parameters = array())
+	public function createExecutionContainer($moduleName = null, $actionName = null, array $parameters = array())
 	{
 		// create a new filter chain
 		$ecfi = $this->context->getFactoryInfo('execution_container');
@@ -151,33 +151,19 @@ abstract class AgaviController extends AgaviParameterHolder
 			
 			$request = $this->context->getRequest();
 			
-			// match routes and set matched routes as request attributes
-			$request->setAttribute('matchedRoutes', $this->context->getRouting()->execute(), 'org.agavi.routing');
-		
 			$request->setParameters($parameters);
-		
-			// determine our module and action
-			$moduleName = $request->getParameter($request->getModuleAccessor());
-			$actionName = $request->getParameter($request->getActionAccessor());
-		
+			
+			// match routes and assign returned initial execution container
+			$container = $this->context->getRouting()->execute();
+			
+			$moduleName = $container->getModuleName();
+			$actionName = $container->getActionName();
+			
 			if($moduleName == null) {
 				// no module has been specified
-				$moduleName = AgaviConfig::get('actions.default_module');
-				$request->setParameter($request->getModuleAccessor(), $moduleName);
+				$container->setModuleName(AgaviConfig::get('actions.default_module'));
+				$container->setActionName(AgaviConfig::get('actions.default_action'));
 			}
-			if($actionName == null) {
-				// no action has been specified
-				if($this->actionExists($moduleName, 'Index')) {
-					// an Index action exists
-					$actionName = 'Index';
-				} else {
-					// use the default action
-					$actionName = AgaviConfig::get('actions.default_action');
-				}
-				$request->setParameter($request->getActionAccessor(), $actionName);
-			}
-			
-			$container = $this->createExecutionContainer($moduleName, $actionName);
 			
 			// create a new filter chain
 			$fcfi = $this->context->getFactoryInfo('filter_chain');
@@ -185,18 +171,18 @@ abstract class AgaviController extends AgaviParameterHolder
 			$filterChain->initialize($this->context, $fcfi['parameters']);
 			
 			$this->loadFilters($filterChain, 'global');
-		
+			
 			// register the dispatch filter
 			$filterChain->register($this->filters['dispatch']);
-		
+			
 			// go, go, go!
 			$filterChain->execute($container);
 			
 			$container->getResponse()->send();
 			
 		} catch(Exception $e) {
-			if(isset($container) && $container instanceof AgaviExecutionContainer && ($response = $container->getResponse()) instanceof AgaviResponse) {
-				AgaviException::printStackTrace($e, $this->context, $response);
+			if(isset($container) && $container instanceof AgaviExecutionContainer) {
+				AgaviException::printStackTrace($e, $this->context, $container);
 			} else {
 				AgaviException::printStackTrace($e, $this->context);
 			}
@@ -230,7 +216,7 @@ abstract class AgaviController extends AgaviParameterHolder
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
-	public function getAction($moduleName, $actionName)
+	public function createActionInstance($moduleName, $actionName)
 	{
 		static $loaded = array();
 		
@@ -292,7 +278,7 @@ abstract class AgaviController extends AgaviParameterHolder
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
-	public function getView($moduleName, $viewName)
+	public function createViewInstance($moduleName, $viewName)
 	{
 		static $loaded;
 		
@@ -339,7 +325,7 @@ abstract class AgaviController extends AgaviParameterHolder
 	 */
 	public function initialize(AgaviResponse $response, array $parameters = array())
 	{
-		$this->maxForwards = isset($parameters['max_fowards']) ? $parameters['max_forwards'] : 20;
+		$this->maxExecutions = isset($parameters['max_executions']) ? $parameters['max_executions'] : 20;
 		
 		$this->response = $response;
 		

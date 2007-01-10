@@ -42,27 +42,17 @@ class AgaviException extends Exception
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.9.0
 	 */
-	public static function printStackTrace(Exception $e, AgaviContext $context = null, AgaviResponse $response = null)
+	public static function printStackTrace(Exception $e, AgaviContext $context = null, AgaviExecutionContainer $container = null)
 	{
 		// discard any previous output waiting in the buffer
 		while(@ob_end_clean());
 		
-		// throw away any response data that might be there
-		if($context !== null && ($c = $context->getController()) !== null && $response !== null) {
-			if($response->isLocked()) {
-				// reponse is locked, so grab the output and discard it
-				ob_start();
-				$response->send();
-				ob_end_clean();
-			} else {
-				// not locked, we can clear the response
-				$response->clear();
-			}
-		}
-		
-		if($context !== null && ($c = $context->getController()) !== null && ($oti = $c->getOutputTypeInfo()) !== null && isset($oti['exception_template'])) { 
-			// an exception template was defined for this output type
-			include($oti['exception_template']); 
+		if($context !== null && $container !== null && ($et = $container->getExceptionTemplate()) !== null) { 
+			// an exception template was defined for the container's output type
+			include($et); 
+		} elseif($container === null && ($c = $context->getController()) !== null && ($ot = $c->getOutputType() !== null) && ($et = $ot->getExceptionTemplate()) !== null) {
+			// an exception template was defined for the default output type and no container was given
+			include($et);
 		} elseif($context !== null && $tpl = AgaviConfig::get('exception.templates.' . $context->getName())) {
 			// a template was set for this context
 			include($tpl);

@@ -212,7 +212,7 @@ final class AgaviContext
 			if($profile === null) {
 				$profile = AgaviConfig::get('core.default_context');
 				if($profile === null) {
-					throw new AgaviException('You must supply an environment name to AgaviContext::getInstance() or set the name of the default environment to be used in the configuration directive "core.default_context".');
+					throw new AgaviException('You must supply a context name to AgaviContext::getInstance() or set the name of the default context to be used in the configuration directive "core.default_context".');
 				}
 			}
 			$profile = strtolower($profile);
@@ -261,7 +261,11 @@ final class AgaviContext
 		
 		$this->name = $profile;
 		
-		include(AgaviConfigCache::checkConfig(AgaviConfig::get('core.config_dir') . '/factories.xml', $profile));
+		try {
+			include(AgaviConfigCache::checkConfig(AgaviConfig::get('core.config_dir') . '/factories.xml', $profile));
+		} catch(Exception $e) {
+			AgaviException::printStackTrace($e, $this);
+		}
 		
 		register_shutdown_function(array($this, 'shutdown'));
 	}

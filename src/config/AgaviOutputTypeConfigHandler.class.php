@@ -100,7 +100,7 @@ class AgaviOutputTypeConfigHandler extends AgaviConfigHandler
 		foreach($data as $outputTypeName => $outputType) {
 			$code[] = implode("\n", array(
 				'$ot = new AgaviOutputType();',
-				'$ot->initialize($this->context, ' . var_export($outputType['parameters'], true) . ', ' . var_export($outputType['renderers'], true) . ', ' . var_export($outputType['default_renderer'], true) . ', ' . var_export($outputType['exception_template'], true) . ');',
+				'$ot->initialize($this->context, ' . var_export($outputType['parameters'], true) . ', ' . var_export($outputTypeName, true) . ', ' . var_export($outputType['renderers'], true) . ', ' . var_export($outputType['default_renderer'], true) . ', ' . var_export($outputType['exception_template'], true) . ');',
 				'$this->outputTypes["' . $outputTypeName . '"] = $ot;',
 			));
 		}

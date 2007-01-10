@@ -52,12 +52,12 @@ class ControllerTest extends AgaviTestCase
 	{
 		// TODO: check all other existing naming schemes for actions
 
-		$action = $this->_controller->getAction('Test', 'Test');
+		$action = $this->_controller->createActionInstance('Test', 'Test');
 		$this->assertType('Test_TestAction', $action);
 		$this->assertType('AgaviAction', $action);
 
 		// TODO: this needs checking for errors 
-//		$this->_controller->getAction('Test', 'NonExistant');
+//		$this->_controller->createActionInstance('Test', 'NonExistant');
 	}
 
 	public function testGetContext()

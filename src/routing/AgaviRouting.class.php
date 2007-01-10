@@ -482,14 +482,20 @@ abstract class AgaviRouting
 	 */
 	public function execute()
 	{
-		$matchedRoutes = array();
+		$req = $this->context->getRequest();
 
+		$container = $this->context->getController()->createExecutionContainer();
+		$response = $container->getResponse();
+		
 		if(!AgaviConfig::get('core.use_routing', false) || count($this->routes) == 0) {
-			// routing disabled, bail out
-			return $matchedRoutes;
+			// routing disabled, determine module and action manually and bail out
+			$container->setModuleName($req->getParameter($req->getModuleAccessor()));
+			$container->setActionName($req->getParameter($req->getActionAccessor()));
+			
+			return $container;
 		}
 
-		$req = $this->context->getRequest();
+		$matchedRoutes = array();
 
 		$input = $this->input;
 
@@ -500,8 +506,6 @@ abstract class AgaviRouting
 		$ma = $req->getModuleAccessor();
 		$aa = $req->getActionAccessor();
 		$requestMethod = $req->getMethod();
-
-//		$routes = array_keys($this->routes);
 
 		// get all top level routes
 		foreach($this->routes as $name => $route) {
@@ -523,7 +527,7 @@ abstract class AgaviRouting
 					if($opts['callback'] && !isset($route['cb'])) {
 						$cb = $opts['callback'];
 						$route['cb'] = new $cb();
-						$route['cb']->initialize($this->response, $route);
+						$route['cb']->initialize($response, $route);
 					}
 
 					$match = array();
@@ -634,7 +638,7 @@ abstract class AgaviRouting
 
 		// set the output type if necessary
 		if($ot !== null) {
-			$this->context->getController()->setOutputType($ot);
+			$container->setOutputType($ot);
 		}
 
 		// set the locale if necessary
@@ -657,8 +661,15 @@ abstract class AgaviRouting
 				$aa => AgaviConfig::get('actions.error_404_action')
 			));
 		}
+		
+		$container->setModuleName($req->getParameter($ma));
+		$container->setActionName($req->getParameter($aa));
+		
+		// set the list of matched route names as a request attribute
+		$req->setAttribute('matchedRoutes', $matchedRoutes, 'org.agavi.routing');
+		
 		// return a list of matched route names
-		return $matchedRoutes;
+		return $container;
 	}
 
 	/**

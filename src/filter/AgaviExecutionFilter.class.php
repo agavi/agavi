@@ -332,7 +332,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 			$container->setViewName($viewName);
 
 			// get the view instance
-			$viewInstance = $controller->getView($viewModule, $viewName);
+			$viewInstance = $controller->createViewInstance($viewModule, $viewName);
 
 			// initialize the view
 			$viewInstance->initialize($container);
@@ -362,30 +362,33 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 					$executeMethod = 'execute';
 				}
 				$key = $request->toggleLock();
-				$renderer = $viewInstance->$executeMethod($container);
+				$next = $viewInstance->$executeMethod($container);
 				$request->toggleLock($key);
 				
-				$attributes =& $viewInstance->getAttributes();
-				
-				$output = array();
-				$nextOutput = null;
-				foreach($viewInstance->getLayers() as $layerName => $layer) {
-					foreach($layer->getSlots() as $slotName => $slotContainer) {
-						$slotContainer->execute();
-						$response = $slotContainer->getResponse();
-						if($response) {
-							// set the presentation data as a template attribute
-							$output[$name] = $response->getContent();
-							// $response->merge($response->exportInfo());
-						} else {
-							$output[$name] = null;
-						}
-					}
-					$nextOutput = $layer->getRenderer()->render($layer, $attributes, $output);
+				if($next instanceof AgaviExecutionContainer) {
+					$container->setNext($next);
+				} else {
+					$attributes =& $viewInstance->getAttributes();
+
 					$output = array();
-					$output[$layerName] = $nextOutput;
+					$nextOutput = null;
+					foreach($viewInstance->getLayers() as $layerName => $layer) {
+						foreach($layer->getSlots() as $slotName => $slotContainer) {
+							$slotResponse = $slotContainer->execute();
+							if($response) {
+								// set the presentation data as a template attribute
+								$output[$name] = $slotResponse->getContent();
+								// $response->merge($response->exportInfo());
+							} else {
+								$output[$name] = null;
+							}
+						}
+						$nextOutput = $layer->getRenderer()->render($layer, $attributes, $output);
+						$output = array();
+						$output[$layerName] = $nextOutput;
+					}
+					$response->setContent($nextOutput);
 				}
-				$response->setContent($nextOutput);
 			}
 
 			if($isCacheable) {
@@ -524,14 +527,6 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 		} else {
 			$viewName = AgaviView::NONE;
 			$viewModule = AgaviView::NONE;
-		}
-
-		if($viewName !== AgaviView::NONE && !$controller->viewExists($viewModule, $viewName)) {
-			// the requested view doesn't exist
-			$file = AgaviConfig::get('core.module_dir') . '/' . $viewModule . '/views/' . $viewName . 'View.class.php';
-			$error = 'Module "%s" does not contain the view "%sView" or the file "%s" is unreadable';
-			$error = sprintf($error, $viewModule, $viewName, $file);
-			throw new AgaviViewException($error);
 		}
 
 		return array($viewModule, $viewName);

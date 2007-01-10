@@ -14,8 +14,8 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * A container used for each forward() call that holds action information, the
- * response etc.
+ * A container used for each action execution that holds neecessary information,
+ * such as the output type, the response etc.
  * 
  * @package    agavi
  * @subpackage controller
@@ -74,6 +74,11 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	protected $viewName = null;
 	
 	/**
+	 * @var        AgaviExecutionContainer The next container to execute.
+	 */
+	protected $next = null;
+	
+	/**
 	 * Initialize the container. This will create a response instance.
 	 *
 	 * @param      AgaviContext The current Context instance.
@@ -100,6 +105,14 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	 * Start execution.
 	 *
 	 * This will create an instance of the action and merge in request parameters.
+	 *
+	 * This method returns a response. It is not necessarily the same response as
+	 * the one of this container, but instead the one that contains the actual
+	 * content that should be used for output etc, since the container's own
+	 * response might be empty or invalid due to a "next" container that has been
+	 * set and executed.
+	 *
+	 * @return     AgaviResponse The "real" response.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
@@ -163,7 +176,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 		$this->setModuleName($moduleName);
 		$this->setActionName($actionName);
 		
-		$this->actionInstance = $controller->getAction($this->moduleName, $this->actionName);
+		$this->actionInstance = $controller->createActionInstance($this->moduleName, $this->actionName);
 		
 		// include the module configuration
 		// laoded only once due to the way import() works
@@ -249,7 +262,13 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 			}
 			
 			// TODO. this will be pretty difficult, I guess...
-			$controller->forward($moduleName, $actionName);
+			$this->setNext($controller->createExecutionContainer($moduleName, $actionName));
+		}
+		
+		if($this->next !== null) {
+			return $this->next->execute();
+		} else {
+			return $this->getResponse();
 		}
 	}
 	
@@ -267,7 +286,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	}
 	
 	/**
-	 * Retrieve this container's rendered view presentation.
+	 * Retrieve this container's response instance.
 	 *
 	 * @return     AgaviResponse The Response instance for this action.
 	 *
@@ -277,6 +296,19 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	public function getResponse()
 	{
 		return $this->response;
+	}
+	
+	/**
+	 * Set a new response.
+	 *
+	 * @param      AgaviResponse A new Response instance.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function setResponse(AgaviResponse $response)
+	{
+		$this->response = $response;
 	}
 	
 	/**
@@ -290,6 +322,19 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	public function getOutputType()
 	{
 		return $this->outputType;
+	}
+	
+	/**
+	 * Set a different output type for this container.
+	 *
+	 * @param      AgaviOutputType An output type object.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function setOutputType(AgaviOutputType $outputType)
+	{
+		$this->outputType = $outputType;
 	}
 	
 	/**
@@ -422,6 +467,61 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	public function setViewName($viewName)
 	{
 		$this->viewName = $viewName;
+	}
+	
+	 /**
+	 * Check if a "next" container has been set.
+	 *
+	 * @return     bool True, if a container for eventual execution has been set.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function hasNext()
+	{
+		return $this->next !== null;
+	}
+	
+	/**
+	 * Get the "next" container.
+	 *
+	 * @return     AgaviExecutionContainer The "next" container, of null if unset.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getNext()
+	{
+		return $this->next;
+	}
+	
+	/**
+	 * Set the container that should be executed once this one finished running.
+	 *
+	 * @param      AgaviExcecutionContainer An execution container instance.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function setNext(AgaviExecutionContainer $container)
+	{
+		$this->next = $container;
+	}
+	
+	/**
+	 * Remove a possibly set "next" container.
+	 *
+	 * @return     AgaviExecutionContainer The removed "next" container, or null
+	 *                                     if none had been set.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function clearNext()
+	{
+		$retval = $this->next;
+		$this->next = null;
+		return $retval;
 	}
 }
 

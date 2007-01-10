@@ -69,12 +69,12 @@ class AgaviSecurityFilter extends AgaviFilter implements AgaviIActionFilter, Aga
 				// the user has access, continue
 				$filterChain->execute($container);
 			} else {
-				// the user doesn't have access, exit stage left
+				// the user doesn't have access, set info regarding next action and leave
 				$request->setAttributes(array(
 					'requested_module' => $container->getModuleName(),
 					'requested_action' => $container->getActionName()
 				), 'org.agavi.controller.forwards.secure');
-				$controller->forward(new AgaviExecutionContainer(AgaviConfig::get('actions.secure_module'), AgaviConfig::get('actions.secure_action')));
+				$container->setNext($controller->createExecutionContainer(AgaviConfig::get('actions.secure_module'), AgaviConfig::get('actions.secure_action')));
 			}
 
 		} else {
@@ -83,7 +83,7 @@ class AgaviSecurityFilter extends AgaviFilter implements AgaviIActionFilter, Aga
 				'requested_module' => $container->getModuleName(),
 				'requested_action' => $container->getActionName()
 			), 'org.agavi.controller.forwards.login');
-			$controller->forward(new AgaviExecutionContainer(AgaviConfig::get('actions.login_module'), AgaviConfig::get('actions.login_action')));
+			$container->setNext($controller->createExecutionContainer(AgaviConfig::get('actions.login_module'), AgaviConfig::get('actions.login_action')));
 		}
 	}
 }

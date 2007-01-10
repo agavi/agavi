@@ -61,11 +61,13 @@ class AgaviOutputType extends AgaviParameterHolder
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function initialize(AgaviContext $context, array $parameters, array $renderers, $defaultRenderer, $exceptionTemplate = null)
+	public function initialize(AgaviContext $context, array $parameters, $name, array $renderers, $defaultRenderer, $exceptionTemplate = null)
 	{
 		$this->context = $context;
 		
 		$this->parameters = $parameters;
+		
+		$this->name = $name;
 		
 		$this->renderers = $renderers;
 		
