@@ -194,12 +194,10 @@
 			<autoload name="AgaviImageFileValidator">%core.agavi_dir%/validator/AgaviImageFileValidator.class.php</autoload>
 			<autoload name="AgaviInarrayValidator">%core.agavi_dir%/validator/AgaviInarrayValidator.class.php</autoload>
 			<autoload name="AgaviIssetValidator">%core.agavi_dir%/validator/AgaviIssetValidator.class.php</autoload>
-			<autoload name="AgaviMktimestampValidator">%core.agavi_dir%/validator/AgaviMktimestampValidator.class.php</autoload>
 			<autoload name="AgaviNumberValidator">%core.agavi_dir%/validator/AgaviNumberValidator.class.php</autoload>
 			<autoload name="AgaviRegexValidator">%core.agavi_dir%/validator/AgaviRegexValidator.class.php</autoload>
 			<autoload name="AgaviSetValidator">%core.agavi_dir%/validator/AgaviSetValidator.class.php</autoload>
 			<autoload name="AgaviStringValidator">%core.agavi_dir%/validator/AgaviStringValidator.class.php</autoload>
-			<autoload name="AgaviTimeValidator">%core.agavi_dir%/validator/AgaviTimeValidator.class.php</autoload>
 		</autoloads>
 	</configuration>
 </configurations>
