@@ -541,7 +541,8 @@ class AgaviDateFormat
 			$cal->setLenient(false);
 		}
 
-		$calendarType = 'gregorian';
+		// TODO: let user chose calendar type when more calendars exist
+		$calendarType = AgaviCalendar::GREGORIAN;
 		$datePos = 0;
 
 		$unprocessedTokens = array();
