@@ -6,7 +6,7 @@ class AndoperatorValidatorTest extends AgaviTestCase
 {
 	public function testvalidate()
 	{
-		$vm = AgaviContext::getInstance()->getValidatorManager();
+		$vm = AgaviContext::getInstance()->getValidationManager();
 		$vm->clear();
 		$o = new AgaviAndoperatorValidator($vm, array(), array(), array('severity' => 'error'));
 		

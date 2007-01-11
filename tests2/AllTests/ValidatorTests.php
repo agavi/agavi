@@ -11,7 +11,7 @@
 
 require_once(dirname(__FILE__) . '/../validator/EmailValidatorTest.php');
 require_once(dirname(__FILE__) . '/../validator/NumberValidatorTest.php');
-require_once(dirname(__FILE__) . '/../validator/DateValidatorTest.php');
+//require_once(dirname(__FILE__) . '/../validator/DateValidatorTest.php');
 
 class ValidatorTests
 {
@@ -31,7 +31,7 @@ class ValidatorTests
 		$suite->addTestSuite('EmailValidatorTest');
 		$suite->addTestSuite('NumberValidatorTest');
 		//$suite->addTestSuite('StringValidatorTest');
-		$suite->addTestSuite('DateValidatorTest');
+		//$suite->addTestSuite('DateValidatorTest');
 
 		return $suite;
 	}

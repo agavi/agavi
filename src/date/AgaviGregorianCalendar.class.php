@@ -486,6 +486,9 @@ class AgaviGregorianCalendar extends AgaviCalendar
 
 	protected function handleGetMonthLength($extendedYear, $month)
 	{
+		if(!isset(self::$kLeapMonthLength[$month])) {
+			return null;
+		}
 		return $this->isLeapYear($extendedYear) ? self::$kLeapMonthLength[$month] : self::$kMonthLength[$month];
 	}
 
@@ -958,7 +961,7 @@ class AgaviGregorianCalendar extends AgaviCalendar
 	}
 
 	/**
-	 * @see        AgaviCalendar::haveDefaultCentury
+	 * @see        AgaviCalendar::defaultCenturyStart
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
@@ -970,7 +973,7 @@ class AgaviGregorianCalendar extends AgaviCalendar
 	}
 
 	/**
-	 * @see        AgaviCalendar::haveDefaultCentury
+	 * @see        AgaviCalendar::defaultCenturyStartYear
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
@@ -980,6 +983,18 @@ class AgaviGregorianCalendar extends AgaviCalendar
 	{
 		return $this->internalGetDefaultCenturyStartYear();
 	}
+
+	/**
+	 * @see        AgaviCalendar::getType
+	 * 
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getType()
+	{
+		return AgaviCalendar::GREGORIAN;
+	}
+
 
 	/**
 	 * @var        float The system maintains a static default century start date.

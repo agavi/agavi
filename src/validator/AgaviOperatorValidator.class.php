@@ -48,15 +48,15 @@ abstract class AgaviOperatorValidator extends AgaviValidator implements AgaviIVa
 	 * constructor
 	 * 
 	 * @param      AgaviIValidatorContainer The parent ValidatorContainer
-	 *                                      (mostly the ValidatorManager)
+	 *                                      (mostly the ValidationManager)
 	 * @param      array                    The parameters from the config file.
 	 *
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
-	public function __construct(AgaviIValidatorContainer $parent, array $arguments, array $errors = array(), array $parameters = array())
+	public function __construct(AgaviIValidatorContainer $parent, array $arguments, array $errors = array(), array $parameters = array(), $name = '')
 	{
-		parent::__construct($parent, $arguments, $errors, $parameters);
+		parent::__construct($parent, $arguments, $errors, $parameters, $name);
 		
 		if($this->getParameter('skip_errors')) {
 			/*
@@ -100,55 +100,6 @@ abstract class AgaviOperatorValidator extends AgaviValidator implements AgaviIVa
 	}
 	
 	/**
-	 * Submits an error to the error manager.
-	 * 
-	 * The stuff in the parameter specified in $index is submitted to the
-	 * error manager. If there is no parameter with this name, then 'error'
-	 * is tryed as an parameter and if even this fails, the stuff in
-	 * $backupError is sent.
-	 * 
-	 * @param      string The name of the error parameter to fetch the message 
-	 *                    from.
-	 * @param      string An default error message to be used if the given error 
-	 *                    has no message set.
-	 *
-	 * @author     Uwe Mesecke <uwe@mesecke.net>
-	 * @since      0.11.0
-	 */
-	protected function throwError($index = null, $backupError = null)
-	{
-		$error = $this->getErrorMessage($index, $backupError);
-
-		// if no error msg was supplied rethrow the child errors
-		if($error === null) {
-			foreach($this->errors as $childError) {
-				$this->parentContainer->reportError($childError[0], $childError[1]);
-			}
-		} else {
-			if($this->hasParameter('translation_domain')) {
-				$error = $this->getContext()->getTranslationManager()->_($error, $this->getParameter('translation_domain'));
-			}
-
-			$this->parentContainer->reportError($this, $error);
-		}
-	}
-
-	/**
-	 * Reports an error to the parent container.
-	 * 
-	 * @param      AgaviValidator The validator where the error occured.
-	 * @param      string         An error message.
-	 * 
-	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @since      0.11.0
-	 * @see        AgaviIValidatorContainer::reportError
-	 */
-	public function reportError(AgaviValidator $validator, $errorMsg)
-	{
-		$this->errors[] = array($validator, $errorMsg);
-	}
-	
-	/**
 	 * Adds new child validator.
 	 * 
 	 * @param      AgaviValidator The new child validator.
@@ -158,9 +109,31 @@ abstract class AgaviOperatorValidator extends AgaviValidator implements AgaviIVa
 	 */
 	public function addChild(AgaviValidator $validator)
 	{
-		$this->children[] = $validator;
+		$name = $validator->getName();
+		if(isset($this->children[$name])) {
+			throw new IllegalArgumentException('A validator with the name "' . $name . '" already exists');
+		}
+
+		$this->children[$name] = $validator;
 	}
-	
+
+	/**
+	 * Returns a named child validator.
+	 *
+	 * @param      AgaviValidator The child validator.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getChild($name)
+	{
+		if(!isset($this->children[$name])) {
+			throw new IllegalArgumentException('A validator with the name "' . $name . '" does not exist');
+		}
+
+		return $this->children[$name];
+	}
+
 	/**
 	 * Registers an array of validators.
 	 * 
@@ -171,22 +144,9 @@ abstract class AgaviOperatorValidator extends AgaviValidator implements AgaviIVa
 	 */
 	public function registerValidators(array $validators)
 	{
-		foreach($validators AS $validator) {
+		foreach($validators as $validator) {
 			$this->addChild($validator);
 		}
-	}
-	
-	/**
-	 * Gets the request from the parent.
-	 * 
-	 * @return     AgaviRequest The parent's request.
-	 *
-	 * @author     Uwe Mesecke <uwe@mesecke.net>
-	 * @since      0.11.0
-	 */
-	public function getRequest()
-	{
-		return $this->parentContainer->getRequest();
 	}
 	
 	/**

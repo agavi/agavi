@@ -65,7 +65,7 @@ class AgaviImageFileValidator  extends AgaviBaseFileValidator
 			$name = $this->curBase->__toString();
 		}
 
-		$request = $this->parentContainer->getContext()->getRequest();
+		$request = $this->getContext()->getRequest();
 
 		$type = @getimagesize($request->getFilePath($name));
 		if($type === false) {

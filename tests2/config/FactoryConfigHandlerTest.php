@@ -58,7 +58,7 @@ class FCHTestStorage					extends FCHTestBase
 	public $suCalled = false;
 	public function startup() { $this->suCalled = true; }
 }
-class FCHTestValidatorManager	extends FCHTestBase {}
+class FCHTestValidationManager	extends FCHTestBase {}
 
 class FCHTestDBManager				extends FCHTestBase {}
 class FCHTestSecurityFilter		extends FCHTestBase implements AgaviIActionFilter, AgaviISecurityFilter {
@@ -86,7 +86,7 @@ class FactoryConfigHandlerTest extends ConfigHandlerTestBase
 	protected		$databaseManager,
 							$request,
 							$storage,
-							$validatorManager,
+							$validationManager,
 							$user,
 							$loggerManager,
 							$controller,
@@ -184,9 +184,9 @@ class FactoryConfigHandlerTest extends ConfigHandlerTestBase
 		$this->assertSame($params_ex, $this->storage->params);
 		$this->assertTrue($this->storage->suCalled);
 
-		$this->assertType('FCHTestValidatorManager', $this->validatorManager);
-		$this->assertReference($this, $this->validatorManager->context);
-		$this->assertSame($params_ex, $this->validatorManager->params);
+		$this->assertType('FCHTestValidationManager', $this->validationManager);
+		$this->assertReference($this, $this->validationManager->context);
+		$this->assertSame($params_ex, $this->validationManager->params);
 
 		$this->assertType('FCHTestUser', $this->user);
 		$this->assertReference($this, $this->user->context);

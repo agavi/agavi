@@ -53,11 +53,11 @@
 		
 		<translation_manager class="AgaviTranslationManager" />
 		
-		<validator_manager class="AgaviValidatorManager">
+		<validation_manager class="AgaviValidationManager">
 			<parameters>
 				<parameter name="mode">conditional</parameter>
 			</parameters>
-		</validator_manager>
+		</validation_manager>
 		
 	</configuration>
 	

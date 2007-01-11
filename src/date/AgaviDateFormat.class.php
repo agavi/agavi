@@ -519,18 +519,30 @@ class AgaviDateFormat
 	 * @param      string The string containing the date.
 	 * @param      AgaviLocale The locale which should be used for parsing local 
 	 *                         day, month, etc names.
+	 * @param      bool Whether the parsing should be strict. (not allowing 
+	 *                  numbers to exceed the defined length, not allowing missing
+	 *                  additional parts). The returned calendar object will be 
+	 *                  non-lenient.
 	 *
 	 * @return     AgaviCalendar The calendar object.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function parse($dateString, $locale)
+	public function parse($dateString, $locale, $strict = false)
 	{
 		$tm = $locale->getContext()->getTranslationManager();
 		$cal = $tm->createCalendar();
+		$era = $cal->get(AgaviDateDefinitions::ERA);
+		$cal->clear();
+		$cal->set(AgaviDateDefinitions::ERA, $era);
 
-		$calendarType = 'gregorian';
+		if($strict) {
+			$cal->setLenient(false);
+		}
+
+		// TODO: let user chose calendar type when more calendars exist
+		$calendarType = AgaviCalendar::GREGORIAN;
 		$datePos = 0;
 
 		$unprocessedTokens = array();
@@ -539,7 +551,9 @@ class AgaviDateFormat
 		$tlCount = count($this->tokenList);
 		for($i = 0; $i < $tlCount; ++$i) {
 			if($datePos >= strlen($dateString)) {
-				// TODO: throw new ...
+				if($strict) {
+					throw new AgaviException('Input string "' . $dateString . '" is to short');
+				}
 				break;
 			}
 
@@ -596,13 +610,24 @@ class AgaviDateFormat
 					$number = (int) substr($dateString, $datePos, $token[1]);
 
 					$datePos += $token[1];
-					if($dateField == AgaviDateDefinitions::MONTH) {
-						if($token[0] == AgaviDateFormat::T_HOUR_1_24 && $number == 24) {
-							$number = 0;
-						} elseif($token[0] == AgaviDateFormat::T_HOUR_1_12 && $number == 12) {
-							$number = 0;
+					if($dateField == AgaviDateDefinitions::HOUR_OF_DAY) {
+						if($token[0] == AgaviDateFormat::T_HOUR_1_24) {
+							if($number == 24) {
+								$number = 0;
+							} elseif($number > 0) {
+								$number -= 1;
+							}
+						} elseif($token[0] == AgaviDateFormat::T_HOUR_1_12) {
+							if($number == 12) {
+								$number = 0;
+							} elseif($number > 0) {
+								$number -= 1;
+							}
 						}
+					} elseif($dateField == AgaviDateDefinitions::MONTH && $number > 0) {
+						$number -= 1;
 					}
+
 					if(self::T_QUARTER == $token[0] || self::T_SA_QUARTER == $token[0]) {
 						// only set the quarter if the date hasn't been set on the calendar object
 						if(!$cal->_isSet(AgaviDateDefinitions::MONTH)) {
@@ -617,6 +642,9 @@ class AgaviDateFormat
 				$dateField = $this->getDateFieldFromTokenType($token[0]);
 				if($dateField === null) {
 					throw new AgaviException('Token type ' . $token[0] . ' claims to be numerical but has no date field');
+				}
+				if($strict && $numberLen > 2 && $numberLen > $token[1]) {
+					$numberLen = $token[1];
 				}
 				$number = (int) substr($dateString, $datePos, $numberLen);
 
@@ -646,8 +674,10 @@ class AgaviDateFormat
 				$count = $token[1];
 				switch($token[0]) {
 					case self::T_TEXT:
-						if($i + 1 == $tlCount /* when the last token is text we can simply skip it */ || substr_compare($dateString, $token[1], $datePos, strlen($token[1])) == 0) {
+						if(substr_compare($dateString, $token[1], $datePos, strlen($token[1])) == 0) {
 							$datePos += strlen($token[1]);
+						} elseif($i + 1 == $tlCount && !$strict) {
+							// when the last text token didn't match we don't do anything in non strict mode
 						} else {
 							throw new AgaviException('Unknown character in "' . $dateString . '" at pos ' . $datePos . ' (expected: "' . $token[1] . '", got: "' . substr($dateString, $datePos, strlen($token[1])) . '")');
 						}
@@ -795,6 +825,15 @@ class AgaviDateFormat
 				}
 			}
 		}
+
+		if($strict) {
+			// calculate the time to get errors for invalid dates
+			$cal->getTime();
+			if($datePos < strlen($dateString)) {
+				throw new AgaviException('Input string "' . $dateString . '" has characters after the date');
+			}
+		}
+
 
 		return $cal;
 	}

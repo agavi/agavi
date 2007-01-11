@@ -37,17 +37,17 @@ interface AgaviIValidatorContainer
 	 * @since      0.11.0
 	 */
 	public function addChild(AgaviValidator $validator);
-	
+
 	/**
-	 * Fetches the request.
-	 * 
-	 * @return     AgaviRequest The request to be used by child validators.
-	 * 
-	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * Returns a named child validator.
+	 *
+	 * @param      AgaviValidator The child validator.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function getRequest();
-	
+	public function getChild($name);
+
 	/**
 	 * Fetches the dependency manager
 	 * 
@@ -59,15 +59,5 @@ interface AgaviIValidatorContainer
 	 */
 	public function getDependencyManager();
 
-	/**
-	 * Reports an error to the parent container.
-	 * 
-	 * @param      AgaviValidator The validator where the error occured.
-	 * @param      string         An error message.
-	 * 
-	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function reportError(AgaviValidator $validator, $errorMsg);
 }
 ?>

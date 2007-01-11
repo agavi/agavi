@@ -87,9 +87,9 @@ final class AgaviContext
 	protected $user = null;
 	
 	/**
-	 * @var        AgaviValidatorManager A ValidatorManager instance.
+	 * @var        AgaviValidationManager A ValidationManager instance.
 	 */
-	protected $validatorManager = null;
+	protected $validationManager = null;
 	
 	/**
 	 * @var        array An array of AgaviContext instances.
@@ -497,17 +497,17 @@ final class AgaviContext
 	}
 	
 	/**
-	 * Retrieve the ValidatorManager
+	 * Retrieve the ValidationManager
 	 *
-	 * @return     AgaviValidatorManager The current ValidatorManager 
-	 *                                   implementation instance.
+	 * @return     AgaviValidationManager The current ValidationManager 
+	 *                                    implementation instance.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function getValidatorManager()
+	public function getValidationManager()
 	{
-		return $this->validatorManager;
+		return $this->validationManager;
 	}
 }
 

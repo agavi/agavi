@@ -17,7 +17,7 @@
 |  response                - The Response class implementation.              |
 |  routing                 - The Routing class implementation.               |
 |  storage                 - The Storage class implementation.               |
-|  validator_manager       - The ValidatorManager class implementation.      |
+|  validation_manager      - The ValidationManager class implementation.      |
 |  * database_manager      - The DatabaseManager class implementation.       |
 |  ** security_filter      - The SecurityFilter class implementation.        |
 |  ** user                 - The User class implementation.                  |
@@ -62,7 +62,7 @@
 		
 		<user class="AgaviSecurityUser" />
 		
-		<validator_manager class="AgaviValidatorManager" />
+		<validation_manager class="AgaviValidationManager" />
 		
 	</configuration>
 	

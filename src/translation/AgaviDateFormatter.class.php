@@ -108,7 +108,7 @@ class AgaviDateFormatter extends AgaviDateFormat implements AgaviITranslator
 			$message->setTimeZone($this->context->getTranslationManager()->createTimeZone($zoneId));
 		}
 
-		return $fmt->format($message, 'gregorian', $locale);
+		return $fmt->format($message, AgaviCalendar::GREGORIAN, $locale);
 	}
 
 	/**
@@ -119,7 +119,7 @@ class AgaviDateFormatter extends AgaviDateFormat implements AgaviITranslator
 		$this->locale = $newLocale;
 
 		if($this->customFormat === null) {
-			$format = $this->resolveSpecifier(null, $this->type);
+			$format = $this->resolveSpecifier($this->locale, null, $this->type);
 			$this->setFormat($format);
 		} else {
 			$format = $this->customFormat;
@@ -128,48 +128,96 @@ class AgaviDateFormatter extends AgaviDateFormat implements AgaviITranslator
 			}
 
 			if($this->isDateSpecifier($format)) {
-				$format = $this->resolveSpecifier($format, $this->type);
+				$format = $this->resolveSpecifier($this->locale, $format, $this->type);
 			}
 
 			$this->setFormat($format);
 		}
 	}
 
-	protected function resolveSpecifier($spec, $type)
+	/**
+	 * Resolves a given format (translates it to the given string of one of 
+	 * 'full', 'long', 'medium', 'short' or returns the format unmodified 
+	 * otherwise.
+	 *
+	 * @param      string The format string.
+	 * @param      AgaviLocale The locale to use for resolving.
+	 * @param      string The type (date, time or datetime).
+	 *
+	 * @return     string The resolved format.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public static function resolveFormat($format, $locale, $type = 'datetime')
 	{
+		if(self::isDateSpecifier($format)) {
+			return self::resolveSpecifier($locale, $format, $type);
+		}
+
+		return $format;
+	}
+
+	/**
+	 * Resolves a given specifier ('full', 'long', 'medium', 'short' or null which
+	 * will use the default format).
+	 *
+	 * @param      AgaviLocale The locale to use for resolving.
+	 * @param      string The specifier.
+	 * @param      string The type (date, time or datetime).
+	 *
+	 * @return     string The format.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	protected static function resolveSpecifier($locale, $spec, $type)
+	{
+		$calendarType = AgaviCalendar::GREGORIAN;
 		if(!$type) {
 			$type = 'datetime';
 		}
 
 		if($type == 'datetime' || $type == 'time') {
 			if($spec === null) {
-				$formatName = $this->locale->getCalendarTimeFormatDefaultName('gregorian');
+				$formatName = $locale->getCalendarTimeFormatDefaultName($calendarType);
 			} else {
 				$formatName = $spec;
 			}
-			$format = $timeFormat = $this->locale->getCalendarTimeFormatPattern('gregorian', $formatName);
+			$format = $timeFormat = $locale->getCalendarTimeFormatPattern($calendarType, $formatName);
 		}
 
 		if($type == 'datetime' || $type == 'date') {
 			if($spec === null) {
-				$formatName = $this->locale->getCalendarDateFormatDefaultName('gregorian');
+				$formatName = $locale->getCalendarDateFormatDefaultName($calendarType);
 			} else {
 				$formatName = $spec;
 			}
 
-			$format = $dateFormat = $this->locale->getCalendarDateFormatPattern('gregorian', $formatName);
+			$format = $dateFormat = $locale->getCalendarDateFormatPattern($calendarType, $formatName);
 		}
 
 		if($type == 'datetime') {
-			$formatName = $this->locale->getCalendarDateTimeFormatDefaultName('gregorian');
-			$formatStr = $this->locale->getCalendarDateTimeFormat('gregorian', $formatName);
+			$formatName = $locale->getCalendarDateTimeFormatDefaultName($calendarType);
+			$formatStr = $locale->getCalendarDateTimeFormat($calendarType, $formatName);
 			$format = str_replace(array('{0}', '{1}'), array($timeFormat, $dateFormat), $formatStr);
 		}
 
 		return $format;
 	}
 
-	protected function isDateSpecifier($format)
+	/**
+	 * Checks whether a given string is a date specifier. (One of 'full', 'long',
+	 * 'medium', 'short')
+	 *
+	 * @param      string The specifier.
+	 *
+	 * @return     bool The result.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	protected static function isDateSpecifier($format)
 	{
 		static $specifiers = array('full', 'long', 'medium', 'short');
 

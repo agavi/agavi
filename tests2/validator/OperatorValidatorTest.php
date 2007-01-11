@@ -19,7 +19,7 @@ class OperatorValidatorTest extends AgaviTestCase
 	public function setUp()
 	{
 		$this->context = AgaviContext::getInstance();
-		$this->vm = $this->context->getValidatorManager();
+		$this->vm = $this->context->getValidationManager();
 	}
 	
 	public function tearDown()

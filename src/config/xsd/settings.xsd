@@ -5,17 +5,24 @@
     <xs:sequence>
       <xs:element name="configuration" minOccurs="0" maxOccurs="unbounded">
         <xs:complexType>
-          <xs:all>
-            <xs:element name="system_actions" type="system_actions" minOccurs="0" />
-            <xs:element name="settings" type="settings" minOccurs="0" />
-            <xs:element name="exception_templates" type="exception_templates" minOccurs="0" />
-          </xs:all>
+          <xs:sequence minOccurs="0" maxOccurs="unbounded" >
+            <xs:group ref="system_actions" minOccurs="0" />
+            <xs:group ref="settings" minOccurs="0" maxOccurs="unbounded" />
+            <xs:group ref="exception_templates" minOccurs="0" />
+          </xs:sequence>
           <xs:attribute name="environment" type="xs:string" />
         </xs:complexType>
       </xs:element>
     </xs:sequence>
     <xs:attribute name="parent" type="xs:string" />
   </xs:complexType>
+
+  <xs:group name="system_actions">
+    <xs:choice>
+      <xs:element name="system_actions" type="system_actions" minOccurs="0" />
+      <xs:element name="system_action" type="system_action" minOccurs="0" maxOccurs="unbounded" />
+    </xs:choice>
+  </xs:group>
 
   <xs:complexType name="system_actions">
     <xs:sequence>
@@ -30,10 +37,18 @@
     <xs:attribute name="name" type="xs:string" />
   </xs:complexType>
 
+  <xs:group name="settings">
+    <xs:choice>
+      <xs:element name="settings" type="settings" minOccurs="0" />
+      <xs:element name="setting" type="setting" minOccurs="0" maxOccurs="unbounded" />
+    </xs:choice>
+  </xs:group>
+
   <xs:complexType name="settings">
     <xs:sequence>
       <xs:element name="setting" type="setting" maxOccurs="unbounded" />
     </xs:sequence>
+    <xs:attribute name="prefix" type="xs:string" />
   </xs:complexType>
   <xs:complexType name="setting">
     <xs:simpleContent>
@@ -42,6 +57,13 @@
       </xs:extension>
     </xs:simpleContent>
   </xs:complexType>
+
+  <xs:group name="exception_templates">
+    <xs:choice>
+      <xs:element name="exception_templates" type="exception_templates" minOccurs="0" />
+      <xs:element name="exception_template" type="exception_template" minOccurs="0" maxOccurs="unbounded" />
+    </xs:choice>
+  </xs:group>
 
   <xs:complexType name="exception_templates">
     <xs:sequence>

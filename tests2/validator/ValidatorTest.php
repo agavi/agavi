@@ -37,7 +37,7 @@ class ValidatorTest extends AgaviTestCase
 					
 	public function setUp()
 	{
-		$this->_vm = AgaviContext::getInstance()->getValidatorManager();
+		$this->_vm = AgaviContext::getInstance()->getValidationManager();
 	}
 
 	public function tearDown()

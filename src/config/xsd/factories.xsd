@@ -121,7 +121,7 @@
 		          <xs:attribute name="class" type="xs:string" use="required" />
 		        </xs:complexType>
 		      </xs:element>
-		      <xs:element name="validator_manager" minOccurs="0">
+		      <xs:element name="validation_manager" minOccurs="0">
 		        <xs:complexType>
 		          <xs:sequence>
 		            <xs:group ref="parameters" />

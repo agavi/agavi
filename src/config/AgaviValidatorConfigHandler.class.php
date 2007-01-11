@@ -56,21 +56,19 @@ class AgaviValidatorConfigHandler extends AgaviConfigHandler
 	{
 		$this->classMap = array(
 			'and' => array('class' => 'AgaviAndoperatorValidator', 'parameters' => array('break' => '1')),
-			'date' => array('class' => 'AgaviDateValidator', 'parameters' => array('check' => '1')),
+			'datetime' => array('class' => 'AgaviDateTimeValidator', 'parameters' => array('check' => '1')),
 			'email' => array('class' => 'AgaviEmailValidator', 'parameters' => array()),
 			'equals' => array('class' => 'AgaviEqualsValidator', 'parameters' => array()),
 			'file' => array('class' => 'AgaviFileValidator', 'parameters' => array()),
 			'imagefile' => array('class' => 'AgaviImageFileValidator', 'parameters' => array()),
 			'inarray' => array('class' => 'AgaviInarrayValidator', 'parameters' => array('sep' => ',')),
 			'isset' => array('class' => 'AgaviIssetValidator', 'parameters' => array()),
-			'mktimestamp' => array('class' => 'AgaviMktimestampValidator', 'parameters' => array()),
 			'not' => array('class' => 'AgaviNotoperatorValidator', 'parameters' => array()),
 			'number' => array('class' => 'AgaviNumberValidator', 'parameters' => array('type' => 'int')),
 			'or' => array('class' => 'AgaviOroperatorValidator', 'parameters' => array('break' => '1')),
 			'regex' => array('class' => 'AgaviRegexValidator', 'parameters' => array('match' => '1')),
 			'set' => array('class' => 'AgaviSetValidator', 'parameters' => array()),
 			'string' => array('class' => 'AgaviStringValidator', 'parameters' => array('min' => '1')),
-			'time' => array('class' => 'AgaviTimeValidator', 'parameters' => array('check' => '1')),
 			'xor' => array('class' => 'AgaviXoroperatorValidator', 'parameters' => array()),
 		);
 
@@ -99,13 +97,13 @@ class AgaviValidatorConfigHandler extends AgaviConfigHandler
 						$stdSeverity = $validators->getAttribute('severity', 'error');
 						$stdMethod = $validators->getAttribute('method');
 						foreach($validators as $validator) {
-							$code = $this->getValidatorArray($validator, $code, $stdSeverity, 'validatorManager', $stdMethod);
+							$code = $this->getValidatorArray($validator, $code, $stdSeverity, 'validationManager', $stdMethod);
 						}
 					}
 				}
 				if(!$hasValidators) {
 					foreach($cfg->validators as $validator) {
-						$code = $this->getValidatorArray($validator, $code, 'error', 'validatorManager', null);
+						$code = $this->getValidatorArray($validator, $code, 'error', 'validationManager', null);
 					}
 				}
 			}
