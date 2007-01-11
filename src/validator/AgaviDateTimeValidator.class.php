@@ -14,7 +14,8 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviDateValidator verifies that a parameter is of a date format.
+ * AgaviDateTimeValidator verifies that a parameter is of a date and or time 
+ * format.
  * 
  * Arguments: 
  *   This can be:
@@ -73,7 +74,7 @@
  *
  * @version    $Id$
  */
-class AgaviDateValidator extends AgaviValidator
+class AgaviDateTimeValidator extends AgaviValidator
 {
 	/**
 	 * Validates the input.

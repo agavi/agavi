@@ -187,7 +187,7 @@
 			<autoload name="AgaviOroperatorValidator">%core.agavi_dir%/validator/AgaviOroperatorValidator.class.php</autoload>
 			<autoload name="AgaviXoroperatorValidator">%core.agavi_dir%/validator/AgaviXoroperatorValidator.class.php</autoload>
 			<autoload name="AgaviNotoperatorValidator">%core.agavi_dir%/validator/AgaviNotoperatorValidator.class.php</autoload>
-			<autoload name="AgaviDateValidator">%core.agavi_dir%/validator/AgaviDateValidator.class.php</autoload>
+			<autoload name="AgaviDateTimeValidator">%core.agavi_dir%/validator/AgaviDateTimeValidator.class.php</autoload>
 			<autoload name="AgaviEmailValidator">%core.agavi_dir%/validator/AgaviEmailValidator.class.php</autoload>
 			<autoload name="AgaviEqualsValidator">%core.agavi_dir%/validator/AgaviEqualsValidator.class.php</autoload>
 			<autoload name="AgaviFileValidator">%core.agavi_dir%/validator/AgaviFileValidator.class.php</autoload>
