@@ -78,10 +78,6 @@ class AgaviWebRouting extends AgaviRouting
 	{
 		parent::initialize($response, $parameters);
 		
-		if(!AgaviConfig::get("core.use_routing", false)) {
-			return;
-		}
-		
 		$rq = $this->context->getRequest();
 		
 		$ru = parse_url($rq->getRequestUri());
@@ -96,7 +92,7 @@ class AgaviWebRouting extends AgaviRouting
 		
 		$rewritten = ($qs !== $ru['query']);
 		
-		if($rewritten) {
+		if(AgaviConfig::get("core.use_routing", false) && $rewritten) {
 			$this->input = preg_replace('/' . preg_quote('&' . $ru['query'], '/') . '$/', '', $qs);
 			
 			if(!isset($_SERVER['SERVER_SOFTWARE']) || strpos($_SERVER['SERVER_SOFTWARE'], 'Apache') === false) {
