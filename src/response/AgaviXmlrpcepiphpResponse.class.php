@@ -90,11 +90,8 @@ class AgaviXmlrpcepiphpResponse extends AgaviResponse
 	 */
 	public function clearContent()
 	{
-		if(!$this->locked) {
-			$this->content = array();
-			return true;
-		}
-		return false;
+		$this->content = array();
+		return true;
 	}
 	
 	/**
@@ -125,11 +122,9 @@ class AgaviXmlrpcepiphpResponse extends AgaviResponse
 	 */
 	public function clear()
 	{
-		if(!$this->locked) {
-			$this->clearContent();
-			$this->httpHeaders = array();
-			$this->cookies = array();
-		}
+		$this->clearContent();
+		$this->httpHeaders = array();
+		$this->cookies = array();
 	}
 }
 

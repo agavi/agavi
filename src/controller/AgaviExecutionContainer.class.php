@@ -97,8 +97,6 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 		$rfi = $this->context->getFactoryInfo('response');
 		$this->response = new $rfi['class'];
 		$this->response->initialize($this->context, $rfi['parameters']);
-		
-		$this->outputType = $context->getController()->getOutputType();
 	}
 	
 	/**

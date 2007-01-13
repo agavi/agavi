@@ -118,6 +118,7 @@ abstract class AgaviController extends AgaviParameterHolder
 	 * @param      string The name of the module.
 	 * @param      string The name of the action.
 	 * @param      array  Optional additional parameters.
+	 * @param      string The name of the initial output type to set.
 	 *
 	 * @return     AgaviExecutionContainer A new execution container instance,
 	 *                                     fully initialized.
@@ -125,7 +126,7 @@ abstract class AgaviController extends AgaviParameterHolder
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function createExecutionContainer($moduleName = null, $actionName = null, array $parameters = array())
+	public function createExecutionContainer($moduleName = null, $actionName = null, array $parameters = array(), AgaviOutputType $outputType = null)
 	{
 		// create a new filter chain
 		$ecfi = $this->context->getFactoryInfo('execution_container');
@@ -134,6 +135,7 @@ abstract class AgaviController extends AgaviParameterHolder
 		$container->setModuleName($moduleName);
 		$container->setActionName($actionName);
 		$container->setParameters($parameters);
+		$container->setOutputType($outputType === null ? $this->context->getController()->getOutputType() : $outputType);
 		return $container;
 	}
 	

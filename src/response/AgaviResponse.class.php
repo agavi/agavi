@@ -71,119 +71,6 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	}
 	
 	/**
-	 * Export the contents of this response.
-	 *
-	 * @return     array An array of data.
-	 *
-	 * @author     David Zuelke <du@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function export()
-	{
-		return array('content' => $this->getContent(), 'locked' => $this->isLocked());
-	}
-	
-	/**
-	 * Export the information data (e.g. HTTP Headers, Cookies) for this response.
-	 *
-	 * @return     array An array of data.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function exportInfo()
-	{
-		return array('locked' => $this->isLocked());
-	}
-	
-	/**
-	 * Import data for this response.
-	 *
-	 * @param      array An array of data.
-	 *
-	 * @return     bool Whether or not the operation was successful.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function import(array $data)
-	{
-		$retval = true;
-		if(isset($data['content'])) {
-			$retval = $this->setContent($data['content']);
-		}
-		if(isset($data['locked']) && $data['locked']) {
-			$this->lock();
-		}
-		return $retval;
-	}
-	
-	/**
-	 * Merge in data for this response.
-	 *
-	 * @param      array An array of data.
-	 *
-	 * @return     bool Whether or not the operation was successful.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function merge(array $data)
-	{
-		// do not lock the response even if $data has locked=true!
-		
-		if(isset($data['content'])) {
-			return $this->appendContent($data['content']);
-		}
-		return true;
-	}
-	
-	/**
-	 * Append data to this response.
-	 *
-	 * @param      array An array of data.
-	 *
-	 * @return     bool Whether or not the operation was successful.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function append(array $data)
-	{
-		// do not lock the response even if $data has locked=true!
-		
-		if(isset($data['content'])) {
-			return $this->appendContent($data['content']);
-		}
-		return true;
-	}
-	
-	/**
-	 * Check if this Response is locked, i.e. whether or not new content and other
-	 * output information can be set.
-	 *
-	 * @return     bool Whether the response is locked.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function isLocked()
-	{
-		return $this->locked;
-	}
-	
-	/**
-	 * Lock this Response so that it does not accept any modifications.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function lock()
-	{
-		$this->locked = true;
-	}
-	
-	/**
 	 * Retrieve the content set for this Response
 	 *
 	 * @return     mixed The content set in this Response.
@@ -208,11 +95,8 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	 */
 	public function setContent($content)
 	{
-		if(!$this->locked) {
-			$this->content = $content;
-			return true;
-		}
-		return false;
+		$this->content = $content;
+		return true;
 	}
 	
 	/**
@@ -255,11 +139,8 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	 */
 	public function clearContent()
 	{
-		if(!$this->locked) {
-			$this->content = '';
-			return true;
-		}
-		return false;
+		$this->content = '';
+		return true;
 	}
 	
 	/**
