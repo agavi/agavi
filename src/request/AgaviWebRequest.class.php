@@ -566,7 +566,7 @@ class AgaviWebRequest extends AgaviRequest
 		$sources = array_merge(array(
 			'HTTP_HOST' => 'HTTP_HOST', // currently not used
 			'HTTPS' => 'HTTPS',
-			'REQUEST_METHOD' => 'REQUEST_METHOD'
+			'REQUEST_METHOD' => 'REQUEST_METHOD',
 			'SERVER_NAME' => 'SERVER_NAME',
 			'SERVER_PORT' => 'SERVER_PORT',
 		), (isset($parameters['sources']) && is_array($parameters['sources']) ? $parameters['sources'] : array()));
