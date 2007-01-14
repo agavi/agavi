@@ -172,6 +172,31 @@ class AgaviWebResponse extends AgaviResponse
 	}
 	
 	/**
+	 * Import response metadata (headers, cookies) from another response.
+	 *
+	 * @param      AgaviResponse The other response to import information from.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function merge(AgaviResponse $otherResponse)
+	{
+		if($otherResponse instanceof AgaviWebResponse) {
+			foreach($otherResponse->getHttpHeaders() as $name => $value) {
+				if(!$this->hasHttpHeader($name)) {
+					$this->setHttpHeader($name, $value);
+				}
+			}
+			foreach($otherResponse->getCookies() as $name => $cookie) {
+				if(!$this->hasCookie($name)) {
+					$this->setCookie($name, $cookie['value'], $cookie['lifetime'], $cookie['path'], $cookie['domain'], $cookie['secure'], $cookie['httpOnly']);
+				}
+			}
+		}
+	}
+	
+	
+	/**
 	 * Sets a HTTP status code for the response.
 	 *
 	 * @param      string A numeric HTTP status code between 100 and 505.
@@ -303,28 +328,28 @@ class AgaviWebResponse extends AgaviResponse
 	 * Send a cookie.
 	 *
 	 * @param      string A cookie name.
-	 * @param      mixed Data to store into a cookie. If null or empty cookie
-	 *                   will be tried to be removed.
+	 * @param      mixed  Data to store into a cookie. If null or empty cookie
+	 *                    will be tried to be removed.
 	 * @param      int    The lifetime of the cookie in seconds. When you pass 0 
-	 *                    the cookie will be valid until the  browser gets closed.
+	 *                    the cookie will be valid until the browser is closed.
 	 * @param      string The path on the server the cookie will be available on.
 	 * @param      string The domain the cookie is available on.
 	 * @param      bool   Indicates that the cookie should only be transmitted 
 	 *                    over a secure HTTPS connection.
 	 * @param      bool   Whether the cookie will be made accessible only through
-	 *                    the HTTP protocol.
+	 *                    the HTTP protocol, and not to client-side scripts.
 	 *
 	 * @author     Veikko Makinen <mail@veikkomakinen.com>
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function setCookie($name, $value, $lifetime = null, $path = null, $domain = null, $secure = null, $httpOnly = false)
+	public function setCookie($name, $value, $lifetime = null, $path = null, $domain = null, $secure = null, $httpOnly = null)
 	{
-		$lifetime = isset($lifetime) ? $lifetime : $this->cookieConfig['lifetime'];
-		$path     = isset($path)     ? $path     : $this->cookieConfig['path'];
-		$domain   = isset($domain)   ? $domain   : $this->cookieConfig['domain'];
-		$secure   = (bool) (isset($secure)   ? $secure   : $this->cookieConfig['secure']);
-		$httpOnly = (bool) (isset($httpOnly) ? $httpOnly : $this->cookieConfig['httpOnly']);
+		$lifetime =         $lifetime === null ? $lifetime : $this->cookieConfig['lifetime'];
+		$path     =         $path === null     ? $path     : $this->cookieConfig['path'];
+		$domain   =         $domain === null   ? $domain   : $this->cookieConfig['domain'];
+		$secure   = (bool) ($secure === null   ? $secure   : $this->cookieConfig['secure']);
+		$httpOnly = (bool) ($httpOnly === null ? $httpOnly : $this->cookieConfig['httpOnly']);
 
 		$this->cookies[$name] = array(
 			'value' => $value,
@@ -335,7 +360,74 @@ class AgaviWebResponse extends AgaviResponse
 			'httpOnly' => $httpOnly
 		);
 	}
-
+	
+	/**
+	 * Get a cookie set for later sending.
+	 *
+	 * @param      string The name of the cookie.
+	 *
+	 * @return     array An associative array containing the cookie data or null
+	 *                   if no cookie with that name has been set.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getCookie($name)
+	{
+		if(isset($this->cookies[$name])) {
+			return $this->cookies[$name];
+		}
+	}
+	
+	/**
+	 * Check if a cookie has been set for later sending.
+	 *
+	 * @param      string The name of the cookie.
+	 *
+	 * @return     bool True if a cookie with that name has been set, else false.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function hasCookie($name)
+	{
+		return isset($this->cookies[$name]);
+	}
+	
+	/**
+	 * Remove a cookie previously set for later sending.
+	 *
+	 * This method cannot be used to unset a cookie. It's purpose is to remove a
+	 * cookie from the list of cookies to be sent along with the response. If you
+	 * wish to remove an existing cookie, use the setCookie method and supply null
+	 * as the value.
+	 *
+	 * @param      string The name of the cookie.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function removeCookie($name)
+	{
+		if(isset($this->cookies[$name])) {
+			unset($this->cookies[$name]);
+		}
+	}
+	
+	/**
+	 * Get a list of cookies set for later sending.
+	 *
+	 * @return     array An associative array of cookie names (key) and cookie
+	 *                   information (value, associative array).
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getCookies()
+	{
+		return $this->cookies;
+	}
+	
 	/**
 	 * Remove the HTTP header set for the response
 	 *

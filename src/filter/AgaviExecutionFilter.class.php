@@ -365,8 +365,8 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 				$next = $viewInstance->$executeMethod($container);
 				$request->toggleLock($key);
 				
-				if(is_array($next) && count($next) >= 2) {
-					$container->setNext($controller->createExecutionContainer($next[0], $next[1], isset($next[2]) ? $next[2] : array(), isset($next[3]) ? ($next[3] instanceof AgaviOutputType ? $next[3] : $controller->getOutputType($next[3])) : $container->getOutputType()));
+				if($next instanceof AgaviExecutionContainer) {
+					$container->setNext($next);
 				} else {
 					$attributes =& $viewInstance->getAttributes();
 
@@ -375,10 +375,12 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 					foreach($viewInstance->getLayers() as $layerName => $layer) {
 						foreach($layer->getSlots() as $slotName => $slotContainer) {
 							$slotResponse = $slotContainer->execute();
-							if($response) {
+							// FIXME: this if is always true
+							if($slotResponse) {
 								// set the presentation data as a template attribute
 								$output[$name] = $slotResponse->getContent();
-								// $response->merge($response->exportInfo());
+								// let our response grab the stuff it needs from the slot's response
+								$response->merge($slotResponse);
 							} else {
 								$output[$name] = null;
 							}

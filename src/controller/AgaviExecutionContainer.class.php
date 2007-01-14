@@ -100,6 +100,28 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	}
 	
 	/**
+	 * Creates a new container instance with the same output type as this one.
+	 *
+	 * @param      string          The name of the module.
+	 * @param      string          The name of the action.
+	 * @param      array           Optional additional parameters.
+	 * @param      AgaviOutputType Optional name of an initial output type to set.
+	 *
+	 * @return     AgaviExecutionContainer A new execution container instance,
+	 *                                     fully initialized.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function createExecutionContainer($moduleName = null, $actionName = null, array $parameters = array(), AgaviOutputType $outputType = null)
+	{
+		if($outputType === null) {
+			$outputType = $this->getOutputType();
+		}
+		return $this->context->getController()->createExecutionContainer($moduleName, $actionName, $parameters, $outputType);
+	}
+	
+	/**
 	 * Start execution.
 	 *
 	 * This will create an instance of the action and merge in request parameters.

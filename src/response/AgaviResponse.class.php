@@ -144,6 +144,16 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	}
 	
 	/**
+	 * Import response metadata from another response.
+	 *
+	 * @param      AgaviResponse The other response to import information from.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	abstract public function merge(AgaviResponse $otherResponse);
+	
+	/**
 	 * Clear all data for this Response.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
