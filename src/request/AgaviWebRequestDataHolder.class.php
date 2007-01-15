@@ -30,6 +30,9 @@
  */
 class AgaviWebRequestDataHolder extends AgaviRequestDataHolder
 {
+	const COOKIE = 'cookie';
+	const FILE = 'file';
+
 	/**
 	 * @var        bool Indicates whether or not PUT was used to upload a file.
 	 */
@@ -44,6 +47,11 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder
 	 * @var        array An array of field names of uploaded files, recursive.
 	 */
 	protected $fileFieldNames = array();
+
+	/**
+	 * @var        array An array of cookies set in the request.
+	 */
+	protected $cookies = array();
 	
 	/**
 	 * Indicates whether or not a Cookie exists.
@@ -57,11 +65,11 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder
 	 */
 	public function hasCookie($name)
 	{
-		if(isset($_COOKIE[$name])) {
+		if(isset($this->cookies[$name])) {
 			return true;
 		}
 		$parts = AgaviArrayPathDefinition::getPartsFromPath($name);
-		return AgaviArrayPathDefinition::hasValue($parts['parts'], $_COOKIE);
+		return AgaviArrayPathDefinition::hasValue($parts['parts'], $this->cookies);
 	}
 
 	/**
@@ -77,13 +85,26 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function getCookie($name, $default=null)
+	public function & getCookie($name, $default=null)
 	{
-		if(isset($_COOKIE[$name])) {
-			return $_COOKIE[$name];
+		if(isset($this->cookies[$name])) {
+			return $this->cookies[$name];
 		}
 		$parts = AgaviArrayPathDefinition::getPartsFromPath($name);
-		return AgaviArrayPathDefinition::getValueFromArray($parts['parts'], $_COOKIE, $default);
+		return AgaviArrayPathDefinition::getValueFromArray($parts['parts'], $this->cookies, $default);
+	}
+
+	/**
+	 * Retrieve all cookies.
+	 *
+	 * @return     array The cookies.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function & getCookies()
+	{
+		return $this->cookies;
 	}
 
 	/**
@@ -97,7 +118,7 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function getFile($name)
+	public function & getFile($name)
 	{
 		$parts = AgaviArrayPathDefinition::getPartsFromPath($name);
 		$retval = AgaviArrayPathDefinition::getValueFromArray($parts['parts'], $this->files);
@@ -191,7 +212,7 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function getFiles($deep = true)
+	public function & getFiles($deep = true)
 	{
 		if($deep) {
 			$retval = array();
@@ -439,6 +460,10 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder
 		} else {
 			$this->fixFilesArray();
 		}
+
+		// store the cookies so we wont change the global array when changing a 
+		// cookie
+		$this->cookies = $_COOKIE;
 		
 		// merge GET parameters
 		$this->setParameters($_GET);

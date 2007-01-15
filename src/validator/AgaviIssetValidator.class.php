@@ -57,7 +57,7 @@ class AgaviIssetValidator extends AgaviValidator
 	 */
 	protected function validate()
 	{
-		$params = $this->validationParameters->getParameters();
+		$params = $this->validationParameters->getAll($this->getParameter('argument_type'));
 
 		foreach($this->getArguments() as $argument) {
 			if(!$this->curBase->hasValueByChildPath($argument, $params)) {

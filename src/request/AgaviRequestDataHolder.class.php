@@ -30,6 +30,8 @@
  */
 class AgaviRequestDataHolder extends AgaviParameterHolder
 {
+	const PARAMETER = 'parameter';
+
 	/*
 	 * @var        AgaviRequest The request instance.
 	 */
@@ -59,6 +61,110 @@ class AgaviRequestDataHolder extends AgaviParameterHolder
 	public function getRequest()
 	{
 		return $this->request;
+	}
+
+	/**
+	 * Retrieves a field from one of the stored data types.
+	 *
+	 * @param      string The type to search in (PARAMETER, ...)
+	 * @param      string A field name.
+	 * @param      mixed  A default value.
+	 *
+	 * @return     mixed The field value.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function & get($type, $field, $default = null)
+	{
+		$funcname = 'get' . ucfirst($type);
+		if(!is_callable(array($this, $funcname))) {
+			throw new InvalidArgumentException('Could not get item of type: ' . $type . '');
+		}
+
+		return $this->$funcname($field, $default);
+	}
+
+	/**
+	 * Retrieves all fields of a stored data types.
+	 *
+	 * @param      string The type.
+	 *
+	 * @return     mixed The values.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function & getAll($type)
+	{
+		$funcname = 'get' . ucfirst(AgaviInflector::pluralize($type));
+		if(!is_callable(array($this, $funcname))) {
+			throw new InvalidArgumentException('Could not get item of type: ' . $type . '');
+		}
+
+		return $this->$funcname();
+	}
+
+	/**
+	 * Checks if a field exists.
+	 *
+	 * @param      string The type.
+	 * @param      string A field name.
+	 *
+	 * @return     bool The result.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function has($type, $field)
+	{
+		$funcname = 'has' . ucfirst($type);
+		if(!is_callable(array($this, $funcname))) {
+			throw new InvalidArgumentException('Could not check for item of type: ' . $type . '');
+		}
+
+		return $this->$funcname($field);
+	}
+
+	/**
+	 * Removes a field.
+	 *
+	 * @param      string The type.
+	 * @param      string A field name.
+	 *
+	 * @return     mixed The removed value.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function & remove($type, $field)
+	{
+		$funcname = 'remove' . ucfirst($type);
+		if(!is_callable(array($this, $funcname))) {
+			throw new InvalidArgumentException('Could not remove item of type: ' . $type . '');
+		}
+
+		return $this->$funcname($field);
+	}
+
+	/**
+	 * Sets a field.
+	 *
+	 * @param      string The type to.
+	 * @param      string A field name.
+	 * @param      mixed  A value.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function set($type, $field, $value)
+	{
+		$funcname = 'get' . ucfirst($type);
+		if(!is_callable(array($this, $funcname))) {
+			throw new InvalidArgumentException('Could not set item of type: ' . $type . '');
+		}
+
+		$this->$funcname($field, $value);
 	}
 
 	/**
