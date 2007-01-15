@@ -100,7 +100,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	protected $name = null;
 
 	/**
-	 * @var        AgaviParameterHolder The parameters which should be validated
+	 * @var        AgaviRequestDataHolder The parameters which should be validated
 	 *                                  in the current validation run.
 	 */
 	protected $validationParameters = null;
@@ -623,14 +623,14 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	/**
 	 * Executes the validator.
 	 *
-	 * @param      AgaviParameterHolder The parameters which should be validated.
+	 * @param      AgaviRequestDataHolder The data which should be validated.
 	 *
 	 * @return     int The validation result (see severity constants).
 	 *
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
-	public function execute(AgaviParameterHolder $parameters)
+	public function execute(AgaviRequestDataHolder $parameters)
 	{
 		$this->validationParameters = $parameters;
 		$base = new AgaviVirtualArrayPath($this->getParameter('base'));

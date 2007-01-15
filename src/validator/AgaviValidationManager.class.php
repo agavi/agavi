@@ -199,14 +199,14 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	/**
 	 * Starts the validation process.
 	 *
-	 * @param      AgaviParameterHolder The parameters which should be validated.
+	 * @param      AgaviRequestDataHolder The datawhich should be validated.
 	 *
 	 * @return     bool true, if validation succeeded.
 	 *
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
-	public function execute(AgaviParameterHolder $parameters)
+	public function execute(AgaviRequestDataHolder $parameters)
 	{
 		$result = true;
 		$this->result = AgaviValidator::SUCCESS;

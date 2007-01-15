@@ -55,17 +55,14 @@ abstract class AgaviBaseFileValidator extends AgaviValidator
 	 */
 	protected function checkAllArgumentsSet($throwError = true)
 	{
-		$request = $this->getContext()->getRequest();
-
 		$isRequired = $this->getParameter('required', true);
 		$result = true;
 
-		$array = $this->validationParameters->getParameters();
 		$baseParts = $this->curBase->getParts();
 		foreach($this->getArguments() as $argument) {
 			$new = $this->curBase->pushRetNew($argument);
 			$pName = $this->curBase->pushRetNew($argument)->__toString();
-			if(!$request->hasFile($pName)) {
+			if(!$this->validationParameters->hasFile($pName)) {
 				if($throwError && $isRequired) {
 					$this->throwError(null, $pName);
 				}
@@ -85,8 +82,6 @@ abstract class AgaviBaseFileValidator extends AgaviValidator
 	 */
 	protected function validate()
 	{
-		$request = $this->getContext()->getRequest();
-
 		foreach($this->getArguments() as $argument) {
 			if($argument) {
 				$name = $this->curBase->pushRetNew($argument)->__toString();
@@ -94,12 +89,12 @@ abstract class AgaviBaseFileValidator extends AgaviValidator
 				$name = $this->curBase->__toString();
 			}
 
-			if($request->getFileError($name) != UPLOAD_ERR_OK) {
+			if($this->validationParameters->getFileError($name) != UPLOAD_ERR_OK) {
 				$this->throwError('upload_failed');
 				return false;
 			}
 			
-			$size = $request->getFileSize($name);
+			$size = $this->validationParameters->getFileSize($name);
 			if($this->hasParameter('min_size') && $size < $this->getParameter('min_size')) {
 				$this->throwError('min_size');
 				return false;
@@ -110,7 +105,7 @@ abstract class AgaviBaseFileValidator extends AgaviValidator
 			}
 
 			if($this->hasParameter('extension')) {
-				$fileinfo = pathinfo($request->getFileName($name));
+				$fileinfo = pathinfo($this->validationParameters->getFileName($name));
 				$ext = isset($fileinfo['extension']) ? $fileinfo['extension'] : '';
 
 				if(in_array($ext, explode(' ', $this->getParameter('extension')))) {
@@ -136,7 +131,7 @@ abstract class AgaviBaseFileValidator extends AgaviValidator
 	 */
 	protected function getKeysInCurrentBase()
 	{
-		$files = $this->getContext()->getRequest()->getFiles(false);
+		$files = $this->getContext()->getRequest()->getRequestData()->getFiles(false);
 
 		$names = $this->curBase->getValue($files, array());
 		return array_keys($names);
