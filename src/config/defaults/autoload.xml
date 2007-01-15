@@ -126,8 +126,10 @@
 
 			<!-- agavi/request -->
 			<autoload name="AgaviConsoleRequest">%core.agavi_dir%/request/AgaviConsoleRequest.class.php</autoload>
+			<autoload name="AgaviRequestDataHolder">%core.agavi_dir%/request/AgaviRequestDataHolder.class.php</autoload>
 			<autoload name="AgaviSecureWebRequest">%core.agavi_dir%/request/AgaviSecureWebRequest.class.php</autoload>
 			<autoload name="AgaviWebRequest">%core.agavi_dir%/request/AgaviWebRequest.class.php</autoload>
+			<autoload name="AgaviWebRequestDataHolder">%core.agavi_dir%/request/AgaviWebRequestDataHolder.class.php</autoload>
 			<autoload name="AgaviWebserviceRequest">%core.agavi_dir%/request/AgaviWebserviceRequest.class.php</autoload>
 			<autoload name="AgaviXmlrpcepiphpRequest">%core.agavi_dir%/request/AgaviXmlrpcepiphpRequest.class.php</autoload>
 

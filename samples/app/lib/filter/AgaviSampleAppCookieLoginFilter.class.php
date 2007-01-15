@@ -29,11 +29,11 @@ class AgaviSampleAppCookieLoginFilter extends AgaviFilter implements AgaviIGloba
 	 */
 	public function execute(AgaviFilterChain $filterChain, AgaviExecutionContainer $container)
 	{
-		$req = $this->getContext()->getRequest();
+		$reqData = $this->getContext()->getRequest()->getRequestData();
 		$usr = $this->getContext()->getUser();
 		
-		if(!$usr->isAuthenticated() && $req->hasCookie('autologon')) {
-			$login = $req->getCookie('autologon');
+		if(!$usr->isAuthenticated() && $reqData->hasCookie('autologon')) {
+			$login = $reqData->getCookie('autologon');
 			try {
 				$usr->login($login['username'], $login['password']);
 			} catch(AgaviSecurityException $e) {

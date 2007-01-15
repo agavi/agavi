@@ -52,6 +52,11 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	protected $context    = null;
 
 	/**
+	 * @var        AgaviRequestDataHolder The request data holder instance.
+	 */
+	protected $requestData = null;
+
+	/**
 	 * @var        string The module accessor name.
 	 */
 	protected $moduleAccessor = 'module';
@@ -352,6 +357,19 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	public function getActionAccessor()
 	{
 		return $this->actionAccessor;
+	}
+
+	/**
+	 * Get the data holder instance of this request.
+	 *
+	 * @return     AgaviRequestDataHolder The request data holder.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getRequestData()
+	{
+		return $this->requestData;
 	}
 
 	/**

@@ -36,7 +36,7 @@ class AgaviSampleAppLanguageRoutingCallback extends AgaviRoutingCallback
 	public function onNotMatched()
 	{
 		// no locale matched. that's sad. let's see if there's a locale set in a cookie, from an earlier visit.
-		$cookie = $this->context->getRequest()->getCookie('locale');
+		$cookie = $this->context->getRequest()->getRequestData()->getCookie('locale');
 		if($cookie !== null) {
 			try {
 				$this->translationManager->setLocale($cookie);
