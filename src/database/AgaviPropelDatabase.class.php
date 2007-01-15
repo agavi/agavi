@@ -259,7 +259,7 @@ class AgaviPropelDatabase extends AgaviDatabase
 		if($datasource === null || $datasource == 'default') {
 			$datasource = $config['propel']['datasources']['default'];
 		}
-		if(isset($config['propel']['version']) && version_compare($config['propel']['version'], '1.3.0-dev') >= 0) {
+		if(isset($config['propel']['generator_version']) && version_compare($config['propel']['generator_version'], '1.3.0-dev') >= 0) {
 			// it's Propel 1.3 or later, we wrap a PDO connection.
 			$this->agaviDatabase = new AgaviPdoDatabase();
 			$this->agaviDatabase->initialize($databaseManager, $parameters);
