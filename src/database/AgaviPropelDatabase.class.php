@@ -251,7 +251,6 @@ class AgaviPropelDatabase extends AgaviDatabase
 	{
 		parent::initialize($databaseManager, $parameters);
 		$useAutoload = $this->getParameter('use_autoload', true);
-		$propel13 = false;
 		$configPath = AgaviConfigHandler::replaceConstants($this->getParameter('config'));
 		$datasource = $this->getParameter('datasource', null);
 		$use_as_default = $this->getParameter('use_as_default', false);
@@ -259,7 +258,11 @@ class AgaviPropelDatabase extends AgaviDatabase
 		if($datasource === null || $datasource == 'default') {
 			$datasource = $config['propel']['datasources']['default'];
 		}
+		$usePdo = false;
 		if(isset($config['propel']['generator_version']) && version_compare($config['propel']['generator_version'], '1.3.0-dev') >= 0) {
+			$usePdo = true;
+		}
+		if($usePdo) {
 			// it's Propel 1.3 or later, we wrap a PDO connection.
 			$this->agaviDatabase = new AgaviPdoDatabase();
 			$this->agaviDatabase->initialize($databaseManager, $parameters);
@@ -272,7 +275,7 @@ class AgaviPropelDatabase extends AgaviDatabase
 			foreach($config['propel']['datasources'][$datasource]['connection'] as $key => $value) {
 				$this->agaviDatabase->setParameter($key, $value);
 			}
-			$this->agaviDatabase->setParameter('method', 'normal');
+			$this->agaviDatabase->setParameter('method', $usePdo ? 'dsn' : 'normal');
 			if(!self::isDefaultConfigPathSet()) {
 				self::setDefaultConfigPath($configPath);
 				if($use_as_default) {
