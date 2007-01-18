@@ -26,9 +26,11 @@ class Default_SecureSuccessView extends AgaviView
 	public function execute(AgaviParameterHolder $parameters)
 	{
 		// set our template
-		$this->setTemplate('SecureSuccess');
-		$this->setDecoratorTemplate('Master');
+		$this->addLayer('content', 'Error404Success');
+		$this->addLayer('decorator', 'Master');
 
+		// set the content type
+		$this->setAttribute('_contentType', $this->container->getOutputType()->getParameter('Content-Type', 'text/html; charset=utf-8'));
 		// set the title
 		$this->setAttribute('title', $this->getContext()->getTranslationManager()->_('Permission Denied', 'default.ErrorActions'));
 	}

@@ -9,12 +9,12 @@ class Disabled_IndexSuccessView extends AgaviView
 	 */
 	public function execute(AgaviParameterHolder $parameters)
 	{
-		// forward all attributes
-		$this->setAttributes($this->getContext()->getRequest()->getAttributes());
-
 		// set our template
-		$this->setTemplate('IndexSuccess');
+		$this->addLayer('content', 'Error404Success');
+		$this->addLayer('decorator', 'Master');
 
+		// set the content type
+		$this->setAttribute('_contentType', $this->container->getOutputType()->getParameter('Content-Type', 'text/html; charset=utf-8'));
 		// set the title
 		$this->setAttribute('_title', 'Index Action');
 
