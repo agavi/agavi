@@ -100,9 +100,6 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 		
 		$this->parameters = $parameters;
 		
-		// copy request data
-		$this->requestData = clone $context->getRequest()->getRequestData();
-		
 		// create a new response instance for this action
 		$rfi = $this->context->getFactoryInfo('response');
 		$this->response = new $rfi['class'];
@@ -154,6 +151,10 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 		
 		$request = $this->context->getRequest();
 		
+		// copy request data
+		// FIXME: problem: can't set info before execute() since requestData is null
+		$this->requestData = clone $request->getRequestData();
+
 		// TODO: merge in request data. request holders need a method for that. 
 		// $this->parameters = array_merge($request->getParameters(), $this->parameters);
 		

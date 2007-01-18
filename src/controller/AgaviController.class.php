@@ -149,11 +149,14 @@ abstract class AgaviController extends AgaviParameterHolder
 	 */
 	public function dispatch(array $parameters = array())
 	{
+		// TODO: this must accept a request data holder
+		// request data holders should have a merge method that merges in the stuff it defines
+		// e.g. COOKIE and FILE for web, then parent::merge
 		try {
 			
-			$request = $this->context->getRequest()->getRequestData();
+			$requestData = $this->context->getRequest()->getRequestData();
 			
-			$request->setParameters($parameters);
+			$requestData->setParameters($parameters);
 			
 			// match routes and assign returned initial execution container
 			$container = $this->context->getRouting()->execute();
