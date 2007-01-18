@@ -118,12 +118,16 @@ class AgaviWebResponse extends AgaviResponse
 	/**
 	 * Send all response data to the client.
 	 *
+	 * @param      AgaviOutputType An optional Output Type object with information
+	 *                             the response can use to send additional data,
+	 *                             such as HTTP headers
+	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function send()
+	public function send(AgaviOutputType $outputType = null)
 	{
-		$this->sendHttpResponseHeaders();
+		$this->sendHttpResponseHeaders($outputType);
 		$this->sendContent();
 	}
 	
@@ -466,7 +470,7 @@ class AgaviWebResponse extends AgaviResponse
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	protected function sendHttpResponseHeaders()
+	protected function sendHttpResponseHeaders(AgaviOutputType $outputType = null)
 	{
 		$file = $line = '';
 		if(headers_sent($file, $line)) {
@@ -480,12 +484,9 @@ class AgaviWebResponse extends AgaviResponse
 			header($this->httpStatusCodes[$this->httpStatusCode]);
 		}
 		
-		// FIXME: this is not possible with the current infrastructure, and also a bit difficult to do... suggestions welcome
-		// $oti = $this->context->getController()->getOutputTypeInfo();
-		// 
-		// if($this->getContentType() === null && isset($oti['parameters']['Content-Type'])) {
-		// 	$this->setContentType($oti['parameters']['Content-Type']);
-		// }
+		if($this->getContentType() === null && $outputType instanceof AgaviOutputType && $outputType->hasParameter('Content-Type')) {
+		 	$this->setContentType($outputType->getParameter('Content-Type'));
+		}
 		
 		// send headers
 		foreach($this->httpHeaders as $name => $values) {

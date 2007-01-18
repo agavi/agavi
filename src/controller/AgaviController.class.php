@@ -180,7 +180,7 @@ abstract class AgaviController extends AgaviParameterHolder
 			// go, go, go!
 			$filterChain->execute($container);
 			
-			$container->getResponse()->send();
+			$container->getResponse()->send($container->getOutputType());
 			
 		} catch(Exception $e) {
 			if(isset($container) && $container instanceof AgaviExecutionContainer) {
