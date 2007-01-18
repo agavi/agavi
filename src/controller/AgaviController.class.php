@@ -151,7 +151,7 @@ abstract class AgaviController extends AgaviParameterHolder
 	{
 		try {
 			
-			$request = $this->context->getRequest();
+			$request = $this->context->getRequest()->getRequestData();
 			
 			$request->setParameters($parameters);
 			

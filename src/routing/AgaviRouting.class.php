@@ -483,14 +483,16 @@ abstract class AgaviRouting
 	public function execute()
 	{
 		$req = $this->context->getRequest();
+		
+		$reqData = $req->getRequestData();
 
 		$container = $this->context->getController()->createExecutionContainer();
 		$response = $container->getResponse();
 		
 		if(!AgaviConfig::get('core.use_routing', false) || count($this->routes) == 0) {
 			// routing disabled, determine module and action manually and bail out
-			$container->setModuleName($req->getParameter($req->getModuleAccessor()));
-			$container->setActionName($req->getParameter($req->getActionAccessor()));
+			$container->setModuleName($reqData->getParameter($req->getModuleAccessor()));
+			$container->setActionName($reqData->getParameter($req->getActionAccessor()));
 			
 			return $container;
 		}
@@ -652,18 +654,18 @@ abstract class AgaviRouting
 		}
 
 		// put the vars into the request
-		$req->setParameters($vars);
+		$reqData->setParameters($vars);
 
-		if(!$req->hasParameter($ma) || !$req->hasParameter($aa)) {
+		if(!$reqData->hasParameter($ma) || !$reqData->hasParameter($aa)) {
 			// no route which supplied the required parameters matched, use 404 action
-			$req->setParameters(array(
+			$reqData->setParameters(array(
 				$ma => AgaviConfig::get('actions.error_404_module'),
 				$aa => AgaviConfig::get('actions.error_404_action')
 			));
 		}
 		
-		$container->setModuleName($req->getParameter($ma));
-		$container->setActionName($req->getParameter($aa));
+		$container->setModuleName($reqData->getParameter($ma));
+		$container->setActionName($reqData->getParameter($aa));
 		
 		// set the list of matched route names as a request attribute
 		$req->setAttribute('matchedRoutes', $matchedRoutes, 'org.agavi.routing');

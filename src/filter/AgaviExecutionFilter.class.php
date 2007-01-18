@@ -361,12 +361,10 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 				if(!method_exists($viewInstance, $executeMethod)) {
 					$executeMethod = 'execute';
 				}
-				$key = $request->toggleLock();
-				$next = $viewInstance->$executeMethod($container);
-				$request->toggleLock($key);
+				$next = $viewInstance->$executeMethod($container->getRequestData());
 				
-				if($next instanceof AgaviExecutionContainer) {
-					$container->setNext($next);
+				if(is_array($next)) {
+					$container->setNext(call_user_func_array(array($controller, 'createExecutionContainer'), $next));
 				} else {
 					$attributes =& $viewInstance->getAttributes();
 
@@ -492,7 +490,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 			$actionInstance->$registerValidatorsMethod();
 
 			// process validators
-			$validated = $validationManager->execute($container);
+			$validated = $validationManager->execute($container->getRequestData());
 
 			$validateMethod = 'validate' . $method;
 			if(!method_exists($actionInstance, $validateMethod)) {
@@ -501,20 +499,16 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 
 			// prevent access to Request::getParameters()
 			// process manual validation
-			if($actionInstance->$validateMethod($container) && $validated) {
+			if($actionInstance->$validateMethod($container->getRequestData()) && $validated) {
 				// execute the action
-				$key = $request->toggleLock();
-				$viewName = $actionInstance->$executeMethod($container);
-				$request->toggleLock($key);
+				$viewName = $actionInstance->$executeMethod($container->getRequestData());
 			} else {
 				// validation failed
 				$handleErrorMethod = 'handle' . $method . 'Error';
 				if(!method_exists($actionInstance, $handleErrorMethod)) {
 					$handleErrorMethod = 'handleError';
 				}
-				$key = $request->toggleLock();
-				$viewName = $actionInstance->$handleErrorMethod($container);
-				$request->toggleLock($key);
+				$viewName = $actionInstance->$handleErrorMethod($container->getRequestData());
 			}
 		}
 

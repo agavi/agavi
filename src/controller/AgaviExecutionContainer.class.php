@@ -34,6 +34,11 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	protected $context = null;
 	
 	/**
+	 * @var        AgaviRequestData A request data instance with request info.
+	 */
+	protected $requestData = null;
+	
+	/**
 	 * @var        AgaviResponse A response instance holding the Action's output.
 	 */
 	protected $response = null;
@@ -93,6 +98,11 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 		
 		$this->context = $context;
 		
+		$this->parameters = $parameters;
+		
+		// copy request data
+		$this->requestData = clone $context->getRequest()->getRequestData();
+		
 		// create a new response instance for this action
 		$rfi = $this->context->getFactoryInfo('response');
 		$this->response = new $rfi['class'];
@@ -115,6 +125,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	 */
 	public function createExecutionContainer($moduleName = null, $actionName = null, array $parameters = array(), AgaviOutputType $outputType = null)
 	{
+		// TODO: parameters... there's more now
 		if($outputType === null) {
 			$outputType = $this->getOutputType();
 		}
@@ -140,9 +151,11 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	public function execute()
 	{
 		$controller = $this->context->getController();
+		
 		$request = $this->context->getRequest();
 		
-		$this->parameters = array_merge($request->getParameters(), $this->parameters);
+		// TODO: merge in request data. request holders need a method for that. 
+		// $this->parameters = array_merge($request->getParameters(), $this->parameters);
 		
 		$controller->countExecution();
 		
@@ -257,9 +270,6 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 			// process the filter chain
 			$filterChain->execute($this);
 			
-			// clear the global request attribute namespace containing attributes for the View
-			$request->removeAttributeNamespace($request->getDefaultNamespace());
-			
 			// restore autoloads
 			Agavi::$autoloads = $oldAutoloads;
 
@@ -303,6 +313,19 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	public function getContext()
 	{
 		return $this->context;
+	}
+	
+	/**
+	 * Retrieve this container's request data holder instance.
+	 *
+	 * @return     AgaviRequestDataHolder The request data holder.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getRequestData()
+	{
+		return $this->requestData;
 	}
 	
 	/**
