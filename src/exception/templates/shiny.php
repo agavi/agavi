@@ -547,7 +547,7 @@ if(isset($fixedTrace[0]['file']) && $fixedTrace[0]['file'] != $e->getFile() && $
 		<ol>
 <?php $i = 0; $highlights = array(); foreach($fixedTrace as $trace): $i++; if(!isset($highlights[$trace['file']])) $highlights[$trace['file']] = explode('<br />', str_replace(array('<code><span style="color: #000000">', '</span>
 </code>', '&nbsp;'), array('', '', '&#160;'), highlight_string(str_replace('	', '  ', file_get_contents($trace['file'])), true))); ?>
-			<li id="frame<?php echo $i; ?>"<?php if($i > 1): ?> class="hidecode"<?php endif; ?>>at <?php if($i > 1): ?><strong><?php if(isset($trace['class'])): ?><?php echo $trace['class'], htmlspecialchars($trace['type']); ?><?php endif; ?><?php echo $trace['function']; ?><?php if(isset($trace['args'])): ?>(<?php echo buildParamList($trace['args']); ?>)<?php endif; ?></strong><?php else: ?><em>exception origin</em><?php endif; ?><br />in <?php echo str_replace(
+			<li id="frame<?php echo $i; ?>"<?php if($i > 1): ?> class="hidecode"<?php endif; ?>>at <?php if($i > 1): ?><strong><?php if(isset($trace['class'])): ?><?php echo $trace['class'], htmlspecialchars($trace['type']); ?><?php endif; ?><?php echo $trace['function']; ?><?php if(isset($trace['args'])): ?>(<?php echo buildParamList($trace['args']); ?>)<?php endif; ?></strong><?php else: ?><em>exception origin</em><?php endif; ?><br />in <?php if(isset($trace['file'])): echo str_replace(
 			array(
 				'_' . AgaviConfig::get('core.module_dir', 'something totally random'),
 				'_' . AgaviConfig::get('core.template_dir', 'something totally random'),
@@ -571,7 +571,7 @@ foreach($lines as $key => &$line) { if($key + 1 == $trace['line']): ?><li class=
 if($line == '') $line = '&#160;'; if(strpos($line, '</span>') === 0) $line = substr($line, 7); if(strpos($line, '</span>') < strpos($line, '<span') || strpos($line, '<span') === false) for($j = $key; $j >= 0; $j--) { if(($pos = strrpos($highlights[$trace['file']][$j], '<span')) !== false) { $line = substr($highlights[$trace['file']][$j], $pos, 29) . $line; break; }} if(strrpos($line, '</span>') < strrpos($line, '<span') || strpos($line, '</span>') === false) $line .= '</span>'; if(strpos($line, ' ', 20) == 29) $line = substr_replace($line, '&#160;', 29, 1); echo $line; 
 
 ?></code></li>
-<?php } ?></ol></li>
+<?php } ?></ol><?php else: // no info about origin file ?><em>unknown</em><?php endif; ?></li>
 <?php endforeach; ?>
 		</ol>
 		<h3>Version Information</h3>
