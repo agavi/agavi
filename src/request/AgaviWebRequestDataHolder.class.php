@@ -65,6 +65,11 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder
 	protected $cookies = array();
 	
 	/**
+	 * @var        array An array of headers sent with the request.
+	 */
+	protected $headers = array();
+	
+	/**
 	 * Indicates whether or not a Cookie exists.
 	 *
 	 * @param      string A cookie name.
