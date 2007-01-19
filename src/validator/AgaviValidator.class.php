@@ -240,8 +240,8 @@ abstract class AgaviValidator extends AgaviParameterHolder
 			$parameters['provides'] = (isset($parameters['provides']) and strlen($parameters['provides'])) ? explode(' ', $parameters['provides']) : array();
 		}
 
-		if(!isset($parameters['argument_type'])) {
-			$parameters['argument_type'] = AgaviRequestDataHolder::PARAMETER;
+		if(!isset($parameters['source'])) {
+			$parameters['source'] = AgaviRequestDataHolder::SOURCE_PARAMETERS;
 		}
 
 
@@ -331,7 +331,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 */
 	protected function & getData($paramName)
 	{
-		$paramType = $this->getParameter('argument_type');
+		$paramType = $this->getParameter('source');
 		$array =& $this->validationParameters->getAll($paramType);
 		return $this->curBase->getValueByChildPath($paramName, $array);
 	}
@@ -396,7 +396,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	protected function checkAllArgumentsSet($throwError = true)
 	{
 		$isRequired = $this->getParameter('required', true);
-		$paramType = $this->getParameter('argument_type');
+		$paramType = $this->getParameter('source');
 		$result = true;
 
 		$baseParts = $this->curBase->getParts();
@@ -506,7 +506,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 			return;
 		}
 
-		$paramType = $this->getParameter('argument_type');
+		$paramType = $this->getParameter('source');
 
 		$array =& $this->validationParameters->getAll($paramType);
 		$cp = $this->curBase->pushRetNew($name);
@@ -693,7 +693,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 */
 	protected function getKeysInCurrentBase()
 	{
-		$paramType = $this->getParameter('argument_type');
+		$paramType = $this->getParameter('source');
 
 		$array = $this->validationParameters->getAll($paramType);
 		$names = $this->curBase->getValue($array, array());
