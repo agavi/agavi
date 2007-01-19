@@ -574,7 +574,14 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	public function & removeFile($name)
 	{
 		$parts = AgaviArrayPathDefinition::getPartsFromPath($name);
-		return AgaviArrayPathDefinition::unsetValue($parts['parts'], $this->files);
+		$oldValue =& AgaviArrayPathDefinition::unsetValue($parts['parts'], $this->files);
+		if(count($parts['parts']) > 1) {
+			array_pop($parts['parts']);
+			if(AgaviArrayPathDefinition::getValueFromArray($parts['parts'], $this->files) == array()) {
+				AgaviArrayPathDefinition::unsetValue($parts['parts'], $this->files);
+			}
+		}
+		return $oldValue;
 	}
 
 	/**
@@ -651,7 +658,7 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 			foreach($sub as $key => $value) {
 				$toIndex = array_merge($index, array($key));
 				if(is_array($value)) {
-					$this->fixFilesArray($toIndex);
+					$this->fixFilesArray($input, $toIndex);
 				} else {
 					foreach($theIndices as $name => $theIndex) {
 						$data[$name] = AgaviArrayPathDefinition::getValueFromArray(array_merge($theIndex, array($key)), $input);
