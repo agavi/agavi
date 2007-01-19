@@ -39,6 +39,11 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	protected $requestData = null;
 	
 	/**
+	 * @var        AgaviRequestData A request data instance with additional args.
+	 */
+	protected $arguments = null;
+	
+	/**
 	 * @var        AgaviResponse A response instance holding the Action's output.
 	 */
 	protected $response = null;
@@ -109,10 +114,12 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	/**
 	 * Creates a new container instance with the same output type as this one.
 	 *
-	 * @param      string          The name of the module.
-	 * @param      string          The name of the action.
-	 * @param      array           Optional additional parameters.
-	 * @param      AgaviOutputType Optional name of an initial output type to set.
+	 * @param      string                 The name of the module.
+	 * @param      string                 The name of the action.
+	 * @param      AgaviRequestDataHolder A RequestDataHolder with additional
+	 *                                    request arguments.
+	 * @param      AgaviOutputType        Optional name of an initial output type
+	 *                                    to set.
 	 *
 	 * @return     AgaviExecutionContainer A new execution container instance,
 	 *                                     fully initialized.
@@ -120,13 +127,12 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function createExecutionContainer($moduleName = null, $actionName = null, array $parameters = array(), AgaviOutputType $outputType = null)
+	public function createExecutionContainer($moduleName = null, $actionName = null, AgaviRequestDataContainer $arguments = null, AgaviOutputType $outputType = null)
 	{
-		// TODO: parameters... there's more now
 		if($outputType === null) {
 			$outputType = $this->getOutputType();
 		}
-		return $this->context->getController()->createExecutionContainer($moduleName, $actionName, $parameters, $outputType);
+		return $this->context->getController()->createExecutionContainer($moduleName, $actionName, $arguments, $outputType);
 	}
 	
 	/**
@@ -151,12 +157,11 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 		
 		$request = $this->context->getRequest();
 		
-		// copy request data
-		// FIXME: problem: can't set info before execute() since requestData is null
 		$this->requestData = clone $request->getRequestData();
-
-		// TODO: merge in request data. request holders need a method for that. 
-		// $this->parameters = array_merge($request->getParameters(), $this->parameters);
+		
+		if($this->arguments !== null) {
+			$this->requestData->merge($this->arguments);
+		}
 		
 		$controller->countExecution();
 		
@@ -327,6 +332,32 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	public function getRequestData()
 	{
 		return $this->requestData;
+	}
+	
+	/**
+	 * Get this container's request data holder instance for additional arguments.
+	 *
+	 * @return     AgaviRequestDataHolder The additional arguments.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getArguments()
+	{
+		return $this->arguments;
+	}
+	
+	/**
+	 * Set this container's request data holder instance for additional arguments.
+	 *
+	 * @return     AgaviRequestDataHolder The request data holder.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function setArguments(AgaviRequestDataHolder $arguments)
+	{
+		$this->arguments = $arguments;
 	}
 	
 	/**
