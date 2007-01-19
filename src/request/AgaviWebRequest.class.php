@@ -297,7 +297,7 @@ class AgaviWebRequest extends AgaviRequest
 		$headers = array();
 		foreach($_SERVER as $key => $value) {
 			if(substr($key, 0, 5) == 'HTTP_') {
-				$headers[strtolower(substr($key, 5))] = $value;
+				$headers[substr($key, 5)] = $value;
 			}
 		}
 		
