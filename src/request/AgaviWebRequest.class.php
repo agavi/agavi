@@ -202,12 +202,19 @@ class AgaviWebRequest extends AgaviRequest
 	{
 		parent::initialize($context, $parameters);
 		
+		$sources = array_merge(array(
+			'HTTPS' => 'HTTPS',
+			'REQUEST_METHOD' => 'REQUEST_METHOD',
+			'SERVER_NAME' => 'SERVER_NAME',
+			'SERVER_PORT' => 'SERVER_PORT',
+		), (isset($parameters['sources']) && is_array($parameters['sources']) ? $parameters['sources'] : array()));
+		
 		$methods = array('GET' => 'read', 'POST' => 'write', 'PUT' => 'create', 'DELETE' => 'remove');
 		if(isset($parameters['method_names'])) {
 			$methods = array_merge($methods, (array) $parameters['method_names']);
 		}
 		
-		switch(isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'GET') {
+		switch(isset($_SERVER[$sources['REQUEST_METHOD']]) ? $_SERVER[$sources['REQUEST_METHOD']] : 'GET') {
 			case 'POST':
 				$this->setMethod($methods['POST']);
 				break;
@@ -221,18 +228,18 @@ class AgaviWebRequest extends AgaviRequest
 				$this->setMethod($methods['GET']);
 		}
 		
-		$this->urlScheme = 'http' . (isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on' ? 's' : '');
+		$this->urlScheme = 'http' . (isset($_SERVER[$sources['HTTPS']]) && strtolower($_SERVER[$sources['HTTPS']]) == 'on' ? 's' : '');
 
-		if(isset($_SERVER['SERVER_PORT'])) {
-			$this->urlPort = intval($_SERVER['SERVER_PORT']);
+		if(isset($_SERVER[$sources['SERVER_PORT']])) {
+			$this->urlPort = intval($_SERVER[$sources['SERVER_PORT']]);
 		}
 
-		if(isset($_SERVER['SERVER_NAME'])) {
+		if(isset($_SERVER[$sources['SERVER_NAME']])) {
 			$port = $this->getUrlPort();
-			if(preg_match_all('/\:/', preg_quote($_SERVER['SERVER_NAME']), $m) > 1) {
-				$this->urlHost = preg_replace('/\]\:' . preg_quote($port) . '$/', '', $_SERVER['SERVER_NAME']);
+			if(preg_match_all('/\:/', preg_quote($_SERVER[$sources['SERVER_NAME']]), $m) > 1) {
+				$this->urlHost = preg_replace('/\]\:' . preg_quote($port) . '$/', '', $_SERVER[$sources['SERVER_NAME']]);
 			} else {
-				$this->urlHost = preg_replace('/\:' . preg_quote($port) . '$/', '', $_SERVER['SERVER_NAME']);
+				$this->urlHost = preg_replace('/\:' . preg_quote($port) . '$/', '', $_SERVER[$sources['SERVER_NAME']]);
 			}
 		}
 
