@@ -111,6 +111,27 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder
 	}
 
 	/**
+	 * Remove a cookie.
+	 *
+	 * @param      string The cookie name
+	 *
+	 * @return     string The value of the removed cookie, if it had been set.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function & removeCookie($name)
+	{
+		$retval = null;
+		if(isset($this->cookies[$name])) {
+			$retval =& $this->cookies[$name];
+			unset($this->cookies[$name]);
+		}
+
+		return $retval;
+	}
+
+	/**
 	 * Retrieve all cookies.
 	 *
 	 * @return     array The cookies.
@@ -182,14 +203,15 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function removeHeader($name)
+	public function & removeHeader($name)
 	{
+		$retval = null;
 		$name = str_replace('-', '_', strtoupper($name));
 		if(isset($this->headers[$name])) {
-			$retval = $this->headers[$name];
+			$retval =& $this->headers[$name];
 			unset($this->headers[$name]);
-			return $retval;
 		}
+		return $retval;
 	}
 	
 	/**
@@ -449,6 +471,23 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder
 	{
 		return count($this->files) > 0;
 	}
+
+	/**
+	 * Removes file information for given file.
+	 *
+	 * @param      string A file name
+	 *
+	 * @return     array The old information array, if it was set.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function & removeFile($name)
+	{
+		$parts = AgaviArrayPathDefinition::getPartsFromPath($name);
+		return AgaviArrayPathDefinition::unsetValue($parts['parts'], $this->files);
+	}
+
 
 	/**
 	 * Corrects the order of $_FILES for arrays of files.
