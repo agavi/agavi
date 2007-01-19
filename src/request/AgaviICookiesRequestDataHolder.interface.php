@@ -39,7 +39,7 @@ interface AgaviICookiesRequestDataHolder
 	
 	public function &removeCookie($cookie);
 	
-	public function clearCookies($cookies);
+	public function clearCookies();
 	
 	public function mergeCookies(AgaviRequestDataHolder $other);
 }

@@ -39,7 +39,7 @@ interface AgaviIHeadersRequestDataHolder
 	
 	public function &removeHeader($header);
 	
-	public function clearHeaders($headers);
+	public function clearHeaders();
 	
 	public function mergeHeaders(AgaviRequestDataHolder $other);
 }

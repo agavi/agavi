@@ -39,7 +39,7 @@ interface AgaviIFilesRequestDataHolder
 	
 	public function &removeFile($file);
 	
-	public function clearFiles($files);
+	public function clearFiles();
 	
 	public function mergeFiles(AgaviRequestDataHolder $other);
 }
