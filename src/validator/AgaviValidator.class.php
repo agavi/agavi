@@ -640,6 +640,10 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 */
 	public function execute(AgaviRequestDataHolder $parameters)
 	{
+		if($this->getParameter('source') != AgaviRequestDataHolder::SOURCE_PARAMETERS && !in_array($this->getParameter('source'), $parameters->getSourceNames())) {
+			throw new AgaviConfigurationException('Unknown source "' . $this->getParameter('source') . '" specified in validator ' . $this->getName());
+		}
+
 		$this->validationParameters = $parameters;
 		$base = new AgaviVirtualArrayPath($this->getParameter('base'));
 
