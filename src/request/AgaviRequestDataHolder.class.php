@@ -157,7 +157,7 @@ class AgaviRequestDataHolder extends AgaviParameterHolder
 	final protected function registerSource($name, array &$holder)
 	{
 		$this->_sources[$name] =& $holder;
-		$this->_sources[$name] = AgaviInflector::singularize($name);
+		$this->_singularSourceNames[$name] = AgaviInflector::singularize($name);
 	}
 
 	/**
