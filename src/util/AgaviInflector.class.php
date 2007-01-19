@@ -60,6 +60,7 @@ final class AgaviInflector
 	 * @var        array plurar => singular mapping
 	 */
 	protected static $pluralMatches = array(
+		'/cookies$/i' => 'cookie',
 		'/moves$/i' => 'move',
 		'/sexes$/i' => 'sex',
 		'/children$/i' => 'child',
