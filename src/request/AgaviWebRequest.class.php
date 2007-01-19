@@ -259,10 +259,52 @@ class AgaviWebRequest extends AgaviRequest
 		$this->urlQuery = $parts['query'];
 		unset($parts);
 		
-		$this->requestData = new AgaviWebRequestDataHolder();
-		$this->requestData->initialize($this);
+		if($this->getMethod() == $methods['PUT']) {
+			// PUT. We now gotta set a flag for that and populate $_FILES manually
+			$this->isHttpPutFile = true;
+
+			$putFile = tmpfile();
+
+			stream_copy_to_stream(fopen("php://input", "rb"), $putFile);
+
+			// for temp file name and size
+			$putFileInfo = array(
+				'stat' => fstat($putFile),
+				'meta_data' => stream_get_meta_data($putFile)
+			);
+
+			$putFileName = $request->getParameter('PUT_file_name', 'put_file');
+
+			$_FILES = array(
+				$putFileName => array(
+					'name' => $putFileName,
+					'type' => 'application/octet-stream',
+					'size' => $putFileInfo['stat']['size'],
+					'tmp_name' => $putFileInfo['meta_data']['uri'],
+					'error' => UPLOAD_ERR_OK,
+					'HTTP_PUT' => true,
+				)
+			);
+		}
+
+		$headers = array();
+		foreach($_SERVER as $key => $value) {
+			if(substr($key, 0, 5) == 'HTTP_') {
+				$headers[strtolower(substr($key, 5))] = $value;
+			}
+		}
+		
+		$this->requestData = new AgaviWebRequestDataHolder(array(
+			AgaviWebRequestDataHolder::SOURCE_PARAMETERS => array_merge($_GET, $_POST),
+			AgaviWebRequestDataHolder::SOURCE_COOKIES => $_COOKIE,
+			AgaviWebRequestDataHolder::SOURCE_FILES => $_FILES,
+			AgaviWebRequestDataHolder::SOURCE_HEADERS => $headers,
+		));
+		
+		if($this->getParameter("unset_input", true)) {
+			$_GET = $_POST = $_COOKIE = $_REQUEST = $_FILES = array();
+		}
 	}
-	
 }
 
 ?>

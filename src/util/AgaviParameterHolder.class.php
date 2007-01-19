@@ -33,7 +33,7 @@ class AgaviParameterHolder
 	/**
 	 * @var        array An array of parameters
 	 */
-	protected $parameters = null;
+	protected $parameters = array();
 
 	/**
 	 * Constructor. Accepts an array of initial parameters as an argument.

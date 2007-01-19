@@ -29,158 +29,158 @@
  */
 class AgaviRequestDataHolder extends AgaviParameterHolder
 {
-	const PARAMETER = 'parameter';
+	/**
+	 * @constant   Constant for source name of parameters.
+	 */
+	const SOURCE_PARAMETERS = 'parameters';
 
 	/*
-	 * @var        AgaviRequest The request instance.
+	 * @var        array An array of source names and references to their data
+	 *                   containers.
 	 */
-	protected $request = null;
+	private $_sources = array();
 
-	/**
-	 * Retrieve the current application context.
-	 *
-	 * @return     AgaviContext An AgaviContext instance.
-	 *
-	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @since      0.11.0
+	/*
+	 * @var        array An array of plural source names and their singular forms.
 	 */
-	public function getContext()
-	{
-		return $this->request->getContext();
-	}
-
-	/**
-	 * Retrieve the request instance.
-	 *
-	 * @return     AgaviRequest An AgaviRequest instance.
-	 *
-	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function getRequest()
-	{
-		return $this->request;
-	}
+	private $_singularSourceNames = array();
 
 	/**
 	 * Retrieves a field from one of the stored data types.
 	 *
-	 * @param      string The type to search in (PARAMETER, ...)
+	 * @param      string The name of the source to operate on.
 	 * @param      string A field name.
 	 * @param      mixed  A default value.
 	 *
 	 * @return     mixed The field value.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function & get($type, $field, $default = null)
+	public function & get($source, $field, $default = null)
 	{
-		$funcname = 'get' . ucfirst($type);
-		if(!is_callable(array($this, $funcname))) {
-			throw new InvalidArgumentException('Could not get item of type: ' . $type . '');
+		if(isset($this->$source)) {
+			$funcname = 'get' . $this->_singularSourceNames[$source];
+			return $this->$funcname($field, $default);
 		}
-
-		return $this->$funcname($field, $default);
 	}
 
 	/**
 	 * Retrieves all fields of a stored data types.
 	 *
-	 * @param      string The type.
+	 * @param      string The name of the source to operate on.
 	 *
 	 * @return     mixed The values.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function & getAll($type)
+	public function & getAll($source)
 	{
-		$funcname = 'get' . ucfirst(AgaviInflector::pluralize($type));
-		if(!is_callable(array($this, $funcname))) {
-			throw new InvalidArgumentException('Could not get item of type: ' . $type . '');
+		if(isset($this->$source)) {
+			$funcname = 'get' . $source;
+			return $this->$funcname();
 		}
-
-		return $this->$funcname();
 	}
 
 	/**
 	 * Checks if a field exists.
 	 *
-	 * @param      string The type.
+	 * @param      string The name of the source to operate on.
 	 * @param      string A field name.
 	 *
 	 * @return     bool The result.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function has($type, $field)
+	public function has($source, $field)
 	{
-		$funcname = 'has' . ucfirst($type);
-		if(!is_callable(array($this, $funcname))) {
-			throw new InvalidArgumentException('Could not check for item of type: ' . $type . '');
+		if(isset($this->$source)) {
+			$funcname = 'get' . $this->_singularSourceNames[$source];
+			return $this->$funcname($field);
 		}
-
-		return $this->$funcname($field);
 	}
 
 	/**
 	 * Removes a field.
 	 *
-	 * @param      string The type.
+	 * @param      string The name of the source to operate on.
 	 * @param      string A field name.
 	 *
 	 * @return     mixed The removed value.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function & remove($type, $field)
+	public function & remove($source, $field)
 	{
-		$funcname = 'remove' . ucfirst($type);
-		if(!is_callable(array($this, $funcname))) {
-			throw new InvalidArgumentException('Could not remove item of type: ' . $type . '');
+		if(isset($this->$source)) {
+			$funcname = 'get' . $this->_singularSourceNames[$source];
+			return $this->$funcname($field);
 		}
-
-		return $this->$funcname($field);
 	}
 
 	/**
 	 * Sets a field.
 	 *
-	 * @param      string The type to.
+	 * @param      string The name of the source to operate on.
 	 * @param      string A field name.
 	 * @param      mixed  A value.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function set($type, $field, $value)
+	public function set($source, $field, $value)
 	{
-		$funcname = 'get' . ucfirst($type);
-		if(!is_callable(array($this, $funcname))) {
-			throw new InvalidArgumentException('Could not set item of type: ' . $type . '');
+		if(isset($this->$source)) {
+			$funcname = 'get' . $this->_singularSourceNames[$source];
+			$this->$funcname($field, $value);
 		}
-
-		$this->$funcname($field, $value);
+	}
+	
+	/**
+	 * Register a source with the holder. Must be called in constructors, and
+	 * prior to calling the parent ctor.
+	 *
+	 * @param      string The source name, typically passed using a constant.
+	 * @param      array  The variable that will hold the data for the source.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	final protected function registerSource($name, array &$holder)
+	{
+		$this->_sources[$name] =& $holder;
+		$this->_sources[$name] = AgaviInflector::singularize($name);
 	}
 
 	/**
-	 * Initialize this RequestDataHolder.
+	 * Constructor
 	 *
-	 * @param      AgaviRequest An AgaviRequest instance.
-	 * @param      array        An associative array of request parameters.
+	 * @param      array An associative array of request data source names and
+	 *                   data arrays.
 	 *
-	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function initialize(AgaviRequest $request, array $parameters = array())
+	public function __construct(array $data)
 	{
-		$this->request = $request;
-		$this->setParameters($parameters);
+		$this->registerSource(self::SOURCE_PARAMETERS, $this->parameters);
+		
+		foreach($this->_sources as $name => &$container) {
+			if(isset($data[$name]) && is_array($data[$name])) {
+				$container = $data[$name];
+			} else {
+				$container = array();
+			}
+		}
 	}
-
 }
 
 ?>

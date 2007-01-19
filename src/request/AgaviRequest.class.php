@@ -265,11 +265,13 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	public function initialize(AgaviContext $context, array $parameters = array())
 	{
 		$this->context = $context;
-
+		
+		$this->parameters = $parameters;
+		
 		if(isset($parameters['default_namespace'])) {
 			$this->defaultNamespace = $parameters['default_namespace'];
 		}
-
+		
 		if(isset($parameters['module_accessor'])) {
 			$this->moduleAccessor = $parameters['module_accessor'];
 		}

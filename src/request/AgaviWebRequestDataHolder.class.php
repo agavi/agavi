@@ -29,9 +29,21 @@
  */
 class AgaviWebRequestDataHolder extends AgaviRequestDataHolder
 {
-	const COOKIE = 'cookie';
-	const FILE = 'file';
-
+	/**
+	 * @constant   Constant for source name of cookies.
+	 */
+	const SOURCE_COOKIES = 'cookies';
+	
+	/**
+	 * @constant   Constant for source name of files.
+	 */
+	const SOURCE_FILES = 'files';
+	
+	/**
+	 * @constant   Constant for source name of HTTP headers.
+	 */
+	const SOURCE_HEADERS = 'headers';
+	
 	/**
 	 * @var        bool Indicates whether or not PUT was used to upload a file.
 	 */
@@ -105,7 +117,76 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder
 	{
 		return $this->cookies;
 	}
-
+	
+	/**
+	 * Retrieve all HTTP headers.
+	 *
+	 * @return     array A list of HTTP headers (keys in original PHP format).
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function & getHeaders()
+	{
+		return $this->headers;
+	}
+	
+	/**
+	 * Get a HTTP header.
+	 *
+	 * @param      string Case-insensitive name of a header, using either a hyphen
+	 *                    or an underscore as a separator.
+	 *
+	 * @return     string The header value, or null if header wasn't set.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getHeader($name)
+	{
+		$name = str_replace('-', '_', strtoupper($name));
+		if(isset($this->headers[$name])) {
+			return $this->headers[$name];
+		}
+	}
+	
+	/**
+	 * Check if a HTTP header exists.
+	 *
+	 * @param      string Case-insensitive name of a header, using either a hyphen
+	 *                    or an underscore as a separator.
+	 *
+	 * @return     bool True if the header was sent with the current request.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function hasHeader($name)
+	{
+		return isset($this->headers[str_replace('-', '_', strtoupper($name))]);
+	}
+	
+	/**
+	 * Remove a HTTP header.
+	 *
+	 * @param      string Case-insensitive name of a header, using either a hyphen
+	 *                    or an underscore as a separator.
+	 *
+	 * @return     string The value of the removed header, if it had been set.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function removeHeader($name)
+	{
+		$name = str_replace('-', '_', strtoupper($name));
+		if(isset($this->headers[$name])) {
+			$retval = $this->headers[$name];
+			unset($this->headers[$name]);
+			return $retval;
+		}
+	}
+	
 	/**
 	 * Retrieve an array of file information.
 	 *
@@ -373,14 +454,18 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	protected function fixFilesArray($index = array())
+	protected function fixFilesArray(&$input = array(), $index = array())
 	{
 		$fromIndex = $index;
 		if(count($fromIndex) > 0) {
 			$first = array_shift($fromIndex);
 			array_unshift($fromIndex, $first, 'error');
+		} else {
+			// first call
+			$input = $this->files;
+			$this->files = array();
 		}
-		$sub = AgaviArrayPathDefinition::getValueFromArray($fromIndex, $_FILES);
+		$sub = AgaviArrayPathDefinition::getValueFromArray($fromIndex, $input);
 		$theIndices = array();
 		foreach(array('name', 'type', 'size', 'tmp_name', 'error') as $name) {
 			$theIndex = $fromIndex;
@@ -396,7 +481,7 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder
 					$this->fixFilesArray($toIndex);
 				} else {
 					foreach($theIndices as $name => $theIndex) {
-						$data[$name] = AgaviArrayPathDefinition::getValueFromArray(array_merge($theIndex, array($key)), $_FILES);
+						$data[$name] = AgaviArrayPathDefinition::getValueFromArray(array_merge($theIndex, array($key)), $input);
 					}
 					AgaviArrayPathDefinition::setValueFromArray($toIndex, $this->files, $data);
 					$this->fileFieldNames[] = $toIndex[0] . '[' . join('][', array_slice($toIndex, 1)) . ']';
@@ -404,7 +489,7 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder
 			}
 		} else {
 			foreach($theIndices as $name => $theIndex) {
-				$data[$name] = AgaviArrayPathDefinition::getValueFromArray($theIndex, $_FILES);
+				$data[$name] = AgaviArrayPathDefinition::getValueFromArray($theIndex, $input);
 			}
 			AgaviArrayPathDefinition::setValueFromArray($index, $this->files, $data);
 			$this->fileFieldNames[] = $index[0];
@@ -412,84 +497,27 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder
 	}
 	
 	/**
-	 * Initialize this WebRequestDataHolder.
+	 * Constructor
 	 *
-	 * @param      AgaviRequest An AgaviRequest instance.
-	 * @param      array        An associative array of request parameters.
-	 *
-	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function initialize(AgaviRequest $request, array $parameters = array())
-	{
-		parent::initialize($request, $parameters);
-		
-		// TODO: maybe the request should store this ?
-		$methods = array('GET' => 'read', 'POST' => 'write', 'PUT' => 'create', 'DELETE' => 'remove');
-/*		if(isset($parameters['method_names'])) {
-			$methods = array_merge($methods, (array) $parameters['method_names']);
-		}
-*/
-
-		if($request->getMethod() == $methods['PUT']) {
-			// PUT. We now gotta set a flag for that and populate $_FILES manually
-			$this->isHttpPutFile = true;
-			
-			$putFile = tmpfile();
-			
-			stream_copy_to_stream(fopen("php://input", "rb"), $putFile);
-			
-			// for temp file name and size
-			$putFileInfo = array(
-				'stat' => fstat($putFile),
-				'meta_data' => stream_get_meta_data($putFile)
-			);
-			
-			$putFileName = $request->getParameter('PUT_file_name', 'put_file');
-			
-			$this->files = array(
-				$putFileName => array(
-					'name' => $putFileName,
-					'type' => 'application/octet-stream',
-					'size' => $putFileInfo['stat']['size'],
-					'tmp_name' => $putFileInfo['meta_data']['uri'],
-					'error' => UPLOAD_ERR_OK
-				)
-			);
-		} else {
-			$this->fixFilesArray();
-		}
-
-		// store the cookies so we wont change the global array when changing a 
-		// cookie
-		$this->cookies = $_COOKIE;
-		
-		// merge GET parameters
-		$this->setParameters($_GET);
-		// merge POST parameters
-		$this->setParameters($_POST);
-	}
-	
-	/**
-	 * Wrapper method for either move_uplaoded_file or HTTP PUT input handling.
-	 *
-	 * @param      string The name of the input file.
-	 * @param      string The name of the destination file.
-	 *
-	 * @return     bool Whether or not the operation was successful.
+	 * @param      array An associative array of request data source names and
+	 *                   data arrays.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	protected function moveUploadedFile($source, $destination)
+	public function __construct(array $data)
 	{
-		if($this->isHttpPutFile) {
-			return @rename($source, $destination);
-		} else {
-			return @move_uploaded_file($source, $destination);
-		}
+		$this->registerSource(self::SOURCE_COOKIES, $this->cookies);
+		$this->registerSource(self::SOURCE_FILES, $this->files);
+		$this->registerSource(self::SOURCE_HEADERS, $this->headers);
+		
+		// call the parent ctor which handles the actual loading of the data
+		parent::__construct($data);
+		
+		// now fix the files array
+		$this->fixFilesArray();
 	}
-
+	
 	/**
 	 * Move an uploaded file.
 	 *
@@ -511,11 +539,11 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function moveFile($name, $file, $fileMode = 0666, $create = true, $dirMode = 0777)
+	public function moveFile($name, $dest, $fileMode = 0666, $create = true, $dirMode = 0777)
 	{
 		if($this->hasFile($name) && !$this->hasFileError($name) && $this->getFileSize($name) > 0) {
 			// get our directory path from the destination filename
-			$directory = dirname($file);
+			$directory = dirname($dest);
 			if(!is_readable($directory)) {
 				$fmode = 0777;
 				if($create && !@mkdir($directory, $dirMode, true)) {
@@ -544,10 +572,17 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder
 				$error = sprintf($error, $directory);
 				throw new AgaviFileException($error);
 			}
-
-			if($this->moveUploadedFile($this->getFilePath($name), $file)) {
+			
+			$from = $this->getFile($name);
+			if(isset($from['HTTP_PUT'])) {
+				$moved = @rename($from['tmp_name'], $dest);
+			} else {
+				$moved = @move_uploaded_file($from['tmp_name'], $dest);
+			}
+			
+			if($moved) {
 				// chmod our file
-				if(!@chmod($file, $fileMode)) {
+				if(!@chmod($dest, $fileMode)) {
 					throw new AgaviFileException('Failed to chmod uploaded file after moving');
 				}
 			} else {
