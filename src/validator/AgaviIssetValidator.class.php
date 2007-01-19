@@ -31,23 +31,6 @@
 class AgaviIssetValidator extends AgaviValidator
 {
 	/**
-	 * We return true here no matter what because we will check for existance
-	 * ourself.
-	 *
-	 * @param      bool Whether an error should be thrown for each missing 
-	 *                  argument if this validator is required.
-	 *
-	 * @return     bool Whether the arguments are set.
-	 *
-	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	protected function checkAllArgumentsSet($throwError = true)
-	{
-		return true;
-	}
-
-	/**
 	 * Validates the input.
 	 * 
 	 * @return     bool The value is set.
