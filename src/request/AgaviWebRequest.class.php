@@ -564,7 +564,6 @@ class AgaviWebRequest extends AgaviRequest
 		parent::initialize($context, $parameters);
 		
 		$sources = array_merge(array(
-			'HTTP_HOST' => 'HTTP_HOST', // currently not used
 			'HTTPS' => 'HTTPS',
 			'REQUEST_METHOD' => 'REQUEST_METHOD',
 			'SERVER_NAME' => 'SERVER_NAME',
