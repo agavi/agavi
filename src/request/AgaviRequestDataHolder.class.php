@@ -100,7 +100,7 @@ class AgaviRequestDataHolder extends AgaviParameterHolder
 	public function has($source, $field)
 	{
 		if(isset($this->$source)) {
-			$funcname = 'get' . $this->_singularSourceNames[$source];
+			$funcname = 'has' . $this->_singularSourceNames[$source];
 			return $this->$funcname($field);
 		}
 	}
@@ -120,7 +120,7 @@ class AgaviRequestDataHolder extends AgaviParameterHolder
 	public function & remove($source, $field)
 	{
 		if(isset($this->$source)) {
-			$funcname = 'get' . $this->_singularSourceNames[$source];
+			$funcname = 'remove' . $this->_singularSourceNames[$source];
 			return $this->$funcname($field);
 		}
 	}
@@ -139,7 +139,7 @@ class AgaviRequestDataHolder extends AgaviParameterHolder
 	public function set($source, $field, $value)
 	{
 		if(isset($this->$source)) {
-			$funcname = 'get' . $this->_singularSourceNames[$source];
+			$funcname = 'set' . $this->_singularSourceNames[$source];
 			$this->$funcname($field, $value);
 		}
 	}
