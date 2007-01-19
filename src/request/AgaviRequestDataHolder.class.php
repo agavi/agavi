@@ -161,6 +161,19 @@ class AgaviRequestDataHolder extends AgaviParameterHolder
 	}
 
 	/**
+	 * Returns all the registered source names.
+	 *
+	 * @return     array A list of source names.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	final public function getSourceNames()
+	{
+		return array_keys($this->_sources);
+	}
+
+	/**
 	 * Constructor
 	 *
 	 * @param      array An associative array of request data source names and
