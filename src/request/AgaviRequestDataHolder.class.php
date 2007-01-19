@@ -46,6 +46,19 @@ class AgaviRequestDataHolder extends AgaviParameterHolder
 	private $_singularSourceNames = array();
 
 	/**
+	 * Merge in parameters from another request data holder.
+	 *
+	 * @param      AgaviRequestDataHolder The other request data holder.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	protected function mergeParameters(AgaviRequestDataHolder $other)
+	{
+		$this->setParameters($other->getParameters());
+	}
+	
+	/**
 	 * Retrieves a field from one of the stored data types.
 	 *
 	 * @param      string The name of the source to operate on.
@@ -159,7 +172,25 @@ class AgaviRequestDataHolder extends AgaviParameterHolder
 		$this->_sources[$name] =& $holder;
 		$this->_singularSourceNames[$name] = AgaviInflector::singularize($name);
 	}
-
+	
+	/**
+	 * Merge in another request data holder.
+	 *
+	 * This method calls mergeSourcename for each source.
+	 *
+	 * @param      AgaviRequestDataHolder The other request data holder.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function merge(AgaviRequestDataHolder $other)
+	{
+		foreach(array_keys($this->_singularSourceNames) as $source) {
+			$fn = $merge . $source; // plural form!
+			$this->$fn($other);
+		}
+	}
+	
 	/**
 	 * Returns all the registered source names.
 	 *

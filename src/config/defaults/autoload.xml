@@ -126,7 +126,9 @@
 
 			<!-- agavi/request -->
 			<autoload name="AgaviConsoleRequest">%core.agavi_dir%/request/AgaviConsoleRequest.class.php</autoload>
-			<autoload name="AgaviRequestDataHolder">%core.agavi_dir%/request/AgaviRequestDataHolder.class.php</autoload>
+			<autoload name="AgaviICookiesRequestDataHolder">%core.agavi_dir%/request/AgaviICookiesRequestDataHolder.interface.php</autoload>
+			<autoload name="AgaviIFilesRequestDataHolder">%core.agavi_dir%/request/AgaviIFilesRequestDataHolder.interface.php</autoload>
+			<autoload name="AgaviIHeadersRequestDataHolder">%core.agavi_dir%/request/AgaviIHeadersRequestDataHolder.interface.php</autoload>
 			<autoload name="AgaviSecureWebRequest">%core.agavi_dir%/request/AgaviSecureWebRequest.class.php</autoload>
 			<autoload name="AgaviWebRequest">%core.agavi_dir%/request/AgaviWebRequest.class.php</autoload>
 			<autoload name="AgaviWebRequestDataHolder">%core.agavi_dir%/request/AgaviWebRequestDataHolder.class.php</autoload>

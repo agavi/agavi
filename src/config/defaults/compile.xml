@@ -49,6 +49,7 @@
 			<compile>%core.agavi_dir%/filter/AgaviExecutionFilter.class.php</compile>
 			<compile>%core.agavi_dir%/filter/AgaviFilterChain.class.php</compile>
 			<compile>%core.agavi_dir%/renderer/AgaviRenderer.class.php</compile>
+			<compile>%core.agavi_dir%/request/AgaviRequestDataHolder.class.php</compile>
 			<compile>%core.agavi_dir%/request/AgaviRequest.class.php</compile>
 			<compile>%core.agavi_dir%/response/AgaviResponse.class.php</compile>
 			<compile>%core.agavi_dir%/routing/AgaviRouting.class.php</compile>

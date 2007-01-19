@@ -27,7 +27,7 @@
  *
  * @version    $Id$
  */
-class AgaviWebRequestDataHolder extends AgaviRequestDataHolder
+class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviICookiesRequestDataHolder, AgaviIFilesRequestDataHolder, AgaviIHeadersRequestDataHolder
 {
 	/**
 	 * @constant   Constant for source name of cookies.
@@ -560,6 +560,51 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder
 		
 		// now fix the files array
 		$this->fixFilesArray();
+	}
+	
+	/**
+	 * Merge in Cookies from another request data holder.
+	 *
+	 * @param      AgaviRequestDataHolder The other request data holder.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function mergeCookies(AgaviRequestDataHolder $other)
+	{
+		if($other instanceof AgaviICookiesRequestDataHolder) {
+			$this->setCookies($other->getCookies());
+		}
+	}
+	
+	/**
+	 * Merge in Files from another request data holder.
+	 *
+	 * @param      AgaviRequestDataHolder The other request data holder.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function mergeFiles(AgaviRequestDataHolder $other)
+	{
+		if($other instanceof AgaviIFilesRequestDataHolder) {
+			$this->setFiles($other->getFiles());
+		}
+	}
+	
+	/**
+	 * Merge in Headers from another request data holder.
+	 *
+	 * @param      AgaviRequestDataHolder The other request data holder.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function mergeHeaders(AgaviRequestDataHolder $other)
+	{
+		if($other instanceof AgaviIHeadersRequestDataHolder) {
+			$this->setHeaders($other->getHeaders());
+		}
 	}
 	
 	/**
