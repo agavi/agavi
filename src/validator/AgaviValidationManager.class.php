@@ -259,11 +259,14 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 		}
 
 		if($mode == self::MODE_STRICT || ($executedValidators > 0 && $mode == self::MODE_CONDITIONAL)) {
-			$asf = array_flip($this->getSucceededFields());
-			// FIXME: Bad news... this system must handle more than just "parameters" :S
-			foreach($parameters->getFlatParameterNames() as $name) {
-				if(!isset($asf[$name]) && $name != $ma && $name != $aa) {
-					$parameters->removeParameter($name);
+			foreach($parameters->getSourceNames() as $source) {
+				$asf = array_flip($this->getSucceededFields($source));
+				$sourceItems = $parameters->getAll($source);
+				// FIXME: Bad news... this system must handle more than just "parameters" :S
+				foreach(AgaviArrayPathDefinition::getFlatKeyNames($sourceItems) as $name) {
+					if(!isset($asf[$name]) && ($source != AgaviRequestDataHolder::SOURCE_PARAMETERS || ($name != $ma && $name != $aa))) {
+						$parameters->remove($source, $name);
+					}
 				}
 			}
 		}
@@ -394,20 +397,26 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	 * were not processed (happens when the field is "not set" and the validator 
 	 * is not required)
 	 *
+	 * @param      string The source for which the fields should be returned.
+	 *
 	 * @return     array An array of field names.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function getSucceededFields()
+	public function getSucceededFields($source)
 	{
 		$names = array();
 		foreach($this->fieldResults as $name => $results) {
+			$hasInSource = false;
 			$ec = AgaviValidator::SUCCESS;
 			foreach($results as $result) {
-				$ec = max($ec, $result[1]);
+				if($result[0]->getParameter('source') == $source) {
+					$hasInSource = true;
+					$ec = max($ec, $result[1]);
+				}
 			}
-			if($ec <= AgaviValidator::SUCCESS) {
+			if($hasInSource && $ec <= AgaviValidator::SUCCESS) {
 				$names[] = $name;
 			}
 		}
