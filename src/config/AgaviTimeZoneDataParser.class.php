@@ -282,7 +282,7 @@ class AgaviTimeZoneDataParser extends AgaviConfigParser
 	protected function getRules($name, $from, $until, $gmtOff, $format)
 	{
 		if(!isset($this->rules[$name])) {
-			throw new IllegalArgumentException('No rule with the name ' . $name . ' exists');
+			throw new InvalidArgumentException('No rule with the name ' . $name . ' exists');
 		}
 
 		$lastDstOff = 0;
