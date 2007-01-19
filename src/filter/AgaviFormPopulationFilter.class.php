@@ -95,7 +95,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 		if(is_array($cfg['populate']) || $cfg['populate'] instanceof AgaviParameterHolder) {
 			$populate = $cfg['populate'];
 		} elseif(in_array($req->getMethod(), $cfg['methods']) && $cfg['populate'] !== false) {
-			$populate = $req;
+			$populate = $req->getRequestData();
 		} else {
 			return;
 		}
