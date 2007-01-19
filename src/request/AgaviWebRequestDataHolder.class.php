@@ -69,6 +69,18 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	 */
 	protected $headers = array();
 	
+
+	/**
+	 * Clear all cookies.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function clearCookies()
+	{
+		$this->cookies = array();
+	}
+
 	/**
 	 * Indicates whether or not a Cookie exists.
 	 *
@@ -111,6 +123,39 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	}
 
 	/**
+	 * Set a cookie.
+	 *
+	 * If a cookie with the name already exists the value will be overridden.
+	 *
+	 * @param      string A cookie name.
+	 * @param      mixed  A cookie value.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function setCookie($name, $value)
+	{
+		$this->cookies[$name] = $value;
+	}
+
+	/**
+	 * Set an array of cookies.
+	 *
+	 * If an existing cookie name matches any of the keys in the supplied
+	 * array, the associated value will be overridden.
+	 *
+	 * @param      array An associative array of cookies and their values.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function setCookies($cookies)
+	{
+		$this->cookies = array_merge($this->cookies, $cookies);
+	}
+
+
+	/**
 	 * Remove a cookie.
 	 *
 	 * @param      string The cookie name
@@ -143,7 +188,18 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	{
 		return $this->cookies;
 	}
-	
+
+	/**
+	 * Clear all headers.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function clearHeaders()
+	{
+		$this->headers = array();
+	}
+
 	/**
 	 * Retrieve all HTTP headers.
 	 *
@@ -162,18 +218,21 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	 *
 	 * @param      string Case-insensitive name of a header, using either a hyphen
 	 *                    or an underscore as a separator.
+	 * @param      mixed  A default value.
 	 *
 	 * @return     string The header value, or null if header wasn't set.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function getHeader($name)
+	public function & getHeader($name, $default = null)
 	{
 		$name = str_replace('-', '_', strtoupper($name));
 		if(isset($this->headers[$name])) {
 			return $this->headers[$name];
 		}
+
+		return $default;
 	}
 	
 	/**
@@ -192,6 +251,35 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 		return isset($this->headers[str_replace('-', '_', strtoupper($name))]);
 	}
 	
+	/**
+	 * Set a header.
+	 *
+	 * The header name is normalized before storing it.
+	 *
+	 * @param      string A header name.
+	 * @param      mixed  A header value.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function setHeader($name, $value)
+	{
+		$this->headers[str_replace('-', '_', strtoupper($name))] = $value;
+	}
+
+	/**
+	 * Set an array of headers.
+	 *
+	 * @param      array An associative array of headers and their values.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function setHeaders($headers)
+	{
+		$this->headers = array_merge($this->headers, $headers);
+	}
+
 	/**
 	 * Remove a HTTP header.
 	 *
@@ -217,7 +305,8 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	/**
 	 * Retrieve an array of file information.
 	 *
-	 * @param      string A file name
+	 * @param      string A file name.
+	 * @param      mixed A default value.
 	 *
 	 * @return     array An associative array of file information, if the file
 	 *                   exists, otherwise null.
@@ -225,7 +314,7 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function & getFile($name)
+	public function & getFile($name, $default = null)
 	{
 		$parts = AgaviArrayPathDefinition::getPartsFromPath($name);
 		$retval = AgaviArrayPathDefinition::getValueFromArray($parts['parts'], $this->files);
@@ -233,7 +322,7 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 		if(is_array($retval)) {
 			return $retval;
 		}
-		return null;
+		return $default;
 	}
 
 	/**
@@ -486,6 +575,46 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	{
 		$parts = AgaviArrayPathDefinition::getPartsFromPath($name);
 		return AgaviArrayPathDefinition::unsetValue($parts['parts'], $this->files);
+	}
+
+	/**
+	 * Set a file.
+	 *
+	 * If a file with the name already exists the value will be overridden.
+	 *
+	 * @param      string A file name.
+	 * @param      mixed  A file information array.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function setFile($name, $value)
+	{
+		$this->files[$name] = $value;
+	}
+
+	/**
+	 * Set an array of files.
+	 *
+	 * @param      array An associative array of files and their values.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function setFiles($files)
+	{
+		$this->files = array_merge($this->files, $files);
+	}
+
+	/**
+	 * Clear all files.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function clearFiles()
+	{
+		$this->files = array();
 	}
 
 
