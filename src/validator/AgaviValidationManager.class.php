@@ -147,7 +147,7 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	{
 		$name = $validator->getName();
 		if(isset($this->children[$name])) {
-			throw new IllegalArgumentException('A validator with the name "' . $name . '" already exists');
+			throw new InvalidArgumentException('A validator with the name "' . $name . '" already exists');
 		}
 
 		$this->children[$name] = $validator;
@@ -164,7 +164,7 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	public function getChild($name)
 	{
 		if(!isset($this->children[$name])) {
-			throw new IllegalArgumentException('A validator with the name "' . $name . '" does not exist');
+			throw new InvalidArgumentException('A validator with the name "' . $name . '" does not exist');
 		}
 
 		return $this->children[$name];

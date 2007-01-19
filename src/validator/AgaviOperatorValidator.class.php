@@ -111,7 +111,7 @@ abstract class AgaviOperatorValidator extends AgaviValidator implements AgaviIVa
 	{
 		$name = $validator->getName();
 		if(isset($this->children[$name])) {
-			throw new IllegalArgumentException('A validator with the name "' . $name . '" already exists');
+			throw new InvalidArgumentException('A validator with the name "' . $name . '" already exists');
 		}
 
 		$this->children[$name] = $validator;
@@ -128,7 +128,7 @@ abstract class AgaviOperatorValidator extends AgaviValidator implements AgaviIVa
 	public function getChild($name)
 	{
 		if(!isset($this->children[$name])) {
-			throw new IllegalArgumentException('A validator with the name "' . $name . '" does not exist');
+			throw new InvalidArgumentException('A validator with the name "' . $name . '" does not exist');
 		}
 
 		return $this->children[$name];
