@@ -289,7 +289,7 @@ class AgaviWebRequest extends AgaviRequest
 					'size' => $putFileInfo['stat']['size'],
 					'tmp_name' => $putFileInfo['meta_data']['uri'],
 					'error' => UPLOAD_ERR_OK,
-					'HTTP_PUT' => true,
+					'is_uploaded_file' => false,
 				)
 			);
 		}

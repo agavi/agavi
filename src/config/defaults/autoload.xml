@@ -130,6 +130,7 @@
 			<autoload name="AgaviIFilesRequestDataHolder">%core.agavi_dir%/request/AgaviIFilesRequestDataHolder.interface.php</autoload>
 			<autoload name="AgaviIHeadersRequestDataHolder">%core.agavi_dir%/request/AgaviIHeadersRequestDataHolder.interface.php</autoload>
 			<autoload name="AgaviSecureWebRequest">%core.agavi_dir%/request/AgaviSecureWebRequest.class.php</autoload>
+			<autoload name="AgaviUploadedFile">%core.agavi_dir%/request/AgaviUploadedFile.class.php</autoload>
 			<autoload name="AgaviWebRequest">%core.agavi_dir%/request/AgaviWebRequest.class.php</autoload>
 			<autoload name="AgaviWebRequestDataHolder">%core.agavi_dir%/request/AgaviWebRequestDataHolder.class.php</autoload>
 			<autoload name="AgaviWebserviceRequest">%core.agavi_dir%/request/AgaviWebserviceRequest.class.php</autoload>

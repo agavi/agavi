@@ -45,20 +45,10 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	const SOURCE_HEADERS = 'headers';
 	
 	/**
-	 * @var        bool Indicates whether or not PUT was used to upload a file.
-	 */
-	protected $isHttpPutFile = false;
-
-	/**
 	 * @var        array An (proper) array of files uploaded during the request.
 	 */
 	protected $files = array();
 	
-	/**
-	 * @var        array An array of field names of uploaded files, recursive.
-	 */
-	protected $fileFieldNames = array();
-
 	/**
 	 * @var        array An array of cookies set in the request.
 	 */
@@ -317,84 +307,11 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	public function & getFile($name, $default = null)
 	{
 		$parts = AgaviArrayPathDefinition::getPartsFromPath($name);
-		$retval = AgaviArrayPathDefinition::getValueFromArray($parts['parts'], $this->files);
-		// check if it's a file (i.e. array with name, tmp name, size etc is there)
-		if(is_array($retval)) {
+		$retval =& AgaviArrayPathDefinition::getValueFromArray($parts['parts'], $this->files);
+		if($retval !== null) {
 			return $retval;
 		}
 		return $default;
-	}
-
-	/**
-	 * Retrieve a file error.
-	 *
-	 * @param      string A file name.
-	 *
-	 * @return     int One of the following error codes:
-	 *                 - <b>UPLOAD_ERR_OK</b>        (no error)
-	 *                 - <b>UPLOAD_ERR_INI_SIZE</b>  (the uploaded file exceeds
-	 *                                               upload_max_filesize
-	 *                                               directive in php.ini)
-	 *                 - <b>UPLOAD_ERR_FORM_SIZE</b> (the uploaded file exceeds
-	 *                                               MAX_FILE_SIZE directive
-	 *                                               specified in the HTML form)
-	 *                 - <b>UPLOAD_ERR_PARTIAL</b>   (the uploaded file was only
-	 *                                               partially uploaded)
-	 *                 - <b>UPLOAD_ERR_NO_FILE</b>   (no file was uploaded)
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function getFileError($name)
-	{
-		$parts = AgaviArrayPathDefinition::getPartsFromPath($name);
-		$retval = AgaviArrayPathDefinition::getValueFromArray(array_merge($parts['parts'], array('error')), $this->files, UPLOAD_ERR_NO_FILE);
-		// this check must be performed. there could be a situation where the requested path was not complete, i.e. there are children left, and one of the children has the same name as the appended part fragment above
-		if(!is_array($retval)) {
-			return $retval;
-		}
-		return null;
-	}
-
-	/**
-	 * Retrieve a file name.
-	 *
-	 * @param      string A file name.
-	 *
-	 * @return     string A file name, if the file exists, otherwise null.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function getFileName($name)
-	{
-		$parts = AgaviArrayPathDefinition::getPartsFromPath($name);
-		$retval = AgaviArrayPathDefinition::getValueFromArray(array_merge($parts['parts'], array('name')), $this->files, null);
-		// this check must be performed. there could be a situation where the requested path was not complete, i.e. there are children left, and one of the children has the same name as the appended part fragment above
-		if(!is_array($retval)) {
-			return $retval;
-		}
-		return null;
-	}
-
-	/**
-	 * Retrieve an array of file field names.
-	 *
-	 * @param      bool Whether or not to include names of nested elements.
-	 *                  Defaults to true.
-	 *
-	 * @return     array An indexed array of file field names.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function getFileFieldNames($deep = true)
-	{
-		if($deep) {
-			return $this->fileFieldNames;
-		} else {
-			return array_keys($this->files);
-		}
 	}
 
 	/**
@@ -408,83 +325,9 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function & getFiles($deep = true)
+	public function & getFiles()
 	{
-		if($deep) {
-			$retval = array();
-			foreach($this->fileFieldNames as $name) {
-				$retval[$name] = $this->getFile($name);
-			}
-			return $retval;
-		} else {
-			return $this->files;
-		}
-	}
-
-	/**
-	 * Retrieve a file path.
-	 *
-	 * @param      string A file name.
-	 *
-	 * @return     string A file path, if the file exists, otherwise null.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function getFilePath($name)
-	{
-		$parts = AgaviArrayPathDefinition::getPartsFromPath($name);
-		$retval = AgaviArrayPathDefinition::getValueFromArray(array_merge($parts['parts'], array('tmp_name')), $this->files, UPLOAD_ERR_NO_FILE);
-		// this check must be performed. there could be a situation where the requested path was not complete, i.e. there are children left, and one of the children has the same name as the appended part fragment above
-		if(!is_array($retval)) {
-			return $retval;
-		}
-		return null;
-	}
-
-	/**
-	 * Retrieve a file size.
-	 *
-	 * @param      string A file name.
-	 *
-	 * @return     int A file size, if the file exists, otherwise null.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function getFileSize($name)
-	{
-		$parts = AgaviArrayPathDefinition::getPartsFromPath($name);
-		$retval = AgaviArrayPathDefinition::getValueFromArray(array_merge($parts['parts'], array('size')), $this->files, UPLOAD_ERR_NO_FILE);
-		// this check must be performed. there could be a situation where the requested path was not complete, i.e. there are children left, and one of the children has the same name as the appended part fragment above
-		if(!is_array($retval)) {
-			return $retval;
-		}
-		return null;
-	}
-
-	/**
-	 * Retrieve a file type.
-	 *
-	 * This may not be accurate. This is the mime-type sent by the browser
-	 * during the upload.
-	 *
-	 * @param      string A file name.
-	 *
-	 * @return     string A file type, if the file exists, otherwise null.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function getFileType($name)
-	{
-		$parts = AgaviArrayPathDefinition::getPartsFromPath($name);
-		$retval = AgaviArrayPathDefinition::getValueFromArray(array_merge($parts['parts'], array('type')), $this->files, UPLOAD_ERR_NO_FILE);
-		// this check must be performed. there could be a situation where the requested path was not complete, i.e. there are children left, and one of the children has the same name as the appended part fragment above
-		if(!is_array($retval)) {
-			return $retval;
-		}
-		return null;
+		return $this->files;
 	}
 
 	/**
@@ -501,51 +344,7 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	{
 		$parts = AgaviArrayPathDefinition::getPartsFromPath($name);
 		// this check is correct, we must make sure the file, and not a "subkey" of it, is requested
-		$retval = AgaviArrayPathDefinition::hasValue(array_merge($parts['parts'], array('error')), $this->files);
-		// this check must be performed. there could be a situation where the requested path was not complete, i.e. there are children left, and one of the children has the same name as the appended part fragment above
-		if(!is_array($retval)) {
-			return true;
-		}
-		return false;
-	}
-
-	/**
-	 * Indicates whether or not a file error exists.
-	 *
-	 * @param      string A file name.
-	 *
-	 * @return     bool true, if the file error exists, otherwise false.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function hasFileError($name)
-	{
-		$parts = AgaviArrayPathDefinition::getPartsFromPath($name);
-		$retval = AgaviArrayPathDefinition::getValueFromArray(array_merge($parts['parts'], array('error')), $this->files);
-		// this check must be performed. there could be a situation where the requested path was not complete, i.e. there are children left, and one of the children has the same name as the appended part fragment above
-		if($retval !== null && !is_array($retval)) {
-			return $retval !== UPLOAD_ERR_OK;
-		}
-		return false;
-	}
-
-	/**
-	 * Indicates whether or not any file errors occured.
-	 *
-	 * @return     bool true, if any file errors occured, otherwise false.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function hasFileErrors()
-	{
-		foreach($this->fileFieldNames as $name) {
-			if($this->hasFileError($name)) {
-				return true;
-			}
-		}
-		return false;
+		return AgaviArrayPathDefinition::hasValue($parts['parts'], $this->files);
 	}
 
 	/**
@@ -647,7 +446,7 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 		}
 		$sub = AgaviArrayPathDefinition::getValueFromArray($fromIndex, $input);
 		$theIndices = array();
-		foreach(array('name', 'type', 'size', 'tmp_name', 'error') as $name) {
+		foreach(array('name', 'type', 'size', 'tmp_name', 'error', 'is_uploaded_file') as $name) {
 			$theIndex = $fromIndex;
 			$first = array_shift($theIndex);
 			array_shift($theIndex);
@@ -660,19 +459,19 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 				if(is_array($value)) {
 					$this->fixFilesArray($input, $toIndex);
 				} else {
+					$data = new AgaviUploadedFile();
 					foreach($theIndices as $name => $theIndex) {
-						$data[$name] = AgaviArrayPathDefinition::getValueFromArray(array_merge($theIndex, array($key)), $input);
+						$data[$name] = AgaviArrayPathDefinition::getValueFromArray(array_merge($theIndex, array($key)), $input, true /* for is_uploaded_file */);
 					}
 					AgaviArrayPathDefinition::setValueFromArray($toIndex, $this->files, $data);
-					$this->fileFieldNames[] = $toIndex[0] . '[' . join('][', array_slice($toIndex, 1)) . ']';
 				}
 			}
 		} else {
+			$data = new AgaviUploadedFile();
 			foreach($theIndices as $name => $theIndex) {
-				$data[$name] = AgaviArrayPathDefinition::getValueFromArray($theIndex, $input);
+				$data[$name] = AgaviArrayPathDefinition::getValueFromArray($theIndex, $input, true /* for is_uploaded_file */);
 			}
 			AgaviArrayPathDefinition::setValueFromArray($index, $this->files, $data);
-			$this->fileFieldNames[] = $index[0];
 		}
 	}
 	
