@@ -40,7 +40,7 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	/**
 	 * @var        mixed The content to send back to the client.
 	 */
-	protected $content = '';
+	protected $content = null;
 	
 	/**
 	 * Retrieve the AgaviContext instance this Response object belongs to.
