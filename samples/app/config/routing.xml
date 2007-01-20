@@ -33,9 +33,7 @@
 			</route>
 			
 			<!-- If the HTTP Accept: header contains "application/xhtml+xml", set the output type to "xhtml". Look at output_types.xml for the declaration of that output type. Execution will not stop if this route matches. -->
-			<!-- FIXME: disabled until the first container is created and thus available by the routing
 			<route pattern="application/xhtml+xml" source="_SERVER[HTTP_ACCEPT]" output_type="xhtml" stop="false" />
-			-->
 		
 			<route name="disabled" pattern="^/disabled" module="Disabled" action="Index" />
 			

@@ -640,7 +640,7 @@ abstract class AgaviRouting
 
 		// set the output type if necessary
 		if($ot !== null) {
-			$container->setOutputType($ot);
+			$container->setOutputType($this->context->getController()->getOutputType($ot));
 		}
 
 		// set the locale if necessary
