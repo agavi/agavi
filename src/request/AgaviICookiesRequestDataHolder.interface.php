@@ -33,6 +33,10 @@ interface AgaviICookiesRequestDataHolder
 	
 	public function &getCookies();
 	
+	public function getCookieNames();
+	
+	public function getFlatCookieNames();
+	
 	public function setCookie($name, $value);
 	
 	public function setCookies($cookies);

@@ -180,6 +180,34 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	}
 
 	/**
+	 * Retrieve an array of cookie names.
+	 *
+	 * @return     array An indexed array of cookie names.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getCookieNames()
+	{
+		return array_keys($this->cookies);
+	}
+	
+	/**
+	 * Retrieve an array of flattened cookie names. This means when a cookie is an
+	 * array you wont get the name of the cookie in the result but instead all
+	 * child keys appended to the name (like foo[0],foo[1][0], ...).
+	 *
+	 * @return     array An indexed array of cookie names.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getFlatCookieNames()
+	{
+		return AgaviArrayPathDefinition::getFlatKeyNames($this->cookies);
+	}
+	
+	/**
 	 * Clear all headers.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
@@ -290,6 +318,19 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 			unset($this->headers[$name]);
 		}
 		return $retval;
+	}
+	
+	/**
+	 * Retrieve an array of header names.
+	 *
+	 * @return     array An indexed array of header names in original PHP format.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getHeaderNames()
+	{
+		return array_keys($this->headers);
 	}
 	
 	/**
@@ -423,7 +464,34 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 		$this->files = array();
 	}
 
-
+	/**
+	 * Retrieve an array of file names.
+	 *
+	 * @return     array An indexed array of file names.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getFileNames()
+	{
+		return array_keys($this->files);
+	}
+	
+	/**
+	 * Retrieve an array of flattened file names. This means when a file is an
+	 * array you wont get the name of the file in the result but instead all child
+	 * keys appended to the name (like foo[0],foo[1][0], ...).
+	 *
+	 * @return     array An indexed array of file names.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getFlatFileNames()
+	{
+		return AgaviArrayPathDefinition::getFlatKeyNames($this->files);
+	}
+	
 	/**
 	 * Corrects the order of $_FILES for arrays of files.
 	 * The cleaned up array is put into $this->files.

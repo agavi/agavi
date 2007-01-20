@@ -33,6 +33,8 @@ interface AgaviIHeadersRequestDataHolder
 	
 	public function &getHeaders();
 	
+	public function getHeaderNames();
+	
 	public function setHeader($name, $value);
 	
 	public function setHeaders($headers);

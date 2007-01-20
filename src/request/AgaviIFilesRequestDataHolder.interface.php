@@ -33,6 +33,10 @@ interface AgaviIFilesRequestDataHolder
 	
 	public function &getFiles();
 	
+	public function getFileNames();
+	
+	public function getFlatFileNames();
+	
 	public function setFile($name, $value);
 	
 	public function setFiles($files);
