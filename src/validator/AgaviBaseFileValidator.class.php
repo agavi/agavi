@@ -57,37 +57,6 @@ abstract class AgaviBaseFileValidator extends AgaviValidator
 	}
 
 	/**
-	 * Returns whether all arguments are set in the validation input parameters.
-	 * Set means anything but empty string.
-	 *
-	 * @param      bool Whether an error should be thrown for each missing 
-	 *                  argument if this validator is required.
-	 *
-	 * @return     bool Whether the arguments are set.
-	 *
-	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	protected function checkAllArgumentsSet($throwError = true)
-	{
-		$isRequired = $this->getParameter('required', true);
-		$result = true;
-
-		$baseParts = $this->curBase->getParts();
-		foreach($this->getArguments() as $argument) {
-			$new = $this->curBase->pushRetNew($argument);
-			$pName = $this->curBase->pushRetNew($argument)->__toString();
-			if(!$this->validationParameters->hasFile($pName)) {
-				if($throwError && $isRequired) {
-					$this->throwError(null, $pName);
-				}
-				$result = false;
-			}
-		}
-		return $result;
-	}
-
-	/**
 	 * Validates the input
 	 * 
 	 * @return     bool The file is valid according to given parameters.
@@ -98,18 +67,19 @@ abstract class AgaviBaseFileValidator extends AgaviValidator
 	protected function validate()
 	{
 		foreach($this->getArguments() as $argument) {
-			if($argument) {
-				$name = $this->curBase->pushRetNew($argument)->__toString();
-			} else {
-				$name = $this->curBase->__toString();
+			$file = $this->getData($argument);
+
+			if(!$file instanceof AgaviUploadedFile) {
+				$this->throwError('argument_wrong_type');
+				return false;
 			}
 
-			if($this->validationParameters->getFileError($name) != UPLOAD_ERR_OK) {
+			if($file->hasError()) {
 				$this->throwError('upload_failed');
 				return false;
 			}
 			
-			$size = $this->validationParameters->getFileSize($name);
+			$size = $file->getSize();
 			if($this->hasParameter('min_size') && $size < $this->getParameter('min_size')) {
 				$this->throwError('min_size');
 				return false;
@@ -120,36 +90,18 @@ abstract class AgaviBaseFileValidator extends AgaviValidator
 			}
 
 			if($this->hasParameter('extension')) {
-				$fileinfo = pathinfo($this->validationParameters->getFileName($name));
+				$fileinfo = pathinfo($file->getName());
 				$ext = isset($fileinfo['extension']) ? $fileinfo['extension'] : '';
 
-				if(in_array($ext, explode(' ', $this->getParameter('extension')))) {
-					continue;
+				if(!in_array($ext, explode(' ', $this->getParameter('extension')))) {
+					$this->throwError('extension');
+					return false;
 				}
-
-				$this->throwError('extension');
-				return false;
 			}
 
 		}
 
 		return true;
-	}
-
-	/**
-	 * Returns all available keys in the currently set base.
-	 *
-	 * @return     array The available keys.
-	 *
-	 * @author     Dominik del Bondio <ddb@bitxtender.com
-	 * @since      0.11.0
-	 */
-	protected function getKeysInCurrentBase()
-	{
-		$files = $this->getContext()->getRequest()->getRequestData()->getFiles(false);
-
-		$names = $this->curBase->getValue($files, array());
-		return array_keys($names);
 	}
 
 }
