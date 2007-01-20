@@ -248,8 +248,7 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 			// strict mode and no validators executed -> clear the parameters
 			$maParam = $parameters->getParameter($ma);
 			$aaParam = $parameters->getParameter($aa);
-			// FIXME: AgaviRequestDataHolder needs clearAll() method
-			$parameters->clearParameters();
+			$parameters->clearAll();
 			if($maParam) {
 				$parameters->setParameter($ma, $maParam);
 			}
