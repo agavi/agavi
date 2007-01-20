@@ -113,7 +113,7 @@ final class AgaviUploadedFile extends ArrayObject
 	 */
 	public function move($dest, $fileMode = 0666, $create = true, $dirMode = 0777)
 	{
-		if(!$this->hasError() && $this->size > 0) {
+		if(!$this->hasError()) {
 			// get our directory path from the destination filename
 			$directory = dirname($dest);
 			if(!is_readable($directory)) {

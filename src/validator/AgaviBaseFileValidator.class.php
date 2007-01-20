@@ -19,7 +19,7 @@
  * validators.
  * 
  * Parameters:
- *   'min_size'     The minimum file size in byte
+ *   'min_size'     The minimum file size in byte, default 1
  *   'max_size'     The maximum file size in byte
  *   'extension'    list of valid extensions (delimited by ' ')
  *
@@ -68,19 +68,19 @@ abstract class AgaviBaseFileValidator extends AgaviValidator
 	{
 		foreach($this->getArguments() as $argument) {
 			$file = $this->getData($argument);
-
+			
 			if(!$file instanceof AgaviUploadedFile) {
 				$this->throwError('argument_wrong_type');
 				return false;
 			}
-
+			
 			if($file->hasError()) {
 				$this->throwError('upload_failed');
 				return false;
 			}
 			
 			$size = $file->getSize();
-			if($this->hasParameter('min_size') && $size < $this->getParameter('min_size')) {
+			if($size < $this->getParameter('min_size', 1)) {
 				$this->throwError('min_size');
 				return false;
 			}
@@ -88,22 +88,19 @@ abstract class AgaviBaseFileValidator extends AgaviValidator
 				$this->throwError('max_size');
 				return false;
 			}
-
+			
 			if($this->hasParameter('extension')) {
 				$fileinfo = pathinfo($file->getName());
 				$ext = isset($fileinfo['extension']) ? $fileinfo['extension'] : '';
-
 				if(!in_array($ext, explode(' ', $this->getParameter('extension')))) {
 					$this->throwError('extension');
 					return false;
 				}
 			}
-
 		}
-
+		
 		return true;
 	}
-
 }
 
 ?>
