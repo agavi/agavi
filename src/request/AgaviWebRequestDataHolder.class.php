@@ -308,7 +308,7 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	{
 		$parts = AgaviArrayPathDefinition::getPartsFromPath($name);
 		$retval =& AgaviArrayPathDefinition::getValueFromArray($parts['parts'], $this->files);
-		if($retval !== null) {
+		if(is_array($retval) || $retval instanceof AgaviUploadedFile) {
 			return $retval;
 		}
 		return $default;
@@ -343,8 +343,8 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	public function hasFile($name)
 	{
 		$parts = AgaviArrayPathDefinition::getPartsFromPath($name);
-		// this check is correct, we must make sure the file, and not a "subkey" of it, is requested
-		return AgaviArrayPathDefinition::hasValue($parts['parts'], $this->files);
+		$val = AgaviArrayPathDefinition::getValue($parts['parts'], $this->files);
+		return is_array($val) || $val instanceof AgaviUploadedFile;
 	}
 
 	/**
