@@ -59,6 +59,36 @@ class AgaviRequestDataHolder extends AgaviParameterHolder
 	}
 	
 	/**
+	 * Deletes all fields in a given source.
+	 *
+	 * @param      string The name of the source to operate on.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function clear($source)
+	{
+		if(isset($this->$source)) {
+			$funcname = 'clear' . $source;
+			$this->$funcname();
+		}
+	}
+
+	/**
+	 * Deletes all fields in all sources.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function clearAll()
+	{
+		foreach($this->_sourceNames as $sourceName => $source) {
+			$funcname = 'clear' . $sourceName;
+			$this->$funcname();
+		}
+	}
+
+	/**
 	 * Retrieves a field from one of the stored data types.
 	 *
 	 * @param      string The name of the source to operate on.
