@@ -384,7 +384,7 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	public function hasFile($name)
 	{
 		$parts = AgaviArrayPathDefinition::getPartsFromPath($name);
-		$val = AgaviArrayPathDefinition::getValue($parts['parts'], $this->files);
+		$val = AgaviArrayPathDefinition::getValueFromArray($parts['parts'], $this->files);
 		return is_array($val) || $val instanceof AgaviUploadedFile;
 	}
 
