@@ -34,6 +34,7 @@ final class AgaviUploadedFile extends ArrayObject
 	protected static $indexMap = array(
 		'Name' => 'name',
 		'Type' => 'type',
+		'Size' => 'size',
 		'TmpName' => 'tmp_name',
 		'Error' => 'error',
 		'IsUploadedFile' => 'is_uploaded_file',
