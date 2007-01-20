@@ -42,6 +42,21 @@ abstract class AgaviBaseFileValidator extends AgaviValidator
 {
 
 	/**
+	 * @see        AgaviValidator::construct
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function __construct(AgaviIValidatorContainer $parent, array $arguments, array $errors = array(), array $parameters = array(), $name = '')
+	{
+		if(!isset($parameters['source'])) {
+			$parameters['source'] = AgaviWebRequestDataHolder::SOURCE_FILES;
+		}
+
+		parent::__construct($parent, $arguments, $errors, $parameters, $name);
+	}
+
+	/**
 	 * Returns whether all arguments are set in the validation input parameters.
 	 * Set means anything but empty string.
 	 *
