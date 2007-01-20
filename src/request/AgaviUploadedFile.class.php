@@ -28,6 +28,9 @@
  */
 final class AgaviUploadedFile extends ArrayObject
 {
+	/**
+	 * @var        array An array to map get* method name fragments to indices.
+	 */
 	protected static $indexMap = array(
 		'Name' => 'name',
 		'Type' => 'type',
@@ -36,6 +39,16 @@ final class AgaviUploadedFile extends ArrayObject
 		'IsUploadedFile' => 'is_uploaded_file',
 	);
 	
+	/**
+	 * Constructor.
+	 *
+	 * @param      $flags int Flags, overridden to be ArrayObject::ARRAY_AS_PROPS.
+	 *
+	 * @see        ArrayObject::__construct()
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public function __construct($array = array(), $flags = ArrayObject::ARRAY_AS_PROPS, $iteratorClass = 'ArrayIterator')
 	{
 		$defaults = array(
@@ -49,6 +62,17 @@ final class AgaviUploadedFile extends ArrayObject
 		parent::__construct(array_merge($defaults, $array), $flags, $iteratorClass);
 	}
 	
+	/**
+	 * Overload to handle getName() etc calls.
+	 *
+	 * @param      string The name of the method.
+	 * @param      array  The method arguments.
+	 *
+	 * @return     string A value.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public function __call($name, array $arguments)
 	{
 		if(substr($name, 0, 3) == 'get') {
@@ -56,11 +80,36 @@ final class AgaviUploadedFile extends ArrayObject
 		}
 	}
 	
+	/**
+	 * Check whether or not this file has an error.
+	 *
+	 * This only returns PHP's own information, not validator's.
+	 *
+	 * @return     bool True in case of UPLOAD_ERR_OK, false otherwise.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public function hasError()
 	{
 		return $this->error !== UPLOAD_ERR_OK;
 	}
 	
+	/**
+	 * Move the uplaoded file.
+	 *
+	 * @param      string The destination filename.
+	 * @param      int    The mode of the destination file, default 0666.
+	 * @param      bool   Whether or not subdirs should be created if necessary.
+	 * @param      int    The mode to use when creating subdirs, default 0777.
+	 *
+	 * @return     bool   True, if the operation was successful, false otherwise.
+	 *
+	 * @throws     AgaviFileException If chmod or mkdir calls failed.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public function move($dest, $fileMode = 0666, $create = true, $dirMode = 0777)
 	{
 		if(!$this->hasError() && $this->size > 0) {
