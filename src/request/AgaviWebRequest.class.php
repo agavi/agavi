@@ -280,7 +280,7 @@ class AgaviWebRequest extends AgaviRequest
 				'meta_data' => stream_get_meta_data($putFile)
 			);
 
-			$putFileName = $request->getParameter('PUT_file_name', 'put_file');
+			$putFileName = $this->getParameter('PUT_file_name', 'put_file');
 
 			$_FILES = array(
 				$putFileName => array(
