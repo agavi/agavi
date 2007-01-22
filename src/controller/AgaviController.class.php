@@ -57,9 +57,9 @@ abstract class AgaviController extends AgaviParameterHolder
 	);
 	
 	/**
-	 * @var        string The currently set Output Type.
+	 * @var        string The default Output Type.
 	 */
-	protected $outputType = null;
+	protected $defaultOutputType = null;
 	
 	/**
 	 * @var        array An array of registered Output Types.
