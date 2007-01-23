@@ -361,7 +361,9 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 				if(!method_exists($viewInstance, $executeMethod)) {
 					$executeMethod = 'execute';
 				}
+				$key = $request->toggleLock();
 				$next = $viewInstance->$executeMethod($container->getRequestData());
+				$request->toggleLock($key);
 				
 				if(is_array($next)) {
 					$container->setNext(call_user_func_array(array($controller, 'createExecutionContainer'), $next));
@@ -498,14 +500,18 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 			// process manual validation
 			if($actionInstance->$validateMethod($container->getRequestData()) && $validated) {
 				// execute the action
+				$key = $request->toggleLock();
 				$viewName = $actionInstance->$executeMethod($container->getRequestData());
+				$request->toggleLock($key);
 			} else {
 				// validation failed
 				$handleErrorMethod = 'handle' . $method . 'Error';
 				if(!method_exists($actionInstance, $handleErrorMethod)) {
 					$handleErrorMethod = 'handleError';
 				}
+				$key = $request->toggleLock();
 				$viewName = $actionInstance->$handleErrorMethod($container->getRequestData());
+				$request->toggleLock($key);
 			}
 		}
 

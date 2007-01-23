@@ -72,7 +72,6 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	 */
 	private $locked = false;
 
-
 	/**
 	 * Retrieve the current application context.
 	 *
@@ -371,6 +370,9 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	 */
 	public function getRequestData()
 	{
+		if($this->locked) {
+			throw new AgaviException("Access to request data is locked during Action and View execution, please use the local request data holder passed to your Action's or View's execute*() method to access request data.");
+		}
 		return $this->requestData;
 	}
 
@@ -382,6 +384,33 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	 */
 	public function shutdown()
 	{
+	}
+
+	/**
+	 * Lock or unlock the Request so parameters can(not) be get or set anymore.
+	 *
+	 * @param      string The key to unlock, if the lock should be removed, or
+	 *                    null if the lock should be set.
+	 *
+	 * @return     mixed The key, if a lock was set, or a boolean value indicating
+	 *                   whether or not the unlocking was successful.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	final public function toggleLock($key = null)
+	{
+		static $keys = array();
+		if(!$this->locked && $key === null) {
+			$this->locked = true;
+			return $this->keys[$this->context->getName()] = uniqid();
+		} elseif($this->locked) {
+			if(isset($this->keys[$this->context->getName()]) && $this->keys[$this->context->getName()] == $key) {
+				$this->locked = false;
+				return true;
+			}
+			return false;
+		}
 	}
 }
 
