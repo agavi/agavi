@@ -65,7 +65,7 @@ class AgaviXslRenderer extends AgaviRenderer implements AgaviIReusableRenderer
 	 * @var        string A string with the default template file extension,
 	 *                    including the dot.
 	 */
-	protected $extension            = '.xsl';
+	protected $defaultExtension     = '.xsl';
 	
 	/**
 	 * @var        string The plural form of the template variable name.

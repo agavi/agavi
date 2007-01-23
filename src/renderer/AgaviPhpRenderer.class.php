@@ -32,30 +32,25 @@ class AgaviPhpRenderer extends AgaviRenderer implements AgaviIReusableRenderer
 	 * @var        string A string with the default template file extension,
 	 *                    including the dot.
 	 */
-	protected $extension = '.php';
-
+	protected $defaultExtension = '.php';
+	
 	/**
-	 * Retrieve the template engine associated with this view.
-	 *
-	 * Note: This will return null because PHP itself has no engine reference.
-	 *
-	 * @return     null
+	 * @var        AgaviTemplateLayer Temporary storage for the template layer,
+	 *                                used during rendering.
 	 */
-	public function getEngine()
-	{
-		return null;
-	}
-
+	protected $_layer = null;
+	
 	/**
-	 * Reset the engine for re-use
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
+	 * @var        array Temporary storage for the template layer, used during
+	 *                   rendering.
 	 */
-	protected function reset()
-	{
-		// nothing needs to be done for PHP
-	}
+	protected $_attributes = null;
+	
+	/**
+	 * @var        array Temporary storage for the template layer, used during
+	 *                   rendering.
+	 */
+	protected $_slots = null;
 	
 	/**
 	 * Render the presentation to the Response.
@@ -66,35 +61,42 @@ class AgaviPhpRenderer extends AgaviRenderer implements AgaviIReusableRenderer
 	public function render(AgaviTemplateLayer $layer, array &$attributes, array &$slots = array())
 	{
 		// DO NOT USE VARIABLES IN HERE, THEY MIGHT INTERFERE WITH TEMPLATE VARS
+		$this->_layer = $layer;
+		$this->_attributes =& $attributes;
+		$this->_slots =& $slots;
+		unset($layer, $attributes, $slots);
 		
 		if($this->extractVars) {
-			extract($attributes, EXTR_REFS | EXTR_PREFIX_INVALID, '_');
+			extract($this->_attributes, EXTR_REFS | EXTR_PREFIX_INVALID, '_');
 		} else {
-			${$this->varName} =& $attributes;
+			${$this->varName} =& $this->_attributes;
 		}
 		
 		if($this->extractSlots === true || ($this->extractVars && $this->extractSlots !== false)) {
-			extract($slots, EXTR_REFS | EXTR_PREFIX_INVALID, '_');
+			extract($this->_slots, EXTR_REFS | EXTR_PREFIX_INVALID, '_');
 		} else {
 			if(!isset(${$this->slotsVarName})) {
 				${$this->slotsVarName} = array();
 			}
-			${$this->slotsVarName} = array_merge(${$this->slotsVarName}, $slots);
+			${$this->slotsVarName} = array_merge(${$this->slotsVarName}, $this->_slots);
 		}
 		
-		$collisions = array_intersect(array_keys($this->assigns), array_keys($attributes));
+		$collisions = array_intersect(array_keys($this->assigns), array_keys($this->_attributes));
 		if(count($collisions)) {
 			throw new AgaviException('Could not import system objects due to variable name collisions ("' . implode('", "', $collisions) . '" already in use).');
 		}
+		unset($collisions);
 		
 		extract($this->assigns);
 		
 		ob_start();
 		
-		require($layer->getTemplateDir() . '/' . $this->buildTemplateName($layer->getTemplate()));
+		require($this->_layer->getResourceStreamIdentifier());
 		
 		$retval = ob_get_contents();
 		ob_end_clean();
+		
+		unset($this->_layer, $this->_attributes, $this->_slots);
 		
 		return $retval;
 	}

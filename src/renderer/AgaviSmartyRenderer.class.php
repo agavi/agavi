@@ -41,7 +41,7 @@ class AgaviSmartyRenderer extends AgaviRenderer implements AgaviIReusableRendere
 	 * @var        string A string with the default template file extension,
 	 *                    including the dot.
 	 */
-	protected $extension = '.tpl';
+	protected $defaultExtension = '.tpl';
 
 	public function getEngine()
 	{

@@ -141,25 +141,95 @@ abstract class AgaviView
 		$this->response = $container->getResponse();
 	}
 
-	public function addLayer($name, $template, $renderer = null)
+	public function createLayer($class, $name, $renderer = null)
 	{
-		$layer = new AgaviTemplateLayer();
-		$layer->initialize($this->context);
-		$layer->setTemplate($template);
-		$layer->setTemplateDir(AgaviConfig::get('core.module_dir') . DIRECTORY_SEPARATOR . $this->container->getModuleName() . DIRECTORY_SEPARATOR . 'templates');
+		$layer = new $class();
+		if(!is_subclass_of($layer, 'AgaviTemplateLayer')) {
+			throw new AgaviViewException('Class "$class" is not a subclass of AgaviTemplateLayer');
+		}
+		$layer->initialize($this->context, array('name' => $name, 'module' => $this->container->getViewModuleName(), 'template' => $this->container->getViewName(), 'output_type' => $this->container->getOutputType()->getName()));
 		$layer->setRenderer($this->container->getOutputType()->getRenderer($renderer));
-		$this->layers[$name] = $layer;
 		return $layer;
 	}
-
+	
+	public function appendLayer(AgaviTemplateLayer $layer, AgaviTemplateLayer $otherLayer = null)
+	{
+		if($otherLayer !== null && in_array($otherLayer, $this->layers, true)) {
+			throw new AgaviViewException('Layer "' . $otherLayer->getName() . '" not in list');
+		}
+		
+		if($pos = array_search($layer, $this->layers, true) !== false) {
+			// given layer is already in the list, so we remove it first
+			array_splice($this->layers, $pos, 1);
+		}
+		
+		if($otherLayer === null) {
+			$dest = count($this->layers);
+		} else {
+			$dest = array_search($otherLayer, $this->layers, true) + 1;
+		}
+		array_splice($this->layers, $dest, 0, array($layer));
+		
+		return $layer;
+	}
+	
+	public function prependLayer(AgaviTemplateLayer $layer, AgaviTemplateLayer $otherLayer = null)
+	{
+		if($otherLayer !== null && in_array($otherLayer, $this->layers, true)) {
+			throw new AgaviViewException('Layer "' . $otherLayer->getName() . '" not in list');
+		}
+		
+		if($pos = array_search($layer, $this->layers, true) !== false) {
+			// given layer is already in the list, so we remove it first
+			array_splice($this->layers, $pos, 1);
+		}
+		
+		if($otherLayer === null) {
+			$dest = 0;
+		} else {
+			$dest = array_search($otherLayer, $this->layers, true);
+		}
+		array_splice($this->layers, $dest, 0, array($layer));
+		
+		return $layer;
+	}
+	
+	public function removeLayer(AgaviTemplateLayer $layer)
+	{
+		if(($pos = array_search($layer, $this->layers, true)) === false) {
+			throw new AgaviViewException('Layer "' . $otherLayer->getName() . '" not in list');
+		}
+		array_splice($this->layers, $pos, 1);
+	}
+	
+	public function clearLayers()
+	{
+		$this->layers = array();
+	}
+	
 	public function getLayer($name)
 	{
-		return (isset($this->Layers[$name]) ? $this->layers[$name] : null);
+		foreach($this->layers as $layer) {
+			if($name == $layer->getName()) {
+				return $layer;
+			}
+		}
 	}
 	
 	public function getLayers()
 	{
 		return $this->layers;
+	}
+	
+	public function loadLayout($layoutName = null)
+	{
+		$layout = $this->container->getOutputType()->getLayout($layoutName);
+		
+		$this->clearLayers();
+		
+		foreach($layout['layers'] as $name => $layer) {
+			$this->appendLayer($this->createLayer($layer['class'], $name, $layer['renderer']))->setParameters($layer['parameters']);
+		}
 	}
 	
 	/**

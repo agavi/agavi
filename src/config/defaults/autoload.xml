@@ -202,6 +202,10 @@
 			<autoload name="AgaviRegexValidator">%core.agavi_dir%/validator/AgaviRegexValidator.class.php</autoload>
 			<autoload name="AgaviSetValidator">%core.agavi_dir%/validator/AgaviSetValidator.class.php</autoload>
 			<autoload name="AgaviStringValidator">%core.agavi_dir%/validator/AgaviStringValidator.class.php</autoload>
+			
+			<!-- agavi/view -->
+			<autoload name="AgaviFileTemplateLayer">%core.agavi_dir%/view/AgaviFileTemplateLayer.class.php</autoload>
+			<autoload name="AgaviStreamTemplateLayer">%core.agavi_dir%/view/AgaviStreamTemplateLayer.class.php</autoload>
 		</autoloads>
 	</configuration>
 </configurations>

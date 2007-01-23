@@ -55,9 +55,7 @@ class Default_LoginSuccessView extends AgaviView
 			return;
 		}
 		
-		// set our template
-		$this->addLayer('content', 'LoginInput');
-		$this->addLayer('decorator', 'Master');
+		$this->loadLayout();
 		
 		// set the content type
 		$this->setAttribute('_contentType', $this->container->getOutputType()->getParameter('Content-Type', 'text/html; charset=utf-8'));

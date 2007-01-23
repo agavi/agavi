@@ -29,6 +29,7 @@
     <xs:sequence maxOccurs="unbounded">
       <xs:group ref="parameters" />
       <xs:element name="renderers" type="renderers" minOccurs="0" />
+      <xs:element name="layouts" type="layouts" minOccurs="0" />
     </xs:sequence>
     <xs:attribute name="name" type="php_label" use="required" />
     <xs:attribute name="exception_template" type="xs:string" />
@@ -46,7 +47,33 @@
     </xs:sequence>
     <xs:attribute name="name" type="php_label" use="required" />
     <xs:attribute name="class" type="php_label" use="required" />
-    <xs:attribute name="extension" type="xs:string" />
+  </xs:complexType>
+
+  <xs:complexType name="layouts">
+    <xs:sequence>
+      <xs:element name="layout" type="layout" maxOccurs="unbounded" />
+    </xs:sequence>
+    <xs:attribute name="default" type="php_label" use="required" />
+  </xs:complexType>
+  <xs:complexType name="layout">
+    <xs:sequence>
+      <xs:element name="layers" type="layers" minOccurs="0" />
+    </xs:sequence>
+    <xs:attribute name="name" type="php_label" use="required" />
+  </xs:complexType>
+
+  <xs:complexType name="layers">
+    <xs:sequence>
+      <xs:element name="layer" type="layer" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="layer">
+    <xs:sequence>
+      <xs:group ref="parameters" />
+    </xs:sequence>
+    <xs:attribute name="name" type="php_label" use="required" />
+    <xs:attribute name="class" type="php_label" use="required" />
+    <xs:attribute name="renderer" type="php_label" />
   </xs:complexType>
 
 </xs:schema>

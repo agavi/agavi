@@ -74,16 +74,36 @@ class AgaviOutputTypeConfigHandler extends AgaviConfigHandler
 
 			foreach($cfg->output_types as $outputType) {
 				$outputTypeName = $outputType->getAttribute('name');
-				$data[$outputTypeName] = isset($data[$outputTypeName]) ? $data[$outputTypeName] : array('parameters' => array(), 'default_renderer' => null, 'renderers' => array(), 'exception_template' => null);
+				$data[$outputTypeName] = isset($data[$outputTypeName]) ? $data[$outputTypeName] : array('parameters' => array(), 'default_renderer' => null, 'renderers' => array(), 'layouts' => array(), 'default_layout' => null, 'exception_template' => null);
 				if(isset($outputType->renderers)) {
 					foreach($outputType->renderers as $renderer) {
 						$rendererName = $renderer->getAttribute('name');
-						$data[$outputTypeName]['renderers'][$rendererName] = array('instance' => null, 'class' => null, 'extension' => null, 'parameters' => array());
+						$data[$outputTypeName]['renderers'][$rendererName] = array('instance' => null, 'class' => null, 'parameters' => array());
 						$data[$outputTypeName]['renderers'][$rendererName]['class'] = $renderer->getAttribute('class');
-						$data[$outputTypeName]['renderers'][$rendererName]['extension'] = $renderer->getAttribute('extension');
 						$data[$outputTypeName]['renderers'][$rendererName]['parameters'] = $this->getItemParameters($renderer, $data[$outputTypeName]['renderers'][$rendererName]['parameters']);
 					}
 					$data[$outputTypeName]['default_renderer'] = $outputType->renderers->getAttribute('default');
+				}
+				if(isset($outputType->layouts)) {
+					foreach($outputType->layouts as $layout) {
+						$layoutName = $layout->getAttribute('name');
+						$data[$outputTypeName]['layouts'][$layoutName] = array('layers' => array());
+						if(isset($layout->layers)) {
+							foreach($layout->layers as $layer) {
+								$layerName = $layer->getAttribute('name');
+								$data[$outputTypeName]['layouts'][$layoutName]['layers'][$layerName] = array('class' => null, 'renderer' => null, 'parameters' => array());
+								$data[$outputTypeName]['layouts'][$layoutName]['layers'][$layerName]['class'] = $layer->getAttribute('class');
+								if(($rendererName = $layer->getAttribute('renderer')) !== null) {
+									if(!isset($rendererName, $data[$outputTypeName]['renderers'])) {
+										throw new AgaviConfigurationException('Layout "' . $layoutName . '" specifies layer "' . $layerName . '" with non-defined renderer "' . $rendererName . '".');
+									}
+									$data[$outputTypeName]['layouts'][$layoutName]['layers'][$layerName]['renderer'] = $rendererName;
+								}
+								$data[$outputTypeName]['layouts'][$layoutName]['layers'][$layerName]['parameters'] = $this->getItemParameters($layer, $data[$outputTypeName]['layouts'][$layoutName]['layers'][$layerName]['parameters']);
+							}
+						}
+					}
+					$data[$outputTypeName]['default_layout'] = $outputType->layouts->getAttribute('default');
 				}
 				if($outputType->hasAttribute('exception_template')) {
 					$data[$outputTypeName]['exception_template'] = $this->replaceConstants($outputType->getAttribute('exception_template'));
@@ -100,7 +120,7 @@ class AgaviOutputTypeConfigHandler extends AgaviConfigHandler
 		foreach($data as $outputTypeName => $outputType) {
 			$code[] = implode("\n", array(
 				'$ot = new AgaviOutputType();',
-				'$ot->initialize($this->context, ' . var_export($outputType['parameters'], true) . ', ' . var_export($outputTypeName, true) . ', ' . var_export($outputType['renderers'], true) . ', ' . var_export($outputType['default_renderer'], true) . ', ' . var_export($outputType['exception_template'], true) . ');',
+				'$ot->initialize($this->context, ' . var_export($outputType['parameters'], true) . ', ' . var_export($outputTypeName, true) . ', ' . var_export($outputType['renderers'], true) . ', ' . var_export($outputType['default_renderer'], true) . ', ' . var_export($outputType['layouts'], true) . ', ' . var_export($outputType['default_layout'], true) . ', ' . var_export($outputType['exception_template'], true) . ');',
 				'$this->outputTypes["' . $outputTypeName . '"] = $ot;',
 			));
 		}

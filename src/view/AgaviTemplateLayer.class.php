@@ -26,7 +26,7 @@
  *
  * @version    $Id$
  */
-class AgaviTemplateLayer
+abstract class AgaviTemplateLayer extends AgaviParameterHolder
 {
 	/**
 	 * @var        AgaviContext The current Context.
@@ -39,19 +39,45 @@ class AgaviTemplateLayer
 	protected $renderer = null;
 	
 	/**
-	 * @var        string The name of the template.
-	 */
-	protected $template = null;
-	
-	/**
-	 * @var        string The directory of the template.
-	 */
-	protected $templateDir = null;
-	
-	/**
 	 * @var        array An associative array of execution containers for slots.
 	 */
 	protected $slots = array();
+	
+	/**
+	 * Constructor.
+	 *
+	 * @param      array Initial parameters.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function __construct(array $parameters = array())
+	{
+		parent::__construct(array_merge($parameters, array(
+			'module' => null,
+			'template' => null,
+		)));
+	}
+	
+	/**
+	 * Convenience overload for accessing parameters using a method.
+	 *
+	 * @param      string The method name.
+	 * @param      array  The method arguments.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function __call($name, array $args)
+	{
+		$matches = array();
+		if(preg_match('/^(has|get|set|remove)(.+)$/', $name, $matches)) {
+			$method = $matches[1] . 'Parameter';
+			// transform "FooBarBaz" (from "setTemplateDir" etc) to "foo_bar_baz"
+			$parameter = strtolower(preg_replace('/((?<!\A)\p{Lu})/', '_$1', $matches[2]));
+			return call_user_func_array(array($this, $method), array_merge(array($parameter), $args));
+		}
+	}
 	
 	/**
 	 * Initialize the layer.
@@ -65,6 +91,8 @@ class AgaviTemplateLayer
 	public function initialize(AgaviContext $context, array $parameters = array())
 	{
 		$this->context = $context;
+		
+		$this->setParameters($parameters);
 	}
 	
 	/**
@@ -181,79 +209,16 @@ class AgaviTemplateLayer
 	}
 	
 	/**
-	 * Set a template.
+	 * Get the full, resolved stream location name to the template resource.
 	 *
-	 * @param      string The template name.
-	 * @param      bool   Whether the template name is to be taken literally.
+	 * @return     string A PHP stream resource identifier.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function setTemplate($template, $literal = false)
-	{
-		if($template === null) {
-			$this->template = null;
-			return;
-		}
-		if(AgaviToolkit::isPathAbsolute($template)) {
-			$this->templateDir = dirname($template);
-			$this->template  = array(basename($template), $literal);
-		} else {
-			$this->template = array($template, $literal);
-		}
-	}
-	
-	/**
-	 * Set the template directory.
-	 *
-	 * @param      string The directory name.
+	 * @throws     AgaviException If the template could not be found.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function setTemplateDir($dir)
-	{
-		$this->templateDir = $dir;
-	}
-	
-	/**
-	 * Get the template name.
-	 *
-	 * @return     string The name of the template.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function getTemplate()
-	{
-		return $this->template;
-	}
-	
-	/**
-	 * Get the template directory.
-	 *
-	 * @return     string The directory name.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function getTemplateDir()
-	{
-		return $this->templateDir;
-	}
-	
-	/**
-	 * Get the full name to the template resource.
-	 *
-	 * @return     string A resource identifier.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function getResourceName()
-	{
-		return $this->getTemplate() . DIRECTORY_SEPARATOR . $this->getTemplateDir();
-	}
+	abstract public function getResourceStreamIdentifier();
 }
 
 ?>

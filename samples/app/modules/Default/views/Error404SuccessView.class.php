@@ -25,9 +25,7 @@ class Default_Error404SuccessView extends AgaviView
 	 */
 	public function execute(AgaviParameterHolder $parameters)
 	{
-		// set our template
-		$this->addLayer('content', 'Error404Success');
-		$this->addLayer('decorator', 'Master');
+		$this->loadLayout();
 
 		// set the content type
 		$this->setAttribute('_contentType', $this->container->getOutputType()->getParameter('Content-Type', 'text/html; charset=utf-8'));

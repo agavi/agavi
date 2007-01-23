@@ -37,7 +37,7 @@ abstract class AgaviRenderer
 	 * @var        string A string with the default template file extension,
 	 *                    including the dot.
 	 */
-	protected $extension = '';
+	protected $defaultExtension = '';
 	
 	/**
 	 * @var        string The name of the array that contains the template vars.
@@ -73,11 +73,6 @@ abstract class AgaviRenderer
 	protected $assigns = array();
 	
 	/**
-	 * @var        array i18n template settings.
-	 */
-	protected $i18n = null;
-	
-	/**
 	 * Initialize this Renderer.
 	 *
 	 * @param      AgaviContext The current application context.
@@ -110,11 +105,8 @@ abstract class AgaviRenderer
 				$this->assigns[$var] = $this->context->$getter();
 			}
 		}
-		if(isset($parameters['i18n'])) {
-			$this->i18n = array_merge(array('mode' => 'subdir', 'separator' => ''), $parameters['i18n']);
-		}
 	}
-
+	
 	/**
 	 * Retrieve the current application context.
 	 *
@@ -136,117 +128,11 @@ abstract class AgaviRenderer
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function getExtension()
+	public function getDefaultExtension()
 	{
-		return $this->extension;
+		return $this->defaultExtension;
 	}
 	
-	/**
-	 * Build a template name based on "literal" flag in the template info.
-	 * Depending on whether or not the "literal" flag is set, the file extension
-	 * for this Renderer instance will be appended ("literal" false) or not (true)
-	 *
-	 * @param      array  The (decorator) template info given by the View.
-	 * @param      string The extension prefix.
-	 * @param      string The extension seperator.
-	 *
-	 * @return     string A template file name.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function buildTemplateName($templateData, $extensionPrefix = '', $separator = '')
-	{
-		list($file, $literal) = $templateData;
-		if($literal) {
-			return $file;
-		} else {
-			return $file . $separator . $extensionPrefix . $this->getExtension();
-		}
-	}
-	
-	/**
-	 * Retrieve the template engine associated with this view.
-	 *
-	 * Note: This will return null for PHPView instances.
-	 *
-	 * @return     mixed A template engine instance.
-	 */
-	abstract function getEngine();
-
-	/**
-	 * Execute a basic pre-render check to verify all required variables exist
-	 * and that the template is readable.
-	 *
-	 * @throws     <b>AgaviRenderException</b> If the pre-render check fails.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public function preRenderCheck()
-	{
-		$view = $this->getView();
-		$oti = $this->context->getController()->getOutputTypeInfo();
-		
-		if($view->getTemplate() === null) {
-			// a template has not been set
-			return;
-		}
-		
-		$checks = array();
-		if(AgaviConfig::get('core.use_translation') && $this->i18n !== null) {
-			// TODO: I guess this could be a lil faster
-			foreach(AgaviLocale::getLookupPath($this->getContext()->getTranslationManager()->getCurrentLocaleIdentifier()) as $identifier) {
-				switch($this->i18n['mode']) {
-					case 'subdir':
-						$checks[] = $view->getDirectory() . '/' . $identifier . '/' . $this->buildTemplateName($view->getTemplate());
-						break;
-					case 'prefix':
-						$checks[] = $view->getDirectory() . '/' . $identifier . $this->i18n['separator'] . $this->buildTemplateName($view->getTemplate());
-						break;
-					case 'postfix':
-						$checks[] = $view->getDirectory() . '/' . $this->buildTemplateName($view->getTemplate(), $identifier, $this->i18n['separator']);
-						break;
-				}
-			}
-		}
-		$checks[] = $view->getDirectory() . '/' . $this->buildTemplateName($view->getTemplate());
-		
-		$template = '';
-		for($i = 0, $count = count($checks); $i < $count; $i++) {
-			$template = $checks[$i];
-			if(!is_readable($template)) {
-				if($i == $count -1) {
-					// the template isn't readable
-					$error = 'The template "%s" does not exist or is unreadable';
-					$error = sprintf($error, $template);
-					throw new AgaviRenderException($error);
-				}
-			} else {
-				$view->setTemplate($template, true);
-				break;
-			}
-		}
-
-		// check to see if this is a decorator template
-		if($view->isDecorator() && !(isset($oti['ignore_decorators']) && $oti['ignore_decorators'])) {
-			$template = $view->getDecoratorDirectory() . '/' . $this->buildTemplateName($view->getDecoratorTemplate());
-			if(!is_readable($template)) {
-				// the decorator template isn't readable
-				$error = 'The decorator template "%s" does not exist or is unreadable';
-				$error = sprintf($error, $template);
-				throw new AgaviRenderException($error);
-			}
-		}
-
-		if(isset($oti['ignore_decorators']) && $oti['ignore_decorators']) {
-			$view->clearDecorator();
-		}
-		if(isset($oti['ignore_slots']) && $oti['ignore_slots']) {
-			$view->clearSlots();
-		}
-	}
-
 	/**
 	 * Render the presentation to the Response.
 	 *

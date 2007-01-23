@@ -370,7 +370,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 
 					$output = array();
 					$nextOutput = null;
-					foreach($viewInstance->getLayers() as $layerName => $layer) {
+					foreach($viewInstance->getLayers() as $layer) {
 						foreach($layer->getSlots() as $slotName => $slotContainer) {
 							$slotResponse = $slotContainer->execute();
 							// set the presentation data as a template attribute
@@ -382,7 +382,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 						}
 						$nextOutput = $layer->getRenderer()->render($layer, $attributes, $output);
 						$output = array();
-						$output[$layerName] = $nextOutput;
+						$output[$layer->getName()] = $nextOutput;
 					}
 					$response->setContent($nextOutput);
 				}

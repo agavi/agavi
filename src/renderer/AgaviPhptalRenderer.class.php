@@ -33,7 +33,7 @@ class AgaviPhptalRenderer extends AgaviRenderer implements AgaviIReusableRendere
 	 * @var        string A string with the default template file extension,
 	 *                    including the dot.
 	 */
-	protected $extension = '.tal';
+	protected $defaultExtension = '.tal';
 
 	/**
 	 * @var        PHPTAL PHPTAL template engine.

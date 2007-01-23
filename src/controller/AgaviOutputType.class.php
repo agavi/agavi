@@ -48,6 +48,16 @@ class AgaviOutputType extends AgaviParameterHolder
 	protected $defaultRenderer = null;
 	
 	/**
+	 * @var        array An array of configured layouts.
+	 */
+	protected $layouts = array();
+	
+	/**
+	 * @var        string The name of the default layout, if set.
+	 */
+	protected $defaultLayout = null;
+	
+	/**
 	 * @var        string The name of the exception template for this output type.
 	 */
 	protected $exceptionTemplate = null;
@@ -61,7 +71,7 @@ class AgaviOutputType extends AgaviParameterHolder
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function initialize(AgaviContext $context, array $parameters, $name, array $renderers, $defaultRenderer, $exceptionTemplate = null)
+	public function initialize(AgaviContext $context, array $parameters, $name, array $renderers, $defaultRenderer, array $layouts, $defaultLayout, $exceptionTemplate = null)
 	{
 		$this->context = $context;
 		
@@ -72,6 +82,10 @@ class AgaviOutputType extends AgaviParameterHolder
 		$this->renderers = $renderers;
 		
 		$this->defaultRenderer = $defaultRenderer;
+		
+		$this->layouts = $layouts;
+		
+		$this->defaultLayout = $defaultLayout;
 		
 		$this->exceptionTemplate = $exceptionTemplate;
 	}
@@ -147,6 +161,29 @@ class AgaviOutputType extends AgaviParameterHolder
 			throw new AgaviException('Unknown renderer "' . $name . '"');
 		}
 		return $this->renderers[$name];
+	}
+	
+	/**
+	 * Get a layout.
+	 *
+	 * @param      The optional name of the layout to fetch.
+	 *
+	 * @return     array An array of layout information.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getLayout($name = null)
+	{
+		if($name === null) {
+			$name = $this->defaultLayout;
+		}
+		
+		if(isset($this->layouts[$name])) {
+			return $this->layouts[$name];
+		} else {
+			throw new AgaviException('Unknown layout "' . $name . '"');
+		}
 	}
 	
 	/**
