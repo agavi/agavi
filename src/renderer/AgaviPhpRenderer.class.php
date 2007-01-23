@@ -53,7 +53,13 @@ class AgaviPhpRenderer extends AgaviRenderer implements AgaviIReusableRenderer
 	protected $_slots = null;
 	
 	/**
-	 * Render the presentation to the Response.
+	 * Render the presentation and return the result.
+	 *
+	 * @param      AgaviTemplateLayer The template layer to render.
+	 * @param      array              The template variables.
+	 * @param      array              The slots.
+	 *
+	 * @return     string A rendered result.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
@@ -72,20 +78,7 @@ class AgaviPhpRenderer extends AgaviRenderer implements AgaviIReusableRenderer
 			${$this->varName} =& $this->_attributes;
 		}
 		
-		if($this->extractSlots === true || ($this->extractVars && $this->extractSlots !== false)) {
-			extract($this->_slots, EXTR_REFS | EXTR_PREFIX_INVALID, '_');
-		} else {
-			if(!isset(${$this->slotsVarName})) {
-				${$this->slotsVarName} = array();
-			}
-			${$this->slotsVarName} = array_merge(${$this->slotsVarName}, $this->_slots);
-		}
-		
-		$collisions = array_intersect(array_keys($this->assigns), array_keys($this->_attributes));
-		if(count($collisions)) {
-			throw new AgaviException('Could not import system objects due to variable name collisions ("' . implode('", "', $collisions) . '" already in use).');
-		}
-		unset($collisions);
+		${$this->slotsVarName} =& $this->_slots; 
 		
 		extract($this->assigns);
 		

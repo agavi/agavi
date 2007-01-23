@@ -28,8 +28,22 @@
  */
 class AgaviSmartyRenderer extends AgaviRenderer implements AgaviIReusableRenderer
 {
+	/**
+	 * @constant   string The directory inside the cache dir where templates will
+	 *                    be stored in compiled form.
+	 */
 	const COMPILE_DIR = 'templates';
+	
+	/**
+	 * @constant   string The subdirectory inside the compile dir where templates
+	 *                    will be stored in compiled form.
+	 */
 	const COMPILE_SUBDIR = 'smarty';
+	
+	/**
+	 * @constant   string The directory inside the cache dir where cached content
+	 *                    will be stored.
+	 */
 	const CACHE_DIR = 'content';
 
 	/**
@@ -43,9 +57,19 @@ class AgaviSmartyRenderer extends AgaviRenderer implements AgaviIReusableRendere
 	 */
 	protected $defaultExtension = '.tpl';
 
-	public function getEngine()
+	/**
+	 * Grab a cleaned up smarty instance.
+	 *
+	 * @return     Smarty A Smarty instance.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.9.0
+	 */
+	protected function getEngine()
 	{
 		if($this->smarty) {
+			$this->smarty->clear_all_assign();
+			$this->smarty->clear_config();
 			return $this->smarty;
 		}
 
@@ -84,85 +108,37 @@ class AgaviSmartyRenderer extends AgaviRenderer implements AgaviIReusableRendere
 	}
 
 	/**
-	 * Reset the engine for re-use
+	 * Render the presentation and return the result.
+	 *
+	 * @param      AgaviTemplateLayer The template layer to render.
+	 * @param      array              The template variables.
+	 * @param      array              The slots.
+	 *
+	 * @return     string A rendered result.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	protected function reset()
+	public function render(AgaviTemplateLayer $layer, array &$attributes, array &$slots = array())
 	{
-		$this->smarty->clear_all_assign();
-	}
-	
-	public function render()
-	{
-		$retval = null;
-
-		// execute pre-render check
-		$this->preRenderCheck();
-
 		$engine = $this->getEngine();
-		$view = $this->getView();
-
-		// get the render mode
-		$mode = $view->getContext()->getController()->getRenderMode();
-
-		$attribs =& $view->getAttributes();
-
+		
 		if($this->extractVars) {
-			foreach($attribs as $name => &$value) {
+			foreach($attributes as $name => &$value) {
 				$engine->assign_by_ref($name, $value);
 			}
 		} else {
-			$engine->assign_by_ref($this->varName, $attribs);
+			$engine->assign_by_ref($this->varName, $attributes);
 		}
-
-		$collisions = array_intersect(array_keys($this->assigns), $this->view->getAttributeNames());
-		if(count($collisions)) {
-			throw new AgaviException('Could not import system objects due to variable name collisions ("' . implode('", "', $collisions) . '" already in use).');
-		}
+		
+		$engine->assign_by_ref($this->slotsVarName, $slots);
+		
 		foreach($this->assigns as $key => &$value) {
 			$engine->assign_by_ref($key, $value);
 		}
 		
-		$engine->assign_by_ref('this', $this);
-		
-		$retval = $this->getEngine()->fetch($view->getDirectory() . '/' . $this->buildTemplateName($view->getTemplate()));
-		
-		// now render our decorator template, if one exists
-		if($view->isDecorator()) {
-			$retval = $this->decorate($retval);
-		}
-		
-		$this->response->setContent($retval);
-	}
-
-	public function decorate($content)
-	{
-		// call our parent decorate() method
-		parent::decorate($content);
-
-		$engine = $this->getEngine();
-		$view = $this->getView();
-
-		if($this->extractSlots === true || ($this->extractVars && $this->extractSlots !== false)) {
-			foreach($this->output as $name => &$value) {
-				$engine->assign_by_ref($name, $value);
-			}
-		} else {
-			if($this->varName == $this->slotsVarName) {
-				$slots = array_merge($this->view->getAttributes(), $this->output);
-				$engine->assign_by_ref($this->varName, $slots);
-			} else {
-				$engine->assign_by_ref($this->slotsVarName, $this->output);
-			}
-		}
-
-		$engine->assign_by_ref('this', $this);
-
-		// render the decorator template and return the result
-		$retval = $engine->fetch($view->getDecoratorDirectory() . '/' . $this->buildTemplateName($view->getDecoratorTemplate()));
-
-		return $retval;
+		return $this->getEngine()->fetch($layer->getResourceStreamIdentifier());
 	}
 }
+
+?>

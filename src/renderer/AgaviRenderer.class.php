@@ -45,27 +45,14 @@ abstract class AgaviRenderer
 	protected $varName = 'template';
 	
 	/**
-	 * @var        string The name of the array that contains the slot output.
-	 *                    Defaults to null, which means it'll be the identical to
-	 *                    the varName setting.
-	 *
-	 * @see        AgaviRenderer::$varName
+	 * @var        string The name of the array that contains the slots output.
 	 */
-	protected $slotsVarName = null;
+	protected $slotsVarName = 'slots';
 	
 	/**
 	 * @var        bool Whether or not the template vars should be extracted.
 	 */
 	protected $extractVars = false;
-	
-	/**
-	 * @var        bool Whether or not the slot output vars should be extracted.
-	 *                  Defaults to null, which means it behaves according to the
-	 *                  extractVars setting.
-	 *
-	 * @see        AgaviRenderer::$extractVars
-	 */
-	protected $extractSlots = null;
 	
 	/**
 	 * @var        array An array of objects to be exported for use in templates.
@@ -93,11 +80,8 @@ abstract class AgaviRenderer
 		if(isset($parameters['extract_vars'])) {
 			$this->extractVars = $parameters['extract_vars'];
 		}
-		if(isset($parameters['extract_slots'])) {
-			$this->extractSlots = $parameters['extract_slots'];
-		}
-		if($this->slotsVarName === null) {
-			$this->slotsVarName = $this->varName;
+		if(!$this->extractVars && $this->varName == $this->slotsVarName) {
+			throw new AgaviException('Template and Slots container variable names cannot be identical.');
 		}
 		if(isset($parameters['assigns'])) {
 			foreach($parameters['assigns'] as $factory => $var) {
@@ -134,7 +118,13 @@ abstract class AgaviRenderer
 	}
 	
 	/**
-	 * Render the presentation to the Response.
+	 * Render the presentation and return the result.
+	 *
+	 * @param      AgaviTemplateLayer The template layer to render.
+	 * @param      array              The template variables.
+	 * @param      array              The slots.
+	 *
+	 * @return     string A rendered result.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
