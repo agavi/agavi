@@ -391,6 +391,13 @@ if(curl_errno($ch)) {
       bundled templates if it couldn't find a specific one in the path you
       specified.</para>
 
+      <tip>
+        <para>You will often want the code templates dir to sit inside your
+        project directory. In order to avoid an absolute path in the setting,
+        you can use <code>${project.dir}</code> to refer to your project
+        directory.</para>
+      </tip>
+
       <para>Also, you can have per-module code templates. Add a
       <filename>modules</filename> directory to your code templates folder,
       and then add a new folder with the same name as the module. Now you can
