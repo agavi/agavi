@@ -29,26 +29,21 @@
 									<parameter name="translation_manager">tm</parameter>
 								</parameters>
 							</parameter>
-							<parameter name="i18n">
-								<parameters>
-									<parameter name="mode">subdir</parameter>
-								</parameters>
-							</parameter>
 						</parameters>
 					</renderer>
 				</renderers>
 				<layouts default="default"> 
 					<layout name="default"> 
 						<layers> 
-							<layer name="content" class="AgaviFileTemplateLayer" /> 
-							<layer name="decorator" class="AgaviFileTemplateLayer"> 
+							<layer name="content" class="AgaviFileTemplateLayer" />
+							<layer name="decorator" class="AgaviFileTemplateLayer">
 								<parameters> 
-									<parameter name="template">Master</parameter> 
-								</parameters> 
-							</layer> 
-						</layers> 
-					</layout> 
-				</layouts> 
+									<parameter name="template">Master</parameter>
+								</parameters>
+							</layer>
+						</layers>
+					</layout>
+				</layouts>
 				<parameters>
 					<parameter name="Content-Type">text/html; charset=UTF-8</parameter>
 				</parameters>

@@ -216,7 +216,7 @@ class AgaviRequestDataHolder extends AgaviParameterHolder
 	public function merge(AgaviRequestDataHolder $other)
 	{
 		foreach(array_keys($this->_sourceNames) as $source) {
-			$fn = $merge . $source; // plural form!
+			$fn = 'merge' . $source; // plural form!
 			$this->$fn($other);
 		}
 	}

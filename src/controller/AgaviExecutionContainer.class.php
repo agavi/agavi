@@ -127,7 +127,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function createExecutionContainer($moduleName = null, $actionName = null, AgaviRequestDataContainer $arguments = null, AgaviOutputType $outputType = null)
+	public function createExecutionContainer($moduleName = null, $actionName = null, AgaviRequestDataHolder $arguments = null, AgaviOutputType $outputType = null)
 	{
 		if($outputType === null) {
 			$outputType = $this->getOutputType();

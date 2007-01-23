@@ -128,7 +128,7 @@ abstract class AgaviController extends AgaviParameterHolder
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function createExecutionContainer($moduleName = null, $actionName = null, AgaviRequestDataContainer $arguments = null, AgaviOutputType $outputType = null)
+	public function createExecutionContainer($moduleName = null, $actionName = null, AgaviRequestDataHolder $arguments = null, AgaviOutputType $outputType = null)
 	{
 		// create a new execution container
 		$ecfi = $this->context->getFactoryInfo('execution_container');
@@ -137,7 +137,7 @@ abstract class AgaviController extends AgaviParameterHolder
 		$container->setModuleName($moduleName);
 		$container->setActionName($actionName);
 		if($arguments !== null) {
-			$container->getRequestData()->merge($arguments);
+			$container->setArguments($arguments);
 		}
 		$container->setOutputType($outputType === null ? $this->context->getController()->getOutputType() : $outputType);
 		return $container;

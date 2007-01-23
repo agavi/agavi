@@ -91,15 +91,20 @@ class AgaviOutputTypeConfigHandler extends AgaviConfigHandler
 						if(isset($layout->layers)) {
 							foreach($layout->layers as $layer) {
 								$layerName = $layer->getAttribute('name');
-								$data[$outputTypeName]['layouts'][$layoutName]['layers'][$layerName] = array('class' => null, 'renderer' => null, 'parameters' => array());
+								$data[$outputTypeName]['layouts'][$layoutName]['layers'][$layerName] = array('class' => null, 'renderer' => null, 'parameters' => array(), 'slots' => array());
 								$data[$outputTypeName]['layouts'][$layoutName]['layers'][$layerName]['class'] = $layer->getAttribute('class');
-								if(($rendererName = $layer->getAttribute('renderer')) !== null) {
-									if(!isset($rendererName, $data[$outputTypeName]['renderers'])) {
-										throw new AgaviConfigurationException('Layout "' . $layoutName . '" specifies layer "' . $layerName . '" with non-defined renderer "' . $rendererName . '".');
-									}
-									$data[$outputTypeName]['layouts'][$layoutName]['layers'][$layerName]['renderer'] = $rendererName;
-								}
+								$data[$outputTypeName]['layouts'][$layoutName]['layers'][$layerName]['renderer'] = $layer->getAttribute('renderer');
 								$data[$outputTypeName]['layouts'][$layoutName]['layers'][$layerName]['parameters'] = $this->getItemParameters($layer, $data[$outputTypeName]['layouts'][$layoutName]['layers'][$layerName]['parameters']);
+								if(isset($layer->slots)) {
+									foreach($layer->slots as $slot) {
+										$slotName = $slot->getAttribute('name');
+										$data[$outputTypeName]['layouts'][$layoutName]['layers'][$layerName]['slots'][$slotName] = array('module' => null, 'action' => null, 'output_type' => null, 'parameters' => array());
+										$data[$outputTypeName]['layouts'][$layoutName]['layers'][$layerName]['slots'][$slotName]['module'] = $slot->getAttribute('module');
+										$data[$outputTypeName]['layouts'][$layoutName]['layers'][$layerName]['slots'][$slotName]['action'] = $slot->getAttribute('action');
+										$data[$outputTypeName]['layouts'][$layoutName]['layers'][$layerName]['slots'][$slotName]['parameters'] = $this->getItemParameters($slot, $data[$outputTypeName]['layouts'][$layoutName]['layers'][$layerName]['slots'][$slotName]['parameters']);
+										$data[$outputTypeName]['layouts'][$layoutName]['layers'][$layerName]['slots'][$slotName]['output_type'] = $slot->getAttribute('output_type');
+									}
+								}
 							}
 						}
 					}

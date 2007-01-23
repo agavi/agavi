@@ -374,7 +374,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 						foreach($layer->getSlots() as $slotName => $slotContainer) {
 							$slotResponse = $slotContainer->execute();
 							// set the presentation data as a template attribute
-							if(($output[$name] = $slotResponse->getContent()) !== null) {
+							if(($output[$slotName] = $slotResponse->getContent()) !== null) {
 								// the slot really output something
 								// let our response grab the stuff it needs from the slot's response
 								$response->merge($slotResponse);

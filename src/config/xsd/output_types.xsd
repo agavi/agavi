@@ -70,10 +70,26 @@
   <xs:complexType name="layer">
     <xs:sequence>
       <xs:group ref="parameters" />
+      <xs:element name="slots" type="slots" minOccurs="0" />
     </xs:sequence>
     <xs:attribute name="name" type="php_label" use="required" />
     <xs:attribute name="class" type="php_label" use="required" />
     <xs:attribute name="renderer" type="php_label" />
+  </xs:complexType>
+
+  <xs:complexType name="slots">
+    <xs:sequence>
+      <xs:element name="slot" type="slot" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="slot">
+    <xs:sequence>
+      <xs:group ref="parameters" />
+    </xs:sequence>
+    <xs:attribute name="name" type="php_label" use="required" />
+    <xs:attribute name="module" type="php_label" use="required" />
+    <xs:attribute name="action" type="php_label" use="required" />
+    <xs:attribute name="output_type" type="php_label" />
   </xs:complexType>
 
 </xs:schema>
