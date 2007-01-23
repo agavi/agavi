@@ -50,16 +50,27 @@ class AgaviException extends Exception
 		if($container !== null && $container->getOutputType() !== null && $container->getOutputType()->getExceptionTemplate() !== null) { 
 			// an exception template was defined for the container's output type
 			include($container->getOutputType()->getExceptionTemplate() !== null); 
-		} elseif($context !== null && $context->getController() !== null && $context->getController()->getOutputType() !== null && $context->getController()->getOutputType()->getExceptionTemplate() !== null) {
-			// an exception template was defined for the default output type
-			include($context->getController()->getOutputType()->getExceptionTemplate());
-		} elseif($context !== null && AgaviConfig::get('exception.templates.' . $context->getName()) !== null) {
+			exit;
+		}
+		
+		if($context !== null && $context->getController() !== null) {
+			try {
+				// check if an exception template was defined for the default output type
+				include($context->getController()->getOutputType()->getExceptionTemplate());
+				exit;
+			} catch(Exception $e2) {
+				unset($e2);
+			}
+		}
+		
+		if($context !== null && AgaviConfig::get('exception.templates.' . $context->getName()) !== null) {
 			// a template was set for this context
 			include(AgaviConfig::get('exception.templates.' . $context->getName()));
-		} else {
-			// include default exception template
-			include(AgaviConfig::get('exception.default_template'));
+			exit;
 		}
+		
+		// include default exception template
+		include(AgaviConfig::get('exception.default_template'));
 		
 		// bail out
 		exit;
