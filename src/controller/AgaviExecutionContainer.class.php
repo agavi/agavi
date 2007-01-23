@@ -215,8 +215,6 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 		$this->setModuleName($moduleName);
 		$this->setActionName($actionName);
 		
-		$this->actionInstance = $controller->createActionInstance($this->moduleName, $this->actionName);
-		
 		// include the module configuration
 		// laoded only once due to the way import() works
 		if(is_readable(AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/config/module.xml')) {
@@ -246,7 +244,9 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 			if(is_readable($moduleConfig)) {
 				require_once($moduleConfig);
 			}
-
+			
+			$this->actionInstance = $controller->createActionInstance($this->moduleName, $this->actionName);
+			
 			// initialize the action
 			$this->actionInstance->initialize($this);
 			
