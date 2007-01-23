@@ -56,8 +56,10 @@ class AgaviException extends Exception
 		if($context !== null && $context->getController() !== null) {
 			try {
 				// check if an exception template was defined for the default output type
-				include($context->getController()->getOutputType()->getExceptionTemplate());
-				exit;
+				if($context->getController()->getOutputType()->getExceptionTemplate() !== null) {
+					include($context->getController()->getOutputType()->getExceptionTemplate());
+					exit;
+				}
 			} catch(Exception $e2) {
 				unset($e2);
 			}
