@@ -84,7 +84,7 @@ class AgaviCompileConfigHandler extends AgaviConfigHandler
 				$data[$file] = $contents;
 			}
 		}
-		
+
 		$data = implode("\n", $data);
 
 		// compile data
@@ -114,9 +114,9 @@ class AgaviCompileConfigHandler extends AgaviConfigHandler
 		$data = str_replace("\r", "\n", $data);
 
 		// remove comments and tags with tokenizer
-		
+
 		// I disabled this, it seems broken somehow. doesn't remove all <?php tags. - david
-		
+
 		if(function_exists('token_get_all')) {
 			$tokens = token_get_all($data);
 			$tokenized = null;
@@ -170,7 +170,7 @@ class AgaviCompileConfigHandler extends AgaviConfigHandler
 				}
 			}
 			$data = $tokenized;
-		} 
+		}
 		$data = trim($data);
 		if(substr($data, 0, 5) == '<?php') {
 			$data = substr($data, 5);
@@ -180,7 +180,7 @@ class AgaviCompileConfigHandler extends AgaviConfigHandler
 		if(substr($data, -2, 2) == '?>') {
 			$data = substr($data, 0, -2);
 		}
-		$data = preg_replace('/\s*\?>\s*<\?(php)?\s*/u', '', $data);
+		$data = preg_replace('/\s*\?>\s*<\?(php)?\s*/', '', $data);
 
 		return $data;
 	}
