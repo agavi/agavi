@@ -37,6 +37,7 @@ class AgaviSampleAppCookieLoginFilter extends AgaviFilter implements AgaviIGloba
 			try {
 				$usr->login($login['username'], $login['password']);
 			} catch(AgaviSecurityException $e) {
+				$response = $this->getContext()->getController()->getGlobalResponse();
 				// login didn't work. that cookie sucks, delete it.
 				$response->setCookie('autologon[username]', false);
 				$response->setCookie('autologon[password]', false);
