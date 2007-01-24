@@ -211,7 +211,7 @@ class AgaviFactoryConfigHandler extends AgaviConfigHandler
 				$data['routing']['params'] = $this->getItemParameters($cfg->routing, $data['routing']['params']);
 
 				$data['routing_code'] =	'$this->routing = new ' . $data['routing']['class'] . '();' . "\n" .
-																'$this->routing->initialize($response, ' . var_export($data['routing']['params'], true) . ');';
+																'$this->routing->initialize($this, ' . var_export($data['routing']['params'], true) . ');';
 			}
 
 			// Translation Manager

@@ -44,6 +44,11 @@ abstract class AgaviController extends AgaviParameterHolder
 	protected $context = null;
 	
 	/**
+	 * @var        AgaviResponse The global response.
+	 */
+	protected $response = null;
+	
+	/**
 	 * @var        array An array of filter instances for reuse.
 	 */
 	protected $filters = array(
@@ -186,7 +191,9 @@ abstract class AgaviController extends AgaviParameterHolder
 			// go, go, go!
 			$filterChain->execute($container);
 			
-			$container->getResponse()->send($container->getOutputType());
+			$response = $container->getResponse();
+			$response->merge($this->response);
+			$response->send($container->getOutputType());
 			
 		} catch(Exception $e) {
 			if(isset($container) && $container instanceof AgaviExecutionContainer) {
@@ -195,6 +202,19 @@ abstract class AgaviController extends AgaviParameterHolder
 				AgaviException::printStackTrace($e, $this->context);
 			}
 		}
+	}
+	
+	/**
+	 * Get the global response instance.
+	 *
+	 * @return     AgaviResponse The global response.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getGlobalResponse()
+	{
+		return $this->response;
 	}
 	
 	/**

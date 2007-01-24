@@ -68,15 +68,15 @@ class AgaviWebRouting extends AgaviRouting
 	/**
 	 * Initialize the routing instance.
 	 *
-	 * @param      AgaviResponse An AgaviResponse instance.
-	 * @param      array         An array of initialization parameters.
+	 * @param      AgaviContext The Context.
+	 * @param      array        An array of initialization parameters.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function initialize(AgaviResponse $response, array $parameters = array())
+	public function initialize(AgaviContext $context, array $parameters = array())
 	{
-		parent::initialize($response, $parameters);
+		parent::initialize($context, $parameters);
 		
 		$rq = $this->context->getRequest();
 		

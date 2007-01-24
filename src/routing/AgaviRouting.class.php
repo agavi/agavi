@@ -44,11 +44,6 @@ abstract class AgaviRouting
 	protected $context = null;
 
 	/**
-	 * @var        AgaviResponse The global Response instance.
-	 */
-	protected $response = null;
-
-	/**
 	 * @var        string Route input.
 	 */
 	protected $input = null;
@@ -70,20 +65,18 @@ abstract class AgaviRouting
 		'relative' => true
 	);
 
-
 	/**
 	 * Initialize the routing instance.
 	 *
-	 * @param      AgaviResponse An AgaviResponse instance.
-	 * @param      array         An array of initialization parameters.
+	 * @param      AgaviContext The Context.
+	 * @param      array        An array of initialization parameters.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function initialize(AgaviResponse $response, array $parameters = array())
+	public function initialize(AgaviContext $context, array $parameters = array())
 	{
-		$this->response = $response;
-		$this->context = $response->getContext();
+		$this->context = $context;
 		
 		if(isset($parameters['default_gen_options'])) {
 			$this->defaultGenOptions = array_merge($this->defaultGenOptions, $parameters['default_gen_options']);
@@ -427,7 +420,7 @@ abstract class AgaviRouting
 				if(!isset($r['cb'])) {
 					$cb = $r['opt']['callback'];
 					$r['cb'] = new $cb();
-					$r['cb']->initialize($this->response, $r);
+					$r['cb']->initialize($this->context, $r);
 				}
 				$myDefaults = $r['cb']->onGenerate($myDefaults, $params);
 			}
@@ -487,7 +480,6 @@ abstract class AgaviRouting
 		$reqData = $req->getRequestData();
 
 		$container = $this->context->getController()->createExecutionContainer();
-		$response = $container->getResponse();
 		
 		if(!AgaviConfig::get('core.use_routing', false) || count($this->routes) == 0) {
 			// routing disabled, determine module and action manually and bail out
@@ -529,7 +521,7 @@ abstract class AgaviRouting
 					if($opts['callback'] && !isset($route['cb'])) {
 						$cb = $opts['callback'];
 						$route['cb'] = new $cb();
-						$route['cb']->initialize($response, $route);
+						$route['cb']->initialize($this->context, $route);
 					}
 
 					$match = array();
@@ -566,7 +558,7 @@ abstract class AgaviRouting
 							} else {
 								$cbVars =& $vars;
 							}
-							if(!$route['cb']->onMatched($cbVars)) {
+							if(!$route['cb']->onMatched($cbVars, $container)) {
 								continue;
 							}
 						}
@@ -631,7 +623,7 @@ abstract class AgaviRouting
 
 					} else {
 						if($opts['callback']) {
-							$route['cb']->onNotMatched();
+							$route['cb']->onNotMatched($container);
 						}
 					}
 				}
