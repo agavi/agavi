@@ -59,13 +59,13 @@ class AgaviFactoryConfigHandler extends AgaviConfigHandler
 		
 		$data = array();
 		foreach($configurations as $cfg) {
-			// Class names for ActionStack, DispatchFilter, ExecutionFilter, FilterChain, Response and SecurityFilter
-			if(isset($cfg->action_stack)) {
-				$data['action_stack'] = isset($data['action_stack']) ? $data['action_stack'] : array('class' => null, 'params' => array());
-				$data['action_stack']['class'] = $cfg->action_stack->hasAttribute('class')? $cfg->action_stack->getAttribute('class') : $data['action_stack']['class'];
-				$data['action_stack']['params'] = $this->getItemParameters($cfg->action_stack, $data['action_stack']['params']);
+			// Class names for Execution Container, DispatchFilter, ExecutionFilter, FilterChain, Response and SecurityFilter
+			if(isset($cfg->execution_container)) {
+				$data['execution_container'] = isset($data['execution_container']) ? $data['execution_container'] : array('class' => null, 'params' => array());
+				$data['execution_container']['class'] = $cfg->execution_container->hasAttribute('class')? $cfg->execution_container->getAttribute('class') : $data['execution_container']['class'];
+				$data['execution_container']['params'] = $this->getItemParameters($cfg->execution_container, $data['execution_container']['params']);
 
-				$data['action_stack_code'] = '$this->factories["action_stack"] = array("class" => "' . $data['action_stack']['class'] . '", "parameters" => ' . var_export($data['action_stack']['params'], true) . ');';
+				$data['execution_container_code'] = '$this->factories["execution_container"] = array("class" => "' . $data['execution_container']['class'] . '", "parameters" => ' . var_export($data['execution_container']['params'], true) . ');';
 			}
 
 			if(isset($cfg->dispatch_filter)) {
@@ -211,7 +211,7 @@ class AgaviFactoryConfigHandler extends AgaviConfigHandler
 				$data['routing']['params'] = $this->getItemParameters($cfg->routing, $data['routing']['params']);
 
 				$data['routing_code'] =	'$this->routing = new ' . $data['routing']['class'] . '();' . "\n" .
-																'$this->routing->initialize($response, ' . var_export($data['routing']['params'], true) . ');';
+																'$this->routing->initialize($this, ' . var_export($data['routing']['params'], true) . ');';
 			}
 
 			// Translation Manager
@@ -229,7 +229,7 @@ class AgaviFactoryConfigHandler extends AgaviConfigHandler
 		// The order of this initialisiation code is fixed, to not change
 		// name => required?
 		$requiredItems = array(
-			'action_stack' => true,
+			'execution_container' => true,
 			'dispatch_filter' => true,
 			'execution_filter' => true,
 			'security_filter' => AgaviConfig::get('core.use_security', false),

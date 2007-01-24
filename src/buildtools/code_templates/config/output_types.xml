@@ -47,21 +47,30 @@
 		<output_types default="html">
 
 			<output_type name="html">
-				<renderer class="AgaviPhpRenderer">
-					<parameters>
-						<parameter name="assigns">
-							<parameters>
-								<parameter name="routing">ro</parameter>
-								<parameter name="request">rq</parameter>
-								<parameter name="controller">ct</parameter>
-								<parameter name="user">us</parameter>
-								<parameter name="translation_manager">tm</parameter>
-							</parameters>
-						</parameter>
-					</parameters>
-				</renderer>
+				<renderers default="php">
+					<renderer name="php" class="AgaviPhpRenderer">
+						<parameters>
+							<parameter name="assigns">
+								<parameters>
+									<parameter name="routing">ro</parameter>
+									<parameter name="request">rq</parameter>
+									<parameter name="controller">ct</parameter>
+									<parameter name="user">us</parameter>
+									<parameter name="translation_manager">tm</parameter>
+								</parameters>
+							</parameter>
+						</parameters>
+					</renderer>
+				</renderers>
+				<layouts default="default"> 
+					<layout name="default"> 
+						<layers>
+							<layer name="content" class="AgaviFileTemplateLayer" /> 
+						</layers> 
+					</layout> 
+				</layouts> 
 				<parameters>
-					<parameter name="Content-Type">text/html</parameter>
+					<parameter name="Content-Type">text/html; charset=UTF-8</parameter>
 				</parameters>
 			</output_type>
 

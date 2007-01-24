@@ -32,23 +32,23 @@ interface AgaviIFilter
 	 * Execute this filter for the first time in this context.
 	 *
 	 * @param      AgaviFilterChain A FilterChain instance.
-	 * @param      AgaviResponse A Response instance.
+	 * @param      AgaviExecutionContainer The current execution container.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.11.0
 	 */
-	public function executeOnce(AgaviFilterChain $filterChain, AgaviResponse $response);
+	public function executeOnce(AgaviFilterChain $filterChain, AgaviExecutionContainer $container);
 
 	/**
 	 * Execute this filter.
 	 *
 	 * @param      AgaviFilterChain A FilterChain instance.
-	 * @param      AgaviResponse A Response instance.
+	 * @param      AgaviExecutionContainer The current execution container.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.11.0
 	 */
-	public function execute(AgaviFilterChain $filterChain, AgaviResponse $response);
+	public function execute(AgaviFilterChain $filterChain, AgaviExecutionContainer $container);
 
 	/**
 	 * Retrieve the current application context.

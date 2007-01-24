@@ -19,11 +19,6 @@ class TestSessionStorage extends AgaviStorage
 	}
 }
 
-class CTTestActionStack extends AgaviActionStack
-{
-}
-
-
 class ContextTest extends AgaviTestCase 
 {
 	public function setup()
@@ -52,7 +47,6 @@ class ContextTest extends AgaviTestCase
 		$this->assertReference($a, $f);
 		$this->assertNotSame($e, $f);
 		
-		$this->assertType('AgaviActionStack', AgaviContext::getInstance('test')->getController()->getActionStack());
 		$this->assertType('AgaviWebRequest', AgaviContext::getInstance('test')->getRequest());
 		$this->assertType('TestRouting', AgaviContext::getInstance('test')->getRouting());
 	}
@@ -74,7 +68,6 @@ class ContextTest extends AgaviTestCase
 		$context = AgaviContext::getInstance('test');
 		$context->initialize('test1');
 		$this->assertType('TestSessionStorage', $context->getStorage());
-		$this->assertType('CTTestActionStack', $context->getController()->getActionStack());
 	}
 
 

@@ -41,8 +41,8 @@ class AgaviExecutionTimeFilter extends AgaviFilter implements AgaviIGlobalFilter
 	/**
 	 * Execute this filter.
 	 *
-	 * @param      AgaviFilterChain The filter chain.
-	 * @param      AgaviResponse A Response instance.
+	 * @param      AgaviFilterChain        The filter chain.
+	 * @param      AgaviExecutionContainer The current execution container.
 	 *
 	 * @throws     <b>AgaviFilterException</b> If an error occurs during execution.
 	 *
@@ -50,7 +50,7 @@ class AgaviExecutionTimeFilter extends AgaviFilter implements AgaviIGlobalFilter
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function executeOnce(AgaviFilterChain $filterChain, AgaviResponse $response)
+	public function executeOnce(AgaviFilterChain $filterChain, AgaviExecutionContainer $container)
 	{
 		$context = $this->getContext();
 		
@@ -58,10 +58,12 @@ class AgaviExecutionTimeFilter extends AgaviFilter implements AgaviIGlobalFilter
 		$replace = $this->getParameter('replace', false);
 		
 		$start = microtime(true);
-		$filterChain->execute();
+		$filterChain->execute($container);
+		
+		$response = $container->getResponse();
 		
 		$outputTypes = $this->getParameter('output_types');
-		if(is_array($outputTypes) && !in_array($context->getController()->getOutputType(), $outputTypes)) {
+		if(is_array($outputTypes) && !in_array($context->getController()->getOutputType()->getName(), $outputTypes)) {
 			return;
 		}
 		

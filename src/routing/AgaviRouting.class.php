@@ -44,11 +44,6 @@ abstract class AgaviRouting
 	protected $context = null;
 
 	/**
-	 * @var        AgaviResponse The global Response instance.
-	 */
-	protected $response = null;
-
-	/**
 	 * @var        string Route input.
 	 */
 	protected $input = null;
@@ -70,20 +65,18 @@ abstract class AgaviRouting
 		'relative' => true
 	);
 
-
 	/**
 	 * Initialize the routing instance.
 	 *
-	 * @param      AgaviResponse An AgaviResponse instance.
-	 * @param      array         An array of initialization parameters.
+	 * @param      AgaviContext The Context.
+	 * @param      array        An array of initialization parameters.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function initialize(AgaviResponse $response, array $parameters = array())
+	public function initialize(AgaviContext $context, array $parameters = array())
 	{
-		$this->response = $response;
-		$this->context = $response->getContext();
+		$this->context = $context;
 		
 		if(isset($parameters['default_gen_options'])) {
 			$this->defaultGenOptions = array_merge($this->defaultGenOptions, $parameters['default_gen_options']);
@@ -427,7 +420,7 @@ abstract class AgaviRouting
 				if(!isset($r['cb'])) {
 					$cb = $r['opt']['callback'];
 					$r['cb'] = new $cb();
-					$r['cb']->initialize($this->response, $r);
+					$r['cb']->initialize($this->context, $r);
 				}
 				$myDefaults = $r['cb']->onGenerate($myDefaults, $params);
 			}
@@ -482,14 +475,21 @@ abstract class AgaviRouting
 	 */
 	public function execute()
 	{
-		$matchedRoutes = array();
+		$req = $this->context->getRequest();
+		
+		$reqData = $req->getRequestData();
 
+		$container = $this->context->getController()->createExecutionContainer();
+		
 		if(!AgaviConfig::get('core.use_routing', false) || count($this->routes) == 0) {
-			// routing disabled, bail out
-			return $matchedRoutes;
+			// routing disabled, determine module and action manually and bail out
+			$container->setModuleName($reqData->getParameter($req->getModuleAccessor()));
+			$container->setActionName($reqData->getParameter($req->getActionAccessor()));
+			
+			return $container;
 		}
 
-		$req = $this->context->getRequest();
+		$matchedRoutes = array();
 
 		$input = $this->input;
 
@@ -500,8 +500,6 @@ abstract class AgaviRouting
 		$ma = $req->getModuleAccessor();
 		$aa = $req->getActionAccessor();
 		$requestMethod = $req->getMethod();
-
-//		$routes = array_keys($this->routes);
 
 		// get all top level routes
 		foreach($this->routes as $name => $route) {
@@ -523,7 +521,7 @@ abstract class AgaviRouting
 					if($opts['callback'] && !isset($route['cb'])) {
 						$cb = $opts['callback'];
 						$route['cb'] = new $cb();
-						$route['cb']->initialize($this->response, $route);
+						$route['cb']->initialize($this->context, $route);
 					}
 
 					$match = array();
@@ -560,7 +558,7 @@ abstract class AgaviRouting
 							} else {
 								$cbVars =& $vars;
 							}
-							if(!$route['cb']->onMatched($cbVars)) {
+							if(!$route['cb']->onMatched($cbVars, $container)) {
 								continue;
 							}
 						}
@@ -625,7 +623,7 @@ abstract class AgaviRouting
 
 					} else {
 						if($opts['callback']) {
-							$route['cb']->onNotMatched();
+							$route['cb']->onNotMatched($container);
 						}
 					}
 				}
@@ -634,7 +632,7 @@ abstract class AgaviRouting
 
 		// set the output type if necessary
 		if($ot !== null) {
-			$this->context->getController()->setOutputType($ot);
+			$container->setOutputType($this->context->getController()->getOutputType($ot));
 		}
 
 		// set the locale if necessary
@@ -648,17 +646,24 @@ abstract class AgaviRouting
 		}
 
 		// put the vars into the request
-		$req->setParameters($vars);
+		$reqData->setParameters($vars);
 
-		if(!$req->hasParameter($ma) || !$req->hasParameter($aa)) {
+		if(!$reqData->hasParameter($ma) || !$reqData->hasParameter($aa)) {
 			// no route which supplied the required parameters matched, use 404 action
-			$req->setParameters(array(
+			$reqData->setParameters(array(
 				$ma => AgaviConfig::get('actions.error_404_module'),
 				$aa => AgaviConfig::get('actions.error_404_action')
 			));
 		}
+		
+		$container->setModuleName($reqData->getParameter($ma));
+		$container->setActionName($reqData->getParameter($aa));
+		
+		// set the list of matched route names as a request attribute
+		$req->setAttribute('matchedRoutes', $matchedRoutes, 'org.agavi.routing');
+		
 		// return a list of matched route names
-		return $matchedRoutes;
+		return $container;
 	}
 
 	/**

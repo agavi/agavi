@@ -28,8 +28,13 @@
  *
  * @version    $Id$
  */
-abstract class AgaviAction extends AgaviAttributeHolder
+abstract class AgaviAction
 {
+	/**
+	 * @var        AgaviExecutionContainer This action's execution container.
+	 */
+	private $container = null;
+
 	/**
 	 * @var        AgaviContext An AgaviContext instance.
 	 */
@@ -49,6 +54,19 @@ abstract class AgaviAction extends AgaviAttributeHolder
 	}
 
 	/**
+	 * Retrieve the execution container for this action.
+	 *
+	 * @return     AgaviExecutionContainer This action's execution container.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public final function getContainer()
+	{
+		return $this->container;
+	}
+
+	/**
 	 * Retrieve the credential required to access this action.
 	 *
 	 * @return     mixed Data that indicates the level of security for this
@@ -65,8 +83,7 @@ abstract class AgaviAction extends AgaviAttributeHolder
 	/**
 	 * Execute any post-validation error application logic.
 	 *
-	 * @param      AgaviParameterHolder A parameter holder containing the filtered
-	 *                                  request parameters for this Action.
+	 * @param      AgaviRequestDataHolder The action's request data holder.
 	 *
 	 * @return     mixed A string containing the view name associated with this
 	 *                   action.
@@ -75,9 +92,10 @@ abstract class AgaviAction extends AgaviAttributeHolder
 	 *                   - The view that will be executed.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
-	public function handleError(AgaviParameterHolder $parameters)
+	public function handleError(AgaviRequestDataHolder $r)
 	{
 		return 'Error';
 	}
@@ -90,9 +108,11 @@ abstract class AgaviAction extends AgaviAttributeHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function initialize(AgaviContext $context)
+	public function initialize(AgaviExecutionContainer $container)
 	{
-		$this->context = $context;
+		$this->container = $container;
+		
+		$this->context = $container->getContext();
 	}
 
 	/**
@@ -121,16 +141,16 @@ abstract class AgaviAction extends AgaviAttributeHolder
 	/**
 	 * Manually validate files and parameters.
 	 *
-	 * @param      AgaviParameterHolder A parameter holder containing request
-	 *                                  parameters for this Action.
+	 * @param      AgaviRequestDataHolder The action's request data holder.
 	 *
-	 * @return     bool true, if validation completes successfully, otherwise
+	 * @return     bool true, if validation completed successfully, otherwise
 	 *                  false.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
-	public function validate(AgaviParameterHolder $parameters)
+	public function validate(AgaviRequestDataHolder $r)
 	{
 		return true;
 	}
@@ -146,6 +166,138 @@ abstract class AgaviAction extends AgaviAttributeHolder
 	public function getDefaultViewName()
 	{
 		return 'Input';
+	}
+
+	/**
+	 * @see        AgaviAttributeHolder::setAttributesByRef()
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.9.0
+	 */
+	public function clearAttributes()
+	{
+		$this->container->clearAttributes();
+	}
+
+	/**
+	 * @see        AgaviAttributeHolder::setAttributesByRef()
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.9.0
+	 */
+	public function & getAttribute($name, $default = null)
+	{
+		return $this->container->getAttribute($name, null, $default);
+	}
+
+	/**
+	 * @see        AgaviAttributeHolder::setAttributesByRef()
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.9.0
+	 */
+	public function getAttributeNames()
+	{
+		return $this->container->getAttributeNames();
+	}
+
+	/**
+	 * @see        AgaviAttributeHolder::setAttributesByRef()
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function & getAttributes()
+	{
+		return $this->container->getAttributes();
+	}
+
+	/**
+	 * @see        AgaviAttributeHolder::setAttributesByRef()
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.9.0
+	 */
+	public function hasAttribute($name)
+	{
+		return $this->container->hasAttribute($name);
+	}
+
+	/**
+	 * @see        AgaviAttributeHolder::setAttributesByRef()
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.9.0
+	 */
+	public function & removeAttribute($name)
+	{
+		return $this->container->removeAttribute($name);
+	}
+	
+	/**
+	 * @see        AgaviAttributeHolder::setAttributesByRef()
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.9.0
+	 */
+	public function setAttribute($name, $value)
+	{
+		$this->container->setAttribute($name, $value);
+	}
+
+	/**
+	 * @see        AgaviAttributeHolder::setAttributesByRef()
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.10.0
+	 */
+	public function appendAttribute($name, $value)
+	{
+		$this->container->appendAttribute($name, $value);
+	}
+
+	/**
+	 * @see        AgaviAttributeHolder::setAttributesByRef()
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.9.0
+	 */
+	public function setAttributeByRef($name, &$value)
+	{
+		$this->container->setAttributeByRef($name, $value);
+	}
+
+	/**
+	 * @see        AgaviAttributeHolder::setAttributesByRef()
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.10.0
+	 */
+	public function appendAttributeByRef($name, &$value)
+	{
+		$this->container->appendAttributeByRef($name, $value);
+	}
+
+	/**
+	 * @see        AgaviAttributeHolder::setAttributesByRef()
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.9.0
+	 */
+	public function setAttributes(array $attributes)
+	{
+		$this->container->setAttributes($attributes);
+	}
+
+	/**
+	 * @see        AgaviAttributeHolder::setAttributesByRef()
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.9.0
+	 */
+	public function setAttributesByRef(array &$attributes)
+	{
+		$this->container->setAttributesByRef($attributes);
 	}
 }
 

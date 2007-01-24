@@ -14,7 +14,7 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
-class Default_LoginAction extends AgaviAction
+class Default_LoginAction extends AgaviSampleAppDefaultBaseAction
 {
 	/**
 	 * This Action does not yet serve any Request methods.
@@ -49,10 +49,10 @@ class Default_LoginAction extends AgaviAction
 	 * execute*() being present, e.g. for a "write" Request, validateWrite() will
 	 * be run even if there is no executeWrite() method.
 	 */
-	public function executeWrite(AgaviParameterHolder $parameters)
+	public function executeWrite(AgaviRequestDataHolder $r)
 	{
 		try {
-			$this->getContext()->getUser()->login($parameters->getParameter('username'), $parameters->getParameter('password'));
+			$this->getContext()->getUser()->login($r->getParameter('username'), $r->getParameter('password'));
 			return 'Success';
 		} catch(AgaviSecurityException $e) {
 			$this->getContext()->getRequest()->setError($e->getMessage(), 'Wrong ' . ucfirst($e->getMessage()));
@@ -60,7 +60,7 @@ class Default_LoginAction extends AgaviAction
 		}
 	}
 
-	public function handleError(AgaviParameterHolder $parameters)
+	public function handleError(AgaviRequestDataHolder $r)
 	{
 		return 'Input';
 	}

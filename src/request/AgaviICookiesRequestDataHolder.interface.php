@@ -3,7 +3,6 @@
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
 // | Copyright (c) 2003-2006 the Agavi Project.                                |
-// | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -15,20 +14,38 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviForwardException is thrown when an error occurs while attempting to 
- * forward the request.
+ * Interface for RequestDataHolders that allow access to Cookies.
  *
  * @package    agavi
- * @subpackage exception
+ * @subpackage request
  *
- * @author     Sean Kerr <skerr@mojavi.org>
+ * @author     David Zuelke <dz@bitxtender.com>
  * @copyright  (c) Authors
- * @since      0.9.0
+ * @since      0.11.0
  *
  * @version    $Id$
  */
-class AgaviForwardException extends AgaviException
+interface AgaviICookiesRequestDataHolder
 {
+	public function hasCookie($cookie);
+	
+	public function &getCookie($cookie, $default = null);
+	
+	public function &getCookies();
+	
+	public function getCookieNames();
+	
+	public function getFlatCookieNames();
+	
+	public function setCookie($name, $value);
+	
+	public function setCookies($cookies);
+	
+	public function &removeCookie($cookie);
+	
+	public function clearCookies();
+	
+	public function mergeCookies(AgaviRequestDataHolder $other);
 }
 
 ?>

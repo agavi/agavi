@@ -35,8 +35,6 @@
 
 			<!-- agavi/action -->
 			<autoload name="AgaviAction">%core.agavi_dir%/action/AgaviAction.class.php</autoload>
-			<autoload name="AgaviActionStack">%core.agavi_dir%/action/AgaviActionStack.class.php</autoload>
-			<autoload name="AgaviActionStackEntry">%core.agavi_dir%/action/AgaviActionStackEntry.class.php</autoload>
 
 			<!-- agavi/config -->
 			<autoload name="AgaviCompileConfigHandler">%core.agavi_dir%/config/AgaviCompileConfigHandler.class.php</autoload>
@@ -59,9 +57,9 @@
 
 			<!-- agavi/controller -->
 			<autoload name="AgaviController">%core.agavi_dir%/controller/AgaviController.class.php</autoload>
-			<autoload name="AgaviConsoleController">%core.agavi_dir%/controller/AgaviConsoleController.class.php</autoload>
-			<autoload name="AgaviWebController">%core.agavi_dir%/controller/AgaviWebController.class.php</autoload>
-			
+			<autoload name="AgaviExecutionContainer">%core.agavi_dir%/controller/AgaviExecutionContainer.class.php</autoload>
+			<autoload name="AgaviOutputType">%core.agavi_dir%/controller/AgaviOutputType.class.php</autoload>
+
 			<!-- agavi/core -->
 			<autoload name="AgaviContext">%core.agavi_dir%/core/AgaviContext.class.php</autoload>
 
@@ -92,7 +90,6 @@
 			<autoload name="AgaviFactoryException">%core.agavi_dir%/exception/AgaviFactoryException.class.php</autoload>
 			<autoload name="AgaviFileException">%core.agavi_dir%/exception/AgaviFileException.class.php</autoload>
 			<autoload name="AgaviFilterException">%core.agavi_dir%/exception/AgaviFilterException.class.php</autoload>
-			<autoload name="AgaviForwardException">%core.agavi_dir%/exception/AgaviForwardException.class.php</autoload>
 			<autoload name="AgaviInitializationException">%core.agavi_dir%/exception/AgaviInitializationException.class.php</autoload>
 			<autoload name="AgaviLoggingException">%core.agavi_dir%/exception/AgaviLoggingException.class.php</autoload>
 			<autoload name="AgaviRenderException">%core.agavi_dir%/exception/AgaviRenderException.class.php</autoload>
@@ -111,7 +108,6 @@
 			<autoload name="AgaviIActionFilter">%core.agavi_dir%/filter/AgaviIActionFilter.interface.php</autoload>
 			<autoload name="AgaviIFilter">%core.agavi_dir%/filter/AgaviIFilter.interface.php</autoload>
 			<autoload name="AgaviIGlobalFilter">%core.agavi_dir%/filter/AgaviIGlobalFilter.interface.php</autoload>
-			<autoload name="AgaviIRenderingFilter">%core.agavi_dir%/filter/AgaviIRenderingFilter.interface.php</autoload>
 			<autoload name="AgaviISecurityFilter">%core.agavi_dir%/filter/AgaviISecurityFilter.interface.php</autoload>
 			<autoload name="AgaviSecurityFilter">%core.agavi_dir%/filter/AgaviSecurityFilter.class.php</autoload>
 
@@ -134,6 +130,7 @@
 			<autoload name="AgaviISingletonModel">%core.agavi_dir%/model/AgaviISingletonModel.interface.php</autoload>
 
 			<!-- agavi/renderer -->
+			<autoload name="AgaviIReusableRenderer">%core.agavi_dir%/renderer/AgaviIReusableRenderer.interface.php</autoload>
 			<autoload name="AgaviRenderer">%core.agavi_dir%/renderer/AgaviRenderer.class.php</autoload>
 			<autoload name="AgaviPhptalRenderer">%core.agavi_dir%/renderer/AgaviPhptalRenderer.class.php</autoload>
 			<autoload name="AgaviPhpRenderer">%core.agavi_dir%/renderer/AgaviPhpRenderer.class.php</autoload>
@@ -143,8 +140,14 @@
 			<!-- agavi/request -->
 			<autoload name="AgaviRequest">%core.agavi_dir%/request/AgaviRequest.class.php</autoload>
 			<autoload name="AgaviConsoleRequest">%core.agavi_dir%/request/AgaviConsoleRequest.class.php</autoload>
+			<autoload name="AgaviICookiesRequestDataHolder">%core.agavi_dir%/request/AgaviICookiesRequestDataHolder.interface.php</autoload>
+			<autoload name="AgaviIFilesRequestDataHolder">%core.agavi_dir%/request/AgaviIFilesRequestDataHolder.interface.php</autoload>
+			<autoload name="AgaviIHeadersRequestDataHolder">%core.agavi_dir%/request/AgaviIHeadersRequestDataHolder.interface.php</autoload>
+			<autoload name="AgaviRequestDataHolder">%core.agavi_dir%/request/AgaviRequestDataHolder.class.php</autoload>
 			<autoload name="AgaviSecureWebRequest">%core.agavi_dir%/request/AgaviSecureWebRequest.class.php</autoload>
+			<autoload name="AgaviUploadedFile">%core.agavi_dir%/request/AgaviUploadedFile.class.php</autoload>
 			<autoload name="AgaviWebRequest">%core.agavi_dir%/request/AgaviWebRequest.class.php</autoload>
+			<autoload name="AgaviWebRequestDataHolder">%core.agavi_dir%/request/AgaviWebRequestDataHolder.class.php</autoload>
 			<autoload name="AgaviWebserviceRequest">%core.agavi_dir%/request/AgaviWebserviceRequest.class.php</autoload>
 			<autoload name="AgaviXmlrpcepiphpRequest">%core.agavi_dir%/request/AgaviXmlrpcepiphpRequest.class.php</autoload>
 
@@ -222,7 +225,11 @@
 			<autoload name="AgaviStringValidator">%core.agavi_dir%/validator/AgaviStringValidator.class.php</autoload>
 
 			<!-- agavi/view -->
+			<autoload name="AgaviFileTemplateLayer">%core.agavi_dir%/view/AgaviFileTemplateLayer.class.php</autoload>
+			<autoload name="AgaviStreamTemplateLayer">%core.agavi_dir%/view/AgaviStreamTemplateLayer.class.php</autoload>
+			<autoload name="AgaviTemplateLayer">%core.agavi_dir%/view/AgaviTemplateLayer.class.php</autoload>
 			<autoload name="AgaviView">%core.agavi_dir%/view/AgaviView.class.php</autoload>
+
 		</autoloads>
 	</configuration>
 </configurations>

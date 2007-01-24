@@ -19,7 +19,7 @@
  * validators.
  * 
  * Parameters:
- *   'min_size'     The minimum file size in byte
+ *   'min_size'     The minimum file size in byte, default 1
  *   'max_size'     The maximum file size in byte
  *   'extension'    list of valid extensions (delimited by ' ')
  *
@@ -42,37 +42,18 @@ abstract class AgaviBaseFileValidator extends AgaviValidator
 {
 
 	/**
-	 * Returns whether all arguments are set in the validation input parameters.
-	 * Set means anything but empty string.
-	 *
-	 * @param      bool Whether an error should be thrown for each missing 
-	 *                  argument if this validator is required.
-	 *
-	 * @return     bool Whether the arguments are set.
+	 * @see        AgaviValidator::construct
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	protected function checkAllArgumentsSet($throwError = true)
+	public function __construct(AgaviIValidatorContainer $parent, array $arguments, array $errors = array(), array $parameters = array(), $name = '')
 	{
-		$request = $this->getContext()->getRequest();
-
-		$isRequired = $this->getParameter('required', true);
-		$result = true;
-
-		$array = $this->validationParameters->getParameters();
-		$baseParts = $this->curBase->getParts();
-		foreach($this->getArguments() as $argument) {
-			$new = $this->curBase->pushRetNew($argument);
-			$pName = $this->curBase->pushRetNew($argument)->__toString();
-			if(!$request->hasFile($pName)) {
-				if($throwError && $isRequired) {
-					$this->throwError(null, $pName);
-				}
-				$result = false;
-			}
+		if(!isset($parameters['source'])) {
+			$parameters['source'] = AgaviWebRequestDataHolder::SOURCE_FILES;
 		}
-		return $result;
+
+		parent::__construct($parent, $arguments, $errors, $parameters, $name);
 	}
 
 	/**
@@ -85,22 +66,21 @@ abstract class AgaviBaseFileValidator extends AgaviValidator
 	 */
 	protected function validate()
 	{
-		$request = $this->getContext()->getRequest();
-
 		foreach($this->getArguments() as $argument) {
-			if($argument) {
-				$name = $this->curBase->pushRetNew($argument)->__toString();
-			} else {
-				$name = $this->curBase->__toString();
+			$file = $this->getData($argument);
+			
+			if(!$file instanceof AgaviUploadedFile) {
+				$this->throwError('argument_wrong_type');
+				return false;
 			}
-
-			if($request->getFileError($name) != UPLOAD_ERR_OK) {
+			
+			if($file->hasError()) {
 				$this->throwError('upload_failed');
 				return false;
 			}
 			
-			$size = $request->getFileSize($name);
-			if($this->hasParameter('min_size') && $size < $this->getParameter('min_size')) {
+			$size = $file->getSize();
+			if($size < $this->getParameter('min_size', 1)) {
 				$this->throwError('min_size');
 				return false;
 			}
@@ -108,40 +88,19 @@ abstract class AgaviBaseFileValidator extends AgaviValidator
 				$this->throwError('max_size');
 				return false;
 			}
-
+			
 			if($this->hasParameter('extension')) {
-				$fileinfo = pathinfo($request->getFileName($name));
+				$fileinfo = pathinfo($file->getName());
 				$ext = isset($fileinfo['extension']) ? $fileinfo['extension'] : '';
-
-				if(in_array($ext, explode(' ', $this->getParameter('extension')))) {
-					continue;
+				if(!in_array($ext, explode(' ', $this->getParameter('extension')))) {
+					$this->throwError('extension');
+					return false;
 				}
-
-				$this->throwError('extension');
-				return false;
 			}
-
 		}
-
+		
 		return true;
 	}
-
-	/**
-	 * Returns all available keys in the currently set base.
-	 *
-	 * @return     array The available keys.
-	 *
-	 * @author     Dominik del Bondio <ddb@bitxtender.com
-	 * @since      0.11.0
-	 */
-	protected function getKeysInCurrentBase()
-	{
-		$files = $this->getContext()->getRequest()->getFiles(false);
-
-		$names = $this->curBase->getValue($files, array());
-		return array_keys($names);
-	}
-
 }
 
 ?>

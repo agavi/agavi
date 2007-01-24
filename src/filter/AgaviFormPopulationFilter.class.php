@@ -64,17 +64,19 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 	/**
 	 * Execute this filter.
 	 *
-	 * @param      AgaviFilterChain The filter chain.
-	 * @param      AgaviResponse    A Response instance.
+	 * @param      AgaviFilterChain        The filter chain.
+	 * @param      AgaviExecutionContainer The current execution container.
 	 *
 	 * @throws     <b>AgaviFilterException</b> If an error occurs during execution.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function executeOnce(AgaviFilterChain $filterChain, AgaviResponse $response)
+	public function executeOnce(AgaviFilterChain $filterChain, AgaviExecutionContainer $container)
 	{
-		$filterChain->execute($filterChain, $response);
+		$filterChain->execute($container);
+		
+		$response = $container->getResponse();
 		
 		$output = $response->getContent();
 		
@@ -86,14 +88,14 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 		
 		$cfg = array_merge(array('populate' => null, 'skip' => null), $this->getParameters(), $req->getAttributes('org.agavi.filter.FormPopulationFilter'));
 		
-		if(is_array($cfg['output_types']) && !in_array($this->getContext()->getController()->getOutputType(), $cfg['output_types'])) {
+		if(is_array($cfg['output_types']) && !in_array($this->getContext()->getController()->getOutputType()->getName(), $cfg['output_types'])) {
 			return;
 		}
 		
 		if(is_array($cfg['populate']) || $cfg['populate'] instanceof AgaviParameterHolder) {
 			$populate = $cfg['populate'];
 		} elseif(in_array($req->getMethod(), $cfg['methods']) && $cfg['populate'] !== false) {
-			$populate = $req;
+			$populate = $req->getRequestData();
 		} else {
 			return;
 		}

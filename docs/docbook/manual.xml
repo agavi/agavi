@@ -571,14 +571,7 @@ if(curl_errno($ch)) {
       <para>The Execution Filter, once reached, will handle Validation, run
       the Action (or skip execution if the Action doesn't serve the Request
       method), determine the View to execute and then execute the View and,
-      after that, start the rendering of the output by creating another filter
-      chain containing all the defined Rendering Filters and, as the last
-      element, the designated Renderer instance that will take care of
-      rendering the template. This functionality might be extended by other
-      Execution Filter implementations; for example, the
-      CachingExecutionFilter will try to load a cached version of the Action
-      and skip execution altogether if possible, resulting in a massive
-      performance increase.</para>
+      after that, start the rendering of the output.</para>
     </section>
 
     <section>
@@ -1409,8 +1402,8 @@ $tm-&gt;_d(time(), 'backend', 'en_US@timezone=Europe/London');
                 <term>factories.xml</term>
 
                 <listitem>
-                  <para>action_stack, controller, database_manager,
-                  dispatch_filter, execution_filter, filter_chain,
+                  <para>controller, database_manager, dispatch_filter
+                  execution_container, execution_filter, filter_chain,
                   logger_manager, request, response, routing, security_filter,
                   storage, translation_manager, user, validator_manager</para>
                 </listitem>
@@ -1641,7 +1634,7 @@ $tm-&gt;_d(time(), 'backend', 'en_US@timezone=Europe/London');
  &lt;configuration&gt;
 
   &lt;handlers&gt;
-   &lt;handler pattern="%core.module_dir%/*/config/rendering_filters.xml" validate="%core.agavi_dir%/config/xsd/filters.xsd" class="AgaviFilterConfigHandler" /&gt;
+   &lt;handler pattern="%core.module_dir%/*/config/action_filters.xml" validate="%core.agavi_dir%/config/xsd/filters.xsd" class="AgaviFilterConfigHandler" /&gt;
    &lt;handler pattern="%core.module_dir%/*/config/module.xml" validate="%core.agavi_dir%/config/xsd/module.xsd" class="AgaviModuleConfigHandler" /&gt;
    &lt;handler pattern="%core.module_dir%/*/validate/*.xml" class="AgaviValidatorConfigHandler" /&gt;
   &lt;/handlers&gt;
@@ -1850,13 +1843,13 @@ $tm-&gt;_d(time(), 'backend', 'en_US@timezone=Europe/London');
         <title>&lt;*&gt;</title>
 
         <para>Available elements are <simplelist type="inline">
-            <member>"action_stack"</member>
-
             <member>"controller"</member>
 
             <member>"database_manager"</member>
 
             <member>"dispatch_filter"</member>
+
+            <member>"execution_container"</member>
 
             <member>"execution_filter"</member>
 
@@ -1908,11 +1901,10 @@ $tm-&gt;_d(time(), 'backend', 'en_US@timezone=Europe/London');
     <section id="reference-configuration_tags-filterhandler">
       <title>FilterConfigHandler Tags (*_filters.xml)</title>
 
-      <para>You may use <filename>action_filters.xml</filename>,
-      <filename>global_filters.xml</filename> and
-      <filename>rendering_filters.xml</filename> to configure Action, global
-      or rendering filters. Action and rendering filters may also be specified
-      on a per-module basis by putting them into the
+      <para>You may use <filename>action_filters.xml</filename> and
+      <filename>global_filters.xml</filename> to configure filters that wrap
+      either the global execution flow or individual actions. Action filters
+      may also be specified on a per-module basis by putting them into the
       <filename>app/modules/ModuleName/config/</filename> folder.</para>
 
       <section id="reference-configuration_tags-filterhandler_filters">

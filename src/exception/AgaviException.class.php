@@ -42,34 +42,37 @@ class AgaviException extends Exception
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.9.0
 	 */
-	public static function printStackTrace(Exception $e, AgaviContext $context = null, AgaviResponse $response = null)
+	public static function printStackTrace(Exception $e, AgaviContext $context = null, AgaviExecutionContainer $container = null)
 	{
 		// discard any previous output waiting in the buffer
 		while(@ob_end_clean());
 		
-		// throw away any response data that might be there
-		if($context !== null && ($c = $context->getController()) !== null && $response !== null) {
-			if($response->isLocked()) {
-				// reponse is locked, so grab the output and discard it
-				ob_start();
-				$response->send();
-				ob_end_clean();
-			} else {
-				// not locked, we can clear the response
-				$response->clear();
+		if($container !== null && $container->getOutputType() !== null && $container->getOutputType()->getExceptionTemplate() !== null) { 
+			// an exception template was defined for the container's output type
+			include($container->getOutputType()->getExceptionTemplate() !== null); 
+			exit;
+		}
+		
+		if($context !== null && $context->getController() !== null) {
+			try {
+				// check if an exception template was defined for the default output type
+				if($context->getController()->getOutputType()->getExceptionTemplate() !== null) {
+					include($context->getController()->getOutputType()->getExceptionTemplate());
+					exit;
+				}
+			} catch(Exception $e2) {
+				unset($e2);
 			}
 		}
 		
-		if($context !== null && ($c = $context->getController()) !== null && ($oti = $c->getOutputTypeInfo()) !== null && isset($oti['exception_template'])) { 
-			// an exception template was defined for this output type
-			include($oti['exception_template']); 
-		} elseif($context !== null && $tpl = AgaviConfig::get('exception.templates.' . $context->getName())) {
+		if($context !== null && AgaviConfig::get('exception.templates.' . $context->getName()) !== null) {
 			// a template was set for this context
-			include($tpl);
-		} else {
-			// include default exception template
-			include(AgaviConfig::get('exception.default_template'));
+			include(AgaviConfig::get('exception.templates.' . $context->getName()));
+			exit;
 		}
+		
+		// include default exception template
+		include(AgaviConfig::get('exception.default_template'));
 		
 		// bail out
 		exit;

@@ -7,10 +7,10 @@
 -->
 <configurations>
 	<configuration>
-		<action_stack class="AgaviActionStack" />
 		<controller class="AgaviWebController" />
 		<database_manager class="AgaviDatabaseManager" />
 		<dispatch_filter class="AgaviDispatchFilter" />
+		<execution_container class="AgaviExecutionContainer" />
 		<execution_filter class="AgaviExecutionFilter" />
 		<filter_chain class="AgaviFilterChain" />
 		<logger_manager class="AgaviLoggerManager" />
@@ -28,7 +28,6 @@
 		<validation_manager class="AgaviValidationManager" />
 	</configuration>
 	<configuration context="test1">
-		<action_stack class="CTTestActionStack" />
 		<storage class="TestSessionStorage">
 		</storage>
 	</configuration>

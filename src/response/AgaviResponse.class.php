@@ -40,7 +40,7 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	/**
 	 * @var        mixed The content to send back to the client.
 	 */
-	protected $content = '';
+	protected $content = null;
 	
 	/**
 	 * Retrieve the AgaviContext instance this Response object belongs to.
@@ -71,119 +71,6 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	}
 	
 	/**
-	 * Export the contents of this response.
-	 *
-	 * @return     array An array of data.
-	 *
-	 * @author     David Zuelke <du@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function export()
-	{
-		return array('content' => $this->getContent(), 'locked' => $this->isLocked());
-	}
-	
-	/**
-	 * Export the information data (e.g. HTTP Headers, Cookies) for this response.
-	 *
-	 * @return     array An array of data.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function exportInfo()
-	{
-		return array('locked' => $this->isLocked());
-	}
-	
-	/**
-	 * Import data for this response.
-	 *
-	 * @param      array An array of data.
-	 *
-	 * @return     bool Whether or not the operation was successful.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function import(array $data)
-	{
-		$retval = true;
-		if(isset($data['content'])) {
-			$retval = $this->setContent($data['content']);
-		}
-		if(isset($data['locked']) && $data['locked']) {
-			$this->lock();
-		}
-		return $retval;
-	}
-	
-	/**
-	 * Merge in data for this response.
-	 *
-	 * @param      array An array of data.
-	 *
-	 * @return     bool Whether or not the operation was successful.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function merge(array $data)
-	{
-		// do not lock the response even if $data has locked=true!
-		
-		if(isset($data['content'])) {
-			return $this->appendContent($data['content']);
-		}
-		return true;
-	}
-	
-	/**
-	 * Append data to this response.
-	 *
-	 * @param      array An array of data.
-	 *
-	 * @return     bool Whether or not the operation was successful.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function append(array $data)
-	{
-		// do not lock the response even if $data has locked=true!
-		
-		if(isset($data['content'])) {
-			return $this->appendContent($data['content']);
-		}
-		return true;
-	}
-	
-	/**
-	 * Check if this Response is locked, i.e. whether or not new content and other
-	 * output information can be set.
-	 *
-	 * @return     bool Whether the response is locked.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function isLocked()
-	{
-		return $this->locked;
-	}
-	
-	/**
-	 * Lock this Response so that it does not accept any modifications.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function lock()
-	{
-		$this->locked = true;
-	}
-	
-	/**
 	 * Retrieve the content set for this Response
 	 *
 	 * @return     mixed The content set in this Response.
@@ -208,11 +95,8 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	 */
 	public function setContent($content)
 	{
-		if(!$this->locked) {
-			$this->content = $content;
-			return true;
-		}
-		return false;
+		$this->content = $content;
+		return true;
 	}
 	
 	/**
@@ -255,12 +139,29 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	 */
 	public function clearContent()
 	{
-		if(!$this->locked) {
-			$this->content = '';
-			return true;
-		}
-		return false;
+		$this->content = '';
+		return true;
 	}
+	
+	/**
+	 * Redirect externally.
+	 *
+	 * @param      mixed Where to redirect.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	abstract public function setRedirect($to);
+
+	/**
+	 * Import response metadata from another response.
+	 *
+	 * @param      AgaviResponse The other response to import information from.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	abstract public function merge(AgaviResponse $otherResponse);
 	
 	/**
 	 * Clear all data for this Response.
@@ -273,10 +174,13 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	/**
 	 * Send all response data to the client.
 	 *
+	 * @param      AgaviOutputType An optional Output Type object with information
+	 *                             the response can use to send additional data.
+	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	abstract public function send();
+	abstract public function send(AgaviOutputType $outputType = null);
 	
 	/**
 	 * Send the content for this response

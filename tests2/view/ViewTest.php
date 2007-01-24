@@ -13,17 +13,17 @@ class ViewTest extends AgaviTestCase
 
 	public function setUp()
 	{
-		AgaviContext::getInstance('test')->initialize();
-		$request = AgaviContext::getInstance('test')->getRequest();
+		$ctx = AgaviContext::getInstance('test');
+		$ctx->initialize();
+		$request = $ctx->getRequest();
 		
 		ob_start();
-		AgaviContext::getInstance('test')->getController()->dispatch(array($request->getModuleAccessor() => 'Test', $request->getActionAccessor() => 'Test'));
+		$ctx->getController()->dispatch(array($request->getModuleAccessor() => 'Test', $request->getActionAccessor() => 'Test'));
 		ob_end_clean();
 		
-		$this->_r = new NoHeadersAgaviWebResponse();
-		$this->_r->initialize(AgaviContext::getInstance('test'));
 		$this->_v = new SampleView();
-		$this->_v->initialize($this->_r);
+		$this->_v->initialize($ct = $ctx->getController()->createExecutionContainer('Test', 'Test'));
+		$this->_r = $ct->getResponse();
 	}
 
 	public function testInitialize()
@@ -35,9 +35,6 @@ class ViewTest extends AgaviTestCase
 		$r_test = $v->getResponse();
 		$this->assertReference($ctx, $ctx_test);
 		$this->assertReference($this->_r, $r_test);
-
-		$this->assertEquals($ctx->getController()->getModuleDirectory() . '/templates', $v->getDecoratorDirectory());
-		$this->assertEquals($ctx->getController()->getModuleDirectory() . '/templates', $v->getDirectory());
 
 		$this->assertNull($v->getDecoratorTemplate());
 		$this->assertNull($v->getTemplate());

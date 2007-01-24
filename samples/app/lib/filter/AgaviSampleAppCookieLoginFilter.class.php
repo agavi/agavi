@@ -20,19 +20,20 @@ class AgaviSampleAppCookieLoginFilter extends AgaviFilter implements AgaviIGloba
 	 * Execute this filter.
 	 *
 	 * @param      AgaviFilterChain The filter chain.
+	 * @param      AgaviExecutionContainer The current execution container.
 	 *
 	 * @throws     <b>AgaviFilterException</b> If an error occurs during execution.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function execute(AgaviFilterChain $filterChain, AgaviResponse $response)
+	public function execute(AgaviFilterChain $filterChain, AgaviExecutionContainer $container)
 	{
-		$req = $this->getContext()->getRequest();
+		$reqData = $this->getContext()->getRequest()->getRequestData();
 		$usr = $this->getContext()->getUser();
 		
-		if(!$usr->isAuthenticated() && $req->hasCookie('autologon')) {
-			$login = $req->getCookie('autologon');
+		if(!$usr->isAuthenticated() && $reqData->hasCookie('autologon')) {
+			$login = $reqData->getCookie('autologon');
 			try {
 				$usr->login($login['username'], $login['password']);
 			} catch(AgaviSecurityException $e) {
@@ -42,7 +43,7 @@ class AgaviSampleAppCookieLoginFilter extends AgaviFilter implements AgaviIGloba
 			}
 		}
 		
-		$filterChain->execute($filterChain, $response);
+		$filterChain->execute($container);
 	}
 }
 

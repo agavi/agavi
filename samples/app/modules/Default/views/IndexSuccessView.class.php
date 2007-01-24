@@ -14,7 +14,7 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
-class Default_IndexSuccessView extends AgaviView
+class Default_IndexSuccessView extends AgaviSampleAppDefaultBaseView
 {
 
 	/**
@@ -23,11 +23,9 @@ class Default_IndexSuccessView extends AgaviView
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function execute(AgaviParameterHolder $parameters)
+	public function executeHtml(AgaviRequestDataHolder $r)
 	{
-		// set our template
-		$this->setTemplate('IndexSuccess');
-		$this->setDecoratorTemplate('Master');
+		parent::executeHtml($r);
 		
 		// set the title
 		$this->setAttribute('title', $this->getContext()->getTranslationManager()->_('Welcome to the Agavi Sample Application', 'default.layout'));

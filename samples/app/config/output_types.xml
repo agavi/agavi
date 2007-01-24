@@ -11,49 +11,47 @@
 | "%" signs. Example: %core.agavi_dir%                                         |
 +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
 -->
-<configurations>
+<configurations xmlns:xi="http://www.w3.org/2001/XInclude">
 	
 	<configuration context="web">
 		<output_types default="html">
 			
 			<output_type name="html">
-				<renderer class="AgaviPhpRenderer">
-					<parameters>
-						<parameter name="assigns">
-							<parameters>
-								<parameter name="routing">r</parameter>
-								<parameter name="request">req</parameter>
-								<parameter name="controller">ctl</parameter>
-								<parameter name="user">usr</parameter>
-								<parameter name="translation_manager">tm</parameter>
-							</parameters>
-						</parameter>
-						<parameter name="i18n">
-							<parameters>
-								<parameter name="mode">subdir</parameter>
-							</parameters>
-						</parameter>
-					</parameters>
-				</renderer>
+				<renderers default="php">
+					<renderer name="php" class="AgaviPhpRenderer">
+						<parameters>
+							<parameter name="assigns">
+								<parameters>
+									<parameter name="routing">r</parameter>
+									<parameter name="request">req</parameter>
+									<parameter name="controller">ctl</parameter>
+									<parameter name="user">usr</parameter>
+									<parameter name="translation_manager">tm</parameter>
+								</parameters>
+							</parameter>
+						</parameters>
+					</renderer>
+				</renderers>
+				<layouts default="default"> 
+					<layout name="default"> 
+						<layers> 
+							<layer name="content" class="AgaviFileTemplateLayer" />
+							<layer name="decorator" class="AgaviFileTemplateLayer">
+								<parameters> 
+									<parameter name="template">Master</parameter>
+								</parameters>
+							</layer>
+						</layers>
+					</layout>
+				</layouts>
 				<parameters>
 					<parameter name="Content-Type">text/html; charset=UTF-8</parameter>
 				</parameters>
 			</output_type>
 			
 			<output_type name="xhtml">
-				<renderer class="AgaviPhpRenderer">
-					<parameters>
-						<parameter name="assigns">
-							<parameters>
-								<parameter name="routing">r</parameter>
-								<parameter name="request">req</parameter>
-								<parameter name="controller">ctl</parameter>
-								<parameter name="user">usr</parameter>
-								<parameter name="translation_manager">tm</parameter>
-							</parameters>
-						</parameter>
-					</parameters>
-				</renderer>
+				<xi:include href="#xpointer(//configurations/configuration[@context='web']/output_types/output_type[@name='html']/renderers)" />
+				<xi:include href="#xpointer(//configurations/configuration[@context='web']/output_types/output_type[@name='html']/layouts)" />
 				<parameters>
 					<parameter name="Content-Type">application/xhtml+xml; charset=UTF-8</parameter>
 				</parameters>

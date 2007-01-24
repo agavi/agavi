@@ -100,7 +100,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	protected $name = null;
 
 	/**
-	 * @var        AgaviParameterHolder The parameters which should be validated
+	 * @var        AgaviRequestDataHolder The parameters which should be validated
 	 *                                  in the current validation run.
 	 */
 	protected $validationParameters = null;
@@ -233,12 +233,17 @@ abstract class AgaviValidator extends AgaviParameterHolder
 		$this->arguments = $arguments;
 		$this->errorMessages = $errors;
 
-		if(!isset($parameters['depends']) or !is_array($parameters['depends'])) {
+		if(!isset($parameters['depends']) || !is_array($parameters['depends'])) {
 			$parameters['depends'] = (isset($parameters['depends']) and strlen($parameters['depends'])) ? explode(' ', $parameters['depends']) : array();
 		}
-		if(!isset($parameters['provides']) or !is_array($parameters['provides'])) {
+		if(!isset($parameters['provides']) || !is_array($parameters['provides'])) {
 			$parameters['provides'] = (isset($parameters['provides']) and strlen($parameters['provides'])) ? explode(' ', $parameters['provides']) : array();
 		}
+
+		if(!isset($parameters['source'])) {
+			$parameters['source'] = AgaviRequestDataHolder::SOURCE_PARAMETERS;
+		}
+
 
 		if(isset($parameters['method'])) {
 			foreach(explode(' ', $parameters['method']) as $method) {
@@ -326,7 +331,8 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 */
 	protected function & getData($paramName)
 	{
-		$array =& $this->validationParameters->getParameters();
+		$paramType = $this->getParameter('source');
+		$array =& $this->validationParameters->getAll($paramType);
 		return $this->curBase->getValueByChildPath($paramName, $array);
 	}
 
@@ -390,14 +396,14 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	protected function checkAllArgumentsSet($throwError = true)
 	{
 		$isRequired = $this->getParameter('required', true);
+		$paramType = $this->getParameter('source');
 		$result = true;
 
-		$array = $this->validationParameters->getParameters();
 		$baseParts = $this->curBase->getParts();
 		foreach($this->getArguments() as $argument) {
 			$new = $this->curBase->pushRetNew($argument);
 			$pName = $this->curBase->pushRetNew($argument)->__toString();
-			if(!$this->validationParameters->hasParameter($pName) || $this->validationParameters->getParameter($pName) === "") {
+			if(!$this->validationParameters->has($paramType, $pName) || $this->validationParameters->get($paramType, $pName) === "") {
 				if($throwError && $isRequired) {
 					$this->throwError(null, $pName);
 				}
@@ -500,7 +506,9 @@ abstract class AgaviValidator extends AgaviParameterHolder
 			return;
 		}
 
-		$array =& $this->validationParameters->getParameters();
+		$paramType = $this->getParameter('source');
+
+		$array =& $this->validationParameters->getAll($paramType);
 		$cp = $this->curBase->pushRetNew($name);
 		$cp->setValueFromArray($array, $value);
 		$this->getContext()->getValidationManager()->addFieldResult($this, $cp->__toString(), AgaviValidator::NOT_PROCESSED);
@@ -623,15 +631,19 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	/**
 	 * Executes the validator.
 	 *
-	 * @param      AgaviParameterHolder The parameters which should be validated.
+	 * @param      AgaviRequestDataHolder The data which should be validated.
 	 *
 	 * @return     int The validation result (see severity constants).
 	 *
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
-	public function execute(AgaviParameterHolder $parameters)
+	public function execute(AgaviRequestDataHolder $parameters)
 	{
+		if($this->getParameter('source') != AgaviRequestDataHolder::SOURCE_PARAMETERS && !in_array($this->getParameter('source'), $parameters->getSourceNames())) {
+			throw new AgaviConfigurationException('Unknown source "' . $this->getParameter('source') . '" specified in validator ' . $this->getName());
+		}
+
 		$this->validationParameters = $parameters;
 		$base = new AgaviVirtualArrayPath($this->getParameter('base'));
 
@@ -685,7 +697,9 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 */
 	protected function getKeysInCurrentBase()
 	{
-		$array = $this->validationParameters->getParameters();
+		$paramType = $this->getParameter('source');
+
+		$array = $this->validationParameters->getAll($paramType);
 		$names = $this->curBase->getValue($array, array());
 
 		return array_keys($names);

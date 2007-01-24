@@ -3,7 +3,6 @@
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
 // | Copyright (c) 2003-2006 the Agavi Project.                                |
-// | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -15,46 +14,21 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviConsoleController allows you to centralize your entry point in your web
- * application, but at the same time allow for any module and action combination
- * to be requested.
+ * This interface can be implemented by Renderers to indicate that their
+ * instances may be used more than once for rendering.
  *
  * @package    agavi
- * @subpackage controller
+ * @subpackage renderer
  *
- * @author     Sean Kerr <skerr@mojavi.org>
+ * @author     David Zuelke <dz@bitxtender.com>
  * @author     Agavi Project <info@agavi.org>
  * @copyright  (c) Authors
- * @since      0.9.0
+ * @since      0.11.0
  *
  * @version    $Id$
  */
-class AgaviConsoleController extends AgaviController
+interface AgaviIReusableRenderer
 {
-	/**
-	 * Initialize this controller.
-	 *
-	 * @param      AgaviResponse An AgaviResponse instance.
-	 * @param      array         An array of initialization parameters.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function initialize(AgaviResponse $response, array $parameters = array())
-	{
-		// initialize parent
-		parent::initialize($response, $parameters);
-
-		ini_set('arg_separator.output', AgaviConfig::get('php.arg_separator.output', '&'));
-	}
-	
-	/**
-	 * This method is not implemented in the console controller!
-	 */
-	public function redirect($to)
-	{
-		throw new AgaviException('N/A');
-	}
 }
 
 ?>

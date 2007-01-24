@@ -8,9 +8,9 @@
 | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
 | The default configuration must at least define:                            |
 |                                                                            |
-|  action_stack            - The ActionStack class implementation.           |
 |  controller              - The Controller class implementation.            |
 |  dispatch_filter         - The DispatchFilter class implementation.        |
+|  execution_container   - The ExecutionContainer class implementation.      |
 |  execution_filter        - The ExecutionFilter class implementation.       |
 |  filter_chain            - The FilterChain class implementation.           |
 |  request                 - The Request class implementation.               |
@@ -34,13 +34,13 @@
 	
 	<configuration>
 		
-		<action_stack class="AgaviActionStack" />
-		
-		<controller class="AgaviWebController" />
+		<controller class="AgaviController" />
 		
 		<database_manager class="AgaviDatabaseManager" />
 		
 		<dispatch_filter class="AgaviDispatchFilter" />
+		
+		<execution_container class="AgaviExecutionContainer" />
 		
 		<execution_filter class="AgaviExecutionFilter" />
 		

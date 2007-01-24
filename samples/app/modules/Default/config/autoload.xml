@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<configurations>
+	<configuration>
+		<autoloads>
+			<autoload name="AgaviSampleAppDefaultBaseAction">%core.module_dir%/Default/lib/action/AgaviSampleAppDefaultBaseAction.class.php</autoload>
+			
+			<autoload name="AgaviSampleAppDefaultBaseView">%core.module_dir%/Default/lib/view/AgaviSampleAppDefaultBaseView.class.php</autoload>
+		</autoloads>
+	</configuration>
+</configurations>

@@ -90,11 +90,8 @@ class AgaviXmlrpcepiphpResponse extends AgaviResponse
 	 */
 	public function clearContent()
 	{
-		if(!$this->locked) {
-			$this->content = array();
-			return true;
-		}
-		return false;
+		$this->content = array();
+		return true;
 	}
 	
 	/**
@@ -103,11 +100,9 @@ class AgaviXmlrpcepiphpResponse extends AgaviResponse
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function send()
+	public function send(AgaviOutputType $outputType)
 	{
-		$oti = $this->context->getController()->getOutputTypeInfo();
-		
-		$outputOptions = array_merge(array('encoding' => 'utf-8', 'escaping' => array('markup', 'non-print')), isset($oti['parameters']['encoding']) ? array('encoding' => $oti['parameters']['encoding']) : array(), (array) $this->getParameter('output_options'));
+		$outputOptions = array_merge(array('encoding' => $outputType->getParameter('encoding', 'utf-8'), 'escaping' => array('markup', 'non-print')), (array) $this->getParameter('output_options'));
 		
 		$this->content = xmlrpc_encode_request(null, $this->content, $outputOptions);
 		
@@ -125,11 +120,9 @@ class AgaviXmlrpcepiphpResponse extends AgaviResponse
 	 */
 	public function clear()
 	{
-		if(!$this->locked) {
-			$this->clearContent();
-			$this->httpHeaders = array();
-			$this->cookies = array();
-		}
+		$this->clearContent();
+		$this->httpHeaders = array();
+		$this->cookies = array();
 	}
 }
 

@@ -19,8 +19,7 @@
  * such as the module and action names and the module directory. 
  * It also serves as a gateway to the core pieces of the framework, allowing
  * objects with access to the context, to access other useful objects such as
- * the current controller, request, user, actionstack, databasemanager, storage,
- * and loggingmanager.
+ * the current controller, request, user, database manager etc.
  *
  * @package    agavi
  * @subpackage core
@@ -44,8 +43,8 @@ final class AgaviContext
 	 * @var        array An array of class names for frequently used factories.
 	 */
 	protected $factories = array(
-		'action_stack' => null,
 		'dispatch_filter' => null,
+		'execution_container' => null,
 		'execution_filter' => null,
 		'filter_chain' => null,
 		'security_filter' => null
@@ -213,7 +212,7 @@ final class AgaviContext
 			if($profile === null) {
 				$profile = AgaviConfig::get('core.default_context');
 				if($profile === null) {
-					throw new AgaviException('You must supply an environment name to AgaviContext::getInstance() or set the name of the default environment to be used in the configuration directive "core.default_context".');
+					throw new AgaviException('You must supply a context name to AgaviContext::getInstance() or set the name of the default context to be used in the configuration directive "core.default_context".');
 				}
 			}
 			$profile = strtolower($profile);
@@ -262,7 +261,11 @@ final class AgaviContext
 		
 		$this->name = $profile;
 		
-		include(AgaviConfigCache::checkConfig(AgaviConfig::get('core.config_dir') . '/factories.xml', $profile));
+		try {
+			include(AgaviConfigCache::checkConfig(AgaviConfig::get('core.config_dir') . '/factories.xml', $profile));
+		} catch(Exception $e) {
+			AgaviException::printStackTrace($e, $this);
+		}
 		
 		register_shutdown_function(array($this, 'shutdown'));
 	}

@@ -14,7 +14,7 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
-class Default_LoginInputView extends AgaviView
+class Default_LoginInputView extends AgaviSampleAppDefaultBaseView
 {
 
 	/**
@@ -23,12 +23,10 @@ class Default_LoginInputView extends AgaviView
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function execute(AgaviParameterHolder $parameters)
+	public function executeHtml(AgaviRequestDataHolder $r)
 	{
-		// set our template
-		$this->setTemplate('LoginInput');
-		$this->setDecoratorTemplate('Master');
-
+		parent::executeHtml($r);
+		
 		// set the title
 		$this->setAttribute('title', $this->getContext()->getTranslationManager()->_('Login', 'default.Login'));
 		

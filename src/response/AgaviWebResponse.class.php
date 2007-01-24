@@ -94,6 +94,11 @@ class AgaviWebResponse extends AgaviResponse
 	protected $cookies = array();
 	
 	/**
+	 * @var        array An array of rediret information, or null if no redirect.
+	 */
+	protected $redirect = null;
+	
+	/**
 	 * Initialize this Response.
 	 *
 	 * @param      AgaviContext An AgaviContext instance.
@@ -118,13 +123,23 @@ class AgaviWebResponse extends AgaviResponse
 	/**
 	 * Send all response data to the client.
 	 *
+	 * @param      AgaviOutputType An optional Output Type object with information
+	 *                             the response can use to send additional data,
+	 *                             such as HTTP headers
+	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function send()
+	public function send(AgaviOutputType $outputType = null)
 	{
-		$this->sendHttpResponseHeaders();
-		$this->sendContent();
+		if($this->redirect) {
+			$this->setHttpHeader('Location', $this->redirect['location']);
+			$this->setHttpStatusCode($this->redirect['code']);
+		}
+		$this->sendHttpResponseHeaders($outputType);
+		if(!$this->redirect) {
+			$this->sendContent();
+		}
 	}
 	
 	/**
@@ -135,115 +150,9 @@ class AgaviWebResponse extends AgaviResponse
 	 */
 	public function clear()
 	{
-		if(!$this->locked) {
-			$this->clearContent();
-			$this->httpHeaders = array();
-			$this->cookies = array();
-		}
-	}
-	
-	/**
-	 * Export the contents of this response.
-	 *
-	 * @return     array An array of data.
-	 *
-	 * @author     David Zuelke <du@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function export()
-	{
-		return array_merge(parent::export(), array('httpStatusCode' => $this->getHttpStatusCode(), 'httpHeaders' => $this->getHttpHeaders(), 'cookies' => $this->cookies));
-	}
-	
-	/**
-	 * Export the information data (e.g. HTTP Headers, Cookies) for this response.
-	 *
-	 * @return     array An array of data.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function exportInfo()
-	{
-		return array_merge(parent::exportInfo(), array('httpStatusCode' => $this->getHttpStatusCode(), 'httpHeaders' => $this->getHttpHeaders(), 'cookies' => $this->cookies));
-	}
-	
-	/**
-	 * Import data for this response.
-	 *
-	 * @param      array An array of data.
-	 *
-	 * @return     bool Whether or not the operation was successful.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function import(array $data)
-	{
-		if(!$this->locked) {
-			if(isset($data['httpStatusCode'])) {
-				$this->httpStatusCode = $data['httpStatusCode'];
-			}
-			if(isset($data['httpHeaders'])) {
-				$this->httpHeaders = $data['httpHeaders'];
-			}
-			if(isset($data['cookies'])) {
-				$this->cookies = $data['cookies'];
-			}
-			return parent::import($data) && true;
-		}
-		parent::import($data);
-		return false;
-	}
-	
-	/**
-	 * Merge in data for this response.
-	 *
-	 * @param      array An array of data.
-	 *
-	 * @return     bool Whether or not the operation was successful.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function merge(array $data)
-	{
-		$retval = parent::merge($data);
-		if(!$this->locked) {
-			if(isset($data['cookies'])) {
-				$this->cookies = array_merge($data['cookies'], $this->cookies);
-			}
-			return $retval && true;
-		}
-		return $retval && false;
-	}
-	
-	/**
-	 * Append data to this response.
-	 *
-	 * @param      array An array of data.
-	 *
-	 * @return     bool Whether or not the operation was successful.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function append(array $data)
-	{
-		$retval = parent::append($data);
-		if(!$this->locked) {
-			if(isset($data['httpStatusCode'])) {
-				$this->httpStatusCode = $data['httpStatusCode'];
-			}
-			if(isset($data['httpHeaders'])) {
-				$this->httpHeaders = array_merge($this->httpHeaders, $data['httpHeaders']);
-			}
-			if(isset($data['cookies'])) {
-				$this->cookies = array_merge($this->cookies, $data['cookies']);
-			}
-			return $retval && true;
-		}
-		return $retval && false;
+		$this->clearContent();
+		$this->httpHeaders = array();
+		$this->cookies = array();
 	}
 	
 	/**
@@ -276,6 +185,31 @@ class AgaviWebResponse extends AgaviResponse
 			return null;
 		}
 	}
+	
+	/**
+	 * Import response metadata (headers, cookies) from another response.
+	 *
+	 * @param      AgaviResponse The other response to import information from.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function merge(AgaviResponse $otherResponse)
+	{
+		if($otherResponse instanceof AgaviWebResponse) {
+			foreach($otherResponse->getHttpHeaders() as $name => $value) {
+				if(!$this->hasHttpHeader($name)) {
+					$this->setHttpHeader($name, $value);
+				}
+			}
+			foreach($otherResponse->getCookies() as $name => $cookie) {
+				if(!$this->hasCookie($name)) {
+					$this->setCookie($name, $cookie['value'], $cookie['lifetime'], $cookie['path'], $cookie['domain'], $cookie['secure'], $cookie['httpOnly']);
+				}
+			}
+		}
+	}
+	
 	
 	/**
 	 * Sets a HTTP status code for the response.
@@ -409,28 +343,28 @@ class AgaviWebResponse extends AgaviResponse
 	 * Send a cookie.
 	 *
 	 * @param      string A cookie name.
-	 * @param      mixed Data to store into a cookie. If null or empty cookie
-	 *                   will be tried to be removed.
+	 * @param      mixed  Data to store into a cookie. If null or empty cookie
+	 *                    will be tried to be removed.
 	 * @param      int    The lifetime of the cookie in seconds. When you pass 0 
-	 *                    the cookie will be valid until the  browser gets closed.
+	 *                    the cookie will be valid until the browser is closed.
 	 * @param      string The path on the server the cookie will be available on.
 	 * @param      string The domain the cookie is available on.
 	 * @param      bool   Indicates that the cookie should only be transmitted 
 	 *                    over a secure HTTPS connection.
 	 * @param      bool   Whether the cookie will be made accessible only through
-	 *                    the HTTP protocol.
+	 *                    the HTTP protocol, and not to client-side scripts.
 	 *
 	 * @author     Veikko Makinen <mail@veikkomakinen.com>
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function setCookie($name, $value, $lifetime = null, $path = null, $domain = null, $secure = null, $httpOnly = false)
+	public function setCookie($name, $value, $lifetime = null, $path = null, $domain = null, $secure = null, $httpOnly = null)
 	{
-		$lifetime = isset($lifetime) ? $lifetime : $this->cookieConfig['lifetime'];
-		$path     = isset($path)     ? $path     : $this->cookieConfig['path'];
-		$domain   = isset($domain)   ? $domain   : $this->cookieConfig['domain'];
-		$secure   = (bool) (isset($secure)   ? $secure   : $this->cookieConfig['secure']);
-		$httpOnly = (bool) (isset($httpOnly) ? $httpOnly : $this->cookieConfig['httpOnly']);
+		$lifetime =         $lifetime !== null ? $lifetime : $this->cookieConfig['lifetime'];
+		$path     =         $path !== null     ? $path     : $this->cookieConfig['path'];
+		$domain   =         $domain !== null   ? $domain   : $this->cookieConfig['domain'];
+		$secure   = (bool) ($secure !== null   ? $secure   : $this->cookieConfig['secure']);
+		$httpOnly = (bool) ($httpOnly !== null ? $httpOnly : $this->cookieConfig['httpOnly']);
 
 		$this->cookies[$name] = array(
 			'value' => $value,
@@ -441,7 +375,74 @@ class AgaviWebResponse extends AgaviResponse
 			'httpOnly' => $httpOnly
 		);
 	}
-
+	
+	/**
+	 * Get a cookie set for later sending.
+	 *
+	 * @param      string The name of the cookie.
+	 *
+	 * @return     array An associative array containing the cookie data or null
+	 *                   if no cookie with that name has been set.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getCookie($name)
+	{
+		if(isset($this->cookies[$name])) {
+			return $this->cookies[$name];
+		}
+	}
+	
+	/**
+	 * Check if a cookie has been set for later sending.
+	 *
+	 * @param      string The name of the cookie.
+	 *
+	 * @return     bool True if a cookie with that name has been set, else false.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function hasCookie($name)
+	{
+		return isset($this->cookies[$name]);
+	}
+	
+	/**
+	 * Remove a cookie previously set for later sending.
+	 *
+	 * This method cannot be used to unset a cookie. It's purpose is to remove a
+	 * cookie from the list of cookies to be sent along with the response. If you
+	 * wish to remove an existing cookie, use the setCookie method and supply null
+	 * as the value.
+	 *
+	 * @param      string The name of the cookie.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function removeCookie($name)
+	{
+		if(isset($this->cookies[$name])) {
+			unset($this->cookies[$name]);
+		}
+	}
+	
+	/**
+	 * Get a list of cookies set for later sending.
+	 *
+	 * @return     array An associative array of cookie names (key) and cookie
+	 *                   information (value, associative array).
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getCookies()
+	{
+		return $this->cookies;
+	}
+	
 	/**
 	 * Remove the HTTP header set for the response
 	 *
@@ -480,7 +481,7 @@ class AgaviWebResponse extends AgaviResponse
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	protected function sendHttpResponseHeaders()
+	protected function sendHttpResponseHeaders(AgaviOutputType $outputType = null)
 	{
 		$file = $line = '';
 		if(headers_sent($file, $line)) {
@@ -494,10 +495,8 @@ class AgaviWebResponse extends AgaviResponse
 			header($this->httpStatusCodes[$this->httpStatusCode]);
 		}
 		
-		$oti = $this->context->getController()->getOutputTypeInfo();
-		
-		if($this->getContentType() === null && isset($oti['parameters']['Content-Type'])) {
-			$this->setContentType($oti['parameters']['Content-Type']);
+		if($this->getContentType() === null && $outputType instanceof AgaviOutputType && $outputType->hasParameter('Content-Type')) {
+		 	$this->setContentType($outputType->getParameter('Content-Type'));
 		}
 		
 		// send headers
@@ -528,6 +527,18 @@ class AgaviWebResponse extends AgaviResponse
 		}
 	}
 
+	/**
+	 * Redirect externally.
+	 *
+	 * @param      mixed Where to redirect.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function setRedirect($location, $code = 302)
+	{
+		$this->redirect = array('location' => $location, 'code' => $code);
+	}
 }
 
 ?>

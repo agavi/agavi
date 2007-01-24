@@ -14,7 +14,7 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
-class Default_ModuleDisabledSuccessView extends AgaviView
+class Default_ModuleDisabledSuccessView extends AgaviSampleAppDefaultBaseView
 {
 
 	/**
@@ -23,12 +23,10 @@ class Default_ModuleDisabledSuccessView extends AgaviView
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function execute(AgaviParameterHolder $parameters)
+	public function executeHtml(AgaviRequestDataHolder $r)
 	{
-		// set our template
-		$this->setTemplate('ModuleDisabledSuccess');
-		$this->setDecoratorTemplate('Master');
-
+		parent::executeHtml($r);
+		
 		// set the title
 		$this->setAttribute('title', $this->getContext()->getTranslationManager()->_('This Module is Disabled', 'default.ErrorActions'));
 	}

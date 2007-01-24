@@ -28,7 +28,7 @@
  *
  * @version    $Id$
  */
-class AgaviXslRenderer extends AgaviRenderer
+class AgaviXslRenderer extends AgaviRenderer implements AgaviIReusableRenderer
 {
 	/**
 	 * @var	       XSLTProcessor Processor for loading XSL templates.
@@ -65,7 +65,7 @@ class AgaviXslRenderer extends AgaviRenderer
 	 * @var        string A string with the default template file extension,
 	 *                    including the dot.
 	 */
-	protected $extension            = '.xsl';
+	protected $defaultExtension     = '.xsl';
 	
 	/**
 	 * @var        string The plural form of the template variable name.
@@ -270,7 +270,17 @@ class AgaviXslRenderer extends AgaviRenderer
 	{
 		return $this->xslEngine;
 	}
-
+	
+	/**
+	 * Reset the engine for re-use
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	protected function reset()
+	{
+	}
+	
 	/**
 	 * Render the presentation to the Response.
 	 *
@@ -313,30 +323,21 @@ class AgaviXslRenderer extends AgaviRenderer
 		$this->setXml($this->xmlEngineAttributes, $this->singularVarName, $this->view->getAttributes());
 		$output = $this->xslEngine->transformToDoc($this->xmlEngine);
 		
-		if($this->context->getController()->getRenderMode() == AgaviView::RENDER_CLIENT) {
-			if($this->view->isDecorator()) {
-				$display = '';
-				for($node = $output->firstChild;
-					$node;
-					$node = $node->nextSibling
-				) {
-					$display .= $output->saveXML($node);
-				}
-				
-				$this->response->setContent($this->decorate($display, false));
-			} else {
-				$output->version = $this->xmlEngine->version;
-				$output->encoding = $this->xmlEngine->encoding;
-				
-				$this->response->setContent($output->saveXML());
-			}
-		} elseif($this->context->getController()->getRenderMode() == AgaviView::RENDER_VAR) {
+		if($this->view->isDecorator()) {
+			$display = '';
 			for($node = $output->firstChild;
 				$node;
 				$node = $node->nextSibling
 			) {
-				$this->response->appendContent($output->saveXML($node));
+				$display .= $output->saveXML($node);
 			}
+			
+			$this->response->setContent($this->decorate($display, false));
+		} else {
+			$output->version = $this->xmlEngine->version;
+			$output->encoding = $this->xmlEngine->encoding;
+				
+			$this->response->setContent($output->saveXML());
 		}
 	}
 }

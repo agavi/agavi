@@ -29,7 +29,7 @@
  *
  * @version    $Id$
  */
-abstract class AgaviView extends AgaviAttributeHolder
+abstract class AgaviView
 {
 	/**
 	 * @since      0.9.0
@@ -58,55 +58,33 @@ abstract class AgaviView extends AgaviAttributeHolder
 	const RENDER_VAR = 4;
 
 	/**
+	 * @var        AgaviExecutionContainer This view's execution container.
+	 */
+	protected $container = null;
+	
+	/**
 	 * @var        AgaviContext The AgaviContext instance this View belongs to.
 	 */
 	protected $context = null;
 	
 	/**
-	 * @var        AgaviResponse The Response object for this Action/View.
+	 * @var        array An array of defined layers.
 	 */
-	protected $response = null;
-	
-	/**
-	 * @var        bool Whether or not this View is configured to use a decorator.
-	 */
-	protected $decorator = false;
-	
-	/**
-	 * @var        string The Decorator template directory.
-	 */
-	protected $decoratorDirectory = null;
-	
-	/**
-	 * @var        array An array containing decorator filename and "literal" flag
-	 */
-	protected $decoratorTemplate = null;
-	
-	/**
-	 * @var        string The directory of the template.
-	 */
-	protected $directory = null;
-	
-	/**
-	 * @var        array The slots to be used in the Decorator.
-	 */
-	protected $slots = array();
-	
-	/**
-	 * @var        array An array containing template file name and "literal" flag
-	 */
-	protected $template = null;
+	protected $layers = array();
 	
 	/**
 	 * Execute any presentation logic and set template attributes.
 	 *
-	 * @return     AgaviParameterHolder An array of forwarding information in case
-	 *                                  a forward should occur, otherwise null.
+	 * @param      AgaviRequestDataHolder The action's request data holder.
+	 *
+	 * @return     AgaviExecutionContainer An array of forwarding information in
+	 *                                     case a forward should occur, or null.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
-	abstract function execute(AgaviParameterHolder $parameters);
+	abstract function execute(AgaviRequestDataHolder $r);
 
 	/**
 	 * Retrieve the current application context.
@@ -122,6 +100,19 @@ abstract class AgaviView extends AgaviAttributeHolder
 	}
 
 	/**
+	 * Retrieve the execution container for this action.
+	 *
+	 * @return     AgaviExecutionContainer This action's execution container.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public final function getContainer()
+	{
+		return $this->container;
+	}
+
+	/**
 	 * Retrieve the Response instance for this View.
 	 *
 	 * @return     AgaviResponse The Response instance.
@@ -131,76 +122,7 @@ abstract class AgaviView extends AgaviAttributeHolder
 	 */
 	public final function getResponse()
 	{
-		return $this->response;
-	}
-
-	/**
-	 * Retrieve this views decorator template directory.
-	 *
-	 * @return     string An absolute filesystem path to this views decorator
-	 *                    template directory.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public function getDecoratorDirectory()
-	{
-		return $this->decoratorDirectory;
-	}
-
-	/**
-	 * Retrieve this views decorator template.
-	 *
-	 * @return     string A template filename, if a template has been set,
-	 *                    otherwise null.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public function getDecoratorTemplate()
-	{
-		return $this->decoratorTemplate;
-	}
-
-	/**
-	 * Retrieve this views template directory.
-	 *
-	 * @return     string An absolute filesystem path to this views template
-	 *                    directory.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public function getDirectory()
-	{
-		return $this->directory;
-	}
-
-	/**
-	 * Retrieve an array of specified slots for the decorator template.
-	 *
-	 * @return     array An associative array of decorator slots.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public function getSlots()
-	{
-		return $this->slots;
-	}
-
-	/**
-	 * Retrieve this views template.
-	 *
-	 * @return     string A template filename, if a template has been set,
-	 *                    otherwise null.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public function getTemplate()
-	{
-		return $this->template;
+		return $this->container->getResponse();
 	}
 
 	/**
@@ -213,174 +135,241 @@ abstract class AgaviView extends AgaviAttributeHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function initialize(AgaviResponse $response, array $attributes = array())
+	public function initialize(AgaviExecutionContainer $container)
 	{
-		$this->context = $response->getContext();
+		$this->container = $container;
 		
-		$this->response = $response;
-
-		// set the currently executing module's template directory as the
-		// default template directory
-		$this->directory = $this->decoratorDirectory = AgaviConfig::get('core.module_dir') . '/' . $this->context->getController()->getActionStack()->getLastEntry()->getViewModuleName() . '/templates';
+		$this->context = $container->getContext();
 		
-		$this->setAttributes($attributes);
+		$this->response = $container->getResponse();
 	}
 
-	/**
-	 * Indicates that this view is a decorating view.
-	 *
-	 * @return     bool true, if this view is a decorating view, otherwise 
-	 *                  false.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public function isDecorator()
+	public function createLayer($class, $name, $renderer = null)
 	{
-		return $this->decorator;
+		$layer = new $class();
+		if(!is_subclass_of($layer, 'AgaviTemplateLayer')) {
+			throw new AgaviViewException('Class "$class" is not a subclass of AgaviTemplateLayer');
+		}
+		$layer->initialize($this->context, array('name' => $name, 'module' => $this->container->getViewModuleName(), 'template' => $this->container->getViewName(), 'output_type' => $this->container->getOutputType()->getName()));
+		$layer->setRenderer($this->container->getOutputType()->getRenderer($renderer));
+		return $layer;
 	}
-
-	/**
-	 * Set the decorator template directory for this view.
-	 *
-	 * @param      string An absolute filesystem path to a template directory.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public function setDecoratorDirectory($directory)
+	
+	public function appendLayer(AgaviTemplateLayer $layer, AgaviTemplateLayer $otherLayer = null)
 	{
-		$this->decoratorDirectory = $directory;
-	}
-
-	/**
-	 * Set the decorator template for this view.
-	 *
-	 * If the template path is relative, it will be based on the currently
-	 * executing module's template sub-directory.
-	 *
-	 * @param      string An absolute or relative filesystem path to a template.
-	 * @param      bool   If set to true, the template name will be forced, i.e.
-	 *                    no extension defined by the Renderer or in the Output
-	 *                    Type configuration will be appended.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public function setDecoratorTemplate($template, $literal = false)
-	{
-		if(AgaviToolkit::isPathAbsolute($template)) {
-			$this->decoratorDirectory = dirname($template);
-			$this->decoratorTemplate  = array(basename($template), $literal);
+		if($otherLayer !== null && in_array($otherLayer, $this->layers, true)) {
+			throw new AgaviViewException('Layer "' . $otherLayer->getName() . '" not in list');
+		}
+		
+		if($pos = array_search($layer, $this->layers, true) !== false) {
+			// given layer is already in the list, so we remove it first
+			array_splice($this->layers, $pos, 1);
+		}
+		
+		if($otherLayer === null) {
+			$dest = count($this->layers);
 		} else {
-			$this->decoratorTemplate = array($template, $literal);
+			$dest = array_search($otherLayer, $this->layers, true) + 1;
 		}
-
-		// set decorator status
-		$this->decorator = true;
+		array_splice($this->layers, $dest, 0, array($layer));
+		
+		return $layer;
 	}
-
-	/**
-	 * Clears out a previously assigned decorator template and directory
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.10.0
-	 */
-	public function clearDecorator()
+	
+	public function prependLayer(AgaviTemplateLayer $layer, AgaviTemplateLayer $otherLayer = null)
 	{
-		$this->decoratorDirectory = null;
-		$this->decoratorTemplate  = null;
-		$this->decorator = false;
-	}
-
-	/**
-	 * Set the template directory for this view.
-	 *
-	 * @param      string An absolute filesystem path to a template directory.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public function setDirectory($directory)
-	{
-		$this->directory = $directory;
-	}
-
-	/**
-	 * Set the module and action to be executed in place of a particular
-	 * template attribute.
-	 *
-	 * If a slot with the name already exists, it will be overridden.
-	 *
-	 * @param      string A template attribute name.
-	 * @param      string A module name.
-	 * @param      string An action name.
-	 * @param      array  An array of additional parameters.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public function setSlot($attributeName, $moduleName, $actionName, $additionalParams = array())
-	{
-		$this->slots[$attributeName] = array(
-			'module_name' => $moduleName,
-			'action_name' => $actionName,
-			'additional_params' => $additionalParams,
-		);
-	}
-
-	/**
-	 * Set an array of slots.
-	 *
-	 * @see        AgaviView::setSlot()
-	 *
-	 * @param      array An array of slots
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.10.0
-	 */
-	public function setSlots($slots)
-	{
-		$this->slots = $slots;
-	}
-
-	/**
-	 * Empties the slots array, clearing all previously registered slots.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.10.0
-	 */
-	public function clearSlots()
-	{
-		$this->slots = array();
-	}
-
-	/**
-	 * Set the template for this view.
-	 *
-	 * If the template path is relative, it will be based on the currently
-	 * executing module's template sub-directory.
-	 *
-	 * @param      string An absolute or relative filesystem path to a template.
-	 * @param      bool   If set to true, the template name will be forced, i.e.
-	 *                    no extension defined by the Renderer or in the Output
-	 *                    Type configuration will be appended.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public function setTemplate($template = null, $literal = false)
-	{
-		if($template === null) {
-			$this->template = null;
-			return;
+		if($otherLayer !== null && in_array($otherLayer, $this->layers, true)) {
+			throw new AgaviViewException('Layer "' . $otherLayer->getName() . '" not in list');
 		}
-		if(AgaviToolkit::isPathAbsolute($template)) {
-			$this->directory = dirname($template);
-			$this->template  = array(basename($template), $literal);
+		
+		if($pos = array_search($layer, $this->layers, true) !== false) {
+			// given layer is already in the list, so we remove it first
+			array_splice($this->layers, $pos, 1);
+		}
+		
+		if($otherLayer === null) {
+			$dest = 0;
 		} else {
-			$this->template = array($template, $literal);
+			$dest = array_search($otherLayer, $this->layers, true);
 		}
+		array_splice($this->layers, $dest, 0, array($layer));
+		
+		return $layer;
+	}
+	
+	public function removeLayer(AgaviTemplateLayer $layer)
+	{
+		if(($pos = array_search($layer, $this->layers, true)) === false) {
+			throw new AgaviViewException('Layer "' . $otherLayer->getName() . '" not in list');
+		}
+		array_splice($this->layers, $pos, 1);
+	}
+	
+	public function clearLayers()
+	{
+		$this->layers = array();
+	}
+	
+	public function getLayer($name)
+	{
+		foreach($this->layers as $layer) {
+			if($name == $layer->getName()) {
+				return $layer;
+			}
+		}
+	}
+	
+	public function getLayers()
+	{
+		return $this->layers;
+	}
+	
+	public function loadLayout($layoutName = null)
+	{
+		$layout = $this->container->getOutputType()->getLayout($layoutName);
+		
+		$this->clearLayers();
+		
+		foreach($layout['layers'] as $name => $layer) {
+			$l = $this->createLayer($layer['class'], $name, $layer['renderer']);
+			$l->setParameters($layer['parameters']);
+			foreach($layer['slots'] as $slotName => $slot) {
+				$l->setSlot($slotName, $this->container->createExecutionContainer($slot['module'], $slot['action'], new AgaviRequestDataHolder(array('parameters' => $slot['parameters'])), $slot['output_type']));
+			}
+			$this->appendLayer($l);
+		}
+	}
+	
+	/**
+	 * @see        AgaviAttributeHolder::setAttributesByRef()
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.9.0
+	 */
+	public function clearAttributes()
+	{
+		$this->container->clearAttributes();
+	}
+
+	/**
+	 * @see        AgaviAttributeHolder::setAttributesByRef()
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.9.0
+	 */
+	public function & getAttribute($name, $default = null)
+	{
+		return $this->container->getAttribute($name, null, $default);
+	}
+
+	/**
+	 * @see        AgaviAttributeHolder::setAttributesByRef()
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.9.0
+	 */
+	public function getAttributeNames()
+	{
+		return $this->container->getAttributeNames();
+	}
+
+	/**
+	 * @see        AgaviAttributeHolder::setAttributesByRef()
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function & getAttributes()
+	{
+		return $this->container->getAttributes();
+	}
+
+	/**
+	 * @see        AgaviAttributeHolder::setAttributesByRef()
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.9.0
+	 */
+	public function hasAttribute($name)
+	{
+		return $this->container->hasAttribute($name);
+	}
+
+	/**
+	 * @see        AgaviAttributeHolder::setAttributesByRef()
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.9.0
+	 */
+	public function & removeAttribute($name)
+	{
+		return $this->container->removeAttribute($name);
+	}
+	
+	/**
+	 * @see        AgaviAttributeHolder::setAttributesByRef()
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.9.0
+	 */
+	public function setAttribute($name, $value)
+	{
+		$this->container->setAttribute($name, $value);
+	}
+
+	/**
+	 * @see        AgaviAttributeHolder::setAttributesByRef()
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.10.0
+	 */
+	public function appendAttribute($name, $value)
+	{
+		$this->container->appendAttribute($name, $value);
+	}
+
+	/**
+	 * @see        AgaviAttributeHolder::setAttributesByRef()
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.9.0
+	 */
+	public function setAttributeByRef($name, &$value)
+	{
+		$this->container->setAttributeByRef($name, $value);
+	}
+
+	/**
+	 * @see        AgaviAttributeHolder::setAttributesByRef()
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.10.0
+	 */
+	public function appendAttributeByRef($name, &$value)
+	{
+		$this->container->appendAttributeByRef($name, $value);
+	}
+
+	/**
+	 * @see        AgaviAttributeHolder::setAttributesByRef()
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.9.0
+	 */
+	public function setAttributes(array $attributes)
+	{
+		$this->container->setAttributes($attributes);
+	}
+
+	/**
+	 * @see        AgaviAttributeHolder::setAttributesByRef()
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.9.0
+	 */
+	public function setAttributesByRef(array &$attributes)
+	{
+		$this->container->setAttributesByRef($attributes);
 	}
 }
 

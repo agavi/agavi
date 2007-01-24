@@ -6,18 +6,18 @@ class TRTestSampleRenderer extends AgaviRenderer
 	{
 	}
 
-	public function render()
+	public function render(array $templateInfo, array &$attributes, array &$slots = array())
 	{
 	}
 }
 
 class TRTestSampleView extends AgaviView
 {
-	public function initialize(AgaviResponse $response, array $attributes = array())
+	public function initialize(AgaviExecutionContainer $container, array $attributes = array())
 	{
-		$this->context = $response->getContext();
-
-		$this->response = $response;
+		$this->context = $container->getContext();
+		$this->container = $container;
+		$this->response = $container->getResponse();
 	}
 
 	public function execute(AgaviParameterHolder $parameters)

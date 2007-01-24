@@ -222,6 +222,22 @@ final class AgaviToolkit
 	}
 
 	/**
+	 * Expand variables in a string.
+	 *
+	 * Variables can be in the form $foo, ${foo} or {$foo}.
+	 *
+	 * @param      string The format string.
+	 * @param      array  The variables to use.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public static function expandVariables($string, array $arguments = array())
+	{
+		return preg_replace(array('/\$\{([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)\}/e', '/\{\$([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)\}/e', '/\$([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)/e'), 'isset($arguments["$1"]) ? $arguments["$1"] : \'$0\'', $string);
+	}
+	
+	/**
 	 * This function takes the numerator and divides it thru the denominator while
 	 * storing the remainder and returning the quotient.
 	 *
