@@ -32,7 +32,11 @@ class Default_Error404SuccessView extends AgaviSampleAppDefaultBaseView
 		
 		$this->container->getResponse()->setHttpStatusCode('404');
 	}
-
+	
+	public function executeXmlrpc(AgaviRequestDataHolder $r)
+	{
+		$this->container->getResponse()->setHttpStatusCode('404');
+	}
 }
 
 ?>
