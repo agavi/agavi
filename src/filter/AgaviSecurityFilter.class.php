@@ -74,7 +74,7 @@ class AgaviSecurityFilter extends AgaviFilter implements AgaviIActionFilter, Aga
 					'requested_module' => $container->getModuleName(),
 					'requested_action' => $container->getActionName()
 				), 'org.agavi.controller.forwards.secure');
-				$container->setNext($controller->createExecutionContainer(AgaviConfig::get('actions.secure_module'), AgaviConfig::get('actions.secure_action')));
+				$container->setNext($container->createExecutionContainer(AgaviConfig::get('actions.secure_module'), AgaviConfig::get('actions.secure_action')));
 			}
 
 		} else {
@@ -83,7 +83,7 @@ class AgaviSecurityFilter extends AgaviFilter implements AgaviIActionFilter, Aga
 				'requested_module' => $container->getModuleName(),
 				'requested_action' => $container->getActionName()
 			), 'org.agavi.controller.forwards.login');
-			$container->setNext($controller->createExecutionContainer(AgaviConfig::get('actions.login_module'), AgaviConfig::get('actions.login_action')));
+			$container->setNext($container->createExecutionContainer(AgaviConfig::get('actions.login_module'), AgaviConfig::get('actions.login_action')));
 		}
 	}
 }

@@ -366,7 +366,9 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 				$request->toggleLock($key);
 				
 				if(is_array($next)) {
-					$container->setNext(call_user_func_array(array($controller, 'createExecutionContainer'), $next));
+					$container->setNext(call_user_func_array(array($container, 'createExecutionContainer'), $next));
+				} elseif($next instanceof AgaviExecutionContainer) {
+					$container->setNext($next);
 				} else {
 					$attributes =& $viewInstance->getAttributes();
 
