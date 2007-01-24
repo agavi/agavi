@@ -90,7 +90,6 @@ class AgaviStreamTemplateLayer extends AgaviTemplateLayer
 				}
 			}
 		}
-		die();
 		
 		// no template found, time to throw an exception
 		throw new AgaviException('Template "' . $template . '" could not be found.');
