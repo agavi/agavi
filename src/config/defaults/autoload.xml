@@ -51,10 +51,6 @@
 			<autoload name="AgaviTranslationConfigHandler">%core.agavi_dir%/config/AgaviTranslationConfigHandler.class.php</autoload>
 			<autoload name="AgaviValidatorConfigHandler">%core.agavi_dir%/config/AgaviValidatorConfigHandler.class.php</autoload>
 
-			<!-- agavi/controller -->
-			<autoload name="AgaviConsoleController">%core.agavi_dir%/controller/AgaviConsoleController.class.php</autoload>
-			<autoload name="AgaviWebController">%core.agavi_dir%/controller/AgaviWebController.class.php</autoload>
-
 			<!-- agavi/database -->
 			<autoload name="AgaviAdodbDatabase">%core.agavi_dir%/database/AgaviAdodbDatabase.class.php</autoload>
 			<autoload name="AgaviCreoleDatabase">%core.agavi_dir%/database/AgaviCreoleDatabase.class.php</autoload>

@@ -21,12 +21,13 @@
  * @subpackage controller
  *
  * @author     Sean Kerr <skerr@mojavi.org>
+ * @author     David Zuelke <dz@bitxtender.com>
  * @copyright  (c) Authors
  * @since      0.9.0
  *
  * @version    $Id$
  */
-abstract class AgaviController extends AgaviParameterHolder
+class AgaviController extends AgaviParameterHolder
 {
 	/**
 	 * @var        int The number of execution containers run so far.
@@ -217,19 +218,6 @@ abstract class AgaviController extends AgaviParameterHolder
 		return $this->response;
 	}
 	
-	/**
-	 * Redirect externally.
-	 *
-	 * @param      mixed Where to redirect.
-	 *
-	 * @return     AgaviResponse A reponse to work with since the others will be
-	 *                           locked down.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	abstract public function redirect($to);
-
 	/**
 	 * Retrieve an Action implementation instance.
 	 *

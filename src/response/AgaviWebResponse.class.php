@@ -94,6 +94,11 @@ class AgaviWebResponse extends AgaviResponse
 	protected $cookies = array();
 	
 	/**
+	 * @var        array An array of rediret information, or null if no redirect.
+	 */
+	protected $redirect = null;
+	
+	/**
 	 * Initialize this Response.
 	 *
 	 * @param      AgaviContext An AgaviContext instance.
@@ -127,8 +132,14 @@ class AgaviWebResponse extends AgaviResponse
 	 */
 	public function send(AgaviOutputType $outputType = null)
 	{
+		if($this->redirect) {
+			$this->setHttpHeader('Location', $this->redirect['location']);
+			$this->setHttpStatusCode($this->redirect['code']);
+		}
 		$this->sendHttpResponseHeaders($outputType);
-		$this->sendContent();
+		if(!$this->redirect) {
+			$this->sendContent();
+		}
 	}
 	
 	/**
@@ -516,6 +527,18 @@ class AgaviWebResponse extends AgaviResponse
 		}
 	}
 
+	/**
+	 * Redirect externally.
+	 *
+	 * @param      mixed Where to redirect.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function setRedirect($location, $code = 302)
+	{
+		$this->redirect = array('location' => $location, 'code' => $code);
+	}
 }
 
 ?>

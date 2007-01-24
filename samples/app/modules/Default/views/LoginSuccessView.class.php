@@ -26,23 +26,7 @@ class Default_LoginSuccessView extends AgaviSampleAppDefaultBaseView
 	public function executeHtml(AgaviRequestDataHolder $r)
 	{
 		$usr = $this->getContext()->getUser();
-		$url = false;
-		if($usr->hasAttribute('redirect', 'org.agavi.SampleApp.login')) {
-			/*
-				we need to redirect back to the action that caused the login form to
-				pop up. setting no template will mean no rendering is performed, which
-				is a good thing since we'll redirect anyway.
-				response will be locked, so no output will be added. the redirect does,
-				however, return a Response instance that can be used to set cookies etc.
-				action and global filters will still run back to Controller::dispatch(),
-				a redirect in 0.11 does NOT bail out immediately anymore!
-			*/
-			$url = $usr->getAttribute('redirect', 'org.agavi.SampleApp.login');
-			$usr->removeAttribute('redirect', 'org.agavi.SampleApp.login');
-			$res = $this->getContext()->getController()->redirect($url);
-		} else {
-			$res = $this->getResponse();
-		}
+		$res = $this->getResponse();
 		
 		// set the autologon cookie if requested
 		if($r->hasParameter('remember')) {
@@ -50,8 +34,8 @@ class Default_LoginSuccessView extends AgaviSampleAppDefaultBaseView
 			$res->setCookie('autologon[password]', $r->getParameter('password'), 60*60*24*14);
 		}
 		
-		// we redirected, let's bail out
-		if($url !== false) {
+		if($usr->hasAttribute('redirect', 'org.agavi.SampleApp.login')) {
+			$this->getResponse()->setRedirect($usr->removeAttribute('redirect', 'org.agavi.SampleApp.login'));
 			return;
 		}
 		

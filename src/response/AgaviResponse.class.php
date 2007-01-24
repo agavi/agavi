@@ -144,6 +144,16 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	}
 	
 	/**
+	 * Redirect externally.
+	 *
+	 * @param      mixed Where to redirect.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	abstract public function setRedirect($to);
+
+	/**
 	 * Import response metadata from another response.
 	 *
 	 * @param      AgaviResponse The other response to import information from.

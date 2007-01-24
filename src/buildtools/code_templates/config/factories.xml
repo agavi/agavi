@@ -34,7 +34,7 @@
 	
 	<configuration>
 		
-		<controller class="AgaviWebController" />
+		<controller class="AgaviController" />
 		
 		<database_manager class="AgaviDatabaseManager" />
 		
