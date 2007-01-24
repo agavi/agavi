@@ -35,8 +35,6 @@
 
 			<!-- agavi/action -->
 			<autoload name="AgaviAction">%core.agavi_dir%/action/AgaviAction.class.php</autoload>
-			<autoload name="AgaviActionStack">%core.agavi_dir%/action/AgaviActionStack.class.php</autoload>
-			<autoload name="AgaviActionStackEntry">%core.agavi_dir%/action/AgaviActionStackEntry.class.php</autoload>
 
 			<!-- agavi/config -->
 			<autoload name="AgaviCompileConfigHandler">%core.agavi_dir%/config/AgaviCompileConfigHandler.class.php</autoload>
@@ -59,6 +57,8 @@
 
 			<!-- agavi/controller -->
 			<autoload name="AgaviController">%core.agavi_dir%/controller/AgaviController.class.php</autoload>
+			<autoload name="AgaviExecutionContainer">%core.agavi_dir%/controller/AgaviExecutionContainer.class.php</autoload>
+			<autoload name="AgaviOutputType">%core.agavi_dir%/controller/AgaviOutputType.class.php</autoload>
 
 			<!-- agavi/core -->
 			<autoload name="AgaviContext">%core.agavi_dir%/core/AgaviContext.class.php</autoload>
@@ -143,6 +143,7 @@
 			<autoload name="AgaviICookiesRequestDataHolder">%core.agavi_dir%/request/AgaviICookiesRequestDataHolder.interface.php</autoload>
 			<autoload name="AgaviIFilesRequestDataHolder">%core.agavi_dir%/request/AgaviIFilesRequestDataHolder.interface.php</autoload>
 			<autoload name="AgaviIHeadersRequestDataHolder">%core.agavi_dir%/request/AgaviIHeadersRequestDataHolder.interface.php</autoload>
+			<autoload name="AgaviRequestDataHolder">%core.agavi_dir%/request/AgaviRequestDataHolder.class.php</autoload>
 			<autoload name="AgaviSecureWebRequest">%core.agavi_dir%/request/AgaviSecureWebRequest.class.php</autoload>
 			<autoload name="AgaviUploadedFile">%core.agavi_dir%/request/AgaviUploadedFile.class.php</autoload>
 			<autoload name="AgaviWebRequest">%core.agavi_dir%/request/AgaviWebRequest.class.php</autoload>
@@ -226,6 +227,7 @@
 			<!-- agavi/view -->
 			<autoload name="AgaviFileTemplateLayer">%core.agavi_dir%/view/AgaviFileTemplateLayer.class.php</autoload>
 			<autoload name="AgaviStreamTemplateLayer">%core.agavi_dir%/view/AgaviStreamTemplateLayer.class.php</autoload>
+			<autoload name="AgaviTemplateLayer">%core.agavi_dir%/view/AgaviTemplateLayer.class.php</autoload>
 			<autoload name="AgaviView">%core.agavi_dir%/view/AgaviView.class.php</autoload>
 
 		</autoloads>
