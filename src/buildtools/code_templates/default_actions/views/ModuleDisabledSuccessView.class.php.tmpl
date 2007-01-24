@@ -2,21 +2,14 @@
 
 class %%MODULE%%_%%ACTION_NAME%%SuccessView extends AgaviView
 {
-	/**
-	 * Execute any presentation logic and set template attributes.
-	 *
-	 */
-	public function execute(AgaviParameterHolder $parameters)
+	public function execute(AgaviRequestDataHolder $r)
 	{
-		// set our template
-		$this->setTemplate('%%ACTION_PATH%%Success');
-		
-		// create a new AgaviPhpRenderer and return that
+		// create a new template layer and a renderer by hand
 		// reason: these actions should work even if the user changes his output type to use Smarty or whatever
+		
 		$renderer = new AgaviPhpRenderer();
 		$renderer->initialize($this->context, array());
-		$renderer->setView($this);
-		return $renderer;
+		$this->appendLayer($this->createLayer('AgaviFileTemplateLayer', 'content', $renderer));
 	}
 }
 

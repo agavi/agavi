@@ -2,12 +2,10 @@
 
 class %%MODULE%%_%%ACTION_NAME%%%%VIEW%%View extends AgaviView
 {
-	/**
-	 * Execute any presentation logic and set template attributes.
-	 *
-	 */
-	public function execute(AgaviParameterHolder $parameters)
+	public function execute(AgaviRequestDataHolder $r)
 	{
+		$this->loadLayout();
+		
 		// set the title
 		$this->setAttribute('_title', '%%ACTION%% Action');
 	}
