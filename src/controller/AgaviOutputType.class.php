@@ -170,6 +170,8 @@ class AgaviOutputType extends AgaviParameterHolder
 	 *
 	 * @return     array An array of layout information.
 	 *
+	 * @throws     AgaviException If the layout doesn't exist.
+	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */

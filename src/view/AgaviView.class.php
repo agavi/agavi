@@ -144,6 +144,21 @@ abstract class AgaviView
 		$this->response = $container->getResponse();
 	}
 
+	/**
+	 * Create a new templaet layer object.
+	 *
+	 * This will automatically set the name of the layer, the current module, the
+	 * current view name as the template, and the output type name.
+	 *
+	 * @param      string The class name of the AgaviTemplateLayer implementation.
+	 * @param      string The name of the layer.
+	 * @param      string An optional name of the non-default renderer to use.
+	 *
+	 * @return     AgaviTemplateLayer A template layer instance.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public function createLayer($class, $name, $renderer = null)
 	{
 		$layer = new $class();
@@ -155,6 +170,20 @@ abstract class AgaviView
 		return $layer;
 	}
 	
+	/**
+	 * Append a layer to the list of layers.
+	 *
+	 * If no reference layer is given, the layer will be added to the end of the
+	 * list.
+	 *
+	 * @param      AgaviTemplateLayer The layer to insert.
+	 * @param      AgaviTemplateLayer An optional other layer to insert after.
+	 *
+	 * @return     AgaviTemplateLayer The template layer that was inserted.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public function appendLayer(AgaviTemplateLayer $layer, AgaviTemplateLayer $otherLayer = null)
 	{
 		if($otherLayer !== null && in_array($otherLayer, $this->layers, true)) {
@@ -176,6 +205,20 @@ abstract class AgaviView
 		return $layer;
 	}
 	
+	/**
+	 * Prepend a layer to the list of layers.
+	 *
+	 * If no reference layer is given, the layer will be added to the beginning of
+	 * the list.
+	 *
+	 * @param      AgaviTemplateLayer The layer to insert.
+	 * @param      AgaviTemplateLayer An optional other layer to insert before.
+	 *
+	 * @return     AgaviTemplateLayer The template layer that was inserted.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public function prependLayer(AgaviTemplateLayer $layer, AgaviTemplateLayer $otherLayer = null)
 	{
 		if($otherLayer !== null && in_array($otherLayer, $this->layers, true)) {
@@ -197,6 +240,14 @@ abstract class AgaviView
 		return $layer;
 	}
 	
+	/**
+	 * Remove a layer from the list.
+	 *
+	 * @param      AgaviTemplateLayer The layer to remove.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public function removeLayer(AgaviTemplateLayer $layer)
 	{
 		if(($pos = array_search($layer, $this->layers, true)) === false) {
@@ -205,11 +256,27 @@ abstract class AgaviView
 		array_splice($this->layers, $pos, 1);
 	}
 	
+	/**
+	 * Remove all layers from the list.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public function clearLayers()
 	{
 		$this->layers = array();
 	}
 	
+	/**
+	 * Retrieve a layer from the list.
+	 *
+	 * @param      string The name of the layer.
+	 *
+	 * @return     AgaviTemplateLayer The layer instance, or null if not found.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public function getLayer($name)
 	{
 		foreach($this->layers as $layer) {
@@ -219,11 +286,31 @@ abstract class AgaviView
 		}
 	}
 	
+	/**
+	 * Get all layers from the list.
+	 *
+	 * @return     array An array of template layer instances.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public function getLayers()
 	{
 		return $this->layers;
 	}
 	
+	/**
+	 * Load a pre-configured layout.
+	 *
+	 * If no layout name is given, the default layout will be used.
+	 *
+	 * @param      string The (optional) name of the layout.
+	 *
+	 * @throws     AgaviException If the layout doesn't exist.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public function loadLayout($layoutName = null)
 	{
 		$layout = $this->container->getOutputType()->getLayout($layoutName);
