@@ -44,26 +44,32 @@ class AgaviWebRouting extends AgaviRouting
 	protected $inputParameters = array();
 	
 	/**
-	 * @var        array An array of default options for gen()
+	 * Constructor.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
 	 */
-	protected $defaultGenOptions = array(
-		// relative or including scheme and authority
-		'relative' => true,
-		// separator, typically &amp; for HTML, & otherwise
-		'separator' => '&amp;',
-		// whether or not to append the SID if necessary
-		'use_trans_sid' => false,
-		// scheme, or true to include, or false to block
-		'scheme' => null,
-		// authority, or true to include, or false to block
-		'authority' => null,
-		// host, or true to include, or false to block
-		'host' => null,
-		// port, or true to include, or false to block
-		'port' => null,
-		// fragment identifier (#foo)
-		'fragment' => null
-	);
+	public function __construct()
+	{
+		parent::__construct();
+		
+		$this->defaultGenOptions = array_merge($this->defaultGenOptions, array(
+			// separator, typically &amp; for HTML, & otherwise
+			'separator' => '&amp;',
+			// whether or not to append the SID if necessary
+			'use_trans_sid' => false,
+			// scheme, or true to include, or false to block
+			'scheme' => null,
+			// authority, or true to include, or false to block
+			'authority' => null,
+			// host, or true to include, or false to block
+			'host' => null,
+			// port, or true to include, or false to block
+			'port' => null,
+			// fragment identifier (#foo)
+			'fragment' => null,
+		));
+	}
 
 	/**
 	 * Initialize the routing instance.
@@ -223,7 +229,7 @@ class AgaviWebRouting extends AgaviRouting
 					$append = '?' . http_build_query($p);
 				}
 
-				$path = parent::gen($routes, array_merge(array_map('rawurlencode', $genParams), array_filter($params, 'is_null')));
+				list($path, $changedParams, $options) = parent::gen($routes, array_merge(array_map('rawurlencode', $genParams), array_filter($params, 'is_null')), $options);
 			} else {
 				// the route exists, but we must create a normal index.php?foo=bar URL.
 

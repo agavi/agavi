@@ -100,6 +100,7 @@ abstract class AgaviRoutingCallback
 	 *
 	 * @param      array The default parameters stored in the route.
 	 * @param      array The parameters the user supplied to AgaviRouting::gen().
+	 * @param      array The options the user supplied to AgaviRouting::gen().
 	 *
 	 * @return     array The default parameters which should be used for 
 	 *                   generating the URL.
@@ -107,7 +108,7 @@ abstract class AgaviRoutingCallback
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function onGenerate(array $defaultParameters, array &$userParameters)
+	public function onGenerate(array $defaultParameters, array &$userParameters, array &$userOptions)
 	{
 		return $defaultParameters;
 	}

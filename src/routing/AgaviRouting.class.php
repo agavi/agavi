@@ -61,9 +61,20 @@ abstract class AgaviRouting
 	/**
 	 * @var        array An array of default options for gen()
 	 */
-	protected $defaultGenOptions = array(
-		'relative' => true
-	);
+	protected $defaultGenOptions = array();
+	
+	/**
+	 * Constructor.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function __construct()
+	{
+		$this->defaultGenOptions = array_merge($this->defaultGenOptions, array(
+			'relative' => true
+		));
+	}
 
 	/**
 	 * Initialize the routing instance.
@@ -381,9 +392,12 @@ abstract class AgaviRouting
 	 * @param      array  An associative array of parameters.
 	 * @param      array  An array of options.
 	 *
-	 * @return     string
+	 * @return     array An array containing the generated route path, the
+	 *                   (possibly modified) parameters, and the (possibly
+	 *                   modified) options.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function gen($route, array $params = array(), array $options = array())
@@ -422,7 +436,7 @@ abstract class AgaviRouting
 					$r['cb'] = new $cb();
 					$r['cb']->initialize($this->context, $r);
 				}
-				$myDefaults = $r['cb']->onGenerate($myDefaults, $params);
+				$myDefaults = $r['cb']->onGenerate($myDefaults, $params, $options);
 			}
 
 			$defaults = array_merge($myDefaults, $defaults);
@@ -461,7 +475,7 @@ abstract class AgaviRouting
 		}
 
 		$url = str_replace($from, $to, $url);
-		return $this->prefix . $url;
+		return array($this->prefix . $url, $params, $options);
 	}
 
 	/**

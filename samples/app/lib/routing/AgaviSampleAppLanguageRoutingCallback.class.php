@@ -46,7 +46,7 @@ class AgaviSampleAppLanguageRoutingCallback extends AgaviRoutingCallback
 		return;
 	}
 
-	public function onGenerate(array $defaultParameters, array &$userParameters)
+	public function onGenerate(array $defaultParameters, array &$userParameters, array &$options)
 	{
 		$defaultParameters['locale'] = array(
 			'pre' => '', 
