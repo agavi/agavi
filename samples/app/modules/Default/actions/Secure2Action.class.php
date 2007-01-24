@@ -1,6 +1,6 @@
 <?php
 
-class Default_Secure2Action extends AgaviAction
+class Default_Secure2Action extends AgaviSampleAppDefaultBaseAction
 {
 	/**
 	 * This Action does not yet serve any Request methods.
@@ -35,7 +35,7 @@ class Default_Secure2Action extends AgaviAction
 	 * execute*() being present, e.g. for a "write" Request, validateWrite() will
 	 * be run even if there is no executeWrite() method.
 	 */
-//	public function execute(AgaviParameterHolder $parameters)
+//	public function execute(AgaviRequestDataHolder $r)
 //	{
 //		return 'Success';
 //	}

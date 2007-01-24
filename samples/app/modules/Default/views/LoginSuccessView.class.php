@@ -14,7 +14,7 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
-class Default_LoginSuccessView extends AgaviView
+class Default_LoginSuccessView extends AgaviSampleAppDefaultBaseView
 {
 
 	/**
@@ -23,7 +23,7 @@ class Default_LoginSuccessView extends AgaviView
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function execute(AgaviParameterHolder $parameters)
+	public function executeHtml(AgaviRequestDataHolder $r)
 	{
 		$usr = $this->getContext()->getUser();
 		$url = false;
@@ -45,9 +45,9 @@ class Default_LoginSuccessView extends AgaviView
 		}
 		
 		// set the autologon cookie if requested
-		if($parameters->hasParameter('remember')) {
-			$res->setCookie('autologon[username]', $parameters->getParameter('username'), 60*60*24*14);
-			$res->setCookie('autologon[password]', $parameters->getParameter('password'), 60*60*24*14);
+		if($r->hasParameter('remember')) {
+			$res->setCookie('autologon[username]', $r->getParameter('username'), 60*60*24*14);
+			$res->setCookie('autologon[password]', $r->getParameter('password'), 60*60*24*14);
 		}
 		
 		// we redirected, let's bail out
@@ -55,10 +55,8 @@ class Default_LoginSuccessView extends AgaviView
 			return;
 		}
 		
-		$this->loadLayout();
+		parent::executeHtml($r);
 		
-		// set the content type
-		$this->setAttribute('_contentType', $this->container->getOutputType()->getParameter('Content-Type', 'text/html; charset=utf-8'));
 		// set the title
 		$this->setAttribute('title', $this->getContext()->getTranslationManager()->_('Login Successful', 'default.Login'));
 	}

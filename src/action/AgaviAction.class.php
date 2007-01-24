@@ -83,8 +83,7 @@ abstract class AgaviAction
 	/**
 	 * Execute any post-validation error application logic.
 	 *
-	 * @param      AgaviParameterHolder A parameter holder containing the filtered
-	 *                                  request parameters for this Action.
+	 * @param      AgaviRequestDataHolder The action's request data holder.
 	 *
 	 * @return     mixed A string containing the view name associated with this
 	 *                   action.
@@ -93,9 +92,10 @@ abstract class AgaviAction
 	 *                   - The view that will be executed.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
-	public function handleError(AgaviParameterHolder $parameters)
+	public function handleError(AgaviRequestDataHolder $r)
 	{
 		return 'Error';
 	}
@@ -141,16 +141,16 @@ abstract class AgaviAction
 	/**
 	 * Manually validate files and parameters.
 	 *
-	 * @param      AgaviParameterHolder A parameter holder containing request
-	 *                                  parameters for this Action.
+	 * @param      AgaviRequestDataHolder The action's request data holder.
 	 *
-	 * @return     bool true, if validation completes successfully, otherwise
+	 * @return     bool true, if validation completed successfully, otherwise
 	 *                  false.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
-	public function validate(AgaviParameterHolder $parameters)
+	public function validate(AgaviRequestDataHolder $r)
 	{
 		return true;
 	}

@@ -14,7 +14,7 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
-class Default_UnavailableSuccessView extends AgaviView
+class Default_UnavailableSuccessView extends AgaviSampleAppDefaultBaseView
 {
 
 	/**
@@ -23,12 +23,10 @@ class Default_UnavailableSuccessView extends AgaviView
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function execute(AgaviParameterHolder $parameters)
+	public function executeHtml(AgaviRequestDataHolder $r)
 	{
-		$this->loadLayout();
-
-		// set the content type
-		$this->setAttribute('_contentType', $this->container->getOutputType()->getParameter('Content-Type', 'text/html; charset=utf-8'));
+		parent::executeHtml($r);
+		
 		// set the title
 		$this->setAttribute('title', $this->getContext()->getTranslationManager()->_('This Application is Unavailable', 'default.ErrorActions'));
 	}

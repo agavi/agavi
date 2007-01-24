@@ -75,13 +75,16 @@ abstract class AgaviView
 	/**
 	 * Execute any presentation logic and set template attributes.
 	 *
-	 * @return     AgaviParameterHolder An array of forwarding information in case
-	 *                                  a forward should occur, otherwise null.
+	 * @param      AgaviRequestDataHolder The action's request data holder.
+	 *
+	 * @return     AgaviExecutionContainer An array of forwarding information in
+	 *                                     case a forward should occur, or null.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
-	abstract function execute(AgaviParameterHolder $parameters);
+	abstract function execute(AgaviRequestDataHolder $r);
 
 	/**
 	 * Retrieve the current application context.

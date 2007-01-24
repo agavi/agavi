@@ -14,7 +14,7 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
-class Default_Error404SuccessView extends AgaviView
+class Default_Error404SuccessView extends AgaviSampleAppDefaultBaseView
 {
 
 	/**
@@ -23,16 +23,14 @@ class Default_Error404SuccessView extends AgaviView
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function execute(AgaviParameterHolder $parameters)
+	public function executeHtml(AgaviRequestDataHolder $r)
 	{
-		$this->loadLayout();
-
-		// set the content type
-		$this->setAttribute('_contentType', $this->container->getOutputType()->getParameter('Content-Type', 'text/html; charset=utf-8'));
+		parent::executeHtml($r);
+		
 		// set the title
 		$this->setAttribute('title', $this->getContext()->getTranslationManager()->_('404 Not Found', 'default.ErrorActions'));
-
-		$this->getResponse()->setHttpStatusCode('404');
+		
+		$this->container->getResponse()->setHttpStatusCode('404');
 	}
 
 }

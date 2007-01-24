@@ -14,7 +14,7 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
-class Default_LogoutSuccessView extends AgaviView
+class Default_LogoutSuccessView extends AgaviSampleAppDefaultBaseView
 {
 
 	/**
@@ -23,12 +23,10 @@ class Default_LogoutSuccessView extends AgaviView
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function execute(AgaviParameterHolder $parameters)
+	public function executeHtml(AgaviRequestDataHolder $r)
 	{
-		$this->loadLayout();
+		parent::executeHtml($r);
 		
-		// set the content type
-		$this->setAttribute('_contentType', $this->container->getOutputType()->getParameter('Content-Type', 'text/html; charset=utf-8'));
 		// set the title
 		$this->setAttribute('title', $this->getContext()->getTranslationManager()->_('Logout Successful', 'default.Login'));
 		
