@@ -145,14 +145,15 @@ abstract class AgaviView
 	}
 
 	/**
-	 * Create a new templaet layer object.
+	 * Create a new template layer object.
 	 *
 	 * This will automatically set the name of the layer, the current module, the
 	 * current view name as the template, and the output type name.
 	 *
 	 * @param      string The class name of the AgaviTemplateLayer implementation.
 	 * @param      string The name of the layer.
-	 * @param      string An optional name of the non-default renderer to use.
+	 * @param      mixed  An optional name of the non-default renderer to use, or
+	 *                    an AgaviRenderer instance to use.
 	 *
 	 * @return     AgaviTemplateLayer A template layer instance.
 	 *
@@ -166,7 +167,11 @@ abstract class AgaviView
 			throw new AgaviViewException('Class "$class" is not a subclass of AgaviTemplateLayer');
 		}
 		$layer->initialize($this->context, array('name' => $name, 'module' => $this->container->getViewModuleName(), 'template' => $this->container->getViewName(), 'output_type' => $this->container->getOutputType()->getName()));
-		$layer->setRenderer($this->container->getOutputType()->getRenderer($renderer));
+		if($renderer instanceof AgaviRenderer) {
+			$layer->setRenderer($renderer);
+		} else {
+			$layer->setRenderer($this->container->getOutputType()->getRenderer($renderer));
+		}
 		return $layer;
 	}
 	
