@@ -1,31 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!--
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
-| This file is part of the Agavi package.                                    |
-| Copyright (c) 2006 the Agavi Project.                                      |
-| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
-| AGAVI AUTO LOAD CONFIGURATION                                              |
-| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
-| Any file listed here will automatically be loaded by PHP when the class is |
-| first accessed. This means you do not manually have to include it in your  |
-| files.                                                                     |
-| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
-| KEYWORDS:                                                                  |
-| You may reference any configuration directive by enclosing the name in     |
-| "%" signs. Example: %core.agavi_dir%                                         |
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
--->
 <configurations parent="%core.system_config_dir%/autoload.xml">
-	<!--
-		+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
-		| Custom Classes                                                         |
-		| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
-		| Any classes you see fit that might be of use, such as classes that     |
-		| used in a session that must exist when the session unserializes its    |
-		| data. Another good example is a custom factory implementation such as  |
-		| a controller or user.                                                  |
-		+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
-	-->
 	<configuration>
 		<autoloads>
 			<autoload name="AgaviSampleAppCookieLoginFilter">%core.lib_dir%/filter/AgaviSampleAppCookieLoginFilter.class.php</autoload>
