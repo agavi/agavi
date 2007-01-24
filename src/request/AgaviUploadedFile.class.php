@@ -148,6 +148,9 @@ final class AgaviUploadedFile extends ArrayObject
 			if($this->is_uploaded_file) {
 				$moved = @move_uploaded_file($this->tmp_name, $dest);
 			} else {
+				if(is_writable($dest)) {
+					unlink($dest);
+				}
 				$moved = @rename($this->tmp_name, $dest);
 			}
 			

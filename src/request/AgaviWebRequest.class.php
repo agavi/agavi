@@ -268,26 +268,17 @@ class AgaviWebRequest extends AgaviRequest
 		
 		if($this->getMethod() == $methods['PUT']) {
 			// PUT. We now gotta set a flag for that and populate $_FILES manually
-			$this->isHttpPutFile = true;
 
-			$putFile = tmpfile();
-
-			stream_copy_to_stream(fopen("php://input", "rb"), $putFile);
-
-			// for temp file name and size
-			$putFileInfo = array(
-				'stat' => fstat($putFile),
-				'meta_data' => stream_get_meta_data($putFile)
-			);
-
-			$putFileName = $this->getParameter('PUT_file_name', 'put_file');
+			$putFile = tempnam(AgaviConfig::get('core.cache_dir'), "PUTUpload_");
+			$size = stream_copy_to_stream(fopen("php://input", "rb"), $handle = fopen($putFile, "wb"));
+			fclose($handle);
 
 			$_FILES = array(
-				$putFileName => array(
-					'name' => $putFileName,
+				$this->getParameter('PUT_file_name', 'put_file') => array(
+					'name' => $putFile,
 					'type' => 'application/octet-stream',
-					'size' => $putFileInfo['stat']['size'],
-					'tmp_name' => $putFileInfo['meta_data']['uri'],
+					'size' => $size,
+					'tmp_name' => $putFile,
 					'error' => UPLOAD_ERR_OK,
 					'is_uploaded_file' => false,
 				)
