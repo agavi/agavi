@@ -349,11 +349,11 @@ class AgaviWebResponse extends AgaviResponse
 	 */
 	public function setCookie($name, $value, $lifetime = null, $path = null, $domain = null, $secure = null, $httpOnly = null)
 	{
-		$lifetime =         $lifetime === null ? $lifetime : $this->cookieConfig['lifetime'];
-		$path     =         $path === null     ? $path     : $this->cookieConfig['path'];
-		$domain   =         $domain === null   ? $domain   : $this->cookieConfig['domain'];
-		$secure   = (bool) ($secure === null   ? $secure   : $this->cookieConfig['secure']);
-		$httpOnly = (bool) ($httpOnly === null ? $httpOnly : $this->cookieConfig['httpOnly']);
+		$lifetime =         $lifetime !== null ? $lifetime : $this->cookieConfig['lifetime'];
+		$path     =         $path !== null     ? $path     : $this->cookieConfig['path'];
+		$domain   =         $domain !== null   ? $domain   : $this->cookieConfig['domain'];
+		$secure   = (bool) ($secure !== null   ? $secure   : $this->cookieConfig['secure']);
+		$httpOnly = (bool) ($httpOnly !== null ? $httpOnly : $this->cookieConfig['httpOnly']);
 
 		$this->cookies[$name] = array(
 			'value' => $value,
