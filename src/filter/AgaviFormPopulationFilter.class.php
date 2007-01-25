@@ -110,6 +110,8 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 			$skip = '/(\A' . str_replace('\[\]', '\[[^\]]*\]', implode('|\A', array_map('preg_quote', $cfg['skip']))) . ')/';
 		}
 		
+		$luie = libxml_use_internal_errors(true);
+		libxml_clear_errors();
 		
 		$doc = new DOMDocument();
 		
@@ -128,7 +130,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 		if($xhtml && $cfg['parse_xhtml_as_xml']) {
 			$doc->loadXML($output);
 			$xpath = new DomXPath($doc);
-			if($doc->documentElement->namespaceURI) {
+			if($doc->documentElement && $doc->documentElement->namespaceURI) {
 				$xpath->registerNamespace('html', $doc->documentElement->namespaceURI);
 				$ns = 'html:';
 			} else {
@@ -139,6 +141,25 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 			$xpath = new DomXPath($doc);
 			$ns = '';
 		}
+		
+		if(libxml_get_last_error() !== false) {
+			$errors = array();
+			foreach(libxml_get_errors() as $error) {
+				$errors[] = sprintf("Line %d: %s", $error->line, $error->message);
+			}
+			libxml_clear_errors();
+			libxml_use_internal_errors($luie);
+			throw new AgaviParseException(
+				sprintf(
+					'Form Population Filter could not parse the document due to the following error%s: ' . "\n\n%s", 
+					count($errors) > 1 ? 's' : '', 
+					implode("\n", $errors)
+				)
+			);
+		}
+		
+		libxml_clear_errors();
+		libxml_use_internal_errors($luie);
 		
 		$properXhtml = false;
 		foreach($xpath->query('//' . $ns . 'head/' . $ns . 'meta') as $meta) {

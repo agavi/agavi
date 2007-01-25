@@ -29,12 +29,6 @@
 
 class AgaviXmlConfigParser extends AgaviConfigParser
 {
-
-	/**
-	 * @var        array An array of parsing errors
-	 */
-	protected $errors = array();
-
 	/**
 	 * @var        DomXPath A DomXPath instance used to parse this document.
 	 */
@@ -49,22 +43,6 @@ class AgaviXmlConfigParser extends AgaviConfigParser
 	 * @var        string The name of the config file we're parsing.
 	 */
 	protected $config = '';
-
-	/**
-	 * The error handler to catch DOM errors so they can be thrown as exceptions.
-	 *
-	 * @param      int    The error level.
-	 * @param      string The error string.
-	 * @param      string The file where the error occured.
-	 * @param      int    The line where the error occured.
-	 *
-	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function errorHandler($errno, $errstr, $errfile, $errline)
-	{
-		$this->errors[] = $errstr;
-	}
 
 	/**
 	 * @see        AgaviConfigParser::parse()
@@ -82,26 +60,52 @@ class AgaviXmlConfigParser extends AgaviConfigParser
 		$this->config = $config;
 
 		// suppress errors from dom, ppl should use a proper xml editor to validate their files atm ...
-		set_error_handler(array($this, 'errorHandler'));
+		$luie = libxml_use_internal_errors(true);
+		libxml_clear_errors();
 		$doc = new DOMDocument();
 		$doc->load($config);
-		restore_error_handler();
-		if(!($doc instanceof DOMDocument)) {
-			$error = 'Configuration file "' . $config . '" could not be parsed, error' . (count($this->errors) > 1 ? 's' : '') . ' reported by DOM: ' . "\n\n" . implode("\n", $this->errors);
-			throw new AgaviParseException($error);
-		} else {
-			$this->errors = array();
+		if(libxml_get_last_error() !== false) {
+			$errors = array();
+			foreach(libxml_get_errors() as $error) {
+				$errors[] = sprintf("Line %d: %s", $error->line, $error->message);
+			}
+			libxml_clear_errors();
+			libxml_use_internal_errors($luie);
+			throw new AgaviParseException(
+				sprintf(
+					'Configuration file "%s" could not be parsed due to the following error%s: ' . "\n\n%s", 
+					$config, 
+					count($errors) > 1 ? 's' : '', 
+					implode("\n", $errors)
+				)
+			);
 		}
 		$this->encoding = strtolower($doc->encoding);
 		
 		// We must use the @ to prevent warnings when an XInclude fails
 		// I know that is not optimal, but we need this, so people can blindly include configs provided by modules, without everything breaking to smithereens by throwing an Exception if the module isn't actually there. XInclude is something advanced, and I expect people who use it to be able to hunt down the problem (incorrect path) when an XInclude just doesn't seem to work.
-		set_error_handler(array($this, 'errorHandler'));
-		$doc->xinclude(LIBXML_NOWARNING);
-		restore_error_handler();
-		if(count($this->errors)) {
-			$error = 'Configuration file "' . $config . '" could not be parsed, error' . (count($this->errors) > 1 ? 's' : '') . ' reported by DOM: ' . "\n\n" . implode("\n", $this->errors);
-			throw new AgaviParseException($error);
+		$doc->xinclude();
+		if(libxml_get_last_error() !== false) {
+			$throw = false;
+			$errors = array();
+			foreach(libxml_get_errors() as $error) {
+				if($error->level != LIBXML_ERR_WARNING) {
+					$throw = true;
+				}
+				$errors[] = sprintf("Line %d: %s", $error->line, $error->message);
+			}
+			libxml_clear_errors();
+			if($throw) {
+				libxml_use_internal_errors($luie);
+				throw new AgaviParseException(
+					sprintf(
+						'Configuration file "%s" could not be parsed due to the following error%s that occured while resolving XInclude directives: ' . "\n\n%s", 
+						$config, 
+						count($errors) > 1 ? 's' : '', 
+						implode("\n", $errors)
+					)
+				);
+			}
 		}
 		
 		$this->xpath = new DomXPath($doc);
@@ -114,20 +118,30 @@ class AgaviXmlConfigParser extends AgaviConfigParser
 		
 		if($validationFile) {
 			if(!is_readable($validationFile)) {
+				libxml_use_internal_errors($luie);
 				$error = 'Validation file "' . $validationFile . '" for configuration file "' . $config . '" does not exist or is unreadable';
 				throw new AgaviUnreadableException($error);
 			}
-			$this->errors = array();
-			set_error_handler(array($this, 'errorHandler'));
 			if(!$doc->schemaValidate($validationFile)) {
-				restore_error_handler();
-				$error = 'XSD Validation of configuration file "' . $config . '" failed, error' . (count($this->errors) > 1 ? 's' : '') . ' reported by DOM: ' . "\n\n" . implode("\n", $this->errors);
-				throw new AgaviParseException($error);
-			} else {
-				restore_error_handler();
+				$errors = array();
+				foreach(libxml_get_errors() as $error) {
+					$errors[] = sprintf("Line %d: %s", $error->line, $error->message);
+				}
+				libxml_clear_errors();
+				libxml_use_internal_errors($luie);
+				throw new AgaviParseException(
+					sprintf(
+						'XML Schema validation of configuration file "%s" failed due to the following error%s: ' . "\n\n%s", 
+						$config, 
+						count($errors) > 1 ? 's' : '', 
+						implode("\n", $errors)
+					)
+				);
 			}
 		}
-
+		
+		libxml_use_internal_errors($luie);
+		
 		$rootRes = new AgaviConfigValueHolder();
 
 		$this->parseNodes(array($doc->documentElement), $rootRes);
