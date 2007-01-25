@@ -29,6 +29,8 @@ interface AgaviIHeadersRequestDataHolder
 {
 	public function hasHeader($header);
 	
+	public function isHeaderValueEmpty($header);
+	
 	public function &getHeader($header, $default = null);
 	
 	public function &getHeaders();

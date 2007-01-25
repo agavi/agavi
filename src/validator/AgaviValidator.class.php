@@ -403,7 +403,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 		foreach($this->getArguments() as $argument) {
 			$new = $this->curBase->pushRetNew($argument);
 			$pName = $this->curBase->pushRetNew($argument)->__toString();
-			if(!$this->validationParameters->has($paramType, $pName) || $this->validationParameters->get($paramType, $pName) === "") {
+			if($this->validationParameters->isValueEmpty($paramType, $pName)) {
 				if($throwError && $isRequired) {
 					$this->throwError(null, $pName);
 				}

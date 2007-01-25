@@ -29,6 +29,8 @@ interface AgaviIFilesRequestDataHolder
 {
 	public function hasFile($file);
 	
+	public function isFileValueEmpty($file);
+	
 	public function &getFile($file, $default = null);
 	
 	public function &getFiles();

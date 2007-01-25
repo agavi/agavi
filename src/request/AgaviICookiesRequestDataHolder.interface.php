@@ -29,6 +29,8 @@ interface AgaviICookiesRequestDataHolder
 {
 	public function hasCookie($cookie);
 	
+	public function isCookieValueEmpty($cookie);
+	
 	public function &getCookie($cookie, $default = null);
 	
 	public function &getCookies();

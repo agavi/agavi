@@ -30,12 +30,31 @@
  */
 class AgaviIssetValidator extends AgaviValidator
 {
+
+	/**
+	 * We need to return true here when this validator is not required, because 
+	 * otherwise the is*ValueEmpty check would make empty but set fields not 
+	 * reach the validate method.
+	 *
+	 * @see        AgaviValidator::checkAllArgumentsSet
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	protected function checkAllArgumentsSet($throwError = true)
+	{
+		if($this->getParameter('required', true)) {
+			return true;
+		} else {
+			return parent::checkAllArgumentsSet($throwError);
+		}
+	}
+
 	/**
 	 * Validates the input.
 	 * 
 	 * @return     bool The value is set.
 	 * 
-	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	protected function validate()

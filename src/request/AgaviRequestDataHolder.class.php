@@ -57,6 +57,21 @@ class AgaviRequestDataHolder extends AgaviParameterHolder
 	{
 		$this->setParameters($other->getParameters());
 	}
+
+	/**
+	 * Checks if there is a value of a parameter is empty.
+	 *
+	 * @param      string The field name.
+	 *
+	 * @retrun     bool The result.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	protected function isParameterValueEmpty($field)
+	{
+		return !$this->hasParameter($field);
+	}
 	
 	/**
 	 * Deletes all fields in a given source.
@@ -144,6 +159,27 @@ class AgaviRequestDataHolder extends AgaviParameterHolder
 	{
 		if(isset($this->$source)) {
 			$funcname = 'has' . $this->_sourceNames[$source];
+			return $this->$funcname($field);
+		}
+	}
+
+	/**
+	 * Checks if a field has no value (In web context this would only return true
+	 * when the strings length is 0 or the field is not set.
+	 *
+	 * @param      string The name of the source to operate on.
+	 * @param      string A field name.
+	 *
+	 * @return     bool The result.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function isValueEmpty($source, $field)
+	{
+		if(isset($this->$source)) {
+			$funcname = 'is' . $this->_sourceNames[$source] . 'ValueEmpty';
 			return $this->$funcname($field);
 		}
 	}

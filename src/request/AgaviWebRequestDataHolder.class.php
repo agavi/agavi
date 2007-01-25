@@ -61,6 +61,21 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	
 
 	/**
+	 * Checks if there is a value of a parameter is empty or not set.
+	 *
+	 * @param      string The field name.
+	 *
+	 * @retrun     bool The result.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function isParameterValueEmpty($field)
+	{
+		return !$this->hasParameter($field) || strlen($this->getParameter($field)) == 0;
+	}
+
+	/**
 	 * Clear all cookies.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
@@ -88,6 +103,21 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 		}
 		$parts = AgaviArrayPathDefinition::getPartsFromPath($name);
 		return AgaviArrayPathDefinition::hasValue($parts['parts'], $this->cookies);
+	}
+
+	/**
+	 * Checks if there is a value of a cookie is empty or not set.
+	 *
+	 * @param      string The cookie name.
+	 *
+	 * @retrun     bool The result.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function isCookieValueEmpty($name)
+	{
+		return !$this->hasCookie($name) || strlen($this->getCookie($name)) == 0;
 	}
 
 	/**
@@ -270,6 +300,20 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	}
 	
 	/**
+	 * Checks if there is a value of a header is empty or not set.
+	 *
+	 * @param      string The header name.
+	 *
+	 * @retrun     bool The result.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function isHeaderValueEmpty($name)
+	{
+		return !$this->hasHeader($name) || strlen($this->getHeader($name)) == 0;
+	}
+	/**
 	 * Set a header.
 	 *
 	 * The header name is normalized before storing it.
@@ -400,6 +444,29 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	{
 		return count($this->files) > 0;
 	}
+
+	/**
+	 * Checks if there is a value of a file is empty or not set.
+	 *
+	 * @param      string The file name.
+	 *
+	 * @retrun     bool The result.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function isFileValueEmpty($name)
+	{
+		if(!$this->hasFile($name)) {
+			return true;
+		}
+		$file = $this->getFile($name);
+		if(!$file instanceof AgaviUploadedFile) {
+			return true;
+		}
+		return ($file->getError() == UPLOAD_ERR_NO_FILE);
+	}
+
 
 	/**
 	 * Removes file information for given file.
