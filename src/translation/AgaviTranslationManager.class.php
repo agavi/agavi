@@ -413,8 +413,7 @@ class AgaviTranslationManager
 		if(isset($this->translators[$translatorDomain])) {
 			return $this->translators[$translatorDomain];
 		} else {
-			// TODO: select proper exception type
-			throw new AgaviException(sprintf('No translator exists for the domain "%s"', $translatorDomain));
+			throw new InvalidArgumentException(sprintf('No translator exists for the domain "%s"', $translatorDomain));
 		}
 	}
 
@@ -790,7 +789,7 @@ class AgaviTranslationManager
 
 		// Now, reset calendar to default state:
 		if($zone) {
-			$c->adoptTimeZone($zone); // TODO: Set the correct time zone
+			$c->setTimeZone($zone);
 		}
 
 		$c->setTime($time); // let the new calendar have the current time.

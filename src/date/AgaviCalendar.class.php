@@ -977,11 +977,10 @@ abstract class AgaviCalendar
 
 	}
 
-
 	/**
-	 * Sets the calendar's time zone to be the one passed in. The Calendar takes 
-	 * ownership of the TimeZone; the caller is no longer responsible for 
-	 * deleting it.  If the given time zone is NULL, this function has no effect.
+	 * Sets the calendar's time zone to be the same as the one passed in. The 
+	 * TimeZone passed in is _not_ adopted; the client is still responsible for 
+	 * deleting it.
 	 *
 	 * @param      AgaviTimeZone The given time zone.
 	 * 
@@ -989,7 +988,7 @@ abstract class AgaviCalendar
 	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
 	 * @since      0.11.0
 	 */
-	public function adoptTimeZone($zone)
+	public function setTimeZone($zone)
 	{
 		// Do nothing if passed-in zone is NULL
 		if(!$zone) {
@@ -1004,25 +1003,7 @@ abstract class AgaviCalendar
 	}
 
 	/**
-	 * Sets the calendar's time zone to be the same as the one passed in. The 
-	 * TimeZone passed in is _not_ adopted; the client is still responsible for 
-	 * deleting it.
-	 *
-	 * @param      AgaviTimeZone The given time zone.
-	 * 
-	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
-	 * @since      0.11.0
-	 */
-	public function setTimeZone($zone)
-	{
-		$this->adoptTimeZone($zone);
-	}
-
-	/**
-	 * Returns a reference to the time zone owned by this calendar. The returned
-	 * reference is only valid until clients make another call to adoptTimeZone or
-	 * setTimeZone, or this Calendar is destroyed.
+	 * Returns a reference to the time zone owned by this calendar.
 	 *
 	 * @return     AgaviTimeZone The time zone object associated with this 
 	 *                           calendar.
