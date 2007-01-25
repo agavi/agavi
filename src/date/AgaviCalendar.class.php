@@ -60,7 +60,7 @@ abstract class AgaviCalendar
 	protected function initVariables()
 	{
 		$this->fIsTimeSet = false;
-		$this->fAreFieldsSet = false;
+		$this->fAreFieldsInSync = false;
 		$this->fAreAllFieldsSet = false;
 		$this->fAreFieldsVirtuallySet = false;
 		$this->fNextStamp = self::kMinimumUserStamp;
@@ -1000,7 +1000,7 @@ abstract class AgaviCalendar
 		$this->fZone = $zone;
 
 		// if the zone changes, we need to recompute the time fields
-		$this->fAreFieldsSet = false;
+		$this->fAreFieldsInSync = false;
 	}
 
 	/**
@@ -1445,7 +1445,7 @@ abstract class AgaviCalendar
 		$this->fFields[$field]    = $value;
 		$this->fStamp[$field]     = $this->fNextStamp++;
 		$this->fIsSet[$field]     = true; // Remove later
-		$this->fIsTimeSet = $this->fAreFieldsSet = $this->fAreFieldsVirtuallySet = false;
+		$this->fIsTimeSet = $this->fAreFieldsInSync = $this->fAreFieldsVirtuallySet = false;
 
 	}
 
@@ -1559,7 +1559,7 @@ abstract class AgaviCalendar
 			$this->fStamp[$i]      = self::kUnset;
 			$this->fIsSet[$i]      = false; // Remove later
 		}
-		$this->fIsTimeSet = $this->fAreFieldsSet = $this->fAreAllFieldsSet = $this->fAreFieldsVirtuallySet = false;
+		$this->fIsTimeSet = $this->fAreFieldsInSync = $this->fAreAllFieldsSet = $this->fAreFieldsVirtuallySet = false;
 		// fTime is not 'cleared' - may be used if no fields are set.
 	}
 
@@ -1582,7 +1582,7 @@ abstract class AgaviCalendar
 		$this->fFields[$field]        = 0;
 		$this->fStamp[$field]         = self::kUnset;
 		$this->fIsSet[$field]         = false; // Remove later
-		$this->fIsTimeSet = $this->fAreFieldsSet = $this->fAreAllFieldsSet = $this->fAreFieldsVirtuallySet = false;
+		$this->fIsTimeSet = $this->fAreFieldsInSync = $this->fAreAllFieldsSet = $this->fAreFieldsVirtuallySet = false;
 	}
 
 	/**
@@ -1784,7 +1784,7 @@ abstract class AgaviCalendar
 		}
 		
 		$this->fTime = $millis;
-		$this->fAreFieldsSet = $this->fAreAllFieldsSet = false;
+		$this->fAreFieldsInSync = $this->fAreAllFieldsSet = false;
 		$this->fIsTimeSet = $this->fAreFieldsVirtuallySet = true;
 	}
 
@@ -1802,10 +1802,10 @@ abstract class AgaviCalendar
 			$this->updateTime();
 		}
 
-		if(!$this->fAreFieldsSet) {
+		if(!$this->fAreFieldsInSync) {
 			$this->computeFields(); // fills in unset fields
 
-			$this->fAreFieldsSet        = true;
+			$this->fAreFieldsInSync        = true;
 			$this->fAreAllFieldsSet     = true;
 		}
 	}
@@ -1830,7 +1830,7 @@ abstract class AgaviCalendar
 
 	/**
 	 * Sets the value for a given time field.  This is a fast internal method for
-	 * subclasses.  It does not affect the areFieldsInSync, isTimeSet, or 
+	 * subclasses.  It does not affect the fAreFieldsInSync, isTimeSet, or 
 	 * areAllFieldsSet flags.
 	 *
 	 * @param      string The given time field.
@@ -2724,17 +2724,13 @@ abstract class AgaviCalendar
 	 */
 	protected $fIsTimeSet = false;
 
-	// TODO: rename to areFieldsInSync
 	/**
 	 * @var        bool True if the fields are in sync with the currently set time
 	 *                  of this Calendar. If false, then the next attempt to get 
 	 *                  the value of a field will force a recomputation of all 
 	 *                  fields from the current value of the time field.
-	 * <P>
-	 * This should really be named areFieldsInSync, but the old name is retained
-	 * for backward compatibility.
 	 */
-	protected $fAreFieldsSet = false;
+	protected $fAreFieldsInSync = false;
 
 	/**
 	 * @var        bool True if all of the fields have been set.  This is 
@@ -3248,7 +3244,7 @@ abstract class AgaviCalendar
 		// the values.  Also, if we haven't set all the fields yet (i.e.,
 		// in a newly-created object), we need to fill in the fields. [LIU]
 		if($this->isLenient() || ! $this->fAreAllFieldsSet) 
-			$this->fAreFieldsSet = false;
+			$this->fAreFieldsInSync = false;
 
 		$this->fIsTimeSet = true;
 		$this->fAreFieldsVirtuallySet = false;
