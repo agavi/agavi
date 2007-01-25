@@ -307,7 +307,7 @@ abstract class AgaviCalendar
 	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
 	 * @since      0.11.0
 	 */
-	public function  equals($when)
+	public function equals($when)
 	{
 		return ($this->__is_equal($when) || $this->getTime() == $when->getTime());
 	}
@@ -347,7 +347,7 @@ abstract class AgaviCalendar
 	 */
 	public function after($when)
 	{
-    return ($this->__is_not_equal($when) && $this->getTimeInMillis() > $when->getTimeInMillis());
+		return ($this->__is_not_equal($when) && $this->getTimeInMillis() > $when->getTimeInMillis());
 	}
 
 	/**
