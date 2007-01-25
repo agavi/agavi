@@ -23,7 +23,6 @@
  * 
  * Parameters:
  *   'value'   value which the input should equals to
- *   'asparam' takes value in 'value' as name of input in request
  *
  * @package    agavi
  * @subpackage validator
