@@ -1037,7 +1037,6 @@ class AgaviGregorianCalendar extends AgaviCalendar
 	{
 		// lazy-evaluate systemDefaultCenturyStart
 		$needsUpdate = false;;
-		// TODO: hook up with this
 		$needsUpdate = (self::$fgSystemDefaultCenturyStart == self::$fgSystemDefaultCentury);
 
 		if($needsUpdate) {
@@ -1064,7 +1063,6 @@ class AgaviGregorianCalendar extends AgaviCalendar
 	private function internalGetDefaultCenturyStartYear()
 	{
 		// lazy-evaluate systemDefaultCenturyStartYear
-		// TODO: hook up with this
 		$needsUpdate = (self::$fgSystemDefaultCenturyStart == self::$fgSystemDefaultCentury);
 
 		if($needsUpdate) {
