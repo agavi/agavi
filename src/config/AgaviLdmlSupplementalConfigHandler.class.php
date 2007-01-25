@@ -47,6 +47,17 @@ class AgaviLdmlSupplementalConfigHandler extends AgaviConfigHandler
 	 */
 	public function execute($config, $context = null)
 	{
+		$dayMap = array(
+										'sun' => AgaviDateDefinitions::SUNDAY,
+										'mon' => AgaviDateDefinitions::MONDAY,
+										'tue' => AgaviDateDefinitions::TUESDAY,
+										'wed' => AgaviDateDefinitions::WEDNESDAY,
+										'thu' => AgaviDateDefinitions::THURSDAY,
+										'fri' => AgaviDateDefinitions::FRIDAY,
+										'sat' => AgaviDateDefinitions::SATURDAY,
+		);
+
+
 		$dataTree = AgaviConfigCache::parseConfig($config, false, $this->getValidationFile(), $this->parser)->supplementalData;
 
 		$parsedData = array();
@@ -99,6 +110,42 @@ class AgaviLdmlSupplementalConfigHandler extends AgaviConfigHandler
 			}
 		}
 
+		// set the default calendar to gregorian for all territories first
+		foreach($data['territories'] as &$territoryData) {
+			$territoryData['calendar'] = 'gregorian';
+		}
+
+		foreach($dataTree->calendarData as $calendar) {
+			$type = $calendar->getAttribute('type');
+			foreach(explode(' ', $calendar->getAttribute('territories')) as $territory) {
+				$data['territories'][$territory]['calendar'] = $type;
+			}
+		}
+
+		foreach($dataTree->weekData as $entry) {
+			$entryName = $entry->getName();
+			if($entryName == 'minDays') {
+				foreach(explode(' ', $entry->getAttribute('territories')) as $territory) {
+					$countries = $this->resolveTerritoryToCountries($data['territoryContainment'], $territory);
+					foreach($countries as $country) {
+						$data['territories'][$country]['week'][$entryName] = $entry->getAttribute('count');
+					}
+				}
+			} elseif($entryName == 'firstDay' || $entryName == 'weekendStart' || $entryName == 'weekendEnd') {
+				if(!$entry->hasAttribute('alt')) {
+					foreach(explode(' ', $entry->getAttribute('territories')) as $territory) {
+						$countries = $this->resolveTerritoryToCountries($data['territoryContainment'], $territory);
+						foreach($countries as $country) {
+							$data['territories'][$country]['week'][$entryName] = $dayMap[$entry->getAttribute('day')];
+						}
+					}
+				}
+			} else {
+				throw new AgaviException('Invalid tag ' . $entry->getName() . ' in weekData tag');
+			}
+
+		}
+
 		$data['timezones'] = array('territories' => array(), 'multiZones' => array());
 		foreach(explode(' ', $dataTree->timezoneData->zoneFormatting->getAttribute('multizone')) as $zone) {
 			$data['timezones']['multiZones'][$zone] = true;
@@ -124,6 +171,35 @@ class AgaviLdmlSupplementalConfigHandler extends AgaviConfigHandler
 		$retval = sprintf($retval, gmdate('m/d/Y H:i:s'), join("\n", $code));
 
 		return $retval;
+	}
+
+	protected function resolveTerritoryToCountries($territoryContainments, $territory)
+	{
+		if(!isset($territoryContainments[$territory])) {
+			return (array) $territory;
+		}
+		$resultCountries = array();
+		
+		$territories = $territoryContainments[$territory];
+		do {
+			$newTerrs = array();
+			foreach($territories as $terr) {
+				if(isset($territoryContainments[$terr])) {
+					foreach($territoryContainments[$terr] as $resolvedTerr) {
+						if(is_numeric($resolvedTerr)) {
+							$newTerrs[] = $resolvedTerr;
+						} else {
+							$resultCountries[] = $resolvedTerr;
+						}
+					}
+				} else {
+					$resultCountries[] = $terr;
+				}
+			}
+			$territories = $newTerrs;
+		} while(count($territories));
+
+		return $resultCountries;
 	}
 }
 
