@@ -56,7 +56,8 @@
     <xs:attribute name="default" type="php_label" use="required" />
   </xs:complexType>
   <xs:complexType name="layout">
-    <xs:sequence>
+    <xs:sequence maxOccurs="unbounded">
+      <xs:group ref="parameters" />
       <xs:element name="layers" type="layers" minOccurs="0" />
     </xs:sequence>
     <xs:attribute name="name" type="php_label" use="required" />

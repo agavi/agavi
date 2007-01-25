@@ -87,7 +87,8 @@ class AgaviOutputTypeConfigHandler extends AgaviConfigHandler
 				if(isset($outputType->layouts)) {
 					foreach($outputType->layouts as $layout) {
 						$layoutName = $layout->getAttribute('name');
-						$data[$outputTypeName]['layouts'][$layoutName] = array('layers' => array());
+						$data[$outputTypeName]['layouts'][$layoutName] = array('layers' => array(), 'parameters' => array());
+						$data[$outputTypeName]['layouts'][$layoutName]['parameters'] = $this->getItemParameters($layout, $data[$outputTypeName]['layouts'][$layoutName]['parameters']);
 						if(isset($layout->layers)) {
 							foreach($layout->layers as $layer) {
 								$layerName = $layer->getAttribute('name');

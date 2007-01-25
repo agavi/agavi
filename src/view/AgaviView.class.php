@@ -311,6 +311,8 @@ abstract class AgaviView
 	 *
 	 * @param      string The (optional) name of the layout.
 	 *
+	 * @return     array An array of parameters set for the layout.
+	 *
 	 * @throws     AgaviException If the layout doesn't exist.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
@@ -330,6 +332,8 @@ abstract class AgaviView
 			}
 			$this->appendLayer($l);
 		}
+		
+		return $layout['parameters'];
 	}
 	
 	/**
