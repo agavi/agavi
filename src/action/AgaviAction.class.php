@@ -95,7 +95,7 @@ abstract class AgaviAction
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
-	public function handleError(AgaviRequestDataHolder $r)
+	public function handleError(AgaviRequestDataHolder $rd)
 	{
 		return 'Error';
 	}
@@ -111,7 +111,7 @@ abstract class AgaviAction
 	public function initialize(AgaviExecutionContainer $container)
 	{
 		$this->container = $container;
-		
+
 		$this->context = $container->getContext();
 	}
 
@@ -150,7 +150,7 @@ abstract class AgaviAction
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
-	public function validate(AgaviRequestDataHolder $r)
+	public function validate(AgaviRequestDataHolder $rd)
 	{
 		return true;
 	}
@@ -233,7 +233,7 @@ abstract class AgaviAction
 	{
 		return $this->container->removeAttribute($name);
 	}
-	
+
 	/**
 	 * @see        AgaviAttributeHolder::setAttributesByRef()
 	 *

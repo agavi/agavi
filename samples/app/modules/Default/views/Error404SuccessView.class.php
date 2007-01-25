@@ -23,17 +23,17 @@ class Default_Error404SuccessView extends AgaviSampleAppDefaultBaseView
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function executeHtml(AgaviRequestDataHolder $r)
+	public function executeHtml(AgaviRequestDataHolder $rd)
 	{
-		parent::executeHtml($r);
-		
+		parent::executeHtml($rd);
+
 		// set the title
 		$this->setAttribute('title', $this->getContext()->getTranslationManager()->_('404 Not Found', 'default.ErrorActions'));
-		
+
 		$this->container->getResponse()->setHttpStatusCode('404');
 	}
-	
-	public function executeXmlrpc(AgaviRequestDataHolder $r)
+
+	public function executeXmlrpc(AgaviRequestDataHolder $rd)
 	{
 		$this->container->getResponse()->setHttpStatusCode('404');
 	}

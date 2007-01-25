@@ -25,7 +25,7 @@ class Default_UnavailableAction extends AgaviSampleAppDefaultBaseAction
 	 * Alternatively, you can implement executeRead() and executeWrite() methods,
 	 * because "read" and "write" are the default names for Web Request methods.
 	 * Other request methods may be explicitely served via execcuteReqmethname().
-	 * 
+	 *
 	 * Keep in mind that if an Action serves a Request method, validation will be
 	 * performed prior to execution.
 	 *
@@ -49,7 +49,7 @@ class Default_UnavailableAction extends AgaviSampleAppDefaultBaseAction
 	 * execute*() being present, e.g. for a "write" Request, validateWrite() will
 	 * be run even if there is no executeWrite() method.
 	 */
-//	public function execute(AgaviRequestDataHolder $r)
+//	public function execute(AgaviRequestDataHolder $rd)
 //	{
 //		return 'Success';
 //	}

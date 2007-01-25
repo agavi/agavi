@@ -1,4 +1,4 @@
-<form action="<?php echo $r->gen('login'); ?>" method="post" id="foo">
+<form action="<?php echo $ro->gen('login'); ?>" method="post" id="foo">
 	<dl>
 		<dt><label for="fe-username"><?php echo $tm->_('Username:', 'default.Login'); ?></label></dt>
 		<dd><input type="text" name="username" id="fe-username" /></dd>

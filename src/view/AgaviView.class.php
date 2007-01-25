@@ -61,17 +61,17 @@ abstract class AgaviView
 	 * @var        AgaviExecutionContainer This view's execution container.
 	 */
 	protected $container = null;
-	
+
 	/**
 	 * @var        AgaviContext The AgaviContext instance this View belongs to.
 	 */
 	protected $context = null;
-	
+
 	/**
 	 * @var        array An array of defined layers.
 	 */
 	protected $layers = array();
-	
+
 	/**
 	 * Execute any presentation logic and set template attributes.
 	 *
@@ -84,7 +84,7 @@ abstract class AgaviView
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
-	abstract function execute(AgaviRequestDataHolder $r);
+	abstract function execute(AgaviRequestDataHolder $rd);
 
 	/**
 	 * Retrieve the current application context.
@@ -138,9 +138,9 @@ abstract class AgaviView
 	public function initialize(AgaviExecutionContainer $container)
 	{
 		$this->container = $container;
-		
+
 		$this->context = $container->getContext();
-		
+
 		$this->response = $container->getResponse();
 	}
 
@@ -174,7 +174,7 @@ abstract class AgaviView
 		}
 		return $layer;
 	}
-	
+
 	/**
 	 * Append a layer to the list of layers.
 	 *
@@ -194,22 +194,22 @@ abstract class AgaviView
 		if($otherLayer !== null && in_array($otherLayer, $this->layers, true)) {
 			throw new AgaviViewException('Layer "' . $otherLayer->getName() . '" not in list');
 		}
-		
+
 		if($pos = array_search($layer, $this->layers, true) !== false) {
 			// given layer is already in the list, so we remove it first
 			array_splice($this->layers, $pos, 1);
 		}
-		
+
 		if($otherLayer === null) {
 			$dest = count($this->layers);
 		} else {
 			$dest = array_search($otherLayer, $this->layers, true) + 1;
 		}
 		array_splice($this->layers, $dest, 0, array($layer));
-		
+
 		return $layer;
 	}
-	
+
 	/**
 	 * Prepend a layer to the list of layers.
 	 *
@@ -229,22 +229,22 @@ abstract class AgaviView
 		if($otherLayer !== null && in_array($otherLayer, $this->layers, true)) {
 			throw new AgaviViewException('Layer "' . $otherLayer->getName() . '" not in list');
 		}
-		
+
 		if($pos = array_search($layer, $this->layers, true) !== false) {
 			// given layer is already in the list, so we remove it first
 			array_splice($this->layers, $pos, 1);
 		}
-		
+
 		if($otherLayer === null) {
 			$dest = 0;
 		} else {
 			$dest = array_search($otherLayer, $this->layers, true);
 		}
 		array_splice($this->layers, $dest, 0, array($layer));
-		
+
 		return $layer;
 	}
-	
+
 	/**
 	 * Remove a layer from the list.
 	 *
@@ -260,7 +260,7 @@ abstract class AgaviView
 		}
 		array_splice($this->layers, $pos, 1);
 	}
-	
+
 	/**
 	 * Remove all layers from the list.
 	 *
@@ -271,7 +271,7 @@ abstract class AgaviView
 	{
 		$this->layers = array();
 	}
-	
+
 	/**
 	 * Retrieve a layer from the list.
 	 *
@@ -290,7 +290,7 @@ abstract class AgaviView
 			}
 		}
 	}
-	
+
 	/**
 	 * Get all layers from the list.
 	 *
@@ -303,7 +303,7 @@ abstract class AgaviView
 	{
 		return $this->layers;
 	}
-	
+
 	/**
 	 * Load a pre-configured layout.
 	 *
@@ -321,9 +321,9 @@ abstract class AgaviView
 	public function loadLayout($layoutName = null)
 	{
 		$layout = $this->container->getOutputType()->getLayout($layoutName);
-		
+
 		$this->clearLayers();
-		
+
 		foreach($layout['layers'] as $name => $layer) {
 			$l = $this->createLayer($layer['class'], $name, $layer['renderer']);
 			$l->setParameters($layer['parameters']);
@@ -335,7 +335,7 @@ abstract class AgaviView
 		
 		return $layout['parameters'];
 	}
-	
+
 	/**
 	 * @see        AgaviAttributeHolder::setAttributesByRef()
 	 *
@@ -401,7 +401,7 @@ abstract class AgaviView
 	{
 		return $this->container->removeAttribute($name);
 	}
-	
+
 	/**
 	 * @see        AgaviAttributeHolder::setAttributesByRef()
 	 *

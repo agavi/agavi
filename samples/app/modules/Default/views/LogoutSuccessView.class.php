@@ -23,13 +23,13 @@ class Default_LogoutSuccessView extends AgaviSampleAppDefaultBaseView
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function executeHtml(AgaviRequestDataHolder $r)
+	public function executeHtml(AgaviRequestDataHolder $rd)
 	{
-		parent::executeHtml($r);
-		
+		parent::executeHtml($rd);
+
 		// set the title
 		$this->setAttribute('title', $this->getContext()->getTranslationManager()->_('Logout Successful', 'default.Login'));
-		
+
 		$this->getResponse()->setCookie('autologon[username]', false);
 		$this->getResponse()->setCookie('autologon[password]', false);
 	}

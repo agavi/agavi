@@ -25,7 +25,7 @@ class Default_LoginAction extends AgaviSampleAppDefaultBaseAction
 	 * Alternatively, you can implement executeRead() and executeWrite() methods,
 	 * because "read" and "write" are the default names for Web Request methods.
 	 * Other request methods may be explicitely served via execcuteReqmethname().
-	 * 
+	 *
 	 * Keep in mind that if an Action serves a Request method, validation will be
 	 * performed prior to execution.
 	 *
@@ -49,10 +49,10 @@ class Default_LoginAction extends AgaviSampleAppDefaultBaseAction
 	 * execute*() being present, e.g. for a "write" Request, validateWrite() will
 	 * be run even if there is no executeWrite() method.
 	 */
-	public function executeWrite(AgaviRequestDataHolder $r)
+	public function executeWrite(AgaviRequestDataHolder $rd)
 	{
 		try {
-			$this->getContext()->getUser()->login($r->getParameter('username'), $r->getParameter('password'));
+			$this->getContext()->getUser()->login($rd->getParameter('username'), $rd->getParameter('password'));
 			return 'Success';
 		} catch(AgaviSecurityException $e) {
 			$this->getContext()->getRequest()->setError($e->getMessage(), 'Wrong ' . ucfirst($e->getMessage()));
@@ -60,7 +60,7 @@ class Default_LoginAction extends AgaviSampleAppDefaultBaseAction
 		}
 	}
 
-	public function handleError(AgaviRequestDataHolder $r)
+	public function handleError(AgaviRequestDataHolder $rd)
 	{
 		return 'Input';
 	}

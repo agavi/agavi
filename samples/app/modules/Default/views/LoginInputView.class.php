@@ -23,17 +23,17 @@ class Default_LoginInputView extends AgaviSampleAppDefaultBaseView
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function executeHtml(AgaviRequestDataHolder $r)
+	public function executeHtml(AgaviRequestDataHolder $rd)
 	{
-		parent::executeHtml($r);
-		
+		parent::executeHtml($rd);
+
 		// set the title
 		$this->setAttribute('title', $this->getContext()->getTranslationManager()->_('Login', 'default.Login'));
-		
+
 		// our login form is displayed. so let's remove that cookie thing there
 		$this->getResponse()->setCookie('autologon[username]', false);
 		$this->getResponse()->setCookie('autologon[password]', false);
-		
+
 		if($this->getContext()->getRequest()->hasAttributeNamespace('org.agavi.controller.forwards.login')) {
 			// we were redirected to the login form by the controller because the requested action required security
 			// so store the input URL in the session for a redirect after login

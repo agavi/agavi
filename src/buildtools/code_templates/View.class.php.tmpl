@@ -2,10 +2,10 @@
 
 class %%MODULE%%_%%ACTION_NAME%%%%VIEW%%View extends AgaviView
 {
-	public function execute(AgaviRequestDataHolder $r)
+	public function execute(AgaviRequestDataHolder $rd)
 	{
 		$this->loadLayout();
-		
+
 		// set the title
 		$this->setAttribute('_title', '%%ACTION%% Action');
 	}

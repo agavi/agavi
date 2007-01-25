@@ -23,24 +23,24 @@ class Default_LoginSuccessView extends AgaviSampleAppDefaultBaseView
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function executeHtml(AgaviRequestDataHolder $r)
+	public function executeHtml(AgaviRequestDataHolder $rd)
 	{
 		$usr = $this->getContext()->getUser();
 		$res = $this->getResponse();
-		
+
 		// set the autologon cookie if requested
 		if($r->hasParameter('remember')) {
-			$res->setCookie('autologon[username]', $r->getParameter('username'), 60*60*24*14);
-			$res->setCookie('autologon[password]', $r->getParameter('password'), 60*60*24*14);
+			$res->setCookie('autologon[username]', $rd->getParameter('username'), 60*60*24*14);
+			$res->setCookie('autologon[password]', $rd->getParameter('password'), 60*60*24*14);
 		}
-		
+
 		if($usr->hasAttribute('redirect', 'org.agavi.SampleApp.login')) {
 			$this->getResponse()->setRedirect($usr->removeAttribute('redirect', 'org.agavi.SampleApp.login'));
 			return;
 		}
-		
-		parent::executeHtml($r);
-		
+
+		parent::executeHtml($rd);
+
 		// set the title
 		$this->setAttribute('title', $this->getContext()->getTranslationManager()->_('Login Successful', 'default.Login'));
 	}

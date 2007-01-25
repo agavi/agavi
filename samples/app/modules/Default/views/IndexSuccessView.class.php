@@ -23,10 +23,10 @@ class Default_IndexSuccessView extends AgaviSampleAppDefaultBaseView
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function executeHtml(AgaviRequestDataHolder $r)
+	public function executeHtml(AgaviRequestDataHolder $rd)
 	{
-		parent::executeHtml($r);
-		
+		parent::executeHtml($rd);
+
 		// set the title
 		$this->setAttribute('title', $this->getContext()->getTranslationManager()->_('Welcome to the Agavi Sample Application', 'default.layout'));
 	}
