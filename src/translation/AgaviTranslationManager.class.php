@@ -797,6 +797,25 @@ class AgaviTranslationManager
 
 		return $c;
 	}
+
+	/**
+	 * Returns the stored information from the ldml supplemental data about a 
+	 * territory.
+	 *
+	 * @param      string The uppercase 2 letter country iso code.
+	 *
+	 * @return     array The data.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getTerritoryData($country)
+	{
+		if(!isset($this->supplementalData['territories'][$country])) {
+			return array();
+		}
+		return $this->supplementalData['territories'][$country];
+	}
 }
 
 ?>
