@@ -3194,10 +3194,6 @@ abstract class AgaviCalendar
 	 */
 	private $fFirstDayOfWeek;
 	private $fMinimalDaysInFirstWeek;
-/*
-	UCalendarDaysOfWeek fFirstDayOfWeek;
-	uint8_t     fMinimalDaysInFirstWeek;
-*/
 
 	/**
 	 * Sets firstDayOfWeek and minimalDaysInFirstWeek. Called at Calendar construction
@@ -3222,35 +3218,17 @@ abstract class AgaviCalendar
 		//   }
 		//   Both have a range of 1..7
 
-
 		$this->fFirstDayOfWeek = AgaviDateDefinitions::SUNDAY;
 		$this->fMinimalDaysInFirstWeek = 1;
 
-/*
-// TODO: use agavi stuff
-		CalendarData calData(desiredLocale, type, status);
-		// If the resource data doesn't seem to be present at all, then use last-resort
-		// hard-coded data.
-		UResourceBundle *dateTimeElements = calData.getByKey(gDateTimeElements);
-
-		U_LOCALE_BASED(locBased, *this);
-		locBased.setLocaleIDs(ures_getLocaleByType(dateTimeElements, ULOC_VALID_LOCALE, &status),
-			ures_getLocaleByType(dateTimeElements, ULOC_ACTUAL_LOCALE, &status));
-		if(U_SUCCESS(status)) {
-			int32_t arrLen;
-			const int32_t *dateTimeElementsArr = ures_getIntVector(dateTimeElements, &arrLen, &status);
-
-			if(U_SUCCESS(status) && arrLen == 2
-					&& 1 <= dateTimeElementsArr[0] && dateTimeElementsArr[0] <= 7
-					&& 1 <= dateTimeElementsArr[1] && dateTimeElementsArr[1] <= 7) {
-				fFirstDayOfWeek = (UCalendarDaysOfWeek)dateTimeElementsArr[0];
-				fMinimalDaysInFirstWeek = (uint8_t)dateTimeElementsArr[1];
-			} else {
-				status = U_INVALID_FORMAT_ERROR;
-			}
+		$tm = $desiredLocale->getContext()->getTranslationManager();
+		$cdata = $tm->getTerritoryData($desiredLocale->getLocaleTerritory());
+		if(isset($cdata['week']['firstDay'])) {
+			$this->fFirstDayOfWeek = (int) $cdata['week']['firstDay'];
 		}
-*/
-		// do NOT close dateTimeElements
+		if(isset($cdata['week']['minDays'])) {
+			$this->fMinimalDaysInFirstWeek = (int) $cdata['week']['minDays'];
+		}
 	}
 
 	/**
