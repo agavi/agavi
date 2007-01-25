@@ -63,6 +63,7 @@ class AgaviValidatorConfigHandler extends AgaviConfigHandler
 			'imagefile' => array('class' => 'AgaviImageFileValidator', 'parameters' => array()),
 			'inarray' => array('class' => 'AgaviInarrayValidator', 'parameters' => array('sep' => ',')),
 			'isset' => array('class' => 'AgaviIssetValidator', 'parameters' => array()),
+			'isnotempty' => array('class' => 'AgaviIsNotEmptyValidator', 'parameters' => array()),
 			'not' => array('class' => 'AgaviNotoperatorValidator', 'parameters' => array()),
 			'number' => array('class' => 'AgaviNumberValidator', 'parameters' => array('type' => 'int')),
 			'or' => array('class' => 'AgaviOroperatorValidator', 'parameters' => array('break' => '1')),
