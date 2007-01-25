@@ -1008,13 +1008,13 @@ class AgaviGregorianCalendar extends AgaviCalendar
 	/**
 	 * @var        int See documentation for systemDefaultCenturyStart.
 	 */
-	private static $fgSystemDefaultCenturyStartYear;
+	private static $fgSystemDefaultCenturyStartYear = -1;
 
 	/**
 	 * @var        int Default value that indicates the defaultCenturyStartYear is
 	 *                 unitialized
 	 */
-	private static $fgSystemDefaultCenturyYear;
+	private static $fgSystemDefaultCenturyYear = -1;
 
 	/**
 	 * @var        float Default value that indicates the UDate of the beginning 
