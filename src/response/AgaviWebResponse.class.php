@@ -151,8 +151,10 @@ class AgaviWebResponse extends AgaviResponse
 	public function clear()
 	{
 		$this->clearContent();
+		$this->httpStatusCode = '200';
 		$this->httpHeaders = array();
 		$this->cookies = array();
+		$this->redirect = null;
 	}
 	
 	/**
@@ -206,6 +208,10 @@ class AgaviWebResponse extends AgaviResponse
 				if(!$this->hasCookie($name)) {
 					$this->setCookie($name, $cookie['value'], $cookie['lifetime'], $cookie['path'], $cookie['domain'], $cookie['secure'], $cookie['httpOnly']);
 				}
+			}
+			if($otherResponse->hasRedirect() && !$this->hasRedirect()) {
+				$redirect = $otherResponse->getRedirect();
+				$this->setRedirect($redirect['location'], $redirect['code']);
 			}
 		}
 	}
@@ -538,6 +544,43 @@ class AgaviWebResponse extends AgaviResponse
 	public function setRedirect($location, $code = 302)
 	{
 		$this->redirect = array('location' => $location, 'code' => $code);
+	}
+
+	/**
+	 * Get info about the set redirect.
+	 *
+	 * @return     array An assoc array of redirect info, or null if none set.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getRedirect()
+	{
+		return $this->redirect;
+	}
+
+	/**
+	 * Check if a redirect is set.
+	 *
+	 * @return     bool true, if a redirect is set, otherwise falsae
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function hasRedirect()
+	{
+		return $this->redirect !== null;
+	}
+
+	/**
+	 * Clear any set redirect information.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function clearRedirect()
+	{
+		$this->redirect = null;
 	}
 }
 
