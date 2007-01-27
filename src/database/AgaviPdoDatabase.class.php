@@ -38,7 +38,7 @@ class AgaviPdoDatabase extends AgaviDatabase
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
-	public function connect()
+	protected function connect()
 	{
 		// determine how to get our parameters
 		$method = $this->getParameter('method', 'dsn');

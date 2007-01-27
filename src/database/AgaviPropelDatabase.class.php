@@ -44,14 +44,13 @@
 class AgaviPropelDatabase extends AgaviDatabase
 {
 	/**
-	 * Stores the actual AgaviDatabase implementation (AgaviCreoleDatabase or 
-	 * AgaviPdoDatabase).
+	 * Stores the actual AgaviCreoleDatabase implementation for Propel 1.2.
 	 *
 	 * @var        AgaviDatabase The AgaviDatabase instance used internally.
 	 *
 	 * @since      0.11.0
 	 */
-	protected $agaviDatabase = null;
+	protected $agaviCreoleDatabase = null;
 	
 	/**
 	 * An array of the classes in the runtime configuration classes list.
@@ -143,54 +142,22 @@ class AgaviPropelDatabase extends AgaviDatabase
 
 	/**
 	 * Connect to the database.
-	 * This method is used only if the <kbd>use_autoload</kbd> parameter is false
 	 * 
 	 *
 	 * @throws     <b>AgaviDatabaseException</b> If a connection could not be 
 	 *                                           created.
 	 *
-	 * @author     Dusty Matthews <dustym@agavi.org>
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
-	public function connect()
+	protected function connect()
 	{
-		$useAutoload = $this->getParameter('use_autoload', true);
-		if($useAutoload) {
-			return $this->agaviDatabase->connect();
-		}
-		try {
-			// determine how to get our settings
-			$method = $this->getParameter('method', 'normal');
-			switch ($method) {
-				case 'normal':
-					$runtime = AgaviConfigHandler::replaceConstants($this->getParameter('config', null));
-					break;
-				case 'server':
-					$runtime = $_SERVER[$this->getParameter('config')];
-					break;
-				case 'env':
-					$runtime = $_ENV[$this->getParameter('config')];
-					break;
-				default:
-					$error = 'Invalid PropelDatabase parameter retrieval method "%s"';
-					$error = sprintf($error, $method);
-					throw new AgaviDatabaseException($error);
-			}
-			// get propel class path
-			$classPath = AgaviConfigHandler::replaceConstants($this->getParameter('classpath',null));
-			// set the include path to our Propel generated classes
-			if(!is_null($classPath)) {
-				set_include_path(get_include_path().PATH_SEPARATOR.$classPath);
-			}
-			require_once('propel/Propel.php');
-			// Everything looks good. Off to the races.
-			Propel::init($runtime);
+		if($this->agaviDatabase) {
+			// make concrecte adapter connect
+			$this->agaviDatabase->getConnection();
+		} else {
+			if(class_exists('Propel'))
 			$this->connection = Propel::getConnection();
-			$this->resource =& $this->connection->getResource();
-		} catch(PropelException $e) {
-			// the connection's foobar'd
-			throw new AgaviDatabaseException($e->toString());
 		}
 	}
 
@@ -212,9 +179,8 @@ class AgaviPropelDatabase extends AgaviDatabase
 	public function getConnection()
 	{
 		if($this->connection === null) {
-			$this->connection = $this->agaviDatabase->getConnection();
+			$this->connect();
 		}
-
 		return parent::getConnection();
 	}
 
@@ -231,11 +197,7 @@ class AgaviPropelDatabase extends AgaviDatabase
 	 */
 	public function getResource()
 	{
-		if($this->resource === null) {
-			$this->resource = $this->agaviDatabase->getResource();
-		}
-
-		return parent::getResource();
+		return $this->getConnection();
 	}
 
 	/**
@@ -250,7 +212,6 @@ class AgaviPropelDatabase extends AgaviDatabase
 	public function initialize(AgaviDatabaseManager $databaseManager, array $parameters = array())
 	{
 		parent::initialize($databaseManager, $parameters);
-		$useAutoload = $this->getParameter('use_autoload', true);
 		$configPath = AgaviConfigHandler::replaceConstants($this->getParameter('config'));
 		$datasource = $this->getParameter('datasource', null);
 		$use_as_default = $this->getParameter('use_as_default', false);
@@ -258,49 +219,40 @@ class AgaviPropelDatabase extends AgaviDatabase
 		if($datasource === null || $datasource == 'default') {
 			$datasource = $config['propel']['datasources']['default'];
 		}
-		$usePdo = false;
+		$is12 = true;
 		if(isset($config['propel']['generator_version']) && version_compare($config['propel']['generator_version'], '1.3.0-dev') >= 0) {
-			$usePdo = true;
+			$usePdo = false;
 		}
-		if($usePdo) {
-			// it's Propel 1.3 or later, we wrap a PDO connection.
-			$this->agaviDatabase = new AgaviPdoDatabase();
-			$this->agaviDatabase->initialize($databaseManager, $parameters);
-		} else {
+		if($is12) {
 			// Propel 1.1 or 1.2, so let's use Creole for the connection.
-			$this->agaviDatabase = new AgaviCreoleDatabase();
-			$this->agaviDatabase->initialize($databaseManager, $parameters);
-		}
-		if($useAutoload) {
+			$this->agaviCreoleDatabase = new AgaviCreoleDatabase();
+			$this->agaviCreoleDatabase->initialize($databaseManager, $parameters);
 			foreach($config['propel']['datasources'][$datasource]['connection'] as $key => $value) {
 				$this->agaviDatabase->setParameter($key, $value);
 			}
 			$this->agaviDatabase->setParameter('method', $usePdo ? 'dsn' : 'normal');
-			if(!self::isDefaultConfigPathSet()) {
-				self::setDefaultConfigPath($configPath);
-				if($use_as_default) {
-					self::setDefaultConfigPathSet();
-				}
+		}
+		
+		if(!self::isDefaultConfigPathSet()) {
+			self::setDefaultConfigPath($configPath);
+			if($use_as_default) {
+				self::setDefaultConfigPathSet();
 			}
+		}
+		if(!$is12) {
 			if(isset($config['propel']['datasources'][$datasource]['classes'])) {
 				$this->propelAutoloads = $config['propel']['datasources'][$datasource]['classes'];
 				spl_autoload_register(array($this, 'autoload'));
 			}
-		}
-	}
-	
-	/**
-	 * Autoloading function for Propel 1.3.
-	 *
-	 * @param      string The name of the class to autoload.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function autoload($className) {
-		if(isset($this->propelAutoloads[$className])) {
-			// it's a propel runtime class. autoload Propel, it will handle the rest.
-			class_exists('Propel');
+
+			// it's Propel 1.3 or later, let's autoload or include Propel
+			if(!class_exists('Propel')) {
+				include('propel/Propel.php');
+			}
+			if(!Propel::isInit()) {
+				// that wasn't PropelAutoload, so init it
+				Propel::init(self::getDefaultConfigPath());
+			}
 		}
 	}
 
@@ -329,7 +281,11 @@ class AgaviPropelDatabase extends AgaviDatabase
 	 */
 	public function shutdown()
 	{
-		$this->agaviDatabase->shutdown();
+		if($this->agaviDatabase) {
+			$this->agaviDatabase->shutdown();
+		} else {
+			$this->connection = null;
+		}
 	}
 }
 

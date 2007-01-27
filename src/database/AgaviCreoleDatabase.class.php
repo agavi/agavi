@@ -67,7 +67,7 @@ class AgaviCreoleDatabase extends AgaviDatabase
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function connect()
+	protected function connect()
 	{
 		try {
 			// determine how to get our settings
@@ -164,7 +164,7 @@ class AgaviCreoleDatabase extends AgaviDatabase
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	private function loadDSN(array $array)
+	protected function loadDSN(array $array)
 	{
 		// determine if a dsn is set, otherwise use separate parameters
 		$dsn = $this->getParameter('dsn');

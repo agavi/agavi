@@ -57,7 +57,7 @@ class AgaviPostgresqlDatabase extends AgaviDatabase
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function connect()
+	protected function connect()
 	{
 		// determine how to get our parameters
 		$method = $this->getParameter('method', 'normal');
@@ -128,7 +128,7 @@ class AgaviPostgresqlDatabase extends AgaviDatabase
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	private function loadParameters(array $array)
+	protected function loadParameters(array $array)
 	{
 		$database = $this->getParameter('database');
 		$host     = $this->getParameter('host');

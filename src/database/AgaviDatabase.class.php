@@ -53,7 +53,7 @@ abstract class AgaviDatabase extends AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	abstract function connect();
+	abstract protected function connect();
 	
 	/**
 	 * Retrieve the Database Manager instance for this implementation.
@@ -140,7 +140,7 @@ abstract class AgaviDatabase extends AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	abstract function shutdown();
+	abstract public function shutdown();
 }
 
 ?>
