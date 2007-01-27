@@ -41,7 +41,7 @@
  *
  * @version    $Id$
  */
-class AgaviPropelDatabase extends agaviCreoleDatabase
+class AgaviPropelDatabase extends AgaviDatabase
 {
 	/**
 	 * Stores the actual AgaviCreoleDatabase implementation for Propel 1.2.
@@ -209,7 +209,7 @@ class AgaviPropelDatabase extends agaviCreoleDatabase
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.10.0
 	 */
-	public function initialize(agaviCreoleDatabaseManager $databaseManager, array $parameters = array())
+	public function initialize(AgaviDatabaseManager $databaseManager, array $parameters = array())
 	{
 		parent::initialize($databaseManager, $parameters);
 		$configPath = AgaviConfigHandler::replaceConstants($this->getParameter('config'));
