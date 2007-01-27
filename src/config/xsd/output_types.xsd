@@ -69,7 +69,7 @@
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="layer">
-    <xs:sequence>
+    <xs:sequence maxOccurs="unbounded">
       <xs:group ref="parameters" />
       <xs:element name="slots" type="slots" minOccurs="0" />
     </xs:sequence>
