@@ -6,7 +6,7 @@ class AgaviPHP5ComplexPeerBuilder extends PHP5ComplexPeerBuilder
 {
 	public function buildObjectInstanceCreationCode($obj, $cls)
 	{
-		return parent::buildObjectInstanceCreationCode($obj, $cls) . "$obj" . "->initialize(\$this->context);\n";
+		return parent::buildObjectInstanceCreationCode($obj, $cls) . $obj . '->initialize(self::$context);' . "\n";
 	}
 	
 	protected function addClassOpen(&$script) {
@@ -17,16 +17,16 @@ class AgaviPHP5ComplexPeerBuilder extends PHP5ComplexPeerBuilder
 		$script .= '
 abstract class '.$this->getClassname().' implements AgaviISingletonModel {
 	
-	protected $context = null;
+	protected static $context = null;
 	
 	public function initialize(AgaviContext $context, array $parameters = array())
 	{
-		$this->context = $context;
+		self::$context = $context;
 	}
 	
 	public function getContext()
 	{
-		return $this->context;
+		return self::$context;
 	}
 ';
 	}
