@@ -105,6 +105,18 @@ class AgaviUser extends AgaviAttributeHolder
 	}
 
 	/**
+	 * Startup the user.
+	 *
+	 * You'd usually try to auth from a cookie here etc.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function startup()
+	{
+	}
+
+	/**
 	 * Execute the shutdown procedure.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>

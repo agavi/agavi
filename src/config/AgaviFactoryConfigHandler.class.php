@@ -172,7 +172,8 @@ class AgaviFactoryConfigHandler extends AgaviConfigHandler
 				$data['user']['params'] = $this->getItemParameters($cfg->user, $data['user']['params']);
 
 				$data['user_code'] =	'$this->user = new ' . $data['user']['class'] . '();' . "\n" .
-															'$this->user->initialize($this, ' . var_export($data['user']['params'], true) . ');';
+															'$this->user->initialize($this, ' . var_export($data['user']['params'], true) . ');' .
+															'$this->user->startup();';
 				
 				if(AgaviConfig::get('core.use_security', false)) {
 					$rc = new ReflectionClass($data['user']['class']);
@@ -239,11 +240,11 @@ class AgaviFactoryConfigHandler extends AgaviConfigHandler
 			'logger_manager' => AgaviConfig::get('core.use_logging', false),
 			'translation_manager' => AgaviConfig::get('core.use_translation', false),
 			'storage' => true,
-			'user' => true,
-			'controller' => true,
 			'request' => true,
+			'user' => true,
 			'routing' => true,
 			'validation_manager' => true,
+			'controller' => true,
 		);
 
 		$code = '';
