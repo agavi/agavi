@@ -41,12 +41,12 @@
  *
  * @version    $Id$
  */
-class AgaviPropelDatabase extends AgaviDatabase
+class AgaviPropelDatabase extends agaviCreoleDatabase
 {
 	/**
 	 * Stores the actual AgaviCreoleDatabase implementation for Propel 1.2.
 	 *
-	 * @var        AgaviDatabase The AgaviDatabase instance used internally.
+	 * @var        agaviCreoleDatabase The agaviCreoleDatabase instance used internally.
 	 *
 	 * @since      0.11.0
 	 */
@@ -144,7 +144,7 @@ class AgaviPropelDatabase extends AgaviDatabase
 	 * Connect to the database.
 	 * 
 	 *
-	 * @throws     <b>AgaviDatabaseException</b> If a connection could not be 
+	 * @throws     <b>agaviCreoleDatabaseException</b> If a connection could not be 
 	 *                                           created.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
@@ -152,9 +152,9 @@ class AgaviPropelDatabase extends AgaviDatabase
 	 */
 	protected function connect()
 	{
-		if($this->agaviDatabase) {
+		if($this->agaviCreoleDatabase) {
 			// make concrecte adapter connect
-			$this->agaviDatabase->getConnection();
+			$this->agaviCreoleDatabase->getConnection();
 		} else {
 			if(class_exists('Propel'))
 			$this->connection = Propel::getConnection();
@@ -170,7 +170,7 @@ class AgaviPropelDatabase extends AgaviDatabase
 	 *
 	 * @return     mixed A database connection.
 	 *
-	 * @throws     <b>AgaviDatabaseException</b> If a connection could not be
+	 * @throws     <b>agaviCreoleDatabaseException</b> If a connection could not be
 	 *                                           retrieved.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
@@ -190,7 +190,7 @@ class AgaviPropelDatabase extends AgaviDatabase
 	 *
 	 * @return     mixed A database resource.
 	 *
-	 * @throws     <b>AgaviDatabaseException</b> If no resource could be retrieved
+	 * @throws     <b>agaviCreoleDatabaseException</b> If no resource could be retrieved
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
@@ -203,13 +203,13 @@ class AgaviPropelDatabase extends AgaviDatabase
 	/**
 	 * Load Propel config
 	 * 
-	 * @param      AgaviDatabaseManager The database manager of this instance.
+	 * @param      agaviCreoleDatabaseManager The database manager of this instance.
 	 * @param      array An associative array of initialization parameters.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.10.0
 	 */
-	public function initialize(AgaviDatabaseManager $databaseManager, array $parameters = array())
+	public function initialize(agaviCreoleDatabaseManager $databaseManager, array $parameters = array())
 	{
 		parent::initialize($databaseManager, $parameters);
 		$configPath = AgaviConfigHandler::replaceConstants($this->getParameter('config'));
@@ -228,9 +228,9 @@ class AgaviPropelDatabase extends AgaviDatabase
 			$this->agaviCreoleDatabase = new AgaviCreoleDatabase();
 			$this->agaviCreoleDatabase->initialize($databaseManager, $parameters);
 			foreach($config['propel']['datasources'][$datasource]['connection'] as $key => $value) {
-				$this->agaviDatabase->setParameter($key, $value);
+				$this->agaviCreoleDatabase->setParameter($key, $value);
 			}
-			$this->agaviDatabase->setParameter('method', $usePdo ? 'dsn' : 'normal');
+			$this->agaviCreoleDatabase->setParameter('method', $usePdo ? 'dsn' : 'normal');
 		}
 		
 		if(!self::isDefaultConfigPathSet()) {
@@ -273,7 +273,7 @@ class AgaviPropelDatabase extends AgaviDatabase
 	/**
 	 * Execute the shutdown procedure.
 	 *
-	 * @throws     <b>AgaviDatabaseException</b> If an error occurs while shutting
+	 * @throws     <b>agaviCreoleDatabaseException</b> If an error occurs while shutting
 	 *                                           down this database.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
@@ -281,8 +281,8 @@ class AgaviPropelDatabase extends AgaviDatabase
 	 */
 	public function shutdown()
 	{
-		if($this->agaviDatabase) {
-			$this->agaviDatabase->shutdown();
+		if($this->agaviCreoleDatabase) {
+			$this->agaviCreoleDatabase->shutdown();
 		} else {
 			$this->connection = null;
 		}
