@@ -53,15 +53,6 @@ class AgaviPropelDatabase extends AgaviDatabase
 	protected $agaviCreoleDatabase = null;
 	
 	/**
-	 * An array of the classes in the runtime configuration classes list.
-	 *
-	 * @var        array An array of classes and their file names.
-	 *
-	 * @since      0.11.0
-	 */
-	protected $propelAutoloads = array();
-	
-	/**
 	 * Stores the path of the configuration file that will be passed to
 	 * Propel::init() when using Propel autoloading magic
 	 *
@@ -221,7 +212,7 @@ class AgaviPropelDatabase extends AgaviDatabase
 		}
 		$is12 = true;
 		if(isset($config['propel']['generator_version']) && version_compare($config['propel']['generator_version'], '1.3.0-dev') >= 0) {
-			$usePdo = false;
+			$is12 = false;
 		}
 		if($is12) {
 			// Propel 1.1 or 1.2, so let's use Creole for the connection.
@@ -240,11 +231,6 @@ class AgaviPropelDatabase extends AgaviDatabase
 			}
 		}
 		if(!$is12) {
-			if(isset($config['propel']['datasources'][$datasource]['classes'])) {
-				$this->propelAutoloads = $config['propel']['datasources'][$datasource]['classes'];
-				spl_autoload_register(array($this, 'autoload'));
-			}
-
 			// it's Propel 1.3 or later, let's autoload or include Propel
 			if(!class_exists('Propel')) {
 				include('propel/Propel.php');
