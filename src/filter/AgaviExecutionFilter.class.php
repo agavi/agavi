@@ -340,7 +340,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 			$isViewCached = false;
 
 			if($isCacheable) {
-				$outputType = $this->context->getController()->getOutputType()->getName();
+				$outputType = $container->getOutputType()->getName();
 
 				if($isActionCached) {
 					$isViewCached = $this->checkCache(array_merge($groups, array($outputType)));
@@ -357,7 +357,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 			} else {
 				// $lm->log(new AgaviLoggerMessage('View is not cached, executing...'));
 				// view initialization completed successfully
-				$executeMethod = 'execute' . $this->context->getController()->getOutputType()->getName();
+				$executeMethod = 'execute' . $container->getOutputType()->getName();
 				if(!method_exists($viewInstance, $executeMethod)) {
 					$executeMethod = 'execute';
 				}
