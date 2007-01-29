@@ -33,6 +33,10 @@
  * # <b>db_time_col</b>  - [sess_time] - The database column in which the
  *                                       session timestamp will be stored.
  * # <b>session_name</b> - [Agavi]     - The name of the session.
+ * # <b>data_as_lob</b>  - [true]      - If true, data is stored as a LOB
+ *                                       other wise as a string.
+ *                                       (Note: with Oracle LOBs are always
+ *                                        used)
  *
  * @package    agavi
  * @subpackage storage
@@ -146,7 +150,7 @@ class AgaviPdoSessionStorage extends AgaviSessionStorage
 	 * @return     bool true, if old sessions have been cleaned, otherwise an
 	 *                  exception is thrown.
 	 *
-	 * @throws     <b>AgaviDatabaseException</b> If old sessions cannot be 
+	 * @throws     <b>AgaviDatabaseException</b> If old sessions cannot be
 	 *                                           cleaned.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
@@ -271,7 +275,7 @@ class AgaviPdoSessionStorage extends AgaviSessionStorage
 	 * @return     bool true, if the session was written, otherwise an exception
 	 *                  is thrown.
 	 *
-	 * @throws     <b>AgaviDatabaseException</b> If session data cannot be 
+	 * @throws     <b>AgaviDatabaseException</b> If session data cannot be
 	 *                                           written.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
@@ -286,25 +290,28 @@ class AgaviPdoSessionStorage extends AgaviSessionStorage
 		$db_data_col = $this->getParameter('db_data_col', 'sess_data');
 		$db_id_col   = $this->getParameter('db_id_col', 'sess_id');
 		$db_time_col = $this->getParameter('db_time_col', 'sess_time');
-		
+
 		$isOracle = $this->connection->getAttribute(PDO::ATTR_DRIVER_NAME) == 'oracle';
+		$useLob = $this->getParameter('data_as_lob', true);
 
 		if($isOracle) {
 			$sql = sprintf('UPDATE %s SET %s = EMPTY_BLOB(), %s = :time WHERE %s = :id RETURNING %s INTO :data', $db_table, $db_data_col, $db_time_col, $db_id_col, $db_data_col);
-			
+
 			$sp = fopen('php://memory', 'r+');
 			fwrite($sp, $data);
 			rewind($sp);
 		} else {
 			$sql = sprintf('UPDATE %s SET %s = :data, %s = :time WHERE %s = :id', $db_table, $db_data_col, $db_time_col, $db_id_col);
-			
+
 			$sp = $data;
 		}
 
 		try {
 			$time = time();
+			$columnType = ($isOracle || $useLob) ? PDO::PARAM_LOB : PDO::PARAM_STR;
+
 			$stmt = $this->connection->prepare($sql);
-			$stmt->bindParam(':data', $sp, PDO::PARAM_LOB);
+			$stmt->bindParam(':data', $sp, $columnType);
 			$stmt->bindParam(':time', $time);
 			$stmt->bindParam(':id', $id);
 			$this->connection->beginTransaction();
