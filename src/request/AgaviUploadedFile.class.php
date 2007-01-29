@@ -97,7 +97,7 @@ final class AgaviUploadedFile extends ArrayObject
 	}
 	
 	/**
-	 * Move the uplaoded file.
+	 * Move the uploaded file.
 	 *
 	 * @param      string The destination filename.
 	 * @param      int    The mode of the destination file, default 0666.

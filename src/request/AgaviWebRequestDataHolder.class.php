@@ -381,10 +381,11 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	 * Retrieve an array of file information.
 	 *
 	 * @param      string A file name.
-	 * @param      mixed A default value.
+	 * @param      mixed  A default return value.
 	 *
-	 * @return     array An associative array of file information, if the file
-	 *                   exists, otherwise null.
+	 * @return     mixed An AgaviUploadedFile object with file information, or an
+	 *                   array if the field name has child elements, or null if
+	 *                   no such file exists.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
