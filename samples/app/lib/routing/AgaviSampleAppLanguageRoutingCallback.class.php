@@ -28,7 +28,7 @@ class AgaviSampleAppLanguageRoutingCallback extends AgaviRoutingCallback
 		if($found) {
 			$this->context->getController()->getGlobalResponse()->setCookie('locale', $parameters['locale'], 60*60*24*30);
 		} else {
-			$this->onNotMatched();
+			$this->onNotMatched($container);
 		}
 		return $found;
 	}
