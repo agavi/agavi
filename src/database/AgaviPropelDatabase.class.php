@@ -221,7 +221,7 @@ class AgaviPropelDatabase extends AgaviDatabase
 			foreach($config['propel']['datasources'][$datasource]['connection'] as $key => $value) {
 				$this->agaviCreoleDatabase->setParameter($key, $value);
 			}
-			$this->agaviCreoleDatabase->setParameter('method', $usePdo ? 'dsn' : 'normal');
+			$this->agaviCreoleDatabase->setParameter('method', 'normal');
 		}
 		
 		if(!self::isDefaultConfigPathSet()) {
