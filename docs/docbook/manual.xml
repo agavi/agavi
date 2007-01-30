@@ -149,13 +149,21 @@
         <title>From SVN</title>
 
         <para>Public access to the Subversion repository is possible via
-        <ulink
-        url="svn://svn.agavi.org/agavi">svn://svn.agavi.org/agavi</ulink>. If
-        you want to get the bleeding edge version, use
-        <filename>/agavi/trunk</filename>. Specific releases are available
-        through <filename>/agavi/tags</filename>. Also, you can get
-        development versions of version branches (if applicable) via
+        <ulink url="svn://svn.agavi.org/agavi">http://svn.agavi.org/</ulink>.
+        If you want to get the bleeding edge version, use
+        <filename>/trunk</filename>. Specific releases are available through
+        <filename>/agavi/tags</filename>. Also, you can get development
+        versions of version branches (if applicable) via
         <filename>/agavi/branches</filename>.</para>
+
+        <para><note>
+            <para>Note that <filename>trunk</filename> might not always give
+            you the latest version of Agavi. For example, once 0.11 RC1 was
+            released, development moved over to
+            <filename>branches/0.11</filename>, and trunk was not maintained
+            until the final 0.11 release, when work on 1.0 started in
+            trunk.</para>
+          </note></para>
 
         <para>You can either perform an <command>svn checkout</command>, which
         creates <filename>.svn</filename> folders that allow you to stay up to
@@ -171,7 +179,7 @@
         linkend="c1-installation-by_hand" />, or you package a PEAR release
         yourself for local installation by first running</para>
 
-        <para><command>phing package</command></para>
+        <para><command>phing package-pear</command></para>
 
         <para>on the root directory of your checkout, followed by a</para>
 
