@@ -9,15 +9,16 @@ class AgaviSampleAppDefaultBaseView extends AgaviView
 
 	public function executeXhtml(AgaviRequestDataHolder $rd)
 	{
-		return $this->executeHtml($rd);
+		if(method_exists($this, 'executeHtml')) {
+			return $this->executeHtml();
+		} else {
+			return $this->execute();
+		}
 	}
 
-	public function executeHtml(AgaviRequestDataHolder $rd)
+	public function setupHtml(AgaviRequestDataHolder $rd)
 	{
 		$this->loadLayout();
-
-		// set the content type
-		$this->setAttribute('_contentType', $this->container->getOutputType()->getParameter('Content-Type', 'text/html; charset=utf-8'));
 
 		// also set a default title just to avoid warnings
 		$this->setAttribute('title', '');

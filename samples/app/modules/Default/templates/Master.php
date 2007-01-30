@@ -5,7 +5,7 @@ $rtl = ($locale->getCharacterOrientation() == 'right-to-left');
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $locale->getLocaleLanguage(); ?>" lang="<?php echo $locale->getLocaleLanguage(); ?>"<?php if($rtl): ?> dir="rtl"<?php endif; ?>>
 	<head>
-		<meta http-equiv="Content-Type" content="<?php echo $template['_contentType']; ?>"/>
+		<meta http-equiv="Content-Type" content="<?php echo $container->getOutputType()->getParameter('Content-Type', 'text/html; charset=utf-8'); ?>" />
 		<title><?php echo $tm->_('Default Agavi Module', 'default.layout'); ?></title>
 		<base href="<?php echo $ro->getBaseHref(); ?>" />
 		<style type="text/css">
@@ -173,7 +173,7 @@ $otherLanguages = array_diff_key($languages, array($currentLanguage => null));
 <?php if($rq->hasErrors()): foreach($rq->getErrorMessages() as $error): ?>
 			<p class="error"><?php echo $error['message']; ?></p>
 <?php endforeach; endif; ?>
-<?php echo $slots['content']; ?>
+<?php echo $inner; // print the content layer output ?>
 		</div>
 	</body>
 </html>

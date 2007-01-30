@@ -25,7 +25,7 @@ class Default_LoginInputView extends AgaviSampleAppDefaultBaseView
 	 */
 	public function executeHtml(AgaviRequestDataHolder $rd)
 	{
-		parent::executeHtml($rd);
+		parent::setupHtml($rd);
 
 		// set the title
 		$this->setAttribute('title', $this->getContext()->getTranslationManager()->_('Login', 'default.Login'));

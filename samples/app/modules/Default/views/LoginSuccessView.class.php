@@ -39,7 +39,7 @@ class Default_LoginSuccessView extends AgaviSampleAppDefaultBaseView
 			return;
 		}
 
-		parent::executeHtml($rd);
+		parent::setupHtml($rd);
 
 		// set the title
 		$this->setAttribute('title', $this->getContext()->getTranslationManager()->_('Login Successful', 'default.Login'));
