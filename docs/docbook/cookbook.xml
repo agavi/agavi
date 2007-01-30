@@ -112,9 +112,10 @@ RewriteRule (.*) index.php?/$1 [QSA,L]
               </listitem>
 
               <listitem>
-                <para>The RewriteCond on %{REQUEST_FILENAME} only work if the
-                request filename has the full document root prepended to it,
-                i.e. %{DOCUMENT_ROOT}%{REQUEST_FILENAME}</para>
+                <para>The RewriteCond on <code>%{REQUEST_FILENAME}</code> only
+                work if the request filename has the full document root
+                prepended to it, i.e.
+                <code>%{DOCUMENT_ROOT}%{REQUEST_FILENAME}</code></para>
               </listitem>
             </orderedlist>Assuming your application is in the webserver root,
           i.e. called via "/" from the outside, that would mean:</para>
