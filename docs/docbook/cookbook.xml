@@ -98,6 +98,32 @@ RewriteRule (.*) index.php?/$1 [QSA,L]
         called. Otherwise, the framework is started and the given URL is
         handed to Agavi as so-called Path Info which the WebRouting will use
         to match a route.</para>
+
+        <tip>
+          <para>Of course you can also use the rewrite rules in your virtual
+          host configuration. However, keep the following things in mind when
+          doing that:</para>
+
+          <para><orderedlist>
+              <listitem>
+                <para>You cannot use a RewriteBase, so you have to use the
+                full relative path in the rewrite rules and destinations,
+                including the leading slash.</para>
+              </listitem>
+
+              <listitem>
+                <para>The RewriteCond on %{REQUEST_FILENAME} only work if the
+                request filename has the full document root prepended to it,
+                i.e. %{DOCUMENT_ROOT}%{REQUEST_FILENAME}</para>
+              </listitem>
+            </orderedlist>Assuming your application is in the webserver root,
+          i.e. called via "/" from the outside, that would mean:</para>
+
+          <para><programlisting>RewriteRule ^/$ index.php?/ [QSA,L]
+RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME} !-f
+RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME} !-d
+RewriteRule ^/(.*)$ /index.php?/$1 [QSA,L]</programlisting></para>
+        </tip>
       </section>
 
       <section>
