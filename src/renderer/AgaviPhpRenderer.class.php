@@ -38,19 +38,25 @@ class AgaviPhpRenderer extends AgaviRenderer implements AgaviIReusableRenderer
 	 * @var        AgaviTemplateLayer Temporary storage for the template layer,
 	 *                                used during rendering.
 	 */
-	protected $_layer = null;
+	private $layer = null;
 	
 	/**
 	 * @var        array Temporary storage for the template layer, used during
 	 *                   rendering.
 	 */
-	protected $_attributes = null;
+	private $attributes = null;
 	
 	/**
 	 * @var        array Temporary storage for the template layer, used during
 	 *                   rendering.
 	 */
-	protected $_slots = null;
+	private $slots = null;
+	
+	/**
+	 * @var        array Temporary storage for additional assigns, used during
+	 *                   rendering.
+	 */
+	private $additionalAssigns = null;
 	
 	/**
 	 * Render the presentation and return the result.
@@ -58,38 +64,47 @@ class AgaviPhpRenderer extends AgaviRenderer implements AgaviIReusableRenderer
 	 * @param      AgaviTemplateLayer The template layer to render.
 	 * @param      array              The template variables.
 	 * @param      array              The slots.
+	 * @param      array              Associative array of additional assigns.
 	 *
 	 * @return     string A rendered result.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function render(AgaviTemplateLayer $layer, array &$attributes, array &$slots = array())
+	public function render(AgaviTemplateLayer $layer, array &$attributes = array(), array &$slots = array(), array &$moreAssigns = array())
 	{
 		// DO NOT USE VARIABLES IN HERE, THEY MIGHT INTERFERE WITH TEMPLATE VARS
-		$this->_layer = $layer;
-		$this->_attributes =& $attributes;
-		$this->_slots =& $slots;
-		unset($layer, $attributes, $slots);
+		$this->layer = $layer;
+		$this->attributes =& $attributes;
+		$this->slots =& $slots;
+		foreach($moreAssigns as $moreAssignName => &$moreAssign) {
+			if(isset($this->moreAssignNames[$moreAssignName])) {
+				$moreAssignName = $this->moreAssignNames[$moreAssignName];
+			}
+			$this->moreAssigns[$moreAssignName] =& $moreAssign;
+		}
+		unset($layer, $attributes, $slots, $moreAssigns);
 		
 		if($this->extractVars) {
-			extract($this->_attributes, EXTR_REFS | EXTR_PREFIX_INVALID, '_');
+			extract($this->attributes, EXTR_REFS | EXTR_PREFIX_INVALID, '_');
 		} else {
-			${$this->varName} =& $this->_attributes;
+			${$this->varName} =& $this->attributes;
 		}
 		
-		${$this->slotsVarName} =& $this->_slots; 
+		${$this->slotsVarName} =& $this->slots; 
 		
 		extract($this->assigns);
 		
+		extract($this->moreAssigns, EXTR_REFS);
+		
 		ob_start();
 		
-		require($this->_layer->getResourceStreamIdentifier());
+		require($this->layer->getResourceStreamIdentifier());
 		
 		$retval = ob_get_contents();
 		ob_end_clean();
 		
-		unset($this->_layer, $this->_attributes, $this->_slots);
+		unset($this->layer, $this->attributes, $this->slots, $this->moreAssigns);
 		
 		return $retval;
 	}

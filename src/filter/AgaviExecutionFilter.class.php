@@ -325,6 +325,8 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 			
 			$actionAttributes = $container->getAttributes();
 		}
+		
+		$response->clear();
 
 		if($viewName !== AgaviView::NONE) {
 
@@ -382,7 +384,12 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 								$response->merge($slotResponse);
 							}
 						}
-						$nextOutput = $layer->getRenderer()->render($layer, $attributes, $output);
+						$moreAssigns = array(
+							'container' => $container,
+							'inner' => $nextOutput,
+							'view' => $viewInstance,
+						);
+						$nextOutput = $layer->getRenderer()->render($layer, $attributes, $output, $moreAssigns);
 						$output = array();
 						$output[$layer->getName()] = $nextOutput;
 					}

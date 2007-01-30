@@ -82,6 +82,7 @@ class AgaviPhptalRenderer extends AgaviRenderer
 	 * @param      AgaviTemplateLayer The template layer to render.
 	 * @param      array              The template variables.
 	 * @param      array              The slots.
+	 * @param      array              Associative array of additional assigns.
 	 *
 	 * @return     string A rendered result.
 	 *
@@ -89,7 +90,7 @@ class AgaviPhptalRenderer extends AgaviRenderer
 	 * @author     Benjamin Muskalla <bm@bmuskalla.de>
 	 * @since      0.11.0
 	 */
-	public function render(AgaviTemplateLayer $layer, array &$attributes, array &$slots = array())
+	public function render(AgaviTemplateLayer $layer, array &$attributes = array(), array &$slots = array(), array &$moreAssigns = array())
 	{
 		$engine = $this->getEngine();
 		
@@ -104,6 +105,13 @@ class AgaviPhptalRenderer extends AgaviRenderer
 		$engine->set($this->slotsVarName, $slots);
 		
 		foreach($this->assigns as $key => $value) {
+			$engine->set($key, $value);
+		}
+		
+		foreach($moreAssigns as $key => $value) {
+			if(isset($this->moreAssignNames[$key])) {
+				$key = $this->moreAssignNames[$key];
+			}
 			$engine->set($key, $value);
 		}
 		

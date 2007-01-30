@@ -113,13 +113,14 @@ class AgaviSmartyRenderer extends AgaviRenderer implements AgaviIReusableRendere
 	 * @param      AgaviTemplateLayer The template layer to render.
 	 * @param      array              The template variables.
 	 * @param      array              The slots.
+	 * @param      array              Associative array of additional assigns.
 	 *
 	 * @return     string A rendered result.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function render(AgaviTemplateLayer $layer, array &$attributes, array &$slots = array())
+	public function render(AgaviTemplateLayer $layer, array &$attributes = array(), array &$slots = array(), array &$moreAssigns = array())
 	{
 		$engine = $this->getEngine();
 		
@@ -134,6 +135,13 @@ class AgaviSmartyRenderer extends AgaviRenderer implements AgaviIReusableRendere
 		$engine->assign_by_ref($this->slotsVarName, $slots);
 		
 		foreach($this->assigns as $key => &$value) {
+			$engine->assign_by_ref($key, $value);
+		}
+		
+		foreach($moreAssigns as $key => &$value) {
+			if(isset($this->moreAssignNames[$key])) {
+				$key = $this->moreAssignNames[$key];
+			}
 			$engine->assign_by_ref($key, $value);
 		}
 		

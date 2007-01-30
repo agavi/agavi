@@ -60,6 +60,11 @@ abstract class AgaviRenderer
 	protected $assigns = array();
 	
 	/**
+	 * @var        array An array of names for the "more" assigns.
+	 */
+	protected $moreAssignNames = array();
+	
+	/**
 	 * Initialize this Renderer.
 	 *
 	 * @param      AgaviContext The current application context.
@@ -84,9 +89,13 @@ abstract class AgaviRenderer
 			throw new AgaviException('Template and Slots container variable names cannot be identical.');
 		}
 		if(isset($parameters['assigns'])) {
-			foreach($parameters['assigns'] as $factory => $var) {
-				$getter = 'get' . str_replace('_', '', $factory);
-				$this->assigns[$var] = $this->context->$getter();
+			foreach($parameters['assigns'] as $item => $var) {
+				$getter = 'get' . str_replace('_', '', $item);
+				if(method_exists($this->context, $getter)) {
+					$this->assigns[$var] = $this->context->$getter();
+				} else {
+					$this->moreAssignNames[$item] = $var;
+				}
 			}
 		}
 	}
@@ -123,13 +132,14 @@ abstract class AgaviRenderer
 	 * @param      AgaviTemplateLayer The template layer to render.
 	 * @param      array              The template variables.
 	 * @param      array              The slots.
+	 * @param      array              Associative array of additional assigns.
 	 *
 	 * @return     string A rendered result.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	abstract public function render(AgaviTemplateLayer $layer, array &$attributes, array &$slots = array());
+	abstract public function render(AgaviTemplateLayer $layer, array &$attributes = array(), array &$slots = array(), array &$moreAssigns = array());
 }
 
 ?>
