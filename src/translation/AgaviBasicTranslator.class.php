@@ -30,7 +30,7 @@ abstract class AgaviBasicTranslator implements AgaviITranslator
 	/**
 	 * @var        AgaviContext An AgaviContext instance.
 	 */
-	private $context = null;
+	protected $context = null;
 
 	/**
 	 * Retrieve the current application context.

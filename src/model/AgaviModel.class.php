@@ -34,7 +34,7 @@ abstract class AgaviModel implements AgaviIModel
 	/**
 	 * @var        AgaviContext An AgaviContext instance.
 	 */
-	private $context = null;
+	protected $context = null;
 
 	/**
 	 * Retrieve the current application context.

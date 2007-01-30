@@ -33,12 +33,12 @@ abstract class AgaviAction
 	/**
 	 * @var        AgaviExecutionContainer This action's execution container.
 	 */
-	private $container = null;
+	protected $container = null;
 
 	/**
 	 * @var        AgaviContext An AgaviContext instance.
 	 */
-	private $context = null;
+	protected $context = null;
 
 	/**
 	 * Retrieve the current application context.
