@@ -119,7 +119,7 @@ RewriteRule (.*) index.php?/$1 [QSA,L]
             </orderedlist>Assuming your application is in the webserver root,
           i.e. called via "/" from the outside, that would mean:</para>
 
-          <para><programlisting>RewriteRule ^/$ index.php?/ [QSA,L]
+          <para><programlisting>RewriteRule ^/$ /index.php?/ [QSA,L]
 RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME} !-f
 RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME} !-d
 RewriteRule ^/(.*)$ /index.php?/$1 [QSA,L]</programlisting></para>
