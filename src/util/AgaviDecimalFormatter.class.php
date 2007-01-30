@@ -643,6 +643,10 @@ class AgaviDecimalFormatter
 				$num = $num * pow(10, $match['exp']);
 			}
 
+			if(!empty($match['sign']) && '-' == $match['sign']) {
+				$num = $num * -1;
+			}
+
 			return $num;
 		} else {
 			if(strlen($string) > 0) {
