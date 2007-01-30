@@ -41,7 +41,7 @@ interface AgaviICookiesRequestDataHolder
 	
 	public function setCookie($name, $value);
 	
-	public function setCookies($cookies);
+	public function setCookies(array $cookies);
 	
 	public function &removeCookie($cookie);
 	

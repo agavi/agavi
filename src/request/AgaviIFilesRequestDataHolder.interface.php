@@ -41,7 +41,7 @@ interface AgaviIFilesRequestDataHolder
 	
 	public function setFile($name, $value);
 	
-	public function setFiles($files);
+	public function setFiles(array $files);
 	
 	public function &removeFile($file);
 	

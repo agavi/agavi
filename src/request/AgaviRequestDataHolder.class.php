@@ -27,7 +27,7 @@
  *
  * @version    $Id$
  */
-class AgaviRequestDataHolder extends AgaviParameterHolder
+class AgaviRequestDataHolder extends AgaviParameterHolder implements AgaviIParametersRequestDataHolder
 {
 	/**
 	 * @constant   Constant for source name of parameters.
@@ -38,12 +38,12 @@ class AgaviRequestDataHolder extends AgaviParameterHolder
 	 * @var        array An array of source names and references to their data
 	 *                   containers. Unset again after construction is complete.
 	 */
-	private $_sources = array();
+	private $sources = array();
 
 	/*
 	 * @var        array An array of plural source names and their singular forms.
 	 */
-	private $_sourceNames = array();
+	private $sourceNames = array();
 
 	/**
 	 * Merge in parameters from another request data holder.
@@ -53,7 +53,7 @@ class AgaviRequestDataHolder extends AgaviParameterHolder
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	protected function mergeParameters(AgaviRequestDataHolder $other)
+	public function mergeParameters(AgaviRequestDataHolder $other)
 	{
 		$this->setParameters($other->getParameters());
 	}
@@ -63,12 +63,12 @@ class AgaviRequestDataHolder extends AgaviParameterHolder
 	 *
 	 * @param      string The field name.
 	 *
-	 * @retrun     bool The result.
+	 * @return     bool The result.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	protected function isParameterValueEmpty($field)
+	public function isParameterValueEmpty($field)
 	{
 		return !$this->hasParameter($field);
 	}
@@ -97,7 +97,7 @@ class AgaviRequestDataHolder extends AgaviParameterHolder
 	 */
 	public function clearAll()
 	{
-		foreach($this->_sourceNames as $sourceName => $source) {
+		foreach($this->sourceNames as $sourceName => $source) {
 			$funcname = 'clear' . $sourceName;
 			$this->$funcname();
 		}
@@ -119,7 +119,7 @@ class AgaviRequestDataHolder extends AgaviParameterHolder
 	public function & get($source, $field, $default = null)
 	{
 		if(isset($this->$source)) {
-			$funcname = 'get' . $this->_sourceNames[$source];
+			$funcname = 'get' . $this->sourceNames[$source];
 			return $this->$funcname($field, $default);
 		}
 	}
@@ -158,7 +158,7 @@ class AgaviRequestDataHolder extends AgaviParameterHolder
 	public function has($source, $field)
 	{
 		if(isset($this->$source)) {
-			$funcname = 'has' . $this->_sourceNames[$source];
+			$funcname = 'has' . $this->sourceNames[$source];
 			return $this->$funcname($field);
 		}
 	}
@@ -179,7 +179,7 @@ class AgaviRequestDataHolder extends AgaviParameterHolder
 	public function isValueEmpty($source, $field)
 	{
 		if(isset($this->$source)) {
-			$funcname = 'is' . $this->_sourceNames[$source] . 'ValueEmpty';
+			$funcname = 'is' . $this->sourceNames[$source] . 'ValueEmpty';
 			return $this->$funcname($field);
 		}
 	}
@@ -199,7 +199,7 @@ class AgaviRequestDataHolder extends AgaviParameterHolder
 	public function & remove($source, $field)
 	{
 		if(isset($this->$source)) {
-			$funcname = 'remove' . $this->_sourceNames[$source];
+			$funcname = 'remove' . $this->sourceNames[$source];
 			return $this->$funcname($field);
 		}
 	}
@@ -218,7 +218,7 @@ class AgaviRequestDataHolder extends AgaviParameterHolder
 	public function set($source, $field, $value)
 	{
 		if(isset($this->$source)) {
-			$funcname = 'set' . $this->_sourceNames[$source];
+			$funcname = 'set' . $this->sourceNames[$source];
 			$this->$funcname($field, $value);
 		}
 	}
@@ -235,8 +235,8 @@ class AgaviRequestDataHolder extends AgaviParameterHolder
 	 */
 	final protected function registerSource($name, array &$holder)
 	{
-		$this->_sources[$name] =& $holder;
-		$this->_sourceNames[$name] = AgaviInflector::singularize($name);
+		$this->sources[$name] =& $holder;
+		$this->sourceNames[$name] = AgaviInflector::singularize($name);
 	}
 	
 	/**
@@ -251,7 +251,7 @@ class AgaviRequestDataHolder extends AgaviParameterHolder
 	 */
 	public function merge(AgaviRequestDataHolder $other)
 	{
-		foreach(array_keys($this->_sourceNames) as $source) {
+		foreach(array_keys($this->sourceNames) as $source) {
 			$fn = 'merge' . $source; // plural form!
 			$this->$fn($other);
 		}
@@ -267,7 +267,7 @@ class AgaviRequestDataHolder extends AgaviParameterHolder
 	 */
 	final public function getSourceNames()
 	{
-		return array_keys($this->_sourceNames);
+		return array_keys($this->sourceNames);
 	}
 
 	/**
@@ -283,7 +283,7 @@ class AgaviRequestDataHolder extends AgaviParameterHolder
 	{
 		$this->registerSource(self::SOURCE_PARAMETERS, $this->parameters);
 		
-		foreach($this->_sources as $name => &$container) {
+		foreach($this->sources as $name => &$container) {
 			if(isset($data[$name]) && is_array($data[$name])) {
 				$container = $data[$name];
 			} else {
@@ -292,7 +292,7 @@ class AgaviRequestDataHolder extends AgaviParameterHolder
 		}
 		
 		// unset it to clean up references that otherwise would mess up cloning
-		unset($this->_sources);
+		unset($this->sources);
 	}
 }
 

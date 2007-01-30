@@ -14,7 +14,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * Interface for RequestDataHolders that allow access to Headers.
+ * Interface for RequestDataHolders that allow access to Parameters.
  *
  * @package    agavi
  * @subpackage request
@@ -25,27 +25,29 @@
  *
  * @version    $Id$
  */
-interface AgaviIHeadersRequestDataHolder
+interface AgaviIParametersRequestDataHolder
 {
-	public function hasHeader($header);
+	public function hasParameter($parameter);
 	
-	public function isHeaderValueEmpty($header);
+	public function isParameterValueEmpty($parameter);
 	
-	public function &getHeader($header, $default = null);
+	public function &getParameter($parameter, $default = null);
 	
-	public function &getHeaders();
+	public function &getParameters();
 	
-	public function getHeaderNames();
+	public function getParameterNames();
 	
-	public function setHeader($name, $value);
+	public function getFlatParameterNames();
 	
-	public function setHeaders(array $headers);
+	public function setParameter($name, $value);
 	
-	public function &removeHeader($header);
+	public function setParameters(array $parameters);
 	
-	public function clearHeaders();
+	public function &removeParameter($parameter);
 	
-	public function mergeHeaders(AgaviRequestDataHolder $other);
+	public function clearParameters();
+	
+	public function mergeParameters(AgaviRequestDataHolder $other);
 }
 
 ?>
