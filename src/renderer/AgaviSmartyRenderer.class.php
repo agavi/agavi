@@ -145,7 +145,9 @@ class AgaviSmartyRenderer extends AgaviRenderer implements AgaviIReusableRendere
 			$engine->assign_by_ref($key, $value);
 		}
 		
-		return $this->getEngine()->fetch($layer->getResourceStreamIdentifier());
+		// hack because stupid smarty cannot handle php streams... my god
+		$resource = str_replace('://', ':', $layer->getResourceStreamIdentifier());
+		return $engine->fetch($resource);
 	}
 }
 
