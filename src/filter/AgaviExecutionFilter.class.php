@@ -388,7 +388,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 							'container' => $container,
 							'inner' => $nextOutput,
 							'view' => $viewInstance,
-							'requestData' => $container->getRequestData()
+							'request_data' => $container->getRequestData()
 						);
 						$nextOutput = $layer->getRenderer()->render($layer, $attributes, $output, $moreAssigns);
 						$output = array();

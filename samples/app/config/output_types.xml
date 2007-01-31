@@ -15,6 +15,7 @@
 									<parameter name="controller">ct</parameter>
 									<parameter name="user">us</parameter>
 									<parameter name="translation_manager">tm</parameter>
+									<parameter name="request_data">rd</parameter>
 								</parameters>
 							</parameter>
 						</parameters>
