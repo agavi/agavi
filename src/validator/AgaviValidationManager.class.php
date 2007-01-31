@@ -111,6 +111,31 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	}
 
 	/**
+	 * Creates a new validator instance.
+	 *
+	 * @param      string The name of the class implementing the validator.
+	 * @param      array The argument names.
+	 * @param      array The error messages.
+	 * @param      array The validator parameters.
+	 * @param      AgaviIValidatorContainer The parent (will use the validation 
+	 *                                      manager if null is given)
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function createValidator($class, array $arguments, array $errors = array(), $parameters = array(), AgaviIValidatorContainer $parent = null)
+	{
+		if($parent === null) {
+			$parent = $this;
+		}
+		$obj = new $class;
+		$obj->initialize($this->getContext(), $parameters, $arguments, $errors);
+		$parent->addChild($obj);
+
+		return $obj;
+	}
+
+	/**
 	 * Clears the validation manager for reuse
 	 *
 	 * clears the validator manager by resetting the dependency and error
@@ -151,6 +176,7 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 		}
 
 		$this->children[$name] = $validator;
+		$validator->setParentContainer($this);
 	}
 
 	/**

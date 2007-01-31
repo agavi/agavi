@@ -209,35 +209,28 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	}
 
 	/**
-	 * constructor
+	 * Initialize this validator.
 	 *
-	 * @param      AgaviIValidatorContainer parent validator container
-	 *                                      (mostly the validator manager)
-	 * @param      array                    The parameters from the config file.
-	 * @param      string                   The name of this validator.
+	 * @param      AgaviContext The Context.
+	 * @param      array        An array of validator parameters.
+	 * @param      array        An array of argument names which should be validated.
+	 * @param      array        An array of error messages.
 	 *
-	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function __construct(AgaviIValidatorContainer $parent, array $arguments, array $errors = array(), array $parameters = array(), $name = '')
+	public function initialize(AgaviContext $context, array $parameters = array(), array $arguments = array(), array $errors = array())
 	{
-		$this->parentContainer = $parent;
-
-		$from = $this;
-		while(!($from instanceof AgaviIValidationManager)) {
-			$from = $from->getParentContainer();
-		}
-		$this->context = $from->getContext();
-		unset($from);
+		$this->context = $context;
 
 		$this->arguments = $arguments;
 		$this->errorMessages = $errors;
 
 		if(!isset($parameters['depends']) || !is_array($parameters['depends'])) {
-			$parameters['depends'] = (isset($parameters['depends']) and strlen($parameters['depends'])) ? explode(' ', $parameters['depends']) : array();
+			$parameters['depends'] = (!empty($parameters['depends'])) ? explode(' ', $parameters['depends']) : array();
 		}
 		if(!isset($parameters['provides']) || !is_array($parameters['provides'])) {
-			$parameters['provides'] = (isset($parameters['provides']) and strlen($parameters['provides'])) ? explode(' ', $parameters['provides']) : array();
+			$parameters['provides'] = (!empty($parameters['provides'])) ? explode(' ', $parameters['provides']) : array();
 		}
 
 		if(!isset($parameters['source'])) {
@@ -251,11 +244,9 @@ abstract class AgaviValidator extends AgaviParameterHolder
 			}
 		}
 
-		parent::__construct($parameters);
-		// we need a reference here, so when looping happens in a parent
-		// we always have the right base
-		$this->curBase = $parent->getBase();
-		$this->name = $name;
+		$this->setParameters($parameters);
+
+		$this->name = $this->getParameter('name', uniqid('val'.rand()));
 	}
 
 	/**
@@ -282,6 +273,22 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	final public function getParentContainer()
 	{
 		return $this->parentContainer;
+	}
+
+	/**
+	 * Sets the parent container.
+	 *
+	 * @param      AgaviIValidatorContainer The parent container.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function setParentContainer(AgaviIValidatorContainer $parent)
+	{
+		// we need a reference here, so when looping happens in a parent
+		// we always have the right base
+		$this->curBase = $parent->getBase();
+		$this->parentContainer = $parent;
 	}
 
 	/**

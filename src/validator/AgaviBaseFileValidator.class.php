@@ -42,18 +42,18 @@ abstract class AgaviBaseFileValidator extends AgaviValidator
 {
 
 	/**
-	 * @see        AgaviValidator::construct
+	 * @see        AgaviValidator::initialize
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function __construct(AgaviIValidatorContainer $parent, array $arguments, array $errors = array(), array $parameters = array(), $name = '')
+	public function initialize(AgaviContext $context, array $parameters = array(), array $arguments = array(), array $errors = array())
 	{
 		if(!isset($parameters['source'])) {
 			$parameters['source'] = AgaviWebRequestDataHolder::SOURCE_FILES;
 		}
 
-		parent::__construct($parent, $arguments, $errors, $parameters, $name);
+		parent::initialize($context, $parameters, $arguments, $errors);
 	}
 
 	/**

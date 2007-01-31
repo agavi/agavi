@@ -44,29 +44,6 @@ abstract class AgaviOperatorValidator extends AgaviValidator implements AgaviIVa
 	 */
 	protected $result = AgaviValidator::SUCCESS;
 	
-	/**
-	 * constructor
-	 * 
-	 * @param      AgaviIValidatorContainer The parent ValidatorContainer
-	 *                                      (mostly the ValidationManager)
-	 * @param      array                    The parameters from the config file.
-	 *
-	 * @author     Uwe Mesecke <uwe@mesecke.net>
-	 * @since      0.11.0
-	 */
-	public function __construct(AgaviIValidatorContainer $parent, array $arguments, array $errors = array(), array $parameters = array(), $name = '')
-	{
-		parent::__construct($parent, $arguments, $errors, $parameters, $name);
-		
-		if($this->getParameter('skip_errors')) {
-			/*
-			 * if the operator is configured to skip errors of the
-			 * child validators, a new error manager is created
-			 */
-		} else {
-			// else the parent's error manager is taken
-		}
-	}
 
 	/**
 	 * Method for checking the validity of child validators.
@@ -115,6 +92,7 @@ abstract class AgaviOperatorValidator extends AgaviValidator implements AgaviIVa
 		}
 
 		$this->children[$name] = $validator;
+		$validator->setParentContainer($this);
 	}
 
 	/**
@@ -188,7 +166,7 @@ abstract class AgaviOperatorValidator extends AgaviValidator implements AgaviIVa
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
-	public function execute(AgaviParameterHolder $parameters)
+	public function execute(AgaviRequestDataHolder $parameters)
 	{
 		// check if we have a valid setup of validators
 		$this->checkValidSetup();

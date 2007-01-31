@@ -160,7 +160,12 @@ class AgaviValidatorConfigHandler extends AgaviConfigHandler
 
 		$stdMethod = $parameters['method'];
 		$stdSeverity = $parameters['severity'];
-		$name = $validator->getAttribute('name', uniqid('val'.rand()));
+		if($validator->hasAttribute('name')) {
+			$name = $validator->getAttribute('name');
+		} else {
+			$name = uniqid('val'.rand());
+			$validator->setAttribute('name', $name);
+		}
 
 		$parameters = array_merge($this->classMap[$validator->getAttribute('class')]['parameters'], $parameters);
 		$parameters = array_merge($parameters, $validator->getAttributes());
@@ -192,11 +197,11 @@ class AgaviValidatorConfigHandler extends AgaviConfigHandler
 			$stdRequired = $parameters['required'] = $this->literalize($validator->getAttribute('required'));
 		}
 
-		if(isset($validator->validators)) {
-			// create operator
-			$code[$name] = '$'.$name.' = new '.$class.'($'.$parent.', '.var_export($arguments, true).', '.var_export($errors, true).', '.var_export($parameters, true).', '.var_export($name, true).');' .
-											'$'.$parent.'->addChild($'.$name.');';
+		$code[$name] = sprintf('$%s = new %s();', $name, $class) .
+										sprintf('$%s->initialize($this->getContext(), %s, %s, %s);', $name, var_export($parameters, true), var_export($arguments, true), var_export($errors, true)) . 
+										sprintf('$%s->addChild($%s);', $parent, $name);
 
+		if(isset($validator->validators)) {
 			$childSeverity = $validator->validators->getAttribute('severity', $stdSeverity);
 			$childMethod = $validator->validators->getAttribute('method', $stdMethod);
 			$childRequired = $stdRequired;
@@ -207,9 +212,6 @@ class AgaviValidatorConfigHandler extends AgaviConfigHandler
 				$code = $this->getValidatorArray($v, $code, $childSeverity, $name, $childMethod, $childRequired);
 			}
 				// create child validators
-		} else {
-			// create new validator
-			$code[$name] = '$'.$parent.'->addChild(new '.$class.'($'.$parent.', '.var_export($arguments, true).', '.var_export($errors, true).', '.var_export($parameters, true).', '.var_export($name, true).'));';
 		}
 
 		return $code;
