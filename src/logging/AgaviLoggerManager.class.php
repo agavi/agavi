@@ -42,6 +42,11 @@ class AgaviLoggerManager
 	 * @since      0.11.0
 	 */
 	protected $defaultLoggerName = 'default';
+	
+	/**
+	 * @var        string The name of the default LoggerMessage class to use.
+	 */
+	protected $defaultMessageClass = 'AgaviLoggerMessage';
 
 	/**
 	 * Retrieve the current application context.
@@ -72,7 +77,11 @@ class AgaviLoggerManager
 	public function initialize(AgaviContext $context, array $parameters = array())
 	{
 		$this->context = $context;
-
+		
+		if(isset($parameters['default_message_class'])) {
+			$this->defaultMessageClass = $parameters['default_message_class'];
+		}
+		
 		// load logging configuration
 		require(AgaviConfigCache::checkConfig(AgaviConfig::get('core.config_dir') . '/logging.xml', $context->getName()));
 	}
@@ -224,7 +233,8 @@ class AgaviLoggerManager
 	/**
 	 * Log a Message.
 	 *
-	 * @param      AgaviLoggerMessage The Message to log.
+	 * @param      mixed  A message to log - either an AgaviLoggerMessage instance
+	 *                    or a string.
 	 * @param      string Optional logger to log to.
 	 *
 	 * @throws     AgaviLoggingException if the logger was not found.
@@ -233,8 +243,11 @@ class AgaviLoggerManager
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.10.0
 	 */
-	public function log(AgaviLoggerMessage $message, $logger = null)
+	public function log($message, $logger = null)
 	{
+		if(!($message instanceof AgaviLoggerMessage)) {
+			$message = new $this->defaultMessageClass($message);
+		}
 		if($logger === null) {
 			foreach($this->loggers as $logger) {
 				$logger->log($message);
