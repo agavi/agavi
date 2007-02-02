@@ -10,7 +10,7 @@
       <xs:element name="configuration" minOccurs="0" maxOccurs="unbounded">
         <xs:complexType>
           <xs:sequence>
-            <xs:group ref="output_types" />
+            <xs:element name="output_types" type="output_types" minOccurs="0" />
           </xs:sequence>
           <xs:attribute name="environment" type="xs:string" />
           <xs:attribute name="context" type="xs:string" />
@@ -19,13 +19,6 @@
     </xs:sequence>
     <xs:attribute name="parent" type="xs:string" />
   </xs:complexType>
-
-  <xs:group name="output_types">
-    <xs:choice>
-      <xs:element name="output_types" type="output_types" minOccurs="0" />
-      <xs:element name="output_type" type="output_type" minOccurs="0" maxOccurs="unbounded"/>
-    </xs:choice>
-  </xs:group>
 
   <xs:complexType name="output_types">
     <xs:sequence>
@@ -67,10 +60,17 @@
   <xs:complexType name="layout">
     <xs:sequence maxOccurs="unbounded">
       <xs:group ref="parameters" />
-      <xs:element name="layers" type="layers" minOccurs="0" />
+      <xs:group ref="layers" />
     </xs:sequence>
     <xs:attribute name="name" type="php_label" use="required" />
   </xs:complexType>
+
+  <xs:group name="layers">
+    <xs:choice>
+      <xs:element name="layers" type="layers" minOccurs="0" />
+      <xs:element name="layer" type="layer" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:choice>
+  </xs:group>
 
   <xs:complexType name="layers">
     <xs:sequence>
