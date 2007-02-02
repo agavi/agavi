@@ -113,6 +113,19 @@ abstract class AgaviOperatorValidator extends AgaviValidator implements AgaviIVa
 	}
 
 	/**
+	 * Returns all child validators.
+	 *
+	 * @return     array An array of AgaviValidator instances.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getChilds()
+	{
+		return $this->children;
+	}
+
+	/**
 	 * Registers an array of validators.
 	 * 
 	 * @param      array The array of validators.

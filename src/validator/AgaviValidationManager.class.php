@@ -197,6 +197,19 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	}
 
 	/**
+	 * Returns all child validators.
+	 *
+	 * @return     array An array of AgaviValidator instances.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getChilds()
+	{
+		return $this->children;
+	}
+
+	/**
 	 * Returns the dependency manager.
 	 *
 	 * @return     AgaviDependencyManager The dependency manager instance.

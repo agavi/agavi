@@ -49,6 +49,16 @@ interface AgaviIValidatorContainer
 	public function getChild($name);
 
 	/**
+	 * Returns all child validators.
+	 *
+	 * @return     array An array of AgaviValidator instances.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getChilds();
+
+	/**
 	 * Fetches the dependency manager
 	 * 
 	 * @return     AgaviDependencyManager The dependency manager to be used
