@@ -88,7 +88,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 		
 		$cfg = array_merge(array('populate' => null, 'skip' => null), $this->getParameters(), $req->getAttributes('org.agavi.filter.FormPopulationFilter'));
 		
-		if(is_array($cfg['output_types']) && !in_array($this->getContext()->getController()->getOutputType()->getName(), $cfg['output_types'])) {
+		if(is_array($cfg['output_types']) && !in_array($container->getOutputType()->getName(), $cfg['output_types'])) {
 			return;
 		}
 		

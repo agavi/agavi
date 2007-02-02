@@ -63,7 +63,7 @@ class AgaviExecutionTimeFilter extends AgaviFilter implements AgaviIGlobalFilter
 		$response = $container->getResponse();
 		
 		$outputTypes = $this->getParameter('output_types');
-		if(is_array($outputTypes) && !in_array($context->getController()->getOutputType()->getName(), $outputTypes)) {
+		if(is_array($outputTypes) && !in_array($container->getOutputType()->getName(), $outputTypes)) {
 			return;
 		}
 		
