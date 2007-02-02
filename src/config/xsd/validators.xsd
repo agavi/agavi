@@ -6,6 +6,7 @@
   <xs:element name="configurations" type="configurations" />
   <xs:complexType name="configurations">
     <xs:sequence>
+      <xs:element name="sandbox" type="sandbox" minOccurs="0" />
       <xs:element name="configuration" minOccurs="0" maxOccurs="unbounded">
         <xs:complexType>
           <xs:sequence minOccurs="0" maxOccurs="unbounded" >

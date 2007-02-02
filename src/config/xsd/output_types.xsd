@@ -6,10 +6,11 @@
   <xs:element name="configurations" type="configurations" />
   <xs:complexType name="configurations">
     <xs:sequence>
+      <xs:element name="sandbox" type="sandbox" minOccurs="0" />
       <xs:element name="configuration" minOccurs="0" maxOccurs="unbounded">
         <xs:complexType>
           <xs:sequence>
-            <xs:element name="output_types" type="output_types" />
+            <xs:group ref="output_types" />
           </xs:sequence>
           <xs:attribute name="environment" type="xs:string" />
           <xs:attribute name="context" type="xs:string" />
@@ -19,12 +20,20 @@
     <xs:attribute name="parent" type="xs:string" />
   </xs:complexType>
 
+  <xs:group name="output_types">
+    <xs:choice>
+      <xs:element name="output_types" type="output_types" minOccurs="0" />
+      <xs:element name="output_type" type="output_type" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:choice>
+  </xs:group>
+
   <xs:complexType name="output_types">
     <xs:sequence>
       <xs:element name="output_type" type="output_type" maxOccurs="unbounded" />
     </xs:sequence>
     <xs:attribute name="default" type="php_label" use="required" />
   </xs:complexType>
+
   <xs:complexType name="output_type">
     <xs:sequence maxOccurs="unbounded">
       <xs:group ref="parameters" />
@@ -71,12 +80,19 @@
   <xs:complexType name="layer">
     <xs:sequence maxOccurs="unbounded">
       <xs:group ref="parameters" />
-      <xs:element name="slots" type="slots" minOccurs="0" />
+      <xs:group ref="slots" />
     </xs:sequence>
     <xs:attribute name="name" type="php_label" use="required" />
     <xs:attribute name="class" type="php_label" use="required" />
     <xs:attribute name="renderer" type="php_label" />
   </xs:complexType>
+
+  <xs:group name="slots">
+    <xs:choice>
+      <xs:element name="slots" type="slots" minOccurs="0" />
+      <xs:element name="slot" type="slot" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:choice>
+  </xs:group>
 
   <xs:complexType name="slots">
     <xs:sequence>

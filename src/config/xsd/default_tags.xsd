@@ -13,6 +13,13 @@
 		</xs:restriction>
 	</xs:simpleType>
 
+  <xs:complexType name="sandbox">
+    <xs:sequence minOccurs="1" maxOccurs="1">
+      <xs:any namespace="##any" minOccurs="0" maxOccurs="unbounded" processContents="skip" />
+    </xs:sequence>
+  </xs:complexType>
+
+
   <xs:complexType name="innerParameters">
     <xs:sequence>
       <xs:group ref="parameters" />

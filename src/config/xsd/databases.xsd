@@ -6,10 +6,11 @@
   <xs:element name="configurations" type="configurations" />
   <xs:complexType name="configurations">
     <xs:sequence>
+      <xs:element name="sandbox" type="sandbox" minOccurs="0" />
       <xs:element name="configuration" minOccurs="0" maxOccurs="unbounded">
         <xs:complexType>
           <xs:sequence>
-            <xs:element name="databases" type="databases" />
+            <xs:group ref="databases" />
           </xs:sequence>
           <xs:attribute name="environment" type="xs:string" />
         </xs:complexType>
@@ -17,6 +18,13 @@
     </xs:sequence>
     <xs:attribute name="parent" type="xs:string" />
   </xs:complexType>
+
+  <xs:group name="databases">
+    <xs:choice>
+      <xs:element name="databases" type="databases" minOccurs="0" />
+      <xs:element name="database" type="database" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:choice>
+  </xs:group>
 
   <xs:complexType name="databases">
     <xs:sequence>
