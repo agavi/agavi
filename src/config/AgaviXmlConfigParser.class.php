@@ -116,6 +116,12 @@ class AgaviXmlConfigParser extends AgaviConfigParser
 			$node->ownerElement->removeAttributeNode($node);
 		}
 		
+		// remove top-level <sandbox> elements
+		$sandboxes = $this->xpath->query('/configurations/sandbox', $doc);
+		foreach($sandboxes as $sandbox) {
+			$sandbox->parentNode->removeChild($sandbox);
+		}
+		
 		if($validationFile) {
 			if(!is_readable($validationFile)) {
 				libxml_use_internal_errors($luie);
