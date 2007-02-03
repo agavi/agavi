@@ -59,7 +59,9 @@ class AgaviEqualsValidator extends AgaviValidator
 				return false;
 			}
 		}
-		
+
+		$this->export($value);
+
 		return true;
 	}
 }
