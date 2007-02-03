@@ -120,7 +120,7 @@ class AgaviOutputTypeConfigHandler extends AgaviConfigHandler
 			$defaultOt = $cfg->output_types->getAttribute('default');
 		}
 
-		$code = '';
+		$code = array();
 		foreach($data as $outputTypeName => $outputType) {
 			$code[] = implode("\n", array(
 				'$ot = new AgaviOutputType();',
