@@ -92,6 +92,8 @@ class AgaviWebRouting extends AgaviRouting
 		}
 		if(!isset($ru['query'])) {
 			$ru['query'] = '';
+		} else {
+			$ru['query'] = preg_replace('/&$/', '', $ru['query']);
 		}
 		
 		$qs = (isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : '');
