@@ -10,9 +10,9 @@ class AgaviSampleAppDefaultBaseView extends AgaviView
 	public function executeXhtml(AgaviRequestDataHolder $rd)
 	{
 		if(method_exists($this, 'executeHtml')) {
-			return $this->executeHtml();
+			return $this->executeHtml($rd);
 		} else {
-			return $this->execute();
+			return $this->execute($rd);
 		}
 	}
 

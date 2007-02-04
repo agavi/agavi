@@ -29,7 +29,7 @@ class Default_LoginSuccessView extends AgaviSampleAppDefaultBaseView
 		$res = $this->getResponse();
 
 		// set the autologon cookie if requested
-		if($r->hasParameter('remember')) {
+		if($rd->hasParameter('remember')) {
 			$res->setCookie('autologon[username]', $rd->getParameter('username'), 60*60*24*14);
 			$res->setCookie('autologon[password]', $rd->getParameter('password'), 60*60*24*14);
 		}
