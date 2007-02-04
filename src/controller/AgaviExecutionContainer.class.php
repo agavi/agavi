@@ -186,12 +186,6 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 		
 		$request = $this->context->getRequest();
 		
-		$this->requestData = clone $request->getRequestData();
-		
-		if($this->arguments !== null) {
-			$this->requestData->merge($this->arguments);
-		}
-		
 		$controller->countExecution();
 		
 		$moduleName = $this->getModuleName();
@@ -279,31 +273,48 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 			// initialize the action
 			$this->actionInstance->initialize($this);
 			
-			// create a new filter chain
-			$fcfi = $this->context->getFactoryInfo('filter_chain');
-			$filterChain = new $fcfi['class']();
-			$filterChain->initialize($this->context, $fcfi['parameters']);
+			if($this->actionInstance->isSimple()) {
+				if($this->arguments !== null) {
+					$this->requestData = $this->arguments;
+				} else {
+					$this->requestData = new AgaviRequestDataHolder();
+				}
+				var_dump('foo');
+				// run the execution filter, without a proper chain
+				$controller->getFilter('execution')->execute(new AgaviFilterChain(), $this);
+			} else {
+				$this->requestData = clone $request->getRequestData();
+				
+				if($this->arguments !== null) {
+					$this->requestData->merge($this->arguments);
+				}
+			
+				// create a new filter chain
+				$fcfi = $this->context->getFactoryInfo('filter_chain');
+				$filterChain = new $fcfi['class']();
+				$filterChain->initialize($this->context, $fcfi['parameters']);
 
-			if(AgaviConfig::get('core.available', false)) {
-				// the application is available so we'll register
-				// global and module filters, otherwise skip them
+				if(AgaviConfig::get('core.available', false)) {
+					// the application is available so we'll register
+					// global and module filters, otherwise skip them
 
-				// does this action require security?
-				if(AgaviConfig::get('core.use_security', false) && $this->actionInstance->isSecure()) {
-					// register security filter
-					$filterChain->register($controller->getFilter('security'));
+					// does this action require security?
+					if(AgaviConfig::get('core.use_security', false) && $this->actionInstance->isSecure()) {
+						// register security filter
+						$filterChain->register($controller->getFilter('security'));
+					}
+
+					// load filters
+					$controller->loadFilters($filterChain, 'action');
+					$controller->loadFilters($filterChain, 'action', $moduleName);
 				}
 
-				// load filters
-				$controller->loadFilters($filterChain, 'action');
-				$controller->loadFilters($filterChain, 'action', $moduleName);
+				// register the execution filter
+				$filterChain->register($controller->getFilter('execution'));
+
+				// process the filter chain
+				$filterChain->execute($this);
 			}
-
-			// register the execution filter
-			$filterChain->register($controller->getFilter('execution'));
-
-			// process the filter chain
-			$filterChain->execute($this);
 			
 			// restore autoloads
 			Agavi::$autoloads = $oldAutoloads;
@@ -326,7 +337,6 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 				throw new AgaviConfigurationException($error);
 			}
 			
-			// TODO. this will be pretty difficult, I guess...
 			$this->setNext($controller->createExecutionContainer($moduleName, $actionName));
 		}
 		

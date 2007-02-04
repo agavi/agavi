@@ -129,6 +129,19 @@ abstract class AgaviAction
 	}
 
 	/**
+	 * Whether or not this action is "simple", i.e. doesn't use validation etc.
+	 *
+	 * @return     bool true, if this action should act in simple mode, or false.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function isSimple()
+	{
+		return false;
+	}
+
+	/**
 	 * Manually register validators for this action.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>

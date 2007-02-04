@@ -205,7 +205,8 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 	 */
 	public function execute(AgaviFilterChain $filterChain, AgaviExecutionContainer $container)
 	{
-		$lm = $this->context->getLoggerManager();
+		// $lm = $this->context->getLoggerManager();
+		
 		// get the context, controller and validator manager
 		$controller = $this->context->getController();
 		
@@ -471,6 +472,8 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 
 		// get the (already formatted) request method
 		$method = $request->getMethod();
+		
+		$requestData = $container->getRequestData();
 
 		$useGenericMethods = false;
 		$executeMethod = 'execute' . $method;
@@ -479,14 +482,14 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 			$useGenericMethods = true;
 		}
 
-		if($useGenericMethods && !method_exists($actionInstance, $executeMethod) ) {
+		if($actionInstance->isSimple() || ($useGenericMethods && !method_exists($actionInstance, $executeMethod))) {
 			// this action will skip validation/execution for this method
 			// get the default view
 			$viewName = $actionInstance->getDefaultViewName();
 		} else {
 			// set default validated status
 			$validated = true;
-
+			
 			// get the current action validation configuration
 			$validationConfig = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/validate/' . $actionName . '.xml';
 
@@ -504,19 +507,19 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 			$actionInstance->$registerValidatorsMethod();
 
 			// process validators
-			$validated = $validationManager->execute($container->getRequestData());
-
+			$validated = $validationManager->execute($requestData);
+			
 			$validateMethod = 'validate' . $method;
 			if(!method_exists($actionInstance, $validateMethod)) {
 				$validateMethod = 'validate';
 			}
-
+			
 			// prevent access to Request::getParameters()
 			// process manual validation
-			if($actionInstance->$validateMethod($container->getRequestData()) && $validated) {
+			if($actionInstance->$validateMethod($requestData) && $validated) {
 				// execute the action
 				$key = $request->toggleLock();
-				$viewName = $actionInstance->$executeMethod($container->getRequestData());
+				$viewName = $actionInstance->$executeMethod($requestData);
 				$request->toggleLock($key);
 			} else {
 				// validation failed
@@ -525,7 +528,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 					$handleErrorMethod = 'handleError';
 				}
 				$key = $request->toggleLock();
-				$viewName = $actionInstance->$handleErrorMethod($container->getRequestData());
+				$viewName = $actionInstance->$handleErrorMethod($requestData);
 				$request->toggleLock($key);
 			}
 		}

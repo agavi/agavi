@@ -70,6 +70,11 @@ class Default_MenuAction extends AgaviSampleAppDefaultBaseAction
 	{
 		return 'Success';
 	}
+	
+	public function isSimple()
+	{
+		return true;
+	}
 }
 
 ?>
