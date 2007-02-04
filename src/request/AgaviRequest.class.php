@@ -30,7 +30,6 @@
  */
 abstract class AgaviRequest extends AgaviAttributeHolder
 {
-
 	/**
 	 * @var        array An associative array of attributes
 	 */
@@ -85,125 +84,6 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 		return $this->context;
 	}
 
-
-	/**
-	 * Retrieve an error message.
-	 *
-	 * @param      string An error name.
-	 *
-	 * @return     string The error message.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @since      0.9.0
-	 */
-	public function getError($name)
-	{
-		$vm = $this->getContext()->getValidationManager();
-		$incidents = $vm->getFieldIncidents($name, AgaviValidator::NOTICE);
-
-		if(count($incidents) == 0) {
-			return null;
-		}
-
-		$errors = $incidents[0]->getErrors();
-		return $errors[0]->getMessage();
-	}
-
-	/**
-	 * Retrieve an array of error names.
-	 *
-	 * @return     array An indexed array of error names.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @since      0.9.0
-	 */
-	public function getErrorNames()
-	{
-		return $this->getContext()->getValidationManager()->getFailedFields();
-	}
-
-	/**
-	 * Retrieve an array of errors.
-	 *
-	 * @param      string An optional error name.
-	 *
-	 * @return     array An associative array of errors(if no name was given) as
-	 *                   an array with the error messages (key 'messages') and
-	 *                   the validators (key 'validators') which failed.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @since      0.9.0
-	 */
-	public function getErrors($name = null)
-	{
-		$vm = $this->getContext()->getValidationManager();
-		$errors = array();
-
-		foreach($vm->getIncidents(AgaviValidator::NOTICE) as $incident) {
-			$validator = $incident->getValidator();
-			foreach($incident->getErrors() as $error) {
-				$msg = $error->getMessage();
-				foreach($error->getFields() as $field) {
-					if(!isset($errors[$field])) {
-						$errors[$field] = array('messages' => array(), 'validators' => array());
-					}
-					$errors[$field]['messages'][] = $msg;
-					if($validator) {
-						$errors[$field]['validators'][] = $validator->getName();
-					}
-				}
-			}
-		}
-
-		if($name === null) {
-			return $errors;
-		} else {
-			return isset($errors[$name]) ? $errors[$name] : null;
-		}
-	}
-
-	/**
-	 * Retrieve an array of error Messages.
-	 *
-	 * @param      string An optional error name.
-	 *
-	 * @return     array An indexed array of error messages (if a name was given)
-	 *                   or an indexed array in this format:
-	 *                   array('message' => string, 'errors' => array(string))
-	 *
-	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function getErrorMessages($name = null)
-	{
-		$vm = $this->getContext()->getValidationManager();
-
-		if($name !== null) {
-			$incidents = $vm->getFieldIncidents($name, AgaviValidator::NOTICE);
-			$msgs = array();
-			foreach($incidents as $incident) {
-				foreach($incident->getErrors() as $error) {
-					$msgs[] = $error->getMessage();
-				}
-			}
-			return $msgs;
-		} else {
-			$msgs = array();
-
-			$incidents = $vm->getIncidents(AgaviValidator::NOTICE);
-			$msgs = array();
-			foreach($incidents as $incident) {
-				foreach($incident->getErrors() as $error) {
-					$msgs[] = array('message' => $error->getMessage(), 'errors' => $error->getFields());
-				}
-			}
-			return $msgs;
-		}
-	}
-
 	/**
 	 * Retrieve this request's method.
 	 *
@@ -216,37 +96,6 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	public function getMethod()
 	{
 		return $this->method;
-	}
-
-	/**
-	 * Indicates whether or not an error exists.
-	 *
-	 * @param      string An error name.
-	 *
-	 * @return     bool true, if the error exists, otherwise false.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @since      0.9.0
-	 */
-	public function hasError($name)
-	{
-		return $this->getContext()->getValidationManager()->isFieldFailed($name);
-	}
-
-
-	/**
-	 * Indicates whether or not any errors exist.
-	 *
-	 * @return     bool true, if any error exist, otherwise false.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @since      0.9.0
-	 */
-	public function hasErrors()
-	{
-		return $this->getContext()->getValidationManager()->getResult() > AgaviValidator::NOTICE;
 	}
 
 	/**
@@ -277,47 +126,6 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 		if(isset($parameters['action_accessor'])) {
 			$this->actionAccessor = $parameters['action_accessor'];
 		}
-	}
-
-	/**
-	 * Set an error.
-	 *
-	 * @param      string An error name.
-	 * @param      string An error message.
-	 *
-	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @since      0.9.0
-	 */
-	public function setError($name, $message)
-	{
-		$vm = $this->getContext()->getValidationManager();
-		$incident = new AgaviValidationIncident(null, AgaviValidator::ERROR);
-		$incident->addError(new AgaviValidationError($message, null, array($name)));
-		$vm->addIncident($incident);
-	}
-
-
-	/**
-	 * Set an array of errors
-	 *
-	 * If an existing error name matches any of the keys in the supplied
-	 * array, the associated message will be appended to the messages array.
-	 *
-	 * @param      array An associative array of errors and their associated
-	 *                   messages.
-	 *
-	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @since      0.9.0
-	 */
-	public function setErrors(array $errors)
-	{
-		$vm = $this->getContext()->getValidationManager();
-		$incident = new AgaviValidationIncident(null, AgaviValidator::ERROR);
-		foreach($errors as $name => $error) {
-			$incident->addError(new AgaviValidationError($error, null, array($name)));
-		}
-
-		$vm->addIncident($incident);
 	}
 
 	/**

@@ -459,9 +459,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 
 		$controller = $this->context->getController();
 		$request = $this->context->getRequest();
-		$validationManager = $this->context->getValidationManager();
-		// clear the validator manager for reuse
-		$validationManager->clear();
+		$validationManager = $container->getValidationManager();
 
 		// get the current action instance
 		$actionInstance = $container->getActionInstance();

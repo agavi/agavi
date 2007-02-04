@@ -86,6 +86,8 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 		
 		$req = $this->getContext()->getRequest();
 		
+		$vm = null;
+		
 		$cfg = array_merge(array('populate' => null, 'skip' => null), $this->getParameters(), $req->getAttributes('org.agavi.filter.FormPopulationFilter'));
 		
 		if(is_array($cfg['output_types']) && !in_array($container->getOutputType()->getName(), $cfg['output_types'])) {
@@ -231,6 +233,11 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 				}
 			}
 			
+			// no validation manager set yet? let's do that. the later, the better.
+			if($vm === null) {
+				$vm = $container->getValidationManager();
+			}
+			
 			// our array for remembering foo[] field's indices
 			$remember = array();
 			
@@ -302,7 +309,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 				}
 				
 				// there's an error with the element's name in the request? good. let's give the baby a class!
-				if($req->hasError($pname)) {
+				if($vm->hasError($pname)) {
 					$element->setAttribute('class', preg_replace('/\s*$/', ' ' . $cfg['error_class'], $element->getAttribute('class')));
 					// assign the class to all implicit labels
 					foreach($xpath->query('ancestor::' . $ns . 'label[not(@for)]', $element) as $label) {

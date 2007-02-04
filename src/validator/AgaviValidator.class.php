@@ -289,6 +289,9 @@ abstract class AgaviValidator extends AgaviParameterHolder
 		// we always have the right base
 		$this->curBase = $parent->getBase();
 		$this->parentContainer = $parent;
+		$this->validationManager = $this->parentContainer;
+		while(!($this->validationManager instanceof AgaviValidationManager) && ($this->validationManager = $this->validationManager->getParentContainer())) {
+		}
 	}
 
 	/**
@@ -518,7 +521,9 @@ abstract class AgaviValidator extends AgaviParameterHolder
 		$array =& $this->validationParameters->getAll($paramType);
 		$cp = $this->curBase->pushRetNew($name);
 		$cp->setValueFromArray($array, $value);
-		$this->getContext()->getValidationManager()->addFieldResult($this, $cp->__toString(), AgaviValidator::NOT_PROCESSED);
+		if($this->validationManager !== null) {
+			$this->validationManager->addFieldResult($this, $cp->__toString(), AgaviValidator::NOT_PROCESSED);
+		}
 	}
 
 	/**
@@ -564,16 +569,17 @@ abstract class AgaviValidator extends AgaviParameterHolder
 				}
 			}
 
-			$vm = $this->getContext()->getValidationManager();
-			foreach($fieldnames as $fieldname) {
-				$vm->addFieldResult($this, $fieldname, $result);
+			if($this->validationManager !== null) {
+				foreach($fieldnames as $fieldname) {
+					$this->validationManager->addFieldResult($this, $fieldname, $result);
+				}
+
+				if($this->incident) {
+					$this->validationManager->addIncident($this->incident);
+				}
 			}
 
-			if($this->incident) {
-				$vm->addIncident($this->incident);
-				$this->incident = null;
-			}
-
+			$this->incident = null;
 			// put dependencies provided by this validator into manager
 			if($result == self::SUCCESS && count($this->getParameter('provides')) > 0) {
 				$this->parentContainer->getDependencyManager()->addDependTokens($this->getParameter('provides'), $this->curBase);

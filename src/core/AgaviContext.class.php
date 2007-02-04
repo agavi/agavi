@@ -47,7 +47,9 @@ final class AgaviContext
 		'execution_container' => null,
 		'execution_filter' => null,
 		'filter_chain' => null,
-		'security_filter' => null
+		'response' => null,
+		'security_filter' => null,
+		'validation_manager' => null,
 	);
 	
 	/**
@@ -85,11 +87,6 @@ final class AgaviContext
 	 * @var        AgaviUser A User instance.
 	 */
 	protected $user = null;
-	
-	/**
-	 * @var        AgaviValidationManager A ValidationManager instance.
-	 */
-	protected $validationManager = null;
 	
 	/**
 	 * @var        array An array of AgaviContext instances.
@@ -494,20 +491,6 @@ final class AgaviContext
 	public function getUser()
 	{
 		return $this->user;
-	}
-	
-	/**
-	 * Retrieve the ValidationManager
-	 *
-	 * @return     AgaviValidationManager The current ValidationManager 
-	 *                                    implementation instance.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function getValidationManager()
-	{
-		return $this->validationManager;
 	}
 }
 

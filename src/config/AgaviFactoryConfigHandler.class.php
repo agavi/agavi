@@ -161,8 +161,7 @@ class AgaviFactoryConfigHandler extends AgaviConfigHandler
 				$data['validation_manager']['class'] = $cfg->validation_manager->hasAttribute('class')? $cfg->validation_manager->getAttribute('class') : $data['validation_manager']['class'];
 				$data['validation_manager']['params'] = $this->getItemParameters($cfg->validation_manager, $data['validation_manager']['params']);
 
-				$data['validation_manager_code'] =	'$this->validationManager = new ' . $data['validation_manager']['class'] . '();' . "\n" .
-																					'$this->validationManager->initialize($this, ' . var_export($data['validation_manager']['params'], true) . ');';
+				$data['validation_manager_code'] =	'$this->factories["validation_manager"] = array("class" => "' . $data['validation_manager']['class'] . '", "parameters" => ' . var_export($data['validation_manager']['params'], true) . ');';
 			}
 
 			// User

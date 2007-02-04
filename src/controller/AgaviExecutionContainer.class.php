@@ -34,6 +34,11 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	protected $context = null;
 	
 	/**
+	 * @var        AgaviValidationManager The validation manager instance.
+	 */
+	protected $validationManager = null;
+	
+	/**
 	 * @var        AgaviRequestData A request data instance with request info.
 	 */
 	protected $requestData = null;
@@ -357,6 +362,25 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	public function getContext()
 	{
 		return $this->context;
+	}
+	
+	/**
+	 * Retrieve the ValidationManager
+	 *
+	 * @return     AgaviValidationManager The container's ValidationManager 
+	 *                                    implementation instance.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getValidationManager()
+	{
+		if($this->validationManager === null) {
+			$vmfi = $this->context->getFactoryInfo('validation_manager');
+			$this->validationManager = new $vmfi['class']();
+			$this->validationManager->initialize($this->context, $vmfi['parameters']);
+		}
+		return $this->validationManager;
 	}
 	
 	/**
