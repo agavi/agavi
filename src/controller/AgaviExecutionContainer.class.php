@@ -89,6 +89,40 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	protected $next = null;
 	
 	/**
+	 * Pre-serialization callback.
+	 *
+	 * Will set the name of the context instead of the instance, and the name of
+	 * the output type instead of the instance. Both will be restored by __wakeup
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function __sleep()
+	{
+		$this->contextName = $this->context->getName();
+		$this->outputTypeName = $this->outputType->getName();
+		$arr = get_object_vars($this);
+		unset($arr['context'], $arr['outputType']);
+		return array_keys($arr);
+	}
+	
+	/**
+	 * Post-unserialization callback.
+	 *
+	 * Will restore the context and output type instances based on their names set
+	 * by __sleep.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function __wakeup()
+	{
+		$this->context = AgaviContext::getInstance($this->contextName);
+		$this->outputType = $this->context->getController()->getOutputType($this->outputTypeName);
+		unset($this->contextName, $this->outputTypeName);
+	}
+	
+	/**
 	 * Initialize the container. This will create a response instance.
 	 *
 	 * @param      AgaviContext The current Context instance.
@@ -104,11 +138,6 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 		$this->context = $context;
 		
 		$this->parameters = $parameters;
-		
-		// create a new response instance for this action
-		$rfi = $this->context->getFactoryInfo('response');
-		$this->response = new $rfi['class'];
-		$this->response->initialize($this->context, $rfi['parameters']);
 	}
 	
 	/**

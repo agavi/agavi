@@ -37,6 +37,7 @@
 			<autoload name="AgaviAction">%core.agavi_dir%/action/AgaviAction.class.php</autoload>
 
 			<!-- agavi/config -->
+			<autoload name="AgaviCachingConfigHandler">%core.agavi_dir%/config/AgaviCachingConfigHandler.class.php</autoload>
 			<autoload name="AgaviCompileConfigHandler">%core.agavi_dir%/config/AgaviCompileConfigHandler.class.php</autoload>
 			<autoload name="AgaviDatabaseConfigHandler">%core.agavi_dir%/config/AgaviDatabaseConfigHandler.class.php</autoload>
 			<autoload name="AgaviFactoryConfigHandler">%core.agavi_dir%/config/AgaviFactoryConfigHandler.class.php</autoload>

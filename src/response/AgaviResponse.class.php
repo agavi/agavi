@@ -33,14 +33,39 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	protected $context = null;
 	
 	/**
-	 * @var        bool Indicates whether or not modifications are allowed.
-	 */
-	protected $locked = false;
-	
-	/**
 	 * @var        mixed The content to send back to the client.
 	 */
 	protected $content = null;
+	
+	/**
+	 * Pre-serialization callback.
+	 *
+	 * Will set the name of the context and exclude the instance from serializing.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function __sleep()
+	{
+		$this->contextName = $this->context->getName();
+		$arr = get_object_vars($this);
+		unset($arr['context']);
+		return array_keys($arr);
+	}
+	
+	/**
+	 * Post-unserialization callback.
+	 *
+	 * Will restore the context based on the names set by __sleep.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function __wakeup()
+	{
+		$this->context = AgaviContext::getInstance($this->contextName);
+		unset($this->contextName);
+	}
 	
 	/**
 	 * Retrieve the AgaviContext instance this Response object belongs to.

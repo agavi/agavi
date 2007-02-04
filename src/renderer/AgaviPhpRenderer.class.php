@@ -93,7 +93,10 @@ class AgaviPhpRenderer extends AgaviRenderer implements AgaviIReusableRenderer
 		
 		${$this->slotsVarName} =& $this->slots; 
 		
-		extract($this->assigns);
+		foreach($this->assigns as $name => $getter) {
+			${$name} = $this->context->$getter();
+		}
+		unset($name, $getter);
 		
 		extract($this->moreAssigns, EXTR_REFS);
 		

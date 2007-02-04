@@ -9,3 +9,5 @@
 		<td><?php echo $tm->_c($template['product_price']); ?></td>
 	</tr>
 </table>
+
+<?=time()?>

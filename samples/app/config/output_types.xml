@@ -1,49 +1,53 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <configurations xmlns:xi="http://www.w3.org/2001/XInclude">
 
+	<sandbox>
+
+		<renderers default="php">
+			<renderer name="php" class="AgaviPhpRenderer">
+				<parameter name="assigns">
+					<parameter name="routing">ro</parameter>
+					<parameter name="request">rq</parameter>
+					<parameter name="controller">ct</parameter>
+					<parameter name="user">us</parameter>
+					<parameter name="translation_manager">tm</parameter>
+					<parameter name="request_data">rd</parameter>
+				</parameter>
+			</renderer>
+		</renderers>
+		
+		<layouts default="default">
+			
+			<layout name="default">
+				<layer name="content" class="AgaviFileTemplateLayer" />
+				<layer name="decorator" class="AgaviFileTemplateLayer">
+					<slot name="menu" module="Default" action="Menu" />
+					<parameter name="template">Master</parameter>
+				</layer>
+			</layout>
+			
+			<layout name="slot">
+				<layer name="content" class="AgaviFileTemplateLayer" />
+			</layout>
+		</layouts>
+
+	</sandbox>
+
 	<configuration context="web">
 		<output_types default="html">
 
 			<output_type name="html">
-				<renderers default="php">
-					<renderer name="php" class="AgaviPhpRenderer">
-						<parameters>
-							<parameter name="assigns">
-								<parameters>
-									<parameter name="routing">ro</parameter>
-									<parameter name="request">rq</parameter>
-									<parameter name="controller">ct</parameter>
-									<parameter name="user">us</parameter>
-									<parameter name="translation_manager">tm</parameter>
-									<parameter name="request_data">rd</parameter>
-								</parameters>
-							</parameter>
-						</parameters>
-					</renderer>
-				</renderers>
-				<layouts default="default">
-					<layout name="default">
-						<layers>
-							<layer name="content" class="AgaviFileTemplateLayer" />
-							<layer name="decorator" class="AgaviFileTemplateLayer">
-								<parameters>
-									<parameter name="template">Master</parameter>
-								</parameters>
-							</layer>
-						</layers>
-					</layout>
-				</layouts>
-				<parameters>
-					<parameter name="Content-Type">text/html; charset=UTF-8</parameter>
-				</parameters>
+				<xi:include href="#xpointer(/configurations/sandbox/renderers)" />
+				<xi:include href="#xpointer(/configurations/sandbox/layouts)" />
+				
+				<parameter name="Content-Type">text/html; charset=UTF-8</parameter>
 			</output_type>
 
 			<output_type name="xhtml">
-				<xi:include href="#xpointer(//configurations/configuration[@context='web']/output_types/output_type[@name='html']/renderers)" />
-				<xi:include href="#xpointer(//configurations/configuration[@context='web']/output_types/output_type[@name='html']/layouts)" />
-				<parameters>
-					<parameter name="Content-Type">application/xhtml+xml; charset=UTF-8</parameter>
-				</parameters>
+				<xi:include href="#xpointer(/configurations/sandbox/renderers)" />
+				<xi:include href="#xpointer(/configurations/sandbox/layouts)" />
+				
+				<parameter name="Content-Type">application/xhtml+xml; charset=UTF-8</parameter>
 			</output_type>
 
 		</output_types>
@@ -53,9 +57,7 @@
 		<output_types default="xmlrpc">
 
 			<output_type name="xmlrpc">
-				<parameters>
-					<parameter name="encoding">UTF-8</parameter>
-				</parameters>
+				<parameter name="encoding">UTF-8</parameter>
 			</output_type>
 
 		</output_types>

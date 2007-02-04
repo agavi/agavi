@@ -16,9 +16,9 @@ class AgaviSampleAppDefaultBaseView extends AgaviView
 		}
 	}
 
-	public function setupHtml(AgaviRequestDataHolder $rd)
+	public function setupHtml(AgaviRequestDataHolder $rd, $layout = null)
 	{
-		$this->loadLayout();
+		$this->loadLayout($layout);
 
 		// also set a default title just to avoid warnings
 		$this->setAttribute('title', '');

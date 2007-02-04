@@ -53,6 +53,21 @@ class AgaviPhptalRenderer extends AgaviRenderer
 	protected $phptal = null;
 
 	/**
+	 * Pre-serialization callback.
+	 *
+	 * Excludes the PHPTAL instance to prevent excessive serialization load.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function __sleep()
+	{
+		$keys = parent::__sleep();
+		unset($keys[array_search('phptal', $keys)]);
+		return $keys;
+	}
+
+	/**
 	 * Retrieve the PHPTAL instance
 	 *
 	 * @return     PHPTAL A PHPTAL instance.
@@ -104,8 +119,8 @@ class AgaviPhptalRenderer extends AgaviRenderer
 		
 		$engine->set($this->slotsVarName, $slots);
 		
-		foreach($this->assigns as $key => $value) {
-			$engine->set($key, $value);
+		foreach($this->assigns as $key => $getter) {
+			$engine->set($key, $this->context->$getter());
 		}
 		
 		foreach($moreAssigns as $key => $value) {

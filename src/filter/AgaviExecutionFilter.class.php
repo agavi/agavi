@@ -85,7 +85,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 		foreach($groups as &$group) {
 			$group = base64_encode($group);
 		}
-		return include(AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . self::CACHE_SUBDIR . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $groups) . '.cefcache');
+		return unserialize(file_get_contents(AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . self::CACHE_SUBDIR . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $groups) . '.cefcache'));
 	}
 
 	/**
@@ -105,7 +105,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 			$group = base64_encode($group);
 		}
 		@mkdir(AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR  . self::CACHE_SUBDIR . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR , array_slice($groups, 0, -1)), 0777, true);
-		return file_put_contents(AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . self::CACHE_SUBDIR . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $groups) . '.cefcache', '<' . '?' . 'php return ' . var_export($data, true) . ';');
+		return file_put_contents(AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . self::CACHE_SUBDIR . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $groups) . '.cefcache', serialize($data));
 	}
 
 	/**
@@ -130,35 +130,32 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 	}
 
 	/**
-	 * Builds an array of cache groups
+	 * Builds an array of cache groups using the configuration and a container.
 	 *
-	 * @param      array  The configuration
-	 * @param      string The Action's Module name
-	 * @param      string The Action's name
+	 * @param      array                   The group array from the configuration.
+	 * @param      AgaviExecutionContainer The execution container.
 	 *
-	 * @return     array An array of groups
+	 * @return     array An array of groups.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function determineGroups(array $cfg, $moduleName, $actionName)
+	public function determineGroups(array $groups, $container)
 	{
-		$groups = array();
-
-		if(isset($cfg['groups'])) {
-			foreach($cfg['groups'] as $group) {
-				$group += array('name' => null, 'source' => null, 'namespace' => null);
-				$val = $this->getVariable($group['name'], $group['source'], $group['namespace']);
-				if($val === null) {
-					$val = "0";
-				}
-				$groups[] = $val;
+		$retval = array();
+		
+		foreach($groups as $group) {
+			$group += array('name' => null, 'source' => null, 'namespace' => null);
+			$val = $this->getVariable($group['name'], $group['source'], $group['namespace']);
+			if($val === null) {
+				$val = "0";
 			}
+			$retval[] = $val;
 		}
-
-		$groups[] = $moduleName . '_' . $actionName;
-
-		return $groups;
+		
+		$retval[] = $container->getModuleName() . '_' . $container->getActionName();
+		
+		return $retval;
 	}
 	
 	public function getVariable($name, $source = 'string', $namespace = null)
@@ -170,19 +167,19 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 			case 'locale':
 				$val = $this->context->getTranslationManager()->getCurrentLocaleIdentifier();
 				break;
-			case 'requestParameter':
-				$val = $this->context->getRequest()->getParameter($name);
+			case 'request_parameter':
+				$val = $this->context->getRequest()->getRequestData()->getParameter($name);
 				break;
-			case 'requestAttribute':
+			case 'request_attribute':
 				$val = $this->context->getRequest()->getAttribute($name, $namespace);
 				break;
-			case 'userParameter':
+			case 'user_parameter':
 				$val = $this->context->getUser()->getParameter($name);
 				break;
-			case 'userAttribute':
+			case 'user_attribute':
 				$val = $this->context->getUser()->getAttribute($name, $namespace);
 				break;
-			case 'userCredential':
+			case 'user_credential':
 				$val = $this->context->getUser()->hasCredential($name);
 				break;
 			default:
@@ -208,229 +205,239 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 	 */
 	public function execute(AgaviFilterChain $filterChain, AgaviExecutionContainer $container)
 	{
-		$response = $container->getResponse();
-		
 		$lm = $this->context->getLoggerManager();
 		// get the context, controller and validator manager
 		$controller = $this->context->getController();
-
+		
 		// get the current action information
 		$actionName = $container->getActionName();
 		$moduleName = $container->getModuleName();
-
+		
 		$request = $this->context->getRequest();
-
+		
 		$isCacheable = false;
-		if($this->getParameter('enable_caching', false) && is_readable($cachingDotXml = AgaviConfig::get('core.module_dir') . '/' . $moduleName . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'caching.xml')) {
-			// $lm->log(new AgaviLoggerMessage('Caching enabled, configuration file found, loading...'));
-			$defaultConfig = array(
-				'enabled' => true,
-				// lifetime. null = forever
-				'lifetime' => null,
-				// request methods to cache. null = any
-				'methods' => null,
-				// group definitions
-				'groups' => array(
-				),
-				// views to cache. null = any
-				'views' => null,
-				// a list of names of action attributes to cache and restore so they are available in view initialization
-				'actionAttributes' => array(
-				),
-				// a list of request attributes to cache and restore so they are available for subsequent stuff
-				'requestAttributes' => array(
-				),
-				'decorator' => array(
-					'include' => true,
-					'slots' => array(
-					),
-					'variables' => array(
-					),
-				)
-			);
-			// // $lm->log(new AgaviLoggerMessage(print_r(include(AgaviConfigCache::checkConfig($cachingDotXml)), true)));
-			//			$config = array_merge($config, include(AgaviConfigCache::checkConfig($cachingDotXml)));
-			$config['SearchEngineSpam'] = array_merge($defaultConfig, array(
-				'enabled' => false,
-				'lifetime' => '10 seconds',
-				// group definitions
-				'groups' => array(
-					array(
-						'name' => 'index',
-					),
-					array(
-						'source' => 'requestParameter',
-						'name' => 'name',
-					),
-					array(
-						'source' => 'locale',
-					),
-				),
-				'actionAttributes' => array(
-					'testing'
-				),
-				// other variables to cache and restore so they are available for subsequent stuff
-				'requestAttributes' => array(
-					// array(
-					// 	'namespace' => 'foo.bar',
-					// 	'name' => 'testing',
-					// ),
-				),
-				'decorator' => array(
-					'include' => true,
-					'slots' => array(
-					),
-					'variables' => array(
-					),
-				),
-			));
-			if(isset($config[$actionName]) && $config[$actionName]['enabled'] && (!is_array($config[$actionName]['methods']) || in_array($method = $request->getMethod(), $config[$actionName]['methods']))) {
-				// $lm->log(new AgaviLoggerMessage('Current action and request method are configured for caching, proceeding...'));
-				$config = $config[$actionName];
-				$groups = $this->determineGroups($config, $moduleName, $actionName);
-				// $lm->log(new AgaviLoggerMessage('Fetched groups "' . implode('", "', $groups) . '"'));
-				$isCacheable = true;
-			}
+		if($this->getParameter('enable_caching', true) && is_readable($cachingDotXml = AgaviConfig::get('core.module_dir') . '/' . $moduleName . DIRECTORY_SEPARATOR . 'cache' . DIRECTORY_SEPARATOR . $actionName . '.xml')) {
+			// $lm->log('Caching enabled, configuration file found, loading...');
+			// no _once please!
+			include(AgaviConfigCache::checkConfig($cachingDotXml));
 		}
-
+		
 		$isActionCached = false;
-
+		
+		
 		if($isCacheable) {
+			$groups = $this->determineGroups($config["groups"], $container);
 			$isActionCached = $this->checkCache(array_merge($groups, array(self::ACTION_CACHE_ID)), $config['lifetime']);
 		} else {
-			// $lm->log(new AgaviLoggerMessage('Action is not cacheable!'));
+			// $lm->log('Action is not cacheable!');
 		}
-
+		
 		if($isActionCached) {
-			// $lm->log(new AgaviLoggerMessage('Action is cached, loading...'));
-			$viewModule = '';
-			$viewName = '';
+			// $lm->log('Action is cached, loading...');
 			// cache/dir/4-8-15-16-23-42 contains the action cache
 			$actionCache = $this->readCache(array_merge($groups, array(self::ACTION_CACHE_ID)));
-			$viewModule = $actionCache['viewModule'];
-			$viewName = $actionCache['viewName'];
-			$actionAttributes = $actionCache['actionAttributes'];
 		} else {
-			// $lm->log(new AgaviLoggerMessage('Action not cached, executing...'));
+			// $lm->log('Action not cached, executing...');
 			// execute the Action and get the View to execute
-			list($viewModule, $viewName) = $this->runAction($container);
+			list($actionCache['view_module'], $actionCache['view_name']) = $this->runAction($container);
 			
-			// check if the returned view is even cacheable
-			if($isCacheable && is_array($config['views']) && !(in_array($viewName, $config['views'], true) || in_array(array($viewModule, $viewName), $config['views']))) {
+			// check if the returned view is cacheable
+			if($isCacheable && is_array($config['views']) && !in_array(array('module' => $actionCache['view_module'], 'name' => $actionCache['view_name']), $config['views'], true)) {
 				$isCacheable = false;
-				// $lm->log(new AgaviLoggerMessage('Returned View is not cleared for caching, setting cacheable status to false.'));
+				// $lm->log('Returned View is not cleared for caching, setting cacheable status to false.');
 			} else {
-				// $lm->log(new AgaviLoggerMessage('Returned View is cleared for caching, proceeding...'));
+				// $lm->log('Returned View is cleared for caching, proceeding...');
 			}
 			
 			$actionAttributes = $container->getAttributes();
 		}
 		
-		$response->clear();
-
-		if($viewName !== AgaviView::NONE) {
-
-			$container->setViewModuleName($viewModule);
-			$container->setViewName($viewName);
-
+		if($actionCache['view_name'] !== AgaviView::NONE) {
+			
+			$container->setViewModuleName($actionCache['view_module']);
+			$container->setViewName($actionCache['view_name']);
+			
 			// get the view instance
-			$viewInstance = $controller->createViewInstance($viewModule, $viewName);
-
+			$viewInstance = $controller->createViewInstance($actionCache['view_module'], $actionCache['view_name']);
+			
 			// initialize the view
 			$viewInstance->initialize($container);
-
+			
+			$outputType = $container->getOutputType()->getName();
+			
 			$isViewCached = false;
-
+			
 			if($isCacheable) {
-				$outputType = $container->getOutputType()->getName();
-
-				if($isActionCached) {
-					$isViewCached = $this->checkCache(array_merge($groups, array($outputType)));
+				if(isset($config['output_types'][$otConfig = $outputType]) || isset($config['output_types'][$otConfig = '*'])) {
+					$otConfig = $config['output_types'][$otConfig];
+					
+					if($isActionCached) {
+						$isViewCached = $this->checkCache(array_merge($groups, array($outputType)));
+					}
+				} else {
+					$isCacheable = false;
 				}
 			}
-
+			
 			if($isViewCached) {
-				// $lm->log(new AgaviLoggerMessage('View is cached, loading...'));
+				// $lm->log('View is cached, loading...');
 				$viewCache = $this->readCache(array_merge($groups, array($outputType)));
-				$response->import($viewCache['response']);
-				foreach($viewCache['requestAttributes'] as $requestAttribute) {
-					$request->setAttribute($requestAttribute['name'], $requestAttribute['value'], $requestAttribute['namespace']);
-				}
 			} else {
-				// $lm->log(new AgaviLoggerMessage('View is not cached, executing...'));
+				$viewCache = array();
+				
+				// create a new response instance for this action
+				$rfi = $this->context->getFactoryInfo('response');
+				$response = new $rfi['class'];
+				$response->initialize($this->context, $rfi['parameters']);
+				$container->setResponse($response);
+				
+				// $lm->log('View is not cached, executing...');
 				// view initialization completed successfully
-				$executeMethod = 'execute' . $container->getOutputType()->getName();
+				$executeMethod = 'execute' . $outputType;
 				if(!method_exists($viewInstance, $executeMethod)) {
 					$executeMethod = 'execute';
 				}
 				$key = $request->toggleLock();
-				$next = $viewInstance->$executeMethod($container->getRequestData());
+				$viewCache['next'] = $viewInstance->$executeMethod($container->getRequestData());
 				$request->toggleLock($key);
+			}
+			
+			if($viewCache['next'] instanceof AgaviExecutionContainer) {
+				// $lm->log('Forwarding request, skipping rendering...');
+				$container->setNext($viewCache['next']);
+			} else {
+				if($isViewCached) {
+					$layers = $viewCache['layers'];
+					$response = $viewCache['response'];
+					$container->setResponse($response);
 				
-				if($next instanceof AgaviExecutionContainer) {
-					$container->setNext($next);
-				} else {
-					$attributes =& $viewInstance->getAttributes();
-
+					foreach($viewCache['template_variables'] as $name => $value) {
+						$viewInstance->setAttribute($name, $value);
+					}
+				
+					foreach($viewCache['request_attributes'] as $requestAttribute) {
+						$request->setAttribute($requestAttribute['name'], $requestAttribute['value'], $requestAttribute['namespace']);
+					}
+				
 					$output = array();
-					$nextOutput = null;
-					foreach($viewInstance->getLayers() as $layer) {
-						foreach($layer->getSlots() as $slotName => $slotContainer) {
-							$slotResponse = $slotContainer->execute();
-							// set the presentation data as a template attribute
-							if(($output[$slotName] = $slotResponse->getContent()) !== null) {
-								// the slot really output something
-								// let our response grab the stuff it needs from the slot's response
-								$response->merge($slotResponse);
+					$nextOutput = $response->getContent();
+				} else {
+					$layers = $viewInstance->getLayers();
+				
+					if($isCacheable) {
+						$viewCache['template_variables'] = array();
+						foreach($otConfig['template_variables'] as $varName) {
+							$viewCache['template_variables'][$varName] = $viewInstance->getAttribute($varName);
+						}
+					
+						$viewCache['response'] = clone $response;
+					
+						$viewCache['layers'] = array();
+					
+						$viewCache['slots'] = array();
+					
+						$lastCacheableLayer = -1;
+						if(is_array($otConfig['layers'])) {
+							if(count($otConfig['layers'])) {
+								for($i = count($layers)-1; $i >= 0; $i--) {
+									$layer = $layers[$i];
+									$layerName = $layer->getName();
+									$cacheSlots[$layerName] = array();
+									if(isset($otConfig['layers'][$layerName])) {
+										if(is_array($otConfig['layers'][$layerName])) {
+											$lastCacheableLayer = $i - 1;
+										} else {
+											$lastCacheableLayer = $i;
+										}
+									}
+								}
+							}
+						} else {
+							$lastLayer = end($layers);
+							if($lastLayer !== false) {
+								$lastCacheableLayer = $lastLayer->getName();
 							}
 						}
-						$moreAssigns = array(
-							'container' => $container,
-							'inner' => $nextOutput,
-							'view' => $viewInstance,
-							'request_data' => $container->getRequestData()
-						);
-						$nextOutput = $layer->getRenderer()->render($layer, $attributes, $output, $moreAssigns);
-						$output = array();
-						$output[$layer->getName()] = $nextOutput;
+					
+						for($i = $lastCacheableLayer + 1; $i < count($layers); $i++) {
+							// $lm->log('Adding non-cacheable layer "' . $layers[$i]->getName() . '" to list');
+							$viewCache['layers'][] = clone $layers[$i];
+						}
 					}
-					$response->setContent($nextOutput);
+				
+					$output = array();
+					$nextOutput = null;
 				}
-			}
-
-			if($isCacheable) {
-				if(!$isActionCached) {
-					$actionCache = array();
-
-					$actionCache['viewModule'] = $viewModule;
-					$actionCache['viewName'] = $viewName;
-
-					$actionCache['actionAttributes'] = array();
-					foreach($config['actionAttributes'] as $attributeName) {
-						$actionCache['actionAttributes'][$attributeName] = $actionAttributes[$attributeName];
+				
+				$attributes =& $viewInstance->getAttributes();
+				
+				// $lm->log('Starting rendering...');
+				for($i = 0; $i < count($layers); $i++) {
+					$layer = $layers[$i];
+					$layerName = $layer->getName();
+					// $lm->log('Running layer "' . $layerName . '"...');
+					foreach($layer->getSlots() as $slotName => $slotContainer) {
+						if($isViewCached && isset($viewCache['slots'][$layerName][$slotName])) {
+							// $lm->log('Loading cached slot "' . $slotName . '"...');
+							$slotResponse = $viewCache['slots'][$layerName][$slotName];
+						} else {
+							// $lm->log('Running slot "' . $slotName . '"...');
+							$slotResponse = $slotContainer->execute();
+							if($isCacheable && !$isViewCached && in_array($slotName, $otConfig['layers'][$layerName])) {
+								// $lm->log('Adding response of slot "' . $slotName . '" to cache...');
+								$viewCache['slots'][$layerName][$slotName] = $slotResponse;
+							}
+						}
+						// set the presentation data as a template attribute
+						if(($output[$slotName] = $slotResponse->getContent()) !== null) {
+							// $lm->log('Merging in response from slot "' . $slotName . '"...');
+							// the slot really output something
+							// let our response grab the stuff it needs from the slot's response
+							$response->merge($slotResponse);
+						}
+					}
+					$moreAssigns = array(
+						'container' => $container,
+						'inner' => $nextOutput,
+						'request_data' => $container->getRequestData(),
+						'view' => $viewInstance,
+					);
+					$nextOutput = $layer->getRenderer()->render($layer, $attributes, $output, $moreAssigns);
+					
+					$response->setContent($nextOutput);
+					
+					if($isCacheable && !$isViewCached && $i === $lastCacheableLayer) {
+						$viewCache['response'] = clone $response;
 					}
 					
-					// $lm->log(new AgaviLoggerMessage('Writing Action cache...'));
+					$output = array();
+					$output[$layer->getName()] = $nextOutput;
+				}
+			}
+			
+			if($isCacheable) {
+				if(!$isActionCached) {
+					$actionCache['action_attributes'] = array();
+					foreach($config['action_attributes'] as $attributeName) {
+						$actionCache['action_attributes'][$attributeName] = $actionAttributes[$attributeName];
+					}
+					
+					// $lm->log('Writing Action cache...');
 					
 					$this->writeCache(array_merge($groups, array(self::ACTION_CACHE_ID)), $actionCache);
 				}
 				if(!$isViewCached) {
-					$viewCache = array();
-					
-					$viewCache['response'] = $response->export();
-					
-					$viewCache['requestAttributes'] = array();
-					foreach($config['requestAttributes'] as $requestAttribute) {
-						$viewCache['requestAttributes'][] = $requestAttribute + array('value' => $request->getAttribute($requestAttribute['name'], $requestAttribute['namespace']));
+					$viewCache['request_attributes'] = array();
+					foreach($otConfig['request_attributes'] as $requestAttribute) {
+						$viewCache['request_attributes'][] = $requestAttribute + array('value' => $request->getAttribute($requestAttribute['name'], $requestAttribute['namespace']));
 					}
 					
 					$this->writeCache(array_merge($groups, array($outputType)), $viewCache);
 					
-					// $lm->log(new AgaviLoggerMessage('Writing View cache...'));
+					// $lm->log('Writing View cache...');
 				}
 			}
 		}
-		// $lm->log(new AgaviLoggerMessage(print_r($request->getAttributeNamespace('foo.bar'), true)));
 	}
 
 	/**

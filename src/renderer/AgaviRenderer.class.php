@@ -65,6 +65,36 @@ abstract class AgaviRenderer
 	protected $moreAssignNames = array();
 	
 	/**
+	 * Pre-serialization callback.
+	 *
+	 * Will set the name of the context and exclude the instance from serializing.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function __sleep()
+	{
+		$this->contextName = $this->context->getName();
+		$arr = get_object_vars($this);
+		unset($arr['context']);
+		return array_keys($arr);
+	}
+	
+	/**
+	 * Post-unserialization callback.
+	 *
+	 * Will restore the context based on the names set by __sleep.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function __wakeup()
+	{
+		$this->context = AgaviContext::getInstance($this->contextName);
+		unset($this->contextName);
+	}
+	
+	/**
 	 * Initialize this Renderer.
 	 *
 	 * @param      AgaviContext The current application context.
@@ -92,7 +122,7 @@ abstract class AgaviRenderer
 			foreach($parameters['assigns'] as $item => $var) {
 				$getter = 'get' . str_replace('_', '', $item);
 				if(method_exists($this->context, $getter)) {
-					$this->assigns[$var] = $this->context->$getter();
+					$this->assigns[$var] = $getter;
 				} else {
 					$this->moreAssignNames[$item] = $var;
 				}

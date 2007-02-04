@@ -80,6 +80,83 @@ abstract class AgaviTemplateLayer extends AgaviParameterHolder
 	}
 	
 	/**
+	 * Pre-serialization callback.
+	 *
+	 * Will set the name of the context and exclude the instance from serializing.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function __sleep()
+	{
+		$this->contextName = $this->context->getName();
+		$arr = get_object_vars($this);
+		unset($arr['context']);
+		return array_keys($arr);
+	}
+	
+	/**
+	 * Post-unserialization callback.
+	 *
+	 * Will restore the context based on the names set by __sleep.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function __wakeup()
+	{
+		$this->context = AgaviContext::getInstance($this->contextName);
+		unset($this->contextName);
+	}
+	
+	/**
+	 * Object cloning callback.
+	 *
+	 * Will clone each individual slot (which are execution containers).
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function __clone()
+	{
+		foreach($this->slots as &$slot) {
+			$slot = clone $slot;
+		}
+	}
+	
+	/**
+	 * A convenience function that renders all slots and then the main template.
+	 * Useful in your custom models to render an email, for example.
+	 *
+	 * @param      AgaviRenderer An optional renderer instance that will be used
+	 *                           instead of the one set on the layer.
+	 *
+	 * @return     string The rendered result.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function execute(AgaviRenderer $renderer = null, array &$attributes = array(), array &$moreAssigns = array())
+	{
+		$output = array();
+		
+		foreach($this->getSlots() as $slotName => $slotContainer) {
+			$slotResponse = $slotContainer->execute();
+			$output[$slotName] = $slotResponse->getContent();
+		}
+		
+		if($renderer === null) {
+			$renderer = $this->getRenderer();
+		}
+		
+		if(!($renderer instanceof AgaviRenderer)) {
+			throw new AgaviException('No renderer has been set or given.');
+		}
+		
+		return $renderer->render($this, $attributes, $output, $moreAssigns);
+	}
+	
+	/**
 	 * Initialize the layer.
 	 *
 	 * @param      AgaviContext The current Context instance.

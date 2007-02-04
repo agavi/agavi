@@ -58,6 +58,21 @@ class AgaviSmartyRenderer extends AgaviRenderer implements AgaviIReusableRendere
 	protected $defaultExtension = '.tpl';
 
 	/**
+	 * Pre-serialization callback.
+	 *
+	 * Excludes the Smarty instance to prevent excessive serialization load.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function __sleep()
+	{
+		$keys = parent::__sleep();
+		unset($keys[array_search('smarty', $keys)]);
+		return $keys;
+	}
+
+	/**
 	 * Grab a cleaned up smarty instance.
 	 *
 	 * @return     Smarty A Smarty instance.
@@ -134,8 +149,8 @@ class AgaviSmartyRenderer extends AgaviRenderer implements AgaviIReusableRendere
 		
 		$engine->assign_by_ref($this->slotsVarName, $slots);
 		
-		foreach($this->assigns as $key => &$value) {
-			$engine->assign_by_ref($key, $value);
+		foreach($this->assigns as $key => $getter) {
+			$engine->assign($key, $this->context->$getter());
 		}
 		
 		foreach($moreAssigns as $key => &$value) {
