@@ -279,7 +279,6 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 				} else {
 					$this->requestData = new AgaviRequestDataHolder();
 				}
-				var_dump('foo');
 				// run the execution filter, without a proper chain
 				$controller->getFilter('execution')->execute(new AgaviFilterChain(), $this);
 			} else {
