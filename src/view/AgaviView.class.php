@@ -328,12 +328,32 @@ abstract class AgaviView
 			$l = $this->createLayer($layer['class'], $name, $layer['renderer']);
 			$l->setParameters($layer['parameters']);
 			foreach($layer['slots'] as $slotName => $slot) {
-				$l->setSlot($slotName, $this->container->createExecutionContainer($slot['module'], $slot['action'], new AgaviRequestDataHolder(array('parameters' => $slot['parameters'])), $slot['output_type']));
+				$l->setSlot($slotName, $this->createSlotContainer($slot['module'], $slot['action'], new AgaviRequestDataHolder(array('parameters' => $slot['parameters'])), $slot['output_type']));
 			}
 			$this->appendLayer($l);
 		}
 		
 		return $layout['parameters'];
+	}
+
+	public function createSlotContainer($moduleName, $actionName, $arguments = array(), $outputType = null)
+	{
+		if(!($arguments instanceof AgaviRequestDataHolder)) {
+			$arguments = new AgaviRequestDataHolder(array(AgaviRequestDataHolder::SOURCE_PARAMETERS => $arguments));
+		}
+		$container = $this->container->createExecutionContainer($moduleName, $actionName, $arguments, $outputType);
+		$container->setParameter('is_slot', true);
+		return $container;
+	}
+
+	public function createForwardContainer($moduleName, $actionName, $arguments = array(), $outputType = null)
+	{
+		if(!($arguments instanceof AgaviRequestDataHolder)) {
+			$arguments = new AgaviRequestDataHolder(array(AgaviRequestDataHolder::SOURCE_PARAMETERS => $arguments));
+		}
+		$container = $this->container->createExecutionContainer($moduleName, $actionName, $arguments, $outputType);
+		$container->setParameter('is_forward', true);
+		return $container;
 	}
 
 	/**

@@ -4,7 +4,7 @@ class AgaviSampleAppDefaultBaseView extends AgaviView
 {
 	final public function execute(AgaviRequestDataHolder $rd)
 	{
-		return $this->container->createExecutionContainer(AgaviConfig::get('actions.404_module'), AgaviConfig::get('actions.404_action'));
+		return $this->createForwardContainer(AgaviConfig::get('actions.404_module'), AgaviConfig::get('actions.404_action'));
 	}
 
 	public function executeXhtml(AgaviRequestDataHolder $rd)
