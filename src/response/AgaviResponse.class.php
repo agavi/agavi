@@ -48,8 +48,14 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	public function __sleep()
 	{
 		$this->contextName = $this->context->getName();
+		if(is_resource($this->content)) {
+			$this->contentStreamMeta = stream_get_meta_data($this->content);
+		}
 		$arr = get_object_vars($this);
 		unset($arr['context']);
+		if(isset($this->contentStreamMeta)) {
+			unset($arr['content']);
+		}
 		return array_keys($arr);
 	}
 	
@@ -65,6 +71,11 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	{
 		$this->context = AgaviContext::getInstance($this->contextName);
 		unset($this->contextName);
+		if(isset($this->contentStreamMeta)) {
+			// contrary to what the documentation says, stream_get_meta_data() will not return a list of filters attached to the stream, so we cannot restore these, unfortunately.
+			$this->content = fopen($this->contentStreamMeta['uri'], $this->contentStreamMeta['mode']);
+			unset($this->contentStreamMeta);
+		}
 	}
 	
 	/**
@@ -113,15 +124,12 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	 *
 	 * @param      mixed The content to be sent in this Response.
 	 *
-	 * @return     bool Whether or not the operation was successful.
-	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function setContent($content)
 	{
 		$this->content = $content;
-		return true;
 	}
 	
 	/**
@@ -129,14 +137,12 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	 *
 	 * @param      mixed The content to be prepended to this Response.
 	 *
-	 * @return     bool Whether or not the operation was successful.
-	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function prependContent($content)
 	{
-		return $this->setContent($content . $this->getContent());
+		$this->setContent($content . $this->getContent());
 	}
 	
 	/**
@@ -144,28 +150,23 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	 *
 	 * @param      mixed The content to be appended to this Response.
 	 *
-	 * @return     bool Whether or not the operation was successful.
-	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function appendContent($content)
 	{
-		return $this->setContent($this->getContent() . $content);
+		$this->setContent($this->getContent() . $content);
 	}
 	
 	/**
 	 * Clear the content for this Response
-	 *
-	 * @return     bool Whether or not the operation was successful.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function clearContent()
 	{
-		$this->content = '';
-		return true;
+		$this->content = null;
 	}
 	
 	/**
@@ -215,7 +216,12 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	 */
 	protected function sendContent()
 	{
-		echo $this->content;
+		if(is_resource($this->content)) {
+			fpassthru($this->content);
+			fclose($this->content);
+		} else {
+			echo $this->content;
+		}
 	}
 }
 
