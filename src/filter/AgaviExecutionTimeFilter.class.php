@@ -54,7 +54,7 @@ class AgaviExecutionTimeFilter extends AgaviFilter implements AgaviIGlobalFilter
 	{
 		$context = $this->getContext();
 		
-		$comment = $this->getParameter('comment');
+		$comment = $this->getParameter('comment', false);
 		$replace = $this->getParameter('replace', false);
 		
 		$start = microtime(true);
@@ -62,7 +62,7 @@ class AgaviExecutionTimeFilter extends AgaviFilter implements AgaviIGlobalFilter
 		
 		$response = $container->getResponse();
 		
-		$outputTypes = $this->getParameter('output_types');
+		$outputTypes = (array) $this->getParameter('output_types');
 		if(is_array($outputTypes) && !in_array($container->getOutputType()->getName(), $outputTypes)) {
 			return;
 		}
@@ -77,7 +77,10 @@ class AgaviExecutionTimeFilter extends AgaviFilter implements AgaviIGlobalFilter
 		}
 		
 		if($comment) {
-			$response->appendContent("\n\n<!-- This page took " . $time . " seconds to process -->");
+			if($comment === true) {
+				$comment = "\n\n<!-- This page took %s seconds to process -->";
+			}
+			$response->appendContent(sprintf($comment, $time));
 		}
 	}
 

@@ -5,9 +5,10 @@
 		<filters>
 
 			<filter name="ExecutionTimeFilter" class="AgaviExecutionTimeFilter">
-				<parameters>
-					<parameter name="comment">On</parameter>
-				</parameters>
+				<parameter name="comment">On</parameter>
+				<parameter name="output_types">
+					<parameter>html</parameter>
+				</parameter>
 			</filter>
 
 		</filters>
