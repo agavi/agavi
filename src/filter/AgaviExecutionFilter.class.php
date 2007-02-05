@@ -253,6 +253,12 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 			$actionAttributes = $container->getAttributes();
 		}
 		
+		// create a new response instance for this action
+		$rfi = $this->context->getFactoryInfo('response');
+		$response = new $rfi['class'];
+		$response->initialize($this->context, $rfi['parameters']);
+		$container->setResponse($response);
+		
 		if($actionCache['view_name'] !== AgaviView::NONE) {
 			
 			$container->setViewModuleName($actionCache['view_module']);
@@ -285,12 +291,6 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 				$viewCache = $this->readCache(array_merge($groups, array($outputType)));
 			} else {
 				$viewCache = array();
-				
-				// create a new response instance for this action
-				$rfi = $this->context->getFactoryInfo('response');
-				$response = new $rfi['class'];
-				$response->initialize($this->context, $rfi['parameters']);
-				$container->setResponse($response);
 				
 				// $lm->log('View is not cached, executing...');
 				// view initialization completed successfully
