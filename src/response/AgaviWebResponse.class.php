@@ -502,7 +502,11 @@ class AgaviWebResponse extends AgaviResponse
 		}
 		
 		if($this->getContentType() === null && $outputType instanceof AgaviOutputType && $outputType->hasParameter('Content-Type')) {
-		 	$this->setContentType($outputType->getParameter('Content-Type'));
+			$this->setContentType($outputType->getParameter('Content-Type'));
+		}
+		
+		if(!$this->hasHttpHeader('Content-Length') && ($contentSize = $this->getContentSize()) !== false) {
+			$this->setHttpHeader('Content-Length', $contentSize);
 		}
 		
 		// send headers

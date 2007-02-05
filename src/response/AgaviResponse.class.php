@@ -107,7 +107,7 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	}
 	
 	/**
-	 * Retrieve the content set for this Response
+	 * Retrieve the content set for this Response.
 	 *
 	 * @return     mixed The content set in this Response.
 	 *
@@ -117,6 +117,27 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	public function getContent()
 	{
 		return $this->content;
+	}
+	
+	/**
+	 * Retrieve the size (in bytes) of the content set for this Response.
+	 *
+	 * @return     int The content size in bytes.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getContentSize()
+	{
+		if(is_resource($this->content)) {
+			if(($stat = fstat($this->content)) !== false) {
+				return $stat['size'];
+			} else {
+				return false;
+			}
+		} else {
+			return strlen($this->content);
+		}
 	}
 	
 	/**
