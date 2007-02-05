@@ -133,7 +133,7 @@ class AgaviVirtualArrayPath
 	 * 
 	 * @return     string The component at the given position.
 	 * 
-	 * @author     Dominik del Bondio <ddb@bitxtender.com
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function get($position)
@@ -269,11 +269,25 @@ class AgaviVirtualArrayPath
 	}
 
 	/**
+	 * Prepends one or more components to the path.
+	 * 
+	 * @param      string The components to be prepended.
+	 * 
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function unshift($path)
+	{
+		$parts = AgaviArrayPathDefinition::getPartsFromPath($path);
+		$this->parts = array_merge($parts['parts'], $this->parts);
+	}
+
+	/**
 	 * Checks if a value exists  at the path of this instance in the given array.
 	 * 
 	 * @param      array The array to check.
 	 * 
-	 * @author     Dominik del Bondio
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function hasValue(array &$array)
@@ -289,7 +303,7 @@ class AgaviVirtualArrayPath
 	 * 
 	 * @return     mixed The value at the path.
 	 * 
-	 * @author     Dominik del Bondio
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function & getValue(array &$array, $default = null)
@@ -303,7 +317,7 @@ class AgaviVirtualArrayPath
 	 * @param      array The array to set the data in.
 	 * @param      mixed The value to be set.
 	 * 
-	 * @author     Dominik del Bondio
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function setValueFromArray(array &$array, $value)
@@ -321,7 +335,7 @@ class AgaviVirtualArrayPath
 	 * 
 	 * @return     mixed The value at the path.
 	 * 
-	 * @author     Dominik del Bondio
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function & getValueByChildPath($path, array &$array, $default = null)
@@ -338,7 +352,7 @@ class AgaviVirtualArrayPath
 	 * @param      array The array to set the data in.
 	 * @param      mixed The value to be set.
 	 * 
-	 * @author     Dominik del Bondio
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function setValueByChildPath($path, array &$array, $value)
@@ -354,7 +368,7 @@ class AgaviVirtualArrayPath
 	 * @param      string The child path appended to the path in this instance.
 	 * @param      array The array to check.
 	 * 
-	 * @author     Dominik del Bondio
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function hasValueByChildPath($path, array &$array)
@@ -369,7 +383,7 @@ class AgaviVirtualArrayPath
 	 *
 	 * @return     array The components
 	 * 
-	 * @author     Dominik del Bondio
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getParts()
