@@ -179,9 +179,16 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 			case 'user_attribute':
 				$val = $this->context->getUser()->getAttribute($name, $namespace);
 				break;
+			case 'user_authenticated':
+				if(($user = $this->context->getUser()) instanceof AgaviISecurityUser) {
+					$val = $user->isAuthenticated();
+					break;
+				}
 			case 'user_credential':
-				$val = $this->context->getUser()->hasCredential($name);
-				break;
+				if(($user = $this->context->getUser()) instanceof AgaviISecurityUser) {
+					$val = $user->hasCredentials($name);
+					break;
+				}
 			default:
 				$val = $name;
 		}
