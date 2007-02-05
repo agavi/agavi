@@ -1,3 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <configurations parent="%core.system_config_dir%/autoload.xml">
+	<configuration>
+		
+		<autoload name="ProjectBaseAction">%core.lib_dir%/action/ProjectBaseAction.class.php</autoload>
+		<autoload name="ProjectBaseView">%core.lib_dir%/view/ProjectBaseView.class.php</autoload>
+		
+	</configuration>
 </configurations>
