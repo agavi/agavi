@@ -6,7 +6,7 @@ class ResponseTests
 {
 	public static function suite()
 	{
-		$suite = new PHPUnit2_Framework_TestSuite('response');
+		$suite = new PHPUnit_Framework_TestSuite('response');
 
 		$suite->addTestSuite('ResponseTest');
 		$suite->addTestSuite('WebResponseTest');

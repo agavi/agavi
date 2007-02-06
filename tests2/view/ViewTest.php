@@ -2,7 +2,7 @@
 
 class SampleView extends AgaviView
 {
-	public function execute(AgaviParameterHolder $parameters) {}
+	public function execute(AgaviRequestDataHolder $rd) {}
 }
 
 class ViewTest extends AgaviTestCase
@@ -18,7 +18,7 @@ class ViewTest extends AgaviTestCase
 		$request = $ctx->getRequest();
 		
 		ob_start();
-		$ctx->getController()->dispatch(array($request->getModuleAccessor() => 'Test', $request->getActionAccessor() => 'Test'));
+		$ctx->getController()->dispatch(new AgaviRequestDataHolder(array(AgaviRequestDataHolder::SOURCE_PARAMETERS => array($request->getModuleAccessor() => 'Test', $request->getActionAccessor() => 'Test'))));
 		ob_end_clean();
 		
 		$this->_v = new SampleView();
@@ -32,16 +32,7 @@ class ViewTest extends AgaviTestCase
 		$v = $this->_v;
 
 		$ctx_test = $v->getContext();
-		$r_test = $v->getResponse();
 		$this->assertReference($ctx, $ctx_test);
-		$this->assertReference($this->_r, $r_test);
-
-		$this->assertNull($v->getDecoratorTemplate());
-		$this->assertNull($v->getTemplate());
-
-		$this->assertEquals(array(), $v->getSlots());
-
-		$this->assertFalse($v->isDecorator());
 	}
 
 

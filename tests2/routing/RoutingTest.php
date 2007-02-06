@@ -19,10 +19,8 @@ class RoutingTest extends AgaviTestCase
 
 	public function setUp()
 	{
-		$response = new AgaviWebResponse();
-		$response->initialize(AgaviContext::getInstance('test'));
 		$this->_r = new SampleRouting();
-		$this->_r->initialize($response);
+		$this->_r->initialize(AgaviContext::getInstance('test'));
 		AgaviConfig::set('core.use_routing', true);
 
 	}

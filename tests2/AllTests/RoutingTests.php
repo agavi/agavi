@@ -7,11 +7,11 @@ class RoutingTests
 {
 	public static function suite()
 	{
-		$suite = new PHPUnit2_Framework_TestSuite('routing');
+		$suite = new PHPUnit_Framework_TestSuite('routing');
 
 		$suite->addTestSuite('RoutingTest');
 
-		$webSuite = new PHPUnit2_Framework_TestSuite('WebRouting');
+		$webSuite = new PHPUnit_Framework_TestSuite('WebRouting');
 		$d = dir(dirname(__FILE__) . '/../routing/cases/');
 		while(false !== ($entry = $d->read())) {
 			if(preg_match('#.*\\.case\\.php#i', $entry))

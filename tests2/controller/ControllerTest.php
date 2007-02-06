@@ -75,11 +75,11 @@ class ControllerTest extends AgaviTestCase
 		$this->assertType('AgaviController', $controller);
 	}
 
-	public function testGetView()
+	public function testCreateViewInstance()
 	{
 		$controller = $this->_controller;
-		$this->assertType('Test_TestSuccessView', $controller->getView('Test', 'TestSuccess'));
-		$this->assertType('Test_TestErrorView', $controller->getView('Test', 'TestError'));
+		$this->assertType('Test_TestSuccessView', $controller->createViewInstance('Test', 'TestSuccess'));
+		$this->assertType('Test_TestErrorView', $controller->createViewInstance('Test', 'TestError'));
 	}
 
 	public function testModelExists()
@@ -107,53 +107,25 @@ class ControllerTest extends AgaviTestCase
 
 
 
-	public function testSetGetOutputType()
-	{
-		$controller = $this->_controller;
-		$this->assertSame('html', $controller->getOutputType());
-
-		$this->assertTrue($controller->setOutputType('test1'));
-		$this->assertSame('test1', $controller->getOutputType());
-
-		$this->assertTrue($controller->setOutputType('test2'));
-		$this->assertSame('test2', $controller->getOutputType());
-
-		try {
-			$controller->setOutputType('nonexistant');
-			$this->fail('Expected AgaviException not thrown!');
-		} catch(AgaviException $e) {
-			$this->assertSame('test2', $controller->getOutputType());
-		}
-/*
-		$controller->getResponse()->lock();
-		$this->assertFalse($controller->setOutputType('html'));
-		$this->assertSame('test2', $controller->getOutputType());
-*/
-	}
-
 	public function testGetOutputTypeInfo()
 	{
 		$controller = $this->_controller;
 
 		$info_ex = array(
 			'parameters' =>							array('Content-Type' => 'text/html'),
-			'renderer_parameters' =>		array(),
-			'renderer' =>								'AgaviPhpRenderer',
 		);
 
-		$info = $controller->getOutputTypeInfo();
-		$this->assertSame($info_ex, $info);
+		$info = $controller->getOutputType();
+		$this->assertSame($info_ex, $info->getParameters());
 
 		$info_ex = array(
 			'parameters' =>							array(),
-			'renderer_parameters' =>		array(),
-			'renderer' =>								'AgaviPhpRenderer',
 		);
-		$info = $controller->getOutputTypeInfo('test1');
-		$this->assertSame($info_ex, $info);
+		$info = $controller->getOutputType('test1');
+		$this->assertSame($info_ex, $info->getParameters());
 
 		try {
-			$controller->getOutputTypeInfo('nonexistant');
+			$controller->getOutputType('nonexistant');
 			$this->fail('Expected AgaviException not thrown!');
 		} catch(AgaviException $e) {
 		}

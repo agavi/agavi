@@ -3,12 +3,12 @@
 date_default_timezone_set('Europe/Berlin');
 error_reporting(E_ALL | E_STRICT);
 
-if(!defined('PHPUnit2_MAIN_METHOD')) {
-	define('PHPUnit2_MAIN_METHOD', 'AllTests::main');
+if(!defined('PHPUnit_MAIN_METHOD')) {
+	define('PHPUnit_MAIN_METHOD', 'AllTests::main');
 }
 
-require_once 'PHPUnit2/Framework/TestSuite.php';
-require_once 'PHPUnit2/TextUI/TestRunner.php';
+require_once 'PHPUnit/Framework/TestSuite.php';
+require_once 'PHPUnit/TextUI/TestRunner.php';
 
 
 require_once('AgaviTestCase.class.php');
@@ -28,10 +28,10 @@ class AllTests
 	public static function main()
 	{
 		$reportDir = dirname(__FILE__) . '/test_report/';
-		if(version_compare(PHPUnit2_Runner_Version::id(), '3.0.0', '<')) {
-			PHPUnit2_TextUI_TestRunner::run(self::suite(), $reportDir . 'coverage.xml', $reportDir . 'coverage.html', $reportDir . 'coverage.txt', $reportDir . 'report.html', $reportDir . 'report.txt', $reportDir . 'report.xml');
+		if(version_compare(PHPUnit_Runner_Version::id(), '3.0.0', '<')) {
+			PHPUnit_TextUI_TestRunner::run(self::suite(), $reportDir . 'coverage.xml', $reportDir . 'coverage.html', $reportDir . 'coverage.txt', $reportDir . 'report.html', $reportDir . 'report.txt', $reportDir . 'report.xml');
 		} else {
-			PHPUnit2_TextUI_TestRunner::run(self::suite(), null, $reportDir);
+			PHPUnit_TextUI_TestRunner::run(self::suite(), null, $reportDir);
 		}
 	}
 
@@ -39,7 +39,7 @@ class AllTests
 	{
 		$testDir = dirname(__FILE__) . '/AllTests';
 
-		$suite = new PHPUnit2_Framework_TestSuite('Agavi Framework');
+		$suite = new PHPUnit_Framework_TestSuite('Agavi Framework');
 
 		require_once($testDir . '/ActionTests.php');
 		$suite->addTest(ActionTests::suite());
@@ -83,8 +83,8 @@ class AllTests
 		require_once($testDir . '/UtilTests.php');
 		$suite->addTest(UtilTests::suite());
 
-		require_once($testDir . '/ValidatorTests.php');
-		$suite->addTest(ValidatorTests::suite());
+//		require_once($testDir . '/ValidatorTests.php');
+//		$suite->addTest(ValidatorTests::suite());
 
 		require_once($testDir . '/ViewTests.php');
 		$suite->addTest(ViewTests::suite());
@@ -94,7 +94,7 @@ class AllTests
 }
 
 
-if(PHPUnit2_MAIN_METHOD == 'AllTests::main') {
+if(PHPUnit_MAIN_METHOD == 'AllTests::main') {
 	AllTests::main();
 }
 ?>

@@ -39,111 +39,7 @@ class WebResponseTest extends AgaviTestCase
 		$r->clear();
 		$this->assertEquals('', $r->getContent());
 		$this->assertEquals(array(), $r->getHttpHeaders());
-		$info = $r->exportInfo();
-		$this->assertEquals(array(), $info['cookies']);
-	}
-
-	public function testImportExportInfo()
-	{
-		$r = $this->_r;
-
-		$r->setContent('test1');
-		$this->assertSame(array('content' => 'test1', 'locked' => false, 'httpStatusCode' => '200', 'httpHeaders' => array(), 'cookies' => array()), $r->export());
-
-		$r->import(array('content' => 'test2'));
-		$this->assertSame(array('content' => 'test2', 'locked' => false, 'httpStatusCode' => '200', 'httpHeaders' => array(), 'cookies' => array()), $r->export());
-
-
-		$array_ex = array('content' => 'test3', 'locked' => false, 'httpStatusCode' => '300', 'httpHeaders' => array('Location' => '/foo.html'), 'cookies' => array('Cookie' => 'value'));
-		$r->import($array_ex);
-		$this->assertSame($array_ex, $r->export());
-
-		$array_ex = array('content' => 'test3', 'locked' => true, 'httpStatusCode' => '300', 'httpHeaders' => array('Location' => '/bar.html'), 'cookies' => array('Cookie 2' => 'value 2'));
-		$r->import($array_ex);
-		$this->assertSame($array_ex, $r->export());
-
-		unset($array_ex['content']);
-		$this->assertSame($array_ex, $r->exportInfo());
-	}
-
-	public function testMerge()
-	{
-		$r = $this->_r;
-
-		$r->setCookie('cookie 1', 'value 1', 'lt1', 'p1', 'd1', false);
-		$r->setCookie('cookie 2', 'value 2', 'lt2', 'p2', 'd2', false);
-		$this->assertTrue($r->merge(array('cookies' => array('cookie 2' => array('value' => 'value 3')) , 'httpStatusCode' => '300', 'httpHeaders' => 'new Header')));
-		$info_ex = array(
-			'locked' => false,
-			'httpStatusCode' => '200',
-			'httpHeaders' => array(),
-			'cookies' => array(
-				'cookie 2' => array(
-					'value' => 'value 2',
-					'lifetime' => 'lt2',
-					'path' => 'p2',
-					'domain' => 'd2',
-					'secure' => false,
-					'httpOnly' => false,
-				),
-				'cookie 1' => array(
-					'value' => 'value 1',
-					'lifetime' => 'lt1',
-					'path' => 'p1',
-					'domain' => 'd1',
-					'secure' => false,
-					'httpOnly' => false,
-				),
-			),
-		);
-		$info = $r->exportInfo();
-		$this->assertSame($info_ex, $info);
-
-		$r->lock();
-		$info_ex['locked'] = true;
-		$this->assertFalse($r->merge(array('cookies' => array('cookie 2' => array('value' => 'value 4')))));
-		$this->assertTrue($r->isLocked());
-		$info = $r->exportInfo();
-		$this->assertEquals($info_ex, $info);
-	}
-
-	public function testAppend()
-	{
-		$r = $this->_r;
-
-		$r->setCookie('cookie 1', 'value 1', 'lt1', 'p1', 'd1', false);
-		$r->setCookie('cookie 2', 'value 2', 'lt2', 'p2', 'd2', false);
-		$this->assertTrue($r->append(array('cookies' => array('cookie 2' => array('value' => 'value 3'), 'cookie 3' => array('value' => 'value 4')) , 'httpStatusCode' => '300', 'httpHeaders' => array('Location' => '/bar.html'))));
-		$info_ex = array(
-			'locked' => false,
-			'httpStatusCode' => '300',
-			'httpHeaders' => array('Location' => '/bar.html'),
-			'cookies' => array(
-				'cookie 1' => array(
-					'value' => 'value 1',
-					'lifetime' => 'lt1',
-					'path' => 'p1',
-					'domain' => 'd1',
-					'secure' => false,
-					'httpOnly' => false,
-				),
-				'cookie 2' => array(
-					'value' => 'value 3',
-				),
-				'cookie 3' => array(
-					'value' => 'value 4',
-				),
-			),
-		);
-		$info = $r->exportInfo();
-		$this->assertSame($info_ex, $info);
-
-		$r->lock();
-		$info_ex['locked'] = true;
-		$this->assertFalse($r->merge(array('cookies' => array('cookie 2' => array('value' => 'value 4')))));
-		$this->assertTrue($r->isLocked());
-		$info = $r->exportInfo();
-		$this->assertEquals($info_ex, $info);
+		$this->assertEquals(array(), $r->getCookies());
 	}
 
 	public function testSetGetContentType()
@@ -243,8 +139,7 @@ class WebResponseTest extends AgaviTestCase
 	{
 		$r = $this->_r;
 
-		$info = $r->exportInfo();
-		$this->assertEquals(array(), $info['httpHeaders']);
+		$this->assertEquals(array(), $r->getHttpHeaders());
 
 		$r->setHttpHeader('test 1', 'value 1');
 		$r->setHttpHeader('test 2', 'value 2');
@@ -257,8 +152,7 @@ class WebResponseTest extends AgaviTestCase
 
 		$r->clearHttpHeaders();
 
-		$info = $r->exportInfo();
-		$this->assertEquals(array(), $info['httpHeaders']);
+		$this->assertEquals(array(), $r->getHttpHeaders());
 	}
 
 	public function testSetCookie()
@@ -274,15 +168,13 @@ class WebResponseTest extends AgaviTestCase
 			'httpOnly' => false,
 		);
 		$r->setCookie('cookieName', 'value');
-		$info = $r->exportInfo();
-		$this->assertEquals($info_ex, $info['cookies']['cookieName']);
+		$this->assertEquals($info_ex, $r->getCookie('cookieName'));
 
 		$r->setCookie('cookieName', 'value 2', 300, '/foo');
 		$info_ex['value'] = 'value 2';
 		$info_ex['lifetime'] = 300;
 		$info_ex['path'] = '/foo';
-		$info = $r->exportInfo();
-		$this->assertEquals($info_ex, $info['cookies']['cookieName']);
+		$this->assertEquals($info_ex, $r->getCookie('cookieName'));
 
 		$r->setCookie('cookieName2', 'value 3', 1000, '', 'foo.bar', 1);
 		$info_ex = array(
@@ -293,8 +185,7 @@ class WebResponseTest extends AgaviTestCase
 			'secure' => true,
 			'httpOnly' => false,
 		);
-		$info = $r->exportInfo();
-		$this->assertEquals($info_ex, $info['cookies']['cookieName2']);
+		$this->assertEquals($info_ex, $r->getCookie('cookieName2'));
 	}
 }
 

@@ -2,9 +2,9 @@
 
 class Test_TestErrorView extends AgaviView
 {
-	public function execute(AgaviParameterHolder $parameters)
+	public function execute(AgaviRequestDataHolder $rd)
 	{
-		$this->setTemplate('testerror');
+		$this->loadLayout();
 	}
 }
 

@@ -5,7 +5,7 @@ class CoreTests
 {
 	public static function suite()
 	{
-		$suite = new PHPUnit2_Framework_TestSuite('core');
+		$suite = new PHPUnit_Framework_TestSuite('core');
 
 		$suite->addTestSuite('ContextTest');
 		return $suite;

@@ -6,7 +6,15 @@ class SampleResponse extends AgaviResponse
 	{
 	}
 
-	public function send()
+	public function send(AgaviOutputType $ot = null)
+	{
+	}
+	
+	public function setRedirect($to)
+	{
+	}
+	
+	public function merge(AgaviResponse $other)
 	{
 	}
 }
@@ -37,70 +45,6 @@ class ResponseTest extends AgaviTestCase
 		$r->lock();
 		$this->assertFalse($r->setContent('test2'));
 		$this->assertEquals('test1', $r->getContent());
-	}
-
-	public function testImportExport()
-	{
-		$r = $this->_r;
-
-		$r->setContent('test1');
-		$this->assertSame(array('content' => 'test1', 'locked' => false), $r->export());
-
-		$r->import(array('content' => 'test2'));
-		$this->assertSame(array('content' => 'test2', 'locked' => false), $r->export());
-
-
-		$r->import(array('content' => 'test3', 'locked' => true));
-		$this->assertSame(array('content' => 'test3', 'locked' => true), $r->export());
-	}
-
-	public function testExportInfo()
-	{
-		$r = $this->_r;
-
-		$this->assertSame(array('locked' => false), $r->exportInfo());
-
-		$r->lock();
-		$this->assertSame(array('locked' => true), $r->exportInfo());
-	}
-
-	public function testMerge()
-	{
-		$r = $this->_r;
-
-		$r->setContent('content a');
-		$this->assertTrue($r->merge(array('content' => 'content b', 'locked' => true)));
-		$this->assertFalse($r->isLocked());
-		$this->assertEquals('content a' . 'content b', $r->getContent());
-
-		$r->lock();
-		$this->assertFalse($r->merge(array('content' => 'content c', 'locked' => false)));
-		$this->assertTrue($r->isLocked());
-		$this->assertEquals('content a' . 'content b', $r->getContent());
-	}
-
-	public function testAppend()
-	{
-		$r = $this->_r;
-
-		$r->setContent('content a');
-		$this->assertTrue($r->append(array('content' => 'content b', 'locked' => true)));
-		$this->assertFalse($r->isLocked());
-		$this->assertEquals('content a' . 'content b', $r->getContent());
-
-		$r->lock();
-		$this->assertFalse($r->append(array('content' => 'content c', 'locked' => false)));
-		$this->assertTrue($r->isLocked());
-		$this->assertEquals('content a' . 'content b', $r->getContent());
-	}
-
-	public function testLocked()
-	{
-		$r = $this->_r;
-
-		$this->assertFalse($r->isLocked());
-		$r->lock();
-		$this->assertTrue($r->isLocked());
 	}
 
 	public function testPrependContent()

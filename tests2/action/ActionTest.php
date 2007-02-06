@@ -44,7 +44,7 @@ class ActionTest extends AgaviTestCase
 
 	public function testhandleError()
 	{
-		$this->assertEquals('Error', $this->_action->handleError(new AgaviParameterHolder()));
+		$this->assertEquals('Error', $this->_action->handleError(new AgaviRequestDataHolder()));
 	}
 
 	public function testisSecure()
@@ -54,7 +54,7 @@ class ActionTest extends AgaviTestCase
 
 	public function testvalidate()
 	{
-		$this->assertTrue($this->_action->validate(new AgaviParameterHolder()));
+		$this->assertTrue($this->_action->validate(new AgaviRequestDataHolder()));
 	}
 }
 ?>

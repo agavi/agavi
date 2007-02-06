@@ -24,7 +24,7 @@
  * @version    $Id$
  */
 
-class AgaviTestCase extends PHPUnit2_Framework_TestCase
+class AgaviTestCase extends PHPUnit_Framework_TestCase
 {
 	/**
 	 * @param  mixed   $object
@@ -85,7 +85,7 @@ class AgaviTestCase extends PHPUnit2_Framework_TestCase
 				));
 			}
 		}
-		catch(PHPUnit2_Framework_AssertionFailedError $e)
+		catch(PHPUnit_Framework_AssertionFailedError $e)
 		{
 			self::fail(sprintf('%s%sexpected copy: %s was not a copy of: %s', 
 				$message,

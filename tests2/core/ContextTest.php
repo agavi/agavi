@@ -172,12 +172,6 @@ class ContextTest extends AgaviTestCase
 		AgaviContext::getInstance('test')->initialize();
 		$this->assertType('AgaviSecurityUser', AgaviContext::getInstance('test')->getUser());
 	}
-
-	public function testGetValidationManager()
-	{
-		$ctx = AgaviContext::getInstance('test');
-		$this->assertType('AgaviValidationManager', $ctx->getValidationManager());
-	}
 }
 
 

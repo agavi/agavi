@@ -17,7 +17,7 @@ class ValidatorTests
 {
 	public static function suite()
 	{
-		$suite = new PHPUnit2_Framework_TestSuite('validator');
+		$suite = new PHPUnit_Framework_TestSuite('validator');
 
 		//$suite->addTestSuite('ErrorManagerTest');
 		//$suite->addTestSuite('DependencyManagerTest');

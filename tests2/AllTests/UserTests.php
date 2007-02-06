@@ -7,7 +7,7 @@ class UserTests
 {
 	public static function suite()
 	{
-		$suite = new PHPUnit2_Framework_TestSuite('user');
+		$suite = new PHPUnit_Framework_TestSuite('user');
 
 		$suite->addTestSuite('UserTest');
 		$suite->addTestSuite('SecurityUserTest');

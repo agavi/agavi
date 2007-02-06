@@ -5,7 +5,7 @@ class ActionTests
 {
 	public static function suite()
 	{
-		$suite = new PHPUnit2_Framework_TestSuite('action');
+		$suite = new PHPUnit_Framework_TestSuite('action');
 
 		$suite->addTestSuite('ActionTest');
 		return $suite;

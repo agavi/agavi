@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <configurations>
 	<configuration>
-		<controller class="AgaviWebController" />
+		<controller class="AgaviController" />
 		<database_manager class="AgaviDatabaseManager" />
 		<dispatch_filter class="AgaviDispatchFilter" />
 		<execution_container class="AgaviExecutionContainer" />
