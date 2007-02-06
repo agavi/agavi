@@ -100,9 +100,9 @@ final class AgaviUploadedFile extends ArrayObject
 	 * Move the uploaded file.
 	 *
 	 * @param      string The destination filename.
-	 * @param      int    The mode of the destination file, default 0666.
+	 * @param      int    The mode of the destination file, defaults to 0664.
 	 * @param      bool   Whether or not subdirs should be created if necessary.
-	 * @param      int    The mode to use when creating subdirs, default 0777.
+	 * @param      int    The mode to use when creating subdirs, defaults to 0775.
 	 *
 	 * @return     bool   True, if the operation was successful, false otherwise.
 	 *
@@ -111,26 +111,16 @@ final class AgaviUploadedFile extends ArrayObject
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function move($dest, $fileMode = 0666, $create = true, $dirMode = 0777)
+	public function move($dest, $fileMode = 0664, $create = true, $dirMode = 0775)
 	{
 		if(!$this->hasError()) {
 			// get our directory path from the destination filename
 			$directory = dirname($dest);
 			if(!is_readable($directory)) {
-				$fmode = 0777;
-				if($create && !@mkdir($directory, $dirMode, true)) {
+				if($create && !AgaviToolkit::mkdir($directory, $dirMode, true)) {
 					// failed to create the directory
 					$error = 'Failed to create file upload directory "%s"';
 					$error = sprintf($error, $directory);
-					throw new AgaviFileException($error);
-				}
-				
-				// chmod the directory since it doesn't seem to work on
-				// recursive paths
-				if(!@chmod($directory, $dirMode)) {
-					// couldn't chmod target dir
-					$error = 'Failed to chmod file upload directory "%s" to mode %o';
-					$error = sprintf($error, $directory, $dirMode);
 					throw new AgaviFileException($error);
 				}
 			} elseif(!is_dir($directory)) {

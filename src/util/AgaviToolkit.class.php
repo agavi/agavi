@@ -74,7 +74,7 @@ final class AgaviToolkit
 	 * PHP mkdir() doesn't do what you tell it to, it takes umask into account.
 	 *
 	 * @param      string   The path name.
-	 * @param      int      The mode. Really.
+	 * @param      int      The mode. Really. Defaults to 0775.
 	 * @param      bool     Recursive or not.
 	 * @param      resource A Context.
 	 *
@@ -83,7 +83,7 @@ final class AgaviToolkit
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public static function mkdir($path, $mode = 0777, $recursive = false, $context = null)
+	public static function mkdir($path, $mode = 0775, $recursive = false, $context = null)
 	{
 		if($context !== null) {
 			$retval = @mkdir($path, $mode, $recursive, $context);
