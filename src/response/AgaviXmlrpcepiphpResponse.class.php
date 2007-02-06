@@ -23,6 +23,7 @@
  * @author     David Zülke <dz@bitxtender.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
+ *
  * @since      0.11.0
  *
  * @version    $Id: AgaviWebResponse.class.php 1075 2006-10-01 05:14:29Z david $

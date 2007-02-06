@@ -18,7 +18,7 @@ class ProjectBaseView extends AgaviView
 		was declared in your view, and no such method exists in this class either.
 	*/
 	
-	final public function execute(AgaviRequestDataHolder $rd)
+	public final function execute(AgaviRequestDataHolder $rd)
 	{
 		throw new AgaviViewException(sprintf(
 			'The View "%1$s" does not implement an "execute%3$s()" method to serve '.

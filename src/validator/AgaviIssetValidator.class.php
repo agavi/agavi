@@ -25,13 +25,13 @@
  * @author     Uwe Mesecke <uwe@mesecke.net>
  * @copyright  Authors
  * @copyright  The Agavi Project
+ *
  * @since      0.11.0
  *
  * @version    $Id$
  */
 class AgaviIssetValidator extends AgaviValidator
 {
-
 	/**
 	 * We need to return true here when this validator is not required, because 
 	 * otherwise the is*ValueEmpty check would make empty but set fields not 

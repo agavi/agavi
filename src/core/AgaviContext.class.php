@@ -29,6 +29,7 @@
  * @author     David Zülke <dz@bitxtender.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
+ *
  * @since      0.9.0
  *
  * @version    $Id$
@@ -107,7 +108,7 @@ final class AgaviContext
 	 */
 	public function __clone()
 	{
-		trigger_error('Cloning the AgaviContext object is not allowed.', E_USER_ERROR);
+		trigger_error('Cloning an AgaviContext instance is not allowed.', E_USER_ERROR);
 	}	
 
 	/**
@@ -117,7 +118,7 @@ final class AgaviContext
 	 * @author     Mike Vincent <mike@agavi.org>	
 	 * @since      0.9.0
 	 */
-	protected function __construct() 
+	private function __construct() 
 	{
 		// Singleton, setting up the class happens in initialize()
 	}
@@ -170,7 +171,7 @@ final class AgaviContext
 	 */
 	public function getDatabaseConnection($name = 'default')
 	{
-		if($this->databaseManager != null) {
+		if($this->databaseManager !== null) {
 			return $this->databaseManager->getDatabase($name)->getConnection();
 		}
 	}

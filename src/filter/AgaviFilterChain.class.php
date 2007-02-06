@@ -21,8 +21,10 @@
  * @subpackage filter
  *
  * @author     Sean Kerr <skerr@mojavi.org>
+ * @author     David Zülke <dz@bitxtender.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
+ *
  * @since      0.9.0
  *
  * @version    $Id$
@@ -102,6 +104,7 @@ class AgaviFilterChain
 	 * @param      AgaviIFilter A Filter implementation instance.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
 	public function register(AgaviIFilter $filter)

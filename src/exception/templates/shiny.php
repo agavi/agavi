@@ -22,12 +22,13 @@
  * @author     David Zülke <dz@bitxtender.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
+ *
  * @since      0.11.0
  *
  * @version    $Id$
  */
 
-/*
+/**
  * Build a list of parameters passed to a method. Example:
  * array([object AgaviFilter], 'baz' => array(1, 2), 'log' => [resource stream])
  *

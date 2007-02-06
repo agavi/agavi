@@ -23,8 +23,10 @@
  *
  * @author     Sean Kerr <skerr@mojavi.org>
  * @author     Veikko Mäkinen <mail@veikkomakinen.com>
+ * @author     David Zülke <dz@bitxtender.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
+ *
  * @since      0.9.0
  *
  * @version    $Id$
@@ -194,7 +196,6 @@ class AgaviWebRequest extends AgaviRequest
 	 * @throws     <b>AgaviInitializationException</b> If an error occurs while
 	 *                                                 initializing this Request.
 	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @author     Veikko Mäkinen <mail@veikkomakinen.com>
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0

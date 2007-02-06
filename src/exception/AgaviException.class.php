@@ -22,10 +22,12 @@
  * @package    agavi
  * @subpackage exception
  *
+ * @author     David Zülke <dz@bitxtender.com>
  * @author     Sean Kerr <skerr@mojavi.org>
  * @author     Bob Zoller <bob@agavi.org>
  * @copyright  Authors
  * @copyright  The Agavi Project
+ *
  * @since      0.9.0
  *
  * @version    $Id$
@@ -39,8 +41,7 @@ class AgaviException extends Exception
 	 * @param      AgaviContext  The context instance.
 	 * @param      AgaviResponse The response instance.
 	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @author     Bob Zoller <bob@agavi.org>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
 	public static function printStackTrace(Exception $e, AgaviContext $context = null, AgaviExecutionContainer $container = null)

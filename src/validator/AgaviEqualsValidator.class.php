@@ -30,6 +30,7 @@
  * @author     Uwe Mesecke <uwe@mesecke.net>
  * @copyright  Authors
  * @copyright  The Agavi Project
+ *
  * @since      0.11.0
  *
  * @version    $Id$

@@ -25,13 +25,13 @@
  * @author     Sean Kerr <skerr@mojavi.org>
  * @copyright  Authors
  * @copyright  The Agavi Project
+ *
  * @since      0.9.0
  *
  * @version    $Id$
  */
 final class AgaviConfigCache
 {
-
 	const CACHE_SUBDIR = 'config';
 
 	/**

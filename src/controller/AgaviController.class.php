@@ -24,6 +24,7 @@
  * @author     David Zülke <dz@bitxtender.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
+ *
  * @since      0.9.0
  *
  * @version    $Id$
@@ -276,7 +277,7 @@ class AgaviController extends AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function getContext()
+	public final function getContext()
 	{
 		return $this->context;
 	}
@@ -336,8 +337,7 @@ class AgaviController extends AgaviParameterHolder
 	 * @param      AgaviContext An AgaviContext instance.
 	 * @param      array        An array of initialization parameters.
 	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @author     Mike Vincent <mike@agavi.org>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
 	public function initialize(AgaviResponse $response, array $parameters = array())

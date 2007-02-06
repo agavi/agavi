@@ -24,7 +24,7 @@ abstract class '.$this->getClassname().' implements AgaviISingletonModel {
 		self::$context = $context;
 	}
 	
-	public function getContext()
+	public final function getContext()
 	{
 		return self::$context;
 	}

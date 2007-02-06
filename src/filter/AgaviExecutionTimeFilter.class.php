@@ -31,8 +31,10 @@
  * @subpackage filter
  *
  * @author     Sean Kerr <skerr@mojavi.org>
+ * @author     David Zülke <dz@bitxtender.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
+ *
  * @since      0.9.0
  *
  * @version    $Id$
@@ -95,6 +97,7 @@ class AgaviExecutionTimeFilter extends AgaviFilter implements AgaviIGlobalFilter
 	 *                                         initialization.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
 	public function initialize(AgaviContext $context, array $parameters = array())

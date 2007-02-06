@@ -18,15 +18,17 @@
  * 
  * @package    agavi
  * @subpackage translation
- * 
- * @since      0.11.0 
+ *
  * @author     Dominik del Bondio <ddb@bitxtender.com>
+ * @copyright  Authors
+ * @copyright  The Agavi Project
+ *
+ * @since      0.11.0
  *
  * @version    $Id$
  */
 final class AgaviGettextMoReader
 {
-
 	/**
 	 * Parses a .mo file and returns the data as an array.
 	 * For the format see the gettext manual

@@ -24,13 +24,13 @@
  * @author     David Zülke <dz@bitxtender.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
+ *
  * @since      0.9.0
  *
  * @version    $Id$
  */
 class AgaviParameterHolder
 {
-
 	/**
 	 * @var        array An array of parameters
 	 */

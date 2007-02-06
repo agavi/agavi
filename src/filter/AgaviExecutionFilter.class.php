@@ -25,6 +25,7 @@
  * @author     Sean Kerr <skerr@mojavi.org>
  * @copyright  Authors
  * @copyright  The Agavi Project
+ *
  * @since      0.9.0
  *
  * @version    $Id$
@@ -159,6 +160,18 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 		return $retval;
 	}
 	
+	/**
+	 * Read a variable from the given source and, optionally, namespace.
+	 *
+	 * @param      string The variable name.
+	 * @param      string The optional variable source.
+	 * @param      string The optional namespace in the source.
+	 *
+	 * @return     mixed The variable.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public function getVariable($name, $source = 'string', $namespace = null)
 	{
 		switch($source) {

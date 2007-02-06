@@ -23,6 +23,7 @@
  * @author     Uwe Mesecke <uwe@mesecke.net>
  * @copyright  Authors
  * @copyright  The Agavi Project
+ *
  * @since      0.11.0
  *
  * @version    $Id$
@@ -106,7 +107,7 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
-	public function getContext()
+	public final function getContext()
 	{
 		return $this->context;
 	}

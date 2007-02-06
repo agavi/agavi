@@ -23,6 +23,7 @@
  * @author     David Zülke <dz@bitxtender.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
+ *
  * @since      0.10.0
  *
  * @version    $Id$

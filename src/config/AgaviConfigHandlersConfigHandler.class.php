@@ -24,13 +24,13 @@
  * @author     Dominik del Bondio <ddb@bitxtender.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
+ *
  * @since      0.11.0
  *
  * @version    $Id$
  */
 class AgaviConfigHandlersConfigHandler extends AgaviConfigHandler
 {
-
 	/**
 	 * Execute this configuration handler.
 	 *

@@ -24,6 +24,7 @@
  * @author     Bob Zoller <bob@agavi.org>
  * @copyright  Authors
  * @copyright  The Agavi Project
+ *
  * @since      0.10.0
  *
  * @version    $Id$
@@ -62,7 +63,7 @@ abstract class AgaviLoggerAppender
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.10.0
 	 */
-	public function getContext()
+	public final function getContext()
 	{
 		return $this->context;
 	}

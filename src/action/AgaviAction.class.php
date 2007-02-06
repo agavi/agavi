@@ -23,8 +23,10 @@
  * @subpackage action
  *
  * @author     Sean Kerr <skerr@mojavi.org>
+ * @author     David Zülke <dz@bitxtender.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
+ *
  * @since      0.9.0
  *
  * @version    $Id$
@@ -74,6 +76,7 @@ abstract class AgaviAction
 	 *                   action.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
 	public function getCredentials()
@@ -106,7 +109,7 @@ abstract class AgaviAction
 	 *
 	 * @param      AgaviContext The current application context.
 	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
 	public function initialize(AgaviExecutionContainer $container)

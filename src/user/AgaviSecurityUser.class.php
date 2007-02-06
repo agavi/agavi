@@ -23,13 +23,13 @@
  * @author     Sean Kerr <skerr@mojavi.org>
  * @copyright  Authors
  * @copyright  The Agavi Project
+ *
  * @since      0.9.0
  *
  * @version    $Id$
  */
 class AgaviSecurityUser extends AgaviUser implements AgaviISecurityUser
 {
-
 	// +-----------------------------------------------------------------------+
 	// | CONSTANTS                                                             |
 	// +-----------------------------------------------------------------------+

@@ -36,6 +36,7 @@
  * @author     Uwe Mesecke <uwe@mesecke.net>
  * @copyright  Authors
  * @copyright  The Agavi Project
+ *
  * @since      0.11.0
  *
  * @version    $Id$
@@ -258,7 +259,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	final public function getContext()
+	public final function getContext()
 	{
 		return $this->context;
 	}
@@ -271,7 +272,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	final public function getParentContainer()
+	public final function getParentContainer()
 	{
 		return $this->parentContainer;
 	}
@@ -628,9 +629,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 
 			// validate in every name defined in the request
 			foreach($names as $name) {
-				$newBase = clone $base;
-				$newBase->unshift($name);
-				$t = $this->validateInBase($newBase);
+				$t = $this->validateInBase($base->pushRetNew($name));
 
 				if($t == self::CRITICAL) {
 					return $t;

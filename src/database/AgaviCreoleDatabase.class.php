@@ -51,8 +51,10 @@
  * @subpackage database
  *
  * @author     Sean Kerr <skerr@mojavi.org>
+ * @author     David Zülke <dz@bitxtender.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
+ *
  * @since      0.9.0
  *
  * @version    $Id$
@@ -66,6 +68,7 @@ class AgaviCreoleDatabase extends AgaviDatabase
 	 *                                           created.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
 	protected function connect()

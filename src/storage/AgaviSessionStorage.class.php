@@ -40,6 +40,7 @@
  * @author     Veikko Mäkinen <mail@veikkomakinen.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
+ *
  * @since      0.9.0
  *
  * @version    $Id$

@@ -24,6 +24,7 @@
  * @author     Sean Kerr <skerr@mojavi.org>
  * @copyright  Authors
  * @copyright  The Agavi Project
+ *
  * @since      0.9.0
  *
  * @version    $Id$
@@ -47,7 +48,7 @@ abstract class AgaviStorage extends AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	final public function getContext()
+	public final function getContext()
 	{
 		return $this->context;
 	}

@@ -10,7 +10,7 @@ class FCHTestBase
 		$this->context = $ctx;
 		$this->params = $params;
 	}
-	public function getContext()
+	public final function getContext()
 	{
 		return $this->context;
 	}
@@ -29,14 +29,14 @@ class FCHTestController				extends FCHTestBase {
 class FCHTestDispatchFilter		extends FCHTestBase implements AgaviIGlobalFilter {
 	public function executeOnce(AgaviFilterChain $filterChain, AgaviResponse $response) {}
 	public function execute(AgaviFilterChain $filterChain, AgaviResponse $response) {}
-	public function getContext() {}
+	public final function getContext() {}
 	public function initialize(AgaviContext $context, array $parameters = array()) {}
 }
 
 class FCHTestExecutionFilter	extends FCHTestBase implements AgaviIActionFilter {
 	public function executeOnce(AgaviFilterChain $filterChain, AgaviResponse $response) {}
 	public function execute(AgaviFilterChain $filterChain, AgaviResponse $response) {}
-	public function getContext() {}
+	public final function getContext() {}
 	public function initialize(AgaviContext $context, array $parameters = array()) {}
 }
 
@@ -64,7 +64,7 @@ class FCHTestDBManager				extends FCHTestBase {}
 class FCHTestSecurityFilter		extends FCHTestBase implements AgaviIActionFilter, AgaviISecurityFilter {
 	public function executeOnce(AgaviFilterChain $filterChain, AgaviResponse $response) {}
 	public function execute(AgaviFilterChain $filterChain, AgaviResponse $response) {}
-	public function getContext() {}
+	public final function getContext() {}
 	public function initialize(AgaviContext $context, array $parameters = array()) {}
 }
 class FCHTestUser							extends FCHTestBase implements AgaviISecurityUser

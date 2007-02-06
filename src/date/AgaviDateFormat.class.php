@@ -23,6 +23,7 @@
  * @author     Dominik del Bondio <ddb@bitxtender.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
+ *
  * @since      0.11.0
  *
  * @version    $Id$
@@ -851,7 +852,7 @@ class AgaviDateFormat
 	 */
 	protected function getDateFieldFromTokenType($type)
 	{
-		$typeMap = array(
+		static $typeMap = array(
 			self::T_ERA                     => AgaviDateDefinitions::ERA,
 			self::T_YEAR                    => AgaviDateDefinitions::YEAR,
 			self::T_MONTH                   => AgaviDateDefinitions::MONTH,

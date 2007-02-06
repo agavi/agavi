@@ -20,8 +20,12 @@
  * @subpackage database
  *
  * @author     Daniel Swarbrick <daniel@pressure.net.nz>
+ * @author     David Zülke <dz@bitxtender.com>
+ * @author     Dominik del Bondio <ddb@bitxtender.com>
+ * @author     Veikko Mäkinen <veikko@veikkomakinen.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
+ *
  * @since      0.9.0
  *
  * @version    $Id$
@@ -36,6 +40,8 @@ class AgaviPdoDatabase extends AgaviDatabase
 	 *
 	 * @author     Daniel Swarbrick <daniel@pressure.net.nz>
 	 * @author     David Zülke <dz@bitxtender.com>
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     Veikko Mäkinen <veikko@veikkomakinen.com>
 	 * @since      0.9.0
 	 */
 	protected function connect()

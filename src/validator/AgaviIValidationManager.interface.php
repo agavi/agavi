@@ -22,9 +22,11 @@
  * 
  * @package    agavi
  * @subpackage validator
- * 
+ *
  * @author     Uwe Mesecke <uwe@mesecke.net>
- * @since      0.11
+ * @copyright  Authors
+ * @copyright  The Agavi Project
+ * @since      0.11.0
  * 
  * @version:   $Id$
  */
@@ -38,7 +40,7 @@ interface AgaviIValidationManager
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
-	public function getContext();
+	public final function getContext();
 
 	/**
 	 * Initializes the validator manager

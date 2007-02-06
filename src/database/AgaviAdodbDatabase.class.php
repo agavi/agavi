@@ -45,6 +45,7 @@
  * @author     Steven Weiss (info@code-factory.de)
  * @copyright  Authors
  * @copyright  The Agavi Project
+ *
  * @since      0.10.0
  *
  * @version    $Id$

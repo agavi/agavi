@@ -20,9 +20,10 @@
  * @subpackage date
  *
  * @author     Dominik del Bondio <ddb@bitxtender.com>
- * @author     The ICU Project ({@link http://icu.sourceforge.net})
+ * @author     The ICU Project
  * @copyright  Authors
  * @copyright  The Agavi Project
+ *
  * @since      0.11.0
  *
  * @version    $Id$
@@ -37,7 +38,7 @@ class AgaviGregorianCalendar extends AgaviCalendar
 	 * Constructor.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project <http://icu.sourceforge.net>
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function __construct()
@@ -67,7 +68,7 @@ class AgaviGregorianCalendar extends AgaviCalendar
 	 * Initialize all variables to default values.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project <http://icu.sourceforge.net>
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	protected function initVariables()
@@ -162,7 +163,7 @@ class AgaviGregorianCalendar extends AgaviCalendar
 	 * @param      float The given Gregorian cutover date.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function setGregorianChange($date)
@@ -209,7 +210,7 @@ class AgaviGregorianCalendar extends AgaviCalendar
 	 * @return     float The Gregorian cutover time for this calendar.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function getGregorianChange()
@@ -233,7 +234,7 @@ class AgaviGregorianCalendar extends AgaviCalendar
 	 * @return     bool if the given year is a leap year; false otherwise.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function isLeapYear($year)
@@ -254,7 +255,7 @@ class AgaviGregorianCalendar extends AgaviCalendar
 	 * @return     bool 
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function isEquivalentTo($other)
@@ -267,7 +268,7 @@ class AgaviGregorianCalendar extends AgaviCalendar
 	 * @see        AgaviCalendar::getActualMinimum
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function getActualMinimum($field)
@@ -279,7 +280,7 @@ class AgaviGregorianCalendar extends AgaviCalendar
 	 * @see        AgaviCalendar::getActualMaximum
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function getActualMaximum($field)
@@ -361,7 +362,7 @@ class AgaviGregorianCalendar extends AgaviCalendar
 	 * @see        AgaviCalendar::inDaylightTime
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function inDaylightTime()
@@ -383,7 +384,7 @@ class AgaviGregorianCalendar extends AgaviCalendar
 	 * @return     int The ERA.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	protected function internalGetEra()
@@ -395,7 +396,7 @@ class AgaviGregorianCalendar extends AgaviCalendar
 	 * @see        AgaviCalendar::handleComputeMonthStart
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	protected function handleComputeMonthStart($eyear, $month,$useMonth)
@@ -439,7 +440,7 @@ class AgaviGregorianCalendar extends AgaviCalendar
 	 * @see        AgaviCalendar::handleComputeJulianDay
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	protected function handleComputeJulianDay($bestField)
@@ -481,7 +482,7 @@ class AgaviGregorianCalendar extends AgaviCalendar
 	 * @see        AgaviCalendar::handleGetMonthLength
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 
@@ -497,7 +498,7 @@ class AgaviGregorianCalendar extends AgaviCalendar
 	 * @see        AgaviCalendar::handleGetYearLength
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	protected function handleGetYearLength($eyear)
@@ -513,7 +514,7 @@ class AgaviGregorianCalendar extends AgaviCalendar
 	 * @return     int The length of the given month.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 
@@ -532,7 +533,7 @@ class AgaviGregorianCalendar extends AgaviCalendar
 	 * @return     int The length of the month.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 
@@ -548,7 +549,7 @@ class AgaviGregorianCalendar extends AgaviCalendar
 	 * @return     int The length of the given year.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 
@@ -563,7 +564,7 @@ class AgaviGregorianCalendar extends AgaviCalendar
 	 * @return     int The length of the year field
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 
@@ -579,7 +580,7 @@ class AgaviGregorianCalendar extends AgaviCalendar
 	 * problem call this method to retain the proper month.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 
@@ -598,7 +599,7 @@ class AgaviGregorianCalendar extends AgaviCalendar
 	 * @return     float the day number with respect to the epoch.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 
@@ -616,7 +617,7 @@ class AgaviGregorianCalendar extends AgaviCalendar
 	 * @see        AgaviCalendar::handleGetLimit
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 
@@ -629,7 +630,7 @@ class AgaviGregorianCalendar extends AgaviCalendar
 	 * @see        AgaviCalendar::handleGetExtendedYear
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 
@@ -668,7 +669,7 @@ class AgaviGregorianCalendar extends AgaviCalendar
 	 * @see        AgaviCalendar::handleGetExtendedYearFromWeekFields
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 
@@ -687,7 +688,7 @@ class AgaviGregorianCalendar extends AgaviCalendar
 	 * @see        AgaviCalendar::handleComputeFields
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 
@@ -758,7 +759,7 @@ class AgaviGregorianCalendar extends AgaviCalendar
 	 * @return     double 
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	private static function computeJulianDayOfYear($isGregorian, $year, &$isLeap)
@@ -782,7 +783,7 @@ class AgaviGregorianCalendar extends AgaviCalendar
 	 * @return     bool True if the set time fields are all valid.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	private function validateFields()
@@ -833,7 +834,7 @@ class AgaviGregorianCalendar extends AgaviCalendar
 	 * @return     bool 
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	private function boundsCheck($value, $field)
@@ -852,7 +853,7 @@ class AgaviGregorianCalendar extends AgaviCalendar
 	 * @return     int The pseudo-time-stamp for two fields.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	private function aggregateStamp($stamp_a, $stamp_b)
@@ -906,7 +907,7 @@ class AgaviGregorianCalendar extends AgaviCalendar
 	 * @return     float The Julian date number.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	private static function millisToJulianDay($millis)
@@ -923,7 +924,7 @@ class AgaviGregorianCalendar extends AgaviCalendar
 	 * @return     float Time as milliseconds.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	private static function julianDayToMillis($julian)
@@ -953,7 +954,7 @@ class AgaviGregorianCalendar extends AgaviCalendar
 	 * @see        AgaviCalendar::haveDefaultCentury
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function haveDefaultCentury()
@@ -965,7 +966,7 @@ class AgaviGregorianCalendar extends AgaviCalendar
 	 * @see        AgaviCalendar::defaultCenturyStart
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function defaultCenturyStart()
@@ -977,7 +978,7 @@ class AgaviGregorianCalendar extends AgaviCalendar
 	 * @see        AgaviCalendar::defaultCenturyStartYear
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function defaultCenturyStartYear()
@@ -1031,7 +1032,7 @@ class AgaviGregorianCalendar extends AgaviCalendar
 	 *                   with 2-digit years are considered to fall within.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	private function internalGetDefaultCenturyStart()
@@ -1058,7 +1059,7 @@ class AgaviGregorianCalendar extends AgaviCalendar
 	 *                 2-digit years are considered to fall within.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	private function internalGetDefaultCenturyStartYear()
@@ -1082,7 +1083,7 @@ class AgaviGregorianCalendar extends AgaviCalendar
 	 * current time.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	private static function initializeSystemDefaultCentury()

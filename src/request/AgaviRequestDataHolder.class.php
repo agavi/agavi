@@ -23,6 +23,7 @@
  * @author     Dominik del Bondio <ddb@bitxtender.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
+ *
  * @since      0.11.0
  *
  * @version    $Id$
@@ -265,7 +266,7 @@ class AgaviRequestDataHolder extends AgaviParameterHolder implements AgaviIParam
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	final public function getSourceNames()
+	public final function getSourceNames()
 	{
 		return array_keys($this->sourceNames);
 	}

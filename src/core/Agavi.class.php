@@ -22,6 +22,7 @@
  * @author     David Zülke <dz@bitxtender.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
+ *
  * @since      0.11.0
  *
  * @version    $Id$
@@ -29,10 +30,7 @@
 final class Agavi
 {
 	/**
-	 * An associative arrays of class and file names used by __autoload().
-	 *
-	 * @author     David Zülke <dz@bitxtender.com>
-	 * @since      0.11.0
+	 * @var        array An assoc array of classes and files used for autoloading.
 	 */
 	public static $autoloads = null;
 	

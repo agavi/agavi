@@ -14,11 +14,8 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * A file that serves as the autoload file for class Propel
- * Use this line in autoload.ini to enable the magic:
- * <code>
- *   Propel      = "%core.agavi_dir%/database/PropelAutoload.php"
- * </code>
+ * A file that serves as the autoload file for Propel < 1.3
+ * It is enabled by default in the Agavi autoload configuration.
  * Whenever you want to use Propel now, it will automatically be setup for you
  * using the configuration file you specified in database.xml
  * 
@@ -28,6 +25,7 @@
  * @author     David Zülke <dz@bitxtender.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
+ *
  * @since      0.10.0
  *
  * @version    $Id$

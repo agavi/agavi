@@ -26,6 +26,7 @@
  * @author     Sean Kerr <skerr@mojavi.org>
  * @copyright  Authors
  * @copyright  The Agavi Project
+ *
  * @since      0.9.0
  *
  * @version    $Id$
@@ -50,7 +51,7 @@ class AgaviUser extends AgaviAttributeHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function getContext()
+	public final function getContext()
 	{
 		return $this->context;
 	}

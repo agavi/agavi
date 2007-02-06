@@ -31,7 +31,7 @@ abstract class ' . $this->getClassname() . ' extends ' . ClassTools::classname($
 		$this->context = $context;
 	}
 	
-	public function getContext()
+	public final function getContext()
 	{
 		return $this->context;
 	}

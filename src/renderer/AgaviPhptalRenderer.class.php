@@ -23,6 +23,7 @@
  * @author     Benjamin Muskalla <bm@bmuskalla.de>
  * @copyright  Authors
  * @copyright  The Agavi Project
+ *
  * @since      0.11.0
  *
  * @version    $Id$
@@ -72,6 +73,8 @@ class AgaviPhptalRenderer extends AgaviRenderer
 	 *
 	 * @return     PHPTAL A PHPTAL instance.
 	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @author     Benjamin Muskalla <bm@muskalla.de>
 	 * @since      0.11.0
 	 */
 	protected function getEngine()

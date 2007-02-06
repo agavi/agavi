@@ -14,7 +14,7 @@ class FCHTestFilter1 implements AgaviIFilter
 
 	public function executeOnce(AgaviFilterChain $filterChain, AgaviExecutionContainer $container) {}
 	public function execute(AgaviFilterChain $filterChain, AgaviExecutionContainer $container) {}
-	public function getContext() {}
+	public final function getContext() {}
 }
 
 class FCHTestFilter2 extends FCHTestFilter1

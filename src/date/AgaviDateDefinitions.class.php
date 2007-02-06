@@ -20,9 +20,10 @@
  * @subpackage date
  *
  * @author     Dominik del Bondio <ddb@bitxtender.com>
- * @author     The ICU Project ({@link http://icu.sourceforge.net})
+ * @author     The ICU Project
  * @copyright  Authors
  * @copyright  The Agavi Project
+ *
  * @since      0.11.0
  *
  * @version    $Id$

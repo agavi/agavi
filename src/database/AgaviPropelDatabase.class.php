@@ -38,6 +38,7 @@
  * @author     David Zülke <dz@bitxtender.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
+ *
  * @since      0.9.0
  *
  * @version    $Id$
@@ -48,8 +49,6 @@ class AgaviPropelDatabase extends AgaviDatabase
 	 * Stores the actual AgaviCreoleDatabase implementation for Propel 1.2.
 	 *
 	 * @var        agaviCreoleDatabase The agaviCreoleDatabase instance used internally.
-	 *
-	 * @since      0.11.0
 	 */
 	protected $agaviCreoleDatabase = null;
 	
@@ -58,8 +57,6 @@ class AgaviPropelDatabase extends AgaviDatabase
 	 * Propel::init() when using Propel autoloading magic
 	 *
 	 * @var        string The filesystem path to the default runtime config.
-	 *
-	 * @since      0.10.0
 	 */
 	private static $defaultConfigPath = null;
 
@@ -68,8 +65,6 @@ class AgaviPropelDatabase extends AgaviDatabase
 	 * as default for use with Propel::init() in database.xml
 	 *
 	 * @var        bool A flag indicating whether a default config path was set.
-	 *
-	 * @since      0.10.0
 	 */
 	private static $defaultConfigPathSet = false;
 
@@ -148,8 +143,10 @@ class AgaviPropelDatabase extends AgaviDatabase
 			// make concrecte adapter connect
 			$this->agaviCreoleDatabase->getConnection();
 		} else {
-			if(class_exists('Propel'))
-			$this->connection = Propel::getConnection();
+			// trigger Propel autoload and go go go
+			if(class_exists('Propel')) {
+				$this->connection = Propel::getConnection();
+			}
 		}
 	}
 
@@ -174,22 +171,6 @@ class AgaviPropelDatabase extends AgaviDatabase
 			$this->connect();
 		}
 		return parent::getConnection();
-	}
-
-	/**
-	 * Retrieve a raw database resource associated with this Database
-	 * implementation.
-	 *
-	 * @return     mixed A database resource.
-	 *
-	 * @throws     <b>agaviCreoleDatabaseException</b> If no resource could be retrieved
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public function getResource()
-	{
-		return $this->getConnection();
 	}
 
 	/**

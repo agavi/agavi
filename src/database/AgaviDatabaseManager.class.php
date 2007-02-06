@@ -26,6 +26,7 @@
  * @author     Sean Kerr <skerr@mojavi.org>
  * @copyright  Authors
  * @copyright  The Agavi Project
+ *
  * @since      0.9.0
  *
  * @version    $Id$
@@ -65,6 +66,10 @@ class AgaviDatabaseManager
 	 *
 	 * @throws     <b>AgaviDatabaseException</b> If the requested database name
 	 *                                           does not exist.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
 	 */
 	public function getDatabase($name = 'default')
 	{

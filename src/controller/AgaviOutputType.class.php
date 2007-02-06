@@ -22,6 +22,7 @@
  * @author     David Zülke <dz@bitxtender.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
+ *
  * @since      0.11.0
  *
  * @version    $Id$
@@ -106,8 +107,11 @@ class AgaviOutputType extends AgaviParameterHolder
 	
 	/**
 	 * @see        AgaviOutputType::getName()
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
 	 */
-	final public function __toString()
+	public final function __toString()
 	{
 		return $this->getName();
 	}

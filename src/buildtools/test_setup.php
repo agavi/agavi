@@ -20,6 +20,7 @@
  * @author     Mike Vincent <mike@agavi.org>
  * @copyright  Authors
  * @copyright  The Agavi Project
+ *
  * @since      0.9.0
  *
  * @version    $Id$

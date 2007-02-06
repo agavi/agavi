@@ -24,9 +24,10 @@
  * @subpackage date
  *
  * @author     Dominik del Bondio <ddb@bitxtender.com>
- * @author     The ICU Project ({@link http://icu.sourceforge.net})
+ * @author     The ICU Project
  * @copyright  Authors
  * @copyright  The Agavi Project
+ *
  * @since      0.11.0
  *
  * @version    $Id$
@@ -47,13 +48,14 @@ final class AgaviCalendarGrego
 	const JULIAN_1970_CE = 2440588; // January 1, 1970 CE Gregorian
 
 	private static $DAYS_BEFORE = array(
-																			0,31,59,90,120,151,181,212,243,273,304,334,
-																			0,31,60,91,121,152,182,213,244,274,305,335
-																		);
+		0,31,59,90,120,151,181,212,243,273,304,334,
+		0,31,60,91,121,152,182,213,244,274,305,335
+	);
+
 	private static $MONTH_LENGTH = array(
-																			31,28,31,30,31,30,31,31,30,31,30,31,
-																			31,29,31,30,31,30,31,31,30,31,30,31
-																		);
+		31,28,31,30,31,30,31,31,30,31,30,31,
+		31,29,31,30,31,30,31,31,30,31,30,31
+	);
 
 	/**
 	 * Return TRUE if the given year is a leap year.
@@ -63,7 +65,7 @@ final class AgaviCalendarGrego
 	 * @return     bool If the year is a leap year.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public static function isLeapYear($year)
@@ -81,7 +83,7 @@ final class AgaviCalendarGrego
 	 * @return     int The number of days in the given month
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public static function monthLength($year, $month)
@@ -97,7 +99,7 @@ final class AgaviCalendarGrego
 	 * @return     int The number of days in the month previous to the given month
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public static function previousMonthLength($y, $m)
@@ -116,7 +118,7 @@ final class AgaviCalendarGrego
 	 * @return     float The day number, with day 0 == Jan 1 1970
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public static function fieldsToDay($year, $month, $dom)
@@ -142,7 +144,7 @@ final class AgaviCalendarGrego
 	 * @param      int   Output parameter to receive day-of-year (1-based)
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public static function dayToFields($day, &$year, &$month, &$dom, &$dow, &$doy = 0)
@@ -191,7 +193,7 @@ final class AgaviCalendarGrego
 	 * @return     float Time as milliseconds.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public static function julianDayToMillis($julian)
@@ -207,7 +209,7 @@ final class AgaviCalendarGrego
 	 * @return     int   The Julian day number.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public static function millisToJulianDay($millis)
@@ -224,7 +226,7 @@ final class AgaviCalendarGrego
 	 *                 from J->G
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public static function gregorianShift($eyear)

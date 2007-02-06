@@ -22,6 +22,7 @@
  * @author     David Zülke <dz@bitxtender.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
+ *
  * @since      0.11.0
  *
  * @version    $Id$
@@ -87,7 +88,7 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function getContext()
+	public final function getContext()
 	{
 		return $this->context;
 	}
