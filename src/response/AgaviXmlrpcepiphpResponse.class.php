@@ -26,7 +26,7 @@
  *
  * @since      0.11.0
  *
- * @version    $Id: AgaviWebResponse.class.php 1075 2006-10-01 05:14:29Z david $
+ * @version    $Id$
  */
 class AgaviXmlrpcepiphpResponse extends AgaviResponse
 {
