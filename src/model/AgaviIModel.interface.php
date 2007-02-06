@@ -32,7 +32,7 @@
  */
 interface AgaviIModel
 {
-	public final function getContext();
+	public function getContext();
 }
 
 ?>

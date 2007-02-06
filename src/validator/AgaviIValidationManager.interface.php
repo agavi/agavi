@@ -40,7 +40,7 @@ interface AgaviIValidationManager
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
-	public final function getContext();
+	public function getContext();
 
 	/**
 	 * Initializes the validator manager

@@ -38,7 +38,7 @@ interface AgaviITranslator
 	 * @author     Dominik del Bondio <ddb@bitxtender.com
 	 * @since      0.11.0
 	 */
-	public final function getContext();
+	public function getContext();
 
 	/**
 	 * Initialize this Translator.

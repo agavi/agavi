@@ -60,7 +60,7 @@ interface AgaviIFilter
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.11.0
 	 */
-	public final function getContext();
+	public function getContext();
 
 	/**
 	 * Initialize this Filter.
