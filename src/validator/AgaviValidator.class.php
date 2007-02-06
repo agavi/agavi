@@ -33,6 +33,7 @@
  * @package    agavi
  * @subpackage validator
  *
+ * @author     Dominik del Bondio <ddb@bitxtender.com>
  * @author     Uwe Mesecke <uwe@mesecke.net>
  * @copyright  Authors
  * @copyright  The Agavi Project
@@ -338,7 +339,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 *
 	 * @return     mixed The input value from the validation input.
 	 *
-	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	protected function & getData($paramName)
@@ -505,7 +506,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 * @param      string An optional name which should be used for exporting 
 	 *                    instead of the export parameter.
 	 *
-	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	protected function export($value, $name = null)
@@ -537,6 +538,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 * @return     int AgaviValidator::SUCCESS if validation succeeded or given
 	 *                 error severity.
 	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */

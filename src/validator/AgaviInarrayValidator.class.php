@@ -24,6 +24,7 @@
  * @package    agavi
  * @subpackage validator
  *
+ * @author     Dominik del Bondio <ddb@bitxtender.com>
  * @author     Uwe Mesecke <uwe@mesecke.net>
  * @copyright  Authors
  * @copyright  The Agavi Project
@@ -39,6 +40,7 @@ class AgaviInarrayValidator extends AgaviValidator
 	 * 
 	 * @return     bool The value is in the array.
 	 * 
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */

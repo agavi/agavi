@@ -27,7 +27,7 @@
  * @package    agavi
  * @subpackage validator
  *
- * @author     Uwe Mesecke <uwe@mesecke.net>
+ * @author     Dominik del Bondio <ddb@bitxtender.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
  *
@@ -42,7 +42,7 @@ class AgaviEqualsValidator extends AgaviValidator
 	 * 
 	 * @return     bool The input equals to given value.
 	 * 
-	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	protected function validate()

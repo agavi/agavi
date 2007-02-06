@@ -23,6 +23,7 @@
  * @package    agavi
  * @subpackage validator
  *
+ * @author     Dominik del Bondio <ddb@bitxtender.com>
  * @author     Uwe Mesecke <uwe@mesecke.net>
  * @copyright  Authors
  * @copyright  The Agavi Project
@@ -38,6 +39,7 @@ class AgaviAndOperatorValidator extends AgaviOperatorValidator
 	 * 
 	 * @return     bool True if all child validators resulted successful.
 	 * 
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
@@ -48,11 +50,11 @@ class AgaviAndOperatorValidator extends AgaviOperatorValidator
 		foreach($this->children as $child) {
 			$result = $child->execute($this->validationParameters);
 			$this->result = max($result, $this->result);
-			if($result != AgaviValidator::SUCCESS) {
+			if($result > AgaviValidator::SUCCESS) {
 				// if one validator fails, the whole operator fails
 				$return = false;
 				$this->throwError();
-				if($this->getParameter('break') or $result == AgaviValidator::CRITICAL) {
+				if($this->getParameter('break') || $result == AgaviValidator::CRITICAL) {
 					break;
 				}
 			}

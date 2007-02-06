@@ -29,7 +29,7 @@
  * @version    $Id$
  */
 
-class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValidationManager, AgaviIValidatorContainer
+class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValidatorContainer
 {
 	/**
 	 * @var        AgaviDependencyManager The dependency manager.

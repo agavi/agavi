@@ -20,6 +20,7 @@
  * @package    agavi
  * @subpackage validator
  *
+ * @author     Dominik del Bondio <ddb@bitxtender.com>
  * @author     Uwe Mesecke <uwe@mesecke.net>
  * @copyright  Authors
  * @copyright  The Agavi Project
@@ -35,6 +36,7 @@ class AgaviEmailValidator extends AgaviValidator
 	 * 
 	 * @return     bool The input is a valid email address.
 	 * 
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */

@@ -22,6 +22,7 @@
  * @package    agavi
  * @subpackage validator
  *
+ * @author     Dominik del Bondio <ddb@bitxtender.com>
  * @author     Uwe Mesecke <uwe@mesecke.net>
  * @copyright  Authors
  * @copyright  The Agavi Project
