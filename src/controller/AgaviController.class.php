@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
@@ -21,8 +21,9 @@
  * @subpackage controller
  *
  * @author     Sean Kerr <skerr@mojavi.org>
- * @author     David Zuelke <dz@bitxtender.com>
- * @copyright  (c) Authors
+ * @author     David Zülke <dz@bitxtender.com>
+ * @copyright  Authors
+ * @copyright  The Agavi Project
  * @since      0.9.0
  *
  * @version    $Id$
@@ -82,7 +83,7 @@ class AgaviController extends AgaviParameterHolder
 	 *
 	 * @throws     AgaviControllerException if the action could not be found.
 	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
 	public function resolveAction($moduleName, $actionName = null)
@@ -108,7 +109,7 @@ class AgaviController extends AgaviParameterHolder
 	 *
 	 * @throws     AgaviControllerException If too many execution runs were made.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function countExecution()
@@ -131,7 +132,7 @@ class AgaviController extends AgaviParameterHolder
 	 * @return     AgaviExecutionContainer A new execution container instance,
 	 *                                     fully initialized.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function createExecutionContainer($moduleName = null, $actionName = null, AgaviRequestDataHolder $arguments = null, $outputType = null)
@@ -155,7 +156,7 @@ class AgaviController extends AgaviParameterHolder
 	 * @param      AgaviRequestDataHolder A RequestDataHolder with additional
 	 *                                    request arguments.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
 	public function dispatch(AgaviRequestDataHolder $arguments = null)
@@ -210,7 +211,7 @@ class AgaviController extends AgaviParameterHolder
 	 *
 	 * @return     AgaviResponse The global response.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getGlobalResponse()
@@ -229,7 +230,7 @@ class AgaviController extends AgaviParameterHolder
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @author     Mike Vincent <mike@agavi.org>
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
 	public function createActionInstance($moduleName, $actionName)
@@ -291,7 +292,7 @@ class AgaviController extends AgaviParameterHolder
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @author     Mike Vincent <mike@agavi.org>
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
 	public function createViewInstance($moduleName, $viewName)
@@ -372,7 +373,7 @@ class AgaviController extends AgaviParameterHolder
 	 *
 	 * @return     AgaviFilter A filter instance, or null.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getFilter($which)
@@ -387,7 +388,7 @@ class AgaviController extends AgaviParameterHolder
 	 * @param      string           "global" or "action".
 	 * @param      string           A module name, or "*" for the generic config.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function loadFilters(AgaviFilterChain $filterChain, $which = 'global', $module = null)
@@ -491,7 +492,7 @@ class AgaviController extends AgaviParameterHolder
 	 *
 	 * @return     AgaviOutputType An Output Type object.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getOutputType($name = null)

@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -19,8 +19,9 @@
  * @package    agavi
  * @subpackage controller
  * 
- * @author     Agavi Project <info@agavi.org>
- * @author     David Zuelke <dz@bitxtender.com>
+ * @author     David Zülke <dz@bitxtender.com>
+ * @copyright  Authors
+ * @copyright  The Agavi Project
  * @since      0.11.0
  *
  * @version    $Id$
@@ -68,7 +69,7 @@ class AgaviOutputType extends AgaviParameterHolder
 	 * @param      AgaviContext The current Context instance.
 	 * @param      array        An array of initialization parameters.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function initialize(AgaviContext $context, array $parameters, $name, array $renderers, $defaultRenderer, array $layouts, $defaultLayout, $exceptionTemplate = null)
@@ -95,7 +96,7 @@ class AgaviOutputType extends AgaviParameterHolder
 	 *
 	 * @return     string The name of the Output Type.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getName()
@@ -116,7 +117,7 @@ class AgaviOutputType extends AgaviParameterHolder
 	 *
 	 * @return     bool True, if renderers are defined, false otherwise.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function hasRenderers()
@@ -131,7 +132,7 @@ class AgaviOutputType extends AgaviParameterHolder
 	 *
 	 * @return     AgaviRenderer A Renderer instance or null if none defined.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getRenderer($name = null)
@@ -172,7 +173,7 @@ class AgaviOutputType extends AgaviParameterHolder
 	 *
 	 * @throws     AgaviException If the layout doesn't exist.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getLayout($name = null)
@@ -193,7 +194,7 @@ class AgaviOutputType extends AgaviParameterHolder
 	 *
 	 * @return     string A path to the exception template, or null if undefined.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getExceptionTemplate()

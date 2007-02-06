@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
@@ -22,8 +22,9 @@
  * @subpackage request
  *
  * @author     Sean Kerr <skerr@mojavi.org>
- * @author     Veikko Makinen <mail@veikkomakinen.com>
- * @copyright  (c) Authors
+ * @author     Veikko Mäkinen <mail@veikkomakinen.com>
+ * @copyright  Authors
+ * @copyright  The Agavi Project
  * @since      0.9.0
  *
  * @version    $Id$
@@ -71,7 +72,7 @@ class AgaviWebRequest extends AgaviRequest
 	 *
 	 * @return     string The request URL scheme.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getUrlScheme()
@@ -84,7 +85,7 @@ class AgaviWebRequest extends AgaviRequest
 	 *
 	 * @return     string The request URL hostname.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getUrlHost()
@@ -97,7 +98,7 @@ class AgaviWebRequest extends AgaviRequest
 	 *
 	 * @return     string The request URL hostname.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getUrlPort()
@@ -114,7 +115,7 @@ class AgaviWebRequest extends AgaviRequest
 	 *
 	 * @return     string The request URL authority.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getUrlAuthority($forcePort = false)
@@ -130,7 +131,7 @@ class AgaviWebRequest extends AgaviRequest
 	 *
 	 * @return     string The relative URL of the curent request.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getRequestUri()
@@ -144,7 +145,7 @@ class AgaviWebRequest extends AgaviRequest
 	 *
 	 * @return     string The path part of the URL.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getUrlPath()
@@ -158,7 +159,7 @@ class AgaviWebRequest extends AgaviRequest
 	 *
 	 * @return     string The query part of the URL, or an empty string.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getUrlQuery()
@@ -173,7 +174,7 @@ class AgaviWebRequest extends AgaviRequest
 	 *
 	 * @return     string The URL of the curent request.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getUrl()
@@ -194,8 +195,8 @@ class AgaviWebRequest extends AgaviRequest
 	 *                                                 initializing this Request.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @author     Veikko Makinen <mail@veikkomakinen.com>
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     Veikko Mäkinen <mail@veikkomakinen.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
 	public function initialize(AgaviContext $context, array $parameters = array())

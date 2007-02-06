@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -19,8 +19,9 @@
  * @package    agavi
  * @subpackage core
  *
- * @author     David Zuelke <dz@bitxtender.com>
- * @copyright  (c) Authors
+ * @author     David Zülke <dz@bitxtender.com>
+ * @copyright  Authors
+ * @copyright  The Agavi Project
  * @since      0.11.0
  *
  * @version    $Id$
@@ -30,7 +31,7 @@ final class Agavi
 	/**
 	 * An associative arrays of class and file names used by __autoload().
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public static $autoloads = null;
@@ -40,7 +41,7 @@ final class Agavi
 	 *
 	 * @param      string A class name.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public static function __autoload($class)
@@ -79,7 +80,7 @@ final class Agavi
 	 *
 	 * @param      string environment the environment to use for this session.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public static function bootstrap($environment = null)

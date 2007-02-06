@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -21,8 +21,8 @@
  * @subpackage request
  *
  * @author     Dominik del Bondio <ddb@bitxtender.com>
- * @author     Agavi Project <info@agavi.org>
- * @copyright  (c) Authors
+ * @copyright  Authors
+ * @copyright  The Agavi Project
  * @since      0.11.0
  *
  * @version    $Id$
@@ -50,7 +50,7 @@ class AgaviRequestDataHolder extends AgaviParameterHolder implements AgaviIParam
 	 *
 	 * @param      AgaviRequestDataHolder The other request data holder.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function mergeParameters(AgaviRequestDataHolder $other)
@@ -113,7 +113,7 @@ class AgaviRequestDataHolder extends AgaviParameterHolder implements AgaviIParam
 	 * @return     mixed The field value.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function & get($source, $field, $default = null)
@@ -132,7 +132,7 @@ class AgaviRequestDataHolder extends AgaviParameterHolder implements AgaviIParam
 	 * @return     mixed The values.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function & getAll($source)
@@ -152,7 +152,7 @@ class AgaviRequestDataHolder extends AgaviParameterHolder implements AgaviIParam
 	 * @return     bool The result.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function has($source, $field)
@@ -173,7 +173,7 @@ class AgaviRequestDataHolder extends AgaviParameterHolder implements AgaviIParam
 	 * @return     bool The result.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function isValueEmpty($source, $field)
@@ -193,7 +193,7 @@ class AgaviRequestDataHolder extends AgaviParameterHolder implements AgaviIParam
 	 * @return     mixed The removed value.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function & remove($source, $field)
@@ -212,7 +212,7 @@ class AgaviRequestDataHolder extends AgaviParameterHolder implements AgaviIParam
 	 * @param      mixed  A value.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function set($source, $field, $value)
@@ -230,7 +230,7 @@ class AgaviRequestDataHolder extends AgaviParameterHolder implements AgaviIParam
 	 * @param      string The source name, typically passed using a constant.
 	 * @param      array  The variable that will hold the data for the source.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	final protected function registerSource($name, array &$holder)
@@ -246,7 +246,7 @@ class AgaviRequestDataHolder extends AgaviParameterHolder implements AgaviIParam
 	 *
 	 * @param      AgaviRequestDataHolder The other request data holder.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function merge(AgaviRequestDataHolder $other)
@@ -276,7 +276,7 @@ class AgaviRequestDataHolder extends AgaviParameterHolder implements AgaviIParam
 	 * @param      array An associative array of request data source names and
 	 *                   data arrays.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function __construct(array $data = array())

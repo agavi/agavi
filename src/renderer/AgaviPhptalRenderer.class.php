@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -19,10 +19,10 @@
  * @package    agavi
  * @subpackage renderer
  *
- * @author     David Zuelke <dz@bitxtender.com>
+ * @author     David Zülke <dz@bitxtender.com>
  * @author     Benjamin Muskalla <bm@bmuskalla.de>
- * @author     Agavi Project <info@agavi.org>
- * @copyright  (c) Authors
+ * @copyright  Authors
+ * @copyright  The Agavi Project
  * @since      0.11.0
  *
  * @version    $Id$
@@ -57,7 +57,7 @@ class AgaviPhptalRenderer extends AgaviRenderer
 	 *
 	 * Excludes the PHPTAL instance to prevent excessive serialization load.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function __sleep()
@@ -101,7 +101,7 @@ class AgaviPhptalRenderer extends AgaviRenderer
 	 *
 	 * @return     string A rendered result.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @author     Benjamin Muskalla <bm@bmuskalla.de>
 	 * @since      0.11.0
 	 */

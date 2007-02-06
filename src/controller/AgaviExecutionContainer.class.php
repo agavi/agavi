@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -20,8 +20,9 @@
  * @package    agavi
  * @subpackage controller
  * 
- * @author     Agavi Project <info@agavi.org>
- * @author     David Zuelke <dz@bitxtender.com>
+ * @author     David Zülke <dz@bitxtender.com>
+ * @copyright  Authors
+ * @copyright  The Agavi Project
  * @since      0.11.0
  *
  * @version    $Id$
@@ -99,7 +100,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	 * Will set the name of the context instead of the instance, and the name of
 	 * the output type instead of the instance. Both will be restored by __wakeup
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function __sleep()
@@ -117,7 +118,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	 * Will restore the context and output type instances based on their names set
 	 * by __sleep.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function __wakeup()
@@ -133,7 +134,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	 * @param      AgaviContext The current Context instance.
 	 * @param      array        An array of initialization parameters.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function initialize(AgaviContext $context, array $parameters = array())
@@ -158,7 +159,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	 * @return     AgaviExecutionContainer A new execution container instance,
 	 *                                     fully initialized.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function createExecutionContainer($moduleName = null, $actionName = null, AgaviRequestDataHolder $arguments = null, $outputType = null)
@@ -182,7 +183,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	 *
 	 * @return     AgaviResponse The "real" response.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function execute()
@@ -356,7 +357,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	 *
 	 * @return     AgaviContext The Context.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getContext()
@@ -370,7 +371,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	 * @return     AgaviValidationManager The container's ValidationManager 
 	 *                                    implementation instance.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getValidationManager()
@@ -388,7 +389,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	 *
 	 * @return     AgaviRequestDataHolder The request data holder.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getRequestData()
@@ -401,7 +402,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	 *
 	 * @return     AgaviRequestDataHolder The additional arguments.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getArguments()
@@ -414,7 +415,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	 *
 	 * @return     AgaviRequestDataHolder The request data holder.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function setArguments(AgaviRequestDataHolder $arguments)
@@ -427,7 +428,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	 *
 	 * @return     AgaviResponse The Response instance for this action.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getResponse()
@@ -440,7 +441,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	 *
 	 * @param      AgaviResponse A new Response instance.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function setResponse(AgaviResponse $response)
@@ -453,7 +454,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	 *
 	 * @return     AgaviOutputType The output type object.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getOutputType()
@@ -466,7 +467,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	 *
 	 * @param      AgaviOutputType An output type object.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function setOutputType(AgaviOutputType $outputType)
@@ -480,7 +481,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	 * @return     string A string representing the microtime this container was
 	 *                    initialized.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getMicrotime()
@@ -493,7 +494,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	 *
 	 * @return     AgaviAction An action implementation instance.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getActionInstance()
@@ -506,7 +507,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	 *
 	 * @return     string A module name.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getModuleName()
@@ -519,7 +520,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	 *
 	 * @return     string An action name.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getActionName()
@@ -533,7 +534,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	 *
 	 * @return     string A view module name.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getViewModuleName()
@@ -546,7 +547,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	 *
 	 * @return     string A view name.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getViewName()
@@ -559,7 +560,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	 *
 	 * @return     string A module name.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function setModuleName($moduleName)
@@ -572,7 +573,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	 *
 	 * @return     string An action name.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function setActionName($actionName)
@@ -585,7 +586,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	 *
 	 * @return     string A view module name.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function setViewModuleName($viewModuleName)
@@ -598,7 +599,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	 *
 	 * @return     string A view name.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function setViewName($viewName)
@@ -611,7 +612,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	 *
 	 * @return     bool True, if a container for eventual execution has been set.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function hasNext()
@@ -624,7 +625,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	 *
 	 * @return     AgaviExecutionContainer The "next" container, of null if unset.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getNext()
@@ -637,7 +638,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	 *
 	 * @param      AgaviExcecutionContainer An execution container instance.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function setNext(AgaviExecutionContainer $container)
@@ -651,7 +652,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	 * @return     AgaviExecutionContainer The removed "next" container, or null
 	 *                                     if none had been set.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function clearNext()

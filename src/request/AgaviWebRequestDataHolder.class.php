@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -21,8 +21,8 @@
  * @subpackage request
  *
  * @author     Dominik del Bondio <ddb@bitxtender.com>
- * @author     Agavi Project <info@agavi.org>
- * @copyright  (c) Authors
+ * @copyright  Authors
+ * @copyright  The Agavi Project
  * @since      0.11.0
  *
  * @version    $Id$
@@ -93,7 +93,7 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	 *
 	 * @return     bool True, if a cookie with that name exists, otherwise false.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function hasCookie($name)
@@ -129,8 +129,8 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	 * @return     mixed The value from the cookie, if such a cookie exists,
 	 *                   otherwise null.
 	 *
-	 * @author     Veikko Makinen <mail@veikkomakinen.com>
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     Veikko Mäkinen <mail@veikkomakinen.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function & getCookie($name, $default=null)
@@ -214,7 +214,7 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	 *
 	 * @return     array An indexed array of cookie names.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getCookieNames()
@@ -229,7 +229,7 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	 *
 	 * @return     array An indexed array of cookie names.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getFlatCookieNames()
@@ -253,7 +253,7 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	 *
 	 * @return     array A list of HTTP headers (keys in original PHP format).
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function & getHeaders()
@@ -270,7 +270,7 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	 *
 	 * @return     string The header value, or null if header wasn't set.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function & getHeader($name, $default = null)
@@ -291,7 +291,7 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	 *
 	 * @return     bool True if the header was sent with the current request.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function hasHeader($name)
@@ -350,7 +350,7 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	 *
 	 * @return     string The value of the removed header, if it had been set.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function & removeHeader($name)
@@ -369,7 +369,7 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	 *
 	 * @return     array An indexed array of header names in original PHP format.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getHeaderNames()
@@ -387,7 +387,7 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	 *                   array if the field name has child elements, or null if
 	 *                   no such file exists.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function & getFile($name, $default = null)
@@ -408,7 +408,7 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	 *
 	 * @return     array An associative array of files.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function & getFiles()
@@ -423,7 +423,7 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	 *
 	 * @return     bool true, if the file exists, otherwise false.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function hasFile($name)
@@ -534,7 +534,7 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	 *
 	 * @return     array An indexed array of file names.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getFileNames()
@@ -549,7 +549,7 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	 *
 	 * @return     array An indexed array of file names.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getFlatFileNames()
@@ -563,7 +563,7 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	 *
 	 * @param      array Array of indices used during recursion, initially empty.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	protected function fixFilesArray(&$input = array(), $index = array())
@@ -614,7 +614,7 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	 * @param      array An associative array of request data source names and
 	 *                   data arrays.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function __construct(array $data = array())
@@ -635,7 +635,7 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	 *
 	 * @param      AgaviRequestDataHolder The other request data holder.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function mergeCookies(AgaviRequestDataHolder $other)
@@ -650,7 +650,7 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	 *
 	 * @param      AgaviRequestDataHolder The other request data holder.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function mergeFiles(AgaviRequestDataHolder $other)
@@ -665,7 +665,7 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	 *
 	 * @param      AgaviRequestDataHolder The other request data holder.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function mergeHeaders(AgaviRequestDataHolder $other)
@@ -693,7 +693,7 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	 *                                to move the file.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function moveFile($name, $dest, $fileMode = 0666, $create = true, $dirMode = 0777)

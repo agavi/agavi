@@ -2,8 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
-// | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -17,12 +16,6 @@
 class Default_LoginSuccessView extends AgaviSampleAppDefaultBaseView
 {
 
-	/**
-	 * Execute any presentation logic and set template attributes.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
 	public function executeHtml(AgaviRequestDataHolder $rd)
 	{
 		$usr = $this->getContext()->getUser();

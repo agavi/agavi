@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -21,7 +21,8 @@
  * @subpackage routing
  *
  * @author     Dominik del Bondio <ddb@bitxtender.com>
- * @copyright  (c) Authors
+ * @copyright  Authors
+ * @copyright  The Agavi Project
  * @since      0.11.0
  *
  * @version    $Id$
@@ -46,7 +47,7 @@ class AgaviWebRouting extends AgaviRouting
 	/**
 	 * Constructor.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function __construct()
@@ -155,7 +156,7 @@ class AgaviWebRouting extends AgaviRouting
 	 *
 	 * @return     string A path string, including a trailing slash.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getBasePath()
@@ -169,7 +170,7 @@ class AgaviWebRouting extends AgaviRouting
 	 * @return     string A URL string, including the protocol, the server port
 	  *                   (if necessary) and the path including a trailing slash.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getBaseHref()
@@ -187,7 +188,7 @@ class AgaviWebRouting extends AgaviRouting
 	 * @return     string The generated URL.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function gen($route, array $params = array(), array $options = array())

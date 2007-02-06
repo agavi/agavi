@@ -1,7 +1,7 @@
 <?php
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -20,8 +20,9 @@
  * @subpackage request
  *
  * @author     Markus Lervik (markus.lervik@necora.fi)
- * @author     David Zuelke <dz@bitxtender.com>
- * @copyright  (c) Authors
+ * @author     David Zülke <dz@bitxtender.com>
+ * @copyright  Authors
+ * @copyright  The Agavi Project
  * @since      0.10.0.0
  *
  * @version    $Id$
@@ -35,7 +36,7 @@ class AgaviSecureWebRequest extends AgaviWebRequest {
 	 * @return     bool true if HTTPS is on, false otherwise
 	 *
 	 * @author     Markus Lervik (markus.lervik@necora.fi)
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.10.0
 	 */
 	public function isHTTPS()
@@ -51,7 +52,7 @@ class AgaviSecureWebRequest extends AgaviWebRequest {
 	 * @return     bool true if the certificate is valid, false otherwise
 	 *
 	 * @author     Markus Lervik (markus.lervik@necora.fi)
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.10.0
 	 */
 	public function hasValidClientCert()
@@ -70,7 +71,7 @@ class AgaviSecureWebRequest extends AgaviWebRequest {
 	 * @return     mixed the CN field if it's available, otherwise null
 	 *
 	 * @author     Markus Lervik (markus.lervik@necora.fi)
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.10.0
 	 */
 	public function getClientCertCN()
@@ -91,7 +92,7 @@ class AgaviSecureWebRequest extends AgaviWebRequest {
 	 * @return     mixed the DN field if it's available, otherwise null
 	 *
 	 * @author     Markus Lervik (markus.lervik@necora.fi)
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.10.0
 	 */
 	public function getClientCertDN()
@@ -110,7 +111,7 @@ class AgaviSecureWebRequest extends AgaviWebRequest {
 	 * @return     mixed the GN field if it's available, otherwise null
 	 *
 	 * @author     Markus Lervik (markus.lervik@necora.fi)
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.10.0
 	 */
 	public function getClientCertGN()
@@ -129,7 +130,7 @@ class AgaviSecureWebRequest extends AgaviWebRequest {
 	 * @return     mixed the SN field if it's available, otherwise null
 	 *
 	 * @author     Markus Lervik (markus.lervik@necora.fi)
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.10.0
 	 */
 	public function getClientCertSN()
@@ -148,7 +149,7 @@ class AgaviSecureWebRequest extends AgaviWebRequest {
 	 * @return     mixed the O field if it's available, otherwise null
 	 *
 	 * @author     Markus Lervik (markus.lervik@necora.fi)
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.10.0
 	 */
 	public function getClientCertO()
@@ -167,7 +168,7 @@ class AgaviSecureWebRequest extends AgaviWebRequest {
 	 * @return     mixed the OU field if it's available, otherwise null
 	 *
 	 * @author     Markus Lervik (markus.lervik@necora.fi)
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.10.0
 	 */
 	public function getClientCertOU()
@@ -186,7 +187,7 @@ class AgaviSecureWebRequest extends AgaviWebRequest {
 	 * @return     mixed the date field if it's available, otherwise null
 	 *
 	 * @author     Markus Lervik (markus.lervik@necora.fi)
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.10.0
 	 */
 	public function getClientCertValidityStart()
@@ -204,7 +205,7 @@ class AgaviSecureWebRequest extends AgaviWebRequest {
 	 *
 	 * @return     mixed the date field if it's available, otherwise null
 	 * @author     Markus Lervik (markus.lervik@necora.fi)
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.10.0
 	 */
 	public function getClientCertValidityEnd()
@@ -222,7 +223,7 @@ class AgaviSecureWebRequest extends AgaviWebRequest {
 	 *
 	 * @return     mixed the cipher type if it's available, otherwise null
 	 * @author     Markus Lervik (markus.lervik@necora.fi)
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.10.0
 	 */
 	public function getSSLChipherType()
@@ -240,7 +241,7 @@ class AgaviSecureWebRequest extends AgaviWebRequest {
 	 *
 	 * @return     mixed the DN field if it's available, otherwise null
 	 * @author     Markus Lervik (markus.lervik@necora.fi)
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.10.0
 	 */
 	public function getIssuerCertDN()
@@ -258,7 +259,7 @@ class AgaviSecureWebRequest extends AgaviWebRequest {
 	 *
 	 * @return     mixed the CN field if it's available, otherwise null
 	 * @author     Markus Lervik (markus.lervik@necora.fi)
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.10.0
 	 */
 	public function getIssuerCertCN()
@@ -276,7 +277,7 @@ class AgaviSecureWebRequest extends AgaviWebRequest {
 	 *
 	 * @return     mixed the C field if it's available, otherwise null
 	 * @author     Markus Lervik (markus.lervik@necora.fi)
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.10.0
 	 */
 	public function getIssuerCertC()
@@ -294,7 +295,7 @@ class AgaviSecureWebRequest extends AgaviWebRequest {
 	 *
 	 * @return     mixed the O field if it's available, otherwise null
 	 * @author     Markus Lervik (markus.lervik@necora.fi)
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.10.0
 	 */
 	public function getIssuerCertO()
@@ -312,7 +313,7 @@ class AgaviSecureWebRequest extends AgaviWebRequest {
 	 *
 	 * @return     mixed the OU field if it's available, otherwise null
 	 * @author     Markus Lervik (markus.lervik@necora.fi)
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.10.0
 	 */
 	public function getIssuerCertOU()
@@ -330,7 +331,7 @@ class AgaviSecureWebRequest extends AgaviWebRequest {
 	 *
 	 * @return     mixed the ST field if it's available, otherwise null
 	 * @author     Markus Lervik (markus.lervik@necora.fi)
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.10.0.0
 	 */
 	public function getIssuerCertST()

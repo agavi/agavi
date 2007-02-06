@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
@@ -23,8 +23,8 @@
  * @subpackage view
  *
  * @author     Sean Kerr <skerr@mojavi.org>
- * @author     Agavi Project <info@agavi.org>
- * @copyright  (c) Authors
+ * @copyright  Authors
+ * @copyright  The Agavi Project
  * @since      0.9.0
  *
  * @version    $Id$
@@ -81,7 +81,7 @@ abstract class AgaviView
 	 *                                     case a forward should occur, or null.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
 	abstract function execute(AgaviRequestDataHolder $rd);
@@ -104,7 +104,7 @@ abstract class AgaviView
 	 *
 	 * @return     AgaviExecutionContainer This action's execution container.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public final function getContainer()
@@ -117,7 +117,7 @@ abstract class AgaviView
 	 *
 	 * @return     AgaviResponse The Response instance.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public final function getResponse()
@@ -131,7 +131,7 @@ abstract class AgaviView
 	 * @param      AgaviResponse The Response for this Action/View.
 	 * @param      array         The attributes for this View.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
@@ -157,7 +157,7 @@ abstract class AgaviView
 	 *
 	 * @return     AgaviTemplateLayer A template layer instance.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function createLayer($class, $name, $renderer = null)
@@ -186,7 +186,7 @@ abstract class AgaviView
 	 *
 	 * @return     AgaviTemplateLayer The template layer that was inserted.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function appendLayer(AgaviTemplateLayer $layer, AgaviTemplateLayer $otherLayer = null)
@@ -221,7 +221,7 @@ abstract class AgaviView
 	 *
 	 * @return     AgaviTemplateLayer The template layer that was inserted.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function prependLayer(AgaviTemplateLayer $layer, AgaviTemplateLayer $otherLayer = null)
@@ -250,7 +250,7 @@ abstract class AgaviView
 	 *
 	 * @param      AgaviTemplateLayer The layer to remove.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function removeLayer(AgaviTemplateLayer $layer)
@@ -264,7 +264,7 @@ abstract class AgaviView
 	/**
 	 * Remove all layers from the list.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function clearLayers()
@@ -279,7 +279,7 @@ abstract class AgaviView
 	 *
 	 * @return     AgaviTemplateLayer The layer instance, or null if not found.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getLayer($name)
@@ -296,7 +296,7 @@ abstract class AgaviView
 	 *
 	 * @return     array An array of template layer instances.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getLayers()
@@ -315,7 +315,7 @@ abstract class AgaviView
 	 *
 	 * @throws     AgaviException If the layout doesn't exist.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function loadLayout($layoutName = null)
@@ -359,7 +359,7 @@ abstract class AgaviView
 	/**
 	 * @see        AgaviAttributeHolder::setAttributesByRef()
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
 	public function clearAttributes()
@@ -370,7 +370,7 @@ abstract class AgaviView
 	/**
 	 * @see        AgaviAttributeHolder::setAttributesByRef()
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
 	public function & getAttribute($name, $default = null)
@@ -381,7 +381,7 @@ abstract class AgaviView
 	/**
 	 * @see        AgaviAttributeHolder::setAttributesByRef()
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
 	public function getAttributeNames()
@@ -392,7 +392,7 @@ abstract class AgaviView
 	/**
 	 * @see        AgaviAttributeHolder::setAttributesByRef()
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function & getAttributes()
@@ -403,7 +403,7 @@ abstract class AgaviView
 	/**
 	 * @see        AgaviAttributeHolder::setAttributesByRef()
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
 	public function hasAttribute($name)
@@ -414,7 +414,7 @@ abstract class AgaviView
 	/**
 	 * @see        AgaviAttributeHolder::setAttributesByRef()
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
 	public function & removeAttribute($name)
@@ -425,7 +425,7 @@ abstract class AgaviView
 	/**
 	 * @see        AgaviAttributeHolder::setAttributesByRef()
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
 	public function setAttribute($name, $value)
@@ -436,7 +436,7 @@ abstract class AgaviView
 	/**
 	 * @see        AgaviAttributeHolder::setAttributesByRef()
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.10.0
 	 */
 	public function appendAttribute($name, $value)
@@ -447,7 +447,7 @@ abstract class AgaviView
 	/**
 	 * @see        AgaviAttributeHolder::setAttributesByRef()
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
 	public function setAttributeByRef($name, &$value)
@@ -458,7 +458,7 @@ abstract class AgaviView
 	/**
 	 * @see        AgaviAttributeHolder::setAttributesByRef()
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.10.0
 	 */
 	public function appendAttributeByRef($name, &$value)
@@ -469,7 +469,7 @@ abstract class AgaviView
 	/**
 	 * @see        AgaviAttributeHolder::setAttributesByRef()
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
 	public function setAttributes(array $attributes)
@@ -480,7 +480,7 @@ abstract class AgaviView
 	/**
 	 * @see        AgaviAttributeHolder::setAttributesByRef()
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
 	public function setAttributesByRef(array &$attributes)

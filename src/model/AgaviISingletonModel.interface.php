@@ -20,8 +20,7 @@
  * @subpackage model
  * 
  * @since      0.11.0 
- * @author     David Zuelke <dz@bitxtender.com>
- * @copyright  (c) Authors
+ * @author     David Zülke <dz@bitxtender.com>
  *
  * @version    $Id$
  */

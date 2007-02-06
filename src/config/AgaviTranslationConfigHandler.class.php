@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -21,7 +21,8 @@
  * @subpackage config
  *
  * @author     Dominik del Bondio <ddb@bitxtender.com>
- * @copyright  (c) Authors
+ * @copyright  Authors
+ * @copyright  The Agavi Project
  * @since      0.11.0
  *
  * @version    $Id$
@@ -40,7 +41,7 @@ class AgaviTranslationConfigHandler extends AgaviConfigHandler
 	 * @throws     <b>AgaviConfigurationException</b> on error in the config.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function execute($config, $context = null)
@@ -142,7 +143,7 @@ class AgaviTranslationConfigHandler extends AgaviConfigHandler
 	 *
 	 * @return     array An array of filter definitions.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	protected function getFilters($translator)

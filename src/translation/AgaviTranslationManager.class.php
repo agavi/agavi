@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -21,8 +21,8 @@
  * @subpackage translation
  *
  * @author     Dominik del Bondio <ddb@bitxtender.com>
- * @author     Agavi Project <info@agavi.org>
- * @copyright  (c) Authors
+ * @copyright  Authors
+ * @copyright  The Agavi Project
  * @since      0.11.0
  *
  * @version    $Id$
@@ -140,7 +140,7 @@ class AgaviTranslationManager
 	/**
 	 * Returns the list of available locales.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getAvailableLocales()
@@ -381,7 +381,7 @@ class AgaviTranslationManager
 	 *
 	 * @return     string The translated message.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function __($singularMessage, $pluralMessage, $amount, $domain = null, $locale = null, array $parameters = null)
@@ -425,7 +425,7 @@ class AgaviTranslationManager
 	 *
 	 * @return     array An array of translators as keys and filters as an array
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	protected function applyFilters($message, $domain, $type = 'msg')

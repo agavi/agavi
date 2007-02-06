@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -20,7 +20,8 @@
  * @subpackage logging
  *
  * @author     Sean Kerr <skerr@mojavi.org>
- * @copyright  (c) Authors
+ * @copyright  Authors
+ * @copyright  The Agavi Project
  * @since      0.9.0
  *
  * @version    $Id$
@@ -53,7 +54,7 @@ class AgaviLoggerManager
 	 *
 	 * @return     AgaviContext The current AgaviContext instance.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public final function getContext()
@@ -70,7 +71,7 @@ class AgaviLoggerManager
 	 * @throws     <b>AgaviInitializationException</b> If an error occurs while
 	 *                                                 initializing this instance.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
@@ -94,7 +95,7 @@ class AgaviLoggerManager
 	 * @return     AgaviLogger A Logger, if a logger with the name exists,
 	 *                         otherwise null.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
@@ -114,7 +115,7 @@ class AgaviLoggerManager
 	 *
 	 * @return     array An indexed array of logger names.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
@@ -130,7 +131,7 @@ class AgaviLoggerManager
 	 *
 	 * @return     bool true, if the logger exists, otherwise false.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
@@ -150,7 +151,7 @@ class AgaviLoggerManager
 	 * @throws     <b>AgaviLoggingException</b> If the logger name is default,
 	 *                                           which cannot be removed.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
@@ -181,7 +182,7 @@ class AgaviLoggerManager
 	 * @throws     <b>AgaviLoggingException</b> If a logger with the name already
 	 *                                          exists.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
@@ -239,7 +240,7 @@ class AgaviLoggerManager
 	 *
 	 * @throws     AgaviLoggingException if the logger was not found.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.10.0
 	 */
@@ -262,7 +263,7 @@ class AgaviLoggerManager
 	/**
 	 * Execute the shutdown procedure.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */

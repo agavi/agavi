@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -35,8 +35,9 @@
  * @package    agavi
  * @subpackage database
  * 
- * @author     Agavi Project <info@agavi.org>
- * @author     David Zuelke <dz@bitxtender.com>
+ * @author     David Zülke <dz@bitxtender.com>
+ * @copyright  Authors
+ * @copyright  The Agavi Project
  * @since      0.9.0
  *
  * @version    $Id$
@@ -78,7 +79,7 @@ class AgaviPropelDatabase extends AgaviDatabase
 	 *
 	 * @return     mixed The path if one has been set, otherwise null
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.10.0
 	 */
 	public static function getDefaultConfigPath()
@@ -94,7 +95,7 @@ class AgaviPropelDatabase extends AgaviDatabase
 	 *
 	 * @return     mixed The old path if one was set previously, otherwise null
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.10.0
 	 */
 	protected static function setDefaultConfigPath($path)
@@ -111,7 +112,7 @@ class AgaviPropelDatabase extends AgaviDatabase
 	 * @return     bool true, if a Propel configuration file path has explicitely
 	 *                  been set as default in database.ini, otherwise false
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.10.0
 	 */
 	protected static function isDefaultConfigPathSet()
@@ -123,7 +124,7 @@ class AgaviPropelDatabase extends AgaviDatabase
 	 * Sets a flag indicating a Propel configuration file path has been
 	 * explicitly set as default for use with Propel::init() in database.xml
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.10.0
 	 */
 	protected static function setDefaultConfigPathSet()
@@ -138,7 +139,7 @@ class AgaviPropelDatabase extends AgaviDatabase
 	 * @throws     <b>agaviCreoleDatabaseException</b> If a connection could not be 
 	 *                                           created.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
 	protected function connect()
@@ -197,7 +198,7 @@ class AgaviPropelDatabase extends AgaviDatabase
 	 * @param      agaviCreoleDatabaseManager The database manager of this instance.
 	 * @param      array An associative array of initialization parameters.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.10.0
 	 */
 	public function initialize(AgaviDatabaseManager $databaseManager, array $parameters = array())
@@ -248,7 +249,7 @@ class AgaviPropelDatabase extends AgaviDatabase
 	 *
 	 * @return     string The path to the Propel configuration file
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.10.0
 	 */
 	public function getConfigPath()

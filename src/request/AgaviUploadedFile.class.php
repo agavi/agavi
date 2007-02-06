@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -20,8 +20,9 @@
  * @package    agavi
  * @subpackage request
  *
- * @author     David Zuelke <dz@bitxtender.com>
- * @copyright  (c) Authors
+ * @author     David Zülke <dz@bitxtender.com>
+ * @copyright  Authors
+ * @copyright  The Agavi Project
  * @since      0.11.0
  *
  * @version    $Id$
@@ -47,7 +48,7 @@ final class AgaviUploadedFile extends ArrayObject
 	 *
 	 * @see        ArrayObject::__construct()
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function __construct($array = array(), $flags = ArrayObject::ARRAY_AS_PROPS, $iteratorClass = 'ArrayIterator')
@@ -71,7 +72,7 @@ final class AgaviUploadedFile extends ArrayObject
 	 *
 	 * @return     string A value.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function __call($name, array $arguments)
@@ -88,7 +89,7 @@ final class AgaviUploadedFile extends ArrayObject
 	 *
 	 * @return     bool True in case of UPLOAD_ERR_OK, false otherwise.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function hasError()
@@ -108,7 +109,7 @@ final class AgaviUploadedFile extends ArrayObject
 	 *
 	 * @throws     AgaviFileException If chmod or mkdir calls failed.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function move($dest, $fileMode = 0664, $create = true, $dirMode = 0775)

@@ -19,8 +19,9 @@
  * @package    agavi
  * @subpackage logging
  *
- * @author     David Zuelke <dz@bitxtender.com>
- * @copyright  (c) Authors
+ * @author     David Zülke <dz@bitxtender.com>
+ * @copyright  Authors
+ * @copyright  The Agavi Project
  * @since      0.11.0
  *
  * @version    $Id$
@@ -34,7 +35,7 @@ class AgaviTimestampLoggerLayout extends AgaviLoggerLayout
 	 *
 	 * @return     string A formatted message.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function format(AgaviLoggerMessage $message)

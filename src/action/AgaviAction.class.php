@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
@@ -23,7 +23,8 @@
  * @subpackage action
  *
  * @author     Sean Kerr <skerr@mojavi.org>
- * @copyright  (c) Authors
+ * @copyright  Authors
+ * @copyright  The Agavi Project
  * @since      0.9.0
  *
  * @version    $Id$
@@ -58,7 +59,7 @@ abstract class AgaviAction
 	 *
 	 * @return     AgaviExecutionContainer This action's execution container.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public final function getContainer()
@@ -92,7 +93,7 @@ abstract class AgaviAction
 	 *                   - The view that will be executed.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
 	public function handleError(AgaviRequestDataHolder $rd)
@@ -133,7 +134,7 @@ abstract class AgaviAction
 	 *
 	 * @return     bool true, if this action should act in simple mode, or false.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function isSimple()
@@ -160,7 +161,7 @@ abstract class AgaviAction
 	 *                  false.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
 	public function validate(AgaviRequestDataHolder $rd)
@@ -173,7 +174,7 @@ abstract class AgaviAction
 	 *
 	 * @return     string A View name
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getDefaultViewName()
@@ -184,7 +185,7 @@ abstract class AgaviAction
 	/**
 	 * @see        AgaviAttributeHolder::setAttributesByRef()
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
 	public function clearAttributes()
@@ -195,7 +196,7 @@ abstract class AgaviAction
 	/**
 	 * @see        AgaviAttributeHolder::setAttributesByRef()
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
 	public function & getAttribute($name, $default = null)
@@ -206,7 +207,7 @@ abstract class AgaviAction
 	/**
 	 * @see        AgaviAttributeHolder::setAttributesByRef()
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
 	public function getAttributeNames()
@@ -217,7 +218,7 @@ abstract class AgaviAction
 	/**
 	 * @see        AgaviAttributeHolder::setAttributesByRef()
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function & getAttributes()
@@ -228,7 +229,7 @@ abstract class AgaviAction
 	/**
 	 * @see        AgaviAttributeHolder::setAttributesByRef()
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
 	public function hasAttribute($name)
@@ -239,7 +240,7 @@ abstract class AgaviAction
 	/**
 	 * @see        AgaviAttributeHolder::setAttributesByRef()
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
 	public function & removeAttribute($name)
@@ -250,7 +251,7 @@ abstract class AgaviAction
 	/**
 	 * @see        AgaviAttributeHolder::setAttributesByRef()
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
 	public function setAttribute($name, $value)
@@ -261,7 +262,7 @@ abstract class AgaviAction
 	/**
 	 * @see        AgaviAttributeHolder::setAttributesByRef()
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.10.0
 	 */
 	public function appendAttribute($name, $value)
@@ -272,7 +273,7 @@ abstract class AgaviAction
 	/**
 	 * @see        AgaviAttributeHolder::setAttributesByRef()
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
 	public function setAttributeByRef($name, &$value)
@@ -283,7 +284,7 @@ abstract class AgaviAction
 	/**
 	 * @see        AgaviAttributeHolder::setAttributesByRef()
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.10.0
 	 */
 	public function appendAttributeByRef($name, &$value)
@@ -294,7 +295,7 @@ abstract class AgaviAction
 	/**
 	 * @see        AgaviAttributeHolder::setAttributesByRef()
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
 	public function setAttributes(array $attributes)
@@ -305,7 +306,7 @@ abstract class AgaviAction
 	/**
 	 * @see        AgaviAttributeHolder::setAttributesByRef()
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
 	public function setAttributesByRef(array &$attributes)

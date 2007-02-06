@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -19,8 +19,9 @@
  * @package    agavi
  * @subpackage response
  *
- * @author     David Zuelke <dz@bitxtender.com>
- * @copyright  (c) Authors
+ * @author     David Zülke <dz@bitxtender.com>
+ * @copyright  Authors
+ * @copyright  The Agavi Project
  * @since      0.11.0
  *
  * @version    $Id$
@@ -104,7 +105,7 @@ class AgaviWebResponse extends AgaviResponse
 	 * @param      AgaviContext An AgaviContext instance.
 	 * @param      array        An array of initialization parameters.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function initialize(AgaviContext $context, array $parameters = array())
@@ -127,7 +128,7 @@ class AgaviWebResponse extends AgaviResponse
 	 *                             the response can use to send additional data,
 	 *                             such as HTTP headers
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function send(AgaviOutputType $outputType = null)
@@ -145,7 +146,7 @@ class AgaviWebResponse extends AgaviResponse
 	/**
 	 * Clear all reponse data.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function clear()
@@ -162,7 +163,7 @@ class AgaviWebResponse extends AgaviResponse
 	 *
 	 * @param      string A content type.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
 	public function setContentType($type)
@@ -175,7 +176,7 @@ class AgaviWebResponse extends AgaviResponse
 	 *
 	 * @return     string A content type, or null if none is set.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
 	public function getContentType()
@@ -193,7 +194,7 @@ class AgaviWebResponse extends AgaviResponse
 	 *
 	 * @param      AgaviResponse The other response to import information from.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function merge(AgaviResponse $otherResponse)
@@ -222,7 +223,7 @@ class AgaviWebResponse extends AgaviResponse
 	 *
 	 * @param      string A numeric HTTP status code between 100 and 505.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function setHttpStatusCode($code) {
@@ -240,7 +241,7 @@ class AgaviWebResponse extends AgaviResponse
 	 * @return     string A numeric HTTP status code between 100 and 505, or null
 	                      if no status code has been set.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getHttpStatusCode() {
@@ -254,7 +255,7 @@ class AgaviWebResponse extends AgaviResponse
 	 *
 	 * @return     string A normalized HTTP header name
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function normalizeHttpHeaderName($name)
@@ -275,7 +276,7 @@ class AgaviWebResponse extends AgaviResponse
 	 *
 	 * @return     array All values set for that header, or null if no headers set
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getHttpHeader($name)
@@ -293,7 +294,7 @@ class AgaviWebResponse extends AgaviResponse
 	 *
 	 * @return     array An associative array of HTTP header names and values.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getHttpHeaders()
@@ -308,7 +309,7 @@ class AgaviWebResponse extends AgaviResponse
 	 *
 	 * @return     bool true if the header exists, false otherwise.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function hasHttpHeader($name)
@@ -329,7 +330,7 @@ class AgaviWebResponse extends AgaviResponse
 	 * @param      bool   If true, a header with that name will be oberwritten,
 	 *                    otherwise, the value will be appended.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function setHttpHeader($name, $value, $replace = true)
@@ -360,8 +361,8 @@ class AgaviWebResponse extends AgaviResponse
 	 * @param      bool   Whether the cookie will be made accessible only through
 	 *                    the HTTP protocol, and not to client-side scripts.
 	 *
-	 * @author     Veikko Makinen <mail@veikkomakinen.com>
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     Veikko Mäkinen <mail@veikkomakinen.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function setCookie($name, $value, $lifetime = null, $path = null, $domain = null, $secure = null, $httpOnly = null)
@@ -390,7 +391,7 @@ class AgaviWebResponse extends AgaviResponse
 	 * @return     array An associative array containing the cookie data or null
 	 *                   if no cookie with that name has been set.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getCookie($name)
@@ -407,7 +408,7 @@ class AgaviWebResponse extends AgaviResponse
 	 *
 	 * @return     bool True if a cookie with that name has been set, else false.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function hasCookie($name)
@@ -425,7 +426,7 @@ class AgaviWebResponse extends AgaviResponse
 	 *
 	 * @param      string The name of the cookie.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function removeCookie($name)
@@ -441,7 +442,7 @@ class AgaviWebResponse extends AgaviResponse
 	 * @return     array An associative array of cookie names (key) and cookie
 	 *                   information (value, associative array).
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getCookies()
@@ -456,7 +457,7 @@ class AgaviWebResponse extends AgaviResponse
 	 *
 	 * @return     mixed The removed header's value or null if header was not set.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function removeHttpHeader($name)
@@ -473,7 +474,7 @@ class AgaviWebResponse extends AgaviResponse
 	/**
 	 * Clears the HTTP headers set for this response.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function clearHttpHeaders()
@@ -484,7 +485,7 @@ class AgaviWebResponse extends AgaviResponse
 	/**
 	 * Sends HTTP Status code, headers and cookies
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	protected function sendHttpResponseHeaders(AgaviOutputType $outputType = null)
@@ -542,7 +543,7 @@ class AgaviWebResponse extends AgaviResponse
 	 *
 	 * @param      mixed Where to redirect.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function setRedirect($location, $code = 302)
@@ -555,7 +556,7 @@ class AgaviWebResponse extends AgaviResponse
 	 *
 	 * @return     array An assoc array of redirect info, or null if none set.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getRedirect()
@@ -568,7 +569,7 @@ class AgaviWebResponse extends AgaviResponse
 	 *
 	 * @return     bool true, if a redirect is set, otherwise falsae
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function hasRedirect()
@@ -579,7 +580,7 @@ class AgaviWebResponse extends AgaviResponse
 	/**
 	 * Clear any set redirect information.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function clearRedirect()

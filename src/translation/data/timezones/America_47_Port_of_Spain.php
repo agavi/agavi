@@ -8,7 +8,8 @@
  * @package    agavi
  * @subpackage translation
  *
- * @copyright  (c) Authors
+ * @copyright  Authors
+ * @copyright  The Agavi Project
  * @since      0.11.0
  *
  * @version    $Id$

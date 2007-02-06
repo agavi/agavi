@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -22,8 +22,8 @@
  * @subpackage request
  *
  * @author     Sean Kerr <skerr@mojavi.org>
- * @author     Agavi Project <info@agavi.org>
- * @copyright  (c) Authors
+ * @copyright  Authors
+ * @copyright  The Agavi Project
  * @since      0.9.0
  *
  * @version    $Id$
@@ -76,7 +76,7 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	 *
 	 * @return     AgaviContext An AgaviContext instance.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getContext()
@@ -90,7 +90,7 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	 * @return     string The request method name
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
 	public function getMethod()
@@ -107,7 +107,7 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	 * @throws     <b>AgaviInitializationException</b> If an error occurs while
 	 *                                                 initializing this Request.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
 	public function initialize(AgaviContext $context, array $parameters = array())
@@ -134,7 +134,7 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	 * @param      string The request method name.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
 	public function setMethod($method)
@@ -147,7 +147,7 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	 *
 	 * @return     string The module accessor name.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getModuleAccessor()
@@ -160,7 +160,7 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	 *
 	 * @return     string The action accessor name.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getActionAccessor()
@@ -203,7 +203,7 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	 * @return     mixed The key, if a lock was set, or a boolean value indicating
 	 *                   whether or not the unlocking was successful.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	final public function toggleLock($key = null)

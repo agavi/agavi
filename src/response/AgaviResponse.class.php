@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -19,8 +19,9 @@
  * @package    agavi
  * @subpackage response
  *
- * @author     David Zuelke <dz@bitxtender.com>
- * @copyright  (c) Authors
+ * @author     David Zülke <dz@bitxtender.com>
+ * @copyright  Authors
+ * @copyright  The Agavi Project
  * @since      0.11.0
  *
  * @version    $Id$
@@ -42,7 +43,7 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	 *
 	 * Will set the name of the context and exclude the instance from serializing.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function __sleep()
@@ -64,7 +65,7 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	 *
 	 * Will restore the context based on the names set by __sleep.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function __wakeup()
@@ -83,7 +84,7 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	 *
 	 * @return     AgaviContext An AgaviContext instance.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getContext()
@@ -97,7 +98,7 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	 * @param      AgaviContext An AgaviContext instance.
 	 * @param      array        An array of initialization parameters.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function initialize(AgaviContext $context, array $parameters = array())
@@ -111,7 +112,7 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	 *
 	 * @return     mixed The content set in this Response.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getContent()
@@ -124,7 +125,7 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	 *
 	 * @return     int The content size in bytes.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getContentSize()
@@ -145,7 +146,7 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	 *
 	 * @param      mixed The content to be sent in this Response.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function setContent($content)
@@ -158,7 +159,7 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	 *
 	 * @param      mixed The content to be prepended to this Response.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function prependContent($content)
@@ -171,7 +172,7 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	 *
 	 * @param      mixed The content to be appended to this Response.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function appendContent($content)
@@ -182,7 +183,7 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	/**
 	 * Clear the content for this Response
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function clearContent()
@@ -195,7 +196,7 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	 *
 	 * @param      mixed Where to redirect.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	abstract public function setRedirect($to);
@@ -205,7 +206,7 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	 *
 	 * @param      AgaviResponse The other response to import information from.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	abstract public function merge(AgaviResponse $otherResponse);
@@ -213,7 +214,7 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	/**
 	 * Clear all data for this Response.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	abstract public function clear();
@@ -224,7 +225,7 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	 * @param      AgaviOutputType An optional Output Type object with information
 	 *                             the response can use to send additional data.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	abstract public function send(AgaviOutputType $outputType = null);
@@ -232,7 +233,7 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	/**
 	 * Send the content for this response
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	protected function sendContent()

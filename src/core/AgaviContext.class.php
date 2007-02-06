@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
@@ -26,8 +26,9 @@
  *
  * @author     Sean Kerr <skerr@mojavi.org>
  * @author     Mike Vincent <mike@agavi.org>
- * @author     David Zuelke <dz@bitxtender.com>
- * @copyright  (c) Authors
+ * @author     David Zülke <dz@bitxtender.com>
+ * @copyright  Authors
+ * @copyright  The Agavi Project
  * @since      0.9.0
  *
  * @version    $Id$
@@ -128,7 +129,7 @@ final class AgaviContext
 	 *
 	 * @return     array An associative array (keys 'class' and 'parameters').
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getFactoryInfo($for)
@@ -199,7 +200,7 @@ final class AgaviContext
 	 *                          settings of the requested context name
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @author     Mike Vincent <mike@agavi.org>
 	 * @since      0.9.0
 	 */
@@ -230,7 +231,7 @@ final class AgaviContext
 	 * @return     AgaviLoggerManager The current LoggerManager implementation 
 	 *                                instance.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getLoggerManager()
@@ -244,7 +245,7 @@ final class AgaviContext
 	 * @param      string A name corresponding to a section of the config
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @author     Mike Vincent <mike@agavi.org>
 	 * @since      0.10.0
 	 */
@@ -270,7 +271,7 @@ final class AgaviContext
 	/**
 	 * Shut down this AgaviContext and all related factories.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function shutdown()
@@ -307,7 +308,7 @@ final class AgaviContext
 	 *
 	 * @throws     AgaviAutloadException if class is ultimately not found.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getModel($modelName, $moduleName = null, array $parameters = null)
@@ -419,7 +420,7 @@ final class AgaviContext
 	 *
 	 * @return     string A context name.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getName()

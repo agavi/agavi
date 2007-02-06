@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -20,8 +20,9 @@
  * @package    agavi
  * @subpackage config
  *
- * @author     David Zuelke <dz@bitxtender.com>
- * @copyright  (c) Authors
+ * @author     David Zülke <dz@bitxtender.com>
+ * @copyright  Authors
+ * @copyright  The Agavi Project
  * @since      0.11.0
  *
  * @version    $Id$
@@ -45,7 +46,7 @@ final class AgaviConfig
 	 *
 	 * @return     mixed The value of the directive, or null if not set.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public static function get($name, $default = null)
@@ -64,7 +65,7 @@ final class AgaviConfig
 	 *
 	 * @return     bool Whether the directive was set.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public static function has($name)
@@ -79,7 +80,7 @@ final class AgaviConfig
 	 *
 	 * @return     bool Whether the directive is read-only.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public static function isReadonly($name)
@@ -97,7 +98,7 @@ final class AgaviConfig
 	 *
 	 * @return     bool   Whether or not the configuration directive has been set.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public static function set($name, $value, $overwrite = true, $readonly = false)
@@ -120,7 +121,7 @@ final class AgaviConfig
 	 *
 	 * @return     bool true, if removed successfuly, false otherwise.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public static function remove($name)
@@ -138,7 +139,7 @@ final class AgaviConfig
 	 *
 	 * @param      string An array of configuration directives.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public static function import($data)
@@ -151,7 +152,7 @@ final class AgaviConfig
 	 *
 	 * @return     array An associative array of configuration values.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public static function export()
@@ -162,7 +163,7 @@ final class AgaviConfig
 	/**
 	 * Clear the configuration.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public static function clear()

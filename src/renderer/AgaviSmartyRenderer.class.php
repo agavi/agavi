@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -19,9 +19,9 @@
  * @package    agavi
  * @subpackage renderer
  *
- * @author     David Zuelke <dz@bitxtender.com>
- * @author     Agavi Project <info@agavi.org>
- * @copyright  (c) Authors
+ * @author     David Zülke <dz@bitxtender.com>
+ * @copyright  Authors
+ * @copyright  The Agavi Project
  * @since      0.11.0
  *
  * @version    $Id$
@@ -62,7 +62,7 @@ class AgaviSmartyRenderer extends AgaviRenderer implements AgaviIReusableRendere
 	 *
 	 * Excludes the Smarty instance to prevent excessive serialization load.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function __sleep()
@@ -77,7 +77,7 @@ class AgaviSmartyRenderer extends AgaviRenderer implements AgaviIReusableRendere
 	 *
 	 * @return     Smarty A Smarty instance.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
 	protected function getEngine()
@@ -132,7 +132,7 @@ class AgaviSmartyRenderer extends AgaviRenderer implements AgaviIReusableRendere
 	 *
 	 * @return     string A rendered result.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function render(AgaviTemplateLayer $layer, array &$attributes = array(), array &$slots = array(), array &$moreAssigns = array())

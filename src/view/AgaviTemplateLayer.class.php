@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -19,9 +19,9 @@
  * @package    agavi
  * @subpackage view
  *
- * @author     David Zuelke <dz@bitxtender.com>
- * @author     Agavi Project <info@agavi.org>
- * @copyright  (c) Authors
+ * @author     David Zülke <dz@bitxtender.com>
+ * @copyright  Authors
+ * @copyright  The Agavi Project
  * @since      0.11.0
  *
  * @version    $Id$
@@ -48,7 +48,7 @@ abstract class AgaviTemplateLayer extends AgaviParameterHolder
 	 *
 	 * @param      array Initial parameters.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function __construct(array $parameters = array())
@@ -65,7 +65,7 @@ abstract class AgaviTemplateLayer extends AgaviParameterHolder
 	 * @param      string The method name.
 	 * @param      array  The method arguments.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function __call($name, array $args)
@@ -84,7 +84,7 @@ abstract class AgaviTemplateLayer extends AgaviParameterHolder
 	 *
 	 * Will set the name of the context and exclude the instance from serializing.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function __sleep()
@@ -100,7 +100,7 @@ abstract class AgaviTemplateLayer extends AgaviParameterHolder
 	 *
 	 * Will restore the context based on the names set by __sleep.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function __wakeup()
@@ -114,7 +114,7 @@ abstract class AgaviTemplateLayer extends AgaviParameterHolder
 	 *
 	 * Will clone each individual slot (which are execution containers).
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function __clone()
@@ -133,7 +133,7 @@ abstract class AgaviTemplateLayer extends AgaviParameterHolder
 	 *
 	 * @return     string The rendered result.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function execute(AgaviRenderer $renderer = null, array &$attributes = array(), array &$moreAssigns = array())
@@ -162,7 +162,7 @@ abstract class AgaviTemplateLayer extends AgaviParameterHolder
 	 * @param      AgaviContext The current Context instance.
 	 * @param      array        An array of initialization parameters.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function initialize(AgaviContext $context, array $parameters = array())
@@ -177,7 +177,7 @@ abstract class AgaviTemplateLayer extends AgaviParameterHolder
 	 *
 	 * @param      AgaviRenderer A renderer instance.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function setRenderer(AgaviRenderer $renderer)
@@ -190,7 +190,7 @@ abstract class AgaviTemplateLayer extends AgaviParameterHolder
 	 *
 	 * @return     AgaviRenderer A renderer instance.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getRenderer()
@@ -204,7 +204,7 @@ abstract class AgaviTemplateLayer extends AgaviParameterHolder
 	 * @param      string                  The name of the slot.
 	 * @param      AgaviExecutionContainer The slot's execution container.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function setSlot($name, AgaviExecutionContainer $c)
@@ -219,7 +219,7 @@ abstract class AgaviTemplateLayer extends AgaviParameterHolder
 	 *
 	 * @return     AgaviExecutionContainer The slot's execution container.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getSlot($name)
@@ -234,7 +234,7 @@ abstract class AgaviTemplateLayer extends AgaviParameterHolder
 	 *
 	 * @return     array An associative array of slot names and exec containers.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getSlots()
@@ -249,7 +249,7 @@ abstract class AgaviTemplateLayer extends AgaviParameterHolder
 	 *
 	 * @return     bool True if the slot exists, false otherwise.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function hasSlot($name)
@@ -262,7 +262,7 @@ abstract class AgaviTemplateLayer extends AgaviParameterHolder
 	 *
 	 * @return     bool true if any slots are defined, falseotherwise.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function hasSlots()
@@ -275,7 +275,7 @@ abstract class AgaviTemplateLayer extends AgaviParameterHolder
 	 *
 	 * @param      string The name of the slot.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function removeSlot($name)
@@ -292,7 +292,7 @@ abstract class AgaviTemplateLayer extends AgaviParameterHolder
 	 *
 	 * @throws     AgaviException If the template could not be found.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	abstract public function getResourceStreamIdentifier();
