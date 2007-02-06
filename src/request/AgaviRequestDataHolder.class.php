@@ -279,7 +279,7 @@ class AgaviRequestDataHolder extends AgaviParameterHolder implements AgaviIParam
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function __construct(array $data)
+	public function __construct(array $data = array())
 	{
 		$this->registerSource(self::SOURCE_PARAMETERS, $this->parameters);
 		
