@@ -7,7 +7,9 @@
 			<output_type name="html">
 				<renderer class="AgaviPhpRenderer" />
 				<parameters>
-					<parameter name="Content-Type">text/html</parameter>
+					<parameter name="http_headers">
+						<parameter name="Content-Type">text/html</parameter>
+					</parameter>
 				</parameters>
 			</output_type>
 			

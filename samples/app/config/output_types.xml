@@ -40,14 +40,18 @@
 				<xi:include href="#xpointer(/configurations/sandbox/renderers)" />
 				<xi:include href="#xpointer(/configurations/sandbox/layouts)" />
 				
-				<parameter name="Content-Type">text/html; charset=UTF-8</parameter>
+				<parameter name="http_headers">
+					<parameter name="Content-Type">text/html; charset=UTF-8</parameter>
+				</parameter>
 			</output_type>
 
 			<output_type name="xhtml">
 				<xi:include href="#xpointer(/configurations/sandbox/renderers)" />
 				<xi:include href="#xpointer(/configurations/sandbox/layouts)" />
 				
-				<parameter name="Content-Type">application/xhtml+xml; charset=UTF-8</parameter>
+				<parameter name="http_headers">
+					<parameter name="Content-Type">application/xhtml+xml; charset=UTF-8</parameter>
+				</parameter>
 			</output_type>
 
 		</output_types>

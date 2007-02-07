@@ -12,7 +12,7 @@ class Disabled_IndexSuccessView extends AgaviView
 		$this->loadLayout();
 
 		// set the content type
-		$this->setAttribute('_contentType', $this->container->getOutputType()->getParameter('Content-Type', 'text/html; charset=utf-8'));
+		$this->setAttribute('_contentType', $this->container->getOutputType()->getParameter('http_headers[Content-Type]', 'text/html; charset=utf-8'));
 		// set the title
 		$this->setAttribute('_title', 'Index Action');
 

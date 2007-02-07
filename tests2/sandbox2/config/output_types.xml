@@ -9,7 +9,9 @@
 					<renderer name="php" class="AgaviPhpRenderer" />
 				</renderers>
 				<parameters>
-					<parameter name="Content-Type">text/html</parameter>
+					<parameter name="http_headers">
+						<parameter name="Content-Type">text/html</parameter>
+					</parameter>
 				</parameters>
 			</output_type>
 			

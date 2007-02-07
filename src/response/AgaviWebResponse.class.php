@@ -503,8 +503,12 @@ class AgaviWebResponse extends AgaviResponse
 			header($this->httpStatusCodes[$this->httpStatusCode]);
 		}
 		
-		if($this->getContentType() === null && $outputType instanceof AgaviOutputType && $outputType->hasParameter('Content-Type')) {
-			$this->setContentType($outputType->getParameter('Content-Type'));
+		if($outputType instanceof AgaviOutputType) {
+			foreach($outputType->getParameter('http_headers', array()) as $name => $value) {
+				if(!$this->hasHttpHeader($name)) {
+					$this->setHttpHeader($name, $value);
+				}
+			}
 		}
 		
 		if($this->getParameter('send_content_length', true) && !$this->hasHttpHeader('Content-Length') && ($contentSize = $this->getContentSize()) !== false) {

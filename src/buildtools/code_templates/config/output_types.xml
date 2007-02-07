@@ -29,7 +29,9 @@
 					</layout> 
 				</layouts> 
 				<parameters>
-					<parameter name="Content-Type">text/html; charset=UTF-8</parameter>
+					<parameter name="http_headers">
+						<parameter name="Content-Type">text/html; charset=UTF-8</parameter>
+					</parameter>
 				</parameters>
 			</output_type>
 
