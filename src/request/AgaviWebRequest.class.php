@@ -301,7 +301,7 @@ class AgaviWebRequest extends AgaviRequest
 			AgaviWebRequestDataHolder::SOURCE_HEADERS => $headers,
 		));
 		
-		if($this->getParameter("unset_input", true)) {
+		if($this->getParameter("unset_input", false)) {
 			$_GET = $_POST = $_COOKIE = $_REQUEST = $_FILES = array();
 		}
 	}
