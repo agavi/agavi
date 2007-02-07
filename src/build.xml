@@ -93,13 +93,13 @@
 
 		<mkdir dir="${app.dir}/lib/action"/>
 		<property name="templates.dir.current" value="${templates.dir.default}"  override="true"  />
-		<available file="${templates.dir}/defaults/base/ProjectBaseAction.class.php" property="templates.dir.current" value="${templates.dir}" />
-		<copy file="${templates.dir.current}/defaults/base/ProjectBaseAction.class.php" tofile="${app.dir}/lib/action/ProjectBaseAction.class.php" />
+		<available file="${templates.dir}/defaults/base/ProjectBaseAction.class.php.tmpl" property="templates.dir.current" value="${templates.dir}" />
+		<copy file="${templates.dir.current}/defaults/base/ProjectBaseAction.class.php.tmpl" tofile="${app.dir}/lib/action/ProjectBaseAction.class.php" />
 
 		<mkdir dir="${app.dir}/lib/view"/>
 		<property name="templates.dir.current" value="${templates.dir.default}"  override="true"  />
-		<available file="${templates.dir}/defaults/base/ProjectBaseView.class.php" property="templates.dir.current" value="${templates.dir}" />
-		<copy file="${templates.dir.current}/defaults/base/ProjectBaseView.class.php" tofile="${app.dir}/lib/view/ProjectBaseView.class.php" />
+		<available file="${templates.dir}/defaults/base/ProjectBaseView.class.php.tmpl" property="templates.dir.current" value="${templates.dir}" />
+		<copy file="${templates.dir.current}/defaults/base/ProjectBaseView.class.php.tmpl" tofile="${app.dir}/lib/view/ProjectBaseView.class.php" />
 
 		<!-- <phingcall target="projecttests" /> -->
 
