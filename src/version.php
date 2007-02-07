@@ -17,7 +17,7 @@
  * Version initialization script.
  *
  * @package    agavi
- * 
+ *
  * @author     David Zülke <dz@bitxtender.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
@@ -32,13 +32,13 @@ AgaviConfig::set('agavi.name', 'Agavi');
 AgaviConfig::set('agavi.major_version', '0');
 AgaviConfig::set('agavi.minor_version', '11');
 AgaviConfig::set('agavi.micro_version', '0');
-AgaviConfig::set('agavi.status', 'DEV');
-AgaviConfig::set('agavi.branch', 'trunk');
+AgaviConfig::set('agavi.status', 'RC2');
+AgaviConfig::set('agavi.branch', '0.11');
 
 AgaviConfig::set('agavi.version',
 	AgaviConfig::get('agavi.major_version') . '.' .
 	AgaviConfig::get('agavi.minor_version') . '.' .
-	AgaviConfig::get('agavi.micro_version') . 
+	AgaviConfig::get('agavi.micro_version') .
 	(AgaviConfig::has('agavi.status')
 		? '-' . AgaviConfig::get('agavi.status')
 		: '')
