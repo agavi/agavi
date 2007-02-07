@@ -36,7 +36,7 @@
       <xs:group ref="parameters"/>
     </xs:sequence>
     <xs:attribute name="pattern" type="xs:string" use="required" />
-    <xs:attribute name="class" type="xs:string" use="required" />
+    <xs:attribute name="class" type="php_label" use="required" />
     <xs:attribute name="validate" type="xs:string" />
     <xs:attribute name="parser" type="xs:string" />
   </xs:complexType>

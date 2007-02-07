@@ -37,7 +37,7 @@
       <xs:group ref="parameters" />
     </xs:sequence>
     <xs:attribute name="name" type="xs:string" />
-    <xs:attribute name="class" type="xs:string" />
+    <xs:attribute name="class" type="php_label" />
     <xs:attribute name="enabled" type="xs:string" />
   </xs:complexType>
 

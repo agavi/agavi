@@ -21,7 +21,7 @@
       <xs:element name="enabled" type="xs:string" />
       <xs:element name="title" type="xs:string" minOccurs="0" />
       <xs:element name="version" type="xs:string" minOccurs="0" />
-      <xs:element name="name" type="xs:string" />
+      <xs:element name="name" type="php_label" />
       <xs:element name="authors" minOccurs="0">
         <xs:complexType>
           <xs:sequence>

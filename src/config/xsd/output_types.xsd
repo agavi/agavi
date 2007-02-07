@@ -41,13 +41,13 @@
     <xs:sequence>
       <xs:element name="renderer" type="renderer" maxOccurs="unbounded" />
     </xs:sequence>
-    <xs:attribute name="default" type="php_label" use="required" />
+    <xs:attribute name="default" type="xs:string" use="required" />
   </xs:complexType>
   <xs:complexType name="renderer">
     <xs:sequence>
       <xs:group ref="parameters" />
     </xs:sequence>
-    <xs:attribute name="name" type="php_label" use="required" />
+    <xs:attribute name="name" type="xs:string" use="required" />
     <xs:attribute name="class" type="php_label" use="required" />
   </xs:complexType>
 
@@ -55,14 +55,14 @@
     <xs:sequence>
       <xs:element name="layout" type="layout" maxOccurs="unbounded" />
     </xs:sequence>
-    <xs:attribute name="default" type="php_label" use="required" />
+    <xs:attribute name="default" type="xs:string" use="required" />
   </xs:complexType>
   <xs:complexType name="layout">
     <xs:sequence maxOccurs="unbounded">
       <xs:group ref="parameters" />
       <xs:group ref="layers" />
     </xs:sequence>
-    <xs:attribute name="name" type="php_label" use="required" />
+    <xs:attribute name="name" type="xs:string" use="required" />
   </xs:complexType>
 
   <xs:group name="layers">
@@ -82,9 +82,9 @@
       <xs:group ref="parameters" />
       <xs:group ref="slots" />
     </xs:sequence>
-    <xs:attribute name="name" type="php_label" use="required" />
+    <xs:attribute name="name" type="xs:string" use="required" />
     <xs:attribute name="class" type="php_label" use="required" />
-    <xs:attribute name="renderer" type="php_label" />
+    <xs:attribute name="renderer" type="xs:string" />
   </xs:complexType>
 
   <xs:group name="slots">
@@ -103,7 +103,7 @@
     <xs:sequence>
       <xs:group ref="parameters" />
     </xs:sequence>
-    <xs:attribute name="name" type="php_label" use="required" />
+    <xs:attribute name="name" type="xs:string" use="required" />
     <xs:attribute name="module" type="php_label" use="required" />
     <xs:attribute name="action" type="xs:string" use="required" />
     <xs:attribute name="output_type" type="php_label" />

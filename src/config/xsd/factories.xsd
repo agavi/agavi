@@ -3,134 +3,36 @@
 
   <xs:include schemaLocation="default_tags.xsd"/>  
 
+  <xs:complexType name="factorydef">
+    <xs:sequence maxOccurs="unbounded">
+      <xs:group ref="parameters" />
+    </xs:sequence>
+    <xs:attribute name="class" type="php_label" use="required" />
+  </xs:complexType>
+  
   <xs:element name="configurations" type="configurations" />
   <xs:complexType name="configurations">
     <xs:sequence>
       <xs:element name="sandbox" type="sandbox" minOccurs="0" />
       <xs:element name="configuration" minOccurs="0" maxOccurs="unbounded">
         <xs:complexType>
-		    <xs:all>
-		      <xs:element name="controller" minOccurs="0">
-		        <xs:complexType>
-		          <xs:sequence>
-		            <xs:group ref="parameters" />
-		          </xs:sequence>
-		          <xs:attribute name="class" type="xs:string" use="required" />
-		        </xs:complexType>
-		      </xs:element>
-		      <xs:element name="database_manager" minOccurs="0">
-		        <xs:complexType>
-		          <xs:sequence>
-		            <xs:group ref="parameters" />
-		          </xs:sequence>
-		          <xs:attribute name="class" type="xs:string" use="required" />
-		        </xs:complexType>
-		      </xs:element>
-		      <xs:element name="dispatch_filter" minOccurs="0">
-		        <xs:complexType>
-		          <xs:sequence>
-		            <xs:group ref="parameters" />
-		          </xs:sequence>
-		          <xs:attribute name="class" type="xs:string" use="required" />
-		        </xs:complexType>
-		      </xs:element>
-		      <xs:element name="execution_container" minOccurs="0">
-		        <xs:complexType>
-		          <xs:sequence>
-		            <xs:group ref="parameters" />
-		          </xs:sequence>
-		          <xs:attribute name="class" type="xs:string" use="required" />
-		        </xs:complexType>
-		      </xs:element>
-		      <xs:element name="execution_filter" minOccurs="0">
-		        <xs:complexType>
-		          <xs:sequence>
-		            <xs:group ref="parameters" />
-		          </xs:sequence>
-		          <xs:attribute name="class" type="xs:string" use="required" />
-		        </xs:complexType>
-		      </xs:element>
-		      <xs:element name="filter_chain" minOccurs="0">
-		        <xs:complexType>
-		          <xs:sequence>
-		            <xs:group ref="parameters" />
-		          </xs:sequence>
-		          <xs:attribute name="class" type="xs:string" use="required" />
-		        </xs:complexType>
-		      </xs:element>
-		      <xs:element name="logger_manager" minOccurs="0">
-		        <xs:complexType>
-		          <xs:sequence>
-		            <xs:group ref="parameters" />
-		          </xs:sequence>
-		          <xs:attribute name="class" type="xs:string" use="required" />
-		        </xs:complexType>
-		      </xs:element>
-		      <xs:element name="request" minOccurs="0">
-		        <xs:complexType>
-		          <xs:sequence>
-		            <xs:group ref="parameters" />
-		          </xs:sequence>
-		          <xs:attribute name="class" type="xs:string" use="required" />
-		        </xs:complexType>
-		      </xs:element>
-		      <xs:element name="response" minOccurs="0">
-		        <xs:complexType>
-		          <xs:sequence>
-		            <xs:group ref="parameters" />
-		          </xs:sequence>
-		          <xs:attribute name="class" type="xs:string" use="required" />
-		        </xs:complexType>
-		      </xs:element>
-		      <xs:element name="routing" minOccurs="0">
-		        <xs:complexType>
-		          <xs:sequence>
-		            <xs:group ref="parameters" />
-		          </xs:sequence>
-		          <xs:attribute name="class" type="xs:string" use="required" />
-		        </xs:complexType>
-		      </xs:element>
-		      <xs:element name="security_filter" minOccurs="0">
-		        <xs:complexType>
-		          <xs:sequence>
-		            <xs:group ref="parameters" />
-		          </xs:sequence>
-		          <xs:attribute name="class" type="xs:string" use="required" />
-		        </xs:complexType>
-		      </xs:element>
-		      <xs:element name="storage" minOccurs="0">
-		        <xs:complexType>
-		          <xs:sequence>
-		            <xs:group ref="parameters" />
-		          </xs:sequence>
-		          <xs:attribute name="class" type="xs:string" use="required" />
-		        </xs:complexType>
-		      </xs:element>
-		      <xs:element name="translation_manager" minOccurs="0">
-		        <xs:complexType>
-		          <xs:sequence>
-		            <xs:group ref="parameters" />
-		          </xs:sequence>
-		          <xs:attribute name="class" type="xs:string" use="required" />
-		        </xs:complexType>
-		      </xs:element>
-		      <xs:element name="user" minOccurs="0">
-		        <xs:complexType>
-		          <xs:sequence>
-		            <xs:group ref="parameters" />
-		          </xs:sequence>
-		          <xs:attribute name="class" type="xs:string" use="required" />
-		        </xs:complexType>
-		      </xs:element>
-		      <xs:element name="validation_manager" minOccurs="0">
-		        <xs:complexType>
-		          <xs:sequence>
-		            <xs:group ref="parameters" />
-		          </xs:sequence>
-		          <xs:attribute name="class" type="xs:string" use="required" />
-		        </xs:complexType>
-		      </xs:element>
-		    </xs:all>
+          <xs:all>
+            <xs:element type="factorydef" minOccurs="0" name="controller" />
+            <xs:element type="factorydef" minOccurs="0" name="database_manager" />
+            <xs:element type="factorydef" minOccurs="0" name="dispatch_filter" />
+            <xs:element type="factorydef" minOccurs="0" name="execution_container" />
+            <xs:element type="factorydef" minOccurs="0" name="execution_filter" />
+            <xs:element type="factorydef" minOccurs="0" name="filter_chain" />
+            <xs:element type="factorydef" minOccurs="0" name="logger_manager" />
+            <xs:element type="factorydef" minOccurs="0" name="request" />
+            <xs:element type="factorydef" minOccurs="0" name="response" />
+            <xs:element type="factorydef" minOccurs="0" name="routing" />
+            <xs:element type="factorydef" minOccurs="0" name="security_filter" />
+            <xs:element type="factorydef" minOccurs="0" name="storage" />
+            <xs:element type="factorydef" minOccurs="0" name="translation_manager" />
+            <xs:element type="factorydef" minOccurs="0" name="user" />
+            <xs:element type="factorydef" minOccurs="0" name="validation_manager" />
+          </xs:all>
           <xs:attribute name="environment" type="xs:string" />
           <xs:attribute name="context" type="xs:string" />
         </xs:complexType>

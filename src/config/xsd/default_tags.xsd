@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
-	<xs:simpleType name="php_label">
-		<xs:restriction base="xs:string">
-			<xs:pattern value="[a-zA-Z_\p{IsLatin-1Supplement}][a-zA-Z0-9_\p{IsLatin-1Supplement}]*"/>
-		</xs:restriction>
-	</xs:simpleType>
+  <xs:simpleType name="php_label">
+  	<xs:restriction base="xs:string">
+  		<xs:pattern value="[a-zA-Z_\p{IsLatin-1Supplement}][a-zA-Z0-9_\p{IsLatin-1Supplement}]*"/>
+  	</xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="php_label_list">
+  	<xs:restriction base="xs:string">
+  		<xs:pattern value="[a-zA-Z_\p{IsLatin-1Supplement}][a-zA-Z0-9_\p{IsLatin-1Supplement}]*(\s+[a-zA-Z_\p{IsLatin-1Supplement}][a-zA-Z0-9_\p{IsLatin-1Supplement}]*)*"/>
+  	</xs:restriction>
+  </xs:simpleType>
 
 	<xs:simpleType name="non_empty_string">
 		<xs:restriction base="xs:string">

@@ -42,7 +42,7 @@
       <xs:element name="filters" type="filters" minOccurs="0" />
       <xs:group ref="parameters" />
     </xs:sequence>
-    <xs:attribute name="class" type="xs:string" />
+    <xs:attribute name="class" type="php_label" />
   </xs:complexType>
   <xs:complexType name="formatterdef">
     <xs:complexContent>

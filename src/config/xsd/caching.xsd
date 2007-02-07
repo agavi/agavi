@@ -38,7 +38,7 @@
       <xs:group ref="action_attributes" />
       <xs:group ref="output_types" />
     </xs:sequence>
-    <xs:attribute name="method" type="php_label" />
+    <xs:attribute name="method" type="php_label_list" />
     <xs:attribute name="enabled" type="xs:boolean" />
     <xs:attribute name="lifetime" type="xs:string" />
   </xs:complexType>
@@ -116,7 +116,7 @@
       <xs:group ref="template_variables" />
       <xs:group ref="layers" />
     </xs:sequence>
-    <xs:attribute name="name" type="php_label" />
+    <xs:attribute name="name" type="php_label_list" />
   </xs:complexType>
 
   <xs:group name="request_attributes">
