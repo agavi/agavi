@@ -276,7 +276,7 @@ class AgaviWebRequest extends AgaviRequest
 			fclose($handle);
 
 			$_FILES = array(
-				$this->getParameter('PUT_file_name', 'put_file') => array(
+				$this->getParameter('http_put_file_name', 'put_file') => array(
 					'name' => $putFile,
 					'type' => 'application/octet-stream',
 					'size' => $size,
