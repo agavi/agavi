@@ -107,7 +107,8 @@ class ContextTest extends AgaviTestCase
 	public function testGetController()
 	{
 		$ctx = AgaviContext::getInstance('test');
-		$this->assertType('AgaviWebController', $ctx->getController());
+		$c = new PHPUnit_Framework_Constraint_IsInstanceOf('AgaviController');
+		$this->assertThat($ctx->getController(), $c);
 	}
 
 	public function testGetDatabaseManager()

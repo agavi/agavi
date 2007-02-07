@@ -29,8 +29,10 @@ class ControllerTest extends AgaviTestCase
 	public function testNewController()
 	{
 		$controller = $this->_controller;
-		$this->assertType('AgaviWebController', $controller);
-		$this->assertType('AgaviContext', $controller->getContext());
+		$c = new PHPUnit_Framework_Constraint_IsInstanceOf('AgaviController');
+		$this->assertThat($controller, $c);
+		$c = new PHPUnit_Framework_Constraint_IsInstanceOf('AgaviContext');
+		$this->assertThat($controller->getContext(), $c);
 		$ctx1 = $controller->getContext();
 		$ctx2 = AgaviContext::getInstance('test');
 		$this->assertReference($ctx1, $ctx2);
@@ -44,8 +46,16 @@ class ControllerTest extends AgaviTestCase
 		$this->assertFalse(file_exists(AgaviConfig::get('core.app_dir') . '/modules/Bunk/actions/BunkAction.class.php'));
 		$controller = $this->_controller;
 		$this->assertEquals('Test', $controller->resolveAction('Test', 'Test'));
-		$this->assertFalse($controller->resolveAction('Test', 'Bunk'));
-		$this->assertFalse($controller->resolveAction('Bunk', 'Bunk'));
+		try {
+			$controller->resolveAction('Test', 'Bunk');
+			$this->fail('resolveAction did not throw an exception for non-existing action in existing module');
+		} catch (AgaviControllerException $e) {
+		}
+		try {
+			$controller->resolveAction('Bunk', 'Bunk');
+			$this->fail('resolveAction did not throw an exception for non-existing action in non-existing module');
+		} catch (AgaviControllerException $e) {
+		}
 	}
 
 	public function testGetActionFromModule()
@@ -112,14 +122,13 @@ class ControllerTest extends AgaviTestCase
 		$controller = $this->_controller;
 
 		$info_ex = array(
-			'parameters' =>							array('Content-Type' => 'text/html'),
+			'Content-Type' => 'text/html',
 		);
 
 		$info = $controller->getOutputType();
 		$this->assertSame($info_ex, $info->getParameters());
 
 		$info_ex = array(
-			'parameters' =>							array(),
 		);
 		$info = $controller->getOutputType('test1');
 		$this->assertSame($info_ex, $info->getParameters());

@@ -40,10 +40,7 @@ class ResponseTest extends AgaviTestCase
 	{
 		$r = $this->_r;
 		$this->assertEquals('', $r->getContent());
-		$this->assertTrue($r->setContent('test1'));
-		$this->assertEquals('test1', $r->getContent());
-		$r->lock();
-		$this->assertFalse($r->setContent('test2'));
+		$r->setContent('test1');
 		$this->assertEquals('test1', $r->getContent());
 	}
 
@@ -52,11 +49,7 @@ class ResponseTest extends AgaviTestCase
 		$r = $this->_r;
 
 		$r->setContent('content a');
-		$this->assertTrue($r->prependContent('content b'));
-		$this->assertEquals('content b' . 'content a', $r->getContent());
-
-		$r->lock();
-		$this->assertFalse($r->prependContent('content c'));
+		$r->prependContent('content b');
 		$this->assertEquals('content b' . 'content a', $r->getContent());
 	}
 
@@ -65,11 +58,7 @@ class ResponseTest extends AgaviTestCase
 		$r = $this->_r;
 
 		$r->setContent('content a');
-		$this->assertTrue($r->appendContent('content b'));
-		$this->assertEquals('content a' . 'content b', $r->getContent());
-
-		$r->lock();
-		$this->assertFalse($r->appendContent('content c'));
+		$r->appendContent('content b');
 		$this->assertEquals('content a' . 'content b', $r->getContent());
 	}
 }

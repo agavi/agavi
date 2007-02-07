@@ -19,7 +19,9 @@ class RendererTest extends AgaviTestCase
 
 	public function testGetContext()
 	{
-		$this->assertReference(AgaviContext::getInstance('test'), $this->_r->getContext());
+		$c1 = AgaviContext::getInstance('test');
+		$c2 = $this->_r->getContext();
+		$this->assertReference($c1, $c2);
 	}
 }
 ?>
