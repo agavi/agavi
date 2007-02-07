@@ -231,6 +231,7 @@ class AgaviFactoryConfigHandler extends AgaviConfigHandler
 		// name => required?
 		$requiredItems = array(
 			'execution_container' => true,
+			'validation_manager' => true,
 			'dispatch_filter' => true,
 			'execution_filter' => true,
 			'security_filter' => AgaviConfig::get('core.use_security', false),
@@ -244,7 +245,6 @@ class AgaviFactoryConfigHandler extends AgaviConfigHandler
 			'request' => true,
 			'user' => true,
 			'routing' => true,
-			'validation_manager' => true,
 		);
 
 		$code = '';

@@ -29,20 +29,20 @@
       methods in Agavi (because they aren't necessary, we have something
       better, more on that later), and we use XML configuration files because
       we believe that they offer better structuring abilites than alternatives
-      such as YAML. If you're looking for a solution that assists you in
-      serious high-end development, that has smart and innovative solutions to
-      common problems that haven't been solved properly before, and that
-      encourages and enforces a clean development process to ensure your code
-      remains maintainable and extensible, you've come to the right
-      place.</para>
+      such as YAML (besides obvious benefits like XSD validation and
+      XIncludes). If you're looking for a solution that assists you in serious
+      high-end development, that has smart and innovative solutions to common
+      problems that haven't been solved properly before, and that encourages
+      and enforces a clean development process to ensure your code remains
+      maintainable and extensible, you've come to the right place.</para>
     </section>
 
     <section>
       <title>Prerequisites</title>
 
       <para>Agavi's minimum requirement is PHP version 5.1.0 or newer. DOM,
-      Reflection and SPL extensions are required, but are always enabled by
-      default, unless you're using one of these crappy Linux distros made by
+      Reflection and SPL extensions are required, but these are always enabled
+      by default, unless you're using one of these weird Linux distros made by
       "smart" people who think they know better.</para>
 
       <para><note>
@@ -505,19 +505,15 @@ if(curl_errno($ch)) {
             </listitem>
 
             <listitem>
-              <para>SessionStorage</para>
-            </listitem>
-
-            <listitem>
-              <para>ValidatorManager</para>
-            </listitem>
-
-            <listitem>
-              <para>User</para>
-            </listitem>
-
-            <listitem>
               <para>LoggerManager</para>
+            </listitem>
+
+            <listitem>
+              <para>TranslationManager</para>
+            </listitem>
+
+            <listitem>
+              <para>Storage</para>
             </listitem>
 
             <listitem>
@@ -529,14 +525,16 @@ if(curl_errno($ch)) {
             </listitem>
 
             <listitem>
+              <para>User</para>
+            </listitem>
+
+            <listitem>
               <para>Routing</para>
             </listitem>
-          </orderedlist>This means that for example a User implementation
-        cannot use <classname>LoggerManager</classname> in its
-        <function>initialize</function> method. The initialization order of
-        these framework core classes is defined in
-        <classname>AgaviFactoryConfigHandler</classname> and it cannot be
-        changed.</para>
+          </orderedlist>The initialization order of these framework core
+        classes is defined in <classname>AgaviFactoryConfigHandler</classname>
+        and it cannot be changed (unless you overwrite this configuration
+        handler, of course).</para>
       </section>
     </section>
 
@@ -550,31 +548,31 @@ if(curl_errno($ch)) {
       dispatched from the Context's Controller instance.</para>
 
       <para>The dispatch method first executes the routing (if enabled) to
-      determine the Module/Action that are to be executed. Then, a filter
-      chain containing all Global Filters is created, and the DispatchFilter
-      is added to that chain as the last element. Each filter will be called
-      in nested sequence, with the last filter being the DispatchFilter, which
-      calls the first forward to the requested Module and Action. After that,
-      the control passes back through the filters to the dispatch method,
-      which sends the Response contents and exits. Filters are given the
-      global Response as a parameter to work with, so they can modify content,
-      send Cookies and so on.</para>
+      determine the Module/Action that are to be executed. The routing returns
+      an Execution Container for the first action. Then, a filter chain
+      containing all Global Filters is created, and the DispatchFilter is
+      added to that chain as the last element. Each filter will be called in
+      nested sequence, with the last filter being the DispatchFilter, which
+      executes the first Execution Container with the requested Action. After
+      that, the control passes back through the filters to the dispatch
+      method, which sends the Response contents and exits. Filters are given
+      the global Response as a parameter to work with, so they can modify
+      content, send Cookies and so on.</para>
 
-      <para>When a forward happens, Agavi does some checks to determine if the
-      requested Module/Action exists, if the Module the Action belongs to is
-      enabled and so on. Then, a filter chain is created, with the first
-      filter being the Security Filter if security is enabled. This filter
-      will forward unauthenticated users to the default "Login Action" if a
-      requested Action requires authentication, and also prevent access of
-      Actions an user doesn't have sufficient credentials for by forwarding to
-      the default "Secure Action". After that, the Action Filters are added to
-      the chain, followed by the Action Filters defined by the Action's
-      Module. The last filter in the chain is the Execution Filter, usually
-      either AgaviExecutionFilter or AgaviCachingExecutionFilter. Again, each
-      filter in the chain is called and may do modifications to the Response
-      instance, which is a new one for each Action that is processed and will
-      be merged to the global Response by the Controller once control returns
-      to the forward method.</para>
+      <para>When an Execution Container is run, Agavi does some checks to
+      determine if the requested Module/Action exists, if the Module the
+      Action belongs to is enabled and so on. Then, a filter chain is created,
+      with the first filter being the Security Filter if security is enabled.
+      This filter will forward unauthenticated users to the default "Login
+      Action" if a requested Action requires authentication, and also prevent
+      access of Actions an user doesn't have sufficient credentials for by
+      forwarding to the default "Secure Action". After that, the Action
+      Filters are added to the chain, followed by the Action Filters defined
+      by the Action's Module. The last filter in the chain is the Execution
+      Filter. Again, each filter in the chain is called and may do
+      modifications to the Response instance, which is a new one for each
+      Action that is processed and will be merged to the global Response by
+      the Controller once control returns to the forward method.</para>
 
       <para>The Execution Filter, once reached, will handle Validation, run
       the Action (or skip execution if the Action doesn't serve the Request
@@ -661,20 +659,34 @@ if(curl_errno($ch)) {
         <code>&lt;route&gt;</code> elements sit inside
         <code>&lt;routes&gt;</code>, <code>&lt;mouse&gt;</code> elements
         inside <code>&lt;mice&gt;</code> and so on.</para>
+
+        <para><tip>
+            <para>With the exception of the
+            <code>&lt;configurations&gt;</code> element and all plural form
+            nodes that have required attributes, you can also omit the plural
+            containers. This makes deeply nested structures a lot more
+            convenient to use, especially <xref
+            endterm="configuration-parameter_blocks-title"
+            linkend="configuration-parameter_blocks" />.</para>
+          </tip>Also, you can use a <code>&lt;sandbox&gt;</code> element
+        inside <code>&lt;configurations&gt;</code> to store XML chunks for
+        easier inclusion in the local document using XInclude.</para>
       </section>
 
-      <section>
-        <title>Parameter blocks</title>
+      <section id="configuration-parameter_blocks">
+        <title id="configuration-parameter_blocks-title">Parameter
+        Blocks</title>
 
-        <para>Many tags in configuration files accept a &lt;parameters&gt;
-        block as the child element which is usually used to specify
-        initialization arguments to the respective resource. Each
-        &lt;parameter&gt; inside the &lt;parameters&gt; container has a name,
-        specified via the attribute "name", and a value. This value can,
-        however, again be a &lt;parameters&gt; block. This inner block often
-        does not need name attributes for the &lt;parameter&gt; elements,
+        <para>Many tags in configuration files accept a
+        <code>&lt;parameters&gt;</code> block as the child element which is
+        usually used to specify initialization arguments to the respective
+        resource. Each <code>&lt;parameter&gt;</code> inside the
+        &lt;parameters&gt; container has a name, specified via the attribute
+        "name", and a value. This value can, however, again be a
+        <code>&lt;parameters&gt;</code> block. This inner block often does not
+        need name attributes for the <code>&lt;parameter&gt;</code> elements,
         because it usually is simply a list of values for the parent
-        &lt;parameter&gt;. Here's an example:</para>
+        <code>&lt;parameter&gt;</code>. Here's an example:</para>
 
         <para><programlisting>&lt;parameters&gt;
   &lt;parameter name="firstparam"&gt;a value goes here&lt;/parameter&gt;
@@ -695,9 +707,9 @@ if(curl_errno($ch)) {
         signs. <note>
             <para>The expansion of the configuration directive happens at
             compile time. This means that if you access a directive you set
-            via AgaviConfig::set before bootstrapping the value that was set
-            when compiling the configuration file will be used throughout all
-            requests.</para>
+            via <code>AgaviConfig::set()</code> before bootstrapping the value
+            that was set when compiling the configuration file will be used
+            throughout all requests.</para>
           </note>The following parameter will contain the path name of the
         project's app dir followed by "/fubar", because the directive is
         expanded before assignment:</para>
@@ -810,6 +822,12 @@ $bar2 = $this-&gt;getContext()-&gt;getModel('SinglesBar'); //returns the same in
 
       <para>views: execution, execution methods, where you set the output type
       (initialize at the latest)</para>
+
+      <para>layouts: how to define, how to load</para>
+
+      <para>layers: what they do, how they work</para>
+
+      <para>slots: blah</para>
 
       <para>templates and renderers: engines, variable naming etc</para>
     </section>

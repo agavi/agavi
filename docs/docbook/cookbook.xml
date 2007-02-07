@@ -254,8 +254,8 @@ RewriteRule ([^?]*)(?:\?(.*))? index.php?/$1&amp;$2 [L]</programlisting></para>
 
       <para><note>
           <para>This requires at least Propel 1.2.0!</para>
-        </note>To set up the advanced Propel support, you have to follow two
-      simple steps:</para>
+        </note>To set up the advanced Propel support, you have to follow one
+      or two simple steps:</para>
 
       <section>
         <title>Register the Runtime Configuration File</title>
@@ -276,9 +276,12 @@ RewriteRule ([^?]*)(?:\?(.*))? index.php?/$1&amp;$2 [L]</programlisting></para>
       <section>
         <title>Add Your Object and Peer Classes to autoload.xml</title>
 
+        <para><important>
+            <para>This step is not necessary for Propel 1.3</para>
+          </important></para>
+
         <para>For each Object and Peer, you now have to create an entry in
-        <filename>autoload.xml</filename> (this won't be necessary anymore
-        once Propel 1.3 is out):</para>
+        <filename>autoload.xml</filename>:</para>
 
         <para><programlisting>&lt;autoload name="Book"&gt;bookstore/Book.php&lt;/autoload&gt;
 &lt;autoload name="BookPeer"&gt;bookstore/BookPeer.php&lt;/autoload&gt;</programlisting>You
