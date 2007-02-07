@@ -95,7 +95,7 @@ EOD;
 		$p2->setAPIStability('beta');
 		$p2->setSummary($shortDesc);
 		$p2->setDescription($longDesc);
-		$p2->setNotes('See the CHANGELOG for full list of changes');
+		$p2->setNotes("To see what's new, please refer to the RELEASE_NOTES. Also, the CHANGELOG contains a full list of changes. \n\nFor installation instructions, consult INSTALL. Information on how to migrate existing 0.10.x series applications can be found in UPGRADING.");
 
 		// this must be the most stupid syntax I've ever seen.
 		$p2->addRelease();
