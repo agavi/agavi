@@ -83,6 +83,17 @@ class AgaviXmlrpcepiphpResponse extends AgaviResponse
 	}
 	
 	/**
+	 * @see        AgaviResponse::isMutable()
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function isContentMutable()
+	{
+		return false;
+	}
+	
+	/**
 	 * Clear the content for this Response
 	 *
 	 * @return     bool Whether or not the operation was successful.

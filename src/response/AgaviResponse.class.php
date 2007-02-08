@@ -232,6 +232,21 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	abstract public function send(AgaviOutputType $outputType = null);
 	
 	/**
+	 * Determine whether the content in the response may be modified by appending
+	 * or prepending data using string operations. Typically false for streams, 
+	 * and for responses like XMLRPC where the content is an array.
+	 *
+	 * @return     bool If the content can be treated as / changed like a string.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function isContentMutable()
+	{
+		return is_resource($this->content);
+	}
+	
+	/**
 	 * Send the content for this response
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>

@@ -80,9 +80,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 		
 		$response = $container->getResponse();
 		
-		$output = $response->getContent();
-		
-		if(!$output) {
+		if(!$response->isContentMutable() || !($output = $response->getContent())) {
 			return;
 		}
 		

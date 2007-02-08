@@ -63,10 +63,14 @@ class AgaviExecutionTimeFilter extends AgaviFilter implements AgaviIGlobalFilter
 		$start = microtime(true);
 		$filterChain->execute($container);
 		
-		$response = $container->getResponse();
-		
 		$outputTypes = (array) $this->getParameter('output_types');
 		if(is_array($outputTypes) && !in_array($container->getOutputType()->getName(), $outputTypes)) {
+			return;
+		}
+		
+		$response = $container->getResponse();
+		
+		if(!$response->isContentMutable()) {
 			return;
 		}
 		
