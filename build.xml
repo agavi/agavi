@@ -24,7 +24,7 @@
 		<echo msg="  apidocs         : regenerate API docs" />
 		<echo msg="  manuals         : regenerate manuals (-Doutput=html|html-onepage|fo)" />
 		<echo msg=" packages         : generate all packages" />
-		<echo msg="  pagacke-zip     : generate .zip package" />
+		<echo msg="  package-zip     : generate .zip package" />
 		<echo msg="  package-pear    : generate PEAR package" />
 		<echo msg="  package-apidocs : generate API docs package" />
 		<echo msg="  package-manuals : generate manuals package" />
