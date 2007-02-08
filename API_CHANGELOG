@@ -273,7 +273,7 @@ API Changes:
      getUrl: new method
      hasCookie: new method
     REM:
-!    setCookie: moved the AgaviWebResponse
+!    setCookie: moved to AgaviWebResponse
 
 
  response/
