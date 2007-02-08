@@ -9,35 +9,18 @@ API Changes:
   CHG:
    AgaviAction:
     CHG:
-!    execute* & validate* & handleError: They now take the parameters (in form of a AgaviParameterHolder) as parameter and shouldn't access the request parameters directly anymore
+!    execute* & validate* & handleError: They now take the parameters (in form of an AgaviRequestDataHolder) as parameter and shouldn't access the request parameters directly anymore
      execute & validate: its not required to define (execute|validate) anymore, but instead you can define execute(Read|Write|...) for each input method you want to handle
 !    getCredential: renamed to getCredentials()
 !    getDefaultView: renamed to getDefaultViewName()
+    ADD:
+     isSimple: return true to put an action into simple mode
     REM:
 !    getRequestMethods: gone, this is now handled by the existance of (execute|validate)(Read|Write|...) methods
 
-
-   AgaviActionStack:
-    CHG:
-!    addEntry: has a new parameter(AgaviParameterHolder) which stores the request parameters for that action entry
-    ADD:
-     clear: a new function to clear the action stack
-
-   AgaviActionStackEntry:
-    CHG:
-!    __construct: has a new parameter(AgaviParameterHolder) which stores the request parameters for this action entry
-!    getPresentation: returns an AgaviResponse instead of a string now
-!    setPresentation: has an AgaviResponse instead of a string as parameter now
-    ADD:
-     getViewName: a new method to retrieve the view name
-     setViewName: a new method to set retrieve the view name
-     getViewModuleName: a new method to retrieve the views module name
-     setViewModuleName: a new method to set retrieve the views module name
-     getParameters: a new method to retrieve the parameters
-     setParameters: a new method to set the parameters
-     setNext: a new method to set the next action which should be executed
-     hasNext: a new method to check if a next action is set
-     getNext: a new method to retrieve the next action
+  REM:
+   AgaviActionStack & AgaviActionStackEntry:
+!    superseded by AgaviExecutionContainer
 
 
  config/
@@ -89,6 +72,13 @@ API Changes:
 
  controller/
 
+  ADD:
+   AgaviExecutionContainer:
+     Replace action stacks, fully encapsulate action executions
+
+   AgaviOutputType:
+     Holds all information about an Output Type.
+
   REM:
    FrontWebController & PageWebController:
 !    removed, these cases are now handled by the general controller and the routing
@@ -97,35 +87,31 @@ API Changes:
    AgaviController:
     ADD:
      loadFilters: new method to load the filters into a filterchain
-     redirect: new abstract method which redirects to a another action (from AgaviWebController)
-     getActionName: moved from AgaviContext
-     getModuleDirectory: moved from AgaviContext
-     getModuleName: moved from AgaviContext
-     getResponse: new method
-     getOutputType: moved from AgaviWebController
-     setOutputType: moved from AgaviWebController
-     getOutputTypeInfo: new method
+     getGlobalResponse: new method
+     getOutputType: retrieves an AgaviOutputType instance
     CHG:
      dispatch: now already implemented here and takes parameters as parameter
-     actionExists: the actionName is now optional and there is 'auto resolving' in place
-     forward: the actionName is now optional (defaults to Index) and a 3. parameter specifying additional parameters has ben added
-     initialize: new parameters parameter
+     actionExists: renamed to resolveAction, the action name is now optional and there is 'auto resolving' in place
+     initialize: new parameters argument
+     getAction / getView: now named createActionInstance / createViewInstance
     REM:
+     forward: removed
 !    getGlobalModel & getModel: this is now handled by AgaviContext::getModel
 !    getInstance: removed, now handled via the AgaviContext instance
 !    newInstance: removed now handled via the AgaviContext instance
 !    registerShutdownListener: removed
 !    setExecutionFilterClassName: removed, this is now handled via the configuration
 !    inCLI: removed
+!    redirect: moved to AgaviResponse
 
    AgaviWebController:
     CHG:
      initalize: now takes parameters as second parameter
-!    redirect: removed delay parameter
     REM:
 !    genUrl: removed, this is now done via AgaviRouting::gen()
-     getContentType: moved to AgaviController
-     setContentType: moved to AgaviController
+     getContentType: removed
+     setContentType: removed
+
 
  core/
   ADD:
@@ -144,18 +130,18 @@ API Changes:
      getLoggerManager: new method
      getRouting: new method
      getTranslationManager: new method
-     getValidationManager: new method
      getFactoryInfo: new method
      shutdown: new method
     CHG:
 !    getInstance: if you don't pass the profile parameter you have to set core.default_context in config
 !    initialize: the overrides parameter is gone
     REM:
-!    getActionName: moved to AgaviController
-!    getActionStack: moved to AgaviController
-!    getModuleDirectory: moved to AgaviController
-!    getModuleName: moved to AgaviController
+!    getActionName: removed
+!    getActionStack: removed
+!    getModuleDirectory: removed
+!    getModuleName: removed
 !    getSecurityFilter: removed
+
 
  database/
   All the database class names have been renamed to be proper camelcased (no more ...MySQL...)
@@ -167,11 +153,17 @@ API Changes:
   AgaviDatabaseManager:
 !   initiliaze: now takes the context and optional parameters as parameter
 
+
+ date/
+  New as part of the i18n features, handles various date parsing and formatting things as well as calendars
+
+
  exception/
   AgaviException:
 !   getName: removed
 !   setName: removed
 !   printStackTrace: format parameter gone and 3 new parameters now
+
 
  filter/
   The filter handling has changed a little (there are different types of filters and interfaces for them)
@@ -184,6 +176,7 @@ API Changes:
 
   SecurityFilter:
 !   is now an interface (AgaviISecurityFilter)
+
 
  logging/
   The logging levels are now bitmasks so they can be combined using binary or.
@@ -224,6 +217,7 @@ API Changes:
   AgaviStdoutAppender:
 !   initialize: now takes an AgaviContext as first parameter and the parameters are now optional
 
+
  model/
   AgaviModel:
     initialize: now takes parameters as optional second parameter
@@ -231,33 +225,41 @@ API Changes:
   SingletonModel:
 !   removed, now handled by simply implementing AgaviISingletonModel
 
+
  renderer/
   All new :) (handles stuff previously handled by the view)
 
+
  request/
+  ADD:
+   AgaviRequestDataHolder & AgaviWebRequestDataHolder:
+     Hold all request data - parameters, files, cookies, headers and so on
+   AgaviUploadedFile:
+     Represents an uploaded file
+
   CHG:
    HTTPSRequest:
 !    renamed to AgaviSecureWebRequest
 
    AgaviRequest:
-!    all constants have been removed, these are now simply strings (read, write, ...), the error handling has been changed slightly 
+!    all constants have been removed, these are now simply strings (read, write, ...), the error handling has been changed slightly
+!    does not contain any request data directly anymore, has a 
     ADD:
      getContext: new method
-     getErrorMessages: new method
      getModuleAccessor: new method
      getActionAccessor: new method
      toggleLock: new method
-     setLocale: new method
-     getLocale: new method
+     getRequestDataHolder: gets the global request data holder
     CHG:
      initialize: not abstract anymore
      shutdown: not abstract anymore
-!    getErrors: now has an optional name parameter
 !    getMethod: returns string instead of int
 !    setMethod: takes a string instead of an int as parameter
     REM:
 !    extractParameters: removed
 !    newInstance: removed now handled via the AgaviContext instance
+!    All error methods (getErrors(), hasError() and so on) moved into AgaviValidationManager
+!    All parameter/file/cookie accessors gone, now handled by request data holders
 
    AgaviWebRequest:
     ADD:
@@ -272,6 +274,15 @@ API Changes:
      hasCookie: new method
     REM:
 !    setCookie: moved the AgaviWebResponse
+
+
+ response/
+  New. Contains response data and sends it
+
+
+ translation/
+  New as part of the i18n features
+
 
  user/
   ADD:
@@ -290,6 +301,7 @@ API Changes:
    AgaviSecurityUser:
     CHG:
 !    hasCredential: renamed to hasCredentials
+
 
  util/
   ADD:
@@ -326,11 +338,15 @@ API Changes:
    ShutdownListener
 
 
- validator/
+ validation/
   completely rewritten
 
 
  view/
+  ADD:
+   AgaviTemplateLayer, AgaviStreamTemplateLayer & AgaviFileTemplateLayer
+     These handle template layering
+
   CHG:
    AgaviView:
 !    all constants have been removed, simply use the strings now
