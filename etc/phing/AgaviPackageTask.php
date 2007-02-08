@@ -77,6 +77,7 @@ EOD;
 				'LICENSE-UNICODE_CLDR' => 'doc',
 				'RELEASE_NOTES' => 'doc',
 				'TODO' => 'doc',
+				'UPGRADING' => 'doc',
 				'scripts/agavi-dist' => 'script',
 				'scripts/agavi.bat-dist' => 'script',
 				'build.xml' => 'php',
@@ -85,9 +86,9 @@ EOD;
 		));
 		$p2->setPackageType('php');
 		$p2->setPackage('agavi');
-		$p2->addMaintainer('lead', 'david', 'David Zuelke', 'dz@bitxtender.com');
+		$p2->addMaintainer('lead', 'david', 'David Zülke', 'dz@bitxtender.com');
 		$p2->addMaintainer('developer', 'dominik', 'Dominik del Bondio', 'ddb@bitxtender.com');
-		$p2->addMaintainer('developer', 'v-dogg', 'Veikko Makinen', 'mail@veikkomakinen.com');
+		$p2->addMaintainer('developer', 'v-dogg', 'Veikko Mäkinen', 'mail@veikkomakinen.com');
 		$p2->setChannel('pear.agavi.org');
 		$p2->setReleaseVersion('0.11.0RC2');
 		$p2->setAPIVersion('0.11.0RC2');
