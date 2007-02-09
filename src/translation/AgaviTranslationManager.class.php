@@ -598,7 +598,8 @@ class AgaviTranslationManager
 			if($availableLocale['identifierData']['territory']) {
 				$territory = $availableLocale['identifierData']['territory'];
 				if(isset($this->supplementalData['territories'][$territory]['currencies'])) {
-					$currency = current(array_slice($this->supplementalData['territories'][$territory]['currencies'], 0, 1));
+					$slice = array_slice($this->supplementalData['territories'][$territory]['currencies'], 0, 1);
+					$currency = current($slice);
 					$data['locale']['currency'] = $currency['currency'];
 				}
 			}
