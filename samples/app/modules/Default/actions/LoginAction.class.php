@@ -54,7 +54,7 @@ class Default_LoginAction extends AgaviSampleAppDefaultBaseAction
 			$this->getContext()->getUser()->login($rd->getParameter('username'), $rd->getParameter('password'));
 			return 'Success';
 		} catch(AgaviSecurityException $e) {
-			$this->getContext()->getRequest()->setError($e->getMessage(), 'Wrong ' . ucfirst($e->getMessage()));
+			$this->container->getValidationManager()->setError($e->getMessage(), 'Wrong ' . ucfirst($e->getMessage()));
 			return 'Input';
 		}
 	}
