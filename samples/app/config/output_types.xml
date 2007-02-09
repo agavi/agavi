@@ -4,6 +4,7 @@
 	<sandbox>
 
 		<renderers default="php">
+			
 			<renderer name="php" class="AgaviPhpRenderer">
 				<parameter name="assigns">
 					<parameter name="routing">ro</parameter>
@@ -14,6 +15,7 @@
 					<parameter name="request_data">rd</parameter>
 				</parameter>
 			</renderer>
+			
 		</renderers>
 		
 		<layouts default="default">
@@ -29,6 +31,7 @@
 			<layout name="slot">
 				<layer name="content" class="AgaviFileTemplateLayer" />
 			</layout>
+			
 		</layouts>
 
 	</sandbox>
@@ -37,8 +40,8 @@
 		<output_types default="html">
 
 			<output_type name="html">
-				<xi:include href="#xpointer(/configurations/sandbox/renderers)" />
-				<xi:include href="#xpointer(/configurations/sandbox/layouts)" />
+				<xi:include xpointer="xpointer(/configurations/sandbox/renderers)" />
+				<xi:include xpointer="xpointer(/configurations/sandbox/layouts)" />
 				
 				<parameter name="http_headers">
 					<parameter name="Content-Type">text/html; charset=UTF-8</parameter>
@@ -46,8 +49,8 @@
 			</output_type>
 
 			<output_type name="xhtml">
-				<xi:include href="#xpointer(/configurations/sandbox/renderers)" />
-				<xi:include href="#xpointer(/configurations/sandbox/layouts)" />
+				<xi:include xpointer="xpointer(/configurations/sandbox/renderers)" />
+				<xi:include xpointer="xpointer(/configurations/sandbox/layouts)" />
 				
 				<parameter name="http_headers">
 					<parameter name="Content-Type">application/xhtml+xml; charset=UTF-8</parameter>
