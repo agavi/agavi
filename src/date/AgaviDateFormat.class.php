@@ -129,6 +129,19 @@ class AgaviDateFormat
 	protected $tokenList;
 
 	/**
+	 * Returns the format which is currently used to format dates.
+	 *
+	 * @return     string The current format.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getFormat()
+	{
+		return $this->originalFormatString;
+	}
+
+	/**
 	 * Sets the format which should be used.
 	 *
 	 * @param      string Format to be used for formatting.
