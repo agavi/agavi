@@ -487,7 +487,7 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 		}
 		foreach($incident->getFields() as $field) {
 			if(!isset($this->fieldResults[$field]) || $this->getFieldErrorCode($field) < $severity) {
-				$this->addFieldResult(null, $field, $incident->getSeverity());
+				$this->addFieldResult($incident->getValidator(), $field, $incident->getSeverity());
 			}
 		}
 		$name = $incident->getValidator() ? $incident->getValidator()->getName() : '';
