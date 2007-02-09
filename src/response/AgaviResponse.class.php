@@ -243,7 +243,7 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	 */
 	public function isContentMutable()
 	{
-		return is_resource($this->content);
+		return !is_resource($this->content);
 	}
 	
 	/**
