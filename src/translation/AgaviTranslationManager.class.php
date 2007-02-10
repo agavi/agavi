@@ -758,6 +758,8 @@ class AgaviTranslationManager
 			$locale = $type;
 		} elseif($type instanceof AgaviTimeZone) {
 			$zone = $type;
+		} elseif($type instanceof DateTime) {
+			$time = $type;
 		} elseif(is_int($type)) {
 			$time = $type * AgaviDateDefinitions::MILLIS_PER_SECOND;
 		} elseif($type !== null) {
@@ -788,13 +790,26 @@ class AgaviTranslationManager
 				throw new AgaviException('Calendar type ' . $calendarType . ' not supported');
 		}
 
-
 		// Now, reset calendar to default state:
 		if($zone) {
 			$c->setTimeZone($zone);
 		}
 
-		$c->setTime($time); // let the new calendar have the current time.
+		if($time instanceof DateTime) {
+			$c->setTimeZone($this->createTimeZone($time->getTimezone()->getName()));
+			$dateStr = $time->format('Y z G i s');
+			list($year, $doy, $hour, $minute, $second) = explode(' ', $dateStr);
+			$c->set(AgaviDateDefinitions::YEAR, $year);
+			$c->set(AgaviDateDefinitions::DAY_OF_YEAR, $doy + 1);
+			$c->set(AgaviDateDefinitions::HOUR_OF_DAY, $hour);
+			$c->set(AgaviDateDefinitions::MINUTE, $minute);
+			$c->set(AgaviDateDefinitions::SECOND, $second);
+
+			// complete the calendar
+			$c->getAll();
+		} else {
+			$c->setTime($time); // let the new calendar have the current time.
+		}
 
 		return $c;
 	}

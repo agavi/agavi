@@ -95,6 +95,9 @@ class AgaviDateFormatter extends AgaviDateFormat implements AgaviITranslator
 			$fmt = $this;
 			$locale = $this->locale;
 		}
+		// HACK! for some reason php decides to separate the zvals of $locale and $this->locale
+		// when $this is cloned, so we need to to do this check before we clone
+		$localesEqual = $locale === $this->locale;
 
 		if($this->translationDomain && $this->customFormat !== null && $domain) {
 			if($fmt === $this) {
@@ -112,6 +115,9 @@ class AgaviDateFormatter extends AgaviDateFormat implements AgaviITranslator
 		}
 
 		if(is_int($message)) {
+			$message = $this->context->getTranslationManager()->createCalendar($locale);
+			$message->setUnixTimestamp($message);
+		} elseif(!($message instanceof AgaviCalendar)) {
 			// convert unix timestamp to calendar
 			$message = $this->context->getTranslationManager()->createCalendar($message);
 		}
@@ -120,7 +126,7 @@ class AgaviDateFormatter extends AgaviDateFormat implements AgaviITranslator
 			throw new InvalidArgumentException('The date needs to be an int or AgaviCalendar instance');
 		}
 
-		if(($zoneId = $locale->getLocaleTimeZone()) && $locale !== $this->locale) {
+		if(($zoneId = $locale->getLocaleTimeZone()) && !$localesEqual) {
 			$message->setTimeZone($this->context->getTranslationManager()->createTimeZone($zoneId));
 		}
 
