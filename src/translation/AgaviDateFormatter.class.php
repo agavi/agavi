@@ -96,6 +96,21 @@ class AgaviDateFormatter extends AgaviDateFormat implements AgaviITranslator
 			$locale = $this->locale;
 		}
 
+		if($this->translationDomain && $this->customFormat !== null && $domain) {
+			if($fmt === $this) {
+				$fmt = clone $this;
+			}
+
+			$td = $this->translationDomain . '.' . $domain;
+			$format = $this->getContext()->getTranslationManager()->_($this->customFormat, $td, $locale);
+
+			if($fmt->isDateSpecifier($format)) {
+				$format = $fmt->resolveSpecifier($locale, $format, $this->type);
+			}
+
+			$fmt->setFormat($format);
+		}
+
 		if(is_int($message)) {
 			// convert unix timestamp to calendar
 			$message = $this->context->getTranslationManager()->createCalendar($message);
@@ -125,7 +140,19 @@ class AgaviDateFormatter extends AgaviDateFormat implements AgaviITranslator
 		} else {
 			$format = $this->customFormat;
 			if($this->translationDomain !== null) {
+				$oldFormat = $format;
 				$format = $this->getContext()->getTranslationManager()->_($format, $this->translationDomain, $newLocale);
+				if($format === $oldFormat && !$this->isDateSpecifier($format)) {
+					// when the format was not translated and is not a date specifier we need wrap the 
+					// setFormat to catch errors. This is the case, when the user wants its format to 
+					// be translated, but we need to delay evaluation because we only have full info
+					// where to translate in the the translate call
+					try {
+						$this->setFormat($format);
+					} catch(AgaviException $e) {
+					}
+					return;
+				}
 			}
 
 			if($this->isDateSpecifier($format)) {

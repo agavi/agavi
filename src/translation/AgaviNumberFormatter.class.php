@@ -85,6 +85,16 @@ class AgaviNumberFormatter extends AgaviDecimalFormatter implements AgaviITransl
 			$fn = $this;
 		}
 
+		if($this->translationDomain && $this->customFormat !== null && $domain) {
+			if($fn === $this) {
+				$fn = clone $this;
+			}
+
+			$td = $this->translationDomain . '.' . $domain;
+			$format = $this->getContext()->getTranslationManager()->_($this->customFormat, $td, $locale);
+			$fn->setFormat($format);
+		}
+
 		return $fn->formatNumber($message);
 	}
 
