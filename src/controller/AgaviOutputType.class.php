@@ -169,6 +169,19 @@ class AgaviOutputType extends AgaviParameterHolder
 	}
 	
 	/**
+	 * Get the name of the default layout.
+	 *
+	 * @return     string The name of the default layout, or null if none defined.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getDefaultLayoutName()
+	{
+		return $this->defaultLayout;
+	}
+	
+	/**
 	 * Get a layout.
 	 *
 	 * @param      The optional name of the layout to fetch.
