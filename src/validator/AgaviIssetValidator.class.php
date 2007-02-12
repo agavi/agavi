@@ -33,7 +33,7 @@
 class AgaviIssetValidator extends AgaviValidator
 {
 	/**
-	 * We need to return true here when this validator is not required, because 
+	 * We need to return true here when this validator is required, because 
 	 * otherwise the is*ValueEmpty check would make empty but set fields not 
 	 * reach the validate method.
 	 *
