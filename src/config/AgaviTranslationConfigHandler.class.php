@@ -73,29 +73,7 @@ class AgaviTranslationConfigHandler extends AgaviConfigHandler
 
 			if(isset($cfg->translators)) {
 				$defaultDomain = $cfg->translators->getAttribute('default_domain', $defaultDomain);
-				foreach($cfg->translators as $translator) {
-					$domain = $translator->getAttribute('domain');
-					if(!isset($translatorData[$domain])) {
-						$translatorData[$domain] = array(
-							'msg'  => array('class' => null, 'filters' => array(), 'params' => array()),
-							'num'  => array('class' => 'AgaviNumberFormatter', 'filters' => array(), 'params' => array()),
-							'cur'  => array('class' => 'AgaviCurrencyFormatter', 'filters' => array(), 'params' => array()),
-							'date' => array('class' => 'AgaviDateFormatter', 'filters' => array(), 'params' => array()),
-						);
-					}
-					$domainData =& $translatorData[$domain];
-
-					foreach(array('msg' => 'message_translator', 'num' => 'number_formatter', 'cur' => 'currency_formatter', 'date' => 'date_formatter') as $type => $node) {
-						if(isset($translator->$node)) {
-							if($translator->$node->hasAttribute('translation_domain')) {
-								$domainData[$type]['params']['translation_domain'] = $translator->$node->getAttribute('translation_domain');
-							}
-							$domainData[$type]['class'] = $translator->$node->getAttribute('class', $domainData[$type]['class']);
-							$domainData[$type]['params'] = $this->getItemParameters($translator->$node, $domainData[$type]['params']);
-							$domainData[$type]['filters'] = $this->getFilters($translator->$node);
-						}
-					}
-				}
+				$this->getTranslators($cfg->translators, $translatorData);
 			}
 		}
 
@@ -162,6 +140,51 @@ class AgaviTranslationConfigHandler extends AgaviConfigHandler
 			}
 		}
 		return $filters;
+	}
+
+	protected function getTranslators($translators, &$data, $parent = null)
+	{
+		static $defaultData = array(
+			'msg'  => array('class' => null, 'filters' => array(), 'params' => array()),
+			'num'  => array('class' => 'AgaviNumberFormatter', 'filters' => array(), 'params' => array()),
+			'cur'  => array('class' => 'AgaviCurrencyFormatter', 'filters' => array(), 'params' => array()),
+			'date' => array('class' => 'AgaviDateFormatter', 'filters' => array(), 'params' => array()),
+		);
+
+		foreach($translators as $translator) {
+			$domain = $translator->getAttribute('domain');
+			if($parent) {
+				$domain = $parent . '.' . $domain;
+			}
+			if(!isset($data[$domain])) {
+				if(!$parent) {
+					$data[$domain] = $defaultData;
+				} else {
+					$data[$domain] = array();
+				}
+			}
+
+			$domainData =& $data[$domain];
+
+			foreach(array('msg' => 'message_translator', 'num' => 'number_formatter', 'cur' => 'currency_formatter', 'date' => 'date_formatter') as $type => $node) {
+				if(isset($translator->$node)) {
+					if(!isset($domainData[$type])) {
+						$domainData[$type] = $defaultData[$type];
+					}
+					
+					if($translator->$node->hasAttribute('translation_domain')) {
+						$domainData[$type]['params']['translation_domain'] = $translator->$node->getAttribute('translation_domain');
+					}
+					$domainData[$type]['class'] = $translator->$node->getAttribute('class', $domainData[$type]['class']);
+					$domainData[$type]['params'] = $this->getItemParameters($translator->$node, $domainData[$type]['params']);
+					$domainData[$type]['filters'] = $this->getFilters($translator->$node);
+				}
+			}
+
+			if(isset($translator->translators)) {
+				$this->getTranslators($translator->translators, $data, $domain);
+			}
+		}
 	}
 }
 

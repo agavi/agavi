@@ -30,6 +30,11 @@
  */
 class AgaviTranslationManager
 {
+	const MESSAGE = 'msg';
+	const NUMBER = 'num';
+	const CURRENCY = 'cur';
+	const DATETIME = 'date';
+
 	/**
 	 * @var        AgaviContext An AgaviContext instance.
 	 */
@@ -248,11 +253,11 @@ class AgaviTranslationManager
 		}
 		
 		$domainExtra = '';
-		$translator = $this->getTranslators($domain, $domainExtra);
+		$translator = $this->getTranslators($domain, $domainExtra, self::DATETIME);
 
-		$retval = $translator['date']->translate($date, $domainExtra, $locale);
+		$retval = $translator->translate($date, $domainExtra, $locale);
 		
-		$retval = $this->applyFilters($retval, $domain, 'date');
+		$retval = $this->applyFilters($retval, $domain, self::DATETIME);
 		
 		return $retval;
 	}
@@ -283,11 +288,11 @@ class AgaviTranslationManager
 		}
 		
 		$domainExtra = '';
-		$translator = $this->getTranslators($domain, $domainExtra);
+		$translator = $this->getTranslators($domain, $domainExtra, self::CURRENCY);
 
-		$retval = $translator['cur']->translate($number, $domainExtra, $locale);
+		$retval = $translator->translate($number, $domainExtra, $locale);
 		
-		$retval = $this->applyFilters($retval, $domain, 'cur');
+		$retval = $this->applyFilters($retval, $domain, self::CURRENCY);
 		
 		return $retval;
 	}
@@ -318,11 +323,11 @@ class AgaviTranslationManager
 		}
 		
 		$domainExtra = '';
-		$translator = $this->getTranslators($domain, $domainExtra);
+		$translator = $this->getTranslators($domain, $domainExtra, self::NUMBER);
 
-		$retval = $translator['num']->translate($number, $domainExtra, $locale);
+		$retval = $translator->translate($number, $domainExtra, $locale);
 		
-		$retval = $this->applyFilters($retval, $domain, 'num');
+		$retval = $this->applyFilters($retval, $domain, self::NUMBER);
 		
 		return $retval;
 	}
@@ -356,14 +361,14 @@ class AgaviTranslationManager
 		}
 		
 		$domainExtra = '';
-		$translator = $this->getTranslators($domain, $domainExtra);
+		$translator = $this->getTranslators($domain, $domainExtra, self::MESSAGE);
 
-		$retval = $translator['msg']->translate($message, $domainExtra, $locale);
+		$retval = $translator->translate($message, $domainExtra, $locale);
 		if(is_array($parameters)) {
 			$retval = vsprintf($retval, $parameters);
 		}
 		
-		$retval = $this->applyFilters($retval, $domain, 'msg');
+		$retval = $this->applyFilters($retval, $domain, self::MESSAGE);
 		
 		return $retval;
 	}
@@ -395,47 +400,53 @@ class AgaviTranslationManager
 	 *
 	 * @param      string The domain.
 	 * @param      string The remaining part in the domain which didn't match
+	 * @param      string The type of the translator
 	 *
-	 * @return     array An array of translators for the given domain
+	 * @return     array|AgaviITranslator An array of translators for the given 
+	 *                                    domain
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	protected function getTranslators($domain, &$domainExtra)
+	protected function getTranslators(&$domain, &$domainExtra, $type = null)
 	{
 		if($domain[0] == '.') {
 			$domain = $this->defaultDomain . $domain;
 		}
 
-		$domainParts = explode('.', $domain, 2);
-		$translatorDomain = $domainParts[0];
-		$domainExtra = isset($domainParts[1]) ? $domainParts[1] : '';
+		$domainParts = explode('.', $domain);
+		$partCount = count($domainParts);
+		$extraParts = array();
 
-		if(isset($this->translators[$translatorDomain])) {
-			return $this->translators[$translatorDomain];
-		} else {
-			throw new InvalidArgumentException(sprintf('No translator exists for the domain "%s"', $translatorDomain));
-		}
+		do {
+			if(count($domainParts) == 0) {
+				throw new InvalidArgumentException(sprintf('No translator exists for the domain "%s"', $domain));
+			}
+			$td = implode('.', $domainParts);
+			array_pop($domainParts);
+		} while(!isset($this->translators[$td]) || ($type && !isset($this->translators[$td][$type])));
+
+		$domainExtra = substr($domain, strlen($td) + 1);
+		$domain = $td;
+		return $type ? $this->translators[$td][$type] : $this->translators[$td];
 	}
 
 	/**
 	 * Returns the translator filters for a given domain.
 	 *
-	 * @param      string The domain.
-	 * @param      string The remaining part in the domain which didn't match
+	 * @param      string The message.
+	 * @param      string The domain (w/o extra parts).
+	 * @param      string The type.
 	 *
-	 * @return     array An array of translators as keys and filters as an array
+	 * @return     string The new message.
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	protected function applyFilters($message, $domain, $type = 'msg')
+	protected function applyFilters($message, $domain, $type = self::MESSAGE)
 	{
-		$domainParts = explode('.', $domain, 2);
-		$translatorDomain = $domainParts[0];
-
-		if(isset($this->translatorFilters[$translatorDomain][$type])) {
-			foreach($this->translatorFilters[$translatorDomain][$type] as $filter) {
+		if(isset($this->translatorFilters[$domain][$type])) {
+			foreach($this->translatorFilters[$domain][$type] as $filter) {
 				$message = call_user_func($filter, $message);
 			}
 		}
