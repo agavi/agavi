@@ -118,14 +118,9 @@ class AgaviDateFormatter extends AgaviDateFormat implements AgaviITranslator
 			$cal = $this->context->getTranslationManager()->createCalendar($locale);
 			$cal->setUnixTimestamp($message);
 		} elseif(!($message instanceof AgaviCalendar)) {
-			// FIXME: this comment seems wrong
-			// convert unix timestamp to calendar
 			$cal = $this->context->getTranslationManager()->createCalendar($message);
-		}
-
-		// FIXME: this will never be reached. is the above elseif correct?
-		if(!($cal instanceof AgaviCalendar)) {
-			throw new InvalidArgumentException('The date needs to be an int or AgaviCalendar instance');
+		} else {
+			$cal = $message;
 		}
 
 		if(($zoneId = $locale->getLocaleTimeZone()) && !$localesEqual) {
