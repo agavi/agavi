@@ -310,7 +310,7 @@ class AgaviVirtualArrayPath
 	 */
 	public function & getValue(array &$array, $default = null)
 	{
-		return AgaviArrayPathDefinition::getValueFromArray($this->parts, $array, $default);
+		return AgaviArrayPathDefinition::getValue($this->parts, $array, $default);
 	}
 
 	/**
@@ -322,9 +322,9 @@ class AgaviVirtualArrayPath
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function setValueFromArray(array &$array, $value)
+	public function setValue(array &$array, $value)
 	{
-		AgaviArrayPathDefinition::setValueFromArray($this->parts, $array, $value);
+		AgaviArrayPathDefinition::setValue($this->parts, $array, $value);
 	}
 
 	/**
@@ -361,7 +361,7 @@ class AgaviVirtualArrayPath
 	{
 		$p = $this->pushRetNew($path);
 
-		$p->setValueFromArray($array, $value);
+		$p->setValue($array, $value);
 	}
 
 	/**

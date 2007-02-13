@@ -128,7 +128,7 @@ final class AgaviArrayPathDefinition
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public static function &getValueFromArray(array $parts, array &$array, $default = null)
+	public static function &getValue(array $parts, array &$array, $default = null)
 	{
 		$a = &$array;
 
@@ -159,7 +159,7 @@ final class AgaviArrayPathDefinition
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public static function setValueFromArray(array $parts, array &$array, $value)
+	public static function setValue(array $parts, array &$array, $value)
 	{
 		$a = &$array;
 

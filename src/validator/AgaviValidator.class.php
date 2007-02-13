@@ -523,7 +523,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 
 		$array =& $this->validationParameters->getAll($paramType);
 		$cp = $this->curBase->pushRetNew($name);
-		$cp->setValueFromArray($array, $value);
+		$cp->setValue($array, $value);
 		if($this->validationManager !== null) {
 			$this->validationManager->addFieldResult($this, $cp->__toString(), AgaviValidator::NOT_PROCESSED);
 		}

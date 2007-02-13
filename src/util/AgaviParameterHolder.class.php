@@ -78,7 +78,7 @@ class AgaviParameterHolder
 			return $this->parameters[$name];
 		}
 		$parts = AgaviArrayPathDefinition::getPartsFromPath($name);
-		return AgaviArrayPathDefinition::getValueFromArray($parts['parts'], $this->parameters, $default);
+		return AgaviArrayPathDefinition::getValue($parts['parts'], $this->parameters, $default);
 	}
 
 	/**
