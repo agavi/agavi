@@ -106,15 +106,21 @@ class AgaviSessionStorage extends AgaviStorage
 	public function startup()
 	{
 		if(session_id() === '') {
+			// first: grab cookie params
+			$params = session_get_cookie_params() + array('httponly' => false);
+			
+			// second: start session
 			session_start();
 			
-			$params = session_get_cookie_params() + array('httponly' => false);
+			// third: send a custom session cookie (yes, must be setcookie()) with false as value to delete PHP's. remember, we're sending the cookie ourselves
+			setcookie(session_name(), false, $params['lifetime'], $params['path'], $params['domain'], $params['secure']);
+			
+			// fourth: fix the cookie path if necessary
 			if($params['path'] === '') {
 				$params['path'] = null;
 			}
 			
 			$res = $this->context->getController()->getGlobalResponse();
-			
 			if($res instanceof AgaviWebResponse) {
 				// send ze session cookie. yes, yes, yes, we want to do this, even though php would send it itself. we need this for non-infinite-lifetime cookies (zomg), plus a "null" path will set the routing's base href
 				$res->setCookie(session_name(), session_id(), $params['lifetime'], $params['path'], $params['domain'], $params['secure'], $params['httponly']);
