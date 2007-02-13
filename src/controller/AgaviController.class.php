@@ -80,26 +80,19 @@ class AgaviController extends AgaviParameterHolder
 	 * @param      string A module name.
 	 * @param      string An action name.
 	 *
-	 * @return     mixed  The actual name of the action (might be auto-resolved).
+	 * @return     string The actual name of the action (might be modified).
 	 *
 	 * @throws     AgaviControllerException if the action could not be found.
-	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @author     David Zülke <dz@bitxtender.com>
-	 * @since      0.9.0
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.11.0
 	 */
-	public function resolveAction($moduleName, $actionName = null)
+	public function resolveAction($moduleName, $actionName)
 	{
 		$actionName = str_replace('.', '/', $actionName);
 		$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/actions/' . $actionName . 'Action.class.php';
 		if(is_readable($file)) {
 			return $actionName;
-		} else {
-			// maybe it's a sub-action with the last portion omitted
-			$actionName .= ($actionName == '' ? '' : '/') . 'Index';
-			$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/actions/' . $actionName . 'Action.class.php';
-			if(is_readable($file)) {
-				return $actionName;
-			}
 		}
 		throw new AgaviControllerException(sprintf('Action "%s" in Module "%s" could not be found.', $actionName, $moduleName));
 	}
