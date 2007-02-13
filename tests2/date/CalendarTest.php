@@ -312,7 +312,7 @@ return;
 	public function testDisambiguation765()
 	{
 	// TODO: check how to do this properly ...
-		$c = $this->tm->createCalendar($this->tm->getLocaleFromIdentifier('en_US'));
+		$c = $this->tm->createCalendar($this->tm->getLocale('en_US'));
 		$c->setLenient(false);
 		$c->clear();
 		$c->set(AgaviDateDefinitions::YEAR, 1997);
@@ -726,7 +726,7 @@ return;
 		 * added a new test that checks for this in place of the old call
 		 * to loop_addroll. - aliu */
 		$times = 20;
-		$cal = $this->tm->createCalendar($this->tm->getLocaleFromIdentifier('de_DE'));
+		$cal = $this->tm->createCalendar($this->tm->getLocale('de_DE'));
 		$sdf = new AgaviSimpleDateFormat("YYYY'-W'ww-ee", AgaviLocale::getGermany());
 		$sdf->applyLocalizedPattern("JJJJ'-W'ww-ee");
 		$cal->clear();

@@ -61,7 +61,7 @@ class AgaviTranslationManager
 	protected $currentLocaleIdentifier = null;
 
 	/**
-	 * @var        string The current locale.
+	 * @var        string The default locale identifier.
 	 */
 	protected $defaultLocaleIdentifier = null;
 
@@ -80,6 +80,11 @@ class AgaviTranslationManager
 	 * @var        array All available locales. Just stores the info for lazyload.
 	 */
 	protected $availableLocales = array();
+
+	/**
+	 * @var        array A cache for locale instances.
+	 */
+	protected $localeCache = array();
 
 	/**
 	 * @var        array A cache for the data of the available locales.
@@ -165,7 +170,7 @@ class AgaviTranslationManager
 	 */
 	public function setLocale($identifier)
 	{
-		$this->currentLocaleIdentifier = $this->getClosestMatchingLocale($identifier);
+		$this->currentLocaleIdentifier = $this->getLocaleIdentifier($identifier);
 		$givenData = AgaviLocale::parseLocaleIdentifier($identifier);
 		$actualData = AgaviLocale::parseLocaleIdentifier($this->currentLocaleIdentifier);
 		// construct the given name from the locale from the closest match and the options that were given to the requested locale identifer
@@ -199,6 +204,32 @@ class AgaviTranslationManager
 	public function getCurrentLocaleIdentifier()
 	{
 		return $this->currentLocaleIdentifier;
+	}
+
+	/**
+	 * Retrieve the default locale.
+	 *
+	 * @return     AgaviLocale The current default.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getDefaultLocale()
+	{
+		$this->getLocale($this->defaultLocale);
+	}
+
+	/**
+	 * Retrieve the default locale identifier.
+	 *
+	 * @return     string The default locale identifier.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getDefaultLocaleIdentifier()
+	{
+		return $this->defaultLocaleIdentifier;
 	}
 
 	/**
@@ -249,7 +280,7 @@ class AgaviTranslationManager
 		if($locale === null) {
 			$this->loadCurrentLocale();
 		} elseif(is_string($locale)) {
-			$locale = $this->getLocaleFromIdentifier($locale);
+			$locale = $this->getLocale($locale);
 		}
 		
 		$domainExtra = '';
@@ -284,7 +315,7 @@ class AgaviTranslationManager
 		if($locale === null) {
 			$this->loadCurrentLocale();
 		} elseif(is_string($locale)) {
-			$locale = $this->getLocaleFromIdentifier($locale);
+			$locale = $this->getLocale($locale);
 		}
 		
 		$domainExtra = '';
@@ -319,7 +350,7 @@ class AgaviTranslationManager
 		if($locale === null) {
 			$this->loadCurrentLocale();
 		} elseif(is_string($locale)) {
-			$locale = $this->getLocaleFromIdentifier($locale);
+			$locale = $this->getLocale($locale);
 		}
 		
 		$domainExtra = '';
@@ -357,7 +388,7 @@ class AgaviTranslationManager
 		if($locale === null) {
 			$this->loadCurrentLocale();
 		} elseif(is_string($locale)) {
-			$locale = $this->getLocaleFromIdentifier($locale);
+			$locale = $this->getLocale($locale);
 		}
 		
 		$domainExtra = '';
@@ -474,7 +505,7 @@ class AgaviTranslationManager
 	protected function loadCurrentLocale()
 	{
 		if(!$this->currentLocale || $this->currentLocale->getIdentifier() != $this->givenLocaleIdentifier) {
-			$this->currentLocale = $this->getLocaleFromIdentifier($this->givenLocaleIdentifier);
+			$this->currentLocale = $this->getLocale($this->givenLocaleIdentifier);
 			foreach($this->translators as $translatorList) {
 				foreach($translatorList as $translator) {
 					$translator->localeChanged($this->currentLocale);
@@ -506,19 +537,29 @@ class AgaviTranslationManager
 	}
 
 	/**
-	 * Returns the identifier of the available locale which matches the given 
-	 * locale identifier most.
+	 * @see        AgaviTranslationManager::getLocaleIdentifier
 	 *
-	 * @param      string The locale identifier
-	 *
-	 * @return     string The locale identifier of the available locale.
-	 *
-	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @since      0.11.0
+	 * @deprecated
 	 */
 	public function getClosestMatchingLocale($identifier)
 	{
-
+		return $this->getLocaleIdentifier($identifier);
+	}
+	
+	/**
+	 * Returns the identifier of the available locale which matches the given 
+	 * locale identifier most.
+	 *
+	 * @param      string A locale identifier
+	 *
+	 * @return     string The actual locale identifier of the available locale.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getLocaleIdentifier($identifier)
+	{
 		// if a locale with the given identifier doesn't exist try to find the closest
 		// match or bail out on no match or an ambigious match
 		if(isset($this->availableLocales[$identifier])) {
@@ -565,17 +606,29 @@ class AgaviTranslationManager
 	}
 
 	/**
+	 * @see        AgaviTranslationManager::getLocale
+	 *
+	 * @deprecated
+	 */
+	public function getLocaleFromIdentifier($identifier)
+	{
+		return $this->getLocale($identifier);
+	}
+	
+	/**
 	 * Returns a new AgaviLocale object from the given identifier.
 	 *
 	 * @param      string The locale identifier
+	 * @param      bool   Force a new instance even if an identical one exists.
 	 *
 	 * @return     AgaviLocale The locale instance which matches the available
 	 *                         locales most.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function getLocaleFromIdentifier($identifier)
+	public function getLocale($identifier, $forceNew = false)
 	{
 		// enable shortcut notation to only set options to the current locale
 		if($identifier[0] == '@' && $this->currentLocaleIdentifier) {
@@ -588,7 +641,24 @@ class AgaviTranslationManager
 			$idData = AgaviLocale::parseLocaleIdentifier($identifier);
 		}
 		// this doesn't care about the options
-		$availableLocale = $this->availableLocales[$this->getClosestMatchingLocale($identifier)];
+		$availableLocale = $this->availableLocales[$this->getLocaleIdentifier($identifier)];
+
+		// if the user wants all options reset he supplies an 'empty' option set (identifier ends with @)
+		if(substr($identifier, -1) == '@') {
+			$idData['options'] = array();
+		} else {
+			$idData['options'] = array_merge($availableLocale['identifierData']['options'], $idData['options']);
+		}
+
+		if(($atPos = strpos($identifier, '@')) !== false) {
+			$identifier = $availableLocale['identifierData']['locale_str'] . substr($identifier, $atPos);
+		} else {
+			$identifier = $availableLocale['identifier'];
+		}
+
+		if(!$forceNew && isset($this->localeCache[$identifier])) {
+			return $this->localeCache[$identifier];
+		}
 
 		if(!isset($this->localeDataCache[$idData['locale_str']])) {
 			$lookupPath = AgaviLocale::getLookupPath($availableLocale['identifierData']);
@@ -615,17 +685,10 @@ class AgaviTranslationManager
 				}
 			}
 
-			$this->localeDataCache[$idData['locale_str']] = array_merge_recursive($data, $availableLocale['parameters']);
+			$this->localeDataCache[$idData['locale_str']] = $data;
 		}
 
 		$data = $this->localeDataCache[$idData['locale_str']];
-
-		// if the user wants all options reset he supplies an 'empty' option set (identifier ends with @)
-		if(substr($identifier, -1) == '@') {
-			$idData['options'] = array();
-		} else {
-			$idData['options'] = array_merge($availableLocale['identifierData']['options'], $idData['options']);
-		}
 
 		if(isset($idData['options']['calendar'])) {
 			$data['locale']['calendar'] = $idData['options']['calendar'];
@@ -639,14 +702,12 @@ class AgaviTranslationManager
 			$data['locale']['timezone'] = $idData['options']['timezone'];
 		}
 
-		if(($atPos = strpos($identifier, '@')) !== false) {
-			$identifier = $availableLocale['identifierData']['locale_str'] . substr($identifier, $atPos);
-		} else {
-			$identifier = $availableLocale['identifier'];
-		}
-
 		$locale = new AgaviLocale();
-		$locale->initialize($this->context, $identifier, $data);
+		$locale->initialize($this->context, $availableLocale['parameters'], $identifier, $data);
+
+		if(!$forceNew) {
+			$this->localeCache[$identifier] = $locale;
+		}
 
 		return $locale;
 	}

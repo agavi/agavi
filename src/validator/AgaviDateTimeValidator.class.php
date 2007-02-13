@@ -92,7 +92,7 @@ class AgaviDateTimeValidator extends AgaviValidator
 		$cal = null;
 
 		$check = $this->getParameter('check', true);
-		$locale = $this->hasParameter('locale') ? $tm->getLocaleFromIdentifier($this->getParameter('locale')) : $tm->getCurrentLocale();
+		$locale = $this->hasParameter('locale') ? $tm->getLocale($this->getParameter('locale')) : $tm->getCurrentLocale();
 
 		if($this->hasMultipleArguments() && !$this->getParameter('arguments_format')) {
 			$cal = $tm->createCalendar();
@@ -130,7 +130,7 @@ class AgaviDateTimeValidator extends AgaviValidator
 
 			$matchedFormat = false;
 			foreach($this->getParameter('formats', array()) as $item) {
-				$itemLocale = empty($item['locale']) ? $locale : $tm->getLocaleFromIdentifier($item['locale']);
+				$itemLocale = empty($item['locale']) ? $locale : $tm->getLocale($item['locale']);
 				$type = empty($item['type']) ? 'format' : $item['type'];
 
 				try {

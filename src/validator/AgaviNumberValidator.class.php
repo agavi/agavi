@@ -54,7 +54,7 @@ class AgaviNumberValidator extends AgaviValidator
 
 		if(!$this->getParameter('no_locale', false)) {
 			if($locale = $this->getParameter('in_locale')) {
-				$locale = $this->getContext()->getTranslationManager()->getLocaleFromIdentifier($locale);
+				$locale = $this->getContext()->getTranslationManager()->getLocale($locale);
 			} else {
 				$locale = $this->getContext()->getTranslationManager()->getCurrentLocale();
 			}

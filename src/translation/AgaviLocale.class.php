@@ -27,7 +27,7 @@
  *
  * @version    $Id$
  */
-class AgaviLocale
+class AgaviLocale extends AgaviParameterHolder
 {
 	/**
 	 * @var        AgaviContext An AgaviContext instance.
@@ -49,15 +49,19 @@ class AgaviLocale
 	 * Initialize this Locale.
 	 *
 	 * @param      AgaviContext The current application context.
-	 * @param      string       The identifier of the locale
 	 * @param      array        An associative array of initialization parameters.
+	 * @param      string       The identifier of the locale
+	 * @param      array        The locale data.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function initialize(AgaviContext $context, $identifier, array $data = array())
+	public function initialize(AgaviContext $context, array $parameters = array(), $identifier, array $data = array())
 	{
 		$this->context = $context;
+		$this->parameters = $parameters;
+		
 		$this->identifier = $identifier;
 		$this->data = $data;
 	}
