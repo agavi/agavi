@@ -353,8 +353,9 @@ class AgaviWebResponse extends AgaviResponse
 	 * @param      string A cookie name.
 	 * @param      mixed  Data to store into a cookie. If null or empty cookie
 	 *                    will be tried to be removed.
-	 * @param      int    The lifetime of the cookie in seconds. When you pass 0 
+	 * @param      mixed  The lifetime of the cookie in seconds. When you pass 0 
 	 *                    the cookie will be valid until the browser is closed.
+	 *                    You can also use a strtotime() string instead of an int.
 	 * @param      string The path on the server the cookie will be available on.
 	 * @param      string The domain the cookie is available on.
 	 * @param      bool   Indicates that the cookie should only be transmitted 
@@ -528,8 +529,13 @@ class AgaviWebResponse extends AgaviResponse
 		
 		// send cookies
 		foreach($this->cookies as $name => $values) {
-			//do we want to set expiration time or not?
-			$expire = ($values['lifetime'] != 0) ? time() + $values['lifetime'] : 0;
+			if(is_string($values['lifetime'])) {
+				// a string, so we pass it to strtotime()
+				$expire = strtotime($values['lifetime']);
+			} else {
+				// do we want to set expiration time or not?
+				$expire = ($values['lifetime'] != 0) ? time() + $values['lifetime'] : 0;
+			}
 
 			if($values['value'] === false || $values['value'] === null || $values['value'] === '') {
 				$expire = time() - 3600 * 24;
