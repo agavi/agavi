@@ -72,6 +72,12 @@ class AgaviSessionStorage extends AgaviStorage
 		}
 		
 		$cookieDefaults = session_get_cookie_params();
+		
+		// set path to null if the default path from php.ini is "/". this will, much later, trigger the base href as the path.
+		if($cookieDefaults['path'] == '/') {
+			$cookieDefaults['path'] = null;
+		}
+		
 		$lifetime = $this->getParameter('session_cookie_lifetime', $cookieDefaults['lifetime']);
 		$path     = $this->getParameter('session_cookie_path', $cookieDefaults['path']);
 		$domain   = $this->getParameter('session_cookie_domain', $cookieDefaults['domain']);
@@ -101,13 +107,17 @@ class AgaviSessionStorage extends AgaviStorage
 	{
 		if(session_id() === '') {
 			session_start();
-			$params = session_get_cookie_params();
-			if($params['lifetime'] != 0) {
-				if(version_compare(phpversion(), '5.2', 'ge')) {
-					setcookie(session_name(), session_id(), time() + $params['lifetime'], $params['path'], $params['domain'], $params['secure'], $params['httponly']);
-				} else {
-					setcookie(session_name(), session_id(), time() + $params['lifetime'], $params['path'], $params['domain'], $params['secure']);
-				}
+			
+			$params = session_get_cookie_params() + array('httponly' => false);
+			if($params['path'] === '') {
+				$params['path'] = null;
+			}
+			
+			$res = $this->context->getController()->getGlobalResponse();
+			
+			if($res instanceof AgaviWebResponse) {
+				// send ze session cookie. yes, yes, yes, we want to do this, even though php would send it itself. we need this for non-infinite-lifetime cookies (zomg), plus a "null" path will set the routing's base href
+				$res->setCookie(session_name(), session_id(), $params['lifetime'], $params['path'], $params['domain'], $params['secure'], $params['httponly']);
 			}
 		}
 	}

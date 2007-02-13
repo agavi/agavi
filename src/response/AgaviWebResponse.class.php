@@ -115,7 +115,7 @@ class AgaviWebResponse extends AgaviResponse
 		
 		$this->cookieConfig = array(
 			'lifetime' => isset($parameters['cookie_lifetime']) ? $parameters['cookie_lifetime'] : 0,
-			'path'     => isset($parameters['cookie_path'])     ? $parameters['cookie_path']     : "/",
+			'path'     => isset($parameters['cookie_path'])     ? $parameters['cookie_path']     : null,
 			'domain'   => isset($parameters['cookie_domain'])   ? $parameters['cookie_domain']   : "",
 			'secure'   => isset($parameters['cookie_secure'])   ? $parameters['cookie_secure']   : false,
 			'httpOnly' => isset($parameters['cookie_httponly']) ? $parameters['cookie_httponly'] : false
@@ -527,6 +527,13 @@ class AgaviWebResponse extends AgaviResponse
 			}
 		}
 		
+		$routing = $this->context->getRouting(); 
+		if($routing instanceof AgaviWebRouting) {
+			$basePath = $routing->getBasePath();
+		} else {
+			$basePath = '/';
+		}
+		
 		// send cookies
 		foreach($this->cookies as $name => $values) {
 			if(is_string($values['lifetime'])) {
@@ -539,6 +546,10 @@ class AgaviWebResponse extends AgaviResponse
 
 			if($values['value'] === false || $values['value'] === null || $values['value'] === '') {
 				$expire = time() - 3600 * 24;
+			}
+			
+			if($values['path'] === null) {
+				$values['path'] = $basePath;
 			}
 			
 			if(version_compare(phpversion(), '5.2', 'ge')) {
