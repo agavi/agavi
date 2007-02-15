@@ -54,14 +54,14 @@ class Default_LoginAction extends AgaviSampleAppDefaultBaseAction
 			$this->getContext()->getUser()->login($rd->getParameter('username'), $rd->getParameter('password'));
 			return 'Success';
 		} catch(AgaviSecurityException $e) {
-			$this->container->getValidationManager()->setError($e->getMessage(), 'Wrong ' . ucfirst($e->getMessage()));
-			return 'Input';
+			$this->setAttribute('error', $e->getMessage());
+			return 'Error';
 		}
 	}
 
 	public function handleError(AgaviRequestDataHolder $rd)
 	{
-		return 'Input';
+		return 'Error';
 	}
 
 	/**

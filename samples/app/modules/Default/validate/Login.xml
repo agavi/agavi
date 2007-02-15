@@ -12,7 +12,7 @@
 	<configuration>
 		<validators>
 
-			<validator class="string" name="username_too_short">
+			<validator class="string" name="username_too_short" translation_domain="default.errors.Login">
 				<arguments>
 					<argument>username</argument>
 				</arguments>
@@ -24,7 +24,7 @@
 				</parameters>
 			</validator>
 
-			<validator class="string" name="password_non_existant">
+			<validator class="string" name="password_non_existant" translation_domain="default.errors.Login">
 				<arguments>
 					<argument>password</argument>
 				</arguments>
