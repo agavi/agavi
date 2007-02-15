@@ -72,6 +72,21 @@ class AgaviRbacSecurityUser extends AgaviSecurityUser implements AgaviISecurityU
 	}
 	
 	/**
+	 * Set many role memberships for this user.
+	 *
+	 * @param      array An array of role names.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function grantRoles(array $roles)
+	{
+		foreach($roles as $role) {
+			$this->grantRole($role);
+		}
+	}
+	
+	/**
 	 * Revoke a role membership for this user.
 	 *
 	 * @param      string The role name to remove from this user.
