@@ -528,16 +528,6 @@ class AgaviWebResponse extends AgaviResponse
 			$this->setHttpHeader('Content-Length', $contentSize);
 		}
 		
-		// send headers
-		foreach($this->httpHeaders as $name => $values) {
-			foreach($values as $key => $value) {
-				if($key == 0) {
-					header($name . ': ' . $value);
-				} else {
-					header($name . ': ' . $value, false);
-				}
-			}
-		}
 		
 		$routing = $this->context->getRouting(); 
 		if($routing instanceof AgaviWebRouting) {
@@ -568,6 +558,17 @@ class AgaviWebResponse extends AgaviResponse
 				setcookie($name, $values['value'], $expire, $values['path'], $values['domain'], $values['secure'], $values['httpOnly']);
 			} else {
 				setcookie($name, $values['value'], $expire, $values['path'], $values['domain'], $values['secure']);
+			}
+		}
+		
+		// send headers
+		foreach($this->httpHeaders as $name => $values) {
+			foreach($values as $key => $value) {
+				if($key == 0) {
+					header($name . ': ' . $value);
+				} else {
+					header($name . ': ' . $value, false);
+				}
 			}
 		}
 	}
