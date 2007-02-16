@@ -115,9 +115,9 @@ class AgaviSessionStorage extends AgaviStorage
 			// third: send a custom session cookie (yes, must be setcookie()) with false as value to delete PHP's. remember, we're sending the cookie ourselves
 			
 			if(version_compare(phpversion(), '5.2', 'ge')) {
-				setcookie(session_name(), false, time() - 100000, $params['path'], $params['domain'], $params['secure']);
-			} else {
 				setcookie(session_name(), false, time() - 100000, $params['path'], $params['domain'], $params['secure'], $params['httponly']);
+			} else {
+				setcookie(session_name(), false, time() - 100000, $params['path'], $params['domain'], $params['secure']);
 			}
 			
 			// fourth: fix the cookie path if necessary

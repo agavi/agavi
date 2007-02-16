@@ -113,8 +113,8 @@ class AgaviWebResponse extends AgaviResponse
 			'cookie_path'     => isset($parameters['cookie_path'])     ? $parameters['cookie_path']     : null,
 			'cookie_domain'   => isset($parameters['cookie_domain'])   ? $parameters['cookie_domain']   : "",
 			'cookie_secure'   => isset($parameters['cookie_secure'])   ? $parameters['cookie_secure']   : false,
-			'cookie_httponly' => isset($parameters['cookie_httponly']) ? $parameters['cookie_httponly'] : false
-		);
+			'cookie_httponly' => isset($parameters['cookie_httponly']) ? $parameters['cookie_httponly'] : false,
+		));
 	}
 	
 	/**
