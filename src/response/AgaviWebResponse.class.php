@@ -144,6 +144,18 @@ class AgaviWebResponse extends AgaviResponse
 		}
 	}
 	
+	public function sendContent()
+	{
+		if(is_resource($this->content) && $this->getParameter('use_sendfile_header', false)) {
+			$info = stream_get_meta_data($this->content);
+			if($info['wrapper_type'] == 'plainfile') {
+				header($this->getParameter('sendfile_header_name', 'X-Sendfile') . ': ' . $info['uri']);
+				return;
+			}
+		}
+		return parent::sendContent();
+	}
+	
 	/**
 	 * Clear all reponse data.
 	 *
