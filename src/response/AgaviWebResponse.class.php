@@ -86,11 +86,6 @@ class AgaviWebResponse extends AgaviResponse
 	protected $httpHeaders = array();
 	
 	/**
-	 * @var        array The Cookie settings for this Request instance.
-	 */
-	protected $cookieConfig = array();
-	
-	/**
 	 * @var        array The Cookies scheduled to be sent with the response.
 	 */
 	protected $cookies = array();
@@ -113,12 +108,12 @@ class AgaviWebResponse extends AgaviResponse
 	{
 		parent::initialize($context, $parameters);
 		
-		$this->cookieConfig = array(
-			'lifetime' => isset($parameters['cookie_lifetime']) ? $parameters['cookie_lifetime'] : 0,
-			'path'     => isset($parameters['cookie_path'])     ? $parameters['cookie_path']     : null,
-			'domain'   => isset($parameters['cookie_domain'])   ? $parameters['cookie_domain']   : "",
-			'secure'   => isset($parameters['cookie_secure'])   ? $parameters['cookie_secure']   : false,
-			'httpOnly' => isset($parameters['cookie_httponly']) ? $parameters['cookie_httponly'] : false
+		$this->setParameters(array(
+			'cookie_lifetime' => isset($parameters['cookie_lifetime']) ? $parameters['cookie_lifetime'] : 0,
+			'cookie_path'     => isset($parameters['cookie_path'])     ? $parameters['cookie_path']     : null,
+			'cookie_domain'   => isset($parameters['cookie_domain'])   ? $parameters['cookie_domain']   : "",
+			'cookie_secure'   => isset($parameters['cookie_secure'])   ? $parameters['cookie_secure']   : false,
+			'cookie_httponly' => isset($parameters['cookie_httponly']) ? $parameters['cookie_httponly'] : false
 		);
 	}
 	
@@ -220,7 +215,7 @@ class AgaviWebResponse extends AgaviResponse
 			}
 			foreach($otherResponse->getCookies() as $name => $cookie) {
 				if(!$this->hasCookie($name)) {
-					$this->setCookie($name, $cookie['value'], $cookie['lifetime'], $cookie['path'], $cookie['domain'], $cookie['secure'], $cookie['httpOnly']);
+					$this->setCookie($name, $cookie['value'], $cookie['lifetime'], $cookie['path'], $cookie['domain'], $cookie['secure'], $cookie['httponly']);
 				}
 			}
 			if($otherResponse->hasRedirect() && !$this->hasRedirect()) {
@@ -379,13 +374,13 @@ class AgaviWebResponse extends AgaviResponse
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function setCookie($name, $value, $lifetime = null, $path = null, $domain = null, $secure = null, $httpOnly = null)
+	public function setCookie($name, $value, $lifetime = null, $path = null, $domain = null, $secure = null, $httponly = null)
 	{
-		$lifetime =         $lifetime !== null ? $lifetime : $this->cookieConfig['lifetime'];
-		$path     =         $path !== null     ? $path     : $this->cookieConfig['path'];
-		$domain   =         $domain !== null   ? $domain   : $this->cookieConfig['domain'];
-		$secure   = (bool) ($secure !== null   ? $secure   : $this->cookieConfig['secure']);
-		$httpOnly = (bool) ($httpOnly !== null ? $httpOnly : $this->cookieConfig['httpOnly']);
+		$lifetime =         $lifetime !== null ? $lifetime : $this->getParameter('cookie_lifetime');
+		$path     =         $path !== null     ? $path     : $this->getParameter('cookie_path');
+		$domain   =         $domain !== null   ? $domain   : $this->getParameter('cookie_domain');
+		$secure   = (bool) ($secure !== null   ? $secure   : $this->getParameter('cookie_secure'));
+		$httponly = (bool) ($httponly !== null ? $httponly : $this->getParameter('cookie_httponly'));
 
 		$this->cookies[$name] = array(
 			'value' => $value,
@@ -393,7 +388,7 @@ class AgaviWebResponse extends AgaviResponse
 			'path' => $path,
 			'domain' => $domain,
 			'secure' => $secure,
-			'httpOnly' => $httpOnly
+			'httponly' => $httponly
 		);
 	}
 	
@@ -555,7 +550,7 @@ class AgaviWebResponse extends AgaviResponse
 			}
 			
 			if(version_compare(phpversion(), '5.2', 'ge')) {
-				setcookie($name, $values['value'], $expire, $values['path'], $values['domain'], $values['secure'], $values['httpOnly']);
+				setcookie($name, $values['value'], $expire, $values['path'], $values['domain'], $values['secure'], $values['httponly']);
 			} else {
 				setcookie($name, $values['value'], $expire, $values['path'], $values['domain'], $values['secure']);
 			}
