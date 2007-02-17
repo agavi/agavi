@@ -108,9 +108,7 @@ class AgaviFactoryConfigHandler extends AgaviConfigHandler
 				$data['response'] = isset($data['response']) ? $data['response'] : array('class' => null, 'params' => array());
 				$data['response']['class'] = $cfg->response->hasAttribute('class')? $cfg->response->getAttribute('class') : $data['response']['class'];
 				$data['response']['params'] = $this->getItemParameters($cfg->response, $data['response']['params']);
-				$data['response_code'] =	'$this->factories["response"] = array("class" => "' . $data['response']['class'] . '", "parameters" => ' . var_export($data['response']['params'], true) . ');' . "\n" . 
-																	'$response = new $this->factories["response"]["class"]();' . "\n" . 
-																	'$response->initialize($this, $this->factories["response"]["parameters"]);';
+				$data['response_code'] =	'$this->factories["response"] = array("class" => "' . $data['response']['class'] . '", "parameters" => ' . var_export($data['response']['params'], true) . ');' . "\n";
 			}
 
 			if(AgaviConfig::get('core.use_security', false) && isset($cfg->security_filter)) {
@@ -201,7 +199,7 @@ class AgaviFactoryConfigHandler extends AgaviConfigHandler
 				$data['controller']['params'] = $this->getItemParameters($cfg->controller, $data['controller']['params']);
 
 				$data['controller_code'] =	'$this->controller = new ' . $data['controller']['class'] . '();' . "\n" .
-																		'$this->controller->initialize($response, ' . var_export($data['controller']['params'], true) . ');';
+																		'$this->controller->initialize($this, ' . var_export($data['controller']['params'], true) . ');';
 			}
 
 			// Routing

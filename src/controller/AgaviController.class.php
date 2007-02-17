@@ -29,7 +29,7 @@
  *
  * @version    $Id$
  */
-class AgaviController extends AgaviParameterHolder
+class AgaviController
 {
 	/**
 	 * @var        int The number of execution containers run so far.
@@ -333,13 +333,15 @@ class AgaviController extends AgaviParameterHolder
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
-	public function initialize(AgaviResponse $response, array $parameters = array())
+	public function initialize(AgaviContext $context, array $parameters = array())
 	{
+		$this->context = $context;
+		
+		$rfi = $context->getFactoryInfo('response');
+		$this->response = new $rfi["class"](); 
+		$this->response->initialize($context, $rfi["parameters"]);
+		
 		$this->maxExecutions = isset($parameters['max_executions']) ? $parameters['max_executions'] : 20;
-		
-		$this->response = $response;
-		
-		$this->context = $response->getContext();
 		
 		$cfg = AgaviConfig::get('core.config_dir') . '/output_types.xml';
 		require(AgaviConfigCache::checkConfig($cfg, $this->context->getName()));
