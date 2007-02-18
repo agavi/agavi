@@ -66,6 +66,11 @@ abstract class AgaviRouting
 	protected $defaultGenOptions = array();
 	
 	/**
+	 * @var        array An array of default options presets for gen()
+	 */
+	protected $genOptionsPresets = array();
+	
+	/**
 	 * Constructor.
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
@@ -85,6 +90,7 @@ abstract class AgaviRouting
 	 * @param      array        An array of initialization parameters.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function initialize(AgaviContext $context, array $parameters = array())
@@ -93,6 +99,10 @@ abstract class AgaviRouting
 		
 		if(isset($parameters['default_gen_options'])) {
 			$this->defaultGenOptions = array_merge($this->defaultGenOptions, $parameters['default_gen_options']);
+		}
+		
+		if(isset($parameters['gen_options_presets']) && is_array($parameters['gen_options_presets'])) {
+			$this->genOptionsPresets = $parameters['gen_options_presets'];
 		}
 		
 		$cfg = AgaviConfig::get("core.config_dir") . "/routing.xml";
@@ -386,13 +396,37 @@ abstract class AgaviRouting
 		return $affectedRoutes;
 	}
 
+	/**
+	 * Get a complete list of gen() options based on the given, probably
+	 * incomplete, options array, or options preset name.
+	 *
+	 * @param      mixed An array of gen options or the name of an options preset.
+	 *
+	 * @return     array A complete array of options.
+	 *
+	 * @throws     AgaviException If the given preset name doesn't exist.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	protected function resolveGenOptions($input = array())
+	{
+		if(is_string($input)) {
+			if(isset($this->genOptionsPresets[$input])) {
+				return array_merge($this->defaultGenOptions, $this->genOptionsPresets[$input]);
+			}
+		} elseif(is_array($input)) {
+			return array_merge($this->defaultGenOptions, $input);
+		}
+		throw new AgaviException('Undefined Routing gen() options preset "' . $input . '"');
+	}
 
 	/**
 	 * Generate a formatted Agavi URL.
 	 *
 	 * @param      string A route name.
 	 * @param      array  An associative array of parameters.
-	 * @param      array  An array of options.
+	 * @param      mixed  An array of options, or the name of an options preset.
 	 *
 	 * @return     array An array containing the generated route path, the
 	 *                   (possibly modified) parameters, and the (possibly
@@ -402,7 +436,7 @@ abstract class AgaviRouting
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function gen($route, array $params = array(), array $options = array())
+	public function gen($route, array $params = array(), $options = array())
 	{
 		$routes = $route;
 		if(is_string($route)) {

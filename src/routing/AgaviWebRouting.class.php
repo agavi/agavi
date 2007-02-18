@@ -79,6 +79,8 @@ class AgaviWebRouting extends AgaviRouting
 	 * @param      AgaviContext The Context.
 	 * @param      array        An array of initialization parameters.
 	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @author     Veikko Mäkinen <veikko@veikkomakinen.com>
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
@@ -184,19 +186,18 @@ class AgaviWebRouting extends AgaviRouting
 	 *
 	 * @param      string A route name.
 	 * @param      array  An associative array of parameters.
-	 * @param      array  An array of options.
+	 * @param      mixed  An array of options, or the name of an options preset.
 	 *
 	 * @return     string The generated URL.
 	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function gen($route, array $params = array(), array $options = array())
+	public function gen($route, array $params = array(), $options = array())
 	{
 		$req = $this->context->getRequest();
 		
-		$options = array_merge($this->defaultGenOptions, $options);
+		$options = $this->resolveGenOptions($options);
 
 		if(defined('SID') && SID !== '' && $options['use_trans_sid'] === true) {
 			$params = array_merge($params, array(session_name() => session_id()));
