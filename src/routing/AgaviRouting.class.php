@@ -518,7 +518,7 @@ abstract class AgaviRouting
 				}
 			} elseif(isset($matchedParams[$name])) {
 				$np[$name] = $val['pre'] . $matchedParams[$name] . $val['post'];
-			} elseif($val['val']) {
+			} elseif($val['val'] !== null && $val['val'] !== '') {
 				// more then just pre or postfix
 				$np[$name] = $val['pre'] . $val['val'] . $val['post'];
 			}
