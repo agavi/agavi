@@ -28,6 +28,7 @@ CHG: Allow nested <translator> tags (#422) (Dominik)
 CHG: auto assign 'validation_manager' in templates ([1691]) (David)
 CHG: Allow extra domain info to be passed to formatters (#419) (Dominik)
 
+FIX: 0 as default value for routes skipped in route generation (#437) (David)
 FIX: Do not override default values using matched incoming parameters when generating the same route unless the route is implied (#434) (Dominik)
 FIX: Routing->gen() could possibly not remove unused parameters from the url when an url depends on multiple routes (#428) (Dominik)
 FIX: addIncident not using the validator of the incident for submitting field results ([1685]) (Dominik)
