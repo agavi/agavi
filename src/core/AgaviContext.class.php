@@ -91,6 +91,11 @@ final class AgaviContext
 	protected $user = null;
 	
 	/**
+	 * @var        array The array used for the shutdown sequence.
+	 */
+	protected $shutdownSequence = array();
+	
+	/**
 	 * @var        array An array of AgaviContext instances.
 	 */
 	protected static $instances = array();
@@ -277,22 +282,8 @@ final class AgaviContext
 	 */
 	public function shutdown()
 	{
-		$this->controller->shutdown();
-		
-		if($this->user) {
-			$this->user->shutdown();
-		}
-		
-		$this->storage->shutdown();
-		
-		$this->request->shutdown();
-		
-		if(AgaviConfig::get('core.use_logging')) {
-			$this->loggerManager->shutdown();
-		}
-		
-		if(AgaviConfig::get('core.use_database')) {
-			$this->databaseManager->shutdown();
+		foreach($this->shutdownSequence as $object) {
+			$object->shutdown();
 		}
 	}
 	

@@ -300,9 +300,25 @@ class AgaviWebRequest extends AgaviRequest
 			AgaviWebRequestDataHolder::SOURCE_FILES => $_FILES,
 			AgaviWebRequestDataHolder::SOURCE_HEADERS => $headers,
 		));
-		
-		if($this->getParameter("unset_input", false)) {
+	}
+	
+	/**
+	 * Do any necessary startup work after initialization.
+	 *
+	 * This method is not called directly after initialize().
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function startup()
+	{
+		if($this->getParameter("unset_input", true)) {
 			$_GET = $_POST = $_COOKIE = $_REQUEST = $_FILES = array();
+			foreach($_SERVER as $key => $value) {
+				if(substr($key, 0, 5) == 'HTTP_') {
+					unset($_SERVER[$key]);
+				}
+			}
 		}
 	}
 }

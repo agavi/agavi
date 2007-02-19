@@ -69,13 +69,19 @@ function buildParamList($params)
 }
 
 $svg = false;
-if(strpos($_SERVER['HTTP_USER_AGENT'], 'AppleWebKit') !== false) {
-	preg_match('#AppleWebKit/(\d+)#', $_SERVER['HTTP_USER_AGENT'], $matches);
+$ua = '';
+if(isset($_SERVER['HTTP_USER_AGENT'])) {
+	$ua = $_SERVER['HTTP_USER_AGENT'];
+} elseif($context !== null && ($rq = $context->getRequest()) !== null && $rq instanceof AgaviWebRequest && ($rd = $rq->getRequestData()) !== null) {
+	$ua = $rd->getHeader('User-Agent');
+}
+if(strpos($ua, 'AppleWebKit') !== false) {
+	preg_match('#AppleWebKit/(\d+)#', $ua, $matches);
 	if(intval($matches[1]) >= 420) {
 		$svg = true;
 	}
-} elseif(strpos($_SERVER['HTTP_USER_AGENT'], 'Gecko') !== false) {
-	preg_match('#rv:([0-9\.]+)#', $_SERVER['HTTP_USER_AGENT'], $matches);
+} elseif(strpos($ua, 'Gecko') !== false) {
+	preg_match('#rv:([0-9\.]+)#', $ua, $matches);
 	if(version_compare($matches[1], '1.8', '>=')) {
 		$svg = true;
 	}

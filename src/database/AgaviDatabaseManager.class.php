@@ -106,6 +106,18 @@ class AgaviDatabaseManager
 	}
 
 	/**
+	 * Do any necessary startup work after initialization.
+	 *
+	 * This method is not called directly after initialize().
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function startup()
+	{
+	}
+
+	/**
 	 * Execute the shutdown procedure.
 	 *
 	 * @throws     <b>AgaviDatabaseException</b> If an error occurs while shutting

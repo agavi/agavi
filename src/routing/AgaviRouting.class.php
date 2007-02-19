@@ -110,7 +110,18 @@ abstract class AgaviRouting
 		if(AgaviConfig::get("core.use_routing", false) || is_readable($cfg)) {
 			include(AgaviConfigCache::checkConfig($cfg, $this->context->getName()));
 		}
+	}
 
+	/**
+	 * Do any necessary startup work after initialization.
+	 *
+	 * This method is not called directly after initialize().
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function startup()
+	{
 		$this->sources['_ENV'] = new AgaviRoutingArraySource($_ENV);
 		
 		$this->sources['_SERVER'] = new AgaviRoutingArraySource($_SERVER);
@@ -118,6 +129,16 @@ abstract class AgaviRouting
 		if(AgaviConfig::get('core.use_security')) {
 			$this->sources['user'] = new AgaviRoutingUserSource($this->context->getUser());
 		}
+	}
+
+	/**
+	 * Execute the shutdown procedure.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function shutdown()
+	{
 	}
 
 	/**

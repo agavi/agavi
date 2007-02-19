@@ -48,87 +48,62 @@
 class AgaviSessionStorage extends AgaviStorage
 {
 	/**
-	 * Initialize this Storage.
-	 *
-	 * @param      AgaviContext An AgaviContext instance.
-	 * @param      array        An associative array of initialization parameters.
-	 *
-	 * @throws     <b>AgaviInitializationException</b> If an error occurs while
-	 *                                                 initializing this Storage.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @author     Veikko Mäkinen <mail@veikkomakinen.com>
-	 * @since      0.9.0
-	 */
-	public function initialize(AgaviContext $context, array $parameters = array())
-	{
-		parent::initialize($context, $parameters);
-
-		$sessionName = $this->getParameter('session_name', 'Agavi');
-		session_name($sessionName);
-
-		if($sessionId = $this->getParameter('session_id')) {
-			session_id($sessionId);
-		}
-		
-		$cookieDefaults = session_get_cookie_params();
-		
-		// set path to null if the default path from php.ini is "/". this will, much later, trigger the base href as the path.
-		if($cookieDefaults['path'] == '/') {
-			$cookieDefaults['path'] = null;
-		}
-		
-		$lifetime = $this->getParameter('session_cookie_lifetime', $cookieDefaults['lifetime']);
-		$path     = $this->getParameter('session_cookie_path', $cookieDefaults['path']);
-		$domain   = $this->getParameter('session_cookie_domain', $cookieDefaults['domain']);
-		$secure   = (bool) $this->getParameter('session_cookie_secure', $cookieDefaults['secure']);
-
-		if(version_compare(phpversion(), '5.2', 'ge')) {
-			$httpOnly = $this->getParameter('session_cookie_httponly', $cookieDefaults['httponly']);
-			session_set_cookie_params($lifetime, $path, $domain, $secure, $httpOnly);
-		} else {
-			session_set_cookie_params($lifetime, $path, $domain, $secure);
-		}
-	}
-
-	/**
-	 * Starts a session unless a session has already been started.
-	 * The method will be called after initialization if auto_start is true.
-	 * If auto_start is false, this method must be called manually.
+	 * Starts the session.
+	 * The method must be called after initialize().
 	 * This code cannot be run in initialize(), because initialization has to
 	 * finish completely, for all instances, before a session can be created:
 	 * A Database Session Storage must initialize the parent, then itself, and
 	 * may only then call startup() to auto-start the session.
+	 * Also, the routing must be fully initialized, too.
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
+	 * @author     Veikko Mäkinen <mail@veikkomakinen.com>
 	 * @since      0.11.0
 	 */
 	public function startup()
 	{
+		session_name($this->getParameter('session_name', 'Agavi'));
+		
+		if($this->hasParameter('session_id')) {
+			session_id($this->getParameter('session_id'));
+		}
+		
 		if(session_id() === '') {
-			// first: grab cookie params
-			$params = session_get_cookie_params() + array('httponly' => false);
+			$cookieDefaults = session_get_cookie_params();
 			
-			// second: start session
-			session_start();
+			// set path to true if the default path from php.ini is "/". this will, in startup(), trigger the base href as the path.
+			if($cookieDefaults['path'] == '/') {
+				$cookieDefaults['path'] = true;
+			}
 			
-			// third: send a custom session cookie (yes, must be setcookie()) with false as value to delete PHP's. remember, we're sending the cookie ourselves
+			$lifetime = $this->getParameter('session_cookie_lifetime', $cookieDefaults['lifetime']);
+			if(is_numeric($lifetime)) {
+				$lifetime = (int) $lifetime;
+			} else {
+				$lifetime = strtotime($lifetime, 0);
+			}
+			$path = $this->getParameter('session_cookie_path', $cookieDefaults['path']);
+			if($path === true) {
+				$path = $this->context->getRouting()->getBasePath();
+			}
+			$domain = $this->getParameter('session_cookie_domain', $cookieDefaults['domain']);
+			$secure = (bool) $this->getParameter('session_cookie_secure', $cookieDefaults['secure']);
 			
 			if(version_compare(phpversion(), '5.2', 'ge')) {
-				setcookie(session_name(), false, time() - 100000, $params['path'], $params['domain'], $params['secure'], $params['httponly']);
+				$httpOnly = (bool) $this->getParameter('session_cookie_httponly', $cookieDefaults['httponly']);
+				session_set_cookie_params($lifetime, $path, $domain, $secure, $httpOnly);
 			} else {
-				setcookie(session_name(), false, time() - 100000, $params['path'], $params['domain'], $params['secure']);
+				session_set_cookie_params($lifetime, $path, $domain, $secure);
 			}
 			
-			// fourth: fix the cookie path if necessary
-			if($params['path'] === '') {
-				$params['path'] = null;
-			}
+			session_start();
 			
-			$res = $this->context->getController()->getGlobalResponse();
-			if($res instanceof AgaviWebResponse) {
-				// send ze session cookie. yes, yes, yes, we want to do this, even though php would send it itself. we need this for non-infinite-lifetime cookies (zomg), plus a "null" path will set the routing's base href
-				$res->setCookie(session_name(), session_id(), $params['lifetime'], $params['path'], $params['domain'], $params['secure'], $params['httponly']);
+			if($lifetime !== 0) {
+				if(version_compare(phpversion(), '5.2', 'ge')) {
+					setcookie(session_name(), session_id(), time() + $lifetime, $path, $domain, $secure, $httpOnly);
+				} else {
+					setcookie(session_name(), session_id(), time() + $lifetime, $path, $domain, $secure);
+				}
 			}
 		}
 	}
