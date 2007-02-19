@@ -212,7 +212,10 @@ class AgaviFactoryConfigHandler extends AgaviConfigHandler
 		
 		foreach($factories as $factory => $info) {
 			if(is_array($info)) {
-				if($info['required'] && (!isset($data[$factory]) || $data[$factory]['class'] === null)) {
+				if(!$info['required']) {
+					continue;
+				}
+				if(!isset($data[$factory]) || $data[$factory]['class'] === null) {
 					$error = 'Configuration file "%s" has missing or incomplete entry "%s"';
 					$error = sprintf($error, $config, $factory);
 					throw new AgaviConfigurationException($error);
