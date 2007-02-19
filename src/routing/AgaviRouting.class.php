@@ -456,7 +456,7 @@ abstract class AgaviRouting
 			}
 
 			$myDefaults = $r['opt']['defaults'];
-			$availableParams = array_merge($availableParams, array_merge($r['par'], $r['opt']['ignores']));
+			$availableParams = array_merge($availableParams, $r['opt']['pattern_parameters']));
 
 			if($firstRoute || $r['opt']['cut'] || (count($r['opt']['childs']) && $r['opt']['cut'] === null)) {
 				if($r['opt']['anchor'] & self::ANCHOR_START || $r['opt']['anchor'] == self::ANCHOR_NONE) {
