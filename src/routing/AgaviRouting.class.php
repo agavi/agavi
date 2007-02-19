@@ -329,7 +329,7 @@ abstract class AgaviRouting
 		}
 
 
-		$route = array('rxp' => $regexp, 'par' => $params, 'opt' => $options);
+		$route = array('rxp' => $regexp, 'par' => $params, 'opt' => $options, 'matches' => array());
 		$this->routes[$routeName] = $route;
 
 		return $routeName;
@@ -467,6 +467,7 @@ abstract class AgaviRouting
 		$url = '';
 		$defaults = array();
 		$availableParams = array();
+		$matchedParams = array(); // the merged incoming matched params of implied routes
 		$firstRoute = true;
 		foreach($routes as $route) {
 			$r = $this->routes[$route];
@@ -477,6 +478,22 @@ abstract class AgaviRouting
 			}
 
 			$myDefaults = $r['opt']['defaults'];
+
+			if(isset($r['opt']['callback'])) {
+				if(!isset($r['cb'])) {
+					$cb = $r['opt']['callback'];
+					$r['cb'] = new $cb();
+					$r['cb']->initialize($this->context, $r);
+				}
+				if(!$r['cb']->onGenerate($myDefaults, $params, $options)) {
+					continue;
+				}
+			}
+
+			if($r['opt']['imply']) {
+				$matchedParams = array_merge($matchedParams, $r['matches']);
+			}
+
 			$availableParams = array_merge($availableParams, $r['opt']['pattern_parameters']);
 
 			if($firstRoute || $r['opt']['cut'] || (count($r['opt']['childs']) && $r['opt']['cut'] === null)) {
@@ -487,29 +504,41 @@ abstract class AgaviRouting
 				}
 			}
 
-			if(isset($r['opt']['callback'])) {
-				if(!isset($r['cb'])) {
-					$cb = $r['opt']['callback'];
-					$r['cb'] = new $cb();
-					$r['cb']->initialize($this->context, $r);
-				}
-				$myDefaults = $r['cb']->onGenerate($myDefaults, $params, $options);
-			}
-
 			$defaults = array_merge($myDefaults, $defaults);
 			$firstRoute = false;
 		}
 
 		$np = array();
-
 		foreach($defaults as $name => $val) {
 			if(isset($params[$name])) {
-				$np[$name] = $val['pre'] . $params[$name] . $val['post'];
+				if(is_array($params[$name])) {
+					$np[$name] = $params[$name]['pre'] . $params[$name]['val'] . $params[$name]['post'];
+				} else {
+					$np[$name] = $val['pre'] . $params[$name] . $val['post'];
+				}
+			} elseif(isset($matchedParams[$name])) {
+				$np[$name] = $val['pre'] . $matchedParams[$name] . $val['post'];
 			} elseif($val['val']) {
 				// more then just pre or postfix
 				$np[$name] = $val['pre'] . $val['val'] . $val['post'];
 			}
 		}
+
+		// we have to check for newly created pre/postfixes and check that we didn't
+		// generate them yet
+		foreach($params as $name => $value) {
+			if(is_array($value) && !array_key_exists($name, $np)) {
+				$np[$name] = $value['pre'] . $value['val'] . $value['post'];
+			}
+		}
+
+
+		foreach($matchedParams as $name => $value) {
+			if(!array_key_exists($name, $params) && !array_key_exists($name, $np)) {
+				$np[$name] = $value;
+			}
+		}
+
 		// get the remaining params too
 		$params = array_merge($params, array_merge($np, array_filter($params, 'is_null')));
 
@@ -636,10 +665,7 @@ abstract class AgaviRouting
 
 						foreach($match as $name => $m) {
 							if(is_string($name)) {
-								if(!isset($opts['defaults'][$name])) {
-									$opts['defaults'][$name] = array('pre' => '', 'val' => '', 'post' => '');
-								}
-								$opts['defaults'][$name]['val'] = $m[0];
+								$route['matches'][$name] = $m[0];
 							}
 						}
 

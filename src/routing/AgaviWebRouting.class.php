@@ -205,7 +205,14 @@ class AgaviWebRouting extends AgaviRouting
 		
 		if($route === null) {
 			if(AgaviConfig::get('core.use_routing')) {
-				$route = join('+', array_reverse($req->getAttribute('matchedRoutes', 'org.agavi.routing')));
+				$routes = array_reverse($req->getAttribute('matchedRoutes', 'org.agavi.routing'));
+				$route = join('+', $routes);
+				$routeMatches = array();
+				foreach($routes as $myRoute) {
+					$r = $this->routes[$myRoute];
+					$routeMatches = array_merge($routeMatches, $r['matches']);
+				}
+				$params = array_merge($routeMatches, $params);
 			}
 			$params = array_merge($this->inputParameters, $params);
 		}

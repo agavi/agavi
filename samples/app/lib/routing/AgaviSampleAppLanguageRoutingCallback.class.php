@@ -48,14 +48,12 @@ class AgaviSampleAppLanguageRoutingCallback extends AgaviRoutingCallback
 
 	public function onGenerate(array $defaultParameters, array &$userParameters, array &$options)
 	{
-		$defaultParameters['locale'] = array(
-			'pre' => '', 
-			'val' => $this->getShortestLocaleIdentifier($this->translationManager->getCurrentLocaleIdentifier()), 
-			'post' => '');
 		if(isset($userParameters['locale'])) {
 			$userParameters['locale'] = $this->getShortestLocaleIdentifier($userParameters['locale']);
+		} else {
+			$userParameters['locale'] = $this->getShortestLocaleIdentifier($this->translationManager->getCurrentLocaleIdentifier());
 		}
-		return $defaultParameters;
+		return true;
 	}
 	
 	public function getShortestLocaleIdentifier($localeIdentifier)
