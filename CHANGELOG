@@ -1,7 +1,37 @@
 AGAVI CHANGELOG
 ===============
 
-0.11.0 (??, 2006)
+0.11.0 (????? ??, 2007)
+
+
+0.11.0 RC3 (February 19, 2007)
+
+ADD: Allow retrieval of the translators/formatters for a defined domain (#417) (Dominik)
+ADD: Routing generation options presets (#432) (David)
+ADD: Support for X-Sendfile family of headers in AgaviWebResponse (#431) (David)
+ADD: AgaviRbacUser::grantRoles (#430) (David)
+ADD: Translation for error messages in sample app (#416) (David)
+ADD: Use base path from routing if null path given to AgaviWebResponse::setCookie, assume same base path for session cookies (#425) (David)
+ADD: strtotime strings support for AgaviWebResponse::setCookie and session cookie lifetime (#423) (David)
+ADD: AgaviOutputType::getDefaultLayoutName() ([1689]) (David)
+ADD: Allow PHP 5.2 DateTime objects to be used with _d() (#420) (Dominik)
+ADD: AgaviDateFormatter::getFormat ([1683]) (Dominik)
+ADD: Add isContentMutable method to response and check where applicable (#414) (David)
+
+CHG: Move pre- and postfix modification from defaultParams to userParams argument in RoutingCallback::onGenerate (#436) (Dominik)
+CHG: Allow returning of true or false from RoutingCallback::onGenerate() (#435) (Dominik)
+CHG: startup() methods for all core classes, shuffled initialization order (#433) (David)
+CHG: Store salted hash for autologon password in sample app, clean up sample app user implementation to serve as a better example (#429) (David)
+CHG: Make AgaviLocale a ParameterHolder, clean up Translation Manager method names, add caching of locale instances, add default locale getters (#426) (David)
+CHG: Removed 'Index' action auto-resolving from AgaviController::resolveAction (#424) (David)
+CHG: Allow nested <translator> tags (#422) (Dominik)
+CHG: auto assign 'validation_manager' in templates ([1691]) (David)
+CHG: Allow extra domain info to be passed to formatters (#419) (Dominik)
+
+FIX: Do not override default values using matched incoming parameters when generating the same route unless the route is implied (#434) (Dominik)
+FIX: Routing->gen() could possibly not remove unused parameters from the url when an url depends on multiple routes (#428) (Dominik)
+FIX: addIncident not using the validator of the incident for submitting field results ([1685]) (Dominik)
+FIX: In Sample App: Call to undefined method setError() (#415) (Veikko, codecop)
 
 
 0.11.0 RC2 (February 7, 2007)
@@ -75,7 +105,6 @@ FIX: Setting the base for arguments in file validators doesn't work (#361) (Domi
 FIX: Routing w/o rewrite borked when path contains a space character (#355) (David)
 FIX: Fixes to the date formatter (#62) (Dominik)
 FIX: Fixed Form Population Filter for radiobuttons, fields containing [] (#327) (David)
-
 
 
 0.11.0 RC1 (November 13, 2006)
