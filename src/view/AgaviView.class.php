@@ -330,7 +330,7 @@ abstract class AgaviView
 			$l = $this->createLayer($layer['class'], $name, $layer['renderer']);
 			$l->setParameters($layer['parameters']);
 			foreach($layer['slots'] as $slotName => $slot) {
-				$l->setSlot($slotName, $this->createSlotContainer($slot['module'], $slot['action'], array('parameters' => $slot['parameters']), $slot['output_type']));
+				$l->setSlot($slotName, $this->createSlotContainer($slot['module'], $slot['action'], $slot['parameters'], $slot['output_type']));
 			}
 			$this->appendLayer($l);
 		}
