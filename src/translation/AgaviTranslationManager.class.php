@@ -584,7 +584,7 @@ class AgaviTranslationManager
 	/**
 	 * @see        AgaviTranslationManager::getLocaleIdentifier
 	 *
-	 * @deprecated
+	 * @deprecated Superseded by AgaviTranslationManager::getLocaleIdentifier()
 	 */
 	public function getClosestMatchingLocale($identifier)
 	{
@@ -653,7 +653,7 @@ class AgaviTranslationManager
 	/**
 	 * @see        AgaviTranslationManager::getLocale
 	 *
-	 * @deprecated
+	 * @deprecated Superseded by AgaviTranslationManager::getLocale()
 	 */
 	public function getLocaleFromIdentifier($identifier)
 	{

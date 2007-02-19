@@ -57,16 +57,6 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	protected $requestData = null;
 
 	/**
-	 * @var        string The module accessor name.
-	 */
-	protected $moduleAccessor = 'module';
-
-	/**
-	 * @var        string The action accessor name.
-	 */
-	protected $actionAccessor = 'action';
-
-	/**
 	 * @var        bool A boolean value indicating whether or not the request is 
 	 *                  locked.
 	 */
@@ -100,6 +90,21 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	}
 
 	/**
+	 * Constructor.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function __construct()
+	{
+		$this->setParameters(array(
+			'module_accessor' => 'module',
+			'action_accessor' => 'action',
+			'request_data_holder_class' => 'AgaviRequestDataHolder',
+		));
+	}
+
+	/**
 	 * Initialize this Request.
 	 *
 	 * @param      AgaviContext An AgaviContext instance.
@@ -115,18 +120,12 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	{
 		$this->context = $context;
 		
-		$this->parameters = $parameters;
-		
 		if(isset($parameters['default_namespace'])) {
 			$this->defaultNamespace = $parameters['default_namespace'];
+			unset($parameters['default_namespace']);
 		}
 		
-		if(isset($parameters['module_accessor'])) {
-			$this->moduleAccessor = $parameters['module_accessor'];
-		}
-		if(isset($parameters['action_accessor'])) {
-			$this->actionAccessor = $parameters['action_accessor'];
-		}
+		$this->setParameters($parameters);
 	}
 
 	/**
@@ -148,12 +147,14 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	 *
 	 * @return     string The module accessor name.
 	 *
+	 * @deprecated Use getParameter('module_accessor') instead.
+	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getModuleAccessor()
 	{
-		return $this->moduleAccessor;
+		return $this->getParameter('module_accessor');
 	}
 
 	/**
@@ -161,12 +162,14 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	 *
 	 * @return     string The action accessor name.
 	 *
+	 * @deprecated Use getParameter('action_accessor') instead.
+	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getActionAccessor()
 	{
-		return $this->actionAccessor;
+		return $this->getParameter('action_accessor');
 	}
 
 	/**

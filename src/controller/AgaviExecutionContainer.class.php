@@ -284,7 +284,8 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 				if($this->arguments !== null) {
 					$this->requestData = $this->arguments;
 				} else {
-					$this->requestData = new AgaviRequestDataHolder();
+					$rdhc = $request->getParameter('request_data_holder_class');
+					$this->requestData = new $rdhc();
 				}
 				// run the execution filter, without a proper chain
 				$controller->getFilter('execution')->execute(new AgaviFilterChain(), $this);

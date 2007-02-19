@@ -188,6 +188,20 @@ class AgaviWebRequest extends AgaviRequest
 	}
 	
 	/**
+	 * Constructor.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function __construct()
+	{
+		parent::__construct();
+		$this->setParameters(array(
+			'request_data_holder_class' => 'AgaviWebRequestDataHolder',
+		));
+	}
+
+	/**
 	 * Initialize this Request.
 	 *
 	 * @param      AgaviContext An AgaviContext instance.
@@ -294,11 +308,12 @@ class AgaviWebRequest extends AgaviRequest
 			}
 		}
 		
-		$this->requestData = new AgaviWebRequestDataHolder(array(
-			AgaviWebRequestDataHolder::SOURCE_PARAMETERS => array_merge($_GET, $_POST),
-			AgaviWebRequestDataHolder::SOURCE_COOKIES => $_COOKIE,
-			AgaviWebRequestDataHolder::SOURCE_FILES => $_FILES,
-			AgaviWebRequestDataHolder::SOURCE_HEADERS => $headers,
+		$rdhc = $this->getParameter('request_data_holder_class');
+		$this->requestData = new $rdhc(array(
+			constant("$rdhc::SOURCE_PARAMETERS") => array_merge($_GET, $_POST),
+			constant("$rdhc::SOURCE_COOKIES") => $_COOKIE,
+			constant("$rdhc::SOURCE_FILES") => $_FILES,
+			constant("$rdhc::SOURCE_HEADERS") => $headers,
 		));
 	}
 	

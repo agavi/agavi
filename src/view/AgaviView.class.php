@@ -330,7 +330,7 @@ abstract class AgaviView
 			$l = $this->createLayer($layer['class'], $name, $layer['renderer']);
 			$l->setParameters($layer['parameters']);
 			foreach($layer['slots'] as $slotName => $slot) {
-				$l->setSlot($slotName, $this->createSlotContainer($slot['module'], $slot['action'], new AgaviRequestDataHolder(array('parameters' => $slot['parameters'])), $slot['output_type']));
+				$l->setSlot($slotName, $this->createSlotContainer($slot['module'], $slot['action'], array('parameters' => $slot['parameters']), $slot['output_type']));
 			}
 			$this->appendLayer($l);
 		}
@@ -338,20 +338,60 @@ abstract class AgaviView
 		return $layout['parameters'];
 	}
 
+	/**
+	 * Creates a new container with the same output type as this view's container.
+	 *
+	 * This container will have a parameter called 'is_slot' set to true.
+	 *
+	 * @param      string The name of the module.
+	 * @param      string The name of the action.
+	 * @param      mixeed An AgaviRequestDataHolder instance with additional
+	 *                    request arguments or an array of request parameters.
+	 * @param      string Optional name of an initial output type to set.
+	 *
+	 * @return     AgaviExecutionContainer A new execution container instance,
+	 *                                     fully initialized.
+	 *
+	 * @see        AgaviExecutionContainer::createExecutionContainer()
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public function createSlotContainer($moduleName, $actionName, $arguments = array(), $outputType = null)
 	{
 		if(!($arguments instanceof AgaviRequestDataHolder)) {
-			$arguments = new AgaviRequestDataHolder(array(AgaviRequestDataHolder::SOURCE_PARAMETERS => $arguments));
+			$rdhc = $this->context->getRequest()->getParameter('request_data_holder_class');
+			$arguments = new $rdhc(array(AgaviRequestDataHolder::SOURCE_PARAMETERS => $arguments));
 		}
 		$container = $this->container->createExecutionContainer($moduleName, $actionName, $arguments, $outputType);
 		$container->setParameter('is_slot', true);
 		return $container;
 	}
 
+	/**
+	 * Creates a new container with the same output type as this view's container.
+	 *
+	 * This container will have a parameter called 'is_forward' set to true.
+	 *
+	 * @param      string The name of the module.
+	 * @param      string The name of the action.
+	 * @param      mixeed An AgaviRequestDataHolder instance with additional
+	 *                    request arguments or an array of request parameters.
+	 * @param      string Optional name of an initial output type to set.
+	 *
+	 * @return     AgaviExecutionContainer A new execution container instance,
+	 *                                     fully initialized.
+	 *
+	 * @see        AgaviExecutionContainer::createExecutionContainer()
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public function createForwardContainer($moduleName, $actionName, $arguments = array(), $outputType = null)
 	{
 		if(!($arguments instanceof AgaviRequestDataHolder)) {
-			$arguments = new AgaviRequestDataHolder(array(AgaviRequestDataHolder::SOURCE_PARAMETERS => $arguments));
+			$rdhc = $this->context->getRequest()->getParameter('request_data_holder_class');
+			$arguments = new $rdhc(array(AgaviRequestDataHolder::SOURCE_PARAMETERS => $arguments));
 		}
 		$container = $this->container->createExecutionContainer($moduleName, $actionName, $arguments, $outputType);
 		$container->setParameter('is_forward', true);
