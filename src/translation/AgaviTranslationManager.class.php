@@ -485,6 +485,29 @@ class AgaviTranslationManager
 	}
 
 	/**
+	 * Returns the translators for a given domain and type. The domain can contain
+	 * any extra parts which will be ignored. Will return null when no tanslator 
+	 * is defined.
+	 *
+	 * @param      string The domain.
+	 * @param      string The type of the translator.
+	 *
+	 * @return     AgaviITranslator The translator instance.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getDomainTranslator($domain, $type)
+	{
+		try {
+			$domainExtra = '';
+			return $this->getTranslators($domain, $domainExtra, $type);
+		} catch(InvalidArgumentException $e) {
+			return null;
+		}
+	}
+
+	/**
 	 * Returns the translator filters for a given domain.
 	 *
 	 * @param      string The message.
