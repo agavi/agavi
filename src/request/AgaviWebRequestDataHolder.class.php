@@ -632,8 +632,15 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 		// call the parent ctor which handles the actual loading of the data
 		parent::__construct($data);
 		
-		// now fix the files array
-		$this->fixFilesArray();
+		// now fix the files array if necessary
+		if($this->files) {
+			foreach(new RecursiveIteratorIterator(new RecursiveArrayIterator($this->files), RecursiveIteratorIterator::LEAVES_ONLY) as $leaf) {
+				if(!($leaf instanceof AgaviUploadedFile)) {
+					$this->fixFilesArray();
+				}
+				break;
+			}
+		}
 	}
 	
 	/**
