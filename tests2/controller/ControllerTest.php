@@ -120,7 +120,9 @@ class ControllerTest extends AgaviTestCase
 		$controller = $this->_controller;
 
 		$info_ex = array(
-			'Content-Type' => 'text/html',
+			'http_headers' => array(
+				'Content-Type' => 'text/html',
+			),
 		);
 
 		$info = $controller->getOutputType();

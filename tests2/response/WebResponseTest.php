@@ -162,12 +162,13 @@ class WebResponseTest extends AgaviTestCase
 		$info_ex = array(
 			'value' => 'value',
 			'lifetime' => 0,
-			'path' => '/',
+			'path' => null,
 			'domain' => '',
 			'secure' => false,
-			'httpOnly' => false,
+			'httponly' => false,
 		);
 		$r->setCookie('cookieName', 'value');
+		var_dump($r->getCookie('cookieName'));
 		$this->assertEquals($info_ex, $r->getCookie('cookieName'));
 
 		$r->setCookie('cookieName', 'value 2', 300, '/foo');
@@ -183,7 +184,7 @@ class WebResponseTest extends AgaviTestCase
 			'path' => '',
 			'domain' => 'foo.bar',
 			'secure' => true,
-			'httpOnly' => false,
+			'httponly' => false,
 		);
 		$this->assertEquals($info_ex, $r->getCookie('cookieName2'));
 	}

@@ -63,12 +63,12 @@ class ContextTest extends AgaviTestCase
 		
 	}
 
-	public function testCanReinitializeContextWithOverrides()
-	{
-		$context = AgaviContext::getInstance('test');
-		$context->initialize('test1');
-		$this->assertType('TestSessionStorage', $context->getStorage());
-	}
+	// public function testCanReinitializeContextWithOverrides()
+	// {
+	// 	$context = AgaviContext::getInstance('test');
+	// 	$context->initialize('test1');
+	// 	$this->assertType('TestSessionStorage', $context->getStorage());
+	// }
 
 
 	public function testGetGlobalModel()
