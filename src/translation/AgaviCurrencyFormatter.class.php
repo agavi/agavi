@@ -73,7 +73,7 @@ class AgaviCurrencyFormatter extends AgaviDecimalFormatter implements AgaviITran
 		if(isset($parameters['format'])) {
 			$this->customFormat = $parameters['format'];
 			// if the translation domain is not set we don't have to delay parsing
-			if($this->translationDomain !== null) {
+			if($this->translationDomain === null) {
 				$this->setFormat($parameters['format']);
 			}
 		}
