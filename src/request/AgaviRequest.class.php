@@ -209,9 +209,20 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	public function shutdown()
 	{
 	}
+	
+	/**
+	 * Whether or not the Request is locked.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public final function isLocked()
+	{
+		return $this->locked;
+	}
 
 	/**
-	 * Lock or unlock the Request so parameters can(not) be get or set anymore.
+	 * Lock or unlock the Request so request data can(not) be fetched anymore.
 	 *
 	 * @param      string The key to unlock, if the lock should be removed, or
 	 *                    null if the lock should be set.
