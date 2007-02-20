@@ -81,6 +81,11 @@ class AgaviDecimalFormatter
 	protected $hasCurrency = false;
 
 	/**
+	 * @var        int The type of the currency symbol.
+	 */
+	protected $currencyType = null;
+
+	/**
 	 * @var        array An array containing the distances for the grouping 
 	 *                   operators which will be applied to the number
 	 */
@@ -101,6 +106,9 @@ class AgaviDecimalFormatter
 	 */
 	protected $roundingMode = AgaviDecimalFormatter::ROUND_SCIENTIFIC;
 
+	const CURRENCY_SYMBOL = 1;
+	const CURRENCY_CODE = 2;
+	const CURRENCY_NAME = 3;
 
 	const ROUND_NONE = 0;
 	const ROUND_SCIENTIFIC = 1;
@@ -176,6 +184,7 @@ class AgaviDecimalFormatter
 
 		$hasMinus = false;
 		$hasCurrency = false;
+		$currencyType = 0;
 		$minShowedIntegrals = 0;
 		$minShowedFractionals = 0;
 		$maxShowedFractionals = 0;
@@ -220,10 +229,15 @@ class AgaviDecimalFormatter
 //					} elseif($c == '-') {
 //						$hasMinus = true;
 //						$formatStr .= '%2$s';
-						} elseif(/*$c == '¤'*/ ord($c) == 194 && ord($cNext) == 164) {
+						} elseif(/*$c == '¤'*/ !$hasCurrency && ord($c) == 194 && ord($cNext) == 164) {
 							++$i;
 							$hasCurrency = true;
+							$currencyType = self::CURRENCY_SYMBOL;
 							$formatStr .= '%3$s';
+
+							for(; $i + 2 < $len && ord($format[$i + 1]) == 194 && ord($format[$i + 2]) == 164 && $currencyType < self::CURRENCY_NAME; $i += 2) {
+								++$currencyType;
+							}
 						} else {
 							// quote % for sprintf usage
 							if($c == '%') {
@@ -331,6 +345,7 @@ class AgaviDecimalFormatter
 
 		$this->hasMinus = $hasMinus;
 		$this->hasCurrency = $hasCurrency;
+		$this->currencyType = $currencyType;
 
 		$this->groupingDistances = $groupingDistances;
 	}

@@ -41,9 +41,15 @@ class AgaviCurrencyFormatter extends AgaviDecimalFormatter implements AgaviITran
 	protected $customFormat = null;
 
 	/**
-	 * @var        string The symbol which will be used as currency sign
+	 * @var        string The iso code of the currency to be used for formatting.
 	 */
-	protected $currencySymbol = '';
+	protected $currencyCode = '';
+
+	/**
+	 * @var        AgaviLocale The locale which should be used for formatting.
+	 */
+	protected $currentLocale = null;
+
 
 	/**
 	 * @var        string The translation domain to translate the format (if any).
@@ -66,6 +72,8 @@ class AgaviCurrencyFormatter extends AgaviDecimalFormatter implements AgaviITran
 		$this->context = $context;
 		if(!empty($parameters['rounding_mode'])) {
 			$this->setRoundingMode($this->getRoundingModeFromString($parameters['rounding_mode']));
+		} else {
+			$this->setRoundingMode(AgaviDecimalFormatter::ROUND_NONE);
 		}
 		if(isset($parameters['translation_domain'])) {
 			$this->translationDomain = $parameters['translation_domain'];
@@ -77,8 +85,8 @@ class AgaviCurrencyFormatter extends AgaviDecimalFormatter implements AgaviITran
 				$this->setFormat($parameters['format']);
 			}
 		}
-		if(isset($parameters['currency_symbol'])) {
-			$this->currencySymbol = $parameters['currency_symbol'];
+		if(isset($parameters['currency_code'])) {
+			$this->currencyCode = $parameters['currency_code'];
 		}
 	}
 
@@ -112,6 +120,7 @@ class AgaviCurrencyFormatter extends AgaviDecimalFormatter implements AgaviITran
 	 */
 	public function localeChanged($newLocale)
 	{
+		$this->currentLocale = $newLocale;
 		$this->groupingSeparator = $newLocale->getNumberSymbolGroup();
 		$this->decimalSeparator = $newLocale->getNumberSymbolDecimal();
 		if($this->customFormat) {
@@ -120,13 +129,6 @@ class AgaviCurrencyFormatter extends AgaviDecimalFormatter implements AgaviITran
 			}
 		} else {
 			$this->setFormat($newLocale->getCurrencyFormat('__default'));
-		}
-		if($currency = $newLocale->getLocaleCurrency()) {
-			if($symbol = $newLocale->getCurrencySymbol($currency)) {
-				$this->currencySymbol = $symbol;
-			} else {
-				$this->currencySymbol = $currency;
-			}
 		}
 	}
 
@@ -140,7 +142,35 @@ class AgaviCurrencyFormatter extends AgaviDecimalFormatter implements AgaviITran
 	 */
 	public function getCurrencySymbol()
 	{
-		return $this->currencySymbol;
+		$code = $this->currencyCode;
+		if(!$this->currentLocale) {
+			return $code;
+		}
+		if(!$code) {
+			$code = $this->currentLocale->getLocaleCurrency();
+		}
+
+		$symbol = $this->currentLocale->getCurrencySymbol($code);
+		$name = $this->currentLocale->getCurrencyDisplayName($code);
+		if($symbol === null) {
+			$symbol = $code;
+		}
+		if($name === null) {
+			$name = $code;
+		}
+
+		$res = '';
+
+		switch($this->currencyType) {
+			case AgaviDecimalFormatter::CURRENCY_SYMBOL:
+				return $symbol;
+			case AgaviDecimalFormatter::CURRENCY_CODE:
+				return $code;
+			case AgaviDecimalFormatter::CURRENCY_NAME:
+				return $name;
+		}
+
+		return null;
 	}
 }
 
