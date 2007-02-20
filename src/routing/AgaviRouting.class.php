@@ -527,8 +527,12 @@ abstract class AgaviRouting
 		// we have to check for newly created pre/postfixes and check that we didn't
 		// generate them yet
 		foreach($params as $name => $value) {
-			if(is_array($value) && !array_key_exists($name, $np)) {
-				$np[$name] = $value['pre'] . $value['val'] . $value['post'];
+			if(!array_key_exists($name, $np)) {
+				if(is_array($value)) {
+					$np[$name] = $value['pre'] . $value['val'] . $value['post'];
+				} else {
+					$np[$name] = $value;
+				}
 			}
 		}
 
