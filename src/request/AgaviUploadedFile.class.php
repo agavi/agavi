@@ -28,7 +28,7 @@
  *
  * @version    $Id$
  */
-final class AgaviUploadedFile extends ArrayObject
+class AgaviUploadedFile extends ArrayObject
 {
 	/**
 	 * @var        array An array to map get* method name fragments to indices.

@@ -61,6 +61,10 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	 */
 	protected $headers = array();
 	
+	/**
+	 * @var        string The name of the AgaviUploadedFile implementation to use.
+	 */
+	protected $uploadedFileClass = 'AgaviUploadedFile';
 
 	/**
 	 * Checks if there is a value of a parameter is empty or not set.
@@ -594,7 +598,7 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 				if(is_array($value)) {
 					$this->fixFilesArray($input, $toIndex);
 				} else {
-					$data = new AgaviUploadedFile();
+					$data = new $this->uploadedFileClass();
 					foreach($theIndices as $name => $theIndex) {
 						$data[$name] = AgaviArrayPathDefinition::getValue(array_merge($theIndex, array($key)), $input, true /* for is_uploaded_file */);
 					}
@@ -602,7 +606,7 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 				}
 			}
 		} else {
-			$data = new AgaviUploadedFile();
+			$data = new $this->uploadedFileClass();
 			foreach($theIndices as $name => $theIndex) {
 				$data[$name] = AgaviArrayPathDefinition::getValue($theIndex, $input, true /* for is_uploaded_file */);
 			}
