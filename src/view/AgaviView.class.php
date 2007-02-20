@@ -130,11 +130,9 @@ abstract class AgaviView
 	/**
 	 * Initialize this view.
 	 *
-	 * @param      AgaviResponse The Response for this Action/View.
-	 * @param      array         The attributes for this View.
+	 * @param      AgaviExecutionContainer This View's execution container.
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
-	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
 	public function initialize(AgaviExecutionContainer $container)

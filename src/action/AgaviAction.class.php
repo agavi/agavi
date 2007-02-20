@@ -107,7 +107,7 @@ abstract class AgaviAction
 	/**
 	 * Initialize this action.
 	 *
-	 * @param      AgaviContext The current application context.
+	 * @param      AgaviExecutionContainer This Action's execution container.
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
