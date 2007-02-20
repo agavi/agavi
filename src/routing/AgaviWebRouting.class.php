@@ -90,6 +90,8 @@ class AgaviWebRouting extends AgaviRouting
 		
 		$rq = $this->context->getRequest();
 		
+		$rd = $rq->getRequestData();
+		
 		$ru = parse_url($rq->getRequestUri());
 		if(!isset($ru['path'])) {
 			$ru['path'] = '';
@@ -121,7 +123,7 @@ class AgaviWebRouting extends AgaviRouting
 			foreach(array_diff(array_keys($parsedInput), array_keys($parsedRuQuery)) as $unset) {
 				unset($_GET[$unset]);
 				if(!isset($_POST[$unset])) {
-					$rq->removeParameter($unset);
+					$rd->removeParameter($unset);
 				}
 			}
 		} else {
