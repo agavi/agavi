@@ -2,8 +2,8 @@
 <!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.4/ldml.dtd">
 <ldml>
 	<identity>
-		<version number="$Revision: 1.68 $"/>
-		<generation date="$Date: 2006/07/11 19:26:43 $"/>
+		<version number="$Revision: 1.69 $"/>
+		<generation date="$Date: 2006/10/26 22:46:08 $"/>
 		<language type="el"/>
 	</identity>
 	<localeDisplayNames>
@@ -138,7 +138,7 @@
 			<territory type="155">Δυτική Ευρώπη</territory>
 			<territory type="419" draft="provisional">Λατινική Αμερική και Καραϊβική</territory>
 			<territory type="830">Νήσοι Καναλιού</territory>
-			<territory type="833">Νήσος Μαν</territory>
+			<territory type="IM">Νήσος Μαν</territory>
 			<territory type="AD">Ανδόρα</territory>
 			<territory type="AE">Ηνωμένα Αραβικά Εμιράτα</territory>
 			<territory type="AF">Αφγανιστάν</territory>

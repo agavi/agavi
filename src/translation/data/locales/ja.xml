@@ -2,8 +2,8 @@
 <!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.4/ldml.dtd">
 <ldml>
 	<identity>
-		<version number="$Revision: 1.89 $"/>
-		<generation date="$Date: 2006/06/29 00:51:05 $"/>
+		<version number="$Revision: 1.90 $"/>
+		<generation date="$Date: 2006/10/26 22:46:08 $"/>
 		<language type="ja"/>
 	</identity>
 	<localeDisplayNames>
@@ -631,7 +631,7 @@
 			<territory type="172">独立国家共同体</territory>
 			<territory type="419">ラテンアメリカ・カリブ地域</territory>
 			<territory type="830">チャネル諸島</territory>
-			<territory type="833">マン島</territory>
+			<territory type="IM">マン島</territory>
 			<territory type="AD">アンドラ</territory>
 			<territory type="AE">アラブ首長国連邦</territory>
 			<territory type="AF">アフガニスタン</territory>

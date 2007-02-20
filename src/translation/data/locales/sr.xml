@@ -2,8 +2,8 @@
 <!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.4/ldml.dtd">
 <ldml>
 	<identity>
-		<version number="$Revision: 1.69 $"/>
-		<generation date="$Date: 2006/06/28 06:03:59 $"/>
+		<version number="$Revision: 1.71 $"/>
+		<generation date="$Date: 2006/10/26 22:46:09 $"/>
 		<language type="sr"/>
 	</identity>
 	<localeDisplayNames>
@@ -126,7 +126,7 @@
 			<territory type="154" draft="unconfirmed">Северна Европа</territory>
 			<territory type="155">Западна Европа</territory>
 			<territory type="830">Каналска острва</territory>
-			<territory type="833">Острво Ман</territory>
+			<territory type="IM">Острво Ман</territory>
 			<territory type="AD">Андора</territory>
 			<territory type="AE">Уједињени Арапски Емирати</territory>
 			<territory type="AF">Авганистан</territory>
@@ -389,6 +389,12 @@
 	<characters>
 		<exemplarCharacters>[а-д ђ е-и ј к л љ м н њ о-т ћ у-ч џ ш]</exemplarCharacters>
 	</characters>
+	<delimiters>
+		<quotationStart draft="unconfirmed">‘</quotationStart>
+		<quotationEnd draft="unconfirmed">’</quotationEnd>
+		<alternateQuotationStart draft="unconfirmed">“</alternateQuotationStart>
+		<alternateQuotationEnd draft="unconfirmed">”</alternateQuotationEnd>
+	</delimiters>
 	<dates>
 		<localizedPatternChars>GanjkHmsSEDFwWxhKzAeugXZvcL</localizedPatternChars>
 		<calendars>

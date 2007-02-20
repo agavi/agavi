@@ -2,8 +2,8 @@
 <!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.4/ldml.dtd">
 <ldml>
 	<identity>
-		<version number="$Revision: 1.84 $"/>
-		<generation date="$Date: 2006/06/28 01:10:34 $"/>
+		<version number="$Revision: 1.85 $"/>
+		<generation date="$Date: 2006/10/26 22:56:54 $"/>
 		<language type="fr"/>
 	</identity>
 	<localeDisplayNames>
@@ -797,8 +797,8 @@
 			<territory type="419">Amérique latine et Caraïbes</territory>
 			<territory type="830">anglo-normandes, îles</territory>
 			<territory type="830" alt="proposed-u148-1" draft="unconfirmed">Iles anglo-normandes</territory>
-			<territory type="833">Île de Man</territory>
-			<territory type="833" alt="proposed-u148-1" draft="unconfirmed">Ile de Man</territory>
+			<territory type="IM">Île de Man</territory>
+			<territory type="IM" alt="proposed-u148-1" draft="unconfirmed">Ile de Man</territory>
 			<territory type="AD">Andorre</territory>
 			<territory type="AE">Émirats arabes unis</territory>
 			<territory type="AF">Afghanistan</territory>

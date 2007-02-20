@@ -2,12 +2,11 @@
 <!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.4/ldml.dtd">
 <ldml>
 	<identity>
-		<version number="$Revision: 1.23 $"/>
-		<generation date="$Date: 2006/10/28 00:22:48 $"/>
+		<version number="$Revision: 1.1 $"/>
+		<generation date="$Date: 2006/10/26 21:31:13 $"/>
 		<language type="sr"/>
 		<script type="Cyrl"/>
-		<territory type="YU"/>
+		<territory type="ME"/>
 	</identity>
-    <alias source="sr_Cyrl_RS" path="//ldml"/>
 </ldml>
 
