@@ -18,10 +18,8 @@ class ControllerTest extends AgaviTestCase
 		$this->_context = AgaviContext::getInstance('test');
 		$this->_context->initialize();
 		//$this->_controller = new TestController();
-		$response = new AgaviWebResponse();
-		$response->initialize($this->_context);
 		$this->_controller = AgaviContext::getInstance('test')->getController();
-		$this->_controller->initialize($response, array());
+		$this->_controller->initialize($this->_context, array());
 
 
 	}
