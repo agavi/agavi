@@ -963,7 +963,6 @@ class AgaviTranslationManager
 	public function getCurrencyFraction($currency)
 	{
 		if(!isset($this->supplementalData['fractions'][$currency])) {
-			var_dump($this->supplementalData['fractions']);
 			return $this->supplementalData['fractions']['DEFAULT'];
 		}
 		return $this->supplementalData['fractions'][$currency];
