@@ -112,6 +112,15 @@ class AgaviCurrencyFormatter extends AgaviDecimalFormatter implements AgaviITran
 			$fn->setFormat($format);
 		}
 
+		$code = $this->getCurrencyCode();
+		$fraction = $this->getContext()->getTranslationManager()->getCurrencyFraction($code);
+		$fn->setFractionDigits($fraction['digits']);
+
+		if($fraction['rounding'] > 0) {
+			$roundingUnit = pow(10, -$fraction['digits']) * $fraction['rounding'];
+			$message = round($message / $roundingUnit) * $roundingUnit;
+		}
+
 		return $fn->formatCurrency($message, $fn->getCurrencySymbol());
 	}
 
@@ -133,7 +142,25 @@ class AgaviCurrencyFormatter extends AgaviDecimalFormatter implements AgaviITran
 	}
 
 	/**
-	 * Returns the current currency symbol.
+	 * Returns the iso code of the currency which should be used when formatting.
+	 *
+	 * @return     string The currency iso code.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getCurrencyCode()
+	{
+		$code = $this->currencyCode;
+		if(!$code && $this->currentLocale) {
+			$code = $this->currentLocale->getLocaleCurrency();
+		}
+
+		return $code;
+	}
+
+	/**
+	 * Returns the currency symbol which should be used when formatting.
 	 *
 	 * @return     string The currency symbol
 	 *
@@ -142,12 +169,9 @@ class AgaviCurrencyFormatter extends AgaviDecimalFormatter implements AgaviITran
 	 */
 	public function getCurrencySymbol()
 	{
-		$code = $this->currencyCode;
+		$code = $this->getCurrencyCode();
 		if(!$this->currentLocale) {
 			return $code;
-		}
-		if(!$code) {
-			$code = $this->currentLocale->getLocaleCurrency();
 		}
 
 		$symbol = $this->currentLocale->getCurrencySymbol($code);
@@ -171,6 +195,19 @@ class AgaviCurrencyFormatter extends AgaviDecimalFormatter implements AgaviITran
 		}
 
 		return null;
+	}
+
+	/**
+	 * Sets the amount of fractional digits to be shown.
+	 *
+	 * @param      int The amount of digits.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function setFractionDigits($count)
+	{
+		$this->maxShowedFractionals = $this->minShowedFractionals = $count;
 	}
 }
 

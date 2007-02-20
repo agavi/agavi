@@ -67,7 +67,12 @@ class AgaviLdmlSupplementalConfigHandler extends AgaviConfigHandler
 
 		foreach($dataTree->currencyData as $currencyNode) {
 			if($currencyNode->getName() == 'fractions') {
-				// TODO: handle this ...
+				foreach($currencyNode as $info) {
+					$data['fractions'][$info->getAttribute('iso4217')] = array(
+						'digits' => $info->getAttribute('digits', 2),
+						'rounding' => $info->getAttribute('rounding', 1),
+					);
+				}
 			} elseif($currencyNode->getName() == 'region') {
 				foreach($currencyNode as $currency) {
 					if($currency->getName() == 'currency') {

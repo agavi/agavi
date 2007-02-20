@@ -949,6 +949,25 @@ class AgaviTranslationManager
 		}
 		return $this->supplementalData['territories'][$country];
 	}
+
+	/**
+	 * Returns an array containing digits and rounding information for a currency.
+	 *
+	 * @param      string The uppercase 3 letter currency iso code.
+	 *
+	 * @return     array The data.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getCurrencyFraction($currency)
+	{
+		if(!isset($this->supplementalData['fractions'][$currency])) {
+			var_dump($this->supplementalData['fractions']);
+			return $this->supplementalData['fractions']['DEFAULT'];
+		}
+		return $this->supplementalData['fractions'][$currency];
+	}
 }
 
 ?>
