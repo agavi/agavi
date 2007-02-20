@@ -168,7 +168,6 @@ class WebResponseTest extends AgaviTestCase
 			'httponly' => false,
 		);
 		$r->setCookie('cookieName', 'value');
-		var_dump($r->getCookie('cookieName'));
 		$this->assertEquals($info_ex, $r->getCookie('cookieName'));
 
 		$r->setCookie('cookieName', 'value 2', 300, '/foo');
