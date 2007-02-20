@@ -71,9 +71,12 @@ class AgaviSessionStorage extends AgaviStorage
 		if(session_id() === '') {
 			$cookieDefaults = session_get_cookie_params();
 			
-			// set path to true if the default path from php.ini is "/". this will, in startup(), trigger the base href as the path.
-			if($cookieDefaults['path'] == '/') {
-				$cookieDefaults['path'] = true;
+			$routing = $this->context->getRouting();
+			if($routing instanceof AgaviWebRouting) {
+				// set path to true if the default path from php.ini is "/". this will, in startup(), trigger the base href as the path.
+				if($cookieDefaults['path'] == '/') {
+					$cookieDefaults['path'] = true;
+				}
 			}
 			
 			$lifetime = $this->getParameter('session_cookie_lifetime', $cookieDefaults['lifetime']);
