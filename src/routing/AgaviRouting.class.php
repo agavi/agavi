@@ -277,7 +277,6 @@ abstract class AgaviRouting
 				$options['optional_parameters'][$name] = true;
 			}
 
-
 			if(!isset($options['defaults'][$name]) && ($param['pre'] || $param['val'] || $param['post'])) {
 				unset($param['is_optional']);
 				$options['defaults'][$name] = $param;
@@ -1019,7 +1018,10 @@ abstract class AgaviRouting
 				}
 			} elseif($state == 'afterRx') {
 				if($c == '?') {
-					$vars[$rxName]['is_optional'] = true;
+					// only record the optional state when the pattern had a name
+					if(isset($vars[$rxName])) {
+						$vars[$rxName]['is_optional'] = true;
+					}
 					$rxStr .= $c;
 				} else {
 					// let the start state parse the char
