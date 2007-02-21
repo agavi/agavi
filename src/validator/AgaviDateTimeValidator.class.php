@@ -88,6 +88,9 @@ class AgaviDateTimeValidator extends AgaviValidator
 	 */
 	protected function validate()
 	{
+		if(!AgaviConfig::get('use_translation')) {
+			throw new AgaviConfigurationException('The datetime validator can only be used with use_translation on');
+		}
 		$tm = $this->getContext()->getTranslationManager();
 		$cal = null;
 

@@ -52,7 +52,7 @@ class AgaviNumberValidator extends AgaviValidator
 
 		$hasExtraChars = false;
 
-		if(!$this->getParameter('no_locale', false)) {
+		if(AgaviConfig::get('use_translation') && !$this->getParameter('no_locale', false)) {
 			if($locale = $this->getParameter('in_locale')) {
 				$locale = $this->getContext()->getTranslationManager()->getLocale($locale);
 			} else {
