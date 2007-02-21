@@ -551,9 +551,19 @@ class AgaviTranslationManager
 	{
 		if(!$this->currentLocale || $this->currentLocale->getIdentifier() != $this->givenLocaleIdentifier) {
 			$this->currentLocale = $this->getLocale($this->givenLocaleIdentifier);
+			// we first need to initialize all message translators before the number formatters
 			foreach($this->translators as $translatorList) {
-				foreach($translatorList as $translator) {
-					$translator->localeChanged($this->currentLocale);
+				foreach($translatorList as $type => $translator) {
+					if($type == self::MESSAGE) {
+						$translator->localeChanged($this->currentLocale);
+					}
+				}
+			}
+			foreach($this->translators as $translatorList) {
+				foreach($translatorList as $type => $translator) {
+					if($type != self::MESSAGE) {
+						$translator->localeChanged($this->currentLocale);
+					}
 				}
 			}
 		}
