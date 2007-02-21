@@ -9,14 +9,7 @@
 		<translators default_domain="default">
 			<translator domain="default">
 
-				<message_translator type="AgaviGettextTranslator" />
-
-				<number_formatter type="number" />
-
-				<currency_formatter type="currency" />
-
-				<date_formatter type="date" />
-				
+				<message_translator class="AgaviGettextTranslator" />
 			</translator>
 		</translators>
 		

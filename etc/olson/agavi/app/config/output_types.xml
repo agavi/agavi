@@ -5,7 +5,9 @@
 		<output_types default="html">
 			
 			<output_type name="html">
-				<renderer class="AgaviPhpRenderer" />
+				<renderers default="php">
+					<renderer name="php" class="AgaviPhpRenderer" />
+				</renderers>
 				<parameters>
 					<parameter name="http_headers">
 						<parameter name="Content-Type">text/html</parameter>
