@@ -466,6 +466,10 @@ abstract class AgaviRouting
 	 */
 	public function gen($route, array $params = array(), $options = array())
 	{
+		// we need to store the original params since we will be trying to fill the 
+		// parameters up to the first user supplied parameter
+		$originalParams = $params;
+
 		$refillAllParams = false;
 		if($options['refill_all_parameters']) {
 			$refillAllParams = true;
@@ -539,7 +543,7 @@ abstract class AgaviRouting
 			if($refillValue) {
 				// we didn't get a user param yet, so lets try to fill the param with the
 				// incoming match or the default value
-				if(array_key_exists($name, $params)) {
+				if(array_key_exists($name, $originalParams)) {
 					$refillValue = false;
 				} elseif(isset($optionalParams[$name])) {
 					if(isset($matchedParams[$name])) {
