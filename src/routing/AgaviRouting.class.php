@@ -533,7 +533,11 @@ abstract class AgaviRouting
 		$refillValue = true;
 		$finalParams = array();
 		foreach($availableParams as $name) {
+			// first lets loop all params which occur in the complete url string
+			// until we find one that has been set in the user params.
 			if($refillValue) {
+				// we didn't get a user param yet, so lets try to fill the param with the
+				// incoming match or the default value
 				if(array_key_exists($name, $params)) {
 					$refillValue = false;
 				} elseif(isset($optionalParams[$name])) {
@@ -543,7 +547,10 @@ abstract class AgaviRouting
 						} else {
 							$finalParams[$name] = $matchedParams[$name];
 						}
+					} elseif(isset($defaults[$name])) {
+						$finalParams[$name] = $defaults[$name]['pre'] . $defaults[$name]['val'] . $defaults[$name]['post'];
 					} else {
+						// there is no default or incoming match for this optional param, so remove it
 						$finalParams[$name] = null;
 					}
 				} else {
@@ -558,6 +565,7 @@ abstract class AgaviRouting
 					}
 				}
 			} else {
+				// now we just need to check if there are defaults for this available param and fill them in if applicable
 				if(isset($defaults[$name])) {
 					$default = $defaults[$name];
 					if(isset($optionalParams[$name])) {
