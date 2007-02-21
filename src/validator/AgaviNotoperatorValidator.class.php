@@ -24,6 +24,8 @@
  *
  * @author     Dominik del Bondio <ddb@bitxtender.com>
  * @author     Uwe Mesecke <uwe@mesecke.net>
+ * @author     Ross Lawley <ross.lawley@gmail.com>
+ * @author     David Zülke <dz@bitxtender.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
  *
@@ -56,11 +58,15 @@ class AgaviNotOperatorValidator extends AgaviOperatorValidator
 	 * @return     bool True if the child validator failed.
 	 * 
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @author     Ross Lawley <ross.lawley@gmail.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	protected function validate()
 	{
-		$result = $this->children[0]->execute($this->validationParameters);
+		$children = $this->children;
+		$child = array_shift($children);
+		$result = $child->execute($this->validationParameters);
 		if($result == AgaviValidator::CRITICAL || $result == AgaviValidator::SUCCESS) {
 			$this->result = max(AgaviValidator::ERROR, $result);
 			$this->throwError();
