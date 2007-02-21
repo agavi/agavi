@@ -79,7 +79,8 @@ class RoutingTest extends AgaviTestCase
 		$this->assertEquals(array('/anchor/child2'), array_slice($r->gen('t1child2'), 0, 1));
 		$this->assertEquals(array('/anchor/bar'), array_slice($r->gen('t1child2', array('foo' => 'bar')), 0, 1));
 		$this->assertEquals(array('/anchor/child3/baz'), array_slice($r->gen('t1child3', array('bar' => 'baz')), 0, 1));
-		$this->assertEquals(array('/anchor/child4/'), array_slice($r->gen('t1child4'), 0, 1));
+		$this->assertEquals(array('/anchor/child4/baz'), array_slice($r->gen('t1child4'), 0, 1));
+		$this->assertEquals(array('/anchor/child4/'), array_slice($r->gen('t1child4', array(), array('omit_defaults' => true)), 0, 1));
 		$this->assertEquals(array('/anchor/foo/bar'), array_slice($r->gen('t1child4', array('foo' => 'foo', 'bar' => 'bar')), 0, 1));
 
 		$r->loadConfig(AgaviConfig::get('core.config_dir') . '/tests/routing_simple.xml', 'test2');
@@ -108,7 +109,8 @@ class RoutingTest extends AgaviTestCase
 		$this->assertEquals(3, count($rd->getParameters()));
 		$this->assertEquals('MACHINE', $rd->getParameter('machine'));
 
-		$this->assertsame(array('/parent/MACHINE'), array_slice($r->gen('test2child1', array('machine' => 'MACHINE')), 0, 1));
+		$this->assertsame(array('/parent/MACHINE'), array_slice($r->gen('test2child1', array('category' => null, 'machine' => 'MACHINE')), 0, 1));
+		$this->assertsame(array('/parent//MACHINE'), array_slice($r->gen('test2child1', array('machine' => 'MACHINE')), 0, 1));
 		$this->assertEquals(array('/parent/cat1/MACHINE'), array_slice($r->gen('test2child1', array('machine' => 'MACHINE', 'category' => 'cat1')), 0, 1));
 	}
 
