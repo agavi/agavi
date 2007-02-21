@@ -79,7 +79,7 @@ class RoutingTest extends AgaviTestCase
 		$this->assertEquals(array('/anchor/child2'), array_slice($r->gen('t1child2'), 0, 1));
 		$this->assertEquals(array('/anchor/bar'), array_slice($r->gen('t1child2', array('foo' => 'bar')), 0, 1));
 		$this->assertEquals(array('/anchor/child3/baz'), array_slice($r->gen('t1child3', array('bar' => 'baz')), 0, 1));
-		$this->assertEquals(array('/anchor/child4/baz'), array_slice($r->gen('t1child4'), 0, 1));
+		$this->assertEquals(array('/anchor/child4/'), array_slice($r->gen('t1child4'), 0, 1));
 		$this->assertEquals(array('/anchor/foo/bar'), array_slice($r->gen('t1child4', array('foo' => 'foo', 'bar' => 'bar')), 0, 1));
 
 		$r->loadConfig(AgaviConfig::get('core.config_dir') . '/tests/routing_simple.xml', 'test2');

@@ -197,6 +197,11 @@ class AgaviWebRouting extends AgaviRouting
 	 */
 	public function gen($route, array $params = array(), $options = array())
 	{
+		if(substr($route, -1) == '*') {
+			$options['refill_all_parameters'] = true;
+			$route = substr($route, 0, -1);
+		}
+
 		$req = $this->context->getRequest();
 		
 		$options = $this->resolveGenOptions($options);

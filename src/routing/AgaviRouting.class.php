@@ -241,7 +241,7 @@ abstract class AgaviRouting
 				$defaultOpts['parent'] = $parent;
 			}
 		} else {
-			$defaultOpts = array('name' => uniqid (rand()), 'stop' => true, 'output_type' => null, 'module' => null, 'action' => null, 'parameters' => array(), 'ignores' => array(), 'defaults' => array(), 'childs' => array(), 'callback' => null, 'imply' => false, 'cut' => null, 'source' => null, 'method' => null, 'constraint' => array(), 'locale' => null, 'pattern_parameters' => array(), 'parent' => $parent, 'reverseStr' => '', 'nostops' => array(), 'anchor' => self::ANCHOR_NONE);
+			$defaultOpts = array('name' => uniqid (rand()), 'stop' => true, 'output_type' => null, 'module' => null, 'action' => null, 'parameters' => array(), 'ignores' => array(), 'defaults' => array(), 'childs' => array(), 'callback' => null, 'imply' => false, 'cut' => null, 'source' => null, 'method' => null, 'constraint' => array(), 'locale' => null, 'pattern_parameters' => array(), 'optional_parameters' => array(), 'parent' => $parent, 'reverseStr' => '', 'nostops' => array(), 'anchor' => self::ANCHOR_NONE);
 		}
 
 		if(isset($options['defaults'])) {
@@ -273,7 +273,13 @@ abstract class AgaviRouting
 		foreach($routeParams as $name => $param) {
 			$params[] = $name;
 
+			if($param['is_optional']) {
+				$options['optional_parameters'][$name] = true;
+			}
+
+
 			if(!isset($options['defaults'][$name]) && ($param['pre'] || $param['val'] || $param['post'])) {
+				unset($param['is_optional']);
 				$options['defaults'][$name] = $param;
 			}
 		}
@@ -459,6 +465,12 @@ abstract class AgaviRouting
 	 */
 	public function gen($route, array $params = array(), $options = array())
 	{
+		$refillAllParams = false;
+		if(isset($options['refill_all_parameters']) && $options['refill_all_parameters']) {
+			$refillAllParams = true;
+		}
+
+		
 		$routes = $route;
 		if(is_string($route)) {
 			$routes = $this->getAffectedRoutes($routes);
@@ -468,6 +480,7 @@ abstract class AgaviRouting
 		$defaults = array();
 		$availableParams = array();
 		$matchedParams = array(); // the merged incoming matched params of implied routes
+		$optionalParams = array();
 		$firstRoute = true;
 		foreach($routes as $route) {
 			$r = $this->routes[$route];
@@ -490,11 +503,10 @@ abstract class AgaviRouting
 				}
 			}
 
-			if($r['opt']['imply']) {
-				$matchedParams = array_merge($matchedParams, $r['matches']);
-			}
+			$matchedParams = array_merge($matchedParams, $r['matches']);
+			$optionalParams = array_merge($optionalParams, $r['opt']['optional_parameters']);
 
-			$availableParams = array_merge($availableParams, $r['opt']['pattern_parameters']);
+			$availableParams = array_merge($availableParams, array_reverse($r['opt']['pattern_parameters']));
 
 			if($firstRoute || $r['opt']['cut'] || (count($r['opt']['childs']) && $r['opt']['cut'] === null)) {
 				if($r['opt']['anchor'] & self::ANCHOR_START || $r['opt']['anchor'] == self::ANCHOR_NONE) {
@@ -508,43 +520,78 @@ abstract class AgaviRouting
 			$firstRoute = false;
 		}
 
-		$np = array();
-		foreach($defaults as $name => $val) {
-			if(isset($params[$name])) {
-				if(is_array($params[$name])) {
-					$np[$name] = $params[$name]['pre'] . $params[$name]['val'] . $params[$name]['post'];
-				} else {
-					$np[$name] = $val['pre'] . $params[$name] . $val['post'];
-				}
-			} elseif(isset($matchedParams[$name])) {
-				$np[$name] = $val['pre'] . $matchedParams[$name] . $val['post'];
-			} elseif($val['val'] !== null && $val['val'] !== '') {
-				// more then just pre or postfix
-				$np[$name] = $val['pre'] . $val['val'] . $val['post'];
-			}
-		}
+		$availableParams = array_reverse($availableParams);
 
-		// we have to check for newly created pre/postfixes and check that we didn't
-		// generate them yet
-		foreach($params as $name => $value) {
-			if(!array_key_exists($name, $np)) {
-				if(is_array($value)) {
-					$np[$name] = $value['pre'] . $value['val'] . $value['post'];
-				} else {
-					$np[$name] = $value;
+		if($refillAllParams) {
+			foreach($matchedParams as $name => $value) {
+				if(!array_key_exists($name, $params)) {
+					$params[$name] = $value;
 				}
 			}
 		}
 
-
-		foreach($matchedParams as $name => $value) {
-			if(!array_key_exists($name, $params) && !array_key_exists($name, $np)) {
-				$np[$name] = $value;
+		$refillValue = true;
+		$finalParams = array();
+		foreach($availableParams as $name) {
+			if($refillValue) {
+				if(array_key_exists($name, $params)) {
+					$refillValue = false;
+				} elseif(isset($optionalParams[$name])) {
+					if(isset($matchedParams[$name])) {
+						if(isset($defaults[$name])) {
+							$finalParams[$name] = $defaults[$name]['pre'] . $matchedParams[$name] . $defaults[$name]['post'];
+						} else {
+							$finalParams[$name] = $matchedParams[$name];
+						}
+					} else {
+						$finalParams[$name] = null;
+					}
+				} else {
+					if(isset($matchedParams[$name])) {
+						if(isset($defaults[$name])) {
+							$finalParams[$name] = $defaults[$name]['pre'] . $matchedParams[$name] . $defaults[$name]['post'];
+						} else {
+							$finalParams[$name] = $matchedParams[$name];
+						}
+					} elseif(isset($defaults[$name])) {
+						$finalParams[$name] = $defaults[$name]['pre'] . $defaults[$name]['val'] . $defaults[$name]['post'];
+					}
+				}
+			} else {
+				if(isset($defaults[$name])) {
+					$default = $defaults[$name];
+					if(isset($optionalParams[$name])) {
+						if(array_key_exists($name, $params)) {
+							if($params[$name] === null) {
+								$finalParams[$name] = null;
+							} else {
+								$finalParams[$name] = $default['pre'] . $params[$name] . $default['post'];
+							}
+						} else {
+							$finalParams[$name] = null;
+						}
+					} elseif(!array_key_exists($name, $params) || $params[$name] === null) {
+						$finalParams[$name] = $default['pre'] . $default['val'] . $default['post'];
+					}
+				}
 			}
 		}
 
-		// get the remaining params too
-		$params = array_merge($params, array_merge($np, array_filter($params, 'is_null')));
+		foreach($params as $name => $param) {
+			if(!array_key_exists($name, $finalParams)) {
+				if($param === null && isset($optionalParams[$name])) {
+					$finalParams[$name] = $param;
+				} else {
+					if(isset($defaults[$name])) {
+						$finalParams[$name] = $defaults[$name]['pre'] . ($param !== null ? $param : $defaults[$name]['val']) . $defaults[$name]['post'];
+					} else {
+						$finalParams[$name] = $param;
+					}
+				}
+			}
+		}
+		
+		$params = $finalParams;
 
 		$from = array();
 		$to = array();
@@ -948,7 +995,7 @@ abstract class AgaviRouting
 									$rxPostfix = '';
 								}
 
-								$vars[$rxName] = array('pre' => $rxPrefix, 'val' => $rxInner, 'post' => $rxPostfix);
+								$vars[$rxName] = array('pre' => $rxPrefix, 'val' => $rxInner, 'post' => $rxPostfix, 'is_optional' => false);
 							}
 						}
 
@@ -964,6 +1011,7 @@ abstract class AgaviRouting
 				}
 			} elseif($state == 'afterRx') {
 				if($c == '?') {
+					$vars[$rxName]['is_optional'] = true;
 					$rxStr .= $c;
 				} else {
 					// let the start state parse the char
