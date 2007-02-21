@@ -471,7 +471,7 @@ abstract class AgaviRouting
 		$originalParams = $params;
 
 		$refillAllParams = false;
-		if($options['refill_all_parameters']) {
+		if(!empty($options['refill_all_parameters'])) {
 			$refillAllParams = true;
 		}
 
@@ -604,7 +604,7 @@ abstract class AgaviRouting
 			}
 		}
 
-		if($options['omit_defaults']) {
+		if(!empty($options['omit_defaults'])) {
 			// remove the optional parameters from the right to the left from the pattern when they match
 			// their default
 			foreach(array_reverse($availableParams) as $name) {
