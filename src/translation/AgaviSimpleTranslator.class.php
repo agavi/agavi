@@ -40,6 +40,11 @@ class AgaviSimpleTranslator extends AgaviBasicTranslator
 	 */
 	protected $currentData = array();
 
+	/**
+	 * @var        AgaviLocale The currently set locale
+	 */
+	protected $locale = null;
+
 
 	/**
 	 * Initialize this Translator.
@@ -76,7 +81,7 @@ class AgaviSimpleTranslator extends AgaviBasicTranslator
 	 */
 	public function translate($message, $domain, AgaviLocale $locale = null)
 	{
-		if($locale) {
+		if($locale && $locale !== $this->locale) {
 			$oldCurrentData = $this->currentData;
 			$oldLocale = $this->locale;
 			$this->localeChanged($locale);
@@ -88,7 +93,7 @@ class AgaviSimpleTranslator extends AgaviBasicTranslator
 			$data = isset($this->currentData[$domain][$message]) ? $this->currentData[$domain][$message] : $message;
 		}
 
-		if($locale) {
+		if($locale && $locale !== $this->locale) {
 			$this->currentData = $oldCurrentData;
 			$this->locale = $oldLocale;
 		}
