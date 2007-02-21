@@ -79,7 +79,9 @@ abstract class AgaviRouting
 	public function __construct()
 	{
 		$this->defaultGenOptions = array_merge($this->defaultGenOptions, array(
-			'relative' => true
+			'relative' => true,
+			'refill_all_parameters' => false,
+			'omit_defaults' => false,
 		));
 	}
 
@@ -465,7 +467,7 @@ abstract class AgaviRouting
 	public function gen($route, array $params = array(), $options = array())
 	{
 		$refillAllParams = false;
-		if(isset($options['refill_all_parameters']) && $options['refill_all_parameters']) {
+		if($options['refill_all_parameters']) {
 			$refillAllParams = true;
 		}
 
@@ -515,7 +517,7 @@ abstract class AgaviRouting
 				}
 			}
 
-			$defaults = array_merge($myDefaults, $defaults);
+			$defaults = array_merge($defaults, $myDefaults);
 			$firstRoute = false;
 		}
 
@@ -597,7 +599,19 @@ abstract class AgaviRouting
 				}
 			}
 		}
-		
+
+		if($options['omit_defaults']) {
+			// remove the optional parameters from the right to the left from the pattern when they match
+			// their default
+			foreach(array_reverse($availableParams) as $name) {
+				if(isset($optionalParams[$name]) && isset($defaults[$name]) && $finalParams[$name] == $defaults[$name]['pre'] . $defaults[$name]['val'] . $defaults[$name]['post']) {
+					$finalParams[$name] = null;
+				} else {
+					break;
+				}
+			}
+		}
+
 		$params = $finalParams;
 
 		$from = array();
