@@ -302,7 +302,6 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 			foreach($parameters->getSourceNames() as $source) {
 				$asf = array_flip($this->getSucceededFields($source));
 				$sourceItems = $parameters->getAll($source);
-				// FIXME: Bad news... this system must handle more than just "parameters" :S
 				foreach(AgaviArrayPathDefinition::getFlatKeyNames($sourceItems) as $name) {
 					if(!isset($asf[$name]) && ($source != AgaviRequestDataHolder::SOURCE_PARAMETERS || ($name != $ma && $name != $aa))) {
 						$parameters->remove($source, $name);
