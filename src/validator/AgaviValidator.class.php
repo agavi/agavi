@@ -487,7 +487,10 @@ abstract class AgaviValidator extends AgaviParameterHolder
 			$this->incident = new AgaviValidationIncident($this, self::mapErrorCode($this->getParameter('severity', 'error')));
 		}
 
-		$this->incident->addError(new AgaviValidationError($error, $index, $affectedArguments));
+		if($error !== null || count($affectedArguments) != 0) {
+			// don't throw empty error messages without affected fields
+			$this->incident->addError(new AgaviValidationError($error, $index, $affectedArguments));
+		}
 	}
 
 
