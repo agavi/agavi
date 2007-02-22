@@ -149,7 +149,7 @@
         <title>From SVN</title>
 
         <para>Public access to the Subversion repository is possible via
-        <ulink url="svn://svn.agavi.org/agavi">http://svn.agavi.org/</ulink>.
+        <ulink url="http://svn.agavi.org/agavi">http://svn.agavi.org/</ulink>.
         If you want to get the bleeding edge version, use
         <filename>/trunk</filename>. Specific releases are available through
         <filename>/agavi/tags</filename>. Also, you can get development
