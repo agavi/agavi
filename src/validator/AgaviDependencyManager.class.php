@@ -59,8 +59,15 @@ class AgaviDependencyManager
 	 */
 	public function checkDependencies(array $tokens, AgaviVirtualArrayPath $base)
 	{
+		$root = new AgaviVirtualArrayPath('');
 		foreach($tokens as $token) {
-			if(!$base->getValueByChildPath($token, $this->depData)) {
+			$path = $root;
+			if(substr($token, 0, 1) == '[') {
+				// the dependency we need to check is relative
+				$path = $base;
+			}
+
+			if(!$path->getValueByChildPath($token, $this->depData)) {
 				return false;
 			}
 		}
