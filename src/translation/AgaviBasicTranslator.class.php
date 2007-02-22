@@ -73,7 +73,6 @@ abstract class AgaviBasicTranslator implements AgaviITranslator
 	public function localeChanged($newLocale)
 	{
 	}
-
 }
 
 ?>

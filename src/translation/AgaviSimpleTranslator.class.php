@@ -77,7 +77,17 @@ class AgaviSimpleTranslator extends AgaviBasicTranslator
 	}
 
 	/**
-	 * @see AgaviITranslator::translate()
+	 * Translates a message into the defined language.
+	 *
+	 * @param      mixed       The message to be translated.
+	 * @param      string      The domain of the message.
+	 * @param      AgaviLocale The locale to which the message should be 
+	 *                         translated.
+	 *
+	 * @return     string The translated message.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
 	 */
 	public function translate($message, $domain, AgaviLocale $locale = null)
 	{
@@ -108,7 +118,7 @@ class AgaviSimpleTranslator extends AgaviBasicTranslator
 	 *
 	 * @param      AgaviLocale The new default locale.
 	 *
-	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function localeChanged($newLocale)
