@@ -130,7 +130,16 @@ class AgaviWebResponse extends AgaviResponse
 	public function send(AgaviOutputType $outputType = null)
 	{
 		if($this->redirect) {
-			$this->setHttpHeader('Location', $this->redirect['location']);
+			$location = $this->redirect['location'];
+			if(!preg_match('#^[^:]+://#', $location)) {
+				if($location[0] == '/') {
+					$rq = $this->context->getRequest();
+					$location = $rq->getUrlScheme . '://' . $rq->getUrlAuthority() . $location;
+				} else {
+					$location = $this->context->getRouting()->getBaseHref() . $location;
+				}
+			}
+			$this->setHttpHeader('Location', $location);
 			$this->setHttpStatusCode($this->redirect['code']);
 		}
 		$this->sendHttpResponseHeaders($outputType);
@@ -511,7 +520,7 @@ class AgaviWebResponse extends AgaviResponse
 			header($this->httpStatusCodes[$this->httpStatusCode]);
 		}
 		
-		if($outputType instanceof AgaviOutputType) {
+		if($outputType !== null) {
 			foreach($outputType->getParameter('http_headers', array()) as $name => $value) {
 				if(!$this->hasHttpHeader($name)) {
 					$this->setHttpHeader($name, $value);
@@ -522,7 +531,6 @@ class AgaviWebResponse extends AgaviResponse
 		if($this->getParameter('send_content_length', true) && !$this->hasHttpHeader('Content-Length') && ($contentSize = $this->getContentSize()) !== false) {
 			$this->setHttpHeader('Content-Length', $contentSize);
 		}
-		
 		
 		$routing = $this->context->getRouting(); 
 		if($routing instanceof AgaviWebRouting) {

@@ -4,8 +4,9 @@ AGAVI CHANGELOG
 0.11.0 (????? ??, 2007)
 
 
-0.11.0 RC3 (February 20, 2007)
+0.11.0 RC3 (February 22, 2007)
 
+ADD: Allow non-absolute URLs for WebResponse redirects (#449) (David)
 ADD: AgaviRequest::isLocked() ([1728]) (David)
 ADD: Make AgaviRequestDataHolder classes configurable (#438) (David)
 ADD: Allow retrieval of the translators/formatters for a defined domain (#417) (Dominik)
