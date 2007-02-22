@@ -619,8 +619,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 					$this->throwError();
 					return self::mapErrorCode($this->getParameter('severity', 'error'));
 				} else {
-					// no reason to throw any error since it wouldn't be included anyways
-					return self::NONE;
+					return self::NOT_PROCESSED;
 				}
 			}
 
@@ -664,7 +663,12 @@ abstract class AgaviValidator extends AgaviParameterHolder
 		$this->validationParameters = $parameters;
 		$base = new AgaviVirtualArrayPath($this->getParameter('base'));
 
-		return $this->validateInBase($base);
+		$res = $this->validateInBase($base);
+		if($this->incident && $this->validationManager) {
+			$this->validationManager->addIncident($this->incident);
+			$this->incident = null;
+		}
+		return $res;
 	}
 
 	/**
