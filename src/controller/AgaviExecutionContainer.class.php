@@ -41,12 +41,12 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	protected $validationManager = null;
 	
 	/**
-	 * @var        AgaviRequestData A request data instance with request info.
+	 * @var        AgaviRequestDataHolder A request data holder with request info.
 	 */
 	protected $requestData = null;
 	
 	/**
-	 * @var        AgaviRequestData A request data instance with additional args.
+	 * @var        AgaviRequestDataHolder A request data holder with arguments.
 	 */
 	protected $arguments = null;
 	
@@ -560,7 +560,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	/**
 	 * Set the module name for this container.
 	 *
-	 * @return     string A module name.
+	 * @param      string A module name.
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
@@ -573,7 +573,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	/**
 	 * Set the action name for this container.
 	 *
-	 * @return     string An action name.
+	 * @param      string An action name.
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
@@ -586,7 +586,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	/**
 	 * Set the view module name for this container.
 	 *
-	 * @return     string A view module name.
+	 * @param      string A view module name.
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
@@ -599,7 +599,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	/**
 	 * Set the module name for this container.
 	 *
-	 * @return     string A view name.
+	 * @param      string A view name.
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
@@ -638,7 +638,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	/**
 	 * Set the container that should be executed once this one finished running.
 	 *
-	 * @param      AgaviExcecutionContainer An execution container instance.
+	 * @param      AgaviExecutionContainer An execution container instance.
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
