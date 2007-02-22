@@ -681,7 +681,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 *
 	 * @return     int The error severity as in (see severity constants).
 	 *
-	 * @throws     <b>AgaviValidatorException<b> if the input was no known 
+	 * @throws     <b>AgaviValidatorException</b> if the input was no known 
 	 *                                           severity
 	 *
 	 * @author     Uwe Mesecke <uwe@mesecke.net>

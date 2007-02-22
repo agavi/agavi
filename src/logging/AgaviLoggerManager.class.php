@@ -218,7 +218,7 @@ class AgaviLoggerManager
 	 *
 	 * @param      string      The name of the the default logger.
 	 *
-	 * @throws     <b>AgaviLoggingException<b> if the logger was not found.
+	 * @throws     <b>AgaviLoggingException</b> if the logger was not found.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0

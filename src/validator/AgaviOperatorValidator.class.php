@@ -56,7 +56,7 @@ abstract class AgaviOperatorValidator extends AgaviValidator implements AgaviIVa
 	 * is valid. This method is run first when execute() is invoked and
 	 * should throw an exception if the setup is invalid.
 	 * 
-	 * @throws     <b>AgaviValidatorException<b> If the  quantity of child 
+	 * @throws     <b>AgaviValidatorException</b> If the  quantity of child 
 	 *                                           validators is invalid
 	 *
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
