@@ -608,8 +608,12 @@ abstract class AgaviRouting
 			// remove the optional parameters from the right to the left from the pattern when they match
 			// their default
 			foreach(array_reverse($availableParams) as $name) {
-				if(isset($optionalParams[$name]) && isset($defaults[$name]) && $finalParams[$name] == $defaults[$name]['pre'] . $this->escapeOutputParameter($defaults[$name]['val']) . $defaults[$name]['post']) {
-					$finalParams[$name] = null;
+				if(isset($optionalParams[$name])) {
+					if($finalParams[$name] === null || isset($defaults[$name]) && $finalParams[$name] == $defaults[$name]['pre'] . $this->escapeOutputParameter($defaults[$name]['val']) . $defaults[$name]['post']) {
+						$finalParams[$name] = null;
+					} else {
+						break;
+					}
 				} else {
 					break;
 				}
