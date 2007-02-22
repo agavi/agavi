@@ -530,7 +530,7 @@ abstract class AgaviRouting
 		if($refillAllParams) {
 			foreach($matchedParams as $name => $value) {
 				if(!array_key_exists($name, $params)) {
-					$params[$name] = $value;
+					$params[$name] = $this->escapeOutputParameter($value);
 				}
 			}
 		}
@@ -548,12 +548,12 @@ abstract class AgaviRouting
 				} elseif(isset($optionalParams[$name])) {
 					if(isset($matchedParams[$name])) {
 						if(isset($defaults[$name])) {
-							$finalParams[$name] = $defaults[$name]['pre'] . $matchedParams[$name] . $defaults[$name]['post'];
+							$finalParams[$name] = $defaults[$name]['pre'] . $this->escapeOutputParameter($matchedParams[$name]) . $defaults[$name]['post'];
 						} else {
-							$finalParams[$name] = $matchedParams[$name];
+							$finalParams[$name] = $this->escapeOutputParameter($matchedParams[$name]);
 						}
 					} elseif(isset($defaults[$name]) && $defaults[$name]['val']) {
-						$finalParams[$name] = $defaults[$name]['pre'] . $defaults[$name]['val'] . $defaults[$name]['post'];
+						$finalParams[$name] = $defaults[$name]['pre'] . $this->escapeOutputParameter($defaults[$name]['val']) . $defaults[$name]['post'];
 					} else {
 						// there is no default or incoming match for this optional param, so remove it
 						$finalParams[$name] = null;
@@ -561,12 +561,12 @@ abstract class AgaviRouting
 				} else {
 					if(isset($matchedParams[$name])) {
 						if(isset($defaults[$name])) {
-							$finalParams[$name] = $defaults[$name]['pre'] . $matchedParams[$name] . $defaults[$name]['post'];
+							$finalParams[$name] = $defaults[$name]['pre'] . $this->escapeOutputParameter($matchedParams[$name]) . $defaults[$name]['post'];
 						} else {
-							$finalParams[$name] = $matchedParams[$name];
+							$finalParams[$name] = $this->escapeOutputParameter($matchedParams[$name]);
 						}
 					} elseif(isset($defaults[$name])) {
-						$finalParams[$name] = $defaults[$name]['pre'] . $defaults[$name]['val'] . $defaults[$name]['post'];
+						$finalParams[$name] = $defaults[$name]['pre'] . $this->escapeOutputParameter($defaults[$name]['val']) . $defaults[$name]['post'];
 					}
 				}
 			} else {
@@ -584,7 +584,7 @@ abstract class AgaviRouting
 							$finalParams[$name] = null;
 						}
 					} elseif(!array_key_exists($name, $params) || $params[$name] === null) {
-						$finalParams[$name] = $default['pre'] . $default['val'] . $default['post'];
+						$finalParams[$name] = $default['pre'] . $this->escapeOutputParameter($default['val']) . $default['post'];
 					}
 				}
 			}
@@ -596,7 +596,7 @@ abstract class AgaviRouting
 					$finalParams[$name] = $param;
 				} else {
 					if(isset($defaults[$name])) {
-						$finalParams[$name] = $defaults[$name]['pre'] . ($param !== null ? $param : $defaults[$name]['val']) . $defaults[$name]['post'];
+						$finalParams[$name] = $defaults[$name]['pre'] . ($param !== null ? $param : $this->escapeOutputParameter($defaults[$name]['val'])) . $defaults[$name]['post'];
 					} else {
 						$finalParams[$name] = $param;
 					}
@@ -608,7 +608,7 @@ abstract class AgaviRouting
 			// remove the optional parameters from the right to the left from the pattern when they match
 			// their default
 			foreach(array_reverse($availableParams) as $name) {
-				if(isset($optionalParams[$name]) && isset($defaults[$name]) && $finalParams[$name] == $defaults[$name]['pre'] . $defaults[$name]['val'] . $defaults[$name]['post']) {
+				if(isset($optionalParams[$name]) && isset($defaults[$name]) && $finalParams[$name] == $defaults[$name]['pre'] . $this->escapeOutputParameter($defaults[$name]['val']) . $defaults[$name]['post']) {
 					$finalParams[$name] = null;
 				} else {
 					break;
@@ -636,6 +636,21 @@ abstract class AgaviRouting
 
 		$url = str_replace($from, $to, $url);
 		return array($this->prefix . $url, $params, $options);
+	}
+
+	/**
+	 * Escapes an argument to be used in an generated route.
+	 *
+	 * @param      string The argument to be escaped.
+	 *
+	 * @return     string The escaped argument.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function escapeOutputParameter($string)
+	{
+		return $string;
 	}
 
 	/**

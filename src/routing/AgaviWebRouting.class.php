@@ -363,6 +363,22 @@ class AgaviWebRouting extends AgaviRouting
 		
 		return $retval;
 	}
+
+	/**
+	 * Escapes an argument to be used in an generated route.
+	 *
+	 * @param      string The argument to be escaped.
+	 *
+	 * @return     string The escaped argument.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function escapeOutputParameter($string)
+	{
+		return rawurlencode($string);
+	}
+
 }
 
 ?>
