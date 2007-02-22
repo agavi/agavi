@@ -552,7 +552,7 @@ abstract class AgaviRouting
 						} else {
 							$finalParams[$name] = $matchedParams[$name];
 						}
-					} elseif(isset($defaults[$name])) {
+					} elseif(isset($defaults[$name]) && $defaults[$name]['val']) {
 						$finalParams[$name] = $defaults[$name]['pre'] . $defaults[$name]['val'] . $defaults[$name]['post'];
 					} else {
 						// there is no default or incoming match for this optional param, so remove it
