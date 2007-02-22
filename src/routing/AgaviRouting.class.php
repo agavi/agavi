@@ -580,6 +580,8 @@ abstract class AgaviRouting
 							} else {
 								$finalParams[$name] = $default['pre'] . $params[$name] . $default['post'];
 							}
+						} elseif($default['val']) {
+							$finalParams[$name] = $default['pre'] . $this->escapeOutputParameter($default['val']) . $default['post'];
 						} else {
 							$finalParams[$name] = null;
 						}
