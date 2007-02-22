@@ -21,6 +21,7 @@
  * @subpackage translation
  *
  * @author     Dominik del Bondio <ddb@bitxtender.com>
+ * @author     David Zülke <dz@bitxtender.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
  *
@@ -48,8 +49,7 @@ class AgaviCurrencyFormatter extends AgaviDecimalFormatter implements AgaviITran
 	/**
 	 * @var        AgaviLocale The locale which should be used for formatting.
 	 */
-	protected $currentLocale = null;
-
+	protected $locale = null;
 
 	/**
 	 * @var        string The translation domain to translate the format (if any).
@@ -65,7 +65,14 @@ class AgaviCurrencyFormatter extends AgaviDecimalFormatter implements AgaviITran
 	}
 
 	/**
-	 * @see        AgaviITranslator::initialize()
+	 * Initialize this Translator.
+	 *
+	 * @param      AgaviContext The current application context.
+	 * @param      array        An associative array of initialization parameters
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
 	 */
 	public function initialize(AgaviContext $context, array $parameters = array())
 	{
@@ -80,9 +87,9 @@ class AgaviCurrencyFormatter extends AgaviDecimalFormatter implements AgaviITran
 		}
 		if(isset($parameters['format'])) {
 			$this->customFormat = $parameters['format'];
-			// if the translation domain is not set we don't have to delay parsing
-			if($this->translationDomain === null) {
-				$this->setFormat($parameters['format']);
+			// if the translation domain is not set and the format is not an array of per-locale strings then we don't have to delay parsing
+			if($this->translationDomain === null && !is_array($this->customFormat)) {
+				$this->setFormat($this->customFormat);
 			}
 		}
 		if(isset($parameters['currency_code'])) {
@@ -91,7 +98,18 @@ class AgaviCurrencyFormatter extends AgaviDecimalFormatter implements AgaviITran
 	}
 
 	/**
-	 * @see        AgaviITranslator::translate()
+	 * Translates a message into the defined language.
+	 *
+	 * @param      mixed       The message to be translated.
+	 * @param      string      The domain of the message.
+	 * @param      AgaviLocale The locale to which the message should be 
+	 *                         translated.
+	 *
+	 * @return     string The translated message.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
 	 */
 	public function translate($message, $domain, AgaviLocale $locale = null)
 	{
@@ -100,15 +118,20 @@ class AgaviCurrencyFormatter extends AgaviDecimalFormatter implements AgaviITran
 			$fn->localeChanged($locale);
 		} else {
 			$fn = $this;
+			$locale = $this->locale;
 		}
 
-		if($this->translationDomain && $this->customFormat !== null && $domain) {
+		if($this->customFormat !== null && (($this->translationDomain && $domain) || is_array($this->customFormat))) {
 			if($fn === $this) {
 				$fn = clone $this;
 			}
-
-			$td = $this->translationDomain . '.' . $domain;
-			$format = $this->getContext()->getTranslationManager()->_($this->customFormat, $td, $locale);
+			
+			if(is_array($this->customFormat)) {
+				$format = AgaviToolkit::getValueByKeyList($this->customFormat, AgaviLocale::getLookupPath($locale->getIdentifier()), $locale->getCurrencyFormat('__default'));
+			} else {
+				$td = $this->translationDomain . '.' . $domain;
+				$format = $this->getContext()->getTranslationManager()->_($this->customFormat, $td, $locale);
+			}
 			$fn->setFormat($format);
 		}
 
@@ -125,19 +148,29 @@ class AgaviCurrencyFormatter extends AgaviDecimalFormatter implements AgaviITran
 	}
 
 	/**
-	 * @see        AgaviITranslator::localeChanged()
+	 * This method gets called by the translation manager when the default locale
+	 * has been changed.
+	 *
+	 * @param      string The new default locale.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
 	 */
 	public function localeChanged($newLocale)
 	{
-		$this->currentLocale = $newLocale;
-		$this->groupingSeparator = $newLocale->getNumberSymbolGroup();
-		$this->decimalSeparator = $newLocale->getNumberSymbolDecimal();
+		$this->locale = $newLocale;
+		
+		$this->groupingSeparator = $this->locale->getNumberSymbolGroup();
+		$this->decimalSeparator = $this->locale->getNumberSymbolDecimal();
 		if($this->customFormat) {
-			if($this->translationDomain !== null) {
-				$this->setFormat($this->getContext()->getTranslationManager()->_($this->customFormat, $this->translationDomain, $newLocale));
+			if(is_array($this->customFormat)) {
+				$this->setFormat(AgaviToolkit::getValueByKeyList($this->customFormat, AgaviLocale::getLookupPath($this->locale->getIdentifier()), $this->locale->getCurrencyFormat('__default')));
+			} elseif($this->translationDomain !== null) {
+				$this->setFormat($this->getContext()->getTranslationManager()->_($this->customFormat, $this->translationDomain, $this->locale));
 			}
 		} else {
-			$this->setFormat($newLocale->getCurrencyFormat('__default'));
+			$this->setFormat($this->locale->getCurrencyFormat('__default'));
 		}
 	}
 
@@ -152,8 +185,8 @@ class AgaviCurrencyFormatter extends AgaviDecimalFormatter implements AgaviITran
 	public function getCurrencyCode()
 	{
 		$code = $this->currencyCode;
-		if(!$code && $this->currentLocale) {
-			$code = $this->currentLocale->getLocaleCurrency();
+		if(!$code && $this->locale) {
+			$code = $this->locale->getLocaleCurrency();
 		}
 
 		return $code;
@@ -170,12 +203,12 @@ class AgaviCurrencyFormatter extends AgaviDecimalFormatter implements AgaviITran
 	public function getCurrencySymbol()
 	{
 		$code = $this->getCurrencyCode();
-		if(!$this->currentLocale) {
+		if(!$this->locale) {
 			return $code;
 		}
 
-		$symbol = $this->currentLocale->getCurrencySymbol($code);
-		$name = $this->currentLocale->getCurrencyDisplayName($code);
+		$symbol = $this->locale->getCurrencySymbol($code);
+		$name = $this->locale->getCurrencyDisplayName($code);
 		if($symbol === null) {
 			$symbol = $code;
 		}

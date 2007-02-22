@@ -292,6 +292,28 @@ final class AgaviToolkit
 		}
 		return true;
 	}
+	
+	/**
+	 * Tries to grab a value from the given array using the given list of keys.
+	 *
+	 * @param      array The array to search in.
+	 * @param      array The list of keys.
+	 * @param      mixed A default return value, defaults to null.
+	 *
+	 * @return     mixed The found value, or the default value if nothing found.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public static function getValueByKeyList(array $array, array $keys, $default = null)
+	{
+		foreach($keys as $key) {
+			if(isset($array[$key])) {
+				return $array[$key];
+			}
+		}
+		return $default;
+	}
 }
 
 ?>

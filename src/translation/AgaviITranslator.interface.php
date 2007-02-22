@@ -35,7 +35,7 @@ interface AgaviITranslator
 	 *
 	 * @return     AgaviContext The current AgaviContext instance.
 	 *
-	 * @author     Dominik del Bondio <ddb@bitxtender.com
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getContext();
@@ -46,7 +46,7 @@ interface AgaviITranslator
 	 * @param      AgaviContext The current application context.
 	 * @param      array        An associative array of initialization parameters
 	 *
-	 * @author     Dominik del Bondio <ddb@bitxtender.com
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function initialize(AgaviContext $context, array $parameters = array());
@@ -61,7 +61,7 @@ interface AgaviITranslator
 	 *
 	 * @return     string The translated message.
 	 *
-	 * @author     Dominik del Bondio <ddb@bitxtender.com
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function translate($message, $domain, AgaviLocale $locale = null);
@@ -72,7 +72,7 @@ interface AgaviITranslator
 	 *
 	 * @param      string The new default locale.
 	 *
-	 * @author     Dominik del Bondio <ddb@bitxtender.com
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function localeChanged($newLocale);

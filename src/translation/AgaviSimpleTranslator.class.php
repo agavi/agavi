@@ -114,15 +114,7 @@ class AgaviSimpleTranslator extends AgaviBasicTranslator
 	public function localeChanged($newLocale)
 	{
 		$this->locale = $newLocale;
-		$this->currentData = array();
-
-		$localeName = $this->locale->getIdentifier();
-		$localeNameBases = AgaviLocale::getLookupPath($localeName);
-		foreach(array_reverse($localeNameBases) as $localeNameBase) {
-			if(isset($this->domainData[$localeNameBase])) {
-				$this->currentData = $this->domainData[$localeNameBase];
-			}
-		}
+		$this->currentData = AgaviToolkit::getValueByKeyList($this->domainData, AgaviLocale::getLookupPath($this->locale->getIdentifier()), array());
 	}
 
 }

@@ -20,6 +20,7 @@
  * @subpackage util
  *
  * @author     Dominik del Bondio <ddb@bitxtender.com>
+ * @author     David Zülke <dz@bitxtender.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
  *
@@ -63,7 +64,14 @@ class AgaviDateFormatter extends AgaviDateFormat implements AgaviITranslator
 	}
 
 	/**
-	 * @see        AgaviITranslator::initialize()
+	 * Initialize this Translator.
+	 *
+	 * @param      AgaviContext The current application context.
+	 * @param      array        An associative array of initialization parameters
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
 	 */
 	public function initialize(AgaviContext $context, array $parameters = array())
 	{
@@ -84,7 +92,18 @@ class AgaviDateFormatter extends AgaviDateFormat implements AgaviITranslator
 	}
 
 	/**
-	 * @see        AgaviITranslator::translate()
+	 * Translates a message into the defined language.
+	 *
+	 * @param      mixed       The message to be translated.
+	 * @param      string      The domain of the message.
+	 * @param      AgaviLocale The locale to which the message should be 
+	 *                         translated.
+	 *
+	 * @return     string The translated message.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
 	 */
 	public function translate($message, $domain, AgaviLocale $locale = null)
 	{
@@ -99,18 +118,22 @@ class AgaviDateFormatter extends AgaviDateFormat implements AgaviITranslator
 		// when $this is cloned, so we need to to do this check before we clone
 		$localesEqual = $locale === $this->locale;
 
-		if($this->translationDomain && $this->customFormat !== null && $domain) {
+		if($this->customFormat !== null && (($this->translationDomain && $domain) || is_array($this->customFormat))) {
 			if($fmt === $this) {
 				$fmt = clone $this;
 			}
-
-			$td = $this->translationDomain . '.' . $domain;
-			$format = $this->getContext()->getTranslationManager()->_($this->customFormat, $td, $locale);
-
+			
+			if(is_array($this->customFormat)) {
+				$format = AgaviToolkit::getValueByKeyList($this->customFormat, AgaviLocale::getLookupPath($locale->getIdentifier()), $this->resolveSpecifier($locale, null, $this->type));
+			} else {
+				$td = $this->translationDomain . '.' . $domain;
+				$format = $this->getContext()->getTranslationManager()->_($this->customFormat, $td, $locale);
+			}
+			
 			if($fmt->isDateSpecifier($format)) {
 				$format = $fmt->resolveSpecifier($locale, $format, $this->type);
 			}
-
+			
 			$fmt->setFormat($format);
 		}
 
@@ -131,7 +154,14 @@ class AgaviDateFormatter extends AgaviDateFormat implements AgaviITranslator
 	}
 
 	/**
-	 * @see        AgaviITranslator::localeChanged()
+	 * This method gets called by the translation manager when the default locale
+	 * has been changed.
+	 *
+	 * @param      string The new default locale.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
 	 */
 	public function localeChanged($newLocale)
 	{
@@ -142,9 +172,15 @@ class AgaviDateFormatter extends AgaviDateFormat implements AgaviITranslator
 			$this->setFormat($format);
 		} else {
 			$format = $this->customFormat;
-			if($this->translationDomain !== null) {
+			if(is_array($format) || $this->translationDomain !== null) {
 				$oldFormat = $format;
-				$format = $this->getContext()->getTranslationManager()->_($format, $this->translationDomain, $newLocale);
+				
+				if(is_array($format)) {
+					$format = AgaviToolkit::getValueByKeyList($format, AgaviLocale::getLookupPath($this->locale->getIdentifier()), $this->resolveSpecifier($this->locale, null, $this->type));
+				} elseif($this->translationDomain !== null) {
+					$format = $this->getContext()->getTranslationManager()->_($format, $this->translationDomain, $this->locale);
+				}
+				
 				if($format === $oldFormat && !$this->isDateSpecifier($format)) {
 					// when the format was not translated and is not a date specifier we need wrap the 
 					// setFormat to catch errors. This is the case, when the user wants its format to 
