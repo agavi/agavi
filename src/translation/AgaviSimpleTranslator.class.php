@@ -120,11 +120,7 @@ class AgaviSimpleTranslator extends AgaviBasicTranslator
 		$localeNameBases = AgaviLocale::getLookupPath($localeName);
 		foreach(array_reverse($localeNameBases) as $localeNameBase) {
 			if(isset($this->domainData[$localeNameBase])) {
-				foreach($this->domainData[$localeNameBase] as $domain => $translations) {
-					foreach($translations as $from => $to) {
-						$this->currentData[$domain][$from] = $to;
-					}
-				}
+				$this->currentData = $this->domainData[$localeNameBase];
 			}
 		}
 	}
