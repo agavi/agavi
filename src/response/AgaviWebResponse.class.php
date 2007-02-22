@@ -134,7 +134,7 @@ class AgaviWebResponse extends AgaviResponse
 			if(!preg_match('#^[^:]+://#', $location)) {
 				if($location[0] == '/') {
 					$rq = $this->context->getRequest();
-					$location = $rq->getUrlScheme . '://' . $rq->getUrlAuthority() . $location;
+					$location = $rq->getUrlScheme() . '://' . $rq->getUrlAuthority() . $location;
 				} else {
 					$location = $this->context->getRouting()->getBaseHref() . $location;
 				}
