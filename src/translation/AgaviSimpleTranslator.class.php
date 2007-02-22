@@ -52,7 +52,7 @@ class AgaviSimpleTranslator extends AgaviBasicTranslator
 	 * @param      AgaviContext The current application context.
 	 * @param      array        An associative array of initialization parameters
 	 *
-	 * @author     Dominik del Bondio <ddb@bitxtender.com
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function initialize(AgaviContext $context, array $parameters = array())
@@ -108,7 +108,7 @@ class AgaviSimpleTranslator extends AgaviBasicTranslator
 	 *
 	 * @param      AgaviLocale The new default locale.
 	 *
-	 * @author     Dominik del Bondio <ddb@bitxtender.com
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function localeChanged($newLocale)

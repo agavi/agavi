@@ -39,7 +39,7 @@ abstract class AgaviBasicTranslator implements AgaviITranslator
 	 *
 	 * @return     AgaviContext The current AgaviContext instance.
 	 *
-	 * @author     Dominik del Bondio <ddb@bitxtender.com
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public final function getContext()
@@ -53,7 +53,7 @@ abstract class AgaviBasicTranslator implements AgaviITranslator
 	 * @param      AgaviContext The current application context.
 	 * @param      array        An associative array of initialization parameters
 	 *
-	 * @author     Dominik del Bondio <ddb@bitxtender.com
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function initialize(AgaviContext $context, array $parameters = array())
@@ -67,7 +67,7 @@ abstract class AgaviBasicTranslator implements AgaviITranslator
 	 *
 	 * @param      AgaviLocale The new default locale.
 	 *
-	 * @author     Dominik del Bondio <ddb@bitxtender.com
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function localeChanged($newLocale)

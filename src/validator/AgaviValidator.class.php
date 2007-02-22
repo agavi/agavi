@@ -716,7 +716,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 *
 	 * @return     array The available keys.
 	 *
-	 * @author     Dominik del Bondio <ddb@bitxtender.com
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	protected function getKeysInCurrentBase()
@@ -734,7 +734,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 *
 	 * @return     array The arguments.
 	 *
-	 * @author     Dominik del Bondio <ddb@bitxtender.com
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	protected function getFullArgumentNames()

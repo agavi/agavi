@@ -41,7 +41,7 @@ class AgaviTimeZoneDataParser extends AgaviConfigParser
 	 *
 	 * @return     AgaviContext An AgaviContext instance.
 	 *
-	 * @author     Dominik del Bondio <ddb@bitxtender.com
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public final function getContext()
@@ -54,7 +54,7 @@ class AgaviTimeZoneDataParser extends AgaviConfigParser
 	 *
 	 * @param      AgaviContext An AgaviContext instance.
 	 *
-	 * @author     Dominik del Bondio <ddb@bitxtender.com
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function initialize(AgaviContext $context)

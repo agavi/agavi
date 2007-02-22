@@ -38,7 +38,7 @@ class AgaviTimeZoneDataConfigHandler extends AgaviConfigHandler
 	 *
 	 * @return     string Data to be written to a cache file.
 	 *
-	 * @author     Dominik del Bondio
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function execute($config, $context = null)

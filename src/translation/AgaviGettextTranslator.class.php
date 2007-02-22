@@ -66,7 +66,7 @@ class AgaviGettextTranslator extends AgaviBasicTranslator
 	 * @param      AgaviContext The current application context.
 	 * @param      array        An associative array of initialization parameters
 	 *
-	 * @author     Dominik del Bondio <ddb@bitxtender.com
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function initialize(AgaviContext $context, array $parameters = array())
@@ -155,7 +155,7 @@ class AgaviGettextTranslator extends AgaviBasicTranslator
 	 *
 	 * @param      string The new default locale.
 	 *
-	 * @author     Dominik del Bondio <ddb@bitxtender.com
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function localeChanged($newLocale)
@@ -170,7 +170,7 @@ class AgaviGettextTranslator extends AgaviBasicTranslator
 	 *
 	 * @param      string The domain to load the data for.
 	 *
-	 * @author     Dominik del Bondio <ddb@bitxtender.com
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function loadDomainData($domain)

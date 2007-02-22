@@ -96,8 +96,8 @@ class AgaviCompileConfigHandler extends AgaviConfigHandler
 	 *
 	 * @return     string Data with unnecessary content removed
 	 *
-	 * @author     Blake Matheny (bmatheny@mobocracy.net)
-	 * @author     David Zülke (dz@bitxtender.com)
+	 * @author     Blake Matheny <bmatheny@mobocracy.net>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	protected function formatFile($data)

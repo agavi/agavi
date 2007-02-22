@@ -17,7 +17,7 @@
  * @package    agavi
  * @subpackage tests2
  *
- * @author     Dominik del Bondio
+ * @author     Dominik del Bondio <ddb@bitxtender.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
  *

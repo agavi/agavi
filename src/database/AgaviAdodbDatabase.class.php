@@ -42,7 +42,7 @@
  * @package    agavi
  * @subpackage database
  *
- * @author     Steven Weiss (info@code-factory.de)
+ * @author     Steven Weiss <info@code-factory.de>
  * @copyright  Authors
  * @copyright  The Agavi Project
  *

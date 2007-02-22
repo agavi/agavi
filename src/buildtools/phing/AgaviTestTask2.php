@@ -18,7 +18,7 @@
  * @subpackage buildtools
  *
  * @author     Mike Vincent <mike@agavi.org>
- * @author     Dominik del Bondio
+ * @author     Dominik del Bondio <ddb@bitxtender.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
  *

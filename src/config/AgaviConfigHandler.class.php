@@ -217,7 +217,7 @@ abstract class AgaviConfigHandler extends AgaviParameterHolder
 	 * @return     string The new value.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @author     Johan Mjones(johan.mjones@ongame.co)
+	 * @author     Johan Mjones <johan.mjones@ongame.com>
 	 * @since      0.9.0
 	 */
 	public static function replaceConstants($value)

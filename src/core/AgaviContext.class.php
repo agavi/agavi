@@ -465,7 +465,7 @@ final class AgaviContext
 	 * @return     AgaviTranslationManager The current TranslationManager
 	 *                                     implementation instance.
 	 *
-	 * @author     Dominik del Bondio <ddb@bitxtender.com
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getTranslationManager()

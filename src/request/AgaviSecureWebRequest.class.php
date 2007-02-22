@@ -19,7 +19,7 @@
  * @package    agavi
  * @subpackage request
  *
- * @author     Markus Lervik (markus.lervik@necora.fi)
+ * @author     Markus Lervik <markus.lervik@necora.fi>
  * @author     David Zülke <dz@bitxtender.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
@@ -36,7 +36,7 @@ class AgaviSecureWebRequest extends AgaviWebRequest {
 	 *
 	 * @return     bool true if HTTPS is on, false otherwise
 	 *
-	 * @author     Markus Lervik (markus.lervik@necora.fi)
+	 * @author     Markus Lervik <markus.lervik@necora.fi>
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.10.0
 	 */
@@ -52,7 +52,7 @@ class AgaviSecureWebRequest extends AgaviWebRequest {
 	 *
 	 * @return     bool true if the certificate is valid, false otherwise
 	 *
-	 * @author     Markus Lervik (markus.lervik@necora.fi)
+	 * @author     Markus Lervik <markus.lervik@necora.fi>
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.10.0
 	 */
@@ -71,7 +71,7 @@ class AgaviSecureWebRequest extends AgaviWebRequest {
 	 *
 	 * @return     mixed the CN field if it's available, otherwise null
 	 *
-	 * @author     Markus Lervik (markus.lervik@necora.fi)
+	 * @author     Markus Lervik <markus.lervik@necora.fi>
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.10.0
 	 */
@@ -92,7 +92,7 @@ class AgaviSecureWebRequest extends AgaviWebRequest {
 	 *
 	 * @return     mixed the DN field if it's available, otherwise null
 	 *
-	 * @author     Markus Lervik (markus.lervik@necora.fi)
+	 * @author     Markus Lervik <markus.lervik@necora.fi>
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.10.0
 	 */
@@ -111,7 +111,7 @@ class AgaviSecureWebRequest extends AgaviWebRequest {
 	 *
 	 * @return     mixed the GN field if it's available, otherwise null
 	 *
-	 * @author     Markus Lervik (markus.lervik@necora.fi)
+	 * @author     Markus Lervik <markus.lervik@necora.fi>
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.10.0
 	 */
@@ -130,7 +130,7 @@ class AgaviSecureWebRequest extends AgaviWebRequest {
 	 *
 	 * @return     mixed the SN field if it's available, otherwise null
 	 *
-	 * @author     Markus Lervik (markus.lervik@necora.fi)
+	 * @author     Markus Lervik <markus.lervik@necora.fi>
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.10.0
 	 */
@@ -149,7 +149,7 @@ class AgaviSecureWebRequest extends AgaviWebRequest {
 	 *
 	 * @return     mixed the O field if it's available, otherwise null
 	 *
-	 * @author     Markus Lervik (markus.lervik@necora.fi)
+	 * @author     Markus Lervik <markus.lervik@necora.fi>
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.10.0
 	 */
@@ -168,7 +168,7 @@ class AgaviSecureWebRequest extends AgaviWebRequest {
 	 *
 	 * @return     mixed the OU field if it's available, otherwise null
 	 *
-	 * @author     Markus Lervik (markus.lervik@necora.fi)
+	 * @author     Markus Lervik <markus.lervik@necora.fi>
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.10.0
 	 */
@@ -187,7 +187,7 @@ class AgaviSecureWebRequest extends AgaviWebRequest {
 	 *
 	 * @return     mixed the date field if it's available, otherwise null
 	 *
-	 * @author     Markus Lervik (markus.lervik@necora.fi)
+	 * @author     Markus Lervik <markus.lervik@necora.fi>
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.10.0
 	 */
@@ -205,7 +205,7 @@ class AgaviSecureWebRequest extends AgaviWebRequest {
 	 * if one is available
 	 *
 	 * @return     mixed the date field if it's available, otherwise null
-	 * @author     Markus Lervik (markus.lervik@necora.fi)
+	 * @author     Markus Lervik <markus.lervik@necora.fi>
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.10.0
 	 */
@@ -223,7 +223,7 @@ class AgaviSecureWebRequest extends AgaviWebRequest {
 	 * if one is available
 	 *
 	 * @return     mixed the cipher type if it's available, otherwise null
-	 * @author     Markus Lervik (markus.lervik@necora.fi)
+	 * @author     Markus Lervik <markus.lervik@necora.fi>
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.10.0
 	 */
@@ -241,7 +241,7 @@ class AgaviSecureWebRequest extends AgaviWebRequest {
 	 * certificate if one is available
 	 *
 	 * @return     mixed the DN field if it's available, otherwise null
-	 * @author     Markus Lervik (markus.lervik@necora.fi)
+	 * @author     Markus Lervik <markus.lervik@necora.fi>
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.10.0
 	 */
@@ -259,7 +259,7 @@ class AgaviSecureWebRequest extends AgaviWebRequest {
 	 * if one is available
 	 *
 	 * @return     mixed the CN field if it's available, otherwise null
-	 * @author     Markus Lervik (markus.lervik@necora.fi)
+	 * @author     Markus Lervik <markus.lervik@necora.fi>
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.10.0
 	 */
@@ -277,7 +277,7 @@ class AgaviSecureWebRequest extends AgaviWebRequest {
 	 * if one is available
 	 *
 	 * @return     mixed the C field if it's available, otherwise null
-	 * @author     Markus Lervik (markus.lervik@necora.fi)
+	 * @author     Markus Lervik <markus.lervik@necora.fi>
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.10.0
 	 */
@@ -295,7 +295,7 @@ class AgaviSecureWebRequest extends AgaviWebRequest {
 	 * if one is available
 	 *
 	 * @return     mixed the O field if it's available, otherwise null
-	 * @author     Markus Lervik (markus.lervik@necora.fi)
+	 * @author     Markus Lervik <markus.lervik@necora.fi>
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.10.0
 	 */
@@ -313,7 +313,7 @@ class AgaviSecureWebRequest extends AgaviWebRequest {
 	 * certificate if one is available
 	 *
 	 * @return     mixed the OU field if it's available, otherwise null
-	 * @author     Markus Lervik (markus.lervik@necora.fi)
+	 * @author     Markus Lervik <markus.lervik@necora.fi>
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.10.0
 	 */
@@ -331,7 +331,7 @@ class AgaviSecureWebRequest extends AgaviWebRequest {
 	 * if one is available
 	 *
 	 * @return     mixed the ST field if it's available, otherwise null
-	 * @author     Markus Lervik (markus.lervik@necora.fi)
+	 * @author     Markus Lervik <markus.lervik@necora.fi>
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.10.0.0
 	 */
