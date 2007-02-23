@@ -79,9 +79,12 @@ class AgaviNumberFormatter extends AgaviDecimalFormatter implements AgaviITransl
 		}
 		if(isset($parameters['format'])) {
 			$this->customFormat = $parameters['format'];
-			// if the translation domain is not set we don't have to delay parsing
-			if($this->translationDomain !== null) {
-				$this->setFormat($parameters['format']);
+			if(is_array($this->customFormat)) {
+				// it's an array, so it contains the translations already, DOMAIN MUST NOT BE SET
+				$this->translationDomain = null;
+			} elseif($this->translationDomain === null) {
+				// if the translation domain is not set and the format is not an array of per-locale strings then we don't have to delay parsing
+				$this->setFormat($this->customFormat);
 			}
 		}
 	}
@@ -110,20 +113,17 @@ class AgaviNumberFormatter extends AgaviDecimalFormatter implements AgaviITransl
 			$locale = $this->locale;
 		}
 		
-		if($this->customFormat !== null && (($this->translationDomain && $domain) || is_array($this->customFormat))) {
+		if($this->customFormat && $this->translationDomain) {
 			if($fn === $this) {
 				$fn = clone $this;
 			}
 			
-			if(is_array($this->customFormat)) {
-				$format = AgaviToolkit::getValueByKeyList($this->customFormat, AgaviLocale::getLookupPath($locale->getIdentifier()), $locale->getDecimalFormat('__default'));
-			} else {
-				$td = $this->translationDomain . '.' . $domain;
-				$format = $this->getContext()->getTranslationManager()->_($this->customFormat, $td, $locale);
-			}
+			$td = $this->translationDomain . ($domain ? '.' . $domain : '');
+			$format = $this->getContext()->getTranslationManager()->_($this->customFormat, $td, $locale);
+			
 			$fn->setFormat($format);
 		}
-
+		
 		return $fn->formatNumber($message);
 	}
 
@@ -143,15 +143,14 @@ class AgaviNumberFormatter extends AgaviDecimalFormatter implements AgaviITransl
 		
 		$this->groupingSeparator = $this->locale->getNumberSymbolGroup();
 		$this->decimalSeparator = $this->locale->getNumberSymbolDecimal();
-		if($this->customFormat) {
-			if(is_array($this->customFormat)) {
-				$this->setFormat(AgaviToolkit::getValueByKeyList($this->customFormat, AgaviLocale::getLookupPath($this->locale->getIdentifier()), $this->locale->getDecimalFormat('__default')));
-			} elseif($this->translationDomain !== null) {
-				$this->setFormat($this->getContext()->getTranslationManager()->_($this->customFormat, $this->translationDomain, $this->locale));
-			}
-		} else {
-			$this->setFormat($this->locale->getDecimalFormat('__default'));
+		
+		$format = $this->locale->getDecimalFormat('__default');
+		
+		if(is_array($this->customFormat)) {
+			$format = AgaviToolkit::getValueByKeyList($this->customFormat, AgaviLocale::getLookupPath($this->locale->getIdentifier()), $format);
 		}
+		
+		$this->setFormat($format);
 	}
 }
 

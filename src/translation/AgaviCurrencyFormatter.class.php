@@ -87,8 +87,11 @@ class AgaviCurrencyFormatter extends AgaviDecimalFormatter implements AgaviITran
 		}
 		if(isset($parameters['format'])) {
 			$this->customFormat = $parameters['format'];
-			// if the translation domain is not set and the format is not an array of per-locale strings then we don't have to delay parsing
-			if($this->translationDomain === null && !is_array($this->customFormat)) {
+			if(is_array($this->customFormat)) {
+				// it's an array, so it contains the translations already, DOMAIN MUST NOT BE SET
+				$this->translationDomain = null;
+			} elseif($this->translationDomain === null) {
+				// if the translation domain is not set and the format is not an array of per-locale strings then we don't have to delay parsing
 				$this->setFormat($this->customFormat);
 			}
 		}
@@ -120,30 +123,27 @@ class AgaviCurrencyFormatter extends AgaviDecimalFormatter implements AgaviITran
 			$fn = $this;
 			$locale = $this->locale;
 		}
-
-		if($this->customFormat !== null && (($this->translationDomain && $domain) || is_array($this->customFormat))) {
+		
+		if($this->customFormat && $this->translationDomain) {
 			if($fn === $this) {
 				$fn = clone $this;
 			}
 			
-			if(is_array($this->customFormat)) {
-				$format = AgaviToolkit::getValueByKeyList($this->customFormat, AgaviLocale::getLookupPath($locale->getIdentifier()), $locale->getCurrencyFormat('__default'));
-			} else {
-				$td = $this->translationDomain . '.' . $domain;
-				$format = $this->getContext()->getTranslationManager()->_($this->customFormat, $td, $locale);
-			}
+			$td = $this->translationDomain . ($domain ? '.' . $domain : '');
+			$format = $this->getContext()->getTranslationManager()->_($this->customFormat, $td, $locale);
+			
 			$fn->setFormat($format);
 		}
-
+		
 		$code = $this->getCurrencyCode();
 		$fraction = $this->getContext()->getTranslationManager()->getCurrencyFraction($code);
 		$fn->setFractionDigits($fraction['digits']);
-
+		
 		if($fraction['rounding'] > 0) {
 			$roundingUnit = pow(10, -$fraction['digits']) * $fraction['rounding'];
 			$message = round($message / $roundingUnit) * $roundingUnit;
 		}
-
+		
 		return $fn->formatCurrency($message, $fn->getCurrencySymbol());
 	}
 
@@ -163,15 +163,14 @@ class AgaviCurrencyFormatter extends AgaviDecimalFormatter implements AgaviITran
 		
 		$this->groupingSeparator = $this->locale->getNumberSymbolGroup();
 		$this->decimalSeparator = $this->locale->getNumberSymbolDecimal();
-		if($this->customFormat) {
-			if(is_array($this->customFormat)) {
-				$this->setFormat(AgaviToolkit::getValueByKeyList($this->customFormat, AgaviLocale::getLookupPath($this->locale->getIdentifier()), $this->locale->getCurrencyFormat('__default')));
-			} elseif($this->translationDomain !== null) {
-				$this->setFormat($this->getContext()->getTranslationManager()->_($this->customFormat, $this->translationDomain, $this->locale));
-			}
-		} else {
-			$this->setFormat($this->locale->getCurrencyFormat('__default'));
+		
+		$format = $this->locale->getCurrencyFormat('__default');
+		
+		if(is_array($this->customFormat)) {
+			$format = AgaviToolkit::getValueByKeyList($this->customFormat, AgaviLocale::getLookupPath($this->locale->getIdentifier()), $format);
 		}
+		
+		$this->setFormat($format);
 	}
 
 	/**

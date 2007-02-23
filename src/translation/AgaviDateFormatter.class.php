@@ -85,8 +85,11 @@ class AgaviDateFormatter extends AgaviDateFormat implements AgaviITranslator
 			$type = $parameters['type'];
 		}
 		if(isset($parameters['format'])) {
-			$format = $parameters['format'];
-			$this->customFormat = $format;
+			$this->customFormat = $parameters['format'];
+			if(is_array($this->customFormat)) {
+				// it's an array, so it contains the translations already, DOMAIN MUST NOT BE SET
+				$this->translationDomain = null;
+			}
 		}
 		$this->type = $type;
 	}
@@ -118,17 +121,13 @@ class AgaviDateFormatter extends AgaviDateFormat implements AgaviITranslator
 		// when $this is cloned, so we need to to do this check before we clone
 		$localesEqual = $locale === $this->locale;
 
-		if($this->customFormat !== null && (($this->translationDomain && $domain) || is_array($this->customFormat))) {
+		if($this->customFormat && $this->translationDomain) {
 			if($fmt === $this) {
 				$fmt = clone $this;
 			}
 			
-			if(is_array($this->customFormat)) {
-				$format = AgaviToolkit::getValueByKeyList($this->customFormat, AgaviLocale::getLookupPath($locale->getIdentifier()), $this->resolveSpecifier($locale, null, $this->type));
-			} else {
-				$td = $this->translationDomain . '.' . $domain;
-				$format = $this->getContext()->getTranslationManager()->_($this->customFormat, $td, $locale);
-			}
+			$td = $this->translationDomain . ($domain ? '.' . $domain : '');
+			$format = $this->getContext()->getTranslationManager()->_($this->customFormat, $td, $locale);
 			
 			if($fmt->isDateSpecifier($format)) {
 				$format = $fmt->resolveSpecifier($locale, $format, $this->type);
@@ -166,40 +165,16 @@ class AgaviDateFormatter extends AgaviDateFormat implements AgaviITranslator
 	public function localeChanged($newLocale)
 	{
 		$this->locale = $newLocale;
-
-		if($this->customFormat === null) {
-			$format = $this->resolveSpecifier($this->locale, null, $this->type);
-			$this->setFormat($format);
-		} else {
-			$format = $this->customFormat;
-			if(is_array($format) || $this->translationDomain !== null) {
-				$oldFormat = $format;
-				
-				if(is_array($format)) {
-					$format = AgaviToolkit::getValueByKeyList($format, AgaviLocale::getLookupPath($this->locale->getIdentifier()), $this->resolveSpecifier($this->locale, null, $this->type));
-				} elseif($this->translationDomain !== null) {
-					$format = $this->getContext()->getTranslationManager()->_($format, $this->translationDomain, $this->locale);
-				}
-				
-				if($format === $oldFormat && !$this->isDateSpecifier($format)) {
-					// when the format was not translated and is not a date specifier we need wrap the 
-					// setFormat to catch errors. This is the case, when the user wants its format to 
-					// be translated, but we need to delay evaluation because we only have full info
-					// where to translate in the the translate call
-					try {
-						$this->setFormat($format);
-					} catch(AgaviException $e) {
-					}
-					return;
-				}
-			}
-
-			if($this->isDateSpecifier($format)) {
-				$format = $this->resolveSpecifier($this->locale, $format, $this->type);
-			}
-
-			$this->setFormat($format);
+		
+		$format = null; // ze default
+		
+		if(is_array($this->customFormat)) {
+			$format = AgaviToolkit::getValueByKeyList($this->customFormat, AgaviLocale::getLookupPath($this->locale->getIdentifier()), $format);
 		}
+		
+		$format = $this->resolveSpecifier($this->locale, $format, $this->type);
+		
+		$this->setFormat($format);
 	}
 
 	/**
