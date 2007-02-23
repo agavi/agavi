@@ -14,9 +14,7 @@
 				
 				<output_type name="html">
 					
-					<layer name="decorator">
-						<slot>menu</slot>
-					</layer>
+					<layer name="content" />
 					
 					<template_variable>title</template_variable>
 					
