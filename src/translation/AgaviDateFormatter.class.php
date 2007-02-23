@@ -172,7 +172,9 @@ class AgaviDateFormatter extends AgaviDateFormat implements AgaviITranslator
 			$format = AgaviToolkit::getValueByKeyList($this->customFormat, AgaviLocale::getLookupPath($this->locale->getIdentifier()), $format);
 		}
 		
-		$format = $this->resolveSpecifier($this->locale, $format, $this->type);
+		if($this->isDateSpecifier($format)) {
+			$format = $this->resolveSpecifier($this->locale, $format, $this->type);
+		}
 		
 		$this->setFormat($format);
 	}
