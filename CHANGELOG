@@ -6,6 +6,7 @@ AGAVI CHANGELOG
 
 0.11.0 RC3 (February 22, 2007)
 
+ADD: Allow specifying per-locale formats for formatters as children to the parameter node (#453) (David)
 ADD: Allow non-absolute URLs for WebResponse redirects (#449) (David)
 ADD: AgaviRequest::isLocked() ([1728]) (David)
 ADD: Make AgaviRequestDataHolder classes configurable (#438) (David)
@@ -21,6 +22,7 @@ ADD: Allow PHP 5.2 DateTime objects to be used with _d() (#420) (Dominik)
 ADD: AgaviDateFormatter::getFormat ([1683]) (Dominik)
 ADD: Add isContentMutable method to response and check where applicable (#414) (David)
 
+CHG: Made "class" attribute for <layer> elements optional in output_types.xml (#454) (David)
 CHG: Update timezone database to 2007b release (#443) (Dominik)
 CHG: Translation Manager should call localeChanged on message translators (#447) (Dominik)
 CHG: Cleaned up config handlers ([1737]) (David)
@@ -38,6 +40,7 @@ CHG: Allow nested <translator> tags (#422) (Dominik)
 CHG: auto assign 'validation_manager' in templates ([1691]) (David)
 CHG: Allow extra domain info to be passed to formatters (#419) (Dominik)
 
+FIX: Operator validators don't work with required=false (#451) (Dominik)
 FIX: Better handling of i18n off in NumberValidator and DateValidator [1753] (Dominik)
 FIX: Small bug in SimpleTranslator (#446) (Dominik)
 FIX: Some OperatorValidators are broken (#445) (Ross Lawley, David)
