@@ -21,15 +21,15 @@
 		<layouts default="default">
 			
 			<layout name="default">
-				<layer name="content" class="AgaviFileTemplateLayer" />
-				<layer name="decorator" class="AgaviFileTemplateLayer">
+				<layer name="content" />
+				<layer name="decorator">
 					<slot name="menu" module="Default" action="Menu" />
 					<parameter name="template">Master</parameter>
 				</layer>
 			</layout>
 			
 			<layout name="slot">
-				<layer name="content" class="AgaviFileTemplateLayer" />
+				<layer name="content" />
 			</layout>
 			
 		</layouts>

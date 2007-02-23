@@ -24,7 +24,7 @@
 				<layouts default="default"> 
 					<layout name="default"> 
 						<layers>
-							<layer name="content" class="AgaviFileTemplateLayer" /> 
+							<layer name="content" /> 
 						</layers> 
 					</layout> 
 				</layouts> 
