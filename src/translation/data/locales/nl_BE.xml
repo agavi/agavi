@@ -2,8 +2,8 @@
 <!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.4/ldml.dtd">
 <ldml>
 	<identity>
-		<version number="$Revision: 1.49 $"/>
-		<generation date="$Date: 2006/07/11 19:33:34 $"/>
+		<version number="$Revision: 1.51 $"/>
+		<generation date="$Date: 2006/10/26 22:46:09 $"/>
 		<language type="nl"/>
 		<territory type="BE"/>
 	</identity>
@@ -20,7 +20,7 @@
 			<territory type="143" draft="provisional">Centraal-Azië</territory>
 			<territory type="172">Gemenebest van Onafhankelijke Staten</territory>
 			<territory type="419" draft="provisional">Latijns-Amerika en de Caraïben</territory>
-			<territory type="833">Het Eiland Man</territory>
+			<territory type="IM">Het Eiland Man</territory>
 			<territory type="KG" draft="provisional">Kirgizië</territory>
 			<territory type="MV" draft="provisional">Malediven</territory>
 			<territory type="SB" draft="provisional">Salomoneilanden</territory>
@@ -64,29 +64,6 @@
 				</currencyFormat>
 			</currencyFormatLength>
 		</currencyFormats>
-		<currencies>
-			<currency type="EEK">
-				<symbol>Estlandse kroon</symbol>
-			</currency>
-			<currency type="LTL">
-				<symbol>Litouwse litas</symbol>
-			</currency>
-			<currency type="LVL">
-				<symbol>Letse lats</symbol>
-			</currency>
-			<currency type="RUB">
-				<symbol>Russische roebel</symbol>
-			</currency>
-			<currency type="SIT">
-				<symbol>Sloveense tolar</symbol>
-			</currency>
-			<currency type="THB">
-				<symbol>Thaise baht</symbol>
-			</currency>
-			<currency type="TRY">
-				<symbol>Nieuwe Turkse lire</symbol>
-			</currency>
-		</currencies>
 	</numbers>
 </ldml>
 

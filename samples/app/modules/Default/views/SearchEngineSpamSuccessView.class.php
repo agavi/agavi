@@ -1,17 +1,15 @@
 <?php
 
-class Default_SearchEngineSpamSuccessView extends AgaviView
+class Default_SearchEngineSpamSuccessView extends AgaviSampleAppDefaultBaseView
 {
 
 	/**
 	 * Execute any presentation logic and set template attributes.
 	 *
 	 */
-	public function execute(AgaviParameterHolder $parameters)
+	public function executeHtml(AgaviRequestDataHolder $rd)
 	{
-		// set our template
-		$this->setTemplate('SearchEngineSpamSuccess');
-		$this->setDecoratorTemplate('Master');
+		parent::setupHtml($rd);
 
 		// set the title
 		$this->setAttribute('title', $this->getContext()->getTranslationManager()->_('Congratulations!', 'default.SearchEngineSpam'));
@@ -20,7 +18,7 @@ class Default_SearchEngineSpamSuccessView extends AgaviView
 	/**
 	 * Execute any presentation logic for XMLRPC requests.
 	 */
-	public function executeXmlrpc(AgaviParameterHolder $parameters)
+	public function executeXmlrpc(AgaviRequestDataHolder $rd)
 	{
 		$this->getResponse()->setContent(array($this->getAttribute('product_price')));
 	}

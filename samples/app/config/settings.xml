@@ -1,16 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!--
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
-| This file is part of the Agavi package.                                    |
-| Copyright (c) 2006 the Agavi Project.                                      |
-| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
-| CORE AGAVI SETTINGS                                                        |
-| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
-| KEYWORDS:                                                                  |
-| You may reference any configuration directive by enclosing the name in     |
-| "%" signs. Example: %core.agavi_dir%                                         |
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
--->
 <configurations>
 	<configuration>
 		
@@ -49,7 +37,7 @@
 		</system_actions>
 		
 		<settings>
-			<setting name="app_name">My Project</setting>
+			<setting name="app_name">Agavi Sample Application</setting>
 			
 			<setting name="available">true</setting>
 			<setting name="debug">false</setting>

@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -19,14 +19,16 @@
  * @package    agavi
  * @subpackage exception
  *
- * @author     David Zuelke <dz@bitxtender.com>
- * @copyright  (c) Authors
+ * @author     David Zülke <dz@bitxtender.com>
+ * @copyright  Authors
+ * @copyright  The Agavi Project
+ *
  * @since      0.11.0
  *
  * @version    $Id$
  */
 
-/*
+/**
  * Build a list of parameters passed to a method. Example:
  * array([object AgaviFilter], 'baz' => array(1, 2), 'log' => [resource stream])
  *
@@ -34,7 +36,7 @@
  *
  * @return     string A string, possibly formatted using HTML "em" tags.
  *
- * @author     David Zuelke <dz@bitxtender.com>
+ * @author     David Zülke <dz@bitxtender.com>
  * @since      0.11.0
  */
 function buildParamList($params)
@@ -67,13 +69,21 @@ function buildParamList($params)
 }
 
 $svg = false;
-if(strpos($_SERVER['HTTP_USER_AGENT'], 'AppleWebKit') !== false) {
-	preg_match('#AppleWebKit/(\d+)#', $_SERVER['HTTP_USER_AGENT'], $matches);
+$ua = '';
+if(isset($_SERVER['HTTP_USER_AGENT'])) {
+	$ua = $_SERVER['HTTP_USER_AGENT'];
+} elseif($container !== null && ($rd = $container->getRequestData()) !== null && $rd instanceof AgaviIHeadersRequestDataHolder && $rd->hasHeader('User-Agent')) {
+	$ua = $rd->getHeader('User-Agent');
+} elseif($context !== null && ($rq = $context->getRequest()) !== null && !$rq->isLocked() && ($rd = $rq->getRequestData()) !== null && $rd instanceof AgaviIHeadersRequestDataHolder) {
+	$ua = $rd->getHeader('User-Agent');
+}
+if(strpos($ua, 'AppleWebKit') !== false) {
+	preg_match('#AppleWebKit/(\d+)#', $ua, $matches);
 	if(intval($matches[1]) >= 420) {
 		$svg = true;
 	}
-} elseif(strpos($_SERVER['HTTP_USER_AGENT'], 'Gecko') !== false) {
-	preg_match('#rv:([0-9\.]+)#', $_SERVER['HTTP_USER_AGENT'], $matches);
+} elseif(strpos($ua, 'Gecko') !== false) {
+	preg_match('#rv:([0-9\.]+)#', $ua, $matches);
 	if(version_compare($matches[1], '1.8', '>=')) {
 		$svg = true;
 	}
@@ -547,7 +557,7 @@ if(isset($fixedTrace[0]['file']) && $fixedTrace[0]['file'] != $e->getFile() && $
 		<ol>
 <?php $i = 0; $highlights = array(); foreach($fixedTrace as $trace): $i++; if(!isset($highlights[$trace['file']])) $highlights[$trace['file']] = explode('<br />', str_replace(array('<code><span style="color: #000000">', '</span>
 </code>', '&nbsp;'), array('', '', '&#160;'), highlight_string(str_replace('	', '  ', file_get_contents($trace['file'])), true))); ?>
-			<li id="frame<?php echo $i; ?>"<?php if($i > 1): ?> class="hidecode"<?php endif; ?>>at <?php if($i > 1): ?><strong><?php if(isset($trace['class'])): ?><?php echo $trace['class'], htmlspecialchars($trace['type']); ?><?php endif; ?><?php echo $trace['function']; ?><?php if(isset($trace['args'])): ?>(<?php echo buildParamList($trace['args']); ?>)<?php endif; ?></strong><?php else: ?><em>exception origin</em><?php endif; ?><br />in <?php echo str_replace(
+			<li id="frame<?php echo $i; ?>"<?php if($i > 1): ?> class="hidecode"<?php endif; ?>>at <?php if($i > 1): ?><strong><?php if(isset($trace['class'])): ?><?php echo $trace['class'], htmlspecialchars($trace['type']); ?><?php endif; ?><?php echo $trace['function']; ?><?php if(isset($trace['args'])): ?>(<?php echo buildParamList($trace['args']); ?>)<?php endif; ?></strong><?php else: ?><em>exception origin</em><?php endif; ?><br />in <?php if(isset($trace['file'])): echo str_replace(
 			array(
 				'_' . AgaviConfig::get('core.module_dir', 'something totally random'),
 				'_' . AgaviConfig::get('core.template_dir', 'something totally random'),
@@ -571,7 +581,7 @@ foreach($lines as $key => &$line) { if($key + 1 == $trace['line']): ?><li class=
 if($line == '') $line = '&#160;'; if(strpos($line, '</span>') === 0) $line = substr($line, 7); if(strpos($line, '</span>') < strpos($line, '<span') || strpos($line, '<span') === false) for($j = $key; $j >= 0; $j--) { if(($pos = strrpos($highlights[$trace['file']][$j], '<span')) !== false) { $line = substr($highlights[$trace['file']][$j], $pos, 29) . $line; break; }} if(strrpos($line, '</span>') < strrpos($line, '<span') || strpos($line, '</span>') === false) $line .= '</span>'; if(strpos($line, ' ', 20) == 29) $line = substr_replace($line, '&#160;', 29, 1); echo $line; 
 
 ?></code></li>
-<?php } ?></ol></li>
+<?php } ?></ol><?php else: // no info about origin file ?><em>unknown</em><?php endif; ?></li>
 <?php endforeach; ?>
 		</ol>
 		<h3>Version Information</h3>

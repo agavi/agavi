@@ -18,10 +18,8 @@ class ControllerTest extends AgaviTestCase
 		$this->_context = AgaviContext::getInstance('test');
 		$this->_context->initialize();
 		//$this->_controller = new TestController();
-		$response = new AgaviWebResponse();
-		$response->initialize($this->_context);
 		$this->_controller = AgaviContext::getInstance('test')->getController();
-		$this->_controller->initialize($response, array());
+		$this->_controller->initialize($this->_context, array());
 
 
 	}
@@ -29,8 +27,10 @@ class ControllerTest extends AgaviTestCase
 	public function testNewController()
 	{
 		$controller = $this->_controller;
-		$this->assertType('AgaviWebController', $controller);
-		$this->assertType('AgaviContext', $controller->getContext());
+		$c = new PHPUnit_Framework_Constraint_IsInstanceOf('AgaviController');
+		$this->assertThat($controller, $c);
+		$c = new PHPUnit_Framework_Constraint_IsInstanceOf('AgaviContext');
+		$this->assertThat($controller->getContext(), $c);
 		$ctx1 = $controller->getContext();
 		$ctx2 = AgaviContext::getInstance('test');
 		$this->assertReference($ctx1, $ctx2);
@@ -43,89 +43,29 @@ class ControllerTest extends AgaviTestCase
 		$this->assertFalse(file_exists(AgaviConfig::get('core.app_dir') . '/modules/Test/actions/BunkAction.class.php'));
 		$this->assertFalse(file_exists(AgaviConfig::get('core.app_dir') . '/modules/Bunk/actions/BunkAction.class.php'));
 		$controller = $this->_controller;
-		$this->assertEquals('Test', $controller->actionExists('Test', 'Test'));
-		$this->assertFalse($controller->actionExists('Test', 'Bunk'));
-		$this->assertFalse($controller->actionExists('Bunk', 'Bunk'));
-	}
-
-	public function testforwardTooTheMaxThrowsException()
-	{
-		AgaviConfig::set('controller.max_forwards', 20, false);
-		$controller = $this->_controller;
-		$controller->setRenderMode(AgaviView::RENDER_VAR);
-		for ($i=0; $i<= AgaviConfig::get('controller.max_forwards'); $i++) {
-			try {
-				$controller->forward('Test', 'Test');
-				if ($i >= AgaviConfig::get('controller.max_forwards')) {
-					$this->assertTrue(0,'Expected ForwardException not thrown');
-				}
-			} catch (AgaviForwardException $fe) {
-				$this->assertRegexp('/too many forwards/i', $fe->getMessage());
-			}
-		}
-	}
-	
-	public function testForwardingToDisabledModule()
-	{
-		AgaviConfig::set('actions.module_disabled_module', 'ErrorModule', false);
-		AgaviConfig::set('actions.module_disabled_action', 'DisabledModule', false);
-		$controller = $this->_controller;
-		$controller->setRenderMode(AgaviView::RENDER_VAR);
+		$this->assertEquals('Test', $controller->resolveAction('Test', 'Test'));
 		try {
-			$mode = $controller->getRenderMode();
-			$this->assertEquals(AgaviView::RENDER_VAR, $mode);
-
-			$controller->forward('UnavailableModule', 'Index');
-			$lastActionEntry = $controller->getActionStack()->getLastEntry();
-			$this->assertType('AgaviActionStackEntry', $lastActionEntry);
-			$view = $lastActionEntry->getPresentation();
-			$this->assertRegexp('/module has been disabled/i', $view->getContent());
-
-			$module = $lastActionEntry->getModuleName();
-			$action = $lastActionEntry->getActionName();
-			$this->assertEquals(AgaviConfig::get('actions.module_disabled_module'), $module);
-			$this->assertEquals(AgaviConfig::get('actions.module_disabled_action'), $action);
-		} catch (AgaviForwardException $e) {
-			$this->assertTrue(0, 'Test forwarding to an unavilable module needs work');
+			$controller->resolveAction('Test', 'Bunk');
+			$this->fail('resolveAction did not throw an exception for non-existing action in existing module');
+		} catch (AgaviControllerException $e) {
 		}
-	}
-
-	public function testForwardingSuccessfully()
-	{
-		$controller = $this->_controller;
-		$controller->setRenderMode(AgaviView::RENDER_VAR);
 		try {
-			$controller->forward('Test', 'Test');
-			$lastActionEntry = $controller->getActionStack()->getLastEntry();
-			$this->assertType('AgaviActionStackEntry', $lastActionEntry);
-			$view = $lastActionEntry->getPresentation();
-			$this->assertRegexp('/test successful/i',$view->getContent());
-			$module = $lastActionEntry->getModuleName();
-			$action = $lastActionEntry->getActionName();
-			$this->assertEquals('Test', $module);
-			$this->assertEquals('Test', $action);
-		} catch (AgaviForwardException $e) {
-			$this->assertTrue(0, 'Test forwarding to an unavilable module needs work');
+			$controller->resolveAction('Bunk', 'Bunk');
+			$this->fail('resolveAction did not throw an exception for non-existing action in non-existing module');
+		} catch (AgaviControllerException $e) {
 		}
-		
 	}
 
 	public function testGetActionFromModule()
 	{
 		// TODO: check all other existing naming schemes for actions
 
-		$action = $this->_controller->getAction('Test', 'Test');
+		$action = $this->_controller->createActionInstance('Test', 'Test');
 		$this->assertType('Test_TestAction', $action);
 		$this->assertType('AgaviAction', $action);
 
 		// TODO: this needs checking for errors 
-//		$this->_controller->getAction('Test', 'NonExistant');
-	}
-
-	public function testGetActionStack()
-	{
-		$con_as = $this->_controller->getActionStack();
-		$this->assertType('AgaviActionStack', $con_as);
+//		$this->_controller->createActionInstance('Test', 'NonExistant');
 	}
 
 	public function testGetContext()
@@ -143,23 +83,11 @@ class ControllerTest extends AgaviTestCase
 		$this->assertType('AgaviController', $controller);
 	}
 
-	public function testSetGetRenderMode()
+	public function testCreateViewInstance()
 	{
 		$controller = $this->_controller;
-		$this->assertEquals(AgaviView::RENDER_CLIENT, $controller->getRenderMode());
-		
-		$controller->setRenderMode(AgaviView::RENDER_VAR);
-		$this->assertEquals(AgaviView::RENDER_VAR, $controller->getRenderMode());
-		
-		$controller->setRenderMode(AgaviView::RENDER_NONE);
-		$this->assertEquals(AgaviView::RENDER_NONE, $controller->getRenderMode());
-	}
-
-	public function testGetView()
-	{
-		$controller = $this->_controller;
-		$this->assertType('Test_TestSuccessView', $controller->getView('Test', 'TestSuccess'));
-		$this->assertType('Test_TestErrorView', $controller->getView('Test', 'TestError'));
+		$this->assertType('Test_TestSuccessView', $controller->createViewInstance('Test', 'TestSuccess'));
+		$this->assertType('Test_TestErrorView', $controller->createViewInstance('Test', 'TestError'));
 	}
 
 	public function testModelExists()
@@ -177,27 +105,6 @@ class ControllerTest extends AgaviTestCase
 		$this->assertFalse($controller->moduleExists('Bunk'));
 	}
 
-	public function testSetRenderMode()
-	{
-		$controller = $this->_controller;
-		$good = array(AgaviView::RENDER_CLIENT, AgaviView::RENDER_VAR, AgaviVIEW::RENDER_NONE);
-		$bad = array(932940, null, '');
-		foreach($good as $value) {
-			try {
-				$controller->setRenderMode($value);
-			} catch(AgaviRenderException $e) {
-				$this->fail('Caught unexpected RenderException!');
-			}
-		}
-		foreach($bad as $value) {
-			try {
-				$controller->setRenderMode($value);
-				$this->fail('Expected RenderException not thrown!');
-			} catch(AgaviRenderException $e) {
-			}
-		}
-	}
-
 	public function testViewExists()
 	{
 		$controller = $this->_controller;
@@ -208,78 +115,26 @@ class ControllerTest extends AgaviTestCase
 
 
 
-	public function testGetActionName()
-	{
-		$controller = $this->_controller;
-
-		$controller->forward('Test', 'Test');
-		$this->assertSame($controller->getActionStack()->getLastEntry()->getActionName(), $controller->getActionName());
-	}
-
-	public function testGetModuleName()
-	{
-		$controller = $this->_controller;
-
-		$controller->forward('ErrorModule', 'Some');
-		$this->assertSame($controller->getActionStack()->getLastEntry()->getModuleName(), $controller->getModuleName());
-	}
-
-
-	public function testGetModuleDirectory()
-	{
-		$controller = $this->_controller;
-
-		$controller->forward('ErrorModule', 'Some');
-		$this->assertSame(AgaviConfig::get('core.app_dir') . '/modules/ErrorModule', $controller->getModuleDirectory());
-	}
-
-	public function testSetGetOutputType()
-	{
-		$controller = $this->_controller;
-		$this->assertSame('html', $controller->getOutputType());
-
-		$this->assertTrue($controller->setOutputType('test1'));
-		$this->assertSame('test1', $controller->getOutputType());
-
-		$this->assertTrue($controller->setOutputType('test2'));
-		$this->assertSame('test2', $controller->getOutputType());
-
-		try {
-			$controller->setOutputType('nonexistant');
-			$this->fail('Expected AgaviException not thrown!');
-		} catch(AgaviException $e) {
-			$this->assertSame('test2', $controller->getOutputType());
-		}
-/*
-		$controller->getResponse()->lock();
-		$this->assertFalse($controller->setOutputType('html'));
-		$this->assertSame('test2', $controller->getOutputType());
-*/
-	}
-
 	public function testGetOutputTypeInfo()
 	{
 		$controller = $this->_controller;
 
 		$info_ex = array(
-			'parameters' =>							array('Content-Type' => 'text/html'),
-			'renderer_parameters' =>		array(),
-			'renderer' =>								'AgaviPhpRenderer',
+			'http_headers' => array(
+				'Content-Type' => 'text/html',
+			),
 		);
 
-		$info = $controller->getOutputTypeInfo();
-		$this->assertSame($info_ex, $info);
+		$info = $controller->getOutputType();
+		$this->assertSame($info_ex, $info->getParameters());
 
 		$info_ex = array(
-			'parameters' =>							array(),
-			'renderer_parameters' =>		array(),
-			'renderer' =>								'AgaviPhpRenderer',
 		);
-		$info = $controller->getOutputTypeInfo('test1');
-		$this->assertSame($info_ex, $info);
+		$info = $controller->getOutputType('test1');
+		$this->assertSame($info_ex, $info->getParameters());
 
 		try {
-			$controller->getOutputTypeInfo('nonexistant');
+			$controller->getOutputType('nonexistant');
 			$this->fail('Expected AgaviException not thrown!');
 		} catch(AgaviException $e) {
 		}

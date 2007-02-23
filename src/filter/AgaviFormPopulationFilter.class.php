@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -53,8 +53,10 @@
  * @package    agavi
  * @subpackage filter
  *
- * @author     David Zuelke <dz@bitxtender.com>
- * @copyright  (c) Authors
+ * @author     David Zülke <dz@bitxtender.com>
+ * @copyright  Authors
+ * @copyright  The Agavi Project
+ *
  * @since      0.11.0
  *
  * @version    $Id$
@@ -64,36 +66,38 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 	/**
 	 * Execute this filter.
 	 *
-	 * @param      AgaviFilterChain The filter chain.
-	 * @param      AgaviResponse    A Response instance.
+	 * @param      AgaviFilterChain        The filter chain.
+	 * @param      AgaviExecutionContainer The current execution container.
 	 *
 	 * @throws     <b>AgaviFilterException</b> If an error occurs during execution.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function executeOnce(AgaviFilterChain $filterChain, AgaviResponse $response)
+	public function executeOnce(AgaviFilterChain $filterChain, AgaviExecutionContainer $container)
 	{
-		$filterChain->execute($filterChain, $response);
+		$filterChain->execute($container);
 		
-		$output = $response->getContent();
+		$response = $container->getResponse();
 		
-		if(!$output) {
+		if(!$response->isContentMutable() || !($output = $response->getContent())) {
 			return;
 		}
 		
 		$req = $this->getContext()->getRequest();
 		
+		$vm = null;
+		
 		$cfg = array_merge(array('populate' => null, 'skip' => null), $this->getParameters(), $req->getAttributes('org.agavi.filter.FormPopulationFilter'));
 		
-		if(is_array($cfg['output_types']) && !in_array($this->getContext()->getController()->getOutputType(), $cfg['output_types'])) {
+		if(is_array($cfg['output_types']) && !in_array($container->getOutputType()->getName(), $cfg['output_types'])) {
 			return;
 		}
 		
 		if(is_array($cfg['populate']) || $cfg['populate'] instanceof AgaviParameterHolder) {
 			$populate = $cfg['populate'];
 		} elseif(in_array($req->getMethod(), $cfg['methods']) && $cfg['populate'] !== false) {
-			$populate = $req;
+			$populate = $req->getRequestData();
 		} else {
 			return;
 		}
@@ -108,6 +112,8 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 			$skip = '/(\A' . str_replace('\[\]', '\[[^\]]*\]', implode('|\A', array_map('preg_quote', $cfg['skip']))) . ')/';
 		}
 		
+		$luie = libxml_use_internal_errors(true);
+		libxml_clear_errors();
 		
 		$doc = new DOMDocument();
 		
@@ -126,7 +132,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 		if($xhtml && $cfg['parse_xhtml_as_xml']) {
 			$doc->loadXML($output);
 			$xpath = new DomXPath($doc);
-			if($doc->documentElement->namespaceURI) {
+			if($doc->documentElement && $doc->documentElement->namespaceURI) {
 				$xpath->registerNamespace('html', $doc->documentElement->namespaceURI);
 				$ns = 'html:';
 			} else {
@@ -137,6 +143,25 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 			$xpath = new DomXPath($doc);
 			$ns = '';
 		}
+		
+		if(libxml_get_last_error() !== false) {
+			$errors = array();
+			foreach(libxml_get_errors() as $error) {
+				$errors[] = sprintf("Line %d: %s", $error->line, $error->message);
+			}
+			libxml_clear_errors();
+			libxml_use_internal_errors($luie);
+			throw new AgaviParseException(
+				sprintf(
+					'Form Population Filter could not parse the document due to the following error%s: ' . "\n\n%s", 
+					count($errors) > 1 ? 's' : '', 
+					implode("\n", $errors)
+				)
+			);
+		}
+		
+		libxml_clear_errors();
+		libxml_use_internal_errors($luie);
 		
 		$properXhtml = false;
 		foreach($xpath->query('//' . $ns . 'head/' . $ns . 'meta') as $meta) {
@@ -155,7 +180,18 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 			}
 		}
 		
-		$encoding = strtolower($doc->encoding);
+		if(($encoding = $this->getParameter('force_encoding')) === false) {
+			if($doc->actualEncoding) {
+				$encoding = $doc->actualEncoding;
+			} elseif($doc->encoding) {
+				$encoding = $doc->encoding;
+			} else {
+				$encoding = $doc->encoding = 'utf-8';
+			}
+		} else {
+			$doc->encoding = $encoding;
+		}
+		$encoding = strtolower($encoding);
 		$utf8 = $encoding == 'utf-8';
 		if(!$utf8 && $encoding != 'iso-8859-1' && !function_exists('iconv')) {
 			throw new AgaviException('No iconv module available, input encoding "' . $encoding . '" cannot be handled.');
@@ -184,7 +220,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 				if(!(
 					$action == $rurl || 
 					(strpos($action, '/') === 0 && preg_replace(array('#/\./#', '#/\.$#', '#[^\./]+/\.\.(/|\z)#', '#/{2,}#'), array('/', '/', '', '/'), $action) == $ruri) ||
-					preg_replace(array('#/\./#', '#/\.$#', '#[^\./]+/\.\.(/|\z)#', '#/{2,}#'), array('/', '/', '', '/'), $baseHref . $action) == $rurl
+					$baseHref . preg_replace(array('#/\./#', '#/\.$#', '#[^\./]+/\.\.(/|\z)#', '#/{2,}#'), array('/', '/', '', '/'), $action) == $rurl
 				)) {
 					continue;
 				}
@@ -195,6 +231,11 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 				} else {
 					continue;
 				}
+			}
+			
+			// no validation manager set yet? let's do that. the later, the better.
+			if($vm === null) {
+				$vm = $container->getValidationManager();
 			}
 			
 			// our array for remembering foo[] field's indices
@@ -213,7 +254,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 				$multiple = $element->nodeName == 'select' && $element->hasAttribute('multiple');
 				
 				$checkValue = false;
-				if($element->getAttribute('type') == 'checkbox') {
+				if($element->getAttribute('type') == 'checkbox' || $element->getAttribute('type') == 'radio') {
 					if(($pos = strpos($pname, '[]')) && ($pos + 2 != strlen($pname))) {
 						// foo[][3] checkboxes etc not possible, [] must occur only once and at the end
 						continue;
@@ -221,7 +262,8 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 						$checkValue = true;
 						$pname = substr($pname, 0, $pos);
 					}
-				} elseif(preg_match_all('/([^\[]+)?(?:\[([^\]]*)\])/', $pname, $matches)) {
+				}
+				if(preg_match_all('/([^\[]+)?(?:\[([^\]]*)\])/', $pname, $matches)) {
 					$pname = $matches[1][0];
 					
 					if($multiple) {
@@ -267,7 +309,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 				}
 				
 				// there's an error with the element's name in the request? good. let's give the baby a class!
-				if($req->hasError($pname)) {
+				if($vm->hasError($pname)) {
 					$element->setAttribute('class', preg_replace('/\s*$/', ' ' . $cfg['error_class'], $element->getAttribute('class')));
 					// assign the class to all implicit labels
 					foreach($xpath->query('ancestor::' . $ns . 'label[not(@for)]', $element) as $label) {
@@ -303,6 +345,12 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 						} else {
 							$value = iconv($encoding, 'UTF-8', $value);
 						}
+					}
+				} else {
+					if(is_array($value)) {
+						$value = array_map('strval', $value);
+					} else {
+						$value = (string) $value;
 					}
 				}
 				
@@ -414,7 +462,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 	 * @throws     <b>AgaviFilterException</b> If an error occurs during 
 	 *                                         initialization
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function initialize(AgaviContext $context, array $parameters = array())
@@ -423,6 +471,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 		$this->setParameter('cdata_fix', true);
 		$this->setParameter('error_class', 'error');
 		$this->setParameter('force_output_mode', false);
+		$this->setParameter('force_encoding', false);
 		$this->setParameter('parse_xhtml_as_xml', true);
 		$this->setParameter('include_password_inputs', false);
 		$this->setParameter('include_hidden_inputs', true);

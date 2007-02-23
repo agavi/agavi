@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
@@ -31,7 +31,10 @@
  * @subpackage filter
  *
  * @author     Sean Kerr <skerr@mojavi.org>
- * @copyright  (c) Authors
+ * @author     David Zülke <dz@bitxtender.com>
+ * @copyright  Authors
+ * @copyright  The Agavi Project
+ *
  * @since      0.9.0
  *
  * @version    $Id$
@@ -41,27 +44,33 @@ class AgaviExecutionTimeFilter extends AgaviFilter implements AgaviIGlobalFilter
 	/**
 	 * Execute this filter.
 	 *
-	 * @param      AgaviFilterChain The filter chain.
-	 * @param      AgaviResponse A Response instance.
+	 * @param      AgaviFilterChain        The filter chain.
+	 * @param      AgaviExecutionContainer The current execution container.
 	 *
 	 * @throws     <b>AgaviFilterException</b> If an error occurs during execution.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function executeOnce(AgaviFilterChain $filterChain, AgaviResponse $response)
+	public function executeOnce(AgaviFilterChain $filterChain, AgaviExecutionContainer $container)
 	{
 		$context = $this->getContext();
 		
-		$comment = $this->getParameter('comment');
+		$comment = $this->getParameter('comment', false);
 		$replace = $this->getParameter('replace', false);
 		
 		$start = microtime(true);
-		$filterChain->execute();
+		$filterChain->execute($container);
 		
-		$outputTypes = $this->getParameter('output_types');
-		if(is_array($outputTypes) && !in_array($context->getController()->getOutputType(), $outputTypes)) {
+		$outputTypes = (array) $this->getParameter('output_types');
+		if(is_array($outputTypes) && !in_array($container->getOutputType()->getName(), $outputTypes)) {
+			return;
+		}
+		
+		$response = $container->getResponse();
+		
+		if(!$response->isContentMutable()) {
 			return;
 		}
 		
@@ -75,7 +84,10 @@ class AgaviExecutionTimeFilter extends AgaviFilter implements AgaviIGlobalFilter
 		}
 		
 		if($comment) {
-			$response->appendContent("\n\n<!-- This page took " . $time . " seconds to process -->");
+			if($comment === true) {
+				$comment = "\n\n<!-- This page took %s seconds to process -->";
+			}
+			$response->appendContent(sprintf($comment, $time));
 		}
 	}
 
@@ -89,6 +101,7 @@ class AgaviExecutionTimeFilter extends AgaviFilter implements AgaviIGlobalFilter
 	 *                                         initialization.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
 	public function initialize(AgaviContext $context, array $parameters = array())

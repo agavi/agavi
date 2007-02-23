@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -19,10 +19,11 @@
  * @package    agavi
  * @subpackage renderer
  *
- * @author     David Zuelke <dz@bitxtender.com>
+ * @author     David Zülke <dz@bitxtender.com>
  * @author     Benjamin Muskalla <bm@bmuskalla.de>
- * @author     Agavi Project <info@agavi.org>
- * @copyright  (c) Authors
+ * @copyright  Authors
+ * @copyright  The Agavi Project
+ *
  * @since      0.11.0
  *
  * @version    $Id$
@@ -30,29 +31,55 @@
 class AgaviPhptalRenderer extends AgaviRenderer
 {
 	/**
+	 * @constant   string The directory inside the cache dir where templates will
+	 *                    be stored in compiled form.
+	 */
+	const COMPILE_DIR = 'templates';
+	
+	/**
+	 * @constant   string The subdirectory inside the compile dir where templates
+	 *                    will be stored in compiled form.
+	 */
+	const COMPILE_SUBDIR = 'phptal';
+	
+	/**
 	 * @var        string A string with the default template file extension,
 	 *                    including the dot.
 	 */
-	protected $extension = '.tal';
+	protected $defaultExtension = '.tal';
 
 	/**
 	 * @var        PHPTAL PHPTAL template engine.
 	 */
-	protected $_phptal = null;
+	protected $phptal = null;
 
-	const COMPILE_DIR = 'templates';
-	const COMPILE_SUBDIR = 'phptal';
+	/**
+	 * Pre-serialization callback.
+	 *
+	 * Excludes the PHPTAL instance to prevent excessive serialization load.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function __sleep()
+	{
+		$keys = parent::__sleep();
+		unset($keys[array_search('phptal', $keys)]);
+		return $keys;
+	}
 
 	/**
 	 * Retrieve the PHPTAL instance
 	 *
 	 * @return     PHPTAL A PHPTAL instance.
 	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @author     Benjamin Muskalla <bm@muskalla.de>
 	 * @since      0.11.0
 	 */
-	public function getEngine()
+	protected function getEngine()
 	{
-		if($this->_phptal === null) {
+		if($this->phptal === null) {
 			if(!defined('PHPTAL_PHP_CODE_DESTINATION')) {
 				define('PHPTAL_PHP_CODE_DESTINATION', AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . AgaviPhptalRenderer::COMPILE_DIR . DIRECTORY_SEPARATOR . AgaviPhptalRenderer::COMPILE_SUBDIR . DIRECTORY_SEPARATOR);
 				AgaviToolkit::mkdir(PHPTAL_PHP_CODE_DESTINATION, fileperms(AgaviConfig::get('core.cache_dir')), true);
@@ -61,114 +88,54 @@ class AgaviPhptalRenderer extends AgaviRenderer
 			if(!class_exists('PHPTAL')) {
 				require('PHPTAL.php');
 			}
-
-			$this->_phptal = new PHPTAL();
+			
+			$this->phptal = new PHPTAL();
 		}
-		return $this->_phptal;
+		return $this->phptal;
 	}
 
 	/**
-	 * Render the presentation to the Response.
+	 * Render the presentation and return the result.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @param      AgaviTemplateLayer The template layer to render.
+	 * @param      array              The template variables.
+	 * @param      array              The slots.
+	 * @param      array              Associative array of additional assigns.
+	 *
+	 * @return     string A rendered result.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @author     Benjamin Muskalla <bm@bmuskalla.de>
 	 * @since      0.11.0
 	 */
-	public function render()
+	public function render(AgaviTemplateLayer $layer, array &$attributes = array(), array &$slots = array(), array &$moreAssigns = array())
 	{
-		$retval = null;
-
 		$engine = $this->getEngine();
-		$view = $this->getView();
-
-		$mode = $view->getContext()->getController()->getRenderMode();
-		$engine->setTemplateRepository($view->getDirectory());
-
-		$engine->setTemplate($this->buildTemplateName($view->getTemplate()));
+		
 		if($this->extractVars) {
-			foreach($view->getAttributes() as $key => $value) {
+			foreach($attributes as $key => $value) {
 				$engine->set($key, $value);
 			}
 		} else {
-			$engine->set($this->varName, $view->getAttributes());
+			$engine->set($this->varName, $attributes);
 		}
-
-		$collisions = array_intersect(array_keys($this->assigns), $this->view->getAttributeNames());
-		if(count($collisions)) {
-			throw new AgaviException('Could not import system objects due to variable name collisions ("' . implode('", "', $collisions) . '" already in use).');
+		
+		$engine->set($this->slotsVarName, $slots);
+		
+		foreach($this->assigns as $key => $getter) {
+			$engine->set($key, $this->context->$getter());
 		}
-		foreach($this->assigns as $key => &$value) {
+		
+		foreach($moreAssigns as $key => $value) {
+			if(isset($this->moreAssignNames[$key])) {
+				$key = $this->moreAssignNames[$key];
+			}
 			$engine->set($key, $value);
 		}
-
-		$engine->set('this', $this);
-
-		if($mode == AgaviView::RENDER_CLIENT && !$view->isDecorator()) {
-			// render directly to the client
-			$this->response->setContent($engine->execute());
-		} elseif($mode != AgaviView::RENDER_NONE) {
-			// render to variable
-			$retval = $engine->execute();
-			// now render our decorator template, if one exists
-			if($view->isDecorator()) {
-				$retval = $this->decorate($retval);
-			}
-
-			$this->response->setContent($retval);
-		}
-	}
-
-	/**
-	 * @see        AgaviRenderer::decorate()
-	 */
-	public function decorate($content)
-	{
-		// call our parent decorate() method
-		parent::decorate($content);
-		$engine = $this->getEngine();
-		$view = $this->getView();
-
-		// render the decorator template and return the result
-		$engine->setTemplateRepository($view->getDecoratorDirectory());
-
-		$engine->setTemplate($this->buildTemplateName($view->getDecoratorTemplate()));
-
-		$toSet = array();
-		// set the template resources
-		if($this->extractVars) {
-			foreach($view->getAttributes() as $key => $value) {
-				$engine->set($key, $value);
-			}
-		} else {
-			$toSet =& $view->getAttributes();
-		}
-
-		if($this->extractSlots === true || ($this->extractVars && $this->extractSlots !== false)) {
-			foreach($this->output as $key => &$value) {
-				$engine->set($key, $value);
-			}
-		} else {
-			if($this->varName == $this->slotsVarName) {
-				$toSet = array_merge($toSet, $this->output);
-			} else {
-				$engine->set($this->slotsVarName, $this->output);
-			}
-		}
-		$engine->set($this->varName, $toSet);
-
-		$collisions = array_intersect(array_keys($this->assigns), $this->view->getAttributeNames());
-		if(count($collisions)) {
-			throw new AgaviException('Could not import system objects due to variable name collisions ("' . implode('", "', $collisions) . '" already in use).');
-		}
-		foreach($this->assigns as $key => $value) {
-			$engine->set($key, $value);
-		}
-
-		$engine->set('this', $this);
-
-		$retval = $engine->execute();
-
-		return $retval;
+		
+		$engine->setTemplate($layer->getResourceStreamIdentifier());
+		
+		return $engine->execute();
 	}
 }
 

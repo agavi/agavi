@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -19,8 +19,10 @@
  * @package    agavi
  * @subpackage user
  *
- * @copyright  David Zuelke <dz@bitxtender.com>
- * @copyright  (c) Authors
+ * @copyright  David Zülke <dz@bitxtender.com>
+ * @copyright  Authors
+ * @copyright  The Agavi Project
+ *
  * @since      0.11.0
  *
  * @version    $Id$
@@ -47,7 +49,7 @@ class AgaviRbacSecurityUser extends AgaviSecurityUser implements AgaviISecurityU
 	 *
 	 * @param      string The role name to add to this user.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function grantRole($role)
@@ -70,11 +72,26 @@ class AgaviRbacSecurityUser extends AgaviSecurityUser implements AgaviISecurityU
 	}
 	
 	/**
+	 * Set many role memberships for this user.
+	 *
+	 * @param      array An array of role names.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function grantRoles(array $roles)
+	{
+		foreach($roles as $role) {
+			$this->grantRole($role);
+		}
+	}
+	
+	/**
 	 * Revoke a role membership for this user.
 	 *
 	 * @param      string The role name to remove from this user.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function revokeRole($role)
@@ -95,7 +112,7 @@ class AgaviRbacSecurityUser extends AgaviSecurityUser implements AgaviISecurityU
 	 *
 	 * @return     bool Whether or not the user is a member of the given role.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function hasRole($role)
@@ -108,7 +125,7 @@ class AgaviRbacSecurityUser extends AgaviSecurityUser implements AgaviISecurityU
 	 *
 	 * @return     array An array of role names.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getRoles()
@@ -119,7 +136,7 @@ class AgaviRbacSecurityUser extends AgaviSecurityUser implements AgaviISecurityU
 	/**
 	 * Revoke all roles.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function revokeAllRoles()
@@ -138,7 +155,7 @@ class AgaviRbacSecurityUser extends AgaviSecurityUser implements AgaviISecurityU
 	 * @throws     <b>AgaviInitializationException</b> If an error occurs while
 	 *                                                 initializing this User.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @author     Harald Kirschner <mail@digitarald.de>
 	 * @since      0.11.0
 	 */
@@ -158,7 +175,7 @@ class AgaviRbacSecurityUser extends AgaviSecurityUser implements AgaviISecurityU
 	/**
 	 * Load RBAC role and permission definitions.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	protected function loadDefinitions()
@@ -174,7 +191,7 @@ class AgaviRbacSecurityUser extends AgaviSecurityUser implements AgaviISecurityU
 	 * Execute the shutdown procedure.
 	 *
 	 * @author     Harald Kirschner <mail@digitarald.de>
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function shutdown()

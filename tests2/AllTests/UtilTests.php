@@ -9,7 +9,7 @@ class UtilTests
 {
 	public static function suite()
 	{
-		$suite = new PHPUnit2_Framework_TestSuite('util');
+		$suite = new PHPUnit_Framework_TestSuite('util');
 
 		$suite->addTestSuite('AttributeHolderTest');
 		$suite->addTestSuite('ParameterHolderTest');

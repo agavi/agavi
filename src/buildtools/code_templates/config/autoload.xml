@@ -1,53 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!--
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
-| This file is part of the Agavi package.                                    |
-| Copyright (c) 2006 the Agavi Project.                                      |
-| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
-| AGAVI AUTO LOAD CONFIGURATION                                              |
-| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
-| Any file listed here will automatically be loaded by PHP when the class is |
-| first accessed (not in advance so there's no performance hit). This means  |
-| you do not manually have to include it in your files.                      |
-| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
-| AUTOLOAD CONFIGURATION ELEMENTS & ATTRIBUTES:                              |
-|                                                                            |
-| <autoloads> Parent element for <autoload>                                  |
-|   Includes:                                                                |
-|     1-n <autoload> element                                                 |
-|                                                                            |
-| <autoload> Defines an autoload for a class                                 |
-|   Attributes:                                                              |
-|     name : Name of the class                                               |
-|   Includes:                                                                |
-|     A full path to the file to be loaded when the class is needed. You can |
-|     use KEYWORDS (see below) in the path.                                  |
-|                                                                            |
-| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
-| KEYWORDS:                                                                  |
-| You may reference any configuration directive by enclosing the name in     |
-| "%" signs. Example: %core.agavi_dir%                                       |
-| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
-| <configurations> & <parameters>                                            |
-| These elements are explained in detail in the Agavi Manual.                |
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
--->
 <configurations parent="%core.system_config_dir%/autoload.xml">
-	<!--
-		+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
-		| Custom Classes                                                         |
-		| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
-		| Any classes you see fit that might be of use, such as classes that     |
-		| used in a session that must exist when the session unserializes its    |
-		| data. Another good example is a custom factory implementation such as  |
-		| a controller or user.                                                  |
-		+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
-	-->
-	<!-- example for a list of autoloads that is only used in the "production" environment
-	<configuration environment="production">
-		<autoloads>
-			<autoload name="MyCustomClass">%core.app_dir%/lib/MyCustomClass.class.php</autoload>
-		</autoloads>
+	<configuration>
+		
+		<autoload name="ProjectBaseAction">%core.lib_dir%/action/ProjectBaseAction.class.php</autoload>
+		<autoload name="ProjectBaseView">%core.lib_dir%/view/ProjectBaseView.class.php</autoload>
+		
 	</configuration>
-	-->
 </configurations>

@@ -2,12 +2,12 @@
 
 require_once(dirname(__FILE__).'/inc/DummyValidator.class.php');
 
-class MyValidatorManager extends AgaviValidatorManager
+class MyValidatorManager extends getValidationManager
 {
 	public function getChildren() { return $this->Children; }
 }
 
-class ValidatorManagerTest extends AgaviTestCase 
+class ValidationManagerTest extends AgaviTestCase 
 {
 	private $_vm = null;
 	private $_context = null;
@@ -15,7 +15,7 @@ class ValidatorManagerTest extends AgaviTestCase
 	public function setUp()
 	{
 		$this->_context = AgaviContext::getInstance('test');
-		$this->_vm = $this->_context->getValidatorManager();
+		$this->_vm = $this->_context->getValidationManager();
 	}
 
 	public function tearDown()
@@ -31,9 +31,9 @@ class ValidatorManagerTest extends AgaviTestCase
 	
 	public function testclear()
 	{
-		$vm = new MyValidatorManager;
+		$vm = new MyValidationManager;
 		$vm->initialize($this->_context);
-		$val = new DummyValidator($vm);
+		$val = new DummyValidator($vm, array());
 		$vm->addChild($val);
 		
 		$this->assertFalse($val->shutdown);
@@ -44,9 +44,9 @@ class ValidatorManagerTest extends AgaviTestCase
 	
 	public function testaddChild()
 	{
-		$vm = new MyValidatorManager;
+		$vm = new MyValidationManager;
 		$vm->initialize($this->_context);
-		$val = new DummyValidator($vm);
+		$val = new DummyValidator($vm, array());
 
 		$this->assertEquals($vm->getChildren(), array());
 		$vm->addChild($val);
@@ -80,8 +80,8 @@ class ValidatorManagerTest extends AgaviTestCase
 	
 	public function testexecute()
 	{
-		$val1 = new DummyValidator($this->_vm);
-		$val2 = new DummyValidator($this->_vm);
+		$val1 = new DummyValidator($this->_vm, array());
+		$val2 = new DummyValidator($this->_vm, array());
 		
 		$val1->val_result = true;
 		$val2->val_result = true;
@@ -125,7 +125,7 @@ class ValidatorManagerTest extends AgaviTestCase
 	
 	public function testshutdown()
 	{
-		$val = new DummyValidator($this->_vm);
+		$val = new DummyValidator($this->_vm, array());
 		$this->_vm->addChild($val);
 		
 		$this->assertFalse($val->shutdown);
@@ -135,10 +135,10 @@ class ValidatorManagerTest extends AgaviTestCase
 	
 	public function testregisterValidators()
 	{
-		$val1 = new DummyValidator($this->_vm);
-		$val2 = new DummyValidator($this->_vm);
+		$val1 = new DummyValidator($this->_vm, array());
+		$val2 = new DummyValidator($this->_vm, array());
 		
-		$vm = new MyValidatorManager;
+		$vm = new MyValidationManager;
 		$vm->initialize($this->_context);
 		$this->assertEquals($vm->getChildren(), array());
 		$vm->registerValidators(array($val1, $val2));

@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -17,14 +17,16 @@
  * @package    agavi
  * @subpackage tests2
  *
- * @author     Dominik del Bondio
- * @copyright  (c) Authors
+ * @author     Dominik del Bondio <ddb@bitxtender.com>
+ * @copyright  Authors
+ * @copyright  The Agavi Project
+ *
  * @since      0.11.0
  *
  * @version    $Id$
  */
 
-class AgaviTestCase extends PHPUnit2_Framework_TestCase
+class AgaviTestCase extends PHPUnit_Framework_TestCase
 {
 	/**
 	 * @param  mixed   $object
@@ -85,7 +87,7 @@ class AgaviTestCase extends PHPUnit2_Framework_TestCase
 				));
 			}
 		}
-		catch(PHPUnit2_Framework_AssertionFailedError $e)
+		catch(PHPUnit_Framework_AssertionFailedError $e)
 		{
 			self::fail(sprintf('%s%sexpected copy: %s was not a copy of: %s', 
 				$message,

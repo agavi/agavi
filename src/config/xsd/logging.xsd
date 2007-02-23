@@ -6,13 +6,14 @@
   <xs:element name="configurations" type="configurations" />
   <xs:complexType name="configurations">
     <xs:sequence>
+      <xs:element name="sandbox" type="sandbox" minOccurs="0" />
       <xs:element name="configuration" minOccurs="0" maxOccurs="unbounded">
         <xs:complexType>
-          <xs:all>
-            <xs:element name="loggers" type="loggers" minOccurs="0" />
-            <xs:element name="appenders" type="appenders" minOccurs="0" />
-            <xs:element name="layouts" type="layouts" minOccurs="0" />
-          </xs:all>
+          <xs:sequence minOccurs="0" maxOccurs="unbounded" >
+            <xs:group ref="loggers" minOccurs="0" />
+            <xs:group ref="appenders" minOccurs="0" />
+            <xs:group ref="layouts" minOccurs="0" />
+          </xs:sequence>
           <xs:attribute name="environment" type="xs:string" />
           <xs:attribute name="context" type="xs:string" />
         </xs:complexType>
@@ -21,61 +22,89 @@
     <xs:attribute name="parent" type="xs:string" />
   </xs:complexType>
 
+  <xs:group name="loggers">
+    <xs:choice>
+      <xs:element name="loggers" type="loggers" minOccurs="0" />
+      <xs:element name="logger" type="logger" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:choice>
+  </xs:group>
+
+  <xs:group name="appenders">
+    <xs:choice>
+      <xs:element name="appenders" type="appenders" minOccurs="0" />
+      <xs:element name="appender" type="appender" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:choice>
+  </xs:group>
+
+  <xs:group name="layouts">
+    <xs:choice>
+      <xs:element name="layouts" type="layouts" minOccurs="0" />
+      <xs:element name="layout" type="layout" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:choice>
+  </xs:group>
+
+
+  <xs:group name="logger_appenders">
+    <xs:choice>
+      <xs:element name="appenders" type="logger_appenders" minOccurs="0" />
+      <xs:element name="appender" type="logger_appender" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:choice>
+  </xs:group>
+
+  <xs:complexType name="logger_appenders">
+    <xs:sequence>
+      <xs:element name="appender" type="logger_appender" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="logger_appender">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
   <xs:complexType name="loggers">
     <xs:sequence>
       <xs:element name="logger" type="logger" maxOccurs="unbounded" />
     </xs:sequence>
-    <xs:attribute name="default_logger" type="xs:string" />
+    <xs:attribute name="default" type="xs:string" use="required" />
   </xs:complexType>
   <xs:complexType name="logger">
-    <xs:all>
-      <xs:element name="parameters" type="parameters" minOccurs="0" />
-      <xs:element name="appenders" minOccurs="0">
-        <xs:complexType>
-          <xs:sequence>
-            <xs:element name="appender" maxOccurs="unbounded">
-              <xs:complexType>
-                <xs:simpleContent>
-                  <xs:extension base="xs:string">
-                  </xs:extension>
-                </xs:simpleContent>
-              </xs:complexType>
-            </xs:element>
-          </xs:sequence>
-        </xs:complexType>
-      </xs:element>
-    </xs:all>
+    <xs:sequence maxOccurs="unbounded">
+      <xs:group ref="parameters" />
+      <xs:group ref="logger_appenders" />
+    </xs:sequence>
     <xs:attribute name="name" type="xs:string" use="required" />
-    <xs:attribute name="class" type="xs:string" />
+    <xs:attribute name="class" type="php_label" />
     <xs:attribute name="level" type="xs:string" />
   </xs:complexType>
 
+  <xs:complexType name="appender">
+    <xs:sequence>
+      <xs:group ref="parameters" />
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string" use="required" />
+    <xs:attribute name="class" type="php_label" />
+    <xs:attribute name="layout" type="xs:string" />
+  </xs:complexType>
   <xs:complexType name="appenders">
     <xs:sequence>
-      <xs:element name="appender" maxOccurs="unbounded">
-        <xs:complexType>
-          <xs:sequence>
-            <xs:element name="parameters" type="parameters" minOccurs="0" />
-          </xs:sequence>
-          <xs:attribute name="name" type="xs:string" use="required" />
-          <xs:attribute name="class" type="xs:string" />
-          <xs:attribute name="layout" type="xs:string" />
-        </xs:complexType>
-      </xs:element>
+      <xs:element name="appender" type="appender" maxOccurs="unbounded" />
     </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="layout">
+    <xs:sequence>
+      <xs:group ref="parameters" />
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string" use="required" />
+    <xs:attribute name="class" type="php_label" />
   </xs:complexType>
 
   <xs:complexType name="layouts">
     <xs:sequence>
-      <xs:element name="layout" maxOccurs="unbounded">
-        <xs:complexType>
-          <xs:sequence>
-            <xs:element name="parameters" type="parameters" minOccurs="0" />
-          </xs:sequence>
-          <xs:attribute name="name" type="xs:string" use="required" />
-          <xs:attribute name="class" type="xs:string" />
-        </xs:complexType>
-      </xs:element>
+      <xs:element name="layout" type="layout" maxOccurs="unbounded" />
     </xs:sequence>
   </xs:complexType>
 </xs:schema>

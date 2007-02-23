@@ -1,55 +1,37 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!--
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
-| This file is part of the Agavi package.                                    |
-| Copyright (c) 2006 the Agavi Project.                                      |
-| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
-| OUTPUT TYPE CONFIGURATION                                                  |
-| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
-| PARAMETERS:                                                                |
-|                                                                            |
-| <parameters> element specifies a group of parameters to be passed to the   |
-| initialization method of the class instance. Parameters can either be      |
-| simple name and value pairs but also nested groups of parameters. Nested   |
-| parameters can also be named and they can be nested infinitely.            |
-|                                                                            |
-| Any number of parameters can be passed but it's of course up to the        |
-| receiving end what parameters are expected.                                |
-|                                                                            |
-| Example:                                                                   |
-|                                                                            |
-| <parameters>                                                               |
-|   <parameter name="param1">value1</parameter>                              |
-|   <parameter name="param2">                                                |
-|     <parameters>                                                           |
-|       <parameter name="subfoo1">value2</parameter>                         |
-|       <parameter name="subfoo2">                                           |
-|         <parameters>                                                       |
-|           <parameter>first</parameter>                                     |
-|           <parameter>second</parameter>                                    |
-|         </parameters>                                                      |
-|       </parameter>                                                         |
-|     </parameters>                                                          |
-|   </parameter>                                                             |
-| </parameters>                                                              |
-|                                                                            |
-| For a list of available parameters for a class, browse the class source    |
-| or documentation.                                                          |
-| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
-| KEYWORDS:                                                                  |
-| You may reference any configuration directive by enclosing the name in     |
-| "%" signs. Example: %core.agavi_dir%                                       |
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
--->
 <configurations>
 
 	<configuration>
 		<output_types default="html">
 
 			<output_type name="html">
-				<renderer class="AgaviPhpRenderer" />
+				<renderers default="php">
+					<renderer name="php" class="AgaviPhpRenderer">
+						<parameters>
+							<parameter name="assigns">
+								<parameters>
+									<parameter name="routing">ro</parameter>
+									<parameter name="request">rq</parameter>
+									<parameter name="controller">ct</parameter>
+									<parameter name="user">us</parameter>
+									<parameter name="translation_manager">tm</parameter>
+									<parameter name="request_data">rd</parameter>
+								</parameters>
+							</parameter>
+						</parameters>
+					</renderer>
+				</renderers>
+				<layouts default="default"> 
+					<layout name="default"> 
+						<layers>
+							<layer name="content" /> 
+						</layers> 
+					</layout> 
+				</layouts> 
 				<parameters>
-					<parameter name="Content-Type">text/html</parameter>
+					<parameter name="http_headers">
+						<parameter name="Content-Type">text/html; charset=UTF-8</parameter>
+					</parameter>
 				</parameters>
 			</output_type>
 

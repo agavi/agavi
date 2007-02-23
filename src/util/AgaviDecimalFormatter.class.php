@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -24,8 +24,9 @@
  * @subpackage util
  *
  * @author     Dominik del Bondio <ddb@bitxtender.com>
- * @author     Agavi Project <info@agavi.org>
- * @copyright  (c) Authors
+ * @copyright  Authors
+ * @copyright  The Agavi Project
+ *
  * @since      0.11.0
  *
  * @version    $Id$
@@ -80,6 +81,11 @@ class AgaviDecimalFormatter
 	protected $hasCurrency = false;
 
 	/**
+	 * @var        int The type of the currency symbol.
+	 */
+	protected $currencyType = null;
+
+	/**
 	 * @var        array An array containing the distances for the grouping 
 	 *                   operators which will be applied to the number
 	 */
@@ -100,6 +106,9 @@ class AgaviDecimalFormatter
 	 */
 	protected $roundingMode = AgaviDecimalFormatter::ROUND_SCIENTIFIC;
 
+	const CURRENCY_SYMBOL = 1;
+	const CURRENCY_CODE = 2;
+	const CURRENCY_NAME = 3;
 
 	const ROUND_NONE = 0;
 	const ROUND_SCIENTIFIC = 1;
@@ -149,6 +158,11 @@ class AgaviDecimalFormatter
 	 */
 	public function setFormat($format)
 	{
+		if($this->originalFormatString == $format) {
+			// the given and the currently set format string are equal so we have nothing to do
+			return;
+		}
+
 		$this->originalFormatString = $format;
 
 		if(($pos = strpos($format, ';')) !== false) {
@@ -170,6 +184,7 @@ class AgaviDecimalFormatter
 
 		$hasMinus = false;
 		$hasCurrency = false;
+		$currencyType = 0;
 		$minShowedIntegrals = 0;
 		$minShowedFractionals = 0;
 		$maxShowedFractionals = 0;
@@ -214,10 +229,15 @@ class AgaviDecimalFormatter
 //					} elseif($c == '-') {
 //						$hasMinus = true;
 //						$formatStr .= '%2$s';
-						} elseif(/*$c == '¤'*/ ord($c) == 194 && ord($cNext) == 164) {
+						} elseif(/*$c == '¤'*/ !$hasCurrency && ord($c) == 194 && ord($cNext) == 164) {
 							++$i;
 							$hasCurrency = true;
+							$currencyType = self::CURRENCY_SYMBOL;
 							$formatStr .= '%3$s';
+
+							for(; $i + 2 < $len && ord($format[$i + 1]) == 194 && ord($format[$i + 2]) == 164 && $currencyType < self::CURRENCY_NAME; $i += 2) {
+								++$currencyType;
+							}
 						} else {
 							// quote % for sprintf usage
 							if($c == '%') {
@@ -325,6 +345,7 @@ class AgaviDecimalFormatter
 
 		$this->hasMinus = $hasMinus;
 		$this->hasCurrency = $hasCurrency;
+		$this->currencyType = $currencyType;
 
 		$this->groupingDistances = $groupingDistances;
 	}
@@ -537,6 +558,118 @@ class AgaviDecimalFormatter
 	public function formatCurrency($number, $currencySymbol)
 	{
 		return vsprintf(($number < 0) ? $this->negativeFormatString : $this->formatString, $this->prepareNumber($number, $currencySymbol));
+	}
+
+	/**
+	 * Returns the rounding mode.
+	 *
+	 * @return     int The rounding mode.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getRoundingMode()
+	{
+		return $this->roundingMode;
+	}
+
+	/**
+	 * Sets the rounding mode.
+	 *
+	 * @return     string The rounding mode.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function setRoundingMode($mode)
+	{
+		$this->roundingMode = $mode;
+	}
+
+
+	/**
+	 * Maps a string rounding mode definition to the rounding mode constants.
+	 *
+	 * @param      string    The mode string.
+	 *
+	 * @return     string    The rounding mode constant.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getRoundingModeFromString($mode)
+	{
+		static $map = array(
+			'none' => self::ROUND_NONE,
+			'scientific' => self::ROUND_SCIENTIFIC,
+			'financial' => self::ROUND_FINANCIAL,
+			'floor' => self::ROUND_FLOOR,
+			'ceil' => self::ROUND_CEIL,
+		);
+
+		if(!isset($map[$mode])) {
+			throw new InvalidArgumentException('Unknown rounding mode "' . $mode . '"');
+		}
+
+		return $map[$mode];
+	}
+
+	/**
+	 * Parses a string into float or int.
+	 *
+	 * @param      string The input number string.
+	 * @param      AgaviLocale An optional locale to get the separators from.
+	 * @param      bool An out value indicating whether there were additional 
+	 *                  characters after the matched number.
+	 *
+	 * @return     mixed The result if parsing was successfull or false when the 
+	 *                   input was no number.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public static function parse($string, $locale = null, &$hasExtraChars = false)
+	{
+		$string = trim($string);
+
+		if($locale) {
+			$groupingSeparator = $locale->getNumberSymbolGroup();
+			$decimalSeparator = $locale->getNumberSymbolDecimal();
+		} else {
+			$groupingSeparator = ',';
+			$decimalSeparator = '.';
+		}
+
+		$rx = '#(?P<sign>\+|-)?(?P<num>[0-9' . preg_quote($groupingSeparator) . ']*)(' . preg_quote($decimalSeparator) . '(?P<dec>[0-9]+))?(e(?P<exp>(\+|-)?[0-9]+))?#';
+		if(preg_match($rx, $string, $match)) {
+
+			if(strlen($match[0]) < strlen($string)) {
+				$hasExtraChars = true;
+			}
+
+			$num = 0;
+			if(!empty($match['num'])) {
+				$num = (int) str_replace($groupingSeparator, '', $match['num']);
+			}
+			if(!empty($match['dec'])) {
+				$num += (float) ('0.' . $match['dec']);
+			}
+
+			if(!empty($match['exp'])) {
+				$num = $num * pow(10, $match['exp']);
+			}
+
+			if(!empty($match['sign']) && '-' == $match['sign']) {
+				$num = $num * -1;
+			}
+
+			return $num;
+		} else {
+			if(strlen($string) > 0) {
+				$hasExtraChars = true;
+			}
+			return false;
+		}
 	}
 }
 

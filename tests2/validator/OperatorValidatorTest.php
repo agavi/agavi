@@ -19,7 +19,7 @@ class OperatorValidatorTest extends AgaviTestCase
 	public function setUp()
 	{
 		$this->context = AgaviContext::getInstance();
-		$this->vm = $this->context->getValidatorManager();
+		$this->vm = $this->context->getValidationManager();
 	}
 	
 	public function tearDown()
@@ -30,16 +30,16 @@ class OperatorValidatorTest extends AgaviTestCase
 	
 	public function testconstruct()
 	{
-		$v = new MyOperatorValidator($this->vm, array());
+		$v = new MyOperatorValidator($this->vm, array(), array(), array());
 		$this->assertSame($v->getErrorManager(), $this->vm->getErrorManager());
 		
-		$v = new MyOperatorValidator($this->vm, array('skip_errors' => true));
+		$v = new MyOperatorValidator($this->vm, array(), array(), array('skip_errors' => true));
 		$this->assertNotSame($v->getErrorManager(), $this->vm->getErrorManager());
 	}
 	
 	public function testshutdown()
 	{
-		$val = new DummyValidator($this->vm);
+		$val = new DummyValidator($this->vm, array());
 		$v = new MyOperatorValidator($this->vm, array());
 		$v->addChild($val);
 		
@@ -50,10 +50,10 @@ class OperatorValidatorTest extends AgaviTestCase
 	
 	public function testregisterValidators()
 	{
-		$val1 = new DummyValidator($this->vm);
-		$val2 = new DummyValidator($this->vm);
+		$val1 = new DummyValidator($this->vm, array());
+		$val2 = new DummyValidator($this->vm, array());
 		
-		$v = new MyOperatorValidator($this->vm, array());
+		$v = new MyOperatorValidator($this->vm, array(), array(), array());
 		$this->assertEquals($v->getChildren(), array());
 		$v->registerValidators(array($val1, $val2));
 		$this->assertEquals($v->getChildren(), array($val1, $val2));
@@ -61,8 +61,8 @@ class OperatorValidatorTest extends AgaviTestCase
 	
 	public function testaddChild()
 	{
-		$val = new DummyValidator($this->vm);
-		$v = new MyOperatorValidator($this->vm, array());
+		$val = new DummyValidator($this->vm, array());
+		$v = new MyOperatorValidator($this->vm, array(), array(), array());
 
 		$this->assertEquals($v->getChildren(), array());
 		$v->addChild($val);
@@ -71,34 +71,34 @@ class OperatorValidatorTest extends AgaviTestCase
 	
 	public function testgetRequest()
 	{
-		$v = new MyOperatorValidator($this->vm, array());
+		$v = new MyOperatorValidator($this->vm, array(), array(), array());
 		$this->assertSame($v->getRequest(), $this->context->getRequest());
 	}
 	
 	public function testgetErrorManager()
 	{
-		$v = new MyOperatorValidator($this->vm, array());
+		$v = new MyOperatorValidator($this->vm, array(), array(), array());
 		$this->assertTrue($v->getErrorManager() instanceof AgaviErrorManager);
 	}
  
 	public function testgetBase()
 	{
 		$this->vm->removeParameter('base');
-		$v = new MyOperatorValidator($this->vm);
+		$v = new MyOperatorValidator($this->vm, array());
 		$this->assertEquals($v->getBase(), '/');
 		
 		$this->vm->setParameter('base', '');
-		$v = new MyOperatorValidator($this->vm);
+		$v = new MyOperatorValidator($this->vm, array());
 		$this->assertEquals($v->getBase(), '');
 		
 		$this->vm->setParameter('base', '/foo/bar');
-		$v = new MyOperatorValidator($this->vm);
+		$v = new MyOperatorValidator($this->vm, array());
 		$this->assertEquals($v->getBase(), '/foo/bar');
 	}
 	
 	public function testexecute()
 	{
-		$v = new MyOperatorValidator($this->vm);
+		$v = new MyOperatorValidator($this->vm, array());
 		$this->assertFalse($v->checked);
 		$this->assertEquals($v->execute(), AgaviValidator::SUCCESS);
 		$this->assertTrue($v->checked);

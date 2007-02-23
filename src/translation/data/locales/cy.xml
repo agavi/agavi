@@ -2,8 +2,8 @@
 <!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.4/ldml.dtd">
 <ldml>
 	<identity>
-		<version number="$Revision: 1.41 $"/>
-		<generation date="$Date: 2006/06/28 02:13:02 $"/>
+		<version number="$Revision: 1.42 $"/>
+		<generation date="$Date: 2006/10/26 22:46:08 $"/>
 		<language type="cy"/>
 	</identity>
 	<localeDisplayNames>
@@ -53,7 +53,7 @@
 			<territory type="154" draft="unconfirmed">Gogledd Ewrop</territory>
 			<territory type="155" draft="unconfirmed">Gorllewin Ewrop</territory>
 			<territory type="830" draft="unconfirmed">Ynysoedd y Sianel</territory>
-			<territory type="833" draft="unconfirmed">Ynys Manaw</territory>
+			<territory type="IM" draft="unconfirmed">Ynys Manaw</territory>
 			<territory type="AD" draft="unconfirmed">Andorra</territory>
 			<territory type="AE" draft="unconfirmed">Emiraethau Arabaidd Unedig</territory>
 			<territory type="AF" draft="unconfirmed">Affganistan</territory>

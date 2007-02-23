@@ -24,7 +24,7 @@
 		<echo msg="  apidocs         : regenerate API docs" />
 		<echo msg="  manuals         : regenerate manuals (-Doutput=html|html-onepage|fo)" />
 		<echo msg=" packages         : generate all packages" />
-		<echo msg="  pagacke-zip     : generate .zip package" />
+		<echo msg="  package-zip     : generate .zip package" />
 		<echo msg="  package-pear    : generate PEAR package" />
 		<echo msg="  package-apidocs : generate API docs package" />
 		<echo msg="  package-manuals : generate manuals package" />
@@ -38,7 +38,8 @@
 	</target>
 
 	<target name="apidocs" description="API docs">
-		<phpdoc title="Agavi Documentation" destdir="apidocs" sourcepath="src" output="HTML:frames:earthli"/>
+		<!-- HAXOR! we need to inject an 'ignore' cmdline argument to prevent the inclusion of the compiled timezone data and the buildtools, hence the weird 'output' attribute contents - the phing phpdoc task doesn't have an 'ignore' attribute -->
+		<phpdoc title="Agavi Documentation" destdir="apidocs" sourcepath="src" output="HTML:frames:DOM/earthli -i buildtools/,translation/data/timezones/"/>
 	</target>
 
 	<target name="manuals" description="generate all manuals">

@@ -1,7 +1,7 @@
 <?php
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -29,8 +29,10 @@
  * @package    agavi
  * @subpackage logging
  *
- * @author     Veikko Makinen <mail@veikkomakinen.com>
- * @copyright  (c) Authors
+ * @author     Veikko Mäkinen <mail@veikkomakinen.com>
+ * @copyright  Authors
+ * @copyright  The Agavi Project
+ *
  * @since      0.11.0
  *
  * @version    $Id$
@@ -43,7 +45,7 @@ class AgaviRotatingFileLoggerAppender extends AgaviFileLoggerAppender
 	 * @param      AgaviContext An AgaviContext instance.
 	 * @param      array        An associative array of initialization parameters.
 	 *
-	 * @author     Veikko Makinen <mail@veikkomakinen.com>
+	 * @author     Veikko Mäkinen <mail@veikkomakinen.com>
 	 * @since      0.11.0
 	 */
 	public function initialize(AgaviContext $context, array $parameters = array())

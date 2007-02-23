@@ -7,7 +7,7 @@ class DateTests
 {
 	public static function suite()
 	{
-		$suite = new PHPUnit2_Framework_TestSuite('date');
+		$suite = new PHPUnit_Framework_TestSuite('date');
 
 //		$suite->addTestSuite('CalendarTest');
 		$suite->addTestSuite('TimeZoneBoundaryTest');

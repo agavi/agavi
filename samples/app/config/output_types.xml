@@ -1,77 +1,73 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!--
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
-| This file is part of the Agavi package.                                    |
-| Copyright (c) 2006 the Agavi Project.                                      |
-| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
-| OUTPUT TYPE CONFIGURATION                                                  |
-| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
-| KEYWORDS:                                                                  |
-| You may reference any configuration directive by enclosing the name in     |
-| "%" signs. Example: %core.agavi_dir%                                         |
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
--->
-<configurations>
-	
+<configurations xmlns:xi="http://www.w3.org/2001/XInclude">
+
+	<sandbox>
+
+		<renderers default="php">
+			
+			<renderer name="php" class="AgaviPhpRenderer">
+				<parameter name="assigns">
+					<parameter name="routing">ro</parameter>
+					<parameter name="request">rq</parameter>
+					<parameter name="controller">ct</parameter>
+					<parameter name="user">us</parameter>
+					<parameter name="translation_manager">tm</parameter>
+					<parameter name="request_data">rd</parameter>
+				</parameter>
+			</renderer>
+			
+		</renderers>
+		
+		<layouts default="default">
+			
+			<layout name="default">
+				<layer name="content" />
+				<layer name="decorator">
+					<slot name="menu" module="Default" action="Menu" />
+					<parameter name="template">Master</parameter>
+				</layer>
+			</layout>
+			
+			<layout name="slot">
+				<layer name="content" />
+			</layout>
+			
+		</layouts>
+
+	</sandbox>
+
 	<configuration context="web">
 		<output_types default="html">
-			
+
 			<output_type name="html">
-				<renderer class="AgaviPhpRenderer">
-					<parameters>
-						<parameter name="assigns">
-							<parameters>
-								<parameter name="routing">r</parameter>
-								<parameter name="request">req</parameter>
-								<parameter name="controller">ctl</parameter>
-								<parameter name="user">usr</parameter>
-								<parameter name="translation_manager">tm</parameter>
-							</parameters>
-						</parameter>
-						<parameter name="i18n">
-							<parameters>
-								<parameter name="mode">subdir</parameter>
-							</parameters>
-						</parameter>
-					</parameters>
-				</renderer>
-				<parameters>
+				<xi:include xpointer="xpointer(/configurations/sandbox/renderers)" />
+				<xi:include xpointer="xpointer(/configurations/sandbox/layouts)" />
+				
+				<parameter name="http_headers">
 					<parameter name="Content-Type">text/html; charset=UTF-8</parameter>
-				</parameters>
+				</parameter>
 			</output_type>
-			
+
 			<output_type name="xhtml">
-				<renderer class="AgaviPhpRenderer">
-					<parameters>
-						<parameter name="assigns">
-							<parameters>
-								<parameter name="routing">r</parameter>
-								<parameter name="request">req</parameter>
-								<parameter name="controller">ctl</parameter>
-								<parameter name="user">usr</parameter>
-								<parameter name="translation_manager">tm</parameter>
-							</parameters>
-						</parameter>
-					</parameters>
-				</renderer>
-				<parameters>
+				<xi:include xpointer="xpointer(/configurations/sandbox/renderers)" />
+				<xi:include xpointer="xpointer(/configurations/sandbox/layouts)" />
+				
+				<parameter name="http_headers">
 					<parameter name="Content-Type">application/xhtml+xml; charset=UTF-8</parameter>
-				</parameters>
+				</parameter>
 			</output_type>
-			
+
 		</output_types>
 	</configuration>
-	
+
 	<configuration context="xmlrpc">
 		<output_types default="xmlrpc">
-			
+
 			<output_type name="xmlrpc">
-				<parameters>
-					<parameter name="encoding">UTF-8</parameter>
-				</parameters>
+				<parameter name="encoding">UTF-8</parameter>
 			</output_type>
-		
+
 		</output_types>
 	</configuration>
-	
+
 </configurations>

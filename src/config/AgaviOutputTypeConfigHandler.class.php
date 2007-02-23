@@ -2,8 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
-// | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -15,21 +14,21 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviModuleConfigHandler reads module configuration files to determine the 
- * status of a module.
+ * AgaviOutputTypeConfigHandler handles output type configuration files.
  *
  * @package    agavi
  * @subpackage config
  *
- * @author     David Zuelke <dz@bitxtender.com>
- * @copyright  (c) Authors
+ * @author     David Zülke <dz@bitxtender.com>
+ * @copyright  Authors
+ * @copyright  The Agavi Project
+ *
  * @since      0.11.0
  *
  * @version    $Id$
  */
 class AgaviOutputTypeConfigHandler extends AgaviConfigHandler
 {
-
 	/**
 	 * Execute this configuration handler.
 	 *
@@ -44,7 +43,7 @@ class AgaviOutputTypeConfigHandler extends AgaviConfigHandler
 	 * @throws     <b>AgaviParseException</b> If a requested configuration file is
 	 *                                        improperly formatted.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function execute($config, $context = null)
@@ -73,53 +72,77 @@ class AgaviOutputTypeConfigHandler extends AgaviConfigHandler
 			}
 
 			foreach($cfg->output_types as $outputType) {
-				$name = $outputType->getAttribute('name');
-				if($name == 'default') {
-					throw new AgaviConfigurationException('"default" is not allowed as an Output Type name');
-				}
-				$data[$name] = isset($data[$name]) ? $data[$name] : array('parameters' => array(), 'renderer_parameters' => array());
-				if(isset($outputType->renderer)) {
-					$data[$name]['renderer'] = $outputType->renderer->getAttribute('class');
-					if($outputType->renderer->hasAttribute('extension')) {
-						$data[$name]['extension'] = $outputType->renderer->getAttribute('extension');
+				$outputTypeName = $outputType->getAttribute('name');
+				$data[$outputTypeName] = isset($data[$outputTypeName]) ? $data[$outputTypeName] : array('parameters' => array(), 'default_renderer' => null, 'renderers' => array(), 'layouts' => array(), 'default_layout' => null, 'exception_template' => null);
+				if(isset($outputType->renderers)) {
+					foreach($outputType->renderers as $renderer) {
+						$rendererName = $renderer->getAttribute('name');
+						$data[$outputTypeName]['renderers'][$rendererName] = array(
+							'class' => $renderer->getAttribute('class'),
+							'instance' => null,
+							'parameters' => $this->getItemParameters($renderer, array()),
+						);
 					}
-					if($outputType->renderer->hasAttribute('ignore_decorators')) {
-						$data[$name]['ignore_decorators'] = $this->literalize($outputType->renderer->getAttribute('ignore_decorators'));
+					$data[$outputTypeName]['default_renderer'] = $outputType->renderers->getAttribute('default');
+				}
+				if(isset($outputType->layouts)) {
+					foreach($outputType->layouts as $layout) {
+						$layers = array();
+						
+						if(isset($layout->layers)) {
+							foreach($layout->layers as $layer) {
+								$slots = array();
+								
+								if(isset($layer->slots)) {
+									foreach($layer->slots as $slot) {
+										$slots[$slot->getAttribute('name')] = array(
+											'action' => $slot->getAttribute('action'),
+											'module' => $slot->getAttribute('module'),
+											'output_type' => $slot->getAttribute('output_type'),
+											'parameters' => $this->getItemParameters($slot, array()),
+										);
+									}
+								}
+								
+								$layers[$layer->getAttribute('name')] = array(
+									'class' => $layer->getAttribute('class', 'AgaviFileTemplateLayer'),
+									'parameters' => $this->getItemParameters($layer, array()),
+									'renderer' => $layer->getAttribute('renderer'),
+									'slots' => $slots,
+								);
+							}
+						}
+						
+						$data[$outputTypeName]['layouts'][$layout->getAttribute('name')] = array(
+							'layers' => $layers,
+							'parameters' => $this->getItemParameters($layout, array()),
+						);
 					}
-					if($outputType->renderer->hasAttribute('ignore_slots')) {
-						$data[$name]['ignore_slots'] = $this->literalize($outputType->renderer->getAttribute('ignore_slots'));
+					$data[$outputTypeName]['default_layout'] = $outputType->layouts->getAttribute('default');
+				}
+				if($outputType->hasAttribute('exception_template')) {
+					$data[$outputTypeName]['exception_template'] = $this->replaceConstants($outputType->getAttribute('exception_template'));
+					if(!is_readable($data[$outputTypeName]['exception_template'])) {
+						throw new AgaviConfigurationException('Exception template "' . $data[$outputTypeName]['exception_template'] . '" does not exist or is unreadable');
 					}
-					$data[$name]['renderer_parameters'] = $this->getItemParameters($outputType->renderer, $data[$name]['renderer_parameters']);
-				} else {
-					$data[$name]['renderer'] = null;
 				}
-				if($outputType->hasAttribute('exception')) {
-					$data[$name]['exception'] = $this->literalize($outputType->getAttribute('exception'));
-				}
-				if(isset($outputType->renderer)) {
-				}
-				$data[$name]['parameters'] = $this->getItemParameters($outputType, $data[$name]['parameters']);
+				$data[$outputTypeName]['parameters'] = $this->getItemParameters($outputType, $data[$outputTypeName]['parameters']);
 			}
-
 			$defaultOt = $cfg->output_types->getAttribute('default');
 		}
 
-		$code = '';
-		$code .= "\$this->outputTypes = " . var_export($data, true) . ";\n";
-		$code .= "\$this->setOutputType('" . $defaultOt . "');\n";
-
-
-		// compile data
-		$retval = "<?php\n" .
-				  "// auto-generated by ".__CLASS__."\n" .
-				  "// date: %s GMT\n%s\n?>";
-
-		$retval = sprintf($retval, gmdate('m/d/Y H:i:s'), $code);
-
-		return $retval;
-
+		$code = array();
+		foreach($data as $outputTypeName => $outputType) {
+			$code[] = implode("\n", array(
+				'$ot = new AgaviOutputType();',
+				'$ot->initialize($this->context, ' . var_export($outputType['parameters'], true) . ', ' . var_export($outputTypeName, true) . ', ' . var_export($outputType['renderers'], true) . ', ' . var_export($outputType['default_renderer'], true) . ', ' . var_export($outputType['layouts'], true) . ', ' . var_export($outputType['default_layout'], true) . ', ' . var_export($outputType['exception_template'], true) . ');',
+				'$this->outputTypes["' . $outputTypeName . '"] = $ot;',
+			));
+		}
+		$code[] = '$this->defaultOutputType = "' . $defaultOt . '";';
+		
+		return $this->generate($code);
 	}
-
 }
 
 ?>

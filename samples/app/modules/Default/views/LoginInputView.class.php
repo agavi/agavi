@@ -2,8 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
-// | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -14,21 +13,12 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
-class Default_LoginInputView extends AgaviView
+class Default_LoginInputView extends AgaviSampleAppDefaultBaseView
 {
-
-	/**
-	 * Execute any presentation logic and set template attributes.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public function execute(AgaviParameterHolder $parameters)
+	public function executeHtml(AgaviRequestDataHolder $rd)
 	{
-		// set our template
-		$this->setTemplate('LoginInput');
-		$this->setDecoratorTemplate('Master');
-
+		parent::setupHtml($rd);
+		
 		// set the title
 		$this->setAttribute('title', $this->getContext()->getTranslationManager()->_('Login', 'default.Login'));
 		
@@ -40,13 +30,12 @@ class Default_LoginInputView extends AgaviView
 			// we were redirected to the login form by the controller because the requested action required security
 			// so store the input URL in the session for a redirect after login
 			$this->getContext()->getUser()->setAttribute('redirect', $this->getContext()->getRequest()->getUrl(), 'org.agavi.SampleApp.login');
-		} elseif($this->getContext()->getRequest()->getMethod() == 'read') {
+		} else {
 			// clear the redirect URL just to be sure
 			// but only if request method is "read", i.e. if the login form is served via GET!
 			$this->getContext()->getUser()->removeAttribute('redirect', 'org.agavi.SampleApp.login');
 		}
 	}
-
 }
 
 ?>

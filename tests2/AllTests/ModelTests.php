@@ -5,7 +5,7 @@ class ModelTests
 {
 	public static function suite()
 	{
-		$suite = new PHPUnit2_Framework_TestSuite('model');
+		$suite = new PHPUnit_Framework_TestSuite('model');
 
 		$suite->addTestSuite('ModelTest');
 

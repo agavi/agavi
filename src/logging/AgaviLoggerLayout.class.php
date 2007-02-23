@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -20,12 +20,14 @@
  * @subpackage logging
  *
  * @author     Sean Kerr <skerr@mojavi.org>
- * @copyright  (c) Authors
+ * @copyright  Authors
+ * @copyright  The Agavi Project
+ *
  * @since      0.9.0
  *
  * @version    $Id$
  */
-abstract class AgaviLoggerLayout
+abstract class AgaviLoggerLayout extends AgaviParameterHolder
 {
 	/**
 	 * @var        AgaviContext An AgaviContext instance.
@@ -43,12 +45,13 @@ abstract class AgaviLoggerLayout
 	 * @param      AgaviContext An AgaviContext instance.
 	 * @param      array        An associative array of initialization parameters.
 	 *
-	 * @author     Veikko Makinen <mail@veikkomakinen.com>
+	 * @author     Veikko Mäkinen <mail@veikkomakinen.com>
 	 * @since      0.10.0
 	 */
 	public function initialize(AgaviContext $context, array $parameters = array())
 	{
 		$this->context = $context;
+		$this->parameters = $parameters;
 	}
 
 	/**
@@ -59,7 +62,7 @@ abstract class AgaviLoggerLayout
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.10.0
 	 */
-	public function getContext()
+	public final function getContext()
 	{
 		return $this->context;
 	}

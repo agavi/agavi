@@ -6,10 +6,11 @@
   <xs:element name="configurations" type="configurations" />
   <xs:complexType name="configurations">
     <xs:sequence>
+      <xs:element name="sandbox" type="sandbox" minOccurs="0" />
       <xs:element name="configuration" minOccurs="0" maxOccurs="unbounded">
         <xs:complexType>
           <xs:sequence>
-            <xs:element name="handlers" type="handlers" />
+            <xs:group ref="handlers" />
           </xs:sequence>
           <xs:attribute name="environment" type="xs:string" />
         </xs:complexType>
@@ -18,17 +19,24 @@
     <xs:attribute name="parent" type="xs:string" />
   </xs:complexType>
 
+  <xs:group name="handlers">
+    <xs:choice>
+      <xs:element name="handlers" type="handlers" minOccurs="0" />
+      <xs:element name="handler" type="handler" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:choice>
+  </xs:group>
+
   <xs:complexType name="handlers">
     <xs:sequence>
       <xs:element name="handler" type="handler" maxOccurs="unbounded" />
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="handler">
-    <xs:all>
-      <xs:element name="parameters" type="parameters" minOccurs="0" />
-    </xs:all>
+    <xs:sequence>
+      <xs:group ref="parameters"/>
+    </xs:sequence>
     <xs:attribute name="pattern" type="xs:string" use="required" />
-    <xs:attribute name="class" type="xs:string" use="required" />
+    <xs:attribute name="class" type="php_label" use="required" />
     <xs:attribute name="validate" type="xs:string" />
     <xs:attribute name="parser" type="xs:string" />
   </xs:complexType>

@@ -40,26 +40,22 @@
 			<compile>%core.agavi_dir%/util/AgaviAttributeHolder.class.php</compile>
 			<compile>%core.agavi_dir%/util/AgaviArrayPathDefinition.class.php</compile>
 			<compile>%core.agavi_dir%/action/AgaviAction.class.php</compile>
-			<compile>%core.agavi_dir%/action/AgaviActionStack.class.php</compile>
-			<compile>%core.agavi_dir%/action/AgaviActionStackEntry.class.php</compile>
 			<compile>%core.agavi_dir%/core/AgaviContext.class.php</compile>
 			<compile>%core.agavi_dir%/controller/AgaviController.class.php</compile>
+			<compile>%core.agavi_dir%/controller/AgaviExecutionContainer.class.php</compile>
+			<compile>%core.agavi_dir%/controller/AgaviOutputType.class.php</compile>
 			<compile>%core.agavi_dir%/filter/AgaviFilter.class.php</compile>
 			<compile>%core.agavi_dir%/filter/AgaviDispatchFilter.class.php</compile>
 			<compile>%core.agavi_dir%/filter/AgaviExecutionFilter.class.php</compile>
 			<compile>%core.agavi_dir%/filter/AgaviFilterChain.class.php</compile>
-			<compile>%core.agavi_dir%/logging/AgaviLoggerAppender.class.php</compile>
-			<compile>%core.agavi_dir%/logging/AgaviLoggerLayout.class.php</compile>
-			<compile>%core.agavi_dir%/logging/AgaviLogger.class.php</compile>
-			<compile>%core.agavi_dir%/logging/AgaviLoggerManager.class.php</compile>
-			<compile>%core.agavi_dir%/logging/AgaviLoggerMessage.class.php</compile>
-			<compile>%core.agavi_dir%/logging/AgaviPassthruLoggerLayout.class.php</compile>
 			<compile>%core.agavi_dir%/renderer/AgaviRenderer.class.php</compile>
+			<compile>%core.agavi_dir%/request/AgaviRequestDataHolder.class.php</compile>
 			<compile>%core.agavi_dir%/request/AgaviRequest.class.php</compile>
 			<compile>%core.agavi_dir%/response/AgaviResponse.class.php</compile>
 			<compile>%core.agavi_dir%/routing/AgaviRouting.class.php</compile>
 			<compile>%core.agavi_dir%/storage/AgaviStorage.class.php</compile>
 			<compile>%core.agavi_dir%/user/AgaviUser.class.php</compile>
+			<compile>%core.agavi_dir%/view/AgaviTemplateLayer.class.php</compile>
 			<compile>%core.agavi_dir%/view/AgaviView.class.php</compile>
 		</compiles>
 	</configuration>

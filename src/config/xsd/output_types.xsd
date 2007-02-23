@@ -6,10 +6,11 @@
   <xs:element name="configurations" type="configurations" />
   <xs:complexType name="configurations">
     <xs:sequence>
+      <xs:element name="sandbox" type="sandbox" minOccurs="0" />
       <xs:element name="configuration" minOccurs="0" maxOccurs="unbounded">
         <xs:complexType>
           <xs:sequence>
-            <xs:element name="output_types" type="output_types" />
+            <xs:element name="output_types" type="output_types" minOccurs="0" />
           </xs:sequence>
           <xs:attribute name="environment" type="xs:string" />
           <xs:attribute name="context" type="xs:string" />
@@ -25,23 +26,87 @@
     </xs:sequence>
     <xs:attribute name="default" type="php_label" use="required" />
   </xs:complexType>
+
   <xs:complexType name="output_type">
-    <xs:all>
-      <xs:element name="parameters" type="parameters" minOccurs="0" />
-      <xs:element name="renderer" minOccurs="0">
-        <xs:complexType>
-          <xs:all>
-            <xs:element name="parameters" type="parameters" minOccurs="0" />
-          </xs:all>
-          <xs:attribute name="class" type="xs:string" use="required" />
-          <xs:attribute name="ignore_slots" type="xs:string" />
-          <xs:attribute name="ignore_decorators" type="xs:string" />
-          <xs:attribute name="extension" type="xs:string" />
-        </xs:complexType>
-      </xs:element>
-    </xs:all>
+    <xs:sequence maxOccurs="unbounded">
+      <xs:group ref="parameters" />
+      <xs:element name="renderers" type="renderers" minOccurs="0" />
+      <xs:element name="layouts" type="layouts" minOccurs="0" />
+    </xs:sequence>
     <xs:attribute name="name" type="php_label" use="required" />
-    <xs:attribute name="exception" type="xs:string" />
+    <xs:attribute name="exception_template" type="xs:string" />
+  </xs:complexType>
+
+  <xs:complexType name="renderers">
+    <xs:sequence>
+      <xs:element name="renderer" type="renderer" maxOccurs="unbounded" />
+    </xs:sequence>
+    <xs:attribute name="default" type="xs:string" use="required" />
+  </xs:complexType>
+  <xs:complexType name="renderer">
+    <xs:sequence>
+      <xs:group ref="parameters" />
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string" use="required" />
+    <xs:attribute name="class" type="php_label" use="required" />
+  </xs:complexType>
+
+  <xs:complexType name="layouts">
+    <xs:sequence>
+      <xs:element name="layout" type="layout" maxOccurs="unbounded" />
+    </xs:sequence>
+    <xs:attribute name="default" type="xs:string" use="required" />
+  </xs:complexType>
+  <xs:complexType name="layout">
+    <xs:sequence maxOccurs="unbounded">
+      <xs:group ref="parameters" />
+      <xs:group ref="layers" />
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string" use="required" />
+  </xs:complexType>
+
+  <xs:group name="layers">
+    <xs:choice>
+      <xs:element name="layers" type="layers" minOccurs="0" />
+      <xs:element name="layer" type="layer" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:choice>
+  </xs:group>
+
+  <xs:complexType name="layers">
+    <xs:sequence>
+      <xs:element name="layer" type="layer" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="layer">
+    <xs:sequence maxOccurs="unbounded">
+      <xs:group ref="parameters" />
+      <xs:group ref="slots" />
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string" use="required" />
+    <xs:attribute name="class" type="php_label" />
+    <xs:attribute name="renderer" type="xs:string" />
+  </xs:complexType>
+
+  <xs:group name="slots">
+    <xs:choice>
+      <xs:element name="slots" type="slots" minOccurs="0" />
+      <xs:element name="slot" type="slot" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:choice>
+  </xs:group>
+
+  <xs:complexType name="slots">
+    <xs:sequence>
+      <xs:element name="slot" type="slot" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="slot">
+    <xs:sequence>
+      <xs:group ref="parameters" />
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string" use="required" />
+    <xs:attribute name="module" type="php_label" use="required" />
+    <xs:attribute name="action" type="xs:string" use="required" />
+    <xs:attribute name="output_type" type="php_label" />
   </xs:complexType>
 
 </xs:schema>

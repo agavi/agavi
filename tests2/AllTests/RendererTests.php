@@ -5,7 +5,7 @@ class RendererTests
 {
 	public static function suite()
 	{
-		$suite = new PHPUnit2_Framework_TestSuite('renderer');
+		$suite = new PHPUnit_Framework_TestSuite('renderer');
 
 		$suite->addTestSuite('RendererTest');
 

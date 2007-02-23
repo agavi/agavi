@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -21,14 +21,16 @@
  * @subpackage config
  *
  * @author     Dominik del Bondio <ddb@bitxtender.com>
- * @copyright  (c) Authors
+ * @author     David Zülke <dz@bitxtender.com>
+ * @copyright  Authors
+ * @copyright  The Agavi Project
+ *
  * @since      0.11.0
  *
  * @version    $Id$
  */
 class AgaviTranslationConfigHandler extends AgaviConfigHandler
 {
-
 	/**
 	 * Execute this configuration handler.
 	 *
@@ -40,6 +42,7 @@ class AgaviTranslationConfigHandler extends AgaviConfigHandler
 	 * @throws     <b>AgaviConfigurationException</b> on error in the config.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function execute($config, $context = null)
@@ -71,50 +74,7 @@ class AgaviTranslationConfigHandler extends AgaviConfigHandler
 
 			if(isset($cfg->translators)) {
 				$defaultDomain = $cfg->translators->getAttribute('default_domain', $defaultDomain);
-				foreach($cfg->translators as $translator) {
-					$domain = $translator->getAttribute('domain');
-					if(!isset($translatorData[$domain])) {
-						$translatorData[$domain] = array(
-							'msg'  => array('type' => null, 'filters' => array(), 'params' => array()),
-							'num'  => array('type' => 'number', 'filters' => array(), 'params' => array()),
-							'cur'  => array('type' => 'currency', 'filters' => array(), 'params' => array()),
-							'date' => array('type' => 'date', 'filters' => array(), 'params' => array()),
-						);
-					}
-					$domainData =& $translatorData[$domain];
-
-					if(isset($translator->message_translator)) {
-						$domainData['msg']['type']   = $translator->message_translator->getAttribute('type', $domainData['msg']['type']);
-						$domainData['msg']['params'] = $this->getItemParameters($translator->message_translator, $domainData['msg']['params']);
-						if(isset($translator->message_translator->filters)) {
-							foreach($translator->message_translator->filters as $filter) {
-								$func = explode('::', $filter->getValue());
-								if(count($func) != 2) {
-									$func = $func[0];
-								}
-								if(!is_callable($func)) {
-									throw new AgaviConfigurationException('Non-existant or uncallable filter function "' . $filter->getValue() .  '" specified.');
-								}
-								$domainData['msg']['filters'][] = $func;
-							}
-						}
-					}
-
-					if(isset($translator->number_formatter)) {
-						$domainData['num']['type']   = $translator->number_formatter->getAttribute('type', $domainData['num']['type']);
-						$domainData['num']['params'] = $this->getItemParameters($translator->number_formatter, $domainData['num']['params']);
-					}
-
-					if(isset($translator->currency_formatter)) {
-						$domainData['cur']['type']   = $translator->currency_formatter->getAttribute('type', $domainData['cur']['type']);
-						$domainData['cur']['params'] = $this->getItemParameters($translator->currency_formatter, $domainData['cur']['params']);
-					}
-
-					if(isset($translator->date_formatter)) {
-						$domainData['date']['type']   = $translator->date_formatter->getAttribute('type', $domainData['date']['type']);
-						$domainData['date']['params'] = $this->getItemParameters($translator->date_formatter, $domainData['date']['params']);
-					}
-				}
+				$this->getTranslators($cfg->translators, $translatorData);
 			}
 		}
 
@@ -131,94 +91,95 @@ class AgaviTranslationConfigHandler extends AgaviConfigHandler
 		}
 
 		foreach($translatorData as $domain => $translator) {
-			if(isset($translator['msg'])) {
-				$data[] = $this->getInitializationCode($domain, 'msg', 'Agavi%sTranslator', $translator['msg']);
-			}
-
-			if(isset($translator['num'])) {
-				$data[] = $this->getInitializationCode($domain, 'num', 'Agavi%sFormatter', $translator['num']);
-			}
-
-			if(isset($translator['cur'])) {
-				$data[] = $this->getInitializationCode($domain, 'cur', 'Agavi%sFormatter', $translator['cur']);
-			}
-
-			if(isset($translator['date'])) {
-				$data[] = $this->getInitializationCode($domain, 'date', 'Agavi%sFormatter', $translator['date']);
+			foreach(array('msg', 'num', 'cur', 'date') as $type) {
+				if(isset($translator[$type]['class'])) {
+					if(!class_exists($translator[$type]['class'])) {
+						throw new AgaviConfigurationException(sprintf('The Translator or Formatter class "%s" for domain "%s" could not be found.', $translator[$type]['class'], $domain));
+					}
+					$data[] = join("\n", array(
+						sprintf('$this->translators[%s][%s] = new %s();', var_export($domain, true), var_export($type, true), $translator[$type]['class']),
+						sprintf('$this->translators[%s][%s]->initialize($this->getContext(), %s);', var_export($domain, true), var_export($type, true), var_export($translator[$type]['params'], true)),
+						sprintf('$this->translatorFilters[%s][%s] = %s;', var_export($domain, true), var_export($type, true), var_export($translator[$type]['filters'], true)),
+					));
+				}
 			}
 		}
 
-		// compile data
-		$retval = "<?php\n" .
-							"// auto-generated by ".__CLASS__."\n" .
-							"// date: %s GMT\n%s\n?>";
-		$retval = sprintf($retval, gmdate('m/d/Y H:i:s'), implode("\n", $data));
-
-		return $retval;
-
+		return $this->generate($data);
 	}
-
+	
 	/**
-	 * Tries to resolve the given class name. This first checks whether a class
-	 * given in $iface exists and if not whether one using the given format 
-	 * exists.
+	 * Builds a list of filters for a translator.
 	 *
-	 * @param      string The format string given to sprintf.
-	 * @param      string The class name we're looking for.
-	 * @param      string The domain in which this translator is specified. This
-	 *                    parameter is only used in the exception to ease 
-	 *                    debugging your configuration.
+	 * @param      AgaviConfigValueHolder The Translator node.
 	 *
-	 * @return     string Data class name.
+	 * @return     array An array of filter definitions.
 	 *
-	 * @throws     <b>AgaviConfigurationException</b> If the class couldn't be 
-	 *                                                resolved.
-	 *
-	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	protected function getCustomClassName($format, $iface, $domain)
+	protected function getFilters($translator)
 	{
-		if(!class_exists($iface) && class_exists(sprintf($format, ucfirst($iface)))) {
-			$iface = sprintf($format, ucfirst($iface));
-		} elseif(!class_exists($iface)) {
-			$err = sprintf('The translator for the domain specifies an unknown translator "%s" for the domain "%s"', $iface, $domain);
-			throw new AgaviConfigurationException($err);
+		$filters = array();
+		if(isset($translator->filters)) {
+			foreach($translator->filters as $filter) {
+				$func = explode('::', $filter->getValue());
+				if(count($func) != 2) {
+					$func = $func[0];
+				}
+				if(!is_callable($func)) {
+					throw new AgaviConfigurationException('Non-existant or uncallable filter function "' . $filter->getValue() .  '" specified.');
+				}
+				$filters[] = $func;
+			}
 		}
-
-		return $iface;
+		return $filters;
 	}
 
-	/**
-	 * Generates the initialization code for the given translator in the given 
-	 * domain and returns it.
-	 *
-	 * @param      string The domain.
-	 * @param      string The type of the translator (msg|num|cur|date)
-	 * @param      string The format of the class names.
-	 * @param      array  The translator data.
-	 *
-	 * @return     string The code for type in the domain.
-	 *
-	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	protected function getInitializationCode($domain, $type, $typeFormat, $data)
+	protected function getTranslators($translators, &$data, $parent = null)
 	{
-		$code = '';
+		static $defaultData = array(
+			'msg'  => array('class' => null, 'filters' => array(), 'params' => array()),
+			'num'  => array('class' => 'AgaviNumberFormatter', 'filters' => array(), 'params' => array()),
+			'cur'  => array('class' => 'AgaviCurrencyFormatter', 'filters' => array(), 'params' => array()),
+			'date' => array('class' => 'AgaviDateFormatter', 'filters' => array(), 'params' => array()),
+		);
 
-		$params = $data['params'];
-		$filters = $data['filters'];
+		foreach($translators as $translator) {
+			$domain = $translator->getAttribute('domain');
+			if($parent) {
+				$domain = $parent . '.' . $domain;
+			}
+			if(!isset($data[$domain])) {
+				if(!$parent) {
+					$data[$domain] = $defaultData;
+				} else {
+					$data[$domain] = array();
+				}
+			}
 
-		$iface = $this->getCustomClassName($typeFormat, $data['type'], $domain);
+			$domainData =& $data[$domain];
 
-		$code .= sprintf('$this->translators[%s][%s] = new %s();', var_export($domain, true), var_export($type, true), $iface);
-		$code .= sprintf('$this->translators[%s][%s]->initialize($this->getContext(), %s);', var_export($domain, true), var_export($type, true), var_export($params, true));
-		$code .= sprintf('$this->translatorFilters[%s][%s] = %s;', var_export($domain, true), var_export($type, true), var_export($filters, true));
+			foreach(array('msg' => 'message_translator', 'num' => 'number_formatter', 'cur' => 'currency_formatter', 'date' => 'date_formatter') as $type => $node) {
+				if(isset($translator->$node)) {
+					if(!isset($domainData[$type])) {
+						$domainData[$type] = $defaultData[$type];
+					}
+					
+					if($translator->$node->hasAttribute('translation_domain')) {
+						$domainData[$type]['params']['translation_domain'] = $translator->$node->getAttribute('translation_domain');
+					}
+					$domainData[$type]['class'] = $translator->$node->getAttribute('class', $domainData[$type]['class']);
+					$domainData[$type]['params'] = $this->getItemParameters($translator->$node, $domainData[$type]['params']);
+					$domainData[$type]['filters'] = $this->getFilters($translator->$node);
+				}
+			}
 
-		return $code;
+			if(isset($translator->translators)) {
+				$this->getTranslators($translator->translators, $data, $domain);
+			}
+		}
 	}
-
 }
 
 ?>

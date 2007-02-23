@@ -2,8 +2,8 @@
 <!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.4/ldml.dtd">
 <ldml>
 	<identity>
-		<version number="$Revision: 1.52 $"/>
-		<generation date="$Date: 2006/06/28 06:03:59 $"/>
+		<version number="$Revision: 1.53 $"/>
+		<generation date="$Date: 2006/10/26 22:46:09 $"/>
 		<language type="sr"/>
 		<script type="Latn"/>
 	</identity>
@@ -125,7 +125,7 @@
 			<territory type="154">Severna Evropa</territory>
 			<territory type="155">Zapadna Evropa</territory>
 			<territory type="830">Kanalska ostrva</territory>
-			<territory type="833">Ostrvo Man</territory>
+			<territory type="IM">Ostrvo Man</territory>
 			<territory type="AD">Andora</territory>
 			<territory type="AE">Ujedinjeni Arapski Emirati</territory>
 			<territory type="AF">Avganistan</territory>

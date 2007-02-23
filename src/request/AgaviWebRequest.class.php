@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
@@ -22,8 +22,11 @@
  * @subpackage request
  *
  * @author     Sean Kerr <skerr@mojavi.org>
- * @author     Veikko Makinen <mail@veikkomakinen.com>
- * @copyright  (c) Authors
+ * @author     Veikko Mäkinen <mail@veikkomakinen.com>
+ * @author     David Zülke <dz@bitxtender.com>
+ * @copyright  Authors
+ * @copyright  The Agavi Project
+ *
  * @since      0.9.0
  *
  * @version    $Id$
@@ -66,17 +69,12 @@ class AgaviWebRequest extends AgaviRequest
 	protected $url = '';
 
 	/**
-	 * @var        bool Indicates whether or not PUT was used to upload a file.
-	 */
-	protected $isHttpPutFile = false;
-
-	/**
 	 * Retrieve the scheme part of a request URL, typically the protocol.
 	 * Example: "http".
 	 *
 	 * @return     string The request URL scheme.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getUrlScheme()
@@ -89,7 +87,7 @@ class AgaviWebRequest extends AgaviRequest
 	 *
 	 * @return     string The request URL hostname.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getUrlHost()
@@ -102,7 +100,7 @@ class AgaviWebRequest extends AgaviRequest
 	 *
 	 * @return     string The request URL hostname.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getUrlPort()
@@ -119,14 +117,14 @@ class AgaviWebRequest extends AgaviRequest
 	 *
 	 * @return     string The request URL authority.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getUrlAuthority($forcePort = false)
 	{
 		$port = $this->getUrlPort();
 		$scheme = $this->getUrlScheme();
-		return $this->getUrlHost() . ($forcePort || ($scheme == 'https' && $port != 443) || ($scheme == 'http' && $port != 80) ? ':' . $port : '');
+		return $this->getUrlHost() . ($forcePort || AgaviToolkit::isPortNecessary($scheme, $port) ? ':' . $port : '');
 	}
 	
 	/**
@@ -135,7 +133,7 @@ class AgaviWebRequest extends AgaviRequest
 	 *
 	 * @return     string The relative URL of the curent request.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getRequestUri()
@@ -149,7 +147,7 @@ class AgaviWebRequest extends AgaviRequest
 	 *
 	 * @return     string The path part of the URL.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getUrlPath()
@@ -163,7 +161,7 @@ class AgaviWebRequest extends AgaviRequest
 	 *
 	 * @return     string The query part of the URL, or an empty string.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getUrlQuery()
@@ -178,7 +176,7 @@ class AgaviWebRequest extends AgaviRequest
 	 *
 	 * @return     string The URL of the curent request.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getUrl()
@@ -190,261 +188,17 @@ class AgaviWebRequest extends AgaviRequest
 	}
 	
 	/**
-	 * Indicates whether or not a Cookie exists.
-	 *
-	 * @param      string A cookie name.
-	 *
-	 * @return     bool True, if a cookie with that name exists, otherwise false.
+	 * Constructor.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function hasCookie($name)
+	public function __construct()
 	{
-		return isset($_COOKIE[$name]);
-	}
-
-	/**
-	 * Retrieve a value stored into a cookie.
-	 *
-	 * @param      string A cookie name.
-	 * @param      mixed A default value.
-	 *
-	 * @return     mixed The value from the cookie, if such a cookie exists,
-	 *                   otherwise null.
-	 *
-	 * @author     Veikko Makinen <mail@veikkomakinen.com>
-	 * @since      0.10.0
-	 */
-	public function getCookie($name, $default=null)
-	{
-		$retval = $default;
-		
-		if(isset($_COOKIE[$name])) {
-			$retval = $_COOKIE[$name];
-		}
-		
-		return $retval;
-	}
-
-	/**
-	 * Retrieve an array of file information.
-	 *
-	 * @param      string A file name
-	 *
-	 * @return     array An associative array of file information, if the file
-	 *                   exists, otherwise null.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public function getFile($name)
-	{
-		if(isset($_FILES[$name])) {
-			return $_FILES[$name];
-		}
-		
-		return null;
-	}
-
-	/**
-	 * Retrieve a file error.
-	 *
-	 * @param      string A file name.
-	 *
-	 * @return     int One of the following error codes:
-	 *                 - <b>UPLOAD_ERR_OK</b>        (no error)
-	 *                 - <b>UPLOAD_ERR_INI_SIZE</b>  (the uploaded file exceeds
-	 *                                               upload_max_filesize
-	 *                                               directive in php.ini)
-	 *                 - <b>UPLOAD_ERR_FORM_SIZE</b> (the uploaded file exceeds
-	 *                                               MAX_FILE_SIZE directive
-	 *                                               specified in the HTML form)
-	 *                 - <b>UPLOAD_ERR_PARTIAL</b>   (the uploaded file was only
-	 *                                               partially uploaded)
-	 *                 - <b>UPLOAD_ERR_NO_FILE</b>   (no file was uploaded)
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public function getFileError($name)
-	{
-		if(isset($_FILES[$name])) {
-			return $_FILES[$name]['error'];
-		}
-		
-		return UPLOAD_ERR_NO_FILE;
-	}
-
-	/**
-	 * Retrieve a file name.
-	 *
-	 * @param      string A file name.
-	 *
-	 * @return     string A file name, if the file exists, otherwise null.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public function getFileName($name)
-	{
-		if(isset($_FILES[$name])) {
-			return $_FILES[$name]['name'];
-		}
-		
-		return null;
-	}
-
-	/**
-	 * Retrieve an array of file names.
-	 *
-	 * @return     array An indexed array of file names.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public function getFileNames()
-	{
-		return array_keys($_FILES);
-	}
-
-	/**
-	 * Retrieve an array of files.
-	 *
-	 * @return     array An associative array of files.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public function getFiles()
-	{
-		return $_FILES;
-	}
-
-	/**
-	 * Retrieve a file path.
-	 *
-	 * @param      string A file name.
-	 *
-	 * @return     string A file path, if the file exists, otherwise null.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public function getFilePath($name)
-	{
-		if(isset($_FILES[$name])) {
-			return $_FILES[$name]['tmp_name'];
-		}
-		
-		return null;
-	}
-
-	/**
-	 * Retrieve a file size.
-	 *
-	 * @param      string A file name.
-	 *
-	 * @return     int A file size, if the file exists, otherwise null.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public function getFileSize($name)
-	{
-		if(isset($_FILES[$name])) {
-			return $_FILES[$name]['size'];
-		}
-		
-		return null;
-	}
-
-	/**
-	 * Retrieve a file type.
-	 *
-	 * This may not be accurate. This is the mime-type sent by the browser
-	 * during the upload.
-	 *
-	 * @param      string A file name.
-	 *
-	 * @return     string A file type, if the file exists, otherwise null.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public function getFileType($name)
-	{
-		if(isset($_FILES[$name])) {
-			return $_FILES[$name]['type'];
-		}
-		
-		return null;
-	}
-
-	/**
-	 * Indicates whether or not a file exists.
-	 *
-	 * @param      string A file name.
-	 *
-	 * @return     bool true, if the file exists, otherwise false.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public function hasFile($name)
-	{
-		return isset($_FILES[$name]);
-	}
-
-	/**
-	 * Indicates whether or not a file error exists.
-	 *
-	 * @param      string A file name.
-	 *
-	 * @return     bool true, if the file error exists, otherwise false.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public function hasFileError($name)
-	{
-		if(isset($_FILES[$name])) {
-			return ($_FILES[$name]['error'] != UPLOAD_ERR_OK);
-		}
-		
-		return false;
-	}
-
-	/**
-	 * Indicates whether or not any file errors occured.
-	 *
-	 * @return     bool true, if any file errors occured, otherwise false.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public function hasFileErrors()
-	{
-		foreach($_FILES as $file) {
-			if($file['error'] != UPLOAD_ERR_OK) {
-				return true;
-			}
-		}
-		
-		return false;
-	}
-
-	/**
-	 * Indicates whether or not any files exist.
-	 *
-	 * @return     bool true, if any files exist, otherwise false.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public function hasFiles()
-	{
-		return (count($_FILES) > 0);
+		parent::__construct();
+		$this->setParameters(array(
+			'request_data_holder_class' => 'AgaviWebRequestDataHolder',
+		));
 	}
 
 	/**
@@ -456,21 +210,27 @@ class AgaviWebRequest extends AgaviRequest
 	 * @throws     <b>AgaviInitializationException</b> If an error occurs while
 	 *                                                 initializing this Request.
 	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @author     Veikko Makinen <mail@veikkomakinen.com>
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     Veikko Mäkinen <mail@veikkomakinen.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
 	public function initialize(AgaviContext $context, array $parameters = array())
 	{
 		parent::initialize($context, $parameters);
 		
+		$sources = array_merge(array(
+			'HTTPS' => 'HTTPS',
+			'REQUEST_METHOD' => 'REQUEST_METHOD',
+			'SERVER_NAME' => 'SERVER_NAME',
+			'SERVER_PORT' => 'SERVER_PORT',
+		), (isset($parameters['sources']) && is_array($parameters['sources']) ? $parameters['sources'] : array()));
+		
 		$methods = array('GET' => 'read', 'POST' => 'write', 'PUT' => 'create', 'DELETE' => 'remove');
 		if(isset($parameters['method_names'])) {
 			$methods = array_merge($methods, (array) $parameters['method_names']);
 		}
 		
-		switch(isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'GET') {
+		switch(isset($_SERVER[$sources['REQUEST_METHOD']]) ? $_SERVER[$sources['REQUEST_METHOD']] : 'GET') {
 			case 'POST':
 				$this->setMethod($methods['POST']);
 				break;
@@ -484,45 +244,18 @@ class AgaviWebRequest extends AgaviRequest
 				$this->setMethod($methods['GET']);
 		}
 		
-		if($this->getMethod() == $methods['PUT']) {
-			// PUT. We now gotta set a flag for that and populate $_FILES manually
-			$this->isHttpPutFile = true;
-			
-			$putFile = tmpfile();
-			
-			stream_copy_to_stream(fopen("php://input", "rb"), $putFile);
-			
-			// for temp file name and size
-			$putFileInfo = array(
-				'stat' => fstat($putFile),
-				'meta_data' => stream_get_meta_data($putFile)
-			);
-			
-			$putFileName = isset($parameters['PUT_file_name']) ? $parameters['PUT_file_name'] : 'put_file';
-			
-			$_FILES = array(
-				$putFileName => array(
-					'name' => $putFileName,
-					'type' => 'application/octet-stream',
-					'size' => $putFileInfo['stat']['size'],
-					'tmp_name' => $putFileInfo['meta_data']['uri'],
-					'error' => UPLOAD_ERR_OK
-				)
-			);
-		}
-		
-		$this->urlScheme = 'http' . (isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on' ? 's' : '');
+		$this->urlScheme = 'http' . (isset($_SERVER[$sources['HTTPS']]) && strtolower($_SERVER[$sources['HTTPS']]) == 'on' ? 's' : '');
 
-		if(isset($_SERVER['SERVER_PORT'])) {
-			$this->urlPort = intval($_SERVER['SERVER_PORT']);
+		if(isset($_SERVER[$sources['SERVER_PORT']])) {
+			$this->urlPort = intval($_SERVER[$sources['SERVER_PORT']]);
 		}
 
-		if(isset($_SERVER['SERVER_NAME'])) {
+		if(isset($_SERVER[$sources['SERVER_NAME']])) {
 			$port = $this->getUrlPort();
-			if(preg_match_all('/\:/', preg_quote($_SERVER['SERVER_NAME']), $m) > 1) {
-				$this->urlHost = preg_replace('/\]\:' . preg_quote($port) . '$/', '', $_SERVER['SERVER_NAME']);
+			if(preg_match_all('/\:/', preg_quote($_SERVER[$sources['SERVER_NAME']]), $m) > 1) {
+				$this->urlHost = preg_replace('/\]\:' . preg_quote($port) . '$/', '', $_SERVER[$sources['SERVER_NAME']]);
 			} else {
-				$this->urlHost = preg_replace('/\:' . preg_quote($port) . '$/', '', $_SERVER['SERVER_NAME']);
+				$this->urlHost = preg_replace('/\:' . preg_quote($port) . '$/', '', $_SERVER[$sources['SERVER_NAME']]);
 			}
 		}
 
@@ -549,90 +282,59 @@ class AgaviWebRequest extends AgaviRequest
 		$this->urlQuery = $parts['query'];
 		unset($parts);
 		
-		// merge GET parameters
-		$this->setParameters($_GET);
-		// merge POST parameters
-		$this->setParameters($_POST);
+		if($this->getMethod() == $methods['PUT']) {
+			// PUT. We now gotta set a flag for that and populate $_FILES manually
+
+			$putFile = tempnam(AgaviConfig::get('core.cache_dir'), "PUTUpload_");
+			$size = stream_copy_to_stream(fopen("php://input", "rb"), $handle = fopen($putFile, "wb"));
+			fclose($handle);
+
+			$_FILES = array(
+				$this->getParameter('http_put_file_name', 'put_file') => array(
+					'name' => $putFile,
+					'type' => 'application/octet-stream',
+					'size' => $size,
+					'tmp_name' => $putFile,
+					'error' => UPLOAD_ERR_OK,
+					'is_uploaded_file' => false,
+				)
+			);
+		}
+
+		$headers = array();
+		foreach($_SERVER as $key => $value) {
+			if(substr($key, 0, 5) == 'HTTP_') {
+				$headers[substr($key, 5)] = $value;
+			}
+		}
+		
+		$rdhc = $this->getParameter('request_data_holder_class');
+		$this->requestData = new $rdhc(array(
+			constant("$rdhc::SOURCE_PARAMETERS") => array_merge($_GET, $_POST),
+			constant("$rdhc::SOURCE_COOKIES") => $_COOKIE,
+			constant("$rdhc::SOURCE_FILES") => $_FILES,
+			constant("$rdhc::SOURCE_HEADERS") => $headers,
+		));
 	}
 	
 	/**
-	 * Wrapper method for either move_uplaoded_file or HTTP PUT input handling.
+	 * Do any necessary startup work after initialization.
 	 *
-	 * @param      string The name of the input file.
-	 * @param      string The name of the destination file.
-	 *
-	 * @return     bool Whether or not the operation was successful.
+	 * This method is not called directly after initialize().
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	protected function moveUploadedFile($source, $destination)
+	public function startup()
 	{
-		if($this->isHttpPutFile) {
-			return @rename($source, $destination);
-		} else {
-			return @move_uploaded_file($source, $destination);
-		}
-	}
-
-	/**
-	 * Move an uploaded file.
-	 *
-	 * @param      string A file name.
-	 * @param      string An absolute filesystem path to where you would like
-	 *                    the file moved. This includes the new filename, too,
-	 *                    since uploaded files are stored with random names.
-	 * @param      int    The octal mode to use for the new file.
-	 * @param      bool   Indicates that we should make the directory before
-	 *                    moving the file.
-	 * @param      int    The octal mode to use when creating the directory.
-	 *
-	 * @return     bool true, if the file was moved, otherwise false.
-	 *
-	 * @throws     AgaviFileException If a major error occurs while attempting
-	 *                                to move the file.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public function moveFile($name, $file, $fileMode = 0666, $create = true, $dirMode = 0777)
-	{
-		if(isset($_FILES[$name]) && $_FILES[$name]['error'] == UPLOAD_ERR_OK && $_FILES[$name]['size'] > 0) {
-			// get our directory path from the destination filename
-			$directory = dirname($file);
-			if(!is_readable($directory)) {
-				$fmode = 0777;
-				if($create && !@mkdir($directory, $dirMode, true)) {
-					// failed to create the directory
-					$error = 'Failed to create file upload directory "%s"';
-					$error = sprintf($error, $directory);
-					throw new AgaviFileException($error);
+		if($this->getParameter("unset_input", true)) {
+			$_GET = $_POST = $_COOKIE = $_REQUEST = $_FILES = array();
+			foreach($_SERVER as $key => $value) {
+				if(substr($key, 0, 5) == 'HTTP_') {
+					unset($_SERVER[$key]);
 				}
-				
-				// chmod the directory since it doesn't seem to work on
-				// recursive paths
-				@chmod($directory, $dirMode);
-			} elseif(!is_dir($directory)) {
-				// the directory path exists but it's not a directory
-				$error = 'File upload path "%s" exists, but is not a directory';
-				$error = sprintf($error, $directory);
-
-				throw new AgaviFileException($error);
-			} elseif(!is_writable($directory)) {
-				// the directory isn't writable
-				$error = 'File upload path "%s" is not writable';
-				$error = sprintf($error, $directory);
-				throw new AgaviFileException($error);
-			}
-
-			if($this->moveUploadedFile($_FILES[$name]['tmp_name'], $file)) {
-				// chmod our file
-				@chmod($file, $fileMode);
-				
-				return true;
 			}
 		}
-		return false;
 	}
 }
 

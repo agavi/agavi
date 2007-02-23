@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -33,14 +33,22 @@
  * @package    agavi
  * @subpackage validator
  *
+ * @author     Dominik del Bondio <ddb@bitxtender.com>
  * @author     Uwe Mesecke <uwe@mesecke.net>
- * @copyright  (c) Authors
+ * @copyright  Authors
+ * @copyright  The Agavi Project
+ *
  * @since      0.11.0
  *
  * @version    $Id$
  */
 abstract class AgaviValidator extends AgaviParameterHolder
 {
+	/**
+	 * validator field success flag
+	 */
+	const NOT_PROCESSED = -1;
+
 	/**
 	 * validator error severity (the validator succeeded)
 	 */
@@ -95,7 +103,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	protected $name = null;
 
 	/**
-	 * @var        AgaviParameterHolder The parameters which should be validated
+	 * @var        AgaviRequestDataHolder The parameters which should be validated
 	 *                                  in the current validation run.
 	 */
 	protected $validationParameters = null;
@@ -106,10 +114,20 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	protected $requestMethods = array();
 
 	/**
-	 * @var        array The field names which have been validated by this
-	 *                   validator
+	 * @var        array The name of the request parameters serving as argument to
+	 *                   this validator.
 	 */
-	protected $validatedFieldnames = array();
+	protected $arguments = array();
+
+	/**
+	 * @var        array The error messages.
+	 */
+	protected $errorMessages = array();
+
+	/**
+	 * @var        AgaviValidationIncident The current incident.
+	 */
+	protected $incident = null;
 
 	/**
 	 * Returns the base path of this validator.
@@ -194,33 +212,34 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	}
 
 	/**
-	 * constructor
+	 * Initialize this validator.
 	 *
-	 * @param      AgaviIValidatorContainer parent validator container
-	 *                                      (mostly the validator manager)
-	 * @param      array                    The parameters from the config file.
-	 * @param      string                   The name of this validator.
+	 * @param      AgaviContext The Context.
+	 * @param      array        An array of validator parameters.
+	 * @param      array        An array of argument names which should be validated.
+	 * @param      array        An array of error messages.
 	 *
-	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function __construct(AgaviIValidatorContainer $parent, array $parameters = array(), $name = '')
+	public function initialize(AgaviContext $context, array $parameters = array(), array $arguments = array(), array $errors = array())
 	{
-		$this->parentContainer = $parent;
+		$this->context = $context;
 
-		$from = $this;
-		while(!($from instanceof AgaviIValidatorManager)) {
-			$from = $from->getParentContainer();
-		}
-		$this->context = $from->getContext();
-		unset($from);
+		$this->arguments = $arguments;
+		$this->errorMessages = $errors;
 
-		if(!isset($parameters['depends']) or !is_array($parameters['depends'])) {
-			$parameters['depends'] = (isset($parameters['depends']) and strlen($parameters['depends'])) ? explode(' ', $parameters['depends']) : array();
+		if(!isset($parameters['depends']) || !is_array($parameters['depends'])) {
+			$parameters['depends'] = (!empty($parameters['depends'])) ? explode(' ', $parameters['depends']) : array();
 		}
-		if(!isset($parameters['provides']) or !is_array($parameters['provides'])) {
-			$parameters['provides'] = (isset($parameters['provides']) and strlen($parameters['provides'])) ? explode(' ', $parameters['provides']) : array();
+		if(!isset($parameters['provides']) || !is_array($parameters['provides'])) {
+			$parameters['provides'] = (!empty($parameters['provides'])) ? explode(' ', $parameters['provides']) : array();
 		}
+
+		if(!isset($parameters['source'])) {
+			$parameters['source'] = AgaviRequestDataHolder::SOURCE_PARAMETERS;
+		}
+
 
 		if(isset($parameters['method'])) {
 			foreach(explode(' ', $parameters['method']) as $method) {
@@ -228,11 +247,9 @@ abstract class AgaviValidator extends AgaviParameterHolder
 			}
 		}
 
-		parent::__construct($parameters);
-		// we need a reference here, so when looping happens in a parent
-		// we always have the right base
-		$this->curBase = $parent->getBase();
-		$this->name = $name;
+		$this->setParameters($parameters);
+
+		$this->name = $this->getParameter('name', uniqid('val'.rand()));
 	}
 
 	/**
@@ -240,10 +257,10 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 *
 	 * @return     AgaviContext The current Context instance.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	final public function getContext()
+	public final function getContext()
 	{
 		return $this->context;
 	}
@@ -256,9 +273,28 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	final public function getParentContainer()
+	public final function getParentContainer()
 	{
 		return $this->parentContainer;
+	}
+
+	/**
+	 * Sets the parent container.
+	 *
+	 * @param      AgaviIValidatorContainer The parent container.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function setParentContainer(AgaviIValidatorContainer $parent)
+	{
+		// we need a reference here, so when looping happens in a parent
+		// we always have the right base
+		$this->curBase = $parent->getBase();
+		$this->parentContainer = $parent;
+		$this->validationManager = $this->parentContainer;
+		while(!($this->validationManager instanceof AgaviValidationManager) && ($this->validationManager = $this->validationManager->getParentContainer())) {
+		}
 	}
 
 	/**
@@ -283,7 +319,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 * This method can be used in validators to shut down used models or
 	 * other activities before the validator is killed.
 	 *
-	 * @see        AgaviValidatorManager::shutdown()
+	 * @see        AgaviValidationManager::shutdown()
 	 *
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
@@ -303,12 +339,13 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 *
 	 * @return     mixed The input value from the validation input.
 	 *
-	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	protected function getData($paramName)
+	protected function & getData($paramName)
 	{
-		$array = $this->validationParameters->getParameters();
+		$paramType = $this->getParameter('source');
+		$array =& $this->validationParameters->getAll($paramType);
 		return $this->curBase->getValueByChildPath($paramName, $array);
 	}
 
@@ -323,7 +360,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 */
 	protected function hasMultipleArguments()
 	{
-		return count($this->getParameter('arguments')) > 1;
+		return count($this->arguments) > 1;
 	}
 
 	/**
@@ -339,7 +376,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 */
 	protected function getArgument()
 	{
-		$argNames = $this->getParameter('arguments', array());
+		$argNames = $this->arguments;
 		reset($argNames);
 		return current($argNames);
 	}
@@ -354,119 +391,108 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 */
 	protected function getArguments()
 	{
-		return $this->getParameter('arguments', array());
+		return $this->arguments;
 	}
 
 	/**
 	 * Returns whether all arguments are set in the validation input parameters.
 	 * Set means anything but empty string.
 	 *
+	 * @param      bool Whether an error should be thrown for each missing 
+	 *                  argument if this validator is required.
+	 *
 	 * @return     bool Whether the arguments are set.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	protected function hasAllArgumentsSet()
+	protected function checkAllArgumentsSet($throwError = true)
 	{
-		$array = $this->validationParameters->getParameters();
+		$isRequired = $this->getParameter('required', true);
+		$paramType = $this->getParameter('source');
+		$result = true;
+
 		$baseParts = $this->curBase->getParts();
 		foreach($this->getArguments() as $argument) {
 			$new = $this->curBase->pushRetNew($argument);
 			$pName = $this->curBase->pushRetNew($argument)->__toString();
-			if(!$this->validationParameters->hasParameter($pName) || $this->validationParameters->getParameter($pName) === "") {
-				return false;
+			if($this->validationParameters->isValueEmpty($paramType, $pName)) {
+				if($throwError && $isRequired) {
+					$this->throwError(null, $pName);
+				}
+				$result = false;
 			}
 		}
-		return true;
+		return $result;
 	}
+
+	/**
+	 * Retrieves the error message for the given index with fallback. 
+	 *
+	 * If the given index does not exist in the error messages array, it first 
+	 * checks if an unnamed error message exists and returns it or falls back the
+	 * the backup message.
+	 *
+	 * @param      string The name of the error.
+	 * @param      string The backup error message.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	protected function getErrorMessage($index = null, $backupMessage = null)
+	{
+		if($index !== null && isset($this->errorMessages[$index])) {
+			$error = $this->errorMessages[$index];
+		} elseif(isset($this->errorMessages[''])) {
+			// check if a default error exists.
+			$error = $this->errorMessages[''];
+		} else {
+			$error = $backupMessage;
+		}
+
+		return $error;
+	}
+
 
 	/**
 	 * Submits an error to the error manager.
 	 *
-	 * The stuff in the parameter specified in $index is submitted to the
-	 * error manager. If there is no parameter with this name, then 'error'
-	 * is tryed as an parameter and if even this fails, the stuff in
-	 * $backupError is sent.
+	 * Will look up the index in the errors array with automatic fallback to the
+	 * default error. You can optionally specify the fields affected by this 
+	 * error. The error will be appended to the current incident.
 	 *
 	 * @param      string The name of the error parameter to fetch the message 
 	 *                    from.
-	 * @param      string An default error message to be used if the given error 
-	 *                    has no message set.
-	 *
-	 * @author     Uwe Mesecke <uwe@mesecke.net>
-	 * @since      0.11.0
-	 */
-	protected function throwError($index = null, $backupError = null)
-	{
-		if($index !== null && $this->hasParameter('errors')) {
-			$errors = $this->getParameter('errors');
-			if(isset($errors[$index])) {
-				$this->reportError($this, $errors[$index]);
-				return;
-			}
-		}
-
-		if($this->hasParameter('error')) {
-			$error = $this->getParameter('error');
-		} else {
-			$error = $backupError;
-		}
-
-		$this->reportError($this, $error);
-	}
-
-
-	/**
-	 * Reports an error to the parent container.
-	 *
-	 * @param      AgaviValidator The validator where the error occured.
-	 * @param      string         An error message.
+	 * @param      string|array The arguments which are affected by this error.
+	 *                          If null is given it will affect all fields
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
-	 * @see        AgaviIValidatorContainer::reportError
 	 */
-	public function reportError(AgaviValidator $validator, $errorMsg)
+	protected function throwError($index = null, $affectedArgument = null)
 	{
-		if(self::mapErrorCode($this->getParameter('severity')) > self::NONE) {
-			$this->parentContainer->reportError($validator, $errorMsg);
+		if($affectedArgument === null) {
+			$affectedArguments = $this->getFullArgumentNames();
+		} else {
+			$affectedArguments = (array) $affectedArgument;
+		}
+
+		$error = $this->getErrorMessage($index);
+
+		if($this->hasParameter('translation_domain')) {
+			$error = $this->getContext()->getTranslationManager()->_($error, $this->getParameter('translation_domain'));
+		}
+
+		if(!$this->incident) {
+			$this->incident = new AgaviValidationIncident($this, self::mapErrorCode($this->getParameter('severity', 'error')));
+		}
+
+		if($error !== null || count($affectedArguments) != 0) {
+			// don't throw empty error messages without affected fields
+			$this->incident->addError(new AgaviValidationError($error, $index, $affectedArguments));
 		}
 	}
 
-	/**
-	 * Returns a list of input fields that are per default affected by a failure
-	 * of the validator
-	 *
-	 * The list consists of the fields in the parameters that are lists in
-	 * affectedFieldNames and the space seperated list of fields in the
-	 * parameter 'affects'.
-	 *
-	 * @return     array The list of fields that are affected by an error.
-	 *
-	 * @author     Uwe Mesecke <uwe@mesecke.net>
-	 * @since      0.11.0
-	 */
-	public function getAffectedFields()
-	{
-		$fields = array();
-		$base = $this->curBase->__toString();
-
-		if($this->hasParameter('affects')) {
-			$f = array_map('trim', explode(' ', trim($this->getParameter('affects'))));
-			foreach($f as $n) {
-				if(!strlen($n)) {
-					continue;
-				}
-				$fields[] = $n;
-			}
-		}
-
-		$fields = array_merge($fields, $this->validatedFieldnames);
-		// filter out empty strings
-		$fields = array_filter($fields, 'strlen');
-
-		return array_unique($fields);
-	}
 
 	/**
 	 * Exports a value back into the request.
@@ -480,19 +506,30 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 * overwrite stuff you don't want to.
 	 *
 	 * @param      mixed The value to be exported.
+	 * @param      string An optional name which should be used for exporting 
+	 *                    instead of the export parameter.
 	 *
-	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	protected function export($value)
+	protected function export($value, $name = null)
 	{
-		if(!$this->hasParameter('export')) {
+		if($name === null) {
+			$name = $this->getParameter('export');
+		}
+
+		if(!$name) {
 			return;
 		}
 
-		$array = $this->validationParameters->getParameters();
-		$this->curBase->setValueByChildPath($this->getParameter('export'), $array, $value);
-		$this->validationParameters->setParameters($array);
+		$paramType = $this->getParameter('source');
+
+		$array =& $this->validationParameters->getAll($paramType);
+		$cp = $this->curBase->pushRetNew($name);
+		$cp->setValue($array, $value);
+		if($this->validationManager !== null) {
+			$this->validationManager->addFieldResult($this, $cp->__toString(), AgaviValidator::NOT_PROCESSED);
+		}
 	}
 
 	/**
@@ -504,6 +541,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 * @return     int AgaviValidator::SUCCESS if validation succeeded or given
 	 *                 error severity.
 	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
@@ -517,30 +555,43 @@ abstract class AgaviValidator extends AgaviParameterHolder
 				return self::SUCCESS;
 			}
 
-			foreach($this->getArguments() as $argument) {
-				$this->validatedFieldnames[] = $this->curBase->pushRetNew($argument)->__toString();
-			}
+			$fieldnames = $this->getFullArgumentNames();
 
-			if($this->hasAllArgumentsSet()) {
+			$result = self::SUCCESS;
+			$errorCode = self::mapErrorCode($this->getParameter('severity', 'error'));
+
+			if($this->checkAllArgumentsSet(false)) {
 				if(!$this->validate()) {
 					// validation failed, exit with configured error code
-					return self::mapErrorCode($this->getParameter('severity'));
+					$result = $errorCode;
 				}
 			} else {
 				if($this->getParameter('required', true)) {
 					$this->throwError();
-					return self::mapErrorCode($this->getParameter('severity'));
+					$result = $errorCode;
 				} else {
-					// no reason to throw any error since it wouldn't be included anyways
-					return self::NONE;
+					// we don't throw an error here because this is not an incident per se
+					// but rather a non validated field
+					$result = self::NOT_PROCESSED;
 				}
 			}
 
+			if($this->validationManager !== null) {
+				foreach($fieldnames as $fieldname) {
+					$this->validationManager->addFieldResult($this, $fieldname, $result);
+				}
+
+				if($this->incident) {
+					$this->validationManager->addIncident($this->incident);
+				}
+			}
+
+			$this->incident = null;
 			// put dependencies provided by this validator into manager
-			if(count($this->getParameter('provides')) > 0) {
+			if($result == self::SUCCESS && count($this->getParameter('provides')) > 0) {
 				$this->parentContainer->getDependencyManager()->addDependTokens($this->getParameter('provides'), $this->curBase);
 			}
-			return self::SUCCESS;
+			return $result;
 
 		} elseif($base->left() !== '') {
 			/*
@@ -562,8 +613,18 @@ abstract class AgaviValidator extends AgaviParameterHolder
 			 * specified by our own base and validate in each of that
 			 * names
 			 */
-			$array = $this->validationParameters->getParameters();
-			$names = $this->curBase->getValue($array, array());
+			$names = $this->getKeysInCurrentBase();
+
+			// if the names array is empty this means we need to throw an error since
+			// this means the input doesn't exist
+			if(count($names) == 0) {
+				if($this->getParameter('required', true)) {
+					$this->throwError();
+					return self::mapErrorCode($this->getParameter('severity', 'error'));
+				} else {
+					return self::NOT_PROCESSED;
+				}
+			}
 
 			// throw the wildcard away
 			$base->shift();
@@ -571,7 +632,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 			$ret = self::SUCCESS;
 
 			// validate in every name defined in the request
-			foreach(array_keys($names) as $name) {
+			foreach($names as $name) {
 				$t = $this->validateInBase($base->pushRetNew($name));
 
 				if($t == self::CRITICAL) {
@@ -589,19 +650,28 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	/**
 	 * Executes the validator.
 	 *
-	 * @param      AgaviParameterHolder The parameters which should be validated.
+	 * @param      AgaviRequestDataHolder The data which should be validated.
 	 *
 	 * @return     int The validation result (see severity constants).
 	 *
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
-	public function execute(AgaviParameterHolder $parameters)
+	public function execute(AgaviRequestDataHolder $parameters)
 	{
+		if($this->getParameter('source') != AgaviRequestDataHolder::SOURCE_PARAMETERS && !in_array($this->getParameter('source'), $parameters->getSourceNames())) {
+			throw new AgaviConfigurationException('Unknown source "' . $this->getParameter('source') . '" specified in validator ' . $this->getName());
+		}
+
 		$this->validationParameters = $parameters;
 		$base = new AgaviVirtualArrayPath($this->getParameter('base'));
 
-		return $this->validateInBase($base);
+		$res = $this->validateInBase($base);
+		if($this->incident && $this->validationManager) {
+			$this->validationManager->addIncident($this->incident);
+			$this->incident = null;
+		}
+		return $res;
 	}
 
 	/**
@@ -618,7 +688,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 *
 	 * @return     int The error severity as in (see severity constants).
 	 *
-	 * @throws     <b>AgaviValidatorException<b> if the input was no known 
+	 * @throws     <b>AgaviValidatorException</b> if the input was no known 
 	 *                                           severity
 	 *
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
@@ -640,6 +710,46 @@ abstract class AgaviValidator extends AgaviParameterHolder
 		}
 	}
 
+
+	/**
+	 * Returns all available keys in the currently set base.
+	 *
+	 * @return     array The available keys.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	protected function getKeysInCurrentBase()
+	{
+		$paramType = $this->getParameter('source');
+
+		$array = $this->validationParameters->getAll($paramType);
+		$names = $this->curBase->getValue($array, array());
+
+		return array_keys($names);
+	}
+
+	/**
+	 * Returns all arguments with their full path.
+	 *
+	 * @return     array The arguments.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	protected function getFullArgumentNames()
+	{
+		$arguments = array();
+		foreach($this->getArguments() as $argument) {
+			if($argument) {
+				$arguments[] = $this->curBase->pushRetNew($argument)->__toString();
+			} else {
+				$arguments[] = $this->curBase->__toString();
+			}
+		}
+
+		return $arguments;
+	}
 }
 
 ?>

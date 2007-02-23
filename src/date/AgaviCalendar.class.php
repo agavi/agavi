@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -20,14 +20,18 @@
  * @subpackage date
  *
  * @author     Dominik del Bondio <ddb@bitxtender.com>
- * @author     The ICU Project ({@link http://icu.sourceforge.net})
- * @copyright  (c) Authors
+ * @author     The ICU Project
+ * @copyright  Authors
+ * @copyright  The Agavi Project
+ *
  * @since      0.11.0
  *
  * @version    $Id$
  */
 abstract class AgaviCalendar
 {
+	const GREGORIAN = 'gregorian';
+
 	/**
 	 * @var        AgaviTranslationManager The translation manager instance.
 	 * @since      0.11.0
@@ -52,13 +56,13 @@ abstract class AgaviCalendar
 	 * Initialize the variables to default values.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project <http://icu.sourceforge.net>
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	protected function initVariables()
 	{
 		$this->fIsTimeSet = false;
-		$this->fAreFieldsSet = false;
+		$this->fAreFieldsInSync = false;
 		$this->fAreAllFieldsSet = false;
 		$this->fAreFieldsVirtuallySet = false;
 		$this->fNextStamp = self::kMinimumUserStamp;
@@ -74,7 +78,7 @@ abstract class AgaviCalendar
 	 * @param      AgaviLocale   The locale to use.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project <http://icu.sourceforge.net>
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	protected function constructorOO(AgaviTimeZone $zone, AgaviLocale $locale)
@@ -86,14 +90,10 @@ abstract class AgaviCalendar
 	}
 
 	/**
-	 * Values for field resolution tables
-	 * @see #resolveFields
-	 */
-
-	/**
 	 * Marker for end of resolve set (row or group).
 	 */
 	const RESOLVE_STOP  = -1;
+
 	/**
 	 * Value to be bitwised "ORed" against resolve table field values for 
 	 * remapping.  Example: (UCAL_DATE | kResolveRemap) in 1st column will cause 
@@ -125,9 +125,6 @@ abstract class AgaviCalendar
 	 */
 	const MAX_MILLIS                 = 1857534508800000.0; // ((MAX_JULIAN - kEpochStartAsJulianDay) * kOneDay)
 
-
-
-
 	const LIMIT_MINIMUM             = 0;
 	const LIMIT_GREATEST_MINIMUM    = 1;
 	const LIMIT_LEAST_MAXIMUM       = 2;
@@ -135,37 +132,32 @@ abstract class AgaviCalendar
 	const LIMIT_COUNT               = 4;
 
 	protected static $kCalendarLimits = array(
-																				//               Minimum        Greatest min            Least max         Greatest max
-																				array(         /*N/A*/-1,          /*N/A*/-1,           /*N/A*/-1,           /*N/A*/-1 ), // ERA
-																				array(         /*N/A*/-1,          /*N/A*/-1,           /*N/A*/-1,           /*N/A*/-1 ), // YEAR
-																				array(         /*N/A*/-1,          /*N/A*/-1,           /*N/A*/-1,           /*N/A*/-1 ), // MONTH
-																				array(         /*N/A*/-1,          /*N/A*/-1,           /*N/A*/-1,           /*N/A*/-1 ), // WEEK_OF_YEAR
-																				array(         /*N/A*/-1,          /*N/A*/-1,           /*N/A*/-1,           /*N/A*/-1 ), // WEEK_OF_MONTH
-																				array(         /*N/A*/-1,          /*N/A*/-1,           /*N/A*/-1,           /*N/A*/-1 ), // DAY_OF_MONTH
-																				array(         /*N/A*/-1,          /*N/A*/-1,           /*N/A*/-1,           /*N/A*/-1 ), // DAY_OF_YEAR
-																				array(                 1,                  1,                   7,                   7 ), // DAY_OF_WEEK
-																				array(         /*N/A*/-1,          /*N/A*/-1,           /*N/A*/-1,           /*N/A*/-1 ), // DAY_OF_WEEK_IN_MONTH
-																				array(                 0,                  0,                   1,                   1 ), // AM_PM
-																				array(                 0,                  0,                  11,                  11 ), // HOUR
-																				array(                 0,                  0,                  23,                  23 ), // HOUR_OF_DAY
-																				array(                 0,                  0,                  59,                  59 ), // MINUTE
-																				array(                 0,                  0,                  59,                  59 ), // SECOND
-																				array(                 0,                  0,                 999,                 999 ), // MILLISECOND
-																				//    -12*self::kOneHour, -12*self::kOneHour,   12*self::kOneHour,   15*self::kOneHour
-																				array(         -43200000,          -43200000,            43200000,            54000000 ), // ZONE_OFFSET
-																				array(                 0,                  0,AgaviDateDefinitions::MILLIS_PER_HOUR , AgaviDateDefinitions::MILLIS_PER_HOUR ), // DST_OFFSET
-																				array(         /*N/A*/-1,          /*N/A*/-1,           /*N/A*/-1,           /*N/A*/-1 ), // YEAR_WOY
-																				array(                 1,                  1,                   7,                   7 ), // DOW_LOCAL
-																				array(         /*N/A*/-1,          /*N/A*/-1,           /*N/A*/-1,           /*N/A*/-1 ), // EXTENDED_YEAR
-																				array(  self::MIN_JULIAN,   self::MIN_JULIAN,    self::MAX_JULIAN,    self::MAX_JULIAN ), // JULIAN_DAY
-																				//                     0,                  0, 24*self::kOneHour-1, 24*self::kOneHour-1
-																				array(                 0,                  0,           86399999,             86399999 ), // MILLISECONDS_IN_DAY
-																			);
-
-
-
-
-
+		//               Minimum        Greatest min            Least max         Greatest max
+		array(         /*N/A*/-1,          /*N/A*/-1,           /*N/A*/-1,           /*N/A*/-1 ), // ERA
+		array(         /*N/A*/-1,          /*N/A*/-1,           /*N/A*/-1,           /*N/A*/-1 ), // YEAR
+		array(         /*N/A*/-1,          /*N/A*/-1,           /*N/A*/-1,           /*N/A*/-1 ), // MONTH
+		array(         /*N/A*/-1,          /*N/A*/-1,           /*N/A*/-1,           /*N/A*/-1 ), // WEEK_OF_YEAR
+		array(         /*N/A*/-1,          /*N/A*/-1,           /*N/A*/-1,           /*N/A*/-1 ), // WEEK_OF_MONTH
+		array(         /*N/A*/-1,          /*N/A*/-1,           /*N/A*/-1,           /*N/A*/-1 ), // DAY_OF_MONTH
+		array(         /*N/A*/-1,          /*N/A*/-1,           /*N/A*/-1,           /*N/A*/-1 ), // DAY_OF_YEAR
+		array(                 1,                  1,                   7,                   7 ), // DAY_OF_WEEK
+		array(         /*N/A*/-1,          /*N/A*/-1,           /*N/A*/-1,           /*N/A*/-1 ), // DAY_OF_WEEK_IN_MONTH
+		array(                 0,                  0,                   1,                   1 ), // AM_PM
+		array(                 0,                  0,                  11,                  11 ), // HOUR
+		array(                 0,                  0,                  23,                  23 ), // HOUR_OF_DAY
+		array(                 0,                  0,                  59,                  59 ), // MINUTE
+		array(                 0,                  0,                  59,                  59 ), // SECOND
+		array(                 0,                  0,                 999,                 999 ), // MILLISECOND
+		//    -12*self::kOneHour, -12*self::kOneHour,   12*self::kOneHour,   15*self::kOneHour
+		array(         -43200000,          -43200000,            43200000,            54000000 ), // ZONE_OFFSET
+		array(                 0,                  0,AgaviDateDefinitions::MILLIS_PER_HOUR , AgaviDateDefinitions::MILLIS_PER_HOUR ), // DST_OFFSET
+		array(         /*N/A*/-1,          /*N/A*/-1,           /*N/A*/-1,           /*N/A*/-1 ), // YEAR_WOY
+		array(                 1,                  1,                   7,                   7 ), // DOW_LOCAL
+		array(         /*N/A*/-1,          /*N/A*/-1,           /*N/A*/-1,           /*N/A*/-1 ), // EXTENDED_YEAR
+		array(  self::MIN_JULIAN,   self::MIN_JULIAN,    self::MAX_JULIAN,    self::MAX_JULIAN ), // JULIAN_DAY
+		//                     0,                  0, 24*self::kOneHour-1, 24*self::kOneHour-1
+		array(                 0,                  0,           86399999,             86399999 ), // MILLISECONDS_IN_DAY
+	);
 
 
 	/**
@@ -175,7 +167,7 @@ abstract class AgaviCalendar
 	 * @return     float The current UTC time in milliseconds.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public static function getNow()
@@ -192,7 +184,7 @@ abstract class AgaviCalendar
 	 *                   operation failed.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function getTime()
@@ -207,13 +199,53 @@ abstract class AgaviCalendar
 	 * @param      float The given UDate in UTC (GMT) time.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function setTime($date)
 	{
 		$this->setTimeInMillis($date);
 	}
+
+
+	/**
+	 * Gets this Calendar's time as unix timestamp. May involve recalculation of 
+	 * time due to previous calls to set time field values. The time specified is 
+	 * non-local UTC (GMT) time.
+	 *
+	 * @return     int The current time in UTC (GMT) time as unix timestamp.
+	 *
+	 * @throws     <b>OverflowException</b> when the date can't be represented by
+	 *                                      an unix timestamp.
+	 * 
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getUnixTimestamp()
+	{
+		$unixTime = floor($this->getTimeInMillis() / AgaviDateDefinitions::MILLIS_PER_SECOND);
+		$unixTimeInt = (int) $unixTime;
+		// lets check if the int can't represent the time anymore
+		if($unixTime != $unixTimeInt) {
+			throw new OverflowException('cannot convert the date ' . $this->get(AgaviDateDefinitions::YEAR) . '/' . $this->get(AgaviDateDefinitions::MONTH) . '/' . $this->get(AgaviDateDefinitions::DATE) . ' into a unix timestamp');
+		}
+		return $unixTimeInt;
+	}
+
+	/**
+	 * Sets this Calendar's current time with the given unix timestamp. The time 
+	 * specified  should be in non-local UTC (GMT) time.
+	 *
+	 * @param      int The given date in UTC (GMT) time.
+	 * 
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function setUnixTimestamp($timestamp)
+	{
+		$this->setTimeInMillis($timestamp * AgaviDateDefinitions::MILLIS_PER_SECOND);
+	}
+
 
 	public function __is_equal($that)
 	{
@@ -237,7 +269,7 @@ abstract class AgaviCalendar
 	 * @return     bool 
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function isEquivalentTo($other)
@@ -262,10 +294,10 @@ abstract class AgaviCalendar
 	 *                  time of Calendar when; false otherwise.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
-	public function  equals($when)
+	public function equals($when)
 	{
 		return ($this->__is_equal($when) || $this->getTime() == $when->getTime());
 	}
@@ -281,7 +313,7 @@ abstract class AgaviCalendar
 	 *                  time of Calendar when; false otherwise.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function before($when)
@@ -300,12 +332,12 @@ abstract class AgaviCalendar
 	 *                  time of Calendar when; false otherwise.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function after($when)
 	{
-    return ($this->__is_not_equal($when) && $this->getTimeInMillis() > $when->getTimeInMillis());
+		return ($this->__is_not_equal($when) && $this->getTimeInMillis() > $when->getTimeInMillis());
 	}
 
 	/**
@@ -323,7 +355,7 @@ abstract class AgaviCalendar
 	 *                 for the hour field.)
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function add($field, $amount)
@@ -467,7 +499,7 @@ abstract class AgaviCalendar
 	 * @param      int Indicates amount to roll.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function roll($field, $amount)
@@ -845,7 +877,7 @@ abstract class AgaviCalendar
 	 *                       of <code>field</code>.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function fieldDifference($targetMs /* $when */, $field)
@@ -935,19 +967,18 @@ abstract class AgaviCalendar
 
 	}
 
-
 	/**
-	 * Sets the calendar's time zone to be the one passed in. The Calendar takes 
-	 * ownership of the TimeZone; the caller is no longer responsible for 
-	 * deleting it.  If the given time zone is NULL, this function has no effect.
+	 * Sets the calendar's time zone to be the same as the one passed in. The 
+	 * TimeZone passed in is _not_ adopted; the client is still responsible for 
+	 * deleting it.
 	 *
 	 * @param      AgaviTimeZone The given time zone.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
-	public function adoptTimeZone($zone)
+	public function setTimeZone($zone)
 	{
 		// Do nothing if passed-in zone is NULL
 		if(!$zone) {
@@ -958,35 +989,17 @@ abstract class AgaviCalendar
 		$this->fZone = $zone;
 
 		// if the zone changes, we need to recompute the time fields
-		$this->fAreFieldsSet = false;
+		$this->fAreFieldsInSync = false;
 	}
 
 	/**
-	 * Sets the calendar's time zone to be the same as the one passed in. The 
-	 * TimeZone passed in is _not_ adopted; the client is still responsible for 
-	 * deleting it.
-	 *
-	 * @param      AgaviTimeZone The given time zone.
-	 * 
-	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
-	 * @since      0.11.0
-	 */
-	public function setTimeZone($zone)
-	{
-		$this->adoptTimeZone($zone);
-	}
-
-	/**
-	 * Returns a reference to the time zone owned by this calendar. The returned
-	 * reference is only valid until clients make another call to adoptTimeZone or
-	 * setTimeZone, or this Calendar is destroyed.
+	 * Returns a reference to the time zone owned by this calendar.
 	 *
 	 * @return     AgaviTimeZone The time zone object associated with this 
 	 *                           calendar.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function getTimeZone()
@@ -1001,7 +1014,7 @@ abstract class AgaviCalendar
 	 *                  Daylight Savings Time, false, otherwise.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public abstract function inDaylightTime();
@@ -1018,7 +1031,7 @@ abstract class AgaviCalendar
 	 * @see        DateFormat#setLenient
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function setLenient($lenient)
@@ -1032,7 +1045,7 @@ abstract class AgaviCalendar
 	 * @return     bool True tells that date/time interpretation is to be lenient.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function isLenient()
@@ -1048,7 +1061,7 @@ abstract class AgaviCalendar
 	 * @param      int The given first day of the week.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function setFirstDayOfWeek($value)
@@ -1063,7 +1076,7 @@ abstract class AgaviCalendar
 	 * @return     int The first day of the week.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function getFirstDayOfWeek()
@@ -1081,7 +1094,7 @@ abstract class AgaviCalendar
 	 *                 year.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function setMinimalDaysInFirstWeek($value)
@@ -1099,7 +1112,7 @@ abstract class AgaviCalendar
 	 * @return     int The minimal days required in the first week of the year.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function getMinimalDaysInFirstWeek()
@@ -1116,7 +1129,7 @@ abstract class AgaviCalendar
 	 * @return     int    The minimum value for the given time field.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function getMinimum($field)
@@ -1133,7 +1146,7 @@ abstract class AgaviCalendar
 	 * @return     int    The maximum value for the given time field.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function getMaximum($field)
@@ -1150,7 +1163,7 @@ abstract class AgaviCalendar
 	 * @return     int    The highest minimum value for the given time field.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function getGreatestMinimum($field)
@@ -1167,7 +1180,7 @@ abstract class AgaviCalendar
 	 * @return     int    The lowest maximum value for the given time field.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function getLeastMaximum($field)
@@ -1192,7 +1205,7 @@ abstract class AgaviCalendar
 	 *                    this Calendar
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function getActualMinimum($field)
@@ -1247,7 +1260,7 @@ abstract class AgaviCalendar
 	 *                    this Calendar
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function getActualMaximum($field)
@@ -1301,7 +1314,7 @@ abstract class AgaviCalendar
 	 * @return     array All fields of this instance.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function getAll()
@@ -1326,7 +1339,7 @@ abstract class AgaviCalendar
 	 *                    is unset, and set() has been called for any other field.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function get($field)
@@ -1349,7 +1362,7 @@ abstract class AgaviCalendar
 	 *                    otherwise.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function _isSet($field) // isset is a keyword in php
@@ -1362,7 +1375,7 @@ abstract class AgaviCalendar
 	 * TODO: describe overload bla
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function set()
@@ -1391,7 +1404,7 @@ abstract class AgaviCalendar
 	 * @param      int    The value to be set for the given time field.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function set1($field, $value)
@@ -1403,7 +1416,7 @@ abstract class AgaviCalendar
 		$this->fFields[$field]    = $value;
 		$this->fStamp[$field]     = $this->fNextStamp++;
 		$this->fIsSet[$field]     = true; // Remove later
-		$this->fIsTimeSet = $this->fAreFieldsSet = $this->fAreFieldsVirtuallySet = false;
+		$this->fIsTimeSet = $this->fAreFieldsInSync = $this->fAreFieldsVirtuallySet = false;
 
 	}
 
@@ -1417,7 +1430,7 @@ abstract class AgaviCalendar
 	 * @param      int The value used to set the DATE time field.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function set2($year, $month, $date)
@@ -1440,7 +1453,7 @@ abstract class AgaviCalendar
 	 * @param      int The value used to set the MINUTE time field.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function set3($year, $month, $date, $hour, $minute)
@@ -1466,7 +1479,7 @@ abstract class AgaviCalendar
 	 * @param      int The value used to set the SECOND time field.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function set4($year, $month, $date, $hour, $minute, $second)
@@ -1483,7 +1496,7 @@ abstract class AgaviCalendar
 	 * TODO: describe overload bla
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function clear()
@@ -1507,7 +1520,7 @@ abstract class AgaviCalendar
 	 * the next resolving of time into time fields.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function clear1()
@@ -1517,7 +1530,7 @@ abstract class AgaviCalendar
 			$this->fStamp[$i]      = self::kUnset;
 			$this->fIsSet[$i]      = false; // Remove later
 		}
-		$this->fIsTimeSet = $this->fAreFieldsSet = $this->fAreAllFieldsSet = $this->fAreFieldsVirtuallySet = false;
+		$this->fIsTimeSet = $this->fAreFieldsInSync = $this->fAreAllFieldsSet = $this->fAreFieldsVirtuallySet = false;
 		// fTime is not 'cleared' - may be used if no fields are set.
 	}
 
@@ -1529,7 +1542,7 @@ abstract class AgaviCalendar
 	 * @param      string The time field to be cleared.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function clear2($field)
@@ -1540,14 +1553,14 @@ abstract class AgaviCalendar
 		$this->fFields[$field]        = 0;
 		$this->fStamp[$field]         = self::kUnset;
 		$this->fIsSet[$field]         = false; // Remove later
-		$this->fIsTimeSet = $this->fAreFieldsSet = $this->fAreAllFieldsSet = $this->fAreFieldsVirtuallySet = false;
+		$this->fIsTimeSet = $this->fAreFieldsInSync = $this->fAreAllFieldsSet = $this->fAreFieldsVirtuallySet = false;
 	}
 
 	/**
 	 * Converts Calendar's time field values to GMT as milliseconds.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	protected function computeTime()
@@ -1605,7 +1618,7 @@ abstract class AgaviCalendar
 	 * the fields, use the method complete().
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	protected function computeFields()
@@ -1712,7 +1725,7 @@ abstract class AgaviCalendar
 	 * @return     double the current time as UTC milliseconds from the epoch.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	protected function getTimeInMillis()
@@ -1730,7 +1743,7 @@ abstract class AgaviCalendar
 	 * @param      double the new time in UTC milliseconds from the epoch.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	protected function setTimeInMillis($millis)
@@ -1742,7 +1755,7 @@ abstract class AgaviCalendar
 		}
 		
 		$this->fTime = $millis;
-		$this->fAreFieldsSet = $this->fAreAllFieldsSet = false;
+		$this->fAreFieldsInSync = $this->fAreAllFieldsSet = false;
 		$this->fIsTimeSet = $this->fAreFieldsVirtuallySet = true;
 	}
 
@@ -1751,7 +1764,7 @@ abstract class AgaviCalendar
 	 * any unset fields in the time field list.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	protected function complete()
@@ -1760,10 +1773,10 @@ abstract class AgaviCalendar
 			$this->updateTime();
 		}
 
-		if(!$this->fAreFieldsSet) {
+		if(!$this->fAreFieldsInSync) {
 			$this->computeFields(); // fills in unset fields
 
-			$this->fAreFieldsSet        = true;
+			$this->fAreFieldsInSync        = true;
 			$this->fAreAllFieldsSet     = true;
 		}
 	}
@@ -1778,7 +1791,7 @@ abstract class AgaviCalendar
 	 * @return     int    The value for the given time field.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	protected function internalGet($field, $defaultValue = null)
@@ -1788,14 +1801,14 @@ abstract class AgaviCalendar
 
 	/**
 	 * Sets the value for a given time field.  This is a fast internal method for
-	 * subclasses.  It does not affect the areFieldsInSync, isTimeSet, or 
+	 * subclasses.  It does not affect the fAreFieldsInSync, isTimeSet, or 
 	 * areAllFieldsSet flags.
 	 *
 	 * @param      string The given time field.
 	 * @param      int    The value for the given time field.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	protected function internalSet($field, $value)
@@ -1814,7 +1827,7 @@ abstract class AgaviCalendar
 	 * @param      bool   
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	protected function prepareGetActual($field, $isMinimum)
@@ -1887,7 +1900,7 @@ abstract class AgaviCalendar
 	 * @return     int 
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	protected abstract function handleGetLimit($field, $limitType);
@@ -1903,7 +1916,7 @@ abstract class AgaviCalendar
 	 * @return     int  
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	protected function getLimit($field, $limitType)
@@ -1943,7 +1956,7 @@ abstract class AgaviCalendar
 	 *                  day of the given month and year
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	protected abstract function handleComputeMonthStart($eyear, $month, $useMonth);
@@ -1955,7 +1968,7 @@ abstract class AgaviCalendar
 	 * implementation than the default implementation in Calendar.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	protected function handleGetMonthLength($extendedYear, $month)
@@ -1971,7 +1984,7 @@ abstract class AgaviCalendar
 	 * default implementation in Calendar.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	protected function handleGetYearLength($eyear)
@@ -1989,7 +2002,7 @@ abstract class AgaviCalendar
 	 * @return     int the extended year
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	protected abstract function handleGetExtendedYear();
@@ -2004,7 +2017,7 @@ abstract class AgaviCalendar
 	 * @return     int    julian day specified by calendar fields.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	protected function handleComputeJulianDay($bestField)
@@ -2188,7 +2201,7 @@ abstract class AgaviCalendar
 	 * @return     int the extended year, UCAL_EXTENDED_YEAR
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	protected function handleGetExtendedYearFromWeekFields($yearWoy, $woy)
@@ -2315,7 +2328,7 @@ abstract class AgaviCalendar
 	 * @return     int the julian day
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	protected function computeJulianDay()
@@ -2353,7 +2366,7 @@ abstract class AgaviCalendar
 	 * @return     int The milliseconds in the day
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	protected function computeMillisInDay()
@@ -2405,7 +2418,7 @@ abstract class AgaviCalendar
 	 * @return     int    
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	protected function computeZoneOffset($millis, $millisInDay)
@@ -2431,7 +2444,7 @@ abstract class AgaviCalendar
 	 * @return     int    the stamp value of the best stamp
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	protected function newestStamp($first, $last, $bestStampSoFar)
@@ -2451,7 +2464,7 @@ abstract class AgaviCalendar
 	 * @internal
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	static $kDatePrecedence = array(
@@ -2494,7 +2507,7 @@ abstract class AgaviCalendar
 	 * @internal
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	protected static $kYearPrecedence = array(
@@ -2515,7 +2528,7 @@ abstract class AgaviCalendar
 	 * @internal
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	protected static $kDOWPrecedence = array(
@@ -2561,7 +2574,7 @@ abstract class AgaviCalendar
 	 * @return     int   the best field
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	protected function resolveFields($precedenceTable)
@@ -2599,7 +2612,7 @@ abstract class AgaviCalendar
 	 * @return     array
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	protected function getFieldResolutionTable()
@@ -2618,7 +2631,7 @@ abstract class AgaviCalendar
 	 * @return     int
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	protected function newerField($defaultField, $alternateField)
@@ -2640,7 +2653,7 @@ abstract class AgaviCalendar
 	 * @return     int    
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	protected function getActualHelper($field, $startValue, $endValue)
@@ -2682,17 +2695,13 @@ abstract class AgaviCalendar
 	 */
 	protected $fIsTimeSet = false;
 
-	// TODO: rename to areFieldsInSync
 	/**
 	 * @var        bool True if the fields are in sync with the currently set time
 	 *                  of this Calendar. If false, then the next attempt to get 
 	 *                  the value of a field will force a recomputation of all 
 	 *                  fields from the current value of the time field.
-	 * <P>
-	 * This should really be named areFieldsInSync, but the old name is retained
-	 * for backward compatibility.
 	 */
-	protected $fAreFieldsSet = false;
+	protected $fAreFieldsInSync = false;
 
 	/**
 	 * @var        bool True if all of the fields have been set.  This is 
@@ -2715,7 +2724,7 @@ abstract class AgaviCalendar
 	 * @return     float the current time without recomputing.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	protected function internalGetTime()
@@ -2729,7 +2738,7 @@ abstract class AgaviCalendar
 	 * @param      float The time to be set
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	protected function internalSetTime($time)
@@ -2750,7 +2759,7 @@ abstract class AgaviCalendar
 	 * @deprecated ICU 2.8 use (fStamp[n]!=kUnset)
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	protected $fIsSet;
@@ -2758,7 +2767,7 @@ abstract class AgaviCalendar
 	/** Special values of stamp[]
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	const kUnset                 = 0;
@@ -2800,7 +2809,7 @@ abstract class AgaviCalendar
 	 * @param      int The julian day
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	protected function handleComputeFields($julianDay)
@@ -2828,7 +2837,7 @@ abstract class AgaviCalendar
 	 * @return     int The gregorian year
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	protected function getGregorianYear()
@@ -2845,7 +2854,7 @@ abstract class AgaviCalendar
 	 * @return     int The gregorian month
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	protected function getGregorianMonth()
@@ -2862,7 +2871,7 @@ abstract class AgaviCalendar
 	 * @return     int The gregorian day of year
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	protected function getGregorianDayOfYear()
@@ -2879,7 +2888,7 @@ abstract class AgaviCalendar
 	 * @return     int The gregorian day of month
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	protected function getGregorianDayOfMonth()
@@ -2895,7 +2904,7 @@ abstract class AgaviCalendar
 	 * @return     int The default month for the year.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	protected function getDefaultMonthInYear()
@@ -2914,7 +2923,7 @@ abstract class AgaviCalendar
 	 * @return     int The default day for the month
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	protected function getDefaultDayInMonth($month)
@@ -2955,7 +2964,7 @@ abstract class AgaviCalendar
 	 * @see        getActualMaximum
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	protected function pinField($field)
@@ -3014,7 +3023,7 @@ abstract class AgaviCalendar
 	 *                 is more than one.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	protected function weekNumber1($desiredDay, $dayOfPeriod, $dayOfWeek)
@@ -3075,7 +3084,7 @@ abstract class AgaviCalendar
 	 * @internal
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	protected function weekNumber($dayOfPeriod, $dayOfWeek)
@@ -3090,7 +3099,7 @@ abstract class AgaviCalendar
 	 * @return     int
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	protected function getLocalDOW()
@@ -3147,15 +3156,11 @@ abstract class AgaviCalendar
 	 * a Calendar is constructed.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	private $fFirstDayOfWeek;
 	private $fMinimalDaysInFirstWeek;
-/*
-	UCalendarDaysOfWeek fFirstDayOfWeek;
-	uint8_t     fMinimalDaysInFirstWeek;
-*/
 
 	/**
 	 * Sets firstDayOfWeek and minimalDaysInFirstWeek. Called at Calendar construction
@@ -3166,7 +3171,7 @@ abstract class AgaviCalendar
 	 *                         buddhist, etc.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	private function setWeekCountData($desiredLocale, $type)
@@ -3180,35 +3185,17 @@ abstract class AgaviCalendar
 		//   }
 		//   Both have a range of 1..7
 
-
 		$this->fFirstDayOfWeek = AgaviDateDefinitions::SUNDAY;
 		$this->fMinimalDaysInFirstWeek = 1;
 
-/*
-// TODO: use agavi stuff
-		CalendarData calData(desiredLocale, type, status);
-		// If the resource data doesn't seem to be present at all, then use last-resort
-		// hard-coded data.
-		UResourceBundle *dateTimeElements = calData.getByKey(gDateTimeElements);
-
-		U_LOCALE_BASED(locBased, *this);
-		locBased.setLocaleIDs(ures_getLocaleByType(dateTimeElements, ULOC_VALID_LOCALE, &status),
-			ures_getLocaleByType(dateTimeElements, ULOC_ACTUAL_LOCALE, &status));
-		if(U_SUCCESS(status)) {
-			int32_t arrLen;
-			const int32_t *dateTimeElementsArr = ures_getIntVector(dateTimeElements, &arrLen, &status);
-
-			if(U_SUCCESS(status) && arrLen == 2
-					&& 1 <= dateTimeElementsArr[0] && dateTimeElementsArr[0] <= 7
-					&& 1 <= dateTimeElementsArr[1] && dateTimeElementsArr[1] <= 7) {
-				fFirstDayOfWeek = (UCalendarDaysOfWeek)dateTimeElementsArr[0];
-				fMinimalDaysInFirstWeek = (uint8_t)dateTimeElementsArr[1];
-			} else {
-				status = U_INVALID_FORMAT_ERROR;
-			}
+		$tm = $desiredLocale->getContext()->getTranslationManager();
+		$cdata = $tm->getTerritoryData($desiredLocale->getLocaleTerritory());
+		if(isset($cdata['week']['firstDay'])) {
+			$this->fFirstDayOfWeek = (int) $cdata['week']['firstDay'];
 		}
-*/
-		// do NOT close dateTimeElements
+		if(isset($cdata['week']['minDays'])) {
+			$this->fMinimalDaysInFirstWeek = (int) $cdata['week']['minDays'];
+		}
 	}
 
 	/**
@@ -3217,7 +3204,7 @@ abstract class AgaviCalendar
 	 * call this method if isTimeSet is false.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	private function updateTime()
@@ -3228,7 +3215,7 @@ abstract class AgaviCalendar
 		// the values.  Also, if we haven't set all the fields yet (i.e.,
 		// in a newly-created object), we need to fill in the fields. [LIU]
 		if($this->isLenient() || ! $this->fAreAllFieldsSet) 
-			$this->fAreFieldsSet = false;
+			$this->fAreFieldsInSync = false;
 
 		$this->fIsTimeSet = true;
 		$this->fAreFieldsVirtuallySet = false;
@@ -3272,7 +3259,7 @@ abstract class AgaviCalendar
 	 * @param      int The julian day
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	private function computeGregorianAndDOWFields($julianDay)
@@ -3305,7 +3292,7 @@ abstract class AgaviCalendar
 	 * @param      int The julian day
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	private function computeGregorianFields($julianDay)
@@ -3335,7 +3322,7 @@ abstract class AgaviCalendar
 	 * proleptic Gregorian calendar, which has no field larger than a year.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	private function computeWeekFields()
@@ -3413,7 +3400,7 @@ abstract class AgaviCalendar
 	 * @internal
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	private function validateFields()
@@ -3436,7 +3423,7 @@ abstract class AgaviCalendar
 	 * @param      string The field
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	private function validateField($field)
@@ -3476,7 +3463,7 @@ abstract class AgaviCalendar
 	 * @param      int    
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	private function validateField1($field, $min, $max)
@@ -3499,7 +3486,7 @@ abstract class AgaviCalendar
 	 * @internal
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	protected function julianDayToDayOfWeek($julian)
@@ -3530,7 +3517,7 @@ abstract class AgaviCalendar
 	 * @return     bool if this calendar has a default century (i.e. 03 -> 2003)
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public abstract function haveDefaultCentury();
@@ -3540,7 +3527,7 @@ abstract class AgaviCalendar
 	 * @return     float the start of the default century, as a UDate
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public abstract function defaultCenturyStart();
@@ -3550,10 +3537,20 @@ abstract class AgaviCalendar
 	 * @return     int the beginning year of the default century, as a year
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public abstract function defaultCenturyStartYear();
+
+	/**
+	 * Returns the type of the implementing calendar.
+	 *
+	 * @return     string The type of this calendar (gegorian, ...)
+	 * 
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public abstract function getType();
 
 }
 ?>

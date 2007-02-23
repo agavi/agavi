@@ -1,0 +1,24 @@
+Extended Propel builder classes for Agavi
+
+These work with Propel 1.3 and will then enable the following:
+
+- fetching of singleton peer instance via getModel
+- creating object instances via getModel
+- context available everywhere
+- even in those objects returned by doSelect etc
+
+Usage:
+
+in build.properties:
+
+propel.builder.object.class = ../../dev.om.templates.AgaviPHP5ComplexObjectBuilder
+propel.builder.peer.class = ../../dev.om.templates.AgaviPHP5ComplexPeerBuilder
+
+in code:
+
+$peer = $ctx->getModel('BookPeer');
+$book = $peer->retrieveByPK(13);
+var_dump($book->getContext()->getName());
+
+$newbook = $ctx->getModel('Book');
+var_dump($newbook->getContext()->getName());

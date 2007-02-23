@@ -29,20 +29,20 @@
       methods in Agavi (because they aren't necessary, we have something
       better, more on that later), and we use XML configuration files because
       we believe that they offer better structuring abilites than alternatives
-      such as YAML. If you're looking for a solution that assists you in
-      serious high-end development, that has smart and innovative solutions to
-      common problems that haven't been solved properly before, and that
-      encourages and enforces a clean development process to ensure your code
-      remains maintainable and extensible, you've come to the right
-      place.</para>
+      such as YAML (besides obvious benefits like XSD validation and
+      XIncludes). If you're looking for a solution that assists you in serious
+      high-end development, that has smart and innovative solutions to common
+      problems that haven't been solved properly before, and that encourages
+      and enforces a clean development process to ensure your code remains
+      maintainable and extensible, you've come to the right place.</para>
     </section>
 
     <section>
       <title>Prerequisites</title>
 
       <para>Agavi's minimum requirement is PHP version 5.1.0 or newer. DOM,
-      Reflection and SPL extensions are required, but are always enabled by
-      default, unless you're using one of these crappy Linux distros made by
+      Reflection and SPL extensions are required, but these are always enabled
+      by default, unless you're using one of these weird Linux distros made by
       "smart" people who think they know better.</para>
 
       <para><note>
@@ -149,13 +149,21 @@
         <title>From SVN</title>
 
         <para>Public access to the Subversion repository is possible via
-        <ulink
-        url="svn://svn.agavi.org/agavi">svn://svn.agavi.org/agavi</ulink>. If
-        you want to get the bleeding edge version, use
-        <filename>/agavi/trunk</filename>. Specific releases are available
-        through <filename>/agavi/tags</filename>. Also, you can get
-        development versions of version branches (if applicable) via
+        <ulink url="http://svn.agavi.org/agavi">http://svn.agavi.org/</ulink>.
+        If you want to get the bleeding edge version, use
+        <filename>/trunk</filename>. Specific releases are available through
+        <filename>/agavi/tags</filename>. Also, you can get development
+        versions of version branches (if applicable) via
         <filename>/agavi/branches</filename>.</para>
+
+        <para><note>
+            <para>Note that <filename>trunk</filename> might not always give
+            you the latest version of Agavi. For example, once 0.11 RC1 was
+            released, development moved over to
+            <filename>branches/0.11</filename>, and trunk was not maintained
+            until the final 0.11 release, when work on 1.0 started in
+            trunk.</para>
+          </note></para>
 
         <para>You can either perform an <command>svn checkout</command>, which
         creates <filename>.svn</filename> folders that allow you to stay up to
@@ -171,7 +179,7 @@
         linkend="c1-installation-by_hand" />, or you package a PEAR release
         yourself for local installation by first running</para>
 
-        <para><command>phing package</command></para>
+        <para><command>phing package-pear</command></para>
 
         <para>on the root directory of your checkout, followed by a</para>
 
@@ -391,6 +399,13 @@ if(curl_errno($ch)) {
       bundled templates if it couldn't find a specific one in the path you
       specified.</para>
 
+      <tip>
+        <para>You will often want the code templates dir to sit inside your
+        project directory. In order to avoid an absolute path in the setting,
+        you can use <code>${project.dir}</code> to refer to your project
+        directory.</para>
+      </tip>
+
       <para>Also, you can have per-module code templates. Add a
       <filename>modules</filename> directory to your code templates folder,
       and then add a new folder with the same name as the module. Now you can
@@ -490,19 +505,15 @@ if(curl_errno($ch)) {
             </listitem>
 
             <listitem>
-              <para>SessionStorage</para>
-            </listitem>
-
-            <listitem>
-              <para>ValidatorManager</para>
-            </listitem>
-
-            <listitem>
-              <para>User</para>
-            </listitem>
-
-            <listitem>
               <para>LoggerManager</para>
+            </listitem>
+
+            <listitem>
+              <para>TranslationManager</para>
+            </listitem>
+
+            <listitem>
+              <para>Storage</para>
             </listitem>
 
             <listitem>
@@ -514,14 +525,16 @@ if(curl_errno($ch)) {
             </listitem>
 
             <listitem>
+              <para>User</para>
+            </listitem>
+
+            <listitem>
               <para>Routing</para>
             </listitem>
-          </orderedlist>This means that for example a User implementation
-        cannot use <classname>LoggerManager</classname> in its
-        <function>initialize</function> method. The initialization order of
-        these framework core classes is defined in
-        <classname>AgaviFactoryConfigHandler</classname> and it cannot be
-        changed.</para>
+          </orderedlist>The initialization order of these framework core
+        classes is defined in <classname>AgaviFactoryConfigHandler</classname>
+        and it cannot be changed (unless you overwrite this configuration
+        handler, of course).</para>
       </section>
     </section>
 
@@ -535,43 +548,36 @@ if(curl_errno($ch)) {
       dispatched from the Context's Controller instance.</para>
 
       <para>The dispatch method first executes the routing (if enabled) to
-      determine the Module/Action that are to be executed. Then, a filter
-      chain containing all Global Filters is created, and the DispatchFilter
-      is added to that chain as the last element. Each filter will be called
-      in nested sequence, with the last filter being the DispatchFilter, which
-      calls the first forward to the requested Module and Action. After that,
-      the control passes back through the filters to the dispatch method,
-      which sends the Response contents and exits. Filters are given the
-      global Response as a parameter to work with, so they can modify content,
-      send Cookies and so on.</para>
+      determine the Module/Action that are to be executed. The routing returns
+      an Execution Container for the first action. Then, a filter chain
+      containing all Global Filters is created, and the DispatchFilter is
+      added to that chain as the last element. Each filter will be called in
+      nested sequence, with the last filter being the DispatchFilter, which
+      executes the first Execution Container with the requested Action. After
+      that, the control passes back through the filters to the dispatch
+      method, which sends the Response contents and exits. Filters are given
+      the global Response as a parameter to work with, so they can modify
+      content, send Cookies and so on.</para>
 
-      <para>When a forward happens, Agavi does some checks to determine if the
-      requested Module/Action exists, if the Module the Action belongs to is
-      enabled and so on. Then, a filter chain is created, with the first
-      filter being the Security Filter if security is enabled. This filter
-      will forward unauthenticated users to the default "Login Action" if a
-      requested Action requires authentication, and also prevent access of
-      Actions an user doesn't have sufficient credentials for by forwarding to
-      the default "Secure Action". After that, the Action Filters are added to
-      the chain, followed by the Action Filters defined by the Action's
-      Module. The last filter in the chain is the Execution Filter, usually
-      either AgaviExecutionFilter or AgaviCachingExecutionFilter. Again, each
-      filter in the chain is called and may do modifications to the Response
-      instance, which is a new one for each Action that is processed and will
-      be merged to the global Response by the Controller once control returns
-      to the forward method.</para>
+      <para>When an Execution Container is run, Agavi does some checks to
+      determine if the requested Module/Action exists, if the Module the
+      Action belongs to is enabled and so on. Then, a filter chain is created,
+      with the first filter being the Security Filter if security is enabled.
+      This filter will forward unauthenticated users to the default "Login
+      Action" if a requested Action requires authentication, and also prevent
+      access of Actions an user doesn't have sufficient credentials for by
+      forwarding to the default "Secure Action". After that, the Action
+      Filters are added to the chain, followed by the Action Filters defined
+      by the Action's Module. The last filter in the chain is the Execution
+      Filter. Again, each filter in the chain is called and may do
+      modifications to the Response instance, which is a new one for each
+      Action that is processed and will be merged to the global Response by
+      the Controller once control returns to the forward method.</para>
 
       <para>The Execution Filter, once reached, will handle Validation, run
       the Action (or skip execution if the Action doesn't serve the Request
       method), determine the View to execute and then execute the View and,
-      after that, start the rendering of the output by creating another filter
-      chain containing all the defined Rendering Filters and, as the last
-      element, the designated Renderer instance that will take care of
-      rendering the template. This functionality might be extended by other
-      Execution Filter implementations; for example, the
-      CachingExecutionFilter will try to load a cached version of the Action
-      and skip execution altogether if possible, resulting in a massive
-      performance increase.</para>
+      after that, start the rendering of the output.</para>
     </section>
 
     <section>
@@ -653,20 +659,34 @@ if(curl_errno($ch)) {
         <code>&lt;route&gt;</code> elements sit inside
         <code>&lt;routes&gt;</code>, <code>&lt;mouse&gt;</code> elements
         inside <code>&lt;mice&gt;</code> and so on.</para>
+
+        <para><tip>
+            <para>With the exception of the
+            <code>&lt;configurations&gt;</code> element and all plural form
+            nodes that have required attributes, you can also omit the plural
+            containers. This makes deeply nested structures a lot more
+            convenient to use, especially <xref
+            endterm="configuration-parameter_blocks-title"
+            linkend="configuration-parameter_blocks" />.</para>
+          </tip>Also, you can use a <code>&lt;sandbox&gt;</code> element
+        inside <code>&lt;configurations&gt;</code> to store XML chunks for
+        easier inclusion in the local document using XInclude.</para>
       </section>
 
-      <section>
-        <title>Parameter blocks</title>
+      <section id="configuration-parameter_blocks">
+        <title id="configuration-parameter_blocks-title">Parameter
+        Blocks</title>
 
-        <para>Many tags in configuration files accept a &lt;parameters&gt;
-        block as the child element which is usually used to specify
-        initialization arguments to the respective resource. Each
-        &lt;parameter&gt; inside the &lt;parameters&gt; container has a name,
-        specified via the attribute "name", and a value. This value can,
-        however, again be a &lt;parameters&gt; block. This inner block often
-        does not need name attributes for the &lt;parameter&gt; elements,
+        <para>Many tags in configuration files accept a
+        <code>&lt;parameters&gt;</code> block as the child element which is
+        usually used to specify initialization arguments to the respective
+        resource. Each <code>&lt;parameter&gt;</code> inside the
+        &lt;parameters&gt; container has a name, specified via the attribute
+        "name", and a value. This value can, however, again be a
+        <code>&lt;parameters&gt;</code> block. This inner block often does not
+        need name attributes for the <code>&lt;parameter&gt;</code> elements,
         because it usually is simply a list of values for the parent
-        &lt;parameter&gt;. Here's an example:</para>
+        <code>&lt;parameter&gt;</code>. Here's an example:</para>
 
         <para><programlisting>&lt;parameters&gt;
   &lt;parameter name="firstparam"&gt;a value goes here&lt;/parameter&gt;
@@ -687,9 +707,9 @@ if(curl_errno($ch)) {
         signs. <note>
             <para>The expansion of the configuration directive happens at
             compile time. This means that if you access a directive you set
-            via AgaviConfig::set before bootstrapping the value that was set
-            when compiling the configuration file will be used throughout all
-            requests.</para>
+            via <code>AgaviConfig::set()</code> before bootstrapping the value
+            that was set when compiling the configuration file will be used
+            throughout all requests.</para>
           </note>The following parameter will contain the path name of the
         project's app dir followed by "/fubar", because the directive is
         expanded before assignment:</para>
@@ -722,21 +742,22 @@ if(curl_errno($ch)) {
       <para>Before we talk about Actions and Models in Agavi let's take a
       brief look at the MVC (Model-View-Controller) paradigm. The idea behind
       MVC is that the view (a presentation layer, user interface) and the
-      model (an object, or alike, that represents some some information about
-      to domain) should be de-coupled in such a way that the model is totally
-      independent of the view. In MVC this is achieved by putting a controller
-      between these two.</para>
+      model (an object, or alike, that represents some information about your
+      application domain) should be de-coupled in such a way that the model is
+      totally independent of the view. In MVC this is achieved by putting a
+      controller between these two (this is not entirely accurate and in any
+      case a simplification but we don't go into that).</para>
 
       <para>When looking at Agavi's classes it's easy to see what's the view
       part and where's the controller. Models are of course your own classes
       although they can derive from an AgaviModel class. But where do Actions
-      stand in this scheme? Orthodoxly they are a piece of the controller but
-      Agavi's Actions can be seen as the glue between the model and the
-      controller. The Controller decides what Action to trigger and after that
-      it's up to the Action to execute the proper domain logic. Some trivial
-      domain logic can reside in the action but to keep your application in
-      accordance with MVC the actual model part of your design should be
-      separated from the action.</para>
+      stand in this scheme? Orthodoxly they are a piece of the controller (or,
+      some could argue, the controller itself) but Agavi's Actions can be seen
+      as the glue between the model and the controller. The Controller decides
+      what Action to trigger and after that it's up to the Action to execute
+      the proper domain logic. Some trivial domain logic can reside in the
+      action but to keep your application in accordance with MVC the actual
+      model part of your design should be separated from the action.</para>
 
       <note>
         <para>Understanding the idea and the value of MVC is essential in all
@@ -782,8 +803,8 @@ if(curl_errno($ch)) {
 $myDog = $this-&gt;getContext()-&gt;getModel('Dog', 'Dogs', array('name'=&gt;'Nelli', 'breed'=&gt;'Novascotian retriever'));
 
 /* class SinglesBar implements AgaviISingletonModel */
-$model = $this-&gt;getContext()-&gt;getModel('SinglesBar'); //loads and initializes the model.
-$model2 = $this-&gt;getContext()-&gt;getModel('SinglesBar'); //return the same instance of SinglesBar as the line above.</programlisting>
+$bar1 = $this-&gt;getContext()-&gt;getModel('SinglesBar'); //loads and initializes the model.
+$bar2 = $this-&gt;getContext()-&gt;getModel('SinglesBar'); //returns the same instance of SinglesBar as the line above.</programlisting>
       </section>
 
       <section>
@@ -801,6 +822,12 @@ $model2 = $this-&gt;getContext()-&gt;getModel('SinglesBar'); //return the same i
 
       <para>views: execution, execution methods, where you set the output type
       (initialize at the latest)</para>
+
+      <para>layouts: how to define, how to load</para>
+
+      <para>layers: what they do, how they work</para>
+
+      <para>slots: blah</para>
 
       <para>templates and renderers: engines, variable naming etc</para>
     </section>
@@ -840,6 +867,205 @@ $model2 = $this-&gt;getContext()-&gt;getModel('SinglesBar'); //return the same i
     </section>
 
     <section>
+      <title>Internationalization</title>
+
+      <para>The i18n and l10n support in Agavi provides you with tools which
+      help you to easily make your application available to different
+      cultures. When internationalizing your application there are many things
+      to take care of. The <ulink url="http://en.wikipedia.org/wiki/I18N">I18N
+      page at Wikipedia</ulink> contains a list of what needs to be taken care
+      about. Agavi provides you an easy to use solution to most<footnote>
+          <para>Agavi currently helps you with the following
+          items:<itemizedlist>
+              <listitem>
+                <para>Language translation (text strings, entire
+                templates)</para>
+              </listitem>
+
+              <listitem>
+                <para>Formatting date and time</para>
+              </listitem>
+
+              <listitem>
+                <para>Formatting of numbers and currencies</para>
+              </listitem>
+
+              <listitem>
+                <para>Time zone support</para>
+              </listitem>
+
+              <listitem>
+                <para>Localized territory, country, language and currency
+                names</para>
+              </listitem>
+            </itemizedlist></para>
+        </footnote> of these points. Agavi can support these features because
+      we are bundling the <ulink url="http://www.unicode.org/cldr/">Unicode
+      Common Locale Data Repository</ulink> (CLDR) and the <ulink
+      url="www.twinsun.com/tz/tz-link.htm">"Olson" timezone database</ulink>
+      and making it available to applications. Agavi additionally includes a
+      port of the calendar functionality from the <ulink
+      url="http://icu.sourceforge.net">ICU project</ulink> which allows you to
+      handle and calculate with date and time in millisecond precision from
+      about 50000 BC to 50000 AD.</para>
+
+      <para>To distinguish between the different settings for each culture
+      Agavi uses the notion of locales. Each locale is uniquely defined by a
+      locale identifier (as defined in the <ulink
+      url="http://www.unicode.org/reports/tr35/#Identifiers">LDML
+      definition</ulink>). You can only access these locales which are <link
+      linkend="reference-translation-define_available_locales">defined as
+      being available to your application</link>. Before using any of the
+      <link linkend="reference-translation-translation_methods">translation
+      related methods</link> of the
+      <classname>AgaviTranslationManager</classname> you need to <link
+      linkend="reference-translation-set_current_locale">specify the currently
+      active locale</link> and at least one translation domain defining your
+      message translator and optionally a different number/currency/date
+      formatter or options to them. Currently Agavi only supports the
+      definition of translation strings by using <ulink
+      url="http://www.gnu.org/software/gettext/">gettext</ulink> as message
+      translator (This doesn't use the gettext functionaly of PHP tho, but a
+      custom parser for the .mo format used by gettext) but you can easily
+      <link linkend="reference-translation-custom_message_translators">write
+      your own custom message translators</link>.</para>
+
+      <section>
+        <title>translation domains?!</title>
+
+        <para>Translation domains allow you to define different translators or
+        different formats for the formatters. This allows you to define one
+        domain which would read the translation messages from the database and
+        another to read it from gettext. Or you can define different formats
+        which you want to use when formatting or parsing dates.<note>
+            <para>This should not be confused with gettexts text
+            domains!</para>
+          </note></para>
+      </section>
+
+      <section>
+        <title>Lets get started</title>
+
+        <para>To use the translation you have to enable
+        <code>use_translation</code> in your <filename>settings.xml</filename>
+        and set up your translation.xml.<example>
+            <title>translation.xml</title>
+
+            <para><programlisting>&lt;configurations&gt;
+ &lt;configuration&gt;
+  &lt;available_locales default_locale="en_US" default_timezone="Europe/London"&gt;
+   &lt;!-- English, United States --&gt;
+   &lt;available_locale identifier="en_US" /&gt;
+   &lt;!-- German, Germany and set the default currency to US Dollar --&gt;
+   &lt;available_locale identifier="de_DE@currency=USD" /&gt;
+  &lt;/available_locales&gt;
+
+  &lt;translators default_domain="frontend"&gt;
+
+   &lt;translator domain="frontend"&gt;
+    &lt;message_translator class="AgaviGettextTranslator"&gt;
+     &lt;!-- This would look for the gettext domain files in gettext compatible way --&gt;
+     &lt;parameter name="text_domain_pattern"&gt;%core.app_dir%/locales/frontend/${locale}/LC_MESSAGES/${domain}.mo&lt;/parameter&gt;
+    &lt;/message_translator&gt;
+   &lt;/translator&gt;
+
+   &lt;translator domain="backend"&gt;
+    &lt;message_translator class="AgaviGettextTranslator"&gt;
+     &lt;parameter name="text_domain_pattern"&gt;%core.app_dir%/locales/backend/${locale}/LC_MESSAGES/${domain}.mo&lt;/parameter&gt;
+    &lt;/message_translator&gt;
+
+    &lt;date_formatter&gt;
+     &lt;parameter name="format"&gt;full&lt;/parameter&gt;
+    &lt;/date_formatter&gt;
+   &lt;/translator&gt;
+  &lt;/translators&gt;
+ &lt;/configuration&gt;
+&lt;/configurations&gt;</programlisting>That this example defines 2 locales as
+            being available and "en_US" being the default locale should be
+            obvious. The not so ovious part is the "@currency=USD": you can
+            specify default options which will be used when the locale was
+            requested and the option was not set when the locale was
+            requested. You can also give parameters to the locales to set
+            extended information which can be <emphasis>queried</emphasis>
+            without loading the locale or <link
+            linkend="reference-translation-overwrite_cldr_data">overwrite the
+            cldr data</link> (not shown here).</para>
+
+            <para>The slightly larger block of the file defines 2 translation
+            domains: frontend (the default one) and backend. Both translators
+            are using the gettext implementation. The parameters differ for
+            each message translator implementation. To use the formatters with
+            the default format of each locale you don't have to configure
+            anything.</para>
+          </example>When everything is configured you can start using the the
+        _*() methods of the <classname>AgaviTranslationManager</classname>.
+        For the examples assume <varname>$tm</varname> is the
+        <classname>AgaviTranslationManager</classname> instance and
+        <code>de_DE</code> the current locale.<example>
+            <title>Translation message strings</title>
+
+            <para><programlisting>$tm-&gt;_('Your Message');
+#&gt; Deine Nachricht (default translation domain)
+
+$tm-&gt;_('%s said: I am your father %s!', 'backend', null, array('Darth Vader', 'Luke'));
+#&gt; Darth Vader sagte: Ich bin dein Vater Luke!
+
+$tm-&gt;_('Your Message', null, 'en_US');
+#&gt; Your Message
+
+$tm-&gt;__('%d registered user', '%d registered users', 3, 'backend', 'en_US', array(3));
+#&gt; 3 registered users</programlisting></para>
+          </example><example>
+            <title>Formatting currencies and numbers</title>
+
+            <para><programlisting>$tm-&gt;_c(5000);
+#&gt; 5.000,00 $
+
+$tm-&gt;_c(5000.12345);
+#&gt; 5.000,12 $
+
+$tm-&gt;_c('12345678901234567890.98765');
+#&gt; 12.345.678.901.234.567.890,99 $
+
+$tm-&gt;_c(5000.12345, null, 'en_US@currency=EUR');
+#&gt; €5,000.12
+
+$tm-&gt;_n(5000.00);
+#&gt; 5.000
+
+$tm-&gt;_n(5000.12345);
+#&gt; 5.000,12345
+
+$tm-&gt;_n("12345678901234567890.98765", 'backend', 'en_US');
+#&gt; 12,345,678,901,234,567,890.98765</programlisting></para>
+          </example><example>
+            <title>Formatting dates</title>
+
+            <para><programlisting>$tm-&gt;_d(time());
+#&gt; 08.12.2006 07:42:43
+
+$tm-&gt;_d(time(), null, 'en_US');
+#&gt; Dec 8, 2006 7:42:43 AM
+
+$tm-&gt;_d(time(), 'backend');
+#&gt; Freitag, 8. Dezember 2006 7:42 Uhr MEZ
+
+$tm-&gt;_d(time(), 'backend', '@timezone=Europe/London');
+#&gt; Freitag, 8. Dezember 2006 6:42 Uhr GMT+00:00
+
+$tm-&gt;_d(time(), 'backend', 'en_US@timezone=Europe/London');
+&gt;# Friday, December 8, 2006 6:42:43 AM Europe/London</programlisting></para>
+          </example></para>
+      </section>
+
+      <section>
+        <title></title>
+
+        <para></para>
+      </section>
+    </section>
+
+    <section>
       <title>Databases</title>
 
       <para>how to retrieve a connection, why do it using the framework,
@@ -860,7 +1086,76 @@ $model2 = $this-&gt;getContext()-&gt;getModel('SinglesBar'); //return the same i
     <section>
       <title>Action</title>
 
-      <para></para>
+      <para><variablelist>
+          <varlistentry>
+            <term>Naming</term>
+
+            <listitem>
+              <para><classname>[ModuleName_][SubSection_]NameAction</classname></para>
+
+              <para>Example:
+              <classname>MyModule_Sub_EditAction</classname></para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Execute Methods</term>
+
+            <listitem>
+              <para><methodname>execute[Method](AgaviParameterHolder
+              parameters)</methodname></para>
+
+              <para>Agavi tries to use the execute method specific to the
+              current request method (e.g.
+              <methodname>executeRead</methodname> or
+              <methodname>executeWrite</methodname>). If such a method is not
+              defined by the current action a generic execute is used. If that
+              doesn't exist either execution and validation is skiped and the
+              default view (returned by
+              <methodname>getDefaultViewName()</methodname>) is used.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Validation Methods</term>
+
+            <listitem>
+              <para><methodname>register[Method]Validators(AgaviValidatorManager
+              validatorManager)</methodname></para>
+
+              <para></para>
+
+              <para><methodname>validate[Method](AgaviParameterHolder
+              parameters)</methodname></para>
+
+              <para></para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Error Handlers</term>
+
+            <listitem>
+              <para></para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Default View Name</term>
+
+            <listitem>
+              <para></para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Request Parameters</term>
+
+            <listitem>
+              <para></para>
+            </listitem>
+          </varlistentry>
+        </variablelist></para>
     </section>
 
     <section>
@@ -949,6 +1244,36 @@ $model2 = $this-&gt;getContext()-&gt;getModel('SinglesBar'); //return the same i
       <section>
         <title id="ref_translation_configuration">Configuration via
         translation.xml</title>
+
+        <para></para>
+      </section>
+
+      <section id="reference-translation-define_available_locales">
+        <title>Defining available locales</title>
+
+        <para></para>
+      </section>
+
+      <section id="reference-translation-set_current_locale">
+        <title>Setting the current locale</title>
+
+        <para></para>
+      </section>
+
+      <section id="reference-translation-translation_methods">
+        <title>Methods being used for translation</title>
+
+        <para></para>
+      </section>
+
+      <section id="reference-translation-custom_message_translators">
+        <title>Writing custom message translators</title>
+
+        <para></para>
+      </section>
+
+      <section id="reference-translation-overwrite_cldr_data">
+        <title>Overwriting the data from the CLDR</title>
 
         <para></para>
       </section>
@@ -1103,8 +1428,8 @@ $model2 = $this-&gt;getContext()-&gt;getModel('SinglesBar'); //return the same i
                 <term>factories.xml</term>
 
                 <listitem>
-                  <para>action_stack, controller, database_manager,
-                  dispatch_filter, execution_filter, filter_chain,
+                  <para>controller, database_manager, dispatch_filter
+                  execution_container, execution_filter, filter_chain,
                   logger_manager, request, response, routing, security_filter,
                   storage, translation_manager, user, validator_manager</para>
                 </listitem>
@@ -1335,7 +1660,7 @@ $model2 = $this-&gt;getContext()-&gt;getModel('SinglesBar'); //return the same i
  &lt;configuration&gt;
 
   &lt;handlers&gt;
-   &lt;handler pattern="%core.module_dir%/*/config/rendering_filters.xml" validate="%core.agavi_dir%/config/xsd/filters.xsd" class="AgaviFilterConfigHandler" /&gt;
+   &lt;handler pattern="%core.module_dir%/*/config/action_filters.xml" validate="%core.agavi_dir%/config/xsd/filters.xsd" class="AgaviFilterConfigHandler" /&gt;
    &lt;handler pattern="%core.module_dir%/*/config/module.xml" validate="%core.agavi_dir%/config/xsd/module.xsd" class="AgaviModuleConfigHandler" /&gt;
    &lt;handler pattern="%core.module_dir%/*/validate/*.xml" class="AgaviValidatorConfigHandler" /&gt;
   &lt;/handlers&gt;
@@ -1544,13 +1869,13 @@ $model2 = $this-&gt;getContext()-&gt;getModel('SinglesBar'); //return the same i
         <title>&lt;*&gt;</title>
 
         <para>Available elements are <simplelist type="inline">
-            <member>"action_stack"</member>
-
             <member>"controller"</member>
 
             <member>"database_manager"</member>
 
             <member>"dispatch_filter"</member>
+
+            <member>"execution_container"</member>
 
             <member>"execution_filter"</member>
 
@@ -1602,11 +1927,10 @@ $model2 = $this-&gt;getContext()-&gt;getModel('SinglesBar'); //return the same i
     <section id="reference-configuration_tags-filterhandler">
       <title>FilterConfigHandler Tags (*_filters.xml)</title>
 
-      <para>You may use <filename>action_filters.xml</filename>,
-      <filename>global_filters.xml</filename> and
-      <filename>rendering_filters.xml</filename> to configure Action, global
-      or rendering filters. Action and rendering filters may also be specified
-      on a per-module basis by putting them into the
+      <para>You may use <filename>action_filters.xml</filename> and
+      <filename>global_filters.xml</filename> to configure filters that wrap
+      either the global execution flow or individual actions. Action filters
+      may also be specified on a per-module basis by putting them into the
       <filename>app/modules/ModuleName/config/</filename> folder.</para>
 
       <section id="reference-configuration_tags-filterhandler_filters">

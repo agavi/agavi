@@ -10,7 +10,7 @@ class LoggingTests
 {
 	public static function suite()
 	{
-		$suite = new PHPUnit2_Framework_TestSuite('logging');
+		$suite = new PHPUnit_Framework_TestSuite('logging');
 
 		$suite->addTestSuite('AppenderTest');
 		$suite->addTestSuite('FileAppenderTest');

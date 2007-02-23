@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<configurations>
+	<configuration>
+		
+		<cachings>
+			
+			<caching method="read" lifetime="2 hours">
+				
+				<group>asdf</group>
+				<group source="request_parameter">name</group>
+				<group source="locale" />
+				
+				<view>Success</view>
+				
+				<output_type name="html">
+					
+					<layer name="decorator">
+						<slot>menu</slot>
+					</layer>
+					
+					<template_variable>title</template_variable>
+					
+				</output_type>
+				
+			</caching>
+			
+		</cachings>
+		
+	</configuration>
+</configurations>

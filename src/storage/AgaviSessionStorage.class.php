@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
@@ -37,8 +37,10 @@
  * @subpackage storage
  *
  * @author     Sean Kerr <skerr@mojavi.org>
- * @author     Veikko Makinen <mail@veikkomakinen.com>
- * @copyright  (c) Authors
+ * @author     Veikko Mäkinen <mail@veikkomakinen.com>
+ * @copyright  Authors
+ * @copyright  The Agavi Project
+ *
  * @since      0.9.0
  *
  * @version    $Id$
@@ -46,65 +48,64 @@
 class AgaviSessionStorage extends AgaviStorage
 {
 	/**
-	 * Initialize this Storage.
-	 *
-	 * @param      AgaviContext An AgaviContext instance.
-	 * @param      array        An associative array of initialization parameters.
-	 *
-	 * @throws     <b>AgaviInitializationException</b> If an error occurs while
-	 *                                                 initializing this Storage.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @author     Veikko Makinen <mail@veikkomakinen.com>
-	 * @since      0.9.0
-	 */
-	public function initialize(AgaviContext $context, array $parameters = array())
-	{
-		parent::initialize($context, $parameters);
-
-		$sessionName = $this->getParameter('session_name', 'Agavi');
-		session_name($sessionName);
-
-		if($sessionId = $this->getParameter('session_id')) {
-			session_id($sessionId);
-		}
-		
-		$cookieDefaults = session_get_cookie_params();
-		$lifetime = $this->getParameter('session_cookie_lifetime', $cookieDefaults['lifetime']);
-		$path     = $this->getParameter('session_cookie_path', $cookieDefaults['path']);
-		$domain   = $this->getParameter('session_cookie_domain', $cookieDefaults['domain']);
-		$secure   = (bool) $this->getParameter('session_cookie_secure', $cookieDefaults['secure']);
-
-		if(version_compare(phpversion(), '5.2', 'ge')) {
-			$httpOnly = $this->getParameter('session_cookie_httponly', $cookieDefaults['httponly']);
-			session_set_cookie_params($lifetime, $path, $domain, $secure, $httpOnly);
-		} else {
-			session_set_cookie_params($lifetime, $path, $domain, $secure);
-		}
-	}
-
-	/**
-	 * Starts a session unless a session has already been started.
-	 * The method will be called after initialization if auto_start is true.
-	 * If auto_start is false, this method must be called manually.
+	 * Starts the session.
+	 * The method must be called after initialize().
 	 * This code cannot be run in initialize(), because initialization has to
 	 * finish completely, for all instances, before a session can be created:
 	 * A Database Session Storage must initialize the parent, then itself, and
 	 * may only then call startup() to auto-start the session.
+	 * Also, the routing must be fully initialized, too.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @author     Veikko Mäkinen <mail@veikkomakinen.com>
 	 * @since      0.11.0
 	 */
 	public function startup()
 	{
+		session_name($this->getParameter('session_name', 'Agavi'));
+		
+		if($this->hasParameter('session_id')) {
+			session_id($this->getParameter('session_id'));
+		}
+		
 		if(session_id() === '') {
+			$cookieDefaults = session_get_cookie_params();
+			
+			$routing = $this->context->getRouting();
+			if($routing instanceof AgaviWebRouting) {
+				// set path to true if the default path from php.ini is "/". this will, in startup(), trigger the base href as the path.
+				if($cookieDefaults['path'] == '/') {
+					$cookieDefaults['path'] = true;
+				}
+			}
+			
+			$lifetime = $this->getParameter('session_cookie_lifetime', $cookieDefaults['lifetime']);
+			if(is_numeric($lifetime)) {
+				$lifetime = (int) $lifetime;
+			} else {
+				$lifetime = strtotime($lifetime, 0);
+			}
+			$path = $this->getParameter('session_cookie_path', $cookieDefaults['path']);
+			if($path === true) {
+				$path = $this->context->getRouting()->getBasePath();
+			}
+			$domain = $this->getParameter('session_cookie_domain', $cookieDefaults['domain']);
+			$secure = (bool) $this->getParameter('session_cookie_secure', $cookieDefaults['secure']);
+			
+			if(version_compare(phpversion(), '5.2', 'ge')) {
+				$httpOnly = (bool) $this->getParameter('session_cookie_httponly', $cookieDefaults['httponly']);
+				session_set_cookie_params($lifetime, $path, $domain, $secure, $httpOnly);
+			} else {
+				session_set_cookie_params($lifetime, $path, $domain, $secure);
+			}
+			
 			session_start();
-			$params = session_get_cookie_params();
-			if($params['lifetime'] != 0) {
+			
+			if($lifetime !== 0) {
 				if(version_compare(phpversion(), '5.2', 'ge')) {
-					setcookie(session_name(), session_id(), time() + $params['lifetime'], $params['path'], $params['domain'], $params['secure'], $params['httponly']);
+					setcookie(session_name(), session_id(), time() + $lifetime, $path, $domain, $secure, $httpOnly);
 				} else {
-					setcookie(session_name(), session_id(), time() + $params['lifetime'], $params['path'], $params['domain'], $params['secure']);
+					setcookie(session_name(), session_id(), time() + $lifetime, $path, $domain, $secure);
 				}
 			}
 		}

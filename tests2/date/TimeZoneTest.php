@@ -814,7 +814,7 @@ We don't support the old aliases (yet)
  */
 	public function testDisplayName()
 	{
-		$enLocale = $this->tm->getLocaleFromIdentifier('en_US');
+		$enLocale = $this->tm->getLocale('en_US');
 
 		$i = 0;
 		$zone = $this->tm->createTimeZone('America/Los_Angeles');
@@ -862,7 +862,7 @@ We don't support the old aliases (yet)
 
 		// Make sure we get the default display format for Locales
 		// with no display name data.
-		$mt_MT = $this->tm->getLocaleFromIdentifier("mt_MT");
+		$mt_MT = $this->tm->getLocale("mt_MT");
 
 		$name = $zone->getDisplayName($mt_MT);
 		//*****************************************************************

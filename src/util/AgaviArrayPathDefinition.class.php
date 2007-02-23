@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -25,7 +25,9 @@
  *
  * @author     Uwe Mesecke <uwe@mesecke.net>
  * @author     Dominik del Bondio <ddb@bitxtender.com>
- * @copyright  (c) Authors
+ * @copyright  Authors
+ * @copyright  The Agavi Project
+ *
  * @since      0.11.0
  *
  * @version    $Id$
@@ -126,7 +128,7 @@ final class AgaviArrayPathDefinition
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public static function &getValueFromArray(array $parts, array &$array, $default = null)
+	public static function &getValue(array $parts, array &$array, $default = null)
 	{
 		$a = &$array;
 
@@ -157,7 +159,7 @@ final class AgaviArrayPathDefinition
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public static function setValueFromArray(array $parts, array &$array, $value)
+	public static function setValue(array $parts, array &$array, $value)
 	{
 		$a = &$array;
 
@@ -206,5 +208,40 @@ final class AgaviArrayPathDefinition
 
 		return array('parts' => $parts, 'absolute' => $absolute);
 	}
+
+
+	/**
+	 * Returns the flat key names of an array.
+	 *
+	 * This method calls itself recursivly to flatten the keys.
+	 *
+	 * @param      array The array which keys should be returned.
+	 * @param      string The prefix for the name (only for internal use).
+	 *
+	 * @return     array The flattened keys.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public static function getFlatKeyNames(array $array, $prefix = '')
+	{
+		$names = array();
+		foreach($array as $key => $value) {
+			if(!$prefix) {
+				// create the top node when no prefix was given
+				$name = $key;
+			} else {
+				$name = $prefix . '[' . $key . ']';
+			}
+
+			if(is_array($value)) {
+				$names = array_merge($names, AgaviArrayPathDefinition::getFlatKeyNames($value, $name));
+			} else {
+				$names[] = $name;
+			}
+		}
+		return $names;
+	}
+
 }
 ?>

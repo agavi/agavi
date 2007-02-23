@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -20,11 +20,13 @@
  * @package    agavi
  * @subpackage response
  *
- * @author     David Zuelke <dz@bitxtender.com>
- * @copyright  (c) Authors
+ * @author     David Zülke <dz@bitxtender.com>
+ * @copyright  Authors
+ * @copyright  The Agavi Project
+ *
  * @since      0.11.0
  *
- * @version    $Id: AgaviWebResponse.class.php 1075 2006-10-01 05:14:29Z david $
+ * @version    $Id$
  */
 class AgaviXmlrpcepiphpResponse extends AgaviResponse
 {
@@ -42,7 +44,7 @@ class AgaviXmlrpcepiphpResponse extends AgaviResponse
 	 *
 	 * @return     bool Whether or not the operation was successful.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function setContent(array $content)
@@ -57,7 +59,7 @@ class AgaviXmlrpcepiphpResponse extends AgaviResponse
 	 *
 	 * @return     bool Whether or not the operation was successful.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function prependContent(array $content)
@@ -72,7 +74,7 @@ class AgaviXmlrpcepiphpResponse extends AgaviResponse
 	 *
 	 * @return     bool Whether or not the operation was successful.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function appendContent(array $content)
@@ -81,33 +83,39 @@ class AgaviXmlrpcepiphpResponse extends AgaviResponse
 	}
 	
 	/**
-	 * Clear the content for this Response
-	 *
-	 * @return     bool Whether or not the operation was successful.
+	 * @see        AgaviResponse::isMutable()
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
+	public function isContentMutable()
+	{
+		return false;
+	}
+	
+	/**
+	 * Clear the content for this Response
+	 *
+	 * @return     bool Whether or not the operation was successful.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public function clearContent()
 	{
-		if(!$this->locked) {
-			$this->content = array();
-			return true;
-		}
-		return false;
+		$this->content = array();
+		return true;
 	}
 	
 	/**
 	 * Send all response data to the client.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function send()
+	public function send(AgaviOutputType $outputType)
 	{
-		$oti = $this->context->getController()->getOutputTypeInfo();
-		
-		$outputOptions = array_merge(array('encoding' => 'utf-8', 'escaping' => array('markup', 'non-print')), isset($oti['parameters']['encoding']) ? array('encoding' => $oti['parameters']['encoding']) : array(), (array) $this->getParameter('output_options'));
+		$outputOptions = array_merge(array('encoding' => $outputType->getParameter('encoding', 'utf-8'), 'escaping' => array('markup', 'non-print')), (array) $this->getParameter('output_options'));
 		
 		$this->content = xmlrpc_encode_request(null, $this->content, $outputOptions);
 		
@@ -120,16 +128,14 @@ class AgaviXmlrpcepiphpResponse extends AgaviResponse
 	/**
 	 * Clear all reponse data.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function clear()
 	{
-		if(!$this->locked) {
-			$this->clearContent();
-			$this->httpHeaders = array();
-			$this->cookies = array();
-		}
+		$this->clearContent();
+		$this->httpHeaders = array();
+		$this->cookies = array();
 	}
 }
 

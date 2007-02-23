@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -19,17 +19,32 @@
  * @package    agavi
  * @subpackage renderer
  *
- * @author     David Zuelke <dz@bitxtender.com>
- * @author     Agavi Project <info@agavi.org>
- * @copyright  (c) Authors
+ * @author     David Zülke <dz@bitxtender.com>
+ * @copyright  Authors
+ * @copyright  The Agavi Project
+ *
  * @since      0.11.0
  *
  * @version    $Id$
  */
-class AgaviSmartyRenderer extends AgaviRenderer
+class AgaviSmartyRenderer extends AgaviRenderer implements AgaviIReusableRenderer
 {
+	/**
+	 * @constant   string The directory inside the cache dir where templates will
+	 *                    be stored in compiled form.
+	 */
 	const COMPILE_DIR = 'templates';
+	
+	/**
+	 * @constant   string The subdirectory inside the compile dir where templates
+	 *                    will be stored in compiled form.
+	 */
 	const COMPILE_SUBDIR = 'smarty';
+	
+	/**
+	 * @constant   string The directory inside the cache dir where cached content
+	 *                    will be stored.
+	 */
 	const CACHE_DIR = 'content';
 
 	/**
@@ -41,11 +56,36 @@ class AgaviSmartyRenderer extends AgaviRenderer
 	 * @var        string A string with the default template file extension,
 	 *                    including the dot.
 	 */
-	protected $extension = '.tpl';
+	protected $defaultExtension = '.tpl';
 
-	public function getEngine()
+	/**
+	 * Pre-serialization callback.
+	 *
+	 * Excludes the Smarty instance to prevent excessive serialization load.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function __sleep()
+	{
+		$keys = parent::__sleep();
+		unset($keys[array_search('smarty', $keys)]);
+		return $keys;
+	}
+
+	/**
+	 * Grab a cleaned up smarty instance.
+	 *
+	 * @return     Smarty A Smarty instance.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.9.0
+	 */
+	protected function getEngine()
 	{
 		if($this->smarty) {
+			$this->smarty->clear_all_assign();
+			$this->smarty->clear_config();
 			return $this->smarty;
 		}
 
@@ -83,81 +123,48 @@ class AgaviSmartyRenderer extends AgaviRenderer
 		return $this->smarty;
 	}
 
-	public function render()
+	/**
+	 * Render the presentation and return the result.
+	 *
+	 * @param      AgaviTemplateLayer The template layer to render.
+	 * @param      array              The template variables.
+	 * @param      array              The slots.
+	 * @param      array              Associative array of additional assigns.
+	 *
+	 * @return     string A rendered result.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function render(AgaviTemplateLayer $layer, array &$attributes = array(), array &$slots = array(), array &$moreAssigns = array())
 	{
-		$retval = null;
-
-		// execute pre-render check
-		$this->preRenderCheck();
-
 		$engine = $this->getEngine();
-		$view = $this->getView();
-
-		// get the render mode
-		$mode = $view->getContext()->getController()->getRenderMode();
-
-		$attribs =& $view->getAttributes();
-
+		
 		if($this->extractVars) {
-			foreach($attribs as $name => &$value) {
+			foreach($attributes as $name => &$value) {
 				$engine->assign_by_ref($name, $value);
 			}
 		} else {
-			$engine->assign_by_ref($this->varName, $attribs);
+			$engine->assign_by_ref($this->varName, $attributes);
 		}
-
-		$collisions = array_intersect(array_keys($this->assigns), $this->view->getAttributeNames());
-		if(count($collisions)) {
-			throw new AgaviException('Could not import system objects due to variable name collisions ("' . implode('", "', $collisions) . '" already in use).');
+		
+		$engine->assign_by_ref($this->slotsVarName, $slots);
+		
+		foreach($this->assigns as $key => $getter) {
+			$engine->assign($key, $this->context->$getter());
 		}
-		foreach($this->assigns as $key => &$value) {
+		
+		foreach($moreAssigns as $key => &$value) {
+			if(isset($this->moreAssignNames[$key])) {
+				$key = $this->moreAssignNames[$key];
+			}
 			$engine->assign_by_ref($key, $value);
 		}
-
-		$engine->assign_by_ref('this', $this);
-
-		if($mode == AgaviView::RENDER_CLIENT && !$view->isDecorator()) {
-			// render directly to the client
-			$this->response->setContent($this->getEngine()->fetch($view->getDirectory() . '/' . $this->buildTemplateName($view->getTemplate())));
-		} elseif($mode != AgaviView::RENDER_NONE) {
-			// render to variable
-			$retval = $this->getEngine()->fetch($view->getDirectory() . '/' . $this->buildTemplateName($view->getTemplate()));
-
-			// now render our decorator template, if one exists
-			if($view->isDecorator()) {
-				$retval = $this->decorate($retval);
-			}
-
-			$this->response->setContent($retval);
-		}
-	}
-
-	public function decorate($content)
-	{
-		// call our parent decorate() method
-		parent::decorate($content);
-
-		$engine = $this->getEngine();
-		$view = $this->getView();
-
-		if($this->extractSlots === true || ($this->extractVars && $this->extractSlots !== false)) {
-			foreach($this->output as $name => &$value) {
-				$engine->assign_by_ref($name, $value);
-			}
-		} else {
-			if($this->varName == $this->slotsVarName) {
-				$slots = array_merge($this->view->getAttributes(), $this->output);
-				$engine->assign_by_ref($this->varName, $slots);
-			} else {
-				$engine->assign_by_ref($this->slotsVarName, $this->output);
-			}
-		}
-
-		$engine->assign_by_ref('this', $this);
-
-		// render the decorator template and return the result
-		$retval = $engine->fetch($view->getDecoratorDirectory() . '/' . $this->buildTemplateName($view->getDecoratorTemplate()));
-
-		return $retval;
+		
+		// hack because stupid smarty cannot handle php streams... my god
+		$resource = str_replace('://', ':', $layer->getResourceStreamIdentifier());
+		return $engine->fetch($resource);
 	}
 }
+
+?>

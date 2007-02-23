@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -21,7 +21,9 @@
  * @subpackage logging
  *
  * @author     Sean Kerr <skerr@mojavi.org>
- * @copyright  (c) Authors
+ * @copyright  Authors
+ * @copyright  The Agavi Project
+ *
  * @since      0.9.0
  *
  * @version    $Id$
@@ -128,6 +130,19 @@ class AgaviLogger
 	}
 
 	/**
+	 * Returns a list of appenders for this logger.
+	 *
+	 * @return     array An associative array of appender names and instances.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getAppenders()
+	{
+		return $this->appenders;
+	}
+
+	/**
 	 * Set the level.
 	 *
 	 * @param      int A log level.
@@ -148,10 +163,6 @@ class AgaviLogger
 	 */
 	public function shutdown()
 	{
-		// loop through our appenders and shut them all down
-		foreach($this->appenders as $appender) {
-			$appender->shutdown();
-		}
 	}
 }
 

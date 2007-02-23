@@ -19,11 +19,6 @@ class TestSessionStorage extends AgaviStorage
 	}
 }
 
-class CTTestActionStack extends AgaviActionStack
-{
-}
-
-
 class ContextTest extends AgaviTestCase 
 {
 	public function setup()
@@ -52,7 +47,6 @@ class ContextTest extends AgaviTestCase
 		$this->assertReference($a, $f);
 		$this->assertNotSame($e, $f);
 		
-		$this->assertType('AgaviActionStack', AgaviContext::getInstance('test')->getController()->getActionStack());
 		$this->assertType('AgaviWebRequest', AgaviContext::getInstance('test')->getRequest());
 		$this->assertType('TestRouting', AgaviContext::getInstance('test')->getRouting());
 	}
@@ -69,13 +63,12 @@ class ContextTest extends AgaviTestCase
 		
 	}
 
-	public function testCanReinitializeContextWithOverrides()
-	{
-		$context = AgaviContext::getInstance('test');
-		$context->initialize('test1');
-		$this->assertType('TestSessionStorage', $context->getStorage());
-		$this->assertType('CTTestActionStack', $context->getController()->getActionStack());
-	}
+	// public function testCanReinitializeContextWithOverrides()
+	// {
+	// 	$context = AgaviContext::getInstance('test');
+	// 	$context->initialize('test1');
+	// 	$this->assertType('TestSessionStorage', $context->getStorage());
+	// }
 
 
 	public function testGetGlobalModel()
@@ -114,7 +107,8 @@ class ContextTest extends AgaviTestCase
 	public function testGetController()
 	{
 		$ctx = AgaviContext::getInstance('test');
-		$this->assertType('AgaviWebController', $ctx->getController());
+		$c = new PHPUnit_Framework_Constraint_IsInstanceOf('AgaviController');
+		$this->assertThat($ctx->getController(), $c);
 	}
 
 	public function testGetDatabaseManager()
@@ -178,12 +172,6 @@ class ContextTest extends AgaviTestCase
 		AgaviConfig::set('core.use_security', true);
 		AgaviContext::getInstance('test')->initialize();
 		$this->assertType('AgaviSecurityUser', AgaviContext::getInstance('test')->getUser());
-	}
-
-	public function testGetValidatorManager()
-	{
-		$ctx = AgaviContext::getInstance('test');
-		$this->assertType('AgaviValidatorManager', $ctx->getValidatorManager());
 	}
 }
 

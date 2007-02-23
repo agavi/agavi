@@ -2,7 +2,7 @@
 
 class TestResponse extends AgaviResponse
 {
-	public function send()
+	public function send(AgaviOutputType $ot = null)
 	{
 		$this->sendContent();
 	}
@@ -10,14 +10,20 @@ class TestResponse extends AgaviResponse
 	/**
 	 * Clear all reponse data.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function clear()
 	{
-		if(!$this->locked) {
-			$this->clearContent();
-		}
+		$this->clearContent();
+	}
+	
+	public function setRedirect($to)
+	{
+	}
+	
+	public function merge(AgaviResponse $other)
+	{
 	}
 }
 

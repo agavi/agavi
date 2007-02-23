@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -23,13 +23,14 @@
  * 
  * Parameters:
  *   'value'   value which the input should equals to
- *   'asparam' takes value in 'value' as name of input in request
  *
  * @package    agavi
  * @subpackage validator
  *
- * @author     Uwe Mesecke <uwe@mesecke.net>
- * @copyright  (c) Authors
+ * @author     Dominik del Bondio <ddb@bitxtender.com>
+ * @copyright  Authors
+ * @copyright  The Agavi Project
+ *
  * @since      0.11.0
  *
  * @version    $Id$
@@ -41,7 +42,7 @@ class AgaviEqualsValidator extends AgaviValidator
 	 * 
 	 * @return     bool The input equals to given value.
 	 * 
-	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	protected function validate()
@@ -60,7 +61,9 @@ class AgaviEqualsValidator extends AgaviValidator
 				return false;
 			}
 		}
-		
+
+		$this->export($value);
+
 		return true;
 	}
 }

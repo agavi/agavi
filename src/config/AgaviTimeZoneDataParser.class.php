@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -21,7 +21,9 @@
  * @subpackage config
  *
  * @author     Dominik del Bondio <ddb@bitxtender.com>
- * @copyright  (c) Authors
+ * @copyright  Authors
+ * @copyright  The Agavi Project
+ *
  * @since      0.11.0
  *
  * @version    $Id$
@@ -29,7 +31,6 @@
 
 class AgaviTimeZoneDataParser extends AgaviConfigParser
 {
-
 	/**
 	 * @var        AgaviContext An AgaviContext instance.
 	 */
@@ -40,7 +41,7 @@ class AgaviTimeZoneDataParser extends AgaviConfigParser
 	 *
 	 * @return     AgaviContext An AgaviContext instance.
 	 *
-	 * @author     Dominik del Bondio <ddb@bitxtender.com
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public final function getContext()
@@ -53,7 +54,7 @@ class AgaviTimeZoneDataParser extends AgaviConfigParser
 	 *
 	 * @param      AgaviContext An AgaviContext instance.
 	 *
-	 * @author     Dominik del Bondio <ddb@bitxtender.com
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function initialize(AgaviContext $context)
@@ -282,7 +283,7 @@ class AgaviTimeZoneDataParser extends AgaviConfigParser
 	protected function getRules($name, $from, $until, $gmtOff, $format)
 	{
 		if(!isset($this->rules[$name])) {
-			throw new IllegalArgumentException('No rule with the name ' . $name . ' exists');
+			throw new InvalidArgumentException('No rule with the name ' . $name . ' exists');
 		}
 
 		$lastDstOff = 0;

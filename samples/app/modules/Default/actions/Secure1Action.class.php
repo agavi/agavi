@@ -1,6 +1,6 @@
 <?php
 
-class Default_Secure1Action extends AgaviAction
+class Default_Secure1Action extends AgaviSampleAppDefaultBaseAction
 {
 	/**
 	 * This Action does not yet serve any Request methods.
@@ -11,7 +11,7 @@ class Default_Secure1Action extends AgaviAction
 	 * Alternatively, you can implement executeRead() and executeWrite() methods,
 	 * because "read" and "write" are the default names for Web Request methods.
 	 * Other request methods may be explicitely served via execcuteReqmethname().
-	 * 
+	 *
 	 * Keep in mind that if an Action serves a Request method, validation will be
 	 * performed prior to execution.
 	 *
@@ -35,7 +35,7 @@ class Default_Secure1Action extends AgaviAction
 	 * execute*() being present, e.g. for a "write" Request, validateWrite() will
 	 * be run even if there is no executeWrite() method.
 	 */
-//	public function execute(AgaviParameterHolder $parameters)
+//	public function execute(AgaviRequestDataHolder $rd)
 //	{
 //		return 'Success';
 //	}
@@ -57,7 +57,7 @@ class Default_Secure1Action extends AgaviAction
 	{
 		return 'Success';
 	}
-	
+
 	public function isSecure()
 	{
 		return true;

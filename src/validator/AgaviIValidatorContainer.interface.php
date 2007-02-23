@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -20,8 +20,11 @@
  * @package    agavi
  * @subpackage validator
  *
+ * @author     Dominik del Bondio <ddb@bitxtender.com>
  * @author     Uwe Mesecke <uwe@mesecke.net>
- * @copyright  (c) Authors
+ * @copyright  Authors
+ * @copyright  The Agavi Project
+ *
  * @since      0.11.0
  *
  * @version    $Id$
@@ -37,17 +40,27 @@ interface AgaviIValidatorContainer
 	 * @since      0.11.0
 	 */
 	public function addChild(AgaviValidator $validator);
-	
+
 	/**
-	 * Fetches the request.
-	 * 
-	 * @return     AgaviRequest The request to be used by child validators.
-	 * 
-	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * Returns a named child validator.
+	 *
+	 * @param      AgaviValidator The child validator.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function getRequest();
-	
+	public function getChild($name);
+
+	/**
+	 * Returns all child validators.
+	 *
+	 * @return     array An array of AgaviValidator instances.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getChilds();
+
 	/**
 	 * Fetches the dependency manager
 	 * 
@@ -59,15 +72,5 @@ interface AgaviIValidatorContainer
 	 */
 	public function getDependencyManager();
 
-	/**
-	 * Reports an error to the parent container.
-	 * 
-	 * @param      AgaviValidator The validator where the error occured.
-	 * @param      string         An error message.
-	 * 
-	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function reportError(AgaviValidator $validator, $errorMsg);
 }
 ?>

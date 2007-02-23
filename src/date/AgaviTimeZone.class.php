@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -20,8 +20,10 @@
  * @subpackage date
  *
  * @author     Dominik del Bondio <ddb@bitxtender.com>
- * @author     The ICU Project ({@link http://icu.sourceforge.net})
- * @copyright  (c) Authors
+ * @author     The ICU Project
+ * @copyright  Authors
+ * @copyright  The Agavi Project
+ *
  * @since      0.11.0
  *
  * @version    $Id$
@@ -41,6 +43,13 @@ abstract class AgaviTimeZone
 	 * @var        string
 	 */
 	protected $id;
+
+	/**
+	 * @var        string The "resolved" id. This means if the original id pointed
+	 *                    to a link timezone this will contain the id of the 
+	 *                    timezone the link resolved to.
+	 */
+	protected $resolvedId = null;
 
 
 	/**
@@ -66,7 +75,7 @@ abstract class AgaviTimeZone
 	 * @return     AgaviTimeZone The GMT time zone.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public static function getGMT(AgaviTranslationManager $tm)
@@ -118,7 +127,7 @@ abstract class AgaviTimeZone
 	 *                   value, typically one hour.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function getOffsetRef($date, $local, &$rawOffset, &$dstOffset)
@@ -163,7 +172,7 @@ abstract class AgaviTimeZone
 	 * @param      int The new raw GMT offset for this time zone.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public abstract function setRawOffset($offsetMillis);
@@ -176,7 +185,7 @@ abstract class AgaviTimeZone
 	 * @return     int The TimeZone's raw GMT offset.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public abstract function getRawOffset();
@@ -187,7 +196,7 @@ abstract class AgaviTimeZone
 	 * @return     string This TimeZone's ID.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function getId()
@@ -209,12 +218,45 @@ abstract class AgaviTimeZone
 	 * @param      string The new timezone ID.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
-	public function setID($id)
+	public function setId($id)
 	{
 		$this->id = $id;
+	}
+
+
+	/**
+	 * Returns the resolved TimeZone's ID.
+	 *
+	 * @return     string This TimeZone's ID.
+	 * 
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     The ICU Project
+	 * @since      0.11.0
+	 */
+	public function getResolvedId()
+	{
+		if($this->resolvedId === null) {
+			return $this->id;
+		}
+
+		return $this->resolvedId;
+	}
+
+	/**
+	 * Sets the resolved TimeZone's ID.
+	 *
+	 * @param      string The resolved timezone ID.
+	 * 
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     The ICU Project
+	 * @since      0.11.0
+	 */
+	public function setResolvedId($id)
+	{
+		$this->resolvedId = $id;
 	}
 
 	/**
@@ -248,7 +290,7 @@ abstract class AgaviTimeZone
 	 *                    not recognized.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function getDisplayName($daylight = null, $style = null, $locale = null)
@@ -326,7 +368,7 @@ abstract class AgaviTimeZone
 	 *                  false, otherwise.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public abstract function useDaylightTime();
@@ -341,7 +383,7 @@ abstract class AgaviTimeZone
 	 *                  with the possible exception of the ID
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function hasSameRules($other)
@@ -365,7 +407,7 @@ abstract class AgaviTimeZone
 	 * @return     int The amount of saving time in milliseconds
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function getDSTSavings()
@@ -383,7 +425,7 @@ abstract class AgaviTimeZone
 	 * @param      string A system time zone ID
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	protected function __construct(AgaviTranslationManager $tm, $id = '')
@@ -418,7 +460,7 @@ abstract class AgaviTimeZone
 	 * @return     int The offset in milliseconds to add to GMT to get local time.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	protected abstract function getOffsetIIIIII($era, $year, $month, $day, $dayOfWeek, $millis);
@@ -443,7 +485,7 @@ abstract class AgaviTimeZone
 	 * @return     int The offset to add *to* GMT to get local time.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	protected abstract function getOffsetIIIIIII($era, $year, $month, $day, $dayOfWeek, $milliseconds, $monthLength);
@@ -461,7 +503,7 @@ abstract class AgaviTimeZone
 	 *                           null if the id cannot be parsed.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public static function createCustomTimeZone(AgaviTranslationManager $tm, $id)
@@ -500,96 +542,6 @@ abstract class AgaviTimeZone
 	}
 
 	/**
-	 * Responsible for setting up DEFAULT_ZONE.  Uses routines in TPlatformUtilities
-	 * (i.e., platform-specific calls) to get the current system time zone.  Failing
-	 * that, uses the platform-specific default time zone.  Failing that, uses GMT.
-	 * 
-	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
-	 * @since      0.11.0
-	 */
-	private static function initDefault()
-	{
-		// We access system timezone data through TPlatformUtilities,
-		// including tzset(), timezone, and tzname[].
-		$rawOffset = 0;
-		$hostID = '';
-
-// TODO: look up how to integrate this
-/*
-		// First, try to create a system timezone, based
-		// on the string ID in tzname[0].
-		// Get the timezone ID from the host.  This function should do
-		// any required host-specific remapping; e.g., on Windows this
-		// function maps the Date and Time control panel setting to an
-		// ICU timezone ID.
-		hostID = uprv_tzname(0);
-		
-		// Invert sign because UNIX semantics are backwards
-		rawOffset = uprv_timezone() * -AgaviDateDefinitions::MILLIS_PER_SECOND;
-*/
-
-		$default_zone = null;
-
-		/* Make sure that the string is NULL terminated to prevent BoundsChecker/Purify warnings. */
-		$default_zone = self::createSystemTimeZone($hostID);
-
-		$hostIDLen = strlen($hostID);
-		if($default_zone != null && $rawOffset != $default_zone->getRawOffset() && (3 <= $hostIDLen && $hostIDLen <= 4)) {
-				// Uh oh. This probably wasn't a good id.
-				// It was probably an ambiguous abbreviation
-				$default_zone = null;
-		}
-
-		// Construct a fixed standard zone with the host's ID
-		// and raw offset.
-		if($default_zone == null) {
-			$default_zone = new AgaviSimpleTimeZone($rawOffset, $hostID);
-		}
-
-		// If we _still_ don't have a time zone, use GMT.
-		if($default_zone == null) {
-			$default_zone = clone self::getGMT();
-		}
-
-		// If DEFAULT_ZONE is still NULL, set it up.
-		if(self::$DEFAULT_ZONE === NULL) {
-			self::$DEFAULT_ZONE = $default_zone;
-		}
-	}
-
-	/**
-	 * Lookup the given name in our system zone table. If found, instantiate a 
-	 * new zone of that name and return it. If not found, return null.
-	 * 
-	 * @param      AgaviTranslationManager The translation manager
-	 * @param      string The given name of a system time zone.
-	 * 
-	 * @return     AgaviTimeZone The timezone indicated by the 'name'.
-	 * 
-	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
-	 * @since      0.11.0
-	 */
-	public static function createSystemTimeZone(AgaviTranslationManager $tm, $name)
-	{
-		$z = null;
-/*
-		UResourceBundle *top = openOlsonResource(id, res, ec);
-		U_DEBUG_TZ_MSG(("post-err=%s\n", u_errorName(ec)));
-		if (U_SUCCESS(ec)) {
-*/
-// TODO: create ...
-//			$z = new OlsonTimeZone($top, $res);
-		$z = new AgaviSimpleTimeZone($tm, 0, $name);
-		$z->setId($name);
-
-		return $z;
-	}
-
-
-
-	/**
 	 * Returns true if the two TimeZones are equal. (The AgaviTimeZone version 
 	 * only compares IDs, but subclasses are expected to also compare the fields 
 	 * they add.)
@@ -600,7 +552,7 @@ abstract class AgaviTimeZone
 	 *                           TimeZone; false otherwise.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function __is_equal($that) {
@@ -617,7 +569,7 @@ abstract class AgaviTimeZone
 	 *                           TimeZone; false otherwise.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function __is_not_equal($that) {
@@ -636,7 +588,7 @@ abstract class AgaviTimeZone
 	 *                   false, otherwise.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function inDaylightTime($date)

@@ -19,9 +19,10 @@
  * @package    agavi
  * @subpackage filter
  * 
+ * @author     David Zülke <dz@bitxtender.com>
+ * @copyright  Authors
+ * @copyright  The Agavi Project
  * @since      0.11.0 
- * @author     David Zuelke <dz@bitxtender.com>
- * @copyright  (c) Authors
  *
  * @version    $Id$
  */

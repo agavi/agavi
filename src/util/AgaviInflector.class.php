@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -20,7 +20,9 @@
  * @subpackage util
  *
  * @author     Dominik del Bondio <ddb@bitxtender.com>
- * @copyright  (c) Authors
+ * @copyright  Authors
+ * @copyright  The Agavi Project
+ *
  * @since      0.11.0
  *
  * @version    $Id$
@@ -60,6 +62,7 @@ final class AgaviInflector
 	 * @var        array plurar => singular mapping
 	 */
 	protected static $pluralMatches = array(
+		'/cookies$/i' => 'cookie',
 		'/moves$/i' => 'move',
 		'/sexes$/i' => 'sex',
 		'/children$/i' => 'child',

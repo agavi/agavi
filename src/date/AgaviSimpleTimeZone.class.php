@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -20,15 +20,16 @@
  * @subpackage date
  *
  * @author     Dominik del Bondio <ddb@bitxtender.com>
- * @author     The ICU Project ({@link http://icu.sourceforge.net})
- * @copyright  (c) Authors
+ * @author     The ICU Project
+ * @copyright  Authors
+ * @copyright  The Agavi Project
+ *
  * @since      0.11.0
  *
  * @version    $Id$
  */
 class AgaviSimpleTimeZone extends AgaviTimeZone
 {
-
 	/**
 	 * TimeMode is used, together with a millisecond offset after
 	 * midnight, to specify a rule transition time.  Most rules
@@ -40,7 +41,7 @@ class AgaviSimpleTimeZone extends AgaviTimeZone
 	 * parameter, this is not the case.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	const WALL_TIME = 0.0;
@@ -57,7 +58,7 @@ class AgaviSimpleTimeZone extends AgaviTimeZone
 	 *                  false otherwise.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	function __is_equal($that)
@@ -103,7 +104,7 @@ class AgaviSimpleTimeZone extends AgaviTimeZone
 	 *                    TimeZone.getAvailableIDs.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	protected function constructorOIS(AgaviTranslationManager $tm, $rawOffsetGMT, $id)
@@ -162,7 +163,7 @@ class AgaviSimpleTimeZone extends AgaviTimeZone
 	 *                          number of milliseconds after midnight.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	protected function constructorOISIIIIIIII(AgaviTranslationManager $tm, $rawOffsetGMT, $id, $savingsStartMonth, $savingsStartDay, $savingsStartDayOfWeek, $savingsStartTime, $savingsEndMonth,  $savingsEndDay, $savingsEndDayOfWeek, $savingsEndTime)
@@ -208,7 +209,7 @@ class AgaviSimpleTimeZone extends AgaviTimeZone
 	 *                    to get DST time. Default is one hour.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	protected function constructorOISIIIIIIIII(AgaviTranslationManager $tm, $rawOffsetGMT, $id, $savingsStartMonth, $savingsStartDay, $savingsStartDayOfWeek, $savingsStartTime, $savingsEndMonth, $savingsEndDay, $savingsEndDayOfWeek, $savingsEndTime, $savingsDST)
@@ -258,7 +259,7 @@ class AgaviSimpleTimeZone extends AgaviTimeZone
 	 *                    to get DST time. Default is one hour.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	protected function constructorOISIIIIIIIIIII(AgaviTranslationManager $tm, $rawOffsetGMT, $id, $savingsStartMonth, $savingsStartDay, $savingsStartDayOfWeek, $savingsStartTime, $savingsStartTimeMode, $savingsEndMonth, $savingsEndDay, $savingsEndDayOfWeek, $savingsEndTime, $savingsEndTimeMode, $savingsDST)
@@ -276,7 +277,7 @@ class AgaviSimpleTimeZone extends AgaviTimeZone
 	 * @param      int The daylight savings starting year.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function setStartYear($year)
@@ -358,7 +359,7 @@ class AgaviSimpleTimeZone extends AgaviTimeZone
 	 *                 description for an example.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function setStartRuleIIII($month, $dayOfWeekInMonth, $dayOfWeek, $time)
@@ -417,7 +418,7 @@ class AgaviSimpleTimeZone extends AgaviTimeZone
 	 *                   or UTC time. Default is local wall time.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function setStartRuleIIIIF($month, $dayOfWeekInMonth, $dayOfWeek, $time, $mode)
@@ -440,7 +441,7 @@ class AgaviSimpleTimeZone extends AgaviTimeZone
 	 *                 standard time in this case.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function setStartRuleIII($month, $dayOfMonth, $time)
@@ -462,7 +463,7 @@ class AgaviSimpleTimeZone extends AgaviTimeZone
 	 *                   or UTC time. Default is local wall time.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function setStartRuleIIIF($month, $dayOfMonth, $time, $mode)
@@ -485,7 +486,7 @@ class AgaviSimpleTimeZone extends AgaviTimeZone
 	 *                  the last dayOfWeek on or before dayOfMonth.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function setStartRuleIIIIB($month, $dayOfMonth, $dayOfWeek, $time, $after)
@@ -510,7 +511,7 @@ class AgaviSimpleTimeZone extends AgaviTimeZone
 	 *                  the last dayOfWeek on or before dayOfMonth.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function setStartRuleIIIIFB($month, $dayOfMonth, $dayOfWeek, $time, $mode, $after)
@@ -564,7 +565,7 @@ class AgaviSimpleTimeZone extends AgaviTimeZone
 	 *                 description for an example.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function setEndRuleIIII($month, $dayOfWeekInMonth, $dayOfWeek, $time)
@@ -596,7 +597,7 @@ class AgaviSimpleTimeZone extends AgaviTimeZone
 	 *                   or UTC time. Default is local wall time.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function setEndRuleIIIIF($month, $dayOfWeekInMonth, $dayOfWeek, $time, $mode)
@@ -619,7 +620,7 @@ class AgaviSimpleTimeZone extends AgaviTimeZone
 	 *                 time in this case.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function setEndRuleIII($month, $dayOfMonth, $time)
@@ -639,7 +640,7 @@ class AgaviSimpleTimeZone extends AgaviTimeZone
 	 *                   or UTC time. Default is local wall time.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function setEndRuleIIIF($month, $dayOfMonth, $time, $mode)
@@ -662,7 +663,7 @@ class AgaviSimpleTimeZone extends AgaviTimeZone
 	 *                  the last dayOfWeek on or before dayOfMonth.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function setEndRuleIIIIB($month, $dayOfMonth, $dayOfWeek, $time, $after)
@@ -687,7 +688,7 @@ class AgaviSimpleTimeZone extends AgaviTimeZone
 	 *                  the last dayOfWeek on or before dayOfMonth.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function setEndRuleIIIIFB($month, $dayOfMonth, $dayOfWeek, $time, $mode, $after)
@@ -735,12 +736,12 @@ class AgaviSimpleTimeZone extends AgaviTimeZone
 	 * @return     int The offset in milliseconds to add to GMT to get local time.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function getOffsetIIIIII($era, $year, $month, $day, $dayOfWeek, $millis)
 	{
-		// Check the month before indexing into STATICMONTHLENGTH. This
+		// Check the month before calling Grego::monthLength(). This
 		// duplicates the test that occurs in the 7-argument getOffset(),
 		// however, this is unavoidable. We don't mind because this method, in
 		// fact, should not be called; internal code should always call the
@@ -752,7 +753,7 @@ class AgaviSimpleTimeZone extends AgaviTimeZone
 				return 0;
 		}
 
-		return $this->getOffsetIIIIIII($era, $year, $month, $day, $dayOfWeek, $millis, self::$STATICMONTHLENGTH[$month]);
+		return $this->getOffsetIIIIIII($era, $year, $month, $day, $dayOfWeek, $millis, AgaviCalendarGrego::monthLength($year, $month));
 	}
 
 	/**
@@ -771,7 +772,7 @@ class AgaviSimpleTimeZone extends AgaviTimeZone
 	 * @return     int The offset to add *to* GMT to get local time.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function getOffsetIIIIIII($era, $year, $month, $day, $dayOfWeek, $millis, $monthLength)
@@ -788,10 +789,7 @@ class AgaviSimpleTimeZone extends AgaviTimeZone
 				return -1;
 		}
 
-		// TODO FIX We don't handle leap years yet!
-		$prevMonthLength = ($month >= 1) ? self::$STATICMONTHLENGTH[$month - 1] : 31;
-
-		return $this->getOffsetIIIIIIII($era, $year, $month, $day, $dayOfWeek, $millis, $monthLength, $prevMonthLength);
+		return $this->getOffsetIIIIIIII($era, $year, $month, $day, $dayOfWeek, $millis, AgaviCalendarGrego::monthLength($year, $month), AgaviCalendarGrego::previousMonthLength($year, $month));
 	}
 
 	/**
@@ -811,7 +809,7 @@ class AgaviSimpleTimeZone extends AgaviTimeZone
 	 * @return     int The offset to add *to* GMT to get local time.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function getOffsetIIIIIIII($era, $year, $month, $day, $dayOfWeek, $millis, $monthLength, $prevMonthLength)
@@ -880,7 +878,7 @@ class AgaviSimpleTimeZone extends AgaviTimeZone
 	 * @return     int The TimeZone's raw GMT offset.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function getRawOffset()
@@ -896,7 +894,7 @@ class AgaviSimpleTimeZone extends AgaviTimeZone
 	 * @param      int The new raw GMT offset for this time zone.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function setRawOffset($offsetMillis)
@@ -913,7 +911,7 @@ class AgaviSimpleTimeZone extends AgaviTimeZone
 	 *                 (3600000).
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function setDSTSavings($millisSavedDuringDST)
@@ -934,7 +932,7 @@ class AgaviSimpleTimeZone extends AgaviTimeZone
 	 *                 (3600000).
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function getDSTSavings()
@@ -949,7 +947,7 @@ class AgaviSimpleTimeZone extends AgaviTimeZone
 	 *                  false otherwise.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function useDaylightTime()
@@ -966,7 +964,7 @@ class AgaviSimpleTimeZone extends AgaviTimeZone
 	 *                  this one
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function hasSameRules($other)
@@ -1029,7 +1027,7 @@ return true;
 	 *                 to get DST time. Default is one hour.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	private function construct($rawOffsetGMT, $startMonth, $startDay, $startDayOfWeek, $startTime, $startTimeMode, $endMonth, $endDay, $endDayOfWeek, $endTime, $endTimeMode, $dstSavings)
@@ -1053,8 +1051,7 @@ return true;
 		$this->decodeRules();
 
 		if($dstSavings <= 0) {
-			// TODO: check why this causes errors in australia/adelaide
-			//throw new InvalidArgumentException('The DST savings amount must be a positive number');
+			throw new InvalidArgumentException('The DST savings amount must be a positive number');
 		}
 	}
 
@@ -1069,7 +1066,7 @@ return true;
 	 *                 date.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	private static function compareToRule($month, $monthLen, $prevMonthLen, $dayOfMonth, $dayOfWeek, $millis, $millisDelta, $ruleMode, $ruleMonth,  $ruleDayOfWeek, $ruleDay, $ruleMillis)
@@ -1109,6 +1106,11 @@ return true;
 
 		// calculate the actual day of month for the rule
 		$ruleDayOfMonth = 0;
+		// Adjust the ruleDay to the monthLen, for non-leap year February 29 rule days.
+		if($ruleDay > $monthLen) {
+			$ruleDay = $monthLen;
+		}
+
 		switch($ruleMode) {
 			// if the mode is day-of-month, the day of month is given
 			case self::DOM_MODE:
@@ -1126,10 +1128,9 @@ return true;
 
 					// if ruleDay is negative (we assume it's not zero here), we have to 
 					// do the same calculation figuring backward from the last day of the 
-					// month. (STATICMONTHLENGTH gives us that last day.  We don't take 
-					// leap years into account, so this may not work right for February.)
+					// month.
 				} else {
-					// (again, this code is trusting that dayOfMonth and dayOfMonth are
+					// (again, this code is trusting that dayOfWeek and dayOfMonth are
 					// consistent with each other here, since we're using them to figure
 					// the day of week of the first of the month)
 					$ruleDayOfMonth = $monthLen + ($ruleDay + 1) * 7 - (7 + ($dayOfWeek + $monthLen - $dayOfMonth) - $ruleDayOfWeek) % 7;
@@ -1237,7 +1238,7 @@ return true;
 	 * no DST.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	private function decodeRules()
@@ -1271,7 +1272,7 @@ return true;
 	 * the start and end ranges the same for consistency.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	private function decodeStartRule() 
@@ -1323,7 +1324,7 @@ return true;
 	 * @see        AgaviSimpleTimeZone::decodeStartRule
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project ({@link http://icu.sourceforge.net})
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	private function decodeEndRule() 

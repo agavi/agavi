@@ -2,7 +2,7 @@
 
 class SampleModel extends AgaviModel {}
 
-class TestAgaviModel extends AgaviTestCase
+class ModelTest extends AgaviTestCase
 {
 	public function testInitialize()
 	{

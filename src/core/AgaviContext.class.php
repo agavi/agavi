@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
@@ -19,16 +19,17 @@
  * such as the module and action names and the module directory. 
  * It also serves as a gateway to the core pieces of the framework, allowing
  * objects with access to the context, to access other useful objects such as
- * the current controller, request, user, actionstack, databasemanager, storage,
- * and loggingmanager.
+ * the current controller, request, user, database manager etc.
  *
  * @package    agavi
  * @subpackage core
  *
  * @author     Sean Kerr <skerr@mojavi.org>
  * @author     Mike Vincent <mike@agavi.org>
- * @author     David Zuelke <dz@bitxtender.com>
- * @copyright  (c) Authors
+ * @author     David Zülke <dz@bitxtender.com>
+ * @copyright  Authors
+ * @copyright  The Agavi Project
+ *
  * @since      0.9.0
  *
  * @version    $Id$
@@ -44,11 +45,13 @@ final class AgaviContext
 	 * @var        array An array of class names for frequently used factories.
 	 */
 	protected $factories = array(
-		'action_stack' => null,
 		'dispatch_filter' => null,
+		'execution_container' => null,
 		'execution_filter' => null,
 		'filter_chain' => null,
-		'security_filter' => null
+		'response' => null,
+		'security_filter' => null,
+		'validation_manager' => null,
 	);
 	
 	/**
@@ -88,9 +91,9 @@ final class AgaviContext
 	protected $user = null;
 	
 	/**
-	 * @var        AgaviValidatorManager A ValidatorManager instance.
+	 * @var        array The array used for the shutdown sequence.
 	 */
-	protected $validatorManager = null;
+	protected $shutdownSequence = array();
 	
 	/**
 	 * @var        array An array of AgaviContext instances.
@@ -110,7 +113,7 @@ final class AgaviContext
 	 */
 	public function __clone()
 	{
-		trigger_error('Cloning the AgaviContext object is not allowed.', E_USER_ERROR);
+		trigger_error('Cloning an AgaviContext instance is not allowed.', E_USER_ERROR);
 	}	
 
 	/**
@@ -120,7 +123,7 @@ final class AgaviContext
 	 * @author     Mike Vincent <mike@agavi.org>	
 	 * @since      0.9.0
 	 */
-	protected function __construct() 
+	private function __construct() 
 	{
 		// Singleton, setting up the class happens in initialize()
 	}
@@ -132,7 +135,7 @@ final class AgaviContext
 	 *
 	 * @return     array An associative array (keys 'class' and 'parameters').
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getFactoryInfo($for)
@@ -173,7 +176,7 @@ final class AgaviContext
 	 */
 	public function getDatabaseConnection($name = 'default')
 	{
-		if($this->databaseManager != null) {
+		if($this->databaseManager !== null) {
 			return $this->databaseManager->getDatabase($name)->getConnection();
 		}
 	}
@@ -203,7 +206,7 @@ final class AgaviContext
 	 *                          settings of the requested context name
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @author     Mike Vincent <mike@agavi.org>
 	 * @since      0.9.0
 	 */
@@ -213,7 +216,7 @@ final class AgaviContext
 			if($profile === null) {
 				$profile = AgaviConfig::get('core.default_context');
 				if($profile === null) {
-					throw new AgaviException('You must supply an environment name to AgaviContext::getInstance() or set the name of the default environment to be used in the configuration directive "core.default_context".');
+					throw new AgaviException('You must supply a context name to AgaviContext::getInstance() or set the name of the default context to be used in the configuration directive "core.default_context".');
 				}
 			}
 			$profile = strtolower($profile);
@@ -234,7 +237,7 @@ final class AgaviContext
 	 * @return     AgaviLoggerManager The current LoggerManager implementation 
 	 *                                instance.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getLoggerManager()
@@ -248,7 +251,7 @@ final class AgaviContext
 	 * @param      string A name corresponding to a section of the config
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @author     Mike Vincent <mike@agavi.org>
 	 * @since      0.10.0
 	 */
@@ -262,7 +265,11 @@ final class AgaviContext
 		
 		$this->name = $profile;
 		
-		include(AgaviConfigCache::checkConfig(AgaviConfig::get('core.config_dir') . '/factories.xml', $profile));
+		try {
+			include(AgaviConfigCache::checkConfig(AgaviConfig::get('core.config_dir') . '/factories.xml', $profile));
+		} catch(Exception $e) {
+			AgaviException::printStackTrace($e, $this);
+		}
 		
 		register_shutdown_function(array($this, 'shutdown'));
 	}
@@ -270,27 +277,13 @@ final class AgaviContext
 	/**
 	 * Shut down this AgaviContext and all related factories.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function shutdown()
 	{
-		$this->controller->shutdown();
-		
-		if($this->user) {
-			$this->user->shutdown();
-		}
-		
-		$this->storage->shutdown();
-		
-		$this->request->shutdown();
-		
-		if(AgaviConfig::get('core.use_logging')) {
-			$this->loggerManager->shutdown();
-		}
-		
-		if(AgaviConfig::get('core.use_database')) {
-			$this->databaseManager->shutdown();
+		foreach($this->shutdownSequence as $object) {
+			$object->shutdown();
 		}
 	}
 	
@@ -307,7 +300,7 @@ final class AgaviContext
 	 *
 	 * @throws     AgaviAutloadException if class is ultimately not found.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getModel($modelName, $moduleName = null, array $parameters = null)
@@ -419,7 +412,7 @@ final class AgaviContext
 	 *
 	 * @return     string A context name.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getName()
@@ -472,7 +465,7 @@ final class AgaviContext
 	 * @return     AgaviTranslationManager The current TranslationManager
 	 *                                     implementation instance.
 	 *
-	 * @author     Dominik del Bondio <ddb@bitxtender.com
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getTranslationManager()
@@ -491,20 +484,6 @@ final class AgaviContext
 	public function getUser()
 	{
 		return $this->user;
-	}
-	
-	/**
-	 * Retrieve the ValidatorManager
-	 *
-	 * @return     AgaviValidatorManager The current ValidatorManager 
-	 *                                   implementation instance.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function getValidatorManager()
-	{
-		return $this->validatorManager;
 	}
 }
 

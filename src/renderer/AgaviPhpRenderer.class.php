@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -19,129 +19,99 @@
  * @package    agavi
  * @subpackage renderer
  *
- * @author     David Zuelke <dz@bitxtender.com>
- * @author     Agavi Project <info@agavi.org>
- * @copyright  (c) Authors
+ * @author     David Zülke <dz@bitxtender.com>
+ * @copyright  Authors
+ * @copyright  The Agavi Project
+ *
  * @since      0.11.0
  *
  * @version    $Id$
  */
-class AgaviPhpRenderer extends AgaviRenderer
+class AgaviPhpRenderer extends AgaviRenderer implements AgaviIReusableRenderer
 {
 	/**
 	 * @var        string A string with the default template file extension,
 	 *                    including the dot.
 	 */
-	protected $extension = '.php';
-
+	protected $defaultExtension = '.php';
+	
 	/**
-	 * Loop through all template slots and fill them in with the results of
-	 * presentation data.
+	 * @var        AgaviTemplateLayer Temporary storage for the template layer,
+	 *                                used during rendering.
+	 */
+	private $layer = null;
+	
+	/**
+	 * @var        array Temporary storage for the template layer, used during
+	 *                   rendering.
+	 */
+	private $attributes = null;
+	
+	/**
+	 * @var        array Temporary storage for the template layer, used during
+	 *                   rendering.
+	 */
+	private $slots = null;
+	
+	/**
+	 * @var        array Temporary storage for additional assigns, used during
+	 *                   rendering.
+	 */
+	private $additionalAssigns = null;
+	
+	/**
+	 * Render the presentation and return the result.
 	 *
-	 * @param      string A chunk of decorator content.
+	 * @param      AgaviTemplateLayer The template layer to render.
+	 * @param      array              The template variables.
+	 * @param      array              The slots.
+	 * @param      array              Associative array of additional assigns.
 	 *
-	 * @return     string A decorated template.
+	 * @return     string A rendered result.
 	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function decorate($content)
+	public function render(AgaviTemplateLayer $layer, array &$attributes = array(), array &$slots = array(), array &$moreAssigns = array())
 	{
-		// call our parent decorate() method
-		parent::decorate($content);
-
 		// DO NOT USE VARIABLES IN HERE, THEY MIGHT INTERFERE WITH TEMPLATE VARS
-
-		if($this->extractVars) {
-			extract($this->view->getAttributes(), EXTR_REFS | EXTR_PREFIX_INVALID, '_');
-		} else {
-			${$this->varName} =& $this->view->getAttributes();
-		}
-
-		if($this->extractSlots === true || ($this->extractVars && $this->extractSlots !== false)) {
-			extract($this->output, EXTR_REFS | EXTR_PREFIX_INVALID, '_');
-		} else {
-			if(!isset(${$this->slotsVarName})) {
-				${$this->slotsVarName} = array();
+		$this->layer = $layer;
+		$this->attributes =& $attributes;
+		$this->slots =& $slots;
+		foreach($moreAssigns as $moreAssignName => &$moreAssign) {
+			if(isset($this->moreAssignNames[$moreAssignName])) {
+				$moreAssignName = $this->moreAssignNames[$moreAssignName];
 			}
-			${$this->slotsVarName} = array_merge(${$this->slotsVarName}, $this->output);
+			$this->moreAssigns[$moreAssignName] =& $moreAssign;
 		}
-
-		$collisions = array_intersect(array_keys($this->assigns), $this->view->getAttributeNames());
-		if(count($collisions)) {
-			throw new AgaviException('Could not import system objects due to variable name collisions ("' . implode('", "', $collisions) . '" already in use).');
+		unset($layer, $attributes, $slots, $moreAssigns);
+		
+		if($this->extractVars) {
+			extract($this->attributes, EXTR_REFS | EXTR_PREFIX_INVALID, '_');
+		} else {
+			${$this->varName} =& $this->attributes;
 		}
-		extract($this->assigns);
-
-		// render the decorator template and return the result
+		
+		${$this->slotsVarName} =& $this->slots; 
+		
+		foreach($this->assigns as $name => $getter) {
+			${$name} = $this->context->$getter();
+		}
+		unset($name, $getter);
+		
+		extract($this->moreAssigns, EXTR_REFS);
+		
 		ob_start();
-
-		require($this->view->getDecoratorDirectory() . '/' . $this->buildTemplateName($this->view->getDecoratorTemplate()));
-
+		
+		require($this->layer->getResourceStreamIdentifier());
+		
 		$retval = ob_get_contents();
 		ob_end_clean();
-
+		
+		unset($this->layer, $this->attributes, $this->slots, $this->moreAssigns);
+		
 		return $retval;
 	}
-
-	/**
-	 * Retrieve the template engine associated with this view.
-	 *
-	 * Note: This will return null because PHP itself has no engine reference.
-	 *
-	 * @return     null
-	 */
-	public function getEngine()
-	{
-		return null;
-	}
-
-	/**
-	 * Render the presentation to the Response.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function render()
-	{
-		// DO NOT USE VARIABLES IN HERE, THEY MIGHT INTERFERE WITH TEMPLATE VARS
-
-		if($this->extractVars) {
-			extract($this->view->getAttributes(), EXTR_REFS | EXTR_PREFIX_INVALID, '_');
-		} else {
-			${$this->varName} =& $this->view->getAttributes();
-		}
-
-		$collisions = array_intersect(array_keys($this->assigns), $this->view->getAttributeNames());
-		if(count($collisions)) {
-			throw new AgaviException('Could not import system objects due to variable name collisions ("' . implode('", "', $collisions) . '" already in use).');
-		}
-		extract($this->assigns);
-
-		if($this->context->getController()->getRenderMode() == AgaviView::RENDER_CLIENT && !$this->view->isDecorator()) {
-			// render directly to the client via Response
-			ob_start();
-
-			require($this->view->getDirectory() . '/' . $this->buildTemplateName($this->view->getTemplate()));
-
-			$this->response->setContent(ob_get_contents());
-			ob_end_clean();
-
-		} elseif($this->view->getContext()->getController()->getRenderMode() != AgaviView::RENDER_NONE) {
-			// render to variable
-			ob_start();
-
-			require($this->view->getDirectory() . '/' . $this->buildTemplateName($this->view->getTemplate()));
-
-			$retval = ob_get_contents();
-			ob_end_clean();
-
-			// now render our decorator template, if one exists
-			if($this->view->isDecorator()) {
-				$retval = $this->decorate($retval);
-			}
-
-			$this->response->setContent($retval);
-		}
-	}
 }
+
+?>

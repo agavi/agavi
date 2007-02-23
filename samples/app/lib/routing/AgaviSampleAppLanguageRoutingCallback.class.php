@@ -4,9 +4,9 @@ class AgaviSampleAppLanguageRoutingCallback extends AgaviRoutingCallback
 {
 	protected $availableLocales = array();
 	
-	public function initialize(AgaviResponse $response, array &$route)
+	public function initialize(AgaviContext $context, array &$route)
 	{
-		parent::initialize($response, $route);
+		parent::initialize($context, $route);
 		
 		// reduce method calls
 		$this->translationManager = $this->context->getTranslationManager();
@@ -15,28 +15,28 @@ class AgaviSampleAppLanguageRoutingCallback extends AgaviRoutingCallback
 		$this->availableLocales = $this->context->getTranslationManager()->getAvailableLocales();
 	}
 	
-	public function onMatched(array &$parameters)
+	public function onMatched(array &$parameters, AgaviExecutionContainer $container)
 	{
 		$found = false;
 		// first, let's check if the locale is allowed
 		try {
-			$set = $this->context->getTranslationManager()->getClosestMatchingLocale($parameters['locale']);
+			$set = $this->context->getTranslationManager()->getLocaleIdentifier($parameters['locale']);
 			$found = true;
 		} catch(AgaviException $e) {
 			// not registered or ambigious locale... uncool!
 		}
 		if($found) {
-			$this->response->setCookie('locale', $parameters['locale'], 60*60*24*30);
+			$this->context->getController()->getGlobalResponse()->setCookie('locale', $parameters['locale'], 60*60*24*30);
 		} else {
-			$this->onNotMatched();
+			$this->onNotMatched($container);
 		}
 		return $found;
 	}
 
-	public function onNotMatched()
+	public function onNotMatched(AgaviExecutionContainer $container)
 	{
 		// no locale matched. that's sad. let's see if there's a locale set in a cookie, from an earlier visit.
-		$cookie = $this->context->getRequest()->getCookie('locale');
+		$cookie = $this->context->getRequest()->getRequestData()->getCookie('locale');
 		if($cookie !== null) {
 			try {
 				$this->translationManager->setLocale($cookie);
@@ -46,16 +46,14 @@ class AgaviSampleAppLanguageRoutingCallback extends AgaviRoutingCallback
 		return;
 	}
 
-	public function onGenerate(array $defaultParameters, array &$userParameters)
+	public function onGenerate(array $defaultParameters, array &$userParameters, array &$options)
 	{
-		$defaultParameters['locale'] = array(
-			'pre' => '', 
-			'val' => $this->getShortestLocaleIdentifier($this->translationManager->getCurrentLocaleIdentifier()), 
-			'post' => '');
 		if(isset($userParameters['locale'])) {
 			$userParameters['locale'] = $this->getShortestLocaleIdentifier($userParameters['locale']);
+		} else {
+			$userParameters['locale'] = $this->getShortestLocaleIdentifier($this->translationManager->getCurrentLocaleIdentifier());
 		}
-		return $defaultParameters;
+		return true;
 	}
 	
 	public function getShortestLocaleIdentifier($localeIdentifier)

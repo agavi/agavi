@@ -19,10 +19,8 @@ class RoutingTest extends AgaviTestCase
 
 	public function setUp()
 	{
-		$response = new AgaviWebResponse();
-		$response->initialize(AgaviContext::getInstance('test'));
 		$this->_r = new SampleRouting();
-		$this->_r->initialize($response);
+		$this->_r->initialize(AgaviContext::getInstance('test'));
 		AgaviConfig::set('core.use_routing', true);
 
 	}
@@ -40,73 +38,80 @@ class RoutingTest extends AgaviTestCase
 		$r->loadConfig(AgaviConfig::get('core.config_dir') . '/tests/routing_simple.xml', 'test1');
 
 		$rq = $r->getContext()->getRequest();
+		$rd = $rq->getRequestData();
 
-		$rq->clearParameters();
-		$this->assertEquals(array(), $rq->getParameters());
+		$rd->clearParameters();
+		$this->assertEquals(array(), $rd->getParameters());
 
 		$r->setInput('/anchor/child3/child2');
-		$this->assertEquals(array('testWithChild', 't1child3'), $r->execute());
-		$this->assertEquals(3, count($rq->getParameters()));
-		$this->assertEquals('module3', $rq->getParameter('module'));
-		$this->assertEquals('action3', $rq->getParameter('action'));
-		$this->assertEquals('child2', $rq->getParameter('bar'));
+		$r->execute();
+		$this->assertEquals(array('testWithChild', 't1child3'), $rq->getAttribute('matchedRoutes', 'org.agavi.routing'));
+		$this->assertEquals(3, count($rd->getParameters()));
+		$this->assertEquals('module3', $rd->getParameter('module'));
+		$this->assertEquals('action3', $rd->getParameter('action'));
+		$this->assertEquals('child2', $rd->getParameter('bar'));
 
 		$r->loadConfig(AgaviConfig::get('core.config_dir') . '/tests/routing_simple.xml', 'test1');
 
-		$rq->clearParameters();
+		$rd->clearParameters();
 		$r->setInput('/anchor/child4/nextChild');
-		$this->assertEquals(array('testWithChild', 't1child4'), $r->execute());
-		$this->assertEquals(3, count($rq->getParameters()));
-		$this->assertEquals('module4', $rq->getParameter('module'));
-		$this->assertEquals('action4', $rq->getParameter('action'));
-		$this->assertEquals('nextChild', $rq->getParameter('bar'));
+		$r->execute();
+		$this->assertEquals(array('testWithChild', 't1child4'), $rq->getAttribute('matchedRoutes', 'org.agavi.routing'));
+		$this->assertEquals(3, count($rd->getParameters()));
+		$this->assertEquals('module4', $rd->getParameter('module'));
+		$this->assertEquals('action4', $rd->getParameter('action'));
+		$this->assertEquals('nextChild', $rd->getParameter('bar'));
 
 		$r->loadConfig(AgaviConfig::get('core.config_dir') . '/tests/routing_simple.xml', 'test1');
 
-		$rq->clearParameters();
+		$rd->clearParameters();
 		$r->setInput('/anchor/child4/');
-		$this->assertEquals(array('testWithChild', 't1child4'), $r->execute());
-		$this->assertEquals(3, count($rq->getParameters()));
-		$this->assertEquals('module4', $rq->getParameter('module'));
-		$this->assertEquals('action4', $rq->getParameter('action'));
-		$this->assertEquals('baz', $rq->getParameter('bar'));
+		$r->execute();
+		$this->assertEquals(array('testWithChild', 't1child4'), $rq->getAttribute('matchedRoutes', 'org.agavi.routing'));
+		$this->assertEquals(3, count($rd->getParameters()));
+		$this->assertEquals('module4', $rd->getParameter('module'));
+		$this->assertEquals('action4', $rd->getParameter('action'));
+		$this->assertEquals('baz', $rd->getParameter('bar'));
 
 
 
-		$this->assertEquals('/anchor/child1', $r->gen('t1child1'));
-		$this->assertEquals('/anchor/child2', $r->gen('t1child2'));
-		$this->assertEquals('/anchor/bar', $r->gen('t1child2', array('foo' => 'bar')));
-		$this->assertEquals('/anchor/child3/baz', $r->gen('t1child3', array('bar' => 'baz')));
-		$this->assertEquals('/anchor/child4/baz', $r->gen('t1child4'));
-		$this->assertEquals('/anchor/foo/bar', $r->gen('t1child4', array('foo' => 'foo', 'bar' => 'bar')));
+		$this->assertEquals(array('/anchor/child1'), array_slice($r->gen('t1child1'), 0, 1));
+		$this->assertEquals(array('/anchor/child2'), array_slice($r->gen('t1child2'), 0, 1));
+		$this->assertEquals(array('/anchor/bar'), array_slice($r->gen('t1child2', array('foo' => 'bar')), 0, 1));
+		$this->assertEquals(array('/anchor/child3/baz'), array_slice($r->gen('t1child3', array('bar' => 'baz')), 0, 1));
+		$this->assertEquals(array('/anchor/child4/baz'), array_slice($r->gen('t1child4'), 0, 1));
+		$this->assertEquals(array('/anchor/child4/'), array_slice($r->gen('t1child4', array(), array('omit_defaults' => true)), 0, 1));
+		$this->assertEquals(array('/anchor/foo/bar'), array_slice($r->gen('t1child4', array('foo' => 'foo', 'bar' => 'bar')), 0, 1));
 
 		$r->loadConfig(AgaviConfig::get('core.config_dir') . '/tests/routing_simple.xml', 'test2');
 
-		$rq->clearParameters();
+		$rd->clearParameters();
 		$r->setInput('/parent/category1/MACHINE/');
-		$this->assertEquals(array('test2parent', 'test2child1'), $r->execute());
-		$this->assertEquals(4, count($rq->getParameters()));
-		$this->assertEquals('category1', $rq->getParameter('category'));
-		$this->assertEquals('MACHINE', $rq->getParameter('machine'));
+		$r->execute();
+		$this->assertEquals(array('test2parent', 'test2child1'), $rq->getAttribute('matchedRoutes', 'org.agavi.routing'));
+		$this->assertEquals(4, count($rd->getParameters()));
+		$this->assertEquals('category1', $rd->getParameter('category'));
+		$this->assertEquals('MACHINE', $rd->getParameter('machine'));
 
 		$r->loadConfig(AgaviConfig::get('core.config_dir') . '/tests/routing_simple.xml', 'test2');
-		$rq->clearParameters();
+		$rd->clearParameters();
 		$r->setInput('/parent/MACHINE/');
-		$this->assertEquals(array('test2parent', 'test2child1'), $r->execute());
-		$this->assertEquals(3, count($rq->getParameters()));
-//		$this->assertEquals('', $rq->getParameter('category'));
-		$this->assertEquals('MACHINE', $rq->getParameter('machine'));
+		$r->execute();
+		$this->assertEquals(array('test2parent', 'test2child1'), $rq->getAttribute('matchedRoutes', 'org.agavi.routing'));
+		$this->assertEquals(3, count($rd->getParameters()));
+		$this->assertEquals('MACHINE', $rd->getParameter('machine'));
 
 		$r->loadConfig(AgaviConfig::get('core.config_dir') . '/tests/routing_simple.xml', 'test2');
-		$rq->clearParameters();
+		$rd->clearParameters();
 		$r->setInput('/parent/MACHINE');
-		$this->assertEquals(array('test2parent', 'test2child1'), $r->execute());
-		$this->assertEquals(3, count($rq->getParameters()));
-		//$this->assertEquals('', $rq->getParameter('category'));
-		$this->assertEquals('MACHINE', $rq->getParameter('machine'));
+		$r->execute();
+		$this->assertEquals(array('test2parent', 'test2child1'), $rq->getAttribute('matchedRoutes', 'org.agavi.routing'));
+		$this->assertEquals(3, count($rd->getParameters()));
+		$this->assertEquals('MACHINE', $rd->getParameter('machine'));
 
-		$this->assertsame('/parent/MACHINE', $r->gen('test2child1', array('machine' => 'MACHINE')));
-		$this->assertEquals('/parent/cat1/MACHINE', $r->gen('test2child1', array('machine' => 'MACHINE', 'category' => 'cat1')));
+		$this->assertsame(array('/parent/MACHINE'), array_slice($r->gen('test2child1', array('category' => null, 'machine' => 'MACHINE')), 0, 1));
+		$this->assertsame(array('/parent//MACHINE'), array_slice($r->gen('test2child1', array('machine' => 'MACHINE')), 0, 1));
+		$this->assertEquals(array('/parent/cat1/MACHINE'), array_slice($r->gen('test2child1', array('machine' => 'MACHINE', 'category' => 'cat1')), 0, 1));
 	}
 
 	public function testErrors()

@@ -1,19 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!--
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
-| This file is part of the Agavi package.                                    |
-| Copyright (c) 2006 the Agavi Project.                                      |
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
--->
 <configurations>
 	<configuration>
-		<action_stack class="FCHTestActionStack">
-			<parameters>
-				<parameter name="p1">v1</parameter>
-				<parameter name="p2">v2</parameter>
-			</parameters>
-		</action_stack>
-
 		<controller class="FCHTestController">
 			<parameters>
 				<parameter name="p1">v1</parameter>
@@ -27,6 +14,13 @@
 				<parameter name="p2">v2</parameter>
 			</parameters>
 		</dispatch_filter>
+
+		<execution_container class="FCHTestExecutionContainer">
+			<parameters>
+				<parameter name="p1">v1</parameter>
+				<parameter name="p2">v2</parameter>
+			</parameters>
+		</execution_container>
 
 		<execution_filter class="FCHTestExecutionFilter">
 			<parameters>
@@ -77,12 +71,12 @@
 			</parameters>
 		</storage>
 
-		<validator_manager class="FCHTestValidatorManager">
+		<validation_manager class="FCHTestValidationManager">
 			<parameters>
 				<parameter name="p1">v1</parameter>
 				<parameter name="p2">v2</parameter>
 			</parameters>
-		</validator_manager>
+		</validation_manager>
 
 
 

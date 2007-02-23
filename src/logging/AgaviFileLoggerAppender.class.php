@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -20,7 +20,9 @@
  * @subpackage logging
  *
  * @author     Bob Zoller <bob@agavi.org>
- * @copyright  (c) Authors
+ * @copyright  Authors
+ * @copyright  The Agavi Project
+ *
  * @since      0.10.0
  *
  * @version    $Id$
@@ -69,8 +71,8 @@ class AgaviFileLoggerAppender extends AgaviLoggerAppender
 	protected function getHandle()
 	{
 		if(is_null($this->handle)) {
-			if(!$this->handle = fopen($this->filename, 'a')) {
-				throw new AgaviLoggingException("Cannot open file (" . $this->filename . ")");
+			if(!is_writable(dirname($this->filename)) || (file_exists($this->filename) && !is_writable($this->filename)) || !$this->handle = fopen($this->filename, 'a')) {
+				throw new AgaviLoggingException('Cannot open file "' . $this->filename . '", please check permissions on file or directory.');
 			}
 		}
 		return $this->handle;
@@ -110,8 +112,8 @@ class AgaviFileLoggerAppender extends AgaviLoggerAppender
 		}
 
 		$str = sprintf("%s\n", $this->getLayout()->format($message));
-		if(fwrite($this->getHandle(), $str) === FALSE) {
-			throw new AgaviLoggingException("Cannot write to file ( " . $this->filename . ")");
+		if(fwrite($this->getHandle(), $str) === false) {
+			throw new AgaviLoggingException('Cannot write to file "' . $this->filename . '".');
 		}
 	}
 }

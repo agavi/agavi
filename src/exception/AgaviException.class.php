@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
@@ -22,9 +22,12 @@
  * @package    agavi
  * @subpackage exception
  *
+ * @author     David Zülke <dz@bitxtender.com>
  * @author     Sean Kerr <skerr@mojavi.org>
  * @author     Bob Zoller <bob@agavi.org>
- * @copyright  (c) Authors
+ * @copyright  Authors
+ * @copyright  The Agavi Project
+ *
  * @since      0.9.0
  *
  * @version    $Id$
@@ -38,32 +41,40 @@ class AgaviException extends Exception
 	 * @param      AgaviContext  The context instance.
 	 * @param      AgaviResponse The response instance.
 	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @author     Bob Zoller <bob@agavi.org>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
-	public static function printStackTrace(Exception $e, AgaviContext $context = null, AgaviResponse $response = null)
+	public static function printStackTrace(Exception $e, AgaviContext $context = null, AgaviExecutionContainer $container = null)
 	{
-		// throw away any response data that might be there
-		if($context !== null && ($c = $context->getController()) !== null && $response !== null) {
-			if($response->isLocked()) {
-				// reponse is locked, so grab the output and discard it
-				ob_start();
-				$response->send();
-				ob_end_clean();
-			} else {
-				// not locked, we can clear the response
-				$response->clear();
+		// discard any previous output waiting in the buffer
+		while(@ob_end_clean());
+		
+		if($container !== null && $container->getOutputType() !== null && $container->getOutputType()->getExceptionTemplate() !== null) { 
+			// an exception template was defined for the container's output type
+			include($container->getOutputType()->getExceptionTemplate() !== null); 
+			exit;
+		}
+		
+		if($context !== null && $context->getController() !== null) {
+			try {
+				// check if an exception template was defined for the default output type
+				if($context->getController()->getOutputType()->getExceptionTemplate() !== null) {
+					include($context->getController()->getOutputType()->getExceptionTemplate());
+					exit;
+				}
+			} catch(Exception $e2) {
+				unset($e2);
 			}
 		}
 		
-		if($context !== null && $tpl = AgaviConfig::get('exception.templates.' . $context->getName())) {
+		if($context !== null && AgaviConfig::get('exception.templates.' . $context->getName()) !== null) {
 			// a template was set for this context
-			include($tpl);
-		} else {
-			// include default exception template
-			include(AgaviConfig::get('exception.default_template'));
+			include(AgaviConfig::get('exception.templates.' . $context->getName()));
+			exit;
 		}
+		
+		// include default exception template
+		include(AgaviConfig::get('exception.default_template'));
 		
 		// bail out
 		exit;

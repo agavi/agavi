@@ -2,12 +2,12 @@
 <!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.4/ldml.dtd">
 <ldml>
 	<identity>
-		<version number="$Revision: 1.21 $"/>
-		<generation date="$Date: 2006/06/24 23:27:01 $"/>
+		<version number="$Revision: 1.23 $"/>
+		<generation date="$Date: 2006/10/28 00:22:48 $"/>
 		<language type="sr"/>
 		<script type="Latn"/>
 		<territory type="YU"/>
 	</identity>
-	<alias source="sr_Latn_CS" path="//ldml"/>
+    <alias source="sr_Latn_RS" path="//ldml"/>
 </ldml>
 

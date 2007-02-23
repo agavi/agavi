@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
@@ -21,7 +21,10 @@
  * @subpackage filter
  *
  * @author     Sean Kerr <skerr@mojavi.org>
- * @copyright  (c) Authors
+ * @author     David Zülke <dz@bitxtender.com>
+ * @copyright  Authors
+ * @copyright  The Agavi Project
+ *
  * @since      0.9.0
  *
  * @version    $Id$
@@ -50,9 +53,9 @@ class AgaviFilterChain
 	protected $index = -1;
 	
 	/**
-	 * @var        AgaviResponse The Response instance that is handed to filters.
+	 * @var        AgaviExecutionContainer The execution container that is handed to filters.
 	 */
-	protected $response = null;
+	protected $context = null;
 
 	/**
 	 * Initialize this Filter Chain.
@@ -60,23 +63,25 @@ class AgaviFilterChain
 	 * @param      AgaviResponse the Response instance for this Chain.
 	 * @param      array An array of initialization parameters.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function initialize(AgaviResponse $response, array $parameters = array())
+	public function initialize(AgaviContext $context, array $parameters = array())
 	{
-		$this->response = $response;
-		$this->filterLogKey = $response->getContext()->getName();
+		$this->context = $context;
+		$this->filterLogKey = $context->getName();
 	}
 	
 	/**
 	 * Execute the next filter in this chain.
 	 *
+	 * @param      AgaviExecutionContainer The current execution container.
+	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
-	public function execute()
+	public function execute(AgaviExecutionContainer $container)
 	{
 		// skip to the next filter
 		$this->index++;
@@ -86,9 +91,9 @@ class AgaviFilterChain
 			$filter = $this->chain[$this->index];
 			$count = ++self::$filterLog[$this->filterLogKey][get_class($filter)];
 			if($count == 1) {
-				$filter->executeOnce($this, $this->response);
+				$filter->executeOnce($this, $container);
 			} else {
-				$filter->execute($this, $this->response);
+				$filter->execute($this, $container);
 			}
 		}
 	}
@@ -99,6 +104,7 @@ class AgaviFilterChain
 	 * @param      AgaviIFilter A Filter implementation instance.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
 	public function register(AgaviIFilter $filter)

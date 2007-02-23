@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
@@ -21,7 +21,10 @@
  * @subpackage util
  *
  * @author     Sean Kerr <skerr@mojavi.org>
- * @copyright  (c) Authors
+ * @author     David Zülke <dz@bitxtender.com>
+ * @copyright  Authors
+ * @copyright  The Agavi Project
+ *
  * @since      0.9.0
  *
  * @version    $Id$
@@ -74,16 +77,16 @@ final class AgaviToolkit
 	 * PHP mkdir() doesn't do what you tell it to, it takes umask into account.
 	 *
 	 * @param      string   The path name.
-	 * @param      int      The mode. Really.
+	 * @param      int      The mode. Really. Defaults to 0775.
 	 * @param      bool     Recursive or not.
 	 * @param      resource A Context.
 	 *
 	 * @return     bool The mkdir return value.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public static function mkdir($path, $mode = 0777, $recursive = false, $context = null)
+	public static function mkdir($path, $mode = 0775, $recursive = false, $context = null)
 	{
 		if($context !== null) {
 			$retval = @mkdir($path, $mode, $recursive, $context);
@@ -127,7 +130,7 @@ final class AgaviToolkit
 	 *
 	 * @param      string The path to remove
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public static function clearCache($path = '')
@@ -222,6 +225,22 @@ final class AgaviToolkit
 	}
 
 	/**
+	 * Expand variables in a string.
+	 *
+	 * Variables can be in the form $foo, ${foo} or {$foo}.
+	 *
+	 * @param      string The format string.
+	 * @param      array  The variables to use.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public static function expandVariables($string, array $arguments = array())
+	{
+		return preg_replace(array('/\$\{([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)\}/e', '/\{\$([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)\}/e', '/\$([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)/e'), 'isset($arguments["$1"]) ? $arguments["$1"] : \'$0\'', $string);
+	}
+	
+	/**
 	 * This function takes the numerator and divides it thru the denominator while
 	 * storing the remainder and returning the quotient.
 	 *
@@ -243,6 +262,57 @@ final class AgaviToolkit
 		$remainder = (int) ($numerator - ($quotient * $denominator));
 
 		return $quotient;
+	}
+	
+	/**
+	 * Determines whether a port declaration is necessary in a URL authority.
+	 *
+	 * @param      string The scheme (protocol identifier).
+	 * @param      int    The port.
+	 *
+	 * @return     bool True, if port must be included, otherwise false.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public static function isPortNecessary($scheme, $port)
+	{
+		static $protocolList = array(
+			'ftp' => 21,
+			'ssh' => 22,
+			'telnet' => 23,
+			'gopher' => 70,
+			'http' => 80,
+			'nttp' => 119,
+			'https' => 443,
+			'mms' => 1755,
+		);
+		if(isset($protocolList[$scheme = strtolower($scheme)]) && $protocolList[$scheme] === $port) {
+			return false;
+		}
+		return true;
+	}
+	
+	/**
+	 * Tries to grab a value from the given array using the given list of keys.
+	 *
+	 * @param      array The array to search in.
+	 * @param      array The list of keys.
+	 * @param      mixed A default return value, defaults to null.
+	 *
+	 * @return     mixed The found value, or the default value if nothing found.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public static function getValueByKeyList(array $array, array $keys, $default = null)
+	{
+		foreach($keys as $key) {
+			if(isset($array[$key])) {
+				return $array[$key];
+			}
+		}
+		return $default;
 	}
 }
 

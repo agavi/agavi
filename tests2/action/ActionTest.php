@@ -16,7 +16,7 @@ class ActionTest extends AgaviTestCase
 		$this->_controller = $this->_context->getController();
 
 		$this->_action = new SampleAction();
-		$this->_action->initialize($this->_context);
+		$this->_action->initialize($this->_controller->createExecutionContainer('Foo', 'Bar'));
 	}
 
 	public function tearDown()
@@ -44,7 +44,7 @@ class ActionTest extends AgaviTestCase
 
 	public function testhandleError()
 	{
-		$this->assertEquals('Error', $this->_action->handleError(new AgaviParameterHolder()));
+		$this->assertEquals('Error', $this->_action->handleError(new AgaviRequestDataHolder()));
 	}
 
 	public function testisSecure()
@@ -54,7 +54,7 @@ class ActionTest extends AgaviTestCase
 
 	public function testvalidate()
 	{
-		$this->assertTrue($this->_action->validate(new AgaviParameterHolder()));
+		$this->assertTrue($this->_action->validate(new AgaviRequestDataHolder()));
 	}
 }
 ?>

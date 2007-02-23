@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -22,7 +22,10 @@
  * @subpackage date
  *
  * @author     Dominik del Bondio <ddb@bitxtender.com>
- * @copyright  (c) Authors
+ * @author     The ICU Project
+ * @copyright  Authors
+ * @copyright  The Agavi Project
+ *
  * @since      0.11.0
  *
  * @version    $Id$
@@ -70,7 +73,7 @@ class AgaviOlsonTimeZone extends AgaviTimeZone
 	 * A SimpleTimeZone that governs the behavior for years > finalYear.
 	 * If and only if finalYear == INT32_MAX then finalZone == 0.
 	 *
-	 * @var        AgaviSimpleZimeZone
+	 * @var        AgaviSimpleTimeZone
 	 * @since      0.11.0
 	 */
 	protected $finalZone; // owned, may be NULL
@@ -85,7 +88,7 @@ class AgaviOlsonTimeZone extends AgaviTimeZone
 	 * @see        AgaviOlsonTimeZone::constructorOSA()
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project <http://icu.sourceforge.net>
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function __construct()
@@ -110,7 +113,7 @@ class AgaviOlsonTimeZone extends AgaviTimeZone
 	 * a fixed GMT offset of zero.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project <http://icu.sourceforge.net>
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	protected function constructor()
@@ -127,7 +130,7 @@ class AgaviOlsonTimeZone extends AgaviTimeZone
 	 * constructor fails so the resultant object is well-behaved.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project <http://icu.sourceforge.net>
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	protected function constructEmpty()
@@ -146,7 +149,7 @@ class AgaviOlsonTimeZone extends AgaviTimeZone
 	 * @param      array  The zone info data.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project <http://icu.sourceforge.net>
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	protected function constructorOSA(AgaviTranslationManager $tm, $id, array $zoneInfo)
@@ -192,7 +195,7 @@ class AgaviOlsonTimeZone extends AgaviTimeZone
 	 * Returns true if the two TimeZone objects are equal.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project <http://icu.sourceforge.net>
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	function __is_equal($that)
@@ -208,7 +211,7 @@ class AgaviOlsonTimeZone extends AgaviTimeZone
 	 * AgaviTimeZone API.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project <http://icu.sourceforge.net>
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	protected function getOffsetIIIIII($era, $year, $month, $dom, $dow, $millis)
@@ -224,7 +227,7 @@ class AgaviOlsonTimeZone extends AgaviTimeZone
 	 * AgaviTimeZone API.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project <http://icu.sourceforge.net>
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	protected function getOffsetIIIIIII($era, $year, $month, $dom, $dow, $millis, $monthLength)
@@ -262,7 +265,7 @@ class AgaviOlsonTimeZone extends AgaviTimeZone
 	 * AgaviTimeZone API.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project <http://icu.sourceforge.net>
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function getOffsetRef($date, $local, &$rawoff, &$dstoff)
@@ -303,7 +306,7 @@ class AgaviOlsonTimeZone extends AgaviTimeZone
 	 * AgaviTimeZone API.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project <http://icu.sourceforge.net>
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function setRawOffset($offsetMillis)
@@ -318,7 +321,7 @@ class AgaviOlsonTimeZone extends AgaviTimeZone
 	 * TimeZone API.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project <http://icu.sourceforge.net>
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function getRawOffset()
@@ -343,7 +346,7 @@ class AgaviOlsonTimeZone extends AgaviTimeZone
 	 *                   transitionCount == 0 or time < transition(0).
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project <http://icu.sourceforge.net>
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	protected function findTransition($time, $local)
@@ -392,7 +395,7 @@ class AgaviOlsonTimeZone extends AgaviTimeZone
 	 * TimeZone API.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project <http://icu.sourceforge.net>
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function useDaylightTime()
@@ -446,7 +449,7 @@ class AgaviOlsonTimeZone extends AgaviTimeZone
 	 * TimeZone API.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project <http://icu.sourceforge.net>
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function getDSTSavings()
@@ -461,7 +464,7 @@ class AgaviOlsonTimeZone extends AgaviTimeZone
 	 * TimeZone API.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     The ICU Project <http://icu.sourceforge.net>
+	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	public function inDaylightTime($date)

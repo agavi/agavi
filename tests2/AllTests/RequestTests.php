@@ -6,7 +6,7 @@ class RequestTests
 {
 	public static function suite()
 	{
-		$suite = new PHPUnit2_Framework_TestSuite('request');
+		$suite = new PHPUnit_Framework_TestSuite('request');
 
 		$suite->addTestSuite('RequestTest');
 		$suite->addTestSuite('WebRequestTest');

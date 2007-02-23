@@ -2,8 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
-// | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -14,7 +13,7 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
-class Default_ModuleDisabledAction extends AgaviAction
+class Default_ModuleDisabledAction extends AgaviSampleAppDefaultBaseAction
 {
 	/**
 	 * This Action does not yet serve any Request methods.
@@ -25,7 +24,7 @@ class Default_ModuleDisabledAction extends AgaviAction
 	 * Alternatively, you can implement executeRead() and executeWrite() methods,
 	 * because "read" and "write" are the default names for Web Request methods.
 	 * Other request methods may be explicitely served via execcuteReqmethname().
-	 * 
+	 *
 	 * Keep in mind that if an Action serves a Request method, validation will be
 	 * performed prior to execution.
 	 *
@@ -49,7 +48,7 @@ class Default_ModuleDisabledAction extends AgaviAction
 	 * execute*() being present, e.g. for a "write" Request, validateWrite() will
 	 * be run even if there is no executeWrite() method.
 	 */
-//	public function execute(AgaviParameterHolder $parameters)
+//	public function execute(AgaviRequestDataHolder $rd)
 //	{
 //		return 'Success';
 //	}

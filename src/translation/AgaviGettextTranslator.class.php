@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -18,10 +18,12 @@
  * 
  * @package    agavi
  * @subpackage translation
- * 
- * @since      0.11.0 
+ *
  * @author     Dominik del Bondio <ddb@bitxtender.com>
- * @copyright  (c) Authors
+ * @copyright  Authors
+ * @copyright  The Agavi Project
+ *
+ * @since      0.11.0
  *
  * @version    $Id$
  */
@@ -46,6 +48,17 @@ class AgaviGettextTranslator extends AgaviBasicTranslator
 	 * @var        string The name of the plural form function
 	 */
 	protected $pluralFormFunc = null;
+	
+	/**
+	 * @var        bool Whether or not to write a file with all used translations
+	 *                  that can be parsed using xgettext.
+	 */
+	protected $storeTranslationCalls = false;
+	
+	/**
+	 * @var        string The folder to write translation call files to.
+	 */
+	protected $translationCallStoreDir = null;
 
 	/**
 	 * Initialize this Translator.
@@ -53,7 +66,7 @@ class AgaviGettextTranslator extends AgaviBasicTranslator
 	 * @param      AgaviContext The current application context.
 	 * @param      array        An associative array of initialization parameters
 	 *
-	 * @author     Dominik del Bondio <ddb@bitxtender.com
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function initialize(AgaviContext $context, array $parameters = array())
@@ -69,10 +82,26 @@ class AgaviGettextTranslator extends AgaviBasicTranslator
 		if(isset($parameters['text_domain_pattern'])) {
 			$this->domainPathPattern = $parameters['text_domain_pattern'];
 		}
+		
+		if(isset($parameters['store_calls'])) {
+			$this->storeTranslationCalls = true;
+			$this->translationCallStoreDir = $parameters['store_calls'];
+			AgaviToolkit::mkdir($parameters['store_calls'], 0777, true);
+		}
 	}
 
 	/**
-	 * @see AgaviITranslator::translate()
+	 * Translates a message into the defined language.
+	 *
+	 * @param      mixed       The message to be translated.
+	 * @param      string      The domain of the message.
+	 * @param      AgaviLocale The locale to which the message should be 
+	 *                         translated.
+	 *
+	 * @return     string The translated message.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
 	 */
 	public function translate($message, $domain, AgaviLocale $locale = null)
 	{
@@ -93,9 +122,9 @@ class AgaviGettextTranslator extends AgaviBasicTranslator
 			$count = $message[2];
 			if($this->pluralFormFunc) {
 				$funcName = $this->pluralFormFunc;
-				$msgId = $funcName($count);
+				$msgId = (int) $funcName($count);
 			} else {
-				$msgId = ($count == 1) ? 1 : 0;
+				$msgId = ($count == 1) ? 0 : 1;
 			}
 
 			$msgKey = $singularMsg . chr(0) . $pluralMsg;
@@ -104,13 +133,22 @@ class AgaviGettextTranslator extends AgaviBasicTranslator
 				$pluralMsgs = explode(chr(0), $this->domainData[$domain]['msgs'][$msgKey]);
 				$data = $pluralMsgs[$msgId];
 			} else {
-				$data = ($msgId == 1) ? $singularMsg : $pluralMsg;
+				$data = ($msgId == 0) ? $singularMsg : $pluralMsg;
 			}
 		} else {
 			$data = isset($this->domainData[$domain]['msgs'][$message]) ? $this->domainData[$domain]['msgs'][$message] : $message;
 		}
 
-		
+		// in "devel" mode, write a gettext() or ngettext() call to a file for xgettext parsing
+		if($this->storeTranslationCalls) {
+			file_put_contents(
+				$this->translationCallStoreDir . DIRECTORY_SEPARATOR . $domain . '.php', 
+				"" . (is_array($message) ? 
+					('ngettext(' . var_export($message[0], true) . ', ' . var_export($message[1], true) . ', ' . var_export($message[2], true) . ')') :
+					('gettext(' . var_export($message, true) . ')')
+				) . ";\n",
+			FILE_APPEND);
+		}
 
 		if($locale) {
 			$this->domainData = $oldDomainData;
@@ -127,7 +165,7 @@ class AgaviGettextTranslator extends AgaviBasicTranslator
 	 *
 	 * @param      string The new default locale.
 	 *
-	 * @author     Dominik del Bondio <ddb@bitxtender.com
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function localeChanged($newLocale)
@@ -142,7 +180,7 @@ class AgaviGettextTranslator extends AgaviBasicTranslator
 	 *
 	 * @param      string The domain to load the data for.
 	 *
-	 * @author     Dominik del Bondio <ddb@bitxtender.com
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function loadDomainData($domain)
@@ -206,11 +244,8 @@ class AgaviGettextTranslator extends AgaviBasicTranslator
 			}
 		}
 
-
-
 		$this->domainData[$domain] = array('headers' => $headers, 'msgs' => $data);
 	}
-
 }
 
 ?>

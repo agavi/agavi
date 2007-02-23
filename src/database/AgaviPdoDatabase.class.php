@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -14,15 +14,18 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviPdoDatabase provides connectivity for the PDO database abstraction 
- * layer.
+ * AgaviPdoDatabase provides connectivity for the PDO database API layer.
  *
  * @package    agavi
  * @subpackage database
  *
- * @author     Daniel Swarbrick (daniel@pressure.net.nz)
- * @author     Agavi Project <info@agavi.org>
- * @copyright  (c) Authors
+ * @author     Daniel Swarbrick <daniel@pressure.net.nz>
+ * @author     David Zülke <dz@bitxtender.com>
+ * @author     Dominik del Bondio <ddb@bitxtender.com>
+ * @author     Veikko Mäkinen <veikko@veikkomakinen.com>
+ * @copyright  Authors
+ * @copyright  The Agavi Project
+ *
  * @since      0.9.0
  *
  * @version    $Id$
@@ -35,10 +38,13 @@ class AgaviPdoDatabase extends AgaviDatabase
 	 * @throws     <b>AgaviDatabaseException</b> If a connection could not be 
 	 *                                           created.
 	 *
-	 * @author     Daniel Swarbrick (daniel@pressure.net.nz)
+	 * @author     Daniel Swarbrick <daniel@pressure.net.nz>
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     Veikko Mäkinen <veikko@veikkomakinen.com>
 	 * @since      0.9.0
 	 */
-	public function connect()
+	protected function connect()
 	{
 		// determine how to get our parameters
 		$method = $this->getParameter('method', 'dsn');
@@ -49,35 +55,42 @@ class AgaviPdoDatabase extends AgaviDatabase
 				$dsn = $this->getParameter('dsn');
 				if($dsn == null) {
 					// missing required dsn parameter
-					$error = 'Database configuration specifies method ' .
-						 '"dsn", but is missing dsn parameter';
+					$error = 'Database configuration specifies method "dsn", but is missing dsn parameter';
 					throw new AgaviDatabaseException($error);
 				}
 				break;
 		}
 
 		try {
-			$pdo_username = $this->getParameter('username');
-			$pdo_password = $this->getParameter('password');
+			$username = $this->getParameter('username');
+			$password = $this->getParameter('password');
 
-			$pdo_options = array();
+			$options = array();
 
-			// let's see if we need a persistent connection
-			// take special care because the postgresql pdo driver bitterly complains
-			// when getting options passed.
-			if($this->hasParameter('persistent')) {
-				$persistent = $this->getParameter('persistent', false);
-				$pdo_options[PDO::ATTR_PERSISTENT] = $persistent;
+			if($this->hasParameter('options')) {
+				foreach((array)$this->getParameter('options') as $key => $value) {
+					$options[is_string($key) && strpos($key, '::') ? constant($key) : $key] = is_string($value) && strpos($value, '::') ? constant($value) : $value;
+				}
 			}
 
-			$this->connection = new PDO($dsn, $pdo_username, $pdo_password, $pdo_options);
+			$this->connection = new PDO($dsn, $username, $password, $options);
 
+			// default connection attributes
+			$attributes = array(
+				// lets generate exceptions instead of silent failures
+				PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+			);
+			if($this->hasParameter('attributes')) {
+				foreach((array)$this->getParameter('attributes') as $key => $value) {
+					$attributes[is_string($key) && strpos($key, '::') ? constant($key) : $key] = is_string($value) && strpos($value, '::') ? constant($value) : $value;
+				}
+			}
+			foreach($attributes as $key => $value) {
+				$this->connection->setAttribute($key, $value);
+			}
 		} catch(PDOException $e) {
 			throw new AgaviDatabaseException($e->getMessage());
 		}
-
-		// lets generate exceptions instead of silent failures
-		$this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	}
 
 	/**
@@ -86,7 +99,7 @@ class AgaviPdoDatabase extends AgaviDatabase
 	 * @throws     <b>AgaviDatabaseException</b> If an error occurs while shutting
 	 *                                           down this database.
 	 *
-	 * @author     Daniel Swarbrick (daniel@pressure.net.nz)
+	 * @author     Daniel Swarbrick <daniel@pressure.net.nz>
 	 * @since      0.9.0
 	 */
 	public function shutdown()
@@ -95,4 +108,5 @@ class AgaviPdoDatabase extends AgaviDatabase
 		$this->connection = null;
 	}
 }
+
 ?>

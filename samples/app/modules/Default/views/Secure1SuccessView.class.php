@@ -1,17 +1,11 @@
 <?php
 
-class Default_Secure1SuccessView extends AgaviView
+class Default_Secure1SuccessView extends AgaviSampleAppDefaultBaseView
 {
 
-	/**
-	 * Execute any presentation logic and set template attributes.
-	 *
-	 */
-	public function execute(AgaviParameterHolder $parameters)
+	public function executeHtml(AgaviRequestDataHolder $rd)
 	{
-		// set our template
-		$this->setTemplate('Secure1Success');
-		$this->setDecoratorTemplate('Master');
+		parent::setupHtml($rd);
 
 		// set the title
 		$this->setAttribute('title', $this->getContext()->getTranslationManager()->_('Secure Action', 'default.Login'));

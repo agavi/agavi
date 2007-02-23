@@ -1,42 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!--
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
-| This file is part of the Agavi package.                                    |
-| Copyright (c) 2006 the Agavi Project.                                      |
-| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
-| OUTPUT TYPE CONFIGURATION                                                  |
-| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
-| KEYWORDS:                                                                  |
-| You may reference any configuration directive by enclosing the name in     |
-| "%" signs. Example: %core.agavi_dir%                                         |
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
--->
 <configurations>
 
 	<configuration>
 
-		<loggers>
+		<loggers default="any">
 
 			<!-- logs only DEBUG messages -->
-			<logger name="debug" class="AgaviLogger" level="AgaviLogger::DEBUG">
+			<logger name="any" class="AgaviLogger" level="AgaviLogger::ALL">
 				<appenders>
 					<appender>DebugLogAppender</appender>
 				</appenders>
 			</logger>
 
-			<!-- logs only INFO messages -->
-			<logger name="default" class="AgaviLogger" level="AgaviLogger::INFO">
-				<appenders>
-					<appender>ApplicationLogAppender</appender>
-				</appenders>
-			</logger>
-
-			<!-- logs everything but DEBUG and INFO messages -->
-			<logger name="error" class="AgaviLogger" level="AgaviLogger::ALL ^ AgaviLogger::DEBUG ^ AgaviLogger::INFO">
-				<appenders>
-					<appender>ErrorLogAppender</appender>
-				</appenders>
-			</logger>
 		</loggers>
 		<appenders>
 
@@ -50,23 +25,10 @@
 					<parameter name="prefix">debug-</parameter>
 				</parameters>
 			</appender>
-
-			<appender name="ApplicationLogAppender" class="AgaviFileLoggerAppender" layout="PassthruLayout">
-				<parameters>
-					<parameter name="file">%core.app_dir%/log/application.log</parameter>
-				</parameters>
-			</appender>
-
-			<appender name="ErrorLogAppender" class="AgaviRotatingFileLoggerAppender" layout="PassthruLayout">
-				<parameters>
-					<parameter name="file">%core.app_dir%/log/error.log</parameter>
-				</parameters>
-			</appender>
-
 		</appenders>
 
 		<layouts>
-			<layout name="PassthruLayout" class="AgaviPassthruLoggerLayout" />
+			<layout name="PassthruLayout" class="AgaviTimestampLoggerLayout" />
 		</layouts>
 
 	</configuration>

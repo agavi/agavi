@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -19,11 +19,13 @@
  * @package    agavi
  * @subpackage routing
  *
- * @author     David Zuelke <dz@bitxtender.com>
- * @copyright  (c) Authors
+ * @author     David Zülke <dz@bitxtender.com>
+ * @copyright  Authors
+ * @copyright  The Agavi Project
+ *
  * @since      0.11.0
  *
- * @version    $Id: AgaviWebRouting.class.php 1095 2006-10-07 15:53:10Z david $
+ * @version    $Id$
  */
 class AgaviWebserviceRouting extends AgaviRouting
 {
@@ -33,12 +35,12 @@ class AgaviWebserviceRouting extends AgaviRouting
 	 * @param      AgaviContext A Context instance.
 	 * @param      array        An array of initialization parameters.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function initialize(AgaviResponse $response, array $parameters = array())
+	public function initialize(AgaviContext $context, array $parameters = array())
 	{
-		parent::initialize($response, $parameters);
+		parent::initialize($context, $parameters);
 		
 		if(!AgaviConfig::get("core.use_routing", false)) {
 			return;

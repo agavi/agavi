@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -19,14 +19,15 @@
  * @package    agavi
  * @subpackage renderer
  *
- * @author     David Zuelke <dz@bitxtender.com>
- * @author     Agavi Project <info@agavi.org>
- * @copyright  (c) Authors
+ * @author     David Zülke <dz@bitxtender.com>
+ * @copyright  Authors
+ * @copyright  The Agavi Project
+ *
  * @since      0.11.0
  *
  * @version    $Id$
  */
-abstract class AgaviRenderer implements AgaviIRenderingFilter
+abstract class AgaviRenderer
 {
 	/**
 	 * @var        AgaviContext An AgaviContext instance.
@@ -34,26 +35,10 @@ abstract class AgaviRenderer implements AgaviIRenderingFilter
 	protected $context = null;
 	
 	/**
-	 @var          AgaviResponse A Response instance.
-	 */
-	protected $response = null;
-	
-	/**
 	 * @var        string A string with the default template file extension,
 	 *                    including the dot.
 	 */
-	protected $extension = '';
-	
-	/**
-	 * @var        array An associative array containing the output of slots and
-	 *                   the output of the content view.
-	 */
-	protected $output = array();
-	
-	/**
-	 * @var        AgaviView The View instance that belongs to this Renderer.
-	 */
-	protected $view = null;
+	protected $defaultExtension = '';
 	
 	/**
 	 * @var        string The name of the array that contains the template vars.
@@ -61,13 +46,9 @@ abstract class AgaviRenderer implements AgaviIRenderingFilter
 	protected $varName = 'template';
 	
 	/**
-	 * @var        string The name of the array that contains the slot output.
-	 *                    Defaults to null, which means it'll be the identical to
-	 *                    the varName setting.
-	 *
-	 * @see        AgaviRenderer::$varName
+	 * @var        string The name of the array that contains the slots output.
 	 */
-	protected $slotsVarName = null;
+	protected $slotsVarName = 'slots';
 	
 	/**
 	 * @var        bool Whether or not the template vars should be extracted.
@@ -75,23 +56,44 @@ abstract class AgaviRenderer implements AgaviIRenderingFilter
 	protected $extractVars = false;
 	
 	/**
-	 * @var        bool Whether or not the slot output vars should be extracted.
-	 *                  Defaults to null, which means it behaves according to the
-	 *                  extractVars setting.
-	 *
-	 * @see        AgaviRenderer::$extractVars
-	 */
-	protected $extractSlots = null;
-	
-	/**
 	 * @var        array An array of objects to be exported for use in templates.
 	 */
 	protected $assigns = array();
 	
 	/**
-	 * @var        array i18n template settings.
+	 * @var        array An array of names for the "more" assigns.
 	 */
-	protected $i18n = null;
+	protected $moreAssignNames = array();
+	
+	/**
+	 * Pre-serialization callback.
+	 *
+	 * Will set the name of the context and exclude the instance from serializing.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function __sleep()
+	{
+		$this->contextName = $this->context->getName();
+		$arr = get_object_vars($this);
+		unset($arr['context']);
+		return array_keys($arr);
+	}
+	
+	/**
+	 * Post-unserialization callback.
+	 *
+	 * Will restore the context based on the names set by __sleep.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function __wakeup()
+	{
+		$this->context = AgaviContext::getInstance($this->contextName);
+		unset($this->contextName);
+	}
 	
 	/**
 	 * Initialize this Renderer.
@@ -99,7 +101,7 @@ abstract class AgaviRenderer implements AgaviIRenderingFilter
 	 * @param      AgaviContext The current application context.
 	 * @param      array        An associative array of initialization parameters.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function initialize(AgaviContext $context, array $parameters = array())
@@ -114,29 +116,27 @@ abstract class AgaviRenderer implements AgaviIRenderingFilter
 		if(isset($parameters['extract_vars'])) {
 			$this->extractVars = $parameters['extract_vars'];
 		}
-		if(isset($parameters['extract_slots'])) {
-			$this->extractSlots = $parameters['extract_slots'];
-		}
-		if($this->slotsVarName === null) {
-			$this->slotsVarName = $this->varName;
+		if(!$this->extractVars && $this->varName == $this->slotsVarName) {
+			throw new AgaviException('Template and Slots container variable names cannot be identical.');
 		}
 		if(isset($parameters['assigns'])) {
-			foreach($parameters['assigns'] as $factory => $var) {
-				$getter = 'get' . str_replace('_', '', $factory);
-				$this->assigns[$var] = $this->context->$getter();
+			foreach($parameters['assigns'] as $item => $var) {
+				$getter = 'get' . str_replace('_', '', $item);
+				if(method_exists($this->context, $getter)) {
+					$this->assigns[$var] = $getter;
+				} else {
+					$this->moreAssignNames[$item] = $var;
+				}
 			}
 		}
-		if(isset($parameters['i18n'])) {
-			$this->i18n = array_merge(array('mode' => 'subdir', 'separator' => ''), $parameters['i18n']);
-		}
 	}
-
+	
 	/**
 	 * Retrieve the current application context.
 	 *
 	 * @return     AgaviContext The current AgaviContext instance.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public final function getContext()
@@ -149,277 +149,28 @@ abstract class AgaviRenderer implements AgaviIRenderingFilter
 	 *
 	 * @return     string The extension, including a leading dot.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function getExtension()
+	public function getDefaultExtension()
 	{
-		return $this->extension;
+		return $this->defaultExtension;
 	}
 	
 	/**
-	 * Set the template file extension
+	 * Render the presentation and return the result.
 	 *
-	 * @param      string The extension, including a leading dot.
+	 * @param      AgaviTemplateLayer The template layer to render.
+	 * @param      array              The template variables.
+	 * @param      array              The slots.
+	 * @param      array              Associative array of additional assigns.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @return     string A rendered result.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function setExtension($extension)
-	{
-		$this->extension = $extension;
-	}
-
-	/**
-	 * Set the View instance that belongs to this Renderer instance.
-	 *
-	 * @param      AgaviView An AgaviView instance
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function setView($view)
-	{
-		$this->view = $view;
-	}
-	
-	/**
-	 * Retrieve the View instance that belongs to this Renderer instance.
-	 *
-	 * @return     AgaviView An AgaviView instance
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function getView()
-	{
-		return $this->view;
-	}
-	
-	/**
-	 * Build a template name based on "literal" flag in the template info.
-	 * Depending on whether or not the "literal" flag is set, the file extension
-	 * for this Renderer instance will be appended ("literal" false) or not (true)
-	 *
-	 * @param      array  The (decorator) template info given by the View.
-	 * @param      string The extension prefix.
-	 * @param      string The extension seperator.
-	 *
-	 * @return     string A template file name.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function buildTemplateName($templateData, $extensionPrefix = '', $separator = '')
-	{
-		list($file, $literal) = $templateData;
-		if($literal) {
-			return $file;
-		} else {
-			return $file . $separator . $extensionPrefix . $this->getExtension();
-		}
-	}
-	
-	/**
-	 * Loop through all template slots and fill them in with the results of
-	 * presentation data.
-	 *
-	 * @param      string A chunk of decorator content.
-	 *
-	 * @return     string A decorated template.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function decorate($content)
-	{
-		$view = $this->getView();
-		
-		// alias controller
-		$controller = $view->getContext()->getController();
-		
-		// get original render mode
-		$renderMode = $controller->getRenderMode();
-		
-		// set render mode to var
-		$controller->setRenderMode(AgaviView::RENDER_VAR);
-		
-		// grab the action stack
-		$actionStack = $controller->getActionStack();
-		
-		// loop through our slots, and replace them one-by-one in the
-		// decorator template
-		$slots = $view->getSlots();
-		
-		foreach($slots as $name => $slot) {
-			// grab this next forward's action stack index
-			$index = $actionStack->getSize();
-			
-			// forward to the first slot action
-			$controller->forward($slot['module_name'], $slot['action_name'], $slot['additional_params']);
-			
-			$response = $actionStack->getEntry($index)->getPresentation();
-			
-			if($response) {
-				// set the presentation data as a template attribute
-				$this->output[$name] = $response->getContent();
-			
-				$this->response->merge($response->exportInfo());
-			} else {
-				$this->output[$name] = null;
-			}
-		}
-		
-		// put render mode back
-		$controller->setRenderMode($renderMode);
-		
-		// set the decorator content as an attribute
-		$this->output['content'] = $content;
-		
-		// return a null value to satisfy the requirement
-		$retval = null;
-		
-		return $retval;
-	}
-	
-	/**
-	 * Retrieve the template engine associated with this view.
-	 *
-	 * Note: This will return null for PHPView instances.
-	 *
-	 * @return     mixed A template engine instance.
-	 */
-	abstract function getEngine();
-
-	/**
-	 * Execute a basic pre-render check to verify all required variables exist
-	 * and that the template is readable.
-	 *
-	 * @throws     <b>AgaviRenderException</b> If the pre-render check fails.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public function preRenderCheck()
-	{
-		$view = $this->getView();
-		$oti = $this->context->getController()->getOutputTypeInfo();
-		
-		if($view->getTemplate() === null) {
-			// a template has not been set
-			return;
-		}
-		
-		$checks = array();
-		if(AgaviConfig::get('core.use_translation') && $this->i18n !== null) {
-			// TODO: I guess this could be a lil faster
-			foreach(AgaviLocale::getLookupPath($this->getContext()->getTranslationManager()->getCurrentLocaleIdentifier()) as $identifier) {
-				switch($this->i18n['mode']) {
-					case 'subdir':
-						$checks[] = $view->getDirectory() . '/' . $identifier . '/' . $this->buildTemplateName($view->getTemplate());
-						break;
-					case 'prefix':
-						$checks[] = $view->getDirectory() . '/' . $identifier . $this->i18n['separator'] . $this->buildTemplateName($view->getTemplate());
-						break;
-					case 'postfix':
-						$checks[] = $view->getDirectory() . '/' . $this->buildTemplateName($view->getTemplate(), $identifier, $this->i18n['separator']);
-						break;
-				}
-			}
-		}
-		$checks[] = $view->getDirectory() . '/' . $this->buildTemplateName($view->getTemplate());
-		
-		$template = '';
-		for($i = 0, $count = count($checks); $i < $count; $i++) {
-			$template = $checks[$i];
-			if(!is_readable($template)) {
-				if($i == $count -1) {
-					// the template isn't readable
-					$error = 'The template "%s" does not exist or is unreadable';
-					$error = sprintf($error, $template);
-					throw new AgaviRenderException($error);
-				}
-			} else {
-				$view->setTemplate($template, true);
-				break;
-			}
-		}
-
-		// check to see if this is a decorator template
-		if($view->isDecorator() && !(isset($oti['ignore_decorators']) && $oti['ignore_decorators'])) {
-			$template = $view->getDecoratorDirectory() . '/' . $this->buildTemplateName($view->getDecoratorTemplate());
-			if(!is_readable($template)) {
-				// the decorator template isn't readable
-				$error = 'The decorator template "%s" does not exist or is unreadable';
-				$error = sprintf($error, $template);
-				throw new AgaviRenderException($error);
-			}
-		}
-
-		if(isset($oti['ignore_decorators']) && $oti['ignore_decorators']) {
-			$view->clearDecorator();
-		}
-		if(isset($oti['ignore_slots']) && $oti['ignore_slots']) {
-			$view->clearSlots();
-		}
-	}
-
-	/**
-	 * Render the presentation to the Response.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	abstract function render();
-	
-	/**
-	 * Get the Response instance for this Renderer
-	 *
-	 * @return     AgaviResponse A Response instance.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function getResponse()
-	{
-		return $this->response;
-	}
-
-	/**
-	 * Execute the Renderer.
-	 *
-	 * This method is called by the rendering FilterChain.
-	 * It puts the returned data into the View (if appropriate)
-	 *
-	 * @param      AgaviFilterChain The filter chain.
-	 * @param      AgaviResponse    The response.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function executeOnce(AgaviFilterChain $filterChain, AgaviResponse $response)
-	{
-		$this->execute($filterChain, $response);
-	}
-
-	/**
-	 * Execute the Renderer.
-	 *
-	 * This method is called by the rendering FilterChain.
-	 * It puts the returned data into the View (if appropriate)
-	 *
-	 * @param      AgaviFilterChain The filter chain.
-	 * @param      AgaviResponse    The response.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function execute(AgaviFilterChain $filterChain, AgaviResponse $response)
-	{
-		$this->response = $response;
-		$this->render();
-	}
+	abstract public function render(AgaviTemplateLayer $layer, array &$attributes = array(), array &$slots = array(), array &$moreAssigns = array());
 }
 
 ?>

@@ -2,8 +2,8 @@
 <!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.4/ldml.dtd">
 <ldml>
 	<identity>
-		<version number="$Revision: 1.109 $"/>
-		<generation date="$Date: 2006/06/29 15:44:37 $"/>
+		<version number="$Revision: 1.114 $"/>
+		<generation date="$Date: 2006/10/28 02:18:53 $"/>
 		<language type="en"/>
 	</identity>
 	<localeDisplayNames>
@@ -328,6 +328,7 @@
 			<language type="no">Norwegian</language>
 			<language type="nog">Nogai</language>
 			<language type="non">Norse, Old</language>
+			<language type="nqo">N’Ko</language>
 			<language type="nr">South Ndebele</language>
 			<language type="nso">Northern Sotho</language>
 			<language type="nub">Nubian Languages</language>
@@ -466,7 +467,7 @@
 			<language type="uga">Ugaritic</language>
 			<language type="uk">Ukrainian</language>
 			<language type="umb">Umbundu</language>
-			<language type="und">Undetermined</language>
+			<language type="und">Unknown or Invalid Language</language>
 			<language type="ur">Urdu</language>
 			<language type="uz">Uzbek</language>
 			<language type="vai">Vai</language>
@@ -495,6 +496,7 @@
 			<language type="znd">Zande</language>
 			<language type="zu">Zulu</language>
 			<language type="zun">Zuni</language>
+			<language type="zza">Zaza</language>
 			<language type="zxx">No linguistic content</language>
 		</languages>
 		<scripts>
@@ -510,6 +512,7 @@
 			<script type="Bugi">Buginese</script>
 			<script type="Buhd">Buhid</script>
 			<script type="Cans">Unified Canadian Aboriginal Symbols</script>
+			<script type="Cari">Carian</script>
 			<script type="Cham" references="R1">Cham</script>
 			<script type="Cher">Cherokee</script>
 			<script type="Cirt">Cirth</script>
@@ -542,12 +545,14 @@
 			<script type="Hung">Old Hungarian</script>
 			<script type="Inds">Indus (Harappan)</script>
 			<script type="Ital">Old Italic</script>
+			<script type="Jpan">Japanese</script>
 			<script type="Java">Javanese</script>
 			<script type="Kali">Kayah Li</script>
 			<script type="Kana">Katakana</script>
 			<script type="Khar">Kharoshthi</script>
 			<script type="Khmr">Khmer</script>
 			<script type="Knda">Kannada</script>
+			<script type="Lana">Lanna</script>
 			<script type="Laoo">Lao</script>
 			<script type="Latf">Latin (Fraktur variant)</script>
 			<script type="Latg">Latin (Gaelic variant)</script>
@@ -556,6 +561,8 @@
 			<script type="Limb">Limbu</script>
 			<script type="Lina">Linear A</script>
 			<script type="Linb">Linear B</script>
+			<script type="Lyci">Lycian</script>
+			<script type="Lydi">Lydian</script>
 			<script type="Mand">Mandaean</script>
 			<script type="Maya">Mayan hieroglyphs</script>
 			<script type="Mero">Meroitic</script>
@@ -564,6 +571,7 @@
 			<script type="Mymr">Myanmar</script>
 			<script type="Nkoo">N’Ko</script>
 			<script type="Ogam">Ogham</script>
+			<script type="Olck">Ol Chiki</script>		
 			<script type="Orkh">Orkhon</script>
 			<script type="Orya">Oriya</script>
 			<script type="Osma">Osmanya</script>
@@ -572,11 +580,15 @@
 			<script type="Phnx">Phoenician</script>
 			<script type="Plrd">Pollard Phonetic</script>
 			<script type="Qaai">Inherited</script>
+			<script type="Rjng">Rejang</script>
 			<script type="Roro">Rongorongo</script>
 			<script type="Runr">Runic</script>
 			<script type="Sara">Sarati</script>
+			<script type="Saur">Saurashtra</script>
+			<script type="Sgnw">SignWriting</script>
 			<script type="Shaw">Shavian</script>
 			<script type="Sinh">Sinhala</script>
+			<script type="Sund">Sundanese</script> 
 			<script type="Sylo">Syloti Nagri</script>
 			<script type="Syrc">Syriac</script>
 			<script type="Syre">Syriac (Estrangelo variant)</script>
@@ -599,9 +611,9 @@
 			<script type="Xpeo">Old Persian</script>
 			<script type="Xsux">Sumero-Akkadian Cuneiform</script>
 			<script type="Yiii">Yi</script>
-			<script type="Zxxx">Code for unwritten languages</script>
+			<script type="Zxxx">Unwritten</script>
 			<script type="Zyyy">Common</script>
-			<script type="Zzzz">Code for uncoded script</script>
+			<script type="Zzzz">Unknown or Invalid Script</script>
 		</scripts>
 		<territories>
 			<territory type="001">World</territory>
@@ -627,6 +639,7 @@
 			<territory type="054">Melanesia</territory>
 			<territory type="057">Micronesian Region</territory>
 			<territory type="061">Polynesia</territory>
+			<territory type="062">South-Central Asia</territory>
 			<territory type="142">Asia</territory>
 			<territory type="143">Central Asia</territory>
 			<territory type="145">Western Asia</territory>
@@ -782,6 +795,7 @@
 			<territory type="MA">Morocco</territory>
 			<territory type="MC">Monaco</territory>
 			<territory type="MD">Moldova</territory>
+			<territory type="ME">Montenegro</territory>
 			<territory type="MG">Madagascar</territory>
 			<territory type="MH">Marshall Islands</territory>
 			<territory type="MI">Midway Islands</territory>
@@ -838,6 +852,7 @@
 			<territory type="QU">European Union</territory>
 			<territory type="RE">Reunion</territory>
 			<territory type="RO">Romania</territory>
+			<territory type="RS">Serbia</territory>
 			<territory type="RU">Russia</territory>
 			<territory type="RW">Rwanda</territory>
 			<territory type="SA">Saudi Arabia</territory>
@@ -905,6 +920,8 @@
 			<variant type="1901">Traditional German orthography</variant>
 			<variant type="1996">German orthography of 1996</variant>
 			<variant type="BOONT">Boontling</variant>
+			<variant type="AREVELA">Eastern Armenian</variant>
+			<variant type="AREVMDA">Western Armenian</variant>
 			<variant type="GAULISH">Gaulish</variant>
 			<variant type="GUOYU">Mandarin or Standard Chinese</variant>
 			<variant type="HAKKA">Hakka</variant>
@@ -1905,8 +1922,12 @@
 				<displayName>Mozambique Escudo</displayName>
 			</currency>
 			<currency type="MZM">
-				<displayName>Mozambique Metical</displayName>
+				<displayName>Old Mozambique Metical</displayName>
 				<symbol>Mt</symbol>
+			</currency>
+				<currency type="MZN">
+				<displayName>Mozambique Metical</displayName>
+				<symbol>MTn</symbol>
 			</currency>
 			<currency type="NAD">
 				<displayName>Namibia Dollar</displayName>

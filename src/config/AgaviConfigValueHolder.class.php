@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -20,7 +20,9 @@
  * @subpackage config
  *
  * @author     Dominik del Bondio <ddb@bitxtender.com>
- * @copyright  (c) Authors
+ * @copyright  Authors
+ * @copyright  The Agavi Project
+ *
  * @since      0.11.0
  *
  * @version    $Id$
@@ -68,6 +70,46 @@ class AgaviConfigValueHolder implements ArrayAccess, IteratorAggregate
 	public function getName()
 	{
 		return $this->_name;
+	}
+
+	public function __isset($name)
+	{
+		return $this->hasChildren($name);
+	}
+
+	public function __get($name)
+	{
+		if(isset($this->_childs[$name])) {
+			return $this->_childs[$name];
+		} else {
+			$tagName = $name;
+			$tagNameStart = '';
+			if(($lastUScore = strrpos($tagName, '_')) !== false) {
+				$lastUScore++;
+				$tagNameStart = substr($tagName, 0, $lastUScore);
+				$tagName = substr($tagName, $lastUScore);
+			}
+
+			// check if the requested node was specified using the plural version
+			// and create a "virtual" node which reflects the non existant plural node
+			$singularName = $tagNameStart . AgaviInflector::singularize($tagName);
+			if($this->hasChildren($singularName)) {
+
+				$vh = new AgaviConfigValueHolder();
+				$vh->setName($name);
+
+				foreach($this->_childs as $child) {
+					if($child->getName() == $singularName) {
+						$vh->addChildren($singularName, $child);
+					}
+				}
+
+				return $vh;
+			} else {
+				//throw new AgaviException('Node with the name ' . $name . ' does not exist ('.$this->getName().', '.implode(', ', array_keys($this->_childs)).')');
+				return null;
+			}
+		}
 	}
 
 	/**
@@ -119,20 +161,47 @@ class AgaviConfigValueHolder implements ArrayAccess, IteratorAggregate
 		if($child === null)
 			return count($this->_childs) > 0;
 
-		return isset($this->_childs[$child]);
+
+		if(isset($this->_childs[$child])) {
+			return true;
+		} else {
+			$tagName = $child;
+			$tagNameStart = '';
+			if(($lastUScore = strrpos($tagName, '_')) !== false) {
+				$lastUScore++;
+				$tagNameStart = substr($tagName, 0, $lastUScore);
+				$tagName = substr($tagName, $lastUScore);
+			}
+
+			$singularName = $tagNameStart . AgaviInflector::singularize($tagName);
+			return isset($this->_childs[$singularName]);
+		}
 	}
 
 	/**
 	 * Returns the children of this value.
+	 *
+	 * @param      string Return only the childs matching this node (tag) name.
 	 *
 	 * @return     array An array with the childs of this value.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function getChildren()
+	public function getChildren($nodename = null)
 	{
-		return $this->_childs;
+		if($nodename === null) {
+			return $this->_childs;
+		} else {
+			$childs = array();
+			foreach($this->_childs as $child) {
+				if($child->getName() == $nodename) {
+					$childs[] = $child;
+				}
+			}
+
+			return $childs;
+		}
 	}
 
 	/**

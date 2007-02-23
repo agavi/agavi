@@ -6,6 +6,7 @@
   <xs:element name="configurations" type="configurations" />
   <xs:complexType name="configurations">
     <xs:sequence>
+      <xs:element name="sandbox" type="sandbox" minOccurs="0" />
       <xs:element name="configuration" minOccurs="0" maxOccurs="unbounded">
         <xs:complexType>
           <xs:all>
@@ -20,6 +21,7 @@
     <xs:attribute name="parent" type="xs:string" />
   </xs:complexType>
 
+
   <xs:complexType name="translators">
     <xs:sequence>
       <xs:element name="translator" type="translator" maxOccurs="unbounded" />
@@ -27,42 +29,42 @@
     <xs:attribute name="default_domain" type="xs:string" use="required" />
   </xs:complexType>
   <xs:complexType name="translator">
-    <xs:all>
-      <xs:element name="message_translator" type="message_translator" minOccurs="0" />
-      <xs:element name="number_formatter" type="number_formatter" minOccurs="0" />
-      <xs:element name="currency_formatter" type="currency_formatter" minOccurs="0" />
-      <xs:element name="date_formatter" type="date_formatter" minOccurs="0" />
-    </xs:all>
+    <xs:sequence maxOccurs="unbounded">
+      <xs:element name="message_translator" type="translatordef" minOccurs="0" />
+      <xs:element name="number_formatter" type="formatterdef" minOccurs="0" />
+      <xs:element name="currency_formatter" type="formatterdef" minOccurs="0" />
+      <xs:element name="date_formatter" type="formatterdef" minOccurs="0" />
+      <xs:group ref="inner_translators" />
+    </xs:sequence>
     <xs:attribute name="domain" type="xs:string" use="required" />
   </xs:complexType>
 
-  <xs:complexType name="message_translator">
-    <xs:all>
-      <xs:element name="filters" type="filters" minOccurs="0" />
-      <xs:element name="parameters" type="parameters" minOccurs="0" />
-    </xs:all>
-    <xs:attribute name="type" type="xs:string" />
+  <xs:group name="inner_translators">
+    <xs:choice>
+      <xs:element name="translators" type="inner_translators" minOccurs="0" />
+      <xs:element name="translator" type="translator" minOccurs="0" maxOccurs="unbounded" />
+    </xs:choice>
+  </xs:group>
+  <xs:complexType name="inner_translators">
+    <xs:sequence>
+      <xs:element name="translator" type="translator" maxOccurs="unbounded" />
+    </xs:sequence>
   </xs:complexType>
-  <xs:complexType name="number_formatter">
-    <xs:all>
+
+
+  <xs:complexType name="translatordef">
+    <xs:sequence maxOccurs="unbounded">
       <xs:element name="filters" type="filters" minOccurs="0" />
-      <xs:element name="parameters" type="parameters" minOccurs="0" />
-    </xs:all>
-    <xs:attribute name="type" type="xs:string" />
+      <xs:group ref="parameters" />
+    </xs:sequence>
+    <xs:attribute name="class" type="php_label" />
   </xs:complexType>
-  <xs:complexType name="currency_formatter">
-    <xs:all>
-      <xs:element name="filters" type="filters" minOccurs="0" />
-      <xs:element name="parameters" type="parameters" minOccurs="0" />
-    </xs:all>
-    <xs:attribute name="type" type="xs:string" />
-  </xs:complexType>
-  <xs:complexType name="date_formatter">
-    <xs:all>
-      <xs:element name="filters" type="filters" minOccurs="0" />
-      <xs:element name="parameters" type="parameters" minOccurs="0" />
-    </xs:all>
-    <xs:attribute name="type" type="xs:string" />
+  <xs:complexType name="formatterdef">
+    <xs:complexContent>
+      <xs:extension base="translatordef">
+        <xs:attribute name="translation_domain" type="xs:string" />
+      </xs:extension>
+    </xs:complexContent>
   </xs:complexType>
 
   <xs:complexType name="filters">
@@ -79,9 +81,9 @@
     <xs:attribute name="default_timezone" type="xs:string" />
   </xs:complexType>
   <xs:complexType name="available_locale">
-    <xs:all>
-      <xs:element name="parameters" type="parameters" minOccurs="0" />
-    </xs:all>
+    <xs:sequence>
+      <xs:group ref="parameters" />
+    </xs:sequence>
     <xs:attribute name="identifier" type="xs:string" use="required" />
     <xs:attribute name="ldml_file" type="xs:string" />
     <xs:attribute name="fallback" type="xs:string" />

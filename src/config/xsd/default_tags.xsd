@@ -1,35 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
-	<xs:simpleType name="php_label">
+  <xs:simpleType name="php_label">
+  	<xs:restriction base="xs:string">
+  		<xs:pattern value="[a-zA-Z_\p{IsLatin-1Supplement}][a-zA-Z0-9_\p{IsLatin-1Supplement}]*"/>
+  	</xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="php_label_list">
+  	<xs:restriction base="xs:string">
+  		<xs:pattern value="[a-zA-Z_\p{IsLatin-1Supplement}][a-zA-Z0-9_\p{IsLatin-1Supplement}]*(\s+[a-zA-Z_\p{IsLatin-1Supplement}][a-zA-Z0-9_\p{IsLatin-1Supplement}]*)*"/>
+  	</xs:restriction>
+  </xs:simpleType>
+
+	<xs:simpleType name="non_empty_string">
 		<xs:restriction base="xs:string">
-			<xs:pattern value="[a-zA-Z_\p{IsLatin-1Supplement}][a-zA-Z0-9_\p{IsLatin-1Supplement}]*"/>
+			<xs:pattern value=".+"/>
 		</xs:restriction>
 	</xs:simpleType>
 
-  <xs:complexType name="parameters">
-    <xs:sequence>
-      <xs:element name="parameter" maxOccurs="unbounded">
-        <xs:complexType mixed="true">
-          <xs:sequence minOccurs="1" maxOccurs="1">
-            <xs:element name="parameters" type="innerParameters" minOccurs="0" />
-          </xs:sequence>
-          <xs:attribute name="name" type="xs:string" use="required" />
-        </xs:complexType>
-      </xs:element>
+  <xs:complexType name="sandbox">
+    <xs:sequence minOccurs="1" maxOccurs="1">
+      <xs:any namespace="##any" minOccurs="0" maxOccurs="unbounded" processContents="skip" />
     </xs:sequence>
   </xs:complexType>
 
+
   <xs:complexType name="innerParameters">
     <xs:sequence>
-      <xs:element name="parameter" maxOccurs="unbounded">
-        <xs:complexType mixed="true">
-          <xs:sequence minOccurs="1" maxOccurs="1">
-            <xs:element name="parameters" type="innerParameters" minOccurs="0" />
-          </xs:sequence>
-          <xs:attribute name="name" type="xs:string" use="optional" />
-        </xs:complexType>
-      </xs:element>
+      <xs:group ref="parameters" />
     </xs:sequence>
   </xs:complexType>
+
+  <xs:complexType name="innerParameter" mixed="true">
+    <xs:choice minOccurs="1" maxOccurs="1">
+      <xs:element name="parameters" type="innerParameters" minOccurs="0" />
+      <xs:element name="parameter" type="innerParameter" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:choice>
+    <xs:attribute name="name" type="xs:string" use="optional" />
+  </xs:complexType>
+
+  <xs:group name="parameters">
+    <xs:choice>
+      <xs:element name="parameters" type="innerParameters" minOccurs="0" />
+      <xs:element name="parameter" type="innerParameter" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:choice>
+  </xs:group>
+
 </xs:schema>

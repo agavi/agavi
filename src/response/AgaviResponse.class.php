@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -19,8 +19,10 @@
  * @package    agavi
  * @subpackage response
  *
- * @author     David Zuelke <dz@bitxtender.com>
- * @copyright  (c) Authors
+ * @author     David Zülke <dz@bitxtender.com>
+ * @copyright  Authors
+ * @copyright  The Agavi Project
+ *
  * @since      0.11.0
  *
  * @version    $Id$
@@ -33,24 +35,60 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	protected $context = null;
 	
 	/**
-	 * @var        bool Indicates whether or not modifications are allowed.
-	 */
-	protected $locked = false;
-	
-	/**
 	 * @var        mixed The content to send back to the client.
 	 */
-	protected $content = '';
+	protected $content = null;
+	
+	/**
+	 * Pre-serialization callback.
+	 *
+	 * Will set the name of the context and exclude the instance from serializing.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function __sleep()
+	{
+		$this->contextName = $this->context->getName();
+		if(is_resource($this->content)) {
+			$this->contentStreamMeta = stream_get_meta_data($this->content);
+		}
+		$arr = get_object_vars($this);
+		unset($arr['context']);
+		if(isset($this->contentStreamMeta)) {
+			unset($arr['content']);
+		}
+		return array_keys($arr);
+	}
+	
+	/**
+	 * Post-unserialization callback.
+	 *
+	 * Will restore the context based on the names set by __sleep.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function __wakeup()
+	{
+		$this->context = AgaviContext::getInstance($this->contextName);
+		unset($this->contextName);
+		if(isset($this->contentStreamMeta)) {
+			// contrary to what the documentation says, stream_get_meta_data() will not return a list of filters attached to the stream, so we cannot restore these, unfortunately.
+			$this->content = fopen($this->contentStreamMeta['uri'], $this->contentStreamMeta['mode']);
+			unset($this->contentStreamMeta);
+		}
+	}
 	
 	/**
 	 * Retrieve the AgaviContext instance this Response object belongs to.
 	 *
 	 * @return     AgaviContext An AgaviContext instance.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function getContext()
+	public final function getContext()
 	{
 		return $this->context;
 	}
@@ -61,7 +99,7 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	 * @param      AgaviContext An AgaviContext instance.
 	 * @param      array        An array of initialization parameters.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function initialize(AgaviContext $context, array $parameters = array())
@@ -71,124 +109,11 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	}
 	
 	/**
-	 * Export the contents of this response.
-	 *
-	 * @return     array An array of data.
-	 *
-	 * @author     David Zuelke <du@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function export()
-	{
-		return array('content' => $this->getContent(), 'locked' => $this->isLocked());
-	}
-	
-	/**
-	 * Export the information data (e.g. HTTP Headers, Cookies) for this response.
-	 *
-	 * @return     array An array of data.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function exportInfo()
-	{
-		return array('locked' => $this->isLocked());
-	}
-	
-	/**
-	 * Import data for this response.
-	 *
-	 * @param      array An array of data.
-	 *
-	 * @return     bool Whether or not the operation was successful.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function import(array $data)
-	{
-		$retval = true;
-		if(isset($data['content'])) {
-			$retval = $this->setContent($data['content']);
-		}
-		if(isset($data['locked']) && $data['locked']) {
-			$this->lock();
-		}
-		return $retval;
-	}
-	
-	/**
-	 * Merge in data for this response.
-	 *
-	 * @param      array An array of data.
-	 *
-	 * @return     bool Whether or not the operation was successful.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function merge(array $data)
-	{
-		// do not lock the response even if $data has locked=true!
-		
-		if(isset($data['content'])) {
-			return $this->appendContent($data['content']);
-		}
-		return true;
-	}
-	
-	/**
-	 * Append data to this response.
-	 *
-	 * @param      array An array of data.
-	 *
-	 * @return     bool Whether or not the operation was successful.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function append(array $data)
-	{
-		// do not lock the response even if $data has locked=true!
-		
-		if(isset($data['content'])) {
-			return $this->appendContent($data['content']);
-		}
-		return true;
-	}
-	
-	/**
-	 * Check if this Response is locked, i.e. whether or not new content and other
-	 * output information can be set.
-	 *
-	 * @return     bool Whether the response is locked.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function isLocked()
-	{
-		return $this->locked;
-	}
-	
-	/**
-	 * Lock this Response so that it does not accept any modifications.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function lock()
-	{
-		$this->locked = true;
-	}
-	
-	/**
-	 * Retrieve the content set for this Response
+	 * Retrieve the content set for this Response.
 	 *
 	 * @return     mixed The content set in this Response.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getContent()
@@ -197,22 +122,37 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	}
 	
 	/**
+	 * Retrieve the size (in bytes) of the content set for this Response.
+	 *
+	 * @return     int The content size in bytes.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getContentSize()
+	{
+		if(is_resource($this->content)) {
+			if(($stat = fstat($this->content)) !== false) {
+				return $stat['size'];
+			} else {
+				return false;
+			}
+		} else {
+			return strlen($this->content);
+		}
+	}
+	
+	/**
 	 * Set the content for this Response.
 	 *
 	 * @param      mixed The content to be sent in this Response.
 	 *
-	 * @return     bool Whether or not the operation was successful.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function setContent($content)
 	{
-		if(!$this->locked) {
-			$this->content = $content;
-			return true;
-		}
-		return false;
+		$this->content = $content;
 	}
 	
 	/**
@@ -220,14 +160,12 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	 *
 	 * @param      mixed The content to be prepended to this Response.
 	 *
-	 * @return     bool Whether or not the operation was successful.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function prependContent($content)
 	{
-		return $this->setContent($content . $this->getContent());
+		$this->setContent($content . $this->getContent());
 	}
 	
 	/**
@@ -235,37 +173,49 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	 *
 	 * @param      mixed The content to be appended to this Response.
 	 *
-	 * @return     bool Whether or not the operation was successful.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function appendContent($content)
 	{
-		return $this->setContent($this->getContent() . $content);
+		$this->setContent($this->getContent() . $content);
 	}
 	
 	/**
 	 * Clear the content for this Response
 	 *
-	 * @return     bool Whether or not the operation was successful.
-	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function clearContent()
 	{
-		if(!$this->locked) {
-			$this->content = '';
-			return true;
-		}
-		return false;
+		$this->content = null;
 	}
+	
+	/**
+	 * Redirect externally.
+	 *
+	 * @param      mixed Where to redirect.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	abstract public function setRedirect($to);
+
+	/**
+	 * Import response metadata from another response.
+	 *
+	 * @param      AgaviResponse The other response to import information from.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	abstract public function merge(AgaviResponse $otherResponse);
 	
 	/**
 	 * Clear all data for this Response.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	abstract public function clear();
@@ -273,20 +223,43 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	/**
 	 * Send all response data to the client.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @param      AgaviOutputType An optional Output Type object with information
+	 *                             the response can use to send additional data.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	abstract public function send();
+	abstract public function send(AgaviOutputType $outputType = null);
 	
 	/**
-	 * Send the content for this response
+	 * Determine whether the content in the response may be modified by appending
+	 * or prepending data using string operations. Typically false for streams, 
+	 * and for responses like XMLRPC where the content is an array.
+	 *
+	 * @return     bool If the content can be treated as / changed like a string.
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
+	public function isContentMutable()
+	{
+		return !is_resource($this->content);
+	}
+	
+	/**
+	 * Send the content for this response
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	protected function sendContent()
 	{
-		echo $this->content;
+		if(is_resource($this->content)) {
+			fpassthru($this->content);
+			fclose($this->content);
+		} else {
+			echo $this->content;
+		}
 	}
 }
 

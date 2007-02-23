@@ -6,11 +6,11 @@ class NotoperatorValidatorTest extends AgaviTestCase
 {
 	public function testvalidate()
 	{
-		$vm = AgaviContext::getInstance()->getValidatorManager();
+		$vm = AgaviContext::getInstance()->getValidationManager();
 		$vm->clear();
-		$o = new AgaviNotoperatorValidator($vm, array('severity' => 'error'));
+		$o = new AgaviNotoperatorValidator($vm, array(), array(), array('severity' => 'error'));
 		
-		$val1 = new DummyValidator($vm, array('severity' => 'error'));
+		$val1 = new DummyValidator($vm, array(), array(), array('severity' => 'error'));
 		$o->registerValidators(array($val1));
 		
 		// 1st test: successful
@@ -35,12 +35,12 @@ class NotoperatorValidatorTest extends AgaviTestCase
 	
 	public function testcheckValidSetup()
 	{
-		$vm = AgaviContext::getInstance()->getValidatorManager();
+		$vm = AgaviContext::getInstance()->getValidationManager();
 		$vm->clear();
-		$o = new AgaviNotoperatorValidator($vm, array('severity' => 'error'));
+		$o = new AgaviNotoperatorValidator($vm, array(), array(), array('severity' => 'error'));
 		
-		$val1 = new DummyValidator($vm, array('severity' => 'error'));
-		$val2 = new DummyValidator($vm, array('severity' => 'error'));
+		$val1 = new DummyValidator($vm, array(), array(), array('severity' => 'error'));
+		$val2 = new DummyValidator($vm, array(), array(), array('severity' => 'error'));
 		
 		try {
 			$o->execute();

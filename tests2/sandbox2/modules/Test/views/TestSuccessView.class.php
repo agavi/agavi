@@ -2,9 +2,9 @@
 
 class Test_TestSuccessView extends AgaviView
 {
-	public function execute(AgaviParameterHolder $parameters)
+	public function execute(AgaviRequestDataHolder $parameters)
 	{
-		$this->setTemplate('success');
+		$this->appendLayer($this->createLayer('AgaviFileTemplateLayer', 'content'))->setTemplate('success');
 	}
 }
 

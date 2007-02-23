@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -21,14 +21,20 @@
  * @subpackage translation
  *
  * @author     Dominik del Bondio <ddb@bitxtender.com>
- * @author     Agavi Project <info@agavi.org>
- * @copyright  (c) Authors
+ * @copyright  Authors
+ * @copyright  The Agavi Project
+ *
  * @since      0.11.0
  *
  * @version    $Id$
  */
 class AgaviTranslationManager
 {
+	const MESSAGE = 'msg';
+	const NUMBER = 'num';
+	const CURRENCY = 'cur';
+	const DATETIME = 'date';
+
 	/**
 	 * @var        AgaviContext An AgaviContext instance.
 	 */
@@ -55,7 +61,7 @@ class AgaviTranslationManager
 	protected $currentLocaleIdentifier = null;
 
 	/**
-	 * @var        string The current locale.
+	 * @var        string The default locale identifier.
 	 */
 	protected $defaultLocaleIdentifier = null;
 
@@ -74,6 +80,11 @@ class AgaviTranslationManager
 	 * @var        array All available locales. Just stores the info for lazyload.
 	 */
 	protected $availableLocales = array();
+
+	/**
+	 * @var        array A cache for locale instances.
+	 */
+	protected $localeCache = array();
 
 	/**
 	 * @var        array A cache for the data of the available locales.
@@ -125,6 +136,28 @@ class AgaviTranslationManager
 	}
 
 	/**
+	 * Do any necessary startup work after initialization.
+	 *
+	 * This method is not called directly after initialize().
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function startup()
+	{
+	}
+
+	/**
+	 * Execute the shutdown procedure.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function shutdown()
+	{
+	}
+
+	/**
 	 * Retrieve the current application context.
 	 *
 	 * @return     AgaviContext The current AgaviContext instance.
@@ -140,7 +173,7 @@ class AgaviTranslationManager
 	/**
 	 * Returns the list of available locales.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getAvailableLocales()
@@ -159,7 +192,7 @@ class AgaviTranslationManager
 	 */
 	public function setLocale($identifier)
 	{
-		$this->currentLocaleIdentifier = $this->getClosestMatchingLocale($identifier);
+		$this->currentLocaleIdentifier = $this->getLocaleIdentifier($identifier);
 		$givenData = AgaviLocale::parseLocaleIdentifier($identifier);
 		$actualData = AgaviLocale::parseLocaleIdentifier($this->currentLocaleIdentifier);
 		// construct the given name from the locale from the closest match and the options that were given to the requested locale identifer
@@ -193,6 +226,32 @@ class AgaviTranslationManager
 	public function getCurrentLocaleIdentifier()
 	{
 		return $this->currentLocaleIdentifier;
+	}
+
+	/**
+	 * Retrieve the default locale.
+	 *
+	 * @return     AgaviLocale The current default.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getDefaultLocale()
+	{
+		$this->getLocale($this->defaultLocale);
+	}
+
+	/**
+	 * Retrieve the default locale identifier.
+	 *
+	 * @return     string The default locale identifier.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getDefaultLocaleIdentifier()
+	{
+		return $this->defaultLocaleIdentifier;
 	}
 
 	/**
@@ -243,13 +302,17 @@ class AgaviTranslationManager
 		if($locale === null) {
 			$this->loadCurrentLocale();
 		} elseif(is_string($locale)) {
-			$locale = $this->getLocaleFromIdentifier($locale);
+			$locale = $this->getLocale($locale);
 		}
 		
 		$domainExtra = '';
-		$translator = $this->getTranslators($domain, $domainExtra);
+		$translator = $this->getTranslators($domain, $domainExtra, self::DATETIME);
 
-		return $translator['date']->translate($date, $domainExtra, $locale);
+		$retval = $translator->translate($date, $domainExtra, $locale);
+		
+		$retval = $this->applyFilters($retval, $domain, self::DATETIME);
+		
+		return $retval;
 	}
 
 	/**
@@ -274,13 +337,17 @@ class AgaviTranslationManager
 		if($locale === null) {
 			$this->loadCurrentLocale();
 		} elseif(is_string($locale)) {
-			$locale = $this->getLocaleFromIdentifier($locale);
+			$locale = $this->getLocale($locale);
 		}
 		
 		$domainExtra = '';
-		$translator = $this->getTranslators($domain, $domainExtra);
+		$translator = $this->getTranslators($domain, $domainExtra, self::CURRENCY);
 
-		return $translator['cur']->translate($number, $domainExtra, $locale);
+		$retval = $translator->translate($number, $domainExtra, $locale);
+		
+		$retval = $this->applyFilters($retval, $domain, self::CURRENCY);
+		
+		return $retval;
 	}
 
 	/**
@@ -305,13 +372,17 @@ class AgaviTranslationManager
 		if($locale === null) {
 			$this->loadCurrentLocale();
 		} elseif(is_string($locale)) {
-			$locale = $this->getLocaleFromIdentifier($locale);
+			$locale = $this->getLocale($locale);
 		}
 		
 		$domainExtra = '';
-		$translator = $this->getTranslators($domain, $domainExtra);
+		$translator = $this->getTranslators($domain, $domainExtra, self::NUMBER);
 
-		return $translator['num']->translate($number, $domainExtra, $locale);
+		$retval = $translator->translate($number, $domainExtra, $locale);
+		
+		$retval = $this->applyFilters($retval, $domain, self::NUMBER);
+		
+		return $retval;
 	}
 
 
@@ -339,23 +410,20 @@ class AgaviTranslationManager
 		if($locale === null) {
 			$this->loadCurrentLocale();
 		} elseif(is_string($locale)) {
-			$locale = $this->getLocaleFromIdentifier($locale);
+			$locale = $this->getLocale($locale);
 		}
 		
 		$domainExtra = '';
-		$translator = $this->getTranslators($domain, $domainExtra);
+		$translator = $this->getTranslators($domain, $domainExtra, self::MESSAGE);
 
-		$translatedMessage = $translator['msg']->translate($message, $domainExtra, $locale);
+		$retval = $translator->translate($message, $domainExtra, $locale);
 		if(is_array($parameters)) {
-			$translatedMessage = vsprintf($translatedMessage, $parameters);
+			$retval = vsprintf($retval, $parameters);
 		}
 		
-		$filters = $this->getTranslatorFilters($domain, $domainExtra);
-		foreach($filters['msg'] as $filter) {
-			$translatedMessage = call_user_func($filter, $translatedMessage);
-		}
-
-		return $translatedMessage;
+		$retval = $this->applyFilters($retval, $domain, self::MESSAGE);
+		
+		return $retval;
 	}
 
 	/**
@@ -372,7 +440,7 @@ class AgaviTranslationManager
 	 *
 	 * @return     string The translated message.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function __($singularMessage, $pluralMessage, $amount, $domain = null, $locale = null, array $parameters = null)
@@ -385,49 +453,81 @@ class AgaviTranslationManager
 	 *
 	 * @param      string The domain.
 	 * @param      string The remaining part in the domain which didn't match
+	 * @param      string The type of the translator
 	 *
-	 * @return     array An array of translators for the given domain
+	 * @return     array|AgaviITranslator An array of translators for the given 
+	 *                                    domain
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	protected function getTranslators($domain, &$domainExtra)
+	protected function getTranslators(&$domain, &$domainExtra, $type = null)
 	{
-		$domainParts = explode('.', $domain, 2);
-		$translatorDomain = $domainParts[0];
-		$domainExtra = isset($domainParts[1]) ? $domainParts[1] : '';
+		if($domain[0] == '.') {
+			$domain = $this->defaultDomain . $domain;
+		}
 
-		if(isset($this->translators[$translatorDomain])) {
-			return $this->translators[$translatorDomain];
-		} else {
-			// TODO: select proper exception type
-			throw new AgaviException(sprintf('No translator exists for the domain "%s"', $translatorDomain));
+		$domainParts = explode('.', $domain);
+		$partCount = count($domainParts);
+		$extraParts = array();
+
+		do {
+			if(count($domainParts) == 0) {
+				throw new InvalidArgumentException(sprintf('No translator exists for the domain "%s"', $domain));
+			}
+			$td = implode('.', $domainParts);
+			array_pop($domainParts);
+		} while(!isset($this->translators[$td]) || ($type && !isset($this->translators[$td][$type])));
+
+		$domainExtra = substr($domain, strlen($td) + 1);
+		$domain = $td;
+		return $type ? $this->translators[$td][$type] : $this->translators[$td];
+	}
+
+	/**
+	 * Returns the translators for a given domain and type. The domain can contain
+	 * any extra parts which will be ignored. Will return null when no tanslator 
+	 * is defined.
+	 *
+	 * @param      string The domain.
+	 * @param      string The type of the translator.
+	 *
+	 * @return     AgaviITranslator The translator instance.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getDomainTranslator($domain, $type)
+	{
+		try {
+			$domainExtra = '';
+			return $this->getTranslators($domain, $domainExtra, $type);
+		} catch(InvalidArgumentException $e) {
+			return null;
 		}
 	}
 
 	/**
 	 * Returns the translator filters for a given domain.
 	 *
-	 * @param      string The domain.
-	 * @param      string The remaining part in the domain which didn't match
+	 * @param      string The message.
+	 * @param      string The domain (w/o extra parts).
+	 * @param      string The type.
 	 *
-	 * @return     array An array of translators as keys and filters as an array
+	 * @return     string The new message.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	protected function getTranslatorFilters($domain, &$domainExtra)
+	protected function applyFilters($message, $domain, $type = self::MESSAGE)
 	{
-		$domainParts = explode('.', $domain, 2);
-		$translatorDomain = $domainParts[0];
-		$domainExtra = isset($domainParts[1]) ? $domainParts[1] : '';
-
-		if(isset($this->translatorFilters[$translatorDomain])) {
-			return $this->translatorFilters[$translatorDomain];
-		} else {
-			// TODO: select proper exception type
-			throw new AgaviException(sprintf('No translator exists for the domain "%s"', $translatorDomain));
+		if(isset($this->translatorFilters[$domain][$type])) {
+			foreach($this->translatorFilters[$domain][$type] as $filter) {
+				$message = call_user_func($filter, $message);
+			}
 		}
+		
+		return $message;
 	}
 
 	/**
@@ -450,10 +550,20 @@ class AgaviTranslationManager
 	protected function loadCurrentLocale()
 	{
 		if(!$this->currentLocale || $this->currentLocale->getIdentifier() != $this->givenLocaleIdentifier) {
-			$this->currentLocale = $this->getLocaleFromIdentifier($this->givenLocaleIdentifier);
+			$this->currentLocale = $this->getLocale($this->givenLocaleIdentifier);
+			// we first need to initialize all message translators before the number formatters
 			foreach($this->translators as $translatorList) {
-				foreach($translatorList as $translator) {
-					$translator->localeChanged($this->currentLocale);
+				foreach($translatorList as $type => $translator) {
+					if($type == self::MESSAGE) {
+						$translator->localeChanged($this->currentLocale);
+					}
+				}
+			}
+			foreach($this->translators as $translatorList) {
+				foreach($translatorList as $type => $translator) {
+					if($type != self::MESSAGE) {
+						$translator->localeChanged($this->currentLocale);
+					}
 				}
 			}
 		}
@@ -482,19 +592,29 @@ class AgaviTranslationManager
 	}
 
 	/**
-	 * Returns the identifier of the available locale which matches the given 
-	 * locale identifier most.
+	 * @see        AgaviTranslationManager::getLocaleIdentifier
 	 *
-	 * @param      string The locale identifier
-	 *
-	 * @return     string The locale identifier of the available locale.
-	 *
-	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @since      0.11.0
+	 * @deprecated Superseded by AgaviTranslationManager::getLocaleIdentifier()
 	 */
 	public function getClosestMatchingLocale($identifier)
 	{
-
+		return $this->getLocaleIdentifier($identifier);
+	}
+	
+	/**
+	 * Returns the identifier of the available locale which matches the given 
+	 * locale identifier most.
+	 *
+	 * @param      string A locale identifier
+	 *
+	 * @return     string The actual locale identifier of the available locale.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getLocaleIdentifier($identifier)
+	{
 		// if a locale with the given identifier doesn't exist try to find the closest
 		// match or bail out on no match or an ambigious match
 		if(isset($this->availableLocales[$identifier])) {
@@ -541,20 +661,59 @@ class AgaviTranslationManager
 	}
 
 	/**
+	 * @see        AgaviTranslationManager::getLocale
+	 *
+	 * @deprecated Superseded by AgaviTranslationManager::getLocale()
+	 */
+	public function getLocaleFromIdentifier($identifier)
+	{
+		return $this->getLocale($identifier);
+	}
+	
+	/**
 	 * Returns a new AgaviLocale object from the given identifier.
 	 *
 	 * @param      string The locale identifier
+	 * @param      bool   Force a new instance even if an identical one exists.
 	 *
 	 * @return     AgaviLocale The locale instance which matches the available
 	 *                         locales most.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function getLocaleFromIdentifier($identifier)
+	public function getLocale($identifier, $forceNew = false)
 	{
-		$idData = AgaviLocale::parseLocaleIdentifier($identifier);
-		$availableLocale = $this->availableLocales[$this->getClosestMatchingLocale($identifier)];
+		// enable shortcut notation to only set options to the current locale
+		if($identifier[0] == '@' && $this->currentLocaleIdentifier) {
+			$idData = AgaviLocale::parseLocaleIdentifier($this->currentLocaleIdentifier);
+			$identifier = $idData['locale_str'] . $identifier;
+
+			$newIdData = AgaviLocale::parseLocaleIdentifier($identifier);
+			$idData['options'] = array_merge($idData['options'], $newIdData['options']);
+		} else {
+			$idData = AgaviLocale::parseLocaleIdentifier($identifier);
+		}
+		// this doesn't care about the options
+		$availableLocale = $this->availableLocales[$this->getLocaleIdentifier($identifier)];
+
+		// if the user wants all options reset he supplies an 'empty' option set (identifier ends with @)
+		if(substr($identifier, -1) == '@') {
+			$idData['options'] = array();
+		} else {
+			$idData['options'] = array_merge($availableLocale['identifierData']['options'], $idData['options']);
+		}
+
+		if(($atPos = strpos($identifier, '@')) !== false) {
+			$identifier = $availableLocale['identifierData']['locale_str'] . substr($identifier, $atPos);
+		} else {
+			$identifier = $availableLocale['identifier'];
+		}
+
+		if(!$forceNew && isset($this->localeCache[$identifier])) {
+			return $this->localeCache[$identifier];
+		}
 
 		if(!isset($this->localeDataCache[$idData['locale_str']])) {
 			$lookupPath = AgaviLocale::getLookupPath($availableLocale['identifierData']);
@@ -575,22 +734,16 @@ class AgaviTranslationManager
 			if($availableLocale['identifierData']['territory']) {
 				$territory = $availableLocale['identifierData']['territory'];
 				if(isset($this->supplementalData['territories'][$territory]['currencies'])) {
-					$currency = current(array_slice($this->supplementalData['territories'][$territory]['currencies'], 0, 1));
+					$slice = array_slice($this->supplementalData['territories'][$territory]['currencies'], 0, 1);
+					$currency = current($slice);
 					$data['locale']['currency'] = $currency['currency'];
 				}
 			}
 
-			$this->localeDataCache[$idData['locale_str']] = array_merge_recursive($data, $availableLocale['parameters']);
+			$this->localeDataCache[$idData['locale_str']] = $data;
 		}
 
 		$data = $this->localeDataCache[$idData['locale_str']];
-
-		// if the user wants all options reset he supplies an 'empty' option set (identifier ends with @)
-		if(substr($identifier, -1) == '@') {
-			$idData['options'] = array();
-		} else {
-			$idData['options'] = array_merge($availableLocale['identifierData']['options'], $idData['options']);
-		}
 
 		if(isset($idData['options']['calendar'])) {
 			$data['locale']['calendar'] = $idData['options']['calendar'];
@@ -604,14 +757,12 @@ class AgaviTranslationManager
 			$data['locale']['timezone'] = $idData['options']['timezone'];
 		}
 
-		if(($atPos = strpos($identifier, '@')) !== false) {
-			$identifier = $availableLocale['identifierData']['locale_str'] . substr($identifier, $atPos);
-		} else {
-			$identifier = $availableLocale['identifier'];
-		}
-
 		$locale = new AgaviLocale();
-		$locale->initialize($this->context, $identifier, $data);
+		$locale->initialize($this->context, $availableLocale['parameters'], $identifier, $data);
+
+		if(!$forceNew) {
+			$this->localeCache[$identifier] = $locale;
+		}
 
 		return $locale;
 	}
@@ -648,6 +799,29 @@ class AgaviTranslationManager
 	}
 
 	/**
+	 * Gets the territory id a (resolved) timezone id belongs to.
+	 *
+	 * @param      string The resolved timezone id.
+	 * @param      bool   Will receive whether the territory has multiple 
+	 *                    time zones
+	 *
+	 * @return     string The territory identifer or null.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getTimeZoneTerritory($id, &$hasMultipleZones = false)
+	{
+		if(isset($this->supplementalData['timezones']['territories'][$id])) {
+			$territory = $this->supplementalData['timezones']['territories'][$id];
+			$hasMultipleZones = isset($this->supplementalData['timezones']['multiZones'][$territory]);
+			return $territory;
+		}
+
+		return null;
+	}
+
+	/**
 	 * Creates a new timezone instance for the given identifier.
 	 *
 	 * Please note that this method caches the results for each identifier, so
@@ -678,6 +852,7 @@ class AgaviTranslationManager
 			$zoneData = include(AgaviConfig::get('core.cldr_dir') . '/timezones/' . $this->timeZoneList[$currId]['filename']);
 
 			$zone = new AgaviOlsonTimeZone($this, $id, $zoneData);
+			$zone->setResolvedId($currId);
 			if($cache) {
 				$this->timeZoneCache[$id] = $zone;
 			}
@@ -710,6 +885,8 @@ class AgaviTranslationManager
 			$locale = $type;
 		} elseif($type instanceof AgaviTimeZone) {
 			$zone = $type;
+		} elseif($type instanceof DateTime) {
+			$time = $type;
 		} elseif(is_int($type)) {
 			$time = $type * AgaviDateDefinitions::MILLIS_PER_SECOND;
 		} elseif($type !== null) {
@@ -719,30 +896,86 @@ class AgaviTranslationManager
 			$time = AgaviCalendar::getNow();
 		}
 
+		if(!$zone) {
+			if($locale->getLocaleTimeZone()) {
+				$zone = $this->createTimeZone($locale->getLocaleTimeZone());
+			}
+		}
+
 		if(!$calendarType) {
 			$calendarType = $locale->getLocaleCalendar();
 			if(!$calendarType) {
-				$calendarType = 'gregorian';
+				$calendarType = AgaviCalendar::GREGORIAN;
 			}
 		}
 
 		switch($calendarType) {
-			case 'gregorian':
+			case AgaviCalendar::GREGORIAN:
 				$c = new AgaviGregorianCalendar($this /* $locale */);
 				break;
 			default:
 				throw new AgaviException('Calendar type ' . $calendarType . ' not supported');
 		}
 
-
 		// Now, reset calendar to default state:
 		if($zone) {
-			$c->adoptTimeZone($zone); // TODO: Set the correct time zone
+			$c->setTimeZone($zone);
 		}
 
-		$c->setTime($time); // let the new calendar have the current time.
+		if($time instanceof DateTime) {
+			$c->setTimeZone($this->createTimeZone($time->getTimezone()->getName()));
+			$dateStr = $time->format('Y z G i s');
+			list($year, $doy, $hour, $minute, $second) = explode(' ', $dateStr);
+			$c->set(AgaviDateDefinitions::YEAR, $year);
+			$c->set(AgaviDateDefinitions::DAY_OF_YEAR, $doy + 1);
+			$c->set(AgaviDateDefinitions::HOUR_OF_DAY, $hour);
+			$c->set(AgaviDateDefinitions::MINUTE, $minute);
+			$c->set(AgaviDateDefinitions::SECOND, $second);
+
+			// complete the calendar
+			$c->getAll();
+		} else {
+			$c->setTime($time); // let the new calendar have the current time.
+		}
 
 		return $c;
+	}
+
+	/**
+	 * Returns the stored information from the ldml supplemental data about a 
+	 * territory.
+	 *
+	 * @param      string The uppercase 2 letter country iso code.
+	 *
+	 * @return     array The data.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getTerritoryData($country)
+	{
+		if(!isset($this->supplementalData['territories'][$country])) {
+			return array();
+		}
+		return $this->supplementalData['territories'][$country];
+	}
+
+	/**
+	 * Returns an array containing digits and rounding information for a currency.
+	 *
+	 * @param      string The uppercase 3 letter currency iso code.
+	 *
+	 * @return     array The data.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getCurrencyFraction($currency)
+	{
+		if(!isset($this->supplementalData['fractions'][$currency])) {
+			return $this->supplementalData['fractions']['DEFAULT'];
+		}
+		return $this->supplementalData['fractions'][$currency];
 	}
 }
 

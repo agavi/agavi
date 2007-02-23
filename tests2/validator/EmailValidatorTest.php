@@ -10,7 +10,7 @@ class EmailValidatorWrapper extends AgaviEmailValidator
 		$this->data = $data;
 	}
 
-	public function getData($paramname)
+	public function & getData($paramname)
 	{
 		return $this->data;
 	}
@@ -28,8 +28,8 @@ class EmailValidatorTest extends AgaviTestCase
 	
 	public function setUp()
 	{
-		$this->_vm = AgaviContext::getInstance('test')->getValidatorManager();
-		$this->validator = new EmailValidatorWrapper($this->_vm);
+		$this->_vm = AgaviContext::getInstance('test')->getValidationManager();
+		$this->validator = new EmailValidatorWrapper($this->_vm, array());
 	}
 
 	public function tearDown()

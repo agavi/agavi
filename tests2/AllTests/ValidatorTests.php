@@ -11,13 +11,13 @@
 
 require_once(dirname(__FILE__) . '/../validator/EmailValidatorTest.php');
 require_once(dirname(__FILE__) . '/../validator/NumberValidatorTest.php');
-require_once(dirname(__FILE__) . '/../validator/DateValidatorTest.php');
+//require_once(dirname(__FILE__) . '/../validator/DateValidatorTest.php');
 
 class ValidatorTests
 {
 	public static function suite()
 	{
-		$suite = new PHPUnit2_Framework_TestSuite('validator');
+		$suite = new PHPUnit_Framework_TestSuite('validator');
 
 		//$suite->addTestSuite('ErrorManagerTest');
 		//$suite->addTestSuite('DependencyManagerTest');
@@ -31,7 +31,7 @@ class ValidatorTests
 		$suite->addTestSuite('EmailValidatorTest');
 		$suite->addTestSuite('NumberValidatorTest');
 		//$suite->addTestSuite('StringValidatorTest');
-		$suite->addTestSuite('DateValidatorTest');
+		//$suite->addTestSuite('DateValidatorTest');
 
 		return $suite;
 	}

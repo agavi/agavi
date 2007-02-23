@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
@@ -24,8 +24,9 @@
  * @subpackage user
  *
  * @author     Sean Kerr <skerr@mojavi.org>
- * @author     Agavi Project <info@agavi.org>
- * @copyright  (c) Authors
+ * @copyright  Authors
+ * @copyright  The Agavi Project
+ *
  * @since      0.9.0
  *
  * @version    $Id$
@@ -50,7 +51,7 @@ class AgaviUser extends AgaviAttributeHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function getContext()
+	public final function getContext()
 	{
 		return $this->context;
 	}
@@ -60,7 +61,7 @@ class AgaviUser extends AgaviAttributeHolder
 	 *
 	 * @return     string The Storage namespace
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getStorageNamespace()
@@ -78,7 +79,7 @@ class AgaviUser extends AgaviAttributeHolder
 	 *                                                 initializing this User.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
 	public function initialize(AgaviContext $context, array $parameters = array())
@@ -102,6 +103,18 @@ class AgaviUser extends AgaviAttributeHolder
 			// initialize our attributes array
 			$this->attributes = array();
 		}
+	}
+
+	/**
+	 * Startup the user.
+	 *
+	 * You'd usually try to auth from a cookie here etc.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function startup()
+	{
 	}
 
 	/**

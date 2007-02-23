@@ -5,7 +5,7 @@ class DatabaseTests
 {
 	public static function suite()
 	{
-		$suite = new PHPUnit2_Framework_TestSuite('database');
+		$suite = new PHPUnit_Framework_TestSuite('database');
 
 		$suite->addTestSuite('DatabaseManagerTest');
 

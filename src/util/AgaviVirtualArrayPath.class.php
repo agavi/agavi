@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -25,7 +25,9 @@
  *
  * @author     Uwe Mesecke <uwe@mesecke.net>
  * @author     Dominik del Bondio <ddb@bitxtender.com>
- * @copyright  (c) Authors
+ * @copyright  Authors
+ * @copyright  The Agavi Project
+ *
  * @since      0.11.0
  *
  * @version    $Id$
@@ -133,7 +135,7 @@ class AgaviVirtualArrayPath
 	 * 
 	 * @return     string The component at the given position.
 	 * 
-	 * @author     Dominik del Bondio <ddb@bitxtender.com
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function get($position)
@@ -269,6 +271,33 @@ class AgaviVirtualArrayPath
 	}
 
 	/**
+	 * Prepends one or more components to the path.
+	 * 
+	 * @param      string The components to be prepended.
+	 * 
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function unshift($path)
+	{
+		$parts = AgaviArrayPathDefinition::getPartsFromPath($path);
+		$this->parts = array_merge($parts['parts'], $this->parts);
+	}
+
+	/**
+	 * Checks if a value exists  at the path of this instance in the given array.
+	 * 
+	 * @param      array The array to check.
+	 * 
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function hasValue(array &$array)
+	{
+		return AgaviArrayPathDefinition::hasValue($this->parts, $array);
+	}
+
+	/**
 	 * Returns the value at the path of this instance in the given array.
 	 * 
 	 * @param      array The array to get the data from.
@@ -276,12 +305,12 @@ class AgaviVirtualArrayPath
 	 * 
 	 * @return     mixed The value at the path.
 	 * 
-	 * @author     Dominik del Bondio
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function &getValue(array &$array, $default = null)
+	public function & getValue(array &$array, $default = null)
 	{
-		return AgaviArrayPathDefinition::getValueFromArray($this->parts, $array, $default);
+		return AgaviArrayPathDefinition::getValue($this->parts, $array, $default);
 	}
 
 	/**
@@ -290,12 +319,12 @@ class AgaviVirtualArrayPath
 	 * @param      array The array to set the data in.
 	 * @param      mixed The value to be set.
 	 * 
-	 * @author     Dominik del Bondio
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function setValueFromArray(array &$array, $value)
+	public function setValue(array &$array, $value)
 	{
-		AgaviArrayPathDefinition::setValueFromArray($this->parts, $array, $value);
+		AgaviArrayPathDefinition::setValue($this->parts, $array, $value);
 	}
 
 	/**
@@ -308,10 +337,10 @@ class AgaviVirtualArrayPath
 	 * 
 	 * @return     mixed The value at the path.
 	 * 
-	 * @author     Dominik del Bondio
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function getValueByChildPath($path, array $array, $default = null)
+	public function & getValueByChildPath($path, array &$array, $default = null)
 	{
 		$p = $this->pushRetNew($path);
 
@@ -325,14 +354,30 @@ class AgaviVirtualArrayPath
 	 * @param      array The array to set the data in.
 	 * @param      mixed The value to be set.
 	 * 
-	 * @author     Dominik del Bondio
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function setValueByChildPath($path, array &$array, $value)
 	{
 		$p = $this->pushRetNew($path);
 
-		$p->setValueFromArray($array, $value);
+		$p->setValue($array, $value);
+	}
+
+	/**
+	 * Checks if a value at the given child path exists in the given array.
+	 * 
+	 * @param      string The child path appended to the path in this instance.
+	 * @param      array The array to check.
+	 * 
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function hasValueByChildPath($path, array &$array)
+	{
+		$p = $this->pushRetNew($path);
+
+		return $p->hasValue($array);
 	}
 
 	/**
@@ -340,7 +385,7 @@ class AgaviVirtualArrayPath
 	 *
 	 * @return     array The components
 	 * 
-	 * @author     Dominik del Bondio
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function getParts()

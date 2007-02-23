@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -21,8 +21,11 @@
  * @package    agavi
  * @subpackage validator
  *
+ * @author     Dominik del Bondio <ddb@bitxtender.com>
  * @author     Uwe Mesecke <uwe@mesecke.net>
- * @copyright  (c) Authors
+ * @copyright  Authors
+ * @copyright  The Agavi Project
+ *
  * @since      0.11.0
  *
  * @version    $Id$
@@ -44,29 +47,6 @@ abstract class AgaviOperatorValidator extends AgaviValidator implements AgaviIVa
 	 */
 	protected $result = AgaviValidator::SUCCESS;
 	
-	/**
-	 * constructor
-	 * 
-	 * @param      AgaviIValidatorContainer The parent ValidatorContainer
-	 *                                      (mostly the ValidatorManager)
-	 * @param      array                    The parameters from the config file.
-	 *
-	 * @author     Uwe Mesecke <uwe@mesecke.net>
-	 * @since      0.11.0
-	 */
-	public function __construct(AgaviIValidatorContainer $parent, array $parameters = array())
-	{
-		parent::__construct($parent, $parameters);
-		
-		if($this->getParameter('skip_errors')) {
-			/*
-			 * if the operator is configured to skip errors of the
-			 * child validators, a new error manager is created
-			 */
-		} else {
-			// else the parent's error manager is taken
-		}
-	}
 
 	/**
 	 * Method for checking the validity of child validators.
@@ -76,7 +56,7 @@ abstract class AgaviOperatorValidator extends AgaviValidator implements AgaviIVa
 	 * is valid. This method is run first when execute() is invoked and
 	 * should throw an exception if the setup is invalid.
 	 * 
-	 * @throws     <b>AgaviValidatorException<b> If the  quantity of child 
+	 * @throws     <b>AgaviValidatorException</b> If the  quantity of child 
 	 *                                           validators is invalid
 	 *
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
@@ -100,57 +80,6 @@ abstract class AgaviOperatorValidator extends AgaviValidator implements AgaviIVa
 	}
 	
 	/**
-	 * Submits an error to the error manager.
-	 * 
-	 * The stuff in the parameter specified in $index is submitted to the
-	 * error manager. If there is no parameter with this name, then 'error'
-	 * is tryed as an parameter and if even this fails, the stuff in
-	 * $backupError is sent.
-	 * 
-	 * @param      string The name of the error parameter to fetch the message 
-	 *                    from.
-	 * @param      string An default error message to be used if the given error 
-	 *                    has no message set.
-	 *
-	 * @author     Uwe Mesecke <uwe@mesecke.net>
-	 * @since      0.11.0
-	 */
-	protected function throwError($index = 'error', $backupError = null)
-	{
-		if($this->hasParameter($index)) {
-			$error = $this->getParameter($index);
-		} elseif($this->hasParameter('error')) {
-			$error = $this->getParameter('error');
-		} else {
-			$error = $backupError;
-		}
-
-		// if no error msg was supplied rethrow the child errors
-		if($error === null) {
-			foreach($this->errors as $childError) {
-				$this->parentContainer->reportError($childError[0], $childError[1]);
-			}
-		} else {
-			$this->parentContainer->reportError($this, $error);
-		}
-	}
-
-	/**
-	 * Reports an error to the parent container.
-	 * 
-	 * @param      AgaviValidator The validator where the error occured.
-	 * @param      string         An error message.
-	 * 
-	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @since      0.11.0
-	 * @see        AgaviIValidatorContainer::reportError
-	 */
-	public function reportError(AgaviValidator $validator, $errorMsg)
-	{
-		$this->errors[] = array($validator, $errorMsg);
-	}
-	
-	/**
 	 * Adds new child validator.
 	 * 
 	 * @param      AgaviValidator The new child validator.
@@ -160,9 +89,45 @@ abstract class AgaviOperatorValidator extends AgaviValidator implements AgaviIVa
 	 */
 	public function addChild(AgaviValidator $validator)
 	{
-		$this->children[] = $validator;
+		$name = $validator->getName();
+		if(isset($this->children[$name])) {
+			throw new InvalidArgumentException('A validator with the name "' . $name . '" already exists');
+		}
+
+		$this->children[$name] = $validator;
+		$validator->setParentContainer($this);
 	}
-	
+
+	/**
+	 * Returns a named child validator.
+	 *
+	 * @param      AgaviValidator The child validator.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getChild($name)
+	{
+		if(!isset($this->children[$name])) {
+			throw new InvalidArgumentException('A validator with the name "' . $name . '" does not exist');
+		}
+
+		return $this->children[$name];
+	}
+
+	/**
+	 * Returns all child validators.
+	 *
+	 * @return     array An array of AgaviValidator instances.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getChilds()
+	{
+		return $this->children;
+	}
+
 	/**
 	 * Registers an array of validators.
 	 * 
@@ -173,22 +138,9 @@ abstract class AgaviOperatorValidator extends AgaviValidator implements AgaviIVa
 	 */
 	public function registerValidators(array $validators)
 	{
-		foreach($validators AS $validator) {
+		foreach($validators as $validator) {
 			$this->addChild($validator);
 		}
-	}
-	
-	/**
-	 * Gets the request from the parent.
-	 * 
-	 * @return     AgaviRequest The parent's request.
-	 *
-	 * @author     Uwe Mesecke <uwe@mesecke.net>
-	 * @since      0.11.0
-	 */
-	public function getRequest()
-	{
-		return $this->parentContainer->getRequest();
 	}
 	
 	/**
@@ -230,7 +182,7 @@ abstract class AgaviOperatorValidator extends AgaviValidator implements AgaviIVa
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
 	 */
-	public function execute(AgaviParameterHolder $parameters)
+	public function execute(AgaviRequestDataHolder $parameters)
 	{
 		// check if we have a valid setup of validators
 		$this->checkValidSetup();

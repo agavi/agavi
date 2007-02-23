@@ -2,8 +2,8 @@
 <!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.4/ldml.dtd">
 <ldml>
 	<identity>
-		<version number="$Revision: 1.67 $"/>
-		<generation date="$Date: 2006/06/28 05:35:49 $"/>
+		<version number="$Revision: 1.68 $"/>
+		<generation date="$Date: 2006/10/26 22:46:08 $"/>
 		<language type="hr"/>
 	</identity>
 	<localeDisplayNames>
@@ -112,7 +112,7 @@
 			<territory type="154">Sjeverna Europa</territory>
 			<territory type="155">Zapadna Europa</territory>
 			<territory type="830">Kanalski otoci</territory>
-			<territory type="833">Otok Man</territory>
+			<territory type="IM">Otok Man</territory>
 			<territory type="AD">Andora</territory>
 			<territory type="AE">Ujedinjeni Arapski Emirati</territory>
 			<territory type="AF">Afganistan</territory>

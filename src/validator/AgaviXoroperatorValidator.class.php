@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -23,8 +23,13 @@
  * @package    agavi
  * @subpackage validator
  *
+ * @author     Dominik del Bondio <ddb@bitxtender.com>
  * @author     Uwe Mesecke <uwe@mesecke.net>
- * @copyright  (c) Authors
+ * @author     Ross Lawley <ross.lawley@gmail.com>
+ * @author     David Zülke <dz@bitxtender.com>
+ * @copyright  Authors
+ * @copyright  The Agavi Project
+ *
  * @since      0.11.0
  *
  * @version    $Id$
@@ -54,24 +59,32 @@ class AgaviXoroperatorValidator extends AgaviOperatorValidator
 	 * @return     bool True if exactly one child validator succeded.
 	 * 
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @author     Ross Lawley <ross.lawley@gmail.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	protected function validate()
 	{
-		$result1 = $this->children[0]->execute($this->validationParameters);
+		$children = $this->children;
+		
+		$child1 = array_shift($children);
+		$result1 = $child1->execute($this->validationParameters);
 		if($result1 == AgaviValidator::CRITICAL) {
 			$this->result = $result1;
 			$this->throwError();
 			return false;
 		}
-		$result2 = $this->children[1]->execute($this->validationParameters);
+		
+		$child2 = array_shift($children);
+		$result2 = $child2->execute($this->validationParameters);
 		if($result2 == AgaviValidator::CRITICAL) {
 			$this->result = $result2;
 			$this->throwError();
 			return false;
 		}
+		
 		$this->result = max($result1, $result2);
-
+		
 		if(($result1 == AgaviValidator::SUCCESS) xor ($result2 == AgaviValidator::SUCCESS)) {
 			return true;
 		} else {

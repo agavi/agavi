@@ -2,8 +2,8 @@
 <!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.4/ldml.dtd">
 <ldml>
 	<identity>
-		<version number="$Revision: 1.73 $"/>
-		<generation date="$Date: 2006/06/28 06:03:59 $"/>
+		<version number="$Revision: 1.74 $"/>
+		<generation date="$Date: 2006/10/26 22:46:09 $"/>
 		<language type="nl"/>
 	</identity>
 	<localeDisplayNames>
@@ -622,7 +622,7 @@
 			<territory type="155">West-Europa</territory>
 			<territory type="419">Latijns-Amerika en het Caribisch gebied</territory>
 			<territory type="830">Kanaaleilanden</territory>
-			<territory type="833">Isle of Man</territory>
+			<territory type="IM">Isle of Man</territory>
 			<territory type="AD">Andorra</territory>
 			<territory type="AE">Verenigde Arabische Emiraten</territory>
 			<territory type="AF">Afghanistan</territory>

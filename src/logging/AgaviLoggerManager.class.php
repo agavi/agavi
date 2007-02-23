@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2007 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -20,7 +20,9 @@
  * @subpackage logging
  *
  * @author     Sean Kerr <skerr@mojavi.org>
- * @copyright  (c) Authors
+ * @copyright  Authors
+ * @copyright  The Agavi Project
+ *
  * @since      0.9.0
  *
  * @version    $Id$
@@ -42,13 +44,18 @@ class AgaviLoggerManager
 	 * @since      0.11.0
 	 */
 	protected $defaultLoggerName = 'default';
+	
+	/**
+	 * @var        string The name of the default LoggerMessage class to use.
+	 */
+	protected $defaultMessageClass = 'AgaviLoggerMessage';
 
 	/**
 	 * Retrieve the current application context.
 	 *
 	 * @return     AgaviContext The current AgaviContext instance.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public final function getContext()
@@ -65,14 +72,18 @@ class AgaviLoggerManager
 	 * @throws     <b>AgaviInitializationException</b> If an error occurs while
 	 *                                                 initializing this instance.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
 	public function initialize(AgaviContext $context, array $parameters = array())
 	{
 		$this->context = $context;
-
+		
+		if(isset($parameters['default_message_class'])) {
+			$this->defaultMessageClass = $parameters['default_message_class'];
+		}
+		
 		// load logging configuration
 		require(AgaviConfigCache::checkConfig(AgaviConfig::get('core.config_dir') . '/logging.xml', $context->getName()));
 	}
@@ -85,7 +96,7 @@ class AgaviLoggerManager
 	 * @return     AgaviLogger A Logger, if a logger with the name exists,
 	 *                         otherwise null.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
@@ -105,7 +116,7 @@ class AgaviLoggerManager
 	 *
 	 * @return     array An indexed array of logger names.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
@@ -121,7 +132,7 @@ class AgaviLoggerManager
 	 *
 	 * @return     bool true, if the logger exists, otherwise false.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
@@ -141,7 +152,7 @@ class AgaviLoggerManager
 	 * @throws     <b>AgaviLoggingException</b> If the logger name is default,
 	 *                                           which cannot be removed.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
@@ -172,7 +183,7 @@ class AgaviLoggerManager
 	 * @throws     <b>AgaviLoggingException</b> If a logger with the name already
 	 *                                          exists.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
@@ -207,7 +218,7 @@ class AgaviLoggerManager
 	 *
 	 * @param      string      The name of the the default logger.
 	 *
-	 * @throws     <b>AgaviLoggingException<b> if the logger was not found.
+	 * @throws     <b>AgaviLoggingException</b> if the logger was not found.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
@@ -224,41 +235,63 @@ class AgaviLoggerManager
 	/**
 	 * Log a Message.
 	 *
-	 * @param      AgaviLoggerMessage The Message to log.
+	 * @param      mixed  A message to log - either an AgaviLoggerMessage instance
+	 *                    or a string.
 	 * @param      string Optional logger to log to.
 	 *
 	 * @throws     AgaviLoggingException if the logger was not found.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.10.0
 	 */
-	public function log(AgaviLoggerMessage $message, $logger = null)
+	public function log($message, $logger = null)
 	{
-		if(is_null($logger)) {
+		if(!($message instanceof AgaviLoggerMessage)) {
+			$message = new $this->defaultMessageClass($message);
+		}
+		if($logger === null) {
 			foreach($this->loggers as $logger) {
 				$logger->log($message);
 			}
-		} elseif(!is_null($logger = self::getLogger($logger))) {
+		} elseif(($logger = $this->getLogger($logger)) !== null) {
 			$logger->log($message);
 		} else {
-			throw new AgaviLoggingException("{$logger} Logger is not configured.");
+			throw new AgaviLoggingException('Logger "' . $logger . '" has not been configured.');
 		}
+	}
+
+	/**
+	 * Do any necessary startup work after initialization.
+	 *
+	 * This method is not called directly after initialize().
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function startup()
+	{
 	}
 
 	/**
 	 * Execute the shutdown procedure.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
 	public function shutdown()
 	{
+		$appenders = array();
 		// loop through our loggers and shut them all down
 		foreach($this->loggers as $name => $logger) {
+			$appenders = $appenders + $logger->getAppenders();
 			$logger->shutdown();
 			unset($this->loggers[$name]);
+		}
+		// loop through our appenders and shut them all down
+		foreach($appenders as $appender) {
+			$appender->shutdown();
 		}
 	}
 }

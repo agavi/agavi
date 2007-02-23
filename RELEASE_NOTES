@@ -13,13 +13,14 @@ A new class 'Agavi' now handles bootstrapping etc. All classes got an "Agavi" pr
 The concept of environments and contexts was introduced.
 Typical environments would be 'production', 'development' and 'testing'. All configuration settings can be specific to an environment. Thus, it's easy to have multiple database settings for each environment. The name of the environment is passed to the bootstrap method that starts up the core framework. Thus, application deployment is greatly simplified.
 Typical Contexts would be 'web', 'xmlrpc' and 'console'. Most configuration settings can be specific to a context.
+In configuration files, regular expressions can be used to restrict the environment or context names. For example, each developer could boostrap a "development-<username>" environment, and debug mode would be enabled for environments "development(-\w+)?".
 
 Rendering has been decoupled from the Views, because of the introduction of Output Types. This means it is now possible to serve different output variants using different renderers (i.e. PHP for HTML and XSL for RSS).
 Examples of Output Types would be "html", "rss" or "pdf". With the new structure, an Action doesn't contain any more presentational information at all, and Views may use separate execution methods for each Output Type. As a result, it is possible to write code once, and then expose it to the web as HTML, as PDF or whatever, and at the same time even make it available as an XMLRPC service or write a console interface to the application.
 This is especially important for AJAX applications that are supposed to degrade gracefully. The same action could return data as a full HTML page, and as an HTML fragment or JSON response, without the need to write the code twice.
 Output Types will typically be set via the routing, based on certain information in the URL (like "/rss" at the end of the URL), request headers (like "Accept: text/javascript") or something else (e.g. a part of the host name).
 
-A very powerful Routing and extensive i18n support have been added. The validation system has been rewritten completely to allow for more control and flexibility.
+A very powerful Routing and extensive i18n support have been added. The validation system has been rewritten completely to allow for more control and flexibility. And last but not least, there finally is a caching system.
 
 Models
 ------
@@ -27,30 +28,52 @@ Models are now retrieved from the Context, through one single method 'getModel'.
 Model classes do not have to have a "Model" postfix anymore, they may also simply extend 'AgaviModel' or implement the 'AgaviIModel' interface.
 To declare a model a singleton, it simply has to implement the 'AgaviISingletonModel' interface.
 
-Execution Flow, Actions, Views and Request Information
+Execution Flow, Actions and Request Information
 ------------------------------------------------------
-Request methods such as GET or POST are now mapped to verbs, by default "read" (GET), "write" (POST), "create" (PUT) and "remove" (delete). This is necessary because RPC web services always use POST, and on the command line, there is no such thing as GET or POST etc.
+The ActionStack is gone. Instead, each action is run in it's own, isolated container. The container also has it's own output type, request data and so forth. This removes a lot of the ugliness that originated from the ActionStack's rather... stacky nature, and odd hacks such as grabbing the last but one element from the stack to determine information about a previous action etc. To applications, this change does not make too much of a difference (unless you fiddled with the action stack directly). Internally however, the execution code has become much, much cleaner, and even a bit faster.
+
+Request methods such as GET or POST are now mapped to verbs, by default "read" (GET), "write" (POST), "create" (PUT) and "remove" (DELETE). This is necessary because RPC web services always use POST, and on the command line, there is no such thing as GET or POST etc. As you may have guessed, this also enables full support for RESTful services.
 
 An Action does not use getRequestMethods() to indicate which request methods it serves anymore. Instead, it implements execute() to indicate that it serves all request methods, or it implements executeRead() etc to serve that specific request method.
 
-Inside Actions and Views, it is not possible to access request parameters directly. Instead, a ParameterHolder passed to the execute() method will contain the request parameters. The idea behind this decision is that these parameters are safe for use if they have been filtered and normalized by validation or by some generic preprocessing filter (which, for instance, could remove any XSS related stuff). Also, with any strict validation mode enabled, only those variables that have been validated will be available for use.
+Inside Actions and Views, it is not possible to access request parameters directly. Instead, a RequestDataHolder passed to the execute() method will contain the request parameters, cookies, files, HTTP headers and so on. The idea behind this decision is that these parameters are safe for use if they have been filtered and normalized by validation or by some generic preprocessing filter (which, for instance, could remove any XSS related stuff). Also, with any strict validation mode enabled, only those variables that have been validated will be available for use. Also, files are objects with various methods such as getSize() and move(), which allows for much nicer file handling code: $rd->getFile('foo')->move('/path/to/dest');
 
-Inside a controller's dispatch() method, global filters now run first. This finally allows to implement features such as cookie based auto-logins etc, and also guarantees that these filters modify the actual final output of a request. The now-called "Action Filters" are identical to filters in 0.10 and earlier. Also, it is now possible to filter the rendering of templates via rendering filters. The result of these rendering filters are also included in any caching.
+As an additional incentive to use validation, number, and date/time validators will cast values to native types if desired and also integrate with i18n to parse localized formats.
 
+Inside a controller's dispatch() method, global filters now run first. This finally allows to implement features such as cookie based auto-logins etc, and also guarantees that these filters modify the actual final output of a request. The now-called "action filters" are identical to filters in 0.10 and earlier. 
+
+Forwarding or redirecting is also not possible anymore from within Actions, because these operations are presentational. Imagine you have an Action that adds a product to the database. Displaying the product is what you want to do in the web interface, but not in case of XMLRPC, where you have to return a response that indicates success. Instead, you may return an execution container with information about the action to forward to, conveniently done using $this->createForwardContainer() inside the view. This forwarding will occur once the control of the current action execution has passed back to the controller. If a forward occurs, no rendering will occur in the current view.
+A Redirect can be done by calling setRedirect() on the container's response (available via $this->getResponse() in a view).
+
+Request attributes now support namespaces, and attributes that should be available to a view must now be set on the action itself, not on the request. It is not necessary to retrieve or assign them again in the view - they are also automatically assigned to templates.
+
+Actions may now return true from their isSimple() method to indicate they are a "simple" action. Simple actions do not pass any filters (and thus not the security filter, either!), don't pass validation and their execution is skipped, too - instead, control jumps directly to the view indicated by getDefaultViewName(). Also, you cannot access any request data except for the arguments that were set on the container itself. This is perfect for slots, and you could place an isSimple() method in your base action that returns the value of the parameter "is_slot" on the container to automatically make all slots "simple".
+
+All error-related methods have been moved into the validation manager, so there are no more getErrors() etc methods in the request. Each container has it's own validation manager holding all the data about errors, incidents and so on. To learn more about the new validation and it's extended capabilities, please refer to the manual.
+
+Views and Rendering
+-------------------
 With the new concept of output types, Views may implement execute() methods specifically for an output type by containing an executeSomething() methods, with "something" being the name of the output type.
 
-Also, you don't specify the template extension anymore when setting template and decorator file names. The extension automatically appended by the system will be the default one for the specific renderer (.php, .tpl etc) unless you explicitly specify an extension you want to use. You can optionally return an initialized Renderer instance from the View to override the renderer configured in the output types configuration.
+Inside the views, a lot has changed. Templates and Decorator Templates are gone, and instead, there are now template layers. Each layer has a template, and each layer may have slots. The layers may even use different renderers! Layers are rendered in the order they are defined, with the output of a rendered layer being available to the next layer's template as $inner (what used to be $template['content']).
 
-For templates, it is now possible to have Agavi's objects (Response, Request, Controller and so on) auto-assigned to variables. Also, the name of the variable that contains the template attributes can be configured to be different from 'template', just like the variable that stores the output of slots. Optionally, either or both can be extracted, so the attributes or slots become available as variables by their names.
+For added convenience, the layers can be grouped together into layouts that are defined for each output type in output_types.xml. A simple call to loadLayout() in a view will load these layers and their slots.
 
-Each slot can now be given additional request parameters as the fourth argument to setSlot().
+Each of the slots can be given additional request arguments to work with, as well as an output type different from the current container's. To create an execution container for a slot, createSlotContainer can be used for more convenience. But remember that in most cases, it's better to define the slots in the layout configuration.
+
+The entire new layered rendering system is very flexible and allows runtime changes to already loaded layouts etc. For instance, you could inject an intermediate layer between two registered layers in one of your views, or you could retrieve a slot that has been loaded for you by loadLayout and then change it's output type or set additional request arguments.
+
+Also, each layer is represented by a class, usually AgaviFileTemplateLayer, but there is a generic AgaviStreamTemplateLayer class that allows you to fetch templates from databases, via HTTP, through SSH tunnels or even from inline strings using data:// streams! And implementing a custom layer that reads templates from a database, without writing a PHP stream wrapper, is possible, too, and very easy to do!
+
+It's a tad more complicated than the old system, and it needs getting used to, but it is all you ever wanted ;) Check out the documentation for it to learn more and see additional examples of what it's capable of.
+
+Also, you don't specify the template extension anymore when setting template names. The extension automatically appended by the system will be the default one for the specific renderer (.php, .tpl etc) unless you explicitly specify an extension you want to use instead. One of the reasons why this is done is that if you have i18n enabled, Agavi will automatically look for localized versions of your templates.
+
+For templates, it is now possible to have Agavi's objects (Response, Request, Controller and so on) auto-assigned to variables. Also, the name of the variable that contains the template attributes can be configured to be different from 'template', just like the variable that stores the output of slots (which now defaults to 'slots'). Optionally, the template variable array can be extracted, so the attributes become available as variables by their names.
 
 The current response instance is available by calling getResponse() on the current view. This way, you could insert content into the response and then not set a template to skip rendering and return content in a different form. Typical situations would be when you set PHP data into the response which gets encoded to XMLRPC, or where you encode PHP data to JSON that is then set in the response.
 
-Forwarding or redirecting is also not possible anymore from within Actions, because these operations are presentational. Imagine you have an Action that adds a product to the database. Displaying the product is what you want to do in the web interface, but not in case of XMLRPC, where you have to return a response that indicates success. Instead, you may return an array containing module name, action name and optionally additional request parameters to forward to an action. This forwarding will occur once the control of the current action execution has passed back to the controller. If a forward occurs, no rendering will occur in the current view.
-A Redirect can be done by calling redirect() on the Controller. This method will return a response instance you can use to set headers, cookies etc, because the view's response as well as the global response will be locked and cannot be modified any further once a redirect occured.
-
-Request attributes now support namespaces, and data that should be available to a view must now be set on the action itself, not on the request.
+Also, you can set a stream on a response, that stream will then be output using fpassthru() for better performance. This is perfect for serving binary content. Simply do $this->getResponse()->setContent(fopen('/path/to/image.png', 'rb')); or something equivalent to make this happen. Keep in mind that you should do this in a dedicated output type for this response type, which obviously also needs the respective headers (like Content-Type: image/png in this case).
 
 Configuration
 -------------
@@ -58,7 +81,7 @@ All configuration files use the XML format now. All configuration files are vali
 
 All configuration settings can either be valid under all situations, or only in one or more specific environments and/or contexts. This allows for very fine-grained control over what's happening. For instance, you can enable debug mode for the 'production' environment, or enable certain filters only in the 'web' context.
 
-'contexts.ini' is gone, and we re-introduced 'factories.xml'. New config files are 'output_types.xml', 'routing.xml' and 'translation.xml'. 'filters.xml' was split up into separate files for global-, rendering- and action filters.
+'contexts.ini' is gone, and we re-introduced 'factories.xml'. New config files are 'output_types.xml', 'routing.xml' and 'translation.xml'. 'filters.xml' was split up into separate files for global- and action filters.
 
 'autoload.xml' 'compile.xml' and 'config_handlers.xml' use the "global" Agavi configuration files as their parents so it's not necessary anymore to sync them after each upgrade of Agavi.
 
@@ -89,6 +112,16 @@ A text translator that can process Gettext .mo files is bundled, and writing a c
 The "Olson" timezone database is used, including all(!) historic, current and known future static and dynamic daylight savings time transition rules.
 A date/time/calendar system heavily inspired by the International Components for Unicode project implements a complete calendar system for date and time calculations, including the ability to roll in the calendar, add and substract dates, and format dates according to an extensive amount of rules.
 All of this works completely independent of system locales, making your applications 100% guaranteed portable.
+
+Caching
+-------
+The new caching system works via the execution filter. For each action, you can define caching rules by creating a file with the action name in the module's "cache" directory. It is possible to define caching rules per request method, and the caching rules themselve may contain separate sections for each of your output types to allow maximum flexibility. Caches are grouped, the system for that is similar to Smarty's caching groups, and you can use various sources for these groups, such as request parameters, user authenticated status, the current locale etc.
+
+It is possible to define the contents of the cache on a per-layer level. You could have the whole page cached, or only the innermost layer plus a slot on the outer, decorator layer, or everything except the decorator layer and so on.
+
+Of course, the cache can also include request attributes, template variables and action attributes which will be restored when the contents are read from the cache.
+
+To learn more about the caching system and how your application can benefit from using it, please refer to the documentation.
 
 New Kids on the Block
 ---------------------

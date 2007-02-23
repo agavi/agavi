@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:include schemaLocation="default_tags.xsd"/>  
+
   <xs:element name="configurations" type="configurations" />
   <xs:complexType name="configurations">
     <xs:sequence>
+      <xs:element name="sandbox" type="sandbox" minOccurs="0" />
       <xs:element name="configuration" minOccurs="0" maxOccurs="unbounded">
         <xs:complexType>
           <xs:sequence>
-            <xs:element name="cachings" type="cachings" />
+            <xs:group ref="cachings" />
           </xs:sequence>
           <xs:attribute name="environment" type="xs:string" />
           <xs:attribute name="context" type="xs:string" />
@@ -15,77 +19,166 @@
     </xs:sequence>
     <xs:attribute name="parent" type="xs:string" />
   </xs:complexType>
+
+  <xs:group name="cachings">
+    <xs:choice>
+      <xs:element name="cachings" type="cachings" minOccurs="0" />
+      <xs:element name="caching" type="caching" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:choice>
+  </xs:group>
   <xs:complexType name="cachings">
     <xs:sequence>
       <xs:element name="caching" type="caching" maxOccurs="unbounded" />
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="caching">
+    <xs:sequence maxOccurs="unbounded">
+      <xs:group ref="groups" />
+      <xs:group ref="views" />
+      <xs:group ref="action_attributes" />
+      <xs:group ref="output_types" />
+    </xs:sequence>
+    <xs:attribute name="method" type="php_label_list" />
+    <xs:attribute name="enabled" type="xs:boolean" />
+    <xs:attribute name="lifetime" type="xs:string" />
+  </xs:complexType>
+  
+  <xs:group name="groups">
+    <xs:choice>
+      <xs:element name="groups" type="groups" minOccurs="0" />
+      <xs:element name="group" type="group" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:choice>
+  </xs:group>
+  <xs:complexType name="groups">
     <xs:sequence>
-      <xs:element name="groups">
-        <xs:complexType>
-          <xs:sequence>
-            <xs:element name="group" maxOccurs="unbounded">
-              <xs:complexType>
-                <xs:sequence>
-                </xs:sequence>
-                <xs:attribute name="name" type="xs:string" use="required" />
-                <xs:attribute name="source" type="xs:string" />
-              </xs:complexType>
-            </xs:element>
-          </xs:sequence>
-        </xs:complexType>
-      </xs:element>
-      <xs:element name="decorator">
-        <xs:complexType>
-          <xs:sequence>
-            <xs:element name="slots">
-              <xs:complexType>
-                <xs:sequence>
-                  <xs:element name="slot" type="xs:string" maxOccurs="unbounded" />
-                </xs:sequence>
-              </xs:complexType>
-            </xs:element>
-            <xs:element name="variables">
-              <xs:complexType>
-                <xs:sequence>
-                  <xs:element name="variable" type="xs:string" maxOccurs="unbounded" />
-                </xs:sequence>
-              </xs:complexType>
-            </xs:element>
-          </xs:sequence>
-          <xs:attribute name="include" type="xs:string" />
-        </xs:complexType>
-      </xs:element>
-      <xs:element name="views">
-        <xs:complexType>
-          <xs:sequence>
-            <xs:element name="whitelists">
-              <xs:complexType>
-                <xs:sequence>
-                  <xs:element name="whitelist" type="xs:string" maxOccurs="unbounded" />
-                </xs:sequence>
-              </xs:complexType>
-            </xs:element>
-          </xs:sequence>
-        </xs:complexType>
-      </xs:element>
-      <xs:element name="variables">
-        <xs:complexType>
-          <xs:sequence>
-            <xs:element name="variable" maxOccurs="unbounded">
-              <xs:complexType>
-                <xs:sequence>
-                </xs:sequence>
-                <xs:attribute name="source" type="xs:string" />
-                <xs:attribute name="name" type="xs:string" />
-              </xs:complexType>
-            </xs:element>
-          </xs:sequence>
-        </xs:complexType>
-      </xs:element>
+      <xs:element name="group" type="group" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="group">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute name="source" type="xs:string" />
+        <xs:attribute name="namespace" type="xs:string" />
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:group name="action_attributes">
+    <xs:choice>
+      <xs:element name="action_attributes" type="action_attributes" minOccurs="0" />
+      <xs:element name="action_attribute" type="action_attribute" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:choice>
+  </xs:group>
+  <xs:complexType name="action_attributes">
+    <xs:sequence>
+      <xs:element name="action_attribute" type="action_attribute" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="action_attribute">
+    <xs:sequence>
+      <xs:element name="action_attribute" type="xs:string" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:group name="views">
+    <xs:choice>
+      <xs:element name="views" type="views" minOccurs="0" />
+      <xs:element name="view" type="view" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:choice>
+  </xs:group>
+  <xs:complexType name="views">
+    <xs:sequence>
+      <xs:element name="view" type="view" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="view">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute name="module" type="php_label" />
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:group name="output_types">
+    <xs:choice>
+      <xs:element name="output_types" type="output_types" minOccurs="0" />
+      <xs:element name="output_type" type="output_type" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:choice>
+  </xs:group>
+  <xs:complexType name="output_types">
+    <xs:sequence>
+      <xs:element name="output_type" type="output_type" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="output_type">
+    <xs:sequence maxOccurs="unbounded">
+      <xs:group ref="request_attributes" />
+      <xs:group ref="template_variables" />
+      <xs:group ref="layers" />
+    </xs:sequence>
+    <xs:attribute name="name" type="php_label_list" />
+  </xs:complexType>
+
+  <xs:group name="request_attributes">
+    <xs:choice>
+      <xs:element name="request_attributes" type="request_attributes" minOccurs="0" />
+      <xs:element name="request_attribute" type="request_attribute" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:choice>
+  </xs:group>
+  <xs:complexType name="request_attributes">
+    <xs:sequence>
+      <xs:element name="request_attribute" type="request_attribute" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="request_attribute">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute name="namespace" type="xs:string" />
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:group name="template_variables">
+    <xs:choice>
+      <xs:element name="template_variables" type="template_variables" minOccurs="0" />
+      <xs:element name="template_variable" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:choice>
+  </xs:group>
+  <xs:complexType name="template_variables">
+    <xs:sequence>
+      <xs:element name="template_variable" type="xs:string" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:group name="layers">
+    <xs:choice>
+      <xs:element name="layers" type="layers" minOccurs="0" />
+      <xs:element name="layer" type="layer" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:choice>
+  </xs:group>
+  <xs:complexType name="layers">
+    <xs:sequence>
+      <xs:element name="layer" type="layer" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="layer">
+    <xs:sequence maxOccurs="unbounded">
+      <xs:group ref="slots" />
     </xs:sequence>
     <xs:attribute name="name" type="xs:string" use="required" />
-    <xs:attribute name="enabled" type="xs:string" />
+    <xs:attribute name="include" type="xs:string" />
   </xs:complexType>
+
+  <xs:group name="slots">
+    <xs:choice>
+      <xs:element name="slots" type="slots" minOccurs="0" />
+      <xs:element name="slot" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:choice>
+  </xs:group>
+  <xs:complexType name="slots">
+    <xs:sequence>
+      <xs:element name="slot" type="xs:string" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
 </xs:schema>
