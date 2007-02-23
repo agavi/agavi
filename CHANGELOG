@@ -23,6 +23,7 @@ ADD: AgaviDateFormatter::getFormat ([1683]) (Dominik)
 ADD: Add isContentMutable method to response and check where applicable (#414) (David)
 
 CHG: Made "class" attribute for <layer> elements optional in output_types.xml (#454) (David)
+CHG: Routing: use matched incoming parameters for same route generation on a hierarchial basis (#444) (Dominik)
 CHG: Update timezone database to 2007b release (#443) (Dominik)
 CHG: Translation Manager should call localeChanged on message translators (#447) (Dominik)
 CHG: Cleaned up config handlers ([1737]) (David)
