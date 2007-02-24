@@ -83,6 +83,33 @@ class AgaviXmlrpcepiphpResponse extends AgaviResponse
 	}
 	
 	/**
+	 * Import response metadata (nothing in this case) from another response.
+	 *
+	 * @param      AgaviResponse The other response to import information from.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function merge(AgaviResponse $otherResponse)
+	{
+	}
+	
+	/**
+	 * Redirect externally. Not implemented here.
+	 *
+	 * @param      mixed Where to redirect.
+	 *
+	 * @throws     BadMethodCallException
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function setRedirect($to)
+	{
+		throw new BadMethodCallException('Redirects are not implemented for XMLRPC.');
+	}
+	
+	/**
 	 * @see        AgaviResponse::isMutable()
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>
@@ -113,14 +140,19 @@ class AgaviXmlrpcepiphpResponse extends AgaviResponse
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function send(AgaviOutputType $outputType)
+	public function send(AgaviOutputType $outputType = null)
 	{
-		$outputOptions = array_merge(array('encoding' => $outputType->getParameter('encoding', 'utf-8'), 'escaping' => array('markup', 'non-print')), (array) $this->getParameter('output_options'));
+		$encoding = array('encoding' => $this->getParameter('output_options[encoding]', 'utf-8'));
+		if($outputType) {
+			$encoding = array('encoding' => $outputType->getParameter('encoding', $encoding['encoding']));
+		}
+		
+		$outputOptions = array_merge(array('escaping' => array('markup', 'non-print')), (array) $this->getParameter('output_options', array()), $encoding);
 		
 		$this->content = xmlrpc_encode_request(null, $this->content, $outputOptions);
 		
 		header('Content-Type: text/xml; charset=' . $outputOptions['encoding']);
-		header('Content-Length: ' . strlen($this->content));
+//		header('Content-Length: ' . strlen($this->content));
 		
 		$this->sendContent();
 	}

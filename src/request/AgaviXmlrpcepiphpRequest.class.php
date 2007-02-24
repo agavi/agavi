@@ -52,14 +52,16 @@ class AgaviXmlrpcepiphpRequest extends AgaviWebserviceRequest
 			$decoded = $decoded[$key];
 		}
 		
-		$this->setParameters($decoded);
+		$rd = $this->getRequestData();
+		
+		$rd->setParameters($decoded);
 		
 		$split = explode(':', $this->calledMethod);
 		if(count($split) == 2) {
-			$this->setParameter($this->getModuleAccessor(), $split[0]);
-			$this->setParameter($this->getActionAccessor(), $split[1]);
+			$rd->setParameter($this->getParameter('module_accessor'), $split[0]);
+			$rd->setParameter($this->getParameter('action_accessor'), $split[1]);
 		} else {
-			$this->setParameter($this->getActionAccessor(), $this->calledMethod);
+			$rd->setParameter($this->getParameter('action_accessor'), $this->calledMethod);
 		}
 	}
 }
