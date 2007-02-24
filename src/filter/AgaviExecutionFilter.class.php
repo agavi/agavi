@@ -280,6 +280,9 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 		$response->initialize($this->context, $rfi['parameters']);
 		$container->setResponse($response);
 		
+		// clear any forward set, it's ze view's job
+		$container->clearNext();
+		
 		if($actionCache['view_name'] !== AgaviView::NONE) {
 			
 			$container->setViewModuleName($actionCache['view_module']);
