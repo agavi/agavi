@@ -3,7 +3,7 @@ AGAVI CHANGELOG
 
 0.11.0 (????? ??, 2007)
 
-0.11.0 RC4 (Feburary 25, 2007)
+0.11.0 RC4 (February 25, 2007)
 
 ADD: Throw exceptions in case PCRE operations fail (like with corrupt UTF-8 input) in FormPopulationFilter (#461) (David, Veikko)
 
