@@ -17,7 +17,7 @@
  * The date formatter will dates numbers according to a given format
  *
  * @package    agavi
- * @subpackage util
+ * @subpackage translation
  *
  * @author     Dominik del Bondio <ddb@bitxtender.com>
  * @author     David Zülke <dz@bitxtender.com>
