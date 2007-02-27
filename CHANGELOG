@@ -3,6 +3,9 @@ AGAVI CHANGELOG
 
 0.11.0 (????? ??, 2007)
 
+ADD: Made default layer class configurable via 'default_layer_class' config parameter for AgaviOutputTypeConfigHandler ([1800]) (David)
+
+
 0.11.0 RC4 (February 25, 2007)
 
 ADD: Throw exceptions in case PCRE operations fail (like with corrupt UTF-8 input) in FormPopulationFilter (#461) (David, Veikko)
