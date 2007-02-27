@@ -552,7 +552,7 @@ abstract class AgaviRouting
 						} else {
 							$finalParams[$name] = $this->escapeOutputParameter($matchedParams[$name]);
 						}
-					} elseif(isset($defaults[$name]) && $defaults[$name]['val']) {
+					} elseif(isset($defaults[$name]) && strlen($defaults[$name]['val']) > 0) {
 						$finalParams[$name] = $defaults[$name]['pre'] . $this->escapeOutputParameter($defaults[$name]['val']) . $defaults[$name]['post'];
 					} else {
 						// there is no default or incoming match for this optional param, so remove it
@@ -580,7 +580,7 @@ abstract class AgaviRouting
 							} else {
 								$finalParams[$name] = $default['pre'] . $params[$name] . $default['post'];
 							}
-						} elseif($default['val']) {
+						} elseif(strlen($default['val']) > 0) {
 							$finalParams[$name] = $default['pre'] . $this->escapeOutputParameter($default['val']) . $default['post'];
 						} else {
 							$finalParams[$name] = null;
