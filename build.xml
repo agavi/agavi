@@ -236,7 +236,9 @@
 		<!-- generate package.xml -->
 		<agavipackage dir="${builddir}" />
 
-		<echo msg="package.xml generated to '${builddir}'. Use &quot;pear package&quot; to create the package." />
+		<echo msg="package.xml generated to '${builddir}'. Use &quot;pear package&quot; in build/ to create the package." />
+		<echo msg="And because PEAR is rubbish, you must run this first, otherwise empty dirs will be omitted from the package:" level="warning" />
+		<echo msg="find . -type d -empty -exec touch &quot;{}/.keep&quot; \;" level="warning" />
 	</target>
 
 	<target name="test" description="run test suite">
