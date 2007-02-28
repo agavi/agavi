@@ -31,10 +31,23 @@ class AgaviPackageTask extends Task {
 		if (!$this->dir || !file_exists($this->dir)) {
 			throw new BuildException('Build dir is not defined or does not exist.');
 		}
+		
+		set_time_limit(0);
+
+		$this->log("Adding .keep files to empty directories", PROJECT_MSG_INFO);
+		
+		foreach(new RecursiveIteratorIterator(new RecursiveDirectoryIterator(realpath('samples')), RecursiveIteratorIterator::CHILD_FIRST) as $dir) {
+			if($dir->isDir()) {
+				foreach(new DirectoryIterator($dir->getPathname()) as $d) {
+					if(!in_array($d->getFilename(), array('.', '..'))) {
+						continue 2;
+					}
+				}
+				touch($dir->getPathname() . '/.keep');
+			}
+		}
 
 		$this->log("Building package contents in: {$this->dir}", PROJECT_MSG_INFO);
-
-		set_time_limit(0);
 
 		// Modify short description. Try to keep under 80 chars width
 $shortDesc = <<<EOD
@@ -54,6 +67,7 @@ EOD;
 			'ignore' => array(
 				'.svn/'
 			),
+			'addhiddenfiles' => true,
 			'dir_roles' => array(
 				'buildtools' => 'php',
 				'config' => 'php',
