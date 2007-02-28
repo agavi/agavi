@@ -852,7 +852,7 @@ abstract class AgaviRouting
 		$container->setActionName($reqData->getParameter($aa));
 		
 		// set the list of matched route names as a request attribute
-		$req->setAttribute('matchedRoutes', $matchedRoutes, 'org.agavi.routing');
+		$req->setAttribute('matched_routes', $matched_routes, 'org.agavi.routing');
 		
 		// return a list of matched route names
 		return $container;
