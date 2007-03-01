@@ -136,7 +136,7 @@ class AgaviPostgresqlDatabase extends AgaviDatabase
 		$host     = $this->getParameter('host');
 		$password = $this->getParameter('password');
 		$port     = $this->getParameter('port');
-		$user     = $this->getParameter('user');
+		$user     = $this->getParameter('username');
 
 		// construct connection string
 		$string = (($database != null) ? (' dbname='   . $array[$database]) : '') .

@@ -5,7 +5,7 @@
 			<database name="postgres" class="AgaviPostgresqlDatabase">
 				<parameters>
 					<parameter name="host">localhost</parameter>
-					<parameter name="user">username</parameter>
+					<parameter name="username">username</parameter>
 					<parameter name="password">passphrase</parameter>
 					<parameter name="database">sample</parameter>
 				</parameters>

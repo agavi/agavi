@@ -144,7 +144,7 @@ class AgaviMysqlDatabase extends AgaviDatabase
 	protected function loadParameters(array $array)
 	{
 		// list of available parameters
-		$available = array('database', 'host', 'password', 'user');
+		$available = array('database', 'host', 'password', 'username');
 
 		$parameters = array();
 
