@@ -726,11 +726,224 @@ if(curl_errno($ch)) {
     <section>
       <title>Request and Routing</title>
 
-      <para>request parameters and attributes, attribute namespaces, errors,
-      cookies.</para>
+      <para>(Request and routing)</para>
 
-      <para>routing functionality, getting info from the routing, generating
-      urls</para>
+      <section>
+        <title>Request</title>
+
+        <para>request parameters and attributes, attribute namespaces, errors,
+        cookies.</para>
+      </section>
+
+      <section>
+        <title>Routing</title>
+
+        <para>(routing functionality, getting info from the routing,
+        generating urls)</para>
+
+        <para>****** maybe first some general explanation with the "method to
+        map" blah and then basic info such as that routes are tested in the
+        order they are specified etc.</para>
+
+        <para>Routing is s a method to map URLs to module/action -pairs and
+        provide information for them, such as parameters. Think of it as
+        replacing mod_rewrite for Apache or ISAPI_Rewrite for Microsoft IIS
+        but with a lot more power and features. Routes are defined in the file
+        <filename>%core.app_dir%/config/routing.xml</filename>. Let's look at
+        an example:<programlisting>&lt;route name="viewproduct" pattern="^/products/(id:\d+)$" module="Shop" action="ViewProduct" /&gt;</programlisting></para>
+
+        <para>Now, the URL <uri>http://host.com/products/157</uri> would run
+        the "ViewProduct" action in module "Shop", with a request parameter
+        <varname>id</varname> set to "157".</para>
+
+        <para>Most of the "magic" is achieved using regular expressions
+        (@linkto PCRE@). In the above example, the id parameter must consist
+        of digits, otherwise, the pattern, and thus this whole route, would
+        not match.</para>
+
+        <note>
+          <para>The <code>name:expression</code> syntax is really only a
+          convenient form for named subpatterns, which look something like
+          <code>(?P&lt;name&gt;pattern)</code></para>
+        </note>
+
+        <para>The example pattern is anchored at the beginning and end. This
+        is very important, because if the pattern above wasn't anchored at the
+        end, a URL like /products/157/YOUR-SITE-SUCKS etc would match, too. So
+        you always have to pay attention to anchor patterns properly. There
+        are cases when you don't want that to happen,</para>
+
+        <para>Routes can run for either read- or write-requests. You tell a
+        route which requests to be applied to by using the <code>method</code>
+        -attribute. For read-methods, you would use
+        <code>method="read"</code>, and for write-requests you would use
+        <code>method="write"</code>. Routes are matched for both request
+        methods by default.</para>
+
+        <section>
+          <title>Optional Parts</title>
+
+          <para>Explain ze question mark here</para>
+        </section>
+
+        <section>
+          <title>Pre- and Postfixes for Parameters</title>
+
+          <para>When using optional parts, you almost always need additional
+          characters before and after the actual parameters, especially when
+          using @@optional parts@@. For that, you can use pre- and
+          postfixes.</para>
+
+          <para>To use them, you enclose the name:expression part in curly
+          braces, and outside of these, you define the pre- and postfixes that
+          should not be included in a matched value:</para>
+
+          <para><programlisting>^/uri(/pre-part-{varname:regexp}-post-part)$</programlisting></para>
+
+          <para>Let's look at a more complicated example from the Sample
+          Application:</para>
+
+          <para><programlisting>&lt;route name="search_engine_spam" pattern="^/products(/buy-cheap-{name:[\S\s]+}-at-agavi-dot-org)?/(id:\d+)" module="Default" action="SearchEngineSpam"&gt;
+  &lt;defaults&gt;
+    &lt;default for="name"&gt;/buy-cheap-{chainsaws}-at-agavi-dot-org&lt;/default&gt;
+  &lt;/defaults&gt;
+&lt;/route&gt;</programlisting>This would match the request
+          <uri>http://host.com/products/37</uri> and
+          <uri>http://host.com/products/buy-cheap-whatever-at-agavi-dot-org/37</uri>.
+          The inner part is optional, and for Search Engine Optimization (or,
+          in this case, stupid spamming) only.</para>
+
+          <para>The <token>&lt;default&gt;</token> indicates that if we do not
+          supply the "<uri>/buy-cheap-whatever-at-agavi-dot-org</uri>", it
+          will set it to "<uri>/buy-cheap-chainsaws-at-agavi-dot-org</uri>",
+          thus setting the <varname>$name</varname> parameter to "chainsaws",
+          and the <varname>$id</varname> to null. (see @@next
+          seciton@@)</para>
+
+          <para><tip>
+              <para>Pre- and Postfixes may also be regular expressions
+              themselves. You must, however, define static @@default values@@
+              so these routes can be @@generated@@</para>
+            </tip></para>
+        </section>
+
+        <section>
+          <title>Defaults</title>
+
+          <para>&lt;default&gt; ftw!</para>
+        </section>
+
+        <section>
+          <title>Subroutes</title>
+
+          <para>Imagine you have a big application with tens or hundreds of
+          actions. Imagine adding all those into
+          <filename>routing.xml</filename> one by one in the
+          <code>&lt;routes&gt;</code> -section. It would be very ineffective
+          to parse through all those routes in order to find the correct
+          route. Introducing... subroutes!</para>
+
+          <para>Subroutes are routes that are defined under other routes. Let
+          us explain through an example:</para>
+
+          <programlisting>&lt;route name="blog" pattern="^/blog" module="Default" action="Blog"&gt;
+  &lt;route name=".article" pattern="^/$" action=".Index" /&gt;
+  &lt;route name=".article" pattern="^/(id:\d+)(-{title:\S+})?$" action=".ShowArticle" /&gt;
+&lt;/route&gt; </programlisting>
+
+          <para>This would <emphasis role="bold">not</emphasis> run the action
+          Blog in the module Default for the request
+          <uri>http://host.com/blog</uri>. Why not? Because the request cannot
+          be anchored at the end of the pattern, as the pattern has children.
+          That is, to run the Blog.Index -action, you would have to use the
+          request <uri>http://host.com/blog.article/</uri>, and to run the
+          Blog.ShowArticle with the id and title -parameters set, you would
+          have to use the request
+          <uri>http://host.com/blog.article/151-Agavi_rocks</uri>. This way
+          you only have to define "top level" routes for your main actions,
+          and you can use subroutes to define routes to actions that are
+          conceptually below the "top level" actions, making parsing of the
+          route much faster.</para>
+        </section>
+
+        <section>
+          <title>Other Things to Match</title>
+
+          <para>But the routing can do more, like match against other sources,
+          or do things other than setting module and action. An
+          example:</para>
+
+          <para>Because this is a <abbrev>MVC</abbrev>-framework, the data
+          produced in the model should be view-independent. That is, the same
+          data could be rendered as XHTML or a PDF or whatever you can
+          imagine. You can define the output type by setting the
+          <code>output_type</code> -attribute for the route:</para>
+
+          <programlisting>&lt;route name="rss" pattern="/rss$" output_type="rss" stop="false" cut="true" /&gt;</programlisting>
+
+          <para>As you can see, the pattern is only anchored at the end. On a
+          match, routing execution will not stop, and the matched portion
+          ("/rss") will be cut from the route for the following tests against
+          the remaining routes.</para>
+
+          <para>Now let's say your application also has fancy AJAX features,
+          and you return the data in JSON format. You can use the exact same
+          URLs for "normal" and AJAX requests, since there is a difference:
+          most AJAX frameworks send special headers along with the request. We
+          can use that to automatically set the output type for these to
+          JSON:</para>
+
+          <programlisting>&lt;route pattern="text/javascript" source="_SERVER[HTTP_ACCEPT]" output_type="json" stop="false" /&gt;</programlisting>
+
+          <para>Here, if the HTTP Accept header contains text/javascript
+          (which it does if you make an XMLHTTPRequest using Prototype or
+          Mootools or Dojo), then the output type will be set to "json". We
+          are operating on a different source, <varname>$_SERVER</varname>,
+          that allows to access it's members directly. There are @@other
+          sources@@ available as well, and of course, you can @@provide your
+          own@@ ones, too.</para>
+        </section>
+
+        <section>
+          <title>Generating routes in PHP code</title>
+
+          <para>To generate routes in templates or actions, you use the
+          <classname>AgaviRouting</classname>-class which returns the URI or
+          route as a string. You must use the <code>name</code> -attribute for
+          the routes in order for the
+          <classname>AgaviRouting</classname>-class to know which route to
+          generate, unless you are generating a route to the same route the
+          user currently is at. The way to generate a route is</para>
+
+          <programlisting>$ro-&gt;gen(routename[, array parameters[, array options]])</programlisting>
+
+          <para>So if we take our blog-route from section 6.2.1 and want to
+          generate a route to <uri>/blog/151-Agavi_rocks</uri>, we would
+          use</para>
+
+          <programlisting>$ro-&gt;gen("blog", array('id' =&gt; 151, 'title' =&gt; 'Agavi_rocks'));</programlisting>
+
+          <para>This wouldn't however, include the protocol
+          (http/https/whatever) nor the host name. To generate a complete URI
+          to the document with the same protocol that the user used, you set
+          the "relative" option to false:</para>
+
+          <para><programlisting>$ro-&gt;gen("blog", array('id' =&gt; 151, 'title' =&gt; "Agavi_rocks'), array('relative' =&gt; false));</programlisting></para>
+
+          <para>To generate a route to the same page the user is currently at,
+          use null as the route name.</para>
+
+          <para>If the user has accessed the page with the HTTP-protocol and
+          you need to generate a route to a super-secure location using HTTPS,
+          you set the "protocol" option to "HTTPS". To generate a URI to the
+          same route that the user is on but add an anchor (#foobar),
+          use</para>
+
+          <para><programlisting>$ro-&gt;gen(null, array(), array('fragment' =&gt; 'foobar'));</programlisting></para>
+
+          <para>(david, can you help out with this?)</para>
+        </section>
+      </section>
     </section>
 
     <section>
@@ -812,6 +1025,66 @@ $bar2 = $this-&gt;getContext()-&gt;getModel('SinglesBar'); //returns the same in
 
         <para>(actions: execution, execution methods, serving request methods,
         default view name, validation, security)</para>
+
+        <para>Like we noticed before, actions can be seen as a part of the
+        controller, or as glue between the controller and the model. The
+        controller can execute actions in two ways depending on the request
+        method. In a web-context this could mean the controller would call the
+        <methodname>executeRead</methodname> -method for a HTTP GET-request or
+        <methodname>executeWrite</methodname> for a HTTP POST-request. Both
+        methods take an <classname>AgaviRequestDataHolder</classname> -object
+        as parameter. If the action contains an
+        <methodname>execute()</methodname>-method and neither
+        <methodname>executeRead()</methodname> or
+        <methodname>executeWrite()</methodname>, the controller will call the
+        <methodname>execute()</methodname> method regardless of the request
+        method. If the request method is POST but it does not implement the
+        write method or similarly the request method is GET but the action
+        does not implement the read method, it can run a default view by
+        implementing the <methodname>getDefaultViewName</methodname>
+        -method.</para>
+
+        <para>Before the controller executes the execute-method, it will check
+        two things: does the action require security (ie a user that has
+        logged in) and what credentials, if any, the user must have to be
+        allowed to execute the action.</para>
+
+        <para>The former is simply done by adding an
+        <methodname>isSecure()</methodname> -method to the action which
+        returns true if security is required. Credential requirements are
+        defined by implementing a <methodname>getCredentials()</methodname>
+        -method which can return either a string indicating a simple
+        credential, or an array of credentials.</para>
+
+        <para>To require the credential "Edit", simply return "Edit" from
+        <methodname>getCredentials()</methodname>. To require both "Edit" and
+        "Write" -credential, return <code>array("Edit", "Write")</code>. To
+        require EITHER the "Edit" OR the "Write" -credentials, you would
+        return <code>array(array("Edit", "Write"))</code>, and to require the
+        "Edit"-credential AND EITHER "Write" or "Foo" (or both), return
+        <code>array("Edit", array("Write", "Foo"))</code>.</para>
+
+        <para>After the controller has decided if the user is allowed to
+        execute the action, validation occurs. If the validation fails, the
+        action's <methodname>handleError()</methodname> will be run, which
+        would, like the execute() return a string or an array indicating which
+        view or action/view -pair should be handed the control. The validation
+        error messages are available for the templates using
+        <methodname>$container-&gt;getValidationManager()-&gt;getErrorMessages()</methodname>
+        which returns an array of messages. For more information on action
+        validation, see section 11 in this manual.</para>
+
+        <para>When the action has finished, it must tell the controller which
+        view to execute. This of course depends on the outcome of the action:
+        if we are successful, we would want to pass the control over to a
+        <classname>SuccessView</classname>, if we had some form of error, we
+        would use <classname>ErrorView</classname> and if we need input from
+        the user, we'd use <classname>InputView</classname>. The action can
+        return a string like "Success" to indicate the action finished
+        successfully, and the controller would use the
+        <classname>ClassnameSuccessView</classname>, or it can return an array
+        with two indices specifying the action/view pair to hand the execution
+        to.</para>
       </section>
     </section>
 
@@ -856,6 +1129,8 @@ $bar2 = $this-&gt;getContext()-&gt;getModel('SinglesBar'); //returns the same in
       <para>why validation, how to validate, explain the drop-in character,
       explain what it can also do (normalization etc), how sweet it is with
       the FormPopulationFilter</para>
+
+      <para></para>
     </section>
 
     <section>
