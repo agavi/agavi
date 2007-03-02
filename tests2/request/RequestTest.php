@@ -31,16 +31,16 @@ class RequestTest extends AgaviTestCase
 
 	public function testGetModuleAccessor()
 	{
-		$this->assertEquals('module', $this->_r->getModuleAccessor());
+		$this->assertEquals('module', $this->_r->getParameter('module_accessor'));
 		$this->_r->initialize(AgaviContext::getInstance('test'), array('module_accessor' => 'moduleTest'));
-		$this->assertEquals('moduleTest', $this->_r->getModuleAccessor());
+		$this->assertEquals('moduleTest', $this->_r->getParameter('module_accessor'));
 	}
 
 	public function testGetActionAccessor()
 	{
-		$this->assertEquals('action', $this->_r->getActionAccessor());
+		$this->assertEquals('action', $this->_r->getParameter('action_accessor'));
 		$this->_r->initialize(AgaviContext::getInstance('test'), array('action_accessor' => 'actionTest'));
-		$this->assertEquals('actionTest', $this->_r->getActionAccessor());
+		$this->assertEquals('actionTest', $this->_r->getParameter('action_accessor'));
 	}
 }
 ?>

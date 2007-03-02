@@ -255,6 +255,10 @@ class AgaviWebRouting extends AgaviRouting
 				// we collect the default parameters from the route and make sure
 				// new parameters don't overwrite already defined parameters
 				$defaults = array();
+				
+				$ma = $req->getParameter('module_accessor');
+				$aa = $req->getParameter('action_accessor');
+				
 				foreach($routes as $route) {
 					if(isset($this->routes[$route])) {
 						$r = $this->routes[$route];
@@ -264,10 +268,10 @@ class AgaviWebRouting extends AgaviRouting
 							$myDefaults[$key] = $default['val'];
 						}
 						if($r['opt']['module']) {
-							$myDefaults[$req->getModuleAccessor()] = $r['opt']['module'];
+							$myDefaults[$ma] = $r['opt']['module'];
 						}
 						if($r['opt']['action']) {
-							$myDefaults[$req->getActionAccessor()] = $r['opt']['action'];
+							$myDefaults[$aa] = $r['opt']['action'];
 						}
 
 						$defaults = array_merge($myDefaults, $defaults);

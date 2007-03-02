@@ -678,8 +678,8 @@ abstract class AgaviRouting
 		
 		if(!AgaviConfig::get('core.use_routing', false) || count($this->routes) == 0) {
 			// routing disabled, determine module and action manually and bail out
-			$container->setModuleName($reqData->getParameter($req->getModuleAccessor()));
-			$container->setActionName($reqData->getParameter($req->getActionAccessor()));
+			$container->setModuleName($reqData->getParameter($req->getParameter('module_accessor')));
+			$container->setActionName($reqData->getParameter($req->getParameter('action_accessor')));
 			
 			return $container;
 		}
@@ -692,8 +692,8 @@ abstract class AgaviRouting
 		$ot = null;
 		$locale = null;
 		$method = null;
-		$ma = $req->getModuleAccessor();
-		$aa = $req->getActionAccessor();
+		$ma = $req->getParameter('module_accessor');
+		$aa = $req->getParameter('action_accessor');
 		$requestMethod = $req->getMethod();
 
 		// get all top level routes
