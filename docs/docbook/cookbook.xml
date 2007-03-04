@@ -304,10 +304,48 @@ RewriteRule ([^?]*)(?:\?(.*))? index.php?/$1&amp;$2 [L]</programlisting></para>
     </section>
 
     <section>
-      <title>Redirecting back to the originally requested page after
-      login</title>
+      <title>Redirecting Back to the Originally Requested Page After
+      Login</title>
 
-      <para></para>
+      <para>If a unautheticated user tries to fire an action he is not allowed
+      to execute he is forwarded to the login action (configured in
+      <filename>settings.xml</filename>). To make a good user experience it's
+      nice to redirect the user back to the action he tried to execute after a
+      successful login. This is especially important if the user's session had
+      timed out and he was in the middle of something when he was logged
+      out.</para>
+
+      <para>Because Agavi forwards to the login action the URL is still the
+      one pointing to the original action. Agavi also stores the information
+      about the forward into the request object under
+      <code>org.agavi.controller.forwards.login</code> namespace. So if the
+      login action was actually triggered because of a denied access the first
+      thing we want to do is save the current URL for later use. The place to
+      do this is usually <classname>LoginInputView</classname> (remember, this
+      is all presentational application logic so the action itself shouldn't
+      do it).</para>
+
+      <programlisting>if($this-&gt;getContext()-&gt;getRequest()-&gt;hasAttributeNamespace('org.agavi.controller.forwards.login')) {
+  // we were redirected to the login form by the controller because the requested action required security
+  // so store the input URL in the session for a redirect after login
+  $this-&gt;getContext()-&gt;getUser()-&gt;setAttribute('redirect', $this-&gt;getContext()-&gt;getRequest()-&gt;getUrl(), 'org.agavi.SampleApp.login');
+}
+else {
+  // clear the redirect URL just to be sure 
+  $this-&gt;getContext()-&gt;getUser()-&gt;removeAttribute('redirect', 'org.agavi.SampleApp.login');
+}</programlisting>
+
+      <para>Now after a successful login we want to redirect the user back to
+      the action he requested. To do so we need this in the
+      <classname>LoginSuccessView</classname>:</para>
+
+      <programlisting>if($usr-&gt;hasAttribute('redirect', 'org.agavi.SampleApp.login')) {
+  $this-&gt;getResponse()-&gt;setRedirect($usr-&gt;removeAttribute('redirect', 'org.agavi.SampleApp.login'));
+  return;
+}
+// else redirect to the welcome page or just proceed with the default behaviour of the view</programlisting>
+
+      <para>And that's it. Enjoy the user experience!</para>
     </section>
 
     <section>
