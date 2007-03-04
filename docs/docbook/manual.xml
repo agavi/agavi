@@ -1121,6 +1121,155 @@ $bar2 = $this-&gt;getContext()-&gt;getModel('SinglesBar'); //returns the same in
 
       <para>explain the user, how it works, what you can do with it, how you
       do authentication, credentials etc</para>
+
+      <section>
+        <title>Role-Based Access Control</title>
+
+        <para>Role-Based Access Control (RBAC) is an approach to restricting
+        system access to authorized users. To learn more about Role-Base
+        Access Control (RBAC) in general you could start from <ulink
+        url="http://en.wikipedia.org/wiki/Role-Based_Access_Control">http://en.wikipedia.org/wiki/Role-Based_Access_Control</ulink>.
+        For an in-depth paper about Role-Base Access Control (RBAC) see
+        National Institute of Standards and Technology's "Proposed NIST
+        Standard for Role-Based Access Control" (a link to that paper can be
+        found from the Wikipedia's page).</para>
+
+        <para>Agavi has an easy-to-use RBAC user implementation
+        <classname>AgaviRbacSecurityUser</classname>. It extends the features
+        of <classname>AgaviSecurityUser</classname> to enable automatic
+        assignment of credentials based on a role or roles granted to the
+        user.</para>
+
+        <section>
+          <title>Enabling RBAC</title>
+
+          <para>The user implementation used by Agavi is configured in
+          <filename>app/config/factories.xml</filename>. To plug in the RBAC
+          user you simply alter the user class to be used.</para>
+
+          <programlisting>&lt;user class="AgaviRbacSecurityUser" /&gt;</programlisting>
+
+          <para>Normally you would extend
+          <classname>AgaviRbacSecurityUser</classname> and create your own
+          user implementation with custom login and logout methods but for now
+          we want to keep our set-up simple and use
+          <classname>AgaviRbacSecurityUser</classname> directly.</para>
+        </section>
+
+        <section>
+          <title>Defining Roles and Credentials</title>
+
+          <para><classname>AgaviRbacSecurityUser</classname> reads the role
+          and credential definitions from an XML-file located by default in
+          <filename>app/config/rbac_definitions.xml</filename>. If you want to
+          keep them in some other file you can use a configuration parameter
+          <parameter>definitions_file</parameter> in
+          <filename>factories.xml</filename>.</para>
+
+          <programlisting>&lt;user class="AgaviRbacSecurityUser"&gt;
+ &lt;parameter name="definitions_file"&gt;%core.app_dir%/data/roles.xml&lt;/parameter&gt;
+&lt;/user&gt;</programlisting>
+
+          <para>Roles in the definition file are defined hierarchically from
+          the bottom up so to speak. That means that a role can have an inner
+          role (or many of them) that inherits all the credentials of the
+          parent. This is a very common way to define roles in RBAC. Here is a
+          simple exaple with three roles that are all in a straight line in
+          the hierarchy ie. all photomoderators are photographers and all
+          photographers are members and they inherit all the credentials from
+          the parent. This is important to understand because now you don't
+          need to grant the user all three roles separately but just the
+          topmost.</para>
+
+          <programlisting>&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;
+&lt;configurations&gt;
+  &lt;configuration&gt;
+    &lt;roles&gt;
+      &lt;role name="member"&gt;
+        &lt;permissions&gt;
+          &lt;permission&gt;photos.comments.add&lt;/permission&gt;
+        &lt;/permissions&gt;
+        &lt;roles&gt;
+          &lt;role name="photographer"&gt;
+            &lt;permissions&gt;
+              &lt;permission&gt;photos.add&lt;/permission&gt;
+            &lt;/permissions&gt;
+            &lt;roles&gt;
+              &lt;role name="photomoderator"&gt;
+                &lt;permissions&gt;
+                  &lt;permission&gt;photos.edit&lt;/permission&gt;
+                  &lt;permission&gt;photos.delete&lt;/permission&gt;
+                &lt;/permissions&gt;
+              &lt;/role&gt;
+            &lt;/roles&gt;
+          &lt;/role&gt;
+        &lt;/roles&gt;
+      &lt;/role&gt;
+    &lt;/roles&gt;
+  &lt;/configuration&gt;
+&lt;/configurations&gt;</programlisting>
+
+          <note>
+            <para>For larger systems this is obviously not the perfect way to
+            store the definitions but instead a database of some sort would be
+            used. To load the definitions from some other source you only have
+            to override <classname>AgaviRbacSecurityUser</classname>'s
+            <methodname>loadDefinitions()</methodname> method</para>
+          </note>
+        </section>
+
+        <section>
+          <title>Granting Roles to the User</title>
+
+          <para>The roles have now been designed and defined in the XML-file
+          and we have some database of the users and their roles. For
+          simplicity's sake we don't bother ourselves with that database now
+          but simply take it for granted that know the role(s) of the user
+          after he has logged in.</para>
+
+          <para>AgaviRbacSecurityUser has six methods for role managing:
+          <methodname>grantRole(string)</methodname>,
+          <methodname>grantRoles(array)</methodname>,
+          <methodname>revokeRole(string)</methodname>,
+          <methodname>revoleAllRoles()</methodname>,
+          <methodname>hasRoles(string)</methodname> and
+          <methodname>getRoles()</methodname>. The methods are
+          self-explanatory.</para>
+
+          <para>If you want to understand how
+          <classname>AgaviRbacSecurityUser</classname> actually works the
+          method <methodname>grantRole(string)</methodname> is worth looking
+          into. What it actually does is quite simple; it reads the role
+          definitions and gives the user each credential the given role has
+          explicitly or implicitly from the parent roles. The credential
+          management itself is actually part of
+          <classname>AgaviSecurityUser</classname> and
+          <classname>AgaviRbacSecurityUser</classname> only extends it with
+          role-to-credential mapping. This is the beauty of the
+          object-oriented design in action.</para>
+        </section>
+
+        <section>
+          <title>Protecting Your Actions</title>
+
+          <para>Protecting your action is simply a matter of defining the
+          credential needed to be able use the action. This is done by
+          overriding <classname>AgaviAction</classname>'s
+          <methodname>getCredentials()</methodname> method.</para>
+
+          <programlisting>class Photos_AddAction extends PhotoSystemBaseAction
+{
+  public function getCredentials()
+  {
+    return 'photos.add';
+  }</programlisting>
+
+          <para>As the method name implies you can require more than one
+          credential or even complex combinations of credentials (eg. 'a' OR
+          'b' AND 'c') but this is explained in detail in another chapter (a
+          link is going to be added later).</para>
+        </section>
+      </section>
     </section>
 
     <section>
