@@ -264,9 +264,9 @@ RewriteRule ([^?]*)(?:\?(.*))? index.php?/$1&amp;$2 [L]</programlisting></para>
         database configuration for your Propel model:</para>
 
         <para><programlisting>&lt;database name="propel" class="AgaviPropelDatabase"&gt;
-	&lt;parameters&gt;
-		&lt;parameter name="config"&gt;%core.app_dir%/config/bookstore-conf.php&lt;/parameter&gt;
-	&lt;/parameters&gt;
+  &lt;parameters&gt;
+    &lt;parameter name="config"&gt;%core.app_dir%/config/bookstore-conf.php&lt;/parameter&gt;
+  &lt;/parameters&gt;
 &lt;/database&gt;</programlisting></para>
 
         <para><filename>bookstore-conf.php</filename> is the name of the
@@ -314,6 +314,58 @@ RewriteRule ([^?]*)(?:\?(.*))? index.php?/$1&amp;$2 [L]</programlisting></para>
       <title>Serving Output Variants of the Same Content</title>
 
       <para>a quick example using a LatestProductsAction or whatever</para>
+    </section>
+
+    <section>
+      <title>Role-Based Access Control and Rules for Unauthenticated
+      Users</title>
+
+      <para>Because of the way Agavi's <classname>SecurityFilter</classname>
+      works Agavi's Role-Based Access Control (RBAC) and the user credential
+      handling in general assume that the user has been authenticated. By
+      default if the user is not authenticated no credentials are checked.
+      This can become an issue if you want to build an application where the
+      same action can be public in one set-up but requires a certain
+      credential in another. For example a project management software's
+      calendar could be public in one firm but protected in another.</para>
+
+      <para>To enable role-based access control for unauthenticated users you
+      need to do two things - grant a role for unauthenticated users and put
+      some logic into your base action's <methodname>isSecure()</methodname>
+      method.</para>
+
+      <programlisting>class MyProjectUser extends AgaviRbacSecurityUser
+{
+
+  public function initialize(AgaviContext $context, array $parameters = array())
+  {
+    parent::initialize($context, $parameters);
+
+    if(!$this-&gt;authenticated) {
+      $this-&gt;grantRole('unauthenticated');
+    }
+  }</programlisting>
+
+      <programlisting>class MyProjectBaseAction extends AgaviAction
+{
+  public function isSecure()
+  {
+    $cred = $this-&gt;getCredentials();
+    return $cred &amp;&amp; !$this-&gt;getContext()-&gt;getUser()-&gt;hasCredentials($cred);
+  }
+}</programlisting>
+
+      <para>The first bit is pretty obvious.
+      <classname>AgaviRbacSecurityUser</classname> initializes unauthenticated
+      users to have no roles but we want to override this and grant them a
+      special role called <code><varname>unauthenticated</varname></code>. The
+      code for <methodname>isSecure()</methodname> then again might require
+      some reasoning. The action is marked as secure only if the user doesn't
+      have the required credential. What this means is that if the user is
+      authenticated but doesn't have the required credential
+      <code>%actions.secure_action%</code> is triggered. If the user is not
+      authenticated and <code>unauthenticated</code> role doesn't allow this
+      action <code>%actions.login_action%</code> is triggered.</para>
     </section>
   </chapter>
 
