@@ -783,7 +783,47 @@ if(curl_errno($ch)) {
         <section>
           <title>Optional Parts</title>
 
-          <para>Explain ze question mark here</para>
+          <para>If we take the previous Shop-example in section 6.2, we notice
+          that we have to specify the id-parameter every time, otherwise the
+          route will not match. So how do we add optional parts to the
+          route?</para>
+
+          <para>Because the route pattern is a regular expression, this is
+          done the same way optional parts are done in regular expressions:
+          with the ?-quantifier.</para>
+
+          <para><programlisting>&lt;route name="viewproduct" pattern="^/products(/{id:\d+})?$" module="Shop" action="ViewProduct" /&gt;</programlisting>The
+          difference between this route and the previous one is that now the
+          slash and the id -parameters are optional. That is, the request
+          <uri>http://host.com/products</uri> would also run the
+          <methodname>Shop.ViewProduct</methodname> action, but the
+          id-parameter would be undefined. Your action can then check if the
+          id request parameter is null, and if so show a listing of, say, all
+          products.</para>
+        </section>
+
+        <section>
+          <title>Defaults</title>
+
+          <para>&lt;default&gt; ftw!</para>
+
+          <para>The default section specifies values that should be used if a
+          parameter is not supplied. This also applies for generating the
+          route even if the parameter is not optional. For instance, we have a
+          route like this:</para>
+
+          <programlisting>&lt;route name="viewproduct" pattern="^/products(/{id:\d+})(/{lang:[a-z]{2})?$" module="Shop" action="ViewProduct"&gt;
+  &lt;defaults&gt;
+    &lt;default for="lang"&gt;en&lt;/default&gt;
+  &lt;/defaults&gt;
+&lt;/route&gt;</programlisting>
+
+          <para>indicates that if we do not specify a value for the
+          lang-parameter (specified with the <code>for="lang"</code>
+          -attribute), the default will be set to "en". Likewise, if we would
+          remove the ?-quantifier from the end of the pattern and generate a
+          route to viewproduct but do not specify the lang-parameter, it will
+          use the default "en".</para>
         </section>
 
         <section>
@@ -813,12 +853,12 @@ if(curl_errno($ch)) {
           The inner part is optional, and for Search Engine Optimization (or,
           in this case, stupid spamming) only.</para>
 
-          <para>The <token>&lt;default&gt;</token> indicates that if we do not
-          supply the "<uri>/buy-cheap-whatever-at-agavi-dot-org</uri>", it
-          will set it to "<uri>/buy-cheap-chainsaws-at-agavi-dot-org</uri>",
-          thus setting the <varname>$name</varname> parameter to "chainsaws",
-          and the <varname>$id</varname> to null. (see @@next
-          seciton@@)</para>
+          <para>The <token>&lt;default&gt;</token> here indicates that if we
+          do not supply the "<uri>/buy-cheap-whatever-at-agavi-dot-org</uri>",
+          it will set it to
+          "<uri>/buy-cheap-chainsaws-at-agavi-dot-org</uri>", thus setting the
+          <varname>$name</varname> parameter to "chainsaws", and
+          <varname>$id</varname> to null. (see @@previous section@@)</para>
 
           <para><tip>
               <para>Pre- and Postfixes may also be regular expressions
@@ -828,9 +868,51 @@ if(curl_errno($ch)) {
         </section>
 
         <section>
-          <title>Defaults</title>
+          <title>Ignores</title>
 
-          <para>&lt;default&gt; ftw!</para>
+          <para>The ignores-section specifies parameters that affect the
+          routing or output types, but are not set as request parameters. From
+          the sample application:</para>
+
+          <para><programlisting>&lt;route pattern="^/({locale:[a-z]{2}(_[A-Z]{2})?})" stop="false" imply="true" cut="true" locale="${locale}@currency=GBP" callback="AgaviSampleAppLanguageRoutingCallback"&gt;
+  &lt;ignores&gt;
+    &lt;ignore&gt;locale&lt;/ignore&gt;
+  &lt;/ignores&gt;
+&lt;/route&gt;</programlisting></para>
+
+          <para>If the locale-parameter is set here, we use the route to set
+          the application locale to the value specified. The ignore-section
+          means that the parameter specified will not be available as a
+          request parameter later on.</para>
+        </section>
+
+        <section>
+          <title>Routing callbacks</title>
+
+          <para>Routing callbacks are user-defined classes that run when Agavi
+          tests the route for matches. The class has to implement methods that
+          Agavi call, and these methods would return true or false depending
+          on if the route matching is to succeed or fail. <code></code></para>
+
+          <para><code>onMatched</code> is called when the route matches. This
+          method can then return either true to indicate that it did indeed
+          match, or false to indicate that even though the pattern itself
+          matches, the route should fail. </para>
+
+          <para><code>onNotMatched</code> is similarly called for routes that
+          do not match the pattern, and likewise can return true to indicate
+          that the pattern should match nevertheless, or false to indicate
+          that ithe route should fail. </para>
+
+          <para><code>onGenerate</code> is called when the routing engine
+          generates an URI for the route, and can modify parameters and return
+          true or false indicating wether this fragment should be in the route
+          at all.</para>
+
+          <para><note>
+              <para>For in-depth information on how to write your custom
+              routing callbacks, please see the @@cookbook@@</para>
+            </note></para>
         </section>
 
         <section>
@@ -899,13 +981,18 @@ if(curl_errno($ch)) {
           (which it does if you make an XMLHTTPRequest using Prototype or
           Mootools or Dojo), then the output type will be set to "json". We
           are operating on a different source, <varname>$_SERVER</varname>,
-          that allows to access it's members directly. There are @@other
-          sources@@ available as well, and of course, you can @@provide your
-          own@@ ones, too.</para>
+          that allows to access it's members directly.</para>
+
+          <para><note>
+              <para>There are other match sources available as well. Please
+              refer to the cookbook for more information on matching against
+              other sources and information on how to create your own
+              sources.</para>
+            </note></para>
         </section>
 
         <section>
-          <title>Generating routes in PHP code</title>
+          <title>Generating routes</title>
 
           <para>To generate routes in templates or actions, you use the
           <classname>AgaviRouting</classname>-class which returns the URI or
@@ -917,18 +1004,17 @@ if(curl_errno($ch)) {
 
           <programlisting>$ro-&gt;gen(routename[, array parameters[, array options]])</programlisting>
 
-          <para>So if we take our blog-route from section 6.2.1 and want to
-          generate a route to <uri>/blog/151-Agavi_rocks</uri>, we would
-          use</para>
+          <para>So if we take our blog-route from section 6.2.6 and want to
+          generate a route to /blog/151/Agavi_rocks, we would use</para>
 
           <programlisting>$ro-&gt;gen("blog", array('id' =&gt; 151, 'title' =&gt; 'Agavi_rocks'));</programlisting>
 
-          <para>This wouldn't however, include the protocol
-          (http/https/whatever) nor the host name. To generate a complete URI
-          to the document with the same protocol that the user used, you set
-          the "relative" option to false:</para>
+          <para>This would generate a relative URI, thus won't include the
+          protocol (http/https/whatever) nor the host name. To generate a
+          complete URI to the document with the same protocol that the user
+          used, you set the "relative" option to false:</para>
 
-          <para><programlisting>$ro-&gt;gen("blog", array('id' =&gt; 151, 'title' =&gt; "Agavi_rocks'), array('relative' =&gt; false));</programlisting></para>
+          <para><programlisting>$ro-&gt;gen("blog", array('id' =&gt; 151, 'title' =&gt; 'Agavi_rocks'), array('relative' =&gt; false));</programlisting></para>
 
           <para>To generate a route to the same page the user is currently at,
           use null as the route name.</para>
@@ -940,8 +1026,6 @@ if(curl_errno($ch)) {
           use</para>
 
           <para><programlisting>$ro-&gt;gen(null, array(), array('fragment' =&gt; 'foobar'));</programlisting></para>
-
-          <para>(david, can you help out with this?)</para>
         </section>
       </section>
     </section>
