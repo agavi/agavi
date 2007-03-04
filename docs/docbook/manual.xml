@@ -897,12 +897,12 @@ if(curl_errno($ch)) {
           <para><code>onMatched</code> is called when the route matches. This
           method can then return either true to indicate that it did indeed
           match, or false to indicate that even though the pattern itself
-          matches, the route should fail. </para>
+          matches, the route should fail.</para>
 
           <para><code>onNotMatched</code> is similarly called for routes that
           do not match the pattern, and likewise can return true to indicate
           that the pattern should match nevertheless, or false to indicate
-          that ithe route should fail. </para>
+          that ithe route should fail.</para>
 
           <para><code>onGenerate</code> is called when the routing engine
           generates an URI for the route, and can modify parameters and return
@@ -1228,8 +1228,8 @@ $bar2 = $this-&gt;getContext()-&gt;getModel('SinglesBar'); //returns the same in
           <title>Enabling RBAC</title>
 
           <para>The user implementation used by Agavi is configured in
-          <filename>app/config/factories.xml</filename>. To plug in the RBAC
-          user you simply alter the user class to be used.</para>
+          <filename>%core.app_dir%/config/factories.xml</filename>. To plug in
+          the RBAC user you simply alter the user class to be used.</para>
 
           <programlisting>&lt;user class="AgaviRbacSecurityUser" /&gt;</programlisting>
 
@@ -1245,9 +1245,9 @@ $bar2 = $this-&gt;getContext()-&gt;getModel('SinglesBar'); //returns the same in
 
           <para><classname>AgaviRbacSecurityUser</classname> reads the role
           and credential definitions from an XML-file located by default in
-          <filename>app/config/rbac_definitions.xml</filename>. If you want to
-          keep them in some other file you can use a configuration parameter
-          <parameter>definitions_file</parameter> in
+          <filename>%core.app_dir%/config/rbac_definitions.xml</filename>. If
+          you want to keep them in some other file you can use a configuration
+          parameter <parameter>definitions_file</parameter> in
           <filename>factories.xml</filename>.</para>
 
           <programlisting>&lt;user class="AgaviRbacSecurityUser"&gt;
@@ -1315,7 +1315,7 @@ $bar2 = $this-&gt;getContext()-&gt;getModel('SinglesBar'); //returns the same in
           <methodname>grantRole(string)</methodname>,
           <methodname>grantRoles(array)</methodname>,
           <methodname>revokeRole(string)</methodname>,
-          <methodname>revoleAllRoles()</methodname>,
+          <methodname>revokeAllRoles()</methodname>,
           <methodname>hasRoles(string)</methodname> and
           <methodname>getRoles()</methodname>. The methods are
           self-explanatory.</para>
