@@ -35,4 +35,12 @@
 		
 	</configuration>
 	
+	<configuration environment="development">
+		
+		<response class="AgaviWebResponse">
+			<parameter name="send_content_length">false</parameter>
+		</response>
+	
+	</configuration>
+	
 </configurations>

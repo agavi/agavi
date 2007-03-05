@@ -39,6 +39,14 @@
 		
 	</configuration>
 	
+	<configuration context="web" environment="development">
+		
+		<response class="AgaviWebResponse">
+			<parameter name="send_content_length">false</parameter>
+		</response>
+	
+	</configuration>
+	
 	<configuration context="xmlrpc">
 		
 		<request class="AgaviXmlrpcepiphpRequest" />
