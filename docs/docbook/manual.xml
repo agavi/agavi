@@ -492,6 +492,9 @@ if(curl_errno($ch)) {
       <section>
         <title>A Closer Look at Context Initialization</title>
 
+        <para>***TODO: needs to be re-written or removed. We have startup
+        methods now.</para>
+
         <para>Agavi's context class (AgaviContext) is initialized according to
         settings defined in <filename>factories.xml</filename>. Normally you
         don't have to worry about how it is done but if you decide to
@@ -733,6 +736,71 @@ if(curl_errno($ch)) {
 
         <para>request parameters and attributes, attribute namespaces, errors,
         cookies.</para>
+
+        <section>
+          <title>User Input</title>
+
+          <para>This chapter focuses on how to use user input in Agavi actions
+          and views. We don't go into input validation as the validation in
+          Agavi works in such a way that you can turn it on later without
+          touching the code in actions or views. Just remember that in real
+          life you should never use any un-validated user input.</para>
+
+          <para>All the input from the user (eg. <code>$_GET</code>,
+          <code>$_POST</code> and others in the web context) is stored into
+          <classname>AgaviRequestDataholder</classname> (in the web context
+          <classname>AgaviWebRequestDataHolder</classname> but you don't have
+          to worry about the actual implementation) object that's given to the
+          action's execute method as an argument. Depending on your validation
+          settings this object has either all input or just the input that has
+          passed validation (see chapter Validation to learn more about
+          different validation set-ups). For added security (to keep
+          developers from accidentally using insecure data) PHP's superglobals
+          like <code>$_GET</code> and <code>$_POST</code> are emptied
+          entirely. Agavi also removes so-called magic quotes from the input
+          should that feature be enabled in your PHP set-up.</para>
+
+          <programlisting>class Products_EditAction extends WebShopBaseAction
+{
+  // route pattern /product/(id:\d+)/edit 
+  // eg. www.example.com/product/123/edit to edit prd no 123
+  
+  public function executeWrite(AgaviRequestDataHolder $rd)
+  {
+    $prdId = $rd-&gt;getParameter('prdid');
+    
+    $product = $this-&gt;getContext()-&gt;getModel('Product', 'Products', array('id'=&gt;'$prdId));
+    $product-&gt;setName($rd-&gt;getParameter('prdname');
+    $product-&gt;save();
+    
+    return 'Success';
+  }</programlisting>
+
+          <para>This simple example shows us two important type of input -
+          input coming directly from the user (submitted via an HTML form
+          perhaps) and implicit parameters from the route (URL). Both input
+          types are accessed with <methodname>getParameter(name,
+          default)</methodname> of the
+          <classname>AgaviRequestDataHolder</classname>. </para>
+        </section>
+
+        <section>
+          <title>Passing Data Inside the System</title>
+
+          <section>
+            <title>From Action to View/Template</title>
+
+            <para>Action::setAttribute, View::getAttribute, $template array /
+            extracted vars</para>
+          </section>
+
+          <section>
+            <title>From Component to Another</title>
+
+            <para>Core messages (matched_routes,
+            org.agavi.controller.forwards.*, fpf)</para>
+          </section>
+        </section>
       </section>
 
       <section>
