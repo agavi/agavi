@@ -127,9 +127,27 @@ EOD;
 		$p2->addPackageDepWithChannel( 'optional', 'creole', 'pear.phpdb.org', '1.1.0');
 		$p2->addPackageDepWithChannel( 'optional', 'propel_generator', 'pear.phpdb.org', '1.2.0');
 		$p2->addPackageDepWithChannel( 'optional', 'propel_runtime', 'pear.phpdb.org', '1.2.0');
+		
+		$p2->addConflictingPackageDepWithChannel('phing', 'pear.php.net');
+		
 		$p2->setPhpDep('5.1.0');
+		
+		$p2->addExtensionDep('required', 'dom');
+		$p2->addExtensionDep('required', 'libxml');
+		$p2->addExtensionDep('required', 'SPL');
+		$p2->addExtensionDep('required', 'Reflection');
+		$p2->addExtensionDep('required', 'pcre');
+		$p2->addExtensionDep('optional', 'tokenizer');
+		$p2->addExtensionDep('optional', 'session');
+		$p2->addExtensionDep('optional', 'xmlrpc');
+		$p2->addExtensionDep('optional', 'PDO');
+		$p2->addExtensionDep('optional', 'iconv');
+		$p2->addExtensionDep('optional', 'gettext');
+		
 		$p2->setPearinstallerDep('1.4.0');
+		
 		$p2->setLicense('LGPL', 'http://www.gnu.org/copyleft/lesser.html');
+		
 		$p2->addReplacement('scripts/agavi-dist', 'pear-config', '@PEAR-DIR@', 'php_dir');
 		$p2->addReplacement('scripts/agavi.bat-dist', 'pear-config', '@PEAR-DIR@', 'php_dir');
 		$p2->generateContents();
