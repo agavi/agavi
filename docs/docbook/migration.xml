@@ -4,6 +4,10 @@
 <book>
   <title>Agavi Migration Guide</title>
 
+  <bookinfo>
+    <releaseinfo>$Id$</releaseinfo>
+  </bookinfo>
+
   <chapter>
     <title>Migrating from Agavi 0.10 to 0.11</title>
 

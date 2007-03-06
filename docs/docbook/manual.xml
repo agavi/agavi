@@ -4,6 +4,10 @@
 <book>
   <title>The Definitive Guide to Agavi</title>
 
+  <bookinfo>
+    <releaseinfo>$Id$</releaseinfo>
+  </bookinfo>
+
   <preface>
     <title>Preface</title>
 

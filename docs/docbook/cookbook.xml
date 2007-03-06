@@ -4,6 +4,10 @@
 <book>
   <title>The Agavi Cookbook</title>
 
+  <bookinfo>
+    <releaseinfo>$Id$</releaseinfo>
+  </bookinfo>
+
   <chapter>
     <title>Best Practices</title>
 
