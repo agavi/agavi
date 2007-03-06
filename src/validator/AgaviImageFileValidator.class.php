@@ -62,7 +62,7 @@ class AgaviImageFileValidator  extends AgaviBaseFileValidator
 
 		$file = $this->getData($this->getArgument());
 
-		$type = getimagesize($file->getTmpName());
+		$type = @getimagesize($file->getTmpName());
 		if($type === false) {
 			$this->throwError('no_image');
 			return false;
