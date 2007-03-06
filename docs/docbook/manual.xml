@@ -5,7 +5,8 @@
   <title>The Definitive Guide to Agavi</title>
 
   <bookinfo>
-    <releaseinfo>$Id$</releaseinfo>
+    <releaseinfo>$Id: manual.xml 1823 2007-03-06 08:47:59Z david
+    $</releaseinfo>
   </bookinfo>
 
   <preface>
@@ -785,7 +786,7 @@ if(curl_errno($ch)) {
           perhaps) and implicit parameters from the route (URL). Both input
           types are accessed with <methodname>getParameter(name,
           default)</methodname> of the
-          <classname>AgaviRequestDataHolder</classname>. </para>
+          <classname>AgaviRequestDataHolder</classname>.</para>
         </section>
 
         <section>
@@ -813,20 +814,23 @@ if(curl_errno($ch)) {
         <para>(routing functionality, getting info from the routing,
         generating urls)</para>
 
-        <para>****** maybe first some general explanation with the "method to
-        map" blah and then basic info such as that routes are tested in the
-        order they are specified etc.</para>
+        <para>Normally when you do HTTP GET requests, parameters are specified
+        using a format like index.php?param1=val1&amp;param2=val2. Routing can
+        help you get rid of this ugly format that search engines do not
+        particularly like and make the URI prettier for the users. Routing is
+        basically a method to map URIs to module/action -pairs and provide
+        information for them, such as the parameters. Think of it as replacing
+        mod_rewrite for Apache or ISAPI_Rewrite for Microsoft IIS but with a
+        lot more power and features. Routes are defined in the file
+        <filename>%core.app_dir%/config/routing.xml</filename>, and to enable
+        routing you must set the "use_routing" option to true in
+        <filename>settings.xml</filename>. </para>
 
-        <para>Routing is s a method to map URLs to module/action -pairs and
-        provide information for them, such as parameters. Think of it as
-        replacing mod_rewrite for Apache or ISAPI_Rewrite for Microsoft IIS
-        but with a lot more power and features. Routes are defined in the file
-        <filename>%core.app_dir%/config/routing.xml</filename>. Let's look at
-        an example:<programlisting>&lt;route name="viewproduct" pattern="^/products/(id:\d+)$" module="Shop" action="ViewProduct" /&gt;</programlisting></para>
+        <para>Let's look at an example route:<programlisting>&lt;route name="viewproduct" pattern="^/products/(id:\d+)$" module="Shop" action="ViewProduct" /&gt;</programlisting></para>
 
-        <para>Now, the URL <uri>http://host.com/products/157</uri> would run
-        the "ViewProduct" action in module "Shop", with a request parameter
-        <varname>id</varname> set to "157".</para>
+        <para>A request to the URL <uri>http://host.com/products/157</uri>
+        would run the "ViewProduct" action in module "Shop", with a request
+        parameter <varname>id</varname> set to "157".</para>
 
         <para>Most of the "magic" is achieved using regular expressions
         (@linkto PCRE@). In the above example, the id parameter must consist
@@ -850,7 +854,8 @@ if(curl_errno($ch)) {
         -attribute. For read-methods, you would use
         <code>method="read"</code>, and for write-requests you would use
         <code>method="write"</code>. Routes are matched for both request
-        methods by default.</para>
+        methods by default, and are always matched in the order they are
+        configured.</para>
 
         <section>
           <title>Optional Parts</title>
@@ -877,9 +882,7 @@ if(curl_errno($ch)) {
         <section>
           <title>Defaults</title>
 
-          <para>&lt;default&gt; ftw!</para>
-
-          <para>The default section specifies values that should be used if a
+          <para>The default-element specifies values that should be used if a
           parameter is not supplied. This also applies for generating the
           route even if the parameter is not optional. For instance, we have a
           route like this:</para>
@@ -901,10 +904,9 @@ if(curl_errno($ch)) {
         <section>
           <title>Pre- and Postfixes for Parameters</title>
 
-          <para>When using optional parts, you almost always need additional
-          characters before and after the actual parameters, especially when
-          using @@optional parts@@. For that, you can use pre- and
-          postfixes.</para>
+          <para>When using @@optional parts@@, you almost always need
+          additional characters before and after the actual parameters. For
+          that, you can use pre- and postfixes.</para>
 
           <para>To use them, you enclose the name:expression part in curly
           braces, and outside of these, you define the pre- and postfixes that
@@ -929,8 +931,8 @@ if(curl_errno($ch)) {
           do not supply the "<uri>/buy-cheap-whatever-at-agavi-dot-org</uri>",
           it will set it to
           "<uri>/buy-cheap-chainsaws-at-agavi-dot-org</uri>", thus setting the
-          <varname>$name</varname> parameter to "chainsaws", and
-          <varname>$id</varname> to null. (see @@previous section@@)</para>
+          name-parameter to "chainsaws", and id to null. (see @@previous
+          section@@)</para>
 
           <para><tip>
               <para>Pre- and Postfixes may also be regular expressions
@@ -964,7 +966,7 @@ if(curl_errno($ch)) {
           <para>Routing callbacks are user-defined classes that run when Agavi
           tests the route for matches. The class has to implement methods that
           Agavi call, and these methods would return true or false depending
-          on if the route matching is to succeed or fail. <code></code></para>
+          on if the route matching is to succeed or fail. </para>
 
           <para><code>onMatched</code> is called when the route matches. This
           method can then return either true to indicate that it did indeed
@@ -1001,7 +1003,7 @@ if(curl_errno($ch)) {
           us explain through an example:</para>
 
           <programlisting>&lt;route name="blog" pattern="^/blog" module="Default" action="Blog"&gt;
-  &lt;route name=".article" pattern="^/$" action=".Index" /&gt;
+  &lt;route name=".index" pattern="^/$" action=".Index" /&gt;
   &lt;route name=".article" pattern="^/(id:\d+)(-{title:\S+})?$" action=".ShowArticle" /&gt;
 &lt;/route&gt; </programlisting>
 
@@ -1010,22 +1012,21 @@ if(curl_errno($ch)) {
           <uri>http://host.com/blog</uri>. Why not? Because the request cannot
           be anchored at the end of the pattern, as the pattern has children.
           That is, to run the Blog.Index -action, you would have to use the
-          request <uri>http://host.com/blog.article/</uri>, and to run the
-          Blog.ShowArticle with the id and title -parameters set, you would
-          have to use the request
-          <uri>http://host.com/blog.article/151-Agavi_rocks</uri>. This way
-          you only have to define "top level" routes for your main actions,
-          and you can use subroutes to define routes to actions that are
-          conceptually below the "top level" actions, making parsing of the
-          route much faster.</para>
+          request <uri>http://host.com/blog/</uri> (note the slash), and to
+          run the Blog.ShowArticle with the id and title -parameters set, you
+          would have to use the request
+          <uri>http://host.com/blog/151-Agavi_rocks</uri>. This way you only
+          have to define "top level" routes for your main actions, and you can
+          use subroutes to define routes to actions that are conceptually
+          below the "top level" actions, making parsing of the route much
+          faster.</para>
         </section>
 
         <section>
           <title>Other Things to Match</title>
 
-          <para>But the routing can do more, like match against other sources,
-          or do things other than setting module and action. An
-          example:</para>
+          <para>Routing can do more -- like match against other sources, or do
+          things other than setting module and action. An example:</para>
 
           <para>Because this is a <abbrev>MVC</abbrev>-framework, the data
           produced in the model should be view-independent. That is, the same
