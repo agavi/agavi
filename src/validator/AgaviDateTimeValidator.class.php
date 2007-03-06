@@ -136,17 +136,17 @@ class AgaviDateTimeValidator extends AgaviValidator
 				$itemLocale = empty($item['locale']) ? $locale : $tm->getLocale($item['locale']);
 				$type = empty($item['type']) ? 'format' : $item['type'];
 
-				try {
-					if($type == 'format') {
-						$formatString = $item['format'];
-					} elseif($type == 'time' || $type == 'date' || $type == 'datetime') {
-						$format = isset($item['format']) ? $item['format'] : null;
-						$formatString = AgaviDateFormatter::resolveFormat($format, $itemLocale, $type);
-					} elseif($type == 'translation_domain') {
-						$td = $item['translation_domain'];
-						$formatString = $tm->_($item['format'], $td, $itemLocale);
-					}
+				if($type == 'format') {
+					$formatString = $item['format'];
+				} elseif($type == 'time' || $type == 'date' || $type == 'datetime') {
+					$format = isset($item['format']) ? $item['format'] : null;
+					$formatString = AgaviDateFormatter::resolveFormat($format, $itemLocale, $type);
+				} elseif($type == 'translation_domain') {
+					$td = $item['translation_domain'];
+					$formatString = $tm->_($item['format'], $td, $itemLocale);
+				}
 
+				try {
 					$format = new AgaviDateFormat($formatString);
 					$cal = $format->parse($param, $itemLocale, $check);
 
