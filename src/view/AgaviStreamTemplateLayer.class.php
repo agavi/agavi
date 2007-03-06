@@ -76,7 +76,7 @@ class AgaviStreamTemplateLayer extends AgaviTemplateLayer
 		$args[] = array();
 		
 		$scheme = $this->getParameter('scheme');
-		if(!in_array($scheme, stream_get_wrappers())) {
+		if($scheme != 'file' && !in_array($scheme, stream_get_wrappers())) {
 			throw new AgaviException('Unknown stream wrapper "' . $scheme . '"');
 		}
 		$check = $this->getParameter('check');
