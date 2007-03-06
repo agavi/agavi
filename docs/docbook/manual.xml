@@ -803,7 +803,7 @@ if(curl_errno($ch)) {
             -method, which takes two parameters: a name-parameter identifying
             the data, and a mixed parameter of actual data. The data can be
             anything you can use as a variable in PHP itself, for instance
-            strings, arrays or objects. </para>
+            strings, arrays or objects.</para>
 
             <para><programlisting>class Products_ViewAction extends WebShopBaseAction
 {
@@ -829,7 +829,7 @@ if(curl_errno($ch)) {
             <para>All the request parameter that the action recieved are also
             available via the AgaviRequestDataHolder -object in the view. This
             is also true for the template, if the request data auto-assignment
-            is enabled in <filename>output_types.xml</filename>. </para>
+            is enabled in <filename>output_types.xml</filename>.</para>
 
             <para>There are several variables automatically assigned in the
             template if set up in <filename>output_types.xml</filename>. These
@@ -865,7 +865,7 @@ if(curl_errno($ch)) {
         lot more power and features. Routes are defined in the file
         <filename>%core.app_dir%/config/routing.xml</filename>, and to enable
         routing you must set the "use_routing" option to true in
-        <filename>settings.xml</filename>. </para>
+        <filename>settings.xml</filename>.</para>
 
         <para>Let's look at an example route:<programlisting>&lt;route name="viewproduct" pattern="^/products/(id:\d+)$" module="Shop" action="ViewProduct" /&gt;</programlisting></para>
 
@@ -1007,7 +1007,7 @@ if(curl_errno($ch)) {
           <para>Routing callbacks are user-defined classes that run when Agavi
           tests the route for matches. The class has to implement methods that
           Agavi call, and these methods would return true or false depending
-          on if the route matching is to succeed or fail. </para>
+          on if the route matching is to succeed or fail.</para>
 
           <para><code>onMatched</code> is called when the route matches. This
           method can then return either true to indicate that it did indeed
@@ -1473,11 +1473,270 @@ $bar2 = $this-&gt;getContext()-&gt;getModel('SinglesBar'); //returns the same in
     <section>
       <title>Validation</title>
 
-      <para>why validation, how to validate, explain the drop-in character,
-      explain what it can also do (normalization etc), how sweet it is with
-      the FormPopulationFilter</para>
+      <section>
+        <title>Why Validation?</title>
 
-      <para></para>
+        <para>It is strongly recommended to validate any request data. All
+        request data including headers and cookies comes from the user and
+        it's content is dictated by the the user. This user may as well be a
+        malicious user trying to attack your application/server/database or
+        use your application to attack other people visiting your website
+        through XSS-attacks or similar. No input to your application which is
+        not under your control should therefore be trusted.</para>
+
+        <para>There are other reasons to validate data: Think of a newsletter
+        application form - it's always a good thing to check whether the data
+        the user entered is at least a syntactically correct email-address.
+        Sometimes typing errors happen and the user is frustrated that he
+        didn't get the newsletter he ordered. It would have been better to
+        check the data the user entered and provide him with a friendly error
+        message at the time of registration.</para>
+
+        <para>The best situation you can be in is if you know exactly what
+        input data is valid - e.g. if your page expects an id parameter to
+        pull a record from the database you know for sure that it must
+        absolutely be an integer and everything else is an attempt to trick
+        your application to do something wrong. Other situations may not be as
+        easy, but you should still try to validate as much data as
+        possible.</para>
+      </section>
+
+      <section>
+        <title>When does Validation happen</title>
+
+        <para>Validation happens if the action serves the incoming request
+        method, that is if the action declares an execute method that matches
+        the request type (<methodname>executeRead()</methodname> for get
+        request, <methodname>executeWrite()</methodname> for post request or a
+        generic <methodname>execute()</methodname> method), immediatly before
+        the action is executed.</para>
+      </section>
+
+      <section>
+        <title>How to validate</title>
+
+        <para>The rules for the validation are defined in validators. A
+        validator is an object that checks wether an input parameter conforms
+        to a set of given constraints - such as "is the parameter 'id' really
+        an integer value etc.". There two ways of registering a validator and
+        a third way to perform more elaborate validations that cannot be
+        handled by a validator:</para>
+
+        <section>
+          <title>XML Configuration</title>
+
+          <para>There are several ways of validating input data. The simplest
+          way is placing an XML configuration file with the proper
+          configuration in the "validate" directory of the module. The XML
+          file must be named &lt;ActionName&gt;.xml, that is if your action is
+          named "LoginAction", the XML file must be "Login.xml". In this file,
+          you can define which validators will be registered for any request
+          handled by the action. It is important to note that even though you
+          can set some validators not to execute on a read or write request,
+          those validators will be registered anyways and as you can't
+          register a validator twice, you can only have one input parameter
+          validated in a different manner on read and write by defining two
+          different validators. Another way which provides finer control over
+          what validators will be registered on read/write requests is the
+          registerValidators() family of methods.</para>
+
+          <section>
+            <title>Example XML Configuration (from the sample app,
+            LoginAction)</title>
+
+            <programlisting>&lt;?xml version="1.0" encoding="UTF-8" standalone="no"?&gt;
+&lt;configurations&gt;
+  &lt;!-- custom validators and default parameters --&gt;
+  &lt;configuration&gt;
+    &lt;validators&gt;
+      &lt;validator class="string" name="username_too_short"&gt;
+        &lt;argument&gt;username&lt;/argument&gt;
+        &lt;error&gt;The username you supplied is less than 4 characters&lt;/error&gt;
+        &lt;parameter name="min"&gt;5&lt;/parameter&gt;
+      &lt;/validator&gt;
+    &lt;/validators&gt;
+  &lt;/configuration&gt;
+&lt;configurations&gt;</programlisting>
+
+            <para>This registers a single validator that checks wether the
+            username is longer than 5 characters. Let's look at this snippet
+            in detail. The interestion block is the
+            <code>&lt;validators&gt;</code> element. It contains a list of
+            <code>&lt;validator</code>&gt; elements, each one representing a
+            validator. A validator must have a type ("string" in this case,
+            alternatively you can use the full class name). The name is
+            optional and must be unique ("username_too_short" here) when
+            supplied . Some validators can act upon multiple input parameters,
+            each one wrapped in a <code>&lt;argument&gt;</code> tag. You can
+            also validate array input parameters <link
+            linkend="reference-validation-validating_arrays">using a special
+            syntax.</link> You can define different <code>&lt;error&gt;</code>
+            blocks for the various validation errors by supplying a name
+            attribute, in this case there is only the generic error available.
+            Finally, the <code>&lt;parameters&gt;</code> block lists the
+            parameters that get passed into the validator. These depend on the
+            type of validator you're trying to register. The
+            AgaviStringValidator being used here for example accepts
+            parameters such as minimum and maximum length etc.</para>
+          </section>
+        </section>
+
+        <section>
+          <title>registerValidators(), registerReadValidators(),
+          registerWriteValidators()</title>
+
+          <para>While the XML configuration method is convenient most of the
+          time, sometimes a more fine grained control is nessesary. Sometimes
+          you might wish to validate a parameter differently on a read request
+          than on a write request or the validation might depend on data no
+          known when you write the application. Think of a form that gets
+          generated depending on some config parameters pulled from a
+          database. When you write the action, you don't know yet what form
+          fields will be available and which type they have - however when the
+          form gets displayed you will know. You just need to tell agavi about
+          it - this is where the <methodname>registerValidators()</methodname>
+          methods come into play. If your action defines a method
+          <methodname>registerReadValidators()</methodname>, it will be
+          executed before <methodname>executeRead()</methodname> and all
+          validators that you registered in this method will be executed as
+          well. The same is true for
+          <methodname>registerWriteValidators()</methodname>, only that it
+          will be called before <methodname>executeWrite()</methodname> will
+          run and <methodname>registerValidators()</methodname> will be
+          executed before any of the execute methods will be run. That way,
+          you can dynamically add validators, you can even mix both methods:
+          use the XML for any validators that you you'll need for shure and
+          use execute*Validators() to add anything that is dynamic. However,
+          as noted above you can't register a validator twice.</para>
+
+          <section>
+            <title>Sample registerReadValidators() (does the same as the XML
+            above)</title>
+
+            <para><programlisting>public function registerWriteValidators()
+{
+  $validationManager = $this-&gt;getContext()-&gt;getValidationManager();
+
+  $arguments = array('username');
+  $errors = array('' =&gt; 'The username you supplied is less than 4 characters.');
+  $parameters = array (
+    'name' =&gt; 'username_too_short',
+    'min' =&gt; '5',
+    'severity' =&gt; 'error',
+    'method' =&gt; NULL,
+    'required' =&gt; true,
+    'class' =&gt; 'string'
+  );
+
+  $validator = new AgaviStringValidator();
+  $validator-&gt;initialize($this-&gt;getContext(), $parameters, $arguments, $errors);
+  $validationManager-&gt;addChild($validator);
+}</programlisting>This example does the same as the XML style registration
+            above.</para>
+          </section>
+        </section>
+
+        <section>
+          <title>validate(), validateRead(), validateWrite()</title>
+
+          <para>If an action declares a method with the name "validate()", it
+          will get called after the registered validators have run but before
+          the execute Method gets called. It recieves a single parameter,
+          $parameters with the type AgaviRequestDataHolder. If validate
+          returns true, the execution continues, if it returns false,
+          validation fails and the error must be handled. As with the
+          register*Validator() family of methods, a method named
+          validateRead(AgaviRequestDataHolder $rd) will only be called in read
+          requests and a method named validateWrite(AgaviRequestDataHolder
+          $rd) only on write request. You can use these method to perform
+          advanced validation that is not possible with validators. As
+          validators are generic and reusable, you should look into creating
+          your own validator whenever feasible.</para>
+        </section>
+      </section>
+
+      <section>
+        <title>Handling Validation errors</title>
+
+        <para>Once validation failed, the error must be handled. The default
+        way is to render an error view, but sometimes you might wish to slip
+        in some logic such as logging the error. You can do this by declaring
+        a method named "handleError()" in your action. You can also define
+        different handlers for the request methods using handle*Error()
+        (handleReadError, handleWriteError and so on). It will be called if a
+        validation error occured and recieves a single parameter, $parameters
+        with the type AgaviRequestDataHolder. It must return the name of a
+        view, just as the execute methods do.</para>
+      </section>
+
+      <section>
+        <title>The FormPopulationFilter</title>
+
+        <para>Once you validated the input data, there may be errors that must
+        be returned to the client. The standard way is displaying the form
+        back to the user and having him correct the errors in the input data.
+        This can be done by pulling the supplied data from the request object
+        in your form template and filling the input fields with the proper
+        value. There is a more convenient way though: The
+        FormPopulationFilter. It is a regular filter that gets executed
+        everytime you post a form by default. It parses the resulting document
+        and extracts the form element whose action attribute matches the
+        current page's URL. It then matches the input fields in this form
+        against the request parameters and fills in the request values in the
+        proper input fields. It even marks the input field and the
+        corresponding label (if any) with a special CSS class that you can use
+        to indicate an error to your users. While inserting the request
+        parameters, it takes care of escaping the values properly so that XSS
+        attacks are not possible.</para>
+      </section>
+
+      <section>
+        <title>Other things Validators can do for you</title>
+
+        <para />
+
+        <section>
+          <title>Normalization</title>
+
+          <para />
+        </section>
+
+        <section>
+          <title>Casting Values (same as Normalization)</title>
+
+          <para />
+        </section>
+
+        <section>
+          <title>Validation and Internationalization</title>
+
+          <para>If you have an internationalized application you need to
+          translate the error messages as well. To make this possible, each
+          validator accepts a "translation_domain" parameter. All error
+          messages will be translated with the Translator registered for this
+          domain.</para>
+        </section>
+      </section>
+
+      <section>
+        <title>Available Validators</title>
+
+        <para>Depending on the validator type, every validator accepts
+        different parameters.</para>
+
+        <section>
+          <title>String (AgaviStringValidator)</title>
+
+          <para />
+        </section>
+      </section>
+
+      <section>
+        <title>Examples</title>
+
+        <programlisting />
+      </section>
+
     </section>
 
     <section>
