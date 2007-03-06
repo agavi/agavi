@@ -751,19 +751,19 @@ if(curl_errno($ch)) {
           touching the code in actions or views. Just remember that in real
           life you should never use any un-validated user input.</para>
 
-          <para>All the input from the user (eg. <code>$_GET</code>,
-          <code>$_POST</code> and others in the web context) is stored into
+          <para>All the input from the user like <code>$_GET</code> and
+          <code>$_POST</code> arrays in the web context is stored into
           <classname>AgaviRequestDataholder</classname> (in the web context
           <classname>AgaviWebRequestDataHolder</classname> but you don't have
           to worry about the actual implementation) object that's given to the
           action's execute method as an argument. Depending on your validation
           settings this object has either all input or just the input that has
           passed validation (see chapter Validation to learn more about
-          different validation set-ups). For added security (to keep
-          developers from accidentally using insecure data) PHP's superglobals
+          different validation set-ups). For added security PHP's superglobals
           like <code>$_GET</code> and <code>$_POST</code> are emptied
-          entirely. Agavi also removes so-called magic quotes from the input
-          should that feature be enabled in your PHP set-up.</para>
+          entirely. This is to keep developers from accidentally using
+          insecure data. Agavi also removes so-called magic quotes from the
+          input should that feature be enabled in your PHP set-up.</para>
 
           <programlisting>class Products_EditAction extends WebShopBaseAction
 {
@@ -786,7 +786,13 @@ if(curl_errno($ch)) {
           perhaps) and implicit parameters from the route (URL). Both input
           types are accessed with <methodname>getParameter(name,
           default)</methodname> of the
-          <classname>AgaviRequestDataHolder</classname>.</para>
+          <classname>AgaviRequestDataHolder</classname>. </para>
+
+          <para>In web context cookies, HTTP headers and uploaded files are
+          accessed just as easily with their respective access methods
+          <methodname>getCookie</methodname>,
+          <methodname>getHeader</methodname> and
+          <methodname>getFile</methodname>.</para>
         </section>
 
         <section>
