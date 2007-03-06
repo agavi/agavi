@@ -9,7 +9,7 @@ class Default_SearchEngineSpamErrorView extends AgaviSampleAppDefaultBaseView
 	 */
 	public function executeHtml(AgaviRequestDataHolder $rd)
 	{
-		return array(AgaviConfig::get('errors.404_module'), AgaviConfig::get('errors.404_action'));
+		return array(AgaviConfig::get('actions.error_404_module'), AgaviConfig::get('actions.error_404_action'));
 	}
 
 	/**
