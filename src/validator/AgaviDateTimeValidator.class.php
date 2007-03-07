@@ -47,7 +47,10 @@
  *                 This can either be a string or an array. If its an string it 
  *                 can be one of 'unix' (converts the date to a unix timestamp),
  *                 'string' (converts it to a string using the default format), 
- *                 'calendar' (will return the AgaviCalendar object).
+ *                 'calendar' (will return the AgaviCalendar object),
+ *                 'datetime' (case sensitive, will return a PHP DateTime 
+ *                 object, requires PHP 5.1.x with DateTime explicitly enabled 
+ *                 or >= PHP 5.2).
  *                 If it's an array it can have these keys:
  *     'type'        The type of the format (format, time, date, datetime)
  *     'format'      see in 'formats' above.
@@ -181,10 +184,13 @@ class AgaviDateTimeValidator extends AgaviValidator
 				$format = new AgaviDateFormat($formatString);
 				$value = $format->format($cal, $cal->getType(), $locale);
 			} else {
+				$cast = strtolower($cast);
 				if($cast == 'unix') {
 					$value = $cal->getUnixTimestamp();
 				} elseif($cast == 'string') {
 					$value = $tm->_d($cal);
+				} elseif($cast == 'datetime') {
+					$value = $cal->getNativeDateTime(); 
 				} else {
 					$value = $cal;
 				}
