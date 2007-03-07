@@ -227,8 +227,8 @@ abstract class AgaviCalendar
 	{
 		$date = new DateTime(
 			sprintf(
-				'%s-%s-%s %s:%s:%s', 
-				$this->get(AgaviDateDefinitions::YEAR), $this->get(AgaviDateDefinitions::MONTH), $this->get(AgaviDateDefinitions::DATE),
+				'%d-%d-%d %d:%d:%d', 
+				$this->get(AgaviDateDefinitions::YEAR), $this->get(AgaviDateDefinitions::MONTH) + 1, $this->get(AgaviDateDefinitions::DATE),
 				$this->get(AgaviDateDefinitions::HOUR_OF_DAY), $this->get(AgaviDateDefinitions::MINUTE), $this->get(AgaviDateDefinitions::SECOND)
 			),
 			new DateTimeZone($this->getTimeZone()->getId())
