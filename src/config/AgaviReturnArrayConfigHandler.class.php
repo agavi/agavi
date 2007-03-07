@@ -42,17 +42,11 @@ class AgaviReturnArrayConfigHandler extends AgaviConfigHandler
 		$configurations = $this->orderConfigurations(AgaviConfigCache::parseConfig($config, false, $this->getValidationFile(), $this->parser)->configurations, AgaviConfig::get('core.environment'), $context);
 		$data = array();
 		foreach($configurations as $cfg) {
-			$data = array_merge($data, $this->convertToArray($cfg));
-		}
-		if(isset($data['environment'])) {
-			unset($data['environment']);
-		}
-		if(isset($data['context'])) {
-			unset($data['context']);
+			$data = array_merge($data, $this->convertToArray($cfg, true));
 		}
 
 		// compile data
-		$code = "return " . var_export($data, true) . ";";
+		$code = 'return ' . var_export($data, true) . ';';
 
 		return $this->generate($code);
 	}
@@ -67,30 +61,89 @@ class AgaviReturnArrayConfigHandler extends AgaviConfigHandler
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	protected function convertToArray(AgaviConfigValueHolder $item)
+	protected function convertToArray(AgaviConfigValueHolder $item, $topLevel = false)
 	{
+		$idAttribute = $this->getParameter('id_attribute', 'name');
+		$valueKey = $this->getParameter('value_key', 'value');
+		$forceArrayValues = $this->getParameter('force_array_values', false);
+		$attributePrefix = $this->getParameter('attribute_prefix', '');
+		$literalize = $this->getParameter('literalize', true);
+		
 		$singularParentName = AgaviInflector::singularize($item->getName());
 
 		$data = array();
 
+		$attribs = $item->getAttributes();
+		$numAttribs = count($attribs);
+		if($idAttribute && $item->hasAttribute($idAttribute)) {
+			$numAttribs--;
+		}
+		
+		foreach($item->getAttributes() as $name => $value) {
+			if(($topLevel && in_array($name, array('context', 'environment'))) || $name == $idAttribute) {
+				continue;
+			}
+
+			if($literalize) {
+				$value = $this->literalize($value);
+			}
+
+			if(!isset($data[$name])) {
+				$data[$attributePrefix . $name] = $value;
+			}
+		}
+		
 		if(!$item->hasChildren()) {
-			$data = $item->getValue();
+			$val = $item->getValue();
+			if($literalize) {
+				$val = $this->literalize($val);
+			}
+			
+			if($val === null) {
+				$val = '';
+			}
+			
+			if(!$topLevel && ($numAttribs || $forceArrayValues)) {
+				$data[$valueKey] = $val;
+			} else {
+				$data = $val;
+			}
+			
 		} else {
-			foreach($item->getChildren() as $key => $child) {
-				if((is_int($key) || $key == $singularParentName) && !$child->hasAttribute('name')) {
-					$data[] = $this->convertToArray($child);
+			$names = array();
+			$children = $item->getChildren();
+			foreach($children as $child) {
+				$names[] = $child->getName();
+			}
+			$dupes = array();
+			foreach(array_unique(array_diff_assoc($names, array_unique($names))) as $name) {
+				$dupes[] = $name;
+			}
+			foreach($children as $key => $child) {
+				$hasId = ($idAttribute && $child->hasAttribute($idAttribute));
+				$isDupe = in_array($child->getName(), $dupes);
+				$hasParent = $child->getName() == $singularParentName;
+				if(($hasId || $isDupe) && !$hasParent) {
+					// it's one of multiple tags in this level without the respective plural form as the parent node
+					if(!isset($data[$idx = AgaviInflector::pluralize($child->getName())])) {
+						$data[$idx] = array();
+					}
+					$hasParent = true;
+					$to =& $data[$idx];
 				} else {
-					$name = $child->hasAttribute('name') ? $child->getAttribute('name') : $child->getName();
-					$data[$name] = $this->convertToArray($child);
+					$to =& $data;
+				}
+				
+				if($hasId) {
+					$to[$child->getAttribute($idAttribute)] = $this->convertToArray($child);
+				} elseif($hasParent) {
+					$to[] = $this->convertToArray($child);
+				} else {
+					$to[$child->getName()] = $this->convertToArray($child);
 				}
 			}
 		}
-
-		foreach($item->getAttributes() as $name => $value) {
-			if(!isset($data[$name])) {
-				$data[$name] = $this->literalize($value);
-			}
-		}
+		
 		return $data;
 	}
 }
