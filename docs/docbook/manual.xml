@@ -786,7 +786,7 @@ if(curl_errno($ch)) {
           perhaps) and implicit parameters from the route (URL). Both input
           types are accessed with <methodname>getParameter(name,
           default)</methodname> of the
-          <classname>AgaviRequestDataHolder</classname>. </para>
+          <classname>AgaviRequestDataHolder</classname>.</para>
 
           <para>In web context cookies, HTTP headers and uploaded files are
           accessed just as easily with their respective access methods
@@ -903,6 +903,12 @@ if(curl_errno($ch)) {
         <code>method="write"</code>. Routes are matched for both request
         methods by default, and are always matched in the order they are
         configured.</para>
+
+        <para>It is worth to note that if the route has the module and action
+        attributes set, they will overwrite route parameters named "module"
+        and "action". If the attributes aren't set, you can use module and
+        action parameters, and they would do what you expect -- set the module
+        and the action of the request.</para>
 
         <section>
           <title>Optional Parts</title>
@@ -1699,18 +1705,18 @@ $bar2 = $this-&gt;getContext()-&gt;getModel('SinglesBar'); //returns the same in
       <section>
         <title>Other things Validators can do for you</title>
 
-        <para />
+        <para></para>
 
         <section>
           <title>Normalization</title>
 
-          <para />
+          <para></para>
         </section>
 
         <section>
           <title>Casting Values (same as Normalization)</title>
 
-          <para />
+          <para></para>
         </section>
 
         <section>
@@ -1733,16 +1739,15 @@ $bar2 = $this-&gt;getContext()-&gt;getModel('SinglesBar'); //returns the same in
         <section>
           <title>String (AgaviStringValidator)</title>
 
-          <para />
+          <para></para>
         </section>
       </section>
 
       <section>
         <title>Examples</title>
 
-        <programlisting />
+        <programlisting></programlisting>
       </section>
-
     </section>
 
     <section>
