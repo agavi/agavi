@@ -120,6 +120,10 @@ class AgaviWebRouting extends AgaviRouting
 			$parsedRuQuery = $parsedInput = '';
 			parse_str($ru['query'], $parsedRuQuery);
 			parse_str($this->input, $parsedInput);
+			if(get_magic_quotes_gpc()) {
+				$parsedRuQuery = AgaviWebRequest::clearMagicQuotes($parsedRuQuery);
+				$parsedInput = AgaviWebRequest::clearMagicQuotes($parsedInput, false /* start on the first level */);
+			}
 			foreach(array_diff(array_keys($parsedInput), array_keys($parsedRuQuery)) as $unset) {
 				unset($_GET[$unset]);
 				if(!isset($_POST[$unset])) {

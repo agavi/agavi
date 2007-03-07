@@ -200,6 +200,38 @@ class AgaviWebRequest extends AgaviRequest
 			'request_data_holder_class' => 'AgaviWebRequestDataHolder',
 		));
 	}
+	
+	/**
+	 * Clear magic quotes. Properly. That means keys are cleared, too.
+	 *
+	 * @param      array An array of data to be put out of it's misery.
+	 *
+	 * @return     array An array delivered from magic quotes.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public final static function clearMagicQuotes($input, $firstLevel = true)
+	{
+		$retval = array();
+		
+		foreach($input as $key => $value) {
+			// the first level of keys (i.e. the actual var names from the root of $_WHATEVER) isn't magic_quoted if the corresponding value is an array. Yay PHP.
+			if(!$firstLevel || !is_array($value)) {
+				$key = stripslashes($key);
+			}
+			
+			if(is_array($value)) {
+				$retval[$key] = self::clearMagicQuotes($value, false);
+			} elseif(is_string($value)) {
+				$retval[$key] = stripslashes($value);
+			} else {
+				$retval[$key] = $value;
+			}
+		}
+		
+		return $retval;
+	}
 
 	/**
 	 * Initialize this Request.
@@ -217,6 +249,24 @@ class AgaviWebRequest extends AgaviRequest
 	public function initialize(AgaviContext $context, array $parameters = array())
 	{
 		parent::initialize($context, $parameters);
+		
+		// very first thing to do: remove magic quotes
+		if(get_magic_quotes_gpc()) {
+			$_GET = self::clearMagicQuotes($_GET);
+			$_POST = self::clearMagicQuotes($_POST);
+			$_COOKIE = self::clearMagicQuotes($_COOKIE);
+			$_REQUEST = self::clearMagicQuotes($_REQUEST);
+			foreach($_FILES as $key => $value) {
+				// DO NOT STRIP FROM tmp_name !
+				foreach(array_keys($value) as $entry) {
+					$val = array($entry => $value[$entry]);
+					if($entry != 'tmp_name') {
+						$val = self::clearMagicQuotes($val);
+					}
+					$_FILES[$key][$entry] = $val[$entry];
+				}
+			}
+		}
 		
 		$sources = array_merge(array(
 			'HTTPS' => 'HTTPS',
