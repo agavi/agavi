@@ -184,6 +184,8 @@
         linkend="c1-installation-by_hand" />, or you package a PEAR release
         yourself for local installation by first running</para>
 
+        <para><command>pear channel-discover pear.agavi.org</command></para>
+
         <para><command>phing package-pear</command></para>
 
         <para>on the root directory of your checkout, followed by a</para>
@@ -192,7 +194,9 @@
 
         <para>inside the <filename>build</filename> directory created by the
         first command. This will write a <filename>.tgz</filename> file which
-        can be installed using PEAR.</para>
+        can be installed using PEAR. If you already have Agavi installed it
+        might be a good idea to remove it by running <command>pear uninstall
+        agavi/agavi</command>.</para>
       </section>
 
       <section>
