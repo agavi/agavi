@@ -135,7 +135,12 @@ class AgaviReturnArrayConfigHandler extends AgaviConfigHandler
 				}
 				
 				if($hasId) {
-					$to[$child->getAttribute($idAttribute)] = $this->convertToArray($child);
+					$key = $child->getAttribute($idAttribute);
+					if($literalize) {
+						// no literalize, just constants!
+						$key = $this->replaceConstants($key);
+					}
+					$to[$key] = $this->convertToArray($child);
 				} elseif($hasParent) {
 					$to[] = $this->convertToArray($child);
 				} else {
