@@ -94,8 +94,11 @@ abstract class AgaviConfigHandler extends AgaviParameterHolder
 				}
 			}
 		}
-		$data = array_merge($oldValues, $data);
-		return $data;
+		// we can NOT use array_merge here, since it would break numeric keys
+		foreach($data as $key => $value) {
+			$oldValues[$key] = $value;
+		}
+		return $oldValues;
 	}
 
 	/**
