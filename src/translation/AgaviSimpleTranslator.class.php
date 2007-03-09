@@ -61,9 +61,9 @@ class AgaviSimpleTranslator extends AgaviBasicTranslator
 
 		$domainData = array();
 
-		foreach($parameters as $domain => $locales) {
-			foreach($locales as $locale => $translations) {
-				foreach($translations as $key => $translation) {
+		foreach((array)$parameters as $domain => $locales) {
+			foreach((array)$locales as $locale => $translations) {
+				foreach((array)$translations as $key => $translation) {
 					if(is_array($translation)) {
 						$domainData[$locale][$domain][$translation['from']] = $translation['to'];
 					} else {
