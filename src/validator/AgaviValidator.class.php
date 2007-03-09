@@ -633,7 +633,9 @@ abstract class AgaviValidator extends AgaviParameterHolder
 
 			// validate in every name defined in the request
 			foreach($names as $name) {
-				$t = $this->validateInBase($base->pushRetNew($name));
+				$newBase = clone $base;
+				$newBase->unshift($name);
+				$t = $this->validateInBase($newBase);
 
 				if($t == self::CRITICAL) {
 					return $t;
