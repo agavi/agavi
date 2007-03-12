@@ -367,7 +367,6 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 								for($i = count($layers)-1; $i >= 0; $i--) {
 									$layer = $layers[$i];
 									$layerName = $layer->getName();
-									$cacheSlots[$layerName] = array();
 									if(isset($otConfig['layers'][$layerName])) {
 										if(is_array($otConfig['layers'][$layerName])) {
 											$lastCacheableLayer = $i - 1;
@@ -408,7 +407,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 						} else {
 							// $lm->log('Running slot "' . $slotName . '"...');
 							$slotResponse = $slotContainer->execute();
-							if($isCacheable && !$isViewCached && isset($otConfig['layers'][$layerName]) && in_array($slotName, $otConfig['layers'][$layerName])) {
+							if($isCacheable && !$isViewCached && isset($otConfig['layers'][$layerName]) && is_array($otConfig['layers'][$layerName]) && in_array($slotName, $otConfig['layers'][$layerName])) {
 								// $lm->log('Adding response of slot "' . $slotName . '" to cache...');
 								$viewCache['slots'][$layerName][$slotName] = $slotResponse;
 							}
