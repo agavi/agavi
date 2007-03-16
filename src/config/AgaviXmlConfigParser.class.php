@@ -89,9 +89,8 @@ class AgaviXmlConfigParser extends AgaviConfigParser
 			if($element->hasAttribute('href')) {
 				$attribute = $element->getAttributeNode('href');
 				$parts = explode('#', $attribute->nodeValue, 2);
-				$parts[0] = AgaviConfigHandler::replaceConstants($parts[0]);
-				// must use textContent, nodeValue would encode
-				$attribute->textContent = implode('#', $parts);
+				$parts[0] = str_replace('\\', '/', AgaviConfigHandler::replaceConstants($parts[0]));
+				$attribute->nodeValue = implode('#', $parts);
 			}
 		}
 		
