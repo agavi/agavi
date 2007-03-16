@@ -87,7 +87,7 @@ class AgaviXmlConfigParser extends AgaviConfigParser
 		// replace %lala% directives in XInclude href attributes
 		foreach($doc->getElementsByTagNameNS('http://www.w3.org/2001/XInclude', '*') as $element) {
 			if($element->hasAttribute('href')) {
-				$element->setAttribute('href', $lala = AgaviConfigHandler::replaceConstants($element->getAttribute('href')));
+				$element->setAttribute('href', AgaviConfigHandler::replaceConstants($element->getAttribute('href')));
 			}
 		}
 		
