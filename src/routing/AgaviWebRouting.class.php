@@ -201,112 +201,116 @@ class AgaviWebRouting extends AgaviRouting
 	 */
 	public function gen($route, array $params = array(), $options = array())
 	{
+		$req = $this->context->getRequest();
+		
 		if(substr($route, -1) == '*') {
 			$options['refill_all_parameters'] = true;
 			$route = substr($route, 0, -1);
 		}
 
-		$req = $this->context->getRequest();
-		
 		$options = $this->resolveGenOptions($options);
 
-		if(defined('SID') && SID !== '' && $options['use_trans_sid'] === true) {
-			$params = array_merge($params, array(session_name() => session_id()));
-		}
-		
-		if($route === null) {
-			if(AgaviConfig::get('core.use_routing')) {
-				$routes = array_reverse($req->getAttribute('matched_routes', 'org.agavi.routing'));
-				$route = join('+', $routes);
-				$routeMatches = array();
-				foreach($routes as $myRoute) {
-					$r = $this->routes[$myRoute];
-					$routeMatches = array_merge($routeMatches, $r['matches']);
-				}
-				$params = array_merge($routeMatches, $params);
-			}
-			$params = array_merge($this->inputParameters, $params);
-		}
-
-		$routes = $this->getAffectedRoutes($route);
-
-		if(count($routes)) {
-			if(AgaviConfig::get('core.use_routing')) {
-				// the route exists and routing is enabled, the parent method handles it
-
-				$append = '';
-
-				// get the parameters which are not defined in this route an append them as query string
-				$p = $params;
-				foreach($routes as $myRoute) {
-					foreach($this->routes[$myRoute]['opt']['pattern_parameters'] as $param) {
-						if(array_key_exists($param, $p)) {
-							unset($p[$param]);
-						}
-					}
-				}
-				
-				$genParams = array_diff_key($params, $p);
-
-				if(count($p) > 0) {
-					$append = '?' . http_build_query($p);
-				}
-
-				list($path, $changedParams, $options) = parent::gen($routes, array_merge(array_map('rawurlencode', $genParams), array_filter($params, 'is_null')), $options);
-			} else {
-				// the route exists, but we must create a normal index.php?foo=bar URL.
-
-				// we collect the default parameters from the route and make sure
-				// new parameters don't overwrite already defined parameters
-				$defaults = array();
-				
-				$ma = $req->getParameter('module_accessor');
-				$aa = $req->getParameter('action_accessor');
-				
-				foreach($routes as $route) {
-					if(isset($this->routes[$route])) {
-						$r = $this->routes[$route];
-						$myDefaults = array();
-
-						foreach($r['opt']['defaults'] as $key => $default) {
-							$myDefaults[$key] = $default['val'];
-						}
-						if($r['opt']['module']) {
-							$myDefaults[$ma] = $r['opt']['module'];
-						}
-						if($r['opt']['action']) {
-							$myDefaults[$aa] = $r['opt']['action'];
-						}
-
-						$defaults = array_merge($myDefaults, $defaults);
-					}
-				}
-
-				$params = array_merge($defaults, $params);
-				$route = null;
-			}
-		}
-		// the route does not exist. we generate a normal index.php?foo=bar URL.
-
-		if($route === null) {
-			$path = $_SERVER['SCRIPT_NAME'];
-			$append = '?' . http_build_query($params);
+		if($route === null && empty($params)) {
+			$retval = $req->getRequestUri();
 		} else {
-			if(!isset($path)) {
-				$path = $route;
+			if(defined('SID') && SID !== '' && $options['use_trans_sid'] === true) {
+				$params = array_merge($params, array(session_name() => session_id()));
 			}
-			if(!isset($append)) {
+		
+			if($route === null) {
+				if(AgaviConfig::get('core.use_routing')) {
+					$routes = array_reverse($req->getAttribute('matched_routes', 'org.agavi.routing'));
+					$route = join('+', $routes);
+					$routeMatches = array();
+					foreach($routes as $myRoute) {
+						$r = $this->routes[$myRoute];
+						$routeMatches = array_merge($routeMatches, $r['matches']);
+					}
+					$params = array_merge($routeMatches, $params);
+				}
+				$params = array_merge($this->inputParameters, $params);
+			}
+
+			$routes = $this->getAffectedRoutes($route);
+
+			if(count($routes)) {
+				if(AgaviConfig::get('core.use_routing')) {
+					// the route exists and routing is enabled, the parent method handles it
+
+					$append = '';
+
+					// get the parameters which are not defined in this route an append them as query string
+					$p = $params;
+					foreach($routes as $myRoute) {
+						foreach($this->routes[$myRoute]['opt']['pattern_parameters'] as $param) {
+							if(array_key_exists($param, $p)) {
+								unset($p[$param]);
+							}
+						}
+					}
+				
+					$genParams = array_diff_key($params, $p);
+
+					if(count($p) > 0) {
+						$append = '?' . http_build_query($p);
+					}
+
+					list($path, $changedParams, $options) = parent::gen($routes, array_merge(array_map('rawurlencode', $genParams), array_filter($params, 'is_null')), $options);
+				} else {
+					// the route exists, but we must create a normal index.php?foo=bar URL.
+
+					// we collect the default parameters from the route and make sure
+					// new parameters don't overwrite already defined parameters
+					$defaults = array();
+				
+					$ma = $req->getParameter('module_accessor');
+					$aa = $req->getParameter('action_accessor');
+				
+					foreach($routes as $route) {
+						if(isset($this->routes[$route])) {
+							$r = $this->routes[$route];
+							$myDefaults = array();
+
+							foreach($r['opt']['defaults'] as $key => $default) {
+								$myDefaults[$key] = $default['val'];
+							}
+							if($r['opt']['module']) {
+								$myDefaults[$ma] = $r['opt']['module'];
+							}
+							if($r['opt']['action']) {
+								$myDefaults[$aa] = $r['opt']['action'];
+							}
+
+							$defaults = array_merge($myDefaults, $defaults);
+						}
+					}
+
+					$params = array_merge($defaults, $params);
+					$route = null;
+				}
+			}
+			// the route does not exist. we generate a normal index.php?foo=bar URL.
+
+			if($route === null) {
+				$path = $_SERVER['SCRIPT_NAME'];
 				$append = '?' . http_build_query($params);
+			} else {
+				if(!isset($path)) {
+					$path = $route;
+				}
+				if(!isset($append)) {
+					$append = '?' . http_build_query($params);
+				}
 			}
-		}
 
-		$aso = ini_get('arg_separator.output');
-		if($options['separator'] != $aso) {
-			// replace arg_separator.output's with given separator
-			$append = str_replace($aso, $options['separator'], $append);
-		}
+			$aso = ini_get('arg_separator.output');
+			if($options['separator'] != $aso) {
+				// replace arg_separator.output's with given separator
+				$append = str_replace($aso, $options['separator'], $append);
+			}
 
-		$retval = $path . $append;
+			$retval = $path . $append;
+		}
 
 		if(
 			!$options['relative'] || 
@@ -317,8 +321,6 @@ class AgaviWebRouting extends AgaviRouting
 				$options['port'] !== null
 			))
 		) {
-			$req = $this->context->getRequest();
-			
 			$scheme = null;
 			if($options['scheme'] !== false) {
 				$scheme = ($options['scheme'] === null ? $req->getUrlScheme() : $options['scheme']);
