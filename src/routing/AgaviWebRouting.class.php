@@ -212,6 +212,7 @@ class AgaviWebRouting extends AgaviRouting
 
 		if($route === null && empty($params)) {
 			$retval = $req->getRequestUri();
+			$retval = str_replace('&', $options['separator'], $retval);
 		} else {
 			if(defined('SID') && SID !== '' && $options['use_trans_sid'] === true) {
 				$params = array_merge($params, array(session_name() => session_id()));
