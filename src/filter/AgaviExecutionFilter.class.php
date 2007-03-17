@@ -142,15 +142,17 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function determineGroups(array $groups, $container)
+	public function determineGroups(array $groups, AgaviExecutionContainer $container)
 	{
 		$retval = array();
 		
 		foreach($groups as $group) {
 			$group += array('name' => null, 'source' => null, 'namespace' => null);
-			$val = $this->getVariable($group['name'], $group['source'], $group['namespace']);
+			$val = $this->getVariable($group['name'], $group['source'], $group['namespace'], $container);
 			if($val === null) {
 				$val = "0";
+			} elseif(is_object($val)) {
+				$val = $val->__toString();
 			}
 			$retval[] = $val;
 		}
@@ -166,13 +168,14 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 	 * @param      string The variable name.
 	 * @param      string The optional variable source.
 	 * @param      string The optional namespace in the source.
+	 * @param      AgaviExecutionContainer The container to use, if necessary.
 	 *
 	 * @return     mixed The variable.
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function getVariable($name, $source = 'string', $namespace = null)
+	public function getVariable($name, $source = 'string', $namespace = null, AgaviExecutionContainer $container = null)
 	{
 		switch($source) {
 			case 'constant':
@@ -180,6 +183,9 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 				break;
 			case 'locale':
 				$val = $this->context->getTranslationManager()->getCurrentLocaleIdentifier();
+				break;
+			case 'container_parameter':
+				$val = $container->getParameter($name);
 				break;
 			case 'request_parameter':
 				$val = $this->context->getRequest()->getRequestData()->getParameter($name);
