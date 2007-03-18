@@ -311,7 +311,7 @@ final class AgaviConfigCache
 
 		if($parserClass) {
 			$parser = new $parserClass();
-			$parser->parse($config, $validateFile);
+			return $parser->parse($config, $validateFile);
 		} else {
 			$path = pathinfo($config);
 			$ext = ucfirst(strtolower($path['extension']));
