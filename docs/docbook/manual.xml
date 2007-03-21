@@ -1331,10 +1331,110 @@ $bar2 = $this-&gt;getContext()-&gt;getModel('SinglesBar'); //returns the same in
     <section>
       <title>Session Handling and Security</title>
 
-      <para>explain the storage, explain why you never use it directly</para>
+      <para>Sessions are a necessary evil of web applications. HTTP is a
+      stateless protocol that provides little help with identifying users and
+      associating HTTP requests with a particular user. Since most if not all
+      web applications require user identification (personalized log-in and
+      application settings) as the most basic application feature, sessions
+      come to the rescue.</para>
 
-      <para>explain the user, how it works, what you can do with it, how you
-      do authentication, credentials etc</para>
+      <para>Agavi provides you with fully featured persistable session
+      management, authorization and security mechanisms. As it is usually the
+      case with Agavi, these mechanisms are rock solid and well thought out,
+      so it is recommended to rely on them instead of wasting your time
+      developing your own session management and security features. This also
+      means that PHP's session and cookie superglobal arrays are not available
+      to you and you should not attempt to use them directly for the same
+      reason you should not be using $_SERVER, $_REQUEST and other PHP
+      misfeatures in Agavi applications..</para>
+
+      <para>In order to store and retrieve session data between requests,
+      Agavi uses an internal mechanism called Storage. Storage is a family of
+      classes that provides a single interface to store and retrieve session
+      data from a specific medium. You can choose which class is to be used
+      for your application in the usual Agavi fashion in
+      app/config/factories.xml. The Storage mechanism is not intended to be
+      used directly by your application logic (e.g. actions and views). In
+      fact, unless you intend to implement your own Storage driver such as
+      SQLite-based session storage which does not exist at the time of this
+      writing, you should not be interacting with Storage at all. Instead, you
+      would be working with User objects.</para>
+
+      <para>The User family of classes is a high-level part of Agavi security
+      &amp; persistence mechanism. An User class of your choosing (typically
+      your own class based on <classname>AgaviSecurityUser</classname> or
+      <classname>AgaviRbacSecurityUser</classname>) is instantiated behind the
+      scene by Agavi; it is available to you in actions, views and models
+      using the <classname>Context</classname>'s
+      <methodname>getUser()</methodname> method. Additionally, it is imported
+      into templates, if the renderer in question is configured to do so
+      (typically through the "assigns" element in
+      app/config/output_types.xml). You now may implement actions that perform
+      log-in and log-out by manipulating the user object's
+      <methodname>setAuthenticated()</methodname> method, and store/retrieve
+      values using its <methodname>getAttribute()</methodname> and
+      <methodname>setAttribute()</methodname> methods.</para>
+
+      <para>Additionally, the security user objects implement a credentials
+      facility that Agavi applications use to decide whether a particular user
+      is allowed to perform a particular action. For simple authorization
+      cases you may choose to use plain
+      <classname>AgaviSecurityUser</classname> class to implement your
+      authorization; when a more complicated scenario is at hand, you should
+      consider using the RBAC facility as described below.</para>
+
+      <para>Authentication status, credentials and attributes of an User
+      object are preserved across requests by the object itself. To do that,
+      the User object uses a Storage object of your choosing. This means that
+      the User object is an application developer's sole interface to
+      identification, security and session persistence.</para>
+
+      <para>In order to be able to use Agavi session management and security,
+      you need to enable it in your configuration.xml. You would most likely
+      want to create your own User class with login and logout methods
+      implemented so that you are comfortable manipulating it in your
+      login/logoout actions.</para>
+
+      <section>
+        <title>Agavi Action Security</title>
+
+        <para>Beside the authentication and persistence, Agavi also has an
+        access authorization mechanism. This mechanism allows you to protect
+        your actions so that only authorized users with particular security
+        credentials may execute these actions. The amount of effort needed to
+        employ this facility is minimal yet you can be creative and adjust
+        your application logic according to the security conditions in current
+        request: you can always question the security mechanism directly to
+        find out whether the current user is allowed to do something or
+        not.</para>
+
+        <para>To protect an action, you declare an
+        <methodname>isSecure()</methodname> method on it that returns true,
+        and optionally declare a <methodname>getCredentials()</methodname> to
+        specify which credentials are needed for this action to be executed.
+        When Agavi executes your action, the security filter examines it and
+        calls its <methodname>isSecure()</methodname> to find out if there are
+        security restrictions on this action. If there are none, the action
+        proceeds. Otherwise, the security filter makes sure that the current
+        user is identified; users that are not logged in would be redirected
+        to the default "login action". If that does not happen the security
+        filter questions the action's
+        <methodname>getCredentials()</methodname> method and passes whatever
+        it returns to the User object's
+        <methodname>hasCredentials()</methodname>. If credentials match, the
+        action is allowed to proceed. If they don't, the default "secure
+        action" is invoked instead.</para>
+
+        <para>Note that "a secure action" and "the secure action" are two
+        wholly different beasts: "a secure action" is your action that is
+        declared as secure (that is, it can only be executed if the user is
+        authenticated and credentials requirements are met), whereas "the
+        secure action" is a system action that's executed instead of the
+        requested one when there are insufficient privileges. The default
+        secure action is defined in configuration.xml as a part of system
+        configuration; it is typically just a page saying "You are not
+        authorized to do this" optionally logging a security violation.</para>
+      </section>
 
       <section>
         <title>Role-Based Access Control</title>
