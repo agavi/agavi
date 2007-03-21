@@ -62,7 +62,7 @@ class AgaviRoutingUserSource implements AgaviIRoutingSource
 		} elseif($parts[0] == 'credentials' && count($parts) > 1) {
 			// throw the 'credentials' entry away and check with the parameters left
 			array_shift($parts);
-			return (int) $this->user->hasCredential($parts);
+			return (int) $this->user->hasCredentials($parts);
 		}
 
 		return null;
