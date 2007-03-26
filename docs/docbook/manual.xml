@@ -32,25 +32,24 @@
 
         <para>A framework is a tool that takes the pain out of building
         software. It should implement all the things that are common to most
-        applications, the things that otherwise would have to be re-done for
+        applications: the things that otherwise would have to be re-done for
         each new software project. That way, it prevents you from having to
         "re-invent the wheel" each and every time, while at the same time
         providing shortcuts for common problems and tasks.</para>
 
         <para>While Agavi can, in theory, be used to build any type of
-        application, it's main focus lies on web-based applications and web
+        application, its main focus lies in Web-based applications and Web
         services rather than standalone rich-client applications or daemons.
         That's because the internal execution flow is modeled around a typical
         HTTP request/response scenario, where an action is invoked upon a
         request, and the resulting response is built and returned before
-        execution ends, just like you know it from any other PHP
-        application.</para>
+        execution ends, just like any other PHP application.</para>
 
         <para>Besides "doing the dishes" for you, a framework should also
         offer a very important factor during development: guidance. Agavi
-        will, where necessary, actively prevent you from doing the worst
+        will, where necessary, actively prevent you from making the worst
         mistakes, keeping your code maintainable and giving you the comforting
-        feeling that you're doing things the right way.</para>
+        feeling that you're doing things the "right way."</para>
       </section>
 
       <section>
@@ -59,18 +58,18 @@
         <section>
           <title>Invent The Wheel Only Once</title>
 
-          <para>Agavi abstracts common problems, and provides you with a
-          central, flexible solution that has evolved from the input,
-          experiences and demands of various users, as well as a single point
-          of implementation you can comfortably override with custom code to
-          implement a different behavior.</para>
+          <para>Agavi abstracts common problems, and provides you, the
+          developer, with a central, flexible solution that has evolved from
+          the experiences and input of many users, as well as a single point of
+          implementation you can comfortably override with custom code to
+          create application-specific behavior.</para>
 
           <para>As a result, you'll find yourself in the relaxing situation of
           not having to hack the framework core to achieve a certain goal.
           Often, a configuration parameter is all you need. And if not, the
           system's extreme extensibility guarantees that your custom
           implementation is only a couple of lines of code away - an important
-          factor in the maintainability of an application as it is not
+          factor in the maintainability of an application, as it is not
           necessary to apply custom patches to the framework after each
           update.</para>
         </section>
@@ -78,9 +77,9 @@
         <section>
           <title>Address Common Concerns</title>
 
-          <para>Agavi comes with smart and versatile solutions to a lot of
-          points that are often very difficult, time-consuming, or simply
-          annoying to implement. Some of these include:</para>
+          <para>Agavi comes with smart and versatile solutions to a great deal
+          of problems that are often very difficult, time-consuming, or simply
+          annoying to solve. Some of these include:</para>
 
           <para><simplelist>
               <member><emphasis role="bold">It helps you build and maintain
@@ -100,10 +99,10 @@
               to your code, greatly lowering the risks of you or one of your
               developers using potentially unsafe data in your code. This
               applies to any potentially unsafe input, not just GET or POST
-              data - files, cookies, HTTP headers will all be run through the
-              validation system, and the single point of access to such data
-              guarantees that you really only process data you have
-              validated.</member>
+              data - files, cookies, and HTTP headers, among other input
+              sources, will all be run through the validation system, and the
+              single point of access to such data guarantees that you really
+              only process data you have validated.</member>
             </simplelist></para>
 
           <para><simplelist>
@@ -116,12 +115,12 @@
               and their labels, and can even insert error messages into your
               form without any placeholders in the markup. Of course, you have
               full control over all aspects at any time, allowing you to
-              pre-populate forms with information from your database
-              etc.</member>
+              pre-populate forms with information from your database or other
+              sources.</member>
             </simplelist></para>
 
           <para><simplelist>
-              <member><emphasis role="bold">It offers strong features for
+              <member><emphasis role="bold">It offers powerful features for
               globalization.</emphasis> Besides support for translating
               strings in different languages, Agavi comes with the ability to
               format and parse numbers, dates and currencies in over 250
@@ -149,21 +148,21 @@
           have to go back and change existing things to make it happen.</para>
 
           <para>Also, you'll be presented with certain best practices from the
-          beginning, as Agavi's project skeletons already have the structure
-          that help you avoid mistakes in the critical early phase of
-          development where you build the foundations of your software. This
-          ensures that you can fully benefit from all the features that made
-          you choose Agavi in the first place.</para>
+          beginning, as Agavi's project skeletons are structured to help you
+          avoid mistakes in the critical early phase of development where you
+          build the foundation for your software. This ensures that you can
+          fully benefit from all the features that made you choose Agavi in the
+          first place.</para>
 
           <para>And because Agavi follows the Model-View-Controller (MVC)
-          architecture, your code automatically becomes a lot more efficient
-          as the various parts are cleanly separated, making your application
-          easily maintainable:</para>
+          architecture, your code automatically becomes highly efficient as the
+          various parts are cleanly separated, making your application easily
+          maintainable:</para>
 
           <para><simplelist>
               <member>The <emphasis role="bold">Model</emphasis> accesses your
               data. It might talk to a database, or to a web service, or use
-              smoke signals to acquire the information it returns to you - the
+              smoke signals to acquire the information it returns to you; the
               essential point is that the way the data is retrieved is
               absolutely irrelevant to the code that uses the model. So in the
               beginning, your application would use models that return "fake"
@@ -173,7 +172,7 @@
 
           <para><simplelist>
               <member>The <emphasis role="bold">View</emphasis> presents your
-              data. For web sites, that typically means it renders an HTML
+              data. For Web sites, that typically means it renders an HTML
               document from one or more templates. But it could also build an
               RSS feed from the data it was given, or create a JSON data
               structure for the Ajax functionality of your application - it's
@@ -183,9 +182,9 @@
           <para><simplelist>
               <member>The <emphasis role="bold">Controller</emphasis> contains
               the business logic: the code that talks to the model, transforms
-              the data, performs various tasks and then prepares data for the
-              view. In Agavi, we call this the <firstterm>Action</firstterm>.
-              After it has finished it's task, it tells the system which View
+              the data, performs necessary tasks and then prepares data for the
+              View. In Agavi, we call this the <firstterm>Action</firstterm>.
+              After it has finished its task, it tells the system which View
               to use to generate the output.</member>
             </simplelist></para>
         </section>
@@ -209,9 +208,9 @@
               not forever, of course, but you cannot simply cut and paste your
               code to port a project to a different framework. If a framework
               promises you that, they're either lying, or they don't deserve
-              the label "framework" because it's so low-level it's nothing
-              else than a simple toolkit or, as they're called these days,
-              component library.</para>
+              the label "framework" because their implementations are so
+              low-level they provide only a simple toolkit (or, as they're
+              called these days, a component library).</para>
             </important>A framework can lock you in in many ways, like:</para>
 
           <para><simplelist>
@@ -233,72 +232,71 @@
               template language of your choice, you have to replicate all this
               stuff if you want to use it. And what's more, all these helpers
               often do only 95% of what you want them to do, but not quite the
-              thing you had in mind. Besides the obvious fact, of course, that
+              thing you had in mind. (Besides the obvious fact, of course, that
               you might just outright hate the template language the framework
-              authors think is best for everyone - and that can ruin the whole
-              experience.</member>
+              authors think is best for everyone, and that can ruin the whole
+              experience.)</member>
             </simplelist></para>
 
-          <para>As you probably guessed by now, Agavi tries hard not to lock
-          you in to any of the above. You can use the template langauge you
-          like, and everything just works - particularly the entire form
+          <para>As you have probably guessed by now, Agavi tries hard not to
+          lock you in to any of the above. You can use the template language
+          you like, and everything just works - particularly the entire form
           handling system that was deliberately built in such a way that it is
           fully independent of any template language implementation.</para>
 
           <para>And while Agavi offers integration for database object layers
-          such as Propel, you do not have to use such a layer. If you like,
-          you may use AdoDB for database access, or the now common PDO, or
-          even vanilla pgsql_* functions - it's all up to you. And if there is
-          no adapter for your favorite layer bundled in the source
-          distribution, someone else probably already wrote one and shared it
-          somewhere. And if not, like if it's your home-made database wrapper
-          you have learned to love over all these years, you can easily write
-          a custom driver for it (and even that is not necessary, but of
-          course highly recommended).</para>
+          like Propel, you do not have to use such a layer. If you like, you
+          may use AdoDB for database access, or the now common PDO, or even
+          vanilla pgsql_* functions - it's all up to you. And if there is no
+          adapter for your favorite layer bundled in the source distribution,
+          chances are that someone has written one and shared it somewhere.
+          And if not, (e.g., if it's your home-made database wrapper you have
+          learned to love over the years), you can easily write a custom driver
+          for it (and even that is not necessary, but of course highly
+          recommended).</para>
         </section>
 
         <section>
           <title>Do Everything To Please People, No Matter How Stupid It
           Is</title>
 
-          <para>Sometimes, it's necessary to say "no". Many projects, over
+          <para>Sometimes, it's necessary to say "no." Many projects, over
           time, develop what's commonly known as "feature creep" or
           "featuritis". There are many things in the area of frameworks where
           you ask a thousand people for their opinion, just to get a thousand
           (or, in the worst case, even more) different answers. Not only must
           a framework decide not to implement a thousand different approaches
           in such a case, it's also very important to balance out precisely
-          how much of that specific feature the framework should do, or if
+          how much of a specific feature the framework should implement, or if
           it's better to leave it entirely up to the users.</para>
 
           <para>A good example of this is any feature that is not within the
           scope of a framework, or that can work perfectly fine without being
           tied to the framework. A common feature is the ability to send
-          E-Mail. Smart frameworks don't have such a feature, because there
+          e-mail. Smart frameworks don't have such a feature, because there
           already are many, many different libraries to choose from, many of
-          which have matured a lot over the course of the years and as such
-          are very stable and comfortable to use. There is simply no reason
-          why a framework should be able to send E-Mail, or rotate image
-          files, or come with a pre-made shopping cart module. Besides locking
-          people in, every new feature that others solve better means
-          increased activity on the support channels, derogating the quality
-          of support for all users.</para>
+          which have matured over the course of years and as such are very
+          stable and comfortable to use. There is simply no reason why a
+          framework should be able to send e-mail, rotate image files, or come
+          with a pre-made shopping cart module. Besides locking people in,
+          every new feature that others solve better means increased activity
+          on the support channels, derogating the quality of support for all
+          users.</para>
         </section>
 
         <section>
           <title>Making You Forget What Programming Is About</title>
 
           <para>Many frameworks have so many helpers for so many things that
-          do stuff in a certain way people might easily get used to that
-          everyone starts to neglect what programming really is about - using
-          one's own imagination and ingenuity. A framework should fuel the
-          human thirst for knowledge and excellence, and not bury it under a
-          pile of stuff targeted mainly at people who are too lazy to learn
-          how things work - and learning how things work is an important
-          factor in enabling people to leverage a tool's fully potential.
-          That's why this manual will, from time to time, delve into
-          explaining the inner workings of Agavi in case you're
-          interested.</para>
+          do stuff in certain ways that people might easily become totally
+          immersed in them. Users start to neglect what programming is really
+          about: using one's own imagination and ingenuity. A framework should
+          fuel the human thirst for knowledge and excellence, and not bury it
+          under a pile of stuff targeted mainly at people who are too lazy to
+          learn how things work - and learning how things work is an important
+          factor in enabling people to leverage a tool's full potential. That's
+          why this manual will, from time to time, delve into explaining the
+          inner workings of Agavi, in case you're interested.</para>
         </section>
       </section>
     </section>
@@ -319,36 +317,37 @@
       Agave plant which grows in the Mojave desert), with the main goal of
       creating a community-driven project with an open and transparent
       development process. A message with the fork announcement was posted on
-      the internet and in the Mojavi forums, and Agavi quickly gathered a
-      small, but loyal user base and more contributors.</para>
+      the Internet and in the Mojavi forums, and Agavi quickly gathered a
+      small but loyal user base and more contributors.</para>
 
       <para>The first version released to the public was 0.9.0, and as the
-      version number tells, it was believed that a final 1.0 release could
+      version number implies, it was believed that a final 1.0 release could
       follow soon after that. It turned out, however, that there were other
-      remaining issues that had to be addressed, but it wasn't until the end
-      of 2005 that a new 0.10.0 version was released to the public.</para>
+      unresolved issues that had to be addressed, and so it wasn't until the
+      end of 2005 that a new 0.10.0 version was released to the public.</para>
 
-      <para>While Agavi never had any official structure in the development
-      team in the beginning, the founders had less and less free time to spend
-      on the project, and Bob ultimately made David Zülke "captain of the
-      ship" as he put it in early 2006, and the decision was made to adjust
-      the roadmap a bit and put important features such as a routing or
+      <para>While Agavi never had any official structure to its development
+      team initially, the founders had less and less free time to spend on the
+      project, and Bob ultimately made David Zülke "captain of the ship" as he
+      put it in early 2006, and the decision was made to adjust the roadmap a
+      bit, putting important features such as a routing and
       internationalization on the schedule for 1.0, since other frameworks,
       mostly inspired by Ruby on Rails, had begun to offer such functionality.
-      An 0.11 release before a final 1.0 was planned in order to be able to
-      make any changes, should that be necessary, before releasing a 1.0 to
-      the general public.</para>
+      A 0.11 release before a final 1.0 was planned in order to be able to make
+      any changes, should they be necessary, before releasing a final 1.0
+      version to the general public.</para>
 
-      <para>In the end, 0.11 gained a lot more features than initially
-      planned, and as time went on, a lot of the core aspects of the
-      framework, which still was heavily based on Mojavi 3, were changed
-      drastically - so much in fact that today, many parts of Agavi do not
-      resemble of Mojavi much anymore. A lot of this work was necessary to
-      prepare Agavi for the challenges frameworks face today and in the future
-      - a solid, structured foundation is very important in order to be able
-      to adapt to new developments and grow without having to introduce hacks
-      or workarounds that would otherwise be necessary to introduce new
-      functionality without breaking backwards compatibility.</para>
+      <para>In the end, 0.11 implemented a great many more features than
+      originally planned, and as time went on, many of the core aspects of the
+      framework, which was still heavily based on Mojavi 3, were changed
+      drastically (so much in fact that at the time of this writing, many parts
+      of Agavi do not resemble Mojavi much anymore). A lot of this work was
+      necessary to prepare Agavi for the challenges frameworks face today and
+      in the future; a solid, structured foundation is very important in order
+      to be able to adapt to new developments and grow without having to
+      introduce hacks or workarounds that would otherwise be necessary to
+      introduce new functionality without breaking backwards
+      compatibility.</para>
 
       <para>Agavi 0.11 is what you see today. Soon after work on 0.11
       commenced, it was decided that version 1.0 should be pretty much
@@ -652,7 +651,7 @@ $url = "http://localhost/path/to/the/samples/pub/xmlrpc.php";
 $header[] = "Content-type: text/xml; charset=utf-8";
 $header[] = "Content-length: ".strlen($request);
 
-$ch = curl_init();  
+$ch = curl_init();
 curl_setopt($ch, CURLOPT_URL, $url);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_TIMEOUT, 10);
@@ -1102,17 +1101,17 @@ if(curl_errno($ch)) {
 
           <programlisting>class Products_EditAction extends WebShopBaseAction
 {
-  // route pattern /product/(id:\d+)/edit 
+  // route pattern /product/(id:\d+)/edit
   // eg. www.example.com/product/123/edit to edit prd no 123
-  
+
   public function executeWrite(AgaviRequestDataHolder $rd)
   {
     $prdId = $rd-&gt;getParameter('prdid');
-    
+
     $product = $this-&gt;getContext()-&gt;getModel('Product', 'Products', array('id'=&gt;'$prdId));
     $product-&gt;setName($rd-&gt;getParameter('prdname');
     $product-&gt;save();
-    
+
     return 'Success';
   }</programlisting>
 
