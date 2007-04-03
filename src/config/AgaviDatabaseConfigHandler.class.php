@@ -100,6 +100,12 @@ class AgaviDatabaseConfigHandler extends AgaviConfigHandler
 			$data[] = sprintf($tmp, $db['class'], var_export($db['params'], true), var_export($name, true));
 		}
 
+		if(!isset($databases[$default])) {
+			$error = 'Configuration file "%s" specifies undefined default database "%s".';
+			$error = sprintf($error, $config, $default);
+			throw new AgaviConfigurationException($error);
+		}
+
 		$data[] = sprintf("\$this->databases['default'] = \$this->databases[%s];", var_export($default, true));
 
 		return $this->generate($data);
