@@ -383,10 +383,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 								}
 							}
 						} else {
-							$lastLayer = end($layers);
-							if($lastLayer !== false) {
-								$lastCacheableLayer = $lastLayer->getName();
-							}
+							$lastCacheableLayer = count($layers) - 1;
 						}
 					
 						for($i = $lastCacheableLayer + 1; $i < count($layers); $i++) {
