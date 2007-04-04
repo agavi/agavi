@@ -99,7 +99,7 @@ class AgaviWebRouting extends AgaviRouting
 		if(!isset($ru['query'])) {
 			$ru['query'] = '';
 		} else {
-			$ru['query'] = preg_replace('/&$/', '', $ru['query']);
+			$ru['query'] = preg_replace('/&$/D', '', $ru['query']);
 		}
 		
 		$qs = (isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : '');
@@ -107,14 +107,14 @@ class AgaviWebRouting extends AgaviRouting
 		$rewritten = ($qs !== $ru['query']);
 		
 		if(AgaviConfig::get("core.use_routing", false) && $rewritten) {
-			$this->input = preg_replace('/' . preg_quote('&' . $ru['query'], '/') . '$/', '', $qs);
+			$this->input = preg_replace('/' . preg_quote('&' . $ru['query'], '/') . '$/D', '', $qs);
 			
 			if(!isset($_SERVER['SERVER_SOFTWARE']) || strpos($_SERVER['SERVER_SOFTWARE'], 'Apache') === false) {
 				// don't do that for Apache, it's already rawurldecode()d there
 				$this->input = rawurldecode($this->input);
 			}
 			
-			$this->basePath = $this->prefix = preg_replace('/' . preg_quote($this->input, '/') . '$/', '', rawurldecode($ru['path']));
+			$this->basePath = $this->prefix = preg_replace('/' . preg_quote($this->input, '/') . '$/D', '', rawurldecode($ru['path']));
 			
 			// that was easy. now clean up $_GET and the Request
 			$parsedRuQuery = $parsedInput = '';

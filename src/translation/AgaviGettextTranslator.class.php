@@ -232,7 +232,7 @@ class AgaviGettextTranslator extends AgaviBasicTranslator
 
 		if(isset($headers['Plural-Forms'])) {
 			$pf = $headers['Plural-Forms'];
-			if(preg_match('#nplurals=\d+;\s+plural=(.*)$#', $pf, $match)) {
+			if(preg_match('#nplurals=\d+;\s+plural=(.*)$#D', $pf, $match)) {
 				$funcCode = $match[1];
 				$validOpChars = array(' ', 'n', '!', '&', '|', '<', '>', '(', ')', '?', ':', ';', '=', '+', '*', '/', '%', '-');
 				if(preg_match('#[^\d' . preg_quote(implode('', $validOpChars)) . ']#', $funcCode, $errorMatch)) {
