@@ -232,6 +232,23 @@ class AgaviWebRequest extends AgaviRequest
 		
 		return $retval;
 	}
+	
+	/**
+	 * Get a value by trying to find the given key in $_SERVER first, then in
+	 * $_ENV. If nothing was found, return the key, or the given default value.
+	 */
+	public static function getSourceValue($key, $default = null)
+	{
+		if(isset($_SERVER[$key])) {
+			return $_SERVER[$key];
+		} elseif(isset($_ENV[$key])) {
+			return $_ENV[$key];
+		}
+		if($default !== null) {
+			return $default;
+		}
+		return $key;
+	}
 
 	/**
 	 * Initialize this Request.
@@ -280,7 +297,9 @@ class AgaviWebRequest extends AgaviRequest
 			$methods = array_merge($methods, (array) $parameters['method_names']);
 		}
 		
-		switch(isset($_SERVER[$sources['REQUEST_METHOD']]) ? $_SERVER[$sources['REQUEST_METHOD']] : 'GET') {
+		$REQUEST_METHOD = self::getSourceValue($sources['REQUEST_METHOD'], isset($parameters['sources']['REQUEST_METHOD']) ? null : 'GET');
+		
+		switch($REQUEST_METHOD) {
 			case 'POST':
 				$this->setMethod($methods['POST']);
 				break;
@@ -294,27 +313,26 @@ class AgaviWebRequest extends AgaviRequest
 				$this->setMethod($methods['GET']);
 		}
 		
-		$this->urlScheme = 'http' . (isset($_SERVER[$sources['HTTPS']]) && strtolower($_SERVER[$sources['HTTPS']]) == 'on' ? 's' : '');
-
-		if(isset($_SERVER[$sources['SERVER_PORT']])) {
-			$this->urlPort = intval($_SERVER[$sources['SERVER_PORT']]);
+		$HTTPS = self::getSourceValue($sources['HTTPS'], isset($parameters['sources']['HTTPS']) ? null : 'off');
+		
+		$this->urlScheme = 'http' . (strtolower($HTTPS) == 'on' ? 's' : '');
+		
+		$this->urlPort = intval(self::getSourceValue($sources['SERVER_PORT'], isset($parameters['sources']['SERVER_PORT']) ? null : $this->urlPort));
+		
+		$SERVER_NAME = self::getSourceValue($sources['SERVER_NAME']);
+		$port = $this->getUrlPort();
+		if(preg_match_all('/\:/', preg_quote($SERVER_NAME), $m) > 1) {
+			$this->urlHost = preg_replace('/\]\:' . preg_quote($port) . '$/', '', $SERVER_NAME);
+		} else {
+			$this->urlHost = preg_replace('/\:' . preg_quote($port) . '$/', '', $SERVER_NAME);
 		}
-
-		if(isset($_SERVER[$sources['SERVER_NAME']])) {
-			$port = $this->getUrlPort();
-			if(preg_match_all('/\:/', preg_quote($_SERVER[$sources['SERVER_NAME']]), $m) > 1) {
-				$this->urlHost = preg_replace('/\]\:' . preg_quote($port) . '$/', '', $_SERVER[$sources['SERVER_NAME']]);
-			} else {
-				$this->urlHost = preg_replace('/\:' . preg_quote($port) . '$/', '', $_SERVER[$sources['SERVER_NAME']]);
-			}
-		}
-
-		if(isset($_SERVER['HTTP_X_REWRITE_URL'])) {
+		
+		if(isset($_SERVER['HTTP_X_REWRITE_URL']) && isset($_SERVER['SERVER_SOFTWARE']) && strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') !== false) {
 			// Microsoft IIS with ISAPI_Rewrite
 			$this->requestUri = $_SERVER['HTTP_X_REWRITE_URL'];
 		} elseif(!isset($_SERVER['REQUEST_URI']) && isset($_SERVER['SERVER_SOFTWARE']) && strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') !== false) {
 			// Microsoft IIS with PHP in CGI mode
-			$this->requestUri = $_SERVER['ORIG_PATH_INFO'] . (isset($_SERVER['QUERY_STRING']) && strlen($_SERVER['QUERY_STRING']) > 0 ? '?' . $_SERVER['QUERY_STRING'] : '');
+			$this->requestUri = $_SERVER['ORIG_PATH_INFO'] . (isset($_SERVER['QUERY_STRING']) && $_SERVER['QUERY_STRING'] != '' ? '?' . $_SERVER['QUERY_STRING'] : '');
 		} elseif(isset($_SERVER['REQUEST_URI'])) {
 			$this->requestUri = $_SERVER['REQUEST_URI'];
 		}
