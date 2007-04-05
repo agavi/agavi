@@ -345,7 +345,8 @@ class AgaviWebRequest extends AgaviRequest
 			$_SERVER['REQUEST_URI'] = $this->getRequestUri();
 		}
 
-		$parts = array_merge(array('path' => '', 'query' => ''), parse_url($this->getRequestUri()));
+		// 'scheme://authority' is necessary so parse_url doesn't stumble over '://' in the request URI
+		$parts = array_merge(array('path' => '', 'query' => ''), parse_url('scheme://authority' . $this->getRequestUri()));
 		$this->urlPath = $parts['path'];
 		$this->urlQuery = $parts['query'];
 		unset($parts);
