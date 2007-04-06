@@ -353,6 +353,12 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 					$output = array();
 					$nextOutput = $response->getContent();
 				} else {
+					if($viewCache['next'] !== null) {
+						// response content was returned from view execute()
+						$response->setContent($viewCache['next']);
+						$viewCache['next'] = null;
+					}
+					
 					$layers = $viewInstance->getLayers();
 				
 					if($isCacheable) {
