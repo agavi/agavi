@@ -82,6 +82,8 @@ class AgaviStreamTemplateLayer extends AgaviTemplateLayer
 		}
 		$check = $this->getParameter('check');
 		
+		$attempts = array();
+		
 		// try each of the patterns
 		foreach((array)$this->getParameter('targets', array()) as $pattern) {
 			// try pattern with each argument list
@@ -94,11 +96,12 @@ class AgaviStreamTemplateLayer extends AgaviTemplateLayer
 				if(!$check || is_readable($target)) {
 					return $target;
 				}
+				$attempts[] = $target;
 			}
 		}
 		
 		// no template found, time to throw an exception
-		throw new AgaviException('Template "' . $template . '" could not be found.');
+		throw new AgaviException('Template "' . $template . '" could not be found. Paths tried:' . "\n" . implode("\n", $attempts));
 	}
 }
 
