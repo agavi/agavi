@@ -223,7 +223,8 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 				// in the error 404 page
 				$request->setAttributes(array(
 					'requested_module' => $moduleName,
-					'requested_action' => $actionName
+					'requested_action' => $actionName,
+					'exception' => $e,
 				), 'org.agavi.controller.forwards.error_404');
 
 				// switch to error 404 action
