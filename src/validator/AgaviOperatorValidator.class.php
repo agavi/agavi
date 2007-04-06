@@ -79,6 +79,39 @@ abstract class AgaviOperatorValidator extends AgaviValidator implements AgaviIVa
 		}
 	}
 	
+
+	/**
+	 * Adds a validation result for a given field.
+	 *
+	 * @param      AgaviValidator The validator.
+	 * @param      string The name of the field which has been validated.
+	 * @param      int    The result of the validation.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function addFieldResult($validator, $fieldname, $result)
+	{
+		if($this->parentContainer !== null) {
+			return $this->parentContainer->addFieldResult($validator, $fieldname, $result);
+		}
+	}
+
+	/**
+	 * Adds an incident to the validation result. 
+	 *
+	 * @param      AgaviValidationIncident The incident.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function addIncident(AgaviValidationIncident $incident)
+	{
+		if($this->parentContainer !== null) {
+			return $this->parentContainer->addIncident($incident);
+		}
+	}
+
 	/**
 	 * Adds new child validator.
 	 * 

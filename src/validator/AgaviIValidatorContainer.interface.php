@@ -42,6 +42,28 @@ interface AgaviIValidatorContainer
 	public function addChild(AgaviValidator $validator);
 
 	/**
+	 * Adds a validation result for a given field.
+	 *
+	 * @param      AgaviValidator The validator.
+	 * @param      string The name of the field which has been validated.
+	 * @param      int    The result of the validation.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function addFieldResult($validator, $fieldname, $result);
+
+	/**
+	 * Adds an incident to the validation result. 
+	 *
+	 * @param      AgaviValidationIncident The incident.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function addIncident(AgaviValidationIncident $incident);
+
+	/**
 	 * Returns a named child validator.
 	 *
 	 * @param      AgaviValidator The child validator.
