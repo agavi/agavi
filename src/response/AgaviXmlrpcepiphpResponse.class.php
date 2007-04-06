@@ -110,6 +110,49 @@ class AgaviXmlrpcepiphpResponse extends AgaviResponse
 	}
 	
 	/**
+	 * Get info about the set redirect. Not implemented here.
+	 *
+	 * @return     array An assoc array of redirect info, or null if none set.
+	 *
+	 * @throws     BadMethodCallException
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getRedirect()
+	{
+		throw new BadMethodCallException('Redirects are not implemented for XMLRPC.');
+	}
+
+	/**
+	 * Check if a redirect is set. Not implemented here.
+	 *
+	 * @return     bool true, if a redirect is set, otherwise falsae
+	 *
+	 * @throws     BadMethodCallException
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function hasRedirect()
+	{
+		throw new BadMethodCallException('Redirects are not implemented for XMLRPC.');
+	}
+
+	/**
+	 * Clear any set redirect information. Not implemented here.
+	 *
+	 * @throws     BadMethodCallException
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function clearRedirect()
+	{
+		throw new BadMethodCallException('Redirects are not implemented for XMLRPC.');
+	}
+	
+	/**
 	 * @see        AgaviResponse::isMutable()
 	 *
 	 * @author     David Zuelke <dz@bitxtender.com>

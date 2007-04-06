@@ -203,6 +203,34 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	abstract public function setRedirect($to);
 
 	/**
+	 * Get info about the set redirect.
+	 *
+	 * @return     array An assoc array of redirect info, or null if none set.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	abstract public function getRedirect();
+
+	/**
+	 * Check if a redirect is set.
+	 *
+	 * @return     bool true, if a redirect is set, otherwise falsae
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	abstract public function hasRedirect();
+
+	/**
+	 * Clear any set redirect information.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	abstract public function clearRedirect();
+
+	/**
 	 * Import response metadata from another response.
 	 *
 	 * @param      AgaviResponse The other response to import information from.
@@ -243,7 +271,7 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	 */
 	public function isContentMutable()
 	{
-		return !is_resource($this->content);
+		return !$this->hasRedirect() && !is_resource($this->content);
 	}
 	
 	/**
