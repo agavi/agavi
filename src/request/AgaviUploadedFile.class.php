@@ -60,9 +60,23 @@ class AgaviUploadedFile extends ArrayObject
 			'size' => 0,
 			'tmp_name' => null,
 			'error' => UPLOAD_ERR_NO_FILE,
-			'is_uploaded_file' => true
+			'is_uploaded_file' => true,
+			'moved' => false,
 		);
 		parent::__construct(array_merge($defaults, $array), $flags, $iteratorClass);
+	}
+	
+	/**
+	 * Destructor. Removes the tempfile.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function __destruct()
+	{
+		if(!$this->moved && !$this->is_uploaded_file) {
+			@unlink($this->tmp_name);
+		}
 	}
 	
 	/**
@@ -96,6 +110,19 @@ class AgaviUploadedFile extends ArrayObject
 	public function hasError()
 	{
 		return $this->error !== UPLOAD_ERR_OK;
+	}
+	
+	/**
+	 * Whether or not this file is movable.
+	 *
+	 * @return     bool True if this file has not been moved yet, otherwise false.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function isMovable()
+	{
+		return !$this->moved;
 	}
 	
 	/**
@@ -147,6 +174,7 @@ class AgaviUploadedFile extends ArrayObject
 			}
 			
 			if($moved) {
+				$this->moved = true;
 				// chmod our file
 				if(!@chmod($dest, $fileMode)) {
 					throw new AgaviFileException('Failed to chmod uploaded file after moving');
