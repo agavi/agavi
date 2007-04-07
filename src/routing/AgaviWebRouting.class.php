@@ -241,23 +241,19 @@ class AgaviWebRouting extends AgaviRouting
 
 					$append = '';
 
-					// get the parameters which are not defined in this route an append them as query string
+					list($path, $usedParams, $options) = parent::gen($routes, array_merge(array_map('rawurlencode', $params), array_filter($params, 'is_null')), $options);
+
 					$p = $params;
-					foreach($routes as $myRoute) {
-						foreach($this->routes[$myRoute]['opt']['pattern_parameters'] as $param) {
-							if(array_key_exists($param, $p)) {
-								unset($p[$param]);
-							}
+					// get the parameters which are not defined in this route an append them as query string
+					foreach($usedParams as $name => $value) {
+						if(array_key_exists($name, $p)) {
+							unset($p[$name]);
 						}
 					}
-				
-					$genParams = array_diff_key($params, $p);
 
 					if(count($p) > 0) {
 						$append = '?' . http_build_query($p);
 					}
-
-					list($path, $changedParams, $options) = parent::gen($routes, array_merge(array_map('rawurlencode', $genParams), array_filter($params, 'is_null')), $options);
 				} else {
 					// the route exists, but we must create a normal index.php?foo=bar URL.
 
