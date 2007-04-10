@@ -592,6 +592,8 @@ abstract class AgaviRouting
 			}
 		}
 
+		$availableParamsAsKeys = array_flip($availableParams);
+
 		foreach($params as $name => $param) {
 			if(!array_key_exists($name, $finalParams)) {
 				if($param === null && isset($optionalParams[$name])) {
@@ -599,7 +601,7 @@ abstract class AgaviRouting
 				} else {
 					if(isset($defaults[$name])) {
 						$finalParams[$name] = $defaults[$name]['pre'] . ($param !== null ? $param : $this->escapeOutputParameter($defaults[$name]['val'])) . $defaults[$name]['post'];
-					} else {
+					} elseif(array_key_exists($name, $availableParamsAsKeys)) {
 						$finalParams[$name] = $param;
 					}
 				}
