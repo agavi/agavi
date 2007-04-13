@@ -314,6 +314,21 @@ final class AgaviToolkit
 		}
 		return $default;
 	}
+
+	/**
+	 * Checks if a value is not an array
+	 *
+	 * @param      mixed The value to check
+	 *
+	 * @return     bool The result.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public static function isNotArray($value)
+	{
+		return !is_array($value);
+	}
 }
 
 ?>
