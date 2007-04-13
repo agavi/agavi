@@ -14,31 +14,62 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviLogger provides an easy way to manage multiple log destinations and 
- * write to them all simultaneously.
+ * AgaviILogger is the interface for all Logger implementations
  *
  * @package    agavi
  * @subpackage logging
  *
- * @author     Sean Kerr <skerr@mojavi.org>
+ * @author     David Zülke <dz@bitxtender.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
  *
- * @since      0.9.0
+ * @since      0.11.0
  *
  * @version    $Id$
  */
-class AgaviLogger implements AgaviILogger
+interface AgaviILogger
 {
 	/**
-	 * @var        array An array of AgaviLoggerAppenders.
+	 * Fatal level.
+	 *
+	 * @since      0.9.0
 	 */
-	protected $appenders = array();
+	const FATAL = 1;
 
 	/**
-	 * @var        int Logging level.
+	 * Error level.
+	 *
+	 * @since      0.9.0
 	 */
-	protected $level = AgaviLogger::WARN;
+	const ERROR = 2;
+
+	/**
+	 * Warning level.
+	 *
+	 * @since      0.9.0
+	 */
+	const WARN = 4;
+
+	/**
+	 * Information level.
+	 *
+	 * @since      0.9.0
+	 */
+	const INFO = 8;
+
+	/**
+	 * Debug level.
+	 *
+	 * @since      0.9.0
+	 */
+	const DEBUG = 16;
+
+	/**
+	 * All levels. (2^32-1)
+	 *
+	 * @since      0.11.0
+	 */
+	const ALL = 4294967295;
 
 	/**
 	 * Log a message.
@@ -46,19 +77,10 @@ class AgaviLogger implements AgaviILogger
 	 * @param      AgaviLoggerMessage A Message instance.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
 	 */
-	public function log(AgaviLoggerMessage $message)
-	{
-		// get message level
-		$msgLevel = $message->getLevel();
-
-		if($this->level & $msgLevel) {
-			foreach($this->appenders as $appender) {
-				$appender->write($message);
-			}
-		}
-	}
+	public function log(AgaviLoggerMessage $message);
 
 	/**
 	 * Set an appender.
@@ -72,20 +94,10 @@ class AgaviLogger implements AgaviILogger
 	 *                                          already exists.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
 	 */
-	public function setAppender($name, AgaviLoggerAppender $appender)
-	{
-		if(!isset($this->appenders[$name])) {
-			$this->appenders[$name] = $appender;
-			return;
-		}
-
-		// appender already exists
-		$error = 'An appender with the name "%s" is already registered';
-		$error = sprintf($error, $name);
-		throw new AgaviLoggingException($error);
-	}
+	public function setAppender($name, AgaviLoggerAppender $appender);
 
 	/**
 	 * Returns a list of appenders for this logger.
@@ -95,10 +107,7 @@ class AgaviLogger implements AgaviILogger
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function getAppenders()
-	{
-		return $this->appenders;
-	}
+	public function getAppenders();
 
 	/**
 	 * Set the level.
@@ -106,22 +115,19 @@ class AgaviLogger implements AgaviILogger
 	 * @param      int A log level.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
 	 */
-	public function setLevel($level)
-	{
-		$this->level = $level;
-	}
+	public function setLevel($level);
 
 	/**
 	 * Execute the shutdown procedure.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
 	 */
-	public function shutdown()
-	{
-	}
+	public function shutdown();
 }
 
 ?>
