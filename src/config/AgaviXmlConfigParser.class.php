@@ -156,7 +156,7 @@ class AgaviXmlConfigParser extends AgaviConfigParser
 		if(libxml_get_last_error() !== false) {
 			$errors = array();
 			foreach(libxml_get_errors() as $error) {
-				$errors[] = sprintf("Line %d: %s", $error->line, $error->message);
+				$errors[] = $error->message;
 			}
 			libxml_clear_errors();
 			libxml_use_internal_errors($luie);
