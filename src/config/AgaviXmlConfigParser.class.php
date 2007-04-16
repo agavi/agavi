@@ -118,12 +118,57 @@ class AgaviXmlConfigParser extends AgaviConfigParser
 			}
 		}
 		
-		$this->xpath = new DomXPath($doc);
+		$this->xpath = new DOMXPath($doc);
 		
 		// remove all xml:base attributes inserted by XIncludes
 		$nodes = $this->xpath->query('//@xml:base', $doc);
 		foreach($nodes as $node) {
 			$node->ownerElement->removeAttributeNode($node);
+		}
+		
+		$stylesheetProcessingInstructions = $this->xpath->query("//processing-instruction('xml-stylesheet')", $doc);
+		foreach($stylesheetProcessingInstructions as $pi) {
+			$fragment = $doc->createDocumentFragment();
+			$fragment->appendXml('<foo ' . $pi->data . ' />');
+			if($fragment->firstChild->getAttribute('type') == 'text/xml') {
+				$href = $href = $fragment->firstChild->getAttribute('href');
+				
+				if(strpos($href, '#') === 0) {
+					// embedded XSL
+					throw new AgaviParseException('Embedded XSL stylesheets are not supported yet.');
+				} else {
+					// references an xsl file
+					$xsl = new DomDocument();
+					$xsl->load(AgaviConfigHandler::replaceConstants($href));
+				}
+
+				$proc = new XSLTProcessor();
+				$proc->importStylesheet($xsl);
+
+				$this->xpath = null;
+				$newdoc = @$proc->transformToDoc($doc);
+				if($newdoc) {
+					$doc = $newdoc;
+				}
+				$this->xpath = new DOMXPath($doc);
+			}
+		}
+		if(libxml_get_last_error() !== false) {
+			$errors = array();
+			foreach(libxml_get_errors() as $error) {
+				$errors[] = sprintf("Line %d: %s", $error->line, $error->message);
+			}
+			libxml_clear_errors();
+			libxml_use_internal_errors($luie);
+			throw new AgaviParseException(
+				sprintf(
+					'Configuration file "%s" could not be parsed due to the following error%s that occured while transforming the document using XSL file "%s": ' . "\n\n%s", 
+					$config, 
+					count($errors) > 1 ? 's' : '', 
+					$href,
+					implode("\n", $errors)
+				)
+			);
 		}
 		
 		// remove top-level <sandbox> elements
