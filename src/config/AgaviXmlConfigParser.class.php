@@ -130,7 +130,8 @@ class AgaviXmlConfigParser extends AgaviConfigParser
 		foreach($stylesheetProcessingInstructions as $pi) {
 			$fragment = $doc->createDocumentFragment();
 			$fragment->appendXml('<foo ' . $pi->data . ' />');
-			if($fragment->firstChild->getAttribute('type') == 'text/xml') {
+			$type = $fragment->firstChild->getAttribute('type');
+			if(in_array($type, array('text/xml', 'text/xsl', 'application/xml', 'application/xsl+xml'))) {
 				$href = $href = $fragment->firstChild->getAttribute('href');
 				
 				if(strpos($href, '#') === 0) {
@@ -151,6 +152,8 @@ class AgaviXmlConfigParser extends AgaviConfigParser
 					$doc = $newdoc;
 				}
 				$this->xpath = new DOMXPath($doc);
+				$pi->parentNode->removeChild($pi);
+				break;
 			}
 		}
 		if(libxml_get_last_error() !== false) {
