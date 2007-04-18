@@ -601,7 +601,8 @@ abstract class AgaviRouting
 				} else {
 					if(isset($defaults[$name])) {
 						$finalParams[$name] = $defaults[$name]['pre'] . ($param !== null ? $param : $this->escapeOutputParameter($defaults[$name]['val'])) . $defaults[$name]['post'];
-					} elseif(array_key_exists($name, $availableParamsAsKeys)) {
+					} elseif(array_key_exists($name, $availableParamsAsKeys) || $param === null) {
+						// when the parameter was available in one of the routes or has explicitly been unset
 						$finalParams[$name] = $param;
 					}
 				}
