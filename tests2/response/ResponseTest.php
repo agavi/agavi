@@ -14,6 +14,18 @@ class SampleResponse extends AgaviResponse
 	{
 	}
 	
+	public function getRedirect()
+	{
+	}
+	
+	public function hasRedirect()
+	{
+	}
+	
+	public function clearRedirect()
+	{
+	}
+	
 	public function merge(AgaviResponse $other)
 	{
 	}
