@@ -16,11 +16,19 @@ class Default_SearchEngineSpamSuccessView extends AgaviSampleAppDefaultBaseView
 	}
 
 	/**
+	 * Execute any presentation logic for SOAP requests.
+	 */
+	public function executeSoap(AgaviRequestDataHolder $rd)
+	{
+		return $this->getAttribute('product_price');
+	}
+
+	/**
 	 * Execute any presentation logic for XMLRPC requests.
 	 */
 	public function executeXmlrpc(AgaviRequestDataHolder $rd)
 	{
-		$this->getResponse()->setContent(array($this->getAttribute('product_price')));
+		return array($this->getAttribute('product_price'));
 	}
 }
 

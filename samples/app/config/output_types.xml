@@ -70,4 +70,12 @@
 		</output_types>
 	</configuration>
 
+	<configuration context="soap">
+		<output_types default="soap">
+
+			<output_type name="soap" />
+
+		</output_types>
+	</configuration>
+
 </configurations>

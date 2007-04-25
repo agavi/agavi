@@ -47,6 +47,23 @@
 	
 	</configuration>
 	
+	<configuration context="soap">
+		
+		<controller class="AgaviSoapController">
+			<parameter name="wsdl">%core.app_dir%/data/test.wsdl</parameter>
+			<parameter name="options">
+				<parameter name="uri">http://localhost</parameter>
+			</parameter>
+		</controller>
+		
+		<request class="AgaviSoapRequest" />
+		
+		<response class="AgaviSoapResponse" />
+		
+		<routing class="AgaviWebserviceRouting" />
+		
+	</configuration>
+	
 	<configuration context="xmlrpc">
 		
 		<request class="AgaviXmlrpcepiphpRequest" />

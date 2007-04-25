@@ -14,10 +14,11 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviWebserviceRouting handles the routing for Web Service requests.
+ * AgaviSoapRequest is an implementation for handling SOAP Web Services using
+ * PHP 5's SOAP extension.
  *
  * @package    agavi
- * @subpackage routing
+ * @subpackage request
  *
  * @author     David Zülke <dz@bitxtender.com>
  * @copyright  Authors
@@ -27,32 +28,8 @@
  *
  * @version    $Id$
  */
-class AgaviWebserviceRouting extends AgaviRouting
+class AgaviSoapRequest extends AgaviWebserviceRequest
 {
-	/**
-	 * Initialize the routing instance.
-	 *
-	 * @param      AgaviContext A Context instance.
-	 * @param      array        An array of initialization parameters.
-	 *
-	 * @author     David Zülke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function initialize(AgaviContext $context, array $parameters = array())
-	{
-		parent::initialize($context, $parameters);
-		
-		if(!AgaviConfig::get("core.use_routing", false)) {
-			return;
-		}
-		
-		$this->updateInput();
-	}
-	
-	public function updateInput()
-	{
-		$this->input = $this->context->getRequest()->getInvokedMethod();
-	}
 }
 
 ?>
