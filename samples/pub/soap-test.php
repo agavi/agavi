@@ -19,7 +19,7 @@ if(USE_WSDL) {
 		/* so we can get last request and response */
 		'trace' => true,
 	));
-	$result = $client->getItemPrice('asdf');
+	$result = $client->getItemPrice('nonsense');
 	
 } else {
 	
@@ -47,9 +47,9 @@ if(USE_WSDL) {
 			/* so we can get last request and response */
 			'trace' => true,
 			/* SOAP Method Namespace */ 
-			"uri" => "urn:test", 
+			"uri" => "urn:agavi-sampleapp", 
 			/* SOAPAction HTTP Header for SOAP Method */ 
-			"soapaction" => "urn:test#getItemPrice" 
+			"soapaction" => "urn:agavi-sampleapp#getItemPrice" 
 		)
 	);
 
