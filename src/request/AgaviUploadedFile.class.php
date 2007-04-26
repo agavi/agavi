@@ -74,8 +74,9 @@ class AgaviUploadedFile extends ArrayObject
 	 */
 	public function __destruct()
 	{
-		if(!$this->moved && !$this->is_uploaded_file) {
-			@unlink($this->tmp_name);
+		// must use array syntax here, ArrayObject property access does not work in destructors
+		if(!$this['moved'] && !$this['is_uploaded_file']) {
+			@unlink($this['tmp_name']);
 		}
 	}
 	
