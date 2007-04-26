@@ -214,7 +214,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 		}
 		foreach($xpath->query($query) as $form) {
 			if($populate instanceof AgaviParameterHolder) {
-				$action = trim($form->getAttribute('action'));
+				$action = preg_replace('/#.*$/', '', trim($form->getAttribute('action')));
 				$ruri = $req->getRequestUri();
 				$rurl = $req->getUrl();
 				if(!(
