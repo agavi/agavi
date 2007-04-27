@@ -25,11 +25,11 @@
   <operation name='getItemPrice'> 
     <soap:operation soapAction='urn:agavi-sampleapp#getItemPrice'/> 
     <input> 
-      <soap:body use='encoded' namespace='urn:agavi-sampleapp' 
+      <soap:body use='literal' namespace='urn:agavi-sampleapp' 
         encodingStyle='http://schemas.xmlsoap.org/soap/encoding/'/> 
     </input> 
     <output> 
-      <soap:body use='encoded' namespace='urn:agavi-sampleapp' 
+      <soap:body use='literal' namespace='urn:agavi-sampleapp' 
         encodingStyle='http://schemas.xmlsoap.org/soap/encoding/'/> 
     </output> 
   </operation> 

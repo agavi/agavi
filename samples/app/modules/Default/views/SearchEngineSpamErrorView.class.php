@@ -16,7 +16,9 @@ class Default_SearchEngineSpamErrorView extends AgaviSampleAppDefaultBaseView
 	 */
 	public function executeSoap(AgaviRequestDataHolder $rd)
 	{
-		return new SoapFault('Error 101', 'Unknown Product "' . $this->getAttribute('product_name') . '"');
+		// fault code must be "Server", check the SOAP spec
+		// do not throw the exception please. it can be done with some fiddling, but returning it is a much better idea
+		return new SoapFault('Server', 'Unknown Product "' . $this->getAttribute('product_name') . '"');
 	}
 
 	/**

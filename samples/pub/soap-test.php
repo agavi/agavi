@@ -10,6 +10,10 @@
 
 define('USE_WSDL', true);
 
+if(!isset($_GET['item'])) {
+	$_GET['item'] = 'nonsense';
+}
+
 if(USE_WSDL) {
 	
 	ini_set('soap.wsdl_cache_enabled', 0);
@@ -19,7 +23,12 @@ if(USE_WSDL) {
 		/* so we can get last request and response */
 		'trace' => true,
 	));
-	$result = $client->getItemPrice('nonsense');
+	
+	try {
+		$result = $client->getItemPrice($_GET['item']);
+	} catch(SoapFault $e) {
+		$result = $e->__toString();
+	}
 	
 } else {
 	
@@ -37,7 +46,7 @@ if(USE_WSDL) {
 		array( 
 			new SoapParam( 
 				/* Parameter Value */ 
-				"nonsense", 
+				$_GET['item'], 
 				/* Parameter Name */ 
 				"name"
 			)
@@ -64,7 +73,7 @@ if(USE_WSDL) {
 		<pre>
 <?php echo htmlspecialchars($client->__getLastResponse()); ?>
 		</pre>
-		<h2>Method call result</h2>
+		<h2>Method call result for item "<?php echo htmlspecialchars($_GET['item']); ?>"</h2>
 		<pre>
 <?php var_dump($result); ?>
 		</pre>
