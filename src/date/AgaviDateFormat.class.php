@@ -472,11 +472,11 @@ class AgaviDateFormat
 		$fLen = strlen($format);
 		for($i = 0; $i < $fLen; ++$i) {
 			$c = $format[$i];
-			$cNext = ($i + 1 < $fLen) ? $format[$i+1] : 0;
+			$cNext = ($i + 1 < $fLen) ? $format[$i+1] : '';
 
 			if($inEscape) {
 				if($c == '\'') {
-					if($cNext == '\'') {
+					if('\'' == $cNext) {
 						$escapeStr .= '\'';
 						++$i;
 					} else {
