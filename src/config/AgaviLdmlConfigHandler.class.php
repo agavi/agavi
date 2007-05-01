@@ -967,13 +967,20 @@ array data format
 				for($i = 0; $i < $len; ++ $i) {
 					$match = $ml[$i];
 					if($match[0][0] != '\'') {
+						// we check if there is a quoted string directly before or directly after the escape sequence
+						// by using the string lengths and the offset of the matches. Since an escape sequence directly before
+						// this sequence results in an quoted string we only check if its really a quoted string and not an
+						// escape sequence for parts coming after this sequence
 						$quoteBefore = ($i > 0 && (strlen($ml[$i - 1][0]) + $ml[$i - 1][1]) == $match[1]);
-						$quoteAfter = ($i + 1 < $len && (strlen($match[0]) + $match[1]) == $ml[$i + 1][1]);
+						$quoteAfter = ($i + 1 < $len && $ml[$i + 1][0][0] == '\'' && (strlen($match[0]) + $match[1]) == $ml[$i + 1][1]);
 						$oldLen = strlen($output);
 						$unescaped = $this->unescapeCallback(array($match[0], substr($match[0], 1)));
 						$unescaped = ($quoteBefore ? '' : '\'') . $unescaped . ($quoteAfter ? '' : '\'');
 						$replacedPartLen = strlen($match[0]) + ((int) $quoteBefore) + ((int) $quoteAfter);
+						// replace the matched escape sequence with the unescaped one. we also replace the opening or closing quote
+						// from the quoted part before or after this escape sequence to include the unescaped string into the closed part
 						$output = substr_replace($output, $unescaped, $offsetMod + $match[1] + ($quoteBefore ? -1 : 0), $replacedPartLen);
+						// since the string length gets changed, we have to track the size change so we can adjust the offset from the match
 						$offsetMod += strlen($output) - $oldLen;
 					}
 				}
