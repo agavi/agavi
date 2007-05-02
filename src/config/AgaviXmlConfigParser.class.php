@@ -31,6 +31,8 @@
 
 class AgaviXmlConfigParser extends AgaviConfigParser
 {
+	const XML_NAMESPACE = 'http://agavi.org/agavi/1.0/config';
+	
 	/**
 	 * @var        DomXPath A DomXPath instance used to parse this document.
 	 */
@@ -82,6 +84,7 @@ class AgaviXmlConfigParser extends AgaviConfigParser
 				)
 			);
 		}
+		
 		$this->encoding = strtolower($doc->encoding);
 		
 		// replace %lala% directives in XInclude href attributes
@@ -118,13 +121,32 @@ class AgaviXmlConfigParser extends AgaviConfigParser
 			}
 		}
 		
+		// if there is no xmlns declaration on the root element, we gotta add it. must do after xinclude() to maintain BC
+		if(!$doc->documentElement->namespaceURI) {
+			$doc->documentElement->setAttribute('xmlns', self::XML_NAMESPACE);
+			
+			$reload = $doc->saveXML();
+			
+			$doc = new DOMDocument();
+			$doc->loadXML($reload);
+		}
+		
+		if(strpos($config, 'output')) {
+			// var_dump($doc->saveXml());
+			$this->debug = true;
+		} else {
+			$this->debug = false;
+		}
+		
 		$this->xpath = new DOMXPath($doc);
+		$this->xpath->registerNamespace('agavi', $doc->documentElement->namespaceURI);
+		
 		
 		// remove all xml:base attributes inserted by XIncludes
-		$nodes = $this->xpath->query('//@xml:base', $doc);
-		foreach($nodes as $node) {
-			$node->ownerElement->removeAttributeNode($node);
-		}
+		// $nodes = $this->xpath->query('//@xml:base', $doc);
+		// foreach($nodes as $node) {
+		// 	$node->ownerElement->removeAttributeNode($node);
+		// }
 		
 		$stylesheetProcessingInstructions = $this->xpath->query("//processing-instruction('xml-stylesheet')", $doc);
 		foreach($stylesheetProcessingInstructions as $pi) {
@@ -175,7 +197,7 @@ class AgaviXmlConfigParser extends AgaviConfigParser
 		}
 		
 		// remove top-level <sandbox> elements
-		$sandboxes = $this->xpath->query('/configurations/sandbox', $doc);
+		$sandboxes = $this->xpath->query('/agavi:configurations/agavi:sandbox', $doc);
 		foreach($sandboxes as $sandbox) {
 			$sandbox->parentNode->removeChild($sandbox);
 		}
@@ -227,13 +249,16 @@ class AgaviXmlConfigParser extends AgaviConfigParser
 	protected function parseNodes($nodes, AgaviConfigValueHolder $parentVh, $isSingular = false)
 	{
 		foreach($nodes as $node) {
-			if($node->nodeType == XML_ELEMENT_NODE) {
+			if($node->nodeType == XML_ELEMENT_NODE && (!$node->namespaceURI || $node->namespaceURI == self::XML_NAMESPACE)) {
 				$vh = new AgaviConfigValueHolder();
-				$vh->setName($this->convertEncoding($node->nodeName));
-				$parentVh->addChildren($this->convertEncoding($node->tagName), $vh);
+				$nodeName = $this->convertEncoding($node->localName);
+				$vh->setName($nodeName);
+				$parentVh->addChildren($nodeName, $vh);
 
 				foreach($node->attributes as $attribute) {
-					$vh->setAttribute($this->convertEncoding($attribute->name), $this->convertEncoding($attribute->value));
+					if((!$attribute->namespaceURI || $attribute->namespaceURI == self::XML_NAMESPACE)) {
+						$vh->setAttribute($this->convertEncoding($attribute->localName), $this->convertEncoding($attribute->nodeValue));
+					}
 				}
 
 				// there are no child nodes so we set the node text contents as the value for the valueholder
