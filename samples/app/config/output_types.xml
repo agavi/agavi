@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<configurations xmlns:xi="http://www.w3.org/2001/XInclude">
+<configurations xmlns="http://agavi.org/agavi/1.0/config" xmlns:xi="http://www.w3.org/2001/XInclude">
 
 	<sandbox>
 
@@ -40,8 +40,8 @@
 		<output_types default="html">
 
 			<output_type name="html">
-				<xi:include xpointer="xpointer(/configurations/sandbox/renderers)" />
-				<xi:include xpointer="xpointer(/configurations/sandbox/layouts)" />
+				<xi:include xpointer="xmlns(a=http://agavi.org/agavi/1.0/config) xpointer(/a:configurations/a:sandbox/a:renderers)" />
+				<xi:include xpointer="xmlns(a=http://agavi.org/agavi/1.0/config) xpointer(/a:configurations/a:sandbox/a:layouts)" />
 				
 				<parameter name="http_headers">
 					<parameter name="Content-Type">text/html; charset=UTF-8</parameter>
@@ -49,8 +49,8 @@
 			</output_type>
 
 			<output_type name="xhtml">
-				<xi:include xpointer="xpointer(/configurations/sandbox/renderers)" />
-				<xi:include xpointer="xpointer(/configurations/sandbox/layouts)" />
+				<xi:include xpointer="xmlns(a=http://agavi.org/agavi/1.0/config) xpointer(/a:configurations/a:sandbox/a:renderers)" />
+				<xi:include xpointer="xmlns(a=http://agavi.org/agavi/1.0/config) xpointer(/a:configurations/a:sandbox/a:layouts)" />
 				
 				<parameter name="http_headers">
 					<parameter name="Content-Type">application/xhtml+xml; charset=UTF-8</parameter>
