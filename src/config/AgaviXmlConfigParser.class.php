@@ -131,13 +131,6 @@ class AgaviXmlConfigParser extends AgaviConfigParser
 			$doc->loadXML($reload);
 		}
 		
-		if(strpos($config, 'output')) {
-			// var_dump($doc->saveXml());
-			$this->debug = true;
-		} else {
-			$this->debug = false;
-		}
-		
 		$this->xpath = new DOMXPath($doc);
 		$this->xpath->registerNamespace('agavi', $doc->documentElement->namespaceURI);
 		
