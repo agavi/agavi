@@ -3,22 +3,15 @@
 
   <xs:include schemaLocation="default_tags.xsd"/>  
 
-  <xs:element name="configurations" type="configurations" />
-  <xs:complexType name="configurations">
-    <xs:sequence>
-      <xs:element name="sandbox" type="sandbox" minOccurs="0" />
-      <xs:element name="configuration" minOccurs="0" maxOccurs="unbounded">
-        <xs:complexType>
-          <xs:all>
-            <xs:element name="translators" type="translators" minOccurs="0"/>
-            <xs:element name="available_locales" type="available_locales" minOccurs="0"/>
-          </xs:all>
-          <xs:attribute name="environment" type="xs:string" />
-          <xs:attribute name="context" type="xs:string" />
-        </xs:complexType>
-      </xs:element>
-    </xs:sequence>
-    <xs:attribute name="parent" type="xs:string" />
+  <xs:complexType name="configuration">
+    <xs:complexContent>
+      <xs:extension base="base_configuration_with_context">
+        <xs:all>
+          <xs:element name="translators" type="translators" minOccurs="0"/>
+          <xs:element name="available_locales" type="available_locales" minOccurs="0"/>
+        </xs:all>
+      </xs:extension>
+    </xs:complexContent>
   </xs:complexType>
 
 

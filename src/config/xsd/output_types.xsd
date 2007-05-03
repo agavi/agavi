@@ -3,23 +3,20 @@
 
   <xs:include schemaLocation="default_tags.xsd"/>  
 
-  <xs:element name="configurations" type="configurations" />
-  <xs:complexType name="configurations">
-    <xs:sequence>
-      <xs:element name="sandbox" type="sandbox" minOccurs="0" />
-      <xs:element name="configuration" minOccurs="0" maxOccurs="unbounded">
-        <xs:complexType>
-          <xs:sequence>
-            <xs:element name="output_types" type="output_types" minOccurs="0" />
-          </xs:sequence>
-          <xs:attribute name="environment" type="xs:string" />
-          <xs:attribute name="context" type="xs:string" />
-        </xs:complexType>
-      </xs:element>
-    </xs:sequence>
-    <xs:attribute name="parent" type="xs:string" />
+  <xs:complexType name="configuration">
+    <xs:complexContent>
+      <xs:extension base="base_configuration_with_context">
+        <xs:group ref="output_types" />
+      </xs:extension>
+    </xs:complexContent>
   </xs:complexType>
 
+  <xs:group name="output_types">
+    <xs:sequence>
+      <xs:element name="output_types" type="output_types" />
+    </xs:sequence>
+  </xs:group>
+  
   <xs:complexType name="output_types">
     <xs:sequence>
       <xs:element name="output_type" type="output_type" maxOccurs="unbounded" />

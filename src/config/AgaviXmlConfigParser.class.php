@@ -122,7 +122,7 @@ class AgaviXmlConfigParser extends AgaviConfigParser
 		}
 		
 		// if there is no xmlns declaration on the root element, we gotta add it. must do after xinclude() to maintain BC
-		if(!$doc->documentElement->namespaceURI) {
+		if($doc->documentElement && !$doc->documentElement->namespaceURI) {
 			$doc->documentElement->setAttribute('xmlns', self::XML_NAMESPACE);
 			
 			$reload = $doc->saveXML();
@@ -149,7 +149,36 @@ class AgaviXmlConfigParser extends AgaviConfigParser
 				
 				if(strpos($href, '#') === 0) {
 					// embedded XSL
-					throw new AgaviParseException('Embedded XSL stylesheets are not supported yet.');
+					$stylesheets = $this->xpath->query("//*[@id='" . substr($href, 1) . "']", $doc);
+					if($stylesheets->length) {
+						$xsl = new DomDocument();
+						$xsl->appendChild($xsl->importNode($stylesheets->item(0), true));
+						if(libxml_get_last_error() !== false) {
+							$errors = array();
+							foreach(libxml_get_errors() as $error) {
+								$errors[] = $error->message;
+							}
+							libxml_clear_errors();
+							libxml_use_internal_errors($luie);
+							throw new AgaviParseException(
+								sprintf(
+									'Configuration file "%s" could not be parsed due to the following error%s that occured while loading the specified XSL stylesheet "%s": ' . "\n\n%s", 
+									$config, 
+									count($errors) > 1 ? 's' : '', 
+									$href,
+									implode("\n", $errors)
+								)
+							);
+						}
+					} else {
+						throw new AgaviParseException(
+							sprintf(
+								'Configuration file "%s" could not be parsed because the inline stylesheet "%s" referenced in the "xml-stylesheet" processing instruction could not be found in the document.', 
+								$config, 
+								$href
+							)
+						);
+					}
 				} else {
 					// references an xsl file
 					$xsl = new DomDocument();
@@ -228,12 +257,15 @@ class AgaviXmlConfigParser extends AgaviConfigParser
 				break;
 			}
 		}
-		$this->xpath->registerNamespace('agavi', $doc->documentElement->namespaceURI);
 		
-		// remove top-level <sandbox> elements
-		$sandboxes = $this->xpath->query('/agavi:configurations/agavi:sandbox', $doc);
-		foreach($sandboxes as $sandbox) {
-			$sandbox->parentNode->removeChild($sandbox);
+		if($doc->documentElement) {
+			$this->xpath->registerNamespace('agavi', $doc->documentElement->namespaceURI);
+		
+			// remove top-level <sandbox> elements
+			$sandboxes = $this->xpath->query('/agavi:configurations/agavi:sandbox', $doc);
+			foreach($sandboxes as $sandbox) {
+				$sandbox->parentNode->removeChild($sandbox);
+			}
 		}
 		
 		if($validationFile) {
@@ -263,9 +295,11 @@ class AgaviXmlConfigParser extends AgaviConfigParser
 		libxml_use_internal_errors($luie);
 		
 		$rootRes = new AgaviConfigValueHolder();
-
-		$this->parseNodes(array($doc->documentElement), $rootRes);
-
+		
+		if($doc->documentElement) {
+			$this->parseNodes(array($doc->documentElement), $rootRes);
+		}
+		
 		return $rootRes;
 	}
 
