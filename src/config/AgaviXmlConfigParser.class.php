@@ -132,8 +132,6 @@ class AgaviXmlConfigParser extends AgaviConfigParser
 		}
 		
 		$this->xpath = new DOMXPath($doc);
-		$this->xpath->registerNamespace('agavi', $doc->documentElement->namespaceURI);
-		
 		
 		// remove all xml:base attributes inserted by XIncludes
 		// $nodes = $this->xpath->query('//@xml:base', $doc);
@@ -156,38 +154,81 @@ class AgaviXmlConfigParser extends AgaviConfigParser
 					// references an xsl file
 					$xsl = new DomDocument();
 					$xsl->load(AgaviConfigHandler::replaceConstants($href));
+					if(libxml_get_last_error() !== false) {
+						$errors = array();
+						foreach(libxml_get_errors() as $error) {
+							$errors[] = $error->message;
+						}
+						libxml_clear_errors();
+						libxml_use_internal_errors($luie);
+						throw new AgaviParseException(
+							sprintf(
+								'Configuration file "%s" could not be parsed due to the following error%s that occured while loading the specified XSL stylesheet "%s": ' . "\n\n%s", 
+								$config, 
+								count($errors) > 1 ? 's' : '', 
+								$href,
+								implode("\n", $errors)
+							)
+						);
+					}
 				}
 
 				$proc = new XSLTProcessor();
 				$proc->importStylesheet($xsl);
+				// libxml_get_last_error() returns false if importStylesheet failed, libxml_get_errors() works nontheless. zomfg libxml.
+				// also, if we catch the errors here and throw an exception, we don't need an @ further down at transformToDoc().
+				if(libxml_get_last_error() !== false || count(libxml_get_errors())) {
+					$errors = array();
+					foreach(libxml_get_errors() as $error) {
+						$errors[] = $error->message;
+					}
+					libxml_clear_errors();
+					libxml_use_internal_errors($luie);
+					throw new AgaviParseException(
+						sprintf(
+							'Configuration file "%s" could not be parsed due to the following error%s that occured while importing the specified XSL stylesheet "%s": ' . "\n\n%s", 
+							$config, 
+							count($errors) > 1 ? 's' : '', 
+							$href,
+							implode("\n", $errors)
+						)
+					);
+				}
 
 				$this->xpath = null;
-				$newdoc = @$proc->transformToDoc($doc);
+				
+				$newdoc = $proc->transformToDoc($doc);
+				
+				if(libxml_get_last_error() !== false) {
+					$errors = array();
+					foreach(libxml_get_errors() as $error) {
+						$errors[] = $error->message;
+					}
+					libxml_clear_errors();
+					libxml_use_internal_errors($luie);
+					throw new AgaviParseException(
+						sprintf(
+							'Configuration file "%s" could not be parsed due to the following error%s that occured while transforming the document using the XSL stylesheet "%s": ' . "\n\n%s", 
+							$config, 
+							count($errors) > 1 ? 's' : '', 
+							$href,
+							implode("\n", $errors)
+						)
+					);
+				}
+
 				if($newdoc) {
 					$doc = $newdoc;
 				}
+				
 				$this->xpath = new DOMXPath($doc);
+				
 				$pi->parentNode->removeChild($pi);
+				
 				break;
 			}
 		}
-		if(libxml_get_last_error() !== false) {
-			$errors = array();
-			foreach(libxml_get_errors() as $error) {
-				$errors[] = $error->message;
-			}
-			libxml_clear_errors();
-			libxml_use_internal_errors($luie);
-			throw new AgaviParseException(
-				sprintf(
-					'Configuration file "%s" could not be parsed due to the following error%s that occured while transforming the document using XSL file "%s": ' . "\n\n%s", 
-					$config, 
-					count($errors) > 1 ? 's' : '', 
-					$href,
-					implode("\n", $errors)
-				)
-			);
-		}
+		$this->xpath->registerNamespace('agavi', $doc->documentElement->namespaceURI);
 		
 		// remove top-level <sandbox> elements
 		$sandboxes = $this->xpath->query('/agavi:configurations/agavi:sandbox', $doc);
