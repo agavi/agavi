@@ -8,9 +8,7 @@
   </xs:simpleType>
 
   <xs:simpleType name="php_label_list">
-  	<xs:restriction base="xs:string">
-  		<xs:pattern value="[a-zA-Z_\p{IsLatin-1Supplement}][a-zA-Z0-9_\p{IsLatin-1Supplement}]*(\s+[a-zA-Z_\p{IsLatin-1Supplement}][a-zA-Z0-9_\p{IsLatin-1Supplement}]*)*"/>
-  	</xs:restriction>
+    <xs:list itemType="php_label" />
   </xs:simpleType>
 
 	<xs:simpleType name="non_empty_string">
@@ -34,12 +32,20 @@
     <xs:attribute name="parent" type="xs:string" />
   </xs:complexType>
   <xs:complexType name="base_configuration">
-    <xs:attribute name="environment" type="xs:string" />
+    <xs:attribute name="environment">
+      <xs:simpleType>
+        <xs:list itemType="xs:string" />
+      </xs:simpleType>
+    </xs:attribute>
   </xs:complexType>
   <xs:complexType name="base_configuration_with_context">
     <xs:complexContent>
       <xs:extension base="base_configuration">
-        <xs:attribute name="context" type="xs:string" />
+        <xs:attribute name="context">
+          <xs:simpleType>
+            <xs:list itemType="xs:string" />
+          </xs:simpleType>
+        </xs:attribute>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
