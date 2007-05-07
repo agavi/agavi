@@ -51,6 +51,7 @@ class AgaviXmlConfigParser extends AgaviConfigParser
 	/**
 	 * @see        AgaviConfigParser::parse()
 	 *
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
@@ -61,9 +62,32 @@ class AgaviXmlConfigParser extends AgaviConfigParser
 			throw new AgaviUnreadableException($error);
 		}
 		
+		$doc = $this->loadAndTransform($config, $validationFile = null);
+		
+		$rootRes = new AgaviConfigValueHolder();
+		
+		if($doc->documentElement) {
+			$this->parseNodes(array($doc->documentElement), $rootRes);
+		}
+		
+		return $rootRes;
+	}
+	
+	/**
+	 * Load the file into DOM, resolve XIncludes, apply XSL, validate against XSD.
+	 *
+	 * @param      string The path to the XML file
+	 * @param      string The path to the validation file.
+	 *
+	 * @return     DOMDocument The fully loaded and transformed DOM document.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function loadAndTransform($config, $validationFile = null)
+	{
 		$this->config = $config;
-
-		// suppress errors from dom, ppl should use a proper xml editor to validate their files atm ...
+		
 		$luie = libxml_use_internal_errors(true);
 		libxml_clear_errors();
 		$doc = new DOMDocument();
@@ -132,12 +156,6 @@ class AgaviXmlConfigParser extends AgaviConfigParser
 		}
 		
 		$this->xpath = new DOMXPath($doc);
-		
-		// remove all xml:base attributes inserted by XIncludes
-		// $nodes = $this->xpath->query('//@xml:base', $doc);
-		// foreach($nodes as $node) {
-		// 	$node->ownerElement->removeAttributeNode($node);
-		// }
 		
 		$stylesheetProcessingInstructions = $this->xpath->query("//processing-instruction('xml-stylesheet')", $doc);
 		foreach($stylesheetProcessingInstructions as $pi) {
@@ -294,13 +312,7 @@ class AgaviXmlConfigParser extends AgaviConfigParser
 		
 		libxml_use_internal_errors($luie);
 		
-		$rootRes = new AgaviConfigValueHolder();
-		
-		if($doc->documentElement) {
-			$this->parseNodes(array($doc->documentElement), $rootRes);
-		}
-		
-		return $rootRes;
+		return $doc;
 	}
 
 	/**
