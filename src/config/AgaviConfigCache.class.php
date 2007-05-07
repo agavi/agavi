@@ -303,32 +303,14 @@ final class AgaviConfigCache
 	 *             extension couldn't be found.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public static function parseConfig($config, $autoloadParser = true, $validateFile = null, $parserClass = null)
 	{
-		static $parsers = array();
-
-		if($parserClass) {
-			$parser = new $parserClass();
-			return $parser->parse($config, $validateFile);
-		} else {
-			$path = pathinfo($config);
-			$ext = ucfirst(strtolower($path['extension']));
-			if(!isset($parsers[$ext])) {
-				$class = $ext . 'ConfigParser';
-				if(!class_exists($class, $autoloadParser)) {
-					$class = 'Agavi' . $class;
-					if(!class_exists($class, $autoloadParser)) {
-						throw new AgaviConfigurationException('Couldn\'t find parser for file extension .' . $path['extension']);
-					}
-				}
-
-				$parsers[$ext] = new $class();
-			}
-
-			return $parsers[$ext]->parse($config, $validateFile);
-		}
+		$parser = new AgaviXmlConfigParser();
+		
+		return $parsers->parse($config, $validateFile);
 	}
 
 }
