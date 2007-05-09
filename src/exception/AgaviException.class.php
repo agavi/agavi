@@ -51,7 +51,7 @@ class AgaviException extends Exception
 		
 		if($container !== null && $container->getOutputType() !== null && $container->getOutputType()->getExceptionTemplate() !== null) { 
 			// an exception template was defined for the container's output type
-			include($container->getOutputType()->getExceptionTemplate() !== null); 
+			include($container->getOutputType()->getExceptionTemplate()); 
 			exit;
 		}
 		
