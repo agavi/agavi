@@ -29,4 +29,7 @@
  */
 class AgaviXmlConfigHandler extends AgaviBaseConfigHandler implements AgaviIXmlConfigHandler
 {
+	public function execute($config, $context = null)
+	{
+	}
 }

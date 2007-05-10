@@ -55,50 +55,57 @@ final class AgaviConfigCache
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	private static function callHandler($handler, $config, $cache, $context)
+	private static function callHandler($name, $config, $cache, $context)
 	{
-
 		if(self::$handlers === null) {
 			// we need to load the handlers first
 			self::$handlers = array();
 			self::loadConfigHandlers();
 		}
-
+		
 		// grab the base name of the handler
-		$basename = basename($handler);
-
-		if(isset(self::$handlers[$handler])) {
+		$basename = basename($name);
+		
+		$handlerInfo = null;
+		
+		if(isset(self::$handlers[$name])) {
 			// we have a handler associated with the full configuration path
-			// call the handler and retrieve the cache data
-			$data = self::$handlers[$handler]->execute($config, $context);
-			self::writeCacheFile($config, $cache, $data, false);
-			return;
+			$handlerInfo = self::$handlers[$name];
 		} elseif(isset(self::$handlers[$basename])) {
 			// we have a handler associated with the configuration base name
-			// call the handler and retrieve the cache data
-			$data = self::$handlers[$basename]->execute($config, $context);
-			self::writeCacheFile($config, $cache, $data, false);
-			return;
+			$handlerInfo = self::$handlers[$basename];
 		} else {
 			// let's see if we have any wildcard handlers registered that match
 			// this basename
-			foreach(self::$handlers as $key => $handlerInstance)	{
+			foreach(self::$handlers as $key => $value)	{
 				// replace wildcard chars in the configuration and create the pattern
 				$pattern = sprintf('#%s#', str_replace('\*', '.*?', preg_quote($key)));
-
-				if(preg_match($pattern, $handler)) {
-					// call the handler and retrieve the cache data
-					$data = $handlerInstance->execute($config, $context);
-					self::writeCacheFile($config, $cache, $data, false);
-					return;
+				
+				if(preg_match($pattern, $name)) {
+					$handlerInfo = $value;
+					break;
 				}
 			}
 		}
-
-		// we do not have a registered handler for this file
-		$error = 'Configuration file "%s" does not have a registered handler';
-		$error = sprintf($error, $config);
-		throw new AgaviConfigurationException($error);
+		
+		if($handlerInfo === null) {
+			// we do not have a registered handler for this file
+			$error = 'Configuration file "%s" does not have a registered handler';
+			$error = sprintf($error, $config);
+			throw new AgaviConfigurationException($error);
+		}
+		
+		// call the handler and retrieve the cache data
+		$handler = new $handlerInfo['class'];
+		if($handler instanceof AgaviIXmlConfigHandler) {
+			
+		} else {
+			if(isset($handlerInfo['validation']))
+			$handler->initialize($handlerInfo['validation'], null, $handlerInfo['parameters']);
+		}
+		
+		$data = $handler->execute($config, $context);
+		self::writeCacheFile($config, $cache, $data, false);
 	}
 
 	/**
@@ -140,7 +147,6 @@ final class AgaviConfigCache
 		}
 
 		return $cache;
-
 	}
 
 	/**
@@ -233,14 +239,27 @@ final class AgaviConfigCache
 	{
 		// since we only need the parser and handlers when the config is not cached
 		// it is sufficient to include them at this stage
+		require(AgaviConfig::get('core.agavi_dir') . '/config/AgaviBaseConfigHandler.class.php');
+		require(AgaviConfig::get('core.agavi_dir') . '/config/AgaviConfigHandler.class.php');
+		require(AgaviConfig::get('core.agavi_dir') . '/config/AgaviIXmlConfigHandler.class.php');
+		require(AgaviConfig::get('core.agavi_dir') . '/config/AgaviXmlConfigHandler.class.php');
+		require(AgaviConfig::get('core.agavi_dir') . '/config/AgaviAutoloadConfigHandler.class.php');
 		require(AgaviConfig::get('core.agavi_dir') . '/config/AgaviConfigHandlersConfigHandler.class.php');
 		require(AgaviConfig::get('core.agavi_dir') . '/config/AgaviConfigValueHolder.class.php');
 		require(AgaviConfig::get('core.agavi_dir') . '/config/AgaviConfigParser.class.php');
 		require(AgaviConfig::get('core.agavi_dir') . '/config/AgaviXmlConfigParser.class.php');
 
 		// manually create our config_handlers.xml handler
-		self::$handlers['config_handlers.xml'] = new AgaviConfigHandlersConfigHandler();
-		self::$handlers['config_handlers.xml']->initialize(AgaviConfig::get('core.agavi_dir') . '/config/xsd/config_handlers.xsd');
+		self::$handlers['config_handlers.xml'] = array(
+			'class' => 'AgaviConfigHandlersConfigHandler', 
+			'parameters' => array(
+			),
+			'validation' => array(
+				AgaviXmlConfigParser::VALIDATION_TYPE_XMLSCHEMA => array(
+					AgaviConfig::get('core.agavi_dir') . '/config/xsd/config_handlers.xsd',
+				),
+			),
+		);
 
 		$cfg = AgaviConfig::get('core.config_dir') . '/config_handlers.xml';
 		if(!is_readable($cfg)) {
@@ -302,17 +321,18 @@ final class AgaviConfigCache
 	 * @throws     <b>AgaviConfigurationException</b> If the parser for the
 	 *             extension couldn't be found.
 	 *
+	 * @deprecated New-style config handlers don't call this method anymore.
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public static function parseConfig($config, $autoloadParser = true, $validateFile = null, $parserClass = null)
 	{
-		$parser = new AgaviXmlConfigParser();
+		$parser = new AgaviConfigParser();
 		
-		return $parsers->parse($config, $validateFile);
+		return $parser->parse($config, $validateFile);
 	}
-
 }
 
 ?>
