@@ -25,6 +25,7 @@
 			<autoload name="AgaviTimeZoneDataParser">%core.agavi_dir%/config/AgaviTimeZoneDataParser.class.php</autoload>
 			<autoload name="AgaviTranslationConfigHandler">%core.agavi_dir%/config/AgaviTranslationConfigHandler.class.php</autoload>
 			<autoload name="AgaviValidatorConfigHandler">%core.agavi_dir%/config/AgaviValidatorConfigHandler.class.php</autoload>
+			<autoload name="AgaviWsdlConfigHandler">%core.agavi_dir%/config/AgaviWsdlConfigHandler.class.php</autoload>
 
 			<!-- agavi/controller -->
 			<autoload name="AgaviController">%core.agavi_dir%/controller/AgaviController.class.php</autoload>
@@ -138,8 +139,10 @@
 			<autoload name="AgaviRoutingArraySource">%core.agavi_dir%/routing/AgaviRoutingArraySource.class.php</autoload>
 			<autoload name="AgaviRoutingCallback">%core.agavi_dir%/routing/AgaviRoutingCallback.class.php</autoload>
 			<autoload name="AgaviRoutingUserSource">%core.agavi_dir%/routing/AgaviRoutingUserSource.class.php</autoload>
+			<autoload name="AgaviSoapRouting">%core.agavi_dir%/routing/AgaviSoapRouting.class.php</autoload>
 			<autoload name="AgaviWebRouting">%core.agavi_dir%/routing/AgaviWebRouting.class.php</autoload>
 			<autoload name="AgaviWebserviceRouting">%core.agavi_dir%/routing/AgaviWebserviceRouting.class.php</autoload>
+			<autoload name="AgaviXmlrpcepiphpRouting">%core.agavi_dir%/routing/AgaviXmlrpcepiphpRouting.class.php</autoload>
 
 			<!-- agavi/storage -->
 			<autoload name="AgaviStorage">%core.agavi_dir%/storage/AgaviStorage.class.php</autoload>

@@ -29,7 +29,7 @@
  *
  * @version    $Id$
  */
-abstract class AgaviRouting
+abstract class AgaviRouting extends AgaviParameterHolder
 {
 	const ANCHOR_NONE = 0;
 	const ANCHOR_START = 1;
@@ -98,6 +98,8 @@ abstract class AgaviRouting
 	public function initialize(AgaviContext $context, array $parameters = array())
 	{
 		$this->context = $context;
+		
+		$this->setParameters($parameters);
 		
 		if(isset($parameters['default_gen_options'])) {
 			$this->defaultGenOptions = array_merge($this->defaultGenOptions, $parameters['default_gen_options']);

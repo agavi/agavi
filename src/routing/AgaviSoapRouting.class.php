@@ -14,7 +14,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviWebserviceRouting handles the routing for Web Service requests.
+ * AgaviSoapRouting handles the routing for SOAP web service requests.
  *
  * @package    agavi
  * @subpackage routing
@@ -27,37 +27,21 @@
  *
  * @version    $Id$
  */
-class AgaviWebserviceRouting extends AgaviRouting
+class AgaviSoapRouting extends AgaviWebserviceRouting
 {
 	/**
-	 * Initialize the routing instance.
+	 * Returns the local filesystem path to the WSDL file built from routing.xml.
 	 *
-	 * @param      AgaviContext A Context instance.
-	 * @param      array        An array of initialization parameters.
-	 *
-	 * @author     David Zülke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function initialize(AgaviContext $context, array $parameters = array())
-	{
-		parent::initialize($context, $parameters);
-		
-		if(!AgaviConfig::get("core.use_routing", false)) {
-			return;
-		}
-		
-		$this->updateInput();
-	}
-	
-	/**
-	 * Set the name of the called web service method as the routing input.
+	 * @return     string A fully qualified filesystem path.
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function updateInput()
+	public function getWsdlPath()
 	{
-		$this->input = $this->context->getRequest()->getInvokedMethod();
+		$path = $this->getParameter('wsdl', AgaviConfig::get('core.agavi_dir') . '/routing/soap/wsdl.xml');
+		
+		return AgaviConfigCache::checkConfig($path);
 	}
 }
 

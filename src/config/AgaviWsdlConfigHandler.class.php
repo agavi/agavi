@@ -14,10 +14,10 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviWebserviceRouting handles the routing for Web Service requests.
+ * AgaviWsdlConfigHandler simply writes the given WSDL file to disk.
  *
  * @package    agavi
- * @subpackage routing
+ * @subpackage config
  *
  * @author     David Zülke <dz@bitxtender.com>
  * @copyright  Authors
@@ -27,37 +27,26 @@
  *
  * @version    $Id$
  */
-class AgaviWebserviceRouting extends AgaviRouting
+class AgaviWsdlConfigHandler extends AgaviXmlConfigHandler
 {
 	/**
-	 * Initialize the routing instance.
+	 * Execute this configuration handler.
 	 *
-	 * @param      AgaviContext A Context instance.
-	 * @param      array        An array of initialization parameters.
+	 * @param      array An array of DOMDocuments (the config and all parents).
+	 *
+	 * @return     string Data to be written to a cache file.
+	 *
+	 * @throws     <b>AgaviParseException</b> If a requested configuration file is
+	 *                                        improperly formatted.
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function initialize(AgaviContext $context, array $parameters = array())
+	public function execute(array $docs = array())
 	{
-		parent::initialize($context, $parameters);
-		
-		if(!AgaviConfig::get("core.use_routing", false)) {
-			return;
+		if(isset($docs[0])) {
+			return $docs[0]->saveXML();
 		}
-		
-		$this->updateInput();
-	}
-	
-	/**
-	 * Set the name of the called web service method as the routing input.
-	 *
-	 * @author     David Zülke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function updateInput()
-	{
-		$this->input = $this->context->getRequest()->getInvokedMethod();
 	}
 }
 

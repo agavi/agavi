@@ -54,6 +54,11 @@ class AgaviSoapController extends AgaviController
 		
 		// user-supplied "wsdl" and "options" parameters
 		$wsdl = $this->getParameter('wsdl');
+		if(!$wsdl) {
+			$wsdl = $this->context->getRouting()->getWsdlPath();
+		}
+		$this->setParameter('wsdl', $wsdl);
+		
 		$options = (array) $this->getParameter('options', array());
 		
 		// create a server

@@ -57,7 +57,8 @@ abstract class AgaviWebserviceRequest extends AgaviWebRequest
 		$_POST = array();
 		
 		// grab the POST body
-		$this->input = file_get_contents('php://input');
+//		$this->input = file_get_contents('php://input');
+		$this->input = $GLOBALS['HTTP_RAW_POST_DATA'];
 		
 		parent::initialize($context, $parameters);
 	}
