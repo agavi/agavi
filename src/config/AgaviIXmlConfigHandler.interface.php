@@ -58,7 +58,7 @@ interface AgaviIXmlConfigHandler
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function execute(array $array = array());
+	public function execute(array $docs = array());
 }
 
 ?>

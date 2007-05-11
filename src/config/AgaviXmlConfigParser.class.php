@@ -39,6 +39,11 @@ class AgaviXmlConfigParser
 	const VALIDATION_TYPE_SCHEMATRON = 'schematron';
 	
 	/**
+	 * @var        string The path to the config file we're currently parsing.
+	 */
+	protected $config = '';
+	
+	/**
 	 * @param      string An absolute filesystem path to a configuration file.
 	 * @param      array  An associative array of validation information.
 	 *
@@ -132,6 +137,8 @@ class AgaviXmlConfigParser
 	 */
 	public function load($config)
 	{
+		$this->config = $config;
+		
 		$luie = libxml_use_internal_errors(true);
 		libxml_clear_errors();
 		$doc = new DOMDocument();
@@ -187,6 +194,13 @@ class AgaviXmlConfigParser
 			}
 		}
 		
+		$xpath = $this->createXpath($doc);
+		// remove all xml:base attributes inserted by XIncludes
+		$nodes = $xpath->query('//@xml:base', $doc);
+		foreach($nodes as $node) {
+			$node->ownerElement->removeAttributeNode($node);
+		}
+		
 		// if there is no xmlns declaration on the root element, we gotta add it. must do after xinclude() to maintain BC
 		if($doc->documentElement && !$doc->documentElement->namespaceURI) {
 			$doc->documentElement->setAttribute('xmlns', self::XML_NAMESPACE);
@@ -240,7 +254,7 @@ class AgaviXmlConfigParser
 							throw new AgaviParseException(
 								sprintf(
 									'Configuration file "%s" could not be parsed due to the following error%s that occured while loading the specified XSL stylesheet "%s": ' . "\n\n%s", 
-									$config, 
+									$this->config, 
 									count($errors) > 1 ? 's' : '', 
 									$href,
 									implode("\n", $errors)
@@ -251,7 +265,7 @@ class AgaviXmlConfigParser
 						throw new AgaviParseException(
 							sprintf(
 								'Configuration file "%s" could not be parsed because the inline stylesheet "%s" referenced in the "xml-stylesheet" processing instruction could not be found in the document.', 
-								$config, 
+								$this->config, 
 								$href
 							)
 						);
@@ -270,7 +284,7 @@ class AgaviXmlConfigParser
 						throw new AgaviParseException(
 							sprintf(
 								'Configuration file "%s" could not be parsed due to the following error%s that occured while loading the specified XSL stylesheet "%s": ' . "\n\n%s", 
-								$config, 
+								$this->config, 
 								count($errors) > 1 ? 's' : '', 
 								$href,
 								implode("\n", $errors)
@@ -293,7 +307,7 @@ class AgaviXmlConfigParser
 					throw new AgaviParseException(
 						sprintf(
 							'Configuration file "%s" could not be parsed due to the following error%s that occured while importing the specified XSL stylesheet "%s": ' . "\n\n%s", 
-							$config, 
+							$this->config, 
 							count($errors) > 1 ? 's' : '', 
 							$href,
 							implode("\n", $errors)
@@ -315,7 +329,7 @@ class AgaviXmlConfigParser
 					throw new AgaviParseException(
 						sprintf(
 							'Configuration file "%s" could not be parsed due to the following error%s that occured while transforming the document using the XSL stylesheet "%s": ' . "\n\n%s", 
-							$config, 
+							$this->config, 
 							count($errors) > 1 ? 's' : '', 
 							$href,
 							implode("\n", $errors)
@@ -401,7 +415,7 @@ class AgaviXmlConfigParser
 		foreach($validationFiles as $validationFile) {
 			if(!is_readable($validationFile)) {
 				libxml_use_internal_errors($luie);
-				$error = 'Validation file "' . $validationFile . '" for configuration file "' . $config . '" does not exist or is unreadable';
+				$error = 'Validation file "' . $validationFile . '" for configuration file "' . $this->config . '" does not exist or is unreadable';
 				throw new AgaviUnreadableException($error);
 			}
 			
@@ -415,7 +429,7 @@ class AgaviXmlConfigParser
 				throw new AgaviParseException(
 					sprintf(
 						'XML Schema validation of configuration file "%s" failed due to the following error%s: ' . "\n\n%s", 
-						$config, 
+						$this->config, 
 						count($errors) > 1 ? 's' : '', 
 						implode("\n", $errors)
 					)
@@ -442,7 +456,7 @@ class AgaviXmlConfigParser
 		foreach($validationFiles as $validationFile) {
 			if(!is_readable($validationFile)) {
 				libxml_use_internal_errors($luie);
-				$error = 'Validation file "' . $validationFile . '" for configuration file "' . $config . '" does not exist or is unreadable';
+				$error = 'Validation file "' . $validationFile . '" for configuration file "' . $this->config . '" does not exist or is unreadable';
 				throw new AgaviUnreadableException($error);
 			}
 			
@@ -456,7 +470,7 @@ class AgaviXmlConfigParser
 				throw new AgaviParseException(
 					sprintf(
 						'XML Schema validation of configuration file "%s" failed due to the following error%s: ' . "\n\n%s", 
-						$config, 
+						$this->config, 
 						count($errors) > 1 ? 's' : '', 
 						implode("\n", $errors)
 					)
@@ -486,7 +500,7 @@ class AgaviXmlConfigParser
 		foreach($validationFiles as $validationFile) {
 			if(!is_readable($validationFile)) {
 				libxml_use_internal_errors($luie);
-				$error = 'Validation file "' . $validationFile . '" for configuration file "' . $config . '" does not exist or is unreadable';
+				$error = 'Validation file "' . $validationFile . '" for configuration file "' . $this->config . '" does not exist or is unreadable';
 				throw new AgaviUnreadableException($error);
 			}
 			
@@ -500,7 +514,7 @@ class AgaviXmlConfigParser
 				throw new AgaviParseException(
 					sprintf(
 						'XML Schema validation of configuration file "%s" failed due to the following error%s: ' . "\n\n%s", 
-						$config, 
+						$this->config, 
 						count($errors) > 1 ? 's' : '', 
 						implode("\n", $errors)
 					)
