@@ -3,7 +3,6 @@
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
 // | Copyright (c) 2003-2007 the Agavi Project.                                |
-// | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -15,24 +14,21 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviConfigHandler allows a developer to create a custom formatted
- * configuration file pertaining to any information they like and still
- * have it auto-generate PHP code.
+ * AgaviILegacyConfigHandler is the interface that all old-style config handlers
+ * which deal with ConfigValueHolders and parse configs themselves implement.
  *
  * @package    agavi
  * @subpackage config
  *
- * @author     Sean Kerr <skerr@mojavi.org>
- * @author     Dominik del Bondio <ddb@bitxtender.com>
- * @author     David Zuelke <dz@bitxtender.com>
+ * @author     David Zülke <dz@bitxtender.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
  *
- * @since      0.9.0
+ * @since      0.11.0
  *
  * @version    $Id$
  */
-abstract class AgaviConfigHandler extends AgaviBaseConfigHandler implements AgaviILegacyConfigHandler
+interface AgaviILegacyConfigHandler
 {
 	/**
 	 * Initialize this ConfigHandler.
@@ -48,12 +44,26 @@ abstract class AgaviConfigHandler extends AgaviBaseConfigHandler implements Agav
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.9.0
 	 */
-	public function initialize($validationFile = null, $parser = null, $parameters = array())
-	{
-		$this->validationFile = $validationFile;
-		$this->parser = $parser;
-		$this->setParameters($parameters);
-	}
+	public function initialize($validationFile = null, $parser = null, $parameters = array());
+	
+	/**
+	 * Execute this configuration handler.
+	 *
+	 * @param      string An absolute filesystem path to a configuration file.
+	 * @param      string Name of the executing context (if any).
+	 *
+	 * @return     string Data to be written to a cache file.
+	 *
+	 * @throws     <b>AgaviUnreadableException</b> If a requested configuration
+	 *                                             file does not exist or is not
+	 *                                             readable.
+	 * @throws     <b>AgaviParseException</b> If a requested configuration file is
+	 *                                        improperly formatted.
+	 *
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @since      0.9.0
+	 */
+	public function execute($config, $context = null);
 }
 
 ?>

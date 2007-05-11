@@ -30,4 +30,35 @@
  */
 interface AgaviIXmlConfigHandler
 {
+	/**
+	 * Initialize this ConfigHandler.
+	 *
+	 * @param      AgaviContext The context to work with (if available).
+	 * @param      array        An associative array of initialization parameters.
+	 *
+	 * @throws     <b>AgaviInitializationException</b> If an error occurs while
+	 *                                                 initializing the
+	 *                                                 ConfigHandler
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function initialize(AgaviContext $context = null, $parameters = array());
+	
+	/**
+	 * Execute this configuration handler.
+	 *
+	 * @param      array An array of DOMDocuments (the config and all parents).
+	 *
+	 * @return     string Data to be written to a cache file.
+	 *
+	 * @throws     <b>AgaviParseException</b> If a requested configuration file is
+	 *                                        improperly formatted.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function execute(array $array = array());
 }
+
+?>

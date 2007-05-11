@@ -98,13 +98,31 @@ final class AgaviConfigCache
 		// call the handler and retrieve the cache data
 		$handler = new $handlerInfo['class'];
 		if($handler instanceof AgaviIXmlConfigHandler) {
+			// a new-style config handler
+			// it does not parse the config itself; instead, it is given an array of parsed DOM documents (with parents!)
+			$parser = new AgaviXmlConfigParser();
+			$docs = $parser->parseAll($config, $handlerInfo['validation']);
 			
+			if($context !== null) {
+				$context = AgaviContext::getInstance($context);
+			}
+			
+			$handler->initialize($context, $handlerInfo['parameters']);
+			
+			try {
+				$data = $handler->execute($docs);
+			} catch(AgaviException $e) {
+				throw new $e(sprintf("Compliation of configuration file '%s' failed for the following reason(s):\n\n%s", $config, $e->getMessage()));
+			}
 		} else {
-			if(isset($handlerInfo['validation']))
-			$handler->initialize($handlerInfo['validation'], null, $handlerInfo['parameters']);
+			$validationFile = null;
+			if(isset($handlerInfo['validation'][AgaviXmlConfigParser::VALIDATION_TYPE_XMLSCHEMA][0])) {
+				$validationFile = $handlerInfo['validation'][AgaviXmlConfigParser::VALIDATION_TYPE_XMLSCHEMA][0];
+			}
+			$handler->initialize($validationFile, null, $handlerInfo['parameters']);
+			$data = $handler->execute($config, $context);
 		}
 		
-		$data = $handler->execute($config, $context);
 		self::writeCacheFile($config, $cache, $data, false);
 	}
 
@@ -239,9 +257,10 @@ final class AgaviConfigCache
 	{
 		// since we only need the parser and handlers when the config is not cached
 		// it is sufficient to include them at this stage
+		require(AgaviConfig::get('core.agavi_dir') . '/config/AgaviILegacyConfigHandler.interface.php');
+		require(AgaviConfig::get('core.agavi_dir') . '/config/AgaviIXmlConfigHandler.class.php');
 		require(AgaviConfig::get('core.agavi_dir') . '/config/AgaviBaseConfigHandler.class.php');
 		require(AgaviConfig::get('core.agavi_dir') . '/config/AgaviConfigHandler.class.php');
-		require(AgaviConfig::get('core.agavi_dir') . '/config/AgaviIXmlConfigHandler.class.php');
 		require(AgaviConfig::get('core.agavi_dir') . '/config/AgaviXmlConfigHandler.class.php');
 		require(AgaviConfig::get('core.agavi_dir') . '/config/AgaviAutoloadConfigHandler.class.php');
 		require(AgaviConfig::get('core.agavi_dir') . '/config/AgaviConfigHandlersConfigHandler.class.php');
@@ -327,11 +346,11 @@ final class AgaviConfigCache
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public static function parseConfig($config, $autoloadParser = true, $validateFile = null, $parserClass = null)
+	public static function parseConfig($config, $autoloadParser = true, $validationFile = null, $parserClass = null)
 	{
 		$parser = new AgaviConfigParser();
 		
-		return $parser->parse($config, $validateFile);
+		return $parser->parse($config, $validationFile);
 	}
 }
 

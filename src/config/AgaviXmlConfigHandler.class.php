@@ -27,9 +27,31 @@
  *
  * @version    $Id$
  */
-class AgaviXmlConfigHandler extends AgaviBaseConfigHandler implements AgaviIXmlConfigHandler
+abstract class AgaviXmlConfigHandler extends AgaviBaseConfigHandler implements AgaviIXmlConfigHandler
 {
-	public function execute($config, $context = null)
+	/**
+	 * @var        AgaviContext The context to work with (if available).
+	 */
+	protected $context = null;
+	
+	/**
+	 * Initialize this ConfigHandler.
+	 *
+	 * @param      AgaviContext The context to work with (if available).
+	 * @param      array        An associative array of initialization parameters.
+	 *
+	 * @throws     <b>AgaviInitializationException</b> If an error occurs while
+	 *                                                 initializing the
+	 *                                                 ConfigHandler
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function initialize(AgaviContext $context = null, $parameters = array())
 	{
+		$this->context = $context;
+		$this->setParameters($parameters);
 	}
 }
+
+?>

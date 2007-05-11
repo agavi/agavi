@@ -28,7 +28,7 @@
  *
  * @version    $Id$
  */
-class AgaviXmlConfigParser extends AgaviConfigParser
+class AgaviXmlConfigParser
 {
 	const XML_NAMESPACE = 'http://agavi.org/agavi/1.0/config';
 	
@@ -43,6 +43,37 @@ class AgaviXmlConfigParser extends AgaviConfigParser
 	 * @param      array  An associative array of validation information.
 	 *
 	 * @return     array An array of DOMDocuments (from child to parent).
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function parseAll($config, array $validation = array())
+	{
+		$retval = array();
+		
+		$nextConfig = $config;
+		
+		while($nextConfig !== null) {
+			$doc = $this->parse($nextConfig, $validation);
+			
+			if($doc->documentElement->hasAttribute('parent')) {
+				$nextConfig = AgaviBaseConfigHandler::literalize($doc->documentElement->getAttribute('parent'));
+			} else {
+				$nextConfig = null;
+			}
+			
+			$retval[] = $doc;
+		}
+		
+		return $retval;
+	}
+	
+	/**
+	 * @param      string An absolute filesystem path to a configuration file.
+	 * @param      array  An associative array of validation information.
+	 *
+	 * @return     DOMDocument A DOMDocument.
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>

@@ -47,11 +47,15 @@ class AgaviConfigParser
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function parse($config, array $validationInfo = array())
+	public function parse($config, $validationFile = null)
 	{
 		$parser = new AgaviXmlConfigParser();
 		
-		$doc = $parser->parse($config, $validationInfo);
+		$validation = array();
+		if($validationFile !== null) {
+			$validation[AgaviXmlConfigParser::VALIDATION_TYPE_XMLSCHEMA] = array($validationFile);
+		}
+		$doc = $parser->parse($config, $validation);
 		
 		$this->encoding = $doc->encoding;
 		

@@ -102,25 +102,6 @@ abstract class AgaviBaseConfigHandler extends AgaviParameterHolder
 	}
 
 	/**
-	 * Execute this configuration handler.
-	 *
-	 * @param      string An absolute filesystem path to a configuration file.
-	 * @param      string Name of the executing context (if any).
-	 *
-	 * @return     string Data to be written to a cache file.
-	 *
-	 * @throws     <b>AgaviUnreadableException</b> If a requested configuration
-	 *                                             file does not exist or is not
-	 *                                             readable.
-	 * @throws     <b>AgaviParseException</b> If a requested configuration file is
-	 *                                        improperly formatted.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	abstract function execute($config, $context = null);
-
-	/**
 	 * Generate the code for returning from execute().
 	 *
 	 * @param      mixed A string with the code, or an array of code lines.
@@ -144,27 +125,6 @@ abstract class AgaviBaseConfigHandler extends AgaviParameterHolder
 		);
 	}
 	
-	/**
-	 * Initialize this ConfigHandler.
-	 *
-	 * @param      string The path to a validation file for this config handler.
-	 * @param      string The parser class to use.
-	 * @param      array An associative array of initialization parameters.
-	 *
-	 * @throws     <b>AgaviInitializationException</b> If an error occurs while
-	 *                                                 initializing the
-	 *                                                 ConfigHandler
-	 *
-	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @since      0.9.0
-	 */
-	public function initialize($validationFile = null, $parser = null, $parameters = array())
-	{
-		$this->validationFile = $validationFile;
-		$this->parser = $parser;
-		$this->setParameters($parameters);
-	}
-
 	/**
 	 * Literalize a string value.
 	 *
