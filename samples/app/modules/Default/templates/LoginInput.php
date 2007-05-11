@@ -4,8 +4,6 @@
 		<dd><input type="text" name="username" id="fe-username" /></dd>
 		<dt><label for="fe-password"><?php echo $tm->_('Password:', 'default.Login'); ?></label></dt>
 		<dd><input type="password" name="password" id="fe-password" /></dd>
-		<dt>mail</dt>
-		<dd><input type="text" name="email" id="fe-email" /></dd>
 		<dt>&#160;</dt>
 		<dd><input type="checkbox" name="remember" id="fe-remember" /><label for="fe-remember"> <?php echo $tm->_('Log me in automatically.', 'default.Login'); ?></label></dd>
 		<dt>&#160;</dt>
