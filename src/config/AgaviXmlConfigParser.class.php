@@ -62,7 +62,7 @@ class AgaviXmlConfigParser
 		while($nextConfig !== null) {
 			$doc = $this->parse($nextConfig, $validation);
 			
-			if($doc->documentElement->hasAttribute('parent')) {
+			if($doc->documentElement && $doc->documentElement->hasAttribute('parent')) {
 				$nextConfig = AgaviBaseConfigHandler::literalize($doc->documentElement->getAttribute('parent'));
 			} else {
 				$nextConfig = null;
@@ -100,29 +100,6 @@ class AgaviXmlConfigParser
 		$this->cleanup($doc);
 		
 		return $doc;
-	}
-	
-	/**
-	 * Create and return a DOMXPath object for the document.
-	 *
-	 * @param      DOMDocument The document to create the DOMXPath object for.
-	 * @param      bool        If the XML namespace from the document element
-	 *                         should be registered as 'agavi'.
-	 *
-	 * @return     DOMXPath A DOMXPath instance for the document.
-	 *
-	 * @author     David Zülke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function createXpath(DOMDocument $doc, $registerNamespace = true)
-	{
-		$xpath = new DOMXPath($doc);
-		
-		if($registerNamespace && $doc->documentElement) {
-			$xpath->registerNamespace('agavi', $doc->documentElement->namespaceURI);
-		}
-		
-		return $xpath;
 	}
 	
 	/**
@@ -171,6 +148,7 @@ class AgaviXmlConfigParser
 		}
 		
 		$doc->xinclude();
+		
 		if(libxml_get_last_error() !== false) {
 			$throw = false;
 			$errors = array();
@@ -194,7 +172,8 @@ class AgaviXmlConfigParser
 			}
 		}
 		
-		$xpath = $this->createXpath($doc);
+		$xpath = new DOMXPath($doc);
+		
 		// remove all xml:base attributes inserted by XIncludes
 		$nodes = $xpath->query('//@xml:base', $doc);
 		foreach($nodes as $node) {
@@ -224,11 +203,11 @@ class AgaviXmlConfigParser
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function transform(DOMDocument $doc)
+	public function transform(DOMDocument &$doc)
 	{
 		$luie = libxml_use_internal_errors(true);
 		
-		$xpath = $this->createXpath($doc, false);
+		$xpath = new DOMXPath($doc);
 		
 		$stylesheetProcessingInstructions = $xpath->query("//processing-instruction('xml-stylesheet')", $doc);
 		foreach($stylesheetProcessingInstructions as $pi) {
@@ -388,12 +367,15 @@ class AgaviXmlConfigParser
 	 */
 	public function cleanup(DOMDocument $doc)
 	{
-		$xpath = $this->createXpath($doc);
+		$xpath = new DOMXPath($doc);
 		
-		// remove top-level <sandbox> elements
-		$sandboxes = $xpath->query('/agavi:configurations/agavi:sandbox', $doc);
-		foreach($sandboxes as $sandbox) {
-			$sandbox->parentNode->removeChild($sandbox);
+		if($doc->documentElement && $doc->documentElement->namespaceURI == self::XML_NAMESPACE) {
+			$xpath->registerNamespace('agavi', $doc->documentElement->namespaceURI);
+			// remove top-level <sandbox> elements
+			$sandboxes = $xpath->query('/agavi:configurations/agavi:sandbox', $doc);
+			foreach($sandboxes as $sandbox) {
+				$sandbox->parentNode->removeChild($sandbox);
+			}
 		}
 		
 		unset($xpath);
