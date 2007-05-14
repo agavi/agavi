@@ -30,7 +30,7 @@
       <xs:element name="configuration" type="configuration" minOccurs="0" maxOccurs="unbounded" />
     </xs:sequence>
     <xs:attribute name="parent" type="xs:string" />
-    <xs:anyAttribute namespace="##other" processContents="lax" />
+    <xs:anyAttribute namespace="##any" processContents="lax" />
   </xs:complexType>
   <xs:complexType name="base_configuration">
     <xs:attribute name="environment">
