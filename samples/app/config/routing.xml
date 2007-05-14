@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configurations xmlns="http://agavi.org/agavi/1.0/config" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<configurations xmlns="http://agavi.org/agavi/1.0/config" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:yay="http://agavi.org/sampleapp" targetNamespace="http://agavi.org/sampleapp">
 	
 	<configuration context="web">
 		<routes>
@@ -43,7 +43,7 @@
 			<!-- SOAP calls include the name of a remote method to call. The WebserviceRouting applies patterns to this method name, not to the URL of the request. We set the request method to "read" here so executeRead() is run in the Action. -->
 			<route pattern="^getItemPrice$" module="Default" action="SearchEngineSpam" method="read">
 				<wsdl:input>
-					<wsdl:part name="criteria" type="tns:Criteria" />
+					<wsdl:part name="criteria" type="yay:Criteria" />
 				</wsdl:input>
 				<wsdl:output>
 					<wsdl:part name="id" type="xsd:string" />

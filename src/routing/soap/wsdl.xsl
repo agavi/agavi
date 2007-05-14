@@ -12,13 +12,15 @@ xmlns="http://schemas.xmlsoap.org/wsdl/"
 	
 	<xsl:output method="xml" version="1.0" encoding="utf-8" indent="yes" />
 	
+	<xsl:variable name="tns" select="name(/agavi:configurations/namespace::*[.=../@targetNamespace])" />
+	
 	<xsl:template match="/agavi:configurations">
 		<wsdl:definitions name="Dummy">
-			<xsl:attribute name="targetNamespace">dummy/namespace</xsl:attribute>
 			
-			<xsl:value-of select="string(namespace::*[namespace-uri(.)='http://schemas.xmlsoap.org/wsdl/'])" />
+			<xsl:copy-of select="namespace::*"/>
 			
-			<xsl:copy-of select="namespace::*[name()]"/>
+			<!-- copy targetNamespace -->
+			<xsl:copy-of select="@targetNamespace" />
 			
 			<!-- copy type defs -->
 			<xsl:apply-templates select="wsdl:types" mode="types" />
@@ -33,10 +35,10 @@ xmlns="http://schemas.xmlsoap.org/wsdl/"
 		<wsdl:operation>
 			<xsl:attribute name="name"><xsl:value-of select="translate(@pattern, '^$', '')" /></xsl:attribute>
 			<wsdl:input>
-				<xsl:attribute name="message">tns:<xsl:value-of select="translate(@pattern, '^$', '')" />Request</xsl:attribute>
+				<xsl:attribute name="message"><xsl:value-of select="$tns" />:<xsl:value-of select="translate(@pattern, '^$', '')" />Request</xsl:attribute>
 			</wsdl:input>
 			<wsdl:output>
-				<xsl:attribute name="message">tns:<xsl:value-of select="translate(@pattern, '^$', '')" />Response</xsl:attribute>
+				<xsl:attribute name="message"><xsl:value-of select="$tns" />:<xsl:value-of select="translate(@pattern, '^$', '')" />Response</xsl:attribute>
 			</wsdl:output>
 		</wsdl:operation>
 	</xsl:template>

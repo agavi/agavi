@@ -56,27 +56,25 @@ class AgaviWsdlConfigHandler extends AgaviXmlConfigHandler
 			$xpath->registerNamespace('wsdl', 'http://schemas.xmlsoap.org/wsdl/');
 			
 			$paramSoapAddressLocation   = $ro->getParameter('wsdl_generator[soap][address][location]');
-			                            
+			
 			$paramSoapBindingStyle      = $ro->getParameter('wsdl_generator[soap][binding][style]',       'rpc');
 			$paramSoapBindingTransport  = $ro->getParameter('wsdl_generator[soap][binding][transport]',   'http://schemas.xmlsoap.org/soap/http');
-			                            
+			
 			$paramSoapBodyUse           = $ro->getParameter('wsdl_generator[soap][body][use]',            'literal');
 			$paramSoapBodyNamespace     = $ro->getParameter('wsdl_generator[soap][body][namespace]',      'urn:' . $cleanAppName);
 			$paramSoapBodyEncodingStyle = $ro->getParameter('wsdl_generator[soap][body][encoding_style]', 'http://schemas.xmlsoap.org/soap/encoding/');
-			                            
-			$paramTargetNamespaceUri    = $ro->getParameter('wsdl_generator[target_namespace][uri]',      'urn:' . $cleanAppName);
-			$paramTargetNamespacePrefix = $ro->getParameter('wsdl_generator[target_namespace][prefix]',   'tns');
 			
 			$wsdlDefinitions = $xpath->query('/wsdl:definitions');
 			foreach($wsdlDefinitions as $wsdlDefinition) {
+				$targetNamespaceUri = $wsdlDefinition->getAttribute('targetNamespace');
+				$targetNamespacePrefix = $wsdlDefinition->lookupPrefix($targetNamespaceUri);
+				
 				$wsdlDefinition->setAttribute('name', $cleanAppName);
-				$wsdlDefinition->setAttribute('targetNamespace', $paramTargetNamespaceUri);
-				$wsdlDefinition->setAttribute('xmlns:' . $paramTargetNamespacePrefix, $paramTargetNamespaceUri);
 				
 				$wsdlBindings = $xpath->query('wsdl:binding', $wsdlDefinition);
 				foreach($wsdlBindings as $wsdlBinding) {
 					$wsdlBinding->setAttribute('name', $cleanAppName . 'Binding');
-					$wsdlBinding->setAttribute('type', $paramTargetNamespacePrefix . ':' . $cleanAppName . 'PortType');
+					$wsdlBinding->setAttribute('type', $targetNamespacePrefix . ':' . $cleanAppName . 'PortType');
 					
 					$soapBindings = $xpath->query('soap:binding', $wsdlBinding);
 					foreach($soapBindings as $soapBinding) {
@@ -113,7 +111,7 @@ class AgaviWsdlConfigHandler extends AgaviXmlConfigHandler
 					$wsdlPorts = $xpath->query('wsdl:port', $wsdlService);
 					foreach($wsdlPorts as $wsdlPort) {
 						$wsdlPort->setAttribute('name', $cleanAppName . 'Port');
-						$wsdlPort->setAttribute('binding', $paramTargetNamespacePrefix . ':' . $cleanAppName . 'Binding');
+						$wsdlPort->setAttribute('binding', $targetNamespacePrefix . ':' . $cleanAppName . 'Binding');
 						
 						$soapAddresses = $xpath->query('soap:address', $wsdlPort);
 						foreach($soapAddresses as $soapAddress) {
