@@ -41,7 +41,7 @@ class AgaviSoapRouting extends AgaviWebserviceRouting
 	{
 		$path = $this->getParameter('wsdl', AgaviConfig::get('core.agavi_dir') . '/routing/soap/wsdl.xml');
 		
-		return AgaviConfigCache::checkConfig($path);
+		return AgaviConfigCache::checkConfig($path, $this->context->getName());
 	}
 }
 

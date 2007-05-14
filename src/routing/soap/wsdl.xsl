@@ -8,24 +8,23 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
 xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
 xmlns="http://schemas.xmlsoap.org/wsdl/"
-xmlns:tns="http://myapp.com/foo"
 >
 	
 	<xsl:output method="xml" version="1.0" encoding="utf-8" indent="yes" />
 	
-	<xsl:template match="/">
-	<!-- TODO :
-		Soapaction festlegen
-		Soapaddress festlegen
-	-->
-		<wsdl:definitions name="RoutingWsdl">
-			<xsl:attribute name="targetNamespace"><xsl:value-of select="agavi:configurations/@xsd:targetNamespace" /></xsl:attribute>
-			<xsl:attribute name="xmlns:tns"><xsl:value-of select="agavi:configurations/@xsd:targetNamespace" /></xsl:attribute>
-			<!-- Typedefintions -->
-			<!--  <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="sl_core.wsdl"/>-->
-			<!-- Porttypedefinition -->
+	<xsl:template match="/agavi:configurations">
+		<wsdl:definitions name="Dummy">
+			<xsl:attribute name="targetNamespace">dummy/namespace</xsl:attribute>
 			
-			<xsl:apply-templates select="/agavi:configurations/agavi:configuration[.//agavi:route//wsdl:part]" />
+			<xsl:value-of select="string(namespace::*[namespace-uri(.)='http://schemas.xmlsoap.org/wsdl/'])" />
+			
+			<xsl:copy-of select="namespace::*[name()]"/>
+			
+			<!-- copy type defs -->
+			<xsl:apply-templates select="wsdl:types" mode="types" />
+			
+			<!-- all the rest -->
+			<xsl:apply-templates select="agavi:configuration[.//agavi:route//wsdl:part]" />
 			
 		</wsdl:definitions>
 	</xsl:template>
@@ -45,7 +44,6 @@ xmlns:tns="http://myapp.com/foo"
 	<xsl:template match="agavi:route" mode="binding">
 		<wsdl:operation>
 			<xsl:attribute name="name"><xsl:value-of select="translate(@pattern, '^$', '')" /></xsl:attribute>
-			<!-- TODO Handler festlegen -->
 			<soap:operation>
 				<xsl:attribute name="soapAction"><xsl:value-of select=".//soap:operation/@soap:soapAction" /></xsl:attribute>
 			</soap:operation>
@@ -61,48 +59,41 @@ xmlns:tns="http://myapp.com/foo"
 	<xsl:template match="agavi:route" mode="message">
 		<wsdl:message>
 			<xsl:attribute name="name"><xsl:value-of select="translate(@pattern, '^$', '')" />Request</xsl:attribute>
-			<xsl:apply-templates select="wsdl:input" />
+			<xsl:copy-of select="wsdl:input/wsdl:part" />
 		</wsdl:message>
 		<wsdl:message>
 			<xsl:attribute name="name"><xsl:value-of select="translate(@pattern, '^$', '')" />Response</xsl:attribute>
-			<xsl:apply-templates select="wsdl:output" />
+			<xsl:copy-of select="wsdl:output/wsdl:part" />
 		</wsdl:message>
-	</xsl:template>
-	
-	<xsl:template match="wsdl:part">
-		<wsdl:part>
-			<xsl:attribute name="name"><xsl:value-of select="@name" /></xsl:attribute>
-			<xsl:attribute name="type"><xsl:value-of select="@type" /></xsl:attribute>
-		</wsdl:part>
 	</xsl:template>
 	
 	<xsl:template match="agavi:configuration">
 		
-		<!-- Port-->
-		<wsdl:portType name="RoutingPortType">
+		<wsdl:portType name="DummyPortType">
 			<xsl:apply-templates select=".//agavi:route" mode="port" />
 		</wsdl:portType>
 		
-		<!-- Binding -->
-		<binding name="binding" type="tns:RoutingPortType">
+		<binding name="DummyBinding" type="tns:DummyPortType">
 			<soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
 			<xsl:apply-templates select=".//agavi:route" mode="binding" />
 		</binding>
 		
-		<!-- Service -->
-		<service name="MyVeryOwnSoapService">
-			<port name="MyVeryOwnSoapServicePort" binding="tns:binding">
-				<!-- TODO Soaphandler festlegen -->
+		<service name="DummyService">
+			<port name="DummyPort" binding="tns:DummyBinding">
 				<soap:address>
-					<xsl:attribute name="location"><xsl:value-of select="//soap:address/@soap:location" /></xsl:attribute>
+					<xsl:attribute name="location"><xsl:value-of select=".//soap:address/@soap:location" /></xsl:attribute>
 				</soap:address>
 			</port>
 		</service>
 		
 		<xsl:apply-templates select=".//agavi:route" mode="message" />
 		
-		<!-- Typedefinitionen -->
-		<!-- <xsl:apply-templates /> -->
-		
 	</xsl:template>
+	
+	<xsl:template match="wsdl:types" mode="types">
+		<xsl:copy>
+			<xsl:copy-of select="* | @*" />
+		</xsl:copy>
+	</xsl:template>
+	
 </xsl:stylesheet>

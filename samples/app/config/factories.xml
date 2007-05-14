@@ -52,7 +52,7 @@
 	<configuration context="soap">
 		
 		<controller class="AgaviSoapController">
-			<parameter name="wsdl">%core.app_dir%/data/test.wsdl</parameter>
+			<!-- <parameter name="wsdl">%core.app_dir%/data/test.wsdl</parameter> -->
 			<parameter name="options">
 				<parameter name="uri">http://localhost</parameter>
 			</parameter>
@@ -62,7 +62,15 @@
 		
 		<response class="AgaviSoapResponse" />
 		
-		<routing class="AgaviSoapRouting" />
+		<routing class="AgaviSoapRouting">
+			<parameter name="wsdl_generator">
+				<parameter name="soap">
+					<parameter name="address">
+						<parameter name="location">http://localhost/~dzuelke/_projects/agavi/branches/0.11/samples/pub/soap.php</parameter>
+					</parameter>
+				</parameter>
+			</parameter>
+		</routing>
 		
 	</configuration>
 	
