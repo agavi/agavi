@@ -23,7 +23,7 @@ xmlns="http://schemas.xmlsoap.org/wsdl/"
 			<xsl:copy-of select="@targetNamespace" />
 			
 			<!-- copy type defs -->
-			<xsl:apply-templates select="wsdl:types" mode="types" />
+			<xsl:apply-templates select="wsdl:types | wsdl:message" mode="typesandmessages" />
 			
 			<!-- all the rest -->
 			<xsl:apply-templates select="agavi:configuration[.//agavi:route//wsdl:part]" />
@@ -92,7 +92,7 @@ xmlns="http://schemas.xmlsoap.org/wsdl/"
 		
 	</xsl:template>
 	
-	<xsl:template match="wsdl:types" mode="types">
+	<xsl:template match="wsdl:types | wsdl:message" mode="typesandmessages">
 		<xsl:copy>
 			<xsl:copy-of select="* | @*" />
 		</xsl:copy>
