@@ -52,6 +52,34 @@ class AgaviNotOperatorValidator extends AgaviOperatorValidator
 	}
 
 	/**
+	 * Adds a validation result for a given field.
+	 *
+	 * @param      AgaviValidator The validator.
+	 * @param      string The name of the field which has been validated.
+	 * @param      int    The result of the validation.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function addFieldResult($validator, $fieldname, $result)
+	{
+		// prevent reporting of any child validators
+	}
+
+	/**
+	 * Adds an incident to the validation result. 
+	 *
+	 * @param      AgaviValidationIncident The incident.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function addIncident(AgaviValidationIncident $incident)
+	{
+		// prevent reporting of any child validators
+	}
+
+	/**
 	 * Validates the operator by returning the inverse result of the child 
 	 * validator
 	 * 
@@ -69,9 +97,14 @@ class AgaviNotOperatorValidator extends AgaviOperatorValidator
 		$result = $child->execute($this->validationParameters);
 		if($result == AgaviValidator::CRITICAL || $result == AgaviValidator::SUCCESS) {
 			$this->result = max(AgaviValidator::ERROR, $result);
-			$this->throwError();
+			$this->throwError(null, $child->getFullArgumentNames());
 			return false;
 		} else {
+			// lets mark the fields of the child validator all as successful
+			$affectedFields = $child->getFullArgumentNames();
+			foreach($affectedFields as $field) {
+				parent::addFieldResult($this, $field, AgaviValidator::SUCCESS);
+			}
 			return true;
 		}
 	}	

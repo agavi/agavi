@@ -42,8 +42,8 @@ class AgaviEmailValidator extends AgaviValidator
 	 */
 	protected function validate()
 	{
-		// TODO: check RFC for exact definition
-		if(!preg_match('/^([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-]+)*@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-]+)+$/D', $this->getData($this->getArgument()))) {
+		$extraChars = preg_quote('!#$%&\'*+-/=?^_`{|}~', '/');
+		if(!preg_match('/^[a-z0-9' . $extraChars . ']+(\.[a-z0-9' . $extraChars . ']+)*@[a-z0-9-]+(\.[a-z0-9-]+)*\.[a-z]{2,6}$/iD', $this->getData($this->getArgument()))) {
 			$this->throwError();
 			return false;
 		}

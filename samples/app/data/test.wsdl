@@ -35,7 +35,7 @@
   </operation> 
 </binding> 
 <service name='ItemPriceService'> 
-  <port name='ItemPriceService' binding='ItemPriceBinding'> 
+  <port name='ItemPriceService' binding='tns:ItemPriceBinding'> 
     <soap:address location='http://localhost/~dzuelke/_projects/agavi/branches/0.11/samples/pub/soap.php'/> 
   </port> 
 </service> 
