@@ -57,8 +57,7 @@ abstract class AgaviWebserviceRequest extends AgaviWebRequest
 		$_POST = array();
 		
 		// grab the POST body
-//		$this->input = file_get_contents('php://input');
-		$this->input = $GLOBALS['HTTP_RAW_POST_DATA'];
+		$this->input = file_get_contents('php://input');
 		
 		parent::initialize($context, $parameters);
 	}
@@ -74,6 +73,19 @@ abstract class AgaviWebserviceRequest extends AgaviWebRequest
 	public function getInput()
 	{
 		return $this->input;
+	}
+	
+	/**
+	 * Set the input data. Useful for debugging purposes.
+	 *
+	 * @param      string The input data.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function setInput($input)
+	{
+		$this->input = $input;
 	}
 	
 	/**
