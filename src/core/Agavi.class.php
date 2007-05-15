@@ -83,6 +83,9 @@ final class Agavi
 	 */
 	public static function bootstrap($environment = null)
 	{
+		// set up our __autoload
+		spl_autoload_register(array('Agavi', '__autoload'));
+
 		try {
 			// required classes for this file and ConfigCache to run
 			require(AgaviConfig::get('core.agavi_dir') . '/util/AgaviInflector.class.php');
