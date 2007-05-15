@@ -23,7 +23,7 @@ xmlns="http://schemas.xmlsoap.org/wsdl/"
 			<xsl:copy-of select="@targetNamespace" />
 			
 			<!-- copy type defs -->
-			<xsl:apply-templates select="wsdl:types | wsdl:message" mode="typesandmessages" />
+			<xsl:apply-templates select="wsdl:types | wsdl:message" />
 			
 			<!-- all the rest -->
 			<xsl:apply-templates select="agavi:configuration[.//agavi:route//wsdl:part]" />
@@ -59,14 +59,18 @@ xmlns="http://schemas.xmlsoap.org/wsdl/"
 	</xsl:template>
 	
 	<xsl:template match="agavi:route" mode="message">
-		<wsdl:message>
-			<xsl:attribute name="name"><xsl:value-of select="translate(@pattern, '^$', '')" />Request</xsl:attribute>
-			<xsl:copy-of select="wsdl:input/wsdl:part" />
-		</wsdl:message>
-		<wsdl:message>
-			<xsl:attribute name="name"><xsl:value-of select="translate(@pattern, '^$', '')" />Response</xsl:attribute>
-			<xsl:copy-of select="wsdl:output/wsdl:part" />
-		</wsdl:message>
+		<xsl:if test="wsdl:input/wsdl:part">
+			<wsdl:message>
+				<xsl:attribute name="name"><xsl:value-of select="translate(@pattern, '^$', '')" />Request</xsl:attribute>
+				<xsl:copy-of select="wsdl:input/wsdl:part" />
+			</wsdl:message>
+		</xsl:if>
+		<xsl:if test="wsdl:output/wsdl:part">
+			<wsdl:message>
+				<xsl:attribute name="name"><xsl:value-of select="translate(@pattern, '^$', '')" />Response</xsl:attribute>
+				<xsl:copy-of select="wsdl:output/wsdl:part" />
+			</wsdl:message>
+		</xsl:if>
 	</xsl:template>
 	
 	<xsl:template match="agavi:configuration">
@@ -92,7 +96,7 @@ xmlns="http://schemas.xmlsoap.org/wsdl/"
 		
 	</xsl:template>
 	
-	<xsl:template match="wsdl:types | wsdl:message" mode="typesandmessages">
+	<xsl:template match="wsdl:types | wsdl:message">
 		<xsl:copy>
 			<xsl:copy-of select="* | @*" />
 		</xsl:copy>
