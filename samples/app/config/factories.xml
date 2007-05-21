@@ -17,9 +17,7 @@
 		
 		<logger_manager class="AgaviLoggerManager" />
 		
-		<request class="AgaviWebRequest">
-			<parameter name="throw_exception_when_locked">false</parameter>
-		</request>
+		<request class="AgaviWebRequest" />
 		
 		<response class="AgaviWebResponse" />
 		
@@ -71,6 +69,16 @@
 		
 	</configuration>
 	
+	<configuration context="wsdl">
+		
+		<storage class="AgaviSessionStorage">
+			<parameter name="auto_start">false</parameter>
+		</storage>
+		
+		<user class="AgaviSecurityUser" />
+		
+	</configuration>
+	
 	<configuration context="xmlrpc">
 		
 		<request class="AgaviXmlrpcepiphpRequest" />
@@ -78,6 +86,8 @@
 		<response class="AgaviXmlrpcepiphpResponse" />
 		
 		<routing class="AgaviXmlrpcepiphpRouting" />
+		
+		<user class="AgaviSecurityUser" />
 		
 	</configuration>
 	

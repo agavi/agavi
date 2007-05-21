@@ -15,7 +15,7 @@ if(!isset($_GET['item'])) {
 ini_set('soap.wsdl_cache_enabled', 0);
 
 // this test.wsdl contains the URL to the service. You have to edit it to match your setup.
-$client = new SoapClient('../app/cache/config/_Users_dzuelke_Sites__projects_agavi_branches_david-xml_config_handlers_src_routing_soap_wsdl.xml_production_soap.php', array(
+$client = new SoapClient('http://localhost/~dzuelke/_projects/agavi/branches/david-xml_config_handlers/samples/pub/wsdl.php', array(
 	/* so we can get last request and response */
 	'trace' => true,
 ));

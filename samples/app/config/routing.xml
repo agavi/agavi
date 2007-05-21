@@ -52,6 +52,12 @@
 		</routes>
 	</configuration>
 	
+	<configuration context="wsdl">
+		<routes>
+			<route pattern="(dummy:.*)" module="Default" action="SendWsdl" />
+		</routes>
+	</configuration>
+	
 	<configuration context="xmlrpc">
 		<routes>
 			<!-- XMLRPC calls include the name of a remote method to call. The WebserviceRouting applies patterns to this method name, not to the URL of the request. We set the request method to "read" here so executeRead() is run in the Action. -->
