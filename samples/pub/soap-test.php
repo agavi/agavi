@@ -8,60 +8,22 @@
 		<h1>Agavi SOAP Test</h1>
 <?php
 
-define('USE_WSDL', true);
-
 if(!isset($_GET['item'])) {
 	$_GET['item'] = 'nonsense';
 }
 
-if(USE_WSDL) {
-	
-	ini_set('soap.wsdl_cache_enabled', 0);
-	
-	// this test.wsdl contains the URL to the service. You have to edit it to match your setup.
-	$client = new SoapClient('../app/data/test.wsdl', array(
-		/* so we can get last request and response */
-		'trace' => true,
-	));
-	
-	try {
-		$result = $client->getItemPrice($_GET['item']);
-	} catch(SoapFault $e) {
-		$result = $e->__toString();
-	}
-	
-} else {
-	
-	$client = new SoapClient(null, array( 
-		"location" => "http://localhost/~dzuelke/_projects/agavi/branches/0.11/samples/pub/soap.php", 
-		"uri"      => "getItemPrice", 
-		"style"    => SOAP_RPC, 
-		"use"      => SOAP_ENCODED 
-	)); 
+ini_set('soap.wsdl_cache_enabled', 0);
 
-	$result = $client->__call( 
-		/* SOAP Method Name */ 
-		"getItemPrice", 
-		/* Parameters */ 
-		array( 
-			new SoapParam( 
-				/* Parameter Value */ 
-				$_GET['item'], 
-				/* Parameter Name */ 
-				"name"
-			)
-		), 
-		/* Options */ 
-		array( 
-			/* so we can get last request and response */
-			'trace' => true,
-			/* SOAP Method Namespace */ 
-			"uri" => "urn:agavi-sampleapp", 
-			/* SOAPAction HTTP Header for SOAP Method */ 
-			"soapaction" => "urn:agavi-sampleapp#getItemPrice" 
-		)
-	);
+// this test.wsdl contains the URL to the service. You have to edit it to match your setup.
+$client = new SoapClient('../app/cache/config/_Users_dzuelke_Sites__projects_agavi_branches_david-xml_config_handlers_src_routing_soap_wsdl.xml_production_soap.php', array(
+	/* so we can get last request and response */
+	'trace' => true,
+));
 
+try {
+	$result = $client->getItemPrice('nonsense');
+} catch(SoapFault $e) {
+	$result = $e->__toString();
 }
 
 ?>

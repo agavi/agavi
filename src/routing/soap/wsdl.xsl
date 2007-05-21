@@ -86,9 +86,7 @@ xmlns="http://schemas.xmlsoap.org/wsdl/"
 		
 		<service name="DummyService">
 			<port name="DummyPort" binding="tns:DummyBinding">
-				<soap:address>
-					<xsl:attribute name="location"><xsl:value-of select=".//soap:address/@soap:location" /></xsl:attribute>
-				</soap:address>
+				<soap:address location="DummySoapLocation" />
 			</port>
 		</service>
 		
