@@ -14,7 +14,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviWebserviceRouting handles the routing for Web Service requests.
+ * AgaviXmlrpcepiphpRouting handles the routing for XMLRPC web service requests.
  *
  * @package    agavi
  * @subpackage routing
@@ -27,38 +27,8 @@
  *
  * @version    $Id$
  */
-class AgaviWebserviceRouting extends AgaviRouting
+class AgaviXmlrpcepiphpRouting extends AgaviWebserviceRouting
 {
-	/**
-	 * Initialize the routing instance.
-	 *
-	 * @param      AgaviContext A Context instance.
-	 * @param      array        An array of initialization parameters.
-	 *
-	 * @author     David Zülke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function initialize(AgaviContext $context, array $parameters = array())
-	{
-		parent::initialize($context, $parameters);
-		
-		if(!AgaviConfig::get("core.use_routing", false)) {
-			return;
-		}
-		
-		$this->updateInput();
-	}
-	
-	/**
-	 * Set the name of the called web service method as the routing input.
-	 *
-	 * @author     David Zülke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function updateInput()
-	{
-		$this->input = $this->context->getRequest()->getInvokedMethod();
-	}
 }
 
 ?>

@@ -3,7 +3,6 @@
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
 // | Copyright (c) 2003-2007 the Agavi Project.                                |
-// | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -15,43 +14,42 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviConfigHandler allows a developer to create a custom formatted
- * configuration file pertaining to any information they like and still
- * have it auto-generate PHP code.
+ * AgaviXmlConfigHandler is the base config handler that deals with DOMDocuments
  *
  * @package    agavi
  * @subpackage config
  *
- * @author     Sean Kerr <skerr@mojavi.org>
- * @author     Dominik del Bondio <ddb@bitxtender.com>
- * @author     David Zuelke <dz@bitxtender.com>
+ * @author     David Zülke <dz@bitxtender.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
  *
- * @since      0.9.0
+ * @since      0.11.0
  *
  * @version    $Id$
  */
-abstract class AgaviConfigHandler extends AgaviBaseConfigHandler implements AgaviILegacyConfigHandler
+abstract class AgaviXmlConfigHandler extends AgaviBaseConfigHandler implements AgaviIXmlConfigHandler
 {
+	/**
+	 * @var        AgaviContext The context to work with (if available).
+	 */
+	protected $context = null;
+	
 	/**
 	 * Initialize this ConfigHandler.
 	 *
-	 * @param      string The path to a validation file for this config handler.
-	 * @param      string The parser class to use.
-	 * @param      array An associative array of initialization parameters.
+	 * @param      AgaviContext The context to work with (if available).
+	 * @param      array        An associative array of initialization parameters.
 	 *
 	 * @throws     <b>AgaviInitializationException</b> If an error occurs while
 	 *                                                 initializing the
 	 *                                                 ConfigHandler
 	 *
-	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @since      0.9.0
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
 	 */
-	public function initialize($validationFile = null, $parser = null, $parameters = array())
+	public function initialize(AgaviContext $context = null, $parameters = array())
 	{
-		$this->validationFile = $validationFile;
-		$this->parser = $parser;
+		$this->context = $context;
 		$this->setParameters($parameters);
 	}
 }

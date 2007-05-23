@@ -30,6 +30,43 @@
  */
 class AgaviSoapRequest extends AgaviWebserviceRequest
 {
+	/**
+	 * Constructor.
+	 *
+	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function __construct()
+	{
+		parent::__construct();
+		$this->setParameters(array(
+			'request_data_holder_class' => 'AgaviSoapRequestDataHolder',
+		));
+	}
+	
+	/**
+	 * Initialize this Request.
+	 *
+	 * @param      AgaviContext An AgaviContext instance.
+	 * @param      array        An associative array of initialization parameters.
+	 *
+	 * @throws     <b>AgaviInitializationException</b> If an error occurs while
+	 *                                                 initializing this Request.
+	 *
+	 * @author     Veikko Mäkinen <mail@veikkomakinen.com>
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.9.0
+	 */
+	public function initialize(AgaviContext $context, array $parameters = array())
+	{
+		parent::initialize($context, $parameters);
+		
+		$rdhc = $this->getParameter('request_data_holder_class');
+		$this->requestData = new $rdhc(array(
+			constant("$rdhc::SOURCE_PARAMETERS") => array(),
+			constant("$rdhc::SOURCE_HEADERS") => array(),
+		));
+	}
 }
 
 ?>

@@ -20,7 +20,7 @@
   <xs:element name="configurations" type="configurations" />
   <xs:complexType name="configurations">
     <xs:sequence>
-      <xs:any namespace="##other" minOccurs="0" processContents="lax" />
+      <xs:any namespace="##other" minOccurs="0" maxOccurs="unbounded" processContents="lax" />
       <xs:element name="sandbox" type="sandbox" minOccurs="0" />
       <!-- 
       The type "configuration" is not defined, so your favorite validating XML editor might throw a warning.
@@ -30,6 +30,7 @@
       <xs:element name="configuration" type="configuration" minOccurs="0" maxOccurs="unbounded" />
     </xs:sequence>
     <xs:attribute name="parent" type="xs:string" />
+    <xs:anyAttribute namespace="##any" processContents="lax" />
   </xs:complexType>
   <xs:complexType name="base_configuration">
     <xs:attribute name="environment">

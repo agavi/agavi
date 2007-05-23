@@ -33,6 +33,7 @@ class AgaviSoapControllerCallHandler
 	/**
 	 * @var        AgaviContext The context.
 	 */
+	protected $context;
 	
 	/**
 	 * Constructor. Expects the SoapController instance to use as the first arg.
@@ -66,38 +67,30 @@ class AgaviSoapControllerCallHandler
 		// the request will also update the routing input
 		$rq->setInvokedMethod($name);
 		
-		// if we use a WSDL...
-		if($ct->hasParameter('wsdl')) {
-			// then we create a SoapClient with the WSDL (yes, SoapClient!)
-			$sc = new SoapClient($ct->getParameter('wsdl'));
-			// and grab a list of functions. in SoapClient, that list contains the method signatures, including the parameter names. SoapServer's __getFunctions() doesn't...
-			$functions = $sc->__getFunctions();
-			unset($sc);
-			foreach($functions as $function) {
-				// now we try to match the called method against the function signatures
-				if(preg_match('/^[a-z]+\s' . preg_quote($name) . '\(([^\)]*)\)$/', $function, $matches)) {
-					// we found something, so we can extract all method argument names
-					preg_match_all('/\$([\w]+)/', $matches[1], $params);
-					for($i = 0; $i < count($params[1]); $i++) {
-						// and replace the numeric keys from our method call args with the actual parameter names as defined in the WSDL
-						$arguments[$params[1][$i]] = $arguments[$i];
-						unset($arguments[$i]);
-					}
-					break;
+		// then we grab the SoapClient with the WSDL (yes, SoapClient!)
+		// and grab a list of functions. in SoapClient, that list contains the method signatures, including the parameter names. SoapServer's __getFunctions() doesn't...
+		$functions = $ct->getSoapClient()->__getFunctions();
+		foreach($functions as $function) {
+			// now we try to match the called method against the function signatures
+			if(preg_match('/^\S+\s' . preg_quote($name) . '\(([^\)]*)\)$/', $function, $matches)) {
+				// we found something, so we can extract all method argument names
+				preg_match_all('/\$([\w]+)/', $matches[1], $params);
+				for($i = 0; $i < count($params[1]); $i++) {
+					// and replace the numeric keys from our method call args with the actual parameter names as defined in the WSDL
+					$arguments[$params[1][$i]] = $arguments[$i];
+					unset($arguments[$i]);
 				}
+				break;
 			}
-			// all that was done because PHP's SOAP extension doesn't allow us to get information about the request. In SOAP, remote methods are always defined using named parameters, but that naming gets lost as PHP calls the respective function on the server directly, and PHP doesn't have named arguments. So all we know is the values that were given for the first, second, and so on parameter. But in Agavi, we want to access parameters by their names. We made it. With an ugly hack. Thank you, Zend.
 		}
+		// all that was done because PHP's SOAP extension doesn't allow us to get information about the request. In SOAP, remote methods are always defined using named parameters, but that naming gets lost as PHP calls the respective function on the server directly, and PHP doesn't have named arguments. So all we know is the values that were given for the first, second, and so on parameter. But in Agavi, we want to access parameters by their names. We made it. With an ugly hack. Thank you, Zend.
 		
 		// finally, we can populate the request with the final data and call the _real_ dispatch() method on the "normal" controller. We hand it the arguments we got in the SOAP request. Everyone's happy.
 		$rd = $rq->getRequestData();
 		
 		$rd->setParameters($arguments);
 		
-		// in case someone doesn't use the routing, we set an action name in the request just to be safe, maybe it helps...
-		$rd->setParameter($rq->getParameter('action_accessor'), $name);
-		
-		// call doDispatch on the controller (we got that in the ctor)
+		// call doDispatch on the controller
 		$response = $ct->doDispatch();
 		
 		// return the content. that's an array, or a float, or whatever, and PHP's SOAP extension will handle the response envelope creation, sending etc for us

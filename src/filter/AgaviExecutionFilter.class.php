@@ -151,8 +151,10 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 			$val = $this->getVariable($group['name'], $group['source'], $group['namespace'], $container);
 			if($val === null) {
 				$val = "0";
-			} elseif(is_object($val)) {
+			} elseif(is_object($val) && is_callable(array($val, '__toString'))) {
 				$val = $val->__toString();
+			} elseif(is_object($val) && function_exists('spl_object_hash')) {
+				$val = spl_object_hash($val);
 			}
 			$retval[] = $val;
 		}

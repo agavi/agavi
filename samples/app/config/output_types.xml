@@ -78,4 +78,16 @@
 		</output_types>
 	</configuration>
 
+	<configuration context="wsdl">
+		<output_types default="wsdl">
+			
+			<output_type name="wsdl">
+				<parameter name="http_headers">
+					<parameter name="Content-Type">text/xml; charset=UTF-8</parameter>
+				</parameter>
+			</output_type>
+			
+		</output_types>
+	</configuration>
+
 </configurations>

@@ -52,27 +52,39 @@ class AgaviConfigHandlersConfigHandler extends AgaviConfigHandler
 	{
 		// parse the config file
 		$configurations = $this->orderConfigurations(AgaviConfigCache::parseConfig($config, false, $this->getValidationFile(), $this->parser)->configurations, AgaviConfig::get('core.environment'));
-
+		
 		// init our data arrays
-		$data     = array();
-
+		$data = array();
+		
 		foreach($configurations as $cfg) {
 			// let's do our fancy work
 			foreach($cfg->handlers as $handler) {
 				$pattern = $handler->getAttribute('pattern');
-
+				
 				$category = var_export(AgaviToolkit::normalizePath($this->replaceConstants($pattern)), true);
-
-				$class = $handler->getAttribute('class');
-
-				$parameters = $this->getItemParameters($handler);
-
+				
+				$class = var_export($handler->getAttribute('class'), true);
+				
+				$validation = array(
+					AgaviXmlConfigParser::VALIDATION_TYPE_RELAXNG    => array(
+					),
+					AgaviXmlConfigParser::VALIDATION_TYPE_SCHEMATRON => array(
+					),
+					AgaviXmlConfigParser::VALIDATION_TYPE_XMLSCHEMA  => array(
+					),
+				);
+				if($handler->hasAttribute('validate')) {
+					$validation[AgaviXmlConfigParser::VALIDATION_TYPE_XMLSCHEMA][] = $this->literalize($handler->getAttribute('validate'));
+				} elseif(false) {
+					// TODO: check for <validations><validation type="schematron"> children here
+				}
+				$validation = var_export($validation, true);
+				
+				$parameters = var_export($this->getItemParameters($handler), true);
+				
 				// append new data
-				$tmp    = "self::\$handlers[%s] = new %s();";
-				$data[] = sprintf($tmp, $category, $class);
-
-				$tmp    = "self::\$handlers[%s]->initialize(%s, %s, %s);";
-				$data[] = sprintf($tmp, $category, var_export($this->literalize($handler->getAttribute('validate')), true), var_export($handler->getAttribute('parser'), true), var_export($parameters, true));
+				$tmp    = "self::\$handlers[%s] = array('class' => %s, 'parameters' => %s, 'validation' => %s);";
+				$data[] = sprintf($tmp, $category, $class, $parameters, $validation);
 			}
 		}
 		

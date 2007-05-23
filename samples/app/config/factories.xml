@@ -17,9 +17,7 @@
 		
 		<logger_manager class="AgaviLoggerManager" />
 		
-		<request class="AgaviWebRequest">
-			<parameter name="throw_exception_when_locked">false</parameter>
-		</request>
+		<request class="AgaviWebRequest" />
 		
 		<response class="AgaviWebResponse" />
 		
@@ -51,18 +49,33 @@
 	
 	<configuration context="soap">
 		
-		<controller class="AgaviSoapController">
-			<parameter name="wsdl">%core.app_dir%/data/test.wsdl</parameter>
-			<parameter name="options">
-				<parameter name="uri">http://localhost</parameter>
-			</parameter>
-		</controller>
+		<controller class="AgaviSoapController" />
 		
 		<request class="AgaviSoapRequest" />
 		
 		<response class="AgaviSoapResponse" />
 		
-		<routing class="AgaviWebserviceRouting" />
+		<routing class="AgaviSoapRouting">
+			<parameter name="wsdl_generator">
+				<parameter name="soap">
+					<parameter name="address">
+						<parameter name="location">http://localhost/~dzuelke/_projects/agavi/branches/david-xml_config_handlers/samples/pub/soap.php</parameter>
+					</parameter>
+				</parameter>
+			</parameter>
+		</routing>
+		
+		<user class="AgaviSecurityUser" />
+		
+	</configuration>
+	
+	<configuration context="wsdl">
+		
+		<storage class="AgaviSessionStorage">
+			<parameter name="auto_start">false</parameter>
+		</storage>
+		
+		<user class="AgaviSecurityUser" />
 		
 	</configuration>
 	
@@ -72,7 +85,9 @@
 		
 		<response class="AgaviXmlrpcepiphpResponse" />
 		
-		<routing class="AgaviWebserviceRouting" />
+		<routing class="AgaviXmlrpcepiphpRouting" />
+		
+		<user class="AgaviSecurityUser" />
 		
 	</configuration>
 	

@@ -73,6 +73,7 @@
       <xs:group ref="ignores" />
       <xs:group ref="defaults" />
       <xs:group ref="routes" />
+      <xs:any namespace="##other" minOccurs="0" maxOccurs="unbounded" processContents="lax" />
     </xs:sequence>
     <xs:attribute name="name" type="route_name" />
     <xs:attribute name="pattern" type="xs:string" use="required" />

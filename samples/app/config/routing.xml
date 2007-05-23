@@ -1,27 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet type="application/xsl+xml" href="#yay"?>
-<configurations xmlns="http://agavi.org/agavi/1.0/config">
-	
-	<xsl:stylesheet id="yay" version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-
-		<xsl:output indent="yes" method="xml" />
-
-		<xsl:key name="no-localized-patterns" match="route" use="pattern[@locale]" />
-
-		<xsl:template match="/configurations/configuration">
-			<xsl:apply-templates select="key('no-localized-patterns', route)" />
-		</xsl:template>
-
-		<xsl:template match="@* | node() ">
-			<xsl:copy>
-				<xsl:apply-templates select="@* | node() " />
-			</xsl:copy>
-		</xsl:template>
-
-	</xsl:stylesheet>
-	<sandbox>
-
-	</sandbox>
+<configurations xmlns="http://agavi.org/agavi/1.0/config" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:yay="http://agavi.org/sampleapp" targetNamespace="http://agavi.org/sampleapp">
 	
 	<configuration context="web">
 		<routes>
@@ -63,7 +41,20 @@
 	<configuration context="soap">
 		<routes>
 			<!-- SOAP calls include the name of a remote method to call. The WebserviceRouting applies patterns to this method name, not to the URL of the request. We set the request method to "read" here so executeRead() is run in the Action. -->
-			<route pattern="^getItemPrice$" module="Default" action="SearchEngineSpam" method="read" />
+			<route pattern="^getItemPrice$" module="Default" action="SearchEngineSpam" method="read">
+				<wsdl:input>
+					<wsdl:part name="name" type="xsd:string" />
+				</wsdl:input>
+				<wsdl:output>
+					<wsdl:part name="price" type="xsd:float" />
+				</wsdl:output>
+			</route>
+		</routes>
+	</configuration>
+	
+	<configuration context="wsdl">
+		<routes>
+			<route pattern="(dummy:.*)" module="Default" action="SendWsdl" />
 		</routes>
 	</configuration>
 	
