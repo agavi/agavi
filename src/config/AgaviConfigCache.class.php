@@ -159,12 +159,28 @@ final class AgaviConfigCache
 		// the cache filename we'll be using
 		$cache = self::getCacheName($config, $context);
 
-		if(!is_readable($cache) || filemtime($filename) > filemtime($cache))	{
+		if(self::isModified($filename, $cache)) {
 			// configuration file has changed so we need to reparse it
 			self::callHandler($config, $filename, $cache, $context);
 		}
 
 		return $cache;
+	}
+	
+	/**
+	 * Check if the cached version of a file is up to date.
+	 *
+	 * @param      string The source file.
+	 * @param      string The name of the cached version.
+	 *
+	 * @return     bool Whether or not the cached file must be updated.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public static function isModified($filename, $cachename)
+	{
+		return (!is_readable($cachename) || filemtime($filename) > filemtime($cachename));
 	}
 
 	/**
@@ -302,7 +318,7 @@ final class AgaviConfigCache
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	private static function writeCacheFile($config, $cache, &$data, $append)
+	public static function writeCacheFile($config, $cache, $data, $append = false)
 	{
 		$perms = fileperms(AgaviConfig::get('core.cache_dir')) ^ 0x4000;
 

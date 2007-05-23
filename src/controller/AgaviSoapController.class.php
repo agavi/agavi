@@ -143,10 +143,52 @@ class AgaviSoapController extends AgaviController
 		// create a server
 		$this->soapServer = new $soapServerClass($wsdl, $soapServerOptions);
 		
+		$newSoapHandlerClass = $soapHandlerClass . 'WithAutoHeaders';
+		
+		// build the special extension class to the handler that contains methods for each of the headers
+		if($this->getParameter('auto_headers', true)) {
+			// the cache filename we'll be using
+			$cache = AgaviConfigCache::getCacheName($soapHandlerClass, $this->context->getName());
+			
+			if(AgaviConfigCache::isModified($wsdl, $cache)) {
+				$doc = new DOMDocument();
+				$doc->load($wsdl);
+				$xpath = new DOMXPath($doc);
+				$xpath->registerNamespace('soap', 'http://schemas.xmlsoap.org/wsdl/soap/');
+				
+				$code = array();
+				
+				$code[] = '<?php';
+				$code[] = sprintf('class %s extends %s {', $newSoapHandlerClass, $soapHandlerClass);
+				$code[] = '  protected $rd;';
+				$code[] = '  public function __construct(AgaviContext $context) {';
+				$code[] = '    parent::__construct($context);';
+				$code[] = '    $this->rd = $this->context->getRequest()->getRequestData();';
+				$code[] = '  }';
+				
+				foreach($xpath->query('//soap:header') as $header) {
+					$name = $header->getAttribute('part');
+				
+					$code[] = sprintf('  public function %s($value) {', $name);
+					$code[] = sprintf('    $this->rd->setHeader(%s, $value);', var_export($name, true));
+					$code[] = '  }';
+				}
+				
+				$code[] = '}';
+				$code[] = '?>';
+				
+				$code = implode("\n", $code);
+				
+				AgaviConfigCache::writeCacheFile($soapHandlerClass, $cache, $code);
+			}
+			
+			include($cache);
+		}
+		
 		// give it a class that handles method calls
 		// that class uses __call
 		// the class ctor gets the context as the first argument
-		$this->soapServer->setClass($soapHandlerClass, $this->context);
+		$this->soapServer->setClass($newSoapHandlerClass, $this->context);
 		
 		// please don't send a response automatically, we need to return it inside the __call overload so PHP's SOAP extension creates a SOAP response envelope with the data
 		$this->setParameter('send_response', false);
