@@ -49,7 +49,7 @@ class AgaviWsdlConfigHandler extends AgaviXmlConfigHandler
 		} else {
 			return;
 		}
-			
+		
 		$ro = $this->context->getRouting();
 		
 		$cleanAppName = preg_replace('/\W/', '', AgaviConfig::get('core.app_name'));
@@ -58,14 +58,18 @@ class AgaviWsdlConfigHandler extends AgaviXmlConfigHandler
 		$xpath->registerNamespace('soap', 'http://schemas.xmlsoap.org/wsdl/soap/');
 		$xpath->registerNamespace('wsdl', 'http://schemas.xmlsoap.org/wsdl/');
 		
-		$paramSoapAddressLocation   = $ro->getParameter('wsdl_generator[soap][address][location]');
+		$paramSoapAddressLocation     = $ro->getParameter('wsdl_generator[soap][address][location]');
+		                              
+		$paramSoapBindingStyle        = $ro->getParameter('wsdl_generator[soap][binding][style]',         'rpc');
+		$paramSoapBindingTransport    = $ro->getParameter('wsdl_generator[soap][binding][transport]',     'http://schemas.xmlsoap.org/soap/http');
 		
-		$paramSoapBindingStyle      = $ro->getParameter('wsdl_generator[soap][binding][style]',       'rpc');
-		$paramSoapBindingTransport  = $ro->getParameter('wsdl_generator[soap][binding][transport]',   'http://schemas.xmlsoap.org/soap/http');
+		$paramSoapBodyUse             = $ro->getParameter('wsdl_generator[soap][body][use]',              'literal');
+		$paramSoapBodyNamespace       = $ro->getParameter('wsdl_generator[soap][body][namespace]',        /*'urn:' . $cleanAppName*/ null);
+		$paramSoapBodyEncodingStyle   = $ro->getParameter('wsdl_generator[soap][body][encoding_style]',   'http://schemas.xmlsoap.org/soap/encoding/');
 		
-		$paramSoapBodyUse           = $ro->getParameter('wsdl_generator[soap][body][use]',            'literal');
-		$paramSoapBodyNamespace     = $ro->getParameter('wsdl_generator[soap][body][namespace]',      'urn:' . $cleanAppName);
-		$paramSoapBodyEncodingStyle = $ro->getParameter('wsdl_generator[soap][body][encoding_style]', 'http://schemas.xmlsoap.org/soap/encoding/');
+		$paramSoapHeaderUse           = $ro->getParameter('wsdl_generator[soap][header][use]',            'literal');
+		$paramSoapHeaderNamespace     = $ro->getParameter('wsdl_generator[soap][header][namespace]',      /*'urn:' . $cleanAppName*/ null);
+		$paramSoapHeaderEncodingStyle = $ro->getParameter('wsdl_generator[soap][header][encoding_style]', 'http://schemas.xmlsoap.org/soap/encoding/');
 		
 		$wsdlDefinitions = $xpath->query('/wsdl:definitions');
 		foreach($wsdlDefinitions as $wsdlDefinition) {
@@ -88,16 +92,38 @@ class AgaviWsdlConfigHandler extends AgaviXmlConfigHandler
 				
 				$wsdlOperations = $xpath->query('wsdl:operation', $wsdlBinding);
 				foreach($wsdlOperations as $wsdlOperation) {
-					$soapOperations = $xpath->query('soap:operation', $wsdlOperation);
-					foreach($soapOperations as $soapOperation) {
-						$soapOperation->setAttribute('soapAction', $paramSoapBodyNamespace . '#' . $wsdlOperation->getAttribute('name'));
+					
+					if($paramSoapBodyNamespace !== null) {
+						$soapOperations = $xpath->query('soap:operation', $wsdlOperation);
+						foreach($soapOperations as $soapOperation) {
+							$soapOperation->setAttribute('soapAction', $paramSoapBodyNamespace . '#' . $wsdlOperation->getAttribute('name'));
+						}
 					}
 					
 					$soapBodies = $xpath->query('.//soap:body', $wsdlOperation);
 					foreach($soapBodies as $soapBody) {
-						$soapBody->setAttribute('use', $paramSoapBodyUse);
-						$soapBody->setAttribute('namespace', $paramSoapBodyNamespace);
-						$soapBody->setAttribute('encodingStyle', $paramSoapBodyEncodingStyle);
+						if(!$soapBody->hasAttribute('use')) {
+							$soapBody->setAttribute('use', $paramSoapBodyUse);
+						}
+						if($paramSoapBodyNamespace !== null) {
+							$soapBody->setAttribute('namespace', $paramSoapBodyNamespace);
+						}
+						if($soapBody->getAttribute('use') == 'encoded') {
+							$soapBody->setAttribute('encodingStyle', $paramSoapBodyEncodingStyle);
+						}
+					}
+					
+					$soapHeaders = $xpath->query('.//soap:header', $wsdlOperation);
+					foreach($soapHeaders as $soapHeader) {
+						if(!$soapHeader->hasAttribute('use')) {
+							$soapHeader->setAttribute('use', $paramSoapHeaderUse);
+						}
+						if($paramSoapHeaderNamespace !== null) {
+							$soapHeader->setAttribute('namespace', $paramSoapHeaderNamespace);
+						}
+						if($soapHeader->getAttribute('use') == 'encoded') {
+							$soapHeader->setAttribute('encodingStyle', $paramSoapHeaderEncodingStyle);
+						}
 					}
 				}
 			}

@@ -96,7 +96,6 @@ class AgaviSoapRequestDataHolder extends AgaviWebserviceRequestDataHolder implem
 	 */
 	public function & getHeader($name, $default = null)
 	{
-		$name = str_replace('-', '_', strtoupper($name));
 		if(isset($this->headers[$name])) {
 			return $this->headers[$name];
 		}
@@ -117,7 +116,7 @@ class AgaviSoapRequestDataHolder extends AgaviWebserviceRequestDataHolder implem
 	 */
 	public function hasHeader($name)
 	{
-		return isset($this->headers[str_replace('-', '_', strtoupper($name))]);
+		return isset($this->headers[$name]);
 	}
 	
 	/**
@@ -127,12 +126,12 @@ class AgaviSoapRequestDataHolder extends AgaviWebserviceRequestDataHolder implem
 	 *
 	 * @return     bool The result.
 	 *
-	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function isHeaderValueEmpty($name)
 	{
-		return ($this->getHeader($name, '') === '');
+		return ($this->getHeader($name) === null);
 	}
 	/**
 	 * Set a header.
@@ -142,12 +141,12 @@ class AgaviSoapRequestDataHolder extends AgaviWebserviceRequestDataHolder implem
 	 * @param      string A header name.
 	 * @param      mixed  A header value.
 	 *
-	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function setHeader($name, $value)
 	{
-		$this->headers[str_replace('-', '_', strtoupper($name))] = $value;
+		$this->headers[$name] = $value;
 	}
 
 	/**
@@ -177,7 +176,6 @@ class AgaviSoapRequestDataHolder extends AgaviWebserviceRequestDataHolder implem
 	public function & removeHeader($name)
 	{
 		$retval = null;
-		$name = str_replace('-', '_', strtoupper($name));
 		if(isset($this->headers[$name])) {
 			$retval =& $this->headers[$name];
 			unset($this->headers[$name]);
