@@ -71,6 +71,9 @@ class AgaviWsdlConfigHandler extends AgaviXmlConfigHandler
 		$paramSoapHeaderNamespace     = $ro->getParameter('wsdl_generator[soap][header][namespace]',      /*'urn:' . $cleanAppName*/ null);
 		$paramSoapHeaderEncodingStyle = $ro->getParameter('wsdl_generator[soap][header][encoding_style]', 'http://schemas.xmlsoap.org/soap/encoding/');
 		
+		$paramGlobalRequestHeaders    = $ro->getParameter('wsdl_generator[global_headers][request]',      array());
+		$paramGlobalResponseHeaders   = $ro->getParameter('wsdl_generator[global_headers][response]',     array());
+		
 		$wsdlDefinitions = $xpath->query('/wsdl:definitions');
 		foreach($wsdlDefinitions as $wsdlDefinition) {
 			$targetNamespaceUri = $wsdlDefinition->getAttribute('targetNamespace');
@@ -92,6 +95,21 @@ class AgaviWsdlConfigHandler extends AgaviXmlConfigHandler
 				
 				$wsdlOperations = $xpath->query('wsdl:operation', $wsdlBinding);
 				foreach($wsdlOperations as $wsdlOperation) {
+					
+					foreach(array('input' => $paramGlobalRequestHeaders, 'output' => $paramGlobalResponseHeaders) as $target => $headers) {
+						foreach($headers as $header) {
+							if(!isset($header['namespace'])) {
+								$header['namespace'] = $targetNamespaceUri;
+							}
+							$element = $doc->createElementNS('http://schemas.xmlsoap.org/wsdl/soap/', 'soap:header');
+							foreach(array('encodingStyle', 'message', 'namespace', 'part', 'use') as $key) {
+								if(isset($header[$key])) {
+									$element->setAttribute($key, $header[$key]);
+								}
+							}
+							$wsdlOperation->getElementsByTagNameNS('http://schemas.xmlsoap.org/wsdl/', $target)->item(0)->appendChild($element);
+						}
+					}
 					
 					if($paramSoapBodyNamespace !== null) {
 						$soapOperations = $xpath->query('soap:operation', $wsdlOperation);

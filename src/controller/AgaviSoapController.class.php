@@ -166,9 +166,16 @@ class AgaviSoapController extends AgaviController
 				$code[] = '    $this->rd = $this->context->getRequest()->getRequestData();';
 				$code[] = '  }';
 				
+				$headers = array();
+				
 				foreach($xpath->query('//soap:header') as $header) {
 					$name = $header->getAttribute('part');
-				
+					
+					if(in_array($name, $headers)) {
+						continue;
+					}
+					$headers[] = $name;
+					
 					$code[] = sprintf('  public function %s($value) {', $name);
 					$code[] = sprintf('    $this->rd->setHeader(%s, $value);', var_export($name, true));
 					$code[] = '  }';
