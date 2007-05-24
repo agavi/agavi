@@ -43,7 +43,7 @@
 			<setting name="debug">false</setting>
 			<setting name="modpub">/modpub</setting>
 			
-			<setting name="use_database">true</setting>
+			<setting name="use_database">false</setting>
 			<setting name="use_logging">false</setting>
 			<setting name="use_routing">true</setting>
 			<setting name="use_security">true</setting>
