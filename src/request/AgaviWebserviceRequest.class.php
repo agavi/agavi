@@ -42,7 +42,7 @@ abstract class AgaviWebserviceRequest extends AgaviRequest
 	/**
 	 * Constructor.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function __construct()

@@ -266,7 +266,7 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	 *
 	 * @return     bool If the content can be treated as / changed like a string.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function isContentMutable()

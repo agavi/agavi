@@ -24,7 +24,7 @@
  *
  * @author     Sean Kerr <skerr@mojavi.org>
  * @author     Dominik del Bondio <ddb@bitxtender.com>
- * @author     David Zuelke <dz@bitxtender.com>
+ * @author     David Zülke <dz@bitxtender.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
  *
@@ -108,7 +108,7 @@ abstract class AgaviBaseConfigHandler extends AgaviParameterHolder
 	 *
 	 * @return     string PHP code.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	protected function generate($code)

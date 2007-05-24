@@ -20,7 +20,7 @@
  * @package    agavi
  * @subpackage config
  *
- * @author     David Zuelke <dz@bitxtender.com>
+ * @author     David Zülke <dz@bitxtender.com>
  * @author     Dominik del Bondio <ddb@bitxtender.com>
  * @author     Sean Kerr <skerr@mojavi.org>
  * @copyright  Authors
@@ -46,7 +46,7 @@ class AgaviSettingConfigHandler extends AgaviConfigHandler
 	 * @throws     <b>AgaviParseException</b> If a requested configuration file is
 	 *                                        improperly formatted.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0

@@ -121,7 +121,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 	 *
 	 * This method is not called directly after initialize().
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function startup()
@@ -138,7 +138,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 	/**
 	 * Execute the shutdown procedure.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function shutdown()
@@ -436,7 +436,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 	 *
 	 * @throws     AgaviException If the given preset name doesn't exist.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	protected function resolveGenOptions($input = array())

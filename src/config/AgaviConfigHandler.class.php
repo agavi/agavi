@@ -24,7 +24,7 @@
  *
  * @author     Sean Kerr <skerr@mojavi.org>
  * @author     Dominik del Bondio <ddb@bitxtender.com>
- * @author     David Zuelke <dz@bitxtender.com>
+ * @author     David Zülke <dz@bitxtender.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
  *

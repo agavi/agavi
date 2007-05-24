@@ -266,7 +266,7 @@ class AgaviLoggerManager
 	 *
 	 * This method is not called directly after initialize().
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function startup()

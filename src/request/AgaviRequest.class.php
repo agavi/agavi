@@ -92,7 +92,7 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	/**
 	 * Constructor.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function __construct()
@@ -197,7 +197,7 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	 *
 	 * This method is not called directly after initialize().
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function startup()
@@ -217,7 +217,7 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	/**
 	 * Whether or not the Request is locked.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public final function isLocked()

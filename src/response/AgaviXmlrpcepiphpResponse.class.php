@@ -155,7 +155,7 @@ class AgaviXmlrpcepiphpResponse extends AgaviResponse
 	/**
 	 * @see        AgaviResponse::isMutable()
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function isContentMutable()
