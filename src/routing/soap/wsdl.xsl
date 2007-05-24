@@ -141,7 +141,7 @@ xmlns="http://schemas.xmlsoap.org/wsdl/"
 			</xsl:if>
 		</xsl:copy>
 	</xsl:template>
-	<xsl:template match="/wsdl:types | /wsdl:message">
+	<xsl:template match="/agavi:configurations/wsdl:types | /agavi:configurations/wsdl:message">
 		<xsl:copy>
 			<xsl:copy-of select="node() | @*" />
 		</xsl:copy>
