@@ -5,7 +5,7 @@ ini_set('soap.wsdl_cache_enabled', 0);
 // +---------------------------------------------------------------------------+
 // | An absolute filesystem path to the agavi/agavi.php script.                |
 // +---------------------------------------------------------------------------+
-require('../../src/agavi.php');
+require('/Users/dzuelke/Sites/_projects/agavi/branches/0.11/src/agavi.php');
 
 // +---------------------------------------------------------------------------+
 // | An absolute filesystem path to our app/config.php script.                 |
