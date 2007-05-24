@@ -66,6 +66,8 @@ class AgaviSoapRequest extends AgaviWebserviceRequest
 			constant("$rdhc::SOURCE_PARAMETERS") => array(),
 			constant("$rdhc::SOURCE_HEADERS") => array(),
 		));
+		
+		$this->setMethod($this->getParameter('default_method', 'read'));
 	}
 }
 
