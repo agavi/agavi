@@ -76,10 +76,11 @@ xmlns="http://schemas.xmlsoap.org/wsdl/"
 	</xsl:template>
 	<xsl:template match="wsdl:input[wsdl:part or wsdl:message/wsdl:part or soap:body[not(@message)]/wsdl:part or soap:body[not(@message)]/wsdl:message/wsdl:part or soap:header[not(@message)]/wsdl:part or soap:header[not(@message)]/wsdl:message/wsdl:part]" mode="message">
 		<xsl:param name="name" />
-		<xsl:apply-templates select="wsdl:part | wsdl:message/wsdl:part | soap:body[not(@message)]/wsdl:part | soap:body[not(@message)]/wsdl:message/wsdl:part" mode="message">
-			<xsl:with-param name="name" select="$name" />
-			<xsl:with-param name="postfix" select="$request_postfix" />
-		</xsl:apply-templates>
+		<xsl:if test="wsdl:part | wsdl:message/wsdl:part | soap:body[not(@message)]/wsdl:part or soap:body[not(@message)]/wsdl:message/wsdl:part">
+			<wsdl:message name="{$name}{$request_postfix}">
+				<xsl:copy-of select="wsdl:part | wsdl:message/wsdl:part | soap:body[not(@message)]/wsdl:part | soap:body[not(@message)]/wsdl:message/wsdl:part" />
+			</wsdl:message>
+		</xsl:if>
 		<xsl:if test="soap:header[not(@message)]/wsdl:part | soap:header[not(@message)]/wsdl:message/wsdl:part">
 			<wsdl:message name="{$name}{$request_postfix}Headers">
 				<xsl:copy-of select="soap:header[not(@message)]/wsdl:part | soap:header[not(@message)]/wsdl:message/wsdl:part" />
@@ -87,23 +88,16 @@ xmlns="http://schemas.xmlsoap.org/wsdl/"
 		</xsl:if>
 	</xsl:template>
 	<xsl:template match="wsdl:output[wsdl:part or wsdl:message/wsdl:part or soap:body[not(@message)]/wsdl:part or soap:body[not(@message)]/wsdl:message/wsdl:part or soap:header[not(@message)]/wsdl:part or soap:header[not(@message)]/wsdl:message/wsdl:part]" mode="message">
-		<xsl:param name="name" />
-		<xsl:apply-templates select="wsdl:part | wsdl:message/wsdl:part | soap:body[not(@message)]/wsdl:part | soap:body[not(@message)]/wsdl:message/wsdl:part" mode="message">
-			<xsl:with-param name="name" select="$name" />
-			<xsl:with-param name="postfix" select="$response_postfix" />
-		</xsl:apply-templates>
+		<xsl:if test="wsdl:part | wsdl:message/wsdl:part | soap:body[not(@message)]/wsdl:part or soap:body[not(@message)]/wsdl:message/wsdl:part">
+			<wsdl:message name="{$name}{$response_postfix}">
+				<xsl:copy-of select="wsdl:part | wsdl:message/wsdl:part | soap:body[not(@message)]/wsdl:part | soap:body[not(@message)]/wsdl:message/wsdl:part" />
+			</wsdl:message>
+		</xsl:if>
 		<xsl:if test="soap:header[not(@message)]/wsdl:part | soap:header[not(@message)]/wsdl:message/wsdl:part">
 			<wsdl:message name="{$name}{$response_postfix}Header">
 				<xsl:copy-of select="soap:header[not(@message)]/wsdl:part | soap:header[not(@message)]/wsdl:message/wsdl:part" />
 			</wsdl:message>
 		</xsl:if>
-	</xsl:template>
-	<xsl:template match="wsdl:part | wsdl:message/wsdl:part | soap:body[not(@message)]/wsdl:part | soap:body[not(@message)]/wsdl:message/wsdl:part" mode="message">
-		<xsl:param name="name" />
-		<xsl:param name="postfix" />
-		<wsdl:message name="{$name}{$postfix}">
-			<xsl:copy-of select="." />
-		</wsdl:message>
 	</xsl:template>
 	<xsl:template match="agavi:route" mode="binding">
 		<xsl:variable name="name" select="translate(@pattern, '^$', '')" />
