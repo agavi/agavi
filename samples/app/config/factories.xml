@@ -25,7 +25,7 @@
 		
 		<security_filter class="AgaviSecurityFilter" />
 		
-		<storage class="AgaviNullStorage" />
+		<storage class="AgaviSessionStorage" />
 		
 		<user class="AgaviSampleAppUser" />
 		
