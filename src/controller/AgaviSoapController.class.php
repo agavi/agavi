@@ -232,7 +232,9 @@ class AgaviSoapController extends AgaviController
 		try {
 			return parent::dispatch($this->dispatchArguments);
 		} catch(SoapFault $f) {
-			return $f;
+			$this->response->clear();
+			$this->response->setContent($f);
+			return $this->response;
 		}
 	}
 }
