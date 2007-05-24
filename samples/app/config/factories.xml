@@ -59,7 +59,7 @@
 			<parameter name="wsdl_generator">
 				<parameter name="soap">
 					<parameter name="address">
-						<parameter name="location">http://localhost/~dzuelke/_projects/agavi/branches/david-xml_config_handlers/samples/pub/soap.php</parameter>
+						<parameter name="location">http://localhost/~dzuelke/_projects/agavi/branches/0.11/samples/pub/soap.php</parameter>
 					</parameter>
 				</parameter>
 			</parameter>
