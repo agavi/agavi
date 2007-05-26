@@ -46,15 +46,18 @@ class AgaviInarrayValidator extends AgaviValidator
 	 */
 	protected function validate()
 	{
-		$list = split($this->getParameter('sep'), $this->getParameter('values'));
-		$value = $this->getData();
+		$list = $this->getParameter('values');
+		if(!is_array($list)) {
+			$list = explode($this->getParameter('sep'), $list);
+		}
+		$value = $this->getData($this->getArgument());
 		
 		if(!$this->getParameter('case')) {
 			$value = strtolower($value);
-			$list = array_map(create_function('$a', 'return strtolower($a);'),$list);
+			$list = array_map(create_function('$a', 'return strtolower($a);'), $list);
 		}
 		
-		if(!in_array($this->getData($this->getArgument()), $list)) {
+		if(!in_array($value, $list)) {
 			$this->throwError();
 			return false;
 		}

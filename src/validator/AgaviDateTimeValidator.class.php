@@ -47,7 +47,10 @@
  *                 This can either be a string or an array. If its an string it 
  *                 can be one of 'unix' (converts the date to a unix timestamp),
  *                 'string' (converts it to a string using the default format), 
- *                 'calendar' (will return the AgaviCalendar object).
+ *                 'calendar' (will return the AgaviCalendar object),
+ *                 'datetime' (case sensitive, will return a PHP DateTime 
+ *                 object, requires PHP 5.1.x with DateTime explicitly enabled 
+ *                 or >= PHP 5.2).
  *                 If it's an array it can have these keys:
  *     'type'        The type of the format (format, time, date, datetime)
  *     'format'      see in 'formats' above.
@@ -88,7 +91,7 @@ class AgaviDateTimeValidator extends AgaviValidator
 	 */
 	protected function validate()
 	{
-		if(!AgaviConfig::get('use_translation')) {
+		if(!AgaviConfig::get('core.use_translation')) {
 			throw new AgaviConfigurationException('The datetime validator can only be used with use_translation on');
 		}
 		$tm = $this->getContext()->getTranslationManager();
@@ -136,17 +139,17 @@ class AgaviDateTimeValidator extends AgaviValidator
 				$itemLocale = empty($item['locale']) ? $locale : $tm->getLocale($item['locale']);
 				$type = empty($item['type']) ? 'format' : $item['type'];
 
-				try {
-					if($type == 'format') {
-						$formatString = $item['format'];
-					} elseif($type == 'time' || $type == 'date' || $type == 'datetime') {
-						$format = isset($item['format']) ? $item['format'] : null;
-						$formatString = AgaviDateFormatter::resolveFormat($format, $itemLocale, $type);
-					} elseif($type == 'translation_domain') {
-						$td = $item['translation_domain'];
-						$formatString = $tm->_($item['format'], $td, $itemLocale);
-					}
+				if($type == 'format') {
+					$formatString = $item['format'];
+				} elseif($type == 'time' || $type == 'date' || $type == 'datetime') {
+					$format = isset($item['format']) ? $item['format'] : null;
+					$formatString = AgaviDateFormatter::resolveFormat($format, $itemLocale, $type);
+				} elseif($type == 'translation_domain') {
+					$td = $item['translation_domain'];
+					$formatString = $tm->_($item['format'], $td, $itemLocale);
+				}
 
+				try {
 					$format = new AgaviDateFormat($formatString);
 					$cal = $format->parse($param, $itemLocale, $check);
 
@@ -181,10 +184,13 @@ class AgaviDateTimeValidator extends AgaviValidator
 				$format = new AgaviDateFormat($formatString);
 				$value = $format->format($cal, $cal->getType(), $locale);
 			} else {
+				$cast = strtolower($cast);
 				if($cast == 'unix') {
 					$value = $cal->getUnixTimestamp();
 				} elseif($cast == 'string') {
 					$value = $tm->_d($cal);
+				} elseif($cast == 'datetime') {
+					$value = $cal->getNativeDateTime(); 
 				} else {
 					$value = $cal;
 				}

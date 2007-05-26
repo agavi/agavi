@@ -405,16 +405,16 @@ array data format
 			$delims = $ldmlTree->delimiters;
 
 			if(isset($delims->quotationStart)) {
-				$data['delimiters']['quotationStart'] = $delims->quotationStart->getValue();
+				$data['delimiters']['quotationStart'] = $this->unescape($delims->quotationStart->getValue());
 			}
 			if(isset($delims->quotationEnd)) {
-				$data['delimiters']['quotationEnd'] = $delims->quotationEnd->getValue();
+				$data['delimiters']['quotationEnd'] = $this->unescape($delims->quotationEnd->getValue());
 			}
 			if(isset($delims->alternateQuotationStart)) {
-				$data['delimiters']['alternateQuotationStart'] = $delims->alternateQuotationStart->getValue();
+				$data['delimiters']['alternateQuotationStart'] = $this->unescape($delims->alternateQuotationStart->getValue());
 			}
 			if(isset($delims->alternateQuotationEnd)) {
-				$data['delimiters']['alternateQuotationEnd'] = $delims->alternateQuotationEnd->getValue();
+				$data['delimiters']['alternateQuotationEnd'] = $this->unescape($delims->alternateQuotationEnd->getValue());
 			}
 		}
 
@@ -449,26 +449,26 @@ array data format
 						}
 
 						if(isset($calendar->am)) {
-							$data['calendars'][$calendarName]['am'] = $calendar->am->getValue();
+							$data['calendars'][$calendarName]['am'] = $this->unescape($calendar->am->getValue());
 						}
 						if(isset($calendar->pm)) {
-							$data['calendars'][$calendarName]['pm'] = $calendar->pm->getValue();
+							$data['calendars'][$calendarName]['pm'] = $this->unescape($calendar->pm->getValue());
 						}
 
 						if(isset($calendar->eras)) {
 							if(isset($calendar->eras->eraNames)) {
 								foreach($this->getChildsOrAlias($calendar->eras->eraNames) as $era) {
-									$data['calendars'][$calendarName]['eras']['wide'][$era->getAttribute('type')] = $era->getValue();
+									$data['calendars'][$calendarName]['eras']['wide'][$era->getAttribute('type')] = $this->unescape($era->getValue());
 								}
 							}
 							if(isset($calendar->eras->eraAbbr)) {
 								foreach($this->getChildsOrAlias($calendar->eras->eraAbbr) as $era) {
-									$data['calendars'][$calendarName]['eras']['abbreviated'][$era->getAttribute('type')] = $era->getValue();
+									$data['calendars'][$calendarName]['eras']['abbreviated'][$era->getAttribute('type')] = $this->unescape($era->getValue());
 								}
 							}
 							if(isset($calendar->eras->eraNarrow)) {
 								foreach($this->getChildsOrAlias($calendar->eras->eraNarrow) as $era) {
-									$data['calendars'][$calendarName]['eras']['narrow'][$era->getAttribute('type')] = $era->getValue();
+									$data['calendars'][$calendarName]['eras']['narrow'][$era->getAttribute('type')] = $this->unescape($era->getValue());
 								}
 							}
 						}
@@ -489,7 +489,7 @@ array data format
 							foreach($dtfItems as $item) {
 								if($item->getName() == 'dateTimeFormatLength') {
 									if(isset($item->dateTimeFormat->pattern)) {
-										$data['calendars'][$calendarName]['dateTimeFormats']['formats'][$item->getAttribute('type', '__default')] = $item->dateTimeFormat->pattern->getValue();
+										$data['calendars'][$calendarName]['dateTimeFormats']['formats'][$item->getAttribute('type', '__default')] = $this->unescape($item->dateTimeFormat->pattern->getValue(), true);
 									} else {
 										throw new AgaviException('unknown child content in dateTimeFormatLength tag');
 									}
@@ -498,14 +498,14 @@ array data format
 										if($dateFormatItem->getName() != 'dateFormatItem') {
 											throw new AgaviException('unknown childtag "' . $dateFormatItem->getName() . '" in availableFormats tag');
 										}
-										$data['calendars'][$calendarName]['dateTimeFormats']['availableFormats'][$dateFormatItem->getAttribute('id')] = $dateFormatItem->getValue();
+										$data['calendars'][$calendarName]['dateTimeFormats']['availableFormats'][$dateFormatItem->getAttribute('id')] = $this->unescape($dateFormatItem->getValue(), true);
 									}
 								} elseif($item->getName() == 'appendItems') {
 									foreach($item as $appendItem) {
 										if($appendItem->getName() != 'appendItem') {
 											throw new AgaviException('unknown childtag "' . $appendItem->getName() . '" in appendItems tag');
 										}
-										$data['calendars'][$calendarName]['dateTimeFormats']['appendItems'][$appendItem->getAttribute('request')] = $appendItem->getValue();
+										$data['calendars'][$calendarName]['dateTimeFormats']['appendItems'][$appendItem->getAttribute('request')] = $this->unescape($appendItem->getValue(), true);
 									}
 								} elseif($item->getName() != 'default') {
 									throw new AgaviException('unknown childtag "' . $item->getName() . '" in dateTimeFormats tag');
@@ -517,12 +517,12 @@ array data format
 							foreach($this->getChildsOrAlias($calendar->fields) as $field) {
 								$type = $field->getAttribute('type');
 								if(isset($field->displayName)) {
-									$data['calendars'][$calendarName]['fields'][$type]['displayName'] = $field->displayName->getValue();
+									$data['calendars'][$calendarName]['fields'][$type]['displayName'] = $this->unescape($field->displayName->getValue());
 								}
 								if(isset($field->relative)) {
 									foreach($field as $relative) {
 										if($relative->getName() == 'relative') {
-											$data['calendars'][$calendarName]['fields'][$type]['relatives'][$relative->getAttribute('type')] = $relative->getValue();
+											$data['calendars'][$calendarName]['fields'][$type]['relatives'][$relative->getAttribute('type')] = $this->unescape($relative->getValue());
 										}
 									}
 								}
@@ -537,19 +537,19 @@ array data format
 			if(isset($dates->timeZoneNames)) {
 				$tzn = $dates->timeZoneNames;
 				if(isset($tzn->hourFormat)) {
-					$data['timeZoneNames']['hourFormat'] = $tzn->hourFormat->getValue();
+					$data['timeZoneNames']['hourFormat'] = $this->unescape($tzn->hourFormat->getValue());
 				}
 				if(isset($tzn->hoursFormat)) {
-					$data['timeZoneNames']['hoursFormat'] = $tzn->hoursFormat->getValue();
+					$data['timeZoneNames']['hoursFormat'] = $this->unescape($tzn->hoursFormat->getValue());
 				}
 				if(isset($tzn->gmtFormat)) {
-					$data['timeZoneNames']['gmtFormat'] = $tzn->gmtFormat->getValue();
+					$data['timeZoneNames']['gmtFormat'] = $this->unescape($tzn->gmtFormat->getValue());
 				}
 				if(isset($tzn->regionFormat)) {
-					$data['timeZoneNames']['regionFormat'] = $tzn->regionFormat->getValue();
+					$data['timeZoneNames']['regionFormat'] = $this->unescape($tzn->regionFormat->getValue());
 				}
 				if(isset($tzn->fallbackFormat)) {
-					$data['timeZoneNames']['fallbackFormat'] = $tzn->fallbackFormat->getValue();
+					$data['timeZoneNames']['fallbackFormat'] = $this->unescape($tzn->fallbackFormat->getValue());
 				}
 				if(isset($tzn->abbreviationFallback)) {
 					$data['timeZoneNames']['abbreviationFallback'] = $tzn->abbreviationFallback->getAttribute('choice');
@@ -562,25 +562,25 @@ array data format
 					$zoneName = $zone->getAttribute('type');
 					if($zone->getName() == 'zone') {
 						if(isset($zone->long->generic)) {
-							$data['timeZoneNames']['zones'][$zoneName]['long']['generic'] = $zone->long->generic->getValue();
+							$data['timeZoneNames']['zones'][$zoneName]['long']['generic'] = $this->unescape($zone->long->generic->getValue());
 						}
 						if(isset($zone->long->standard)) {
-							$data['timeZoneNames']['zones'][$zoneName]['long']['standard'] = $zone->long->standard->getValue();
+							$data['timeZoneNames']['zones'][$zoneName]['long']['standard'] = $this->unescape($zone->long->standard->getValue());
 						}
 						if(isset($zone->long->daylight)) {
-							$data['timeZoneNames']['zones'][$zoneName]['long']['daylight'] = $zone->long->daylight->getValue();
+							$data['timeZoneNames']['zones'][$zoneName]['long']['daylight'] = $this->unescape($zone->long->daylight->getValue());
 						}
 						if(isset($zone->short->generic)) {
-							$data['timeZoneNames']['zones'][$zoneName]['short']['generic'] = $zone->short->generic->getValue();
+							$data['timeZoneNames']['zones'][$zoneName]['short']['generic'] = $this->unescape($zone->short->generic->getValue());
 						}
 						if(isset($zone->short->standard)) {
-							$data['timeZoneNames']['zones'][$zoneName]['short']['standard'] = $zone->short->standard->getValue();
+							$data['timeZoneNames']['zones'][$zoneName]['short']['standard'] = $this->unescape($zone->short->standard->getValue());
 						}
 						if(isset($zone->short->daylight)) {
-							$data['timeZoneNames']['zones'][$zoneName]['short']['daylight'] = $zone->short->daylight->getValue();
+							$data['timeZoneNames']['zones'][$zoneName]['short']['daylight'] = $this->unescape($zone->short->daylight->getValue());
 						}
 						if(isset($zone->exemplarCity)) {
-							$data['timeZoneNames']['zones'][$zoneName]['exemplarCity'] = $zone->exemplarCity->getValue();
+							$data['timeZoneNames']['zones'][$zoneName]['exemplarCity'] = $this->unescape($zone->exemplarCity->getValue());
 						}
 
 					}
@@ -597,37 +597,37 @@ array data format
 			if(isset($nums->symbols)) {
 				$syms = $nums->symbols;
 				if(isset($syms->decimal)) {
-					$data['numbers']['symbols']['decimal'] = $syms->decimal->getValue();
+					$data['numbers']['symbols']['decimal'] = $this->unescape($syms->decimal->getValue());
 				}
 				if(isset($syms->group)) {
-					$data['numbers']['symbols']['group'] = $syms->group->getValue();
+					$data['numbers']['symbols']['group'] = $this->unescape($syms->group->getValue());
 				}
 				if(isset($syms->list)) {
-					$data['numbers']['symbols']['list'] = $syms->list->getValue();
+					$data['numbers']['symbols']['list'] = $this->unescape($syms->list->getValue());
 				}
 				if(isset($syms->percentSign)) {
-					$data['numbers']['symbols']['percentSign'] = $syms->percentSign->getValue();
+					$data['numbers']['symbols']['percentSign'] = $this->unescape($syms->percentSign->getValue());
 				}
 				if(isset($syms->nativeZeroDigit)) {
-					$data['numbers']['symbols']['nativeZeroDigit'] = $syms->nativeZeroDigit->getValue();
+					$data['numbers']['symbols']['nativeZeroDigit'] = $this->unescape($syms->nativeZeroDigit->getValue());
 				}
 				if(isset($syms->patternDigit)) {
-					$data['numbers']['symbols']['patternDigit'] = $syms->patternDigit->getValue();
+					$data['numbers']['symbols']['patternDigit'] = $this->unescape($syms->patternDigit->getValue());
 				}
 				if(isset($syms->plusSign)) {
-					$data['numbers']['symbols']['plusSign'] = $syms->plusSign->getValue();
+					$data['numbers']['symbols']['plusSign'] = $this->unescape($syms->plusSign->getValue());
 				}
 				if(isset($syms->exponential)) {
-					$data['numbers']['symbols']['exponential'] = $syms->exponential->getValue();
+					$data['numbers']['symbols']['exponential'] = $this->unescape($syms->exponential->getValue());
 				}
 				if(isset($syms->perMille)) {
-					$data['numbers']['symbols']['perMille'] = $syms->perMille->getValue();
+					$data['numbers']['symbols']['perMille'] = $this->unescape($syms->perMille->getValue());
 				}
 				if(isset($syms->infinity)) {
-					$data['numbers']['symbols']['infinity'] = $syms->infinity->getValue();
+					$data['numbers']['symbols']['infinity'] = $this->unescape($syms->infinity->getValue());
 				}
 				if(isset($syms->nan)) {
-					$data['numbers']['symbols']['nan'] = $syms->nan->getValue();
+					$data['numbers']['symbols']['nan'] = $this->unescape($syms->nan->getValue());
 				}
 			}
 			if(isset($nums->decimalFormats)) {
@@ -652,7 +652,7 @@ array data format
 						foreach($this->getChildsOrAlias($itemLength) as $itemFormat) {
 							if($itemFormat->getName() == 'currencyFormat') {
 								if(isset($itemFormat->pattern)) {
-									$data['numbers']['currencyFormats'][$itemLengthName] = $itemFormat->pattern->getValue();
+									$data['numbers']['currencyFormats'][$itemLengthName] = $this->unescape($itemFormat->pattern->getValue());
 								}
 							} else {
 								throw new Exception('unknown childtag "' . $itemFormat->getName() . '" in currencyFormatLength tag');
@@ -662,22 +662,22 @@ array data format
 					} elseif($itemLength->getName() == 'currencySpacing') {
 
 						if(isset($itemLength->beforeCurrency->currencyMatch)) {
-							$data['numbers']['currencySpacing']['beforeCurrency']['currencyMatch'] = $itemLength->beforeCurrency->currencyMatch->getValue();
+							$data['numbers']['currencySpacing']['beforeCurrency']['currencyMatch'] = $this->unescape($itemLength->beforeCurrency->currencyMatch->getValue());
 						}
 						if(isset($itemLength->beforeCurrency->surroundingMatch)) {
-							$data['numbers']['currencySpacing']['beforeCurrency']['surroundingMatch'] = $itemLength->beforeCurrency->surroundingMatch->getValue();
+							$data['numbers']['currencySpacing']['beforeCurrency']['surroundingMatch'] = $this->unescape($itemLength->beforeCurrency->surroundingMatch->getValue());
 						}
 						if(isset($itemLength->beforeCurrency->insertBetween)) {
-							$data['numbers']['currencySpacing']['beforeCurrency']['insertBetween'] = $itemLength->beforeCurrency->insertBetween->getValue();
+							$data['numbers']['currencySpacing']['beforeCurrency']['insertBetween'] = $this->unescape($itemLength->beforeCurrency->insertBetween->getValue());
 						}
 						if(isset($itemLength->afterCurrency->currencyMatch)) {
-							$data['numbers']['currencySpacing']['afterCurrency']['currencyMatch'] = $itemLength->afterCurrency->currencyMatch->getValue();
+							$data['numbers']['currencySpacing']['afterCurrency']['currencyMatch'] = $this->unescape($itemLength->afterCurrency->currencyMatch->getValue());
 						}
 						if(isset($itemLength->afterCurrency->surroundingMatch)) {
-							$data['numbers']['currencySpacing']['afterCurrency']['surroundingMatch'] = $itemLength->afterCurrency->surroundingMatch->getValue();
+							$data['numbers']['currencySpacing']['afterCurrency']['surroundingMatch'] = $this->unescape($itemLength->afterCurrency->surroundingMatch->getValue());
 						}
 						if(isset($itemLength->afterCurrency->insertBetween)) {
-							$data['numbers']['currencySpacing']['afterCurrency']['insertBetween'] = $itemLength->afterCurrency->insertBetween->getValue();
+							$data['numbers']['currencySpacing']['afterCurrency']['insertBetween'] = $this->unescape($itemLength->afterCurrency->insertBetween->getValue());
 						}
 
 
@@ -691,10 +691,10 @@ array data format
 				foreach($nums->currencies as $currency) {
 					$name = $currency->getAttribute('type');
 					if(isset($currency->displayName)) {
-						$data['numbers']['currencies'][$name]['displayName'] = $currency->displayName->getValue();
+						$data['numbers']['currencies'][$name]['displayName'] = $this->unescape($currency->displayName->getValue());
 					}
 					if(isset($currency->symbol)) {
-						$symbolValue = $currency->symbol->getValue();
+						$symbolValue = $this->unescape($currency->symbol->getValue());
 						if($currency->symbol->getAttribute('choice') == 'true') {
 							$symbolValue = explode('|', $symbolValue);
 						}
@@ -710,7 +710,7 @@ array data format
 	/**
 	 * Gets the value of each node with a type attribute.
 	 *
-	 * @param      array List of AgaivConfigValueHolder items.
+	 * @param      array List of AgaviConfigValueHolder items.
 	 * @param      array The array to store the parsed data to.
 	 *
 	 * @return     array The array with the data.
@@ -726,7 +726,7 @@ array data format
 			$type = $listItem->getAttribute('type');
 
 			if(!$listItem->hasAttribute('alt')) {
-				$data[$type] = $listItem->getValue();
+				$data[$type] = $this->unescape($listItem->getValue());
 			}
 
 			++$lc;
@@ -742,7 +742,7 @@ array data format
 	/**
 	 * Gets the calendar widths for the given item.
 	 *
-	 * @param      AgaivConfigValueHolder The item.
+	 * @param      AgaviConfigValueHolder The item.
 	 * @param      string The name of item.
 	 * @param      array The array to store the parsed data to.
 	 *
@@ -776,7 +776,7 @@ array data format
 
 							if(!$item->hasAttribute('alt')) {
 								$itemName = $item->getAttribute('type');
-								$data[$dataIdxName][$itemContextName][$itemWidthName][$itemName] = $item->getValue();
+								$data[$dataIdxName][$itemContextName][$itemWidthName][$itemName] = $this->unescape($item->getValue());
 							}
 						}
 					} else {
@@ -793,7 +793,7 @@ array data format
 	/**
 	 * Gets the date or time formats the given item.
 	 *
-	 * @param      AgaivConfigValueHolder The item.
+	 * @param      AgaviConfigValueHolder The item.
 	 * @param      string The name of item.
 	 * @param      array The array to store the parsed data to.
 	 *
@@ -817,10 +817,10 @@ array data format
 				foreach($aliasedItemLength as $itemFormat) {
 					if($itemFormat->getName() == $name) {
 						if(isset($itemFormat->pattern)) {
-							$data[$dataIdxName][$itemLengthName]['pattern'] = $itemFormat->pattern->getValue();
+							$data[$dataIdxName][$itemLengthName]['pattern'] = $this->unescape($itemFormat->pattern->getValue(), true);
 						}
 						if(isset($itemFormat->displayName)) {
-							$data[$dataIdxName][$itemLengthName]['displayName'] = $itemFormat->displayName->getValue();
+							$data[$dataIdxName][$itemLengthName]['displayName'] = $this->unescape($itemFormat->displayName->getValue());
 						}
 					} else {
 						throw new Exception('unknown childtag "' . $itemFormat->getName() . '" in ' . $name . 'Length tag');
@@ -836,7 +836,7 @@ array data format
 	/**
 	 * Gets the number formats the given item.
 	 *
-	 * @param      AgaivConfigValueHolder The item.
+	 * @param      AgaviConfigValueHolder The item.
 	 * @param      string The name of item.
 	 * @param      array The array to store the parsed data to.
 	 *
@@ -859,7 +859,7 @@ array data format
 				foreach($this->getChildsOrAlias($itemLength) as $itemFormat) {
 					if($itemFormat->getName() == $name) {
 						if(isset($itemFormat->pattern)) {
-							$data[$dataIdxName][$itemLengthName] = $itemFormat->pattern->getValue();
+							$data[$dataIdxName][$itemLengthName] = $this->unescape($itemFormat->pattern->getValue());
 						}
 					} else {
 						throw new Exception('unknown childtag "' . $itemFormat->getName() . '" in ' . $name . 'Length tag');
@@ -875,7 +875,7 @@ array data format
 	/**
 	 * Resolves the alias LDML tag.
 	 *
-	 * @param      AgaivConfigValueHolder The item.
+	 * @param      AgaviConfigValueHolder The item.
 	 *
 	 * @return     mixed Either the item if there is no alias or the resolved 
 	 *                   alias.
@@ -936,6 +936,104 @@ array data format
 		} else {
 			return $item;
 		}
+	}
+	
+	/**
+	 * Unescapes unicode escapes
+	 * 
+	 * @link       http://unicode.org/reports/tr35/#Unicode_Sets
+	 * 
+	 * @param      string The string to unescape.
+	 * @param      bool   Whether the string needs to handle quoting behaviour
+	 *
+	 * @return     string The unescaped string.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0	
+	 */
+	protected function unescape($input, $handleQuotes = false)
+	{
+		$output = '';
+		$hex = '[0-9A-Fa-f]';
+		$rx = '\\\\(\\\\|u' . $hex . '{4}|U' . $hex . '{8}|x' . $hex .'{1,2}|[0-7]{1,3}|[abtnvfr]|[a-zA-Z])';
+		if($handleQuotes) {
+			// needs to be < -1 to not confuse the algorithm in the first run
+			$lastClose = -2;
+			if(preg_match_all("#'(?:''|[^'])+'|" . $rx . "#", $input, $matches, PREG_PATTERN_ORDER | PREG_OFFSET_CAPTURE)) {
+				$output = $input;
+				$offsetMod = 0;
+				$ml = $matches[0];
+				$len = count($ml);
+				for($i = 0; $i < $len; ++ $i) {
+					$match = $ml[$i];
+					if($match[0][0] != '\'') {
+						// we check if there is a quoted string directly before or directly after the escape sequence
+						// by using the string lengths and the offset of the matches. Since an escape sequence directly before
+						// this sequence results in an quoted string we only check if its really a quoted string and not an
+						// escape sequence for parts coming after this sequence
+						$quoteBefore = ($i > 0 && (strlen($ml[$i - 1][0]) + $ml[$i - 1][1]) == $match[1]);
+						$quoteAfter = ($i + 1 < $len && $ml[$i + 1][0][0] == '\'' && (strlen($match[0]) + $match[1]) == $ml[$i + 1][1]);
+						$oldLen = strlen($output);
+						$unescaped = $this->unescapeCallback(array($match[0], substr($match[0], 1)));
+						$unescaped = ($quoteBefore ? '' : '\'') . $unescaped . ($quoteAfter ? '' : '\'');
+						$replacedPartLen = strlen($match[0]) + ((int) $quoteBefore) + ((int) $quoteAfter);
+						// replace the matched escape sequence with the unescaped one. we also replace the opening or closing quote
+						// from the quoted part before or after this escape sequence to include the unescaped string into the closed part
+						$output = substr_replace($output, $unescaped, $offsetMod + $match[1] + ($quoteBefore ? -1 : 0), $replacedPartLen);
+						// since the string length gets changed, we have to track the size change so we can adjust the offset from the match
+						$offsetMod += strlen($output) - $oldLen;
+					}
+				}
+			} else {
+				$output = $input;
+			}
+		} else {
+			$output = preg_replace_callback('#' . $rx . '#', array($this, 'unescapeCallback'), $input);
+		}
+
+		return $output;
+	}
+	
+	/**
+	 * Unescapes a single unicode escape sequence. This is designed to be a 
+	 * preg_replace_callback callback function.
+	 * 
+	 * @param      array The match.
+	 *
+	 * @return     string The unescaped sequence.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0	
+	 */
+	protected function unescapeCallback($matches)
+	{
+		static $map = array(
+			'a' => "\x07",
+			'b' => "\x08",
+			't' => "\x09",
+			'n' => "\x0A",
+			'v' => "\x0B",
+			'f' => "\x0C",
+			'r' => "\x0D",
+			'\\' => '\\',
+		);
+		
+		
+		$res = '';
+		
+		$char = $matches[1][0];
+		$seq = substr($matches[1], 1);
+		if($char == 'u' || $char == 'U' || $char == 'x') {
+			$res = html_entity_decode('&#x' . $seq . ';', ENT_QUOTES, 'utf-8');
+		} elseif(is_numeric($char)) {
+			$res = html_entity_decode('&#' . octdec($matches[1]) . ';', ENT_QUOTES, 'utf-8');
+		} elseif(isset($map[$char])) {
+			$res = $map[$char];
+		} else {
+			$res = $match[0];
+		}
+		
+		return $res;
 	}
 }
 

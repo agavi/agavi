@@ -46,9 +46,18 @@ class AgaviWebserviceRouting extends AgaviRouting
 			return;
 		}
 		
-		$rq = $this->context->getRequest();
-		
-		$this->input = $rq->getCalledMethod();
+		$this->updateInput();
+	}
+	
+	/**
+	 * Set the name of the called web service method as the routing input.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function updateInput()
+	{
+		$this->input = $this->context->getRequest()->getInvokedMethod();
 	}
 }
 

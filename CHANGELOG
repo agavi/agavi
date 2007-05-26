@@ -3,6 +3,33 @@ AGAVI CHANGELOG
 
 0.11.0 (????? ??, 2007)
 
+ADD: Support for magic_quotes_gpc, including proper handling of indices in and outside of arrays as well as $_FILES
+ADD: Method to convert AgaviCalendar objects into native PHP DateTime objects ([1836]) (Dominik)
+ADD: Support for UTF-8 in StringValidator via parameter 'utf8', default on ([1820]) (David)
+ADD: Ability to prevent sending of the response in Controller::dispatch(), which now always returns the final (not global!) response (#469) (David)
+ADD: Made default layer class configurable via 'default_layer_class' config parameter for AgaviOutputTypeConfigHandler ([1800]) (David)
+
+CHG: Update timezone database to 2007c release ([1873]) (Dominik)
+CHG: More features and improved consistency for AgaviReturnArrayConfigHandler (#463) (David)
+CHG: Deprecate request attribute "matchedRoutes" in "org.agavi.routing" in favor of "matched_routes" (#465) (David)
+
+FIX: Fix date parsing for 1-12 hour formats (#472) (Dominik)
+FIX: Typos and too greedy exception catching in some validators ([1829], [1831]) (David, Dominik)
+FIX: Workaround for broken stream_get_wrappers() in Debian and Gentoo (and probably others) in latest PHP packages for versions < 5.2.1 thanks to, did I mention it yet, clueless Linux package maintainers who constantly manage to ruin their very uncool, very wrongly patched PHP versions ([1824]) (David)
+FIX: Suppress warning in AgaviImageFileValidator when a valid file, but no image is uploaded (#471) (David)
+FIX: Don't use unicode character properties in regular expressions, thanks to all the clueless Linux package maintainers who disable those even though they're on as default (just like they do it with DOM and other default stuff) ([1809], [1810]) (David)
+FIX: Make the pear package task create .keep files in empty dirs ([1807]) (David)
+FIX: When using 0 as default value for an optional parameter gen() could skip the parameter (#464) (Dominik)
+
+0.11.0 RC4 (February 25, 2007)
+
+ADD: Throw exceptions in case PCRE operations fail (like with corrupt UTF-8 input) in FormPopulationFilter (#461) (David, Veikko)
+
+FIX: XML-RPC support broken completely (#459) (David)
+FIX: Handling of multiple <configuration> blocks is broken in FactoryConfigHandler (#458) (David)
+FIX: ExecutionFilter throws notice/warning while trying to determine slot cacheability status (#457) (David)
+FIX: Using date translator with a custom format doesn't work (#455, #460) (Dominik, David)
+
 
 0.11.0 RC3 (February 22, 2007)
 

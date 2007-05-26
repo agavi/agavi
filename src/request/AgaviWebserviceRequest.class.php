@@ -27,7 +27,7 @@
  *
  * @version    $Id$
  */
-abstract class AgaviWebserviceRequest extends AgaviWebRequest
+abstract class AgaviWebserviceRequest extends AgaviRequest
 {
 	/**
 	 * @var        string The Input Data.
@@ -37,7 +37,21 @@ abstract class AgaviWebserviceRequest extends AgaviWebRequest
 	/**
 	 * @var        string The method called by the web service request.
 	 */
-	protected $calledMethod = '';
+	protected $invokedMethod = '';
+	
+	/**
+	 * Constructor.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function __construct()
+	{
+		parent::__construct();
+		$this->setParameters(array(
+			'request_data_holder_class' => 'AgaviWebserviceRequestDataHolder',
+		));
+	}
 	
 	/**
 	 * Initialize this Request.
@@ -63,6 +77,48 @@ abstract class AgaviWebserviceRequest extends AgaviWebRequest
 	}
 	
 	/**
+	 * Get the input data, usually the request from the POST body.
+	 *
+	 * @return     string The input data.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getInput()
+	{
+		return $this->input;
+	}
+	
+	/**
+	 * Set the input data. Useful for debugging purposes.
+	 *
+	 * @param      string The input data.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function setInput($input)
+	{
+		$this->input = $input;
+	}
+	
+	/**
+	 * Set the name of the method called by the web service request.
+	 *
+	 * @return     string A method name.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function setInvokedMethod($method)
+	{
+		$this->invokedMethod = $method;
+		
+		// let the routing update it's input
+		$this->context->getRouting()->updateInput();
+	}
+	
+	/**
 	 * Get the name of the method called by the web service request.
 	 *
 	 * @return     string A method name.
@@ -70,9 +126,9 @@ abstract class AgaviWebserviceRequest extends AgaviWebRequest
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function getCalledMethod()
+	public function getInvokedMethod()
 	{
-		return $this->calledMethod;
+		return $this->invokedMethod;
 	}
 }
 

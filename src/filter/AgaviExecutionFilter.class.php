@@ -142,15 +142,19 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function determineGroups(array $groups, $container)
+	public function determineGroups(array $groups, AgaviExecutionContainer $container)
 	{
 		$retval = array();
 		
 		foreach($groups as $group) {
 			$group += array('name' => null, 'source' => null, 'namespace' => null);
-			$val = $this->getVariable($group['name'], $group['source'], $group['namespace']);
+			$val = $this->getVariable($group['name'], $group['source'], $group['namespace'], $container);
 			if($val === null) {
 				$val = "0";
+			} elseif(is_object($val) && is_callable(array($val, '__toString'))) {
+				$val = $val->__toString();
+			} elseif(is_object($val) && function_exists('spl_object_hash')) {
+				$val = spl_object_hash($val);
 			}
 			$retval[] = $val;
 		}
@@ -166,13 +170,14 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 	 * @param      string The variable name.
 	 * @param      string The optional variable source.
 	 * @param      string The optional namespace in the source.
+	 * @param      AgaviExecutionContainer The container to use, if necessary.
 	 *
 	 * @return     mixed The variable.
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function getVariable($name, $source = 'string', $namespace = null)
+	public function getVariable($name, $source = 'string', $namespace = null, AgaviExecutionContainer $container = null)
 	{
 		switch($source) {
 			case 'constant':
@@ -180,6 +185,9 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 				break;
 			case 'locale':
 				$val = $this->context->getTranslationManager()->getCurrentLocaleIdentifier();
+				break;
+			case 'container_parameter':
+				$val = $container->getParameter($name);
 				break;
 			case 'request_parameter':
 				$val = $this->context->getRequest()->getRequestData()->getParameter($name);
@@ -280,6 +288,9 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 		$response->initialize($this->context, $rfi['parameters']);
 		$container->setResponse($response);
 		
+		// clear any forward set, it's ze view's job
+		$container->clearNext();
+		
 		if($actionCache['view_name'] !== AgaviView::NONE) {
 			
 			$container->setViewModuleName($actionCache['view_module']);
@@ -344,6 +355,12 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 					$output = array();
 					$nextOutput = $response->getContent();
 				} else {
+					if($viewCache['next'] !== null) {
+						// response content was returned from view execute()
+						$response->setContent($viewCache['next']);
+						$viewCache['next'] = null;
+					}
+					
 					$layers = $viewInstance->getLayers();
 				
 					if($isCacheable) {
@@ -364,7 +381,6 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 								for($i = count($layers)-1; $i >= 0; $i--) {
 									$layer = $layers[$i];
 									$layerName = $layer->getName();
-									$cacheSlots[$layerName] = array();
 									if(isset($otConfig['layers'][$layerName])) {
 										if(is_array($otConfig['layers'][$layerName])) {
 											$lastCacheableLayer = $i - 1;
@@ -375,10 +391,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 								}
 							}
 						} else {
-							$lastLayer = end($layers);
-							if($lastLayer !== false) {
-								$lastCacheableLayer = $lastLayer->getName();
-							}
+							$lastCacheableLayer = count($layers) - 1;
 						}
 					
 						for($i = $lastCacheableLayer + 1; $i < count($layers); $i++) {
@@ -405,7 +418,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 						} else {
 							// $lm->log('Running slot "' . $slotName . '"...');
 							$slotResponse = $slotContainer->execute();
-							if($isCacheable && !$isViewCached && in_array($slotName, $otConfig['layers'][$layerName])) {
+							if($isCacheable && !$isViewCached && isset($otConfig['layers'][$layerName]) && is_array($otConfig['layers'][$layerName]) && in_array($slotName, $otConfig['layers'][$layerName])) {
 								// $lm->log('Adding response of slot "' . $slotName . '" to cache...');
 								$viewCache['slots'][$layerName][$slotName] = $slotResponse;
 							}

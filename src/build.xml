@@ -480,8 +480,8 @@
 			</filterchain>
 		</copy>
 		<property name="templates.dir.current" value="${templates.dir.default}" override="true" />
-		<available file="${templates.dir}/Template.php.tmpl" property="templates.dir.current" value="${templates.dir}" />
-		<available file="${templates.dir}/modules/${module}/Template.php.tmpl" property="templates.dir.current" value="${templates.dir}/modules/${module}" />
+		<available file="${templates.dir}/Template${template.extension}.tmpl" property="templates.dir.current" value="${templates.dir}" />
+		<available file="${templates.dir}/modules/${module}/Template${template.extension}.tmpl" property="templates.dir.current" value="${templates.dir}/modules/${module}" />
 		<copy file="${templates.dir.current}/Template${template.extension}.tmpl" tofile="${module.dir}/templates/${actionPath}${view}${template.extension}">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">

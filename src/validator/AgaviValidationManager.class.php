@@ -251,8 +251,11 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	{
 		$result = true;
 		$this->result = AgaviValidator::SUCCESS;
+		
+		$req = $this->context->getRequest();
 
-		$requestMethod = $this->getContext()->getRequest()->getMethod();
+		$requestMethod = $req->getMethod();
+		
 		$executedValidators = 0;
 		foreach($this->children as $validator) {
 			if(!$validator->validatesInMethod($requestMethod)) {
@@ -280,8 +283,8 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 			}
 		}
 
-		$ma = $this->getContext()->getRequest()->getModuleAccessor();
-		$aa = $this->getContext()->getRequest()->getActionAccessor();
+		$ma = $req->getParameter('module_accessor');
+		$aa = $req->getParameter('action_accessor');
 
 		$mode = $this->getParameter('mode');
 

@@ -4,6 +4,11 @@
 <book>
   <title>The Definitive Guide to Agavi</title>
 
+  <bookinfo>
+    <releaseinfo>$Id: manual.xml 1823 2007-03-06 08:47:59Z david
+    $</releaseinfo>
+  </bookinfo>
+
   <preface>
     <title>Preface</title>
 
@@ -17,25 +22,347 @@
   </preface>
 
   <chapter>
-    <title>Getting Started</title>
+    <title>An Introduction</title>
 
     <section>
-      <title>Introduction</title>
+      <title>Agavi, a (Web) Application Framework</title>
 
-      <para>Agavi is a Web Application Framework for PHP 5. While it lies in
-      the nature of a framework to simplify the application development
-      process, Agavi won't do that at any cost. The primary goals are
-      flexibility, cleanliness and structure. You won't find HTML Form helper
-      methods in Agavi (because they aren't necessary, we have something
-      better, more on that later), and we use XML configuration files because
-      we believe that they offer better structuring abilites than alternatives
-      such as YAML (besides obvious benefits like XSD validation and
-      XIncludes). If you're looking for a solution that assists you in serious
-      high-end development, that has smart and innovative solutions to common
-      problems that haven't been solved properly before, and that encourages
-      and enforces a clean development process to ensure your code remains
-      maintainable and extensible, you've come to the right place.</para>
+      <section>
+        <title>What a Framework Is</title>
+
+        <para>A framework is a tool that takes the pain out of building
+        software. It should implement all the things that are common to most
+        applications: the things that otherwise would have to be re-done for
+        each new software project. That way, it prevents you from having to
+        "re-invent the wheel" each and every time, while at the same time
+        providing shortcuts for common problems and tasks.</para>
+
+        <para>While Agavi can, in theory, be used to build any type of
+        application, its main focus lies in Web-based applications and Web
+        services rather than standalone rich-client applications or daemons.
+        That's because the internal execution flow is modeled around a typical
+        HTTP request/response scenario, where an action is invoked upon a
+        request, and the resulting response is built and returned before
+        execution ends, just like any other PHP application.</para>
+
+        <para>Besides "doing the dishes" for you, a framework should also
+        offer a very important factor during development: guidance. Agavi
+        will, where necessary, actively prevent you from making the worst
+        mistakes, keeping your code maintainable and giving you the comforting
+        feeling that you're doing things the "right way."</para>
+      </section>
+
+      <section>
+        <title>What a Framework Should Do</title>
+
+        <section>
+          <title>Invent The Wheel Only Once</title>
+
+          <para>Agavi abstracts common problems, and provides you, the
+          developer, with a central, flexible solution that has evolved from
+          the experiences and input of many users, as well as a single point of
+          implementation you can comfortably override with custom code to
+          create application-specific behavior.</para>
+
+          <para>As a result, you'll find yourself in the relaxing situation of
+          not having to hack the framework core to achieve a certain goal.
+          Often, a configuration parameter is all you need. And if not, the
+          system's extreme extensibility guarantees that your custom
+          implementation is only a couple of lines of code away - an important
+          factor in the maintainability of an application, as it is not
+          necessary to apply custom patches to the framework after each
+          update.</para>
+        </section>
+
+        <section>
+          <title>Address Common Concerns</title>
+
+          <para>Agavi comes with smart and versatile solutions to a great deal
+          of problems that are often very difficult, time-consuming, or simply
+          annoying to solve. Some of these include:</para>
+
+          <para><simplelist>
+              <member><emphasis role="bold">It helps you build and maintain
+              clean URLs.</emphasis> Agavi's routing implementation can not
+              only map request URLs to actions, but also handles your web
+              service requests, generates URLs for you, and much more. Read
+              the chapter on routing for more information on advanced features
+              such as route callbacks or how to read an HTTP Accept header and
+              set an output type accordingly.</member>
+            </simplelist></para>
+
+          <para><simplelist>
+              <member><emphasis role="bold">It validates your data and helps
+              secure your code.</emphasis> Agavi can validate input submitted
+              by the user, filter and normalize values, and make your
+              application totally bullet-proof by only exposing validated data
+              to your code, greatly lowering the risks of you or one of your
+              developers using potentially unsafe data in your code. This
+              applies to any potentially unsafe input, not just GET or POST
+              data - files, cookies, and HTTP headers, among other input
+              sources, will all be run through the validation system, and the
+              single point of access to such data guarantees that you really
+              only process data you have validated.</member>
+            </simplelist></para>
+
+          <para><simplelist>
+              <member><emphasis role="bold">It takes the pain out of HTML
+              forms.</emphasis> Agavi features a very clever approach to
+              handling forms for you that does not rely on helpers or a
+              specific template language to work. Not only will it re-populate
+              the information the user entered when a form is shown again
+              after submission, it also assigns classes to erroneous fields
+              and their labels, and can even insert error messages into your
+              form without any placeholders in the markup. Of course, you have
+              full control over all aspects at any time, allowing you to
+              pre-populate forms with information from your database or other
+              sources.</member>
+            </simplelist></para>
+
+          <para><simplelist>
+              <member><emphasis role="bold">It offers powerful features for
+              globalization.</emphasis> Besides support for translating
+              strings in different languages, Agavi comes with the ability to
+              format and parse numbers, dates and currencies in over 250
+              different locales. It is aware of time zones, has extensive
+              support for calendars and calendar operations, can give you a
+              list of country names in the language (and script!) you like,
+              and much, much more.</member>
+            </simplelist></para>
+
+          <para></para>
+        </section>
+
+        <section>
+          <title>Encourage Clean, Pragmatic Design</title>
+
+          <para>Agavi's whole structure helps you a lot with designing and
+          structuring your applications so that you get things right from the
+          beginning. It encourages loose coupling, making it easy to hide
+          implementational details from the parts of your code that should not
+          have to worry about the "inner workings" of things, which also means
+          that your code becomes very forward-compatible: whether you just
+          want to modify the way your code talks to the database, or add a web
+          service interface to your existing application, you will notice that
+          your project already is structured in such a way that you do not
+          have to go back and change existing things to make it happen.</para>
+
+          <para>Also, you'll be presented with certain best practices from the
+          beginning, as Agavi's project skeletons are structured to help you
+          avoid mistakes in the critical early phase of development where you
+          build the foundation for your software. This ensures that you can
+          fully benefit from all the features that made you choose Agavi in the
+          first place.</para>
+
+          <para>And because Agavi follows the Model-View-Controller (MVC)
+          architecture, your code automatically becomes highly efficient as the
+          various parts are cleanly separated, making your application easily
+          maintainable:</para>
+
+          <para><simplelist>
+              <member>The <emphasis role="bold">Model</emphasis> accesses your
+              data. It might talk to a database, or to a web service, or use
+              smoke signals to acquire the information it returns to you; the
+              essential point is that the way the data is retrieved is
+              absolutely irrelevant to the code that uses the model. So in the
+              beginning, your application would use models that return "fake"
+              dummy test data for rapid prototyping, and later, you will write
+              the actual code that talks to a database.</member>
+            </simplelist></para>
+
+          <para><simplelist>
+              <member>The <emphasis role="bold">View</emphasis> presents your
+              data. For Web sites, that typically means it renders an HTML
+              document from one or more templates. But it could also build an
+              RSS feed from the data it was given, or create a JSON data
+              structure for the Ajax functionality of your application - it's
+              all up to you!</member>
+            </simplelist></para>
+
+          <para><simplelist>
+              <member>The <emphasis role="bold">Controller</emphasis> contains
+              the business logic: the code that talks to the model, transforms
+              the data, performs necessary tasks and then prepares data for the
+              View. In Agavi, we call this the <firstterm>Action</firstterm>.
+              After it has finished its task, it tells the system which View
+              to use to generate the output.</member>
+            </simplelist></para>
+        </section>
+      </section>
+
+      <section>
+        <title>What a Framework Shouldn't Do</title>
+
+        <section>
+          <title>Lock You In</title>
+
+          <para>This is the most important point about a framework. It should
+          not lock you into a certain way of building your HTML output, or the
+          way you deal with your database.</para>
+
+          <para><important>
+              <para>Of course, this is a bit of a moot point. You might argue
+              that by using a framework in the first place, you're locking
+              yourself in already - and you'd be right to insist! There is no
+              doubt that by choosing a framework, you have to stick to it -
+              not forever, of course, but you cannot simply cut and paste your
+              code to port a project to a different framework. If a framework
+              promises you that, they're either lying, or they don't deserve
+              the label "framework" because their implementations are so
+              low-level they provide only a simple toolkit (or, as they're
+              called these days, a component library).</para>
+            </important>A framework can lock you in in many ways, like:</para>
+
+          <para><simplelist>
+              <member>Require you to use some object relational mapper tool to
+              leverage the full potential of the framework. Many frameworks
+              out there do this, and some people like that, while others
+              don't. A good example is the infamous Ruby on Rails - a lot of
+              it's glamour is due to it being strongly tied to the
+              ActiveRecord ORM layer, and if you wish to use something else,
+              some of the "Rails feeling" gets lost.</member>
+            </simplelist></para>
+
+          <para><simplelist>
+              <member>Force you to use a certain template language in order to
+              be able to use all features. Many, many, many frameworks come
+              with helpers for everything you could possibly imagine, from
+              creating an opening <code>&lt;form&gt;</code> tag to inserting
+              stylesheets or even javascript effects. If you try to use the
+              template language of your choice, you have to replicate all this
+              stuff if you want to use it. And what's more, all these helpers
+              often do only 95% of what you want them to do, but not quite the
+              thing you had in mind. (Besides the obvious fact, of course, that
+              you might just outright hate the template language the framework
+              authors think is best for everyone, and that can ruin the whole
+              experience.)</member>
+            </simplelist></para>
+
+          <para>As you have probably guessed by now, Agavi tries hard not to
+          lock you in to any of the above. You can use the template language
+          you like, and everything just works - particularly the entire form
+          handling system that was deliberately built in such a way that it is
+          fully independent of any template language implementation.</para>
+
+          <para>And while Agavi offers integration for database object layers
+          like Propel, you do not have to use such a layer. If you like, you
+          may use AdoDB for database access, or the now common PDO, or even
+          vanilla pgsql_* functions - it's all up to you. And if there is no
+          adapter for your favorite layer bundled in the source distribution,
+          chances are that someone has written one and shared it somewhere.
+          And if not, (e.g., if it's your home-made database wrapper you have
+          learned to love over the years), you can easily write a custom driver
+          for it (and even that is not necessary, but of course highly
+          recommended).</para>
+        </section>
+
+        <section>
+          <title>Do Everything To Please People, No Matter How Stupid It
+          Is</title>
+
+          <para>Sometimes, it's necessary to say "no." Many projects, over
+          time, develop what's commonly known as "feature creep" or
+          "featuritis". There are many things in the area of frameworks where
+          you ask a thousand people for their opinion, just to get a thousand
+          (or, in the worst case, even more) different answers. Not only must
+          a framework decide not to implement a thousand different approaches
+          in such a case, it's also very important to balance out precisely
+          how much of a specific feature the framework should implement, or if
+          it's better to leave it entirely up to the users.</para>
+
+          <para>A good example of this is any feature that is not within the
+          scope of a framework, or that can work perfectly fine without being
+          tied to the framework. A common feature is the ability to send
+          e-mail. Smart frameworks don't have such a feature, because there
+          already are many, many different libraries to choose from, many of
+          which have matured over the course of years and as such are very
+          stable and comfortable to use. There is simply no reason why a
+          framework should be able to send e-mail, rotate image files, or come
+          with a pre-made shopping cart module. Besides locking people in,
+          every new feature that others solve better means increased activity
+          on the support channels, derogating the quality of support for all
+          users.</para>
+        </section>
+
+        <section>
+          <title>Making You Forget What Programming Is About</title>
+
+          <para>Many frameworks have so many helpers for so many things that
+          do stuff in certain ways that people might easily become totally
+          immersed in them. Users start to neglect what programming is really
+          about: using one's own imagination and ingenuity. A framework should
+          fuel the human thirst for knowledge and excellence, and not bury it
+          under a pile of stuff targeted mainly at people who are too lazy to
+          learn how things work - and learning how things work is an important
+          factor in enabling people to leverage a tool's full potential. That's
+          why this manual will, from time to time, delve into explaining the
+          inner workings of Agavi, in case you're interested.</para>
+        </section>
+      </section>
     </section>
+
+    <section>
+      <title>A Brief Look at Agavi's History</title>
+
+      <para>The Agavi project was started in early 2005 as a fork of the then
+      well-known Mojavi framework for PHP. Mojavi had gathered a pretty large
+      community over the years, but the new version 3 didn't see overly active
+      development and was, despite the open source license, not developed in a
+      typically open source manner, i.e. with active involvement of and
+      feedback from the community, or access to the main development
+      repository, issue tracker and so on.</para>
+
+      <para>As a result, a couple of guys from Keller, Texas (namely Mike
+      Vincent and Bob Zoller) forked Mojavi and labeled it Agavi (after the
+      Agave plant which grows in the Mojave desert), with the main goal of
+      creating a community-driven project with an open and transparent
+      development process. A message with the fork announcement was posted on
+      the Internet and in the Mojavi forums, and Agavi quickly gathered a
+      small but loyal user base and more contributors.</para>
+
+      <para>The first version released to the public was 0.9.0, and as the
+      version number implies, it was believed that a final 1.0 release could
+      follow soon after that. It turned out, however, that there were other
+      unresolved issues that had to be addressed, and so it wasn't until the
+      end of 2005 that a new 0.10.0 version was released to the public.</para>
+
+      <para>While Agavi never had any official structure to its development
+      team initially, the founders had less and less free time to spend on the
+      project, and Bob ultimately made David Zülke "captain of the ship" as he
+      put it in early 2006, and the decision was made to adjust the roadmap a
+      bit, putting important features such as a routing and
+      internationalization on the schedule for 1.0, since other frameworks,
+      mostly inspired by Ruby on Rails, had begun to offer such functionality.
+      A 0.11 release before a final 1.0 was planned in order to be able to make
+      any changes, should they be necessary, before releasing a final 1.0
+      version to the general public.</para>
+
+      <para>In the end, 0.11 implemented a great many more features than
+      originally planned, and as time went on, many of the core aspects of the
+      framework, which was still heavily based on Mojavi 3, were changed
+      drastically (so much in fact that at the time of this writing, many parts
+      of Agavi do not resemble Mojavi much anymore). A lot of this work was
+      necessary to prepare Agavi for the challenges frameworks face today and
+      in the future; a solid, structured foundation is very important in order
+      to be able to adapt to new developments and grow without having to
+      introduce hacks or workarounds that would otherwise be necessary to
+      introduce new functionality without breaking backwards
+      compatibility.</para>
+
+      <para>Agavi 0.11 is what you see today. Soon after work on 0.11
+      commenced, it was decided that version 1.0 should be pretty much
+      identical in terms of features, but with comprehensive documentation and
+      everything a community would need after the launch. This "pre-1.0
+      release" was deliberately flown "below radar" in order to keep Agavi
+      from getting wide public attention before the documentation was fully up
+      to scale with the framework itself - everything else would have scared
+      off a lot of people very quickly and thus possibly ruined the chances of
+      ever getting a large user base.</para>
+    </section>
+  </chapter>
+
+  <chapter>
+    <title>Getting Started</title>
 
     <section>
       <title>Prerequisites</title>
@@ -106,6 +433,14 @@
         Agavi:</para>
 
         <para><command>pear install agavi/agavi-0.11.0</command></para>
+
+        <para><tip>
+            <para>Depending on your system configuration, you might need to
+            run these commands with superuser rights. This is, for instance,
+            often the case with PEAR installs on Mac OS X. You can simply
+            prepend <command>sudo</command> to each command to run it with the
+            appropriate permissions.</para>
+          </tip></para>
       </section>
 
       <section id="c1-installation-by_hand">
@@ -179,6 +514,8 @@
         linkend="c1-installation-by_hand" />, or you package a PEAR release
         yourself for local installation by first running</para>
 
+        <para><command>pear channel-discover pear.agavi.org</command></para>
+
         <para><command>phing package-pear</command></para>
 
         <para>on the root directory of your checkout, followed by a</para>
@@ -187,7 +524,9 @@
 
         <para>inside the <filename>build</filename> directory created by the
         first command. This will write a <filename>.tgz</filename> file which
-        can be installed using PEAR.</para>
+        can be installed using PEAR. If you already have Agavi installed it
+        might be a good idea to remove it by running <command>pear uninstall
+        agavi/agavi</command>.</para>
       </section>
 
       <section>
@@ -312,7 +651,7 @@ $url = "http://localhost/path/to/the/samples/pub/xmlrpc.php";
 $header[] = "Content-type: text/xml; charset=utf-8";
 $header[] = "Content-length: ".strlen($request);
 
-$ch = curl_init();  
+$ch = curl_init();
 curl_setopt($ch, CURLOPT_URL, $url);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_TIMEOUT, 10);
@@ -491,6 +830,9 @@ if(curl_errno($ch)) {
 
       <section>
         <title>A Closer Look at Context Initialization</title>
+
+        <para>***TODO: needs to be re-written or removed. We have startup
+        methods now.</para>
 
         <para>Agavi's context class (AgaviContext) is initialized according to
         settings defined in <filename>factories.xml</filename>. Normally you
@@ -726,11 +1068,426 @@ if(curl_errno($ch)) {
     <section>
       <title>Request and Routing</title>
 
-      <para>request parameters and attributes, attribute namespaces, errors,
-      cookies.</para>
+      <para>(Request and routing)</para>
 
-      <para>routing functionality, getting info from the routing, generating
-      urls</para>
+      <section>
+        <title>Request</title>
+
+        <para>request parameters and attributes, attribute namespaces, errors,
+        cookies.</para>
+
+        <section>
+          <title>User Input</title>
+
+          <para>This chapter focuses on how to use user input in Agavi actions
+          and views. We don't go into input validation as the validation in
+          Agavi works in such a way that you can turn it on later without
+          touching the code in actions or views. Just remember that in real
+          life you should never use any un-validated user input.</para>
+
+          <para>All the input from the user like <code>$_GET</code> and
+          <code>$_POST</code> arrays in the web context is stored into
+          <classname>AgaviRequestDataholder</classname> (in the web context
+          <classname>AgaviWebRequestDataHolder</classname> but you don't have
+          to worry about the actual implementation) object that's given to the
+          action's execute method as an argument. Depending on your validation
+          settings this object has either all input or just the input that has
+          passed validation (see chapter Validation to learn more about
+          different validation set-ups). For added security PHP's superglobals
+          like <code>$_GET</code> and <code>$_POST</code> are emptied
+          entirely. This is to keep developers from accidentally using
+          insecure data. Agavi also removes so-called magic quotes from the
+          input should that feature be enabled in your PHP set-up.</para>
+
+          <programlisting>class Products_EditAction extends WebShopBaseAction
+{
+  // route pattern /product/(id:\d+)/edit
+  // eg. www.example.com/product/123/edit to edit prd no 123
+
+  public function executeWrite(AgaviRequestDataHolder $rd)
+  {
+    $prdId = $rd-&gt;getParameter('prdid');
+
+    $product = $this-&gt;getContext()-&gt;getModel('Product', 'Products', array('id'=&gt;'$prdId));
+    $product-&gt;setName($rd-&gt;getParameter('prdname');
+    $product-&gt;save();
+
+    return 'Success';
+  }</programlisting>
+
+          <para>This simple example shows us two important type of input -
+          input coming directly from the user (submitted via an HTML form
+          perhaps) and implicit parameters from the route (URL). Both input
+          types are accessed with <methodname>getParameter(name,
+          default)</methodname> of the
+          <classname>AgaviRequestDataHolder</classname>.</para>
+
+          <para>In web context cookies, HTTP headers and uploaded files are
+          accessed just as easily with their respective access methods
+          <methodname>getCookie</methodname>,
+          <methodname>getHeader</methodname> and
+          <methodname>getFile</methodname>.</para>
+        </section>
+
+        <section>
+          <title>Passing Data Inside the System</title>
+
+          <section>
+            <title>From Action to View/Template</title>
+
+            <para>{Action::setAttribute, View::getAttribute, $template array /
+            extracted vars}</para>
+
+            <para>To pass data from the action to the view or template, you
+            would use the action's <methodname>setAttribute</methodname>
+            -method, which takes two parameters: a name-parameter identifying
+            the data, and a mixed parameter of actual data. The data can be
+            anything you can use as a variable in PHP itself, for instance
+            strings, arrays or objects.</para>
+
+            <para><programlisting>class Products_ViewAction extends WebShopBaseAction
+{
+  // route pattern /prouct/(id:\d+)
+  // eg. www.example.com/product/123 to view the product with id 123
+  public function executeRead(AgaviRequestDataHolder $rd)
+  {
+    $prdId = $rd-&gt;getParameter('prdid');
+
+    $product = $this-&gt;getContext()-&gt;getModel('Product', 'Products', array('id' =&gt; $prdId));
+    $this-&gt;setAttribute('product', $product);
+
+    return 'Success';
+  }
+
+}</programlisting>Now the attribute "product" is available in the view as an
+            attribute which you can access via the view's
+            <methodname>getAttribute</methodname> -method, and in the template
+            as a template variable. Attributes may also be set in separate
+            namespaces, for more information see @@attribute
+            namespaces@@.</para>
+
+            <para>All the request parameter that the action recieved are also
+            available via the AgaviRequestDataHolder -object in the view. This
+            is also true for the template, if the request data auto-assignment
+            is enabled in <filename>output_types.xml</filename>.</para>
+
+            <para>There are several variables automatically assigned in the
+            template if set up in <filename>output_types.xml</filename>. These
+            are the @@link:routing object@@, the request object (which is not
+            the same as the <emphasis>request data</emphasis> object), the
+            @@link:controller@@, the @@link:user@@ , the @@link:translation
+            manager@@ and the request data -object. The variable name of these
+            objects is naturally configurable to your own taste.</para>
+          </section>
+
+          <section>
+            <title>From Component to Another</title>
+
+            <para>Core messages (matched_routes,
+            org.agavi.controller.forwards.*, fpf)</para>
+          </section>
+        </section>
+      </section>
+
+      <section>
+        <title>Routing</title>
+
+        <para>(routing functionality, getting info from the routing,
+        generating urls)</para>
+
+        <para>Normally when you do HTTP GET requests, parameters are specified
+        using a format like index.php?param1=val1&amp;param2=val2. Routing can
+        help you get rid of this ugly format that search engines do not
+        particularly like and make the URI prettier for the users. Routing is
+        basically a method to map URIs to module/action -pairs and provide
+        information for them, such as the parameters. Think of it as replacing
+        mod_rewrite for Apache or ISAPI_Rewrite for Microsoft IIS but with a
+        lot more power and features. Routes are defined in the file
+        <filename>%core.app_dir%/config/routing.xml</filename>, and to enable
+        routing you must set the "use_routing" option to true in
+        <filename>settings.xml</filename>.</para>
+
+        <para>Let's look at an example route:<programlisting>&lt;route name="viewproduct" pattern="^/products/(id:\d+)$" module="Shop" action="ViewProduct" /&gt;</programlisting></para>
+
+        <para>A request to the URL <uri>http://host.com/products/157</uri>
+        would run the "ViewProduct" action in module "Shop", with a request
+        parameter <varname>id</varname> set to "157".</para>
+
+        <para>Most of the "magic" is achieved using regular expressions
+        (@linkto PCRE@). In the above example, the id parameter must consist
+        of digits, otherwise, the pattern, and thus this whole route, would
+        not match.</para>
+
+        <note>
+          <para>The <code>name:expression</code> syntax is really only a
+          convenient form for named subpatterns, which look something like
+          <code>(?P&lt;name&gt;pattern)</code></para>
+        </note>
+
+        <para>The example pattern is anchored at the beginning and end. This
+        is very important, because if the pattern above wasn't anchored at the
+        end, a URL like /products/157/YOUR-SITE-SUCKS etc would match, too. So
+        you always have to pay attention to anchor patterns properly. There
+        are cases when you don't want that to happen,</para>
+
+        <para>Routes can run for either read- or write-requests. You tell a
+        route which requests to be applied to by using the <code>method</code>
+        -attribute. For read-methods, you would use
+        <code>method="read"</code>, and for write-requests you would use
+        <code>method="write"</code>. Routes are matched for both request
+        methods by default, and are always matched in the order they are
+        configured.</para>
+
+        <para>It is worth to note that if the route has the module and action
+        attributes set, they will overwrite route parameters named "module"
+        and "action". If the attributes aren't set, you can use module and
+        action parameters, and they would do what you expect -- set the module
+        and the action of the request.</para>
+
+        <section>
+          <title>Optional Parts</title>
+
+          <para>If we take the previous Shop-example in section 6.2, we notice
+          that we have to specify the id-parameter every time, otherwise the
+          route will not match. So how do we add optional parts to the
+          route?</para>
+
+          <para>Because the route pattern is a regular expression, this is
+          done the same way optional parts are done in regular expressions:
+          with the ?-quantifier.</para>
+
+          <para><programlisting>&lt;route name="viewproduct" pattern="^/products(/{id:\d+})?$" module="Shop" action="ViewProduct" /&gt;</programlisting>The
+          difference between this route and the previous one is that now the
+          slash and the id -parameters are optional. That is, the request
+          <uri>http://host.com/products</uri> would also run the
+          <methodname>Shop.ViewProduct</methodname> action, but the
+          id-parameter would be undefined. Your action can then check if the
+          id request parameter is null, and if so show a listing of, say, all
+          products.</para>
+        </section>
+
+        <section>
+          <title>Defaults</title>
+
+          <para>The default-element specifies values that should be used if a
+          parameter is not supplied. This also applies for generating the
+          route even if the parameter is not optional. For instance, we have a
+          route like this:</para>
+
+          <programlisting>&lt;route name="viewproduct" pattern="^/products(/{id:\d+})(/{lang:[a-z]{2})?$" module="Shop" action="ViewProduct"&gt;
+  &lt;defaults&gt;
+    &lt;default for="lang"&gt;en&lt;/default&gt;
+  &lt;/defaults&gt;
+&lt;/route&gt;</programlisting>
+
+          <para>indicates that if we do not specify a value for the
+          lang-parameter (specified with the <code>for="lang"</code>
+          -attribute), the default will be set to "en". Likewise, if we would
+          remove the ?-quantifier from the end of the pattern and generate a
+          route to viewproduct but do not specify the lang-parameter, it will
+          use the default "en".</para>
+        </section>
+
+        <section>
+          <title>Pre- and Postfixes for Parameters</title>
+
+          <para>When using @@optional parts@@, you almost always need
+          additional characters before and after the actual parameters. For
+          that, you can use pre- and postfixes.</para>
+
+          <para>To use them, you enclose the name:expression part in curly
+          braces, and outside of these, you define the pre- and postfixes that
+          should not be included in a matched value:</para>
+
+          <para><programlisting>^/uri(/pre-part-{varname:regexp}-post-part)$</programlisting></para>
+
+          <para>Let's look at a more complicated example from the Sample
+          Application:</para>
+
+          <para><programlisting>&lt;route name="search_engine_spam" pattern="^/products(/buy-cheap-{name:[\S\s]+}-at-agavi-dot-org)?/(id:\d+)" module="Default" action="SearchEngineSpam"&gt;
+  &lt;defaults&gt;
+    &lt;default for="name"&gt;/buy-cheap-{chainsaws}-at-agavi-dot-org&lt;/default&gt;
+  &lt;/defaults&gt;
+&lt;/route&gt;</programlisting>This would match the request
+          <uri>http://host.com/products/37</uri> and
+          <uri>http://host.com/products/buy-cheap-whatever-at-agavi-dot-org/37</uri>.
+          The inner part is optional, and for Search Engine Optimization (or,
+          in this case, stupid spamming) only.</para>
+
+          <para>The <token>&lt;default&gt;</token> here indicates that if we
+          do not supply the "<uri>/buy-cheap-whatever-at-agavi-dot-org</uri>",
+          it will set it to
+          "<uri>/buy-cheap-chainsaws-at-agavi-dot-org</uri>", thus setting the
+          name-parameter to "chainsaws", and id to null. (see @@previous
+          section@@)</para>
+
+          <para><tip>
+              <para>Pre- and Postfixes may also be regular expressions
+              themselves. You must, however, define static @@default values@@
+              so these routes can be @@generated@@</para>
+            </tip></para>
+        </section>
+
+        <section>
+          <title>Ignores</title>
+
+          <para>The ignores-section specifies parameters that affect the
+          routing or output types, but are not set as request parameters. From
+          the sample application:</para>
+
+          <para><programlisting>&lt;route pattern="^/({locale:[a-z]{2}(_[A-Z]{2})?})" stop="false" imply="true" cut="true" locale="${locale}@currency=GBP" callback="AgaviSampleAppLanguageRoutingCallback"&gt;
+  &lt;ignores&gt;
+    &lt;ignore&gt;locale&lt;/ignore&gt;
+  &lt;/ignores&gt;
+&lt;/route&gt;</programlisting></para>
+
+          <para>If the locale-parameter is set here, we use the route to set
+          the application locale to the value specified. The ignore-section
+          means that the parameter specified will not be available as a
+          request parameter later on.</para>
+        </section>
+
+        <section>
+          <title>Routing callbacks</title>
+
+          <para>Routing callbacks are user-defined classes that run when Agavi
+          tests the route for matches. The class has to implement methods that
+          Agavi call, and these methods would return true or false depending
+          on if the route matching is to succeed or fail.</para>
+
+          <para><code>onMatched</code> is called when the route matches. This
+          method can then return either true to indicate that it did indeed
+          match, or false to indicate that even though the pattern itself
+          matches, the route should fail.</para>
+
+          <para><code>onNotMatched</code> is similarly called for routes that
+          do not match the pattern, and likewise can return true to indicate
+          that the pattern should match nevertheless, or false to indicate
+          that ithe route should fail.</para>
+
+          <para><code>onGenerate</code> is called when the routing engine
+          generates an URI for the route, and can modify parameters and return
+          true or false indicating wether this fragment should be in the route
+          at all.</para>
+
+          <para><note>
+              <para>For in-depth information on how to write your custom
+              routing callbacks, please see the @@cookbook@@</para>
+            </note></para>
+        </section>
+
+        <section>
+          <title>Subroutes</title>
+
+          <para>Imagine you have a big application with tens or hundreds of
+          actions. Imagine adding all those into
+          <filename>routing.xml</filename> one by one in the
+          <code>&lt;routes&gt;</code> -section. It would be very ineffective
+          to parse through all those routes in order to find the correct
+          route. Introducing... subroutes!</para>
+
+          <para>Subroutes are routes that are defined under other routes. Let
+          us explain through an example:</para>
+
+          <programlisting>&lt;route name="blog" pattern="^/blog" module="Default" action="Blog"&gt;
+  &lt;route name=".index" pattern="^/$" action=".Index" /&gt;
+  &lt;route name=".article" pattern="^/(id:\d+)(-{title:\S+})?$" action=".ShowArticle" /&gt;
+&lt;/route&gt; </programlisting>
+
+          <para>This would <emphasis role="bold">not</emphasis> run the action
+          Blog in the module Default for the request
+          <uri>http://host.com/blog</uri>. Why not? Because the request cannot
+          be anchored at the end of the pattern, as the pattern has children.
+          That is, to run the Blog.Index -action, you would have to use the
+          request <uri>http://host.com/blog/</uri> (note the slash), and to
+          run the Blog.ShowArticle with the id and title -parameters set, you
+          would have to use the request
+          <uri>http://host.com/blog/151-Agavi_rocks</uri>. This way you only
+          have to define "top level" routes for your main actions, and you can
+          use subroutes to define routes to actions that are conceptually
+          below the "top level" actions, making parsing of the route much
+          faster.</para>
+        </section>
+
+        <section>
+          <title>Other Things to Match</title>
+
+          <para>Routing can do more -- like match against other sources, or do
+          things other than setting module and action. An example:</para>
+
+          <para>Because this is a <abbrev>MVC</abbrev>-framework, the data
+          produced in the model should be view-independent. That is, the same
+          data could be rendered as XHTML or a PDF or whatever you can
+          imagine. You can define the output type by setting the
+          <code>output_type</code> -attribute for the route:</para>
+
+          <programlisting>&lt;route name="rss" pattern="/rss$" output_type="rss" stop="false" cut="true" /&gt;</programlisting>
+
+          <para>As you can see, the pattern is only anchored at the end. On a
+          match, routing execution will not stop, and the matched portion
+          ("/rss") will be cut from the route for the following tests against
+          the remaining routes.</para>
+
+          <para>Now let's say your application also has fancy AJAX features,
+          and you return the data in JSON format. You can use the exact same
+          URLs for "normal" and AJAX requests, since there is a difference:
+          most AJAX frameworks send special headers along with the request. We
+          can use that to automatically set the output type for these to
+          JSON:</para>
+
+          <programlisting>&lt;route pattern="text/javascript" source="_SERVER[HTTP_ACCEPT]" output_type="json" stop="false" /&gt;</programlisting>
+
+          <para>Here, if the HTTP Accept header contains text/javascript
+          (which it does if you make an XMLHTTPRequest using Prototype or
+          Mootools or Dojo), then the output type will be set to "json". We
+          are operating on a different source, <varname>$_SERVER</varname>,
+          that allows to access it's members directly.</para>
+
+          <para><note>
+              <para>There are other match sources available as well. Please
+              refer to the cookbook for more information on matching against
+              other sources and information on how to create your own
+              sources.</para>
+            </note></para>
+        </section>
+
+        <section>
+          <title>Generating routes</title>
+
+          <para>To generate routes in templates or actions, you use the
+          <classname>AgaviRouting</classname>-class which returns the URI or
+          route as a string. You must use the <code>name</code> -attribute for
+          the routes in order for the
+          <classname>AgaviRouting</classname>-class to know which route to
+          generate, unless you are generating a route to the same route the
+          user currently is at. The way to generate a route is</para>
+
+          <programlisting>$ro-&gt;gen(routename[, array parameters[, array options]])</programlisting>
+
+          <para>So if we take our blog-route from section 6.2.6 and want to
+          generate a route to /blog/151/Agavi_rocks, we would use</para>
+
+          <programlisting>$ro-&gt;gen("blog.article", array('id' =&gt; 151, 'title' =&gt; 'Agavi_rocks'));</programlisting>
+
+          <para>This would generate a relative URI, thus won't include the
+          protocol (http/https/whatever) nor the host name. To generate a
+          complete URI to the document with the same protocol that the user
+          used, you set the "relative" option to false:</para>
+
+          <para><programlisting>$ro-&gt;gen("blog.article", array('id' =&gt; 151, 'title' =&gt; 'Agavi_rocks'), array('relative' =&gt; false));</programlisting></para>
+
+          <para>To generate a route to the same page the user is currently at,
+          use null as the route name.</para>
+
+          <para>If the user has accessed the page with the HTTP-protocol and
+          you need to generate a route to a super-secure location using HTTPS,
+          you set the "protocol" option to "HTTPS". To generate a URI to the
+          same route that the user is on but add an anchor (#foobar),
+          use</para>
+
+          <para><programlisting>$ro-&gt;gen(null, array(), array('fragment' =&gt; 'foobar'));</programlisting></para>
+        </section>
+      </section>
     </section>
 
     <section>
@@ -812,6 +1569,66 @@ $bar2 = $this-&gt;getContext()-&gt;getModel('SinglesBar'); //returns the same in
 
         <para>(actions: execution, execution methods, serving request methods,
         default view name, validation, security)</para>
+
+        <para>Like we noticed before, actions can be seen as a part of the
+        controller, or as glue between the controller and the model. The
+        controller can execute actions in two ways depending on the request
+        method. In a web-context this could mean the controller would call the
+        <methodname>executeRead</methodname> -method for a HTTP GET-request or
+        <methodname>executeWrite</methodname> for a HTTP POST-request. Both
+        methods take an <classname>AgaviRequestDataHolder</classname> -object
+        as parameter. If the action contains an
+        <methodname>execute()</methodname>-method and neither
+        <methodname>executeRead()</methodname> or
+        <methodname>executeWrite()</methodname>, the controller will call the
+        <methodname>execute()</methodname> method regardless of the request
+        method. If the request method is POST but it does not implement the
+        write method or similarly the request method is GET but the action
+        does not implement the read method, it can run a default view by
+        implementing the <methodname>getDefaultViewName</methodname>
+        -method.</para>
+
+        <para>Before the controller executes the execute-method, it will check
+        two things: does the action require security (ie a user that has
+        logged in) and what credentials, if any, the user must have to be
+        allowed to execute the action.</para>
+
+        <para>The former is simply done by adding an
+        <methodname>isSecure()</methodname> -method to the action which
+        returns true if security is required. Credential requirements are
+        defined by implementing a <methodname>getCredentials()</methodname>
+        -method which can return either a string indicating a simple
+        credential, or an array of credentials.</para>
+
+        <para>To require the credential "Edit", simply return "Edit" from
+        <methodname>getCredentials()</methodname>. To require both "Edit" and
+        "Write" -credential, return <code>array("Edit", "Write")</code>. To
+        require EITHER the "Edit" OR the "Write" -credentials, you would
+        return <code>array(array("Edit", "Write"))</code>, and to require the
+        "Edit"-credential AND EITHER "Write" or "Foo" (or both), return
+        <code>array("Edit", array("Write", "Foo"))</code>.</para>
+
+        <para>After the controller has decided if the user is allowed to
+        execute the action, validation occurs. If the validation fails, the
+        action's <methodname>handleError()</methodname> will be run, which
+        would, like the execute() return a string or an array indicating which
+        view or action/view -pair should be handed the control. The validation
+        error messages are available for the templates using
+        <methodname>$container-&gt;getValidationManager()-&gt;getErrorMessages()</methodname>
+        which returns an array of messages. For more information on action
+        validation, see section 11 in this manual.</para>
+
+        <para>When the action has finished, it must tell the controller which
+        view to execute. This of course depends on the outcome of the action:
+        if we are successful, we would want to pass the control over to a
+        <classname>SuccessView</classname>, if we had some form of error, we
+        would use <classname>ErrorView</classname> and if we need input from
+        the user, we'd use <classname>InputView</classname>. The action can
+        return a string like "Success" to indicate the action finished
+        successfully, and the controller would use the
+        <classname>ClassnameSuccessView</classname>, or it can return an array
+        with two indices specifying the action/view pair to hand the execution
+        to.</para>
       </section>
     </section>
 
@@ -848,14 +1665,423 @@ $bar2 = $this-&gt;getContext()-&gt;getModel('SinglesBar'); //returns the same in
 
       <para>explain the user, how it works, what you can do with it, how you
       do authentication, credentials etc</para>
+
+      <section>
+        <title>Role-Based Access Control</title>
+
+        <para>Role-Based Access Control (RBAC) is an approach to restricting
+        system access to authorized users. To learn more about Role-Base
+        Access Control (RBAC) in general you could start from <ulink
+        url="http://en.wikipedia.org/wiki/Role-Based_Access_Control">http://en.wikipedia.org/wiki/Role-Based_Access_Control</ulink>.
+        For an in-depth paper about Role-Base Access Control (RBAC) see
+        National Institute of Standards and Technology's "Proposed NIST
+        Standard for Role-Based Access Control" (a link to that paper can be
+        found from the Wikipedia's page).</para>
+
+        <para>Agavi has an easy-to-use RBAC user implementation
+        <classname>AgaviRbacSecurityUser</classname>. It extends the features
+        of <classname>AgaviSecurityUser</classname> to enable automatic
+        assignment of credentials based on a role or roles granted to the
+        user.</para>
+
+        <section>
+          <title>Enabling RBAC</title>
+
+          <para>The user implementation used by Agavi is configured in
+          <filename>%core.app_dir%/config/factories.xml</filename>. To plug in
+          the RBAC user you simply alter the user class to be used.</para>
+
+          <programlisting>&lt;user class="AgaviRbacSecurityUser" /&gt;</programlisting>
+
+          <para>Normally you would extend
+          <classname>AgaviRbacSecurityUser</classname> and create your own
+          user implementation with custom login and logout methods but for now
+          we want to keep our set-up simple and use
+          <classname>AgaviRbacSecurityUser</classname> directly.</para>
+        </section>
+
+        <section>
+          <title>Defining Roles and Credentials</title>
+
+          <para><classname>AgaviRbacSecurityUser</classname> reads the role
+          and credential definitions from an XML-file located by default in
+          <filename>%core.app_dir%/config/rbac_definitions.xml</filename>. If
+          you want to keep them in some other file you can use a configuration
+          parameter <parameter>definitions_file</parameter> in
+          <filename>factories.xml</filename>.</para>
+
+          <programlisting>&lt;user class="AgaviRbacSecurityUser"&gt;
+ &lt;parameter name="definitions_file"&gt;%core.app_dir%/data/roles.xml&lt;/parameter&gt;
+&lt;/user&gt;</programlisting>
+
+          <para>Roles in the definition file are defined hierarchically from
+          the bottom up so to speak. That means that a role can have an inner
+          role (or many of them) that inherits all the credentials of the
+          parent. This is a very common way to define roles in RBAC. Here is a
+          simple exaple with three roles that are all in a straight line in
+          the hierarchy ie. all photomoderators are photographers and all
+          photographers are members and they inherit all the credentials from
+          the parent. This is important to understand because now you don't
+          need to grant the user all three roles separately but just the
+          topmost.</para>
+
+          <programlisting>&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;
+&lt;configurations&gt;
+  &lt;configuration&gt;
+    &lt;roles&gt;
+      &lt;role name="member"&gt;
+        &lt;permissions&gt;
+          &lt;permission&gt;photos.comments.add&lt;/permission&gt;
+        &lt;/permissions&gt;
+        &lt;roles&gt;
+          &lt;role name="photographer"&gt;
+            &lt;permissions&gt;
+              &lt;permission&gt;photos.add&lt;/permission&gt;
+            &lt;/permissions&gt;
+            &lt;roles&gt;
+              &lt;role name="photomoderator"&gt;
+                &lt;permissions&gt;
+                  &lt;permission&gt;photos.edit&lt;/permission&gt;
+                  &lt;permission&gt;photos.delete&lt;/permission&gt;
+                &lt;/permissions&gt;
+              &lt;/role&gt;
+            &lt;/roles&gt;
+          &lt;/role&gt;
+        &lt;/roles&gt;
+      &lt;/role&gt;
+    &lt;/roles&gt;
+  &lt;/configuration&gt;
+&lt;/configurations&gt;</programlisting>
+
+          <note>
+            <para>For larger systems this is obviously not the perfect way to
+            store the definitions but instead a database of some sort would be
+            used. To load the definitions from some other source you only have
+            to override <classname>AgaviRbacSecurityUser</classname>'s
+            <methodname>loadDefinitions()</methodname> method</para>
+          </note>
+        </section>
+
+        <section>
+          <title>Granting Roles to the User</title>
+
+          <para>The roles have now been designed and defined in the XML-file
+          and we have some database of the users and their roles. For
+          simplicity's sake we don't bother ourselves with that database now
+          but simply take it for granted that know the role(s) of the user
+          after he has logged in.</para>
+
+          <para>AgaviRbacSecurityUser has six methods for role managing:
+          <methodname>grantRole(string)</methodname>,
+          <methodname>grantRoles(array)</methodname>,
+          <methodname>revokeRole(string)</methodname>,
+          <methodname>revokeAllRoles()</methodname>,
+          <methodname>hasRoles(string)</methodname> and
+          <methodname>getRoles()</methodname>. The methods are
+          self-explanatory.</para>
+
+          <para>If you want to understand how
+          <classname>AgaviRbacSecurityUser</classname> actually works the
+          method <methodname>grantRole(string)</methodname> is worth looking
+          into. What it actually does is quite simple; it reads the role
+          definitions and gives the user each credential the given role has
+          explicitly or implicitly from the parent roles. The credential
+          management itself is actually part of
+          <classname>AgaviSecurityUser</classname> and
+          <classname>AgaviRbacSecurityUser</classname> only extends it with
+          role-to-credential mapping. This is the beauty of the
+          object-oriented design in action.</para>
+        </section>
+
+        <section>
+          <title>Protecting Your Actions</title>
+
+          <para>Protecting your action is simply a matter of defining the
+          credential needed to be able use the action. This is done by
+          overriding <classname>AgaviAction</classname>'s
+          <methodname>getCredentials()</methodname> method.</para>
+
+          <programlisting>class Photos_AddAction extends PhotoSystemBaseAction
+{
+  public function getCredentials()
+  {
+    return 'photos.add';
+  }</programlisting>
+
+          <para>As the method name implies you can require more than one
+          credential or even complex combinations of credentials (eg. 'a' OR
+          'b' AND 'c') but this is explained in detail in another chapter (a
+          link is going to be added later).</para>
+        </section>
+      </section>
     </section>
 
     <section>
       <title>Validation</title>
 
-      <para>why validation, how to validate, explain the drop-in character,
-      explain what it can also do (normalization etc), how sweet it is with
-      the FormPopulationFilter</para>
+      <section>
+        <title>Why Validation?</title>
+
+        <para>It is strongly recommended to validate any request data. All
+        request data including headers and cookies comes from the user and
+        it's content is dictated by the the user. This user may as well be a
+        malicious user trying to attack your application/server/database or
+        use your application to attack other people visiting your website
+        through XSS-attacks or similar. No input to your application which is
+        not under your control should therefore be trusted.</para>
+
+        <para>There are other reasons to validate data: Think of a newsletter
+        application form - it's always a good thing to check whether the data
+        the user entered is at least a syntactically correct email-address.
+        Sometimes typing errors happen and the user is frustrated that he
+        didn't get the newsletter he ordered. It would have been better to
+        check the data the user entered and provide him with a friendly error
+        message at the time of registration.</para>
+
+        <para>The best situation you can be in is if you know exactly what
+        input data is valid - e.g. if your page expects an id parameter to
+        pull a record from the database you know for sure that it must
+        absolutely be an integer and everything else is an attempt to trick
+        your application to do something wrong. Other situations may not be as
+        easy, but you should still try to validate as much data as
+        possible.</para>
+      </section>
+
+      <section>
+        <title>When does Validation happen</title>
+
+        <para>Validation happens if the action serves the incoming request
+        method, that is if the action declares an execute method that matches
+        the request type (<methodname>executeRead()</methodname> for get
+        request, <methodname>executeWrite()</methodname> for post request or a
+        generic <methodname>execute()</methodname> method), immediatly before
+        the action is executed.</para>
+      </section>
+
+      <section>
+        <title>How to validate</title>
+
+        <para>The rules for the validation are defined in validators. A
+        validator is an object that checks wether an input parameter conforms
+        to a set of given constraints - such as "is the parameter 'id' really
+        an integer value etc.". There two ways of registering a validator and
+        a third way to perform more elaborate validations that cannot be
+        handled by a validator:</para>
+
+        <section>
+          <title>XML Configuration</title>
+
+          <para>There are several ways of validating input data. The simplest
+          way is placing an XML configuration file with the proper
+          configuration in the "validate" directory of the module. The XML
+          file must be named &lt;ActionName&gt;.xml, that is if your action is
+          named "LoginAction", the XML file must be "Login.xml". In this file,
+          you can define which validators will be registered for any request
+          handled by the action. It is important to note that even though you
+          can set some validators not to execute on a read or write request,
+          those validators will be registered anyways and as you can't
+          register a validator twice, you can only have one input parameter
+          validated in a different manner on read and write by defining two
+          different validators. Another way which provides finer control over
+          what validators will be registered on read/write requests is the
+          registerValidators() family of methods.</para>
+
+          <section>
+            <title>Example XML Configuration (from the sample app,
+            LoginAction)</title>
+
+            <programlisting>&lt;?xml version="1.0" encoding="UTF-8" standalone="no"?&gt;
+&lt;configurations&gt;
+  &lt;!-- custom validators and default parameters --&gt;
+  &lt;configuration&gt;
+    &lt;validators&gt;
+      &lt;validator class="string" name="username_too_short"&gt;
+        &lt;argument&gt;username&lt;/argument&gt;
+        &lt;error&gt;The username you supplied is less than 4 characters&lt;/error&gt;
+        &lt;parameter name="min"&gt;5&lt;/parameter&gt;
+      &lt;/validator&gt;
+    &lt;/validators&gt;
+  &lt;/configuration&gt;
+&lt;configurations&gt;</programlisting>
+
+            <para>This registers a single validator that checks wether the
+            username is longer than 5 characters. Let's look at this snippet
+            in detail. The interestion block is the
+            <code>&lt;validators&gt;</code> element. It contains a list of
+            <code>&lt;validator</code>&gt; elements, each one representing a
+            validator. A validator must have a type ("string" in this case,
+            alternatively you can use the full class name). The name is
+            optional and must be unique ("username_too_short" here) when
+            supplied . Some validators can act upon multiple input parameters,
+            each one wrapped in a <code>&lt;argument&gt;</code> tag. You can
+            also validate array input parameters <link
+            linkend="reference-validation-validating_arrays">using a special
+            syntax.</link> You can define different <code>&lt;error&gt;</code>
+            blocks for the various validation errors by supplying a name
+            attribute, in this case there is only the generic error available.
+            Finally, the <code>&lt;parameters&gt;</code> block lists the
+            parameters that get passed into the validator. These depend on the
+            type of validator you're trying to register. The
+            AgaviStringValidator being used here for example accepts
+            parameters such as minimum and maximum length etc.</para>
+          </section>
+        </section>
+
+        <section>
+          <title>registerValidators(), registerReadValidators(),
+          registerWriteValidators()</title>
+
+          <para>While the XML configuration method is convenient most of the
+          time, sometimes a more fine grained control is nessesary. Sometimes
+          you might wish to validate a parameter differently on a read request
+          than on a write request or the validation might depend on data no
+          known when you write the application. Think of a form that gets
+          generated depending on some config parameters pulled from a
+          database. When you write the action, you don't know yet what form
+          fields will be available and which type they have - however when the
+          form gets displayed you will know. You just need to tell agavi about
+          it - this is where the <methodname>registerValidators()</methodname>
+          methods come into play. If your action defines a method
+          <methodname>registerReadValidators()</methodname>, it will be
+          executed before <methodname>executeRead()</methodname> and all
+          validators that you registered in this method will be executed as
+          well. The same is true for
+          <methodname>registerWriteValidators()</methodname>, only that it
+          will be called before <methodname>executeWrite()</methodname> will
+          run and <methodname>registerValidators()</methodname> will be
+          executed before any of the execute methods will be run. That way,
+          you can dynamically add validators, you can even mix both methods:
+          use the XML for any validators that you you'll need for shure and
+          use execute*Validators() to add anything that is dynamic. However,
+          as noted above you can't register a validator twice.</para>
+
+          <section>
+            <title>Sample registerReadValidators() (does the same as the XML
+            above)</title>
+
+            <para><programlisting>public function registerWriteValidators()
+{
+  $validationManager = $this-&gt;getContext()-&gt;getValidationManager();
+
+  $arguments = array('username');
+  $errors = array('' =&gt; 'The username you supplied is less than 4 characters.');
+  $parameters = array (
+    'name' =&gt; 'username_too_short',
+    'min' =&gt; '5',
+    'severity' =&gt; 'error',
+    'method' =&gt; NULL,
+    'required' =&gt; true,
+    'class' =&gt; 'string'
+  );
+
+  $validator = new AgaviStringValidator();
+  $validator-&gt;initialize($this-&gt;getContext(), $parameters, $arguments, $errors);
+  $validationManager-&gt;addChild($validator);
+}</programlisting>This example does the same as the XML style registration
+            above.</para>
+          </section>
+        </section>
+
+        <section>
+          <title>validate(), validateRead(), validateWrite()</title>
+
+          <para>If an action declares a method with the name "validate()", it
+          will get called after the registered validators have run but before
+          the execute Method gets called. It recieves a single parameter,
+          $parameters with the type AgaviRequestDataHolder. If validate
+          returns true, the execution continues, if it returns false,
+          validation fails and the error must be handled. As with the
+          register*Validator() family of methods, a method named
+          validateRead(AgaviRequestDataHolder $rd) will only be called in read
+          requests and a method named validateWrite(AgaviRequestDataHolder
+          $rd) only on write request. You can use these method to perform
+          advanced validation that is not possible with validators. As
+          validators are generic and reusable, you should look into creating
+          your own validator whenever feasible.</para>
+        </section>
+      </section>
+
+      <section>
+        <title>Handling Validation errors</title>
+
+        <para>Once validation failed, the error must be handled. The default
+        way is to render an error view, but sometimes you might wish to slip
+        in some logic such as logging the error. You can do this by declaring
+        a method named "handleError()" in your action. You can also define
+        different handlers for the request methods using handle*Error()
+        (handleReadError, handleWriteError and so on). It will be called if a
+        validation error occured and recieves a single parameter, $parameters
+        with the type AgaviRequestDataHolder. It must return the name of a
+        view, just as the execute methods do.</para>
+      </section>
+
+      <section>
+        <title>The FormPopulationFilter</title>
+
+        <para>Once you validated the input data, there may be errors that must
+        be returned to the client. The standard way is displaying the form
+        back to the user and having him correct the errors in the input data.
+        This can be done by pulling the supplied data from the request object
+        in your form template and filling the input fields with the proper
+        value. There is a more convenient way though: The
+        FormPopulationFilter. It is a regular filter that gets executed
+        everytime you post a form by default. It parses the resulting document
+        and extracts the form element whose action attribute matches the
+        current page's URL. It then matches the input fields in this form
+        against the request parameters and fills in the request values in the
+        proper input fields. It even marks the input field and the
+        corresponding label (if any) with a special CSS class that you can use
+        to indicate an error to your users. While inserting the request
+        parameters, it takes care of escaping the values properly so that XSS
+        attacks are not possible.</para>
+      </section>
+
+      <section>
+        <title>Other things Validators can do for you</title>
+
+        <para></para>
+
+        <section>
+          <title>Normalization</title>
+
+          <para></para>
+        </section>
+
+        <section>
+          <title>Casting Values (same as Normalization)</title>
+
+          <para></para>
+        </section>
+
+        <section>
+          <title>Validation and Internationalization</title>
+
+          <para>If you have an internationalized application you need to
+          translate the error messages as well. To make this possible, each
+          validator accepts a "translation_domain" parameter. All error
+          messages will be translated with the Translator registered for this
+          domain.</para>
+        </section>
+      </section>
+
+      <section>
+        <title>Available Validators</title>
+
+        <para>Depending on the validator type, every validator accepts
+        different parameters.</para>
+
+        <section>
+          <title>String (AgaviStringValidator)</title>
+
+          <para></para>
+        </section>
+      </section>
+
+      <section>
+        <title>Examples</title>
+
+        <programlisting></programlisting>
+      </section>
     </section>
 
     <section>

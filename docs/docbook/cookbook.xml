@@ -4,6 +4,11 @@
 <book>
   <title>The Agavi Cookbook</title>
 
+  <bookinfo>
+    <releaseinfo>$Id: cookbook.xml 1823 2007-03-06 08:47:59Z david
+    $</releaseinfo>
+  </bookinfo>
+
   <chapter>
     <title>Best Practices</title>
 
@@ -264,9 +269,9 @@ RewriteRule ([^?]*)(?:\?(.*))? index.php?/$1&amp;$2 [L]</programlisting></para>
         database configuration for your Propel model:</para>
 
         <para><programlisting>&lt;database name="propel" class="AgaviPropelDatabase"&gt;
-	&lt;parameters&gt;
-		&lt;parameter name="config"&gt;%core.app_dir%/config/bookstore-conf.php&lt;/parameter&gt;
-	&lt;/parameters&gt;
+  &lt;parameters&gt;
+    &lt;parameter name="config"&gt;%core.app_dir%/config/bookstore-conf.php&lt;/parameter&gt;
+  &lt;/parameters&gt;
 &lt;/database&gt;</programlisting></para>
 
         <para><filename>bookstore-conf.php</filename> is the name of the
@@ -304,16 +309,178 @@ RewriteRule ([^?]*)(?:\?(.*))? index.php?/$1&amp;$2 [L]</programlisting></para>
     </section>
 
     <section>
-      <title>Redirecting back to the originally requested page after
-      login</title>
+      <title>Redirecting Back to the Originally Requested Page After
+      Login</title>
 
-      <para></para>
+      <para>If a unautheticated user tries to fire an action he is not allowed
+      to execute he is forwarded to the login action (configured in
+      <filename>settings.xml</filename>). To make a good user experience it's
+      nice to redirect the user back to the action he tried to execute after a
+      successful login. This is especially important if the user's session had
+      timed out and he was in the middle of something when he was logged
+      out.</para>
+
+      <para>Because Agavi forwards to the login action the URL is still the
+      one pointing to the original action. Agavi also stores the information
+      about the forward into the request object under
+      <code>org.agavi.controller.forwards.login</code> namespace. So if the
+      login action was actually triggered because of a denied access the first
+      thing we want to do is save the current URL for later use. The place to
+      do this is usually <classname>LoginInputView</classname> (remember, this
+      is all presentational application logic so the action itself shouldn't
+      do it).</para>
+
+      <programlisting>if($this-&gt;getContext()-&gt;getRequest()-&gt;hasAttributeNamespace('org.agavi.controller.forwards.login')) {
+  // we were redirected to the login form by the controller because the requested action required security
+  // so store the input URL in the session for a redirect after login
+  $this-&gt;getContext()-&gt;getUser()-&gt;setAttribute('redirect', $this-&gt;getContext()-&gt;getRequest()-&gt;getUrl(), 'org.agavi.SampleApp.login');
+}
+else {
+  // clear the redirect URL just to be sure 
+  $this-&gt;getContext()-&gt;getUser()-&gt;removeAttribute('redirect', 'org.agavi.SampleApp.login');
+}</programlisting>
+
+      <para>Now after a successful login we want to redirect the user back to
+      the action he requested. To do so we need this in the
+      <classname>LoginSuccessView</classname>:</para>
+
+      <programlisting>if($usr-&gt;hasAttribute('redirect', 'org.agavi.SampleApp.login')) {
+  $this-&gt;getResponse()-&gt;setRedirect($usr-&gt;removeAttribute('redirect', 'org.agavi.SampleApp.login'));
+  return;
+}
+// else redirect to the welcome page or just proceed with the default behaviour of the view</programlisting>
+
+      <para>And that's it. Enjoy the user experience!</para>
     </section>
 
     <section>
       <title>Serving Output Variants of the Same Content</title>
 
       <para>a quick example using a LatestProductsAction or whatever</para>
+    </section>
+
+    <section>
+      <title>Running Agavi Behind a Reverse Proxy</title>
+
+      <para>If you are developping an Agavi application that needs to run
+      behind a <ulink url="http://en.wikipedia.org/wiki/Reverse_proxy">Reverse
+      Proxy</ulink> , you need to be aware of a few things. The main issue is
+      that there is a difference between the public DNS for you applciation
+      and the internal, unregistered DNS. A reverse proxy intercepts all calls
+      for the public IP address and decides what to do with them. It will
+      decide what internal webserver to forward to (there can be several
+      webservers running the same application to help balance the load). As a
+      result your application receives a call from the Reverse Proxy and not
+      from the client.</para>
+
+      <para>This means that some of the <code>$_SERVER[]</code> variables just
+      contain the info for the reverse proxy and not for the client (e.g.
+      <code>$_SERVER[REMOTE_ADDR]</code> will be the IP address for the
+      reverse proxy). This is one of the reasons why it's a bad idea to rely
+      on the client's IP address for security. You'll also notice that
+      variables like <code>$_SERVER['SERVER_NAME']</code> contain info about
+      the server within the network, but this address is unknown to the
+      outside world. E.g A client makes a request for
+      <code>http://www.foo.com</code>. A Reverse Proxy intercepts this and
+      forwards this request to an internal server
+      <code>http://internal1.foo.com</code>. In this case the
+      <code>SERVER_NAME</code> variable will be set to 'internal1.foo.com' and
+      not to 'www.foo.com'.</para>
+
+      <para>Now if you're using Agavi you should seldom have to deal with the
+      contents of <code>$_SERVER[]</code>. But sometimes you have to generate
+      an absolute url (e.g. as a link in a rss feed or a <code> &lt;base
+      href="..." /&gt;</code> tag in html). You can do this by calling the
+      <methodname>gen()</methodname> method on Agavi's Routing class with the
+      optional parameter 'relative' set to false</para>
+
+      <programlisting>&lt;link&gt;&lt;?php echo $ro-&gt;gen( 'Newsitem' , array( 'id' =&gt; 5 ) , array ( 'relative' =&gt; false ) ); ?&gt;&lt;/link&gt;</programlisting>
+
+      <para>In a setup with a Reverse Proxy this would generate an url like
+      <code>http://internal1.foo.com/news/1</code>. This is not what we want.
+      Since internal1 is not known to a public dns server any user that
+      follows the link will receive a host not found error.</para>
+
+      <para>One way to deal with this is to let the Reverse Proxy rewrite all
+      html it sends back to the client. Information for this kind of setup can
+      be found in the manual for the Reverse Proxy. E.g. for Apache 2 see
+      <ulink
+      url="http://www.apachetutor.org/admin/reverseproxies">http://www.apachetutor.org/admin/reverseproxies</ulink>
+      . Another option is to use some of the alternate variables that are set
+      by Apache (I have no idea how other webservers handle this). You can
+      view these by looking at the output of the <code>phpinfo()</code>
+      function. With php 5.1.6 under Apache2 I have access to
+      HTTP_X_FORWARDED_FOR, HTTP_X_FORWARDED_HOST and
+      HTTP_X_FORWARDED_SERVER.</para>
+
+      <para>Armed with this information we can tell Agavi where to get the
+      name of the server. This information is needed by the
+      <classname>AgaviWebRequest</classname> object. To do this we need to
+      edit <filename>factories.xml</filename>.</para>
+
+      <programlisting>&lt;request class="AgaviWebRequest"&gt;
+  &lt;parameters&gt;
+    &lt;parameter name="sources"&gt;
+      &lt;parameter name="SERVER_NAME"&gt;HTTP_X_FORWARDED_SERVER&lt;/parameter&gt;
+    &lt;/parameter&gt;
+  &lt;/parameters&gt;
+&lt;/request&gt;</programlisting>
+
+      <para>This tells Agavi to use the value of <code>HTTP_X_FORWARDED_SERVER
+      </code> for <code>SERVER_NAME</code>, ensuring that absolute urls are
+      correct.</para>
+    </section>
+
+    <section>
+      <title>Role-Based Access Control and Rules for Unauthenticated
+      Users</title>
+
+      <para>Because of the way Agavi's <classname>SecurityFilter</classname>
+      works Agavi's Role-Based Access Control (RBAC) and the user credential
+      handling in general assume that the user has been authenticated. By
+      default if the user is not authenticated no credentials are checked.
+      This can become an issue if you want to build an application where the
+      same action can be public in one set-up but requires a certain
+      credential in another. For example a project management software's
+      calendar could be public in one firm but protected in another.</para>
+
+      <para>To enable role-based access control for unauthenticated users you
+      need to do two things - grant a role for unauthenticated users and put
+      some logic into your base action's <methodname>isSecure()</methodname>
+      method.</para>
+
+      <programlisting>class MyProjectUser extends AgaviRbacSecurityUser
+{
+
+  public function initialize(AgaviContext $context, array $parameters = array())
+  {
+    parent::initialize($context, $parameters);
+
+    if(!$this-&gt;authenticated) {
+      $this-&gt;grantRole('unauthenticated');
+    }
+  }</programlisting>
+
+      <programlisting>class MyProjectBaseAction extends AgaviAction
+{
+  public function isSecure()
+  {
+    $cred = $this-&gt;getCredentials();
+    return $cred &amp;&amp; !$this-&gt;getContext()-&gt;getUser()-&gt;hasCredentials($cred);
+  }
+}</programlisting>
+
+      <para>The first bit is pretty obvious.
+      <classname>AgaviRbacSecurityUser</classname> initializes unauthenticated
+      users to have no roles but we want to override this and grant them a
+      special role called <code><varname>unauthenticated</varname></code>. The
+      code for <methodname>isSecure()</methodname> then again might require
+      some reasoning. The action is marked as secure only if the user doesn't
+      have the required credential. What this means is that if the user is
+      authenticated but doesn't have the required credential
+      <code>%actions.secure_action%</code> is triggered. If the user is not
+      authenticated and <code>unauthenticated</code> role doesn't allow this
+      action <code>%actions.login_action%</code> is triggered.</para>
     </section>
   </chapter>
 

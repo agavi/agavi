@@ -472,11 +472,11 @@ class AgaviDateFormat
 		$fLen = strlen($format);
 		for($i = 0; $i < $fLen; ++$i) {
 			$c = $format[$i];
-			$cNext = ($i + 1 < $fLen) ? $format[$i+1] : 0;
+			$cNext = ($i + 1 < $fLen) ? $format[$i+1] : '';
 
 			if($inEscape) {
 				if($c == '\'') {
-					if($cNext == '\'') {
+					if('\'' == $cNext) {
 						$escapeStr .= '\'';
 						++$i;
 					} else {
@@ -624,20 +624,10 @@ class AgaviDateFormat
 					$number = (int) substr($dateString, $datePos, $token[1]);
 
 					$datePos += $token[1];
-					if($dateField == AgaviDateDefinitions::HOUR_OF_DAY) {
-						if($token[0] == AgaviDateFormat::T_HOUR_1_24) {
-							if($number == 24) {
-								$number = 0;
-							} elseif($number > 0) {
-								$number -= 1;
-							}
-						} elseif($token[0] == AgaviDateFormat::T_HOUR_1_12) {
-							if($number == 12) {
-								$number = 0;
-							} elseif($number > 0) {
-								$number -= 1;
-							}
-						}
+					if($dateField == AgaviDateDefinitions::HOUR_OF_DAY && $token[0] == AgaviDateFormat::T_HOUR_1_24 && $number == 24) {
+						$number = 0;
+					} elseif($dateField == AgaviDateDefinitions::HOUR && $token[0] == AgaviDateFormat::T_HOUR_1_12 && $number == 12) {
+						$number = 0;
 					} elseif($dateField == AgaviDateDefinitions::MONTH && $number > 0) {
 						$number -= 1;
 					}
@@ -665,8 +655,12 @@ class AgaviDateFormat
 				$datePos += $numberLen;
 				// since the month is 0-indexed in the calendar and 1-indexed in the
 				// cldr we need to substract 1 from the month
-				if($dateField == AgaviDateDefinitions::MONTH || $token[0] == AgaviDateFormat::T_HOUR_1_24 || $token[0] == AgaviDateFormat::T_HOUR_1_12) {
+				if($dateField == AgaviDateDefinitions::MONTH && $number > 0) {
 					$number -= 1;
+				} elseif($dateField == AgaviDateDefinitions::HOUR_OF_DAY && $token[0] == AgaviDateFormat::T_HOUR_1_24 && $number == 24) {
+					$number = 0;
+				} elseif($dateField == AgaviDateDefinitions::HOUR && $token[0] == AgaviDateFormat::T_HOUR_1_12 && $number == 12) {
+					$number = 0;
 				} elseif($token[0] == self::T_YEAR && $token[1] == 2 && $numberLen <= 2) {
 					if($number >= 40) {
 						$number += 1900;

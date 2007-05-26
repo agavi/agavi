@@ -29,17 +29,12 @@
  *
  * @version    $Id$
  */
-class AgaviController
+class AgaviController extends AgaviParameterHolder
 {
 	/**
 	 * @var        int The number of execution containers run so far.
 	 */
 	protected $numExecutions = 0;
-	
-	/**
-	 * @var        int The maximum number of execution container runs allowed.
-	 */
-	protected $maxExecutions = 20;
 	
 	/**
 	 * @var        AgaviContext An AgaviContext instance.
@@ -108,7 +103,9 @@ class AgaviController
 	 */
 	public function countExecution()
 	{
-		if(++$this->numExecutions > $this->maxExecutions && $this->maxExecutions > 0) {
+		$maxExecutions = $this->getParameter('max_executions');
+		
+		if(++$this->numExecutions > $maxExecutions && $maxExecutions > 0) {
 			throw new AgaviControllerException('Too many execution runs have been detected for this Context.');
 		}
 	}
@@ -189,7 +186,12 @@ class AgaviController
 			
 			$response = $container->getResponse();
 			$response->merge($this->response);
-			$response->send($container->getOutputType());
+			
+			if($this->getParameter('send_response')) {
+				$response->send($container->getOutputType());
+			}
+			
+			return $response;
 			
 		} catch(Exception $e) {
 			if(isset($container) && $container instanceof AgaviExecutionContainer) {
@@ -325,6 +327,21 @@ class AgaviController
 	}
 
 	/**
+	 * Constructor.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function __construct()
+	{
+		parent::__construct();
+		$this->setParameters(array(
+			'max_executions' => 20,
+			'send_response' => true,
+		));
+	}
+	
+	/**
 	 * Initialize this controller.
 	 *
 	 * @param      AgaviContext An AgaviContext instance.
@@ -337,11 +354,11 @@ class AgaviController
 	{
 		$this->context = $context;
 		
+		$this->setParameters($parameters);
+		
 		$rfi = $context->getFactoryInfo('response');
 		$this->response = new $rfi["class"](); 
 		$this->response->initialize($context, $rfi["parameters"]);
-		
-		$this->maxExecutions = isset($parameters['max_executions']) ? $parameters['max_executions'] : 20;
 		
 		$cfg = AgaviConfig::get('core.config_dir') . '/output_types.xml';
 		require(AgaviConfigCache::checkConfig($cfg, $this->context->getName()));
@@ -457,7 +474,7 @@ class AgaviController
 	 *
 	 * This method is not called directly after initialize().
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function startup()

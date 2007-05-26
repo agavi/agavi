@@ -29,7 +29,7 @@
  *
  * @version    $Id$
  */
-abstract class AgaviRouting
+abstract class AgaviRouting extends AgaviParameterHolder
 {
 	const ANCHOR_NONE = 0;
 	const ANCHOR_START = 1;
@@ -99,6 +99,8 @@ abstract class AgaviRouting
 	{
 		$this->context = $context;
 		
+		$this->setParameters($parameters);
+		
 		if(isset($parameters['default_gen_options'])) {
 			$this->defaultGenOptions = array_merge($this->defaultGenOptions, $parameters['default_gen_options']);
 		}
@@ -119,7 +121,7 @@ abstract class AgaviRouting
 	 *
 	 * This method is not called directly after initialize().
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function startup()
@@ -136,7 +138,7 @@ abstract class AgaviRouting
 	/**
 	 * Execute the shutdown procedure.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function shutdown()
@@ -434,7 +436,7 @@ abstract class AgaviRouting
 	 *
 	 * @throws     AgaviException If the given preset name doesn't exist.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	protected function resolveGenOptions($input = array())
@@ -552,7 +554,7 @@ abstract class AgaviRouting
 						} else {
 							$finalParams[$name] = $this->escapeOutputParameter($matchedParams[$name]);
 						}
-					} elseif(isset($defaults[$name]) && $defaults[$name]['val']) {
+					} elseif(isset($defaults[$name]) && strlen($defaults[$name]['val']) > 0) {
 						$finalParams[$name] = $defaults[$name]['pre'] . $this->escapeOutputParameter($defaults[$name]['val']) . $defaults[$name]['post'];
 					} else {
 						// there is no default or incoming match for this optional param, so remove it
@@ -580,7 +582,7 @@ abstract class AgaviRouting
 							} else {
 								$finalParams[$name] = $default['pre'] . $params[$name] . $default['post'];
 							}
-						} elseif($default['val']) {
+						} elseif(strlen($default['val']) > 0) {
 							$finalParams[$name] = $default['pre'] . $this->escapeOutputParameter($default['val']) . $default['post'];
 						} else {
 							$finalParams[$name] = null;
@@ -592,6 +594,8 @@ abstract class AgaviRouting
 			}
 		}
 
+		$availableParamsAsKeys = array_flip($availableParams);
+
 		foreach($params as $name => $param) {
 			if(!array_key_exists($name, $finalParams)) {
 				if($param === null && isset($optionalParams[$name])) {
@@ -599,7 +603,8 @@ abstract class AgaviRouting
 				} else {
 					if(isset($defaults[$name])) {
 						$finalParams[$name] = $defaults[$name]['pre'] . ($param !== null ? $param : $this->escapeOutputParameter($defaults[$name]['val'])) . $defaults[$name]['post'];
-					} else {
+					} elseif(array_key_exists($name, $availableParamsAsKeys) || $param === null) {
+						// when the parameter was available in one of the routes or has explicitly been unset
 						$finalParams[$name] = $param;
 					}
 				}
@@ -678,8 +683,8 @@ abstract class AgaviRouting
 		
 		if(!AgaviConfig::get('core.use_routing', false) || count($this->routes) == 0) {
 			// routing disabled, determine module and action manually and bail out
-			$container->setModuleName($reqData->getParameter($req->getModuleAccessor()));
-			$container->setActionName($reqData->getParameter($req->getActionAccessor()));
+			$container->setModuleName($reqData->getParameter($req->getParameter('module_accessor')));
+			$container->setActionName($reqData->getParameter($req->getParameter('action_accessor')));
 			
 			return $container;
 		}
@@ -692,8 +697,8 @@ abstract class AgaviRouting
 		$ot = null;
 		$locale = null;
 		$method = null;
-		$ma = $req->getModuleAccessor();
-		$aa = $req->getActionAccessor();
+		$ma = $req->getParameter('module_accessor');
+		$aa = $req->getParameter('action_accessor');
 		$requestMethod = $req->getMethod();
 
 		// get all top level routes
@@ -852,6 +857,8 @@ abstract class AgaviRouting
 		$container->setActionName($reqData->getParameter($aa));
 		
 		// set the list of matched route names as a request attribute
+		$req->setAttribute('matched_routes', $matchedRoutes, 'org.agavi.routing');
+		// deprecated
 		$req->setAttribute('matchedRoutes', $matchedRoutes, 'org.agavi.routing');
 		
 		// return a list of matched route names

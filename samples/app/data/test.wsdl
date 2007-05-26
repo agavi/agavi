@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<definitions name='ItemPrice' 
+  targetNamespace='http://agavi.org/samples/SearchEngineSpamItemPrice' 
+  xmlns:tns='http://agavi.org/samples/SearchEngineSpamItemPrice' 
+  xmlns:soap='http://schemas.xmlsoap.org/wsdl/soap/' 
+  xmlns:xsd='http://www.w3.org/2001/XMLSchema' 
+  xmlns:soapenc='http://schemas.xmlsoap.org/soap/encoding/' 
+  xmlns:wsdl='http://schemas.xmlsoap.org/wsdl/' 
+  xmlns='http://schemas.xmlsoap.org/wsdl/'> 
+<message name='getItemPriceRequest'> 
+<part name='name' type='xsd:string'/> 
+</message> 
+<message name='getItemPriceResponse'> 
+  <part name='Result' type='xsd:float'/> 
+</message> 
+<portType name='ItemPricePortType'> 
+  <operation name='getItemPrice'> 
+    <input message='tns:getItemPriceRequest'/> 
+    <output message='tns:getItemPriceResponse'/> 
+  </operation> 
+</portType> 
+<binding name='ItemPriceBinding' type='tns:ItemPricePortType'> 
+  <soap:binding style='rpc' 
+    transport='http://schemas.xmlsoap.org/soap/http'/> 
+  <operation name='getItemPrice'> 
+    <soap:operation soapAction='urn:agavi-sampleapp#getItemPrice'/> 
+    <input> 
+      <soap:body use='literal' namespace='urn:agavi-sampleapp' 
+        encodingStyle='http://schemas.xmlsoap.org/soap/encoding/'/> 
+    </input> 
+    <output> 
+      <soap:body use='literal' namespace='urn:agavi-sampleapp' 
+        encodingStyle='http://schemas.xmlsoap.org/soap/encoding/'/> 
+    </output> 
+  </operation> 
+</binding> 
+<service name='ItemPriceService'> 
+  <port name='ItemPriceService' binding='tns:ItemPriceBinding'> 
+    <soap:address location='http://localhost/~dzuelke/_projects/agavi/branches/0.11/samples/pub/soap.php'/> 
+  </port> 
+</service> 
+</definitions>

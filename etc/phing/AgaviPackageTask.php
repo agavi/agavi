@@ -31,10 +31,23 @@ class AgaviPackageTask extends Task {
 		if (!$this->dir || !file_exists($this->dir)) {
 			throw new BuildException('Build dir is not defined or does not exist.');
 		}
+		
+		set_time_limit(0);
+
+		$this->log("Adding .keep files to empty directories", PROJECT_MSG_INFO);
+		
+		foreach(new RecursiveIteratorIterator(new RecursiveDirectoryIterator(realpath('samples')), RecursiveIteratorIterator::CHILD_FIRST) as $dir) {
+			if($dir->isDir()) {
+				foreach(new DirectoryIterator($dir->getPathname()) as $d) {
+					if(!in_array($d->getFilename(), array('.', '..'))) {
+						continue 2;
+					}
+				}
+				touch($dir->getPathname() . '/.keep');
+			}
+		}
 
 		$this->log("Building package contents in: {$this->dir}", PROJECT_MSG_INFO);
-
-		set_time_limit(0);
 
 		// Modify short description. Try to keep under 80 chars width
 $shortDesc = <<<EOD
@@ -54,6 +67,7 @@ EOD;
 			'ignore' => array(
 				'.svn/'
 			),
+			'addhiddenfiles' => true,
 			'dir_roles' => array(
 				'buildtools' => 'php',
 				'config' => 'php',
@@ -90,10 +104,10 @@ EOD;
 		$p2->addMaintainer('developer', 'dominik', 'Dominik del Bondio', 'ddb@bitxtender.com');
 		$p2->addMaintainer('developer', 'v-dogg', 'Veikko Mäkinen', 'mail@veikkomakinen.com');
 		$p2->setChannel('pear.agavi.org');
-		$p2->setReleaseVersion('0.11.0RC3');
-		$p2->setAPIVersion('0.11.0RC3');
-		$p2->setReleaseStability('beta');
-		$p2->setAPIStability('beta');
+		$p2->setReleaseVersion('0.11.0');
+		$p2->setAPIVersion('0.11.0');
+		$p2->setReleaseStability('stable');
+		$p2->setAPIStability('stable');
 		$p2->setSummary($shortDesc);
 		$p2->setDescription($longDesc);
 		$p2->setNotes("To see what's new, please refer to the RELEASE_NOTES. Also, the CHANGELOG contains a full list of changes. \n\nFor installation instructions, consult INSTALL. Information on how to migrate existing 0.10.x series applications can be found in UPGRADING.");
@@ -113,9 +127,27 @@ EOD;
 		$p2->addPackageDepWithChannel( 'optional', 'creole', 'pear.phpdb.org', '1.1.0');
 		$p2->addPackageDepWithChannel( 'optional', 'propel_generator', 'pear.phpdb.org', '1.2.0');
 		$p2->addPackageDepWithChannel( 'optional', 'propel_runtime', 'pear.phpdb.org', '1.2.0');
+		
+		$p2->addConflictingPackageDepWithChannel('phing', 'pear.php.net');
+		
 		$p2->setPhpDep('5.1.0');
+		
+		$p2->addExtensionDep('required', 'dom');
+		$p2->addExtensionDep('required', 'libxml');
+		$p2->addExtensionDep('required', 'SPL');
+		$p2->addExtensionDep('required', 'Reflection');
+		$p2->addExtensionDep('required', 'pcre');
+		$p2->addExtensionDep('optional', 'tokenizer');
+		$p2->addExtensionDep('optional', 'session');
+		$p2->addExtensionDep('optional', 'xmlrpc');
+		$p2->addExtensionDep('optional', 'PDO');
+		$p2->addExtensionDep('optional', 'iconv');
+		$p2->addExtensionDep('optional', 'gettext');
+		
 		$p2->setPearinstallerDep('1.4.0');
+		
 		$p2->setLicense('LGPL', 'http://www.gnu.org/copyleft/lesser.html');
+		
 		$p2->addReplacement('scripts/agavi-dist', 'pear-config', '@PEAR-DIR@', 'php_dir');
 		$p2->addReplacement('scripts/agavi.bat-dist', 'pear-config', '@PEAR-DIR@', 'php_dir');
 		$p2->generateContents();

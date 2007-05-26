@@ -76,24 +76,32 @@ class AgaviStreamTemplateLayer extends AgaviTemplateLayer
 		$args[] = array();
 		
 		$scheme = $this->getParameter('scheme');
-		if(!in_array($scheme, stream_get_wrappers())) {
-			throw new AgaviException('Unknown stream wrapper "' . $scheme . '"');
+		// FIXME: a simple workaround for broken ubuntu and debian packages (fixed already), we can remove that for final 0.11
+		if($scheme != 'file' && !in_array($scheme, stream_get_wrappers())) {
+			throw new AgaviException('Unknown stream wrapper "' . $scheme . '", must be one of "' . implode('", "', stream_get_wrappers()) . '".');
 		}
 		$check = $this->getParameter('check');
+		
+		$attempts = array();
 		
 		// try each of the patterns
 		foreach((array)$this->getParameter('targets', array()) as $pattern) {
 			// try pattern with each argument list
 			foreach($args as $arg) {
-				$target = $scheme . '://' . AgaviToolkit::expandVariables($pattern, array_merge($this->getParameters(), $arg));
+				$target = AgaviToolkit::expandVariables($pattern, array_merge($this->getParameters(), $arg));
+				// FIXME (should they fix it): don't add file:// because suhosin's include whitelist is empty by default, does not contain 'file' as allowed uri scheme
+				if($scheme != 'file') {
+					$target = $scheme . '://' . $target;
+				}
 				if(!$check || is_readable($target)) {
 					return $target;
 				}
+				$attempts[] = $target;
 			}
 		}
 		
 		// no template found, time to throw an exception
-		throw new AgaviException('Template "' . $template . '" could not be found.');
+		throw new AgaviException('Template "' . $template . '" could not be found. Paths tried:' . "\n" . implode("\n", $attempts));
 	}
 }
 

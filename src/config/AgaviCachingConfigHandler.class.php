@@ -56,7 +56,7 @@ class AgaviCachingConfigHandler extends AgaviConfigHandler
 
 		foreach($configurations as $cfg) {
 			foreach($cfg->cachings as $caching) {
-				if(!$caching->getAttribute('enabled', true)) {
+				if(!$this->literalize($caching->getAttribute('enabled', true))) {
 					continue;
 				}
 				

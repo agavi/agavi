@@ -198,11 +198,9 @@ class AgaviFactoryConfigHandler extends AgaviConfigHandler
 		foreach($configurations as $cfg) {
 			foreach($factories as $factory => $info) {
 				if($info['required'] && isset($cfg->$factory)) {
-					if(isset($cfg->execution_container)) {
-						$data[$factory] = isset($data[$factory]) ? $data[$factory] : array('class' => null, 'params' => array());
-						$data[$factory]['class'] = $cfg->$factory->getAttribute('class', $data[$factory]['class']);
-						$data[$factory]['params'] = $this->getItemParameters($cfg->$factory, $data[$factory]['params']);
-					}
+					$data[$factory] = isset($data[$factory]) ? $data[$factory] : array('class' => null, 'params' => array());
+					$data[$factory]['class'] = $cfg->$factory->getAttribute('class', $data[$factory]['class']);
+					$data[$factory]['params'] = $this->getItemParameters($cfg->$factory, $data[$factory]['params']);
 				}
 			}
 		}

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <configurations parent="%core.system_config_dir%/config_handlers.xml">
 	<configuration><!-- config/ConfigCacheTest:testimport -->
 		<handlers>

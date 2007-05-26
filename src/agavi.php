@@ -48,7 +48,4 @@ AgaviConfig::set('exception.default_template', AgaviConfig::get('core.agavi_dir'
 require(AgaviConfig::get('core.agavi_dir') . '/version.php');
 require(AgaviConfig::get('core.agavi_dir') . '/core/Agavi.class.php');
 
-// set up our __autoload
-spl_autoload_register(array('Agavi', '__autoload'));
-
 ?>

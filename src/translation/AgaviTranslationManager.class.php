@@ -140,7 +140,7 @@ class AgaviTranslationManager
 	 *
 	 * This method is not called directly after initialize().
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function startup()
@@ -150,7 +150,7 @@ class AgaviTranslationManager
 	/**
 	 * Execute the shutdown procedure.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function shutdown()

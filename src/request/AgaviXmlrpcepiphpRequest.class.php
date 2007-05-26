@@ -46,20 +46,22 @@ class AgaviXmlrpcepiphpRequest extends AgaviWebserviceRequest
 	{
 		parent::initialize($context, $parameters);
 		
-		$decoded = xmlrpc_decode_request($this->input, $this->calledMethod, isset($parameters['encoding']) ? $parameters['encoding'] : 'utf-8');
+		$decoded = xmlrpc_decode_request($this->input, $this->invokedMethod, isset($parameters['encoding']) ? $parameters['encoding'] : 'utf-8');
 		
 		if(count($decoded) == 1 && is_int($key = array_pop(array_keys($decoded))) && is_array($decoded[$key])) {
 			$decoded = $decoded[$key];
 		}
 		
-		$this->setParameters($decoded);
+		$rd = $this->getRequestData();
 		
-		$split = explode(':', $this->calledMethod);
+		$rd->setParameters($decoded);
+		
+		$split = explode(':', $this->invokedMethod);
 		if(count($split) == 2) {
-			$this->setParameter($this->getModuleAccessor(), $split[0]);
-			$this->setParameter($this->getActionAccessor(), $split[1]);
+			$rd->setParameter($this->getParameter('module_accessor'), $split[0]);
+			$rd->setParameter($this->getParameter('action_accessor'), $split[1]);
 		} else {
-			$this->setParameter($this->getActionAccessor(), $this->calledMethod);
+			$rd->setParameter($this->getParameter('action_accessor'), $this->invokedMethod);
 		}
 	}
 }

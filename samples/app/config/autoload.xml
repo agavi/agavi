@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<configurations parent="%core.system_config_dir%/autoload.xml">
+<?xml version="1.0" encoding="UTF-8"?>
+<configurations xmlns="http://agavi.org/agavi/1.0/config" parent="%core.system_config_dir%/autoload.xml">
 	<configuration>
 		<autoloads>
 			<autoload name="AgaviSampleAppLanguageRoutingCallback">%core.lib_dir%/routing/AgaviSampleAppLanguageRoutingCallback.class.php</autoload>

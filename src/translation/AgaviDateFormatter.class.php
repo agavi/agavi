@@ -17,7 +17,7 @@
  * The date formatter will dates numbers according to a given format
  *
  * @package    agavi
- * @subpackage util
+ * @subpackage translation
  *
  * @author     Dominik del Bondio <ddb@bitxtender.com>
  * @author     David Zülke <dz@bitxtender.com>
@@ -169,10 +169,14 @@ class AgaviDateFormatter extends AgaviDateFormat implements AgaviITranslator
 		$format = null; // ze default
 		
 		if(is_array($this->customFormat)) {
-			$format = AgaviToolkit::getValueByKeyList($this->customFormat, AgaviLocale::getLookupPath($this->locale->getIdentifier()), $format);
+			$format = AgaviToolkit::getValueByKeyList($this->customFormat, AgaviLocale::getLookupPath($this->locale->getIdentifier()));
+		} elseif($this->customFormat && !$this->translationDomain) {
+			$format = $this->customFormat;
 		}
 		
-		$format = $this->resolveSpecifier($this->locale, $format, $this->type);
+		if($format === null || $this->isDateSpecifier($format)) {
+			$format = $this->resolveSpecifier($this->locale, $format, $this->type);
+		}
 		
 		$this->setFormat($format);
 	}

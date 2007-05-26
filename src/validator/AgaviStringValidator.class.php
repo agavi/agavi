@@ -48,8 +48,12 @@ class AgaviStringValidator extends AgaviValidator
 	 */
 	protected function validate()
 	{
-		$value = (string) $this->getData($this->getArgument());
-
+		$originalValue = $value = (string) $this->getData($this->getArgument());
+		
+		if($this->getParameter('utf8', true)) {
+			$value = utf8_decode($value);
+		}
+		
 		if($this->hasParameter('min') and strlen($value) < $this->getParameter('min')) {
 			$this->throwError('min');
 			return false;
@@ -59,7 +63,9 @@ class AgaviStringValidator extends AgaviValidator
 			$this->throwError('max');
 			return false;
 		}
-		
+
+		$this->export($originalValue);
+
 		return true;
 	}
 }

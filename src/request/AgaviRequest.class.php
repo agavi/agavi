@@ -92,7 +92,7 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	/**
 	 * Constructor.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function __construct()
@@ -183,7 +183,11 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	public function getRequestData()
 	{
 		if($this->locked) {
-			throw new AgaviException("Access to request data is locked during Action and View execution, please use the local request data holder passed to your Action's or View's execute*() method to access request data.");
+			if($this->getParameter('request_lock_barf', true)) {
+				throw new AgaviException("Access to request data is locked during Action and View execution, please use the local request data holder passed to your Action's or View's execute*() method to access request data.\nYou may disable the throwing of this exception by setting the 'request_lock_barf' parameter to false. Sorry for the name of that one, 'throw_exception_when_trying_to_access_request_data_while_request_is_locked' is just a little too long.");
+			} else {
+				return new AgaviRequestDataHolder();
+			}
 		}
 		return $this->requestData;
 	}
@@ -193,7 +197,7 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	 *
 	 * This method is not called directly after initialize().
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function startup()
@@ -213,7 +217,7 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	/**
 	 * Whether or not the Request is locked.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public final function isLocked()

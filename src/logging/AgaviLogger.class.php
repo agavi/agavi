@@ -28,50 +28,8 @@
  *
  * @version    $Id$
  */
-class AgaviLogger
+class AgaviLogger implements AgaviILogger
 {
-	/**
-	 * Fatal level.
-	 *
-	 * @since      0.9.0
-	 */
-	const FATAL = 1;
-
-	/**
-	 * Error level.
-	 *
-	 * @since      0.9.0
-	 */
-	const ERROR = 2;
-
-	/**
-	 * Warning level.
-	 *
-	 * @since      0.9.0
-	 */
-	const WARN = 4;
-
-	/**
-	 * Information level.
-	 *
-	 * @since      0.9.0
-	 */
-	const INFO = 8;
-
-	/**
-	 * Debug level.
-	 *
-	 * @since      0.9.0
-	 */
-	const DEBUG = 16;
-
-	/**
-	 * All levels. (2^32-1)
-	 *
-	 * @since      0.11.0
-	 */
-	const ALL = 4294967295;
-
 	/**
 	 * @var        array An array of AgaviLoggerAppenders.
 	 */

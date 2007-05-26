@@ -207,6 +207,34 @@ abstract class AgaviCalendar
 		$this->setTimeInMillis($date);
 	}
 
+	/**
+	 * Returns the php native DateTime object which represents the time of this 
+	 * object. Also supports dates which are not in the range of a unix timestamp.
+	 * It will also set the DateTime object to be in the same time zone as this
+	 * Calendar object.
+	 * Please note that this method will only work on PHP 5.1.x when you have 
+	 * explicitly enabled the new DateTime support. This restriction does not 
+	 * apply to 5.2 and upwards. 
+	 * When the Calendar object is in the AD era, the result of the conversion 
+	 * is undefined.
+	 *
+	 * @return     DateTime The native DateTime.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getNativeDateTime()
+	{
+		$date = new DateTime(
+			sprintf(
+				'%d-%d-%d %d:%d:%d', 
+				$this->get(AgaviDateDefinitions::YEAR), $this->get(AgaviDateDefinitions::MONTH) + 1, $this->get(AgaviDateDefinitions::DATE),
+				$this->get(AgaviDateDefinitions::HOUR_OF_DAY), $this->get(AgaviDateDefinitions::MINUTE), $this->get(AgaviDateDefinitions::SECOND)
+			),
+			new DateTimeZone($this->getTimeZone()->getId())
+		);
+		return $date;
+	}
 
 	/**
 	 * Gets this Calendar's time as unix timestamp. May involve recalculation of 

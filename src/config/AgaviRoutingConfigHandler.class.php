@@ -96,7 +96,7 @@ class AgaviRoutingConfigHandler extends AgaviConfigHandler
 			if($route->hasAttribute('name'))					$opts['name']					= $route->getAttribute('name');
 			if($route->hasAttribute('callback'))			$opts['callback']			= $route->getAttribute('callback');
 			if($route->hasAttribute('source'))				$opts['source']				= $route->getAttribute('source');
-			if($route->hasAttribute('constraint'))		$opts['constraint']		= array_map('trim', explode(' ', trim($route->getAttribute('method'))));
+			if($route->hasAttribute('constraint'))		$opts['constraint']		= array_map('trim', explode(' ', trim($route->getAttribute('constraint'))));
 			// values which will be set when the route matched
 			if($route->hasAttribute('action'))				$opts['action']				= $this->literalize($route->getAttribute('action'));
 			if($route->hasAttribute('locale'))				$opts['locale']				= $this->literalize($route->getAttribute('locale'));

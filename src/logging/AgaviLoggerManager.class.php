@@ -177,8 +177,8 @@ class AgaviLoggerManager
 	 *
 	 * If a logger with the name already exists, an exception will be thrown.
 	 *
-	 * @param      string      A logger name.
-	 * @param      AgaviLogger A Logger instance.
+	 * @param      string       A logger name.
+	 * @param      AgaviILogger A Logger instance.
 	 *
 	 * @throws     <b>AgaviLoggingException</b> If a logger with the name already
 	 *                                          exists.
@@ -187,7 +187,7 @@ class AgaviLoggerManager
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function setLogger($name, AgaviLogger $logger)
+	public function setLogger($name, AgaviILogger $logger)
 	{
 		if(!isset($this->loggers[$name])) {
 			$this->loggers[$name] = $logger;
@@ -266,7 +266,7 @@ class AgaviLoggerManager
 	 *
 	 * This method is not called directly after initialize().
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function startup()

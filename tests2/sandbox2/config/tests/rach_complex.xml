@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <configurations>
 	<configuration>
 		<cachings>
@@ -20,10 +20,8 @@
 					</variables>
 				</decorator>
 
-				<variables>
-					<variable name="categoryId" source="request.attribute" />
-					<variable name="isRootCat" source="request.attribute" />
-				</variables>
+				<variable name="categoryId" source="request.attribute" />
+				<variable name="isRootCat" source="request.attribute" />
 			</caching>
 		</cachings>
 	</configuration>

@@ -246,8 +246,6 @@ API Changes:
 !    does not contain any request data directly anymore, has a 
     ADD:
      getContext: new method
-     getModuleAccessor: new method
-     getActionAccessor: new method
      toggleLock: new method
      getRequestDataHolder: gets the global request data holder
     CHG:

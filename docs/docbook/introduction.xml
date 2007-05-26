@@ -4,22 +4,25 @@
 <book>
   <title>An Introduction to Agavi</title>
 
+  <bookinfo>
+    <releaseinfo>$Id$</releaseinfo>
+  </bookinfo>
+
   <preface>
     <title>Preface</title>
 
-    <para>Agavi is a Web Application Framework for
-    PHP 5. While it
-    lies in the nature of a framework to simplify the application development
-    process, Agavi won't do that at any cost. The primary goals are
-    flexibility, cleanliness and structure. You won't find HTML Form helper
-    methods in Agavi (because they aren't necessary, we have something better,
-    more on that later), and we use XML configuration files because we believe
-    that they offer better structuring abilites than alternatives such as
-    YAML. If you're looking for a solution that assists you in serious
-    high-end development, that has smart and innovative solutions to common
-    problems that haven't been solved properly before, and that encourages and
-    enforces a clean development process to ensure your code remains
-    maintainable and extensible, you've come to the right place.</para>
+    <para>Agavi is a Web Application Framework for PHP 5. While it lies in the
+    nature of a framework to simplify the application development process,
+    Agavi won't do that at any cost. The primary goals are flexibility,
+    cleanliness and structure. You won't find HTML Form helper methods in
+    Agavi (because they aren't necessary, we have something better, more on
+    that later), and we use XML configuration files because we believe that
+    they offer better structuring abilites than alternatives such as YAML. If
+    you're looking for a solution that assists you in serious high-end
+    development, that has smart and innovative solutions to common problems
+    that haven't been solved properly before, and that encourages and enforces
+    a clean development process to ensure your code remains maintainable and
+    extensible, you've come to the right place.</para>
   </preface>
 
   <chapter>

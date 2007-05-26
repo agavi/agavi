@@ -292,9 +292,6 @@ abstract class AgaviValidator extends AgaviParameterHolder
 		// we always have the right base
 		$this->curBase = $parent->getBase();
 		$this->parentContainer = $parent;
-		$this->validationManager = $this->parentContainer;
-		while(!($this->validationManager instanceof AgaviValidationManager) && ($this->validationManager = $this->validationManager->getParentContainer())) {
-		}
 	}
 
 	/**
@@ -527,8 +524,9 @@ abstract class AgaviValidator extends AgaviParameterHolder
 		$array =& $this->validationParameters->getAll($paramType);
 		$cp = $this->curBase->pushRetNew($name);
 		$cp->setValue($array, $value);
-		if($this->validationManager !== null) {
-			$this->validationManager->addFieldResult($this, $cp->__toString(), AgaviValidator::NOT_PROCESSED);
+		if($this->parentContainer !== null) {
+			// make sure the parameter doesn't get removed by the validation manager
+			$this->parentContainer->addFieldResult($this, $cp->__toString(), AgaviValidator::NOT_PROCESSED);
 		}
 	}
 
@@ -550,7 +548,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 		$base = clone $base;
 		if($base->length() == 0) {
 			// we have an empty base so we do the actual validation
-			if(count($this->getParameter('depends')) > 0 && !$this->parentContainer->getDependencyManager()->checkDependencies($this->getParameter('depends'), $this->curBase)) {
+			if($this->getDependencyManager() && (count($this->getParameter('depends')) > 0 && !$this->getDependencyManager()->checkDependencies($this->getParameter('depends'), $this->curBase))) {
 				// dependencies not met, exit with success
 				return self::SUCCESS;
 			}
@@ -576,20 +574,20 @@ abstract class AgaviValidator extends AgaviParameterHolder
 				}
 			}
 
-			if($this->validationManager !== null) {
+			if($this->parentContainer !== null) {
 				foreach($fieldnames as $fieldname) {
-					$this->validationManager->addFieldResult($this, $fieldname, $result);
+					$this->parentContainer->addFieldResult($this, $fieldname, $result);
 				}
 
 				if($this->incident) {
-					$this->validationManager->addIncident($this->incident);
+					$this->parentContainer->addIncident($this->incident);
 				}
 			}
 
 			$this->incident = null;
 			// put dependencies provided by this validator into manager
-			if($result == self::SUCCESS && count($this->getParameter('provides')) > 0) {
-				$this->parentContainer->getDependencyManager()->addDependTokens($this->getParameter('provides'), $this->curBase);
+			if($this->getDependencyManager() && ($result == self::SUCCESS && count($this->getParameter('provides')) > 0)) {
+				$this->getDependencyManager()->addDependTokens($this->getParameter('provides'), $this->curBase);
 			}
 			return $result;
 
@@ -633,7 +631,9 @@ abstract class AgaviValidator extends AgaviParameterHolder
 
 			// validate in every name defined in the request
 			foreach($names as $name) {
-				$t = $this->validateInBase($base->pushRetNew($name));
+				$newBase = clone $base;
+				$newBase->unshift($name);
+				$t = $this->validateInBase($newBase);
 
 				if($t == self::CRITICAL) {
 					return $t;
@@ -667,8 +667,8 @@ abstract class AgaviValidator extends AgaviParameterHolder
 		$base = new AgaviVirtualArrayPath($this->getParameter('base'));
 
 		$res = $this->validateInBase($base);
-		if($this->incident && $this->validationManager) {
-			$this->validationManager->addIncident($this->incident);
+		if($this->incident && $this->parentContainer) {
+			$this->parentContainer->addIncident($this->incident);
 			$this->incident = null;
 		}
 		return $res;
@@ -749,6 +749,22 @@ abstract class AgaviValidator extends AgaviParameterHolder
 		}
 
 		return $arguments;
+	}
+
+	/**
+	 * Returns the depency manager of the parent container if any.
+	 * 
+	 * @return     AgaviDependencyManager The parent's dependency manager.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getDependencyManager()
+	{
+		if($this->parentContainer instanceof AgaviIValidatorContainer) {
+			return $this->parentContainer->getDependencyManager();
+		}
+		return null;
 	}
 }
 

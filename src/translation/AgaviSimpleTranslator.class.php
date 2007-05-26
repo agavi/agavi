@@ -61,9 +61,9 @@ class AgaviSimpleTranslator extends AgaviBasicTranslator
 
 		$domainData = array();
 
-		foreach($parameters as $domain => $locales) {
-			foreach($locales as $locale => $translations) {
-				foreach($translations as $key => $translation) {
+		foreach((array)$parameters as $domain => $locales) {
+			foreach((array)$locales as $locale => $translations) {
+				foreach((array)$translations as $key => $translation) {
 					if(is_array($translation)) {
 						$domainData[$locale][$domain][$translation['from']] = $translation['to'];
 					} else {
@@ -100,7 +100,7 @@ class AgaviSimpleTranslator extends AgaviBasicTranslator
 		if(is_array($message)) {
 			throw new AgaviException('The simple translator doesn\'t support pluralized input');
 		} else {
-			$data = isset($this->currentData[$domain][$message]) ? $this->currentData[$domain][$message] : $message;
+			$data = isset($this->currentData[(string)$domain][$message]) ? $this->currentData[(string)$domain][$message] : $message;
 		}
 
 		if($locale && $locale !== $this->locale) {

@@ -236,7 +236,7 @@
 		<!-- generate package.xml -->
 		<agavipackage dir="${builddir}" />
 
-		<echo msg="package.xml generated to '${builddir}'. Use &quot;pear package&quot; to create the package." />
+		<echo msg="package.xml generated to '${builddir}'. Use &quot;pear package&quot; in build/ to create the package." />
 	</target>
 
 	<target name="test" description="run test suite">

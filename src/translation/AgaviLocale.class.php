@@ -54,7 +54,7 @@ class AgaviLocale extends AgaviParameterHolder
 	 * @param      array        The locale data.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function initialize(AgaviContext $context, array $parameters = array(), $identifier, array $data = array())

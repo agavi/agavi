@@ -62,7 +62,7 @@ class AgaviImageFileValidator  extends AgaviBaseFileValidator
 
 		$file = $this->getData($this->getArgument());
 
-		$type = getimagesize($file->getTmpName());
+		$type = @getimagesize($file->getTmpName());
 		if($type === false) {
 			$this->throwError('no_image');
 			return false;
@@ -102,9 +102,14 @@ class AgaviImageFileValidator  extends AgaviBaseFileValidator
 			'swf' => IMAGETYPE_SWF,
 		);
 		
+		$format = $this->getParameter('format', array());
 		
-		foreach(explode(' ', $this->getParameter('format')) as $format) {
-			if($formats[strtolower($format)] == $imageType) {
+		if(!is_array($format)) {
+			$format = explode(' ', $this->getParameter('format'));
+		}
+		
+		foreach($format as $name) {
+			if($formats[strtolower($name)] == $imageType) {
 				return true;
 			}
 		}
