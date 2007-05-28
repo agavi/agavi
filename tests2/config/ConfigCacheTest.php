@@ -85,21 +85,4 @@ class ConfigCacheTest extends AgaviTestCase
 		AgaviConfigCache::clear();
 		$this->assertFalse( file_exists($dummyfile) );
 	}
-
-	public function testparseConfig()
-	{
-		$cfg = 'parseConfigTest.pt';
-		$validationFile = 'validFile.vf';
-
-		$exc = false;
-		try {
-			AgaviConfigCache::parseConfig($cfg, false);
-		} catch (AgaviConfigurationException $e) {
-			$exc = true;
-		}
-		if(!$exc) $this->fail('Did not get expected ConfigurationException?');
-
-		$this->assertSame($cfg . '---' . $validationFile, AgaviConfigCache::parseConfig($cfg, true, $validationFile));
-
-	}
 }

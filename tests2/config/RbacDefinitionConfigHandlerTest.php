@@ -1,7 +1,7 @@
 <?php
 require_once(dirname(__FILE__) . '/ConfigHandlerTestBase.php');
 
-class RbacdefinitionConfigHandlerTest extends ConfigHandlerTestBase
+class RbacDefinitionConfigHandlerTest extends ConfigHandlerTestBase
 {
 	public function testHandler()
 	{
