@@ -37,6 +37,11 @@
 final class AgaviContext
 {
 	/**
+	 * @var        string The name of the Context.
+	 */
+	protected $name = '';
+	
+	/**
 	 * @var        AgaviController A Controller instance.
 	 */
 	protected $controller = null;
@@ -128,6 +133,21 @@ final class AgaviContext
 		// Singleton, setting up the class happens in initialize()
 	}
 
+	/**
+	 * __toString overload, returns the name of the Context.
+	 *
+	 * @return     string The context name.
+	 *
+	 * @see        AgaviContext::getName()
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function __toString()
+	{
+		return $this->getName();
+	}
+	
 	/**
 	 * Get information on a frequently used class.
 	 *
