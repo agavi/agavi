@@ -56,6 +56,9 @@ final class Agavi
 					}
 				}
 				include(AgaviConfigCache::checkConfig($cfg));
+				// if(class_exists($class, false)) {
+				// 	return;
+				// }
 			} catch(Exception $e) {
 				trigger_error($e->getMessage(), E_USER_ERROR);
 			}

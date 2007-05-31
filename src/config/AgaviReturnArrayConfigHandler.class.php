@@ -85,7 +85,7 @@ class AgaviReturnArrayConfigHandler extends AgaviConfigHandler
 			}
 
 			if($literalize) {
-				$value = $this->literalize($value);
+				$value = AgaviToolkit::literalize($value);
 			}
 
 			if(!isset($data[$name])) {
@@ -96,7 +96,7 @@ class AgaviReturnArrayConfigHandler extends AgaviConfigHandler
 		if(!$item->hasChildren()) {
 			$val = $item->getValue();
 			if($literalize) {
-				$val = $this->literalize($val);
+				$val = AgaviToolkit::literalize($val);
 			}
 			
 			if($val === null) {
@@ -138,7 +138,7 @@ class AgaviReturnArrayConfigHandler extends AgaviConfigHandler
 					$key = $child->getAttribute($idAttribute);
 					if($literalize) {
 						// no literalize, just constants!
-						$key = $this->replaceConstants($key);
+						$key = AgaviToolkit::expandDirectives($key);
 					}
 					$to[$key] = $this->convertToArray($child);
 				} elseif($hasParent) {

@@ -68,7 +68,7 @@ class AgaviModuleConfigHandler extends AgaviConfigHandler
 
 			$name = strtolower($cfg->name->getValue());
 			$prefix = 'modules.' . $name . '.';
-			$data[$prefix . 'enabled']     = $this->literalize($cfg->enabled->getValue());
+			$data[$prefix . 'enabled']     = AgaviToolkit::literalize($cfg->enabled->getValue());
 			if(isset($cfg->title)) {
 				$data[$prefix . 'title']       = $cfg->title->getValue();
 			}

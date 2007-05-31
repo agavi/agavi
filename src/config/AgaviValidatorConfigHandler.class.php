@@ -190,7 +190,7 @@ class AgaviValidatorConfigHandler extends AgaviConfigHandler
 			}
 		}
 		if($validator->hasAttribute('required')) {
-			$stdRequired = $parameters['required'] = $this->literalize($validator->getAttribute('required'));
+			$stdRequired = $parameters['required'] = AgaviToolkit::literalize($validator->getAttribute('required'));
 		}
 
 		$code[$name] = sprintf('$%s = new %s();', $name, $class) .
@@ -202,7 +202,7 @@ class AgaviValidatorConfigHandler extends AgaviConfigHandler
 			$childMethod = $validator->validators->getAttribute('method', $stdMethod);
 			$childRequired = $stdRequired;
 			if($validator->validators->hasAttribute('required')) {
-				$childRequired = $this->literalize($validator->validators->getAttribute('required'));
+				$childRequired = AgaviToolkit::literalize($validator->validators->getAttribute('required'));
 			}
 			foreach($validator->validators as $v) {
 				$code = $this->getValidatorArray($v, $code, $childSeverity, $name, $childMethod, $childRequired);

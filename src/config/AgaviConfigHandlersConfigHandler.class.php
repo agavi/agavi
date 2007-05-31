@@ -61,7 +61,7 @@ class AgaviConfigHandlersConfigHandler extends AgaviConfigHandler
 			foreach($cfg->handlers as $handler) {
 				$pattern = $handler->getAttribute('pattern');
 				
-				$category = var_export(AgaviToolkit::normalizePath($this->replaceConstants($pattern)), true);
+				$category = var_export(AgaviToolkit::normalizePath(AgaviToolkit::expandDirectives($pattern)), true);
 				
 				$class = var_export($handler->getAttribute('class'), true);
 				
@@ -74,7 +74,7 @@ class AgaviConfigHandlersConfigHandler extends AgaviConfigHandler
 					),
 				);
 				if($handler->hasAttribute('validate')) {
-					$validation[AgaviXmlConfigParser::VALIDATION_TYPE_XMLSCHEMA][] = $this->literalize($handler->getAttribute('validate'));
+					$validation[AgaviXmlConfigParser::VALIDATION_TYPE_XMLSCHEMA][] = AgaviToolkit::literalize($handler->getAttribute('validate'));
 				} elseif(false) {
 					// TODO: check for <validations><validation type="schematron"> children here
 				}

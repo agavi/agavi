@@ -63,7 +63,7 @@ class AgaviXmlConfigParser
 			$doc = $this->parse($nextConfig, $validation);
 			
 			if($doc->documentElement && $doc->documentElement->hasAttribute('parent')) {
-				$nextConfig = AgaviBaseConfigHandler::literalize($doc->documentElement->getAttribute('parent'));
+				$nextConfig = AgaviToolkit::literalize($doc->documentElement->getAttribute('parent'));
 			} else {
 				$nextConfig = null;
 			}
@@ -142,7 +142,7 @@ class AgaviXmlConfigParser
 			if($element->hasAttribute('href')) {
 				$attribute = $element->getAttributeNode('href');
 				$parts = explode('#', $attribute->nodeValue, 2);
-				$parts[0] = str_replace('\\', '/', AgaviConfigHandler::replaceConstants($parts[0]));
+				$parts[0] = str_replace('\\', '/', AgaviToolkit::expandDirectives($parts[0]));
 				$attribute->nodeValue = implode('#', $parts);
 			}
 		}
@@ -252,7 +252,7 @@ class AgaviXmlConfigParser
 				} else {
 					// references an xsl file
 					$xsl = new DomDocument();
-					$xsl->load(AgaviConfigHandler::replaceConstants($href));
+					$xsl->load(AgaviToolkit::expandDirectives($href));
 					if(libxml_get_last_error() !== false) {
 						$errors = array();
 						foreach(libxml_get_errors() as $error) {
@@ -361,11 +361,11 @@ class AgaviXmlConfigParser
 		if($doc->documentElement->hasAttributeNS('http://www.w3.org/2001/XMLSchema-instance', 'schemaLocation')) {
 			$locations = preg_split('/\s+/', $doc->documentElement->getAttributeNS('http://www.w3.org/2001/XMLSchema-instance', 'schemaLocation'));
 			for($i = 1; $i < count($locations); $i = $i + 2) {
-				$sources[] = file_get_contents(AgaviBaseConfigHandler::literalize($locations[$i]));
+				$sources[] = file_get_contents(AgaviToolkit::literalize($locations[$i]));
 			}
 		}
 		if($doc->documentElement->hasAttributeNS('http://www.w3.org/2001/XMLSchema-instance', 'noNamespaceSchemaLocation')) {
-			$sources[] = file_get_contents(AgaviBaseConfigHandler::literalize($doc->documentElement->getAttributeNS('http://www.w3.org/2001/XMLSchema-instance', 'noNamespaceSchemaLocation')));
+			$sources[] = file_get_contents(AgaviToolkit::literalize($doc->documentElement->getAttributeNS('http://www.w3.org/2001/XMLSchema-instance', 'noNamespaceSchemaLocation')));
 		}
 		
 		if($sources) {

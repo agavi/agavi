@@ -56,7 +56,7 @@ class AgaviCachingConfigHandler extends AgaviConfigHandler
 
 		foreach($configurations as $cfg) {
 			foreach($cfg->cachings as $caching) {
-				if(!$this->literalize($caching->getAttribute('enabled', true))) {
+				if(!AgaviToolkit::literalize($caching->getAttribute('enabled', true))) {
 					continue;
 				}
 				
@@ -93,7 +93,7 @@ class AgaviCachingConfigHandler extends AgaviConfigHandler
 						if(isset($outputType->layers)) {
 							$layers = array();
 							foreach($outputType->layers as $layer) {
-								$include = $this->literalize($layer->getAttribute('include', 'true'));
+								$include = AgaviToolkit::literalize($layer->getAttribute('include', 'true'));
 								if((isset($layer->slots) && !$layer->hasAttribute('include')) || !$include) {
 									$slots = array();
 									if(isset($layer->slots)) {
