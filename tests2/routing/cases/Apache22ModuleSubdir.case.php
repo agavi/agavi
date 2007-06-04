@@ -596,6 +596,58 @@
 		)
 	),
 	array(
+		'message' => 'Sub-directory, rewritten, called path in dir with two slashes',
+		'input' => '/fubar',
+		'prefix' => '/tmp//rewrite',
+		'basePath' => '/tmp//rewrite/',
+		'baseHref' => 'http://ross.sandbox.zomglolkthxbai.net/tmp//rewrite/',
+		'_ENV' => array (
+		),
+		'_GET' => array (
+			'/fubar' => '',
+		),
+		'_SERVER' => array (
+			'REDIRECT_STATUS' => '200',
+			'HTTP_USER_AGENT' => 'Opera/9.21 (Windows NT 5.1; U; en)',
+			'HTTP_HOST' => 'ross.sandbox.zomglolkthxbai.net',
+			'HTTP_ACCEPT' => 'text/html, application/xml;q=0.9, application/xhtml+xml, image/png, image/jpeg, image/gif, image/x-xbitmap, */*;q=0.1',
+			'HTTP_ACCEPT_LANGUAGE' => 'en-GB,en;q=0.9',
+			'HTTP_ACCEPT_CHARSET' => 'iso-8859-1, utf-8, utf-16, *;q=0.1',
+			'HTTP_ACCEPT_ENCODING' => 'deflate, gzip, x-gzip, identity, *;q=0',
+			'HTTP_CONNECTION' => 'Keep-Alive, TE',
+			'HTTP_TE' => 'deflate, gzip, chunked, identity, trailers',
+			'PATH' => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/X11R6/bin',
+			'SERVER_SIGNATURE' => '
+		Apache/2.2.4 (Unix) DAV/2 SVN/1.4.3 PHP/5.2.1 Server at ross.sandbox.zomglolkthxbai.net Port 80
+
+		',
+			'SERVER_SOFTWARE' => 'Apache/2.2.4 (Unix) DAV/2 SVN/1.4.3 PHP/5.2.1',
+			'SERVER_NAME' => 'ross.sandbox.zomglolkthxbai.net',
+			'SERVER_ADDR' => '10.42.2.223',
+			'SERVER_PORT' => '80',
+			'REMOTE_ADDR' => '10.42.2.128',
+			'DOCUMENT_ROOT' => '/home/ross/www/',
+			'SERVER_ADMIN' => 'webmaster@localhost',
+			'SCRIPT_FILENAME' => '/home/ross/www/tmp/rewrite/index.php',
+			'REMOTE_PORT' => '2937',
+			'REDIRECT_QUERY_STRING' => '/fubar',
+			'REDIRECT_URL' => '/tmp//rewrite/fubar',
+			'GATEWAY_INTERFACE' => 'CGI/1.1',
+			'SERVER_PROTOCOL' => 'HTTP/1.1',
+			'REQUEST_METHOD' => 'GET',
+			'QUERY_STRING' => '/fubar',
+			'REQUEST_URI' => '/tmp//rewrite/fubar',
+			'SCRIPT_NAME' => '/tmp/rewrite/index.php',
+			'PHP_SELF' => '/tmp/rewrite/index.php',
+			'REQUEST_TIME' => 1180957954,
+			'argv' => 
+			array (
+				0 => '/fubar',
+			),
+			'argc' => 1,
+		)
+	),
+	array(
 		'message' => 'Sub-directory, rewritten, called path with two slashes',
 		'input' => '/fu//bar',
 		'prefix' => '/tests/apache2.2-rewrite',
@@ -790,7 +842,7 @@
 		'input' => '/fu//bar',
 		'prefix' => '/tmp/rewrite',
 		'basePath' => '/tmp/rewrite/',
-		'baseHref' => 'http://ross.sandbox.zomglolkthxbai.net/tmp/rewrite/apache2.2-rewrite/',
+		'baseHref' => 'http://ross.sandbox.zomglolkthxbai.net/tmp/rewrite/',
 		'_ENV' => array (
 		),
 		'_GET' => array (
@@ -840,7 +892,7 @@
 	),
 	array(
 		'message' => 'Sub-directory, rewritten, called path with three slashes',
-		'input' => '/fu///bar',
+		'input' => '/foo///bar',
 		'prefix' => '/tests/apache2.2-rewrite',
 		'basePath' => '/tests/apache2.2-rewrite/',
 		'baseHref' => 'http://impl.user.compass.zomglolkthxbai.com/tests/apache2.2-rewrite/',
@@ -1022,6 +1074,60 @@
 			'SCRIPT_NAME' => '/tests/apache2.2-rewrite/index.php',
 			'PHP_SELF' => '/tests/apache2.2-rewrite/index.php',
 			'REQUEST_TIME' => 1180909167,
+		)
+	),
+	array(
+		'message' => 'Sub-directory, rewritten, called special path with two slashes and an uber complicated query with, yeah, two slashes',
+		'input' => '/fu//bar',
+		'prefix' => '/tmp/rewrite',
+		'basePath' => '/tmp/rewrite/',
+		'baseHref' => 'http://ross.sandbox.zomglolkthxbai.net/tmp/rewrite/',
+		'_ENV' => array (
+		),
+		'_GET' => array (
+			'/fu/bar' => '',
+			'foo' => 'bar ba//z lol',
+		),
+		'_SERVER' => array (
+			'REDIRECT_STATUS' => '200',
+			'HTTP_USER_AGENT' => 'Opera/9.21 (Windows NT 5.1; U; en)',
+			'HTTP_HOST' => 'ross.sandbox.zomglolkthxbai.net',
+			'HTTP_ACCEPT' => 'text/html, application/xml;q=0.9, application/xhtml+xml, image/png, image/jpeg, image/gif, image/x-xbitmap, */*;q=0.1',
+			'HTTP_ACCEPT_LANGUAGE' => 'en-GB,en;q=0.9',
+			'HTTP_ACCEPT_CHARSET' => 'iso-8859-1, utf-8, utf-16, *;q=0.1',
+			'HTTP_ACCEPT_ENCODING' => 'deflate, gzip, x-gzip, identity, *;q=0',
+			'HTTP_CONNECTION' => 'Keep-Alive, TE',
+			'HTTP_TE' => 'deflate, gzip, chunked, identity, trailers',
+			'PATH' => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/X11R6/bin',
+			'SERVER_SIGNATURE' => '
+		Apache/2.2.4 (Unix) DAV/2 SVN/1.4.3 PHP/5.2.1 Server at ross.sandbox.zomglolkthxbai.net Port 80
+
+		',
+			'SERVER_SOFTWARE' => 'Apache/2.2.4 (Unix) DAV/2 SVN/1.4.3 PHP/5.2.1',
+			'SERVER_NAME' => 'ross.sandbox.zomglolkthxbai.net',
+			'SERVER_ADDR' => '10.42.2.223',
+			'SERVER_PORT' => '80',
+			'REMOTE_ADDR' => '10.42.2.128',
+			'DOCUMENT_ROOT' => '/home/ross/www/',
+			'SERVER_ADMIN' => 'webmaster@localhost',
+			'SCRIPT_FILENAME' => '/home/ross/www/tmp/rewrite/index.php',
+			'REMOTE_PORT' => '2947',
+			'REDIRECT_QUERY_STRING' => '/fu/bar&foo=bar%20ba//z+lol',
+			'REDIRECT_URL' => '/tmp/rewrite/fu//bar',
+			'GATEWAY_INTERFACE' => 'CGI/1.1',
+			'SERVER_PROTOCOL' => 'HTTP/1.1',
+			'REQUEST_METHOD' => 'GET',
+			'QUERY_STRING' => '/fu/bar&foo=bar%20ba//z+lol',
+			'REQUEST_URI' => '/tmp/rewrite/fu//bar?foo=bar%20ba//z+lol',
+			'SCRIPT_NAME' => '/tmp/rewrite/index.php',
+			'PHP_SELF' => '/tmp/rewrite/index.php',
+			'REQUEST_TIME' => 1180958000,
+			'argv' => 
+			array (
+				0 => '/fu/bar&foo=bar%20ba//z',
+				1 => 'lol',
+			),
+			'argc' => 2,
 		)
 	),
 );
