@@ -137,6 +137,7 @@ EOD;
 		$p2->addExtensionDep('required', 'SPL');
 		$p2->addExtensionDep('required', 'Reflection');
 		$p2->addExtensionDep('required', 'pcre');
+		$p2->addExtensionDep('optional', 'xsl');
 		$p2->addExtensionDep('optional', 'tokenizer');
 		$p2->addExtensionDep('optional', 'session');
 		$p2->addExtensionDep('optional', 'xmlrpc');
