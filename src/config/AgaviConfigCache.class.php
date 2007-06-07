@@ -273,10 +273,10 @@ final class AgaviConfigCache
 	{
 		// since we only need the parser and handlers when the config is not cached
 		// it is sufficient to include them at this stage
-		require(AgaviConfig::get('core.agavi_dir') . '/config/AgaviILegacyConfigHandler.interface.php');
+		require_once(AgaviConfig::get('core.agavi_dir') . '/config/AgaviILegacyConfigHandler.interface.php');
 		require(AgaviConfig::get('core.agavi_dir') . '/config/AgaviIXmlConfigHandler.interface.php');
-		require(AgaviConfig::get('core.agavi_dir') . '/config/AgaviBaseConfigHandler.class.php');
-		require(AgaviConfig::get('core.agavi_dir') . '/config/AgaviConfigHandler.class.php');
+		require_once(AgaviConfig::get('core.agavi_dir') . '/config/AgaviBaseConfigHandler.class.php');
+		require_once(AgaviConfig::get('core.agavi_dir') . '/config/AgaviConfigHandler.class.php');
 		require(AgaviConfig::get('core.agavi_dir') . '/config/AgaviXmlConfigHandler.class.php');
 		require(AgaviConfig::get('core.agavi_dir') . '/config/AgaviAutoloadConfigHandler.class.php');
 		require(AgaviConfig::get('core.agavi_dir') . '/config/AgaviConfigHandlersConfigHandler.class.php');
