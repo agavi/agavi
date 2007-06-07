@@ -31,7 +31,6 @@
  *
  * <b>Optional parameters:</b>
  *
-
  * # <b>cdata_fix</b> - [true] - Fix generated CDATA delimiters in script and
  *                               style blocks.
  * # <b>error_class</b> - "error" - The class name that is assigned to form
