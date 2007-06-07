@@ -21,6 +21,8 @@ ADD: Support for UTF-8 in StringValidator via parameter 'utf8', default on ([182
 ADD: Ability to prevent sending of the response in Controller::dispatch(), which now always returns the final (not global!) response (#469) (David)
 ADD: Made default layer class configurable via 'default_layer_class' config parameter for AgaviOutputTypeConfigHandler ([1800]) (David)
 
+CHG: Deprecate AgaviConfigCache::literalize() and AgaviConfigCache::replaceConstants() (#526) (David)
+CHG: Improvements for FPF's charset detection, now uses output type's http_headers Content-Type value if possible ([1982]) (David)
 CHG: Updated zoneinfo database to 2007f (#524) (David)
 CHG: Ability to get empty data instead of exceptions when accessing locked request data (#512) (David)
 CHG: Display full list of complete paths of templates tried when displaying "template not found" exception (#497) (David)
