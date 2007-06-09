@@ -6,6 +6,7 @@ AGAVI CHANGELOG
 ADD: Add extension points to XML Schema definitions where feasible (#515) (David)
 ADD: Support for XML Schema instance schema location declarations (#517) (David)
 ADD: AgaviNullStorage (#523) (David)
+ADD: Experimental(!) support for native XML config handlers, base work for XML-only configuration system (#519)
 ADD: Support for XSL stylesheets in configuration files (#509) (David)
 ADD: Support for XML namespaces in configuration files (#508) (David)
 ADD: SOAP Support (#301) with automatic WSDL generation (#514) (David)
