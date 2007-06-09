@@ -47,8 +47,7 @@ class AgaviTimeZoneDataConfigHandler extends AgaviConfigHandler
 			throw new AgaviException('this config handler needs a context specified!');
 		}
 		
-		$parserClass = $this->parser;
-		$parser = new $parserClass();
+		$parser = new AgaviTimeZoneDataParser();
 		$parser->initialize(AgaviContext::getInstance($context));
 
 		//$tzData = AgaviConfigCache::parseConfig($config, false, $this->getValidationFile(), $this->parser);

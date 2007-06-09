@@ -62,7 +62,7 @@ class AgaviCompileConfigHandler extends AgaviConfigHandler
 			foreach($configuration->compiles as $compileFile) {
 				$file = trim($compileFile->getValue());
 
-				$file = $this->replaceConstants($file);
+				$file = AgaviToolkit::expandDirectives($file);
 				$file = $this->replacePath($file);
 				$file = realpath($file);
 

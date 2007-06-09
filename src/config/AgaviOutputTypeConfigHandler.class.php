@@ -121,7 +121,7 @@ class AgaviOutputTypeConfigHandler extends AgaviConfigHandler
 					$data[$outputTypeName]['default_layout'] = $outputType->layouts->getAttribute('default');
 				}
 				if($outputType->hasAttribute('exception_template')) {
-					$data[$outputTypeName]['exception_template'] = $this->replaceConstants($outputType->getAttribute('exception_template'));
+					$data[$outputTypeName]['exception_template'] = AgaviToolkit::expandDirectives($outputType->getAttribute('exception_template'));
 					if(!is_readable($data[$outputTypeName]['exception_template'])) {
 						throw new AgaviConfigurationException('Exception template "' . $data[$outputTypeName]['exception_template'] . '" does not exist or is unreadable');
 					}

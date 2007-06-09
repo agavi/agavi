@@ -43,7 +43,6 @@ final class AgaviToolkit
 	 */
 	public static function isPathAbsolute($path)
 	{
-
 		if($path[0] == '/' || $path[0] == '\\' ||
 			(
 				strlen($path) >= 3 && ctype_alpha($path[0]) &&
@@ -240,6 +239,79 @@ final class AgaviToolkit
 		return preg_replace(array('/\$\{([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)\}/e', '/\{\$([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)\}/e', '/\$([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)/e'), 'isset($arguments["$1"]) ? $arguments["$1"] : \'$0\'', $string);
 	}
 	
+	/**
+	 * Literalize a string value.
+	 *
+	 * @param      string The value to literalize.
+	 *
+	 * @return     string A literalized value.
+	 *
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public static function literalize($value)
+	{
+		if($value == null) {
+			// null value
+			return null;
+		}
+		
+		if(!is_string($value)) {
+			return $value;
+		}
+		
+		// lowercase our value for comparison
+		$value  = trim($value);
+		$lvalue = strtolower($value);
+		
+		if($lvalue == 'on' || $lvalue == 'yes' || $lvalue == 'true') {
+			// replace values 'on' and 'yes' with a boolean true value
+			return true;
+		} elseif($lvalue == 'off' || $lvalue == 'no' || $lvalue == 'false') {
+			// replace values 'off' and 'no' with a boolean false value
+			return false;
+		} elseif(!is_numeric($value)) {
+			return self::expandDirectives($value);
+		}
+		
+		// numeric value
+		return $value;
+	}
+	
+	/**
+	 * Replace configuration directive identifiers in a string.
+	 *
+	 * @param      string The value on which to run the replacement procedure.
+	 *
+	 * @return     string The new value.
+	 *
+	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     Johan Mjones <johan.mjones@ongame.com>
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.9.0
+	 */
+	public static function expandDirectives($value)
+	{
+		$newvalue = $value;
+		
+		do {
+			$value = $newvalue;
+			$newvalue = preg_replace_callback(
+				'/\%([\w\.]+?)\%/',
+				create_function(
+					'$match',
+					'$constant = $match[1];' .
+					'return (AgaviConfig::has($constant) ? AgaviConfig::get($constant) : "%".$constant."%");'
+				),
+				$value
+			);
+		} while($newvalue != $value);
+		
+		return $value;
+	}
+
 	/**
 	 * This function takes the numerator and divides it thru the denominator while
 	 * storing the remainder and returning the quotient.

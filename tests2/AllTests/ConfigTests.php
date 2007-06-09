@@ -31,7 +31,7 @@ class ConfigTests
 		$suite->addTestSuite('FilterConfigHandlerTest');
 		$suite->addTestSuite('LoggingConfigHandlerTest');
 		$suite->addTestSuite('ReturnArrayConfigHandlerTest');
-		$suite->addTestSuite('RbacdefinitionConfigHandlerTest');
+		$suite->addTestSuite('RbacDefinitionConfigHandlerTest');
 		return $suite;
 	}
 }

@@ -64,10 +64,10 @@ class ConfigHandlerTest extends AgaviTestCase
 		AgaviConfig::set('foobar', '%foo% %bar%');
 		AgaviConfig::set('foobarbaz', '%foobar% baz');
 
-		$this->assertSame('foo',					AgaviConfigHandler::replaceConstants('%foo%')						);
-		$this->assertSame('foo bar',			AgaviConfigHandler::replaceConstants('%foobar%')				);
-		$this->assertSame('foo bar baz',	AgaviConfigHandler::replaceConstants('%foobar% baz')		);
-		$this->assertSame('foo bar baz',	AgaviConfigHandler::replaceConstants('%foobarbaz%')			);
+		$this->assertSame('foo',					AgaviToolkit::expandDirectives('%foo%')						);
+		$this->assertSame('foo bar',			AgaviToolkit::expandDirectives('%foobar%')				);
+		$this->assertSame('foo bar baz',	AgaviToolkit::expandDirectives('%foobar% baz')		);
+		$this->assertSame('foo bar baz',	AgaviToolkit::expandDirectives('%foobarbaz%')			);
 
 
 		AgaviConfig::remove('foo');

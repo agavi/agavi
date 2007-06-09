@@ -63,7 +63,7 @@ class AgaviXmlConfigParser
 			$doc = $this->parse($nextConfig, $validation);
 			
 			if($doc->documentElement && $doc->documentElement->hasAttribute('parent')) {
-				$nextConfig = AgaviBaseConfigHandler::literalize($doc->documentElement->getAttribute('parent'));
+				$nextConfig = AgaviToolkit::literalize($doc->documentElement->getAttribute('parent'));
 			} else {
 				$nextConfig = null;
 			}
@@ -142,7 +142,7 @@ class AgaviXmlConfigParser
 			if($element->hasAttribute('href')) {
 				$attribute = $element->getAttributeNode('href');
 				$parts = explode('#', $attribute->nodeValue, 2);
-				$parts[0] = str_replace('\\', '/', AgaviConfigHandler::replaceConstants($parts[0]));
+				$parts[0] = str_replace('\\', '/', AgaviToolkit::expandDirectives($parts[0]));
 				$attribute->nodeValue = implode('#', $parts);
 			}
 		}
@@ -252,7 +252,7 @@ class AgaviXmlConfigParser
 				} else {
 					// references an xsl file
 					$xsl = new DomDocument();
-					$xsl->load(AgaviConfigHandler::replaceConstants($href));
+					$xsl->load(AgaviToolkit::expandDirectives($href));
 					if(libxml_get_last_error() !== false) {
 						$errors = array();
 						foreach(libxml_get_errors() as $error) {
@@ -355,6 +355,22 @@ class AgaviXmlConfigParser
 					break;
 			}
 		}
+		
+		$sources = array();
+		
+		if($doc->documentElement->hasAttributeNS('http://www.w3.org/2001/XMLSchema-instance', 'schemaLocation')) {
+			$locations = preg_split('/\s+/', $doc->documentElement->getAttributeNS('http://www.w3.org/2001/XMLSchema-instance', 'schemaLocation'));
+			for($i = 1; $i < count($locations); $i = $i + 2) {
+				$sources[] = file_get_contents(AgaviToolkit::literalize($locations[$i]));
+			}
+		}
+		if($doc->documentElement->hasAttributeNS('http://www.w3.org/2001/XMLSchema-instance', 'noNamespaceSchemaLocation')) {
+			$sources[] = file_get_contents(AgaviToolkit::literalize($doc->documentElement->getAttributeNS('http://www.w3.org/2001/XMLSchema-instance', 'noNamespaceSchemaLocation')));
+		}
+		
+		if($sources) {
+			$this->validateXmlschema($doc, array(), $sources);
+		}
 	}
 	
 	/**
@@ -390,18 +406,37 @@ class AgaviXmlConfigParser
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function validateXmlschema(DOMDocument $doc, array $validationFiles = array())
+	public function validateXmlschema(DOMDocument $doc, array $validationFiles = array(), array $validationSources = array())
 	{
 		$luie = libxml_use_internal_errors(true);
 		
 		foreach($validationFiles as $validationFile) {
-			if(!is_readable($validationFile)) {
+			if(!is_resource($validationFile) && !is_readable($validationFile)) {
 				libxml_use_internal_errors($luie);
 				$error = 'Validation file "' . $validationFile . '" for configuration file "' . $this->config . '" does not exist or is unreadable';
 				throw new AgaviUnreadableException($error);
 			}
 			
 			if(!$doc->schemaValidate($validationFile)) {
+				$errors = array();
+				foreach(libxml_get_errors() as $error) {
+					$errors[] = sprintf("Line %d: %s", $error->line, $error->message);
+				}
+				libxml_clear_errors();
+				libxml_use_internal_errors($luie);
+				throw new AgaviParseException(
+					sprintf(
+						'XML Schema validation of configuration file "%s" failed due to the following error%s: ' . "\n\n%s", 
+						$this->config, 
+						count($errors) > 1 ? 's' : '', 
+						implode("\n", $errors)
+					)
+				);
+			}
+		}
+		
+		foreach($validationSources as $validationSource) {
+			if(!$doc->schemaValidateSource($validationSource)) {
 				$errors = array();
 				foreach(libxml_get_errors() as $error) {
 					$errors[] = sprintf("Line %d: %s", $error->line, $error->message);
@@ -431,7 +466,7 @@ class AgaviXmlConfigParser
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function validateRelaxng(DOMDocument $doc, array $validationFiles = array())
+	public function validateRelaxng(DOMDocument $doc, array $validationFiles = array(), array $validationSources = array())
 	{
 		$luie = libxml_use_internal_errors(true);
 		
@@ -443,6 +478,25 @@ class AgaviXmlConfigParser
 			}
 			
 			if(!$doc->relaxNGValidate($validationFile)) {
+				$errors = array();
+				foreach(libxml_get_errors() as $error) {
+					$errors[] = sprintf("Line %d: %s", $error->line, $error->message);
+				}
+				libxml_clear_errors();
+				libxml_use_internal_errors($luie);
+				throw new AgaviParseException(
+					sprintf(
+						'XML Schema validation of configuration file "%s" failed due to the following error%s: ' . "\n\n%s", 
+						$this->config, 
+						count($errors) > 1 ? 's' : '', 
+						implode("\n", $errors)
+					)
+				);
+			}
+		}
+		
+		foreach($validationSources as $validationSource) {
+			if(!$doc->relaxNGValidateSource($validationSource)) {
 				$errors = array();
 				foreach(libxml_get_errors() as $error) {
 					$errors[] = sprintf("Line %d: %s", $error->line, $error->message);

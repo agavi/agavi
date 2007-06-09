@@ -185,7 +185,7 @@ class AgaviPropelDatabase extends AgaviDatabase
 	public function initialize(AgaviDatabaseManager $databaseManager, array $parameters = array())
 	{
 		parent::initialize($databaseManager, $parameters);
-		$configPath = AgaviConfigHandler::replaceConstants($this->getParameter('config'));
+		$configPath = AgaviToolkit::expandDirectives($this->getParameter('config'));
 		$datasource = $this->getParameter('datasource', null);
 		$use_as_default = $this->getParameter('use_as_default', false);
 		$config = require($configPath);

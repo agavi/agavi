@@ -31,7 +31,6 @@
  *
  * <b>Optional parameters:</b>
  *
-
  * # <b>cdata_fix</b> - [true] - Fix generated CDATA delimiters in script and
  *                               style blocks.
  * # <b>error_class</b> - "error" - The class name that is assigned to form
@@ -90,7 +89,9 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 
 		$cfg = array_merge(array('populate' => null, 'skip' => null), $this->getParameters(), $req->getAttributes('org.agavi.filter.FormPopulationFilter'));
 
-		if(is_array($cfg['output_types']) && !in_array($container->getOutputType()->getName(), $cfg['output_types'])) {
+		$ot = $container->getOutputType();
+
+		if(is_array($cfg['output_types']) && !in_array($ot->getName(), $cfg['output_types'])) {
 			return;
 		}
 
@@ -126,6 +127,9 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 		$hasXmlProlog = false;
 		if(preg_match('/^<\?xml[^\?]*\?>/', $output)) {
 			$hasXmlProlog = true;
+		} elseif(preg_match('/charset=(.+)\s*$/i', $ot->getParameter('http_headers[Content-Type]'), $matches)) {
+			// add an XML prolog with the char encoding, works around issues with ISO-8859-1 etc
+			$output = "<?xml version='1.0' encoding='" . $matches[1] . "' ?>\n" . $output;
 		}
 
 		$xhtml = (preg_match('/<!DOCTYPE[^>]+XHTML[^>]+/', $output) > 0 && strtolower($cfg['force_output_mode']) != 'html') || strtolower($cfg['force_output_mode']) == 'xhtml';
@@ -197,22 +201,29 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 			throw new AgaviException('No iconv module available, input encoding "' . $encoding . '" cannot be handled.');
 		}
 
-		$base = $xpath->query('//' . $ns . 'head/' . $ns . 'base[@href]');
+		$base = $xpath->query('/' . $ns . 'html/' . $ns . 'head/' . $ns . 'base[@href]');
 		if($base->length) {
 			$baseHref = $base->item(0)->getAttribute('href');
 		} else {
 			$baseHref = $req->getUrl();
 		}
 		$baseHref = substr($baseHref, 0, strrpos($baseHref, '/') + 1);
+		
+		$forms = array();
 		if(is_array($populate)) {
+			$query = array();
 			foreach(array_keys($populate) as $id) {
-				$query[] = '@id="' . $id . '"';
+				if(is_string($id)) {
+					$query[] = '@id="' . $id . '"';
+				}
 			}
-			$query = '//' . $ns . 'form[' . implode(' or ', $query) . ']';
+			if($query) {
+				$forms = $xpath->query('//' . $ns . 'form[' . implode(' or ', $query) . ']');
+			}
 		} else {
-			$query = '//' . $ns . 'form[@action]';
+			$forms = $xpath->query('//' . $ns . 'form[@action]');
 		}
-		foreach($xpath->query($query) as $form) {
+		foreach($forms as $form) {
 			if($populate instanceof AgaviParameterHolder) {
 				$action = preg_replace('/#.*$/', '', trim($form->getAttribute('action')));
 				$ruri = $req->getRequestUri();

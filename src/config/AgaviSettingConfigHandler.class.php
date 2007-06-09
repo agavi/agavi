@@ -74,14 +74,14 @@ class AgaviSettingConfigHandler extends AgaviConfigHandler
 					$prefix = $settings->getAttribute('prefix', 'core.');
 					foreach($settings as $setting)
 					{
-						$data[$prefix . $setting->getAttribute('name')] = $this->literalize($setting->getValue());
+						$data[$prefix . $setting->getAttribute('name')] = AgaviToolkit::literalize($setting->getValue());
 					}
 				}
 			}
 			
 			if($cfg->hasChildren('exception_templates')) {
 				foreach($cfg->exception_templates->getChildren() as $exception_template) {
-					$tpl = $this->replaceConstants($exception_template->getValue());
+					$tpl = AgaviToolkit::expandDirectives($exception_template->getValue());
 					if(!is_readable($tpl)) {
 						throw new AgaviConfigurationException('Exception template "' . $tpl . '" does not exist or is unreadable');
 					}
@@ -90,7 +90,7 @@ class AgaviSettingConfigHandler extends AgaviConfigHandler
 							$data['exception.templates.' . $ctx] = $tpl;
 						}
 					} else {
-						$data['exception.default_template'] = $this->replaceConstants($tpl);
+						$data['exception.default_template'] = AgaviToolkit::expandDirectives($tpl);
 					}
 				}
 			}

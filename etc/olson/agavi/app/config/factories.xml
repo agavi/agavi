@@ -21,13 +21,11 @@
 		
 		<security_filter class="AgaviSecurityFilter" />
 		
-		<storage class="AgaviSessionStorage">
-			<parameters><parameter name="auto_start">false</parameter></parameters>
-		</storage>
+		<storage class="AgaviNullStorage" />
 		
 		<translation_manager class="AgaviTranslationManager" />
 		
-		<user class="AgaviSecurityUser" />
+		<user class="AgaviUser" />
 		
 		<validation_manager class="AgaviValidationManager" />
 		

@@ -63,9 +63,9 @@ class AgaviFilterConfigHandler extends AgaviConfigHandler
 					$name = $filter->getAttribute('name', uniqid(mt_rand()));
 					
 					if(!isset($filters[$name])) {
-						$filters[$name] = array('params' => array(), 'enabled' => $this->literalize($filter->getAttribute('enabled', true)));
+						$filters[$name] = array('params' => array(), 'enabled' => AgaviToolkit::literalize($filter->getAttribute('enabled', true)));
 					} else {
-						$filters[$name]['enabled'] = $this->literalize($filter->getAttribute('enabled', $filters[$name]['enabled']));
+						$filters[$name]['enabled'] = AgaviToolkit::literalize($filter->getAttribute('enabled', $filters[$name]['enabled']));
 					}
 
 					if($filter->hasAttribute('class')) {

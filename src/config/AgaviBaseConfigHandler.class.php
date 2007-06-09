@@ -90,7 +90,7 @@ abstract class AgaviBaseConfigHandler extends AgaviParameterHolder
 					$data[$name] = (isset($oldValues[$name]) && is_array($oldValues[$name])) ? $oldValues[$name] : array();
 					$data[$name] = $this->getItemParameters($node, $data[$name], $literalize);
 				} else {
-					$data[$name] = $literalize ? $this->literalize($node->getValue()) : $node->getValue();
+					$data[$name] = $literalize ? AgaviToolkit::literalize($node->getValue()) : $node->getValue();
 				}
 			}
 		}
@@ -134,46 +134,16 @@ abstract class AgaviBaseConfigHandler extends AgaviParameterHolder
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
 	public static function literalize($value)
 	{
-		if($value == null) {
-			// null value
-			return null;
-		}
-
-		if(!is_string($value)) {
-			return $value;
-		}
-
-		// lowercase our value for comparison
-		$value  = trim($value);
-		$lvalue = strtolower($value);
-
-		if($lvalue == 'on' || $lvalue == 'yes' || $lvalue == 'true') {
-
-			// replace values 'on' and 'yes' with a boolean true value
-			return true;
-
-		} elseif($lvalue == 'off' || $lvalue == 'no' || $lvalue == 'false') {
-
-			// replace values 'off' and 'no' with a boolean false value
-			return false;
-
-		} elseif(!is_numeric($value)) {
-
-			return self::replaceConstants($value);
-
-		}
-
-		// numeric value
-		return $value;
-
+		return AgaviToolkit::literalize($value);
 	}
 
 	/**
-	 * Replace constant identifiers in a string.
+	 * Replace configuration directive identifiers in a string.
 	 *
 	 * @param      string The value on which to run the replacement procedure.
 	 *
@@ -181,26 +151,12 @@ abstract class AgaviBaseConfigHandler extends AgaviParameterHolder
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @author     Johan Mjones <johan.mjones@ongame.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
 	public static function replaceConstants($value)
 	{
-		$newvalue = $value;
-		do {
-			$value = $newvalue;
-			$newvalue = preg_replace_callback(
-				'/\%([\w\.]+?)\%/',
-				create_function(
-					'$match',
-					'$constant = $match[1];' .
-					'return (AgaviConfig::has($constant) ? AgaviConfig::get($constant) : "%".$constant."%");'
-				),
-				$value
-			);
-
-		} while($newvalue != $value);
-
-		return $value;
+		return AgaviToolkit::expandDirectives($value);
 	}
 
 	/**
@@ -260,7 +216,7 @@ abstract class AgaviBaseConfigHandler extends AgaviParameterHolder
 		$configs = array();
 
 		if($configurations->hasAttribute('parent')) {
-			$parent = self::literalize($configurations->getAttribute('parent'));
+			$parent = AgaviToolkit::literalize($configurations->getAttribute('parent'));
 			$parentConfigs = $this->orderConfigurations(AgaviConfigCache::parseConfig($parent, $autoloadParser, $this->getValidationFile(), $this->parser)->configurations, $environment, $context, $autoloadParser);
 			$configs = array_merge($configs, $parentConfigs);
 		}
