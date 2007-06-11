@@ -33,6 +33,7 @@ CHG: Update timezone database to 2007c release ([1873]) (Dominik)
 CHG: More features and improved consistency for AgaviReturnArrayConfigHandler (#463) (David)
 CHG: Deprecate request attribute "matchedRoutes" in "org.agavi.routing" in favor of "matched_routes" (#465) (David)
 
+FIX: XMLRPC Request and Response cause strict warnings, fatals, notices (#528) (David)
 FIX: Agavi's autoloader fails if Agavi has not been bootstrapped yet (#521) (David)
 FIX: Fixes for AgaviEmailValidator (#486) (Dominik)
 FIX: Correct standalone declarations for all XML configs (#518) (David)
