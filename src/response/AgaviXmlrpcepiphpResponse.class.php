@@ -47,9 +47,9 @@ class AgaviXmlrpcepiphpResponse extends AgaviResponse
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function setContent(array $content)
+	public function setContent($content)
 	{
-		return parent::setContent($content);
+		return parent::setContent((array) $content);
 	}
 	
 	/**
@@ -62,9 +62,9 @@ class AgaviXmlrpcepiphpResponse extends AgaviResponse
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function prependContent(array $content)
+	public function prependContent($content)
 	{
-		return $this->setContent($content + $this->getContent());
+		return $this->setContent((array) $content + $this->getContent());
 	}
 	
 	/**
@@ -77,9 +77,9 @@ class AgaviXmlrpcepiphpResponse extends AgaviResponse
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function appendContent(array $content)
+	public function appendContent($content)
 	{
-		return $this->setContent($this->getContent() + $content);
+		return $this->setContent($this->getContent() + (array) $content);
 	}
 	
 	/**
