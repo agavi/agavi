@@ -87,6 +87,8 @@ class AgaviRequestDataHolder extends AgaviParameterHolder implements AgaviIParam
 		if(isset($this->$source)) {
 			$funcname = 'clear' . $source;
 			$this->$funcname();
+		} else {
+			throw new InvalidArgumentException('Unknown source ' . $source . 'specified');
 		}
 	}
 
@@ -122,6 +124,8 @@ class AgaviRequestDataHolder extends AgaviParameterHolder implements AgaviIParam
 		if(isset($this->$source)) {
 			$funcname = 'get' . $this->sourceNames[$source];
 			return $this->$funcname($field, $default);
+		} else {
+			throw new InvalidArgumentException('Unknown source ' . $source . 'specified');
 		}
 	}
 
@@ -141,6 +145,8 @@ class AgaviRequestDataHolder extends AgaviParameterHolder implements AgaviIParam
 		if(isset($this->$source)) {
 			$funcname = 'get' . $source;
 			return $this->$funcname();
+		} else {
+			throw new InvalidArgumentException('Unknown source ' . $source . 'specified');
 		}
 	}
 
@@ -161,6 +167,8 @@ class AgaviRequestDataHolder extends AgaviParameterHolder implements AgaviIParam
 		if(isset($this->$source)) {
 			$funcname = 'has' . $this->sourceNames[$source];
 			return $this->$funcname($field);
+		} else {
+			throw new InvalidArgumentException('Unknown source ' . $source . 'specified');
 		}
 	}
 
@@ -182,6 +190,8 @@ class AgaviRequestDataHolder extends AgaviParameterHolder implements AgaviIParam
 		if(isset($this->$source)) {
 			$funcname = 'is' . $this->sourceNames[$source] . 'ValueEmpty';
 			return $this->$funcname($field);
+		} else {
+			throw new InvalidArgumentException('Unknown source ' . $source . 'specified');
 		}
 	}
 
@@ -202,6 +212,8 @@ class AgaviRequestDataHolder extends AgaviParameterHolder implements AgaviIParam
 		if(isset($this->$source)) {
 			$funcname = 'remove' . $this->sourceNames[$source];
 			return $this->$funcname($field);
+		} else {
+			throw new InvalidArgumentException('Unknown source ' . $source . 'specified');
 		}
 	}
 
@@ -221,6 +233,8 @@ class AgaviRequestDataHolder extends AgaviParameterHolder implements AgaviIParam
 		if(isset($this->$source)) {
 			$funcname = 'set' . $this->sourceNames[$source];
 			$this->$funcname($field, $value);
+		} else {
+			throw new InvalidArgumentException('Unknown source ' . $source . 'specified');
 		}
 	}
 	
