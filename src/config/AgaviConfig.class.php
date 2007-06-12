@@ -14,8 +14,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviAutoloadConfigHandler allows you to specify a list of classes that will
- * automatically be included for you upon first use.
+ * AgaviConfig acts as global registry of agavi related configuration settings 
  *
  * @package    agavi
  * @subpackage config
