@@ -54,8 +54,6 @@
 			-->
 			<handler pattern="%core.module_dir%/*/config/autoload.xml" validate="%core.agavi_dir%/config/xsd/autoload.xsd" class="AgaviAutoloadConfigHandler" />
 
-			<handler pattern="%core.module_dir%/*/config/caching.xml" validate="%core.agavi_dir%/config/xsd/caching.xsd" class="AgaviReturnArrayConfigHandler" />
-
 			<handler pattern="%core.module_dir%/*/config/action_filters.xml" validate="%core.agavi_dir%/config/xsd/filters.xsd" class="AgaviFilterConfigHandler" />
 
 			<handler pattern="%core.module_dir%/*/config/module.xml" validate="%core.agavi_dir%/config/xsd/module.xsd" class="AgaviModuleConfigHandler" />

@@ -46,22 +46,27 @@ class AgaviXmlrpcepiphpRequest extends AgaviWebserviceRequest
 	{
 		parent::initialize($context, $parameters);
 		
-		$decoded = xmlrpc_decode_request($this->input, $this->invokedMethod, isset($parameters['encoding']) ? $parameters['encoding'] : 'utf-8');
+		$decoded = (array) xmlrpc_decode_request($this->input, $this->invokedMethod, isset($parameters['encoding']) ? $parameters['encoding'] : 'utf-8');
 		
-		if(count($decoded) == 1 && is_int($key = array_pop(array_keys($decoded))) && is_array($decoded[$key])) {
+		$akeys = array_keys($decoded);
+		if(count($decoded) == 1 && is_int($key = array_pop($akeys)) && is_array($decoded[$key])) {
 			$decoded = $decoded[$key];
 		}
 		
-		$rd = $this->getRequestData();
+		$rdhc = $this->getParameter('request_data_holder_class');
+		$this->requestData = new $rdhc(array(
+			constant("$rdhc::SOURCE_PARAMETERS") => array(),
+		));
 		
-		$rd->setParameters($decoded);
+		
+		$this->requestData->setParameters((array)$decoded);
 		
 		$split = explode(':', $this->invokedMethod);
 		if(count($split) == 2) {
-			$rd->setParameter($this->getParameter('module_accessor'), $split[0]);
-			$rd->setParameter($this->getParameter('action_accessor'), $split[1]);
+			$this->requestData->setParameter($this->getParameter('module_accessor'), $split[0]);
+			$this->requestData->setParameter($this->getParameter('action_accessor'), $split[1]);
 		} else {
-			$rd->setParameter($this->getParameter('action_accessor'), $this->invokedMethod);
+			$this->requestData->setParameter($this->getParameter('action_accessor'), $this->invokedMethod);
 		}
 	}
 }

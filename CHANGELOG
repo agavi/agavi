@@ -1,7 +1,7 @@
 AGAVI CHANGELOG
 ===============
 
-0.11.0 RC5 (June ??, 2007)
+0.11.0 RC5 (June 18, 2007)
 
 ADD: Add extension points to XML Schema definitions where feasible (#515) (David)
 ADD: Support for XML Schema instance schema location declarations (#517) (David)
@@ -14,7 +14,7 @@ ADD: Allow routing callbacks to unset parameters by setting them to null (#505) 
 ADD: Set "exception" in "org.agavi.controller.forwards.error_404" (#496) (David)
 ADD: Allow setting response content by returning data from View::execute*() (#503) (David)
 ADD: Support for configuration directives in href attributes of XInclude <include> elements (#488) (David)
-ADD: DateTime cast support for AgaviDateValidator (#475) (Dominik)  
+ADD: DateTime cast support for AgaviDateValidator (#475) (Dominik)
 ADD: Support for magic_quotes_gpc, including proper handling of indices in and outside of arrays as well as $_FILES
 ADD: Method to convert AgaviCalendar objects into native PHP DateTime objects ([1836]) (Dominik)
 ADD: Support for UTF-8 in StringValidator via parameter 'utf8', default on ([1820]) (David)
@@ -32,6 +32,7 @@ CHG: Update timezone database to 2007c release ([1873]) (Dominik)
 CHG: More features and improved consistency for AgaviReturnArrayConfigHandler (#463) (David)
 CHG: Deprecate request attribute "matchedRoutes" in "org.agavi.routing" in favor of "matched_routes" (#465) (David)
 
+FIX: XMLRPC Request and Response cause strict warnings, fatals, notices (#528) (David)
 FIX: Agavi's autoloader fails if Agavi has not been bootstrapped yet (#521) (David)
 FIX: Fixes for AgaviEmailValidator (#486) (Dominik)
 FIX: Correct standalone declarations for all XML configs (#518) (David)

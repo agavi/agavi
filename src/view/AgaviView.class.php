@@ -39,27 +39,6 @@ abstract class AgaviView
 	const NONE = null;
 
 	/**
-	 * Render the presentation to the client.
-	 *
-	 * @since      0.9.0
-	 */
-	const RENDER_CLIENT = 2;
-
-	/**
-	 * Do not render the presentation.
-	 *
-	 * @since      0.9.0
-	 */
-	const RENDER_NONE = 1;
-
-	/**
-	 * Render the presentation to a variable.
-	 *
-	 * @since      0.9.0
-	 */
-	const RENDER_VAR = 4;
-
-	/**
 	 * @var        AgaviExecutionContainer This view's execution container.
 	 */
 	protected $container = null;
