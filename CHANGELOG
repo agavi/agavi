@@ -1,7 +1,7 @@
 AGAVI CHANGELOG
 ===============
 
-0.11.0 RC5 (June ??, 2007)
+0.11.0 RC5 (June 17, 2007)
 
 ADD: Add extension points to XML Schema definitions where feasible (#515) (David)
 ADD: Support for XML Schema instance schema location declarations (#517) (David)
