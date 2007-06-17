@@ -15,7 +15,7 @@ ADD: Allow routing callbacks to unset parameters by setting them to null (#505) 
 ADD: Set "exception" in "org.agavi.controller.forwards.error_404" (#496) (David)
 ADD: Allow setting response content by returning data from View::execute*() (#503) (David)
 ADD: Support for configuration directives in href attributes of XInclude <include> elements (#488) (David)
-ADD: DateTime cast support for AgaviDateValidator (#475) (Dominik)  
+ADD: DateTime cast support for AgaviDateValidator (#475) (Dominik)
 ADD: Support for magic_quotes_gpc, including proper handling of indices in and outside of arrays as well as $_FILES
 ADD: Method to convert AgaviCalendar objects into native PHP DateTime objects ([1836]) (Dominik)
 ADD: Support for UTF-8 in StringValidator via parameter 'utf8', default on ([1820]) (David)
