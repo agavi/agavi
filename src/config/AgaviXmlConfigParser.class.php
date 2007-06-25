@@ -361,14 +361,23 @@ class AgaviXmlConfigParser
 		if($doc->documentElement->hasAttributeNS('http://www.w3.org/2001/XMLSchema-instance', 'schemaLocation')) {
 			$locations = preg_split('/\s+/', $doc->documentElement->getAttributeNS('http://www.w3.org/2001/XMLSchema-instance', 'schemaLocation'));
 			for($i = 1; $i < count($locations); $i = $i + 2) {
-				$sources[] = file_get_contents(AgaviToolkit::literalize($locations[$i]));
+				$sources[] = $locations[$i];
 			}
 		}
 		if($doc->documentElement->hasAttributeNS('http://www.w3.org/2001/XMLSchema-instance', 'noNamespaceSchemaLocation')) {
-			$sources[] = file_get_contents(AgaviToolkit::literalize($doc->documentElement->getAttributeNS('http://www.w3.org/2001/XMLSchema-instance', 'noNamespaceSchemaLocation')));
+			$sources[] = $doc->documentElement->getAttributeNS('http://www.w3.org/2001/XMLSchema-instance', 'noNamespaceSchemaLocation');
 		}
 		
 		if($sources) {
+			foreach($sources as &$source) {
+				$source = AgaviToolkit::expandDirectives($source);
+				$info = parse_url($source);
+				if(!isset($info['scheme']) && !AgaviToolkit::isPathAbsolute($source)) {
+					// the schema location is relative to the XML file
+					$source = dirname($this->config) . DIRECTORY_SEPARATOR . $source;
+				}
+				$source = file_get_contents($source);
+			}
 			$this->validateXmlschema($doc, array(), $sources);
 		}
 	}
