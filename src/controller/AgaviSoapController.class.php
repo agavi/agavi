@@ -196,9 +196,6 @@ class AgaviSoapController extends AgaviController
 		// that class uses __call
 		// the class ctor gets the context as the first argument
 		$this->soapServer->setClass($newSoapHandlerClass, $this->context);
-		
-		// please don't send a response automatically, we need to return it inside the __call overload so PHP's SOAP extension creates a SOAP response envelope with the data
-		$this->setParameter('send_response', false);
 	}
 	/**
 	 * Dispatch a request
@@ -216,6 +213,7 @@ class AgaviSoapController extends AgaviController
 		
 		// handle the request. the aforementioned __call will be run next
 		// we use the input from the request as the argument, it contains the SOAP request
+		// no need to send the response as SoapServer does that
 		$this->soapServer->handle($this->context->getRequest()->getInput());
 	}
 	
@@ -230,10 +228,13 @@ class AgaviSoapController extends AgaviController
 	public function doDispatch()
 	{
 		try {
+			// return the content so SoapServer can send it.
+			// AgaviSoapResponse::send() does not send the content, but sets the headers on the SoapServer
 			return parent::dispatch($this->dispatchArguments);
 		} catch(SoapFault $f) {
 			$this->response->clear();
 			$this->response->setContent($f);
+			// return the content so SoapServer can send it.
 			return $this->response;
 		}
 	}
