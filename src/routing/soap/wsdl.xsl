@@ -88,6 +88,7 @@ xmlns="http://schemas.xmlsoap.org/wsdl/"
 		</xsl:if>
 	</xsl:template>
 	<xsl:template match="wsdl:output[wsdl:part or wsdl:message/wsdl:part or soap:body[not(@message)]/wsdl:part or soap:body[not(@message)]/wsdl:message/wsdl:part or soap:header[not(@message)]/wsdl:part or soap:header[not(@message)]/wsdl:message/wsdl:part]" mode="message">
+		<xsl:param name="name" />
 		<xsl:if test="wsdl:part | wsdl:message/wsdl:part | soap:body[not(@message)]/wsdl:part or soap:body[not(@message)]/wsdl:message/wsdl:part">
 			<wsdl:message name="{$name}{$response_postfix}">
 				<xsl:copy-of select="wsdl:part | wsdl:message/wsdl:part | soap:body[not(@message)]/wsdl:part | soap:body[not(@message)]/wsdl:message/wsdl:part" />
