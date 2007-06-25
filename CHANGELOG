@@ -3,6 +3,7 @@ AGAVI CHANGELOG
 
 0.11.0 (July ??, 2007)
 
+ADD: Support for SOAP response headers (#531) (David)
 ADD: Allow relative paths to xsd files in XML Schema Instance *schemaLocation attributes (#530) (David)
 
 FIX: Missing param declaration in wsdl.xsl might lead to corrupt response message blocks in generated WSDL (#529) (David)
