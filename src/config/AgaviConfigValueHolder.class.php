@@ -72,11 +72,31 @@ class AgaviConfigValueHolder implements ArrayAccess, IteratorAggregate
 		return $this->_name;
 	}
 
+	/**
+	 * isset() overload.
+	 *
+	 * @param      string Name of the child.
+	 *
+	 * @return     bool Whether or not that child exists.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public function __isset($name)
 	{
 		return $this->hasChildren($name);
 	}
 
+	/**
+	 * Magic getter overload.
+	 *
+	 * @param      string Name of the child .
+	 *
+	 * @return     AgaviConfigValueHolder The child, if it exists.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public function __get($name)
 	{
 		if(isset($this->_childs[$name])) {

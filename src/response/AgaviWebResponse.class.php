@@ -149,6 +149,12 @@ class AgaviWebResponse extends AgaviResponse
 		}
 	}
 	
+	/**
+	 * Send the content for this response
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public function sendContent()
 	{
 		if(is_resource($this->content) && $this->getParameter('use_sendfile_header', false)) {
