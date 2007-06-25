@@ -1,6 +1,11 @@
 AGAVI CHANGELOG
 ===============
 
+0.11.0 (July ??, 2007)
+
+FIX: Missing param declaration in wsdl.xsl might lead to corrupt response message blocks in generated WSDL (#529) (David)
+
+
 0.11.0 RC5 (June 18, 2007)
 
 ADD: Add extension points to XML Schema definitions where feasible (#515) (David)
