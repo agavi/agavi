@@ -2719,7 +2719,7 @@ abstract class AgaviCalendar
 
 	/**
 	 * @var        bool The flag which indicates if the current time is set in the
-	                    calendar.
+	 *                  calendar.
 	 */
 	protected $fIsTimeSet = false;
 
