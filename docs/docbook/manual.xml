@@ -367,7 +367,7 @@
     <section>
       <title>Prerequisites</title>
 
-      <para>Agavi's minimum requirement is PHP version 5.1.0 or newer. DOM,
+      <para>Agavi's minimum requirement is PHP version 5.1.3 or newer. DOM,
       Reflection and SPL extensions are required, but these are always enabled
       by default, unless you're using one of these weird Linux distros made by
       "smart" people who think they know better.</para>
