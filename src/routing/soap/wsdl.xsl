@@ -13,7 +13,10 @@ xmlns="http://schemas.xmlsoap.org/wsdl/"
 	<xsl:variable name="tns" select="name(/agavi:configurations/namespace::*[.=../@targetNamespace])" />
 	<xsl:variable name="targetNamespace" select="/agavi:configurations/@targetNamespace" />
 	<xsl:variable name="request_postfix" select="'Request'" />
+	<xsl:variable name="request_headers_postfix" select="'RequestHeaders'" />
 	<xsl:variable name="response_postfix" select="'Response'" />
+	<xsl:variable name="response_headers_postfix" select="'ResponseHeaders'" />
+	<xsl:variable name="fault_postfix" select="'Fault'" />
 	<xsl:template match="/agavi:configurations">
 		<wsdl:definitions name="Dummy">
 			<xsl:copy-of select="namespace::*"/>
@@ -43,34 +46,45 @@ xmlns="http://schemas.xmlsoap.org/wsdl/"
 	<xsl:template match="agavi:route" mode="port">
 		<xsl:variable name="name" select="translate(@pattern, '^$', '')" />
 		<wsdl:operation name="{$name}">
-			<xsl:apply-templates select="wsdl:input | wsdl:output" mode="portType_operation">
+			<xsl:apply-templates select="wsdl:input | wsdl:output | wsdl:fault" mode="portType_operation">
 				<xsl:with-param name="name" select="$name" />
 			</xsl:apply-templates>
 		</wsdl:operation>
 	</xsl:template>
 	<xsl:template match="wsdl:input[wsdl:part or wsdl:message/wsdl:part or soap:body[not(@message)]/wsdl:part or soap:body[not(@message)]/wsdl:message/wsdl:part]" mode="portType_operation">
 		<xsl:param name="name" />
-		<wsdl:input message="{$tns}:{$name}Request" />
+		<wsdl:input message="{$tns}:{$name}{$request_postfix}" />
 	</xsl:template>
 	<xsl:template match="wsdl:input[@message] | wsdl:input/soap:body[@message]" mode="portType_operation">
-		<xsl:param name="name" />
 		<wsdl:input>
 			<xsl:attribute name="message"><xsl:value-of select="@message" /></xsl:attribute>
 		</wsdl:input>
 	</xsl:template>
 	<xsl:template match="wsdl:output[wsdl:part or wsdl:message/wsdl:part or soap:body[not(@message)]/wsdl:part or soap:body[not(@message)]/wsdl:message/wsdl:part]" mode="portType_operation">
 		<xsl:param name="name" />
-		<wsdl:output message="{$tns}:{$name}Response" />
+		<wsdl:output message="{$tns}:{$name}{$response_postfix}" />
 	</xsl:template>
 	<xsl:template match="wsdl:output[@message] | wsdl:output/soap:body[@message]" mode="portType_operation">
-		<xsl:param name="name" />
 		<wsdl:output>
 			<xsl:attribute name="message"><xsl:value-of select="@message" /></xsl:attribute>
 		</wsdl:output>
 	</xsl:template>
+	<xsl:template match="wsdl:fault[wsdl:part or wsdl:message/wsdl:part or soap:fault[not(@message)]/wsdl:part or soap:fault[not(@message)]/wsdl:message/wsdl:part]" mode="portType_operation">
+		<xsl:param name="name" />
+		<wsdl:fault>
+			<xsl:attribute name="message"><xsl:value-of select="$tns" />:<xsl:value-of select="$name" /><xsl:value-of select="$fault_postfix" /><xsl:value-of select="(count(preceding-sibling::*[name()=name(current())])+1)" /></xsl:attribute>
+			<xsl:attribute name="name"><xsl:value-of select="$name" /><xsl:value-of select="$fault_postfix" /><xsl:value-of select="(count(preceding-sibling::*[name()=name(current())])+1)" /></xsl:attribute>
+		</wsdl:fault>
+	</xsl:template>
+	<xsl:template match="wsdl:fault[@message] | wsdl:output/soap:fault[@message]" mode="portType_operation">
+		<wsdl:fault>
+			<xsl:attribute name="message"><xsl:value-of select="@message" /></xsl:attribute>
+			<xsl:attribute name="name"><xsl:value-of select="@name" /></xsl:attribute>
+		</wsdl:fault>
+	</xsl:template>
 	<xsl:template match="agavi:route" mode="messages">
 		<xsl:variable name="name" select="translate(@pattern, '^$', '')" />
-		<xsl:apply-templates select="wsdl:input | wsdl:output" mode="message">
+		<xsl:apply-templates select="wsdl:input | wsdl:output | wsdl:fault" mode="message">
 			<xsl:with-param name="name" select="$name" />
 		</xsl:apply-templates>
 	</xsl:template>
@@ -82,7 +96,7 @@ xmlns="http://schemas.xmlsoap.org/wsdl/"
 			</wsdl:message>
 		</xsl:if>
 		<xsl:if test="soap:header[not(@message)]/wsdl:part | soap:header[not(@message)]/wsdl:message/wsdl:part">
-			<wsdl:message name="{$name}{$request_postfix}Headers">
+			<wsdl:message name="{$name}{$request_headers_postfix}">
 				<xsl:copy-of select="soap:header[not(@message)]/wsdl:part | soap:header[not(@message)]/wsdl:message/wsdl:part" />
 			</wsdl:message>
 		</xsl:if>
@@ -95,32 +109,41 @@ xmlns="http://schemas.xmlsoap.org/wsdl/"
 			</wsdl:message>
 		</xsl:if>
 		<xsl:if test="soap:header[not(@message)]/wsdl:part | soap:header[not(@message)]/wsdl:message/wsdl:part">
-			<wsdl:message name="{$name}{$response_postfix}Header">
+			<wsdl:message name="{$name}{$response_headers_postfix}">
 				<xsl:copy-of select="soap:header[not(@message)]/wsdl:part | soap:header[not(@message)]/wsdl:message/wsdl:part" />
 			</wsdl:message>
 		</xsl:if>
+	</xsl:template>
+	<xsl:template match="wsdl:fault[wsdl:part or wsdl:message/wsdl:part or soap:fault[not(@message)]/wsdl:part or soap:fault[not(@message)]/wsdl:message/wsdl:part]" mode="message">
+		<xsl:param name="name" />
+		<wsdl:message name="{$name}{$fault_postfix}{(count(preceding-sibling::*[name()=name(current())])+1)}">
+			<xsl:copy-of select="wsdl:part | wsdl:message/wsdl:part | soap:fault[not(@message)]/wsdl:part | soap:fault[not(@message)]/wsdl:message/wsdl:part" />
+		</wsdl:message>
 	</xsl:template>
 	<xsl:template match="agavi:route" mode="binding">
 		<xsl:variable name="name" select="translate(@pattern, '^$', '')" />
 		<wsdl:operation name="{$name}">
 			<soap:operation soapAction="{$targetNamespace}#{$name}" />
-			<xsl:apply-templates select="wsdl:input" mode="binding_operation">
+			<xsl:apply-templates select="wsdl:input" mode="binding_operation_inout">
 				<xsl:with-param name="name" select="$name" />
-				<xsl:with-param name="postfix" select="$request_postfix" />
+				<xsl:with-param name="postfix" select="$request_headers_postfix" />
 			</xsl:apply-templates>
-			<xsl:apply-templates select="wsdl:output" mode="binding_operation">
+			<xsl:apply-templates select="wsdl:output" mode="binding_operation_inout">
 				<xsl:with-param name="name" select="$name" />
-				<xsl:with-param name="postfix" select="$response_postfix" />
+				<xsl:with-param name="postfix" select="$response_headers_postfix" />
+			</xsl:apply-templates>
+			<xsl:apply-templates select="wsdl:fault" mode="binding_operation_fault">
+				<xsl:with-param name="name" select="$name" />
 			</xsl:apply-templates>
 		</wsdl:operation>
 	</xsl:template>
-	<xsl:template match="wsdl:input | wsdl:output" mode="binding_operation">
+	<xsl:template match="wsdl:input | wsdl:output" mode="binding_operation_inout">
 		<xsl:param name="name" />
 		<xsl:param name="postfix" />
 		<xsl:copy>
 			<soap:body namespace="{$targetNamespace}">
 				<xsl:if test="soap:body">
-					<xsl:copy-of select="soap:body/@encodingStyle | soap:body/@namespace | soap:body/@use" />
+					<xsl:copy-of select="soap:body/@encodingStyle | soap:body/@namespace | soap:body/@parts | soap:body/@use" />
 				</xsl:if>
 			</soap:body>
 			<xsl:if test="soap:header">
@@ -128,12 +151,22 @@ xmlns="http://schemas.xmlsoap.org/wsdl/"
 					<soap:header namespace="{$targetNamespace}">
 						<xsl:copy-of select="@encodingStyle | @message | @namespace | @part | @use" />
 						<xsl:if test=".//wsdl:part">
-							<xsl:attribute name="message"><xsl:value-of select="$tns" />:<xsl:value-of select="$name" /><xsl:value-of select="$postfix" />Headers</xsl:attribute>
+							<xsl:attribute name="message"><xsl:value-of select="$tns" />:<xsl:value-of select="$name" /><xsl:value-of select="$postfix" /></xsl:attribute>
 							<xsl:attribute name="part"><xsl:value-of select=".//wsdl:part/@name" /></xsl:attribute>
 						</xsl:if>
 					</soap:header>
 				</xsl:for-each>
 			</xsl:if>
+		</xsl:copy>
+	</xsl:template>
+	<xsl:template match="wsdl:fault" mode="binding_operation_fault">
+		<xsl:param name="name" />
+		<xsl:copy>
+			<soap:fault name="{$name}{$fault_postfix}{(count(preceding-sibling::*[name()=name(current())])+1)}" namespace="{$targetNamespace}">
+				<xsl:if test="soap:fault">
+					<xsl:copy-of select="soap:fault/@encodingStyle | soap:fault/@name | soap:fault/@namespace | soap:fault/@use" />
+				</xsl:if>
+			</soap:fault>
 		</xsl:copy>
 	</xsl:template>
 	<xsl:template match="/agavi:configurations/wsdl:types | /agavi:configurations/wsdl:message">

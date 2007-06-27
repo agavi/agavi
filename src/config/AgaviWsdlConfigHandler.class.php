@@ -71,6 +71,10 @@ class AgaviWsdlConfigHandler extends AgaviXmlConfigHandler
 		$paramSoapHeaderNamespace     = $ro->getParameter('wsdl_generator[soap][header][namespace]',      /*'urn:' . $cleanAppName*/ null);
 		$paramSoapHeaderEncodingStyle = $ro->getParameter('wsdl_generator[soap][header][encoding_style]', 'http://schemas.xmlsoap.org/soap/encoding/');
 		
+		$paramSoapFaultUse            = $ro->getParameter('wsdl_generator[soap][fault][use]',             'literal');
+		$paramSoapFaultNamespace      = $ro->getParameter('wsdl_generator[soap][fault][namespace]',       /*'urn:' . $cleanAppName*/ null);
+		$paramSoapFaultEncodingStyle  = $ro->getParameter('wsdl_generator[soap][fault][encoding_style]',  'http://schemas.xmlsoap.org/soap/encoding/');
+		
 		$paramGlobalRequestHeaders    = $ro->getParameter('wsdl_generator[global_headers][request]',      array());
 		$paramGlobalResponseHeaders   = $ro->getParameter('wsdl_generator[global_headers][response]',     array());
 		
@@ -141,6 +145,19 @@ class AgaviWsdlConfigHandler extends AgaviXmlConfigHandler
 						}
 						if($soapHeader->getAttribute('use') == 'encoded') {
 							$soapHeader->setAttribute('encodingStyle', $paramSoapHeaderEncodingStyle);
+						}
+					}
+					
+					$soapFaults = $xpath->query('.//soap:fault', $wsdlOperation);
+					foreach($soapFaults as $soapFault) {
+						if(!$soapFault->hasAttribute('use')) {
+							$soapFault->setAttribute('use', $paramSoapFaultUse);
+						}
+						if($paramSoapFaultNamespace !== null) {
+							$soapFault->setAttribute('namespace', $paramSoapFaultNamespace);
+						}
+						if($soapFault->getAttribute('use') == 'encoded') {
+							$soapFault->setAttribute('encodingStyle', $paramSoapFaultEncodingStyle);
 						}
 					}
 				}
