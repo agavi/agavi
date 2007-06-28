@@ -36,7 +36,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 	 * The directory inside %core.cache_dir% where cached stuff is stored.
 	 */
 	const CACHE_SUBDIR = 'content';
-	
+
 	/*
 	 * The name of the file that holds the cached action data.
 	 * Minuses because these are not allowed in an output type name.
@@ -123,11 +123,11 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 		foreach($groups as &$group) {
 			$group = base64_encode($group);
 		}
-		$path = AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . self::CACHE_SUBDIR . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $groups) . '.cefcache';
-		if(is_file($path)) {
-			AgaviToolkit::clearCache($path);
+		$path = self::CACHE_SUBDIR . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $groups);
+		if(is_file(AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . $path . '.cefcache')) {
+			AgaviToolkit::clearCache($path . '.cefcache');
 		} else {
-			AgaviToolkit::clearCache(self::CACHE_SUBDIR . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, array_slice($groups, 0, -1)));
+			AgaviToolkit::clearCache($path);
 		}
 	}
 
@@ -145,7 +145,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 	public function determineGroups(array $groups, AgaviExecutionContainer $container)
 	{
 		$retval = array();
-		
+
 		foreach($groups as $group) {
 			$group += array('name' => null, 'source' => null, 'namespace' => null);
 			$val = $this->getVariable($group['name'], $group['source'], $group['namespace'], $container);
@@ -158,12 +158,12 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 			}
 			$retval[] = $val;
 		}
-		
+
 		$retval[] = $container->getModuleName() . '_' . $container->getActionName();
-		
+
 		return $retval;
 	}
-	
+
 	/**
 	 * Read a variable from the given source and, optionally, namespace.
 	 *
@@ -235,33 +235,33 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 	public function execute(AgaviFilterChain $filterChain, AgaviExecutionContainer $container)
 	{
 		// $lm = $this->context->getLoggerManager();
-		
+
 		// get the context, controller and validator manager
 		$controller = $this->context->getController();
-		
+
 		// get the current action information
 		$actionName = $container->getActionName();
 		$moduleName = $container->getModuleName();
-		
+
 		$request = $this->context->getRequest();
-		
+
 		$isCacheable = false;
 		if($this->getParameter('enable_caching', true) && is_readable($cachingDotXml = AgaviConfig::get('core.module_dir') . '/' . $moduleName . DIRECTORY_SEPARATOR . 'cache' . DIRECTORY_SEPARATOR . $actionName . '.xml')) {
 			// $lm->log('Caching enabled, configuration file found, loading...');
 			// no _once please!
 			include(AgaviConfigCache::checkConfig($cachingDotXml));
 		}
-		
+
 		$isActionCached = false;
-		
-		
+
+
 		if($isCacheable) {
 			$groups = $this->determineGroups($config["groups"], $container);
 			$isActionCached = $this->checkCache(array_merge($groups, array(self::ACTION_CACHE_ID)), $config['lifetime']);
 		} else {
 			// $lm->log('Action is not cacheable!');
 		}
-		
+
 		if($isActionCached) {
 			// $lm->log('Action is cached, loading...');
 			// cache/dir/4-8-15-16-23-42 contains the action cache
@@ -270,7 +270,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 			// $lm->log('Action not cached, executing...');
 			// execute the Action and get the View to execute
 			list($actionCache['view_module'], $actionCache['view_name']) = $this->runAction($container);
-			
+
 			// check if the returned view is cacheable
 			if($isCacheable && is_array($config['views']) && !in_array(array('module' => $actionCache['view_module'], 'name' => $actionCache['view_name']), $config['views'], true)) {
 				$isCacheable = false;
@@ -278,38 +278,38 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 			} else {
 				// $lm->log('Returned View is cleared for caching, proceeding...');
 			}
-			
+
 			$actionAttributes = $container->getAttributes();
 		}
-		
+
 		// create a new response instance for this action
 		$rfi = $this->context->getFactoryInfo('response');
 		$response = new $rfi['class'];
 		$response->initialize($this->context, $rfi['parameters']);
 		$container->setResponse($response);
-		
+
 		// clear any forward set, it's ze view's job
 		$container->clearNext();
-		
+
 		if($actionCache['view_name'] !== AgaviView::NONE) {
-			
+
 			$container->setViewModuleName($actionCache['view_module']);
 			$container->setViewName($actionCache['view_name']);
-			
+
 			// get the view instance
 			$viewInstance = $controller->createViewInstance($actionCache['view_module'], $actionCache['view_name']);
-			
+
 			// initialize the view
 			$viewInstance->initialize($container);
-			
+
 			$outputType = $container->getOutputType()->getName();
-			
+
 			$isViewCached = false;
-			
+
 			if($isCacheable) {
 				if(isset($config['output_types'][$otConfig = $outputType]) || isset($config['output_types'][$otConfig = '*'])) {
 					$otConfig = $config['output_types'][$otConfig];
-					
+
 					if($isActionCached) {
 						$isViewCached = $this->checkCache(array_merge($groups, array($outputType)));
 					}
@@ -317,13 +317,13 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 					$isCacheable = false;
 				}
 			}
-			
+
 			if($isViewCached) {
 				// $lm->log('View is cached, loading...');
 				$viewCache = $this->readCache(array_merge($groups, array($outputType)));
 			} else {
 				$viewCache = array();
-				
+
 				// $lm->log('View is not cached, executing...');
 				// view initialization completed successfully
 				$executeMethod = 'execute' . $outputType;
@@ -334,7 +334,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 				$viewCache['next'] = $viewInstance->$executeMethod($container->getRequestData());
 				$request->toggleLock($key);
 			}
-			
+
 			if($viewCache['next'] instanceof AgaviExecutionContainer) {
 				// $lm->log('Forwarding request, skipping rendering...');
 				$container->setNext($viewCache['next']);
@@ -343,15 +343,15 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 					$layers = $viewCache['layers'];
 					$response = $viewCache['response'];
 					$container->setResponse($response);
-				
+
 					foreach($viewCache['template_variables'] as $name => $value) {
 						$viewInstance->setAttribute($name, $value);
 					}
-				
+
 					foreach($viewCache['request_attributes'] as $requestAttribute) {
 						$request->setAttribute($requestAttribute['name'], $requestAttribute['value'], $requestAttribute['namespace']);
 					}
-				
+
 					$output = array();
 					$nextOutput = $response->getContent();
 				} else {
@@ -360,21 +360,21 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 						$response->setContent($viewCache['next']);
 						$viewCache['next'] = null;
 					}
-					
+
 					$layers = $viewInstance->getLayers();
-				
+
 					if($isCacheable) {
 						$viewCache['template_variables'] = array();
 						foreach($otConfig['template_variables'] as $varName) {
 							$viewCache['template_variables'][$varName] = $viewInstance->getAttribute($varName);
 						}
-					
+
 						$viewCache['response'] = clone $response;
-					
+
 						$viewCache['layers'] = array();
-					
+
 						$viewCache['slots'] = array();
-					
+
 						$lastCacheableLayer = -1;
 						if(is_array($otConfig['layers'])) {
 							if(count($otConfig['layers'])) {
@@ -393,19 +393,19 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 						} else {
 							$lastCacheableLayer = count($layers) - 1;
 						}
-					
+
 						for($i = $lastCacheableLayer + 1; $i < count($layers); $i++) {
 							// $lm->log('Adding non-cacheable layer "' . $layers[$i]->getName() . '" to list');
 							$viewCache['layers'][] = clone $layers[$i];
 						}
 					}
-				
+
 					$output = array();
 					$nextOutput = null;
 				}
-				
+
 				$attributes =& $viewInstance->getAttributes();
-				
+
 				// $lm->log('Starting rendering...');
 				for($i = 0; $i < count($layers); $i++) {
 					$layer = $layers[$i];
@@ -439,27 +439,27 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 						'view' => $viewInstance,
 					);
 					$nextOutput = $layer->getRenderer()->render($layer, $attributes, $output, $moreAssigns);
-					
+
 					$response->setContent($nextOutput);
-					
+
 					if($isCacheable && !$isViewCached && $i === $lastCacheableLayer) {
 						$viewCache['response'] = clone $response;
 					}
-					
+
 					$output = array();
 					$output[$layer->getName()] = $nextOutput;
 				}
 			}
-			
+
 			if($isCacheable) {
 				if(!$isActionCached) {
 					$actionCache['action_attributes'] = array();
 					foreach($config['action_attributes'] as $attributeName) {
 						$actionCache['action_attributes'][$attributeName] = $actionAttributes[$attributeName];
 					}
-					
+
 					// $lm->log('Writing Action cache...');
-					
+
 					$this->writeCache(array_merge($groups, array(self::ACTION_CACHE_ID)), $actionCache);
 				}
 				if(!$isViewCached) {
@@ -467,9 +467,9 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 					foreach($otConfig['request_attributes'] as $requestAttribute) {
 						$viewCache['request_attributes'][] = $requestAttribute + array('value' => $request->getAttribute($requestAttribute['name'], $requestAttribute['namespace']));
 					}
-					
+
 					$this->writeCache(array_merge($groups, array($outputType)), $viewCache);
-					
+
 					// $lm->log('Writing View cache...');
 				}
 			}
@@ -505,7 +505,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 
 		// get the (already formatted) request method
 		$method = $request->getMethod();
-		
+
 		$requestData = $container->getRequestData();
 
 		$useGenericMethods = false;
@@ -522,7 +522,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 		} else {
 			// set default validated status
 			$validated = true;
-			
+
 			// get the current action validation configuration
 			$validationConfig = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/validate/' . $actionName . '.xml';
 
@@ -541,12 +541,12 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 
 			// process validators
 			$validated = $validationManager->execute($requestData);
-			
+
 			$validateMethod = 'validate' . $method;
 			if(!method_exists($actionInstance, $validateMethod)) {
 				$validateMethod = 'validate';
 			}
-			
+
 			// prevent access to Request::getParameters()
 			// process manual validation
 			if($actionInstance->$validateMethod($requestData) && $validated) {
