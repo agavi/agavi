@@ -3,9 +3,13 @@ AGAVI CHANGELOG
 
 0.11.0 (July ??, 2007)
 
+ADD: Support for SOAP faults (#532) (David, Noah Fontes)
 ADD: Support for SOAP response headers (#531) (David)
 ADD: Allow relative paths to xsd files in XML Schema Instance *schemaLocation attributes (#530) (David)
 
+CHG: Bumped minimum required PHP version to 5.1.3 (#456) (David)
+
+FIX: Output messages with multiple parts break SOAP completely (#533) (David)
 FIX: Missing param declaration in wsdl.xsl might lead to corrupt response message blocks in generated WSDL (#529) (David)
 
 
