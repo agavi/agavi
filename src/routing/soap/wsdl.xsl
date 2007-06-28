@@ -51,36 +51,23 @@ xmlns="http://schemas.xmlsoap.org/wsdl/"
 			</xsl:apply-templates>
 		</wsdl:operation>
 	</xsl:template>
-	<xsl:template match="wsdl:input[wsdl:part or wsdl:message/wsdl:part or soap:body[not(@message)]/wsdl:part or soap:body[not(@message)]/wsdl:message/wsdl:part]" mode="portType_operation">
+	<xsl:template match="wsdl:input[wsdl:part or wsdl:message/wsdl:part or soap:body[not(@message)]/wsdl:part or soap:body[not(@message)]/wsdl:message/wsdl:part or @message]" mode="portType_operation">
 		<xsl:param name="name" />
-		<wsdl:input message="{$tns}:{$name}{$request_postfix}" />
-	</xsl:template>
-	<xsl:template match="wsdl:input[@message] | wsdl:input/soap:body[@message]" mode="portType_operation">
-		<wsdl:input>
-			<xsl:attribute name="message"><xsl:value-of select="@message" /></xsl:attribute>
+		<wsdl:input message="{$tns}:{$name}{$request_postfix}">
+			<xsl:copy-of select="@message" />
 		</wsdl:input>
 	</xsl:template>
-	<xsl:template match="wsdl:output[wsdl:part or wsdl:message/wsdl:part or soap:body[not(@message)]/wsdl:part or soap:body[not(@message)]/wsdl:message/wsdl:part]" mode="portType_operation">
+	<xsl:template match="wsdl:output[wsdl:part or wsdl:message/wsdl:part or soap:body[not(@message)]/wsdl:part or soap:body[not(@message)]/wsdl:message/wsdl:part or @message]" mode="portType_operation">
 		<xsl:param name="name" />
-		<wsdl:output message="{$tns}:{$name}{$response_postfix}" />
-	</xsl:template>
-	<xsl:template match="wsdl:output[@message] | wsdl:output/soap:body[@message]" mode="portType_operation">
-		<wsdl:output>
-			<xsl:attribute name="message"><xsl:value-of select="@message" /></xsl:attribute>
+		<wsdl:output message="{$tns}:{$name}{$response_postfix}">
+			<xsl:copy-of select="@message" />
 		</wsdl:output>
 	</xsl:template>
-	<xsl:template match="wsdl:fault[wsdl:part or wsdl:message/wsdl:part or soap:fault[not(@message)]/wsdl:part or soap:fault[not(@message)]/wsdl:message/wsdl:part]" mode="portType_operation">
+	<xsl:template match="wsdl:fault[wsdl:part or wsdl:message/wsdl:part or soap:fault[not(@message)]/wsdl:part or soap:fault[not(@message)]/wsdl:message/wsdl:part or @message]" mode="portType_operation">
 		<xsl:param name="name" />
-		<wsdl:fault>
-			<xsl:attribute name="message"><xsl:value-of select="$tns" />:<xsl:value-of select="$name" /><xsl:value-of select="$fault_postfix" /><xsl:value-of select="(count(preceding-sibling::*[name()=name(current())])+1)" /></xsl:attribute>
-			<xsl:attribute name="name"><xsl:value-of select="$name" /><xsl:value-of select="$fault_postfix" /><xsl:value-of select="(count(preceding-sibling::*[name()=name(current())])+1)" /></xsl:attribute>
-			<xsl:copy-of select="@name" />
-		</wsdl:fault>
-	</xsl:template>
-	<xsl:template match="wsdl:fault[@message]" mode="portType_operation">
-		<wsdl:fault>
-			<xsl:attribute name="message"><xsl:value-of select="@message" /></xsl:attribute>
-			<xsl:attribute name="name"><xsl:value-of select="$name" /><xsl:value-of select="$fault_postfix" /><xsl:value-of select="(count(preceding-sibling::*[name()=name(current())])+1)" /></xsl:attribute>
+		<xsl:variable name="counter" select="(count(preceding-sibling::*[name()=name(current())])+1)" />
+		<wsdl:fault message="{$tns}:{$name}{$fault_postfix}{$counter}" name="{$name}{$fault_postfix}{$counter}">
+			<xsl:copy-of select="@message" />
 			<xsl:copy-of select="@name" />
 		</wsdl:fault>
 	</xsl:template>
@@ -167,6 +154,7 @@ xmlns="http://schemas.xmlsoap.org/wsdl/"
 			<xsl:attribute name="name"><xsl:value-of select="$name" /><xsl:value-of select="$fault_postfix" /><xsl:value-of select="(count(preceding-sibling::*[name()=name(current())])+1)" /></xsl:attribute>
 			<xsl:copy-of select="@name" />
 			<soap:fault name="{$name}{$fault_postfix}{(count(preceding-sibling::*[name()=name(current())])+1)}" namespace="{$targetNamespace}" use="encoded">
+				<xsl:copy-of select="@name" />
 				<xsl:if test="soap:fault">
 					<xsl:copy-of select="soap:fault/@encodingStyle | soap:fault/@name | soap:fault/@namespace | soap:fault/@use" />
 				</xsl:if>
