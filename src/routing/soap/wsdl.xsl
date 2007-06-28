@@ -150,10 +150,11 @@ xmlns="http://schemas.xmlsoap.org/wsdl/"
 	</xsl:template>
 	<xsl:template match="wsdl:fault" mode="binding_operation_fault">
 		<xsl:param name="name" />
+		<xsl:variable name="counter" select="(count(preceding-sibling::*[name()=name(current())])+1)" />
 		<xsl:copy>
-			<xsl:attribute name="name"><xsl:value-of select="$name" /><xsl:value-of select="$fault_postfix" /><xsl:value-of select="(count(preceding-sibling::*[name()=name(current())])+1)" /></xsl:attribute>
+			<xsl:attribute name="name"><xsl:value-of select="$name" /><xsl:value-of select="$fault_postfix" /><xsl:value-of select="$counter" /></xsl:attribute>
 			<xsl:copy-of select="@name" />
-			<soap:fault name="{$name}{$fault_postfix}{(count(preceding-sibling::*[name()=name(current())])+1)}" namespace="{$targetNamespace}" use="encoded">
+			<soap:fault name="{$name}{$fault_postfix}{$counter}" namespace="{$targetNamespace}" use="encoded">
 				<xsl:copy-of select="@name" />
 				<xsl:if test="soap:fault">
 					<xsl:copy-of select="soap:fault/@encodingStyle | soap:fault/@name | soap:fault/@namespace | soap:fault/@use" />
