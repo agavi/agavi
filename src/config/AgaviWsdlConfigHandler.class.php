@@ -71,7 +71,7 @@ class AgaviWsdlConfigHandler extends AgaviXmlConfigHandler
 		$paramSoapHeaderNamespace     = $ro->getParameter('wsdl_generator[soap][header][namespace]',      /*'urn:' . $cleanAppName*/ null);
 		$paramSoapHeaderEncodingStyle = $ro->getParameter('wsdl_generator[soap][header][encoding_style]', 'http://schemas.xmlsoap.org/soap/encoding/');
 		
-		$paramSoapFaultUse            = $ro->getParameter('wsdl_generator[soap][fault][use]',             'literal');
+		$paramSoapFaultUse            = $ro->getParameter('wsdl_generator[soap][fault][use]',             'encoded');
 		$paramSoapFaultNamespace      = $ro->getParameter('wsdl_generator[soap][fault][namespace]',       /*'urn:' . $cleanAppName*/ null);
 		$paramSoapFaultEncodingStyle  = $ro->getParameter('wsdl_generator[soap][fault][encoding_style]',  'http://schemas.xmlsoap.org/soap/encoding/');
 		

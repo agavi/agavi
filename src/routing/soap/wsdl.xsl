@@ -74,12 +74,14 @@ xmlns="http://schemas.xmlsoap.org/wsdl/"
 		<wsdl:fault>
 			<xsl:attribute name="message"><xsl:value-of select="$tns" />:<xsl:value-of select="$name" /><xsl:value-of select="$fault_postfix" /><xsl:value-of select="(count(preceding-sibling::*[name()=name(current())])+1)" /></xsl:attribute>
 			<xsl:attribute name="name"><xsl:value-of select="$name" /><xsl:value-of select="$fault_postfix" /><xsl:value-of select="(count(preceding-sibling::*[name()=name(current())])+1)" /></xsl:attribute>
+			<xsl:copy-of select="@name" />
 		</wsdl:fault>
 	</xsl:template>
 	<xsl:template match="wsdl:fault[@message] | wsdl:output/soap:fault[@message]" mode="portType_operation">
 		<wsdl:fault>
 			<xsl:attribute name="message"><xsl:value-of select="@message" /></xsl:attribute>
-			<xsl:attribute name="name"><xsl:value-of select="@name" /></xsl:attribute>
+			<xsl:attribute name="name"><xsl:value-of select="$name" /><xsl:value-of select="$fault_postfix" /><xsl:value-of select="(count(preceding-sibling::*[name()=name(current())])+1)" /></xsl:attribute>
+			<xsl:copy-of select="@name" />
 		</wsdl:fault>
 	</xsl:template>
 	<xsl:template match="agavi:route" mode="messages">
@@ -162,7 +164,9 @@ xmlns="http://schemas.xmlsoap.org/wsdl/"
 	<xsl:template match="wsdl:fault" mode="binding_operation_fault">
 		<xsl:param name="name" />
 		<xsl:copy>
-			<soap:fault name="{$name}{$fault_postfix}{(count(preceding-sibling::*[name()=name(current())])+1)}" namespace="{$targetNamespace}">
+			<xsl:attribute name="name"><xsl:value-of select="$name" /><xsl:value-of select="$fault_postfix" /><xsl:value-of select="(count(preceding-sibling::*[name()=name(current())])+1)" /></xsl:attribute>
+			<xsl:copy-of select="@name" />
+			<soap:fault name="{$name}{$fault_postfix}{(count(preceding-sibling::*[name()=name(current())])+1)}" namespace="{$targetNamespace}" use="encoded">
 				<xsl:if test="soap:fault">
 					<xsl:copy-of select="soap:fault/@encodingStyle | soap:fault/@name | soap:fault/@namespace | soap:fault/@use" />
 				</xsl:if>
