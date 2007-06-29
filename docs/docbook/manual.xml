@@ -60,8 +60,8 @@
 
           <para>Agavi abstracts common problems, and provides you, the
           developer, with a central, flexible solution that has evolved from
-          the experiences and input of many users, as well as a single point of
-          implementation you can comfortably override with custom code to
+          the experiences and input of many users, as well as a single point
+          of implementation you can comfortably override with custom code to
           create application-specific behavior.</para>
 
           <para>As a result, you'll find yourself in the relaxing situation of
@@ -151,13 +151,13 @@
           beginning, as Agavi's project skeletons are structured to help you
           avoid mistakes in the critical early phase of development where you
           build the foundation for your software. This ensures that you can
-          fully benefit from all the features that made you choose Agavi in the
-          first place.</para>
+          fully benefit from all the features that made you choose Agavi in
+          the first place.</para>
 
           <para>And because Agavi follows the Model-View-Controller (MVC)
-          architecture, your code automatically becomes highly efficient as the
-          various parts are cleanly separated, making your application easily
-          maintainable:</para>
+          architecture, your code automatically becomes highly efficient as
+          the various parts are cleanly separated, making your application
+          easily maintainable:</para>
 
           <para><simplelist>
               <member>The <emphasis role="bold">Model</emphasis> accesses your
@@ -182,10 +182,11 @@
           <para><simplelist>
               <member>The <emphasis role="bold">Controller</emphasis> contains
               the business logic: the code that talks to the model, transforms
-              the data, performs necessary tasks and then prepares data for the
-              View. In Agavi, we call this the <firstterm>Action</firstterm>.
-              After it has finished its task, it tells the system which View
-              to use to generate the output.</member>
+              the data, performs necessary tasks and then prepares data for
+              the View. In Agavi, we call this the
+              <firstterm>Action</firstterm>. After it has finished its task,
+              it tells the system which View to use to generate the
+              output.</member>
             </simplelist></para>
         </section>
       </section>
@@ -232,10 +233,10 @@
               template language of your choice, you have to replicate all this
               stuff if you want to use it. And what's more, all these helpers
               often do only 95% of what you want them to do, but not quite the
-              thing you had in mind. (Besides the obvious fact, of course, that
-              you might just outright hate the template language the framework
-              authors think is best for everyone, and that can ruin the whole
-              experience.)</member>
+              thing you had in mind. (Besides the obvious fact, of course,
+              that you might just outright hate the template language the
+              framework authors think is best for everyone, and that can ruin
+              the whole experience.)</member>
             </simplelist></para>
 
           <para>As you have probably guessed by now, Agavi tries hard not to
@@ -251,8 +252,8 @@
           adapter for your favorite layer bundled in the source distribution,
           chances are that someone has written one and shared it somewhere.
           And if not, (e.g., if it's your home-made database wrapper you have
-          learned to love over the years), you can easily write a custom driver
-          for it (and even that is not necessary, but of course highly
+          learned to love over the years), you can easily write a custom
+          driver for it (and even that is not necessary, but of course highly
           recommended).</para>
         </section>
 
@@ -294,9 +295,10 @@
           fuel the human thirst for knowledge and excellence, and not bury it
           under a pile of stuff targeted mainly at people who are too lazy to
           learn how things work - and learning how things work is an important
-          factor in enabling people to leverage a tool's full potential. That's
-          why this manual will, from time to time, delve into explaining the
-          inner workings of Agavi, in case you're interested.</para>
+          factor in enabling people to leverage a tool's full potential.
+          That's why this manual will, from time to time, delve into
+          explaining the inner workings of Agavi, in case you're
+          interested.</para>
         </section>
       </section>
     </section>
@@ -333,18 +335,18 @@
       bit, putting important features such as a routing and
       internationalization on the schedule for 1.0, since other frameworks,
       mostly inspired by Ruby on Rails, had begun to offer such functionality.
-      A 0.11 release before a final 1.0 was planned in order to be able to make
-      any changes, should they be necessary, before releasing a final 1.0
+      A 0.11 release before a final 1.0 was planned in order to be able to
+      make any changes, should they be necessary, before releasing a final 1.0
       version to the general public.</para>
 
       <para>In the end, 0.11 implemented a great many more features than
       originally planned, and as time went on, many of the core aspects of the
       framework, which was still heavily based on Mojavi 3, were changed
-      drastically (so much in fact that at the time of this writing, many parts
-      of Agavi do not resemble Mojavi much anymore). A lot of this work was
-      necessary to prepare Agavi for the challenges frameworks face today and
-      in the future; a solid, structured foundation is very important in order
-      to be able to adapt to new developments and grow without having to
+      drastically (so much in fact that at the time of this writing, many
+      parts of Agavi do not resemble Mojavi much anymore). A lot of this work
+      was necessary to prepare Agavi for the challenges frameworks face today
+      and in the future; a solid, structured foundation is very important in
+      order to be able to adapt to new developments and grow without having to
       introduce hacks or workarounds that would otherwise be necessary to
       introduce new functionality without breaking backwards
       compatibility.</para>
@@ -1956,7 +1958,7 @@ $bar2 = $this-&gt;getContext()-&gt;getModel('SinglesBar'); //returns the same in
           as noted above you can't register a validator twice.</para>
 
           <section>
-            <title>Sample registerReadValidators() (does the same as the XML
+            <title>Sample registerWriteValidators() (does the same as the XML
             above)</title>
 
             <para><programlisting>public function registerWriteValidators()
@@ -1985,19 +1987,41 @@ $bar2 = $this-&gt;getContext()-&gt;getModel('SinglesBar'); //returns the same in
         <section>
           <title>validate(), validateRead(), validateWrite()</title>
 
-          <para>If an action declares a method with the name "validate()", it
-          will get called after the registered validators have run but before
-          the execute Method gets called. It recieves a single parameter,
-          $parameters with the type AgaviRequestDataHolder. If validate
+          <para>If an action declares a method with the name
+          <function>validate()</function>, it will get called after the
+          registered validators have run but before the execute Method gets
+          called. It recieves a single parameter, <code>$rd</code> with the
+          type <classname>AgaviRequestDataHolder</classname>. If validate
           returns true, the execution continues, if it returns false,
           validation fails and the error must be handled. As with the
           register*Validator() family of methods, a method named
-          validateRead(AgaviRequestDataHolder $rd) will only be called in read
-          requests and a method named validateWrite(AgaviRequestDataHolder
-          $rd) only on write request. You can use these method to perform
-          advanced validation that is not possible with validators. As
-          validators are generic and reusable, you should look into creating
-          your own validator whenever feasible.</para>
+          <function>validateRead(AgaviRequestDataHolder $rd)</function> will
+          only be called in read requests and a method named
+          <function>validateWrite(AgaviRequestDataHolder $rd)</function> only
+          on write request. You can use these methods for quick testing and to
+          perform advanced validation that is not possible with validators.
+          But, as validators are generic and reusable, you should look into
+          creating your own validator whenever feasible.</para>
+
+          <section>
+            <title>Sample registerWriteValidators() (does the same as the XML
+            above)</title>
+
+            <programlisting>public function validateWrite(AgaviRequestDataHolder $rd)
+{
+  if (strlen($rd-&gt;getParameter('parent') &lt; 5) {
+    $tm = $this-&gt;getContext()-&gt;getTranslationManager();
+    $message = $tm-&gt;_('The username you supplied is less than 4 characters.', '.errors');
+    $this-&gt;container-&gt;getValidationManager()-&gt;setError('username', $message);
+
+    return false
+  }
+  return true;
+}</programlisting>
+
+            <para>This example does the same as the two earlier validator
+            examples. </para>
+          </section>
         </section>
       </section>
 
@@ -2007,12 +2031,13 @@ $bar2 = $this-&gt;getContext()-&gt;getModel('SinglesBar'); //returns the same in
         <para>Once validation failed, the error must be handled. The default
         way is to render an error view, but sometimes you might wish to slip
         in some logic such as logging the error. You can do this by declaring
-        a method named "handleError()" in your action. You can also define
-        different handlers for the request methods using handle*Error()
-        (handleReadError, handleWriteError and so on). It will be called if a
-        validation error occured and recieves a single parameter, $parameters
-        with the type AgaviRequestDataHolder. It must return the name of a
-        view, just as the execute methods do.</para>
+        a method named <function>handleError()</function> in your action. You
+        can also define different handlers for the request methods using
+        handle*Error() (handleReadError, handleWriteError and so on). It will
+        be called if a validation error occured and recieves a single
+        parameter, <code>$rd</code> with the type
+        <classname>AgaviRequestDataHolder</classname>. It must return the name
+        of a view, just as the execute methods do.</para>
       </section>
 
       <section>
