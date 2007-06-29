@@ -2020,7 +2020,7 @@ $bar2 = $this-&gt;getContext()-&gt;getModel('SinglesBar'); //returns the same in
 }</programlisting>
 
             <para>This example does the same as the two earlier validator
-            examples. </para>
+            examples.</para>
           </section>
         </section>
       </section>
@@ -2319,8 +2319,95 @@ $tm-&gt;_d(time(), 'backend', 'en_US@timezone=Europe/London');
     <section>
       <title>Databases</title>
 
-      <para>how to retrieve a connection, why do it using the framework,
-      propel</para>
+      <para>(how to retrieve a connection, why do it using the framework,
+      propel)</para>
+
+      <para>Unlike many other frameworks Agavi doesn't have a database layer
+      of its own but it supports a variety of different database layers and
+      APIs. Currently the following APIs and tools are supported</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>AdoDB (<link linkend="???"><ulink
+          url="http://adodb.sourceforge.net/">http://adodb.sourceforge.net/</ulink></link>)</para>
+        </listitem>
+
+        <listitem>
+          <para>Creole (<ulink
+          url="http://creole.phpdb.org/">http://creole.phpdb.org/</ulink>)</para>
+        </listitem>
+
+        <listitem>
+          <para>PDO (<ulink
+          url="http://www.php.net/pdo">http://www.php.net/pdo</ulink>)</para>
+        </listitem>
+
+        <listitem>
+          <para>PHP's native Mysql API</para>
+        </listitem>
+
+        <listitem>
+          <para>PHP's native Postgresql API</para>
+        </listitem>
+
+        <listitem>
+          <para>Propel (<ulink
+          url="http://propel.phpdb.org/">http://propel.phpdb.org/</ulink>)</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Your options are however not limited to these because integrating
+      your favourite database tool with Agavi is fairly simple.</para>
+
+      <para>Each database implementation is wrapped into a class extending
+      <classname>AgaviDatabase</classname>.</para>
+
+      <section>
+        <title>Database Connection Configuration</title>
+
+        <para>Database connections are configured in
+        <filename>app/config/databases.xml. You can have more than one
+        connections.</filename></para>
+
+        <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;configurations xmlns="http://agavi.org/agavi/1.0/config"&gt;
+  &lt;configuration&gt;
+    &lt;databases default="postgres"&gt;
+
+      &lt;database name="postgres" class="AgaviPostgresqlDatabase"&gt;
+        &lt;parameters&gt;
+          &lt;parameter name="host"&gt;localhost&lt;/parameter&gt;
+          &lt;parameter name="username"&gt;username&lt;/parameter&gt;
+          &lt;parameter name="password"&gt;passphrase&lt;/parameter&gt;
+          &lt;parameter name="database"&gt;sample&lt;/parameter&gt;
+        &lt;/parameters&gt;
+      &lt;/database&gt;
+
+      &lt;database name="propel" class="AgaviPropelDatabase"&gt;
+        &lt;parameters&gt;
+          &lt;parameter name="config"&gt;%core.app_dir%/config/project-conf.php&lt;/parameter&gt;
+        &lt;/parameters&gt;
+      &lt;/database&gt;
+
+    &lt;/databases&gt;
+  &lt;/configuration&gt;
+&lt;/configurations&gt;</programlisting>
+      </section>
+
+      <section>
+        <title>Using the Connection</title>
+
+        <para>Database connections are retrieved using
+        <classname>AgaviDatabaseManager</classname>.</para>
+
+        <programlisting>// retrieve the handle of the default database connection
+$conn = $this-&gt;context-&gt;getDatabaseManager()-&gt;getDatabase();
+// retrieve the handle of a named database connection
+$conn2 = $this-&gt;context-&gt;getDatabaseManager()-&gt;getDatabase('second_database');
+
+// AgaviContext also has a shorcut. You can use it for named connections too.
+$conn2 = $this-&gt;context-&gt;getDatabaseConnection();</programlisting>
+      </section>
     </section>
 
     <section>
