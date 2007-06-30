@@ -404,7 +404,7 @@ final class AgaviContext
 					$this->singletonModelInstances[$class] = new $class();
 				} else {
 					// we use this approach so we can pass constructor params or if it doesn't have an initialize() method
-					$this->singletonModelInstances[$class] = call_user_func_array(array($rc, 'newInstance'), $parameters);
+					$this->singletonModelInstances[$class] = $rc->newInstanceArgs($parameters);
 				}
 			}
 			$model = $this->singletonModelInstances[$class];
@@ -415,7 +415,7 @@ final class AgaviContext
 				$model = new $class();
 			} else {
 				// we use this approach so we can pass constructor params or if it doesn't have an initialize() method
-				$model = call_user_func_array(array($rc, 'newInstance'), $parameters);
+				$model = $rc->newInstanceArgs($parameters);
 			}
 		}
 		

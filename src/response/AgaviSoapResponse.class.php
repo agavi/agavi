@@ -35,7 +35,12 @@ class AgaviSoapResponse extends AgaviResponse
 	protected $content = null;
 	
 	/**
-	 * Import response metadata (nothing in this case) from another response.
+	 * @var        array An array of SOAP headers to send with the response.
+	 */
+	protected $soapHeaders = array();
+	
+	/**
+	 * Import response metadata (SOAP headers) from another response.
 	 *
 	 * @param      AgaviResponse The other response to import information from.
 	 *
@@ -44,6 +49,13 @@ class AgaviSoapResponse extends AgaviResponse
 	 */
 	public function merge(AgaviResponse $otherResponse)
 	{
+		if($otherResponse instanceof AgaviSoapResponse) {
+			foreach($otherResponse->getSoapHeaders() as $soapHeader) {
+				if(!$this->hasSoapHeader($soapHeader->namespace, $soapHeader->name)) {
+					$this->addSoapHeader($soapHeader);
+				}
+			}
+		}
 	}
 	
 	/**
@@ -137,7 +149,9 @@ class AgaviSoapResponse extends AgaviResponse
 	 */
 	public function send(AgaviOutputType $outputType = null)
 	{
-		$this->sendContent();
+		$this->sendSoapHeaders();
+		// don't send content, that's done by returning it from Controller::dispatch(), so SoapServer::handle() deals with the rest
+		// $this->sendContent();
 	}
 	
 	/**
@@ -149,6 +163,157 @@ class AgaviSoapResponse extends AgaviResponse
 	public function clear()
 	{
 		$this->clearContent();
+		$this->clearSoapHeaders();
+	}
+	
+	/**
+	 * Clear all SOAP headers from the response.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function clearSoapHeaders()
+	{
+		$this->soapHeaders = array();
+	}
+	
+	/**
+	 * Send SOAP Headers.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function sendSoapHeaders()
+	{
+		$server = $this->context->getController()->getSoapServer();
+		
+		foreach($this->soapHeaders as $soapHeader) {
+			$server->addSoapHeader($soapHeader);
+		}
+	}
+	
+	/**
+	 * Get an array of all SOAP headers set on this response.
+	 *
+	 * @return     array An array of SoapHeader objects.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getSoapHeaders()
+	{
+		return $this->soapHeaders;
+	}
+	
+	/**
+	 * Get a SOAP Header from this response based on its namespace and name.
+	 *
+	 * @param      string The namespace of the SOAP header element.
+	 * @param      string The name of the SOAP header element.
+	 *
+	 * @return     SoapHeader A SoapHeader, if found, otherwise null.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getSoapHeader($namespace, $name)
+	{
+		if(($key = $this->searchSoapHeader($namespace, $name)) !== false) {
+			return $this->soapHeaders[$key];
+		}
+	}
+	
+	/**
+	 * Add a SOAP Header to this response.
+	 *
+	 * @param      SoapHeader The SOAP header to set.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function addSoapHeader(SoapHeader $soapHeader)
+	{
+		$this->removeSoapHeader($soapHeader->namespace, $soapHeader->name);
+		$this->soapHeaders[] = $soapHeader;
+	}
+	
+	/**
+	 * Set a SOAP header into this response.
+	 *
+	 * This method has the same signature as PHP's SoapHeader->__construct().
+	 *
+	 * @param      string The namespace of the SOAP header element.
+	 * @param      string The name of the SOAP header element.
+	 * @param      mixed  A SOAP header's content. It can be a PHP value or a
+	 *                    SoapVar object.
+	 * @param      bool   Value of the mustUnderstand attribute of the SOAP header
+	 *                    element.
+	 * @param      mixed  Value of the actor attribute of the SOAP header element.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function setSoapHeader($namespace, $name, $data = null, $mustUnderstand = false, $actor = null)
+	{
+		if($actor === null) {
+			$h = new SoapHeader($namespace, $name, $data, $mustUnderstand);
+		} else {
+			$h = new SoapHeader($namespace, $name, $data, $mustUnderstand, $actor);
+		}
+		$this->addSoapHeader($h);
+	}
+	
+	/**
+	 * Remove a SOAP Header from this response based on its namespace and name.
+	 *
+	 * @param      string The namespace of the SOAP header element.
+	 * @param      string The name of the SOAP header element.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function removeSoapHeader($namespace, $name)
+	{
+		if(($key = $this->searchSoapHeader($namespace, $name)) !== false) {
+			unset($this->soapHeaders[$key]);
+		}
+	}
+	
+	/**
+	 * Check if a SOAP Header has been set based on its namespace and name.
+	 *
+	 * @param      string The namespace of the SOAP header element.
+	 * @param      string The name of the SOAP header element.
+	 *
+	 * @return     bool true, if this SOAP header has been set, false otherwise.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function hasSoapHeader($namespace, $name)
+	{
+		return $this->searchSoapHeader($namespace, $name) !== false;
+	}
+	
+	/**
+	 * Find the key of a SOAP Header based on its namespace and name.
+	 *
+	 * @param      string The namespace of the SOAP header element.
+	 * @param      string The name of the SOAP header element.
+	 *
+	 * @return     int The key of the SOAP header in the array, otherwise false.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	protected function searchSoapHeader($namespace, $name)
+	{
+		foreach($this->soapHeaders as $key => $soapHeader) {
+			if($soapHeader->namespace = $namespace && $soapHeader->name == $name) {
+				return $key;
+			}
+		}
+		return false;
 	}
 }
 

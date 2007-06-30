@@ -136,6 +136,17 @@ class AgaviTranslationConfigHandler extends AgaviConfigHandler
 		return $filters;
 	}
 
+	/**
+	 * Build a list of translators.
+	 *
+	 * @param      AgaviConfigValueHolder The translators container.
+	 * @param      array                  The destination data array.
+	 * @param      string                 The name of the parent domain.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	protected function getTranslators($translators, &$data, $parent = null)
 	{
 		static $defaultData = array(

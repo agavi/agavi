@@ -307,22 +307,21 @@ class AgaviWebRouting extends AgaviRouting
 			}
 			// the route does not exist. we generate a normal index.php?foo=bar URL.
 
+			$aso = ini_get('arg_separator.output');
+			if($options['separator'] != $aso) {
+				$aso = $options['separator'];
+			}
+
 			if($route === null) {
 				$path = $_SERVER['SCRIPT_NAME'];
-				$append = '?' . http_build_query($params);
+				$append = '?' . http_build_query($params, '', $aso);
 			} else {
 				if(!isset($path)) {
 					$path = $route;
 				}
 				if(!isset($append)) {
-					$append = '?' . http_build_query($params);
+					$append = '?' . http_build_query($params, '', $aso);
 				}
-			}
-
-			$aso = ini_get('arg_separator.output');
-			if($options['separator'] != $aso) {
-				// replace arg_separator.output's with given separator
-				$append = str_replace($aso, $options['separator'], $append);
 			}
 
 			$retval = $path . $append;

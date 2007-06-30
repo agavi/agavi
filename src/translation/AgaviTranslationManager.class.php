@@ -72,7 +72,7 @@ class AgaviTranslationManager
 
 	/**
 	 * @var        array The available locales which have been defined in the 
-	                     translation.xml config file.
+	 *                   translation.xml config file.
 	 */
 	protected $availableConfigLocales = array();
 

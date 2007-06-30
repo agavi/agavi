@@ -130,7 +130,7 @@ EOD;
 		
 		$p2->addConflictingPackageDepWithChannel('phing', 'pear.php.net');
 		
-		$p2->setPhpDep('5.1.0');
+		$p2->setPhpDep('5.1.3');
 		
 		$p2->addExtensionDep('required', 'dom');
 		$p2->addExtensionDep('required', 'libxml');

@@ -149,6 +149,12 @@ class AgaviWebResponse extends AgaviResponse
 		}
 	}
 	
+	/**
+	 * Send the content for this response
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
 	public function sendContent()
 	{
 		if(is_resource($this->content) && $this->getParameter('use_sendfile_header', false)) {
@@ -257,7 +263,7 @@ class AgaviWebResponse extends AgaviResponse
 	 * Gets the HTTP status code set for the response.
 	 *
 	 * @return     string A numeric HTTP status code between 100 and 505, or null
-	                      if no status code has been set.
+	 *                    if no status code has been set.
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0

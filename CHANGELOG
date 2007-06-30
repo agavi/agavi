@@ -1,11 +1,24 @@
 AGAVI CHANGELOG
 ===============
 
+0.11.0 (July ??, 2007)
+
+ADD: Support for SOAP faults (#532) (David, Noah Fontes)
+ADD: Support for SOAP response headers (#531) (David)
+ADD: Allow relative paths to xsd files in XML Schema Instance *schemaLocation attributes (#530) (David)
+
+CHG: Bumped minimum required PHP version to 5.1.3 (#456) (David)
+
+FIX: Output messages with multiple parts break SOAP completely (#533) (David)
+FIX: Missing param declaration in wsdl.xsl might lead to corrupt response message blocks in generated WSDL (#529) (David)
+
+
 0.11.0 RC5 (June 18, 2007)
 
 ADD: Add extension points to XML Schema definitions where feasible (#515) (David)
 ADD: Support for XML Schema instance schema location declarations (#517) (David)
 ADD: AgaviNullStorage (#523) (David)
+ADD: Experimental(!) support for native XML config handlers, base work for XML-only configuration system (#519) (David)
 ADD: Support for XSL stylesheets in configuration files (#509) (David)
 ADD: Support for XML namespaces in configuration files (#508) (David)
 ADD: SOAP Support (#301) with automatic WSDL generation (#514) (David)
@@ -21,7 +34,7 @@ ADD: Support for UTF-8 in StringValidator via parameter 'utf8', default on ([182
 ADD: Ability to prevent sending of the response in Controller::dispatch(), which now always returns the final (not global!) response (#469) (David)
 ADD: Made default layer class configurable via 'default_layer_class' config parameter for AgaviOutputTypeConfigHandler ([1800]) (David)
 
-CHG: Deprecate AgaviConfigCache::literalize() and AgaviConfigCache::replaceConstants() (#526) (David)
+CHG: Deprecate AgaviConfigHandler::literalize() and AgaviConfigHandler::replaceConstants() (#526) (David)
 CHG: Improvements for FPF's charset detection, now uses output type's http_headers Content-Type value if possible ([1982]) (David)
 CHG: Updated zoneinfo database to 2007f (#524) (David)
 CHG: Ability to get empty data instead of exceptions when accessing locked request data (#512) (David)
@@ -60,6 +73,7 @@ FIX: Suppress warning in AgaviImageFileValidator when a valid file, but no image
 FIX: Don't use unicode character properties in regular expressions, thanks to all the clueless Linux package maintainers who disable those even though they're on as default (just like they do it with DOM and other default stuff) ([1809], [1810]) (David)
 FIX: Make the pear package task create .keep files in empty dirs ([1807]) (David)
 FIX: When using 0 as default value for an optional parameter gen() could skip the parameter (#464) (Dominik)
+
 
 0.11.0 RC4 (February 25, 2007)
 
@@ -317,6 +331,7 @@ FIX: Building many modules/actions etc. will make agavi run out of memory (#35) 
 
 
 0.10.2 (February 27, 2006)
+
 CHG: Changed to new PEAR package task, package.xml v2 format, using PEAR channel pear.agavi.org (David)
 CHG: Declared API stability alpha (David)
 FIX: Fixed PHP 5.0.5 / 5.1 return by reference problem in logging/PassthruLayout (Markus Lervik, David)
@@ -324,10 +339,12 @@ FIX: Fixed incorrect Phing dependendy (David)
 
 
 0.10.1 (January 6, 2006)
+
 FIX: Fixed critical bug that prevented parameters to be passed in config_handlers.ini
 
 
 0.10.0 (December 20, 2005)
+
 CHG: Updated TODO
 CHG: Bumped Version Numbers
 FIX: ReturnArrayConfigHandler did not convert foo.bar.baz keys into multi-dimensional arrays

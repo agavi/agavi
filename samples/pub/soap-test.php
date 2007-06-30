@@ -21,7 +21,7 @@ $client = new SoapClient('http://localhost/~dzuelke/_projects/agavi/branches/0.1
 ));
 
 try {
-	$result = $client->getItemPrice('nonsense');
+	$result = $client->getItemPrice($_GET['item']);
 } catch(SoapFault $e) {
 	$result = $e->__toString();
 }
