@@ -236,7 +236,7 @@ final class AgaviToolkit
 	 */
 	public static function expandVariables($string, array $arguments = array())
 	{
-		return preg_replace(array('/\$\{([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)\}/e', '/\{\$([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)\}/e', '/\$([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)/e'), 'array_key_exists($arguments["$1"]) ? $arguments["$1"] : \'$0\'', $string);
+		return preg_replace(array('/\$\{([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)\}/e', '/\{\$([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)\}/e', '/\$([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)/e'), 'array_key_exists("$1", $arguments) ? $arguments["$1"] : \'$0\'', $string);
 	}
 	
 	/**
