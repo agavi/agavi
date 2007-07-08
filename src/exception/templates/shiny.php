@@ -555,8 +555,18 @@ if(isset($fixedTrace[0]['file']) && $fixedTrace[0]['file'] != $e->getFile() && $
 		</p>
 		<h3>Stack Trace</h3>
 		<ol>
-<?php $i = 0; $highlights = array(); foreach($fixedTrace as $trace): $i++; if(!isset($highlights[$trace['file']])) $highlights[$trace['file']] = explode('<br />', str_replace(array('<code><span style="color: #000000">', '</span>
-</code>', '&nbsp;'), array('', '', '&#160;'), highlight_string(str_replace('	', '  ', file_get_contents($trace['file'])), true))); ?>
+<?php
+$i = 0;
+$highlights = array();
+foreach($fixedTrace as $trace): 
+	$i++;
+	if(!isset($highlights[$trace['file']])) {
+		$highlights[$trace['file']] = highlight_string(str_replace('	', '  ', file_get_contents($trace['file'])), true);
+		$highlights[$trace['file']] = str_replace(array("\r\n", "\n", "\r"), array('', '', ''), $highlights[$trace['file']]);
+		$highlights[$trace['file']] = str_replace(array('<code><span style="color: #000000">', '</span></code>', '&nbsp;'), array('', '', '&#160;'), $highlights[$trace['file']]);
+		$highlights[$trace['file']] = explode('<br />', $highlights[$trace['file']]);
+	}
+?>
 			<li id="frame<?php echo $i; ?>"<?php if($i > 1): ?> class="hidecode"<?php endif; ?>>at <?php if($i > 1): ?><strong><?php if(isset($trace['class'])): ?><?php echo $trace['class'], htmlspecialchars($trace['type']); ?><?php endif; ?><?php echo $trace['function']; ?><?php if(isset($trace['args'])): ?>(<?php echo buildParamList($trace['args']); ?>)<?php endif; ?></strong><?php else: ?><em>exception origin</em><?php endif; ?><br />in <?php if(isset($trace['file'])): echo str_replace(
 			array(
 				'_' . AgaviConfig::get('core.module_dir', 'something totally random'),
@@ -576,10 +586,30 @@ if(isset($fixedTrace[0]['file']) && $fixedTrace[0]['file'] != $e->getFile() && $
 				'<abbr title="' . AgaviConfig::get('core.app_dir') . '">core.app_dir</abbr>',
 				'<abbr title="' . AgaviConfig::get('core.agavi_dir') . '">core.agavi_dir</abbr>',
 			), 
-'_' . $trace['file']); ?> <a href="#frame<?php echo $i; ?>" class="toggle" title="Toggle source code snippet" onclick="this.parentNode.className = this.parentNode.className == 'hidecode' ? '' : 'hidecode'; return false;">line <?php echo $trace['line']; ?></a><ol start="<?php echo $start = $trace['line'] < 4 ? 1 : $trace['line'] - 3; ?>" style="padding-left:<?php echo strlen($start+6)*0.6+2; ?>em"><?php $lines = array_slice($highlights[$trace['file']], $start - 1, 7, true); 
-foreach($lines as $key => &$line) { if($key + 1 == $trace['line']): ?><li class="highlight"><?php if($svg): ?><div style="float:left; width:1em; height:1em; margin-left:-1.35em; background-color:#FFF;"><svg:svg viewBox="2 1 45 43" preserveAspectRatio="xMaxYMax meet" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><svg:use xlink:href="#stopSign" /></svg:svg></div><?php endif; else: ?><li><?php endif; ?><code><?php
-if($line == '') $line = '&#160;'; if(strpos($line, '</span>') === 0) $line = substr($line, 7); if(strpos($line, '</span>') < strpos($line, '<span') || strpos($line, '<span') === false) for($j = $key; $j >= 0; $j--) { if(($pos = strrpos($highlights[$trace['file']][$j], '<span')) !== false) { $line = substr($highlights[$trace['file']][$j], $pos, 29) . $line; break; }} if(strrpos($line, '</span>') < strrpos($line, '<span') || strpos($line, '</span>') === false) $line .= '</span>'; if(strpos($line, ' ', 20) == 29) $line = substr_replace($line, '&#160;', 29, 1); echo $line; 
-
+'_' . $trace['file']); ?> <a href="#frame<?php echo $i; ?>" class="toggle" title="Toggle source code snippet" onclick="this.parentNode.className = this.parentNode.className == 'hidecode' ? '' : 'hidecode'; return false;">line <?php echo $trace['line']; ?></a><ol start="<?php echo $start = $trace['line'] < 4 ? 1 : $trace['line'] - 3; ?>" style="padding-left:<?php echo strlen($start+6)*0.6+2; ?>em"><?php
+$lines = array_slice($highlights[$trace['file']], $start - 1, 7, true); 
+foreach($lines as $key => &$line) {
+	if($key + 1 == $trace['line']): ?><li class="highlight"><?php if($svg): ?><div style="float:left; width:1em; height:1em; margin-left:-1.35em; background-color:#FFF;"><svg:svg viewBox="2 1 45 43" preserveAspectRatio="xMaxYMax meet" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><svg:use xlink:href="#stopSign" /></svg:svg></div><?php endif; else: ?><li><?php endif; ?><code><?php
+	if($line == '') {
+		$line = '&#160;';
+	}
+	if(strpos($line, '</span>') === 0) {
+		$line = substr($line, 7);
+	}
+	if(strpos($line, '</span>') < strpos($line, '<span') || strpos($line, '<span') === false) {
+		for($j = $key; $j >= 0; $j--) {
+			if(($pos = strrpos($highlights[$trace['file']][$j], '<span')) !== false) {
+				$line = substr($highlights[$trace['file']][$j], $pos, 29) . $line; break;
+			}
+		}
+	}
+	if(strrpos($line, '</span>') < strrpos($line, '<span') || strpos($line, '</span>') === false) {
+		$line .= '</span>';
+	}
+	if(strpos($line, ' ', 20) == 29) {
+		$line = substr_replace($line, '&#160;', 29, 1);
+	}
+	echo $line;
 ?></code></li>
 <?php } ?></ol><?php else: // no info about origin file ?><em>unknown</em><?php endif; ?></li>
 <?php endforeach; ?>
