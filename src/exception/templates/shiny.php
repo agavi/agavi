@@ -598,12 +598,12 @@ foreach($lines as $key => &$line) {
 	}
 	if(strpos($line, '</span>') < strpos($line, '<span') || strpos($line, '<span') === false) {
 		for($j = $key; $j >= 0; $j--) {
-			if(($pos = strrpos($highlights[$trace['file']][$j], '<span')) !== false) {
+			if(($pos = strrpos($highlights[$trace['file']][$j], '<span')) !== false && strrpos($highlights[$trace['file']][$j], '</span>') < $pos) {
 				$line = substr($highlights[$trace['file']][$j], $pos, 29) . $line; break;
 			}
 		}
 	}
-	if(strrpos($line, '</span>') < strrpos($line, '<span') || strpos($line, '</span>') === false) {
+	if((strrpos($line, '</span>') < strrpos($line, '<span') || strpos($line, '</span>') === false) && strpos($line, '<span') !== false) {
 		$line .= '</span>';
 	}
 	if(strpos($line, ' ', 20) == 29) {
