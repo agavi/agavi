@@ -141,7 +141,7 @@ class AgaviPropelDatabase extends AgaviDatabase
 	{
 		if($this->agaviCreoleDatabase) {
 			// make concrecte adapter connect
-			$this->agaviCreoleDatabase->getConnection();
+			$this->connection = $this->agaviCreoleDatabase->getConnection();
 		} else {
 			// trigger Propel autoload and go go go
 			if(class_exists('Propel')) {
