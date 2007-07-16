@@ -86,7 +86,7 @@ class AgaviController extends AgaviParameterHolder
 	{
 		$actionName = str_replace('.', '/', $actionName);
 		$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/actions/' . $actionName . 'Action.class.php';
-		if(is_readable($file)) {
+		if(is_readable($file) && substr($actionName, 0, 1) !== '/') {
 			return $actionName;
 		}
 		throw new AgaviControllerException(sprintf('Action "%s" in Module "%s" could not be found.', $actionName, $moduleName));
