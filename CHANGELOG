@@ -1,14 +1,24 @@
 AGAVI CHANGELOG
 ===============
 
-0.11.0 (July ??, 2007)
+0.11.0 RC6 (July ??, 2007)
 
+ADD: Allow logging of FormPopulationFilter parse errors (#543) (David)
+ADD: Add Agavi information to X-Powered-By header (#542) (David)
+ADD: Add LoggerManager::getDefaultMessageClass() (#539) (David)
 ADD: Support for SOAP faults (#532) (David, Noah Fontes)
 ADD: Support for SOAP response headers (#531) (David)
 ADD: Allow relative paths to xsd files in XML Schema Instance *schemaLocation attributes (#530) (David)
 
+CHG: Change agavi.release directive to use a slash instead of a space as the name/version delimiter (#541) (David)
 CHG: Bumped minimum required PHP version to 5.1.3 (#456) (David)
 
+FIX: <route action=".Something" /> confuses template location code (#540) (David)
+FIX: AgaviPropelDatabase returns null in getConnection when used with Propel 1.2 (#538) (Dominik) 
+FIX: "shiny" exception template may generate invalid markup if HTML is at first line of code snippet (#537) (David)
+FIX: AgaviToolkit::expandVariables() skips null arguments (#536) (David)
+FIX: AgaviParameterHolder::hasParameter() etc return false for keys that have a null value (#535) (David)
+FIX: AgaviExecutionFilter::clearCache doesn't clear the content cache properly (#534) (Veikko)
 FIX: Output messages with multiple parts break SOAP completely (#533) (David)
 FIX: Missing param declaration in wsdl.xsl might lead to corrupt response message blocks in generated WSDL (#529) (David)
 
