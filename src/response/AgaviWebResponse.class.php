@@ -539,6 +539,18 @@ class AgaviWebResponse extends AgaviResponse
 			$this->setHttpHeader('Content-Length', $contentSize);
 		}
 		
+		if($this->getParameter('expose_agavi', true)) {
+			if(AgaviConfig::get('expose_agavi_version', $expose_php = ini_get('expose_php'))) {
+				$xpbh = AgaviConfig::get('agavi.release');
+			} else {
+				$xpbh = AgaviConfig::get('agavi.name');
+			}
+			if($expose_php) {
+				$xpbh .= ' on PHP/' . PHP_VERSION;
+			}
+			$this->setHttpHeader('X-Powered-By', $xpbh);
+		}
+		
 		$routing = $this->context->getRouting(); 
 		if($routing instanceof AgaviWebRouting) {
 			$basePath = $routing->getBasePath();
