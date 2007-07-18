@@ -155,13 +155,19 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 			}
 			libxml_clear_errors();
 			libxml_use_internal_errors($luie);
-			throw new AgaviParseException(
-				sprintf(
-					'Form Population Filter could not parse the document due to the following error%s: ' . "\n\n%s",
-					count($errors) > 1 ? 's' : '',
-					implode("\n", $errors)
-				)
+			$emsg = sprintf(
+				'Form Population Filter could not parse the document due to the following error%s: ' . "\n\n%s",
+				count($errors) > 1 ? 's' : '',
+				implode("\n", $errors)
 			);
+			if(AgaviConfig::get('core.use_logging') && $cfg['log_parse_errors']) {
+				$lmsg = $emsg . "\n\nResponse content:\n\n" . $response->getContent();
+				$lm = $this->context->getLoggerManager();
+				$mc = $lm->getDefaultMessageClass();
+				$m = new $mc($lmsg, $cfg['logging_severity']);
+				$lm->log($m, $cfg['logging_logger']);
+			}
+			throw new AgaviParseException($emsg);
 		}
 
 		libxml_clear_errors();
@@ -184,7 +190,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 			}
 		}
 
-		if(($encoding = $this->getParameter('force_encoding')) === false) {
+		if(($encoding = $cfg['force_encoding']) === false) {
 			if($doc->actualEncoding) {
 				$encoding = $doc->actualEncoding;
 			} elseif($doc->encoding) {
@@ -551,7 +557,10 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 		$this->setParameter('dom_validate_on_parse', false);
 		$this->setParameter('dom_preserve_white_space', true);
 		$this->setParameter('dom_format_output', false);
-
+		$this->setParameter('log_parse_errors', true);
+		$this->setParameter('logging_severity', AgaviLogger::FATAL);
+		$this->setParameter('logging_logger', null);
+		
 		// initialize parent
 		parent::initialize($context, $parameters);
 
