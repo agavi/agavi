@@ -45,7 +45,7 @@ AgaviConfig::set('agavi.version',
 );
 
 AgaviConfig::set('agavi.release',
-	AgaviConfig::get('agavi.name') . ' ' .
+	AgaviConfig::get('agavi.name') . '/' .
 	AgaviConfig::get('agavi.version')
 );
 
