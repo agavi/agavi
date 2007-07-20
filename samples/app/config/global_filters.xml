@@ -5,13 +5,13 @@
 		<filters>
 			
 			<filter name="FormPopulationFilter" class="AgaviFormPopulationFilter">
-				<parameters>
-					<parameter name="methods">
-						<parameters>
-							<parameter>write</parameter>
-						</parameters>
-					</parameter>
-				</parameters>
+				<parameter name="methods">
+					<parameter>write</parameter>
+				</parameter>
+				<parameter name="output_types">
+					<parameter>html</parameter>
+					<parameter>xhtml</parameter>
+				</parameter>
 			</filter>
 			
 		</filters>

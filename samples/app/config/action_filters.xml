@@ -8,6 +8,7 @@
 				<parameter name="comment">On</parameter>
 				<parameter name="output_types">
 					<parameter>html</parameter>
+					<parameter>xhtml</parameter>
 				</parameter>
 			</filter>
 
