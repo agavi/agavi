@@ -229,9 +229,14 @@ class AgaviWebRouting extends AgaviRouting
 
 		$options = $this->resolveGenOptions($options);
 
+		$aso = ini_get('arg_separator.output');
+		if($options['separator'] != $aso) {
+			$aso = $options['separator'];
+		}
+
 		if($route === null && empty($params)) {
 			$retval = $req->getRequestUri();
-			$retval = str_replace('&', $options['separator'], $retval);
+			$retval = str_replace('&', $aso, $retval);
 		} else {
 			if(defined('SID') && SID !== '' && $options['use_trans_sid'] === true) {
 				$params = array_merge($params, array(session_name() => session_id()));
@@ -270,7 +275,7 @@ class AgaviWebRouting extends AgaviRouting
 					}
 
 					if(count($p) > 0) {
-						$append = '?' . http_build_query($p);
+						$append = '?' . http_build_query($p, '', $aso);
 					}
 				} else {
 					// the route exists, but we must create a normal index.php?foo=bar URL.
@@ -306,11 +311,6 @@ class AgaviWebRouting extends AgaviRouting
 				}
 			}
 			// the route does not exist. we generate a normal index.php?foo=bar URL.
-
-			$aso = ini_get('arg_separator.output');
-			if($options['separator'] != $aso) {
-				$aso = $options['separator'];
-			}
 
 			if($route === null) {
 				$path = $_SERVER['SCRIPT_NAME'];
