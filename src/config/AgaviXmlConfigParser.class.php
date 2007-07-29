@@ -426,7 +426,8 @@ class AgaviXmlConfigParser
 				throw new AgaviUnreadableException($error);
 			}
 			
-			if(!$doc->schemaValidate($validationFile)) {
+			// gotta do the @ to suppress warnings when the schema cannot be found
+			if(!@$doc->schemaValidate($validationFile)) {
 				$errors = array();
 				foreach(libxml_get_errors() as $error) {
 					$errors[] = sprintf("Line %d: %s", $error->line, $error->message);
@@ -486,7 +487,8 @@ class AgaviXmlConfigParser
 				throw new AgaviUnreadableException($error);
 			}
 			
-			if(!$doc->relaxNGValidate($validationFile)) {
+			// gotta do the @ to suppress warnings when the schema cannot be found
+			if(!@$doc->relaxNGValidate($validationFile)) {
 				$errors = array();
 				foreach(libxml_get_errors() as $error) {
 					$errors[] = sprintf("Line %d: %s", $error->line, $error->message);
