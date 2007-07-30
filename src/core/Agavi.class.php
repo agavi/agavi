@@ -143,7 +143,7 @@ final class Agavi
 			AgaviConfigCache::import(AgaviConfig::get('core.config_dir') . '/settings.xml');
 
 			// clear our cache if the conditions are right
-			if(AgaviConfig::get('core.debug'))	{
+			if(AgaviConfig::get('core.debug')) {
 				AgaviToolkit::clearCache();
 
 				// load base settings
