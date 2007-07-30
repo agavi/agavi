@@ -342,6 +342,10 @@ class AgaviXmlConfigParser
 	 */
 	public function validate(DOMDocument $doc, array $validationInfo = array())
 	{
+		if(!AgaviConfig::get('core.skip_config_validation', false)) {
+			return;
+		}
+		
 		foreach($validationInfo as $type => $files) {
 			switch($type) {
 				case self::VALIDATION_TYPE_XMLSCHEMA:
