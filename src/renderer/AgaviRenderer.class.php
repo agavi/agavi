@@ -27,7 +27,7 @@
  *
  * @version    $Id$
  */
-abstract class AgaviRenderer
+abstract class AgaviRenderer extends AgaviParameterHolder
 {
 	/**
 	 * @var        AgaviContext An AgaviContext instance.
@@ -107,6 +107,9 @@ abstract class AgaviRenderer
 	public function initialize(AgaviContext $context, array $parameters = array())
 	{
 		$this->context = $context;
+		
+		$this->setParameters($parameters);
+		
 		if(isset($parameters['var_name'])) {
 			$this->varName = $parameters['var_name'];
 		}
