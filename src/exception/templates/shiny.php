@@ -558,9 +558,9 @@ if(isset($fixedTrace[0]['file']) && $fixedTrace[0]['file'] != $e->getFile() && $
 <?php
 $i = 0;
 $highlights = array();
-foreach($fixedTrace as $trace): 
+foreach($fixedTrace as $trace):
 	$i++;
-	if(!isset($highlights[$trace['file']])) {
+	if(isset($trace['file']) && !isset($highlights[$trace['file']])) {
 		$highlights[$trace['file']] = highlight_string(str_replace('	', '  ', file_get_contents($trace['file'])), true);
 		$highlights[$trace['file']] = str_replace(array("\r\n", "\n", "\r"), array('', '', ''), $highlights[$trace['file']]);
 		$highlights[$trace['file']] = str_replace(array('<code><span style="color: #000000">', '</span></code>', '&nbsp;'), array('', '', '&#160;'), $highlights[$trace['file']]);
