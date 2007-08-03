@@ -53,16 +53,17 @@ class AgaviEzctemplateCustomFunctions implements ezcTemplateCustomFunction
 				$def->sendTemplateObject = false;
 				return $def;
 			
-			case 'gen':
+			case 'route':
 			case '_':
 			case '__':
 			case '_c':
 			case '_d':
 			case '_n':
 				return $def;
+			
+			default:
+				return false;
 		}
-
-		return false;
 	}
 
 	/**

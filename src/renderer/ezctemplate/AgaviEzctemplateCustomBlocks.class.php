@@ -72,9 +72,10 @@ class AgaviEzctemplateCustomBlocks implements ezcTemplateCustomBlock
 				$def->requiredParameters = array('name');
 				$def->optionalParameters  = array('params', 'options');
 				return $def;
+			
+			default:
+				return false;
 		}
-
-		return false;
 	}
 	
 	
