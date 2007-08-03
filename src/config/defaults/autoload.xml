@@ -123,12 +123,17 @@
 			<autoload name="AgaviModel">%core.agavi_dir%/model/AgaviModel.class.php</autoload>
 
 			<!-- agavi/renderer -->
+			<autoload name="AgaviEzctemplateCustomBlocks">%core.agavi_dir%/renderer/ezctemplate/AgaviEzctemplateCustomBlocks.class.php</autoload>			
+			<autoload name="AgaviEzctemplateCustomFunctions">%core.agavi_dir%/renderer/ezctemplate/AgaviEzctemplateCustomFunctions.class.php</autoload>
+			<autoload name="AgaviEzctemplateRenderer">%core.agavi_dir%/renderer/AgaviEzctemplateRenderer.class.php</autoload>
+			<autoload name="AgaviEzctemplateTemplate">%core.agavi_dir%/renderer/ezctemplate/AgaviEzctemplateTemplate.class.php</autoload>
+			<autoload name="AgaviIEzctemplateTemplate">%core.agavi_dir%/renderer/ezctemplate/AgaviIEzctemplateTemplate.interface.php</autoload>
 			<autoload name="AgaviIReusableRenderer">%core.agavi_dir%/renderer/AgaviIReusableRenderer.interface.php</autoload>
 			<autoload name="AgaviPhpRenderer">%core.agavi_dir%/renderer/AgaviPhpRenderer.class.php</autoload>
 			<autoload name="AgaviPhptalRenderer">%core.agavi_dir%/renderer/AgaviPhptalRenderer.class.php</autoload>
 			<autoload name="AgaviRenderer">%core.agavi_dir%/renderer/AgaviRenderer.class.php</autoload>
 			<autoload name="AgaviSmartyRenderer">%core.agavi_dir%/renderer/AgaviSmartyRenderer.class.php</autoload>
-
+			
 			<!-- agavi/request -->
 			<autoload name="AgaviConsoleRequest">%core.agavi_dir%/request/AgaviConsoleRequest.class.php</autoload>
 			<autoload name="AgaviICookiesRequestDataHolder">%core.agavi_dir%/request/AgaviICookiesRequestDataHolder.interface.php</autoload>
