@@ -1,8 +1,10 @@
 AGAVI CHANGELOG
 ===============
 
-0.11.0 RC6 (July ??, 2007)
+0.11.0 RC6 (August ??, 2007)
 
+ADD: AgaviEzctemplateRenderer (#326) (Felix Weis, David)
+ADD: Allow disabling of XML config validation (#552) (David)
 ADD: Allow logging of FormPopulationFilter parse errors (#543) (David)
 ADD: Add Agavi information to X-Powered-By header (#542) (David)
 ADD: Add LoggerManager::getDefaultMessageClass() (#539) (David)
@@ -10,6 +12,7 @@ ADD: Support for SOAP faults (#532) (David, Noah Fontes)
 ADD: Support for SOAP response headers (#531) (David)
 ADD: Allow relative paths to xsd files in XML Schema Instance *schemaLocation attributes (#530) (David)
 
+CHG: Made AgaviRenderer an AgaviParameterHolder (#553) (David)
 CHG: Removed bash dependency from agavi build script, (#546) (David, simoncpu)
 CHG: Change agavi.release directive to use a slash instead of a space as the name/version delimiter (#541) (David)
 CHG: Bumped minimum required PHP version to 5.1.3 (#456) (David)
