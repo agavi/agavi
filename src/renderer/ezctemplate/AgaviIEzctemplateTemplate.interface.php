@@ -38,7 +38,7 @@ interface AgaviIEzctemplateTemplate
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public final function getContext();
+	public function getContext();
 	
 	/**
 	 * Retrieve the current application context.
@@ -48,7 +48,7 @@ interface AgaviIEzctemplateTemplate
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public final function setContext(AgaviContext $context);
+	public function setContext(AgaviContext $context);
 }
 
 ?>
