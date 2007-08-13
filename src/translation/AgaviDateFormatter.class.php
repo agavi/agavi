@@ -140,7 +140,13 @@ class AgaviDateFormatter extends AgaviDateFormat implements AgaviITranslator
 			$cal = $this->context->getTranslationManager()->createCalendar($locale);
 			$cal->setUnixTimestamp($message);
 		} elseif(!($message instanceof AgaviCalendar)) {
-			$cal = $this->context->getTranslationManager()->createCalendar($message);
+			try {
+				// maybe it is a date/time string we can parse...
+				$cal = $this->context->getTranslationManager()->createCalendar(new DateTime($message));
+			} catch(Exception $e) {
+				// err... no, it isn't. try to use the message as a calendar name
+				$cal = $this->context->getTranslationManager()->createCalendar($message);
+			}
 		} else {
 			$cal = $message;
 		}
