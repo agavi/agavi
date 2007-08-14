@@ -97,7 +97,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 
 		if(is_array($cfg['populate']) || $cfg['populate'] instanceof AgaviParameterHolder) {
 			$populate = $cfg['populate'];
-		} elseif(in_array($req->getMethod(), $cfg['methods']) && $cfg['populate'] !== false) {
+		} elseif($cfg['populate'] === true || (in_array($req->getMethod(), $cfg['methods']) && $cfg['populate'] !== false)) {
 			$populate = $req->getRequestData();
 		} else {
 			return;
@@ -243,8 +243,14 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 				}
 				$p = $populate;
 			} else {
-				if(isset($populate[$form->getAttribute('id')]) && (($p = $populate[$form->getAttribute('id')]) instanceof AgaviParameterHolder)) {
-					$p = $populate[$form->getAttribute('id')];
+				if(isset($populate[$form->getAttribute('id')])) {
+					if($populate[$form->getAttribute('id')] instanceof AgaviParameterHolder) {
+						$p = $populate[$form->getAttribute('id')];
+					} elseif($populate[$form->getAttribute('id')] === true) {
+						$p = $req->getRequestData();
+					} else {
+						continue;
+					}
 				} else {
 					continue;
 				}
