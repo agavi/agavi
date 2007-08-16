@@ -69,7 +69,12 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	 * @var        AgaviAction The Action instance that belongs to this container.
 	 */
 	protected $actionInstance = null;
-	
+
+	/**
+	 * @var        AgaviView The View instance that belongs to this container.
+	 */
+	protected $viewInstance = null;
+
 	/**
 	 * @var        string The name of the Action's Module.
 	 */
@@ -503,6 +508,32 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	public function getActionInstance()
 	{
 		return $this->actionInstance;
+	}
+	
+	/**
+	 * Retrieve this container's view instance.
+	 *
+	 * @return     AgaviView A view implementation instance.
+	 *
+	 * @author     Ross Lawley <ross.lawley@gmail.com>
+	 * @since      0.11.0
+	 */
+	public function getViewInstance()
+	{
+		return $this->viewInstance;
+	}
+	
+	/**
+	 * Set this container's view instance.
+	 *
+	 * @param      AgaviView A view implementation instance.
+	 *
+	 * @author     Ross Lawley <ross.lawley@gmail.com>
+	 * @since      0.11.0
+	 */
+	public function setViewInstance($viewInstance)
+	{
+		return $this->viewInstance = $viewInstance;
 	}
 	
 	/**
