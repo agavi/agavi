@@ -14,7 +14,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviConfig acts as global registry of agavi related configuration settings 
+ * AgaviConfig acts as global registry of agavi related configuration settings
  *
  * @package    agavi
  * @subpackage config
@@ -142,7 +142,7 @@ final class AgaviConfig
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public static function import($data)
+	public static function fromArray($data)
 	{
 		self::$config = array_merge(array_merge(self::$config, $data), self::$readonlies);
 	}
@@ -155,9 +155,24 @@ final class AgaviConfig
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public static function export()
+	public static function toArray()
 	{
 		return self::$config;
+	}
+
+	/**
+	 * Get all configuration directives and values.
+	 *
+	 * @return     array An associative array of configuration values.
+	 *
+	 * @deprecated Use toArray() instead.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public static function export()
+	{
+		return self::toArray();
 	}
 
 	/**

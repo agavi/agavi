@@ -95,14 +95,14 @@ class FactoryConfigHandlerTest extends ConfigHandlerTestBase
 
 	public function setUp()
 	{
-		$this->conf = AgaviConfig::export();
+		$this->conf = AgaviConfig::toArray();
 		$this->factories = array();
 	}
 
 	public function tearDown()
 	{
 		AgaviConfig::clear();
-		AgaviConfig::import($this->conf);
+		AgaviConfig::fromArray($this->conf);
 	}
 
 	public function testFactoryConfigHandler()

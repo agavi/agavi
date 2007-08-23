@@ -13,7 +13,7 @@ class ConfigCacheTest extends AgaviTestCase
 		$this->_context = $this->_controller->getContext();
 	}
 
-	public function tearDown() 
+	public function tearDown()
 	{
 		$this->_controller = null;
 		$this->_context->cleanSlate();
@@ -33,7 +33,7 @@ class ConfigCacheTest extends AgaviTestCase
 		$this->assertSame($cd, substr($fn, 0, strlen($cd)));
 
 		$this->assertTrue( file_exists($filename) );
-		
+
 		try {
 			AgaviConfigCache::checkConfig('a file that doesnt exist');
 		} catch (AgaviConfigurationException $e) {
@@ -53,30 +53,30 @@ class ConfigCacheTest extends AgaviTestCase
 
 		$name = 'bleh/blah.xml';
 		$this->assertEquals($csd . 'bleh_blah.xml_' . $env . '_.php', AgaviConfigCache::getCacheName($name));
-		
+
 		$name = 'bleh\\blah.xml';
 		$this->assertEquals($csd . 'bleh_blah.xml_' . $env . '_.php', AgaviConfigCache::getCacheName($name) );
 
 		$name = 'bleh/blah.xml';
 		$this->assertEquals($csd . 'bleh_blah.xml_' . $env . '_' . $ctx . '.php', AgaviConfigCache::getCacheName($name, $ctx) );
 	}
-	
-	public function testimport()
+
+	public function testload()
 	{
 		$this->assertFalse( defined('ConfigCacheImportTest_included') );
-		AgaviConfigCache::import(AgaviConfig::get('core.config_dir') . '/tests/importtest.xml');
+		AgaviConfigCache::load(AgaviConfig::get('core.config_dir') . '/tests/importtest.xml');
 		$this->assertTrue( defined('ConfigCacheImportTest_included') );
 
 		$GLOBALS["ConfigCacheImportTestOnce_included"] = false;
-		AgaviConfigCache::import(AgaviConfig::get('core.config_dir') . '/tests/importtest_once.xml', true);
+		AgaviConfigCache::load(AgaviConfig::get('core.config_dir') . '/tests/importtest_once.xml', true);
 		$this->assertTrue( $GLOBALS["ConfigCacheImportTestOnce_included"] );
 
 		$GLOBALS["ConfigCacheImportTestOnce_included"] = false;
-		AgaviConfigCache::import(AgaviConfig::get('core.config_dir') . '/tests/importtest_once.xml', true);
+		AgaviConfigCache::load(AgaviConfig::get('core.config_dir') . '/tests/importtest_once.xml', true);
 		$this->assertFalse( $GLOBALS["ConfigCacheImportTestOnce_included"] );
 
 	}
-	
+
 	public function testclear()
 	{
 		$dummyfile = AgaviConfig::get('core.cache_dir') . '/' . AgaviConfigCache::CACHE_SUBDIR . '/dummyfile.ini.php';

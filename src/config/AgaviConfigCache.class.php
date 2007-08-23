@@ -62,12 +62,12 @@ final class AgaviConfigCache
 			self::$handlers = array();
 			self::loadConfigHandlers();
 		}
-		
+
 		// grab the base name of the handler
 		$basename = basename($name);
-		
+
 		$handlerInfo = null;
-		
+
 		if(isset(self::$handlers[$name])) {
 			// we have a handler associated with the full configuration path
 			$handlerInfo = self::$handlers[$name];
@@ -80,21 +80,21 @@ final class AgaviConfigCache
 			foreach(self::$handlers as $key => $value)	{
 				// replace wildcard chars in the configuration and create the pattern
 				$pattern = sprintf('#%s#', str_replace('\*', '.*?', preg_quote($key)));
-				
+
 				if(preg_match($pattern, $name)) {
 					$handlerInfo = $value;
 					break;
 				}
 			}
 		}
-		
+
 		if($handlerInfo === null) {
 			// we do not have a registered handler for this file
 			$error = 'Configuration file "%s" does not have a registered handler';
 			$error = sprintf($error, $config);
 			throw new AgaviConfigurationException($error);
 		}
-		
+
 		// call the handler and retrieve the cache data
 		$handler = new $handlerInfo['class'];
 		if($handler instanceof AgaviIXmlConfigHandler) {
@@ -102,13 +102,13 @@ final class AgaviConfigCache
 			// it does not parse the config itself; instead, it is given an array of parsed DOM documents (with parents!)
 			$parser = new AgaviXmlConfigParser();
 			$docs = $parser->parseAll($config, $handlerInfo['validation']);
-			
+
 			if($context !== null) {
 				$context = AgaviContext::getInstance($context);
 			}
-			
+
 			$handler->initialize($context, $handlerInfo['parameters']);
-			
+
 			try {
 				$data = $handler->execute($docs);
 			} catch(AgaviException $e) {
@@ -122,7 +122,7 @@ final class AgaviConfigCache
 			$handler->initialize($validationFile, null, $handlerInfo['parameters']);
 			$data = $handler->execute($config, $context);
 		}
-		
+
 		self::writeCacheFile($config, $cache, $data, false);
 	}
 
@@ -140,7 +140,7 @@ final class AgaviConfigCache
 	 * @return     string An absolute filesystem path to the cache filename
 	 *                    associated with this specified configuration file.
 	 *
-	 * @throws     <b>AgaviUnreadableException</b> If a requested configuration 
+	 * @throws     <b>AgaviUnreadableException</b> If a requested configuration
 	 *                                             file does not exist.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
@@ -166,7 +166,7 @@ final class AgaviConfigCache
 
 		return $cache;
 	}
-	
+
 	/**
 	 * Check if the cached version of a file is up to date.
 	 *
@@ -248,7 +248,7 @@ final class AgaviConfigCache
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public static function import($config, $context = null, $once = true)
+	public static function load($config, $context = null, $once = true)
 	{
 		$cache = self::checkConfig($config, $context);
 
@@ -286,7 +286,7 @@ final class AgaviConfigCache
 
 		// manually create our config_handlers.xml handler
 		self::$handlers['config_handlers.xml'] = array(
-			'class' => 'AgaviConfigHandlersConfigHandler', 
+			'class' => 'AgaviConfigHandlersConfigHandler',
 			'parameters' => array(
 			),
 			'validation' => array(
@@ -365,7 +365,7 @@ final class AgaviConfigCache
 	public static function parseConfig($config, $autoloadParser = true, $validationFile = null, $parserClass = null)
 	{
 		$parser = new AgaviConfigParser();
-		
+
 		return $parser->parse($config, $validationFile);
 	}
 }

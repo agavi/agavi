@@ -78,7 +78,7 @@ class AgaviSettingConfigHandler extends AgaviConfigHandler
 					}
 				}
 			}
-			
+
 			if($cfg->hasChildren('exception_templates')) {
 				foreach($cfg->exception_templates->getChildren() as $exception_template) {
 					$tpl = AgaviToolkit::expandDirectives($exception_template->getValue());
@@ -96,7 +96,7 @@ class AgaviSettingConfigHandler extends AgaviConfigHandler
 			}
 		}
 
-		$code = 'AgaviConfig::import(' . var_export($data, true) . ');';
+		$code = 'AgaviConfig::fromArray(' . var_export($data, true) . ');';
 
 		return $this->generate($code);
 	}

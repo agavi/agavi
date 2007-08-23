@@ -6,13 +6,13 @@ class AgaviConfigTest extends AgaviTestCase
 
 	public function setUp()
 	{
-		$this->config = AgaviConfig::export();
+		$this->config = AgaviConfig::toArray();
 	}
 
 	public function tearDown()
 	{
 		AgaviConfig::clear();
-		AgaviConfig::import($this->config);
+		AgaviConfig::fromArray($this->config);
 		$this->config = null;
 	}
 
@@ -38,9 +38,9 @@ class AgaviConfigTest extends AgaviTestCase
 		$this->assertTrue(AgaviConfig::isReadonly('some.readonly.value'));
 		$this->assertFalse(AgaviConfig::set('some.readonly.value', 'write'));
 		$this->assertSame('read', AgaviConfig::get('some.readonly.value'));
-		$conf = AgaviConfig::export();
+		$conf = AgaviConfig::toArray();
 		$conf['some.readonly.value'] = 'write';
-		AgaviConfig::import($conf);
+		AgaviConfig::fromArray($conf);
 		$this->assertSame('read', AgaviConfig::get('some.readonly.value'));
 
 		AgaviConfig::clear();
@@ -83,12 +83,12 @@ class AgaviConfigTest extends AgaviTestCase
 		$this->assertTrue(AgaviConfig::has('some.readonly.value'));
 	}
 
-	public function testImportExport()
+	public function testFromArrayToArray()
 	{
-		AgaviConfig::import(array('some.value.one' => 'foo', 'some.value.two' => 'bar'));
+		AgaviConfig::fromArray(array('some.value.one' => 'foo', 'some.value.two' => 'bar'));
 		$this->assertSame('foo', AgaviConfig::get('some.value.one'));
 		$this->assertSame('bar', AgaviConfig::get('some.value.two'));
-		$conf = AgaviConfig::export();
+		$conf = AgaviConfig::toArray();
 		$this->assertSame('foo', $conf['some.value.one']);
 		$this->assertSame('bar', $conf['some.value.two']);
 	}

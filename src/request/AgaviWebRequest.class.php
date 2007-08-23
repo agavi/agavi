@@ -15,7 +15,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviWebRequest provides additional support for web-only client requests 
+ * AgaviWebRequest provides additional support for web-only client requests
  * such as cookie and file manipulation.
  *
  * @package    agavi
@@ -81,7 +81,7 @@ class AgaviWebRequest extends AgaviRequest
 	{
 		return $this->urlScheme;
 	}
-	
+
 	/**
 	 * Retrieve the hostname part of a request URL.
 	 *
@@ -94,7 +94,7 @@ class AgaviWebRequest extends AgaviRequest
 	{
 		return $this->urlHost;
 	}
-	
+
 	/**
 	 * Retrieve the hostname part of a request URL.
 	 *
@@ -107,7 +107,7 @@ class AgaviWebRequest extends AgaviRequest
 	{
 		return $this->urlPort;
 	}
-	
+
 	/**
 	 * Retrieve the request URL authority, typically host and port.
 	 * Example: "foo.example.com:8080".
@@ -126,7 +126,7 @@ class AgaviWebRequest extends AgaviRequest
 		$scheme = $this->getUrlScheme();
 		return $this->getUrlHost() . ($forcePort || AgaviToolkit::isPortNecessary($scheme, $port) ? ':' . $port : '');
 	}
-	
+
 	/**
 	 * Retrieve the relative part of the request URL, i.e. path and query.
 	 * Example: "/foo/bar/baz?id=4815162342".
@@ -140,7 +140,7 @@ class AgaviWebRequest extends AgaviRequest
 	{
 		return $this->requestUri;
 	}
-	
+
 	/**
 	 * Retrieve the path part of the URL.
 	 * Example: "/foo/bar/baz".
@@ -154,7 +154,7 @@ class AgaviWebRequest extends AgaviRequest
 	{
 		return $this->urlPath;
 	}
-	
+
 	/**
 	 * Retrieve the query part of the URL.
 	 * Example: "id=4815162342".
@@ -168,7 +168,7 @@ class AgaviWebRequest extends AgaviRequest
 	{
 		return $this->urlQuery;
 	}
-	
+
 	/**
 	 * Retrieve the full request URL, including protocol, server name, port (if
 	 * necessary), and request URI.
@@ -181,12 +181,12 @@ class AgaviWebRequest extends AgaviRequest
 	 */
 	public function getUrl()
 	{
-		return 
-			$this->getUrlScheme() . '://' . 
-			$this->getUrlAuthority() . 
+		return
+			$this->getUrlScheme() . '://' .
+			$this->getUrlAuthority() .
 			$this->getRequestUri();
 	}
-	
+
 	/**
 	 * Constructor.
 	 *
@@ -200,7 +200,7 @@ class AgaviWebRequest extends AgaviRequest
 			'request_data_holder_class' => 'AgaviWebRequestDataHolder',
 		));
 	}
-	
+
 	/**
 	 * Clear magic quotes. Properly. That means keys are cleared, too.
 	 *
@@ -214,13 +214,13 @@ class AgaviWebRequest extends AgaviRequest
 	public final static function clearMagicQuotes($input, $firstLevel = true)
 	{
 		$retval = array();
-		
+
 		foreach($input as $key => $value) {
 			// the first level of keys (i.e. the actual var names from the root of $_WHATEVER) isn't magic_quoted if the corresponding value is an array. Yay PHP.
 			if(!$firstLevel || !is_array($value)) {
 				$key = stripslashes($key);
 			}
-			
+
 			if(is_array($value)) {
 				$retval[$key] = self::clearMagicQuotes($value, false);
 			} elseif(is_string($value)) {
@@ -229,10 +229,10 @@ class AgaviWebRequest extends AgaviRequest
 				$retval[$key] = $value;
 			}
 		}
-		
+
 		return $retval;
 	}
-	
+
 	/**
 	 * Get a value by trying to find the given key in $_SERVER first, then in
 	 * $_ENV. If nothing was found, return the key, or the given default value.
@@ -266,9 +266,9 @@ class AgaviWebRequest extends AgaviRequest
 	public function initialize(AgaviContext $context, array $parameters = array())
 	{
 		parent::initialize($context, $parameters);
-		
+
 		// very first thing to do: remove magic quotes
-		if(get_magic_quotes_gpc()) {
+		if(function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
 			$_GET = self::clearMagicQuotes($_GET);
 			$_POST = self::clearMagicQuotes($_POST);
 			$_COOKIE = self::clearMagicQuotes($_COOKIE);
@@ -284,21 +284,21 @@ class AgaviWebRequest extends AgaviRequest
 				}
 			}
 		}
-		
+
 		$sources = array_merge(array(
 			'HTTPS' => 'HTTPS',
 			'REQUEST_METHOD' => 'REQUEST_METHOD',
 			'SERVER_NAME' => 'SERVER_NAME',
 			'SERVER_PORT' => 'SERVER_PORT',
 		), (isset($parameters['sources']) && is_array($parameters['sources']) ? $parameters['sources'] : array()));
-		
+
 		$methods = array('GET' => 'read', 'POST' => 'write', 'PUT' => 'create', 'DELETE' => 'remove');
 		if(isset($parameters['method_names'])) {
 			$methods = array_merge($methods, (array) $parameters['method_names']);
 		}
-		
+
 		$REQUEST_METHOD = self::getSourceValue($sources['REQUEST_METHOD'], isset($parameters['sources']['REQUEST_METHOD']) ? null : 'GET');
-		
+
 		switch($REQUEST_METHOD) {
 			case 'POST':
 				$this->setMethod($methods['POST']);
@@ -312,13 +312,13 @@ class AgaviWebRequest extends AgaviRequest
 			default:
 				$this->setMethod($methods['GET']);
 		}
-		
+
 		$HTTPS = self::getSourceValue($sources['HTTPS'], isset($parameters['sources']['HTTPS']) ? null : 'off');
-		
+
 		$this->urlScheme = 'http' . (strtolower($HTTPS) == 'on' ? 's' : '');
-		
+
 		$this->urlPort = intval(self::getSourceValue($sources['SERVER_PORT'], isset($parameters['sources']['SERVER_PORT']) ? null : $this->urlPort));
-		
+
 		$SERVER_NAME = self::getSourceValue($sources['SERVER_NAME']);
 		$port = $this->getUrlPort();
 		if(preg_match_all('/\:/', preg_quote($SERVER_NAME), $m) > 1) {
@@ -326,7 +326,7 @@ class AgaviWebRequest extends AgaviRequest
 		} else {
 			$this->urlHost = preg_replace('/\:' . preg_quote($port) . '$/', '', $SERVER_NAME);
 		}
-		
+
 		if(isset($_SERVER['HTTP_X_REWRITE_URL']) && isset($_SERVER['SERVER_SOFTWARE']) && strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') !== false) {
 			// Microsoft IIS with ISAPI_Rewrite
 			$this->requestUri = $_SERVER['HTTP_X_REWRITE_URL'];
@@ -350,7 +350,7 @@ class AgaviWebRequest extends AgaviRequest
 		$this->urlPath = $parts['path'];
 		$this->urlQuery = $parts['query'];
 		unset($parts);
-		
+
 		if($this->getMethod() == $methods['PUT']) {
 			// PUT. We now gotta set a flag for that and populate $_FILES manually
 
@@ -376,7 +376,7 @@ class AgaviWebRequest extends AgaviRequest
 				$headers[substr($key, 5)] = $value;
 			}
 		}
-		
+
 		$rdhc = $this->getParameter('request_data_holder_class');
 		$this->requestData = new $rdhc(array(
 			constant("$rdhc::SOURCE_PARAMETERS") => array_merge($_GET, $_POST),
@@ -385,7 +385,7 @@ class AgaviWebRequest extends AgaviRequest
 			constant("$rdhc::SOURCE_HEADERS") => $headers,
 		));
 	}
-	
+
 	/**
 	 * Do any necessary startup work after initialization.
 	 *
