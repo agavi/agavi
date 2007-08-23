@@ -135,10 +135,6 @@ final class Agavi
 			
 			AgaviConfig::set('core.cldr_dir', AgaviConfig::get('core.agavi_dir') . '/translation/data', false, true);
 			
-			// ini settings
-			ini_set('magic_quotes_runtime', AgaviConfig::get('php.magic_quotes_runtime', false));
-			ini_set('unserialize_callback_func', AgaviConfig::get('php.unserialize_callback_func', '__autoload'));
-			
 			// load base settings
 			AgaviConfigCache::import(AgaviConfig::get('core.config_dir') . '/settings.xml');
 
