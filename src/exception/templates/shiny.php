@@ -78,14 +78,16 @@ if(isset($_SERVER['HTTP_USER_AGENT'])) {
 	$ua = $rd->getHeader('User-Agent');
 }
 if(strpos($ua, 'AppleWebKit') !== false) {
-	preg_match('#AppleWebKit/(\d+)#', $ua, $matches);
-	if(intval($matches[1]) >= 420) {
-		$svg = true;
+	if(preg_match('#AppleWebKit/(\d+)#', $ua, $matches)) {
+		if(intval($matches[1]) >= 420) {
+			$svg = true;
+		}
 	}
 } elseif(strpos($ua, 'Gecko') !== false) {
-	preg_match('#rv:([0-9\.]+)#', $ua, $matches);
-	if(version_compare($matches[1], '1.8', '>=')) {
-		$svg = true;
+	if(preg_match('#rv:([0-9\.]+)#', $ua, $matches)) {
+		if(version_compare($matches[1], '1.8', '>=')) {
+			$svg = true;
+		}
 	}
 }
 
@@ -115,7 +117,7 @@ if(isset($fixedTrace[0]['file']) && $fixedTrace[0]['file'] != $e->getFile() && $
 			html {
 				background-color:		#EEE;
 			}
-			
+
 			body {
 				margin:							5em;
 				padding:						2em;
@@ -126,20 +128,20 @@ if(isset($fixedTrace[0]['file']) && $fixedTrace[0]['file'] != $e->getFile() && $
 				line-height:				1.5em;
 				font-size:					10pt;
 			}
-			
+
 			h1 {
 				margin:							0 0 1.5em 0;
 			}
-			
+
 			h3 {
 				margin:							2em 0 0 0;
 			}
-			
+
 			.nice {
 				margin:							1.5em 0 1.5em 1em;
 				padding-left:				3.5em !important;
 			}
-			
+
 			#message {
 				font-weight:				bold;
 				padding:						0.5em;
@@ -148,7 +150,7 @@ if(isset($fixedTrace[0]['file']) && $fixedTrace[0]['file'] != $e->getFile() && $
 				background-color:		#FFC;
 				position:						relative;
 			}
-			
+
 			#help {
 				font-weight:				bold;
 				padding:						0.5em;
@@ -157,36 +159,36 @@ if(isset($fixedTrace[0]['file']) && $fixedTrace[0]['file'] != $e->getFile() && $
 				background-color:		#F0F0FF;
 				position:						relative;
 			}
-			
+
 			ol {
 				font-size:					8pt;
 				line-height:				1.5em;
 			}
-			
+
 			li.hidecode ol {
 				display:						none;
 			}
-			
+
 			ol li {
 				margin:							0 0 1em 0;
 			}
-			
+
 			ol ol li {
 				margin:							auto;
 			}
-			
+
 			a.toggle:before {
 				content:						'« ';
 			}
-			
+
 			.hidecode a.toggle:before {
 				content:						'';
 			}
-			
+
 			.hidecode a.toggle:after {
 				content:						' »';
 			}
-			
+
 			ol ol {
 				border:							1px solid #DDD;
 				-moz-border-radius:	0.5em;
@@ -199,29 +201,29 @@ if(isset($fixedTrace[0]['file']) && $fixedTrace[0]['file'] != $e->getFile() && $
 				padding-right:			0.5em;
 				padding-bottom:			0.5em;
 			}
-			
+
 			li.highlight code {
 				background-color:		#EEE;
 			}
-			
+
 			#svgDefinitions {
 				width:							0;
 				height:							0;
 				overflow:						hidden;
 			}
-			
+
 			abbr {
 				border-bottom:			1px dotted #000;
 				cursor:							help;
 			}
-			
+
 			code {
 				display:						block;
 				margin:							0;
 				padding:						0;
 			}
 <?php if($svg): ?>
-			
+
 			ol ol li {
 				padding-left:				1em;
 			}
@@ -576,7 +578,7 @@ foreach($fixedTrace as $trace):
 				'_' . AgaviConfig::get('core.lib_dir', 'something totally random'),
 				'_' . AgaviConfig::get('core.app_dir', 'something totally random'),
 				'_' . AgaviConfig::get('core.agavi_dir', 'something totally random')
-			), 
+			),
 			array(
 				'<abbr title="' . AgaviConfig::get('core.module_dir') . '">core.module_dir</abbr>',
 				'<abbr title="' . AgaviConfig::get('core.template_dir') . '">core.template_dir</abbr>',
@@ -585,9 +587,9 @@ foreach($fixedTrace as $trace):
 				'<abbr title="' . AgaviConfig::get('core.lib_dir') . '">core.lib_dir</abbr>',
 				'<abbr title="' . AgaviConfig::get('core.app_dir') . '">core.app_dir</abbr>',
 				'<abbr title="' . AgaviConfig::get('core.agavi_dir') . '">core.agavi_dir</abbr>',
-			), 
+			),
 '_' . $trace['file']); ?> <a href="#frame<?php echo $i; ?>" class="toggle" title="Toggle source code snippet" onclick="this.parentNode.className = this.parentNode.className == 'hidecode' ? '' : 'hidecode'; return false;">line <?php echo $trace['line']; ?></a><ol start="<?php echo $start = $trace['line'] < 4 ? 1 : $trace['line'] - 3; ?>" style="padding-left:<?php echo strlen($start+6)*0.6+2; ?>em"><?php
-$lines = array_slice($highlights[$trace['file']], $start - 1, 7, true); 
+$lines = array_slice($highlights[$trace['file']], $start - 1, 7, true);
 foreach($lines as $key => &$line) {
 	if($key + 1 == $trace['line']): ?><li class="highlight"><?php if($svg): ?><div style="float:left; width:1em; height:1em; margin-left:-1.35em; background-color:#FFF;"><svg:svg viewBox="2 1 45 43" preserveAspectRatio="xMaxYMax meet" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><svg:use xlink:href="#stopSign" /></svg:svg></div><?php endif; else: ?><li><?php endif; ?><code><?php
 	if($line == '') {
