@@ -110,7 +110,10 @@ class AgaviFilterChain
 	public function register(AgaviIFilter $filter)
 	{
 		$this->chain[] = $filter;
-		self::$filterLog[$this->filterLogKey][get_class($filter)] = 0;
+		$filterClass = get_class($filter);
+		if(!isset(self::$filterLog[$this->filterLogKey][$filterClass])) {
+			self::$filterLog[$this->filterLogKey][$filterClass] = 0;
+		}
 	}
 }
 
