@@ -113,6 +113,17 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 			$skip = '/(\A' . str_replace('\[\]', '\[[^\]]*\]', implode('|\A', array_map('preg_quote', $cfg['skip']))) . ')/';
 		}
 
+		if($cfg['force_request_uri'] !== null) {
+			$ruri = $cfg['force_request_uri'];
+		} else {
+			$ruri = $req->getRequestUri();
+		}
+		if($cfg['force_request_url'] !== null) {
+			$rurl = $cfg['force_request_url'];
+		} else {
+			$rurl = $req->getUrl();
+		}
+		
 		$luie = libxml_use_internal_errors(true);
 		libxml_clear_errors();
 
@@ -232,8 +243,6 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 		foreach($forms as $form) {
 			if($populate instanceof AgaviParameterHolder) {
 				$action = preg_replace('/#.*$/', '', trim($form->getAttribute('action')));
-				$ruri = $req->getRequestUri();
-				$rurl = $req->getUrl();
 				if(!(
 					$action == $rurl ||
 					(strpos($action, '/') === 0 && preg_replace(array('#/\./#', '#/\.$#', '#[^\./]+/\.\.(/|\z)#', '#/{2,}#'), array('/', '/', '', '/'), $action) == $ruri) ||
@@ -552,6 +561,8 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 		$this->setParameter('error_class', 'error');
 		$this->setParameter('force_output_mode', false);
 		$this->setParameter('force_encoding', false);
+		$this->setParameter('force_request_uri', null);
+		$this->setParameter('force_request_url', null);
 		$this->setParameter('parse_xhtml_as_xml', true);
 		$this->setParameter('include_password_inputs', false);
 		$this->setParameter('include_hidden_inputs', true);
