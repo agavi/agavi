@@ -55,6 +55,11 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	 * @var        int The highest error severity in the container.
 	 */
 	protected $result = AgaviValidator::SUCCESS;
+	
+	/**
+	 * @var        array The validation incidents.
+	 */
+	protected $incidents = array();
 
 	/**
 	 * All request variables are always available.
