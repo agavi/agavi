@@ -221,6 +221,13 @@ class AgaviPropelDatabase extends AgaviDatabase
 				// that wasn't PropelAutoload, so init it
 				Propel::init(self::getDefaultConfigPath());
 			}
+			
+			$config = Propel::getConfiguration();
+			$config['datasources'][$datasource]['adapter'] = $this->getParameter('overrides[adapter]', $config['datasources'][$datasource]['adapter']);
+			$config['datasources'][$datasource]['connection'] = array_merge($config['datasources'][$datasource]['connection'], $this->getParameter('overrides[connection]', array()));
+			$config['datasources'][$datasource]['classes'] = array_merge($config['datasources'][$datasource]['classes'], $this->getParameter('overrides[classes]', array()));
+			// set the new config
+			Propel::setConfiguration($config);
 		}
 	}
 
