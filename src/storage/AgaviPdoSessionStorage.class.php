@@ -37,9 +37,9 @@
  *                                       other wise as a string.
  *                                       (Note: with Oracle LOBs are always
  *                                        used)
- * # <b>time_format</b>  - [unix]      - The way the date time will be sent 
- *                                       to the db. Can be "unix" or 
- *                                       "string".
+ * # <b>date_format</b>  - [U]         - The format string passed to date() to
+ *                                       format timestamps. Defaults to "U",
+ *                                       which means a Unix Timestamp again.
  *
  * @package    agavi
  * @subpackage storage
@@ -172,8 +172,8 @@ class AgaviPdoSessionStorage extends AgaviSessionStorage
 		$db_table    = $this->getParameter('db_table');
 		$db_time_col = $this->getParameter('db_time_col', 'sess_time');
 
-		// delete the record associated with this id
-		$sql = sprintf('DELETE FROM %s  WHERE %s < %d', $db_table, $db_time_col, $this->formatTime($time));
+		// delete the records that are expired
+		$sql = sprintf('DELETE FROM %s  WHERE %s < %d', $db_table, $db_time_col, date($this->getParameter('date_format', 'U'), $time));
 
 		try {
 			$this->connection->exec($sql);
@@ -263,7 +263,7 @@ class AgaviPdoSessionStorage extends AgaviSessionStorage
 			$sql = sprintf('INSERT INTO %s (%s, %s, %s) VALUES (?,?,?)', $db_table, $db_id_col, $db_data_col, $db_time_col);
 
 			$stmt = $this->connection->prepare($sql);
-			$stmt->execute(array($id, '', $this->formatTime(time())));
+			$stmt->execute(array($id, '', date($this->getParameter('date_format', 'U'))));
 			return '';
 		} catch(PDOException $e) {
 			$error = 'PDOException was thrown when trying to manipulate session data. Message: ' . $e->getMessage();
@@ -312,12 +312,11 @@ class AgaviPdoSessionStorage extends AgaviSessionStorage
 		}
 
 		try {
-			$time = time();
 			$columnType = ($isOracle || $useLob) ? PDO::PARAM_LOB : PDO::PARAM_STR;
 
 			$stmt = $this->connection->prepare($sql);
 			$stmt->bindParam(':data', $sp, $columnType);
-			$stmt->bindParam(':time', $this->formatTime($time));
+			$stmt->bindParam(':time', date($this->getParameter('date_format', 'U')));
 			$stmt->bindParam(':id', $id);
 			$this->connection->beginTransaction();
 			$stmt->execute();
@@ -341,26 +340,6 @@ class AgaviPdoSessionStorage extends AgaviSessionStorage
 	public function shutdown()
 	{
 		parent::shutdown();
-	}
-	
-	/**
-	 * Formats a date according to the users configuration
-	 * 
-	 * @param      int The unix timestamp to be formatted
-	 * 
-	 * @return     mixed The formatted timestamp
-	 * 
-	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	protected function formatTime($unixTime)
-	{
-		$timeFormat = $this->getParameter('time_format', 'unix');
-		if($timeFormat == 'string') {
-			return date('Y-m-d H:i:s', $unixTime);
-		} else {
-			return $unixTime;
-		}
 	}
 }
 
