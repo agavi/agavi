@@ -912,6 +912,9 @@ abstract class AgaviCalendar
 	{
 		$min = 0;
 		$startMs = (float) $this->getTimeInMillis();
+		if($targetMs instanceof AgaviCalendar) {
+			$targetMs = (float) $targetMs->getTimeInMillis();
+		}
 		// Always add from the start millis.  This accomodates
 		// operations like adding years from February 29, 2000 up to
 		// February 29, 2004.  If 1, 1, 1, 1 is added to the year
