@@ -179,24 +179,23 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 	 */
 	public function getVariable($name, $source = 'string', $namespace = null, AgaviExecutionContainer $container = null)
 	{
+		$val = $name;
+		
 		switch($source) {
 			case 'constant':
 				$val = constant($name);
 				break;
-			case 'locale':
-				$val = $this->context->getTranslationManager()->getCurrentLocaleIdentifier();
-				break;
 			case 'container_parameter':
 				$val = $container->getParameter($name);
 				break;
-			case 'request_parameter':
-				$val = $this->context->getRequest()->getRequestData()->getParameter($name);
+			case 'locale':
+				$val = $this->context->getTranslationManager()->getCurrentLocaleIdentifier();
 				break;
 			case 'request_attribute':
 				$val = $this->context->getRequest()->getAttribute($name, $namespace);
 				break;
-			case 'user_parameter':
-				$val = $this->context->getUser()->getParameter($name);
+			case 'request_parameter':
+				$val = $this->context->getRequest()->getRequestData()->getParameter($name);
 				break;
 			case 'user_attribute':
 				$val = $this->context->getUser()->getAttribute($name, $namespace);
@@ -204,16 +203,18 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 			case 'user_authenticated':
 				if(($user = $this->context->getUser()) instanceof AgaviISecurityUser) {
 					$val = $user->isAuthenticated();
-					break;
 				}
+				break;
 			case 'user_credential':
 				if(($user = $this->context->getUser()) instanceof AgaviISecurityUser) {
 					$val = $user->hasCredentials($name);
-					break;
 				}
-			default:
-				$val = $name;
+				break;
+			case 'user_parameter':
+				$val = $this->context->getUser()->getParameter($name);
+				break;
 		}
+		
 		return $val;
 	}
 
