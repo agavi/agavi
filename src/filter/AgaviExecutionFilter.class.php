@@ -188,11 +188,17 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 			case 'container_parameter':
 				$val = $container->getParameter($name);
 				break;
+			case 'global_request_data':
+				$val = $this->context->getRequest()->getRequestData()->get($name, $namespace ? $namespace : AgaviRequestDataHolder::SOURCE_PARAMETERS);
+				break;
 			case 'locale':
 				$val = $this->context->getTranslationManager()->getCurrentLocaleIdentifier();
 				break;
 			case 'request_attribute':
 				$val = $this->context->getRequest()->getAttribute($name, $namespace);
+				break;
+			case 'request_data':
+				$val = $container->getRequestData()->get($name, $namespace ? $namespace : AgaviRequestDataHolder::SOURCE_PARAMETERS);
 				break;
 			case 'request_parameter':
 				$val = $this->context->getRequest()->getRequestData()->getParameter($name);
