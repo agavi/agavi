@@ -109,6 +109,18 @@ abstract class AgaviRouting extends AgaviParameterHolder
 			$this->genOptionsPresets = $parameters['gen_options_presets'];
 		}
 		
+		// and load the config.
+		$this->loadConfig();
+	}
+	
+	/**
+	 * Load the routing.xml configuration file.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	protected function loadConfig()
+	{
 		$cfg = AgaviConfig::get("core.config_dir") . "/routing.xml";
 		// allow missing routing.xml when routing is not enabled
 		if(AgaviConfig::get("core.use_routing", false) || is_readable($cfg)) {
@@ -305,8 +317,6 @@ abstract class AgaviRouting extends AgaviParameterHolder
 		$options['module'] = $this->parseDynamicSet($options['module']);
 		$options['output_type'] = $this->parseDynamicSet($options['output_type']);
 
-
-
 		// check if 2 nodes with the same name in the same execution tree exist
 		foreach($this->routes as $name => $route) {
 			// if a route with this route as parent exist check if its really a child of our route
@@ -336,7 +346,6 @@ abstract class AgaviRouting extends AgaviParameterHolder
 				}
 			}
 		}
-
 
 		$route = array('rxp' => $regexp, 'par' => $params, 'opt' => $options, 'matches' => array());
 		$this->routes[$routeName] = $route;
@@ -779,7 +788,6 @@ abstract class AgaviRouting extends AgaviParameterHolder
 							$vars[$aa] = is_array($opts['action']) ? $this->resolveDynamicSet($opts['action'], $match) : $opts['action'];
 						}
 
-
 						if($opts['output_type']) {
 							$ot = is_array($opts['output_type']) ? $this->resolveDynamicSet($opts['output_type'], $match) : $opts['output_type'];
 						}
@@ -964,7 +972,6 @@ abstract class AgaviRouting extends AgaviParameterHolder
 				$inEscape = false;
 				continue;
 			}
-
 
 			if($state == 'start') {
 				// start of regular expression block
