@@ -14,7 +14,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * Pre-initialization script.
+ * Main framework class used for autoloading and initial bootstrapping of Agavi.
  *
  * @package    agavi
  * @subpackage core
