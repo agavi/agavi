@@ -181,7 +181,6 @@ class AgaviTranslationManager
 		return $this->availableLocales;
 	}
 
-
 	/**
 	 * Sets the current locale.
 	 *
@@ -384,7 +383,6 @@ class AgaviTranslationManager
 		
 		return $retval;
 	}
-
 
 	/**
 	 * Translate a message into the current locale.
@@ -861,7 +859,6 @@ class AgaviTranslationManager
 
 		return $zone; 
 	}
-
 
 	/**
 	 * Creates a new calendar instance with the current time set.

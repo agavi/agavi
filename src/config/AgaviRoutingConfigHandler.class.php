@@ -143,5 +143,4 @@ class AgaviRoutingConfigHandler extends AgaviConfigHandler
 	}
 }
 
-
 ?>

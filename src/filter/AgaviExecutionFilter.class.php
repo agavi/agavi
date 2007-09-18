@@ -261,7 +261,6 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 
 		$isActionCached = false;
 
-
 		if($isCacheable) {
 			$groups = $this->determineGroups($config["groups"], $container);
 			$isActionCached = $this->checkCache(array_merge($groups, array(self::ACTION_CACHE_ID)), $config['lifetime']);

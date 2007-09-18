@@ -336,9 +336,7 @@ final class AgaviConfigCache
 		} else {
 			chmod($cache, $perms);
 		}
-
 	}
-
 
 	/**
 	 * Parses a config file with the ConfigParser for the extension of the given

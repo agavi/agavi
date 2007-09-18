@@ -45,7 +45,6 @@ class AgaviSimpleTranslator extends AgaviBasicTranslator
 	 */
 	protected $locale = null;
 
-
 	/**
 	 * Initialize this Translator.
 	 *

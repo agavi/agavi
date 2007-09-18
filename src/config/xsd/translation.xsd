@@ -14,7 +14,6 @@
     </xs:complexContent>
   </xs:complexType>
 
-
   <xs:complexType name="translators">
     <xs:sequence>
       <xs:element name="translator" type="translator" maxOccurs="unbounded" />
@@ -43,7 +42,6 @@
       <xs:element name="translator" type="translator" maxOccurs="unbounded" />
     </xs:sequence>
   </xs:complexType>
-
 
   <xs:complexType name="translatordef">
     <xs:sequence maxOccurs="unbounded">

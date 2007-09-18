@@ -39,7 +39,6 @@ class AgaviOlsonCompileTask extends Task
 
 		AgaviConfig::set('olson.dir', $this->olsonDir);
 
-
 		AgaviConfig::set('core.app_dir', getcwd() . '/etc/olson/agavi/app');
 		Agavi::bootstrap('');
 
@@ -72,7 +71,6 @@ class AgaviOlsonCompileTask extends Task
 			}
 		}
 
-
 		$baseCode = '<?php
 
 /**
@@ -94,7 +92,6 @@ class AgaviOlsonCompileTask extends Task
 return %s;
 
 ?>';
-
 
 		$zoneList = array();
 

@@ -449,8 +449,6 @@ class AgaviSimpleTimeZone extends AgaviTimeZone
 		$this->setStartRuleIIIF($month, $dayOfMonth, $time, self::WALL_TIME);
 	}
 
-
-
 	/**
 	 * Sets the DST start rule to a fixed date within a month.
 	 *
@@ -519,7 +517,6 @@ class AgaviSimpleTimeZone extends AgaviTimeZone
 		$this->setStartRuleIIIIF($month, $after ? $dayOfMonth : -$dayOfMonth, -$dayOfWeek, $time, $mode);
 	}
 
-
 	public function setEndRule()
 	{
 		$arguments = func_get_args();
@@ -541,7 +538,6 @@ class AgaviSimpleTimeZone extends AgaviTimeZone
 		);
 		call_user_func_array(array($this, $fName), $arguments);
 	}
-
 
 	/**
 	 * Sets the daylight savings ending rule. For example, in the U.S., Daylight
@@ -695,7 +691,6 @@ class AgaviSimpleTimeZone extends AgaviTimeZone
 	{
 		$this->setEndRuleIIIIF($month, $after ? $dayOfMonth : -$dayOfMonth, -$dayOfWeek, $time, $mode);
 	}
-
 
 	public function getOffset()
 	{
@@ -1165,9 +1160,6 @@ return true;
 		}
 	}
 
-
-
-
 	//----------------------------------------------------------------------
 	// Rule representation
 	//
@@ -1220,7 +1212,6 @@ return true;
 	// include additional data, they should do so by storing them after the
 	// packed representation below.
 	//----------------------------------------------------------------------
-
 
 	/**
 	 * Given a set of encoded rules in startDay and startDayOfMonth, decode
@@ -1315,7 +1306,6 @@ return true;
 			}
 		}
 	}
-
 
 	/**
 	 * Decode the end rule and validate the parameters.  This method is exactly

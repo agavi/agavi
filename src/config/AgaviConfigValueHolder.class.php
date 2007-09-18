@@ -178,9 +178,9 @@ class AgaviConfigValueHolder implements ArrayAccess, IteratorAggregate
 	 */
 	public function hasChildren($child = null)
 	{
-		if($child === null)
+		if($child === null) {
 			return count($this->_childs) > 0;
-
+		}
 
 		if(isset($this->_childs[$child])) {
 			return true;

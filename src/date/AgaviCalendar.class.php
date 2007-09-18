@@ -159,7 +159,6 @@ abstract class AgaviCalendar
 		array(                 0,                  0,           86399999,             86399999 ), // MILLISECONDS_IN_DAY
 	);
 
-
 	/**
 	 * Returns the current UTC (GMT) time measured in milliseconds since 0:00:00 
 	 * on 1/1/70 (derived from the system time).
@@ -274,7 +273,6 @@ abstract class AgaviCalendar
 		$this->setTimeInMillis($timestamp * AgaviDateDefinitions::MILLIS_PER_SECOND);
 	}
 
-
 	public function __is_equal($that)
 	{
 		return $this->isEquivalentTo($that) && $this->getTimeInMillis() == $that->getTimeInMillis();
@@ -309,7 +307,6 @@ abstract class AgaviCalendar
 						$this->getTimeZone()->__is_equal($other->getTimeZone());
 
 	}
-
 
 	/**
 	 * Compares the Calendar time, whereas Calendar::operator== compares the 
@@ -851,7 +848,6 @@ abstract class AgaviCalendar
 		}
 	}
 
-
 	/**
 	 * Return the difference between the given time and the time this
 	 * calendar object is set to.  If this calendar is set
@@ -1084,7 +1080,6 @@ abstract class AgaviCalendar
 		return $this->fLenient;
 	}
 
-
 	/**
 	 * Sets what the first day of the week is; e.g., Sunday in US, Monday in
 	 * France.
@@ -1241,35 +1236,35 @@ abstract class AgaviCalendar
 	 */
 	public function getActualMinimum($field)
 	{
-    $fieldValue = $this->getGreatestMinimum($field);
-    $endValue = $this->getMinimum($field);
+		$fieldValue = $this->getGreatestMinimum($field);
+		$endValue = $this->getMinimum($field);
 
-    // if we know that the minimum value is always the same, just return it
-    if ($fieldValue == $endValue) {
-      return $fieldValue;
-    }
+		// if we know that the minimum value is always the same, just return it
+		if($fieldValue == $endValue) {
+			return $fieldValue;
+		}
 
-    // clone the calendar so we don't mess with the real one, and set it to
-    // accept anything for the field values
-    $work = clone $this;
-    $work->setLenient(true);
+		// clone the calendar so we don't mess with the real one, and set it to
+		// accept anything for the field values
+		$work = clone $this;
+		$work->setLenient(true);
 
-    // now try each value from getLeastMaximum() to getMaximum() one by one until
-    // we get a value that normalizes to another value.  The last value that
-    // normalizes to itself is the actual minimum for the current date
-    $result = $fieldValue;
+		// now try each value from getLeastMaximum() to getMaximum() one by one until
+		// we get a value that normalizes to another value.	 The last value that
+		// normalizes to itself is the actual minimum for the current date
+		$result = $fieldValue;
 
-    do {
-      $work->set($field, $fieldValue);
-      if($work->get($field) != $fieldValue) {
-        break;
-      } else {
-        $result = $fieldValue;
-        $fieldValue--;
-      }
-    } while($fieldValue >= $endValue);
+		do {
+			$work->set($field, $fieldValue);
+			if($work->get($field) != $fieldValue) {
+				break;
+			} else {
+				$result = $fieldValue;
+				$fieldValue--;
+			}
+		} while($fieldValue >= $endValue);
 
-    return $result;
+		return $result;
 	}
 
 	/**
@@ -1333,7 +1328,6 @@ abstract class AgaviCalendar
 		}
 		return $result;
 	}
-
 
 	/**
 	 * Gets all time field values. Recalculate the current time field
@@ -1400,7 +1394,6 @@ abstract class AgaviCalendar
 	{
 		return $this->fAreFieldsVirtuallySet || ($this->fStamp[$field] != self::kUnset);
 	}
-
 
 	/**
 	 * TODO: describe overload bla
@@ -1907,7 +1900,6 @@ abstract class AgaviCalendar
 		$this->set($field, $this->getGreatestMinimum($field));
 	}
 
-
 	/**
 	 * Subclass API for defining limits of different types.
 	 * Subclasses must implement this method to return limits for the
@@ -1970,7 +1962,6 @@ abstract class AgaviCalendar
 				return $this->handleGetLimit($field, $limitType);
 		}
 	}
-
 
 	/**
 	 * Return the Julian day number of day before the first day of the
@@ -2205,7 +2196,7 @@ abstract class AgaviCalendar
 
 			// assert(bestField == WEEK_OF_MONTH || bestField == WEEK_OF_YEAR)
 			// Adjust for minimal days in first week
-			if ((7 - $first) < $this->getMinimalDaysInFirstWeek()) {
+			if((7 - $first) < $this->getMinimalDaysInFirstWeek()) {
 				$date += 7;
 			}
 
@@ -2214,7 +2205,6 @@ abstract class AgaviCalendar
 		}
 
 		return $julianDay + $date;
-
 
 	}
 
@@ -2464,7 +2454,6 @@ abstract class AgaviCalendar
 
 	}
 
-
 	/**
 	 * Determine the best stamp in a range.
 	 * 
@@ -2499,38 +2488,35 @@ abstract class AgaviCalendar
 	 * @since      0.11.0
 	 */
 	static $kDatePrecedence = array(
-															array(
-																array(AgaviDateDefinitions::DAY_OF_MONTH, self::RESOLVE_STOP),
-																array(AgaviDateDefinitions::WEEK_OF_YEAR, AgaviDateDefinitions::DAY_OF_WEEK, self::RESOLVE_STOP),
-																array(AgaviDateDefinitions::WEEK_OF_MONTH, AgaviDateDefinitions::DAY_OF_WEEK, self::RESOLVE_STOP),
-																array(AgaviDateDefinitions::DAY_OF_WEEK_IN_MONTH, AgaviDateDefinitions::DAY_OF_WEEK, self::RESOLVE_STOP),
-																array(AgaviDateDefinitions::WEEK_OF_YEAR, AgaviDateDefinitions::DOW_LOCAL, self::RESOLVE_STOP),
-																array(AgaviDateDefinitions::WEEK_OF_MONTH, AgaviDateDefinitions::DOW_LOCAL, self::RESOLVE_STOP),
-																array(AgaviDateDefinitions::DAY_OF_WEEK_IN_MONTH, AgaviDateDefinitions::DOW_LOCAL, self::RESOLVE_STOP),
-																array(AgaviDateDefinitions::DAY_OF_YEAR, self::RESOLVE_STOP),
-																//    kResolveRemap | UCAL_DAY_OF_MONTH
-																array(37, AgaviDateDefinitions::YEAR, self::RESOLVE_STOP),  // if YEAR is set over YEAR_WOY use DAY_OF_MONTH
-																//    kResolveRemap | UCAL_WEEK_OF_YEAR
-																array(35, AgaviDateDefinitions::YEAR_WOY, self::RESOLVE_STOP),  // if YEAR_WOY is set,  calc based on WEEK_OF_YEAR
-																array(self::RESOLVE_STOP),
-															),
-															array(
-																array(AgaviDateDefinitions::WEEK_OF_YEAR, self::RESOLVE_STOP),
-																array(AgaviDateDefinitions::WEEK_OF_MONTH, self::RESOLVE_STOP),
-																array(AgaviDateDefinitions::DAY_OF_WEEK_IN_MONTH, self::RESOLVE_STOP),
-																//    kResolveRemap | UCAL_DAY_OF_WEEK_IN_MONTH
-																array(40, AgaviDateDefinitions::DAY_OF_WEEK, self::RESOLVE_STOP),
-																//    self::kResolveRemap | UCAL_DAY_OF_WEEK_IN_MONTH
-																array(40, AgaviDateDefinitions::DOW_LOCAL, self::RESOLVE_STOP),
-																array(self::RESOLVE_STOP),
-															),
-															array(
-																array(self::RESOLVE_STOP),
-															),
-														);
-
-
-
+		array(
+			array(AgaviDateDefinitions::DAY_OF_MONTH, self::RESOLVE_STOP),
+			array(AgaviDateDefinitions::WEEK_OF_YEAR, AgaviDateDefinitions::DAY_OF_WEEK, self::RESOLVE_STOP),
+			array(AgaviDateDefinitions::WEEK_OF_MONTH, AgaviDateDefinitions::DAY_OF_WEEK, self::RESOLVE_STOP),
+			array(AgaviDateDefinitions::DAY_OF_WEEK_IN_MONTH, AgaviDateDefinitions::DAY_OF_WEEK, self::RESOLVE_STOP),
+			array(AgaviDateDefinitions::WEEK_OF_YEAR, AgaviDateDefinitions::DOW_LOCAL, self::RESOLVE_STOP),
+			array(AgaviDateDefinitions::WEEK_OF_MONTH, AgaviDateDefinitions::DOW_LOCAL, self::RESOLVE_STOP),
+			array(AgaviDateDefinitions::DAY_OF_WEEK_IN_MONTH, AgaviDateDefinitions::DOW_LOCAL, self::RESOLVE_STOP),
+			array(AgaviDateDefinitions::DAY_OF_YEAR, self::RESOLVE_STOP),
+			//    kResolveRemap | UCAL_DAY_OF_MONTH
+			array(37, AgaviDateDefinitions::YEAR, self::RESOLVE_STOP),  // if YEAR is set over YEAR_WOY use DAY_OF_MONTH
+			//    kResolveRemap | UCAL_WEEK_OF_YEAR
+			array(35, AgaviDateDefinitions::YEAR_WOY, self::RESOLVE_STOP),  // if YEAR_WOY is set,  calc based on WEEK_OF_YEAR
+			array(self::RESOLVE_STOP),
+		),
+		array(
+			array(AgaviDateDefinitions::WEEK_OF_YEAR, self::RESOLVE_STOP),
+			array(AgaviDateDefinitions::WEEK_OF_MONTH, self::RESOLVE_STOP),
+			array(AgaviDateDefinitions::DAY_OF_WEEK_IN_MONTH, self::RESOLVE_STOP),
+			//    kResolveRemap | UCAL_DAY_OF_WEEK_IN_MONTH
+			array(40, AgaviDateDefinitions::DAY_OF_WEEK, self::RESOLVE_STOP),
+			//    self::kResolveRemap | UCAL_DAY_OF_WEEK_IN_MONTH
+			array(40, AgaviDateDefinitions::DOW_LOCAL, self::RESOLVE_STOP),
+			array(self::RESOLVE_STOP),
+		),
+		array(
+			array(self::RESOLVE_STOP),
+		),
+	);
 
 	/**
 	 * @var        array Precedence table for Year
@@ -2542,16 +2528,16 @@ abstract class AgaviCalendar
 	 * @since      0.11.0
 	 */
 	protected static $kYearPrecedence = array(
-																				array(
-																					array(AgaviDateDefinitions::YEAR, self::RESOLVE_STOP),
-																					array(AgaviDateDefinitions::EXTENDED_YEAR, self::RESOLVE_STOP),
-																					array(AgaviDateDefinitions::YEAR_WOY, AgaviDateDefinitions::WEEK_OF_YEAR, self::RESOLVE_STOP),  // YEAR_WOY is useless without WEEK_OF_YEAR
-																					array(self::RESOLVE_STOP),
-																				),
-																				array(
-																					array(self::RESOLVE_STOP),
-																				),
-																			);
+		array(
+			array(AgaviDateDefinitions::YEAR, self::RESOLVE_STOP),
+			array(AgaviDateDefinitions::EXTENDED_YEAR, self::RESOLVE_STOP),
+			array(AgaviDateDefinitions::YEAR_WOY, AgaviDateDefinitions::WEEK_OF_YEAR, self::RESOLVE_STOP),  // YEAR_WOY is useless without WEEK_OF_YEAR
+			array(self::RESOLVE_STOP),
+		),
+		array(
+			array(self::RESOLVE_STOP),
+		),
+	);
 
 	/**
 	 * @var        array Precedence table for Day of Week
@@ -2563,15 +2549,15 @@ abstract class AgaviCalendar
 	 * @since      0.11.0
 	 */
 	protected static $kDOWPrecedence = array(
-																				array(
-																					array(AgaviDateDefinitions::DAY_OF_WEEK, self::RESOLVE_STOP, self::RESOLVE_STOP),
-																					array(AgaviDateDefinitions::DOW_LOCAL, self::RESOLVE_STOP, self::RESOLVE_STOP),
-																					array(self::RESOLVE_STOP),
-																				),
-																				array(
-																					array(self::RESOLVE_STOP),
-																				),
-																			);
+		array(
+			array(AgaviDateDefinitions::DAY_OF_WEEK, self::RESOLVE_STOP, self::RESOLVE_STOP),
+			array(AgaviDateDefinitions::DOW_LOCAL, self::RESOLVE_STOP, self::RESOLVE_STOP),
+			array(self::RESOLVE_STOP),
+		),
+		array(
+			array(self::RESOLVE_STOP),
+		),
+	);
 
 	/**
 	 * Given a precedence table, return the newest field combination in
@@ -2638,7 +2624,6 @@ abstract class AgaviCalendar
 		return ($bestField >= self::RESOLVE_REMAP) ? ($bestField & (self::RESOLVE_REMAP - 1)) : $bestField ;
 	}
 
-
 	/**
 	 * @return     array
 	 * 
@@ -2672,7 +2657,6 @@ abstract class AgaviCalendar
 		}
 		return $defaultField;
 	}
-
 
 	/**
 	 * Helper function for calculating limits by trial and error
@@ -2718,7 +2702,6 @@ abstract class AgaviCalendar
 
 		return $result;
 	}
-
 
 	/**
 	 * @var        bool The flag which indicates if the current time is set in the
@@ -2943,7 +2926,6 @@ abstract class AgaviCalendar
 		return 0;
 	}
 
-
 	/**
 	 * Called by computeJulianDay.  Returns the default day (1-based) for the 
 	 * month, taking currently-set year and era into account.  Defaults to 1 for
@@ -3081,7 +3063,6 @@ abstract class AgaviCalendar
 
 		return $weekNo;
 	}
-
 
 	/**
 	 * Return the week number of a day, within a period. This may be the week number in
@@ -3421,7 +3402,6 @@ abstract class AgaviCalendar
 
 	}
 
-
 	/**
 	 * Ensure that each field is within its valid range by calling {@link
 	 * #validateField(int, int&)} on each field that has been set.  This method
@@ -3531,7 +3511,6 @@ abstract class AgaviCalendar
 		return $result;
 	}
 
-
 	/**
 	 * @var        string
 	 */
@@ -3541,7 +3520,6 @@ abstract class AgaviCalendar
 	 * @var        string
 	 */
 	private $actualLocale;
-
 
 	/**
 	 * @internal
@@ -3582,6 +3560,6 @@ abstract class AgaviCalendar
 	 * @since      0.11.0
 	 */
 	public abstract function getType();
-
 }
+
 ?>

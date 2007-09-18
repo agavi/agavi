@@ -134,7 +134,6 @@ class AgaviPdoSessionStorage extends AgaviSessionStorage
 		$db_table  = $this->getParameter('db_table');
 		$db_id_col = $this->getParameter('db_id_col', 'sess_id');
 
-
 		// delete the record associated with this id
 		$sql = sprintf('DELETE FROM %s WHERE %s = ?', $db_table, $db_id_col);
 

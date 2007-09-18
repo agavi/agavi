@@ -25,23 +25,24 @@
  *
  * @version    $Id$
  */
-class AgaviInfoTask extends Task {
-
+class AgaviInfoTask extends Task
+{
 	protected $agaviDir;
 
 	protected $phing;
 
-
-	public function setAgavidir($d) {
+	public function setAgavidir($d)
+	{
 		$this->agaviDir = $d;
 	}
 
-	public function setPhing($p) {
+	public function setPhing($p)
+	{
 		$this->phing = $p;
 	}
 
-	public function main() {
-
+	public function main()
+	{
 		include($this->agaviDir . '/config/AgaviConfig.class.php');
 		include($this->agaviDir . '/version.php');
 
@@ -71,4 +72,5 @@ class AgaviInfoTask extends Task {
 
 	}
 }
+
 ?>

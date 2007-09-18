@@ -107,7 +107,6 @@ class AgaviOlsonTimeZone extends AgaviTimeZone
 		call_user_func_array(array($this, $fName), $arguments);
 	}
 
-
 	/**
 	 * Default constructor. Creates a time zone with an empty ID and
 	 * a fixed GMT offset of zero.

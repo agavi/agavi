@@ -44,7 +44,6 @@ class AgaviLocale extends AgaviParameterHolder
 	 */
 	protected $identifier = null;
 
-
 	/**
 	 * Initialize this Locale.
 	 *
@@ -143,8 +142,6 @@ class AgaviLocale extends AgaviParameterHolder
 			: null;
 	}
 
-
-
 	///////////////////////////// locale names //////////////////////////////////
 
 	protected function generateCountryList()
@@ -204,7 +201,6 @@ class AgaviLocale extends AgaviParameterHolder
 			: null;
 	}
 
-
 	public function getScripts()
 	{
 		return isset($this->data['displayNames']['scripts'])
@@ -218,7 +214,6 @@ class AgaviLocale extends AgaviParameterHolder
 			? $this->data['displayNames']['scripts'][$id]
 			: null;
 	}
-
 
 	public function getTerritories()
 	{
@@ -234,7 +229,6 @@ class AgaviLocale extends AgaviParameterHolder
 			: null;
 	}
 
-
 	public function getVariants()
 	{
 		return isset($this->data['displayNames']['variants'])
@@ -248,7 +242,6 @@ class AgaviLocale extends AgaviParameterHolder
 			? $this->data['displayNames']['variants'][$id]
 			: null;
 	}
-
 
 	public function getMeasurementSystemNames()
 	{
@@ -264,9 +257,7 @@ class AgaviLocale extends AgaviParameterHolder
 			: null;
 	}
 
-
 	//////////////////////////////// layout /////////////////////////////////////
-
 
 	public function getLineOrientation()
 	{
@@ -282,9 +273,7 @@ class AgaviLocale extends AgaviParameterHolder
 			: null;
 	}
 
-
 	//////////////////////////////// delimiters /////////////////////////////////
-
 
 	public function getQuotationStart()
 	{
@@ -314,9 +303,7 @@ class AgaviLocale extends AgaviParameterHolder
 			: null;
 	}
 
-
 	//////////////////////////////// calendars //////////////////////////////////
-
 
 	public function getDefaultCalendar()
 	{
@@ -367,7 +354,6 @@ class AgaviLocale extends AgaviParameterHolder
 			: null;
 	}
 
-
 	public function getCalendarDaysWide($calendar)
 	{
 		return isset($this->data['calendars'][$calendar]['days']['format']['wide'])
@@ -409,7 +395,6 @@ class AgaviLocale extends AgaviParameterHolder
 			? $this->data['calendars'][$calendar]['days']['stand-alone']['narrow'][$day]
 			: null;
 	}
-
 
 	public function getCalendarQuartersWide($calendar)
 	{
@@ -453,7 +438,6 @@ class AgaviLocale extends AgaviParameterHolder
 			: null;
 	}
 
-
 	public function getCalendarAm($calendar)
 	{
 		return isset($this->data['calendars'][$calendar]['am'])
@@ -467,7 +451,6 @@ class AgaviLocale extends AgaviParameterHolder
 			? $this->data['calendars'][$calendar]['pm']
 			: null;
 	}
-
 
 	public function getCalendarErasWide($calendar)
 	{
@@ -636,7 +619,6 @@ class AgaviLocale extends AgaviParameterHolder
 			? $this->data['calendars'][$calendar]['fields'][$id]['relatives'][$rId]
 			: null;
 	}
-
 
 	public function getTimeZoneHourFormat()
 	{
@@ -813,7 +795,6 @@ class AgaviLocale extends AgaviParameterHolder
 			: null;
 	}
 
-
 	public function getDecimalFormat($dfId)
 	{
 		return isset($this->data['numbers']['decimalFormats'][$dfId])
@@ -870,7 +851,6 @@ class AgaviLocale extends AgaviParameterHolder
 			: null;
 	}
 
-
 	public function getCurrencySpacingBeforeCurrencyCurrencyMatch()
 	{
 		return isset($this->data['numbers']['currencySpacing']['beforeCurrency']['currencyMatch'])
@@ -912,7 +892,6 @@ class AgaviLocale extends AgaviParameterHolder
 			? $this->data['numbers']['currencySpacing']['afterCurrency']['insertBetween']
 			: null;
 	}
-
 
 	public function getCurrencies()
 	{

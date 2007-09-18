@@ -51,7 +51,6 @@ abstract class AgaviTimeZone
 	 */
 	protected $resolvedId = null;
 
-
 	/**
 	 * Returns the translation manager for this TimeZone.
 	 *
@@ -64,7 +63,6 @@ abstract class AgaviTimeZone
 	{
 		return $this->translationManager;
 	}
-
 
 	/**
 	 * The GMT time zone has a raw offset of zero and does not use daylight
@@ -82,8 +80,6 @@ abstract class AgaviTimeZone
 	{
 		return new AgaviSimpleTimeZone($tm, 0, 'GMT');
 	}
-
-
 
 	/**
 	 * TODO: document the overloads
@@ -163,7 +159,6 @@ abstract class AgaviTimeZone
 		}
 	}
 
-
 	/**
 	 * Sets the TimeZone's raw GMT offset (i.e., the number of milliseconds to 
 	 * add to GMT to get local time, before taking daylight savings time into 
@@ -225,7 +220,6 @@ abstract class AgaviTimeZone
 	{
 		$this->id = $id;
 	}
-
 
 	/**
 	 * Returns the resolved TimeZone's ID.
@@ -489,7 +483,6 @@ abstract class AgaviTimeZone
 	 * @since      0.11.0
 	 */
 	protected abstract function getOffsetIIIIIII($era, $year, $month, $day, $dayOfWeek, $milliseconds, $monthLength);
-
 
 	/**
 	 * Parse a custom time zone identifier and return a corresponding zone.

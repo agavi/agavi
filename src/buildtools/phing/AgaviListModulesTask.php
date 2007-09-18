@@ -25,29 +25,35 @@
  *
  * @version    $Id$
  */
-class AgaviListModulesTask extends Task {
-	private 	$property,
-				$defaultProperty,
-				$app;
+class AgaviListModulesTask extends Task
+{
+	private
+		$property,
+		$defaultProperty,
+		$app;
 
-	public function setApp($dir) {
+	public function setApp($dir)
+	{
 		$this->app = $dir;
 	}
 
-	public function setProperty($property) {
+	public function setProperty($property)
+	{
 		$this->property = $property;
 	}
 
-	public function setDefaultproperty($property) {
+	public function setDefaultproperty($property)
+	{
 		$this->defaultProperty = $property;
 	}
 
-	public function main() {
-		if ($this->app && $this->property) {
-			foreach (glob($this->app.'/modules/*', GLOB_ONLYDIR) as $path) {
+	public function main()
+	{
+		if($this->app && $this->property) {
+			foreach(glob($this->app.'/modules/*', GLOB_ONLYDIR) as $path) {
 				$modules[] = basename($path);
 			}
-			if (isset($modules[0])) {
+			if(isset($modules[0])) {
 				$this->project->setProperty($this->defaultProperty, $modules[0]);
 			}
 			$this->project->setProperty($this->property, implode(',', $modules));
@@ -56,4 +62,5 @@ class AgaviListModulesTask extends Task {
 		}
 	}
 }
+
 ?>

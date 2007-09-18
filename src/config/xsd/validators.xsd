@@ -54,7 +54,6 @@
     <xs:attribute name="class" type="php_label" use="required" />
   </xs:complexType>
 
-
   <xs:complexType name="argument">
     <xs:simpleContent>
       <xs:extension base="xs:string">
@@ -105,13 +104,11 @@
     </xs:choice>
   </xs:group>
 
-
   <xs:group name="arguments">
     <xs:choice>
       <xs:element name="arguments" type="arguments" minOccurs="0" />
       <xs:element name="argument" type="argument" minOccurs="0" maxOccurs="unbounded" />
     </xs:choice>
   </xs:group>
-
 
 </xs:schema>

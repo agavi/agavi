@@ -30,11 +30,13 @@ class AgaviSubActionNameTask extends Task
 	protected $property = 'action';
 	protected $outputPropertyPrefix = '';
 
-	public function setProperty($property) {
+	public function setProperty($property)
+	{
 		$this->property = $property;
 	}
 
-	public function setOutputpropertyprefix($prefix) {
+	public function setOutputpropertyprefix($prefix)
+	{
 		$this->outputPropertyPrefix = $prefix;
 	}
 
@@ -56,4 +58,5 @@ class AgaviSubActionNameTask extends Task
 		$this->project->setProperty($this->outputPropertyPrefix.'actionFile', $actionFile);
 	}
 }
+
 ?>

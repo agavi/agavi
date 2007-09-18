@@ -180,7 +180,6 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 		$this->cookies = array_merge($this->cookies, $cookies);
 	}
 
-
 	/**
 	 * Remove a cookie.
 	 *
@@ -470,7 +469,6 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 		}
 		return ($file->getError() == UPLOAD_ERR_NO_FILE);
 	}
-
 
 	/**
 	 * Removes file information for given file.

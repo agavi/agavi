@@ -25,14 +25,16 @@
  *
  * @version    $Id$
  */
-class AgaviTestTask extends Task {
-	private $agavidir,
-					$testdir = 'tests',
-					$reporter = 'text',
-					$startpoint,
-					$base_include = array('src', 'app'),
-					$outfile = '',
-					$exit = false;
+class AgaviTestTask extends Task
+{
+	private
+		$agavidir,
+		$testdir = 'tests',
+		$reporter = 'text',
+		$startpoint,
+		$base_include = array('src', 'app'),
+		$outfile = '',
+		$exit = false;
 
 	public function setAgavidir($dir)
 	{
@@ -75,11 +77,11 @@ class AgaviTestTask extends Task {
 	public function main()
 	{
 		@include_once('simpletest/unit_tester.php');
-		if (!class_exists('SimpleTestCase', false)) {
+		if(!class_exists('SimpleTestCase', false)) {
 			throw new BuildException("\nRequires SimpleTest be accessible from your include path.\neg: include('simpletest/unit_tester.php');\nyour include path is currently set to: " . get_include_path() . ".\nsee http://sourceforge.net/projects/simpletest");
 		}
-		if (!empty($this->outfile)) {
-			if (!is_writeable($this->outfile) || !touch($this->outfile)) {
+		if(!empty($this->outfile)) {
+			if(!is_writeable($this->outfile) || !touch($this->outfile)) {
 				throw new BuildException("Could not open/append to outfile: {$this->outfile}");
 			}
 		}
@@ -91,7 +93,7 @@ class AgaviTestTask extends Task {
 		);
 		$pipes = array();
 		$process = proc_open($php, $descriptorspec, $pipes, getcwd());
-		if (!is_resource($process)) {
+		if(!is_resource($process)) {
 			throw new BuildException("AgaviTest couldn't proc_open: {$php}", PROJECT_MSG_INFO);
 		}
 		$testcode = '
@@ -168,7 +170,7 @@ switch (strtolower(AgaviConfig::get("tests.reporter"))) {
 		fwrite($pipes[0], $testcode);
 		fclose($pipes[0]);
 
-		if (!empty($this->outfile)) {
+		if(!empty($this->outfile)) {
 			file_put_contents($this->outfile, stream_get_contents($pipes[1]));
 			$this->log("AgaviTest output written to: {$this->outfile}", PROJECT_MSG_INFO);
 		} else {
@@ -176,10 +178,11 @@ switch (strtolower(AgaviConfig::get("tests.reporter"))) {
 		}
 		fclose($pipes[1]);
 		$return_value = proc_close($process);
-		if ($this->exit && ($return_value !== 0)) {
+		if($this->exit && ($return_value !== 0)) {
 			throw new BuildException('AgaviTest suite FAILED!');
 		}
 		$this->log("AgaviTest returned: {$return_value}", PROJECT_MSG_INFO);
 	}
 }
+
 ?>

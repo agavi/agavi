@@ -221,7 +221,6 @@ abstract class AgaviBaseConfigHandler extends AgaviParameterHolder
 			$configs = array_merge($configs, $parentConfigs);
 		}
 
-
 		foreach($configurations as $cfg) {
 			if(!$cfg->hasAttribute('environment') && !$cfg->hasAttribute('context')) {
 				$configs[] = $cfg;

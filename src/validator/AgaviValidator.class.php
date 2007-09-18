@@ -95,7 +95,6 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 */
 	protected $curBase = null;
 
-
 	/**
 	 * @var        string The name of this validator instance. This will either
 	 *                    be the user supplied name (if any) or a random string
@@ -191,7 +190,6 @@ abstract class AgaviValidator extends AgaviParameterHolder
 		return $this->name;
 	}
 
-
 	/**
 	 * Checks whether this validator validates in the given request method.
 	 *
@@ -239,7 +237,6 @@ abstract class AgaviValidator extends AgaviParameterHolder
 		if(!isset($parameters['source'])) {
 			$parameters['source'] = AgaviRequestDataHolder::SOURCE_PARAMETERS;
 		}
-
 
 		if(isset($parameters['method'])) {
 			foreach(explode(' ', $parameters['method']) as $method) {
@@ -450,7 +447,6 @@ abstract class AgaviValidator extends AgaviParameterHolder
 		return $error;
 	}
 
-
 	/**
 	 * Submits an error to the error manager.
 	 *
@@ -489,7 +485,6 @@ abstract class AgaviValidator extends AgaviParameterHolder
 			$this->incident->addError(new AgaviValidationError($error, $index, $affectedArguments));
 		}
 	}
-
 
 	/**
 	 * Exports a value back into the request.
@@ -709,7 +704,6 @@ abstract class AgaviValidator extends AgaviParameterHolder
 				throw new AgaviValidatorException('unknown error code: '.$code);
 		}
 	}
-
 
 	/**
 	 * Returns all available keys in the currently set base.

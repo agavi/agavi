@@ -26,14 +26,16 @@
  *
  * @version    $Id$
  */
-class AgaviTestTask2 extends PHPUnit2Task {
-	private $agavidir,
-					$testdir = 'tests2',
-					$reporter = 'text',
-					$startpoint,
-					$base_include = array('', 'src', 'app'),
-					$outfile = '',
-					$exit = false;
+class AgaviTestTask2 extends PHPUnit2Task
+{
+	private
+		$agavidir,
+		$testdir = 'tests2',
+		$reporter = 'text',
+		$startpoint,
+		$base_include = array('', 'src', 'app'),
+		$outfile = '',
+		$exit = false;
 
 	public function setAgavidir($dir)
 	{
@@ -63,7 +65,7 @@ class AgaviTestTask2 extends PHPUnit2Task {
 	public function setOutfile($outfile)
 	{
 		$this->outfile = (string) $outfile;
-		if (!empty($outfile)) {
+		if(!empty($outfile)) {
 			echo "Testing output will be written to: $outfile\n";
 		}
 	}
@@ -89,8 +91,8 @@ class AgaviTestTask2 extends PHPUnit2Task {
 		@include_once(AgaviConfig::get('tests.dir') . "/test_environment.php"); // we probably defined our app location, etc in here. 
 		require_once(AgaviConfig::get('core.agavi_dir') . "/buildtools/test_setup.php");
 
-		if (!empty($this->outfile)) {
-			if (!is_writeable($this->outfile) || !touch($this->outfile)) {
+		if(!empty($this->outfile)) {
+			if(!is_writeable($this->outfile) || !touch($this->outfile)) {
 				throw new BuildException("Could not open/append to outfile: {$this->outfile}");
 			}
 		}

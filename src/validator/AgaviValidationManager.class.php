@@ -77,7 +77,6 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	 */
 	const MODE_STRICT = 'strict';
 
-
 	/**
 	 * initializes the validator manager.
 	 *
@@ -158,7 +157,6 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 		$this->fieldResults = array();
 		$this->incidents = array();
 		$this->result = AgaviValidator::SUCCESS;
-
 
 		foreach($this->children as $child) {
 			$child->shutdown();
@@ -470,7 +468,6 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 
 		return $names;
 	}
-
 
 	/**
 	 * Adds an incident to the validation result. This will automatically adjust
@@ -835,7 +832,6 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 		$incident->addError(new AgaviValidationError($message, null, array($name)));
 		$this->addIncident($incident);
 	}
-
 
 	/**
 	 * Set an array of errors

@@ -418,7 +418,6 @@ array data format
 			}
 		}
 
-
 		if(isset($ldmlTree->dates)) {
 			$dates = $ldmlTree->dates;
 
@@ -472,7 +471,6 @@ array data format
 								}
 							}
 						}
-
 
 						if(isset($calendar->dateFormats)) {
 							$this->getDateOrTimeFormats($calendar->dateFormats, 'dateFormat', $data['calendars'][$calendarName]);
@@ -642,7 +640,6 @@ array data format
 			if(isset($nums->currencyFormats)) {
 				$cf = $nums->currencyFormats;
 
-
 				foreach($this->getChildsOrAlias($cf) as $itemLength) {
 					if($itemLength->getName() == 'default') {
 						$data['numbers']['currencyFormats']['default'] = $itemLength->getAttribute('choice');
@@ -679,8 +676,6 @@ array data format
 						if(isset($itemLength->afterCurrency->insertBetween)) {
 							$data['numbers']['currencySpacing']['afterCurrency']['insertBetween'] = $this->unescape($itemLength->afterCurrency->insertBetween->getValue());
 						}
-
-
 
 					} else {
 						throw new Exception('unknown childtag "' . $itemLength->getName() . '" in currencyFormats tag');
@@ -890,7 +885,6 @@ array data format
 			if($alias->getAttribute('source') != 'locale') {
 				throw new AgaviException('The alias handling doesn\'t support any source except locale (' . $alias->getAttribute('source') . ' was given)');
 			}
-
 
 			$pathParts = explode('/', $alias->getAttribute('path'));
 

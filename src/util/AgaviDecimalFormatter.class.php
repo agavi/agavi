@@ -73,7 +73,6 @@ class AgaviDecimalFormatter
 	 */
 	protected $hasMinus = false;
 
-
 	/**
 	 * @var        bool Whether the format string has the location of the 
 	 *                  currency sign defined
@@ -298,7 +297,6 @@ class AgaviDecimalFormatter
 			}
 		}
 
-
 		if($state == self::IN_NUMBER) {
 			if($numberState == 'inInteger') {
 				$groupingDistances[] = $currentGroupingDistance;
@@ -312,7 +310,6 @@ class AgaviDecimalFormatter
 			$maxShowedFractionals = -1;
 		}
 
-
 		// we chop of the first element of the grouping distance which is 
 		// either the the number of chars until the first ',' or the only element
 		// in case there was no grouping separator specified (which means that 
@@ -321,7 +318,6 @@ class AgaviDecimalFormatter
 
 		// now we reverse the array so we can process it in natural order later
 		$groupingDistances = array_reverse($groupingDistances);
-
 
 		if(($pos = strpos($negativeFormat, '-')) !== false) {
 			str_replace('-', '%2$s', $negativeFormat);
@@ -585,7 +581,6 @@ class AgaviDecimalFormatter
 	{
 		$this->roundingMode = $mode;
 	}
-
 
 	/**
 	 * Maps a string rounding mode definition to the rounding mode constants.

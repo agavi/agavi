@@ -124,7 +124,6 @@ class AgaviCreoleSessionStorage extends AgaviSessionStorage
 		$db_table  = $this->getParameter('db_table');
 		$db_id_col = $this->getParameter('db_id_col', 'sess_id');
 
-
 		// delete the record associated with this id
 		$sql = 'DELETE FROM ' . $db_table . ' ' . 'WHERE ' . $db_id_col . '=?';
 

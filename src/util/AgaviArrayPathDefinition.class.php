@@ -83,7 +83,6 @@ final class AgaviArrayPathDefinition
 		}
 	}
 
-
 	/**
 	 * Checks whether the array has a value at the given path.
 	 *
@@ -114,7 +113,6 @@ final class AgaviArrayPathDefinition
 
 		return true;
 	}
-
 
 	/**
 	 * Returns the value at the given path.
@@ -208,7 +206,6 @@ final class AgaviArrayPathDefinition
 
 		return array('parts' => $parts, 'absolute' => $absolute);
 	}
-
 
 	/**
 	 * Returns the flat key names of an array.
