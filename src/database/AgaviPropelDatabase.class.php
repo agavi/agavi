@@ -176,8 +176,8 @@ class AgaviPropelDatabase extends AgaviDatabase
 	/**
 	 * Load Propel config
 	 * 
-	 * @param      agaviCreoleDatabaseManager The database manager of this instance.
-	 * @param      array An associative array of initialization parameters.
+	 * @param      AgaviDatabaseManager The database manager of this instance.
+	 * @param      array                An assoc array of initialization params.
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.10.0

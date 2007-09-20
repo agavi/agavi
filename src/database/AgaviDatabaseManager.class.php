@@ -82,6 +82,21 @@ class AgaviDatabaseManager
 		$error = sprintf($error, $name);
 		throw new AgaviDatabaseException($error);
 	}
+	
+	/**
+	 * Retrieve the name of the given database instance.
+	 *
+	 * @param      AgaviDatabase The database to fetch the name of.
+	 *
+	 * @return     string The name of the database, or false if it was not found.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getDatabaseName(AgaviDatabase $database)
+	{
+		return array_search($database, $this->databases, true);
+	}
 
 	/**
 	 * Initialize this DatabaseManager.
