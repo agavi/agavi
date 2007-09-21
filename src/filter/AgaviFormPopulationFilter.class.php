@@ -342,15 +342,30 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 
 				// there's an error with the element's name in the request? good. let's give the baby a class!
 				if($vm->hasError($pname)) {
-					$element->setAttribute('class', preg_replace('/\s*$/', ' ' . $cfg['error_class'], $element->getAttribute('class')));
-					// assign the class to all implicit labels
+					// a collection of all elements that need an error class
+					$errorClassElements = array();
+					// the element itself of course
+					$errorClassElements[] = $element;
+					// all implicit labels
 					foreach($xpath->query('ancestor::' . $ns . 'label[not(@for)]', $element) as $label) {
-						$label->setAttribute('class', preg_replace('/\s*$/', ' ' . $cfg['error_class'], $label->getAttribute('class')));
+						$errorClassElements[] = $label;
 					}
+					// and all explicit labels
 					if(($id = $element->getAttribute('id')) != '') {
-						// assign the class to all explicit labels
 						foreach($xpath->query('descendant::' . $ns . 'label[@for="' . $id . '"]', $form) as $label) {
-							$label->setAttribute('class', preg_replace('/\s*$/', ' ' . $cfg['error_class'], $label->getAttribute('class')));
+							$errorClassElements[] = $label;
+						}
+					}
+					
+					// now loop over all those elements and assign the class
+					foreach($errorClassElements as $errorClassElement) {
+						// go over all the elements in the error class map
+						foreach($cfg['error_class_map'] as $xpathExpression => $errorClassName) {
+							if($xpath->query(str_replace('%ns%', $ns, $xpathExpression), $errorClassElement)->length) {
+								$errorClassElement->setAttribute('class', preg_replace('/\s*$/', ' ' . $errorClassName, $errorClassElement->getAttribute('class')));
+								// and break the foreach, our expression matched after all
+								break;
+							}
 						}
 					}
 				}
@@ -559,6 +574,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 		// set defaults
 		$this->setParameter('cdata_fix', true);
 		$this->setParameter('error_class', 'error');
+		$this->setParameter('error_class_map', array("self::html:input[@type='text']" => 'foo'));
 		$this->setParameter('force_output_mode', false);
 		$this->setParameter('force_encoding', false);
 		$this->setParameter('force_request_uri', null);
@@ -581,7 +597,15 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 		// initialize parent
 		parent::initialize($context, $parameters);
 
+		// and "clean up" some of the params just in case the user messed up
+		
+		$errorClassMap = (array) $this->getParameter('error_class_map');
+		// append a match-all expression to the map, which assigns the default error class
+		$errorClassMap['self::%ns%*'] = $this->getParameter('error_class');
+		$this->setParameter('error_class_map', $errorClassMap);
+		
 		$this->setParameter('methods', (array) $this->getParameter('methods'));
+		
 		if($ot = $this->getParameter('output_types')) {
 			$this->setParameter('output_types', (array) $ot);
 		}
