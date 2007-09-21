@@ -130,6 +130,9 @@ class AgaviDatabaseManager
 	 */
 	public function startup()
 	{
+		foreach($this->databases as $database) {
+			$database->startup();
+		}
 	}
 
 	/**
