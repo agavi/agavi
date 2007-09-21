@@ -34,6 +34,11 @@
 class AgaviDatabaseManager
 {
 	/**
+	 * @var        string The name of the default database.
+	 */
+	protected $defaultDatabaseName = null;
+	
+	/**
 	 * @var        array An array of AgaviDatabases.
 	 */
 	protected $databases = array();
@@ -71,8 +76,12 @@ class AgaviDatabaseManager
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function getDatabase($name = 'default')
+	public function getDatabase($name = null)
 	{
+		if($name === null) {
+			$name = $this->defaultDatabaseName;
+		}
+		
 		if(isset($this->databases[$name])) {
 			return $this->databases[$name];
 		}
@@ -96,6 +105,19 @@ class AgaviDatabaseManager
 	public function getDatabaseName(AgaviDatabase $database)
 	{
 		return array_search($database, $this->databases, true);
+	}
+
+	/**
+	 * Returns the name of the default database.
+	 *
+	 * @return     string The name of the default database.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getDefaultDatabaseName()
+	{
+		return $this->defaultDatabaseName;
 	}
 
 	/**
