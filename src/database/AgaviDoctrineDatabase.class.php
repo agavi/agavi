@@ -79,6 +79,8 @@ class AgaviDoctrineDatabase extends AgaviDatabase
 	{
 		parent::initialize($databaseManager, $parameters);
 		
+		$name = $this->getName();
+		
 		// try to autoload doctrine
 		if(!class_exists('Doctrine')) {
 			// okay that didn't work. last resort: include it. we assume it's on the include path by default
@@ -105,9 +107,17 @@ class AgaviDoctrineDatabase extends AgaviDatabase
 				throw new AgaviDatabaseException($error);
 			}
 			
-			$this->connection = $this->doctrineManager->openConnection($dsn, $this->getName());
+			$this->connection = $this->doctrineManager->openConnection($dsn, $name);
 			// do not assign the resource here. that would connect to the database
 			// $this->resource = $this->connection->getDbh();
+			
+			foreach((array)$this->getParameter('attributes', array()) as $attributeName => $attributeValue) {
+				$this->connection->setAttribute($attributeName, $attributeValue);
+			}
+			
+			foreach((array)$this->getParameter('bind_components', array()) as $componentName) {
+				$this->doctrineManager->bindComponent($componentName, $name);
+			}
 		} catch(Doctrine_Exception $e) {
 			// the connection's foobar'd
 			throw new AgaviDatabaseException($e->getMessage());
