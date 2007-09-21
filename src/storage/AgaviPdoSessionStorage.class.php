@@ -204,7 +204,7 @@ class AgaviPdoSessionStorage extends AgaviSessionStorage
 	public function sessionOpen($path, $name)
 	{
 		// what database are we using?
-		$database = $this->getParameter('database', 'default');
+		$database = $this->getParameter('database', null);
 
 		$this->connection = $this->getContext()->getDatabaseConnection($database);
 		if($this->connection === null || !$this->connection instanceof PDO) {

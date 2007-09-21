@@ -193,7 +193,7 @@ class AgaviCreoleSessionStorage extends AgaviSessionStorage
 	public function sessionOpen($path, $name)
 	{
 		// what database are we using?
-		$database = $this->getParameter('database', 'default');
+		$database = $this->getParameter('database', null);
 
 		$this->db = $this->getContext()->getDatabaseConnection($database);
 		if($this->db == null || !$this->db instanceof Connection) {

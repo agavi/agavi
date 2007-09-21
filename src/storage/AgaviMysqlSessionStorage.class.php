@@ -195,7 +195,7 @@ class AgaviMysqlSessionStorage extends AgaviSessionStorage
 	public function sessionOpen($path, $name)
 	{
 		// what database are we using?
-		$database = $this->getParameter('database', 'default');
+		$database = $this->getParameter('database', null);
 
 		// get the database resource
 		$this->resource = $this->getContext()->getDatabaseManager()->getDatabase($database)->getResource();
