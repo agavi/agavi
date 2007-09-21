@@ -574,7 +574,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 		// set defaults
 		$this->setParameter('cdata_fix', true);
 		$this->setParameter('error_class', 'error');
-		$this->setParameter('error_class_map', array("self::html:input[@type='text']" => 'foo'));
+		$this->setParameter('error_class_map', array());
 		$this->setParameter('force_output_mode', false);
 		$this->setParameter('force_encoding', false);
 		$this->setParameter('force_request_uri', null);
