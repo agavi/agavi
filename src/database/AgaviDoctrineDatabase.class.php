@@ -127,7 +127,8 @@ class AgaviDoctrineDatabase extends AgaviDatabase
 	{
 		if($this->connection !== null) {
 			$this->doctrineManager->closeConnection($this->connection);
-			unset($this->connection, $this->resource);
+			$this->connection = null;
+			$this->resource = null;
 		}
 	}
 	
