@@ -303,18 +303,11 @@ final class AgaviToolkit
 	 */
 	public static function expandDirectives($value)
 	{
-		$newvalue = $value;
-		
-		do {
-			$value = $newvalue;
-			$newvalue = preg_replace_callback(
-				'/\%([\w\.]+?)\%/',
-				array('AgaviToolkit', 'expandDirectivesCallback'),
-				$value
-			);
-		} while($newvalue != $value);
-		
-		return $value;
+		return preg_replace_callback(
+			'/\%([\w\.]+?)\%/',
+			array('AgaviToolkit', 'expandDirectivesCallback'),
+			$value
+		);
 	}
 	
 	/**
