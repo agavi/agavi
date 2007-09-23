@@ -3,6 +3,11 @@ AGAVI CHANGELOG
 
 0.11.0 RC6 (September ??, 2007)
 
+ADD: AgaviDoctrineDatabase (#381) (David, Ross Lawley)
+ADD: Support for error class name maps in FormPopulationFilter (#575) (David)
+ADD: AgaviDatabase::startup() (#573) (David)
+ADD: AgaviDatabase::getName() (#572) (David)
+ADD: Cache group sources "request_data" and "global_request_data" (#571) (David)
 ADD: Make format used to insert dates and times configurable in database session storage adapters (#569) (David)
 ADD: Allow overriding of specific Propel runtime config directives via databases.xml (#567) (David)
 ADD: Added force_request_uri and force_request_url config options to FPF ([2066]) (David)
@@ -18,12 +23,13 @@ ADD: Support for SOAP response headers (#531) (David)
 ADD: Allow relative paths to xsd files in XML Schema Instance *schemaLocation attributes (#530) (David)
 
 CHG: Make Agavi ready for PHP6 (#563) (Noah Fontes, David)
-CHG: Make viewInstance avaliable in the execution controller (#557) (David, Ross Lawley)
+CHG: Make viewInstance available in the execution container (#557) (David, Ross Lawley)
 CHG: Made AgaviRenderer an AgaviParameterHolder (#553) (David)
 CHG: Removed bash dependency from agavi build script (#546) (David, simoncpu)
 CHG: Change agavi.release directive to use a slash instead of a space as the name/version delimiter (#541) (David)
 CHG: Bumped minimum required PHP version to 5.1.3 (#456) (David)
 
+FIX: Default database exists twice in the databases array, thus is shutdown twice (#574) (David)
 FIX: Agavi validation manager is missing the declaration of $incidents (#566) (Dominik)
 FIX: FilterChain resets run count for each registered filter; thus executeOnce() does not work as intended (#565) (David)
 FIX: User-agent check in shiny exception template can throw errors (Noah Fontes)
