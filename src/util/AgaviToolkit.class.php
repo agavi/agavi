@@ -236,7 +236,18 @@ final class AgaviToolkit
 	 */
 	public static function expandVariables($string, array $arguments = array())
 	{
-		return preg_replace(array('/\$\{([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)\}/e', '/\{\$([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)\}/e', '/\$([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)/e'), 'array_key_exists("$1", $arguments) ? $arguments["$1"] : \'$0\'', $string);
+		// replacing the other two forms is faster than using three different search values in the str_replace
+		// also, if we had three search patterns, ${foo} with an argument {foo} would be replaced...
+		$string = preg_replace(
+			array('/\$\{([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)\}/', '/\{\$([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)\}/'),
+			'$$1',
+			$string
+		);
+		$search = array();
+		foreach($arguments as $key => $value) {
+			$search[] = '$' . $key;
+		}
+		return str_replace($search, $arguments, $string);
 	}
 	
 	/**
@@ -287,10 +298,8 @@ final class AgaviToolkit
 	 *
 	 * @return     string The new value.
 	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @author     Johan Mjones <johan.mjones@ongame.com>
 	 * @author     David Zülke <dz@bitxtender.com>
-	 * @since      0.9.0
+	 * @since      0.11.0
 	 */
 	public static function expandDirectives($value)
 	{
@@ -300,16 +309,27 @@ final class AgaviToolkit
 			$value = $newvalue;
 			$newvalue = preg_replace_callback(
 				'/\%([\w\.]+?)\%/',
-				create_function(
-					'$match',
-					'$constant = $match[1];' .
-					'return (AgaviConfig::has($constant) ? AgaviConfig::get($constant) : "%".$constant."%");'
-				),
+				array('AgaviToolkit', 'expandDirectivesCallback'),
 				$value
 			);
 		} while($newvalue != $value);
 		
 		return $value;
+	}
+	
+	/**
+	 * preg_replace_callback used in AgaviTookit::expandDirectives()
+	 *
+	 * @param      array An array of matches; index 1 is used.
+	 *
+	 * @return     string A value to use for replacement.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	private static function expandDirectivesCallback($matches)
+	{
+		return AgaviConfig::get($matches[1], '%' . $matches[1] . '%');
 	}
 
 	/**
