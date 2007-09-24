@@ -377,7 +377,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 					$didInsertMessages = false;
 					// and next: see if we're supposed to insert an error message somewhere
 					foreach($cfg['error_messages'] as $xpathExpression => $errorMessageInfo) {
-						$targets = $xpath->query(str_replace('%ns%', $ns, $xpathExpression), $element);
+						$targets = $xpath->query(AgaviToolkit::expandVariables($xpathExpression, array('htmlnsPrefix' => $ns)), $element);
 						if($targets->length) {
 							if(is_array($errorMessageInfo)) {
 								$elementInfo = $errorMessageInfo['element'];
@@ -690,7 +690,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 		
 		$errorClassMap = (array) $this->getParameter('error_class_map');
 		// append a match-all expression to the map, which assigns the default error class
-		$errorClassMap['self::%ns%*'] = $this->getParameter('error_class');
+		$errorClassMap['self::${htmlnsPrefix}*'] = $this->getParameter('error_class');
 		$this->setParameter('error_class_map', $errorClassMap);
 		
 		$this->setParameter('error_messages', (array) $this->getParameter('error_messages'));
