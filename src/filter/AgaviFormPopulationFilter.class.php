@@ -438,6 +438,8 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 										} else {
 											$target->parentNode->appendChild($errorMessageElement);
 										}
+									} elseif($locationInfo == 'replace') {
+										$target->parentNode->replaceChild($errorMessageElement, $target);
 									} else {
 										$target->appendChild($errorMessageElement);
 									}
