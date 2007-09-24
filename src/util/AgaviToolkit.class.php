@@ -87,13 +87,16 @@ final class AgaviToolkit
 	 */
 	public static function mkdir($path, $mode = 0775, $recursive = false, $context = null)
 	{
-		if($context !== null) {
-			$retval = @mkdir($path, $mode, $recursive, $context);
-		} else {
-			$retval = @mkdir($path, $mode, $recursive);
-		}
-		if($retval) {
-			chmod($path, $mode);
+		$retval = is_dir($path);
+		if(!$retval) {
+			if($context !== null) {
+				$retval = mkdir($path, $mode, $recursive, $context);
+			} else {
+				$retval = mkdir($path, $mode, $recursive);
+			}
+			if($retval) {
+				chmod($path, $mode);
+			}
 		}
 		return $retval;
 	}
