@@ -342,6 +342,8 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 
 				// there's an error with the element's name in the request? good. let's give the baby a class!
 				if($vm->hasError($pname)) {
+					$errorMessages = $vm->getErrorMessages($pname);
+					
 					// a collection of all elements that need an error class
 					$errorClassElements = array();
 					// the element itself of course
@@ -363,10 +365,96 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 						foreach($cfg['error_class_map'] as $xpathExpression => $errorClassName) {
 							if($xpath->query(str_replace('%ns%', $ns, $xpathExpression), $errorClassElement)->length) {
 								$errorClassElement->setAttribute('class', preg_replace('/\s*$/', ' ' . $errorClassName, $errorClassElement->getAttribute('class')));
-								// and break the foreach, our expression matched after all
+								// and break the foreach, our expression matched after all - no need to look further
 								break;
 							}
 						}
+					}
+					
+					$luie = libxml_use_internal_errors(true);
+					libxml_clear_errors();
+					
+					$didInsertMessages = false;
+					// and next: see if we're supposed to insert an error message somewhere
+					foreach($cfg['error_messages'] as $xpathExpression => $errorMessageInfo) {
+						$targets = $xpath->query(str_replace('%ns%', $ns, $xpathExpression), $element);
+						if($targets->length) {
+							if(is_array($errorMessageInfo)) {
+								$elementInfo = $errorMessageInfo['element'];
+								$locationInfo = $errorMessageInfo['location'];
+							} else {
+								$elementInfo = $errorMessageInfo;
+								$locationInfo = 'after';
+							}
+							
+							// TODO: special syntax for handling of multiple error messages
+							// e.g. one might want to have a container for all of them, and then individual fragments of markup for each message
+							foreach($errorMessages as $errorMessage) {
+								if(is_string($elementInfo)) {
+									// it's a string with the HTML to insert
+									// %s is the placeholder in the HTML for the error message
+									$errorMessageElement = $doc->createDocumentFragment();
+									$errorMessageElement->appendXML(sprintf($elementInfo, $errorMessage));
+								} elseif(is_callable($elementInfo)) {
+									// it's a callback we can use to get a DOMElement
+									// we give it the element as the first, and the error message as the second argument
+									$errorMessageElement = call_user_func(elementInfo, $element, $errorMessage);
+									$doc->importNode($errorMessageNode, true);
+								} else {
+									throw new AgaviException('Form Population Filter was unable to insert an error message into the document using the XPath expression "' . $xpathExpression . '" because the element information could not be evaluated as an XML/HTML fragment or as a PHP callback.');
+								}
+								
+								if(libxml_get_last_error() !== false) {
+									$errors = array();
+									foreach(libxml_get_errors() as $error) {
+										$errors[] = sprintf("Line %d: %s", $error->line, $error->message);
+									}
+									libxml_clear_errors();
+									libxml_use_internal_errors($luie);
+									$emsg = sprintf(
+										'Form Population Filter was unable to insert an error message into the document using the XPath expression "%s" due to the following error%s: ' . "\n\n%s",
+										$xpathExpression,
+										count($errors) > 1 ? 's' : '',
+										implode("\n", $errors)
+									);
+									if(AgaviConfig::get('core.use_logging') && $cfg['log_parse_errors']) {
+										$lmsg = $emsg . "\n\nResponse content:\n\n" . $response->getContent();
+										$lm = $this->context->getLoggerManager();
+										$mc = $lm->getDefaultMessageClass();
+										$m = new $mc($lmsg, $cfg['logging_severity']);
+										$lm->log($m, $cfg['logging_logger']);
+									}
+									throw new AgaviParseException($emsg);
+								}
+								
+								foreach($targets as $target) {
+									if($locationInfo == 'before') {
+										$target->parentNode->insertBefore($errorMessageElement, $target);
+									} elseif($locationInfo == 'after') {
+										// check if there is a following sibling, then insert before that one
+										// if not, append to parent
+										if($target->nextSibling) {
+											$target->parentNode->insertBefore($errorMessageElement, $target->nextSibling);
+										} else {
+											$target->parentNode->appendChild($errorMessageElement);
+										}
+									} else {
+										$target->appendChild($errorMessageElement);
+									}
+								}
+							}
+							
+							// and break the foreach, our expression matched after all - no need to look further
+							$didInsertMessages = true;
+							break;
+						}
+					}
+					
+					libxml_clear_errors();
+					libxml_use_internal_errors($luie);
+					
+					if(!$didInsertMessages) {
+						// TODO: collect the error messages that could not be inserted in a request attribute
 					}
 				}
 
@@ -575,6 +663,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 		$this->setParameter('cdata_fix', true);
 		$this->setParameter('error_class', 'error');
 		$this->setParameter('error_class_map', array());
+		$this->setParameter('error_messages', array());
 		$this->setParameter('force_output_mode', false);
 		$this->setParameter('force_encoding', false);
 		$this->setParameter('force_request_uri', null);
@@ -603,6 +692,8 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 		// append a match-all expression to the map, which assigns the default error class
 		$errorClassMap['self::%ns%*'] = $this->getParameter('error_class');
 		$this->setParameter('error_class_map', $errorClassMap);
+		
+		$this->setParameter('error_messages', (array) $this->getParameter('error_messages'));
 		
 		$this->setParameter('methods', (array) $this->getParameter('methods'));
 		
