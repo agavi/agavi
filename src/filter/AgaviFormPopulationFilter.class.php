@@ -363,7 +363,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 					foreach($errorClassElements as $errorClassElement) {
 						// go over all the elements in the error class map
 						foreach($cfg['error_class_map'] as $xpathExpression => $errorClassName) {
-							if($xpath->query(str_replace('%ns%', $ns, $xpathExpression), $errorClassElement)->length) {
+							if($xpath->query(AgaviToolkit::expandVariables($xpathExpression, array('htmlnsPrefix' => $ns)), $errorClassElement)->length) {
 								$errorClassElement->setAttribute('class', preg_replace('/\s*$/', ' ' . $errorClassName, $errorClassElement->getAttribute('class')));
 								// and break the foreach, our expression matched after all - no need to look further
 								break;
