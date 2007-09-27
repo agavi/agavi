@@ -379,69 +379,116 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 					foreach($cfg['error_messages'] as $xpathExpression => $errorMessageInfo) {
 						$targets = $xpath->query(AgaviToolkit::expandVariables($xpathExpression, array('htmlnsPrefix' => $ns)), $element);
 						if($targets->length) {
-							if(is_array($errorMessageInfo)) {
-								$elementInfo = $errorMessageInfo['element'];
-								$locationInfo = $errorMessageInfo['location'];
-							} else {
-								$elementInfo = $errorMessageInfo;
-								$locationInfo = 'after';
+							if(!is_array($errorMessageInfo)) {
+								$errorMessageInfo = array('markup' => $errorMessageInfo);
 							}
+							if(isset($errorMessageInfo['markup'])) {
+								$errorMarkup = $errorMessageInfo['markup'];
+							} else {
+								throw new AgaviException('Form Population Filter was unable to insert an error message into the document using the XPath expression "' . $xpathExpression . '" because the element information did not contain markup to use.');
+							}
+							if(isset($errorMessageInfo['location'])) {
+								$errorLocation = $errorMessageInfo['location'];
+							} else {
+								$errorLocation = 'after';
+							}
+							if(isset($errorMessageInfo['container'])) {
+								$errorContainer = $errorMessageInfo['container'];
+							} else {
+								$errorContainer = null;
+							}
+							
+							$errorElements = array();
 							
 							// TODO: special syntax for handling of multiple error messages
 							// e.g. one might want to have a container for all of them, and then individual fragments of markup for each message
 							foreach($errorMessages as $errorMessage) {
-								if(is_string($elementInfo)) {
+								if(is_string($errorMarkup)) {
 									// it's a string with the HTML to insert
 									// %s is the placeholder in the HTML for the error message
-									$errorMessageElement = $doc->createDocumentFragment();
-									$errorMessageElement->appendXML(sprintf($elementInfo, $errorMessage));
-								} elseif(is_callable($elementInfo)) {
+									$errorElement = $doc->createDocumentFragment();
+									$errorElement->appendXML(AgaviToolkit::expandVariables($errorMarkup, array('errorMessage' => $errorMessage)));
+								} elseif(is_callable($errorMarkup)) {
 									// it's a callback we can use to get a DOMElement
 									// we give it the element as the first, and the error message as the second argument
-									$errorMessageElement = call_user_func(elementInfo, $element, $errorMessage);
-									$doc->importNode($errorMessageNode, true);
+									$errorElement = call_user_func($errorMarkup, $element, $errorMessage);
+									$doc->importNode($errorElement, true);
 								} else {
 									throw new AgaviException('Form Population Filter was unable to insert an error message into the document using the XPath expression "' . $xpathExpression . '" because the element information could not be evaluated as an XML/HTML fragment or as a PHP callback.');
 								}
 								
-								if(libxml_get_last_error() !== false) {
-									$errors = array();
-									foreach(libxml_get_errors() as $error) {
-										$errors[] = sprintf("Line %d: %s", $error->line, $error->message);
-									}
-									libxml_clear_errors();
-									libxml_use_internal_errors($luie);
-									$emsg = sprintf(
-										'Form Population Filter was unable to insert an error message into the document using the XPath expression "%s" due to the following error%s: ' . "\n\n%s",
-										$xpathExpression,
-										count($errors) > 1 ? 's' : '',
-										implode("\n", $errors)
-									);
-									if(AgaviConfig::get('core.use_logging') && $cfg['log_parse_errors']) {
-										$lmsg = $emsg . "\n\nResponse content:\n\n" . $response->getContent();
-										$lm = $this->context->getLoggerManager();
-										$mc = $lm->getDefaultMessageClass();
-										$m = new $mc($lmsg, $cfg['logging_severity']);
-										$lm->log($m, $cfg['logging_logger']);
-									}
-									throw new AgaviParseException($emsg);
+								$errorElements[] = $errorElement;
+							}
+							
+							if($errorContainer) {
+								// we have an error container.
+								// that means that instead of inserting each message element, we add the messages into the container
+								// then, the container is the only element scheduled for insertion
+								$errorStrings = array();
+								// add all error XML strings to an array
+								foreach($errorElements as $errorElement) {
+									$errorStrings[] = $errorElement->ownerDocument->saveXML($errorElement);
 								}
 								
+								// create the container element and replace the errors placeholder in the container
+								if(is_string($errorContainer)) {
+									// it's a string with the HTML to insert
+									// %s is the placeholder in the HTML for the error message
+									$containerElement = $doc->createDocumentFragment();
+									$containerElement->appendXML(AgaviToolkit::expandVariables($errorContainer, array('errorMessages' => implode("\n", $errorStrings))));
+								} elseif(is_callable($errorContainer)) {
+									// it's a callback we can use to get a DOMElement
+									// we give it the element as the first, and the error messages array(!) as the second argument
+									$containerElement = call_user_func($errorContainer, $element, $errorStrings);
+									$doc->importNode($containerElement, true);
+								} else {
+									throw new AgaviException('Form Population Filter was unable to insert an error message container into the document using the XPath expression "' . $xpathExpression . '" because the element information could not be evaluated as an XML/HTML fragment or as a PHP callback.');
+								}
+								
+								// and now the trick: set the error container element as the only one in the errorElements variable
+								// that way, it's going to get inserted for us as if it were a normal error message element, using the location specified
+								$errorElements = array($containerElement);
+							}
+							
+							if(libxml_get_last_error() !== false) {
+								$errors = array();
+								foreach(libxml_get_errors() as $error) {
+									$errors[] = sprintf("Line %d: %s", $error->line, $error->message);
+								}
+								libxml_clear_errors();
+								libxml_use_internal_errors($luie);
+								$emsg = sprintf(
+									'Form Population Filter was unable to insert an error message into the document using the XPath expression "%s" due to the following error%s: ' . "\n\n%s",
+									$xpathExpression,
+									count($errors) > 1 ? 's' : '',
+									implode("\n", $errors)
+								);
+								if(AgaviConfig::get('core.use_logging') && $cfg['log_parse_errors']) {
+									$lmsg = $emsg . "\n\nResponse content:\n\n" . $response->getContent();
+									$lm = $this->context->getLoggerManager();
+									$mc = $lm->getDefaultMessageClass();
+									$m = new $mc($lmsg, $cfg['logging_severity']);
+									$lm->log($m, $cfg['logging_logger']);
+								}
+								throw new AgaviParseException($emsg);
+							}
+							
+							foreach($errorElements as $errorElement) {
 								foreach($targets as $target) {
-									if($locationInfo == 'before') {
-										$target->parentNode->insertBefore($errorMessageElement, $target);
-									} elseif($locationInfo == 'after') {
+									if($errorLocation == 'before') {
+										$target->parentNode->insertBefore($errorElement, $target);
+									} elseif($errorLocation == 'after') {
 										// check if there is a following sibling, then insert before that one
 										// if not, append to parent
 										if($target->nextSibling) {
-											$target->parentNode->insertBefore($errorMessageElement, $target->nextSibling);
+											$target->parentNode->insertBefore($errorElement, $target->nextSibling);
 										} else {
-											$target->parentNode->appendChild($errorMessageElement);
+											$target->parentNode->appendChild($errorElement);
 										}
-									} elseif($locationInfo == 'replace') {
-										$target->parentNode->replaceChild($errorMessageElement, $target);
+									} elseif($errorLocation == 'replace') {
+										$target->parentNode->replaceChild($errorElement, $target);
 									} else {
-										$target->appendChild($errorMessageElement);
+										$target->appendChild($errorElement);
 									}
 								}
 							}
