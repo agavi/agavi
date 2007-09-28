@@ -444,7 +444,16 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 									// it's a string with the HTML to insert
 									// %s is the placeholder in the HTML for the error message
 									$containerElement = $doc->createDocumentFragment();
-									$containerElement->appendXML(AgaviToolkit::expandVariables($errorContainer, array('errorMessages' => implode("\n", $errorStrings))));
+									$containerElement->appendXML(
+										AgaviToolkit::expandVariables(
+											$errorContainer,
+											array(
+												'elementId'     => $element->getAttribute('id'),
+												'elementName'   => $element->getAttribute('name'),
+												'errorMessages' => implode("\n", $errorStrings),
+											)
+										)
+									);
 								} elseif(is_callable($errorContainer)) {
 									// it's a callback we can use to get a DOMElement
 									// we give it the element as the first, and the error messages array(!) as the second argument
