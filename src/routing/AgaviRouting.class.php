@@ -720,8 +720,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 		// prepare the working stack with the root routes
 		$routeStack = array($routes);
 
-		do
-		{
+		do {
 			$routes = array_pop($routeStack);
 			foreach($routes as $key) {
 				$route =& $this->routes[$key];
