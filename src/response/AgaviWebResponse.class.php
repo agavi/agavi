@@ -409,6 +409,29 @@ class AgaviWebResponse extends AgaviResponse
 	}
 	
 	/**
+	 * Unset an existing cookie.
+	 * All arguments must reflect the values of the cookie that is already set.
+	 *
+	 * @param      string A cookie name.
+	 * @param      string The path on the server the cookie will be available on.
+	 * @param      string The domain the cookie is available on.
+	 * @param      bool   Indicates that the cookie should only be transmitted 
+	 *                    over a secure HTTPS connection.
+	 * @param      bool   Whether the cookie will be made accessible only through
+	 *                    the HTTP protocol, and not to client-side scripts.
+	 *
+	 * @author     Ross Lawley <ross.lawley@gmail.com>
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function unsetCookie($name, $path = null, $domain = null, $secure = null, $httponly = null)
+	{
+		// false as the value, triggers deletion
+		// null for the lifetime, since Agavi automatically sets that when the value is false or null
+		$this->setCookie($name, false, null, $path, $domain, $secure, $httponly);
+	}
+	
+	/**
 	 * Get a cookie set for later sending.
 	 *
 	 * @param      string The name of the cookie.
