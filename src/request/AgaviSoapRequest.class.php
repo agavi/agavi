@@ -62,10 +62,10 @@ class AgaviSoapRequest extends AgaviWebserviceRequest
 		parent::initialize($context, $parameters);
 		
 		$rdhc = $this->getParameter('request_data_holder_class');
-		$this->requestData = new $rdhc(array(
+		$this->setRequestData(new $rdhc(array(
 			constant("$rdhc::SOURCE_PARAMETERS") => array(),
 			constant("$rdhc::SOURCE_HEADERS") => array(),
-		));
+		)));
 		
 		$this->setMethod($this->getParameter('default_method', 'read'));
 	}

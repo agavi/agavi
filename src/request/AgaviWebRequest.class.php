@@ -378,12 +378,12 @@ class AgaviWebRequest extends AgaviRequest
 		}
 
 		$rdhc = $this->getParameter('request_data_holder_class');
-		$this->requestData = new $rdhc(array(
+		$this->setRequestData(new $rdhc(array(
 			constant("$rdhc::SOURCE_PARAMETERS") => array_merge($_GET, $_POST),
 			constant("$rdhc::SOURCE_COOKIES") => $_COOKIE,
 			constant("$rdhc::SOURCE_FILES") => $_FILES,
 			constant("$rdhc::SOURCE_HEADERS") => $headers,
-		));
+		)));
 	}
 
 	/**

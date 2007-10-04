@@ -43,7 +43,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	/**
 	 * @var        AgaviRequestDataHolder A request data holder with request info.
 	 */
-	protected $requestData = null;
+	private $requestData = null;
 
 	/**
 	 * @var        AgaviRequestDataHolder A request data holder with arguments.
@@ -296,7 +296,8 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 				// run the execution filter, without a proper chain
 				$controller->getFilter('execution')->execute(new AgaviFilterChain(), $this);
 			} else {
-				$this->requestData = clone $request->getRequestData();
+				// mmmh I smell awesomeness... clone the RD JIT, yay, that's the spirit
+				$this->requestData = clone $this->requestData;
 
 				if($this->arguments !== null) {
 					$this->requestData->merge($this->arguments);
@@ -400,9 +401,22 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function getRequestData()
+	public final function getRequestData()
 	{
 		return $this->requestData;
+	}
+
+	/**
+	 * Set this container's request data holder instance.
+	 *
+	 * @param      AgaviRequestDataHolder The request data holder.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public final function setRequestData(AgaviRequestDataHolder $rd)
+	{
+		$this->requestData = $rd;
 	}
 
 	/**

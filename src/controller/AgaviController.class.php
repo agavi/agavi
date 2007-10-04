@@ -70,6 +70,11 @@ class AgaviController extends AgaviParameterHolder
 	protected $outputTypes = array();
 	
 	/**
+	 * @var        array Ref to the request data object from the request.
+	 */
+	private $requestData = null;
+	
+	/**
 	 * Indicates whether or not a module has a specific action.
 	 *
 	 * @param      string A module name.
@@ -134,6 +139,7 @@ class AgaviController extends AgaviParameterHolder
 		$container->initialize($this->context, $ecfi['parameters']);
 		$container->setModuleName($moduleName);
 		$container->setActionName($actionName);
+		$container->setRequestData($this->requestData);
 		if($arguments !== null) {
 			$container->setArguments($arguments);
 		}
@@ -479,6 +485,8 @@ class AgaviController extends AgaviParameterHolder
 	 */
 	public function startup()
 	{
+		// grab a pointer to the request data
+		$this->requestData = $this->context->getRequest()->getRequestData();
 	}
 
 	/**
