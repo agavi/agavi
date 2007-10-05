@@ -59,14 +59,6 @@ class AgaviVirtualArrayPath
 			return;
 		}
 		
-		$parts = array();
-		$this->absolute = ($path[0] != '[');
-		if(($pos = strpos($path, '[')) === false) {
-			$pos = strlen($path);
-		}
-		if($this->absolute) {
-			$parts[] = substr($path, 0, $pos);
-		}
 
 		$parts = AgaviArrayPathDefinition::getPartsFromPath($path);
 
