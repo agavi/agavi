@@ -50,7 +50,7 @@ final class Agavi
 			try {
 				$cfg = AgaviConfig::get('core.config_dir') . '/autoload.xml';
 				if(!is_readable($cfg)) {
-					$cfg = $cfg = AgaviConfig::get('core.system_config_dir') . '/autoload.xml';
+					$cfg = AgaviConfig::get('core.system_config_dir') . '/autoload.xml';
 					if(!is_readable($cfg)) {
 						return;
 					}
