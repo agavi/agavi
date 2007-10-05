@@ -59,9 +59,8 @@ class AgaviVirtualArrayPath
 			return;
 		}
 		
-
 		$parts = AgaviArrayPathDefinition::getPartsFromPath($path);
-
+		
 		$this->absolute = $parts['absolute'];
 		$this->parts = $parts['parts'];
 	}
