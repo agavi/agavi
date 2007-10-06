@@ -64,6 +64,36 @@ abstract class AgaviModel implements AgaviIModel
 	{
 		$this->context = $context;
 	}
+
+	/**
+	 * Pre-serialization callback.
+	 *
+	 * Will set the name of the context and exclude the instance from serializing.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function __sleep()
+	{
+		$this->_contextName = $this->context->getName();
+		$arr = get_object_vars($this);
+		unset($arr['context']);
+		return array_keys($arr);
+	}
+
+	/**
+	 * Post-unserialization callback.
+	 *
+	 * Will restore the context based on the names set by __sleep.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function __wakeup()
+	{
+		$this->context = AgaviContext::getInstance($this->_contextName);
+		unset($this->_contextName);
+	}
 }
 
 ?>
