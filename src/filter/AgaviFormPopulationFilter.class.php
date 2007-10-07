@@ -355,8 +355,9 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 					// now loop over all those elements and assign the class
 					foreach($errorClassElements as $errorClassElement) {
 						// go over all the elements in the error class map
-						foreach($cfg['error_class_map'] as $this->xpathExpression => $errorClassName) {
-							if($this->xpath->query(AgaviToolkit::expandVariables($this->xpathExpression, array('htmlnsPrefix' => $this->ns)), $errorClassElement)->length) {
+						foreach($cfg['error_class_map'] as $xpathExpression => $errorClassName) {
+							$errorClassTest = $this->xpath->query(AgaviToolkit::expandVariables($xpathExpression, array('htmlnsPrefix' => $this->ns)), $errorClassElement);
+							if($errorClassTest && $errorClassTest->length) {
 								$errorClassElement->setAttribute('class', preg_replace('/\s*$/', ' ' . $errorClassName, $errorClassElement->getAttribute('class')));
 								// and break the foreach, our expression matched after all - no need to look further
 								break;
@@ -588,10 +589,10 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 		libxml_clear_errors();
 		
 		$insertSuccessful = false;
-		foreach($rules as $this->xpathExpression => $errorMessageInfo) {
-			$targets = $this->xpath->query(AgaviToolkit::expandVariables($this->xpathExpression, array('htmlnsPrefix' => $this->ns)), $element);
+		foreach($rules as $xpathExpression => $errorMessageInfo) {
+			$targets = $this->xpath->query(AgaviToolkit::expandVariables($xpathExpression, array('htmlnsPrefix' => $this->ns)), $element);
 			
-			if(!$targets->length) {
+			if(!$targets || !$targets->length) {
 				continue;
 			}
 			
@@ -601,7 +602,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 			if(isset($errorMessageInfo['markup'])) {
 				$errorMarkup = $errorMessageInfo['markup'];
 			} else {
-				throw new AgaviException('Form Population Filter was unable to insert an error message into the document using the XPath expression "' . $this->xpathExpression . '" because the element information did not contain markup to use.');
+				throw new AgaviException('Form Population Filter was unable to insert an error message into the document using the XPath expression "' . $xpathExpression . '" because the element information did not contain markup to use.');
 			}
 			if(isset($errorMessageInfo['location'])) {
 				$errorLocation = $errorMessageInfo['location'];
@@ -637,7 +638,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 					$errorElement = call_user_func($errorMarkup, $element, $errorMessage);
 					$this->doc->importNode($errorElement, true);
 				} else {
-					throw new AgaviException('Form Population Filter was unable to insert an error message into the document using the XPath expression "' . $this->xpathExpression . '" because the element information could not be evaluated as an XML/HTML fragment or as a PHP callback.');
+					throw new AgaviException('Form Population Filter was unable to insert an error message into the document using the XPath expression "' . $xpathExpression . '" because the element information could not be evaluated as an XML/HTML fragment or as a PHP callback.');
 				}
 				
 				$errorElements[] = $errorElement;
@@ -674,7 +675,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 					$containerElement = call_user_func($errorContainer, $element, $errorStrings);
 					$this->doc->importNode($containerElement, true);
 				} else {
-					throw new AgaviException('Form Population Filter was unable to insert an error message container into the document using the XPath expression "' . $this->xpathExpression . '" because the element information could not be evaluated as an XML/HTML fragment or as a PHP callback.');
+					throw new AgaviException('Form Population Filter was unable to insert an error message container into the document using the XPath expression "' . $xpathExpression . '" because the element information could not be evaluated as an XML/HTML fragment or as a PHP callback.');
 				}
 				
 				// and now the trick: set the error container element as the only one in the errorElements variable
@@ -691,17 +692,10 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 				libxml_use_internal_errors($luie);
 				$emsg = sprintf(
 					'Form Population Filter was unable to insert an error message into the document using the XPath expression "%s" due to the following error%s: ' . "\n\n%s",
-					$this->xpathExpression,
+					$xpathExpression,
 					count($errors) > 1 ? 's' : '',
 					implode("\n", $errors)
 				);
-				if(AgaviConfig::get('core.use_logging') && $cfg['log_parse_errors']) {
-					$lmsg = $emsg . "\n\nResponse content:\n\n" . $response->getContent();
-					$lm = $this->context->getLoggerManager();
-					$mc = $lm->getDefaultMessageClass();
-					$m = new $mc($lmsg, $cfg['logging_severity']);
-					$lm->log($m, $cfg['logging_logger']);
-				}
 				throw new AgaviParseException($emsg);
 			}
 			
