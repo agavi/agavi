@@ -114,7 +114,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 		$this->contextName = $this->context->getName();
 		$this->outputTypeName = $this->outputType->getName();
 		$arr = get_object_vars($this);
-		unset($arr['context'], $arr['outputType']);
+		unset($arr['context'], $arr['outputType'], $arr['requestData']);
 		return array_keys($arr);
 	}
 
@@ -131,6 +131,12 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	{
 		$this->context = AgaviContext::getInstance($this->contextName);
 		$this->outputType = $this->context->getController()->getOutputType($this->outputTypeName);
+		$rq = $this->context->getRequest();
+		if($rq->isLocked()) {
+			$this->requestData = new AgaviRequestDataHolder();
+		} else {
+			$this->requestData = $rq->getRequestData();
+		}
 		unset($this->contextName, $this->outputTypeName);
 	}
 
