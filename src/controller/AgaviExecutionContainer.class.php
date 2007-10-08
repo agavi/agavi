@@ -46,6 +46,11 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	private $requestData = null;
 
 	/**
+	 * @var        AgaviRequestDataHolder A pointer to the global request data.
+	 */
+	private $globalRequestData = null;
+
+	/**
 	 * @var        AgaviRequestDataHolder A request data holder with arguments.
 	 */
 	protected $arguments = null;
@@ -303,7 +308,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 				$controller->getFilter('execution')->execute(new AgaviFilterChain(), $this);
 			} else {
 				// mmmh I smell awesomeness... clone the RD JIT, yay, that's the spirit
-				$this->requestData = clone $this->requestData;
+				$this->requestData = clone $this->globalRequestData;
 
 				if($this->arguments !== null) {
 					$this->requestData->merge($this->arguments);
@@ -413,7 +418,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	}
 
 	/**
-	 * Set this container's request data holder instance.
+	 * Set this container's global request data holder reference.
 	 *
 	 * @param      AgaviRequestDataHolder The request data holder.
 	 *
@@ -422,7 +427,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	 */
 	public final function setRequestData(AgaviRequestDataHolder $rd)
 	{
-		$this->requestData = $rd;
+		$this->globalRequestData = $rd;
 	}
 
 	/**
