@@ -302,14 +302,16 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 			$container->setViewModuleName($actionCache['view_module']);
 			$container->setViewName($actionCache['view_name']);
 
+			$key = $request->toggleLock();
 			// get the view instance
 			$viewInstance = $controller->createViewInstance($actionCache['view_module'], $actionCache['view_name']);
-			// Set the View Instance in the container
-			$container->setViewInstance($viewInstance);
-
 			// initialize the view
 			$viewInstance->initialize($container);
+			$request->toggleLock($key);
 
+			// Set the View Instance in the container
+			$container->setViewInstance($viewInstance);
+			
 			$outputType = $container->getOutputType()->getName();
 
 			$isViewCached = false;
