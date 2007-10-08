@@ -565,6 +565,9 @@ abstract class AgaviRouting extends AgaviParameterHolder
 						}
 					} elseif(isset($defaults[$name]) && strlen($defaults[$name]['val']) > 0) {
 						$finalParams[$name] = $defaults[$name]['pre'] . $this->escapeOutputParameter($defaults[$name]['val']) . $defaults[$name]['post'];
+					} elseif(!isset($originalParams[$name])) {
+						// the parameter was set via a callback
+						$finalParams[$name] = $defaults[$name]['pre'] . $params[$name] . $defaults[$name]['post'];
 					} else {
 						// there is no default or incoming match for this optional param, so remove it
 						$finalParams[$name] = null;
