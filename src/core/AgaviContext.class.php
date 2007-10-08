@@ -160,7 +160,9 @@ final class AgaviContext
 	 */
 	public function getFactoryInfo($for)
 	{
-		return $this->factories[$for];
+		if(isset($this->factories[$for])) {
+			return $this->factories[$for];
+		}
 	}
 
 	/**
