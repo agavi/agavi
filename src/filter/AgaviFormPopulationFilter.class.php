@@ -117,11 +117,11 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 			$errorMessageRules = $cfg['error_messages'];
 		}
 		$fieldErrorMessageRules = $errorMessageRules;
-		if(isset($cfg['field_error_messages']) && is_array($cfg['field_error_messages'])) {
+		if(isset($cfg['field_error_messages']) && is_array($cfg['field_error_messages']) && count($cfg['field_error_messages'])) {
 			$fieldErrorMessageRules = $cfg['field_error_messages'];
 		}
 		$multiFieldErrorMessageRules = $fieldErrorMessageRules;
-		if(isset($cfg['multi_field_error_messages']) && is_array($cfg['multi_field_error_messages'])) {
+		if(isset($cfg['multi_field_error_messages']) && is_array($cfg['multi_field_error_messages']) && count($cfg['multi_field_error_messages'])) {
 			$multiFieldErrorMessageRules = $cfg['multi_field_error_messages'];
 		}
 		
