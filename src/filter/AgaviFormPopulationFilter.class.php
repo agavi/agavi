@@ -241,6 +241,10 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 		} else {
 			$forms = $this->xpath->query('//' . $this->ns . 'form[@action]');
 		}
+		
+		// an array of all validation incidents; errors inserted for fields or multiple fields will be removed in here
+		$allIncidents = $vm->getIncidents();
+		
 		foreach($forms as $form) {
 			if($populate instanceof AgaviParameterHolder) {
 				$action = preg_replace('/#.*$/', '', trim($form->getAttribute('action')));
@@ -269,9 +273,6 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 			// our array for remembering foo[] field's indices
 			$remember = array();
 
-			// an array of all validation incidents; errors inserted for fields or multiple fields will be removed in here
-			$allIncidents = $vm->getIncidents();
-			
 			// build the XPath query
 			$query = 'descendant::' . $this->ns . 'textarea[@name] | descendant::' . $this->ns . 'select[@name] | descendant::' . $this->ns . 'input[@name and (not(@type) or @type="text" or (@type="checkbox" and not(contains(@name, "[]"))) or (@type="checkbox" and contains(@name, "[]") and @value) or @type="radio" or @type="password" or @type="file"';
 			if($cfg['include_hidden_inputs']) {
@@ -472,10 +473,13 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 			}
 
 			// now output the remaining incidents
-			if(!$this->insertErrorMessages($form, $errorMessageRules, $allIncidents)) {
-				$rq->setAttribute('lolz', $allIncidents, 'org.agavi.filter.FormPopulationFilter');
+			if($this->insertErrorMessages($form, $errorMessageRules, $allIncidents)) {
+				$allIncidents = array();
 			}
 		}
+		
+		$rq->setAttribute('orphaned_errors', $allIncidents, 'org.agavi.filter.FormPopulationFilter');
+		
 		if($xhtml) {
 			$fiveTwo = version_compare(PHP_VERSION, '5.2', 'ge');
 			$firstError = null;
@@ -578,6 +582,11 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 	 */
 	protected function insertErrorMessages(DOMElement $element, array $rules, array $incidents)
 	{
+		if(!count($incidents)) {
+			// nothing to do here
+			return true;
+		}
+		
 		$errorMessages = array();
 		foreach($incidents as $incident) {
 			foreach($incident->getErrors() as $error) {

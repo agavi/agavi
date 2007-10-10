@@ -4,7 +4,7 @@ AGAVI CHANGELOG
 0.11.0 RC6 (September ??, 2007)
 
 ADD: __sleep() and __wakeup() magic methods for AgaviModel to prevent Context serialization (#581) (David)
-ADD: Ability to insert error messages into forms automatically using FormPopulationFilter (#303) (David)
+ADD: Ability to insert error messages into forms automatically using FormPopulationFilter (#303) (David, Ross Lawley)
 ADD: AgaviWebResponse::unsetCookie() (#577) (David, Ross Lawley)
 ADD: AgaviDoctrineDatabase (#381) (David, Ross Lawley)
 ADD: Support for error class name maps in FormPopulationFilter (#575) (David)
