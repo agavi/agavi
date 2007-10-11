@@ -99,7 +99,7 @@
 		<mkdir dir="${app.dir}/lib/model"/>
 		<property name="templates.dir.current" value="${templates.dir.default}"  override="true"  />
 		<available file="${templates.dir}/defaults/base/ProjectBaseModel.class.php.tmpl" property="templates.dir.current" value="${templates.dir}" />
-		<copy file="${templates.dir.current}/defaults/base/ProjectBaseModel.class.php.tmpl" tofile="${app.dir}/lib/action/ProjectBaseModel.class.php" />
+		<copy file="${templates.dir.current}/defaults/base/ProjectBaseModel.class.php.tmpl" tofile="${app.dir}/lib/model/ProjectBaseModel.class.php" />
 
 		<mkdir dir="${app.dir}/lib/view"/>
 		<property name="templates.dir.current" value="${templates.dir.default}"  override="true"  />
