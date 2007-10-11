@@ -14,6 +14,7 @@ class DCHTestDatabase
 class DatabaseConfigHandlerTest extends ConfigHandlerTestBase
 {
 	protected $databases;
+	protected $defaultDatabaseName;
 
 	public function setUp()
 	{
@@ -34,7 +35,7 @@ class DatabaseConfigHandlerTest extends ConfigHandlerTestBase
 		);
 		$this->assertSame($params_ex, $this->databases['test1']->params);
 
-		$this->assertReference($this->databases['test1'], $this->databases['default']);
+		$this->assertReference($this->databases['test1'], $this->databases[$this->defaultDatabaseName]);
 	}
 
 	public function testOverwrite()

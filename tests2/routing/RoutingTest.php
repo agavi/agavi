@@ -7,7 +7,7 @@ class SampleRouting extends AgaviRouting
 		$this->input = $input;
 	}
 
-	public function loadConfig($cfg, $ctx = null)
+	public function loadTestConfig($cfg, $ctx = null)
 	{
 		include(AgaviConfigCache::checkConfig($cfg, $ctx));
 	}
@@ -35,7 +35,7 @@ class RoutingTest extends AgaviTestCase
 	public function testSimple()
 	{
 		$r = $this->_r;
-		$r->loadConfig(AgaviConfig::get('core.config_dir') . '/tests/routing_simple.xml', 'test1');
+		$r->loadTestConfig(AgaviConfig::get('core.config_dir') . '/tests/routing_simple.xml', 'test1');
 
 		$rq = $r->getContext()->getRequest();
 		$rd = $rq->getRequestData();
@@ -51,7 +51,7 @@ class RoutingTest extends AgaviTestCase
 		$this->assertEquals('action3', $rd->getParameter('action'));
 		$this->assertEquals('child2', $rd->getParameter('bar'));
 
-		$r->loadConfig(AgaviConfig::get('core.config_dir') . '/tests/routing_simple.xml', 'test1');
+		$r->loadTestConfig(AgaviConfig::get('core.config_dir') . '/tests/routing_simple.xml', 'test1');
 
 		$rd->clearParameters();
 		$r->setInput('/anchor/child4/nextChild');
@@ -62,7 +62,7 @@ class RoutingTest extends AgaviTestCase
 		$this->assertEquals('action4', $rd->getParameter('action'));
 		$this->assertEquals('nextChild', $rd->getParameter('bar'));
 
-		$r->loadConfig(AgaviConfig::get('core.config_dir') . '/tests/routing_simple.xml', 'test1');
+		$r->loadTestConfig(AgaviConfig::get('core.config_dir') . '/tests/routing_simple.xml', 'test1');
 
 		$rd->clearParameters();
 		$r->setInput('/anchor/child4/');
@@ -83,7 +83,7 @@ class RoutingTest extends AgaviTestCase
 		$this->assertEquals(array('/anchor/child4/'), array_slice($r->gen('t1child4', array(), array('omit_defaults' => true)), 0, 1));
 		$this->assertEquals(array('/anchor/foo/bar'), array_slice($r->gen('t1child4', array('foo' => 'foo', 'bar' => 'bar')), 0, 1));
 
-		$r->loadConfig(AgaviConfig::get('core.config_dir') . '/tests/routing_simple.xml', 'test2');
+		$r->loadTestConfig(AgaviConfig::get('core.config_dir') . '/tests/routing_simple.xml', 'test2');
 
 		$rd->clearParameters();
 		$r->setInput('/parent/category1/MACHINE/');
@@ -93,7 +93,7 @@ class RoutingTest extends AgaviTestCase
 		$this->assertEquals('category1', $rd->getParameter('category'));
 		$this->assertEquals('MACHINE', $rd->getParameter('machine'));
 
-		$r->loadConfig(AgaviConfig::get('core.config_dir') . '/tests/routing_simple.xml', 'test2');
+		$r->loadTestConfig(AgaviConfig::get('core.config_dir') . '/tests/routing_simple.xml', 'test2');
 		$rd->clearParameters();
 		$r->setInput('/parent/MACHINE/');
 		$r->execute();
@@ -101,7 +101,7 @@ class RoutingTest extends AgaviTestCase
 		$this->assertEquals(3, count($rd->getParameters()));
 		$this->assertEquals('MACHINE', $rd->getParameter('machine'));
 
-		$r->loadConfig(AgaviConfig::get('core.config_dir') . '/tests/routing_simple.xml', 'test2');
+		$r->loadTestConfig(AgaviConfig::get('core.config_dir') . '/tests/routing_simple.xml', 'test2');
 		$rd->clearParameters();
 		$r->setInput('/parent/MACHINE');
 		$r->execute();
@@ -119,19 +119,19 @@ class RoutingTest extends AgaviTestCase
 		$r = $this->_r;
 
 		try {
-			$r->loadConfig(AgaviConfig::get('core.config_dir') . '/tests/routing_errors.xml', 'SameNameDirectChild');
+			$r->loadTestConfig(AgaviConfig::get('core.config_dir') . '/tests/routing_errors.xml', 'SameNameDirectChild');
 			$this->fail('Expected AgaviException not thrown for declaring direct childs with the same name!');
 		} catch(AgaviException $e) {
 		}
 
 		try {
-			$r->loadConfig(AgaviConfig::get('core.config_dir') . '/tests/routing_errors.xml', 'SameNameIndirectChild');
+			$r->loadTestConfig(AgaviConfig::get('core.config_dir') . '/tests/routing_errors.xml', 'SameNameIndirectChild');
 			$this->fail('Expected AgaviException not thrown for declaring indirect childs with the same name!');
 		} catch(AgaviException $e) {
 		}
 
 		try {
-			$r->loadConfig(AgaviConfig::get('core.config_dir') . '/tests/routing_errors.xml', 'SameNameInOverwrittenHierarchy');
+			$r->loadTestConfig(AgaviConfig::get('core.config_dir') . '/tests/routing_errors.xml', 'SameNameInOverwrittenHierarchy');
 			$this->fail('Expected AgaviException not thrown for declaring childs with the same name when inserting a new child hierarchy on overwriting a pattern!');
 		} catch(AgaviException $e) {
 		}
