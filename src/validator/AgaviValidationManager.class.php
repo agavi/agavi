@@ -273,7 +273,9 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 			switch($v_ret) {
 				case AgaviValidator::SUCCESS:
 					continue 2;
-				case AgaviValidator::NONE:
+				case AgaviValidator::INFO:
+					continue 2;
+				case AgaviValidator::SILENT:
 					continue 2;
 				case AgaviValidator::NOTICE:
 					continue 2;
@@ -461,7 +463,7 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 					$ec = max($ec, $result[1]);
 				}
 			}
-			if($hasInSource && $ec <= AgaviValidator::SUCCESS) {
+			if($hasInSource && $ec <= AgaviValidator::INFO) {
 				$names[] = $name;
 			}
 		}

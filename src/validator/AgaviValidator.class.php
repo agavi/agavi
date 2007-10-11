@@ -56,27 +56,35 @@ abstract class AgaviValidator extends AgaviParameterHolder
 
 	/**
 	 * validator error severity (validator failed but without impact on result
+	 * of whole validation process, completely silent and does not remove the 
+	 * "failed" parameters from the input parameters)
+	 */
+	const INFO = 100;
+	
+	/**
+	 * validator error severity (validator failed but without impact on result
 	 * of whole validation process and completely silent)
 	 */
-	const NONE = 1;
-
+	const SILENT = 200;
+	const NONE = AgaviValidator::SILENT;
+	
 	/**
 	 * validator error severity (validator failed but without impact on result
 	 * of whole validation process)
 	 */
-	const NOTICE = 2;
+	const NOTICE = 300;
 
 	/**
 	 * validation error severity (validator failed but validation process
 	 * continues)
 	 */
-	const ERROR = 3;
+	const ERROR = 400;
 
 	/**
 	 * validation error severty (validator failed and validation process will
 	 * be aborted)
 	 */
-	const CRITICAL = 4;
+	const CRITICAL = 500;
 
 	/**
 	 * @var        AgaviContext An AgaviContext instance.
@@ -127,6 +135,11 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 * @var        AgaviValidationIncident The current incident.
 	 */
 	protected $incident = null;
+	
+	/**
+	 * @var        array The affected arguments of this validation run.
+	 */
+	protected $affectedArguments = array();
 
 	/**
 	 * Returns the base path of this validator.
@@ -387,6 +400,20 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	{
 		return $this->arguments;
 	}
+	
+	/**
+	 * Sets the arguments which should be flagged with the result of the 
+	 * validator
+	 * 
+	 * @param      array A list of (absolute) argument names
+	 * 
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	protected function setAffectedArguments($arguments)
+	{
+		$this->affectedArguments = $arguments;
+	}
 
 	/**
 	 * Returns whether all arguments are set in the validation input parameters.
@@ -457,17 +484,30 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 * @param      string The name of the error parameter to fetch the message 
 	 *                    from.
 	 * @param      string|array The arguments which are affected by this error.
-	 *                          If null is given it will affect all fields
+	 *                          If null is given it will affect all fields.
+	 * @param      boolean Whether the argument names in $affectedArgument are
+	 *                     relative or absolute.
+	 * @param      boolean Whether to set the affected fields of the validator
+	 *                     to the $affectedArguments
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	protected function throwError($index = null, $affectedArgument = null)
+	protected function throwError($index = null, $affectedArgument = null, $argumentsRelative = false, $setAffected = false)
 	{
 		if($affectedArgument === null) {
 			$affectedArguments = $this->getFullArgumentNames();
 		} else {
 			$affectedArguments = (array) $affectedArgument;
+			if($argumentsRelative) {
+				foreach($affectedArguments as &$arg) {
+					$arg = $this->curBase->pushRetNew($arg)->__toString()
+				}
+			}
+		}
+		
+		if($setAffected) {
+			$this->affectedArguments = $affectedArguments;
 		}
 
 		$error = $this->getErrorMessage($index);
@@ -548,7 +588,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 				return self::SUCCESS;
 			}
 
-			$fieldnames = $this->getFullArgumentNames();
+			$this->affectedArguments = $this->getFullArgumentNames();
 
 			$result = self::SUCCESS;
 			$errorCode = self::mapErrorCode($this->getParameter('severity', 'error'));
@@ -571,7 +611,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 
 			if($this->parentContainer !== null) {
 				if($result != self::NOT_PROCESSED) {
-					foreach($fieldnames as $fieldname) {
+					foreach($this->affectedArguments as $fieldname) {
 						$this->parentContainer->addFieldResult($this, $fieldname, $result);
 					}
 				}
@@ -701,7 +741,10 @@ abstract class AgaviValidator extends AgaviParameterHolder
 			case 'notice':
 				return self::NOTICE;
 			case 'none':
-				return self::NONE;
+			case 'silent':
+				return self::SILENT;
+			case 'info':
+				return self::INFO;
 			default:
 				throw new AgaviValidatorException('unknown error code: '.$code);
 		}
