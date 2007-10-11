@@ -570,8 +570,10 @@ abstract class AgaviValidator extends AgaviParameterHolder
 			}
 
 			if($this->parentContainer !== null) {
-				foreach($fieldnames as $fieldname) {
-					$this->parentContainer->addFieldResult($this, $fieldname, $result);
+				if($result != self::NOT_PROCESSED) {
+					foreach($fieldnames as $fieldname) {
+						$this->parentContainer->addFieldResult($this, $fieldname, $result);
+					}
 				}
 
 				if($this->incident) {
