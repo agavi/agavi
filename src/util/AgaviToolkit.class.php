@@ -146,32 +146,36 @@ final class AgaviToolkit
 		if(is_file($path)) {
 			@unlink($path);
 		} else {
-			foreach(new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path), RecursiveIteratorIterator::CHILD_FIRST) as $iterator) {
-				// omg, thanks spl for always using forward slashes ... even on windows
-				$pathname = str_replace('/', DIRECTORY_SEPARATOR, str_replace('\\', DIRECTORY_SEPARATOR, $iterator->getPathname()));
-				$continue = false;
-				if(in_array($iterator->getFilename(), $ignores)) {
-					$continue = true;
-				} else {
-					foreach($ignores as $ignore) {
-						if(strpos($pathname, DIRECTORY_SEPARATOR . $ignore . DIRECTORY_SEPARATOR) !== false) {
-							$continue = true;
-							break;
-						} elseif(strrpos($pathname, DIRECTORY_SEPARATOR . $ignore) == (strlen($pathname) - strlen(DIRECTORY_SEPARATOR . $ignore))) {
-							// if we hit the directory itself it wont include a trailing /
-							$continue = true;
-							break;
+			try {
+				foreach(new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path), RecursiveIteratorIterator::CHILD_FIRST) as $iterator) {
+					// omg, thanks spl for always using forward slashes ... even on windows
+					$pathname = str_replace('/', DIRECTORY_SEPARATOR, str_replace('\\', DIRECTORY_SEPARATOR, $iterator->getPathname()));
+					$continue = false;
+					if(in_array($iterator->getFilename(), $ignores)) {
+						$continue = true;
+					} else {
+						foreach($ignores as $ignore) {
+							if(strpos($pathname, DIRECTORY_SEPARATOR . $ignore . DIRECTORY_SEPARATOR) !== false) {
+								$continue = true;
+								break;
+							} elseif(strrpos($pathname, DIRECTORY_SEPARATOR . $ignore) == (strlen($pathname) - strlen(DIRECTORY_SEPARATOR . $ignore))) {
+								// if we hit the directory itself it wont include a trailing /
+								$continue = true;
+								break;
+							}
 						}
 					}
+					if($continue) {
+						continue;
+					}
+					if($iterator->isDir()) {
+						@rmdir($pathname);
+					} elseif($iterator->isFile()) {
+						@unlink($pathname);
+					}
 				}
-				if($continue) {
-					continue;
-				}
-				if($iterator->isDir()) {
-					@rmdir($pathname);
-				} elseif($iterator->isFile()) {
-					@unlink($pathname);
-				}
+			} catch(Exception $e) {
+				// ignore all exceptions in case the path didn't exist anymore
 			}
 		}
 	}
