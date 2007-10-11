@@ -113,17 +113,14 @@ class AgaviWebRouting extends AgaviRouting
 			if(isset($_SERVER['SERVER_SOFTWARE']) && strpos($_SERVER['SERVER_SOFTWARE'], 'Apache/2.2') !== false) {
 				// multiple consecutive slashes got lost in our input thanks to an apache bug
 				// let's fix that
-				// var_dump($this->input, $ru['query'], rawurldecode($_SERVER['REQUEST_URI']), '--------------------');
 				$cqs = preg_replace('#/{2,}#', '/', rawurldecode($ru['query']));
 				$cru = preg_replace('#/{2,}#', '/', rawurldecode($_SERVER['REQUEST_URI']));
 				$tmp = preg_replace('/' . preg_quote($this->input . (($cqs != '') ? '?' . $cqs : ''), '/') . '$/D', '', $cru);
-				// var_dump($cqs, $cru, $tmp, '====================');
 				$input = preg_replace('/^' . preg_quote($tmp, '/') . '/', '', $_SERVER['REQUEST_URI']);
 				if($ru['query']) {
 					$input = preg_replace('/' . preg_quote('?' . $ru['query'], '/') . '$/D', '', $input);
 				}
 				$this->input = rawurldecode($input);
-				// var_dump($this->input, '====================');
 			}
 
 			if(!isset($_SERVER['SERVER_SOFTWARE']) || strpos($_SERVER['SERVER_SOFTWARE'], 'Apache') === false) {
@@ -133,7 +130,6 @@ class AgaviWebRouting extends AgaviRouting
 
 			$xrup = rawurldecode($ru['path']);
 			$this->basePath = $this->prefix = preg_replace('/' . preg_quote($this->input, '/') . '$/D', '', rawurldecode($ru['path']));
-			// var_dump($this->input, $xrup, $this->prefix, '');
 
 			// that was easy. now clean up $_GET and the Request
 			$parsedRuQuery = $parsedInput = '';
