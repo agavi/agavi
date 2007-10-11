@@ -310,11 +310,16 @@ final class AgaviToolkit
 	 */
 	public static function expandDirectives($value)
 	{
-		return preg_replace_callback(
-			'/\%([\w\.]+?)\%/',
-			array('AgaviToolkit', 'expandDirectivesCallback'),
-			$value
-		);
+		do {
+			$oldvalue = $value;
+			$value = preg_replace_callback(
+				'/\%([\w\.]+?)\%/',
+				array('AgaviToolkit', 'expandDirectivesCallback'),
+				$value
+			);
+		} while($oldvalue != $value);
+		
+		return $value;
 	}
 	
 	/**
