@@ -112,7 +112,21 @@ class AgaviValidatorConfigHandler extends AgaviConfigHandler
 			}
 		}
 
-		return $this->generate($code);
+		$newCode = array();
+		if(isset($code[''])) {
+			$newCode = $code[''];
+			unset($code['']);
+		}
+
+		foreach($code as $method => $codes) {
+			$newCode[] = 'if($method == ' . var_export($method, true) . ') {';
+			foreach($codes as $line) {
+				$newCode[] = $line;
+			}
+			$newCode[] = '}';
+		}
+
+		return $this->generate($newCode);
 	}
 
 	/**
@@ -193,9 +207,16 @@ class AgaviValidatorConfigHandler extends AgaviConfigHandler
 			$stdRequired = $parameters['required'] = AgaviToolkit::literalize($validator->getAttribute('required'));
 		}
 
-		$code[$name] = sprintf('$%s = new %s();', $name, $class) .
-										sprintf('$%s->initialize($this->getContext(), %s, %s, %s);', $name, var_export($parameters, true), var_export($arguments, true), var_export($errors, true)) . 
-										sprintf('$%s->addChild($%s);', $parent, $name);
+		$methods = array('');
+		if(trim($stdMethod)) {
+			$methods = preg_split('/[\s]+/', $stdMethod);
+		}
+
+		foreach($methods as $method) {
+			$code[$method][$name] = sprintf('$%s = new %s();', $name, $class) .
+											sprintf('$%s->initialize($this->getContext(), %s, %s, %s);', $name, var_export($parameters, true), var_export($arguments, true), var_export($errors, 	true)) . 
+											sprintf('$%s->addChild($%s);', $parent, $name);
+		}
 
 		if(isset($validator->validators)) {
 			$childSeverity = $validator->validators->getAttribute('severity', $stdSeverity);
