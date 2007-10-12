@@ -12,7 +12,7 @@
 
 # If using svn, AGAVI_INSTALLATION should point to the full path of your src dir. 
 # eg: if agavi is checked out to /var/www/agavi, this should be set to /var/www/agavi/src
-AGAVI_INSTALLATION="/usr/local/share/pear/agavi"
+AGAVI_INSTALLATION="@PEAR-DIR@/agavi"
 
 # Change this to reflect your environment if the default value doesn't work
 PHING_COMMAND="phing"
