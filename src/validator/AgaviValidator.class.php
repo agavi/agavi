@@ -501,7 +501,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 			$affectedArguments = (array) $affectedArgument;
 			if($argumentsRelative) {
 				foreach($affectedArguments as &$arg) {
-					$arg = $this->curBase->pushRetNew($arg)->__toString()
+					$arg = $this->curBase->pushRetNew($arg)->__toString();
 				}
 			}
 		}
