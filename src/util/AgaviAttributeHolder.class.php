@@ -78,7 +78,7 @@ abstract class AgaviAttributeHolder extends AgaviParameterHolder
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.9.0
 	 */
-	public function & getAttribute($name, $ns = null, $default = null)
+	public function &getAttribute($name, $ns = null, $default = null)
 	{
 		if($ns === null) {
 			$ns = $this->defaultNamespace;
@@ -125,7 +125,7 @@ abstract class AgaviAttributeHolder extends AgaviParameterHolder
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function & getAttributes($ns = null)
+	public function &getAttributes($ns = null)
 	{
 		if($ns === null) {
 			$ns = $this->defaultNamespace;
@@ -151,7 +151,7 @@ abstract class AgaviAttributeHolder extends AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function & getAttributeNamespace($ns = null)
+	public function &getAttributeNamespace($ns = null)
 	{
 		if($ns === null) {
 			$ns = $this->defaultNamespace;
@@ -230,7 +230,7 @@ abstract class AgaviAttributeHolder extends AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function & removeAttribute($name, $ns = null)
+	public function &removeAttribute($name, $ns = null)
 	{
 		if($ns === null) {
 			$ns = $this->defaultNamespace;

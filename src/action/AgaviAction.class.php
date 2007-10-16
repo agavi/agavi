@@ -202,7 +202,7 @@ abstract class AgaviAction
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
-	public function & getAttribute($name, $default = null)
+	public function &getAttribute($name, $default = null)
 	{
 		return $this->container->getAttribute($name, null, $default);
 	}
@@ -224,7 +224,7 @@ abstract class AgaviAction
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function & getAttributes()
+	public function &getAttributes()
 	{
 		return $this->container->getAttributes();
 	}
@@ -246,7 +246,7 @@ abstract class AgaviAction
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
-	public function & removeAttribute($name)
+	public function &removeAttribute($name)
 	{
 		return $this->container->removeAttribute($name);
 	}

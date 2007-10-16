@@ -349,7 +349,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	protected function & getData($paramName)
+	protected function &getData($paramName)
 	{
 		$paramType = $this->getParameter('source');
 		$array =& $this->validationParameters->getAll($paramType);
