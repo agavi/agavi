@@ -1,6 +1,13 @@
 AGAVI CHANGELOG
 ===============
 
+0.11.0 (October ??, 2007)
+
+ADD: Pass on "is_slot" flag in View::createForwardContainer() (#591) (David)
+
+CHG: Use gmdate() in config handlers to prevent strict notices about timezone settings (#590) (David)
+
+
 0.11.0 RC6 (October 12, 2007)
 
 ADD: Allow setting of the affected arguments in a validator via throwError() (#568) (Dominik)
