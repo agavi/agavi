@@ -96,6 +96,11 @@
 		<available file="${templates.dir}/defaults/base/ProjectBaseAction.class.php.tmpl" property="templates.dir.current" value="${templates.dir}" />
 		<copy file="${templates.dir.current}/defaults/base/ProjectBaseAction.class.php.tmpl" tofile="${app.dir}/lib/action/ProjectBaseAction.class.php" />
 
+		<mkdir dir="${app.dir}/lib/model"/>
+		<property name="templates.dir.current" value="${templates.dir.default}"  override="true"  />
+		<available file="${templates.dir}/defaults/base/ProjectBaseModel.class.php.tmpl" property="templates.dir.current" value="${templates.dir}" />
+		<copy file="${templates.dir.current}/defaults/base/ProjectBaseModel.class.php.tmpl" tofile="${app.dir}/lib/model/ProjectBaseModel.class.php" />
+
 		<mkdir dir="${app.dir}/lib/view"/>
 		<property name="templates.dir.current" value="${templates.dir.default}"  override="true"  />
 		<available file="${templates.dir}/defaults/base/ProjectBaseView.class.php.tmpl" property="templates.dir.current" value="${templates.dir}" />
@@ -198,6 +203,7 @@
 		
 
 		<!-- WELCOME action-->
+		<property name="templates.dir.current" value="${templates.dir.default}"  override="true" />
 		<available file="${templates.dir}/defaults/actions/WelcomeToAgaviAction.class.php.tmpl" property="templates.dir.current" value="${templates.dir}" />
 		<copy file="${templates.dir.current}/defaults/actions/WelcomeToAgaviAction.class.php.tmpl" tofile="${app.dir}/modules/${module.default}/actions/WelcomeToAgaviAction.class.php" overwrite="false">
 			<filterchain>
@@ -209,6 +215,7 @@
 		</copy>
 
 		<!-- WELCOME view-->
+		<property name="templates.dir.current" value="${templates.dir.default}"  override="true" />
 		<available file="${templates.dir}/defaults/views/WelcomeToAgaviSuccessView.class.php.tmpl" property="templates.dir.current" value="${templates.dir}" />
 		<copy file="${templates.dir.current}/defaults/views/WelcomeToAgaviSuccessView.class.php.tmpl" tofile="${app.dir}/modules/${module.default}/views/WelcomeToAgaviSuccessView.class.php" overwrite="false">
 			<filterchain>
@@ -221,12 +228,15 @@
 		</copy>
 
 		<!-- WELCOME template -->
+		<property name="templates.dir.current" value="${templates.dir.default}"  override="true" />
 		<available file="${templates.dir}/defaults/templates/WelcomeToAgaviSuccess${template.extension}.tmpl" property="templates.dir.current" value="${templates.dir}" />
 		<copy file="${templates.dir.current}/defaults/templates/WelcomeToAgaviSuccess${template.extension}.tmpl" tofile="${app.dir}/modules/${module.default}/templates/WelcomeToAgaviSuccess${template.extension}" overwrite="false" />
 		
 		<!-- WELCOME images -->
+		<property name="templates.dir.current" value="${templates.dir.default}"  override="true" />
 		<available file="${templates.dir}/defaults/data/plant.png" property="templates.dir.current" value="${templates.dir}" />
 		<copy file="${templates.dir.current}/defaults/data/plant.png" tofile="${project.dir}/pub/plant.png" /> 
+		<property name="templates.dir.current" value="${templates.dir.default}"  override="true" />
 		<available file="${templates.dir}/defaults/data/bg.png" property="templates.dir.current" value="${templates.dir}" />
 		<copy file="${templates.dir.current}/defaults/data/bg.png" tofile="${project.dir}/pub/bg.png" /> 
 		
@@ -240,6 +250,7 @@
 		<subActionName property="action.404" outputPropertyPrefix="404."/>
 
 		<!-- 404 action-->
+		<property name="templates.dir.current" value="${templates.dir.default}"  override="true" />
 		<available file="${templates.dir}/defaults/actions/Error404Action.class.php.tmpl" property="templates.dir.current" value="${templates.dir}" />
 		<copy file="${templates.dir.current}/defaults/actions/Error404Action.class.php.tmpl" tofile="${app.dir}/modules/${module.404}/actions/${404.actionPath}Action.class.php" overwrite="false">
 			<filterchain>
@@ -251,6 +262,7 @@
 		</copy>
 
 		<!-- 404 view-->
+		<property name="templates.dir.current" value="${templates.dir.default}"  override="true" />
 		<available file="${templates.dir}/defaults/views/Error404SuccessView.class.php.tmpl" property="templates.dir.current" value="${templates.dir}" />
 		<copy file="${templates.dir.current}/defaults/views/Error404SuccessView.class.php.tmpl" tofile="${app.dir}/modules/${module.404}/views/${404.actionPath}SuccessView.class.php" overwrite="false">
 			<filterchain>
@@ -263,6 +275,7 @@
 		</copy>
 
 		<!-- 404 template -->
+		<property name="templates.dir.current" value="${templates.dir.default}"  override="true" />
 		<available file="${templates.dir}/defaults/templates/Error404Success${template.extension}.tmpl" property="templates.dir.current" value="${templates.dir}" />
 		<copy file="${templates.dir.current}/defaults/templates/Error404Success${template.extension}.tmpl" tofile="${app.dir}/modules/${module.404}/templates/${404.actionPath}Success${template.extension}" overwrite="false" />
 
@@ -275,6 +288,7 @@
 		<subActionName property="action.login" outputPropertyPrefix="login."/>
 
 		<!-- Login action-->
+		<property name="templates.dir.current" value="${templates.dir.default}"  override="true" />
 		<available file="${templates.dir}/defaults/actions/LoginAction.class.php.tmpl" property="templates.dir.current" value="${templates.dir}" />
 		<copy file="${templates.dir.current}/defaults/actions/LoginAction.class.php.tmpl" tofile="${app.dir}/modules/${module.login}/actions/${login.actionPath}Action.class.php" overwrite="false">
 			<filterchain>
@@ -294,6 +308,7 @@
 		<subActionName property="action.secure" outputPropertyPrefix="secure."/>
 
 		<!-- Secure action-->
+		<property name="templates.dir.current" value="${templates.dir.default}"  override="true" />
 		<available file="${templates.dir}/defaults/actions/SecureAction.class.php.tmpl" property="templates.dir.current" value="${templates.dir}" />
 		<copy file="${templates.dir.current}/defaults/actions/SecureAction.class.php.tmpl" tofile="${app.dir}/modules/${module.secure}/actions/${secure.actionPath}Action.class.php" overwrite="false">
 			<filterchain>
@@ -305,6 +320,7 @@
 		</copy>
 
 		<!-- Secure view-->
+		<property name="templates.dir.current" value="${templates.dir.default}"  override="true" />
 		<available file="${templates.dir}/defaults/views/SecureSuccessView.class.php.tmpl" property="templates.dir.current" value="${templates.dir}" />
 		<copy file="${templates.dir.current}/defaults/views/SecureSuccessView.class.php.tmpl" tofile="${app.dir}/modules/${module.secure}/views/${secure.actionPath}SuccessView.class.php" overwrite="false">
 			<filterchain>
@@ -317,6 +333,7 @@
 		</copy>
 
 		<!-- Secure template -->
+		<property name="templates.dir.current" value="${templates.dir.default}"  override="true" />
 		<available file="${templates.dir}/defaults/templates/SecureSuccess${template.extension}.tmpl" property="templates.dir.current" value="${templates.dir}" />
 		<copy file="${templates.dir.current}/defaults/templates/SecureSuccess${template.extension}.tmpl" tofile="${app.dir}/modules/${module.secure}/templates/${secure.actionPath}Success${template.extension}" overwrite="false" />
 
@@ -329,6 +346,7 @@
 		<subActionName property="action.disabled" outputPropertyPrefix="disabled."/>
 
 		<!-- Disabled action-->
+		<property name="templates.dir.current" value="${templates.dir.default}"  override="true" />
 		<available file="${templates.dir}/defaults/actions/ModuleDisabledAction.class.php.tmpl" property="templates.dir.current" value="${templates.dir}" />
 		<copy file="${templates.dir.current}/defaults/actions/ModuleDisabledAction.class.php.tmpl" tofile="${app.dir}/modules/${module.disabled}/actions/${disabled.actionPath}Action.class.php" overwrite="false">
 			<filterchain>
@@ -340,6 +358,7 @@
 		</copy>
 
 		<!-- Disabled view-->
+		<property name="templates.dir.current" value="${templates.dir.default}"  override="true" />
 		<available file="${templates.dir}/defaults/views/ModuleDisabledSuccessView.class.php.tmpl" property="templates.dir.current" value="${templates.dir}" />
 		<copy file="${templates.dir.current}/defaults/views/ModuleDisabledSuccessView.class.php.tmpl" tofile="${app.dir}/modules/${module.disabled}/views/${disabled.actionPath}SuccessView.class.php" overwrite="false">
 			<filterchain>
@@ -352,6 +371,7 @@
 		</copy>
 
 		<!-- Disabled template -->
+		<property name="templates.dir.current" value="${templates.dir.default}"  override="true" />
 		<available file="${templates.dir}/defaults/templates/ModuleDisabledSuccess${template.extension}.tmpl" property="templates.dir.current" value="${templates.dir}" />
 		<copy file="${templates.dir.current}/defaults/templates/ModuleDisabledSuccess${template.extension}.tmpl" tofile="${app.dir}/modules/${module.disabled}/templates/${disabled.actionPath}Success${template.extension}" overwrite="false" />
 
@@ -364,6 +384,7 @@
 		<subActionName property="action.unavailable" outputPropertyPrefix="unavailable."/>
 
 		<!-- Unavailable action-->
+		<property name="templates.dir.current" value="${templates.dir.default}"  override="true" />
 		<available file="${templates.dir}/defaults/actions/UnavailableAction.class.php.tmpl" property="templates.dir.current" value="${templates.dir}" />
 		<copy file="${templates.dir.current}/defaults/actions/UnavailableAction.class.php.tmpl" tofile="${app.dir}/modules/${module.unavailable}/actions/${unavailable.actionPath}Action.class.php" overwrite="false">
 			<filterchain>
@@ -375,6 +396,7 @@
 		</copy>
 
 		<!-- Unavailable view-->
+		<property name="templates.dir.current" value="${templates.dir.default}"  override="true" />
 		<available file="${templates.dir}/defaults/views/UnavailableSuccessView.class.php.tmpl" property="templates.dir.current" value="${templates.dir}" />
 		<copy file="${templates.dir.current}/defaults/views/UnavailableSuccessView.class.php.tmpl" tofile="${app.dir}/modules/${module.unavailable}/views/${unavailable.actionPath}SuccessView.class.php" overwrite="false">
 			<filterchain>
@@ -387,10 +409,12 @@
 		</copy>
 
 		<!-- Unavailable template -->
+		<property name="templates.dir.current" value="${templates.dir.default}"  override="true" />
 		<available file="${templates.dir}/defaults/templates/UnavailableSuccess${template.extension}.tmpl" property="templates.dir.current" value="${templates.dir}" />
 		<copy file="${templates.dir.current}/defaults/templates/UnavailableSuccess${template.extension}.tmpl" tofile="${app.dir}/modules/${module.unavailable}/templates/${unavailable.actionPath}Success${template.extension}" overwrite="false" />
 
 <!-- settings.xml -->
+		<property name="templates.dir.current" value="${templates.dir.default}"  override="true" />
 		<available file="${templates.dir}/config/settings.xml.tmpl" property="templates.dir.current" value="${templates.dir}" />
 		<copy file="${templates.dir.current}/config/settings.xml.tmpl" tofile="${app.dir}/config/settings.xml" overwrite="false">
 			<filterchain>

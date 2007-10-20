@@ -3,6 +3,7 @@
 	<configuration>
 		
 		<autoload name="ProjectBaseAction">%core.lib_dir%/action/ProjectBaseAction.class.php</autoload>
+		<autoload name="ProjectBaseModel">%core.lib_dir%/model/ProjectBaseModel.class.php</autoload>
 		<autoload name="ProjectBaseView">%core.lib_dir%/view/ProjectBaseView.class.php</autoload>
 		
 	</configuration>

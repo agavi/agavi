@@ -525,7 +525,6 @@ class AgaviDateFormat
 		}
 	}
 
-
 	/**
 	 * Parses a string into an calendar object. Note that this doesn't fallback to
 	 * the english locale.
@@ -571,7 +570,6 @@ class AgaviDateFormat
 				break;
 			}
 
-
 			$token = $this->tokenList[$i];
 			$type = $this->getTokenType($token);
 			// this and the next token are numbers
@@ -583,7 +581,6 @@ class AgaviDateFormat
 					++$i;
 					$unprocessedTokens[] = $this->tokenList[$i];
 				} while($i + 1 < $tlCount && $this->getTokenType($this->tokenList[$i + 1]) == 'number');
-
 
 				// retrieve the amount of number characters at our current parse position
 				$numberLen = strspn($dateString, '0123456789', $datePos);
@@ -668,7 +665,6 @@ class AgaviDateFormat
 						$number += 2000;
 					}
 				}
-
 
 				if(self::T_QUARTER == $token[0] || self::T_SA_QUARTER == $token[0]) {
 					// only set the quarter if the date hasn't been set on the calendar object
@@ -791,7 +787,6 @@ class AgaviDateFormat
 						$cal->setTimeZone($tz);
 						break;
 
-
 					case self::T_MONTH:
 					case self::T_SA_MONTH:
 						if($count == 3) {
@@ -809,7 +804,6 @@ class AgaviDateFormat
 						}
 
 						break;
-
 
 					case self::T_QUARTER:
 					case self::T_SA_QUARTER:
@@ -842,10 +836,8 @@ class AgaviDateFormat
 			}
 		}
 
-
 		return $cal;
 	}
-
 
 	/**
 	 * Returns the date field which is associated with the given token.

@@ -65,7 +65,7 @@ class AgaviPostgresqlDatabase extends AgaviDatabase
 		$method = $this->getParameter('method', 'normal');
 
 		// get parameters
-		switch ($method) {
+		switch($method) {
 			case 'normal':
 				// get parameters normally
 				$database = $this->getParameter('database');

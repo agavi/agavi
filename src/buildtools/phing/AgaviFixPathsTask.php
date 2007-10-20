@@ -25,12 +25,14 @@
  *
  * @version    $Id$
  */
-class AgaviFixPathsTask extends Task {
-	private $base,
-					$depth=5,
-					$newproject = false,
-					$parseModulePath = false,
-					$testing = false;
+class AgaviFixPathsTask extends Task
+{
+	private
+		$base,
+		$depth = 5,
+		$newproject = false,
+		$parseModulePath = false,
+		$testing = false;
 
 	private $appdir = 'app';
 
@@ -38,40 +40,48 @@ class AgaviFixPathsTask extends Task {
 	{
 		$this->appdir = $appdir;
 	}
-	public function setBase($base) {
+	
+	public function setBase($base)
+	{
 		$this->base = $base;
 	}
 	
-	public function setDepth($depth) {
+	public function setDepth($depth)
+	{
 		$this->depth = (int) $depth;
 	}
 	
-	public function setDefaultmodule($boolean) {
+	public function setDefaultmodule($boolean)
+	{
 		$this->parseModulePath = (boolean) $boolean;
 	}
 	
-	public function setNew($boolean) {
+	public function setNew($boolean)
+	{
 		$this->newproject = (boolean) $boolean;
 	}
 	
-	public function setTesting($boolean) {
+	public function setTesting($boolean)
+	{
 		$this->testing = (boolean) $boolean;
 	}
 	
-	private function getModule() {
+	private function getModule()
+	{
 		$module = '';
-		if (preg_match('#/app/modules/(.*?)(/.*)?$#', str_replace('\\', '/', $this->base), $matches)) {
+		if(preg_match('#/app/modules/(.*?)(/.*)?$#', str_replace('\\', '/', $this->base), $matches)) {
 			$module = $matches[1];
 		}
 		return $module;
 	}
 
-	private function getDir($pattern = 'modules') {
-		if($pattern == 'modules')
-		{
+	private function getDir($pattern = 'modules')
+	{
+		if($pattern == 'modules') {
 			$pattern = '/'.$this->appdir.'/'.$pattern;
 		}
-		if ($this->newproject) { 
+		
+		if($this->newproject) { 
 			return realpath($this->base);
 		}
 
@@ -80,11 +90,12 @@ class AgaviFixPathsTask extends Task {
 		$needle = implode('/', array_diff(explode('/', $pattern), explode('/', ($base{0} != '/' ? '/' : '') . $base)));
 
 		preg_match('#(.*?)' . $pattern . '#', $base . '/' . $needle, $matches);
-		if (isset($matches[1]) && file_exists($matches[1] . $pattern)) {
+		
+		if(isset($matches[1]) && file_exists($matches[1] . $pattern)) {
 			return realpath($matches[1]);
 		} else {
 			// above the project root folder
-			if ($this->testing && $pattern != '/src/agavi.php') {
+			if($this->testing && $pattern != '/src/agavi.php') {
 				return $this->getDir('/src/agavi.php');
 			} else {
 				return false;
@@ -92,14 +103,15 @@ class AgaviFixPathsTask extends Task {
 		}
 	} 
 
-	public function main() {
+	public function main()
+	{
 		$pdir = $this->getDir();
-		if ($pdir) {
+		if($pdir) {
 			echo "Project dir: $pdir\n";
 			$this->project->setProperty('project.dir', $pdir);
 			$this->project->setProperty('app.dir', realpath($pdir) . '/' . $this->appdir);
 			$this->project->setProperty('tests.dir', realpath($pdir) . '/tests');
-			if ($this->parseModulePath) {
+			if($this->parseModulePath) {
 				$this->project->setProperty('default.module', $this->getModule());
 			}
 		} else {
@@ -107,4 +119,5 @@ class AgaviFixPathsTask extends Task {
 		}
 	}
 }
+
 ?>

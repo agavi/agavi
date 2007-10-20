@@ -54,16 +54,16 @@ class AgaviConfigHandlersConfigHandler extends AgaviConfigHandler
 		$configurations = $this->orderConfigurations(AgaviConfigCache::parseConfig($config, false, $this->getValidationFile(), $this->parser)->configurations, AgaviConfig::get('core.environment'));
 		
 		// init our data arrays
-		$data = array();
+		$handlers = array();
 		
 		foreach($configurations as $cfg) {
 			// let's do our fancy work
 			foreach($cfg->handlers as $handler) {
 				$pattern = $handler->getAttribute('pattern');
 				
-				$category = var_export(AgaviToolkit::normalizePath(AgaviToolkit::expandDirectives($pattern)), true);
+				$category = AgaviToolkit::normalizePath(AgaviToolkit::expandDirectives($pattern));
 				
-				$class = var_export($handler->getAttribute('class'), true);
+				$class = $handler->getAttribute('class');
 				
 				$validation = array(
 					AgaviXmlConfigParser::VALIDATION_TYPE_RELAXNG    => array(
@@ -78,15 +78,18 @@ class AgaviConfigHandlersConfigHandler extends AgaviConfigHandler
 				} elseif(false) {
 					// TODO: check for <validations><validation type="schematron"> children here
 				}
-				$validation = var_export($validation, true);
 				
-				$parameters = var_export($this->getItemParameters($handler), true);
-				
-				// append new data
-				$tmp    = "self::\$handlers[%s] = array('class' => %s, 'parameters' => %s, 'validation' => %s);";
-				$data[] = sprintf($tmp, $category, $class, $parameters, $validation);
+				$handlers[$category] = array(
+					'class' => $class,
+					'parameters' => $this->getItemParameters($handler),
+					'validation' => $validation,
+				);
 			}
 		}
+		
+		$data = array(
+			'self::$handlers += ' . var_export($handlers, true),
+		);
 		
 		return $this->generate($data);
 	}

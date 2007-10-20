@@ -77,7 +77,7 @@ class AgaviSoapRequestDataHolder extends AgaviWebserviceRequestDataHolder implem
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function & getHeaders()
+	public function &getHeaders()
 	{
 		return $this->headers;
 	}
@@ -94,7 +94,7 @@ class AgaviSoapRequestDataHolder extends AgaviWebserviceRequestDataHolder implem
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function & getHeader($name, $default = null)
+	public function &getHeader($name, $default = null)
 	{
 		if(isset($this->headers[$name])) {
 			return $this->headers[$name];
@@ -173,7 +173,7 @@ class AgaviSoapRequestDataHolder extends AgaviWebserviceRequestDataHolder implem
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function & removeHeader($name)
+	public function &removeHeader($name)
 	{
 		$retval = null;
 		if(isset($this->headers[$name])) {

@@ -179,24 +179,29 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 	 */
 	public function getVariable($name, $source = 'string', $namespace = null, AgaviExecutionContainer $container = null)
 	{
+		$val = $name;
+		
 		switch($source) {
 			case 'constant':
 				$val = constant($name);
 				break;
-			case 'locale':
-				$val = $this->context->getTranslationManager()->getCurrentLocaleIdentifier();
-				break;
 			case 'container_parameter':
 				$val = $container->getParameter($name);
 				break;
-			case 'request_parameter':
-				$val = $this->context->getRequest()->getRequestData()->getParameter($name);
+			case 'global_request_data':
+				$val = $this->context->getRequest()->getRequestData()->get($namespace ? $namespace : AgaviRequestDataHolder::SOURCE_PARAMETERS, $name);
+				break;
+			case 'locale':
+				$val = $this->context->getTranslationManager()->getCurrentLocaleIdentifier();
 				break;
 			case 'request_attribute':
 				$val = $this->context->getRequest()->getAttribute($name, $namespace);
 				break;
-			case 'user_parameter':
-				$val = $this->context->getUser()->getParameter($name);
+			case 'request_data':
+				$val = $container->getRequestData()->get($namespace ? $namespace : AgaviRequestDataHolder::SOURCE_PARAMETERS, $name);
+				break;
+			case 'request_parameter':
+				$val = $this->context->getRequest()->getRequestData()->getParameter($name);
 				break;
 			case 'user_attribute':
 				$val = $this->context->getUser()->getAttribute($name, $namespace);
@@ -204,16 +209,18 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 			case 'user_authenticated':
 				if(($user = $this->context->getUser()) instanceof AgaviISecurityUser) {
 					$val = $user->isAuthenticated();
-					break;
 				}
+				break;
 			case 'user_credential':
 				if(($user = $this->context->getUser()) instanceof AgaviISecurityUser) {
 					$val = $user->hasCredentials($name);
-					break;
 				}
-			default:
-				$val = $name;
+				break;
+			case 'user_parameter':
+				$val = $this->context->getUser()->getParameter($name);
+				break;
 		}
+		
 		return $val;
 	}
 
@@ -253,7 +260,6 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 		}
 
 		$isActionCached = false;
-
 
 		if($isCacheable) {
 			$groups = $this->determineGroups($config["groups"], $container);
@@ -296,12 +302,16 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 			$container->setViewModuleName($actionCache['view_module']);
 			$container->setViewName($actionCache['view_name']);
 
+			$key = $request->toggleLock();
 			// get the view instance
 			$viewInstance = $controller->createViewInstance($actionCache['view_module'], $actionCache['view_name']);
-
 			// initialize the view
 			$viewInstance->initialize($container);
+			$request->toggleLock($key);
 
+			// Set the View Instance in the container
+			$container->setViewInstance($viewInstance);
+			
 			$outputType = $container->getOutputType()->getName();
 
 			$isViewCached = false;

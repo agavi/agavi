@@ -119,7 +119,7 @@ class AgaviRequestDataHolder extends AgaviParameterHolder implements AgaviIParam
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function & get($source, $field, $default = null)
+	public function &get($source, $field, $default = null)
 	{
 		if(isset($this->$source)) {
 			$funcname = 'get' . $this->sourceNames[$source];
@@ -140,7 +140,7 @@ class AgaviRequestDataHolder extends AgaviParameterHolder implements AgaviIParam
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function & getAll($source)
+	public function &getAll($source)
 	{
 		if(isset($this->$source)) {
 			$funcname = 'get' . $source;
@@ -207,7 +207,7 @@ class AgaviRequestDataHolder extends AgaviParameterHolder implements AgaviIParam
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function & remove($source, $field)
+	public function &remove($source, $field)
 	{
 		if(isset($this->$source)) {
 			$funcname = 'remove' . $this->sourceNames[$source];

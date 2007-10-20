@@ -320,7 +320,6 @@ final class AgaviDateDefinitions
 	 */
 	const DAY_OF_MONTH            = AgaviDateDefinitions::DATE;
 
-
 	/** January */
 	const JANUARY                 = 0;
 	/** February */
@@ -351,7 +350,6 @@ final class AgaviDateDefinitions
 		*/
 	const UNDECIMBER              = 12;
 
-
 	/** Sunday */
 	const SUNDAY                  = 1;
 	/** Monday */
@@ -366,7 +364,6 @@ final class AgaviDateDefinitions
 	const FRIDAY                  = 6;
 	/** Saturday */
 	const SATURDAY                = 7;
-
 
 	/** 
 	 * The number of milliseconds per second
@@ -408,7 +405,6 @@ final class AgaviDateDefinitions
 	 * January 1, 1970 (Gregorian) as julian day
 	 */
 	const EPOCH_START_AS_JULIAN_DAY  = 2440588.0;
-
 
 	private function __construct()
 	{

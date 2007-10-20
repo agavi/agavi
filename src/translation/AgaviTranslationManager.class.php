@@ -181,7 +181,6 @@ class AgaviTranslationManager
 		return $this->availableLocales;
 	}
 
-
 	/**
 	 * Sets the current locale.
 	 *
@@ -283,8 +282,8 @@ class AgaviTranslationManager
 	/**
 	 * Formats a date in the current locale.
 	 *
-	 * @param      mixed The date to be formatted.
-	 * @param      string The domain in which the date should be formatted.
+	 * @param      mixed       The date to be formatted.
+	 * @param      string      The domain in which the date should be formatted.
 	 * @param      AgaviLocale The locale which should be used for formatting.
 	 *                         Defaults to the currently active locale.
 	 *
@@ -316,10 +315,10 @@ class AgaviTranslationManager
 	}
 
 	/**
-	 * Formats a currency in the current locale.
+	 * Formats a currency amount in the current locale.
 	 *
-	 * @param      mixed The number to be formatted.
-	 * @param      string The domain in which the date should be formatted.
+	 * @param      mixed       The number to be formatted.
+	 * @param      string      The domain in which the amount should be formatted.
 	 * @param      AgaviLocale The locale which should be used for formatting.
 	 *                         Defaults to the currently active locale.
 	 *
@@ -353,8 +352,8 @@ class AgaviTranslationManager
 	/**
 	 * Formats a number in the current locale.
 	 *
-	 * @param      mixed The number to be formatted.
-	 * @param      string The domain in which the date should be formatted.
+	 * @param      mixed       The number to be formatted.
+	 * @param      string      The domain in which the number should be formatted.
 	 * @param      AgaviLocale The locale which should be used for formatting.
 	 *                         Defaults to the currently active locale.
 	 *
@@ -385,16 +384,15 @@ class AgaviTranslationManager
 		return $retval;
 	}
 
-
 	/**
 	 * Translate a message into the current locale.
 	 *
-	 * @param      mixed  The message.
-	 * @param      string The domain in which the date should be formatted.
+	 * @param      mixed       The message.
+	 * @param      string      The domain in which the translation should be done.
 	 * @param      AgaviLocale The locale which should be used for formatting.
 	 *                         Defaults to the currently active locale.
-	 * @param      array The parameters which should be used for sprintf on the 
-	 *                   translated string.
+	 * @param      array       The parameters which should be used for sprintf on
+	 *                         the translated string.
 	 *
 	 * @return     string The translated message.
 	 *
@@ -429,14 +427,14 @@ class AgaviTranslationManager
 	/**
 	 * Translate a singular/plural message into the current locale.
 	 *
-	 * @param      string The message for the singular form.
-	 * @param      string The message for the plural form.
-	 * @param      int    The amount for which the translation should happen.
-	 * @param      string The domain in which the date should be formatted.
+	 * @param      string      The message for the singular form.
+	 * @param      string      The message for the plural form.
+	 * @param      int         The amount for which the translation should happen.
+	 * @param      string      The domain in which the translation should be done.
 	 * @param      AgaviLocale The locale which should be used for formatting.
 	 *                         Defaults to the currently active locale.
-	 * @param      array The parameters which should be used for sprintf on the 
-	 *                   translated string.
+	 * @param      array       The parameters which should be used for sprintf on
+	 *                         the translated string.
 	 *
 	 * @return     string The translated message.
 	 *
@@ -455,8 +453,7 @@ class AgaviTranslationManager
 	 * @param      string The remaining part in the domain which didn't match
 	 * @param      string The type of the translator
 	 *
-	 * @return     array|AgaviITranslator An array of translators for the given 
-	 *                                    domain
+	 * @return     array An array of translators for the given domain
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
@@ -862,7 +859,6 @@ class AgaviTranslationManager
 
 		return $zone; 
 	}
-
 
 	/**
 	 * Creates a new calendar instance with the current time set.

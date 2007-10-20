@@ -62,8 +62,6 @@ class AgaviTimeZoneDataParser extends AgaviConfigParser
 		$this->context = $context;
 	}
 
-
-
 	const MIN_GEN_YEAR   =  1900;
 	const MAX_GEN_YEAR   =  2040;
 	const MAX_YEAR_VALUE =  2147483647;
@@ -386,7 +384,6 @@ class AgaviTimeZoneDataParser extends AgaviConfigParser
 				$format = $zoneRule['format'];
 				$until = $zoneRule['until'];
 
-
 				// when the rule is a rule an not the dst save
 				if(is_string($rule)) {
 					$rules = $this->getRules($rule, $lastRuleEndTime, $until, $gmtOff, $format);
@@ -638,7 +635,6 @@ class AgaviTimeZoneDataParser extends AgaviConfigParser
 					$itemStr .= $c;
 				}
 			}
-
 
 			if(($lastChar || ctype_space($c)) && strlen($itemStr) > 0) {
 				if(isset($items[$itemPos])) {
@@ -941,7 +937,6 @@ class AgaviTimeZoneDataParser extends AgaviConfigParser
 			}
 
 			$rules[] = array('gmtOff' => $gmtOff, 'rule' => $rule, 'format' => $format, 'until' => $until);
-
 
 			$indexBase = -1;
 			++$i;

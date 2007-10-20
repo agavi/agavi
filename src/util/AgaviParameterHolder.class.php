@@ -72,9 +72,9 @@ class AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function & getParameter($name, $default = null)
+	public function &getParameter($name, $default = null)
 	{
-		if(isset($this->parameters[$name])) {
+		if(array_key_exists($name, $this->parameters)) {
 			return $this->parameters[$name];
 		}
 		$parts = AgaviArrayPathDefinition::getPartsFromPath($name);
@@ -117,7 +117,7 @@ class AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function & getParameters()
+	public function &getParameters()
 	{
 		return $this->parameters;
 	}
@@ -134,7 +134,7 @@ class AgaviParameterHolder
 	 */
 	public function hasParameter($name)
 	{
-		if(isset($this->parameters[$name])) {
+		if(array_key_exists($name, $this->parameters)) {
 			return true;
 		}
 		$parts = AgaviArrayPathDefinition::getPartsFromPath($name);
@@ -152,7 +152,7 @@ class AgaviParameterHolder
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function & removeParameter($name)
+	public function &removeParameter($name)
 	{
 		$parts = AgaviArrayPathDefinition::getPartsFromPath($name);
 		return AgaviArrayPathDefinition::unsetValue($parts['parts'], $this->parameters);

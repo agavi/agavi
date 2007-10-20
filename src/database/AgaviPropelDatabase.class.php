@@ -141,7 +141,7 @@ class AgaviPropelDatabase extends AgaviDatabase
 	{
 		if($this->agaviCreoleDatabase) {
 			// make concrecte adapter connect
-			$this->agaviCreoleDatabase->getConnection();
+			$this->connection = $this->agaviCreoleDatabase->getConnection();
 		} else {
 			// trigger Propel autoload and go go go
 			if(class_exists('Propel')) {
@@ -176,8 +176,8 @@ class AgaviPropelDatabase extends AgaviDatabase
 	/**
 	 * Load Propel config
 	 * 
-	 * @param      agaviCreoleDatabaseManager The database manager of this instance.
-	 * @param      array An associative array of initialization parameters.
+	 * @param      AgaviDatabaseManager The database manager of this instance.
+	 * @param      array                An assoc array of initialization params.
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.10.0
@@ -221,6 +221,13 @@ class AgaviPropelDatabase extends AgaviDatabase
 				// that wasn't PropelAutoload, so init it
 				Propel::init(self::getDefaultConfigPath());
 			}
+			
+			$config = Propel::getConfiguration();
+			$config['datasources'][$datasource]['adapter'] = $this->getParameter('overrides[adapter]', $config['datasources'][$datasource]['adapter']);
+			$config['datasources'][$datasource]['connection'] = array_merge($config['datasources'][$datasource]['connection'], $this->getParameter('overrides[connection]', array()));
+			$config['datasources'][$datasource]['classes'] = array_merge($config['datasources'][$datasource]['classes'], $this->getParameter('overrides[classes]', array()));
+			// set the new config
+			Propel::setConfiguration($config);
 		}
 	}
 

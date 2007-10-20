@@ -14,38 +14,41 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * Pre-initialization script.
+ * A renderer produces the output as defined by a View
  *
  * @package    agavi
+ * @subpackage renderer
  *
- * @author     Sean Kerr <skerr@mojavi.org>
- * @author     Mike Vincent <mike@agavi.org>
+ * @author     Felix Weis <mail@felixweis.com>
  * @author     David Zülke <dz@bitxtender.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
  *
- * @since      0.9.0
+ * @since      0.11.0
  *
  * @version    $Id$
  */
-
-// load the AgaviConfig class
-require(dirname(__FILE__) . '/config/AgaviConfig.class.php');
-
-// check minimum PHP version
-AgaviConfig::set('core.minimum_php_version', '5.1.3');
-if(!version_compare(PHP_VERSION, AgaviConfig::get('core.minimum_php_version'), 'ge') ) {
-	die('You must be using PHP version ' . AgaviConfig::get('core.minimum_php_version') . ' or greater.');
+interface AgaviIEzctemplateTemplate
+{
+	/**
+	 * Retrieve the current application context.
+	 *
+	 * @return     AgaviContext The current AgaviContext instance.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getContext();
+	
+	/**
+	 * Retrieve the current application context.
+	 *
+	 * @param      AgaviContext The current AgaviContext instance.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function setContext(AgaviContext $context);
 }
-
-// define a few filesystem paths
-AgaviConfig::set('core.agavi_dir', dirname(__FILE__), true, true);
-
-// default exception template
-AgaviConfig::set('exception.default_template', AgaviConfig::get('core.agavi_dir') . '/exception/templates/shiny.php');
-
-// required files
-require(AgaviConfig::get('core.agavi_dir') . '/version.php');
-require(AgaviConfig::get('core.agavi_dir') . '/core/Agavi.class.php');
 
 ?>

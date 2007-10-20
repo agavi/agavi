@@ -54,20 +54,19 @@ class AgaviXmlrpcepiphpRequest extends AgaviWebserviceRequest
 		}
 		
 		$rdhc = $this->getParameter('request_data_holder_class');
-		$this->requestData = new $rdhc(array(
-			constant("$rdhc::SOURCE_PARAMETERS") => array(),
+		$rd = new $rdhc(array(
+			constant("$rdhc::SOURCE_PARAMETERS") => (array)$decoded,
 		));
-		
-		
-		$this->requestData->setParameters((array)$decoded);
 		
 		$split = explode(':', $this->invokedMethod);
 		if(count($split) == 2) {
-			$this->requestData->setParameter($this->getParameter('module_accessor'), $split[0]);
-			$this->requestData->setParameter($this->getParameter('action_accessor'), $split[1]);
+			$rd->setParameter($this->getParameter('module_accessor'), $split[0]);
+			$rd->setParameter($this->getParameter('action_accessor'), $split[1]);
 		} else {
-			$this->requestData->setParameter($this->getParameter('action_accessor'), $this->invokedMethod);
+			$rd->setParameter($this->getParameter('action_accessor'), $this->invokedMethod);
 		}
+		
+		$this->setRequestData($rd);
 	}
 }
 

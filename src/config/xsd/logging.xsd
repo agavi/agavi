@@ -36,7 +36,6 @@
     </xs:choice>
   </xs:group>
 
-
   <xs:group name="logger_appenders">
     <xs:choice>
       <xs:element name="appenders" type="logger_appenders" minOccurs="0" />

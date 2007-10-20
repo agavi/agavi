@@ -596,7 +596,7 @@
 		)
 	),
 	array(
-		'message' => 'Sub-directory, rewritten, called path in dir with two slashes',
+		'message' => 'Sub-directory, rewritten, called path in dir with two slashes; THIS TEST IS EXPECTED TO FAIL, SEE #502!',
 		'input' => '/fubar',
 		'prefix' => '/tmp//rewrite',
 		'basePath' => '/tmp//rewrite/',

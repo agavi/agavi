@@ -50,15 +50,14 @@ class AgaviLdmlSupplementalConfigHandler extends AgaviConfigHandler
 	public function execute($config, $context = null)
 	{
 		$dayMap = array(
-										'sun' => AgaviDateDefinitions::SUNDAY,
-										'mon' => AgaviDateDefinitions::MONDAY,
-										'tue' => AgaviDateDefinitions::TUESDAY,
-										'wed' => AgaviDateDefinitions::WEDNESDAY,
-										'thu' => AgaviDateDefinitions::THURSDAY,
-										'fri' => AgaviDateDefinitions::FRIDAY,
-										'sat' => AgaviDateDefinitions::SATURDAY,
+			'sun' => AgaviDateDefinitions::SUNDAY,
+			'mon' => AgaviDateDefinitions::MONDAY,
+			'tue' => AgaviDateDefinitions::TUESDAY,
+			'wed' => AgaviDateDefinitions::WEDNESDAY,
+			'thu' => AgaviDateDefinitions::THURSDAY,
+			'fri' => AgaviDateDefinitions::FRIDAY,
+			'sat' => AgaviDateDefinitions::SATURDAY,
 		);
-
 
 		$dataTree = AgaviConfigCache::parseConfig($config, false, $this->getValidationFile(), $this->parser)->supplementalData;
 

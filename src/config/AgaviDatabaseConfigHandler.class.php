@@ -106,7 +106,7 @@ class AgaviDatabaseConfigHandler extends AgaviConfigHandler
 			throw new AgaviConfigurationException($error);
 		}
 
-		$data[] = sprintf("\$this->databases['default'] = \$this->databases[%s];", var_export($default, true));
+		$data[] = sprintf("\$this->defaultDatabaseName = %s;", var_export($default, true));
 
 		return $this->generate($data);
 	}

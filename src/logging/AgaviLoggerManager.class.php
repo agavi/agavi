@@ -214,6 +214,19 @@ class AgaviLoggerManager
 	}
 
 	/**
+	 * Returns the name of the default message class.
+	 *
+	 * @return     string The name of the default message class.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getDefaultMessageClass()
+	{
+		return $this->defaultMessageClass;
+	}
+
+	/**
 	 * Sets the default logger.
 	 *
 	 * @param      string      The name of the the default logger.

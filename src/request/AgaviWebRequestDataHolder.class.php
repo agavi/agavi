@@ -139,7 +139,7 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function & getCookie($name, $default=null)
+	public function &getCookie($name, $default=null)
 	{
 		if(isset($this->cookies[$name])) {
 			return $this->cookies[$name];
@@ -180,7 +180,6 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 		$this->cookies = array_merge($this->cookies, $cookies);
 	}
 
-
 	/**
 	 * Remove a cookie.
 	 *
@@ -191,7 +190,7 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function & removeCookie($name)
+	public function &removeCookie($name)
 	{
 		$retval = null;
 		if(isset($this->cookies[$name])) {
@@ -210,7 +209,7 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function & getCookies()
+	public function &getCookies()
 	{
 		return $this->cookies;
 	}
@@ -262,7 +261,7 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function & getHeaders()
+	public function &getHeaders()
 	{
 		return $this->headers;
 	}
@@ -279,7 +278,7 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function & getHeader($name, $default = null)
+	public function &getHeader($name, $default = null)
 	{
 		$name = str_replace('-', '_', strtoupper($name));
 		if(isset($this->headers[$name])) {
@@ -359,7 +358,7 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function & removeHeader($name)
+	public function &removeHeader($name)
 	{
 		$retval = null;
 		$name = str_replace('-', '_', strtoupper($name));
@@ -396,7 +395,7 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function & getFile($name, $default = null)
+	public function &getFile($name, $default = null)
 	{
 		$parts = AgaviArrayPathDefinition::getPartsFromPath($name);
 		$retval =& AgaviArrayPathDefinition::getValue($parts['parts'], $this->files);
@@ -417,7 +416,7 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function & getFiles()
+	public function &getFiles()
 	{
 		return $this->files;
 	}
@@ -471,7 +470,6 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 		return ($file->getError() == UPLOAD_ERR_NO_FILE);
 	}
 
-
 	/**
 	 * Removes file information for given file.
 	 *
@@ -482,7 +480,7 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function & removeFile($name)
+	public function &removeFile($name)
 	{
 		$parts = AgaviArrayPathDefinition::getPartsFromPath($name);
 		$oldValue =& AgaviArrayPathDefinition::unsetValue($parts['parts'], $this->files);

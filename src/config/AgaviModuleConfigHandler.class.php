@@ -15,7 +15,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviModuleConfigHandler reads module configuration files to determine the 
+ * AgaviModuleConfigHandler reads module configuration files to determine the
  * status of a module.
  *
  * @package    agavi
@@ -87,7 +87,7 @@ class AgaviModuleConfigHandler extends AgaviConfigHandler
 			}
 		}
 
-		$code = 'AgaviConfig::import(' . var_export($data, true) . ');';
+		$code = 'AgaviConfig::fromArray(' . var_export($data, true) . ');';
 
 		return $this->generate($code);
 	}

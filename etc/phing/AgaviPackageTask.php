@@ -13,7 +13,8 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
-class AgaviPackageTask extends Task {
+class AgaviPackageTask extends Task
+{
 	private $dir = '';
 
 	public function setDir($dir)
@@ -104,8 +105,8 @@ EOD;
 		$p2->addMaintainer('developer', 'dominik', 'Dominik del Bondio', 'ddb@bitxtender.com');
 		$p2->addMaintainer('developer', 'v-dogg', 'Veikko Mäkinen', 'mail@veikkomakinen.com');
 		$p2->setChannel('pear.agavi.org');
-		$p2->setReleaseVersion('0.11.0');
-		$p2->setAPIVersion('0.11.0');
+		$p2->setReleaseVersion('0.11.0RC6');
+		$p2->setAPIVersion('0.11.0RC6');
 		$p2->setReleaseStability('beta');
 		$p2->setAPIStability('beta');
 		$p2->setSummary($shortDesc);
@@ -153,10 +154,9 @@ EOD;
 		$p2->addReplacement('scripts/agavi.bat-dist', 'pear-config', '@PEAR-DIR@', 'php_dir');
 		$p2->generateContents();
 
-
 		try {
 			$p2->writePackageFile();
-		} catch (PEAR_Exception $e) {
+		} catch(PEAR_Exception $e) {
 			$this->log("Oops!  Caught PEAR Exception: ".$e->getMessage());
 		}
 	}
@@ -164,10 +164,10 @@ EOD;
 
 function PEAR_ErrorToPEAR_Exception($err)
 {
-    if ($err->getCode()) {
-        throw new PEAR_Exception($err->getMessage(),
-            $err->getCode());
-    }
-    throw new PEAR_Exception($err->getMessage());
+	if($err->getCode()) {
+		throw new PEAR_Exception($err->getMessage(), $err->getCode());
+	}
+	throw new PEAR_Exception($err->getMessage());
 }
+
 ?>

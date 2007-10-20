@@ -55,6 +55,11 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	 * @var        int The highest error severity in the container.
 	 */
 	protected $result = AgaviValidator::SUCCESS;
+	
+	/**
+	 * @var        array The validation incidents.
+	 */
+	protected $incidents = array();
 
 	/**
 	 * All request variables are always available.
@@ -71,7 +76,6 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	 * Only validated request variables are available.
 	 */
 	const MODE_STRICT = 'strict';
-
 
 	/**
 	 * initializes the validator manager.
@@ -153,7 +157,6 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 		$this->fieldResults = array();
 		$this->incidents = array();
 		$this->result = AgaviValidator::SUCCESS;
-
 
 		foreach($this->children as $child) {
 			$child->shutdown();
@@ -270,7 +273,9 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 			switch($v_ret) {
 				case AgaviValidator::SUCCESS:
 					continue 2;
-				case AgaviValidator::NONE:
+				case AgaviValidator::INFO:
+					continue 2;
+				case AgaviValidator::SILENT:
 					continue 2;
 				case AgaviValidator::NOTICE:
 					continue 2;
@@ -458,14 +463,13 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 					$ec = max($ec, $result[1]);
 				}
 			}
-			if($hasInSource && $ec <= AgaviValidator::SUCCESS) {
+			if($hasInSource && $ec <= AgaviValidator::INFO) {
 				$names[] = $name;
 			}
 		}
 
 		return $names;
 	}
-
 
 	/**
 	 * Adds an incident to the validation result. This will automatically adjust
@@ -830,7 +834,6 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 		$incident->addError(new AgaviValidationError($message, null, array($name)));
 		$this->addIncident($incident);
 	}
-
 
 	/**
 	 * Set an array of errors

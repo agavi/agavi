@@ -25,25 +25,30 @@
  *
  * @version    $Id$
  */
-class AgaviListActionsTask extends Task {
-	private 	$property,
-				$defaultProperty,
-				$moduleDir;
+class AgaviListActionsTask extends Task
+{
+	private
+		$property,
+		$defaultProperty,
+		$moduleDir;
 
-
-	public function setModuleDir($dir) {
+	public function setModuleDir($dir)
+	{
 		$this->moduleDir = $dir;
 	}
 
-	public function setProperty($property) {
+	public function setProperty($property)
+	{
 		$this->property = $property;
 	}
 
-	public function setDefaultproperty($property) {
+	public function setDefaultproperty($property)
+	{
 		$this->defaultProperty = $property;
 	}
 
-	public function main() {
+	public function main()
+	{
 		if ($this->moduleDir && $this->property) {
 			$actions = $this->getActions();
 			$this->project->setProperty($this->defaultProperty, $actions[0]);
@@ -53,8 +58,8 @@ class AgaviListActionsTask extends Task {
 		}
 	}
 
-	protected function getActions() {
-
+	protected function getActions()
+	{
 		/* code shamelessly copied from AgaviToolkit::clearCache */
 
 		$result = array();
@@ -94,8 +99,6 @@ class AgaviListActionsTask extends Task {
 		}
 
 		return $result;
-
 	}
-
 }
 ?>

@@ -5,11 +5,12 @@
   <title>The Definitive Guide to Agavi</title>
 
   <bookinfo>
-    <releaseinfo>$Id: manual.xml 1823 2007-03-06 08:47:59Z david
-    $</releaseinfo>
+    <releaseinfo>$Revision$</releaseinfo>
+
+    <date>$Date$</date>
   </bookinfo>
 
-  <preface>
+  <preface id="preface">
     <title>Preface</title>
 
     <para>Welcome to the Agavi manual. This book tries to serve you as the
@@ -21,13 +22,13 @@
     behind Agavi, and the way it works as a "big picture".</para>
   </preface>
 
-  <chapter>
+  <chapter id="intro">
     <title>An Introduction</title>
 
-    <section>
+    <section id="intro-agavi">
       <title>Agavi, a (Web) Application Framework</title>
 
-      <section>
+      <section id="what-a-framework-is">
         <title>What a Framework Is</title>
 
         <para>A framework is a tool that takes the pain out of building
@@ -52,10 +53,10 @@
         feeling that you're doing things the "right way."</para>
       </section>
 
-      <section>
+      <section id="what-a-framework-should-do">
         <title>What a Framework Should Do</title>
 
-        <section>
+        <section id="invent-the-wheel-only-once">
           <title>Invent The Wheel Only Once</title>
 
           <para>Agavi abstracts common problems, and provides you, the
@@ -74,7 +75,7 @@
           update.</para>
         </section>
 
-        <section>
+        <section id="address-common-concerns">
           <title>Address Common Concerns</title>
 
           <para>Agavi comes with smart and versatile solutions to a great deal
@@ -133,7 +134,7 @@
           <para></para>
         </section>
 
-        <section>
+        <section id="encourage-clean-pragmatic-design">
           <title>Encourage Clean, Pragmatic Design</title>
 
           <para>Agavi's whole structure helps you a lot with designing and
@@ -191,10 +192,10 @@
         </section>
       </section>
 
-      <section>
+      <section id="what-a-framework-shouldnt-do">
         <title>What a Framework Shouldn't Do</title>
 
-        <section>
+        <section id="lock-you-in">
           <title>Lock You In</title>
 
           <para>This is the most important point about a framework. It should
@@ -257,7 +258,7 @@
           recommended).</para>
         </section>
 
-        <section>
+        <section id="do-everything-to-please-people">
           <title>Do Everything To Please People, No Matter How Stupid It
           Is</title>
 
@@ -285,7 +286,7 @@
           users.</para>
         </section>
 
-        <section>
+        <section id="making-you-forget-what-programming-is-about">
           <title>Making You Forget What Programming Is About</title>
 
           <para>Many frameworks have so many helpers for so many things that
@@ -303,7 +304,7 @@
       </section>
     </section>
 
-    <section>
+    <section id="history">
       <title>A Brief Look at Agavi's History</title>
 
       <para>The Agavi project was started in early 2005 as a fork of the then
@@ -363,10 +364,10 @@
     </section>
   </chapter>
 
-  <chapter>
+  <chapter id="getting-started">
     <title>Getting Started</title>
 
-    <section>
+    <section id="prerequisites">
       <title>Prerequisites</title>
 
       <para>Agavi's minimum requirement is PHP version 5.1.3 or newer. DOM,
@@ -396,10 +397,10 @@
       burden.</para>
     </section>
 
-    <section>
+    <section id="installation">
       <title>Installation</title>
 
-      <section>
+      <section id="installation-pear">
         <title>PEAR</title>
 
         <para>Agavi uses a PEAR Channel for release distribution. In order to
@@ -482,7 +483,7 @@
         path.</para>
       </section>
 
-      <section>
+      <section id="installation-svn">
         <title>From SVN</title>
 
         <para>Public access to the Subversion repository is possible via
@@ -531,7 +532,7 @@
         agavi/agavi</command>.</para>
       </section>
 
-      <section>
+      <section id="installation-apache">
         <title>Apache Web Server Configuration</title>
 
         <para>Agavi doesn't require any changes to your Apache
@@ -544,7 +545,7 @@
         the Cookbook for further instructions.</para>
       </section>
 
-      <section>
+      <section id="installation-lighttp">
         <title>LightTPD Configuration</title>
 
         <para>Agavi doesn't require any changes to your Lighty
@@ -563,7 +564,7 @@
         </tip>
       </section>
 
-      <section>
+      <section id="installation-iss">
         <title>Microsoft IIS Configuration</title>
 
         <para>Agavi doesn't require any changes to your IIS
@@ -613,7 +614,7 @@
       </section>
     </section>
 
-    <section>
+    <section id="sample-application">
       <title>The Sample Application</title>
 
       <para>Agavi comes with a (very simple) sample application. To make it
@@ -675,7 +676,7 @@ if(curl_errno($ch)) {
 &lt;/html&gt;</programlisting></para>
     </section>
 
-    <section>
+    <section id="your-first-agavi-app">
       <title>Creating Your First Agavi Application</title>
 
       <para>Once you have everything set up, create a new directory for your
@@ -774,16 +775,16 @@ if(curl_errno($ch)) {
     </section>
   </chapter>
 
-  <chapter>
+  <chapter id="agavi-basics">
     <title>Agavi Basics</title>
 
-    <section>
+    <section id="system-architecture">
       <title>System Architecture</title>
 
       <para></para>
     </section>
 
-    <section>
+    <section id="elements-of-an-application">
       <title>Elements of an Application</title>
 
       <para>modules</para>
@@ -797,7 +798,7 @@ if(curl_errno($ch)) {
       <para>config files</para>
     </section>
 
-    <section>
+    <section id="environments-and-contexts">
       <title>Environments and Contexts</title>
 
       <para>The framework is started by bootstrapping an environment. Typical
@@ -830,7 +831,7 @@ if(curl_errno($ch)) {
       compiles them into highly optimized variants for each Environment and
       Context when needed for minimum overhead.</para>
 
-      <section>
+      <section id="closer-look-at-context-initialization">
         <title>A Closer Look at Context Initialization</title>
 
         <para>***TODO: needs to be re-written or removed. We have startup
@@ -882,7 +883,7 @@ if(curl_errno($ch)) {
       </section>
     </section>
 
-    <section>
+    <section id="how-a-request-is-processed">
       <title>How a Request is Processed</title>
 
       <para>If you call an URL that is handled by pub/index.php, Agavi will
@@ -924,10 +925,10 @@ if(curl_errno($ch)) {
       after that, start the rendering of the output.</para>
     </section>
 
-    <section>
+    <section id="configuration">
       <title>Configuration</title>
 
-      <section>
+      <section id="configuration-basic-concepts">
         <title>Basic Configuration Concepts</title>
 
         <para>Agavi's standard configuration file format is XML, but you can
@@ -947,7 +948,7 @@ if(curl_errno($ch)) {
         always re-compiled on each request.</para>
       </section>
 
-      <section>
+      <section id="configuration-general">
         <title>General Format and Environment-/Context-Specific Blocks</title>
 
         <para>Each configuration file should have an XML prolog. The default
@@ -1043,7 +1044,7 @@ if(curl_errno($ch)) {
 &lt;/parameters&gt;</programlisting></para>
       </section>
 
-      <section>
+      <section id="configuration-substitution-and-directives">
         <title>Value Substitution and Configuration Directives</title>
 
         <para>Parameter blocks, but also many other attributes and values may
@@ -1067,18 +1068,18 @@ if(curl_errno($ch)) {
       </section>
     </section>
 
-    <section>
+    <section id="request-and-routing">
       <title>Request and Routing</title>
 
       <para>(Request and routing)</para>
 
-      <section>
+      <section id="request">
         <title>Request</title>
 
         <para>request parameters and attributes, attribute namespaces, errors,
         cookies.</para>
 
-        <section>
+        <section id="user-input">
           <title>User Input</title>
 
           <para>This chapter focuses on how to use user input in Agavi actions
@@ -1131,10 +1132,10 @@ if(curl_errno($ch)) {
           <methodname>getFile</methodname>.</para>
         </section>
 
-        <section>
+        <section id="passing-data-inside-the-system">
           <title>Passing Data Inside the System</title>
 
-          <section>
+          <section id="passing-data-from-action-to-view">
             <title>From Action to View/Template</title>
 
             <para>{Action::setAttribute, View::getAttribute, $template array /
@@ -1182,7 +1183,7 @@ if(curl_errno($ch)) {
             objects is naturally configurable to your own taste.</para>
           </section>
 
-          <section>
+          <section id="passing-data-from-component-to-another">
             <title>From Component to Another</title>
 
             <para>Core messages (matched_routes,
@@ -1191,7 +1192,7 @@ if(curl_errno($ch)) {
         </section>
       </section>
 
-      <section>
+      <section id="routing">
         <title>Routing</title>
 
         <para>(routing functionality, getting info from the routing,
@@ -1246,7 +1247,7 @@ if(curl_errno($ch)) {
         action parameters, and they would do what you expect -- set the module
         and the action of the request.</para>
 
-        <section>
+        <section id="routing-optional-parts">
           <title>Optional Parts</title>
 
           <para>If we take the previous Shop-example in section 6.2, we notice
@@ -1268,7 +1269,7 @@ if(curl_errno($ch)) {
           products.</para>
         </section>
 
-        <section>
+        <section id="routing-defaults">
           <title>Defaults</title>
 
           <para>The default-element specifies values that should be used if a
@@ -1290,7 +1291,7 @@ if(curl_errno($ch)) {
           use the default "en".</para>
         </section>
 
-        <section>
+        <section id="routing-pre-and-postfixes">
           <title>Pre- and Postfixes for Parameters</title>
 
           <para>When using @@optional parts@@, you almost always need
@@ -1330,7 +1331,7 @@ if(curl_errno($ch)) {
             </tip></para>
         </section>
 
-        <section>
+        <section id="routing-ignores">
           <title>Ignores</title>
 
           <para>The ignores-section specifies parameters that affect the
@@ -1349,7 +1350,7 @@ if(curl_errno($ch)) {
           request parameter later on.</para>
         </section>
 
-        <section>
+        <section id="routing-callbacks">
           <title>Routing callbacks</title>
 
           <para>Routing callbacks are user-defined classes that run when Agavi
@@ -1378,7 +1379,7 @@ if(curl_errno($ch)) {
             </note></para>
         </section>
 
-        <section>
+        <section id="routing-subroutes">
           <title>Subroutes</title>
 
           <para>Imagine you have a big application with tens or hundreds of
@@ -1411,7 +1412,7 @@ if(curl_errno($ch)) {
           faster.</para>
         </section>
 
-        <section>
+        <section id="routing-other-things-to-match">
           <title>Other Things to Match</title>
 
           <para>Routing can do more -- like match against other sources, or do
@@ -1453,7 +1454,7 @@ if(curl_errno($ch)) {
             </note></para>
         </section>
 
-        <section>
+        <section id="routing-generating">
           <title>Generating routes</title>
 
           <para>To generate routes in templates or actions, you use the
@@ -1492,7 +1493,7 @@ if(curl_errno($ch)) {
       </section>
     </section>
 
-    <section>
+    <section id="actions-and-models">
       <title>Actions and Models</title>
 
       <para>(what they do and contain (business logic at different
@@ -1525,7 +1526,7 @@ if(curl_errno($ch)) {
         Architecture (ISBN 0321127420).</para>
       </note>
 
-      <section>
+      <section id="models">
         <title>Models</title>
 
         <para>As said before you write your own models for the application and
@@ -1566,7 +1567,7 @@ $bar1 = $this-&gt;getContext()-&gt;getModel('SinglesBar'); //loads and initializ
 $bar2 = $this-&gt;getContext()-&gt;getModel('SinglesBar'); //returns the same instance of SinglesBar as the line above.</programlisting>
       </section>
 
-      <section>
+      <section id="actions">
         <title>Actions</title>
 
         <para>(actions: execution, execution methods, serving request methods,
@@ -1634,7 +1635,7 @@ $bar2 = $this-&gt;getContext()-&gt;getModel('SinglesBar'); //returns the same in
       </section>
     </section>
 
-    <section>
+    <section id="views-renderers-templates">
       <title>Views, Renderers and Templates</title>
 
       <para>what they do and contain (only presentational stuff)</para>
@@ -1651,7 +1652,7 @@ $bar2 = $this-&gt;getContext()-&gt;getModel('SinglesBar'); //returns the same in
       <para>templates and renderers: engines, variable naming etc</para>
     </section>
 
-    <section>
+    <section id="output-types-and-response">
       <title>Output Types and Response</title>
 
       <para>output types, what's the point of it, explain how easy it is to
@@ -1660,7 +1661,7 @@ $bar2 = $this-&gt;getContext()-&gt;getModel('SinglesBar'); //returns the same in
       <para>response: why they exist, whey they are isolated</para>
     </section>
 
-    <section>
+    <section id="session-handling-and-security">
       <title>Session Handling and Security</title>
 
       <para>explain the storage, explain why you never use it directly</para>
@@ -1668,7 +1669,7 @@ $bar2 = $this-&gt;getContext()-&gt;getModel('SinglesBar'); //returns the same in
       <para>explain the user, how it works, what you can do with it, how you
       do authentication, credentials etc</para>
 
-      <section>
+      <section id="security-rbac">
         <title>Role-Based Access Control</title>
 
         <para>Role-Based Access Control (RBAC) is an approach to restricting
@@ -1686,7 +1687,7 @@ $bar2 = $this-&gt;getContext()-&gt;getModel('SinglesBar'); //returns the same in
         assignment of credentials based on a role or roles granted to the
         user.</para>
 
-        <section>
+        <section id="security-rbac-enabling">
           <title>Enabling RBAC</title>
 
           <para>The user implementation used by Agavi is configured in
@@ -1702,7 +1703,7 @@ $bar2 = $this-&gt;getContext()-&gt;getModel('SinglesBar'); //returns the same in
           <classname>AgaviRbacSecurityUser</classname> directly.</para>
         </section>
 
-        <section>
+        <section id="security-rbac-roles-and-credentials">
           <title>Defining Roles and Credentials</title>
 
           <para><classname>AgaviRbacSecurityUser</classname> reads the role
@@ -1764,7 +1765,7 @@ $bar2 = $this-&gt;getContext()-&gt;getModel('SinglesBar'); //returns the same in
           </note>
         </section>
 
-        <section>
+        <section id="security-rbac-granting-roles">
           <title>Granting Roles to the User</title>
 
           <para>The roles have now been designed and defined in the XML-file
@@ -1795,7 +1796,7 @@ $bar2 = $this-&gt;getContext()-&gt;getModel('SinglesBar'); //returns the same in
           object-oriented design in action.</para>
         </section>
 
-        <section>
+        <section id="security-rbac-protect-actions">
           <title>Protecting Your Actions</title>
 
           <para>Protecting your action is simply a matter of defining the
@@ -1818,10 +1819,10 @@ $bar2 = $this-&gt;getContext()-&gt;getModel('SinglesBar'); //returns the same in
       </section>
     </section>
 
-    <section>
+    <section id="validation">
       <title>Validation</title>
 
-      <section>
+      <section id="validation-why">
         <title>Why Validation?</title>
 
         <para>It is strongly recommended to validate any request data. All
@@ -1849,7 +1850,7 @@ $bar2 = $this-&gt;getContext()-&gt;getModel('SinglesBar'); //returns the same in
         possible.</para>
       </section>
 
-      <section>
+      <section id="validation-when">
         <title>When does Validation happen</title>
 
         <para>Validation happens if the action serves the incoming request
@@ -1860,7 +1861,7 @@ $bar2 = $this-&gt;getContext()-&gt;getModel('SinglesBar'); //returns the same in
         the action is executed.</para>
       </section>
 
-      <section>
+      <section id="validation-how">
         <title>How to validate</title>
 
         <para>The rules for the validation are defined in validators. A
@@ -1870,7 +1871,7 @@ $bar2 = $this-&gt;getContext()-&gt;getModel('SinglesBar'); //returns the same in
         a third way to perform more elaborate validations that cannot be
         handled by a validator:</para>
 
-        <section>
+        <section id="validation-xml-config">
           <title>XML Configuration</title>
 
           <para>There are several ways of validating input data. The simplest
@@ -1888,7 +1889,7 @@ $bar2 = $this-&gt;getContext()-&gt;getModel('SinglesBar'); //returns the same in
           what validators will be registered on read/write requests is the
           registerValidators() family of methods.</para>
 
-          <section>
+          <section id="validation-xml-config-example">
             <title>Example XML Configuration (from the sample app,
             LoginAction)</title>
 
@@ -1929,7 +1930,7 @@ $bar2 = $this-&gt;getContext()-&gt;getModel('SinglesBar'); //returns the same in
           </section>
         </section>
 
-        <section>
+        <section id="validation-registervalidators">
           <title>registerValidators(), registerReadValidators(),
           registerWriteValidators()</title>
 
@@ -1957,7 +1958,7 @@ $bar2 = $this-&gt;getContext()-&gt;getModel('SinglesBar'); //returns the same in
           use execute*Validators() to add anything that is dynamic. However,
           as noted above you can't register a validator twice.</para>
 
-          <section>
+          <section id="validation-registervalidators-example">
             <title>Sample registerWriteValidators() (does the same as the XML
             above)</title>
 
@@ -1984,7 +1985,7 @@ $bar2 = $this-&gt;getContext()-&gt;getModel('SinglesBar'); //returns the same in
           </section>
         </section>
 
-        <section>
+        <section id="validation-validate">
           <title>validate(), validateRead(), validateWrite()</title>
 
           <para>If an action declares a method with the name
@@ -2003,8 +2004,8 @@ $bar2 = $this-&gt;getContext()-&gt;getModel('SinglesBar'); //returns the same in
           But, as validators are generic and reusable, you should look into
           creating your own validator whenever feasible.</para>
 
-          <section>
-            <title>Sample registerWriteValidators() (does the same as the XML
+          <section id="validation-validate-example">
+            <title>Sample validateWrite() (does the same as the XML
             above)</title>
 
             <programlisting>public function validateWrite(AgaviRequestDataHolder $rd)
@@ -2025,7 +2026,7 @@ $bar2 = $this-&gt;getContext()-&gt;getModel('SinglesBar'); //returns the same in
         </section>
       </section>
 
-      <section>
+      <section id="validation-errors">
         <title>Handling Validation errors</title>
 
         <para>Once validation failed, the error must be handled. The default
@@ -2040,7 +2041,7 @@ $bar2 = $this-&gt;getContext()-&gt;getModel('SinglesBar'); //returns the same in
         of a view, just as the execute methods do.</para>
       </section>
 
-      <section>
+      <section id="validation-fpf">
         <title>The FormPopulationFilter</title>
 
         <para>Once you validated the input data, there may be errors that must
@@ -2061,24 +2062,24 @@ $bar2 = $this-&gt;getContext()-&gt;getModel('SinglesBar'); //returns the same in
         attacks are not possible.</para>
       </section>
 
-      <section>
+      <section id="validation-other-things">
         <title>Other things Validators can do for you</title>
 
         <para></para>
 
-        <section>
+        <section id="validation-normalization">
           <title>Normalization</title>
 
           <para></para>
         </section>
 
-        <section>
+        <section id="validation-casting">
           <title>Casting Values (same as Normalization)</title>
 
           <para></para>
         </section>
 
-        <section>
+        <section id="validation-i18n">
           <title>Validation and Internationalization</title>
 
           <para>If you have an internationalized application you need to
@@ -2089,27 +2090,27 @@ $bar2 = $this-&gt;getContext()-&gt;getModel('SinglesBar'); //returns the same in
         </section>
       </section>
 
-      <section>
+      <section id="validation-available-validators">
         <title>Available Validators</title>
 
         <para>Depending on the validator type, every validator accepts
         different parameters.</para>
 
-        <section>
+        <section id="validation-stringvalidator">
           <title>String (AgaviStringValidator)</title>
 
           <para></para>
         </section>
       </section>
 
-      <section>
+      <section id="validation-examples">
         <title>Examples</title>
 
         <programlisting></programlisting>
       </section>
     </section>
 
-    <section>
+    <section id="filters">
       <title>Filters</title>
 
       <para>Each Filter calls the next one, making Filter Chains work like a
@@ -2117,7 +2118,7 @@ $bar2 = $this-&gt;getContext()-&gt;getModel('SinglesBar'); //returns the same in
       Doll</ulink>.</para>
     </section>
 
-    <section>
+    <section id="i18n">
       <title>Internationalization</title>
 
       <para>The i18n and l10n support in Agavi provides you with tools which
@@ -2181,7 +2182,7 @@ $bar2 = $this-&gt;getContext()-&gt;getModel('SinglesBar'); //returns the same in
       <link linkend="reference-translation-custom_message_translators">write
       your own custom message translators</link>.</para>
 
-      <section>
+      <section id="i18n-domains">
         <title>translation domains?!</title>
 
         <para>Translation domains allow you to define different translators or
@@ -2194,7 +2195,7 @@ $bar2 = $this-&gt;getContext()-&gt;getModel('SinglesBar'); //returns the same in
           </note></para>
       </section>
 
-      <section>
+      <section id="i18n-get-started">
         <title>Lets get started</title>
 
         <para>To use the translation you have to enable
@@ -2316,7 +2317,7 @@ $tm-&gt;_d(time(), 'backend', 'en_US@timezone=Europe/London');
       </section>
     </section>
 
-    <section>
+    <section id="databases">
       <title>Databases</title>
 
       <para>(how to retrieve a connection, why do it using the framework,
@@ -2362,7 +2363,7 @@ $tm-&gt;_d(time(), 'backend', 'en_US@timezone=Europe/London');
       <para>Each database implementation is wrapped into a class extending
       <classname>AgaviDatabase</classname>.</para>
 
-      <section>
+      <section id="databases-connection-configuration">
         <title>Database Connection Configuration</title>
 
         <para>Database connections are configured in
@@ -2394,7 +2395,7 @@ $tm-&gt;_d(time(), 'backend', 'en_US@timezone=Europe/London');
 &lt;/configurations&gt;</programlisting>
       </section>
 
-      <section>
+      <section id="databases-using-the-connection">
         <title>Using the Connection</title>
 
         <para>Database connections are retrieved using
@@ -2410,7 +2411,7 @@ $conn2 = $this-&gt;context-&gt;getDatabaseConnection();</programlisting>
       </section>
     </section>
 
-    <section>
+    <section id="logging">
       <title>Logging</title>
 
       <para>why logging, how to do it, levels, loggers, appenders,
@@ -2418,10 +2419,10 @@ $conn2 = $this-&gt;context-&gt;getDatabaseConnection();</programlisting>
     </section>
   </chapter>
 
-  <chapter>
+  <chapter id="agavi-reference">
     <title>Agavi Reference</title>
 
-    <section>
+    <section id="ref-agavi">
       <title>Action</title>
 
       <para><variablelist>
@@ -2496,19 +2497,19 @@ $conn2 = $this-&gt;context-&gt;getDatabaseConnection();</programlisting>
         </variablelist></para>
     </section>
 
-    <section>
+    <section id="ref-configuration">
       <title>Configuration</title>
 
       <para></para>
     </section>
 
-    <section>
+    <section id="ref-controller">
       <title>Controller</title>
 
       <para></para>
     </section>
 
-    <section>
+    <section id="ref-core-context">
       <title>Core/Context</title>
 
       <para></para>
@@ -2520,61 +2521,61 @@ $conn2 = $this-&gt;context-&gt;getDatabaseConnection();</programlisting>
       <para></para>
     </section>
 
-    <section>
+    <section id="ref-exceptions">
       <title>Exceptions</title>
 
       <para></para>
     </section>
 
-    <section>
+    <section id="ref-filters">
       <title>Filters</title>
 
       <para></para>
     </section>
 
-    <section>
+    <section id="ref-logging">
       <title>Logging</title>
 
       <para></para>
     </section>
 
-    <section>
+    <section id="ref-models">
       <title>Models</title>
 
       <para></para>
     </section>
 
-    <section>
+    <section id="ref-renderers">
       <title>Renderers</title>
 
       <para></para>
     </section>
 
-    <section>
+    <section id="ref-request">
       <title>Request</title>
 
       <para></para>
     </section>
 
-    <section>
+    <section id="ref-response">
       <title>Response</title>
 
       <para></para>
     </section>
 
-    <section>
+    <section id="ref-routing">
       <title>Routing</title>
 
       <para></para>
     </section>
 
-    <section>
+    <section id="ref-storage">
       <title>Storage</title>
 
       <para></para>
     </section>
 
-    <section>
+    <section id="ref-translation">
       <title>Translation</title>
 
       <para></para>
@@ -2617,26 +2618,26 @@ $conn2 = $this-&gt;context-&gt;getDatabaseConnection();</programlisting>
       </section>
     </section>
 
-    <section>
+    <section id="ref-user">
       <title>User</title>
 
       <para></para>
     </section>
 
-    <section>
+    <section id="ref-validation">
       <title>Validation</title>
 
       <para></para>
     </section>
 
-    <section>
+    <section id="ref-views">
       <title>Views</title>
 
       <para></para>
     </section>
   </chapter>
 
-  <chapter>
+  <chapter id="configuration-handler-tag-reference">
     <title>Configuration handler tag reference</title>
 
     <section id="reference-configuration_tags-general">

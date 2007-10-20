@@ -160,7 +160,9 @@ final class AgaviContext
 	 */
 	public function getFactoryInfo($for)
 	{
-		return $this->factories[$for];
+		if(isset($this->factories[$for])) {
+			return $this->factories[$for];
+		}
 	}
 
 	/**
@@ -194,7 +196,7 @@ final class AgaviContext
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function getDatabaseConnection($name = 'default')
+	public function getDatabaseConnection($name = null)
 	{
 		if($this->databaseManager !== null) {
 			return $this->databaseManager->getDatabase($name)->getConnection();

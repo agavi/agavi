@@ -47,7 +47,6 @@
     </xs:complexType>
   </xs:element>
 
-
   <xs:group name="defaults">
     <xs:choice>
       <xs:element name="defaults" minOccurs="0">

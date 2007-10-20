@@ -43,6 +43,11 @@ abstract class AgaviDatabase extends AgaviParameterHolder
 	protected $connection = null;
 
 	/**
+	 * @var        string The name of the database.
+	 */
+	private $name = null;
+
+	/**
 	 * @var        mixed A database resource.
 	 */
 	protected $resource = null;
@@ -71,6 +76,19 @@ abstract class AgaviDatabase extends AgaviParameterHolder
 		return $this->databaseManager;
 	}
 
+	/**
+	 * Retrieve the name of this database connection.
+	 *
+	 * @return     string The name of the database.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getName()
+	{
+		return $this->name;
+	}
+	
 	/**
 	 * Retrieve the database connection associated with this Database
 	 * implementation.
@@ -119,11 +137,12 @@ abstract class AgaviDatabase extends AgaviParameterHolder
 	 * Initialize this Database.
 	 *
 	 * @param      AgaviDatabaseManager The database manager of this instance.
-	 * @param      array An associative array of initialization parameters.
+	 * @param      array                An assoc array of initialization params.
 	 *
 	 * @throws     <b>AgaviInitializationException</b> If an error occurs while
 	 *                                                 initializing this Database.
 	 *
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
@@ -132,6 +151,21 @@ abstract class AgaviDatabase extends AgaviParameterHolder
 		$this->databaseManager = $databaseManager;
 		
 		$this->setParameters($parameters);
+		
+		$this->name = $databaseManager->getDatabaseName($this);
+	}
+
+	/**
+	 * Do any necessary startup work after initialization.
+	 *
+	 * This method is not called directly after initialize().
+	 * It is called during the startup() of the database manager.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function startup()
+	{
 	}
 
 	/**

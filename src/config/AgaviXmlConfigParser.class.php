@@ -342,6 +342,10 @@ class AgaviXmlConfigParser
 	 */
 	public function validate(DOMDocument $doc, array $validationInfo = array())
 	{
+		if(!AgaviConfig::get('core.skip_config_validation', false)) {
+			return;
+		}
+		
 		foreach($validationInfo as $type => $files) {
 			switch($type) {
 				case self::VALIDATION_TYPE_XMLSCHEMA:
@@ -426,7 +430,8 @@ class AgaviXmlConfigParser
 				throw new AgaviUnreadableException($error);
 			}
 			
-			if(!$doc->schemaValidate($validationFile)) {
+			// gotta do the @ to suppress warnings when the schema cannot be found
+			if(!@$doc->schemaValidate($validationFile)) {
 				$errors = array();
 				foreach(libxml_get_errors() as $error) {
 					$errors[] = sprintf("Line %d: %s", $error->line, $error->message);
@@ -486,7 +491,8 @@ class AgaviXmlConfigParser
 				throw new AgaviUnreadableException($error);
 			}
 			
-			if(!$doc->relaxNGValidate($validationFile)) {
+			// gotta do the @ to suppress warnings when the schema cannot be found
+			if(!@$doc->relaxNGValidate($validationFile)) {
 				$errors = array();
 				foreach(libxml_get_errors() as $error) {
 					$errors[] = sprintf("Line %d: %s", $error->line, $error->message);

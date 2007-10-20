@@ -99,6 +99,8 @@ class AgaviSoapController extends AgaviController
 	 */
 	public function startup()
 	{
+		parent::startup();
+		
 		// user-supplied "wsdl" and "options" parameters
 		$wsdl = $this->getParameter('wsdl');
 		if(!$wsdl) {

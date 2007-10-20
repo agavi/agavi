@@ -245,11 +245,13 @@ class AgaviFactoryConfigHandler extends AgaviConfigHandler
 				} else {
 					// it's a factory info
 					$code[] = sprintf(
-						'$this->factories[%1$s] = array("class" => %2$s, "parameters" => %3$s);',
+						'$this->factories[%1$s] = %2$s;',
 						var_export($factory, true),
-						var_export($data[$factory]['class'], true),
-						var_export($data[$factory]['params'], true)
-					);
+						var_export(array(
+							'class' => $data[$factory]['class'],
+							'parameters' => $data[$factory]['params'],
+						), true)
+ 					);
 				}
 			} else {
 				if($factories[$info]['required']) {

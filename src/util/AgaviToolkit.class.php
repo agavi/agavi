@@ -87,13 +87,16 @@ final class AgaviToolkit
 	 */
 	public static function mkdir($path, $mode = 0775, $recursive = false, $context = null)
 	{
-		if($context !== null) {
-			$retval = @mkdir($path, $mode, $recursive, $context);
-		} else {
-			$retval = @mkdir($path, $mode, $recursive);
-		}
-		if($retval) {
-			chmod($path, $mode);
+		$retval = is_dir($path);
+		if(!$retval) {
+			if($context !== null) {
+				$retval = mkdir($path, $mode, $recursive, $context);
+			} else {
+				$retval = mkdir($path, $mode, $recursive);
+			}
+			if($retval) {
+				chmod($path, $mode);
+			}
 		}
 		return $retval;
 	}
@@ -143,32 +146,36 @@ final class AgaviToolkit
 		if(is_file($path)) {
 			@unlink($path);
 		} else {
-			foreach(new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path), RecursiveIteratorIterator::CHILD_FIRST) as $iterator) {
-				// omg, thanks spl for always using forward slashes ... even on windows
-				$pathname = str_replace('/', DIRECTORY_SEPARATOR, str_replace('\\', DIRECTORY_SEPARATOR, $iterator->getPathname()));
-				$continue = false;
-				if(in_array($iterator->getFilename(), $ignores)) {
-					$continue = true;
-				} else {
-					foreach($ignores as $ignore) {
-						if(strpos($pathname, DIRECTORY_SEPARATOR . $ignore . DIRECTORY_SEPARATOR) !== false) {
-							$continue = true;
-							break;
-						} elseif(strrpos($pathname, DIRECTORY_SEPARATOR . $ignore) == (strlen($pathname) - strlen(DIRECTORY_SEPARATOR . $ignore))) {
-							// if we hit the directory itself it wont include a trailing /
-							$continue = true;
-							break;
+			try {
+				foreach(new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path), RecursiveIteratorIterator::CHILD_FIRST) as $iterator) {
+					// omg, thanks spl for always using forward slashes ... even on windows
+					$pathname = str_replace('/', DIRECTORY_SEPARATOR, str_replace('\\', DIRECTORY_SEPARATOR, $iterator->getPathname()));
+					$continue = false;
+					if(in_array($iterator->getFilename(), $ignores)) {
+						$continue = true;
+					} else {
+						foreach($ignores as $ignore) {
+							if(strpos($pathname, DIRECTORY_SEPARATOR . $ignore . DIRECTORY_SEPARATOR) !== false) {
+								$continue = true;
+								break;
+							} elseif(strrpos($pathname, DIRECTORY_SEPARATOR . $ignore) == (strlen($pathname) - strlen(DIRECTORY_SEPARATOR . $ignore))) {
+								// if we hit the directory itself it wont include a trailing /
+								$continue = true;
+								break;
+							}
 						}
 					}
+					if($continue) {
+						continue;
+					}
+					if($iterator->isDir()) {
+						@rmdir($pathname);
+					} elseif($iterator->isFile()) {
+						@unlink($pathname);
+					}
 				}
-				if($continue) {
-					continue;
-				}
-				if($iterator->isDir()) {
-					@rmdir($pathname);
-				} elseif($iterator->isFile()) {
-					@unlink($pathname);
-				}
+			} catch(Exception $e) {
+				// ignore all exceptions in case the path didn't exist anymore
 			}
 		}
 	}
@@ -236,7 +243,18 @@ final class AgaviToolkit
 	 */
 	public static function expandVariables($string, array $arguments = array())
 	{
-		return preg_replace(array('/\$\{([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)\}/e', '/\{\$([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)\}/e', '/\$([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)/e'), 'isset($arguments["$1"]) ? $arguments["$1"] : \'$0\'', $string);
+		// replacing the other two forms is faster than using three different search values in the str_replace
+		// also, if we had three search patterns, ${foo} with an argument {foo} would be replaced...
+		$string = preg_replace(
+			array('/\$\{([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)\}/', '/\{\$([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)\}/'),
+			'$$1',
+			$string
+		);
+		$search = array();
+		foreach($arguments as $key => $value) {
+			$search[] = '$' . $key;
+		}
+		return str_replace($search, $arguments, $string);
 	}
 	
 	/**
@@ -287,29 +305,36 @@ final class AgaviToolkit
 	 *
 	 * @return     string The new value.
 	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @author     Johan Mjones <johan.mjones@ongame.com>
 	 * @author     David Zülke <dz@bitxtender.com>
-	 * @since      0.9.0
+	 * @since      0.11.0
 	 */
 	public static function expandDirectives($value)
 	{
-		$newvalue = $value;
-		
 		do {
-			$value = $newvalue;
-			$newvalue = preg_replace_callback(
+			$oldvalue = $value;
+			$value = preg_replace_callback(
 				'/\%([\w\.]+?)\%/',
-				create_function(
-					'$match',
-					'$constant = $match[1];' .
-					'return (AgaviConfig::has($constant) ? AgaviConfig::get($constant) : "%".$constant."%");'
-				),
+				array('AgaviToolkit', 'expandDirectivesCallback'),
 				$value
 			);
-		} while($newvalue != $value);
+		} while($oldvalue != $value);
 		
 		return $value;
+	}
+	
+	/**
+	 * preg_replace_callback used in AgaviTookit::expandDirectives()
+	 *
+	 * @param      array An array of matches; index 1 is used.
+	 *
+	 * @return     string A value to use for replacement.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	private static function expandDirectivesCallback($matches)
+	{
+		return AgaviConfig::get($matches[1], '%' . $matches[1] . '%');
 	}
 
 	/**

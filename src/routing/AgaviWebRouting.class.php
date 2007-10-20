@@ -44,7 +44,7 @@ class AgaviWebRouting extends AgaviRouting
 	 * @var        array The GET parameters that were passed in the URL.
 	 */
 	protected $inputParameters = array();
-	
+
 	/**
 	 * Constructor.
 	 *
@@ -54,7 +54,7 @@ class AgaviWebRouting extends AgaviRouting
 	public function __construct()
 	{
 		parent::__construct();
-		
+
 		$this->defaultGenOptions = array_merge($this->defaultGenOptions, array(
 			// separator, typically &amp; for HTML, & otherwise
 			'separator' => '&amp;',
@@ -87,11 +87,11 @@ class AgaviWebRouting extends AgaviRouting
 	public function initialize(AgaviContext $context, array $parameters = array())
 	{
 		parent::initialize($context, $parameters);
-		
+
 		$rq = $this->context->getRequest();
-		
+
 		$rd = $rq->getRequestData();
-		
+
 		// 'scheme://authority' is necessary so parse_url doesn't stumble over '://' in the request URI
 		$ru = parse_url('scheme://authority' . $rq->getRequestUri());
 		if(!isset($ru['path'])) {
@@ -102,44 +102,40 @@ class AgaviWebRouting extends AgaviRouting
 		} else {
 			$ru['query'] = preg_replace('/&$/D', '', $ru['query']);
 		}
-		
+
 		$qs = (isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : '');
-		
+
 		$rewritten = ($qs !== $ru['query']);
-		
+
 		if(AgaviConfig::get("core.use_routing", false) && $rewritten) {
 			$this->input = preg_replace('/' . preg_quote('&' . $ru['query'], '/') . '$/D', '', $qs);
-			
+
 			if(isset($_SERVER['SERVER_SOFTWARE']) && strpos($_SERVER['SERVER_SOFTWARE'], 'Apache/2.2') !== false) {
 				// multiple consecutive slashes got lost in our input thanks to an apache bug
 				// let's fix that
-				// var_dump($this->input, $ru['query'], rawurldecode($_SERVER['REQUEST_URI']), '--------------------');
 				$cqs = preg_replace('#/{2,}#', '/', rawurldecode($ru['query']));
 				$cru = preg_replace('#/{2,}#', '/', rawurldecode($_SERVER['REQUEST_URI']));
 				$tmp = preg_replace('/' . preg_quote($this->input . (($cqs != '') ? '?' . $cqs : ''), '/') . '$/D', '', $cru);
-				// var_dump($cqs, $cru, $tmp, '====================');
 				$input = preg_replace('/^' . preg_quote($tmp, '/') . '/', '', $_SERVER['REQUEST_URI']);
 				if($ru['query']) {
 					$input = preg_replace('/' . preg_quote('?' . $ru['query'], '/') . '$/D', '', $input);
 				}
 				$this->input = rawurldecode($input);
-				// var_dump($this->input, '====================');
 			}
-			
+
 			if(!isset($_SERVER['SERVER_SOFTWARE']) || strpos($_SERVER['SERVER_SOFTWARE'], 'Apache') === false) {
 				// don't do that for Apache, it's already rawurldecode()d there
 				$this->input = rawurldecode($this->input);
 			}
-			
+
 			$xrup = rawurldecode($ru['path']);
 			$this->basePath = $this->prefix = preg_replace('/' . preg_quote($this->input, '/') . '$/D', '', rawurldecode($ru['path']));
-			// var_dump($this->input, $xrup, $this->prefix, '');
-			
+
 			// that was easy. now clean up $_GET and the Request
 			$parsedRuQuery = $parsedInput = '';
 			parse_str($ru['query'], $parsedRuQuery);
 			parse_str($this->input, $parsedInput);
-			if(get_magic_quotes_gpc()) {
+			if(function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
 				$parsedRuQuery = AgaviWebRequest::clearMagicQuotes($parsedRuQuery);
 				$parsedInput = AgaviWebRequest::clearMagicQuotes($parsedInput, false /* start on the first level */);
 			}
@@ -152,30 +148,30 @@ class AgaviWebRouting extends AgaviRouting
 		} else {
 			$sn = $_SERVER['SCRIPT_NAME'];
 			$path = rawurldecode($ru['path']);
-			
+
 			$appendFrom = 0;
 			$this->prefix = AgaviToolkit::stringBase($sn, $path, $appendFrom);
 			$this->prefix .= substr($sn, $appendFrom + 1);
-			
+
 			$this->input = substr($path, $appendFrom + 1);
 			if(!isset($_SERVER['SERVER_SOFTWARE']) || strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') === false || isset($_SERVER['HTTP_X_REWRITE_URL']) || !isset($_SERVER['GATEWAY_INTERFACE']) || strpos($_SERVER['GATEWAY_INTERFACE'], 'CGI') === false) {
 				// don't do that for IIS-CGI, it's already rawurldecode()d there
 				$this->input = rawurldecode($this->input);
 			}
-			
+
 			$this->basePath = str_replace('\\', '/', dirname($this->prefix));
 		}
-		
+
 		$this->inputParameters = $_GET;
-		
+
 		if(!$this->input) {
 			$this->input = "/";
 		}
-		
+
 		if(substr($this->basePath, -1, 1) != '/') {
 			$this->basePath .= '/';
 		}
-		
+
 		$this->baseHref = $rq->getUrlScheme() . '://' . $rq->getUrlAuthority() . $this->basePath;
 	}
 
@@ -221,7 +217,7 @@ class AgaviWebRouting extends AgaviRouting
 	public function gen($route, array $params = array(), $options = array())
 	{
 		$req = $this->context->getRequest();
-		
+
 		if(substr($route, -1) == '*') {
 			$options['refill_all_parameters'] = true;
 			$route = substr($route, 0, -1);
@@ -229,14 +225,19 @@ class AgaviWebRouting extends AgaviRouting
 
 		$options = $this->resolveGenOptions($options);
 
+		$aso = ini_get('arg_separator.output');
+		if($options['separator'] != $aso) {
+			$aso = $options['separator'];
+		}
+
 		if($route === null && empty($params)) {
 			$retval = $req->getRequestUri();
-			$retval = str_replace('&', $options['separator'], $retval);
+			$retval = str_replace('&', $aso, $retval);
 		} else {
 			if(defined('SID') && SID !== '' && $options['use_trans_sid'] === true) {
 				$params = array_merge($params, array(session_name() => session_id()));
 			}
-		
+
 			if($route === null) {
 				if(AgaviConfig::get('core.use_routing')) {
 					$routes = array_reverse($req->getAttribute('matched_routes', 'org.agavi.routing'));
@@ -270,7 +271,7 @@ class AgaviWebRouting extends AgaviRouting
 					}
 
 					if(count($p) > 0) {
-						$append = '?' . http_build_query($p);
+						$append = '?' . http_build_query($p, '', $aso);
 					}
 				} else {
 					// the route exists, but we must create a normal index.php?foo=bar URL.
@@ -278,10 +279,10 @@ class AgaviWebRouting extends AgaviRouting
 					// we collect the default parameters from the route and make sure
 					// new parameters don't overwrite already defined parameters
 					$defaults = array();
-				
+
 					$ma = $req->getParameter('module_accessor');
 					$aa = $req->getParameter('action_accessor');
-				
+
 					foreach($routes as $route) {
 						if(isset($this->routes[$route])) {
 							$r = $this->routes[$route];
@@ -307,11 +308,6 @@ class AgaviWebRouting extends AgaviRouting
 			}
 			// the route does not exist. we generate a normal index.php?foo=bar URL.
 
-			$aso = ini_get('arg_separator.output');
-			if($options['separator'] != $aso) {
-				$aso = $options['separator'];
-			}
-
 			if($route === null) {
 				$path = $_SERVER['SCRIPT_NAME'];
 				$append = '?' . http_build_query($params, '', $aso);
@@ -328,11 +324,11 @@ class AgaviWebRouting extends AgaviRouting
 		}
 
 		if(
-			!$options['relative'] || 
+			!$options['relative'] ||
 			($options['relative'] && (
-				$options['scheme'] !== null || 
-				$options['authority'] !== null || 
-				$options['host'] !== null || 
+				$options['scheme'] !== null ||
+				$options['authority'] !== null ||
+				$options['host'] !== null ||
 				$options['port'] !== null
 			))
 		) {
@@ -340,12 +336,12 @@ class AgaviWebRouting extends AgaviRouting
 			if($options['scheme'] !== false) {
 				$scheme = ($options['scheme'] === null ? $req->getUrlScheme() : $options['scheme']);
 			}
-			
+
 			$authority = '';
-			
+
 			if($options['authority'] === null) {
 				if(
-					($options['host'] !== null && $options['host'] !== false) && 
+					($options['host'] !== null && $options['host'] !== false) &&
 					($options['port'] !== null && $options['port'] !== false)
 				) {
 					$authority = $req->getUrlAuthority();
@@ -378,14 +374,14 @@ class AgaviWebRouting extends AgaviRouting
 			} elseif($options['authority'] !== false) {
 				$authority = $options['authority'];
 			}
-			
+
 			$retval = ($scheme === null ? '' : $scheme . '://') . $authority . $retval;
 		}
 
 		if($options['fragment'] !== null) {
 			$retval .= '#' . $options['fragment'];
 		}
-		
+
 		return $retval;
 	}
 

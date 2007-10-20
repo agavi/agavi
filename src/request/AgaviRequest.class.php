@@ -54,13 +54,12 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	/**
 	 * @var        AgaviRequestDataHolder The request data holder instance.
 	 */
-	protected $requestData = null;
+	private $requestData = null;
 
 	/**
-	 * @var        bool A boolean value indicating whether or not the request is 
-	 *                  locked.
+	 * @var        string The key used to lock the request, or null if no lock set
 	 */
-	private $locked = false;
+	private $key = null;
 
 	/**
 	 * Retrieve the current application context.
@@ -173,21 +172,34 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	}
 
 	/**
+	 * Set the data holder instance of this request.
+	 *
+	 * @param      AgaviRequestDataHolder The request data holder.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	final protected function setRequestData(AgaviRequestDataHolder $rd)
+	{
+		if(!$this->isLocked()) {
+			$this->requestData = $rd;
+		}
+	}
+
+	/**
 	 * Get the data holder instance of this request.
 	 *
 	 * @return     AgaviRequestDataHolder The request data holder.
 	 *
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function getRequestData()
+	final public function getRequestData()
 	{
-		if($this->locked) {
-			if($this->getParameter('request_lock_barf', true)) {
-				throw new AgaviException("Access to request data is locked during Action and View execution, please use the local request data holder passed to your Action's or View's execute*() method to access request data.\nYou may disable the throwing of this exception by setting the 'request_lock_barf' parameter to false. Sorry for the name of that one, 'throw_exception_when_trying_to_access_request_data_while_request_is_locked' is just a little too long.");
-			} else {
-				return new AgaviRequestDataHolder();
-			}
+		if($this->isLocked()) {
+			throw new AgaviException("Access to request data is locked during Action and View execution, please use the local request data holder passed to your Action's or View's execute*() method to access request data.");
 		}
 		return $this->requestData;
 	}
@@ -222,7 +234,7 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	 */
 	public final function isLocked()
 	{
-		return $this->locked;
+		return $this->key !== null;
 	}
 
 	/**
@@ -239,13 +251,12 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	 */
 	public final function toggleLock($key = null)
 	{
-		static $keys = array();
-		if(!$this->locked && $key === null) {
+		if(!$this->isLocked() && $key === null) {
 			$this->locked = true;
-			return $this->keys[$this->context->getName()] = uniqid();
-		} elseif($this->locked) {
-			if(isset($this->keys[$this->context->getName()]) && $this->keys[$this->context->getName()] == $key) {
-				$this->locked = false;
+			return $this->key = uniqid();
+		} elseif($this->isLocked()) {
+			if($this->key === $key) {
+				$this->key = null;
 				return true;
 			}
 			return false;

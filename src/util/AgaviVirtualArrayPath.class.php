@@ -59,17 +59,8 @@ class AgaviVirtualArrayPath
 			return;
 		}
 		
-		$parts = array();
-		$this->absolute = ($path[0] != '[');
-		if(($pos = strpos($path, '[')) === false) {
-			$pos = strlen($path);
-		}
-		if($this->absolute) {
-			$parts[] = substr($path, 0, $pos);
-		}
-
 		$parts = AgaviArrayPathDefinition::getPartsFromPath($path);
-
+		
 		$this->absolute = $parts['absolute'];
 		$this->parts = $parts['parts'];
 	}
@@ -308,7 +299,7 @@ class AgaviVirtualArrayPath
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function & getValue(array &$array, $default = null)
+	public function &getValue(array &$array, $default = null)
 	{
 		return AgaviArrayPathDefinition::getValue($this->parts, $array, $default);
 	}
@@ -340,7 +331,7 @@ class AgaviVirtualArrayPath
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function & getValueByChildPath($path, array &$array, $default = null)
+	public function &getValueByChildPath($path, array &$array, $default = null)
 	{
 		$p = $this->pushRetNew($path);
 

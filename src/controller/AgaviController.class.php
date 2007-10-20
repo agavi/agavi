@@ -70,6 +70,11 @@ class AgaviController extends AgaviParameterHolder
 	protected $outputTypes = array();
 	
 	/**
+	 * @var        array Ref to the request data object from the request.
+	 */
+	private $requestData = null;
+	
+	/**
 	 * Indicates whether or not a module has a specific action.
 	 *
 	 * @param      string A module name.
@@ -86,7 +91,7 @@ class AgaviController extends AgaviParameterHolder
 	{
 		$actionName = str_replace('.', '/', $actionName);
 		$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/actions/' . $actionName . 'Action.class.php';
-		if(is_readable($file)) {
+		if(is_readable($file) && substr($actionName, 0, 1) !== '/') {
 			return $actionName;
 		}
 		throw new AgaviControllerException(sprintf('Action "%s" in Module "%s" could not be found.', $actionName, $moduleName));
@@ -134,6 +139,7 @@ class AgaviController extends AgaviParameterHolder
 		$container->initialize($this->context, $ecfi['parameters']);
 		$container->setModuleName($moduleName);
 		$container->setActionName($actionName);
+		$container->setRequestData($this->requestData);
 		if($arguments !== null) {
 			$container->setArguments($arguments);
 		}
@@ -479,6 +485,8 @@ class AgaviController extends AgaviParameterHolder
 	 */
 	public function startup()
 	{
+		// grab a pointer to the request data
+		$this->requestData = $this->context->getRequest()->getRequestData();
 	}
 
 	/**

@@ -31,6 +31,9 @@
  * # <b>db_time_col</b>  - [sess_time] - The database column in which the
  *                                       session timestamp will be stored.
  * # <b>session_name</b> - [Agavi]     - The name of the session.
+ * # <b>date_format</b>  - [U]         - The format string passed to date() to
+ *                                       format timestamps. Defaults to "U",
+ *                                       which means a Unix Timestamp again.
  *
  * @package    agavi
  * @subpackage storage
@@ -157,8 +160,8 @@ class AgaviPostgresqlSessionStorage extends AgaviSessionStorage
 		$db_table    = $this->getParameter('db_table');
 		$db_time_col = $this->getParameter('db_time_col', 'sess_time');
 
-		// delete the record associated with this id
-		$sql = 'DELETE FROM ' . $db_table . ' WHERE ' . $db_time_col . ' < ' . $lifetime;
+		// delete the records that are expired
+		$sql = 'DELETE FROM ' . $db_table . ' WHERE ' . $db_time_col . ' < ' . date($this->getParameter('date_format', 'U'), $time);
 
 		if(@pg_query($this->resource, $sql)) {
 			return true;
@@ -188,7 +191,7 @@ class AgaviPostgresqlSessionStorage extends AgaviSessionStorage
 	public function sessionOpen($path, $name)
 	{
 		// what database are we using?
-		$database = $this->getParameter('database', 'default');
+		$database = $this->getParameter('database', null);
 
 		// get the database resource
 		$this->resource = $this->getContext()->getDatabaseManager()->getDatabase($database)->getResource();
@@ -232,7 +235,7 @@ class AgaviPostgresqlSessionStorage extends AgaviSessionStorage
 		} else {
 
 			// session does not exist, create it
-			$sql = 'INSERT INTO ' . $db_table . ' (' . $db_id_col . ', ' . $db_data_col . ', ' . $db_time_col . ') VALUES (\'' . $id . '\', \'\', ' . time() . ')';
+			$sql = 'INSERT INTO ' . $db_table . ' (' . $db_id_col . ', ' . $db_data_col . ', ' . $db_time_col . ') VALUES (\'' . $id . '\', \'\', ' . date($this->getParameter('date_format', 'U')) . ')';
 
 			if(@pg_query($this->resource, $sql)) {
 				return '';
@@ -273,7 +276,7 @@ class AgaviPostgresqlSessionStorage extends AgaviSessionStorage
 		$data = addslashes($data);
 
 		// delete the record associated with this id
-		$sql = 'UPDATE ' . $db_table . ' SET ' . $db_data_col . ' = \'' . $data . '\', ' . $db_time_col . ' = ' . time() . ' WHERE ' . $db_id_col . ' = \'' . $id . '\'';
+		$sql = 'UPDATE ' . $db_table . ' SET ' . $db_data_col . ' = \'' . $data . '\', ' . $db_time_col . ' = ' . date($this->getParameter('date_format', 'U')) . ' WHERE ' . $db_id_col . ' = \'' . $id . '\'';
 
 		if(@pg_query($this->resource, $sql)) {
 			return true;
