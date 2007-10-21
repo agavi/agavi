@@ -170,17 +170,19 @@ abstract class AgaviView
 	 */
 	public function appendLayer(AgaviTemplateLayer $layer, AgaviTemplateLayer $otherLayer = null)
 	{
-		if($otherLayer !== null && in_array($otherLayer, $this->layers, true)) {
+		if($otherLayer !== null && !in_array($otherLayer, $this->layers, true)) {
 			throw new AgaviViewException('Layer "' . $otherLayer->getName() . '" not in list');
 		}
 
-		if($pos = array_search($layer, $this->layers, true) !== false) {
+		if(($pos = array_search($layer, $this->layers, true)) !== false) {
 			// given layer is already in the list, so we remove it first
 			array_splice($this->layers, $pos, 1);
 		}
 
 		if($otherLayer === null) {
 			$dest = count($this->layers);
+		} elseif($otherLayer === $layer) {
+			$dest = $pos;
 		} else {
 			$dest = array_search($otherLayer, $this->layers, true) + 1;
 		}
@@ -205,17 +207,19 @@ abstract class AgaviView
 	 */
 	public function prependLayer(AgaviTemplateLayer $layer, AgaviTemplateLayer $otherLayer = null)
 	{
-		if($otherLayer !== null && in_array($otherLayer, $this->layers, true)) {
+		if($otherLayer !== null && !in_array($otherLayer, $this->layers, true)) {
 			throw new AgaviViewException('Layer "' . $otherLayer->getName() . '" not in list');
 		}
 
-		if($pos = array_search($layer, $this->layers, true) !== false) {
+		if(($pos = array_search($layer, $this->layers, true)) !== false) {
 			// given layer is already in the list, so we remove it first
 			array_splice($this->layers, $pos, 1);
 		}
 
 		if($otherLayer === null) {
 			$dest = 0;
+		} elseif($otherLayer === $layer) {
+			$dest = $pos;
 		} else {
 			$dest = array_search($otherLayer, $this->layers, true);
 		}
