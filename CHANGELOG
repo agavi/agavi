@@ -7,6 +7,9 @@ ADD: Pass on "is_slot" flag in View::createForwardContainer() (#591) (David)
 
 CHG: Use gmdate() in config handlers to prevent strict notices about timezone settings (#590) (David)
 
+FIX: View::appendLayer() and View::prependLayer() break when given a second argument (#593) (David)
+FIX: core.skip_config_validation logic is inverted (#592) (David)
+
 
 0.11.0 RC6 (October 12, 2007)
 
