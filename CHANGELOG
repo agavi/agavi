@@ -3,6 +3,7 @@ AGAVI CHANGELOG
 
 0.11.0 (October ??, 2007)
 
+ADD: Default extension of renderers can now be configured directly via "default_extension" parameter (#594) (David)
 ADD: Pass on "is_slot" flag in View::createForwardContainer() (#591) (David)
 
 CHG: Use gmdate() in config handlers to prevent strict notices about timezone settings (#590) (David)
