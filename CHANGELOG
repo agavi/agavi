@@ -1,6 +1,11 @@
 AGAVI CHANGELOG
 ===============
 
+0.11.0 (October ??, 2007)
+
+ADD: Allow simpler format definitions in DateTime validator (#596) (David)
+
+
 0.11.0 RC7 (October 23, 2007)
 
 ADD: Default extension of renderers can now be configured directly via "default_extension" parameter (#594) (David)
