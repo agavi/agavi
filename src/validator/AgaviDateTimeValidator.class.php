@@ -135,7 +135,11 @@ class AgaviDateTimeValidator extends AgaviValidator
 			}
 
 			$matchedFormat = false;
-			foreach($this->getParameter('formats', array()) as $item) {
+			foreach((array)$this->getParameter('formats', array()) as $key => $item) {
+				if(!is_array($item)) {
+					$item = array((is_int($key) ? 'format' : $key) => $item);
+				}
+				
 				$itemLocale = empty($item['locale']) ? $locale : $tm->getLocale($item['locale']);
 				$type = empty($item['type']) ? 'format' : $item['type'];
 
