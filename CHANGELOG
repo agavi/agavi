@@ -5,6 +5,8 @@ AGAVI CHANGELOG
 
 ADD: Allow simpler format definitions in DateTime validator (#596) (David)
 
+FIX: Routing gets confused by a trailing ampersand in the query string under some circumstances (#599) (David)
+
 
 0.11.0 RC7 (October 23, 2007)
 
