@@ -100,10 +100,10 @@ class AgaviWebRouting extends AgaviRouting
 		if(!isset($ru['query'])) {
 			$ru['query'] = '';
 		} else {
-			$ru['query'] = preg_replace('/&$/D', '', $ru['query']);
+			$ru['query'] = preg_replace('/&+$/D', '', $ru['query']);
 		}
 
-		$qs = (isset($_SERVER['QUERY_STRING']) ? preg_replace('/&$/D', '', $_SERVER['QUERY_STRING']) : '');
+		$qs = (isset($_SERVER['QUERY_STRING']) ? preg_replace('/&+$/D', '', $_SERVER['QUERY_STRING']) : '');
 
 		$rewritten = ($qs !== $ru['query']);
 
@@ -113,7 +113,7 @@ class AgaviWebRouting extends AgaviRouting
 			if(isset($_SERVER['SERVER_SOFTWARE']) && strpos($_SERVER['SERVER_SOFTWARE'], 'Apache/2.2') !== false) {
 				// multiple consecutive slashes got lost in our input thanks to an apache bug
 				// let's fix that
-				$sru = preg_replace('/&$/D', '', $_SERVER['REQUEST_URI']);
+				$sru = preg_replace('/&+$/D', '', $_SERVER['REQUEST_URI']);
 				$cqs = preg_replace('#/{2,}#', '/', rawurldecode($ru['query']));
 				$cru = preg_replace('#/{2,}#', '/', rawurldecode($sru));
 				$tmp = preg_replace('/' . preg_quote($this->input . (($cqs != '') ? '?' . $cqs : ''), '/') . '$/D', '', $cru);
