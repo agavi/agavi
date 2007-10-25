@@ -88,7 +88,7 @@ class AgaviStreamTemplateLayer extends AgaviTemplateLayer
 		foreach((array)$this->getParameter('targets', array()) as $pattern) {
 			// try pattern with each argument list
 			foreach($args as $arg) {
-				$target = AgaviToolkit::expandVariables($pattern, array_merge(array_filter($this->getParameters(), 'is_string'), $arg));
+				$target = AgaviToolkit::expandVariables($pattern, array_merge(array_filter($this->getParameters(), 'is_scalar'), $arg));
 				// FIXME (should they fix it): don't add file:// because suhosin's include whitelist is empty by default, does not contain 'file' as allowed uri scheme
 				if($scheme != 'file') {
 					$target = $scheme . '://' . $target;
