@@ -5,6 +5,8 @@ AGAVI CHANGELOG
 
 ADD: Allow simpler format definitions in DateTime validator (#596) (David)
 
+FIX: Routing callbacks cannot set additional arguments that are not in the pattern (e.g. extra query args) (#602) (David)
+FIX: Strict standards violation in AgaviPdoSessionStorage (#600) (Veikko)
 FIX: Routing gets confused by a trailing ampersand in the query string under some circumstances (#599) (David)
 
 
