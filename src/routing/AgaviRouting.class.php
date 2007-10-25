@@ -643,6 +643,9 @@ abstract class AgaviRouting extends AgaviParameterHolder
 			}
 		}
 
+		// remember the params that are not in any pattern (could be extra query params, for example, set by a callback)
+		$extras = array_diff_key($params, $finalParams);
+
 		$params = $finalParams;
 
 		$from = array();
@@ -662,7 +665,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 		}
 
 		$url = str_replace($from, $to, $url);
-		return array($this->prefix . $url, $params, $options);
+		return array($this->prefix . $url, $params, $options, $extras);
 	}
 
 	/**

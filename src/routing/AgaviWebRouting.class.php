@@ -261,7 +261,7 @@ class AgaviWebRouting extends AgaviRouting
 
 					$append = '';
 
-					list($path, $usedParams, $options) = parent::gen($routes, array_merge(array_map('rawurlencode', array_filter($params, array('AgaviToolkit', 'isNotArray'))), array_filter($params, 'is_null')), $options);
+					list($path, $usedParams, $options, $extraParams) = parent::gen($routes, array_merge(array_map('rawurlencode', array_filter($params, array('AgaviToolkit', 'isNotArray'))), array_filter($params, 'is_null')), $options);
 
 					$p = $params;
 					// get the parameters which are not defined in this route an append them as query string
@@ -270,6 +270,8 @@ class AgaviWebRouting extends AgaviRouting
 							unset($p[$name]);
 						}
 					}
+					// and do not forget those set by routing callbacks
+					$p = array_merge($p, $extraParams);
 
 					if(count($p) > 0) {
 						$append = '?' . http_build_query($p, '', $aso);
