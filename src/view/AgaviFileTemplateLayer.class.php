@@ -80,7 +80,7 @@ class AgaviFileTemplateLayer extends AgaviStreamTemplateLayer
 			$directory = $this->getParameter('directory');
 		}
 		// treat the directory as sprintf format string and inject module name
-		$directory = AgaviToolkit::expandVariables($directory, array_filter($this->getParameters(), 'is_string'));
+		$directory = AgaviToolkit::expandVariables($directory, array_merge(array_filter($this->getParameters(), 'is_scalar'), array_filter($this->getParameters(), 'is_null')));
 		
 		$this->setParameter('directory', $directory);
 		$this->setParameter('template', $template);
