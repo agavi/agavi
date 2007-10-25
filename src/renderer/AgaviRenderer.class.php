@@ -110,26 +110,22 @@ abstract class AgaviRenderer extends AgaviParameterHolder
 		
 		$this->setParameters($parameters);
 		
-		if(isset($parameters['var_name'])) {
-			$this->varName = $parameters['var_name'];
-		}
-		if(isset($parameters['slots_var_name'])) {
-			$this->slotsVarName = $parameters['slots_var_name'];
-		}
-		if(isset($parameters['extract_vars'])) {
-			$this->extractVars = $parameters['extract_vars'];
-		}
+		$this->varName = $this->getParameter('var_name', $this->varName);
+		$this->slotsVarName = $this->getParameter('slots_var_name', $this->slotsVarName);
+		$this->extractVars = $this->getParameter('extract_vars', $this->extractVars);
+		
+		$this->defaultExtension = $this->getParameter('default_extension', $this->defaultExtension);
+		
 		if(!$this->extractVars && $this->varName == $this->slotsVarName) {
 			throw new AgaviException('Template and Slots container variable names cannot be identical.');
 		}
-		if(isset($parameters['assigns'])) {
-			foreach($parameters['assigns'] as $item => $var) {
-				$getter = 'get' . str_replace('_', '', $item);
-				if(method_exists($this->context, $getter)) {
-					$this->assigns[$var] = $getter;
-				} else {
-					$this->moreAssignNames[$item] = $var;
-				}
+		
+		foreach($this->getParameter('assigns', array()) as $item => $var) {
+			$getter = 'get' . str_replace('_', '', $item);
+			if(method_exists($this->context, $getter)) {
+				$this->assigns[$var] = $getter;
+			} else {
+				$this->moreAssignNames[$item] = $var;
 			}
 		}
 	}

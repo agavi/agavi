@@ -624,6 +624,8 @@ foreach($lines as $key => &$line) {
 			<dd><?php echo phpversion(); ?></dd>
 			<dt>System:</dt>
 			<dd><?php echo php_uname(); ?></dd>
+			<dt>Timestamp:</dt>
+			<dd><?php echo gmdate(DATE_ISO8601); ?></dd>
 		</dl>
 	</body>
 </html>

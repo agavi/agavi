@@ -100,10 +100,10 @@ class AgaviWebRouting extends AgaviRouting
 		if(!isset($ru['query'])) {
 			$ru['query'] = '';
 		} else {
-			$ru['query'] = preg_replace('/&$/D', '', $ru['query']);
+			$ru['query'] = preg_replace('/&+$/D', '', $ru['query']);
 		}
 
-		$qs = (isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : '');
+		$qs = (isset($_SERVER['QUERY_STRING']) ? preg_replace('/&+$/D', '', $_SERVER['QUERY_STRING']) : '');
 
 		$rewritten = ($qs !== $ru['query']);
 
@@ -113,10 +113,11 @@ class AgaviWebRouting extends AgaviRouting
 			if(isset($_SERVER['SERVER_SOFTWARE']) && strpos($_SERVER['SERVER_SOFTWARE'], 'Apache/2.2') !== false) {
 				// multiple consecutive slashes got lost in our input thanks to an apache bug
 				// let's fix that
+				$sru = preg_replace('/&+$/D', '', $_SERVER['REQUEST_URI']);
 				$cqs = preg_replace('#/{2,}#', '/', rawurldecode($ru['query']));
-				$cru = preg_replace('#/{2,}#', '/', rawurldecode($_SERVER['REQUEST_URI']));
+				$cru = preg_replace('#/{2,}#', '/', rawurldecode($sru));
 				$tmp = preg_replace('/' . preg_quote($this->input . (($cqs != '') ? '?' . $cqs : ''), '/') . '$/D', '', $cru);
-				$input = preg_replace('/^' . preg_quote($tmp, '/') . '/', '', $_SERVER['REQUEST_URI']);
+				$input = preg_replace('/^' . preg_quote($tmp, '/') . '/', '', $sru);
 				if($ru['query']) {
 					$input = preg_replace('/' . preg_quote('?' . $ru['query'], '/') . '$/D', '', $input);
 				}
@@ -260,7 +261,7 @@ class AgaviWebRouting extends AgaviRouting
 
 					$append = '';
 
-					list($path, $usedParams, $options) = parent::gen($routes, array_merge(array_map('rawurlencode', array_filter($params, array('AgaviToolkit', 'isNotArray'))), array_filter($params, 'is_null')), $options);
+					list($path, $usedParams, $options, $extraParams) = parent::gen($routes, array_merge(array_map('rawurlencode', array_filter($params, array('AgaviToolkit', 'isNotArray'))), array_filter($params, 'is_null')), $options);
 
 					$p = $params;
 					// get the parameters which are not defined in this route an append them as query string
@@ -269,6 +270,8 @@ class AgaviWebRouting extends AgaviRouting
 							unset($p[$name]);
 						}
 					}
+					// and do not forget those set by routing callbacks
+					$p = array_merge($p, $extraParams);
 
 					if(count($p) > 0) {
 						$append = '?' . http_build_query($p, '', $aso);

@@ -315,7 +315,7 @@ class AgaviPdoSessionStorage extends AgaviSessionStorage
 
 			$stmt = $this->connection->prepare($sql);
 			$stmt->bindParam(':data', $sp, $columnType);
-			$stmt->bindParam(':time', date($this->getParameter('date_format', 'U')));
+			$stmt->bindValue(':time', date($this->getParameter('date_format', 'U')));
 			$stmt->bindParam(':id', $id);
 			$this->connection->beginTransaction();
 			$stmt->execute();

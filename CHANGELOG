@@ -3,9 +3,21 @@ AGAVI CHANGELOG
 
 0.11.0 (October ??, 2007)
 
+ADD: Allow simpler format definitions in DateTime validator (#596) (David)
+
+FIX: Routing gets confused by a trailing ampersand in the query string under some circumstances (#599) (David)
+
+
+0.11.0 RC7 (October 23, 2007)
+
+ADD: Default extension of renderers can now be configured directly via "default_extension" parameter (#594) (David)
+ADD: Exception templates show current date and time (#595) (David)
 ADD: Pass on "is_slot" flag in View::createForwardContainer() (#591) (David)
 
 CHG: Use gmdate() in config handlers to prevent strict notices about timezone settings (#590) (David)
+
+FIX: View::appendLayer() and View::prependLayer() break when given a second argument (#593) (David)
+FIX: core.skip_config_validation logic is inverted (#592) (David)
 
 
 0.11.0 RC6 (October 12, 2007)
@@ -51,7 +63,7 @@ FIX: Error control operator in AgaviToolkit::mkdir() might be problematic (#576)
 FIX: Default database exists twice in the databases array, thus is shutdown twice (#574) (David)
 FIX: Agavi validation manager is missing the declaration of $incidents (#566) (Dominik)
 FIX: FilterChain resets run count for each registered filter; thus executeOnce() does not work as intended (#565) (David)
-FIX: User-agent check in shiny exception template can throw errors (Noah Fontes)
+FIX: User-agent check in shiny exception template can throw errors (#564) (Noah Fontes)
 FIX: WebRouting::gen() ignores 'separator' option when generating existing routes (#545) (David)
 FIX: <route action=".Something" /> confuses template location code (#540) (David)
 FIX: AgaviPropelDatabase returns null in getConnection when used with Propel 1.2 (#538) (Dominik) 

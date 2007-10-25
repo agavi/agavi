@@ -342,7 +342,7 @@ class AgaviXmlConfigParser
 	 */
 	public function validate(DOMDocument $doc, array $validationInfo = array())
 	{
-		if(!AgaviConfig::get('core.skip_config_validation', false)) {
+		if(AgaviConfig::get('core.skip_config_validation', false)) {
 			return;
 		}
 		

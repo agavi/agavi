@@ -75,10 +75,12 @@ foreach ($fixedTrace as $no => $trace) {
 
   Version Information
 =======================
-Agavi: <?php echo AgaviConfig::get('agavi.version'); ?>
+Agavi:     <?php echo AgaviConfig::get('agavi.version'); ?>
 
-PHP: <?php echo phpversion(); ?>
+PHP:       <?php echo phpversion(); ?>
 
-System: <?php echo php_uname(); ?>
+System:    <?php echo php_uname(); ?>
+
+Timestamp: <?php echo gmdate(DATE_ISO8601); ?>
 
 
