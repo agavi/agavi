@@ -43,13 +43,13 @@
 class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilter, AgaviIActionFilter
 {
 	const ENCODING_UTF_8 = 'utf-8';
-	
+
 	const ENCODING_ISO_8859_1 = 'iso-8859-1';
-	
+
 	protected $doc;
 	protected $xpath;
 	protected $ns;
-	
+
 	/**
 	 * Execute this filter.
 	 *
@@ -111,7 +111,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 		} else {
 			$rurl = $rq->getUrl();
 		}
-		
+
 		$errorMessageRules = array();
 		if(isset($cfg['error_messages']) && is_array($cfg['error_messages'])) {
 			$errorMessageRules = $cfg['error_messages'];
@@ -124,7 +124,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 		if(isset($cfg['multi_field_error_messages']) && is_array($cfg['multi_field_error_messages']) && count($cfg['multi_field_error_messages'])) {
 			$multiFieldErrorMessageRules = $cfg['multi_field_error_messages'];
 		}
-		
+
 		$luie = libxml_use_internal_errors(true);
 		libxml_clear_errors();
 
@@ -226,7 +226,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 			$baseHref = $rq->getUrl();
 		}
 		$baseHref = substr($baseHref, 0, strrpos($baseHref, '/') + 1);
-		
+
 		$forms = array();
 		if(is_array($populate)) {
 			$query = array();
@@ -241,10 +241,10 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 		} else {
 			$forms = $this->xpath->query('//' . $this->ns . 'form[@action]');
 		}
-		
+
 		// an array of all validation incidents; errors inserted for fields or multiple fields will be removed in here
 		$allIncidents = $vm->getIncidents();
-		
+
 		foreach($forms as $form) {
 			if($populate instanceof AgaviParameterHolder) {
 				$action = preg_replace('/#.*$/', '', trim($form->getAttribute('action')));
@@ -352,7 +352,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 							$errorClassElements[] = $label;
 						}
 					}
-					
+
 					// now loop over all those elements and assign the class
 					foreach($errorClassElements as $errorClassElement) {
 						// go over all the elements in the error class map
@@ -365,7 +365,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 							}
 						}
 					}
-					
+
 					// up next: the error messages
 					$fieldIncidents = array();
 					$multiFieldIncidents = array();
@@ -425,7 +425,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 						if($checkValue && is_array($value)) {
 							$eValue = $element->getAttribute('value');
 							if(!$utf8) {
-								$eValue = fromUtf8($eValue, $encoding);
+								$eValue = $this->fromUtf8($eValue, $encoding);
 							}
 							if(!in_array($eValue, $value)) {
 								continue;
@@ -477,9 +477,9 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 				$allIncidents = array();
 			}
 		}
-		
+
 		$rq->setAttribute('orphaned_errors', $allIncidents, 'org.agavi.filter.FormPopulationFilter');
-		
+
 		if($xhtml) {
 			$fiveTwo = version_compare(PHP_VERSION, '5.2', 'ge');
 			$firstError = null;
@@ -566,7 +566,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 		unset($this->xpath);
 		unset($this->doc);
 	}
-	
+
 	/**
 	 * Insert the error messages from the given incidents into the given element
 	 * using the given rules.
@@ -586,25 +586,25 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 			// nothing to do here
 			return true;
 		}
-		
+
 		$errorMessages = array();
 		foreach($incidents as $incident) {
 			foreach($incident->getErrors() as $error) {
 				$errorMessages[] = $error->getMessage();
 			}
 		}
-		
+
 		$luie = libxml_use_internal_errors(true);
 		libxml_clear_errors();
-		
+
 		$insertSuccessful = false;
 		foreach($rules as $xpathExpression => $errorMessageInfo) {
 			$targets = $this->xpath->query(AgaviToolkit::expandVariables($xpathExpression, array('htmlnsPrefix' => $this->ns)), $element);
-			
+
 			if(!$targets || !$targets->length) {
 				continue;
 			}
-			
+
 			if(!is_array($errorMessageInfo)) {
 				$errorMessageInfo = array('markup' => $errorMessageInfo);
 			}
@@ -623,9 +623,9 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 			} else {
 				$errorContainer = null;
 			}
-			
+
 			$errorElements = array();
-			
+
 			foreach($errorMessages as $errorMessage) {
 				if(is_string($errorMarkup)) {
 					// it's a string with the HTML to insert
@@ -649,10 +649,10 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 				} else {
 					throw new AgaviException('Form Population Filter was unable to insert an error message into the document using the XPath expression "' . $xpathExpression . '" because the element information could not be evaluated as an XML/HTML fragment or as a PHP callback.');
 				}
-				
+
 				$errorElements[] = $errorElement;
 			}
-			
+
 			if($errorContainer) {
 				// we have an error container.
 				// that means that instead of inserting each message element, we add the messages into the container
@@ -662,7 +662,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 				foreach($errorElements as $errorElement) {
 					$errorStrings[] = $errorElement->ownerDocument->saveXML($errorElement);
 				}
-				
+
 				// create the container element and replace the errors placeholder in the container
 				if(is_string($errorContainer)) {
 					// it's a string with the HTML to insert
@@ -686,12 +686,12 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 				} else {
 					throw new AgaviException('Form Population Filter was unable to insert an error message container into the document using the XPath expression "' . $xpathExpression . '" because the element information could not be evaluated as an XML/HTML fragment or as a PHP callback.');
 				}
-				
+
 				// and now the trick: set the error container element as the only one in the errorElements variable
 				// that way, it's going to get inserted for us as if it were a normal error message element, using the location specified
 				$errorElements = array($containerElement);
 			}
-			
+
 			if(libxml_get_last_error() !== false) {
 				$errors = array();
 				foreach(libxml_get_errors() as $error) {
@@ -707,7 +707,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 				);
 				throw new AgaviParseException($emsg);
 			}
-			
+
 			foreach($errorElements as $errorElement) {
 				foreach($targets as $target) {
 					if($errorLocation == 'before') {
@@ -727,18 +727,18 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 					}
 				}
 			}
-			
+
 			// and break the foreach, our expression matched after all - no need to look further
 			$insertSuccessful = true;
 			break;
 		}
-		
+
 		libxml_clear_errors();
 		libxml_use_internal_errors($luie);
-		
+
 		return $insertSuccessful;
 	}
-	
+
 	/**
 	 * Encode given value to UTF-8
 	 *
@@ -769,10 +769,10 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 				$value = iconv($encoding, self::ENCODING_UTF_8, $value);
 			}
 		}
-		
+
 		return $value;
 	}
-	
+
 	/**
 	 * Decode given value from UTF-8
 	 *
@@ -803,7 +803,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 				$value = iconv(self::ENCODING_UTF_8, $encoding, $value);
 			}
 		}
-		
+
 		return $value;
 	}
 
@@ -825,12 +825,12 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 		$this->setParameters(array(
 			'methods'                    => array(),
 			'output_types'               => null,
-			
+
 			'populate'                   => null,
 			'skip'                       => null,
 			'include_hidden_inputs'      => true,
 			'include_password_inputs'    => false,
-			
+
 			'force_output_mode'          => false,
 			'force_encoding'             => false,
 			'force_request_uri'          => false,
@@ -843,34 +843,34 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 			'dom_validate_on_parse'      => false,
 			'dom_preserve_white_space'   => true,
 			'dom_format_output'          => false,
-			
+
 			'error_class'                => 'error',
 			'error_class_map'            => array(),
 			'error_messages'             => array(),
 			'field_error_messages'       => array(),
 			'multi_field_error_messages' => array(),
-			
+
 			'log_parse_errors'           => true,
 			'logging_severity'           => AgaviLogger::FATAL,
 			'logging_logger'             => null,
 		));
-		
+
 		// initialize parent
 		parent::initialize($context, $parameters);
 
 		// and "clean up" some of the params just in case the user messed up
-		
+
 		$errorClassMap = (array) $this->getParameter('error_class_map');
 		// append a match-all expression to the map, which assigns the default error class
 		$errorClassMap['self::${htmlnsPrefix}*'] = $this->getParameter('error_class');
 		$this->setParameter('error_class_map', $errorClassMap);
-		
+
 		$this->setParameter('methods', (array) $this->getParameter('methods'));
-		
+
 		if($ot = $this->getParameter('output_types')) {
 			$this->setParameter('output_types', (array) $ot);
 		}
-		
+
 		// and now copy all that to the request namespace so it can all be modified at runtime, not just overwritten
 		$this->context->getRequest()->setAttributes($this->getParameters(), 'org.agavi.filter.FormPopulationFilter');
 	}
