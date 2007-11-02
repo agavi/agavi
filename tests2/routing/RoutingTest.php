@@ -110,7 +110,7 @@ class RoutingTest extends AgaviTestCase
 		$this->assertEquals('MACHINE', $rd->getParameter('machine'));
 
 		$this->assertsame(array('/parent/MACHINE'), array_slice($r->gen('test2child1', array('category' => null, 'machine' => 'MACHINE')), 0, 1));
-		$this->assertsame(array('/parent//MACHINE'), array_slice($r->gen('test2child1', array('machine' => 'MACHINE')), 0, 1));
+		$this->assertsame(array('/parent/MACHINE'), array_slice($r->gen('test2child1', array('machine' => 'MACHINE')), 0, 1));
 		$this->assertEquals(array('/parent/cat1/MACHINE'), array_slice($r->gen('test2child1', array('machine' => 'MACHINE', 'category' => 'cat1')), 0, 1));
 	}
 
