@@ -88,7 +88,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 			$group = base64_encode($group);
 		}
 		$filename = AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . self::CACHE_SUBDIR . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $groups) . '.cefcache';
-		$data = file_get_contents($filename);
+		$data = @file_get_contents($filename);
 		if($data !== false) {
 			return unserialize($data);
 		} else {
