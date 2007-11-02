@@ -87,7 +87,13 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 		foreach($groups as &$group) {
 			$group = base64_encode($group);
 		}
-		return unserialize(file_get_contents(AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . self::CACHE_SUBDIR . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $groups) . '.cefcache'));
+		$filename = AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . self::CACHE_SUBDIR . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $groups) . '.cefcache';
+		$data = file_get_contents($filename);
+		if($data !== false) {
+			return unserialize($data);
+		} else {
+			throw new AgaviException(sprintf('Failed to read cache file "%s"', $filename));
+		}
 	}
 
 	/**
@@ -271,8 +277,15 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 		if($isActionCached) {
 			// $lm->log('Action is cached, loading...');
 			// cache/dir/4-8-15-16-23-42 contains the action cache
-			$actionCache = $this->readCache(array_merge($groups, array(self::ACTION_CACHE_ID)));
-		} else {
+			try {
+				$actionCache = $this->readCache(array_merge($groups, array(self::ACTION_CACHE_ID)));
+			} catch(AgaviException $e) {
+				$isActionCached = false;
+			}
+		}
+		if(!$isActionCached) {
+			$actionCache = array();
+			
 			// $lm->log('Action not cached, executing...');
 			// execute the Action and get the View to execute
 			list($actionCache['view_module'], $actionCache['view_name']) = $this->runAction($container);
@@ -330,8 +343,13 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 
 			if($isViewCached) {
 				// $lm->log('View is cached, loading...');
-				$viewCache = $this->readCache(array_merge($groups, array($outputType)));
-			} else {
+				try {
+					$viewCache = $this->readCache(array_merge($groups, array($outputType)));
+				} catch(AgaviException $e) {
+					$isViewCached = false;
+				}
+			}
+			if(!$isViewCached) {
 				$viewCache = array();
 
 				// $lm->log('View is not cached, executing...');
