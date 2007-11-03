@@ -1,4 +1,4 @@
-<?
+<?php
 require_once(dirname(__FILE__) . '/../config/AgaviConfigTest.php');
 require_once(dirname(__FILE__) . '/../config/AutoloadConfigHandlerTest.php');
 require_once(dirname(__FILE__) . '/../config/CompileConfigHandlerTest.php');

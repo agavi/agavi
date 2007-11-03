@@ -1,4 +1,4 @@
-<?
+<?php
 require_once(dirname(__FILE__) . '/../user/UserTest.php');
 require_once(dirname(__FILE__) . '/../user/SecurityUserTest.php');
 require_once(dirname(__FILE__) . '/../user/RbacSecurityUserTest.php');

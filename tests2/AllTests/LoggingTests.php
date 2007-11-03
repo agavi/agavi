@@ -1,4 +1,4 @@
-<?
+<?php
 require_once(dirname(__FILE__) . '/../logging/AppenderTest.php');
 require_once(dirname(__FILE__) . '/../logging/FileAppenderTest.php');
 require_once(dirname(__FILE__) . '/../logging/LayoutTest.php');

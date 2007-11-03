@@ -1,4 +1,4 @@
-<?
+<?php
 //require_once(dirname(__FILE__) . '/../validator/ErrorManagerTest.php');
 //require_once(dirname(__FILE__) . '/../validator/DependencyManagerTest.php');
 //require_once(dirname(__FILE__) . '/../validator/ValidatorTest.php');

@@ -1,4 +1,4 @@
-<?
+<?php
 
 class DisabledModuleSuccessView extends AgaviView
 {

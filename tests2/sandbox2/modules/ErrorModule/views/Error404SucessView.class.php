@@ -1,4 +1,4 @@
-<?
+<?php
 
 class ErrorModule_Error404SuccessView extends AgaviView
 {
