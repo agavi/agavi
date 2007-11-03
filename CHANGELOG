@@ -5,6 +5,9 @@ AGAVI CHANGELOG
 
 ADD: Allow simpler format definitions in DateTime validator (#596) (David)
 
+CHG: Update timezone database to 2007i (#610) (Dominik)
+
+FIX: Adapt olson timezone generation task to agavi changes (#611) (Dominik)
 FIX: Optional route params are generated incorrectly under certain circumstances (#609) (Dominik)
 FIX: Incorrect handling of HTTP/1.0 requests (#604) (David)
 FIX: Caching leaves room for potential race condition (#608) (David)
