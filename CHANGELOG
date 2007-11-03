@@ -1,10 +1,14 @@
 AGAVI CHANGELOG
 ===============
 
-0.11.0 (October ??, 2007)
+0.11.0 (November 3, 2007)
 
 ADD: Allow simpler format definitions in DateTime validator (#596) (David)
 
+FIX: Optional route params are generated incorrectly under certain circumstances (#609) (Dominik)
+FIX: Incorrect handling of HTTP/1.0 requests (#604) (David)
+FIX: Caching leaves room for potential race condition (#608) (David)
+FIX: AgaviFormPopulationFilter calls fromUtf8 without $this-> (#606) (Veikko)
 FIX: Template layers do not expand empty parameters in formatting strings (#603) (David)
 FIX: Routing callbacks cannot set additional arguments that are not in the pattern (e.g. extra query args) (#602) (David)
 FIX: Strict standards violation in AgaviPdoSessionStorage (#600) (Veikko)

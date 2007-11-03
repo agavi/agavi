@@ -1,7 +1,7 @@
 AGAVI RELEASE NOTES
 ===================
 
-Version 0.11.0 - ???????? ?? ????
+Version 0.11.0 - November 3, 2007
 =================================
 
 The following is a brief summary of the most important changes in this release. For a full list of new features, changes and bugfixes, please refer to the CHANGELOG. For a list of API changes, please refer to the API_CHANGELOG. For detailed information on how to upgrade from 0.10.x to 0.11, please refer to the "Agavi 0.10 to 0.11 Migration Guide".
@@ -10,9 +10,9 @@ Core
 ----
 A new class 'Agavi' now handles bootstrapping etc. All classes got an "Agavi" prefix.
 
-The concept of environments and contexts was introduced.
-Typical environments would be 'production', 'development' and 'testing'. All configuration settings can be specific to an environment. Thus, it's easy to have multiple database settings for each environment. The name of the environment is passed to the bootstrap method that starts up the core framework. Thus, application deployment is greatly simplified.
-Typical Contexts would be 'web', 'xmlrpc' and 'console'. Most configuration settings can be specific to a context.
+The concept of environments and contexts was introduced:
+Typical environments would be 'production', 'development' or 'testing'. All configuration settings can be specific to an environment. Thus, it's easy to have multiple database settings for each environment. The name of the environment is passed to the bootstrap method that starts up the core framework. Thus, application deployment is greatly simplified.
+Typical Contexts (which basically represent a certain way of accessing an application) would be 'web', 'soap' or 'console', and may use different request, response, controller etc implementations. Most configuration settings can be specific to a context.
 In configuration files, regular expressions can be used to restrict the environment or context names. For example, each developer could boostrap a "development-<username>" environment, and debug mode would be enabled for environments "development(-\w+)?".
 
 Rendering has been decoupled from the Views, because of the introduction of Output Types. This means it is now possible to serve different output variants using different renderers (i.e. PHP for HTML and XSL for RSS).
@@ -123,20 +123,35 @@ Of course, the cache can also include request attributes, template variables and
 
 To learn more about the caching system and how your application can benefit from using it, please refer to the documentation.
 
+Form Handling
+-------------
+FormPopulationFilter can automatically (or manually) (re-)insert data into HTML forms, e.g. on an error, when the form is shown again to the user. A broad range of configuration options and features guarantees maximum flexibility.
+
+FPF can also automatically insert error messages into the document, with options for fine tuning of container elements for multiple messages, errors for multiple form fields and more.
+
+Validation
+----------
+The validation system has been rewritten completely, and can now handle multi-level (i.e. array-) input data, supports different error severities, value casting and normalization, validation dependencies, boolean grouping and a lot more.
+
 New Kids on the Block
 ---------------------
 Agavi now has an RbacUser implementation you can easily extend to load your role defintions from somewhere else than an XML configuration file. Granting a user a role will then give him the corresponding credentials.
 
 A PhptalRenderer allows you to use the PHPTAL template engine for rendering.
 
+AgaviDoctrineDatabase offers Doctrine integration.
+
 A PdoSessionStorage complements the PdoDatabase class.
+
+Agavi has comprehensive support for SOAP web services; the SOAP server implementation automatically generates WSDL files from information embedded in the routing, and can handle automatic class mapping, request and response headers and much more.
 
 Request, Routing and Response implementations for PHP's XMLRPC extension make the creation of web services a piece of cake.
 
 Agavi now supports RESTful web services.
 
-Version 0.10.0 - December 20 2005
-=================================
+
+Version 0.10.0 - December 20, 2005
+==================================
 
 The following is a brief summary of the most important changes in this release. For a full list of new features, changes and bugfixes, please refer to the CHANGELOG
 
