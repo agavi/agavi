@@ -1,7 +1,7 @@
 AGAVI CHANGELOG
 ===============
 
-0.11.0 (November 3, 2007)
+0.11.0 (November 4, 2007)
 
 ADD: Allow simpler format definitions in DateTime validator (#596) (David)
 
