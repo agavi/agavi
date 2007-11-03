@@ -432,14 +432,6 @@ class AgaviOlsonTimeZone extends AgaviTimeZone
 				return true;
 			}
 		}
-		for($i = 0; $i < $this->transitionCount; ++$i) {
-			if($this->transitionTimes[$i] >= $limit) {
-				break;
-			}
-			if($this->transitionTimes[$i] >= $start && $this->dstOffset($this->typeData[$i]) != 0) {
-				return true;
-			}
-		}
 
 		return false;
 	}

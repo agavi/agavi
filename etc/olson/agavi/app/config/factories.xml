@@ -3,7 +3,9 @@
 	
 	<configuration>
 		
-		<controller class="AgaviController" />
+		<controller class="AgaviController">
+			<parameter name="send_response">false</parameter>
+		</controller>
 		
 		<dispatch_filter class="AgaviDispatchFilter" />
 		
@@ -13,7 +15,7 @@
 		
 		<filter_chain class="AgaviFilterChain" />
 		
-		<request class="AgaviConsoleRequest" />
+		<request class="AgaviWebRequest" />
 		
 		<response class="AgaviWebResponse" />
 		
