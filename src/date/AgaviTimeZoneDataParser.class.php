@@ -18,7 +18,7 @@
  * time zone database files parsed into the different definitions.
  *
  * @package    agavi
- * @subpackage config
+ * @subpackage date
  *
  * @author     Dominik del Bondio <ddb@bitxtender.com>
  * @copyright  Authors
@@ -29,7 +29,7 @@
  * @version    $Id$
  */
 
-class AgaviTimeZoneDataParser extends AgaviConfigParser
+class AgaviTimeZoneDataParser
 {
 	/**
 	 * @var        AgaviContext An AgaviContext instance.
