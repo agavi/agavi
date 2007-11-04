@@ -64,7 +64,9 @@ class AgaviOlsonCompileTask extends Task
 				// and we don't want the factory time zone
 				if(strpos($file->getFilename(), '.') === false && $file->getFilename() != 'factory') {
 					$this->log("compiling " . $file->getPathname(), PROJECT_MSG_INFO);
-					$rules = include(AgaviConfigCache::checkConfig($file->getPathname(), $context->getName()));
+					$parser = new AgaviTimeZoneDataParser();
+					$parser->initialize(AgaviContext::getInstance($context));
+					$rules = $parser->parse($file->getPathname());
 					$zones = $rules['zones'] + $zones;
 					$links = $rules['links'] + $links;
 				}

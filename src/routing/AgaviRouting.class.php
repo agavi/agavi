@@ -784,7 +784,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 						$matchedRoutes[] = $opts['name'];
 
 						foreach($match as $name => $m) {
-							if(is_string($name)) {
+							if(is_string($name) && $m[1] != -1) {
 								$route['matches'][$name] = $m[0];
 							}
 						}

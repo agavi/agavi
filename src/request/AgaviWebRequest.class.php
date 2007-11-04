@@ -34,6 +34,11 @@
 class AgaviWebRequest extends AgaviRequest
 {
 	/**
+	 * @var        string The protocol information of this request.
+	 */ 
+	protected $protocol = null;
+	
+	/**
 	 * @var        string The current URL scheme.
 	 */
 	protected $urlScheme = '';
@@ -67,6 +72,19 @@ class AgaviWebRequest extends AgaviRequest
 	 * @var        string The current URL.
 	 */
 	protected $url = '';
+
+	/**
+	 * Get the request protocol information, e.g. "HTTP/1.1".
+	 *
+	 * @return     string The protocol information.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getProtocol()
+	{
+		return $this->protocol;
+	}
 
 	/**
 	 * Retrieve the scheme part of a request URL, typically the protocol.
@@ -290,6 +308,7 @@ class AgaviWebRequest extends AgaviRequest
 			'REQUEST_METHOD' => 'REQUEST_METHOD',
 			'SERVER_NAME' => 'SERVER_NAME',
 			'SERVER_PORT' => 'SERVER_PORT',
+			'SERVER_PROTOCOL' => 'SERVER_PROTOCOL',
 		), (isset($parameters['sources']) && is_array($parameters['sources']) ? $parameters['sources'] : array()));
 
 		$methods = array('GET' => 'read', 'POST' => 'write', 'PUT' => 'create', 'DELETE' => 'remove');
@@ -312,7 +331,9 @@ class AgaviWebRequest extends AgaviRequest
 			default:
 				$this->setMethod($methods['GET']);
 		}
-
+		
+		$this->protocol = self::getSourceValue($sources['SERVER_PROTOCOL'], isset($parameters['sources']['SERVER_PROTOCOL']) ? null : 'HTTP/1.0');
+		
 		$HTTPS = self::getSourceValue($sources['HTTPS'], isset($parameters['sources']['HTTPS']) ? null : 'off');
 
 		$this->urlScheme = 'http' . (strtolower($HTTPS) == 'on' ? 's' : '');

@@ -1,4 +1,4 @@
-<?
+<?php
 
 class ErrorModule_SomeSuccessView extends AgaviView
 {

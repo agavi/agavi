@@ -1,4 +1,4 @@
-<?
+<?php
 require_once(dirname(__FILE__) . '/../database/DatabaseManagerTest.php');
 
 class DatabaseTests

@@ -1,4 +1,4 @@
-<?
+<?php
 require_once(dirname(__FILE__) . '/../date/CalendarTest.php');
 require_once(dirname(__FILE__) . '/../date/TimeZoneBoundaryTest.php');
 require_once(dirname(__FILE__) . '/../date/TimeZoneTest.php');

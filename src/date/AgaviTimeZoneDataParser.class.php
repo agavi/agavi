@@ -18,7 +18,7 @@
  * time zone database files parsed into the different definitions.
  *
  * @package    agavi
- * @subpackage config
+ * @subpackage date
  *
  * @author     Dominik del Bondio <ddb@bitxtender.com>
  * @copyright  Authors
@@ -29,7 +29,7 @@
  * @version    $Id$
  */
 
-class AgaviTimeZoneDataParser extends AgaviConfigParser
+class AgaviTimeZoneDataParser
 {
 	/**
 	 * @var        AgaviContext An AgaviContext instance.
@@ -212,7 +212,7 @@ class AgaviTimeZoneDataParser extends AgaviConfigParser
 						if($activeRule['endYear'] < $year) {
 							unset($activeRules[$activeRuleIdx]);
 						// protect against generating final rules, they are handled in the timezone implementation
-						} elseif($year != $activeRule['startYear'] && $hasNonFinalRules) {
+						} elseif($year != $activeRule['startYear'] && ($hasNonFinalRules || !$last)) {
 							// if the year is the start year this rule has already been processed for this year
 							$time = $this->getOnDate($year, $activeRule['month'], $activeRule['on'], $myRule['at'], 0, 0);
 							$myRules[] = array('time' => $time, 'rule' => $activeRule);
@@ -222,7 +222,7 @@ class AgaviTimeZoneDataParser extends AgaviConfigParser
 					if($year == $myRule['startYear']) {
 						$time = $this->getOnDate($year, $myRule['month'], $myRule['on'], $myRule['at'], 0, 0);
 
-						if($myRule['endYear'] != self::MAX_YEAR_VALUE || $hasNonFinalRules) {
+						if(($myRule['endYear'] != self::MAX_YEAR_VALUE || $year == $myRule['startYear']) || $hasNonFinalRules) {
 							$myRules[] = array('time' => $time, 'rule' => $myRule);
 						}
 
@@ -295,6 +295,7 @@ class AgaviTimeZoneDataParser extends AgaviConfigParser
 		foreach($this->rules[$name]['rules'] as $rule) {
 			$time = $rule['time'];
 			$dstOff = $rule['rule']['save'];
+			$isEndless = $rule['rule']['endYear'] == self::MAX_YEAR_VALUE;
 
 			if($until !== null) {
 				$untilDate = $this->dateStrToArray($until);
@@ -327,6 +328,7 @@ class AgaviTimeZoneDataParser extends AgaviConfigParser
 						'rawOffset' => $gmtOff,
 						'dstOffset' => 0,
 						'name' => $insertRuleName,
+						'fromEndless' => false,
 					);
 				}
 				$firstHit = false;
@@ -341,6 +343,7 @@ class AgaviTimeZoneDataParser extends AgaviConfigParser
 				'rawOffset' => $gmtOff,
 				'dstOffset' => $dstOff,
 				'name' => sprintf(is_array($format) ? ($dstOff == 0 ? $format[0] : $format[1]) : $format, $rule['rule']['variablePart']),
+				'fromEndless' => $isEndless,
 			);
 
 			$lastUntilTime = $untilTime;
@@ -417,7 +420,14 @@ class AgaviTimeZoneDataParser extends AgaviConfigParser
 						$lastRuleStartYear = self::MIN_YEAR_VALUE;
 					} else {
 						$cal = $this->getContext()->getTranslationManager()->createCalendar();
-						$cal->setTime($myRules[count($myRules) - 1]['time'] * AgaviDateDefinitions::MILLIS_PER_SECOND);
+						$lastRuleStartYear = self::MIN_YEAR_VALUE;
+						for($i = count($myRules) - 1; $i > 0; --$i) {
+							if(!$myRules[$i]['fromEndless']) {
+								break;
+							}
+						}
+
+						$cal->setTime($myRules[$i]['time'] * AgaviDateDefinitions::MILLIS_PER_SECOND);
 						// + 1 because this specifies the first year in which the final rule will apply
 						$lastRuleStartYear = $cal->get(AgaviDateDefinitions::YEAR) + 1;
 					}

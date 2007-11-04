@@ -1,4 +1,4 @@
-<?
+<?php
 require_once(dirname(__FILE__) . '/../request/RequestTest.php');
 require_once(dirname(__FILE__) . '/../request/WebRequestTest.php');
 
