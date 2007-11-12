@@ -91,7 +91,7 @@ if(strpos($ua, 'AppleWebKit') !== false) {
 	}
 }
 
-header('HTTP/1.1 500 Internal Server Error');
+header('HTTP/1.0 500 Internal Server Error');
 if($svg) {
 	header('Content-Type: application/xhtml+xml; charset=utf-8');
 	echo '<?xml version="1.0" encoding="utf-8" standalone="no" ?>';
