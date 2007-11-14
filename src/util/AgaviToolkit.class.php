@@ -90,9 +90,9 @@ final class AgaviToolkit
 		$retval = is_dir($path);
 		if(!$retval) {
 			if($context !== null) {
-				$retval = mkdir($path, $mode, $recursive, $context);
+				$retval = @mkdir($path, $mode, $recursive, $context);
 			} else {
-				$retval = mkdir($path, $mode, $recursive);
+				$retval = @mkdir($path, $mode, $recursive);
 			}
 			if($retval) {
 				chmod($path, $mode);
