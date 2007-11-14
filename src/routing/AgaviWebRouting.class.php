@@ -303,7 +303,7 @@ class AgaviWebRouting extends AgaviRouting
 					array_map('rawurldecode', array_filter($extraParams, array('AgaviToolkit', 'isNotArray')));
 					
 					// and do not forget those set by routing callbacks
-					$p = array_merge($extraParams, $p);
+					$p = array_merge($p, $extraParams);
 
 					if(count($p) > 0) {
 						$append = '?' . http_build_query($p, '', $aso);
