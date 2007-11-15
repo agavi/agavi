@@ -297,16 +297,11 @@ class AgaviWebRouting extends AgaviRouting
 						}
 					}
 					
-					// http build query will encode all its parameters. since a callback
-					// would always pass us already encoded parameters they need to be
-					// decoded manually
-					array_map('rawurldecode', array_filter($extraParams, array('AgaviToolkit', 'isNotArray')));
-					
 					// and do not forget those set by routing callbacks
 					$p = array_merge($p, $extraParams);
 
 					if(count($p) > 0) {
-						$append = '?' . http_build_query($p, '', $aso);
+						$append = '?' . rawurldecode(http_build_query($p, '', $aso));
 					}
 				} else {
 					// the route exists, but we must create a normal index.php?foo=bar URL.
