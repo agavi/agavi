@@ -12,18 +12,9 @@
 		<response class="TestResponse" />
 		<routing class="TestRouting" />
 		<security_filter class="AgaviSecurityFilter" />
-		<storage class="AgaviSessionStorage">
-			<parameters>
-				<parameter name="auto_start">false</parameter>
-			</parameters>
-		</storage>
+		<storage class="AgaviNullStorage" />
 		<translation_manager class="AgaviTranslationManager" />
 		<user class="AgaviSecurityUser" />
 		<validation_manager class="AgaviValidationManager" />
 	</configuration>
-	<configuration context="test1">
-		<storage class="TestSessionStorage">
-		</storage>
-	</configuration>
-
 </configurations>
