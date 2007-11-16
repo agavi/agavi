@@ -301,7 +301,7 @@ class AgaviWebRouting extends AgaviRouting
 					$p = array_merge($p, $extraParams);
 
 					if(count($p) > 0) {
-						$append = '?' . rawurldecode(http_build_query($p, '', $aso));
+						$append = '?' . rawurldecode(http_build_query($p, '', rawurlencode($aso)));
 					}
 				} else {
 					// the route exists, but we must create a normal index.php?foo=bar URL.
