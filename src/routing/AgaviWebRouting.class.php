@@ -99,26 +99,52 @@ class AgaviWebRouting extends AgaviRouting
 		}
 		if(!isset($ru['query'])) {
 			$ru['query'] = '';
-		} else {
-			$ru['query'] = preg_replace('/&+$/D', '', $ru['query']);
 		}
 
-		$qs = (isset($_SERVER['QUERY_STRING']) ? preg_replace('/&+$/D', '', $_SERVER['QUERY_STRING']) : '');
+		if(isset($_SERVER['QUERY_STRING'])) {
+			$qs = $_SERVER['QUERY_STRING'];
+		} else {
+			$qs = '';
+		}
 
-		$rewritten = ($qs !== $ru['query']);
+		// when rewriting, apache strips one (not all) trailing ampersand from the end of QUERY_STRING... normalize:
+		$rewritten = (preg_replace('/&+$/D', '', $qs) !== preg_replace('/&+$/D', '', $ru['query']));
 
 		if(AgaviConfig::get("core.use_routing", false) && $rewritten) {
-			$this->input = preg_replace('/' . preg_quote('&' . $ru['query'], '/') . '$/D', '', $qs);
+			// strip the one trailing ampersand, see above
+			$queryWasEmptied = false;
+			if($ru['query'] !== '' && isset($_SERVER['SERVER_SOFTWARE']) && strpos($_SERVER['SERVER_SOFTWARE'], 'Apache') !== false) {
+				$ru['query'] = preg_replace('/&$/D', '', $ru['query']);
+				if($ru['query'] == '') {
+					$queryWasEmptied = true;
+				}
+			}
 
-			if(isset($_SERVER['SERVER_SOFTWARE']) && strpos($_SERVER['SERVER_SOFTWARE'], 'Apache/2.2') !== false) {
+			$stripFromQuery = '&' . $ru['query'];
+			if($ru['query'] == '' && !$queryWasEmptied && isset($_SERVER['SERVER_SOFTWARE']) && strpos($_SERVER['SERVER_SOFTWARE'], 'Apache') !== false) {
+				// if the query is empty, simply give apache2 nothing instead of an "&", since that could kill a real trailing ampersand in the path, as Apache strips those from the query string (which has the rewritten path), but not the request uri
+				$stripFromQuery = '';
+			}
+			$this->input = preg_replace('/' . preg_quote($stripFromQuery, '/') . '$/D', '', $qs);
+
+			if(isset($_SERVER['SERVER_SOFTWARE']) && strpos($_SERVER['SERVER_SOFTWARE'], 'Apache/2') !== false) {
+				$sru = $_SERVER['REQUEST_URI'];
+				
+				if(($fqmp = strpos($sru, '?')) !== false && ($fqmp == strlen($sru)-1)) {
+					// strip a trailing question mark, but only if it really is the query string separator (i.e. the only question mark in the URI)
+					$sru = substr($sru, 0, -1);
+				} elseif($ru['query'] !== '' || $queryWasEmptied) {
+					// if there is a trailing ampersand (in query string or path, whatever ends the URL), strip it (but just one)
+					$sru = preg_replace('/&$/D', '', $sru);
+				}
+				
 				// multiple consecutive slashes got lost in our input thanks to an apache bug
 				// let's fix that
-				$sru = preg_replace('/&+$/D', '', $_SERVER['REQUEST_URI']);
 				$cqs = preg_replace('#/{2,}#', '/', rawurldecode($ru['query']));
 				$cru = preg_replace('#/{2,}#', '/', rawurldecode($sru));
-				$tmp = preg_replace('/' . preg_quote($this->input . (($cqs != '') ? '?' . $cqs : ''), '/') . '$/D', '', $cru);
+				$tmp = preg_replace('/' . preg_quote($this->input . (($cqs != '' || $queryWasEmptied) ? '?' . $cqs : ''), '/') . '$/D', '', $cru);
 				$input = preg_replace('/^' . preg_quote($tmp, '/') . '/', '', $sru);
-				if($ru['query']) {
+				if($ru['query'] !== '' || $queryWasEmptied) {
 					$input = preg_replace('/' . preg_quote('?' . $ru['query'], '/') . '$/D', '', $input);
 				}
 				$this->input = rawurldecode($input);
@@ -270,11 +296,12 @@ class AgaviWebRouting extends AgaviRouting
 							unset($p[$name]);
 						}
 					}
+					
 					// and do not forget those set by routing callbacks
 					$p = array_merge($p, $extraParams);
 
 					if(count($p) > 0) {
-						$append = '?' . http_build_query($p, '', $aso);
+						$append = '?' . rawurldecode(http_build_query($p, '', rawurlencode($aso)));
 					}
 				} else {
 					// the route exists, but we must create a normal index.php?foo=bar URL.

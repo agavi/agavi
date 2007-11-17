@@ -31,7 +31,7 @@ class AllTests
 		if(version_compare(PHPUnit_Runner_Version::id(), '3.0.0', '<')) {
 			PHPUnit_TextUI_TestRunner::run(self::suite(), $reportDir . 'coverage.xml', $reportDir . 'coverage.html', $reportDir . 'coverage.txt', $reportDir . 'report.html', $reportDir . 'report.txt', $reportDir . 'report.xml');
 		} else {
-			PHPUnit_TextUI_TestRunner::run(self::suite(), null, $reportDir);
+			PHPUnit_TextUI_TestRunner::run(self::suite(), array(), $reportDir);
 		}
 	}
 
