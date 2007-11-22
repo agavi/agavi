@@ -1,6 +1,17 @@
 AGAVI CHANGELOG
 ===============
 
+0.11.1 RC1 (November ??, 2007)
+
+CHG: Perform special multislash cleanup for all Apache 2.x versions (#619) (David)
+
+FIX: Nested XIncludes cause segfault due to PHP bug (#621) (David)
+FIX: AgaviToolkit::mkdir might throw errors on concurrent directory creation (#615) (Dominik)
+FIX: WebRouting::gen() encodes additional parameters twice (#622) (David)
+FIX: Always send HTTP/1.0 responses in shiny exception template (#620) (David)
+FIX: Trailing ampersands and other special cases might still confuse the routing under some circumstances (#618) (David)
+
+
 0.11.0 (November 3, 2007)
 
 ADD: Allow simpler format definitions in DateTime validator (#596) (David)
