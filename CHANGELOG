@@ -5,6 +5,7 @@ AGAVI CHANGELOG
 
 CHG: Perform special multislash cleanup for all Apache 2.x versions (#619) (David)
 
+FIX: Global request data is not locked during rendering of templates (#628) (David)
 FIX: Nested XIncludes cause segfault due to PHP bug (#621) (David)
 FIX: AgaviToolkit::mkdir might throw errors on concurrent directory creation (#615) (Dominik)
 FIX: WebRouting::gen() encodes additional parameters twice (#622) (David)
