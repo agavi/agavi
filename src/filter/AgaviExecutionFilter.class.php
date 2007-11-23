@@ -434,6 +434,8 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 
 				$attributes =& $viewInstance->getAttributes();
 
+				// lock the request. doing it here for all runs is fine, and quicker too
+				$key = $request->toggleLock();
 				// $lm->log('Starting rendering...');
 				for($i = 0; $i < count($layers); $i++) {
 					$layer = $layers[$i];
@@ -477,6 +479,8 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 					$output = array();
 					$output[$layer->getName()] = $nextOutput;
 				}
+				// and unlock the request again
+				$request->toggleLock($key);
 			}
 
 			if($isCacheable) {
