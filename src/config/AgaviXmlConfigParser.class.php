@@ -190,8 +190,7 @@ class AgaviXmlConfigParser
 		}
 		
 		// necessary due to a PHP bug, see http://trac.agavi.org/ticket/621 and http://bugs.php.net/bug.php?id=43364
-		// TODO: add a version check once the fix is in PHP.
-		if(true) {
+		if(version_compare(PHP_VERSION, '5.2.6', '<')) {
 			$needsReload = true;
 		}
 		
