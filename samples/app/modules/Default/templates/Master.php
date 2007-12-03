@@ -159,9 +159,6 @@ $otherLanguages = array_diff_key($languages, array($currentLanguage => null));
 		</div>
 		<div id="content">
 			<h2><?php echo $template['title']; ?></h2>
-<?php if($container->getValidationManager()->hasErrors()): foreach($container->getValidationManager()->getErrorMessages() as $error): ?>
-			<p class="error"><?php echo $error['message']; ?></p>
-<?php endforeach; endif; ?>
 <?php echo $inner; // print the content layer output ?>
 		</div>
 	</body>

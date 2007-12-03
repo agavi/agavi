@@ -180,14 +180,26 @@ class AgaviXmlConfigParser
 			$node->ownerElement->removeAttributeNode($node);
 		}
 		
+		$needsReload = false;
+		
 		// if there is no xmlns declaration on the root element, we gotta add it. must do after xinclude() to maintain BC
 		if($doc->documentElement && !$doc->documentElement->namespaceURI) {
 			$doc->documentElement->setAttribute('xmlns', self::XML_NAMESPACE);
 			
-			$reload = $doc->saveXML();
-			
-			$doc = new DOMDocument();
-			$doc->loadXML($reload);
+			$needsReload = true;
+		}
+		
+		// necessary due to a PHP bug, see http://trac.agavi.org/ticket/621 and http://bugs.php.net/bug.php?id=43364
+		if(version_compare(PHP_VERSION, '5.2.6', '<')) {
+			$needsReload = true;
+		}
+		
+		// reload the doc maybe?
+		if($needsReload) {
+			// we need to remember the document URI and restore it, just in case
+			$documentUri = $doc->documentURI;
+			$doc->loadXML($doc->saveXML());
+			$doc->documentURI = $documentUri;
 		}
 		
 		libxml_use_internal_errors($luie);
