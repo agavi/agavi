@@ -194,7 +194,7 @@ class AgaviController extends AgaviParameterHolder
 			$response->merge($this->response);
 			
 			if($this->getParameter('send_response')) {
-				$response->send($container->getOutputType());
+				$response->send();
 			}
 			
 			return $response;

@@ -301,11 +301,9 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 			$actionAttributes = $container->getAttributes();
 		}
 
-		// create a new response instance for this action
-		$rfi = $this->context->getFactoryInfo('response');
-		$response = new $rfi['class'];
-		$response->initialize($this->context, $rfi['parameters']);
-		$container->setResponse($response);
+		// clear the response
+		$response = $container->getResponse();
+		$response->clear();
 
 		// clear any forward set, it's ze view's job
 		$container->clearNext();
@@ -434,8 +432,6 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 
 				$attributes =& $viewInstance->getAttributes();
 
-				// lock the request. doing it here for all runs is fine, and quicker too
-				$key = $request->toggleLock();
 				// $lm->log('Starting rendering...');
 				for($i = 0; $i < count($layers); $i++) {
 					$layer = $layers[$i];
@@ -468,7 +464,11 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 						'validation_manager' => $container->getValidationManager(),
 						'view' => $viewInstance,
 					);
+					// lock the request. can't be done outside the loop for the whole run, see #628
+					$key = $request->toggleLock();
 					$nextOutput = $layer->getRenderer()->render($layer, $attributes, $output, $moreAssigns);
+					// and unlock the request again
+					$request->toggleLock($key);
 
 					$response->setContent($nextOutput);
 
@@ -479,8 +479,6 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 					$output = array();
 					$output[$layer->getName()] = $nextOutput;
 				}
-				// and unlock the request again
-				$request->toggleLock($key);
 			}
 
 			if($isCacheable) {

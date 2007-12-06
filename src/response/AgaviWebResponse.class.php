@@ -591,6 +591,10 @@ class AgaviWebResponse extends AgaviResponse
 	 */
 	protected function sendHttpResponseHeaders(AgaviOutputType $outputType = null)
 	{
+		if($outputType === null) {
+			$outputType = $this->getOutputType();
+		}
+		
 		$file = $line = '';
 		if(headers_sent($file, $line)) {
 			throw new AgaviException('Headers already sent, output started in "' . $file . '" on line "' . $line . '"');

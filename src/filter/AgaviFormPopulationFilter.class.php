@@ -77,7 +77,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 
 		$cfg = $rq->getAttributes('org.agavi.filter.FormPopulationFilter');
 
-		$ot = $container->getOutputType();
+		$ot = $response->getOutputType();
 
 		if(is_array($cfg['output_types']) && !in_array($ot->getName(), $cfg['output_types'])) {
 			return;
