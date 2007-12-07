@@ -3,13 +3,21 @@ AGAVI CHANGELOG
 
 0.11.1 RC1 (November ??, 2007)
 
+ADD: Creole session storage supports configurable date formatting (#639) (David)
+
+CHG: Always send HTTP/1.0 responses in shiny exception template (#620) (David)
 CHG: Perform special multislash cleanup for all Apache 2.x versions (#619) (David)
 
+FIX: Creole and PDO session storage incorrectly force garbage collection on session open (#638) (David)
+FIX: AgaviMysqlSessionStorage uses mysql_escape_string() instead of mysql_real_escape_string() (#637) (David)
+FIX: Database session storage implementations have incorrect read/write behavior (#636) (David)
+FIX: Some database session storages do not work with non-integer date() results. (#635) (David)
+FIX: Global request data is serialized in execution containers (#633) (David)
+FIX: Forwarding does not honor output types properly (#629) (David)
 FIX: Global request data is not locked during rendering of templates (#628) (David)
 FIX: Nested XIncludes cause segfault due to PHP bug (#621) (David)
 FIX: AgaviToolkit::mkdir might throw errors on concurrent directory creation (#615) (Dominik)
 FIX: WebRouting::gen() encodes additional parameters twice (#622) (David)
-FIX: Always send HTTP/1.0 responses in shiny exception template (#620) (David)
 FIX: Trailing ampersands and other special cases might still confuse the routing under some circumstances (#618) (David)
 
 
