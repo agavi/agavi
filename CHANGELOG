@@ -8,6 +8,7 @@ ADD: Creole session storage supports configurable date formatting (#639) (David)
 CHG: Always send HTTP/1.0 responses in shiny exception template (#620) (David)
 CHG: Perform special multislash cleanup for all Apache 2.x versions (#619) (David)
 
+FIX: Undefined variable notice in AgaviValidationManager::hasIncidents() (#640) (David)
 FIX: Creole and PDO session storage incorrectly force garbage collection on session open (#638) (David)
 FIX: AgaviMysqlSessionStorage uses mysql_escape_string() instead of mysql_real_escape_string() (#637) (David)
 FIX: Database session storage implementations have incorrect read/write behavior (#636) (David)
