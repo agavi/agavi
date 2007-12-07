@@ -1,6 +1,19 @@
 AGAVI RELEASE NOTES
 ===================
 
+Version 0.11.1 - January ??, 2008
+
+This is a bugfix release. The most important changes are:
+
+- When forwarding, using a different output type for the forward container now works properly. As a result of the fix, a response now has an output type, too. It is strongly recommended to determine the output type of the response from the response's output type object, not from the execution container's, which might be the one of the container that ordered the forward. Agavi's built-in filters have been changed to accommodate for this enhancement where possible. This is not a breaking chance.
+
+- The global request data is now correctly locked away during rendering of templates.
+
+- Several fixes were done to the database session storage. Of note, no implementation forces a garbage collection run anymore before opening a session. An issue with date formats in queries has been fixed, too, for all implementations, and storages will not create a blank session entry anymore if the requested session ID was not found during a read operation.
+
+For a complete list of changes in this release, please refer to the CHANGELOG file.
+
+
 Version 0.11.0 - November 3, 2007
 =================================
 
