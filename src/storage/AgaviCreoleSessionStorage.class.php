@@ -25,14 +25,16 @@
  * <b>Optional parameters:</b>
  *
  * # <b>database</b>     - [default]   - The database connection to use
- *                                       (see databases.ini).
+ *                                       (see databases.xml).
  * # <b>db_id_col</b>    - [sess_id]   - The database column in which the
  *                                       session id will be stored.
  * # <b>db_data_col</b>  - [sess_data] - The database column in which the
  *                                       session data will be stored.
  * # <b>db_time_col</b>  - [sess_time] - The database column in which the
  *                                       session timestamp will be stored.
- * # <b>session_name</b> - [Agavi]     - The name of the session.
+ * # <b>date_format</b>  - [U]         - The format string passed to date() to
+ *                                       format timestamps. Defaults to "U",
+ *                                       which means a Unix Timestamp again.
  *
  * @package    agavi
  * @subpackage storage
@@ -49,8 +51,7 @@
 class AgaviCreoleSessionStorage extends AgaviSessionStorage
 {
 	/**
-	 * Creole Database Connection
-	 * @var AgaviConnection
+	 * @var        Connection A Creole Database Connection
 	 */
 	protected $db;
 
@@ -125,7 +126,7 @@ class AgaviCreoleSessionStorage extends AgaviSessionStorage
 		$db_id_col = $this->getParameter('db_id_col', 'sess_id');
 
 		// delete the record associated with this id
-		$sql = 'DELETE FROM ' . $db_table . ' ' . 'WHERE ' . $db_id_col . '=?';
+		$sql = sprintf('DELETE FROM %s WHERE %s = ?', $db_table, $db_id_col);
 
 		try {
 			$stmt = $this->db->prepareStatement($sql);
@@ -156,16 +157,25 @@ class AgaviCreoleSessionStorage extends AgaviSessionStorage
 	{
 		// determine deletable session time
 		$time = time() - $lifetime;
+		$time = date($this->getParameter('date_format', 'U'), $time);
 
 		// get table/column
 		$db_table    = $this->getParameter('db_table');
 		$db_time_col = $this->getParameter('db_time_col', 'sess_time');
 
 		// delete the record associated with this id
-		$sql = 'DELETE FROM ' . $db_table . ' ' . 'WHERE ' . $db_time_col . ' < ' . $time;
+		$sql = sprintf('DELETE FROM %s WHERE %s < ?', $db_table, $db_time_col);
 
 		try {
-			$this->db->executeQuery($sql);
+			$stmt = $this->db->prepareStatement($sql);
+			
+			if(is_numeric($time)) {
+				$stmt->setInt(1, (int)$time);
+			} else {
+				$stmt->setString(1, $time);
+			}
+			
+			$stmt->executeUpdate();
 			return true;
 		} catch(SQLException $e) {
 			$error = 'Creole SQLException was thrown when trying to manipulate session data. Message: ' . $e->getMessage();
@@ -196,15 +206,9 @@ class AgaviCreoleSessionStorage extends AgaviSessionStorage
 		$database = $this->getParameter('database', null);
 
 		$this->db = $this->getContext()->getDatabaseConnection($database);
-		if($this->db == null || !$this->db instanceof Connection) {
+		if($this->db === null || !$this->db instanceof Connection) {
 			$error = 'Creole dabatase connection doesn\'t exist. Unable to open session.';
 			throw new AgaviDatabaseException($error);
-		}
-
-		//force clean up before starting session
-		$cookieParams = session_get_cookie_params();
-		if($cookieParams['lifetime'] > 0) {
-			$this->sessionGC($cookieParams['lifetime']);
 		}
 
 		return true;
@@ -233,7 +237,7 @@ class AgaviCreoleSessionStorage extends AgaviSessionStorage
 		$db_time_col = $this->getParameter('db_time_col', 'sess_time');
 
 		try {
-			$sql = 'SELECT ' . $db_data_col . ' ' . 'FROM ' . $db_table . ' ' . 'WHERE ' . $db_id_col . '=?';
+			$sql = sprintf('SELECT %s FROM %s WHERE %s = ?', $db_data_col, $db_table, $db_id_col);
 
 			$stmt = $this->db->prepareStatement($sql);
 			$stmt->setString(1, $id);
@@ -243,20 +247,11 @@ class AgaviCreoleSessionStorage extends AgaviSessionStorage
 			if($dbRes->next()) {
 				$data = $dbRes->getString(1);
 				return $data;
-			}
-			else {
-				// session does not exist, create it
-				$sql = 'INSERT INTO ' . $db_table . '('.$db_id_col.','.$db_data_col.','.$db_time_col.') VALUES (?,?,?)';
-
-				$stmt = $this->db->prepareStatement($sql);
-				$stmt->setString(1, $id);
-				$stmt->setString(2, '');
-				$stmt->setInt(3, time());
-				$stmt->executeUpdate();
+			} else {
 				return '';
 			}
 		} catch(SQLException $e) {
-			$error = 'Creole SQLException was thrown when trying to manipulate session data. Message: ' . $e->getMessage();
+			$error = 'Creole SQLException was thrown when trying to read session data. Message: ' . $e->getMessage();
 			throw new AgaviDatabaseException($error);
 		}
 	}
@@ -285,21 +280,45 @@ class AgaviCreoleSessionStorage extends AgaviSessionStorage
 		$db_id_col   = $this->getParameter('db_id_col', 'sess_id');
 		$db_time_col = $this->getParameter('db_time_col', 'sess_time');
 
-		$sql = 'UPDATE ' . $db_table . ' SET ' . $db_data_col . '=?, ' . $db_time_col . ' = ' . time() .
-			' WHERE ' . $db_id_col . '=?';
+		$sql = sprintf('UPDATE %s SET %s = ?, %s = ? WHERE %s = ?', $db_table, $db_data_col, $db_time_col, $db_id_col);
+
+		$ts = date($this->getParameter('date_format', 'U'));
 
 		try {
 			$stmt = $this->db->prepareStatement($sql);
 			$stmt->setString(1, $data);
-			$stmt->setString(2, $id);
-			$stmt->executeUpdate();
-			return true;
+			if(is_numeric($ts)) {
+				$stmt->setInt(2, (int)$ts);
+			} else {
+				$stmt->setString(2, $ts);
+			}
+			$stmt->setString(3, $id);
+			$count = $stmt->executeUpdate();
 		} catch(SQLException $e) {
-			$error = 'Creole SQLException was thrown when trying to manipulate session data. Message: ' . $e->getMessage();
+			$error = 'Creole SQLException was thrown when trying to update session data. Message: ' . $e->getMessage();
 			throw new AgaviDatabaseException($error);
 		}
+		
+		if($count == 0) {
+			// session does not exist, create it
+			$sql = sprintf('INSERT INTO %s (%s, %s, %s) VALUES (?,?,?)', $db_table, $db_id_col, $db_data_col, $db_time_col);
 
-		return false;
+			try {
+				$stmt = $this->db->prepareStatement($sql);
+				$stmt->setString(1, $id);
+				$stmt->setString(2, $data);
+				if(is_numeric($ts)) {
+					$stmt->setInt(3, (int)$ts);
+				} else {
+					$stmt->setString(3, $ts);
+				}
+				$stmt->executeUpdate();
+				return true;
+			} catch(SQLException $e) {
+				$error = 'Creole SQLException was thrown when trying to create session data. Message: ' . $e->getMessage();
+				throw new AgaviDatabaseException($error);
+			}
+		}
 	}
 
 	/**

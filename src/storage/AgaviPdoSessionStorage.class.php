@@ -25,14 +25,13 @@
  * <b>Optional parameters:</b>
  *
  * # <b>database</b>     - [default]   - The database connection to use
- *                                       (see databases.ini).
+ *                                       (see databases.xml).
  * # <b>db_id_col</b>    - [sess_id]   - The database column in which the
  *                                       session id will be stored.
  * # <b>db_data_col</b>  - [sess_data] - The database column in which the
  *                                       session data will be stored.
  * # <b>db_time_col</b>  - [sess_time] - The database column in which the
  *                                       session timestamp will be stored.
- * # <b>session_name</b> - [Agavi]     - The name of the session.
  * # <b>data_as_lob</b>  - [true]      - If true, data is stored as a LOB
  *                                       other wise as a string.
  *                                       (Note: with Oracle LOBs are always
@@ -57,7 +56,7 @@
 class AgaviPdoSessionStorage extends AgaviSessionStorage
 {
 	/**
-	 * @var        mixed PDO Database Connection.
+	 * @var        PDO A Database Connection.
 	 */
 	protected $connection;
 
@@ -166,16 +165,24 @@ class AgaviPdoSessionStorage extends AgaviSessionStorage
 	{
 		// determine deletable session time
 		$time = time() - $lifetime;
+		$time = date($this->getParameter('date_format', 'U'), $time);
 
 		// get table/column
 		$db_table    = $this->getParameter('db_table');
 		$db_time_col = $this->getParameter('db_time_col', 'sess_time');
 
 		// delete the records that are expired
-		$sql = sprintf('DELETE FROM %s  WHERE %s < %d', $db_table, $db_time_col, date($this->getParameter('date_format', 'U'), $time));
+		$sql = sprintf('DELETE FROM %s WHERE %s < :time', $db_table, $db_time_col);
 
 		try {
-			$this->connection->exec($sql);
+			if(is_numeric($time)) {
+				$time = (int)$time;
+				$stmt->bindValue(':time', $time, PDO::PARAM_INT);
+			} else {
+				$stmt->bindValue(':time', $time, PDO::PARAM_STR);
+			}
+			$stmt = $this->connection->prepare($sql);
+			$stmt->execute();
 			return true;
 		} catch(PDOException $e) {
 			$error = 'PDOException was thrown when trying to manipulate session data. Message: ' . $e->getMessage();
@@ -210,12 +217,6 @@ class AgaviPdoSessionStorage extends AgaviSessionStorage
 		if($this->connection === null || !$this->connection instanceof PDO) {
 			$error = 'Database connection "' . $database . '" could not be found or is not a PDO database connection.';
 			throw new AgaviDatabaseException($error);
-		}
-
-		//force clean up before starting session
-		$cookieParams = session_get_cookie_params();
-		if($cookieParams['lifetime'] > 0) {
-			$this->sessionGC($cookieParams['lifetime']);
 		}
 
 		return true;
@@ -258,11 +259,6 @@ class AgaviPdoSessionStorage extends AgaviSessionStorage
 				return $result;
 			}
 
-			// session does not exist, create it
-			$sql = sprintf('INSERT INTO %s (%s, %s, %s) VALUES (?,?,?)', $db_table, $db_id_col, $db_data_col, $db_time_col);
-
-			$stmt = $this->connection->prepare($sql);
-			$stmt->execute(array($id, '', date($this->getParameter('date_format', 'U'))));
 			return '';
 		} catch(PDOException $e) {
 			$error = 'PDOException was thrown when trying to manipulate session data. Message: ' . $e->getMessage();
@@ -310,12 +306,18 @@ class AgaviPdoSessionStorage extends AgaviSessionStorage
 			$sp = $data;
 		}
 
+		$ts = date($this->getParameter('date_format', 'U'));
+
 		try {
 			$columnType = ($isOracle || $useLob) ? PDO::PARAM_LOB : PDO::PARAM_STR;
 
 			$stmt = $this->connection->prepare($sql);
 			$stmt->bindParam(':data', $sp, $columnType);
-			$stmt->bindValue(':time', date($this->getParameter('date_format', 'U')));
+			if(is_numeric($ts)) {
+				$stmt->bindValue(':time', (int)$ts, PDO::PARAM_INT);
+			} else {
+				$stmt->bindValue(':time', $ts, PDO::PARAM_STR);
+			}
 			$stmt->bindParam(':id', $id);
 			$this->connection->beginTransaction();
 			$stmt->execute();
@@ -323,11 +325,33 @@ class AgaviPdoSessionStorage extends AgaviSessionStorage
 			return true;
 		} catch(PDOException $e) {
 			$this->connection->rollback();
-			$error = 'PDOException was thrown when trying to manipulate session data. Message: ' . $e->getMessage();
+			$error = 'PDOException was thrown when trying to update session data. Message: ' . $e->getMessage();
 			throw new AgaviDatabaseException($error);
 		}
+			
+		if(!$stmt->rowCount()) {
+			// session does not exist, create it
+			$sql = sprintf('INSERT INTO %s (%s, %s, %s) VALUES (:id, :data, :time)', $db_table, $db_id_col, $db_data_col, $db_time_col);
 
-		return false;
+			try {
+				$stmt = $this->connection->prepare($sql);
+				$stmt->bindParam(':id', $id);
+				$stmt->bindParam(':data', $sp, $columnType);
+				if(is_numeric($ts)) {
+					$stmt->bindValue(':time', (int)$ts, PDO::PARAM_INT);
+				} else {
+					$stmt->bindValue(':time', $ts, PDO::PARAM_STR);
+				}
+				$this->connection->beginTransaction();
+				$stmt->execute();
+				$this->connection->commit();
+				return true;
+			} catch(PDOException $e) {
+				$this->connection->rollback();
+				$error = 'PDOException was thrown when trying to update session data. Message: ' . $e->getMessage();
+				throw new AgaviDatabaseException($error);
+			}
+		}
 	}
 
 	/**
