@@ -175,13 +175,13 @@ class AgaviPdoSessionStorage extends AgaviSessionStorage
 		$sql = sprintf('DELETE FROM %s WHERE %s < :time', $db_table, $db_time_col);
 
 		try {
+			$stmt = $this->connection->prepare($sql);
 			if(is_numeric($time)) {
 				$time = (int)$time;
 				$stmt->bindValue(':time', $time, PDO::PARAM_INT);
 			} else {
 				$stmt->bindValue(':time', $time, PDO::PARAM_STR);
 			}
-			$stmt = $this->connection->prepare($sql);
 			$stmt->execute();
 			return true;
 		} catch(PDOException $e) {
@@ -307,14 +307,17 @@ class AgaviPdoSessionStorage extends AgaviSessionStorage
 		}
 
 		$ts = date($this->getParameter('date_format', 'U'));
+		if(is_numeric($ts)) {
+			$ts = (int)$ts;
+		}
 
 		try {
 			$columnType = ($isOracle || $useLob) ? PDO::PARAM_LOB : PDO::PARAM_STR;
 
 			$stmt = $this->connection->prepare($sql);
 			$stmt->bindParam(':data', $sp, $columnType);
-			if(is_numeric($ts)) {
-				$stmt->bindValue(':time', (int)$ts, PDO::PARAM_INT);
+			if(is_int($ts)) {
+				$stmt->bindValue(':time', $ts, PDO::PARAM_INT);
 			} else {
 				$stmt->bindValue(':time', $ts, PDO::PARAM_STR);
 			}
@@ -336,8 +339,8 @@ class AgaviPdoSessionStorage extends AgaviSessionStorage
 				$stmt = $this->connection->prepare($sql);
 				$stmt->bindParam(':id', $id);
 				$stmt->bindParam(':data', $sp, $columnType);
-				if(is_numeric($ts)) {
-					$stmt->bindValue(':time', (int)$ts, PDO::PARAM_INT);
+				if(is_int($ts)) {
+					$stmt->bindValue(':time', $ts, PDO::PARAM_INT);
 				} else {
 					$stmt->bindValue(':time', $ts, PDO::PARAM_STR);
 				}
