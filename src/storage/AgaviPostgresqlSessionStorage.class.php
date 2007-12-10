@@ -133,8 +133,8 @@ class AgaviPostgresqlSessionStorage extends AgaviSessionStorage
 		}
 
 		// failed to destroy session
-		$error = 'PostgreSQLSessionStorage cannot destroy session id "%s"';
-		$error = sprintf($error, $id);
+		$error = 'PostgreSQLSessionStorage cannot destroy session id "%s", error reported by server: "%s"';
+		$error = sprintf($error, $id, pg_last_error($this->resource));
 		throw new AgaviDatabaseException($error);
 	}
 
@@ -176,7 +176,8 @@ class AgaviPostgresqlSessionStorage extends AgaviSessionStorage
 		}
 
 		// failed to cleanup old sessions
-		$error = 'PostgreSQLSessionStorage cannot delete old sessions';
+		$error = 'PostgreSQLSessionStorage cannot delete old sessions, error reported by server: "%s"';
+		$error = sprintf($error, pg_last_error($this->resource));
 		throw new AgaviDatabaseException($error);
 	}
 
@@ -312,14 +313,14 @@ class AgaviPostgresqlSessionStorage extends AgaviSessionStorage
 			}
 
 			// can't create record
-			$error = 'PostgreSQLSessionStorage cannot create new record for id "%s"';
-			$error = sprintf($error, $id);
+			$error = 'PostgreSQLSessionStorage cannot create new record for id "%s", error reported by server: "%s"';
+			$error = sprintf($error, $id, pg_last_error($this->resource));
 			throw new AgaviDatabaseException($error);
 		}
 		
 		// failed to write session data
-		$error = 'PostgreSQLSessionStorage cannot write session data for id "%s"';
-		$error = sprintf($error, $id);
+		$error = 'PostgreSQLSessionStorage cannot write session data for id "%s", error reported by server: "%s"';
+		$error = sprintf($error, $id, pg_last_error($this->resource));
 		throw new AgaviDatabaseException($error);
 	}
 

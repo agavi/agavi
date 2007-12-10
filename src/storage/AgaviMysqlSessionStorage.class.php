@@ -136,8 +136,8 @@ class AgaviMysqlSessionStorage extends AgaviSessionStorage
 		}
 
 		// failed to destroy session
-		$error = 'MySQLSessionStorage cannot destroy session id "%s"';
-		$error = sprintf($error, $id);
+		$error = 'MySQLSessionStorage cannot destroy session id "%s", error reported by server: "%s"';
+		$error = sprintf($error, $id, mysql_error($this->resource));
 		throw new AgaviDatabaseException($error);
 	}
 
@@ -179,7 +179,8 @@ class AgaviMysqlSessionStorage extends AgaviSessionStorage
 		}
 
 		// failed to cleanup old sessions
-		$error = 'MySQLSessionStorage cannot delete old sessions';
+		$error = 'MySQLSessionStorage cannot delete old sessions, error reported by server: "%s"';
+		$error = sprintf($error, mysql_error($this->resource));
 		throw new AgaviDatabaseException($error);
 	}
 
@@ -249,8 +250,8 @@ class AgaviMysqlSessionStorage extends AgaviSessionStorage
 		}
 
 		// failed to read session data
-		$error = 'MySQLSessionStorage cannot read session data for id "%s"';
-		$error = sprintf($error, $id);
+		$error = 'MySQLSessionStorage cannot read session data for id "%s", error reported by server: "%s"';
+		$error = sprintf($error, $id, mysql_error($this->resource));
 		throw new AgaviDatabaseException($error);
 	}
 
@@ -320,14 +321,14 @@ class AgaviMysqlSessionStorage extends AgaviSessionStorage
 			}
 
 			// can't create record
-			$error = 'MySQLSessionStorage cannot create new record for id "%s"';
-			$error = sprintf($error, $id);
+			$error = 'MySQLSessionStorage cannot create new record for id "%s", error reported by server: "%s"';
+			$error = sprintf($error, $id, mysql_error($this->resource));
 			throw new AgaviDatabaseException($error);
 		}
 
 		// failed to write session data
-		$error = 'MySQLSessionStorage cannot update session data for id "%s"';
-		$error = sprintf($error, $id);
+		$error = 'MySQLSessionStorage cannot update session data for id "%s", error reported by server: "%s"';
+		$error = sprintf($error, $id, mysql_error($this->resource));
 		throw new AgaviDatabaseException($error);
 	}
 
