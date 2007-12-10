@@ -322,7 +322,6 @@ class AgaviPdoSessionStorage extends AgaviSessionStorage
 			$this->connection->beginTransaction();
 			$stmt->execute();
 			$this->connection->commit();
-			return true;
 		} catch(PDOException $e) {
 			$this->connection->rollback();
 			$error = 'PDOException was thrown when trying to update session data. Message: ' . $e->getMessage();
@@ -351,6 +350,8 @@ class AgaviPdoSessionStorage extends AgaviSessionStorage
 				$error = 'PDOException was thrown when trying to update session data. Message: ' . $e->getMessage();
 				throw new AgaviDatabaseException($error);
 			}
+		} else {
+			return true;
 		}
 	}
 
