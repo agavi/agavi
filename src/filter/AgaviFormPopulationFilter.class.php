@@ -486,8 +486,44 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 
 			if(!$cfg['parse_xhtml_as_xml']) {
 				// workaround for a bug in dom or something that results in two xmlns attributes being generated for the <html> element
-				foreach($this->xpath->query('//html') as $html) {
-					$html->removeAttribute('xmlns');
+				// attributes must be removed and created again
+				// and don't change the DOMNodeList in the foreach!
+				$remove = array();
+				$reset = array();
+				foreach($this->doc->documentElement->attributes as $attribute) {
+					// remember to remove the node
+					$remove[] = $attribute;
+					// not for the xmlns attribute itself
+					if($attribute->nodeName != 'xmlns') {
+						// can't do $attribute->prefix. we're in HTML parsing mode, remember? even if there is a prefix, the attribute node will not have a namespace
+						$attributeNameParts = explode(':', $attribute->nodeName);
+						if(isset($attributeNameParts[1])) {
+							// it's a namespaced node
+							$attributeNamespaceUri = $attribute->parentNode->lookupNamespaceURI($attributeNameParts[0]);
+							if($attributeNamespaceUri) {
+								// it is an attribute, for which the namespace is known internally (even though we're in HTML mode), typically xml: or xmlns:.
+								// so we need to create a new node, in the right namespace
+								$attributeCopy = $this->doc->createAttributeNS($attributeNamespaceUri, $attribute->nodeName);
+							} else {
+								// it's a foo:bar node - just copy it over
+								$attributeCopy = $attribute;
+							}
+						} else {
+							// no namespace on this node, copy it
+							$attributeCopy = $attribute;
+						}
+						// don't forget the attribute value
+						$attributeCopy->nodeValue = $attribute->nodeValue;
+						// and remember to set this attribute later
+						$reset[] = $attributeCopy;
+					}
+				}
+				
+				foreach($remove as $attribute) {
+					$this->doc->documentElement->removeAttributeNode($attribute);
+				}
+				foreach($reset as $attribute) {
+					$this->doc->documentElement->setAttributeNode($attribute);
 				}
 			}
 			$out = $this->doc->saveXML();
