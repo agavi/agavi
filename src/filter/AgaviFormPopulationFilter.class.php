@@ -64,7 +64,6 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 	public function executeOnce(AgaviFilterChain $filterChain, AgaviExecutionContainer $container)
 	{
 		$filterChain->execute($container);
-
 		$response = $container->getResponse();
 
 		if(!$response->isContentMutable() || !($output = $response->getContent())) {
@@ -529,19 +528,23 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 			$out = $this->doc->saveXML();
 			if((!$cfg['parse_xhtml_as_xml'] || !$properXhtml) && $cfg['cdata_fix']) {
 				// these are ugly fixes so inline style and script blocks still work. better don't use them with XHTML to avoid trouble
-				$out = preg_replace('/<style([^>]*)>\s*<!\[CDATA\[/iU' . ($utf8 ? 'u' : ''), '<style$1><!--/*--><![CDATA[/*><!--*/', $out);
+				// http://www.456bereastreet.com/archive/200501/the_perils_of_using_xhtml_properly/
+				// http://www.hixie.ch/advocacy/xhtml
+				$out = preg_replace('/<style([^>]*)>\s*<!\[CDATA\[\s*?/iU' . ($utf8 ? 'u' : ''), '<style$1><!--/*--><![CDATA[/*><!--*/' . "\n", $out);
 				if(!$firstError && $fiveTwo) {
 					$firstError = preg_last_error();
 				}
-				$out = preg_replace('/\]\]><\/style>/iU' . ($utf8 ? 'u' : ''), '/*]]>*/--></style>', $out);
+				// we can't clean up whitespace before the closing element because a preg with a leading \s* expression would be horribly slow
+				$out = preg_replace('/\]\]>\s*<\/style>/iU' . ($utf8 ? 'u' : ''), "\n" . '/*]]>*/--></style>', $out);
 				if(!$firstError && $fiveTwo) {
 					$firstError = preg_last_error();
 				}
-				$out = preg_replace('/<script([^>]*)>\s*<!\[CDATA\[/iU' . ($utf8 ? 'u' : ''), '<script$1><!--//--><![CDATA[//><!--', $out);
+				$out = preg_replace('/<script([^>]*)>\s*<!\[CDATA\[\s*?/iU' . ($utf8 ? 'u' : ''), '<script$1><!--//--><![CDATA[//><!--' . "\n", $out);
 				if(!$firstError && $fiveTwo) {
 					$firstError = preg_last_error();
 				}
-				$out = preg_replace('/\]\]><\/script>/iU' . ($utf8 ? 'u' : ''), '//--><!]]></script>', $out);
+				// we can't clean up whitespace before the closing element because a preg with a leading \s* expression would be horribly slow
+				$out = preg_replace('/\]\]>\s*<\/script>/iU' . ($utf8 ? 'u' : ''), "\n" . '//--><!]]></script>', $out);
 				if(!$firstError && $fiveTwo) {
 					$firstError = preg_last_error();
 				}
