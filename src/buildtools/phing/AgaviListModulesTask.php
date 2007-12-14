@@ -50,7 +50,11 @@ class AgaviListModulesTask extends Task
 	public function main()
 	{
 		if($this->app && $this->property) {
-			foreach(glob($this->app.'/modules/*', GLOB_ONLYDIR) as $path) {
+			$paths = glob($this->app.'/modules/*', GLOB_ONLYDIR);
+			if($paths === false) {
+				throw new BuildException('Could not glob() modules directory, please check access rights');
+			}
+			foreach($paths as $path) {
 				$modules[] = basename($path);
 			}
 			if(isset($modules[0])) {
