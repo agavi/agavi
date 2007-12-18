@@ -5,9 +5,18 @@ AGAVI CHANGELOG
 
 ADD: Creole session storage supports configurable date formatting (#639) (David)
 
+CHG: Session storages should reveal server error message in exceptions (#645) (David)
+CHG: Update timezone database to 2007j (#642) (David)
 CHG: Always send HTTP/1.0 responses in shiny exception template (#620) (David)
 CHG: Perform special multislash cleanup for all Apache 2.x versions (#619) (David)
 
+FIX: PDOSessionStorage is unlikely to work properly in case of exceptions (#644) (David)
+FIX: PHP 5.2.5's completely ruined glob() can lead to unhappy foreach loops (#649) (David)
+FIX: RotatingLoggerAppender should complain about a rotation cycle smaller than 1 (#654) (David)
+FIX: validators.xsd is missing the "source" attribute in validators (#653) (Dominik)
+FIX: FPF's CDATA fix for <style> and <script> tags corrupts one-liners in HTML parsing mode (#652) (David)
+FIX: Code to remove potential duplicate xmlns attributes in FPF's HTML parsing mode does not work with certain libxml versions (#650) (David)
+FIX: libxml bug may lead to "attribute redefined" errors in FPF in HTML parsing mode (#651) (David)
 FIX: Undefined variable notice in AgaviValidationManager::hasIncidents() (#640) (David)
 FIX: Creole and PDO session storage incorrectly force garbage collection on session open (#638) (David)
 FIX: AgaviMysqlSessionStorage uses mysql_escape_string() instead of mysql_real_escape_string() (#637) (David)
