@@ -24,13 +24,14 @@
  *
  * <b>Optional parameters:</b>
  *
+ * # <b>database</b>     - [default]   - The database connection to use
+ *                                       (see databases.xml).
  * # <b>db_id_col</b>    - [sess_id]   - The database column in which the
  *                                       session id will be stored.
  * # <b>db_data_col</b>  - [sess_data] - The database column in which the
  *                                       session data will be stored.
  * # <b>db_time_col</b>  - [sess_time] - The database column in which the
  *                                       session timestamp will be stored.
- * # <b>session_name</b> - [Agavi]     - The name of the session.
  * # <b>date_format</b>  - [U]         - The format string passed to date() to
  *                                       format timestamps. Defaults to "U",
  *                                       which means a Unix Timestamp again.
@@ -49,7 +50,7 @@
 class AgaviPostgresqlSessionStorage extends AgaviSessionStorage
 {
 	/**
-	 * @var        mixed A postgresql database resource.
+	 * @var        resource A postgresql database resource.
 	 */
 	protected $resource = null;
 
@@ -97,8 +98,11 @@ class AgaviPostgresqlSessionStorage extends AgaviSessionStorage
 	 */
 	public function sessionClose()
 	{
-		// do nothing
-		return true;
+		if($this->resource) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	/**
@@ -117,6 +121,10 @@ class AgaviPostgresqlSessionStorage extends AgaviSessionStorage
 	 */
 	public function sessionDestroy($id)
 	{
+		if(!$this->resource) {
+			return false;
+		}
+		
 		// get table/column
 		$db_table  = $this->getParameter('db_table');
 		$db_id_col = $this->getParameter('db_id_col', 'sess_id');
@@ -125,15 +133,15 @@ class AgaviPostgresqlSessionStorage extends AgaviSessionStorage
 		$id = addslashes($id);
 
 		// delete the record associated with this id
-		$sql = 'DELETE FROM ' . $db_table . ' WHERE ' . $db_id_col . ' = \'' . $id . '\'';
+		$sql = sprintf("DELETE FROM %s WHERE %s = '%s'", $db_table, $db_id_col, $id);
 
 		if(@pg_query($this->resource, $sql)) {
 			return true;
 		}
 
 		// failed to destroy session
-		$error = 'PostgreSQLSessionStorage cannot destroy session id "%s"';
-		$error = sprintf($error, $id);
+		$error = 'PostgreSQLSessionStorage cannot destroy session id "%s", error reported by server: "%s"';
+		$error = sprintf($error, $id, pg_last_error($this->resource));
 		throw new AgaviDatabaseException($error);
 	}
 
@@ -153,6 +161,10 @@ class AgaviPostgresqlSessionStorage extends AgaviSessionStorage
 	 */
 	public function sessionGC($lifetime)
 	{
+		if(!$this->resource) {
+			return false;
+		}
+		
 		// determine deletable session time
 		$time = time() - $lifetime;
 
@@ -160,15 +172,23 @@ class AgaviPostgresqlSessionStorage extends AgaviSessionStorage
 		$db_table    = $this->getParameter('db_table');
 		$db_time_col = $this->getParameter('db_time_col', 'sess_time');
 
+		$ts = date($this->getParameter('date_format', 'U'), $time);
+		if(is_numeric($ts)) {
+			$ts = (int)$ts;
+		} else {
+			$ts = "'" . addslashes($ts) . "'";
+		}
+		
 		// delete the records that are expired
-		$sql = 'DELETE FROM ' . $db_table . ' WHERE ' . $db_time_col . ' < ' . date($this->getParameter('date_format', 'U'), $time);
+		$sql = sprintf("DELETE FROM %s WHERE %s < %s", $db_table, $db_time_col, $ts);
 
 		if(@pg_query($this->resource, $sql)) {
 			return true;
 		}
 
 		// failed to cleanup old sessions
-		$error = 'PostgreSQLSessionStorage cannot delete old sessions';
+		$error = 'PostgreSQLSessionStorage cannot delete old sessions, error reported by server: "%s"';
+		$error = sprintf($error, pg_last_error($this->resource));
 		throw new AgaviDatabaseException($error);
 	}
 
@@ -214,6 +234,10 @@ class AgaviPostgresqlSessionStorage extends AgaviSessionStorage
 	 */
 	public function sessionRead($id)
 	{
+		if(!$this->resource) {
+			return false;
+		}
+		
 		// get table/column
 		$db_table    = $this->getParameter('db_table');
 		$db_data_col = $this->getParameter('db_data_col', 'sess_data');
@@ -223,8 +247,8 @@ class AgaviPostgresqlSessionStorage extends AgaviSessionStorage
 		// cleanup the session id, just in case
 		$id = addslashes($id);
 
-		// delete the record associated with this id
-		$sql = 'SELECT ' . $db_data_col . ' FROM ' . $db_table . ' WHERE ' . $db_id_col . ' = \'' . $id . '\'';
+		// retrieve the record associated with this id
+		$sql = sprintf("SELECT %s FROM %s WHERE %s = '%s'", $db_data_col, $db_table, $db_id_col, $id);
 
 		$result = @pg_query($this->resource, $sql);
 
@@ -233,18 +257,7 @@ class AgaviPostgresqlSessionStorage extends AgaviSessionStorage
 			$data = pg_fetch_row($result);
 			return $data[0];
 		} else {
-
-			// session does not exist, create it
-			$sql = 'INSERT INTO ' . $db_table . ' (' . $db_id_col . ', ' . $db_data_col . ', ' . $db_time_col . ') VALUES (\'' . $id . '\', \'\', ' . date($this->getParameter('date_format', 'U')) . ')';
-
-			if(@pg_query($this->resource, $sql)) {
-				return '';
-			}
-
-			// can't create record
-			$error = 'PostgreSQLSessionStorage cannot create new record for id "%s"';
-			$error = sprintf($error, $id);
-			throw new AgaviDatabaseException($error);
+			return '';
 		}
 	}
 
@@ -265,6 +278,10 @@ class AgaviPostgresqlSessionStorage extends AgaviSessionStorage
 	 */
 	public function sessionWrite($id, &$data)
 	{
+		if(!$this->resource) {
+			return false;
+		}
+		
 		// get table/column
 		$db_table    = $this->getParameter('db_table');
 		$db_data_col = $this->getParameter('db_data_col', 'sess_data');
@@ -275,29 +292,55 @@ class AgaviPostgresqlSessionStorage extends AgaviSessionStorage
 		$id   = addslashes($id);
 		$data = addslashes($data);
 
-		// delete the record associated with this id
-		$sql = 'UPDATE ' . $db_table . ' SET ' . $db_data_col . ' = \'' . $data . '\', ' . $db_time_col . ' = ' . date($this->getParameter('date_format', 'U')) . ' WHERE ' . $db_id_col . ' = \'' . $id . '\'';
-
-		if(@pg_query($this->resource, $sql)) {
-			return true;
+		$ts = date($this->getParameter('date_format', 'U'), $time);
+		if(is_numeric($ts)) {
+			$ts = (int)$ts;
+		} else {
+			$ts = "'" . addslashes($ts) . "'";
 		}
 
-		// failed to write session data
-		$error = 'PostgreSQLSessionStorage cannot write session data for id ' .
-				 '"%s"';
-		$error = sprintf($error, $id);
-		throw new AgaviDatabaseException($error);
-	}
+		// delete the record associated with this id
+		$sql = sprintf(
+			"UPDATE %s SET %s = '%s', %s = %s WHERE %s = '%s'",
+			$db_table,
+			$db_data_col,
+			$data,
+			$db_time_col,
+			$ts,
+			$db_id_col,
+			$id
+		);
 
-	/**
-	 * Execute the shutdown procedure.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public function shutdown()
-	{
-		parent::shutdown();
+		$result = @pg_query($this->resource, $sql);
+		if($result !== false && pg_affected_rows($result)) {
+			return true;
+		} elseif($result !== false) {
+			// session does not exist, create it
+			$sql = sprintf(
+				"INSERT INTO %s (%s, %s, %s) VALUES ('%s', '%s', %s)",
+				$db_table,
+				$db_id_col,
+				$db_data_col,
+				$db_time_col,
+				$id,
+				$data,
+				$ts
+			);
+
+			if(@pg_query($this->resource, $sql)) {
+				return true;
+			}
+
+			// can't create record
+			$error = 'PostgreSQLSessionStorage cannot create new record for id "%s", error reported by server: "%s"';
+			$error = sprintf($error, $id, pg_last_error($this->resource));
+			throw new AgaviDatabaseException($error);
+		}
+		
+		// failed to write session data
+		$error = 'PostgreSQLSessionStorage cannot write session data for id "%s", error reported by server: "%s"';
+		$error = sprintf($error, $id, pg_last_error($this->resource));
+		throw new AgaviDatabaseException($error);
 	}
 }
 

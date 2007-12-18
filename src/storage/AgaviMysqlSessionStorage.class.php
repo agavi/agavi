@@ -24,13 +24,14 @@
  *
  * <b>Optional parameters:</b>
  *
+ * # <b>database</b>     - [default]   - The database connection to use
+ *                                       (see databases.xml).
  * # <b>db_id_col</b>    - [sess_id]   - The database column in which the
  *                                       session id will be stored.
  * # <b>db_data_col</b>  - [sess_data] - The database column in which the
  *                                       session data will be stored.
  * # <b>db_time_col</b>  - [sess_time] - The database column in which the
  *                                       session timestamp will be stored.
- * # <b>session_name</b> - [Agavi]     - The name of the session.
  * # <b>date_format</b>  - [U]         - The format string passed to date() to
  *                                       format timestamps. Defaults to "U",
  *                                       which means a Unix Timestamp again.
@@ -49,7 +50,7 @@
 class AgaviMysqlSessionStorage extends AgaviSessionStorage
 {
 	/**
-	 * @var        mixed A mysql database resource.
+	 * @var        resource A mysql database resource.
 	 */
 	protected $resource = null;
 
@@ -100,8 +101,11 @@ class AgaviMysqlSessionStorage extends AgaviSessionStorage
 	 */
 	public function sessionClose()
 	{
-		// do nothing
-		return true;
+		if($this->resource) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	/**
@@ -120,23 +124,27 @@ class AgaviMysqlSessionStorage extends AgaviSessionStorage
 	 */
 	public function sessionDestroy($id)
 	{
+		if(!$this->resource) {
+			return false;
+		}
+		
 		// get table/column
 		$db_table  = $this->getParameter('db_table');
 		$db_id_col = $this->getParameter('db_id_col', 'sess_id');
 
 		// cleanup the session id, just in case
-		$id = mysql_escape_string($id);
+		$id = mysql_real_escape_string($id, $this->resource);
 
 		// delete the record associated with this id
-		$sql = 'DELETE FROM ' . $db_table . ' WHERE ' . $db_id_col . ' = \'' . $id . '\'';
+		$sql = sprintf("DELETE FROM %s WHERE %s = '%s'", $db_table, $db_id_col, $id);
 
 		if(@mysql_query($sql, $this->resource)) {
 			return true;
 		}
 
 		// failed to destroy session
-		$error = 'MySQLSessionStorage cannot destroy session id "%s"';
-		$error = sprintf($error, $id);
+		$error = 'MySQLSessionStorage cannot destroy session id "%s", error reported by server: "%s"';
+		$error = sprintf($error, $id, mysql_error($this->resource));
 		throw new AgaviDatabaseException($error);
 	}
 
@@ -156,23 +164,34 @@ class AgaviMysqlSessionStorage extends AgaviSessionStorage
 	 */
 	public function sessionGC($lifetime)
 	{
+		if(!$this->resource) {
+			return false;
+		}
+		
 		// determine deletable session time
 		$time = time() - $lifetime;
+		$time = date($this->getParameter('date_format', 'U'), $time);
 
 		// get table/column
 		$db_table    = $this->getParameter('db_table');
 		$db_time_col = $this->getParameter('db_time_col', 'sess_time');
 
+		if(is_numeric($time)) {
+			$time = (int)$time;
+		} else {
+			$time = "'" . mysql_real_escape_string($time, $this->resource) . "'";
+		}
+
 		// delete the records that are expired
-		$sql = 'DELETE FROM ' . $db_table . ' ' .
-			   'WHERE ' . $db_time_col . ' < ' . date($this->getParameter('date_format', 'U'), $time);
+		$sql = sprintf('DELETE FROM %s WHERE %s < %s', $db_table, $db_time_col, $time);
 
 		if(@mysql_query($sql, $this->resource)){
 			return true;
 		}
 
 		// failed to cleanup old sessions
-		$error = 'MySQLSessionStorage cannot delete old sessions';
+		$error = 'MySQLSessionStorage cannot delete old sessions, error reported by server: "%s"';
+		$error = sprintf($error, mysql_error($this->resource));
 		throw new AgaviDatabaseException($error);
 	}
 
@@ -218,6 +237,10 @@ class AgaviMysqlSessionStorage extends AgaviSessionStorage
 	 */
 	public function sessionRead($id)
 	{
+		if(!$this->resource) {
+			return false;
+		}
+		
 		// get table/column
 		$db_table    = $this->getParameter('db_table');
 		$db_data_col = $this->getParameter('db_data_col', 'sess_data');
@@ -225,32 +248,26 @@ class AgaviMysqlSessionStorage extends AgaviSessionStorage
 		$db_time_col = $this->getParameter('db_time_col', 'sess_time');
 
 		// cleanup the session id, just in case
-		$id = mysql_escape_string($id);
+		$id = mysql_real_escape_string($id, $this->resource);
 
 		// delete the record associated with this id
-		$sql = 'SELECT ' . $db_data_col . ' FROM ' . $db_table . ' WHERE ' . $db_id_col . ' = \'' . $id . '\'';
+		$sql = sprintf("SELECT %s FROM %s WHERE %s = '%s'", $db_data_col, $db_table, $db_id_col, $id);
 
 		$result = @mysql_query($sql, $this->resource);
 
-		if($result != false && @mysql_num_rows($result) == 1) {
+		if($result != false && mysql_num_rows($result) > 0) {
 			// found the session
 			$data = mysql_fetch_row($result);
 
 			return $data[0];
-		} else {
-
-			// session does not exist, create it
-			$sql = 'INSERT INTO ' . $db_table . ' (' . $db_id_col . ', ' . $db_data_col . ', ' . $db_time_col . ') VALUES (' . '\'' . $id . '\', \'\', ' . date($this->getParameter('date_format', 'U')) . ')';
-
-			if(@mysql_query($sql, $this->resource)) {
-				return '';
-			}
-
-			// can't create record
-			$error = 'MySQLSessionStorage cannot create new record for id "%s"';
-			$error = sprintf($error, $id);
-			throw new AgaviDatabaseException($error);
+		} elseif($result !== false) {
+			return '';
 		}
+
+		// failed to read session data
+		$error = 'MySQLSessionStorage cannot read session data for id "%s", error reported by server: "%s"';
+		$error = sprintf($error, $id, mysql_error($this->resource));
+		throw new AgaviDatabaseException($error);
 	}
 
 	/**
@@ -270,6 +287,10 @@ class AgaviMysqlSessionStorage extends AgaviSessionStorage
 	 */
 	public function sessionWrite($id, &$data)
 	{
+		if(!$this->resource) {
+			return false;
+		}
+		
 		// get table/column
 		$db_table    = $this->getParameter('db_table');
 		$db_data_col = $this->getParameter('db_data_col', 'sess_data');
@@ -277,31 +298,57 @@ class AgaviMysqlSessionStorage extends AgaviSessionStorage
 		$db_time_col = $this->getParameter('db_time_col', 'sess_time');
 
 		// cleanup the session id and data, just in case
-		$id   = mysql_escape_string($id);
-		$data = mysql_escape_string($data);
+		$id   = mysql_real_escape_string($id, $this->resource);
+		$data = mysql_real_escape_string($data, $this->resource);
 
-		// delete the record associated with this id
-		$sql = 'UPDATE ' . $db_table . ' SET ' . $db_data_col . ' = \'' . $data . '\', ' . $db_time_col . ' = ' . date($this->getParameter('date_format', 'U')) . ' WHERE ' . $db_id_col . ' = \'' . $id . '\'';
+		$ts = date($this->getParameter('date_format', 'U'));
+		if(is_numeric($ts)) {
+			$ts = (int)$ts;
+		} else {
+			$ts = "'" . mysql_real_escape_string($ts) . "'";
+		}
+		// update the record associated with this id
+		$sql = sprintf(
+			"UPDATE %s SET %s = '%s', %s = %s WHERE %s = '%s'",
+			$db_table,
+			$db_data_col,
+			$data,
+			$db_time_col,
+			$ts,
+			$db_id_col,
+			$id
+		);
 
-		if(@mysql_query($sql, $this->resource)) {
+		$result = @mysql_query($sql, $this->resource);
+		if($result !== false && mysql_affected_rows($this->resource)) {
 			return true;
+		} elseif($result !== false) {
+			// session does not exist, create it
+			$sql = sprintf(
+				"INSERT INTO %s (%s, %s, %s) VALUES ('%s', '%s', %s)",
+				$db_table,
+				$db_id_col,
+				$db_data_col,
+				$db_time_col,
+				$id,
+				$data,
+				$ts
+			);
+
+			if(@mysql_query($sql, $this->resource)) {
+				return true;
+			}
+
+			// can't create record
+			$error = 'MySQLSessionStorage cannot create new record for id "%s", error reported by server: "%s"';
+			$error = sprintf($error, $id, mysql_error($this->resource));
+			throw new AgaviDatabaseException($error);
 		}
 
 		// failed to write session data
-		$error = 'MySQLSessionStorage cannot write session data for id "%s"';
-		$error = sprintf($error, $id);
+		$error = 'MySQLSessionStorage cannot update session data for id "%s", error reported by server: "%s"';
+		$error = sprintf($error, $id, mysql_error($this->resource));
 		throw new AgaviDatabaseException($error);
-	}
-
-	/**
-	 * Execute the shutdown procedure.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public function shutdown()
-	{
-		parent::shutdown();
 	}
 }
 

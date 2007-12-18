@@ -31,10 +31,6 @@
  */
 abstract class AgaviStorage extends AgaviParameterHolder
 {
-	// +-----------------------------------------------------------------------+
-	// | PRIVATE DATA                                                          |
-	// +-----------------------------------------------------------------------+
-
 	/**
 	 * @var        AgaviContext An AgaviContext instance.
 	 */

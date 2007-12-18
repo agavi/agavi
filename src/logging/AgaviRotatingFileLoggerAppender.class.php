@@ -61,7 +61,11 @@ class AgaviRotatingFileLoggerAppender extends AgaviFileLoggerAppender
 		$dir = $parameters['dir'];
 
 		if(isset($parameters['cycle'])) {
-			$cycle = $parameters['cycle'];
+			$cycle = (int)$parameters['cycle'];
+		}
+		
+		if($cycle < 1) {
+			throw new AgaviLoggingException('Logging rotation cycle cannot be smaller than 1');
 		}
 
 		if(isset($parameters['prefix'])) {
@@ -80,12 +84,14 @@ class AgaviRotatingFileLoggerAppender extends AgaviFileLoggerAppender
 			// and at the same time we'll remove all unwanted history files
 
 			$files = array();
-			foreach(glob($dir . $prefix . '*-*-*' . $suffix) as $filename) {
-				$files[] = $filename;
+			$remove = glob($dir . $prefix . '*-*-*' . $suffix);
+			if($remove === false) {
+				// who cares, it's just log files
+				$remove = array();
 			}
-
-			while(count($files) > $cycle-1) { //-1 because todays file is not yet created
-				unlink(array_shift($files));
+			
+			foreach(array_slice($remove, 0, -$cycle + 1) as $filename) {
+				unlink($filename);
 			}
 		}
 

@@ -514,7 +514,7 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	 */
 	public function hasIncidents($minSeverity = null)
 	{
-		if($minErrorCode === null) {
+		if($minSeverity === null) {
 			return count($this->incidents) > 0;
 		} else {
 			foreach($this->incidents as $validatorIncidents) {

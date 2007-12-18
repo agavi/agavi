@@ -36,8 +36,9 @@
     <xs:attribute name="export" type="xs:string" />
     <xs:attribute name="method" type="xs:string" />
     <xs:attribute name="provides" type="xs:string" />
-    <xs:attribute name="severity" type="xs:string" />
     <xs:attribute name="required" type="xs:string" />
+    <xs:attribute name="severity" type="xs:string" />
+    <xs:attribute name="source" type="xs:string" />
     <xs:attribute name="translation_domain" type="xs:string" />
   </xs:complexType>
 

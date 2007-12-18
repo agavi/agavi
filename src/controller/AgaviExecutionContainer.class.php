@@ -119,7 +119,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 		$this->contextName = $this->context->getName();
 		$this->outputTypeName = $this->outputType->getName();
 		$arr = get_object_vars($this);
-		unset($arr['context'], $arr['outputType'], $arr['requestData']);
+		unset($arr['context'], $arr['outputType'], $arr['requestData'], $arr['globalRequestData']);
 		return array_keys($arr);
 	}
 
@@ -136,11 +136,10 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	{
 		$this->context = AgaviContext::getInstance($this->contextName);
 		$this->outputType = $this->context->getController()->getOutputType($this->outputTypeName);
-		$rq = $this->context->getRequest();
-		if($rq->isLocked()) {
-			$this->requestData = new AgaviRequestDataHolder();
-		} else {
-			$this->requestData = $rq->getRequestData();
+		try {
+			$this->globalRequestData = $this->context->getRequest()->getRequestData();
+		} catch(AgaviException $e) {
+			$this->globalRequestData = new AgaviRequestDataHolder();
 		}
 		unset($this->contextName, $this->outputTypeName);
 	}
@@ -161,6 +160,10 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 		$this->context = $context;
 
 		$this->parameters = $parameters;
+
+		$rfi = $this->context->getFactoryInfo('response');
+		$this->response = new $rfi['class'];
+		$this->response->initialize($this->context, $rfi['parameters']);
 	}
 
 	/**
@@ -480,6 +483,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	public function setResponse(AgaviResponse $response)
 	{
 		$this->response = $response;
+		// do not set the output type on the response here!
 	}
 
 	/**
@@ -506,6 +510,9 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	public function setOutputType(AgaviOutputType $outputType)
 	{
 		$this->outputType = $outputType;
+		if($this->response) {
+			$this->response->setOutputType($outputType);
+		}
 	}
 
 	/**

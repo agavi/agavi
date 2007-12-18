@@ -64,7 +64,6 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 	public function executeOnce(AgaviFilterChain $filterChain, AgaviExecutionContainer $container)
 	{
 		$filterChain->execute($container);
-
 		$response = $container->getResponse();
 
 		if(!$response->isContentMutable() || !($output = $response->getContent())) {
@@ -77,7 +76,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 
 		$cfg = $rq->getAttributes('org.agavi.filter.FormPopulationFilter');
 
-		$ot = $container->getOutputType();
+		$ot = $response->getOutputType();
 
 		if(is_array($cfg['output_types']) && !in_array($ot->getName(), $cfg['output_types'])) {
 			return;
@@ -486,26 +485,66 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 
 			if(!$cfg['parse_xhtml_as_xml']) {
 				// workaround for a bug in dom or something that results in two xmlns attributes being generated for the <html> element
-				foreach($this->xpath->query('//html') as $html) {
-					$html->removeAttribute('xmlns');
+				// attributes must be removed and created again
+				// and don't change the DOMNodeList in the foreach!
+				$remove = array();
+				$reset = array();
+				foreach($this->doc->documentElement->attributes as $attribute) {
+					// remember to remove the node
+					$remove[] = $attribute;
+					// not for the xmlns attribute itself
+					if($attribute->nodeName != 'xmlns') {
+						// can't do $attribute->prefix. we're in HTML parsing mode, remember? even if there is a prefix, the attribute node will not have a namespace
+						$attributeNameParts = explode(':', $attribute->nodeName);
+						if(isset($attributeNameParts[1])) {
+							// it's a namespaced node
+							$attributeNamespaceUri = $attribute->parentNode->lookupNamespaceURI($attributeNameParts[0]);
+							if($attributeNamespaceUri) {
+								// it is an attribute, for which the namespace is known internally (even though we're in HTML mode), typically xml: or xmlns:.
+								// so we need to create a new node, in the right namespace
+								$attributeCopy = $this->doc->createAttributeNS($attributeNamespaceUri, $attribute->nodeName);
+							} else {
+								// it's a foo:bar node - just copy it over
+								$attributeCopy = $attribute;
+							}
+						} else {
+							// no namespace on this node, copy it
+							$attributeCopy = $attribute;
+						}
+						// don't forget the attribute value
+						$attributeCopy->nodeValue = $attribute->nodeValue;
+						// and remember to set this attribute later
+						$reset[] = $attributeCopy;
+					}
+				}
+				
+				foreach($remove as $attribute) {
+					$this->doc->documentElement->removeAttributeNode($attribute);
+				}
+				foreach($reset as $attribute) {
+					$this->doc->documentElement->setAttributeNode($attribute);
 				}
 			}
 			$out = $this->doc->saveXML();
 			if((!$cfg['parse_xhtml_as_xml'] || !$properXhtml) && $cfg['cdata_fix']) {
 				// these are ugly fixes so inline style and script blocks still work. better don't use them with XHTML to avoid trouble
-				$out = preg_replace('/<style([^>]*)>\s*<!\[CDATA\[/iU' . ($utf8 ? 'u' : ''), '<style$1><!--/*--><![CDATA[/*><!--*/', $out);
+				// http://www.456bereastreet.com/archive/200501/the_perils_of_using_xhtml_properly/
+				// http://www.hixie.ch/advocacy/xhtml
+				$out = preg_replace('/<style([^>]*)>\s*<!\[CDATA\[\s*?/iU' . ($utf8 ? 'u' : ''), '<style$1><!--/*--><![CDATA[/*><!--*/' . "\n", $out);
 				if(!$firstError && $fiveTwo) {
 					$firstError = preg_last_error();
 				}
-				$out = preg_replace('/\]\]><\/style>/iU' . ($utf8 ? 'u' : ''), '/*]]>*/--></style>', $out);
+				// we can't clean up whitespace before the closing element because a preg with a leading \s* expression would be horribly slow
+				$out = preg_replace('/\]\]>\s*<\/style>/iU' . ($utf8 ? 'u' : ''), "\n" . '/*]]>*/--></style>', $out);
 				if(!$firstError && $fiveTwo) {
 					$firstError = preg_last_error();
 				}
-				$out = preg_replace('/<script([^>]*)>\s*<!\[CDATA\[/iU' . ($utf8 ? 'u' : ''), '<script$1><!--//--><![CDATA[//><!--', $out);
+				$out = preg_replace('/<script([^>]*)>\s*<!\[CDATA\[\s*?/iU' . ($utf8 ? 'u' : ''), '<script$1><!--//--><![CDATA[//><!--' . "\n", $out);
 				if(!$firstError && $fiveTwo) {
 					$firstError = preg_last_error();
 				}
-				$out = preg_replace('/\]\]><\/script>/iU' . ($utf8 ? 'u' : ''), '//--><!]]></script>', $out);
+				// we can't clean up whitespace before the closing element because a preg with a leading \s* expression would be horribly slow
+				$out = preg_replace('/\]\]>\s*<\/script>/iU' . ($utf8 ? 'u' : ''), "\n" . '//--><!]]></script>', $out);
 				if(!$firstError && $fiveTwo) {
 					$firstError = preg_last_error();
 				}

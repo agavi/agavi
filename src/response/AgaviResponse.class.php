@@ -40,6 +40,11 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	protected $content = null;
 	
 	/**
+	 * @var        AgaviOutputType The output type of this response.
+	 */
+	protected $outputType = null;
+	
+	/**
 	 * Pre-serialization callback.
 	 *
 	 * Will set the name of the context and exclude the instance from serializing.
@@ -49,16 +54,26 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	 */
 	public function __sleep()
 	{
+		$vars = get_object_vars($this);
+		$also = array();
+		
 		$this->contextName = $this->context->getName();
+		unset($vars['context']);
+		$also[] = 'contextName';
+		
+		if($this->outputType) {
+			$this->outputTypeName = $this->outputType->getName();
+			unset($vars['outputType']);
+			$also[] = 'outputTypeName';
+		}
+		
 		if(is_resource($this->content)) {
 			$this->contentStreamMeta = stream_get_meta_data($this->content);
+			unset($vars['content']);
+			$also[] = 'contentStreamMeta';
 		}
-		$arr = get_object_vars($this);
-		unset($arr['context']);
-		if(isset($this->contentStreamMeta)) {
-			unset($arr['content']);
-		}
-		return array_keys($arr);
+		
+		return array_merge(array_keys($vars), $also);
 	}
 	
 	/**
@@ -73,6 +88,12 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	{
 		$this->context = AgaviContext::getInstance($this->contextName);
 		unset($this->contextName);
+		
+		if(isset($this->outputTypeName)) {
+			$this->outputType = $this->context->getController()->getOutputType($this->outputTypeName);
+			unset($this->outputTypeName);
+		}
+		
 		if(isset($this->contentStreamMeta)) {
 			// contrary to what the documentation says, stream_get_meta_data() will not return a list of filters attached to the stream, so we cannot restore these, unfortunately.
 			$this->content = fopen($this->contentStreamMeta['uri'], $this->contentStreamMeta['mode']);
@@ -106,6 +127,43 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	{
 		$this->context = $context;
 		$this->setParameters($parameters);
+	}
+	
+	/**
+	 * Get the Output Type to use with this response.
+	 *
+	 * @return     AgaviOutputType The Output Type instance associated with.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.1
+	 */
+	public function getOutputType()
+	{
+		return $this->outputType;
+	}
+	
+	/**
+	 * Set the Output Type to use with this response.
+	 *
+	 * @param      AgaviOutputType The Output Type instance to associate with.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.1
+	 */
+	public function setOutputType(AgaviOutputType $outputType)
+	{
+		$this->outputType = $outputType;
+	}
+	
+	/**
+	 * Clear the Output Type to use with this response.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.1
+	 */
+	public function clearOutputType()
+	{
+		$this->outputType = null;
 	}
 	
 	/**
