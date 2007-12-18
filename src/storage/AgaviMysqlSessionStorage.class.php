@@ -101,8 +101,11 @@ class AgaviMysqlSessionStorage extends AgaviSessionStorage
 	 */
 	public function sessionClose()
 	{
-		// do nothing
-		return true;
+		if($this->resource) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	/**
@@ -121,6 +124,10 @@ class AgaviMysqlSessionStorage extends AgaviSessionStorage
 	 */
 	public function sessionDestroy($id)
 	{
+		if(!$this->resource) {
+			return false;
+		}
+		
 		// get table/column
 		$db_table  = $this->getParameter('db_table');
 		$db_id_col = $this->getParameter('db_id_col', 'sess_id');
@@ -157,6 +164,10 @@ class AgaviMysqlSessionStorage extends AgaviSessionStorage
 	 */
 	public function sessionGC($lifetime)
 	{
+		if(!$this->resource) {
+			return false;
+		}
+		
 		// determine deletable session time
 		$time = time() - $lifetime;
 		$time = date($this->getParameter('date_format', 'U'), $time);
@@ -226,6 +237,10 @@ class AgaviMysqlSessionStorage extends AgaviSessionStorage
 	 */
 	public function sessionRead($id)
 	{
+		if(!$this->resource) {
+			return false;
+		}
+		
 		// get table/column
 		$db_table    = $this->getParameter('db_table');
 		$db_data_col = $this->getParameter('db_data_col', 'sess_data');
@@ -272,6 +287,10 @@ class AgaviMysqlSessionStorage extends AgaviSessionStorage
 	 */
 	public function sessionWrite($id, &$data)
 	{
+		if(!$this->resource) {
+			return false;
+		}
+		
 		// get table/column
 		$db_table    = $this->getParameter('db_table');
 		$db_data_col = $this->getParameter('db_data_col', 'sess_data');
@@ -330,17 +349,6 @@ class AgaviMysqlSessionStorage extends AgaviSessionStorage
 		$error = 'MySQLSessionStorage cannot update session data for id "%s", error reported by server: "%s"';
 		$error = sprintf($error, $id, mysql_error($this->resource));
 		throw new AgaviDatabaseException($error);
-	}
-
-	/**
-	 * Execute the shutdown procedure.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public function shutdown()
-	{
-		parent::shutdown();
 	}
 }
 

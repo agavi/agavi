@@ -100,8 +100,11 @@ class AgaviCreoleSessionStorage extends AgaviSessionStorage
 	*/
 	public function sessionClose()
 	{
-		// do nothing
-		return true;
+		if($this->db) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	/**
@@ -121,6 +124,10 @@ class AgaviCreoleSessionStorage extends AgaviSessionStorage
 	 */
 	public function sessionDestroy($id)
 	{
+		if(!$this->db) {
+			return false;
+		}
+		
 		// get table/column
 		$db_table  = $this->getParameter('db_table');
 		$db_id_col = $this->getParameter('db_id_col', 'sess_id');
@@ -155,6 +162,10 @@ class AgaviCreoleSessionStorage extends AgaviSessionStorage
 	 */
 	public function sessionGC($lifetime)
 	{
+		if(!$this->db) {
+			return false;
+		}
+		
 		// determine deletable session time
 		$time = time() - $lifetime;
 		$time = date($this->getParameter('date_format', 'U'), $time);
@@ -230,6 +241,10 @@ class AgaviCreoleSessionStorage extends AgaviSessionStorage
 	 */
 	public function sessionRead($id)
 	{
+		if(!$this->db) {
+			return false;
+		}
+		
 		// get table/columns
 		$db_table    = $this->getParameter('db_table');
 		$db_data_col = $this->getParameter('db_data_col', 'sess_data');
@@ -274,6 +289,10 @@ class AgaviCreoleSessionStorage extends AgaviSessionStorage
 	 */
 	public function sessionWrite($id, $data)
 	{
+		if(!$this->db) {
+			return false;
+		}
+		
 		// get table/column
 		$db_table    = $this->getParameter('db_table');
 		$db_data_col = $this->getParameter('db_data_col', 'sess_data');
@@ -319,17 +338,6 @@ class AgaviCreoleSessionStorage extends AgaviSessionStorage
 				throw new AgaviDatabaseException($error);
 			}
 		}
-	}
-
-	/**
-	 * Execute the shutdown procedure.
-	 *
-	 * @author     David Zülke <dz@bitxtender.com>
-	 * @since      0.10.0
-	 */
-	public function shutdown()
-	{
-		parent::shutdown();
 	}
 }
 

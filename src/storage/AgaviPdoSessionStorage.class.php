@@ -46,6 +46,7 @@
  * @author     Sean Kerr <skerr@mojavi.org>
  * @author     Veikko Mäkinen <mail@veikkomakinen.com>
  * @author     Dominik del Bondio <ddb@bitxtender.com>
+ * @author     David Zülke <dz@bitxtender.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
  *
@@ -107,8 +108,11 @@ class AgaviPdoSessionStorage extends AgaviSessionStorage
 	 */
 	public function sessionClose()
 	{
-		// do nothing
-		return true;
+		if($this->connection) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	/**
@@ -129,6 +133,10 @@ class AgaviPdoSessionStorage extends AgaviSessionStorage
 	 */
 	public function sessionDestroy($id)
 	{
+		if(!$this->connection) {
+			return false;
+		}
+		
 		// get table/column
 		$db_table  = $this->getParameter('db_table');
 		$db_id_col = $this->getParameter('db_id_col', 'sess_id');
@@ -138,9 +146,16 @@ class AgaviPdoSessionStorage extends AgaviSessionStorage
 
 		try {
 			$stmt = $this->connection->prepare($sql);
-			$stmt->execute(array($id));
+			$result = $stmt->execute(array($id));
+			if(!$result) {
+				$errorInfo = $stmt->errorInfo();
+				$e = new PDOException($errorInfo[2], $errorInfo[0]);
+				$e->errorInfo = $errorInfo;
+				throw $e;
+			}
+			return true;
 		} catch(PDOException $e) {
-			$error = 'PDOException was thrown when trying to manipulate session data. Message: ' . $e->getMessage();
+			$error = sprintf('PDOException was thrown when trying to manipulate session data. Message: "%s"', $e->getMessage());
 			throw new AgaviDatabaseException($error);
 		}
 	}
@@ -163,6 +178,10 @@ class AgaviPdoSessionStorage extends AgaviSessionStorage
 	 */
 	public function sessionGC($lifetime)
 	{
+		if(!$this->connection) {
+			return false;
+		}
+		
 		// determine deletable session time
 		$time = time() - $lifetime;
 		$time = date($this->getParameter('date_format', 'U'), $time);
@@ -182,10 +201,18 @@ class AgaviPdoSessionStorage extends AgaviSessionStorage
 			} else {
 				$stmt->bindValue(':time', $time, PDO::PARAM_STR);
 			}
-			$stmt->execute();
+			$result = $stmt->execute();
+			
+			if(!$result) {
+				$errorInfo = $stmt->errorInfo();
+				$e = new PDOException($errorInfo[2], $errorInfo[0]);
+				$e->errorInfo = $errorInfo;
+				throw $e;
+			}
+			
 			return true;
 		} catch(PDOException $e) {
-			$error = 'PDOException was thrown when trying to manipulate session data. Message: ' . $e->getMessage();
+			$error = sprintf('PDOException was thrown when trying to manipulate session data. Message: "%s"', $e->getMessage());
 			throw new AgaviDatabaseException($error);
 		}
 	}
@@ -239,6 +266,10 @@ class AgaviPdoSessionStorage extends AgaviSessionStorage
 	 */
 	public function sessionRead($id)
 	{
+		if(!$this->connection) {
+			return false;
+		}
+		
 		// get table/columns
 		$db_table    = $this->getParameter('db_table');
 		$db_data_col = $this->getParameter('db_data_col', 'sess_data');
@@ -249,7 +280,15 @@ class AgaviPdoSessionStorage extends AgaviSessionStorage
 			$sql = sprintf('SELECT %s FROM %s WHERE %s = ?', $db_data_col, $db_table, $db_id_col);
 
 			$stmt = $this->connection->prepare($sql);
-			$stmt->execute(array($id));
+			$result = $stmt->execute(array($id));
+			
+			if(!$result) {
+				$errorInfo = $stmt->errorInfo();
+				$e = new PDOException($errorInfo[2], $errorInfo[0]);
+				$e->errorInfo = $errorInfo;
+				throw $e;
+			}
+			
 			if($result = $stmt->fetch(PDO::FETCH_NUM)) {
 				$result = $result[0];
 				// pdo is returning the LOB as stream, so check if we had a lob (this seems to differ from db to db)
@@ -261,7 +300,7 @@ class AgaviPdoSessionStorage extends AgaviSessionStorage
 
 			return '';
 		} catch(PDOException $e) {
-			$error = 'PDOException was thrown when trying to manipulate session data. Message: ' . $e->getMessage();
+			$error = sprintf('PDOException was thrown when trying to manipulate session data. Message: "%s"', $e->getMessage());
 			throw new AgaviDatabaseException($error);
 		}
 	}
@@ -285,6 +324,10 @@ class AgaviPdoSessionStorage extends AgaviSessionStorage
 	 */
 	public function sessionWrite($id, $data)
 	{
+		if(!$this->connection) {
+			return false;
+		}
+		
 		// get table/column
 		$db_table    = $this->getParameter('db_table');
 		$db_data_col = $this->getParameter('db_data_col', 'sess_data');
@@ -323,11 +366,21 @@ class AgaviPdoSessionStorage extends AgaviSessionStorage
 			}
 			$stmt->bindParam(':id', $id);
 			$this->connection->beginTransaction();
-			$stmt->execute();
-			$this->connection->commit();
+			if(!$stmt->execute()) {
+				$errorInfo = $stmt->errorInfo();
+				$e = new PDOException($errorInfo[2], $errorInfo[0]);
+				$e->errorInfo = $errorInfo;
+				throw $e;
+			}
+			if(!$this->connection->commit()) {
+				$errorInfo = $stmt->errorInfo();
+				$e = new PDOException($errorInfo[2], $errorInfo[0]);
+				$e->errorInfo = $errorInfo;
+				throw $e;
+			}
 		} catch(PDOException $e) {
 			$this->connection->rollback();
-			$error = 'PDOException was thrown when trying to update session data. Message: ' . $e->getMessage();
+			$error = sprintf('PDOException was thrown when trying to manipulate session data. Message: "%s"', $e->getMessage());
 			throw new AgaviDatabaseException($error);
 		}
 			
@@ -345,28 +398,27 @@ class AgaviPdoSessionStorage extends AgaviSessionStorage
 					$stmt->bindValue(':time', $ts, PDO::PARAM_STR);
 				}
 				$this->connection->beginTransaction();
-				$stmt->execute();
-				$this->connection->commit();
+				if(!$stmt->execute()) {
+					$errorInfo = $stmt->errorInfo();
+					$e = new PDOException($errorInfo[2], $errorInfo[0]);
+					$e->errorInfo = $errorInfo;
+					throw $e;
+				}
+				if(!$this->connection->commit()) {
+					$errorInfo = $stmt->errorInfo();
+					$e = new PDOException($errorInfo[2], $errorInfo[0]);
+					$e->errorInfo = $errorInfo;
+					throw $e;
+				}
 				return true;
 			} catch(PDOException $e) {
 				$this->connection->rollback();
-				$error = 'PDOException was thrown when trying to update session data. Message: ' . $e->getMessage();
+				$error = sprintf('PDOException was thrown when trying to manipulate session data. Message: "%s"', $e->getMessage());
 				throw new AgaviDatabaseException($error);
 			}
 		} else {
 			return true;
 		}
-	}
-
-	/**
-	 * Execute the shutdown procedure.
-	 *
-	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function shutdown()
-	{
-		parent::shutdown();
 	}
 }
 

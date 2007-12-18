@@ -98,8 +98,11 @@ class AgaviPostgresqlSessionStorage extends AgaviSessionStorage
 	 */
 	public function sessionClose()
 	{
-		// do nothing
-		return true;
+		if($this->resource) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	/**
@@ -118,6 +121,10 @@ class AgaviPostgresqlSessionStorage extends AgaviSessionStorage
 	 */
 	public function sessionDestroy($id)
 	{
+		if(!$this->resource) {
+			return false;
+		}
+		
 		// get table/column
 		$db_table  = $this->getParameter('db_table');
 		$db_id_col = $this->getParameter('db_id_col', 'sess_id');
@@ -154,6 +161,10 @@ class AgaviPostgresqlSessionStorage extends AgaviSessionStorage
 	 */
 	public function sessionGC($lifetime)
 	{
+		if(!$this->resource) {
+			return false;
+		}
+		
 		// determine deletable session time
 		$time = time() - $lifetime;
 
@@ -223,6 +234,10 @@ class AgaviPostgresqlSessionStorage extends AgaviSessionStorage
 	 */
 	public function sessionRead($id)
 	{
+		if(!$this->resource) {
+			return false;
+		}
+		
 		// get table/column
 		$db_table    = $this->getParameter('db_table');
 		$db_data_col = $this->getParameter('db_data_col', 'sess_data');
@@ -263,6 +278,10 @@ class AgaviPostgresqlSessionStorage extends AgaviSessionStorage
 	 */
 	public function sessionWrite($id, &$data)
 	{
+		if(!$this->resource) {
+			return false;
+		}
+		
 		// get table/column
 		$db_table    = $this->getParameter('db_table');
 		$db_data_col = $this->getParameter('db_data_col', 'sess_data');
@@ -322,17 +341,6 @@ class AgaviPostgresqlSessionStorage extends AgaviSessionStorage
 		$error = 'PostgreSQLSessionStorage cannot write session data for id "%s", error reported by server: "%s"';
 		$error = sprintf($error, $id, pg_last_error($this->resource));
 		throw new AgaviDatabaseException($error);
-	}
-
-	/**
-	 * Execute the shutdown procedure.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public function shutdown()
-	{
-		parent::shutdown();
 	}
 }
 
