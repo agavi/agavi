@@ -248,9 +248,10 @@ class AgaviLoggerManager
 	/**
 	 * Log a Message.
 	 *
-	 * @param      mixed  A message to log - either an AgaviLoggerMessage instance
-	 *                    or a string.
-	 * @param      string Optional logger to log to.
+	 * @param      mixed A message to log - either an AgaviLoggerMessage instance,
+	 *                   or a message string.
+	 * @param      mixed Optional logger to log to (instance or name), or an int
+	 *                   with the severity of the message.
 	 *
 	 * @throws     AgaviLoggingException if the logger was not found.
 	 *
@@ -258,19 +259,36 @@ class AgaviLoggerManager
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.10.0
 	 */
-	public function log($message, $logger = null)
+	public function log($message, $loggerOrSeverity = null)
 	{
 		if(!($message instanceof AgaviLoggerMessage)) {
 			$message = new $this->defaultMessageClass($message);
 		}
-		if($logger === null) {
-			foreach($this->loggers as $logger) {
-				$logger->log($message);
-			}
-		} elseif(($logger = $this->getLogger($logger)) !== null) {
-			$logger->log($message);
+		
+		// the loggers to log to
+		$loggers = array();
+		
+		if($loggerOrSeverity === null) {
+			// no logger/severity given - log to all loggers
+			$loggers = $this->loggers;
+		} elseif($loggerOrSeverity instanceof AgaviILogger) {
+			// we're given a logger instance, use that
+			$loggers[] = $loggerOrSeverity;
+		} elseif(is_int($loggerOrSeverity)) {
+			// we're given a message level, set that and log to all loggers
+			$message->setLevel($loggerOrSeverity);
+			$loggers = $this->loggers;
+		} elseif(($logger = $this->getLogger($loggerOrSeverity)) !== null) {
+			// there is a logger of that name
+			$loggers[] = $logger;
 		} else {
-			throw new AgaviLoggingException('Logger "' . $logger . '" has not been configured.');
+			// nothing found? bark!
+			throw new AgaviLoggingException(sprintf('Logger "%s" has not been configured.', $loggerOrSeverity));
+		}
+		
+		// and log the stuff
+		foreach($loggers as $logger) {
+			$logger->log($message);
 		}
 	}
 

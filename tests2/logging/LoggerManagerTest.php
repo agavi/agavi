@@ -79,6 +79,21 @@ class LoggerManagerTest extends AgaviTestCase
 		$this->_lm->log(new AgaviLoggerMessage('simple debug message', AgaviLogger::DEBUG));
 		$this->assertNotRegexp('/simple debug message/', file_get_contents($this->_logfile));
 		$this->assertRegexp('/simple debug message/', file_get_contents($this->_logfile2));
+
+		//this should be logged only by l2
+		$this->_lm->log('simple debug message two', AgaviLogger::DEBUG);
+		$this->assertNotRegexp('/simple debug message two/', file_get_contents($this->_logfile));
+		$this->assertRegexp('/simple debug message two/', file_get_contents($this->_logfile2));
+
+		//this should be logged only by l
+		$this->_lm->log('simple debug message three', $this->_l);
+		$this->assertRegexp('/simple debug message three/', file_get_contents($this->_logfile));
+		$this->assertNotRegexp('/simple debug message three/', file_get_contents($this->_logfile2));
+
+		//this should be logged only by l
+		$this->_lm->log(new AgaviLoggerMessage('simple info message four', AgaviLogger::INFO), $this->_l);
+		$this->assertRegexp('/simple info message four/', file_get_contents($this->_logfile));
+		$this->assertNotRegexp('/simple info message four/', file_get_contents($this->_logfile2));
 	}
 
 }
