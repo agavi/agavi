@@ -19,6 +19,19 @@ Copyright (c) Authors.
 --
 
 
+PHPUnit
+-------
+
+Agavi bundles PHPUnit in a development version to facilitate software testing.
+
+For more information about PHPUnit, visit the homepage:
+http://phpunit.de/
+
+Copyright (c) 2002-2007 Sebastian Bergmann.
+
+--
+
+
 International Components for Unicode
 ------------------------------------
 
