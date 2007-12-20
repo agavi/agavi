@@ -4,8 +4,7 @@ class AgaviFragmentTestSuite extends AgaviTestSuite
 {
 	public static function suite()
 	{
-		$c = __CLASS__;
-		$c = new $c();
+		$c = new self();
 		
 		return $c;
 	}
