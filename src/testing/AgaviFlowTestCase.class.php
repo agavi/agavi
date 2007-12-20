@@ -1,6 +1,6 @@
 <?php
 
-class AgaviFragmentTestCase implements AgaviIFragmentTestCase
+class AgaviFlowTestCase extends PHPUnit_Framework_TestCase implements AgaviIFlowTestCase
 {
 	/**
 	 * @var        bool Indicates to PHPUnit whether or not each test method in this test case should run in isolation. In this case, we want each method of the test case to run isolated in a separate process.
