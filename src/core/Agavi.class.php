@@ -103,14 +103,21 @@ final class Agavi
 			require(AgaviConfig::get('core.agavi_dir') . '/exception/AgaviParseException.class.php');
 			require(AgaviConfig::get('core.agavi_dir') . '/util/AgaviToolkit.class.php');
 
-			if(AgaviConfig::has('core.environment') && AgaviConfig::isReadonly('core.environment')) {
+			if($environment === null) {
+				// no env given? let's read one from core.environment
 				$environment = AgaviConfig::get('core.environment');
-			} else {
-				if($environment === null) {
-					throw new AgaviException('You must supply an environment name to Agavi::bootstrap() or set the name of the default environment to be used in the configuration directive "core.environment".');
-				}
-				AgaviConfig::set('core.environment', $environment, true, true);
+			} elseif(AgaviConfig::has('core.environment') && AgaviConfig::isReadonly('core.environment')) {
+				// env given, but core.environment is read-only? then we must use that instead and ignore the given setting
+				$environment = AgaviConfig::get('core.environment');
 			}
+			
+			if($environment === null) {
+				// still no env? oh man...
+				throw new AgaviException('You must supply an environment name to Agavi::bootstrap() or set the name of the default environment to be used in the configuration directive "core.environment".');
+			}
+			
+			// finally set the env to what we're really using now.
+			AgaviConfig::set('core.environment', $environment, true, true);
 
 			AgaviConfig::set('core.debug', false, false);
 
