@@ -7,6 +7,12 @@ class AgaviUnitTestCase extends PHPUnit_Framework_TestCase implements AgaviIUnit
 	 */
 	protected $runInSeparateProcess = true;
 	
+	public function __construct()
+	{
+		// TODO: carry over env name to bootstrap from parent process via passed $GLOBALS
+		Agavi::bootstrap('testing-david');
+	}
+	
 	protected function setUp()
 	{
 		// all methods of this test case run in the same process
