@@ -10,6 +10,7 @@ CHG: Update timezone database to 2007j (#642) (David)
 CHG: Always send HTTP/1.0 responses in shiny exception template (#620) (David)
 CHG: Perform special multislash cleanup for all Apache 2.x versions (#619) (David)
 
+FIX: Agavi:boostrap() without arguments ignores writeable core.environment setting (#657) (David)
 FIX: PDOSessionStorage is unlikely to work properly in case of exceptions (#644) (David)
 FIX: PHP 5.2.5's completely ruined glob() can lead to unhappy foreach loops (#649) (David)
 FIX: RotatingLoggerAppender should complain about a rotation cycle smaller than 1 (#654) (David)
