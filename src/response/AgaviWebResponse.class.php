@@ -194,7 +194,9 @@ class AgaviWebResponse extends AgaviResponse
 			}
 			$this->setHttpHeader('Location', $location);
 			$this->setHttpStatusCode($this->redirect['code']);
-			$this->setHttpHeader('Content-Length', 0);
+			if($this->getParameter('send_content_length', true) && !$this->hasHttpHeader('Content-Length')) {
+				$this->setHttpHeader('Content-Length', 0);
+			}
 		}
 		$this->sendHttpResponseHeaders($outputType);
 		if(!$this->redirect) {
