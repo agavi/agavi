@@ -105,13 +105,13 @@ EOD;
 		$p2->addMaintainer('developer', 'dominik', 'Dominik del Bondio', 'ddb@bitxtender.com');
 		$p2->addMaintainer('developer', 'v-dogg', 'Veikko Mäkinen', 'mail@veikkomakinen.com');
 		$p2->setChannel('pear.agavi.org');
-		$p2->setReleaseVersion('0.11.0');
-		$p2->setAPIVersion('0.11.0');
+		$p2->setReleaseVersion('0.11.1');
+		$p2->setAPIVersion('0.11.1');
 		$p2->setReleaseStability('stable');
 		$p2->setAPIStability('stable');
 		$p2->setSummary($shortDesc);
 		$p2->setDescription($longDesc);
-		$p2->setNotes("To see what's new, please refer to the RELEASE_NOTES. Also, the CHANGELOG contains a full list of changes. \n\nFor installation instructions, consult INSTALL. Information on how to migrate existing 0.10.x series applications can be found in UPGRADING.");
+		$p2->setNotes("To see what's new, please refer to the RELEASE_NOTES. Also, the CHANGELOG contains a full list of changes. \n\nFor installation instructions, consult INSTALL.");
 
 		// this must be the most stupid syntax I've ever seen.
 		$p2->addRelease();
