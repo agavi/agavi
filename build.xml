@@ -3,21 +3,21 @@
 <project name="agavi" basedir="." default="main">
 
 	<!-- set up some stuff -->
-  <property environment="env"/>
-  <property file="build.properties"/>
-  <property name="package"  value="${phing.project.name}" override="true" />
-  <property name="builddir" value="build" override="true" />
-  <property name="srcdir"   value="${project.basedir}" override="true" />
+	<property environment="env"/>
+	<property file="build.properties"/>
+	<property name="package"  value="${phing.project.name}" override="true" />
+	<property name="builddir" value="build" override="true" />
+	<property name="srcdir"   value="${project.basedir}" override="true" />
 	<taskdef classname="etc.phing.AgaviPackageTask" name="agavipackage"/>
 	<taskdef classname="etc.phing.AgaviOlsonCompileTask" name="agaviolsoncompile"/>
 	<taskdef classname="src.buildtools.phing.AgaviTestTask" name="agavitest"/>
 
-  <!-- fileset for -dist files -->
-  <fileset dir="." id="distfiles">
+	<!-- fileset for -dist files -->
+	<fileset dir="." id="distfiles">
 		<include name="**/*-dist"/>
-  </fileset>
+	</fileset>
 
-  <!-- main target -->
+	<!-- main target -->
 	<target name="main" description="main target">
 		<echo msg="available targets: " />
 		<echo msg=" docs             : regenerate all documentation" />

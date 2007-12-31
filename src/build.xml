@@ -34,10 +34,10 @@
 
 	<property name="template.extension" value=".php" override="false" />
 
-  <!-- fileset for -dist files -->
-  <fileset dir="." id="distfiles">
+	<!-- fileset for -dist files -->
+	<fileset dir="." id="distfiles">
 		<include name="**/*-dist"/>
-  </fileset>
+	</fileset>
 
 	<target name="help" description="show info and help texts" >
 		<agaviInfo phing="${phing.version}" agavidir="${agavi.dir}" />
