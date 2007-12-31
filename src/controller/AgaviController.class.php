@@ -244,27 +244,35 @@ class AgaviController extends AgaviParameterHolder
 		if(!isset($loaded[$file]) && file_exists($file)) {
 			require($file);
 			$loaded[$file] = true;
-		}
 
-		$longActionName = $actionName;
+			$longActionName = $actionName;
 
-		// Nested action check?
-		$position = strrpos($actionName, '/');
-		if($position > -1) {
-			$longActionName = str_replace('/', '_', $actionName);
-			$actionName = substr($actionName, $position + 1);
-		}
+			// Nested action check?
+			$position = strrpos($actionName, '/');
+			if($position > -1) {
+				$longActionName = str_replace('/', '_', $actionName);
+				$actionName = substr($actionName, $position + 1);
+			}
 
-		if(class_exists($moduleName . '_' . $longActionName . 'Action', false)) {
-			$class = $moduleName . '_' . $longActionName . 'Action';
-		} elseif(class_exists($moduleName . '_' . $actionName . 'Action', false)) {
-			$class = $moduleName . '_' . $actionName . 'Action';
-		} elseif(class_exists($longActionName . 'Action', false)) {
-			$class = $longActionName . 'Action';
-		} elseif(class_exists($actionName . 'Action', false)) {
-			$class = $actionName . 'Action';
+			if(class_exists($moduleName . '_' . $longActionName . 'Action', false)) {
+				$class = $moduleName . '_' . $longActionName . 'Action';
+			} elseif(class_exists($moduleName . '_' . $actionName . 'Action', false)) {
+				$class = $moduleName . '_' . $actionName . 'Action';
+			} elseif(class_exists($longActionName . 'Action', false)) {
+				$class = $longActionName . 'Action';
+			} elseif(class_exists($actionName . 'Action', false)) {
+				$class = $actionName . 'Action';
+			} else {
+				throw new AgaviException('Could not find Action "' . $longActionName . '" for module "' . $moduleName . '"');
+			}
+			
+			$loaded[$file] = $class;
 		} else {
-			throw new AgaviException('Could not find Action "' . $longActionName . '" for module "' . $moduleName . '"');
+			$class = $loaded[$file];
+			
+			if($loaded[$file] === true) {
+				throw new AgaviException('Could not find Action "' . $actionName . '" for module "' . $moduleName . '"');
+			}
 		}
 
 		return new $class();
@@ -307,26 +315,34 @@ class AgaviController extends AgaviParameterHolder
 		if(!isset($loaded[$file]) && file_exists($file)) {
 			require($file);
 			$loaded[$file] = true;
-		}
+			
+			$longViewName = $viewName;
 
-		$longViewName = $viewName;
+			$position = strrpos($viewName, '/');
+			if($position > -1) {
+				$longViewName = str_replace('/', '_', $viewName);
+				$viewName = substr($viewName, $position + 1);
+			}
 
-		$position = strrpos($viewName, '/');
-		if($position > -1) {
-			$longViewName = str_replace('/', '_', $viewName);
-			$viewName = substr($viewName, $position + 1);
-		}
-
-		if(class_exists($moduleName . '_' . $longViewName . 'View', false)) {
-			$class = $moduleName . '_' . $longViewName . 'View';
-		} elseif(class_exists($moduleName . '_' . $viewName . 'View', false)) {
-			$class = $moduleName . '_' . $viewName . 'View';
-		} elseif(class_exists($longViewName . 'View', false)) {
-			$class = $longViewName . 'View';
-		} elseif(class_exists($viewName . 'View', false)) {
-			$class = $viewName . 'View';
+			if(class_exists($moduleName . '_' . $longViewName . 'View', false)) {
+				$class = $moduleName . '_' . $longViewName . 'View';
+			} elseif(class_exists($moduleName . '_' . $viewName . 'View', false)) {
+				$class = $moduleName . '_' . $viewName . 'View';
+			} elseif(class_exists($longViewName . 'View', false)) {
+				$class = $longViewName . 'View';
+			} elseif(class_exists($viewName . 'View', false)) {
+				$class = $viewName . 'View';
+			} else {
+				throw new AgaviException('Could not find View "' . $longViewName . '" for module "' . $moduleName . '"');
+			}
+			
+			$loaded[$file] = $class;
 		} else {
-			throw new AgaviException('Could not find View "' . $longViewName . '" for module "' . $moduleName . '"');
+			$class = $loaded[$file];
+			
+			if($class === true) {
+				throw new AgaviException('Could not find View "' . $viewName . '" for module "' . $moduleName . '"');
+			}
 		}
 
 		return new $class();
