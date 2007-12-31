@@ -129,7 +129,7 @@ class AgaviAdodbDatabase extends AgaviDatabase
 			}
 
 			// set default fetch mode to 'assoc'
-			$ADODB_FETCH_MODE = ADODB_FETCH_ASSOC;
+			$GLOBALS['ADODB_FETCH_MODE'] = ADODB_FETCH_ASSOC;
 
 			// NOTE:
 			// note that my AdoDB-version was build with PHP4 and _connectionID is documented as private. 
