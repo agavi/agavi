@@ -2,11 +2,13 @@ AGAVI CHANGELOG
 ===============
 
 0.11.1 RC2 (January ??, 2008)
+-----------------------------
 
 CHG: Update timezone database to 2007k (#660) (David)
 
 
 0.11.1 RC1 (December 26, 2007)
+------------------------------
 
 ADD: Creole session storage supports configurable date formatting (#639) (David)
 
@@ -40,6 +42,7 @@ FIX: Trailing ampersands and other special cases might still confuse the routing
 
 
 0.11.0 (November 3, 2007)
+-------------------------
 
 ADD: Allow simpler format definitions in DateTime validator (#596) (David)
 
@@ -57,6 +60,7 @@ FIX: Routing gets confused by a trailing ampersand in the query string under som
 
 
 0.11.0 RC7 (October 23, 2007)
+-----------------------------
 
 ADD: Default extension of renderers can now be configured directly via "default_extension" parameter (#594) (David)
 ADD: Exception templates show current date and time (#595) (David)
@@ -69,6 +73,7 @@ FIX: core.skip_config_validation logic is inverted (#592) (David)
 
 
 0.11.0 RC6 (October 12, 2007)
+-----------------------------
 
 ADD: Allow setting of the affected arguments in a validator via throwError() (#568) (Dominik)
 ADD: __sleep() and __wakeup() magic methods for AgaviModel to prevent Context serialization (#581) (David)
@@ -124,6 +129,7 @@ FIX: Missing param declaration in wsdl.xsl might lead to corrupt response messag
 
 
 0.11.0 RC5 (June 18, 2007)
+--------------------------
 
 ADD: Add extension points to XML Schema definitions where feasible (#515) (David)
 ADD: Support for XML Schema instance schema location declarations (#517) (David)
@@ -187,6 +193,7 @@ FIX: When using 0 as default value for an optional parameter gen() could skip th
 
 
 0.11.0 RC4 (February 25, 2007)
+------------------------------
 
 ADD: Throw exceptions in case PCRE operations fail (like with corrupt UTF-8 input) in FormPopulationFilter (#461) (David, Veikko)
 
@@ -197,6 +204,7 @@ FIX: Using date translator with a custom format doesn't work (#455, #460) (Domin
 
 
 0.11.0 RC3 (February 22, 2007)
+------------------------------
 
 ADD: Allow specifying per-locale formats for formatters as children to the parameter node (#453) (David)
 ADD: Allow non-absolute URLs for WebResponse redirects (#449) (David)
@@ -252,6 +260,7 @@ FIX: In Sample App: Call to undefined method setError() (#415) (Veikko, codecop)
 
 
 0.11.0 RC2 (February 7, 2007)
+-----------------------------
 
 ADD: Add convenience container creation methods to view (#410) (David)
 ADD: Allow streams as response content (#408) (David)
@@ -325,6 +334,7 @@ FIX: Fixed Form Population Filter for radiobuttons, fields containing [] (#327) 
 
 
 0.11.0 RC1 (November 13, 2006)
+------------------------------
 
 ADD: Add a PdoSessionStorage (#354) (Dominik)
 ADD: Allow the default logger to have a different name then default (#351) (Dominik)
@@ -442,6 +452,7 @@ FIX: Building many modules/actions etc. will make agavi run out of memory (#35) 
 
 
 0.10.2 (February 27, 2006)
+--------------------------
 
 CHG: Changed to new PEAR package task, package.xml v2 format, using PEAR channel pear.agavi.org (David)
 CHG: Declared API stability alpha (David)
@@ -450,11 +461,13 @@ FIX: Fixed incorrect Phing dependendy (David)
 
 
 0.10.1 (January 6, 2006)
+------------------------
 
 FIX: Fixed critical bug that prevented parameters to be passed in config_handlers.ini
 
 
 0.10.0 (December 20, 2005)
+--------------------------
 
 CHG: Updated TODO
 CHG: Bumped Version Numbers
@@ -463,6 +476,7 @@ FIX: RELEASE_NOTES and INSTALL were missing in AgaviPackageTask
 
 
 0.10.0 RC1 (December 16, 2005)
+------------------------------
 
 ADD: ShutdownListener support (Veikko)
 ADD: Cookie support for WebRequest (Veikko)
@@ -519,6 +533,7 @@ FIX: Use proper type "::" or "->" in stack trace (David)
 
 
 0.9.0 (June 8, 2005)
+--------------------
 
 - Initial Release
 
