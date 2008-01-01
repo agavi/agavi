@@ -1,6 +1,11 @@
 AGAVI CHANGELOG
 ===============
 
+0.11.1 RC2 (January ??, 2008)
+
+CHG: Update timezone database to 2007k (#660) (David)
+
+
 0.11.1 RC1 (December 26, 2007)
 
 ADD: Creole session storage supports configurable date formatting (#639) (David)
