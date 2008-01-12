@@ -201,7 +201,7 @@ class AgaviPropelDatabase extends AgaviDatabase
 			$this->agaviCreoleDatabase = new AgaviCreoleDatabase();
 			$this->agaviCreoleDatabase->initialize($databaseManager, $parameters);
 			foreach($config['propel']['datasources'][$datasource]['connection'] as $key => $value) {
-				$this->agaviCreoleDatabase->setParameter($key, $value);
+				$this->agaviCreoleDatabase->setParameter($key, $this->getParameter('overrides[connection][' . $key . ']', $value));
 			}
 			$this->agaviCreoleDatabase->setParameter('method', 'normal');
 		}
