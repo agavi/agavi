@@ -201,7 +201,7 @@ class AgaviPropelDatabase extends AgaviDatabase
 			$this->agaviCreoleDatabase = new AgaviCreoleDatabase();
 			$this->agaviCreoleDatabase->initialize($databaseManager, $parameters);
 			foreach($config['propel']['datasources'][$datasource]['connection'] as $key => $value) {
-				$this->agaviCreoleDatabase->setParameter($key, $value);
+				$this->agaviCreoleDatabase->setParameter($key, $this->getParameter('overrides[connection][' . $key . ']', $value));
 			}
 			$this->agaviCreoleDatabase->setParameter('method', 'normal');
 		}
@@ -221,14 +221,20 @@ class AgaviPropelDatabase extends AgaviDatabase
 				// that wasn't PropelAutoload, so init it
 				Propel::init(self::getDefaultConfigPath());
 			}
-			
-			$config = Propel::getConfiguration();
-			$config['datasources'][$datasource]['adapter'] = $this->getParameter('overrides[adapter]', $config['datasources'][$datasource]['adapter']);
-			$config['datasources'][$datasource]['connection'] = array_merge($config['datasources'][$datasource]['connection'], $this->getParameter('overrides[connection]', array()));
-			$config['datasources'][$datasource]['classes'] = array_merge($config['datasources'][$datasource]['classes'], $this->getParameter('overrides[classes]', array()));
-			// set the new config
-			Propel::setConfiguration($config);
 		}
+		
+		// grab the configuration values and inject possibly defined overrides for this data source
+		$config = Propel::getConfiguration();
+		$config['datasources'][$datasource]['adapter'] = $this->getParameter('overrides[adapter]', $config['datasources'][$datasource]['adapter']);
+		$config['datasources'][$datasource]['connection'] = array_merge($config['datasources'][$datasource]['connection'], $this->getParameter('overrides[connection]', array()));
+		
+		if(!$is12) {
+			// for 1.3+, also the autoload classes
+			$config['datasources'][$datasource]['classes'] = array_merge($config['datasources'][$datasource]['classes'], $this->getParameter('overrides[classes]', array()));
+		}
+		
+		// set the new config
+		Propel::setConfiguration($config);
 	}
 
 	/**
