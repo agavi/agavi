@@ -324,10 +324,10 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 
 				if(AgaviConfig::get('core.available', false)) {
 					// the application is available so we'll register
-					// global and module filters, otherwise skip them
+					// globally defined and module-specific action filters, otherwise skip them
 
 					// does this action require security?
-					if(AgaviConfig::get('core.use_security', false) && $this->actionInstance->isSecure()) {
+					if(AgaviConfig::get('core.use_security', false)) {
 						// register security filter
 						$filterChain->register($controller->getFilter('security'));
 					}
