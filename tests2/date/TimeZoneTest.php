@@ -408,7 +408,7 @@ TODO: is_equal doesn't work yet
 															array('id' =>"EST", 'offset' =>  -300, 'daylight' => false), // updated Aug 2003 aliu
 															array('id' =>"PRT", 'offset' =>  -240, 'daylight' => false),
 															array('id' =>"CNT", 'offset' =>  -210, 'daylight' => true),
-															array('id' =>"AGT", 'offset' =>  -180, 'daylight' => false), // updated 26 Sep 2000 aliu
+															array('id' =>"AGT", 'offset' =>  -180, 'daylight' => true), // updated 30 Dec 2007
 															array('id' =>"BET", 'offset' =>  -180, 'daylight' => true),
 															// "CAT", -60, false, // Wrong:
 															// As of bug 4130885, fix CAT (Central Africa)
