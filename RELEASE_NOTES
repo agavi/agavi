@@ -1,6 +1,18 @@
 AGAVI RELEASE NOTES
 ===================
 
+Version 1.0 - September ??, 2008
+================================
+
+The following is a brief summary of the most important changes in this release. For a full list of new features, changes and bugfixes, please refer to the CHANGELOG.
+
+ATTENTION: Some bugfixes caused changes to internal behavior. Make absolutely sure that your application is ready for an upgrade to 1.0 by reading the UPGRADING document.
+
+Security
+--------
+The check against isSecure() is now performed in the Security Filter, which always runs unconditionally when core.use_security is enabled. This is a bug fix that was made because it would otherwise be impossible to make certain changes to Agavi's authentication model.
+
+
 Version 0.11.1 - January ??, 2008
 =================================
 
