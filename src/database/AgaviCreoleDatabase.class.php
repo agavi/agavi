@@ -79,19 +79,15 @@ class AgaviCreoleDatabase extends AgaviDatabase
 
 			switch($method) {
 				case 'normal':
-					// get parameters normally, and all are required
-					$database = $this->getParameter('database', null);
-					$hostspec = $this->getParameter('hostspec', null);
-					$password = $this->getParameter('password', null);
-					$phptype  = $this->getParameter('phptype', null);
-					$username = $this->getParameter('username', null);
-					$dsn = array(
-						'database' => $database,
-						'hostspec' => $hostspec,
-						'password' => $password,
-						'phptype'  => $phptype,
-						'username' => $username
-					);
+					// get parameters normally
+					// all params, because we can't know all names!
+					$dsn = $this->getParameters();
+					// remove our own
+					unset($dsn['method']);
+					unset($dsn['classpath']);
+					unset($dsn['compat_assoc_lower']);
+					unset($dsn['compat_rtrim_string']);
+					unset($dsn['persistent']);
 					break;
 
 				case 'dsn':
