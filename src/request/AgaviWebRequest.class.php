@@ -417,6 +417,8 @@ class AgaviWebRequest extends AgaviRequest
 	 */
 	public function startup()
 	{
+		parent::startup();
+		
 		if($this->getParameter("unset_input", true)) {
 			$_GET = $_POST = $_COOKIE = $_REQUEST = $_FILES = array();
 			foreach($_SERVER as $key => $value) {
