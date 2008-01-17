@@ -18,6 +18,7 @@ FIX: Security filters cannot perform checks in addition to isSecure() (#671) (Da
 CHG: Bumped and fixed copyright years (#664) (David)
 CHG: Update timezone database to 2007k (#660) (David)
 
+FIX: AgaviWebRequest::startup() does not call parent startup() (#677) (David)
 FIX: AgaviCreoleDatabase does not support various Creole driver settings (#672) (David)
 
 
