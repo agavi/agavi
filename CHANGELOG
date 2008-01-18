@@ -7,6 +7,7 @@ AGAVI CHANGELOG
 ADD: Allow additional types for second argument of AgaviLoggerManager::log() (#634) (David)
 ADD: Ability to return data from view as inner content for first layer in a rendering batch (#655) (David)
 
+CHG: Deprecated AgaviSecureWebRequest (#676) (David)
 CHG: Deprecated AgaviAdodbDatabase (#662) (David)
 
 FIX: Security filters cannot perform checks in addition to isSecure() (#671) (David)
