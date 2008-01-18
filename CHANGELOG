@@ -8,6 +8,10 @@ CHG: dist.htaccess in code templates should have RewriteEngine On (#678) (David)
 CHG: Bumped and fixed copyright years (#664) (David)
 CHG: Update timezone database to 2007k (#660) (David)
 
+FIX: WebRouting does not clean up in $_REQUEST (#681) (David)
+FIX: $HTTP_RAW_POST_DATA is not removed on request startup (#679) (David)
+FIX: Copies of $_SERVER values in $_ENV are not cleaned (#674) (David)
+FIX: Request data is not cleaned for variables affected by register_argc_argv or register_long_arrays (#673) (David)
 FIX: AgaviWebRequest::startup() does not call parent startup() (#677) (David)
 FIX: AgaviCreoleDatabase does not support various Creole driver settings (#672) (David)
 

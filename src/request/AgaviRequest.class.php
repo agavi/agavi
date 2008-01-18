@@ -214,6 +214,33 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	 */
 	public function startup()
 	{
+		if($this->getParameter("unset_input", true)) {
+			// remove raw post data
+			// can still be read from php://input, but we can't prevent that
+			unset($GLOBALS['HTTP_RAW_POST_DATA']);
+			
+			// nuke argc and argc if necessary
+			$rla = ini_get('register_long_arrays');
+			
+			if(isset($_SERVER['argc'])) {
+				$_SERVER['argc'] = 0;
+				if(isset($GLOBALS['argc'])) {
+					$GLOBALS['argc'] = 0;
+				}
+				if($rla) {
+					$GLOBALS['HTTP_SERVER_VARS']['argc'] = 0;
+				}
+			}
+			if(isset($_SERVER['argv'])) {
+				$_SERVER['argv'] = array();
+				if(isset($GLOBALS['argv'])) {
+					$GLOBALS['argv'] = array();
+				}
+				if($rla) {
+					$GLOBALS['HTTP_SERVER_VARS']['argv'] = array();
+				}
+			}
+		}
 	}
 
 	/**

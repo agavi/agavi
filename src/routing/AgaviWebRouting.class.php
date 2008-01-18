@@ -147,11 +147,11 @@ class AgaviWebRouting extends AgaviRouting
 				if($ru['query'] !== '' || $queryWasEmptied) {
 					$input = preg_replace('/' . preg_quote('?' . $ru['query'], '/') . '$/D', '', $input);
 				}
-				$this->input = rawurldecode($input);
+				$this->input = $input;
 			}
 
-			if(!isset($_SERVER['SERVER_SOFTWARE']) || strpos($_SERVER['SERVER_SOFTWARE'], 'Apache') === false) {
-				// don't do that for Apache, it's already rawurldecode()d there
+			if(!isset($_SERVER['SERVER_SOFTWARE']) || strpos($_SERVER['SERVER_SOFTWARE'], 'Apache/1') === false) {
+				// don't do that for Apache 1, it's already rawurldecode()d there
 				$this->input = rawurldecode($this->input);
 			}
 
@@ -167,9 +167,13 @@ class AgaviWebRouting extends AgaviRouting
 				$parsedInput = AgaviWebRequest::clearMagicQuotes($parsedInput, false /* start on the first level */);
 			}
 			foreach(array_diff(array_keys($parsedInput), array_keys($parsedRuQuery)) as $unset) {
+				// our element is in $_GET
 				unset($_GET[$unset]);
+				// if it is not also in $_POST, then we need to remove it from the request params
 				if(!isset($_POST[$unset])) {
 					$rd->removeParameter($unset);
+					// and from $_REQUEST, too!
+					unset($_REQUEST[$unset]);
 				}
 			}
 		} else {
