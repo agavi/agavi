@@ -294,6 +294,7 @@ class AgaviWebRequest extends AgaviRequest
 
 		// very first thing to do: remove magic quotes
 		if(function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
+			$rla = ini_get('register_long_arrays');
 			$_GET = self::clearMagicQuotes($_GET);
 			$_POST = self::clearMagicQuotes($_POST);
 			$_COOKIE = self::clearMagicQuotes($_COOKIE);
@@ -307,6 +308,12 @@ class AgaviWebRequest extends AgaviRequest
 					}
 					$_FILES[$key][$entry] = $val[$entry];
 				}
+			}
+			if($rla) {
+				$GLOBALS['HTTP_GET_VARS'] = $_GET;
+				$GLOBALS['HTTP_POST_VARS'] = $_POST;
+				$GLOBALS['HTTP_COOKIE_VARS'] = $_COOKIE;
+				$GLOBALS['HTTP_POST_FILES'] = $_FILES;
 			}
 		}
 

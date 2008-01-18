@@ -169,6 +169,7 @@ class AgaviWebRouting extends AgaviRouting
 			foreach(array_diff(array_keys($parsedInput), array_keys($parsedRuQuery)) as $unset) {
 				// our element is in $_GET
 				unset($_GET[$unset]);
+				unset($GLOBALS['HTTP_GET_VARS'][$unset]);
 				// if it is not also in $_POST, then we need to remove it from the request params
 				if(!isset($_POST[$unset])) {
 					$rd->removeParameter($unset);
