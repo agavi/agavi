@@ -254,6 +254,13 @@ class AgaviWebRequest extends AgaviRequest
 	/**
 	 * Get a value by trying to find the given key in $_SERVER first, then in
 	 * $_ENV. If nothing was found, return the key, or the given default value.
+	 *
+	 * @param      string The key of the value to fetch.
+	 * @param      mixed  A default return value, or null if the key should be
+	 *                    returned (static return values can be defined this way).
+	 *
+	 * @author     David Zülke
+	 * @since      0.11.0
 	 */
 	public static function getSourceValue($key, $default = null)
 	{
@@ -420,10 +427,22 @@ class AgaviWebRequest extends AgaviRequest
 		parent::startup();
 		
 		if($this->getParameter("unset_input", true)) {
+			$rla = ini_get('register_long_arrays');
+			
 			$_GET = $_POST = $_COOKIE = $_REQUEST = $_FILES = array();
+			if($rla) {
+				// clean long arrays, too!
+				$GLOBALS['HTTP_GET_VARS'] = $GLOBALS['HTTP_POST_VARS'] = $GLOBALS['HTTP_COOKIE_VARS'] = $GLOBALS['HTTP_POST_FILES'] = array();
+			}
+			
 			foreach($_SERVER as $key => $value) {
 				if(substr($key, 0, 5) == 'HTTP_') {
 					unset($_SERVER[$key]);
+					unset($_ENV[$key]);
+					if($rla) {
+						unset($GLOBALS['HTTP_SERVER_VARS'][$key]);
+						unset($GLOBALS['HTTP_ENV_VARS'][$key]);
+					}
 				}
 			}
 		}
