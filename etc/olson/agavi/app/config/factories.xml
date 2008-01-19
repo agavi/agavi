@@ -19,7 +19,9 @@
 		
 		<response class="AgaviWebResponse" />
 		
-		<routing class="AgaviWebserviceRouting" />
+		<routing class="AgaviWebserviceRouting">
+			<parameter name="enabled">false</parameter>
+		</routing>
 		
 		<security_filter class="AgaviSecurityFilter" />
 		

@@ -72,24 +72,6 @@ class AgaviSoapController extends AgaviController
 	}
 	
 	/**
-	 * Initialize this controller.
-	 *
-	 * @param      AgaviContext An AgaviContext instance.
-	 * @param      array        An array of initialization parameters.
-	 *
-	 * @author     David Zülke <dz@bitxtender.com>
-	 * @since      0.9.0
-	 */
-	public function initialize(AgaviContext $context, array $parameters = array())
-	{
-		if(!AgaviConfig::get('core.use_routing')) {
-			throw new AgaviInitializationException('Agavi SOAP support requires the Routing to be on, please enable "core.use_routing" in settings.xml.');
-		}
-		
-		parent::initialize($context, $parameters);
-	}
-	
-	/**
 	 * Do any necessary startup work after initialization.
 	 *
 	 * This method is not called directly after initialize().

@@ -21,7 +21,7 @@ class RoutingTest extends AgaviTestCase
 	{
 		$this->_r = new SampleRouting();
 		$this->_r->initialize(AgaviContext::getInstance('test'));
-		AgaviConfig::set('core.use_routing', true);
+		// AgaviConfig::set('core.use_routing', true);
 
 	}
 

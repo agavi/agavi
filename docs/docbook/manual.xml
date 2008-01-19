@@ -1206,9 +1206,7 @@ if(curl_errno($ch)) {
         information for them, such as the parameters. Think of it as replacing
         mod_rewrite for Apache or ISAPI_Rewrite for Microsoft IIS but with a
         lot more power and features. Routes are defined in the file
-        <filename>%core.app_dir%/config/routing.xml</filename>, and to enable
-        routing you must set the "use_routing" option to true in
-        <filename>settings.xml</filename>.</para>
+        <filename>%core.app_dir%/config/routing.xml</filename></para>
 
         <para>Let's look at an example route:<programlisting>&lt;route name="viewproduct" pattern="^/products/(id:\d+)$" module="Shop" action="ViewProduct" /&gt;</programlisting></para>
 
