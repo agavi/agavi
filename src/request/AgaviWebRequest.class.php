@@ -255,24 +255,31 @@ class AgaviWebRequest extends AgaviRequest
 	 * Get a value by trying to find the given key in $_SERVER first, then in
 	 * $_ENV. If nothing was found, return the key, or the given default value.
 	 *
-	 * @param      string The key of the value to fetch.
+	 * @param      mixed  The key (or an array of keys) of the value to fetch.
 	 * @param      mixed  A default return value, or null if the key should be
 	 *                    returned (static return values can be defined this way).
 	 *
 	 * @author     David Zülke
 	 * @since      0.11.0
 	 */
-	public static function getSourceValue($key, $default = null)
+	public static function getSourceValue($keys, $default = null)
 	{
-		if(isset($_SERVER[$key])) {
-			return $_SERVER[$key];
-		} elseif(isset($_ENV[$key])) {
-			return $_ENV[$key];
+		$keys = (array)$keys;
+		// walk over all possible keys
+		foreach($keys as $key) {
+			if(isset($_SERVER[$key])) {
+				return $_SERVER[$key];
+			} elseif(isset($_ENV[$key])) {
+				return $_ENV[$key];
+			}
 		}
 		if($default !== null) {
 			return $default;
 		}
-		return $key;
+		// nothing found so far. remember that the keys list is an array
+		if($keys) {
+			return end($keys);
+		}
 	}
 
 	/**
@@ -340,6 +347,7 @@ class AgaviWebRequest extends AgaviRequest
 				$this->setMethod($methods['PUT']);
 				break;
 			case 'DELETE':
+			
 				$this->setMethod($methods['DELETE']);
 				break;
 			default:
