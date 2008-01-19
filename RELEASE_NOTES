@@ -6,11 +6,24 @@ Version 1.0 - September ??, 2008
 
 The following is a brief summary of the most important changes in this release. For a full list of new features, changes and bugfixes, please refer to the CHANGELOG.
 
+Also, please pay special attention to the list of deprecated elements at the end of this description.
+
 ATTENTION: Some bugfixes caused changes to internal behavior. Make absolutely sure that your application is ready for an upgrade to 1.0 by reading the UPGRADING document.
 
 Security
 --------
 The check against isSecure() is now performed in the Security Filter, which always runs unconditionally when core.use_security is enabled. This is a bug fix that was made because it would otherwise be impossible to make certain changes to Agavi's authentication model.
+
+Deprecated elements
+-------------------
+- The "core.use_routing" configuration directive is now deprecated. Instead, please use <parameter name="enabled"> in factories.xml's <routing> element to control the use of routing on a per-context basis (this is a new feature).
+Existing "core.use_routing" directives will be used as a fallback until the directive is removed completely in Agavi 1.1
+
+- AgaviSecureWebRequest has been deprecated. There is no replacement available. It will be removed in Agavi 1.1, but of course, you can continue to use the implementation from an older release.
+
+- AgaviAdodbDatabase has been deprecated. There is no replacement available. It will be removed in Agavi 1.1, but of course, you can continue to use the implementation from an older release.
+
+- Validation severity "none" is now called "silent".
 
 
 Version 0.11.1 - January ??, 2008

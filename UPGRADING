@@ -6,6 +6,8 @@ Upgrading to 1.0 Series from 0.11 Series
 
 Upgrading to Agavi 1.0 requires very little effort as the API remained identical.
 
+It is recommended that you refer to the RELEASE_NOTES to see a list of deprecated elements, and change your application accordingly.
+
 However, two areas might affect your application:
 
 Previously Deprecated Elements that have been removed
