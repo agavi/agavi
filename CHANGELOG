@@ -22,6 +22,7 @@ CHG: dist.htaccess in code templates should have RewriteEngine On (#678) (David)
 CHG: Bumped and fixed copyright years (#664) (David)
 CHG: Update timezone database to 2007k (#660) (David)
 
+FIX: onGenerate() method in callback is not run for routes with a source (#695) (David)
 FIX: Values in long request arrays are not decoded with magic_quotes_gpc on (#684) (David)
 FIX: WebRouting does not clean up in long request arrays (#685) (David)
 FIX: WebRouting does not clean up in $_REQUEST (#681) (David)
