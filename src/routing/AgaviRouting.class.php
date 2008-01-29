@@ -501,11 +501,6 @@ abstract class AgaviRouting extends AgaviParameterHolder
 		foreach($routes as $route) {
 			$r = $this->routes[$route];
 
-			// if the route has a source we shouldn't put its stuff in the generated string
-			if($r['opt']['source']) {
-				continue;
-			}
-
 			$myDefaults = $r['opt']['defaults'];
 
 			if(isset($r['opt']['callback'])) {
@@ -517,6 +512,11 @@ abstract class AgaviRouting extends AgaviParameterHolder
 				if(!$r['cb']->onGenerate($myDefaults, $params, $options)) {
 					continue;
 				}
+			}
+
+			// if the route has a source we shouldn't put its stuff in the generated string
+			if($r['opt']['source']) {
+				continue;
 			}
 
 			$matchedParams = array_merge($matchedParams, $r['matches']);
