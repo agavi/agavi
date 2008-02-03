@@ -297,7 +297,7 @@ class AgaviWebRouting extends AgaviRouting
 					$p = $params;
 					// get the parameters which are not defined in this route an append them as query string
 					foreach($usedParams as $name => $value) {
-						if(array_key_exists($name, $p)) {
+						if(isset($p[$name]) || array_key_exists($name, $p)) {
 							unset($p[$name]);
 						}
 					}

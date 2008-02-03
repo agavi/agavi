@@ -86,7 +86,7 @@ abstract class AgaviAttributeHolder extends AgaviParameterHolder
 
 		$retval =& $default;
 
-		if(isset($this->attributes[$ns]) && array_key_exists($name, $this->attributes[$ns])) {
+		if(isset($this->attributes[$ns]) && (isset($this->attributes[$ns][$name]) || array_key_exists($name, $this->attributes[$ns]))) {
 			$retval =& $this->attributes[$ns][$name];
 		}
 
@@ -197,7 +197,7 @@ abstract class AgaviAttributeHolder extends AgaviParameterHolder
 		}
 
 		if(isset($this->attributes[$ns])) {
-			return array_key_exists($name, $this->attributes[$ns]);
+			return isset($this->attributes[$ns][$name]) || array_key_exists($name, $this->attributes[$ns]);
 		}
 
 		return false;
@@ -238,7 +238,7 @@ abstract class AgaviAttributeHolder extends AgaviParameterHolder
 
 		$retval = null;
 
-		if(isset($this->attributes[$ns]) && 	array_key_exists($name, $this->attributes[$ns])) {
+		if(isset($this->attributes[$ns]) && (isset($this->attributes[$ns][$name]) || array_key_exists($name, $this->attributes[$ns]))) {
 			$retval =& $this->attributes[$ns][$name];
 			unset($this->attributes[$ns][$name]);
 		}

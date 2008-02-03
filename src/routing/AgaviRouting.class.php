@@ -540,7 +540,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 
 		if($refillAllParams) {
 			foreach($matchedParams as $name => $value) {
-				if(!array_key_exists($name, $params)) {
+				if(!(isset($params[$name]) || array_key_exists($name, $params))) {
 					$params[$name] = $this->escapeOutputParameter($value);
 				}
 			}
@@ -554,7 +554,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 			if($refillValue) {
 				// we didn't get a user param yet, so lets try to fill the param with the
 				// incoming match or the default value
-				if(array_key_exists($name, $originalParams)) {
+				if(isset($originalParams[$name]) || array_key_exists($name, $originalParams)) {
 					$refillValue = false;
 				} elseif(isset($optionalParams[$name])) {
 					if(isset($matchedParams[$name])) {
@@ -565,7 +565,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 						}
 					} elseif(isset($defaults[$name]) && strlen($defaults[$name]['val']) > 0) {
 						$finalParams[$name] = $defaults[$name]['pre'] . $this->escapeOutputParameter($defaults[$name]['val']) . $defaults[$name]['post'];
-					} elseif(array_key_exists($name, $params)) {
+					} elseif(isset($params[$name]) || array_key_exists($name, $params)) {
 						// the parameter was set via a callback
 						if(isset($defaults[$name]) && $params[$name] !== null) {
 							$finalParams[$name] = $defaults[$name]['pre'] . $params[$name] . $defaults[$name]['post'];
@@ -592,7 +592,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 				if(isset($defaults[$name])) {
 					$default = $defaults[$name];
 					if(isset($optionalParams[$name])) {
-						if(array_key_exists($name, $params)) {
+						if(isset($params[$name]) || array_key_exists($name, $params)) {
 							if($params[$name] === null) {
 								$finalParams[$name] = null;
 							} else {
@@ -603,7 +603,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 						} else {
 							$finalParams[$name] = null;
 						}
-					} elseif(!array_key_exists($name, $params) || $params[$name] === null) {
+					} elseif(!(isset($params[$name]) || array_key_exists($name, $params)) || $params[$name] === null) {
 						$finalParams[$name] = $default['pre'] . $this->escapeOutputParameter($default['val']) . $default['post'];
 					}
 				}
@@ -613,13 +613,13 @@ abstract class AgaviRouting extends AgaviParameterHolder
 		$availableParamsAsKeys = array_flip($availableParams);
 
 		foreach($params as $name => $param) {
-			if(!array_key_exists($name, $finalParams)) {
+			if(!(isset($finalParams[$name]) || array_key_exists($name, $finalParams))) {
 				if($param === null && isset($optionalParams[$name])) {
 					$finalParams[$name] = $param;
 				} else {
 					if(isset($defaults[$name])) {
 						$finalParams[$name] = $defaults[$name]['pre'] . ($param !== null ? $param : $this->escapeOutputParameter($defaults[$name]['val'])) . $defaults[$name]['post'];
-					} elseif(array_key_exists($name, $availableParamsAsKeys) || $param === null) {
+					} elseif(isset($availableParamsAsKeys[$name]) || array_key_exists($name, $availableParamsAsKeys) || $param === null) {
 						// when the parameter was available in one of the routes or has explicitly been unset
 						$finalParams[$name] = $param;
 					}

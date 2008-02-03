@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 0.11.1 RC2 (January ??, 2008)
 -----------------------------
 
+CHG: Improve the speed of array key lookups (#693) (Noah)
 CHG: Change *val() functions to proper typecasts (#697) (Noah)
 CHG: dist.htaccess in code templates should have RewriteEngine On (#678) (David)
 CHG: Bumped and fixed copyright years (#664) (David)
