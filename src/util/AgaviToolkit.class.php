@@ -352,7 +352,7 @@ final class AgaviToolkit
 	 */
 	public static function floorDivide($numerator, $denominator, &$remainder)
 	{
-		if(intval($denominator) != $denominator) {
+		if((int)$denominator != $denominator) {
 			throw new AgaviException('AgaviToolkit::floorDivive works only for int denominators');
 		}
 		$quotient = floor($numerator / $denominator);

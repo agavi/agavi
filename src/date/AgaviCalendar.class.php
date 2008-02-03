@@ -2134,7 +2134,7 @@ abstract class AgaviCalendar
 				// values < -1 are technically disallowed.
 				$m = $this->internalGet(AgaviDateDefinitions::MONTH, AgaviDateDefinitions::JANUARY);
 				$monthLength = $this->handleGetMonthLength($year, $m);
-				$date += (intval(($monthLength - $date) / 7) + $dim + 1) * 7;
+				$date += ((int)(($monthLength - $date) / 7) + $dim + 1) * 7;
 			}
 		} else {
 			if($bestField == AgaviDateDefinitions::WEEK_OF_YEAR) {  // ------------------------------------- WOY -------------
@@ -3398,7 +3398,7 @@ abstract class AgaviCalendar
 
 		$dayOfMonth = $this->fFields[AgaviDateDefinitions::DAY_OF_MONTH];
 		$this->fFields[AgaviDateDefinitions::WEEK_OF_MONTH] = $this->weekNumber($dayOfMonth, $dayOfWeek);
-		$this->fFields[AgaviDateDefinitions::DAY_OF_WEEK_IN_MONTH] = intval(($dayOfMonth-1) / 7) + 1;
+		$this->fFields[AgaviDateDefinitions::DAY_OF_WEEK_IN_MONTH] = (int)(($dayOfMonth-1) / 7) + 1;
 
 	}
 

@@ -405,7 +405,7 @@ class AgaviDateFormat
 
 				case self::T_QUARTER:
 				case self::T_SA_QUARTER:
-					$quarter = intval($data[AgaviDateDefinitions::MONTH] / 3);
+					$quarter = (int)($data[AgaviDateDefinitions::MONTH] / 3);
 					if($count == 3) {
 						$out .= $locale->getCalendarQuarterAbbreviated($calendarType, $quarter);
 					} elseif($count == 4) {

@@ -351,7 +351,7 @@ class AgaviGregorianCalendar extends AgaviCalendar
 					$lowGood = self::$kGregorianCalendarLimits[AgaviDateDefinitions::YEAR][1];
 					$highBad = self::$kGregorianCalendarLimits[AgaviDateDefinitions::YEAR][2] + 1;
 					while((lowGood + 1) < highBad) {
-						$y = intval(($lowGood + $highBad) / 2);
+						$y = (int)(($lowGood + $highBad) / 2);
 						$cal->set(AgaviDateDefinitions::YEAR, $y);
 						if($cal->get(AgaviDateDefinitions::YEAR) == $y && $cal->get(AgaviDateDefinitions::ERA) == $era) {
 							$lowGood = $y;

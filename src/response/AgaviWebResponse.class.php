@@ -306,7 +306,7 @@ class AgaviWebResponse extends AgaviResponse
 	 * @since      0.11.0
 	 */
 	public function setHttpStatusCode($code) {
-		$code = strval($code);
+		$code = (string)$code;
 		if(isset($this->httpStatusCodes[$code])) {
 			$this->httpStatusCode = $code;
 		} else {
