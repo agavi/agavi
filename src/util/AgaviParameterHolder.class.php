@@ -74,7 +74,7 @@ class AgaviParameterHolder
 	 */
 	public function &getParameter($name, $default = null)
 	{
-		if(array_key_exists($name, $this->parameters)) {
+		if(isset($this->parameters[$name]) || array_key_exists($name, $this->parameters)) {
 			return $this->parameters[$name];
 		}
 		$parts = AgaviArrayPathDefinition::getPartsFromPath($name);
@@ -134,7 +134,7 @@ class AgaviParameterHolder
 	 */
 	public function hasParameter($name)
 	{
-		if(array_key_exists($name, $this->parameters)) {
+		if(isset($this->parameters[$name]) || array_key_exists($name, $this->parameters)) {
 			return true;
 		}
 		$parts = AgaviArrayPathDefinition::getPartsFromPath($name);

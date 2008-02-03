@@ -51,7 +51,7 @@ final class AgaviConfig
 	 */
 	public static function get($name, $default = null)
 	{
-		if(isset(self::$config[$name])) {
+		if(isset(self::$config[$name]) || array_key_exists($name, self::$config)) {
 			return self::$config[$name];
 		} else {
 			return $default;
@@ -70,7 +70,7 @@ final class AgaviConfig
 	 */
 	public static function has($name)
 	{
-		return isset(self::$config[$name]);
+		return isset(self::$config[$name]) || array_key_exists($name, self::$config);
 	}
 
 	/**
@@ -104,7 +104,7 @@ final class AgaviConfig
 	public static function set($name, $value, $overwrite = true, $readonly = false)
 	{
 		$retval = false;
-		if(($overwrite || !isset(self::$config[$name])) && !isset(self::$readonlies[$name])) {
+		if(($overwrite || !(isset(self::$config[$name]) || array_key_exists($name, self::$config))) && !isset(self::$readonlies[$name])) {
 			self::$config[$name] = $value;
 			if($readonly) {
 				self::$readonlies[$name] = $value;
@@ -127,7 +127,7 @@ final class AgaviConfig
 	public static function remove($name)
 	{
 		$retval = false;
-		if(isset(self::$config[$name]) && !isset(self::$readonlies[$name])) {
+		if((isset(self::$config[$name]) || array_key_exists($name, self::$config)) && !isset(self::$readonlies[$name])) {
 			unset(self::$config[$name]);
 			$retval = true;
 		}
