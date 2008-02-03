@@ -100,7 +100,7 @@ final class AgaviArrayPathDefinition
 
 		foreach($parts as $part) {
 			if($part !== '' && $part !== null) {
-				if(is_numeric($part) && strpos($part, '.') === false && strpos($part, ',') === false && is_array($a) && (isset($part[(int)$a]) || array_key_exists((int)$part, $a))) {
+				if(is_numeric($part) && strpos($part, '.') === false && strpos($part, ',') === false && is_array($a) && (isset($a[(int)$part]) || array_key_exists((int)$part, $a))) {
 					$part = (int)$part;
 				}
 				if(is_array($a) && (isset($a[$part]) || array_key_exists($part, $a))) {
