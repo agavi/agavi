@@ -352,7 +352,7 @@ class AgaviWebRequest extends AgaviRequest
 
 		$this->urlScheme = 'http' . (strtolower($HTTPS) == 'on' ? 's' : '');
 
-		$this->urlPort = intval(self::getSourceValue($sources['SERVER_PORT'], isset($parameters['sources']['SERVER_PORT']) ? null : $this->urlPort));
+		$this->urlPort = (int)self::getSourceValue($sources['SERVER_PORT'], isset($parameters['sources']['SERVER_PORT']) ? null : $this->urlPort);
 
 		$SERVER_NAME = self::getSourceValue($sources['SERVER_NAME']);
 		$port = $this->getUrlPort();

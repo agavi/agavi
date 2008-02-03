@@ -79,7 +79,7 @@ if(isset($_SERVER['HTTP_USER_AGENT'])) {
 }
 if(strpos($ua, 'AppleWebKit') !== false) {
 	if(preg_match('#AppleWebKit/(\d+)#', $ua, $matches)) {
-		if(intval($matches[1]) >= 420) {
+		if((int)$matches[1] >= 420) {
 			$svg = true;
 		}
 	}

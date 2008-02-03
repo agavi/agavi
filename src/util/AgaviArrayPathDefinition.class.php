@@ -64,8 +64,8 @@ final class AgaviArrayPathDefinition
 			$part = $parts[$i];
 			$last = ($i+1 == $c);
 			if($part !== '' && $part !== null) {
-				if(is_numeric($part) && strpos($part, '.') === false && strpos($part, ',') === false && is_array($a) && array_key_exists(intval($part), $a)) {
-					$part = intval($part);
+				if(is_numeric($part) && strpos($part, '.') === false && strpos($part, ',') === false && is_array($a) && array_key_exists((int)$part, $a)) {
+					$part = (int)$part;
 				}
 				if(is_array($a) && array_key_exists($part, $a)) {
 					if($last) {
@@ -100,8 +100,8 @@ final class AgaviArrayPathDefinition
 
 		foreach($parts as $part) {
 			if($part !== '' && $part !== null) {
-				if(is_numeric($part) && strpos($part, '.') === false && strpos($part, ',') === false && is_array($a) && array_key_exists(intval($part), $a)) {
-					$part = intval($part);
+				if(is_numeric($part) && strpos($part, '.') === false && strpos($part, ',') === false && is_array($a) && array_key_exists((int)$part, $a)) {
+					$part = (int)$part;
 				}
 				if(is_array($a) && array_key_exists($part, $a)) {
 					$a = $a[$part];
@@ -132,8 +132,8 @@ final class AgaviArrayPathDefinition
 
 		foreach($parts as $part) {
 			if($part !== '' && $part !== null) {
-				if(is_numeric($part) && strpos($part, '.') === false && strpos($part, ',') === false && is_array($a) && array_key_exists(intval($part), $a)) {
-					$part = intval($part);
+				if(is_numeric($part) && strpos($part, '.') === false && strpos($part, ',') === false && is_array($a) && array_key_exists((int)$part, $a)) {
+					$part = (int)$part;
 				}
 				if(is_array($a) && array_key_exists($part, $a)) {
 					$a = &$a[$part];
@@ -163,8 +163,8 @@ final class AgaviArrayPathDefinition
 
 		foreach($parts as $part) {
 			if($part !== '' && $part !== null) {
-				if(is_numeric($part) && strpos($part, '.') === false && strpos($part, ',') === false && is_array($a) && array_key_exists(intval($part), $a)) {
-					$part = intval($part);
+				if(is_numeric($part) && strpos($part, '.') === false && strpos($part, ',') === false && is_array($a) && array_key_exists((int)$part, $a)) {
+					$part = (int)$part;
 				}
 				if(!isset($a[$part]) || (is_array($a) && !array_key_exists($part, $a))) {
 					$a[$part] = array();

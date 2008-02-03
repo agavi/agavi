@@ -140,8 +140,8 @@ class AgaviVirtualArrayPath
 
 		$part = $this->parts[0];
 
-		if(strval(intval($part)) == $part) {
-			$part = intval($part);
+		if((string)(int)$part == $part) {
+			$part = (int)$part;
 		}
 
 		if(!$this->absolute && $addBracketsWhenRelative) {
@@ -170,8 +170,8 @@ class AgaviVirtualArrayPath
 
 		$part = $this->parts[0];
 
-		if(strval(intval($part)) == $part) {
-			$part = intval($part);
+		if((string)(int)$part == $part) {
+			$part = (int)$part;
 		}
 
 		if(!$this->absolute && $addBracketsWhenRelative) {
@@ -197,8 +197,8 @@ class AgaviVirtualArrayPath
 
 		$part = array_pop($this->parts);
 
-		if(strval(intval($part)) == $part) {
-			return intval($part);
+		if((string)(int)$part == $part) {
+			return (int)$part;
 		} else {
 			return $part;
 		}
