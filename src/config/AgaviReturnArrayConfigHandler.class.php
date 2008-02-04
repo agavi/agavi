@@ -122,7 +122,7 @@ class AgaviReturnArrayConfigHandler extends AgaviConfigHandler
 			foreach($children as $key => $child) {
 				$hasId = ($idAttribute && $child->hasAttribute($idAttribute));
 				$isDupe = in_array($child->getName(), $dupes);
-				$hasParent = $child->getName() == $singularParentName;
+				$hasParent = $child->getName() == $singularParentName && $item->getName() != $singularParentName;
 				if(($hasId || $isDupe) && !$hasParent) {
 					// it's one of multiple tags in this level without the respective plural form as the parent node
 					if(!isset($data[$idx = AgaviInflector::pluralize($child->getName())])) {
