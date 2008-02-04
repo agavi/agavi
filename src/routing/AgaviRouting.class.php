@@ -603,7 +603,14 @@ abstract class AgaviRouting extends AgaviParameterHolder
 						$finalParams[$name] = null;
 					}
 				} else {
-					if(isset($matchedParams[$name])) {
+					if(array_key_exists($name, $params)) {
+						// the parameter was set via a callback
+						if(isset($defaults[$name]) && $params[$name] !== null) {
+							$finalParams[$name] = $defaults[$name]['pre'] . $params[$name] . $defaults[$name]['post'];
+						} else {
+							$finalParams[$name] = $params[$name];
+						}
+					} elseif(isset($matchedParams[$name])) {
 						if(isset($defaults[$name])) {
 							$finalParams[$name] = $defaults[$name]['pre'] . $this->escapeOutputParameter($matchedParams[$name]) . $defaults[$name]['post'];
 						} else {
