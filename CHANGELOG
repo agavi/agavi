@@ -10,6 +10,7 @@ CHG: dist.htaccess in code templates should have RewriteEngine On (#678) (David)
 CHG: Bumped and fixed copyright years (#664) (David)
 CHG: Update timezone database to 2007k (#660) (David)
 
+FIX: Incoming routing parameters can possibly overwrite routing parameters set in a callback (#698) (Dominik)
 FIX: AgaviReturnArrayConfigHandler creates an numerical indexed array of elements if child and parent have the same names (#694) (Dominik)
 FIX: AgaviConfig does not handle empty strings properly (#692) (Noah, David)
 FIX: onGenerate() method in callback is not run for routes with a source (#695) (David)
