@@ -332,7 +332,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 					$otConfig = $config['output_types'][$otConfig];
 
 					if($isActionCached) {
-						$isViewCached = $this->checkCache(array_merge($groups, array($outputType)));
+						$isViewCached = $this->checkCache(array_merge($groups, array($outputType)), $config['lifetime']);
 					}
 				} else {
 					$isCacheable = false;
