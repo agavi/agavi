@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 0.11.1 RC2 (January ??, 2008)
 -----------------------------
 
+CHG: Cache write order in execution filter should be reversed (#703) (David)
 CHG: AgaviExecutionFilter::writeCache() could use third argument with lifetime (#702) (David)
 CHG: AgaviExecutionContainer::createExecutionContainer() should copy over container parameters (#699) (David)
 CHG: Improve the speed of array key lookups (#693) (Noah)

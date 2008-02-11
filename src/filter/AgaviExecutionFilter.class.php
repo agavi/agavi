@@ -488,16 +488,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 			}
 
 			if($isCacheable) {
-				if(!$isActionCached) {
-					$actionCache['action_attributes'] = array();
-					foreach($config['action_attributes'] as $attributeName) {
-						$actionCache['action_attributes'][$attributeName] = $actionAttributes[$attributeName];
-					}
-
-					// $lm->log('Writing Action cache...');
-
-					$this->writeCache(array_merge($groups, array(self::ACTION_CACHE_ID)), $actionCache, $config['lifetime']);
-				}
+				// we're writing the view cache first. this is just in case we get into a situation with really bad timing on the leap of a second
 				if(!$isViewCached) {
 					$viewCache['request_attributes'] = array();
 					foreach($otConfig['request_attributes'] as $requestAttribute) {
@@ -507,6 +498,16 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 					$this->writeCache(array_merge($groups, array($outputType)), $viewCache, $config['lifetime']);
 
 					// $lm->log('Writing View cache...');
+				}
+				if(!$isActionCached) {
+					$actionCache['action_attributes'] = array();
+					foreach($config['action_attributes'] as $attributeName) {
+						$actionCache['action_attributes'][$attributeName] = $actionAttributes[$attributeName];
+					}
+
+					// $lm->log('Writing Action cache...');
+
+					$this->writeCache(array_merge($groups, array(self::ACTION_CACHE_ID)), $actionCache, $config['lifetime']);
 				}
 			}
 		}
