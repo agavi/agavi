@@ -371,7 +371,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 				throw new AgaviConfigurationException($error);
 			}
 
-			$this->setNext($controller->createExecutionContainer($moduleName, $actionName));
+			$this->setNext($this->createExecutionContainer($moduleName, $actionName));
 		}
 
 		if($this->next !== null) {
