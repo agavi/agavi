@@ -46,7 +46,9 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 	/**
 	 * Check if a cache exists and is up-to-date
 	 *
-	 * @param      array An array of cache groups
+	 * @param      array  An array of cache groups
+	 * @param      string The lifetime of the cache as a strtotime relative string
+	 *                    without the leading plus sign.
 	 *
 	 * @return     bool true, if the cache is up to date, otherwise false
 	 *
@@ -99,16 +101,20 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 	/**
 	 * Write cache content
 	 *
-	 * @param      array An array of cache groups
-	 * @param      array The cache data
+	 * @param      array  An array of cache groups
+	 * @param      array  The cache data
+	 * @param      string The lifetime of the cache as a strtotime relative string
+	 *                    without the leading plus sign.
 	 *
-	 * @return     bool true, if the cache is up to date, otherwise false
+	 * @return     bool The result of the write operation
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function writeCache(array $groups, $data)
+	public function writeCache(array $groups, $data, $lifetime = null)
 	{
+		// lifetime is not used in this implementation!
+		
 		foreach($groups as &$group) {
 			$group = base64_encode($group);
 		}
@@ -332,7 +338,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 					$otConfig = $config['output_types'][$otConfig];
 
 					if($isActionCached) {
-						$isViewCached = $this->checkCache(array_merge($groups, array($outputType)));
+						$isViewCached = $this->checkCache(array_merge($groups, array($outputType)), $config['lifetime']);
 					}
 				} else {
 					$isCacheable = false;
@@ -481,6 +487,17 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 			}
 
 			if($isCacheable) {
+				// we're writing the view cache first. this is just in case we get into a situation with really bad timing on the leap of a second
+				if(!$isViewCached) {
+					$viewCache['request_attributes'] = array();
+					foreach($otConfig['request_attributes'] as $requestAttribute) {
+						$viewCache['request_attributes'][] = $requestAttribute + array('value' => $request->getAttribute($requestAttribute['name'], $requestAttribute['namespace']));
+					}
+
+					$this->writeCache(array_merge($groups, array($outputType)), $viewCache, $config['lifetime']);
+
+					// $lm->log('Writing View cache...');
+				}
 				if(!$isActionCached) {
 					$actionCache['action_attributes'] = array();
 					foreach($config['action_attributes'] as $attributeName) {
@@ -489,17 +506,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 
 					// $lm->log('Writing Action cache...');
 
-					$this->writeCache(array_merge($groups, array(self::ACTION_CACHE_ID)), $actionCache);
-				}
-				if(!$isViewCached) {
-					$viewCache['request_attributes'] = array();
-					foreach($otConfig['request_attributes'] as $requestAttribute) {
-						$viewCache['request_attributes'][] = $requestAttribute + array('value' => $request->getAttribute($requestAttribute['name'], $requestAttribute['namespace']));
-					}
-
-					$this->writeCache(array_merge($groups, array($outputType)), $viewCache);
-
-					// $lm->log('Writing View cache...');
+					$this->writeCache(array_merge($groups, array(self::ACTION_CACHE_ID)), $actionCache, $config['lifetime']);
 				}
 			}
 		}

@@ -187,7 +187,13 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 		if($outputType === null) {
 			$outputType = $this->getOutputType()->getName();
 		}
-		return $this->context->getController()->createExecutionContainer($moduleName, $actionName, $arguments, $outputType);
+		
+		$container = $this->context->getController()->createExecutionContainer($moduleName, $actionName, $arguments, $outputType);
+		
+		// copy over parameters (could be is_slot, is_forward etc)
+		$container->setParameters($this->getParameters());
+		
+		return $container;
 	}
 
 	/**
@@ -365,7 +371,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 				throw new AgaviConfigurationException($error);
 			}
 
-			$this->setNext($controller->createExecutionContainer($moduleName, $actionName));
+			$this->setNext($this->createExecutionContainer($moduleName, $actionName));
 		}
 
 		if($this->next !== null) {
