@@ -57,15 +57,10 @@
   <xs:group name="action_attributes">
     <xs:choice>
       <xs:element name="action_attributes" type="action_attributes" minOccurs="0" />
-      <xs:element name="action_attribute" type="action_attribute" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="action_attribute" type="xs:string" minOccurs="0" maxOccurs="unbounded" />
     </xs:choice>
   </xs:group>
   <xs:complexType name="action_attributes">
-    <xs:sequence>
-      <xs:element name="action_attribute" type="action_attribute" minOccurs="0" maxOccurs="unbounded" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="action_attribute">
     <xs:sequence>
       <xs:element name="action_attribute" type="xs:string" minOccurs="0" maxOccurs="unbounded" />
     </xs:sequence>
