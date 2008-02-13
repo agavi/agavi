@@ -18,6 +18,7 @@ FIX: Security filters cannot perform checks in addition to isSecure() (#671) (Da
 0.11.1 RC2 (January ??, 2008)
 -----------------------------
 
+CHG: Execution Filter should read action attributes for caching from Action, not Container (#706) (David)
 CHG: Cache write order in execution filter should be reversed (#703) (David)
 CHG: AgaviExecutionFilter::writeCache() could use third argument with lifetime (#702) (David)
 CHG: AgaviExecutionContainer::createExecutionContainer() should copy over container parameters (#699) (David)
@@ -27,6 +28,7 @@ CHG: dist.htaccess in code templates should have RewriteEngine On (#678) (David)
 CHG: Bumped and fixed copyright years (#664) (David)
 CHG: Update timezone database to 2007k (#660) (David)
 
+FIX: Execution Filter does not restore cached action attributes on cache hit (#705) (David)
 FIX: caching.xsd has incorrect rules for <action_attribute> elements (#704) (David)
 FIX: View cache validity check does not use lifetime, might cause usage of stale data (#701) (David)
 FIX: Container info is not retained on internal forward due to disabled module (#700) (David)

@@ -261,6 +261,9 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 		// get the current action information
 		$actionName = $container->getActionName();
 		$moduleName = $container->getModuleName();
+		
+		// the action instance
+		$actionInstance = $container->getActionInstance();
 
 		$request = $this->context->getRequest();
 
@@ -285,6 +288,8 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 			// cache/dir/4-8-15-16-23-42 contains the action cache
 			try {
 				$actionCache = $this->readCache(array_merge($groups, array(self::ACTION_CACHE_ID)));
+				// and restore action attributes
+				$actionInstance->setAttributes($actionCache['action_attributes']);
 			} catch(AgaviException $e) {
 				$isActionCached = false;
 			}
@@ -304,7 +309,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 				// $lm->log('Returned View is cleared for caching, proceeding...');
 			}
 
-			$actionAttributes = $container->getAttributes();
+			$actionAttributes = $actionInstance->getAttributes();
 		}
 
 		// clear the response
