@@ -191,7 +191,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 					if(preg_match('/charset=(.+)\s*$/i', $meta->getAttribute('content'), $matches)) {
 						$this->doc->encoding = $matches[1];
 					} else {
-						$this->doc->encoding = "utf-8";
+						$this->doc->encoding = self::ENCODING_UTF_8;
 					}
 				}
 				if(strpos($meta->getAttribute('content'), 'application/xhtml+xml') !== false) {
