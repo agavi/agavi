@@ -333,8 +333,6 @@ class AgaviXmlConfigParser
 				}
 				
 				$pi->parentNode->removeChild($pi);
-				
-				break;
 			}
 		}
 		
