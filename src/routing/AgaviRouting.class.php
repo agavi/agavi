@@ -555,7 +555,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 			// or via callback always have precedence
 
 			// keep track if a user supplied has already been encountered
-			if(!$refillValue && isset($originalParams[$name]) || array_key_exists($name, $originalParams)) {
+			if($refillValue && (isset($originalParams[$name]) || array_key_exists($name, $originalParams))) {
 				$refillValue = false;
 			}
 
