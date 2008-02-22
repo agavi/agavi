@@ -14,6 +14,8 @@ CHG: dist.htaccess in code templates should have RewriteEngine On (#678) (David)
 CHG: Bumped and fixed copyright years (#664) (David)
 CHG: Update timezone database to 2007k (#660) (David)
 
+FIX: Unsetting a user parameter that in a routing callback's onGenerate() was passed to gen() produces strange behavior (#714) (David)
+FIX: Setting a user parameter that was undefined in a routing callback's onGenerate() has no effect if a default is defined (#713) (David)
 FIX: Form Population trips over entities in error messages when inserting them into the document (#715) (David)
 FIX: Routing config handler cannot handle parameter arrays (#712) (David)
 FIX: XML config parser only applies the xsl stylesheet defined in the first processing instruction (#711) (David)
