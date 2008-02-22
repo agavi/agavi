@@ -12,12 +12,38 @@
     indent-tabs-mode: t
     End:
   -->
-<project name="Agavi" basedir="." default="info">
+
+<!--
+  $Id$
+  -->
+<project name="Agavi" basedir="." default="status">
 
 	<!-- Agavi core directories -->
 	<property name="agavi.directory" value="@PEAR_DIR@/agavi" />
 
 	<property name="agavi.directory.src" value="${agavi.directory}/src" />
+	<property name="agavi.directory.src.action" value="${agavi.directory.src}/action" />
+	<property name="agavi.directory.src.config" value="${agavi.directory.src}/config" />
+	<property name="agavi.directory.src.controller" value="${agavi.directory.src}/controller" />
+	<property name="agavi.directory.src.core" value="${agavi.directory.src}/core" />
+	<property name="agavi.directory.src.database" value="${agavi.directory.src}/database" />
+	<property name="agavi.directory.src.date" value="${agavi.directory.src}/date" />
+	<property name="agavi.directory.src.exception" value="${agavi.directory.src}/exception" />
+	<property name="agavi.directory.src.filter" value="${agavi.directory.src}/filter" />
+	<property name="agavi.directory.src.logging" value="${agavi.directory.src}/logging" />
+	<property name="agavi.directory.src.model" value="${agavi.directory.src}/model" />
+	<property name="agavi.directory.src.renderer" value="${agavi.directory.src}/renderer" />
+	<property name="agavi.directory.src.request" value="${agavi.directory.src}/request" />
+	<property name="agavi.directory.src.response" value="${agavi.directory.src}/response" />
+	<property name="agavi.directory.src.routing" value="${agavi.directory.src}/routing" />
+	<property name="agavi.directory.src.storage" value="${agavi.directory.src}/storage" />
+	<property name="agavi.directory.src.testing" value="${agavi.directory.src}/testing" />
+	<property name="agavi.directory.src.translation" value="${agavi.directory.src}/translation" />
+	<property name="agavi.directory.src.user" value="${agavi.directory.src}/user" />
+	<property name="agavi.directory.src.util" value="${agavi.directory.src}/util" />
+	<property name="agavi.directory.src.validator" value="${agavi.directory.src}/validator" />
+	<property name="agavi.directory.src.vendor" value="${agavi.directory.src}/vender" />
+	<property name="agavi.directory.src.view" value="${agavi.directory.src}/view" />
 
 	<property name="agavi.directory.etc" value="${agavi.directory}/etc" />
 
@@ -52,30 +78,95 @@
 	<!-- Version control properties -->
 	<property name="versioning" value="filesystem" />
 
-	<!-- Project-specific configuration -->
-	<property name="file.project.properties" value="${project.directory}/build.properties" />
-	<property file="${file.project.properties}" />
+	<!-- Load tasks relative to the build system. -->
+	<taskdef name="agavi.input" classname="AgaviInputTask" classpath="tasks" />
+	<taskdef name="agavi.transform-path" classname="AgaviTransformpathTask" classpath="tasks" />
+	<taskdef name="agavi.locate-project" classname="AgaviLocateprojectTask" classpath="tasks" />
+	<taskdef name="agavi.validate-project" classname="AgaviValidateprojectTask" classpath="tasks" />
+	<!--<taskdef name="agavi.transform-string-to-identifier" classname="AgaviTransformstringtoidentifierTask" classpath="tasks" />-->
+
+	<!-- Environment-specific configuration -->
 
 	<!-- Targets -->
 	<target name="initialize">
 		<tstamp />
 
+		<!-- Load user-defined build configuration. -->
+		<if>
+			<isset property="file.build-properties" />
+			<then>
+				<agavi.transform-path property="file.build-properties" base="${application.startdir}" path="${file.build-properties}" />
+				<property file="${file.build-properties}" />
+			</then>
+		</if>
+
 		<!-- Ensure we can reach the Agavi directory. -->
 		<available property="agavi.available" file="${agavi.directory.src}/agavi.php" type="file" />
-		<fail unless="agavi.available" message="Agavi installation not found in &quot;${agavi.directory}&quot;" />
+		<fail unless="agavi.available" message="Agavi installation not found in ${agavi.directory}" />
 
-		<!-- Agavi was found, load Agavi-specific tasks. -->
-		<taskdef name="agavi.input" classname="AgaviInputTask" classpath="${agavi.directory.build.tasks}" />
-		<taskdef name="agavi.transform-path" classname="AgaviTransformpathTask" classpath="${agavi.directory.build.tasks}" />
-		<taskdef name="agavi.locate-project" classname="AgaviLocateprojectTask" classpath="${agavi.directory.build.tasks}" />
-		<!--<taskdef name="agavi.transform-string-to-identifier" classname="AgaviTransformstringtoidentifierTask" classpath="${agavi.directory.build.tasks}" />-->
-		<!--<taskdef name="agavi.sequential-file" classname="AgaviFileSequentialTask" classpath="${agavi.directory.build.tasks}" />-->
+		<!-- Agavi was found; load Agavi-specific tasks. -->
+		<taskdef name="agavi.read-configuration" classname="AgaviReadconfigurationTask" classpath="tasks" />
+
+		<!-- Load some basic configuration values. -->
+		<agavi.read-configuration property="agavi.version" configurationValue="agavi.version" />
+		<agavi.read-configuration property="agavi.url" configurationValue="agavi.url" />
+	</target>
+
+	<target name="locate-project" depends="initialize">
+		<agavi.locate-project property="project.directory" path="${application.startdir}" ignoreIfSet="true" />
+		<agavi.input property="project.directory" message="Project base directory" default="${application.startdir}" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
+		<agavi.transform-path property="project.directory" base="${application.startdir}" path="${project.directory}" />
+
+		<agavi.validate-project property="project.available" path="${project.directory}" />
+		<fail unless="project.available" message="Agavi project not found in ${project.directory}" />
+		
+		<!-- Load project-specific build configuration. -->
+		<property name="project.file.build-properties" value="${project.directory}/build.properties" />
+		<property file="${project.file.build-properties}" />
+	</target>
+
+	<target name="locate-module" depends="initialize,locate-project">
+	</target>
+
+	<target name="status" depends="initialize" description="Displays information about the current environment">
+		<!-- Phing status -->
+		<echo message="PHP:" />
+		<echo message="  Version: ${php.version}" />
+		<echo message="  Include path: ${php.classpath}" />
+		<echo message="" />
+
+		<echo message="Phing:" />
+		<echo message="  Version: ${phing.version}" />
+		<echo message="" />
+
+		<echo message="Agavi:" />
+		<echo message="  Installation directory: ${agavi.directory}" />
+		<echo message="  Version: ${agavi.version}" />
+		<echo message="  URL: ${agavi.url}" />
+		<echo message="" />
+
+		<echo message="Project:" />
+		<agavi.locate-project property="project.directory" path="${application.startdir}" ignoreIfSet="true" quiet="true" />
+		<agavi.validate-project property="project.available" path="${project.directory}" />
+		<if>
+			<isset property="project.available" />
+			<then>
+				<echo message="  Base directory: ${project.directory}" />
+			</then>
+			<else>
+				<echo message="  (not found)" />
+			</else>
+		</if>
+		<echo message="" />
+
+		<echo message="For a list of possible build targets, call this script with the -l argument." />
 	</target>
 
 	<target name="project" depends="initialize" description="Creates a project">
 		<agavi.input property="project.directory" message="Project base directory" default="${application.startdir}" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
 		<agavi.transform-path property="project.directory" base="${application.startdir}" path="${project.directory}" />
 
+		<!-- Create directory structure. -->
 		<mkdir dir="${project.directory}" />
 		<mkdir dir="${project.directory}/${project.directory.app}" />
 		<mkdir dir="${project.directory}/${project.directory.app.config}" />
@@ -86,14 +177,23 @@
 		<mkdir dir="${project.directory}/${project.directory.pub}" />
 
 		<chmod file="${project.directory}/${project.directory.app.cache}" mode="0777" />
-		<touch file="${project.directory}/${project.directory.app}/config.php" />
+
+		<!-- Create base action. -->
+		<!--
+		<agavi.input property="project.file.app.lib.action.base-action.name" message="Project base action name" default="ProjectBaseAction" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
+		<agavi.transform-string-to-identifier property="project.file.app.lib.action.base-action.name.transformed" string="${project.file.app.lib.action.base-action.name}" />
+		<echo message="${project.file.app.lib.action.base-action.name.transformed}" />
+		-->
+
+		<!-- Create base view. -->
+		<!--
+		<agavi.input property="project.file.app.lib.view.base-view.name" message="Project base view name" default="ProjectBaseView" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
+		<agavi.transform-string-to-identifier property="project.file.app.lib.view.base-view.name.transformed" string="${project.file.app.lib.view.base-view.name}" />
+		<echo message="${project.file.app.lib.view.base-view.name.transformed}" />
+		-->
 	</target>
 
-	<target name="module-create" depends="initialize" description="Creates a module">
-		<agavi.locate-project property="project.directory" path="${application.startdir}" ignoreIfSet="true" />
-		<agavi.input property="project.directory" message="Project base directory" default="${application.startdir}" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
-		<agavi.transform-path property="project.directory" base="${application.startdir}" path="${project.directory}" />
-
+	<target name="module-create" depends="initialize,locate-project" description="Creates a module">
 		<agavi.input property="module.name" message="Module name" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
 
 		<property name="module.directory" value="${project.directory}/${project.directory.app.modules}/${module.name}" />
@@ -110,46 +210,46 @@
 		<chmod file="${module.directory}/${module.directory.cache}" mode="0777" />
 	</target>
 
-	<target name="module-rename" depends="initialize" description="Renames a module">
+	<target name="module-rename" depends="initialize,locate-project" description="Renames a module">
 	</target>
 
-	<target name="module-remove" depends="initialize" description="Removes a module">
+	<target name="module-remove" depends="initialize,locate-project" description="Removes a module">
 	</target>
 
-	<target name="action-create" depends="initialize" description="Creates an action">
+	<target name="action-create" depends="initialize,locate-project,locate-module" description="Creates an action">
 	</target>
 
-	<target name="action-rename" depends="initialize" description="Renames an action">
+	<target name="action-rename" depends="initialize,locate-project,locate-module" description="Renames an action">
 	</target>
 
-	<target name="action-remove" depends="initialize" description="Removes an action">
+	<target name="action-remove" depends="initialize,locate-project,locate-module" description="Removes an action">
 	</target>
 
-	<target name="view-create" depends="initialize" description="Creates a view">
+	<target name="view-create" depends="initialize,locate-project,locate-module" description="Creates a view">
 	</target>
 
-	<target name="view-rename" depends="initialize" description="Renames a view">
+	<target name="view-rename" depends="initialize,locate-project,locate-module" description="Renames a view">
 	</target>
 
-	<target name="view-remove" depends="initialize" description="Removes a view">
+	<target name="view-remove" depends="initialize,locate-project,locate-module" description="Removes a view">
 	</target>
 
-	<target name="model-create" depends="initialize" description="Creates a model">
+	<target name="model-create" depends="initialize,locate-project,locate-module" description="Creates a model">
 	</target>
 
-	<target name="model-rename" depends="initialize" description="Renames a model">
+	<target name="model-rename" depends="initialize,locate-project,locate-module" description="Renames a model">
 	</target>
 
-	<target name="model-remove" depends="initialize" description="Removes a model">
+	<target name="model-remove" depends="initialize,locate-project,locate-module" description="Removes a model">
 	</target>
 
-	<target name="template-create" depends="initialize" description="Creates a template">
+	<target name="template-create" depends="initialize,locate-project,locate-module" description="Creates a template">
 	</target>
 
-	<target name="template-rename" depends="initialize" description="Renames a template">
+	<target name="template-rename" depends="initialize,locate-project,locate-module" description="Renames a template">
 	</target>
 
-	<target name="template-remove" depends="initialize" description="Removes a template">
+	<target name="template-remove" depends="initialize,locate-project,locate-module" description="Removes a template">
 	</target>
 
 	<!-- define the location of our tasks -->
@@ -172,10 +272,6 @@
 	<fileset dir="." id="distfiles">
 		<include name="**/*-dist"/>
 	</fileset>
-
-	<target name="old.help" description="show info and help texts" >
-		<agaviInfo phing="${phing.version}" agavidir="${agavi.dir}" />
-	</target>
 
 	<!-- Project creation -->
 	<target name="old.project" description="create a new project">

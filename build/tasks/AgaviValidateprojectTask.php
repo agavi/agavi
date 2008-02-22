@@ -16,7 +16,7 @@
 require_once(dirname(__FILE__) . '/AgaviTask.php');
 
 /**
- * Locates the base project directory given a directory within it.
+ * Validates that a given directory is the base directory for a project.
  *
  * @package    agavi
  * @subpackage build
@@ -29,11 +29,11 @@ require_once(dirname(__FILE__) . '/AgaviTask.php');
  *
  * @version    $Id$
  */
-class AgaviLocateprojectTask extends AgaviTask
+class AgaviValidateprojectTask extends AgaviTask
 {
 	protected $property = null;
 	protected $path = null;
-	protected $ignoreIfSet = false;
+	protected $value = true;
 	
 	/**
 	 * Sets the property that this task will modify.
@@ -46,7 +46,7 @@ class AgaviLocateprojectTask extends AgaviTask
 	}
 	
 	/**
-	 * Sets the path to use to locate the project.
+	 * Sets the path to use to validate the project.
 	 *
 	 * @param      string The path to use.
 	 */
@@ -56,15 +56,16 @@ class AgaviLocateprojectTask extends AgaviTask
 	}
 	
 	/**
-	 * Sets whether to ignore this check if the property is already set.
+	 * Sets the value that the property will contain if the project is
+	 * valid.
 	 *
-	 * @param      bool Whether to bypass the check if the property is set.
+	 * @param      string The value to which the property will be set.
 	 */
-	public function setIgnoreIfSet($ignoreIfSet)
+	public function setValue($value)
 	{
-		$this->ignoreIfSet = StringHelper::booleanValue($ignoreIfSet);
+		$this->value = $value;
 	}
-	
+
 	/**
 	 * Determines whether a given directory is a valid Agavi project base
 	 * directory.
@@ -73,7 +74,7 @@ class AgaviLocateprojectTask extends AgaviTask
 	 *
 	 * @return     bool True if the directory is valid, false otherwise.
 	 */
-	protected function checkProjectDirectory(PhingFile $directory)
+	public static function checkProjectDirectory(PhingFile $directory)
 	{
 		$list = $directory->listDir();
 		if(in_array('app', $list) && in_array('pub', $list))
@@ -87,17 +88,6 @@ class AgaviLocateprojectTask extends AgaviTask
 		return false;
 	}
 	
-	/**
-	 * Initializes the task.
-	 */
-	public function init()
-	{
-		require_once($this->project->getProperty('agavi.directory.build.tasks') . '/AgaviValidateprojectTask.php');
-	}
-	
-	/**
-	 * Executes the task.
-	 */
 	public function main()
 	{
 		if($this->property === null)
@@ -109,36 +99,9 @@ class AgaviLocateprojectTask extends AgaviTask
 			throw new BuildException('The path attribute must be specified');
 		}
 		
-		if($this->ignoreIfSet && $this->project->getProperty($this->property) !== null)
+		if($this->path->exists() && $this->path->isDirectory() && self::checkProjectDirectory($this->path))
 		{
-			return;
-		}
-		
-		if(!$this->path->exists())
-		{
-			throw new BuildException('The path ' . $this->path->getAbsolutePath() . ' does not exist');
-		}
-		$this->path = $this->path->getAbsoluteFile();
-		if(!$this->path->isDirectory())
-		{
-			$this->path = $this->path->getParentFile();
-		}
-		
-		if(AgaviValidateprojectTask::checkProjectDirectory($this->path))
-		{
-			/* The current path is the project directory. */
-			$this->log('Project base directory: ' . $this->path->getPath());
-			$this->project->setUserProperty($this->property, $this->path);
-		}
-		
-		if(preg_match('#^(.+?)/(?:app|pub)#', $this->path->getPath(), $matches))
-		{
-			$directory = new PhingFile($matches[1]);
-			if(AgaviValidateprojectTask::checkProjectDirectory($directory))
-			{
-				$this->log('Project base directory: ' . $directory);
-				$this->project->setUserProperty($this->property, $directory);
-			}
+			$this->project->setUserProperty($this->property, $this->value);
 		}
 	}
 }

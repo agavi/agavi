@@ -13,6 +13,8 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
+require_once(dirname(__FILE__) . '/AgaviTask.php');
+
 /**
  * @package    agavi
  * @subpackage build
@@ -25,7 +27,7 @@
  *
  * @version    $Id$
  */
-class AgaviInputTask extends Task
+class AgaviInputTask extends AgaviTask
 {
 	protected $property = null;
 	protected $message = '';
