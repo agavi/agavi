@@ -609,7 +609,10 @@ abstract class AgaviRouting extends AgaviParameterHolder
 			// their default
 			foreach(array_reverse($availableParams) as $name) {
 				if(isset($optionalParams[$name])) {
-					if(!array_key_exists($name, $finalParams) || $finalParams[$name] === null || (isset($defaults[$name]) && $finalParams[$name] == $defaults[$name]['pre'] . $this->escapeOutputParameter($defaults[$name]['val']) . $defaults[$name]['post'])) {
+					// the isset() could be replaced by 
+					// "!array_key_exists($name, $finalParams) || $finalParams[$name] === null"
+					// to clarify that null is explicitly allowed here
+					if(!isset($finalParams[$name]) || (isset($defaults[$name]) && $finalParams[$name] == $defaults[$name]['pre'] . $this->escapeOutputParameter($defaults[$name]['val']) . $defaults[$name]['post'])) {
 						$finalParams[$name] = null;
 					} else {
 						break;
