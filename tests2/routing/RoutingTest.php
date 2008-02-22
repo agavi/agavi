@@ -32,6 +32,13 @@ class BaseTestCallback extends AgaviRoutingCallback
 
 class TestCallbackLAN extends AgaviRoutingCallback
 {
+	public function onGenerate(array $defaultParameters, array &$userParameters, array &$userOptions)
+	{
+		if(!array_key_exists('language', $userParameters)) {
+			$userParameters['language'] = 'au';
+		}
+		return true;
+	}
 }
 class TestCallbackRAN extends AgaviRoutingCallback
 {
@@ -197,7 +204,7 @@ class RoutingTest extends AgaviTestCase
 			'part1' => 'part1match',
 			'part2' => 'part2match',
 		), 'Matching complex route');
-		$this->doTestGen('/de/parent/42/opt,35/p1/part1match/p2/part2match', 'child_complex+left_anchored_nonstop');
+		$this->doTestGen('/au/parent/42/opt,35/p1/part1match/p2/part2match', 'child_complex+left_anchored_nonstop');
 
 		$this->doTestMatch('/en/parent/42/', array('left_anchored_nonstop', 'parent', 'child_simple'), array(
 			'module' => 'module_parent', 'action' => 'action_child_simple',
@@ -207,8 +214,8 @@ class RoutingTest extends AgaviTestCase
 			'part2' => 'part2_default',
 			'part3' => 'part3_default',
 		), 'Matching simple route');
-		$this->doTestGen('/en/parent/42/part1_default/part2_default/xxpart3_defaultxx/', 'child_simple+left_anchored_nonstop');
-		$this->doTestGen('/en/parent/42/', 'child_simple+left_anchored_nonstop', array(), array('omit_defaults' => true));
+		$this->doTestGen('/au/parent/42/part1_default/part2_default/xxpart3_defaultxx/', 'child_simple+left_anchored_nonstop');
+		$this->doTestGen('/au/parent/42/', 'child_simple+left_anchored_nonstop', array(), array('omit_defaults' => true));
 
 		$this->doTestMatch('/en/parent/42/title_match', array('left_anchored_nonstop', 'parent', 'child_nonstop', 'child_simple'), array(
 			'module' => 'module_parent', 'action' => 'action_child_simple',
@@ -219,8 +226,8 @@ class RoutingTest extends AgaviTestCase
 			'part2' => 'part2_default',
 			'part3' => 'part3_default',
 		), 'Matching simple route');
-		$this->doTestGen('/en/parent/42/part1_default/part2_default/xxpart3_defaultxx/title_match', 'child_simple+child_nonstop+left_anchored_nonstop');
-		$this->doTestGen('/en/parent/42/title_match', 'child_simple+child_nonstop+left_anchored_nonstop', array(), array('omit_defaults' => true));
+		$this->doTestGen('/au/parent/42/part1_default/part2_default/xxpart3_defaultxx/title_match', 'child_simple+child_nonstop+left_anchored_nonstop');
+		$this->doTestGen('/au/parent/42/title_match', 'child_simple+child_nonstop+left_anchored_nonstop', array(), array('omit_defaults' => true));
 
 		$this->doTestMatch('/parent/41/part1_match/part2_match/part3_match/title_match', array('parent', 'child_nonstop', 'child_simple'), array(
 			'module' => 'module_parent', 'action' => 'action_child_simple',
