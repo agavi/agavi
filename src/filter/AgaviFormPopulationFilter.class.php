@@ -674,9 +674,9 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 						AgaviToolkit::expandVariables(
 							$errorMarkup,
 							array(
-								'elementId'    => $element->getAttribute('id'),
-								'elementName'  => $element->getAttribute('name'),
-								'errorMessage' => $errorMessage,
+								'elementId'    => htmlspecialchars($element->getAttribute('id'), ENT_QUOTES, 'UTF-8'),
+								'elementName'  => htmlspecialchars($element->getAttribute('name'), ENT_QUOTES, 'UTF-8'),
+								'errorMessage' => htmlspecialchars($errorMessage, ENT_QUOTES, 'UTF-8'),
 							)
 						)
 					);
@@ -711,8 +711,8 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 						AgaviToolkit::expandVariables(
 							$errorContainer,
 							array(
-								'elementId'     => $element->getAttribute('id'),
-								'elementName'   => $element->getAttribute('name'),
+								'elementId'     => htmlspecialchars($element->getAttribute('id'), ENT_QUOTES, 'UTF-8'),
+								'elementName'   => htmlspecialchars($element->getAttribute('name'), ENT_QUOTES, 'UTF-8'),
 								'errorMessages' => implode("\n", $errorStrings),
 							)
 						)
