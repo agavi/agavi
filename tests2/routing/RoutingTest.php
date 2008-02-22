@@ -190,7 +190,7 @@ class RoutingTest extends AgaviTestCase
 		$this->doTestGen('/parent/42/p1//p2/', 'child_complex', array('parent_id' => 42, 'optional1' => null));
 		$this->doTestGen('/parent/42/opt,21/p1//p2/', 'child_complex', array('parent_id' => 42, 'optional1' => '21'));
 		// this fails atm
-//		$this->doTestGen('/parent/42/p1//p2/', 'child_complex', array('parent_id' => 42), array('omit_defaults' => true));
+		$this->doTestGen('/parent/42/opt,35/p1//p2/', 'child_complex', array('parent_id' => 42), array('omit_defaults' => true));
 
 		$this->doTestGen('/parent/23/opt,35/p1/p1_given/p2/', 'child_complex', array('parent_id' => 'remove', 'optional1' => 'remove', 'part1' => 'p1_given'));
 		$this->doTestGen('/parent/opt,35/p1//p2/part2_given', 'child_complex', array('parent_id' => 'null', 'optional1' => 'remove', 'part1' => 'null', 'part2' => 'part2_given'));
@@ -249,7 +249,7 @@ class RoutingTest extends AgaviTestCase
 		$this->doTestGen('/parent/23/xxpart3_defaultxx/', 'child_simple', array('part1' => 'null', 'part2' => 'null', 'part3' => 'remove'));
 		$this->doTestGen('/parent/xxpart3_defaultxx/', 'child_simple', array('parent_id' => 'null', 'part1' => 'null', 'part2' => 'null', 'part3' => 'remove'));
 		$this->doTestGen('/parent/23/xxpart3_defaultxx/', 'child_simple', array('parent_id' => 'remove', 'part1' => 'null', 'part2' => 'null', 'part3' => 'remove'));
-//		$this->doTestGen('/parent/23/', 'child_simple', array('part1' => 'remove', 'part2' => null, 'part3' => null), array('omit_defaults' => true));
+		$this->doTestGen('/parent/', 'child_simple', array('part1' => 'remove', 'part2' => null, 'part3' => null), array('omit_defaults' => true));
 	}
 
 	public function testErrors()
