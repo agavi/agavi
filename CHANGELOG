@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 0.11.1 RC2 (February ??, 2008)
 ------------------------------
 
+CHG: Check for existing X-Powered-By header before setting it in WebResponse (#716) (David)
 CHG: Execution Filter should read action attributes for caching from Action, not Container (#706) (David)
 CHG: Cache write order in execution filter should be reversed (#703) (David)
 CHG: AgaviExecutionFilter::writeCache() could use third argument with lifetime (#702) (David)
