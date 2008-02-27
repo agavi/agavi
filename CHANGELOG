@@ -1,7 +1,7 @@
 AGAVI CHANGELOG
 ===============
 
-0.11.1 RC2 (February ??, 2008)
+0.11.1 RC2 (February 27, 2008)
 ------------------------------
 
 CHG: Check for existing X-Powered-By header before setting it in WebResponse (#716) (David)
@@ -15,6 +15,7 @@ CHG: dist.htaccess in code templates should have RewriteEngine On (#678) (David)
 CHG: Bumped and fixed copyright years (#664) (David)
 CHG: Update timezone database to 2007k (#660) (David)
 
+FIX: Generating the current route with additional or changed arguments allows code injections (#717) (David)
 FIX: Unsetting a user parameter that in a routing callback's onGenerate() was passed to gen() produces strange behavior (#714) (David)
 FIX: Setting a user parameter that was undefined in a routing callback's onGenerate() has no effect if a default is defined (#713) (David)
 FIX: Form Population trips over entities in error messages when inserting them into the document (#715) (David)
