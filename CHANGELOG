@@ -15,6 +15,7 @@ CHG: dist.htaccess in code templates should have RewriteEngine On (#678) (David)
 CHG: Bumped and fixed copyright years (#664) (David)
 CHG: Update timezone database to 2007k (#660) (David)
 
+FIX: Charset in Content-Type http-equiv meta tag might be parsed incorrectly (#722) (David)
 FIX: Generating the current route without additional arguments results in unescaped single quotes and square brackets, potentially incorrectly replaced argument separator (#718) (David)
 FIX: Generating the current route with additional or changed arguments allows code injections (#717) (David)
 FIX: Unsetting a user parameter that in a routing callback's onGenerate() was passed to gen() produces strange behavior (#714) (David)
