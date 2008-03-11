@@ -14,7 +14,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * 
+ *
  *
  * @package    agavi
  * @subpackage date
@@ -72,7 +72,7 @@ abstract class AgaviCalendar
 	}
 
 	/**
-	 * Called by the overload handler in the constructor. 
+	 * Called by the overload handler in the constructor.
 	 *
 	 * @param      AgaviTimeZone The timezone to use.
 	 * @param      AgaviLocale   The locale to use.
@@ -95,8 +95,8 @@ abstract class AgaviCalendar
 	const RESOLVE_STOP  = -1;
 
 	/**
-	 * Value to be bitwised "ORed" against resolve table field values for 
-	 * remapping.  Example: (UCAL_DATE | kResolveRemap) in 1st column will cause 
+	 * Value to be bitwised "ORed" against resolve table field values for
+	 * remapping.  Example: (UCAL_DATE | kResolveRemap) in 1st column will cause
 	 * 'UCAL_DATE' to be returned, but will not examine the value of UCAL_DATE.
 	 */
 	const RESOLVE_REMAP = 32;
@@ -160,11 +160,11 @@ abstract class AgaviCalendar
 	);
 
 	/**
-	 * Returns the current UTC (GMT) time measured in milliseconds since 0:00:00 
+	 * Returns the current UTC (GMT) time measured in milliseconds since 0:00:00
 	 * on 1/1/70 (derived from the system time).
 	 *
 	 * @return     float The current UTC time in milliseconds.
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -175,13 +175,13 @@ abstract class AgaviCalendar
 	}
 
 	/**
-	 * Gets this Calendar's time as milliseconds. May involve recalculation of 
-	 * time due to previous calls to set time field values. The time specified is 
+	 * Gets this Calendar's time as milliseconds. May involve recalculation of
+	 * time due to previous calls to set time field values. The time specified is
 	 * non-local UTC (GMT) time.
 	 *
-	 * @return     float The current time in UTC (GMT) time, or zero if the 
+	 * @return     float The current time in UTC (GMT) time, or zero if the
 	 *                   operation failed.
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -192,11 +192,11 @@ abstract class AgaviCalendar
 	}
 
 	/**
-	 * Sets this Calendar's current time with the given UDate. The time specified 
+	 * Sets this Calendar's current time with the given UDate. The time specified
 	 * should be in non-local UTC (GMT) time.
 	 *
 	 * @param      float The given UDate in UTC (GMT) time.
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -207,14 +207,14 @@ abstract class AgaviCalendar
 	}
 
 	/**
-	 * Returns the php native DateTime object which represents the time of this 
+	 * Returns the php native DateTime object which represents the time of this
 	 * object. Also supports dates which are not in the range of a unix timestamp.
 	 * It will also set the DateTime object to be in the same time zone as this
 	 * Calendar object.
-	 * Please note that this method will only work on PHP 5.1.x when you have 
-	 * explicitly enabled the new DateTime support. This restriction does not 
-	 * apply to 5.2 and upwards. 
-	 * When the Calendar object is in the AD era, the result of the conversion 
+	 * Please note that this method will only work on PHP 5.1.x when you have
+	 * explicitly enabled the new DateTime support. This restriction does not
+	 * apply to 5.2 and upwards.
+	 * When the Calendar object is in the AD era, the result of the conversion
 	 * is undefined.
 	 *
 	 * @return     DateTime The native DateTime.
@@ -226,7 +226,7 @@ abstract class AgaviCalendar
 	{
 		$date = new DateTime(
 			sprintf(
-				'%d-%d-%d %d:%d:%d', 
+				'%d-%d-%d %d:%d:%d',
 				$this->get(AgaviDateDefinitions::YEAR), $this->get(AgaviDateDefinitions::MONTH) + 1, $this->get(AgaviDateDefinitions::DATE),
 				$this->get(AgaviDateDefinitions::HOUR_OF_DAY), $this->get(AgaviDateDefinitions::MINUTE), $this->get(AgaviDateDefinitions::SECOND)
 			),
@@ -236,15 +236,15 @@ abstract class AgaviCalendar
 	}
 
 	/**
-	 * Gets this Calendar's time as unix timestamp. May involve recalculation of 
-	 * time due to previous calls to set time field values. The time specified is 
+	 * Gets this Calendar's time as unix timestamp. May involve recalculation of
+	 * time due to previous calls to set time field values. The time specified is
 	 * non-local UTC (GMT) time.
 	 *
 	 * @return     int The current time in UTC (GMT) time as unix timestamp.
 	 *
 	 * @throws     <b>OverflowException</b> when the date can't be represented by
 	 *                                      an unix timestamp.
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
@@ -260,11 +260,11 @@ abstract class AgaviCalendar
 	}
 
 	/**
-	 * Sets this Calendar's current time with the given unix timestamp. The time 
+	 * Sets this Calendar's current time with the given unix timestamp. The time
 	 * specified  should be in non-local UTC (GMT) time.
 	 *
 	 * @param      int The given date in UTC (GMT) time.
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
@@ -291,9 +291,9 @@ abstract class AgaviCalendar
 	 * be set to the same time.
 	 *
 	 * @param      AgaviCalendar the Calendar to be compared with this Calendar
-	 * 
-	 * @return     bool 
-	 * 
+	 *
+	 * @return     bool
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -309,15 +309,15 @@ abstract class AgaviCalendar
 	}
 
 	/**
-	 * Compares the Calendar time, whereas Calendar::operator== compares the 
+	 * Compares the Calendar time, whereas Calendar::operator== compares the
 	 * equality of Calendar objects.
 	 *
 	 * @param      AgaviCalendar The Calendar to be compared with this Calendar.
 	 *                           The object may be modified physically
-	 * 
+	 *
 	 * @return     bool True if the current time of this Calendar is equal to the
 	 *                  time of Calendar when; false otherwise.
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -328,15 +328,15 @@ abstract class AgaviCalendar
 	}
 
 	/**
-	 * Returns true if this Calendar's current time is before "when"'s current 
+	 * Returns true if this Calendar's current time is before "when"'s current
 	 * time.
 	 *
 	 * @param      AgaviCalendar The Calendar to be compared with this Calendar.
 	 *                           The object may be modified physically.
-	 * 
+	 *
 	 * @return     bool True if the current time of this Calendar is before the
 	 *                  time of Calendar when; false otherwise.
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -347,15 +347,15 @@ abstract class AgaviCalendar
 	}
 
 	/**
-	 * Returns true if this Calendar's current time is after "when"'s current 
+	 * Returns true if this Calendar's current time is after "when"'s current
 	 * time.
 	 *
 	 * @param      AgaviCalendar The Calendar to be compared with this Calendar.
 	 *                           The object may be modified physically.
-	 * 
-	 * @return     bool True if the current time of this Calendar is after the 
+	 *
+	 * @return     bool True if the current time of this Calendar is after the
 	 *                  time of Calendar when; false otherwise.
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -366,19 +366,19 @@ abstract class AgaviCalendar
 	}
 
 	/**
-	 * UDate Arithmetic function. Adds the specified (signed) amount of time to 
-	 * the given time field, based on the calendar's rules. For example, to 
-	 * subtract 5 days from the current time of the calendar, call 
-	 * add(AgaviCalendarDefinitions::DATE, -5). When adding on the month or 
-	 * AgaviCalendarDefinitions::DATE field, other fields like date might conflict
-	 * and need to be changed. For instance, adding 1 month on the date 01/31/96 
+	 * UDate Arithmetic function. Adds the specified (signed) amount of time to
+	 * the given time field, based on the calendar's rules. For example, to
+	 * subtract 5 days from the current time of the calendar, call
+	 * add(AgaviDateDefinitions::DATE, -5). When adding on the month or
+	 * AgaviDateDefinitions::DATE field, other fields like date might conflict
+	 * and need to be changed. For instance, adding 1 month on the date 01/31/96
 	 * will result in 02/29/96.
 	 *
 	 * @param      int Specifies which date field to modify.
 	 * @param      int The amount of time to be added to the field, in the natural
-	 *                 unit for that field (e.g., days for the day fields, hours 
+	 *                 unit for that field (e.g., days for the day fields, hours
 	 *                 for the hour field.)
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -493,7 +493,7 @@ abstract class AgaviCalendar
 				// danger of adjusting into a different day.  To avoid
 				// this we make the adjustment only if it actually
 				// maintains the hour.
-				
+
 				/* double */
 				$t = $this->internalGetTime();
 				$this->setTimeInMillis($t + $dst);
@@ -507,13 +507,13 @@ abstract class AgaviCalendar
 	/**
 	 * Time Field Rolling function. Rolls by the given amount on the given
 	 * time field. For example, to roll the current date up by one day, call
-	 * roll(AgaviCalendarDefinitions::DATE, +1). When rolling on the month or
-	 * AgaviCalendarDefinitions::MONTH field, other fields like date might 
+	 * roll(AgaviDateDefinitions::DATE, +1). When rolling on the month or
+	 * AgaviDateDefinitions::MONTH field, other fields like date might
 	 * conflict and, need to be changed. For instance, rolling the month up on the
-	 * date 01/31/96 will result in 02/29/96.  Rolling by a positive value always 
-	 * means rolling forward in time; e.g., rolling the year by +1 on "100 BC" 
-	 * will result in "99 BC", for Gregorian calendar. When rolling on the 
-	 * hour-in-day or AgaviCalendarDefinitions::HOUR_OF_DAY field, it will
+	 * date 01/31/96 will result in 02/29/96.  Rolling by a positive value always
+	 * means rolling forward in time; e.g., rolling the year by +1 on "100 BC"
+	 * will result in "99 BC", for Gregorian calendar. When rolling on the
+	 * hour-in-day or AgaviDateDefinitions::HOUR_OF_DAY field, it will
 	 * roll the hour value in the range between 0 and 23, which is zero-based.
 	 * <P>
 	 * The only difference between roll() and add() is that roll() does not change
@@ -522,7 +522,7 @@ abstract class AgaviCalendar
 	 *
 	 * @param      int The time field.
 	 * @param      int Indicates amount to roll.
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -895,11 +895,11 @@ abstract class AgaviCalendar
 	 *
 	 * @param      float     When the date to compare this calendar's time to
 	 * @param      int       The field in which to compute the result
-	 * 
+	 *
 	 * @return     int       The difference, either positive or negative, between
 	 *                       this calendar's time and <code>when</code>, in terms
 	 *                       of <code>field</code>.
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -965,7 +965,7 @@ abstract class AgaviCalendar
 				} else {
 					$max <<= 1;
 					if($max == 0) {
-						// TODO: see above 
+						// TODO: see above
 						// Field difference too large to fit into int32_t
 						throw new InvalidArgumentException('The difference is to large to fit into an integer');
 					}
@@ -995,12 +995,12 @@ abstract class AgaviCalendar
 	}
 
 	/**
-	 * Sets the calendar's time zone to be the same as the one passed in. The 
-	 * TimeZone passed in is _not_ adopted; the client is still responsible for 
+	 * Sets the calendar's time zone to be the same as the one passed in. The
+	 * TimeZone passed in is _not_ adopted; the client is still responsible for
 	 * deleting it.
 	 *
 	 * @param      AgaviTimeZone The given time zone.
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -1022,9 +1022,9 @@ abstract class AgaviCalendar
 	/**
 	 * Returns a reference to the time zone owned by this calendar.
 	 *
-	 * @return     AgaviTimeZone The time zone object associated with this 
+	 * @return     AgaviTimeZone The time zone object associated with this
 	 *                           calendar.
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -1037,9 +1037,9 @@ abstract class AgaviCalendar
 	/**
 	 * Queries if the current date for this Calendar is in Daylight Savings Time.
 	 *
-	 * @return     bool True if the current date for this Calendar is in 
+	 * @return     bool True if the current date for this Calendar is in
 	 *                  Daylight Savings Time, false, otherwise.
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -1047,16 +1047,16 @@ abstract class AgaviCalendar
 	public abstract function inDaylightTime();
 
 	/**
-	 * Specifies whether or not date/time interpretation is to be lenient. With 
+	 * Specifies whether or not date/time interpretation is to be lenient. With
 	 * lenient interpretation, a date such as "February 942, 1996" will be treated
-	 * as being equivalent to the 941st day after February 1, 1996. With strict 
+	 * as being equivalent to the 941st day after February 1, 1996. With strict
 	 * interpretation, such dates will cause an error when computing time from the
 	 * time field values representing the dates.
 	 *
 	 * @param      bool True specifies date/time interpretation to be lenient.
 	 *
 	 * @see        DateFormat#setLenient
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -1070,7 +1070,7 @@ abstract class AgaviCalendar
 	 * Tells whether date/time interpretation is to be lenient.
 	 *
 	 * @return     bool True tells that date/time interpretation is to be lenient.
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -1085,7 +1085,7 @@ abstract class AgaviCalendar
 	 * France.
 	 *
 	 * @param      int The given first day of the week.
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -1094,13 +1094,13 @@ abstract class AgaviCalendar
 	{
 		$this->fFirstDayOfWeek = $value;
 	}
-	
+
 	/**
 	 * Gets what the first day of the week is; e.g., Sunday in US, Monday in
 	 * France.
 	 *
 	 * @return     int The first day of the week.
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -1118,7 +1118,7 @@ abstract class AgaviCalendar
 	 *
 	 * @param      int The given minimal days required in the first week of the
 	 *                 year.
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -1127,7 +1127,7 @@ abstract class AgaviCalendar
 	{
 		$this->fMinimalDaysInFirstWeek = $value;
 	}
-	
+
 	/**
 	 * Gets what the minimal days required in the first week of the year are;
 	 * e.g., if the first week is defined as one that contains the first day of
@@ -1136,7 +1136,7 @@ abstract class AgaviCalendar
 	 * returns 7.
 	 *
 	 * @return     int The minimal days required in the first week of the year.
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -1145,15 +1145,15 @@ abstract class AgaviCalendar
 	{
 		return $this->fMinimalDaysInFirstWeek;
 	}
-	
+
 	/**
 	 * Gets the minimum value for the given time field. e.g., for Gregorian
 	 * DAY_OF_MONTH, 1.
 	 *
 	 * @param      string The given time field.
-	 * 
+	 *
 	 * @return     int    The minimum value for the given time field.
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -1162,15 +1162,15 @@ abstract class AgaviCalendar
 	{
 		return $this->getLimit($field, self::LIMIT_MINIMUM);
 	}
-	
+
 	/**
 	 * Gets the maximum value for the given time field. e.g., for Gregorian
 	 * DAY_OF_MONTH, 31.
 	 *
 	 * @param      string The given time field.
-	 * 
+	 *
 	 * @return     int    The maximum value for the given time field.
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -1179,15 +1179,15 @@ abstract class AgaviCalendar
 	{
 		return $this->getLimit($field, self::LIMIT_MAXIMUM);
 	}
-	
+
 	/**
 	 * Gets the highest minimum value for the given field if varies. Otherwise
 	 * same as getMinimum(). For Gregorian, no difference.
 	 *
 	 * @param      string The given time field.
-	 * 
+	 *
 	 * @return     int    The highest minimum value for the given time field.
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -1196,15 +1196,15 @@ abstract class AgaviCalendar
 	{
 		return $this->getLimit($field, self::LIMIT_GREATEST_MINIMUM);
 	}
-	
+
 	/**
 	 * Gets the lowest maximum value for the given field if varies. Otherwise same
 	 * as getMaximum(). e.g., for Gregorian DAY_OF_MONTH, 28.
 	 *
 	 * @param      string The given time field.
-	 * 
+	 *
 	 * @return     int    The lowest maximum value for the given time field.
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -1213,7 +1213,7 @@ abstract class AgaviCalendar
 	{
 		return $this->getLimit($field, self::LIMIT_LEAST_MAXIMUM);
 	}
-	
+
 	/**
 	 * Return the minimum value that this field could have, given the current
 	 * date. For the Gregorian calendar, this is the same as getMinimum() and
@@ -1226,10 +1226,10 @@ abstract class AgaviCalendar
 	 * efficient implementation.
 	 *
 	 * @param      string the field to determine the minimum of
-	 * 
+	 *
 	 * @return     int    the minimum of the given field for the current date of
 	 *                    this Calendar
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -1281,10 +1281,10 @@ abstract class AgaviCalendar
 	 * efficient implementation.
 	 *
 	 * @param      string the field to determine the maximum of
-	 * 
+	 *
 	 * @return     int    the maximum of the given field for the current date of
 	 *                    this Calendar
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -1337,7 +1337,7 @@ abstract class AgaviCalendar
 	 * state, call complete().
 	 *
 	 * @return     array All fields of this instance.
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -1359,10 +1359,10 @@ abstract class AgaviCalendar
 	 * state, call complete().
 	 *
 	 * @param      string The given time field.
-	 * 
+	 *
 	 * @return     int    The value for the given time field, or zero if the field
 	 *                    is unset, and set() has been called for any other field.
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -1382,10 +1382,10 @@ abstract class AgaviCalendar
 	 * definition.
 	 *
 	 * @param      string The given time field.
-	 * 
+	 *
 	 * @return     bool   True if the given time field has a value set; false
 	 *                    otherwise.
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -1426,7 +1426,7 @@ abstract class AgaviCalendar
 	 *
 	 * @param      int    The given time field.
 	 * @param      int    The value to be set for the given time field.
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -1436,7 +1436,7 @@ abstract class AgaviCalendar
 		if($this->fAreFieldsVirtuallySet) {
 			$this->computeFields();
 		}
-		
+
 		$this->fFields[$field]    = $value;
 		$this->fStamp[$field]     = $this->fNextStamp++;
 		$this->fIsSet[$field]     = true; // Remove later
@@ -1452,7 +1452,7 @@ abstract class AgaviCalendar
 	 * @param      int The value used to set the MONTH time field. Month value is
 	 *                 0-based. e.g., 0 for January.
 	 * @param      int The value used to set the DATE time field.
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -1466,7 +1466,7 @@ abstract class AgaviCalendar
 
 	/**
 	 * Sets the values for the fields YEAR, MONTH, DATE, HOUR_OF_DAY, and MINUTE.
-	 * Other field values are retained; call 
+	 * Other field values are retained; call
 	 * ) first if this is not desired.
 	 *
 	 * @param      int The value used to set the YEAR time field.
@@ -1475,7 +1475,7 @@ abstract class AgaviCalendar
 	 * @param      int The value used to set the DATE time field.
 	 * @param      int The value used to set the HOUR_OF_DAY time field.
 	 * @param      int The value used to set the MINUTE time field.
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -1501,7 +1501,7 @@ abstract class AgaviCalendar
 	 * @param      int The value used to set the HOUR_OF_DAY time field.
 	 * @param      int The value used to set the MINUTE time field.
 	 * @param      int The value used to set the SECOND time field.
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -1518,7 +1518,7 @@ abstract class AgaviCalendar
 
 	/**
 	 * TODO: describe overload bla
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -1542,7 +1542,7 @@ abstract class AgaviCalendar
 	 * Clears the values of all the time fields, making them both unset and
 	 * assigning them a value of zero. The field values will be determined during
 	 * the next resolving of time into time fields.
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -1564,7 +1564,7 @@ abstract class AgaviCalendar
 	 * the next resolving of time into time fields.
 	 *
 	 * @param      string The time field to be cleared.
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -1631,7 +1631,7 @@ abstract class AgaviCalendar
 		} else {
 			$millisInDay -= $this->computeZoneOffset($millis, $millisInDay);
 		}
-	
+
 		$this->internalSetTime($millis + $millisInDay);
 	}
 
@@ -1652,7 +1652,7 @@ abstract class AgaviCalendar
 
 		$rawOffset = $dstOffset = 0;
 		$this->getTimeZone()->getOffsetRef($localMillis, false, $rawOffset, $dstOffset);
-		$localMillis += $rawOffset; 
+		$localMillis += $rawOffset;
 
 		// Mark fields as set.  Do this before calling handleComputeFields().
 		$mask =   //fInternalSetMask;
@@ -1747,7 +1747,7 @@ abstract class AgaviCalendar
 	 * Gets this Calendar's current time as a long.
 	 *
 	 * @return     double the current time as UTC milliseconds from the epoch.
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -1757,15 +1757,15 @@ abstract class AgaviCalendar
 		if(!$this->fIsTimeSet) {
 			$this->updateTime();
 		}
-		
+
 		return $this->fTime;
 	}
 
 	/**
 	 * Sets this Calendar's current time from the given long value.
-	 * 
+	 *
 	 * @param      double the new time in UTC milliseconds from the epoch.
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -1777,7 +1777,7 @@ abstract class AgaviCalendar
 		} elseif($millis < self::MIN_MILLIS) {
 			$millis = self::MIN_MILLIS;
 		}
-		
+
 		$this->fTime = $millis;
 		$this->fAreFieldsInSync = $this->fAreAllFieldsSet = false;
 		$this->fIsTimeSet = $this->fAreFieldsVirtuallySet = true;
@@ -1786,7 +1786,7 @@ abstract class AgaviCalendar
 	/**
 	 * Recomputes the current time from currently set fields, and then fills in
 	 * any unset fields in the time field list.
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -1813,7 +1813,7 @@ abstract class AgaviCalendar
 	 * @param      string The given time field.
 	 * @param      int    a default value used if the field is unset.
 	 * @return     int    The value for the given time field.
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -1825,12 +1825,12 @@ abstract class AgaviCalendar
 
 	/**
 	 * Sets the value for a given time field.  This is a fast internal method for
-	 * subclasses.  It does not affect the fAreFieldsInSync, isTimeSet, or 
+	 * subclasses.  It does not affect the fAreFieldsInSync, isTimeSet, or
 	 * areAllFieldsSet flags.
 	 *
 	 * @param      string The given time field.
 	 * @param      int    The value for the given time field.
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -1846,10 +1846,10 @@ abstract class AgaviCalendar
 	 * Prepare this calendar for computing the actual minimum or maximum.
 	 * This method modifies this calendar's fields; it is called on a
 	 * temporary calendar.
-	 * 
+	 *
 	 * @param      string The given time field
-	 * @param      bool   
-	 * 
+	 * @param      bool
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -1919,9 +1919,9 @@ abstract class AgaviCalendar
 	 * @param      string one of the above field numbers
 	 * @param      int one of <code>MINIMUM</code>, <code>GREATEST_MINIMUM</code>,
 	 *                 <code>LEAST_MAXIMUM</code>, or <code>MAXIMUM</code>
-	 * 
-	 * @return     int 
-	 * 
+	 *
+	 * @return     int
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -1930,14 +1930,14 @@ abstract class AgaviCalendar
 
 	/**
 	 * Return a limit for a field.
-	 * 
+	 *
 	 * @param      string the field, from <code>0..UCAL_MAX_FIELD</code>
 	 * @param      int the type specifier for the limit
-	 * 
+	 *
 	 * @see        #ELimitType
-	 * 
-	 * @return     int  
-	 * 
+	 *
+	 * @return     int
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -1967,16 +1967,16 @@ abstract class AgaviCalendar
 	 * Return the Julian day number of day before the first day of the
 	 * given month in the given extended year.  Subclasses should override
 	 * this method to implement their calendar system.
-	 * 
+	 *
 	 * @param      int  the extended year
 	 * @param      int  the zero-based month, or 0 if useMonth is false
 	 * @param      bool useMonth if false, compute the day before the first day of
-	 *                  the given year, otherwise, compute the day before the 
+	 *                  the given year, otherwise, compute the day before the
 	 *                  first day of the given month
-	 * 
+	 *
 	 * @return     int  the Julian day number of the day before the first
 	 *                  day of the given month and year
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -1988,7 +1988,7 @@ abstract class AgaviCalendar
 	 * year of this calendar system.  Subclasses should override this
 	 * method if they can provide a more correct or more efficient
 	 * implementation than the default implementation in Calendar.
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -2004,7 +2004,7 @@ abstract class AgaviCalendar
 	 * calendar system.  Subclasses should override this method if they can
 	 * provide a more correct or more efficient implementation than the
 	 * default implementation in Calendar.
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -2017,12 +2017,12 @@ abstract class AgaviCalendar
 
 	/**
 	 * Return the extended year defined by the current fields.  This will
-	 * use the UCAL_EXTENDED_YEAR field or the UCAL_YEAR and supra-year fields 
-	 * (such as UCAL_ERA) specific to the calendar system, depending on which set 
+	 * use the UCAL_EXTENDED_YEAR field or the UCAL_YEAR and supra-year fields
+	 * (such as UCAL_ERA) specific to the calendar system, depending on which set
 	 * of fields is newer.
-	 * 
+	 *
 	 * @return     int the extended year
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -2033,11 +2033,11 @@ abstract class AgaviCalendar
 	 * Subclasses may override this.  This method calls
 	 * handleGetMonthLength() to obtain the calendar-specific month
 	 * length.
-	 * 
+	 *
 	 * @param      string which field to use to calculate the date
-	 * 
+	 *
 	 * @return     int    julian day specified by calendar fields.
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -2146,7 +2146,7 @@ abstract class AgaviCalendar
 					$woy = $this->internalGet($bestField);
 
 					$nextJulianDay = $this->handleComputeMonthStart($year + 1, 0, false); // jd of day before jan 1
-					$nextFirst = $this->julianDayToDayOfWeek($nextJulianDay + 1) - $firstDayOfWeek; 
+					$nextFirst = $this->julianDayToDayOfWeek($nextJulianDay + 1) - $firstDayOfWeek;
 
 					if($nextFirst < 0) { // 0..6 ldow of Jan 1
 						$nextFirst += 7;
@@ -2213,27 +2213,27 @@ abstract class AgaviCalendar
 	 * (YEAR_WOY and WEEK_OF_YEAR) to an extended year in the case
 	 * where YEAR, EXTENDED_YEAR are not set.
 	 * The Calendar implementation assumes yearWoy is in extended gregorian form
-	 * 
+	 *
 	 * @internal
-	 * 
-	 * @param      int 
-	 * @param      int 
-	 * 
+	 *
+	 * @param      int
+	 * @param      int
+	 *
 	 * @return     int the extended year, UCAL_EXTENDED_YEAR
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
 	protected function handleGetExtendedYearFromWeekFields($yearWoy, $woy)
 	{
-		// We have UCAL_YEAR_WOY and UCAL_WEEK_OF_YEAR - from those, determine 
+		// We have UCAL_YEAR_WOY and UCAL_WEEK_OF_YEAR - from those, determine
 		// what year we fall in, so that other code can set it properly.
 		// (code borrowed from computeWeekFields and handleComputeJulianDay)
 		//return yearWoy;
 
 		// First, we need a reliable DOW.
-		$bestField = $this->resolveFields(self::$kDatePrecedence); // !! Note: if subclasses have a different table, they should override handleGetExtendedYearFromWeekFields 
+		$bestField = $this->resolveFields(self::$kDatePrecedence); // !! Note: if subclasses have a different table, they should override handleGetExtendedYearFromWeekFields
 
 		// Now, a local DOW
 		$dowLocal = $this->getLocalDOW(); // 0..6
@@ -2264,9 +2264,9 @@ abstract class AgaviCalendar
 
 		$minDays = $this->getMinimalDaysInFirstWeek();
 		$jan1InPrevYear = false;  // January 1st in the year of WOY is the 1st week?  (i.e. first week is < minimal )
-		//UBool nextJan1InPrevYear = false; // January 1st of Year of WOY + 1 is in the first week? 
+		//UBool nextJan1InPrevYear = false; // January 1st of Year of WOY + 1 is in the first week?
 
-		if((7 - $first) < $minDays) { 
+		if((7 - $first) < $minDays) {
 			$jan1InPrevYear = true;
 		}
 
@@ -2290,7 +2290,7 @@ abstract class AgaviCalendar
 						}
 					}
 				} elseif($woy >= $this->getLeastMaximum($bestField)) {
-					// we _might_ be in the last week.. 
+					// we _might_ be in the last week..
 					$jd =  // Calculate JD of our target day:
 								$jan1Start +  // JD of Jan 1
 								(7 - $first) + //  days in the first week (Jan 1.. )
@@ -2328,7 +2328,7 @@ abstract class AgaviCalendar
 				}
 
 				//(internalGet(UCAL_DATE) <= (7-first)) /* && in minDow  */ ) {
-				//within 1st week and in this month.. 
+				//within 1st week and in this month..
 				//return yearWoy+1;
 				return $yearWoy;
 				break;
@@ -2345,9 +2345,9 @@ abstract class AgaviCalendar
 	/**
 	 * Compute the Julian day from fields.  Will determine whether to use
 	 * the JULIAN_DAY field directly, or other fields.
-	 * 
+	 *
 	 * @return     int the julian day
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -2383,9 +2383,9 @@ abstract class AgaviCalendar
 	 * value from 0 to 23:59:59.999 inclusive, unless fields are out of
 	 * range, in which case it can be an arbitrary value.  This value
 	 * reflects local zone wall time.
-	 * 
+	 *
 	 * @return     int The milliseconds in the day
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -2432,12 +2432,12 @@ abstract class AgaviCalendar
 
 	/**
 	 * This method can assume EXTENDED_YEAR has been set.
-	 * 
+	 *
 	 * @param      double milliseconds of the date fields
 	 * @param      int    milliseconds of the time fields; may be out or range.
-	 * 
-	 * @return     int    
-	 * 
+	 *
+	 * @return     int
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -2456,13 +2456,13 @@ abstract class AgaviCalendar
 
 	/**
 	 * Determine the best stamp in a range.
-	 * 
+	 *
 	 * @param      string first enum to look at
 	 * @param      string last enum to look at
 	 * @param      int    stamp prior to function call
-	 * 
+	 *
 	 * @return     int    the stamp value of the best stamp
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -2482,7 +2482,7 @@ abstract class AgaviCalendar
 	 * @var        array Precedence table for Dates
 	 * @see #resolveFields
 	 * @internal
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -2522,7 +2522,7 @@ abstract class AgaviCalendar
 	 * @var        array Precedence table for Year
 	 * @see #resolveFields
 	 * @internal
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -2543,7 +2543,7 @@ abstract class AgaviCalendar
 	 * @var        array Precedence table for Day of Week
 	 * @see #resolveFields
 	 * @internal
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -2585,11 +2585,11 @@ abstract class AgaviCalendar
 	 * that case, the next group will be processed.  If all groups fail to
 	 * match, then UCAL_FIELD_COUNT is returned.
 	 * @internal
-	 * 
+	 *
 	 * @param      array the precedence table
-	 * 
+	 *
 	 * @return     int   the best field
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -2626,7 +2626,7 @@ abstract class AgaviCalendar
 
 	/**
 	 * @return     array
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -2640,12 +2640,12 @@ abstract class AgaviCalendar
 	 * Return the field that is newer, either defaultField, or alternateField.
 	 * If neither is newer or neither is set, return defaultField.
 	 * @internal
-	 * 
+	 *
 	 * @param      int
 	 * @param      int
-	 * 
+	 *
 	 * @return     int
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -2660,13 +2660,13 @@ abstract class AgaviCalendar
 
 	/**
 	 * Helper function for calculating limits by trial and error
-	 * 
+	 *
 	 * @param      string The field being investigated
 	 * @param      int    starting (least max) value of field
 	 * @param      int    ending (greatest max) value of field
-	 * 
-	 * @return     int    
-	 * 
+	 *
+	 * @return     int
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -2711,22 +2711,22 @@ abstract class AgaviCalendar
 
 	/**
 	 * @var        bool True if the fields are in sync with the currently set time
-	 *                  of this Calendar. If false, then the next attempt to get 
-	 *                  the value of a field will force a recomputation of all 
+	 *                  of this Calendar. If false, then the next attempt to get
+	 *                  the value of a field will force a recomputation of all
 	 *                  fields from the current value of the time field.
 	 */
 	protected $fAreFieldsInSync = false;
 
 	/**
-	 * @var        bool True if all of the fields have been set.  This is 
+	 * @var        bool True if all of the fields have been set.  This is
 	 *                  initially false, and set to true by computeFields().
 	 */
 	protected $fAreAllFieldsSet = false;
 
 	/**
-	 * @var        bool True if all fields have been virtually set, but have not 
+	 * @var        bool True if all fields have been virtually set, but have not
 	 *                  yet been computed.  This occurs only in setTimeInMillis().
-	 *                  A calendar set to this state will compute all fields from 
+	 *                  A calendar set to this state will compute all fields from
 	 *                  the time if it becomes necessary, but otherwise will delay
 	 *                  such computation.
 	 */
@@ -2736,7 +2736,7 @@ abstract class AgaviCalendar
 	 * Get the current time without recomputing.
 	 *
 	 * @return     float the current time without recomputing.
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -2750,7 +2750,7 @@ abstract class AgaviCalendar
 	 * Set the current time without affecting flags or fields.
 	 *
 	 * @param      float The time to be set
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -2769,9 +2769,9 @@ abstract class AgaviCalendar
 	/**
 	 * @var        array The flags which tell if a specified time field for the
 	 *                   calendar is set.
-	 * 
+	 *
 	 * @deprecated ICU 2.8 use (fStamp[n]!=kUnset)
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -2779,7 +2779,7 @@ abstract class AgaviCalendar
 	protected $fIsSet;
 
 	/** Special values of stamp[]
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -2790,8 +2790,8 @@ abstract class AgaviCalendar
 
 	/**
 	 * @var        array Pseudo-time-stamps which specify when each field was set.
-	 *                   There are two special values, UNSET and INTERNALLY_SET. 
-	 *                   Values from MINIMUM_USER_SET to Integer.MAX_VALUE are 
+	 *                   There are two special values, UNSET and INTERNALLY_SET.
+	 *                   Values from MINIMUM_USER_SET to Integer.MAX_VALUE are
 	 *                   legal user set values.
 	 */
 	protected $fStamp;
@@ -2819,9 +2819,9 @@ abstract class AgaviCalendar
 	 * <p>The default implementation in <code>Calendar</code> implements
 	 * a pure proleptic Gregorian calendar.
 	 * @internal
-	 * 
+	 *
 	 * @param      int The julian day
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -2847,9 +2847,9 @@ abstract class AgaviCalendar
 	 * <code>computeGregorianFields()</code>.
 	 * @see #computeGregorianFields
 	 * @internal
-	 * 
+	 *
 	 * @return     int The gregorian year
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -2864,9 +2864,9 @@ abstract class AgaviCalendar
 	 * <code>computeGregorianFields()</code>.
 	 * @see #computeGregorianFields
 	 * @internal
-	 * 
+	 *
 	 * @return     int The gregorian month
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -2881,9 +2881,9 @@ abstract class AgaviCalendar
 	 * computed by <code>computeGregorianFields()</code>.
 	 * @see #computeGregorianFields
 	 * @internal
-	 * 
+	 *
 	 * @return     int The gregorian day of year
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -2898,9 +2898,9 @@ abstract class AgaviCalendar
 	 * computed by <code>computeGregorianFields()</code>.
 	 * @see #computeGregorianFields
 	 * @internal
-	 * 
+	 *
 	 * @return     int The gregorian day of month
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -2911,12 +2911,12 @@ abstract class AgaviCalendar
 	}
 
 	/**
-	 * Called by computeJulianDay.  Returns the default month (0-based) for the 
+	 * Called by computeJulianDay.  Returns the default month (0-based) for the
 	 * year, taking year and era into account.  Defaults to 0 for Gregorian, which
 	 * doesn't care.
-	 * 
+	 *
 	 * @return     int The default month for the year.
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -2927,14 +2927,14 @@ abstract class AgaviCalendar
 	}
 
 	/**
-	 * Called by computeJulianDay.  Returns the default day (1-based) for the 
+	 * Called by computeJulianDay.  Returns the default day (1-based) for the
 	 * month, taking currently-set year and era into account.  Defaults to 1 for
 	 * Gregorian.
-	 * 
+	 *
 	 * @param      int The months
-	 * 
+	 *
 	 * @return     int The default day for the month
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -2952,13 +2952,13 @@ abstract class AgaviCalendar
 	/**
 	 * Adjust the specified field so that it is within
 	 * the allowable range for the date to which this calendar is set.
-	 * For example, in a Gregorian calendar pinning the 
-	 * AgaviCalendarDefinitions::DAY_OF_MONTH field for a calendar set to April 31
+	 * For example, in a Gregorian calendar pinning the
+	 * AgaviDateDefinitions::DAY_OF_MONTH field for a calendar set to April 31
 	 * would cause it to be set to April 30.
 	 * <p>
 	 * <b>Subclassing:</b>
 	 * <br>
-	 * This utility method is intended for use by subclasses that need to 
+	 * This utility method is intended for use by subclasses that need to
 	 * implement their own overrides of {@link #roll roll} and {@link #add add}.
 	 * <p>
 	 * <b>Note:</b>
@@ -2970,12 +2970,12 @@ abstract class AgaviCalendar
 	 * really do need to do so, you should override this method to do
 	 * something more efficient for that field.
 	 * <p>
-	 * 
+	 *
 	 * @param      string The calendar field whose value should be pinned.
 	 *
 	 * @see        getActualMinimum
 	 * @see        getActualMaximum
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -2993,12 +2993,12 @@ abstract class AgaviCalendar
 	}
 
 	/**
-	 * Return the week number of a day, within a period. This may be the week 
-	 * number in a year or the week number in a month. Usually this will be a 
-	 * value >= 1, but if some initial days of the period are excluded from 
+	 * Return the week number of a day, within a period. This may be the week
+	 * number in a year or the week number in a month. Usually this will be a
+	 * value >= 1, but if some initial days of the period are excluded from
 	 * week 1, because getMinimalDaysInFirstWeek is > 1, then the week number will
 	 * be zero for those initial days. This method requires the day number and day
-	 * of week for some known date in the period in order to determine the day of 
+	 * of week for some known date in the period in order to determine the day of
 	 * week on the desired day.
 	 * <p>
 	 * <b>Subclassing:</b>
@@ -3013,28 +3013,28 @@ abstract class AgaviCalendar
 	 * of the week is not known but the day number and day of week for some other
 	 * day in the period (e.g. the current date) <em>is</em> known.
 	 * <p>
-	 * 
+	 *
 	 * @param      int The {@link #UCalendarDateFields DAY_OF_YEAR} or
-	 *                 {@link #UCalendarDateFields DAY_OF_MONTH} whose week 
+	 *                 {@link #UCalendarDateFields DAY_OF_MONTH} whose week
 	 *                 number is desired.
 	 *                 Should be 1 for the first day of the period.
 	 *
 	 * @param      int The {@link #UCalendarDateFields DAY_OF_YEAR}
-	 *                 or {@link #UCalendarDateFields DAY_OF_MONTH} for a day in 
-	 *                 the period whose {@link #UCalendarDateFields DAY_OF_WEEK} 
+	 *                 or {@link #UCalendarDateFields DAY_OF_MONTH} for a day in
+	 *                 the period whose {@link #UCalendarDateFields DAY_OF_WEEK}
 	 *                 is specified by the <code>knownDayOfWeek</code> parameter.
 	 *                 Should be 1 for first day of period.
 	 *
 	 * @param      int The {@link #UCalendarDateFields DAY_OF_WEEK} for the day
-	 *                 corresponding to the <code>knownDayOfPeriod</code> 
+	 *                 corresponding to the <code>knownDayOfPeriod</code>
 	 *                 parameter.
 	 *                 1-based with 1=Sunday.
 	 *
-	 * @return     int The week number (one-based), or zero if the day falls 
+	 * @return     int The week number (one-based), or zero if the day falls
 	 *                 before the first week because
 	 *                 {@link #getMinimalDaysInFirstWeek getMinimalDaysInFirstWeek}
 	 *                 is more than one.
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -3081,20 +3081,20 @@ abstract class AgaviCalendar
 	 * {@link #getActualMaximum getActualMaximum} as well.
 	 * <p>
 	 * @param      int The {@link #UCalendarDateFields DAY_OF_YEAR} or
-	 *                 {@link #UCalendarDateFields DAY_OF_MONTH} whose week 
-	 *                 number is desired. Should be 1 for the first day of the 
+	 *                 {@link #UCalendarDateFields DAY_OF_MONTH} whose week
+	 *                 number is desired. Should be 1 for the first day of the
 	 *                 period.
 	 *
 	 * @param      int The {@link #UCalendarDateFields DAY_OF_WEEK} for the day
 	 *                 corresponding to the <code>dayOfPeriod</code> parameter.
 	 *                 1-based with 1=Sunday.
 	 *
-	 * @return     int The week number (one-based), or zero if the day falls 
+	 * @return     int The week number (one-based), or zero if the day falls
 	 *                 before the first week because
 	 *                 {@link #getMinimalDaysInFirstWeek getMinimalDaysInFirstWeek}
 	 *                 is more than one.
 	 * @internal
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -3107,9 +3107,9 @@ abstract class AgaviCalendar
 	/**
 	 * returns the local DOW, valid range 0..6
 	 * @internal
-	 * 
+	 *
 	 * @return     int
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -3148,13 +3148,13 @@ abstract class AgaviCalendar
 
 	/**
 	 * @see   #setLenient
-	 * @var        bool 
+	 * @var        bool
 	 */
 	private $fLenient;
 
 	/**
-	 * @var        AgaviTimeZone Time zone affects the time calculation done by 
-	 *                           Calendar. Calendar subclasses use the time zone 
+	 * @var        AgaviTimeZone Time zone affects the time calculation done by
+	 *                           Calendar. Calendar subclasses use the time zone
 	 *                           data to produce the local time.
 	 */
 	private $fZone;
@@ -3166,7 +3166,7 @@ abstract class AgaviCalendar
 	 * firstDayOfWeek is SUNDAY; minimalDaysInFirstWeek is 1. They are used to figure
 	 * out the week count for a specific date for a given locale. These must be set when
 	 * a Calendar is constructed.
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -3179,9 +3179,9 @@ abstract class AgaviCalendar
 	 * time.
 	 *
 	 * @param      AgaviLocale The given locale.
-	 * @param      string      The calendar type identifier, e.g: gregorian, 
+	 * @param      string      The calendar type identifier, e.g: gregorian,
 	 *                         buddhist, etc.
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -3226,7 +3226,7 @@ abstract class AgaviCalendar
 		// If we are lenient, we need to recompute the fields to normalize
 		// the values.  Also, if we haven't set all the fields yet (i.e.,
 		// in a newly-created object), we need to fill in the fields. [LIU]
-		if($this->isLenient() || ! $this->fAreAllFieldsSet) 
+		if($this->isLenient() || ! $this->fAreAllFieldsSet)
 			$this->fAreFieldsInSync = false;
 
 		$this->fIsTimeSet = true;
@@ -3240,22 +3240,22 @@ abstract class AgaviCalendar
 	private $fGregorianYear;
 
 	/**
-	 * @var        int The Gregorian month, as computed by 
-	 *                 computeGregorianFields() and returned by 
+	 * @var        int The Gregorian month, as computed by
+	 *                 computeGregorianFields() and returned by
 	 *                 getGregorianMonth().
 	 */
 	private $fGregorianMonth;
 
 	/**
 	 * @var        int The Gregorian day of the year, as computed by
-	 *                 computeGregorianFields() and returned by 
+	 *                 computeGregorianFields() and returned by
 	 *                 getGregorianDayOfYear().
 	 */
 	private $fGregorianDayOfYear;
 
 	/**
 	 * @var        int The Gregorian day of the month, as computed by
-	 *                 computeGregorianFields() and returned by 
+	 *                 computeGregorianFields() and returned by
 	 *                 getGregorianDayOfMonth().
 	 */
 	private $fGregorianDayOfMonth;
@@ -3267,9 +3267,9 @@ abstract class AgaviCalendar
 	 * the given Julian day.  These values are not stored in fields, but in
 	 * member variables gregorianXxx.  Also compute the DAY_OF_WEEK and
 	 * DOW_LOCAL fields.
-	 * 
+	 *
 	 * @param      int The julian day
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -3300,9 +3300,9 @@ abstract class AgaviCalendar
 	 * To perform a Gregorian calendar fields->millis computation, call
 	 * computeGregorianMonthStart().
 	 * @see #computeGregorianMonthStart
-	 * 
+	 *
 	 * @param      int The julian day
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -3332,7 +3332,7 @@ abstract class AgaviCalendar
 	 * complexity is not warranted, since the intention of the YEAR_WOY field is
 	 * to support ISO 8601 notation, so it will typically be used with a
 	 * proleptic Gregorian calendar, which has no field larger than a year.
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -3409,7 +3409,7 @@ abstract class AgaviCalendar
 	 * @see #isLenient
 	 * @see #validateField(int, int&)
 	 * @internal
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -3430,9 +3430,9 @@ abstract class AgaviCalendar
 	 * <code>Calendar.validateField()</code>.
 	 * @see #validateField(int, int, int, int&)
 	 * @internal
-	 * 
+	 *
 	 * @param      string The field
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -3468,11 +3468,11 @@ abstract class AgaviCalendar
 	 * use this method in their implementation of {@link
 	 * #validateField(int, int&)}.
 	 * @internal
-	 * 
-	 * @param      string 
-	 * @param      int    
-	 * @param      int    
-	 * 
+	 *
+	 * @param      string
+	 * @param      int
+	 * @param      int
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -3491,11 +3491,11 @@ abstract class AgaviCalendar
 	 * value is one-based.
 	 *
 	 * @param      double The given Julian date number.
-	 * 
+	 *
 	 * @return     int    Day number from 1..7 (SUN..SAT).
-	 * 
+	 *
 	 * @internal
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -3524,7 +3524,7 @@ abstract class AgaviCalendar
 	/**
 	 * @internal
 	 * @return     bool if this calendar has a default century (i.e. 03 -> 2003)
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -3534,7 +3534,7 @@ abstract class AgaviCalendar
 	/**
 	 * @internal
 	 * @return     float the start of the default century, as a UDate
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -3544,7 +3544,7 @@ abstract class AgaviCalendar
 	/**
 	 * @internal
 	 * @return     int the beginning year of the default century, as a year
-	 * 
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -3554,8 +3554,8 @@ abstract class AgaviCalendar
 	/**
 	 * Returns the type of the implementing calendar.
 	 *
-	 * @return     string The type of this calendar (gegorian, ...)
-	 * 
+	 * @return     string The type of this calendar (Gregorian, ...)
+	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
