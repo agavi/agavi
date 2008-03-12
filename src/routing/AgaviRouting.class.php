@@ -69,12 +69,12 @@ abstract class AgaviRouting extends AgaviParameterHolder
 	 * @var        array An array of default options for gen()
 	 */
 	protected $defaultGenOptions = array();
-	
+
 	/**
 	 * @var        array An array of default options presets for gen()
 	 */
 	protected $genOptionsPresets = array();
-	
+
 	/**
 	 * Constructor.
 	 *
@@ -107,16 +107,16 @@ abstract class AgaviRouting extends AgaviParameterHolder
 	public function initialize(AgaviContext $context, array $parameters = array())
 	{
 		$this->context = $context;
-		
+
 		$this->setParameters($parameters);
-		
+
 		$this->enabled = $this->getParameter('enabled', $this->enabled);
-		
+
 		$this->defaultGenOptions = array_merge(
 			$this->defaultGenOptions,
 			$this->getParameter('default_gen_options', array())
 		);
-		
+
 		$this->genOptionsPresets = array_merge(
 			$this->genOptionsPresets,
 			$this->getParameter('gen_options_presets', array())
@@ -125,7 +125,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 		// and load the config.
 		$this->loadConfig();
 	}
-	
+
 	/**
 	 * Load the routing.xml configuration file.
 	 *
@@ -152,9 +152,9 @@ abstract class AgaviRouting extends AgaviParameterHolder
 	public function startup()
 	{
 		$this->sources['_ENV'] = new AgaviRoutingArraySource($_ENV);
-		
+
 		$this->sources['_SERVER'] = new AgaviRoutingArraySource($_SERVER);
-		
+
 		if(AgaviConfig::get('core.use_security')) {
 			$this->sources['user'] = new AgaviRoutingUserSource($this->context->getUser());
 		}
@@ -503,7 +503,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 	 */
 	public function gen($route, array $params = array(), $options = array())
 	{
-		// we need to store the original params since we will be trying to fill the 
+		// we need to store the original params since we will be trying to fill the
 		// parameters up to the first user supplied parameter
 		$originalParams = $params;
 
@@ -512,7 +512,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 			$refillAllParams = true;
 		}
 
-		
+
 		$routes = $route;
 		if(is_string($route)) {
 			$routes = $this->getAffectedRoutes($routes);
@@ -635,7 +635,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 			// their default
 			foreach(array_reverse($availableParams) as $name) {
 				if(isset($optionalParams[$name])) {
-					// the isset() could be replaced by 
+					// the isset() could be replaced by
 					// "!array_key_exists($name, $finalParams) || $finalParams[$name] === null"
 					// to clarify that null is explicitly allowed here
 					if(!isset($finalParams[$name]) || (isset($defaults[$name]) && $finalParams[$name] == $defaults[$name]['pre'] . $this->escapeOutputParameter($defaults[$name]['val']) . $defaults[$name]['post'])) {
@@ -693,7 +693,8 @@ abstract class AgaviRouting extends AgaviParameterHolder
 	 * Matches the input against the routing info and sets the info as request
 	 * parameter.
 	 *
-	 * @return     array All routes that matched.
+	 * @return     AgaviExecutionContainer An execution container holding all of the
+	 *                                     matched routes.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
@@ -701,16 +702,16 @@ abstract class AgaviRouting extends AgaviParameterHolder
 	public function execute()
 	{
 		$req = $this->context->getRequest();
-		
+
 		$reqData = $req->getRequestData();
 
 		$container = $this->context->getController()->createExecutionContainer();
-		
+
 		if(!$this->enabled || count($this->routes) == 0) {
 			// routing disabled, determine module and action manually and bail out
 			$container->setModuleName($reqData->getParameter($req->getParameter('module_accessor')));
 			$container->setActionName($reqData->getParameter($req->getParameter('action_accessor')));
-			
+
 			return $container;
 		}
 
@@ -875,15 +876,15 @@ abstract class AgaviRouting extends AgaviParameterHolder
 				$aa => AgaviConfig::get('actions.error_404_action')
 			));
 		}
-		
+
 		$container->setModuleName($reqData->getParameter($ma));
 		$container->setActionName($reqData->getParameter($aa));
-		
+
 		// set the list of matched route names as a request attribute
 		$req->setAttribute('matched_routes', $matchedRoutes, 'org.agavi.routing');
 		// deprecated
 		$req->setAttribute('matchedRoutes', $matchedRoutes, 'org.agavi.routing');
-		
+
 		// return a list of matched route names
 		return $container;
 	}
@@ -957,7 +958,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 		$parenthesisCount = 0;
 		$bracketCount = 0;
 		$hasBrackets = false;
-		// whether the regular expression is clean of any regular expression 
+		// whether the regular expression is clean of any regular expression
 		// so we can reverse generate it
 		$cleanRx = true;
 
@@ -1124,16 +1125,16 @@ abstract class AgaviRouting extends AgaviParameterHolder
 	}
 
 	/**
-	 * Parses an argument passed to one of the 'setting attributes' for dynamic 
+	 * Parses an argument passed to one of the 'setting attributes' for dynamic
 	 * parts.
 	 *
-	 * To access variables in the setters one can either use '$variable' (so the 
-	 * variable name makes up the entire argument) or 'text${variable}text' to 
+	 * To access variables in the setters one can either use '$variable' (so the
+	 * variable name makes up the entire argument) or 'text${variable}text' to
 	 * add additional text.
 	 *
 	 * @param      string The definition.
 	 *
-	 * @return     mixed Either the definition if it didn't contain any dynamic 
+	 * @return     mixed Either the definition if it didn't contain any dynamic
 	 *                   parts or an array containing the definition prepared for
 	 *                   sprintf use and the variables in the right order.
 	 *
