@@ -329,7 +329,6 @@ class AgaviWebRequest extends AgaviRequest
 				$this->setMethod($methods['PUT']);
 				break;
 			case 'DELETE':
-			
 				$this->setMethod($methods['DELETE']);
 				break;
 			default:
