@@ -349,7 +349,7 @@ class AgaviWebRequest extends AgaviRequest
 		// if someone set a static value as default for a source that does not have a mapping, then he's really asking for it, and thus out of luck
 		$this->setMethod($this->getParameter(sprintf('method_names[%s]', $REQUEST_METHOD), $this->getParameter(sprintf('method_names[%s]', $sourceDefaults['REQUEST_METHOD']))));
 		
-			$this->protocol = self::getSourceValue($sources['SERVER_PROTOCOL'], $sourceDefaults['SERVER_PROTOCOL']);
+		$this->protocol = self::getSourceValue($sources['SERVER_PROTOCOL'], $sourceDefaults['SERVER_PROTOCOL']);
 		
 		$HTTPS = self::getSourceValue($sources['HTTPS'], $sourceDefaults['HTTPS']);
 
