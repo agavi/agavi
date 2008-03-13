@@ -4,30 +4,6 @@
 	<configuration context="web">
 		<filters>
 			
-			<filter name="phpids" class="AgaviPhpidsFilter">
-				<parameter name="config_path">/Volumes/DAVID/Downloads/phpids-0.4.7/lib/IDS/config/Config.ini</parameter>
-				<parameter name="config">
-					<parameter name="General">
-						<parameter name="filter_type">xml</parameter>
-						<parameter name="filter_path">/Volumes/DAVID/Downloads/phpids-0.4.7/lib/IDS/default_filter.xml</parameter>
-						<parameter name="tmp_path">/Volumes/DAVID/Downloads/phpids-0.4.7/lib/IDS/tmp/</parameter>
-						<parameter name="scan_keys">false</parameter>
-						<parameter name="exceptions">
-							<parameter>__utmz</parameter>
-							<parameter>__utmc</parameter>
-						</parameter>
-					</parameter>
-				</parameter>
-				<parameter name="total_impact_threshold">15</parameter>
-				<parameter name="tag_blacklist">
-					<parameter>csrf</parameter>
-				</parameter>
-				<parameter name="sources">
-					<parameter>parameters</parameter>
-					<parameter>cookies</parameter>
-				</parameter>
-			</filter>
-			
 			<filter name="FormPopulationFilter" class="AgaviFormPopulationFilter">
 				<parameter name="methods">
 					<parameter>write</parameter>

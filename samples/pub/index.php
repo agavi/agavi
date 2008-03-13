@@ -2,8 +2,6 @@
 
 error_reporting(E_ALL | E_STRICT);
 
-set_include_path('/Volumes/DAVID/Downloads/phpids-0.4.7/lib:' . get_include_path());
-
 // +---------------------------------------------------------------------------+
 // | An absolute filesystem path to the agavi/agavi.php script.                |
 // +---------------------------------------------------------------------------+

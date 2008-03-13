@@ -321,11 +321,21 @@ class AgaviWebRequest extends AgaviRequest
 
 		$REQUEST_METHOD = self::getSourceValue($sources['REQUEST_METHOD'], $sourceDefaults['REQUEST_METHOD']);
 
-		// map REQUEST_METHOD value to a method name, or fall back to the default in $sourceDefaults.
-		// if someone set a static value as default for a source that does not have a mapping, then he's really asking for it, and thus out of luck
-		$this->setMethod($this->getParameter(sprintf('method_names[%s]', $REQUEST_METHOD), $this->getParameter(sprintf('method_names[%s]', $sourceDefaults['REQUEST_METHOD']))));
+		switch($REQUEST_METHOD) {
+			case 'POST':
+				$this->setMethod($methods['POST']);
+				break;
+			case 'PUT':
+				$this->setMethod($methods['PUT']);
+				break;
+			case 'DELETE':
+				$this->setMethod($methods['DELETE']);
+				break;
+			default:
+				$this->setMethod($methods['GET']);
+		}
 		
-			$this->protocol = self::getSourceValue($sources['SERVER_PROTOCOL'], $sourceDefaults['SERVER_PROTOCOL']);
+		$this->protocol = self::getSourceValue($sources['SERVER_PROTOCOL'], $sourceDefaults['SERVER_PROTOCOL']);
 		
 		$HTTPS = self::getSourceValue($sources['HTTPS'], $sourceDefaults['HTTPS']);
 
