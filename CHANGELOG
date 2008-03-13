@@ -1,8 +1,8 @@
 AGAVI CHANGELOG
 ===============
 
-0.11.1 RC2 (February 27, 2008)
-------------------------------
+0.11.1 RC2 (March ??, 2008)
+---------------------------
 
 CHG: Check for existing X-Powered-By header before setting it in WebResponse (#716) (David)
 CHG: Execution Filter should read action attributes for caching from Action, not Container (#706) (David)
@@ -15,6 +15,8 @@ CHG: dist.htaccess in code templates should have RewriteEngine On (#678) (David)
 CHG: Bumped and fixed copyright years (#664) (David)
 CHG: Update timezone database to 2007k (#660) (David)
 
+FIX: AgaviWebRequest cannot map arbitrary HTTP verbs (#725) (David)
+FIX: AgaviWebRequest does not write all changed factory parameters back (#724) (David)
 FIX: Charset in Content-Type http-equiv meta tag might be parsed incorrectly (#722) (David)
 FIX: Generating the current route without additional arguments results in unescaped single quotes and square brackets, potentially incorrectly replaced argument separator (#718) (David)
 FIX: Generating the current route with additional or changed arguments allows code injections (#717) (David)
