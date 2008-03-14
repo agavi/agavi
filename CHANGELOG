@@ -15,6 +15,7 @@ CHG: dist.htaccess in code templates should have RewriteEngine On (#678) (David)
 CHG: Bumped and fixed copyright years (#664) (David)
 CHG: Update timezone database to 2007k (#660) (David)
 
+FIX: AgaviPhpRenderer::$moreAssigns is not declared or initialized (#729) (David)
 FIX: AgaviWebRequest cannot map arbitrary HTTP verbs (#725) (David)
 FIX: AgaviWebRequest does not write all changed factory parameters back (#724) (David)
 FIX: Charset in Content-Type http-equiv meta tag might be parsed incorrectly (#722) (David)

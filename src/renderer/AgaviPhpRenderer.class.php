@@ -57,7 +57,7 @@ class AgaviPhpRenderer extends AgaviRenderer implements AgaviIReusableRenderer
 	 * @var        array Temporary storage for additional assigns, used during
 	 *                   rendering.
 	 */
-	private $additionalAssigns = null;
+	private $moreAssigns = null;
 	
 	/**
 	 * Render the presentation and return the result.
@@ -78,6 +78,7 @@ class AgaviPhpRenderer extends AgaviRenderer implements AgaviIReusableRenderer
 		$this->layer = $layer;
 		$this->attributes =& $attributes;
 		$this->slots =& $slots;
+		$this->moreAssigns = array();
 		foreach($moreAssigns as $moreAssignName => &$moreAssign) {
 			if(isset($this->moreAssignNames[$moreAssignName])) {
 				$moreAssignName = $this->moreAssignNames[$moreAssignName];
