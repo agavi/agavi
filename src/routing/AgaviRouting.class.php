@@ -742,6 +742,12 @@ abstract class AgaviRouting extends AgaviParameterHolder
 							}
 						}
 
+						foreach($match as $name => $m) {
+							if(is_string($name) && $m[1] != -1) {
+								$route['matches'][$name] = $m[0];
+							}
+						}
+
 						if($opts['callback']) {
 							if(count($opts['ignores']) > 0) {
 								$cbVars = array();
@@ -758,17 +764,13 @@ abstract class AgaviRouting extends AgaviParameterHolder
 								$cbVars =& $vars;
 							}
 							if(!$route['cb']->onMatched($cbVars, $container)) {
+								// reset the matches array. it must be populated by the time onMatched() is called so matches can be modified in a callback
+								$route['matches'] = array();
 								continue;
 							}
 						}
 
 						$matchedRoutes[] = $opts['name'];
-
-						foreach($match as $name => $m) {
-							if(is_string($name) && $m[1] != -1) {
-								$route['matches'][$name] = $m[0];
-							}
-						}
 
 						if($opts['module']) {
 							$vars[$ma] = is_array($opts['module']) ? $this->resolveDynamicSet($opts['module'], $match) : $opts['module'];
