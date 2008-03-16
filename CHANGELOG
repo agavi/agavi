@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 0.11.1 RC2 (March ??, 2008)
 ---------------------------
 
+CHG: Update timezone database to 2008a (#727) (David)
 CHG: List of matches for a route should be populated by the time onMatched() is called on a callback (#730) (David)
 CHG: Check for existing X-Powered-By header before setting it in WebResponse (#716) (David)
 CHG: Execution Filter should read action attributes for caching from Action, not Container (#706) (David)
