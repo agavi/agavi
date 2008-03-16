@@ -1,23 +1,14 @@
 <?php
 
-class Disabled_IndexSuccessView extends AgaviView
+class Disabled_IndexSuccessView extends AgaviSampleAppDisabledBaseView
 {
-
-	/**
-	 * Execute any presentation logic and set template attributes.
-	 *
-	 */
-	public function execute(AgaviRequestDataHolder $rd)
+	public function executeHtml(AgaviRequestDataHolder $rd)
 	{
-		$this->loadLayout();
+		$this->setupHtml($rd);
 
-		// set the content type
-		$this->setAttribute('_contentType', $this->container->getOutputType()->getParameter('http_headers[Content-Type]', 'text/html; charset=utf-8'));
 		// set the title
-		$this->setAttribute('_title', 'Index Action');
-
+		$this->setAttribute('title', 'Index Action');
 	}
-
 }
 
 ?>

@@ -77,7 +77,7 @@
 		
 	</configuration>
 	
-	<configuration environment="development">
+	<configuration environment="development.*">
 		<translators default_domain="default">
 			<translator domain="default">
 				<message_translator class="AgaviGettextTranslator">

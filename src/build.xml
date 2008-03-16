@@ -138,6 +138,7 @@
 		<property name="module.dir" value="${app.dir}/modules/${module}"/>
 		<mkdir dir="${module.dir}"/>
 		<mkdir dir="${module.dir}/actions"/>
+		<mkdir dir="${module.dir}/cache"/>
 		<mkdir dir="${module.dir}/config"/>
 		<property name="templates.dir.current" value="${templates.dir.default}"  override="true" />
 		<available file="${templates.dir}/module.xml.tmpl" property="templates.dir.current" value="${templates.dir}" />
@@ -148,8 +149,14 @@
 				</replacetokens>
 			</filterchain>
 		</copy>
+		
+		<mkdir dir="${module.dir}/lib"/>
+		<mkdir dir="${module.dir}/lib/action"/>
+		<mkdir dir="${module.dir}/lib/model"/>
+		<mkdir dir="${module.dir}/lib/view"/>
 		<mkdir dir="${module.dir}/models"/>
 		<mkdir dir="${module.dir}/templates"/>
+		<mkdir dir="${module.dir}/validate"/>
 		<mkdir dir="${module.dir}/views"/>
 
 		<!-- <phingcall target="buildmoduletests"> -->

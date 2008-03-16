@@ -24,6 +24,7 @@
 				<layer name="content" />
 				<layer name="decorator">
 					<slot name="menu" module="Default" action="Menu" />
+					<parameter name="directory">%core.template_dir%</parameter>
 					<parameter name="template">Master</parameter>
 				</layer>
 			</layout>

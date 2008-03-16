@@ -41,7 +41,6 @@
 			
 			<setting name="available">true</setting>
 			<setting name="debug">false</setting>
-			<setting name="modpub">/modpub</setting>
 			
 			<setting name="use_database">false</setting>
 			<setting name="use_logging">false</setting>
@@ -56,7 +55,7 @@
 
 	</configuration>
 	
-	<configuration environment="development">
+	<configuration environment="development.*">
 		<settings>
 			<setting name="debug">true</setting>
 		</settings>

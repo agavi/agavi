@@ -18,7 +18,8 @@ class Default_MenuSuccessView extends AgaviSampleAppDefaultBaseView
 
 	public function executeHtml(AgaviRequestDataHolder $rd)
 	{
-		parent::setupHtml($rd, 'slot');
+		// will automatically load "slot" layout for us
+		$this->setupHtml($rd);
 
 		// set the title
 		$this->setAttribute('title', $this->getContext()->getTranslationManager()->_('Welcome to the Agavi Sample Application', 'default.layout'));
