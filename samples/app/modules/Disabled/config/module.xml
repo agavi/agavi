@@ -2,7 +2,7 @@
 <configurations>
 	<configuration>
 		<enabled>false</enabled>
-		<title>Dsiabled Agavi Sample App Module</title>
+		<title>Disabled Agavi Sample App Module</title>
 		<version>1.0</version>
 		<name>Disabled</name>
 		<authors>
