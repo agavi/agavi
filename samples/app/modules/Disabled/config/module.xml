@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configurations>
 	<configuration>
-		<enabled>On</enabled>
-		<title>Dsiabled Agavi Sample App Module</title>
+		<enabled>false</enabled>
+		<title>Disabled Agavi Sample App Module</title>
 		<version>1.0</version>
 		<name>Disabled</name>
 		<authors>
