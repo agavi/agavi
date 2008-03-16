@@ -1,13 +1,13 @@
 <?php
 
-class AgaviSampleAppDefaultBaseAction extends AgaviSampleAppBaseAction
+class AgaviSampleAppDisabledBaseView extends AgaviSampleAppBaseView
 {
 	/*
-		This is the base action all your module's actions should extend. This way,
-		you can easily inject new functionality into all of this module's actions.
+		This is the base view all your module's views should extend. This way,
+		you can easily inject new functionality into all of this module's views.
 		
-		One example would be to extend the getCredentials() method and return a list
-		of credentials that all actions in this module require.
+		One example would be to extend a setupHtml() method and assign attributes
+		that many templates in this module use.
 		
 		Even if you don't need any of the above and this class remains empty, it is
 		strongly recommended you keep it. There shall come the day where you are

@@ -1,22 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configurations xmlns="http://agavi.org/agavi/1.0/config">
+	
 	<configuration>
-		<databases default="postgres">
-			<database name="postgres" class="AgaviPostgresqlDatabase">
-				<parameters>
-					<parameter name="host">localhost</parameter>
-					<parameter name="username">username</parameter>
-					<parameter name="password">passphrase</parameter>
-					<parameter name="database">sample</parameter>
-				</parameters>
+		<databases default="pdo_mysql_main">
+			
+			<database name="pdo_mysql_main" class="AgaviPdoDatabase">
+				<parameter name="dsn">mysql:host=localhost;dbname=agsmplapp</parameter>
+				<parameter name="username">root</parameter>
+				<parameter name="password"></parameter>
 			</database>
-<!--
-			<database name="propel" class="AgaviPropelDatabase">
-				<parameters>
-					<parameter name="config">%core.app_dir%/config/project-conf.php</parameter>
-				</parameters>
+			
+			<database name="propelom" class="AgaviPropelDatabase">
+				<parameter name="config">%core.app_dir%/config/project-conf.php</parameter>
 			</database>
--->
+			
 		</databases>
 	</configuration>
+	
+	<configuration environment="development-joecool">
+		<databases default="pdo_mysql_main">
+			
+			<database name="pdo_mysql_main">
+				<parameter name="dsn">mysql:host=localhost;dbname=agavisample</parameter>
+				<parameter name="username">agavisample</parameter>
+				<parameter name="password">123qwe</parameter>
+			</database>
+			
+		</databases>
+	</configuration>
+	
 </configurations>

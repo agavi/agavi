@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configurations xmlns="http://agavi.org/agavi/1.0/config">
 
-	<configuration environment="development" context="web">
+	<configuration environment="development.*" context="web">
 		<filters>
 
 			<filter name="ExecutionTimeFilter" class="AgaviExecutionTimeFilter">
