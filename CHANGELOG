@@ -33,6 +33,7 @@ CHG: dist.htaccess in code templates should have RewriteEngine On (#678) (David)
 CHG: Bumped and fixed copyright years (#664) (David)
 CHG: Update timezone database to 2007k (#660) (David)
 
+FIX: routing.xsd does not allow dynamic expressions in output_type attribute (#734) (David)
 FIX: AgaviToolkit::expandVariables replacing is too greedy (#732) (David)
 FIX: AgaviPhpRenderer::$moreAssigns is not declared or initialized (#729) (David)
 FIX: AgaviWebRequest cannot map arbitrary HTTP verbs (#725) (David)
