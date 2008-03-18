@@ -259,7 +259,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 
 		$this->setParameters($parameters);
 
-		$this->name = $this->getParameter('name', uniqid('val'.rand()));
+		$this->name = $this->getParameter('name', AgaviToolkit::uniqid());
 	}
 
 	/**

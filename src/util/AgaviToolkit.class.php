@@ -426,6 +426,23 @@ final class AgaviToolkit
 	{
 		return !is_array($value);
 	}
+	
+	/**
+	 * Generate a proper unique ID.
+	 *
+	 * Uses PHP's uniqid(), but forces use of additional entropy. Without, it's
+	 * just the microtime in hex, and much slower than with entropy on Linux.
+	 *
+	 * @param      string An optional prefix
+	 * @return     string A properly unique ID
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.1
+	 */
+	public static function uniqid($prefix = '')
+	{
+		return uniqid($prefix, true);
+	}
 }
 
 ?>

@@ -280,7 +280,7 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	{
 		if(!$this->isLocked() && $key === null) {
 			$this->locked = true;
-			return $this->key = uniqid();
+			return $this->key = AgaviToolkit::uniqid();
 		} elseif($this->isLocked()) {
 			if($this->key === $key) {
 				$this->key = null;

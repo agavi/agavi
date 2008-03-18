@@ -173,7 +173,7 @@ class AgaviValidatorConfigHandler extends AgaviConfigHandler
 		if($validator->hasAttribute('name')) {
 			$name = $validator->getAttribute('name');
 		} else {
-			$name = uniqid('val'.rand());
+			$name = AgaviToolkit::uniqid();
 			$validator->setAttribute('name', $name);
 		}
 
