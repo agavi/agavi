@@ -337,12 +337,6 @@ abstract class AgaviRouting extends AgaviParameterHolder
 		$routeName = $options['name'];
 
 		// parse all the setting values for dynamic variables
-		$options['action'] = $this->parseDynamicSet($options['action']);
-		$options['locale'] = $this->parseDynamicSet($options['locale']);
-		$options['method'] = $this->parseDynamicSet($options['method']);
-		$options['module'] = $this->parseDynamicSet($options['module']);
-		$options['output_type'] = $this->parseDynamicSet($options['output_type']);
-
 		// check if 2 nodes with the same name in the same execution tree exist
 		foreach($this->routes as $name => $route) {
 			// if a route with this route as parent exist check if its really a child of our route
@@ -798,24 +792,27 @@ abstract class AgaviRouting extends AgaviParameterHolder
 
 						$matchedRoutes[] = $opts['name'];
 
+						// matches are arrays with value and offset due to PREG_OFFSET_CAPTURE, and we want index 0, the value, which current() will give us
+						$matchvals = array_map('current', $match);
+
 						if($opts['module']) {
-							$vars[$ma] = is_array($opts['module']) ? $this->resolveDynamicSet($opts['module'], $match) : $opts['module'];
+							$vars[$ma] = AgaviToolkit::expandVariables($opts['module'], $matchvals);
 						}
 
 						if($opts['action']) {
-							$vars[$aa] = is_array($opts['action']) ? $this->resolveDynamicSet($opts['action'], $match) : $opts['action'];
+							$vars[$aa] = AgaviToolkit::expandVariables($opts['action'], $matchvals);
 						}
 
 						if($opts['output_type']) {
-							$ot = is_array($opts['output_type']) ? $this->resolveDynamicSet($opts['output_type'], $match) : $opts['output_type'];
+							$ot = AgaviToolkit::expandVariables($opts['output_type'], $matchvals);
 						}
 
 						if($opts['locale']) {
-							$locale = is_array($opts['locale']) ? $this->resolveDynamicSet($opts['locale'], $match) : $opts['locale'];
+							$locale = AgaviToolkit::expandVariables($opts['locale'], $matchvals);
 						}
 
 						if($opts['method']) {
-							$method = is_array($opts['method']) ? $this->resolveDynamicSet($opts['method'], $match) : $opts['method'];
+							$method = AgaviToolkit::expandVariables($opts['method'], $matchvals);
 						}
 
 						if($opts['cut'] || (count($opts['childs']) && $opts['cut'] === null)) {
@@ -1124,74 +1121,6 @@ abstract class AgaviRouting extends AgaviParameterHolder
 
 		preg_match('#([a-z0-9_-]+:)?(.*)#i', $def, $match);
 		return array(substr($match[1], 0, -1), $match[2]);
-	}
-
-	/**
-	 * Parses an argument passed to one of the 'setting attributes' for dynamic
-	 * parts.
-	 *
-	 * To access variables in the setters one can either use '$variable' (so the
-	 * variable name makes up the entire argument) or 'text${variable}text' to
-	 * add additional text.
-	 *
-	 * @param      string The definition.
-	 *
-	 * @return     mixed Either the definition if it didn't contain any dynamic
-	 *                   parts or an array containing the definition prepared for
-	 *                   sprintf use and the variables in the right order.
-	 *
-	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	protected function parseDynamicSet($definition)
-	{
-		if(!is_string($definition) || strlen($definition) < 2) {
-			return $definition;
-		}
-		// assume the entire definition is a variable
-		if($definition[0] == '$' && $definition[1] != '{') {
-			return array(
-				'str' => '%s',
-				'vars' => array(substr($definition, 1))
-			);
-		} elseif(strpos($definition, '${') !== false) {
-			$vars = array();
-			if(preg_match_all('#\$\{([a-z0-9_-]+)\}#i', $definition, $matches, PREG_SET_ORDER)) {
-				foreach($matches as $match) {
-					$vars[] = $match[1];
-				}
-			}
-			$definition = str_replace('%%', '%', $definition);
-			$definition = preg_replace('#\$\{([a-z0-9_-]+)\}#i', '%s', $definition);
-			return array(
-				'str' => $definition,
-				'vars' => $vars
-			);
-		// doesn't contain any dynamic variables
-		} else {
-			return $definition;
-		}
-	}
-
-	/**
-	 * Resolves all variables in a prepared dynamic set definition.
-	 *
-	 * @param      array The definition of the dynamic argument.
-	 * @param      array The array to search for the variables in the argument.
-	 *
-	 * @return     string The resulting string.
-	 *
-	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	protected function resolveDynamicSet($definition, $parameters)
-	{
-		$vars = array();
-		foreach($definition['vars'] as $varName) {
-			$vars[] = isset($parameters[$varName]) ? $parameters[$varName][0] : '';
-		}
-
-		return vsprintf($definition['str'], $vars);
 	}
 }
 
