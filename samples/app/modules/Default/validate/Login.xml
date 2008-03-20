@@ -7,7 +7,7 @@
 | AGAVI VALIDATORS CONFIGURATION                                             |
 +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
 -->
-<configurations>
+<configurations xmlns="http://agavi.org/agavi/1.0/config">
 	<!-- custom validators and default parameters -->
 	<configuration>
 		<validators>

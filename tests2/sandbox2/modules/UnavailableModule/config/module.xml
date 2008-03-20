@@ -5,7 +5,7 @@
 | Copyright (c) 2006 the Agavi Project.                                      |
 +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
 -->
-<configurations>
+<configurations xmlns="http://agavi.org/agavi/1.0/config">
 	<configuration>
 		<enabled>Off</enabled>
 		<title>A module which has been made unavailable by setting Enabled to Off</title>
