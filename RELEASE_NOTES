@@ -41,6 +41,8 @@ This is a bugfix release. The most important changes are:
 
 For a complete list of changes in this release, please refer to the CHANGELOG file.
 
+Please be advised that development versions of 0.11.1 contained a security vulnerability in the routing, see tickets #717 and #718 for details. The issue did not exist in the 0.11.0 Agavi release.
+
 
 Version 0.11.0 - November 3, 2007
 =================================
