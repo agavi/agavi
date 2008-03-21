@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 0.11.1 RC2 (March ??, 2008)
 ---------------------------
 
+CHG: AgaviView::create*Container() should use null as default for arguments (#735) (David)
 CHG: Routing, GettextTranslator etc should use AgaviToolkit::expandVariables (#708) (David)
 CHG: Speed up unique ID generation (#731) (David)
 CHG: Bring sample app and code templates up to date (#719) (David)

@@ -326,7 +326,7 @@ abstract class AgaviView
 	 *
 	 * @param      string The name of the module.
 	 * @param      string The name of the action.
-	 * @param      mixeed An AgaviRequestDataHolder instance with additional
+	 * @param      mixed  An AgaviRequestDataHolder instance with additional
 	 *                    request arguments or an array of request parameters.
 	 * @param      string Optional name of an initial output type to set.
 	 *
@@ -338,9 +338,9 @@ abstract class AgaviView
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function createSlotContainer($moduleName, $actionName, $arguments = array(), $outputType = null)
+	public function createSlotContainer($moduleName, $actionName, $arguments = null, $outputType = null)
 	{
-		if(!($arguments instanceof AgaviRequestDataHolder)) {
+		if($arguments !== null && !($arguments instanceof AgaviRequestDataHolder)) {
 			$rdhc = $this->context->getRequest()->getParameter('request_data_holder_class');
 			$arguments = new $rdhc(array(AgaviRequestDataHolder::SOURCE_PARAMETERS => $arguments));
 		}
@@ -356,7 +356,7 @@ abstract class AgaviView
 	 *
 	 * @param      string The name of the module.
 	 * @param      string The name of the action.
-	 * @param      mixeed An AgaviRequestDataHolder instance with additional
+	 * @param      mixed  An AgaviRequestDataHolder instance with additional
 	 *                    request arguments or an array of request parameters.
 	 * @param      string Optional name of an initial output type to set.
 	 *
@@ -368,9 +368,9 @@ abstract class AgaviView
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function createForwardContainer($moduleName, $actionName, $arguments = array(), $outputType = null)
+	public function createForwardContainer($moduleName, $actionName, $arguments = null, $outputType = null)
 	{
-		if(!($arguments instanceof AgaviRequestDataHolder)) {
+		if($arguments !== null && !($arguments instanceof AgaviRequestDataHolder)) {
 			$rdhc = $this->context->getRequest()->getParameter('request_data_holder_class');
 			$arguments = new $rdhc(array(AgaviRequestDataHolder::SOURCE_PARAMETERS => $arguments));
 		}
