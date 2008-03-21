@@ -31,7 +31,9 @@
 		
 		<user class="AgaviSecurityUser" />
 		
-		<validation_manager class="AgaviValidationManager" />
+		<validation_manager class="AgaviValidationManager">
+			<parameter name="mode">strict</parameter>
+		</validation_manager>
 		
 	</configuration>
 	
@@ -41,6 +43,10 @@
 			<parameter name="send_content_length">false</parameter>
 		</response>
 	
+		<validation_manager class="AgaviValidationManager">
+			<parameter name="mode">conditional</parameter>
+		</validation_manager>
+		
 	</configuration>
 	
 </configurations>
