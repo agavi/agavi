@@ -308,7 +308,8 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 
 			if($this->actionInstance->isSimple()) {
 				if($this->arguments !== null) {
-					$this->requestData = $this->arguments;
+					// clone it so mutating it has no effect on the "outside world"
+					$this->requestData = clone $this->arguments;
 				} else {
 					$rdhc = $request->getParameter('request_data_holder_class');
 					$this->requestData = new $rdhc();
