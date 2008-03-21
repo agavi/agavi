@@ -20,6 +20,7 @@ CHG: dist.htaccess in code templates should have RewriteEngine On (#678) (David)
 CHG: Bumped and fixed copyright years (#664) (David)
 CHG: Update timezone database to 2007k (#660) (David)
 
+FIX: Form Population Filter handles boolean false values incorrectly (#737) (David)
 FIX: Percent signs are incorrectly escaped in AgaviRouting::parseDynamicSet() (#733) (David)
 FIX: routing.xsd does not allow dynamic expressions in output_type attribute (#734) (David)
 FIX: AgaviToolkit::expandVariables replacing is too greedy (#732) (David)
