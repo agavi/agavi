@@ -397,7 +397,9 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 					continue;
 				}
 
-				if(!$utf8) {
+				if(is_bool($value)) {
+					$value = (string)(int)$value;
+				} elseif(!$utf8) {
 					$value = $this->toUtf8($value, $encoding);
 				} else {
 					if(is_array($value)) {

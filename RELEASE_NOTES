@@ -26,10 +26,12 @@ Existing "core.use_routing" directives will be used as a fallback until the dire
 - Validation severity "none" is now called "silent".
 
 
-Version 0.11.1 - January ??, 2008
-=================================
+Version 0.11.1 - March ??, 2008
+===============================
 
 This is a bugfix release. The most important changes are:
+
+- Form Population Filter now correctly casts boolean values to '0', not to an empty string. This change is only relevant during programmatical population and was done to be able to distinguish from null values (consider a <select> dropdown with a "please choose..." initial value and settings for "on" and "off", where so far, "please choose..." would have been selected for both null and false). If you have previously relied on this incorrect behavior, you will need to adjust your forms. Note that for bool values populated into regular text fields, a "0" will now appear for a false value, not an empty string as it was the case before.
 
 - When forwarding, using a different output type for the forward container now works properly. As a result of the fix, a response now has an output type, too. It is strongly recommended to determine the output type of the response from the response's output type object, not from the execution container's, which might be the one of the container that ordered the forward. Agavi's built-in filters have been changed to accommodate for this enhancement where possible. This is not a breaking chance.
 
