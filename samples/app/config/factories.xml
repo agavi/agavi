@@ -32,9 +32,15 @@
 		<translation_manager class="AgaviTranslationManager" />
 		
 		<validation_manager class="AgaviValidationManager">
-			<parameters>
-				<parameter name="mode">conditional</parameter>
-			</parameters>
+			<parameter name="mode">strict</parameter>
+		</validation_manager>
+		
+	</configuration>
+	
+	<configuration environment="development.*">
+		
+		<validation_manager class="AgaviValidationManager">
+			<parameter name="mode">conditional</parameter>
 		</validation_manager>
 		
 	</configuration>
