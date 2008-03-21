@@ -370,9 +370,14 @@ abstract class AgaviView
 	 */
 	public function createForwardContainer($moduleName, $actionName, $arguments = null, $outputType = null)
 	{
-		if($arguments !== null && !($arguments instanceof AgaviRequestDataHolder)) {
-			$rdhc = $this->context->getRequest()->getParameter('request_data_holder_class');
-			$arguments = new $rdhc(array(AgaviRequestDataHolder::SOURCE_PARAMETERS => $arguments));
+		if($arguments !== null) {
+			if(!($arguments instanceof AgaviRequestDataHolder)) {
+				$rdhc = $this->context->getRequest()->getParameter('request_data_holder_class');
+				$arguments = new $rdhc(array(AgaviRequestDataHolder::SOURCE_PARAMETERS => $arguments));
+			}
+		} else {
+			// we carry over our container's arguments
+			$arguments = $this->container->getArguments();
 		}
 		$container = $this->container->createExecutionContainer($moduleName, $actionName, $arguments, $outputType);
 		$container->setParameter('is_forward', true);
