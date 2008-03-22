@@ -1,7 +1,7 @@
 AGAVI CHANGELOG
 ===============
 
-0.11.1 RC2 (March ??, 2008)
+0.11.1 RC2 (March 22, 2008)
 ---------------------------
 
 CHG: Make AgaviView::createForwardContainer() forward arguments from the current container if no arguments given (#707) (David)
