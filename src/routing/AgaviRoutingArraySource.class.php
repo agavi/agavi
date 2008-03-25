@@ -48,11 +48,11 @@ class AgaviRoutingArraySource implements AgaviIRoutingSource
 	}
 
 	/**
-	 * Retrieves the source for a given entry.
+	 * Retrieves the value for a given entry from the source.
 	 *
-	 * @param      array        An array with the parts of the entry.
+	 * @param      array An array with the name parts for the entry.
 	 * 
-	 * @return     mixed
+	 * @return     mixed The value.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
