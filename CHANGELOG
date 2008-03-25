@@ -15,6 +15,12 @@ CHG: Deprecated AgaviAdodbDatabase (#662) (David)
 FIX: Security filters cannot perform checks in addition to isSecure() (#671) (David)
 
 
+0.11.1 RC3 (March ??, 2008)
+---------------------------
+
+CHG: Update timezone database to 2008b (#728) (David)
+
+
 0.11.1 RC2 (March 22, 2008)
 ---------------------------
 
