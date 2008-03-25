@@ -6,6 +6,8 @@ AGAVI CHANGELOG
 
 CHG: Update timezone database to 2008b (#728) (David)
 
+FIX: AgaviInflector::singularize returns the wrong singular form of "caches" (#739) (Dominik)
+
 
 0.11.1 RC2 (March 22, 2008)
 ---------------------------
