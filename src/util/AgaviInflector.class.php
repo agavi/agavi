@@ -69,6 +69,7 @@ final class AgaviInflector
 		'/men$/i' => 'man',
 		'/people$/i' => 'person',
 		'/databases$/i'=> 'database',
+		'/caches$/i'=> 'cache',
 		'/(quiz)zes$/i' => '\1',
 		'/(matr)ices$/i' => '\1ix',
 		'/(vert|ind)ices$/i' => '\1ex',
