@@ -502,6 +502,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 					foreach($otConfig['request_attributes'] as $requestAttribute) {
 						$viewCache['request_attributes'][] = $requestAttribute + array('value' => $request->getAttribute($requestAttribute['name'], $requestAttribute['namespace']));
 					}
+					$viewCache['request_attribute_namespaces'] = array();
 					foreach($otConfig['request_attribute_namespaces'] as $requestAttributeNamespace) {
 						$viewCache['request_attribute_namespaces'][$requestAttributeNamespace] = $request->getAttributes($requestAttributeNamespace);
 					}
