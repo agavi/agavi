@@ -122,12 +122,20 @@ class AgaviCachingConfigHandler extends AgaviConfigHandler
 							}
 						}
 						
+						$requestAttributeNamespaces = array();
+						if(isset($outputType->request_attribute_namespaces)) {
+							foreach($outputType->request_attribute_namespaces as $requestAttributeNamespace) {
+								$requestAttributeNamespaces[] = $requestAttributeNamespace->getValue();
+							}
+						}
+						
 						$otnames = array_map('trim', explode(' ', $outputType->getAttribute('name', '*')));
 						foreach($otnames as $otname) {
 							$outputTypes[$otname] = array(
 								'layers' => $layers,
 								'template_variables' => $templateVariables,
 								'request_attributes' => $requestAttributes,
+								'request_attribute_namespaces' => $requestAttributeNamespaces,
 							);
 						}
 					}

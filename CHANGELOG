@@ -4,6 +4,8 @@ AGAVI CHANGELOG
 0.11.1 RC3 (March ??, 2008)
 ---------------------------
 
+ADD: Add ability to cache complete request attribute namespaces in Execution Filter (#740) (David)
+
 CHG: Update timezone database to 2008b (#728) (David)
 
 FIX: AgaviInflector::singularize returns the wrong singular form of "caches" (#739) (Dominik)
