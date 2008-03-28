@@ -391,6 +391,10 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 					foreach($viewCache['request_attributes'] as $requestAttribute) {
 						$request->setAttribute($requestAttribute['name'], $requestAttribute['value'], $requestAttribute['namespace']);
 					}
+					
+					foreach($viewCache['request_attribute_namespaces'] as $ranName => $ranValues) {
+						$request->setAttributes($ranValues, $ranName);
+					}
 
 					$nextOutput = $response->getContent();
 				} else {
@@ -497,6 +501,9 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 					$viewCache['request_attributes'] = array();
 					foreach($otConfig['request_attributes'] as $requestAttribute) {
 						$viewCache['request_attributes'][] = $requestAttribute + array('value' => $request->getAttribute($requestAttribute['name'], $requestAttribute['namespace']));
+					}
+					foreach($otConfig['request_attribute_namespaces'] as $requestAttributeNamespace) {
+						$viewCache['request_attribute_namespaces'][$requestAttributeNamespace] = $request->getAttributes($requestAttributeNamespace);
 					}
 
 					$this->writeCache(array_merge($groups, array($outputType)), $viewCache, $config['lifetime']);
