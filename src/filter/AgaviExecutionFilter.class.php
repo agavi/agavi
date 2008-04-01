@@ -319,210 +319,209 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 		// clear any forward set, it's ze view's job
 		$container->clearNext();
 
-		if($actionCache['view_name'] === AgaviView::NONE) {
-			return;
-		}
+		if($actionCache['view_name'] !== AgaviView::NONE) {
 
-		$container->setViewModuleName($actionCache['view_module']);
-		$container->setViewName($actionCache['view_name']);
+			$container->setViewModuleName($actionCache['view_module']);
+			$container->setViewName($actionCache['view_name']);
 
-		$key = $request->toggleLock();
-		// get the view instance
-		$viewInstance = $controller->createViewInstance($actionCache['view_module'], $actionCache['view_name']);
-		// initialize the view
-		$viewInstance->initialize($container);
-		$request->toggleLock($key);
-
-		// Set the View Instance in the container
-		$container->setViewInstance($viewInstance);
-		
-		$outputType = $container->getOutputType()->getName();
-
-		$isViewCached = false;
-
-		if($isCacheable) {
-			if(isset($config['output_types'][$otConfig = $outputType]) || isset($config['output_types'][$otConfig = '*'])) {
-				$otConfig = $config['output_types'][$otConfig];
-
-				if($isActionCached) {
-					$isViewCached = $this->checkCache(array_merge($groups, array($outputType)), $config['lifetime']);
-				}
-			} else {
-				$isCacheable = false;
-			}
-		}
-
-		if($isViewCached) {
-			// $lm->log('View is cached, loading...');
-			try {
-				$viewCache = $this->readCache(array_merge($groups, array($outputType)));
-			} catch(AgaviException $e) {
-				$isViewCached = false;
-			}
-		}
-		if(!$isViewCached) {
-			$viewCache = array();
-
-			// $lm->log('View is not cached, executing...');
-			// view initialization completed successfully
-			$executeMethod = 'execute' . $outputType;
-			if(!method_exists($viewInstance, $executeMethod)) {
-				$executeMethod = 'execute';
-			}
 			$key = $request->toggleLock();
-			$viewCache['next'] = $viewInstance->$executeMethod($container->getRequestData());
+			// get the view instance
+			$viewInstance = $controller->createViewInstance($actionCache['view_module'], $actionCache['view_name']);
+			// initialize the view
+			$viewInstance->initialize($container);
 			$request->toggleLock($key);
-		}
 
-		if($viewCache['next'] instanceof AgaviExecutionContainer) {
-			// $lm->log('Forwarding request, skipping rendering...');
-			$container->setNext($viewCache['next']);
-		} else {
+			// Set the View Instance in the container
+			$container->setViewInstance($viewInstance);
+			
+			$outputType = $container->getOutputType()->getName();
+
+			$isViewCached = false;
+
+			if($isCacheable) {
+				if(isset($config['output_types'][$otConfig = $outputType]) || isset($config['output_types'][$otConfig = '*'])) {
+					$otConfig = $config['output_types'][$otConfig];
+
+					if($isActionCached) {
+						$isViewCached = $this->checkCache(array_merge($groups, array($outputType)), $config['lifetime']);
+					}
+				} else {
+					$isCacheable = false;
+				}
+			}
+
 			if($isViewCached) {
-				$layers = $viewCache['layers'];
-				$response = $viewCache['response'];
-				$container->setResponse($response);
-
-				foreach($viewCache['template_variables'] as $name => $value) {
-					$viewInstance->setAttribute($name, $value);
+				// $lm->log('View is cached, loading...');
+				try {
+					$viewCache = $this->readCache(array_merge($groups, array($outputType)));
+				} catch(AgaviException $e) {
+					$isViewCached = false;
 				}
+			}
+			if(!$isViewCached) {
+				$viewCache = array();
 
-				foreach($viewCache['request_attributes'] as $requestAttribute) {
-					$request->setAttribute($requestAttribute['name'], $requestAttribute['value'], $requestAttribute['namespace']);
+				// $lm->log('View is not cached, executing...');
+				// view initialization completed successfully
+				$executeMethod = 'execute' . $outputType;
+				if(!method_exists($viewInstance, $executeMethod)) {
+					$executeMethod = 'execute';
 				}
-				
-				foreach($viewCache['request_attribute_namespaces'] as $ranName => $ranValues) {
-					$request->setAttributes($ranValues, $ranName);
-				}
+				$key = $request->toggleLock();
+				$viewCache['next'] = $viewInstance->$executeMethod($container->getRequestData());
+				$request->toggleLock($key);
+			}
 
-				$output = array();
-				$nextOutput = $response->getContent();
+			if($viewCache['next'] instanceof AgaviExecutionContainer) {
+				// $lm->log('Forwarding request, skipping rendering...');
+				$container->setNext($viewCache['next']);
 			} else {
-				if($viewCache['next'] !== null) {
-					// response content was returned from view execute()
-					$response->setContent($viewCache['next']);
-					$viewCache['next'] = null;
-				}
+				if($isViewCached) {
+					$layers = $viewCache['layers'];
+					$response = $viewCache['response'];
+					$container->setResponse($response);
 
-				$layers = $viewInstance->getLayers();
-
-				if($isCacheable) {
-					$viewCache['template_variables'] = array();
-					foreach($otConfig['template_variables'] as $varName) {
-						$viewCache['template_variables'][$varName] = $viewInstance->getAttribute($varName);
+					foreach($viewCache['template_variables'] as $name => $value) {
+						$viewInstance->setAttribute($name, $value);
 					}
 
-					$viewCache['response'] = clone $response;
+					foreach($viewCache['request_attributes'] as $requestAttribute) {
+						$request->setAttribute($requestAttribute['name'], $requestAttribute['value'], $requestAttribute['namespace']);
+					}
+					
+					foreach($viewCache['request_attribute_namespaces'] as $ranName => $ranValues) {
+						$request->setAttributes($ranValues, $ranName);
+					}
 
-					$viewCache['layers'] = array();
+					$output = array();
+					$nextOutput = $response->getContent();
+				} else {
+					if($viewCache['next'] !== null) {
+						// response content was returned from view execute()
+						$response->setContent($viewCache['next']);
+						$viewCache['next'] = null;
+					}
 
-					$viewCache['slots'] = array();
+					$layers = $viewInstance->getLayers();
 
-					$lastCacheableLayer = -1;
-					if(is_array($otConfig['layers'])) {
-						if(count($otConfig['layers'])) {
-							for($i = count($layers)-1; $i >= 0; $i--) {
-								$layer = $layers[$i];
-								$layerName = $layer->getName();
-								if(isset($otConfig['layers'][$layerName])) {
-									if(is_array($otConfig['layers'][$layerName])) {
-										$lastCacheableLayer = $i - 1;
-									} else {
-										$lastCacheableLayer = $i;
+					if($isCacheable) {
+						$viewCache['template_variables'] = array();
+						foreach($otConfig['template_variables'] as $varName) {
+							$viewCache['template_variables'][$varName] = $viewInstance->getAttribute($varName);
+						}
+
+						$viewCache['response'] = clone $response;
+
+						$viewCache['layers'] = array();
+
+						$viewCache['slots'] = array();
+
+						$lastCacheableLayer = -1;
+						if(is_array($otConfig['layers'])) {
+							if(count($otConfig['layers'])) {
+								for($i = count($layers)-1; $i >= 0; $i--) {
+									$layer = $layers[$i];
+									$layerName = $layer->getName();
+									if(isset($otConfig['layers'][$layerName])) {
+										if(is_array($otConfig['layers'][$layerName])) {
+											$lastCacheableLayer = $i - 1;
+										} else {
+											$lastCacheableLayer = $i;
+										}
 									}
 								}
 							}
+						} else {
+							$lastCacheableLayer = count($layers) - 1;
 						}
-					} else {
-						$lastCacheableLayer = count($layers) - 1;
-					}
 
-					for($i = $lastCacheableLayer + 1; $i < count($layers); $i++) {
-						// $lm->log('Adding non-cacheable layer "' . $layers[$i]->getName() . '" to list');
-						$viewCache['layers'][] = clone $layers[$i];
-					}
-				}
-
-				$output = array();
-				$nextOutput = null;
-			}
-
-			$attributes =& $viewInstance->getAttributes();
-
-			// $lm->log('Starting rendering...');
-			for($i = 0; $i < count($layers); $i++) {
-				$layer = $layers[$i];
-				$layerName = $layer->getName();
-				// $lm->log('Running layer "' . $layerName . '"...');
-				foreach($layer->getSlots() as $slotName => $slotContainer) {
-					if($isViewCached && isset($viewCache['slots'][$layerName][$slotName])) {
-						// $lm->log('Loading cached slot "' . $slotName . '"...');
-						$slotResponse = $viewCache['slots'][$layerName][$slotName];
-					} else {
-						// $lm->log('Running slot "' . $slotName . '"...');
-						$slotResponse = $slotContainer->execute();
-						if($isCacheable && !$isViewCached && isset($otConfig['layers'][$layerName]) && is_array($otConfig['layers'][$layerName]) && in_array($slotName, $otConfig['layers'][$layerName])) {
-							// $lm->log('Adding response of slot "' . $slotName . '" to cache...');
-							$viewCache['slots'][$layerName][$slotName] = $slotResponse;
+						for($i = $lastCacheableLayer + 1; $i < count($layers); $i++) {
+							// $lm->log('Adding non-cacheable layer "' . $layers[$i]->getName() . '" to list');
+							$viewCache['layers'][] = clone $layers[$i];
 						}
 					}
-					// set the presentation data as a template attribute
-					if(($output[$slotName] = $slotResponse->getContent()) !== null) {
-						// $lm->log('Merging in response from slot "' . $slotName . '"...');
-						// the slot really output something
-						// let our response grab the stuff it needs from the slot's response
-						$response->merge($slotResponse);
+
+					$output = array();
+					$nextOutput = null;
+				}
+
+				$attributes =& $viewInstance->getAttributes();
+
+				// $lm->log('Starting rendering...');
+				for($i = 0; $i < count($layers); $i++) {
+					$layer = $layers[$i];
+					$layerName = $layer->getName();
+					// $lm->log('Running layer "' . $layerName . '"...');
+					foreach($layer->getSlots() as $slotName => $slotContainer) {
+						if($isViewCached && isset($viewCache['slots'][$layerName][$slotName])) {
+							// $lm->log('Loading cached slot "' . $slotName . '"...');
+							$slotResponse = $viewCache['slots'][$layerName][$slotName];
+						} else {
+							// $lm->log('Running slot "' . $slotName . '"...');
+							$slotResponse = $slotContainer->execute();
+							if($isCacheable && !$isViewCached && isset($otConfig['layers'][$layerName]) && is_array($otConfig['layers'][$layerName]) && in_array($slotName, $otConfig['layers'][$layerName])) {
+								// $lm->log('Adding response of slot "' . $slotName . '" to cache...');
+								$viewCache['slots'][$layerName][$slotName] = $slotResponse;
+							}
+						}
+						// set the presentation data as a template attribute
+						if(($output[$slotName] = $slotResponse->getContent()) !== null) {
+							// $lm->log('Merging in response from slot "' . $slotName . '"...');
+							// the slot really output something
+							// let our response grab the stuff it needs from the slot's response
+							$response->merge($slotResponse);
+						}
 					}
+					$moreAssigns = array(
+						'container' => $container,
+						'inner' => $nextOutput,
+						'request_data' => $container->getRequestData(),
+						'validation_manager' => $container->getValidationManager(),
+						'view' => $viewInstance,
+					);
+					// lock the request. can't be done outside the loop for the whole run, see #628
+					$key = $request->toggleLock();
+					$nextOutput = $layer->getRenderer()->render($layer, $attributes, $output, $moreAssigns);
+					// and unlock the request again
+					$request->toggleLock($key);
+
+					$response->setContent($nextOutput);
+
+					if($isCacheable && !$isViewCached && $i === $lastCacheableLayer) {
+						$viewCache['response'] = clone $response;
+					}
+
+					$output = array();
+					$output[$layer->getName()] = $nextOutput;
 				}
-				$moreAssigns = array(
-					'container' => $container,
-					'inner' => $nextOutput,
-					'request_data' => $container->getRequestData(),
-					'validation_manager' => $container->getValidationManager(),
-					'view' => $viewInstance,
-				);
-				// lock the request. can't be done outside the loop for the whole run, see #628
-				$key = $request->toggleLock();
-				$nextOutput = $layer->getRenderer()->render($layer, $attributes, $output, $moreAssigns);
-				// and unlock the request again
-				$request->toggleLock($key);
-
-				$response->setContent($nextOutput);
-
-				if($isCacheable && !$isViewCached && $i === $lastCacheableLayer) {
-					$viewCache['response'] = clone $response;
-				}
-
-				$output = array();
-				$output[$layer->getName()] = $nextOutput;
 			}
-		}
 
-		if($isCacheable) {
-			// we're writing the view cache first. this is just in case we get into a situation with really bad timing on the leap of a second
-			if(!$isViewCached) {
-				$viewCache['request_attributes'] = array();
-				foreach($otConfig['request_attributes'] as $requestAttribute) {
-					$viewCache['request_attributes'][] = $requestAttribute + array('value' => $request->getAttribute($requestAttribute['name'], $requestAttribute['namespace']));
+			if($isCacheable) {
+				// we're writing the view cache first. this is just in case we get into a situation with really bad timing on the leap of a second
+				if(!$isViewCached) {
+					$viewCache['request_attributes'] = array();
+					foreach($otConfig['request_attributes'] as $requestAttribute) {
+						$viewCache['request_attributes'][] = $requestAttribute + array('value' => $request->getAttribute($requestAttribute['name'], $requestAttribute['namespace']));
+					}
+					$viewCache['request_attribute_namespaces'] = array();
+					foreach($otConfig['request_attribute_namespaces'] as $requestAttributeNamespace) {
+						$viewCache['request_attribute_namespaces'][$requestAttributeNamespace] = $request->getAttributes($requestAttributeNamespace);
+					}
+
+					$this->writeCache(array_merge($groups, array($outputType)), $viewCache, $config['lifetime']);
+
+					// $lm->log('Writing View cache...');
 				}
-				$viewCache['request_attribute_namespaces'] = array();
-				foreach($otConfig['request_attribute_namespaces'] as $requestAttributeNamespace) {
-					$viewCache['request_attribute_namespaces'][$requestAttributeNamespace] = $request->getAttributes($requestAttributeNamespace);
+				if(!$isActionCached) {
+					$actionCache['action_attributes'] = array();
+					foreach($config['action_attributes'] as $attributeName) {
+						$actionCache['action_attributes'][$attributeName] = $actionAttributes[$attributeName];
+					}
+
+					// $lm->log('Writing Action cache...');
+
+					$this->writeCache(array_merge($groups, array(self::ACTION_CACHE_ID)), $actionCache, $config['lifetime']);
 				}
-
-				$this->writeCache(array_merge($groups, array($outputType)), $viewCache, $config['lifetime']);
-
-				// $lm->log('Writing View cache...');
-			}
-			if(!$isActionCached) {
-				$actionCache['action_attributes'] = array();
-				foreach($config['action_attributes'] as $attributeName) {
-					$actionCache['action_attributes'][$attributeName] = $actionAttributes[$attributeName];
-				}
-
-				// $lm->log('Writing Action cache...');
-
-				$this->writeCache(array_merge($groups, array(self::ACTION_CACHE_ID)), $actionCache, $config['lifetime']);
 			}
 		}
 	}
