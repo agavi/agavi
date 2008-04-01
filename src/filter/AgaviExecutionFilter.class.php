@@ -44,6 +44,41 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 	const ACTION_CACHE_ID = '4-8-15-16-23-42';
 
 	/**
+	 * Method that's called when a cacheable, Action/View with a stale cache is
+	 * about to be run.
+	 * Can be used to prevent stampede situations where many requests to an action
+	 * with an out-of-date cache are run in parallel, slowing down everything.
+	 * For instance, you could set a flag into memcached with the groups of the
+	 * action that's currently run, and in checkCache check for those and return
+	 * an old, stale cache until the flag is gone.
+	 *
+	 * @param      array The groups.
+	 * @param      array The caching configuration.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function startedCacheCreationCallback(array $groups, array $config)
+	{
+	}
+	
+	/**
+	 * Method that's called when a cacheable, Action/View with a stale cache has
+	 * finished execution and all caches are written.
+	 *
+	 * @see        AgaviExecutionFilter::startedCacheCreationCallback()
+	 *
+	 * @param      array The groups.
+	 * @param      array The caching configuration.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function finishedCacheCreationCallback(array $groups, array $config)
+	{
+	}
+	
+	/**
 	 * Check if a cache exists and is up-to-date
 	 *
 	 * @param      array  An array of cache groups
@@ -279,6 +314,10 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 		if($isCacheable) {
 			$groups = $this->determineGroups($config["groups"], $container);
 			$isActionCached = $this->checkCache(array_merge($groups, array(self::ACTION_CACHE_ID)), $config['lifetime']);
+			
+			if(!$isActionCached) {
+				$this->startedCacheCreationCallback($groups, $config);
+			}
 		} else {
 			// $lm->log('Action is not cacheable!');
 		}
@@ -522,6 +561,9 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 
 					$this->writeCache(array_merge($groups, array(self::ACTION_CACHE_ID)), $actionCache, $config['lifetime']);
 				}
+				
+				// notify callback that the cache has finished
+				$this->finishedCacheCreationCallback($groups, $config);
 			}
 		}
 	}
