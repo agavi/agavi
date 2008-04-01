@@ -316,6 +316,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 			$isActionCached = $this->checkCache(array_merge($groups, array(self::ACTION_CACHE_ID)), $config['lifetime']);
 			
 			if(!$isActionCached) {
+				// cacheable, but action is not cached. notify our callback so it can prevent the stampede that follows
 				$this->startedCacheCreationCallback($groups, $config);
 			}
 		} else {
@@ -330,6 +331,8 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 				// and restore action attributes
 				$actionInstance->setAttributes($actionCache['action_attributes']);
 			} catch(AgaviException $e) {
+				// cacheable, but action is not cached. notify our callback so it can prevent the stampede that follows
+				$this->startedCacheCreationCallback($groups, $config);
 				$isActionCached = false;
 			}
 		}
@@ -560,10 +563,10 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 					// $lm->log('Writing Action cache...');
 
 					$this->writeCache(array_merge($groups, array(self::ACTION_CACHE_ID)), $actionCache, $config['lifetime']);
+					
+					// notify callback that the execution has finished and caches have been written
+					$this->finishedCacheCreationCallback($groups, $config);
 				}
-				
-				// notify callback that the cache has finished
-				$this->finishedCacheCreationCallback($groups, $config);
 			}
 		}
 	}
