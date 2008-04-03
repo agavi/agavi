@@ -538,36 +538,36 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 				}
 			}
 
-			if($isCacheable) {
+			if($isCacheable && !$isViewCached) {
 				// we're writing the view cache first. this is just in case we get into a situation with really bad timing on the leap of a second
-				if(!$isViewCached) {
-					$viewCache['request_attributes'] = array();
-					foreach($otConfig['request_attributes'] as $requestAttribute) {
-						$viewCache['request_attributes'][] = $requestAttribute + array('value' => $request->getAttribute($requestAttribute['name'], $requestAttribute['namespace']));
-					}
-					$viewCache['request_attribute_namespaces'] = array();
-					foreach($otConfig['request_attribute_namespaces'] as $requestAttributeNamespace) {
-						$viewCache['request_attribute_namespaces'][$requestAttributeNamespace] = $request->getAttributes($requestAttributeNamespace);
-					}
-
-					$this->writeCache(array_merge($groups, array($outputType)), $viewCache, $config['lifetime']);
-
-					// $lm->log('Writing View cache...');
+				$viewCache['request_attributes'] = array();
+				foreach($otConfig['request_attributes'] as $requestAttribute) {
+					$viewCache['request_attributes'][] = $requestAttribute + array('value' => $request->getAttribute($requestAttribute['name'], $requestAttribute['namespace']));
 				}
-				if(!$isActionCached) {
-					$actionCache['action_attributes'] = array();
-					foreach($config['action_attributes'] as $attributeName) {
-						$actionCache['action_attributes'][$attributeName] = $actionAttributes[$attributeName];
-					}
-
-					// $lm->log('Writing Action cache...');
-
-					$this->writeCache(array_merge($groups, array(self::ACTION_CACHE_ID)), $actionCache, $config['lifetime']);
-					
-					// notify callback that the execution has finished and caches have been written
-					$this->finishedCacheCreationCallback($groups, $config);
+				$viewCache['request_attribute_namespaces'] = array();
+				foreach($otConfig['request_attribute_namespaces'] as $requestAttributeNamespace) {
+					$viewCache['request_attribute_namespaces'][$requestAttributeNamespace] = $request->getAttributes($requestAttributeNamespace);
 				}
+
+				$this->writeCache(array_merge($groups, array($outputType)), $viewCache, $config['lifetime']);
+
+				// $lm->log('Writing View cache...');
 			}
+		}
+		
+		// action cache writing must occur here, so actions that return AgaviView::NONE also get their cache written
+		if($isCacheable && !$isActionCached) {
+			$actionCache['action_attributes'] = array();
+			foreach($config['action_attributes'] as $attributeName) {
+				$actionCache['action_attributes'][$attributeName] = $actionAttributes[$attributeName];
+			}
+
+			// $lm->log('Writing Action cache...');
+
+			$this->writeCache(array_merge($groups, array(self::ACTION_CACHE_ID)), $actionCache, $config['lifetime']);
+			
+			// notify callback that the execution has finished and caches have been written
+			$this->finishedCacheCreationCallback($groups, $config);
 		}
 	}
 
