@@ -22,6 +22,7 @@ ADD: Add ability to cache complete request attribute namespaces in Execution Fil
 
 CHG: Update timezone database to 2008b (#728) (David)
 
+FIX: Actions that return no View are never cached (#746) (David)
 FIX: AgaviDateFormatter::translate() might kill DateTime's DateTimeZone object (#743) (David)
 FIX: Reusable renderers do not work (#741) (David)
 FIX: AgaviInflector::singularize returns the wrong singular form of "caches" (#739) (Dominik)

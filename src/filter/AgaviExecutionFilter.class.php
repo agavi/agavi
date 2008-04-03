@@ -44,6 +44,41 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 	const ACTION_CACHE_ID = '4-8-15-16-23-42';
 
 	/**
+	 * Method that's called when a cacheable, Action/View with a stale cache is
+	 * about to be run.
+	 * Can be used to prevent stampede situations where many requests to an action
+	 * with an out-of-date cache are run in parallel, slowing down everything.
+	 * For instance, you could set a flag into memcached with the groups of the
+	 * action that's currently run, and in checkCache check for those and return
+	 * an old, stale cache until the flag is gone.
+	 *
+	 * @param      array The groups.
+	 * @param      array The caching configuration.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function startedCacheCreationCallback(array $groups, array $config)
+	{
+	}
+	
+	/**
+	 * Method that's called when a cacheable, Action/View with a stale cache has
+	 * finished execution and all caches are written.
+	 *
+	 * @see        AgaviExecutionFilter::startedCacheCreationCallback()
+	 *
+	 * @param      array The groups.
+	 * @param      array The caching configuration.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function finishedCacheCreationCallback(array $groups, array $config)
+	{
+	}
+	
+	/**
 	 * Check if a cache exists and is up-to-date
 	 *
 	 * @param      array  An array of cache groups
@@ -279,6 +314,11 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 		if($isCacheable) {
 			$groups = $this->determineGroups($config["groups"], $container);
 			$isActionCached = $this->checkCache(array_merge($groups, array(self::ACTION_CACHE_ID)), $config['lifetime']);
+			
+			if(!$isActionCached) {
+				// cacheable, but action is not cached. notify our callback so it can prevent the stampede that follows
+				$this->startedCacheCreationCallback($groups, $config);
+			}
 		} else {
 			// $lm->log('Action is not cacheable!');
 		}
@@ -291,6 +331,8 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 				// and restore action attributes
 				$actionInstance->setAttributes($actionCache['action_attributes']);
 			} catch(AgaviException $e) {
+				// cacheable, but action is not cached. notify our callback so it can prevent the stampede that follows
+				$this->startedCacheCreationCallback($groups, $config);
 				$isActionCached = false;
 			}
 		}
@@ -495,33 +537,36 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 				}
 			}
 
-			if($isCacheable) {
+			if($isCacheable && !$isViewCached) {
 				// we're writing the view cache first. this is just in case we get into a situation with really bad timing on the leap of a second
-				if(!$isViewCached) {
-					$viewCache['request_attributes'] = array();
-					foreach($otConfig['request_attributes'] as $requestAttribute) {
-						$viewCache['request_attributes'][] = $requestAttribute + array('value' => $request->getAttribute($requestAttribute['name'], $requestAttribute['namespace']));
-					}
-					$viewCache['request_attribute_namespaces'] = array();
-					foreach($otConfig['request_attribute_namespaces'] as $requestAttributeNamespace) {
-						$viewCache['request_attribute_namespaces'][$requestAttributeNamespace] = $request->getAttributes($requestAttributeNamespace);
-					}
-
-					$this->writeCache(array_merge($groups, array($outputType)), $viewCache, $config['lifetime']);
-
-					// $lm->log('Writing View cache...');
+				$viewCache['request_attributes'] = array();
+				foreach($otConfig['request_attributes'] as $requestAttribute) {
+					$viewCache['request_attributes'][] = $requestAttribute + array('value' => $request->getAttribute($requestAttribute['name'], $requestAttribute['namespace']));
 				}
-				if(!$isActionCached) {
-					$actionCache['action_attributes'] = array();
-					foreach($config['action_attributes'] as $attributeName) {
-						$actionCache['action_attributes'][$attributeName] = $actionAttributes[$attributeName];
-					}
-
-					// $lm->log('Writing Action cache...');
-
-					$this->writeCache(array_merge($groups, array(self::ACTION_CACHE_ID)), $actionCache, $config['lifetime']);
+				$viewCache['request_attribute_namespaces'] = array();
+				foreach($otConfig['request_attribute_namespaces'] as $requestAttributeNamespace) {
+					$viewCache['request_attribute_namespaces'][$requestAttributeNamespace] = $request->getAttributes($requestAttributeNamespace);
 				}
+
+				$this->writeCache(array_merge($groups, array($outputType)), $viewCache, $config['lifetime']);
+
+				// $lm->log('Writing View cache...');
 			}
+		}
+		
+		// action cache writing must occur here, so actions that return AgaviView::NONE also get their cache written
+		if($isCacheable && !$isActionCached) {
+			$actionCache['action_attributes'] = array();
+			foreach($config['action_attributes'] as $attributeName) {
+				$actionCache['action_attributes'][$attributeName] = $actionAttributes[$attributeName];
+			}
+
+			// $lm->log('Writing Action cache...');
+
+			$this->writeCache(array_merge($groups, array(self::ACTION_CACHE_ID)), $actionCache, $config['lifetime']);
+			
+			// notify callback that the execution has finished and caches have been written
+			$this->finishedCacheCreationCallback($groups, $config);
 		}
 	}
 

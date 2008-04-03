@@ -81,7 +81,7 @@ class AgaviCachingConfigHandler extends AgaviConfigHandler
 						if($view->hasAttribute('module')) {
 							$views[] = array('module' => $view->getAttribute('module'), 'view' => $view->getValue());
 						} else {
-							$views[] = $view->getValue();
+							$views[] = AgaviToolkit::literalize($view->getValue());
 						}
 					}
 				}
@@ -162,7 +162,11 @@ class AgaviCachingConfigHandler extends AgaviConfigHandler
 			'	if(is_array($config["views"])) {',
 			'		foreach($config["views"] as &$view) {',
 			'			if(!is_array($view)) {',
-			'				$view = array("module" => $moduleName, "name" => $actionName . $view);',
+			'				if($view === null) {',
+			'					$view = array("module" => null, "name" => null);',
+			'				} else {',
+			'					$view = array("module" => $moduleName, "name" => ($view === null ? $view : $actionName . $view));',
+			'				}',
 			'			}',
 			'		}',
 			'	}',
