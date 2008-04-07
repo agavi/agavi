@@ -338,6 +338,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 		}
 		
 		$isViewCached = false;
+		$rememberTheView = null;
 		
 		while(true) {
 			if(!$isActionCached) {
@@ -346,10 +347,27 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 				// $lm->log('Action not cached, executing...');
 				// execute the Action and get the View to execute
 				list($actionCache['view_module'], $actionCache['view_name']) = $this->runAction($container);
-
+				
+				// check if we've just run the action again after a previous cache read revealed that the view is not cached for this output type and we need to go back to square one due to the lack of action attribute caching configuration...
+				// if yes: is the view module/name that we got just now different from what was in the cache?
+				if(isset($rememberTheView) && $actionCache != $rememberTheView) {
+					// yup. clear it!
+					$ourClass = get_class($this);
+					call_user_func(array($ourClass, 'clearCache'), $groups);
+				}
+				
 				// check if the returned view is cacheable
 				if($isCacheable && is_array($config['views']) && !in_array(array('module' => $actionCache['view_module'], 'name' => $actionCache['view_name']), $config['views'], true)) {
 					$isCacheable = false;
+					
+					// so that view is not cacheable? okay then:
+					// check if we've just run the action again after a previous cache read revealed that the view is not cached for this output type and we need to go back to square one due to the lack of action attribute caching configuration...
+					// 'cause then we need to flush all those existing caches - obviously, that data is stale now, as we learned, since we are not allowed to cache anymore for the view that was returned now
+					if(isset($rememberTheView)) {
+						// yup. clear it!
+						$ourClass = get_class($this);
+						call_user_func(array($ourClass, 'clearCache'), $groups);
+					}
 					// $lm->log('Returned View is not cleared for caching, setting cacheable status to false.');
 				} else {
 					// $lm->log('Returned View is cleared for caching, proceeding...');
@@ -409,6 +427,11 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 						// has the cache config a list of action attributes?
 						// no. that means we must run the action again!
 						$isActionCached = false;
+						// but remember the view info, just in case it differs if we run the action again now
+						$rememberTheView = array(
+							'view_module' => $actionCache['view_module'],
+							'view_name' => $actionCache['view_name'],
+						);
 						continue;
 					}
 				
