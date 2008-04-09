@@ -6,6 +6,7 @@ AGAVI CHANGELOG
 
 ADD: Add ability to cache complete request attribute namespaces in Execution Filter (#740) (David)
 
+CHG: Non-Agavi exceptions should be clearly marked as such (#749) (David)
 CHG: Change execution filter to run action again if action is cached, but output type of the view isn't (#742) (David)
 CHG: Update timezone database to 2008b (#728) (David)
 
