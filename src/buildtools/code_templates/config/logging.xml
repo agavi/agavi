@@ -47,7 +47,8 @@
 
 			<appender name="ErrorLogAppender" class="AgaviRotatingFileLoggerAppender" layout="PassthruLayout">
 				<parameters>
-					<parameter name="file">%core.app_dir%/log/error.log</parameter>
+					<parameter name="dir">%core.app_dir%/log/</parameter>
+					<parameter name="prefix">error-</parameter>
 				</parameters>
 			</appender>
 
