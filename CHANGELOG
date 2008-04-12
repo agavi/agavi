@@ -24,6 +24,7 @@ CHG: Non-Agavi exceptions should be clearly marked as such (#749) (David)
 CHG: Change execution filter to run action again if action is cached, but output type of the view isn't (#742) (David)
 CHG: Update timezone database to 2008b (#728) (David)
 
+FIX: logging.xml in code templates does not work out of the box (#750) (David)
 FIX: Actions that return no View are never cached (#746) (David)
 FIX: AgaviDateFormatter::translate() might kill DateTime's DateTimeZone object (#743) (David)
 FIX: Reusable renderers do not work (#741) (David)
