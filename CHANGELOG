@@ -15,9 +15,33 @@ CHG: Deprecated AgaviAdodbDatabase (#662) (David)
 FIX: Security filters cannot perform checks in addition to isSecure() (#671) (David)
 
 
-0.11.1 RC2 (January ??, 2008)
------------------------------
+0.11.1 RC3 (March ??, 2008)
+---------------------------
 
+ADD: Add ability to cache complete request attribute namespaces in Execution Filter (#740) (David)
+
+CHG: Non-Agavi exceptions should be clearly marked as such (#749) (David)
+CHG: Change execution filter to run action again if action is cached, but output type of the view isn't (#742) (David)
+CHG: Update timezone database to 2008b (#728) (David)
+
+FIX: logging.xml in code templates does not work out of the box (#750) (David)
+FIX: Actions that return no View are never cached (#746) (David)
+FIX: AgaviDateFormatter::translate() might kill DateTime's DateTimeZone object (#743) (David)
+FIX: Reusable renderers do not work (#741) (David)
+FIX: AgaviInflector::singularize returns the wrong singular form of "caches" (#739) (Dominik)
+
+
+0.11.1 RC2 (March 22, 2008)
+---------------------------
+
+CHG: Make AgaviView::createForwardContainer() forward arguments from the current container if no arguments given (#707) (David)
+CHG: AgaviView::create*Container() should use null as default for arguments (#735) (David)
+CHG: Routing, GettextTranslator etc should use AgaviToolkit::expandVariables (#708) (David)
+CHG: Speed up unique ID generation (#731) (David)
+CHG: Bring sample app and code templates up to date (#719) (David)
+CHG: Update timezone database to 2008a (#727) (David)
+CHG: List of matches for a route should be populated by the time onMatched() is called on a callback (#730) (David)
+CHG: Check for existing X-Powered-By header before setting it in WebResponse (#716) (David)
 CHG: Execution Filter should read action attributes for caching from Action, not Container (#706) (David)
 CHG: Cache write order in execution filter should be reversed (#703) (David)
 CHG: AgaviExecutionFilter::writeCache() could use third argument with lifetime (#702) (David)
@@ -28,6 +52,22 @@ CHG: dist.htaccess in code templates should have RewriteEngine On (#678) (David)
 CHG: Bumped and fixed copyright years (#664) (David)
 CHG: Update timezone database to 2007k (#660) (David)
 
+FIX: Given arguments object is not cloned for Container execution if Action is "simple" (#736) (David)
+FIX: Form Population Filter handles boolean false values incorrectly (#737) (David)
+FIX: Percent signs are incorrectly escaped in AgaviRouting::parseDynamicSet() (#733) (David)
+FIX: routing.xsd does not allow dynamic expressions in output_type attribute (#734) (David)
+FIX: AgaviToolkit::expandVariables replacing is too greedy (#732) (David)
+FIX: AgaviPhpRenderer::$moreAssigns is not declared or initialized (#729) (David)
+FIX: AgaviWebRequest cannot map arbitrary HTTP verbs (#725) (David)
+FIX: AgaviWebRequest does not write all changed factory parameters back (#724) (David)
+FIX: Charset in Content-Type http-equiv meta tag might be parsed incorrectly (#722) (David)
+FIX: Generating the current route without additional arguments results in unescaped single quotes and square brackets, potentially incorrectly replaced argument separator (#718) (David)
+FIX: Generating the current route with additional or changed arguments allows code injections (#717) (David)
+FIX: Unsetting a user parameter that in a routing callback's onGenerate() was passed to gen() produces strange behavior (#714) (David)
+FIX: Setting a user parameter that was undefined in a routing callback's onGenerate() has no effect if a default is defined (#713) (David)
+FIX: Form Population trips over entities in error messages when inserting them into the document (#715) (David)
+FIX: Routing config handler cannot handle parameter arrays (#712) (David)
+FIX: XML config parser only applies the xsl stylesheet defined in the first processing instruction (#711) (David)
 FIX: Execution Filter does not restore cached action attributes on cache hit (#705) (David)
 FIX: caching.xsd has incorrect rules for <action_attribute> elements (#704) (David)
 FIX: View cache validity check does not use lifetime, might cause usage of stale data (#701) (David)

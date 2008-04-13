@@ -17,7 +17,7 @@ class Default_UnavailableSuccessView extends AgaviSampleAppDefaultBaseView
 {
 	public function executeHtml(AgaviRequestDataHolder $rd)
 	{
-		parent::setupHtml($rd);
+		$this->setupHtml($rd);
 
 		// set the title
 		$this->setAttribute('title', $this->getContext()->getTranslationManager()->_('This Application is Unavailable', 'default.ErrorActions'));

@@ -44,6 +44,41 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 	const ACTION_CACHE_ID = '4-8-15-16-23-42';
 
 	/**
+	 * Method that's called when a cacheable, Action/View with a stale cache is
+	 * about to be run.
+	 * Can be used to prevent stampede situations where many requests to an action
+	 * with an out-of-date cache are run in parallel, slowing down everything.
+	 * For instance, you could set a flag into memcached with the groups of the
+	 * action that's currently run, and in checkCache check for those and return
+	 * an old, stale cache until the flag is gone.
+	 *
+	 * @param      array The groups.
+	 * @param      array The caching configuration.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function startedCacheCreationCallback(array $groups, array $config)
+	{
+	}
+	
+	/**
+	 * Method that's called when a cacheable, Action/View with a stale cache has
+	 * finished execution and all caches are written.
+	 *
+	 * @see        AgaviExecutionFilter::startedCacheCreationCallback()
+	 *
+	 * @param      array The groups.
+	 * @param      array The caching configuration.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function finishedCacheCreationCallback(array $groups, array $config)
+	{
+	}
+	
+	/**
 	 * Check if a cache exists and is up-to-date
 	 *
 	 * @param      array  An array of cache groups
@@ -279,6 +314,11 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 		if($isCacheable) {
 			$groups = $this->determineGroups($config["groups"], $container);
 			$isActionCached = $this->checkCache(array_merge($groups, array(self::ACTION_CACHE_ID)), $config['lifetime']);
+			
+			if(!$isActionCached) {
+				// cacheable, but action is not cached. notify our callback so it can prevent the stampede that follows
+				$this->startedCacheCreationCallback($groups, $config);
+			}
 		} else {
 			// $lm->log('Action is not cacheable!');
 		}
@@ -291,229 +331,284 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 				// and restore action attributes
 				$actionInstance->setAttributes($actionCache['action_attributes']);
 			} catch(AgaviException $e) {
+				// cacheable, but action is not cached. notify our callback so it can prevent the stampede that follows
+				$this->startedCacheCreationCallback($groups, $config);
 				$isActionCached = false;
 			}
 		}
-		if(!$isActionCached) {
-			$actionCache = array();
+		
+		$isViewCached = false;
+		$rememberTheView = null;
+		
+		while(true) {
+			if(!$isActionCached) {
+				$actionCache = array();
 			
-			// $lm->log('Action not cached, executing...');
-			// execute the Action and get the View to execute
-			list($actionCache['view_module'], $actionCache['view_name']) = $this->runAction($container);
-
-			// check if the returned view is cacheable
-			if($isCacheable && is_array($config['views']) && !in_array(array('module' => $actionCache['view_module'], 'name' => $actionCache['view_name']), $config['views'], true)) {
-				$isCacheable = false;
-				// $lm->log('Returned View is not cleared for caching, setting cacheable status to false.');
-			} else {
-				// $lm->log('Returned View is cleared for caching, proceeding...');
-			}
-
-			$actionAttributes = $actionInstance->getAttributes();
-		}
-
-		// clear the response
-		$response = $container->getResponse();
-		$response->clear();
-
-		// clear any forward set, it's ze view's job
-		$container->clearNext();
-
-		if($actionCache['view_name'] !== AgaviView::NONE) {
-
-			$container->setViewModuleName($actionCache['view_module']);
-			$container->setViewName($actionCache['view_name']);
-
-			$key = $request->toggleLock();
-			// get the view instance
-			$viewInstance = $controller->createViewInstance($actionCache['view_module'], $actionCache['view_name']);
-			// initialize the view
-			$viewInstance->initialize($container);
-			$request->toggleLock($key);
-
-			// Set the View Instance in the container
-			$container->setViewInstance($viewInstance);
-			
-			$outputType = $container->getOutputType()->getName();
-
-			$isViewCached = false;
-
-			if($isCacheable) {
-				if(isset($config['output_types'][$otConfig = $outputType]) || isset($config['output_types'][$otConfig = '*'])) {
-					$otConfig = $config['output_types'][$otConfig];
-
-					if($isActionCached) {
-						$isViewCached = $this->checkCache(array_merge($groups, array($outputType)), $config['lifetime']);
-					}
-				} else {
-					$isCacheable = false;
-				}
-			}
-
-			if($isViewCached) {
-				// $lm->log('View is cached, loading...');
-				try {
-					$viewCache = $this->readCache(array_merge($groups, array($outputType)));
-				} catch(AgaviException $e) {
-					$isViewCached = false;
-				}
-			}
-			if(!$isViewCached) {
-				$viewCache = array();
-
-				// $lm->log('View is not cached, executing...');
-				// view initialization completed successfully
-				$executeMethod = 'execute' . $outputType;
-				if(!method_exists($viewInstance, $executeMethod)) {
-					$executeMethod = 'execute';
-				}
-				$key = $request->toggleLock();
-				$viewCache['next'] = $viewInstance->$executeMethod($container->getRequestData());
-				$request->toggleLock($key);
-			}
-
-			if($viewCache['next'] instanceof AgaviExecutionContainer) {
-				// $lm->log('Forwarding request, skipping rendering...');
-				$container->setNext($viewCache['next']);
-			} else {
-				$output = array();
-				$nextOutput = null;
+				// $lm->log('Action not cached, executing...');
+				// execute the Action and get the View to execute
+				list($actionCache['view_module'], $actionCache['view_name']) = $this->runAction($container);
 				
-				if($isViewCached) {
-					$layers = $viewCache['layers'];
-					$response = $viewCache['response'];
-					$container->setResponse($response);
-
-					foreach($viewCache['template_variables'] as $name => $value) {
-						$viewInstance->setAttribute($name, $value);
+				// check if we've just run the action again after a previous cache read revealed that the view is not cached for this output type and we need to go back to square one due to the lack of action attribute caching configuration...
+				// if yes: is the view module/name that we got just now different from what was in the cache?
+				if(isset($rememberTheView) && $actionCache != $rememberTheView) {
+					// yup. clear it!
+					$ourClass = get_class($this);
+					call_user_func(array($ourClass, 'clearCache'), $groups);
+				}
+				
+				// check if the returned view is cacheable
+				if($isCacheable && is_array($config['views']) && !in_array(array('module' => $actionCache['view_module'], 'name' => $actionCache['view_name']), $config['views'], true)) {
+					$isCacheable = false;
+					
+					// so that view is not cacheable? okay then:
+					// check if we've just run the action again after a previous cache read revealed that the view is not cached for this output type and we need to go back to square one due to the lack of action attribute caching configuration...
+					// 'cause then we need to flush all those existing caches - obviously, that data is stale now, as we learned, since we are not allowed to cache anymore for the view that was returned now
+					if(isset($rememberTheView)) {
+						// yup. clear it!
+						$ourClass = get_class($this);
+						call_user_func(array($ourClass, 'clearCache'), $groups);
 					}
-
-					foreach($viewCache['request_attributes'] as $requestAttribute) {
-						$request->setAttribute($requestAttribute['name'], $requestAttribute['value'], $requestAttribute['namespace']);
-					}
-
-					$nextOutput = $response->getContent();
+					// $lm->log('Returned View is not cleared for caching, setting cacheable status to false.');
 				} else {
-					if($viewCache['next'] !== null) {
-						// response content was returned from view execute()
-						$response->setContent($nextOutput = $viewCache['next']);
-						$viewCache['next'] = null;
+					// $lm->log('Returned View is cleared for caching, proceeding...');
+				}
+
+				$actionAttributes = $actionInstance->getAttributes();
+			}
+
+			// clear the response
+			$response = $container->getResponse();
+			$response->clear();
+
+			// clear any forward set, it's ze view's job
+			$container->clearNext();
+
+			if($actionCache['view_name'] !== AgaviView::NONE) {
+
+				$container->setViewModuleName($actionCache['view_module']);
+				$container->setViewName($actionCache['view_name']);
+
+				$key = $request->toggleLock();
+				// get the view instance
+				$viewInstance = $controller->createViewInstance($actionCache['view_module'], $actionCache['view_name']);
+				// initialize the view
+				$viewInstance->initialize($container);
+				$request->toggleLock($key);
+
+				// Set the View Instance in the container
+				$container->setViewInstance($viewInstance);
+			
+				$outputType = $container->getOutputType()->getName();
+
+				if($isCacheable) {
+					if(isset($config['output_types'][$otConfig = $outputType]) || isset($config['output_types'][$otConfig = '*'])) {
+						$otConfig = $config['output_types'][$otConfig];
+
+						if($isActionCached) {
+							$isViewCached = $this->checkCache(array_merge($groups, array($outputType)), $config['lifetime']);
+						}
+					} else {
+						$isCacheable = false;
 					}
+				}
 
-					$layers = $viewInstance->getLayers();
+				if($isViewCached) {
+					// $lm->log('View is cached, loading...');
+					try {
+						$viewCache = $this->readCache(array_merge($groups, array($outputType)));
+					} catch(AgaviException $e) {
+						$isViewCached = false;
+					}
+				}
+				if(!$isViewCached) {
+					// view not cached
+					// but the action  might
+					if($isActionCached && !$config['action_attributes']) {
+						// has the cache config a list of action attributes?
+						// no. that means we must run the action again!
+						$isActionCached = false;
+						// but remember the view info, just in case it differs if we run the action again now
+						$rememberTheView = array(
+							'view_module' => $actionCache['view_module'],
+							'view_name' => $actionCache['view_name'],
+						);
+						continue;
+					}
+				
+					$viewCache = array();
 
-					if($isCacheable) {
-						$viewCache['template_variables'] = array();
-						foreach($otConfig['template_variables'] as $varName) {
-							$viewCache['template_variables'][$varName] = $viewInstance->getAttribute($varName);
+					// $lm->log('View is not cached, executing...');
+					// view initialization completed successfully
+					$executeMethod = 'execute' . $outputType;
+					if(!method_exists($viewInstance, $executeMethod)) {
+						$executeMethod = 'execute';
+					}
+					$key = $request->toggleLock();
+					$viewCache['next'] = $viewInstance->$executeMethod($container->getRequestData());
+					$request->toggleLock($key);
+				}
+
+				if($viewCache['next'] instanceof AgaviExecutionContainer) {
+					// $lm->log('Forwarding request, skipping rendering...');
+					$container->setNext($viewCache['next']);
+				} else {
+					$output = array();
+					$nextOutput = null;
+				
+					if($isViewCached) {
+						$layers = $viewCache['layers'];
+						$response = $viewCache['response'];
+						$container->setResponse($response);
+
+						foreach($viewCache['template_variables'] as $name => $value) {
+							$viewInstance->setAttribute($name, $value);
 						}
 
-						$viewCache['response'] = clone $response;
+						foreach($viewCache['request_attributes'] as $requestAttribute) {
+							$request->setAttribute($requestAttribute['name'], $requestAttribute['value'], $requestAttribute['namespace']);
+						}
+					
+						foreach($viewCache['request_attribute_namespaces'] as $ranName => $ranValues) {
+							$request->setAttributes($ranValues, $ranName);
+						}
 
-						$viewCache['layers'] = array();
+						$nextOutput = $response->getContent();
+					} else {
+						if($viewCache['next'] !== null) {
+							// response content was returned from view execute()
+							$response->setContent($nextOutput = $viewCache['next']);
+							$viewCache['next'] = null;
+						}
 
-						$viewCache['slots'] = array();
+						$layers = $viewInstance->getLayers();
 
-						$lastCacheableLayer = -1;
-						if(is_array($otConfig['layers'])) {
-							if(count($otConfig['layers'])) {
-								for($i = count($layers)-1; $i >= 0; $i--) {
-									$layer = $layers[$i];
-									$layerName = $layer->getName();
-									if(isset($otConfig['layers'][$layerName])) {
-										if(is_array($otConfig['layers'][$layerName])) {
-											$lastCacheableLayer = $i - 1;
-										} else {
-											$lastCacheableLayer = $i;
+						if($isCacheable) {
+							$viewCache['template_variables'] = array();
+							foreach($otConfig['template_variables'] as $varName) {
+								$viewCache['template_variables'][$varName] = $viewInstance->getAttribute($varName);
+							}
+
+							$viewCache['response'] = clone $response;
+
+							$viewCache['layers'] = array();
+
+							$viewCache['slots'] = array();
+
+							$lastCacheableLayer = -1;
+							if(is_array($otConfig['layers'])) {
+								if(count($otConfig['layers'])) {
+									for($i = count($layers)-1; $i >= 0; $i--) {
+										$layer = $layers[$i];
+										$layerName = $layer->getName();
+										if(isset($otConfig['layers'][$layerName])) {
+											if(is_array($otConfig['layers'][$layerName])) {
+												$lastCacheableLayer = $i - 1;
+											} else {
+												$lastCacheableLayer = $i;
+											}
 										}
 									}
 								}
+							} else {
+								$lastCacheableLayer = count($layers) - 1;
 							}
-						} else {
-							$lastCacheableLayer = count($layers) - 1;
+
+							for($i = $lastCacheableLayer + 1; $i < count($layers); $i++) {
+								// $lm->log('Adding non-cacheable layer "' . $layers[$i]->getName() . '" to list');
+								$viewCache['layers'][] = clone $layers[$i];
+							}
+						}
+					}
+
+					$attributes =& $viewInstance->getAttributes();
+
+					// $lm->log('Starting rendering...');
+					for($i = 0; $i < count($layers); $i++) {
+						$layer = $layers[$i];
+						$layerName = $layer->getName();
+						// $lm->log('Running layer "' . $layerName . '"...');
+						foreach($layer->getSlots() as $slotName => $slotContainer) {
+							if($isViewCached && isset($viewCache['slots'][$layerName][$slotName])) {
+								// $lm->log('Loading cached slot "' . $slotName . '"...');
+								$slotResponse = $viewCache['slots'][$layerName][$slotName];
+							} else {
+								// $lm->log('Running slot "' . $slotName . '"...');
+								$slotResponse = $slotContainer->execute();
+								if($isCacheable && !$isViewCached && isset($otConfig['layers'][$layerName]) && is_array($otConfig['layers'][$layerName]) && in_array($slotName, $otConfig['layers'][$layerName])) {
+									// $lm->log('Adding response of slot "' . $slotName . '" to cache...');
+									$viewCache['slots'][$layerName][$slotName] = $slotResponse;
+								}
+							}
+							// set the presentation data as a template attribute
+							if(($output[$slotName] = $slotResponse->getContent()) !== null) {
+								// $lm->log('Merging in response from slot "' . $slotName . '"...');
+								// the slot really output something
+								// let our response grab the stuff it needs from the slot's response
+								$response->merge($slotResponse);
+							}
+						}
+						$moreAssigns = array(
+							'container' => $container,
+							'inner' => $nextOutput,
+							'request_data' => $container->getRequestData(),
+							'validation_manager' => $container->getValidationManager(),
+							'view' => $viewInstance,
+						);
+						// lock the request. can't be done outside the loop for the whole run, see #628
+						$key = $request->toggleLock();
+						$nextOutput = $layer->getRenderer()->render($layer, $attributes, $output, $moreAssigns);
+						// and unlock the request again
+						$request->toggleLock($key);
+
+						$response->setContent($nextOutput);
+
+						if($isCacheable && !$isViewCached && $i === $lastCacheableLayer) {
+							$viewCache['response'] = clone $response;
 						}
 
-						for($i = $lastCacheableLayer + 1; $i < count($layers); $i++) {
-							// $lm->log('Adding non-cacheable layer "' . $layers[$i]->getName() . '" to list');
-							$viewCache['layers'][] = clone $layers[$i];
-						}
+						$output = array();
+						$output[$layer->getName()] = $nextOutput;
 					}
 				}
 
-				$attributes =& $viewInstance->getAttributes();
-
-				// $lm->log('Starting rendering...');
-				for($i = 0; $i < count($layers); $i++) {
-					$layer = $layers[$i];
-					$layerName = $layer->getName();
-					// $lm->log('Running layer "' . $layerName . '"...');
-					foreach($layer->getSlots() as $slotName => $slotContainer) {
-						if($isViewCached && isset($viewCache['slots'][$layerName][$slotName])) {
-							// $lm->log('Loading cached slot "' . $slotName . '"...');
-							$slotResponse = $viewCache['slots'][$layerName][$slotName];
-						} else {
-							// $lm->log('Running slot "' . $slotName . '"...');
-							$slotResponse = $slotContainer->execute();
-							if($isCacheable && !$isViewCached && isset($otConfig['layers'][$layerName]) && is_array($otConfig['layers'][$layerName]) && in_array($slotName, $otConfig['layers'][$layerName])) {
-								// $lm->log('Adding response of slot "' . $slotName . '" to cache...');
-								$viewCache['slots'][$layerName][$slotName] = $slotResponse;
-							}
-						}
-						// set the presentation data as a template attribute
-						if(($output[$slotName] = $slotResponse->getContent()) !== null) {
-							// $lm->log('Merging in response from slot "' . $slotName . '"...');
-							// the slot really output something
-							// let our response grab the stuff it needs from the slot's response
-							$response->merge($slotResponse);
-						}
-					}
-					$moreAssigns = array(
-						'container' => $container,
-						'inner' => $nextOutput,
-						'request_data' => $container->getRequestData(),
-						'validation_manager' => $container->getValidationManager(),
-						'view' => $viewInstance,
-					);
-					// lock the request. can't be done outside the loop for the whole run, see #628
-					$key = $request->toggleLock();
-					$nextOutput = $layer->getRenderer()->render($layer, $attributes, $output, $moreAssigns);
-					// and unlock the request again
-					$request->toggleLock($key);
-
-					$response->setContent($nextOutput);
-
-					if($isCacheable && !$isViewCached && $i === $lastCacheableLayer) {
-						$viewCache['response'] = clone $response;
-					}
-
-					$output = array();
-					$output[$layer->getName()] = $nextOutput;
-				}
-			}
-
-			if($isCacheable) {
-				// we're writing the view cache first. this is just in case we get into a situation with really bad timing on the leap of a second
-				if(!$isViewCached) {
+				if($isCacheable && !$isViewCached) {
+					// we're writing the view cache first. this is just in case we get into a situation with really bad timing on the leap of a second
 					$viewCache['request_attributes'] = array();
 					foreach($otConfig['request_attributes'] as $requestAttribute) {
 						$viewCache['request_attributes'][] = $requestAttribute + array('value' => $request->getAttribute($requestAttribute['name'], $requestAttribute['namespace']));
+					}
+					$viewCache['request_attribute_namespaces'] = array();
+					foreach($otConfig['request_attribute_namespaces'] as $requestAttributeNamespace) {
+						$viewCache['request_attribute_namespaces'][$requestAttributeNamespace] = $request->getAttributes($requestAttributeNamespace);
 					}
 
 					$this->writeCache(array_merge($groups, array($outputType)), $viewCache, $config['lifetime']);
 
 					// $lm->log('Writing View cache...');
-				}
-				if(!$isActionCached) {
-					$actionCache['action_attributes'] = array();
-					foreach($config['action_attributes'] as $attributeName) {
-						$actionCache['action_attributes'][$attributeName] = $actionAttributes[$attributeName];
-					}
-
-					// $lm->log('Writing Action cache...');
-
-					$this->writeCache(array_merge($groups, array(self::ACTION_CACHE_ID)), $actionCache, $config['lifetime']);
+					$isViewCached = true;
 				}
 			}
+		
+			// action cache writing must occur here, so actions that return AgaviView::NONE also get their cache written
+			if($isCacheable && !$isActionCached) {
+				$actionCache['action_attributes'] = array();
+				foreach($config['action_attributes'] as $attributeName) {
+					$actionCache['action_attributes'][$attributeName] = $actionAttributes[$attributeName];
+				}
+
+				// $lm->log('Writing Action cache...');
+
+				$this->writeCache(array_merge($groups, array(self::ACTION_CACHE_ID)), $actionCache, $config['lifetime']);
+			
+				// notify callback that the execution has finished and caches have been written
+				$this->finishedCacheCreationCallback($groups, $config);
+				
+				// set action cached to true so the next
+				$isActionCached = true;
+			}
+			
+			// we're done here. bai.
+			break;
 		}
 	}
 

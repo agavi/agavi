@@ -5,7 +5,7 @@
 | Copyright (c) 2006 the Agavi Project.                                      |
 +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
 -->
-<configurations>
+<configurations xmlns="http://agavi.org/agavi/1.0/config">
 	<configuration>
 		<enabled>On</enabled>
 		<title>An Error Module</title>

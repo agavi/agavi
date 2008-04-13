@@ -621,7 +621,7 @@ class AgaviWebResponse extends AgaviResponse
 			$this->setHttpHeader('Content-Length', $contentSize);
 		}
 		
-		if($this->getParameter('expose_agavi', true)) {
+		if($this->getParameter('expose_agavi', true) && !$this->hasHttpHeader('X-Powered-By')) {
 			if(AgaviConfig::get('expose_agavi_version', $expose_php = ini_get('expose_php'))) {
 				$xpbh = AgaviConfig::get('agavi.release');
 			} else {

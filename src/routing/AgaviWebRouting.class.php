@@ -233,6 +233,19 @@ class AgaviWebRouting extends AgaviRouting
 	{
 		return $this->baseHref;
 	}
+	
+	/**
+	 * Callback for array_walk_recursive.
+	 *
+	 * @param      mixed The value to decode, passed as a reference.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.1
+	 */
+	protected function rawurldecodeCallback(&$value)
+	{
+		$value = rawurldecode($value);
+	}
 
 	/**
 	 * Generate a formatted Agavi URL.
@@ -264,7 +277,7 @@ class AgaviWebRouting extends AgaviRouting
 
 		if($route === null && empty($params)) {
 			$retval = $req->getRequestUri();
-			$retval = str_replace('&', $aso, $retval);
+			$retval = str_replace(array('[', ']', '\'', ini_get('arg_separator.input')), array('%5B', '%5D', '%27', $aso), $retval);
 		} else {
 			if(defined('SID') && SID !== '' && $options['use_trans_sid'] === true) {
 				$params = array_merge($params, array(session_name() => session_id()));
@@ -302,11 +315,14 @@ class AgaviWebRouting extends AgaviRouting
 						}
 					}
 					
+					// decode the extra params, not all of the rest
+					array_walk_recursive($extraParams, array($this, 'rawurldecodeCallback'));
+					
 					// and do not forget those set by routing callbacks
 					$p = array_merge($p, $extraParams);
 
 					if(count($p) > 0) {
-						$append = '?' . rawurldecode(http_build_query($p, '', rawurlencode($aso)));
+						$append = '?' . http_build_query($p, '', $aso);
 					}
 				} else {
 					// the route exists, but we must create a normal index.php?foo=bar URL.

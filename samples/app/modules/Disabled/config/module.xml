@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configurations>
+<configurations xmlns="http://agavi.org/agavi/1.0/config">
 	<configuration>
-		<enabled>Off</enabled>
-		<title>Disabled Agavi Module</title>
-		<version></version>
+		<enabled>false</enabled>
+		<title>Disabled Agavi Sample App Module</title>
+		<version>1.0</version>
 		<name>Disabled</name>
 		<authors>
-			<author></author>
+			<author>David Zülke</author>
 		</authors>
-		<homepage></homepage>
+		<homepage>http://www.agavi.org</homepage>
 		<update_url></update_url>
-		<description></description>
+		<description>An example module that is disabled for demonstration purposes</description>
 	</configuration>
 </configurations>

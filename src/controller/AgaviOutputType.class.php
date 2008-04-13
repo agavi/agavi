@@ -147,25 +147,22 @@ class AgaviOutputType extends AgaviParameterHolder
 			$name = $this->defaultRenderer;
 		}
 		if(isset($this->renderers[$name])) {
-			$r =& $this->renderers[$name];
-			$ri =& $r['instance'];
-			if($ri === null) {
-				$renderer = new $r['class']();
-				$renderer->initialize($this->context, $r['parameters']);
-				if(isset($r['extension'])) {
-					$renderer->setExtension($r['extension']);
+			if($this->renderers[$name]['instance'] === null) {
+				$renderer = new $this->renderers[$name]['class']();
+				$renderer->initialize($this->context, $this->renderers[$name]['parameters']);
+				if(isset($this->renderers[$name]['extension'])) {
+					$renderer->setExtension($this->renderers[$name]['extension']);
 				}
 				if($renderer instanceof AgaviIReusableRenderer) {
-					$ri =& $renderer;
+					$this->renderers[$name]['instance'] = $renderer;
 				}
 				return $renderer;
 			} else {
-				return $ri;
+				return $this->renderers[$name]['instance'];
 			}
 		} else {
 			throw new AgaviException('Unknown renderer "' . $name . '"');
 		}
-		return $this->renderers[$name];
 	}
 	
 	/**

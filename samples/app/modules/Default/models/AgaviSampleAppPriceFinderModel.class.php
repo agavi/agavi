@@ -1,6 +1,6 @@
 <?php
 
-class AgaviSampleAppPriceFinderModel extends AgaviModel implements AgaviISingletonModel
+class AgaviSampleAppPriceFinderModel extends AgaviSampleAppDefaultBaseModel implements AgaviISingletonModel
 {
 	public function getPriceByProductName($productName)
 	{

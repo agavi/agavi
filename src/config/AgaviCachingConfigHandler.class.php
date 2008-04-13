@@ -81,7 +81,7 @@ class AgaviCachingConfigHandler extends AgaviConfigHandler
 						if($view->hasAttribute('module')) {
 							$views[] = array('module' => $view->getAttribute('module'), 'view' => $view->getValue());
 						} else {
-							$views[] = $view->getValue();
+							$views[] = AgaviToolkit::literalize($view->getValue());
 						}
 					}
 				}
@@ -122,12 +122,20 @@ class AgaviCachingConfigHandler extends AgaviConfigHandler
 							}
 						}
 						
+						$requestAttributeNamespaces = array();
+						if(isset($outputType->request_attribute_namespaces)) {
+							foreach($outputType->request_attribute_namespaces as $requestAttributeNamespace) {
+								$requestAttributeNamespaces[] = $requestAttributeNamespace->getValue();
+							}
+						}
+						
 						$otnames = array_map('trim', explode(' ', $outputType->getAttribute('name', '*')));
 						foreach($otnames as $otname) {
 							$outputTypes[$otname] = array(
 								'layers' => $layers,
 								'template_variables' => $templateVariables,
 								'request_attributes' => $requestAttributes,
+								'request_attribute_namespaces' => $requestAttributeNamespaces,
 							);
 						}
 					}
@@ -154,7 +162,11 @@ class AgaviCachingConfigHandler extends AgaviConfigHandler
 			'	if(is_array($config["views"])) {',
 			'		foreach($config["views"] as &$view) {',
 			'			if(!is_array($view)) {',
-			'				$view = array("module" => $moduleName, "name" => $actionName . $view);',
+			'				if($view === null) {',
+			'					$view = array("module" => null, "name" => null);',
+			'				} else {',
+			'					$view = array("module" => $moduleName, "name" => ($view === null ? $view : $actionName . $view));',
+			'				}',
 			'			}',
 			'		}',
 			'	}',

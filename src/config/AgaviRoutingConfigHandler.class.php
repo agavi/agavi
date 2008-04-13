@@ -116,9 +116,7 @@ class AgaviRoutingConfigHandler extends AgaviConfigHandler
 			}
 
 			if($route->hasChildren('parameters')) {
-				foreach($route->parameters as $parameter) {
-					$opts['parameters'][$parameter->getAttribute('name')] = $parameter->getValue();
-				}
+				$opts['parameters'] = $this->getItemParameters($route);
 			}
 
 			if(isset($opts['name']) && $parent) {

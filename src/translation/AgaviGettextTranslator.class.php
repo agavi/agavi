@@ -198,14 +198,15 @@ class AgaviGettextTranslator extends AgaviBasicTranslator
 			$basePath = $this->domainPaths[$domain];
 		}
 
-		$replaceCount = 0;
-		$basePath = str_replace('${domain}', $domain, $basePath, $replaceCount);
+		$basePath = AgaviToolkit::expandVariables($basePath, array('domain' => $domain));
 
 		$data = array();
-
+		$replaceCount = 0;
+		
 		foreach($localeNameBases as $localeNameBase) {
-			$fileName = str_replace('${locale}', $localeNameBase, $basePath, $replaceCount);
-			if($replaceCount == 0) {
+			$fileName = AgaviToolkit::expandVariables($basePath, array('locale' => $localeNameBase));
+			if($fileName === $basePath) {
+				// no replacing of $locale happened
 				$fileName = $basePath . '/' . $localeNameBase . '.mo';
 			}
 			if(is_readable($fileName)) {

@@ -299,39 +299,41 @@ class AgaviWebRequest extends AgaviRequest
 			'SERVER_NAME' => 'SERVER_NAME',
 			'SERVER_PORT' => 'SERVER_PORT',
 			'SERVER_PROTOCOL' => 'SERVER_PROTOCOL',
-		), (isset($parameters['sources']) && is_array($parameters['sources']) ? $parameters['sources'] : array()));
+		), (array)$this->getParameter('sources'));
+		$this->setParameter('sources', $sources);
 
-		$methods = array('GET' => 'read', 'POST' => 'write', 'PUT' => 'create', 'DELETE' => 'remove');
-		if(isset($parameters['method_names'])) {
-			$methods = array_merge($methods, (array) $parameters['method_names']);
-		}
+		// this is correct: if a user-supplied parameter was set, then null is used as the default return value, which means getSourceValue() returns the user-supplied parameter as a last resort if a key of the same name could not be found. allows setting of static values for any of those below
+		$sourceDefaults = array(
+			'HTTPS' => isset($parameters['sources']['HTTPS']) ? null : 'off',
+			'REQUEST_METHOD' => isset($parameters['sources']['REQUEST_METHOD']) ? null : 'GET',
+			'SERVER_NAME' => null,
+			'SERVER_PORT' => isset($parameters['sources']['SERVER_PORT']) ? null : $this->urlPort,
+			'SERVER_PROTOCOL' => isset($parameters['sources']['SERVER_PROTOCOL']) ? null : 'HTTP/1.0',
+		);
 
-		$REQUEST_METHOD = self::getSourceValue($sources['REQUEST_METHOD'], isset($parameters['sources']['REQUEST_METHOD']) ? null : 'GET');
+		$methods = array_merge(array(
+			'GET' => 'read',
+			'POST' => 'write',
+			'PUT' => 'create',
+			'DELETE' => 'remove',
+		), (array)$this->getParameter('method_names'));
+		$this->setParameter('method_names', $methods);
 
-		switch($REQUEST_METHOD) {
-			case 'POST':
-				$this->setMethod($methods['POST']);
-				break;
-			case 'PUT':
-				$this->setMethod($methods['PUT']);
-				break;
-			case 'DELETE':
-			
-				$this->setMethod($methods['DELETE']);
-				break;
-			default:
-				$this->setMethod($methods['GET']);
-		}
+		$REQUEST_METHOD = self::getSourceValue($sources['REQUEST_METHOD'], $sourceDefaults['REQUEST_METHOD']);
+
+		// map REQUEST_METHOD value to a method name, or fall back to the default in $sourceDefaults.
+		// if someone set a static value as default for a source that does not have a mapping, then he's really asking for it, and thus out of luck
+		$this->setMethod($this->getParameter(sprintf('method_names[%s]', $REQUEST_METHOD), $this->getParameter(sprintf('method_names[%s]', $sourceDefaults['REQUEST_METHOD']))));
 		
-		$this->protocol = self::getSourceValue($sources['SERVER_PROTOCOL'], isset($parameters['sources']['SERVER_PROTOCOL']) ? null : 'HTTP/1.0');
+		$this->protocol = self::getSourceValue($sources['SERVER_PROTOCOL'], $sourceDefaults['SERVER_PROTOCOL']);
 		
-		$HTTPS = self::getSourceValue($sources['HTTPS'], isset($parameters['sources']['HTTPS']) ? null : 'off');
+		$HTTPS = self::getSourceValue($sources['HTTPS'], $sourceDefaults['HTTPS']);
 
 		$this->urlScheme = 'http' . (strtolower($HTTPS) == 'on' ? 's' : '');
 
-		$this->urlPort = (int)self::getSourceValue($sources['SERVER_PORT'], isset($parameters['sources']['SERVER_PORT']) ? null : $this->urlPort);
+		$this->urlPort = (int)self::getSourceValue($sources['SERVER_PORT'], $sourceDefaults['SERVER_PORT']);
 
-		$SERVER_NAME = self::getSourceValue($sources['SERVER_NAME']);
+		$SERVER_NAME = self::getSourceValue($sources['SERVER_NAME'], $sourceDefaults['SERVER_NAME']);
 		$port = $this->getUrlPort();
 		if(preg_match_all('/\:/', preg_quote($SERVER_NAME), $m) > 1) {
 			$this->urlHost = preg_replace('/\]\:' . preg_quote($port) . '$/', '', $SERVER_NAME);

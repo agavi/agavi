@@ -110,7 +110,7 @@ if(isset($fixedTrace[0]['file']) && $fixedTrace[0]['file'] != $e->getFile() && $
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"<?php if($svg): ?> xmlns:svg="http://www.w3.org/2000/svg"<?php endif; ?>>
 	<head>
 		<meta http-equiv="Content-Type" content="<?php if($svg): ?>application/xhtml+xml<?php else: ?>text/html<?php endif; ?>; charset=utf-8" />
-		<title>Agavi Exception</title>
+		<title><?php echo get_class($e); ?></title>
 		<meta http-equiv="Content-Language" content="en" />
 		<meta name="robots" content="none" />
 		<style type="text/css">
@@ -547,14 +547,23 @@ if(isset($fixedTrace[0]['file']) && $fixedTrace[0]['file'] != $e->getFile() && $
 			<div style="position:absolute; top:-1.25em; left:-2em; height:5em; width:5em;"><svg:svg viewBox="3 3 42 42" preserveAspectRatio="xMaxYMax meet" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><svg:use xlink:href="#helpSign" /></svg:svg></div>
 <?php endif; ?>
 			This is an internal Agavi exception. Please consult the documentation for assistance with solving this issue.</p>
+<?php else: ?>
+		<p id="help"<?php if($svg): ?> class="nice"<?php endif; ?>>
+<?php if($svg): ?>
+			<div style="position:absolute; top:-1.25em; left:-2em; height:5em; width:5em;"><svg:svg viewBox="3 3 42 42" preserveAspectRatio="xMaxYMax meet" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><svg:use xlink:href="#helpSign" /></svg:svg></div>
+<?php endif; ?>
+			This is <em>not</em> an Agavi exception, but likely an error that occured in the application code.</p>
 <?php endif; ?>
 		<p>An exception of type <strong><?php echo get_class($e); ?></strong> was thrown, but did not get caught during the execution of the request. You will find information provided by the exception along with a stack trace below.</p>
+<?php $msg = nl2br(htmlentities($e->getMessage())); ?>
+<?php if($msg != ''): ?>
 		<p id="message"<?php if($svg): ?> class="nice"<?php endif; ?>>
 <?php if($svg): ?>
 			<div style="position:absolute; top:-1.25em; left:-2em; height:5em; width:5em;"><svg:svg viewBox="3 0 43 43" preserveAspectRatio="xMaxYMax meet" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><svg:use xlink:href="#importantSign" /></svg:svg></div>
 <?php endif; ?>
-			<?php echo nl2br(htmlentities($e->getMessage())); ?>
+			<?php echo $msg; ?>
 		</p>
+<?php endif; ?>
 		<h3>Stack Trace</h3>
 		<ol>
 <?php

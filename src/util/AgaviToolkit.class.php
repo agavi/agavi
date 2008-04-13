@@ -246,13 +246,13 @@ final class AgaviToolkit
 		// replacing the other two forms is faster than using three different search values in the str_replace
 		// also, if we had three search patterns, ${foo} with an argument {foo} would be replaced...
 		$string = preg_replace(
-			array('/\$\{([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)\}/', '/\{\$([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)\}/'),
-			'$$1',
+			'/((\{\$)|\$)([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)(?(2)\}|)/',
+			'${$3}',
 			$string
 		);
 		$search = array();
 		foreach($arguments as $key => $value) {
-			$search[] = '$' . $key;
+			$search[] = '${' . $key . '}';
 		}
 		return str_replace($search, $arguments, $string);
 	}
@@ -425,6 +425,23 @@ final class AgaviToolkit
 	public static function isNotArray($value)
 	{
 		return !is_array($value);
+	}
+	
+	/**
+	 * Generate a proper unique ID.
+	 *
+	 * Uses PHP's uniqid(), but forces use of additional entropy. Without, it's
+	 * just the microtime in hex, and much slower than with entropy on Linux.
+	 *
+	 * @param      string An optional prefix
+	 * @return     string A properly unique ID
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.1
+	 */
+	public static function uniqid($prefix = '')
+	{
+		return uniqid($prefix, true);
 	}
 }
 
