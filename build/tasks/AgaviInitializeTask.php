@@ -13,8 +13,10 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
+require_once(dirname(__FILE__) . '/AgaviTask.php');
+
 /**
- * Base task for all Agavi tasks.
+ * Initializes the Agavi build environment.
  *
  * @package    agavi
  * @subpackage build
@@ -25,33 +27,20 @@
  *
  * @since      1.0.0
  *
- * @version    $Id$
+ * @version    $Id: AgaviInputTask.php 2319 2008-02-22 04:27:36Z impl $
  */
-abstract class AgaviTask extends Task {
-	protected $quiet = false;
-	
+class AgaviInitializeTask extends AgaviTask
+{
 	/**
-	 * Sets whether log messages for this task will be suppressed.
-	 *
-	 * @param      bool Whether to suppressing log messages for this task.
+	 * Executes this task.
 	 */
-	public function setQuiet($quiet)
+	public function main()
 	{
-		$this->quiet = StringHelper::booleanValue($quiet);
-	}
-	
-	/**
-	 * Logs an event.
-	 *
-	 * @param      string The message to log.
-	 * @param      int The priority of the message.
-	 */
-	public function log($message, $level = Project::MSG_INFO)
-	{
-		if($this->quiet === false)
-		{
-			parent::log($message, $level);
-		}
+		var_dump(get_class($this->project));
+		$build = new PhingFile('agavi/build.php');
+		require_once($build->getAbsolutePath());
+		
+		AgaviBuild::bootstrap();
 	}
 }
 

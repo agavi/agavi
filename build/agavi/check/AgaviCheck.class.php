@@ -14,7 +14,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * Base task for all Agavi tasks.
+ * Represents any build-level assertion requirement.
  *
  * @package    agavi
  * @subpackage build
@@ -27,32 +27,14 @@
  *
  * @version    $Id$
  */
-abstract class AgaviTask extends Task {
-	protected $quiet = false;
-	
+abstract class AgaviCheck
+{
 	/**
-	 * Sets whether log messages for this task will be suppressed.
+	 * Determines whether the given requirement is successfully met.
 	 *
-	 * @param      bool Whether to suppressing log messages for this task.
+	 * @return     bool True if the check is successful; false otherwise.
 	 */
-	public function setQuiet($quiet)
-	{
-		$this->quiet = StringHelper::booleanValue($quiet);
-	}
-	
-	/**
-	 * Logs an event.
-	 *
-	 * @param      string The message to log.
-	 * @param      int The priority of the message.
-	 */
-	public function log($message, $level = Project::MSG_INFO)
-	{
-		if($this->quiet === false)
-		{
-			parent::log($message, $level);
-		}
-	}
+	abstract public function check();
 }
 
 ?>

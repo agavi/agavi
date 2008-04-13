@@ -1,0 +1,13 @@
+<?php
+
+class %%MODULE_NAME%%_%%ACTION_NAME%%%%VIEW_NAME%%View extends %%BASE_VIEW_NAME%%View
+{
+	public function executeHtml(AgaviRequestDataHolder $rd)
+	{
+		$this->setupHtml($rd);
+
+		$this->setAttribute('title', '%%ACTION_NAME%%');
+	}
+}
+
+?>

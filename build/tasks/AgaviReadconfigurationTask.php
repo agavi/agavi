@@ -25,7 +25,7 @@ require_once(dirname(__FILE__) . '/AgaviTask.php');
  * @copyright  Authors
  * @copyright  The Agavi Project
  *
- * @since      0.11.0
+ * @since      1.0.0
  *
  * @version    $Id$
  */

@@ -29,7 +29,7 @@ require_once(dirname(__FILE__) . '/AgaviTask.php');
  *
  * @version    $Id$
  */
-class AgaviValidateprojectTask extends AgaviTask
+class AgaviCheckprojectTask extends AgaviTask
 {
 	protected $property = null;
 	protected $path = null;
@@ -66,28 +66,6 @@ class AgaviValidateprojectTask extends AgaviTask
 		$this->value = $value;
 	}
 
-	/**
-	 * Determines whether a given directory is a valid Agavi project base
-	 * directory.
-	 *
-	 * @param      PhingFile The directory to check.
-	 *
-	 * @return     bool True if the directory is valid, false otherwise.
-	 */
-	public static function checkProjectDirectory(PhingFile $directory)
-	{
-		$list = $directory->listDir();
-		if(in_array('app', $list) && in_array('pub', $list))
-		{
-			$config = new PhingFile($directory, 'app/config.php');
-			if($config->exists())
-			{
-				return true;
-			}
-		}
-		return false;
-	}
-	
 	public function main()
 	{
 		if($this->property === null)
@@ -99,7 +77,12 @@ class AgaviValidateprojectTask extends AgaviTask
 			throw new BuildException('The path attribute must be specified');
 		}
 		
-		if($this->path->exists() && $this->path->isDirectory() && self::checkProjectDirectory($this->path))
+		$check = new AgaviProjectFilesystemCheck();
+		$check->setAppDirectory($this->project->getProperty('project.directory.app'));
+		$check->setPubDirectory($this->project->getProperty('project.directory.pub'));
+		
+		$check->setPath($this->path->getAbsolutePath());
+		if($check->check())
 		{
 			$this->project->setUserProperty($this->property, $this->value);
 		}

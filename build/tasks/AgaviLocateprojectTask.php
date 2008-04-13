@@ -88,14 +88,6 @@ class AgaviLocateprojectTask extends AgaviTask
 	}
 	
 	/**
-	 * Initializes the task.
-	 */
-	public function init()
-	{
-		require_once($this->project->getProperty('agavi.directory.build.tasks') . '/AgaviValidateprojectTask.php');
-	}
-	
-	/**
 	 * Executes the task.
 	 */
 	public function main()
@@ -124,17 +116,37 @@ class AgaviLocateprojectTask extends AgaviTask
 			$this->path = $this->path->getParentFile();
 		}
 		
-		if(AgaviValidateprojectTask::checkProjectDirectory($this->path))
+		/* Check if the current directory is a project directory. */
+		$check = new AgaviProjectFilesystemCheck();
+		$check->setAppDirectory($this->project->getProperty('project.directory.app'));
+		$check->setPubDirectory($this->project->getProperty('project.directory.pub'));
+		
+		$check->setPath($this->path->getAbsolutePath());
+		if($check->check())
 		{
 			/* The current path is the project directory. */
 			$this->log('Project base directory: ' . $this->path->getPath());
 			$this->project->setUserProperty($this->property, $this->path);
 		}
 		
+		/* Check if "app" or "pub" are in the current path. */
 		if(preg_match('#^(.+?)/(?:app|pub)#', $this->path->getPath(), $matches))
 		{
-			$directory = new PhingFile($matches[1]);
-			if(AgaviValidateprojectTask::checkProjectDirectory($directory))
+			$directory = $matches[1];
+			$check->setPath($directory->getAbsolutePath());
+			if($check->check())
+			{
+				$this->log('Project base directory: ' . $directory);
+				$this->project->setUserProperty($this->property, $directory);
+			}
+		}
+		
+		/* Last chance: recurse upward and check for a project directory. */
+		$directory = $this->path;
+		while(($directory = $directory->getParentFile()) !== null)
+		{
+			$check->setPath($directory->getAbsolutePath());
+			if($check->check())
 			{
 				$this->log('Project base directory: ' . $directory);
 				$this->project->setUserProperty($this->property, $directory);

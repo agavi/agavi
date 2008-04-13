@@ -14,7 +14,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * Base task for all Agavi tasks.
+ * 
  *
  * @package    agavi
  * @subpackage build
@@ -27,31 +27,44 @@
  *
  * @version    $Id$
  */
-abstract class AgaviTask extends Task {
-	protected $quiet = false;
+final class AgaviBuild
+{
+	/**
+	 * @var        array An associative array of classes and files that
+	 *                   can be autoloaded.
+	 */
+	public static $autoloads = array(
+		'AgaviCheck' => 'check/AgaviCheck.class.php',
+		'AgaviFilesystemCheck' => 'check/AgaviFilesystemCheck.class.php',
+		'AgaviProjectFilesystemCheck' => 'check/AgaviProjectFilesystemCheck.class.php',
+		'AgaviModuleFilesystemCheck' => 'check/AgaviModuleFilesystemCheck.class.php'
+	);
 	
 	/**
-	 * Sets whether log messages for this task will be suppressed.
+	 * Autoloads classes.
 	 *
-	 * @param      bool Whether to suppressing log messages for this task.
-	 */
-	public function setQuiet($quiet)
-	{
-		$this->quiet = StringHelper::booleanValue($quiet);
-	}
-	
-	/**
-	 * Logs an event.
+	 * @param      string A class name.
 	 *
-	 * @param      string The message to log.
-	 * @param      int The priority of the message.
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @author     Noah Fontes <impl@cynigram.com>
 	 */
-	public function log($message, $level = Project::MSG_INFO)
+	public static function __autoload($class)
 	{
-		if($this->quiet === false)
-		{
-			parent::log($message, $level);
+		if(isset(self::$autoloads[$class])) {
+			require(dirname(__FILE__) . '/' . self::$autoloads[$class]);
 		}
+		
+		/* If the class isn't loaded by this method, the only other
+		 * sane option is to simply let PHP handle it and hope another
+		 * handler picks it up. */
+	}
+
+	/**
+	 * Prepares the build environment classes for use.
+	 */
+	public static function bootstrap()
+	{
+		spl_autoload_register(array(self, '__autoload'));
 	}
 }
 

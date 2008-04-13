@@ -18,76 +18,12 @@
   -->
 <project name="Agavi" basedir="." default="status">
 
-	<!-- Agavi core directories -->
-	<property name="agavi.directory" value="@PEAR_DIR@/agavi" />
-
-	<property name="agavi.directory.src" value="${agavi.directory}/src" />
-	<property name="agavi.directory.src.action" value="${agavi.directory.src}/action" />
-	<property name="agavi.directory.src.config" value="${agavi.directory.src}/config" />
-	<property name="agavi.directory.src.controller" value="${agavi.directory.src}/controller" />
-	<property name="agavi.directory.src.core" value="${agavi.directory.src}/core" />
-	<property name="agavi.directory.src.database" value="${agavi.directory.src}/database" />
-	<property name="agavi.directory.src.date" value="${agavi.directory.src}/date" />
-	<property name="agavi.directory.src.exception" value="${agavi.directory.src}/exception" />
-	<property name="agavi.directory.src.filter" value="${agavi.directory.src}/filter" />
-	<property name="agavi.directory.src.logging" value="${agavi.directory.src}/logging" />
-	<property name="agavi.directory.src.model" value="${agavi.directory.src}/model" />
-	<property name="agavi.directory.src.renderer" value="${agavi.directory.src}/renderer" />
-	<property name="agavi.directory.src.request" value="${agavi.directory.src}/request" />
-	<property name="agavi.directory.src.response" value="${agavi.directory.src}/response" />
-	<property name="agavi.directory.src.routing" value="${agavi.directory.src}/routing" />
-	<property name="agavi.directory.src.storage" value="${agavi.directory.src}/storage" />
-	<property name="agavi.directory.src.testing" value="${agavi.directory.src}/testing" />
-	<property name="agavi.directory.src.translation" value="${agavi.directory.src}/translation" />
-	<property name="agavi.directory.src.user" value="${agavi.directory.src}/user" />
-	<property name="agavi.directory.src.util" value="${agavi.directory.src}/util" />
-	<property name="agavi.directory.src.validator" value="${agavi.directory.src}/validator" />
-	<property name="agavi.directory.src.vendor" value="${agavi.directory.src}/vender" />
-	<property name="agavi.directory.src.view" value="${agavi.directory.src}/view" />
-
-	<property name="agavi.directory.etc" value="${agavi.directory}/etc" />
-
-	<property name="agavi.directory.build" value="${agavi.directory}/build" />
-	<property name="agavi.directory.build.templates" value="${agavi.directory.build}/templates" />
-	<property name="agavi.directory.build.tasks" value="${agavi.directory.build}/tasks" />
-
-	<property name="agavi.directory.test" value="${agavi.directory}/test" />
-
-	<property name="agavi.directory.docs" value="${agavi.directory}/docs" />
-
-	<!-- Project directories -->
-	<property name="project.directory.app" value="app" />
-	<property name="project.directory.app.config" value="${project.directory.app}/config" />
-	<property name="project.directory.app.modules" value="${project.directory.app}/modules" />
-	<property name="project.directory.app.cache" value="${project.directory.app}/cache" />
-	<property name="project.directory.app.lib" value="${project.directory.app}/lib" />
-	<property name="project.directory.app.templates" value="${project.directory.app}/templates" />
-
-	<property name="project.directory.pub" value="pub" />
-
-	<!-- Module directories -->
-	<property name="module.directory.actions" value="actions" />
-	<property name="module.directory.cache" value="cache" />
-	<property name="module.directory.config" value="config" />
-	<property name="module.directory.lib" value="lib" />
-	<property name="module.directory.models" value="models" />
-	<property name="module.directory.templates" value="templates" />
-	<property name="module.directory.validate" value="validate" />
-	<property name="module.directory.views" value="views" />
-
-	<!-- Version control properties -->
-	<property name="versioning" value="filesystem" />
-
 	<!-- Load tasks relative to the build system. -->
 	<taskdef name="agavi.input" classname="AgaviInputTask" classpath="tasks" />
 	<taskdef name="agavi.transform-path" classname="AgaviTransformpathTask" classpath="tasks" />
-	<taskdef name="agavi.locate-project" classname="AgaviLocateprojectTask" classpath="tasks" />
-	<taskdef name="agavi.validate-project" classname="AgaviValidateprojectTask" classpath="tasks" />
 	<!--<taskdef name="agavi.transform-string-to-identifier" classname="AgaviTransformstringtoidentifierTask" classpath="tasks" />-->
 
-	<!-- Environment-specific configuration -->
-
-	<!-- Targets -->
+	<!-- Define targets. -->
 	<target name="initialize">
 		<tstamp />
 
@@ -100,11 +36,67 @@
 			</then>
 		</if>
 
+		<!-- Define Agavi core directories. -->
+		<property name="agavi.directory" value="@PEAR_DIR@/agavi" />
+	
+		<property name="agavi.directory.src" value="${agavi.directory}/src" override="true" />
+		<property name="agavi.directory.src.action" value="${agavi.directory.src}/action" override="true" />
+		<property name="agavi.directory.src.config" value="${agavi.directory.src}/config" override="true" />
+		<property name="agavi.directory.src.controller" value="${agavi.directory.src}/controller" override="true" />
+		<property name="agavi.directory.src.core" value="${agavi.directory.src}/core" override="true" />
+		<property name="agavi.directory.src.database" value="${agavi.directory.src}/database" override="true" />
+		<property name="agavi.directory.src.date" value="${agavi.directory.src}/date" override="true" />
+		<property name="agavi.directory.src.exception" value="${agavi.directory.src}/exception" override="true" />
+		<property name="agavi.directory.src.filter" value="${agavi.directory.src}/filter" override="true" />
+		<property name="agavi.directory.src.logging" value="${agavi.directory.src}/logging" override="true" />
+		<property name="agavi.directory.src.model" value="${agavi.directory.src}/model" override="true" />
+		<property name="agavi.directory.src.renderer" value="${agavi.directory.src}/renderer" override="true" />
+		<property name="agavi.directory.src.request" value="${agavi.directory.src}/request" override="true" />
+		<property name="agavi.directory.src.response" value="${agavi.directory.src}/response" override="true" />
+		<property name="agavi.directory.src.routing" value="${agavi.directory.src}/routing" override="true" />
+		<property name="agavi.directory.src.storage" value="${agavi.directory.src}/storage" override="true" />
+		<property name="agavi.directory.src.testing" value="${agavi.directory.src}/testing" override="true" />
+		<property name="agavi.directory.src.translation" value="${agavi.directory.src}/translation" override="true" />
+		<property name="agavi.directory.src.user" value="${agavi.directory.src}/user" override="true" />
+		<property name="agavi.directory.src.util" value="${agavi.directory.src}/util" override="true" />
+		<property name="agavi.directory.src.validator" value="${agavi.directory.src}/validator" override="true" />
+		<property name="agavi.directory.src.vendor" value="${agavi.directory.src}/vender" override="true" />
+		<property name="agavi.directory.src.view" value="${agavi.directory.src}/view" override="true" />
+
+		<property name="agavi.directory.etc" value="${agavi.directory}/etc" override="true" />
+
+		<property name="agavi.directory.build" value="${agavi.directory}/build" override="true" />
+		<property name="agavi.directory.build.templates" value="${agavi.directory.build}/templates" override="true" />
+		<property name="agavi.directory.build.tasks" value="${agavi.directory.build}/tasks" override="true" />
+
+		<property name="agavi.directory.test" value="${agavi.directory}/test" override="true" />
+
+		<property name="agavi.directory.docs" value="${agavi.directory}/docs" override="true" />
+
+		<!-- Define essential project directories. -->
+		<property name="project.directory.app" value="app" />
+		<property name="project.directory.app.config" value="${project.directory.app}/config" />
+		<property name="project.directory.app.modules" value="${project.directory.app}/modules" />
+		<property name="project.directory.app.cache" value="${project.directory.app}/cache" />
+		<property name="project.directory.app.lib" value="${project.directory.app}/lib" />
+		<property name="project.directory.app.templates" value="${project.directory.app}/templates" />
+		<property name="project.directory.pub" value="pub" />
+
 		<!-- Ensure we can reach the Agavi directory. -->
 		<available property="agavi.available" file="${agavi.directory.src}/agavi.php" type="file" />
 		<fail unless="agavi.available" message="Agavi installation not found in ${agavi.directory}" />
 
 		<!-- Agavi was found; load Agavi-specific tasks. -->
+		<taskdef name="agavi.initialize" classname="AgaviInitializeTask" classpath="tasks" />
+		
+		<!-- Initialize the Agavi build environment. -->
+		<agavi.initialize />
+
+		<!-- Load the remaining Agavi-specific tasks. -->
+		<taskdef name="agavi.locate-project" classname="AgaviLocateprojectTask" classpath="tasks" />
+		<taskdef name="agavi.check-project" classname="AgaviCheckprojectTask" classpath="tasks" />
+		<!--<taskdef name="agavi.locate-module" classname="AgaviLocatemoduleTask" classpath="tasks" />
+		<taskdef name="agavi.check-module" classname="AgaviCheckmoduleTask" classpath="tasks" />-->
 		<taskdef name="agavi.read-configuration" classname="AgaviReadconfigurationTask" classpath="tasks" />
 
 		<!-- Load some basic configuration values. -->
@@ -117,37 +109,79 @@
 		<agavi.input property="project.directory" message="Project base directory" default="${application.startdir}" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
 		<agavi.transform-path property="project.directory" base="${application.startdir}" path="${project.directory}" />
 
-		<agavi.validate-project property="project.available" path="${project.directory}" />
+		<agavi.check-project property="project.available" path="${project.directory}" />
 		<fail unless="project.available" message="Agavi project not found in ${project.directory}" />
 		
 		<!-- Load project-specific build configuration. -->
 		<property name="project.file.build-properties" value="${project.directory}/build.properties" />
 		<property file="${project.file.build-properties}" />
+
+		<!-- Define the remaining properties. -->
+		<property name="module.directory.actions" value="actions" />
+		<property name="module.directory.cache" value="cache" />
+		<property name="module.directory.config" value="config" />
+		<property name="module.directory.lib" value="lib" />
+		<property name="module.directory.models" value="models" />
+		<property name="module.directory.templates" value="templates" />
+		<property name="module.directory.validate" value="validate" />
+		<property name="module.directory.views" value="views" />
+
+		<!-- Define template properties. -->
+		<property name="templates.directory" value="${agavi.directory.build.templates}" />
+		<property name="templates.directory.app" value="${templates.directory}/app" />
+		<property name="templates.directory.app.config" value="${templates.directory.app}/config" />
+		<property name="templates.directory.app.modules" value="${templates.directory.app}/modules" />
+		<property name="templates.directory.app.modules.actions" value="${templates.directory.app.modules}/actions" />
+		<property name="templates.directory.app.modules.views" value="${templates.directory.app.modules}/views" />
+		<property name="templates.directory.app.modules.templates" value="${templates.directory.app.modules}/templates" />
+		<property name="templates.directory.app.modules.config" value="${templates.directory.app.modules}/config" />
+		<property name="templates.directory.app.modules.models" value="${templates.directory.app.modules}/models" />
+		<property name="templates.directory.app.lib" value="${templates.directory.app}/lib" />
+		<property name="templates.directory.app.lib.action" value="${templates.directory.app.lib}/action" />
+		<property name="templates.directory.app.lib.view" value="${templates.directory.app.lib}/view" />
+		<property name="templates.directory.app.lib.model" value="${templates.directory.app.lib}/model" />
+
+		<!-- Define version control properties. -->
+		<property name="versioning" value="filesystem" />
 	</target>
 
 	<target name="locate-module" depends="initialize,locate-project">
+		<agavi.locate-module property="module.name" path="${application.startdir}" ignoreIfSet="true" />
+		<agavi.input property="module.name" message="Module name" default="${application.startdir}" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
+		<property name="module.directory" value="${project.directory.app.modules}/${module.name}" />
+		<agavi.transform-path property="module.directory" base="${project.directory}" path="${module.directory}" />
+
+		<agavi.check-module property="module.available" path="${module.directory}" />
+		<fail unless="module.available" message="Agavi module not found in ${module.directory}" />
+		
+		<!-- Load module-specific build configuration. -->
+		<property name="module.file.build-properties" value="${module.directory}/build.properties" />
+		<property file="${module.file.build-properties}" />
 	</target>
 
 	<target name="status" depends="initialize" description="Displays information about the current environment">
-		<!-- Phing status -->
+		<!-- Print PHP status. -->
 		<echo message="PHP:" />
 		<echo message="  Version: ${php.version}" />
 		<echo message="  Include path: ${php.classpath}" />
 		<echo message="" />
 
+		<!-- Print Phing status. -->
 		<echo message="Phing:" />
 		<echo message="  Version: ${phing.version}" />
 		<echo message="" />
 
+		<!-- Print Agavi status. -->
 		<echo message="Agavi:" />
 		<echo message="  Installation directory: ${agavi.directory}" />
 		<echo message="  Version: ${agavi.version}" />
 		<echo message="  URL: ${agavi.url}" />
 		<echo message="" />
 
+		<!-- Print project status. -->
 		<echo message="Project:" />
 		<agavi.locate-project property="project.directory" path="${application.startdir}" ignoreIfSet="true" quiet="true" />
-		<agavi.validate-project property="project.available" path="${project.directory}" />
+		<agavi.check-project property="project.available" path="${project.directory}" />
 		<if>
 			<isset property="project.available" />
 			<then>
@@ -162,7 +196,7 @@
 		<echo message="For a list of possible build targets, call this script with the -l argument." />
 	</target>
 
-	<target name="project" depends="initialize" description="Creates a project">
+	<target name="project-create" depends="initialize" description="Creates a project">
 		<agavi.input property="project.directory" message="Project base directory" default="${application.startdir}" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
 		<agavi.transform-path property="project.directory" base="${application.startdir}" path="${project.directory}" />
 
@@ -177,6 +211,9 @@
 		<mkdir dir="${project.directory}/${project.directory.pub}" />
 
 		<chmod file="${project.directory}/${project.directory.app.cache}" mode="0777" />
+
+		<!-- Create the project identifier file. -->
+		<touch file="${project.directory}/.agavi-project" />
 
 		<!-- Create base action. -->
 		<!--

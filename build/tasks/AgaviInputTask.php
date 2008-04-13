@@ -16,6 +16,8 @@
 require_once(dirname(__FILE__) . '/AgaviTask.php');
 
 /**
+ * Requests an input value from the user.
+ *
  * @package    agavi
  * @subpackage build
  *
