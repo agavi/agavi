@@ -61,18 +61,15 @@ class AgaviTransformstringtoidentifierTask extends AgaviTask
 	 */
 	public function main()
 	{
-		if($this->property === null)
-		{
+		if($this->property === null) {
 			throw new BuildException('The property attribute must be specified');
 		}
-		if($this->string === null || strlen($this->string) === 0)
-		{
+		if($this->string === null || strlen($this->string) === 0) {
 			throw new BuildException('The string attribute must be specified and must be non-empty');
 		}
 		
 		$identifier = str_replace(' ', '', preg_replace('#[^A-Za-z0-9\7F-\FF_ ]#', '_', $this->string));
-		if(ctype_digit($identifier[0]))
-		{
+		if(ctype_digit($identifier[0])) {
 			$identifier = '_' . $identifier;
 		}
 		

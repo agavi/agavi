@@ -115,26 +115,19 @@ class AgaviInputTask extends AgaviTask
 	 */
 	public function main()
 	{
-		if($this->property === null)
-		{
+		if($this->property === null) {
 			throw new BuildException('The property attribute must be specified');
 		}
-		if($this->message === '')
-		{
+		if($this->message === '') {
 			throw new BuildException('The message attribute must be specified or the element must contain a message');
 		}
 		
-		if($this->ignoreIfSet && $this->project->getProperty($this->property) !== null)
-		{
-			if($this->failIfEmpty)
-			{
-				if($this->project->getProperty($this->property) != '')
-				{
+		if($this->ignoreIfSet && $this->project->getProperty($this->property) !== null) {
+			if($this->failIfEmpty) {
+				if($this->project->getProperty($this->property) != '') {
 					return;
 				}
-			}
-			else
-			{
+			} else {
 				return;
 			}
 		}
@@ -143,8 +136,7 @@ class AgaviInputTask extends AgaviTask
 		$request->setDefaultValue($this->project->getProperty($this->property));
 		$request->setPromptChar($this->promptCharacter);
 		
-		if ($this->default !== null)
-		{
+		if($this->default !== null) {
 			$request->setDefaultValue($this->default);
 		}
 		
@@ -152,8 +144,7 @@ class AgaviInputTask extends AgaviTask
 		
 		$result = $request->getInput();
 		
-		if($this->failIfEmpty && $result == '')
-		{
+		if($this->failIfEmpty && $result == '') {
 			throw new BuildException('Input value cannot be empty');
 		}
 		

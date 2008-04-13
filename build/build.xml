@@ -203,18 +203,6 @@
 		<agavi.check-project property="project.available" path="${project.directory}" />
 		<fail if="project.available" message="Agavi project already exists in ${project.directory}" />
 
-		<!-- Create directory structure. -->
-		<mkdir dir="${project.directory}" />
-		<mkdir dir="${project.directory}/${project.directory.app}" />
-		<mkdir dir="${project.directory}/${project.directory.app.config}" />
-		<mkdir dir="${project.directory}/${project.directory.app.modules}" />
-		<mkdir dir="${project.directory}/${project.directory.app.cache}" />
-		<mkdir dir="${project.directory}/${project.directory.app.lib}" />
-		<mkdir dir="${project.directory}/${project.directory.app.templates}" />
-		<mkdir dir="${project.directory}/${project.directory.pub}" />
-
-		<chmod file="${project.directory}/${project.directory.app.cache}" mode="0777" />
-
 		<!-- Determine project prefix. -->
 		<agavi.input property="project.prefix" message="Project prefix (used, for example, in the project base action)" default="Project" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
 		<agavi.transform-string-to-identifier property="project.prefix.transformed" string="${project.prefix}" />
@@ -253,9 +241,31 @@
 		<property name="templates.directory.app.lib.view" value="${templates.directory.app.lib}/view" />
 		<property name="templates.directory.app.lib.model" value="${templates.directory.app.lib}/model" />
 
+		<!-- Create directory structure. -->
+		<mkdir dir="${project.directory}" />
+		<mkdir dir="${project.directory}/${project.directory.app}" />
+		<mkdir dir="${project.directory}/${project.directory.app.config}" />
+		<mkdir dir="${project.directory}/${project.directory.app.modules}" />
+		<mkdir dir="${project.directory}/${project.directory.app.cache}" />
+		<mkdir dir="${project.directory}/${project.directory.app.lib}" />
+		<mkdir dir="${project.directory}/${project.directory.app.templates}" />
+		<mkdir dir="${project.directory}/${project.directory.pub}" />
+
+		<chmod file="${project.directory}/${project.directory.app.cache}" mode="0777" />
+
+		<!-- Create config.php. -->
+		<copy file="${templates.directory.app}/config.php.tmpl" tofile="${project.directory}/${project.directory.app}/config.php">
+			<filterchain>
+				<replacetokens begintoken="%%" endtoken="%%">
+					<token key="PREFIX" value="${project.prefix}" />
+					<token key="AGAVI_LOCATION" value="${agavi.directory}" />
+					<token key="PROJECT_LOCATION" value="${project.directory}" />
+				</replacetokens>
+			</filterchain>
+		</copy>
+
 		<!-- Create base action. -->
 		<mkdir dir="${project.directory}/${project.directory.app.lib}/action" />
-		<echo message="${templates.directory}" />
 		<copy file="${templates.directory.app.lib.action}/BaseAction.class.php.tmpl" tofile="${project.directory}/${project.directory.app.lib}/action/${project.prefix}BaseAction.class.php">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">
@@ -278,8 +288,23 @@
 			</filterchain>
 		</copy>
 
+		<!-- Copy configuration. -->
+		<copy todir="${project.directory}/${project.directory.app.config}">
+			<mapper type="glob" from="*.xml.tmpl" to="*.xml" />
+			<fileset dir="${templates.directory.app.config}">
+				<include name="**/*.xml.tmpl" />
+			</fileset>
+			<filterchain>
+				<replacetokens begintoken="%%" endtoken="%%">
+					<token key="PREFIX" value="${project.prefix}" />
+					<token key="AGAVI_LOCATION" value="${agavi.directory}" />
+					<token key="PROJECT_LOCATION" value="${project.directory}" />
+				</replacetokens>
+			</filterchain>
+		</copy>
+
 		<!-- Create base model. -->
-		<mkdir dir="${projects.directory}/${project.directory.app.lib}/model" />
+		<mkdir dir="${project.directory}/${project.directory.app.lib}/model" />
 		<copy file="${templates.directory.app.lib.model}/BaseModel.class.php.tmpl" tofile="${project.directory}/${project.directory.app.lib}/model/${project.prefix}BaseModel.class.php">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">

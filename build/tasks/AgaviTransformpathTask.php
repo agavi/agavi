@@ -72,24 +72,17 @@ class AgaviTransformpathTask extends AgaviTask
 	 */
 	public function main()
 	{
-		if($this->property === null)
-		{
+		if($this->property === null) {
 			throw new BuildException('The property attribute must be specified');
 		}
-		if($this->path === null)
-		{
+		if($this->path === null) {
 			throw new BuildException('The path attribute must be specified');
 		}
-		if(!$this->path->isAbsolute())
-		{
-			if($this->base === null)
-			{
+		if(!$this->path->isAbsolute()) {
+			if($this->base === null) {
 				$this->path = new PhingFile($this->project->getProperty('project.basedir'), $this->path->getPath());
-			}
-			else
-			{
-				if($this->base->isFile())
-				{
+			} else {
+				if($this->base->isFile()) {
 					throw new BuildException('Cannot use base directory ' . $this->base->getAbsolutePath() . ' because a file exists with the same name');
 				}
 				$this->path = new PhingFile($this->base, $this->path->getPath());

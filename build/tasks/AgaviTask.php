@@ -48,8 +48,7 @@ abstract class AgaviTask extends Task {
 	 */
 	public function log($message, $level = Project::MSG_INFO)
 	{
-		if($this->quiet === false)
-		{
+		if($this->quiet === false) {
 			parent::log($message, $level);
 		}
 	}

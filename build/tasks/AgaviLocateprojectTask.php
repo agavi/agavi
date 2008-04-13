@@ -70,27 +70,22 @@ class AgaviLocateprojectTask extends AgaviTask
 	 */
 	public function main()
 	{
-		if($this->property === null)
-		{
+		if($this->property === null) {
 			throw new BuildException('The property attribute must be specified');
 		}
-		if($this->path === null)
-		{
+		if($this->path === null) {
 			throw new BuildException('The path attribute must be specified');
 		}
 		
-		if($this->ignoreIfSet && $this->project->getProperty($this->property) !== null)
-		{
+		if($this->ignoreIfSet && $this->project->getProperty($this->property) !== null) {
 			return;
 		}
 		
-		if(!$this->path->exists())
-		{
+		if(!$this->path->exists()) {
 			throw new BuildException('The path ' . $this->path->getAbsolutePath() . ' does not exist');
 		}
 		$this->path = $this->path->getAbsoluteFile();
-		if(!$this->path->isDirectory())
-		{
+		if(!$this->path->isDirectory()) {
 			$this->path = $this->path->getParentFile();
 		}
 		
@@ -100,34 +95,32 @@ class AgaviLocateprojectTask extends AgaviTask
 		$check->setPubDirectory($this->project->getProperty('project.directory.pub'));
 		
 		$check->setPath($this->path->getAbsolutePath());
-		if($check->check())
-		{
+		if($check->check()) {
 			/* The current path is the project directory. */
 			$this->log('Project base directory: ' . $this->path->getPath());
 			$this->project->setUserProperty($this->property, $this->path);
+			return;
 		}
 		
 		/* Check if "app" or "pub" are in the current path. */
-		if(preg_match(sprintf('#^(.+?)/(?:%s|%s)(?:/|$)#', $this->project->getProperty('project.directory.app'), $this->project->getProperty('project.directory.pub')), $this->path->getPath(), $matches))
-		{
+		if(preg_match(sprintf('#^(.+?)/(?:%s|%s)(?:/|$)#', $this->project->getProperty('project.directory.app'), $this->project->getProperty('project.directory.pub')), $this->path->getPath(), $matches)) {
 			$directory = new PhingFile($matches[1]);
 			$check->setPath($directory->getAbsolutePath());
-			if($check->check())
-			{
+			if($check->check()) {
 				$this->log('Project base directory: ' . $directory);
 				$this->project->setUserProperty($this->property, $directory);
+				return;
 			}
 		}
 		
 		/* Last chance: recurse upward and check for a project directory. */
 		$directory = $this->path;
-		while(($directory = $directory->getParentFile()) !== null)
-		{
+		while(($directory = $directory->getParentFile()) !== null) {
 			$check->setPath($directory->getAbsolutePath());
-			if($check->check())
-			{
+			if($check->check()) {
 				$this->log('Project base directory: ' . $directory);
 				$this->project->setUserProperty($this->property, $directory);
+				return;
 			}
 		}
 	}

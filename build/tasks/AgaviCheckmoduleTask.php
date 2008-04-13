@@ -67,12 +67,10 @@ class AgaviCheckmoduleTask extends AgaviTask
 
 	public function main()
 	{
-		if($this->property === null)
-		{
+		if($this->property === null) {
 			throw new BuildException('The property attribute must be specified');
 		}
-		if($this->path === null)
-		{
+		if($this->path === null) {
 			throw new BuildException('The path attribute must be specified');
 		}
 		
@@ -83,8 +81,7 @@ class AgaviCheckmoduleTask extends AgaviTask
 		$check->setConfigDirectory($this->project->getProperty('module.directory.config'));
 		
 		$check->setPath($this->path->getAbsolutePath());
-		if($check->check())
-		{
+		if($check->check()) {
 			$this->project->setUserProperty($this->property, $this->value);
 		}
 	}

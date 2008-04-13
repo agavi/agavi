@@ -89,12 +89,9 @@ class AgaviProjectFilesystemCheck extends AgaviFilesystemCheck
 	public function check()
 	{
 		$path = $this->getPath();
-		if(is_dir($path))
-		{
-			if(is_dir($path . '/' . $this->appDirectory) && is_dir($path . '/' . $this->pubDirectory))
-			{
-				if(file_exists($path . '/' . $this->appDirectory . '/config.php'))
-				{
+		if(is_dir($path)) {
+			if(is_dir($path . '/' . $this->appDirectory) && is_dir($path . '/' . $this->pubDirectory)) {
+				if(file_exists($path . '/' . $this->appDirectory . '/config.php')) {
 					return true;
 				}
 			}

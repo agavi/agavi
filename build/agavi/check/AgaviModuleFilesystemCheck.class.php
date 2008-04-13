@@ -142,15 +142,12 @@ class AgaviModuleFilesystemCheck extends AgaviFilesystemCheck
 	public function check()
 	{
 		$path = $this->getPath();
-		if(is_dir($path))
-		{
+		if(is_dir($path)) {
 			if(is_dir($path . '/' . $this->actionsDirectory) &&
 				is_dir($path . '/' . $this->viewsDirectory) &&
 				is_dir($path . '/' . $this->templatesDirectory) &&
-				is_dir($path . '/' . $this->configDirectory))
-			{
-				if(file_exists($path . '/' . $this->configDirectory . '/module.xml'))
-				{
+				is_dir($path . '/' . $this->configDirectory)) {
+				if(file_exists($path . '/' . $this->configDirectory . '/module.xml')) {
 					return true;
 				}
 			}
