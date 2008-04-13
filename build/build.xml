@@ -21,7 +21,7 @@
 	<!-- Load tasks relative to the build system. -->
 	<taskdef name="agavi.input" classname="AgaviInputTask" classpath="tasks" />
 	<taskdef name="agavi.transform-path" classname="AgaviTransformpathTask" classpath="tasks" />
-	<!--<taskdef name="agavi.transform-string-to-identifier" classname="AgaviTransformstringtoidentifierTask" classpath="tasks" />-->
+	<taskdef name="agavi.transform-string-to-identifier" classname="AgaviTransformstringtoidentifierTask" classpath="tasks" />
 
 	<!-- Define targets. -->
 	<target name="initialize">
@@ -95,8 +95,8 @@
 		<!-- Load the remaining Agavi-specific tasks. -->
 		<taskdef name="agavi.locate-project" classname="AgaviLocateprojectTask" classpath="tasks" />
 		<taskdef name="agavi.check-project" classname="AgaviCheckprojectTask" classpath="tasks" />
-		<!--<taskdef name="agavi.locate-module" classname="AgaviLocatemoduleTask" classpath="tasks" />
-		<taskdef name="agavi.check-module" classname="AgaviCheckmoduleTask" classpath="tasks" />-->
+		<taskdef name="agavi.locate-module" classname="AgaviLocatemoduleTask" classpath="tasks" />
+		<taskdef name="agavi.check-module" classname="AgaviCheckmoduleTask" classpath="tasks" />
 		<taskdef name="agavi.read-configuration" classname="AgaviReadconfigurationTask" classpath="tasks" />
 
 		<!-- Load some basic configuration values. -->
@@ -116,7 +116,7 @@
 		<property name="project.file.build-properties" value="${project.directory}/build.properties" />
 		<property file="${project.file.build-properties}" />
 
-		<!-- Define the remaining properties. -->
+		<!-- Define module properties. -->
 		<property name="module.directory.actions" value="actions" />
 		<property name="module.directory.cache" value="cache" />
 		<property name="module.directory.config" value="config" />
@@ -200,6 +200,9 @@
 		<agavi.input property="project.directory" message="Project base directory" default="${application.startdir}" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
 		<agavi.transform-path property="project.directory" base="${application.startdir}" path="${project.directory}" />
 
+		<agavi.check-project property="project.available" path="${project.directory}" />
+		<fail if="project.available" message="Agavi project already exists in ${project.directory}" />
+
 		<!-- Create directory structure. -->
 		<mkdir dir="${project.directory}" />
 		<mkdir dir="${project.directory}/${project.directory.app}" />
@@ -212,22 +215,80 @@
 
 		<chmod file="${project.directory}/${project.directory.app.cache}" mode="0777" />
 
-		<!-- Create the project identifier file. -->
-		<touch file="${project.directory}/.agavi-project" />
+		<!-- Determine project prefix. -->
+		<agavi.input property="project.prefix" message="Project prefix (used, for example, in the project base action)" default="Project" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
+		<agavi.transform-string-to-identifier property="project.prefix.transformed" string="${project.prefix}" />
+		<if>
+			<not>
+				<equals arg1="${project.prefix}" arg2="${project.prefix.transformed}" />
+			</not>
+			<then>
+				<echo message="Prefix ${project.prefix} is not a valid identifier; ${project.prefix.transformed} will be used instead" level="warning" />
+			</then>
+		</if>
+		<property name="${project.prefix}" value="${project.prefix.transformed}" />
+
+		<!-- Define module properties. -->
+		<property name="module.directory.actions" value="actions" />
+		<property name="module.directory.cache" value="cache" />
+		<property name="module.directory.config" value="config" />
+		<property name="module.directory.lib" value="lib" />
+		<property name="module.directory.models" value="models" />
+		<property name="module.directory.templates" value="templates" />
+		<property name="module.directory.validate" value="validate" />
+		<property name="module.directory.views" value="views" />
+
+		<!-- Define template properties. -->
+		<property name="templates.directory" value="${agavi.directory.build.templates}" />
+		<property name="templates.directory.app" value="${templates.directory}/app" />
+		<property name="templates.directory.app.config" value="${templates.directory.app}/config" />
+		<property name="templates.directory.app.modules" value="${templates.directory.app}/modules" />
+		<property name="templates.directory.app.modules.actions" value="${templates.directory.app.modules}/actions" />
+		<property name="templates.directory.app.modules.views" value="${templates.directory.app.modules}/views" />
+		<property name="templates.directory.app.modules.templates" value="${templates.directory.app.modules}/templates" />
+		<property name="templates.directory.app.modules.config" value="${templates.directory.app.modules}/config" />
+		<property name="templates.directory.app.modules.models" value="${templates.directory.app.modules}/models" />
+		<property name="templates.directory.app.lib" value="${templates.directory.app}/lib" />
+		<property name="templates.directory.app.lib.action" value="${templates.directory.app.lib}/action" />
+		<property name="templates.directory.app.lib.view" value="${templates.directory.app.lib}/view" />
+		<property name="templates.directory.app.lib.model" value="${templates.directory.app.lib}/model" />
 
 		<!-- Create base action. -->
-		<!--
-		<agavi.input property="project.file.app.lib.action.base-action.name" message="Project base action name" default="ProjectBaseAction" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
-		<agavi.transform-string-to-identifier property="project.file.app.lib.action.base-action.name.transformed" string="${project.file.app.lib.action.base-action.name}" />
-		<echo message="${project.file.app.lib.action.base-action.name.transformed}" />
-		-->
+		<mkdir dir="${project.directory}/${project.directory.app.lib}/action" />
+		<echo message="${templates.directory}" />
+		<copy file="${templates.directory.app.lib.action}/BaseAction.class.php.tmpl" tofile="${project.directory}/${project.directory.app.lib}/action/${project.prefix}BaseAction.class.php">
+			<filterchain>
+				<replacetokens begintoken="%%" endtoken="%%">
+					<token key="PREFIX" value="${project.prefix}" />
+					<token key="AGAVI_LOCATION" value="${agavi.directory}" />
+					<token key="PROJECT_LOCATION" value="${project.directory}" />
+				</replacetokens>
+			</filterchain>
+		</copy>
 
 		<!-- Create base view. -->
-		<!--
-		<agavi.input property="project.file.app.lib.view.base-view.name" message="Project base view name" default="ProjectBaseView" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
-		<agavi.transform-string-to-identifier property="project.file.app.lib.view.base-view.name.transformed" string="${project.file.app.lib.view.base-view.name}" />
-		<echo message="${project.file.app.lib.view.base-view.name.transformed}" />
-		-->
+		<mkdir dir="${projects.directory}/${project.directory.app.lib}/view" />
+		<copy file="${templates.directory.app.lib.view}/BaseView.class.php.tmpl" tofile="${project.directory}/${project.directory.app.lib}/view/${project.prefix}BaseView.class.php">
+			<filterchain>
+				<replacetokens begintoken="%%" endtoken="%%">
+					<token key="PREFIX" value="${project.prefix}" />
+					<token key="AGAVI_LOCATION" value="${agavi.directory}" />
+					<token key="PROJECT_LOCATION" value="${project.directory}" />
+				</replacetokens>
+			</filterchain>
+		</copy>
+
+		<!-- Create base model. -->
+		<mkdir dir="${projects.directory}/${project.directory.app.lib}/model" />
+		<copy file="${templates.directory.app.lib.model}/BaseModel.class.php.tmpl" tofile="${project.directory}/${project.directory.app.lib}/model/${project.prefix}BaseModel.class.php">
+			<filterchain>
+				<replacetokens begintoken="%%" endtoken="%%">
+					<token key="PREFIX" value="${project.prefix}" />
+					<token key="AGAVI_LOCATION" value="${agavi.directory}" />
+					<token key="PROJECT_LOCATION" value="${project.directory}" />
+				</replacetokens>
+			</filterchain>
+		</copy>
 	</target>
 
 	<target name="module-create" depends="initialize,locate-project" description="Creates a module">

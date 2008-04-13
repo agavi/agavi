@@ -16,7 +16,9 @@
 require_once(dirname(__FILE__) . '/AgaviTask.php');
 
 /**
- * Initializes the Agavi build environment.
+ * Transforms a string into an identifier suitable for use in PHP. This class
+ * only makes a reasonable guess at a decent identifier, and so the real
+ * identifier name should generally be user-configurable.
  *
  * @package    agavi
  * @subpackage build
@@ -27,19 +29,54 @@ require_once(dirname(__FILE__) . '/AgaviTask.php');
  *
  * @since      1.0.0
  *
- * @version    $Id: AgaviInputTask.php 2319 2008-02-22 04:27:36Z impl $
+ * @version    $Id$
  */
-class AgaviInitializeTask extends AgaviTask
+class AgaviTransformstringtoidentifierTask extends AgaviTask
 {
+	protected $property = null;
+	protected $string = null;
+	
 	/**
-	 * Executes this task.
+	 * Sets the property that this task will modify.
+	 *
+	 * @param      string The property to modify.
+	 */
+	public function setProperty($property)
+	{
+		$this->property = $property;
+	}
+	
+	/**
+	 * Sets the string to transform.
+	 *
+	 * @param      string The string to transform.
+	 */
+	public function setString($string)
+	{
+		$this->string = $string;
+	}
+	
+	/**
+	 * Executes the task.
 	 */
 	public function main()
 	{
-		$build = new PhingFile('agavi/build.php');
-		require_once($build->getAbsolutePath());
+		if($this->property === null)
+		{
+			throw new BuildException('The property attribute must be specified');
+		}
+		if($this->string === null || strlen($this->string) === 0)
+		{
+			throw new BuildException('The string attribute must be specified and must be non-empty');
+		}
 		
-		AgaviBuild::bootstrap();
+		$identifier = str_replace(' ', '', preg_replace('#[^A-Za-z0-9\7F-\FF_ ]#', '_', $this->string));
+		if(ctype_digit($identifier[0]))
+		{
+			$identifier = '_' . $identifier;
+		}
+		
+		$this->project->setUserProperty($this->property, $identifier);
 	}
 }
 

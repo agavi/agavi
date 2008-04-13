@@ -16,7 +16,7 @@
 require_once(dirname(__FILE__) . '/AgaviTask.php');
 
 /**
- * Locates the base project directory given a directory within it.
+ * Locates a module directory given a project and a module name.
  *
  * @package    agavi
  * @subpackage build
@@ -29,7 +29,7 @@ require_once(dirname(__FILE__) . '/AgaviTask.php');
  *
  * @version    $Id$
  */
-class AgaviLocateprojectTask extends AgaviTask
+class AgaviLocatemoduleTask extends AgaviTask
 {
 	protected $property = null;
 	protected $path = null;
@@ -95,9 +95,11 @@ class AgaviLocateprojectTask extends AgaviTask
 		}
 		
 		/* Check if the current directory is a project directory. */
-		$check = new AgaviProjectFilesystemCheck();
-		$check->setAppDirectory($this->project->getProperty('project.directory.app'));
-		$check->setPubDirectory($this->project->getProperty('project.directory.pub'));
+		$check = new AgaviProjectModuleCheck();
+		$check->setActionsDirectory($this->project->getProperty('module.directory.actions'));
+		$check->setViewsDirectory($this->project->getProperty('module.directory.views'));
+		$check->setTemplatesDirectory($this->project->getProperty('module.directory.templates'));
+		$check->setConfigDirectory($this->project->getProperty('module.directory.config'));
 		
 		$check->setPath($this->path->getAbsolutePath());
 		if($check->check())
@@ -107,11 +109,11 @@ class AgaviLocateprojectTask extends AgaviTask
 			$this->project->setUserProperty($this->property, $this->path);
 		}
 		
-		/* Check if "app" or "pub" are in the current path. */
-		if(preg_match(sprintf('#^(.+?)/(?:%s|%s)(?:/|$)#', $this->project->getProperty('project.directory.app'), $this->project->getProperty('project.directory.pub')), $this->path->getPath(), $matches))
+		/* Check if "actions", "views", "templates", or "config" are in the current path. */
+		if(preg_match(sprintf('#^(.+?)/(?:%s|%s|%s|%s)(?:/|$)#', $this->project->getProperty('module.directory.actions'), $this->project->getProperty('module.directory.views'), $this->project->getProperty('module.directory.templates'), $this->project->getProperty('module.directory.config')), $this->path->getPath(), $matches))
 		{
 			$directory = new PhingFile($matches[1]);
-			$check->setPath($directory->getAbsolutePath());
+			$check->setPath($directory->getParentFile()->getAbsolutePath());
 			if($check->check())
 			{
 				$this->log('Project base directory: ' . $directory);
