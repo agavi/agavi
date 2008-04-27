@@ -29,6 +29,8 @@
 		<taskdef name="agavi.input" classname="AgaviInputTask" classpath="tasks" />
 		<taskdef name="agavi.transform-path" classname="AgaviTransformpathTask" classpath="tasks" />
 		<taskdef name="agavi.transform-string-to-identifier" classname="AgaviTransformstringtoidentifierTask" classpath="tasks" />
+		<taskdef name="agavi.base-name" classname="AgaviBasenameTask" classpath="tasks" />
+		<taskdef name="agavi.directory-name" classname="AgaviDirectorynameTask" classpath="tasks" />
 
 		<!-- Load user-defined build configuration. -->
 		<if>
@@ -142,6 +144,38 @@
 		<echo message="" />
 
 		<echo message="For a list of possible build targets, call this script with the -l argument." />
+	</target>
+
+	<!--
+	  Build targets.
+	  -->
+
+	<target name="build-template-copy" depends="initialize" description="Copies a build template to another location">
+		<agavi.input property="template.file" message="Template file to copy (relative to build templates directory)" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
+		<available property="template.available" file="templates/${template.file}" type="file" />
+		<fail unless="template.available" message="Template file not found in build templates directory" />
+		
+		<agavi.transform-path property="copy.file.suggest" base="${application.startdir}" path="${template.file}" />
+
+		<agavi.input property="copy.file" message="Output file" default="${copy.file.suggest}" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
+		<agavi.transform-path property="copy.file" base="${application.startdir}" path="${copy.file}" />
+		
+		<agavi.directory-name property="copy.directory" path="${copy.file}" />
+		<mkdir dir="${copy.directory}" />
+
+		<copy file="templates/${template.file}" tofile="${copy.file}" />
+	</target>
+	
+	<target name="build-template-copy-all" depends="initialize" description="Copies the build template heirarchy to a new location">
+		<agavi.input property="copy.directory" message="Output directory" default="${application.startdir}" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
+		<agavi.transform-path property="copy.directory" base="${application.startdir}" path="${copy.directory}" />
+
+		<mkdir dir="${copy.directory}" />
+		<copy todir="${copy.directory}">
+			<fileset dir="templates">
+				<include name="**/*" />
+			</fileset>
+		</copy>
 	</target>
 
 	<!--
@@ -304,20 +338,6 @@
 					<token key="PREFIX" value="${project.prefix}" />
 					<token key="AGAVI_LOCATION" value="${agavi.directory}" />
 					<token key="PROJECT_LOCATION" value="${project.directory}" />
-
-					<!-- The following tokens are replaced at a later point. -->
-					<token key="DEFAULT_MODULE" value="%%DEFAULT_MODULE%%" />
-					<token key="DEFAULT_ACTION" value="%%DEFAULT_ACTION%%" />
-					<token key="404_MODULE" value="%%404_MODULE%%" />
-					<token key="404_ACTION" value="%%404_ACTION%%" />
-					<token key="UNAVAILABLE_MODULE" value="%%UNAVAILABLE_MODULE%%" />
-					<token key="UNAVAILABLE_ACTION" value="%%UNAVAILABLE_ACTION%%" />
-					<token key="DISABLED_MODULE" value="%%DISABLED_MODULE%%" />
-					<token key="DISABLED_ACTION" value="%%DISABLED_ACTION%%" />
-					<token key="SECURE_MODULE" value="%%SECURE_MODULE%%" />
-					<token key="SECURE_ACTION" value="%%SECURE_ACTION%%" />
-					<token key="LOGIN_MODULE" value="%%LOGIN_MODULE%%" />
-					<token key="LOGIN_ACTION" value="%%LOGIN_ACTION%%" />
 				</replacetokens>
 			</filterchain>
 		</copy>

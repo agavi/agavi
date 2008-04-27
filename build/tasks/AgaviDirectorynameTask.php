@@ -16,7 +16,7 @@
 require_once(dirname(__FILE__) . '/AgaviTask.php');
 
 /**
- * Validates that a given directory is the base directory for a project.
+ * Retrieves the directory name for a given path.
  *
  * @package    agavi
  * @subpackage build
@@ -29,15 +29,14 @@ require_once(dirname(__FILE__) . '/AgaviTask.php');
  *
  * @version    $Id$
  */
-class AgaviCheckprojectTask extends AgaviTask
+class AgaviDirectorynameTask extends AgaviTask
 {
 	protected $property = null;
 	protected $path = null;
-	protected $value = true;
 	
 	/**
 	 * Sets the property that this task will modify.
-	 *
+	 * 
 	 * @param      string The property to modify.
 	 */
 	public function setProperty($property)
@@ -46,7 +45,7 @@ class AgaviCheckprojectTask extends AgaviTask
 	}
 	
 	/**
-	 * Sets the path to use to validate the project.
+	 * Sets the path to access for its directory name.
 	 *
 	 * @param      string The path to use.
 	 */
@@ -55,17 +54,6 @@ class AgaviCheckprojectTask extends AgaviTask
 		$this->path = $path;
 	}
 	
-	/**
-	 * Sets the value that the property will contain if the project is
-	 * valid.
-	 *
-	 * @param      string The value to which the property will be set.
-	 */
-	public function setValue($value)
-	{
-		$this->value = $value;
-	}
-
 	/**
 	 * Executes this target.
 	 */
@@ -78,14 +66,7 @@ class AgaviCheckprojectTask extends AgaviTask
 			throw new BuildException('The path attribute must be specified');
 		}
 		
-		$check = new AgaviProjectFilesystemCheck();
-		$check->setAppDirectory($this->project->getProperty('project.directory.app'));
-		$check->setPubDirectory($this->project->getProperty('project.directory.pub'));
-		
-		$check->setPath($this->path->getAbsolutePath());
-		if($check->check()) {
-			$this->project->setUserProperty($this->property, $this->value);
-		}
+		$this->project->setUserProperty($this->property, dirname($this->path));
 	}
 }
 

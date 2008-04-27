@@ -65,6 +65,9 @@ class AgaviCheckmoduleTask extends AgaviTask
 		$this->value = $value;
 	}
 
+	/**
+	 * Executes this target.
+	 */
 	public function main()
 	{
 		if($this->property === null) {
