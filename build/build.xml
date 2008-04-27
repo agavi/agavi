@@ -214,6 +214,7 @@
 		<property name="templates.directory.app.modules.templates" value="${templates.directory.app.modules}/templates" />
 		<property name="templates.directory.app.modules.config" value="${templates.directory.app.modules}/config" />
 		<property name="templates.directory.app.modules.models" value="${templates.directory.app.modules}/models" />
+		<property name="templates.directory.app.modules.lib" value="${templates.directory.app.modules}/lib" />
 		<property name="templates.directory.app.lib" value="${templates.directory.app}/lib" />
 		<property name="templates.directory.app.lib.action" value="${templates.directory.app.lib}/action" />
 		<property name="templates.directory.app.lib.view" value="${templates.directory.app.lib}/view" />
@@ -221,6 +222,19 @@
 
 		<!-- Define version control properties. -->
 		<property name="versioning" value="filesystem" />
+
+		<!-- Ensure we have a working project prefix. -->
+		<agavi.input property="project.prefix" message="Project prefix" default="Project" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
+		<property name="project.prefix.input" value="${project.prefix}" override="true" />
+		<agavi.transform-string-to-identifier property="project.prefix" string="${project.prefix}" />
+		<if>
+			<not>
+				<equals arg1="${project.prefix}" arg2="${project.prefix.input}" />
+			</not>
+			<then>
+				<echo message="Prefix ${project.prefix.input} is not a valid identifier; ${project.prefix} will be used instead" level="warning" />
+			</then>
+		</if>
 	</target>
 
 	<target name="project-create" depends="initialize" description="Creates a project">
@@ -232,16 +246,16 @@
 
 		<!-- Determine project prefix. -->
 		<agavi.input property="project.prefix" message="Project prefix (used, for example, in the project base action)" default="Project" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
-		<agavi.transform-string-to-identifier property="project.prefix.transformed" string="${project.prefix}" />
+		<property name="project.prefix.input" value="${project.prefix}" override="true" />
+		<agavi.transform-string-to-identifier property="project.prefix" string="${project.prefix}" />
 		<if>
 			<not>
-				<equals arg1="${project.prefix}" arg2="${project.prefix.transformed}" />
+				<equals arg1="${project.prefix}" arg2="${project.prefix.input}" />
 			</not>
 			<then>
-				<echo message="Prefix ${project.prefix} is not a valid identifier; ${project.prefix.transformed} will be used instead" level="warning" />
+				<echo message="Prefix ${project.prefix.input} is not a valid identifier; ${project.prefix} will be used instead" level="warning" />
 			</then>
 		</if>
-		<property name="${project.prefix}" value="${project.prefix.transformed}" />
 
 		<!-- Define module properties. -->
 		<property name="module.directory.actions" value="actions" />
@@ -263,6 +277,7 @@
 		<property name="templates.directory.app.modules.templates" value="${templates.directory.app.modules}/templates" />
 		<property name="templates.directory.app.modules.config" value="${templates.directory.app.modules}/config" />
 		<property name="templates.directory.app.modules.models" value="${templates.directory.app.modules}/models" />
+		<property name="templates.directory.app.modules.lib" value="${templates.directory.app.modules}/lib" />
 		<property name="templates.directory.app.lib" value="${templates.directory.app}/lib" />
 		<property name="templates.directory.app.lib.action" value="${templates.directory.app.lib}/action" />
 		<property name="templates.directory.app.lib.view" value="${templates.directory.app.lib}/view" />
@@ -291,33 +306,12 @@
 			</filterchain>
 		</copy>
 
-		<!-- Create base action. -->
-		<mkdir dir="${project.directory}/${project.directory.app.lib}/action" />
-		<copy file="${templates.directory.app.lib.action}/BaseAction.class.php.tmpl" tofile="${project.directory}/${project.directory.app.lib}/action/${project.prefix}BaseAction.class.php">
-			<filterchain>
-				<replacetokens begintoken="%%" endtoken="%%">
-					<token key="PREFIX" value="${project.prefix}" />
-					<token key="AGAVI_LOCATION" value="${agavi.directory}" />
-					<token key="PROJECT_LOCATION" value="${project.directory}" />
-				</replacetokens>
-			</filterchain>
-		</copy>
-
-		<!-- Create base view. -->
-		<mkdir dir="${project.directory}/${project.directory.app.lib}/view" />
-		<copy file="${templates.directory.app.lib.view}/BaseView.class.php.tmpl" tofile="${project.directory}/${project.directory.app.lib}/view/${project.prefix}BaseView.class.php">
-			<filterchain>
-				<replacetokens begintoken="%%" endtoken="%%">
-					<token key="PREFIX" value="${project.prefix}" />
-					<token key="AGAVI_LOCATION" value="${agavi.directory}" />
-					<token key="PROJECT_LOCATION" value="${project.directory}" />
-				</replacetokens>
-			</filterchain>
-		</copy>
-
-		<!-- Create base model. -->
-		<mkdir dir="${project.directory}/${project.directory.app.lib}/model" />
-		<copy file="${templates.directory.app.lib.model}/BaseModel.class.php.tmpl" tofile="${project.directory}/${project.directory.app.lib}/model/${project.prefix}BaseModel.class.php">
+		<!-- Create library. -->
+		<copy todir="${project.directory}/${project.directory.app.lib}">
+			<mapper type="regexp" from="^(.+\/)?(.+)\.tmpl$" to="\1/${project.prefix}\2" />
+			<fileset dir="${templates.directory.app.lib}">
+				<include name="**/*.tmpl" />
+			</fileset>
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">
 					<token key="PREFIX" value="${project.prefix}" />
@@ -341,6 +335,26 @@
 				</replacetokens>
 			</filterchain>
 		</copy>
+
+		<!-- Create build.properties. -->
+		<copy file="${templates.directory}/build.properties.tmpl" tofile="${project.directory}/build.properties">
+			<filterchain>
+				<replacetokens begintoken="%%" endtoken="%%">
+					<token key="PREFIX" value="${project.prefix}" />
+					<token key="AGAVI_LOCATION" value="${agavi.directory}" />
+					<token key="PROJECT_LOCATION" value="${project.directory}" />
+					<token key="TEMPLATES_LOCATION" value="${templates.directory}" />
+				</replacetokens>
+			</filterchain>
+		</copy>
+	</target>
+	
+	<target name="project-cache-remove" depends="initialize,project-locate" description="Removes the contents of a project's filesystem cache">
+		<delete failonerror="false" includeemptydirs="true">
+			<fileset dir="${project.directory}">
+				<include name="${project.directory.app.cache}/**/*" />
+			</fileset>
+		</delete>
 	</target>
 
 	<!--
@@ -349,7 +363,7 @@
 
 	<target name="module-locate" depends="initialize,project-locate">
 		<agavi.locate-module property="module.name" path="${application.startdir}" ignoreIfSet="true" />
-		<agavi.input property="module.name" message="Module name" default="${application.startdir}" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
+		<agavi.input property="module.name" message="Module name" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
 		<property name="module.directory" value="${project.directory.app.modules}/${module.name}" />
 		<agavi.transform-path property="module.directory" base="${project.directory}" path="${module.directory}" />
 
@@ -362,7 +376,18 @@
 	</target>
 
 	<target name="module-create" depends="initialize,project-locate" description="Creates a module">
+		<!-- Determine module name. -->
 		<agavi.input property="module.name" message="Module name" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
+		<property name="module.name.input" value="${module.name}" override="true" />
+		<agavi.transform-string-to-identifier property="module.name" string="${module.name}" />
+		<if>
+			<not>
+				<equals arg1="${module.name}" arg2="${module.name.input}" />
+			</not>
+			<then>
+				<echo message="Module name ${module.name.input} is not a valid identifier; ${module.name} will be used instead" level="warning" />
+			</then>
+		</if>
 
 		<property name="module.directory" value="${project.directory}/${project.directory.app.modules}/${module.name}" />
 
@@ -370,6 +395,7 @@
 		<fail if="module.available" message="Module ${module.name} already exists in ${module.directory}" />
 
 		<!-- Create directory structure. -->
+		<mkdir dir="${module.directory}" />
 		<mkdir dir="${module.directory}/${module.directory.actions}" />
 		<mkdir dir="${module.directory}/${module.directory.cache}" />
 		<mkdir dir="${module.directory}/${module.directory.config}" />
@@ -380,6 +406,22 @@
 		<mkdir dir="${module.directory}/${module.directory.views}" />
 
 		<chmod file="${module.directory}/${module.directory.cache}" mode="0777" />
+
+		<!-- Create library. -->
+		<copy todir="${module.directory}/${module.directory.lib}">
+			<mapper type="regexp" from="^(.+\/)?(.+)\.tmpl$" to="\1/${project.prefix}${module.name}\2" />
+			<fileset dir="${templates.directory.app.modules.lib}">
+				<include name="**/*.tmpl" />
+			</fileset>
+			<filterchain>
+				<replacetokens begintoken="%%" endtoken="%%">
+					<token key="PREFIX" value="${project.prefix}" />
+					<token key="AGAVI_LOCATION" value="${agavi.directory}" />
+					<token key="PROJECT_LOCATION" value="${project.directory}" />
+					<token key="MODULE_NAME" value="${module.name}" />
+				</replacetokens>
+			</filterchain>
+		</copy>
 
 		<!-- Copy configuration. -->
 		<copy todir="${module.directory}/${module.directory.config}">
@@ -402,6 +444,14 @@
 	</target>
 
 	<target name="module-remove" depends="initialize,project-locate" description="Removes a module">
+	</target>
+	
+	<target name="module-cache-remove" depends="initialize,project-locate,module-locate" description="Removes the contents of a module's filesystem cache">
+		<delete failonerror="false" includeemptydirs="true">
+			<fileset dir="${module.directory}">
+				<include name="${module.directory.cache}/**/*" />
+			</fileset>
+		</delete>
 	</target>
 
 	<!--
