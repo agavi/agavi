@@ -74,7 +74,7 @@ class AgaviCheckmoduleTask extends AgaviTask
 			throw new BuildException('The path attribute must be specified');
 		}
 		
-		$check = new AgaviProjectModuleCheck();
+		$check = new AgaviModuleFilesystemCheck();
 		$check->setActionsDirectory($this->project->getProperty('module.directory.actions'));
 		$check->setViewsDirectory($this->project->getProperty('module.directory.views'));
 		$check->setTemplatesDirectory($this->project->getProperty('module.directory.templates'));

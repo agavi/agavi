@@ -18,14 +18,17 @@
   -->
 <project name="Agavi" basedir="." default="status">
 
-	<!-- Load tasks relative to the build system. -->
-	<taskdef name="agavi.input" classname="AgaviInputTask" classpath="tasks" />
-	<taskdef name="agavi.transform-path" classname="AgaviTransformpathTask" classpath="tasks" />
-	<taskdef name="agavi.transform-string-to-identifier" classname="AgaviTransformstringtoidentifierTask" classpath="tasks" />
+	<!--
+	  General targets.
+	  -->
 
-	<!-- Define targets. -->
 	<target name="initialize">
 		<tstamp />
+
+		<!-- Load tasks relative to the build system. -->
+		<taskdef name="agavi.input" classname="AgaviInputTask" classpath="tasks" />
+		<taskdef name="agavi.transform-path" classname="AgaviTransformpathTask" classpath="tasks" />
+		<taskdef name="agavi.transform-string-to-identifier" classname="AgaviTransformstringtoidentifierTask" classpath="tasks" />
 
 		<!-- Load user-defined build configuration. -->
 		<if>
@@ -104,61 +107,6 @@
 		<agavi.read-configuration property="agavi.url" configurationValue="agavi.url" />
 	</target>
 
-	<target name="locate-project" depends="initialize">
-		<agavi.locate-project property="project.directory" path="${application.startdir}" ignoreIfSet="true" />
-		<agavi.input property="project.directory" message="Project base directory" default="${application.startdir}" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
-		<agavi.transform-path property="project.directory" base="${application.startdir}" path="${project.directory}" />
-
-		<agavi.check-project property="project.available" path="${project.directory}" />
-		<fail unless="project.available" message="Agavi project not found in ${project.directory}" />
-		
-		<!-- Load project-specific build configuration. -->
-		<property name="project.file.build-properties" value="${project.directory}/build.properties" />
-		<property file="${project.file.build-properties}" />
-
-		<!-- Define module properties. -->
-		<property name="module.directory.actions" value="actions" />
-		<property name="module.directory.cache" value="cache" />
-		<property name="module.directory.config" value="config" />
-		<property name="module.directory.lib" value="lib" />
-		<property name="module.directory.models" value="models" />
-		<property name="module.directory.templates" value="templates" />
-		<property name="module.directory.validate" value="validate" />
-		<property name="module.directory.views" value="views" />
-
-		<!-- Define template properties. -->
-		<property name="templates.directory" value="${agavi.directory.build.templates}" />
-		<property name="templates.directory.app" value="${templates.directory}/app" />
-		<property name="templates.directory.app.config" value="${templates.directory.app}/config" />
-		<property name="templates.directory.app.modules" value="${templates.directory.app}/modules" />
-		<property name="templates.directory.app.modules.actions" value="${templates.directory.app.modules}/actions" />
-		<property name="templates.directory.app.modules.views" value="${templates.directory.app.modules}/views" />
-		<property name="templates.directory.app.modules.templates" value="${templates.directory.app.modules}/templates" />
-		<property name="templates.directory.app.modules.config" value="${templates.directory.app.modules}/config" />
-		<property name="templates.directory.app.modules.models" value="${templates.directory.app.modules}/models" />
-		<property name="templates.directory.app.lib" value="${templates.directory.app}/lib" />
-		<property name="templates.directory.app.lib.action" value="${templates.directory.app.lib}/action" />
-		<property name="templates.directory.app.lib.view" value="${templates.directory.app.lib}/view" />
-		<property name="templates.directory.app.lib.model" value="${templates.directory.app.lib}/model" />
-
-		<!-- Define version control properties. -->
-		<property name="versioning" value="filesystem" />
-	</target>
-
-	<target name="locate-module" depends="initialize,locate-project">
-		<agavi.locate-module property="module.name" path="${application.startdir}" ignoreIfSet="true" />
-		<agavi.input property="module.name" message="Module name" default="${application.startdir}" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
-		<property name="module.directory" value="${project.directory.app.modules}/${module.name}" />
-		<agavi.transform-path property="module.directory" base="${project.directory}" path="${module.directory}" />
-
-		<agavi.check-module property="module.available" path="${module.directory}" />
-		<fail unless="module.available" message="Agavi module not found in ${module.directory}" />
-		
-		<!-- Load module-specific build configuration. -->
-		<property name="module.file.build-properties" value="${module.directory}/build.properties" />
-		<property file="${module.file.build-properties}" />
-	</target>
-
 	<target name="status" depends="initialize" description="Displays information about the current environment">
 		<!-- Print PHP status. -->
 		<echo message="PHP:" />
@@ -194,6 +142,51 @@
 		<echo message="" />
 
 		<echo message="For a list of possible build targets, call this script with the -l argument." />
+	</target>
+
+	<!--
+	  Project targets.
+	  -->
+
+	<target name="project-locate" depends="initialize">
+		<agavi.locate-project property="project.directory" path="${application.startdir}" ignoreIfSet="true" />
+		<agavi.input property="project.directory" message="Project base directory" default="${application.startdir}" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
+		<agavi.transform-path property="project.directory" base="${application.startdir}" path="${project.directory}" />
+
+		<agavi.check-project property="project.available" path="${project.directory}" />
+		<fail unless="project.available" message="Agavi project not found in ${project.directory}" />
+
+		<!-- Load project-specific build configuration. -->
+		<property name="project.file.build-properties" value="${project.directory}/build.properties" />
+		<property file="${project.file.build-properties}" />
+
+		<!-- Define module properties. -->
+		<property name="module.directory.actions" value="actions" />
+		<property name="module.directory.cache" value="cache" />
+		<property name="module.directory.config" value="config" />
+		<property name="module.directory.lib" value="lib" />
+		<property name="module.directory.models" value="models" />
+		<property name="module.directory.templates" value="templates" />
+		<property name="module.directory.validate" value="validate" />
+		<property name="module.directory.views" value="views" />
+
+		<!-- Define template properties. -->
+		<property name="templates.directory" value="${agavi.directory.build.templates}" />
+		<property name="templates.directory.app" value="${templates.directory}/app" />
+		<property name="templates.directory.app.config" value="${templates.directory.app}/config" />
+		<property name="templates.directory.app.modules" value="${templates.directory.app}/modules" />
+		<property name="templates.directory.app.modules.actions" value="${templates.directory.app.modules}/actions" />
+		<property name="templates.directory.app.modules.views" value="${templates.directory.app.modules}/views" />
+		<property name="templates.directory.app.modules.templates" value="${templates.directory.app.modules}/templates" />
+		<property name="templates.directory.app.modules.config" value="${templates.directory.app.modules}/config" />
+		<property name="templates.directory.app.modules.models" value="${templates.directory.app.modules}/models" />
+		<property name="templates.directory.app.lib" value="${templates.directory.app}/lib" />
+		<property name="templates.directory.app.lib.action" value="${templates.directory.app.lib}/action" />
+		<property name="templates.directory.app.lib.view" value="${templates.directory.app.lib}/view" />
+		<property name="templates.directory.app.lib.model" value="${templates.directory.app.lib}/model" />
+
+		<!-- Define version control properties. -->
+		<property name="versioning" value="filesystem" />
 	</target>
 
 	<target name="project-create" depends="initialize" description="Creates a project">
@@ -277,23 +270,8 @@
 		</copy>
 
 		<!-- Create base view. -->
-		<mkdir dir="${projects.directory}/${project.directory.app.lib}/view" />
+		<mkdir dir="${project.directory}/${project.directory.app.lib}/view" />
 		<copy file="${templates.directory.app.lib.view}/BaseView.class.php.tmpl" tofile="${project.directory}/${project.directory.app.lib}/view/${project.prefix}BaseView.class.php">
-			<filterchain>
-				<replacetokens begintoken="%%" endtoken="%%">
-					<token key="PREFIX" value="${project.prefix}" />
-					<token key="AGAVI_LOCATION" value="${agavi.directory}" />
-					<token key="PROJECT_LOCATION" value="${project.directory}" />
-				</replacetokens>
-			</filterchain>
-		</copy>
-
-		<!-- Copy configuration. -->
-		<copy todir="${project.directory}/${project.directory.app.config}">
-			<mapper type="glob" from="*.xml.tmpl" to="*.xml" />
-			<fileset dir="${templates.directory.app.config}">
-				<include name="**/*.xml.tmpl" />
-			</fileset>
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">
 					<token key="PREFIX" value="${project.prefix}" />
@@ -314,13 +292,64 @@
 				</replacetokens>
 			</filterchain>
 		</copy>
+
+		<!-- Copy configuration. -->
+		<copy todir="${project.directory}/${project.directory.app.config}">
+			<mapper type="glob" from="*.xml.tmpl" to="*.xml" />
+			<fileset dir="${templates.directory.app.config}">
+				<include name="**/*.xml.tmpl" />
+			</fileset>
+			<filterchain>
+				<replacetokens begintoken="%%" endtoken="%%">
+					<token key="PREFIX" value="${project.prefix}" />
+					<token key="AGAVI_LOCATION" value="${agavi.directory}" />
+					<token key="PROJECT_LOCATION" value="${project.directory}" />
+
+					<!-- The following tokens are replaced at a later point. -->
+					<token key="DEFAULT_MODULE" value="%%DEFAULT_MODULE%%" />
+					<token key="DEFAULT_ACTION" value="%%DEFAULT_ACTION%%" />
+					<token key="404_MODULE" value="%%404_MODULE%%" />
+					<token key="404_ACTION" value="%%404_ACTION%%" />
+					<token key="UNAVAILABLE_MODULE" value="%%UNAVAILABLE_MODULE%%" />
+					<token key="UNAVAILABLE_ACTION" value="%%UNAVAILABLE_ACTION%%" />
+					<token key="DISABLED_MODULE" value="%%DISABLED_MODULE%%" />
+					<token key="DISABLED_ACTION" value="%%DISABLED_ACTION%%" />
+					<token key="SECURE_MODULE" value="%%SECURE_MODULE%%" />
+					<token key="SECURE_ACTION" value="%%SECURE_ACTION%%" />
+					<token key="LOGIN_MODULE" value="%%LOGIN_MODULE%%" />
+					<token key="LOGIN_ACTION" value="%%LOGIN_ACTION%%" />
+				</replacetokens>
+			</filterchain>
+		</copy>
 	</target>
 
-	<target name="module-create" depends="initialize,locate-project" description="Creates a module">
+	<!--
+      Module targets.
+      -->
+
+	<target name="module-locate" depends="initialize,project-locate">
+		<agavi.locate-module property="module.name" path="${application.startdir}" ignoreIfSet="true" />
+		<agavi.input property="module.name" message="Module name" default="${application.startdir}" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
+		<property name="module.directory" value="${project.directory.app.modules}/${module.name}" />
+		<agavi.transform-path property="module.directory" base="${project.directory}" path="${module.directory}" />
+
+		<agavi.check-module property="module.available" path="${module.directory}" />
+		<fail unless="module.available" message="Agavi module not found in ${module.directory}" />
+		
+		<!-- Load module-specific build configuration. -->
+		<property name="module.file.build-properties" value="${module.directory}/build.properties" />
+		<property file="${module.file.build-properties}" />
+	</target>
+
+	<target name="module-create" depends="initialize,project-locate" description="Creates a module">
 		<agavi.input property="module.name" message="Module name" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
 
 		<property name="module.directory" value="${project.directory}/${project.directory.app.modules}/${module.name}" />
 
+		<agavi.check-module property="module.available" path="${module.directory}" />
+		<fail if="module.available" message="Module ${module.name} already exists in ${module.directory}" />
+
+		<!-- Create directory structure. -->
 		<mkdir dir="${module.directory}/${module.directory.actions}" />
 		<mkdir dir="${module.directory}/${module.directory.cache}" />
 		<mkdir dir="${module.directory}/${module.directory.config}" />
@@ -331,48 +360,80 @@
 		<mkdir dir="${module.directory}/${module.directory.views}" />
 
 		<chmod file="${module.directory}/${module.directory.cache}" mode="0777" />
+
+		<!-- Copy configuration. -->
+		<copy todir="${module.directory}/${module.directory.config}">
+			<mapper type="glob" from="*.xml.tmpl" to="*.xml" />
+			<fileset dir="${templates.directory.app.modules.config}">
+				<include name="**/*.xml.tmpl" />
+			</fileset>
+			<filterchain>
+				<replacetokens begintoken="%%" endtoken="%%">
+					<token key="PREFIX" value="${project.prefix}" />
+					<token key="AGAVI_LOCATION" value="${agavi.directory}" />
+					<token key="PROJECT_LOCATION" value="${project.directory}" />
+					<token key="MODULE_NAME" value="${module.name}" />
+				</replacetokens>
+			</filterchain>
+		</copy>
 	</target>
 
-	<target name="module-rename" depends="initialize,locate-project" description="Renames a module">
+	<target name="module-rename" depends="initialize,project-locate" description="Renames a module">
 	</target>
 
-	<target name="module-remove" depends="initialize,locate-project" description="Removes a module">
+	<target name="module-remove" depends="initialize,project-locate" description="Removes a module">
 	</target>
 
-	<target name="action-create" depends="initialize,locate-project,locate-module" description="Creates an action">
+	<!--
+	  Action targets.
+	  -->
+
+	<target name="action-create" depends="initialize,project-locate,module-locate" description="Creates an action">
 	</target>
 
-	<target name="action-rename" depends="initialize,locate-project,locate-module" description="Renames an action">
+	<target name="action-rename" depends="initialize,project-locate,module-locate" description="Renames an action">
 	</target>
 
-	<target name="action-remove" depends="initialize,locate-project,locate-module" description="Removes an action">
+	<target name="action-remove" depends="initialize,project-locate,module-locate" description="Removes an action">
 	</target>
 
-	<target name="view-create" depends="initialize,locate-project,locate-module" description="Creates a view">
+	<!--
+	  View targets.
+	  -->
+
+	<target name="view-create" depends="initialize,project-locate,module-locate" description="Creates a view">
 	</target>
 
-	<target name="view-rename" depends="initialize,locate-project,locate-module" description="Renames a view">
+	<target name="view-rename" depends="initialize,project-locate,module-locate" description="Renames a view">
 	</target>
 
-	<target name="view-remove" depends="initialize,locate-project,locate-module" description="Removes a view">
+	<target name="view-remove" depends="initialize,project-locate,module-locate" description="Removes a view">
 	</target>
 
-	<target name="model-create" depends="initialize,locate-project,locate-module" description="Creates a model">
+	<!--
+	  Model targets.
+	  -->
+
+	<target name="model-create" depends="initialize,project-locate,module-locate" description="Creates a model">
 	</target>
 
-	<target name="model-rename" depends="initialize,locate-project,locate-module" description="Renames a model">
+	<target name="model-rename" depends="initialize,project-locate,module-locate" description="Renames a model">
 	</target>
 
-	<target name="model-remove" depends="initialize,locate-project,locate-module" description="Removes a model">
+	<target name="model-remove" depends="initialize,project-locate,module-locate" description="Removes a model">
 	</target>
 
-	<target name="template-create" depends="initialize,locate-project,locate-module" description="Creates a template">
+	<!--
+	  Template targets.
+	  -->
+
+	<target name="template-create" depends="initialize,project-locate,module-locate" description="Creates a template">
 	</target>
 
-	<target name="template-rename" depends="initialize,locate-project,locate-module" description="Renames a template">
+	<target name="template-rename" depends="initialize,project-locate,module-locate" description="Renames a template">
 	</target>
 
-	<target name="template-remove" depends="initialize,locate-project,locate-module" description="Removes a template">
+	<target name="template-remove" depends="initialize,project-locate,module-locate" description="Removes a template">
 	</target>
 
 	<!-- define the location of our tasks -->

@@ -27,7 +27,7 @@ require_once(dirname(__FILE__) . '/AgaviTask.php');
  *
  * @since      1.0.0
  *
- * @version    $Id: AgaviInputTask.php 2319 2008-02-22 04:27:36Z impl $
+ * @version    $Id$
  */
 class AgaviInitializeTask extends AgaviTask
 {
