@@ -32,7 +32,7 @@ To create a copy of the default code templates and their hierarchy, call the Aga
 agavi build-template-copy-all
 }}}
 
-The process will prompt for the directory in which the templates should be placed.
+The process will prompt for the directory into which the templates should be placed.
 
 The template directory used within the build environment may be specified using the `template.directory` property.
 
@@ -57,6 +57,8 @@ Executing this target prompts for the path to the new project directory and the 
 
 Enter the new project directory (for example, by using the `cd` command).
 
+=== Creating the Base Modules ===
+
 The next step is to create a few base modules for the project. These modules will need to encapsulate the six core Agavi actions:
 
  * `default` (the default action to load when no route is given),
@@ -76,6 +78,8 @@ agavi module-create
 
 The target will automatically detect the project directory (assuming it is called from within it), and will then prompt for the module name and create the module structure. Repeat this process as many times as necessary to create the base modules.
 
+=== Creating the Base Actions ===
+
 Now create the actions using the `action-create`, `view-create`, and `template-create` targets:
 
 {{{
@@ -83,6 +87,8 @@ agavi action-create
 agavi view-create
 agavi template-create
 }}}
+
+=== Final Action Configuration ===
 
 The final step in preparing the new project is to add each base action to the configuration. This can be done by hand (by editing `app/config/settings.xml`) or by using the Agavi script, for example:
 
