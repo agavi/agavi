@@ -389,10 +389,16 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 				$container->setViewName($actionCache['view_name']);
 
 				$key = $request->toggleLock();
-				// get the view instance
-				$viewInstance = $controller->createViewInstance($actionCache['view_module'], $actionCache['view_name']);
-				// initialize the view
-				$viewInstance->initialize($container);
+				try {
+					// get the view instance
+					$viewInstance = $controller->createViewInstance($actionCache['view_module'], $actionCache['view_name']);
+					// initialize the view
+					$viewInstance->initialize($container);
+				} catch(Exception $e) {
+					// we caught an exception... unlock the request and rethrow!
+					$request->toggleLock($key);
+					throw $e;
+				}
 				$request->toggleLock($key);
 
 				// Set the View Instance in the container
@@ -444,7 +450,13 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 						$executeMethod = 'execute';
 					}
 					$key = $request->toggleLock();
-					$viewCache['next'] = $viewInstance->$executeMethod($container->getRequestData());
+					try {
+						$viewCache['next'] = $viewInstance->$executeMethod($container->getRequestData());
+					} catch(Exception $e) {
+						// we caught an exception... unlock the request and rethrow!
+						$request->toggleLock($key);
+						throw $e;
+					}
 					$request->toggleLock($key);
 				}
 
@@ -557,7 +569,13 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 						);
 						// lock the request. can't be done outside the loop for the whole run, see #628
 						$key = $request->toggleLock();
-						$nextOutput = $layer->getRenderer()->render($layer, $attributes, $output, $moreAssigns);
+						try {
+							$nextOutput = $layer->getRenderer()->render($layer, $attributes, $output, $moreAssigns);
+						} catch(Exception $e) {
+							// we caught an exception... unlock the request and rethrow!
+							$request->toggleLock($key);
+							throw $e;
+						}
 						// and unlock the request again
 						$request->toggleLock($key);
 
@@ -689,7 +707,13 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 			if($actionInstance->$validateMethod($requestData) && $validated) {
 				// execute the action
 				$key = $request->toggleLock();
-				$viewName = $actionInstance->$executeMethod($requestData);
+				try {
+					$viewName = $actionInstance->$executeMethod($requestData);
+				} catch(Exception $e) {
+					// we caught an exception... unlock the request and rethrow!
+					$request->toggleLock($key);
+					throw $e;
+				}
 				$request->toggleLock($key);
 			} else {
 				// validation failed
@@ -698,7 +722,13 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 					$handleErrorMethod = 'handleError';
 				}
 				$key = $request->toggleLock();
-				$viewName = $actionInstance->$handleErrorMethod($requestData);
+				try {
+					$viewName = $actionInstance->$handleErrorMethod($requestData);
+				} catch(Exception $e) {
+					// we caught an exception... unlock the request and rethrow!
+					$request->toggleLock($key);
+					throw $e;
+				}
 				$request->toggleLock($key);
 			}
 		}
