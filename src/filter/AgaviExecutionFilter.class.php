@@ -44,41 +44,6 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 	const ACTION_CACHE_ID = '4-8-15-16-23-42';
 
 	/**
-	 * Method that's called when a cacheable, Action/View with a stale cache is
-	 * about to be run.
-	 * Can be used to prevent stampede situations where many requests to an action
-	 * with an out-of-date cache are run in parallel, slowing down everything.
-	 * For instance, you could set a flag into memcached with the groups of the
-	 * action that's currently run, and in checkCache check for those and return
-	 * an old, stale cache until the flag is gone.
-	 *
-	 * @param      array The groups.
-	 * @param      array The caching configuration.
-	 *
-	 * @author     David Zülke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function startedCacheCreationCallback(array $groups, array $config)
-	{
-	}
-	
-	/**
-	 * Method that's called when a cacheable, Action/View with a stale cache has
-	 * finished execution and all caches are written.
-	 *
-	 * @see        AgaviExecutionFilter::startedCacheCreationCallback()
-	 *
-	 * @param      array The groups.
-	 * @param      array The caching configuration.
-	 *
-	 * @author     David Zülke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function finishedCacheCreationCallback(array $groups, array $config)
-	{
-	}
-	
-	/**
 	 * Check if a cache exists and is up-to-date
 	 *
 	 * @param      array  An array of cache groups
@@ -314,11 +279,6 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 		if($isCacheable) {
 			$groups = $this->determineGroups($config["groups"], $container);
 			$isActionCached = $this->checkCache(array_merge($groups, array(self::ACTION_CACHE_ID)), $config['lifetime']);
-			
-			if(!$isActionCached) {
-				// cacheable, but action is not cached. notify our callback so it can prevent the stampede that follows
-				$this->startedCacheCreationCallback($groups, $config);
-			}
 		} else {
 			// $lm->log('Action is not cacheable!');
 		}
@@ -331,8 +291,6 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 				// and restore action attributes
 				$actionInstance->setAttributes($actionCache['action_attributes']);
 			} catch(AgaviException $e) {
-				// cacheable, but action is not cached. notify our callback so it can prevent the stampede that follows
-				$this->startedCacheCreationCallback($groups, $config);
 				$isActionCached = false;
 			}
 		}
@@ -389,10 +347,16 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 				$container->setViewName($actionCache['view_name']);
 
 				$key = $request->toggleLock();
-				// get the view instance
-				$viewInstance = $controller->createViewInstance($actionCache['view_module'], $actionCache['view_name']);
-				// initialize the view
-				$viewInstance->initialize($container);
+				try {
+					// get the view instance
+					$viewInstance = $controller->createViewInstance($actionCache['view_module'], $actionCache['view_name']);
+					// initialize the view
+					$viewInstance->initialize($container);
+				} catch(Exception $e) {
+					// we caught an exception... unlock the request and rethrow!
+					$request->toggleLock($key);
+					throw $e;
+				}
 				$request->toggleLock($key);
 
 				// Set the View Instance in the container
@@ -444,7 +408,13 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 						$executeMethod = 'execute';
 					}
 					$key = $request->toggleLock();
-					$viewCache['next'] = $viewInstance->$executeMethod($container->getRequestData());
+					try {
+						$viewCache['next'] = $viewInstance->$executeMethod($container->getRequestData());
+					} catch(Exception $e) {
+						// we caught an exception... unlock the request and rethrow!
+						$request->toggleLock($key);
+						throw $e;
+					}
 					$request->toggleLock($key);
 				}
 
@@ -556,7 +526,13 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 						);
 						// lock the request. can't be done outside the loop for the whole run, see #628
 						$key = $request->toggleLock();
-						$nextOutput = $layer->getRenderer()->render($layer, $attributes, $output, $moreAssigns);
+						try {
+							$nextOutput = $layer->getRenderer()->render($layer, $attributes, $output, $moreAssigns);
+						} catch(Exception $e) {
+							// we caught an exception... unlock the request and rethrow!
+							$request->toggleLock($key);
+							throw $e;
+						}
 						// and unlock the request again
 						$request->toggleLock($key);
 
@@ -599,9 +575,6 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 				// $lm->log('Writing Action cache...');
 
 				$this->writeCache(array_merge($groups, array(self::ACTION_CACHE_ID)), $actionCache, $config['lifetime']);
-			
-				// notify callback that the execution has finished and caches have been written
-				$this->finishedCacheCreationCallback($groups, $config);
 				
 				// set action cached to true so the next
 				$isActionCached = true;
@@ -688,7 +661,13 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 			if($actionInstance->$validateMethod($requestData) && $validated) {
 				// execute the action
 				$key = $request->toggleLock();
-				$viewName = $actionInstance->$executeMethod($requestData);
+				try {
+					$viewName = $actionInstance->$executeMethod($requestData);
+				} catch(Exception $e) {
+					// we caught an exception... unlock the request and rethrow!
+					$request->toggleLock($key);
+					throw $e;
+				}
 				$request->toggleLock($key);
 			} else {
 				// validation failed
@@ -697,7 +676,13 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 					$handleErrorMethod = 'handleError';
 				}
 				$key = $request->toggleLock();
-				$viewName = $actionInstance->$handleErrorMethod($requestData);
+				try {
+					$viewName = $actionInstance->$handleErrorMethod($requestData);
+				} catch(Exception $e) {
+					// we caught an exception... unlock the request and rethrow!
+					$request->toggleLock($key);
+					throw $e;
+				}
 				$request->toggleLock($key);
 			}
 		}
