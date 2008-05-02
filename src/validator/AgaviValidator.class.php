@@ -561,6 +561,12 @@ abstract class AgaviValidator extends AgaviParameterHolder
 		$cp->setValue($array, $value);
 		if($this->parentContainer !== null) {
 			// make sure the parameter doesn't get removed by the validation manager
+			if(is_array($value)) {
+				// for arrays all child elements need to be marked as not processed
+				foreach(AgaviArrayPathDefinition::getFlatKeyNames($value) as $keyName) {
+					$this->parentContainer->addFieldResult($this, $cp->pushRetNew($keyName)->__toString(), AgaviValidator::NOT_PROCESSED);
+				}
+			}
 			$this->parentContainer->addFieldResult($this, $cp->__toString(), AgaviValidator::NOT_PROCESSED);
 		}
 	}
