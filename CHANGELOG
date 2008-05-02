@@ -1,8 +1,8 @@
 AGAVI CHANGELOG
 ===============
 
-0.11.1 RC3 (March ??, 2008)
----------------------------
+0.11.1 RC3 (May 2, 2008)
+------------------------
 
 ADD: Add ability to cache complete request attribute namespaces in Execution Filter (#740) (David)
 
