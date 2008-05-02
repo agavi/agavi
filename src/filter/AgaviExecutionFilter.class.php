@@ -57,7 +57,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 	const CACHE_CALLBACK_ACTION_CACHE_WRITTEN = 8;
 	
 	/**
-	 * Method that's called when a cacheable, Action/View with a stale cache is
+	 * Method that's called when a cacheable Action/View with a stale cache is
 	 * about to be run.
 	 * Can be used to prevent stampede situations where many requests to an action
 	 * with an out-of-date cache are run in parallel, slowing down everything.
@@ -65,29 +65,51 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 	 * action that's currently run, and in checkCache check for those and return
 	 * an old, stale cache until the flag is gone.
 	 *
+	 * @param      int   The type of the event that occured. See CACHE_CALLBACK_*
+	 *                   constants.
 	 * @param      array The groups.
 	 * @param      array The caching configuration.
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function startedCacheCreationCallback(array $groups, array $config)
+	public function startedCacheCreationCallback($eventType, array $groups, array $config)
 	{
 	}
 	
 	/**
-	 * Method that's called when a cacheable, Action/View with a stale cache has
-	 * finished execution and all caches are written.
+	 * Method that's called when an Action/View that was assumed to be cacheable
+	 * turned out not to be (because the View or Output Type isn't).
 	 *
 	 * @see        AgaviExecutionFilter::startedCacheCreationCallback()
 	 *
+	 * @param      int   The type of the event that occured. See CACHE_CALLBACK_*
+	 *                   constants.
 	 * @param      array The groups.
 	 * @param      array The caching configuration.
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function finishedCacheCreationCallback(array $groups, array $config)
+	public function abortedCacheCreationCallback($eventType, array $groups, array $config)
+	{
+	}
+	
+	/**
+	 * Method that's called when a cacheable Action/View with a stale cache has
+	 * finished execution and all caches are written.
+	 *
+	 * @see        AgaviExecutionFilter::startedCacheCreationCallback()
+	 *
+	 * @param      int   The type of the event that occured. See CACHE_CALLBACK_*
+	 *                   constants.
+	 * @param      array The groups.
+	 * @param      array The caching configuration.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function finishedCacheCreationCallback($eventType, array $groups, array $config)
 	{
 	}
 	
