@@ -33,10 +33,38 @@ class WebRoutingTest extends AgaviTestCase
 		$ctx->getRequest()->initialize($ctx);
 		$this->_r = new AgaviWebRouting();
 		$this->_r->initialize($ctx);
-		$this->assertEquals($export['prefix'], $this->_r->getPrefix(), '[' . $export['message'] . '] getPrefix() ('.$export['prefix'].':'.$this->_r->getPrefix().')');
-		$this->assertEquals($export['input'], $this->_r->getInput(), '[' . $export['message'] . '] getInput()('.$export['input'].':'.$this->_r->getInput().')');
-		$this->assertEquals($export['basePath'], $this->_r->getBasePath(), '[' . $export['message'] . '] getBasePath()');
-		$this->assertEquals($export['baseHref'], $this->_r->getBaseHref(), '[' . $export['message'] . '] getBaseHref()');
+		
+		if(!isset($export['expectFailure'])) {
+			$export['expectFailure'] = array();
+		}
+		
+		if(in_array('prefix', $export['expectFailure'])) {
+			$assertMethod = 'assertNotEquals';
+		} else {
+			$assertMethod = 'assertEquals';
+		}
+		$this->$assertMethod($export['prefix'], $this->_r->getPrefix(), '[' . $export['message'] . '] getPrefix() ('.$export['prefix'].':'.$this->_r->getPrefix().')');
+		
+		if(in_array('input', $export['expectFailure'])) {
+			$assertMethod = 'assertNotEquals';
+		} else {
+			$assertMethod = 'assertEquals';
+		}
+		$this->$assertMethod($export['input'], $this->_r->getInput(), '[' . $export['message'] . '] getInput()('.$export['input'].':'.$this->_r->getInput().')');
+		
+		if(in_array('basePath', $export['expectFailure'])) {
+			$assertMethod = 'assertNotEquals';
+		} else {
+			$assertMethod = 'assertEquals';
+		}
+		$this->$assertMethod($export['basePath'], $this->_r->getBasePath(), '[' . $export['message'] . '] getBasePath()');
+		
+		if(in_array('baseHref', $export['expectFailure'])) {
+			$assertMethod = 'assertNotEquals';
+		} else {
+			$assertMethod = 'assertEquals';
+		}
+		$this->$assertMethod($export['baseHref'], $this->_r->getBaseHref(), '[' . $export['message'] . '] getBaseHref()');
 	}
 
 
