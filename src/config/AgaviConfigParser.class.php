@@ -83,14 +83,14 @@ class AgaviConfigParser
 	protected function parseNodes($nodes, AgaviConfigValueHolder $parentVh, $isSingular = false)
 	{
 		foreach($nodes as $node) {
-			if($node->nodeType == XML_ELEMENT_NODE && (!$node->namespaceURI || $node->namespaceURI == AgaviXmlConfigParser::XML_NAMESPACE)) {
+			if($node->nodeType == XML_ELEMENT_NODE && (!$node->namespaceURI || $node->namespaceURI == AgaviXmlConfigParser::AGAVI_1_0_CONFIG_XML_NAMESPACE)) {
 				$vh = new AgaviConfigValueHolder();
 				$nodeName = $this->convertEncoding($node->localName);
 				$vh->setName($nodeName);
 				$parentVh->addChildren($nodeName, $vh);
 
 				foreach($node->attributes as $attribute) {
-					if((!$attribute->namespaceURI || $attribute->namespaceURI == AgaviXmlConfigParser::XML_NAMESPACE)) {
+					if((!$attribute->namespaceURI || $attribute->namespaceURI == AgaviXmlConfigParser::AGAVI_1_0_CONFIG_XML_NAMESPACE)) {
 						$vh->setAttribute($this->convertEncoding($attribute->localName), $this->convertEncoding($attribute->nodeValue));
 					}
 				}

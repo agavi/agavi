@@ -20,6 +20,7 @@
  * @package    agavi
  * @subpackage config
  *
+ * @author     David Zülke <dz@bitxtender.com>
  * @author     Dominik del Bondio <ddb@bitxtender.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
@@ -30,7 +31,9 @@
  */
 class AgaviXmlConfigParser
 {
-	const XML_NAMESPACE = 'http://agavi.org/agavi/1.0/config';
+	const AGAVI_1_0_CONFIG_XML_NAMESPACE = 'http://agavi.org/agavi/1.0/config';
+	
+	const AGAVI_LATEST_CONFIG_XML_NAMESPACE = self::AGAVI_1_0_CONFIG_XML_NAMESPACE;
 	
 	const VALIDATION_TYPE_XMLSCHEMA = 'xml_schema';
 	
@@ -39,37 +42,116 @@ class AgaviXmlConfigParser
 	const VALIDATION_TYPE_SCHEMATRON = 'schematron';
 	
 	/**
+	 * @var        array A list of XML namespaces for Agavi configuration files.
+	 */
+	static $agaviConfigXmlNamespaces = array(
+		self::AGAVI_1_0_CONFIG_XML_NAMESPACE,
+	);
+	
+	/**
 	 * @var        string The path to the config file we're currently parsing.
 	 */
-	protected $config = '';
+	protected $path = '';
 	
 	/**
 	 * @param      string An absolute filesystem path to a configuration file.
 	 * @param      array  An associative array of validation information.
+	 * @param      string The environment name.
+	 * @param      string The context name.
 	 *
-	 * @return     array An array of DOMDocuments (from child to parent).
+	 * @return     DOMDocument A properly merged DOMDocument.
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function parseAll($config, array $validation = array())
+	public static function execute($path, array $validation = array(), $environment, $context = null)
 	{
-		$retval = array();
-		
-		$nextConfig = $config;
-		
-		while($nextConfig !== null) {
-			$doc = $this->parse($nextConfig, $validation);
+		$isAgaviConfigFormat = true;
+		// build an array of documents (this one, and the parents)
+		$docs = array();
+		$nextPath = $path;
+		while($nextPath !== null) {
+			$parser = new AgaviXmlConfigParser();
+			$doc = $parser->parse($nextPath, $validation);
+			$doc->xpath = new DOMXPath($doc);
+			$docs[] = $doc;
 			
-			if($doc->documentElement && $doc->documentElement->hasAttribute('parent')) {
-				$nextConfig = AgaviToolkit::literalize($doc->documentElement->getAttribute('parent'));
-			} else {
-				$nextConfig = null;
+			// make sure it (still) is a <configurations> file with the proper agavi namespace
+			if($isAgaviConfigFormat) {
+				$isAgaviConfigFormat = $doc->documentElement && $doc->documentElement->nodeName == 'configuration' && $doc->documentElement->namespaceURI == self::AGAVI_LATEST_CONFIG_XML_NAMESPACE;
 			}
 			
-			$retval[] = $doc;
+			// is it an agavi <configurations> element? does it have a parent attribute? yes? good. parse that next
+			// TODO: support future namespaces
+			if($isAgaviConfigFormat && $doc->documentElement->hasAttribute('parent')) {
+				$nextPath = AgaviToolkit::literalize($doc->documentElement->getAttribute('parent'));
+			} else {
+				$isAgaviConfigFormat = false;
+				$nextPath = null;
+			}
 		}
+		
+		// TODO: use our own classes here that extend DOM*
+		$retval = new AgaviXmlConfigDomDocument();
+		
+		if($isAgaviConfigFormat) {
+			$retval->appendChild(new AgaviXmlConfigDomElement('configurations', null, self::AGAVI_LATEST_CONFIG_XML_NAMESPACE));
+		
+			// reverse the array - we want the parents first!
+			$docs = array_reverse($docs);
+		
+			$configurationElements = array();
+		
+			// TODO: I bet this leaks memory due to the nodes being taken out of the docs. beware circular refs!
+			foreach($docs as $doc) {
+				// iterate over all nodes (attributes, <sandbox>, <configuration> etc) inside the document element and append them to the <configurations> element in our final document
+				foreach($doc->documentElement->childNodes as $node) {
+					if($node->nodeType == XML_ELEMENT_NODE && $node->nodeName == 'configuration' && $node->namespaceURI == self::AGAVI_LATEST_CONFIG_XML_NAMESPACE) {
+						// it's a <configuration> element - put that on a stack for processing
+						$configurationElements[] = $node;
+					} else {
+						// import the node, recursively, and store the imported node
+						$importedNode = $retval->importNode($node, true);
+						// now append it to the <configurations> element
+						$retval->documentElement->appendChild($importedNode);
+					}
+				}
+			}
+		
+			$configurationOrder = array(
+				'count(self::node()[not(@environment) and not(@context)])',
+				'count(self::node()[@environment and not(@context)])',
+				'count(self::node()[not(@environment) and @context])',
+				'count(self::node()[@environment and @context])',
+			);
+			$testAttributes = array(
+				'context' => $context,
+				'environment' => $environment,
+			);
+		
+			// we sort the nodes - generic ones first, then those that are per-environment, then those per-context, then those per-both
+			foreach($configurationOrder as $xpath) {
+				foreach($configurationElements as &$element) {
+					if($element->ownerDocument->xpath->evaluate($xpath, $element)) {
+						foreach($testAttributes as $attributeName => $attributeValue) {
+							// TODO: move that method or something
+							if($element->hasAttribute($attributeName) && !AgaviConfigHandler::testPattern($element->getAttribute($attributeName), $attributeValue)) {
+								continue 2;
+							}
+						}
+						$importedNode = $retval->importNode($element, true);
+						$retval->documentElement->appendChild($importedNode);
+					}
+				}
+			}
+		} else {
+			// it's not an agavi config file. just pass it through then
+			$retval->appendChild($retval->importNode($doc->documentElement, true));
+		}
+		
+		echo '<pre>' . htmlspecialchars($retval->saveXML()) . '</pre>';
+		die();
 		
 		return $retval;
 	}
@@ -84,14 +166,14 @@ class AgaviXmlConfigParser
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function parse($config, array $validation = array())
+	public function parse($path, array $validation = array())
 	{
-		if(!is_readable($config)) {
-			$error = 'Configuration file "' . $config . '" does not exist or is unreadable';
+		if(!is_readable($path)) {
+			$error = 'Configuration file "' . $path . '" does not exist or is unreadable';
 			throw new AgaviUnreadableException($error);
 		}
 		
-		$doc = $this->load($config);
+		$doc = $this->load($path);
 		
 		$this->transform($doc);
 		
@@ -103,23 +185,23 @@ class AgaviXmlConfigParser
 	}
 	
 	/**
-	 * Load the configuration file into DOM and resolve XIncludes.
+	 * Load the configuration file and resolve XIncludes.
 	 *
 	 * @param      string The path to the configuration file.
 	 *
-	 * @return     DOMDocument The loaded document.
+	 * @return     DOMDocument A document with.
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function load($config)
+	public function load($path)
 	{
-		$this->config = $config;
+		$this->path = $path;
 		
 		$luie = libxml_use_internal_errors(true);
 		libxml_clear_errors();
 		$doc = new DOMDocument();
-		$doc->load($config);
+		$doc->load($path);
 		if(libxml_get_last_error() !== false) {
 			$errors = array();
 			foreach(libxml_get_errors() as $error) {
@@ -130,7 +212,7 @@ class AgaviXmlConfigParser
 			throw new AgaviParseException(
 				sprintf(
 					'Configuration file "%s" could not be parsed due to the following error%s: ' . "\n\n%s", 
-					$config, 
+					$path, 
 					count($errors) > 1 ? 's' : '', 
 					implode("\n", $errors)
 				)
@@ -164,7 +246,7 @@ class AgaviXmlConfigParser
 				throw new AgaviParseException(
 					sprintf(
 						'Configuration file "%s" could not be parsed due to the following error%s that occured while resolving XInclude directives: ' . "\n\n%s", 
-						$config, 
+						$path, 
 						count($errors) > 1 ? 's' : '', 
 						implode("\n", $errors)
 					)
@@ -182,9 +264,10 @@ class AgaviXmlConfigParser
 		
 		$needsReload = false;
 		
+		// TODO: get rid of this for 1.0
 		// if there is no xmlns declaration on the root element, we gotta add it. must do after xinclude() to maintain BC
 		if($doc->documentElement && !$doc->documentElement->namespaceURI) {
-			$doc->documentElement->setAttribute('xmlns', self::XML_NAMESPACE);
+			$doc->documentElement->setAttribute('xmlns', self::AGAVI_LATEST_CONFIG_XML_NAMESPACE);
 			
 			$needsReload = true;
 		}
@@ -245,7 +328,7 @@ class AgaviXmlConfigParser
 							throw new AgaviParseException(
 								sprintf(
 									'Configuration file "%s" could not be parsed due to the following error%s that occured while loading the specified XSL stylesheet "%s": ' . "\n\n%s", 
-									$this->config, 
+									$this->path, 
 									count($errors) > 1 ? 's' : '', 
 									$href,
 									implode("\n", $errors)
@@ -256,7 +339,7 @@ class AgaviXmlConfigParser
 						throw new AgaviParseException(
 							sprintf(
 								'Configuration file "%s" could not be parsed because the inline stylesheet "%s" referenced in the "xml-stylesheet" processing instruction could not be found in the document.', 
-								$this->config, 
+								$this->path, 
 								$href
 							)
 						);
@@ -275,7 +358,7 @@ class AgaviXmlConfigParser
 						throw new AgaviParseException(
 							sprintf(
 								'Configuration file "%s" could not be parsed due to the following error%s that occured while loading the specified XSL stylesheet "%s": ' . "\n\n%s", 
-								$this->config, 
+								$this->path, 
 								count($errors) > 1 ? 's' : '', 
 								$href,
 								implode("\n", $errors)
@@ -298,7 +381,7 @@ class AgaviXmlConfigParser
 					throw new AgaviParseException(
 						sprintf(
 							'Configuration file "%s" could not be parsed due to the following error%s that occured while importing the specified XSL stylesheet "%s": ' . "\n\n%s", 
-							$this->config, 
+							$this->path, 
 							count($errors) > 1 ? 's' : '', 
 							$href,
 							implode("\n", $errors)
@@ -320,7 +403,7 @@ class AgaviXmlConfigParser
 					throw new AgaviParseException(
 						sprintf(
 							'Configuration file "%s" could not be parsed due to the following error%s that occured while transforming the document using the XSL stylesheet "%s": ' . "\n\n%s", 
-							$this->config, 
+							$this->path, 
 							count($errors) > 1 ? 's' : '', 
 							$href,
 							implode("\n", $errors)
@@ -388,7 +471,7 @@ class AgaviXmlConfigParser
 				$info = parse_url($source);
 				if(!isset($info['scheme']) && !AgaviToolkit::isPathAbsolute($source)) {
 					// the schema location is relative to the XML file
-					$source = dirname($this->config) . DIRECTORY_SEPARATOR . $source;
+					$source = dirname($this->path) . DIRECTORY_SEPARATOR . $source;
 				}
 				$source = file_get_contents($source);
 			}
@@ -408,7 +491,7 @@ class AgaviXmlConfigParser
 	{
 		$xpath = new DOMXPath($doc);
 		
-		if($doc->documentElement && $doc->documentElement->namespaceURI == self::XML_NAMESPACE) {
+		if($doc->documentElement && $doc->documentElement->namespaceURI == self::AGAVI_LATEST_CONFIG_XML_NAMESPACE) {
 			$xpath->registerNamespace('agavi', $doc->documentElement->namespaceURI);
 			// remove top-level <sandbox> elements
 			$sandboxes = $xpath->query('/agavi:configurations/agavi:sandbox', $doc);
@@ -436,7 +519,7 @@ class AgaviXmlConfigParser
 		foreach($validationFiles as $validationFile) {
 			if(!is_resource($validationFile) && !is_readable($validationFile)) {
 				libxml_use_internal_errors($luie);
-				$error = 'Validation file "' . $validationFile . '" for configuration file "' . $this->config . '" does not exist or is unreadable';
+				$error = 'Validation file "' . $validationFile . '" for configuration file "' . $this->path . '" does not exist or is unreadable';
 				throw new AgaviUnreadableException($error);
 			}
 			
@@ -451,7 +534,7 @@ class AgaviXmlConfigParser
 				throw new AgaviParseException(
 					sprintf(
 						'XML Schema validation of configuration file "%s" failed due to the following error%s: ' . "\n\n%s", 
-						$this->config, 
+						$this->path, 
 						count($errors) > 1 ? 's' : '', 
 						implode("\n", $errors)
 					)
@@ -470,7 +553,7 @@ class AgaviXmlConfigParser
 				throw new AgaviParseException(
 					sprintf(
 						'XML Schema validation of configuration file "%s" failed due to the following error%s: ' . "\n\n%s", 
-						$this->config, 
+						$this->path, 
 						count($errors) > 1 ? 's' : '', 
 						implode("\n", $errors)
 					)
@@ -497,7 +580,7 @@ class AgaviXmlConfigParser
 		foreach($validationFiles as $validationFile) {
 			if(!is_readable($validationFile)) {
 				libxml_use_internal_errors($luie);
-				$error = 'Validation file "' . $validationFile . '" for configuration file "' . $this->config . '" does not exist or is unreadable';
+				$error = 'Validation file "' . $validationFile . '" for configuration file "' . $this->path . '" does not exist or is unreadable';
 				throw new AgaviUnreadableException($error);
 			}
 			
@@ -512,7 +595,7 @@ class AgaviXmlConfigParser
 				throw new AgaviParseException(
 					sprintf(
 						'XML Schema validation of configuration file "%s" failed due to the following error%s: ' . "\n\n%s", 
-						$this->config, 
+						$this->path, 
 						count($errors) > 1 ? 's' : '', 
 						implode("\n", $errors)
 					)
@@ -531,7 +614,7 @@ class AgaviXmlConfigParser
 				throw new AgaviParseException(
 					sprintf(
 						'XML Schema validation of configuration file "%s" failed due to the following error%s: ' . "\n\n%s", 
-						$this->config, 
+						$this->path, 
 						count($errors) > 1 ? 's' : '', 
 						implode("\n", $errors)
 					)
@@ -561,7 +644,7 @@ class AgaviXmlConfigParser
 		foreach($validationFiles as $validationFile) {
 			if(!is_readable($validationFile)) {
 				libxml_use_internal_errors($luie);
-				$error = 'Validation file "' . $validationFile . '" for configuration file "' . $this->config . '" does not exist or is unreadable';
+				$error = 'Validation file "' . $validationFile . '" for configuration file "' . $this->path . '" does not exist or is unreadable';
 				throw new AgaviUnreadableException($error);
 			}
 			
@@ -575,7 +658,7 @@ class AgaviXmlConfigParser
 				throw new AgaviParseException(
 					sprintf(
 						'XML Schema validation of configuration file "%s" failed due to the following error%s: ' . "\n\n%s", 
-						$this->config, 
+						$this->path, 
 						count($errors) > 1 ? 's' : '', 
 						implode("\n", $errors)
 					)
