@@ -1,7 +1,7 @@
 AGAVI CHANGELOG
 ===============
 
-0.11.1 (May ?, 2008)
+0.11.1 (May 9, 2008)
 --------------------
 
 FIX: UTF-8 Special characters in exception messages get garbled in exception output (Tanaka Koichi, David) (#758)
