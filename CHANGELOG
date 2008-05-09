@@ -15,6 +15,12 @@ CHG: Deprecated AgaviAdodbDatabase (#662) (David)
 FIX: Security filters cannot perform checks in addition to isSecure() (#671) (David)
 
 
+0.11.1 (May 9, 2008)
+--------------------
+
+FIX: UTF-8 Special characters in exception messages get garbled in exception output (Tanaka Koichi, David) (#758)
+
+
 0.11.1 RC3 (May 2, 2008)
 ------------------------
 

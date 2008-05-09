@@ -555,7 +555,7 @@ if(isset($fixedTrace[0]['file']) && $fixedTrace[0]['file'] != $e->getFile() && $
 			This is <em>not</em> an Agavi exception, but likely an error that occured in the application code.</p>
 <?php endif; ?>
 		<p>An exception of type <strong><?php echo get_class($e); ?></strong> was thrown, but did not get caught during the execution of the request. You will find information provided by the exception along with a stack trace below.</p>
-<?php $msg = nl2br(htmlentities($e->getMessage())); ?>
+<?php $msg = nl2br(htmlspecialchars($e->getMessage())); ?>
 <?php if($msg != ''): ?>
 		<p id="message"<?php if($svg): ?> class="nice"<?php endif; ?>>
 <?php if($svg): ?>
