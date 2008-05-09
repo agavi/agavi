@@ -23,6 +23,7 @@
  * @copyright  Authors
  * @copyright  The Agavi Project
  *
+ * @deprecated Not used anymore by XML config handlers, to be removed in Agavi 1.1
  * @since      0.11.0
  *
  * @version    $Id$

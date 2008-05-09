@@ -14,14 +14,14 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviXmlConfigHandler allows you to retrieve the contents of a xml config
- * file as structured object tree
+ * AgaviXmlConfigParser handles both Agavi and foreign XML configuration files,
+ * deals with XIncludes, XSL transformations and validation as well as filtering
+ * and ordering of configuration blocks and parent file resolution and parsing.
  *
  * @package    agavi
  * @subpackage config
  *
  * @author     David Zülke <dz@bitxtender.com>
- * @author     Dominik del Bondio <ddb@bitxtender.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
  *
@@ -31,9 +31,9 @@
  */
 class AgaviXmlConfigParser
 {
-	const AGAVI_1_0_CONFIG_XML_NAMESPACE = 'http://agavi.org/agavi/1.0/config';
+	const AGAVI_ENVELOPE_NAMESPACE_1_0 = 'http://agavi.org/agavi/1.0/config';
 	
-	const AGAVI_LATEST_CONFIG_XML_NAMESPACE = self::AGAVI_1_0_CONFIG_XML_NAMESPACE;
+	const AGAVI_ENVELOPE_NAMESPACE_LATEST = self::AGAVI_ENVELOPE_NAMESPACE_1_0;
 	
 	const VALIDATION_TYPE_XMLSCHEMA = 'xml_schema';
 	
@@ -44,14 +44,19 @@ class AgaviXmlConfigParser
 	/**
 	 * @var        array A list of XML namespaces for Agavi configuration files.
 	 */
-	static $agaviConfigXmlNamespaces = array(
-		self::AGAVI_1_0_CONFIG_XML_NAMESPACE,
+	public static $agaviEnvelopeNamespaces = array(
+		self::AGAVI_ENVELOPE_NAMESPACE_1_0,
 	);
 	
 	/**
 	 * @var        string The path to the config file we're currently parsing.
 	 */
 	protected $path = '';
+	
+	public static function isAgaviEnvelopeNamespace($namespaceUri)
+	{
+		return in_array($namespaceUri, self::$agaviEnvelopeNamespaces);
+	}
 	
 	/**
 	 * @param      string An absolute filesystem path to a configuration file.
@@ -79,7 +84,7 @@ class AgaviXmlConfigParser
 			
 			// make sure it (still) is a <configurations> file with the proper agavi namespace
 			if($isAgaviConfigFormat) {
-				$isAgaviConfigFormat = $doc->documentElement && $doc->documentElement->nodeName == 'configuration' && $doc->documentElement->namespaceURI == self::AGAVI_LATEST_CONFIG_XML_NAMESPACE;
+				$isAgaviConfigFormat = $doc->documentElement && $doc->documentElement->nodeName == 'configurations' && self::isAgaviEnvelopeNamespace($doc->documentElement->namespaceURI);
 			}
 			
 			// is it an agavi <configurations> element? does it have a parent attribute? yes? good. parse that next
@@ -87,7 +92,6 @@ class AgaviXmlConfigParser
 			if($isAgaviConfigFormat && $doc->documentElement->hasAttribute('parent')) {
 				$nextPath = AgaviToolkit::literalize($doc->documentElement->getAttribute('parent'));
 			} else {
-				$isAgaviConfigFormat = false;
 				$nextPath = null;
 			}
 		}
@@ -96,6 +100,7 @@ class AgaviXmlConfigParser
 		$retval = new AgaviXmlConfigDomDocument();
 		
 		if($isAgaviConfigFormat) {
+			
 			$retval->appendChild(new AgaviXmlConfigDomElement('configurations', null, self::AGAVI_LATEST_CONFIG_XML_NAMESPACE));
 		
 			// reverse the array - we want the parents first!
@@ -107,7 +112,7 @@ class AgaviXmlConfigParser
 			foreach($docs as $doc) {
 				// iterate over all nodes (attributes, <sandbox>, <configuration> etc) inside the document element and append them to the <configurations> element in our final document
 				foreach($doc->documentElement->childNodes as $node) {
-					if($node->nodeType == XML_ELEMENT_NODE && $node->nodeName == 'configuration' && $node->namespaceURI == self::AGAVI_LATEST_CONFIG_XML_NAMESPACE) {
+					if($node->nodeType == XML_ELEMENT_NODE && $node->nodeName == 'configuration' && self::isAgaviEnvelopeNamespace($node->namespaceURI)) {
 						// it's a <configuration> element - put that on a stack for processing
 						$configurationElements[] = $node;
 					} else {
@@ -149,9 +154,6 @@ class AgaviXmlConfigParser
 			// it's not an agavi config file. just pass it through then
 			$retval->appendChild($retval->importNode($doc->documentElement, true));
 		}
-		
-		echo '<pre>' . htmlspecialchars($retval->saveXML()) . '</pre>';
-		die();
 		
 		return $retval;
 	}
@@ -491,7 +493,7 @@ class AgaviXmlConfigParser
 	{
 		$xpath = new DOMXPath($doc);
 		
-		if($doc->documentElement && $doc->documentElement->namespaceURI == self::AGAVI_LATEST_CONFIG_XML_NAMESPACE) {
+		if($doc->documentElement && self::isAgaviEnvelopeNamespace($doc->documentElement->namespaceURI)) {
 			$xpath->registerNamespace('agavi', $doc->documentElement->namespaceURI);
 			// remove top-level <sandbox> elements
 			$sandboxes = $xpath->query('/agavi:configurations/agavi:sandbox', $doc);
