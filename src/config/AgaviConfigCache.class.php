@@ -100,7 +100,7 @@ final class AgaviConfigCache
 		if($handler instanceof AgaviIXmlConfigHandler) {
 			// a new-style config handler
 			// it does not parse the config itself; instead, it is given an array of parsed DOM documents (with parents!)
-			$doc = AgaviXmlConfigParser::execute($config, $handlerInfo['validation'], AgaviConfig::get('core.environment'), $context);
+			$doc = AgaviXmlConfigParser::run($config, $handlerInfo['validation'], AgaviConfig::get('core.environment'), $context);
 
 			if($context !== null) {
 				$context = AgaviContext::getInstance($context);

@@ -42,20 +42,41 @@ class AgaviXmlConfigParser
 	const VALIDATION_TYPE_SCHEMATRON = 'schematron';
 	
 	/**
-	 * @var        array A list of XML namespaces for Agavi configuration files.
+	 * @var        array A list of XML namespaces for Agavi configuration files as
+	 *                   keys and their associated XPath namespace prefix (value).
 	 */
 	public static $agaviEnvelopeNamespaces = array(
-		self::AGAVI_ENVELOPE_NAMESPACE_1_0,
+		self::AGAVI_ENVELOPE_NAMESPACE_1_0 => 'ae10',
 	);
 	
 	/**
-	 * @var        string The path to the config file we're currently parsing.
+	 * @var        string Path to the config file we're parsing in this instance.
 	 */
 	protected $path = '';
 	
+	/**
+	 * @var        DOMDocument The document we're parsing here.
+	 */
+	protected $doc = null;
+	
+	/**
+	 * @var        DOMXPath The XPath instance for the current document.
+	 */
+	protected $xpath = null;
+	
+	/**
+	 * Check if the given namespace URI is a valid Agavi envelope namespace.
+	 *
+	 * @param      string The namespace URI.
+	 *
+	 * @return     bool True, if the given URI is a valid namespace URI, or false.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      1.0.0
+	 */
 	public static function isAgaviEnvelopeNamespace($namespaceUri)
 	{
-		return in_array($namespaceUri, self::$agaviEnvelopeNamespaces);
+		return isset(self::$agaviEnvelopeNamespaces[$namespaceUri]);
 	}
 	
 	/**
@@ -70,15 +91,15 @@ class AgaviXmlConfigParser
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public static function execute($path, array $validation = array(), $environment, $context = null)
+	public static function run($path, array $validationInfo = array(), $environment, $context = null)
 	{
 		$isAgaviConfigFormat = true;
 		// build an array of documents (this one, and the parents)
 		$docs = array();
 		$nextPath = $path;
 		while($nextPath !== null) {
-			$parser = new AgaviXmlConfigParser();
-			$doc = $parser->parse($nextPath, $validation);
+			$parser = new AgaviXmlConfigParser($nextPath);
+			$doc = $parser->execute($validationInfo, $environment, $context);
 			$doc->xpath = new DOMXPath($doc);
 			$docs[] = $doc;
 			
@@ -98,10 +119,13 @@ class AgaviXmlConfigParser
 		
 		// TODO: use our own classes here that extend DOM*
 		$retval = new AgaviXmlConfigDomDocument();
+		foreach(self::$agaviEnvelopeNamespaces as $envelopeNamespaceUri => $envelopeNamespacePrefix) {
+			$retval->getXpath()->registerNamespace($envelopeNamespacePrefix, $envelopeNamespaceUri);
+		}
 		
 		if($isAgaviConfigFormat) {
 			
-			$retval->appendChild(new AgaviXmlConfigDomElement('configurations', null, self::AGAVI_LATEST_CONFIG_XML_NAMESPACE));
+			$retval->appendChild(new AgaviXmlConfigDomElement('configurations', null, self::AGAVI_ENVELOPE_NAMESPACE_LATEST));
 		
 			// reverse the array - we want the parents first!
 			$docs = array_reverse($docs);
@@ -111,7 +135,7 @@ class AgaviXmlConfigParser
 			// TODO: I bet this leaks memory due to the nodes being taken out of the docs. beware circular refs!
 			foreach($docs as $doc) {
 				// iterate over all nodes (attributes, <sandbox>, <configuration> etc) inside the document element and append them to the <configurations> element in our final document
-				foreach($doc->documentElement->childNodes as $node) {
+				foreach($this->doc->documentElement->childNodes as $node) {
 					if($node->nodeType == XML_ELEMENT_NODE && $node->nodeName == 'configuration' && self::isAgaviEnvelopeNamespace($node->namespaceURI)) {
 						// it's a <configuration> element - put that on a stack for processing
 						$configurationElements[] = $node;
@@ -159,51 +183,29 @@ class AgaviXmlConfigParser
 	}
 	
 	/**
-	 * @param      string An absolute filesystem path to a configuration file.
-	 * @param      array  An associative array of validation information.
+	 * The constructor.
+	 * Will make a DOMDocument instance using the given path.
 	 *
-	 * @return     DOMDocument A DOMDocument.
+	 * @param      string The path to the configuration file.
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
-	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @since      0.11.0
+	 * @since      1.0.0
 	 */
-	public function parse($path, array $validation = array())
+	public function __construct($path)
 	{
 		if(!is_readable($path)) {
 			$error = 'Configuration file "' . $path . '" does not exist or is unreadable';
 			throw new AgaviUnreadableException($error);
 		}
 		
-		$doc = $this->load($path);
-		
-		$this->transform($doc);
-		
-		$this->validate($doc, $validation);
-		
-		$this->cleanup($doc);
-		
-		return $doc;
-	}
-	
-	/**
-	 * Load the configuration file and resolve XIncludes.
-	 *
-	 * @param      string The path to the configuration file.
-	 *
-	 * @return     DOMDocument A document with.
-	 *
-	 * @author     David Zülke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function load($path)
-	{
 		$this->path = $path;
 		
 		$luie = libxml_use_internal_errors(true);
 		libxml_clear_errors();
-		$doc = new DOMDocument();
-		$doc->load($path);
+		
+		$this->doc = new DOMDocument();
+		$this->doc->load($path);
+		
 		if(libxml_get_last_error() !== false) {
 			$errors = array();
 			foreach(libxml_get_errors() as $error) {
@@ -221,8 +223,60 @@ class AgaviXmlConfigParser
 			);
 		}
 		
+		$this->xpath = new DOMXPath($this->doc);
+		
+		libxml_use_internal_errors($luie);
+	}
+	
+	/**
+	 * Destructor to do the cleaning up.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      1.0.0
+	 */
+	public function __destruct()
+	{
+		unset($this->xpath);
+		unset($this->doc);
+	}
+	
+	/**
+	 * @param      array  An associative array of validation information.
+	 * @param      string The name of the current environment.
+	 * @param      string Optional name of the current context.
+	 *
+	 * @return     DOMDocument Our DOMDocument.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function execute(array $validationInfo = array(), $environment, $context = null)
+	{
+		$this->prepare();
+		
+		$this->transform($environment, $context);
+		
+		$this->validate($validationInfo);
+		
+		$this->cleanup();
+		
+		return $this->doc;
+	}
+	
+	/**
+	 * Prepre the configuration file and resolve XIncludes.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function prepare()
+	{
+		$luie = libxml_use_internal_errors(true);
+		libxml_clear_errors();
+		
 		// replace %lala% directives in XInclude href attributes
-		foreach($doc->getElementsByTagNameNS('http://www.w3.org/2001/XInclude', '*') as $element) {
+		foreach($this->doc->getElementsByTagNameNS('http://www.w3.org/2001/XInclude', '*') as $element) {
 			if($element->hasAttribute('href')) {
 				$attribute = $element->getAttributeNode('href');
 				$parts = explode('#', $attribute->nodeValue, 2);
@@ -231,7 +285,7 @@ class AgaviXmlConfigParser
 			}
 		}
 		
-		$doc->xinclude();
+		$this->doc->xinclude();
 		
 		if(libxml_get_last_error() !== false) {
 			$throw = false;
@@ -256,40 +310,23 @@ class AgaviXmlConfigParser
 			}
 		}
 		
-		$xpath = new DOMXPath($doc);
-		
 		// remove all xml:base attributes inserted by XIncludes
-		$nodes = $xpath->query('//@xml:base', $doc);
+		$nodes = $this->xpath->query('//@xml:base', $this->doc);
 		foreach($nodes as $node) {
 			$node->ownerElement->removeAttributeNode($node);
 		}
 		
-		$needsReload = false;
-		
-		// TODO: get rid of this for 1.0
-		// if there is no xmlns declaration on the root element, we gotta add it. must do after xinclude() to maintain BC
-		if($doc->documentElement && !$doc->documentElement->namespaceURI) {
-			$doc->documentElement->setAttribute('xmlns', self::AGAVI_LATEST_CONFIG_XML_NAMESPACE);
-			
-			$needsReload = true;
-		}
-		
 		// necessary due to a PHP bug, see http://trac.agavi.org/ticket/621 and http://bugs.php.net/bug.php?id=43364
 		if(version_compare(PHP_VERSION, '5.2.6', '<')) {
-			$needsReload = true;
-		}
-		
-		// reload the doc maybe?
-		if($needsReload) {
 			// we need to remember the document URI and restore it, just in case
-			$documentUri = $doc->documentURI;
-			$doc->loadXML($doc->saveXML());
-			$doc->documentURI = $documentUri;
+			$documentUri = $this->doc->documentURI;
+			$this->doc->loadXML($this->doc->saveXML());
+			$this->doc->documentURI = $documentUri;
+			
+			$this->xpath = new DOMXPath($this->doc);
 		}
 		
 		libxml_use_internal_errors($luie);
-		
-		return $doc;
 	}
 	
 	/**
@@ -300,15 +337,13 @@ class AgaviXmlConfigParser
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function transform(DOMDocument &$doc)
+	public function transform($environment, $context = null)
 	{
 		$luie = libxml_use_internal_errors(true);
 		
-		$xpath = new DOMXPath($doc);
-		
-		$stylesheetProcessingInstructions = $xpath->query("//processing-instruction('xml-stylesheet')", $doc);
+		$stylesheetProcessingInstructions = $this->xpath->query("//processing-instruction('xml-stylesheet')", $this->doc);
 		foreach($stylesheetProcessingInstructions as $pi) {
-			$fragment = $doc->createDocumentFragment();
+			$fragment = $this->doc->createDocumentFragment();
 			$fragment->appendXml('<foo ' . $pi->data . ' />');
 			$type = $fragment->firstChild->getAttribute('type');
 			if(in_array($type, array('text/xml', 'text/xsl', 'application/xml', 'application/xsl+xml'))) {
@@ -316,7 +351,7 @@ class AgaviXmlConfigParser
 				
 				if(strpos($href, '#') === 0) {
 					// embedded XSL
-					$stylesheets = $xpath->query("//*[@id='" . substr($href, 1) . "']", $doc);
+					$stylesheets = $this->xpath->query("//*[@id='" . substr($href, 1) . "']", $this->doc);
 					if($stylesheets->length) {
 						$xsl = new DomDocument();
 						$xsl->appendChild($xsl->importNode($stylesheets->item(0), true));
@@ -391,9 +426,7 @@ class AgaviXmlConfigParser
 					);
 				}
 				
-				unset($xpath);
-				
-				$newdoc = $proc->transformToDoc($doc);
+				$newdoc = $proc->transformToDoc($this->doc);
 				
 				if(libxml_get_last_error() !== false) {
 					$errors = array();
@@ -414,7 +447,7 @@ class AgaviXmlConfigParser
 				}
 				
 				if($newdoc) {
-					$doc = $newdoc;
+					$this->doc = $newdoc;
 				}
 				
 				$pi->parentNode->removeChild($pi);
@@ -435,7 +468,7 @@ class AgaviXmlConfigParser
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function validate(DOMDocument $doc, array $validationInfo = array())
+	public function validate(array $validationInfo = array())
 	{
 		if(AgaviConfig::get('core.skip_config_validation', false)) {
 			return;
@@ -444,27 +477,27 @@ class AgaviXmlConfigParser
 		foreach($validationInfo as $type => $files) {
 			switch($type) {
 				case self::VALIDATION_TYPE_XMLSCHEMA:
-					$this->validateXmlschema($doc, (array) $files);
+					$this->validateXmlschema((array) $files);
 					break;
 				case self::VALIDATION_TYPE_RELAXNG:
-					$this->validateRelaxng($doc, (array) $files);
+					$this->validateRelaxng((array) $files);
 					break;
 				case self::VALIDATION_TYPE_SCHEMATRON:
-					$this->validateSchematron($doc, (array) $files);
+					$this->validateSchematron((array) $files);
 					break;
 			}
 		}
 		
 		$sources = array();
 		
-		if($doc->documentElement->hasAttributeNS('http://www.w3.org/2001/XMLSchema-instance', 'schemaLocation')) {
-			$locations = preg_split('/\s+/', $doc->documentElement->getAttributeNS('http://www.w3.org/2001/XMLSchema-instance', 'schemaLocation'));
+		if($this->doc->documentElement->hasAttributeNS('http://www.w3.org/2001/XMLSchema-instance', 'schemaLocation')) {
+			$locations = preg_split('/\s+/', $this->doc->documentElement->getAttributeNS('http://www.w3.org/2001/XMLSchema-instance', 'schemaLocation'));
 			for($i = 1; $i < count($locations); $i = $i + 2) {
 				$sources[] = $locations[$i];
 			}
 		}
-		if($doc->documentElement->hasAttributeNS('http://www.w3.org/2001/XMLSchema-instance', 'noNamespaceSchemaLocation')) {
-			$sources[] = $doc->documentElement->getAttributeNS('http://www.w3.org/2001/XMLSchema-instance', 'noNamespaceSchemaLocation');
+		if($this->doc->documentElement->hasAttributeNS('http://www.w3.org/2001/XMLSchema-instance', 'noNamespaceSchemaLocation')) {
+			$sources[] = $this->doc->documentElement->getAttributeNS('http://www.w3.org/2001/XMLSchema-instance', 'noNamespaceSchemaLocation');
 		}
 		
 		if($sources) {
@@ -477,10 +510,10 @@ class AgaviXmlConfigParser
 				}
 				$source = file_get_contents($source);
 			}
-			$this->validateXmlschema($doc, array(), $sources);
+			$this->validateXmlschema(array(), $sources);
 		}
 	}
-	
+
 	/**
 	 * Clean up the document.
 	 *
@@ -489,20 +522,16 @@ class AgaviXmlConfigParser
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function cleanup(DOMDocument $doc)
+	public function cleanup()
 	{
-		$xpath = new DOMXPath($doc);
-		
-		if($doc->documentElement && self::isAgaviEnvelopeNamespace($doc->documentElement->namespaceURI)) {
-			$xpath->registerNamespace('agavi', $doc->documentElement->namespaceURI);
+		if($this->doc->documentElement && self::isAgaviEnvelopeNamespace($this->doc->documentElement->namespaceURI)) {
+			$this->xpath->registerNamespace('agavi', $this->doc->documentElement->namespaceURI);
 			// remove top-level <sandbox> elements
-			$sandboxes = $xpath->query('/agavi:configurations/agavi:sandbox', $doc);
+			$sandboxes = $this->xpath->query('/agavi:configurations/agavi:sandbox', $this->doc);
 			foreach($sandboxes as $sandbox) {
 				$sandbox->parentNode->removeChild($sandbox);
 			}
 		}
-		
-		unset($xpath);
 	}
 	
 	/**
@@ -514,7 +543,7 @@ class AgaviXmlConfigParser
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function validateXmlschema(DOMDocument $doc, array $validationFiles = array(), array $validationSources = array())
+	public function validateXmlschema(array $validationFiles = array(), array $validationSources = array())
 	{
 		$luie = libxml_use_internal_errors(true);
 		
@@ -526,7 +555,7 @@ class AgaviXmlConfigParser
 			}
 			
 			// gotta do the @ to suppress warnings when the schema cannot be found
-			if(!@$doc->schemaValidate($validationFile)) {
+			if(!@$this->doc->schemaValidate($validationFile)) {
 				$errors = array();
 				foreach(libxml_get_errors() as $error) {
 					$errors[] = sprintf("Line %d: %s", $error->line, $error->message);
@@ -545,7 +574,7 @@ class AgaviXmlConfigParser
 		}
 		
 		foreach($validationSources as $validationSource) {
-			if(!$doc->schemaValidateSource($validationSource)) {
+			if(!$this->doc->schemaValidateSource($validationSource)) {
 				$errors = array();
 				foreach(libxml_get_errors() as $error) {
 					$errors[] = sprintf("Line %d: %s", $error->line, $error->message);
@@ -575,7 +604,7 @@ class AgaviXmlConfigParser
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function validateRelaxng(DOMDocument $doc, array $validationFiles = array(), array $validationSources = array())
+	public function validateRelaxng(array $validationFiles = array(), array $validationSources = array())
 	{
 		$luie = libxml_use_internal_errors(true);
 		
@@ -587,7 +616,7 @@ class AgaviXmlConfigParser
 			}
 			
 			// gotta do the @ to suppress warnings when the schema cannot be found
-			if(!@$doc->relaxNGValidate($validationFile)) {
+			if(!@$this->doc->relaxNGValidate($validationFile)) {
 				$errors = array();
 				foreach(libxml_get_errors() as $error) {
 					$errors[] = sprintf("Line %d: %s", $error->line, $error->message);
@@ -606,7 +635,7 @@ class AgaviXmlConfigParser
 		}
 		
 		foreach($validationSources as $validationSource) {
-			if(!$doc->relaxNGValidateSource($validationSource)) {
+			if(!$this->doc->relaxNGValidateSource($validationSource)) {
 				$errors = array();
 				foreach(libxml_get_errors() as $error) {
 					$errors[] = sprintf("Line %d: %s", $error->line, $error->message);
@@ -636,7 +665,7 @@ class AgaviXmlConfigParser
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function validateSchematron(DOMDocument $doc, array $validationFiles = array())
+	public function validateSchematron(array $validationFiles = array())
 	{
 		// not yet implemented
 		return;
@@ -650,7 +679,7 @@ class AgaviXmlConfigParser
 				throw new AgaviUnreadableException($error);
 			}
 			
-			if(!$doc->schemaValidate($validationFile)) {
+			if(!$this->doc->schemaValidate($validationFile)) {
 				$errors = array();
 				foreach(libxml_get_errors() as $error) {
 					$errors[] = sprintf("Line %d: %s", $error->line, $error->message);
