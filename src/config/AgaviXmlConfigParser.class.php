@@ -81,9 +81,10 @@ class AgaviXmlConfigParser
 	
 	/**
 	 * @param      string An absolute filesystem path to a configuration file.
-	 * @param      array  An associative array of validation information.
 	 * @param      string The environment name.
-	 * @param      string The context name.
+	 * @param      string The optional context name.
+	 * @param      array  An associative array of validation information.
+	 * @param      array  An associative array of transformation information.
 	 *
 	 * @return     DOMDocument A properly merged DOMDocument.
 	 *
@@ -91,7 +92,7 @@ class AgaviXmlConfigParser
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public static function run($path, array $validationInfo = array(), $environment, $context = null)
+	public static function run($path, $environment, $context = null, array $validationInfo = array(), array $transformationInfo = array())
 	{
 		$isAgaviConfigFormat = true;
 		// build an array of documents (this one, and the parents)
@@ -99,7 +100,7 @@ class AgaviXmlConfigParser
 		$nextPath = $path;
 		while($nextPath !== null) {
 			$parser = new AgaviXmlConfigParser($nextPath);
-			$doc = $parser->execute($validationInfo, $environment, $context);
+			$doc = $parser->execute($environment, $context, $validationInfo, $transformationInfo);
 			$doc->xpath = new DOMXPath($doc);
 			$docs[] = $doc;
 			
@@ -251,11 +252,11 @@ class AgaviXmlConfigParser
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function execute(array $validationInfo = array(), $environment, $context = null)
+	public function execute($environment, $context = null, array $validationInfo = array(), array $transformationInfo = array())
 	{
 		$this->prepare();
 		
-		$this->transform($environment, $context);
+		$this->transform($environment, $context, $transformationInfo);
 		
 		$this->validate($validationInfo);
 		
@@ -330,14 +331,17 @@ class AgaviXmlConfigParser
 	}
 	
 	/**
-	 * Transform the document using info from embedded processing instructions.
+	 * Transform the document using info from embedded processing instructions
+	 * and given stylesheets.
 	 *
-	 * @param      DOMDocument The document to transform.
+	 * @param      string The environment name.
+	 * @param      string The optional context name.
+	 * @param      array  An array of transformation information.
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function transform($environment, $context = null)
+	public function transform($environment, $context = null, array $transformationInfo = array())
 	{
 		$luie = libxml_use_internal_errors(true);
 		
@@ -537,8 +541,8 @@ class AgaviXmlConfigParser
 	/**
 	 * Validate the document against the given list of XML Schema files.
 	 *
-	 * @param      DOMDocument The document to validate.
 	 * @param      array       An array of file names to validate.
+	 * @param      array       An array of XML Schema sources to validate.
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0

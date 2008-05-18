@@ -75,13 +75,19 @@ class AgaviConfigHandlersConfigHandler extends AgaviConfigHandler
 				);
 				if($handler->hasAttribute('validate')) {
 					$validation[AgaviXmlConfigParser::VALIDATION_TYPE_XMLSCHEMA][] = AgaviToolkit::literalize($handler->getAttribute('validate'));
-				} elseif(false) {
+				} elseif(isset($handler->validations)) {
+					foreach($handler->validations as $validation) {
+						if(!$validation->hasAttribute('type')) {
+							
+						}
+					}
 					// TODO: check for <validations><validation type="schematron"> children here
 				}
 				
 				$handlers[$category] = array(
 					'class' => $class,
 					'parameters' => $this->getItemParameters($handler),
+					'transformation' => array(),
 					'validation' => $validation,
 				);
 			}
@@ -92,6 +98,22 @@ class AgaviConfigHandlersConfigHandler extends AgaviConfigHandler
 		);
 		
 		return $this->generate($data);
+	}
+	
+	public function guessValidationType($path)
+	{
+		switch(pathinfo($path, PATHINFO_EXTENSION)) {
+			case 'rng':
+				return AgaviXmlConfigParser::VALIDATION_TYPE_RELAXNG;
+			case 'rnc':
+				return AgaviXmlConfigParser::VALIDATION_TYPE_RELAXNG;
+			case 'sch':
+				return AgaviXmlConfigParser::VALIDATION_TYPE_SCHEMATRON;
+			case 'xsd':
+				return AgaviXmlConfigParser::VALIDATION_TYPE_XMLSCHEMA;
+			default:
+				throw new AgaviException(sprintf('Could not determine validation type for file "%s"', $path));
+		}
 	}
 }
 
