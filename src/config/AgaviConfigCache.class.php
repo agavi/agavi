@@ -100,7 +100,7 @@ final class AgaviConfigCache
 		if($handler instanceof AgaviIXmlConfigHandler) {
 			// a new-style config handler
 			// it does not parse the config itself; instead, it is given an array of parsed DOM documents (with parents!)
-			$doc = AgaviXmlConfigParser::run($config, AgaviConfig::get('core.environment'), $context, $handlerInfo['validation'], $handlerInfo['transformation']);
+			$doc = AgaviXmlConfigParser::run($config, AgaviConfig::get('core.environment'), $context, $handlerInfo['validations'], $handlerInfo['transformations']);
 
 			if($context !== null) {
 				$context = AgaviContext::getInstance($context);
@@ -115,8 +115,8 @@ final class AgaviConfigCache
 			}
 		} else {
 			$validationFile = null;
-			if(isset($handlerInfo['validation'][AgaviXmlConfigParser::VALIDATION_TYPE_XMLSCHEMA][0])) {
-				$validationFile = $handlerInfo['validation'][AgaviXmlConfigParser::VALIDATION_TYPE_XMLSCHEMA][0];
+			if(isset($handlerInfo['validations'][AgaviXmlConfigParser::VALIDATION_TYPE_XMLSCHEMA][0])) {
+				$validationFile = $handlerInfo['validations'][AgaviXmlConfigParser::VALIDATION_TYPE_XMLSCHEMA][0];
 			}
 			$handler->initialize($validationFile, null, $handlerInfo['parameters']);
 			$data = $handler->execute($config, $context);
@@ -303,7 +303,7 @@ final class AgaviConfigCache
 			'class' => 'AgaviConfigHandlersConfigHandler',
 			'parameters' => array(
 			),
-			'validation' => array(
+			'validations' => array(
 				AgaviXmlConfigParser::VALIDATION_TYPE_XMLSCHEMA => array(
 					$agaviDir . '/config/xsd/config_handlers.xsd',
 				),

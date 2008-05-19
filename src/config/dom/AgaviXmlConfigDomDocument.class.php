@@ -169,7 +169,7 @@ class AgaviXmlConfigDomDocument extends DOMDocument
 			$agaviNs = $this->getAgaviEnvelopeNamespace();
 			
 			foreach($this->documentElement->childNodes as $configuration) {
-				if($configuration->nodeType == XML_ELEMENT_NODE && $configuration->nodeName == 'configuration' && $configuration->namespaceURI == $this->getAgaviEnvelopeNamespace()) {
+				if($configuration->nodeType == XML_ELEMENT_NODE && $configuration->localName == 'configuration' && $configuration->namespaceURI == $this->getAgaviEnvelopeNamespace()) {
 					$retval[] = $configuration;
 				}
 			}

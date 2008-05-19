@@ -3,7 +3,10 @@
 
 	<configuration>
 		
-		<handler pattern="%core.config_dir%/factories.xml" class="AgaviXmlFactoryConfigHandler" />
+		<handler pattern="%core.config_dir%/factories.xml" class="AgaviXmlFactoryConfigHandler">
+			<validation>%core.agavi_dir%/config/xsd/factories.xsd</validation>
+			<transformation>%core.agavi_dir%/config/xsl/factories.xsl</transformation>
+		</handler>
 		
 	</configuration>
 

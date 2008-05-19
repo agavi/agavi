@@ -106,7 +106,7 @@ class AgaviXmlConfigParser
 			
 			// make sure it (still) is a <configurations> file with the proper agavi namespace
 			if($isAgaviConfigFormat) {
-				$isAgaviConfigFormat = $doc->documentElement && $doc->documentElement->nodeName == 'configurations' && self::isAgaviEnvelopeNamespace($doc->documentElement->namespaceURI);
+				$isAgaviConfigFormat = $doc->documentElement && $doc->documentElement->localName == 'configurations' && self::isAgaviEnvelopeNamespace($doc->documentElement->namespaceURI);
 			}
 			
 			// is it an agavi <configurations> element? does it have a parent attribute? yes? good. parse that next
@@ -136,8 +136,8 @@ class AgaviXmlConfigParser
 			// TODO: I bet this leaks memory due to the nodes being taken out of the docs. beware circular refs!
 			foreach($docs as $doc) {
 				// iterate over all nodes (attributes, <sandbox>, <configuration> etc) inside the document element and append them to the <configurations> element in our final document
-				foreach($this->doc->documentElement->childNodes as $node) {
-					if($node->nodeType == XML_ELEMENT_NODE && $node->nodeName == 'configuration' && self::isAgaviEnvelopeNamespace($node->namespaceURI)) {
+				foreach($doc->documentElement->childNodes as $node) {
+					if($node->nodeType == XML_ELEMENT_NODE && $node->localName == 'configuration' && self::isAgaviEnvelopeNamespace($node->namespaceURI)) {
 						// it's a <configuration> element - put that on a stack for processing
 						$configurationElements[] = $node;
 					} else {
@@ -571,7 +571,7 @@ class AgaviXmlConfigParser
 		foreach($validationFiles as $validationFile) {
 			if(!is_resource($validationFile) && !is_readable($validationFile)) {
 				libxml_use_internal_errors($luie);
-				$error = 'Validation file "' . $validationFile . '" for configuration file "' . $this->path . '" does not exist or is unreadable';
+				$error = 'XML Schema validation file "' . $validationFile . '" for configuration file "' . $this->path . '" does not exist or is unreadable';
 				throw new AgaviUnreadableException($error);
 			}
 			
@@ -632,7 +632,7 @@ class AgaviXmlConfigParser
 		foreach($validationFiles as $validationFile) {
 			if(!is_readable($validationFile)) {
 				libxml_use_internal_errors($luie);
-				$error = 'Validation file "' . $validationFile . '" for configuration file "' . $this->path . '" does not exist or is unreadable';
+				$error = 'RELAX NG validation file "' . $validationFile . '" for configuration file "' . $this->path . '" does not exist or is unreadable';
 				throw new AgaviUnreadableException($error);
 			}
 			
@@ -646,7 +646,7 @@ class AgaviXmlConfigParser
 				libxml_use_internal_errors($luie);
 				throw new AgaviParseException(
 					sprintf(
-						'XML Schema validation of configuration file "%s" failed due to the following error%s: ' . "\n\n%s", 
+						'RELAX NG validation of configuration file "%s" failed due to the following error%s: ' . "\n\n%s", 
 						$this->path, 
 						count($errors) > 1 ? 's' : '', 
 						implode("\n", $errors)
@@ -665,7 +665,7 @@ class AgaviXmlConfigParser
 				libxml_use_internal_errors($luie);
 				throw new AgaviParseException(
 					sprintf(
-						'XML Schema validation of configuration file "%s" failed due to the following error%s: ' . "\n\n%s", 
+						'RELAX NG validation of configuration file "%s" failed due to the following error%s: ' . "\n\n%s", 
 						$this->path, 
 						count($errors) > 1 ? 's' : '', 
 						implode("\n", $errors)
@@ -696,7 +696,7 @@ class AgaviXmlConfigParser
 		foreach($validationFiles as $validationFile) {
 			if(!is_readable($validationFile)) {
 				libxml_use_internal_errors($luie);
-				$error = 'Validation file "' . $validationFile . '" for configuration file "' . $this->path . '" does not exist or is unreadable';
+				$error = 'Schematron validation file "' . $validationFile . '" for configuration file "' . $this->path . '" does not exist or is unreadable';
 				throw new AgaviUnreadableException($error);
 			}
 			
@@ -709,7 +709,7 @@ class AgaviXmlConfigParser
 				libxml_use_internal_errors($luie);
 				throw new AgaviParseException(
 					sprintf(
-						'XML Schema validation of configuration file "%s" failed due to the following error%s: ' . "\n\n%s", 
+						'Schematron validation of configuration file "%s" failed due to the following error%s: ' . "\n\n%s", 
 						$this->path, 
 						count($errors) > 1 ? 's' : '', 
 						implode("\n", $errors)

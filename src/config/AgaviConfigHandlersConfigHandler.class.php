@@ -65,7 +65,7 @@ class AgaviConfigHandlersConfigHandler extends AgaviConfigHandler
 				
 				$class = $handler->getAttribute('class');
 				
-				$validation = array(
+				$validations = array(
 					AgaviXmlConfigParser::VALIDATION_TYPE_RELAXNG    => array(
 					),
 					AgaviXmlConfigParser::VALIDATION_TYPE_SCHEMATRON => array(
@@ -73,22 +73,28 @@ class AgaviConfigHandlersConfigHandler extends AgaviConfigHandler
 					AgaviXmlConfigParser::VALIDATION_TYPE_XMLSCHEMA  => array(
 					),
 				);
+				// legacy: via attribute
 				if($handler->hasAttribute('validate')) {
-					$validation[AgaviXmlConfigParser::VALIDATION_TYPE_XMLSCHEMA][] = AgaviToolkit::literalize($handler->getAttribute('validate'));
-				} elseif(isset($handler->validations)) {
+					$validations[AgaviXmlConfigParser::VALIDATION_TYPE_XMLSCHEMA][] = AgaviToolkit::literalize($handler->getAttribute('validate'));
+				}
+				// new: via child elements
+				if(isset($handler->validations)) {
 					foreach($handler->validations as $validation) {
+						$validationPath = AgaviToolkit::literalize($validation->getValue());
 						if(!$validation->hasAttribute('type')) {
-							
+							$validationType = $this->guessValidationType($validationPath);
+						} else {
+							$validationType = $validation->getAttribute('type');
 						}
+						$validations[$validationType][] = $validationPath;
 					}
 					// TODO: check for <validations><validation type="schematron"> children here
 				}
-				
 				$handlers[$category] = array(
 					'class' => $class,
 					'parameters' => $this->getItemParameters($handler),
-					'transformation' => array(),
-					'validation' => $validation,
+					'transformations' => array(),
+					'validations' => $validations,
 				);
 			}
 		}
