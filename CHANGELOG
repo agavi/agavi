@@ -1,6 +1,12 @@
 AGAVI CHANGELOG
 ===============
 
+0.11.2 RC1 (June ??, 2008)
+--------------------------
+
+FIX: Static method AgaviBaseConfigHandler::replacePath() is used in object context in two config handlers (David) (#762)
+
+
 0.11.1 (May 9, 2008)
 --------------------
 
