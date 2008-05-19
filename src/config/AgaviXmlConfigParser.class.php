@@ -166,7 +166,7 @@ class AgaviXmlConfigParser
 					if($element->ownerDocument->xpath->evaluate($xpath, $element)) {
 						foreach($testAttributes as $attributeName => $attributeValue) {
 							// TODO: move that method or something
-							if($element->hasAttribute($attributeName) && !AgaviConfigHandler::testPattern($element->getAttribute($attributeName), $attributeValue)) {
+							if($element->hasAttribute($attributeName) && !self::testPattern($element->getAttribute($attributeName), $attributeValue)) {
 								continue 2;
 							}
 						}
@@ -181,6 +181,23 @@ class AgaviXmlConfigParser
 		}
 		
 		return $retval;
+	}
+	
+	/**
+	 * Builds a proper regular expression from the input pattern to test against
+	 * the given subject. This is for "environment" and "context" attributes of
+	 * configuration blocks in the files.
+	 *
+	 * @param      string A regular expression chunk without delimiters/anchors.
+	 *
+	 * @return     bool Whether or not the subject matched the pattern.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      1.0.0
+	 */
+	public static function testPattern($pattern, $subject)
+	{
+		return (preg_match('/^(' . implode('|', array_map('trim', explode(' ', $pattern))) . ')$/', $subject) > 0);
 	}
 	
 	/**

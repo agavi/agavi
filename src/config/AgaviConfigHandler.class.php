@@ -35,6 +35,17 @@
 abstract class AgaviConfigHandler extends AgaviBaseConfigHandler implements AgaviILegacyConfigHandler
 {
 	/**
+	 * @var        string An absolute filesystem path to a validation filename.
+	 */
+	protected $validationFile = null;
+
+	/**
+	 * @var        string A class name of the class which should be used to parse
+	 *                    Input files of this config handler.
+	 */
+	protected $parser = null;
+
+	/**
 	 * Initialize this ConfigHandler.
 	 *
 	 * @param      string The path to a validation file for this config handler.
@@ -53,6 +64,87 @@ abstract class AgaviConfigHandler extends AgaviBaseConfigHandler implements Agav
 		$this->validationFile = $validationFile;
 		$this->parser = $parser;
 		$this->setParameters($parameters);
+	}
+	
+	/**
+	 * Retrieves the stored validation filename.
+	 *
+	 * @return     string An absolute filesystem path to a validation filename.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getValidationFile()
+	{
+		return $this->validationFile;
+	}
+	
+	/**
+	 * Builds a proper regular expression from the input pattern to test against
+	 * the given subject. This is for "environment" and "context" attributes of
+	 * configuration blocks in the files.
+	 *
+	 * @param      string A regular expression chunk without delimiters/anchors.
+	 *
+	 * @return     bool Whether or not the subject matched the pattern.
+	 *
+	 * @see        AgaviXmlConfigParser::testPattern()
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public static function testPattern($pattern, $subject)
+	{
+		return AgaviXmlConfigParser::testPattern($pattern, $subject);
+	}
+
+	/**
+	 * Returns a properly ordered array of AgaviConfigValueHolder configuration
+	 * elements for given env and context.
+	 *
+	 * @param      AgaviConfigValueHolder The root config element
+	 * @param      string                 An environment name.
+	 * @param      string                 A context name.
+	 * @param      bool                   Whether the parser class should be
+	 *                                    autoloaded or not.
+	 *
+	 * @return     array An array of ConfigValueHolder configuration elements.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function orderConfigurations(AgaviConfigValueHolder $configurations, $environment = null, $context = null, $autoloadParser = true)
+	{
+		$configs = array();
+
+		if($configurations->hasAttribute('parent')) {
+			$parent = AgaviToolkit::literalize($configurations->getAttribute('parent'));
+			$parentConfigs = $this->orderConfigurations(AgaviConfigCache::parseConfig($parent, $autoloadParser, $this->getValidationFile(), $this->parser)->configurations, $environment, $context, $autoloadParser);
+			$configs = array_merge($configs, $parentConfigs);
+		}
+
+		foreach($configurations as $cfg) {
+			if(!$cfg->hasAttribute('environment') && !$cfg->hasAttribute('context')) {
+				$configs[] = $cfg;
+			}
+		}
+		foreach($configurations as $cfg) {
+			if($environment !== null && $cfg->hasAttribute('environment') && self::testPattern($cfg->getAttribute('environment'), $environment) && !$cfg->hasAttribute('context')) {
+				$configs[] = $cfg;
+			}
+		}
+		foreach($configurations as $cfg) {
+			if(!$cfg->hasAttribute('environment') && $context !== null && $cfg->hasAttribute('context') && self::testPattern($cfg->getAttribute('context'), $context)) {
+				$configs[] = $cfg;
+			}
+		}
+		foreach($configurations as $cfg) {
+			if($environment !== null && $cfg->hasAttribute('environment') && self::testPattern($cfg->getAttribute('environment'), $environment) && $context !== null && $cfg->hasAttribute('context') && self::testPattern($cfg->getAttribute('context'), $context)) {
+				$configs[] = $cfg;
+			}
+		}
+
+		return $configs;
 	}
 }
 
