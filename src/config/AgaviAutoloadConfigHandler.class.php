@@ -65,7 +65,7 @@ class AgaviAutoloadConfigHandler extends AgaviConfigHandler
 				// be placed in the include path
 				$originalFile = $file;
 				// if the filename is not absolute we assume its relative to the app dir
-				$file = $this->replacePath($file);
+				$file = self::replacePath($file);
 
 				$class = $entry->getAttribute('name');
 

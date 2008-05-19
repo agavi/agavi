@@ -15,6 +15,12 @@ CHG: Deprecated AgaviAdodbDatabase (#662) (David)
 FIX: Security filters cannot perform checks in addition to isSecure() (#671) (David)
 
 
+0.11.2 RC1 (June ??, 2008)
+--------------------------
+
+FIX: Static method AgaviBaseConfigHandler::replacePath() is used in object context in two config handlers (David) (#762)
+
+
 0.11.1 (May 9, 2008)
 --------------------
 
