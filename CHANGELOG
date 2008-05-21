@@ -4,6 +4,8 @@ AGAVI CHANGELOG
 0.11.2 RC1 (June ??, 2008)
 --------------------------
 
+ADD: Allow nested routing structures with concatenated name or action attributes in ancestors other than immediate parents (Dominik) (#764)
+
 FIX: Static method AgaviBaseConfigHandler::replacePath() is used in object context in two config handlers (David) (#762)
 
 
