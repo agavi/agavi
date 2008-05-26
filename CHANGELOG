@@ -6,7 +6,6 @@ AGAVI CHANGELOG
 
 ADD: Allow arrays as values for web request sources. (#675) (David)
 ADD: Allow additional types for second argument of AgaviLoggerManager::log() (#634) (David)
-ADD: Ability to return data from view as inner content for first layer in a rendering batch (#655) (David)
 
 CHG: Moved AgaviWebRequest::getSourceValue() to AgaviRequest (#686) (David)
 CHG: Deprecated AgaviSecureWebRequest (#676) (David)
@@ -18,6 +17,7 @@ FIX: Security filters cannot perform checks in addition to isSecure() (#671) (Da
 0.11.2 RC1 (June ??, 2008)
 --------------------------
 
+ADD: Ability to return data from view as inner content for first layer in a rendering batch (#655) (David)
 ADD: Allow nested routing structures with concatenated name or action attributes in ancestors other than immediate parents (Dominik) (#764)
 
 FIX: shiny.php exception template does not use htmlspecialchars() when outputting file paths (#765) (David)
