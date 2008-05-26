@@ -48,12 +48,9 @@
     </xs:sequence>
     <xs:attribute name="prefix" type="xs:string" />
   </xs:complexType>
-  <xs:complexType name="setting">
-    <xs:simpleContent>
-      <xs:extension base="xs:string">
-        <xs:attribute name="name" type="xs:string" use="required" />
-      </xs:extension>
-    </xs:simpleContent>
+  <xs:complexType name="setting" mixed="true">
+    <xs:group ref="parameters" />
+    <xs:attribute name="name" type="xs:string" use="required" />
   </xs:complexType>
 
   <xs:group name="exception_templates">
