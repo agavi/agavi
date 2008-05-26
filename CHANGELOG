@@ -4,7 +4,6 @@ AGAVI CHANGELOG
 1.0.0 (?????? ??, 2008)
 -----------------------
 
-ADD: Allow arrays as values for web request sources. (#675) (David)
 ADD: Allow additional types for second argument of AgaviLoggerManager::log() (#634) (David)
 
 CHG: Moved AgaviWebRequest::getSourceValue() to AgaviRequest (#686) (David)
@@ -17,6 +16,7 @@ FIX: Security filters cannot perform checks in addition to isSecure() (#671) (Da
 0.11.2 RC1 (June ??, 2008)
 --------------------------
 
+ADD: Allow arrays as values for web request sources. (#675) (David)
 ADD: Allow arrays as setting values in settings.xml (#670) (David)
 ADD: Ability to return data from view as inner content for first layer in a rendering batch (#655) (David)
 ADD: Allow nested routing structures with concatenated name or action attributes in ancestors other than immediate parents (Dominik) (#764)
