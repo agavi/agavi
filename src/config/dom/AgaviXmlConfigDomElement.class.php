@@ -1,6 +1,6 @@
 <?php
 
-class AgaviXmlConfigDomElement extends DOMElement
+class AgaviXmlConfigDomElement extends DOMElement implements IteratorAggregate
 {
 	/**
 	 * Overloaded method for accessing child nodes. Does the pluralizing etc, and
@@ -15,10 +15,74 @@ class AgaviXmlConfigDomElement extends DOMElement
 	 */
 	public function __get($name) {
 		// TODO: add {namespace}element support
+		// should look into the default ns, IMO. otherwise, you gotta use getChild()
+		// must use singular/plural handling
 	}
 	
 	public function __isset($name) {
 		// TODO: add {namespace}element support
+		// should look into the default ns, IMO. otherwise, you gotta use hasChild()
+	}
+	
+	public function __toString()
+	{
+		return $this->getValue();
+	}
+	
+	public function getName()
+	{
+		// what to return here? name with prefix? no.
+		// but... element name, or with ns prefix?
+	}
+	
+	public function getValue()
+	{
+		// TODO: or textContent?
+		// trimmed or not? in utf-8 or native encoding?
+		// I'd really say we only support utf-8 for the new api
+		return $this->nodeValue;
+	}
+	
+	/**
+	 * Returns an iterator for the child nodes.
+	 *
+	 * @return     Iterator An iterator.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      1.0.0
+	 */
+	public function getIterator()
+	{
+		// should only pull elements from the default ns
+		// remember to handle special case where we are the document element and an agavi config - must find <configuration> elements from the envelope ns here
+		return $this->ownerDocument->getXpath()->query('child::element()', $this);
+	}
+	
+	public function hasChildren($defaultNamespaceOnly = false)
+	{
+		// check for child elements(!) using XPath
+		// if arg is true, then only check for elements from our default namespace
+		// remember to handle special case where we are the document element and an agavi config - must find <configuration> elements from the envelope ns here
+	}
+	
+	public function getChildren($defaultNamespaceOnly = false)
+	{
+		// check for child elements(!) using XPath
+		// if arg is true, then only check for elements from our default namespace
+		// remember to handle special case where we are the document element and an agavi config - must find <configuration> elements from the envelope ns here
+	}
+	
+	public function hasChild($name, $namespaceUri = null)
+	{
+		// if namespace uri is null, use default ns. if empty string, use no ns
+		// remember to handle special case where we are the document element and an agavi config - must find <configuration> elements from the envelope ns here
+		// remember singular/plural support
+	}
+	
+	public function getChild($name, $namespaceUri = null)
+	{
+		// if namespace uri is null, use default ns. if empty string, use no ns
+		// remember to handle special case where we are the document element and an agavi config - must find <configuration> elements from the envelope ns here
 	}
 	
 	/**
