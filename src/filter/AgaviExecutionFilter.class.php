@@ -422,6 +422,9 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 					// $lm->log('Forwarding request, skipping rendering...');
 					$container->setNext($viewCache['next']);
 				} else {
+					$output = array();
+					$nextOutput = null;
+				
 					if($isViewCached) {
 						$layers = $viewCache['layers'];
 						$response = $viewCache['response'];
@@ -439,12 +442,11 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 							$request->setAttributes($ranValues, $ranName);
 						}
 
-						$output = array();
 						$nextOutput = $response->getContent();
 					} else {
 						if($viewCache['next'] !== null) {
 							// response content was returned from view execute()
-							$response->setContent($viewCache['next']);
+							$response->setContent($nextOutput = $viewCache['next']);
 							$viewCache['next'] = null;
 						}
 
@@ -486,9 +488,6 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 								$viewCache['layers'][] = clone $layers[$i];
 							}
 						}
-
-						$output = array();
-						$nextOutput = null;
 					}
 
 					$attributes =& $viewInstance->getAttributes();
