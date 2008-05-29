@@ -10,6 +10,10 @@ Also, please pay special attention to the list of deprecated elements at the end
 
 ATTENTION: Some bugfixes caused changes to internal behavior. Make absolutely sure that your application is ready for an upgrade to 1.0 by reading the UPGRADING document.
 
+Execution
+---------
+Execution containers now have their own request method. By default, it is equal to the global requests' request method. It can, however, be changed using the last (and new) argument of AgaviController::createExecutionContainer() and the related methods in AgaviExecutionContainer and AgaviView. Like the output type, the request method is carried over from the "parent" container if AgaviExecutionContainer::createExecutionContainer() is used (or the methods in AgaviView, which use this method). You can define a slot's request method using the new "method" attribute of the <slot> element in your output_types.xml layout declarations.
+
 Security
 --------
 The check against isSecure() is now performed in the Security Filter, which always runs unconditionally when core.use_security is enabled. This is a bug fix that was made because it would otherwise be impossible to make certain changes to Agavi's authentication model.

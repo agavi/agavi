@@ -863,6 +863,8 @@ abstract class AgaviRouting extends AgaviParameterHolder
 		// set the request method if necessary
 		if($method) {
 			$req->setMethod($method);
+			// and on the already created container, too!
+			$container->setRequestMethod($method);
 		}
 
 		// put the vars into the request

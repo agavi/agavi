@@ -156,7 +156,7 @@ class AgaviCachingConfigHandler extends AgaviConfigHandler
 		
 		$code = array(
 			'$configs = ' . var_export($cachings, true) . ';',
-			'if(isset($configs[$index = $request->getMethod()]) || isset($configs[$index = "*"])) {',
+			'if(isset($configs[$index = $container->getRequestMethod()]) || isset($configs[$index = "*"])) {',
 			'	$isCacheable = true;',
 			'	$config = $configs[$index];',
 			'	if(is_array($config["views"])) {',

@@ -613,7 +613,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 		$actionName = $container->getActionName();
 
 		// get the (already formatted) request method
-		$method = $request->getMethod();
+		$method = $container->getRequestMethod();
 
 		$requestData = $container->getRequestData();
 

@@ -6,6 +6,7 @@ AGAVI CHANGELOG
 
 ADD: Allow additional types for second argument of AgaviLoggerManager::log() (#634) (David)
 
+CHG: Make request method per-container (#667) (David)
 CHG: Moved AgaviWebRequest::getSourceValue() to AgaviRequest (#686) (David)
 CHG: Deprecated AgaviSecureWebRequest (#676) (David)
 CHG: Deprecated AgaviAdodbDatabase (#662) (David)
