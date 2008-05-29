@@ -18,6 +18,10 @@ Security
 --------
 The check against isSecure() is now performed in the Security Filter, which always runs unconditionally when core.use_security is enabled. This is a bug fix that was made because it would otherwise be impossible to make certain changes to Agavi's authentication model.
 
+Validation
+----------
+Validators are not handed a "method" parameter anymore with the request method they should run for. This was extremely redundant since the validators weren't even registered if the request method was "wrong". For manual registering, registerReadValidators(), registerWriteValidators() etc are always used in actions anyway, so no problem here, either. As a result, AgaviValidator::validatesInMethod() is gone, too.
+
 Deprecated elements
 -------------------
 - The "core.use_routing" configuration directive is now deprecated. Instead, please use <parameter name="enabled"> in factories.xml's <routing> element to control the use of routing on a per-context basis (this is a new feature).

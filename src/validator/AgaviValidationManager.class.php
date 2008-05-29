@@ -257,15 +257,8 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 		
 		$req = $this->context->getRequest();
 
-		$requestMethod = $req->getMethod();
-		
 		$executedValidators = 0;
 		foreach($this->children as $validator) {
-			// AgaviValidator::validatesInMethod() is deprecated, so we don't check against the container method here, but the global one. to be removed in 1.1
-			if(!$validator->validatesInMethod($requestMethod)) {
-				continue;
-			}
-
 			++$executedValidators;
 
 			$v_ret = $validator->execute($parameters);
