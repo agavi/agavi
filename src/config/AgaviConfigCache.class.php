@@ -322,7 +322,7 @@ final class AgaviConfigCache
 	{
 		$perms = fileperms(AgaviConfig::get('core.cache_dir')) ^ 0x4000;
 
-		$flags = ($append) ? FILE_APPEND : 0;
+		$flags = LOCK_EX | (($append) ? FILE_APPEND : 0);
 
 		AgaviToolkit::mkdir(AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . self::CACHE_SUBDIR, $perms);
 
