@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 0.11.2 RC1 (June ??, 2008)
 --------------------------
 
+ADD: Add convenience methods to AgaviUploadedFile (#607) (David)
 ADD: Change error class handling in FPF to set classes on elements returned by the respective XPath expressions, not the original elements (#768) (David)
 ADD: Allow arrays as values for web request sources. (#675) (David)
 ADD: Allow arrays as setting values in settings.xml (#670) (David)

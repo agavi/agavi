@@ -127,6 +127,46 @@ class AgaviUploadedFile extends ArrayObject
 	}
 	
 	/**
+	 * Retrieve the contents of the uploaded file.
+	 *
+	 * @return     string The file contents.
+	 *
+	 * @throws     AgaviException If the file has errors or has been moved.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.2
+	 */
+	public function getContents()
+	{
+		if($this->hasError() || !$this->isMovable()) {
+			throw new AgaviException('Cannot get contents of erroneous or moved file.');
+		}
+		
+		return file_get_contents($this->tmp_name);
+	}
+	
+	/**
+	 * Retrieve a stream handle of the uploaded file.
+	 *
+	 * @param      string The fopen mode, defaults to 'rb'.
+	 *
+	 * @return     resource The stream.
+	 *
+	 * @throws     AgaviException If the file has errors or has been moved.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.2
+	 */
+	public function getStream($mode = 'rb')
+	{
+		if($this->hasError() || !$this->isMovable()) {
+			throw new AgaviException('Cannot get contents of erroneous or moved file.');
+		}
+		
+		return fopen($this->tmp_name, $mode);
+	}
+	
+	/**
 	 * Move the uploaded file.
 	 *
 	 * @param      string The destination filename.
@@ -134,7 +174,7 @@ class AgaviUploadedFile extends ArrayObject
 	 * @param      bool   Whether or not subdirs should be created if necessary.
 	 * @param      int    The mode to use when creating subdirs, defaults to 0775.
 	 *
-	 * @return     bool   True, if the operation was successful, false otherwise.
+	 * @return     bool True, if the operation was successful, false otherwise.
 	 *
 	 * @throws     AgaviFileException If chmod or mkdir calls failed.
 	 *
