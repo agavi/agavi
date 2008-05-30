@@ -41,6 +41,11 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	protected $validationManager = null;
 
 	/**
+	 * @var        string The request method for this container.
+	 */
+	protected $requestMethod = null;
+
+	/**
 	 * @var        AgaviRequestDataHolder A request data holder with request info.
 	 */
 	private $requestData = null;
@@ -167,7 +172,8 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	}
 
 	/**
-	 * Creates a new container instance with the same output type as this one.
+	 * Creates a new container instance with the same output type and request
+	 * method as this one.
 	 *
 	 * @param      string                 The name of the module.
 	 * @param      string                 The name of the action.
@@ -175,6 +181,8 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	 *                                    request arguments.
 	 * @param      string                 Optional name of an initial output type
 	 *                                    to set.
+	 * @param      string                 Optional name of the request method to
+	 *                                    be used in this container.
 	 *
 	 * @return     AgaviExecutionContainer A new execution container instance,
 	 *                                     fully initialized.
@@ -182,13 +190,16 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function createExecutionContainer($moduleName = null, $actionName = null, AgaviRequestDataHolder $arguments = null, $outputType = null)
+	public function createExecutionContainer($moduleName = null, $actionName = null, AgaviRequestDataHolder $arguments = null, $outputType = null, $requestMethod = null)
 	{
 		if($outputType === null) {
 			$outputType = $this->getOutputType()->getName();
 		}
+		if($requestMethod === null) {
+			$requestMethod = $this->getRequestMethod();
+		}
 		
-		$container = $this->context->getController()->createExecutionContainer($moduleName, $actionName, $arguments, $outputType);
+		$container = $this->context->getController()->createExecutionContainer($moduleName, $actionName, $arguments, $outputType, $requestMethod);
 		
 		// copy over parameters (could be is_slot, is_forward etc)
 		$container->setParameters($this->getParameters());
@@ -412,6 +423,32 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 			$this->validationManager->initialize($this->context, $vmfi['parameters']);
 		}
 		return $this->validationManager;
+	}
+
+	/**
+	 * Retrieve this container's request method name.
+	 *
+	 * @return     string The request method name.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      1.0.0
+	 */
+	public function getRequestMethod()
+	{
+		return $this->requestMethod;
+	}
+
+	/**
+	 * Set this container's request method name.
+	 *
+	 * @param      string The request method name.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      1.0.0
+	 */
+	public function setRequestMethod($requestMethod)
+	{
+		$this->requestMethod = $requestMethod;
 	}
 
 	/**

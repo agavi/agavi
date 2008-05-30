@@ -116,11 +116,6 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	protected $validationParameters = null;
 
 	/**
-	 * @var        array The request methods where this validator should validate
-	 */
-	protected $requestMethods = array();
-
-	/**
 	 * @var        array The name of the request parameters serving as argument to
 	 *                   this validator.
 	 */
@@ -204,25 +199,6 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	}
 
 	/**
-	 * Checks whether this validator validates in the given request method.
-	 *
-	 * @param      string The request method.
-	 *
-	 * @return     bool Whether the validator validates.
-	 *
-	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function validatesInMethod($requestMethod)
-	{
-		if(count($this->requestMethods) > 0) {
-			return in_array($requestMethod, $this->requestMethods);
-		} else {
-			return true;
-		}
-	}
-
-	/**
 	 * Initialize this validator.
 	 *
 	 * @param      AgaviContext The Context.
@@ -249,12 +225,6 @@ abstract class AgaviValidator extends AgaviParameterHolder
 
 		if(!isset($parameters['source'])) {
 			$parameters['source'] = AgaviRequestDataHolder::SOURCE_PARAMETERS;
-		}
-
-		if(isset($parameters['method'])) {
-			foreach(explode(' ', $parameters['method']) as $method) {
-				$this->requestMethods[] = trim($method);
-			}
 		}
 
 		$this->setParameters($parameters);
@@ -561,6 +531,12 @@ abstract class AgaviValidator extends AgaviParameterHolder
 		$cp->setValue($array, $value);
 		if($this->parentContainer !== null) {
 			// make sure the parameter doesn't get removed by the validation manager
+			if(is_array($value)) {
+				// for arrays all child elements need to be marked as not processed
+				foreach(AgaviArrayPathDefinition::getFlatKeyNames($value) as $keyName) {
+					$this->parentContainer->addFieldResult($this, $cp->pushRetNew($keyName)->__toString(), AgaviValidator::NOT_PROCESSED);
+				}
+			}
 			$this->parentContainer->addFieldResult($this, $cp->__toString(), AgaviValidator::NOT_PROCESSED);
 		}
 	}

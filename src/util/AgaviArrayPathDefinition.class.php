@@ -220,13 +220,18 @@ final class AgaviArrayPathDefinition
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public static function getFlatKeyNames(array $array, $prefix = '')
+	public static function getFlatKeyNames(array $array, $prefix = null)
 	{
 		$names = array();
 		foreach($array as $key => $value) {
-			if(!$prefix) {
+			if($prefix === null) {
 				// create the top node when no prefix was given
-				$name = $key;
+				if(strlen($key) == 0) {
+					// when an empty key was used at top level, create a "relative" path, so the empty string doesn't get lost
+					$name = '[' . $key . ']';
+				} else {
+					$name = $key;
+				}
 			} else {
 				$name = $prefix . '[' . $key . ']';
 			}

@@ -99,6 +99,7 @@ class AgaviOutputTypeConfigHandler extends AgaviConfigHandler
 											'action' => $slot->getAttribute('action'),
 											'module' => $slot->getAttribute('module'),
 											'output_type' => $slot->getAttribute('output_type'),
+											'request_method' => $slot->getAttribute('method'),
 											'parameters' => $this->getItemParameters($slot, array()),
 										);
 									}

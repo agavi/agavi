@@ -161,21 +161,6 @@ final class AgaviConfig
 	}
 
 	/**
-	 * Get all configuration directives and values.
-	 *
-	 * @return     array An associative array of configuration values.
-	 *
-	 * @deprecated Use toArray() instead.
-	 *
-	 * @author     David Zülke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public static function export()
-	{
-		return self::toArray();
-	}
-
-	/**
 	 * Clear the configuration.
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>

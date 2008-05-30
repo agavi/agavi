@@ -4,10 +4,11 @@ AGAVI CHANGELOG
 1.0.0 (?????? ??, 2008)
 -----------------------
 
-ADD: Allow arrays as values for web request sources. (#675) (David)
 ADD: Allow additional types for second argument of AgaviLoggerManager::log() (#634) (David)
-ADD: Ability to return data from view as inner content for first layer in a rendering batch (#655) (David)
 
+CHG: Bump minimum required PHP version to 5.2.0 (#738) (David)
+CHG: Remove direct association of validator instances and request methods (#767) (David)
+CHG: Make request method per-container (#667) (David)
 CHG: Moved AgaviWebRequest::getSourceValue() to AgaviRequest (#686) (David)
 CHG: Deprecated AgaviSecureWebRequest (#676) (David)
 CHG: Deprecated AgaviAdodbDatabase (#662) (David)
@@ -15,8 +16,31 @@ CHG: Deprecated AgaviAdodbDatabase (#662) (David)
 FIX: Security filters cannot perform checks in addition to isSecure() (#671) (David)
 
 
-0.11.1 RC3 (March ??, 2008)
----------------------------
+0.11.2 RC1 (June ??, 2008)
+--------------------------
+
+ADD: Add convenience methods to AgaviUploadedFile (#607) (David)
+ADD: Change error class handling in FPF to set classes on elements returned by the respective XPath expressions, not the original elements (#768) (David)
+ADD: Allow arrays as values for web request sources. (#675) (David)
+ADD: Allow arrays as setting values in settings.xml (#670) (David)
+ADD: Ability to return data from view as inner content for first layer in a rendering batch (#655) (David)
+ADD: Allow nested routing structures with concatenated name or action attributes in ancestors other than immediate parents (Dominik) (#764)
+
+CHG: Use file locking everywhere files are written (Dominik) (#766)
+
+FIX: Calling move() twice on the same uploaded file will cause a bogus exception (#770) (David)
+FIX: shiny.php exception template does not use htmlspecialchars() when outputting file paths (#765) (David)
+FIX: Static method AgaviBaseConfigHandler::replacePath() is used in object context in two config handlers (David) (#762)
+
+
+0.11.1 (May 9, 2008)
+--------------------
+
+FIX: UTF-8 Special characters in exception messages get garbled in exception output (Tanaka Koichi, David) (#758)
+
+
+0.11.1 RC3 (May 2, 2008)
+------------------------
 
 ADD: Add ability to cache complete request attribute namespaces in Execution Filter (#740) (David)
 
@@ -24,6 +48,8 @@ CHG: Non-Agavi exceptions should be clearly marked as such (#749) (David)
 CHG: Change execution filter to run action again if action is cached, but output type of the view isn't (#742) (David)
 CHG: Update timezone database to 2008b (#728) (David)
 
+FIX: Arrays exported by a validator do not survive validation cleanup (#756) (Dominik)
+FIX: AgaviArrayPathDefinition::getFlatKeyNames() returns nonsense if the prefix is "0" or an empty string (#757) (Dominik)
 FIX: Request is not properly unlocked if an exception occurs (#753) (David)
 FIX: logging.xml in code templates does not work out of the box (#750) (David)
 FIX: Actions that return no View are never cached (#746) (David)

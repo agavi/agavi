@@ -132,6 +132,8 @@ abstract class AgaviBaseConfigHandler extends AgaviParameterHolder
 	 *
 	 * @return     string A literalized value.
 	 *
+	 * @deprecated Use AgaviToolkit::expandDirectives() instead.
+	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     David Zülke <dz@bitxtender.com>
@@ -148,6 +150,8 @@ abstract class AgaviBaseConfigHandler extends AgaviParameterHolder
 	 * @param      string The value on which to run the replacement procedure.
 	 *
 	 * @return     string The new value.
+	 *
+	 * @deprecated Use AgaviToolkit::expandDirectives() instead.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @author     Johan Mjones <johan.mjones@ongame.com>
