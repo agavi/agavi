@@ -142,36 +142,6 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	}
 
 	/**
-	 * Get the name of the request parameter that defines which module to use.
-	 *
-	 * @return     string The module accessor name.
-	 *
-	 * @deprecated Use getParameter('module_accessor') instead.
-	 *
-	 * @author     David Zülke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function getModuleAccessor()
-	{
-		return $this->getParameter('module_accessor');
-	}
-
-	/**
-	 * Get the name of the request parameter that defines which action to use.
-	 *
-	 * @return     string The action accessor name.
-	 *
-	 * @deprecated Use getParameter('action_accessor') instead.
-	 *
-	 * @author     David Zülke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function getActionAccessor()
-	{
-		return $this->getParameter('action_accessor');
-	}
-
-	/**
 	 * Set the data holder instance of this request.
 	 *
 	 * @param      AgaviRequestDataHolder The request data holder.
