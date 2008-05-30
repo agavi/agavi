@@ -183,51 +183,54 @@ class AgaviUploadedFile extends ArrayObject
 	 */
 	public function move($dest, $fileMode = 0664, $create = true, $dirMode = 0775)
 	{
-		if(!$this->hasError()) {
-			// get our directory path from the destination filename
-			$directory = dirname($dest);
-			if(!is_readable($directory)) {
-				if($create && !AgaviToolkit::mkdir($directory, $dirMode, true)) {
-					// failed to create the directory
-					$error = 'Failed to create file upload directory "%s"';
-					$error = sprintf($error, $directory);
-					throw new AgaviFileException($error);
-				}
-			} elseif(!is_dir($directory)) {
-				// the directory path exists but it's not a directory
-				$error = 'File upload path "%s" exists, but is not a directory';
-				$error = sprintf($error, $directory);
-				throw new AgaviFileException($error);
-			} elseif(!is_writable($directory)) {
-				// the directory isn't writable
-				$error = 'File upload path "%s" is not writable';
-				$error = sprintf($error, $directory);
-				throw new AgaviFileException($error);
-			}
-			
-			if($this->is_uploaded_file) {
-				$moved = @move_uploaded_file($this->tmp_name, $dest);
-			} else {
-				if(is_writable($dest)) {
-					unlink($dest);
-				}
-				$moved = @rename($this->tmp_name, $dest);
-			}
-			
-			if($moved) {
-				$this->moved = true;
-				// chmod our file
-				if(!@chmod($dest, $fileMode)) {
-					throw new AgaviFileException('Failed to chmod uploaded file after moving');
-				}
-			} else {
-				// moving the file failed
-				throw new AgaviFileException('Failed to move uploaded file');
-			}
-			
-			return true;
+		if($this->hasError()) {
+			return false;
+		} elseif(!$this->isMovable()) {
+			return false;
 		}
-		return false;
+		
+		// get our directory path from the destination filename
+		$directory = dirname($dest);
+		if(!is_readable($directory)) {
+			if($create && !AgaviToolkit::mkdir($directory, $dirMode, true)) {
+				// failed to create the directory
+				$error = 'Failed to create file upload directory "%s"';
+				$error = sprintf($error, $directory);
+				throw new AgaviFileException($error);
+			}
+		} elseif(!is_dir($directory)) {
+			// the directory path exists but it's not a directory
+			$error = 'File upload path "%s" exists, but is not a directory';
+			$error = sprintf($error, $directory);
+			throw new AgaviFileException($error);
+		} elseif(!is_writable($directory)) {
+			// the directory isn't writable
+			$error = 'File upload path "%s" is not writable';
+			$error = sprintf($error, $directory);
+			throw new AgaviFileException($error);
+		}
+		
+		if($this->is_uploaded_file) {
+			$moved = @move_uploaded_file($this->tmp_name, $dest);
+		} else {
+			if(is_writable($dest)) {
+				unlink($dest);
+			}
+			$moved = @rename($this->tmp_name, $dest);
+		}
+		
+		if($moved) {
+			$this->moved = true;
+			// chmod our file
+			if(!@chmod($dest, $fileMode)) {
+				throw new AgaviFileException('Failed to chmod uploaded file after moving');
+			}
+		} else {
+			// moving the file failed
+			throw new AgaviFileException('Failed to move uploaded file');
+		}
+		
+		return true;
 	}
 }
 
