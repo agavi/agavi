@@ -336,7 +336,7 @@ final class AgaviConfigCache
 	{
 		$perms = fileperms(AgaviConfig::get('core.cache_dir')) ^ 0x4000;
 
-		$flags = ($append) ? FILE_APPEND : 0;
+		$flags = LOCK_EX | (($append) ? FILE_APPEND : 0);
 
 		AgaviToolkit::mkdir(AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . self::CACHE_SUBDIR, $perms);
 
@@ -368,7 +368,8 @@ final class AgaviConfigCache
 	 * @throws     <b>AgaviConfigurationException</b> If the parser for the
 	 *             extension couldn't be found.
 	 *
-	 * @deprecated New-style config handlers don't call this method anymore.
+	 * @deprecated New-style config handlers don't call this method anymore. To be
+	 *             removed in Agavi 1.1
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     David Zülke <dz@bitxtender.com>

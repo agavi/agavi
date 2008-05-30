@@ -31,6 +31,11 @@
 class AgaviRoutingConfigHandler extends AgaviConfigHandler
 {
 	/**
+	 * @var        array Stores the generated names of unnamed routes.
+	 */
+	protected $unnamedRoutes = array();
+	
+	/**
 	 * Execute this configuration handler.
 	 *
 	 * @param      string An absolute filesystem path to a configuration file.
@@ -54,6 +59,9 @@ class AgaviRoutingConfigHandler extends AgaviConfigHandler
 		if($context == null) {
 			$context = '';
 		}
+
+		// reset the stored route names
+		$this->unnamedRoutes = array();
 
 		// parse the config file
 		$configurations = $this->orderConfigurations(AgaviConfigCache::parseConfig($config, true, $this->getValidationFile(), $this->parser)->configurations, AgaviConfig::get('core.environment'), $context);
@@ -120,19 +128,34 @@ class AgaviRoutingConfigHandler extends AgaviConfigHandler
 			}
 
 			if(isset($opts['name']) && $parent) {
+				// don't overwrite $parent since it's used later
+				$parentName = $parent;
 				if($opts['name'][0] == '.') {
-					$opts['name'] = $parent . $opts['name'];
+					while($parentName && isset($this->unnamedRoutes[$parentName])) {
+						$parentRoute = $routing->getRoute($parentName);
+						$parentName = $parentRoute['opt']['parent'];
+					}
+					$opts['name'] = $parentName . $opts['name'];
 				}
 			}
 
 			if(isset($opts['action']) && $parent) {
 				if($opts['action'][0] == '.') {
 					$parentRoute = $routing->getRoute($parent);
-					$opts['action'] = $parentRoute['opt']['action'] . $opts['action'];
+					// unwind all empty 'action' attributes of the parent(s)
+					while($parentRoute && empty($parentRoute['opt']['action'])) {
+						$parentRoute = $routing->getRoute($parentRoute['opt']['parent']);
+					}
+					if(!empty($parentRoute['opt']['action'])) {
+						$opts['action'] = $parentRoute['opt']['action'] . $opts['action'];
+					}
 				}
 			}
 
 			$name = $routing->addRoute($pattern, $opts, $parent);
+			if(!isset($opts['name']) || $opts['name'] !== $name) {
+				$this->unnamedRoutes[$name] = true;
+			}
 			if($route->hasChildren('routes')) {
 				$this->parseRoutes($routing, $route->routes, $name);
 			}

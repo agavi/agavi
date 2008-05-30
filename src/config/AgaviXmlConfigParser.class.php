@@ -524,8 +524,7 @@ class AgaviXmlConfigParser
 		if($sources) {
 			foreach($sources as &$source) {
 				$source = AgaviToolkit::expandDirectives($source);
-				$info = parse_url($source);
-				if(!isset($info['scheme']) && !AgaviToolkit::isPathAbsolute($source)) {
+				if(parse_url($source, PHP_URL_SCHEME) === null && !AgaviToolkit::isPathAbsolute($source)) {
 					// the schema location is relative to the XML file
 					$source = dirname($this->path) . DIRECTORY_SEPARATOR . $source;
 				}
