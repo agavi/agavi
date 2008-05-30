@@ -6,6 +6,7 @@ AGAVI CHANGELOG
 
 ADD: Allow additional types for second argument of AgaviLoggerManager::log() (#634) (David)
 
+CHG: Bump minimum required PHP version to 5.2.0 (#738) (David)
 CHG: Remove direct association of validator instances and request methods (#767) (David)
 CHG: Make request method per-container (#667) (David)
 CHG: Moved AgaviWebRequest::getSourceValue() to AgaviRequest (#686) (David)
@@ -18,6 +19,7 @@ FIX: Security filters cannot perform checks in addition to isSecure() (#671) (Da
 0.11.2 RC1 (June ??, 2008)
 --------------------------
 
+ADD: Add convenience methods to AgaviUploadedFile (#607) (David)
 ADD: Change error class handling in FPF to set classes on elements returned by the respective XPath expressions, not the original elements (#768) (David)
 ADD: Allow arrays as values for web request sources. (#675) (David)
 ADD: Allow arrays as setting values in settings.xml (#670) (David)
@@ -26,6 +28,7 @@ ADD: Allow nested routing structures with concatenated name or action attributes
 
 CHG: Use file locking everywhere files are written (Dominik) (#766)
 
+FIX: Calling move() twice on the same uploaded file will cause a bogus exception (#770) (David)
 FIX: shiny.php exception template does not use htmlspecialchars() when outputting file paths (#765) (David)
 FIX: Static method AgaviBaseConfigHandler::replacePath() is used in object context in two config handlers (David) (#762)
 

@@ -93,13 +93,7 @@ class AgaviWebRouting extends AgaviRouting
 		$rd = $rq->getRequestData();
 
 		// 'scheme://authority' is necessary so parse_url doesn't stumble over '://' in the request URI
-		$ru = parse_url('scheme://authority' . $rq->getRequestUri());
-		if(!isset($ru['path'])) {
-			$ru['path'] = '';
-		}
-		if(!isset($ru['query'])) {
-			$ru['query'] = '';
-		}
+		$ru = array_merge(array('path' => '', 'query' => ''), parse_url('scheme://authority' . $rq->getRequestUri()));
 
 		if(isset($_SERVER['QUERY_STRING'])) {
 			$qs = $_SERVER['QUERY_STRING'];

@@ -883,8 +883,6 @@ abstract class AgaviRouting extends AgaviParameterHolder
 
 		// set the list of matched route names as a request attribute
 		$req->setAttribute('matched_routes', $matchedRoutes, 'org.agavi.routing');
-		// deprecated
-		$req->setAttribute('matchedRoutes', $matchedRoutes, 'org.agavi.routing');
 
 		// return a list of matched route names
 		return $container;
