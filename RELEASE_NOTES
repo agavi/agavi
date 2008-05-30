@@ -1,8 +1,8 @@
 AGAVI RELEASE NOTES
 ===================
 
-Version 0.11.1 - March ??, 2008
-===============================
+Version 0.11.1 - May 9, 2008
+============================
 
 This is a bugfix release. The most important changes are:
 
@@ -13,6 +13,10 @@ This is a bugfix release. The most important changes are:
 - The global request data is now correctly locked away during rendering of templates.
 
 - Several fixes were done to the database session storage. Of note, no implementation forces a garbage collection run anymore before opening a session. An issue with date formats in queries has been fixed, too, for all implementations, and storages will not create a blank session entry anymore if the requested session ID was not found during a read operation.
+
+- The Execution Container creation methods in AgaviView now use null as the default values for the optional arguments array/object, and createForwardContainer() will now forward arguments from the current Container if no arguments are given in the call.
+
+- AgaviExecutionFilter::writeCache() now is passed the lifetime as the third argument.
 
 For a complete list of changes in this release, please refer to the CHANGELOG file.
 

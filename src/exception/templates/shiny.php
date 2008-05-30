@@ -56,7 +56,7 @@ function buildParamList($params)
 				$retval[] = $key . '[object <em>' . get_class($param) . '</em>]';
 				break;
 			case 'resource':
-				$retval[] = $key . '[resource <em>' . get_resource_type($param) . '</em>]';
+				$retval[] = $key . '[resource <em>' . htmlspecialchars(get_resource_type($param)) . '</em>]';
 				break;
 			case 'string':
 				$retval[] = $key . htmlspecialchars(var_export(strlen($param) > 51 ? substr_replace($param, ' … ', 25, -25) : $param, true));
@@ -555,7 +555,7 @@ if(isset($fixedTrace[0]['file']) && $fixedTrace[0]['file'] != $e->getFile() && $
 			This is <em>not</em> an Agavi exception, but likely an error that occured in the application code.</p>
 <?php endif; ?>
 		<p>An exception of type <strong><?php echo get_class($e); ?></strong> was thrown, but did not get caught during the execution of the request. You will find information provided by the exception along with a stack trace below.</p>
-<?php $msg = nl2br(htmlentities($e->getMessage())); ?>
+<?php $msg = nl2br(htmlspecialchars($e->getMessage())); ?>
 <?php if($msg != ''): ?>
 		<p id="message"<?php if($svg): ?> class="nice"<?php endif; ?>>
 <?php if($svg): ?>
@@ -578,7 +578,7 @@ foreach($fixedTrace as $trace):
 		$highlights[$trace['file']] = explode('<br />', $highlights[$trace['file']]);
 	}
 ?>
-			<li id="frame<?php echo $i; ?>"<?php if($i > 1): ?> class="hidecode"<?php endif; ?>>at <?php if($i > 1): ?><strong><?php if(isset($trace['class'])): ?><?php echo $trace['class'], htmlspecialchars($trace['type']); ?><?php endif; ?><?php echo $trace['function']; ?><?php if(isset($trace['args'])): ?>(<?php echo buildParamList($trace['args']); ?>)<?php endif; ?></strong><?php else: ?><em>exception origin</em><?php endif; ?><br />in <?php if(isset($trace['file'])): echo str_replace(
+			<li id="frame<?php echo $i; ?>"<?php if($i > 1): ?> class="hidecode"<?php endif; ?>>at <?php if($i > 1): ?><strong><?php if(isset($trace['class'])): ?><?php echo $trace['class'], htmlspecialchars($trace['type']); ?><?php endif; ?><?php echo $trace['function']; ?><?php if(isset($trace['args'])): ?>(<?php echo buildParamList($trace['args']); ?>)<?php endif; ?></strong><?php else: ?><em>exception origin</em><?php endif; ?><br />in <?php if(isset($trace['file'])): echo htmlspecialchars(str_replace(
 			array(
 				'_' . AgaviConfig::get('core.module_dir', 'something totally random'),
 				'_' . AgaviConfig::get('core.template_dir', 'something totally random'),
@@ -597,7 +597,7 @@ foreach($fixedTrace as $trace):
 				'<abbr title="' . AgaviConfig::get('core.app_dir') . '">core.app_dir</abbr>',
 				'<abbr title="' . AgaviConfig::get('core.agavi_dir') . '">core.agavi_dir</abbr>',
 			),
-'_' . $trace['file']); ?> <a href="#frame<?php echo $i; ?>" class="toggle" title="Toggle source code snippet" onclick="this.parentNode.className = this.parentNode.className == 'hidecode' ? '' : 'hidecode'; return false;">line <?php echo $trace['line']; ?></a><ol start="<?php echo $start = $trace['line'] < 4 ? 1 : $trace['line'] - 3; ?>" style="padding-left:<?php echo strlen($start+6)*0.6+2; ?>em"><?php
+'_' . $trace['file'])); ?> <a href="#frame<?php echo $i; ?>" class="toggle" title="Toggle source code snippet" onclick="this.parentNode.className = this.parentNode.className == 'hidecode' ? '' : 'hidecode'; return false;">line <?php echo $trace['line']; ?></a><ol start="<?php echo $start = $trace['line'] < 4 ? 1 : $trace['line'] - 3; ?>" style="padding-left:<?php echo strlen($start+6)*0.6+2; ?>em"><?php
 $lines = array_slice($highlights[$trace['file']], $start - 1, 7, true);
 foreach($lines as $key => &$line) {
 	if($key + 1 == $trace['line']): ?><li class="highlight"><?php if($svg): ?><div style="float:left; width:1em; height:1em; margin-left:-1.35em; background-color:#FFF;"><svg:svg viewBox="2 1 45 43" preserveAspectRatio="xMaxYMax meet" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><svg:use xlink:href="#stopSign" /></svg:svg></div><?php endif; else: ?><li><?php endif; ?><code><?php
@@ -628,11 +628,11 @@ foreach($lines as $key => &$line) {
 		<h3>Version Information</h3>
 		<dl>
 			<dt>Agavi:</dt>
-			<dd><?php echo AgaviConfig::get('agavi.version'); ?></dd>
+			<dd><?php echo htmlspecialchars(AgaviConfig::get('agavi.version')); ?></dd>
 			<dt>PHP:</dt>
-			<dd><?php echo phpversion(); ?></dd>
+			<dd><?php echo htmlspecialchars(phpversion()); ?></dd>
 			<dt>System:</dt>
-			<dd><?php echo php_uname(); ?></dd>
+			<dd><?php echo htmlspecialchars(php_uname()); ?></dd>
 			<dt>Timestamp:</dt>
 			<dd><?php echo gmdate(DATE_ISO8601); ?></dd>
 		</dl>
