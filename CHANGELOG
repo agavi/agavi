@@ -28,6 +28,7 @@ ADD: Allow nested routing structures with concatenated name or action attributes
 CHG: Change error class handling in FPF to set classes on elements returned by the respective XPath expressions, not the original elements (#768) (David)
 CHG: Use file locking everywhere files are written (Dominik) (#766)
 
+FIX: Form Population Filter incorrectly inserts XML prolog into HTML documents (#771) (David)
 FIX: Calling move() twice on the same uploaded file will cause a bogus exception (#770) (David)
 FIX: shiny.php exception template does not use htmlspecialchars() when outputting file paths (#765) (David)
 FIX: Static method AgaviBaseConfigHandler::replacePath() is used in object context in two config handlers (David) (#762)

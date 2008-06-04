@@ -135,15 +135,16 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 		$this->doc->preserveWhiteSpace = $cfg['dom_preserve_white_space'];
 		$this->doc->formatOutput       = $cfg['dom_format_output'];
 
+		$xhtml = (preg_match('/<!DOCTYPE[^>]+XHTML[^>]+/', $output) > 0 && strtolower($cfg['force_output_mode']) != 'html') || strtolower($cfg['force_output_mode']) == 'xhtml';
+
 		$hasXmlProlog = false;
-		if(preg_match('/^<\?xml[^\?]*\?>/', $output)) {
+		if($xhtml && preg_match('/^<\?xml[^\?]*\?>/', $output)) {
 			$hasXmlProlog = true;
-		} elseif(preg_match('/charset=(.+)\s*$/i', $ot->getParameter('http_headers[Content-Type]'), $matches)) {
+		} elseif($xhtml && preg_match('/charset=(.+)\s*$/i', $ot->getParameter('http_headers[Content-Type]'), $matches)) {
 			// add an XML prolog with the char encoding, works around issues with ISO-8859-1 etc
 			$output = "<?xml version='1.0' encoding='" . $matches[1] . "' ?>\n" . $output;
 		}
 
-		$xhtml = (preg_match('/<!DOCTYPE[^>]+XHTML[^>]+/', $output) > 0 && strtolower($cfg['force_output_mode']) != 'html') || strtolower($cfg['force_output_mode']) == 'xhtml';
 		if($xhtml && $cfg['parse_xhtml_as_xml']) {
 			$this->doc->loadXML($output);
 			$this->xpath = new DomXPath($this->doc);
