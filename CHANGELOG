@@ -10,9 +10,12 @@ ADD: Allow arrays as setting values in settings.xml (#670) (David)
 ADD: Ability to return data from view as inner content for first layer in a rendering batch (#655) (David)
 ADD: Allow nested routing structures with concatenated name or action attributes in ancestors other than immediate parents (Dominik) (#764)
 
+CHG: Introduce generic AgaviStreamLoggerAppender (#773) (David)
+CHG: Make AgaviLoggerAppender an AgaviParameterHolder (#774) (David)
 CHG: Change error class handling in FPF to set classes on elements returned by the respective XPath expressions, not the original elements (#768) (David)
 CHG: Use file locking everywhere files are written (Dominik) (#766)
 
+FIX: stdout/stderror log appenders are broken (#751) (David)
 FIX: Caching configuration blocks might be merged incorrectly (#755) (David)
 FIX: Caching and validation configurations cannot be per-context (#754) (David)
 FIX: Form Population Filter incorrectly inserts XML prolog into HTML documents (#771) (David)
