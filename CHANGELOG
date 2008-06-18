@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 0.11.2 RC1 (June ??, 2008)
 --------------------------
 
+ADD: Add SecurityUser::hasCredential and SecurityUser::getCredentials for convenience (Noah) (#772)
 ADD: Add convenience methods to AgaviUploadedFile (#607) (David)
 ADD: Allow arrays as values for web request sources. (#675) (David)
 ADD: Allow arrays as setting values in settings.xml (#670) (David)
@@ -216,7 +217,7 @@ FIX: FilterChain resets run count for each registered filter; thus executeOnce()
 FIX: User-agent check in shiny exception template can throw errors (#564) (Noah Fontes)
 FIX: WebRouting::gen() ignores 'separator' option when generating existing routes (#545) (David)
 FIX: <route action=".Something" /> confuses template location code (#540) (David)
-FIX: AgaviPropelDatabase returns null in getConnection when used with Propel 1.2 (#538) (Dominik) 
+FIX: AgaviPropelDatabase returns null in getConnection when used with Propel 1.2 (#538) (Dominik)
 FIX: "shiny" exception template may generate invalid markup if HTML is at first line of code snippet (#537) (David)
 FIX: AgaviToolkit::expandVariables() skips null arguments (#536) (David)
 FIX: AgaviParameterHolder::hasParameter() etc return false for keys that have a null value (#535) (David)
@@ -633,4 +634,3 @@ FIX: Use proper type "::" or "->" in stack trace (David)
 --------------------
 
 - Initial Release
-
