@@ -86,7 +86,6 @@ final class AgaviContext
 	
 	/**
 	 * @var        AgaviTranslationManager A TranslationManager instance.
-	 * @since      0.11.0
 	 */
 	protected $translationManager = null;
 	
@@ -111,24 +110,24 @@ final class AgaviContext
 	protected $singletonModelInstances = array();
 
 	/**
-	 * Clone method, overridden to prevent cloning, there can be only one. 
+	 * Clone method, overridden to prevent cloning, there can be only one.
 	 *
-	 * @author     Mike Vincent <mike@agavi.org>	
+	 * @author     Mike Vincent <mike@agavi.org>
 	 * @since      0.9.0
 	 */
 	public function __clone()
 	{
 		trigger_error('Cloning an AgaviContext instance is not allowed.', E_USER_ERROR);
-	}	
+	}
 
 	/**
-	 * Constuctor method, intentionally made private so the context cannot be 
+	 * Constuctor method, intentionally made private so the context cannot be
 	 * created directly.
 	 *
-	 * @author     Mike Vincent <mike@agavi.org>	
+	 * @author     Mike Vincent <mike@agavi.org>
 	 * @since      0.9.0
 	 */
-	private function __construct() 
+	private function __construct()
 	{
 		// Singleton, setting up the class happens in initialize()
 	}
