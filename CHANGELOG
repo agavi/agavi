@@ -11,6 +11,7 @@ ADD: Allow arrays as setting values in settings.xml (#670) (David)
 ADD: Ability to return data from view as inner content for first layer in a rendering batch (#655) (David)
 ADD: Allow nested routing structures with concatenated name or action attributes in ancestors other than immediate parents (Dominik) (#764)
 
+CHG: Arguments passed to AgaviController::dispatch() should have precedence over routing results (#777) (David)
 CHG: Introduce generic AgaviStreamLoggerAppender (#773) (David)
 CHG: Make AgaviLoggerAppender an AgaviParameterHolder (#774) (David)
 CHG: Change error class handling in FPF to set classes on elements returned by the respective XPath expressions, not the original elements (#768) (David)

@@ -162,13 +162,14 @@ class AgaviController extends AgaviParameterHolder
 		
 		try {
 			
+			// match routes and assign returned initial execution container
+			$container = $this->context->getRouting()->execute();
+			
+			// merge in any arguments given. they need to have precedence over what the routing found
 			$requestData = $this->context->getRequest()->getRequestData();
 			if($arguments !== null) {
 				$requestData->merge($arguments);
 			}
-			
-			// match routes and assign returned initial execution container
-			$container = $this->context->getRouting()->execute();
 			
 			$moduleName = $container->getModuleName();
 			$actionName = $container->getActionName();
