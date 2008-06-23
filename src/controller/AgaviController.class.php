@@ -158,6 +158,8 @@ class AgaviController extends AgaviParameterHolder
 	 */
 	public function dispatch(AgaviRequestDataHolder $arguments = null)
 	{
+		$container = null;
+		
 		try {
 			
 			$requestData = $this->context->getRequest()->getRequestData();
@@ -200,11 +202,7 @@ class AgaviController extends AgaviParameterHolder
 			return $response;
 			
 		} catch(Exception $e) {
-			if(isset($container) && $container instanceof AgaviExecutionContainer) {
-				AgaviException::printStackTrace($e, $this->context, $container);
-			} else {
-				AgaviException::printStackTrace($e, $this->context);
-			}
+			AgaviException::printStackTrace($e, $this->context, $container);
 		}
 	}
 	
