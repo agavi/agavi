@@ -124,12 +124,15 @@ final class AgaviContext
 	 * Constuctor method, intentionally made private so the context cannot be
 	 * created directly.
 	 *
+	 * @param      string The name of this context.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @author     Mike Vincent <mike@agavi.org>
 	 * @since      0.9.0
 	 */
-	private function __construct()
+	private function __construct($name)
 	{
-		// Singleton, setting up the class happens in initialize()
+		$this->name = $name;
 	}
 
 	/**
@@ -243,8 +246,8 @@ final class AgaviContext
 			$profile = strtolower($profile);
 			if(!isset(self::$instances[$profile])) {
 				$class = __CLASS__;
-				self::$instances[$profile] = new $class;
-				self::$instances[$profile]->initialize($profile);
+				self::$instances[$profile] = new $class($profile);
+				self::$instances[$profile]->initialize();
 			}
 			return self::$instances[$profile];
 		} catch(Exception $e) {
@@ -269,8 +272,6 @@ final class AgaviContext
 	/**
 	 * (re)Initialize the AgaviContext instance.
 	 *
-	 * @param      string A name corresponding to a section of the config
-	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @author     Mike Vincent <mike@agavi.org>
@@ -278,16 +279,8 @@ final class AgaviContext
 	 */
 	public function initialize($profile = null)
 	{
-		if($profile === null) {
-			$profile = AgaviConfig::get('core.default_context', 'stdctx');
-		}
-		
-		$profile = strtolower($profile);
-		
-		$this->name = $profile;
-		
 		try {
-			include(AgaviConfigCache::checkConfig(AgaviConfig::get('core.config_dir') . '/factories.xml', $profile));
+			include(AgaviConfigCache::checkConfig(AgaviConfig::get('core.config_dir') . '/factories.xml', $this->name));
 		} catch(Exception $e) {
 			AgaviException::printStackTrace($e, $this);
 		}
