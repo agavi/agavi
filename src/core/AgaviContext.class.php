@@ -277,7 +277,7 @@ final class AgaviContext
 	 * @author     Mike Vincent <mike@agavi.org>
 	 * @since      0.10.0
 	 */
-	public function initialize($profile = null)
+	public function initialize()
 	{
 		try {
 			include(AgaviConfigCache::checkConfig(AgaviConfig::get('core.config_dir') . '/factories.xml', $this->name));
