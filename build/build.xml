@@ -479,10 +479,16 @@
 	<target name="action-locate" depends="initialize,project-locate,module-locate">
 		<agavi.input property="action.name" message="Action name" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
 		<agavi.transform-action-name-to-path property="action.path" name="${action.name}" />
-		<property name="action.file" value="${module.directory}/actions/${action.path}Action.class.php" />
+		<property name="action.file" value="${module.directory}/actions/${action.path}Action.class.php" override="true" />
 
 		<available property="action.available" file="${action.file}" type="file" />
 		<fail unless="action.available" message="Agavi action not found at ${action.file}" />
+
+		<!-- Transform . to _ for the actual identifier. -->
+		<agavi.transform-string-to-identifier property="action.identifier" string="${action.name}" />
+
+		<!-- Define the name of the action class. -->
+		<property name="action.class" value="${module.name}_${action.identifier}Action" override="true" />
 	</target>
 
 	<target name="action-create" depends="initialize,project-locate,module-locate" description="Creates an action">
@@ -508,6 +514,9 @@
 		<available property="action.available" file="${action.file}" type="file" />
 		<fail if="action.available" message="Action ${action.name} already exists at ${action.file}" />
 
+		<!-- Define the name of the action class. -->
+		<property name="action.class" value="${module.name}_${action.identifier}Action" />
+
 		<!-- Copy. -->
 		<copy file="${templates.directory.app.modules.actions}/Action.class.php.tmpl" tofile="${action.file}">
 			<filterchain>
@@ -518,6 +527,7 @@
 					<token key="MODULE_NAME" value="${module.name}" />
 					<token key="ACTION_NAME" value="${action.name}" />
 					<token key="ACTION_IDENTIFIER" value="${action.identifier}" />
+					<token key="ACTION_CLASS" value="${action.class}" />
 				</replacetokens>
 			</filterchain>
 		</copy>
@@ -531,6 +541,7 @@
 					<token key="MODULE_NAME" value="${module.name}" />
 					<token key="ACTION_NAME" value="${action.name}" />
 					<token key="ACTION_IDENTIFIER" value="${action.identifier}" />
+					<token key="ACTION_CLASS" value="${action.class}" />
 				</replacetokens>
 			</filterchain>
 		</copy>
@@ -544,6 +555,7 @@
 					<token key="MODULE_NAME" value="${module.name}" />
 					<token key="ACTION_NAME" value="${action.name}" />
 					<token key="ACTION_IDENTIFIER" value="${action.identifier}" />
+					<token key="ACTION_CLASS" value="${action.class}" />
 				</replacetokens>
 			</filterchain>
 		</copy>
@@ -553,45 +565,100 @@
 	</target>
 
 	<target name="action-remove" depends="initialize,project-locate,module-locate,action-locate" description="Removes an action">
+		
 	</target>
 
 	<!--
 	  View targets.
 	  -->
 
+	<target name="view-locate" depends="initialize,project-locate,module-locate,action-locate">
+		<agavi.input property="view.name" message="View name" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
+		<property name="view.file" value="${module.directory}/views/${action.path}${view.name}View.class.php" />
+
+		<available property="view.available" file="${view.file}" type="file" />
+		<fail unless="view.available" message="Agavi view not found at ${view.file}" />
+
+		<!-- Define the name of the view class. -->
+		<property name="view.class" value="${module.name}_${action.identifier}${view.name}View" />
+	</target>
+
 	<target name="view-create" depends="initialize,project-locate,module-locate,action-locate" description="Creates a view">
+		<!-- Determine view name. -->
+		<agavi.input property="view.name" message="View name" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
+		<property name="view.name.input" value="${view.name}" override="true" />
+		<agavi.transform-string-to-identifier property="view.name" string="${view.name}" />
+		<if>
+			<not>
+				<equals arg1="${view.name}" arg2="${view.name.input}" />
+			</not>
+			<then>
+				<echo message="View name ${view.name.input} is not a valid identifier; ${view.name} will be used instead" level="warning" />
+			</then>
+		</if>
+
+		<property name="view.file" value="${module.directory}/views/${action.path}${view.name}View.class.php" />
+
+		<available property="view.available" file="${view.file}" type="file" />
+		<fail if="view.available" message="View ${view.name} already exists at ${view.file}" />
+
+		<!-- Define the name of the view class. -->
+		<property name="view.class" value="${module.name}_${action.identifier}${view.name}View" />
+
+		<!-- Copy. -->
+		<copy file="${templates.directory.app.modules.views}/View.class.php.tmpl" tofile="${view.file}">
+			<filterchain>
+				<replacetokens begintoken="%%" endtoken="%%">
+					<token key="PREFIX" value="${project.prefix}" />
+					<token key="AGAVI_LOCATION" value="${agavi.directory}" />
+					<token key="PROJECT_LOCATION" value="${project.directory}" />
+					<token key="MODULE_NAME" value="${module.name}" />
+					<token key="ACTION_NAME" value="${action.name}" />
+					<token key="ACTION_IDENTIFIER" value="${action.identifier}" />
+					<token key="ACTION_CLASS" value="${action.class}" />
+					<token key="VIEW_NAME" value="${view.name}" />
+					<token key="VIEW_CLASS" value="${view.class}" />
+				</replacetokens>
+			</filterchain>
+		</copy>
 	</target>
 
-	<target name="view-rename" depends="initialize,project-locate,module-locate" description="Renames a view">
+	<target name="view-rename" depends="initialize,project-locate,module-locate,action-locate,view-locate" description="Renames a view">
 	</target>
 
-	<target name="view-remove" depends="initialize,project-locate,module-locate" description="Removes a view">
+	<target name="view-remove" depends="initialize,project-locate,module-locate,action-locate,view-locate" description="Removes a view">
 	</target>
 
 	<!--
 	  Model targets.
 	  -->
 
+	<target name="model-locate" depends="initialize,project-locate,module-locate">
+	</target>
+
 	<target name="model-create" depends="initialize,project-locate,module-locate" description="Creates a model">
 	</target>
 
-	<target name="model-rename" depends="initialize,project-locate,module-locate" description="Renames a model">
+	<target name="model-rename" depends="initialize,project-locate,module-locate,model-locate" description="Renames a model">
 	</target>
 
-	<target name="model-remove" depends="initialize,project-locate,module-locate" description="Removes a model">
+	<target name="model-remove" depends="initialize,project-locate,module-locate,model-locate" description="Removes a model">
 	</target>
 
 	<!--
 	  Template targets.
 	  -->
 
+	<target name="template-locate" depends="initialize,project-locate,module-locate">
+	</target>
+
 	<target name="template-create" depends="initialize,project-locate,module-locate" description="Creates a template">
 	</target>
 
-	<target name="template-rename" depends="initialize,project-locate,module-locate" description="Renames a template">
+	<target name="template-rename" depends="initialize,project-locate,module-locate,template-locate" description="Renames a template">
 	</target>
 
-	<target name="template-remove" depends="initialize,project-locate,module-locate" description="Removes a template">
+	<target name="template-remove" depends="initialize,project-locate,module-locate,template-locate" description="Removes a template">
 	</target>
 
 	<!-- View creation -->

@@ -79,7 +79,7 @@ class AgaviModuleFilesystemCheck extends AgaviFilesystemCheck
 	 *
 	 * @param      string The views directory.
 	 */
-	public function setViewsDirectory($viewDirectory)
+	public function setViewsDirectory($viewsDirectory)
 	{
 		$this->viewsDirectory = $viewsDirectory;
 	}

@@ -99,18 +99,18 @@ class AgaviLocatemoduleTask extends AgaviTask
 		$check->setPath($this->path->getAbsolutePath());
 		if($check->check()) {
 			/* The current path is the project directory. */
-			$this->log('Project base directory: ' . $this->path->getPath());
-			$this->project->setUserProperty($this->property, $this->path);
+			$this->log('Module base directory: ' . $this->path);
+			$this->project->setUserProperty($this->property, $this->path->getName());
 			return;
 		}
 		
 		/* Check if "actions", "views", "templates", or "config" are in the current path. */
 		if(preg_match(sprintf('#^(.+?)/(?:%s|%s|%s|%s)(?:/|$)#', $this->project->getProperty('module.directory.actions'), $this->project->getProperty('module.directory.views'), $this->project->getProperty('module.directory.templates'), $this->project->getProperty('module.directory.config')), $this->path->getPath(), $matches)) {
 			$directory = new PhingFile($matches[1]);
-			$check->setPath($directory->getParentFile()->getAbsolutePath());
+			$check->setPath($directory->getAbsolutePath());
 			if($check->check()) {
-				$this->log('Project base directory: ' . $directory);
-				$this->project->setUserProperty($this->property, $directory);
+				$this->log('Module base directory: ' . $directory);
+				$this->project->setUserProperty($this->property, $directory->getName());
 				return;
 			}
 		}
@@ -120,8 +120,8 @@ class AgaviLocatemoduleTask extends AgaviTask
 		while(($directory = $directory->getParentFile()) !== null) {
 			$check->setPath($directory->getAbsolutePath());
 			if($check->check()) {
-				$this->log('Project base directory: ' . $directory);
-				$this->project->setUserProperty($this->property, $directory);
+				$this->log('Module base directory: ' . $directory);
+				$this->project->setUserProperty($this->property, $directory->getName());
 				return;
 			}
 		}
