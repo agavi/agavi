@@ -13,12 +13,9 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
-require_once(dirname(__FILE__) . '/AgaviTask.php');
-
 /**
- * Transforms a string into an identifier suitable for use in PHP. This class
- * only makes a reasonable guess at a decent identifier, and so the real
- * identifier name should generally be user-configurable.
+ * Represents a transformation for sanitizing a string to a valid PHP
+ * identifier.
  *
  * @package    agavi
  * @subpackage build
@@ -31,47 +28,27 @@ require_once(dirname(__FILE__) . '/AgaviTask.php');
  *
  * @version    $Id$
  */
-class AgaviTransformstringtoidentifierTask extends AgaviTask
+class AgaviIdentifierTransform extends AgaviTransform
 {
-	protected $property = null;
-	protected $string = null;
-
 	/**
-	 * Sets the property that this task will modify.
+	 * Transforms the input into a valid PHP identifier.
 	 *
-	 * @param      string The property to modify.
+	 * @return     string The result of the transformation.
 	 */
-	public function setProperty($property)
+	public function transform()
 	{
-		$this->property = $property;
-	}
+		$input = $this->getInput();
 
-	/**
-	 * Sets the string to transform.
-	 *
-	 * @param      string The string to transform.
-	 */
-	public function setString($string)
-	{
-		$this->string = $string;
-	}
-
-	/**
-	 * Executes the task.
-	 */
-	public function main()
-	{
-		if($this->property === null) {
-			throw new BuildException('The property attribute must be specified');
-		}
-		if($this->string === null || strlen($this->string) === 0) {
-			throw new BuildException('The string attribute must be specified and must be non-empty');
+		if($input === null) {
+			return null;
 		}
 
-		$transform = new AgaviIdentifierTransform();
-		$transform->setInput($this->string);
+		$identifier = str_replace(' ', '', preg_replace('#[^A-Za-z0-9\7F-\FF_ ]#', '_', $input));
+		if(ctype_digit($identifier[0])) {
+			$identifier = '_' . $identifier;
+		}
 
-		$this->project->setUserProperty($this->property, $transform->transform());
+		return $identifier;
 	}
 }
 

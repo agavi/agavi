@@ -14,11 +14,12 @@
 // +---------------------------------------------------------------------------+
 
 require_once(dirname(__FILE__) . '/AgaviTask.php');
+require_once(dirname(__FILE__) . '/AgaviTransformstringtoidentifierTask.php');
 
 /**
- * Transforms a string into an identifier suitable for use in PHP. This class
- * only makes a reasonable guess at a decent identifier, and so the real
- * identifier name should generally be user-configurable.
+ * Transforms a string into an identifier suitable for use in PHP in the same
+ * way as <code>AgaviTransformstringtoidentifierTask</code>, but allows for
+ * ASCII character 0x2E as a namespace separator.
  *
  * @package    agavi
  * @subpackage build
@@ -31,31 +32,8 @@ require_once(dirname(__FILE__) . '/AgaviTask.php');
  *
  * @version    $Id$
  */
-class AgaviTransformstringtoidentifierTask extends AgaviTask
+class AgaviTransformnamespacestringtoidentifierTask extends AgaviTransformstringtoidentifierTask
 {
-	protected $property = null;
-	protected $string = null;
-
-	/**
-	 * Sets the property that this task will modify.
-	 *
-	 * @param      string The property to modify.
-	 */
-	public function setProperty($property)
-	{
-		$this->property = $property;
-	}
-
-	/**
-	 * Sets the string to transform.
-	 *
-	 * @param      string The string to transform.
-	 */
-	public function setString($string)
-	{
-		$this->string = $string;
-	}
-
 	/**
 	 * Executes the task.
 	 */
@@ -68,10 +46,15 @@ class AgaviTransformstringtoidentifierTask extends AgaviTask
 			throw new BuildException('The string attribute must be specified and must be non-empty');
 		}
 
-		$transform = new AgaviIdentifierTransform();
-		$transform->setInput($this->string);
+		$transformables = explode('.', $this->string);
+		foreach($transformables as &$transformable) {
+			$transform = new AgaviIdentifierTransform();
+			$transform->setInput($transformable);
 
-		$this->project->setUserProperty($this->property, $transform->transform());
+			$transformable = $transform->transform();
+		}
+
+		$this->project->setUserProperty($this->property, implode('.', $transformables));
 	}
 }
 

@@ -14,7 +14,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * 
+ *
  *
  * @package    agavi
  * @subpackage build
@@ -37,9 +37,11 @@ final class AgaviBuild
 		'AgaviCheck' => 'check/AgaviCheck.class.php',
 		'AgaviFilesystemCheck' => 'check/AgaviFilesystemCheck.class.php',
 		'AgaviProjectFilesystemCheck' => 'check/AgaviProjectFilesystemCheck.class.php',
-		'AgaviModuleFilesystemCheck' => 'check/AgaviModuleFilesystemCheck.class.php'
+		'AgaviModuleFilesystemCheck' => 'check/AgaviModuleFilesystemCheck.class.php',
+		'AgaviTransform' => 'transform/AgaviTransform.class.php',
+		'AgaviIdentifierTransform' => 'transform/AgaviIdentifierTransform.class.php',
 	);
-	
+
 	/**
 	 * Autoloads classes.
 	 *
@@ -53,7 +55,7 @@ final class AgaviBuild
 		if(isset(self::$autoloads[$class])) {
 			require(dirname(__FILE__) . '/' . self::$autoloads[$class]);
 		}
-		
+
 		/* If the class isn't loaded by this method, the only other
 		 * sane option is to simply let PHP handle it and hope another
 		 * handler picks it up. */

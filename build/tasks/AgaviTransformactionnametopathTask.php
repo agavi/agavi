@@ -16,9 +16,7 @@
 require_once(dirname(__FILE__) . '/AgaviTask.php');
 
 /**
- * Transforms a string into an identifier suitable for use in PHP. This class
- * only makes a reasonable guess at a decent identifier, and so the real
- * identifier name should generally be user-configurable.
+ * Converts an action name in dotted form to a path.
  *
  * @package    agavi
  * @subpackage build
@@ -31,10 +29,10 @@ require_once(dirname(__FILE__) . '/AgaviTask.php');
  *
  * @version    $Id$
  */
-class AgaviTransformstringtoidentifierTask extends AgaviTask
+class AgaviTransformactionnametopathTask extends AgaviTask
 {
 	protected $property = null;
-	protected $string = null;
+	protected $name = null;
 
 	/**
 	 * Sets the property that this task will modify.
@@ -47,31 +45,28 @@ class AgaviTransformstringtoidentifierTask extends AgaviTask
 	}
 
 	/**
-	 * Sets the string to transform.
+	 * Sets the path to access for its base name.
 	 *
-	 * @param      string The string to transform.
+	 * @param      string The path to use.
 	 */
-	public function setString($string)
+	public function setName($name)
 	{
-		$this->string = $string;
+		$this->name = $name;
 	}
 
 	/**
-	 * Executes the task.
+	 * Executes this target.
 	 */
 	public function main()
 	{
 		if($this->property === null) {
 			throw new BuildException('The property attribute must be specified');
 		}
-		if($this->string === null || strlen($this->string) === 0) {
-			throw new BuildException('The string attribute must be specified and must be non-empty');
+		if($this->name === null) {
+			throw new BuildException('The name attribute must be specified');
 		}
 
-		$transform = new AgaviIdentifierTransform();
-		$transform->setInput($this->string);
-
-		$this->project->setUserProperty($this->property, $transform->transform());
+		$this->project->setUserProperty($this->property, str_replace('.', '/', $this->name));
 	}
 }
 
