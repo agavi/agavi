@@ -19,6 +19,7 @@ CHG: Make AgaviLoggerAppender an AgaviParameterHolder (#774) (David)
 CHG: Change error class handling in FPF to set classes on elements returned by the respective XPath expressions, not the original elements (#768) (David)
 CHG: Use file locking everywhere files are written (Dominik) (#766)
 
+FIX: Routing tests do not reset core.use_routing in tearDown() (#781) (David)
 FIX: stdout/stderror log appenders are broken (#751) (David)
 FIX: Caching configuration blocks might be merged incorrectly (#755) (David)
 FIX: Caching and validation configurations cannot be per-context (#754) (David)
