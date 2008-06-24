@@ -43,7 +43,7 @@ class AgaviIdentifierTransform extends AgaviTransform
 			return null;
 		}
 
-		$identifier = str_replace(' ', '', preg_replace('#[^A-Za-z0-9\7F-\FF_ ]#', '_', $input));
+		$identifier = str_replace(' ', '', preg_replace('#[^A-Za-z0-9\x7F-\xFF_ ]#', '_', $input));
 		if(ctype_digit($identifier[0])) {
 			$identifier = '_' . $identifier;
 		}

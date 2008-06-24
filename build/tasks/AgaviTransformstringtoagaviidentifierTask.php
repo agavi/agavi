@@ -13,49 +13,41 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
+require_once(dirname(__FILE__) . '/AgaviTask.php');
+require_once(dirname(__FILE__) . '/AgaviTransformstringtoidentifierTask.php');
+
 /**
- * @package    agavi
- * @subpackage buildtools
+ * Transforms a string into an identifier suitable for use in PHP in the same
+ * way as <code>AgaviTransformstringtoidentifierTask</code>, but ensures that
+ * the only capitalized character in the string is the first one.
  *
- * @author     David Zülke <dz@bitxtender.com>
+ * @package    agavi
+ * @subpackage build
+ *
+ * @author     Noah Fontes <noah.fontes@bitextender.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
  *
- * @since      0.10.0
+ * @since      1.0.0
  *
  * @version    $Id$
  */
-class AgaviSubActionNameTask extends Task
+class AgaviTransformstringtoagaviidentifierTask extends AgaviTransformstringtoidentifierTask
 {
-	protected $property = 'action';
-	protected $outputPropertyPrefix = '';
-
-	public function setProperty($property)
-	{
-		$this->property = $property;
-	}
-
-	public function setOutputpropertyprefix($prefix)
-	{
-		$this->outputPropertyPrefix = $prefix;
-	}
-
+	/**
+	 * Executes the task.
+	 */
 	public function main()
 	{
-		$action = $this->project->getProperty($this->property);
-		$actionPath = str_replace('.', '/', str_replace('\\', '/', $action));
-		$actionName = str_replace('/', '_', $actionPath);
-		$actionDir = '';
-		$actionFile = $actionPath;
-		if(($lastSlash = strrpos($actionPath, '/')) !== false)
-		{
-			$actionDir = substr($actionPath, 0, $lastSlash);
-			$actionFile = substr($actionPath, $lastSlash + 1);
+		if($this->property === null) {
+			throw new BuildException('The property attribute must be specified');
 		}
-		$this->project->setProperty($this->outputPropertyPrefix.'actionName', $actionName);
-		$this->project->setProperty($this->outputPropertyPrefix.'actionPath', $actionPath);
-		$this->project->setProperty($this->outputPropertyPrefix.'actionDir', $actionDir);
-		$this->project->setProperty($this->outputPropertyPrefix.'actionFile', $actionFile);
+		if($this->string === null || strlen($this->string) === 0) {
+			throw new BuildException('The string attribute must be specified and must be non-empty');
+		}
+
+		$this->string = ucfirst(strtolower($this->string));
+		parent::main();
 	}
 }
 

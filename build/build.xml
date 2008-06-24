@@ -30,8 +30,10 @@
 		<taskdef name="agavi.transform-path" classname="AgaviTransformpathTask" classpath="tasks" />
 		<taskdef name="agavi.transform-string-to-identifier" classname="AgaviTransformstringtoidentifierTask" classpath="tasks" />
 		<taskdef name="agavi.transform-namespace-string-to-identifier" classname="AgaviTransformnamespacestringtoidentifierTask" classpath="tasks" />
+		<taskdef name="agavi.transform-string-to-agavi-identifier" classname="AgaviTransformstringtoagaviidentifierTask" classpath="tasks" />
 		<taskdef name="agavi.base-name" classname="AgaviBasenameTask" classpath="tasks" />
 		<taskdef name="agavi.directory-name" classname="AgaviDirectorynameTask" classpath="tasks" />
+		<taskdef name="agavi.write-properties" classname="AgaviWritepropertiesTask" classpath="tasks" />
 
 		<!-- Load user-defined build configuration. -->
 		<if>
@@ -82,6 +84,7 @@
 		<!-- Define essential project directories. -->
 		<property name="project.directory.app" value="app" />
 		<property name="project.directory.app.config" value="${project.directory.app}/config" />
+		<property name="project.directory.app.models" value="${project.directory.app}/models" />
 		<property name="project.directory.app.modules" value="${project.directory.app}/modules" />
 		<property name="project.directory.app.cache" value="${project.directory.app}/cache" />
 		<property name="project.directory.app.lib" value="${project.directory.app}/lib" />
@@ -248,8 +251,17 @@
 		<agavi.check-project property="project.available" path="${project.directory}" />
 		<fail if="project.available" message="Agavi project already exists in ${project.directory}" />
 
+		<property name="project.file.build-properties" value="${project.directory}/build.properties" />
+
+		<!-- Load project properties (first attempt). -->
+		<property file="${project.file.build-properties}" />
+
+		<!-- Determine project name. -->
+		<agavi.input property="project.name" message="Project name" default="New Agavi Project" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
+
 		<!-- Determine project prefix. -->
-		<agavi.input property="project.prefix" message="Project prefix (used, for example, in the project base action)" default="Project" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
+		<agavi.transform-string-to-agavi-identifier property="project.prefix.default" string="${project.name}" />
+		<agavi.input property="project.prefix" message="Project prefix (used, for example, in the project base action)" default="${project.prefix.default}" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
 		<property name="project.prefix.input" value="${project.prefix}" override="true" />
 		<agavi.transform-string-to-identifier property="project.prefix" string="${project.prefix}" />
 		<if>
@@ -260,6 +272,9 @@
 				<echo message="Prefix ${project.prefix.input} is not a valid identifier; ${project.prefix} will be used instead" level="warning" />
 			</then>
 		</if>
+
+		<!-- Determine default template extension. -->
+		<agavi.input property="template.extension.default" message="Default template extension" default="php" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
 
 		<!-- Define module properties. -->
 		<property name="module.directory.actions" value="actions" />
@@ -291,9 +306,21 @@
 
 		<!-- Create directory structure. -->
 		<mkdir dir="${project.directory}" />
+
+		<!-- Create or update build.properties. -->
+		<agavi.write-properties file="${project.file.build-properties}" update="true">
+			<property name="project.name" value="${project.name}" />
+			<property name="project.prefix" value="${project.prefix}" />
+			<property name="template.extension.default" value="${template.extension.default}" />
+			<property name="templates.directory" value="${templates.directory}" />
+		</agavi.write-properties>
+		<property file="${project.file.build-properties}" />
+
+		<!-- Create project sub-directories. -->
 		<mkdir dir="${project.directory}/${project.directory.app}" />
 		<mkdir dir="${project.directory}/${project.directory.app.config}" />
 		<mkdir dir="${project.directory}/${project.directory.app.modules}" />
+		<mkdir dir="${project.directory}/${project.directory.app.models}" />
 		<mkdir dir="${project.directory}/${project.directory.app.cache}" />
 		<mkdir dir="${project.directory}/${project.directory.app.lib}" />
 		<mkdir dir="${project.directory}/${project.directory.app.templates}" />
@@ -305,9 +332,11 @@
 		<copy file="${templates.directory.app}/config.php.tmpl" tofile="${project.directory}/${project.directory.app}/config.php">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">
-					<token key="PREFIX" value="${project.prefix}" />
 					<token key="AGAVI_LOCATION" value="${agavi.directory}" />
 					<token key="PROJECT_LOCATION" value="${project.directory}" />
+					<token key="PROJECT_NAME" value="${project.name}" />
+					<token key="PROJECT_PREFIX" value="${project.prefix}" />
+					<token key="TEMPLATES_LOCATION" value="${templates.directory}" />
 				</replacetokens>
 			</filterchain>
 		</copy>
@@ -320,9 +349,11 @@
 			</fileset>
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">
-					<token key="PREFIX" value="${project.prefix}" />
 					<token key="AGAVI_LOCATION" value="${agavi.directory}" />
 					<token key="PROJECT_LOCATION" value="${project.directory}" />
+					<token key="PROJECT_NAME" value="${project.name}" />
+					<token key="PROJECT_PREFIX" value="${project.prefix}" />
+					<token key="TEMPLATES_LOCATION" value="${templates.directory}" />
 				</replacetokens>
 			</filterchain>
 		</copy>
@@ -335,20 +366,10 @@
 			</fileset>
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">
-					<token key="PREFIX" value="${project.prefix}" />
 					<token key="AGAVI_LOCATION" value="${agavi.directory}" />
 					<token key="PROJECT_LOCATION" value="${project.directory}" />
-				</replacetokens>
-			</filterchain>
-		</copy>
-
-		<!-- Create build.properties. -->
-		<copy file="${templates.directory}/build.properties.tmpl" tofile="${project.directory}/build.properties">
-			<filterchain>
-				<replacetokens begintoken="%%" endtoken="%%">
-					<token key="PREFIX" value="${project.prefix}" />
-					<token key="AGAVI_LOCATION" value="${agavi.directory}" />
-					<token key="PROJECT_LOCATION" value="${project.directory}" />
+					<token key="PROJECT_NAME" value="${project.name}" />
+					<token key="PROJECT_PREFIX" value="${project.prefix}" />
 					<token key="TEMPLATES_LOCATION" value="${templates.directory}" />
 				</replacetokens>
 			</filterchain>
@@ -364,8 +385,40 @@
 	</target>
 
 	<!--
-      Module targets.
-      -->
+	  Project model targets.
+		-->
+
+	<target name="project-model-locate" depends="initialize,project-locate">
+	</target>
+
+	<target name="project-model-create" depends="initialize,project-locate" description="Creates a project model">
+	</target>
+
+	<target name="project-model-rename" depends="initialize,project-locate,project-model-locate" description="Renames a project model">
+	</target>
+
+	<target name="project-model-remove" depends="initialize,project-locate,project-model-locate" description="Removes a project model">
+	</target>
+
+	<!--
+	  Project template targets.
+		-->
+
+	<target name="project-template-locate" depends="initialize,project-locate">
+	</target>
+
+	<target name="project-template-create" depends="initialize,project-locate" description="Creates a project template">
+	</target>
+
+	<target name="project-template-rename" depends="initialize,project-locate,project-template-locate" description="Renames a project template">
+	</target>
+
+	<target name="project-template-remove" depends="initialize,project-locate,project-template-locate" description="Removes a project template">
+	</target>
+
+	<!--
+    Module targets.
+    -->
 
 	<target name="module-locate" depends="initialize,project-locate">
 		<agavi.locate-module property="module.name" path="${application.startdir}" ignoreIfSet="true" />
@@ -419,9 +472,9 @@
 			</fileset>
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">
-					<token key="PREFIX" value="${project.prefix}" />
 					<token key="AGAVI_LOCATION" value="${agavi.directory}" />
 					<token key="PROJECT_LOCATION" value="${project.directory}" />
+					<token key="PROJECT_PREFIX" value="${project.prefix}" />
 					<token key="MODULE_NAME" value="${module.name}" />
 				</replacetokens>
 			</filterchain>
@@ -435,9 +488,9 @@
 			</fileset>
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">
-					<token key="PREFIX" value="${project.prefix}" />
 					<token key="AGAVI_LOCATION" value="${agavi.directory}" />
 					<token key="PROJECT_LOCATION" value="${project.directory}" />
+					<token key="PROJECT_PREFIX" value="${project.prefix}" />
 					<token key="MODULE_NAME" value="${module.name}" />
 				</replacetokens>
 			</filterchain>
@@ -521,9 +574,9 @@
 		<copy file="${templates.directory.app.modules.actions}/Action.class.php.tmpl" tofile="${action.file}">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">
-					<token key="PREFIX" value="${project.prefix}" />
 					<token key="AGAVI_LOCATION" value="${agavi.directory}" />
 					<token key="PROJECT_LOCATION" value="${project.directory}" />
+					<token key="PROJECT_PREFIX" value="${project.prefix}" />
 					<token key="MODULE_NAME" value="${module.name}" />
 					<token key="ACTION_NAME" value="${action.name}" />
 					<token key="ACTION_IDENTIFIER" value="${action.identifier}" />
@@ -535,9 +588,9 @@
 		<copy file="${templates.directory.app.modules.validate}/action.xml.tmpl" tofile="${module.directory}/${module.directory.validate}/${action.path}.xml">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">
-					<token key="PREFIX" value="${project.prefix}" />
 					<token key="AGAVI_LOCATION" value="${agavi.directory}" />
 					<token key="PROJECT_LOCATION" value="${project.directory}" />
+					<token key="PROJECT_PREFIX" value="${project.prefix}" />
 					<token key="MODULE_NAME" value="${module.name}" />
 					<token key="ACTION_NAME" value="${action.name}" />
 					<token key="ACTION_IDENTIFIER" value="${action.identifier}" />
@@ -549,9 +602,9 @@
 		<copy file="${templates.directory.app.modules.cache}/action.xml.tmpl" tofile="${module.directory}/${module.directory.cache}/${action.path}.xml">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">
-					<token key="PREFIX" value="${project.prefix}" />
 					<token key="AGAVI_LOCATION" value="${agavi.directory}" />
 					<token key="PROJECT_LOCATION" value="${project.directory}" />
+					<token key="PROJECT_PREFIX" value="${project.prefix}" />
 					<token key="MODULE_NAME" value="${module.name}" />
 					<token key="ACTION_NAME" value="${action.name}" />
 					<token key="ACTION_IDENTIFIER" value="${action.identifier}" />
@@ -574,7 +627,7 @@
 
 	<target name="view-locate" depends="initialize,project-locate,module-locate,action-locate">
 		<agavi.input property="view.name" message="View name" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
-		<property name="view.file" value="${module.directory}/views/${action.path}${view.name}View.class.php" />
+		<property name="view.file" value="${module.directory}/${module.directory.views}/${action.path}${view.name}View.class.php" />
 
 		<available property="view.available" file="${view.file}" type="file" />
 		<fail unless="view.available" message="Agavi view not found at ${view.file}" />
@@ -597,7 +650,7 @@
 			</then>
 		</if>
 
-		<property name="view.file" value="${module.directory}/views/${action.path}${view.name}View.class.php" />
+		<property name="view.file" value="${module.directory}/${module.directory.views}/${action.path}${view.name}View.class.php" />
 
 		<available property="view.available" file="${view.file}" type="file" />
 		<fail if="view.available" message="View ${view.name} already exists at ${view.file}" />
@@ -609,9 +662,9 @@
 		<copy file="${templates.directory.app.modules.views}/View.class.php.tmpl" tofile="${view.file}">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">
-					<token key="PREFIX" value="${project.prefix}" />
 					<token key="AGAVI_LOCATION" value="${agavi.directory}" />
 					<token key="PROJECT_LOCATION" value="${project.directory}" />
+					<token key="PROJECT_PREFIX" value="${project.prefix}" />
 					<token key="MODULE_NAME" value="${module.name}" />
 					<token key="ACTION_NAME" value="${action.name}" />
 					<token key="ACTION_IDENTIFIER" value="${action.identifier}" />
@@ -634,9 +687,51 @@
 	  -->
 
 	<target name="model-locate" depends="initialize,project-locate,module-locate">
+		<agavi.input property="model.name" message="Model name" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
+		<property name="model.file" value="${module.directory}/${module.directory.models}/${model.name}Model.class.php" />
+
+		<available property="model.available" file="${model.file}" type="file" />
+		<fail unless="model.available" message="Agavi model not found at ${model.file}" />
+
+		<!-- Define the name of the view class. -->
+		<property name="model.class" value="${module.name}_${model.name}Model" />
 	</target>
 
 	<target name="model-create" depends="initialize,project-locate,module-locate" description="Creates a model">
+		<!-- Determine model name. -->
+		<agavi.input property="model.name" message="Model name" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
+		<property name="model.name.input" value="${model.name}" override="true" />
+		<agavi.transform-string-to-identifier property="model.name" string="${model.name}" />
+		<if>
+			<not>
+				<equals arg1="${model.name}" arg2="${model.name.input}" />
+			</not>
+			<then>
+				<echo message="Model name ${model.name.input} is not a valid identifier; ${model.name} will be used instead" level="warning" />
+			</then>
+		</if>
+
+		<property name="model.file" value="${module.directory}/${module.directory.models}/${model.name}Model.class.php" />
+
+		<available property="model.available" file="${model.file}" type="file" />
+		<fail if="model.available" message="Model ${model.name} already exists at ${model.file}" />
+
+		<!-- Define the name of the view class. -->
+		<property name="model.class" value="${module.name}_${model.name}Model" />
+
+		<!-- Copy. -->
+		<copy file="${templates.directory.app.modules.models}/Model.class.php.tmpl" tofile="${model.file}">
+			<filterchain>
+				<replacetokens begintoken="%%" endtoken="%%">
+					<token key="AGAVI_LOCATION" value="${agavi.directory}" />
+					<token key="PROJECT_LOCATION" value="${project.directory}" />
+					<token key="PROJECT_PREFIX" value="${project.prefix}" />
+					<token key="MODULE_NAME" value="${module.name}" />
+					<token key="MODEL_NAME" value="${model.name}" />
+					<token key="MODEL_CLASS" value="${model.class}" />
+				</replacetokens>
+			</filterchain>
+		</copy>
 	</target>
 
 	<target name="model-rename" depends="initialize,project-locate,module-locate,model-locate" description="Renames a model">
@@ -650,9 +745,44 @@
 	  -->
 
 	<target name="template-locate" depends="initialize,project-locate,module-locate">
+		<agavi.input property="template.name" message="Template name" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
+		<agavi.input property="template.extension" message="Template extension" default="${template.extension.default}" promptCharacter=":" failIfEmpty="true" />
+		<property name="template.file" value="${module.directory}/${module.directory.templates}/${template.name}.${template.extension}" override="true" />
+
+		<available property="template.available" file="${template.file}" type="file" />
+		<fail unless="template.available" message="Agavi template not found at ${template.file}" />
 	</target>
 
 	<target name="template-create" depends="initialize,project-locate,module-locate" description="Creates a template">
+		<agavi.input property="template.name" message="Template name" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
+		<agavi.input property="template.extension" message="Template extension" default="${template.extension.default}" promptCharacter=":" failIfEmpty="true" />
+		<property name="template.file" value="${module.directory}/${module.directory.templates}/${template.name}.${template.extension}" override="true" />
+
+		<available property="template.available" file="${template.file}" type="file" />
+		<fail if="template.available" message="Template ${template.name}.${template.extension} already exists at ${template.file}" />
+
+		<!-- Copy. -->
+		<if>
+			<available file="${templates.directory.app.modules.templates}/template.${template.extension}.tmpl" />
+			<then>
+				<property name="template.source" value="${templates.directory.app.modules.templates}/template.${template.extension}.tmpl" override="true" />
+			</then>
+			<else>
+				<property name="template.source" value="${templates.directory.app.modules.templates}/template.tmpl" />
+			</else>
+		</if>
+		<copy file="${template.source}" tofile="${template.file}">
+			<filterchain>
+				<replacetokens begintoken="%%" endtoken="%%">
+					<token key="AGAVI_LOCATION" value="${agavi.directory}" />
+					<token key="PROJECT_LOCATION" value="${project.directory}" />
+					<token key="PROJECT_PREFIX" value="${project.prefix}" />
+					<token key="MODULE_NAME" value="${module.name}" />
+					<token key="TEMPLATE_NAME" value="${template.name}" />
+					<token key="TEMPLATE_EXTENSION" value="${template.extension}" />
+				</replacetokens>
+			</filterchain>
+		</copy>
 	</target>
 
 	<target name="template-rename" depends="initialize,project-locate,module-locate,template-locate" description="Renames a template">
@@ -661,121 +791,5 @@
 	<target name="template-remove" depends="initialize,project-locate,module-locate,template-locate" description="Removes a template">
 	</target>
 
-	<!-- View creation -->
-	<target name="old.buildview">
-		<property name="templates.dir.current" value="${templates.dir.default}" override="true" />
-		<available file="${templates.dir}/View.class.php.tmpl" property="templates.dir.current" value="${templates.dir}" />
-		<available file="${templates.dir}/modules/${module}/View.class.php.tmpl" property="templates.dir.current" value="${templates.dir}/modules/${module}" />
-		<copy file="${templates.dir.current}/View.class.php.tmpl" tofile="${module.dir}/views/${actionPath}${view}View.class.php">
-			<filterchain>
-				<replacetokens begintoken="%%" endtoken="%%">
-					<token key="MODULE" value="${module}"/>
-					<token key="ACTION" value="${action}"/>
-					<token key="ACTION_NAME" value="${actionName}"/>
-					<token key="ACTION_PATH" value="${actionPath}"/>
-					<token key="ACTION_DIR" value="${actionDir}"/>
-					<token key="ACTION_FILE" value="${actionFile}"/>
-					<token key="VIEW" value="${view}"/>
-				</replacetokens>
-			</filterchain>
-		</copy>
-		<property name="templates.dir.current" value="${templates.dir.default}" override="true" />
-		<available file="${templates.dir}/Template${template.extension}.tmpl" property="templates.dir.current" value="${templates.dir}" />
-		<available file="${templates.dir}/modules/${module}/Template${template.extension}.tmpl" property="templates.dir.current" value="${templates.dir}/modules/${module}" />
-		<copy file="${templates.dir.current}/Template${template.extension}.tmpl" tofile="${module.dir}/templates/${actionPath}${view}${template.extension}">
-			<filterchain>
-				<replacetokens begintoken="%%" endtoken="%%">
-					<token key="MODULE" value="${module}"/>
-					<token key="ACTION" value="${action}"/>
-					<token key="ACTION_NAME" value="${actionName}"/>
-					<token key="ACTION_PATH" value="${actionPath}"/>
-					<token key="ACTION_DIR" value="${actionDir}"/>
-					<token key="ACTION_FILE" value="${actionFile}"/>
-					<token key="VIEW" value="${view}"/>
-				</replacetokens>
-			</filterchain>
-		</copy>
-		<!-- <phingcall target="buildviewtests"> -->
-		<!-- 	<property name="moduletests.dir" value="${tests.dir}/modules/${module}"/> -->
-		<!-- </phingcall> -->
-	</target>
-
-	<!-- <target name="buildviewtests"> -->
-	<!-- 	<mkdir dir="${moduletests.dir}/views"/> -->
-	<!-- 	<available file="${moduletests.dir}/views" type="dir" property="has_viewtests" value="true"/> -->
-	<!-- 	<fail unless="has_viewtests" message="Could not find view tests directory."/> -->
-	<!--  -->
-	<!-- 	<property name="templates.dir.current" value="${templates.dir.default}" override="true" /> -->
-	<!-- 	<available file="${templates.dir}/ViewTest.class.php.tmpl" property="templates.dir.current" value="${templates.dir}" /> -->
-	<!-- 	<available file="${templates.dir}/modules/${module}/ViewTest.class.php.tmpl" property="templates.dir.current" value="${templates.dir}/modules/${module}" /> -->
-	<!-- 	<copy file="${templates.dir.current}/ViewTest.class.php.tmpl" tofile="${moduletests.dir}/views/${actionPath}${view}ViewTest.class.php" overwrite="false"> -->
-	<!-- 		<filterchain> -->
-	<!-- 			<replacetokens begintoken="%%" endtoken="%%"> -->
-	<!-- 				<token key="MODULE" value="${module}"/> -->
-	<!-- 				<token key="ACTION" value="${action}"/> -->
-	<!-- 				<token key="ACTION_NAME" value="${actionName}"/> -->
-	<!-- 				<token key="ACTION_PATH" value="${actionPath}"/> -->
-	<!-- 				<token key="ACTION_DIR" value="${actionDir}"/> -->
-	<!-- 				<token key="ACTION_FILE" value="${actionFile}"/> -->
-	<!-- 				<token key="VIEW" value="${view}"/> -->
-	<!-- 			</replacetokens> -->
-	<!-- 		</filterchain> -->
-	<!-- 	</copy> -->
-	<!-- </target> -->
-
-	<!-- Model creation -->
-	<target name="old.model" description="create a new model">
-		<fixpaths base="${project.dir}" defaultmodule="true" appdir="${app.dirname}"/>
-
-		<listModules app="${app.dir}" property="current.modules"/>
-
-		<input propertyname="module" promptChar="?" validArgs="${current.modules}" defaultValue="${default.module}" message="Make the model for which module? "/>
-		<input propertyname="model" promptChar="?" message="Model Name"/>
-
-		<phingcall target="buildmodel">
-			<property name="module.dir" value="${app.dir}/modules/${module}"/>
-		</phingcall>
-		<!--
-		<input propertyname="model" promptChar="?" defaultValue="${module}" message="Model Name"/>
-		<phingcall target="buildmodel"/>
-		-->
-	</target>
-
-	<target name="old.buildmodel">
-		<property name="templates.dir.current" value="${templates.dir.default}" override="true" />
-		<available file="${templates.dir}/Model.class.php.tmpl" property="templates.dir.current" value="${templates.dir}" />
-		<available file="${templates.dir}/modules/${module}/Model.class.php.tmpl" property="templates.dir.current" value="${templates.dir}/modules/${module}" />
-		<copy file="${templates.dir.current}/Model.class.php.tmpl" tofile="${module.dir}/models/${model}Model.class.php">
-			<filterchain>
-				<replacetokens begintoken="%%" endtoken="%%">
-					<token key="MODULE" value="${module}"/>
-					<token key="MODEL" value="${model}"/>
-				</replacetokens>
-			</filterchain>
-		</copy>
-		<!-- <phingcall target="buildmodeltests"> -->
-		<!-- 	<property name="moduletests.dir" value="${tests.dir}/modules/${module}"/> -->
-		<!-- </phingcall> -->
-	</target>
-
-	<!-- <target name="buildmodeltests"> -->
-	<!-- 	<mkdir dir="${moduletests.dir}/models"/> -->
-	<!-- 	<available file="${moduletests.dir}/models" type="dir" property="has_modeltests" value="true"/> -->
-	<!-- 	<fail unless="has_modeltests" message="Could not find model tests directory. (${moduletests.dir}/models)"/> -->
-	<!--  -->
-	<!-- 	<property name="templates.dir.current" value="${templates.dir.default}" override="true" /> -->
-	<!-- 	<available file="${templates.dir}/ModelTest.class.php.tmpl" property="templates.dir.current" value="${templates.dir}" /> -->
-	<!-- 	<available file="${templates.dir}/modules/${module}/ModelTest.class.php.tmpl" property="templates.dir.current" value="${templates.dir}/modules/${module}" /> -->
-	<!-- 	<copy file="${templates.dir.current}/ModelTest.class.php.tmpl" tofile="${moduletests.dir}/models/${model}ModelTest.class.php" overwrite="false"> -->
-	<!-- 		<filterchain> -->
-	<!-- 			<replacetokens begintoken="%%" endtoken="%%"> -->
-	<!-- 				<token key="MODULE" value="${module}"/> -->
-	<!-- 				<token key="MODEL" value="${model}"/> -->
-	<!-- 			</replacetokens> -->
-	<!-- 		</filterchain> -->
-	<!-- 	</copy> -->
-	<!-- </target> -->
-
-	<!-- Fin -->
-
 </project>
+
