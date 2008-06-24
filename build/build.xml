@@ -222,10 +222,13 @@
 		<property name="templates.directory.app.modules.lib" value="${templates.directory.app.modules}/lib" />
 		<property name="templates.directory.app.modules.validate" value="${templates.directory.app.modules}/validate" />
 		<property name="templates.directory.app.modules.cache" value="${templates.directory.app.modules}/cache" />
+		<property name="templates.directory.app.models" value="${templates.directory.app}/models" />
 		<property name="templates.directory.app.lib" value="${templates.directory.app}/lib" />
 		<property name="templates.directory.app.lib.action" value="${templates.directory.app.lib}/action" />
 		<property name="templates.directory.app.lib.view" value="${templates.directory.app.lib}/view" />
 		<property name="templates.directory.app.lib.model" value="${templates.directory.app.lib}/model" />
+		<property name="templates.directory.pub" value="${templates.directory}/pub" />
+		<property name="templates.directory.templates" value="${templates.directory}/templates" />
 
 		<!-- Define version control properties. -->
 		<property name="versioning" value="filesystem" />
@@ -299,10 +302,13 @@
 		<property name="templates.directory.app.modules.lib" value="${templates.directory.app.modules}/lib" />
 		<property name="templates.directory.app.modules.validate" value="${templates.directory.app.modules}/validate" />
 		<property name="templates.directory.app.modules.cache" value="${templates.directory.app.modules}/cache" />
+		<property name="templates.directory.app.models" value="${templates.directory.app.modules}/models" />
 		<property name="templates.directory.app.lib" value="${templates.directory.app}/lib" />
 		<property name="templates.directory.app.lib.action" value="${templates.directory.app.lib}/action" />
 		<property name="templates.directory.app.lib.view" value="${templates.directory.app.lib}/view" />
 		<property name="templates.directory.app.lib.model" value="${templates.directory.app.lib}/model" />
+		<property name="templates.directory.pub" value="${templates.directory}/pub" />
+		<property name="templates.directory.templates" value="${templates.directory}/templates" />
 
 		<!-- Create directory structure. -->
 		<mkdir dir="${project.directory}" />
@@ -389,9 +395,50 @@
 		-->
 
 	<target name="project-model-locate" depends="initialize,project-locate">
+		<agavi.input property="model.name" message="Model name" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
+		<property name="model.file" value="${project.directory}/${project.directory.app.models}/${model.name}Model.class.php" />
+
+		<available property="model.available" file="${model.file}" type="file" />
+		<fail unless="model.available" message="Agavi model not found at ${model.file}" />
+
+		<!-- Define the name of the view class. -->
+		<property name="model.class" value="${model.name}Model" />
 	</target>
 
 	<target name="project-model-create" depends="initialize,project-locate" description="Creates a project model">
+		<!-- Determine model name. -->
+		<agavi.input property="model.name" message="Model name" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
+		<property name="model.name.input" value="${model.name}" override="true" />
+		<agavi.transform-string-to-identifier property="model.name" string="${model.name}" />
+		<if>
+			<not>
+				<equals arg1="${model.name}" arg2="${model.name.input}" />
+			</not>
+			<then>
+				<echo message="Model name ${model.name.input} is not a valid identifier; ${model.name} will be used instead" level="warning" />
+			</then>
+		</if>
+
+		<property name="model.file" value="${project.directory}/${project.directory.app.models}/${model.name}Model.class.php" />
+
+		<available property="model.available" file="${model.file}" type="file" />
+		<fail if="model.available" message="Model ${model.name} already exists at ${model.file}" />
+
+		<!-- Define the name of the view class. -->
+		<property name="model.class" value="${model.name}Model" />
+
+		<!-- Copy. -->
+		<copy file="${templates.directory.app.models}/Model.class.php.tmpl" tofile="${model.file}">
+			<filterchain>
+				<replacetokens begintoken="%%" endtoken="%%">
+					<token key="AGAVI_LOCATION" value="${agavi.directory}" />
+					<token key="PROJECT_LOCATION" value="${project.directory}" />
+					<token key="PROJECT_PREFIX" value="${project.prefix}" />
+					<token key="MODEL_NAME" value="${model.name}" />
+					<token key="MODEL_CLASS" value="${model.class}" />
+				</replacetokens>
+			</filterchain>
+		</copy>
 	</target>
 
 	<target name="project-model-rename" depends="initialize,project-locate,project-model-locate" description="Renames a project model">
@@ -405,9 +452,43 @@
 		-->
 
 	<target name="project-template-locate" depends="initialize,project-locate">
+		<agavi.input property="template.name" message="Template name" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
+		<agavi.input property="template.extension" message="Template extension" default="${template.extension.default}" promptCharacter=":" failIfEmpty="true" />
+		<property name="template.file" value="${project.directory}/${project.directory.app.templates}/${template.name}.${template.extension}" override="true" />
+
+		<available property="template.available" file="${template.file}" type="file" />
+		<fail unless="template.available" message="Agavi template not found at ${template.file}" />
 	</target>
 
 	<target name="project-template-create" depends="initialize,project-locate" description="Creates a project template">
+		<agavi.input property="template.name" message="Template name" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
+		<agavi.input property="template.extension" message="Template extension" default="${template.extension.default}" promptCharacter=":" failIfEmpty="true" />
+		<property name="template.file" value="${project.directory}/${project.directory.app.templates}/${template.name}.${template.extension}" override="true" />
+
+		<available property="template.available" file="${template.file}" type="file" />
+		<fail if="template.available" message="Template ${template.name}.${template.extension} already exists at ${template.file}" />
+
+		<!-- Copy. -->
+		<if>
+			<available file="${templates.directory.templates}/template.${template.extension}.tmpl" />
+			<then>
+				<property name="template.source" value="${templates.directory.templates}/template.${template.extension}.tmpl" override="true" />
+			</then>
+			<else>
+				<property name="template.source" value="${templates.directory.templates}/template.tmpl" />
+			</else>
+		</if>
+		<copy file="${template.source}" tofile="${template.file}">
+			<filterchain>
+				<replacetokens begintoken="%%" endtoken="%%">
+					<token key="AGAVI_LOCATION" value="${agavi.directory}" />
+					<token key="PROJECT_LOCATION" value="${project.directory}" />
+					<token key="PROJECT_PREFIX" value="${project.prefix}" />
+					<token key="TEMPLATE_NAME" value="${template.name}" />
+					<token key="TEMPLATE_EXTENSION" value="${template.extension}" />
+				</replacetokens>
+			</filterchain>
+		</copy>
 	</target>
 
 	<target name="project-template-rename" depends="initialize,project-locate,project-template-locate" description="Renames a project template">
@@ -755,7 +836,7 @@
 
 	<target name="template-create" depends="initialize,project-locate,module-locate" description="Creates a template">
 		<agavi.input property="template.name" message="Template name" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
-		<agavi.input property="template.extension" message="Template extension" default="${template.extension.default}" promptCharacter=":" failIfEmpty="true" />
+		<agavi.input property="template.extension" message="Template extension" default="${template.extension.default}" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
 		<property name="template.file" value="${module.directory}/${module.directory.templates}/${template.name}.${template.extension}" override="true" />
 
 		<available property="template.available" file="${template.file}" type="file" />
@@ -763,12 +844,12 @@
 
 		<!-- Copy. -->
 		<if>
-			<available file="${templates.directory.app.modules.templates}/template.${template.extension}.tmpl" />
+			<available file="${templates.directory.templates}/template.${template.extension}.tmpl" />
 			<then>
-				<property name="template.source" value="${templates.directory.app.modules.templates}/template.${template.extension}.tmpl" override="true" />
+				<property name="template.source" value="${templates.directory.templates}/template.${template.extension}.tmpl" override="true" />
 			</then>
 			<else>
-				<property name="template.source" value="${templates.directory.app.modules.templates}/template.tmpl" />
+				<property name="template.source" value="${templates.directory.templates}/template.tmpl" />
 			</else>
 		</if>
 		<copy file="${template.source}" tofile="${template.file}">
