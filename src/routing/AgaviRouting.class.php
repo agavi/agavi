@@ -675,7 +675,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 
 		$container = $this->context->getController()->createExecutionContainer();
 
-		if(!AgaviConfig::get('core.use_routing', false) || count($this->routes) == 0) {
+		if(!AgaviConfig::get('core.use_routing', false)) {
 			// routing disabled, determine module and action manually and bail out
 			$container->setModuleName($reqData->getParameter($req->getParameter('module_accessor')));
 			$container->setActionName($reqData->getParameter($req->getParameter('action_accessor')));
@@ -695,6 +695,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 		$aa = $req->getParameter('action_accessor');
 		$requestMethod = $req->getMethod();
 
+		$routes = array();
 		// get all top level routes
 		foreach($this->routes as $name => $route) {
 			if(!$route['opt']['parent']) {
