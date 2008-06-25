@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 0.11.2 RC1 (June ??, 2008)
 --------------------------
 
+ADD: Add support for doctrine manager attributes (#783) (David)
 ADD: Add SecurityUser::hasCredential and SecurityUser::getCredentials for convenience (Noah) (#772)
 ADD: Add convenience methods to AgaviUploadedFile (#607) (David)
 ADD: Allow arrays as values for web request sources. (#675) (David)
