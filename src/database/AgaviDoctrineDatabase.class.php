@@ -119,6 +119,8 @@ class AgaviDoctrineDatabase extends AgaviDatabase
 				$this->doctrineManager->setAttribute($attributeName, $attributeValue);
 			}
 			
+			Doctrine::loadModels($this->getParameter('load_models')); 
+			
 			foreach((array)$this->getParameter('bind_components', array()) as $componentName) {
 				$this->doctrineManager->bindComponent($componentName, $name);
 			}
