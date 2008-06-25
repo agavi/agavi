@@ -1,6 +1,21 @@
 AGAVI RELEASE NOTES
 ===================
 
+Version 0.11.2 - July ??, 2008
+==============================
+
+This maintenance release fixes a number of bugs, comes with several changes to improve consistency, and also features a couple of new features. Some of these include:
+
+- AgaviStringValidator can now trim an input string.
+- AgaviDoctrineDatabase has been improved.
+- <setting> elements in settings.xml can now be arrays by using <parameter>s.
+- Data returned from a View is now available through $inner in the first template.
+- File locking is now used anywhere files are being written (config compilation, caching).
+- AgaviValidationManager::hasError() behavior was fixed to be consistent with getError().
+
+As always, the CHANGELOG has a comprehensive list of changes.
+
+
 Version 0.11.1 - May 9, 2008
 ============================
 
