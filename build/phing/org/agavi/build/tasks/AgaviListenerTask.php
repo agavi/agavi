@@ -16,12 +16,12 @@
 require_once(dirname(__FILE__) . '/AgaviTask.php');
 
 /**
- * Converts an action name in dotted form to a path.
+ * Defines a new listener for this build environment.
  *
  * @package    agavi
  * @subpackage build
  *
- * @author     Noah Fontes <impl@cynigram.com>
+ * @author     Noah Fontes <noah.fontes@bitextender.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
  *
@@ -29,44 +29,18 @@ require_once(dirname(__FILE__) . '/AgaviTask.php');
  *
  * @version    $Id$
  */
-class AgaviTransformactionnametopathTask extends AgaviTask
+abstract class AgaviListenerTask extends AgaviTask
 {
-	protected $property = null;
-	protected $name = null;
-
+	protected $object = null;
+	
 	/**
-	 * Sets the property that this task will modify.
+	 * Sets the object reference that should listen for target events.
 	 *
-	 * @param      string The property to modify.
+	 * @param      Reference A reference to an object.
 	 */
-	public function setProperty($property)
+	public function setObject(Reference $object)
 	{
-		$this->property = $property;
-	}
-
-	/**
-	 * Sets the path to access for its base name.
-	 *
-	 * @param      string The path to use.
-	 */
-	public function setName($name)
-	{
-		$this->name = $name;
-	}
-
-	/**
-	 * Executes this target.
-	 */
-	public function main()
-	{
-		if($this->property === null) {
-			throw new BuildException('The property attribute must be specified');
-		}
-		if($this->name === null) {
-			throw new BuildException('The name attribute must be specified');
-		}
-
-		$this->project->setUserProperty($this->property, str_replace('.', '/', $this->name));
+		$this->object = $object;
 	}
 }
 

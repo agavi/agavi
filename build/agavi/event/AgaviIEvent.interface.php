@@ -13,15 +13,13 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
-require_once(dirname(__FILE__) . '/AgaviTask.php');
-
 /**
- * Initializes the Agavi build environment.
+ * Represents any event in the Agavi build system.
  *
  * @package    agavi
  * @subpackage build
  *
- * @author     Noah Fontes <impl@cynigram.com>
+ * @author     Noah Fontes <noah.fontes@bitextender.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
  *
@@ -29,18 +27,21 @@ require_once(dirname(__FILE__) . '/AgaviTask.php');
  *
  * @version    $Id$
  */
-class AgaviInitializeTask extends AgaviTask
+interface AgaviIEvent
 {
 	/**
-	 * Executes this task.
+	 * Retrieves the source object that generated this event.
+	 *
+	 * @return     object This event's source.
 	 */
-	public function main()
-	{
-		$build = new PhingFile('agavi/build.php');
-		require_once($build->getAbsolutePath());
-		
-		AgaviBuild::bootstrap();
-	}
+	public function getSource();
+	
+	/**
+	 * Sets the source object for this event.
+	 *
+	 * @param      object This event's source.
+	 */
+	public function setSource($source);
 }
 
 ?>

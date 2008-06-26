@@ -13,15 +13,13 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
-require_once(dirname(__FILE__) . '/AgaviTask.php');
-
 /**
- * Retrieves the base name for a given path.
+ * Implements a default adapter for listening for target events.
  *
  * @package    agavi
  * @subpackage build
  *
- * @author     Noah Fontes <impl@cynigram.com>
+ * @author     Noah Fontes <noah.fontes@bitextender.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
  *
@@ -29,44 +27,26 @@ require_once(dirname(__FILE__) . '/AgaviTask.php');
  *
  * @version    $Id$
  */
-class AgaviBasenameTask extends AgaviTask
+class AgaviPhingTargetAdapter implements AgaviIPhingTargetListener
 {
-	protected $property = null;
-	protected $path = null;
-	
 	/**
-	 * Sets the property that this task will modify.
-	 * 
-	 * @param      string The property to modify.
-	 */
-	public function setProperty($property)
-	{
-		$this->property = $property;
-	}
-	
-	/**
-	 * Sets the path to access for its base name.
+	 * Invoked when a target is entered.
 	 *
-	 * @param      string The path to use.
+	 * @param      AgaviPhingTargetEvent The raised event.
 	 */
-	public function setPath(PhingFile $path)
+	public function targetEntered(AgaviPhingTargetEvent $event)
 	{
-		$this->path = $path;
+		
 	}
 	
 	/**
-	 * Executes this target.
+	 * Invoked when a target is left.
+	 *
+	 * @param      AgaviPhingTargetEvent The raised event.
 	 */
-	public function main()
+	public function targetLeft(AgaviPhingTargetEvent $event)
 	{
-		if($this->property === null) {
-			throw new BuildException('The property attribute must be specified');
-		}
-		if($this->path === null) {
-			throw new BuildException('The path attribute must be specified');
-		}
 		
-		$this->project->setUserProperty($this->property, basename($this->path));
 	}
 }
 

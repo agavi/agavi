@@ -14,14 +14,17 @@
 // +---------------------------------------------------------------------------+
 
 require_once(dirname(__FILE__) . '/AgaviTask.php');
+require_once(dirname(__FILE__) . '/AgaviTransformstringtoidentifierTask.php');
 
 /**
- * Sets relevant Agavi properties given an Agavi installation directory.
+ * Transforms a string into an identifier suitable for use in PHP in the same
+ * way as <code>AgaviTransformstringtoidentifierTask</code>, but allows for
+ * ASCII character 0x2E as a namespace separator.
  *
  * @package    agavi
  * @subpackage build
  *
- * @author     Noah Fontes <impl@cynigram.com>
+ * @author     Noah Fontes <noah.fontes@bitextender.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
  *
@@ -29,46 +32,8 @@ require_once(dirname(__FILE__) . '/AgaviTask.php');
  *
  * @version    $Id$
  */
-class AgaviReadconfigurationTask extends AgaviTask
+class AgaviTransformnamespacestringtoidentifierTask extends AgaviTransformstringtoidentifierTask
 {
-	protected $property;
-	protected $configurationValue;
-
-	/**
-	 * Sets the property that this task will modify.
-	 *
-	 * @param      string The property to modify.
-	 */
-	public function setProperty($property)
-	{
-		$this->property = $property;
-	}
-	
-	/**
-	 * Sets the configuration value that this task will read.
-	 *
-	 * @param      string The configuration value to read.
-	 */
-	public function setConfigurationValue($configurationValue)
-	{
-		$this->configurationValue = $configurationValue;
-	}
-	
-	/**
-	 * Initializes the task.
-	 */
-	public function init()
-	{
-		$sourceDirectory = $this->project->getProperty('agavi.directory.src');
-		if($sourceDirectory !== null) {
-			$sourceDirectory = new PhingFile($sourceDirectory);
-			if($sourceDirectory->isDirectory()) {
-				/* We can load Agavi. */
-				require_once($sourceDirectory->getAbsolutePath() . '/agavi.php');
-			}
-		}
-	}
-	
 	/**
 	 * Executes the task.
 	 */
@@ -77,11 +42,19 @@ class AgaviReadconfigurationTask extends AgaviTask
 		if($this->property === null) {
 			throw new BuildException('The property attribute must be specified');
 		}
-		if($this->configurationValue === null) {
-			throw new BuildException('The configurationValue attribute must be specified');
+		if($this->string === null || strlen($this->string) === 0) {
+			throw new BuildException('The string attribute must be specified and must be non-empty');
 		}
-		
-		$this->project->setUserProperty($this->property, AgaviConfig::get($this->configurationValue));
+
+		$transformables = explode('.', $this->string);
+		foreach($transformables as &$transformable) {
+			$transform = new AgaviIdentifierTransform();
+			$transform->setInput($transformable);
+
+			$transformable = $transform->transform();
+		}
+
+		$this->project->setUserProperty($this->property, implode('.', $transformables));
 	}
 }
 

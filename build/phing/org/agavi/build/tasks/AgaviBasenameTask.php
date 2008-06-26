@@ -13,13 +13,15 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
+require_once(dirname(__FILE__) . '/AgaviTask.php');
+
 /**
- * Base task for all Agavi tasks.
+ * Retrieves the base name for a given path.
  *
  * @package    agavi
  * @subpackage build
  *
- * @author     Noah Fontes <impl@cynigram.com>
+ * @author     Noah Fontes <noah.fontes@bitextender.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
  *
@@ -27,30 +29,44 @@
  *
  * @version    $Id$
  */
-abstract class AgaviTask extends Task {
-	protected $quiet = false;
+class AgaviBasenameTask extends AgaviTask
+{
+	protected $property = null;
+	protected $path = null;
 	
 	/**
-	 * Sets whether log messages for this task will be suppressed.
-	 *
-	 * @param      bool Whether to suppressing log messages for this task.
+	 * Sets the property that this task will modify.
+	 * 
+	 * @param      string The property to modify.
 	 */
-	public function setQuiet($quiet)
+	public function setProperty($property)
 	{
-		$this->quiet = StringHelper::booleanValue($quiet);
+		$this->property = $property;
 	}
 	
 	/**
-	 * Logs an event.
+	 * Sets the path to access for its base name.
 	 *
-	 * @param      string The message to log.
-	 * @param      int The priority of the message.
+	 * @param      string The path to use.
 	 */
-	public function log($message, $level = Project::MSG_INFO)
+	public function setPath(PhingFile $path)
 	{
-		if($this->quiet === false) {
-			parent::log($message, $level);
+		$this->path = $path;
+	}
+	
+	/**
+	 * Executes this target.
+	 */
+	public function main()
+	{
+		if($this->property === null) {
+			throw new BuildException('The property attribute must be specified');
 		}
+		if($this->path === null) {
+			throw new BuildException('The path attribute must be specified');
+		}
+		
+		$this->project->setUserProperty($this->property, basename($this->path));
 	}
 }
 

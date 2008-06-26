@@ -14,7 +14,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * Represents any build-level assertion requirement.
+ * Implements a default adapter for listening for message events.
  *
  * @package    agavi
  * @subpackage build
@@ -27,14 +27,17 @@
  *
  * @version    $Id$
  */
-abstract class AgaviCheck
+class AgaviPhingMessageAdapter implements AgaviIPhingMessageListener
 {
 	/**
-	 * Determines whether the given requirement is successfully met.
+	 * Invoked when a message is reported.
 	 *
-	 * @return     bool True if the check is successful; false otherwise.
+	 * @param      AgaviPhingMessageEvent The raised event.
 	 */
-	abstract public function check();
+	public function messageReported(AgaviPhingMessageEvent $event)
+	{
+		
+	}
 }
 
 ?>

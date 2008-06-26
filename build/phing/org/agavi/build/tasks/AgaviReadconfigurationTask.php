@@ -16,12 +16,12 @@
 require_once(dirname(__FILE__) . '/AgaviTask.php');
 
 /**
- * Transforms a relative path into an absolute path given a base directory.
+ * Sets relevant Agavi properties given an Agavi installation directory.
  *
  * @package    agavi
  * @subpackage build
  *
- * @author     Noah Fontes <impl@cynigram.com>
+ * @author     Noah Fontes <noah.fontes@bitextender.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
  *
@@ -29,12 +29,11 @@ require_once(dirname(__FILE__) . '/AgaviTask.php');
  *
  * @version    $Id$
  */
-class AgaviTransformpathTask extends AgaviTask
+class AgaviReadconfigurationTask extends AgaviTask
 {
-	protected $property = null;
-	protected $base = null;
-	protected $path = null;
-	
+	protected $property;
+	protected $configurationValue;
+
 	/**
 	 * Sets the property that this task will modify.
 	 *
@@ -46,25 +45,30 @@ class AgaviTransformpathTask extends AgaviTask
 	}
 	
 	/**
-	 * Sets the path to transform.
+	 * Sets the configuration value that this task will read.
 	 *
-	 * @param      string The path to transform.
+	 * @param      string The configuration value to read.
 	 */
-	public function setPath($path)
+	public function setConfigurationValue($configurationValue)
 	{
-		/* This must be created here to prevent the directory from
-		 * becoming automatically converted to an absolute path. */
-		$this->path = new PhingFile($path);
+		$this->configurationValue = $configurationValue;
 	}
 	
 	/**
-	 * Sets the relative base path for the directory.
-	 *
-	 * @param      PhingFile The directory's base path.
+	 * Initializes the task.
 	 */
-	public function setBase(PhingFile $base)
+	public function init()
 	{
-		$this->base = $base;
+		parent::init();
+		
+		$sourceDirectory = $this->project->getProperty('agavi.directory.src');
+		if($sourceDirectory !== null) {
+			$sourceDirectory = new PhingFile($sourceDirectory);
+			if($sourceDirectory->isDirectory()) {
+				/* We can load Agavi. */
+				require_once($sourceDirectory->getAbsolutePath() . '/agavi.php');
+			}
+		}
 	}
 	
 	/**
@@ -75,20 +79,11 @@ class AgaviTransformpathTask extends AgaviTask
 		if($this->property === null) {
 			throw new BuildException('The property attribute must be specified');
 		}
-		if($this->path === null) {
-			throw new BuildException('The path attribute must be specified');
+		if($this->configurationValue === null) {
+			throw new BuildException('The configurationValue attribute must be specified');
 		}
-		if(!$this->path->isAbsolute()) {
-			if($this->base === null) {
-				$this->path = new PhingFile($this->project->getProperty('project.basedir'), $this->path->getPath());
-			} else {
-				if($this->base->isFile()) {
-					throw new BuildException('Cannot use base directory ' . $this->base->getAbsolutePath() . ' because a file exists with the same name');
-				}
-				$this->path = new PhingFile($this->base, $this->path->getPath());
-			}
-		}
-		$this->project->setUserProperty($this->property, $this->path);
+		
+		$this->project->setUserProperty($this->property, AgaviConfig::get($this->configurationValue));
 	}
 }
 

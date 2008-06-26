@@ -14,7 +14,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * Represents any build-level assertion requirement.
+ * Represents an event that occurred within a Phing target.
  *
  * @package    agavi
  * @subpackage build
@@ -27,14 +27,50 @@
  *
  * @version    $Id$
  */
-abstract class AgaviCheck
+class AgaviPhingMessageEvent extends AgaviPhingEvent
 {
+	protected $message = null;
+	protected $priority = null;
+	
 	/**
-	 * Determines whether the given requirement is successfully met.
+	 * Sets the event message.
 	 *
-	 * @return     bool True if the check is successful; false otherwise.
+	 * @param      string The message.
 	 */
-	abstract public function check();
+	public function setMessage($message)
+	{
+		$this->message = (string)$message;
+	}
+	
+	/**
+	 * Gets the event message
+	 *
+	 * @return     string The message.
+	 */
+	public function getMessage()
+	{
+		return $this->message;
+	}
+	
+	/**
+	 * Sets the event priority.
+	 *
+	 * @param      int The priority.
+	 */
+	public function setPriority($priority)
+	{
+		$this->priority = (int)$priority;
+	}
+	
+	/**
+	 * Gets the event priority.
+	 *
+	 * @param      int The priority.
+	 */
+	public function getPriority()
+	{
+		return $this->priority;
+	}
 }
 
 ?>

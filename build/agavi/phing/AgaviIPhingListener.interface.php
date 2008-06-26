@@ -13,15 +13,13 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
-require_once(dirname(__FILE__) . '/AgaviTask.php');
-
 /**
- * Retrieves the directory name for a given path.
+ * Represents a listener for events involving the Phing build system.
  *
  * @package    agavi
  * @subpackage build
  *
- * @author     Noah Fontes <impl@cynigram.com>
+ * @author     Noah Fontes <noah.fontes@bitextender.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
  *
@@ -29,45 +27,9 @@ require_once(dirname(__FILE__) . '/AgaviTask.php');
  *
  * @version    $Id$
  */
-class AgaviDirectorynameTask extends AgaviTask
+interface AgaviIPhingListener extends AgaviIListener
 {
-	protected $property = null;
-	protected $path = null;
 	
-	/**
-	 * Sets the property that this task will modify.
-	 * 
-	 * @param      string The property to modify.
-	 */
-	public function setProperty($property)
-	{
-		$this->property = $property;
-	}
-	
-	/**
-	 * Sets the path to access for its directory name.
-	 *
-	 * @param      string The path to use.
-	 */
-	public function setPath(PhingFile $path)
-	{
-		$this->path = $path;
-	}
-	
-	/**
-	 * Executes this target.
-	 */
-	public function main()
-	{
-		if($this->property === null) {
-			throw new BuildException('The property attribute must be specified');
-		}
-		if($this->path === null) {
-			throw new BuildException('The path attribute must be specified');
-		}
-		
-		$this->project->setUserProperty($this->property, dirname($this->path));
-	}
 }
 
 ?>

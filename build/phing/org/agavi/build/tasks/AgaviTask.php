@@ -13,18 +13,13 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
-require_once(dirname(__FILE__) . '/AgaviTask.php');
-require_once(dirname(__FILE__) . '/AgaviTransformstringtoidentifierTask.php');
-
 /**
- * Transforms a string into an identifier suitable for use in PHP in the same
- * way as <code>AgaviTransformstringtoidentifierTask</code>, but allows for
- * ASCII character 0x2E as a namespace separator.
+ * Base task for all Agavi tasks.
  *
  * @package    agavi
  * @subpackage build
  *
- * @author     Noah Fontes <impl@cynigram.com>
+ * @author     Noah Fontes <noah.fontes@bitextender.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
  *
@@ -32,29 +27,48 @@ require_once(dirname(__FILE__) . '/AgaviTransformstringtoidentifierTask.php');
  *
  * @version    $Id$
  */
-class AgaviTransformnamespacestringtoidentifierTask extends AgaviTransformstringtoidentifierTask
+abstract class AgaviTask extends Task
 {
+	protected $quiet = false;
+	protected static $bootstrapped = false;
+	
 	/**
-	 * Executes the task.
+	 * Initializes the task by bootstrapping Agavi build components.
 	 */
-	public function main()
+	public function init()
 	{
-		if($this->property === null) {
-			throw new BuildException('The property attribute must be specified');
+		if(!self::$bootstrapped) {
+			require_once(dirname(__FILE__) . '/../../../../../agavi/build.php');
+			AgaviBuild::bootstrap();
+			
+			self::$bootstrapped = true;
+			
+			/* Create and bind an event dispatcher. */
+			AgaviPhingEventDispatcherManager::register($this->project);
 		}
-		if($this->string === null || strlen($this->string) === 0) {
-			throw new BuildException('The string attribute must be specified and must be non-empty');
+	}
+	
+	/**
+	 * Sets whether log messages for this task will be suppressed.
+	 *
+	 * @param      bool Whether to suppressing log messages for this task.
+	 */
+	public function setQuiet($quiet)
+	{
+		$this->quiet = StringHelper::booleanValue($quiet);
+	}
+	
+	/**
+	 * Logs an event.
+	 *
+	 * @param      string The message to log.
+	 * @param      int The priority of the message.
+	 */
+	public function log($message, $level = Project::MSG_INFO)
+	{
+		if($this->quiet === false) {
+			parent::log($message, $level);
 		}
-
-		$transformables = explode('.', $this->string);
-		foreach($transformables as &$transformable) {
-			$transform = new AgaviIdentifierTransform();
-			$transform->setInput($transformable);
-
-			$transformable = $transform->transform();
-		}
-
-		$this->project->setUserProperty($this->property, implode('.', $transformables));
 	}
 }
 

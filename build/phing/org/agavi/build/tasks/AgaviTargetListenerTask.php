@@ -13,8 +13,10 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
+require_once(dirname(__FILE__) . '/AgaviListenerTask.php');
+
 /**
- * Represents any build-level assertion requirement.
+ * Defines a new listener on targets for this build environment.
  *
  * @package    agavi
  * @subpackage build
@@ -27,14 +29,28 @@
  *
  * @version    $Id$
  */
-abstract class AgaviCheck
+class AgaviTargetListenerTask extends AgaviListenerTask
 {
-	/**
-	 * Determines whether the given requirement is successfully met.
-	 *
-	 * @return     bool True if the check is successful; false otherwise.
-	 */
-	abstract public function check();
+	public function main()
+	{
+		if($this->object === null) {
+			throw new BuildException('The object attribute must be specified');
+		}
+		
+		$objectType = $this->object->getReferencedObject($this->project);
+		if(!$objectType instanceof AgaviObjectType) {
+			throw new BuildException('The object attribute must be a reference to an Agavi object type');
+		}
+		
+		$object = $objectType->getInstance();
+		if(!$object instanceof AgaviIPhingTargetListener) {
+			throw new BuildException(sprintf('Cannot add target listener: Object is of type %s which does not implement %s',
+				get_class($object), 'AgaviIPhingTargetListener'));
+		}
+		
+		$dispatcher = AgaviPhingEventDispatcherManager::get($this->project);
+		$dispatcher->addTargetListener($object);
+	}
 }
 
 ?>

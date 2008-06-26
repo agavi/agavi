@@ -14,7 +14,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * Represents any build-level assertion requirement.
+ * Implements a basic build exception for the Agavi build system.
  *
  * @package    agavi
  * @subpackage build
@@ -27,14 +27,9 @@
  *
  * @version    $Id$
  */
-abstract class AgaviCheck
+class AgaviBuildException extends Exception
 {
-	/**
-	 * Determines whether the given requirement is successfully met.
-	 *
-	 * @return     bool True if the check is successful; false otherwise.
-	 */
-	abstract public function check();
+	
 }
 
 ?>

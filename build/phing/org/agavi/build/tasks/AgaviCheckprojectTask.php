@@ -16,12 +16,12 @@
 require_once(dirname(__FILE__) . '/AgaviTask.php');
 
 /**
- * Validates that a given directory is a module directory for a project.
+ * Validates that a given directory is the base directory for a project.
  *
  * @package    agavi
  * @subpackage build
  *
- * @author     Noah Fontes <impl@cynigram.com>
+ * @author     Noah Fontes <noah.fontes@bitextender.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
  *
@@ -29,7 +29,7 @@ require_once(dirname(__FILE__) . '/AgaviTask.php');
  *
  * @version    $Id$
  */
-class AgaviCheckmoduleTask extends AgaviTask
+class AgaviCheckprojectTask extends AgaviTask
 {
 	protected $property = null;
 	protected $path = null;
@@ -46,7 +46,7 @@ class AgaviCheckmoduleTask extends AgaviTask
 	}
 	
 	/**
-	 * Sets the path to use to validate the module.
+	 * Sets the path to use to validate the project.
 	 *
 	 * @param      string The path to use.
 	 */
@@ -56,7 +56,8 @@ class AgaviCheckmoduleTask extends AgaviTask
 	}
 	
 	/**
-	 * Sets the value that the property will contain if the module is valid.
+	 * Sets the value that the property will contain if the project is
+	 * valid.
 	 *
 	 * @param      string The value to which the property will be set.
 	 */
@@ -77,11 +78,9 @@ class AgaviCheckmoduleTask extends AgaviTask
 			throw new BuildException('The path attribute must be specified');
 		}
 		
-		$check = new AgaviModuleFilesystemCheck();
-		$check->setActionsDirectory($this->project->getProperty('module.directory.actions'));
-		$check->setViewsDirectory($this->project->getProperty('module.directory.views'));
-		$check->setTemplatesDirectory($this->project->getProperty('module.directory.templates'));
-		$check->setConfigDirectory($this->project->getProperty('module.directory.config'));
+		$check = new AgaviProjectFilesystemCheck();
+		$check->setAppDirectory($this->project->getProperty('project.directory.app'));
+		$check->setPubDirectory($this->project->getProperty('project.directory.pub'));
 		
 		$check->setPath($this->path->getAbsolutePath());
 		if($check->check()) {

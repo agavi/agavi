@@ -13,9 +13,12 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
+require_once(dirname(__FILE__) . '/AgaviTask.php');
+
 /**
- * Represents a transformation for sanitizing a string to a valid PHP
- * identifier.
+ * Transforms a string into an identifier suitable for use in PHP. This class
+ * only makes a reasonable guess at a decent identifier, and so the real
+ * identifier name should generally be user-configurable.
  *
  * @package    agavi
  * @subpackage build
@@ -28,27 +31,47 @@
  *
  * @version    $Id$
  */
-class AgaviIdentifierTransform extends AgaviTransform
+class AgaviTransformstringtoidentifierTask extends AgaviTask
 {
+	protected $property = null;
+	protected $string = null;
+
 	/**
-	 * Transforms the input into a valid PHP identifier.
+	 * Sets the property that this task will modify.
 	 *
-	 * @return     string The result of the transformation.
+	 * @param      string The property to modify.
 	 */
-	public function transform()
+	public function setProperty($property)
 	{
-		$input = $this->getInput();
+		$this->property = $property;
+	}
 
-		if($input === null) {
-			return null;
+	/**
+	 * Sets the string to transform.
+	 *
+	 * @param      string The string to transform.
+	 */
+	public function setString($string)
+	{
+		$this->string = $string;
+	}
+
+	/**
+	 * Executes the task.
+	 */
+	public function main()
+	{
+		if($this->property === null) {
+			throw new BuildException('The property attribute must be specified');
+		}
+		if($this->string === null || strlen($this->string) === 0) {
+			throw new BuildException('The string attribute must be specified and must be non-empty');
 		}
 
-		$identifier = str_replace(' ', '', preg_replace('#[^A-Za-z0-9\x7F-\xFF_ ]#', '_', $input));
-		if(ctype_digit($identifier[0])) {
-			$identifier = '_' . $identifier;
-		}
+		$transform = new AgaviIdentifierTransform();
+		$transform->setInput($this->string);
 
-		return $identifier;
+		$this->project->setUserProperty($this->property, $transform->transform());
 	}
 }
 

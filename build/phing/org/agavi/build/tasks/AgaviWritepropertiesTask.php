@@ -19,7 +19,6 @@ require_once('phing/system/util/Properties.php');
 /**
  * Represents any property-holding data.
  *
- *
  * @package    agavi
  * @subpackage build
  *
@@ -137,7 +136,7 @@ class AgaviWritepropertiesTask extends AgaviTask
 	 */
 	public function setUpdate($update)
 	{
-		$this->update = (bool)$update;
+		$this->update = StringHelper::booleanValue($update);
 	}
 	
 	/**
@@ -155,14 +154,12 @@ class AgaviWritepropertiesTask extends AgaviTask
 	 */
 	public function main()
 	{
-		if($this->file === null)
-		{
+		if($this->file === null) {
 			throw new BuildException('The file attribute must be set');
 		}
 		
 		$properties = new Properties();
-		if($this->update === true)
-		{
+		if($this->update === true) {
 			/* Load existing properties. */
 			try {
 				$properties->load($this->file);
@@ -173,10 +170,8 @@ class AgaviWritepropertiesTask extends AgaviTask
 		}
 		
 		/* Add new properties. */
-		foreach($this->properties as $property)
-		{
-			foreach($property->resolve()->getProperties() as $name => $value)
-			{
+		foreach($this->properties as $property) {
+			foreach($property->resolve()->getProperties() as $name => $value) {
 				$properties->setProperty($name, $value);
 			}
 		}

@@ -18,22 +18,35 @@
   -->
 <project name="Agavi" basedir="." default="status">
 
+	<!-- Load tasks relative to the build system. -->
+	<taskdef name="agavi.input" classname="org.agavi.build.tasks.AgaviInputTask" classpath="phing" />
+	
+	<taskdef name="agavi.import" classname="org.agavi.build.tasks.AgaviImportTask" classpath="phing" />
+	
+	<taskdef name="agavi.transform-path" classname="org.agavi.build.tasks.AgaviTransformpathTask" classpath="phing" />
+	<taskdef name="agavi.transform-action-name-to-path" classname="org.agavi.build.tasks.AgaviTransformactionnametopathTask" classpath="phing" />
+	<taskdef name="agavi.transform-string-to-identifier" classname="org.agavi.build.tasks.AgaviTransformstringtoidentifierTask" classpath="phing" />
+	<taskdef name="agavi.transform-namespace-string-to-identifier" classname="org.agavi.build.tasks.AgaviTransformnamespacestringtoidentifierTask" classpath="phing" />
+	<taskdef name="agavi.transform-string-to-agavi-identifier" classname="org.agavi.build.tasks.AgaviTransformstringtoagaviidentifierTask" classpath="phing" />
+	
+	<taskdef name="agavi.base-name" classname="org.agavi.build.tasks.AgaviBasenameTask" classpath="phing" />
+	<taskdef name="agavi.directory-name" classname="org.agavi.build.tasks.AgaviDirectorynameTask" classpath="phing" />
+	
+	<taskdef name="agavi.write-properties" classname="org.agavi.build.tasks.AgaviWritepropertiesTask" classpath="phing" />
+	
+	<taskdef name="agavi.target-listener" classname="org.agavi.build.tasks.AgaviTargetListenerTask" classpath="phing" />
+	<taskdef name="agavi.task-listener" classname="org.agavi.build.tasks.AgaviTaskListenerTask" classpath="phing" />
+	<!--<taskdef name="agavi.message-listener" classname="org.agavi.build.tasks.AgaviMessageListenerTask" classpath="phing" />-->
+	
+	<!-- Load types relative to the build system. -->
+	<typedef name="agavi.object" classname="org.agavi.build.types.AgaviObjectType" classpath="phing" />
+
 	<!--
 	  General targets.
 	  -->
 
 	<target name="initialize">
 		<tstamp />
-
-		<!-- Load tasks relative to the build system. -->
-		<taskdef name="agavi.input" classname="AgaviInputTask" classpath="tasks" />
-		<taskdef name="agavi.transform-path" classname="AgaviTransformpathTask" classpath="tasks" />
-		<taskdef name="agavi.transform-string-to-identifier" classname="AgaviTransformstringtoidentifierTask" classpath="tasks" />
-		<taskdef name="agavi.transform-namespace-string-to-identifier" classname="AgaviTransformnamespacestringtoidentifierTask" classpath="tasks" />
-		<taskdef name="agavi.transform-string-to-agavi-identifier" classname="AgaviTransformstringtoagaviidentifierTask" classpath="tasks" />
-		<taskdef name="agavi.base-name" classname="AgaviBasenameTask" classpath="tasks" />
-		<taskdef name="agavi.directory-name" classname="AgaviDirectorynameTask" classpath="tasks" />
-		<taskdef name="agavi.write-properties" classname="AgaviWritepropertiesTask" classpath="tasks" />
 
 		<!-- Load user-defined build configuration. -->
 		<if>
@@ -95,19 +108,12 @@
 		<available property="agavi.available" file="${agavi.directory.src}/agavi.php" type="file" />
 		<fail unless="agavi.available" message="Agavi installation not found in ${agavi.directory}" />
 
-		<!-- Agavi was found; load Agavi-specific tasks. -->
-		<taskdef name="agavi.initialize" classname="AgaviInitializeTask" classpath="tasks" />
-
-		<!-- Initialize the Agavi build environment. -->
-		<agavi.initialize />
-
 		<!-- Load the remaining Agavi-specific tasks. -->
-		<taskdef name="agavi.transform-action-name-to-path" classname="AgaviTransformactionnametopathTask" classpath="tasks" />
-		<taskdef name="agavi.locate-project" classname="AgaviLocateprojectTask" classpath="tasks" />
-		<taskdef name="agavi.check-project" classname="AgaviCheckprojectTask" classpath="tasks" />
-		<taskdef name="agavi.locate-module" classname="AgaviLocatemoduleTask" classpath="tasks" />
-		<taskdef name="agavi.check-module" classname="AgaviCheckmoduleTask" classpath="tasks" />
-		<taskdef name="agavi.read-configuration" classname="AgaviReadconfigurationTask" classpath="tasks" />
+		<taskdef name="agavi.locate-project" classname="org.agavi.build.tasks.AgaviLocateprojectTask" classpath="phing" />
+		<taskdef name="agavi.check-project" classname="org.agavi.build.tasks.AgaviCheckprojectTask" classpath="phing" />
+		<taskdef name="agavi.locate-module" classname="org.agavi.build.tasks.AgaviLocatemoduleTask" classpath="phing" />
+		<taskdef name="agavi.check-module" classname="org.agavi.build.tasks.AgaviCheckmoduleTask" classpath="phing" />
+		<taskdef name="agavi.read-configuration" classname="org.agavi.build.tasks.AgaviReadconfigurationTask" classpath="phing" />
 
 		<!-- Load some basic configuration values. -->
 		<agavi.read-configuration property="agavi.version" configurationValue="agavi.version" />
@@ -152,10 +158,10 @@
 	</target>
 
 	<!--
-	  Build targets.
+	  System targets.
 	  -->
 
-	<target name="build-template-copy" depends="initialize" description="Copies a build template to another location">
+	<target name="system-template-copy" depends="initialize" description="Copies a build template to a new location">
 		<agavi.input property="template.file" message="Template file to copy (relative to build templates directory)" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
 		<available property="template.available" file="templates/${template.file}" type="file" />
 		<fail unless="template.available" message="Template file not found in build templates directory" />
@@ -171,13 +177,25 @@
 		<copy file="templates/${template.file}" tofile="${copy.file}" />
 	</target>
 
-	<target name="build-template-copy-all" depends="initialize" description="Copies the build template heirarchy to a new location">
+	<target name="system-template-copy-all" depends="initialize" description="Copies the build template heirarchy to a new location">
 		<agavi.input property="copy.directory" message="Output directory" default="${application.startdir}" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
 		<agavi.transform-path property="copy.directory" base="${application.startdir}" path="${copy.directory}" />
 
 		<mkdir dir="${copy.directory}" />
 		<copy todir="${copy.directory}">
 			<fileset dir="templates">
+				<include name="**/*" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="system-source-copy" depends="initialize" description="Copies the Agavi source tree to a new location">
+		<agavi.input property="copy.directory" message="Output directory" default="${application.startdir}" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
+		<agavi.transform-path property="copy.directory" base="${application.startdir}" path="${copy.directory}" />
+
+		<mkdir dir="${copy.directory}" />
+		<copy todir="${copy.directory}">
+			<fileset dir="${agavi.directory.src}">
 				<include name="**/*" />
 			</fileset>
 		</copy>
@@ -255,6 +273,7 @@
 		<fail if="project.available" message="Agavi project already exists in ${project.directory}" />
 
 		<property name="project.file.build-properties" value="${project.directory}/build.properties" />
+		<property name="project.file.build-xml" value="${project.directory}/build.xml" />
 
 		<!-- Load project properties (first attempt). -->
 		<property file="${project.file.build-properties}" />
@@ -321,6 +340,26 @@
 			<property name="templates.directory" value="${templates.directory}" />
 		</agavi.write-properties>
 		<property file="${project.file.build-properties}" />
+
+		<!-- Copy a project-specific build.xml if one doesn't already exist. -->
+		<if>
+			<not>
+				<available file="${project.file.build-xml}" type="file" />
+			</not>
+			<then>
+				<copy file="${templates.directory}/build.xml.tmpl" tofile="${project.file.build-xml}">
+					<filterchain>
+						<replacetokens begintoken="%%" endtoken="%%">
+							<token key="AGAVI_LOCATION" value="${agavi.directory}" />
+							<token key="PROJECT_LOCATION" value="${project.directory}" />
+							<token key="PROJECT_NAME" value="${project.name}" />
+							<token key="PROJECT_PREFIX" value="${project.prefix}" />
+							<token key="TEMPLATES_LOCATION" value="${templates.directory}" />
+						</replacetokens>
+					</filterchain>
+				</copy>
+			</then>
+		</if>
 
 		<!-- Create project sub-directories. -->
 		<mkdir dir="${project.directory}/${project.directory.app}" />

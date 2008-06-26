@@ -13,8 +13,10 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
+require_once(dirname(__FILE__) . '/AgaviTask.php');
+
 /**
- * Represents any build-level assertion requirement.
+ * Converts an action name in dotted form to a path.
  *
  * @package    agavi
  * @subpackage build
@@ -27,14 +29,45 @@
  *
  * @version    $Id$
  */
-abstract class AgaviCheck
+class AgaviTransformactionnametopathTask extends AgaviTask
 {
+	protected $property = null;
+	protected $name = null;
+
 	/**
-	 * Determines whether the given requirement is successfully met.
+	 * Sets the property that this task will modify.
 	 *
-	 * @return     bool True if the check is successful; false otherwise.
+	 * @param      string The property to modify.
 	 */
-	abstract public function check();
+	public function setProperty($property)
+	{
+		$this->property = $property;
+	}
+
+	/**
+	 * Sets the path to access for its base name.
+	 *
+	 * @param      string The path to use.
+	 */
+	public function setName($name)
+	{
+		$this->name = $name;
+	}
+
+	/**
+	 * Executes this target.
+	 */
+	public function main()
+	{
+		if($this->property === null) {
+			throw new BuildException('The property attribute must be specified');
+		}
+		if($this->name === null) {
+			throw new BuildException('The name attribute must be specified');
+		}
+
+		$this->project->setUserProperty($this->property, str_replace('.', '/', $this->name));
+	}
 }
 
 ?>

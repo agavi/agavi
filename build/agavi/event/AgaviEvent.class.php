@@ -14,7 +14,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * Represents any build-level assertion requirement.
+ * Implements a basic Agavi build system event.
  *
  * @package    agavi
  * @subpackage build
@@ -27,14 +27,37 @@
  *
  * @version    $Id$
  */
-abstract class AgaviCheck
+class AgaviEvent implements AgaviIEvent
 {
 	/**
-	 * Determines whether the given requirement is successfully met.
+	 * The source for this event.
 	 *
-	 * @return     bool True if the check is successful; false otherwise.
+	 * @var        object
 	 */
-	abstract public function check();
+	protected $source;
+	
+	/**
+	 * Retrieves the source object that generated this event.
+	 *
+	 * @return     object This event's source.
+	 */
+	public function getSource()
+	{
+		return $this->source;
+	}
+	
+	/**
+	 * Sets the source object for this event.
+	 *
+	 * @param      object This event's source.
+	 */
+	public function setSource($source)
+	{
+		if($this->source !== null) {
+			throw new AgaviEventBuildException('An event source may not be set multiple times');
+		}
+		$this->source = $source;
+	}
 }
 
 ?>

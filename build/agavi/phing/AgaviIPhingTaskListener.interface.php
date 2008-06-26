@@ -14,7 +14,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * Represents any build-level assertion requirement.
+ * Represents a listener for events involving build system tasks.
  *
  * @package    agavi
  * @subpackage build
@@ -27,14 +27,21 @@
  *
  * @version    $Id$
  */
-abstract class AgaviCheck
+interface AgaviIPhingTaskListener extends AgaviIPhingListener
 {
 	/**
-	 * Determines whether the given requirement is successfully met.
+	 * Invoked when a task is entered.
 	 *
-	 * @return     bool True if the check is successful; false otherwise.
+	 * @param      AgaviPhingTaskEvent The raised event.
 	 */
-	abstract public function check();
+	public function taskEntered(AgaviPhingTaskEvent $event);
+	
+	/**
+	 * Invoked when a task is left.
+	 *
+	 * @param      AgaviPhingTaskEvent The raised event.
+	 */
+	public function taskLeft(AgaviPhingTaskEvent $event);
 }
 
 ?>

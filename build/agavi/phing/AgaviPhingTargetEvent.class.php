@@ -14,7 +14,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * Represents any build-level assertion requirement.
+ * Represents an event that occurred within a Phing target.
  *
  * @package    agavi
  * @subpackage build
@@ -27,14 +27,29 @@
  *
  * @version    $Id$
  */
-abstract class AgaviCheck
+class AgaviPhingTargetEvent extends AgaviPhingEvent
 {
+	protected $target = null;
+	
 	/**
-	 * Determines whether the given requirement is successfully met.
+	 * Sets the target that generated this event.
 	 *
-	 * @return     bool True if the check is successful; false otherwise.
+	 * @param      Target The target.
 	 */
-	abstract public function check();
+	public function setTarget(Target $target)
+	{
+		$this->target = $target;
+	}
+	
+	/**
+	 * Gets the target that generated this event.
+	 *
+	 * @return     Target The target.
+	 */
+	public function getTarget()
+	{
+		return $this->target;
+	}
 }
 
 ?>

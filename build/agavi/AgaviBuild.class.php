@@ -19,7 +19,7 @@
  * @package    agavi
  * @subpackage build
  *
- * @author     Noah Fontes <impl@cynigram.com>
+ * @author     Noah Fontes <noah.fontes@bitextender.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
  *
@@ -34,12 +34,35 @@ final class AgaviBuild
 	 *                   can be autoloaded.
 	 */
 	public static $autoloads = array(
+		'AgaviBuildException' => 'exception/AgaviBuildException.class.php',
+		'AgaviEventBuildException' => 'exception/AgaviEventBuildException.class.php',
 		'AgaviCheck' => 'check/AgaviCheck.class.php',
 		'AgaviFilesystemCheck' => 'check/AgaviFilesystemCheck.class.php',
 		'AgaviProjectFilesystemCheck' => 'check/AgaviProjectFilesystemCheck.class.php',
 		'AgaviModuleFilesystemCheck' => 'check/AgaviModuleFilesystemCheck.class.php',
 		'AgaviTransform' => 'transform/AgaviTransform.class.php',
 		'AgaviIdentifierTransform' => 'transform/AgaviIdentifierTransform.class.php',
+		'AgaviIListener' => 'event/AgaviIListener.interface.php',
+		'AgaviITargetListener' => 'phing/AgaviITargetListener.interface.php',
+		'AgaviTargetAdapter' => 'phing/AgaviTargetAdapter.class.php',
+		'AgaviEventDispatcher' => 'event/AgaviEventDispatcher.class.php',
+		'AgaviIEvent' => 'event/AgaviIEvent.interface.php',
+		'AgaviEvent' => 'event/AgaviEvent.class.php',
+		'AgaviProxyProject' => 'phing/AgaviProxyProject.class.php',
+		'AgaviProxyTarget' => 'phing/AgaviProxyTarget.class.php',
+		'AgaviPhingEventDispatcherManager' => 'phing/AgaviPhingEventDispatcherManager.class.php',
+		'AgaviPhingEventDispatcher' => 'phing/AgaviPhingEventDispatcher.class.php',
+		'AgaviPhingEvent' => 'phing/AgaviPhingEvent.class.php',
+		'AgaviPhingTargetEvent' => 'phing/AgaviPhingTargetEvent.class.php',
+		'AgaviPhingTaskEvent' => 'phing/AgaviPhingTaskEvent.class.php',
+		'AgaviPhingMessageEvent' => 'phing/AgaviPhingMessageEvent.class.php',
+		'AgaviIPhingListener' => 'phing/AgaviIPhingListener.interface.php',
+		'AgaviIPhingTargetListener' => 'phing/AgaviIPhingTargetListener.interface.php',
+		'AgaviIPhingTaskListener' => 'phing/AgaviIPhingTaskListener.interface.php',
+		'AgaviIPhingMessageListener' => 'phing/AgaviIPhingMessageListener.interface.php',
+		'AgaviPhingTargetAdapter' => 'phing/AgaviPhingTargetAdapter.class.php',
+		'AgaviPhingTaskAdapter' => 'phing/AgaviPhingTaskAdapter.class.php',
+		'AgaviPhingMessageAdapter' => 'phing/AgaviPhingMessageAdapter.class.php',
 	);
 
 	/**
@@ -48,7 +71,7 @@ final class AgaviBuild
 	 * @param      string A class name.
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
-	 * @author     Noah Fontes <impl@cynigram.com>
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
 	 */
 	public static function __autoload($class)
 	{
@@ -66,7 +89,7 @@ final class AgaviBuild
 	 */
 	public static function bootstrap()
 	{
-		spl_autoload_register(array(self, '__autoload'));
+		spl_autoload_register(array('AgaviBuild', '__autoload'));
 	}
 }
 

@@ -14,7 +14,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * Represents any build-level assertion requirement.
+ * Represents an event that occurred within Phing.
  *
  * @package    agavi
  * @subpackage build
@@ -27,14 +27,29 @@
  *
  * @version    $Id$
  */
-abstract class AgaviCheck
+class AgaviPhingEvent extends AgaviEvent
 {
+	protected $project = null;
+	
 	/**
-	 * Determines whether the given requirement is successfully met.
+	 * Sets the project that generated this event.
 	 *
-	 * @return     bool True if the check is successful; false otherwise.
+	 * @param      Project The project.
 	 */
-	abstract public function check();
+	public function setProject(Project $project)
+	{
+		$this->project = $project;
+	}
+	
+	/**
+	 * Gets the project that generated this event.
+	 *
+	 * @return     Project The project.
+	 */
+	public function getProject()
+	{
+		return $this->project;
+	}
 }
 
 ?>
