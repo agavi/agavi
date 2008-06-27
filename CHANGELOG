@@ -1,7 +1,7 @@
 AGAVI CHANGELOG
 ===============
 
-0.11.2 RC1 (June ??, 2008)
+0.11.2 RC1 (June 27, 2008)
 --------------------------
 
 ADD: Support trimming of input string in AgaviStringValidator (#745) (David)
