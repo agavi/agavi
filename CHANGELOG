@@ -1,6 +1,12 @@
 AGAVI CHANGELOG
 ===============
 
+0.11.2 RC2 (July ?, 2008)
+--------------------------
+
+FIX: Using '#' in a routing pattern triggers a warning (#789) (Dominik)
+
+
 0.11.2 RC1 (June 27, 2008)
 --------------------------
 

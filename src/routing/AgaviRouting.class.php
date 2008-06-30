@@ -963,7 +963,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 			if($state == 'start') {
 				// start of regular expression block
 				if($c == '(') {
-					$rxStr .= preg_quote($tmpStr);
+					$rxStr .= preg_quote($tmpStr, '#');
 					$reverseStr .= $tmpStr;
 
 					$tmpStr = '';
@@ -977,7 +977,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 				}
 
 				if($atEnd) {
-					$rxStr .= preg_quote($tmpStr);
+					$rxStr .= preg_quote($tmpStr, '#');
 					$reverseStr .= $tmpStr;
 				}
 			} elseif($state == 'rxStart') {
@@ -1026,9 +1026,9 @@ abstract class AgaviRouting extends AgaviParameterHolder
 							if(strpbrk($myRx, $rxChars) === false) {
 								$reverseStr .= $myRx;
 							}
-							$rxStr .= sprintf('(%s)', $myRx);
+							$rxStr .= str_replace('#', '\#', sprintf('(%s)', $myRx));
 						} else {
-							$rxStr .= sprintf('(%s(?P<%s>%s)%s)', $rxPrefix, $rxName, $rxInner, $rxPostfix);
+							$rxStr .= str_replace('#', '\#', sprintf('(%s(?P<%s>%s)%s)', $rxPrefix, $rxName, $rxInner, $rxPostfix));
 							$reverseStr .= sprintf('(:%s:)', $rxName);
 
 							if(!isset($vars[$rxName])) {
