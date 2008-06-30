@@ -49,13 +49,13 @@ class AgaviConfigParser
 	 */
 	public function parse($config, $validationFile = null)
 	{
-		$parser = new AgaviXmlConfigParser($config);
+		$parser = new AgaviXmlConfigParser($config, AgaviConfig::get('core.environment'), null);
 		
 		$validation = array();
 		if($validationFile !== null) {
 			$validation[AgaviXmlConfigParser::VALIDATION_TYPE_XMLSCHEMA] = array($validationFile);
 		}
-		$doc = $parser->execute(AgaviConfig::get('core.environment'), null, $validation);
+		$doc = $parser->execute(array(), $validation);
 		
 		$this->encoding = $doc->encoding;
 		

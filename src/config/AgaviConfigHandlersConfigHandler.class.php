@@ -65,6 +65,14 @@ class AgaviConfigHandlersConfigHandler extends AgaviConfigHandler
 				
 				$class = $handler->getAttribute('class');
 				
+				$transformations = array();
+				if(isset($handler->transformations)) {
+					foreach($handler->transformations as $transformation) {
+						$transformationPath = AgaviToolkit::literalize($transformation->getValue());
+						$transformations[] = $transformationPath;
+					}
+				}
+				
 				$validations = array(
 					AgaviXmlConfigParser::VALIDATION_TYPE_RELAXNG    => array(
 					),
@@ -77,7 +85,6 @@ class AgaviConfigHandlersConfigHandler extends AgaviConfigHandler
 				if($handler->hasAttribute('validate')) {
 					$validations[AgaviXmlConfigParser::VALIDATION_TYPE_XMLSCHEMA][] = AgaviToolkit::literalize($handler->getAttribute('validate'));
 				}
-				// new: via child elements
 				if(isset($handler->validations)) {
 					foreach($handler->validations as $validation) {
 						$validationPath = AgaviToolkit::literalize($validation->getValue());
@@ -88,12 +95,12 @@ class AgaviConfigHandlersConfigHandler extends AgaviConfigHandler
 						}
 						$validations[$validationType][] = $validationPath;
 					}
-					// TODO: check for <validations><validation type="schematron"> children here
 				}
+				
 				$handlers[$category] = array(
 					'class' => $class,
 					'parameters' => $this->getItemParameters($handler),
-					'transformations' => array(),
+					'transformations' => $transformations,
 					'validations' => $validations,
 				);
 			}

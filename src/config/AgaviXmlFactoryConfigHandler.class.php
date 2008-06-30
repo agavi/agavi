@@ -49,13 +49,13 @@ class AgaviXmlFactoryConfigHandler extends AgaviXmlConfigHandler
 	{
 		echo ($doc->saveXML());
 		
-		$xsl = new DOMDocument();
-		$xsl->load(AgaviConfig::get('core.system_config_dir') . '/../xsl/factories.xsl');
-		
-		$xslt = new XSLTProcessor();
-		$xslt->importStylesheet($xsl);
-		
-		echo ($xslt->transformToDoc($doc)->saveXML());
+		// $xsl = new DOMDocument();
+		// $xsl->load(AgaviConfig::get('core.system_config_dir') . '/../xsl/factories.xsl');
+		// 
+		// $xslt = new XSLTProcessor();
+		// $xslt->importStylesheet($xsl);
+		// 
+		// echo ($xslt->transformToDoc($doc)->saveXML());
 		die();
 		
 		// set up our default namespace
