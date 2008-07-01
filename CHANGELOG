@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 0.11.2 RC2 (July ?, 2008)
 --------------------------
 
+FIX: Markup is escaped by accident in shiny exception template (#791) (David)
 FIX: Using '#' in a routing pattern triggers a warning (#789) (Dominik)
 
 
