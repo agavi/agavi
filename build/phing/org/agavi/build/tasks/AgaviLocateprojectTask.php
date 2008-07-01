@@ -98,7 +98,7 @@ class AgaviLocateprojectTask extends AgaviTask
 		if($check->check()) {
 			/* The current path is the project directory. */
 			$this->log('Project base directory: ' . $this->path->getPath());
-			$this->project->setUserProperty($this->property, $this->path);
+			$this->project->setUserProperty($this->property, $this->path->getAbsolutePath());
 			return;
 		}
 		
@@ -108,7 +108,7 @@ class AgaviLocateprojectTask extends AgaviTask
 			$check->setPath($directory->getAbsolutePath());
 			if($check->check()) {
 				$this->log('Project base directory: ' . $directory);
-				$this->project->setUserProperty($this->property, $directory);
+				$this->project->setUserProperty($this->property, $directory->getAbsolutePath());
 				return;
 			}
 		}
@@ -119,7 +119,7 @@ class AgaviLocateprojectTask extends AgaviTask
 			$check->setPath($directory->getAbsolutePath());
 			if($check->check()) {
 				$this->log('Project base directory: ' . $directory);
-				$this->project->setUserProperty($this->property, $directory);
+				$this->project->setUserProperty($this->property, $directory->getAbsolutePath());
 				return;
 			}
 		}

@@ -20,24 +20,24 @@
 
 	<!-- Load tasks relative to the build system. -->
 	<taskdef name="agavi.input" classname="org.agavi.build.tasks.AgaviInputTask" classpath="phing" />
-	
+
 	<taskdef name="agavi.import" classname="org.agavi.build.tasks.AgaviImportTask" classpath="phing" />
-	
+
 	<taskdef name="agavi.transform-path" classname="org.agavi.build.tasks.AgaviTransformpathTask" classpath="phing" />
 	<taskdef name="agavi.transform-action-name-to-path" classname="org.agavi.build.tasks.AgaviTransformactionnametopathTask" classpath="phing" />
 	<taskdef name="agavi.transform-string-to-identifier" classname="org.agavi.build.tasks.AgaviTransformstringtoidentifierTask" classpath="phing" />
 	<taskdef name="agavi.transform-namespace-string-to-identifier" classname="org.agavi.build.tasks.AgaviTransformnamespacestringtoidentifierTask" classpath="phing" />
 	<taskdef name="agavi.transform-string-to-agavi-identifier" classname="org.agavi.build.tasks.AgaviTransformstringtoagaviidentifierTask" classpath="phing" />
-	
+
 	<taskdef name="agavi.base-name" classname="org.agavi.build.tasks.AgaviBasenameTask" classpath="phing" />
 	<taskdef name="agavi.directory-name" classname="org.agavi.build.tasks.AgaviDirectorynameTask" classpath="phing" />
-	
+
 	<taskdef name="agavi.write-properties" classname="org.agavi.build.tasks.AgaviWritepropertiesTask" classpath="phing" />
-	
+
 	<taskdef name="agavi.target-listener" classname="org.agavi.build.tasks.AgaviTargetListenerTask" classpath="phing" />
 	<taskdef name="agavi.task-listener" classname="org.agavi.build.tasks.AgaviTaskListenerTask" classpath="phing" />
 	<!--<taskdef name="agavi.message-listener" classname="org.agavi.build.tasks.AgaviMessageListenerTask" classpath="phing" />-->
-	
+
 	<!-- Load types relative to the build system. -->
 	<typedef name="agavi.object" classname="org.agavi.build.types.AgaviObjectType" classpath="phing" />
 
@@ -59,6 +59,7 @@
 
 		<!-- Define Agavi core directories. -->
 		<property name="agavi.directory" value="@PEAR_DIR@/agavi" />
+		<agavi.transform-path property="agavi.directory" base="${application.startdir}" path="${agavi.directory}" />
 
 		<property name="agavi.directory.src" value="${agavi.directory}/src" override="true" />
 		<property name="agavi.directory.src.action" value="${agavi.directory.src}/action" override="true" />
@@ -246,6 +247,7 @@
 		<property name="templates.directory.app.lib.view" value="${templates.directory.app.lib}/view" />
 		<property name="templates.directory.app.lib.model" value="${templates.directory.app.lib}/model" />
 		<property name="templates.directory.pub" value="${templates.directory}/pub" />
+		<property name="templates.directory.pub.web" value="${templates.directory.pub}/web" />
 		<property name="templates.directory.templates" value="${templates.directory}/templates" />
 
 		<!-- Define version control properties. -->
@@ -327,6 +329,7 @@
 		<property name="templates.directory.app.lib.view" value="${templates.directory.app.lib}/view" />
 		<property name="templates.directory.app.lib.model" value="${templates.directory.app.lib}/model" />
 		<property name="templates.directory.pub" value="${templates.directory}/pub" />
+		<property name="templates.directory.pub.web" value="${templates.directory.pub}/web" />
 		<property name="templates.directory.templates" value="${templates.directory}/templates" />
 
 		<!-- Create directory structure. -->
@@ -534,6 +537,28 @@
 	</target>
 
 	<target name="project-template-remove" depends="initialize,project-locate,project-template-locate" description="Removes a project template">
+	</target>
+
+	<!--
+	  Public directory targets.
+	  -->
+	<target name="public-web-create" depends="initialize,project-locate" description="Creates a Web structure for the public directory">
+		<agavi.input property="public.base" message="Document-root relative path to the Agavi script" default="/" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
+
+		<copy todir="${project.directory}/${project.directory.pub}">
+			<mapper type="regexp" from="^(?:dot(\.))?(.+)\.tmpl" to="\1\2" />
+			<fileset dir="${templates.directory.pub.web}">
+				<include name="**/*.tmpl" />
+			</fileset>
+			<filterchain>
+				<replacetokens begintoken="%%" endtoken="%%">
+					<token key="AGAVI_LOCATION" value="${agavi.directory}" />
+					<token key="PROJECT_LOCATION" value="${project.directory}" />
+					<token key="PROJECT_PREFIX" value="${project.prefix}" />
+					<token key="PUBLIC_BASE" value="${public.base}" />
+				</replacetokens>
+			</filterchain>
+		</copy>
 	</target>
 
 	<!--
@@ -910,6 +935,15 @@
 
 	<target name="template-remove" depends="initialize,project-locate,module-locate,template-locate" description="Removes a template">
 	</target>
+
+	<!-- Post-initialization. -->
+	<if>
+		<isset property="project.directory" />
+		<then>
+			<property file="${project.directory}/build.properties" />
+			<agavi.import file="${project.directory}/build.xml" />
+		</then>
+	</if>
 
 </project>
 

@@ -151,4 +151,5 @@ class AgaviInputTask extends AgaviTask
 		$this->project->setUserProperty($this->property, $result);
 	}
 }
+
 ?>

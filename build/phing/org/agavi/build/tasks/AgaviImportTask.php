@@ -77,6 +77,8 @@ class AgaviImportTask extends AgaviTask
 			}
 			
 			Phing::setCurrentProject($this->project);
+			
+			$this->log(sprintf('Importing external build file %s', $this->file->getAbsolutePath()), Project::MSG_INFO);
 		}
 		catch(Exception $e) {
 			$this->log(sprintf('Could not read %s: %s (skipping)', $this->file->getAbsolutePath(), $e->getMessage()), Project::MSG_WARN);

@@ -13,8 +13,10 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
+require_once('phing/listener/DefaultLogger.php');
+
 /**
- * Manages Phing-based event dispatchers.
+ * Default logger for Agavi Phing build events.
  *
  * @package    agavi
  * @subpackage build
@@ -27,46 +29,19 @@
  *
  * @version    $Id$
  */
-final class AgaviPhingEventDispatcherManager
+class AgaviBuildLogger extends DefaultLogger
 {
-	protected static $dispatchers;
-	
-	/**
-	 * Retrieves a dispatcher for a project.
-	 *
-	 * @param      Project The project that governs the dispatcher.
-	 *
-	 * @return     AgaviPhingEventDispatcher The dispatcher.
-	 */
-	public static function get(Project $project)
+	public function buildStarted(BuildEvent $event)
 	{
-		$hash = spl_object_hash($project);
 		
-		if(!isset(self::$dispatchers[$hash])) {
-			self::$dispatchers[$hash] = new AgaviPhingEventDispatcher($project);
-		}
-		
-		return self::$dispatchers[$hash];
 	}
 	
-	/**
-	 * Removes a dispatcher.
-	 *
-	 * @param      Project The project that governs the dispatcher.
-	 *
-	 * @return     boolean True if the dispatcher is successfully removed, false
-	 *                     otherwise.
-	 */
-	public static function remove(Project $project)
+	public function buildFinished(BuildEvent $event)
 	{
-		$hash = spl_object_hash($project);
-		
-		if(isset(self::$dispatchers[$hash])) {
-			unset(self::$dispatchers[$hash]);
-			return true;
+		$exception = $event->getException();
+		if($exception !== null) {
+			$this->printMessage(str_pad('[error] ', DefaultLogger::LEFT_COLUMN_SIZE, ' ', STR_PAD_LEFT) . $exception->getMessage(), $this->out, $event->getPriority());
 		}
-		
-		return false;
 	}
 }
 

@@ -29,22 +29,22 @@
  */
 final class AgaviBuild
 {
+	protected static $bootstrapped = false;
+	
 	/**
 	 * @var        array An associative array of classes and files that
 	 *                   can be autoloaded.
 	 */
 	public static $autoloads = array(
 		'AgaviBuildException' => 'exception/AgaviBuildException.class.php',
-		'AgaviEventBuildException' => 'exception/AgaviEventBuildException.class.php',
 		'AgaviCheck' => 'check/AgaviCheck.class.php',
 		'AgaviFilesystemCheck' => 'check/AgaviFilesystemCheck.class.php',
 		'AgaviProjectFilesystemCheck' => 'check/AgaviProjectFilesystemCheck.class.php',
 		'AgaviModuleFilesystemCheck' => 'check/AgaviModuleFilesystemCheck.class.php',
 		'AgaviTransform' => 'transform/AgaviTransform.class.php',
 		'AgaviIdentifierTransform' => 'transform/AgaviIdentifierTransform.class.php',
+		'AgaviEventBuildException' => 'event/AgaviEventBuildException.class.php',
 		'AgaviIListener' => 'event/AgaviIListener.interface.php',
-		'AgaviITargetListener' => 'phing/AgaviITargetListener.interface.php',
-		'AgaviTargetAdapter' => 'phing/AgaviTargetAdapter.class.php',
 		'AgaviEventDispatcher' => 'event/AgaviEventDispatcher.class.php',
 		'AgaviIEvent' => 'event/AgaviIEvent.interface.php',
 		'AgaviEvent' => 'event/AgaviEvent.class.php',
@@ -63,6 +63,8 @@ final class AgaviBuild
 		'AgaviPhingTargetAdapter' => 'phing/AgaviPhingTargetAdapter.class.php',
 		'AgaviPhingTaskAdapter' => 'phing/AgaviPhingTaskAdapter.class.php',
 		'AgaviPhingMessageAdapter' => 'phing/AgaviPhingMessageAdapter.class.php',
+		'AgaviBuildLogger' => 'phing/AgaviBuildLogger.php',
+		'AgaviProxyBuildLogger' => 'phing/AgaviProxyBuildLogger.php'
 	);
 
 	/**
@@ -89,7 +91,22 @@ final class AgaviBuild
 	 */
 	public static function bootstrap()
 	{
-		spl_autoload_register(array('AgaviBuild', '__autoload'));
+		if(self::$bootstrapped === false) {
+			spl_autoload_register(array('AgaviBuild', '__autoload'));
+		}
+		
+		self::$bootstrapped = true;
+	}
+	
+	/**
+	 * Retrieves whether the build system has been bootstrapped.
+	 *
+	 * @return     boolean True if the build system has been bootstrapped, false
+	 *                     otherwise.
+	 */
+	public static function isBootstrapped()
+	{
+		return self::$bootstrapped;
 	}
 }
 

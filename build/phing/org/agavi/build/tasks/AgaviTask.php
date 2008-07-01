@@ -37,14 +37,9 @@ abstract class AgaviTask extends Task
 	 */
 	public function init()
 	{
-		if(!self::$bootstrapped) {
+		if(!class_exists('AgaviBuild')) {
 			require_once(dirname(__FILE__) . '/../../../../../agavi/build.php');
 			AgaviBuild::bootstrap();
-			
-			self::$bootstrapped = true;
-			
-			/* Create and bind an event dispatcher. */
-			AgaviPhingEventDispatcherManager::register($this->project);
 		}
 	}
 	

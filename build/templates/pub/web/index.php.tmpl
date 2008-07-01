@@ -3,7 +3,7 @@
 // +---------------------------------------------------------------------------+
 // | An absolute filesystem path to the agavi/agavi.php script.                |
 // +---------------------------------------------------------------------------+
-require('%%PATH_TO_AGAVI%%/agavi.php');
+require('%%AGAVI_LOCATION%%/agavi.php');
 
 // +---------------------------------------------------------------------------+
 // | An absolute filesystem path to our app/config.php script.                 |
@@ -21,4 +21,5 @@ Agavi::bootstrap('development');
 // | Call the controller's dispatch method on the default context              |
 // +---------------------------------------------------------------------------+
 AgaviContext::getInstance('web')->getController()->dispatch();
+
 ?>

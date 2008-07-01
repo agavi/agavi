@@ -6,7 +6,7 @@
 	<property environment="env"/>
 	<property file="build.properties"/>
 	<property name="package"  value="${phing.project.name}" override="true" />
-	<property name="builddir" value="build" override="true" />
+	<property name="builddir" value="pear-build" override="true" />
 	<property name="srcdir"   value="${project.basedir}" override="true" />
 	<taskdef classname="etc.phing.AgaviPackageTask" name="agavipackage"/>
 	<taskdef classname="etc.phing.AgaviOlsonCompileTask" name="agaviolsoncompile"/>
@@ -39,7 +39,7 @@
 
 	<target name="apidocs" description="API docs">
 		<!-- HAXOR! we need to inject an 'ignore' cmdline argument to prevent the inclusion of the compiled timezone data and the buildtools, hence the weird 'output' attribute contents - the phing phpdoc task doesn't have an 'ignore' attribute -->
-		<phpdoc title="Agavi Documentation" destdir="apidocs" sourcepath="src" output="HTML:frames:DOM/earthli -i buildtools/,translation/data/timezones/"/>
+		<phpdoc title="Agavi Documentation" destdir="apidocs" sourcepath="src" output="HTML:frames:DOM/earthli -i translation/data/timezones/"/>
 	</target>
 
 	<target name="manuals" description="generate all manuals">
@@ -245,7 +245,7 @@
 
 	<target name="clean" description="clean out the cruft">
 		<delete dir="manuals" includeemptydirs="true" failonerror="true" />
-		<delete dir="build" includeemptydirs="true" failonerror="true" />
+		<delete dir="pear-build" includeemptydirs="true" failonerror="true" />
 		<delete dir="apidocs" includeemptydirs="true" quiet="true" failonerror="false" />
 		<delete file="tests.html" includeemptydirs="true" quiet="true" failonerror="false" />
 	</target>

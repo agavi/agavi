@@ -13,8 +13,11 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
+require_once(dirname(__FILE__) . '/AgaviBuildLogger.php');
+
 /**
- * Manages Phing-based event dispatchers.
+ * Logs events through Agavi's default Phing logger, but ignores all proxy
+ * names.
  *
  * @package    agavi
  * @subpackage build
@@ -27,46 +30,20 @@
  *
  * @version    $Id$
  */
-final class AgaviPhingEventDispatcherManager
+class AgaviProxyBuildLogger extends AgaviBuildLogger
 {
-	protected static $dispatchers;
-	
-	/**
-	 * Retrieves a dispatcher for a project.
-	 *
-	 * @param      Project The project that governs the dispatcher.
-	 *
-	 * @return     AgaviPhingEventDispatcher The dispatcher.
-	 */
-	public static function get(Project $project)
+	public function targetStarted(BuildEvent $event)
 	{
-		$hash = spl_object_hash($project);
-		
-		if(!isset(self::$dispatchers[$hash])) {
-			self::$dispatchers[$hash] = new AgaviPhingEventDispatcher($project);
+		if(!$event->getTarget() instanceof AgaviProxyTarget) {
+			parent::targetStarted($event);
 		}
-		
-		return self::$dispatchers[$hash];
 	}
 	
-	/**
-	 * Removes a dispatcher.
-	 *
-	 * @param      Project The project that governs the dispatcher.
-	 *
-	 * @return     boolean True if the dispatcher is successfully removed, false
-	 *                     otherwise.
-	 */
-	public static function remove(Project $project)
+	public function targetFinished(BuildEvent $event)
 	{
-		$hash = spl_object_hash($project);
-		
-		if(isset(self::$dispatchers[$hash])) {
-			unset(self::$dispatchers[$hash]);
-			return true;
+		if(!$event->getTarget() instanceof AgaviProxyTarget) {
+			parent::targetFinished($event);
 		}
-		
-		return false;
 	}
 }
 

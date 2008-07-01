@@ -53,6 +53,15 @@ class AgaviProxyProject extends Project
 			parent::addDataTypeDefinition($name, $class);
 		}
 		
+		/* Add proxy targets to the new project. */
+		foreach($proxied->getTargets() as $name => $target) {
+			$proxy = new AgaviProxyTarget();
+			$proxy->setName($name);
+			$proxy->setDescription($target->getDescription());
+			$proxy->setTarget($target);
+			parent::addTarget($name, $proxy);
+		}
+		
 		parent::setUserProperty('phing.version', $proxied->getProperty('phing.version'));
 		$this->setSystemProperties();
 	}
@@ -143,4 +152,3 @@ class AgaviProxyProject extends Project
 }
 
 ?>
-

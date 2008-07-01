@@ -14,7 +14,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * Manages Phing-based event dispatchers.
+ * Represents an exception thrown by the Agavi build script's option parser.
  *
  * @package    agavi
  * @subpackage build
@@ -27,47 +27,9 @@
  *
  * @version    $Id$
  */
-final class AgaviPhingEventDispatcherManager
+class AgaviOptionException extends Exception
 {
-	protected static $dispatchers;
 	
-	/**
-	 * Retrieves a dispatcher for a project.
-	 *
-	 * @param      Project The project that governs the dispatcher.
-	 *
-	 * @return     AgaviPhingEventDispatcher The dispatcher.
-	 */
-	public static function get(Project $project)
-	{
-		$hash = spl_object_hash($project);
-		
-		if(!isset(self::$dispatchers[$hash])) {
-			self::$dispatchers[$hash] = new AgaviPhingEventDispatcher($project);
-		}
-		
-		return self::$dispatchers[$hash];
-	}
-	
-	/**
-	 * Removes a dispatcher.
-	 *
-	 * @param      Project The project that governs the dispatcher.
-	 *
-	 * @return     boolean True if the dispatcher is successfully removed, false
-	 *                     otherwise.
-	 */
-	public static function remove(Project $project)
-	{
-		$hash = spl_object_hash($project);
-		
-		if(isset(self::$dispatchers[$hash])) {
-			unset(self::$dispatchers[$hash]);
-			return true;
-		}
-		
-		return false;
-	}
 }
 
 ?>

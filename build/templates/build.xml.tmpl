@@ -1,13 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project name="%%PROJECT_NAME%%" basedir="." default="status">
 
-	<property name="agavi.directory" value="%%AGAVI_LOCATION%%" />
-	<property name="agavi.directory.build" value="${agavi.directory}/build" />
-	<property name="agavi.directory.build.phing" value="${agavi.directory.build}/phing" />
-
-	<taskdef name="agavi.import" classname="org.agavi.build.tasks.AgaviImportTask" classpath="${agavi.directory.build.phing}" />
-	<agavi.import file="${agavi.directory.build}/build.xml" />
-
 	<!--
 	  Define project-specific or custom build targets.
 	  -->
