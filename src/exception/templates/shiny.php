@@ -101,7 +101,7 @@ if($svg) {
 
 // fix stack trace in case it doesn't contain the exception origin as the first entry
 $fixedTrace = $e->getTrace();
-if(isset($fixedTrace[0]['file']) && $fixedTrace[0]['file'] != $e->getFile() && $fixedTrace[0]['line'] != $e->getLine()) {
+if(isset($fixedTrace[0]['file']) && !($fixedTrace[0]['file'] == $e->getFile() && $fixedTrace[0]['line'] == $e->getLine())) {
 	$fixedTrace = array_merge(array(array('file' => $e->getFile(), 'line' => $e->getLine())), $fixedTrace);
 }
 
@@ -578,7 +578,7 @@ foreach($fixedTrace as $trace):
 		$highlights[$trace['file']] = explode('<br />', $highlights[$trace['file']]);
 	}
 ?>
-			<li id="frame<?php echo $i; ?>"<?php if($i > 1): ?> class="hidecode"<?php endif; ?>>at <?php if($i > 1): ?><strong><?php if(isset($trace['class'])): ?><?php echo $trace['class'], htmlspecialchars($trace['type']); ?><?php endif; ?><?php echo $trace['function']; ?><?php if(isset($trace['args'])): ?>(<?php echo buildParamList($trace['args']); ?>)<?php endif; ?></strong><?php else: ?><em>exception origin</em><?php endif; ?><br />in <?php if(isset($trace['file'])): echo str_replace(
+			<li id="frame<?php echo $i; ?>"<?php if($i != 2): ?> class="hidecode"<?php endif; ?>>at <?php if($i > 1): ?><strong><?php if(isset($trace['class'])): ?><?php echo $trace['class'], htmlspecialchars($trace['type']); ?><?php endif; ?><?php echo $trace['function']; ?><?php if(isset($trace['args'])): ?>(<?php echo buildParamList($trace['args']); ?>)<?php endif; ?></strong><?php else: ?><em>exception origin</em><?php endif; ?><br />in <?php if(isset($trace['file'])): echo str_replace(
 			array(
 				'_' . AgaviConfig::get('core.module_dir', 'something totally random'),
 				'_' . AgaviConfig::get('core.template_dir', 'something totally random'),
