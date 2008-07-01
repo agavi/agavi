@@ -70,28 +70,30 @@ class AgaviSecurityFilter extends AgaviFilter implements AgaviIActionFilter, Aga
 		// NOTE: the nice thing about the Action class is that getCredential()
 		//       is vague enough to describe any level of security and can be
 		//       used to retrieve such data and should never have to be altered
-		if($user->isAuthenticated()) {
-			// the user is authenticated
-			
-			if($credential === null || $user->hasCredentials($credential)) {
-				// the user has access, continue
-				$filterChain->execute($container);
-			} else {
-				// the user doesn't have access, set info regarding next action and leave
-				$request->setAttributes(array(
-					'requested_module' => $container->getModuleName(),
-					'requested_action' => $container->getActionName()
-				), 'org.agavi.controller.forwards.secure');
-				$container->setNext($container->createExecutionContainer(AgaviConfig::get('actions.secure_module'), AgaviConfig::get('actions.secure_action')));
-			}
-
+		if($user->isAuthenticated() && ($credential === null || $user->hasCredentials($credential))) {
+			// the user has access, continue
+			$filterChain->execute($container);
 		} else {
-			// the user is not authenticated
-			$request->setAttributes(array(
+			if($user->isAuthenticated()) {
+				// the user doesn't have access
+				$forwardInfoNamespace = 'org.agavi.controller.forwards.secure';
+				$forwardContainer = $container->createExecutionContainer(AgaviConfig::get('actions.secure_module'), AgaviConfig::get('actions.secure_action'));
+			} else {
+				// the user is not authenticated
+				$forwardInfoNamespace = 'org.agavi.controller.forwards.login';
+				$forwardContainer = $container->createExecutionContainer(AgaviConfig::get('actions.login_module'), AgaviConfig::get('actions.login_action'));
+			}
+			
+			$container->setNext($forwardContainer);
+			
+			$forwardInfoData = array(
 				'requested_module' => $container->getModuleName(),
-				'requested_action' => $container->getActionName()
-			), 'org.agavi.controller.forwards.login');
-			$container->setNext($container->createExecutionContainer(AgaviConfig::get('actions.login_module'), AgaviConfig::get('actions.login_action')));
+				'requested_action' => $container->getActionName(),
+			);
+			
+			$forwardContainer->setAttributes($forwardInfoData, $forwardInfoNamespace);
+			// legacy
+			$request->setAttributes($forwardInfoData, $forwardInfoNamespace);
 		}
 	}
 }
