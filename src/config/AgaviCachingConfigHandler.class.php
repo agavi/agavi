@@ -56,10 +56,6 @@ class AgaviCachingConfigHandler extends AgaviConfigHandler
 
 		foreach($configurations as $cfg) {
 			foreach($cfg->cachings as $caching) {
-				if(!AgaviToolkit::literalize($caching->getAttribute('enabled', true))) {
-					continue;
-				}
-				
 				$groups = array();
 				if(isset($caching->groups)) {
 					foreach($caching->groups as $group) {
@@ -143,13 +139,18 @@ class AgaviCachingConfigHandler extends AgaviConfigHandler
 				
 				$methods = array_map('trim', explode(' ', $caching->getAttribute('method', '*')));
 				foreach($methods as $method) {
-					$cachings[$method] = array(
-						'lifetime' => $caching->getAttribute('lifetime'),
-						'groups' => $groups,
-						'views' => $views,
-						'action_attributes' => $actionAttributes,
-						'output_types' => $outputTypes,
-					);
+					if(!AgaviToolkit::literalize($caching->getAttribute('enabled', true))) {
+						unset($cachings[$method]);
+					} else {
+						$values = array(
+							'lifetime' => $caching->getAttribute('lifetime'),
+							'groups' => $groups,
+							'views' => $views,
+							'action_attributes' => $actionAttributes,
+							'output_types' => $outputTypes,
+						);
+						$cachings[$method] = $values;
+					}
 				}
 			}
 		}

@@ -20,7 +20,7 @@ class WebRoutingTest extends AgaviTestCase
 		$this->_SERVER = $_SERVER;
 		$this->_ENV = $_ENV;
 		$this->_GET = $_GET;
-		// AgaviConfig::set('core.use_routing', true);
+		AgaviConfig::set('core.use_routing', true);
 	}
 
 	protected function runTest()
@@ -75,6 +75,8 @@ class WebRoutingTest extends AgaviTestCase
 		$_GET = $this->_GET;
 		$ctx = AgaviContext::getInstance('test');
 		$ctx->getRequest()->initialize($ctx);
+		
+		AgaviConfig::set('core.use_routing', false);
 	}
 
 }
