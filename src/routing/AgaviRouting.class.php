@@ -675,11 +675,8 @@ abstract class AgaviRouting extends AgaviParameterHolder
 
 		$container = $this->context->getController()->createExecutionContainer();
 
-		if(!AgaviConfig::get('core.use_routing', false) || count($this->routes) == 0) {
-			// routing disabled, determine module and action manually and bail out
-			$container->setModuleName($reqData->getParameter($req->getParameter('module_accessor')));
-			$container->setActionName($reqData->getParameter($req->getParameter('action_accessor')));
-
+		if(!AgaviConfig::get('core.use_routing', false)) {
+			// routing disabled, just bail out here
 			return $container;
 		}
 
@@ -695,6 +692,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 		$aa = $req->getParameter('action_accessor');
 		$requestMethod = $req->getMethod();
 
+		$routes = array();
 		// get all top level routes
 		foreach($this->routes as $name => $route) {
 			if(!$route['opt']['parent']) {
@@ -965,7 +963,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 			if($state == 'start') {
 				// start of regular expression block
 				if($c == '(') {
-					$rxStr .= preg_quote($tmpStr);
+					$rxStr .= preg_quote($tmpStr, '#');
 					$reverseStr .= $tmpStr;
 
 					$tmpStr = '';
@@ -979,7 +977,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 				}
 
 				if($atEnd) {
-					$rxStr .= preg_quote($tmpStr);
+					$rxStr .= preg_quote($tmpStr, '#');
 					$reverseStr .= $tmpStr;
 				}
 			} elseif($state == 'rxStart') {
@@ -1028,9 +1026,9 @@ abstract class AgaviRouting extends AgaviParameterHolder
 							if(strpbrk($myRx, $rxChars) === false) {
 								$reverseStr .= $myRx;
 							}
-							$rxStr .= sprintf('(%s)', $myRx);
+							$rxStr .= str_replace('#', '\#', sprintf('(%s)', $myRx));
 						} else {
-							$rxStr .= sprintf('(%s(?P<%s>%s)%s)', $rxPrefix, $rxName, $rxInner, $rxPostfix);
+							$rxStr .= str_replace('#', '\#', sprintf('(%s(?P<%s>%s)%s)', $rxPrefix, $rxName, $rxInner, $rxPostfix));
 							$reverseStr .= sprintf('(:%s:)', $rxName);
 
 							if(!isset($vars[$rxName])) {

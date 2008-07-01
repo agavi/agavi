@@ -341,7 +341,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 		if($this->getParameter('enable_caching', true) && is_readable($cachingDotXml = AgaviConfig::get('core.module_dir') . '/' . $moduleName . DIRECTORY_SEPARATOR . 'cache' . DIRECTORY_SEPARATOR . $actionName . '.xml')) {
 			// $lm->log('Caching enabled, configuration file found, loading...');
 			// no _once please!
-			include(AgaviConfigCache::checkConfig($cachingDotXml));
+			include(AgaviConfigCache::checkConfig($cachingDotXml, $this->context->getName()));
 		}
 
 		$isActionCached = false;
@@ -730,7 +730,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 			if(is_readable($validationConfig)) {
 				// load validation configuration
 				// do NOT use require_once
-				require(AgaviConfigCache::checkConfig($validationConfig));
+				require(AgaviConfigCache::checkConfig($validationConfig, $this->context->getName()));
 			}
 
 			// manually load validators
