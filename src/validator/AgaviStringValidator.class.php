@@ -48,9 +48,23 @@ class AgaviStringValidator extends AgaviValidator
 	 */
 	protected function validate()
 	{
-		$originalValue = $value = (string) $this->getData($this->getArgument());
+		$utf8 = $this->getParameter('utf8', true);
 		
-		if($this->getParameter('utf8', true)) {
+		$originalValue =& $this->getData($this->getArgument());
+		if($this->getParameter('trim', false)) {
+			if($utf8) {
+				$pattern = '/^\p{Z}*(?P<trimmed>.*?)\p{Z}*$/Du';
+			} else {
+				$pattern = '/^\s*(?P<trimmed>.*?)\s*$/D';
+			}
+			if(preg_match($pattern, $originalValue, $matches)) {
+				$originalValue = $matches['trimmed'];
+			}
+		}
+		
+		$value = $originalValue;
+		
+		if($utf8) {
 			$value = utf8_decode($value);
 		}
 		

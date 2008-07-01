@@ -86,7 +86,6 @@ final class AgaviContext
 	
 	/**
 	 * @var        AgaviTranslationManager A TranslationManager instance.
-	 * @since      0.11.0
 	 */
 	protected $translationManager = null;
 	
@@ -111,26 +110,29 @@ final class AgaviContext
 	protected $singletonModelInstances = array();
 
 	/**
-	 * Clone method, overridden to prevent cloning, there can be only one. 
+	 * Clone method, overridden to prevent cloning, there can be only one.
 	 *
-	 * @author     Mike Vincent <mike@agavi.org>	
+	 * @author     Mike Vincent <mike@agavi.org>
 	 * @since      0.9.0
 	 */
 	public function __clone()
 	{
 		trigger_error('Cloning an AgaviContext instance is not allowed.', E_USER_ERROR);
-	}	
+	}
 
 	/**
-	 * Constuctor method, intentionally made private so the context cannot be 
+	 * Constuctor method, intentionally made private so the context cannot be
 	 * created directly.
 	 *
-	 * @author     Mike Vincent <mike@agavi.org>	
+	 * @param      string The name of this context.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @author     Mike Vincent <mike@agavi.org>
 	 * @since      0.9.0
 	 */
-	private function __construct() 
+	private function __construct($name)
 	{
-		// Singleton, setting up the class happens in initialize()
+		$this->name = $name;
 	}
 
 	/**
@@ -244,8 +246,8 @@ final class AgaviContext
 			$profile = strtolower($profile);
 			if(!isset(self::$instances[$profile])) {
 				$class = __CLASS__;
-				self::$instances[$profile] = new $class;
-				self::$instances[$profile]->initialize($profile);
+				self::$instances[$profile] = new $class($profile);
+				self::$instances[$profile]->initialize();
 			}
 			return self::$instances[$profile];
 		} catch(Exception $e) {
@@ -270,25 +272,15 @@ final class AgaviContext
 	/**
 	 * (re)Initialize the AgaviContext instance.
 	 *
-	 * @param      string A name corresponding to a section of the config
-	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @author     Mike Vincent <mike@agavi.org>
 	 * @since      0.10.0
 	 */
-	public function initialize($profile = null)
+	public function initialize()
 	{
-		if($profile === null) {
-			$profile = AgaviConfig::get('core.default_context', 'stdctx');
-		}
-		
-		$profile = strtolower($profile);
-		
-		$this->name = $profile;
-		
 		try {
-			include(AgaviConfigCache::checkConfig(AgaviConfig::get('core.config_dir') . '/factories.xml', $profile));
+			include(AgaviConfigCache::checkConfig(AgaviConfig::get('core.config_dir') . '/factories.xml', $this->name));
 		} catch(Exception $e) {
 			AgaviException::printStackTrace($e, $this);
 		}

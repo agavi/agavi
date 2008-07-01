@@ -115,6 +115,7 @@
 			<autoload name="AgaviRotatingFileLoggerAppender">%core.agavi_dir%/logging/AgaviRotatingFileLoggerAppender.class.php</autoload>
 			<autoload name="AgaviStderrLoggerAppender">%core.agavi_dir%/logging/AgaviStderrLoggerAppender.class.php</autoload>
 			<autoload name="AgaviStdoutLoggerAppender">%core.agavi_dir%/logging/AgaviStdoutLoggerAppender.class.php</autoload>
+			<autoload name="AgaviStreamLoggerAppender">%core.agavi_dir%/logging/AgaviStreamLoggerAppender.class.php</autoload>
 			<autoload name="AgaviTimestampLoggerLayout">%core.agavi_dir%/logging/AgaviTimestampLoggerLayout.class.php</autoload>
 
 			<!-- agavi/model -->

@@ -16,18 +16,42 @@ CHG: Deprecated AgaviAdodbDatabase (#662) (David)
 FIX: Security filters cannot perform checks in addition to isSecure() (#671) (David)
 
 
-0.11.2 RC1 (June ??, 2008)
+0.11.2 RC2 (July ?, 2008)
 --------------------------
 
+FIX: Exception templates incorrectly fix information about exception origin (#790) (David)
+FIX: Markup is escaped by accident in shiny exception template (#791) (David)
+FIX: Using '#' in a routing pattern triggers a warning (#789) (Dominik)
+
+
+0.11.2 RC1 (June 27, 2008)
+--------------------------
+
+ADD: Support trimming of input string in AgaviStringValidator (#745) (David)
+ADD: Add support for native doctrine model autoloading (#759) (David)
+ADD: Add support for doctrine manager attributes (#783) (David)
+ADD: Add SecurityUser::hasCredential and SecurityUser::getCredentials for convenience (Noah) (#772)
 ADD: Add convenience methods to AgaviUploadedFile (#607) (David)
-ADD: Change error class handling in FPF to set classes on elements returned by the respective XPath expressions, not the original elements (#768) (David)
 ADD: Allow arrays as values for web request sources. (#675) (David)
 ADD: Allow arrays as setting values in settings.xml (#670) (David)
 ADD: Ability to return data from view as inner content for first layer in a rendering batch (#655) (David)
 ADD: Allow nested routing structures with concatenated name or action attributes in ancestors other than immediate parents (Dominik) (#764)
 
+CHG: AgaviController::dispatch() should accept module and action names in the request data argument with routing disabled (#776) (David)
+CHG: Routing should not just bail out of execute() if routing is enabled, but no routes are defined (#779) (David)
+CHG: Refactor AgaviContext::initialize() and the passing of "profile" (#778) (David)
+CHG: Arguments passed to AgaviController::dispatch() should have precedence over routing results (#777) (David)
+CHG: Introduce generic AgaviStreamLoggerAppender (#773) (David)
+CHG: Make AgaviLoggerAppender an AgaviParameterHolder (#774) (David)
+CHG: Change error class handling in FPF to set classes on elements returned by the respective XPath expressions, not the original elements (#768) (David)
 CHG: Use file locking everywhere files are written (Dominik) (#766)
 
+FIX: AgaviValidationManager::hasError() is inconsistent with AgaviValidationManager::getError() regarding severity (#784) (David)
+FIX: Routing tests do not reset core.use_routing in tearDown() (#781) (David)
+FIX: stdout/stderror log appenders are broken (#751) (David)
+FIX: Caching configuration blocks might be merged incorrectly (#755) (David)
+FIX: Caching and validation configurations cannot be per-context (#754) (David)
+FIX: Form Population Filter incorrectly inserts XML prolog into HTML documents (#771) (David)
 FIX: Calling move() twice on the same uploaded file will cause a bogus exception (#770) (David)
 FIX: shiny.php exception template does not use htmlspecialchars() when outputting file paths (#765) (David)
 FIX: Static method AgaviBaseConfigHandler::replacePath() is used in object context in two config handlers (David) (#762)
@@ -225,7 +249,7 @@ FIX: FilterChain resets run count for each registered filter; thus executeOnce()
 FIX: User-agent check in shiny exception template can throw errors (#564) (Noah Fontes)
 FIX: WebRouting::gen() ignores 'separator' option when generating existing routes (#545) (David)
 FIX: <route action=".Something" /> confuses template location code (#540) (David)
-FIX: AgaviPropelDatabase returns null in getConnection when used with Propel 1.2 (#538) (Dominik) 
+FIX: AgaviPropelDatabase returns null in getConnection when used with Propel 1.2 (#538) (Dominik)
 FIX: "shiny" exception template may generate invalid markup if HTML is at first line of code snippet (#537) (David)
 FIX: AgaviToolkit::expandVariables() skips null arguments (#536) (David)
 FIX: AgaviParameterHolder::hasParameter() etc return false for keys that have a null value (#535) (David)
@@ -642,4 +666,3 @@ FIX: Use proper type "::" or "->" in stack trace (David)
 --------------------
 
 - Initial Release
-

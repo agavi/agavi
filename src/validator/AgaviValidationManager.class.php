@@ -796,7 +796,9 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	 */
 	public function hasError($name)
 	{
-		return $this->isFieldFailed($name);
+		$ec = $this->getFieldErrorCode($fieldname);
+		// greater than or equal to notice cause that's when we need to show an error (this is different to hasErrors() behavior due to legacy)
+		return ($ec >= AgaviValidator::NOTICE);
 	}
 
 	/**
@@ -810,6 +812,7 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	 */
 	public function hasErrors()
 	{
+		// anything above notice. just notice means validation didn't fail, although a notice is considered an error itself. but notices only "show up" if other validators with higher severity (error, fatal) failed
 		return $this->getResult() > AgaviValidator::NOTICE;
 	}
 
