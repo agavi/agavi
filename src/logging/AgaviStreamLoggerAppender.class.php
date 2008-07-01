@@ -14,7 +14,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviFileLoggerAppender appends AgaviLoggerMessages to a given file.
+ * AgaviStreamLoggerAppender appends AgaviLoggerMessages to a given stream.
  *
  * @package    agavi
  * @subpackage logging
@@ -24,12 +24,17 @@
  * @copyright  Authors
  * @copyright  The Agavi Project
  *
- * @since      0.10.0
+ * @since      0.11.2
  *
  * @version    $Id$
  */
-class AgaviFileLoggerAppender extends AgaviStreamLoggerAppender
+class AgaviStreamLoggerAppender extends AgaviLoggerAppender
 {
+	/**
+	 * @var        The resource of the stream this appender is writing to.
+	 */
+	protected $handle = null;
+
 	/**
 	 * Initialize the object.
 	 *
@@ -41,23 +46,20 @@ class AgaviFileLoggerAppender extends AgaviStreamLoggerAppender
 	 */
 	public function initialize(AgaviContext $context, array $parameters = array())
 	{
-		// for < 0.11.2 BC
-		if(isset($parameters['file'])) {
-			$parameters['destination'] = $parameters['file'];
-			unset($parameters['file']);
-		}
-		
 		parent::initialize($context, $parameters);
 
+		if(!isset($parameters['destination'])) {
+			throw new AgaviException('No destination given for appending');
+		}
 	}
 
 	/**
-	 * Retrieve the file handle for this FileAppender.
+	 * Retrieve the handle for this stream appender.
 	 *
-	 * @throws     <b>AgaviLoggingException</b> if file cannot be opened for
+	 * @throws     <b>AgaviLoggingException</b> if stream cannot be opened for
 	 *                                          appending.
 	 *
-	 * @return     resource The open file handle.
+	 * @return     resource The opened resource handle.
 	 *
 	 * @author     Bob Zoller <bob@agavi.org>
 	 * @since      0.10.0
@@ -65,11 +67,52 @@ class AgaviFileLoggerAppender extends AgaviStreamLoggerAppender
 	protected function getHandle()
 	{
 		$destination = $this->getParameter('destination');
-		if(is_null($this->handle) && (!is_writable(dirname($destination)) || (file_exists($destination) && !is_writable($destination)))) {
-			throw new AgaviLoggingException('Cannot open file "' . $destination . '", please check permissions on file or directory.');
+		if(is_null($this->handle)) {
+			$this->handle = fopen($destination, $this->getParameter('mode', 'a'));
+			if(!$this->handle) {
+				throw new AgaviLoggingException('Cannot open stream "' . $destination . '".');
+			}
 		}
-		
-		return parent::getHandle();
+		return $this->handle;
+	}
+
+	/**
+	 * Execute the shutdown procedure.
+	 *
+	 * If open, close the stream handle.
+	 *
+	 * @author     Bob Zoller <bob@agavi.org>
+	 * @since      0.10.0
+	 */
+	public function shutdown()
+	{
+		if(!is_null($this->handle)) {
+			fclose($this->handle);
+		}
+	}
+
+	/**
+	 * Write a Message to the stream.
+	 *
+	 * @param      mixed Message
+	 *
+	 * @throws     <b>AgaviLoggingException</b> if no Layout is set or the stream
+	 *                                          cannot be written.
+	 *
+	 *
+	 * @author     Bob Zoller <bob@agavi.org>
+	 * @since      0.10.0
+	 */
+	public function write($message)
+	{
+		if(($layout = $this->getLayout()) === null) {
+			throw new AgaviLoggingException('No Layout set');
+		}
+
+		$str = sprintf("%s\n", $this->getLayout()->format($message));
+		if(fwrite($this->getHandle(), $str) === false) {
+			throw new AgaviLoggingException('Cannot write to stream "' . $this->getParameter('destination') . '".');
+		}
 	}
 }
 

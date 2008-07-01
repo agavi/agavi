@@ -21,6 +21,7 @@
  * @package    agavi
  * @subpackage logging
  *
+ * @author     David Zülke <dz@bitxtender.com>
  * @author     Bob Zoller <bob@agavi.org>
  * @copyright  Authors
  * @copyright  The Agavi Project
@@ -29,7 +30,7 @@
  *
  * @version    $Id$
  */
-abstract class AgaviLoggerAppender
+abstract class AgaviLoggerAppender extends AgaviParameterHolder
 {
 	/**
 	 * @var        AgaviContext An AgaviContext instance.
@@ -48,11 +49,14 @@ abstract class AgaviLoggerAppender
 	 * @param      array        An associative array of initialization parameters.
 	 *
 	 * @author     Bob Zoller <bob@agavi.org>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.10.0
 	 */
 	public function initialize(AgaviContext $context, array $parameters = array())
 	{
 		$this->context = $context;
+		
+		$this->setParameters($parameters);
 	}
 
 	/**

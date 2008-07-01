@@ -75,6 +75,8 @@ class WebRoutingTest extends AgaviTestCase
 		$_GET = $this->_GET;
 		$ctx = AgaviContext::getInstance('test');
 		$ctx->getRequest()->initialize($ctx);
+		
+		AgaviConfig::set('core.use_routing', false);
 	}
 
 }

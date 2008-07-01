@@ -46,9 +46,21 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 
 	const ENCODING_ISO_8859_1 = 'iso-8859-1';
 
+	/**
+	 * @var        DOMDocument Our (X)HTML document.
+	 */
 	protected $doc;
+
+	/**
+	 * @var        DOMXPath Our XPath instance for the document.
+	 */
 	protected $xpath;
-	protected $ns;
+
+	/**
+	 * @var        string The XML NS prefix we're working on with XPath, including
+	 *                    a colon (or empty string if document has no NS).
+	 */
+	protected $xmlnsPrefix = '';
 
 	/**
 	 * Execute this filter.
@@ -150,14 +162,14 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 			$this->xpath = new DomXPath($this->doc);
 			if($this->doc->documentElement && $this->doc->documentElement->namespaceURI) {
 				$this->xpath->registerNamespace('html', $this->doc->documentElement->namespaceURI);
-				$this->ns = 'html:';
+				$this->xmlnsPrefix = 'html:';
 			} else {
-				$this->ns = '';
+				$this->xmlnsPrefix = '';
 			}
 		} else {
 			$this->doc->loadHTML($output);
 			$this->xpath = new DomXPath($this->doc);
-			$this->ns = '';
+			$this->xmlnsPrefix = '';
 		}
 
 		if(libxml_get_last_error() !== false) {
@@ -186,7 +198,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 		libxml_use_internal_errors($luie);
 
 		$properXhtml = false;
-		foreach($this->xpath->query('//' . $this->ns . 'head/' . $this->ns . 'meta') as $meta) {
+		foreach($this->xpath->query(sprintf('//%1$shead/%1$smeta', $this->xmlnsPrefix)) as $meta) {
 			if(strtolower($meta->getAttribute('http-equiv')) == 'content-type') {
 				if($this->doc->encoding === null) {
 					// media-type = type "/" subtype *( ";" parameter ), says http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.7
@@ -220,7 +232,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 			throw new AgaviException('No iconv module available, input encoding "' . $encoding . '" cannot be handled.');
 		}
 
-		$base = $this->xpath->query('/' . $this->ns . 'html/' . $this->ns . 'head/' . $this->ns . 'base[@href]');
+		$base = $this->xpath->query(sprintf('/%1$shtml/%1$shead/%1$sbase[@href]', $this->xmlnsPrefix));
 		if($base->length) {
 			$baseHref = $base->item(0)->getAttribute('href');
 		} else {
@@ -233,14 +245,14 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 			$query = array();
 			foreach(array_keys($populate) as $id) {
 				if(is_string($id)) {
-					$query[] = '@id="' . $id . '"';
+					$query[] = sprintf('@id="%s"', $id);
 				}
 			}
 			if($query) {
-				$forms = $this->xpath->query('//' . $this->ns . 'form[' . implode(' or ', $query) . ']');
+				$forms = $this->xpath->query(sprintf('//%1$sform[%2$s]', $this->xmlnsPrefix, implode(' or ', $query)));
 			}
 		} else {
-			$forms = $this->xpath->query('//' . $this->ns . 'form[@action]');
+			$forms = $this->xpath->query(sprintf('//%1$sform[@action]', $this->xmlnsPrefix));
 		}
 
 		// an array of all validation incidents; errors inserted for fields or multiple fields will be removed in here
@@ -275,7 +287,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 			$remember = array();
 
 			// build the XPath query
-			$query = 'descendant::' . $this->ns . 'textarea[@name] | descendant::' . $this->ns . 'select[@name] | descendant::' . $this->ns . 'input[@name and (not(@type) or @type="text" or (@type="checkbox" and not(contains(@name, "[]"))) or (@type="checkbox" and contains(@name, "[]") and @value) or @type="radio" or @type="password" or @type="file"';
+			$query = sprintf('descendant::%1$stextarea[@name] | descendant::%1$sselect[@name] | descendant::%1$sinput[@name and (not(@type) or @type="text" or (@type="checkbox" and not(contains(@name, "[]"))) or (@type="checkbox" and contains(@name, "[]") and @value) or @type="radio" or @type="password" or @type="file"', $this->xmlnsPrefix);
 			if($cfg['include_hidden_inputs']) {
 				$query .= ' or @type="hidden"';
 			}
@@ -344,12 +356,12 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 					// the element itself of course
 					$errorClassElements[] = $element;
 					// all implicit labels
-					foreach($this->xpath->query('ancestor::' . $this->ns . 'label[not(@for)]', $element) as $label) {
+					foreach($this->xpath->query(sprintf('ancestor::%1$slabel[not(@for)]', $this->xmlnsPrefix), $element) as $label) {
 						$errorClassElements[] = $label;
 					}
 					// and all explicit labels
 					if(($id = $element->getAttribute('id')) != '') {
-						foreach($this->xpath->query('descendant::' . $this->ns . 'label[@for="' . $id . '"]', $form) as $label) {
+						foreach($this->xpath->query(sprintf('descendant::%1$slabel[@for="%2$s"]', $this->xmlnsPrefix, $id), $form) as $label) {
 							$errorClassElements[] = $label;
 						}
 					}
@@ -359,7 +371,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 						// go over all the elements in the error class map
 						foreach($cfg['error_class_map'] as $xpathExpression => $errorClassName) {
 							// evaluate each xpath expression
-							$errorClassResults = $this->xpath->query(AgaviToolkit::expandVariables($xpathExpression, array('htmlnsPrefix' => $this->ns)), $errorClassElement);
+							$errorClassResults = $this->xpath->query(AgaviToolkit::expandVariables($xpathExpression, array('htmlnsPrefix' => $this->xmlnsPrefix)), $errorClassElement);
 							if($errorClassResults && $errorClassResults->length) {
 								// we have results. the xpath expressions are used to locale the actual elements we set the error class on - doesn't necessarily have to be the erroneous element or the label!
 								foreach($errorClassResults as $errorClassDestinationElement) {
@@ -456,7 +468,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 				} elseif($element->nodeName == 'select') {
 					// select elements
 					// yes, we still use XPath because there could be OPTGROUPs
-					foreach($this->xpath->query('descendant::' . $this->ns . 'option', $element) as $option) {
+					foreach($this->xpath->query(sprintf('descendant::%1$soption', $this->xmlnsPrefix), $element) as $option) {
 						$option->removeAttribute('selected');
 						if($p->hasParameter($pname) && ($option->getAttribute('value') === $value || ($multiple && is_array($value) && in_array($option->getAttribute('value'), $value)))) {
 							$option->setAttribute('selected', 'selected');
@@ -632,7 +644,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 
 		$insertSuccessful = false;
 		foreach($rules as $xpathExpression => $errorMessageInfo) {
-			$targets = $this->xpath->query(AgaviToolkit::expandVariables($xpathExpression, array('htmlnsPrefix' => $this->ns)), $element);
+			$targets = $this->xpath->query(AgaviToolkit::expandVariables($xpathExpression, array('htmlnsPrefix' => $this->xmlnsPrefix)), $element);
 
 			if(!$targets || !$targets->length) {
 				continue;
