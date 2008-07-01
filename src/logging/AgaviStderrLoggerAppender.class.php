@@ -27,7 +27,7 @@
  *
  * @version    $Id$
  */
-class AgaviStderrLoggerAppender extends AgaviFileLoggerAppender
+class AgaviStderrLoggerAppender extends AgaviStreamLoggerAppender
 {
 	/**
 	 * Initialize the object.
@@ -40,7 +40,10 @@ class AgaviStderrLoggerAppender extends AgaviFileLoggerAppender
 	 */
 	public function initialize(AgaviContext $context, array $parameters = array())
 	{
-		$parameters['file'] = 'php://stderr';
+		$parameters['destination'] = 'php://stderr';
+		// 'a' doesn't work on Linux
+		$parameters['mode'] = 'w';
+		
 		parent::initialize($context, $parameters);
 	}
 }

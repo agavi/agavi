@@ -18,7 +18,7 @@ class ViewTest extends AgaviTestCase
 		$request = $ctx->getRequest();
 		
 		ob_start();
-		$ctx->getController()->dispatch(new AgaviRequestDataHolder(array(AgaviRequestDataHolder::SOURCE_PARAMETERS => array($request->getModuleAccessor() => 'Test', $request->getActionAccessor() => 'Test'))));
+		$ctx->getController()->dispatch(new AgaviRequestDataHolder(array(AgaviRequestDataHolder::SOURCE_PARAMETERS => array($request->getParameter('module_accessor') => 'Test', $request->getParameter('action_accessor') => 'Test'))));
 		ob_end_clean();
 		
 		$this->_v = new SampleView();

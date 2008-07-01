@@ -82,7 +82,8 @@ class AgaviSecurityUser extends AgaviUser implements AgaviISecurityUser
 	}
 
 	/**
-	 * Indicates whether or not this user has a credential.
+	 * Indicates whether or not this user has a credential or a set of
+	 * credentials.
 	 *
 	 * @param      mixed Credential data. Either a string or an array of
 	 *                   credentials which are all required. If these individual
@@ -114,8 +115,36 @@ class AgaviSecurityUser extends AgaviUser implements AgaviISecurityUser
 			}
 			return true;
 		} else {
-			return in_array($credential, $this->credentials, true);
+			return $this->hasCredential($credential);
 		}
+	}
+	
+	/**
+	 * Indicates whether or not this user has a credential.
+	 *
+	 * @param      string Credential data.
+	 *
+	 * @return     bool True if this user has the credential, otherwise false.
+	 *
+	 * @author     Noah Fontes <nf@bitextender.com>
+	 * @since      0.11.2
+	 */
+	public function hasCredential($credential)
+	{
+		return in_array($credential, $this->credentials, true);
+	}
+	
+	/**
+	 * Returns the list of credentials that this user possesses.
+	 *
+	 * @return     array This user's credentials.
+	 *
+	 * @author     Noah Fontes <nf@bitextender.com>
+	 * @since      0.11.2
+	 */
+	public function getCredentials()
+	{
+		return $this->credentials;
 	}
 
 	/**

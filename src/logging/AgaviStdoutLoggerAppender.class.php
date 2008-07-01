@@ -27,7 +27,7 @@
  *
  * @version    $Id$
  */
-class AgaviStdoutLoggerAppender extends AgaviFileLoggerAppender
+class AgaviStdoutLoggerAppender extends AgaviStreamLoggerAppender
 {
 	/**
 	 * Initialize the object.
@@ -40,7 +40,10 @@ class AgaviStdoutLoggerAppender extends AgaviFileLoggerAppender
 	 */
 	public function initialize(AgaviContext $context, array $parameters = array())
 	{
-		$parameters['file'] = 'php://stdout';
+		$parameters['destination'] = 'php://stdout';
+		// 'a' doesn't work on Linux
+		$parameters['mode'] = 'w';
+		
 		parent::initialize($context, $parameters);
 	}
 }
