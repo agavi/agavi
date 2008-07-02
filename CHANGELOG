@@ -1,8 +1,8 @@
 AGAVI CHANGELOG
 ===============
 
-0.11.2 RC2 (July ?, 2008)
---------------------------
+0.11.2 RC2 (July 2, 2008)
+-------------------------
 
 FIX: Exception templates incorrectly fix information about exception origin (#790) (David)
 FIX: Markup is escaped by accident in shiny exception template (#791) (David)
