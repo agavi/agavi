@@ -234,49 +234,40 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 		$moduleName = $this->getModuleName();
 		$actionName = $this->getActionName();
 
-		if(!AgaviConfig::get('core.available', false)) {
-			// application is unavailable
-			$request->setAttributes(array(
+		try {
+			$actionName = $controller->resolveAction($moduleName, $actionName);
+		} catch(AgaviControllerException $e) {
+			// track the requested module so we have access to the data in the error 404 page
+			$forwardInfoData = array(
 				'requested_module' => $moduleName,
-				'requested_action' => $actionName
-			), 'org.agavi.controller.forwards.unavailable');
-			$moduleName = AgaviConfig::get('actions.unavailable_module');
-			$actionName = AgaviConfig::get('actions.unavailable_action');
+				'requested_action' => $actionName,
+				'exception' => $e,
+			);
+			$forwardInfoNamespace = 'org.agavi.controller.forwards.error_404';
+
+			// switch to error 404 action
+			$moduleName = AgaviConfig::get('actions.error_404_module');
+			$actionName = AgaviConfig::get('actions.error_404_action');
 
 			try {
 				$actionName = $controller->resolveAction($moduleName, $actionName);
 			} catch(AgaviControllerException $e) {
-				$error = 'Invalid configuration settings: actions.unavailable_module "%s", actions.unavailable_action "%s"';
+				// cannot find unavailable module/action
+				$error = 'Invalid configuration settings: actions.error_404_module "%s", actions.error_404_action "%s"';
 				$error = sprintf($error, $moduleName, $actionName);
+
 				throw new AgaviConfigurationException($error);
 			}
-
-		} else {
-			try {
-				$actionName = $controller->resolveAction($moduleName, $actionName);
-			} catch(AgaviControllerException $e) {
-				// track the requested module so we have access to the data
-				// in the error 404 page
-				$request->setAttributes(array(
-					'requested_module' => $moduleName,
-					'requested_action' => $actionName,
-					'exception' => $e,
-				), 'org.agavi.controller.forwards.error_404');
-
-				// switch to error 404 action
-				$moduleName = AgaviConfig::get('actions.error_404_module');
-				$actionName = AgaviConfig::get('actions.error_404_action');
-
-				try {
-					$actionName = $controller->resolveAction($moduleName, $actionName);
-				} catch(AgaviControllerException $e) {
-					// cannot find unavailable module/action
-					$error = 'Invalid configuration settings: actions.error_404_module "%s", actions.error_404_action "%s"';
-					$error = sprintf($error, $moduleName, $actionName);
-
-					throw new AgaviConfigurationException($error);
-				}
-			}
+			
+			$forwardContainer = $this->createExecutionContainer($moduleName, $actionName);
+			
+			$forwardContainer->setAttributes($forwardInfoData, $forwardInfoNamespace);
+			// legacy
+			$request->setAttributes($forwardInfoData, $forwardInfoNamespace);
+			
+			$this->setNext($forwardContainer);
+			
+			return $this->proceed();
 		}
 
 		$this->setModuleName($moduleName);
@@ -367,10 +358,13 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 
 		} else {
 
-			$request->setAttributes(array(
+			// track the requested module so we have access to the data in the module disabled action
+			$forwardInfoData = array(
 				'requested_module' => $moduleName,
-				'requested_action' => $actionName
-			), 'org.agavi.controller.forwards.module_disabled');
+				'requested_action' => $actionName,
+			);
+			$forwardInfoNamespace = 'org.agavi.controller.forwards.module_disabled';
+			
 			$moduleName = AgaviConfig::get('actions.module_disabled_module');
 			$actionName = AgaviConfig::get('actions.module_disabled_action');
 
@@ -383,9 +377,29 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 				throw new AgaviConfigurationException($error);
 			}
 
-			$this->setNext($this->createExecutionContainer($moduleName, $actionName));
+			$forwardContainer = $this->createExecutionContainer($moduleName, $actionName);
+			
+			$forwardContainer->setAttributes($forwardInfoData, $forwardInfoNamespace);
+			// legacy
+			$request->setAttributes($forwardInfoData, $forwardInfoNamespace);
+			
+			$this->setNext($forwardContainer);
 		}
 
+		return $this->proceed();
+	}
+	
+	/**
+	 * Proceed to the "next" container by running it and returning its response,
+	 * or return our response if there is no "next" container.
+	 *
+	 * @return     AgaviResponse The "real" response.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      1.0.0
+	 */
+	protected function proceed()
+	{
 		if($this->next !== null) {
 			return $this->next->execute();
 		} else {
