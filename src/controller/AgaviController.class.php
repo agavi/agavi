@@ -222,8 +222,8 @@ class AgaviController extends AgaviParameterHolder
 					throw new AgaviConfigurationException($error);
 				}
 				
-				$container->setModuleName($moduleName);
-				$container->setActionName($actionName);
+				// make a new container
+				$container = $container->createExecutionContainer($moduleName, $actionName);
 				
 				$container->setAttributes($forwardInfoData, $forwardInfoNamespace);
 				// legacy
