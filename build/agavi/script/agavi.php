@@ -25,6 +25,10 @@ define('AGAVI_DIRECTORY', realpath(dirname(__FILE__) . '/../../..'));
 define('BUILD_DIRECTORY', realpath(dirname(__FILE__) . '/../..'));
 define('START_DIRECTORY', getcwd());
 
+$GLOBALS['OUTPUT'] = new OutputStream(fopen('php://stdout', 'w'));
+$GLOBALS['ERROR'] = new OutputStream(fopen('php://stderr', 'w'));
+$GLOBALS['INPUT'] = new InputStream(fopen('php://stdin', 'r'));
+
 /* Initialize Phing. */
 try {
 	Phing::startup();
@@ -36,9 +40,6 @@ catch(Exception $e) {
 	exit(1);
 }
 
-$GLOBALS['OUTPUT'] = new OutputStream(fopen('php://stdout', 'w'));
-$GLOBALS['ERROR'] = new OutputStream(fopen('php://stderr', 'w'));
-$GLOBALS['INPUT'] = new InputStream(fopen('php://stdin', 'r'));
 $GLOBALS['PROPERTIES'] = array();
 $GLOBALS['SHOW_LIST'] = false;
 $GLOBALS['BUILD'] = new PhingFile(BUILD_DIRECTORY . '/build.xml');
