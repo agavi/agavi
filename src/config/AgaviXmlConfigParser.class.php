@@ -507,6 +507,15 @@ class AgaviXmlConfigParser
 					)
 				);
 			}
+			
+			// set some info (config file path, context name, environment name) as params
+			// first arg is the namespace URI, which PHP doesn't support. awesome. see http://bugs.php.net/bug.php?id=30622 for the sad details
+			// we could use "agavi:context" etc, that does work even without such a prefix being declared in the stylesheet, but that would be completely non-XML-ish, confusing, and against the spec. so we use dots instead.
+			$proc->setParameter('', array(
+				'agavi.config_path' => $this->path,
+				'agavi.environment' => $this->environment,
+				'agavi.context' => $this->context,
+			));
 		
 			$newdoc = $proc->transformToDoc($this->doc);
 		
