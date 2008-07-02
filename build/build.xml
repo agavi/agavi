@@ -487,6 +487,21 @@
 	</target>
 
 	<target name="project-model-remove" depends="initialize,project-locate,project-model-locate" description="Removes a project model">
+		<agavi.input property="target.project-model-remove.continue" message="Really remove this project model" default="n" failIfEmpty="true" ignoreIfSet="true" />
+		<if>
+			<not>
+				<or>
+					<equals arg1="${target.project-model-remove.continue}" arg2="yes" trim="true" casesensitive="false" />
+					<equals arg1="${target.project-model-remove.continue}" arg2="y" trim="true" casesensitive="false" />
+					<equals arg1="${target.project-model-remove.continue}" arg2="true" trim="true" casesensitive="false" />
+				</or>
+			</not>
+			<then>
+				<fail message="Target execution aborted" />
+			</then>
+		</if>
+
+		<delete file="${model.file}" />
 	</target>
 
 	<!--
@@ -537,6 +552,21 @@
 	</target>
 
 	<target name="project-template-remove" depends="initialize,project-locate,project-template-locate" description="Removes a project template">
+		<agavi.input property="target.project-template-remove.continue" message="Really remove this project template" default="n" failIfEmpty="true" ignoreIfSet="true" />
+		<if>
+			<not>
+				<or>
+					<equals arg1="${target.project-template-remove.continue}" arg2="yes" trim="true" casesensitive="false" />
+					<equals arg1="${target.project-template-remove.continue}" arg2="y" trim="true" casesensitive="false" />
+					<equals arg1="${target.project-template-remove.continue}" arg2="true" trim="true" casesensitive="false" />
+				</or>
+			</not>
+			<then>
+				<fail message="Target execution aborted" />
+			</then>
+		</if>
+
+		<delete file="${template.file}" />
 	</target>
 
 	<!--
@@ -546,7 +576,7 @@
 		<agavi.input property="public.base" message="Document-root relative path to the Agavi script" default="/" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
 
 		<copy todir="${project.directory}/${project.directory.pub}">
-			<mapper type="regexp" from="^(?:dot(\.))?(.+)\.tmpl" to="\1\2" />
+			<mapper type="regexp" from="^(.+\/)?(?:dot(\.))?(.+)\.tmpl" to="\1/\2\3" />
 			<fileset dir="${templates.directory.pub.web}">
 				<include name="**/*.tmpl" />
 			</fileset>
