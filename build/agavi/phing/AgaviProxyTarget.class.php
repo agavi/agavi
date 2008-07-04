@@ -124,7 +124,7 @@ class AgaviProxyTarget extends Target
 		$thisProject->copyUserProperties($project);
 		$thisProject->copyInheritedProperties($project);
 		foreach($thisProject->getProperties() as $name => $property) {
-			if($name !== 'basedir' && $name !== 'phing.file' && $project->getProperty($name) === null) {
+			if(!AgaviProxyProject::isProtectedProperty($name) && $project->getProperty($name) === null) {
 				$project->setNewProperty($name, $property);
 			}
 		}
@@ -138,7 +138,7 @@ class AgaviProxyTarget extends Target
 		$project->copyUserProperties($thisProject);
 		$project->copyInheritedProperties($thisProject);
 		foreach($project->getProperties() as $name => $property) {
-			if($name !== 'basedir' && $name !== 'phing.file' && $thisProject->getProperty($name) === null) {
+			if(!AgaviProxyProject::isProtectedProperty($name) && $thisProject->getProperty($name) === null) {
 				$thisProject->setNewProperty($name, $property);
 			}
 		}

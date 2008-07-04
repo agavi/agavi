@@ -31,6 +31,11 @@ class AgaviProxyProject extends Project
 {
 	protected $proxied = null;
 	
+	protected static $protectedProperties = array(
+		'phing.file',
+		'basedir'
+	);
+	
 	/**
 	 * Creates a new proxied project.
 	 *
@@ -75,6 +80,19 @@ class AgaviProxyProject extends Project
 	}
 	
 	/**
+	 * Determines whether a given property is protected (that is, should not be
+	 * copied from one project to the other).
+	 *
+	 * @param      string The name of the property.
+	 *
+	 * @return     bool True if the property is protected, false otherwise.
+	 */
+	public static function isPropertyProtected($property)
+	{
+		return in_array($property, self::$protectedProperties);
+	}
+	
+	/**
 	 * Sets a property. Proxies the request to the underlying project.
 	 *
 	 * @param      string The name of the property.
@@ -82,7 +100,7 @@ class AgaviProxyProject extends Project
 	 */
 	public function setProperty($name, $value)
 	{
-		if($name !== 'phing.file' && $name !== 'basedir') {
+		if(!self::isPropertyProtected($name)) {
 			$this->proxied->setProperty($name, $value);
 		}
 		parent::setProperty($name, $value);
@@ -96,7 +114,7 @@ class AgaviProxyProject extends Project
 	 */
 	public function setNewProperty($name, $value)
 	{
-		if($name !== 'phing.file' && $name !== 'basedir') {
+		if(!self::isPropertyProtected($name)) {
 			$this->proxied->setNewProperty($name, $value);
 		}
 		parent::setNewProperty($name, $value);
@@ -110,7 +128,7 @@ class AgaviProxyProject extends Project
 	 */
 	public function setUserProperty($name, $value)
 	{
-		if($name !== 'phing.file' && $name !== 'basedir') {
+		if(!self::isPropertyProtected($name)) {
 			$this->proxied->setUserProperty($name, $value);
 		}
 		parent::setUserProperty($name, $value);
@@ -124,7 +142,7 @@ class AgaviProxyProject extends Project
 	 */
 	public function setInheritedProperty($name, $value)
 	{
-		if($name !== 'phing.file' && $name !== 'basedir') {
+		if(!self::isPropertyProtected($name)) {
 			$this->proxied->setInheritedProperty($name, $value);
 		}
 		parent::setInheritedProperty($name, $value);
