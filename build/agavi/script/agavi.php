@@ -128,8 +128,6 @@ try {
 		$task->init();
 		$task->perform();
 		
-		$project->executeTarget('initialize');
-		
 		$task = $project->createTask('agavi.locate-project');
 		$task->setProperty('project.directory');
 		$task->setPath(new PhingFile($project->getProperty('application.startdir')));

@@ -82,7 +82,9 @@ class AgaviProxyProject extends Project
 	 */
 	public function setProperty($name, $value)
 	{
-		$this->proxied->setProperty($name, $value);
+		if($name !== 'phing.file' && $name !== 'basedir') {
+			$this->proxied->setProperty($name, $value);
+		}
 		parent::setProperty($name, $value);
 	}
 	
@@ -94,7 +96,9 @@ class AgaviProxyProject extends Project
 	 */
 	public function setNewProperty($name, $value)
 	{
-		$this->proxied->setNewProperty($name, $value);
+		if($name !== 'phing.file' && $name !== 'basedir') {
+			$this->proxied->setNewProperty($name, $value);
+		}
 		parent::setNewProperty($name, $value);
 	}
 	
@@ -106,7 +110,9 @@ class AgaviProxyProject extends Project
 	 */
 	public function setUserProperty($name, $value)
 	{
-		$this->proxied->setUserProperty($name, $value);
+		if($name !== 'phing.file' && $name !== 'basedir') {
+			$this->proxied->setUserProperty($name, $value);
+		}
 		parent::setUserProperty($name, $value);
 	}
 	
@@ -118,7 +124,9 @@ class AgaviProxyProject extends Project
 	 */
 	public function setInheritedProperty($name, $value)
 	{
-		$this->proxied->setInheritedProperty($name, $value);
+		if($name !== 'phing.file' && $name !== 'basedir') {
+			$this->proxied->setInheritedProperty($name, $value);
+		}
 		parent::setInheritedProperty($name, $value);
 	}
 	

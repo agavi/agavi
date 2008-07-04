@@ -14,90 +14,6 @@
 // +---------------------------------------------------------------------------+
 
 require_once(dirname(__FILE__) . '/AgaviTask.php');
-require_once('phing/system/util/Properties.php');
-
-/**
- * Represents any property-holding data.
- *
- * @package    agavi
- * @subpackage build
- *
- * @author     Noah Fontes <noah.fontes@bitextender.com>
- * @copyright  Authors
- * @copyright  The Agavi Project
- *
- * @since      1.0.0
- *
- * @version    $Id$
- */
-abstract class AgaviWritepropertiesProperties extends DataType
-{
-	/**
-	 * Retrieves the new property or properties.
-	 *
-	 * @return     Properties The list of properties.
-	 */
-	abstract public function resolve();
-}
-
-/**
- * Represents a property reference internally for this task.
- *
- * @package    agavi
- * @subpackage build
- *
- * @author     Noah Fontes <noah.fontes@bitextender.com>
- * @copyright  Authors
- * @copyright  The Agavi Project
- *
- * @since      1.0.0
- *
- * @version    $Id$
- */
-class AgaviWritepropertiesProperty extends AgaviWritepropertiesProperties
-{
-	protected $name = null;
-	protected $value = null;
-	
-	/**
-	 * Sets the name of the property.
-	 *
-	 * @param      string The name of the property.
-	 */
-	public function setName($name)
-	{
-		$this->name = (string)$name;
-	}
-	
-	/**
-	 * Sets the value of the property.
-	 *
-	 * @param      mixed The property value.
-	 */
-	public function setValue($value)
-	{
-		$this->value = $value;
-	}
-	
-	/**
-	 * Retrieves the new property or properties.
-	 *
-	 * @return     Properties The list of properties.
-	 */
-	public function resolve()
-	{
-		if($this->name === null) {
-			throw new BuildException('The name attribute must be specified');
-		}
-		if($this->value === null) {
-			throw new BuildException('The value attribute must be specified');
-		}
-		
-		$properties = new Properties();
-		$properties->setProperty($this->name, $this->value);
-		return $properties;
-	}
-}
 
 /**
  * Writes properties to a given file.
@@ -144,7 +60,7 @@ class AgaviWritepropertiesTask extends AgaviTask
 	 */
 	public function createProperty()
 	{
-		$property = new AgaviWritepropertiesProperty();
+		$property = new AgaviPropertyType();
 		$this->properties[] = $property;
 		return $property;
 	}

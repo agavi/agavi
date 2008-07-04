@@ -135,7 +135,7 @@ class AgaviProxyTarget extends Target
 		Phing::setCurrentProject($thisProject);
 		chdir($thisProject->getBasedir()->getAbsolutePath());
 		
-		$project->copyUserProperties($project);
+		$project->copyUserProperties($thisProject);
 		$project->copyInheritedProperties($thisProject);
 		foreach($project->getProperties() as $name => $property) {
 			if($name !== 'basedir' && $name !== 'phing.file' && $thisProject->getProperty($name) === null) {
