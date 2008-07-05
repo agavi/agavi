@@ -676,13 +676,10 @@
 				<echo message="Module name ${module.name.input} is not a valid identifier; ${module.name} will be used instead" level="warning" />
 			</then>
 		</if>
-		<echo message="${module.name} [${module.name.input}] -> ${module.directory}" />
 
 		<property userProperty="true" name="module.directory" value="${project.directory}/${project.directory.app.modules}/${module.name}" override="true" />
-		<echo message="${module.name} [${module.name.input}] -> ${module.directory}" />
 
 		<agavi.check-module property="module.available" path="${module.directory}" />
-		<echo message="${module.name} [${module.name.input}] -> ${module.directory}" />
 		<fail if="module.available" message="Module ${module.name} already exists at ${module.directory}" />
 
 		<!-- Create directory structure. -->
