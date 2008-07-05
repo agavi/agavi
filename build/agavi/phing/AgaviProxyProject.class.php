@@ -58,6 +58,15 @@ class AgaviProxyProject extends Project
 			parent::addDataTypeDefinition($name, $class);
 		}
 		
+		/* Assign properties for consistency. */
+		$proxied->copyUserProperties($this);
+		$proxied->copyInheritedProperties($this);
+		foreach($proxied->getProperties() as $name => $property) {
+			if(!AgaviProxyProject::isPropertyProtected($name) && $this->getProperty($name) === null) {
+				parent::setNewProperty($name, $property);
+			}
+		}
+		
 		/* Add proxy targets to the new project. */
 		foreach($proxied->getTargets() as $name => $target) {
 			$proxy = new AgaviProxyTarget();

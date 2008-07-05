@@ -103,6 +103,7 @@ class AgaviExecutetargetTask extends AgaviTask
 			}
 			
 			/* Fuck. */
+			unset($project);
 		}
 		catch(BuildException $be) {
 			if($this->exceptionsFatal) {

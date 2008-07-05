@@ -16,7 +16,7 @@
 require_once(dirname(__FILE__) . '/AgaviTask.php');
 
 /**
- * Validates that a given directory is the base directory for a project.
+ * Determines whether a file is available on the filesystem.
  *
  * @package    agavi
  * @subpackage build
@@ -29,16 +29,21 @@ require_once(dirname(__FILE__) . '/AgaviTask.php');
  *
  * @version    $Id$
  */
-class AgaviCheckprojectTask extends AgaviTask
+class AgaviAvailableTask extends AgaviTask
 {
+	const TYPE_ANY = 1;
+	const TYPE_FILE = 2;
+	const TYPE_DIRECTORY = 3;
+	
 	protected $property = null;
-	protected $path = null;
+	protected $file = null;
 	protected $value = true;
+	protected $type = self::TYPE_ANY;
 	
 	/**
 	 * Sets the property that this task will modify.
 	 *
-	 * @param      string The property to modify.
+	 * @param      string The name of the property.
 	 */
 	public function setProperty($property)
 	{
@@ -46,48 +51,83 @@ class AgaviCheckprojectTask extends AgaviTask
 	}
 	
 	/**
-	 * Sets the path to use to validate the project.
+	 * Sets the file to find.
 	 *
-	 * @param      string The path to use.
+	 * @param      PhingFile The file.
 	 */
-	public function setPath(PhingFile $path)
+	public function setFile(PhingFile $file)
 	{
-		$this->path = $path;
+		$this->file = $file;
 	}
 	
 	/**
-	 * Sets the value that the property will contain if the project is
-	 * valid.
+	 * Sets the value to which the property will be set if the condition is
+	 * successfully evaluated.
 	 *
-	 * @param      string The value to which the property will be set.
+	 * @param      string The value.
 	 */
 	public function setValue($value)
 	{
 		$this->value = $value;
 	}
-
+	
 	/**
-	 * Executes this target.
+	 * Sets the type of the file.
+	 *
+	 * @param      string One of <code>file</code> or <code>directory</code>.
+	 */
+	public function setType($type)
+	{
+		switch($type) {
+		case 'any':
+			$this->type = self::TYPE_ANY;
+			break;
+		case 'file':
+			$this->type = self::TYPE_FILE;
+			break;
+		case 'directory':
+			$this->type = self::TYPE_DIRECTORY;
+			break;
+		default:
+			throw new BuildException('The type attribute must be one of {any, file, directory}');
+		}
+	}
+	
+	/**
+	 * Executes this task.
 	 */
 	public function main()
 	{
 		if($this->property === null) {
 			throw new BuildException('The property attribute must be specified');
 		}
-		if($this->path === null) {
-			throw new BuildException('The path attribute must be specified');
+		if($this->file === null) {
+			throw new BuildException('The file attribute must be specified');
 		}
 		
-		$check = new AgaviProjectFilesystemCheck();
-		$check->setAppDirectory($this->project->getProperty('project.directory.app'));
-		$check->setPubDirectory($this->project->getProperty('project.directory.pub'));
-		
-		$check->setPath($this->path->getAbsolutePath());
-		if($check->check()) {
-			$this->project->setUserProperty($this->property, $this->value);
+		if($this->evaluate()) {
+			if($this->value !== null) {
+				$this->project->setUserProperty($this->property, $this->value);
+			}
 		}
 		else {
+			/* Unset. */
 			$this->project->setUserProperty($this->property, null);
+		}
+	}
+	
+	/**
+	 * Determines whether the file successfully meets the specified criteria.
+	 */
+	protected function evaluate()
+	{
+		switch($this->type) {
+		case self::TYPE_ANY:
+			return $this->file->exists();
+		case self::TYPE_FILE:
+			return $this->file->isFile();
+		case self::TYPE_DIRECTORY:
+			return $this->file->isDirectory();
 		}
 	}
 }

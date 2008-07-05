@@ -32,6 +32,8 @@
 	<taskdef name="agavi.base-name" classname="org.agavi.build.tasks.AgaviBasenameTask" classpath="phing" />
 	<taskdef name="agavi.directory-name" classname="org.agavi.build.tasks.AgaviDirectorynameTask" classpath="phing" />
 
+	<taskdef name="agavi.available" classname="org.agavi.build.tasks.AgaviAvailableTask" classpath="phing" />
+
 	<taskdef name="agavi.write-properties" classname="org.agavi.build.tasks.AgaviWritepropertiesTask" classpath="phing" />
 
 	<taskdef name="agavi.target-listener" classname="org.agavi.build.tasks.AgaviTargetListenerTask" classpath="phing" />
@@ -106,15 +108,18 @@
 	<property name="project.directory.pub" value="pub" />
 
 	<!-- Ensure we can reach the Agavi directory. -->
-	<available property="agavi.available" file="${agavi.directory.src}/agavi.php" type="file" />
+	<agavi.available property="agavi.available" file="${agavi.directory.src}/agavi.php" type="file" />
 	<fail unless="agavi.available" message="Agavi installation not found in ${agavi.directory}" />
 
 	<!-- Load the remaining Agavi-specific tasks. -->
 	<taskdef name="agavi.locate-project" classname="org.agavi.build.tasks.AgaviLocateprojectTask" classpath="phing" />
 	<taskdef name="agavi.check-project" classname="org.agavi.build.tasks.AgaviCheckprojectTask" classpath="phing" />
+
 	<taskdef name="agavi.locate-module" classname="org.agavi.build.tasks.AgaviLocatemoduleTask" classpath="phing" />
 	<taskdef name="agavi.check-module" classname="org.agavi.build.tasks.AgaviCheckmoduleTask" classpath="phing" />
+
 	<taskdef name="agavi.read-configuration" classname="org.agavi.build.tasks.AgaviReadconfigurationTask" classpath="phing" />
+	<taskdef name="agavi.write-configuration" classname="org.agavi.build.tasks.AgaviWriteconfigurationTask" classpath="phing" />
 
 	<!-- Load some basic configuration values. -->
 	<agavi.read-configuration property="agavi.version" configurationValue="agavi.version" />
@@ -163,7 +168,7 @@
 
 	<target name="system-template-copy" description="Copies a build template to a new location">
 		<agavi.input property="template.file" message="Template file to copy (relative to build templates directory)" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
-		<available property="template.available" file="templates/${template.file}" type="file" />
+		<agavi.available property="template.available" file="templates/${template.file}" type="file" />
 		<fail unless="template.available" message="Template file not found in build templates directory" />
 
 		<agavi.transform-path property="copy.file.suggest" base="${application.startdir}" path="${template.file}" />
@@ -189,7 +194,7 @@
 		</copy>
 	</target>
 
-	<target name="system-source-copy" description="Copies the Agavi source tree to a new location">
+	<target name="system-source-copy-all" description="Copies the Agavi source tree to a new location">
 		<agavi.input property="copy.directory" message="Output directory" default="${application.startdir}" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
 		<agavi.transform-path property="copy.directory" base="${application.startdir}" path="${copy.directory}" />
 
@@ -265,6 +270,19 @@
 			</then>
 		</if>
 	</target>
+
+	<target name="project-wizard" description="Creates a project and corresponding default actions, views, and templates">
+		<agavi.execute-target name="project-create" />
+		<agavi.execute-target name="public-web-create" />
+
+		<agavi.input property="target.project-wizard.modules.names" message="Space-separated list of modules to create for ${project.name}" default="Default" promptCharacter=":" useExistingAsDefault="false" />
+		<agavi.iterate property="module.name" target="module-wizard" list="${target.project-wizard.modules.names}" delimiter=" " exceptionsFatal="false" />
+
+		<!-- System action: default. -->
+		
+	</target>
+
+	<target name="project" depends="project-wizard" description="Creates a project and corresponding default actions, views, and templates" />
 
 	<target name="project-create" description="Creates a project">
 		<agavi.input property="project.directory" message="Project base directory" default="${application.startdir}" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
@@ -432,6 +450,32 @@
 	</target>
 
 	<!--
+	  Project configuration targets.
+	  -->
+	<target name="project-configuration-set-system-action" depends="project-locate" description="Assigns a module and action to a system action">
+		<agavi.input property="system-action.name" message="System action name" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
+		<if>
+			<not>
+				<or>
+					<equals arg1="${system-action.name}" arg2="default" />
+					<equals arg1="${system-action.name}" arg2="error_404" />
+					<equals arg1="${system-action.name}" arg2="unavailable" />
+					<equals arg1="${system-action.name}" arg2="module_disabled" />
+					<equals arg1="${system-action.name}" arg2="secure" />
+					<equals arg1="${system-action.name}" arg2="login" />
+				</or>
+			</not>
+			<then>
+				<fail message="System action name must be one of {default, error_404, unavailable, module_disabled, secure, login}" />
+			</then>
+		</if>
+
+		<agavi.execute-target name="action-locate" />
+		<agavi.write-configuration file="${project.directory}/${project.directory.app.config}/settings.xml" path="/agavi:configurations/agavi:configuration/agavi:system_actions/agavi:system_action[@name='${system-action.name}']/agavi:module" value="${module.name}" />
+		<agavi.write-configuration file="${project.directory}/${project.directory.app.config}/settings.xml" path="/agavi:configurations/agavi:configuration/agavi:system_actions/agavi:system_action[@name='${system-action.name}']/agavi:action" value="${action.name}" />
+	</target>
+
+	<!--
 	  Project model targets.
 		-->
 
@@ -439,7 +483,7 @@
 		<agavi.input property="model.name" message="Model name" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
 		<property name="model.file" value="${project.directory}/${project.directory.app.models}/${model.name}Model.class.php" />
 
-		<available property="model.available" file="${model.file}" type="file" />
+		<agavi.available property="model.available" file="${model.file}" type="file" />
 		<fail unless="model.available" message="Agavi model not found at ${model.file}" />
 
 		<!-- Define the name of the view class. -->
@@ -462,7 +506,7 @@
 
 		<property name="model.file" value="${project.directory}/${project.directory.app.models}/${model.name}Model.class.php" />
 
-		<available property="model.available" file="${model.file}" type="file" />
+		<agavi.available property="model.available" file="${model.file}" type="file" />
 		<fail if="model.available" message="Model ${model.name} already exists at ${model.file}" />
 
 		<!-- Define the name of the view class. -->
@@ -512,7 +556,7 @@
 		<agavi.input property="template.extension" message="Template extension" default="${template.extension.default}" promptCharacter=":" failIfEmpty="true" />
 		<property name="template.file" value="${project.directory}/${project.directory.app.templates}/${template.name}.${template.extension}" override="true" />
 
-		<available property="template.available" file="${template.file}" type="file" />
+		<agavi.available property="template.available" file="${template.file}" type="file" />
 		<fail unless="template.available" message="Agavi template not found at ${template.file}" />
 	</target>
 
@@ -521,7 +565,7 @@
 		<agavi.input property="template.extension" message="Template extension" default="${template.extension.default}" promptCharacter=":" failIfEmpty="true" />
 		<property name="template.file" value="${project.directory}/${project.directory.app.templates}/${template.name}.${template.extension}" override="true" />
 
-		<available property="template.available" file="${template.file}" type="file" />
+		<agavi.available property="template.available" file="${template.file}" type="file" />
 		<fail if="template.available" message="Template ${template.name}.${template.extension} already exists at ${template.file}" />
 
 		<!-- Copy. -->
@@ -571,6 +615,7 @@
 	<!--
 	  Public directory targets.
 	  -->
+
 	<target name="public-web-create" depends="project-locate" description="Creates a Web structure for the public directory">
 		<agavi.input property="public.base" message="Document-root relative path to the Agavi script" default="/" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
 
@@ -582,6 +627,7 @@
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">
 					<token key="AGAVI_LOCATION" value="${agavi.directory}" />
+					<token key="AGAVI_SOURCE_LOCATION" value="${agavi.directory.src}" />
 					<token key="PROJECT_LOCATION" value="${project.directory}" />
 					<token key="PROJECT_PREFIX" value="${project.prefix}" />
 					<token key="PUBLIC_BASE" value="${public.base}" />
@@ -597,7 +643,7 @@
 	<target name="module-locate" depends="project-locate">
 		<agavi.locate-module property="module.name" path="${application.startdir}" ignoreIfSet="true" />
 		<agavi.input property="module.name" message="Module name" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
-		<property name="module.directory" value="${project.directory.app.modules}/${module.name}" />
+		<property userProperty="true" name="module.directory" value="${project.directory.app.modules}/${module.name}" override="true" />
 		<agavi.transform-path property="module.directory" base="${project.directory}" path="${module.directory}" />
 
 		<agavi.check-module property="module.available" path="${module.directory}" />
@@ -605,8 +651,17 @@
 
 		<!-- Load module-specific build configuration. -->
 		<property name="module.file.build-properties" value="${module.directory}/build.properties" override="true" />
-		<property file="${module.file.build-properties}" />
+		<property file="${module.file.build-properties}" override="true" />
 	</target>
+
+	<target name="module-wizard" depends="project-locate" description="Creates a module and user-specified actions, views, and templates">
+		<agavi.execute-target name="module-create" />
+		
+		<agavi.input property="target.module-wizard.actions.names" message="Space-separated list of actions to create for ${module.name}" promptCharacter=":" useExistingAsDefault="false" />
+		<agavi.iterate property="action.name" target="action-wizard" list="${target.module-wizard.actions.names}" delimiter=" " exceptionsFatal="false" />
+	</target>
+
+	<target name="module" depends="module-wizard" description="Creates a module and user-specified actions, views, and templates" />
 
 	<target name="module-create" depends="project-locate" description="Creates a module">
 		<!-- Determine module name. -->
@@ -621,11 +676,14 @@
 				<echo message="Module name ${module.name.input} is not a valid identifier; ${module.name} will be used instead" level="warning" />
 			</then>
 		</if>
+		<echo message="${module.name} [${module.name.input}] -> ${module.directory}" />
 
-		<property name="module.directory" value="${project.directory}/${project.directory.app.modules}/${module.name}" />
+		<property userProperty="true" name="module.directory" value="${project.directory}/${project.directory.app.modules}/${module.name}" override="true" />
+		<echo message="${module.name} [${module.name.input}] -> ${module.directory}" />
 
 		<agavi.check-module property="module.available" path="${module.directory}" />
-		<fail if="module.available" message="Module ${module.name} already exists in ${module.directory}" />
+		<echo message="${module.name} [${module.name.input}] -> ${module.directory}" />
+		<fail if="module.available" message="Module ${module.name} already exists at ${module.directory}" />
 
 		<!-- Create directory structure. -->
 		<mkdir dir="${module.directory}" />
@@ -708,7 +766,7 @@
 		<agavi.transform-action-name-to-path property="action.path" name="${action.name}" />
 		<property name="action.file" value="${module.directory}/actions/${action.path}Action.class.php" override="true" />
 
-		<available property="action.available" file="${action.file}" type="file" />
+		<agavi.available property="action.available" file="${action.file}" type="file" />
 		<fail unless="action.available" message="Agavi action not found at ${action.file}" />
 
 		<!-- Transform . to _ for the actual identifier. -->
@@ -720,15 +778,15 @@
 
 	<target name="action-wizard" depends="project-locate,module-locate" description="Creates an action and corresponding views and templates">
 		<agavi.execute-target name="action-create" />
-		
-		<agavi.input property="target.action-wizard.views.names" message="Space-separated list of views to create for ${action.name}" default="Success" promptCharacter=":" />
+
+		<agavi.input property="target.action-wizard.views.names" message="Space-separated list of views to create for ${action.name}" default="Success" promptCharacter=":" useExistingAsDefault="false" />
 		<agavi.iterate property="view.name" target="view-create" list="${target.action-wizard.views.names}" delimiter=" " exceptionsFatal="false" />
-		
+
 		<property name="template.extension" value="${template.extension.default}" />
 		<agavi.iterate property="view.name" target="view-template-create" list="${target.action-wizard.views.names}" delimiter=" " exceptionsFatal="false" />
 	</target>
 
-	<target name="action" depends="action-wizard" />
+	<target name="action" depends="action-wizard" description="Creates an action and corresponding views and templates" />
 
 	<target name="action-create" depends="project-locate,module-locate" description="Creates an action">
 		<!-- Determine action name. -->
@@ -750,7 +808,7 @@
 		<agavi.transform-action-name-to-path property="action.path" name="${action.name}" />
 		<property name="action.file" value="${module.directory}/${module.directory.actions}/${action.path}Action.class.php" override="true" />
 
-		<available property="action.available" file="${action.file}" type="file" />
+		<agavi.available property="action.available" file="${action.file}" type="file" />
 		<fail if="action.available" message="Action ${action.name} already exists at ${action.file}" />
 
 		<!-- Define the name of the action class. -->
@@ -815,7 +873,7 @@
 		<agavi.input property="view.name" message="View name" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
 		<property name="view.file" value="${module.directory}/${module.directory.views}/${action.path}${view.name}View.class.php" override="true" />
 
-		<available property="view.available" file="${view.file}" type="file" />
+		<agavi.available property="view.available" file="${view.file}" type="file" />
 		<fail unless="view.available" message="Agavi view not found at ${view.file}" />
 
 		<!-- Define the name of the view class. -->
@@ -838,7 +896,7 @@
 
 		<property name="view.file" value="${module.directory}/${module.directory.views}/${action.path}${view.name}View.class.php" override="true" />
 
-		<available property="view.available" file="${view.file}" type="file" />
+		<agavi.available property="view.available" file="${view.file}" type="file" />
 		<fail if="view.available" message="View ${view.name} already exists at ${view.file}" />
 
 		<!-- Define the name of the view class. -->
@@ -881,7 +939,7 @@
 		<agavi.input property="model.name" message="Model name" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
 		<property name="model.file" value="${module.directory}/${module.directory.models}/${model.name}Model.class.php" />
 
-		<available property="model.available" file="${model.file}" type="file" />
+		<agavi.available property="model.available" file="${model.file}" type="file" />
 		<fail unless="model.available" message="Agavi model not found at ${model.file}" />
 
 		<!-- Define the name of the view class. -->
@@ -904,7 +962,7 @@
 
 		<property name="model.file" value="${module.directory}/${module.directory.models}/${model.name}Model.class.php" />
 
-		<available property="model.available" file="${model.file}" type="file" />
+		<agavi.available property="model.available" file="${model.file}" type="file" />
 		<fail if="model.available" message="Model ${model.name} already exists at ${model.file}" />
 
 		<!-- Define the name of the view class. -->
@@ -940,7 +998,7 @@
 		<agavi.input property="template.extension" message="Template extension" default="${template.extension.default}" promptCharacter=":" failIfEmpty="true" />
 		<property name="template.file" value="${module.directory}/${module.directory.templates}/${template.name}.${template.extension}" override="true" />
 
-		<available property="template.available" file="${template.file}" type="file" />
+		<agavi.available property="template.available" file="${template.file}" type="file" />
 		<fail unless="template.available" message="Agavi template not found at ${template.file}" />
 	</target>
 
@@ -949,7 +1007,7 @@
 		<agavi.input property="template.extension" message="Template extension" default="${template.extension.default}" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
 		<property name="template.file" value="${module.directory}/${module.directory.templates}/${template.name}.${template.extension}" override="true" />
 
-		<available property="template.available" file="${template.file}" type="file" />
+		<agavi.available property="template.available" file="${template.file}" type="file" />
 		<fail if="template.available" message="Template ${template.name}.${template.extension} already exists at ${template.file}" />
 
 		<!-- Copy. -->

@@ -16,7 +16,7 @@
 require_once(dirname(__FILE__) . '/AgaviTask.php');
 
 /**
- * Validates that a given directory is the base directory for a project.
+ * Writes XPath-defined configuration values to an Agavi configuration file.
  *
  * @package    agavi
  * @subpackage build
@@ -29,66 +29,73 @@ require_once(dirname(__FILE__) . '/AgaviTask.php');
  *
  * @version    $Id$
  */
-class AgaviCheckprojectTask extends AgaviTask
+class AgaviWriteconfigurationTask extends AgaviTask
 {
-	protected $property = null;
+	protected $file = null;
 	protected $path = null;
-	protected $value = true;
+	protected $value = null;
 	
 	/**
-	 * Sets the property that this task will modify.
+	 * Sets the file to modify.
 	 *
-	 * @param      string The property to modify.
+	 * @param      PhingFile The file to modify.
 	 */
-	public function setProperty($property)
+	public function setFile(PhingFile $file)
 	{
-		$this->property = $property;
+		$this->file = $file;
 	}
 	
 	/**
-	 * Sets the path to use to validate the project.
+	 * Sets the XPath path to search for in the file.
 	 *
-	 * @param      string The path to use.
+	 * @param      string The search path.
 	 */
-	public function setPath(PhingFile $path)
+	public function setPath($path)
 	{
 		$this->path = $path;
 	}
 	
 	/**
-	 * Sets the value that the property will contain if the project is
-	 * valid.
+	 * Sets the new value for the configuration element.
 	 *
-	 * @param      string The value to which the property will be set.
+	 * @param      mixed The new value.
 	 */
 	public function setValue($value)
 	{
 		$this->value = $value;
 	}
-
+	
 	/**
-	 * Executes this target.
+	 * Executes this task.
 	 */
 	public function main()
 	{
-		if($this->property === null) {
-			throw new BuildException('The property attribute must be specified');
+		if($this->file === null) {
+			throw new BuildException('The file attribute must be specified');
 		}
 		if($this->path === null) {
 			throw new BuildException('The path attribute must be specified');
 		}
-		
-		$check = new AgaviProjectFilesystemCheck();
-		$check->setAppDirectory($this->project->getProperty('project.directory.app'));
-		$check->setPubDirectory($this->project->getProperty('project.directory.pub'));
-		
-		$check->setPath($this->path->getAbsolutePath());
-		if($check->check()) {
-			$this->project->setUserProperty($this->property, $this->value);
+		if($this->value === null) {
+			throw new BuildException('The value attribute must be specified');
 		}
-		else {
-			$this->project->setUserProperty($this->property, null);
+		
+		$document = new DOMDocument();
+		$document->preserveWhiteSpace = true;
+		$document->load($this->file->getAbsolutePath());
+		
+		$path = new DOMXPath($document);
+		$path->registerNamespace('agavi', $document->documentElement->namespaceURI);
+		
+		$entries = $path->query($this->path);
+		foreach($entries as $entry) {
+			$entry->nodeValue = (string)$this->value;
 		}
+		
+		$document->save($this->file->getAbsolutePath());
+		
+		$this->log(sprintf('Writing configuration file %s with new data for %s (%s)',
+			$this->file->getAbsolutePath(), $this->path, $this->value), Project::MSG_INFO);
 	}
 }
 

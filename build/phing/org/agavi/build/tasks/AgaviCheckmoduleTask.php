@@ -87,6 +87,9 @@ class AgaviCheckmoduleTask extends AgaviTask
 		if($check->check()) {
 			$this->project->setUserProperty($this->property, $this->value);
 		}
+		else {
+			$this->project->setUserProperty($this->property, null);
+		}
 	}
 }
 

@@ -37,6 +37,7 @@ class AgaviInputTask extends AgaviTask
 	protected $promptCharacter = '?';
 	protected $ignoreIfSet = false;
 	protected $failIfEmpty = false;
+	protected $useExistingAsDefault = true;
 	
 	/**
 	 * Sets the property to which this task will write.
@@ -109,6 +110,18 @@ class AgaviInputTask extends AgaviTask
 	{
 		$this->failIfEmpty = StringHelper::booleanValue($failIfEmpty);
 	}
+	
+	/**
+	 * Sets whether to use the existing value for the property as the default
+	 * value for the prompt.
+	 *
+	 * @param      bool Whether to use the existing property value as the
+	 *                  default.
+	 */
+	public function setUseExistingAsDefault($useExistingAsDefault)
+	{
+		$this->useExistingAsDefault = StringHelper::booleanValue($useExistingAsDefault);
+	}
 
 	/**
 	 * Executes this task.
@@ -133,9 +146,11 @@ class AgaviInputTask extends AgaviTask
 		}
 		
 		$request = new InputRequest($this->message);
-		$request->setDefaultValue($this->project->getProperty($this->property));
 		$request->setPromptChar($this->promptCharacter);
 		
+		if($this->useExistingAsDefault === true) {
+			$request->setDefaultValue($this->project->getProperty($this->property));
+		}
 		if($this->default !== null) {
 			$request->setDefaultValue($this->default);
 		}
