@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 0.11.2 RC3 (July ?, 2008)
 -------------------------
 
+FIX: Several config handlers are missing checks for existance of element(s) inside <configuration> (#796) (David)
 FIX: Namespace for disabled module forwarding information is wrong (#792) (David)
 
 
