@@ -134,7 +134,7 @@ class AgaviXmlConfigDomDocument extends DOMDocument
 	 */
 	public function isAgaviConfiguration()
 	{
-		return AgaviXmlConfigParser::isAgaviEnvelopeNamespace($this->documentElement->namespaceURI);
+		return AgaviXmlConfigParser::isAgaviConfigurationDocument($this);
 	}
 	
 	/**
@@ -165,7 +165,7 @@ class AgaviXmlConfigDomDocument extends DOMDocument
 	{
 		$retval = array();
 		
-		if($this->isAgaviConfigurationFile()) {
+		if($this->isAgaviConfiguration()) {
 			$agaviNs = $this->getAgaviEnvelopeNamespace();
 			
 			foreach($this->documentElement->childNodes as $configuration) {

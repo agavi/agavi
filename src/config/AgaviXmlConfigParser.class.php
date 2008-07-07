@@ -46,7 +46,7 @@ class AgaviXmlConfigParser
 	 *                   keys and their associated XPath namespace prefix (value).
 	 */
 	public static $agaviEnvelopeNamespaces = array(
-		self::AGAVI_ENVELOPE_NAMESPACE_1_0 => 'ae10',
+		self::AGAVI_ENVELOPE_NAMESPACE_1_0 => 'agavi_envelope_1_0',
 	);
 	
 	/**
@@ -73,6 +73,21 @@ class AgaviXmlConfigParser
 	 * @var        DOMXPath The XPath instance for the current document.
 	 */
 	protected $xpath = null;
+	
+	/**
+	 * Test if the given document looks like an Agavi config file.
+	 *
+	 * @param      DOMDocument The document to test.
+	 *
+	 * @return     bool True, if it is an Agavi config document, false otherwise.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public static function isAgaviConfigurationDocument(DOMDocument $doc)
+	{
+		return $doc->documentElement && $doc->documentElement->localName == 'configurations' && self::isAgaviEnvelopeNamespace($doc->documentElement->namespaceURI);
+	}
 	
 	/**
 	 * Check if the given namespace URI is a valid Agavi envelope namespace.
@@ -116,7 +131,7 @@ class AgaviXmlConfigParser
 			
 			// make sure it (still) is a <configurations> file with the proper agavi namespace
 			if($isAgaviConfigFormat) {
-				$isAgaviConfigFormat = $doc->documentElement && $doc->documentElement->localName == 'configurations' && self::isAgaviEnvelopeNamespace($doc->documentElement->namespaceURI);
+				$isAgaviConfigFormat = self::isAgaviConfigurationDocument($doc);
 			}
 			
 			// is it an agavi <configurations> element? does it have a parent attribute? yes? good. parse that next
@@ -160,10 +175,10 @@ class AgaviXmlConfigParser
 			}
 		
 			$configurationOrder = array(
-				'count(self::node()[not(@environment) and not(@context)])',
-				'count(self::node()[@environment and not(@context)])',
-				'count(self::node()[not(@environment) and @context])',
-				'count(self::node()[@environment and @context])',
+				'count(self::node()[@agavi_envelope_1_0:matched and not(@environment) and not(@context)])',
+				'count(self::node()[@agavi_envelope_1_0:matched and @environment and not(@context)])',
+				'count(self::node()[@agavi_envelope_1_0:matched and not(@environment) and @context])',
+				'count(self::node()[@agavi_envelope_1_0:matched and @environment and @context])',
 			);
 			$testAttributes = array(
 				'context' => $context,
@@ -174,12 +189,6 @@ class AgaviXmlConfigParser
 			foreach($configurationOrder as $xpath) {
 				foreach($configurationElements as &$element) {
 					if($element->ownerDocument->xpath->evaluate($xpath, $element)) {
-						foreach($testAttributes as $attributeName => $attributeValue) {
-							// TODO: move that method or something
-							if($element->hasAttribute($attributeName) && !self::testPattern($element->getAttribute($attributeName), $attributeValue)) {
-								continue 2;
-							}
-						}
 						$importedNode = $retval->importNode($element, true);
 						$retval->documentElement->appendChild($importedNode);
 					}
@@ -240,7 +249,7 @@ class AgaviXmlConfigParser
 		$luie = libxml_use_internal_errors(true);
 		libxml_clear_errors();
 		
-		$this->doc = new DOMDocument();
+		$this->doc = new AgaviXmlConfigDomDocument();
 		$this->doc->load($path);
 		
 		if(libxml_get_last_error() !== false) {
@@ -301,8 +310,9 @@ class AgaviXmlConfigParser
 	}
 	
 	/**
-	 * Prepare the configuration file, resolve XIncludes, and validate embedded
-	 * XML Schemas.
+	 * Prepare the configuration file: resolve XIncludes, validate against XML
+	 * Schema instances declared on the document, and set processing information
+	 * flags on <configuration> elements.
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
@@ -392,6 +402,25 @@ class AgaviXmlConfigParser
 				$schemas[] = $schema;
 			}
 			$this->validateXmlschemaSource($schemas);
+		}
+		
+		if($this->doc->isAgaviConfiguration()) {
+			$testAttributes = array(
+				'context' => $this->context,
+				'environment' => $this->environment,
+			);
+			
+			foreach($this->doc->getConfigurationElements() as $configuration) {
+				$matched = true;
+				foreach($testAttributes as $attributeName => $attributeValue) {
+					if($configuration->hasAttribute($attributeName)) {
+						$matched = $matched && self::testPattern($configuration->getAttribute($attributeName), $attributeValue);
+					}
+				}
+				if($matched) {
+					$configuration->setAttributeNS(self::AGAVI_ENVELOPE_NAMESPACE_LATEST, 'matched', 'true');
+				}
+			}
 		}
 	}
 	
