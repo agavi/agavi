@@ -28,7 +28,7 @@ xmlns="http://schemas.xmlsoap.org/wsdl/"
 			<xsl:apply-templates select="agavi:configuration[.//agavi:route//wsdl:* | .//agavi:route//soap:*]" />
 		</wsdl:definitions>
 	</xsl:template>
-	<xsl:template match="agavi:configuration">
+	<xsl:template match="agavi:configuration[@agavi:matched]">
 		<wsdl:portType name="DummyPortType">
 			<xsl:apply-templates select=".//agavi:route" mode="port" />
 		</wsdl:portType>
@@ -162,7 +162,7 @@ xmlns="http://schemas.xmlsoap.org/wsdl/"
 			</soap:fault>
 		</xsl:copy>
 	</xsl:template>
-	<xsl:template match="/agavi:configurations/wsdl:types | /agavi:configurations/wsdl:message">
+	<xsl:template match="/agavi:configurations/wsdl:types | /agavi:configurations/agavi:configuration[@agavi:matched]/wsdl:types | /agavi:configurations/wsdl:message | /agavi:configurations/agavi:configuration[@agavi:matched]/wsdl:message">
 		<xsl:copy>
 			<xsl:copy-of select="node() | @*" />
 		</xsl:copy>
