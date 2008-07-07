@@ -12,6 +12,7 @@ This maintenance release fixes a number of bugs, comes with several changes to i
 - Data returned from a View is now available through $inner in the first template.
 - File locking is now used anywhere files are being written (config compilation, caching).
 - AgaviValidationManager::hasError() behavior was fixed to be consistent with getError().
+- Incorrect namespace for disabled module forwarding information got fixed (was: org.agavi.controller.forwards.disabled, now: org.agavi.controller.forwards.module_disabled).
 
 As always, the CHANGELOG has a comprehensive list of changes.
 
