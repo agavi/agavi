@@ -38,6 +38,7 @@
         <xs:list itemType="xs:string" />
       </xs:simpleType>
     </xs:attribute>
+    <xs:anyAttribute namespace="##any" processContents="lax" />
   </xs:complexType>
   <xs:complexType name="base_configuration_with_context">
     <xs:complexContent>
