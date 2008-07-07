@@ -64,7 +64,7 @@ class AgaviExecutetargetTask extends AgaviTask
 		}
 		
 		try {
-			/* Works cannot describe how ridiculously fucking stupid this is. Phing
+			/* Words cannot describe how ridiculously fucking stupid this is. Phing
 			 * seems to resolve properties only once, ever, so in order to run a
 			 * target multiple times with different properties we'll have to create
 			 * a new project, parse the build file all over again, copy everything
