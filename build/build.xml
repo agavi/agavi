@@ -121,6 +121,9 @@
 	<taskdef name="agavi.list-modules" classname="org.agavi.build.tasks.AgaviListmodulesTask" classpath="phing" />
 	<taskdef name="agavi.display-modules" classname="org.agavi.build.tasks.AgaviDisplaymodulesTask" classpath="phing" />
 
+	<taskdef name="agavi.list-actions" classname="org.agavi.build.tasks.AgaviListactionsTask" classpath="phing" />
+	<taskdef name="agavi.display-actions" classname="org.agavi.build.tasks.AgaviDisplayactionsTask" classpath="phing" />
+
 	<taskdef name="agavi.read-configuration" classname="org.agavi.build.tasks.AgaviReadconfigurationTask" classpath="phing" />
 	<taskdef name="agavi.write-configuration" classname="org.agavi.build.tasks.AgaviWriteconfigurationTask" classpath="phing" />
 
@@ -1002,6 +1005,10 @@
 	<!--
 	  Action targets.
 	  -->
+
+	<target name="action-list" depends="project-locate,module-locate" description="Displays all actions in a module">
+		<agavi.display-actions path="${module.directory}" />
+	</target>
 
 	<target name="action-locate" depends="project-locate,module-locate">
 		<agavi.input property="action.name" message="Action name" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
