@@ -774,7 +774,7 @@
 	</target>
 
 	<target name="project-model-remove" depends="project-locate,project-model-locate" description="Removes a project model">
-		<agavi.input property="target.project-model-remove.continue" message="Really remove this project model" default="n" failIfEmpty="true" ignoreIfSet="true" />
+		<agavi.input property="target.project-model-remove.continue" message="Really remove project model ${model.name}" default="n" failIfEmpty="true" ignoreIfSet="true" />
 		<if>
 			<not>
 				<or>
@@ -839,7 +839,7 @@
 	</target>
 
 	<target name="project-template-remove" depends="project-locate,project-template-locate" description="Removes a project template">
-		<agavi.input property="target.project-template-remove.continue" message="Really remove this project template" default="n" failIfEmpty="true" ignoreIfSet="true" />
+		<agavi.input property="target.project-template-remove.continue" message="Really remove project template ${template.name}.${template.extension}" default="n" failIfEmpty="true" ignoreIfSet="true" />
 		<if>
 			<not>
 				<or>
@@ -985,7 +985,7 @@
 		<agavi.check-module property="module.available" path="${module.directory}" />
 		<fail unless="module.available" message="Agavi module not found in ${module.directory}" />
 
-		<agavi.input property="target.module-remove.continue" message="Really remove this module" default="n" failIfEmpty="true" ignoreIfSet="true" />
+		<agavi.input property="target.module-remove.continue" message="Really remove module ${module.name}" default="n" failIfEmpty="true" ignoreIfSet="true" />
 		<if>
 			<not>
 				<or>
@@ -1112,7 +1112,21 @@
 	</target>
 
 	<target name="action-remove" depends="project-locate,module-locate,action-locate" description="Removes an action">
-		
+		<agavi.input property="target.action-remove.continue" message="Really remove action ${action.name}" default="n" failIfEmpty="true" ignoreIfSet="true" />
+		<if>
+			<not>
+				<or>
+					<equals arg1="${target.action-remove.continue}" arg2="yes" trim="true" casesensitive="false" />
+					<equals arg1="${target.action-remove.continue}" arg2="y" trim="true" casesensitive="false" />
+					<equals arg1="${target.action-remove.continue}" arg2="true" trim="true" casesensitive="false" />
+				</or>
+			</not>
+			<then>
+				<fail message="Target execution aborted" />
+			</then>
+		</if>
+
+		<delete file="${action.file}" />
 	</target>
 
 	<!--
@@ -1175,6 +1189,21 @@
 	</target>
 
 	<target name="view-remove" depends="project-locate,module-locate,action-locate,view-locate" description="Removes a view">
+		<agavi.input property="target.view-remove.continue" message="Really remove view ${view.name}" default="n" failIfEmpty="true" ignoreIfSet="true" />
+		<if>
+			<not>
+				<or>
+					<equals arg1="${target.view-remove.continue}" arg2="yes" trim="true" casesensitive="false" />
+					<equals arg1="${target.view-remove.continue}" arg2="y" trim="true" casesensitive="false" />
+					<equals arg1="${target.view-remove.continue}" arg2="true" trim="true" casesensitive="false" />
+				</or>
+			</not>
+			<then>
+				<fail message="Target execution aborted" />
+			</then>
+		</if>
+
+		<delete file="${view.file}" />
 	</target>
 
 	<target name="view-template-create" depends="project-locate,module-locate,action-locate,view-locate" description="Creates a template for a view">
@@ -1238,6 +1267,21 @@
 	</target>
 
 	<target name="model-remove" depends="project-locate,module-locate,model-locate" description="Removes a model">
+		<agavi.input property="target.model-remove.continue" message="Really remove model ${model.name}" default="n" failIfEmpty="true" ignoreIfSet="true" />
+		<if>
+			<not>
+				<or>
+					<equals arg1="${target.model-remove.continue}" arg2="yes" trim="true" casesensitive="false" />
+					<equals arg1="${target.model-remove.continue}" arg2="y" trim="true" casesensitive="false" />
+					<equals arg1="${target.model-remove.continue}" arg2="true" trim="true" casesensitive="false" />
+				</or>
+			</not>
+			<then>
+				<fail message="Target execution aborted" />
+			</then>
+		</if>
+
+		<delete file="${model.file}" />
 	</target>
 
 	<!--
@@ -1289,6 +1333,21 @@
 	</target>
 
 	<target name="template-remove" depends="project-locate,module-locate,template-locate" description="Removes a template">
+		<agavi.input property="target.template-remove.continue" message="Really remove template ${template.name}.${template.extension}" default="n" failIfEmpty="true" ignoreIfSet="true" />
+		<if>
+			<not>
+				<or>
+					<equals arg1="${target.template-remove.continue}" arg2="yes" trim="true" casesensitive="false" />
+					<equals arg1="${target.template-remove.continue}" arg2="y" trim="true" casesensitive="false" />
+					<equals arg1="${target.template-remove.continue}" arg2="true" trim="true" casesensitive="false" />
+				</or>
+			</not>
+			<then>
+				<fail message="Target execution aborted" />
+			</then>
+		</if>
+
+		<delete file="${template.file}" />
 	</target>
 
 	<!-- Post-initialization. -->
