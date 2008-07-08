@@ -118,6 +118,9 @@
 	<taskdef name="agavi.locate-module" classname="org.agavi.build.tasks.AgaviLocatemoduleTask" classpath="phing" />
 	<taskdef name="agavi.check-module" classname="org.agavi.build.tasks.AgaviCheckmoduleTask" classpath="phing" />
 
+	<taskdef name="agavi.list-modules" classname="org.agavi.build.tasks.AgaviListmodulesTask" classpath="phing" />
+	<taskdef name="agavi.display-modules" classname="org.agavi.build.tasks.AgaviDisplaymodulesTask" classpath="phing" />
+
 	<taskdef name="agavi.read-configuration" classname="org.agavi.build.tasks.AgaviReadconfigurationTask" classpath="phing" />
 	<taskdef name="agavi.write-configuration" classname="org.agavi.build.tasks.AgaviWriteconfigurationTask" classpath="phing" />
 
@@ -877,6 +880,10 @@
 	<!--
     Module targets.
     -->
+
+	<target name="module-list" depends="project-locate" description="Displays all modules in a project">
+		<agavi.display-modules path="${project.directory}" />
+	</target>
 
 	<target name="module-locate" depends="project-locate">
 		<agavi.locate-module property="module.name" path="${application.startdir}" ignoreIfSet="true" />

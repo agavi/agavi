@@ -86,7 +86,7 @@ class AgaviOptionParser
 			foreach($options as $optionName => $option) {
 				if(in_array($source[$i], array_map(array($this, 'getSourceNameForShortName'), $option['short_names'])) ||
 					in_array($source[$i], array_map(array($this, 'getSourceNameForLongName'), $option['long_names']))) {
-					$arguments = array_slice($source, $i + 1, $i + $option['arguments']);
+					$arguments = array_slice($source, $i + 1, $option['arguments']);
 					if(count($arguments) !== $option['arguments']) {
 						throw new AgaviOptionException(
 							sprintf('Too few arguments to option %s (%d given, %d expected)', $source[$i], count($arguments), $option['arguments'])

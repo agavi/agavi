@@ -43,6 +43,8 @@ final class AgaviBuild
 		'AgaviModuleFilesystemCheck' => 'check/AgaviModuleFilesystemCheck.class.php',
 		'AgaviTransform' => 'transform/AgaviTransform.class.php',
 		'AgaviIdentifierTransform' => 'transform/AgaviIdentifierTransform.class.php',
+		'AgaviArraytostringTransform' => 'transform/AgaviArraytostringTransform.class.php',
+		'AgaviStringtoarrayTransform' => 'transform/AgaviStringtoarrayTransform.class.php',
 		'AgaviEventBuildException' => 'event/AgaviEventBuildException.class.php',
 		'AgaviIListener' => 'event/AgaviIListener.interface.php',
 		'AgaviEventDispatcher' => 'event/AgaviEventDispatcher.class.php',

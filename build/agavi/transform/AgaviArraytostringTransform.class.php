@@ -14,56 +14,50 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * @package    agavi
- * @subpackage buildtools
+ * Transforms an input array to a delimited string.
  *
- * @author     Mike Vincent <mike@agavi.org>
+ * @package    agavi
+ * @subpackage build
+ *
+ * @author     Noah Fontes <noah.fontes@bitextender.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
  *
- * @since      0.9.0
+ * @since      1.0.0
  *
  * @version    $Id$
  */
-class AgaviListModulesTask extends Task
+class AgaviArraytostringTransform extends AgaviTransform
 {
-	private
-		$property,
-		$defaultProperty,
-		$app;
-
-	public function setApp($dir)
+	protected $delimiter = ' ';
+	
+	/**
+	 * Sets the delimiter.
+	 *
+	 * @param      string The delimiter for the output string.
+	 */
+	public function setDelimiter($delimiter)
 	{
-		$this->app = $dir;
+		$this->delimiter = $delimiter;
 	}
-
-	public function setProperty($property)
+	
+	/**
+	 * Transforms an input array to a delimited string.
+	 *
+	 * @return     string The output string.
+	 */
+	public function transform()
 	{
-		$this->property = $property;
-	}
-
-	public function setDefaultproperty($property)
-	{
-		$this->defaultProperty = $property;
-	}
-
-	public function main()
-	{
-		if($this->app && $this->property) {
-			$paths = glob($this->app.'/modules/*', GLOB_ONLYDIR);
-			if($paths === false) {
-				throw new BuildException('Could not glob() modules directory, please check access rights');
-			}
-			foreach($paths as $path) {
-				$modules[] = basename($path);
-			}
-			if(isset($modules[0])) {
-				$this->project->setProperty($this->defaultProperty, $modules[0]);
-			}
-			$this->project->setProperty($this->property, implode(',', $modules));
-		} else {
-			throw new BuildException('You must pass the path of the app directory and give a property name to hold the list.');
+		$input = $this->getInput();
+		
+		if($input === null || !is_array($input)) {
+			return $input;
 		}
+		
+		$input = str_replace('"', '\\"', $input);
+		$input = '"' . implode('" "', $input) . '"';
+		
+		return $input;
 	}
 }
 

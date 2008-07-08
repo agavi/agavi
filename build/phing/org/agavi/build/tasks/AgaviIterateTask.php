@@ -102,29 +102,12 @@ class AgaviIterateTask extends AgaviTask
 			throw new BuildException('The target attribute must be specified');
 		}
 		
-		$delimiter = preg_quote($this->delimiter, '#');
-		$pattern = sprintf('#(?:(?P<unquoted>[^"\'%s].+)|\'(?P<single_quoted>(?:\\\\\'|[^\'])+)\'|"(?P<double_quoted>(?:\\\\"|[^"])+)")(?=%s|$)#U',
-			$delimiter, $delimiter);
+		$transform = new AgaviStringtoarrayTransform();
+		$transform->setInput($this->list);
+		$transform->setDelimiter($this->delimiter);
 		
-		$matches = array();
-		preg_match_all($pattern, $this->list, $matches, PREG_SET_ORDER);
-		
-		foreach($matches as $match) {
-			$iterated;
-			
-			/* This has everything to do with the order of the regular expression.
-			 * Watch it. */
-			if(!empty($match['double_quoted'])) {
-				$iterated = str_replace('\\"', '"', $match['double_quoted']);
-			}
-			elseif(!empty($match['single_quoted'])) {
-				$iterated = str_replace('\\\'', '\'', $match['single_quoted']);
-			}
-			else {
-				$iterated = $match['unquoted'];
-			}
-			
-			$this->project->setUserProperty($this->property, $iterated);
+		foreach($transform->transform() as $value) {
+			$this->project->setUserProperty($this->property, $value);
 			
 			$task = $this->project->createTask('agavi.execute-target');
 			$task->setName($this->target);
