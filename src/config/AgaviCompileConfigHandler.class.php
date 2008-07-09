@@ -59,6 +59,10 @@ class AgaviCompileConfigHandler extends AgaviConfigHandler
 
 		// let's do our fancy work
 		foreach($configurations as $configuration) {
+			if(!isset($configuration->compiles)) {
+				continue;
+			}
+			
 			foreach($configuration->compiles as $compileFile) {
 				$file = trim($compileFile->getValue());
 

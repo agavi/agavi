@@ -59,6 +59,10 @@ class AgaviDatabaseConfigHandler extends AgaviConfigHandler
 		$databases = array();
 		$default = null;
 		foreach($configurations as $cfg) {
+			if(!isset($cfg->databases)) {
+				continue;
+			}
+			
 			// make sure we have a default database exists
 			if(!$cfg->databases->hasAttribute('default') && $default === null) {
 				// missing default database

@@ -57,6 +57,10 @@ class AgaviConfigHandlersConfigHandler extends AgaviConfigHandler
 		$handlers = array();
 		
 		foreach($configurations as $cfg) {
+			if(!isset($cfg->handlers)) {
+				continue;
+			}
+			
 			// let's do our fancy work
 			foreach($cfg->handlers as $handler) {
 				$pattern = $handler->getAttribute('pattern');

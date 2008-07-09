@@ -57,6 +57,10 @@ class AgaviAutoloadConfigHandler extends AgaviConfigHandler
 
 		$data = array();
 		foreach($configurations as $cfg) {
+			if(!isset($cfg->autoloads)) {
+				continue;
+			}
+			
 			// let's do our fancy work
 			foreach($cfg->autoloads as $entry) {
 				// we can have variables in the filename
