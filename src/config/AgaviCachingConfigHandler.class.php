@@ -55,6 +55,10 @@ class AgaviCachingConfigHandler extends AgaviConfigHandler
 		$cachings = array();
 
 		foreach($configurations as $cfg) {
+			if(!isset($cfg->cachings)) {
+				continue;
+			}
+			
 			foreach($cfg->cachings as $caching) {
 				$groups = array();
 				if(isset($caching->groups)) {

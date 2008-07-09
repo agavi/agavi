@@ -54,6 +54,10 @@ class AgaviOutputTypeConfigHandler extends AgaviConfigHandler
 		$data = array();
 		$defaultOt = null;
 		foreach($configurations as $cfg) {
+			if(!isset($cfg->output_types)) {
+				continue;
+			}
+			
 			$otnames = array();
 			foreach($cfg->output_types as $outputType) {
 				$otname = $outputType->getAttribute('name');

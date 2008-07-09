@@ -32,11 +32,11 @@ class AgaviPackageTask extends Task
 		if (!$this->dir || !file_exists($this->dir)) {
 			throw new BuildException('Build dir is not defined or does not exist.');
 		}
-		
+
 		set_time_limit(0);
 
 		$this->log("Adding .keep files to empty directories", PROJECT_MSG_INFO);
-		
+
 		foreach(new RecursiveIteratorIterator(new RecursiveDirectoryIterator(realpath('samples')), RecursiveIteratorIterator::CHILD_FIRST) as $dir) {
 			if($dir->isDir()) {
 				foreach(new DirectoryIterator($dir->getPathname()) as $d) {
@@ -73,6 +73,7 @@ EOD;
 				'buildtools' => 'php',
 				'config' => 'php',
 				'translation' => 'php',
+				'routing' => 'php',
 				'samples' => 'data'
 			),
 			'installexceptions' => array(
@@ -96,7 +97,8 @@ EOD;
 				'scripts/agavi-dist' => 'script',
 				'scripts/agavi.bat-dist' => 'script',
 				'build.xml' => 'php',
-				'config/xsd/' => 'php'
+				'config/xsd/' => 'php',
+				'routing/soap/' => 'php'
 			)
 		));
 		$p2->setPackageType('php');
@@ -106,9 +108,9 @@ EOD;
 		$p2->addMaintainer('developer', 'impl', 'Noah Fontes', 'impl@cynigram.com');
 		$p2->addMaintainer('developer', 'v-dogg', 'Veikko Mäkinen', 'mail@veikkomakinen.com');
 		$p2->setChannel('pear.agavi.org');
-		$p2->setReleaseVersion('0.11.2RC1');
-		$p2->setAPIVersion('0.11.2RC1');
-		$p2->setReleaseStability('beta');
+		$p2->setReleaseVersion('0.11.2');
+		$p2->setAPIVersion('0.11.2');
+		$p2->setReleaseStability('stable');
 		$p2->setAPIStability('stable');
 		$p2->setSummary($shortDesc);
 		$p2->setDescription($longDesc);
@@ -129,11 +131,11 @@ EOD;
 		$p2->addPackageDepWithChannel( 'optional', 'creole', 'pear.phpdb.org', '1.1.0');
 		$p2->addPackageDepWithChannel( 'optional', 'propel_generator', 'pear.phpdb.org', '1.2.0');
 		$p2->addPackageDepWithChannel( 'optional', 'propel_runtime', 'pear.phpdb.org', '1.2.0');
-		
+
 		$p2->addConflictingPackageDepWithChannel('phing', 'pear.php.net');
-		
+
 		$p2->setPhpDep('5.1.3');
-		
+
 		$p2->addExtensionDep('required', 'dom');
 		$p2->addExtensionDep('required', 'libxml');
 		$p2->addExtensionDep('required', 'SPL');
@@ -146,11 +148,11 @@ EOD;
 		$p2->addExtensionDep('optional', 'PDO');
 		$p2->addExtensionDep('optional', 'iconv');
 		$p2->addExtensionDep('optional', 'gettext');
-		
+
 		$p2->setPearinstallerDep('1.4.0');
-		
+
 		$p2->setLicense('LGPL', 'http://www.gnu.org/copyleft/lesser.html');
-		
+
 		$p2->addReplacement('scripts/agavi-dist', 'pear-config', '@PEAR-DIR@', 'php_dir');
 		$p2->addReplacement('scripts/agavi.bat-dist', 'pear-config', '@PEAR-DIR@', 'php_dir');
 		$p2->generateContents();

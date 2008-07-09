@@ -359,7 +359,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 			$request->setAttributes(array(
 				'requested_module' => $moduleName,
 				'requested_action' => $actionName
-			), 'org.agavi.controller.forwards.disabled');
+			), 'org.agavi.controller.forwards.module_disabled');
 			$moduleName = AgaviConfig::get('actions.module_disabled_module');
 			$actionName = AgaviConfig::get('actions.module_disabled_action');
 
