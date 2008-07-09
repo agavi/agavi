@@ -55,6 +55,10 @@ class AgaviRbacDefinitionConfigHandler extends AgaviConfigHandler
 		$data = array();
 
 		foreach($configurations as $cfg) {
+			if(!isset($cfg->roles)) {
+				continue;
+			}
+			
 			$this->parseRoles($cfg->roles, null, $data);
 		}
 

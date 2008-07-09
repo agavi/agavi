@@ -4,8 +4,10 @@ AGAVI CHANGELOG
 1.0.0 (?????? ??, 2008)
 -----------------------
 
+ADD: Rewrite the project build system and throw out the old one (#689) (Noah)
 ADD: Allow additional types for second argument of AgaviLoggerManager::log() (#634) (David)
 
+CHG: Refactor internal "system action" handling and fowarding (#769) (David)
 CHG: Bump minimum required PHP version to 5.2.0 (#738) (David)
 CHG: Remove direct association of validator instances and request methods (#767) (David)
 CHG: Make request method per-container (#667) (David)
@@ -16,9 +18,10 @@ CHG: Deprecated AgaviAdodbDatabase (#662) (David)
 FIX: Security filters cannot perform checks in addition to isSecure() (#671) (David)
 
 
-0.11.2 RC3 (July ?, 2008)
--------------------------
+0.11.2 (July 8, 2008)
+---------------------
 
+FIX: Several config handlers are missing checks for existance of element(s) inside <configuration> (#796) (David)
 FIX: Namespace for disabled module forwarding information is wrong (#792) (David)
 
 

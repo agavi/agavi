@@ -14,6 +14,8 @@ Execution
 ---------
 Execution containers now have their own request method. By default, it is equal to the global requests' request method. It can, however, be changed using the last (and new) argument of AgaviController::createExecutionContainer() and the related methods in AgaviExecutionContainer and AgaviView. Like the output type, the request method is carried over from the "parent" container if AgaviExecutionContainer::createExecutionContainer() is used (or the methods in AgaviView, which use this method). You can define a slot's request method using the new "method" attribute of the <slot> element in your output_types.xml layout declarations.
 
+When Agavi does an internal forward, for example to the login "system action" when an action requires authentication, the corresponding information in the "org.agavi.controller.forwards.*" namespaces will now be set on as attributes on the respective containers, in addition to the existing request attributes, which remain for BC.
+
 Security
 --------
 The check against isSecure() is now performed in the Security Filter, which always runs unconditionally when core.use_security is enabled. This is a bug fix that was made because it would otherwise be impossible to make certain changes to Agavi's authentication model.
@@ -33,9 +35,17 @@ Existing "core.use_routing" directives will be used as a fallback until the dire
 
 - Validation severity "none" is now called "silent".
 
+Project development environment
+-------------------------------
+Agavi 1.0 introduces a new environment for creating and managing Agavi-based projects. This environment effectively replaces the older agavi script and Phing build environment. The new environment is also based on Phing. It adds a few useful features:
 
-Version 0.11.2 - July ??, 2008
-==============================
+- Skeleton projects may be created
+- Targets are included for creating views and other project elements
+- Project-specific build.xml files are now recognized and targets are automatically imported
+- Build files may define objects that act as event listeners for targets, tasks, or build messages
+
+Version 0.11.2 - July 8, 2008
+=============================
 
 This maintenance release fixes a number of bugs, comes with several changes to improve consistency, and also features a couple of new features. Some of these include:
 
@@ -45,6 +55,7 @@ This maintenance release fixes a number of bugs, comes with several changes to i
 - Data returned from a View is now available through $inner in the first template.
 - File locking is now used anywhere files are being written (config compilation, caching).
 - AgaviValidationManager::hasError() behavior was fixed to be consistent with getError().
+- Incorrect namespace for disabled module forwarding information got fixed (was: org.agavi.controller.forwards.disabled, now: org.agavi.controller.forwards.module_disabled).
 
 As always, the CHANGELOG has a comprehensive list of changes.
 
@@ -110,7 +121,7 @@ Inside Actions and Views, it is not possible to access request parameters direct
 
 As an additional incentive to use validation, number, and date/time validators will cast values to native types if desired and also integrate with i18n to parse localized formats.
 
-Inside a controller's dispatch() method, global filters now run first. This finally allows to implement features such as cookie based auto-logins etc, and also guarantees that these filters modify the actual final output of a request. The now-called "action filters" are identical to filters in 0.10 and earlier. 
+Inside a controller's dispatch() method, global filters now run first. This finally allows to implement features such as cookie based auto-logins etc, and also guarantees that these filters modify the actual final output of a request. The now-called "action filters" are identical to filters in 0.10 and earlier.
 
 Forwarding or redirecting is also not possible anymore from within Actions, because these operations are presentational. Imagine you have an Action that adds a product to the database. Displaying the product is what you want to do in the web interface, but not in case of XMLRPC, where you have to return a response that indicates success. Instead, you may return an execution container with information about the action to forward to, conveniently done using $this->createForwardContainer() inside the view. This forwarding will occur once the control of the current action execution has passed back to the controller. If a forward occurs, no rendering will occur in the current view.
 A Redirect can be done by calling setRedirect() on the container's response (available via $this->getResponse() in a view).
@@ -165,7 +176,7 @@ A routing was added for this release. Some of the features:
 - callbacks for match, non-match and before generation of URLs
 - support for nested routes (recommended for better structure and increased performance)
 - flexible input data support, not limited to URLs
-- routes are generated based on 
+- routes are generated based on
 Some examples of what it's capable of:
 - "/rss" at the end of the URL sets output type to RSS
 - "text/javascript" in the HTTP "Accept:" header sets output type to JSON
@@ -284,7 +295,7 @@ Please note that this new feature requires  Propel 1.2.0 or later and Creole 1.0
 
 Logging
 -------
-Agavi 0.10.0 features a brand-new logging infrastructure. All aspects of logging are configurable via the logging.ini configuration file. Loggers handle all the logging operations and use Layouts to format messages and output them to the desired destination using Appenders. 
+Agavi 0.10.0 features a brand-new logging infrastructure. All aspects of logging are configurable via the logging.ini configuration file. Loggers handle all the logging operations and use Layouts to format messages and output them to the desired destination using Appenders.
 
 Request
 -------
