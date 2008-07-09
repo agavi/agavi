@@ -14,6 +14,8 @@ Execution
 ---------
 Execution containers now have their own request method. By default, it is equal to the global requests' request method. It can, however, be changed using the last (and new) argument of AgaviController::createExecutionContainer() and the related methods in AgaviExecutionContainer and AgaviView. Like the output type, the request method is carried over from the "parent" container if AgaviExecutionContainer::createExecutionContainer() is used (or the methods in AgaviView, which use this method). You can define a slot's request method using the new "method" attribute of the <slot> element in your output_types.xml layout declarations.
 
+When Agavi does an internal forward, for example to the login "system action" when an action requires authentication, the corresponding information in the "org.agavi.controller.forwards.*" namespaces will now be set on as attributes on the respective containers, in addition to the existing request attributes, which remain for BC.
+
 Security
 --------
 The check against isSecure() is now performed in the Security Filter, which always runs unconditionally when core.use_security is enabled. This is a bug fix that was made because it would otherwise be impossible to make certain changes to Agavi's authentication model.

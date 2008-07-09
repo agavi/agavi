@@ -26,7 +26,7 @@ class Default_LoginInputView extends AgaviSampleAppDefaultBaseView
 		$this->getResponse()->setCookie('autologon[username]', false);
 		$this->getResponse()->setCookie('autologon[password]', false);
 		
-		if($this->getContext()->getRequest()->hasAttributeNamespace('org.agavi.controller.forwards.login')) {
+		if($this->getContainer()->hasAttributeNamespace('org.agavi.controller.forwards.login')) {
 			// we were redirected to the login form by the controller because the requested action required security
 			// so store the input URL in the session for a redirect after login
 			$this->getContext()->getUser()->setAttribute('redirect', $this->getContext()->getRequest()->getUrl(), 'org.agavi.SampleApp.login');
