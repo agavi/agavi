@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 1.0.0 (?????? ??, 2008)
 -----------------------
 
+ADD: Rewrite the project build system and throw out the old one (#689) (Noah)
 ADD: Allow additional types for second argument of AgaviLoggerManager::log() (#634) (David)
 
 CHG: Refactor internal "system action" handling and fowarding (#769) (David)

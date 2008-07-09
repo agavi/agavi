@@ -1,0 +1,97 @@
+# $Id$
+
+= Managing an Agavi Project =
+
+Agavi includes a comprehensive build environment suitable for creating and updating an Agavi-based project.
+
+== Introduction to the Build Environment ==
+
+The frontend of Agavi's build environment is the `agavi` script, which is itself a frontend to [Phing http://phing.info/], an [Ant http://ant.apache.org/]-inspired build system for PHP scripts. As with Ant, Phing supports user-defined properties, targets and tasks, and a variety of other build goodies.
+
+Agavi looks for user-defined properties in three places. First and with the most precedence, it looks at command-line arguments when the Agavi script is called, for example:
+
+{{{
+agavi -Dproject.directory=/opt/dev/projects/my-site <target>
+}}}
+
+The second place that Agavi looks for properties is in the file specified by the `file.build-properties` property. This is useful for storing a large number of properties in one place for convenience, collaboration, and so forth. The `file.build-properties` property may be set on the command line like any other property:
+
+{{{
+agavi -Dfile.build-properties=/opt/dev/build.properties <target>
+}}}
+
+If Agavi is able to locate a project's base directory, either implicitly or explicitly (by the `project.directory` property), it will also load build properties from the file `build.properties` in the project base directory.
+
+== Using Custom Templates ==
+
+Agavi includes a set of default templates that are suitable for basic development. However, developers often prefer code styles that differ from those of the Agavi developers, and as such all code templates used in the build process may be overridden.
+
+To create a copy of the default code templates and their hierarchy, call the Agavi build environment script's `build-template-copy-all` target:
+
+{{{
+agavi build-template-copy-all
+}}}
+
+The process will prompt for the directory into which the templates should be placed.
+
+The template directory used within the build environment may be specified using the `template.directory` property.
+
+== Creating a New Agavi Project ==
+
+The process of setting up a new Agavi project consists of the following:
+
+ * Creating the initial directory structure and configuration for the project,
+ * creating a set of base modules,
+ * creating a set of base actions to handle core Agavi functionality (such as an action not existing when called),
+ * and mapping the set of base actions to their respective configuration directives.
+
+=== Creating the Directory Structure ===
+
+The first step in creating a new Agavi project is to set up its directory structure by calling the `project-create` target:
+
+{{{
+agavi project-create
+}}}
+
+Executing this target prompts for the path to the new project directory and the project class prefix. The class prefix is used when library classes are generated (for example, the base action will have the form `<Prefix>BaseAction`). The process then creates a very basic directory structure for Agavi-based applications as well as the core set of configuration files.
+
+Enter the new project directory (for example, by using the `cd` command).
+
+=== Creating the Base Modules ===
+
+The next step is to create a few base modules for the project. These modules will need to encapsulate the six core Agavi actions:
+
+ * `default` (the default action to load when no route is given),
+ * `error_404` (an action could not be found),
+ * `unavailable` (the project is disabled, for example for maintenance),
+ * `module_disabled` (a particular module of a project is disabled),
+ * `secure` (the base action to be loaded when a user has been authenticated),
+ * and `login` (the action to load when an action requiring authentication is called and the user has not been authenticated).
+
+There are no requirements for organizing these actions. Some users prefer to separate them into several different modules (for example, `Default`, `Error`, and `Secure`); others prefer to use just one module. This guide assumes the first approach.
+
+To create a new module, call the `module-create` target.
+
+{{{
+agavi module-create
+}}}
+
+The target will automatically detect the project directory (assuming it is called from within it), and will then prompt for the module name and create the module structure. Repeat this process as many times as necessary to create the base modules.
+
+=== Creating the Base Actions ===
+
+Now create the actions using the `action-create`, `view-create`, and `template-create` targets:
+
+{{{
+agavi action-create
+agavi view-create
+agavi template-create
+}}}
+
+=== Final Action Configuration ===
+
+The final step in preparing the new project is to add each base action to the configuration. This can be done by hand (by editing `app/config/settings.xml`) or by using the Agavi script, for example:
+
+{{{
+agavi -Dmodule.name=Secure -Daction.name=Login -Dconfiguration.system_action=login configuration-set-system-action
+}}}

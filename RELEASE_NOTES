@@ -35,6 +35,14 @@ Existing "core.use_routing" directives will be used as a fallback until the dire
 
 - Validation severity "none" is now called "silent".
 
+Project development environment
+-------------------------------
+Agavi 1.0 introduces a new environment for creating and managing Agavi-based projects. This environment effectively replaces the older agavi script and Phing build environment. The new environment is also based on Phing. It adds a few useful features:
+
+- Skeleton projects may be created
+- Targets are included for creating views and other project elements
+- Project-specific build.xml files are now recognized and targets are automatically imported
+- Build files may define objects that act as event listeners for targets, tasks, or build messages
 
 Version 0.11.2 - July ??, 2008
 ==============================
@@ -112,7 +120,7 @@ Inside Actions and Views, it is not possible to access request parameters direct
 
 As an additional incentive to use validation, number, and date/time validators will cast values to native types if desired and also integrate with i18n to parse localized formats.
 
-Inside a controller's dispatch() method, global filters now run first. This finally allows to implement features such as cookie based auto-logins etc, and also guarantees that these filters modify the actual final output of a request. The now-called "action filters" are identical to filters in 0.10 and earlier. 
+Inside a controller's dispatch() method, global filters now run first. This finally allows to implement features such as cookie based auto-logins etc, and also guarantees that these filters modify the actual final output of a request. The now-called "action filters" are identical to filters in 0.10 and earlier.
 
 Forwarding or redirecting is also not possible anymore from within Actions, because these operations are presentational. Imagine you have an Action that adds a product to the database. Displaying the product is what you want to do in the web interface, but not in case of XMLRPC, where you have to return a response that indicates success. Instead, you may return an execution container with information about the action to forward to, conveniently done using $this->createForwardContainer() inside the view. This forwarding will occur once the control of the current action execution has passed back to the controller. If a forward occurs, no rendering will occur in the current view.
 A Redirect can be done by calling setRedirect() on the container's response (available via $this->getResponse() in a view).
@@ -167,7 +175,7 @@ A routing was added for this release. Some of the features:
 - callbacks for match, non-match and before generation of URLs
 - support for nested routes (recommended for better structure and increased performance)
 - flexible input data support, not limited to URLs
-- routes are generated based on 
+- routes are generated based on
 Some examples of what it's capable of:
 - "/rss" at the end of the URL sets output type to RSS
 - "text/javascript" in the HTTP "Accept:" header sets output type to JSON
@@ -286,7 +294,7 @@ Please note that this new feature requires  Propel 1.2.0 or later and Creole 1.0
 
 Logging
 -------
-Agavi 0.10.0 features a brand-new logging infrastructure. All aspects of logging are configurable via the logging.ini configuration file. Loggers handle all the logging operations and use Layouts to format messages and output them to the desired destination using Appenders. 
+Agavi 0.10.0 features a brand-new logging infrastructure. All aspects of logging are configurable via the logging.ini configuration file. Loggers handle all the logging operations and use Layouts to format messages and output them to the desired destination using Appenders.
 
 Request
 -------
