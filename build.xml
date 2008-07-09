@@ -10,7 +10,6 @@
 	<property name="srcdir"   value="${project.basedir}" override="true" />
 	<taskdef classname="etc.phing.AgaviPackageTask" name="agavipackage"/>
 	<taskdef classname="etc.phing.AgaviOlsonCompileTask" name="agaviolsoncompile"/>
-	<taskdef classname="src.buildtools.phing.AgaviTestTask" name="agavitest"/>
 
 	<!-- fileset for -dist files -->
 	<fileset dir="." id="distfiles">
@@ -239,10 +238,6 @@
 		<echo msg="package.xml generated to '${builddir}'. Use &quot;pear package&quot; in build/ to create the package." />
 	</target>
 
-	<target name="test" description="run test suite">
-		<agavitest exit="true"/>
-	</target>
-
 	<target name="clean" description="clean out the cruft">
 		<delete dir="manuals" includeemptydirs="true" failonerror="true" />
 		<delete dir="pear-build" includeemptydirs="true" failonerror="true" />
@@ -252,13 +247,6 @@
 
 	<target name="olson" description="build timezone datebase">
 		<agaviolsoncompile olsonDir="${srcdir}/etc/olson/tzdata" outputDir="${srcdir}/src/translation/data/timezones" />
-	</target>
-
-	<target name="damagecontrol" description="damagecontrol target">
-		<phingcall target="docs"/>
-		<phingcall target="package"/>
-		<agavitest exit="true" outfile="tests.html" reporter="html"/>
-		<!-- sync docs, packages, tests.html -->
 	</target>
 
 </project>
