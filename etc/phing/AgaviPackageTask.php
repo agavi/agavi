@@ -76,7 +76,7 @@ EOD;
 			),
 			'installexceptions' => array(
 				'bin/agavi-dist' => '/',
-				/*'bin/agavi.bat-dist' => '/',*/
+				'bin/agavi.bat-dist' => '/',
 			),
 			'exceptions' => array(
 				'API_CHANGELOG' => 'doc',
@@ -92,8 +92,6 @@ EOD;
 				'RELEASE_NOTES' => 'doc',
 				'TODO' => 'doc',
 				'UPGRADING' => 'doc',
-				/*'bin/agavi-dist' => 'script',*/
-				/*'bin/agavi.bat-dist' => 'script',*/
 			),
 		));
 		$p2->setPackageType('php');
@@ -112,15 +110,15 @@ EOD;
 		$p2->setNotes("To see what's new, please refer to the RELEASE_NOTES. Also, the CHANGELOG contains a full list of changes.\n\nFor installation instructions, consult INSTALL. Information on how to migrate existing Agavi 0.11.x applications can be found in UPGRADING.");
 		
 		// this must be the most stupid syntax I've ever seen.
-		/*$p2->addRelease();
+		$p2->addRelease();
 		$p2->setOSInstallCondition('windows');
-		$p2->addInstallAs('scripts/agavi.bat-dist', 'agavi.bat');
-		$p2->addIgnoreToRelease('scripts/agavi-dist');*/
+		$p2->addInstallAs('bin/agavi.bat-dist', 'agavi.bat');
+		$p2->addIgnoreToRelease('bin/agavi-dist');
 		
 		// and the next release... very cool, eh? how utterly stupid is that
 		$p2->addRelease();
 		$p2->addInstallAs('bin/agavi-dist', 'agavi');
-		/*$p2->addIgnoreToRelease('scripts/agavi.bat-dist');*/
+		$p2->addIgnoreToRelease('bin/agavi.bat-dist');
 		
 		$p2->addPackageDepWithChannel( 'required', 'phing', 'pear.phing.info', '2.2.0');
 		
@@ -146,7 +144,9 @@ EOD;
 		$p2->setLicense('LGPL', 'http://www.gnu.org/copyleft/lesser.html');
 		
 		$p2->addReplacement('bin/agavi-dist', 'pear-config', '@PEAR-DIR@', 'php_dir');
-		/*$p2->addReplacement('bin/agavi.bat-dist', 'pear-config', '@PEAR-DIR@', 'php_dir');*/
+		$p2->addReplacement('bin/agavi-dist', 'pear-config', '@PHP-BIN@', 'php_bin');
+		$p2->addReplacement('bin/agavi.bat-dist', 'pear-config', '@PEAR-DIR@', 'php_dir');
+		$p2->addReplacement('bin/agavi.bat-dist', 'pear-config', '@PHP-BIN@', 'php_bin');
 		$p2->addReplacement('src/build/build.xml', 'pear-config', '@PEAR-DIR@', 'php_dir');
 		$p2->generateContents();
 		
