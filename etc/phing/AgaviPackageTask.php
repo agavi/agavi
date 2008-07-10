@@ -16,12 +16,12 @@
 class AgaviPackageTask extends Task
 {
 	private $dir = '';
-
+	
 	public function setDir($dir)
 	{
 		$this->dir = (string) $dir;
 	}
-
+	
 	public function main()
 	{
 		if (!@require_once('PEAR/PackageFileManager2.php')) {
@@ -34,7 +34,7 @@ class AgaviPackageTask extends Task
 		}
 		
 		set_time_limit(0);
-
+		
 		$this->log("Adding .keep files to empty directories", PROJECT_MSG_INFO);
 		
 		foreach(new RecursiveIteratorIterator(new RecursiveDirectoryIterator(realpath('samples')), RecursiveIteratorIterator::CHILD_FIRST) as $dir) {
@@ -47,9 +47,9 @@ class AgaviPackageTask extends Task
 				touch($dir->getPathname() . '/.keep');
 			}
 		}
-
+		
 		$this->log("Building package contents in: {$this->dir}", PROJECT_MSG_INFO);
-
+		
 		// Modify short description. Try to keep under 80 chars width
 $shortDesc = <<<EOD
 PHP5 MVC Application Framework
@@ -66,18 +66,17 @@ EOD;
 			'packagedirectory' => $this->dir,
 			'baseinstalldir' => 'agavi',
 			'ignore' => array(
-				'.svn/'
+				'.svn/',
 			),
 			'addhiddenfiles' => true,
 			'dir_roles' => array(
-				'buildtools' => 'php',
-				'config' => 'php',
-				'translation' => 'php',
-				'samples' => 'data'
+				'/' => 'php',
+				'bin' => 'script',
+				'samples' => 'data',
 			),
 			'installexceptions' => array(
-				'scripts/agavi-dist' => '/',
-				'scripts/agavi.bat-dist' => '/'
+				'bin/agavi-dist' => '/',
+				/*'bin/agavi.bat-dist' => '/',*/
 			),
 			'exceptions' => array(
 				'API_CHANGELOG' => 'doc',
@@ -93,17 +92,15 @@ EOD;
 				'RELEASE_NOTES' => 'doc',
 				'TODO' => 'doc',
 				'UPGRADING' => 'doc',
-				'scripts/agavi-dist' => 'script',
-				'scripts/agavi.bat-dist' => 'script',
-				'build.xml' => 'php',
-				'config/xsd/' => 'php'
-			)
+				/*'bin/agavi-dist' => 'script',*/
+				/*'bin/agavi.bat-dist' => 'script',*/
+			),
 		));
 		$p2->setPackageType('php');
 		$p2->setPackage('agavi');
 		$p2->addMaintainer('lead', 'david', 'David Zülke', 'david.zuelke@bitextender.com');
 		$p2->addMaintainer('developer', 'dominik', 'Dominik del Bondio', 'dominik.del.bondio@bitextender.com');
-		$p2->addMaintainer('developer', 'impl', 'Noah Fontes', 'impl@cynigram.com');
+		$p2->addMaintainer('developer', 'impl', 'Noah Fontes', 'nfontes@cynigram.com');
 		$p2->addMaintainer('developer', 'v-dogg', 'Veikko Mäkinen', 'mail@veikkomakinen.com');
 		$p2->setChannel('pear.agavi.org');
 		$p2->setReleaseVersion('1.0.0');
@@ -112,23 +109,20 @@ EOD;
 		$p2->setAPIStability('stable');
 		$p2->setSummary($shortDesc);
 		$p2->setDescription($longDesc);
-		$p2->setNotes("To see what's new, please refer to the RELEASE_NOTES. Also, the CHANGELOG contains a full list of changes. \n\nFor installation instructions, consult INSTALL. Information on how to migrate existing 0.10.x series applications can be found in UPGRADING.");
-
+		$p2->setNotes("To see what's new, please refer to the RELEASE_NOTES. Also, the CHANGELOG contains a full list of changes.\n\nFor installation instructions, consult INSTALL. Information on how to migrate existing Agavi 0.11.x applications can be found in UPGRADING.");
+		
 		// this must be the most stupid syntax I've ever seen.
-		$p2->addRelease();
+		/*$p2->addRelease();
 		$p2->setOSInstallCondition('windows');
 		$p2->addInstallAs('scripts/agavi.bat-dist', 'agavi.bat');
-		$p2->addIgnoreToRelease('scripts/agavi-dist');
-
+		$p2->addIgnoreToRelease('scripts/agavi-dist');*/
+		
 		// and the next release... very cool, eh? how utterly stupid is that
 		$p2->addRelease();
-		$p2->addInstallAs('scripts/agavi-dist', 'agavi');
-		$p2->addIgnoreToRelease('scripts/agavi.bat-dist');
-
+		$p2->addInstallAs('bin/agavi-dist', 'agavi');
+		/*$p2->addIgnoreToRelease('scripts/agavi.bat-dist');*/
+		
 		$p2->addPackageDepWithChannel( 'required', 'phing', 'pear.phing.info', '2.2.0');
-		$p2->addPackageDepWithChannel( 'optional', 'creole', 'pear.phpdb.org', '1.1.0');
-		$p2->addPackageDepWithChannel( 'optional', 'propel_generator', 'pear.phpdb.org', '1.2.0');
-		$p2->addPackageDepWithChannel( 'optional', 'propel_runtime', 'pear.phpdb.org', '1.2.0');
 		
 		$p2->addConflictingPackageDepWithChannel('phing', 'pear.php.net');
 		
@@ -151,14 +145,15 @@ EOD;
 		
 		$p2->setLicense('LGPL', 'http://www.gnu.org/copyleft/lesser.html');
 		
-		$p2->addReplacement('scripts/agavi-dist', 'pear-config', '@PEAR-DIR@', 'php_dir');
-		$p2->addReplacement('scripts/agavi.bat-dist', 'pear-config', '@PEAR-DIR@', 'php_dir');
+		$p2->addReplacement('bin/agavi-dist', 'pear-config', '@PEAR-DIR@', 'php_dir');
+		/*$p2->addReplacement('bin/agavi.bat-dist', 'pear-config', '@PEAR-DIR@', 'php_dir');*/
+		$p2->addReplacement('src/build/build.xml', 'pear-config', '@PEAR-DIR@', 'php_dir');
 		$p2->generateContents();
-
+		
 		try {
 			$p2->writePackageFile();
 		} catch(PEAR_Exception $e) {
-			$this->log("Oops!  Caught PEAR Exception: ".$e->getMessage());
+			$this->log("Oops! Caught PEAR Exception: ".$e->getMessage());
 		}
 	}
 }

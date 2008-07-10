@@ -60,10 +60,9 @@
 	</if>
 
 	<!-- Define Agavi core directories. -->
-	<property name="agavi.directory" value="@PEAR_DIR@/agavi" />
-	<agavi.transform-path property="agavi.directory" base="${application.startdir}" path="${agavi.directory}" />
+	<property name="agavi.directory.src" value="@PEAR_DIR@/agavi" />
+	<agavi.transform-path property="agavi.directory.src" base="${application.startdir}" path="${agavi.directory.src}" />
 
-	<property name="agavi.directory.src" value="${agavi.directory}/src" override="true" />
 	<property name="agavi.directory.src.action" value="${agavi.directory.src}/action" override="true" />
 	<property name="agavi.directory.src.config" value="${agavi.directory.src}/config" override="true" />
 	<property name="agavi.directory.src.controller" value="${agavi.directory.src}/controller" override="true" />
@@ -87,15 +86,9 @@
 	<property name="agavi.directory.src.vendor" value="${agavi.directory.src}/vender" override="true" />
 	<property name="agavi.directory.src.view" value="${agavi.directory.src}/view" override="true" />
 
-	<property name="agavi.directory.etc" value="${agavi.directory}/etc" override="true" />
-
-	<property name="agavi.directory.build" value="${agavi.directory}/build" override="true" />
-	<property name="agavi.directory.build.templates" value="${agavi.directory.build}/templates" override="true" />
-	<property name="agavi.directory.build.tasks" value="${agavi.directory.build}/tasks" override="true" />
-
-	<property name="agavi.directory.test" value="${agavi.directory}/test" override="true" />
-
-	<property name="agavi.directory.docs" value="${agavi.directory}/docs" override="true" />
+	<property name="agavi.directory.src.build" value="${agavi.directory.src}/build" override="true" />
+	<property name="agavi.directory.src.build.templates" value="${agavi.directory.src.build}/templates" override="true" />
+	<property name="agavi.directory.src.build.tasks" value="${agavi.directory.src.build}/tasks" override="true" />
 
 	<!-- Define essential project directories. -->
 	<property name="project.directory.app" value="app" />
@@ -109,7 +102,7 @@
 
 	<!-- Ensure we can reach the Agavi directory. -->
 	<agavi.available property="agavi.available" file="${agavi.directory.src}/agavi.php" type="file" />
-	<fail unless="agavi.available" message="Agavi installation not found in ${agavi.directory}" />
+	<fail unless="agavi.available" message="Agavi installation not found in ${agavi.directory.src}" />
 
 	<!-- Load the remaining Agavi-specific tasks. -->
 	<taskdef name="agavi.locate-project" classname="org.agavi.build.tasks.AgaviLocateprojectTask" classpath="phing" />
@@ -145,7 +138,7 @@
 
 		<!-- Print Agavi status. -->
 		<echo message="Agavi:" />
-		<echo message="  Installation directory: ${agavi.directory}" />
+		<echo message="  Installation directory: ${agavi.directory.src}" />
 		<echo message="  Version: ${agavi.version}" />
 		<echo message="  URL: ${agavi.url}" />
 		<echo message="" />
@@ -239,7 +232,7 @@
 		<property name="module.directory.views" value="views" />
 
 		<!-- Define template properties. -->
-		<property name="templates.directory" value="${agavi.directory.build.templates}" />
+		<property name="templates.directory" value="${agavi.directory.src.build.templates}" />
 		<property name="templates.directory.app" value="${templates.directory}/app" />
 		<property name="templates.directory.app.config" value="${templates.directory.app}/config" />
 		<property name="templates.directory.app.modules" value="${templates.directory.app}/modules" />
@@ -327,7 +320,7 @@
 		<copy file="${templates.directory.defaults.app.modules.templates}/WelcomeSuccess.php.tmpl" tofile="${module.directory}/${module.directory.templates}/${action.path}Success.php">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">
-					<token key="AGAVI_LOCATION" value="${agavi.directory}" />
+					<token key="AGAVI_SOURCE_LOCATION" value="${agavi.directory.src}" />
 					<token key="PROJECT_LOCATION" value="${project.directory}" />
 					<token key="PROJECT_PREFIX" value="${project.prefix}" />
 					<token key="MODULE_NAME" value="${module.name}" />
@@ -338,10 +331,10 @@
 		</copy>
 
 		<!-- And fuck this routing too! -->
-		<copy file="${templates.directory.defaults.app.config}/routing.xml.tmpl" tofile="${project.directory}/${project.directory.app.config}/routing.xml">
+		<copy overwrite="true" file="${templates.directory.defaults.app.config}/routing.xml.tmpl" tofile="${project.directory}/${project.directory.app.config}/routing.xml">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">
-					<token key="AGAVI_LOCATION" value="${agavi.directory}" />
+					<token key="AGAVI_SOURCE_LOCATION" value="${agavi.directory.src}" />
 					<token key="PROJECT_LOCATION" value="${project.directory}" />
 					<token key="PROJECT_NAME" value="${project.name}" />
 					<token key="PROJECT_PREFIX" value="${project.prefix}" />
@@ -374,7 +367,7 @@
 		<copy file="${templates.directory.defaults.app.modules.templates}/Error404Success.php.tmpl" tofile="${module.directory}/${module.directory.templates}/${action.path}Success.php">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">
-					<token key="AGAVI_LOCATION" value="${agavi.directory}" />
+					<token key="AGAVI_SOURCE_LOCATION" value="${agavi.directory.src}" />
 					<token key="PROJECT_LOCATION" value="${project.directory}" />
 					<token key="PROJECT_PREFIX" value="${project.prefix}" />
 					<token key="MODULE_NAME" value="${module.name}" />
@@ -404,7 +397,7 @@
 		<copy file="${templates.directory.defaults.app.modules.templates}/UnavailableSuccess.php.tmpl" tofile="${module.directory}/${module.directory.templates}/${action.path}Success.php">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">
-					<token key="AGAVI_LOCATION" value="${agavi.directory}" />
+					<token key="AGAVI_SOURCE_LOCATION" value="${agavi.directory.src}" />
 					<token key="PROJECT_LOCATION" value="${project.directory}" />
 					<token key="PROJECT_PREFIX" value="${project.prefix}" />
 					<token key="MODULE_NAME" value="${module.name}" />
@@ -434,7 +427,7 @@
 		<copy file="${templates.directory.defaults.app.modules.templates}/ModuleDisabledSuccess.php.tmpl" tofile="${module.directory}/${module.directory.templates}/${action.path}Success.php">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">
-					<token key="AGAVI_LOCATION" value="${agavi.directory}" />
+					<token key="AGAVI_SOURCE_LOCATION" value="${agavi.directory.src}" />
 					<token key="PROJECT_LOCATION" value="${project.directory}" />
 					<token key="PROJECT_PREFIX" value="${project.prefix}" />
 					<token key="MODULE_NAME" value="${module.name}" />
@@ -464,7 +457,7 @@
 		<copy file="${templates.directory.defaults.app.modules.templates}/SecureSuccess.php.tmpl" tofile="${module.directory}/${module.directory.templates}/${action.path}Success.php">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">
-					<token key="AGAVI_LOCATION" value="${agavi.directory}" />
+					<token key="AGAVI_SOURCE_LOCATION" value="${agavi.directory.src}" />
 					<token key="PROJECT_LOCATION" value="${project.directory}" />
 					<token key="PROJECT_PREFIX" value="${project.prefix}" />
 					<token key="MODULE_NAME" value="${module.name}" />
@@ -563,7 +556,7 @@
 		<property name="module.directory.views" value="views" />
 
 		<!-- Define template properties. -->
-		<property name="templates.directory" value="${agavi.directory.build.templates}" />
+		<property name="templates.directory" value="${agavi.directory.src.build.templates}" />
 		<property name="templates.directory.app" value="${templates.directory}/app" />
 		<property name="templates.directory.app.config" value="${templates.directory.app}/config" />
 		<property name="templates.directory.app.modules" value="${templates.directory.app}/modules" />
@@ -613,7 +606,7 @@
 				<copy file="${templates.directory}/build.xml.tmpl" tofile="${project.file.build-xml}">
 					<filterchain>
 						<replacetokens begintoken="%%" endtoken="%%">
-							<token key="AGAVI_LOCATION" value="${agavi.directory}" />
+							<token key="AGAVI_SOURCE_LOCATION" value="${agavi.directory.src}" />
 							<token key="PROJECT_LOCATION" value="${project.directory}" />
 							<token key="PROJECT_NAME" value="${project.name}" />
 							<token key="PROJECT_PREFIX" value="${project.prefix}" />
@@ -640,7 +633,7 @@
 		<copy file="${templates.directory.app}/config.php.tmpl" tofile="${project.directory}/${project.directory.app}/config.php">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">
-					<token key="AGAVI_LOCATION" value="${agavi.directory}" />
+					<token key="AGAVI_SOURCE_LOCATION" value="${agavi.directory.src}" />
 					<token key="PROJECT_LOCATION" value="${project.directory}" />
 					<token key="PROJECT_NAME" value="${project.name}" />
 					<token key="PROJECT_PREFIX" value="${project.prefix}" />
@@ -657,7 +650,7 @@
 			</fileset>
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">
-					<token key="AGAVI_LOCATION" value="${agavi.directory}" />
+					<token key="AGAVI_SOURCE_LOCATION" value="${agavi.directory.src}" />
 					<token key="PROJECT_LOCATION" value="${project.directory}" />
 					<token key="PROJECT_NAME" value="${project.name}" />
 					<token key="PROJECT_PREFIX" value="${project.prefix}" />
@@ -674,7 +667,7 @@
 			</fileset>
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">
-					<token key="AGAVI_LOCATION" value="${agavi.directory}" />
+					<token key="AGAVI_SOURCE_LOCATION" value="${agavi.directory.src}" />
 					<token key="PROJECT_LOCATION" value="${project.directory}" />
 					<token key="PROJECT_NAME" value="${project.name}" />
 					<token key="PROJECT_PREFIX" value="${project.prefix}" />
@@ -760,7 +753,7 @@
 		<copy file="${templates.directory.app.models}/Model.class.php.tmpl" tofile="${model.file}">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">
-					<token key="AGAVI_LOCATION" value="${agavi.directory}" />
+					<token key="AGAVI_SOURCE_LOCATION" value="${agavi.directory.src}" />
 					<token key="PROJECT_LOCATION" value="${project.directory}" />
 					<token key="PROJECT_PREFIX" value="${project.prefix}" />
 					<token key="MODEL_NAME" value="${model.name}" />
@@ -804,7 +797,7 @@
 		<copy file="${template.source}" tofile="${template.file}">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">
-					<token key="AGAVI_LOCATION" value="${agavi.directory}" />
+					<token key="AGAVI_SOURCE_LOCATION" value="${agavi.directory.src}" />
 					<token key="PROJECT_LOCATION" value="${project.directory}" />
 					<token key="PROJECT_PREFIX" value="${project.prefix}" />
 					<token key="TEMPLATE_NAME" value="${template.name}" />
@@ -828,7 +821,6 @@
 			</fileset>
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">
-					<token key="AGAVI_LOCATION" value="${agavi.directory}" />
 					<token key="AGAVI_SOURCE_LOCATION" value="${agavi.directory.src}" />
 					<token key="PROJECT_LOCATION" value="${project.directory}" />
 					<token key="PROJECT_PREFIX" value="${project.prefix}" />
@@ -907,7 +899,7 @@
 			</fileset>
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">
-					<token key="AGAVI_LOCATION" value="${agavi.directory}" />
+					<token key="AGAVI_SOURCE_LOCATION" value="${agavi.directory.src}" />
 					<token key="PROJECT_LOCATION" value="${project.directory}" />
 					<token key="PROJECT_PREFIX" value="${project.prefix}" />
 					<token key="MODULE_NAME" value="${module.name}" />
@@ -923,7 +915,7 @@
 			</fileset>
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">
-					<token key="AGAVI_LOCATION" value="${agavi.directory}" />
+					<token key="AGAVI_SOURCE_LOCATION" value="${agavi.directory.src}" />
 					<token key="PROJECT_LOCATION" value="${project.directory}" />
 					<token key="PROJECT_PREFIX" value="${project.prefix}" />
 					<token key="MODULE_NAME" value="${module.name}" />
@@ -998,7 +990,7 @@
 		<copy file="${action.source}" tofile="${action.file}">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">
-					<token key="AGAVI_LOCATION" value="${agavi.directory}" />
+					<token key="AGAVI_SOURCE_LOCATION" value="${agavi.directory.src}" />
 					<token key="PROJECT_LOCATION" value="${project.directory}" />
 					<token key="PROJECT_PREFIX" value="${project.prefix}" />
 					<token key="MODULE_NAME" value="${module.name}" />
@@ -1012,7 +1004,7 @@
 		<copy file="${templates.directory.app.modules.validate}/action.xml.tmpl" tofile="${module.directory}/${module.directory.validate}/${action.path}.xml">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">
-					<token key="AGAVI_LOCATION" value="${agavi.directory}" />
+					<token key="AGAVI_SOURCE_LOCATION" value="${agavi.directory.src}" />
 					<token key="PROJECT_LOCATION" value="${project.directory}" />
 					<token key="PROJECT_PREFIX" value="${project.prefix}" />
 					<token key="MODULE_NAME" value="${module.name}" />
@@ -1026,7 +1018,7 @@
 		<copy file="${templates.directory.app.modules.cache}/action.xml.tmpl" tofile="${module.directory}/${module.directory.cache}/${action.path}.xml">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">
-					<token key="AGAVI_LOCATION" value="${agavi.directory}" />
+					<token key="AGAVI_SOURCE_LOCATION" value="${agavi.directory.src}" />
 					<token key="PROJECT_LOCATION" value="${project.directory}" />
 					<token key="PROJECT_PREFIX" value="${project.prefix}" />
 					<token key="MODULE_NAME" value="${module.name}" />
@@ -1080,7 +1072,7 @@
 		<copy file="${view.source}" tofile="${view.file}">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">
-					<token key="AGAVI_LOCATION" value="${agavi.directory}" />
+					<token key="AGAVI_SOURCE_LOCATION" value="${agavi.directory.src}" />
 					<token key="PROJECT_LOCATION" value="${project.directory}" />
 					<token key="PROJECT_PREFIX" value="${project.prefix}" />
 					<token key="MODULE_NAME" value="${module.name}" />
@@ -1140,7 +1132,7 @@
 		<copy file="${templates.directory.app.modules.models}/Model.class.php.tmpl" tofile="${model.file}">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">
-					<token key="AGAVI_LOCATION" value="${agavi.directory}" />
+					<token key="AGAVI_SOURCE_LOCATION" value="${agavi.directory.src}" />
 					<token key="PROJECT_LOCATION" value="${project.directory}" />
 					<token key="PROJECT_PREFIX" value="${project.prefix}" />
 					<token key="MODULE_NAME" value="${module.name}" />
@@ -1185,7 +1177,7 @@
 		<copy file="${template.source}" tofile="${template.file}">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">
-					<token key="AGAVI_LOCATION" value="${agavi.directory}" />
+					<token key="AGAVI_SOURCE_LOCATION" value="${agavi.directory.src}" />
 					<token key="PROJECT_LOCATION" value="${project.directory}" />
 					<token key="PROJECT_PREFIX" value="${project.prefix}" />
 					<token key="MODULE_NAME" value="${module.name}" />

@@ -21,7 +21,6 @@ AgaviBuild::bootstrap();
 
 require(dirname(__FILE__) . '/AgaviOptionParser.class.php');
 
-define('AGAVI_DIRECTORY', realpath(dirname(__FILE__) . '/../../..'));
 define('BUILD_DIRECTORY', realpath(dirname(__FILE__) . '/../..'));
 define('START_DIRECTORY', getcwd());
 
@@ -34,8 +33,7 @@ try {
 	Phing::startup();
 	
 	Phing::setProperty('phing.home', getenv('PHING_HOME'));
-}
-catch(Exception $e) {
+} catch(Exception $e) {
 	$GLOBALS['OUTPUT']->write($e->getMessage() . PHP_EOL);
 	exit(1);
 }
@@ -50,12 +48,13 @@ function input_help_display()
 {
 	$GLOBALS['OUTPUT']->write(sprintf('Usage: %s [options] [target...]', basename($_SERVER['argv'][0])) . PHP_EOL);
 	$GLOBALS['OUTPUT']->write('Options:' . PHP_EOL);
-	$GLOBALS['OUTPUT']->write('  -h -? --help                    Displays the help for this utility' . PHP_EOL);
-	$GLOBALS['OUTPUT']->write('  -v --version                    Displays relevant version information' . PHP_EOL);
-	$GLOBALS['OUTPUT']->write('  -l --list --targets             Displays the list of available targets' . PHP_EOL);
-	$GLOBALS['OUTPUT']->write('  -D --define <property> <value>  Defines a build property' . PHP_EOL);
-	$GLOBALS['OUTPUT']->write('  --include-path <path>           Appends <path> to the PHP include path' . PHP_EOL);
-	$GLOBALS['OUTPUT']->write('  --logger <class>                Sets the build logger class to <class>' . PHP_EOL);
+	$GLOBALS['OUTPUT']->write('  -h -? --help                     Displays the help for this utility' . PHP_EOL);
+	$GLOBALS['OUTPUT']->write('  -v --version                     Displays relevant version information' . PHP_EOL);
+	$GLOBALS['OUTPUT']->write('  -l --list --targets              Displays the list of available targets' . PHP_EOL);
+	$GLOBALS['OUTPUT']->write('  -D --define <property> <value>   Defines a build property' . PHP_EOL);
+	$GLOBALS['OUTPUT']->write('  --agavi-source-directory <path>  Sets the Agavi source directory to <path>' . PHP_EOL);
+	$GLOBALS['OUTPUT']->write('  --include-path <path>            Appends <path> to the PHP include path' . PHP_EOL);
+	$GLOBALS['OUTPUT']->write('  --logger <class>                 Sets the build logger class to <class>' . PHP_EOL);
 }
 
 function input_help(AgaviOptionParser $parser, $name, $arguments, $scriptArguments)
@@ -84,6 +83,14 @@ function input_define(AgaviOptionParser $parser, $name, $arguments, $scriptArgum
 	$GLOBALS['PROPERTIES'][$name] = $value;
 }
 
+function input_agavi_source_directory(AgaviOptionParser $parser, $name, $arguments, $scriptArguments)
+{
+	$path = new PhingFile($arguments[0]);
+	$path = $path->isAbsolute() ? $path : new PhingFile(START_DIRECTORY, (string)$path);
+	
+	$GLOBALS['PROPERTIES']['agavi.directory.src'] = $path;
+}
+
 function input_include_path(AgaviOptionParser $parser, $name, $arguments, $scriptArguments)
 {
 	$path = new PhingFile($arguments[0]);
@@ -105,13 +112,13 @@ $parser->addOption('help', array('h', '?'), array('help'), 'input_help');
 $parser->addOption('version', array('v'), array('version'), 'input_version');
 $parser->addOption('list', array('l'), array('list', 'targets'), 'input_list');
 $parser->addOption('define', array('D'), array('define'), 'input_define', 2);
+$parser->addOption('agavi_source_directory', array(), array('agavi-source-directory'), 'input_agavi_source_directory', 1);
 $parser->addOption('include_path', array(), array('include-path'), 'input_include_path', 1);
 $parser->addOption('logger', array(), array('logger'), 'input_logger', 1);
 
 try {
 	$parser->parse();
-}
-catch(AgaviOptionException $aae) {
+} catch(AgaviOptionException $aae) {
 	$GLOBALS['ERROR']->write('Error: ' . $aae->getMessage() . PHP_EOL);
 	$GLOBALS['ERROR']->write(PHP_EOL);
 	input_help_display();
@@ -120,7 +127,15 @@ catch(AgaviOptionException $aae) {
 
 $GLOBALS['TARGETS'] = $parser->getPassedArguments();
 
-$GLOBALS['PROPERTIES']['agavi.directory'] = AGAVI_DIRECTORY;
+if(!isset($GLOBALS['PROPERTIES']['agavi.directory.src'])) {
+	$GLOBALS['PROPERTIES']['agavi.directory.src'] = new PhingFile(realpath(dirname(__FILE__) . '/../../..'));
+}
+if(!is_dir($GLOBALS['PROPERTIES']['agavi.directory.src']) || !is_file($GLOBALS['PROPERTIES']['agavi.directory.src'] . DIRECTORY_SEPARATOR . 'agavi.php')) {
+	$GLOBALS['ERROR']->write(sprintf('Error: Agavi source directory expected at %s, but is not present', $GLOBALS['PROPERTIES']['agavi.directory.src']) . PHP_EOL);
+	$GLOBALS['ERROR']->write(PHP_EOL);
+	input_help_display();
+	exit(1);
+}
 
 $GLOBALS['PROJECT_DIRECTORY'] = null;
 
@@ -161,8 +176,7 @@ try {
 			$task->setPath(new PhingFile($project->getProperty('project.directory')));
 			$task->init();
 			$task->perform();
-		}
-		else {
+		} else {
 			/* The script might be a symlink. */
 			$task = $project->createTask('agavi.locate-project');
 			$task->setProperty('project.directory');
@@ -183,8 +197,7 @@ try {
 				$task->perform();
 			}
 		}
-	}
-	catch(BuildException $be) {
+	} catch(BuildException $be) {
 		$project->fireBuildFinished($be);
 		throw $be;
 	}
@@ -193,8 +206,7 @@ try {
 	if($project->getProperty('project.available')) {
 		$GLOBALS['PROJECT_DIRECTORY'] = $project->getProperty('project.directory');
 	}
-}
-catch(Exception $e) {
+} catch(Exception $e) {
 	/* This failed. Can't figure out project directory. Forget it. */
 }
 
@@ -271,14 +283,12 @@ try {
 			: $GLOBALS['TARGETS'];
 		
 		$project->executeTargets($GLOBALS['TARGETS']);
-	}
-	catch(Exception $e) {
+	} catch(Exception $e) {
 		$project->fireBuildFinished($e);
 		throw $e;
 	}
 	$project->fireBuildFinished(null);
-}
-catch(Exception $e) {
+} catch(Exception $e) {
 	$GLOBALS['ERROR']->write(PHP_EOL);
 	$GLOBALS['ERROR']->write(sprintf('%s:%d: %s', $e->getFile(), $e->getLine(), $e->getMessage()) . PHP_EOL);
 	exit(1);
