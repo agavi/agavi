@@ -184,6 +184,18 @@ class AgaviProxyProject extends Project
 		$this->proxied->addDataTypeDefinition($name, $class, $classpath);
 		parent::addDataTypeDefinition($name, $class, $classpath);
 	}
+	
+	/**
+	 * Adds a new build listener to the project. Proxies the request to the
+	 * underlying project.
+	 *
+	 * @param      BuildListener The build listener to add.
+	 */
+	public function addBuildListener(BuildListener $listener)
+	{
+		$this->proxied->addBuildListener($listener);
+		parent::addBuildListener($listener);
+	}
 }
 
 ?>
