@@ -493,7 +493,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 					$attributes =& $viewInstance->getAttributes();
 
 					// whether or not we should assign the previous' layer's output to the $slots array
-					$assignInnerToSlots = $this->getParameter('assign_inner_to_slots', true);
+					$assignInnerToSlots = $this->getParameter('assign_inner_to_slots', false);
 					
 					// $lm->log('Starting rendering...');
 					for($i = 0; $i < count($layers); $i++) {
