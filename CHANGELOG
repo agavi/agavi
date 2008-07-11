@@ -21,6 +21,9 @@ FIX: Security filters cannot perform checks in addition to isSecure() (#671) (Da
 0.11.3 RC1 (July ??, 2008)
 --------------------------
 
+ADD: Set current Context instance on Doctrine connections (#800) (David)
+ADD: Support for doctrine connection settings and options (#788) (David)
+
 FIX: PEAR installations place src/routing/soap files in the data directory rather than the source directory (#799) (Noah)
 
 
