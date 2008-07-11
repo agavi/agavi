@@ -111,6 +111,9 @@ class AgaviDoctrineDatabase extends AgaviDatabase
 			// do not assign the resource here. that would connect to the database
 			// $this->resource = $this->connection->getDbh();
 			
+			// set the context instance as a connection parameter
+			$this->connection->setParam('context', $this->context, 'org.agavi');
+			
 			// charset
 			if($this->hasParameter('charset')) {
 				$this->connection->setCharset($this->getParameter('charset'));
