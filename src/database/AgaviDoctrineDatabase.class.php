@@ -111,6 +111,21 @@ class AgaviDoctrineDatabase extends AgaviDatabase
 			// do not assign the resource here. that would connect to the database
 			// $this->resource = $this->connection->getDbh();
 			
+			// charset
+			if($this->hasParameter('charset')) {
+				$this->connection->setCharset($this->getParameter('charset'));
+			}
+			
+			// date format
+			if($this->hasParameter('date_format')) {
+				$this->connection->setDateFormat($this->getParameter('date_format'));
+			}
+			
+			// options
+			foreach((array)$this->getParameter('options') as $optionName => $optionValue) {
+				$this->connection->setOption($optionName, $optionValue);
+			}
+			
 			foreach((array)$this->getParameter('attributes', array()) as $attributeName => $attributeValue) {
 				$this->connection->setAttribute($attributeName, $attributeValue);
 			}
