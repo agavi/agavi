@@ -44,6 +44,8 @@
 
 	<taskdef name="agavi.iterate" classname="org.agavi.build.tasks.AgaviIterateTask" classpath="phing" />
 
+	<taskdef name="agavi.car" classname="org.agavi.build.tasks.AgaviCarTask" classpath="phing" />
+
 	<!-- Load types relative to the build system. -->
 	<typedef name="agavi.object" classname="org.agavi.build.types.AgaviObjectType" classpath="phing" />
 	<typedef name="agavi.property" classname="org.agavi.build.types.AgaviPropertyType" classpath="phing" />
@@ -279,7 +281,8 @@
 	</target>
 
 	<target name="project-wizard-system-action-default" depends="project-locate">
-		<agavi.input property="module.name" message="Module for default system action" promptCharacter=":" failIfEmpty="true" useExistingAsDefault="false" />
+		<agavi.car property="module.name" list="${target.project-wizard.modules.names}" />
+		<agavi.input property="module.name" message="Module for default system action" default="${module.name}" promptCharacter=":" failIfEmpty="true" useExistingAsDefault="false" />
 		<agavi.execute-target name="module-locate" exceptionsFatal="false" />
 		<if>
 			<not>
@@ -812,7 +815,7 @@
 	  -->
 
 	<target name="public-web-create" depends="project-locate" description="Creates a Web structure for the public directory">
-		<agavi.input property="public.base" message="Document-root relative path to the Agavi script" default="/" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
+		<agavi.input property="public.base" message="Document-root relative path to the Agavi index.php script" default="/" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
 
 		<copy todir="${project.directory}/${project.directory.pub}">
 			<mapper type="regexp" from="^(.+[\\\/])?(?:dot(\.))?(.+)\.tmpl" to="\1/\2\3" />
