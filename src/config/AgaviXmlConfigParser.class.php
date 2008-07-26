@@ -750,29 +750,117 @@ class AgaviXmlConfigParser
 	 */
 	public function validateSchematron(array $validationFiles = array())
 	{
-		// not yet implemented
-		return;
+		// first, we load the schematron implementation. this is an XSL document that is used to transform a .sch file to another XSL document that is then used to transform the input document. the result is informational output about the validation, which in our case must be valid ISO SVRL, an XML schema validation reporting format
+		$schematronIsoSvrlImplementation = new DOMDocument();
+		$schematronIsoSvrlImplementation->load(AgaviConfig::get('core.agavi_dir') . '/config/schematron/iso_svrl.xsl');
+		$schematron = new XSLTProcessor();
+		$schematron->importStylesheet($schematronIsoSvrlImplementation);
+		// set some info (config file path, context name, environment name) as params
+		// first arg is the namespace URI, which PHP doesn't support. awesome. see http://bugs.php.net/bug.php?id=30622 for the sad details
+		// we could use "agavi:context" etc, that does work even without such a prefix being declared in the stylesheet, but that would be completely non-XML-ish, confusing, and against the spec. so we use dots instead.
+		$schematron->setParameter('', array(
+			'agavi.config_path' => $this->path,
+			'agavi.environment' => $this->environment,
+			'agavi.context' => $this->context,
+		));
 		
 		$luie = libxml_use_internal_errors(true);
 		
-		foreach($validationFiles as $validationFile) {
-			if(!is_readable($validationFile)) {
+		// loop over all validation files. those are .sch schematron schemas, which we transform to an XSL document that is then used to validate the source document :)
+		foreach($validationFiles as $href) {
+			if(!is_readable($href)) {
 				libxml_use_internal_errors($luie);
-				$error = 'Schematron validation file "' . $validationFile . '" for configuration file "' . $this->path . '" does not exist or is unreadable';
+				$error = 'Schematron validation file "' . $href . '" for configuration file "' . $this->path . '" does not exist or is unreadable';
 				throw new AgaviUnreadableException($error);
 			}
 			
-			if(!$this->doc->schemaValidate($validationFile)) {
+			// load the .sch file
+			$sch = new DomDocument();
+			$sch->load($href);
+			if(libxml_get_last_error() !== false) {
 				$errors = array();
 				foreach(libxml_get_errors() as $error) {
-					$errors[] = sprintf("Line %d: %s", $error->line, $error->message);
+					$errors[] = $error->message;
 				}
 				libxml_clear_errors();
 				libxml_use_internal_errors($luie);
 				throw new AgaviParseException(
 					sprintf(
-						'Schematron validation of configuration file "%s" failed due to the following error%s: ' . "\n\n%s", 
+						'Schematron validation of configuration file "%s" failed due to the following error%s that occured while loading schema file "%s": ' . "\n\n%s", 
 						$this->path, 
+						count($errors) > 1 ? 's' : '', 
+						$href,
+						implode("\n", $errors)
+					)
+				);
+			}
+			
+			// transform the .sch file to a validation stylesheet using the schematron implementation
+			$schema = $schematron->transformToDoc($sch);
+			if($schema) {
+				$validator = new XSLTProcessor();
+				$validator->importStylesheet($schema);
+			}
+			
+			if(libxml_get_last_error() !== false) {
+				$errors = array();
+				foreach(libxml_get_errors() as $error) {
+					$errors[] = $error->message;
+				}
+				libxml_clear_errors();
+				libxml_use_internal_errors($luie);
+				throw new AgaviParseException(
+					sprintf(
+						'Schematron validation of configuration file "%s" failed due to the following error%s that occured while processing the schema file "%s": ' . "\n\n%s", 
+						$this->path, 
+						count($errors) > 1 ? 's' : '', 
+						$href,
+						implode("\n", $errors)
+					)
+				);
+			}
+			
+			$validator->setParameter('', array(
+				'agavi.config_path' => $this->path,
+				'agavi.environment' => $this->environment,
+				'agavi.context' => $this->context,
+			));
+			
+			// run the validation by transforming our document using the generated validation stylesheet
+			$result = $validator->transformToDoc($this->doc);
+			
+			if(libxml_get_last_error() !== false) {
+				$errors = array();
+				foreach(libxml_get_errors() as $error) {
+					$errors[] = $error->message;
+				}
+				libxml_clear_errors();
+				libxml_use_internal_errors($luie);
+				throw new AgaviParseException(
+					sprintf(
+						'Schematron validation of configuration file "%s" failed due to the following error%s that occured while validating the document against the schema file "%s": ' . "\n\n%s", 
+						$this->path, 
+						count($errors) > 1 ? 's' : '', 
+						$href,
+						implode("\n", $errors)
+					)
+				);
+			}
+			
+			// validation ran okay, now we need to look at the result document to see if there are errors
+			$xpath = new DOMXPath($result);
+			$xpath->registerNamespace('svrl', 'http://purl.oclc.org/dsdl/svrl');
+			
+			$results = $xpath->query('//svrl:failed-assert | //svrl:successful-report');
+			if($results->length) {
+				// TODO: grab error info from <svrl:failed-assert> and <svrl:successful-report> elements. note that the child <svrl:text> element is optional. also, the <sch:pattern> can have a "name" attribute, but that value never occurs in an SVRL result...
+				$errors = array();
+				
+				libxml_use_internal_errors($luie);
+				throw new AgaviParseException(
+					sprintf(
+						'Schematron validation of configuration file "%s" failed due to the following error%s:' . "\n\n%s",
+						$this->path,
 						count($errors) > 1 ? 's' : '', 
 						implode("\n", $errors)
 					)
