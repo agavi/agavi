@@ -60,6 +60,20 @@ Copyright (c) 1991-2006 Unicode, Inc. All rights reserved.
 --
 
 
+ISO Schematron
+--------------
+
+This software uses the ISO Schematron Skeleton, and the ISO Schematron ISO SVRL
+implementation, by Rick Jelliffe.
+
+For more information about ISO Schematron, visit the homepage:
+http://www.schematron.com/
+
+Copyright (c) 2000-2007 Rick Jelliffe and Academia Sinica Computing Center, TW
+
+--
+
+
 Zoneinfo Database
 -----------------
 
