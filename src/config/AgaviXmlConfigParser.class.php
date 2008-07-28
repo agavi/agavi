@@ -41,6 +41,10 @@ class AgaviXmlConfigParser
 	
 	const VALIDATION_TYPE_SCHEMATRON = 'schematron';
 	
+	const SCHEMATRON_ISO_NAMESPACE = 'http://purl.oclc.org/dsdl/schematron';
+	
+	const XSL_NAMESPACE_1999 = 'http://www.w3.org/1999/XSL/Transform';
+	
 	/**
 	 * @var        array A list of XML namespaces for Agavi configuration files as
 	 *                   keys and their associated XPath namespace prefix (value).
@@ -795,9 +799,30 @@ class AgaviXmlConfigParser
 				);
 			}
 			
+			if(!$sch->documentElement || $sch->documentElement->namespaceURI != self::SCHEMATRON_ISO_NAMESPACE) {
+				throw new AgaviParseException(
+					sprintf(
+						'Schematron validation of configuration file "%s" failed because schema file "%s" is invalid', 
+						$this->path, 
+						$href
+					)
+				);
+			}
+			
 			// transform the .sch file to a validation stylesheet using the schematron implementation
 			$schema = $schematron->transformToDoc($sch);
 			if($schema) {
+				// it transformed fine. but did we get a proper stylesheet instance at all? wrong namespaces can lead to empty docs that only have an XML prolog
+				if(!$schema->documentElement || $schema->documentElement->namespaceURI != self::XSL_NAMESPACE_1999) {
+					throw new AgaviParseException(
+						sprintf(
+							'Schematron validation of configuration file "%s" failed because schema file "%s" resulted in an invalid stylesheet', 
+							$this->path, 
+							$href
+						)
+					);
+				}
+				
 				$validator = new XSLTProcessor();
 				$validator->importStylesheet($schema);
 			}
