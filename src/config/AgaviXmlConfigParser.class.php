@@ -227,8 +227,8 @@ class AgaviXmlConfigParser
 	 */
 	public static function testPattern($pattern, $subject)
 	{
-		$pattern = preg_quote($pattern, '/');
-		return (preg_match('/^(' . implode('|', array_map('trim', explode(' ', $pattern))) . ')$/', $subject) > 0);
+		$pattern = str_replace('#', '\#', $pattern);
+		return (preg_match('#^(' . implode('|', array_map('trim', explode(' ', $pattern))) . ')$#', $subject) > 0);
 	}
 	
 	/**
