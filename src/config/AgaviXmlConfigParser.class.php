@@ -300,7 +300,6 @@ class AgaviXmlConfigParser
 	public function __destruct()
 	{
 		unset($this->xpath);
-		unset($this->doc->xpath);
 		unset($this->doc);
 	}
 	
