@@ -667,14 +667,9 @@ class AgaviXmlConfigParser
 	 */
 	public function cleanup()
 	{
-		if($this->doc->isAgaviConfiguration()) {
-			// TODO: we need a method to retrieve the sandbox elements
-			$this->xpath->registerNamespace('agavi', $this->doc->documentElement->namespaceURI);
-			// remove top-level <sandbox> elements
-			$sandboxes = $this->xpath->query('/agavi:configurations/agavi:sandbox', $this->doc);
-			foreach($sandboxes as $sandbox) {
-				$sandbox->parentNode->removeChild($sandbox);
-			}
+		// remove top-level <sandbox> element
+		if($sandbox = $this->doc->getSandbox()) {
+			$sandbox->parentNode->removeChild($sandbox);
 		}
 	}
 	

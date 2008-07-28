@@ -168,14 +168,35 @@ class AgaviXmlConfigDomDocument extends DOMDocument
 		if($this->isAgaviConfiguration()) {
 			$agaviNs = $this->getAgaviEnvelopeNamespace();
 			
-			foreach($this->documentElement->childNodes as $configuration) {
-				if($configuration->nodeType == XML_ELEMENT_NODE && $configuration->localName == 'configuration' && $configuration->namespaceURI == $this->getAgaviEnvelopeNamespace()) {
-					$retval[] = $configuration;
+			foreach($this->documentElement->childNodes as $node) {
+				if($node->nodeType == XML_ELEMENT_NODE && $node->localName == 'configuration' && $node->namespaceURI == $agaviNs) {
+					$retval[] = $node;
 				}
 			}
 		}
 		
 		return $retval;
+	}
+	
+	/**
+	 * Method to retrieve the Agavi <sandbox> element regardless of the namespace.
+	 *
+	 * @return     AgaviXmlConfigDomElement The <sandbox> element, or null.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      1.0.0
+	 */
+	public function getSandbox()
+	{
+		if($this->isAgaviConfiguration()) {
+			$agaviNs = $this->getAgaviEnvelopeNamespace();
+			
+			foreach($this->documentElement->childNodes as $node) {
+				if($node->nodeType == XML_ELEMENT_NODE && $node->localName == 'sandbox' && $node->namespaceURI == $agaviNs) {
+					return $node;
+				}
+			}
+		}
 	}
 }
 
