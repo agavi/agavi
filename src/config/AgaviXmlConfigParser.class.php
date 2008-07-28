@@ -227,7 +227,8 @@ class AgaviXmlConfigParser
 	 */
 	public static function testPattern($pattern, $subject)
 	{
-		$pattern = str_replace('#', '\#', $pattern);
+		// four backslashes mean one literal backslash
+		$pattern = preg_replace('/\\\\+#/', '\\#', $pattern);
 		return (preg_match('#^(' . implode('|', array_map('trim', explode(' ', $pattern))) . ')$#', $subject) > 0);
 	}
 	
