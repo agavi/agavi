@@ -43,6 +43,8 @@ class AgaviXmlConfigParser
 	
 	const SCHEMATRON_ISO_NAMESPACE = 'http://purl.oclc.org/dsdl/schematron';
 	
+	const SVRL_ISO_NAMESPACE = 'http://purl.oclc.org/dsdl/svrl';
+	
 	const XSL_NAMESPACE_1999 = 'http://www.w3.org/1999/XSL/Transform';
 	
 	/**
@@ -476,6 +478,7 @@ class AgaviXmlConfigParser
 							);
 						}
 					} else {
+						libxml_use_internal_errors($luie);
 						throw new AgaviParseException(
 							sprintf(
 								'Configuration file "%s" could not be parsed because the inline stylesheet "%s" referenced in the "xml-stylesheet" processing instruction could not be found in the document.', 
@@ -643,8 +646,13 @@ class AgaviXmlConfigParser
 		foreach($validationFiles as $validationFile) {
 			if(!is_resource($validationFile) && !is_readable($validationFile)) {
 				libxml_use_internal_errors($luie);
-				$error = 'XML Schema validation file "' . $validationFile . '" for configuration file "' . $this->path . '" does not exist or is unreadable';
-				throw new AgaviUnreadableException($error);
+				throw new AgaviUnreadableException(
+					sprintf(
+						'XML Schema validation file "%s" for configuration file "%s" does not exist or is unreadable',
+						$validationFile,
+						$this->path
+					)
+				);
 			}
 			
 			// gotta do the @ to suppress warnings when the schema cannot be found
@@ -718,8 +726,13 @@ class AgaviXmlConfigParser
 		foreach($validationFiles as $validationFile) {
 			if(!is_readable($validationFile)) {
 				libxml_use_internal_errors($luie);
-				$error = 'RELAX NG validation file "' . $validationFile . '" for configuration file "' . $this->path . '" does not exist or is unreadable';
-				throw new AgaviUnreadableException($error);
+				throw new AgaviUnreadableException(
+					sprintf(
+						'RELAX NG validation file "%s" for configuration file "%s" does not exist or is unreadable',
+						$validationFile,
+						$this->path
+					)
+				);
 			}
 			
 			// gotta do the @ to suppress warnings when the schema cannot be found
@@ -774,8 +787,13 @@ class AgaviXmlConfigParser
 		foreach($validationFiles as $href) {
 			if(!is_readable($href)) {
 				libxml_use_internal_errors($luie);
-				$error = 'Schematron validation file "' . $href . '" for configuration file "' . $this->path . '" does not exist or is unreadable';
-				throw new AgaviUnreadableException($error);
+				throw new AgaviUnreadableException(
+					sprintf(
+						'Schematron validation file "%s" for configuration file "%s" does not exist or is unreadable',
+						$href,
+						$this->path
+					)
+				);
 			}
 			
 			// load the .sch file
@@ -800,6 +818,7 @@ class AgaviXmlConfigParser
 			}
 			
 			if(!$sch->documentElement || $sch->documentElement->namespaceURI != self::SCHEMATRON_ISO_NAMESPACE) {
+				libxml_use_internal_errors($luie);
 				throw new AgaviParseException(
 					sprintf(
 						'Schematron validation of configuration file "%s" failed because schema file "%s" is invalid', 
@@ -814,6 +833,7 @@ class AgaviXmlConfigParser
 			if($schema) {
 				// it transformed fine. but did we get a proper stylesheet instance at all? wrong namespaces can lead to empty docs that only have an XML prolog
 				if(!$schema->documentElement || $schema->documentElement->namespaceURI != self::XSL_NAMESPACE_1999) {
+					libxml_use_internal_errors($luie);
 					throw new AgaviParseException(
 						sprintf(
 							'Schematron validation of configuration file "%s" failed because schema file "%s" resulted in an invalid stylesheet', 
@@ -874,7 +894,7 @@ class AgaviXmlConfigParser
 			
 			// validation ran okay, now we need to look at the result document to see if there are errors
 			$xpath = new DOMXPath($result);
-			$xpath->registerNamespace('svrl', 'http://purl.oclc.org/dsdl/svrl');
+			$xpath->registerNamespace('svrl', self::SVRL_ISO_NAMESPACE);
 			
 			$results = $xpath->query('//svrl:failed-assert | //svrl:successful-report');
 			if($results->length) {
