@@ -203,17 +203,11 @@
 		<!-- prepare -->
 		<delete dir="${builddir}" includeemptydirs="true" verbose="true" failonerror="false" />
 		<mkdir dir="${builddir}" />
-		<copy todir="${builddir}">
-			<fileset dir="src/">
-				<exclude name="**/*.svn" />
-				<include name="**/**" />
-			</fileset>
-		</copy>
-		<mkdir dir="${builddir}/samples" />
+
 		<copy todir="${builddir}/samples">
 			<fileset dir="samples/">
 				<exclude name="**/*.svn" />
-				<include name="**/**" />
+				<include name="**/*" />
 			</fileset>
 		</copy>
 		<copy file="API_CHANGELOG" todir="${builddir}" />
@@ -228,14 +222,25 @@
 		<copy file="LICENSE-UNICODE_CLDR" todir="${builddir}" />
 		<copy file="RELEASE_NOTES" todir="${builddir}" />
 		<copy file="TODO" todir="${builddir}" />
-		<mkdir dir="${builddir}/scripts" />
-		<copy file="etc/agavi-dist" todir="${builddir}/scripts" />
-		<copy file="etc/agavi.bat-dist" todir="${builddir}/scripts" />
+
+		<copy todir="${builddir}">
+			<fileset dir="src/">
+				<exclude name="**/*.svn" />
+				<include name="**/*" />
+			</fileset>
+		</copy>
+
+		<copy todir="${builddir}/bin">
+			<fileset dir="bin/">
+				<exclude name="**/*.svn" />
+				<include name="**/*" />
+			</fileset>
+		</copy>
 
 		<!-- generate package.xml -->
 		<agavipackage dir="${builddir}" />
 
-		<echo msg="package.xml generated to '${builddir}'. Use &quot;pear package&quot; in build/ to create the package." />
+		<echo msg="package.xml generated to '${builddir}'. Use &quot;pear package&quot; in ${builddir}/ to create the package." />
 	</target>
 
 	<target name="clean" description="clean out the cruft">

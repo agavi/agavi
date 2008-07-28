@@ -7,6 +7,7 @@ AGAVI CHANGELOG
 ADD: Rewrite the project build system and throw out the old one (#689) (Noah)
 ADD: Allow additional types for second argument of AgaviLoggerManager::log() (#634) (David)
 
+CHG: Change default for assigning of "inner" content to $slots template array to disabled (#794) (David)
 CHG: Refactor internal "system action" handling and fowarding (#769) (David)
 CHG: Bump minimum required PHP version to 5.2.0 (#738) (David)
 CHG: Remove direct association of validator instances and request methods (#767) (David)
@@ -16,6 +17,18 @@ CHG: Deprecated AgaviSecureWebRequest (#676) (David)
 CHG: Deprecated AgaviAdodbDatabase (#662) (David)
 
 FIX: Security filters cannot perform checks in addition to isSecure() (#671) (David)
+
+
+0.11.3 RC1 (July ??, 2008)
+--------------------------
+
+ADD: Set current Context instance on Doctrine connections (#800) (David)
+ADD: Support for doctrine connection settings and options (#788) (David)
+
+CHG: Assigning of "inner" content to $slots template array should be configurable (#793) (David)
+
+FIX: AgaviExecutionTimeFilter runs only once (#801) (David)
+FIX: PEAR installations place src/routing/soap files in the data directory rather than the source directory (#799) (Noah)
 
 
 0.11.2 (July 8, 2008)

@@ -108,13 +108,15 @@ class AgaviDateTimeValidator extends AgaviValidator
 				$param = $this->getData($field);
 				if(defined($calField)) {
 					$calField = constant($calField);
-
-					if($calField == AgaviDateDefinitions::MONTH) {
-						$param -= 1;
-					}
-
-					$cal->set($calField, (float) $param);
+				} elseif(!is_numeric($calField)) {
+					throw new AgaviValidatorException('Unknown argument name "' . $calField . '" for argument "' . $field . '" supplied. This needs to be one of the constants defined in AgaviDateDefinitions.');
 				}
+
+				if($calField == AgaviDateDefinitions::MONTH) {
+					$param -= 1;
+				}
+
+				$cal->set($calField, (float) $param);
 			}
 
 			try {

@@ -32,6 +32,19 @@ The corresponding license can be found in LICENSE-AGAVI.
 --
 
 
+PHPUnit
+-------
+
+Agavi bundles PHPUnit in a development version to facilitate software testing.
+
+For more information about PHPUnit, visit the homepage:
+http://phpunit.de/
+
+The corresponding license can be found in LICENSE-PHPUNIT.
+
+--
+
+
 International Components for Unicode
 ------------------------------------
 

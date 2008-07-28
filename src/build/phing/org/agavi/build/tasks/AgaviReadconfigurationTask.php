@@ -55,23 +55,6 @@ class AgaviReadconfigurationTask extends AgaviTask
 	}
 	
 	/**
-	 * Initializes the task.
-	 */
-	public function init()
-	{
-		parent::init();
-		
-		$sourceDirectory = $this->project->getProperty('agavi.directory.src');
-		if($sourceDirectory !== null) {
-			$sourceDirectory = new PhingFile($sourceDirectory);
-			if($sourceDirectory->isDirectory()) {
-				/* We can load Agavi. */
-				require_once($sourceDirectory->getAbsolutePath() . '/agavi.php');
-			}
-		}
-	}
-	
-	/**
 	 * Executes the task.
 	 */
 	public function main()
@@ -81,6 +64,11 @@ class AgaviReadconfigurationTask extends AgaviTask
 		}
 		if($this->configurationValue === null) {
 			throw new BuildException('The configurationValue attribute must be specified');
+		}
+		
+		if(!class_exists('Agavi')) {
+			$sourceDirectory = (string)$this->project->getProperty('agavi.directory.src');
+			require_once($sourceDirectory . '/agavi.php');
 		}
 		
 		$this->project->setUserProperty($this->property, AgaviConfig::get($this->configurationValue));
