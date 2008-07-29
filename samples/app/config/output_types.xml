@@ -1,60 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configurations xmlns="http://agavi.org/agavi/1.0/config" xmlns:xi="http://www.w3.org/2001/XInclude">
 
+	<!-- the sandbox. we can put anything in here. very useful for sharing stuff inside the document using XIncludes -->
 	<sandbox>
-
-		<renderers default="php">
-			
-			<renderer name="php" class="AgaviPhpRenderer">
-				<parameter name="assigns">
-					<parameter name="routing">ro</parameter>
-					<parameter name="request">rq</parameter>
-					<parameter name="controller">ct</parameter>
-					<parameter name="user">us</parameter>
-					<parameter name="translation_manager">tm</parameter>
-					<parameter name="request_data">rd</parameter>
-				</parameter>
-			</renderer>
-			
-		</renderers>
-		
-		<layouts default="default">
-			
-			<layout name="default">
-				<layer name="content" />
-				<layer name="decorator">
-					<slot name="menu" module="Default" action="Menu" />
-					<parameter name="directory">%core.template_dir%</parameter>
-					<parameter name="template">Master</parameter>
-				</layer>
-			</layout>
-			
-			<layout name="slot">
-				<layer name="content" />
-			</layout>
-			
-		</layouts>
-
+		<!-- our common layers that all layouts use. only the content layer in here, and empty, but who knows! -->
+		<layers>
+			<layer name="content" />
+		</layers>
 	</sandbox>
 
 	<configuration context="web">
 		<output_types default="html">
 
 			<output_type name="html">
-				<xi:include xpointer="xmlns(a=http://agavi.org/agavi/1.0/config) xpointer(/a:configurations/a:sandbox/a:renderers)" />
-				<xi:include xpointer="xmlns(a=http://agavi.org/agavi/1.0/config) xpointer(/a:configurations/a:sandbox/a:layouts)" />
-				
+				<renderers default="php">
+
+					<renderer name="php" class="AgaviPhpRenderer">
+						<parameter name="assigns">
+							<parameter name="routing">ro</parameter>
+							<parameter name="request">rq</parameter>
+							<parameter name="controller">ct</parameter>
+							<parameter name="user">us</parameter>
+							<parameter name="translation_manager">tm</parameter>
+							<parameter name="request_data">rd</parameter>
+						</parameter>
+					</renderer>
+
+				</renderers>
+
+				<layouts default="default">
+
+					<layout name="default">
+						<!-- include common layer definitions from the sandbox -->
+						<xi:include xpointer="xmlns(a=http://agavi.org/agavi/1.0/config) xpointer(/a:configurations/a:sandbox/a:layers/*)" />
+						<!-- and then define those special tp this layout -->
+						<layer name="decorator">
+							<slot name="menu" module="Default" action="Menu" />
+							<parameter name="directory">%core.template_dir%</parameter>
+							<parameter name="template">Master</parameter>
+						</layer>
+					</layout>
+
+					<layout name="slot">
+						<!-- include common layer definitions from the sandbox -->
+						<xi:include xpointer="xmlns(a=http://agavi.org/agavi/1.0/config) xpointer(/a:configurations/a:sandbox/a:layers/*)" />
+					</layout>
+
+				</layouts>
+
 				<parameter name="http_headers">
 					<parameter name="Content-Type">text/html; charset=UTF-8</parameter>
 				</parameter>
 			</output_type>
 
-			<output_type name="xhtml">
-				<xi:include xpointer="xmlns(a=http://agavi.org/agavi/1.0/config) xpointer(/a:configurations/a:sandbox/a:renderers)" />
-				<xi:include xpointer="xmlns(a=http://agavi.org/agavi/1.0/config) xpointer(/a:configurations/a:sandbox/a:layouts)" />
-				
+			<output_type name="json">
 				<parameter name="http_headers">
-					<parameter name="Content-Type">application/xhtml+xml; charset=UTF-8</parameter>
+					<parameter name="Content-Type">application/json; charset=UTF-8</parameter>
 				</parameter>
 			</output_type>
 

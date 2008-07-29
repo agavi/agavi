@@ -12,6 +12,18 @@ class Default_SearchEngineSpamErrorView extends AgaviSampleAppDefaultBaseView
 	}
 
 	/**
+	 * Execute any presentation logic for JSON requests.
+	 */
+	public function executeJson(AgaviRequestDataHolder $rd)
+	{
+		return json_encode(
+			array(
+				'_error' => 404,
+			)
+		);
+	}
+
+	/**
 	 * Execute any presentation logic for SOAP requests.
 	 */
 	public function executeSoap(AgaviRequestDataHolder $rd)
