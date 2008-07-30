@@ -284,19 +284,20 @@ final class AgaviConfigCache
 		require($agaviDir . '/config/AgaviConfigParser.class.php');
 		require($agaviDir . '/config/AgaviXmlConfigParser.class.php');
 		// extended DOM* classes
-		require($agaviDir . '/config/dom/AgaviXmlConfigDomAttr.class.php');
-		require($agaviDir . '/config/dom/AgaviXmlConfigDomCharacterData.class.php');
-		require($agaviDir . '/config/dom/AgaviXmlConfigDomComment.class.php');
-		require($agaviDir . '/config/dom/AgaviXmlConfigDomDocument.class.php');
-		require($agaviDir . '/config/dom/AgaviXmlConfigDomDocumentFragment.class.php');
-		require($agaviDir . '/config/dom/AgaviXmlConfigDomDocumentType.class.php');
-		require($agaviDir . '/config/dom/AgaviXmlConfigDomElement.class.php');
-		require($agaviDir . '/config/dom/AgaviXmlConfigDomEntity.class.php');
-		require($agaviDir . '/config/dom/AgaviXmlConfigDomEntityReference.class.php');
-		require($agaviDir . '/config/dom/AgaviXmlConfigDomNode.class.php');
-		require($agaviDir . '/config/dom/AgaviXmlConfigDomNotation.class.php');
-		require($agaviDir . '/config/dom/AgaviXmlConfigDomProcessingInstruction.class.php');
-		require($agaviDir . '/config/dom/AgaviXmlConfigDomText.class.php');
+		require($agaviDir . '/config/util/dom/AgaviXmlConfigDomAttr.class.php');
+		require($agaviDir . '/config/util/dom/AgaviXmlConfigDomCharacterData.class.php');
+		require($agaviDir . '/config/util/dom/AgaviXmlConfigDomComment.class.php');
+		require($agaviDir . '/config/util/dom/AgaviXmlConfigDomDocument.class.php');
+		require($agaviDir . '/config/util/dom/AgaviXmlConfigDomDocumentFragment.class.php');
+		require($agaviDir . '/config/util/dom/AgaviXmlConfigDomDocumentType.class.php');
+		require($agaviDir . '/config/util/dom/AgaviXmlConfigDomElement.class.php');
+		require($agaviDir . '/config/util/dom/AgaviXmlConfigDomEntity.class.php');
+		require($agaviDir . '/config/util/dom/AgaviXmlConfigDomEntityReference.class.php');
+		require($agaviDir . '/config/util/dom/AgaviXmlConfigDomNode.class.php');
+		require($agaviDir . '/config/util/dom/AgaviXmlConfigDomNotation.class.php');
+		require($agaviDir . '/config/util/dom/AgaviXmlConfigDomProcessingInstruction.class.php');
+		require($agaviDir . '/config/util/dom/AgaviXmlConfigDomText.class.php');
+		require($agaviDir . '/config/util/xsl/AgaviXmlConfigXsltProcessor.class.php');
 
 		// manually create our config_handlers.xml handler
 		self::$handlers['config_handlers.xml'] = array(

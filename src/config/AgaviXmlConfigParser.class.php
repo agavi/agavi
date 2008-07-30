@@ -76,11 +76,6 @@ class AgaviXmlConfigParser
 	protected $doc = null;
 	
 	/**
-	 * @var        DOMXPath The XPath instance for the current document.
-	 */
-	protected $xpath = null;
-	
-	/**
 	 * Test if the given document looks like an Agavi config file.
 	 *
 	 * @param      DOMDocument The document to test.
@@ -131,10 +126,9 @@ class AgaviXmlConfigParser
 		$nextPath = $path;
 		while($nextPath !== null) {
 			$parser = new AgaviXmlConfigParser($nextPath, $environment, $context);
+			
 			$doc = $parser->execute($transformationInfo, $validationInfo);
-			// assign an xpath instance to each doc
-			$doc->xpath = new DOMXPath($doc);
-			// and put it on the list
+			// put the new document in the list
 			$docs[] = $doc;
 			
 			// make sure it (still) is a <configurations> file with the proper Agavi namespace
@@ -195,7 +189,7 @@ class AgaviXmlConfigParser
 				// append all matching nodes from the order array...
 				foreach($configurationElements as &$element) {
 					// ... if the xpath matches, that is!
-					if($element->ownerDocument->xpath->evaluate($xpath, $element)) {
+					if($element->ownerDocument->getXpath()->evaluate($xpath, $element)) {
 						// it did, so import the node and append it to the result doc
 						$importedNode = $retval->importNode($element, true);
 						$retval->documentElement->appendChild($importedNode);
@@ -241,6 +235,7 @@ class AgaviXmlConfigParser
 	 * @param      string The optional name of the current context.
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
 	 * @since      1.0.0
 	 */
 	public function __construct($path, $environment = null, $context = null)
@@ -261,34 +256,13 @@ class AgaviXmlConfigParser
 		// store path to the config file
 		$this->path = $path;
 		
-		$luie = libxml_use_internal_errors(true);
-		libxml_clear_errors();
-		
 		// AgaviXmlConfigDomDocument has convenience methods!
-		$this->doc = new AgaviXmlConfigDomDocument();
-		$this->doc->load($path);
-		
-		if(libxml_get_last_error() !== false) {
-			$errors = array();
-			foreach(libxml_get_errors() as $error) {
-				$errors[] = sprintf("Line %d: %s", $error->line, $error->message);
-			}
-			libxml_clear_errors();
-			libxml_use_internal_errors($luie);
-			throw new AgaviParseException(
-				sprintf(
-					'Configuration file "%s" could not be parsed due to the following error%s: ' . "\n\n%s", 
-					$path, 
-					count($errors) > 1 ? 's' : '', 
-					implode("\n", $errors)
-				)
-			);
+		try {
+			$this->doc = new AgaviXmlConfigDomDocument();
+			$this->doc->load($path);
+		} catch(DOMException $dome) {
+			throw new AgaviParseException(sprintf('Configuration file "%s" could not be parsed: %s', $path, $dome->getMessage()));
 		}
-		
-		// store this doc's XPath instance so we don't have to make a new one each time
-		$this->xpath = new DOMXPath($this->doc);
-		
-		libxml_use_internal_errors($luie);
 	}
 	
 	/**
@@ -299,7 +273,6 @@ class AgaviXmlConfigParser
 	 */
 	public function __destruct()
 	{
-		unset($this->xpath);
 		unset($this->doc);
 	}
 	
@@ -336,13 +309,11 @@ class AgaviXmlConfigParser
 	 * flags on <configuration> elements.
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
 	 * @since      0.11.0
 	 */
 	public function prepare()
 	{
-		$luie = libxml_use_internal_errors(true);
-		libxml_clear_errors();
-		
 		// replace %lala% directives in XInclude href attributes
 		foreach($this->doc->getElementsByTagNameNS('http://www.w3.org/2001/XInclude', '*') as $element) {
 			if($element->hasAttribute('href')) {
@@ -354,33 +325,14 @@ class AgaviXmlConfigParser
 		}
 		
 		// perform xincludes
-		$this->doc->xinclude();
-		
-		if(libxml_get_last_error() !== false) {
-			$throw = false;
-			$errors = array();
-			foreach(libxml_get_errors() as $error) {
-				if($error->level != LIBXML_ERR_WARNING) {
-					$throw = true;
-				}
-				$errors[] = sprintf("Line %d: %s", $error->line, $error->message);
-			}
-			libxml_clear_errors();
-			if($throw) {
-				libxml_use_internal_errors($luie);
-				throw new AgaviParseException(
-					sprintf(
-						'Configuration file "%s" could not be parsed due to the following error%s that occured while resolving XInclude directives: ' . "\n\n%s", 
-						$path, 
-						count($errors) > 1 ? 's' : '', 
-						implode("\n", $errors)
-					)
-				);
-			}
+		try {
+			$this->doc->xinclude();
+		} catch(DOMException $dome) {
+			throw new AgaviParseException(sprintf('Configuration file "%s" could not be parsed: %s', $this->path, $dome->getMessage()));
 		}
 		
 		// remove all xml:base attributes inserted by XIncludes
-		$nodes = $this->xpath->query('//@xml:base', $this->doc);
+		$nodes = $this->doc->getXpath()->query('//@xml:base', $this->doc);
 		foreach($nodes as $node) {
 			$node->ownerElement->removeAttributeNode($node);
 		}
@@ -392,12 +344,7 @@ class AgaviXmlConfigParser
 			// reload, and all is good
 			$this->doc->loadXML($this->doc->saveXML());
 			$this->doc->documentURI = $documentUri;
-			
-			// it's a new doc, so we need a new XPath, too
-			$this->xpath = new DOMXPath($this->doc);
 		}
-		
-		libxml_use_internal_errors($luie);
 		
 		// next, find (and validate against) XML schema instance declarations
 		$sources = array();
@@ -424,13 +371,7 @@ class AgaviXmlConfigParser
 				}
 				$schema = @file_get_contents($source);
 				if($schema === false) {
-					throw new AgaviUnreadableException(
-						sprintf(
-							'XML Schema validation file "%s" for configuration file "%s" does not exist or is unreadable',
-							$source,
-							$this->path
-						)
-					);
+					throw new AgaviUnreadableException(sprintf('XML Schema validation file "%s" for configuration file "%s" does not exist or is unreadable', $source, $this->path));
 				}
 				$schemas[] = $schema;
 			}
@@ -468,16 +409,17 @@ class AgaviXmlConfigParser
 	 * @param      array  An array of transformation information.
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
 	 * @since      0.11.0
 	 */
 	public function transform(array $transformationInfo = array())
 	{
 		$transformations = array();
 		
-		$luie = libxml_use_internal_errors(true);
+		$xpath = $this->doc->getXpath();
 		
 		// see if there are <?xml-stylesheet... processing instructions
-		$stylesheetProcessingInstructions = $this->xpath->query("//processing-instruction('xml-stylesheet')", $this->doc);
+		$stylesheetProcessingInstructions = $xpath->query("//processing-instruction('xml-stylesheet')", $this->doc);
 		foreach($stylesheetProcessingInstructions as $pi) {
 			// yes! alright. trick: we create a doc fragment with the contents so we don't have to parse things by hand...
 			$fragment = $this->doc->createDocumentFragment();
@@ -489,41 +431,21 @@ class AgaviXmlConfigParser
 				
 				if(strpos($href, '#') === 0) {
 					// the href points to an embedded XSL stylesheet (with ID reference), so let's see if we can find it
-					$stylesheets = $this->xpath->query("//*[@id='" . substr($href, 1) . "']", $this->doc);
+					$stylesheets = $xpath->query("//*[@id='" . substr($href, 1) . "']", $this->doc);
 					if($stylesheets->length) {
 						// excellent. make a new doc from that element!
-						$xsl = new DomDocument();
-						$xsl->appendChild($xsl->importNode($stylesheets->item(0), true));
-						if(libxml_get_last_error() !== false) {
-							$errors = array();
-							foreach(libxml_get_errors() as $error) {
-								$errors[] = $error->message;
-							}
-							libxml_clear_errors();
-							libxml_use_internal_errors($luie);
-							throw new AgaviParseException(
-								sprintf(
-									'Configuration file "%s" could not be parsed due to the following error%s that occured while loading the specified XSL stylesheet "%s": ' . "\n\n%s", 
-									$this->path, 
-									count($errors) > 1 ? 's' : '', 
-									$href,
-									implode("\n", $errors)
-								)
-							);
+						try {
+							$xsl = new AgaviXmlConfigDomDocument();
+							$xsl->appendChild($xsl->importNode($stylesheets->item(0), true));
+						} catch(DOMException $dome) {
+							throw new AgaviParseException(sprintf('Configuration file "%s" could not be parsed: Could not load XSL stylesheet "%s": %s', $this->path, $href, $dome->getMessage()));
 						}
 						
 						// and append to the list of XSLs to process
 						// TODO: spec mandates that external XSLs be processed first!
 						$transformations[] = $xsl;
 					} else {
-						libxml_use_internal_errors($luie);
-						throw new AgaviParseException(
-							sprintf(
-								'Configuration file "%s" could not be parsed because the inline stylesheet "%s" referenced in the "xml-stylesheet" processing instruction could not be found in the document.', 
-								$this->path, 
-								$href
-							)
-						);
+						throw new AgaviParseException(sprintf('Configuration file "%s" could not be parsed because the inline stylesheet "%s" referenced in the "xml-stylesheet" processing instruction could not be found in the document.', $this->path, $href));
 					}
 				} else {
 					// href references an xsl file, remember the path
@@ -537,24 +459,11 @@ class AgaviXmlConfigParser
 		
 		// loop over all the paths we found and load the files
 		foreach($transformationInfo as $href) {
-			$xsl = new DomDocument();
-			$xsl->load($href);
-			if(libxml_get_last_error() !== false) {
-				$errors = array();
-				foreach(libxml_get_errors() as $error) {
-					$errors[] = $error->message;
-				}
-				libxml_clear_errors();
-				libxml_use_internal_errors($luie);
-				throw new AgaviParseException(
-					sprintf(
-						'Configuration file "%s" could not be parsed due to the following error%s that occured while loading the specified XSL stylesheet "%s": ' . "\n\n%s", 
-						$this->path, 
-						count($errors) > 1 ? 's' : '', 
-						$href,
-						implode("\n", $errors)
-					)
-				);
+			try {
+				$xsl = new AgaviXmlConfigDomDocument();
+				$xsl->load($href);
+			} catch(DOMException $dome) {
+				throw new AgaviParseException(sprintf('Configuration file "%s" could not be parsed: Could not load XSL stylesheet "%s": %s', $this->path, $href, $dome->getMessage()));
 			}
 			
 			// add them to the list of transformations to be done
@@ -564,26 +473,11 @@ class AgaviXmlConfigParser
 		// now let's perform the transformations
 		foreach($transformations as $xsl) {
 			// load the stylesheet document into an XSLTProcessor instance
-			$proc = new XSLTProcessor();
-			$proc->importStylesheet($xsl);
-			// libxml_get_last_error() returns false if importStylesheet failed, libxml_get_errors() works nontheless. zomfg libxml.
-			// also, if we catch the errors here and throw an exception, we don't need an @ further down at transformToDoc().
-			if(libxml_get_last_error() !== false || count(libxml_get_errors())) {
-				$errors = array();
-				foreach(libxml_get_errors() as $error) {
-					$errors[] = $error->message;
-				}
-				libxml_clear_errors();
-				libxml_use_internal_errors($luie);
-				throw new AgaviParseException(
-					sprintf(
-						'Configuration file "%s" could not be parsed due to the following error%s that occured while importing the specified XSL stylesheet "%s": ' . "\n\n%s", 
-						$this->path, 
-						count($errors) > 1 ? 's' : '', 
-						$href,
-						implode("\n", $errors)
-					)
-				);
+			try {
+				$proc = new AgaviXmlConfigXsltProcessor();
+				$proc->importStylesheet($xsl);
+			} catch(Exception $e) {
+				throw new AgaviParseException(sprintf('Configuration file "%s" could not be parsed: Could not import XSL stylesheet "%s": %s', $this->path, $xsl->documentURI, $e->getMessage()));
 			}
 			
 			// set some info (config file path, context name, environment name) as params
@@ -595,36 +489,24 @@ class AgaviXmlConfigParser
 				'agavi.context' => $this->context,
 			));
 			
-			// transform the doc
-			$newdoc = $proc->transformToDoc($this->doc);
+			try {
+				// transform the doc
+				$newdoc = $proc->transformToDoc($this->doc);
+			} catch(Exception $e) {
+				throw new AgaviParseException(sprintf('Configuration file "%s" could not be parsed: Could not transform the document using the XSL stylesheet "%s": %s', $this->path, $xsl->documentURI, $e->getMessage()));
+			}
 			
-			if(libxml_get_last_error() !== false) {
-				$errors = array();
-				foreach(libxml_get_errors() as $error) {
-					$errors[] = $error->message;
-				}
-				libxml_clear_errors();
-				libxml_use_internal_errors($luie);
-				throw new AgaviParseException(
-					sprintf(
-						'Configuration file "%s" could not be parsed due to the following error%s that occured while transforming the document using the XSL stylesheet "%s": ' . "\n\n%s", 
-						$this->path, 
-						count($errors) > 1 ? 's' : '', 
-						$href,
-						implode("\n", $errors)
-					)
-				);
-			}
-		
-			if($newdoc) {
-				// no errors and we got a document back? excellent. this will be our new baby from now. time to kill the old one
-				$this->doc = $newdoc;
-				// and make an xpath
-				$this->xpath = new DOMXPath($this->doc);
-			}
+			// no errors and we got a document back? excellent. this will be our new baby from now. time to kill the old one
+			
+			// get the old document URI
+			$documentUri = $this->doc->documentURI;
+			
+			// and assign the new document to the old one
+			$this->doc = $newdoc;
+			
+			// save the old document URI just in case
+			$this->doc->documentURI = $documentUri;
 		}
-		
-		libxml_use_internal_errors($luie);
 	}
 	
 	/**
@@ -679,44 +561,23 @@ class AgaviXmlConfigParser
 	 * @param      array An array of file names to validate against.
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
 	 * @since      0.11.0
 	 */
 	public function validateXmlschema(array $validationFiles = array())
 	{
-		$luie = libxml_use_internal_errors(true);
-		
 		foreach($validationFiles as $validationFile) {
 			if(!is_resource($validationFile) && !is_readable($validationFile)) {
-				libxml_use_internal_errors($luie);
-				throw new AgaviUnreadableException(
-					sprintf(
-						'XML Schema validation file "%s" for configuration file "%s" does not exist or is unreadable',
-						$validationFile,
-						$this->path
-					)
-				);
+				throw new AgaviUnreadableException(sprintf('XML Schema validation file "%s" for configuration file "%s" does not exist or is unreadable', $validationFile, $this->path));
 			}
 			
 			// gotta do the @ to suppress warnings when the schema cannot be found
-			if(!@$this->doc->schemaValidate($validationFile)) {
-				$errors = array();
-				foreach(libxml_get_errors() as $error) {
-					$errors[] = sprintf("Line %d: %s", $error->line, $error->message);
-				}
-				libxml_clear_errors();
-				libxml_use_internal_errors($luie);
-				throw new AgaviParseException(
-					sprintf(
-						'XML Schema validation of configuration file "%s" failed due to the following error%s: ' . "\n\n%s", 
-						$this->path, 
-						count($errors) > 1 ? 's' : '', 
-						implode("\n", $errors)
-					)
-				);
+			try {
+				@$this->doc->schemaValidate($validationFile);
+			} catch(DOMException $dome) {
+				throw new AgaviParseException(sprintf('XML Schema validation of configuration file "%s" failed: %s', $this->path, $dome->getMessage()));
 			}
 		}
-		
-		libxml_use_internal_errors($luie);
 	}
 	
 	/**
@@ -725,32 +586,18 @@ class AgaviXmlConfigParser
 	 * @param      array An array of schema documents to validate against.
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
 	 * @since      1.0.0
 	 */
 	public function validateXmlschemaSource(array $validationSources = array())
 	{
-		$luie = libxml_use_internal_errors(true);
-		
 		foreach($validationSources as $validationSource) {
-			if(!@$this->doc->schemaValidateSource($validationSource)) {
-				$errors = array();
-				foreach(libxml_get_errors() as $error) {
-					$errors[] = sprintf("Line %d: %s", $error->line, $error->message);
-				}
-				libxml_clear_errors();
-				libxml_use_internal_errors($luie);
-				throw new AgaviParseException(
-					sprintf(
-						'XML Schema validation of configuration file "%s" failed due to the following error%s: ' . "\n\n%s",
-						$this->path,
-						count($errors) > 1 ? 's' : '',
-						implode("\n", $errors)
-					)
-				);
+			try {
+				@$this->doc->schemaValidateSource($validationSource);
+			} catch(DOMException $dome) {
+				throw new AgaviParseException(sprintf('XML Schema validation of configuration file "%s" failed: ' . "\n\n%s", $this->path, $dome->getMessage()));
 			}
 		}
-		
-		libxml_use_internal_errors($luie);
 	}
 	
 	/**
@@ -759,44 +606,23 @@ class AgaviXmlConfigParser
 	 * @param      array An array of file names to validate against.
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
 	 * @since      0.11.0
 	 */
 	public function validateRelaxng(array $validationFiles = array())
 	{
-		$luie = libxml_use_internal_errors(true);
-		
 		foreach($validationFiles as $validationFile) {
 			if(!is_readable($validationFile)) {
-				libxml_use_internal_errors($luie);
-				throw new AgaviUnreadableException(
-					sprintf(
-						'RELAX NG validation file "%s" for configuration file "%s" does not exist or is unreadable',
-						$validationFile,
-						$this->path
-					)
-				);
+				throw new AgaviUnreadableException(sprintf('RELAX NG validation file "%s" for configuration file "%s" does not exist or is unreadable', $validationFile, $this->path));
 			}
 			
 			// gotta do the @ to suppress warnings when the schema cannot be found
-			if(!@$this->doc->relaxNGValidate($validationFile)) {
-				$errors = array();
-				foreach(libxml_get_errors() as $error) {
-					$errors[] = sprintf("Line %d: %s", $error->line, $error->message);
-				}
-				libxml_clear_errors();
-				libxml_use_internal_errors($luie);
-				throw new AgaviParseException(
-					sprintf(
-						'RELAX NG validation of configuration file "%s" failed due to the following error%s: ' . "\n\n%s", 
-						$this->path, 
-						count($errors) > 1 ? 's' : '', 
-						implode("\n", $errors)
-					)
-				);
+			try {
+				@$this->doc->relaxNGValidate($validationFile);
+			} catch(DOMException $dome) {
+				throw new AgaviParseException(sprintf('RELAX NG validation of configuration file "%s" failed: ' . "\n\n%s", $this->path, $dome->getMessage()));
 			}
 		}
-		
-		libxml_use_internal_errors($luie);
 	}
 	
 	/**
@@ -805,14 +631,15 @@ class AgaviXmlConfigParser
 	 * @param      array An array of file names to validate against.
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
 	 * @since      0.11.0
 	 */
 	public function validateSchematron(array $validationFiles = array())
 	{
 		// first, we load the schematron implementation. this is an XSL document that is used to transform a .sch file to another XSL document that is then used to transform the input document. the result is informational output about the validation, which in our case must be valid ISO SVRL, an XML schema validation reporting format
-		$schematronIsoSvrlImplementation = new DOMDocument();
+		$schematronIsoSvrlImplementation = new AgaviXmlConfigDomDocument();
 		$schematronIsoSvrlImplementation->load(AgaviConfig::get('core.agavi_dir') . '/config/schematron/iso_svrl.xsl');
-		$schematron = new XSLTProcessor();
+		$schematron = new AgaviXmlConfigXsltProcessor();
 		$schematron->importStylesheet($schematronIsoSvrlImplementation);
 		// set some info (config file path, context name, environment name) as params
 		// first arg is the namespace URI, which PHP doesn't support. awesome. see http://bugs.php.net/bug.php?id=30622 for the sad details
@@ -823,115 +650,54 @@ class AgaviXmlConfigParser
 			'agavi.context' => $this->context,
 		));
 		
-		$luie = libxml_use_internal_errors(true);
-		
 		// loop over all validation files. those are .sch schematron schemas, which we transform to an XSL document that is then used to validate the source document :)
 		foreach($validationFiles as $href) {
 			if(!is_readable($href)) {
-				libxml_use_internal_errors($luie);
-				throw new AgaviUnreadableException(
-					sprintf(
-						'Schematron validation file "%s" for configuration file "%s" does not exist or is unreadable',
-						$href,
-						$this->path
-					)
-				);
+				throw new AgaviUnreadableException(sprintf('Schematron validation file "%s" for configuration file "%s" does not exist or is unreadable', $href, $this->path));
 			}
 			
 			// load the .sch file
-			$sch = new DomDocument();
-			$sch->load($href);
-			if(libxml_get_last_error() !== false) {
-				$errors = array();
-				foreach(libxml_get_errors() as $error) {
-					$errors[] = $error->message;
-				}
-				libxml_clear_errors();
-				libxml_use_internal_errors($luie);
-				throw new AgaviParseException(
-					sprintf(
-						'Schematron validation of configuration file "%s" failed due to the following error%s that occured while loading schema file "%s": ' . "\n\n%s", 
-						$this->path, 
-						count($errors) > 1 ? 's' : '', 
-						$href,
-						implode("\n", $errors)
-					)
-				);
+			try {
+				$sch = new AgaviXmlConfigDomDocument();
+				$sch->load($href);
+			} catch(DOMException $dome) {
+				throw new AgaviParseException(sprintf('Schematron validation of configuration file "%s" failed: Could not load schema file "%s": %s', $this->path, $href, $dome->getMessage()));
 			}
 			
 			// is it an ISO Schematron file?
 			if(!$sch->documentElement || $sch->documentElement->namespaceURI != self::SCHEMATRON_ISO_NAMESPACE) {
-				libxml_use_internal_errors($luie);
-				throw new AgaviParseException(
-					sprintf(
-						'Schematron validation of configuration file "%s" failed because schema file "%s" is invalid', 
-						$this->path, 
-						$href
-					)
-				);
+				throw new AgaviParseException(sprintf('Schematron validation of configuration file "%s" failed because schema file "%s" is invalid', $this->path, $href));
 			}
 			
 			// transform the .sch file to a validation stylesheet using the schematron implementation
-			$schema = $schematron->transformToDoc($sch);
-			if($schema) {
-				// it transformed fine. but did we get a proper stylesheet instance at all? wrong namespaces can lead to empty docs that only have an XML prolog
-				if(!$schema->documentElement || $schema->documentElement->namespaceURI != self::XSL_NAMESPACE_1999) {
-					libxml_use_internal_errors($luie);
-					throw new AgaviParseException(
-						sprintf(
-							'Schematron validation of configuration file "%s" failed because schema file "%s" resulted in an invalid stylesheet', 
-							$this->path, 
-							$href
-						)
-					);
-				}
-				
-				// all fine so far. let us import the stylesheet
-				$validator = new XSLTProcessor();
-				$validator->importStylesheet($schema);
+			try {
+				$schema = $schematron->transformToDoc($sch);
+			} catch(Exception $e) {
+				throw new AgaviParseException(sprintf('Schematron validation of configuration file "%s" failed: Could not transform schema file "%s": %s', $this->path, $href, $e->getMessage()));
 			}
 			
-			if(libxml_get_last_error() !== false) {
-				$errors = array();
-				foreach(libxml_get_errors() as $error) {
-					$errors[] = $error->message;
-				}
-				libxml_clear_errors();
-				libxml_use_internal_errors($luie);
-				throw new AgaviParseException(
-					sprintf(
-						'Schematron validation of configuration file "%s" failed due to the following error%s that occured while processing the schema file "%s": ' . "\n\n%s", 
-						$this->path, 
-						count($errors) > 1 ? 's' : '', 
-						$href,
-						implode("\n", $errors)
-					)
-				);
+			// it transformed fine. but did we get a proper stylesheet instance at all? wrong namespaces can lead to empty docs that only have an XML prolog
+			if(!$schema->documentElement || $schema->documentElement->namespaceURI != self::XSL_NAMESPACE_1999) {
+				throw new AgaviParseException(sprintf('Schematron validation of configuration file "%s" failed because schema file "%s" resulted in an invalid stylesheet', $this->path, $href));
+			}
+			
+			// all fine so far. let us import the stylesheet
+			try {
+				$validator = new AgaviXmlConfigXsltProcessor();
+				$validator->importStylesheet($schema);
+			} catch(Exception $e) {
+				throw new AgaviParseException(sprintf('Schematron validation of configuration file "%s" failed: Could not process the schema file "%s": %s', $this->path, $href, $e->getMessage()));
 			}
 			
 			// run the validation by transforming our document using the generated validation stylesheet
-			$result = $validator->transformToDoc($this->doc);
-			
-			if(libxml_get_last_error() !== false) {
-				$errors = array();
-				foreach(libxml_get_errors() as $error) {
-					$errors[] = $error->message;
-				}
-				libxml_clear_errors();
-				libxml_use_internal_errors($luie);
-				throw new AgaviParseException(
-					sprintf(
-						'Schematron validation of configuration file "%s" failed due to the following error%s that occured while validating the document against the schema file "%s": ' . "\n\n%s", 
-						$this->path, 
-						count($errors) > 1 ? 's' : '', 
-						$href,
-						implode("\n", $errors)
-					)
-				);
+			try {
+				$result = $validator->transformToDoc($this->doc);
+			} catch(Exception $e) {
+				throw new AgaviParseException(sprintf('Schematron validation of configuration file "%s" failed: Could not validate the document against the schema file "%s": %s', $this->path, $href, $e->getMessage()));
 			}
 			
 			// validation ran okay, now we need to look at the result document to see if there are errors
-			$xpath = new DOMXPath($result);
+			$xpath = $result->getXpath();
 			$xpath->registerNamespace('svrl', self::SVRL_ISO_NAMESPACE);
 			
 			$results = $xpath->query('//svrl:failed-assert | //svrl:successful-report');
@@ -939,19 +705,9 @@ class AgaviXmlConfigParser
 				// TODO: grab error info from <svrl:failed-assert> and <svrl:successful-report> elements. note that the child <svrl:text> element is optional. also, the <sch:pattern> can have a "name" attribute, but that value never occurs in an SVRL result...
 				$errors = array();
 				
-				libxml_use_internal_errors($luie);
-				throw new AgaviParseException(
-					sprintf(
-						'Schematron validation of configuration file "%s" failed due to the following error%s:' . "\n\n%s",
-						$this->path,
-						count($errors) > 1 ? 's' : '', 
-						implode("\n", $errors)
-					)
-				);
+				throw new AgaviParseException(sprintf('Schematron validation of configuration file "%s" failed due to the following error%s:' . "\n\n%s", $this->path, count($errors) > 1 ? 's' : '', implode("\n", $errors)));
 			}
 		}
-		
-		libxml_use_internal_errors($luie);
 	}
 }
 
