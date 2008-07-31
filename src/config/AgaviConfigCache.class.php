@@ -297,8 +297,14 @@ final class AgaviConfigCache
 		require($agaviDir . '/config/util/dom/AgaviXmlConfigDomNotation.class.php');
 		require($agaviDir . '/config/util/dom/AgaviXmlConfigDomProcessingInstruction.class.php');
 		require($agaviDir . '/config/util/dom/AgaviXmlConfigDomText.class.php');
-		require($agaviDir . '/config/util/xsl/AgaviXmlConfigXsltProcessor.class.php');
-
+		// extended XSL* classes
+		if(!AgaviConfig::get('core.skip_config_transformations', false)) {
+			if(!extension_loaded('xsl')) {
+				throw new AgaviConfigurationException('The XSL extension is required for performing transformations in the configuration system; transformations may be disabled by setting the core.skip_config_transformations directive');
+			}
+			require($agaviDir . '/config/util/xsl/AgaviXmlConfigXsltProcessor.class.php');
+		}
+		
 		// manually create our config_handlers.xml handler
 		self::$handlers['config_handlers.xml'] = array(
 			'class' => 'AgaviConfigHandlersConfigHandler',

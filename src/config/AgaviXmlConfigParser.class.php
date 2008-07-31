@@ -316,8 +316,10 @@ class AgaviXmlConfigParser
 		// prepare the doc (resolve xincludes, validate against XSI declarations and evaluate <configuration> attributes for environment and context targeting)
 		$this->prepare();
 		
-		// perform XSL transformations
-		$this->transform($transformationInfo);
+		if(!AgaviConfig::get('core.skip_config_transformations', false)) {
+			// perform XSL transformations
+			$this->transform($transformationInfo);
+		}
 		
 		// validate against WXS/RNG/SCH
 		$this->validate($validationInfo);
@@ -661,6 +663,10 @@ class AgaviXmlConfigParser
 	 */
 	public function validateSchematron(array $validationFiles = array())
 	{
+		if(AgaviConfig::get('core.skip_config_transformations', false)) {
+			return;
+		}
+		
 		// first, we load the schematron implementation. this is an XSL document that is used to transform a .sch file to another XSL document that is then used to transform the input document. the result is informational output about the validation, which in our case must be valid ISO SVRL, an XML schema validation reporting format
 		$schematronIsoSvrlImplementation = new AgaviXmlConfigDomDocument();
 		$schematronIsoSvrlImplementation->load(AgaviConfig::get('core.agavi_dir') . '/config/schematron/iso_svrl.xsl');
