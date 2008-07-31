@@ -31,7 +31,9 @@
  */
 class AgaviXmlConfigParser
 {
-	const AGAVI_ENVELOPE_NAMESPACE_1_0 = 'http://agavi.org/agavi/1.0/config';
+	const AGAVI_ENVELOPE_NAMESPACE_0_11 = 'http://agavi.org/agavi/1.0/config';
+	
+	const AGAVI_ENVELOPE_NAMESPACE_1_0 = 'http://agavi.org/agavi/config/1.0';
 	
 	const AGAVI_ENVELOPE_NAMESPACE_LATEST = self::AGAVI_ENVELOPE_NAMESPACE_1_0;
 	
@@ -52,6 +54,7 @@ class AgaviXmlConfigParser
 	 *                   keys and their associated XPath namespace prefix (value).
 	 */
 	public static $agaviEnvelopeNamespaces = array(
+		self::AGAVI_ENVELOPE_NAMESPACE_0_11 => 'agavi_envelope_0_11',
 		self::AGAVI_ENVELOPE_NAMESPACE_1_0 => 'agavi_envelope_1_0',
 	);
 	
@@ -103,6 +106,25 @@ class AgaviXmlConfigParser
 	public static function isAgaviEnvelopeNamespace($namespaceUri)
 	{
 		return isset(self::$agaviEnvelopeNamespaces[$namespaceUri]);
+	}
+	
+	/**
+	 * Retrieves an XPath namespace prefix based on a given namespace URI.
+	 *
+	 * @param      string The namespace URI.
+	 *
+	 * @return     string The prefix for the namespace URI, or null if none
+	 *                    exists.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public static function getAgaviEnvelopePrefix($namespaceUri)
+	{
+		if(self::isAgaviEnvelopeNamespace($namespaceUri)) {
+			return self::$agaviEnvelopeNamespaces[$namespaceUri];
+		}
+		return null;
 	}
 	
 	/**
@@ -203,6 +225,9 @@ class AgaviXmlConfigParser
 		
 		// cleanup attempt
 		unset($docs);
+		
+		// set the pseudo-document URI
+		$retval->documentURI = $path;
 		
 		return $retval;
 	}
@@ -396,7 +421,7 @@ class AgaviXmlConfigParser
 				}
 				if($matched) {
 					// if all was fine, we set the attribute. the element will then be kept in the merged result doc later
-					$configuration->setAttributeNS(self::AGAVI_ENVELOPE_NAMESPACE_LATEST, 'matched', 'true');
+					$configuration->setAttributeNS(self::AGAVI_ENVELOPE_NAMESPACE_LATEST, 'agavi:matched', 'true');
 				}
 			}
 		}

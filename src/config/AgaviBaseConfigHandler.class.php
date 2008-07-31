@@ -35,49 +35,6 @@
 abstract class AgaviBaseConfigHandler extends AgaviParameterHolder
 {
 	/**
-	 * Retrieve the parameter node values of the given item's parameters element.
-	 *
-	 * @param      ConfigValueHolder The node that contains a parameters chiild.
-	 * @param      array             As associative array of parameters that will
-	 *                               be overwritten if appropriate.
-	 * @param      boolean           Whether or not values should be literalized.
-	 *
-	 * @return     array An associative array of parameters
-	 *
-	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	protected function getItemParameters($itemNode, $oldValues = array(), $literalize = true)
-	{
-		$data = array();
-		if($itemNode->hasChildren('parameters')) {
-			foreach($itemNode->parameters as $node) {
-				if(!$node->hasAttribute('name')) {
-					// create a new entry in in the array and get they key of the new
-					// created entry (the last in the array). The value doesn't matter
-					// since it will be overwritten anyways
-					$data[] = 0;
-					end($data);
-					$name = key($data);
-				} else {
-					$name = $node->getAttribute('name');
-				}
-				if($node->hasChildren('parameters')) {
-					$data[$name] = (isset($oldValues[$name]) && is_array($oldValues[$name])) ? $oldValues[$name] : array();
-					$data[$name] = $this->getItemParameters($node, $data[$name], $literalize);
-				} else {
-					$data[$name] = $literalize ? AgaviToolkit::literalize($node->getValue()) : $node->getValue();
-				}
-			}
-		}
-		// we can NOT use array_merge here, since it would break numeric keys
-		foreach($data as $key => $value) {
-			$oldValues[$key] = $value;
-		}
-		return $oldValues;
-	}
-
-	/**
 	 * Generate the code for returning from execute().
 	 *
 	 * @param      mixed A string with the code, or an array of code lines.

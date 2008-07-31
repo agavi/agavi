@@ -52,7 +52,7 @@ class AgaviConfigHandlersConfigHandler extends AgaviConfigHandler
 	{
 		// parse the config file
 		$configurations = $this->orderConfigurations(AgaviConfigCache::parseConfig($config, false, $this->getValidationFile(), $this->parser)->configurations, AgaviConfig::get('core.environment'));
-		
+		                                                                                                                                                                         
 		// init our data arrays
 		$handlers = array();
 		

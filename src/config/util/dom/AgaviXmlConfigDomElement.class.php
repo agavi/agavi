@@ -33,6 +33,7 @@ class AgaviXmlConfigDomElement extends DOMElement implements IteratorAggregate
 	{
 		// what to return here? name with prefix? no.
 		// but... element name, or with ns prefix?
+		return $this->nodeName;
 	}
 	
 	public function getValue()
@@ -54,35 +55,87 @@ class AgaviXmlConfigDomElement extends DOMElement implements IteratorAggregate
 	public function getIterator()
 	{
 		// should only pull elements from the default ns
-		// remember to handle special case where we are the document element and an agavi config - must find <configuration> elements from the envelope ns here
-		return $this->ownerDocument->getXpath()->query('child::element()', $this);
+		$prefix = $this->ownerDocument->getDefaultNamespacePrefix();
+		if($prefix) {
+			return $this->ownerDocument->getXpath()->query(sprintf('child::%s:element()', $prefix), $this);
+		} else {
+			return $this->ownerDocument->getXpath()->query('child::element()', $this);
+		}
 	}
 	
-	public function hasChildren($defaultNamespaceOnly = false)
+	protected function singularize($name)
+	{
+		$names = preg_split('#([_\-\.])#', $name, -1, PREG_SPLIT_DELIM_CAPTURE);
+		$names[count($names) - 1] = AgaviInflector::singularize(end($names));
+		return implode('', $names);
+	}
+	
+	public function countChildren($name, $namespaceUri = null)
 	{
 		// check for child elements(!) using XPath
 		// if arg is true, then only check for elements from our default namespace
-		// remember to handle special case where we are the document element and an agavi config - must find <configuration> elements from the envelope ns here
+		$namespaceUri = ($namespaceUri === null ? $this->ownerDocument->getDefaultNamespaceUri() : $namespaceUri);
+		$singularName = $this->singularize($name);
+		
+		$xpath = $this->ownerDocument->getXpath();
+		if($namespaceUri) {
+			return (int)$xpath->evaluate(sprintf('count(child::*[local-name() = "%2$s" and namespace-uri() = "%3$s"]) + count(child::*[local-name() = "%1$s" and namespace-uri() = "%3$s"]/*[local-name() = "%2$s" and namespace-uri() = "%3$s"])', $name, $singularName, $namespaceUri), $this);
+		} else {
+			return (int)$xpath->evaluate(sprintf('count(%2$s) + count(%1$s/%2$s)', $name, $singularName), $this);
+		}
 	}
 	
-	public function getChildren($defaultNamespaceOnly = false)
+	public function hasChildren($name, $namespaceUri = null)
+	{
+		return $this->countChildren($name, $namespaceUri) !== 0;
+	}
+	
+	public function getChildren($name, $namespaceUri = null)
 	{
 		// check for child elements(!) using XPath
 		// if arg is true, then only check for elements from our default namespace
-		// remember to handle special case where we are the document element and an agavi config - must find <configuration> elements from the envelope ns here
+		// if namespace uri is null, use default ns. if empty string, use no ns
+		$namespaceUri = ($namespaceUri === null ? $this->ownerDocument->getDefaultNamespaceUri() : $namespaceUri);
+		$singularName = $this->singularize($name);
+		
+		$xpath = $this->ownerDocument->getXpath();
+		if($namespaceUri) {
+			return $xpath->query(sprintf('child::*[local-name() = "%2$s" and namespace-uri() = "%3$s"] | child::*[local-name() = "%1$s" and namespace-uri() = "%3$s"]/*[local-name() = "%2$s" and namespace-uri() = "%3$s"]', $name, $singularName, $namespaceUri), $this);
+		} else {
+			return $xpath->query(sprintf('%1$s/%2$s | %2$s', $name, $singularName), $this);
+		}
 	}
 	
 	public function hasChild($name, $namespaceUri = null)
 	{
 		// if namespace uri is null, use default ns. if empty string, use no ns
-		// remember to handle special case where we are the document element and an agavi config - must find <configuration> elements from the envelope ns here
+		return $this->countChildren($name) === 1;
+		
+		// XXX: not necessary for single elements?
 		// remember singular/plural support
 	}
 	
+	/**
+	 * Returns a single child element with a given name.
+	 *
+	 * @param      string The name of the element.
+	 * @param      string The namespace URI. If null, the document default
+	 *                    namespace will be used. If an empty string, no namespace
+	 *                    will be used.
+	 *
+	 * @return     DOMElement The child element, or null if none xists.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
+	 */
 	public function getChild($name, $namespaceUri = null)
 	{
-		// if namespace uri is null, use default ns. if empty string, use no ns
-		// remember to handle special case where we are the document element and an agavi config - must find <configuration> elements from the envelope ns here
+		$list = $this->getChildren($name, $namespaceUri);
+		
+		if($list->length > 0) {
+			return $list->item(0);
+		}
+		return null;
 	}
 	
 	/**
@@ -140,9 +193,24 @@ class AgaviXmlConfigDomElement extends DOMElement implements IteratorAggregate
 		return $retval;
 	}
 	
-	public function getAgaviParameters()
+	public function getAgaviParameters(array $existing = array())
 	{
-		return $this->ownerDocument->xpath->query('child::aens:parameters | child::aens:parameter');
+		if($this->ownerDocument->isAgaviConfiguration()) {
+			$elements = $this->getChildren('parameters', AgaviXmlConfigParser::AGAVI_ENVELOPE_NAMESPACE_LATEST);
+			$result = array();
+			
+			foreach($elements as $element) {
+				if($element->hasChildren('parameters', AgaviXmlConfigParser::AGAVI_ENVELOPE_NAMESPACE_LATEST)) {
+					$result[$element->getAttribute('name')] = $element->getAgaviParameters();
+				} else {
+					$result[$element->getAttribute('name')] = $element->getValue();
+				}
+			}
+			
+			return array_merge($existing, $result);
+		} else {
+			return $existing;
+		}
 	}
 }
 

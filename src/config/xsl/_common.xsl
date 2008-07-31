@@ -2,11 +2,14 @@
 <xsl:stylesheet
 	version="1.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-	xmlns:agavi10="http://agavi.org/agavi/1.0/config"
->
+	xmlns:envelope_0_11="http://agavi.org/agavi/1.0/config"
+	xmlns:envelope_1_0="http://agavi.org/agavi/config/1.0">
 	
-	<xsl:template match="agavi10:configurations | agavi10:configuration | agavi10:sandbox | agavi10:parameters | agavi10:parameter">
-		<xsl:element name="{local-name()}" namespace="{namespace-uri()}">
+	<xsl:variable name="envelope_0_11" select="'http://agavi.org/agavi/1.0/config'" />
+	<xsl:variable name="envelope_1_0" select="'http://agavi.org/agavi/config/1.0'" />
+	
+	<xsl:template match="envelope_0_11:configurations | envelope_0_11:configuration | envelope_0_11:sandbox | envelope_0_11:parameters | envelope_0_11:parameter">
+		<xsl:element name="{local-name()}" namespace="{$envelope_1_0}">
 			<xsl:copy-of select="@*" />
 			<xsl:apply-templates />
 		</xsl:element>

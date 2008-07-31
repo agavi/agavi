@@ -30,7 +30,7 @@
  */
 class AgaviXmlFactoryConfigHandler extends AgaviXmlConfigHandler
 {
-	const XML_NAMESPACE = 'http://agavi.org/agavi/1.0/config/factories';
+	const NAMESPACE = 'http://agavi.org/agavi/config/factories/1.0';
 	
 	/**
 	 * Execute this configuration handler.
@@ -47,20 +47,10 @@ class AgaviXmlFactoryConfigHandler extends AgaviXmlConfigHandler
 	 */
 	public function execute(DOMDocument $doc)
 	{
-		echo ($doc->saveXML());
-		
-		// $xsl = new DOMDocument();
-		// $xsl->load(AgaviConfig::get('core.system_config_dir') . '/../xsl/factories.xsl');
-		// 
-		// $xslt = new XSLTProcessor();
-		// $xslt->importStylesheet($xsl);
-		// 
-		// echo ($xslt->transformToDoc($doc)->saveXML());
-		die();
-		
 		// set up our default namespace
-		$doc->setDefaultNamespace(self::XML_NAMESPACE, 'factories');
+		$doc->setDefaultNamespace(self::NAMESPACE, 'factories');
 		
+		$config = $doc->documentURI;
 		$data = array();
 		
 		// The order of this initialisiation code is fixed, to not change
@@ -198,12 +188,14 @@ class AgaviXmlFactoryConfigHandler extends AgaviXmlConfigHandler
 			'controller', // startup()
 		);
 		
-		foreach($doc->getConfigurations() as $cfg) {
+		foreach($doc->getConfigurationElements() as $configuration) {
 			foreach($factories as $factory => $info) {
-				if($info['required'] && isset($cfg->$factory)) {
+				if(is_array($info) && $info['required'] && $configuration->hasChild($factory)) {
+					$element = $configuration->getChild($factory);
+					
 					$data[$factory] = isset($data[$factory]) ? $data[$factory] : array('class' => null, 'params' => array());
-					$data[$factory]['class'] = $cfg->$factory->getAttribute('class', $data[$factory]['class']);
-					$data[$factory]['params'] = $this->getItemParameters($cfg->$factory, $data[$factory]['params']);
+					$data[$factory]['class'] = $element->getAttribute('class', $data[$factory]['class']);
+					$data[$factory]['params'] = $element->getAgaviParameters($data[$factory]['params']);
 				}
 			}
 		}

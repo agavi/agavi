@@ -44,7 +44,7 @@ class AgaviXmlConfigXsltProcessor extends XSLTProcessor
 	 *
 	 * @param      DOMNode The node to transform.
 	 *
-	 * @return     DOMDocument The resulting DOMDocument.
+	 * @return     AgaviXmlConfigDomDocument The resulting DOMDocument.
 	 *
 	 * @author     Noah Fontes <noah.fontes@bitextender.com>
 	 * @since      1.0.0
