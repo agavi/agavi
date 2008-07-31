@@ -290,7 +290,10 @@ class AgaviController extends AgaviParameterHolder
 		
 		$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/actions/' . $actionName . 'Action.class.php';
 
-		if(!isset($loaded[$file]) && file_exists($file)) {
+		if(!isset($loaded[$file])) {
+			if(!is_readable($file)) {
+				throw new AgaviException('Could not find file for Action "' . $actionName . '" in module "' . $moduleName . '"');
+			}
 			require($file);
 			$loaded[$file] = true;
 
@@ -362,6 +365,9 @@ class AgaviController extends AgaviParameterHolder
 		$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/views/' . $viewName . 'View.class.php';
 
 		if(!isset($loaded[$file]) && file_exists($file)) {
+			if(!is_readable($file)) {
+				throw new AgaviException('Could not find file for View "' . $viewName . '" in module "' . $moduleName . '"');
+			}
 			require($file);
 			$loaded[$file] = true;
 			

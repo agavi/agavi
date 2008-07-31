@@ -13,4 +13,4 @@ SET AGAVI_SOURCE_DIRECTORY=@PEAR-DIR@/agavi
 :: Set this to the path to a PHP binary.
 SET PHP_EXECUTABLE=@PHP-BIN@
 
-%PHP_EXECUTABLE% -d memory_limit=4294967296 -f "%AGAVI_SOURCE_DIRECTORY%/build/agavi/script/agavi.php" -- --agavi-source-directory "%AGAVI_SOURCE_DIRECTORY%" %*
+%PHP_EXECUTABLE% -d memory_limit=4294967295 -f "%AGAVI_SOURCE_DIRECTORY%/build/agavi/script/agavi.php" -- --agavi-source-directory "%AGAVI_SOURCE_DIRECTORY%" %*
