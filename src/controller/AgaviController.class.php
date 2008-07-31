@@ -364,7 +364,7 @@ class AgaviController extends AgaviParameterHolder
 		$viewName = str_replace('.', '/', $viewName);
 		$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/views/' . $viewName . 'View.class.php';
 
-		if(!isset($loaded[$file]) && file_exists($file)) {
+		if(!isset($loaded[$file])) {
 			if(!is_readable($file)) {
 				throw new AgaviException('Could not find file for View "' . $viewName . '" in module "' . $moduleName . '"');
 			}
