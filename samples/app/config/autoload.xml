@@ -9,8 +9,6 @@
 			<autoload name="AgaviSampleAppLanguageRoutingCallback">%core.lib_dir%/routing/AgaviSampleAppLanguageRoutingCallback.class.php</autoload>
 			
 			<autoload name="AgaviSampleAppUser">%core.lib_dir%/user/AgaviSampleAppUser.class.php</autoload>
-			
-			<autoload name="AgaviXmlFactoryConfigHandler">%core.agavi_dir%/config/AgaviXmlFactoryConfigHandler.class.php</autoload>
 		</autoloads>
 	</configuration>
 </configurations>
