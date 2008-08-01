@@ -70,6 +70,19 @@ class AgaviXmlConfigDomElement extends DOMElement implements IteratorAggregate
 		return implode('', $names);
 	}
 	
+	/**
+	 * Count the number of child elements with a given name.
+	 *
+	 * @param      string The name of the element.
+	 * @param      string The namespace URI. If null, the document default
+	 *                    namespace will be used. If an empty string, no namespace
+	 *                    will be used.
+	 *
+	 * @return     int The number of child elements with the given name.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
+	 */
 	public function countChildren($name, $namespaceUri = null)
 	{
 		// check for child elements(!) using XPath
@@ -85,11 +98,39 @@ class AgaviXmlConfigDomElement extends DOMElement implements IteratorAggregate
 		}
 	}
 	
+	/**
+	 * Determine whether there is at least one instance of a child element with a
+	 * given name.
+	 *
+	 * @param      string The name of the element.
+	 * @param      string The namespace URI. If null, the document default
+	 *                    namespace will be used. If an empty string, no namespace
+	 *                    will be used.
+	 *
+	 * @return     bool True if one or more child elements with the given name
+	 *                  exist, false otherwise.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
+	 */
 	public function hasChildren($name, $namespaceUri = null)
 	{
 		return $this->countChildren($name, $namespaceUri) !== 0;
 	}
 	
+	/**
+	 * Retrieve all children with the given element name.
+	 *
+	 * @param      string The name of the element.
+	 * @param      string The namespace URI. If null, the document default
+	 *                    namespace will be used. If an empty string, no namespace
+	 *                    will be used.
+	 *
+	 * @return     DOMNodeList A list of the child elements.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
+	 */
 	public function getChildren($name, $namespaceUri = null)
 	{
 		// check for child elements(!) using XPath
@@ -106,6 +147,21 @@ class AgaviXmlConfigDomElement extends DOMElement implements IteratorAggregate
 		}
 	}
 	
+	/**
+	 * Determine whether this element has a particular child element. This method
+	 * succeeds only when there is exactly one child element with the given name.
+	 *
+	 * @param      string The name of the element.
+	 * @param      string The namespace URI. If null, the document default
+	 *                    namespace will be used. If an empty string, no namespace
+	 *                    will be used.
+	 *
+	 * @return     bool True if there is exactly one instance of an element with
+	 *                  the given name; false otherwise.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
+	 */
 	public function hasChild($name, $namespaceUri = null)
 	{
 		// if namespace uri is null, use default ns. if empty string, use no ns
@@ -116,7 +172,7 @@ class AgaviXmlConfigDomElement extends DOMElement implements IteratorAggregate
 	}
 	
 	/**
-	 * Returns a single child element with a given name.
+	 * Return a single child element with a given name.
 	 *
 	 * @param      string The name of the element.
 	 * @param      string The namespace URI. If null, the document default
@@ -193,24 +249,46 @@ class AgaviXmlConfigDomElement extends DOMElement implements IteratorAggregate
 		return $retval;
 	}
 	
-	public function getAgaviParameters(array $existing = array())
+	/**
+	 * Retrieve all of the Agavi parameter elements associated with this
+	 * element.
+	 *
+	 * @param      array An array of existing parameters.
+	 * @param      bool  Whether or not input values should be literalized once
+	 *                   they are read.
+	 *
+	 * @return     array The complete array of parameters.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function getAgaviParameters(array $existing = array(), $literalize = true)
 	{
+		$result = $existing;
+		
 		if($this->ownerDocument->isAgaviConfiguration()) {
 			$elements = $this->getChildren('parameters', AgaviXmlConfigParser::AGAVI_ENVELOPE_NAMESPACE_LATEST);
-			$result = array();
 			
 			foreach($elements as $element) {
-				if($element->hasChildren('parameters', AgaviXmlConfigParser::AGAVI_ENVELOPE_NAMESPACE_LATEST)) {
-					$result[$element->getAttribute('name')] = $element->getAgaviParameters();
+				$key = null;
+				if(!$element->hasAttribute('name')) {
+					$result[] = null;
+					end($result);
+					$key = key($result);
 				} else {
-					$result[$element->getAttribute('name')] = $element->getValue();
+					$key = $element->getAttribute('name');
+				}
+				
+				if($element->hasChildren('parameters', AgaviXmlConfigParser::AGAVI_ENVELOPE_NAMESPACE_LATEST)) {
+					$result[$key] = isset($result[$key]) && is_array($result[$key]) ? $result[$key] : array();
+					$result[$key] = $element->getAgaviParameters($result[$key], $literalize);
+				} else {
+					$result[$key] = $literalize ? AgaviToolkit::literalize($element->getValue()) : $element->getValue();
 				}
 			}
-			
-			return array_merge($existing, $result);
-		} else {
-			return $existing;
 		}
+		
+		return $result;
 	}
 }
 
