@@ -31,11 +31,15 @@
  */
 class AgaviXmlConfigParser
 {
-	const AGAVI_ENVELOPE_NAMESPACE_0_11 = 'http://agavi.org/agavi/1.0/config';
+	const NAMESPACE_AGAVI_ENVELOPE_0_11 = 'http://agavi.org/agavi/1.0/config';
 	
-	const AGAVI_ENVELOPE_NAMESPACE_1_0 = 'http://agavi.org/agavi/config/1.0';
+	const NAMESPACE_AGAVI_ENVELOPE_1_0 = 'http://agavi.org/agavi/config/envelope/1.0';
 	
-	const AGAVI_ENVELOPE_NAMESPACE_LATEST = self::AGAVI_ENVELOPE_NAMESPACE_1_0;
+	const NAMESPACE_AGAVI_ENVELOPE_LATEST = self::NAMESPACE_AGAVI_ENVELOPE_1_0;
+	
+	const NAMESPACE_AGAVI_ANNOTATION_1_0 = 'http://agavi.org/agavi/config/annotation/1.0';
+	
+	const NAMESPACE_AGAVI_ANNOTATION_LATEST = self::NAMESPACE_AGAVI_ANNOTATION_1_0;
 	
 	const VALIDATION_TYPE_XMLSCHEMA = 'xml_schema';
 	
@@ -43,19 +47,30 @@ class AgaviXmlConfigParser
 	
 	const VALIDATION_TYPE_SCHEMATRON = 'schematron';
 	
-	const SCHEMATRON_ISO_NAMESPACE = 'http://purl.oclc.org/dsdl/schematron';
+	const NAMESPACE_SCHEMATRON_ISO = 'http://purl.oclc.org/dsdl/schematron';
 	
-	const SVRL_ISO_NAMESPACE = 'http://purl.oclc.org/dsdl/svrl';
+	const NAMESPACE_SVRL_ISO = 'http://purl.oclc.org/dsdl/svrl';
 	
-	const XSL_NAMESPACE_1999 = 'http://www.w3.org/1999/XSL/Transform';
+	const NAMESPACE_XSL_1999 = 'http://www.w3.org/1999/XSL/Transform';
 	
 	/**
 	 * @var        array A list of XML namespaces for Agavi configuration files as
 	 *                   keys and their associated XPath namespace prefix (value).
 	 */
 	public static $agaviEnvelopeNamespaces = array(
-		self::AGAVI_ENVELOPE_NAMESPACE_0_11 => 'agavi_envelope_0_11',
-		self::AGAVI_ENVELOPE_NAMESPACE_1_0 => 'agavi_envelope_1_0',
+		self::NAMESPACE_AGAVI_ENVELOPE_0_11 => 'agavi_envelope_0_11',
+		self::NAMESPACE_AGAVI_ENVELOPE_1_0 => 'agavi_envelope_1_0',
+	);
+	
+	/**
+	 * @var        array A list of all XML namespaces that are used internally by
+	 *                   the configuration parser.
+	 */
+	public static $agaviNamespaces = array(
+		self::NAMESPACE_AGAVI_ENVELOPE_0_11 => 'agavi_envelope_0_11',
+		self::NAMESPACE_AGAVI_ENVELOPE_1_0 => 'agavi_envelope_1_0',
+		
+		self::NAMESPACE_AGAVI_ANNOTATION_1_0 => 'agavi_annotation_1_0'
 	);
 	
 	/**
@@ -109,6 +124,22 @@ class AgaviXmlConfigParser
 	}
 	
 	/**
+	 * Check if a given namespace URI is a valid Agavi namespace.
+	 *
+	 * @param      string The namespace URI.
+	 *
+	 * @return     bool True if the given URI is a valid namespace URI,
+	 *                  false otherwise.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public static function isAgaviNamespace($namespaceUri)
+	{
+		return isset(self::$agaviNamespaces[$namespaceUri]);
+	}
+	
+	/**
 	 * Retrieves an XPath namespace prefix based on a given namespace URI.
 	 *
 	 * @param      string The namespace URI.
@@ -119,12 +150,33 @@ class AgaviXmlConfigParser
 	 * @author     Noah Fontes <noah.fontes@bitextender.com>
 	 * @since      1.0.0
 	 */
-	public static function getAgaviEnvelopePrefix($namespaceUri)
+	public static function getAgaviNamespacePrefix($namespaceUri)
 	{
-		if(self::isAgaviEnvelopeNamespace($namespaceUri)) {
-			return self::$agaviEnvelopeNamespaces[$namespaceUri];
+		if(self::isAgaviNamespace($namespaceUri)) {
+			return self::$agaviNamespaces[$namespaceUri];
 		}
 		return null;
+	}
+	
+	/**
+	 * Register Agavi namespace prefixes in a given document.
+	 *
+	 * @param      AgaviXmlConfigDomDocument The document.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public static function registerAgaviNamespaces(AgaviXmlConfigDomDocument $document)
+	{
+		$xpath = $document->getXpath();
+		
+		foreach(self::$agaviNamespaces as $namespaceUri => $prefix) {
+			$xpath->registerNamespace($prefix, $namespaceUri);
+		}
+		
+		/* Register the latest namespaces. */
+		$xpath->registerNamespace('agavi_envelope_latest', self::NAMESPACE_AGAVI_ENVELOPE_LATEST);
+		$xpath->registerNamespace('agavi_annotation_latest', self::NAMESPACE_AGAVI_ANNOTATION_LATEST);
 	}
 	
 	/**
@@ -175,7 +227,7 @@ class AgaviXmlConfigParser
 		
 		if($isAgaviConfigFormat) {
 			// if it is an Agavi config, we'll create a new document with all files' <configuration> blocks inside
-			$retval->appendChild(new AgaviXmlConfigDomElement('configurations', null, self::AGAVI_ENVELOPE_NAMESPACE_LATEST));
+			$retval->appendChild(new AgaviXmlConfigDomElement('configurations', null, self::NAMESPACE_AGAVI_ENVELOPE_LATEST));
 			
 			// reverse the array - we want the parents first!
 			$docs = array_reverse($docs);
@@ -200,10 +252,10 @@ class AgaviXmlConfigParser
 			
 			// generic <configuration> first, then those with an environment attribute, then those with context, then those with both
 			$configurationOrder = array(
-				'count(self::node()[@agavi_envelope_1_0:matched and not(@environment) and not(@context)])',
-				'count(self::node()[@agavi_envelope_1_0:matched and @environment and not(@context)])',
-				'count(self::node()[@agavi_envelope_1_0:matched and not(@environment) and @context])',
-				'count(self::node()[@agavi_envelope_1_0:matched and @environment and @context])',
+				'count(self::node()[@agavi_annotation_latest:matched and not(@environment) and not(@context)])',
+				'count(self::node()[@agavi_annotation_latest:matched and @environment and not(@context)])',
+				'count(self::node()[@agavi_annotation_latest:matched and not(@environment) and @context])',
+				'count(self::node()[@agavi_annotation_latest:matched and @environment and @context])',
 			);
 			
 			// now we sort the nodes according to the rules
@@ -423,7 +475,7 @@ class AgaviXmlConfigParser
 				}
 				if($matched) {
 					// if all was fine, we set the attribute. the element will then be kept in the merged result doc later
-					$configuration->setAttributeNS(self::AGAVI_ENVELOPE_NAMESPACE_LATEST, 'agavi:matched', 'true');
+					$configuration->setAttributeNS(self::NAMESPACE_AGAVI_ANNOTATION_LATEST, 'agavi_annotation_latest:matched', 'true');
 				}
 			}
 		}
@@ -696,7 +748,7 @@ class AgaviXmlConfigParser
 			}
 			
 			// is it an ISO Schematron file?
-			if(!$sch->documentElement || $sch->documentElement->namespaceURI != self::SCHEMATRON_ISO_NAMESPACE) {
+			if(!$sch->documentElement || $sch->documentElement->namespaceURI != self::NAMESPACE_SCHEMATRON_ISO) {
 				throw new AgaviParseException(sprintf('Schematron validation of configuration file "%s" failed because schema file "%s" is invalid', $this->path, $href));
 			}
 			
@@ -708,7 +760,7 @@ class AgaviXmlConfigParser
 			}
 			
 			// it transformed fine. but did we get a proper stylesheet instance at all? wrong namespaces can lead to empty docs that only have an XML prolog
-			if(!$schema->documentElement || $schema->documentElement->namespaceURI != self::XSL_NAMESPACE_1999) {
+			if(!$schema->documentElement || $schema->documentElement->namespaceURI != self::NAMESPACE_XSL_1999) {
 				throw new AgaviParseException(sprintf('Schematron validation of configuration file "%s" failed because schema file "%s" resulted in an invalid stylesheet', $this->path, $href));
 			}
 			
@@ -729,7 +781,7 @@ class AgaviXmlConfigParser
 			
 			// validation ran okay, now we need to look at the result document to see if there are errors
 			$xpath = $result->getXpath();
-			$xpath->registerNamespace('svrl', self::SVRL_ISO_NAMESPACE);
+			$xpath->registerNamespace('svrl', self::NAMESPACE_SVRL_ISO);
 			
 			$results = $xpath->query('//svrl:failed-assert | //svrl:successful-report');
 			if($results->length) {

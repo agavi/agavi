@@ -267,7 +267,7 @@ class AgaviXmlConfigDomElement extends DOMElement implements IteratorAggregate
 		$result = $existing;
 		
 		if($this->ownerDocument->isAgaviConfiguration()) {
-			$elements = $this->getChildren('parameters', AgaviXmlConfigParser::AGAVI_ENVELOPE_NAMESPACE_LATEST);
+			$elements = $this->getChildren('parameters', AgaviXmlConfigParser::NAMESPACE_AGAVI_ENVELOPE_LATEST);
 			
 			foreach($elements as $element) {
 				$key = null;
@@ -279,7 +279,7 @@ class AgaviXmlConfigDomElement extends DOMElement implements IteratorAggregate
 					$key = $element->getAttribute('name');
 				}
 				
-				if($element->hasChildren('parameters', AgaviXmlConfigParser::AGAVI_ENVELOPE_NAMESPACE_LATEST)) {
+				if($element->hasChildren('parameters', AgaviXmlConfigParser::NAMESPACE_AGAVI_ENVELOPE_LATEST)) {
 					$result[$key] = isset($result[$key]) && is_array($result[$key]) ? $result[$key] : array();
 					$result[$key] = $element->getAgaviParameters($result[$key], $literalize);
 				} else {

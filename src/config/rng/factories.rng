@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <grammar xmlns="http://relaxng.org/ns/structure/1.0"
-	xmlns:factories="http://agavi.org/agavi/config/factories/1.0"
-	ns="http://agavi.org/agavi/config/factories/1.0"
+	xmlns:factories_1_0="http://agavi.org/agavi/config/item/factories/1.0"
+	ns="http://agavi.org/agavi/config/item/factories/1.0"
 	datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
 	
 	<include href="_common.rng" />

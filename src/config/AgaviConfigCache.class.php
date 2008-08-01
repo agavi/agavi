@@ -111,7 +111,7 @@ final class AgaviConfigCache
 			try {
 				$data = $handler->execute($doc);
 			} catch(AgaviException $e) {
-				throw new $e(sprintf("Compliation of configuration file '%s' failed for the following reason(s):\n\n%s", $config, $e->getMessage()));
+				throw new $e(sprintf("Compilation of configuration file '%s' failed for the following reason(s):\n\n%s", $config, $e->getMessage()));
 			}
 		} else {
 			$validationFile = null;

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <grammar xmlns="http://relaxng.org/ns/structure/1.0"
-	xmlns:agavi="http://agavi.org/agavi/config/1.0"
-	ns="http://agavi.org/agavi/config/1.0"
+	xmlns:envelope_1_0="http://agavi.org/agavi/config/envelope/1.0"
+	xmlns:annotation_1_0="http://agavi.org/agavi/config/annotation/1.0"
+	ns="http://agavi.org/agavi/config/envelope/1.0"
 	datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
 	
 	<!-- Structure -->
@@ -42,7 +43,7 @@
 	<define name="content-configuration">
 		<!-- XXX: Here, or no? -->
 		<optional>
-			<attribute name="agavi:matched">
+			<attribute name="annotation_1_0:matched">
 				<ref name="data-matched" />
 			</attribute>
 		</optional>
@@ -148,7 +149,8 @@
 					<except>
 						<nsName />
 						<nsName ns="" />
-						<nsName ns="http://agavi.org/agavi/config/1.0" />
+						<nsName ns="http://agavi.org/agavi/config/envelope/1.0" />
+						<nsName ns="http://agavi.org/agavi/config/annotation/1.0" />
 					</except>
 				</anyName>
 				<ref name="content-anything" />
@@ -163,7 +165,8 @@
 					<except>
 						<nsName />
 						<nsName ns="" />
-						<nsName ns="http://agavi.org/agavi/config/1.0" />
+						<nsName ns="http://agavi.org/agavi/config/envelope/1.0" />
+						<nsName ns="http://agavi.org/agavi/config/annotation/1.0" />
 					</except>
 				</anyName>
 			</attribute>

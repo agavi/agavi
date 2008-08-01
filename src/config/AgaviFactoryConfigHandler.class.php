@@ -32,7 +32,7 @@
  */
 class AgaviFactoryConfigHandler extends AgaviXmlConfigHandler
 {
-	const NAMESPACE = 'http://agavi.org/agavi/config/factories/1.0';
+	const NAMESPACE = 'http://agavi.org/agavi/config/item/factories/1.0';
 	
 	/**
 	 * Execute this configuration handler.

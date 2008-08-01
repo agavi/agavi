@@ -101,13 +101,7 @@ $errors[] = sprintf("Line %d: %s", $error->line, $error->message);
 		$this->xpath = new DOMXPath($this);
 		
 		if($this->isAgaviConfiguration()) {
-			/* Register Agavi namespace prefixes. */
-			foreach(AgaviXmlConfigParser::$agaviEnvelopeNamespaces as $namespaceUri => $prefix) {
-				$this->xpath->registerNamespace($prefix, $namespaceUri);
-			}
-			
-			/* Register the default envelope namespace. */
-			$this->xpath->registerNamespace('agavi_envelope_latest', AgaviXmlConfigParser::AGAVI_ENVELOPE_NAMESPACE_LATEST);
+			AgaviXmlConfigParser::registerAgaviNamespaces($this);
 		}
 		
 		return $result;
@@ -153,13 +147,7 @@ $errors[] = sprintf("Line %d: %s", $error->line, $error->message);
 		$this->xpath = new DOMXPath($this);
 		
 		if($this->isAgaviConfiguration()) {
-			/* Register Agavi namespace prefixes. */
-			foreach(AgaviXmlConfigParser::$agaviEnvelopeNamespaces as $namespaceUri => $prefix) {
-				$this->xpath->registerNamespace($prefix, $namespaceUri);
-			}
-			
-			/* Register the default envelope namespace. */
-			$this->xpath->registerNamespace('agavi_envelope_latest', AgaviXmlConfigParser::AGAVI_ENVELOPE_NAMESPACE_LATEST);
+			AgaviXmlConfigParser::registerAgaviNamespaces($this);
 		}
 		
 		return $result;
