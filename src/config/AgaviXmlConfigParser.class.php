@@ -58,9 +58,9 @@ class AgaviXmlConfigParser
 	
 	const STAGE_COMPILATION = 'compilation';
 	
-	const STEP_TRANSFORMATIONS_BEFORE = 'before-transformations';
+	const STEP_TRANSFORMATIONS_BEFORE = 'transformations_before';
 	
-	const STEP_TRANSFORMATIONS_AFTER = 'after-transformations';
+	const STEP_TRANSFORMATIONS_AFTER = 'transformations_after';
 	
 	/**
 	 * @var        array A list of XML namespaces for Agavi configuration files as

@@ -127,8 +127,8 @@
 	
 	<define name="data-step">
 		<choice>
-			<value type="string">before-transformations</value>
-			<value type="string">after-transformations</value>
+			<value type="string">transformations_before</value>
+			<value type="string">transformations_after</value>
 		</choice>
 	</define>
 	
