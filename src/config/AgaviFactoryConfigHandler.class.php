@@ -37,7 +37,7 @@ class AgaviFactoryConfigHandler extends AgaviXmlConfigHandler
 	/**
 	 * Execute this configuration handler.
 	 *
-	 * @param      DOMDocument The document to parse.
+	 * @param      AgaviXmlConfigDomDocument The document to parse.
 	 *
 	 * @return     string Data to be written to a cache file.
 	 *
@@ -45,15 +45,16 @@ class AgaviFactoryConfigHandler extends AgaviXmlConfigHandler
 	 *                                        improperly formatted.
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     Noah Fontes <noah.fontes@bitextender.com>
 	 * @since      0.11.0
 	 */
-	public function execute(DOMDocument $doc)
+	public function execute(AgaviXmlConfigDomDocument $document)
 	{
 		// set up our default namespace
-		$doc->setDefaultNamespace(self::NAMESPACE, 'factories');
+		$document->setDefaultNamespace(self::NAMESPACE, 'factories');
 		
-		$config = $doc->documentURI;
+		$config = $document->documentURI;
 		$data = array();
 		
 		// The order of this initialisiation code is fixed, to not change
@@ -191,7 +192,7 @@ class AgaviFactoryConfigHandler extends AgaviXmlConfigHandler
 			'controller', // startup()
 		);
 		
-		foreach($doc->getConfigurationElements() as $configuration) {
+		foreach($document->getConfigurationElements() as $configuration) {
 			foreach($factories as $factory => $info) {
 				if(is_array($info) && $info['required'] && $configuration->hasChild($factory)) {
 					$element = $configuration->getChild($factory);

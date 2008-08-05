@@ -48,7 +48,7 @@ interface AgaviIXmlConfigHandler
 	/**
 	 * Execute this configuration handler.
 	 *
-	 * @param      DOMDocument The document to parse.
+	 * @param      AgaviXmlConfigDomDocument The document to parse.
 	 *
 	 * @return     string Data to be written to a cache file.
 	 *
@@ -58,7 +58,7 @@ interface AgaviIXmlConfigHandler
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function execute(DOMDocument $doc);
+	public function execute(AgaviXmlConfigDomDocument $document);
 }
 
 ?>

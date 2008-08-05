@@ -51,9 +51,14 @@ class AgaviConfigParser
 	{
 		$parser = new AgaviXmlConfigParser($config, AgaviConfig::get('core.environment'), null);
 		
-		$validation = array();
+		$validation = array(
+			AgaviXmlConfigParser::STEP_TRANSFORMATIONS_BEFORE => array(),
+			AgaviXmlConfigParser::STEP_TRANSFORMATIONS_AFTER => array(
+				AgaviXmlConfigParser::VALIDATION_TYPE_XMLSCHEMA => array(),
+			),
+		);
 		if($validationFile !== null) {
-			$validation[AgaviXmlConfigParser::VALIDATION_TYPE_XMLSCHEMA] = array($validationFile);
+			$validation[AgaviXmlConfigParser::STEP_TRANSFORMATIONS_AFTER][AgaviXmlConfigParser::VALIDATION_TYPE_XMLSCHEMA][] = array($validationFile);
 		}
 		$doc = $parser->execute(array(), $validation);
 		

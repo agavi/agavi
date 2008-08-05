@@ -310,9 +310,26 @@ final class AgaviConfigCache
 			'class' => 'AgaviConfigHandlersConfigHandler',
 			'parameters' => array(
 			),
+			'transformations' => array(
+				AgaviXmlConfigParser::STAGE_SINGLE => array(
+					$agaviDir . '/config/xsl/config_handlers.xsl',
+				),
+				AgaviXmlConfigParser::STAGE_COMPILATION => array(
+				),
+			),
 			'validations' => array(
-				AgaviXmlConfigParser::VALIDATION_TYPE_XMLSCHEMA => array(
-					$agaviDir . '/config/xsd/config_handlers.xsd',
+				AgaviXmlConfigParser::STAGE_SINGLE => array(
+					AgaviXmlConfigParser::STEP_TRANSFORMATIONS_BEFORE => array(
+					),
+					AgaviXmlConfigParser::STEP_TRANSFORMATIONS_AFTER => array(
+						AgaviXmlConfigParser::VALIDATION_TYPE_RELAXNG => array(
+							$agaviDir . '/config/rng/config_handlers.rng',
+						),
+					),
+				),
+				AgaviXmlConfigParser::STAGE_COMPILATION => array(
+					AgaviXmlConfigParser::STEP_TRANSFORMATIONS_BEFORE => array(),
+					AgaviXmlConfigParser::STEP_TRANSFORMATIONS_AFTER => array()
 				),
 			),
 		);

@@ -214,7 +214,9 @@ class AgaviXmlConfigDomElement extends DOMElement implements IteratorAggregate
 	{
 		$retval = parent::getAttribute($name);
 		
-		if($retval === null) {
+		// getAttribute returns '' when the attribute doesn't exist, but any
+		// null-ish value is probably unacceptable anyway
+		if($retval == null) {
 			$retval = $default;
 		}
 		

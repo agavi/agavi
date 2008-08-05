@@ -22,6 +22,7 @@
  * @subpackage config
  *
  * @author     David Zülke <dz@bitxtender.com>
+ * @author     Noah Fontes <noah.fontes@bitextender.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
  *
@@ -52,6 +53,14 @@ class AgaviXmlConfigParser
 	const NAMESPACE_SVRL_ISO = 'http://purl.oclc.org/dsdl/svrl';
 	
 	const NAMESPACE_XSL_1999 = 'http://www.w3.org/1999/XSL/Transform';
+	
+	const STAGE_SINGLE = 'single';
+	
+	const STAGE_COMPILATION = 'compilation';
+	
+	const STEP_TRANSFORMATIONS_BEFORE = 'before-transformations';
+	
+	const STEP_TRANSFORMATIONS_AFTER = 'after-transformations';
 	
 	/**
 	 * @var        array A list of XML namespaces for Agavi configuration files as
@@ -178,7 +187,7 @@ class AgaviXmlConfigParser
 		$xpath->registerNamespace('agavi_envelope_latest', self::NAMESPACE_AGAVI_ENVELOPE_LATEST);
 		$xpath->registerNamespace('agavi_annotation_latest', self::NAMESPACE_AGAVI_ANNOTATION_LATEST);
 	}
-	
+	                                                 
 	/**
 	 * @param      string An absolute filesystem path to a configuration file.
 	 * @param      string The environment name.
@@ -190,6 +199,7 @@ class AgaviXmlConfigParser
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
 	 * @since      0.11.0
 	 */
 	public static function run($path, $environment, $context = null, array $transformationInfo = array(), array $validationInfo = array())
@@ -199,9 +209,10 @@ class AgaviXmlConfigParser
 		$docs = array();
 		$nextPath = $path;
 		while($nextPath !== null) {
+			// run the single stage parser
 			$parser = new AgaviXmlConfigParser($nextPath, $environment, $context);
+			$doc = $parser->execute($transformationInfo[self::STAGE_SINGLE], $validationInfo[self::STAGE_SINGLE]);
 			
-			$doc = $parser->execute($transformationInfo, $validationInfo);
 			// put the new document in the list
 			$docs[] = $doc;
 			
@@ -270,6 +281,9 @@ class AgaviXmlConfigParser
 					}
 				}
 			}
+			
+			// run the compilation stage parser
+			self::executeCompilation($retval, $environment, $context, $transformationInfo[self::STAGE_COMPILATION], $validationInfo[self::STAGE_COMPILATION]);
 		} else {
 			// it's not an agavi config file. just pass it through then
 			$retval->appendChild($retval->importNode($doc->documentElement, true));
@@ -361,40 +375,88 @@ class AgaviXmlConfigParser
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
 	 * @since      0.11.0
 	 */
 	public function execute(array $transformationInfo = array(), array $validationInfo = array())
 	{
-		// prepare the doc (resolve xincludes, validate against XSI declarations and evaluate <configuration> attributes for environment and context targeting)
-		$this->prepare();
+		// resolve xincludes
+		self::xinclude($this->doc);
+		
+		// validate XMLSchema-instance declarations
+		self::validateXsi($this->doc);
+		
+		// mark document for merging
+		self::match($this->doc, $this->environment, $this->context);
+		
+		// validate pre-transformation
+		self::validate($this->doc, $this->environment, $this->context, $validationInfo[AgaviXmlConfigParser::STEP_TRANSFORMATIONS_BEFORE]);
 		
 		if(!AgaviConfig::get('core.skip_config_transformations', false)) {
+			// run inline transformations
+			self::transformProcessingInstructions($this->doc);
+			
 			// perform XSL transformations
-			$this->transform($transformationInfo);
+			$this->doc = self::transform($this->doc, $this->environment, $this->context, $transformationInfo);
+			
+			// resolve xincludes again, since transformations may have introduced some
+			self::xinclude($this->doc);
 		}
 		
-		// validate against WXS/RNG/SCH
-		$this->validate($validationInfo);
+		// validate post-transformation
+		self::validate($this->doc, $this->environment, $this->context, $validationInfo[AgaviXmlConfigParser::STEP_TRANSFORMATIONS_AFTER]);
 		
 		// clean up the document
-		$this->cleanup();
+		self::cleanup($this->doc);
 		
 		return $this->doc;
 	}
 	
 	/**
-	 * Prepare the configuration file: resolve XIncludes, validate against XML
-	 * Schema instances declared on the document, and set processing information
-	 * flags on <configuration> elements.
+	 * Executes the parser for a compilation document.
+	 *
+	 * @param      AgaviXmlConfigDomDocument The document to act upon.
+	 * @param      string The environment name.
+	 * @param      string The context name.
+	 * @param      array An array of XSL paths for transformation.
+	 * @param      array An associative array of validation information.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public static function executeCompilation(AgaviXmlConfigDomDocument $document, $environment, $context, array $transformationInfo = array(), array $validationInfo = array())
+	{
+		// resolve xincludes
+		self::xinclude($document);
+		
+		// validate pre-transformation
+		self::validate($document, $environment, $context, $validationInfo[AgaviXmlConfigParser::STEP_TRANSFORMATIONS_BEFORE]);
+		
+		if(!AgaviConfig::get('core.skip_config_transformations', false)) {
+			// perform XSL transformations
+			$document = self::transform($document, $environment, $context, $transformationInfo);
+			
+			// resolve xincludes again, since transformations may have introduced some
+			self::xinclude($document);
+		}
+		
+		// validate post-transformation
+		self::validate($document, $environment, $context, $validationInfo[AgaviXmlConfigParser::STEP_TRANSFORMATIONS_AFTER]);
+	}
+	
+	/**
+	 * Resolve xinclude directives on a given document.
+	 *
+	 * @param      AgaviXmlConfigDomDocument The document to act upon.
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @author     Noah Fontes <noah.fontes@bitextender.com>
-	 * @since      0.11.0
+	 * @since      1.0.0
 	 */
-	public function prepare()
+	public static function xinclude(AgaviXmlConfigDomDocument $document)
 	{
 		// replace %lala% directives in XInclude href attributes
-		foreach($this->doc->getElementsByTagNameNS('http://www.w3.org/2001/XInclude', '*') as $element) {
+		foreach($document->getElementsByTagNameNS('http://www.w3.org/2001/XInclude', '*') as $element) {
 			if($element->hasAttribute('href')) {
 				$attribute = $element->getAttributeNode('href');
 				$parts = explode('#', $attribute->nodeValue, 2);
@@ -405,67 +467,51 @@ class AgaviXmlConfigParser
 		
 		// perform xincludes
 		try {
-			$this->doc->xinclude();
+			$document->xinclude();
 		} catch(DOMException $dome) {
-			throw new AgaviParseException(sprintf('Configuration file "%s" could not be parsed: %s', $this->path, $dome->getMessage()));
+			throw new AgaviParseException(sprintf('Configuration file "%s" could not be parsed: %s', $document->documentURI, $dome->getMessage()));
 		}
 		
+		/*
 		// remove all xml:base attributes inserted by XIncludes
-		$nodes = $this->doc->getXpath()->query('//@xml:base', $this->doc);
+		$nodes = $document->getXpath()->query('//@xml:base', $document);
 		foreach($nodes as $node) {
 			$node->ownerElement->removeAttributeNode($node);
 		}
+		*/
 		
 		// necessary due to a PHP bug, see http://trac.agavi.org/ticket/621 and http://bugs.php.net/bug.php?id=43364
 		if(version_compare(PHP_VERSION, '5.2.6', '<')) {
 			// we need to remember the document URI and restore it, just in case
-			$documentUri = $this->doc->documentURI;
+			$documentUri = $document->documentURI;
 			// reload, and all is good
-			$this->doc->loadXML($this->doc->saveXML());
-			$this->doc->documentURI = $documentUri;
+			$document->loadXML($document->saveXML());
+			$document->documentURI = $documentUri;
 		}
-		
-		// next, find (and validate against) XML schema instance declarations
-		$sources = array();
-		if($this->doc->documentElement->hasAttributeNS('http://www.w3.org/2001/XMLSchema-instance', 'schemaLocation')) {
-			// find locations. for namespaces, they are space separated pairs of a namespace URI and a schema location
-			$locations = preg_split('/\s+/', $this->doc->documentElement->getAttributeNS('http://www.w3.org/2001/XMLSchema-instance', 'schemaLocation'));
-			for($i = 1; $i < count($locations); $i = $i + 2) {
-				$sources[] = $locations[$i];
-			}
-		}
-		// no namespace? then it's only one schema location in this attribute
-		if($this->doc->documentElement->hasAttributeNS('http://www.w3.org/2001/XMLSchema-instance', 'noNamespaceSchemaLocation')) {
-			$sources[] = $this->doc->documentElement->getAttributeNS('http://www.w3.org/2001/XMLSchema-instance', 'noNamespaceSchemaLocation');
-		}
-		if($sources) {
-			// we have instances to validate against...
-			$schemas = array();
-			foreach($sources as &$source) {
-				// so for each location, we need to grab the file and validate against this grabbed source code, as libxml often has a hard time retrieving stuff over HTTP
-				$source = AgaviToolkit::expandDirectives($source);
-				if(parse_url($source, PHP_URL_SCHEME) === null && !AgaviToolkit::isPathAbsolute($source)) {
-					// the schema location is relative to the XML file
-					$source = dirname($this->path) . DIRECTORY_SEPARATOR . $source;
-				}
-				$schema = @file_get_contents($source);
-				if($schema === false) {
-					throw new AgaviUnreadableException(sprintf('XML Schema validation file "%s" for configuration file "%s" does not exist or is unreadable', $source, $this->path));
-				}
-				$schemas[] = $schema;
-			}
-			// now validate them all
-			$this->validateXmlschemaSource($schemas);
-		}
-		
-		if($this->doc->isAgaviConfiguration()) {
+	}
+	
+	/**
+	 * Annotate the document with matched attributes against each configuration
+	 * element that matches the given context and environment.
+	 *
+	 * @param      AgaviXmlConfigDomDocument The document to act upon.
+	 * @param      string The environment name.
+	 * @param      string The context name.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public static function match(AgaviXmlConfigDomDocument $document, $environment, $context)
+	{
+		if($document->isAgaviConfiguration()) {
 			// it's an agavi config, so we need to set "matched" flags on all <configuration> elements where "context" and "environment" attributes match the values below
 			$testAttributes = array(
-				'context' => $this->context,
-				'environment' => $this->environment,
+				'context' => $context,
+				'environment' => $environment,
 			);
 			
-			foreach($this->doc->getConfigurationElements() as $configuration) {
+			foreach($document->getConfigurationElements() as $configuration) {
 				// assume that the element counts as matched, in case it doesn't have "context" or "environment" attributes
 				$matched = true;
 				foreach($testAttributes as $attributeName => $attributeValue) {
@@ -485,56 +531,20 @@ class AgaviXmlConfigParser
 	 * Transform the document using info from embedded processing instructions
 	 * and given stylesheets.
 	 *
+	 * @param      AgaviXmlConfigDomDocument The document to act upon.
+	 * @param      string The environment name.
+	 * @param      string The context name.
 	 * @param      array  An array of transformation information.
+	 *
+	 * @return     AgaviXmlConfigDomDocument The transformed document.
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @author     Noah Fontes <noah.fontes@bitextender.com>
 	 * @since      0.11.0
 	 */
-	public function transform(array $transformationInfo = array())
+	public static function transform(AgaviXmlConfigDomDocument $document, $environment, $context, array $transformationInfo = array())
 	{
 		$transformations = array();
-		
-		$xpath = $this->doc->getXpath();
-		
-		// see if there are <?xml-stylesheet... processing instructions
-		$stylesheetProcessingInstructions = $xpath->query("//processing-instruction('xml-stylesheet')", $this->doc);
-		foreach($stylesheetProcessingInstructions as $pi) {
-			// yes! alright. trick: we create a doc fragment with the contents so we don't have to parse things by hand...
-			$fragment = $this->doc->createDocumentFragment();
-			$fragment->appendXml('<foo ' . $pi->data . ' />');
-			$type = $fragment->firstChild->getAttribute('type');
-			// we process only the types below...
-			if(in_array($type, array('text/xml', 'text/xsl', 'application/xml', 'application/xsl+xml'))) {
-				$href = $href = $fragment->firstChild->getAttribute('href');
-				
-				if(strpos($href, '#') === 0) {
-					// the href points to an embedded XSL stylesheet (with ID reference), so let's see if we can find it
-					$stylesheets = $xpath->query("//*[@id='" . substr($href, 1) . "']", $this->doc);
-					if($stylesheets->length) {
-						// excellent. make a new doc from that element!
-						try {
-							$xsl = new AgaviXmlConfigDomDocument();
-							$xsl->appendChild($xsl->importNode($stylesheets->item(0), true));
-						} catch(DOMException $dome) {
-							throw new AgaviParseException(sprintf('Configuration file "%s" could not be parsed: Could not load XSL stylesheet "%s": %s', $this->path, $href, $dome->getMessage()));
-						}
-						
-						// and append to the list of XSLs to process
-						// TODO: spec mandates that external XSLs be processed first!
-						$transformations[] = $xsl;
-					} else {
-						throw new AgaviParseException(sprintf('Configuration file "%s" could not be parsed because the inline stylesheet "%s" referenced in the "xml-stylesheet" processing instruction could not be found in the document.', $this->path, $href));
-					}
-				} else {
-					// href references an xsl file, remember the path
-					$transformationInfo[] = AgaviToolkit::expandDirectives($href);
-				}
-				
-				// remove the processing instructions after we dealt with them
-				$pi->parentNode->removeChild($pi);
-			}
-		}
 		
 		// loop over all the paths we found and load the files
 		foreach($transformationInfo as $href) {
@@ -542,7 +552,7 @@ class AgaviXmlConfigParser
 				$xsl = new AgaviXmlConfigDomDocument();
 				$xsl->load($href);
 			} catch(DOMException $dome) {
-				throw new AgaviParseException(sprintf('Configuration file "%s" could not be parsed: Could not load XSL stylesheet "%s": %s', $this->path, $href, $dome->getMessage()));
+				throw new AgaviParseException(sprintf('Configuration file "%s" could not be parsed: Could not load XSL stylesheet "%s": %s', $document->documentURI, $href, $dome->getMessage()));
 			}
 			
 			// add them to the list of transformations to be done
@@ -556,47 +566,107 @@ class AgaviXmlConfigParser
 				$proc = new AgaviXmlConfigXsltProcessor();
 				$proc->importStylesheet($xsl);
 			} catch(Exception $e) {
-				throw new AgaviParseException(sprintf('Configuration file "%s" could not be parsed: Could not import XSL stylesheet "%s": %s', $this->path, $xsl->documentURI, $e->getMessage()));
+				throw new AgaviParseException(sprintf('Configuration file "%s" could not be parsed: Could not import XSL stylesheet "%s": %s', $document->documentURI, $xsl->documentURI, $e->getMessage()));
 			}
 			
 			// set some info (config file path, context name, environment name) as params
 			// first arg is the namespace URI, which PHP doesn't support. awesome. see http://bugs.php.net/bug.php?id=30622 for the sad details
 			// we could use "agavi:context" etc, that does work even without such a prefix being declared in the stylesheet, but that would be completely non-XML-ish, confusing, and against the spec. so we use dots instead.
 			$proc->setParameter('', array(
-				'agavi.config_path' => $this->path,
-				'agavi.environment' => $this->environment,
-				'agavi.context' => $this->context,
+				'agavi.config_path' => $document->documentURI,
+				'agavi.environment' => $environment,
+				'agavi.context' => $context,
 			));
 			
 			try {
 				// transform the doc
-				$newdoc = $proc->transformToDoc($this->doc);
+				$newdoc = $proc->transformToDoc($document);
 			} catch(Exception $e) {
-				throw new AgaviParseException(sprintf('Configuration file "%s" could not be parsed: Could not transform the document using the XSL stylesheet "%s": %s', $this->path, $xsl->documentURI, $e->getMessage()));
+				throw new AgaviParseException(sprintf('Configuration file "%s" could not be parsed: Could not transform the document using the XSL stylesheet "%s": %s', $document->documentURI, $xsl->documentURI, $e->getMessage()));
 			}
 			
 			// no errors and we got a document back? excellent. this will be our new baby from now. time to kill the old one
 			
 			// get the old document URI
-			$documentUri = $this->doc->documentURI;
+			$documentUri = $document->documentURI;
 			
 			// and assign the new document to the old one
-			$this->doc = $newdoc;
+			$document = $newdoc;
 			
 			// save the old document URI just in case
-			$this->doc->documentURI = $documentUri;
+			$document->documentURI = $documentUri;
+		}
+		
+		return $document;
+	}
+	
+	/**
+	 * Transforms a given document according to xml-stylesheet processing
+	 * instructions
+	 *
+	 * @param      AgaviXmlConfigDomDocument The document to act upon.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public static function transformProcessingInstructions(AgaviXmlConfigDomDocument $document)
+	{
+		$xpath = $document->getXpath();
+		
+		// see if there are <?xml-stylesheet... processing instructions
+		$stylesheetProcessingInstructions = $xpath->query("//processing-instruction('xml-stylesheet')", $document);
+		foreach($stylesheetProcessingInstructions as $pi) {
+			// yes! alright. trick: we create a doc fragment with the contents so we don't have to parse things by hand...
+			$fragment = $document->createDocumentFragment();
+			$fragment->appendXml('<foo ' . $pi->data . ' />');
+			$type = $fragment->firstChild->getAttribute('type');
+			// we process only the types below...
+			if(in_array($type, array('text/xml', 'text/xsl', 'application/xml', 'application/xsl+xml'))) {
+				$href = $href = $fragment->firstChild->getAttribute('href');
+				
+				if(strpos($href, '#') === 0) {
+					// the href points to an embedded XSL stylesheet (with ID reference), so let's see if we can find it
+					$stylesheets = $xpath->query("//*[@id='" . substr($href, 1) . "']", $document);
+					if($stylesheets->length) {
+						// excellent. make a new doc from that element!
+						try {
+							$xsl = new AgaviXmlConfigDomDocument();
+							$xsl->appendChild($xsl->importNode($stylesheets->item(0), true));
+						} catch(DOMException $dome) {
+							throw new AgaviParseException(sprintf('Configuration file "%s" could not be parsed: Could not load XSL stylesheet "%s": %s', $document->documentURI, $href, $dome->getMessage()));
+						}
+						
+						// and append to the list of XSLs to process
+						// TODO: spec mandates that external XSLs be processed first!
+						$transformations[] = $xsl;
+					} else {
+						throw new AgaviParseException(sprintf('Configuration file "%s" could not be parsed because the inline stylesheet "%s" referenced in the "xml-stylesheet" processing instruction could not be found in the document.', $document->documentURI, $href));
+					}
+				} else {
+					// href references an xsl file, remember the path
+					$transformationInfo[] = AgaviToolkit::expandDirectives($href);
+				}
+				
+				// remove the processing instructions after we dealt with them
+				$pi->parentNode->removeChild($pi);
+			}
 		}
 	}
 	
 	/**
-	 * Perform validation on this document.
+	 * Perform validation on a given document.
 	 *
+	 * @param      AgaviXmlConfigDomDocument The document to act upon.
+	 * @param      string The environment name.
+	 * @param      string The context name.
 	 * @param      array An array of validation information.
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
 	 * @since      0.11.0
 	 */
-	public function validate(array $validationInfo = array())
+	public static function validate(AgaviXmlConfigDomDocument $document, $environment, $context, array $validationInfo = array())
 	{
 		// bail out right away if validation is disabled
 		if(AgaviConfig::get('core.skip_config_validation', false)) {
@@ -606,55 +676,102 @@ class AgaviXmlConfigParser
 		foreach($validationInfo as $type => $files) {
 			switch($type) {
 				case self::VALIDATION_TYPE_XMLSCHEMA:
-					$this->validateXmlschema((array) $files);
+					self::validateXmlschema($document, (array) $files);
 					break;
 				case self::VALIDATION_TYPE_RELAXNG:
-					$this->validateRelaxng((array) $files);
+					self::validateRelaxng($document, (array) $files);
 					break;
 				case self::VALIDATION_TYPE_SCHEMATRON:
-					$this->validateSchematron((array) $files);
+					self::validateSchematron($document, $environment, $context, (array) $files);
 					break;
 			}
 		}
 	}
 
 	/**
-	 * Clean up the document.
+	 * Clean up a given document.
 	 *
-	 * @param      DOMDocument The document to clean up.
+	 * @param      AgaviXmlConfigDomDocument The document to clean up.
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function cleanup()
+	public static function cleanup(AgaviXmlConfigDomDocument $document)
 	{
 		// remove top-level <sandbox> element
-		if($sandbox = $this->doc->getSandbox()) {
+		if($sandbox = $document->getSandbox()) {
 			$sandbox->parentNode->removeChild($sandbox);
+		}
+	}
+	
+	/**
+	 * Validate a given document according to XMLSchema-instance (xsi)
+	 * declarations.
+	 *
+	 * @param      AgaviXmlConfigDomDocument The document to act upon.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public static function validateXsi(AgaviXmlConfigDomDocument $document)
+	{
+		// next, find (and validate against) XML schema instance declarations
+		$sources = array();
+		if($document->documentElement->hasAttributeNS('http://www.w3.org/2001/XMLSchema-instance', 'schemaLocation')) {
+			// find locations. for namespaces, they are space separated pairs of a namespace URI and a schema location
+			$locations = preg_split('/\s+/', $document->documentElement->getAttributeNS('http://www.w3.org/2001/XMLSchema-instance', 'schemaLocation'));
+			for($i = 1; $i < count($locations); $i = $i + 2) {
+				$sources[] = $locations[$i];
+			}
+		}
+		// no namespace? then it's only one schema location in this attribute
+		if($document->documentElement->hasAttributeNS('http://www.w3.org/2001/XMLSchema-instance', 'noNamespaceSchemaLocation')) {
+			$sources[] = $document->documentElement->getAttributeNS('http://www.w3.org/2001/XMLSchema-instance', 'noNamespaceSchemaLocation');
+		}
+		if($sources) {
+			// we have instances to validate against...
+			$schemas = array();
+			foreach($sources as &$source) {
+				// so for each location, we need to grab the file and validate against this grabbed source code, as libxml often has a hard time retrieving stuff over HTTP
+				$source = AgaviToolkit::expandDirectives($source);
+				if(parse_url($source, PHP_URL_SCHEME) === null && !AgaviToolkit::isPathAbsolute($source)) {
+					// the schema location is relative to the XML file
+					$source = dirname($document->documentURI) . DIRECTORY_SEPARATOR . $source;
+				}
+				$schema = @file_get_contents($source);
+				if($schema === false) {
+					throw new AgaviUnreadableException(sprintf('XML Schema validation file "%s" for configuration file "%s" does not exist or is unreadable', $source, $document->documentURI));
+				}
+				$schemas[] = $schema;
+			}
+			// now validate them all
+			self::validateXmlschemaSource($document, $schemas);
 		}
 	}
 	
 	/**
 	 * Validate the document against the given list of XML Schema files.
 	 *
+	 * @param      AgaviXmlConfigDomDocument The document to act upon.
 	 * @param      array An array of file names to validate against.
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @author     Noah Fontes <noah.fontes@bitextender.com>
 	 * @since      0.11.0
 	 */
-	public function validateXmlschema(array $validationFiles = array())
+	public static function validateXmlschema(AgaviXmlConfigDomDocument $document, array $validationFiles = array())
 	{
 		foreach($validationFiles as $validationFile) {
 			if(!is_resource($validationFile) && !is_readable($validationFile)) {
-				throw new AgaviUnreadableException(sprintf('XML Schema validation file "%s" for configuration file "%s" does not exist or is unreadable', $validationFile, $this->path));
+				throw new AgaviUnreadableException(sprintf('XML Schema validation file "%s" for configuration file "%s" does not exist or is unreadable', $validationFile, $document->documentURI));
 			}
 			
 			// gotta do the @ to suppress warnings when the schema cannot be found
 			try {
-				@$this->doc->schemaValidate($validationFile);
+				@$document->schemaValidate($validationFile);
 			} catch(DOMException $dome) {
-				throw new AgaviParseException(sprintf('XML Schema validation of configuration file "%s" failed: %s', $this->path, $dome->getMessage()));
+				throw new AgaviParseException(sprintf('XML Schema validation of configuration file "%s" failed: %s', $document->documentURI, $dome->getMessage()));
 			}
 		}
 	}
@@ -662,19 +779,20 @@ class AgaviXmlConfigParser
 	/**
 	 * Validate the document against the given list of XML Schema documents.
 	 *
+	 * @param      AgaviXmlConfigDomDocument The document to act upon.
 	 * @param      array An array of schema documents to validate against.
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @author     Noah Fontes <noah.fontes@bitextender.com>
 	 * @since      1.0.0
 	 */
-	public function validateXmlschemaSource(array $validationSources = array())
+	public static function validateXmlschemaSource(AgaviXmlConfigDomDocument $document, array $validationSources = array())
 	{
 		foreach($validationSources as $validationSource) {
 			try {
-				@$this->doc->schemaValidateSource($validationSource);
+				@$document->schemaValidateSource($validationSource);
 			} catch(DOMException $dome) {
-				throw new AgaviParseException(sprintf('XML Schema validation of configuration file "%s" failed: ' . "\n\n%s", $this->path, $dome->getMessage()));
+				throw new AgaviParseException(sprintf('XML Schema validation of configuration file "%s" failed: ' . "\n\n%s", $document->documentURI, $dome->getMessage()));
 			}
 		}
 	}
@@ -682,24 +800,25 @@ class AgaviXmlConfigParser
 	/**
 	 * Validate the document against the given list of RELAX NG files.
 	 *
+	 * @param      AgaviXmlConfigDomDocument The document to act upon.
 	 * @param      array An array of file names to validate against.
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @author     Noah Fontes <noah.fontes@bitextender.com>
 	 * @since      0.11.0
 	 */
-	public function validateRelaxng(array $validationFiles = array())
+	public static function validateRelaxng(AgaviXmlConfigDomDocument $document, array $validationFiles = array())
 	{
 		foreach($validationFiles as $validationFile) {
 			if(!is_readable($validationFile)) {
-				throw new AgaviUnreadableException(sprintf('RELAX NG validation file "%s" for configuration file "%s" does not exist or is unreadable', $validationFile, $this->path));
+				throw new AgaviUnreadableException(sprintf('RELAX NG validation file "%s" for configuration file "%s" does not exist or is unreadable', $validationFile, $document->documentURI));
 			}
 			
 			// gotta do the @ to suppress warnings when the schema cannot be found
 			try {
-				@$this->doc->relaxNGValidate($validationFile);
+				@$document->relaxNGValidate($validationFile);
 			} catch(DOMException $dome) {
-				throw new AgaviParseException(sprintf('RELAX NG validation of configuration file "%s" failed: ' . "\n\n%s", $this->path, $dome->getMessage()));
+				throw new AgaviParseException(sprintf('RELAX NG validation of configuration file "%s" failed: ' . "\n\n%s", $document->documentURI, $dome->getMessage()));
 			}
 		}
 	}
@@ -707,13 +826,16 @@ class AgaviXmlConfigParser
 	/**
 	 * Validate the document against the given list of Schematron files.
 	 *
+	 * @param      AgaviXmlConfigDomDocument The document to act upon.
+	 * @param      string The environment name.
+	 * @param      string The context name.
 	 * @param      array An array of file names to validate against.
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @author     Noah Fontes <noah.fontes@bitextender.com>
 	 * @since      0.11.0
 	 */
-	public function validateSchematron(array $validationFiles = array())
+	public static function validateSchematron(AgaviXmlConfigDomDocument $document, $environment, $context, array $validationFiles = array())
 	{
 		if(AgaviConfig::get('core.skip_config_transformations', false)) {
 			return;
@@ -728,15 +850,15 @@ class AgaviXmlConfigParser
 		// first arg is the namespace URI, which PHP doesn't support. awesome. see http://bugs.php.net/bug.php?id=30622 for the sad details
 		// we could use "agavi:context" etc, that does work even without such a prefix being declared in the stylesheet, but that would be completely non-XML-ish, confusing, and against the spec. so we use dots instead.
 		$schematron->setParameter('', array(
-			'agavi.config_path' => $this->path,
-			'agavi.environment' => $this->environment,
-			'agavi.context' => $this->context,
+			'agavi.config_path' => $document->documentURI,
+			'agavi.environment' => $environment,
+			'agavi.context' => $context,
 		));
 		
 		// loop over all validation files. those are .sch schematron schemas, which we transform to an XSL document that is then used to validate the source document :)
 		foreach($validationFiles as $href) {
 			if(!is_readable($href)) {
-				throw new AgaviUnreadableException(sprintf('Schematron validation file "%s" for configuration file "%s" does not exist or is unreadable', $href, $this->path));
+				throw new AgaviUnreadableException(sprintf('Schematron validation file "%s" for configuration file "%s" does not exist or is unreadable', $href, $document->documentURI));
 			}
 			
 			// load the .sch file
@@ -744,24 +866,24 @@ class AgaviXmlConfigParser
 				$sch = new AgaviXmlConfigDomDocument();
 				$sch->load($href);
 			} catch(DOMException $dome) {
-				throw new AgaviParseException(sprintf('Schematron validation of configuration file "%s" failed: Could not load schema file "%s": %s', $this->path, $href, $dome->getMessage()));
+				throw new AgaviParseException(sprintf('Schematron validation of configuration file "%s" failed: Could not load schema file "%s": %s', $document->documentURI, $href, $dome->getMessage()));
 			}
 			
 			// is it an ISO Schematron file?
 			if(!$sch->documentElement || $sch->documentElement->namespaceURI != self::NAMESPACE_SCHEMATRON_ISO) {
-				throw new AgaviParseException(sprintf('Schematron validation of configuration file "%s" failed because schema file "%s" is invalid', $this->path, $href));
+				throw new AgaviParseException(sprintf('Schematron validation of configuration file "%s" failed because schema file "%s" is invalid', $document->documentURI, $href));
 			}
 			
 			// transform the .sch file to a validation stylesheet using the schematron implementation
 			try {
 				$schema = $schematron->transformToDoc($sch);
 			} catch(Exception $e) {
-				throw new AgaviParseException(sprintf('Schematron validation of configuration file "%s" failed: Could not transform schema file "%s": %s', $this->path, $href, $e->getMessage()));
+				throw new AgaviParseException(sprintf('Schematron validation of configuration file "%s" failed: Could not transform schema file "%s": %s', $document->documentURI, $href, $e->getMessage()));
 			}
 			
 			// it transformed fine. but did we get a proper stylesheet instance at all? wrong namespaces can lead to empty docs that only have an XML prolog
 			if(!$schema->documentElement || $schema->documentElement->namespaceURI != self::NAMESPACE_XSL_1999) {
-				throw new AgaviParseException(sprintf('Schematron validation of configuration file "%s" failed because schema file "%s" resulted in an invalid stylesheet', $this->path, $href));
+				throw new AgaviParseException(sprintf('Schematron validation of configuration file "%s" failed because schema file "%s" resulted in an invalid stylesheet', $document->documentURI, $href));
 			}
 			
 			// all fine so far. let us import the stylesheet
@@ -769,14 +891,14 @@ class AgaviXmlConfigParser
 				$validator = new AgaviXmlConfigXsltProcessor();
 				$validator->importStylesheet($schema);
 			} catch(Exception $e) {
-				throw new AgaviParseException(sprintf('Schematron validation of configuration file "%s" failed: Could not process the schema file "%s": %s', $this->path, $href, $e->getMessage()));
+				throw new AgaviParseException(sprintf('Schematron validation of configuration file "%s" failed: Could not process the schema file "%s": %s', $document->documentURI, $href, $e->getMessage()));
 			}
 			
 			// run the validation by transforming our document using the generated validation stylesheet
 			try {
-				$result = $validator->transformToDoc($this->doc);
+				$result = $validator->transformToDoc($document);
 			} catch(Exception $e) {
-				throw new AgaviParseException(sprintf('Schematron validation of configuration file "%s" failed: Could not validate the document against the schema file "%s": %s', $this->path, $href, $e->getMessage()));
+				throw new AgaviParseException(sprintf('Schematron validation of configuration file "%s" failed: Could not validate the document against the schema file "%s": %s', $document->documentURI, $href, $e->getMessage()));
 			}
 			
 			// validation ran okay, now we need to look at the result document to see if there are errors
@@ -788,7 +910,7 @@ class AgaviXmlConfigParser
 				// TODO: grab error info from <svrl:failed-assert> and <svrl:successful-report> elements. note that the child <svrl:text> element is optional. also, the <sch:pattern> can have a "name" attribute, but that value never occurs in an SVRL result...
 				$errors = array();
 				
-				throw new AgaviParseException(sprintf('Schematron validation of configuration file "%s" failed due to the following error%s:' . "\n\n%s", $this->path, count($errors) > 1 ? 's' : '', implode("\n", $errors)));
+				throw new AgaviParseException(sprintf('Schematron validation of configuration file "%s" failed due to the following error%s:' . "\n\n%s", $document->documentURI, count($errors) > 1 ? 's' : '', implode("\n", $errors)));
 			}
 		}
 	}

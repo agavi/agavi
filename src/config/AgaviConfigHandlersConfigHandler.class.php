@@ -29,13 +29,14 @@
  *
  * @version    $Id$
  */
-class AgaviConfigHandlersConfigHandler extends AgaviConfigHandler
+class AgaviConfigHandlersConfigHandler extends AgaviXmlConfigHandler
 {
+	const NAMESPACE = 'http://agavi.org/agavi/config/item/config_handlers/1.0';
+	
 	/**
 	 * Execute this configuration handler.
 	 *
-	 * @param      string An absolute filesystem path to a configuration file.
-	 * @param      string An optional context in which we are currently running.
+	 * @param      AgaviXmlConfigDomDocument The document to handle.
 	 *
 	 * @return     string Data to be written to a cache file.
 	 *
@@ -46,64 +47,103 @@ class AgaviConfigHandlersConfigHandler extends AgaviConfigHandler
 	 *                                        improperly formatted.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
 	 * @since      0.11.0
 	 */
-	public function execute($config, $context = null)
+	public function execute(AgaviXmlConfigDomDocument $document)
 	{
-		// parse the config file
-		$configurations = $this->orderConfigurations(AgaviConfigCache::parseConfig($config, false, $this->getValidationFile(), $this->parser)->configurations, AgaviConfig::get('core.environment'));
-		                                                                                                                                                                         
+		// set up our default namespace
+		$document->setDefaultNamespace(self::NAMESPACE, 'config_handlers');
+		
 		// init our data arrays
 		$handlers = array();
 		
-		foreach($configurations as $cfg) {
-			if(!isset($cfg->handlers)) {
+		foreach($document->getConfigurationElements() as $configuration) {
+			if(!$configuration->hasChildren('handlers')) {
 				continue;
 			}
 			
 			// let's do our fancy work
-			foreach($cfg->handlers as $handler) {
+			foreach($configuration->getChildren('handlers') as $handler) {
 				$pattern = $handler->getAttribute('pattern');
 				
 				$category = AgaviToolkit::normalizePath(AgaviToolkit::expandDirectives($pattern));
 				
 				$class = $handler->getAttribute('class');
 				
-				$transformations = array();
-				if(isset($handler->transformations)) {
-					foreach($handler->transformations as $transformation) {
-						$transformationPath = AgaviToolkit::literalize($transformation->getValue());
-						$transformations[] = $transformationPath;
+				$transformations = array(
+					AgaviXmlConfigParser::STAGE_SINGLE => array(),
+					AgaviXmlConfigParser::STAGE_COMPILATION => array(),
+				);
+				if($handler->hasChildren('transformations')) {
+					foreach($handler->getChildren('transformations') as $transformation) {
+						$path = AgaviToolkit::literalize($transformation->getValue());
+						$for = $transformation->getAttribute('for', AgaviXmlConfigParser::STAGE_SINGLE);
+						$transformations[$for][] = $path;
 					}
 				}
 				
 				$validations = array(
-					AgaviXmlConfigParser::VALIDATION_TYPE_RELAXNG    => array(
+					AgaviXmlConfigParser::STAGE_SINGLE => array(
+						AgaviXmlConfigParser::STEP_TRANSFORMATIONS_BEFORE => array(
+							AgaviXmlConfigParser::VALIDATION_TYPE_RELAXNG => array(
+							),
+							AgaviXmlConfigParser::VALIDATION_TYPE_SCHEMATRON => array(
+							),
+							AgaviXmlConfigParser::VALIDATION_TYPE_XMLSCHEMA => array(
+							),
+						),
+						AgaviXmlConfigParser::STEP_TRANSFORMATIONS_AFTER => array(
+							AgaviXmlConfigParser::VALIDATION_TYPE_RELAXNG => array(
+							),
+							AgaviXmlConfigParser::VALIDATION_TYPE_SCHEMATRON => array(
+							),
+							AgaviXmlConfigParser::VALIDATION_TYPE_XMLSCHEMA => array(
+							),
+						),
 					),
-					AgaviXmlConfigParser::VALIDATION_TYPE_SCHEMATRON => array(
-					),
-					AgaviXmlConfigParser::VALIDATION_TYPE_XMLSCHEMA  => array(
+					AgaviXmlConfigParser::STAGE_COMPILATION => array(
+						AgaviXmlConfigParser::STEP_TRANSFORMATIONS_BEFORE => array(
+							AgaviXmlConfigParser::VALIDATION_TYPE_RELAXNG => array(
+							),
+							AgaviXmlConfigParser::VALIDATION_TYPE_SCHEMATRON => array(
+							),
+							AgaviXmlConfigParser::VALIDATION_TYPE_XMLSCHEMA => array(
+							),
+						),
+						AgaviXmlConfigParser::STEP_TRANSFORMATIONS_AFTER => array(
+							AgaviXmlConfigParser::VALIDATION_TYPE_RELAXNG => array(
+							),
+							AgaviXmlConfigParser::VALIDATION_TYPE_SCHEMATRON => array(
+							),
+							AgaviXmlConfigParser::VALIDATION_TYPE_XMLSCHEMA => array(
+							),
+						),
 					),
 				);
-				// legacy: via attribute
-				if($handler->hasAttribute('validate')) {
-					$validations[AgaviXmlConfigParser::VALIDATION_TYPE_XMLSCHEMA][] = AgaviToolkit::literalize($handler->getAttribute('validate'));
-				}
-				if(isset($handler->validations)) {
-					foreach($handler->validations as $validation) {
-						$validationPath = AgaviToolkit::literalize($validation->getValue());
+				if($handler->hasChildren('validations')) {
+					foreach($handler->getChildren('validations') as $validation) {
+						$path = AgaviToolkit::literalize($validation->getValue());
+						$type = null;
 						if(!$validation->hasAttribute('type')) {
-							$validationType = $this->guessValidationType($validationPath);
+							$type = $this->guessValidationType($path);
 						} else {
-							$validationType = $validation->getAttribute('type');
+							$type = $validation->getAttribute('type');
 						}
-						$validations[$validationType][] = $validationPath;
+						$for = $validation->getAttribute('for', AgaviXmlConfigParser::STAGE_SINGLE);
+						$step = $validation->getAttribute('step', AgaviXmlConfigParser::STEP_TRANSFORMATIONS_AFTER);
+						$validations[$for][$step][$type][] = $path;
 					}
 				}
 				
+				$handlers[$category] = isset($handlers[$category])
+					? $handlers[$category]
+					: array(
+						'parameters' => array(),
+						);
 				$handlers[$category] = array(
 					'class' => $class,
-					'parameters' => $this->getItemParameters($handler),
+					'parameters' => $handler->getAgaviParameters($handlers[$category]['parameters']),
 					'transformations' => $transformations,
 					'validations' => $validations,
 				);
