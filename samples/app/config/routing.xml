@@ -10,9 +10,9 @@
 				</ignores>
 			</route>
 			
-			<!-- If the HTTP Accept: header contains "application/xhtml+xml", set the output type to "xhtml". Look at output_types.xml for the declaration of that output type. Execution will not stop if this route matches. -->
-			<route pattern="application/xhtml+xml" source="_SERVER[HTTP_ACCEPT]" output_type="xhtml" stop="false" />
-		
+			<!-- If the HTTP Accept: header contains "application/json" (i.e. if you do an XMLHTTPRequest with one of the usual JS frameworks), set the output type to "json". Look at output_types.xml for the declaration of that output type. Execution will not stop if this route matches. This is nice for making XMLHTTPRequest calls. -->
+			<route pattern="application/json" source="_SERVER[HTTP_ACCEPT]" output_type="json" stop="false" />
+			
 			<route name="disabled" pattern="^/disabled" module="Disabled" action="Index" />
 			
 			<route name="login" pattern="^/login" module="%actions.login_module%" action="%actions.login_action%">
