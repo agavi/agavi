@@ -63,7 +63,10 @@
 				<validation>%core.agavi_dir%/config/xsd/routing.xsd</validation>
 			</handler>
 
-			<handler pattern="%core.agavi_dir%/routing/soap/wsdl.xml" class="AgaviWsdlConfigHandler" />
+			<handler pattern="%core.agavi_dir%/routing/soap/wsdl.xml" class="AgaviWsdlConfigHandler">
+				<transformation>%core.agavi_dir%/config/xsl/routing.xsl</transformation>
+				<transformation for="compilation">%core.agavi_dir%/routing/soap/wsdl.xsl</transformation>
+			</handler>
 
 			<handler pattern="%core.config_dir%/translation.xml" class="AgaviTranslationConfigHandler">
 				<validation>%core.agavi_dir%/config/xsd/translation.xsd</validation>
