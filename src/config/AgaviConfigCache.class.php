@@ -99,9 +99,8 @@ final class AgaviConfigCache
 		$handler = new $handlerInfo['class'];
 		if($handler instanceof AgaviIXmlConfigHandler) {
 			// a new-style config handler
-			// it does not parse the config itself; instead, it is given an array of parsed DOM documents (with parents!)
-			$parser = new AgaviXmlConfigParser();
-			$docs = $parser->parseAll($config, $handlerInfo['validation']);
+			// it does not parse the config itself; instead, it is given a complete and merged DOM document
+			$doc = AgaviXmlConfigParser::run($config, AgaviConfig::get('core.environment'), $context, $handlerInfo['transformations'], $handlerInfo['validations']);
 
 			if($context !== null) {
 				$context = AgaviContext::getInstance($context);
@@ -110,14 +109,14 @@ final class AgaviConfigCache
 			$handler->initialize($context, $handlerInfo['parameters']);
 
 			try {
-				$data = $handler->execute($docs);
+				$data = $handler->execute($doc);
 			} catch(AgaviException $e) {
-				throw new $e(sprintf("Compliation of configuration file '%s' failed for the following reason(s):\n\n%s", $config, $e->getMessage()));
+				throw new $e(sprintf("Compilation of configuration file '%s' failed for the following reason(s):\n\n%s", $config, $e->getMessage()));
 			}
 		} else {
 			$validationFile = null;
-			if(isset($handlerInfo['validation'][AgaviXmlConfigParser::VALIDATION_TYPE_XMLSCHEMA][0])) {
-				$validationFile = $handlerInfo['validation'][AgaviXmlConfigParser::VALIDATION_TYPE_XMLSCHEMA][0];
+			if(isset($handlerInfo['validations'][AgaviXmlConfigParser::VALIDATION_TYPE_XMLSCHEMA][0])) {
+				$validationFile = $handlerInfo['validations'][AgaviXmlConfigParser::VALIDATION_TYPE_XMLSCHEMA][0];
 			}
 			$handler->initialize($validationFile, null, $handlerInfo['parameters']);
 			$data = $handler->execute($config, $context);
@@ -271,27 +270,66 @@ final class AgaviConfigCache
 	 */
 	private static function loadConfigHandlers()
 	{
+		$agaviDir = AgaviConfig::get('core.agavi_dir');
 		// since we only need the parser and handlers when the config is not cached
 		// it is sufficient to include them at this stage
-		require_once(AgaviConfig::get('core.agavi_dir') . '/config/AgaviILegacyConfigHandler.interface.php');
-		require(AgaviConfig::get('core.agavi_dir') . '/config/AgaviIXmlConfigHandler.interface.php');
-		require_once(AgaviConfig::get('core.agavi_dir') . '/config/AgaviBaseConfigHandler.class.php');
-		require_once(AgaviConfig::get('core.agavi_dir') . '/config/AgaviConfigHandler.class.php');
-		require(AgaviConfig::get('core.agavi_dir') . '/config/AgaviXmlConfigHandler.class.php');
-		require(AgaviConfig::get('core.agavi_dir') . '/config/AgaviAutoloadConfigHandler.class.php');
-		require(AgaviConfig::get('core.agavi_dir') . '/config/AgaviConfigHandlersConfigHandler.class.php');
-		require(AgaviConfig::get('core.agavi_dir') . '/config/AgaviConfigValueHolder.class.php');
-		require(AgaviConfig::get('core.agavi_dir') . '/config/AgaviConfigParser.class.php');
-		require(AgaviConfig::get('core.agavi_dir') . '/config/AgaviXmlConfigParser.class.php');
-
+		require_once($agaviDir . '/config/AgaviILegacyConfigHandler.interface.php');
+		require($agaviDir . '/config/AgaviIXmlConfigHandler.interface.php');
+		require_once($agaviDir . '/config/AgaviBaseConfigHandler.class.php');
+		require_once($agaviDir . '/config/AgaviConfigHandler.class.php');
+		require($agaviDir . '/config/AgaviXmlConfigHandler.class.php');
+		require($agaviDir . '/config/AgaviAutoloadConfigHandler.class.php');
+		require($agaviDir . '/config/AgaviConfigHandlersConfigHandler.class.php');
+		require($agaviDir . '/config/AgaviConfigValueHolder.class.php');
+		require($agaviDir . '/config/AgaviConfigParser.class.php');
+		require($agaviDir . '/config/AgaviXmlConfigParser.class.php');
+		// extended DOM* classes
+		require($agaviDir . '/config/util/dom/AgaviXmlConfigDomAttr.class.php');
+		require($agaviDir . '/config/util/dom/AgaviXmlConfigDomCharacterData.class.php');
+		require($agaviDir . '/config/util/dom/AgaviXmlConfigDomComment.class.php');
+		require($agaviDir . '/config/util/dom/AgaviXmlConfigDomDocument.class.php');
+		require($agaviDir . '/config/util/dom/AgaviXmlConfigDomDocumentFragment.class.php');
+		require($agaviDir . '/config/util/dom/AgaviXmlConfigDomDocumentType.class.php');
+		require($agaviDir . '/config/util/dom/AgaviXmlConfigDomElement.class.php');
+		require($agaviDir . '/config/util/dom/AgaviXmlConfigDomEntity.class.php');
+		require($agaviDir . '/config/util/dom/AgaviXmlConfigDomEntityReference.class.php');
+		require($agaviDir . '/config/util/dom/AgaviXmlConfigDomNode.class.php');
+		require($agaviDir . '/config/util/dom/AgaviXmlConfigDomNotation.class.php');
+		require($agaviDir . '/config/util/dom/AgaviXmlConfigDomProcessingInstruction.class.php');
+		require($agaviDir . '/config/util/dom/AgaviXmlConfigDomText.class.php');
+		// extended XSL* classes
+		if(!AgaviConfig::get('core.skip_config_transformations', false)) {
+			if(!extension_loaded('xsl')) {
+				throw new AgaviConfigurationException('The XSL extension is required for performing transformations in the configuration system; transformations may be disabled by setting the core.skip_config_transformations directive');
+			}
+			require($agaviDir . '/config/util/xsl/AgaviXmlConfigXsltProcessor.class.php');
+		}
+		
 		// manually create our config_handlers.xml handler
 		self::$handlers['config_handlers.xml'] = array(
 			'class' => 'AgaviConfigHandlersConfigHandler',
 			'parameters' => array(
 			),
-			'validation' => array(
-				AgaviXmlConfigParser::VALIDATION_TYPE_XMLSCHEMA => array(
-					AgaviConfig::get('core.agavi_dir') . '/config/xsd/config_handlers.xsd',
+			'transformations' => array(
+				AgaviXmlConfigParser::STAGE_SINGLE => array(
+					$agaviDir . '/config/xsl/config_handlers.xsl',
+				),
+				AgaviXmlConfigParser::STAGE_COMPILATION => array(
+				),
+			),
+			'validations' => array(
+				AgaviXmlConfigParser::STAGE_SINGLE => array(
+					AgaviXmlConfigParser::STEP_TRANSFORMATIONS_BEFORE => array(
+					),
+					AgaviXmlConfigParser::STEP_TRANSFORMATIONS_AFTER => array(
+						AgaviXmlConfigParser::VALIDATION_TYPE_RELAXNG => array(
+							$agaviDir . '/config/rng/config_handlers.rng',
+						),
+					),
+				),
+				AgaviXmlConfigParser::STAGE_COMPILATION => array(
+					AgaviXmlConfigParser::STEP_TRANSFORMATIONS_BEFORE => array(),
+					AgaviXmlConfigParser::STEP_TRANSFORMATIONS_AFTER => array()
 				),
 			),
 		);

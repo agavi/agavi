@@ -18,14 +18,55 @@
     </xs:choice>
   </xs:group>
 
+  <xs:group name="transformations">
+    <xs:choice>
+      <xs:element name="transformations" type="transformations" minOccurs="0" />
+      <xs:element name="transformation" type="xs:string" minOccurs="0" maxOccurs="unbounded" />
+    </xs:choice>
+  </xs:group>
+  <xs:complexType name="transformations">
+    <xs:sequence>
+      <xs:element name="transformation" type="xs:string" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:group name="validations">
+    <xs:choice>
+      <xs:element name="validations" type="validations" minOccurs="0" />
+      <xs:element name="validation" type="validation" minOccurs="0" maxOccurs="unbounded" />
+    </xs:choice>
+  </xs:group>
+  <xs:complexType name="validations">
+    <xs:sequence>
+      <xs:element name="validation" type="validation" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="validation">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute name="type">
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:enumeration value="relax_ng"/>
+              <xs:enumeration value="schematron"/>
+              <xs:enumeration value="xml_schema"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:attribute>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
   <xs:complexType name="handlers">
     <xs:sequence>
       <xs:element name="handler" type="handler" maxOccurs="unbounded" />
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="handler">
-    <xs:sequence>
+    <xs:sequence maxOccurs="unbounded">
       <xs:group ref="parameters"/>
+      <xs:group ref="transformations" />
+      <xs:group ref="validations" />
     </xs:sequence>
     <xs:attribute name="pattern" type="xs:string" use="required" />
     <xs:attribute name="class" type="php_label" use="required" />

@@ -49,13 +49,18 @@ class AgaviConfigParser
 	 */
 	public function parse($config, $validationFile = null)
 	{
-		$parser = new AgaviXmlConfigParser();
+		$parser = new AgaviXmlConfigParser($config, AgaviConfig::get('core.environment'), null);
 		
-		$validation = array();
+		$validation = array(
+			AgaviXmlConfigParser::STEP_TRANSFORMATIONS_BEFORE => array(),
+			AgaviXmlConfigParser::STEP_TRANSFORMATIONS_AFTER => array(
+				AgaviXmlConfigParser::VALIDATION_TYPE_XMLSCHEMA => array(),
+			),
+		);
 		if($validationFile !== null) {
-			$validation[AgaviXmlConfigParser::VALIDATION_TYPE_XMLSCHEMA] = array($validationFile);
+			$validation[AgaviXmlConfigParser::STEP_TRANSFORMATIONS_AFTER][AgaviXmlConfigParser::VALIDATION_TYPE_XMLSCHEMA][] = array($validationFile);
 		}
-		$doc = $parser->parse($config, $validation);
+		$doc = $parser->execute(array(), $validation);
 		
 		$this->encoding = $doc->encoding;
 		
@@ -83,14 +88,14 @@ class AgaviConfigParser
 	protected function parseNodes($nodes, AgaviConfigValueHolder $parentVh, $isSingular = false)
 	{
 		foreach($nodes as $node) {
-			if($node->nodeType == XML_ELEMENT_NODE && (!$node->namespaceURI || $node->namespaceURI == AgaviXmlConfigParser::XML_NAMESPACE)) {
+			if($node->nodeType == XML_ELEMENT_NODE && (!$node->namespaceURI || $node->namespaceURI == AgaviXmlConfigParser::NAMESPACE_AGAVI_ENVELOPE_0_11)) {
 				$vh = new AgaviConfigValueHolder();
 				$nodeName = $this->convertEncoding($node->localName);
 				$vh->setName($nodeName);
 				$parentVh->addChildren($nodeName, $vh);
 
 				foreach($node->attributes as $attribute) {
-					if((!$attribute->namespaceURI || $attribute->namespaceURI == AgaviXmlConfigParser::XML_NAMESPACE)) {
+					if((!$attribute->namespaceURI || $attribute->namespaceURI == AgaviXmlConfigParser::NAMESPACE_AGAVI_ENVELOPE_0_11)) {
 						$vh->setAttribute($this->convertEncoding($attribute->localName), $this->convertEncoding($attribute->nodeValue));
 					}
 				}
