@@ -31,7 +31,7 @@
  */
 class AgaviConfigHandlersConfigHandler extends AgaviXmlConfigHandler
 {
-	const NAMESPACE = 'http://agavi.org/agavi/config/item/config_handlers/1.0';
+	const NAMESPACE = 'http://agavi.org/agavi/config/parts/config_handlers/1.0';
 	
 	/**
 	 * Execute this configuration handler.

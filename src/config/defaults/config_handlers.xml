@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<agavi:configurations xmlns:agavi="http://agavi.org/agavi/config/envelope/1.0" xmlns="http://agavi.org/agavi/config/item/config_handlers/1.0">
+<agavi:configurations xmlns:agavi="http://agavi.org/agavi/config/global/envelope/1.0" xmlns="http://agavi.org/agavi/config/parts/config_handlers/1.0">
 	<agavi:configuration>
 		<handlers>
 			<!--

@@ -34,13 +34,13 @@ class AgaviXmlConfigParser
 {
 	const NAMESPACE_AGAVI_ENVELOPE_0_11 = 'http://agavi.org/agavi/1.0/config';
 	
-	const NAMESPACE_AGAVI_ENVELOPE_1_0 = 'http://agavi.org/agavi/config/envelope/1.0';
+	const NAMESPACE_AGAVI_ENVELOPE_1_0 = 'http://agavi.org/agavi/config/global/envelope/1.0';
 	
 	const NAMESPACE_AGAVI_ENVELOPE_LATEST = self::NAMESPACE_AGAVI_ENVELOPE_1_0;
 	
-	const NAMESPACE_AGAVI_ANNOTATION_1_0 = 'http://agavi.org/agavi/config/annotation/1.0';
+	const NAMESPACE_AGAVI_ANNOTATIONS_1_0 = 'http://agavi.org/agavi/config/global/annotations/1.0';
 	
-	const NAMESPACE_AGAVI_ANNOTATION_LATEST = self::NAMESPACE_AGAVI_ANNOTATION_1_0;
+	const NAMESPACE_AGAVI_ANNOTATIONS_LATEST = self::NAMESPACE_AGAVI_ANNOTATIONS_1_0;
 	
 	const VALIDATION_TYPE_XMLSCHEMA = 'xml_schema';
 	
@@ -79,7 +79,7 @@ class AgaviXmlConfigParser
 		self::NAMESPACE_AGAVI_ENVELOPE_0_11 => 'agavi_envelope_0_11',
 		self::NAMESPACE_AGAVI_ENVELOPE_1_0 => 'agavi_envelope_1_0',
 		
-		self::NAMESPACE_AGAVI_ANNOTATION_1_0 => 'agavi_annotation_1_0'
+		self::NAMESPACE_AGAVI_ANNOTATIONS_1_0 => 'agavi_annotations_1_0'
 	);
 	
 	/**
@@ -185,7 +185,7 @@ class AgaviXmlConfigParser
 		
 		/* Register the latest namespaces. */
 		$xpath->registerNamespace('agavi_envelope_latest', self::NAMESPACE_AGAVI_ENVELOPE_LATEST);
-		$xpath->registerNamespace('agavi_annotation_latest', self::NAMESPACE_AGAVI_ANNOTATION_LATEST);
+		$xpath->registerNamespace('agavi_annotations_latest', self::NAMESPACE_AGAVI_ANNOTATIONS_LATEST);
 	}
 	                                                 
 	/**
@@ -263,10 +263,10 @@ class AgaviXmlConfigParser
 			
 			// generic <configuration> first, then those with an environment attribute, then those with context, then those with both
 			$configurationOrder = array(
-				'count(self::node()[@agavi_annotation_latest:matched and not(@environment) and not(@context)])',
-				'count(self::node()[@agavi_annotation_latest:matched and @environment and not(@context)])',
-				'count(self::node()[@agavi_annotation_latest:matched and not(@environment) and @context])',
-				'count(self::node()[@agavi_annotation_latest:matched and @environment and @context])',
+				'count(self::node()[@agavi_annotations_latest:matched and not(@environment) and not(@context)])',
+				'count(self::node()[@agavi_annotations_latest:matched and @environment and not(@context)])',
+				'count(self::node()[@agavi_annotations_latest:matched and not(@environment) and @context])',
+				'count(self::node()[@agavi_annotations_latest:matched and @environment and @context])',
 			);
 			
 			// now we sort the nodes according to the rules
@@ -521,7 +521,7 @@ class AgaviXmlConfigParser
 				}
 				if($matched) {
 					// if all was fine, we set the attribute. the element will then be kept in the merged result doc later
-					$configuration->setAttributeNS(self::NAMESPACE_AGAVI_ANNOTATION_LATEST, 'agavi_annotation_latest:matched', 'true');
+					$configuration->setAttributeNS(self::NAMESPACE_AGAVI_ANNOTATIONS_LATEST, 'agavi_annotations_latest:matched', 'true');
 				}
 			}
 		}
