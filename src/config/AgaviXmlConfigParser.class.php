@@ -283,7 +283,7 @@ class AgaviXmlConfigParser
 			}
 			
 			// run the compilation stage parser
-			self::executeCompilation($retval, $environment, $context, $transformationInfo[self::STAGE_COMPILATION], $validationInfo[self::STAGE_COMPILATION]);
+			$retval = self::executeCompilation($retval, $environment, $context, $transformationInfo[self::STAGE_COMPILATION], $validationInfo[self::STAGE_COMPILATION]);
 		} else {
 			// it's not an agavi config file. just pass it through then
 			$retval->appendChild($retval->importNode($doc->documentElement, true));
@@ -442,6 +442,8 @@ class AgaviXmlConfigParser
 		
 		// validate post-transformation
 		self::validate($document, $environment, $context, $validationInfo[AgaviXmlConfigParser::STEP_TRANSFORMATIONS_AFTER]);
+		
+		return $document;
 	}
 	
 	/**
