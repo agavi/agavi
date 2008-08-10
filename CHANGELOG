@@ -4,8 +4,13 @@ AGAVI CHANGELOG
 1.0.0 beta 1 (August 10, 2008)
 ------------------------------
 
+ADD: XSL Transformations done by XML Config Parser should have some information available in template parameters (#710) (David, Noah)
+ADD: Add extension points to XML schema definitions where feasible (#515) (David, Noah)
+ADD: Update SOAP support to make use of functionality introduced in #710 (#795) (David)
 ADD: Allow additional types for second argument of AgaviLoggerManager::log() (#634) (David)
 
+CHG: Move XML validation to RelaxNG and Schematron (#462) (Noah, David)
+CHG: Change configuration system to support only XML (#519) (David, Noah)
 CHG: Change default for assigning of "inner" content to $slots template array to disabled (#794) (David)
 CHG: Rewrite the project build system and throw out the old one (#689) (Noah)
 CHG: Refactor internal "system action" handling and fowarding (#769) (David)
