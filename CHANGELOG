@@ -19,12 +19,13 @@ CHG: Deprecated AgaviAdodbDatabase (#662) (David)
 FIX: Security filters cannot perform checks in addition to isSecure() (#671) (David)
 
 
-0.11.3 RC1 (July ??, 2008)
---------------------------
+0.11.3 RC1 (August ??, 2008)
+----------------------------
 
 ADD: Set current Context instance on Doctrine connections (#800) (David)
 ADD: Support for doctrine connection settings and options (#788) (David)
 
+CHG: Update timezone database to 2008e (#806) (David)
 CHG: Dump "xhtml" output type from sample app and introduce a replacement (#802) (David)
 CHG: Assigning of "inner" content to $slots template array should be configurable (#793) (David)
 
