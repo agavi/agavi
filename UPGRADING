@@ -28,6 +28,10 @@ New namespaces for all configuration files have been introduced, and envelope na
 
 Please refer to the documentation for a full list of configuration namespaces and their roles.
 
+Template layer output availability
+----------------------------------
+By default, the output of the previous template layer is only available in $inner, not anymore through $slots['layername']. This can be changed through a configuration setting for the execution filter, but is strongly discouraged, as $inner is more portable (and also more logical).
+
 Previously Deprecated Elements that have been removed
 -----------------------------------------------------
 The following methods and attributes were deprecated in Agavi 0.11 and have been removed in this following release:
