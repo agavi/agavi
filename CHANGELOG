@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 1.0.0 beta 1 (August 10, 2008)
 ------------------------------
 
+ADD: Implement Schematron support (#761) (David, Noah)
 ADD: XSL Transformations done by XML Config Parser should have some information available in template parameters (#710) (David, Noah)
 ADD: Add extension points to XML schema definitions where feasible (#515) (David, Noah)
 ADD: Update SOAP support to make use of functionality introduced in #710 (#795) (David)
