@@ -486,7 +486,6 @@ TODO: is_equal doesn't work yet
 
 			// Check daylight usage.
 			$usesDaylight = $tz->useDaylightTime();
-			var_dump($itsID);
 			$this->assertEquals($entry['daylight'], $usesDaylight, 'Zone ' . $itsID);
 
 			// Check offset
