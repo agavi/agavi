@@ -1,8 +1,8 @@
 AGAVI RELEASE NOTES
 ===================
 
-Version 1.0 - September ??, 2008
-================================
+Version 1.0 - October ??, 2008
+==============================
 
 The following is a brief summary of the most important changes in this release. For a full list of new features, changes and bugfixes, please refer to the CHANGELOG.
 
@@ -10,9 +10,16 @@ Also, please pay special attention to the list of deprecated elements at the end
 
 ATTENTION: Some bugfixes caused changes to internal behavior. Make absolutely sure that your application is ready for an upgrade to 1.0 by reading the UPGRADING document.
 
+Configuration
+-------------
+A new configuration subsystem that natively deals with XML files replaces the current implementation. This has numerous advantages; for instance, Agavi now supports any number of XML Schema (including XML Schema Instance declarations), RELAX NG or Schematron files to be validated against config files or merged result documents in several different stages, can apply XSL transformations (including those declared in <?xml-stylesheet?> PIs) and has extended namespaces support that allow backwards-compatibility to old config files in future versions.
+Backwards compabibility requires PHP's XSL extension enabled; other than that, everything still works as usual. Old-style configuration file handlers are still supported (but deprecated), but don't support the new features explained above.
+Also, the namespaces of configuration files have been changed, with envelope namespaces (<configurations> and other elements) decoupled from the actual config content namespaces. Again, backwards compatibility is maintained, but you should upgrade your configuration files when moving to 1.0 in order to be able to fully leverage all features and make future transitions easier.
+Of note, the legacy support for configuration files with no namespace at all (just <configurations>) has been dropped completely, so your files at the very least have to be in the global 0.11 namespace (http://agavi.org/agavi/1.0/config).
+
 Execution
 ---------
-Execution containers now have their own request method. By default, it is equal to the global requests' request method. It can, however, be changed using the last (and new) argument of AgaviController::createExecutionContainer() and the related methods in AgaviExecutionContainer and AgaviView. Like the output type, the request method is carried over from the "parent" container if AgaviExecutionContainer::createExecutionContainer() is used (or the methods in AgaviView, which use this method). You can define a slot's request method using the new "method" attribute of the <slot> element in your output_types.xml layout declarations.
+Execution containers now have their own request method. By default, it is equal to the global request's request method. It can, however, be changed using the last (and new) argument of AgaviController::createExecutionContainer() and the related methods in AgaviExecutionContainer and AgaviView. Like the output type, the request method is carried over from the "parent" container if AgaviExecutionContainer::createExecutionContainer() is used (or the methods in AgaviView, which use this method). You can define a slot's request method using the new "method" attribute of the <slot> element in your output_types.xml layout declarations.
 
 When Agavi does an internal forward, for example to the login "system action" when an action requires authentication, the corresponding information in the "org.agavi.controller.forwards.*" namespaces will now be set on as attributes on the respective containers, in addition to the existing request attributes, which remain for BC.
 
@@ -43,6 +50,7 @@ Agavi 1.0 introduces a new environment for creating and managing Agavi-based pro
 - Targets are included for creating views and other project elements
 - Project-specific build.xml files are now recognized and targets are automatically imported
 - Build files may define objects that act as event listeners for targets, tasks, or build messages
+
 
 Version 0.11.2 - July 8, 2008
 =============================

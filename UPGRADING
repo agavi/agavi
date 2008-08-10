@@ -8,7 +8,25 @@ Upgrading to Agavi 1.0 requires very little effort as the API remained identical
 
 It is recommended that you refer to the RELEASE_NOTES to see a list of deprecated elements, and change your application accordingly.
 
-However, two areas might affect your application:
+However, a couple of changes might affect your application:
+
+Configuration file XML namespace changes
+----------------------------------------
+Legacy support for configuration files with no namespace (from 0.11 unstable versions) has been dropped.
+That means <configurations> without xmlns="http://agavi.org/agavi/1.0/config" as the namespace will not work anymore.
+
+New namespaces for all configuration files have been introduced, and envelope namespaces and actual content namespaces are now separate:
+<a:configurations xmlns:a="http://agavi.org/agavi/config/global/envelope/1.0">
+  <a:configuration>
+    <handlers xmlns="http://agavi.org/agavi/config/parts/config_handlers/1.0">
+      <handler pattern="%core.config_dir%/autoload.xml" class="AgaviAutoloadConfigHandler">
+        <a:parameter name="foo">bar</a:parameter>
+      </handler>
+    </handlers>
+  </a:configuration>
+</a:configurations>
+
+Please refer to the documentation for a full list of configuration namespaces and their roles.
 
 Previously Deprecated Elements that have been removed
 -----------------------------------------------------
