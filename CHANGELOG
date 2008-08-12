@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 1.0.0 beta 2 (August ??, 2008)
 ------------------------------
 
+FIX: Some config handlers use PHP-5.3-reserved-word "NAMESPACE" as constant (#810) (David, Benjamin Börngen-Schmidt)
 FIX: src/config/xsl/routing.xsl is missing (#811) (David)
 
 

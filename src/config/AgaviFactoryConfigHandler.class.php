@@ -32,7 +32,7 @@
  */
 class AgaviFactoryConfigHandler extends AgaviXmlConfigHandler
 {
-	const NAMESPACE = 'http://agavi.org/agavi/config/parts/factories/1.0';
+	const XML_NAMESPACE = 'http://agavi.org/agavi/config/parts/factories/1.0';
 	
 	/**
 	 * Execute this configuration handler.
@@ -52,7 +52,7 @@ class AgaviFactoryConfigHandler extends AgaviXmlConfigHandler
 	public function execute(AgaviXmlConfigDomDocument $document)
 	{
 		// set up our default namespace
-		$document->setDefaultNamespace(self::NAMESPACE, 'factories');
+		$document->setDefaultNamespace(self::XML_NAMESPACE, 'factories');
 		
 		$config = $document->documentURI;
 		$data = array();

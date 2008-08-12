@@ -31,7 +31,7 @@
  */
 class AgaviConfigHandlersConfigHandler extends AgaviXmlConfigHandler
 {
-	const NAMESPACE = 'http://agavi.org/agavi/config/parts/config_handlers/1.0';
+	const XML_NAMESPACE = 'http://agavi.org/agavi/config/parts/config_handlers/1.0';
 	
 	/**
 	 * Execute this configuration handler.
@@ -53,7 +53,7 @@ class AgaviConfigHandlersConfigHandler extends AgaviXmlConfigHandler
 	public function execute(AgaviXmlConfigDomDocument $document)
 	{
 		// set up our default namespace
-		$document->setDefaultNamespace(self::NAMESPACE, 'config_handlers');
+		$document->setDefaultNamespace(self::XML_NAMESPACE, 'config_handlers');
 		
 		// init our data arrays
 		$handlers = array();
