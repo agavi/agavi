@@ -1,6 +1,12 @@
 AGAVI CHANGELOG
 ===============
 
+1.0.0 beta 2 (August ??, 2008)
+------------------------------
+
+FIX: src/config/xsl/routing.xsl is missing (#811) (David)
+
+
 1.0.0 beta 1 (August 10, 2008)
 ------------------------------
 
