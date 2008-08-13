@@ -300,12 +300,13 @@ class AgaviWebResponse extends AgaviResponse
 	/**
 	 * Sets a HTTP status code for the response.
 	 *
-	 * @param      string A numeric HTTP status code between 100 and 505.
+	 * @param      string A numeric HTTP status code.
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function setHttpStatusCode($code) {
+	public function setHttpStatusCode($code)
+	{
 		$code = (string)$code;
 		if(isset($this->httpStatusCodes[$code])) {
 			$this->httpStatusCode = $code;
@@ -323,7 +324,8 @@ class AgaviWebResponse extends AgaviResponse
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function getHttpStatusCode() {
+	public function getHttpStatusCode()
+	{
 		return $this->httpStatusCode;
 	}
 
