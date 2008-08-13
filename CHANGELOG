@@ -7,6 +7,7 @@ AGAVI CHANGELOG
 ADD: Set current Context instance on Doctrine connections (#800, #808) (David)
 ADD: Support for doctrine connection settings and options (#788) (David)
 
+CHG: Enhance HTTP status code validation for AgaviWebResponse::setRedirect() (#804) (David)
 CHG: Update timezone database to 2008e (#806) (David)
 CHG: Dump "xhtml" output type from sample app and introduce a replacement (#802) (David)
 CHG: Assigning of "inner" content to $slots template array should be configurable (#793) (David)
