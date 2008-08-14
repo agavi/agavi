@@ -12,6 +12,7 @@ CHG: Update timezone database to 2008e (#806) (David)
 CHG: Dump "xhtml" output type from sample app and introduce a replacement (#802) (David)
 CHG: Assigning of "inner" content to $slots template array should be configurable (#793) (David)
 
+FIX: AgaviView::initialize() incorrectly assigns container's response to a property (#813) (David)
 FIX: AgaviExecutionTimeFilter runs only once (#801) (David)
 FIX: PEAR installations place src/routing/soap files in the data directory rather than the source directory (#799) (Noah)
 
