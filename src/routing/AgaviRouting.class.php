@@ -685,8 +685,6 @@ abstract class AgaviRouting extends AgaviParameterHolder
 		$input = $this->input;
 
 		$vars = array();
-		$module = null;
-		$action = null;
 		$ot = null;
 		$locale = null;
 		$method = null;
@@ -770,11 +768,11 @@ abstract class AgaviRouting extends AgaviParameterHolder
 						$matchvals = array_map('current', $match);
 
 						if($opts['module']) {
-							$module = AgaviToolkit::expandVariables($opts['module'], $matchvals);
+							$vars[$ma] = AgaviToolkit::expandVariables($opts['module'], $matchvals);
 						}
 
 						if($opts['action']) {
-							$action = AgaviToolkit::expandVariables($opts['action'], $matchvals);
+							$vars[$aa] = AgaviToolkit::expandVariables($opts['action'], $matchvals);
 						}
 
 						if($opts['output_type']) {
@@ -839,23 +837,19 @@ abstract class AgaviRouting extends AgaviParameterHolder
 			$req->setMethod($method);
 		}
 
-		// no route which supplied the required parameters matched, use 404 action
-		if($ma === null || $aa === null) {
-			$module = AgaviConfig::get('actions.error_404_module');
-			$action = AgaviConfig::get('actions.error_404_action');
-		}
-
-		// see if we need to add module and action names to the request data
-		if($req->getParameter('use_module_action_parameters')) {
-			$vars[$ma] = $module;
-			$vars[$aa] = $action;
-		}
-
 		// put the vars into the request
 		$reqData->setParameters($vars);
 
-		$container->setModuleName($module);
-		$container->setActionName($action);
+		if(!$reqData->hasParameter($ma) || !$reqData->hasParameter($aa)) {
+			// no route which supplied the required parameters matched, use 404 action
+			$reqData->setParameters(array(
+				$ma => AgaviConfig::get('actions.error_404_module'),
+				$aa => AgaviConfig::get('actions.error_404_action')
+			));
+		}
+
+		$container->setModuleName($reqData->getParameter($ma));
+		$container->setActionName($reqData->getParameter($aa));
 
 		// set the list of matched route names as a request attribute
 		$req->setAttribute('matched_routes', $matchedRoutes, 'org.agavi.routing');

@@ -298,13 +298,11 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 			$maParam = $parameters->getParameter($ma);
 			$aaParam = $parameters->getParameter($aa);
 			$parameters->clearAll();
-			if($req->getParameter('use_module_action_parameters')) {
-				if($maParam) {
-					$parameters->setParameter($ma, $maParam);
-				}
-				if($aaParam) {
-					$parameters->setParameter($aa, $aaParam);
-				}
+			if($maParam) {
+				$parameters->setParameter($ma, $maParam);
+			}
+			if($aaParam) {
+				$parameters->setParameter($aa, $aaParam);
 			}
 		}
 
