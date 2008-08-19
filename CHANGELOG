@@ -6,6 +6,8 @@ AGAVI CHANGELOG
 
 ADD: Allow skipping of template auto-assigns (#605) (David)
 
+CHG: Make AgaviContext implementation configurable (#815) (David)
+
 FIX: Some config handlers use PHP-5.3-reserved-word "NAMESPACE" as constant (#810) (David, Benjamin Börngen-Schmidt)
 FIX: src/config/xsl/routing.xsl is missing (#811) (David)
 
