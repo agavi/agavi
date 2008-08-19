@@ -82,6 +82,9 @@ class AgaviPhpRenderer extends AgaviRenderer implements AgaviIReusableRenderer
 		foreach($moreAssigns as $moreAssignName => &$moreAssign) {
 			if(isset($this->moreAssignNames[$moreAssignName])) {
 				$moreAssignName = $this->moreAssignNames[$moreAssignName];
+			} elseif(array_key_exists($moreAssignName, $this->moreAssignNames)) {
+				// the name is null, which means this one should not be assigned
+				continue;
 			}
 			$this->moreAssigns[$moreAssignName] =& $moreAssign;
 		}

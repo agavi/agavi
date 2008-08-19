@@ -161,6 +161,9 @@ class AgaviEzctemplateRenderer extends AgaviRenderer implements AgaviIReusableRe
 		foreach($moreAssigns as $key => &$value) {
 			if(isset($this->moreAssignNames[$key])) {
 				$key = $this->moreAssignNames[$key];
+			} elseif(array_key_exists($key, $this->moreAssignNames)) {
+				// the name is null, which means this one should not be assigned
+				continue;
 			}
 			$engine->send->{$key} = $value;
 		}
