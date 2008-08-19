@@ -32,7 +32,7 @@
 		<user class="AgaviSecurityUser" />
 		
 		<validation_manager class="AgaviValidationManager">
-			<parameter name="mode">strict</parameter>
+			<ae:parameter name="mode">strict</ae:parameter>
 		</validation_manager>
 		
 	</ae:configuration>
@@ -40,11 +40,11 @@
 	<ae:configuration environment="development.*">
 		
 		<response class="AgaviWebResponse">
-			<parameter name="send_content_length">false</parameter>
+			<ae:parameter name="send_content_length">false</ae:parameter>
 		</response>
 	
 		<validation_manager class="AgaviValidationManager">
-			<parameter name="mode">conditional</parameter>
+			<ae:parameter name="mode">conditional</ae:parameter>
 		</validation_manager>
 		
 	</ae:configuration>
