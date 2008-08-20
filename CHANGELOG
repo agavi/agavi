@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 0.11.3 RC1 (August ??, 2008)
 ----------------------------
 
+ADD: Allow ignoring of (X)HTML parse errors in FPF (#613) (David)
 ADD: Set current Context instance on Doctrine connections (#800, #808) (David)
 ADD: Support for doctrine connection settings and options (#788) (David)
 
