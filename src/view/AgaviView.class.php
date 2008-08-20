@@ -119,8 +119,6 @@ abstract class AgaviView
 		$this->container = $container;
 
 		$this->context = $container->getContext();
-
-		$this->response = $container->getResponse();
 	}
 
 	/**

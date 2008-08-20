@@ -191,6 +191,12 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 				$m = new $mc($lmsg, $cfg['logging_severity']);
 				$lm->log($m, $cfg['logging_logger']);
 			}
+			
+			// all in all, that didn't go so well. let's see if we should just silently abort instead of throwin an exception
+			if($cfg['ignore_parse_errors']) {
+				return;
+			}
+			
 			throw new AgaviParseException($emsg);
 		}
 
@@ -895,6 +901,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 			'field_error_messages'       => array(),
 			'multi_field_error_messages' => array(),
 
+			'ignore_parse_errors'        => false,
 			'log_parse_errors'           => true,
 			'logging_severity'           => AgaviLogger::FATAL,
 			'logging_logger'             => null,
