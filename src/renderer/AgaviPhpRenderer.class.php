@@ -78,16 +78,7 @@ class AgaviPhpRenderer extends AgaviRenderer implements AgaviIReusableRenderer
 		$this->layer = $layer;
 		$this->attributes =& $attributes;
 		$this->slots =& $slots;
-		$this->moreAssigns = array();
-		foreach($moreAssigns as $moreAssignName => &$moreAssign) {
-			if(isset($this->moreAssignNames[$moreAssignName])) {
-				$moreAssignName = $this->moreAssignNames[$moreAssignName];
-			} elseif(array_key_exists($moreAssignName, $this->moreAssignNames)) {
-				// the name is null, which means this one should not be assigned
-				continue;
-			}
-			$this->moreAssigns[$moreAssignName] =& $moreAssign;
-		}
+		$this->moreAssigns =& self::buildMoreAssigns($moreAssigns, $this->moreAssignNames);
 		unset($layer, $attributes, $slots, $moreAssigns);
 		
 		if($this->extractVars) {
@@ -103,7 +94,7 @@ class AgaviPhpRenderer extends AgaviRenderer implements AgaviIReusableRenderer
 		}
 		unset($name, $getter);
 		
-		extract($this->moreAssigns, EXTR_REFS);
+		extract($this->moreAssigns, EXTR_REFS | EXTR_PREFIX_INVALID, '_');
 		
 		ob_start();
 		

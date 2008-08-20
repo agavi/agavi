@@ -162,6 +162,34 @@ abstract class AgaviRenderer extends AgaviParameterHolder
 	}
 	
 	/**
+	 * Build an array of "more" assigns.
+	 *
+	 * @param      array The values to be assigned.
+	 * @param      array Assigns name map.
+	 *
+	 * @return     array The data.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.0.0
+	 */
+	protected static function &buildMoreAssigns(&$moreAssigns, $moreAssignNames)
+	{
+		$retval = array();
+		
+		foreach($moreAssigns as $name => &$value) {
+			if(isset($moreAssignNames[$name])) {
+				$name = $moreAssignNames[$name];
+			} elseif(array_key_exists($name, $moreAssignNames)) {
+				// the name is null, which means this one should not be assigned
+				continue;
+			}
+			$retval[$name] =& $value;
+		}
+		
+		return $retval;
+	}
+	
+	/**
 	 * Render the presentation and return the result.
 	 *
 	 * @param      AgaviTemplateLayer The template layer to render.
