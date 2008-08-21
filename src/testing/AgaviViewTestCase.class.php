@@ -1,6 +1,6 @@
 <?php
 
-class AgaviViewTestCase extends AgaviFragmentTestCase
+abstract class AgaviViewTestCase extends AgaviFragmentTestCase
 {
 }
 

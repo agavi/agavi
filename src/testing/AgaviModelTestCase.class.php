@@ -1,6 +1,6 @@
 <?php
 
-class AgaviModelTestCase extends AgaviUnitTestCase
+abstract class AgaviModelTestCase extends AgaviUnitTestCase
 {
 }
 

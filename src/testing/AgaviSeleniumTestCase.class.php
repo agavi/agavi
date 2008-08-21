@@ -1,6 +1,6 @@
 <?php
 
-class AgaviSeleniumTestCase extends PHPUnit_Framework_SeleniumTestCase implements AgaviIRemoteTestCase
+abstract class AgaviSeleniumTestCase extends PHPUnit_Framework_SeleniumTestCase implements AgaviIRemoteTestCase
 {
 }
 
