@@ -2,6 +2,23 @@
 
 class AgaviUnitTestSuite extends AgaviTestSuite
 {
+	
+	/**
+     * Whether or not the tests of this test suite are
+     * to be run in separate PHP processes.
+     *
+     * @var    boolean
+     */
+    protected $runTestsInSeparateProcesses = true;
+
+    /**
+     * Whether or not the tests of this test suite are
+     * to be run in a separate PHP process.
+     *
+     * @var    boolean
+     */
+    protected $runTestSuiteInSeparateProcess = true;
+	
 	public static function suite()
 	{
 		$c = new self();
