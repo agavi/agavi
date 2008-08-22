@@ -23,9 +23,6 @@ abstract class AgaviUnitTestCase extends PHPUnit_Framework_TestCase implements A
             dirname(__FILE__),
             DIRECTORY_SEPARATOR
           );
-
-		// TODO: carry over env name to bootstrap from parent process via passed $GLOBALS
-		Agavi::bootstrap('testing-david');
 	}
 	
 	protected function setUp()
