@@ -3,6 +3,7 @@
 // copied from PHPUnit/Util/Process/TestMethod.tpl
 set_include_path('{include_path}');
 $GLOBALS = unserialize({globals});
+$GLOBALS['GLOBALS'] = &$GLOBALS;
 // end copied from PHPUnit/Util/Process/TestMethod.tpl
 
 // bootstrap an agavi installation, so tests can run without problems
