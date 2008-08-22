@@ -7,8 +7,23 @@ abstract class AgaviUnitTestCase extends PHPUnit_Framework_TestCase implements A
 	 */
 	protected $runInSeparateProcess = true;
 	
-	public function __construct()
-	{
+    /**
+     * Constructs a test case with the given name.
+     *
+     * @param  string $name
+     * @param  array  $data
+     * @param  string $dataName
+     */
+    public function __construct($name = NULL, array $data = array(), $dataName = '')
+    {
+		parent::__construct($name, $data, $dataName);
+		$this->methodTemplateName = sprintf(
+            '%1$s%2$stemplates%2$sAgaviTestMethod.tpl',
+
+            dirname(__FILE__),
+            DIRECTORY_SEPARATOR
+          );
+
 		// TODO: carry over env name to bootstrap from parent process via passed $GLOBALS
 		Agavi::bootstrap('testing-david');
 	}
