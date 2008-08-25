@@ -8,6 +8,7 @@ ADD: Allow ignoring of (X)HTML parse errors in FPF (#613) (David)
 ADD: Set current Context instance on Doctrine connections (#800, #808) (David)
 ADD: Support for doctrine connection settings and options (#788) (David)
 
+CHG: Improve AgaviInflector performance (#823) (Thomas Bachem, David)
 CHG: Enhance HTTP status code validation for AgaviWebResponse::setRedirect() (#804) (David)
 CHG: Update timezone database to 2008e (#806) (David)
 CHG: Dump "xhtml" output type from sample app and introduce a replacement (#802) (David)
