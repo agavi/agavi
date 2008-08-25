@@ -29,6 +29,14 @@ abstract class AgaviUnitTestCase extends PHPUnit_Framework_TestCase implements A
 	{
 		// all methods of this test case run in the same process
 	}
+	
+	public function getContext()
+	{
+		/**
+		 * @TODO change this implementation, it's only here for dev purposes
+		 */
+		return AgaviContext::getInstance('web');
+	}
 }
 
 ?>
