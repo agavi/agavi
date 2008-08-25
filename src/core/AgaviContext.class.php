@@ -34,7 +34,7 @@
  *
  * @version    $Id$
  */
-final class AgaviContext
+class AgaviContext
 {
 	/**
 	 * @var        string The name of the Context.
@@ -121,7 +121,7 @@ final class AgaviContext
 	}
 
 	/**
-	 * Constuctor method, intentionally made private so the context cannot be
+	 * Constuctor method, intentionally made protected so the context cannot be
 	 * created directly.
 	 *
 	 * @param      string The name of this context.
@@ -130,7 +130,7 @@ final class AgaviContext
 	 * @author     Mike Vincent <mike@agavi.org>
 	 * @since      0.9.0
 	 */
-	private function __construct($name)
+	protected function __construct($name)
 	{
 		$this->name = $name;
 	}
@@ -245,7 +245,7 @@ final class AgaviContext
 			}
 			$profile = strtolower($profile);
 			if(!isset(self::$instances[$profile])) {
-				$class = __CLASS__;
+				$class = AgaviConfig::get('core.context_implementation', __CLASS__);
 				self::$instances[$profile] = new $class($profile);
 				self::$instances[$profile]->initialize();
 			}

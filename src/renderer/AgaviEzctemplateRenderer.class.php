@@ -158,10 +158,8 @@ class AgaviEzctemplateRenderer extends AgaviRenderer implements AgaviIReusableRe
 			$engine->send->{$key} = $this->context->$getter();
 		}
 
-		foreach($moreAssigns as $key => &$value) {
-			if(isset($this->moreAssignNames[$key])) {
-				$key = $this->moreAssignNames[$key];
-			}
+		$finalMoreAssigns =& self::buildMoreAssigns($moreAssigns, $this->moreAssignNames);
+		foreach($finalMoreAssigns as $key => &$value) {
 			$engine->send->{$key} = $value;
 		}
 

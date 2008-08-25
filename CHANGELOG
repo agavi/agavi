@@ -4,6 +4,10 @@ AGAVI CHANGELOG
 1.0.0 beta 2 (August ??, 2008)
 ------------------------------
 
+ADD: Allow skipping of template auto-assigns (#605) (David)
+
+CHG: Make AgaviContext implementation configurable (#815) (David)
+
 FIX: Some config handlers use PHP-5.3-reserved-word "NAMESPACE" as constant (#810) (David, Benjamin Börngen-Schmidt)
 FIX: src/config/xsl/routing.xsl is missing (#811) (David)
 
@@ -36,13 +40,16 @@ FIX: Security filters cannot perform checks in addition to isSecure() (#671) (Da
 0.11.3 RC1 (August ??, 2008)
 ----------------------------
 
-ADD: Set current Context instance on Doctrine connections (#800) (David)
+ADD: Allow ignoring of (X)HTML parse errors in FPF (#613) (David)
+ADD: Set current Context instance on Doctrine connections (#800, #808) (David)
 ADD: Support for doctrine connection settings and options (#788) (David)
 
+CHG: Enhance HTTP status code validation for AgaviWebResponse::setRedirect() (#804) (David)
 CHG: Update timezone database to 2008e (#806) (David)
 CHG: Dump "xhtml" output type from sample app and introduce a replacement (#802) (David)
 CHG: Assigning of "inner" content to $slots template array should be configurable (#793) (David)
 
+FIX: AgaviView::initialize() incorrectly assigns container's response to a property (#813) (David)
 FIX: AgaviExecutionTimeFilter runs only once (#801) (David)
 FIX: PEAR installations place src/routing/soap files in the data directory rather than the source directory (#799) (Noah)
 

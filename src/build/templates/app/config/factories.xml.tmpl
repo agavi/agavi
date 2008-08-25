@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configurations xmlns="http://agavi.org/agavi/1.0/config">
+<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" xmlns="http://agavi.org/agavi/config/parts/factories/1.0">
 	
-	<configuration>
+	<ae:configuration>
 		
 		<controller class="AgaviController" />
 		
@@ -32,21 +32,21 @@
 		<user class="AgaviSecurityUser" />
 		
 		<validation_manager class="AgaviValidationManager">
-			<parameter name="mode">strict</parameter>
+			<ae:parameter name="mode">strict</ae:parameter>
 		</validation_manager>
 		
-	</configuration>
+	</ae:configuration>
 	
-	<configuration environment="development.*">
+	<ae:configuration environment="development.*">
 		
 		<response class="AgaviWebResponse">
-			<parameter name="send_content_length">false</parameter>
+			<ae:parameter name="send_content_length">false</ae:parameter>
 		</response>
 	
 		<validation_manager class="AgaviValidationManager">
-			<parameter name="mode">conditional</parameter>
+			<ae:parameter name="mode">conditional</ae:parameter>
 		</validation_manager>
 		
-	</configuration>
+	</ae:configuration>
 	
-</configurations>
+</ae:configurations>
