@@ -38,12 +38,6 @@ class AgaviTesting
 			// class exists, let's include it
 			require(AgaviConfig::get('core.agavi_dir') . '/' . self::$autoloads[$class]);
 		}
-
-		/*
-			If the class doesn't exist in autoload.xml there's not a lot we can do. Because
-			PHP's class_exists resorts to __autoload we cannot throw exceptions
-			for this might break some 3rd party lib autoloading mechanism.
-		*/
 	}
 
 	/**
