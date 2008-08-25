@@ -75,15 +75,23 @@ class AgaviTesting
 		// finally set the env to what we're really using now.
 		AgaviConfig::set('testing.environment', $environment, true, true);
 		
+		ini_set('include_path', get_include_path().PATH_SEPARATOR.dirname(dirname(__FILE__)));
+
 		$_ENV['AGAVI'] = AgaviConfig::toArray();
 	}
-	
+
 	public function dispatch()
 	{
-		$suite = new PHPUnit_Framework_TestSuite();
-		
+		$suite = new AgaviUnitTestSuite('Foo');
+		//require_once 'tests/unit/PriceFinderModelTest.php';
+		//$test = new PriceFinderModelTest();
+		//$test->setName('PriceFinder Model');
+		//$suite->addTest($test);
+		$suite->addTestFile('tests/unit/PriceFinderModelTest.php');
+
+
 		// TODO: read test suites from xml or so
-		
+
 		$runner = PHPUnit_TextUI_TestRunner::run($suite);
 	}
 }
