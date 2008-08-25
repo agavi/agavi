@@ -12,6 +12,7 @@ AgaviConfig::fromArray($GLOBALS['_ENV']['AGAVI']);
 unset($GLOBALS['_ENV']['AGAVI']);
 
 AgaviTesting::bootstrap();
+Agavi::bootstrap(AgaviConfig::get('testing.environment'));
 
 // copied from PHPUnit/Util/Process/TestMethod.tpl
 require_once 'PHPUnit/Framework.php';
