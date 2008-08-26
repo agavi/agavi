@@ -244,94 +244,66 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 		$this->setModuleName($moduleName);
 		$this->setActionName($actionName);
 
-		// include the module configuration
-		// loaded only once due to the way load() (former import()) works
-		if(is_readable(AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/config/module.xml')) {
-			AgaviConfigCache::load(AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/config/module.xml', $this->context->getName());
-		} else {
-			AgaviConfig::set('modules.' . strtolower($moduleName) . '.enabled', true);
-		}
 
-		// save autoloads so we can restore them later
-		$oldAutoloads = Agavi::$autoloads;
-
-		static $moduleAutoloads = array();
-		if(!isset($moduleAutoloads[$moduleName])) {
-			$moduleAutoloads[$moduleName] = array();
-			$moduleAutoload = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/config/autoload.xml';
-			if(is_readable($moduleAutoload)) {
-				include(AgaviConfigCache::checkConfig($moduleAutoload));
-				$moduleAutoloads[$moduleName] = Agavi::$autoloads;
-			}
-		} else {
-			Agavi::$autoloads = array_merge($moduleAutoloads[$moduleName], Agavi::$autoloads);
-		}
-
-		if(AgaviConfig::get('modules.' . strtolower($moduleName) . '.enabled')) {
-			// check for a module config.php
-			$moduleConfig = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/config.php';
-			if(is_readable($moduleConfig)) {
-				require_once($moduleConfig);
-			}
-
+		try {
 			$this->actionInstance = $controller->createActionInstance($this->moduleName, $this->actionName);
+		} catch(AgaviDisabledModuleException $e) {
+			$this->setNext($this->createSystemActionForwardContainer('module_disabled'));
+			return $this->proceed();
+		}
+		
+ 
+		// initialize the action
+		$this->actionInstance->initialize($this);
 
-			// initialize the action
-			$this->actionInstance->initialize($this);
-
-			if($this->actionInstance->isSimple()) {
-				if($this->arguments !== null) {
-					// clone it so mutating it has no effect on the "outside world"
-					$this->requestData = clone $this->arguments;
-				} else {
-					$rdhc = $request->getParameter('request_data_holder_class');
-					$this->requestData = new $rdhc();
-				}
-				// run the execution filter, without a proper chain
-				$controller->getFilter('execution')->execute(new AgaviFilterChain(), $this);
+		if($this->actionInstance->isSimple()) {
+			if($this->arguments !== null) {
+				// clone it so mutating it has no effect on the "outside world"
+				$this->requestData = clone $this->arguments;
 			} else {
-				// mmmh I smell awesomeness... clone the RD JIT, yay, that's the spirit
-				$this->requestData = clone $this->globalRequestData;
+				$rdhc = $request->getParameter('request_data_holder_class');
+				$this->requestData = new $rdhc();
+			}
+			// run the execution filter, without a proper chain
+			$controller->getFilter('execution')->execute(new AgaviFilterChain(), $this);
+		} else {
+			// mmmh I smell awesomeness... clone the RD JIT, yay, that's the spirit
+			$this->requestData = clone $this->globalRequestData;
 
-				if($this->arguments !== null) {
-					$this->requestData->merge($this->arguments);
-				}
-
-				// create a new filter chain
-				$fcfi = $this->context->getFactoryInfo('filter_chain');
-				$filterChain = new $fcfi['class']();
-				$filterChain->initialize($this->context, $fcfi['parameters']);
-
-				if(AgaviConfig::get('core.available', false)) {
-					// the application is available so we'll register
-					// globally defined and module-specific action filters, otherwise skip them
-
-					// does this action require security?
-					if(AgaviConfig::get('core.use_security', false)) {
-						// register security filter
-						$filterChain->register($controller->getFilter('security'));
-					}
-
-					// load filters
-					$controller->loadFilters($filterChain, 'action');
-					$controller->loadFilters($filterChain, 'action', $moduleName);
-				}
-
-				// register the execution filter
-				$filterChain->register($controller->getFilter('execution'));
-
-				// process the filter chain
-				$filterChain->execute($this);
+			if($this->arguments !== null) {
+				$this->requestData->merge($this->arguments);
 			}
 
-			// restore autoloads
-			Agavi::$autoloads = $oldAutoloads;
-		} else {
-			$this->setNext($this->createSystemActionForwardContainer('module_disabled'));
+			// create a new filter chain
+			$fcfi = $this->context->getFactoryInfo('filter_chain');
+			$filterChain = new $fcfi['class']();
+			$filterChain->initialize($this->context, $fcfi['parameters']);
+
+			if(AgaviConfig::get('core.available', false)) {
+				// the application is available so we'll register
+				// globally defined and module-specific action filters, otherwise skip them
+
+				// does this action require security?
+				if(AgaviConfig::get('core.use_security', false)) {
+					// register security filter
+					$filterChain->register($controller->getFilter('security'));
+				}
+
+				// load filters
+				$controller->loadFilters($filterChain, 'action');
+				$controller->loadFilters($filterChain, 'action', $moduleName);
+			}
+
+			// register the execution filter
+			$filterChain->register($controller->getFilter('execution'));
+
+			// process the filter chain
+			$filterChain->execute($this);
 		}
 		
 		return $this->proceed();
 	}
+	
 	
 	/**
 	 * create a system forward container

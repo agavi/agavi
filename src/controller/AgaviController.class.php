@@ -154,6 +154,45 @@ class AgaviController extends AgaviParameterHolder
 	}
 	
 	/**
+	 * initialize a module and load it's autoload, module config etc. 
+	 *
+	 * @param      string  The name of the module to initialize
+	 *
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0
+	 */
+	public function initializeModule($moduleName)
+	{
+		if(null === AgaviConfig::get('modules.' . strtolower($moduleName) . '.enabled')) {
+			
+			// include the module configuration
+			// loaded only once due to the way load() (former import()) works
+			if(is_readable(AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/config/module.xml')) {
+				AgaviConfigCache::load(AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/config/module.xml', $this->context->getName());
+			} else {
+				AgaviConfig::set('modules.' . strtolower($moduleName) . '.enabled', true);
+			}
+
+			$moduleAutoload = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/config/autoload.xml';
+			try {
+				Agavi::$autoloads = array_merge(Agavi::$autoloads, include(AgaviConfigCache::checkConfig($moduleAutoload)));
+			} catch(AgaviUnreadableException $e) {
+				// swallow, not every module does have an autoload
+			}
+		}
+		
+		if(!AgaviConfig::get('modules.' . strtolower($moduleName) . '.enabled')) {
+			throw new AgaviDisabledModuleException(sprintf('The module "%1$s" is disabled.', $moduleName));
+		}
+		
+		// check for a module config.php
+		$moduleConfig = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/config.php';
+		if(is_readable($moduleConfig)) {
+			require_once($moduleConfig);
+		}
+	}
+	
+	/**
 	 * Dispatch a request
 	 *
 	 * @param      AgaviRequestDataHolder A RequestDataHolder with additional
@@ -265,6 +304,8 @@ class AgaviController extends AgaviParameterHolder
 	{
 		static $loaded = array();
 		
+		$this->initializeModule($moduleName);
+		
 		$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/actions/' . $actionName . 'Action.class.php';
 
 		if(!isset($loaded[$file])) {
@@ -337,6 +378,13 @@ class AgaviController extends AgaviParameterHolder
 	public function createViewInstance($moduleName, $viewName)
 	{
 		static $loaded;
+		
+		try {
+			$this->initializeModule($moduleName);
+		} catch(AgaviDisabledModuleException $e) {
+			// views from disabled modules should be usable by definition
+			// swallow
+		}
 		
 		$viewName = str_replace('.', '/', $viewName);
 		$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/views/' . $viewName . 'View.class.php';

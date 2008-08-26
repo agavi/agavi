@@ -344,6 +344,12 @@ class AgaviContext
 				}
 			}
 		} else {
+			try {
+				$this->controller->initializeModule($moduleName);
+			} catch (AgaviDisabledModuleException $e) {
+				// swallow, this will load the modules autoload but throw an exception 
+				// if the module is disabled.
+			}
 			// module model
 			// alternative name
 			$moduleClass = $moduleName . '_' . $class;
