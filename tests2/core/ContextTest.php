@@ -87,9 +87,7 @@ class ContextTest extends AgaviTestCase
 	{
 		$ctx = AgaviContext::getInstance('test');
 		$this->assertType('Test_TestModel', $ctx->getModel('Test', 'Test'));
-		$this->assertType('Test2Model', $ctx->getModel('Test2', 'Test'));
 		$this->assertType('Test_SingletonTestModel', $ctx->getModel('SingletonTest', 'Test'));
-		$this->assertType('SingletonTest2Model', $ctx->getModel('SingletonTest2', 'Test'));
 		$firstSingleton = $ctx->getModel('SingletonTest', 'Test');
 		$firstSingleton->setFoo('bar');
 		$secondSingleton = $ctx->getModel('SingletonTest', 'Test');

@@ -292,8 +292,9 @@ class AgaviController extends AgaviParameterHolder
 	 * @param      string A module name.
 	 * @param      string An action name.
 	 *
-	 * @return     AgaviAction An Action implementation instance, if the action 
-	 *                         exists, otherwise null.
+	 * @return     AgaviAction An Action implementation instance
+	 *
+	 * @throws     AgaviException if the action could not be found.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @author     Mike Vincent <mike@agavi.org>
@@ -302,49 +303,26 @@ class AgaviController extends AgaviParameterHolder
 	 */
 	public function createActionInstance($moduleName, $actionName)
 	{
-		static $loaded = array();
-		
 		$this->initializeModule($moduleName);
 		
-		$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/actions/' . $actionName . 'Action.class.php';
+		$longActionName = str_replace('/', '_', $actionName);
+		
+		$class = $moduleName . '_' . $longActionName . 'Action';
+		
+		if(!class_exists($class, false)) {
+			$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/actions/' . $actionName . 'Action.class.php';
 
-		if(!isset($loaded[$file])) {
 			if(!is_readable($file)) {
 				throw new AgaviException('Could not find file for Action "' . $actionName . '" in module "' . $moduleName . '"');
 			}
 			require($file);
 			$loaded[$file] = true;
-
-			$longActionName = $actionName;
-
-			// Nested action check?
-			$position = strrpos($actionName, '/');
-			if($position > -1) {
-				$longActionName = str_replace('/', '_', $actionName);
-				$actionName = substr($actionName, $position + 1);
-			}
-
-			if(class_exists($moduleName . '_' . $longActionName . 'Action', false)) {
-				$class = $moduleName . '_' . $longActionName . 'Action';
-			} elseif(class_exists($moduleName . '_' . $actionName . 'Action', false)) {
-				$class = $moduleName . '_' . $actionName . 'Action';
-			} elseif(class_exists($longActionName . 'Action', false)) {
-				$class = $longActionName . 'Action';
-			} elseif(class_exists($actionName . 'Action', false)) {
-				$class = $actionName . 'Action';
-			} else {
+			
+			if(!class_exists($class, false)) {
 				throw new AgaviException('Could not find Action "' . $longActionName . '" for module "' . $moduleName . '"');
 			}
-			
-			$loaded[$file] = $class;
-		} else {
-			$class = $loaded[$file];
-			
-			if($loaded[$file] === true) {
-				throw new AgaviException('Could not find Action "' . $actionName . '" for module "' . $moduleName . '"');
-			}
-		}
-
+		} 
+		
 		return new $class();
 	}
 
@@ -377,8 +355,6 @@ class AgaviController extends AgaviParameterHolder
 	 */
 	public function createViewInstance($moduleName, $viewName)
 	{
-		static $loaded;
-		
 		try {
 			$this->initializeModule($moduleName);
 		} catch(AgaviDisabledModuleException $e) {
@@ -387,44 +363,22 @@ class AgaviController extends AgaviParameterHolder
 		}
 		
 		$viewName = str_replace('.', '/', $viewName);
-		$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/views/' . $viewName . 'View.class.php';
-
-		if(!isset($loaded[$file])) {
+		$longViewName = str_replace('/', '_', $viewName);
+		
+		$class = $moduleName . '_' . $longViewName . 'View';
+		
+		if(!class_exists($class, false)) {
+			$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/views/' . $viewName . 'View.class.php';
 			if(!is_readable($file)) {
 				throw new AgaviException('Could not find file for View "' . $viewName . '" in module "' . $moduleName . '"');
 			}
 			require($file);
-			$loaded[$file] = true;
 			
-			$longViewName = $viewName;
-
-			$position = strrpos($viewName, '/');
-			if($position > -1) {
-				$longViewName = str_replace('/', '_', $viewName);
-				$viewName = substr($viewName, $position + 1);
-			}
-
-			if(class_exists($moduleName . '_' . $longViewName . 'View', false)) {
-				$class = $moduleName . '_' . $longViewName . 'View';
-			} elseif(class_exists($moduleName . '_' . $viewName . 'View', false)) {
-				$class = $moduleName . '_' . $viewName . 'View';
-			} elseif(class_exists($longViewName . 'View', false)) {
-				$class = $longViewName . 'View';
-			} elseif(class_exists($viewName . 'View', false)) {
-				$class = $viewName . 'View';
-			} else {
+			if(!class_exists($class, false)) {
 				throw new AgaviException('Could not find View "' . $longViewName . '" for module "' . $moduleName . '"');
 			}
-			
-			$loaded[$file] = $class;
-		} else {
-			$class = $loaded[$file];
-			
-			if($class === true) {
-				throw new AgaviException('Could not find View "' . $viewName . '" for module "' . $moduleName . '"');
-			}
-		}
-
+		} 
+		
 		return new $class();
 	}
 
