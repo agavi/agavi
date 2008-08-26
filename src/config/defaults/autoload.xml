@@ -97,6 +97,7 @@
 			<autoload name="AgaviFileException">%core.agavi_dir%/exception/AgaviFileException.class.php</autoload>
 			<autoload name="AgaviFilterException">%core.agavi_dir%/exception/AgaviFilterException.class.php</autoload>
 			<autoload name="AgaviInitializationException">%core.agavi_dir%/exception/AgaviInitializationException.class.php</autoload>
+			<autoload name="AgaviDisabledModuleException">%core.agavi_dir%/exception/AgaviDisabledModuleException.class.php</autoload>
 			<autoload name="AgaviLoggingException">%core.agavi_dir%/exception/AgaviLoggingException.class.php</autoload>
 			<autoload name="AgaviParseException">%core.agavi_dir%/exception/AgaviParseException.class.php</autoload>
 			<autoload name="AgaviRenderException">%core.agavi_dir%/exception/AgaviRenderException.class.php</autoload>

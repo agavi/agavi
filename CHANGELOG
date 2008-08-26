@@ -6,8 +6,12 @@ AGAVI CHANGELOG
 
 ADD: Allow skipping of template auto-assigns (#605) (David)
 
+CHG: Add module initialization method and use it where appropriate (#825) (Felix)
+CHG: Do not remove module autoload definitions after action execution (#824) (Felix)
+CHG: Refactor AgaviExecutionContainer::execute, AgaviController::dispatch and AgaviSecurityFilter::dispatch to have forwards in seperate methods (#827) (Felix)
 CHG: Make AgaviContext implementation configurable (#815) (David)
 
+FIX: Phing 2.2.0 is a dependency, but 2.3.0 is required for new build system (#828) (David)
 FIX: Some config handlers use PHP-5.3-reserved-word "NAMESPACE" as constant (#810) (David, Benjamin Börngen-Schmidt)
 FIX: src/config/xsl/routing.xsl is missing (#811) (David)
 
