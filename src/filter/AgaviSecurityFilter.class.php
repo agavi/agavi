@@ -48,8 +48,6 @@ class AgaviSecurityFilter extends AgaviFilter implements AgaviIActionFilter, Aga
 	{
 		// get the cool stuff
 		$context    = $this->getContext();
-		$controller = $context->getController();
-		$request    = $context->getRequest();
 		$user       = $context->getUser();
 
 		// get the current action instance
@@ -76,24 +74,11 @@ class AgaviSecurityFilter extends AgaviFilter implements AgaviIActionFilter, Aga
 		} else {
 			if($user->isAuthenticated()) {
 				// the user doesn't have access
-				$forwardInfoNamespace = 'org.agavi.controller.forwards.secure';
-				$forwardContainer = $container->createExecutionContainer(AgaviConfig::get('actions.secure_module'), AgaviConfig::get('actions.secure_action'));
+				$container->setNext($container->createSystemActionForwardContainer('secure'));
 			} else {
 				// the user is not authenticated
-				$forwardInfoNamespace = 'org.agavi.controller.forwards.login';
-				$forwardContainer = $container->createExecutionContainer(AgaviConfig::get('actions.login_module'), AgaviConfig::get('actions.login_action'));
+				$container->setNext($container->createSystemActionForwardContainer('login'));
 			}
-			
-			$container->setNext($forwardContainer);
-			
-			$forwardInfoData = array(
-				'requested_module' => $container->getModuleName(),
-				'requested_action' => $container->getActionName(),
-			);
-			
-			$forwardContainer->setAttributes($forwardInfoData, $forwardInfoNamespace);
-			// legacy
-			$request->setAttributes($forwardInfoData, $forwardInfoNamespace);
 		}
 	}
 }

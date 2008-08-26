@@ -6,6 +6,7 @@ AGAVI CHANGELOG
 
 ADD: Allow skipping of template auto-assigns (#605) (David)
 
+CHG: Refactor AgaviExecutionContainer::execute, AgaviController::dispatch and AgaviSecurityFilter::dispatch to have forwards in seperate methods (#827) (Felix)
 CHG: Make AgaviContext implementation configurable (#815) (David)
 
 FIX: Phing 2.2.0 is a dependency, but 2.3.0 is required for new build system (#828) (David)

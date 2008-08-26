@@ -237,36 +237,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 		try {
 			$actionName = $controller->resolveAction($moduleName, $actionName);
 		} catch(AgaviControllerException $e) {
-			// track the requested module so we have access to the data in the error 404 page
-			$forwardInfoData = array(
-				'requested_module' => $moduleName,
-				'requested_action' => $actionName,
-				'exception' => $e,
-			);
-			$forwardInfoNamespace = 'org.agavi.controller.forwards.error_404';
-
-			// switch to error 404 action
-			$moduleName = AgaviConfig::get('actions.error_404_module');
-			$actionName = AgaviConfig::get('actions.error_404_action');
-
-			try {
-				$actionName = $controller->resolveAction($moduleName, $actionName);
-			} catch(AgaviControllerException $e) {
-				// cannot find unavailable module/action
-				$error = 'Invalid configuration settings: actions.error_404_module "%s", actions.error_404_action "%s"';
-				$error = sprintf($error, $moduleName, $actionName);
-
-				throw new AgaviConfigurationException($error);
-			}
-			
-			$forwardContainer = $this->createExecutionContainer($moduleName, $actionName);
-			
-			$forwardContainer->setAttributes($forwardInfoData, $forwardInfoNamespace);
-			// legacy
-			$request->setAttributes($forwardInfoData, $forwardInfoNamespace);
-			
-			$this->setNext($forwardContainer);
-			
+			$this->setNext($this->createSystemActionForwardContainer('error_404', $e));
 			return $this->proceed();
 		}
 
@@ -355,38 +326,70 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 
 			// restore autoloads
 			Agavi::$autoloads = $oldAutoloads;
-
 		} else {
-
-			// track the requested module so we have access to the data in the module disabled action
-			$forwardInfoData = array(
-				'requested_module' => $moduleName,
-				'requested_action' => $actionName,
-			);
-			$forwardInfoNamespace = 'org.agavi.controller.forwards.module_disabled';
-			
-			$moduleName = AgaviConfig::get('actions.module_disabled_module');
-			$actionName = AgaviConfig::get('actions.module_disabled_action');
-
-			try {
-				$actionName = $controller->resolveAction($moduleName, $actionName);
-			} catch(AgaviControllerException $e) {
-				// cannot find mod disabled module/action
-				$error = 'Invalid configuration settings: actions.module_disabled_module "%s", actions.module_disabled_action "%s"';
-				$error = sprintf($error, $moduleName, $actionName);
-				throw new AgaviConfigurationException($error);
-			}
-
-			$forwardContainer = $this->createExecutionContainer($moduleName, $actionName);
-			
-			$forwardContainer->setAttributes($forwardInfoData, $forwardInfoNamespace);
-			// legacy
-			$request->setAttributes($forwardInfoData, $forwardInfoNamespace);
-			
-			$this->setNext($forwardContainer);
+			$this->setNext($this->createSystemActionForwardContainer('module_disabled'));
 		}
-
+		
 		return $this->proceed();
+	}
+	
+	/**
+	 * create a system forward container
+	 *
+	 * calling this method will set the attributes 
+	 * 
+	 *  - requested_module
+	 *  - requested_action
+	 *  - an optional system exception 
+	 * 
+	 * in the appropriate namespace on the created container and the request 
+	 * (for legacy reasons)
+	 *
+	 *
+	 * @param      string          the type of forward to create (error_404, 
+	 *                             module_disabled, secure, login, unavailable)
+	 * @param      AgaviException  optional the exception thrown by the controller
+	 *                             when resolving the module/action
+	 *
+	 * @return     AgaviExecutionContainer The forward container
+	 *
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function createSystemActionForwardContainer($type, AgaviException $e = null)
+	{
+		if(!in_array($type, array('error_404', 'module_disabled', 'secure', 'login', 'unavailable'))) {
+			throw new AgaviException(sprintf('Unknown system forward type "%1$s"', $type));
+		}
+		
+		// track the requested module so we have access to the data in the error 404 page
+		$forwardInfoData = array(
+			'requested_module' => $this->getModuleName(),
+			'requested_action' => $this->getActionName(),
+			'exception'        => $e,
+		);
+		$forwardInfoNamespace = 'org.agavi.controller.forwards.' . $type;
+		
+		$moduleName = AgaviConfig::get('actions.' . $type . '_module');
+		$actionName = AgaviConfig::get('actions.' . $type . '_action');
+		
+		try {
+			$actionName = $this->context->getController()->resolveAction($moduleName, $actionName);
+		} catch(AgaviControllerException $e) {
+			// cannot find unavailable module/action
+			$error = 'Invalid configuration settings: actions.%3$s_module "%1$s", actions.%3$s_action "%2$s"';
+			$error = sprintf($error, $moduleName, $actionName, $type);
+			
+			throw new AgaviConfigurationException($error);
+		}
+		
+		$forwardContainer = $this->createExecutionContainer($moduleName, $actionName);
+		
+		$forwardContainer->setAttributes($forwardInfoData, $forwardInfoNamespace);
+		// legacy
+		$this->context->getRequest()->setAttributes($forwardInfoData, $forwardInfoNamespace);
+		
+		return $forwardContainer;
 	}
 	
 	/**

@@ -204,30 +204,7 @@ class AgaviController extends AgaviParameterHolder
 			}
 			
 			if(!AgaviConfig::get('core.available', false)) {
-				// application is unavailable
-				$forwardInfoData = array(
-					'requested_module' => $moduleName,
-					'requested_action' => $actionName,
-				);
-				$forwardInfoNamespace = 'org.agavi.controller.forwards.unavailable';
-				
-				$moduleName = AgaviConfig::get('actions.unavailable_module');
-				$actionName = AgaviConfig::get('actions.unavailable_action');
-				
-				try {
-					$actionName = $controller->resolveAction($moduleName, $actionName);
-				} catch(AgaviControllerException $e) {
-					$error = 'Invalid configuration settings: actions.unavailable_module "%s", actions.unavailable_action "%s"';
-					$error = sprintf($error, $moduleName, $actionName);
-					throw new AgaviConfigurationException($error);
-				}
-				
-				// make a new container
-				$container = $container->createExecutionContainer($moduleName, $actionName);
-				
-				$container->setAttributes($forwardInfoData, $forwardInfoNamespace);
-				// legacy
-				$rq->setAttributes($forwardInfoData, $forwardInfoNamespace);
+				$container = $container->createSystemActionForwardContainer('unavailable');
 			}
 			
 			// create a new filter chain
