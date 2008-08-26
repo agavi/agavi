@@ -92,7 +92,7 @@ class AgaviAutoloadConfigHandler extends AgaviConfigHandler
 			}
 		}
 
-		$code = 'Agavi::$autoloads = array_merge(' . var_export($data, true) . ', Agavi::$autoloads);';
+		$code = 'return ' . var_export($data, true) . ';';
 
 		return $this->generate($code);
 	}
