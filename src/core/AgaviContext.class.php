@@ -319,7 +319,9 @@ class AgaviContext
 	 */
 	public function getModel($modelName, $moduleName = null, array $parameters = null)
 	{
-		$class = $modelName . 'Model';
+		$origModelName = $modelName;
+		$modelName = AgaviToolkit::canonicalName($modelName);
+		$class = str_replace('/', '_', $modelName) . 'Model';
 		$file = null;
 		$rc = null;
 		
@@ -353,7 +355,7 @@ class AgaviContext
 
 		if(!class_exists($class)) {
 			// it's not there. 
-			throw new AgaviAutoloadException("Couldn't find class for Model " . $modelName);
+			throw new AgaviAutoloadException("Couldn't find class for Model " . $origModelName);
 		}		
 
 		
