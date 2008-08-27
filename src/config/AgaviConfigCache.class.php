@@ -339,7 +339,23 @@ final class AgaviConfigCache
 			$cfg = AgaviConfig::get('core.system_config_dir') . '/config_handlers.xml';
 		}
 		// application configuration handlers
-		require(AgaviConfigCache::checkConfig($cfg));
+		self::loadConfigHandlersFile($cfg);
+	}
+	
+	/**
+	 * add the config handlers from the given config file
+	 * 
+	 * existing handlers will not be overwritten
+	 * 
+	 * @param      string the path to the config_handlers.xml
+	 * 
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 * 
+	 */
+	public static function loadConfigHandlersFile($cfg)
+	{
+		self::$handlers += include AgaviConfigCache::checkConfig($cfg);
 	}
 
 	/**

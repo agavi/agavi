@@ -151,7 +151,7 @@ class AgaviConfigHandlersConfigHandler extends AgaviXmlConfigHandler
 		}
 		
 		$data = array(
-			'self::$handlers += ' . var_export($handlers, true),
+			'return ' . var_export($handlers, true),
 		);
 		
 		return $this->generate($data);
