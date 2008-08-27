@@ -319,7 +319,10 @@ class AgaviContext
 	 */
 	public function getModel($modelName, $moduleName = null, array $parameters = null)
 	{
-		$class = $modelName . 'Model';
+		$origModelName = $modelName;
+		$modelName = AgaviToolkit::canonicalName($modelName);
+		$class = str_replace('/', '_', $modelName) . 'Model';
+		$file = null;
 		$rc = null;
 		
 		if($moduleName === null) {
@@ -328,65 +331,33 @@ class AgaviContext
 			if(!class_exists($class)) {
 				// it's not there. the hunt is on
 				$file = AgaviConfig::get('core.model_dir') . '/' . $modelName . 'Model.class.php';
-				if(is_readable($file)) {
-					require($file);
-				} else {
-					// nothing so far. our last chance: the model name, without a "Model" postfix
-					if(!class_exists($modelName)) {
-						throw new AgaviAutoloadException("Couldn't find class for Model " . $modelName);
-					} else {
-						$class = $modelName;
-						$rc = new ReflectionClass($class);
-						if(!$rc->implementsInterface('AgaviIModel')) {
-							throw new AgaviAutoloadException("Couldn't find class for Model " . $modelName);
-						}
-					}
-				}
 			}
 		} else {
 			try {
 				$this->controller->initializeModule($moduleName);
-			} catch (AgaviDisabledModuleException $e) {
+			} catch(AgaviDisabledModuleException $e) {
 				// swallow, this will load the modules autoload but throw an exception 
 				// if the module is disabled.
 			}
 			// module model
 			// alternative name
-			$moduleClass = $moduleName . '_' . $class;
-			$moduleModelName = $moduleName . '_' . $modelName;
+			$class = $moduleName . '_' . $class;
 			// let's try to autoload the baby
-			if(!class_exists($moduleClass) && !class_exists($class)) {
+			if(!class_exists($class)) {
 				// it's not there. the hunt is on
 				$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/models/' . $modelName . 'Model.class.php';
-				if(is_readable($file)) {
-					require($file);
-					if(class_exists($moduleClass, false)) {
-						$class = $moduleClass;
-					}
-				} else {
-					// nothing so far. our last chance: the model name, without a "Model" postfix
-					if(!class_exists($moduleModelName) && !class_exists($modelName)) {
-						throw new AgaviAutoloadException("Couldn't find class for Model " . $modelName);
-					} else {
-						// it was autolaoded, which one is it?
-						if(class_exists($moduleModelName, false)) {
-							$class = $moduleModelName;
-						} else {
-							$class = $modelName;
-						}
-						$rc = new ReflectionClass($class);
-						if(!$rc->implementsInterface('AgaviIModel')) {
-							throw new AgaviAutoloadException("Couldn't find class for Model " . $modelName);
-						}
-					}
-				}
-			} else {
-				// it was autoloaded, which one is it?
-				if(class_exists($moduleClass, false)) {
-					$class = $moduleClass;
-				}
-			}
+			}		
 		}
+
+		if(null !== $file && is_readable($file)) {
+			require($file);
+		}
+
+		if(!class_exists($class)) {
+			// it's not there. 
+			throw new AgaviAutoloadException("Couldn't find class for Model " . $origModelName);
+		}		
+
 		
 		// so if we're here, we found something, right? good.
 		

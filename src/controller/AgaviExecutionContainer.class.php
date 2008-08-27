@@ -111,6 +111,20 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	protected $next = null;
 
 	/**
+	 * action names can contain any valid php token, dot's and slashes for subactions
+	 */
+	const SANE_ACTION_NAME = '/[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff\/.]*/';
+	
+	/**
+	 * view names can contain any valid php token, dot's and slashes for subactions
+	 */
+	const SANE_VIEW_NAME   = '/[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff\/.]*/';
+	/**
+	 * only php tokens are allowed as module names
+	 */
+	const SANE_MODULE_NAME = '/[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*/';
+	
+	/**
 	 * Pre-serialization callback.
 	 *
 	 * Will set the name of the context instead of the instance, and the name of
@@ -233,20 +247,22 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 
 		$moduleName = $this->getModuleName();
 		$actionName = $this->getActionName();
-
-		try {
-			$actionName = $controller->resolveAction($moduleName, $actionName);
-		} catch(AgaviControllerException $e) {
+		
+		/**
+		 * TODO: cleanup and merge with createActionInstance once Exceptions have been
+		 * cleaned up and specced properly so that the two error conditions can be told
+		 * apart
+		 */
+		if(false === $controller->checkActionFile($moduleName, $actionName))
+		{
 			$this->setNext($this->createSystemActionForwardContainer('error_404', $e));
 			return $this->proceed();
 		}
-
-		$this->setModuleName($moduleName);
-		$this->setActionName($actionName);
-
-
+		
+		$this->setActionName(AgaviToolkit::canonicalName($actionName));
+		
 		try {
-			$this->actionInstance = $controller->createActionInstance($this->moduleName, $this->actionName);
+			$this->actionInstance = $controller->createActionInstance($moduleName, $actionName);
 		} catch(AgaviDisabledModuleException $e) {
 			$this->setNext($this->createSystemActionForwardContainer('module_disabled'));
 			return $this->proceed();
@@ -345,9 +361,8 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 		$moduleName = AgaviConfig::get('actions.' . $type . '_module');
 		$actionName = AgaviConfig::get('actions.' . $type . '_action');
 		
-		try {
-			$actionName = $this->context->getController()->resolveAction($moduleName, $actionName);
-		} catch(AgaviControllerException $e) {
+		if(false === $this->context->getController()->checkActionFile($moduleName, $actionName))
+		{
 			// cannot find unavailable module/action
 			$error = 'Invalid configuration settings: actions.%3$s_module "%1$s", actions.%3$s_action "%2$s"';
 			$error = sprintf($error, $moduleName, $actionName, $type);
@@ -664,7 +679,13 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	 */
 	public function setModuleName($moduleName)
 	{
-		$this->moduleName = preg_replace('/[^a-z0-9\-_]+/i', '', $moduleName);
+		if(null === $moduleName) {
+			$this->moduleName = null;
+		} elseif(preg_match(self::SANE_MODULE_NAME, $moduleName)) {
+			$this->moduleName = $moduleName;
+		} else {
+			throw new AgaviException(sprintf('Invalid module name "%1$s"', $moduleName));
+		}
 	}
 
 	/**
@@ -677,7 +698,13 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	 */
 	public function setActionName($actionName)
 	{
-		$this->actionName = preg_replace(array('/\./', '/[^a-z0-9\-_\/]+/i'), array('/', ''), $actionName);
+		if(null === $actionName) {
+			$this->actionName = null;
+		} elseif(preg_match(self::SANE_ACTION_NAME, $actionName)) {
+			$this->actionName = $actionName;
+		} else {
+			throw new AgaviException(sprintf('Invalid action name "%1$s"', $actionName));
+		}
 	}
 
 	/**
@@ -690,7 +717,13 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	 */
 	public function setViewModuleName($viewModuleName)
 	{
-		$this->viewModuleName = $viewModuleName;
+		if(null === $viewModuleName) {
+			$this->viewModuleName = null;
+		} elseif(preg_match(self::SANE_MODULE_NAME, $viewModuleName)) {
+			$this->viewModuleName = $viewModuleName;
+		} else {
+			throw new AgaviException(sprintf('Invalid view module name "%1$s"', $viewModuleName));
+		}
 	}
 
 	/**
@@ -703,7 +736,13 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	 */
 	public function setViewName($viewName)
 	{
-		$this->viewName = $viewName;
+		if(null === $viewName) {
+			$this->viewName = null;
+		} elseif(preg_match(self::SANE_VIEW_NAME, $viewName)) {
+			$this->viewName = $viewName;
+		} else {
+			throw new AgaviException(sprintf('Invalid view name "%1$s"', $viewName));
+		}
 	}
 
 	 /**
