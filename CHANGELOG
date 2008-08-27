@@ -4,10 +4,10 @@ AGAVI CHANGELOG
 1.0.0 beta 2 (August ??, 2008)
 ------------------------------
 
+ADD: Allow per-module config_handlers.xml (#826) (Felix)
+ADD: Allow action-style subdirectory dot notation for models (#631) (Felix)
 ADD: Allow skipping of template auto-assigns (#605) (David)
 
-CHG: Allow per-module config_handlers.xml (#826) (Felix)
-CHG: Allow action-style subdirectory dot notation for models (#631) (Felix)
 CHG: Sanity checks in AgaviExecutionContainer::set*Name() need refactoring (#780) (Felix)
 CHG: Throw out legacy naming schemes support and support autoloading of Actions, Views and Models (#829) (Felix)
 CHG: Add module initialization method and use it where appropriate (#825) (Felix)
