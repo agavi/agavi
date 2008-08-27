@@ -443,6 +443,23 @@ final class AgaviToolkit
 	{
 		return uniqid($prefix, true);
 	}
+	
+	/**
+	 * returns the canonical name for a dot-separated view, action, modelname
+	 *
+	 * calling this function twice or more on a name still yields the right result
+	 *
+	 * @param      string the name
+	 * @return     string the canonical name
+	 * 
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 * 
+	 */
+	public static function canonicalName($name)
+	{
+		return str_replace('.', '/', $name);
+	}
 }
 
 ?>
