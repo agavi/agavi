@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 1.0.0 beta 2 (August ??, 2008)
 ------------------------------
 
+ADD: Add config option to run arbitrary SQL commands after connecting to a MySQLi database (#831) (David)
 ADD: Allow per-module config_handlers.xml (#826) (Felix)
 ADD: Allow action-style subdirectory dot notation for models (#631) (Felix)
 ADD: Allow skipping of template auto-assigns (#605) (David)
