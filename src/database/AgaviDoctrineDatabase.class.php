@@ -142,6 +142,10 @@ class AgaviDoctrineDatabase extends AgaviDatabase
 			foreach((array)$this->getParameter('bind_components', array()) as $componentName) {
 				$this->doctrineManager->bindComponent($componentName, $name);
 			}
+			
+			foreach((array)$this->getParameter('init_queries') as $query) {
+				$this->connection->exec($query);
+			}
 		} catch(Doctrine_Exception $e) {
 			// the connection's foobar'd
 			throw new AgaviDatabaseException($e->getMessage());
