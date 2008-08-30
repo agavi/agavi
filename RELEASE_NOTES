@@ -1,6 +1,19 @@
 AGAVI RELEASE NOTES
 ===================
 
+Version 0.11.3 - September ??, 2008
+===================================
+
+This maintenance release fixes a couple of minor problems like PEAR package generation, gettext plural form expression handling etc, and introduces some new features:
+- Database handlers now can send arbitrary SQL statements after connecting; useful for "SET NAMES utf8" in MySQL etc.
+- AgaviDoctrineDatabase improvements
+- AgaviMysqliDatabase adapter added
+- New timezone database version
+- Sample app cleanup
+- FPF has the option to ignore errors during document parsing and skip population (good for production environments)
+- Assigning of "inner" content to $slots template array can be disabled
+
+
 Version 0.11.2 - July 8, 2008
 =============================
 
