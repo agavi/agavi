@@ -1,7 +1,7 @@
 AGAVI CHANGELOG
 ===============
 
-1.0.0 beta 2 (August ??, 2008)
+1.0.0 beta 2 (August 31, 2008)
 ------------------------------
 
 ADD: Allow per-module config_handlers.xml (#826) (Felix)
