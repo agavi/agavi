@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 0.11.3 RC1 (August ??, 2008)
 ----------------------------
 
+ADD: AgaviMysqliDatabase (#601) (Blake Matheny, David)
 ADD: Add config option to run arbitrary SQL commands after connecting to a database (#646) (David)
 ADD: Allow ignoring of (X)HTML parse errors in FPF (#613) (David)
 ADD: Set current Context instance on Doctrine connections (#800, #808) (David)
