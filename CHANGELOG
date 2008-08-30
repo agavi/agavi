@@ -11,6 +11,7 @@ ADD: Assigning of "inner" content to $slots template array should be configurabl
 ADD: Support for doctrine connection settings and options (#788) (David)
 
 CHG: Improve AgaviInflector performance (#823) (Thomas Bachem, David)
+CHG: Change the Pricefinder Model in the Sample App to have a more useful name (#819) (Felix)
 CHG: Enhance HTTP status code validation for AgaviWebResponse::setRedirect() (#804) (David)
 CHG: Update timezone database to 2008e (#806) (David)
 CHG: Dump "xhtml" output type from sample app and introduce a replacement (#802) (David)
