@@ -7,13 +7,13 @@ AGAVI CHANGELOG
 ADD: Add config option to run arbitrary SQL commands after connecting to a database (#646) (David)
 ADD: Allow ignoring of (X)HTML parse errors in FPF (#613) (David)
 ADD: Set current Context instance on Doctrine connections (#800, #808) (David)
+ADD: Assigning of "inner" content to $slots template array should be configurable (#793) (David)
 ADD: Support for doctrine connection settings and options (#788) (David)
 
 CHG: Improve AgaviInflector performance (#823) (Thomas Bachem, David)
 CHG: Enhance HTTP status code validation for AgaviWebResponse::setRedirect() (#804) (David)
 CHG: Update timezone database to 2008e (#806) (David)
 CHG: Dump "xhtml" output type from sample app and introduce a replacement (#802) (David)
-CHG: Assigning of "inner" content to $slots template array should be configurable (#793) (David)
 
 FIX: Invalid argument name in AgaviValidationManager::hasError() (#832) (David)
 FIX: The gettext translator doesn't interpret the plural forms like the original gettext implementation (#821) (Dominik)
