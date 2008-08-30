@@ -9,6 +9,7 @@ ADD: Allow ignoring of (X)HTML parse errors in FPF (#613) (David)
 ADD: Set current Context instance on Doctrine connections (#800, #808) (David)
 ADD: Assigning of "inner" content to $slots template array should be configurable (#793) (David)
 ADD: Support for doctrine connection settings and options (#788) (David)
+ADD: Allow using the resolved datetime constants for the argument names in the datetime validator (#760) (Dominik)
 
 CHG: Improve AgaviInflector performance (#823) (Thomas Bachem, David)
 CHG: Change the Pricefinder Model in the Sample App to have a more useful name (#819) (Felix)
