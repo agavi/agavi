@@ -4,7 +4,6 @@ AGAVI CHANGELOG
 1.0.0 beta 2 (August ??, 2008)
 ------------------------------
 
-ADD: Add config option to run arbitrary SQL commands after connecting to a MySQLi database (#831) (David)
 ADD: Allow per-module config_handlers.xml (#826) (Felix)
 ADD: Allow action-style subdirectory dot notation for models (#631) (Felix)
 ADD: Allow skipping of template auto-assigns (#605) (David)
@@ -49,6 +48,7 @@ FIX: Security filters cannot perform checks in addition to isSecure() (#671) (Da
 0.11.3 RC1 (August ??, 2008)
 ----------------------------
 
+ADD: AgaviMysqliDatabase (#601) (Blake Matheny, David)
 ADD: Add config option to run arbitrary SQL commands after connecting to a database (#646) (David)
 ADD: Allow ignoring of (X)HTML parse errors in FPF (#613) (David)
 ADD: Set current Context instance on Doctrine connections (#800, #808) (David)
