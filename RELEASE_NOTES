@@ -63,6 +63,8 @@ This maintenance release fixes a couple of minor problems like PEAR package gene
 - FPF has the option to ignore errors during document parsing and skip population (good for production environments)
 - Assigning of "inner" content to $slots template array can be disabled
 
+A full list of changes can be found in the CHANGELOG file.
+
 
 Version 0.11.2 - July 8, 2008
 =============================
