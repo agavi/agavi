@@ -62,6 +62,7 @@ CHG: Enhance HTTP status code validation for AgaviWebResponse::setRedirect() (#8
 CHG: Update timezone database to 2008e (#806) (David)
 CHG: Dump "xhtml" output type from sample app and introduce a replacement (#802) (David)
 
+FIX: AgaviEqualsValidator's docs do not match the actual validation process (#833) (Dominik)
 FIX: Invalid argument name in AgaviValidationManager::hasError() (#832) (David)
 FIX: The gettext translator doesn't interpret the plural forms like the original gettext implementation (#821) (Dominik)
 FIX: AgaviView::initialize() incorrectly assigns container's response to a property (#813) (David)
