@@ -17,6 +17,20 @@ Backwards compabibility requires PHP's XSL extension enabled; other than that, e
 Also, the namespaces of configuration files have been changed, with envelope namespaces (<configurations> and other elements) decoupled from the actual config content namespaces. Again, backwards compatibility is maintained, but you should upgrade your configuration files when moving to 1.0 in order to be able to fully leverage all features and make future transitions easier.
 Of note, the legacy support for configuration files with no namespace at all (just <configurations>) has been dropped completely, so your files at the very least have to be in the global 0.11 namespace (http://agavi.org/agavi/1.0/config).
 
+Module/Action/View/Model
+------------------------
+Every module can now have a config_handlers.xml file.
+
+Models can use the same dot-notation for nesting as Actions, e.g. model Foo.Bar sitting in models/Foo/BarModel.class.php with class name Foo_BarModel
+
+Models and Views from other modules can now be used safely even if those other module have base classes in a local autoload.xml etc.
+
+Actions, Views and Models must now use fully qualified class names, including the module name. Examples:
+%core.app_dir%/models/Foo/BarModel.class.php is class Foo_BarModel
+%core.app_dir%/modules/Default/models/FooModel.class.php is class Default_FooModel
+%core.app_dir%/modules/Default/actions/Foo_BarAction.class.php is class Default_Foo_BarAction
+The legacy naming schemes (leaving out module name for Actions, Views and non-global Models; leaving out sub-notation paths except the last one) are not supported anymore.
+
 Project development environment
 -------------------------------
 Agavi 1.0 introduces a new environment for creating and managing Agavi-based projects. This environment effectively replaces the older agavi script and Phing build environment. The new environment is also based on Phing. It adds a few useful features:
