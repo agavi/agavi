@@ -255,7 +255,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 		 */
 		if(false === $controller->checkActionFile($moduleName, $actionName))
 		{
-			$this->setNext($this->createSystemActionForwardContainer('error_404', $e));
+			$this->setNext($this->createSystemActionForwardContainer('error_404'));
 			return $this->proceed();
 		}
 		
