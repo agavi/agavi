@@ -248,13 +248,8 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 		$moduleName = $this->getModuleName();
 		$actionName = $this->getActionName();
 		
-		/**
-		 * TODO: cleanup and merge with createActionInstance once Exceptions have been
-		 * cleaned up and specced properly so that the two error conditions can be told
-		 * apart
-		 */
-		if(false === $controller->checkActionFile($moduleName, $actionName))
-		{
+		// TODO: cleanup and merge with createActionInstance once Exceptions have been cleaned up and specced properly so that the two error conditions can be told apart
+		if(false === $controller->checkActionFile($moduleName, $actionName)) {
 			$this->setNext($this->createSystemActionForwardContainer('error_404'));
 			return $this->proceed();
 		}
@@ -361,8 +356,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 		$moduleName = AgaviConfig::get('actions.' . $type . '_module');
 		$actionName = AgaviConfig::get('actions.' . $type . '_action');
 		
-		if(false === $this->context->getController()->checkActionFile($moduleName, $actionName))
-		{
+		if(false === $this->context->getController()->checkActionFile($moduleName, $actionName)) {
 			// cannot find unavailable module/action
 			$error = 'Invalid configuration settings: actions.%3$s_module "%1$s", actions.%3$s_action "%2$s"';
 			$error = sprintf($error, $moduleName, $actionName, $type);
