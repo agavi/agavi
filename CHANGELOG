@@ -4,7 +4,7 @@ AGAVI CHANGELOG
 1.0.0 beta 3 (September ?, 2008)
 --------------------------------
 
-FIX: Undefined variable notice when file for requested does not exist (#835) (Felix)
+FIX: Undefined variable notice when file for requested action does not exist (#835) (Felix)
 
 
 1.0.0 beta 2 (August 31, 2008)
