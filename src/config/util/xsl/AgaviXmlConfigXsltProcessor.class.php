@@ -47,6 +47,7 @@ class AgaviXmlConfigXsltProcessor extends XSLTProcessor
 	 * @return     AgaviXmlConfigDomDocument The resulting DOMDocument.
 	 *
 	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @author     David Zülke <david.zuelke@bitextender.com>
 	 * @since      1.0.0
 	 */
 	public function transformToDoc(DOMNode $doc)
@@ -56,7 +57,8 @@ class AgaviXmlConfigXsltProcessor extends XSLTProcessor
 		
 		$result = parent::transformToDoc($doc);
 		
-		if(libxml_get_last_error() !== false) {
+		// check if result is false, too, as that means the transformation failed for reasons like infinite template recursion
+		if($result === false || libxml_get_last_error() !== false) {
 			$errors = array();
 			foreach(libxml_get_errors() as $error) {
 				$errors[] = $error->message;
