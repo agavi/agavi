@@ -58,7 +58,7 @@ class AgaviXmlConfigXsltProcessor extends XSLTProcessor
 		$result = parent::transformToDoc($doc);
 		
 		// check if result is false, too, as that means the transformation failed for reasons like infinite template recursion
-		if($result === false || libxml_get_last_error() !== false) {
+		if($result === false || libxml_get_last_error() !== false || count(libxml_get_errors())) {
 			$errors = array();
 			foreach(libxml_get_errors() as $error) {
 				$errors[] = $error->message;

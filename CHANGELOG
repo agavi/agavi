@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 1.0.0 beta 3 (September ?, 2008)
 --------------------------------
 
+FIX: AgaviXmlConfigXsltProcessor::transformToDoc() does not throw exceptions on runtime warnings (#837) (David)
 FIX: AgaviXmlConfigXsltProcessor::transformToDoc() does not check parent return value (#836) (David)
 FIX: Undefined variable notice when file for requested action does not exist (#835) (Felix)
 
