@@ -55,6 +55,7 @@ class AgaviModuleConfigHandler extends AgaviXmlConfigHandler
 		$config = $document->documentURI;
 		
 		$enabled = false;
+		$prefix = 'modules.${moduleName}.';
 		$data = array();
 		
 		// loop over <configuration> elements
@@ -64,7 +65,6 @@ class AgaviModuleConfigHandler extends AgaviXmlConfigHandler
 				continue;
 			}
 			
-			$prefix = 'modules.' . strtolower($module->getAttribute('name')) . '.';
 			// enabled flag is treated separately
 			$enabled = (bool) AgaviToolkit::literalize($module->getAttribute('enabled'));
 			
@@ -84,11 +84,11 @@ class AgaviModuleConfigHandler extends AgaviXmlConfigHandler
 		}
 		
 		$code = array();
-		$code[] = 'AgaviConfig::set(' . var_export($prefix . 'enabled', true) . ', ' . var_export($enabled, true) . ', true, true);';
+		$code[] = '$lcModuleName = strtolower($moduleName);';
+		$code[] = 'AgaviConfig::set(AgaviToolkit::expandVariables(' . var_export($prefix . 'enabled', true) . ', array(\'moduleName\' => $lcModuleName)), ' . var_export($enabled, true) . ', true, true);';
 		if(count($data)) {
 			$code[] = '$moduleConfig = ' . var_export($data, true) . ';';
 			$code[] = '$moduleConfigKeys = array_keys($moduleConfig);';
-			$code[] = '$lcModuleName = strtolower($moduleName);';
 			$code[] = 'foreach($moduleConfigKeys as &$value) $value = AgaviToolkit::expandVariables($value, array(\'moduleName\' => $lcModuleName));';
 			$code[] = '$moduleConfig = array_combine($moduleConfigKeys, $moduleConfig);';
 			$code[] = 'AgaviConfig::fromArray($moduleConfig);';

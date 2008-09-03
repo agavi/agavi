@@ -23,7 +23,6 @@
 			<xsl:copy-of select="@*" />
 			
 			<module>
-				<xsl:attribute name="name"><xsl:value-of select="envelope-0.11:name" /></xsl:attribute>
 				<xsl:attribute name="enabled"><xsl:value-of select="envelope-0.11:enabled" /></xsl:attribute>
 				
 				<settings>

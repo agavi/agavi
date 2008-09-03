@@ -2,7 +2,7 @@
 <ae:configurations xmlns="http://agavi.org/agavi/config/parts/module/1.0" xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0">
 	<ae:configuration>
 		
-		<module name="Default" enabled="true">
+		<module enabled="true">
 			<settings>
 				<setting name="title">Default Agavi Sample App Module</setting>
 				<setting name="version">1.0</setting>
