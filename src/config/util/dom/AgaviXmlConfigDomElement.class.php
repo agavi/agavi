@@ -57,9 +57,9 @@ class AgaviXmlConfigDomElement extends DOMElement implements IteratorAggregate
 		// should only pull elements from the default ns
 		$prefix = $this->ownerDocument->getDefaultNamespacePrefix();
 		if($prefix) {
-			return $this->ownerDocument->getXpath()->query(sprintf('child::%s:element()', $prefix), $this);
+			return $this->ownerDocument->getXpath()->query(sprintf('child::%s:*', $prefix), $this);
 		} else {
-			return $this->ownerDocument->getXpath()->query('child::element()', $this);
+			return $this->ownerDocument->getXpath()->query('child::*', $this);
 		}
 	}
 	
