@@ -98,7 +98,7 @@
 			</handler>
 
 			<handler pattern="%core.module_dir%/*/config/module.xml" class="AgaviModuleConfigHandler">
-				<!-- <validation>%core.agavi_dir%/config/xsd/module.xsd</validation> -->
+				<validation>%core.agavi_dir%/config/rng/module.rng</validation>
 				<transformation>%core.agavi_dir%/config/xsl/module.xsl</transformation>
 			</handler>
 
