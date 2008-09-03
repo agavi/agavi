@@ -1,6 +1,11 @@
 AGAVI CHANGELOG
 ===============
 
+0.11.3 RC2 (September ?, 2008)
+------------------------------
+
+FIX: module.xml must not be per-context (#839) (David)
+
 0.11.3 RC1 (August 31, 2008)
 ----------------------------
 
