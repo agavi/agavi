@@ -19,7 +19,7 @@ Of note, the legacy support for configuration files with no namespace at all (ju
 
 Module/Action/View/Model
 ------------------------
-The module.xml configuration file has been redesigned. It now needs a <module enabled="true"> element, and inside, there can be any number of <settings> blocks, which like in settings.xml, can have a "prefix" attribute to change the prefix. In the prefix and in setting names, ${moduleName} is expanded to the current module's name.
+The module.xml configuration file has been redesigned. It now needs a <module enabled="true"> element, and inside, there can be any number of <settings> blocks, which like in settings.xml, can have a "prefix" attribute to change the prefix. In the prefix and in setting names, ${moduleName} is expanded to the current module's name. Specifying the module name inside this configuration file is not necessary anymore.
 
 Every module can now have a config_handlers.xml file.
 
