@@ -6,6 +6,8 @@ AGAVI CHANGELOG
 
 ADD: AgaviXmlConfigDomElement::hasAgaviParameters() (#841) (David)
 
+CHG: Redesign module.xml completely to allow arbitrary settings (#834) (David)
+
 FIX: AgaviXmlConfigDomElement::getIterator() uses incorrect XPath expressions (#840) (David)
 FIX: AgaviXmlConfigXsltProcessor::transformToDoc() does not throw exceptions on runtime warnings (#837) (David)
 FIX: AgaviXmlConfigXsltProcessor::transformToDoc() does not check parent return value (#836) (David)

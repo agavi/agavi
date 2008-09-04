@@ -145,7 +145,7 @@ class AgaviController extends AgaviParameterHolder
 			// include the module configuration
 			// loaded only once due to the way load() (former import()) works
 			if(is_readable(AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/config/module.xml')) {
-				AgaviConfigCache::load(AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/config/module.xml');
+				include_once(AgaviConfigCache::checkConfig(AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/config/module.xml'));
 			} else {
 				AgaviConfig::set('modules.' . strtolower($moduleName) . '.enabled', true);
 			}
