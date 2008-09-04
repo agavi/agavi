@@ -19,6 +19,8 @@ Of note, the legacy support for configuration files with no namespace at all (ju
 
 Module/Action/View/Model
 ------------------------
+The module.xml configuration file has been redesigned. It now needs a <module enabled="true"> element, and inside, there can be any number of <settings> blocks, which like in settings.xml, can have a "prefix" attribute to change the prefix. In the prefix and in setting names, ${moduleName} is expanded to the current module's name.
+
 Every module can now have a config_handlers.xml file.
 
 Models can use the same dot-notation for nesting as Actions, e.g. model Foo.Bar sitting in models/Foo/BarModel.class.php with class name Foo_BarModel
