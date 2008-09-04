@@ -1,14 +1,31 @@
 AGAVI CHANGELOG
 ===============
 
-1.0.0 beta 2 (August ??, 2008)
+1.0.0 beta 3 (September ?, 2008)
+--------------------------------
+
+ADD: AgaviXmlConfigDomElement::hasAgaviParameters() (#841) (David)
+
+CHG: Redesign module.xml completely to allow arbitrary settings (#834) (David)
+
+FIX: AgaviXmlConfigDomElement::getIterator() uses incorrect XPath expressions (#840) (David)
+FIX: AgaviXmlConfigXsltProcessor::transformToDoc() does not throw exceptions on runtime warnings (#837) (David)
+FIX: AgaviXmlConfigXsltProcessor::transformToDoc() does not check parent return value (#836) (David)
+FIX: Undefined variable notice when file for requested action does not exist (#835) (Felix)
+
+
+1.0.0 beta 2 (August 31, 2008)
 ------------------------------
 
+ADD: Allow per-module config_handlers.xml (#826) (Felix)
+ADD: Allow action-style subdirectory dot notation for models (#631) (Felix)
 ADD: Allow skipping of template auto-assigns (#605) (David)
 
+CHG: Sanity checks in AgaviExecutionContainer::set*Name() need refactoring (#780) (Felix)
+CHG: Throw out legacy naming schemes support and support autoloading of Actions, Views and Models (#829) (Felix)
 CHG: Add module initialization method and use it where appropriate (#825) (Felix)
 CHG: Do not remove module autoload definitions after action execution (#824) (Felix)
-CHG: Refactor AgaviExecutionContainer::execute, AgaviController::dispatch and AgaviSecurityFilter::dispatch to have forwards in seperate methods (#827) (Felix)
+CHG: Refactor AgaviExecutionContainer::execute, AgaviController::dispatch and AgaviSecurityFilter::dispatch to have forwards in separate methods (#827) (Felix)
 CHG: Make AgaviContext implementation configurable (#815) (David)
 
 FIX: Phing 2.2.0 is a dependency, but 2.3.0 is required for new build system (#828) (David)
@@ -41,18 +58,32 @@ CHG: Deprecated AgaviAdodbDatabase (#662) (David)
 FIX: Security filters cannot perform checks in addition to isSecure() (#671) (David)
 
 
-0.11.3 RC1 (August ??, 2008)
+0.11.3 RC2 (September ?, 2008)
+------------------------------
+
+FIX: module.xml must not be per-context (#839) (David)
+
+
+0.11.3 RC1 (August 31, 2008)
 ----------------------------
 
+ADD: AgaviMysqliDatabase (#601) (Blake Matheny, David)
+ADD: Add config option to run arbitrary SQL commands after connecting to a database (#646) (David)
 ADD: Allow ignoring of (X)HTML parse errors in FPF (#613) (David)
 ADD: Set current Context instance on Doctrine connections (#800, #808) (David)
+ADD: Assigning of "inner" content to $slots template array should be configurable (#793) (David)
 ADD: Support for doctrine connection settings and options (#788) (David)
+ADD: Allow using the resolved datetime constants for the argument names in the datetime validator (#760) (Dominik)
 
+CHG: Improve AgaviInflector performance (#823) (Thomas Bachem, David)
+CHG: Change the Pricefinder Model in the Sample App to have a more useful name (#819) (Felix)
 CHG: Enhance HTTP status code validation for AgaviWebResponse::setRedirect() (#804) (David)
 CHG: Update timezone database to 2008e (#806) (David)
 CHG: Dump "xhtml" output type from sample app and introduce a replacement (#802) (David)
-CHG: Assigning of "inner" content to $slots template array should be configurable (#793) (David)
 
+FIX: AgaviEqualsValidator's docs do not match the actual validation process (#833) (Dominik)
+FIX: Invalid argument name in AgaviValidationManager::hasError() (#832) (David)
+FIX: The gettext translator doesn't interpret the plural forms like the original gettext implementation (#821) (Dominik)
 FIX: AgaviView::initialize() incorrectly assigns container's response to a property (#813) (David)
 FIX: AgaviExecutionTimeFilter runs only once (#801) (David)
 FIX: PEAR installations place src/routing/soap files in the data directory rather than the source directory (#799) (Noah)

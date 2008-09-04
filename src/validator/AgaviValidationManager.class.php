@@ -784,19 +784,20 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	}
 
 	/**
-	 * Indicates whether or not an error exists.
+	 * Indicates whether or not a field has an error.
 	 *
-	 * @param      string An error name.
+	 * @param      string A field name.
 	 *
-	 * @return     bool true, if the error exists, otherwise false.
+	 * @return     bool true, if the field has an error, false otherwise.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     David Zülke <david.zuelke@bitextender.com>
 	 * @since      0.9.0
 	 */
 	public function hasError($name)
 	{
-		$ec = $this->getFieldErrorCode($fieldname);
+		$ec = $this->getFieldErrorCode($name);
 		// greater than or equal to notice cause that's when we need to show an error (this is different to hasErrors() behavior due to legacy)
 		return ($ec >= AgaviValidator::NOTICE);
 	}

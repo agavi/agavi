@@ -129,6 +129,10 @@ class AgaviMysqlDatabase extends AgaviDatabase
 		// since we're not an abstraction layer, we copy the connection
 		// to the resource
 		$this->resource =& $this->connection;
+		
+		foreach((array)$this->getParameter('init_queries') as $query) {
+			mysql_query($query, $this->connection);
+		}
 	}
 
 	/**
