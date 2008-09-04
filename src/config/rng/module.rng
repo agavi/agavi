@@ -9,16 +9,14 @@
 	<include href="_common.rng" />
 	
 	<define name="content-configuration" combine="interleave">
-		<interleave>
-			<element name="module">
-				<ref name="content-module" />
-			</element>
-		</interleave>
+		<element name="module">
+			<ref name="content-module" />
+		</element>
 	</define>
 	
 	<define name="content-module">
 		<attribute name="enabled">
-			<ref name="data-identifier" />
+			<ref name="data-agaviboolean" />
 		</attribute>
 		<zeroOrMore>
 			<ref name="content-settings" />
@@ -28,9 +26,7 @@
 	<define name="content-settings">
 		<element name="settings">
 			<optional>
-				<attribute name="prefix">
-					<ref name="data-identifier" />
-				</attribute>
+				<attribute name="prefix" />
 			</optional>
 			<zeroOrMore>
 				<ref name="content-setting" />
@@ -40,9 +36,7 @@
 	
 	<define name="content-setting">
 		<element name="setting">
-			<attribute name="name">
-				<ref name="data-identifier" />
-			</attribute>
+			<attribute name="name" />
 			<choice>
 				<ref name="content-parameters" />
 				<text />
