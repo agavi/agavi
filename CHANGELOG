@@ -4,7 +4,6 @@ AGAVI CHANGELOG
 0.11.3 RC2 (September ?, 2008)
 ------------------------------
 
-FIX: AgaviParameterHolder::removeParameter() does not try literal key lookup first (#842) (David)
 FIX: module.xml must not be per-context (#839) (David)
 
 
