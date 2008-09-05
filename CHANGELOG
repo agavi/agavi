@@ -62,6 +62,10 @@ FIX: Security filters cannot perform checks in addition to isSecure() (#671) (Da
 0.11.3 RC2 (September ?, 2008)
 ------------------------------
 
+ADD: Caching group element with array value support (#809) (David)
+ADD: Allow convenience array index access in AgaviAttributeHolder (#843) (David)
+
+FIX: AgaviParameterHolder::removeParameter() does not try literal key lookup first (#842) (David)
 FIX: module.xml must not be per-context (#839) (David)
 
 
