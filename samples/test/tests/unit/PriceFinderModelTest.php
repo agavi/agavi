@@ -1,5 +1,6 @@
 <?php 
 
+
 class PriceFinderModelTest extends AgaviUnitTestCase
 {
 	/**
@@ -7,7 +8,8 @@ class PriceFinderModelTest extends AgaviUnitTestCase
 	 */
 	public function testValidProductPrices($productName, $price)
 	{
-		
+		$finder = $this->getContext()->getModel('PriceFinder', 'Default');
+		$this->assertEquals($price, $finder->getPriceByProductName($productName));
 	}
 	
 	public function productPrices()
@@ -21,7 +23,7 @@ class PriceFinderModelTest extends AgaviUnitTestCase
 	
 	public function testPriceNullForUnknownProduct()
     {
-		$this->assertNull($this->getContext()->getModel('AgaviSampleAppPriceFinder', 'Default')->getPriceByProductName('unknown product'));
+		$this->assertNull($this->getContext()->getModel('PriceFinder', 'Default')->getPriceByProductName('unknown product'));
 	}
 
 }
