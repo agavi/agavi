@@ -7,6 +7,7 @@ AGAVI CHANGELOG
 ADD: Caching group element with array value support (#809) (David)
 ADD: Allow convenience array index access in AgaviAttributeHolder (#843) (David)
 
+FIX: Empty redirect in response may cause uninitialized string offset notice (#847) (David)
 FIX: AgaviParameterHolder::removeParameter() does not try literal key lookup first (#842) (David)
 FIX: module.xml must not be per-context (#839) (David)
 
