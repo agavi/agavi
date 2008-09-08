@@ -257,6 +257,22 @@
 			<autoload name="AgaviTemplateLayer">%core.agavi_dir%/view/AgaviTemplateLayer.class.php</autoload>
 			<autoload name="AgaviView">%core.agavi_dir%/view/AgaviView.class.php</autoload>
 
+			<!-- agavi/testing -->
+			<autoload name="AgaviIFlowTestCase">%core.agavi_dir%/testing/AgaviIFlowTestCase.interface.php</autoload>
+			<autoload name="AgaviIFragmentTestCase">%core.agavi_dir%/testing/AgaviIFragmentTestCase.interface.php</autoload>
+			<autoload name="AgaviIRemoteTestCase">%core.agavi_dir%/testing/AgaviIRemoteTestCase.interface.php</autoload>
+			<autoload name="AgaviITestCase">%core.agavi_dir%/testing/AgaviITestCase.interface.php</autoload>
+			<autoload name="AgaviIUnitTestCase">%core.agavi_dir%/testing/AgaviIUnitTestCase.interface.php</autoload>
+	
+			<autoload name="AgaviActionTestCase">%core.agavi_dir%/testing/AgaviActionTestCase.class.php</autoload>
+			<autoload name="AgaviFlowTestCase">%core.agavi_dir%/testing/AgaviFlowTestCase.class.php</autoload>
+			<autoload name="AgaviFragmentTestCase">%core.agavi_dir%/testing/AgaviFragmentTestCase.class.php</autoload>
+			<autoload name="AgaviModelTestCase">%core.agavi_dir%/testing/AgaviModelTestCase.class.php</autoload>
+			<autoload name="AgaviSeleniumTestCase">%core.agavi_dir%/testing/AgaviSeleniumTestCase.class.php</autoload>
+			<autoload name="AgaviUnitTestCase">%core.agavi_dir%/testing/AgaviUnitTestCase.class.php</autoload>
+			<autoload name="AgaviViewTestCase">%core.agavi_dir%/testing/AgaviViewTestCase.class.php</autoload>
+			
+			<autoload name="AgaviTestSuite">%core.agavi_dir%/testing/AgaviTestSuite.class.php</autoload>
 		</autoloads>
 	</configuration>
 </configurations>

@@ -6,22 +6,7 @@ class AgaviTesting
 	 * @var        array An assoc array of classes and files used for autoloading.
 	 */
 	public static $autoloads = array(
-		'AgaviActionTestCase'            => 'testing/AgaviActionTestCase.class.php',
-		'AgaviFlowTestCase'              => 'testing/AgaviFlowTestCase.class.php',
-		'AgaviFlowTestSuite'             => 'testing/AgaviFlowTestSuite.class.php',
-		'AgaviFragmentTestCase'          => 'testing/AgaviFragmentTestCase.class.php',
-		'AgaviFragmentTestSuite'         => 'testing/AgaviFragmentTestSuite.class.php',
-		'AgaviIFlowTestCase'             => 'testing/AgaviIFlowTestCase.interface.php',
-		'AgaviIFragmentTestCase'         => 'testing/AgaviIFragmentTestCase.interface.php',
-		'AgaviIRemoteTestCase'           => 'testing/AgaviIRemoteTestCase.interface.php',
-		'AgaviITestCase'                 => 'testing/AgaviITestCase.interface.php',
-		'AgaviIUnitTestCase'             => 'testing/AgaviIUnitTestCase.interface.php',
-		'AgaviModelTestCase'             => 'testing/AgaviModelTestCase.class.php',
-		'AgaviSeleniumTestCase'          => 'testing/AgaviSeleniumTestCase.class.php',
-		'AgaviTestSuite'                 => 'testing/AgaviTestSuite.class.php',
-		'AgaviUnitTestCase'              => 'testing/AgaviUnitTestCase.class.php',
-		'AgaviUnitTestSuite'             => 'testing/AgaviUnitTestSuite.class.php',
-		'AgaviViewTestCase'              => 'testing/AgaviViewTestCase.class.php',
+
 	);
 
 	/**
