@@ -4,10 +4,13 @@ AGAVI CHANGELOG
 1.0.0 beta 3 (September ?, 2008)
 --------------------------------
 
+ADD: AgaviTidyFilter (#845) (David)
+ADD: Allow customization of the way Actions, Views etc. are laid out in the filesystem (#668) (David)
 ADD: AgaviXmlConfigDomElement::hasAgaviParameters() (#841) (David)
 
 CHG: Redesign module.xml completely to allow arbitrary settings (#834) (David)
 
+FIX: System actions' templates are always copied to the first module (#805) (Noah)
 FIX: AgaviXmlConfigDomElement::getIterator() uses incorrect XPath expressions (#840) (David)
 FIX: AgaviXmlConfigXsltProcessor::transformToDoc() does not throw exceptions on runtime warnings (#837) (David)
 FIX: AgaviXmlConfigXsltProcessor::transformToDoc() does not check parent return value (#836) (David)
@@ -61,6 +64,11 @@ FIX: Security filters cannot perform checks in addition to isSecure() (#671) (Da
 0.11.3 RC2 (September ?, 2008)
 ------------------------------
 
+ADD: Caching group element with array value support (#809) (David)
+ADD: Allow convenience array index access in AgaviAttributeHolder (#843) (David)
+
+FIX: Empty redirect in response may cause uninitialized string offset notice (#847) (David)
+FIX: AgaviParameterHolder::removeParameter() does not try literal key lookup first (#842) (David)
 FIX: module.xml must not be per-context (#839) (David)
 
 

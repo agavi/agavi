@@ -118,6 +118,7 @@
 			<autoload name="AgaviIGlobalFilter">%core.agavi_dir%/filter/AgaviIGlobalFilter.interface.php</autoload>
 			<autoload name="AgaviISecurityFilter">%core.agavi_dir%/filter/AgaviISecurityFilter.interface.php</autoload>
 			<autoload name="AgaviSecurityFilter">%core.agavi_dir%/filter/AgaviSecurityFilter.class.php</autoload>
+			<autoload name="AgaviTidyFilter">%core.agavi_dir%/filter/AgaviTidyFilter.class.php</autoload>
 
 			<!-- agavi/logging -->
 			<autoload name="AgaviFileLoggerAppender">%core.agavi_dir%/logging/AgaviFileLoggerAppender.class.php</autoload>

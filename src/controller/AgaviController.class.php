@@ -287,9 +287,21 @@ class AgaviController extends AgaviParameterHolder
 	 * @since      1.0.0
 	 */
 	public function checkActionFile($moduleName, $actionName)
-	{		
+	{
+		$this->initializeModule($moduleName);
 		$actionName = AgaviToolkit::canonicalName($actionName);
-		$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/actions/' . $actionName . 'Action.class.php';
+		$file = AgaviToolkit::expandVariables(
+			AgaviToolkit::expandDirectives(
+				AgaviConfig::get(
+					sprintf('modules.%s.agavi.action.path', strtolower($moduleName)),
+					'%core.module_dir%/${moduleName}/actions/${actionName}Action.class.php'
+				)
+			),
+			array(
+				'moduleName' => $moduleName,
+				'actionName' => $actionName,
+			)
+		);
 		if(is_readable($file) && substr($actionName, 0, 1) !== '/') {
 			return $file;
 		}
@@ -367,9 +379,21 @@ class AgaviController extends AgaviParameterHolder
 	 * @since      1.0.0
 	 */
 	public function checkViewFile($moduleName, $viewName)
-	{	
+	{
+		$this->initializeModule($moduleName);
 		$viewName = AgaviToolkit::canonicalName($viewName);
-		$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/views/' . $viewName . 'View.class.php';
+		$file = AgaviToolkit::expandVariables(
+			AgaviToolkit::expandDirectives(
+				AgaviConfig::get(
+					sprintf('modules.%s.agavi.view.path', strtolower($moduleName)),
+					'%core.module_dir%/${moduleName}/views/${viewName}View.class.php'
+				)
+			),
+			array(
+				'moduleName' => $moduleName,
+				'viewName' => $viewName,
+			)
+		);
 		if(is_readable($file) && substr($viewName, 0, 1) !== '/') {
 			return $file;
 		}

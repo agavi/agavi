@@ -268,7 +268,19 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 		$request = $this->context->getRequest();
 
 		$isCacheable = false;
-		if($this->getParameter('enable_caching', true) && is_readable($cachingDotXml = AgaviConfig::get('core.module_dir') . '/' . $moduleName . DIRECTORY_SEPARATOR . 'cache' . DIRECTORY_SEPARATOR . $actionName . '.xml')) {
+		$cachingDotXml = AgaviToolkit::expandVariables(
+			AgaviToolkit::expandDirectives(
+				AgaviConfig::get(
+					sprintf('modules.%s.agavi.cache.path', strtolower($moduleName)),
+					'%core.module_dir%/${moduleName}/cache/${actionName}.xml'
+				)
+			),
+			array(
+				'moduleName' => $moduleName,
+				'actionName' => $actionName,
+			)
+		);
+		if($this->getParameter('enable_caching', true) && is_readable($cachingDotXml)) {
 			// $lm->log('Caching enabled, configuration file found, loading...');
 			// no _once please!
 			include(AgaviConfigCache::checkConfig($cachingDotXml, $this->context->getName()));
@@ -638,8 +650,18 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 			$validated = true;
 
 			// get the current action validation configuration
-			$validationConfig = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/validate/' . $actionName . '.xml';
-
+			$validationConfig = AgaviToolkit::expandVariables(
+				AgaviToolkit::expandDirectives(
+					AgaviConfig::get(
+						sprintf('modules.%s.agavi.validate.path', strtolower($moduleName)),
+						'%core.module_dir%/${moduleName}/validate/${actionName}.xml'
+					)
+				),
+				array(
+					'moduleName' => $moduleName,
+					'actionName' => $actionName,
+				)
+			);
 			if(is_readable($validationConfig)) {
 				// load validation configuration
 				// do NOT use require_once
@@ -698,7 +720,18 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 			$viewName   = $viewName[1];
 		} elseif($viewName !== AgaviView::NONE) {
 			// use a view related to this action
-			$viewName = $actionName . $viewName;
+			$viewName = AgaviToolkit::expandVariables(
+				AgaviToolkit::expandDirectives(
+					AgaviConfig::get(
+						sprintf('modules.%s.agavi.view.name', strtolower($moduleName)),
+						'${actionName}${viewName}'
+					)
+				),
+				array(
+					'actionName' => $actionName,
+					'viewName' => $viewName,
+				)
+			);
 			$viewModule = $moduleName;
 		} else {
 			$viewName = AgaviView::NONE;

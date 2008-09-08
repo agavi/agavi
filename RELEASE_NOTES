@@ -33,6 +33,17 @@ Actions, Views and Models must now use fully qualified class names, including th
 %core.app_dir%/modules/Default/actions/Foo_BarAction.class.php is class Default_Foo_BarAction
 The legacy naming schemes (leaving out module name for Actions, Views and non-global Models; leaving out sub-notation paths except the last one) are not supported anymore.
 
+Finally, you can now define the filesystem structure of the following elements on a per-module basis:
+- Actions
+- Caching XML configs
+- Validation XML configs
+- Views
+You can also customize these aspects:
+- Default template "directory" part
+- View shortname resolution ("Success" => "Default_Sub_MarineSuccess")
+This allows you to put all the files for a feature into a single subdirectory, instead of having the separate files cluttered over action/, template/, view/ etc. subfolders inside the module directory.
+Ticket #668 has more details an an example.
+
 Project development environment
 -------------------------------
 Agavi 1.0 introduces a new environment for creating and managing Agavi-based projects. This environment effectively replaces the older agavi script and Phing build environment. The new environment is also based on Phing. It adds a few useful features:
