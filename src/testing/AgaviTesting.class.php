@@ -90,7 +90,7 @@ class AgaviTesting
 		
 		ini_set('include_path', get_include_path().PATH_SEPARATOR.dirname(dirname(__FILE__)));
 
-		$_ENV['AGAVI'] = AgaviConfig::toArray();
+		$GLOBALS['AGAVI_CONFIG'] = AgaviConfig::toArray();
 	}
 
 	public function dispatch()
@@ -101,7 +101,8 @@ class AgaviTesting
 		//$test->setName('PriceFinder Model');
 		//$suite->addTest($test);
 		$suite->addTestFile('tests/unit/PriceFinderModelTest.php');
-
+		
+		$GLOBALS['__PHPUNIT_BOOTSTRAP'] = dirname(__FILE__).'/templates/AgaviBootstrap.tpl.php';
 
 		// TODO: read test suites from xml or so
 
