@@ -22,25 +22,6 @@ class AgaviTesting
 		'AgaviUnitTestCase'              => 'testing/AgaviUnitTestCase.class.php',
 		'AgaviUnitTestSuite'             => 'testing/AgaviUnitTestSuite.class.php',
 		'AgaviViewTestCase'              => 'testing/AgaviViewTestCase.class.php',
-		'AgaviAutoloadException'         => 'exception/AgaviAutoloadException.class.php',
-		'AgaviCacheException'            => 'exception/AgaviCacheException.class.php',
-		'AgaviConfigurationException'    => 'exception/AgaviConfigurationException.class.php',
-		'AgaviControllerException'       => 'exception/AgaviControllerException.class.php',
-		'AgaviDatabaseException'         => 'exception/AgaviDatabaseException.class.php',
-		'AgaviDisabledModuleException'   => 'exception/AgaviDisabledModuleException.class.php',
-		'AgaviException'                 => 'exception/AgaviException.class.php',
-		'AgaviFactoryException'          => 'exception/AgaviFactoryException.class.php',
-		'AgaviFileException'             => 'exception/AgaviFileException.class.php',
-		'AgaviFilterException'           => 'exception/AgaviFilterException.class.php',
-		'AgaviInitializationException'   => 'exception/AgaviInitializationException.class.php',
-		'AgaviLoggingException'          => 'exception/AgaviLoggingException.class.php',
-		'AgaviParseException'            => 'exception/AgaviParseException.class.php',
-		'AgaviRenderException'           => 'exception/AgaviRenderException.class.php',
-		'AgaviSecurityException'         => 'exception/AgaviSecurityException.class.php',
-		'AgaviStorageException'          => 'exception/AgaviStorageException.class.php',
-		'AgaviUnreadableException'       => 'exception/AgaviUnreadableException.class.php',
-		'AgaviValidatorException'        => 'exception/AgaviValidatorException.class.php',
-		'AgaviViewException'             => 'exception/AgaviViewException.class.php',
 	);
 
 	/**
@@ -88,6 +69,9 @@ class AgaviTesting
 		// finally set the env to what we're really using now.
 		AgaviConfig::set('testing.environment', $environment, true, true);
 		
+		// bootstrap the framework for autoload, config handlers etc.
+		Agavi::bootstrap($environment);
+		
 		ini_set('include_path', get_include_path().PATH_SEPARATOR.dirname(dirname(__FILE__)));
 
 		$GLOBALS['AGAVI_CONFIG'] = AgaviConfig::toArray();
@@ -95,11 +79,7 @@ class AgaviTesting
 
 	public function dispatch()
 	{
-		$suite = new AgaviUnitTestSuite('Foo');
-		//require_once 'tests/unit/PriceFinderModelTest.php';
-		//$test = new PriceFinderModelTest();
-		//$test->setName('PriceFinder Model');
-		//$suite->addTest($test);
+		$suite = new AgaviTestSuite('Foo');
 		$suite->addTestFile('tests/unit/PriceFinderModelTest.php');
 		
 		$GLOBALS['__PHPUNIT_BOOTSTRAP'] = dirname(__FILE__).'/templates/AgaviBootstrap.tpl.php';
