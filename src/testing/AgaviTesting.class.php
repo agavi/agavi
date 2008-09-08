@@ -3,29 +3,6 @@
 class AgaviTesting
 {
 	/**
-	 * @var        array An assoc array of classes and files used for autoloading.
-	 */
-	public static $autoloads = array(
-
-	);
-
-	/**
-	 * Handles autoloading of classes
-	 *
-	 * @param      string A class name.
-	 *
-	 * @author     David Zülke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public static function __autoload($class)
-	{
-		if(isset(self::$autoloads[$class])) {
-			// class exists, let's include it
-			require(AgaviConfig::get('core.agavi_dir') . '/' . self::$autoloads[$class]);
-		}
-	}
-
-	/**
 	 * Startup the Agavi core
 	 *
 	 * @param      string environment the environment to use for this session.
@@ -35,9 +12,6 @@ class AgaviTesting
 	 */
 	public static function bootstrap($environment = null)
 	{
-		// set up our __autoload
-		spl_autoload_register(array('AgaviTesting', '__autoload'));
-
 		if($environment === null) {
 			// no env given? let's read one from testing.environment
 			$environment = AgaviConfig::get('testing.environment');
