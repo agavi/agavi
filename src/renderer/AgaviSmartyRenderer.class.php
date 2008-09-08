@@ -20,6 +20,7 @@
  * @subpackage renderer
  *
  * @author     David Zülke <dz@bitxtender.com>
+ * @author     TANAKA Koichi <tanaka@ensites.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
  *
@@ -79,6 +80,7 @@ class AgaviSmartyRenderer extends AgaviRenderer implements AgaviIReusableRendere
 	 * @return     Smarty A Smarty instance.
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
+	 * @author     TANAKA Koichi <tanaka@ensites.com>
 	 * @since      0.9.0
 	 */
 	protected function getEngine()
@@ -118,6 +120,10 @@ class AgaviSmartyRenderer extends AgaviRenderer implements AgaviIReusableRendere
 
 		if(AgaviConfig::get('core.debug', false)) {
 			$this->smarty->debugging = true;
+		}
+
+		foreach((array)$this->getParameter('smarty_variables') as $key => $value) {
+			$this->smarty->$key = $value;
 		}
 
 		return $this->smarty;

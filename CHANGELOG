@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 0.11.3 RC2 (September ?, 2008)
 ------------------------------
 
+ADD: Allow runtime configuration of Smarty via parameters in AgaviSmartyRenderer (#846) (David, TANAKA Koichi)
 ADD: Caching group element with array value support (#809) (David)
 ADD: Allow convenience array index access in AgaviAttributeHolder (#843) (David)
 
