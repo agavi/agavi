@@ -1,7 +1,7 @@
 AGAVI CHANGELOG
 ===============
 
-0.11.3 RC2 (September ?, 2008)
+0.11.3 RC2 (September 9, 2008)
 ------------------------------
 
 ADD: Allow runtime configuration of Smarty via parameters in AgaviSmartyRenderer (#846) (David, TANAKA Koichi)

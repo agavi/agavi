@@ -5,6 +5,7 @@ Version 0.11.3 - September ??, 2008
 ===================================
 
 This maintenance release fixes a couple of minor problems like PEAR package generation, gettext plural form expression handling etc, and introduces some new features:
+- Accessing array values in attribute holders via foo[bar] is now possible, as it is already with parameter holders
 - Database handlers now can send arbitrary SQL statements after connecting; useful for "SET NAMES utf8" in MySQL etc.
 - AgaviDoctrineDatabase improvements
 - AgaviMysqliDatabase adapter added
