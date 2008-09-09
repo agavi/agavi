@@ -32,6 +32,7 @@
 			<autoload name="AgaviRoutingConfigHandler">%core.agavi_dir%/config/AgaviRoutingConfigHandler.class.php</autoload>
 			<autoload name="AgaviSettingConfigHandler">%core.agavi_dir%/config/AgaviSettingConfigHandler.class.php</autoload>
 			<autoload name="AgaviTranslationConfigHandler">%core.agavi_dir%/config/AgaviTranslationConfigHandler.class.php</autoload>
+			<autoload name="AgaviTestSuitesConfigHandler">%core.agavi_dir%/config/AgaviTestSuitesConfigHandler.class.php</autoload>
 			<autoload name="AgaviValidatorConfigHandler">%core.agavi_dir%/config/AgaviValidatorConfigHandler.class.php</autoload>
 			<autoload name="AgaviWsdlConfigHandler">%core.agavi_dir%/config/AgaviWsdlConfigHandler.class.php</autoload>
 			<autoload name="AgaviXmlConfigDomAttr">%core.agavi_dir%/config/util/dom/AgaviXmlConfigDomAttr.class.php</autoload>

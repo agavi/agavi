@@ -38,14 +38,21 @@ class AgaviTesting
 
 	public function dispatch()
 	{
-		$suite = new AgaviTestSuite('Foo');
-		$suite->addTestFile('tests/unit/PriceFinderModelTest.php');
-		
 		$GLOBALS['__PHPUNIT_BOOTSTRAP'] = dirname(__FILE__).'/templates/AgaviBootstrap.tpl.php';
 
-		// TODO: read test suites from xml or so
+		$suites = include AgaviConfigCache::checkConfig(AgaviConfig::get('core.app_dir').'/../test/config/suites.xml');
+		$master_suite = new AgaviTestSuite('Master');
+		foreach ($suites as $name => $suite)
+		{
+			$s = new $suite['class']($name);
+			foreach ($suite['testfiles'] as $file)
+			{
+				$s->addTestFile('tests/'.$file);
+			}
+			$master_suite->addTest($s);
+		}
 
-		$runner = PHPUnit_TextUI_TestRunner::run($suite);
+		$runner = PHPUnit_TextUI_TestRunner::run($master_suite);
 	}
 }
 
