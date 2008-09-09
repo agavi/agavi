@@ -60,8 +60,7 @@ class AgaviTestSuitesConfigHandler extends AgaviXmlConfigHandler
 			foreach($configuration->getChildren('suites') as $current) {
 				$suite =  array('class' => $current->getAttribute('class', 'AgaviTestSuite'));
 				$suite['testfiles'] = array();
-				foreach ($current->getChildren('testfiles') as $file)
-				{
+				foreach($current->getChildren('testfiles') as $file) {
 					$suite['testfiles'][$file->getAttribute('name')] = $file->textContent;
 				}
 				$data[$current->getAttribute('name')] = $suite;
