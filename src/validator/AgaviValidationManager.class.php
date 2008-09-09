@@ -125,7 +125,8 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	 * @param      array The validator parameters.
 	 * @param      AgaviIValidatorContainer The parent (will use the validation 
 	 *                                      manager if null is given)
-	 *
+	 * @return     AgaviValidator
+	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
