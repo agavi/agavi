@@ -186,7 +186,7 @@ abstract class AgaviAction
 	}
 
 	/**
-	 * @see        AgaviAttributeHolder::setAttributesByRef()
+	 * @see        AgaviAttributeHolder::clearAttributes()
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
@@ -197,7 +197,7 @@ abstract class AgaviAction
 	}
 
 	/**
-	 * @see        AgaviAttributeHolder::setAttributesByRef()
+	 * @see        AgaviAttributeHolder::getAttribute()
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
@@ -208,7 +208,7 @@ abstract class AgaviAction
 	}
 
 	/**
-	 * @see        AgaviAttributeHolder::setAttributesByRef()
+	 * @see        AgaviAttributeHolder::getAttributeNames()
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
@@ -219,7 +219,7 @@ abstract class AgaviAction
 	}
 
 	/**
-	 * @see        AgaviAttributeHolder::setAttributesByRef()
+	 * @see        AgaviAttributeHolder::getAttributes()
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
@@ -230,7 +230,7 @@ abstract class AgaviAction
 	}
 
 	/**
-	 * @see        AgaviAttributeHolder::setAttributesByRef()
+	 * @see        AgaviAttributeHolder::hasAttribute()
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
@@ -241,7 +241,7 @@ abstract class AgaviAction
 	}
 
 	/**
-	 * @see        AgaviAttributeHolder::setAttributesByRef()
+	 * @see        AgaviAttributeHolder::removeAttribute()
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
@@ -252,7 +252,7 @@ abstract class AgaviAction
 	}
 
 	/**
-	 * @see        AgaviAttributeHolder::setAttributesByRef()
+	 * @see        AgaviAttributeHolder::setAttribute()
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
@@ -263,7 +263,7 @@ abstract class AgaviAction
 	}
 
 	/**
-	 * @see        AgaviAttributeHolder::setAttributesByRef()
+	 * @see        AgaviAttributeHolder::appendAttribute()
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.10.0
@@ -274,7 +274,7 @@ abstract class AgaviAction
 	}
 
 	/**
-	 * @see        AgaviAttributeHolder::setAttributesByRef()
+	 * @see        AgaviAttributeHolder::setAttributeByRef()
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
@@ -285,7 +285,7 @@ abstract class AgaviAction
 	}
 
 	/**
-	 * @see        AgaviAttributeHolder::setAttributesByRef()
+	 * @see        AgaviAttributeHolder::appendAttributeByRef()
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.10.0
@@ -296,7 +296,7 @@ abstract class AgaviAction
 	}
 
 	/**
-	 * @see        AgaviAttributeHolder::setAttributesByRef()
+	 * @see        AgaviAttributeHolder::setAttributes()
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
