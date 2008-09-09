@@ -105,13 +105,17 @@
 	
 	<define name="data-list-environment">
 		<list>
-			<data type="string" />
+			<oneOrMore>
+				<data type="string" />
+			</oneOrMore>
 		</list>
 	</define>
 	
 	<define name="data-list-context">
 		<list>
-			<data type="string" />
+			<oneOrMore>
+				<data type="string" />
+			</oneOrMore>
 		</list>
 	</define>
 	
