@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" xmlns="http://agavi.org/agavi/config/parts/testing/suites/1.0">
 	<ae:configuration>
+		<suites>
 			<suite name="Default">
 				<testfiles>
 					<testfile name="Productfinder">unit/PriceFinderModelTest.php</testfile>
 				</testfiles>
 			</suite>
+		</suites>
 	</ae:configuration>
 </ae:configurations>
