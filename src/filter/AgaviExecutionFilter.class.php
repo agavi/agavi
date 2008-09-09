@@ -597,8 +597,6 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 	 *
 	 * @return     mixed The processed View information returned by the Action.
 	 *
-	 * @throws     AgaviViewException If the returned View does not exist.
-	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
