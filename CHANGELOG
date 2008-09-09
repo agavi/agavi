@@ -64,8 +64,11 @@ FIX: Security filters cannot perform checks in addition to isSecure() (#671) (Da
 0.11.3 RC2 (September ?, 2008)
 ------------------------------
 
+ADD: Allow runtime configuration of Smarty via parameters in AgaviSmartyRenderer (#846) (David, TANAKA Koichi)
 ADD: Caching group element with array value support (#809) (David)
 ADD: Allow convenience array index access in AgaviAttributeHolder (#843) (David)
+
+CHG: AgaviSmartyRenderer should not set a Smarty plugins dir (#848) (David)
 
 FIX: Empty redirect in response may cause uninitialized string offset notice (#847) (David)
 FIX: AgaviParameterHolder::removeParameter() does not try literal key lookup first (#842) (David)
