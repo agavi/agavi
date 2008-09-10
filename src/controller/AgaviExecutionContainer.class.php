@@ -48,7 +48,8 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	/**
 	 * @var        AgaviRequestDataHolder A request data holder with request info.
 	 */
-	private $requestData = null;
+	protected $requestData = null; // TODO: check if this can actually be protected 
+	                               // or whether it should be private (would break actiontests though)
 
 	/**
 	 * @var        AgaviRequestDataHolder A pointer to the global request data.
@@ -136,7 +137,10 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	public function __sleep()
 	{
 		$this->contextName = $this->context->getName();
-		$this->outputTypeName = $this->outputType->getName();
+		if (!empty($this->outputType))
+		{
+			$this->outputTypeName = $this->outputType->getName();	
+		}
 		$arr = get_object_vars($this);
 		unset($arr['context'], $arr['outputType'], $arr['requestData'], $arr['globalRequestData']);
 		return array_keys($arr);
@@ -154,7 +158,12 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	public function __wakeup()
 	{
 		$this->context = AgaviContext::getInstance($this->contextName);
-		$this->outputType = $this->context->getController()->getOutputType($this->outputTypeName);
+		
+		if (!empty($this->outputTypeName))
+		{
+			$this->outputType = $this->context->getController()->getOutputType($this->outputTypeName);
+		}
+		
 		try {
 			$this->globalRequestData = $this->context->getRequest()->getRequestData();
 		} catch(AgaviException $e) {
