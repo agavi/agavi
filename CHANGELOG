@@ -10,6 +10,7 @@ ADD: AgaviXmlConfigDomElement::hasAgaviParameters() (#841) (David)
 
 CHG: Redesign module.xml completely to allow arbitrary settings (#834) (David)
 
+FIX: XML namespace declarations are not carried over when transforming or merging configs (#853) (David)
 FIX: AgaviXmlConfigParser does not copy <configurations> attributes when merging Agavi config files (#852) (David)
 FIX: RELAX NG list definitions for "context" and "environment" attributes of <configuration> element allow only one value (#850) (David)
 FIX: System actions' templates are always copied to the first module (#805) (Noah)
