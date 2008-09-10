@@ -259,6 +259,17 @@ class AgaviXmlConfigParser
 						$retval->documentElement->appendChild($importedNode);
 					}
 				}
+				// if it's a <configurations> element, then we need to copy the attributes from there
+				if($doc->isAgaviConfiguration()) {
+					foreach($doc->documentElement->attributes as $attribute) {
+						// but not the "parent" attributes...
+						if($attribute->namespaceURI === null && $attribute->localName === 'parent') {
+							continue;
+						}
+						$importedAttribute = $retval->importNode($attribute, true);
+						$retval->documentElement->setAttributeNode($importedAttribute);
+					}
+				}
 			}
 			
 			// generic <configuration> first, then those with an environment attribute, then those with context, then those with both
