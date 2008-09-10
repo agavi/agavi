@@ -261,6 +261,12 @@ class AgaviXmlConfigParser
 				}
 				// if it's a <configurations> element, then we need to copy the attributes from there
 				if($doc->isAgaviConfiguration()) {
+					$namespaces = $doc->getXPath()->query('namespace::*');
+					foreach($namespaces as $namespace) {
+						if($namespace->localName !== 'xml' && $namespace->localName != 'xmlns') {
+							$retval->documentElement->setAttribute('xmlns:' . $namespace->localName, $namespace->namespaceURI);
+						}
+					}
 					foreach($doc->documentElement->attributes as $attribute) {
 						// but not the "parent" attributes...
 						if($attribute->namespaceURI === null && $attribute->localName === 'parent') {

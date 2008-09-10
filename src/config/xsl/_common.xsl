@@ -11,6 +11,8 @@
 	<xsl:template match="envelope_0_11:configurations | envelope_0_11:configuration | envelope_0_11:sandbox | envelope_0_11:parameters | envelope_0_11:parameter">
 		<xsl:element name="{local-name()}" namespace="{$envelope_1_0}">
 			<xsl:copy-of select="@*" />
+			<!-- also copy all namespace declarations, but not xmlns itself -->
+			<xsl:copy-of select="namespace::*[not(name() = '')]" />
 			<xsl:apply-templates />
 		</xsl:element>
 	</xsl:template>
