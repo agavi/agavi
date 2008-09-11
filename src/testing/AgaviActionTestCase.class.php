@@ -23,6 +23,7 @@ abstract class AgaviActionTestCase extends AgaviFragmentTestCase
 	protected function createActionInstance()
 	{
 		$actionInstance = $this->getContext()->getController()->createActionInstance($this->moduleName, $this->actionName);
+		$actionInstance->initialize($this->container);
 		return $actionInstance;
 	}
 	
