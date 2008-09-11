@@ -42,6 +42,18 @@ abstract class AgaviActionTestCase extends AgaviFragmentTestCase
 
 	protected function assertViewEquals($expected, $message = '', $delta = 0, $maxDepth = 10, $canonicalizeEol = FALSE)
 	{
+		$expected = AgaviToolkit::expandVariables(
+			AgaviToolkit::expandDirectives(
+				AgaviConfig::get(
+					sprintf('modules.%s.agavi.view.name', strtolower($this->moduleName)),
+					'${actionName}${viewName}'
+				)
+			),
+			array(
+				'actionName' => $this->actionName,
+				'viewName' => $expected,
+			)	
+		);
 		$this->assertEquals($expected, $this->viewName, $message = '', $delta = 0, $maxDepth = 10, $canonicalizeEol = FALSE);
 	}
 	
