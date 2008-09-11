@@ -72,6 +72,14 @@ abstract class AgaviActionTestCase extends AgaviFragmentTestCase
         self::assertThat($method, $constraint, $message);
 	}
 	
+	protected function assertNotHandlesMethod($method, $acceptGeneric = true, $message = '')
+	{
+		$actionInstance = $this->createActionInstance();
+        $constraint = self::logicalNot(new AgaviConstraintActionHandlesMethod($actionInstance, $acceptGeneric));
+
+        self::assertThat($method, $constraint, $message);
+	}
+	
 	protected function assertIsSimple($message = '')
 	{
 		$actionInstance = $this->createActionInstance();

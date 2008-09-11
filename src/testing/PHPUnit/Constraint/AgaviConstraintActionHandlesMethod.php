@@ -27,26 +27,32 @@ class AgaviConstraintActionHandlesMethod extends PHPUnit_Framework_Constraint
 		
 		return false;
     }
-
-    /**
-     * Returns a string representation of the constraint.
-     *
-     * @return string
-     */
-    public function toString()
-    {
-        return sprintf(
-          '%1$s handles method',
-
-          get_class($this->actionInstance)
-        );
-    }
-
+	
+	/**
+	 * Returns a string representation of the constraint.
+	 *
+	 * @return string
+	 */
+	public function toString()
+	{
+	    return sprintf(
+	      '%1$s handles method',
+	
+	      get_class($this->actionInstance)
+	    );
+	}
+    
     protected function customFailureDescription($other, $description, $not)
     {
-        return sprintf(
-          'Failed asserting that "%s" %s.', $this->toString(), $other
-        );
+		if(!$not) {
+		    return sprintf(
+	          'Failed asserting that %1$s handles method "%2$s".', get_class($this->actionInstance), $other
+	        );
+		} else {
+			return sprintf(
+	          'Failed asserting that %1$s does not handle method "%2$s".', get_class($this->actionInstance), $other
+	        );
+		}
     }
 }
 ?>
