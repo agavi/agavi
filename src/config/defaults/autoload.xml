@@ -274,6 +274,8 @@
 			<autoload name="AgaviViewTestCase">%core.agavi_dir%/testing/AgaviViewTestCase.class.php</autoload>
 			
 			<autoload name="AgaviTestSuite">%core.agavi_dir%/testing/AgaviTestSuite.class.php</autoload>
+			
+			<autoload name="AgaviConstraintActionHandlesMethod">%core.agavi_dir%/testing/PHPUnit/Constraint/AgaviConstraintActionHandlesMethod.php</autoload>
 		</autoloads>
 	</configuration>
 </configurations>
