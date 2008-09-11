@@ -17,7 +17,7 @@ class SearchEngineSpamActionTest extends AgaviActionTestCase
 	public function testSuccessViewValidProducts($productName)
 	{
 		$this->setRequestMethod('read');
-		$this->setArguments($this->createRequestDataHolder(array(AgaviWebRequestDataHolder::SOURCE_PARAMETERS => array('name' => $productName)), 'AgaviWebRequestDataHolder'));
+		$this->setArguments($this->createRequestDataHolder(array(AgaviWebRequestDataHolder::SOURCE_PARAMETERS => array('name' => $productName))));
 		$this->runAction();
 		$this->assertViewEquals('Success');
 	}
@@ -25,7 +25,7 @@ class SearchEngineSpamActionTest extends AgaviActionTestCase
 	public function testErrorViewInvalidProduct()
 	{
 		$this->setRequestMethod('read');
-		$this->setArguments($this->createRequestDataHolder(array(AgaviWebRequestDataHolder::SOURCE_PARAMETERS => array('name' => 'nonexistant product')), 'AgaviWebRequestDataHolder'));
+		$this->setArguments($this->createRequestDataHolder(array(AgaviWebRequestDataHolder::SOURCE_PARAMETERS => array('name' => 'nonexistant product'))));
 		$this->runAction();
 		$this->assertViewEquals('Error');
 	}

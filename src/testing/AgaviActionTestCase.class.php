@@ -34,8 +34,13 @@ abstract class AgaviActionTestCase extends AgaviFragmentTestCase
 		list($this->viewModuleName, $this->viewName) = $executionFilter->runAction($this->container);
 	}
 	
-	protected function createRequestDataHolder(array $arguments = array(), $type = 'AgaviRequestDataHolder')
+	protected function createRequestDataHolder(array $arguments = array(), $type = null)
 	{
+		if(null === $type)
+		{
+			$type = $this->getContext()->getRequest()->getParameter('request_data_holder_class', 'AgaviRequestDataHolder');
+		}
+		
 		$class = new $type($arguments);
 		return $class;
 	}
