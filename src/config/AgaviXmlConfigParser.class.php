@@ -299,6 +299,13 @@ class AgaviXmlConfigParser
 				}
 			}
 			
+			// reload the doc
+			// this must be done because further up, we create attributes with names like xmlns:foo on the document element, copied from parent <configurations> blocks
+			// those will, internally, be normal attributes, not namespace nodes, and thus cannot be accessed through the namespace:: axis in XML stylesheets
+			// a reload fixes that, because they are then parsed as normal xml namespace declaration nodes
+			// thank you, ext/dom, for not exposing your internal DOMNameSpaceNode shit
+			$retval->loadXML($retval->saveXML());
+			
 			// run the compilation stage parser
 			$retval = self::executeCompilation($retval, $environment, $context, $transformationInfo[self::STAGE_COMPILATION], $validationInfo[self::STAGE_COMPILATION]);
 		} else {
