@@ -81,11 +81,12 @@ abstract class AgaviActionTestCase extends AgaviFragmentTestCase
 		$this->assertFalse($actionInstance->isSimple(), $message);
 	}
 	
-	protected function assertDefaultViewName($viewName, $message = '', $delta = 0, $maxDepth = 10, $canonicalizeEol = FALSE)
+	protected function assertDefaultViewName($expected, $message = '', $delta = 0, $maxDepth = 10, $canonicalizeEol = FALSE)
 	{
-		
+		$actionInstance = $this->createActionInstance();
+		$this->assertEquals($expected, $actionInstance->getDefaultViewName(), $message = '', $delta = 0, $maxDepth = 10, $canonicalizeEol = FALSE);
 	}
-	
+
 	protected function createExecutionFilter()
 	{
 		$effi = $this->getContext()->getFactoryInfo('execution_filter');

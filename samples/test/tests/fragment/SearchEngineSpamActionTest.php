@@ -34,6 +34,12 @@ class SearchEngineSpamActionTest extends AgaviActionTestCase
 	{
 		$this->assertIsNotSimple();
 	}
+	
+	public function testDefaultViewName()
+	{
+		$this->assertDefaultViewName('Input');
+	}
+	
 	public function products()
 	{
 		return array(	'brains' 	=> array('brains'),
