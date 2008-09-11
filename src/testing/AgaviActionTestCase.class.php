@@ -69,7 +69,14 @@ abstract class AgaviActionTestCase extends AgaviFragmentTestCase
 	
 	protected function assertIsSimple($message = '')
 	{
-		
+		$actionInstance = $this->createActionInstance();
+		$this->assertTrue($actionInstance->isSimple(), $message);
+	}
+	
+	protected function assertIsNotSimple($message = '')
+	{
+		$actionInstance = $this->createActionInstance();
+		$this->assertFalse($actionInstance->isSimple(), $message);
 	}
 	
 	protected function assertDefaultViewName($viewName, $message = '', $delta = 0, $maxDepth = 10, $canonicalizeEol = FALSE)
