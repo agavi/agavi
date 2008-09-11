@@ -64,9 +64,12 @@ abstract class AgaviActionTestCase extends AgaviFragmentTestCase
 		$this->assertEquals($expected, $this->container->getAttribute($attributeName, $value, $namespace), $message = '', $delta = 0, $maxDepth = 10, $canonicalizeEol = FALSE);
 	}
 	
-	protected function assertHandlesMethod($method, $message = '')
+	protected function assertHandlesMethod($method, $acceptGeneric = true, $message = '')
 	{
-		
+		$actionInstance = $this->createActionInstance();
+        $constraint = new AgaviConstraintActionHandlesMethod($actionInstance, $acceptGeneric);
+
+        self::assertThat($method, $constraint, $message);
 	}
 	
 	protected function assertIsSimple($message = '')
