@@ -81,6 +81,9 @@ abstract class AgaviActionTestCase extends AgaviFragmentTestCase
 		$this->assertFalse($actionInstance->isSimple(), $message);
 	}
 	
+	/**
+	 * TODO: Maybe getDefaultViewName() can return an array, check
+	 */
 	protected function assertDefaultViewName($expected, $message = '', $delta = 0, $maxDepth = 10, $canonicalizeEol = FALSE)
 	{
 		$actionInstance = $this->createActionInstance();
