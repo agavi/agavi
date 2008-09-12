@@ -16,7 +16,7 @@
 require_once(dirname(__FILE__) . '/AgaviTask.php');
 
 /**
- * Converts an action name in dotted form to a path.
+ * Converts a namespaced string in dotted form to a path.
  *
  * @package    agavi
  * @subpackage build
@@ -29,10 +29,10 @@ require_once(dirname(__FILE__) . '/AgaviTask.php');
  *
  * @version    $Id$
  */
-class AgaviTransformactionnametopathTask extends AgaviTask
+class AgaviTransformnamespacestringtopathTask extends AgaviTask
 {
 	protected $property = null;
-	protected $name = null;
+	protected $string = null;
 
 	/**
 	 * Sets the property that this task will modify.
@@ -45,13 +45,13 @@ class AgaviTransformactionnametopathTask extends AgaviTask
 	}
 
 	/**
-	 * Sets the path to access for its base name.
+	 * Sets the string to access for the transformation.
 	 *
-	 * @param      string The path to use.
+	 * @param      string The string to use.
 	 */
-	public function setName($name)
+	public function setString($string)
 	{
-		$this->name = $name;
+		$this->string = $string;
 	}
 
 	/**
@@ -62,11 +62,11 @@ class AgaviTransformactionnametopathTask extends AgaviTask
 		if($this->property === null) {
 			throw new BuildException('The property attribute must be specified');
 		}
-		if($this->name === null) {
-			throw new BuildException('The name attribute must be specified');
+		if($this->string === null) {
+			throw new BuildException('The string attribute must be specified');
 		}
 
-		$this->project->setUserProperty($this->property, str_replace('.', '/', $this->name));
+		$this->project->setUserProperty($this->property, str_replace('.', '/', $this->string));
 	}
 }
 

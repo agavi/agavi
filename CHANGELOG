@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 1.0.0 beta 3 (September ?, 2008)
 --------------------------------
 
+ADD: Build system support for models in subdirectories (#851) (Noah)
 ADD: Support for cache group callbacks (#854) (David)
 ADD: AgaviTidyFilter (#845) (David)
 ADD: Allow customization of the way Actions, Views etc. are laid out in the filesystem (#668) (David)
