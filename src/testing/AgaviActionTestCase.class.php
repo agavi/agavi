@@ -173,6 +173,22 @@ abstract class AgaviActionTestCase extends AgaviFragmentTestCase
 	}
 	
 	/**
+	 * asserts that the view's modulename is the expected value after runAction was called
+	 * 
+	 * @param      string the expected moduleName 
+	 * @param      string an optional message to display if the test fails
+	 * 
+	 * @return     void
+	 * 
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0 
+	 */
+	protected function assertViewModuleNameEquals($expected, $message = '')
+	{
+		$this->assertEquals($expected, $this->viewModuleName, $message);
+	}
+	
+	/**
 	 * asserts that the DefaultView is the expected 
 	 * 
 	 * @param     mixed A string containing the view name associated with the
