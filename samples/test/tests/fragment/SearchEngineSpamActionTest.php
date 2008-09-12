@@ -20,6 +20,9 @@ class SearchEngineSpamActionTest extends AgaviActionTestCase
 		$this->runAction();
 		$this->assertViewNameEquals('Success');
 		$this->assertViewModuleNameEquals('Default');
+		$this->assertContainerAttributeExists('product_price');
+		$this->assertContainerAttributeEquals($productName, 'product_name');
+		
 	}
 	
 	public function testErrorViewInvalidProduct()
@@ -36,7 +39,7 @@ class SearchEngineSpamActionTest extends AgaviActionTestCase
 		$this->assertIsNotSimple();
 	}
 	
-	public function testDefaultViewName()
+	public function testDefaultView()
 	{
 		$this->assertDefaultView('Input');
 	}

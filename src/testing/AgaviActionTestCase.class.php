@@ -226,9 +226,24 @@ abstract class AgaviActionTestCase extends AgaviFragmentTestCase
 	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
 	 * @since      1.0.0
 	 */
-	protected function assertContainerAttributeEquals($expected, $attributeName, $namespace = null, $message = '', $delta = 0, $maxDepth = 10, $canonicalizeEol = FALSE)
+	protected function assertContainerAttributeEquals($expected, $attributeName, $namespace = null, $message = '', $delta = 0, $maxDepth = 10, $canonicalizeEol = false)
 	{
-		$this->assertEquals($expected, $this->container->getAttribute($attributeName, $namespace), $message = '', $delta = 0, $maxDepth = 10, $canonicalizeEol = FALSE);
+		$this->assertEquals($expected, $this->container->getAttribute($attributeName, $namespace), $message, $delta, $maxDepth, $canonicalizeEol);
+	}
+	
+	/**
+	 * assert that the exectionContainer has a given attribute 
+	 * 
+	 * @param      string  the attribute name
+	 * @param      string  the attribute namespace
+	 * @param      string  an optional message to display if the test fails
+     * 
+     * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */
+	protected function assertContainerAttributeExists($attributeName, $namespace = null, $message = '')
+	{
+		$this->assertTrue($this->container->hasAttribute($attributeName, $namespace), $message);
 	}
 	
 	/**
