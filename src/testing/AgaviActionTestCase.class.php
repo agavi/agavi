@@ -133,8 +133,7 @@ abstract class AgaviActionTestCase extends AgaviFragmentTestCase
 	 */
 	protected function createRequestDataHolder(array $arguments = array(), $type = null)
 	{
-		if(null === $type)
-		{
+		if(null === $type) {
 			$type = $this->getContext()->getRequest()->getParameter('request_data_holder_class', 'AgaviRequestDataHolder');
 		}
 		
@@ -316,8 +315,7 @@ abstract class AgaviActionTestCase extends AgaviFragmentTestCase
 		$wrapper_class = $effi['class'].'UnitTesting';
 		
 		//extend the original class to overwrite runAction, so that the containers request data is cloned
-		if (!class_exists($wrapper_class))
-		{
+		if(!class_exists($wrapper_class)) {
 			$code = sprintf('
 class %1$s extends %2$s
 {
@@ -359,8 +357,7 @@ class %1$s extends %2$s
 		$wrapper_class = $ecfi['class'].'UnitTesting';
 		
 		//extend the original class to add a setter for the action instance
-		if (!class_exists($wrapper_class))
-		{
+		if(!class_exists($wrapper_class)) {
 			$code = sprintf('
 class %1$s extends %2$s
 {
