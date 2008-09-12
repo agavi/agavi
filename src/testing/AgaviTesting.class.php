@@ -1,5 +1,32 @@
 <?php
 
+// +---------------------------------------------------------------------------+
+// | This file is part of the Agavi package.                                   |
+// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// |                                                                           |
+// | For the full copyright and license information, please view the LICENSE   |
+// | file that was distributed with this source code. You can also view the    |
+// | LICENSE file online at http://www.agavi.org/LICENSE.txt                   |
+// |   vi: set noexpandtab:                                                    |
+// |   Local Variables:                                                        |
+// |   indent-tabs-mode: t                                                     |
+// |   End:                                                                    |
+// +---------------------------------------------------------------------------+
+
+/**
+ * Main framework class used for autoloading and initial bootstrapping of the 
+ * Agavi testing environment
+ * 
+ * @package    agavi
+ * @subpackage testing
+ *
+ * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+ * @copyright  The Agavi Project
+ *
+ * @since      1.0.0
+ *
+ * @version    $Id$
+ */
 class AgaviTesting
 {
 	/**
@@ -7,8 +34,8 @@ class AgaviTesting
 	 *
 	 * @param      string environment the environment to use for this session.
 	 *
-	 * @author     David Zülke <dz@bitxtender.com>
-	 * @since      0.11.0
+	 * @author     Felix Gilcher <felix.gilcher@exozet.com>
+	 * @since      1.0.0
 	 */
 	public static function bootstrap($environment = null)
 	{
