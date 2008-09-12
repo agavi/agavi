@@ -143,7 +143,15 @@ abstract class AgaviActionTestCase extends AgaviFragmentTestCase
 	}
 	
 	/**
+	 * asserts that the viewName is the expected value after runAction was called
 	 * 
+	 * @param      string the expected viewname in short form ('Success' etc)
+	 * @param      string an optional message to display if the test fails
+	 * 
+	 * @return     void
+	 * 
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0 
 	 */
 	protected function assertViewNameEquals($expected, $message = '')
 	{
@@ -165,7 +173,22 @@ abstract class AgaviActionTestCase extends AgaviFragmentTestCase
 	}
 	
 	/**
-	 * TODO: Maybe getDefaultViewName() can return an array, check
+	 * asserts that the DefaultView is the expected 
+	 * 
+	 * @param     mixed A string containing the view name associated with the
+	 *                   action.
+	 *                   Or an array with the following indices:
+	 *                   - The parent module of the view that will be executed.
+	 *                   - The view that will be executed.
+	 *
+	 * @param      string an optional message to display if the test fails
+	 * 
+	 * @return     void
+	 * 
+	 * @see        AgaviAction::getDefaultViewName()
+	 * 
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0 
 	 */
 	protected function assertDefaultView($expected, $message = '')
 	{
