@@ -37,7 +37,7 @@ class SearchEngineSpamActionTest extends AgaviActionTestCase
 	
 	public function testDefaultViewName()
 	{
-		$this->assertDefaultViewName('Input');
+		$this->assertDefaultView('Input');
 	}
 	
 	public function testReadMethod()

@@ -167,7 +167,7 @@ abstract class AgaviActionTestCase extends AgaviFragmentTestCase
 	/**
 	 * TODO: Maybe getDefaultViewName() can return an array, check
 	 */
-	protected function assertDefaultViewName($expected, $message = '')
+	protected function assertDefaultView($expected, $message = '')
 	{
 		$actionInstance = $this->createActionInstance();
 		$this->assertEquals($expected, $actionInstance->getDefaultViewName(), $message);
