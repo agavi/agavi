@@ -1,25 +1,97 @@
 <?php
 
+// +---------------------------------------------------------------------------+
+// | This file is part of the Agavi package.                                   |
+// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// |                                                                           |
+// | For the full copyright and license information, please view the LICENSE   |
+// | file that was distributed with this source code. You can also view the    |
+// | LICENSE file online at http://www.agavi.org/LICENSE.txt                   |
+// |   vi: set noexpandtab:                                                    |
+// |   Local Variables:                                                        |
+// |   indent-tabs-mode: t                                                     |
+// |   End:                                                                    |
+// +---------------------------------------------------------------------------+
+
+/**
+ * AgaviActionTestCase is the base class for all action testcases and provides
+ * the necessary assertions
+ * 
+ * 
+ * @package    agavi
+ * @subpackage testing
+ *
+ * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+ * @copyright  The Agavi Project
+ *
+ * @since      1.0.0
+ *
+ * @version    $Id$
+ */
 abstract class AgaviActionTestCase extends AgaviFragmentTestCase
 {
+	/**
+	 * @var        string the name of the action to test
+	 */
 	protected $actionName;
+	
+	
+	/**
+	 * @var        string the name of the module 
+	 */
 	protected $moduleName;
 	
+	/**
+	 * @var        string the name of the resulting view
+	 */
 	protected $viewName;
+	
+	/**
+	 * @var        string the name of the resulting view's module
+	 */
 	protected $viewModuleName;
 	
+	/**
+	 * @var        AgaviExecutionContainer the container to run the action in
+	 */
 	protected $container;
 	
+	/**
+	 * creates a new AgaviExecutionContainer for each test
+	 * 
+	 * @return void
+	 * 
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */
 	public function setUp()
 	{
 		$this->container = $this->createExecutionContainer();
 	}
 	
+	
+	/**
+	 * unsets the AgaviExecutionContainer after each test
+	 * 
+	 * @return void
+	 * 
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */
 	public function tearDown()
 	{
 		$this->container = null;
 	}
 	
+	/**
+	 * creates an Action instance and initializes it with this testcases
+	 * container
+	 * 
+	 * @return     AgaviAction
+	 * 
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */
 	protected function createActionInstance()
 	{
 		$actionInstance = $this->getContext()->getController()->createActionInstance($this->moduleName, $this->actionName);
@@ -27,6 +99,14 @@ abstract class AgaviActionTestCase extends AgaviFragmentTestCase
 		return $actionInstance;
 	}
 	
+	/**
+	 * run the action for this testcase
+	 *  
+	 * @return     void
+	 * 
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */ 
 	protected function runAction()
 	{
 		$this->container->setActionInstance($this->createActionInstance());
@@ -34,6 +114,23 @@ abstract class AgaviActionTestCase extends AgaviFragmentTestCase
 		list($this->viewModuleName, $this->viewName) = $executionFilter->runAction($this->container);
 	}
 	
+	/**
+	 * create a requestDataHolder with the given arguments and type
+	 * 
+	 * arguments need to be passed in the way {@see AgaviRequestDataHolder} accepts them
+	 * 
+	 * array(AgaviRequestDataHolder::SOURCE_PARAMETERS => array('foo' => 'bar'))
+	 * 
+	 * if no type is passed, the default for the configured request class will be used
+	 * 
+	 * @param      array   a two-dimensional array with the arguments
+	 * @param      string  the subclass of AgaviRequestDataHolder to create
+	 * 
+	 * @return     AgaviRequestDataHolder
+	 * 
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */
 	protected function createRequestDataHolder(array $arguments = array(), $type = null)
 	{
 		if(null === $type)
@@ -45,8 +142,10 @@ abstract class AgaviActionTestCase extends AgaviFragmentTestCase
 		return $class;
 	}
 	
-
-	protected function assertViewEquals($expected, $message = '', $delta = 0, $maxDepth = 10, $canonicalizeEol = FALSE)
+	/**
+	 * 
+	 */
+	protected function assertViewEquals($expected, $message = '')
 	{
 		if($expected != AgaviView::NONE) {
 			$expected = AgaviToolkit::expandVariables(
@@ -62,7 +161,7 @@ abstract class AgaviActionTestCase extends AgaviFragmentTestCase
 				)	
 			);	
 		}
-		$this->assertEquals($expected, $this->viewName, $message = '', $delta = 0, $maxDepth = 10, $canonicalizeEol = FALSE);
+		$this->assertEquals($expected, $this->viewName, $message);
 	}
 	
 	protected function assertContainerAttributeEquals($expected, $attributeName, $value, $namespace = null, $message = '', $delta = 0, $maxDepth = 10, $canonicalizeEol = FALSE)
