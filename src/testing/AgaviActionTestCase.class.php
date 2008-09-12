@@ -212,11 +212,37 @@ abstract class AgaviActionTestCase extends AgaviFragmentTestCase
 		$this->assertEquals($expected, $actionInstance->getDefaultViewName(), $message);
 	}
 	
-	protected function assertContainerAttributeEquals($expected, $attributeName, $value, $namespace = null, $message = '', $delta = 0, $maxDepth = 10, $canonicalizeEol = FALSE)
+	/**
+	 * assert that the exectionContainer has a given attribute with the expected value
+	 * 
+	 * @param      mixed   the expected attribute value
+	 * @param      string  the attribute name
+	 * @param      string  the attribute namespace
+	 * @param      string  an optional message to display if the test fails
+     * @param      float   $delta
+     * @param      integer $maxDepth
+     * @param      boolean $canonicalizeEol
+     * 
+     * @see        PHPUnit_Framework_Assert::assertEquals()
+	 * 
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */
+	protected function assertContainerAttributeEquals($expected, $attributeName, $namespace = null, $message = '', $delta = 0, $maxDepth = 10, $canonicalizeEol = FALSE)
 	{
-		$this->assertEquals($expected, $this->container->getAttribute($attributeName, $value, $namespace), $message = '', $delta = 0, $maxDepth = 10, $canonicalizeEol = FALSE);
+		$this->assertEquals($expected, $this->container->getAttribute($attributeName, $namespace), $message = '', $delta = 0, $maxDepth = 10, $canonicalizeEol = FALSE);
 	}
 	
+	/**
+	 * assert that the action handles the given request method
+	 * 
+	 * @param      string  the method name
+	 * @param      boolean true if the generic 'execute' method should be accepted as handled
+	 * @param      string  an optional message to display if the test fails
+	 * 
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */
 	protected function assertHandlesMethod($method, $acceptGeneric = true, $message = '')
 	{
 		$actionInstance = $this->createActionInstance();
@@ -225,6 +251,16 @@ abstract class AgaviActionTestCase extends AgaviFragmentTestCase
 		self::assertThat($method, $constraint, $message);
 	}
 	
+	/**
+	 * assert that the action does not handle the given request method
+	 * 
+	 * @param      string  the method name
+	 * @param      boolean true if the generic 'execute' method should be accepted as handled
+	 * @param      string  an optional message to display if the test fails
+	 * 
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */
 	protected function assertNotHandlesMethod($method, $acceptGeneric = true, $message = '')
 	{
 		$actionInstance = $this->createActionInstance();
@@ -233,18 +269,46 @@ abstract class AgaviActionTestCase extends AgaviFragmentTestCase
 		self::assertThat($method, $constraint, $message);
 	}
 	
+	/**
+	 * assert that the action is simple
+	 * 
+	 * @param      string  an optional message to display if the test fails
+	 * 
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */
 	protected function assertIsSimple($message = '')
 	{
 		$actionInstance = $this->createActionInstance();
 		$this->assertTrue($actionInstance->isSimple(), $message);
 	}
 	
+	/**
+	 * assert that the action is not simple
+	 * 
+	 * @param      string  an optional message to display if the test fails
+	 * 
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */
 	protected function assertIsNotSimple($message = '')
 	{
 		$actionInstance = $this->createActionInstance();
 		$this->assertFalse($actionInstance->isSimple(), $message);
 	}
 	
+	/**
+	 * create an executionfilter for the test
+	 * 
+	 * the configured executionfilter class will be wrapped in a testing
+	 * extension to provide advanced capabilities required for testing 
+	 * only
+	 * 
+	 * @return     AgaviExecutionFilter 
+	 * 
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */
 	protected function createExecutionFilter()
 	{
 		$effi = $this->getContext()->getFactoryInfo('execution_filter');
@@ -275,6 +339,18 @@ class %1$s extends %2$s
 		return $filter;
 	}
 	
+	/**
+	 * create an AgaviExecutionContainer for the test
+	 * 
+	 * the configured AgaviExecutionContainer class will be wrapped in a testing
+	 * extension to provide advanced capabilities required for testing 
+	 * only
+	 * 
+	 * @return     AgaviExecutionContainer 
+	 * 
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */
 	protected function createExecutionContainer()
 	{
 		$context = $this->getContext();
