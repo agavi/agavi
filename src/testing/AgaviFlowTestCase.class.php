@@ -2,10 +2,18 @@
 
 abstract class AgaviFlowTestCase extends PHPUnit_Framework_TestCase implements AgaviIFlowTestCase
 {
-	/**
-	 * @var        bool Indicates to PHPUnit whether or not each test method in this test case should run in isolation. In this case, we want each method of the test case to run isolated in a separate process.
-	 */
-	protected $runTestsInSeparateProcesses = true;
+    /**
+     * Constructs a test case with the given name.
+     *
+     * @param  string $name
+     * @param  array  $data
+     * @param  string $dataName
+     */
+    public function __construct($name = NULL, array $data = array(), $dataName = '')
+    {
+		parent::__construct($name, $data, $dataName);
+		$this->setRunTestInSeparateProcess(true);
+	}
 	
 	protected function setUp()
 	{
