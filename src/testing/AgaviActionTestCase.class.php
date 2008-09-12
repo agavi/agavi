@@ -172,17 +172,17 @@ abstract class AgaviActionTestCase extends AgaviFragmentTestCase
 	protected function assertHandlesMethod($method, $acceptGeneric = true, $message = '')
 	{
 		$actionInstance = $this->createActionInstance();
-        $constraint = new AgaviConstraintActionHandlesMethod($actionInstance, $acceptGeneric);
-
-        self::assertThat($method, $constraint, $message);
+		$constraint = new AgaviConstraintActionHandlesMethod($actionInstance, $acceptGeneric);
+		
+		self::assertThat($method, $constraint, $message);
 	}
 	
 	protected function assertNotHandlesMethod($method, $acceptGeneric = true, $message = '')
 	{
 		$actionInstance = $this->createActionInstance();
-        $constraint = self::logicalNot(new AgaviConstraintActionHandlesMethod($actionInstance, $acceptGeneric));
-
-        self::assertThat($method, $constraint, $message);
+		$constraint = self::logicalNot(new AgaviConstraintActionHandlesMethod($actionInstance, $acceptGeneric));
+		
+		self::assertThat($method, $constraint, $message);
 	}
 	
 	protected function assertIsSimple($message = '')
@@ -209,9 +209,9 @@ abstract class AgaviActionTestCase extends AgaviFragmentTestCase
 	protected function createExecutionFilter()
 	{
 		$effi = $this->getContext()->getFactoryInfo('execution_filter');
-
+		
 		$wrapper_class = $effi['class'].'UnitTesting';
-
+		
 		//extend the original class to add a setter for the action instance
 		if (!class_exists($wrapper_class))
 		{
@@ -226,10 +226,10 @@ class %1$s extends %2$s
 }',
 			$wrapper_class,
 			$effi['class']);
-
+		
 			eval($code);
 		}
-
+		
 		// create a new execution container with the wrapped class
 		$filter = new $wrapper_class();
 		$filter->initialize($this->getContext(), $effi['parameters']);
