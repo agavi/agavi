@@ -3,12 +3,11 @@
 class SearchEngineSpamActionTest extends AgaviActionTestCase
 {
 	
-    public function __construct($name = NULL, array $data = array(), $dataName = '')
-    {
+	public function __construct($name = NULL, array $data = array(), $dataName = '')
+	{
 		parent::__construct($name, $data, $dataName);
 		$this->actionName = 'SearchEngineSpam';
 		$this->moduleName = 'Default';
-		
 	}
 	
 	/**
@@ -54,14 +53,14 @@ class SearchEngineSpamActionTest extends AgaviActionTestCase
 	
 	public function products()
 	{
-		return array(	'brains' 	=> array('brains'),
-						'chainsaws' => array('chainsaws'),
-						'coding'	=> array('mad coding skills'),
-						'nonsense'	=> array('nonsense'),
-						'viagra'	=> array('viagra'));
+		return array(
+			'brains'    => array('brains'),
+			'chainsaws' => array('chainsaws'),
+			'coding'    => array('mad coding skills'),
+			'nonsense'  => array('nonsense'),
+			'viagra'    => array('viagra'),
+		);
 	}
-
-
 }
 
 ?>
