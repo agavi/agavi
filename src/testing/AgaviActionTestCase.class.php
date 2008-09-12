@@ -249,11 +249,6 @@ class %1$s extends %2$s
 			$code = sprintf('
 class %1$s extends %2$s
 {
-	/**
-	 * @var        AgaviRequestDataHolder A request data holder with request info.
-	 */
-	protected $requestData = null;
-	
 	public function cloneArgumentsToRequestData()
 	{
 		$this->requestData = clone $this->arguments;
