@@ -35,7 +35,6 @@ abstract class AgaviActionTestCase extends AgaviFragmentTestCase
 	 */
 	protected $actionName;
 	
-	
 	/**
 	 * @var        string the name of the module 
 	 */
