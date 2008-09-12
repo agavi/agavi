@@ -145,7 +145,7 @@ abstract class AgaviActionTestCase extends AgaviFragmentTestCase
 	/**
 	 * 
 	 */
-	protected function assertViewEquals($expected, $message = '')
+	protected function assertViewNameEquals($expected, $message = '')
 	{
 		if($expected != AgaviView::NONE) {
 			$expected = AgaviToolkit::expandVariables(
