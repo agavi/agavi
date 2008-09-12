@@ -30,6 +30,8 @@
  */
 abstract class AgaviFragmentTestCase extends PHPUnit_Framework_TestCase implements AgaviIFragmentTestCase
 {
+	protected $contextName = null;
+	
 	/**
 	 * Constructs a test case with the given name.
 	 *
@@ -45,10 +47,7 @@ abstract class AgaviFragmentTestCase extends PHPUnit_Framework_TestCase implemen
 		
 	public function getContext()
 	{
-		/**
-		 * @TODO change this implementation, it's only here for dev purposes
-		 */
-		return AgaviContext::getInstance('web');
+		return AgaviContext::getInstance($this->contextName);
 	}
 }
 
