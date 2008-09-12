@@ -282,16 +282,34 @@ class %1$s extends %2$s
 	
 	/* --- container delegates --- */
 	
+	/**
+	 * @see        AgaviExcutionContainer::setOutputType()
+	 *
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */
 	protected function setOutputType(AgaviOutputType $outputType)
 	{
 		$this->container->setOutputType($outputType);
 	}
 	
+	/**
+	 * @see        AgaviExcutionContainer::setArguments()
+	 *
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */
 	protected function setArguments(AgaviRequestDataHolder $rd)
 	{
 		$this->container->setArguments($rd);
 	}
 	
+	/**
+	 * @see        AgaviExcutionContainer::setRequestMethod()
+	 *
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */
 	protected function setRequestMethod($method)
 	{
 		$this->container->setRequestMethod($method);
