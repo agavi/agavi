@@ -65,7 +65,13 @@ CHG: Deprecated AgaviAdodbDatabase (#662) (David)
 FIX: Security filters cannot perform checks in addition to isSecure() (#671) (David)
 
 
-0.11.3 RC2 (September ?, 2008)
+0.11.3 RC3 (September ??, 2008)
+-------------------------------
+
+FIX: AgaviXmlrpcepiphpResponse::setHttpStatusCode() is not implemented but gets called in sample app Error404SuccessView (#849) (David)
+
+
+0.11.3 RC2 (September 9, 2008)
 ------------------------------
 
 ADD: Allow runtime configuration of Smarty via parameters in AgaviSmartyRenderer (#846) (David, TANAKA Koichi)
