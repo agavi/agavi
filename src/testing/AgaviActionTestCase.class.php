@@ -164,6 +164,15 @@ abstract class AgaviActionTestCase extends AgaviFragmentTestCase
 		$this->assertEquals($expected, $this->viewName, $message);
 	}
 	
+	/**
+	 * TODO: Maybe getDefaultViewName() can return an array, check
+	 */
+	protected function assertDefaultViewName($expected, $message = '')
+	{
+		$actionInstance = $this->createActionInstance();
+		$this->assertEquals($expected, $actionInstance->getDefaultViewName(), $message);
+	}
+	
 	protected function assertContainerAttributeEquals($expected, $attributeName, $value, $namespace = null, $message = '', $delta = 0, $maxDepth = 10, $canonicalizeEol = FALSE)
 	{
 		$this->assertEquals($expected, $this->container->getAttribute($attributeName, $value, $namespace), $message = '', $delta = 0, $maxDepth = 10, $canonicalizeEol = FALSE);
@@ -197,22 +206,13 @@ abstract class AgaviActionTestCase extends AgaviFragmentTestCase
 		$this->assertFalse($actionInstance->isSimple(), $message);
 	}
 	
-	/**
-	 * TODO: Maybe getDefaultViewName() can return an array, check
-	 */
-	protected function assertDefaultViewName($expected, $message = '', $delta = 0, $maxDepth = 10, $canonicalizeEol = FALSE)
-	{
-		$actionInstance = $this->createActionInstance();
-		$this->assertEquals($expected, $actionInstance->getDefaultViewName(), $message = '', $delta = 0, $maxDepth = 10, $canonicalizeEol = FALSE);
-	}
-
 	protected function createExecutionFilter()
 	{
 		$effi = $this->getContext()->getFactoryInfo('execution_filter');
 		
 		$wrapper_class = $effi['class'].'UnitTesting';
 		
-		//extend the original class to add a setter for the action instance
+		//extend the original class to overwrite runAction, so that the containers request data is cloned
 		if (!class_exists($wrapper_class))
 		{
 			$code = sprintf('
