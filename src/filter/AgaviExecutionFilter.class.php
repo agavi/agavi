@@ -194,6 +194,9 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 		$val = $name;
 		
 		switch($source) {
+			case 'callback':
+				$val = $container->getActionInstance()->$name();
+				break;
 			case 'constant':
 				$val = constant($name);
 				break;
@@ -289,8 +292,16 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 		$isActionCached = false;
 
 		if($isCacheable) {
-			$groups = $this->determineGroups($config["groups"], $container);
-			$isActionCached = $this->checkCache(array_merge($groups, array(self::ACTION_CACHE_ID)), $config['lifetime']);
+			try {
+				$groups = $this->determineGroups($config["groups"], $container);
+			} catch(Exception $e) {
+				// a group callback threw an exception. that means we're not allowed t cache
+				$isCacheable = false;
+			}
+			if($isCacheable) {
+				// this is not wrapped in the try/catch block above as it might throw an exception itself
+				$isActionCached = $this->checkCache(array_merge($groups, array(self::ACTION_CACHE_ID)), $config['lifetime']);
+			}
 		} else {
 			// $lm->log('Action is not cacheable!');
 		}
