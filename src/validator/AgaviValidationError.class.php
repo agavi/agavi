@@ -65,7 +65,7 @@ class AgaviValidationError
 		$this->message = $message;
 		$this->messageIndex = $messageIdx;
 		foreach($arguments as $argument) {
-			$this->arguments[$argument->__getHash()] = $argument;
+			$this->arguments[$argument->getHash()] = $argument;
 		}
 	}
 
@@ -172,7 +172,7 @@ class AgaviValidationError
 	 */
 	public function hasArgument(AgaviValidationArgument $argument)
 	{
-		return isset($this->arguments[$argument->__getHash()]);
+		return isset($this->arguments[$argument->getHash()]);
 	}
 	
 	/**

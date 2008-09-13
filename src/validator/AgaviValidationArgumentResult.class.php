@@ -27,33 +27,53 @@
  *
  * @version    $Id$
  */
-class AgaviValidationArgument
+class AgaviValidationArgumentResult
 {
-	protected $name;
-	protected $source;
+	protected $validationResult;
+	protected $argument;
 	
-	public function __construct($name, $source = null)
+	public function __construct(AgaviValidationResult $result, AgaviValidationArgument $argument)
 	{
-		if($source === null) {
-			$source = AgaviRequestDataHolder::SOURCE_PARAMETERS;
+		$this->validationResult = $result;
+		$this->argument = $argument;
+	}
+	
+	public function getArgument()
+	{
+		return $this->argument;
+	}
+	
+	public function getSeverity()
+	{
+		return $this->validationResult->getArgumentErrorSeverity($this->argument);
+	}
+	
+	public function getIncidents()
+	{
+		$affectedIncidents = array();
+		$incidents = $this->validationResult->getIncidents();
+		foreach($incidents as $incident) {
+			foreach($incident->getErrors() as $error) {
+				if($error->hasArgument($this->argument)) {
+					$affectedIncidents = $incident;
+				}
+			}
 		}
-		$this->name = $name;
-		$this->source = $source;
+		return $affectedIncidents;
 	}
 	
-	public function getName()
+	public function getErrorMessages()
 	{
-		return $this->name;
-	}
-	
-	public function getSource()
-	{
-		return $this->source;
-	}
-	
-	public function getHash()
-	{
-		return sprintf('%s/%s', $this->source, $this->name);
+		$errorMessages = array();
+		$incidents = $this->validationResult->getIncidents();
+		foreach($incidents as $incident) {
+			foreach($incident->getErrors() as $error) {
+				if($error->hasArgument($this->argument)) {
+					$errorMessages = array_merge($errorMessages, $error->getErrorMessages());
+				}
+			}
+		}
+		return $errorMessages;
 	}
 }
 

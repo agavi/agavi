@@ -27,33 +27,32 @@
  *
  * @version    $Id$
  */
-class AgaviValidationArgument
+class AgaviValidationValidatorResult
 {
-	protected $name;
-	protected $source;
+	protected $validationResult;
+	protected $validatorName;
 	
-	public function __construct($name, $source = null)
+	public function __construct(AgaviValidationResult $result, $name)
 	{
-		if($source === null) {
-			$source = AgaviRequestDataHolder::SOURCE_PARAMETERS;
+		$this->validationResult = $result;
+		$this->validatorName = $name;
+	}
+	
+	public function getValidatorName()
+	{
+		return $this->validatorName;
+	}
+	
+	public function getIncidents()
+	{
+		$affectedIncidents = array();
+		$incidents = $this->validationResult->getIncidents();
+		foreach($incidents as $incident) {
+			if($incident->getValidator()->getName() == $this->validatorName) {
+				$affectedIncidents = $incident;
+			}
 		}
-		$this->name = $name;
-		$this->source = $source;
-	}
-	
-	public function getName()
-	{
-		return $this->name;
-	}
-	
-	public function getSource()
-	{
-		return $this->source;
-	}
-	
-	public function getHash()
-	{
-		return sprintf('%s/%s', $this->source, $this->name);
+		return $affectedIncidents;
 	}
 }
 

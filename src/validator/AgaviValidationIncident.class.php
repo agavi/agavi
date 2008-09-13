@@ -158,28 +158,6 @@ class AgaviValidationIncident
 	}
 
 	/**
-	 * Checks if any of the errors of this incident were thrown for the given 
-	 * argument.
-	 *
-	 * @param      AgaviValidationArgument The argument.
-	 *
-	 * @return     bool The result.
-	 *
-	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
-	 * @since      1.0.0
-	 */
-	public function hasArgumentError(AgaviValidationArgument $argument)
-	{
-		foreach($this->errors as $error) {
-			if($error->hasArgument($argument)) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	/**
 	 * Retrieves a list of all errorneus arguments of this incident.
 	 *
 	 * @return     array An array of AgaviValidationArgument.
@@ -192,35 +170,19 @@ class AgaviValidationIncident
 		$arguments = array();
 		foreach($this->errors as $error) {
 			foreach($error->getArguments() as $argument) {
-				$arguments[$argument->__getHash()] = $argument;
+				$arguments[$argument->getHash()] = $argument;
 			}
 		}
 
 		return $arguments;
 	}
-
-	/**
-	 * Retrieves the errors which were thrown for the given field.
-	 *
-	 * @param      AgaviValidationArgument The field name.
-	 *
-	 * @return     array An array of AgaviValidationError.
-	 *
-	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
-	 * @since      1.0.0
-	 */
-	public function getArgumentErrors(AgaviValidationArgument $argument)
-	{
-		$errors = array();
-		foreach($this->errors as $error) {
-			if($error->hasArgument($argument)) {
-				$errors[] = $error;
-			}
-		}
-
-		return $errors;
-	}
-
+	
+	
+	/////////////////////////////////////////////////////////////////////////////
+	////////////////////////////// Deprecated Parts /////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////
+	
+	
 	/**
 	 * Checks if any of the errors of this incident were thrown for the given 
 	 * field name.
@@ -231,10 +193,18 @@ class AgaviValidationIncident
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
+	 * @deprecated 1.0.0
 	 */
 	public function hasFieldError($fieldname)
 	{
-		return $this->hasArgumentError(new AgaviValidationArgument($fieldname));
+		$argument = $this->hasArgumentError(new AgaviValidationArgument($fieldname));
+		foreach($this->errors as $error) {
+			if($error->hasArgument($argument)) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**
@@ -244,6 +214,7 @@ class AgaviValidationIncident
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
+	 * @deprecated 1.0.0
 	 */
 	public function getFields()
 	{
@@ -264,10 +235,19 @@ class AgaviValidationIncident
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
+	 * @deprecated 1.0.0
 	 */
 	public function getFieldErrors($fieldname)
 	{
-		return $this->getArgumentErrors(new AgaviValidationArgument($fieldname));
+		$argument = new AgaviValidationArgument($fieldname);
+		$errors = array();
+		foreach($this->errors as $error) {
+			if($error->hasArgument($argument)) {
+				$errors[] = $error;
+			}
+		}
+
+		return $errors;
 	}
 
 }

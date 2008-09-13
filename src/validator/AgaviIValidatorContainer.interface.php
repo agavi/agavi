@@ -63,9 +63,9 @@ interface AgaviIValidatorContainer
 	 *                            a validator).
 	 *
 	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
-	 * @since      1.0.0
+	 * @since      1.1.0
 	 */
-	public function addArgumentResult(AgaviValidationArgument $argument, $result, $validator = null);
+	//public function addArgumentResult(AgaviValidationArgument $argument, $result, $validator = null);
 
 	/**
 	 * Adds an incident to the validation result. 

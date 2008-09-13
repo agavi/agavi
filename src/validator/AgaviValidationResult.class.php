@@ -36,7 +36,7 @@ class AgaviValidationResult
 	/**
 	 * @var        int The highest error severity thrown by the validation run.
 	 */
-	protected $result;
+	protected $result = AgaviValidator::NOT_PROCESSED;
 	/**
 	 * @var        array The incidents which were thrown by the validation run.
 	 */
@@ -53,6 +53,19 @@ class AgaviValidationResult
 	public function getResult()
 	{
 		return $this->result;
+	}
+	
+	/**
+	 * Sets the validation result
+	 * 
+	 * @param      int The new validation result
+	 * 
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function setResult($result)
+	{
+		$this->result = $result;
 	}
 	
 	/**
@@ -90,87 +103,32 @@ class AgaviValidationResult
 	 * in the validation. Includes arguments which were not processed (happens
 	 *  when the argument is "not set" and the validator is not required)
 	 *
-	 * @param      int The minimum severity which shall be checked for.
-	 *
 	 * @return     bool The result.
 	 *
 	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
 	 * @since      1.0.0
 	 */
-	public function hasIncidents($minSeverity = null)
+	public function hasIncidents()
 	{
-		if($minSeverity === null) {
-			return count($this->incidents) > 0;
-		} else {
-			foreach($this->incidents as $validatorIncidents) {
-				foreach($validatorIncidents as $incident) {
-					if($incident->getSeverity() >= $minSeverity) {
-						return true;
-					}
-				}
-			}
-
-			return false;
-		}
+		return count($this->incidents) > 0;
 	}
 	
 	/**
 	 * Returns all incidents which happened during the execution of the 
 	 * validation.
 	 *
-	 * @param      int The minimum severity a returned incident needs to have.
-	 *
 	 * @return     array The incidents.
 	 *
 	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
 	 * @since      1.0.0
 	 */
-	public function getIncidents($minSeverity = null)
+	public function getIncidents()
 	{
 		$incidents = array();
-
 		foreach($this->incidents as $validatorIncidents) {
-			if($minSeverity === null) {
-				$incidents = array_merge($incidents, $validatorIncidents);
-			} else {
-				foreach($validatorIncidents as $incident) {
-					if($incident->getSeverity() >= $minSeverity) {
-						$incidents[] = $incident;
-					}
-				}
-			}
+			$incidents = array_merge($incidents, $validatorIncidents);
 		}
 		return $incidents;
-	}
-	
-	/**
-	 * Returns all incidents of a given validator.
-	 *
-	 * @param      string The name of the validator.
-	 * @param      int The minimum severity a returned incident needs to have.
-	 *
-	 * @return     array The incidents.
-	 *
-	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
-	 * @since      1.0.0
-	 */
-	public function getValidatorIncidents($validatorName, $minSeverity = null)
-	{
-		if(!isset($this->incidents[$validatorName])) {
-			return array();
-		}
-
-		if($minSeverity === null) {
-			return $this->incidents[$validatorName];
-		} else {
-			$incidents = array();
-			foreach($this->incidents[$validatorName] as $incident) {
-				if($incident->getSeverity() >= $minSeverity) {
-					$incidents[] = $incident;
-				}
-			}
-			return $incidents;
-		}
 	}
 	
 	/**
@@ -186,7 +144,7 @@ class AgaviValidationResult
 	 */
 	public function addArgumentResult(AgaviValidationArgument $argument, $result, $validator = null)
 	{
-		$this->argumentResults[$argument->__getHash()][] = array($argument, $result, $validator);
+		$this->argumentResults[$argument->getHash()][] = array($argument, $result, $validator);
 	}
 	
 	/**
@@ -205,84 +163,18 @@ class AgaviValidationResult
 	// getArgumentSeverity ?
 	public function getArgumentErrorSeverity(AgaviValidationArgument $argument, $validatorName = null)
 	{
-		if(!isset($this->argumentResults[$argument->__getHash()])) {
+		if(!isset($this->argumentResults[$argument->getHash()])) {
 			return null;
 		}
 
 		$severity = AgaviValidator::NOT_PROCESSED;
-		foreach($this->argumentResults[$argument->__getHash()] as $result) {
+		foreach($this->argumentResults[$argument->getHash()] as $result) {
 			if($validatorName === null || ($result[2] instanceof AgaviValidator && $result[2]->getName() == $validatorName)) {
 				$severity = max($severity, $result[1]);
 			}
 		}
 
 		return $severity;
-	}
-	
-	/**
-	 * Returns all errors of a given argument in a given validator.
-	 *
-	 * @param      AgaviValidationArgument The argument.
-	 * @param      int The minimum severity the error needs to have.
-	 *
-	 * @return     array A list of AgaviValidationErrors.
-	 *
-	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
-	 * @since      1.0.0
-	 */
-	// getValidatorArgumentErrors ?
-	public function getArgumentErrorsForValidator(AgaviValidationArgument $argument, $validatorName, $minSeverity = null)
-	{
-		$errors = array();
-		foreach($this->getValidatorIncidents($validatorName, $minSeverity) as $incident) {
-			$errors = array_merge($errors, $incident->getArgumentErrors($argument));
-		}
-
-		return $errors;
-	}
-	
-	/**
-	 * Returns all errors of a given argument.
-	 *
-	 * @param      AgaviValidationArgument The argument.
-	 * @param      int The minimum severity the error needs to have.
-	 *
-	 * @return     array A list of AgaviValidationErrors.
-	 *
-	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
-	 * @since      1.0.0
-	 */
-	public function getArgumentErrors(AgaviValidationArgument $argument, $minSeverity = null)
-	{
-		$errors = array();
-		foreach($this->getIncidents($minSeverity) as $incident) {
-			$errors = array_merge($errors, $incident->getArgumentErrors($argument));
-		}
-
-		return $errors;
-	}
-	
-	/**
-	 * Returns all incidents of a given argument.
-	 *
-	 * @param      AgaviValidationArgument The argument.
-	 * @param      int The minimum severity a returned incident needs to have.
-	 *
-	 * @return     array The incidents.
-	 *
-	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
-	 * @since      1.0.0
-	 */
-	public function getArgumentIncidents(AgaviValidationArgument $argument, $minSeverity = null)
-	{
-		$incidents = array();
-		foreach($this->getIncidents($minSeverity) as $incident) {
-			if($incident->hasArgumentError($argument)) {
-				$incidents[] = $incident;
-			}
-		}
-
-		return $incidents;
 	}
 	
 	/**
@@ -299,7 +191,7 @@ class AgaviValidationResult
 	 */
 	public function isArgumentValidated(AgaviValidationArgument $argument)
 	{
-		return isset($this->argumentResults[$argument->__getHash()]);
+		return isset($this->argumentResults[$argument->getHash()]);
 	}
 	
 	/**
@@ -316,33 +208,6 @@ class AgaviValidationResult
 	{
 		$severity = $this->getArgumentErrorSeverity($argument);
 		return ($severity > AgaviValidator::SUCCESS);
-	}
-	
-	/**
-	 * Returns all failed arguments (this are all fields including those with 
-	 * severity none and notice).
-	 *
-	 * @param      string The source which the arguments needs to have.
-	 * @param      int The minimum severity an error needs to have
-	 *
-	 * @return     array An array of AgaviValidationArguments.
-	 * 
-	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
-	 * @since      1.0.0
-	 */
-	// argument order ?
-	public function getFailedArguments($source = null, $minSeverity = null)
-	{
-		$arguments = array();
-		foreach($this->getIncidents($minSeverity) as $incident) {
-			foreach($incident->getArguments as $argument) {
-				if($source === null || $argument->getSource() == $source) {
-					$arguments[$argument->__getHash()] = $argument;
-				}
-			}
-		}
-
-		return $arguments;
 	}
 	
 	/**
@@ -370,11 +235,46 @@ class AgaviValidationResult
 				}
 			}
 			if($hasInSource && $severity <= AgaviValidator::INFO) {
-				$arguments[] = $results[0][0];
+				$argument = $results[0][0];
+				$arguments[$argument->getHash()] = $results[0][0];
 			}
 		}
 
 		return $arguments;
+	}
+	
+	/**
+	 * Returns an argument result for the given argument.
+	 * 
+	 * @param      string The name of the argument or an instance of an AgaviValidationArgument
+	 * @param      string The source. Only used when the first parameter is a string
+	 * 
+	 * @return     AgaviValidationArgument
+	 * 
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function getArgumentResult($nameOrArgument, $source = null)
+	{
+		if(!($nameOrArgument instanceof AgaviValidationArgumentResult)) {
+			$nameOrArgument = new AgaviValidationArgument($nameOrArgument, $source);
+		}
+		return new AgaviValidationArgumentResult($this, $nameOrArgument);
+	}
+	
+	/**
+	 * Returns an validator result for the given validator.
+	 * 
+	 * @param      string The name of the validator
+	 * 
+	 * @return     AgaviValidationValidatorResult
+	 * 
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function getValidatorResult($name)
+	{
+		return new AgaviValidationValidatorResult($this, $name);
 	}
 }
 
