@@ -24,9 +24,9 @@
 	<taskdef name="agavi.import" classname="org.agavi.build.tasks.AgaviImportTask" classpath="phing" />
 
 	<taskdef name="agavi.transform-path" classname="org.agavi.build.tasks.AgaviTransformpathTask" classpath="phing" />
-	<taskdef name="agavi.transform-action-name-to-path" classname="org.agavi.build.tasks.AgaviTransformactionnametopathTask" classpath="phing" />
 	<taskdef name="agavi.transform-string-to-identifier" classname="org.agavi.build.tasks.AgaviTransformstringtoidentifierTask" classpath="phing" />
 	<taskdef name="agavi.transform-namespace-string-to-identifier" classname="org.agavi.build.tasks.AgaviTransformnamespacestringtoidentifierTask" classpath="phing" />
+	<taskdef name="agavi.transform-namespace-string-to-path" classname="org.agavi.build.tasks.AgaviTransformnamespacestringtopathTask" classpath="phing" />
 	<taskdef name="agavi.transform-string-to-agavi-identifier" classname="org.agavi.build.tasks.AgaviTransformstringtoagaviidentifierTask" classpath="phing" />
 
 	<taskdef name="agavi.base-name" classname="org.agavi.build.tasks.AgaviBasenameTask" classpath="phing" />
@@ -752,7 +752,7 @@
 		<!-- Determine model name. -->
 		<agavi.input property="model.name" message="Model name" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
 		<property userProperty="true" name="model.name.input" value="${model.name}" override="true" />
-		<agavi.transform-string-to-identifier property="model.name" string="${model.name}" />
+		<agavi.transform-namespace-string-to-identifier property="model.name" string="${model.name}" />
 		<if>
 			<not>
 				<equals arg1="${model.name}" arg2="${model.name.input}" />
@@ -762,13 +762,17 @@
 			</then>
 		</if>
 
-		<property userProperty="true" name="model.file" value="${project.directory}/${project.directory.app.models}/${model.name}Model.class.php" />
+		<!-- Transform . to _ for the actual identifier. -->
+		<agavi.transform-string-to-identifier property="model.identifier" string="${model.name}" />
+
+		<agavi.transform-namespace-string-to-path property="model.path" string="${model.name}" />
+		<property userProperty="true" name="model.file" value="${project.directory}/${project.directory.app.models}/${model.path}Model.class.php" override="true" />
 
 		<agavi.available property="model.available" file="${model.file}" type="file" />
 		<fail if="model.available" message="Model ${model.name} already exists at ${model.file}" />
 
-		<!-- Define the name of the view class. -->
-		<property userProperty="true" name="model.class" value="${model.name}Model" />
+		<!-- Define the name of the model class. -->
+		<property userProperty="true" name="model.class" value="${model.identifier}Model" override="true" />
 
 		<!-- Copy. -->
 		<copy file="${templates.directory.app.models}/Model.class.php.tmpl" tofile="${model.file}">
@@ -955,7 +959,7 @@
 
 	<target name="action-locate" depends="project-locate,module-locate">
 		<agavi.input property="action.name" message="Action name" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
-		<agavi.transform-action-name-to-path property="action.path" name="${action.name}" />
+		<agavi.transform-namespace-string-to-path property="action.path" string="${action.name}" />
 		<property userProperty="true" name="action.file" value="${module.directory}/actions/${action.path}Action.class.php" override="true" />
 
 		<agavi.available property="action.available" file="${action.file}" type="file" />
@@ -997,7 +1001,7 @@
 		<!-- Transform . to _ for the actual identifier. -->
 		<agavi.transform-string-to-identifier property="action.identifier" string="${action.name}" />
 
-		<agavi.transform-action-name-to-path property="action.path" name="${action.name}" />
+		<agavi.transform-namespace-string-to-path property="action.path" string="${action.name}" />
 		<property userProperty="true" name="action.file" value="${module.directory}/${module.directory.actions}/${action.path}Action.class.php" override="true" />
 
 		<agavi.available property="action.available" file="${action.file}" type="file" />
@@ -1131,7 +1135,7 @@
 		<!-- Determine model name. -->
 		<agavi.input property="model.name" message="Model name" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
 		<property userProperty="true" name="model.name.input" value="${model.name}" override="true" />
-		<agavi.transform-string-to-identifier property="model.name" string="${model.name}" />
+		<agavi.transform-namespace-string-to-identifier property="model.name" string="${model.name}" />
 		<if>
 			<not>
 				<equals arg1="${model.name}" arg2="${model.name.input}" />
@@ -1141,13 +1145,17 @@
 			</then>
 		</if>
 
-		<property userProperty="true" name="model.file" value="${module.directory}/${module.directory.models}/${model.name}Model.class.php" />
+		<!-- Transform . to _ for the actual identifier. -->
+		<agavi.transform-string-to-identifier property="model.identifier" string="${model.name}" />
+
+		<agavi.transform-namespace-string-to-path property="model.path" string="${model.name}" />
+		<property userProperty="true" name="model.file" value="${module.directory}/${module.directory.models}/${model.path}Model.class.php" override="true" />
 
 		<agavi.available property="model.available" file="${model.file}" type="file" />
 		<fail if="model.available" message="Model ${model.name} already exists at ${model.file}" />
 
-		<!-- Define the name of the view class. -->
-		<property userProperty="true" name="model.class" value="${module.name}_${model.name}Model" />
+		<!-- Define the name of the model class. -->
+		<property userProperty="true" name="model.class" value="${module.name}_${model.identifier}Model" override="true" />
 
 		<!-- Copy. -->
 		<copy file="${templates.directory.app.modules.models}/Model.class.php.tmpl" tofile="${model.file}">

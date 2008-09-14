@@ -4,6 +4,8 @@ AGAVI CHANGELOG
 1.0.0 beta 3 (September ?, 2008)
 --------------------------------
 
+ADD: Build system support for per-module config_handlers.xml (#855) (Noah)
+ADD: Build system support for models in subdirectories (#851) (Noah)
 ADD: Support for cache group callbacks (#854) (David)
 ADD: AgaviTidyFilter (#845) (David)
 ADD: Allow customization of the way Actions, Views etc. are laid out in the filesystem (#668) (David)
@@ -11,6 +13,7 @@ ADD: AgaviXmlConfigDomElement::hasAgaviParameters() (#841) (David)
 
 CHG: Redesign module.xml completely to allow arbitrary settings (#834) (David)
 
+FIX: Regression in AgaviXmlConfigDomElement::getAgaviParameters() (#856) (Noah)
 FIX: XML namespace declarations are not carried over when transforming or merging configs (#853) (David)
 FIX: AgaviXmlConfigParser does not copy <configurations> attributes when merging Agavi config files (#852) (David)
 FIX: RELAX NG list definitions for "context" and "environment" attributes of <configuration> element allow only one value (#850) (David)
@@ -65,7 +68,13 @@ CHG: Deprecated AgaviAdodbDatabase (#662) (David)
 FIX: Security filters cannot perform checks in addition to isSecure() (#671) (David)
 
 
-0.11.3 RC2 (September ?, 2008)
+0.11.3 RC3 (September ??, 2008)
+-------------------------------
+
+FIX: AgaviXmlrpcepiphpResponse::setHttpStatusCode() is not implemented but gets called in sample app Error404SuccessView (#849) (David)
+
+
+0.11.3 RC2 (September 9, 2008)
 ------------------------------
 
 ADD: Allow runtime configuration of Smarty via parameters in AgaviSmartyRenderer (#846) (David, TANAKA Koichi)
