@@ -51,6 +51,11 @@ abstract class AgaviActionTestCase extends AgaviFragmentTestCase
 	protected $viewModuleName;
 	
 	/**
+	 * @var        bool   the result of the validation process
+	 */
+	protected $validationSuccess;
+	
+	/**
 	 * @var        AgaviExecutionContainer the container to run the action in
 	 */
 	protected $container;
@@ -112,6 +117,21 @@ abstract class AgaviActionTestCase extends AgaviFragmentTestCase
 		$executionFilter = $this->createExecutionFilter();
 		list($this->viewModuleName, $this->viewName) = $executionFilter->runAction($this->container);
 	}
+	
+	/**
+	 * register the validators for this testcase
+	 *  
+	 * @return     void
+	 * 
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */ 
+	protected function performValidation()
+	{
+		$this->container->setActionInstance($this->createActionInstance());
+		$this->validationSuccess = $this->container->performValidation($this->container);
+	}
+	
 	
 	/**
 	 * create a requestDataHolder with the given arguments and type
@@ -309,6 +329,23 @@ abstract class AgaviActionTestCase extends AgaviFragmentTestCase
 		$actionInstance = $this->createActionInstance();
 		$this->assertFalse($actionInstance->isSimple(), $message);
 	}
+
+	protected function assertValidatesArgument($argumentName, $type = null, $validationParameters = null, $source = AgaviRequestDataHolder::SOURCE_PARAMETERS)
+	{
+		$found = false;
+		foreach ($this->container->getValidationManager()->getChilds() as $child)
+		{
+			if (in_array($argumentName, $child->getArguments()))
+			{
+				$found = true;
+			}
+		}
+		
+		if (!$found)
+		{
+			$this->fail('does not validate argument');
+		}
+	}
 	
 	/**
 	 * create an executionfilter for the test
@@ -333,6 +370,13 @@ abstract class AgaviActionTestCase extends AgaviFragmentTestCase
 			$code = sprintf('
 class %1$s extends %2$s
 {
+	protected $validationResult = null;
+	
+	public function performValidation(AgaviExecutionContainer $container)
+	{	
+		return  parent::performValidation($container);
+	}
+	
 	public function runAction(AgaviExecutionContainer $container)
 	{
 		$container->cloneArgumentsToRequestData();
@@ -375,6 +419,17 @@ class %1$s extends %2$s
 			$code = sprintf('
 class %1$s extends %2$s
 {
+	protected $validationResult = null;
+	
+	public function performValidation()
+	{	
+		if(null === $this->validationResult) {
+			$this->cloneArgumentsToRequestData();
+			$this->validationResult = parent::performValidation();
+		}
+		return $this->validationResult;
+	}
+	
 	public function cloneArgumentsToRequestData()
 	{
 		$this->requestData = clone $this->arguments;

@@ -425,13 +425,101 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	public function getValidationManager()
 	{
 		if($this->validationManager === null) {
-			$vmfi = $this->context->getFactoryInfo('validation_manager');
-			$this->validationManager = new $vmfi['class']();
-			$this->validationManager->initialize($this->context, $vmfi['parameters']);
+			$this->createValidationManager();
 		}
 		return $this->validationManager;
 	}
+	
+	protected function createValidationManager()
+	{
+		$vmfi = $this->context->getFactoryInfo('validation_manager');
+		$this->validationManager = new $vmfi['class']();
+		$this->validationManager->initialize($this->context, $vmfi['parameters']);
+	}
 
+	/**
+	 * performs the validation for this container
+	 * 
+	 * @return     bool true if the data validated successfully, false in any other case
+	 * 
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function performValidation()
+	{
+		$validationManager = $this->getValidationManager();
+
+		// get the current action instance
+		$actionInstance = $this->getActionInstance();
+		// get the (already formatted) request method
+		$method = $this->getRequestMethod();
+
+		$requestData = $this->getRequestData();
+		
+		// set default validated status
+		$validated = true;
+
+		$this->registerValidators();
+
+		// process validators
+		$validated = $validationManager->execute($requestData);
+
+		$validateMethod = 'validate' . $method;
+		if(!method_exists($actionInstance, $validateMethod)) {
+			$validateMethod = 'validate';
+		}
+
+		// process manual validation
+		return $actionInstance->$validateMethod($requestData) && $validated;
+	}
+
+	/**
+	 * register the validators for this container
+	 * 
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function registerValidators()
+	{
+		$validationManager = $this->getValidationManager();
+
+		// get the current action instance
+		$actionInstance = $this->getActionInstance();
+		
+		// get the current action information
+		$moduleName = $this->getModuleName();
+		$actionName = $this->getActionName();
+		
+		// get the (already formatted) request method
+		$method = $this->getRequestMethod();
+
+		// get the current action validation configuration
+		$validationConfig = AgaviToolkit::expandVariables(
+			AgaviToolkit::expandDirectives(
+				AgaviConfig::get(
+					sprintf('modules.%s.agavi.validate.path', strtolower($moduleName)),
+					'%core.module_dir%/${moduleName}/validate/${actionName}.xml'
+				)
+			),
+			array(
+				'moduleName' => $moduleName,
+				'actionName' => $actionName,
+			)
+		);
+		if(is_readable($validationConfig)) {
+			// load validation configuration
+			// do NOT use require_once
+			require(AgaviConfigCache::checkConfig($validationConfig, $this->context->getName()));
+		}
+
+		// manually load validators
+		$registerValidatorsMethod = 'register' . $method . 'Validators';
+		if(!method_exists($actionInstance, $registerValidatorsMethod)) {
+			$registerValidatorsMethod = 'registerValidators';
+		}
+		$actionInstance->$registerValidatorsMethod();
+	}
+	
 	/**
 	 * Retrieve this container's request method name.
 	 *

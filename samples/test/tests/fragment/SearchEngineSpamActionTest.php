@@ -17,6 +17,8 @@ class SearchEngineSpamActionTest extends AgaviActionTestCase
 	{
 		$this->setRequestMethod('read');
 		$this->setArguments($this->createRequestDataHolder(array(AgaviWebRequestDataHolder::SOURCE_PARAMETERS => array('name' => $productName))));
+		$this->performValidation();
+		//$this->assertValidatesArgument('name', 'AgaviStringValidator', array('min' => 5));
 		$this->runAction();
 		$this->assertViewNameEquals('Success');
 		$this->assertViewModuleNameEquals('Default');

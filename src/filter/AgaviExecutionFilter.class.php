@@ -655,7 +655,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 			// get the default view
 			$viewName = $actionInstance->getDefaultViewName();
 		} else {			
-			if($this->performValidation($container)) {
+			if($container->performValidation()) {
 				// execute the action
 				// prevent access to Request::getParameters()
 				$key = $request->toggleLock();
@@ -710,95 +710,6 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 		}
 
 		return array($viewModule, $viewName);
-	}
-	
-	/**
-	 * performs the validation for the given container
-	 * 
-	 * @param      AgaviExecutionContainer the container
-	 *
-	 * @return     bool true if the data validated successfully, false in any other case
-	 * 
-	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
-	 * @since      1.0.0
-	 */
-	protected function performValidation(AgaviExecutionContainer $container)
-	{
-		$validationManager = $container->getValidationManager();
-
-		// get the current action instance
-		$actionInstance = $container->getActionInstance();
-		// get the (already formatted) request method
-		$method = $container->getRequestMethod();
-
-		$requestData = $container->getRequestData();
-		
-		// set default validated status
-		$validated = true;
-
-		$this->registerValidators($container);
-
-		// process validators
-		$validated = $validationManager->execute($requestData);
-
-		$validateMethod = 'validate' . $method;
-		if(!method_exists($actionInstance, $validateMethod)) {
-			$validateMethod = 'validate';
-		}
-
-		// process manual validation
-		return $actionInstance->$validateMethod($requestData) && $validated;
-	}
-	
-	/**
-	 * registers the validators for the given container
-	 * 
-	 * @param      AgaviExecutionContainer the container
-	 * 
-	 * @return     bool true if the data validated successfully, false in any other case
-	 * 
-	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
-	 * @since      1.0.0
-	 */
-	protected function registerValidators(AgaviExecutionContainer $container)
-	{
-		$validationManager = $container->getValidationManager();
-
-		// get the current action instance
-		$actionInstance = $container->getActionInstance();
-		
-		// get the current action information
-		$moduleName = $container->getModuleName();
-		$actionName = $container->getActionName();
-		
-		// get the (already formatted) request method
-		$method = $container->getRequestMethod();
-
-		// get the current action validation configuration
-		$validationConfig = AgaviToolkit::expandVariables(
-			AgaviToolkit::expandDirectives(
-				AgaviConfig::get(
-					sprintf('modules.%s.agavi.validate.path', strtolower($moduleName)),
-					'%core.module_dir%/${moduleName}/validate/${actionName}.xml'
-				)
-			),
-			array(
-				'moduleName' => $moduleName,
-				'actionName' => $actionName,
-			)
-		);
-		if(is_readable($validationConfig)) {
-			// load validation configuration
-			// do NOT use require_once
-			require(AgaviConfigCache::checkConfig($validationConfig, $this->context->getName()));
-		}
-
-		// manually load validators
-		$registerValidatorsMethod = 'register' . $method . 'Validators';
-		if(!method_exists($actionInstance, $registerValidatorsMethod)) {
-			$registerValidatorsMethod = 'registerValidators';
-		}
-		$actionInstance->$registerValidatorsMethod();
 	}
 }
 
