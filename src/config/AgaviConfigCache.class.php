@@ -297,6 +297,8 @@ final class AgaviConfigCache
 		require($agaviDir . '/config/util/dom/AgaviXmlConfigDomNotation.class.php');
 		require($agaviDir . '/config/util/dom/AgaviXmlConfigDomProcessingInstruction.class.php');
 		require($agaviDir . '/config/util/dom/AgaviXmlConfigDomText.class.php');
+		// schematron processor
+		require($agaviDir . '/config/util/schematron/AgaviXmlConfigSchematronProcessor.class.php');
 		// extended XSL* classes
 		if(!AgaviConfig::get('core.skip_config_transformations', false)) {
 			if(!extension_loaded('xsl')) {
@@ -324,6 +326,9 @@ final class AgaviConfigCache
 					AgaviXmlConfigParser::STEP_TRANSFORMATIONS_AFTER => array(
 						AgaviXmlConfigParser::VALIDATION_TYPE_RELAXNG => array(
 							$agaviDir . '/config/rng/config_handlers.rng',
+						),
+						AgaviXmlConfigParser::VALIDATION_TYPE_SCHEMATRON => array(
+							$agaviDir . '/config/sch/config_handlers.sch',
 						),
 					),
 				),

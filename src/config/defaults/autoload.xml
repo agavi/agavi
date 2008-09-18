@@ -49,6 +49,7 @@
 			<autoload name="AgaviXmlConfigDomProcessingInstruction">%core.agavi_dir%/config/util/dom/AgaviXmlConfigDomProcessingInstruction.class.php</autoload>
 			<autoload name="AgaviXmlConfigDomText">%core.agavi_dir%/config/util/dom/AgaviXmlConfigDomText.class.php</autoload>
 			<autoload name="AgaviXmlConfigXsltProcessor">%core.agavi_dir%/config/util/xsl/AgaviXmlConfigXsltProcessor.class.php</autoload>
+			<autoload name="AgaviXmlConfigSchematronProcessor">%core.agavi_dir%/config/util/schematron/AgaviXmlConfigSchematronProcessor.class.php</autoload>
 			<autoload name="AgaviXmlConfigHandler">%core.agavi_dir%/config/AgaviXmlConfigHandler.class.php</autoload>
 			<autoload name="AgaviXmlConfigParser">%core.agavi_dir%/config/AgaviXmlConfigParser.class.php</autoload>
 
