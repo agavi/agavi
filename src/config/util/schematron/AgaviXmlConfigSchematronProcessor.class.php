@@ -31,7 +31,7 @@
  */
 class AgaviXmlConfigSchematronProcessor extends AgaviParameterHolder
 {
-	protected static $processors = array();
+	protected static $processors = null;
 	protected static $processorCount = 0;
 	
 	protected static $chain = array(
@@ -62,8 +62,8 @@ class AgaviXmlConfigSchematronProcessor extends AgaviParameterHolder
 	 */
 	protected static function createProcessors()
 	{
-		$processors = array();
-		$processorCount = 0;
+		self::$processors = array();
+		self::$processorCount = 0;
 		
 		foreach(self::$chain as $file) {
 			$processorImpl = new AgaviXmlConfigDomDocument();
@@ -85,7 +85,7 @@ class AgaviXmlConfigSchematronProcessor extends AgaviParameterHolder
 	 */
 	public function setNode(DOMNode $node)
 	{
-		if(count(self::$processors) === 0) {
+		if(self::$processors === null) {
 			self::createProcessors();
 		}
 		
