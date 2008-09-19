@@ -14,9 +14,8 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviIRemoteTestCase is the interface that all remote tests must implement
- * 
- * 
+ * PHPUnit bootstrap file for isolated tests
+ *
  * @package    agavi
  * @subpackage testing
  *
@@ -27,8 +26,10 @@
  *
  * @version    $Id$
  */
-interface AgaviIRemoteTestCase extends AgaviIFlowTestCase
-{
-}
 
+require_once('testing.php');
+AgaviConfig::fromArray($GLOBALS['AGAVI_CONFIG']);
+unset($GLOBALS['AGAVI_CONFIG']);
+
+AgaviTesting::bootstrap();
 ?>

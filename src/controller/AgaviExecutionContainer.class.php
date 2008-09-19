@@ -48,7 +48,8 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	/**
 	 * @var        AgaviRequestDataHolder A request data holder with request info.
 	 */
-	private $requestData = null;
+	protected $requestData = null; // TODO: check if this can actually be protected 
+	                               // or whether it should be private (would break actiontests though)
 
 	/**
 	 * @var        AgaviRequestDataHolder A pointer to the global request data.
@@ -136,7 +137,10 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	public function __sleep()
 	{
 		$this->contextName = $this->context->getName();
-		$this->outputTypeName = $this->outputType->getName();
+		if (!empty($this->outputType))
+		{
+			$this->outputTypeName = $this->outputType->getName();	
+		}
 		$arr = get_object_vars($this);
 		unset($arr['context'], $arr['outputType'], $arr['requestData'], $arr['globalRequestData']);
 		return array_keys($arr);
@@ -154,7 +158,12 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	public function __wakeup()
 	{
 		$this->context = AgaviContext::getInstance($this->contextName);
-		$this->outputType = $this->context->getController()->getOutputType($this->outputTypeName);
+		
+		if (!empty($this->outputTypeName))
+		{
+			$this->outputType = $this->context->getController()->getOutputType($this->outputTypeName);
+		}
+		
 		try {
 			$this->globalRequestData = $this->context->getRequest()->getRequestData();
 		} catch(AgaviException $e) {
@@ -416,7 +425,90 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 		}
 		return $this->validationManager;
 	}
+	
+	/**
+	 * performs the validation for this container
+	 * 
+	 * @return     bool true if the data validated successfully, false in any other case
+	 * 
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function performValidation()
+	{
+		$validationManager = $this->getValidationManager();
 
+		// get the current action instance
+		$actionInstance = $this->getActionInstance();
+		// get the (already formatted) request method
+		$method = $this->getRequestMethod();
+
+		$requestData = $this->getRequestData();
+		
+		// set default validated status
+		$validated = true;
+
+		$this->registerValidators();
+
+		// process validators
+		$validated = $validationManager->execute($requestData);
+
+		$validateMethod = 'validate' . $method;
+		if(!method_exists($actionInstance, $validateMethod)) {
+			$validateMethod = 'validate';
+		}
+
+		// process manual validation
+		return $actionInstance->$validateMethod($requestData) && $validated;
+	}
+
+	/**
+	 * register the validators for this container
+	 * 
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function registerValidators()
+	{
+		$validationManager = $this->getValidationManager();
+
+		// get the current action instance
+		$actionInstance = $this->getActionInstance();
+		
+		// get the current action information
+		$moduleName = $this->getModuleName();
+		$actionName = $this->getActionName();
+		
+		// get the (already formatted) request method
+		$method = $this->getRequestMethod();
+
+		// get the current action validation configuration
+		$validationConfig = AgaviToolkit::expandVariables(
+			AgaviToolkit::expandDirectives(
+				AgaviConfig::get(
+					sprintf('modules.%s.agavi.validate.path', strtolower($moduleName)),
+					'%core.module_dir%/${moduleName}/validate/${actionName}.xml'
+				)
+			),
+			array(
+				'moduleName' => $moduleName,
+				'actionName' => $actionName,
+			)
+		);
+		if(is_readable($validationConfig)) {
+			// load validation configuration
+			// do NOT use require_once
+			require(AgaviConfigCache::checkConfig($validationConfig, $this->context->getName()));
+		}
+
+		// manually load validators
+		$registerValidatorsMethod = 'register' . $method . 'Validators';
+		if(!method_exists($actionInstance, $registerValidatorsMethod)) {
+			$registerValidatorsMethod = 'registerValidators';
+		}
+		$actionInstance->$registerValidatorsMethod();
+	}
+	
 	/**
 	 * Retrieve this container's request method name.
 	 *

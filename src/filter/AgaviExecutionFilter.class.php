@@ -654,48 +654,10 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 			// this action will skip validation/execution for this method
 			// get the default view
 			$viewName = $actionInstance->getDefaultViewName();
-		} else {
-			// set default validated status
-			$validated = true;
-
-			// get the current action validation configuration
-			$validationConfig = AgaviToolkit::expandVariables(
-				AgaviToolkit::expandDirectives(
-					AgaviConfig::get(
-						sprintf('modules.%s.agavi.validate.path', strtolower($moduleName)),
-						'%core.module_dir%/${moduleName}/validate/${actionName}.xml'
-					)
-				),
-				array(
-					'moduleName' => $moduleName,
-					'actionName' => $actionName,
-				)
-			);
-			if(is_readable($validationConfig)) {
-				// load validation configuration
-				// do NOT use require_once
-				require(AgaviConfigCache::checkConfig($validationConfig, $this->context->getName()));
-			}
-
-			// manually load validators
-			$registerValidatorsMethod = 'register' . $method . 'Validators';
-			if(!method_exists($actionInstance, $registerValidatorsMethod)) {
-				$registerValidatorsMethod = 'registerValidators';
-			}
-			$actionInstance->$registerValidatorsMethod();
-
-			// process validators
-			$validated = $validationManager->execute($requestData);
-
-			$validateMethod = 'validate' . $method;
-			if(!method_exists($actionInstance, $validateMethod)) {
-				$validateMethod = 'validate';
-			}
-
-			// prevent access to Request::getParameters()
-			// process manual validation
-			if($actionInstance->$validateMethod($requestData) && $validated) {
+		} else {			
+			if($container->performValidation()) {
 				// execute the action
+				// prevent access to Request::getParameters()
 				$key = $request->toggleLock();
 				try {
 					$viewName = $actionInstance->$executeMethod($requestData);

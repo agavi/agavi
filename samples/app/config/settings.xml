@@ -61,4 +61,11 @@
 		</settings>
 	</configuration>
 	
+	<configuration environment="testing.*">
+		<settings>
+			<setting name="default_context">web</setting>
+		</settings>
+	</configuration>
+	
+	
 </configurations>
