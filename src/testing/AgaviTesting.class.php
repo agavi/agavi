@@ -63,7 +63,7 @@ class AgaviTesting
 		$GLOBALS['AGAVI_CONFIG'] = AgaviConfig::toArray();
 	}
 
-	public function dispatch()
+	public static function dispatch()
 	{
 		$GLOBALS['__PHPUNIT_BOOTSTRAP'] = dirname(__FILE__).'/templates/AgaviBootstrap.tpl.php';
 

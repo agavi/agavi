@@ -78,7 +78,11 @@ Existing "core.use_routing" directives will be used as a fallback until the dire
 - Validation severity "none" is now called "silent".
 
 
-Version 0.11.3 - September ??, 2008
+Version 0.11.4 - September ??, 2008
+===================================
+
+
+Version 0.11.3 - September 19, 2008
 ===================================
 
 This maintenance release fixes a couple of minor problems like PEAR package generation, gettext plural form expression handling etc, and introduces some new features:
@@ -90,6 +94,8 @@ This maintenance release fixes a couple of minor problems like PEAR package gene
 - Sample app cleanup
 - FPF has the option to ignore errors during document parsing and skip population (good for production environments)
 - Assigning of "inner" content to $slots template array can be disabled
+
+The sample app's SearchEngineSpamAction and the associated elements (PriceFinderModel etc) have been updated to work as the routing pattern always suggested - identify the product by ID, and allow an optional part including the name of the product. This also shows off some more Agavi features now.
 
 A full list of changes can be found in the CHANGELOG file.
 
