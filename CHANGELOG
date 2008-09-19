@@ -4,6 +4,8 @@ AGAVI CHANGELOG
 0.11.4 RC1 (September ??, 2008)
 -------------------------------
 
+FIX: Sample app SearchEngineSpamAction works with invalid product names (#861) (David)
+
 
 0.11.3 (September 19, 2008)
 ---------------------------

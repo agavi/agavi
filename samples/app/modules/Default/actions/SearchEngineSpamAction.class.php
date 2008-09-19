@@ -8,7 +8,7 @@ class Default_SearchEngineSpamAction extends AgaviSampleAppDefaultBaseAction
 		$id = $rd->getParameter('id');
 		
 		// was the name in the url? then validate that, too
-		if($rd->hasParameter('product_name')) {
+		if($rd->hasParameter('name')) {
 			$name = $rd->getParameter('name');
 			$price = $pfm->getPriceByProductInfo($id, $name);
 		} else {
