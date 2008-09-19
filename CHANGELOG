@@ -4,6 +4,8 @@ AGAVI CHANGELOG
 0.11.3 RC3 (September ??, 2008)
 -------------------------------
 
+CHG: Improve sample app SearchEngineSpamAction to use ID and optionally name (#859) (David)
+
 FIX: AgaviXmlrpcepiphpResponse::setHttpStatusCode() is not implemented but gets called in sample app Error404SuccessView (#849) (David)
 
 

@@ -27,7 +27,7 @@
 			<!-- This route uses a prefix and a postfix for a value, and the entire block is optional. That means that you can omit "buy-cheap-whatever-at-agavi-dot-org" from the URL, and the route still matches! If there is no value given for the parameter "name" when you enerate a route, the entire block will be missing. Since we specified a default value here, you have to explicitly set that parameter to 'null' when generating, so it gets skipped. -->
 			<route name="search_engine_spam" pattern="^/products(/buy-cheap-{name:[\S\s]+}-at-agavi-dot-org)?/(id:\d+)" module="Default" action="SearchEngineSpam">
 				<defaults>
-					<default for="name">/buy-cheap-{chainsaws}-at-agavi-dot-org</default>
+					<default for="name">/buy-cheap-{}-at-agavi-dot-org</default>
 				</defaults>
 			</route>
 			
@@ -43,7 +43,7 @@
 			<!-- SOAP calls include the name of a remote method to call. The WebserviceRouting applies patterns to this method name, not to the URL of the request. We set the request method to "read" here so executeRead() is run in the Action. -->
 			<route pattern="^getItemPrice$" module="Default" action="SearchEngineSpam" method="read">
 				<wsdl:input>
-					<wsdl:part name="name" type="xsd:string" />
+					<wsdl:part name="id" type="xsd:int" />
 				</wsdl:input>
 				<wsdl:output>
 					<wsdl:part name="price" type="xsd:float" />

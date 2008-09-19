@@ -6,7 +6,9 @@
 			
 			<caching method="read" lifetime="2 hours">
 				
-				<group>asdf</group>
+				<group>products</group>
+				<!-- we need to vary by both id and name, as they can both be valid -->
+				<group source="request_parameter">id</group>
 				<group source="request_parameter">name</group>
 				<group source="locale" />
 				
