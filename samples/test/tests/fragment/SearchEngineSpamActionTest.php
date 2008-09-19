@@ -2,6 +2,33 @@
 
 class SearchEngineSpamActionTest extends AgaviActionTestCase
 {
+	protected static $products = array(
+		array(
+			'id'    => 8172401,
+			'name'  => 'brains',
+			'price' => 0.89,
+		),
+		array(
+			'id'    => 917246,
+			'name'  => 'chainsaws',
+			'price' => 129.99,
+		),
+		array(
+			'id'    => 7856122,
+			'name'  => 'mad coding skills',
+			'price' => 14599,
+		),
+		array(
+			'id'    => 123456,
+			'name'  => 'nonsense',
+			'price' => 3.14,
+		),
+		array(
+			'id'    => 3165463,
+			'name'  => 'viagra',
+			'price' => 14.69,
+		),
+	);
 	
 	public function __construct($name = NULL, array $data = array(), $dataName = '')
 	{
@@ -11,29 +38,53 @@ class SearchEngineSpamActionTest extends AgaviActionTestCase
 	}
 	
 	/**
-	 * @dataProvider products
+	 * @dataProvider successViewValidProductsData
 	 */
-	public function testSuccessViewValidProducts($productName)
+	public function testSuccessViewValidProducts($parameters, $price)
 	{
 		$this->setRequestMethod('read');
-		$this->setArguments($this->createRequestDataHolder(array(AgaviWebRequestDataHolder::SOURCE_PARAMETERS => array('name' => $productName))));
-		$this->performValidation();
-		//$this->assertValidatesArgument('name', 'AgaviStringValidator', array('min' => 5));
+		$this->setArguments($this->createRequestDataHolder(array(AgaviWebRequestDataHolder::SOURCE_PARAMETERS => $parameters)));
 		$this->runAction();
 		$this->assertViewNameEquals('Success');
 		$this->assertViewModuleNameEquals('Default');
 		$this->assertContainerAttributeExists('product_price');
-		$this->assertContainerAttributeEquals($productName, 'product_name');
-		
+		$this->assertContainerAttributeEquals($price, 'product_price');
 	}
 	
-	public function testErrorViewInvalidProduct()
+	public function successViewValidProductsData()
+	{
+		$retval = array();
+		foreach(self::$products as $product) {
+			$retval['id only: ' . $product['id']] = array(array('id' => $product['id']), $product['price']);
+		}
+		foreach(self::$products as $product) {
+			$retval['id+name: ' . $product['id'] . '/' . $product['name']] = array(array('id' => $product['id'], 'name' => $product['name']), $product['price']);
+		}
+		return $retval;
+	}
+	
+	/**
+	 * @dataProvider errorViewInvalidProductsData
+	 */
+	public function testErrorViewInvalidProducts($parameters)
 	{
 		$this->setRequestMethod('read');
-		$this->setArguments($this->createRequestDataHolder(array(AgaviWebRequestDataHolder::SOURCE_PARAMETERS => array('name' => 'nonexistant product'))));
+		$this->setArguments($this->createRequestDataHolder(array(AgaviWebRequestDataHolder::SOURCE_PARAMETERS => $parameters)));
 		$this->runAction();
 		$this->assertViewNameEquals('Error');
 		$this->assertViewModuleNameEquals('Default');
+	}
+	
+	public function errorViewInvalidProductsData()
+	{
+		return array(
+			'only product name given' => array(array('name' => 'nonsense')),
+			'invalid product id given' => array(array('id' => 81236123)),
+			'negative product id given' => array(array('id' => -1)),
+			'id and name given, id invalid' => array(array('id' => 123457, 'name' => 'nonsense')),
+			'id and name given, name invalid' => array(array('id' => 123456, 'name' => 'nonsenseZOMG')),
+			'id and name given, both invalid' => array(array('id' => -1, 'name' => 'nonsenseZOMG')),
+		);
 	}
 	
 	public function testIsNotSimple()
@@ -58,6 +109,7 @@ class SearchEngineSpamActionTest extends AgaviActionTestCase
 	
 	public function products()
 	{
+		
 		return array(
 			'brains'    => array('brains'),
 			'chainsaws' => array('chainsaws'),
