@@ -11,6 +11,7 @@ ADD: AgaviTidyFilter (#845) (David)
 ADD: Allow customization of the way Actions, Views etc. are laid out in the filesystem (#668) (David)
 ADD: AgaviXmlConfigDomElement::hasAgaviParameters() (#841) (David)
 
+CHG: Update ISO Schematron to latest release (#844) (Noah)
 CHG: Redesign module.xml completely to allow arbitrary settings (#834) (David)
 
 FIX: Regression in AgaviXmlConfigDomElement::getAgaviParameters() (#856) (Noah)
