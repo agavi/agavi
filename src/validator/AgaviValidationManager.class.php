@@ -47,19 +47,9 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	protected $context = null;
 
 	/**
-	 * @var        array The results for each field which has been validated.
+	 * @var        AgaviValidationResult The container storing the valiation results.
 	 */
-	protected $fieldResults = array();
-
-	/**
-	 * @var        int The highest error severity in the container.
-	 */
-	protected $result = AgaviValidator::SUCCESS;
-	
-	/**
-	 * @var        array The validation incidents.
-	 */
-	protected $incidents = array();
+	protected $lastResult = null;
 
 	/**
 	 * All request variables are always available.
@@ -100,6 +90,7 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 		$this->setParameters($parameters);
 
 		$this->dependencyManager = new AgaviDependencyManager();
+		$this->lastResult = new AgaviValidationResult();
 		$this->children = array();
 	}
 
@@ -114,6 +105,19 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	public final function getContext()
 	{
 		return $this->context;
+	}
+	
+	/**
+	 * Retrieve the validation result container of the last validation run.
+	 *
+	 * @return     AgaviValidationResult The result container.
+	 *
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function getLastResult()
+	{
+		return $this->lastResult;
 	}
 
 	/**
@@ -253,8 +257,9 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	 */
 	public function execute(AgaviRequestDataHolder $parameters)
 	{
-		$result = true;
-		$this->result = AgaviValidator::SUCCESS;
+		$success = true;
+		$this->lastResult = new AgaviValidationResult();
+		$result = AgaviValidator::SUCCESS;
 		
 		$req = $this->context->getRequest();
 
@@ -262,10 +267,10 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 		foreach($this->children as $validator) {
 			++$executedValidators;
 
-			$v_ret = $validator->execute($parameters);
-			$this->result = max($this->result, $v_ret);
+			$validatorResult = $validator->execute($parameters);
+			$result = max($result, $validatorResult);
 
-			switch($v_ret) {
+			switch($validatorResult) {
 				case AgaviValidator::SUCCESS:
 					continue 2;
 				case AgaviValidator::INFO:
@@ -275,13 +280,14 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 				case AgaviValidator::NOTICE:
 					continue 2;
 				case AgaviValidator::ERROR:
-					$result = false;
+					$success = false;
 					continue 2;
 				case AgaviValidator::CRITICAL:
-					$result = false;
+					$success = false;
 					break 2;
 			}
 		}
+		$this->lastResult->setResult($result);
 
 		$ma = $req->getParameter('module_accessor');
 		$aa = $req->getParameter('action_accessor');
@@ -302,18 +308,18 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 		}
 
 		if($mode == self::MODE_STRICT || ($executedValidators > 0 && $mode == self::MODE_CONDITIONAL)) {
+			$succeededArguments = $this->lastResult->getSucceededArguments();
 			foreach($parameters->getSourceNames() as $source) {
-				$asf = array_flip($this->getSucceededFields($source));
 				$sourceItems = $parameters->getAll($source);
 				foreach(AgaviArrayPathDefinition::getFlatKeyNames($sourceItems) as $name) {
-					if(!isset($asf[$name]) && ($source != AgaviRequestDataHolder::SOURCE_PARAMETERS || ($name != $ma && $name != $aa))) {
+					if(!isset($succeededArguments[$source . '/' . $name]) && ($source != AgaviRequestDataHolder::SOURCE_PARAMETERS || ($name != $ma && $name != $aa))) {
 						$parameters->remove($source, $name);
 					}
 				}
 			}
 		}
 
-		return $result;
+		return $success;
 	}
 
 	/**
@@ -343,18 +349,41 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 			$this->addChild($validator);
 		}
 	}
-
+	
 	/**
-	 * Returns the result from the error manager
+	 * Adds an incident to the validation result. This will automatically adjust
+	 * the field result table (which is required because one can still manually
+	 * add errors either via AgaviRequest::addError or by directly using this 
+	 * method)
+	 *
+	 * @param      AgaviValidationIncident The incident.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function addIncident(AgaviValidationIncident $incident)
+	{
+		return $this->lastResult->addIncident($incident);
+	}
+	
+	
+	/////////////////////////////////////////////////////////////////////////////
+	////////////////////////////// Deprecated Parts /////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////
+	
+	
+	/**
+	 * Returns the final validation result.
 	 *
 	 * @return     int The result of the validation process.
 	 *
-	 * @author     Uwe Mesecke <uwe@mesecke.net>
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
 	 * @since      0.11.0
+	 * @deprecated 1.0.0
 	 */
 	public function getResult()
 	{
-		return $this->result;
+		return $this->resultContainer->getResult();
 	}
 
 	/**
@@ -366,10 +395,12 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
+	 * @deprecated 1.0.0
 	 */
 	public function addFieldResult($validator, $fieldname, $result)
 	{
-		$this->fieldResults[$fieldname][] = array($validator, $result);
+		$argument = new AgaviValidationArgument($fieldname);
+		return $this->resultContainer->addArgumentResult($argument, $result, $validator);
 	}
 
 	/**
@@ -384,21 +415,11 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
+	 * @deprecated 1.0.0
 	 */
 	public function getFieldErrorCode($fieldname, $validatorName = null)
 	{
-		if(!isset($this->fieldResults[$fieldname])) {
-			return null;
-		}
-
-		$ec = AgaviValidator::NOT_PROCESSED;
-		foreach($this->fieldResults[$fieldname] as $result) {
-			if($validatorName === null || ($result[0] instanceof AgaviValidator && $result[0]->getName() == $validatorName)) {
-				$ec = max($ec, $result[1]);
-			}
-		}
-
-		return $ec;
+		return $this->resultContainer->getArgumentErrorSeverity(new AgaviValidationArgument($fieldname), $validatorName);
 	}
 
 	/**
@@ -410,11 +431,11 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
+	 * @deprecated 1.0.0
 	 */
 	public function isFieldFailed($fieldname)
 	{
-		$ec = $this->getFieldErrorCode($fieldname);
-		return ($ec > AgaviValidator::SUCCESS);
+		return $this->resultContainer->isArgumentFailed(new AgaviValidationArgument($fieldname));
 	}
 
 	/**
@@ -428,10 +449,11 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
+	 * @deprecated 1.0.0
 	 */
 	public function isFieldValidated($fieldname)
 	{
-		return isset($this->fieldResults[$fieldname]);
+		return $this->resultContainer->isArgumentValidated(new AgaviValidationArgument($fieldname));
 	}
 
 	/**
@@ -445,56 +467,19 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
+	 * @deprecated 1.0.0
 	 */
 	public function getSucceededFields($source)
 	{
 		$names = array();
-		foreach($this->fieldResults as $name => $results) {
-			$hasInSource = false;
-			$ec = AgaviValidator::SUCCESS;
-			foreach($results as $result) {
-				if($result[0]->getParameter('source') == $source) {
-					$hasInSource = true;
-					$ec = max($ec, $result[1]);
-				}
-			}
-			if($hasInSource && $ec <= AgaviValidator::INFO) {
-				$names[] = $name;
-			}
+		$arguments = $this->resultContainer->getSucceededArguments($source);
+		foreach($arguments as $argument) {
+			$names[] = $argument->getName();
 		}
-
+		
 		return $names;
 	}
-
-	/**
-	 * Adds an incident to the validation result. This will automatically adjust
-	 * the field result table (which is required because one can still manually
-	 * add errors either via AgaviRequest::addError or by directly using this 
-	 * method)
-	 *
-	 * @param      AgaviValidationIncident The incident.
-	 *
-	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function addIncident(AgaviValidationIncident $incident)
-	{
-		// we need to add the fields to our fieldresults if they don't exist there 
-		// yet and adjust our result if needed (which only happens when this method
-		// is called not from a validator)
-		$severity = $incident->getSeverity();
-		if($severity > $this->result) {
-			$this->result = $severity;
-		}
-		foreach($incident->getFields() as $field) {
-			if(!isset($this->fieldResults[$field]) || $this->getFieldErrorCode($field) < $severity) {
-				$this->addFieldResult($incident->getValidator(), $field, $incident->getSeverity());
-			}
-		}
-		$name = $incident->getValidator() ? $incident->getValidator()->getName() : '';
-		$this->incidents[$name][] = $incident;
-	}
-
+	
 	/**
 	 * Checks if any incidents occured Returns all fields which succeeded in the 
 	 * validation. Includes fields which were not processed (happens when the 
@@ -506,22 +491,11 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
+	 * @deprecated 1.0.0
 	 */
 	public function hasIncidents($minSeverity = null)
 	{
-		if($minSeverity === null) {
-			return count($this->incidents) > 0;
-		} else {
-			foreach($this->incidents as $validatorIncidents) {
-				foreach($validatorIncidents as $incident) {
-					if($incident->getSeverity() >= $minSeverity) {
-						return true;
-					}
-				}
-			}
-
-			return false;
-		}
+		return count($this->getIncidents($minSeverity)) > 0;
 	}
 
 	/**
@@ -533,19 +507,17 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
+	 * @deprecated 1.0.0
 	 */
 	public function getIncidents($minSeverity = null)
 	{
 		$incidents = array();
-
-		foreach($this->incidents as $validatorIncidents) {
-			if($minSeverity === null) {
-				$incidents = array_merge($incidents, $validatorIncidents);
-			} else {
-				foreach($validatorIncidents as $incident) {
-					if($incident->getSeverity() >= $minSeverity) {
-						$incidents[] = $incident;
-					}
+		if($minSeverity === null) {
+			return $this->resultContainer->getIncidents();
+		} else {
+			foreach($this->resultContainer->getIncidents() as $incident) {
+				if($incident->getSeverity() >= $minSeverity) {
+					$incidents[] = $incident;
 				}
 			}
 		}
@@ -562,26 +534,24 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
+	 * @deprecated 1.0.0
 	 */
 	public function getValidatorIncidents($validatorName, $minSeverity = null)
 	{
-		if(!isset($this->incidents[$validatorName])) {
-			return array();
-		}
-
+		$incidents = $this->resultContainer->getValidatorResult($validatorName)->getIncidents();
+		
 		if($minSeverity === null) {
-			return $this->incidents[$validatorName];
+			return $incidents;
 		} else {
-			$incidents = array();
-			foreach($this->incidents[$validatorName] as $incident) {
+			$matchingIncidents = array();
+			foreach($incidents as $incident) {
 				if($incident->getSeverity() >= $minSeverity) {
-					$incidents[] = $incident;
+					$matchingIncidents[] = $incident;
 				}
 			}
-			return $incidents;
+			return $matchingIncidents;
 		}
 	}
-
 	/**
 	 * Returns all incidents of a given field.
 	 *
@@ -592,17 +562,23 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
+	 * @deprecated 1.0.0
 	 */
 	public function getFieldIncidents($fieldname, $minSeverity = null)
 	{
-		$incidents = array();
-		foreach($this->getIncidents($minSeverity) as $incident) {
-			if($incident->hasFieldError($fieldname)) {
-				$incidents[] = $incident;
+		$incidents = $this->resultContainer->getArgumentResult($fieldname)->getIncidents();
+		
+		if($minSeverity === null) {
+			return $incidents;
+		} else {
+			$matchingIncidents = array();
+			foreach($incidents as $incident) {
+				if($incident->getSeverity() >= $minSeverity) {
+					$matchingIncidents[] = $incident;
+				}
 			}
+			return $matchingIncidents;
 		}
-
-		return $incidents;
 	}
 
 	/**
@@ -612,18 +588,19 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	 * @param      int The minimum severity a returned incident of the error 
 	 *                 needs to have.
 	 *
-	 * @return     array The incidents.
+	 * @return     array The errors.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
+	 * @deprecated 1.0.0
 	 */
 	public function getFieldErrors($fieldname, $minSeverity = null)
 	{
+		$incidents = $this->getFieldIncidents($fieldname, $minSeverity);
 		$errors = array();
-		foreach($this->getIncidents($minSeverity) as $incident) {
-			$errors = array_merge($errors, $incident->getFieldErrors($fieldname));
+		foreach($incidents as $incident) {
+			$errors = array_merge($errors, $incident->getErrors());
 		}
-
 		return $errors;
 	}
 
@@ -638,15 +615,19 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
+	 * @deprecated 1.0.0
 	 */
 	public function getValidatorFieldErrors($validatorName, $fieldname, $minSeverity = null)
 	{
-		$errors = array();
-		foreach($this->getValidatorIncidents($validatorName, $minSeverity) as $incident) {
-			$errors = array_merge($errors, $incident->getFieldErrors($fieldname));
+		$incidents = $this->getFieldIncidents($fieldname, $minSeverity);
+		$matchingIncidents = array();
+		foreach($incidents as $incident) {
+			$validator = $incident->getValidator();
+			if($validator && $validator->getName() == $validatorName) {
+				$matchingIncidents[] = $incident;
+			}
 		}
-
-		return $errors;
+		return $matchingIncidents;
 	}
 
 	/**
@@ -658,17 +639,19 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
+	 * @deprecated 1.0.0
 	 */
 	public function getFailedFields($minSeverity = null)
 	{
-		$fields = array();
-		foreach($this->getIncidents($minSeverity) as $incident) {
-			$fields = array_merge($fields, $incident->getFields());
+		$arguments = $this->resultContainer->getFailedArguments(null, $minSeverity);
+		$names = array();
+		foreach($arguments as $argument) {
+			$names[] = $argument->getName();
 		}
-
-		return array_values(array_unique($fields));
+		
+		return array_values(array_unique($names));
 	}
-
+	
 	/**
 	 * Retrieve an error message.
 	 *
@@ -679,6 +662,7 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.9.0
+	 * @deprecated 1.0.0
 	 */
 	public function getError($name)
 	{
@@ -700,6 +684,7 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.9.0
+	 * @deprecated 1.0.0
 	 */
 	public function getErrorNames()
 	{
@@ -718,6 +703,7 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.9.0
+	 * @deprecated 1.0.0
 	 */
 	public function getErrors($name = null)
 	{
@@ -757,6 +743,7 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
+	 * @deprecated 1.0.0
 	 */
 	public function getErrorMessages($name = null)
 	{
@@ -795,6 +782,7 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     David Zülke <david.zuelke@bitextender.com>
 	 * @since      0.9.0
+	 * @deprecated 1.0.0
 	 */
 	public function hasError($name)
 	{
@@ -811,6 +799,7 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.9.0
+	 * @deprecated 1.0.0
 	 */
 	public function hasErrors()
 	{
@@ -826,6 +815,7 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.9.0
+	 * @deprecated 1.0.0
 	 */
 	public function setError($name, $message)
 	{
@@ -845,6 +835,7 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.9.0
+	 * @deprecated 1.0.0
 	 */
 	public function setErrors(array $errors)
 	{
