@@ -113,9 +113,7 @@ class AgaviController extends AgaviParameterHolder
 	public function createExecutionContainer($moduleName = null, $actionName = null, AgaviRequestDataHolder $arguments = null, $outputType = null, $requestMethod = null)
 	{
 		// create a new execution container
-		$ecfi = $this->context->getFactoryInfo('execution_container');
-		$container = new $ecfi['class']();
-		$container->initialize($this->context, $ecfi['parameters']);
+		$container = $this->context->createFactoryInstance('execution_container');
 		$container->setModuleName($moduleName);
 		$container->setActionName($actionName);
 		$container->setRequestData($this->requestData);
@@ -231,9 +229,7 @@ class AgaviController extends AgaviParameterHolder
 			}
 			
 			// create a new filter chain
-			$fcfi = $this->context->getFactoryInfo('filter_chain');
-			$filterChain = new $fcfi['class']();
-			$filterChain->initialize($this->context, $fcfi['parameters']);
+			$filterChain = $this->context->createFactoryInstance('filter_chain');
 			
 			$this->loadFilters($filterChain, 'global');
 			
@@ -476,26 +472,18 @@ class AgaviController extends AgaviParameterHolder
 		
 		$this->setParameters($parameters);
 		
-		$rfi = $context->getFactoryInfo('response');
-		$this->response = new $rfi["class"](); 
-		$this->response->initialize($context, $rfi["parameters"]);
+		$this->response = $this->context->createFactoryInstance('response');
 		
 		$cfg = AgaviConfig::get('core.config_dir') . '/output_types.xml';
 		require(AgaviConfigCache::checkConfig($cfg, $this->context->getName()));
 		
 		if(AgaviConfig::get('core.use_security', false)) {
-			$sffi = $this->context->getFactoryInfo('security_filter');
-			$this->filters['security'] = new $sffi['class']();
-			$this->filters['security']->initialize($this->context, $sffi['parameters']);
+			$this->filters['security'] = $this->context->createFactoryInstance('security_filter');
 		}
 		
-		$dffi = $this->context->getFactoryInfo('dispatch_filter');
-		$this->filters['dispatch'] = new $dffi['class']();
-		$this->filters['dispatch']->initialize($this->context, $dffi['parameters']);
+		$this->filters['dispatch'] = $this->context->createFactoryInstance('dispatch_filter');
 		
-		$effi = $this->context->getFactoryInfo('execution_filter');
-		$this->filters['execution'] = new $effi['class']();
-		$this->filters['execution']->initialize($this->context, $effi['parameters']);
+		$this->filters['execution'] = $this->context->createFactoryInstance('execution_filter');
 	}
 	
 	/**
