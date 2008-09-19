@@ -180,7 +180,9 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 
 		$this->parameters = $parameters;
 
-		$this->response = $this->context->createFactoryInstance('response');
+		$rfi = $this->context->getFactoryInfo('response');
+		$this->response = new $rfi['class'];
+		$this->response->initialize($this->context, $rfi['parameters']);
 	}
 
 	/**
@@ -284,7 +286,9 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 			}
 
 			// create a new filter chain
-			$filterChain = $this->context->createFactoryInstance('filter_chain');
+			$fcfi = $this->context->getFactoryInfo('filter_chain');
+			$filterChain = new $fcfi['class']();
+			$filterChain->initialize($this->context, $fcfi['parameters']);
 
 			if(AgaviConfig::get('core.available', false)) {
 				// the application is available so we'll register
@@ -412,7 +416,9 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	public function getValidationManager()
 	{
 		if($this->validationManager === null) {
-			$this->validationManager = $this->context->createFactoryInstance('validation_manager');
+			$vmfi = $this->context->getFactoryInfo('validation_manager');
+			$this->validationManager = new $vmfi['class']();
+			$this->validationManager->initialize($this->context, $vmfi['parameters']);
 		}
 		return $this->validationManager;
 	}
