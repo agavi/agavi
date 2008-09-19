@@ -1,8 +1,8 @@
 AGAVI CHANGELOG
 ===============
 
-0.11.3 RC3 (September ??, 2008)
--------------------------------
+0.11.3 (September 19, 2008)
+---------------------------
 
 CHG: Update zoneinfo database to 2008f (#860) (David)
 CHG: Improve sample app SearchEngineSpamAction to use ID and optionally name (#859) (David)
