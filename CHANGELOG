@@ -1,8 +1,8 @@
 AGAVI CHANGELOG
 ===============
 
-1.0.0 beta 3 (September ?, 2008)
---------------------------------
+1.0.0 beta 3 (September 21, 2008)
+---------------------------------
 
 ADD: Build system support for per-module config_handlers.xml (#855) (Noah)
 ADD: Build system support for models in subdirectories (#851) (Noah)
