@@ -107,12 +107,33 @@ abstract class AgaviFragmentTestCase extends PHPUnit_Framework_TestCase implemen
 	{
 		$this->container = null;
 	}
-		
+	
+	/**
+	 * retrieve the application context
+	 * 
+	 * @return     AgaviContext the application context
+	 * 
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */
 	public function getContext()
 	{
 		return AgaviContext::getInstance($this->contextName);
 	}
 	
+	/**
+	 * normalizes a viewname according to the configured rules
+	 * 
+	 * Please do not use this method, it exists only for internal 
+	 * purposes and will be removed ASAP. You have been warned
+	 * 
+	 * @param      string the short view name
+	 * 
+	 * @return     string the full view name
+	 * 
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */
 	protected function normalizeViewName($shortName)
 	{
 		if($shortName != AgaviView::NONE) {
