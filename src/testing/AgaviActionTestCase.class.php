@@ -330,16 +330,56 @@ abstract class AgaviActionTestCase extends AgaviFragmentTestCase
 		$this->assertFalse($actionInstance->isSimple(), $message);
 	}
 
+	/**
+	 * asserts that the given argument has been touched by a validator
+	 * 
+	 * This does not imply that the validation failed or succeeded, just
+	 * that a validator attempted to validate the given argument
+	 * 
+	 * @param      string the name of the argument
+	 * @param      string the source of the argument
+	 * @param      string an optional message 
+	 * 
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */
 	protected function assertValidatedArgument($argumentName, $source = AgaviRequestDataHolder::SOURCE_PARAMETERS, $message = 'Failed asserting that the argument <%1$s> is validated.')
 	{
 		$result = $this->container->getValidationManager()->getLastResult();
 		$this->assertTrue($result->isArgumentValidated(new AgaviValidationArgument($argumentName, $source)), sprintf($message, $argumentName));
 	}
 
+	/**
+	 * asserts that the given argument has failed the validation
+	 * 
+	 * @param      string the name of the argument
+	 * @param      string the source of the argument
+	 * @param      string an optional message 
+	 * 
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */
 	protected function assertFailedArgument($argumentName, $source = AgaviRequestDataHolder::SOURCE_PARAMETERS, $message = 'Failed asserting that the argument <%1$s> is failed.')
 	{
 		$result = $this->container->getValidationManager()->getLastResult();
 		$this->assertTrue($result->isArgumentFailed(new AgaviValidationArgument($argumentName, $source)), sprintf($message, $argumentName));
+	}
+
+	/**
+	 * asserts that the given argument has succeeded the validation
+	 * 
+	 * @param      string the name of the argument
+	 * @param      string the source of the argument
+	 * @param      string an optional message 
+	 * 
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */
+	protected function assertSucceededArgument($argumentName, $source = AgaviRequestDataHolder::SOURCE_PARAMETERS, $message = 'Failed asserting that the argument <%1$s> is succeeded.')
+	{
+		$result = $this->container->getValidationManager()->getLastResult();
+		$success = $result->isArgumentValidated(new AgaviValidationArgument($argumentName, $source)) && ! $result->isArgumentFailed(new AgaviValidationArgument($argumentName, $source));
+		$this->assertTrue($success, sprintf($message, $argumentName));
 	}
 
 
