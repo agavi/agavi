@@ -30,8 +30,43 @@
  */
 abstract class AgaviFragmentTestCase extends PHPUnit_Framework_TestCase implements AgaviIFragmentTestCase
 {
+	
+	/**
+	 * @var        string the name of the context to use, null for default context
+	 */
 	protected $contextName = null;
 	
+	/**
+	 * @var        string the name of the action to test
+	 */
+	protected $actionName;
+	
+	/**
+	 * @var        string the name of the module 
+	 */
+	protected $moduleName;
+	
+	/**
+	 * @var        string the name of the resulting view
+	 */
+	protected $viewName;
+	
+	/**
+	 * @var        string the name of the resulting view's module
+	 */
+	protected $viewModuleName;
+	
+	/**
+	 * @var        bool   the result of the validation process
+	 */
+	protected $validationSuccess;
+	
+	/**
+	 * @var        AgaviExecutionContainer the container to run the action in
+	 */
+	protected $container;
+
+
 	/**
 	 * Constructs a test case with the given name.
 	 *
@@ -44,11 +79,60 @@ abstract class AgaviFragmentTestCase extends PHPUnit_Framework_TestCase implemen
 		parent::__construct($name, $data, $dataName);
 		$this->setRunTestInSeparateProcess(true);
 	}
+	
+	
+	/**
+	 * creates a new AgaviExecutionContainer for each test
+	 * 
+	 * @return void
+	 * 
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function setUp()
+	{
+		$this->container = $this->createExecutionContainer();
+	}
+	
+	
+	/**
+	 * unsets the AgaviExecutionContainer after each test
+	 * 
+	 * @return void
+	 * 
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function tearDown()
+	{
+		$this->container = null;
+	}
 		
 	public function getContext()
 	{
 		return AgaviContext::getInstance($this->contextName);
 	}
+	
+	protected function normalizeViewName($shortName)
+	{
+		if($shortName != AgaviView::NONE) {
+			$shortName = AgaviToolkit::expandVariables(
+				AgaviToolkit::expandDirectives(
+					AgaviConfig::get(
+						sprintf('modules.%s.agavi.view.name', strtolower($this->moduleName)),
+						'${actionName}${viewName}'
+					)
+				),
+				array(
+					'actionName' => $this->actionName,
+					'viewName' => $shortName,
+				)	
+			);	
+		}
+		
+		return $shortName;
+	}
+
 }
 
 ?>

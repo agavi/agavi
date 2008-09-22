@@ -29,64 +29,7 @@
  * @version    $Id$
  */
 abstract class AgaviActionTestCase extends AgaviFragmentTestCase
-{
-	/**
-	 * @var        string the name of the action to test
-	 */
-	protected $actionName;
-	
-	/**
-	 * @var        string the name of the module 
-	 */
-	protected $moduleName;
-	
-	/**
-	 * @var        string the name of the resulting view
-	 */
-	protected $viewName;
-	
-	/**
-	 * @var        string the name of the resulting view's module
-	 */
-	protected $viewModuleName;
-	
-	/**
-	 * @var        bool   the result of the validation process
-	 */
-	protected $validationSuccess;
-	
-	/**
-	 * @var        AgaviExecutionContainer the container to run the action in
-	 */
-	protected $container;
-	
-	/**
-	 * creates a new AgaviExecutionContainer for each test
-	 * 
-	 * @return void
-	 * 
-	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
-	 * @since      1.0.0
-	 */
-	public function setUp()
-	{
-		$this->container = $this->createExecutionContainer();
-	}
-	
-	
-	/**
-	 * unsets the AgaviExecutionContainer after each test
-	 * 
-	 * @return void
-	 * 
-	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
-	 * @since      1.0.0
-	 */
-	public function tearDown()
-	{
-		$this->container = null;
-	}
-	
+{	
 	/**
 	 * creates an Action instance and initializes it with this testcases
 	 * container
@@ -173,20 +116,7 @@ abstract class AgaviActionTestCase extends AgaviFragmentTestCase
 	 */
 	protected function assertViewNameEquals($expected, $message = 'Failed asserting that the view\'s name is <%1$s>.')
 	{
-		if($expected != AgaviView::NONE) {
-			$expected = AgaviToolkit::expandVariables(
-				AgaviToolkit::expandDirectives(
-					AgaviConfig::get(
-						sprintf('modules.%s.agavi.view.name', strtolower($this->moduleName)),
-						'${actionName}${viewName}'
-					)
-				),
-				array(
-					'actionName' => $this->actionName,
-					'viewName' => $expected,
-				)	
-			);	
-		}
+		$expected = $this->normalizeViewName($expected);
 		$this->assertEquals($expected, $this->viewName, sprintf($message, $expected));
 	}
 	
