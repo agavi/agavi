@@ -261,9 +261,9 @@ abstract class AgaviActionTestCase extends AgaviFragmentTestCase
      * @author     Felix Gilcher <felix.gilcher@bitextender.com>
 	 * @since      1.0.0
 	 */
-	protected function assertContainerAttributeExists($attributeName, $namespace = null, $message = '')
+	protected function assertContainerAttributeExists($attributeName, $namespace = null, $message = 'Failed asserting that the container has an attribute named <%1$s/%2$s>.')
 	{
-		$this->assertTrue($this->container->hasAttribute($attributeName, $namespace), $message);
+		$this->assertTrue($this->container->hasAttribute($attributeName, $namespace), sprintf($message, $namespace, $attributeName));
 	}
 	
 	/**
