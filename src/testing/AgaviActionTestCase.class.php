@@ -330,23 +330,19 @@ abstract class AgaviActionTestCase extends AgaviFragmentTestCase
 		$this->assertFalse($actionInstance->isSimple(), $message);
 	}
 
-	protected function assertValidatesArgument($argumentName, $type = null, $validationParameters = null, $source = AgaviRequestDataHolder::SOURCE_PARAMETERS)
+	protected function assertValidatedArgument($argumentName, $source = AgaviRequestDataHolder::SOURCE_PARAMETERS)
 	{
-		$found = false;
-		foreach ($this->container->getValidationManager()->getChilds() as $child)
-		{
-			if (in_array($argumentName, $child->getArguments()))
-			{
-				$found = true;
-			}
-		}
-		
-		if (!$found)
-		{
-			$this->fail('does not validate argument');
-		}
+		$result = $this->container->getValidationManager()->getLastResult();
+		$this->assertTrue($result->isArgumentValidated(new AgaviValidationArgument($argumentName, $source)));
 	}
-	
+
+	protected function assertFailedArgument($argumentName, $source = AgaviRequestDataHolder::SOURCE_PARAMETERS)
+	{
+		$result = $this->container->getValidationManager()->getLastResult();
+		$this->assertTrue($result->isArgumentFailed(new AgaviValidationArgument($argumentName, $source)));
+	}
+
+
 	/**
 	 * create an executionfilter for the test
 	 * 
