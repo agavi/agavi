@@ -171,7 +171,7 @@ abstract class AgaviActionTestCase extends AgaviFragmentTestCase
 	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
 	 * @since      1.0.0 
 	 */
-	protected function assertViewNameEquals($expected, $message = '')
+	protected function assertViewNameEquals($expected, $message = 'Failed asserting that the view\'s name is <%1$s>.')
 	{
 		if($expected != AgaviView::NONE) {
 			$expected = AgaviToolkit::expandVariables(
@@ -187,7 +187,7 @@ abstract class AgaviActionTestCase extends AgaviFragmentTestCase
 				)	
 			);	
 		}
-		$this->assertEquals($expected, $this->viewName, $message);
+		$this->assertEquals($expected, $this->viewName, sprintf($message, $expected));
 	}
 	
 	/**
@@ -201,9 +201,9 @@ abstract class AgaviActionTestCase extends AgaviFragmentTestCase
 	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
 	 * @since      1.0.0 
 	 */
-	protected function assertViewModuleNameEquals($expected, $message = '')
+	protected function assertViewModuleNameEquals($expected, $message = 'Failed asserting that the view\'s module name is <%1$s>.')
 	{
-		$this->assertEquals($expected, $this->viewModuleName, $message);
+		$this->assertEquals($expected, $this->viewModuleName, sprintf($message, $expected));
 	}
 	
 	/**
@@ -224,7 +224,7 @@ abstract class AgaviActionTestCase extends AgaviFragmentTestCase
 	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
 	 * @since      1.0.0 
 	 */
-	protected function assertDefaultView($expected, $message = '')
+	protected function assertDefaultView($expected, $message = 'Failed asserting that the defaultView is the expected value.')
 	{
 		$actionInstance = $this->createActionInstance();
 		$this->assertEquals($expected, $actionInstance->getDefaultViewName(), $message);
@@ -246,9 +246,9 @@ abstract class AgaviActionTestCase extends AgaviFragmentTestCase
 	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
 	 * @since      1.0.0
 	 */
-	protected function assertContainerAttributeEquals($expected, $attributeName, $namespace = null, $message = '', $delta = 0, $maxDepth = 10, $canonicalizeEol = false)
+	protected function assertContainerAttributeEquals($expected, $attributeName, $namespace = null, $message = 'Failed asserting that the attribute <%1$s/%2$s> has the value <%3$s>', $delta = 0, $maxDepth = 10, $canonicalizeEol = false)
 	{
-		$this->assertEquals($expected, $this->container->getAttribute($attributeName, $namespace), $message, $delta, $maxDepth, $canonicalizeEol);
+		$this->assertEquals($expected, $this->container->getAttribute($attributeName, $namespace), sprintf($message, $namespace, $attributeName, $expected), $delta, $maxDepth, $canonicalizeEol);
 	}
 	
 	/**
@@ -310,7 +310,7 @@ abstract class AgaviActionTestCase extends AgaviFragmentTestCase
 	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
 	 * @since      1.0.0
 	 */
-	protected function assertIsSimple($message = '')
+	protected function assertIsSimple($message = 'Failed asserting that the action is simple.')
 	{
 		$actionInstance = $this->createActionInstance();
 		$this->assertTrue($actionInstance->isSimple(), $message);
@@ -324,22 +324,22 @@ abstract class AgaviActionTestCase extends AgaviFragmentTestCase
 	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
 	 * @since      1.0.0
 	 */
-	protected function assertIsNotSimple($message = '')
+	protected function assertIsNotSimple($message = 'Failed asserting that the action is not simple.')
 	{
 		$actionInstance = $this->createActionInstance();
 		$this->assertFalse($actionInstance->isSimple(), $message);
 	}
 
-	protected function assertValidatedArgument($argumentName, $source = AgaviRequestDataHolder::SOURCE_PARAMETERS)
+	protected function assertValidatedArgument($argumentName, $source = AgaviRequestDataHolder::SOURCE_PARAMETERS, $message = 'Failed asserting that the argument <%1$s> is validated.')
 	{
 		$result = $this->container->getValidationManager()->getLastResult();
-		$this->assertTrue($result->isArgumentValidated(new AgaviValidationArgument($argumentName, $source)));
+		$this->assertTrue($result->isArgumentValidated(new AgaviValidationArgument($argumentName, $source)), sprintf($message, $argumentName));
 	}
 
-	protected function assertFailedArgument($argumentName, $source = AgaviRequestDataHolder::SOURCE_PARAMETERS)
+	protected function assertFailedArgument($argumentName, $source = AgaviRequestDataHolder::SOURCE_PARAMETERS, $message = 'Failed asserting that the argument <%1$s> is failed.')
 	{
 		$result = $this->container->getValidationManager()->getLastResult();
-		$this->assertTrue($result->isArgumentFailed(new AgaviValidationArgument($argumentName, $source)));
+		$this->assertTrue($result->isArgumentFailed(new AgaviValidationArgument($argumentName, $source)), sprintf($message, $argumentName));
 	}
 
 
