@@ -618,13 +618,14 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 	 * 
 	 * @return     mixed the view's result
 	 * 
-	 * @author     Felix Gilcher <felix.gilcher@bitextender.com> 
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
 	 * @since      1.0.0
 	 */
 	protected function executeView(AgaviExecutionContainer $container)
 	{
 		$outputType = $container->getOutputType()->getName();
-		$request = $container->getRequest();
+		$request = $this->context->getRequest();
 		$viewInstance = $container->getViewInstance();
 		
 		// $lm->log('View is not cached, executing...');
