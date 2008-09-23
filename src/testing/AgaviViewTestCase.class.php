@@ -30,6 +30,77 @@
  */
 abstract class AgaviViewTestCase extends AgaviFragmentTestCase
 {
+	
+	protected function createViewInstance()
+	{
+		$viewName = $this->normalizeViewName($this->viewName);
+		$viewInstance = $this->getContext()->getController()->createViewInstance($this->moduleName, $viewName);
+		$viewInstance->initialize($this->container);
+		return $viewInstance;
+	}
+	
+	protected function runView()
+	{
+		
+	}
+	
+	/**
+	 * assert that the view handles the given output type
+	 * 
+	 * @param      string  the output type name
+	 * @param      boolean true if the generic 'execute' method should be accepted as handled
+	 * @param      string  an optional message to display if the test fails
+	 * 
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */
+	protected function assertHandlesOutputType($method, $acceptGeneric = false, $message = '')
+	{
+		$viewInstance = $this->createViewInstance();
+		$constraint = new AgaviConstraintViewHandlesOutputType($viewInstance, $acceptGeneric);
+		
+		self::assertThat($method, $constraint, $message);
+	}
+	
+	/**
+	 * assert that the view does not handle the given output type
+	 * 
+	 * @param      string  the output type name
+	 * @param      boolean true if the generic 'execute' method should be accepted as handled
+	 * @param      string  an optional message to display if the test fails
+	 * 
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */
+	protected function assertNotHandlesOutputType($method, $acceptGeneric = false, $message = '')
+	{
+		$viewInstance = $this->createViewInstance();
+		$constraint = self::logicalNot(new AgaviConstraintViewHandlesOutputType($viewInstance, $acceptGeneric));
+		
+		self::assertThat($method, $constraint, $message);
+	}
+	
+	
+	protected function assertResponseHasRedirect($expected, $message = '')
+	{
+		
+	}
+	
+	protected function assertResponseHasContent($expected, $message = '')
+	{
+		
+	}
+	
+	protected function assertForwards($expectedModule, $expectedAction, $message = '')
+	{
+		
+	}
+	
+	protected function assertHasLayer($expectedLayer, $message = '')
+	{
+		
+	}
+	
 }
 
 ?>
