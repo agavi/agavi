@@ -251,6 +251,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 	 *                                                 executing the View.
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
@@ -621,9 +622,10 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 	 * @return     mixed The processed View information returned by the Action.
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
 	 * @since      0.11.0
 	 * 
-	 * @deprecated sind 1.0.0, use AgaviExecutionContainer::runAction()
+	 * @deprecated since 1.0.0, use AgaviExecutionContainer::runAction()
 	 */
 	protected function runAction(AgaviExecutionContainer $container)
 	{
