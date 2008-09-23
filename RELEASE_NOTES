@@ -42,7 +42,7 @@ You can also customize these aspects:
 - Default template "directory" part
 - View shortname resolution ("Success" => "Default_Sub_MarineSuccess")
 This allows you to put all the files for a feature into a single subdirectory, instead of having the separate files cluttered over action/, template/, view/ etc. subfolders inside the module directory.
-Ticket #668 has more details an an example.
+Ticket #668 has more details and an example.
 
 Project development environment
 -------------------------------
@@ -57,6 +57,12 @@ Execution
 Execution containers now have their own request method. By default, it is equal to the global request's request method. It can, however, be changed using the last (and new) argument of AgaviController::createExecutionContainer() and the related methods in AgaviExecutionContainer and AgaviView. Like the output type, the request method is carried over from the "parent" container if AgaviExecutionContainer::createExecutionContainer() is used (or the methods in AgaviView, which use this method). You can define a slot's request method using the new "method" attribute of the <slot> element in your output_types.xml layout declarations.
 
 When Agavi does an internal forward, for example to the login "system action" when an action requires authentication, the corresponding information in the "org.agavi.controller.forwards.*" namespaces will now be set on as attributes on the respective containers, in addition to the existing request attributes, which remain for BC.
+
+Caching
+-------
+A new cache group source called "callback" has been added. You can use it to specify the name of a method implemented in the respective Action class. The value this callback returns is used as the group key. You can also throw an exception from the callback to prevent caching altogether. These two different abilities offer very nice caching capabilities, such as:
+- Having different caches for the owner of an element and for everyone else
+- Enabling a cache only for users that are not logged in
 
 Security
 --------

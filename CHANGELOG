@@ -1,8 +1,8 @@
 AGAVI CHANGELOG
 ===============
 
-1.0.0 beta 3 (September ?, 2008)
---------------------------------
+1.0.0 beta 3 (September 21, 2008)
+---------------------------------
 
 ADD: Build system support for per-module config_handlers.xml (#855) (Noah)
 ADD: Build system support for models in subdirectories (#851) (Noah)
@@ -73,6 +73,7 @@ FIX: Security filters cannot perform checks in addition to isSecure() (#671) (Da
 0.11.4 RC1 (September ??, 2008)
 -------------------------------
 
+FIX: Certain validator names will cause a fatal error (#863) (David)
 FIX: Sample app SearchEngineSpamAction works with invalid product names (#861) (David)
 
 
