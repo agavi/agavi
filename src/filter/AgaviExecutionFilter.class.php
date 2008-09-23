@@ -272,13 +272,9 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 		$request = $this->context->getRequest();
 
 		$isCacheable = false;
-		$cachingDotXml = AgaviToolkit::expandVariables(
-			AgaviToolkit::expandDirectives(
-				AgaviConfig::get(
-					sprintf('modules.%s.agavi.cache.path', strtolower($moduleName)),
-					'%core.module_dir%/${moduleName}/cache/${actionName}.xml'
-				)
-			),
+		$cachingDotXml = AgaviToolkit::evaluateModuleDirective(
+			$moduleName,
+			'agavi.cache.path',
 			array(
 				'moduleName' => $moduleName,
 				'actionName' => $actionName,

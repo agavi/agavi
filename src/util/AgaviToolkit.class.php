@@ -460,6 +460,35 @@ final class AgaviToolkit
 	{
 		return str_replace('.', '/', $name);
 	}
+	
+	/**
+	 * Evaluates a given AgaviConfig per-module directive using the given info.
+	 *
+	 * @param      string The name of the module
+	 * @param      string The relevant name fragment of the directive
+	 * @param      array  The variables to expand in the directive value.
+	 *
+	 * @return     string The final value
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public static function evaluateModuleDirective($moduleName, $directiveNameFragment, $variables = array())
+	{
+		return AgaviToolkit::expandVariables(
+			AgaviToolkit::expandDirectives(
+				AgaviConfig::get(
+					sprintf(
+						'modules.%s.%s',
+						strtolower($moduleName),
+						$directiveNameFragment
+					)
+				)
+			),
+			$variables
+		);
+		
+	}
 }
 
 ?>

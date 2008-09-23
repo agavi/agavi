@@ -137,18 +137,14 @@ abstract class AgaviFragmentTestCase extends PHPUnit_Framework_TestCase implemen
 	protected function normalizeViewName($shortName)
 	{
 		if($shortName != AgaviView::NONE) {
-			$shortName = AgaviToolkit::expandVariables(
-				AgaviToolkit::expandDirectives(
-					AgaviConfig::get(
-						sprintf('modules.%s.agavi.view.name', strtolower($this->moduleName)),
-						'${actionName}${viewName}'
-					)
-				),
+			$shortName = AgaviToolkit::evaluateModuleDirective(
+				$this->moduleName,
+				'agavi.view.name',
 				array(
 					'actionName' => $this->actionName,
 					'viewName' => $shortName,
-				)	
-			);	
+				)
+			);
 		}
 		
 		return $shortName;

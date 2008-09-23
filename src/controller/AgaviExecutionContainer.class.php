@@ -504,13 +504,9 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 			$viewName   = $viewName[1];
 		} elseif($viewName !== AgaviView::NONE) {
 			// use a view related to this action
-			$viewName = AgaviToolkit::expandVariables(
-				AgaviToolkit::expandDirectives(
-					AgaviConfig::get(
-						sprintf('modules.%s.agavi.view.name', strtolower($moduleName)),
-						'${actionName}${viewName}'
-					)
-				),
+			$viewName = AgaviToolkit::evaluateModuleDirective(
+				$moduleName,
+				'agavi.view.name',
 				array(
 					'actionName' => $actionName,
 					'viewName' => $viewName,
@@ -584,13 +580,9 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 		$method = $this->getRequestMethod();
 
 		// get the current action validation configuration
-		$validationConfig = AgaviToolkit::expandVariables(
-			AgaviToolkit::expandDirectives(
-				AgaviConfig::get(
-					sprintf('modules.%s.agavi.validate.path', strtolower($moduleName)),
-					'%core.module_dir%/${moduleName}/validate/${actionName}.xml'
-				)
-			),
+		$validationConfig = AgaviToolkit::evaluateModuleDirective(
+			$moduleName,
+			'agavi.validate.path',
 			array(
 				'moduleName' => $moduleName,
 				'actionName' => $actionName,
