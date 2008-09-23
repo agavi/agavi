@@ -75,34 +75,6 @@ abstract class AgaviActionTestCase extends AgaviFragmentTestCase
 		$this->validationSuccess = $this->container->performValidation($this->container);
 	}
 	
-	
-	/**
-	 * create a requestDataHolder with the given arguments and type
-	 * 
-	 * arguments need to be passed in the way {@see AgaviRequestDataHolder} accepts them
-	 * 
-	 * array(AgaviRequestDataHolder::SOURCE_PARAMETERS => array('foo' => 'bar'))
-	 * 
-	 * if no type is passed, the default for the configured request class will be used
-	 * 
-	 * @param      array   a two-dimensional array with the arguments
-	 * @param      string  the subclass of AgaviRequestDataHolder to create
-	 * 
-	 * @return     AgaviRequestDataHolder
-	 * 
-	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
-	 * @since      1.0.0
-	 */
-	protected function createRequestDataHolder(array $arguments = array(), $type = null)
-	{
-		if(null === $type) {
-			$type = $this->getContext()->getRequest()->getParameter('request_data_holder_class', 'AgaviRequestDataHolder');
-		}
-		
-		$class = new $type($arguments);
-		return $class;
-	}
-	
 	/**
 	 * asserts that the viewName is the expected value after runAction was called
 	 * 
