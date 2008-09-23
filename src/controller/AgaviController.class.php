@@ -285,6 +285,7 @@ class AgaviController extends AgaviParameterHolder
 	public function checkActionFile($moduleName, $actionName)
 	{
 		$this->initializeModule($moduleName);
+		
 		$actionName = AgaviToolkit::canonicalName($actionName);
 		$file = AgaviToolkit::expandVariables(
 			AgaviToolkit::expandDirectives(
@@ -298,9 +299,11 @@ class AgaviController extends AgaviParameterHolder
 				'actionName' => $actionName,
 			)
 		);
+		
 		if(is_readable($file) && substr($actionName, 0, 1) !== '/') {
 			return $file;
 		}
+		
 		return false;
 	}
 	
@@ -321,7 +324,6 @@ class AgaviController extends AgaviParameterHolder
 	 */
 	public function createActionInstance($moduleName, $actionName)
 	{
-		
 		$this->initializeModule($moduleName);
 		
 		$actionName = AgaviToolkit::canonicalName($actionName);
@@ -377,6 +379,7 @@ class AgaviController extends AgaviParameterHolder
 	public function checkViewFile($moduleName, $viewName)
 	{
 		$this->initializeModule($moduleName);
+		
 		$viewName = AgaviToolkit::canonicalName($viewName);
 		$file = AgaviToolkit::expandVariables(
 			AgaviToolkit::expandDirectives(
@@ -390,10 +393,11 @@ class AgaviController extends AgaviParameterHolder
 				'viewName' => $viewName,
 			)
 		);
+		
 		if(is_readable($file) && substr($viewName, 0, 1) !== '/') {
 			return $file;
 		}
-			
+		
 		return false;
 	}
 	
