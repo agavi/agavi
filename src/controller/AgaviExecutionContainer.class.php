@@ -432,7 +432,8 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	 *
 	 * @return     mixed The processed View information returned by the Action.
 	 *
-	 * @author     David Zülke <dz@bitxtender.com>
+	 * @author     David Zülke <david.zuelke@bitxtender.com>
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
 	 * @since      1.0.0
 	 */
 	public function runAction()
@@ -529,6 +530,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	 * 
 	 * @return     bool true if the data validated successfully, false in any other case
 	 * 
+	 * @author     David Zülke <david.zuelke@bitxtender.com>
 	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
 	 * @since      1.0.0
 	 */
@@ -563,6 +565,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	/**
 	 * register the validators for this container
 	 * 
+	 * @author     David Zülke <david.zuelke@bitxtender.com>
 	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
 	 * @since      1.0.0
 	 */
