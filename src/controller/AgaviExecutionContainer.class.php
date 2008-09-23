@@ -426,6 +426,104 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 		return $this->validationManager;
 	}
 	
+	
+	/**
+	 * Execute the Action
+	 *
+	 * @return     mixed The processed View information returned by the Action.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      1.0.0
+	 */
+	public function runAction()
+	{
+		$viewName = null;
+
+		$controller = $this->context->getController();
+		$request = $this->context->getRequest();
+		$validationManager = $this->getValidationManager();
+
+		// get the current action instance
+		$actionInstance = $this->getActionInstance();
+
+		// get the current action information
+		$moduleName = $this->getModuleName();
+		$actionName = $this->getActionName();
+
+		// get the (already formatted) request method
+		$method = $this->getRequestMethod();
+
+		$requestData = $this->getRequestData();
+
+		$useGenericMethods = false;
+		$executeMethod = 'execute' . $method;
+		if(!method_exists($actionInstance, $executeMethod)) {
+			$executeMethod = 'execute';
+			$useGenericMethods = true;
+		}
+
+		if($actionInstance->isSimple() || ($useGenericMethods && !method_exists($actionInstance, $executeMethod))) {
+			// this action will skip validation/execution for this method
+			// get the default view
+			$viewName = $actionInstance->getDefaultViewName();
+		} else {			
+			if($this->performValidation()) {
+				// execute the action
+				// prevent access to Request::getParameters()
+				$key = $request->toggleLock();
+				try {
+					$viewName = $actionInstance->$executeMethod($requestData);
+				} catch(Exception $e) {
+					// we caught an exception... unlock the request and rethrow!
+					$request->toggleLock($key);
+					throw $e;
+				}
+				$request->toggleLock($key);
+			} else {
+				// validation failed
+				$handleErrorMethod = 'handle' . $method . 'Error';
+				if(!method_exists($actionInstance, $handleErrorMethod)) {
+					$handleErrorMethod = 'handleError';
+				}
+				$key = $request->toggleLock();
+				try {
+					$viewName = $actionInstance->$handleErrorMethod($requestData);
+				} catch(Exception $e) {
+					// we caught an exception... unlock the request and rethrow!
+					$request->toggleLock($key);
+					throw $e;
+				}
+				$request->toggleLock($key);
+			}
+		}
+
+		if(is_array($viewName)) {
+			// we're going to use an entirely different action for this view
+			$viewModule = $viewName[0];
+			$viewName   = $viewName[1];
+		} elseif($viewName !== AgaviView::NONE) {
+			// use a view related to this action
+			$viewName = AgaviToolkit::expandVariables(
+				AgaviToolkit::expandDirectives(
+					AgaviConfig::get(
+						sprintf('modules.%s.agavi.view.name', strtolower($moduleName)),
+						'${actionName}${viewName}'
+					)
+				),
+				array(
+					'actionName' => $actionName,
+					'viewName' => $viewName,
+				)
+			);
+			$viewModule = $moduleName;
+		} else {
+			$viewName = AgaviView::NONE;
+			$viewModule = AgaviView::NONE;
+		}
+
+		return array($viewModule, $viewName);
+	}
+	
 	/**
 	 * performs the validation for this container
 	 * 

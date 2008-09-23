@@ -327,7 +327,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 			
 				// $lm->log('Action not cached, executing...');
 				// execute the Action and get the View to execute
-				list($actionCache['view_module'], $actionCache['view_name']) = $this->runAction($container);
+				list($actionCache['view_module'], $actionCache['view_name']) = $container->runAction();
 				
 				// check if we've just run the action again after a previous cache read revealed that the view is not cached for this output type and we need to go back to square one due to the lack of action attribute caching configuration...
 				// if yes: is the view module/name that we got just now different from what was in the cache?
@@ -622,94 +622,12 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
+	 * 
+	 * @deprecated sind 1.0.0, use AgaviExecutionContainer::runAction()
 	 */
 	protected function runAction(AgaviExecutionContainer $container)
 	{
-		$viewName = null;
-
-		$controller = $this->context->getController();
-		$request = $this->context->getRequest();
-		$validationManager = $container->getValidationManager();
-
-		// get the current action instance
-		$actionInstance = $container->getActionInstance();
-
-		// get the current action information
-		$moduleName = $container->getModuleName();
-		$actionName = $container->getActionName();
-
-		// get the (already formatted) request method
-		$method = $container->getRequestMethod();
-
-		$requestData = $container->getRequestData();
-
-		$useGenericMethods = false;
-		$executeMethod = 'execute' . $method;
-		if(!method_exists($actionInstance, $executeMethod)) {
-			$executeMethod = 'execute';
-			$useGenericMethods = true;
-		}
-
-		if($actionInstance->isSimple() || ($useGenericMethods && !method_exists($actionInstance, $executeMethod))) {
-			// this action will skip validation/execution for this method
-			// get the default view
-			$viewName = $actionInstance->getDefaultViewName();
-		} else {			
-			if($container->performValidation()) {
-				// execute the action
-				// prevent access to Request::getParameters()
-				$key = $request->toggleLock();
-				try {
-					$viewName = $actionInstance->$executeMethod($requestData);
-				} catch(Exception $e) {
-					// we caught an exception... unlock the request and rethrow!
-					$request->toggleLock($key);
-					throw $e;
-				}
-				$request->toggleLock($key);
-			} else {
-				// validation failed
-				$handleErrorMethod = 'handle' . $method . 'Error';
-				if(!method_exists($actionInstance, $handleErrorMethod)) {
-					$handleErrorMethod = 'handleError';
-				}
-				$key = $request->toggleLock();
-				try {
-					$viewName = $actionInstance->$handleErrorMethod($requestData);
-				} catch(Exception $e) {
-					// we caught an exception... unlock the request and rethrow!
-					$request->toggleLock($key);
-					throw $e;
-				}
-				$request->toggleLock($key);
-			}
-		}
-
-		if(is_array($viewName)) {
-			// we're going to use an entirely different action for this view
-			$viewModule = $viewName[0];
-			$viewName   = $viewName[1];
-		} elseif($viewName !== AgaviView::NONE) {
-			// use a view related to this action
-			$viewName = AgaviToolkit::expandVariables(
-				AgaviToolkit::expandDirectives(
-					AgaviConfig::get(
-						sprintf('modules.%s.agavi.view.name', strtolower($moduleName)),
-						'${actionName}${viewName}'
-					)
-				),
-				array(
-					'actionName' => $actionName,
-					'viewName' => $viewName,
-				)
-			);
-			$viewModule = $moduleName;
-		} else {
-			$viewName = AgaviView::NONE;
-			$viewModule = AgaviView::NONE;
-		}
-
-		return array($viewModule, $viewName);
+		return $container->runAction();
 	}
 }
 
