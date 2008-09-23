@@ -112,12 +112,12 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	protected $next = null;
 
 	/**
-	 * action names can contain any valid php token, dot's and slashes for subactions
+	 * action names can contain any valid php token, dots and slashes for subactions
 	 */
 	const SANE_ACTION_NAME = '/[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff\/.]*/';
 	
 	/**
-	 * view names can contain any valid php token, dot's and slashes for subactions
+	 * view names can contain any valid php token, dots and slashes for subactions
 	 */
 	const SANE_VIEW_NAME   = '/[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff\/.]*/';
 	/**
