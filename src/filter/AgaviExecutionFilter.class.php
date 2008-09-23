@@ -424,22 +424,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 					}
 				
 					$viewCache = array();
-
-					// $lm->log('View is not cached, executing...');
-					// view initialization completed successfully
-					$executeMethod = 'execute' . $outputType;
-					if(!method_exists($viewInstance, $executeMethod)) {
-						$executeMethod = 'execute';
-					}
-					$key = $request->toggleLock();
-					try {
-						$viewCache['next'] = $viewInstance->$executeMethod($container->getRequestData());
-					} catch(Exception $e) {
-						// we caught an exception... unlock the request and rethrow!
-						$request->toggleLock($key);
-						throw $e;
-					}
-					$request->toggleLock($key);
+					$viewCache['next'] = $this->executeView($container);
 				}
 
 				if($viewCache['next'] instanceof AgaviExecutionContainer) {
@@ -631,6 +616,39 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 	{
 		return $container->runAction();
 	}
+	
+	/**
+	 * execute this containers view instance
+	 * 
+	 * @return     mixed the view's result
+	 * 
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com> 
+	 * @since      1.0.0
+	 */
+	protected function executeView(AgaviExecutionContainer $container)
+	{
+		$outputType = $container->getOutputType()->getName();
+		$request = $container->getRequest();
+		$viewInstance = $container->getViewInstance();
+		
+		// $lm->log('View is not cached, executing...');
+		// view initialization completed successfully
+		$executeMethod = 'execute' . $outputType;
+		if(!method_exists($viewInstance, $executeMethod)) {
+			$executeMethod = 'execute';
+		}
+		$key = $request->toggleLock();
+		try {
+			$viewResult = $viewInstance->$executeMethod($container->getRequestData());
+		} catch(Exception $e) {
+			// we caught an exception... unlock the request and rethrow!
+			$request->toggleLock($key);
+			throw $e;
+		}
+		$request->toggleLock($key);
+		return $viewResult;
+	}
+	
 }
 
 ?>
