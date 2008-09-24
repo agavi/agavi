@@ -174,16 +174,11 @@ abstract class AgaviFragmentTestCase extends PHPUnit_Framework_TestCase implemen
 class %1$s extends %2$s
 {
 	protected $validationResult = null;
-
-	public function performValidation(AgaviExecutionContainer $container)
-	{	
-		return  parent::performValidation($container);
-	}
-
-	public function runAction(AgaviExecutionContainer $container)
+	
+	public function executeView(AgaviExecutionContainer $container)
 	{
 		$container->cloneArgumentsToRequestData();
-		return parent::runAction($container);
+		return parent::executeView($container);
 	}
 }',
 			$wrapper_class,
@@ -233,6 +228,12 @@ class %1$s extends %2$s
 		return $this->validationResult;
 	}
 
+	public function runAction()
+	{
+		$this->cloneArgumentsToRequestData();
+		return parent::runAction();
+	}
+	
 	public function cloneArgumentsToRequestData()
 	{
 		$this->requestData = clone $this->arguments;

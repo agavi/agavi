@@ -58,7 +58,7 @@ abstract class AgaviActionTestCase extends AgaviFragmentTestCase
 	{
 		$this->container->setActionInstance($this->createActionInstance());
 		$executionFilter = $this->createExecutionFilter();
-		list($this->viewModuleName, $this->viewName) = $executionFilter->runAction($this->container);
+		list($this->viewModuleName, $this->viewName) = $this->container->runAction();
 	}
 	
 	/**

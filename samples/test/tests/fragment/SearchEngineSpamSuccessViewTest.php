@@ -33,6 +33,17 @@ class SearchEngineSpamSuccessViewTest extends AgaviViewTestCase
 	{
 		$this->assertNotHandlesOutputType('xml');
 	}
+	
+	public function testResultLayers()
+	{		
+		$this->setArguments($this->createRequestDataHolder(array(AgaviWebRequestDataHolder::SOURCE_PARAMETERS => array('product_name' => 'spam'))));
+
+		$this->setAttribute('product_id', 1234);
+		$this->setAttribute('product_name', 'spam');
+		$this->setAttribute('product_price', '123.45');
+		$this->runView();
+		$this->assertHasLayer('content');
+	}
 }
 
 ?>

@@ -30,6 +30,7 @@
  */
 abstract class AgaviViewTestCase extends AgaviFragmentTestCase
 {
+	protected $viewResult;
 	
 	protected function createViewInstance()
 	{
@@ -39,9 +40,12 @@ abstract class AgaviViewTestCase extends AgaviFragmentTestCase
 		return $viewInstance;
 	}
 	
-	protected function runView()
+	protected function runView($otName = null)
 	{
-		
+		$this->container->setOutputType($this->getContext()->getController()->getOutputType($otName));
+		$this->container->setViewInstance($this->createViewInstance());
+		$executionFilter = $this->createExecutionFilter();
+		$this->viewResult = $executionFilter->executeView($this->container);
 	}
 	
 	/**
@@ -93,12 +97,21 @@ abstract class AgaviViewTestCase extends AgaviFragmentTestCase
 	
 	protected function assertForwards($expectedModule, $expectedAction, $message = '')
 	{
-		
+		if (!($this->viewResult instanceof AgaviExecutionContainer))
+		{
+			$this->fail('Failed asserting that the view result is a forward');
+		}
 	}
 	
 	protected function assertHasLayer($expectedLayer, $message = '')
 	{
+		$viewInstance = $this->container->getViewInstance();
+		$layer = $viewInstance->getLayer($expectedLayer);
 		
+		if (null == $layer)
+		{
+			$this->fail('Failed asserting that the view contains the layer');
+		}
 	}
 	
 }
