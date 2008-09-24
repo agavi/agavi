@@ -30,6 +30,12 @@
  */
 abstract class AgaviViewTestCase extends AgaviFragmentTestCase
 {
+	/**
+	 * @var        string the (short) name of the view
+	 */
+	protected $viewName;
+	
+	
 	protected $viewResult;
 	
 	protected function createViewInstance()

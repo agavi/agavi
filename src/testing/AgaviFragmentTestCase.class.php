@@ -47,16 +47,6 @@ abstract class AgaviFragmentTestCase extends PHPUnit_Framework_TestCase implemen
 	protected $moduleName;
 	
 	/**
-	 * @var        string the name of the resulting view
-	 */
-	protected $viewName;
-	
-	/**
-	 * @var        string the name of the resulting view's module
-	 */
-	protected $viewModuleName;
-	
-	/**
 	 * @var        bool   the result of the validation process
 	 */
 	protected $validationSuccess;

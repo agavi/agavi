@@ -31,6 +31,16 @@
 abstract class AgaviActionTestCase extends AgaviFragmentTestCase
 {	
 	/**
+	 * @var        string the name of the resulting view
+	 */
+	protected $viewName;
+	
+	/**
+	 * @var        string the name of the resulting view's module
+	 */
+	protected $viewModuleName;
+	
+	/**
 	 * creates an Action instance and initializes it with this testcases
 	 * container
 	 * 
