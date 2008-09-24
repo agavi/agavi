@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 0.11.4 RC1 (September ??, 2008)
 -------------------------------
 
+FIX: SOAP and XMLRPC test scripts in sample app are broken (#866) (David)
 FIX: Certain validator names will cause a fatal error (#863) (David)
 FIX: Sample app SearchEngineSpamAction works with invalid product names (#861) (David)
 
