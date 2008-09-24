@@ -160,12 +160,13 @@ class AgaviXmlConfigDomElement extends DOMElement implements IteratorAggregate
 	 *                  the given name; false otherwise.
 	 *
 	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @author     David Zülke <david.zuelke@bitextender.com>
 	 * @since      1.0.0
 	 */
 	public function hasChild($name, $namespaceUri = null)
 	{
 		// if namespace uri is null, use default ns. if empty string, use no ns
-		return $this->countChildren($name) === 1;
+		return $this->countChildren($name, $namespaceUri) === 1;
 		
 		// XXX: not necessary for single elements?
 		// remember singular/plural support

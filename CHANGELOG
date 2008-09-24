@@ -1,6 +1,12 @@
 AGAVI CHANGELOG
 ===============
 
+1.0.0 beta 4 (October ??, 2008)
+-------------------------------
+
+FIX: AgaviXmlConfigDomElement::hasChild() does not pass on $namespaceUri argument (#865) (David)
+
+
 1.0.0 beta 3 (September 21, 2008)
 ---------------------------------
 
