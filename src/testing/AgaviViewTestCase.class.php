@@ -85,15 +85,30 @@ abstract class AgaviViewTestCase extends AgaviFragmentTestCase
 		self::assertThat($method, $constraint, $message);
 	}
 	
-	
 	protected function assertResponseHasRedirect($expected, $message = '')
 	{
 		
 	}
 	
-	protected function assertResponseHasContent($expected, $message = '')
+	protected function assertResponseHasHeader($expected, $expectedValue = null, $message = '')
 	{
 		
+	}
+	
+	protected function assertResponseHasHTTPStatus($expected, $message = 'Failed asserting that the respons status is %1$s')
+	{
+		$response = $this->container->getResponse();
+		
+		if(!($response instanceof AgaviWebResponse)) {
+			$this->fail(sprintf($message . ' (response is not an AgaviWebResponse)', $expected));
+		}
+		$this->assertEquals($expected, $response->getHttpStatusCode(), sprintf($message, $expected));
+	}
+	
+	protected function assertResponseHasContent($expected, $message = 'Failed asserting that the response has content <%1$s>')
+	{
+		$response = $this->container->getResponse();
+		$this->assertEquals($expected, $response->getContent(), sprintf($message, $expected));
 	}
 	
 	protected function assertForwards($expectedModule, $expectedAction, $message = '')
