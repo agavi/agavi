@@ -34,6 +34,7 @@ abstract class AgaviViewTestCase extends AgaviFragmentTestCase
 	
 	protected function createViewInstance()
 	{
+		$this->getContext()->getController()->initializeModule($this->moduleName);
 		$viewName = $this->normalizeViewName($this->viewName);
 		$viewInstance = $this->getContext()->getController()->createViewInstance($this->moduleName, $viewName);
 		$viewInstance->initialize($this->container);
