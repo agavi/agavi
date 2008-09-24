@@ -133,42 +133,6 @@ abstract class AgaviActionTestCase extends AgaviFragmentTestCase
 	}
 	
 	/**
-	 * assert that the exectionContainer has a given attribute with the expected value
-	 * 
-	 * @param      mixed   the expected attribute value
-	 * @param      string  the attribute name
-	 * @param      string  the attribute namespace
-	 * @param      string  an optional message to display if the test fails
-     * @param      float   $delta
-     * @param      integer $maxDepth
-     * @param      boolean $canonicalizeEol
-     * 
-     * @see        PHPUnit_Framework_Assert::assertEquals()
-	 * 
-	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
-	 * @since      1.0.0
-	 */
-	protected function assertContainerAttributeEquals($expected, $attributeName, $namespace = null, $message = 'Failed asserting that the attribute <%1$s/%2$s> has the value <%3$s>', $delta = 0, $maxDepth = 10, $canonicalizeEol = false)
-	{
-		$this->assertEquals($expected, $this->container->getAttribute($attributeName, $namespace), sprintf($message, $namespace, $attributeName, $expected), $delta, $maxDepth, $canonicalizeEol);
-	}
-	
-	/**
-	 * assert that the exectionContainer has a given attribute 
-	 * 
-	 * @param      string  the attribute name
-	 * @param      string  the attribute namespace
-	 * @param      string  an optional message to display if the test fails
-     * 
-     * @author     Felix Gilcher <felix.gilcher@bitextender.com>
-	 * @since      1.0.0
-	 */
-	protected function assertContainerAttributeExists($attributeName, $namespace = null, $message = 'Failed asserting that the container has an attribute named <%1$s/%2$s>.')
-	{
-		$this->assertTrue($this->container->hasAttribute($attributeName, $namespace), sprintf($message, $namespace, $attributeName));
-	}
-	
-	/**
 	 * assert that the action handles the given request method
 	 * 
 	 * @param      string  the method name
