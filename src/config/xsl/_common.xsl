@@ -32,19 +32,19 @@
 	</xsl:template>
 	
 	<xsl:template match="envelope_0_11:configurations">
-		<xsl:call-template name="_common-migrate-envelope" />
+		<xsl:call-template name="_common-migrate-envelope-element" />
 	</xsl:template>
 	<xsl:template match="envelope_0_11:configuration">
-		<xsl:call-template name="_common-migrate-envelope" />
+		<xsl:call-template name="_common-migrate-envelope-element" />
 	</xsl:template>
 	<xsl:template match="envelope_0_11:sandbox">
-		<xsl:call-template name="_common-migrate-envelope" />
+		<xsl:call-template name="_common-migrate-envelope-element" />
 	</xsl:template>
 	<xsl:template match="envelope_0_11:parameters">
-		<xsl:call-template name="_common-migrate-envelope" />
+		<xsl:call-template name="_common-migrate-envelope-element" />
 	</xsl:template>
 	<xsl:template match="envelope_0_11:parameter">
-		<xsl:call-template name="_common-migrate-envelope" />
+		<xsl:call-template name="_common-migrate-envelope-element" />
 	</xsl:template>
 	
 	<xsl:template match="*">
