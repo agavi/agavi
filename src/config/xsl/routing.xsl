@@ -12,7 +12,7 @@
 	<xsl:variable name="routing_1_0" select="'http://agavi.org/agavi/config/parts/routing/1.0'" />
 	
 	<!-- pre-1.0 backwards compatibility for 1.0 -->
-	<!-- non-"envelope" elements are copied to the 1.0 factories namespace -->
+	<!-- non-"envelope" elements are copied to the 1.0 routing namespace -->
 	<xsl:template match="envelope_0_11:*">
 		<xsl:element name="{local-name()}" namespace="{$routing_1_0}">
 			<xsl:copy-of select="@*" />
