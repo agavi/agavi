@@ -110,6 +110,14 @@ abstract class AgaviViewTestCase extends AgaviFragmentTestCase
 		self::assertThat($method, $constraint, $message);
 	}
 	
+	/**
+	 * assert that the response contains a redirect
+	 * 
+	 * @param      string the message to emit on failure
+	 *
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */
 	protected function assertResponseHasRedirect($message = 'Failed asserting that the view redirects')
 	{
 		$response = $this->container->getResponse();
@@ -120,6 +128,14 @@ abstract class AgaviViewTestCase extends AgaviFragmentTestCase
 		}
 	}
 	
+	/**
+	 * assert that the response contains no redirect
+	 * 
+	 * @param      string the message to emit on failure
+	 *
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */
 	protected function assertResponseHasNoRedirect($message = 'Failed asserting that the view does not redirect')
 	{
 		$response = $this->container->getResponse();
@@ -130,6 +146,15 @@ abstract class AgaviViewTestCase extends AgaviFragmentTestCase
 		}
 	}
 	
+	/**
+	 * assert that the response contains the expected redirect
+	 * 
+	 * @param      mixed  the expected redirect
+	 * @param      string the message to emit on failure
+	 *
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */
 	protected function assertResponseRedirectsTo($expected, $message = 'Failed asserting that the view redirects to the given target.')
 	{
 		$response = $this->container->getResponse();
@@ -140,6 +165,17 @@ abstract class AgaviViewTestCase extends AgaviFragmentTestCase
 		}
 	}
 	
+	/**
+	 * assert that the response has the given content type
+	 * 
+	 * this assertion only works on AgaviWebResponse or subclasses
+	 * 
+	 * @param      string the expected content type
+	 * @param      string the message to emit on failure
+	 *
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */
 	protected function assertResponseHasContentType($expected, $message = 'Failed asserting that the response content type is %1$s.')
 	{
 		$response = $this->container->getResponse();
@@ -150,6 +186,18 @@ abstract class AgaviViewTestCase extends AgaviFragmentTestCase
 		$this->assertEquals($expected, $response->getContentType(), sprintf($message, $expected));
 	}
 	
+	/**
+	 * assert that the response has the given header and value
+	 * 
+	 * this response only works on AgaviWebResponse and subclasses
+	 * 
+	 * @param      string the name of the expected header
+	 * @param      string the value of the expected header
+	 * @param      string the message to emit on failure
+	 *
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */
 	protected function assertResponseHasHeader($expected, $expectedValue = null, $message = 'Failed asserting that the response has a header named <%1$s> with the value <%2$s>')
 	{
 		$response = $this->container->getResponse();
@@ -160,6 +208,17 @@ abstract class AgaviViewTestCase extends AgaviFragmentTestCase
 		$this->assertEquals($expected, $response->getHeader($expected), sprintf($message, $expected, $expectedValue));
 	}
 	
+	/**
+	 * assert that the response has the given http status
+	 * 
+	 * this assertion only works on AgaviWebResponse or subclasses
+	 * 
+	 * @param      string the expected http status
+	 * @param      string the message to emit on failure
+	 *
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */
 	protected function assertResponseHasHTTPStatus($expected, $message = 'Failed asserting that the respons status is %1$s.')
 	{
 		$response = $this->container->getResponse();
@@ -170,17 +229,45 @@ abstract class AgaviViewTestCase extends AgaviFragmentTestCase
 		$this->assertEquals($expected, $response->getHttpStatusCode(), sprintf($message, $expected));
 	}
 	
+	/**
+	 * assert that the response has the given content 
+	 * 
+	 * @param      mixed the expected content
+	 * @param      string the message to emit on failure
+	 *
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */
 	protected function assertResponseHasContent($expected, $message = 'Failed asserting that the response has content <%1$s>.')
 	{
 		$response = $this->container->getResponse();
 		$this->assertEquals($expected, $response->getContent(), sprintf($message, $expected));
 	}
 	
+	/**
+	 * assert that the view result has the given content 
+	 * 
+	 * @param      mixed the expected content
+	 * @param      string the message to emit on failure
+	 *
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */
 	protected function assertViewResultEquals($expected, $message = 'Failed asserting the expected view result.')
 	{
 		$this->assertEquals($expected, $this->viewResult, sprintf($message, $expected));
 	}
 	
+	/**
+	 * assert that the view forwards to the given module/action
+	 * 
+	 * @param      string the expected module name
+	 * @param      string the expected action name
+	 * @param      string the message to emit on failure
+	 *
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */
 	protected function assertForwards($expectedModule, $expectedAction, $message = '')
 	{
 		if (!($this->viewResult instanceof AgaviExecutionContainer))
@@ -189,6 +276,15 @@ abstract class AgaviViewTestCase extends AgaviFragmentTestCase
 		}
 	}
 	
+	/**
+	 * assert that the view has the  given layer
+	 * 
+	 * @param      string the expected layer name
+	 * @param      string the message to emit on failure
+	 *
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */
 	protected function assertHasLayer($expectedLayer, $message = '')
 	{
 		$viewInstance = $this->container->getViewInstance();
