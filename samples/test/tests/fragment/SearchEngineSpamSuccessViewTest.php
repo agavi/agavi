@@ -43,9 +43,24 @@ class SearchEngineSpamSuccessViewTest extends AgaviViewTestCase
 		$this->setAttribute('product_price', '123.45');
 		$this->runView();
 		$this->assertResponseHasHTTPStatus(200);
-		$this->assertResponseHasContent('');
+		$this->assertViewResultEquals('');
 		$this->assertHasLayer('content');
 		$this->assertHasLayer('decorator');
+		$this->assertResponseHasNoRedirect();
+		$this->assertContainerAttributeExists('title');
+	}
+	
+	public function testResponseJson()
+	{		
+		$this->setArguments($this->createRequestDataHolder(array(AgaviWebRequestDataHolder::SOURCE_PARAMETERS => array('product_name' => 'spam'))));
+
+		$this->setAttribute('product_id', 1234);
+		$this->setAttribute('product_name', 'spam');
+		$this->setAttribute('product_price', '123.45');
+		$this->runView('json');
+		$this->assertResponseHasHTTPStatus(200);
+		$this->assertViewResultEquals('{"product_price":"123.45"}');
+		$this->assertResponseHasNoRedirect();
 	}
 }
 
