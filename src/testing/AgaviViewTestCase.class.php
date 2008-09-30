@@ -205,7 +205,29 @@ abstract class AgaviViewTestCase extends AgaviFragmentTestCase
 		if(!($response instanceof AgaviWebResponse)) {
 			$this->fail(sprintf($message . ' (response is not an AgaviWebResponse)', $expected));
 		}
-		$this->assertEquals($expected, $response->getHeader($expected), sprintf($message, $expected, $expectedValue));
+		$this->assertEquals($expectedValue, $response->getHeader($expected), sprintf($message, $expected, $expectedValue));
+	}
+	
+	/**
+	 * assert that the response has the given cookie and value
+	 * 
+	 * this response only works on AgaviWebResponse and subclasses
+	 * 
+	 * @param      string the name of the expected cookie
+	 * @param      string the value of the expected header
+	 * @param      string the message to emit on failure
+	 *
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */
+	protected function assertResponseHasCookie($expected, $expectedValue = null, $message = 'Failed asserting that the response has a cookie named <%1$s>')
+	{
+		$response = $this->container->getResponse();
+		
+		if(!($response instanceof AgaviWebResponse)) {
+			$this->fail(sprintf($message . ' (response is not an AgaviWebResponse)', $expected));
+		}
+		$this->assertEquals($expectedValue, $response->getCookie($expected), sprintf($message, $expected));
 	}
 	
 	/**
