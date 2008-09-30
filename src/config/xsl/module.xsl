@@ -15,7 +15,7 @@
 	<xsl:variable name="envelope-1.0" select="'http://agavi.org/agavi/config/global/envelope/1.0'" />
 	
 	<!-- pre-1.0 backwards compatibility for 1.0 -->
-	<!-- non-"envelope" elements are copied to the 1.0 factories namespace -->
+	<!-- non-"envelope" elements are copied to the 1.0 module namespace -->
 	
 	<!-- overwrite the configuration rule, as we need to work on the elements directly inside it -->
 	<xsl:template match="envelope-0.11:configuration">
