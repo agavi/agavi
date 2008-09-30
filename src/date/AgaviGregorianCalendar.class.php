@@ -494,7 +494,6 @@ class AgaviGregorianCalendar extends AgaviCalendar
 	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
-
 	protected function handleGetMonthLength($extendedYear, $month)
 	{
 		if(!isset(self::$kLeapMonthLength[$month])) {
@@ -526,7 +525,6 @@ class AgaviGregorianCalendar extends AgaviCalendar
 	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
-
 	protected function monthLength($month)
 	{
 		$year = $this->internalGet(AgaviDateDefinitions::EXTENDED_YEAR);
@@ -545,7 +543,6 @@ class AgaviGregorianCalendar extends AgaviCalendar
 	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
-
 	protected function monthLength1($month, $year)
 	{
 		return $this->isLeapYear($year) ? self::$kLeapMonthLength[$month] : self::$kMonthLength[$month];
@@ -561,7 +558,6 @@ class AgaviGregorianCalendar extends AgaviCalendar
 	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
-
 	protected function yearLength1($year)
 	{
 		return $this->isLeapYear($year) ? 366 : 365;
@@ -576,7 +572,6 @@ class AgaviGregorianCalendar extends AgaviCalendar
 	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
-
 	protected function yearLength()
 	{
 		return $this->isLeapYear($this->internalGet(AgaviDateDefinitions::YEAR)) ? 366 : 365;
@@ -592,7 +587,6 @@ class AgaviGregorianCalendar extends AgaviCalendar
 	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
-
 	protected function pinDayOfMonth()
 	{
 		$monthLen = $this->monthLength(internalGet(AgaviDateDefinitions::MONTH));
@@ -611,7 +605,6 @@ class AgaviGregorianCalendar extends AgaviCalendar
 	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
-
 	protected function getEpochDay()
 	{
 		$this->complete();
@@ -629,7 +622,6 @@ class AgaviGregorianCalendar extends AgaviCalendar
 	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
-
 	protected function handleGetLimit($field, $limitType)
 	{
 		return self::$kGregorianCalendarLimits[$field][$limitType];
@@ -642,7 +634,6 @@ class AgaviGregorianCalendar extends AgaviCalendar
 	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
-
 	protected function handleGetExtendedYear()
 	{
 		$year = AgaviDateDefinitions::EPOCH_YEAR;
@@ -681,7 +672,6 @@ class AgaviGregorianCalendar extends AgaviCalendar
 	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
-
 	protected function handleGetExtendedYearFromWeekFields($yearWoy, $woy)
 	{
 		// convert year to extended form
@@ -699,7 +689,6 @@ class AgaviGregorianCalendar extends AgaviCalendar
 	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
-
 	protected function handleComputeFields($julianDay)
 	{
 		if($julianDay >= $this->fCutoverJulianDay) {
