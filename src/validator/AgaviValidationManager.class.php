@@ -28,7 +28,6 @@
  *
  * @version    $Id$
  */
-
 class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValidatorContainer
 {
 	/**

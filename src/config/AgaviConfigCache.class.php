@@ -348,19 +348,17 @@ final class AgaviConfigCache
 	}
 	
 	/**
-	 * add the config handlers from the given config file
+	 * Add the config handlers from the given config file.
+	 * Existing handlers will not be overwritten.
 	 * 
-	 * existing handlers will not be overwritten
-	 * 
-	 * @param      string the path to the config_handlers.xml
+	 * @param      string The path to a config_handlers.xml file.
 	 * 
 	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
 	 * @since      1.0.0
-	 * 
 	 */
 	public static function loadConfigHandlersFile($cfg)
 	{
-		self::$handlers += include AgaviConfigCache::checkConfig($cfg);
+		self::$handlers = (array)self::$handlers + include(AgaviConfigCache::checkConfig($cfg));
 	}
 
 	/**
