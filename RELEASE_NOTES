@@ -1,8 +1,14 @@
 AGAVI RELEASE NOTES
 ===================
 
-Version 0.11.4 - September ??, 2008
-===================================
+Version 0.11.4 - October 2, 2008
+================================
+
+This is a maintenance release that fixes a couple of minor issues, such as problems in the sample app introduced in 0.11.3 and a missing class in autoload.xml.
+
+Also, it is now possible to specify template implementation mappings in AgaviDoctrineDatabase.
+
+As always, the CHANGELOG has all the details.
 
 
 Version 0.11.3 - September 19, 2008

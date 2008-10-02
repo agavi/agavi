@@ -1,8 +1,8 @@
 AGAVI CHANGELOG
 ===============
 
-0.11.4 RC1 (September ??, 2008)
--------------------------------
+0.11.4 RC1 (October 2, 2008)
+----------------------------
 
 ADD: Allow specifying of doctrine template implementations (#864) (David, TANAKA Koichi)
 
