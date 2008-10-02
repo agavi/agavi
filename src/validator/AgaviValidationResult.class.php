@@ -40,7 +40,7 @@ class AgaviValidationResult
 	/**
 	 * @var        array The incidents which were thrown by the validation run.
 	 */
-	protected $incidents;
+	protected $incidents = array();
 	
 	/**
 	 * Returns the final validation result.
