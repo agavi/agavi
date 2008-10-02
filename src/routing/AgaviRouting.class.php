@@ -93,7 +93,12 @@ abstract class AgaviRouting extends AgaviParameterHolder
 			'omit_defaults' => false,
 		));
 	}
-
+	
+	public function disable()
+	{
+		$this->enabled = false;
+	}
+	
 	/**
 	 * Initialize the routing instance.
 	 *

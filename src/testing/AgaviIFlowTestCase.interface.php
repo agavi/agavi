@@ -29,9 +29,9 @@
  */
 interface AgaviIFlowTestCase extends AgaviITestCase
 {
-	public function dispatch(AgaviITestCall $call);
+	public function dispatch();
 	
-	public function assertValidationFailed();
+	public function assertValidationFailed($message = '');
 }
 
 ?>
