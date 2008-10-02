@@ -6,6 +6,7 @@ AGAVI CHANGELOG
 
 ADD: Allow specifying of doctrine template implementations (#864) (David, TANAKA Koichi)
 
+FIX: Default autoload.xml is missing AgaviMysqliDatabase entry (#868) (David)
 FIX: SOAP and XMLRPC test scripts in sample app are broken (#866) (David)
 FIX: Certain validator names will cause a fatal error (#863) (David)
 FIX: Sample app SearchEngineSpamAction works with invalid product names (#861) (David)
