@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 1.0.0 beta 4 (October ??, 2008)
 -------------------------------
 
+FIX: Configuration files with old-style handlers are never validated (#870) (David)
 FIX: Per-module config_handlers.xml will cause "unsupported operand types" fatal error with debug mode off (#867) (David)
 FIX: AgaviXmlConfigDomElement::hasChild() does not pass on $namespaceUri argument (#865) (David)
 
