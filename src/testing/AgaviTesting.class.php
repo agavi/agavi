@@ -1,44 +1,64 @@
 <?php
 
-// +---------------------------------------------------------------------------+
-// | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
-// |                                                                           |
-// | For the full copyright and license information, please view the LICENSE   |
-// | file that was distributed with this source code. You can also view the    |
-// | LICENSE file online at http://www.agavi.org/LICENSE.txt                   |
-// |   vi: set noexpandtab:                                                    |
-// |   Local Variables:                                                        |
-// |   indent-tabs-mode: t                                                     |
-// |   End:                                                                    |
-// +---------------------------------------------------------------------------+
-
-/**
- * Main framework class used for autoloading and initial bootstrapping of the 
- * Agavi testing environment
- * 
- * @package    agavi
- * @subpackage testing
- *
- * @author     Felix Gilcher <felix.gilcher@bitextender.com>
- * @copyright  The Agavi Project
- *
- * @since      1.0.0
- *
- * @version    $Id$
- */
 class AgaviTesting
 {
+	/**
+	 * @var        array An assoc array of classes and files used for autoloading.
+	 */
+	public static $autoloads = array(
+		'AgaviActionTestCase'    => 'testing/AgaviActionTestCase.class.php',
+		'AgaviFlowTestCase'      => 'testing/AgaviFlowTestCase.class.php',
+		'AgaviFlowTestSuite'     => 'testing/AgaviFlowTestSuite.class.php',
+		'AgaviFragmentTestCase'  => 'testing/AgaviFragmentTestCase.class.php',
+		'AgaviFragmentTestSuite' => 'testing/AgaviFragmentTestSuite.class.php',
+		'AgaviIFlowTestCase'     => 'testing/AgaviIFlowTestCase.interface.php',
+		'AgaviIFragmentTestCase' => 'testing/AgaviIFragmentTestCase.interface.php',
+		'AgaviIRemoteTestCase'   => 'testing/AgaviIRemoteTestCase.interface.php',
+		'AgaviITestCase'         => 'testing/AgaviITestCase.interface.php',
+		'AgaviIUnitTestCase'     => 'testing/AgaviIUnitTestCase.interface.php',
+		'AgaviModelTestCase'     => 'testing/AgaviModelTestCase.class.php',
+		'AgaviSeleniumTestCase'  => 'testing/AgaviSeleniumTestCase.class.php',
+		'AgaviTestSuite'         => 'testing/AgaviTestSuite.class.php',
+		'AgaviUnitTestCase'      => 'testing/AgaviUnitTestCase.class.php',
+		'AgaviUnitTestSuite'     => 'testing/AgaviUnitTestSuite.class.php',
+		'AgaviViewTestCase'      => 'testing/AgaviViewTestCase.class.php',
+	);
+
+	/**
+	 * Handles autoloading of classes
+	 *
+	 * @param      string A class name.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public static function __autoload($class)
+	{
+		if(isset(self::$autoloads[$class])) {
+			// class exists, let's include it
+			require(AgaviConfig::get('core.agavi_dir') . '/' . self::$autoloads[$class]);
+		}
+
+		/*
+			If the class doesn't exist in autoload.xml there's not a lot we can do. Because
+			PHP's class_exists resorts to __autoload we cannot throw exceptions
+			for this might break some 3rd party lib autoloading mechanism.
+		*/
+	}
+
 	/**
 	 * Startup the Agavi core
 	 *
 	 * @param      string environment the environment to use for this session.
 	 *
-	 * @author     Felix Gilcher <felix.gilcher@exozet.com>
-	 * @since      1.0.0
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
 	 */
 	public static function bootstrap($environment = null)
 	{
+		// set up our __autoload
+		spl_autoload_register(array('AgaviTesting', '__autoload'));
+
 		if($environment === null) {
 			// no env given? let's read one from testing.environment
 			$environment = AgaviConfig::get('testing.environment');
@@ -55,31 +75,16 @@ class AgaviTesting
 		// finally set the env to what we're really using now.
 		AgaviConfig::set('testing.environment', $environment, true, true);
 		
-		// bootstrap the framework for autoload, config handlers etc.
-		Agavi::bootstrap($environment);
-		
-		ini_set('include_path', get_include_path().PATH_SEPARATOR.dirname(dirname(__FILE__)));
-
-		$GLOBALS['AGAVI_CONFIG'] = AgaviConfig::toArray();
+		$_ENV['AGAVI'] = AgaviConfig::toArray();
 	}
-
-	public static function dispatch()
+	
+	public function dispatch()
 	{
-		$GLOBALS['__PHPUNIT_BOOTSTRAP'] = dirname(__FILE__).'/templates/AgaviBootstrap.tpl.php';
-
-		$suites = include AgaviConfigCache::checkConfig(AgaviConfig::get('core.app_dir').'/../test/config/suites.xml');
-		$master_suite = new AgaviTestSuite('Master');
-		foreach ($suites as $name => $suite)
-		{
-			$s = new $suite['class']($name);
-			foreach ($suite['testfiles'] as $file)
-			{
-				$s->addTestFile('tests/'.$file);
-			}
-			$master_suite->addTest($s);
-		}
-
-		$runner = PHPUnit_TextUI_TestRunner::run($master_suite);
+		$suite = new PHPUnit_Framework_TestSuite();
+		
+		// TODO: read test suites from xml or so
+		
+		$runner = PHPUnit_TextUI_TestRunner::run($suite);
 	}
 }
 

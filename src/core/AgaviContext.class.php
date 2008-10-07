@@ -168,30 +168,6 @@ class AgaviContext
 	}
 
 	/**
-	 * Factory for frequently used classes from factories.xml
-	 *
-	 * @param      string The factory identifier.
-	 *
-	 * @return     mixed An instance, already initialized with parameters.
-	 *
-	 * @throws     AgaviException If no such identifier exists.
-	 *
-	 * @author     David Zülke <david.zuelke@bitextender.com>
-	 * @since      1.0.0
-	 */
-	public function createInstanceFor($for)
-	{
-		$info = $this->getFactoryInfo($for);
-		if(null === $info) {
-			throw new AgaviException(sprintf('No factory info for "%s"', $for));
-		}
-		
-		$class = new $info['class']();
-		$class->initialize($this, $info['parameters']);
-		return $class;
-	}
-
-	/**
 	 * Retrieve the controller.
 	 *
 	 * @return     AgaviController The current Controller implementation instance.

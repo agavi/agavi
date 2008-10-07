@@ -1,19 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ae:configurations xmlns="http://agavi.org/agavi/config/parts/module/1.0" xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0">
-	<ae:configuration>
-		
-		<module enabled="true">
-			<settings>
-				<setting name="title">Default Agavi Sample App Module</setting>
-				<setting name="version">1.0</setting>
-				<setting name="authors">
-					<ae:parameter name="david.zuelke@bitextender.com">David Zülke</ae:parameter>
-				</setting>
-				<setting name="homepage">http://www.agavi.org</setting>
-				<setting name="update_url" />
-				<setting name="description">An example module</setting>
-			</settings>
-		</module>
-		
-	</ae:configuration>
-</ae:configurations>
+<configurations xmlns="http://agavi.org/agavi/1.0/config">
+	<configuration>
+		<enabled>On</enabled>
+		<title>Default Agavi Sample App Module</title>
+		<version>1.0</version>
+		<name>Default</name>
+		<authors>
+			<author>David Zülke</author>
+		</authors>
+		<homepage>http://www.agavi.org</homepage>
+		<update_url></update_url>
+		<description>An example module</description>
+	</configuration>
+</configurations>

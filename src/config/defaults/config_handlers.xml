@@ -79,11 +79,6 @@
 				<validation>%core.agavi_dir%/config/xsd/validators.xsd</validation>
 			</handler>
 
-			<handler pattern="%core.app_dir%/../test/config/suites.xml" class="AgaviTestSuitesConfigHandler">
-				<!-- <validation>%core.agavi_dir%/config/rng/module.rng</validation>-->
-				<!-- <transformation>%core.agavi_dir%/config/xsl/module.xsl</transformation> --> 
-			</handler>
-
 			<!--
 				+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
 				| Global Agavi configuration handlers.                                       |
@@ -103,8 +98,7 @@
 			</handler>
 
 			<handler pattern="%core.module_dir%/*/config/module.xml" class="AgaviModuleConfigHandler">
-				<validation>%core.agavi_dir%/config/rng/module.rng</validation>
-				<transformation>%core.agavi_dir%/config/xsl/module.xsl</transformation>
+				<validation>%core.agavi_dir%/config/xsd/module.xsd</validation>
 			</handler>
 
 			<handler pattern="%core.module_dir%/*/validate/*.xml" class="AgaviValidatorConfigHandler">

@@ -9,7 +9,7 @@
 <?php
 
 if(!isset($_GET['item'])) {
-	$_GET['item'] = 123456;
+	$_GET['item'] = 'nonsense';
 }
 
 ini_set('soap.wsdl_cache_enabled', 0);

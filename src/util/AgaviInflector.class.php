@@ -20,7 +20,6 @@
  * @subpackage util
  *
  * @author     Dominik del Bondio <ddb@bitxtender.com>
- * @author     Thomas Bachem <mail@thomasbachem.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
  *
@@ -98,28 +97,18 @@ final class AgaviInflector
 	);
 
 	/**
-	 * @var        array An array of uncountable nouns as keys
+	 * @var        array An array of uncountable nouns
 	 */
 	protected static $uncountables = array(
-		'equipment' => true,
-		'information' => true,
-		'rice' => true,
-		'money' => true,
-		'species' => true,
-		'series' => true,
-		'fish' => true,
-		'sheep' => true,
+		'equipment',
+		'information',
+		'rice',
+		'money',
+		'species',
+		'series',
+		'fish',
+		'sheep',
 	);
-	
-	/**
-	 * @var        array An array remembering the results of singularize()
-	 */
-	protected static $singularizeCache = array();
-	
-	/**
-	 * @var        array An array remembering the results of pluralize()
-	 */
-	protected static $pluralizeCache = array();
 
 	/**
 	 * Translates a noun from its plural form in its singular form
@@ -129,31 +118,21 @@ final class AgaviInflector
 	 * @return     string The singular form of the word
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     Thomas Bachem <mail@thomasbachem.com>
 	 * @since      0.11.0
 	 */
 	public static function singularize($word)
 	{
-		if(isset(self::$singularizeCache[$word])) {
-			return self::$singularizeCache[$word];
-		}
-		
-		if(isset(self::$uncountables[$word])) {
+		if(in_array($word, self::$uncountables)) {
 			return $word;
 		}
 
-		$count = 0;
-		$singularizedWord = $word;
 		foreach(self::$pluralMatches as $regexp => $replacement) {
-			$singularizedWord = preg_replace($regexp, $replacement, $word, 1, $count);
-			if($count) {
+			if(preg_match($regexp, $word)) {
+				$word = preg_replace($regexp, $replacement, $word);
 				break;
 			}
 		}
-		
-		self::$singularizeCache[$word] = $singularizedWord;
-		
-		return $singularizedWord;
+		return $word;
 	}
 
 	/**
@@ -164,31 +143,21 @@ final class AgaviInflector
 	 * @return     string The plural form of the word
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     Thomas Bachem <mail@thomasbachem.com>
 	 * @since      0.11.0
 	 */
 	public static function pluralize($word)
 	{
-		if(isset(self::$pluralizeCache[$word])) {
-			return self::$pluralizeCache[$word];
-		}
-		
-		if(isset(self::$uncountables[$word])) {
+		if(in_array($word, self::$uncountables)) {
 			return $word;
 		}
 
-		$count = 0;
-		$pluralizedWord = $word;
 		foreach(self::$singularMatches as $regexp => $replacement) {
-			$pluralizedWord = preg_replace($regexp, $replacement, $pluralizedWord, 1, $count);
-			if($count) {
+			if(preg_match($regexp, $word)) {
+				$word = preg_replace($regexp, $replacement, $word);
 				break;
 			}
 		}
-		
-		self::$pluralizeCache[$word] = $pluralizedWord;
-		
-		return $pluralizedWord;
+		return $word;
 	}
 }
 

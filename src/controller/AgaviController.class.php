@@ -113,7 +113,9 @@ class AgaviController extends AgaviParameterHolder
 	public function createExecutionContainer($moduleName = null, $actionName = null, AgaviRequestDataHolder $arguments = null, $outputType = null, $requestMethod = null)
 	{
 		// create a new execution container
-		$container = $this->context->createInstanceFor('execution_container');
+		$ecfi = $this->context->getFactoryInfo('execution_container');
+		$container = new $ecfi['class']();
+		$container->initialize($this->context, $ecfi['parameters']);
 		$container->setModuleName($moduleName);
 		$container->setActionName($actionName);
 		$container->setRequestData($this->requestData);
@@ -143,7 +145,7 @@ class AgaviController extends AgaviParameterHolder
 			// include the module configuration
 			// loaded only once due to the way load() (former import()) works
 			if(is_readable(AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/config/module.xml')) {
-				include_once(AgaviConfigCache::checkConfig(AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/config/module.xml'));
+				AgaviConfigCache::load(AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/config/module.xml', $this->context->getName());
 			} else {
 				AgaviConfig::set('modules.' . strtolower($moduleName) . '.enabled', true);
 			}
@@ -229,7 +231,9 @@ class AgaviController extends AgaviParameterHolder
 			}
 			
 			// create a new filter chain
-			$filterChain = $this->context->createInstanceFor('filter_chain');
+			$fcfi = $this->context->getFactoryInfo('filter_chain');
+			$filterChain = new $fcfi['class']();
+			$filterChain->initialize($this->context, $fcfi['parameters']);
 			
 			$this->loadFilters($filterChain, 'global');
 			
@@ -283,21 +287,9 @@ class AgaviController extends AgaviParameterHolder
 	 * @since      1.0.0
 	 */
 	public function checkActionFile($moduleName, $actionName)
-	{
-		$this->initializeModule($moduleName);
+	{		
 		$actionName = AgaviToolkit::canonicalName($actionName);
-		$file = AgaviToolkit::expandVariables(
-			AgaviToolkit::expandDirectives(
-				AgaviConfig::get(
-					sprintf('modules.%s.agavi.action.path', strtolower($moduleName)),
-					'%core.module_dir%/${moduleName}/actions/${actionName}Action.class.php'
-				)
-			),
-			array(
-				'moduleName' => $moduleName,
-				'actionName' => $actionName,
-			)
-		);
+		$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/actions/' . $actionName . 'Action.class.php';
 		if(is_readable($file) && substr($actionName, 0, 1) !== '/') {
 			return $file;
 		}
@@ -375,21 +367,9 @@ class AgaviController extends AgaviParameterHolder
 	 * @since      1.0.0
 	 */
 	public function checkViewFile($moduleName, $viewName)
-	{
-		$this->initializeModule($moduleName);
+	{	
 		$viewName = AgaviToolkit::canonicalName($viewName);
-		$file = AgaviToolkit::expandVariables(
-			AgaviToolkit::expandDirectives(
-				AgaviConfig::get(
-					sprintf('modules.%s.agavi.view.path', strtolower($moduleName)),
-					'%core.module_dir%/${moduleName}/views/${viewName}View.class.php'
-				)
-			),
-			array(
-				'moduleName' => $moduleName,
-				'viewName' => $viewName,
-			)
-		);
+		$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/views/' . $viewName . 'View.class.php';
 		if(is_readable($file) && substr($viewName, 0, 1) !== '/') {
 			return $file;
 		}
@@ -472,18 +452,26 @@ class AgaviController extends AgaviParameterHolder
 		
 		$this->setParameters($parameters);
 		
-		$this->response = $this->context->createInstanceFor('response');
+		$rfi = $context->getFactoryInfo('response');
+		$this->response = new $rfi["class"](); 
+		$this->response->initialize($context, $rfi["parameters"]);
 		
 		$cfg = AgaviConfig::get('core.config_dir') . '/output_types.xml';
 		require(AgaviConfigCache::checkConfig($cfg, $this->context->getName()));
 		
 		if(AgaviConfig::get('core.use_security', false)) {
-			$this->filters['security'] = $this->context->createInstanceFor('security_filter');
+			$sffi = $this->context->getFactoryInfo('security_filter');
+			$this->filters['security'] = new $sffi['class']();
+			$this->filters['security']->initialize($this->context, $sffi['parameters']);
 		}
 		
-		$this->filters['dispatch'] = $this->context->createInstanceFor('dispatch_filter');
+		$dffi = $this->context->getFactoryInfo('dispatch_filter');
+		$this->filters['dispatch'] = new $dffi['class']();
+		$this->filters['dispatch']->initialize($this->context, $dffi['parameters']);
 		
-		$this->filters['execution'] = $this->context->createInstanceFor('execution_filter');
+		$effi = $this->context->getFactoryInfo('execution_filter');
+		$this->filters['execution'] = new $effi['class']();
+		$this->filters['execution']->initialize($this->context, $effi['parameters']);
 	}
 	
 	/**

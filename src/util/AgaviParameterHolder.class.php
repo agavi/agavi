@@ -154,11 +154,6 @@ class AgaviParameterHolder
 	 */
 	public function &removeParameter($name)
 	{
-		if(isset($this->parameters[$name]) || array_key_exists($name, $this->parameters)) {
-			$retval =& $this->parameters[$name];
-			unset($this->parameters[$name]);
-			return $retval;
-		}
 		$parts = AgaviArrayPathDefinition::getPartsFromPath($name);
 		return AgaviArrayPathDefinition::unsetValue($parts['parts'], $this->parameters);
 	}

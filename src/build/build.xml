@@ -24,9 +24,9 @@
 	<taskdef name="agavi.import" classname="org.agavi.build.tasks.AgaviImportTask" classpath="phing" />
 
 	<taskdef name="agavi.transform-path" classname="org.agavi.build.tasks.AgaviTransformpathTask" classpath="phing" />
+	<taskdef name="agavi.transform-action-name-to-path" classname="org.agavi.build.tasks.AgaviTransformactionnametopathTask" classpath="phing" />
 	<taskdef name="agavi.transform-string-to-identifier" classname="org.agavi.build.tasks.AgaviTransformstringtoidentifierTask" classpath="phing" />
 	<taskdef name="agavi.transform-namespace-string-to-identifier" classname="org.agavi.build.tasks.AgaviTransformnamespacestringtoidentifierTask" classpath="phing" />
-	<taskdef name="agavi.transform-namespace-string-to-path" classname="org.agavi.build.tasks.AgaviTransformnamespacestringtopathTask" classpath="phing" />
 	<taskdef name="agavi.transform-string-to-agavi-identifier" classname="org.agavi.build.tasks.AgaviTransformstringtoagaviidentifierTask" classpath="phing" />
 
 	<taskdef name="agavi.base-name" classname="org.agavi.build.tasks.AgaviBasenameTask" classpath="phing" />
@@ -306,10 +306,20 @@
 		<property userProperty="true" name="system-action.name" value="default" override="true" />
 		<agavi.execute-target name="project-configuration-set-system-action" />
 	</target>
-	
-	<target name="project-wizard-welcome-template" depends="project-locate,module-locate,action-locate">
-		<property userProperty="true" name="template.name" value="${action.path}Success" override="true" />
-		<property userProperty="true" name="template.extension" value="php" override="true" />
+
+	<target name="project-wizard-welcome" depends="project-locate">
+		<!-- Fuck this, man, fuck this. -->
+		<agavi.execute-target name="module-locate" />
+
+		<property userProperty="true" name="action.name" value="Welcome" override="true" />
+		<agavi.execute-target name="action-create" />
+
+		<property userProperty="true" name="view.name" value="Success" override="true" />
+		<property userProperty="true" name="view.source" value="${templates.directory.defaults.app.modules.views}/WelcomeSuccessView.class.php.tmpl" override="true" />
+		<agavi.execute-target name="view-create" />
+
+		<property userProperty="true" name="template.name" value="${action.path}Success" />
+		<property userProperty="true" name="template.extension" value="php" />
 		<copy file="${templates.directory.defaults.app.modules.templates}/WelcomeSuccess.php.tmpl" tofile="${module.directory}/${module.directory.templates}/${action.path}Success.php">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">
@@ -322,18 +332,6 @@
 				</replacetokens>
 			</filterchain>
 		</copy>
-	</target>
-
-	<target name="project-wizard-welcome" depends="project-locate,module-locate">
-		<!-- Fuck this, man, fuck this. -->
-		<property userProperty="true" name="action.name" value="Welcome" override="true" />
-		<agavi.execute-target name="action-create" />
-
-		<property userProperty="true" name="view.name" value="Success" override="true" />
-		<property userProperty="true" name="view.source" value="${templates.directory.defaults.app.modules.views}/WelcomeSuccessView.class.php.tmpl" override="true" />
-		<agavi.execute-target name="view-create" />
-
-		<agavi.execute-target name="project-wizard-welcome-template" />
 
 		<!-- And fuck this routing too! -->
 		<copy overwrite="true" file="${templates.directory.defaults.app.config}/routing.xml.tmpl" tofile="${project.directory}/${project.directory.app.config}/routing.xml">
@@ -355,23 +353,6 @@
 			</fileset>
 		</copy>
 	</target>
-	
-	<target name="project-wizard-system-action-error_404-template" depends="project-locate,module-locate,action-locate">
-		<property userProperty="true" name="template.name" value="${action.path}Success" override="true" />
-		<property userProperty="true" name="template.extension" value="php" override="true" />
-		<copy file="${templates.directory.defaults.app.modules.templates}/Error404Success.php.tmpl" tofile="${module.directory}/${module.directory.templates}/${action.path}Success.php">
-			<filterchain>
-				<replacetokens begintoken="%%" endtoken="%%">
-					<token key="AGAVI_SOURCE_LOCATION" value="${agavi.directory.src}" />
-					<token key="PROJECT_LOCATION" value="${project.directory}" />
-					<token key="PROJECT_PREFIX" value="${project.prefix}" />
-					<token key="MODULE_NAME" value="${module.name}" />
-					<token key="TEMPLATE_NAME" value="${template.name}" />
-					<token key="TEMPLATE_EXTENSION" value="${template.extension}" />
-				</replacetokens>
-			</filterchain>
-		</copy>
-	</target>
 
 	<target name="project-wizard-system-action-error_404" depends="project-locate">
 		<agavi.input property="module.name" message="Module for error_404 system action" promptCharacter=":" failIfEmpty="true" />
@@ -384,16 +365,9 @@
 		<property userProperty="true" name="view.source" value="${templates.directory.defaults.app.modules.views}/Error404SuccessView.class.php.tmpl" override="true" />
 		<agavi.execute-target name="view-create" />
 
-		<agavi.execute-target name="project-wizard-system-action-error_404-template" />
-
-		<property userProperty="true" name="system-action.name" value="error_404" override="true" />
-		<agavi.execute-target name="project-configuration-set-system-action" />
-	</target>
-
-	<target name="project-wizard-system-action-unavailable-template" depends="project-locate,module-locate,action-locate">
-		<property userProperty="true" name="template.name" value="${action.path}Success" override="true" />
-		<property userProperty="true" name="template.extension" value="php" override="true" />
-		<copy file="${templates.directory.defaults.app.modules.templates}/UnavailableSuccess.php.tmpl" tofile="${module.directory}/${module.directory.templates}/${action.path}Success.php">
+		<property userProperty="true" name="template.name" value="${action.path}Success" />
+		<property userProperty="true" name="template.extension" value="php" />
+		<copy file="${templates.directory.defaults.app.modules.templates}/Error404Success.php.tmpl" tofile="${module.directory}/${module.directory.templates}/${action.path}Success.php">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">
 					<token key="AGAVI_SOURCE_LOCATION" value="${agavi.directory.src}" />
@@ -405,6 +379,9 @@
 				</replacetokens>
 			</filterchain>
 		</copy>
+
+		<property userProperty="true" name="system-action.name" value="error_404" override="true" />
+		<agavi.execute-target name="project-configuration-set-system-action" />
 	</target>
 
 	<target name="project-wizard-system-action-unavailable" depends="project-locate">
@@ -418,16 +395,9 @@
 		<property userProperty="true" name="view.source" value="${templates.directory.defaults.app.modules.views}/UnavailableSuccessView.class.php.tmpl" override="true" />
 		<agavi.execute-target name="view-create" />
 
-		<agavi.execute-target name="project-wizard-system-action-unavailable-template" />
-
-		<property userProperty="true" name="system-action.name" value="unavailable" override="true" />
-		<agavi.execute-target name="project-configuration-set-system-action" />
-	</target>
-
-	<target name="project-wizard-system-action-module_disabled-template" depends="project-locate,module-locate,action-locate">
-		<property userProperty="true" name="template.name" value="${action.path}Success" override="true" />
-		<property userProperty="true" name="template.extension" value="php" override="true" />
-		<copy file="${templates.directory.defaults.app.modules.templates}/ModuleDisabledSuccess.php.tmpl" tofile="${module.directory}/${module.directory.templates}/${action.path}Success.php">
+		<property userProperty="true" name="template.name" value="${action.path}Success" />
+		<property userProperty="true" name="template.extension" value="php" />
+		<copy file="${templates.directory.defaults.app.modules.templates}/UnavailableSuccess.php.tmpl" tofile="${module.directory}/${module.directory.templates}/${action.path}Success.php">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">
 					<token key="AGAVI_SOURCE_LOCATION" value="${agavi.directory.src}" />
@@ -439,6 +409,9 @@
 				</replacetokens>
 			</filterchain>
 		</copy>
+
+		<property userProperty="true" name="system-action.name" value="unavailable" override="true" />
+		<agavi.execute-target name="project-configuration-set-system-action" />
 	</target>
 
 	<target name="project-wizard-system-action-module_disabled" depends="project-locate">
@@ -452,16 +425,9 @@
 		<property userProperty="true" name="view.source" value="${templates.directory.defaults.app.modules.views}/ModuleDisabledSuccessView.class.php.tmpl" override="true" />
 		<agavi.execute-target name="view-create" />
 
-		<agavi.execute-target name="project-wizard-system-action-module_disabled-template" />
-
-		<property userProperty="true" name="system-action.name" value="module_disabled" override="true" />
-		<agavi.execute-target name="project-configuration-set-system-action" />
-	</target>
-
-	<target name="project-wizard-system-action-secure-template" depends="project-locate,module-locate,action-locate">
-		<property userProperty="true" name="template.name" value="${action.path}Success" override="true" />
-		<property userProperty="true" name="template.extension" value="php" override="true" />
-		<copy file="${templates.directory.defaults.app.modules.templates}/SecureSuccess.php.tmpl" tofile="${module.directory}/${module.directory.templates}/${action.path}Success.php">
+		<property userProperty="true" name="template.name" value="${action.path}Success" />
+		<property userProperty="true" name="template.extension" value="php" />
+		<copy file="${templates.directory.defaults.app.modules.templates}/ModuleDisabledSuccess.php.tmpl" tofile="${module.directory}/${module.directory.templates}/${action.path}Success.php">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">
 					<token key="AGAVI_SOURCE_LOCATION" value="${agavi.directory.src}" />
@@ -473,6 +439,9 @@
 				</replacetokens>
 			</filterchain>
 		</copy>
+
+		<property userProperty="true" name="system-action.name" value="module_disabled" override="true" />
+		<agavi.execute-target name="project-configuration-set-system-action" />
 	</target>
 
 	<target name="project-wizard-system-action-secure" depends="project-locate">
@@ -486,7 +455,20 @@
 		<property userProperty="true" name="view.source" value="${templates.directory.defaults.app.modules.views}/SecureSuccessView.class.php.tmpl" override="true" />
 		<agavi.execute-target name="view-create" />
 
-		<agavi.execute-target name="project-wizard-system-action-secure-template" />
+		<property userProperty="true" name="template.name" value="${action.path}Success" />
+		<property userProperty="true" name="template.extension" value="php" />
+		<copy file="${templates.directory.defaults.app.modules.templates}/SecureSuccess.php.tmpl" tofile="${module.directory}/${module.directory.templates}/${action.path}Success.php">
+			<filterchain>
+				<replacetokens begintoken="%%" endtoken="%%">
+					<token key="AGAVI_SOURCE_LOCATION" value="${agavi.directory.src}" />
+					<token key="PROJECT_LOCATION" value="${project.directory}" />
+					<token key="PROJECT_PREFIX" value="${project.prefix}" />
+					<token key="MODULE_NAME" value="${module.name}" />
+					<token key="TEMPLATE_NAME" value="${template.name}" />
+					<token key="TEMPLATE_EXTENSION" value="${template.extension}" />
+				</replacetokens>
+			</filterchain>
+		</copy>
 
 		<property userProperty="true" name="system-action.name" value="secure" override="true" />
 		<agavi.execute-target name="project-configuration-set-system-action" />
@@ -752,7 +734,7 @@
 		<!-- Determine model name. -->
 		<agavi.input property="model.name" message="Model name" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
 		<property userProperty="true" name="model.name.input" value="${model.name}" override="true" />
-		<agavi.transform-namespace-string-to-identifier property="model.name" string="${model.name}" />
+		<agavi.transform-string-to-identifier property="model.name" string="${model.name}" />
 		<if>
 			<not>
 				<equals arg1="${model.name}" arg2="${model.name.input}" />
@@ -762,17 +744,13 @@
 			</then>
 		</if>
 
-		<!-- Transform . to _ for the actual identifier. -->
-		<agavi.transform-string-to-identifier property="model.identifier" string="${model.name}" />
-
-		<agavi.transform-namespace-string-to-path property="model.path" string="${model.name}" />
-		<property userProperty="true" name="model.file" value="${project.directory}/${project.directory.app.models}/${model.path}Model.class.php" override="true" />
+		<property userProperty="true" name="model.file" value="${project.directory}/${project.directory.app.models}/${model.name}Model.class.php" />
 
 		<agavi.available property="model.available" file="${model.file}" type="file" />
 		<fail if="model.available" message="Model ${model.name} already exists at ${model.file}" />
 
-		<!-- Define the name of the model class. -->
-		<property userProperty="true" name="model.class" value="${model.identifier}Model" override="true" />
+		<!-- Define the name of the view class. -->
+		<property userProperty="true" name="model.class" value="${model.name}Model" />
 
 		<!-- Copy. -->
 		<copy file="${templates.directory.app.models}/Model.class.php.tmpl" tofile="${model.file}">
@@ -959,7 +937,7 @@
 
 	<target name="action-locate" depends="project-locate,module-locate">
 		<agavi.input property="action.name" message="Action name" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
-		<agavi.transform-namespace-string-to-path property="action.path" string="${action.name}" />
+		<agavi.transform-action-name-to-path property="action.path" name="${action.name}" />
 		<property userProperty="true" name="action.file" value="${module.directory}/actions/${action.path}Action.class.php" override="true" />
 
 		<agavi.available property="action.available" file="${action.file}" type="file" />
@@ -1001,7 +979,7 @@
 		<!-- Transform . to _ for the actual identifier. -->
 		<agavi.transform-string-to-identifier property="action.identifier" string="${action.name}" />
 
-		<agavi.transform-namespace-string-to-path property="action.path" string="${action.name}" />
+		<agavi.transform-action-name-to-path property="action.path" name="${action.name}" />
 		<property userProperty="true" name="action.file" value="${module.directory}/${module.directory.actions}/${action.path}Action.class.php" override="true" />
 
 		<agavi.available property="action.available" file="${action.file}" type="file" />
@@ -1135,7 +1113,7 @@
 		<!-- Determine model name. -->
 		<agavi.input property="model.name" message="Model name" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
 		<property userProperty="true" name="model.name.input" value="${model.name}" override="true" />
-		<agavi.transform-namespace-string-to-identifier property="model.name" string="${model.name}" />
+		<agavi.transform-string-to-identifier property="model.name" string="${model.name}" />
 		<if>
 			<not>
 				<equals arg1="${model.name}" arg2="${model.name.input}" />
@@ -1145,17 +1123,13 @@
 			</then>
 		</if>
 
-		<!-- Transform . to _ for the actual identifier. -->
-		<agavi.transform-string-to-identifier property="model.identifier" string="${model.name}" />
-
-		<agavi.transform-namespace-string-to-path property="model.path" string="${model.name}" />
-		<property userProperty="true" name="model.file" value="${module.directory}/${module.directory.models}/${model.path}Model.class.php" override="true" />
+		<property userProperty="true" name="model.file" value="${module.directory}/${module.directory.models}/${model.name}Model.class.php" />
 
 		<agavi.available property="model.available" file="${model.file}" type="file" />
 		<fail if="model.available" message="Model ${model.name} already exists at ${model.file}" />
 
-		<!-- Define the name of the model class. -->
-		<property userProperty="true" name="model.class" value="${module.name}_${model.identifier}Model" override="true" />
+		<!-- Define the name of the view class. -->
+		<property userProperty="true" name="model.class" value="${module.name}_${model.name}Model" />
 
 		<!-- Copy. -->
 		<copy file="${templates.directory.app.modules.models}/Model.class.php.tmpl" tofile="${model.file}">

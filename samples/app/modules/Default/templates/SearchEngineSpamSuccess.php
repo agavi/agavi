@@ -9,4 +9,3 @@
 		<td><?php echo $tm->_c($template['product_price']); ?></td>
 	</tr>
 </table>
-<p><a href="<?php echo $ro->gen(null, array('name' => null)); ?>">Product ShortLink</a></p>

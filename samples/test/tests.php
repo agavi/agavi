@@ -4,7 +4,8 @@ require('../../src/testing.php');
 
 require('config.php');
 
-AgaviTesting::bootstrap('testing-felix');
+AgaviTesting::bootstrap('testing-david');
+
 AgaviTesting::dispatch();
 
 ?>

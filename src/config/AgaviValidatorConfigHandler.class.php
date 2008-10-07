@@ -215,12 +215,12 @@ class AgaviValidatorConfigHandler extends AgaviConfigHandler
 			$code[$method][$name] = implode("\n", array(
 				sprintf(
 					'${%s} = new %s();',
-					var_export('_validator_' . $name, true),
+					var_export($name, true),
 					$class
 				),
 				sprintf(
 					'${%s}->initialize($this->getContext(), %s, %s, %s);',
-					var_export('_validator_' . $name, true),
+					var_export($name, true),
 					var_export($parameters, true),
 					var_export($arguments, true),
 					var_export($errors, true)
@@ -228,7 +228,7 @@ class AgaviValidatorConfigHandler extends AgaviConfigHandler
 				sprintf(
 					'${%s}->addChild(${%s});',
 					var_export($parent, true),
-					var_export('_validator_' . $name, true)
+					var_export($name, true)
 				),
 			));
 		}

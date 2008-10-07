@@ -1,48 +1,25 @@
 <?php
 
-// +---------------------------------------------------------------------------+
-// | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
-// |                                                                           |
-// | For the full copyright and license information, please view the LICENSE   |
-// | file that was distributed with this source code. You can also view the    |
-// | LICENSE file online at http://www.agavi.org/LICENSE.txt                   |
-// |   vi: set noexpandtab:                                                    |
-// |   Local Variables:                                                        |
-// |   indent-tabs-mode: t                                                     |
-// |   End:                                                                    |
-// +---------------------------------------------------------------------------+
-
-/**
- * AgaviFlowTestCase is the base class for all flow tests and provides
- * the necessary assertions
- * 
- * 
- * @package    agavi
- * @subpackage testing
- *
- * @author     Felix Gilcher <felix.gilcher@bitextender.com>
- * @copyright  The Agavi Project
- *
- * @since      1.0.0
- *
- * @version    $Id$
- */
-abstract class AgaviFlowTestCase extends PHPUnit_Framework_TestCase implements AgaviIFlowTestCase
+class AgaviFlowTestCase extends PHPUnit_Framework_TestCase implements AgaviIFlowTestCase
 {
 	/**
-	 * Constructs a test case with the given name.
-	 *
-	 * @param  string $name
-	 * @param  array  $data
-	 * @param  string $dataName
+	 * @var        bool Indicates to PHPUnit whether or not each test method in this test case should run in isolation. In this case, we want each method of the test case to run isolated in a separate process.
 	 */
-	public function __construct($name = NULL, array $data = array(), $dataName = '')
+	protected $runTestsInSeparateProcesses = true;
+	
+	protected function setUp()
 	{
-		parent::__construct($name, $data, $dataName);
-		$this->setRunTestInSeparateProcess(true);
+		// this method will be called in each of the child processes used to run the individual test methods in isolation
+		// those, of course, need agavi
+		
+		// load agavi
+		require_once(realpath(dirname(__FILE__) . '/../agavi.php'));
+		
+		// TODO: carry over env name to bootstrap from parent process via passed $GLOBALS
+		Agavi::bootstrap('testing-david');
+		
+		// TODO: grab a context?
 	}
-
 }
 
 ?>

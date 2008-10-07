@@ -36,6 +36,7 @@ abstract class AgaviCalendar
 	 * @var        AgaviTranslationManager The translation manager instance.
 	 * @since      0.11.0
 	 */
+
 	protected $translationManager;
 
 	/**

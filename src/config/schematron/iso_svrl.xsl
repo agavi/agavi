@@ -29,28 +29,7 @@
   validate with schemas from either namespace.
   
 
-  History: 
-    2008-08-11
-   		* RJ Fix attribute/@select which saxon allows  in XSLT 1
-   2008-08-07
-    	* RJ Add output-encoding attribute to specify final encoding to use
-    	* Alter allow-foreign functionality so that Schematron span, emph and dir elements make 
-    	  it to the output, for better formatting and because span can be used to mark up
-    	  semantically interesting information embedded in diagnostics, which reduces the
-    	  need to extend SVRL itself
-    	* Diagnostic-reference had an invalid attribute @id that duplicated @diagnostic: removed
-  	2008-08-06
-    	* RJ Fix invalid output:  svrl:diagnostic-reference is not contained in an svrl:text
-    	* Output comment to SVRL file giving filename if available (from command-line parameter)
-  	2008-08-04
-  		* RJ move sch: prefix to schold: prefix to prevent confusion (we want people to
-  		be able to switch from old namespace to new namespace without changing the
-  		sch: prefix, so it is better to keep that prefix completely out of the XSLT)
-  		* Extra signature fixes (PH)
-    2008-08-03
-    	* Repair missing class parameter on process-p
-    2008-07-31
-    	* Update skeleton names
+  History:
     2007-04-03 
     	* Add option generate-fired-rule (RG)
     2007-02-07
@@ -127,7 +106,7 @@
    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:xs="http://www.w3.org/2001/XMLSchema"
    xmlns:axsl="http://www.w3.org/1999/XSL/TransformAlias"
-   xmlns:schold="http://www.ascc.net/xml/schematron" 
+   xmlns:sch="http://www.ascc.net/xml/schematron"
    xmlns:iso="http://purl.oclc.org/dsdl/schematron"
    xmlns:svrl="http://purl.oclc.org/dsdl/svrl" 
 >
@@ -135,21 +114,18 @@
 <!-- Select the import statement and adjust the path as 
    necessary for your system.
 -->
-<xsl:import href="iso_schematron_skeleton_for_xslt1.xsl"/>
-<!--
-<xsl:import href="iso_schematron_skeleton_for_saxon.xsl"/>
- 
 <xsl:import href="iso_schematron_skeleton.xsl"/>
+<!--
 <xsl:import href="skeleton1-5.xsl"/>
 <xsl:import href="skeleton1-6.xsl"/>
 -->
 
-<xsl:param name="diagnose" >true</xsl:param>
-<xsl:param name="phase" >
+<xsl:param name="diagnose">true</xsl:param>
+<xsl:param name="phase">
 	<xsl:choose>
 		<!-- Handle Schematron 1.5 and 1.6 phases -->
-		<xsl:when test="//schold:schema/@defaultPhase">
-			<xsl:value-of select="//schold:schema/@defaultPhase"/>
+		<xsl:when test="//sch:schema/@defaultPhase">
+			<xsl:value-of select="//sch:schema/@defaultPhase"/>
 		</xsl:when>
 		<!-- Handle ISO Schematron phases -->
 		<xsl:when test="//iso:schema/@defaultPhase">
@@ -158,33 +134,21 @@
 		<xsl:otherwise>#ALL</xsl:otherwise>
 	</xsl:choose>
 </xsl:param>
-<xsl:param name="allow-foreign" >false</xsl:param>
-<xsl:param name="generate-paths" >true</xsl:param>
-<xsl:param name="generate-fired-rule" >true</xsl:param>
-<xsl:param name="optimize"/>
-
-<xsl:param name="output-encoding" ></xsl:param>
-
+<xsl:param name="allow-foreign">false</xsl:param>
+<xsl:param name="generate-paths">true</xsl:param>
+<xsl:param name="generate-fired-rule">true</xsl:param>
+<xsl:param name="optimize" />
 <!-- e.g. saxon file.xml file.xsl "sch.exslt.imports=.../string.xsl;.../math.xsl" -->
-<xsl:param name="sch.exslt.imports" />
-
-
+<xsl:param name="sch.exslt.imports"/>
 
 <!-- Experimental: If this file called, then must be generating svrl -->
 <xsl:variable name="svrlTest" select="true()" />
 
-  
- 
 <!-- ================================================================ -->
 
 <xsl:template name="process-prolog">
 	<axsl:output method="xml" omit-xml-declaration="no" standalone="yes"
-		indent="yes">
-		<xsl:if test=" string-length($output-encoding) &gt; 0">
-			<xsl:attribute name="encoding"><xsl:value-of select=" $output-encoding" /></xsl:attribute>
-		</xsl:if>
-    </axsl:output>
-     
+		indent="yes"/>
 </xsl:template>
 
 <!-- Overrides skeleton.xsl -->
@@ -194,7 +158,6 @@
 	<xsl:param name="queryBinding" >xslt1</xsl:param>
 	<xsl:param name="schemaVersion" />
 	<xsl:param name="id" />
-	<xsl:param name="version"/>
 	<!-- "Rich" parameters -->
 	<xsl:param name="fpi" />
 	<xsl:param name="icon" />
@@ -209,25 +172,6 @@
 				<xsl:value-of select=" $phase " />
 			</axsl:attribute>
 		</xsl:if>
-		<xsl:if test=" $allow-foreign = 'true'">
-		</xsl:if>
-		  <xsl:if  test=" $allow-foreign = 'true'">
-	
-		<xsl:call-template name='richParms'>
-			<xsl:with-param name="fpi" select="$fpi" />
-			<xsl:with-param name="icon" select="$icon"/>
-			<xsl:with-param name="lang" select="$lang"/>
-			<xsl:with-param name="see"  select="$see" />
-			<xsl:with-param name="space"  select="$space" />
-		</xsl:call-template>
-	</xsl:if>
-		 
-		 <axsl:comment><axsl:value-of select="$archiveDirParameter"/>  &#xA0;
-		 <axsl:value-of select="$archiveNameParameter"/> &#xA0;
-		 <axsl:value-of select="$fileNameParameter"/> &#xA0;
-		 <axsl:value-of select="$fileDirParameter"/></axsl:comment> 
-		 
-		
 		<xsl:apply-templates mode="do-schema-p" />
 		<xsl:copy-of select="$contents" />
 	</svrl:schematron-output>
@@ -277,17 +221,16 @@
 				<axsl:apply-templates select="." mode="schematron-get-full-path"/>
 			</axsl:attribute>
 		</xsl:if>
-		  
 		<svrl:text>
 			<xsl:apply-templates mode="text" />
 	
-		</svrl:text>
 		    <xsl:if test="$diagnose = 'yes' or $diagnose= 'true' ">
 			<!-- true/false is the new way -->
 				<xsl:call-template name="diagnosticsSplit">
 					<xsl:with-param name="str" select="$diagnostics"/>
 				</xsl:call-template>
 			</xsl:if>
+		</svrl:text>
 	</svrl:failed-assert>
 </xsl:template>
 
@@ -335,37 +278,19 @@
 				<axsl:apply-templates select="." mode="schematron-get-full-path"/>
 			</axsl:attribute>
 		</xsl:if>
-	 
 		<svrl:text>
 			<xsl:apply-templates mode="text" />
 
-		</svrl:text>
 			<xsl:if test="$diagnose = 'yes' or $diagnose='true' ">
 			<!-- true/false is the new way -->
 				<xsl:call-template name="diagnosticsSplit">
 					<xsl:with-param name="str" select="$diagnostics"/>
 				</xsl:call-template>
 			</xsl:if>
+		</svrl:text>
 	</svrl:successful-report>
 </xsl:template>
 
-
-    <!-- Overrides skeleton -->
-	<xsl:template name="process-dir" >
-		<xsl:param name="value" />
-        <xsl:choose>
-        	<xsl:when test=" $allow-foreign = 'true'">
-        		<xsl:copy-of select="."/>
-        	</xsl:when>
-       
-        <xsl:otherwise>
-	    <!-- We generate too much whitespace rather than risking concatenation -->
-		<axsl:text> </axsl:text>
-		<xsl:apply-templates mode="inline-text"/>
-		<axsl:text> </axsl:text>
-		</xsl:otherwise>
-		 </xsl:choose>		
-	</xsl:template>
 
 <xsl:template name="process-diagnostic">
 	<xsl:param name="id"/>
@@ -376,38 +301,23 @@
 	<xsl:param name="see" />
 	<xsl:param name="space" />
 	<svrl:diagnostic-reference diagnostic="{$id}" >
-	  
+		<xsl:if test="string($id)">
+			<xsl:attribute name="id">
+				<xsl:value-of select="$id"/>
+			</xsl:attribute>
+		</xsl:if>
 		<xsl:call-template name="richParms">
 			<xsl:with-param name="fpi" select="$fpi"/>
 			<xsl:with-param name="icon" select="$icon"/>
 			<xsl:with-param name="lang" select="$lang"/>
 			<xsl:with-param name="see" select="$see" />
 			<xsl:with-param name="space" select="$space" />
-		</xsl:call-template> 
-<xsl:text>
-</xsl:text>
- 
+		</xsl:call-template>
+		<svrl:text>
+		</svrl:text>
 		<xsl:apply-templates mode="text"/>
-		 
 	</svrl:diagnostic-reference>
 </xsl:template>
-
-
-    <!-- Overrides skeleton -->
-	<xsl:template name="process-emph" >
-		<xsl:param name="class" />
-        <xsl:choose>
-        	<xsl:when test=" $allow-foreign = 'true'">
-        		<xsl:copy-of select="."/>
-        	</xsl:when> 
-        <xsl:otherwise>
-	    <!-- We generate too much whitespace rather than risking concatenation -->
-		<axsl:text> </axsl:text>
-		<xsl:apply-templates mode="inline-text"/>
-		<axsl:text> </axsl:text>
-		</xsl:otherwise>
-	 	</xsl:choose>	
-	</xsl:template>
 
 <xsl:template name="process-rule">
 	<xsl:param name="id"/>
@@ -441,7 +351,8 @@
 			<xsl:attribute name="role">
 				<xsl:value-of select=" $role " />
 			</xsl:attribute>
-		</xsl:if> 
+		</xsl:if>
+		
 	</svrl:fired-rule>
 </xsl:if>
 </xsl:template>
@@ -452,13 +363,13 @@
 	<svrl:ns-prefix-in-attribute-values uri="{$uri}" prefix="{$prefix}" />
 </xsl:template>
 
-<xsl:template name="process-p"> 
+<xsl:template name="process-p">
+	<xsl:param name="role"/>
 	<xsl:param name="icon"/>
-	<xsl:param name="class"/>
 	<xsl:param name="id"/>
 	<xsl:param name="lang"/>
-	 
-	<svrl:text> 
+
+	<svrl:text>
 		<xsl:apply-templates mode="text"/>
 	</svrl:text>
 </xsl:template>
@@ -484,8 +395,8 @@
 			<axsl:attribute name="name">
 				<xsl:value-of select=" $name " />
 			</axsl:attribute>
-		</xsl:if> 
-		 
+		</xsl:if>
+		
 		<xsl:call-template name='richParms'>
 			<xsl:with-param name="fpi" select="$fpi"/>
 			<xsl:with-param name="icon" select="$icon"/>
@@ -502,27 +413,8 @@
 </xsl:template>
 
 <!-- Overrides skeleton -->
-<xsl:template name="process-message" > 
-	<xsl:param name="pattern"/>
-	<xsl:param name="role"/>
-</xsl:template>
+<xsl:template name="process-message"/> 
 
-
-    <!-- Overrides skeleton -->
-	<xsl:template name="process-span" >
-		<xsl:param name="class" />
-        <xsl:choose>
-        	<xsl:when test=" $allow-foreign = 'true'">
-        		<xsl:copy-of select="."/>
-        	</xsl:when> 
-        <xsl:otherwise>
-	    <!-- We generate too much whitespace rather than risking concatenation -->
-		<axsl:text> </axsl:text>
-		<xsl:apply-templates mode="inline-text"/>
-		<axsl:text> </axsl:text>
-		</xsl:otherwise>
-	 	</xsl:choose>	
-	</xsl:template>
 
 <!-- =========================================================================== -->
 <!-- processing rich parameters. -->
@@ -534,23 +426,6 @@
 	<xsl:param name="see" />
 	<xsl:param name="space" />
 	<!-- Process rich attributes.  -->
-	<xsl:if  test=" $allow-foreign = 'true'">
-	<xsl:if test="string($fpi)"> 
-		<axsl:attribute name="fpi">
-			<xsl:value-of select="$fpi "/>
-		</axsl:attribute>
-	</xsl:if>
-	<xsl:if test="string($icon)"> 
-		<axsl:attribute name="icon">
-			<xsl:value-of select="$icon "/>
-		</axsl:attribute>
-	</xsl:if>
-	<xsl:if test="string($see)"> 
-		<axsl:attribute name="see ">
-			<xsl:value-of select="$see "/>
-		</axsl:attribute>
-	</xsl:if>
-	</xsl:if>
 	<xsl:if test="string($space)">
 		<axsl:attribute name="xml:space">
 			<xsl:value-of select="$space"/>
@@ -577,7 +452,7 @@
 	<!-- ISO SVRL does not have a subject attribute to match the Schematron subject attribute.
        Instead, the Schematron subject attribute is folded into the location attribute -->
 </xsl:template>
-   
+
 
 </xsl:stylesheet>
 

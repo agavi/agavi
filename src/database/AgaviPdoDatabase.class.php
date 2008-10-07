@@ -88,9 +88,6 @@ class AgaviPdoDatabase extends AgaviDatabase
 			foreach($attributes as $key => $value) {
 				$this->connection->setAttribute($key, $value);
 			}
-			foreach((array)$this->getParameter('init_queries') as $query) {
-				$this->connection->exec($query);
-			}
 		} catch(PDOException $e) {
 			throw new AgaviDatabaseException($e->getMessage());
 		}

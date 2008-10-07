@@ -28,6 +28,7 @@
  *
  * @version    $Id$
  */
+
 class AgaviTimeZoneDataParser
 {
 	/**

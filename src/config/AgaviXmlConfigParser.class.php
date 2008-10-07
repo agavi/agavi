@@ -259,23 +259,6 @@ class AgaviXmlConfigParser
 						$retval->documentElement->appendChild($importedNode);
 					}
 				}
-				// if it's a <configurations> element, then we need to copy the attributes from there
-				if($doc->isAgaviConfiguration()) {
-					$namespaces = $doc->getXPath()->query('namespace::*');
-					foreach($namespaces as $namespace) {
-						if($namespace->localName !== 'xml' && $namespace->localName != 'xmlns') {
-							$retval->documentElement->setAttribute('xmlns:' . $namespace->localName, $namespace->namespaceURI);
-						}
-					}
-					foreach($doc->documentElement->attributes as $attribute) {
-						// but not the "parent" attributes...
-						if($attribute->namespaceURI === null && $attribute->localName === 'parent') {
-							continue;
-						}
-						$importedAttribute = $retval->importNode($attribute, true);
-						$retval->documentElement->setAttributeNode($importedAttribute);
-					}
-				}
 			}
 			
 			// generic <configuration> first, then those with an environment attribute, then those with context, then those with both
@@ -298,13 +281,6 @@ class AgaviXmlConfigParser
 					}
 				}
 			}
-			
-			// reload the doc
-			// this must be done because further up, we create attributes with names like xmlns:foo on the document element, copied from parent <configurations> blocks
-			// those will, internally, be normal attributes, not namespace nodes, and thus cannot be accessed through the namespace:: axis in XML stylesheets
-			// a reload fixes that, because they are then parsed as normal xml namespace declaration nodes
-			// thank you, ext/dom, for not exposing your internal DOMNameSpaceNode shit
-			$retval->loadXML($retval->saveXML());
 			
 			// run the compilation stage parser
 			$retval = self::executeCompilation($retval, $environment, $context, $transformationInfo[self::STAGE_COMPILATION], $validationInfo[self::STAGE_COMPILATION]);
@@ -867,13 +843,15 @@ class AgaviXmlConfigParser
 			return;
 		}
 		
-		// load the schematron processor
-		$schematron = new AgaviXmlConfigSchematronProcessor();
-		$schematron->setNode($document);
+		// first, we load the schematron implementation. this is an XSL document that is used to transform a .sch file to another XSL document that is then used to transform the input document. the result is informational output about the validation, which in our case must be valid ISO SVRL, an XML schema validation reporting format
+		$schematronIsoSvrlImplementation = new AgaviXmlConfigDomDocument();
+		$schematronIsoSvrlImplementation->load(AgaviConfig::get('core.agavi_dir') . '/config/schematron/iso_svrl.xsl');
+		$schematron = new AgaviXmlConfigXsltProcessor();
+		$schematron->importStylesheet($schematronIsoSvrlImplementation);
 		// set some info (config file path, context name, environment name) as params
 		// first arg is the namespace URI, which PHP doesn't support. awesome. see http://bugs.php.net/bug.php?id=30622 for the sad details
 		// we could use "agavi:context" etc, that does work even without such a prefix being declared in the stylesheet, but that would be completely non-XML-ish, confusing, and against the spec. so we use dots instead.
-		$schematron->setParameters(array(
+		$schematron->setParameter('', array(
 			'agavi.config_path' => $document->documentURI,
 			'agavi.environment' => $environment,
 			'agavi.context' => $context,
@@ -893,11 +871,36 @@ class AgaviXmlConfigParser
 				throw new AgaviParseException(sprintf('Schematron validation of configuration file "%s" failed: Could not load schema file "%s": %s', $document->documentURI, $href, $dome->getMessage()));
 			}
 			
-			// perform the validation transformation
+			// is it an ISO Schematron file?
+			if(!$sch->documentElement || $sch->documentElement->namespaceURI != self::NAMESPACE_SCHEMATRON_ISO) {
+				throw new AgaviParseException(sprintf('Schematron validation of configuration file "%s" failed because schema file "%s" is invalid', $document->documentURI, $href));
+			}
+			
+			// transform the .sch file to a validation stylesheet using the schematron implementation
 			try {
-				$result = $schematron->transform($sch);
+				$schema = $schematron->transformToDoc($sch);
 			} catch(Exception $e) {
-				throw new AgaviParseException(sprintf('Schematron validation of configuration file "%s" failed: %s', $document->documentURI, $e->getMessage()));
+				throw new AgaviParseException(sprintf('Schematron validation of configuration file "%s" failed: Could not transform schema file "%s": %s', $document->documentURI, $href, $e->getMessage()));
+			}
+			
+			// it transformed fine. but did we get a proper stylesheet instance at all? wrong namespaces can lead to empty docs that only have an XML prolog
+			if(!$schema->documentElement || $schema->documentElement->namespaceURI != self::NAMESPACE_XSL_1999) {
+				throw new AgaviParseException(sprintf('Schematron validation of configuration file "%s" failed because schema file "%s" resulted in an invalid stylesheet', $document->documentURI, $href));
+			}
+			
+			// all fine so far. let us import the stylesheet
+			try {
+				$validator = new AgaviXmlConfigXsltProcessor();
+				$validator->importStylesheet($schema);
+			} catch(Exception $e) {
+				throw new AgaviParseException(sprintf('Schematron validation of configuration file "%s" failed: Could not process the schema file "%s": %s', $document->documentURI, $href, $e->getMessage()));
+			}
+			
+			// run the validation by transforming our document using the generated validation stylesheet
+			try {
+				$result = $validator->transformToDoc($document);
+			} catch(Exception $e) {
+				throw new AgaviParseException(sprintf('Schematron validation of configuration file "%s" failed: Could not validate the document against the schema file "%s": %s', $document->documentURI, $href, $e->getMessage()));
 			}
 			
 			// validation ran okay, now we need to look at the result document to see if there are errors

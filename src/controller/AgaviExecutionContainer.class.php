@@ -48,8 +48,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	/**
 	 * @var        AgaviRequestDataHolder A request data holder with request info.
 	 */
-	protected $requestData = null; // TODO: check if this can actually be protected 
-	                               // or whether it should be private (would break actiontests though)
+	private $requestData = null;
 
 	/**
 	 * @var        AgaviRequestDataHolder A pointer to the global request data.
@@ -137,10 +136,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	public function __sleep()
 	{
 		$this->contextName = $this->context->getName();
-		if (!empty($this->outputType))
-		{
-			$this->outputTypeName = $this->outputType->getName();	
-		}
+		$this->outputTypeName = $this->outputType->getName();
 		$arr = get_object_vars($this);
 		unset($arr['context'], $arr['outputType'], $arr['requestData'], $arr['globalRequestData']);
 		return array_keys($arr);
@@ -158,12 +154,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	public function __wakeup()
 	{
 		$this->context = AgaviContext::getInstance($this->contextName);
-		
-		if (!empty($this->outputTypeName))
-		{
-			$this->outputType = $this->context->getController()->getOutputType($this->outputTypeName);
-		}
-		
+		$this->outputType = $this->context->getController()->getOutputType($this->outputTypeName);
 		try {
 			$this->globalRequestData = $this->context->getRequest()->getRequestData();
 		} catch(AgaviException $e) {
@@ -189,7 +180,9 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 
 		$this->parameters = $parameters;
 
-		$this->response = $this->context->createInstanceFor('response');
+		$rfi = $this->context->getFactoryInfo('response');
+		$this->response = new $rfi['class'];
+		$this->response->initialize($this->context, $rfi['parameters']);
 	}
 
 	/**
@@ -255,9 +248,14 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 		$moduleName = $this->getModuleName();
 		$actionName = $this->getActionName();
 		
-		// TODO: cleanup and merge with createActionInstance once Exceptions have been cleaned up and specced properly so that the two error conditions can be told apart
-		if(false === $controller->checkActionFile($moduleName, $actionName)) {
-			$this->setNext($this->createSystemActionForwardContainer('error_404'));
+		/**
+		 * TODO: cleanup and merge with createActionInstance once Exceptions have been
+		 * cleaned up and specced properly so that the two error conditions can be told
+		 * apart
+		 */
+		if(false === $controller->checkActionFile($moduleName, $actionName))
+		{
+			$this->setNext($this->createSystemActionForwardContainer('error_404', $e));
 			return $this->proceed();
 		}
 		
@@ -293,7 +291,9 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 			}
 
 			// create a new filter chain
-			$filterChain = $this->context->createInstanceFor('filter_chain');
+			$fcfi = $this->context->getFactoryInfo('filter_chain');
+			$filterChain = new $fcfi['class']();
+			$filterChain->initialize($this->context, $fcfi['parameters']);
 
 			if(AgaviConfig::get('core.available', false)) {
 				// the application is available so we'll register
@@ -361,7 +361,8 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 		$moduleName = AgaviConfig::get('actions.' . $type . '_module');
 		$actionName = AgaviConfig::get('actions.' . $type . '_action');
 		
-		if(false === $this->context->getController()->checkActionFile($moduleName, $actionName)) {
+		if(false === $this->context->getController()->checkActionFile($moduleName, $actionName))
+		{
 			// cannot find unavailable module/action
 			$error = 'Invalid configuration settings: actions.%3$s_module "%1$s", actions.%3$s_action "%2$s"';
 			$error = sprintf($error, $moduleName, $actionName, $type);
@@ -421,94 +422,13 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	public function getValidationManager()
 	{
 		if($this->validationManager === null) {
-			$this->validationManager = $this->context->createInstanceFor('validation_manager');
+			$vmfi = $this->context->getFactoryInfo('validation_manager');
+			$this->validationManager = new $vmfi['class']();
+			$this->validationManager->initialize($this->context, $vmfi['parameters']);
 		}
 		return $this->validationManager;
 	}
-	
-	/**
-	 * performs the validation for this container
-	 * 
-	 * @return     bool true if the data validated successfully, false in any other case
-	 * 
-	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
-	 * @since      1.0.0
-	 */
-	public function performValidation()
-	{
-		$validationManager = $this->getValidationManager();
 
-		// get the current action instance
-		$actionInstance = $this->getActionInstance();
-		// get the (already formatted) request method
-		$method = $this->getRequestMethod();
-
-		$requestData = $this->getRequestData();
-		
-		// set default validated status
-		$validated = true;
-
-		$this->registerValidators();
-
-		// process validators
-		$validated = $validationManager->execute($requestData);
-
-		$validateMethod = 'validate' . $method;
-		if(!method_exists($actionInstance, $validateMethod)) {
-			$validateMethod = 'validate';
-		}
-
-		// process manual validation
-		return $actionInstance->$validateMethod($requestData) && $validated;
-	}
-
-	/**
-	 * register the validators for this container
-	 * 
-	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
-	 * @since      1.0.0
-	 */
-	public function registerValidators()
-	{
-		$validationManager = $this->getValidationManager();
-
-		// get the current action instance
-		$actionInstance = $this->getActionInstance();
-		
-		// get the current action information
-		$moduleName = $this->getModuleName();
-		$actionName = $this->getActionName();
-		
-		// get the (already formatted) request method
-		$method = $this->getRequestMethod();
-
-		// get the current action validation configuration
-		$validationConfig = AgaviToolkit::expandVariables(
-			AgaviToolkit::expandDirectives(
-				AgaviConfig::get(
-					sprintf('modules.%s.agavi.validate.path', strtolower($moduleName)),
-					'%core.module_dir%/${moduleName}/validate/${actionName}.xml'
-				)
-			),
-			array(
-				'moduleName' => $moduleName,
-				'actionName' => $actionName,
-			)
-		);
-		if(is_readable($validationConfig)) {
-			// load validation configuration
-			// do NOT use require_once
-			require(AgaviConfigCache::checkConfig($validationConfig, $this->context->getName()));
-		}
-
-		// manually load validators
-		$registerValidatorsMethod = 'register' . $method . 'Validators';
-		if(!method_exists($actionInstance, $registerValidatorsMethod)) {
-			$registerValidatorsMethod = 'registerValidators';
-		}
-		$actionInstance->$registerValidatorsMethod();
-	}
-	
 	/**
 	 * Retrieve this container's request method name.
 	 *

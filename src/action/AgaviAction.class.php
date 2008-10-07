@@ -175,11 +175,7 @@ abstract class AgaviAction
 	/**
 	 * Get the default View name if this Action doesn't serve the Request method.
 	 *
-	 * @return     mixed A string containing the view name associated with this
-	 *                   action.
-	 *                   Or an array with the following indices:
-	 *                   - The parent module of the view that will be executed.
-	 *                   - The view that will be executed.
+	 * @return     string A View name
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
@@ -190,7 +186,7 @@ abstract class AgaviAction
 	}
 
 	/**
-	 * @see        AgaviAttributeHolder::clearAttributes()
+	 * @see        AgaviAttributeHolder::setAttributesByRef()
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
@@ -201,7 +197,7 @@ abstract class AgaviAction
 	}
 
 	/**
-	 * @see        AgaviAttributeHolder::getAttribute()
+	 * @see        AgaviAttributeHolder::setAttributesByRef()
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
@@ -212,7 +208,7 @@ abstract class AgaviAction
 	}
 
 	/**
-	 * @see        AgaviAttributeHolder::getAttributeNames()
+	 * @see        AgaviAttributeHolder::setAttributesByRef()
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
@@ -223,7 +219,7 @@ abstract class AgaviAction
 	}
 
 	/**
-	 * @see        AgaviAttributeHolder::getAttributes()
+	 * @see        AgaviAttributeHolder::setAttributesByRef()
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
@@ -234,7 +230,7 @@ abstract class AgaviAction
 	}
 
 	/**
-	 * @see        AgaviAttributeHolder::hasAttribute()
+	 * @see        AgaviAttributeHolder::setAttributesByRef()
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
@@ -245,7 +241,7 @@ abstract class AgaviAction
 	}
 
 	/**
-	 * @see        AgaviAttributeHolder::removeAttribute()
+	 * @see        AgaviAttributeHolder::setAttributesByRef()
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
@@ -256,7 +252,7 @@ abstract class AgaviAction
 	}
 
 	/**
-	 * @see        AgaviAttributeHolder::setAttribute()
+	 * @see        AgaviAttributeHolder::setAttributesByRef()
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
@@ -267,7 +263,7 @@ abstract class AgaviAction
 	}
 
 	/**
-	 * @see        AgaviAttributeHolder::appendAttribute()
+	 * @see        AgaviAttributeHolder::setAttributesByRef()
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.10.0
@@ -278,7 +274,7 @@ abstract class AgaviAction
 	}
 
 	/**
-	 * @see        AgaviAttributeHolder::setAttributeByRef()
+	 * @see        AgaviAttributeHolder::setAttributesByRef()
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
@@ -289,7 +285,7 @@ abstract class AgaviAction
 	}
 
 	/**
-	 * @see        AgaviAttributeHolder::appendAttributeByRef()
+	 * @see        AgaviAttributeHolder::setAttributesByRef()
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.10.0
@@ -300,7 +296,7 @@ abstract class AgaviAction
 	}
 
 	/**
-	 * @see        AgaviAttributeHolder::setAttributes()
+	 * @see        AgaviAttributeHolder::setAttributesByRef()
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0

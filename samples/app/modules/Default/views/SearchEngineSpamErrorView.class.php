@@ -30,7 +30,7 @@ class Default_SearchEngineSpamErrorView extends AgaviSampleAppDefaultBaseView
 	{
 		// fault code must be "Server", check the SOAP spec
 		// do not throw the exception please. it can be done with some fiddling, but returning it is a much better idea
-		return new SoapFault('Server', 'Unknown Product ' . $rd->getParameter('id'));
+		return new SoapFault('Server', 'Unknown Product "' . $this->getAttribute('product_name') . '"');
 	}
 
 	/**
@@ -38,7 +38,7 @@ class Default_SearchEngineSpamErrorView extends AgaviSampleAppDefaultBaseView
 	 */
 	public function executeXmlrpc(AgaviRequestDataHolder $rd)
 	{
-		return array('faultCode' => 101, 'faultString' => 'Unknown Product ' . $rd->getParameter('id'));
+		return array('faultCode' => 101, 'faultString' => 'Unknown Product "' . $this->getAttribute('product_name') . '"');
 	}
 }
 

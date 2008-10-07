@@ -23,7 +23,6 @@
  * 
  * Parameters:
  *   'value'   value which the input should equals to
- *   'asparam' whether the 'value' should be treated as a parameter name 
  *
  * @package    agavi
  * @subpackage validator
@@ -52,9 +51,6 @@ class AgaviEqualsValidator extends AgaviValidator
 		// individual arguments that failed
 		if($this->hasParameter('value')) {
 			$value = $this->getParameter('value');
-			if($this->getParameter('asparam', false)) { 
-				$value = $this->getData($value); 
-			}
 		} else {
 			$value = $this->getData($this->getArgument());
 		}
