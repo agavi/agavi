@@ -185,7 +185,7 @@ class AgaviWebResponse extends AgaviResponse
 		if($this->redirect) {
 			$location = $this->redirect['location'];
 			if(!preg_match('#^[^:]+://#', $location)) {
-				if($location[0] == '/') {
+				if(isset($location[0]) && $location[0] == '/') {
 					$rq = $this->context->getRequest();
 					$location = $rq->getUrlScheme() . '://' . $rq->getUrlAuthority() . $location;
 				} else {

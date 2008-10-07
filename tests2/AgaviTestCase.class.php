@@ -25,7 +25,6 @@
  *
  * @version    $Id$
  */
-
 class AgaviTestCase extends PHPUnit_Framework_TestCase
 {
 	/**

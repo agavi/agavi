@@ -58,7 +58,7 @@ class AgaviConfigParser
 			),
 		);
 		if($validationFile !== null) {
-			$validation[AgaviXmlConfigParser::STEP_TRANSFORMATIONS_AFTER][AgaviXmlConfigParser::VALIDATION_TYPE_XMLSCHEMA][] = array($validationFile);
+			$validation[AgaviXmlConfigParser::STEP_TRANSFORMATIONS_AFTER][AgaviXmlConfigParser::VALIDATION_TYPE_XMLSCHEMA][] = $validationFile;
 		}
 		$doc = $parser->execute(array(), $validation);
 		

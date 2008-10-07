@@ -194,6 +194,9 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 		$val = $name;
 		
 		switch($source) {
+			case 'callback':
+				$val = $container->getActionInstance()->$name();
+				break;
 			case 'constant':
 				$val = constant($name);
 				break;
@@ -268,7 +271,19 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 		$request = $this->context->getRequest();
 
 		$isCacheable = false;
-		if($this->getParameter('enable_caching', true) && is_readable($cachingDotXml = AgaviConfig::get('core.module_dir') . '/' . $moduleName . DIRECTORY_SEPARATOR . 'cache' . DIRECTORY_SEPARATOR . $actionName . '.xml')) {
+		$cachingDotXml = AgaviToolkit::expandVariables(
+			AgaviToolkit::expandDirectives(
+				AgaviConfig::get(
+					sprintf('modules.%s.agavi.cache.path', strtolower($moduleName)),
+					'%core.module_dir%/${moduleName}/cache/${actionName}.xml'
+				)
+			),
+			array(
+				'moduleName' => $moduleName,
+				'actionName' => $actionName,
+			)
+		);
+		if($this->getParameter('enable_caching', true) && is_readable($cachingDotXml)) {
 			// $lm->log('Caching enabled, configuration file found, loading...');
 			// no _once please!
 			include(AgaviConfigCache::checkConfig($cachingDotXml, $this->context->getName()));
@@ -277,8 +292,16 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 		$isActionCached = false;
 
 		if($isCacheable) {
-			$groups = $this->determineGroups($config["groups"], $container);
-			$isActionCached = $this->checkCache(array_merge($groups, array(self::ACTION_CACHE_ID)), $config['lifetime']);
+			try {
+				$groups = $this->determineGroups($config["groups"], $container);
+			} catch(Exception $e) {
+				// a group callback threw an exception. that means we're not allowed t cache
+				$isCacheable = false;
+			}
+			if($isCacheable) {
+				// this is not wrapped in the try/catch block above as it might throw an exception itself
+				$isActionCached = $this->checkCache(array_merge($groups, array(self::ACTION_CACHE_ID)), $config['lifetime']);
+			}
 		} else {
 			// $lm->log('Action is not cacheable!');
 		}
@@ -597,8 +620,6 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 	 *
 	 * @return     mixed The processed View information returned by the Action.
 	 *
-	 * @throws     AgaviViewException If the returned View does not exist.
-	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
@@ -633,38 +654,10 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 			// this action will skip validation/execution for this method
 			// get the default view
 			$viewName = $actionInstance->getDefaultViewName();
-		} else {
-			// set default validated status
-			$validated = true;
-
-			// get the current action validation configuration
-			$validationConfig = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/validate/' . $actionName . '.xml';
-
-			if(is_readable($validationConfig)) {
-				// load validation configuration
-				// do NOT use require_once
-				require(AgaviConfigCache::checkConfig($validationConfig, $this->context->getName()));
-			}
-
-			// manually load validators
-			$registerValidatorsMethod = 'register' . $method . 'Validators';
-			if(!method_exists($actionInstance, $registerValidatorsMethod)) {
-				$registerValidatorsMethod = 'registerValidators';
-			}
-			$actionInstance->$registerValidatorsMethod();
-
-			// process validators
-			$validated = $validationManager->execute($requestData);
-
-			$validateMethod = 'validate' . $method;
-			if(!method_exists($actionInstance, $validateMethod)) {
-				$validateMethod = 'validate';
-			}
-
-			// prevent access to Request::getParameters()
-			// process manual validation
-			if($actionInstance->$validateMethod($requestData) && $validated) {
+		} else {			
+			if($container->performValidation()) {
 				// execute the action
+				// prevent access to Request::getParameters()
 				$key = $request->toggleLock();
 				try {
 					$viewName = $actionInstance->$executeMethod($requestData);
@@ -698,7 +691,18 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 			$viewName   = $viewName[1];
 		} elseif($viewName !== AgaviView::NONE) {
 			// use a view related to this action
-			$viewName = $actionName . $viewName;
+			$viewName = AgaviToolkit::expandVariables(
+				AgaviToolkit::expandDirectives(
+					AgaviConfig::get(
+						sprintf('modules.%s.agavi.view.name', strtolower($moduleName)),
+						'${actionName}${viewName}'
+					)
+				),
+				array(
+					'actionName' => $actionName,
+					'viewName' => $viewName,
+				)
+			);
 			$viewModule = $moduleName;
 		} else {
 			$viewName = AgaviView::NONE;

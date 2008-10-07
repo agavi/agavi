@@ -57,9 +57,9 @@ class AgaviXmlConfigDomElement extends DOMElement implements IteratorAggregate
 		// should only pull elements from the default ns
 		$prefix = $this->ownerDocument->getDefaultNamespacePrefix();
 		if($prefix) {
-			return $this->ownerDocument->getXpath()->query(sprintf('child::%s:element()', $prefix), $this);
+			return $this->ownerDocument->getXpath()->query(sprintf('child::%s:*', $prefix), $this);
 		} else {
-			return $this->ownerDocument->getXpath()->query('child::element()', $this);
+			return $this->ownerDocument->getXpath()->query('child::*', $this);
 		}
 	}
 	
@@ -160,12 +160,13 @@ class AgaviXmlConfigDomElement extends DOMElement implements IteratorAggregate
 	 *                  the given name; false otherwise.
 	 *
 	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @author     David Zülke <david.zuelke@bitextender.com>
 	 * @since      1.0.0
 	 */
 	public function hasChild($name, $namespaceUri = null)
 	{
 		// if namespace uri is null, use default ns. if empty string, use no ns
-		return $this->countChildren($name) === 1;
+		return $this->countChildren($name, $namespaceUri) === 1;
 		
 		// XXX: not necessary for single elements?
 		// remember singular/plural support
@@ -252,6 +253,23 @@ class AgaviXmlConfigDomElement extends DOMElement implements IteratorAggregate
 	}
 	
 	/**
+	 * Check whether or not the element has Agavi parameters as children.
+	 *
+	 * @return     bool True, if there are parameters, false otherwise.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function hasAgaviParameters()
+	{
+		if($this->ownerDocument->isAgaviConfiguration()) {
+			return $this->hasChildren('parameters', AgaviXmlConfigParser::NAMESPACE_AGAVI_ENVELOPE_LATEST);
+		}
+		
+		return false;
+	}
+	
+	/**
 	 * Retrieve all of the Agavi parameter elements associated with this
 	 * element.
 	 *
@@ -267,6 +285,7 @@ class AgaviXmlConfigDomElement extends DOMElement implements IteratorAggregate
 	public function getAgaviParameters(array $existing = array(), $literalize = true)
 	{
 		$result = $existing;
+		$offset = 0;
 		
 		if($this->ownerDocument->isAgaviConfiguration()) {
 			$elements = $this->getChildren('parameters', AgaviXmlConfigParser::NAMESPACE_AGAVI_ENVELOPE_LATEST);
@@ -274,14 +293,12 @@ class AgaviXmlConfigDomElement extends DOMElement implements IteratorAggregate
 			foreach($elements as $element) {
 				$key = null;
 				if(!$element->hasAttribute('name')) {
-					$result[] = null;
-					end($result);
-					$key = key($result);
+					$result[$key = $offset++] = null;
 				} else {
 					$key = $element->getAttribute('name');
 				}
 				
-				if($element->hasChildren('parameters', AgaviXmlConfigParser::NAMESPACE_AGAVI_ENVELOPE_LATEST)) {
+				if($element->hasAgaviParameters()) {
 					$result[$key] = isset($result[$key]) && is_array($result[$key]) ? $result[$key] : array();
 					$result[$key] = $element->getAgaviParameters($result[$key], $literalize);
 				} else {

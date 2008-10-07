@@ -21,6 +21,7 @@
  *
  * @author     Ross Lawley <ross.lawley@gmail.com>
  * @author     David Zülke <dz@bitxtender.com>
+ * @author     TANAKA Koichi <tanaka@ensites.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
  *
@@ -73,6 +74,7 @@ class AgaviDoctrineDatabase extends AgaviDatabase
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @author     Ross Lawley <ross.lawley@gmail.com>
+	 * @author     TANAKA Koichi <tanaka@ensites.com>
 	 * @since      0.11.0
 	 */
 	public function initialize(AgaviDatabaseManager $databaseManager, array $parameters = array())
@@ -137,10 +139,22 @@ class AgaviDoctrineDatabase extends AgaviDatabase
 				$this->doctrineManager->setAttribute($attributeName, $attributeValue);
 			}
 			
+			foreach((array)$this->getParameter('impls', array()) as $templateName => $className) {
+				$this->connection->setImpl($templateName, $className);
+			}
+			
+			foreach((array)$this->getParameter('manager_impls', array()) as $templateName => $className) {
+				$this->doctrineManager->setImpl($templateName, $className);
+			}
+			
 			Doctrine::loadModels($this->getParameter('load_models')); 
 			
 			foreach((array)$this->getParameter('bind_components', array()) as $componentName) {
 				$this->doctrineManager->bindComponent($componentName, $name);
+			}
+			
+			foreach((array)$this->getParameter('init_queries') as $query) {
+				$this->connection->exec($query);
 			}
 		} catch(Doctrine_Exception $e) {
 			// the connection's foobar'd
