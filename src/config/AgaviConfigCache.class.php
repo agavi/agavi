@@ -115,8 +115,8 @@ final class AgaviConfigCache
 			}
 		} else {
 			$validationFile = null;
-			if(isset($handlerInfo['validations'][AgaviXmlConfigParser::VALIDATION_TYPE_XMLSCHEMA][0])) {
-				$validationFile = $handlerInfo['validations'][AgaviXmlConfigParser::VALIDATION_TYPE_XMLSCHEMA][0];
+			if(isset($handlerInfo['validations'][AgaviXmlConfigParser::STAGE_SINGLE][AgaviXmlConfigParser::STEP_TRANSFORMATIONS_AFTER][AgaviXmlConfigParser::VALIDATION_TYPE_XMLSCHEMA][0])) {
+				$validationFile = $handlerInfo['validations'][AgaviXmlConfigParser::STAGE_SINGLE][AgaviXmlConfigParser::STEP_TRANSFORMATIONS_AFTER][AgaviXmlConfigParser::VALIDATION_TYPE_XMLSCHEMA][0];
 			}
 			$handler->initialize($validationFile, null, $handlerInfo['parameters']);
 			$data = $handler->execute($config, $context);

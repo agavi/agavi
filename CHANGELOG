@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 1.0.0 beta 4 (October ??, 2008)
 -------------------------------
 
+FIX: Configuration files with old-style handlers are never validated (#870) (David)
 FIX: Per-module config_handlers.xml will cause "unsupported operand types" fatal error with debug mode off (#867) (David)
 FIX: AgaviXmlConfigDomElement::hasChild() does not pass on $namespaceUri argument (#865) (David)
 
@@ -82,6 +83,7 @@ FIX: Security filters cannot perform checks in addition to isSecure() (#671) (Da
 
 ADD: Allow specifying of doctrine template implementations (#864) (David, TANAKA Koichi)
 
+FIX: Default autoload.xml is missing AgaviMysqliDatabase entry (#868) (David)
 FIX: SOAP and XMLRPC test scripts in sample app are broken (#866) (David)
 FIX: Certain validator names will cause a fatal error (#863) (David)
 FIX: Sample app SearchEngineSpamAction works with invalid product names (#861) (David)
