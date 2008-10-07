@@ -14,7 +14,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviValidationError stores the incidents of an validation run.
+ * AgaviValidationValidatorResult provides access to the validation result for a given validator
  *
  * @package    agavi
  * @subpackage validator
@@ -29,27 +29,68 @@
  */
 class AgaviValidationValidatorResult
 {
+	/**
+	 * @var        AgaviValidationResult the result
+	 */
 	protected $validationResult;
+	
+	/**
+	 * @var        string the affected validators name
+	 */
 	protected $validatorName;
 	
+	/**
+	 * create a new AgaviValidationValidatorResult
+	 * 
+	 * @param      AgaviValidationResult the validation result
+	 * @param      string the affected validators name
+	 * 
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @copyright  Authors
+	 * @copyright  The Agavi Project
+	 *
+	 * @since      1.0.0
+	 */
 	public function __construct(AgaviValidationResult $result, $name)
 	{
 		$this->validationResult = $result;
 		$this->validatorName = $name;
 	}
 	
+	/**
+	 * retrieve the affected validators name
+	 * 
+	 * @return     string the validators name
+	 * 
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @copyright  Authors
+	 * @copyright  The Agavi Project
+	 *
+	 * @since      1.0.0
+	 */
 	public function getValidatorName()
 	{
 		return $this->validatorName;
 	}
 	
+	/**
+	 * retrieve all AgaviValidationIncidents for this instances' validator
+	 * 
+	 * @return     array a collection of affected {@see AgaviValidationIncident}
+	 * 
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @copyright  Authors
+	 * @copyright  The Agavi Project
+	 *
+	 * @since      1.0.0
+	 */
 	public function getIncidents()
 	{
 		$affectedIncidents = array();
 		$incidents = $this->validationResult->getIncidents();
 		foreach($incidents as $incident) {
 			if($incident->getValidator()->getName() == $this->validatorName) {
-				$affectedIncidents = $incident;
+				$affectedIncidents[] = $incident;
 			}
 		}
 		return $affectedIncidents;
