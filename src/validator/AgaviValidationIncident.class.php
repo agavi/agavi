@@ -158,32 +158,6 @@ class AgaviValidationIncident
 	}
 
 	/**
-	 * Retrieves a list of all errorneus arguments of this incident.
-	 *
-	 * @return     array An array of AgaviValidationArgument.
-	 *
-	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
-	 * @since      1.0.0
-	 */
-	public function getArguments()
-	{
-		$arguments = array();
-		foreach($this->errors as $error) {
-			foreach($error->getArguments() as $argument) {
-				$arguments[$argument->getHash()] = $argument;
-			}
-		}
-
-		return $arguments;
-	}
-	
-	
-	/////////////////////////////////////////////////////////////////////////////
-	////////////////////////////// Deprecated Parts /////////////////////////////
-	/////////////////////////////////////////////////////////////////////////////
-	
-	
-	/**
 	 * Checks if any of the errors of this incident were thrown for the given 
 	 * field name.
 	 *
@@ -193,13 +167,11 @@ class AgaviValidationIncident
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
-	 * @deprecated 1.0.0
 	 */
 	public function hasFieldError($fieldname)
 	{
-		$argument = $this->hasArgumentError(new AgaviValidationArgument($fieldname));
 		foreach($this->errors as $error) {
-			if($error->hasArgument($argument)) {
+			if($error->hasField($fieldname)) {
 				return true;
 			}
 		}
@@ -214,7 +186,6 @@ class AgaviValidationIncident
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
-	 * @deprecated 1.0.0
 	 */
 	public function getFields()
 	{
@@ -235,14 +206,12 @@ class AgaviValidationIncident
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
-	 * @deprecated 1.0.0
 	 */
 	public function getFieldErrors($fieldname)
 	{
-		$argument = new AgaviValidationArgument($fieldname);
 		$errors = array();
 		foreach($this->errors as $error) {
-			if($error->hasArgument($argument)) {
+			if($error->hasField($fieldname)) {
 				$errors[] = $error;
 			}
 		}
