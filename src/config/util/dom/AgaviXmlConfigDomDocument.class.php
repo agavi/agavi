@@ -185,7 +185,6 @@ $errors[] = sprintf("Line %d: %s", $error->line, $error->message);
 				throw new DOMException(
 					sprintf(
 						'Error%s occured while resolving XInclude directives: ' . "\n\n%s", 
-						$this->documentURI, 
 						count($errors) > 1 ? 's' : '', 
 						implode("\n", $errors)
 					)

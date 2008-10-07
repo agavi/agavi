@@ -115,8 +115,8 @@ final class AgaviConfigCache
 			}
 		} else {
 			$validationFile = null;
-			if(isset($handlerInfo['validations'][AgaviXmlConfigParser::VALIDATION_TYPE_XMLSCHEMA][0])) {
-				$validationFile = $handlerInfo['validations'][AgaviXmlConfigParser::VALIDATION_TYPE_XMLSCHEMA][0];
+			if(isset($handlerInfo['validations'][AgaviXmlConfigParser::STAGE_SINGLE][AgaviXmlConfigParser::STEP_TRANSFORMATIONS_AFTER][AgaviXmlConfigParser::VALIDATION_TYPE_XMLSCHEMA][0])) {
+				$validationFile = $handlerInfo['validations'][AgaviXmlConfigParser::STAGE_SINGLE][AgaviXmlConfigParser::STEP_TRANSFORMATIONS_AFTER][AgaviXmlConfigParser::VALIDATION_TYPE_XMLSCHEMA][0];
 			}
 			$handler->initialize($validationFile, null, $handlerInfo['parameters']);
 			$data = $handler->execute($config, $context);
@@ -297,6 +297,8 @@ final class AgaviConfigCache
 		require($agaviDir . '/config/util/dom/AgaviXmlConfigDomNotation.class.php');
 		require($agaviDir . '/config/util/dom/AgaviXmlConfigDomProcessingInstruction.class.php');
 		require($agaviDir . '/config/util/dom/AgaviXmlConfigDomText.class.php');
+		// schematron processor
+		require($agaviDir . '/config/util/schematron/AgaviXmlConfigSchematronProcessor.class.php');
 		// extended XSL* classes
 		if(!AgaviConfig::get('core.skip_config_transformations', false)) {
 			if(!extension_loaded('xsl')) {
@@ -325,6 +327,9 @@ final class AgaviConfigCache
 						AgaviXmlConfigParser::VALIDATION_TYPE_RELAXNG => array(
 							$agaviDir . '/config/rng/config_handlers.rng',
 						),
+						AgaviXmlConfigParser::VALIDATION_TYPE_SCHEMATRON => array(
+							$agaviDir . '/config/sch/config_handlers.sch',
+						),
 					),
 				),
 				AgaviXmlConfigParser::STAGE_COMPILATION => array(
@@ -343,19 +348,17 @@ final class AgaviConfigCache
 	}
 	
 	/**
-	 * add the config handlers from the given config file
+	 * Add the config handlers from the given config file.
+	 * Existing handlers will not be overwritten.
 	 * 
-	 * existing handlers will not be overwritten
-	 * 
-	 * @param      string the path to the config_handlers.xml
+	 * @param      string The path to a config_handlers.xml file.
 	 * 
 	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
 	 * @since      1.0.0
-	 * 
 	 */
 	public static function loadConfigHandlersFile($cfg)
 	{
-		self::$handlers += include AgaviConfigCache::checkConfig($cfg);
+		self::$handlers = (array)self::$handlers + include(AgaviConfigCache::checkConfig($cfg));
 	}
 
 	/**

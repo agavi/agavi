@@ -28,7 +28,6 @@
  *
  * @version    $Id$
  */
-
 class AgaviReturnArrayConfigHandler extends AgaviConfigHandler
 {
 	/**

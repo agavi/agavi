@@ -13,9 +13,13 @@
 		<validators>
 
 			<!-- just a simple example. no error message here, since the error view redirects to the 404 page anyway. usually, you'd have a ProductValidator that looks into the database, and then also exports the record into the request data so you don't have to fetch it again in the action -->
-			<validator class="isnotempty">
+			<validator class="string" required="false">
 				<argument>name</argument>
-				<parameter name="min">5</parameter>
+				<parameter name="min">1</parameter>
+			</validator>
+
+			<validator class="number">
+				<argument>id</argument>
 			</validator>
 
 		</validators>

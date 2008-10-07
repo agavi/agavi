@@ -17,6 +17,33 @@ Backwards compabibility requires PHP's XSL extension enabled; other than that, e
 Also, the namespaces of configuration files have been changed, with envelope namespaces (<configurations> and other elements) decoupled from the actual config content namespaces. Again, backwards compatibility is maintained, but you should upgrade your configuration files when moving to 1.0 in order to be able to fully leverage all features and make future transitions easier.
 Of note, the legacy support for configuration files with no namespace at all (just <configurations>) has been dropped completely, so your files at the very least have to be in the global 0.11 namespace (http://agavi.org/agavi/1.0/config).
 
+Module/Action/View/Model
+------------------------
+The module.xml configuration file has been redesigned. It now needs a <module enabled="true"> element, and inside, there can be any number of <settings> blocks, which like in settings.xml, can have a "prefix" attribute to change the prefix. In the prefix and in setting names, ${moduleName} is expanded to the current module's name. Specifying the module name inside this configuration file is not necessary anymore.
+
+Every module can now have a config_handlers.xml file.
+
+Models can use the same dot-notation for nesting as Actions, e.g. model Foo.Bar sitting in models/Foo/BarModel.class.php with class name Foo_BarModel
+
+Models and Views from other modules can now be used safely even if those other module have base classes in a local autoload.xml etc.
+
+Actions, Views and Models must now use fully qualified class names, including the module name. Examples:
+%core.app_dir%/models/Foo/BarModel.class.php is class Foo_BarModel
+%core.app_dir%/modules/Default/models/FooModel.class.php is class Default_FooModel
+%core.app_dir%/modules/Default/actions/Foo_BarAction.class.php is class Default_Foo_BarAction
+The legacy naming schemes (leaving out module name for Actions, Views and non-global Models; leaving out sub-notation paths except the last one) are not supported anymore.
+
+Finally, you can now define the filesystem structure of the following elements on a per-module basis:
+- Actions
+- Caching XML configs
+- Validation XML configs
+- Views
+You can also customize these aspects:
+- Default template "directory" part
+- View shortname resolution ("Success" => "Default_Sub_MarineSuccess")
+This allows you to put all the files for a feature into a single subdirectory, instead of having the separate files cluttered over action/, template/, view/ etc. subfolders inside the module directory.
+Ticket #668 has more details and an example.
+
 Project development environment
 -------------------------------
 Agavi 1.0 introduces a new environment for creating and managing Agavi-based projects. This environment effectively replaces the older agavi script and Phing build environment. The new environment is also based on Phing. It adds a few useful features:
@@ -30,6 +57,12 @@ Execution
 Execution containers now have their own request method. By default, it is equal to the global request's request method. It can, however, be changed using the last (and new) argument of AgaviController::createExecutionContainer() and the related methods in AgaviExecutionContainer and AgaviView. Like the output type, the request method is carried over from the "parent" container if AgaviExecutionContainer::createExecutionContainer() is used (or the methods in AgaviView, which use this method). You can define a slot's request method using the new "method" attribute of the <slot> element in your output_types.xml layout declarations.
 
 When Agavi does an internal forward, for example to the login "system action" when an action requires authentication, the corresponding information in the "org.agavi.controller.forwards.*" namespaces will now be set on as attributes on the respective containers, in addition to the existing request attributes, which remain for BC.
+
+Caching
+-------
+A new cache group source called "callback" has been added. You can use it to specify the name of a method implemented in the respective Action class. The value this callback returns is used as the group key. You can also throw an exception from the callback to prevent caching altogether. These two different abilities offer very nice caching capabilities, such as:
+- Having different caches for the owner of an element and for everyone else
+- Enabling a cache only for users that are not logged in
 
 Security
 --------
@@ -49,6 +82,28 @@ Existing "core.use_routing" directives will be used as a fallback until the dire
 - AgaviAdodbDatabase has been deprecated. There is no replacement available. It will be removed in Agavi 1.1, but of course, you can continue to use the implementation from an older release.
 
 - Validation severity "none" is now called "silent".
+
+
+Version 0.11.4 - September ??, 2008
+===================================
+
+
+Version 0.11.3 - September 19, 2008
+===================================
+
+This maintenance release fixes a couple of minor problems like PEAR package generation, gettext plural form expression handling etc, and introduces some new features:
+- Accessing array values in attribute holders via foo[bar] is now possible, as it is already with parameter holders
+- Database handlers now can send arbitrary SQL statements after connecting; useful for "SET NAMES utf8" in MySQL etc.
+- AgaviDoctrineDatabase improvements
+- AgaviMysqliDatabase adapter added
+- New timezone database version
+- Sample app cleanup
+- FPF has the option to ignore errors during document parsing and skip population (good for production environments)
+- Assigning of "inner" content to $slots template array can be disabled
+
+The sample app's SearchEngineSpamAction and the associated elements (PriceFinderModel etc) have been updated to work as the routing pattern always suggested - identify the product by ID, and allow an optional part including the name of the product. This also shows off some more Agavi features now.
+
+A full list of changes can be found in the CHANGELOG file.
 
 
 Version 0.11.2 - July 8, 2008
