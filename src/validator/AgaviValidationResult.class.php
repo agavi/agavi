@@ -14,7 +14,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviValidationError stores the incidents of an validation run.
+ * AgaviValidationResult stores the result of a validation run.
  *
  * @package    agavi
  * @subpackage validator
