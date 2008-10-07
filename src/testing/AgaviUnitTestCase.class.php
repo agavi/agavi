@@ -30,14 +30,24 @@
  */
 abstract class AgaviUnitTestCase extends PHPUnit_Framework_TestCase implements AgaviIUnitTestCase
 {
+	/**
+	 * @var        string the name of the context to use
+	 */
 	protected $contextName = null;
+
+	/**
+	 * Whether or not this test is to be run in a separate PHP process.
+	 *
+	 * @var        boolean
+	 */
+	protected $runTestInSeparateProcess = FALSE;
 
 	/**
 	 * Constructs a test case with the given name.
 	 *
-	 * @param  string $name
-	 * @param  array  $data
-	 * @param  string $dataName
+	 * @param      string $name
+	 * @param      array  $data
+	 * @param      string $dataName
 	 */
 	public function __construct($name = NULL, array $data = array(), $dataName = '')
 	{
