@@ -2,11 +2,29 @@
 
 class AgaviXmlConfigDomElement extends DOMElement implements IteratorAggregate
 {
+	/**
+	 * __toString() magic method, returns the element value.
+	 *
+	 * @see        AgaviXmlConfigDomElement::getValue()
+	 *
+	 * @return     string The element value.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.0.0
+	 */
 	public function __toString()
 	{
 		return $this->getValue();
 	}
 	
+	/**
+	 * Returns the element name.
+	 *
+	 * @return     string The element name.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.0.0
+	 */
 	public function getName()
 	{
 		// what to return here? name with prefix? no.
@@ -14,6 +32,14 @@ class AgaviXmlConfigDomElement extends DOMElement implements IteratorAggregate
 		return $this->nodeName;
 	}
 	
+	/**
+	 * Returns the element value.
+	 *
+	 * @return     string The element value.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.0.0
+	 */
 	public function getValue()
 	{
 		// TODO: or textContent?
@@ -27,7 +53,7 @@ class AgaviXmlConfigDomElement extends DOMElement implements IteratorAggregate
 	 *
 	 * @return     Iterator An iterator.
 	 *
-	 * @author     David Zülke <dz@bitxtender.com>
+	 * @author     David Zülke <david.zuelke@bitextender.com>
 	 * @since      1.0.0
 	 */
 	public function getIterator()
@@ -41,8 +67,21 @@ class AgaviXmlConfigDomElement extends DOMElement implements IteratorAggregate
 		}
 	}
 	
+	/**
+	 * Retrieve singular form of given element name.
+	 * This does special splitting only of the last part of the name if the name
+	 * of the element contains hyphens, underscores or dots.
+	 *
+	 * @param      string The element name to singularize.
+	 *
+	 * @return     string The singularized element name.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
+	 */
 	protected function singularize($name)
 	{
+		// TODO: shouldn't this be static?
 		$names = preg_split('#([_\-\.])#', $name, -1, PREG_SPLIT_DELIM_CAPTURE);
 		$names[count($names) - 1] = AgaviInflector::singularize(end($names));
 		return implode('', $names);
@@ -267,7 +306,7 @@ class AgaviXmlConfigDomElement extends DOMElement implements IteratorAggregate
 	 *
 	 * @see        DOMElement::getAttribute()
 	 *
-	 * @author     David Zülke <dz@bitxtender.com>
+	 * @author     David Zülke <david.zuelke@bitextender.com>
 	 * @since      1.0.0
 	 */
 	public function getAttribute($name, $default = null)
@@ -297,7 +336,7 @@ class AgaviXmlConfigDomElement extends DOMElement implements IteratorAggregate
 	 *
 	 * @see        DOMElement::getAttributeNS()
 	 *
-	 * @author     David Zülke <dz@bitxtender.com>
+	 * @author     David Zülke <david.zuelke@bitextender.com>
 	 * @since      1.0.0
 	 */
 	public function getAttributeNS($namespaceUri, $localName, $default = null)
@@ -306,6 +345,38 @@ class AgaviXmlConfigDomElement extends DOMElement implements IteratorAggregate
 		
 		if($retval === null) {
 			$retval = $default;
+		}
+		
+		return $retval;
+	}
+	
+	/**
+	 * Retrieve all attributes of the element that are in no namespace.
+	 *
+	 * @return     array An associative array of attribute names and values.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function getAttributes()
+	{
+		return $this->getAttributesNS('');
+	}
+	
+	/**
+	 * Retrieve all attributes of the element that are in the given namespace.
+	 *
+	 * @return     array An associative array of attribute names and values.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function getAttributesNS($namespaceUri)
+	{
+		$retval = array();
+		
+		foreach($this->ownerDocument->getXpath()->query(sprintf('@*[namespace-uri() = "%s"]', $namespaceUri), $this) as $attribute) {
+			$retval[$attribute->localName] = $attribute->nodeValue;
 		}
 		
 		return $retval;
