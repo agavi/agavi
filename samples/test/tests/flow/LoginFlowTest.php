@@ -9,7 +9,7 @@ class LoginFlowTest extends AgaviFlowTestCase
 		$this->moduleName = 'Default';
 	}
 	
-	public function testFake()
+	public function testValidWriteRequest()
 	{
 		$this->setRequestMethod('write');
 		$this->setArguments($this->createRequestDataHolder(array(AgaviWebRequestDataHolder::SOURCE_PARAMETERS => array('username' => 'Chuck Norris', 'password' => 'kick'))));
