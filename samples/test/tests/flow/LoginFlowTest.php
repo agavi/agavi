@@ -15,7 +15,6 @@ class LoginFlowTest extends AgaviFlowTestCase
 		$this->setArguments($this->createRequestDataHolder(array(AgaviWebRequestDataHolder::SOURCE_PARAMETERS => array('username' => 'Chuck Norris', 'password' => 'kick'))));
 		$this->dispatch();
 		$this->assertResponseHasTag(array('tag' => 'body'));
-		$this->assertEquals('foo', $this->response->getContent());
 	}
 	
 }
