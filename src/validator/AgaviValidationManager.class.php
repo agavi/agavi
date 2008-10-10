@@ -818,7 +818,7 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	 */
 	public function setError($name, $message)
 	{
-		$name = new AgaviValidationArgument($fieldname);
+		$name = new AgaviValidationArgument($name);
 		$incident = new AgaviValidationIncident(null, AgaviValidator::ERROR);
 		$incident->addError(new AgaviValidationError($message, null, array($name)));
 		$this->addIncident($incident);
@@ -841,7 +841,7 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	{
 		$incident = new AgaviValidationIncident(null, AgaviValidator::ERROR);
 		foreach($errors as $name => $error) {
-			$name = new AgaviValidationArgument($fieldname);
+			$name = new AgaviValidationArgument($name);
 			$incident->addError(new AgaviValidationError($error, null, array($name)));
 		}
 

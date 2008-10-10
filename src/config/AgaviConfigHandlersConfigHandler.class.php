@@ -22,6 +22,8 @@
  * @subpackage config
  *
  * @author     Dominik del Bondio <ddb@bitxtender.com>
+ * @author     Noah Fontes <noah.fontes@bitextender.com>
+ * @author     David Zülke <david.zuelke@bitextender.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
  *
@@ -48,6 +50,7 @@ class AgaviConfigHandlersConfigHandler extends AgaviXmlConfigHandler
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @author     David Zülke <david.zuelke@bitextender.com>
 	 * @since      0.11.0
 	 */
 	public function execute(AgaviXmlConfigDomDocument $document)
@@ -59,12 +62,12 @@ class AgaviConfigHandlersConfigHandler extends AgaviXmlConfigHandler
 		$handlers = array();
 		
 		foreach($document->getConfigurationElements() as $configuration) {
-			if(!$configuration->hasChildren('handlers')) {
+			if(!$configuration->has('handlers')) {
 				continue;
 			}
 			
 			// let's do our fancy work
-			foreach($configuration->getChildren('handlers') as $handler) {
+			foreach($configuration->get('handlers') as $handler) {
 				$pattern = $handler->getAttribute('pattern');
 				
 				$category = AgaviToolkit::normalizePath(AgaviToolkit::expandDirectives($pattern));
@@ -75,8 +78,8 @@ class AgaviConfigHandlersConfigHandler extends AgaviXmlConfigHandler
 					AgaviXmlConfigParser::STAGE_SINGLE => array(),
 					AgaviXmlConfigParser::STAGE_COMPILATION => array(),
 				);
-				if($handler->hasChildren('transformations')) {
-					foreach($handler->getChildren('transformations') as $transformation) {
+				if($handler->has('transformations')) {
+					foreach($handler->get('transformations') as $transformation) {
 						$path = AgaviToolkit::literalize($transformation->getValue());
 						$for = $transformation->getAttribute('for', AgaviXmlConfigParser::STAGE_SINGLE);
 						$transformations[$for][] = $path;
@@ -121,8 +124,8 @@ class AgaviConfigHandlersConfigHandler extends AgaviXmlConfigHandler
 						),
 					),
 				);
-				if($handler->hasChildren('validations')) {
-					foreach($handler->getChildren('validations') as $validation) {
+				if($handler->has('validations')) {
+					foreach($handler->get('validations') as $validation) {
 						$path = AgaviToolkit::literalize($validation->getValue());
 						$type = null;
 						if(!$validation->hasAttribute('type')) {
@@ -157,7 +160,20 @@ class AgaviConfigHandlersConfigHandler extends AgaviXmlConfigHandler
 		return $this->generate($data);
 	}
 	
-	public function guessValidationType($path)
+	/**
+	 * Convenience method to quickly guess the type of a validation file using its
+	 * file extension.
+	 *
+	 * @param      string The path to the file.
+	 *
+	 * @return     string An AgaviXmlConfigParser::VALIDATION_TYPE_* const value.
+	 *
+	 * @throws     AgaviException If the type could not be determined.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.0.0
+	 */
+	protected function guessValidationType($path)
 	{
 		switch(pathinfo($path, PATHINFO_EXTENSION)) {
 			case 'rng':

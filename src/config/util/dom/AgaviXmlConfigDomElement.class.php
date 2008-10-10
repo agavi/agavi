@@ -3,32 +3,28 @@
 class AgaviXmlConfigDomElement extends DOMElement implements IteratorAggregate
 {
 	/**
-	 * Overloaded method for accessing child nodes. Does the pluralizing etc, and
-	 * provides convenient access through a potentially set default namespace.
+	 * __toString() magic method, returns the element value.
 	 *
-	 * @param      string The child element name.
+	 * @see        AgaviXmlConfigDomElement::getValue()
 	 *
-	 * @return     mixed A DOMNodeList or an AgaviXmlConfigDomElement.
+	 * @return     string The element value.
 	 *
-	 * @author     David Zülke <dz@bitxtender.com>
+	 * @author     David Zülke <david.zuelke@bitextender.com>
 	 * @since      1.0.0
 	 */
-	public function __get($name) {
-		// TODO: add {namespace}element support
-		// should look into the default ns, IMO. otherwise, you gotta use getChild()
-		// must use singular/plural handling
-	}
-	
-	public function __isset($name) {
-		// TODO: add {namespace}element support
-		// should look into the default ns, IMO. otherwise, you gotta use hasChild()
-	}
-	
 	public function __toString()
 	{
 		return $this->getValue();
 	}
 	
+	/**
+	 * Returns the element name.
+	 *
+	 * @return     string The element name.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.0.0
+	 */
 	public function getName()
 	{
 		// what to return here? name with prefix? no.
@@ -36,6 +32,14 @@ class AgaviXmlConfigDomElement extends DOMElement implements IteratorAggregate
 		return $this->nodeName;
 	}
 	
+	/**
+	 * Returns the element value.
+	 *
+	 * @return     string The element value.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.0.0
+	 */
 	public function getValue()
 	{
 		// TODO: or textContent?
@@ -49,7 +53,7 @@ class AgaviXmlConfigDomElement extends DOMElement implements IteratorAggregate
 	 *
 	 * @return     Iterator An iterator.
 	 *
-	 * @author     David Zülke <dz@bitxtender.com>
+	 * @author     David Zülke <david.zuelke@bitextender.com>
 	 * @since      1.0.0
 	 */
 	public function getIterator()
@@ -63,11 +67,65 @@ class AgaviXmlConfigDomElement extends DOMElement implements IteratorAggregate
 		}
 	}
 	
+	/**
+	 * Retrieve singular form of given element name.
+	 * This does special splitting only of the last part of the name if the name
+	 * of the element contains hyphens, underscores or dots.
+	 *
+	 * @param      string The element name to singularize.
+	 *
+	 * @return     string The singularized element name.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
+	 */
 	protected function singularize($name)
 	{
+		// TODO: shouldn't this be static?
 		$names = preg_split('#([_\-\.])#', $name, -1, PREG_SPLIT_DELIM_CAPTURE);
 		$names[count($names) - 1] = AgaviInflector::singularize(end($names));
 		return implode('', $names);
+	}
+	
+	/**
+	 * Convenience method to retrieve child elements of the given name.
+	 * Accepts singular or plural forms of the name, and will detect and handle
+	 * parent containers with plural names properly.
+	 *
+	 * @param      string The name of the element(s) to check for.
+	 * @param      string The namespace URI. If null, the document default
+	 *                    namespace will be used. If an empty string, no namespace
+	 *                    will be used.
+	 *
+	 * @return     DOMNodeList A list of the child elements.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function get($name, $namespaceUri = null)
+	{
+		return $this->getChildren($name, $namespaceUri, true);
+	}
+	
+	/**
+	 * Convenience method to check if there are child elements of the given name.
+	 * Accepts singular or plural forms of the name, and will detect and handle
+	 * parent containers with plural names properly.
+	 *
+	 * @param      string The name of the element(s) to check for.
+	 * @param      string The namespace URI. If null, the document default
+	 *                    namespace will be used. If an empty string, no namespace
+	 *                    will be used.
+	 *
+	 * @return     bool True if one or more child elements with the given name
+	 *                  exist, false otherwise.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function has($name, $namespaceUri = null)
+	{
+		return $this->hasChildren($name, $namespaceUri, true);
 	}
 	
 	/**
@@ -77,25 +135,42 @@ class AgaviXmlConfigDomElement extends DOMElement implements IteratorAggregate
 	 * @param      string The namespace URI. If null, the document default
 	 *                    namespace will be used. If an empty string, no namespace
 	 *                    will be used.
+	 * @param      bool   Whether or not to apply automatic singular/plural
+	 *                    handling that skips plural container elements.
 	 *
 	 * @return     int The number of child elements with the given name.
 	 *
 	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @author     David Zülke <david.zuelke@bitextender.com>
 	 * @since      1.0.0
 	 */
-	public function countChildren($name, $namespaceUri = null)
+	public function countChildren($name, $namespaceUri = null, $pluralMagic = false)
 	{
-		// check for child elements(!) using XPath
-		// if arg is true, then only check for elements from our default namespace
+		// if arg is null, then only check for elements from our default namespace
+		// if namespace uri is null, use default ns. if empty string, use no ns
 		$namespaceUri = ($namespaceUri === null ? $this->ownerDocument->getDefaultNamespaceUri() : $namespaceUri);
-		$singularName = $this->singularize($name);
 		
-		$xpath = $this->ownerDocument->getXpath();
-		if($namespaceUri) {
-			return (int)$xpath->evaluate(sprintf('count(child::*[local-name() = "%2$s" and namespace-uri() = "%3$s"]) + count(child::*[local-name() = "%1$s" and namespace-uri() = "%3$s"]/*[local-name() = "%2$s" and namespace-uri() = "%3$s"])', $name, $singularName, $namespaceUri), $this);
+		// init our vars
+		$query = '';
+		$singularName = null;
+		
+		if($pluralMagic) {
+			// we always assume that we either get plural names, or the singular of the singular is not different from the singular :)
+			$singularName = $this->singularize($name);
+			if($namespaceUri) {
+				$query = 'count(child::*[local-name() = "%2$s" and namespace-uri() = "%3$s"]) + count(child::*[local-name() = "%1$s" and namespace-uri() = "%3$s"]/*[local-name() = "%2$s" and namespace-uri() = "%3$s"])';
+			} else {
+				$query = 'count(%1$s/%2$s) + count(%2$s)';
+			}
 		} else {
-			return (int)$xpath->evaluate(sprintf('count(%2$s) + count(%1$s/%2$s)', $name, $singularName), $this);
+			if($namespaceUri) {
+				$query = 'count(child::*[local-name() = "%1$s" and namespace-uri() = "%3$s"])';
+			} else {
+				$query = 'count(%1$s)';
+			}
 		}
+		
+		return (int)$this->ownerDocument->getXpath()->evaluate(sprintf($query, $name, $singularName, $namespaceUri), $this);
 	}
 	
 	/**
@@ -106,16 +181,19 @@ class AgaviXmlConfigDomElement extends DOMElement implements IteratorAggregate
 	 * @param      string The namespace URI. If null, the document default
 	 *                    namespace will be used. If an empty string, no namespace
 	 *                    will be used.
+	 * @param      bool   Whether or not to apply automatic singular/plural
+	 *                    handling that skips plural container elements.
 	 *
 	 * @return     bool True if one or more child elements with the given name
 	 *                  exist, false otherwise.
 	 *
 	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @author     David Zülke <david.zuelke@bitextender.com>
 	 * @since      1.0.0
 	 */
-	public function hasChildren($name, $namespaceUri = null)
+	public function hasChildren($name, $namespaceUri = null, $pluralMagic = false)
 	{
-		return $this->countChildren($name, $namespaceUri) !== 0;
+		return $this->countChildren($name, $namespaceUri, $pluralMagic) !== 0;
 	}
 	
 	/**
@@ -125,26 +203,43 @@ class AgaviXmlConfigDomElement extends DOMElement implements IteratorAggregate
 	 * @param      string The namespace URI. If null, the document default
 	 *                    namespace will be used. If an empty string, no namespace
 	 *                    will be used.
+	 * @param      string Whether or not to apply pluralization magic in selects.
+	 * @param      bool   Whether or not to apply automatic singular/plural
+	 *                    handling that skips plural container elements.
 	 *
 	 * @return     DOMNodeList A list of the child elements.
 	 *
 	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @author     David Zülke <david.zuelke@bitextender.com>
 	 * @since      1.0.0
 	 */
-	public function getChildren($name, $namespaceUri = null)
+	public function getChildren($name, $namespaceUri = null, $pluralMagic = false)
 	{
-		// check for child elements(!) using XPath
-		// if arg is true, then only check for elements from our default namespace
+		// if arg is null, then only check for elements from our default namespace
 		// if namespace uri is null, use default ns. if empty string, use no ns
 		$namespaceUri = ($namespaceUri === null ? $this->ownerDocument->getDefaultNamespaceUri() : $namespaceUri);
-		$singularName = $this->singularize($name);
 		
-		$xpath = $this->ownerDocument->getXpath();
-		if($namespaceUri) {
-			return $xpath->query(sprintf('child::*[local-name() = "%2$s" and namespace-uri() = "%3$s"] | child::*[local-name() = "%1$s" and namespace-uri() = "%3$s"]/*[local-name() = "%2$s" and namespace-uri() = "%3$s"]', $name, $singularName, $namespaceUri), $this);
+		// init our vars
+		$query = '';
+		$singularName = null;
+		
+		if($pluralMagic) {
+			// we always assume that we either get plural names, or the singular of the singular is not different from the singular :)
+			$singularName = $this->singularize($name);
+			if($namespaceUri) {
+				$query = 'child::*[local-name() = "%2$s" and namespace-uri() = "%3$s"] | child::*[local-name() = "%1$s" and namespace-uri() = "%3$s"]/*[local-name() = "%2$s" and namespace-uri() = "%3$s"]';
+			} else {
+				$query = '%1$s/%2$s | %2$s';
+			}
 		} else {
-			return $xpath->query(sprintf('%1$s/%2$s | %2$s', $name, $singularName), $this);
+			if($namespaceUri) {
+				$query = 'child::*[local-name() = "%1$s" and namespace-uri() = "%3$s"]';
+			} else {
+				$query = '%1$s';
+			}
 		}
+		
+		return $this->ownerDocument->getXpath()->query(sprintf($query, $name, $singularName, $namespaceUri), $this);
 	}
 	
 	/**
@@ -165,34 +260,37 @@ class AgaviXmlConfigDomElement extends DOMElement implements IteratorAggregate
 	 */
 	public function hasChild($name, $namespaceUri = null)
 	{
-		// if namespace uri is null, use default ns. if empty string, use no ns
-		return $this->countChildren($name, $namespaceUri) === 1;
-		
-		// XXX: not necessary for single elements?
-		// remember singular/plural support
+		return $this->getChild($name, $namespaceUri) !== null;
 	}
 	
 	/**
 	 * Return a single child element with a given name.
+	 * Only returns anything if there is exactly one child of this name.
 	 *
 	 * @param      string The name of the element.
 	 * @param      string The namespace URI. If null, the document default
 	 *                    namespace will be used. If an empty string, no namespace
 	 *                    will be used.
 	 *
-	 * @return     DOMElement The child element, or null if none xists.
+	 * @return     DOMElement The child element, or null if none exists.
 	 *
 	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @author     David Zülke <david.zuelke@bitextender.com>
 	 * @since      1.0.0
 	 */
 	public function getChild($name, $namespaceUri = null)
 	{
-		$list = $this->getChildren($name, $namespaceUri);
+		// if arg is null, then only check for elements from our default namespace
+		// if namespace uri is null, use default ns. if empty string, use no ns
+		$namespaceUri = ($namespaceUri === null ? $this->ownerDocument->getDefaultNamespaceUri() : $namespaceUri);
 		
-		if($list->length > 0) {
-			return $list->item(0);
+		if($namespaceUri) {
+			$query = 'self::node()[count(child::*[local-name() = "%1$s" and namespace-uri() = "%2$s"]) = 1]/*[local-name() = "%1$s" and namespace-uri() = "%2$s"]';
+		} else {
+			$query = 'self::node()[count(child::%1$s) = 1]/%1$s';
 		}
-		return null;
+		
+		return $this->ownerDocument->getXpath()->query(sprintf($query, $name, $namespaceUri), $this)->item(0);
 	}
 	
 	/**
@@ -208,7 +306,7 @@ class AgaviXmlConfigDomElement extends DOMElement implements IteratorAggregate
 	 *
 	 * @see        DOMElement::getAttribute()
 	 *
-	 * @author     David Zülke <dz@bitxtender.com>
+	 * @author     David Zülke <david.zuelke@bitextender.com>
 	 * @since      1.0.0
 	 */
 	public function getAttribute($name, $default = null)
@@ -238,7 +336,7 @@ class AgaviXmlConfigDomElement extends DOMElement implements IteratorAggregate
 	 *
 	 * @see        DOMElement::getAttributeNS()
 	 *
-	 * @author     David Zülke <dz@bitxtender.com>
+	 * @author     David Zülke <david.zuelke@bitextender.com>
 	 * @since      1.0.0
 	 */
 	public function getAttributeNS($namespaceUri, $localName, $default = null)
@@ -247,6 +345,38 @@ class AgaviXmlConfigDomElement extends DOMElement implements IteratorAggregate
 		
 		if($retval === null) {
 			$retval = $default;
+		}
+		
+		return $retval;
+	}
+	
+	/**
+	 * Retrieve all attributes of the element that are in no namespace.
+	 *
+	 * @return     array An associative array of attribute names and values.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function getAttributes()
+	{
+		return $this->getAttributesNS('');
+	}
+	
+	/**
+	 * Retrieve all attributes of the element that are in the given namespace.
+	 *
+	 * @return     array An associative array of attribute names and values.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function getAttributesNS($namespaceUri)
+	{
+		$retval = array();
+		
+		foreach($this->ownerDocument->getXpath()->query(sprintf('@*[namespace-uri() = "%s"]', $namespaceUri), $this) as $attribute) {
+			$retval[$attribute->localName] = $attribute->nodeValue;
 		}
 		
 		return $retval;
@@ -263,7 +393,7 @@ class AgaviXmlConfigDomElement extends DOMElement implements IteratorAggregate
 	public function hasAgaviParameters()
 	{
 		if($this->ownerDocument->isAgaviConfiguration()) {
-			return $this->hasChildren('parameters', AgaviXmlConfigParser::NAMESPACE_AGAVI_ENVELOPE_LATEST);
+			return $this->has('parameters', AgaviXmlConfigParser::NAMESPACE_AGAVI_ENVELOPE_LATEST);
 		}
 		
 		return false;
@@ -280,6 +410,7 @@ class AgaviXmlConfigDomElement extends DOMElement implements IteratorAggregate
 	 * @return     array The complete array of parameters.
 	 *
 	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @author     David Zülke <david.zuelke@bitextender.com>
 	 * @since      1.0.0
 	 */
 	public function getAgaviParameters(array $existing = array(), $literalize = true)
@@ -288,7 +419,7 @@ class AgaviXmlConfigDomElement extends DOMElement implements IteratorAggregate
 		$offset = 0;
 		
 		if($this->ownerDocument->isAgaviConfiguration()) {
-			$elements = $this->getChildren('parameters', AgaviXmlConfigParser::NAMESPACE_AGAVI_ENVELOPE_LATEST);
+			$elements = $this->get('parameters', AgaviXmlConfigParser::NAMESPACE_AGAVI_ENVELOPE_LATEST);
 			
 			foreach($elements as $element) {
 				$key = null;
