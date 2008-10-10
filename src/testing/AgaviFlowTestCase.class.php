@@ -30,15 +30,30 @@
  */
 abstract class AgaviFlowTestCase extends PHPUnit_Framework_TestCase implements AgaviIFlowTestCase
 {
+	/**
+	 * @var        AgaviRequestDataHolder the arguments to use for the dispatch
+	 */
 	protected $arguments;
 	
+	/**
+	 * @var        string the name of the action to use
+	 */
 	protected $acionName;
 	
+	/**
+	 * @var        string the name of the module the action resides in
+	 */
 	protected $moduleName;
 	
+	/**
+	 * @var        AgaviResponse the response after the dispatch call
+	 */
 	protected $response;
 	
-	protected $method;
+	/**
+	 * @var        string the request method to use
+	 */
+	protected $method = 'read';
 	
 	/**
 	 * Constructs a test case with the given name.
@@ -51,8 +66,16 @@ abstract class AgaviFlowTestCase extends PHPUnit_Framework_TestCase implements A
 	{
 		parent::__construct($name, $data, $dataName);
 		$this->setRunTestInSeparateProcess(true);
+		$this->setArguments($this->createRequestDataHolder());
 	}
 	
+	
+	/**
+	 * dispatch the request
+	 *
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0 
+	 */
 	public function dispatch()
 	{
 		$context = AgaviContext::getInstance();
@@ -70,29 +93,60 @@ abstract class AgaviFlowTestCase extends PHPUnit_Framework_TestCase implements A
 	
 		$ctrl = $context->getController();
 		$ctrl->setParameter('send_response', false);
-		$this->response = $ctrl->dispatch();
+		$this->response = $ctrl->dispatch($this->arguments);
 	}
 	
+	/**
+	 * set the request method to use
+	 * 
+	 * @param      string the normalized method name
+	 * 
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */
 	public function setRequestMethod($method)
 	{
 		$this->method = $method;
 	}
 	
-	public function assertValidationFailed($message = '')
-	{
-		
-	}
-	
+	/**
+	 * assert that the response has a given tag
+	 * 
+	 * @see the documentation of PHPUnit's assertTag()
+	 * 
+	 * @param      array the matcher describing the tag
+	 * @param      string an optional message
+	 * 
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */
 	public function assertResponseHasTag($matcher, $message = '', $isHtml = true)
 	{
 		$this->assertTag($matcher, $this->response->getContent(), $message, $isHtml);
 	}
 	
+	
+	/**
+	 * assert that the response does not have a given tag
+	 * 
+	 * @see the documentation of PHPUnit's assertTag()
+	 * 
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */
 	public function assertResponseHasNotTag($matcher, $message = '', $isHtml = true)
 	{
 		$this->assertNotTag($matcher, $this->response->getContent(), $message, $isHtml);
 	}
 
+	/**
+	 * set the argument to be used in simulating the request
+	 * 
+	 * @param      AgaviRequestDataHolder the arguments
+	 * 
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */
 	protected function setArguments(AgaviRequestDataHolder $arguments)
 	{
 		$this->arguments = $arguments;

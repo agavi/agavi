@@ -29,9 +29,13 @@
  */
 interface AgaviIFlowTestCase extends AgaviITestCase
 {
+	/**
+	 * dispatch the request
+	 *
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0 
+	 */
 	public function dispatch();
-	
-	public function assertValidationFailed($message = '');
 }
 
 ?>
