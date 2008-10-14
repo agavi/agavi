@@ -85,7 +85,7 @@ class AgaviConfigHandlersConfigHandler extends AgaviConfigHandler
 				
 				$handlers[$category] = array(
 					'class' => $class,
-					'parameters' => $this->getItemParameters($handler),
+					'parameters' => $this->getItemParameters($handler, isset($handlers[$category]['parameters']) ? $handlers[$category]['parameters'] : array()),
 					'validation' => $validation,
 				);
 			}

@@ -6,6 +6,8 @@ AGAVI CHANGELOG
 
 CHG: Update logging.xml in Sample app and code templates and add "log" dir to Sample app (#879) (David)
 
+FIX: Parameters are not merged in config_handlers.xml (#880) (David)
+
 
 0.11.4 RC1 (October 2, 2008)
 ----------------------------
