@@ -1,8 +1,8 @@
 AGAVI RELEASE NOTES
 ===================
 
-Version 0.11.4 - October 2, 2008
-================================
+Version 0.11.4 - October 14, 2008
+=================================
 
 This is a maintenance release that fixes a couple of minor issues, such as problems in the sample app introduced in 0.11.3 and a missing class in autoload.xml.
 
