@@ -6,6 +6,9 @@
 				<testfiles>
 					<testfile>unit/PriceFinderModelTest.php</testfile>
 					<testfile>fragment/SearchEngineSpamActionTest.php</testfile>
+					<testfile>fragment/SearchEngineSpamSuccessViewTest.php</testfile>
+					<testfile>fragment/LoginSuccessViewTest.php</testfile>
+					<testfile>flow/LoginFlowTest.php</testfile>
 				</testfiles>
 			</suite>
 		</suites>

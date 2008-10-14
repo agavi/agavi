@@ -129,7 +129,7 @@ class AgaviController extends AgaviParameterHolder
 	}
 	
 	/**
-	 * initialize a module and load it's autoload, module config etc. 
+	 * Initialize a module and load its autoload, module config etc.
 	 *
 	 * @param      string  The name of the module to initialize
 	 *
@@ -138,14 +138,24 @@ class AgaviController extends AgaviParameterHolder
 	 */
 	public function initializeModule($moduleName)
 	{
-		if(null === AgaviConfig::get('modules.' . strtolower($moduleName) . '.enabled')) {
-			
+		$lowerModuleName = strtolower($moduleName);
+		
+		if(null === AgaviConfig::get('modules.' . $lowerModuleName . '.enabled')) {
+			// set some defaults first
+			AgaviConfig::fromArray(array(
+				'modules.' . $lowerModuleName . '.agavi.action.path' => '%core.module_dir%/${moduleName}/actions/${actionName}Action.class.php',
+				'modules.' . $lowerModuleName . '.agavi.cache.path' => '%core.module_dir%/${moduleName}/cache/${actionName}.xml',
+				'modules.' . $lowerModuleName . '.agavi.template.directory' => '%core.module_dir%/${module}/templates',
+				'modules.' . $lowerModuleName . '.agavi.validate.path' => '%core.module_dir%/${moduleName}/validate/${actionName}.xml',
+				'modules.' . $lowerModuleName . '.agavi.view.path' => '%core.module_dir%/${moduleName}/views/${viewName}View.class.php',
+				'modules.' . $lowerModuleName . '.agavi.view.name' => '${actionName}${viewName}',
+			));
 			// include the module configuration
 			// loaded only once due to the way load() (former import()) works
 			if(is_readable(AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/config/module.xml')) {
 				include_once(AgaviConfigCache::checkConfig(AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/config/module.xml'));
 			} else {
-				AgaviConfig::set('modules.' . strtolower($moduleName) . '.enabled', true);
+				AgaviConfig::set('modules.' . $lowerModuleName . '.enabled', true);
 			}
 			
 			$moduleAutoload = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/config/autoload.xml';
@@ -156,7 +166,7 @@ class AgaviController extends AgaviParameterHolder
 			}
 		}
 		
-		if(!AgaviConfig::get('modules.' . strtolower($moduleName) . '.enabled')) {
+		if(!AgaviConfig::get('modules.' . $lowerModuleName . '.enabled')) {
 			throw new AgaviDisabledModuleException(sprintf('The module "%1$s" is disabled.', $moduleName));
 		}
 		
@@ -285,22 +295,21 @@ class AgaviController extends AgaviParameterHolder
 	public function checkActionFile($moduleName, $actionName)
 	{
 		$this->initializeModule($moduleName);
+		
 		$actionName = AgaviToolkit::canonicalName($actionName);
-		$file = AgaviToolkit::expandVariables(
-			AgaviToolkit::expandDirectives(
-				AgaviConfig::get(
-					sprintf('modules.%s.agavi.action.path', strtolower($moduleName)),
-					'%core.module_dir%/${moduleName}/actions/${actionName}Action.class.php'
-				)
-			),
+		$file = AgaviToolkit::evaluateModuleDirective(
+			$moduleName,
+			'agavi.action.path',
 			array(
 				'moduleName' => $moduleName,
 				'actionName' => $actionName,
 			)
 		);
+		
 		if(is_readable($file) && substr($actionName, 0, 1) !== '/') {
 			return $file;
 		}
+		
 		return false;
 	}
 	
@@ -321,7 +330,6 @@ class AgaviController extends AgaviParameterHolder
 	 */
 	public function createActionInstance($moduleName, $actionName)
 	{
-		
 		$this->initializeModule($moduleName);
 		
 		$actionName = AgaviToolkit::canonicalName($actionName);
@@ -377,23 +385,21 @@ class AgaviController extends AgaviParameterHolder
 	public function checkViewFile($moduleName, $viewName)
 	{
 		$this->initializeModule($moduleName);
+		
 		$viewName = AgaviToolkit::canonicalName($viewName);
-		$file = AgaviToolkit::expandVariables(
-			AgaviToolkit::expandDirectives(
-				AgaviConfig::get(
-					sprintf('modules.%s.agavi.view.path', strtolower($moduleName)),
-					'%core.module_dir%/${moduleName}/views/${viewName}View.class.php'
-				)
-			),
+		$file = AgaviToolkit::evaluateModuleDirective(
+			$moduleName,
+			'agavi.view.path',
 			array(
 				'moduleName' => $moduleName,
 				'viewName' => $viewName,
 			)
 		);
+		
 		if(is_readable($file) && substr($viewName, 0, 1) !== '/') {
 			return $file;
 		}
-			
+		
 		return false;
 	}
 	
