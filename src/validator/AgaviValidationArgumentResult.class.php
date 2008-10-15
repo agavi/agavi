@@ -85,7 +85,7 @@ class AgaviValidationArgumentResult
 	 */
 	public function getSeverity()
 	{
-		return $this->validationResult->getArgumentErrorSeverity($this->argument);
+		return $this->validationResult->getAuthoritativeArgumentSeverity($this->argument);
 	}
 	
 	/**
