@@ -40,7 +40,7 @@ class AgaviValidationValidatorResult
 	protected $validatorName;
 	
 	/**
-	 * create a new AgaviValidationValidatorResult
+	 * Create a new AgaviValidationValidatorResult
 	 * 
 	 * @param      AgaviValidationResult the validation result instance.
 	 * @param      string the affected validators name.
@@ -55,7 +55,7 @@ class AgaviValidationValidatorResult
 	}
 	
 	/**
-	 * retrieve the affected validators name.
+	 * Retrieve the affected validators name.
 	 * 
 	 * @return     string the validators name.
 	 * 
@@ -68,9 +68,9 @@ class AgaviValidationValidatorResult
 	}
 	
 	/**
-	 * retrieve all AgaviValidationIncidents for this instances' validator.
+	 * Retrieve all AgaviValidationIncidents for this instances' validator.
 	 * 
-	 * @return     array a collection of affected {@see AgaviValidationIncident}.
+	 * @return     array a collection of affected {@see AgaviValidationIncident}s.
 	 * 
 	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
 	 * @since      1.0.0
