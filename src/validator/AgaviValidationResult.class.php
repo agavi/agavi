@@ -146,7 +146,11 @@ class AgaviValidationResult
 	 */
 	public function addArgumentResult(AgaviValidationArgument $argument, $result, $validator = null)
 	{
-		$this->argumentResults[$argument->getHash()][] = array($argument, $result, $validator);
+		$this->argumentResults[$argument->getHash()][] = array(
+			'argument' => $argument,
+			'severity' => $result,
+			'validator' => $validator,
+		);
 	}
 	
 	/**
@@ -171,8 +175,8 @@ class AgaviValidationResult
 
 		$severity = AgaviValidator::NOT_PROCESSED;
 		foreach($this->argumentResults[$argument->getHash()] as $result) {
-			if($validatorName === null || ($result[2] instanceof AgaviValidator && $result[2]->getName() == $validatorName)) {
-				$severity = max($severity, $result[1]);
+			if($validatorName === null || ($result['validator'] instanceof AgaviValidator && $result['validator']->getName() == $validatorName)) {
+				$severity = max($severity, $result['severity']);
 			}
 		}
 
@@ -231,14 +235,14 @@ class AgaviValidationResult
 			$hasInSource = false;
 			$severity = AgaviValidator::SUCCESS;
 			foreach($results as $result) {
-				if($source === null || $result[0]->getSource() == $source) {
+				if($source === null || $result['argument']->getSource() == $source) {
 					$hasInSource = true;
-					$severity = max($severity, $result[1]);
+					$severity = max($severity, $result['severity']);
 				}
 			}
 			if($hasInSource && $severity <= AgaviValidator::INFO) {
-				$argument = $results[0][0];
-				$arguments[$argument->getHash()] = $results[0][0];
+				$argument = $results[0]['argument'];
+				$arguments[$argument->getHash()] = $argument;
 			}
 		}
 
