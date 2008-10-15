@@ -538,10 +538,10 @@ abstract class AgaviValidator extends AgaviParameterHolder
 			if(is_array($value)) {
 				// for arrays all child elements need to be marked as not processed
 				foreach(AgaviArrayPathDefinition::getFlatKeyNames($value) as $keyName) {
-					$this->parentContainer->addFieldResult($this, $cp->pushRetNew($keyName)->__toString(), AgaviValidator::NOT_PROCESSED);
+					$this->parentContainer->addArgumentResult(new AgaviValidationArgument($cp->pushRetNew($keyName)->__toString(), $this->getParameter('source')), AgaviValidator::NOT_PROCESSED, $this);
 				}
 			}
-			$this->parentContainer->addFieldResult($this, $cp->__toString(), AgaviValidator::NOT_PROCESSED);
+			$this->parentContainer->addArgumentResult(new AgaviValidationArgument($cp->__toString(), $this->getParameter('source')), AgaviValidator::NOT_PROCESSED, $this);
 		}
 	}
 
@@ -592,7 +592,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 			if($this->parentContainer !== null) {
 				if($result != self::NOT_PROCESSED) {
 					foreach($this->affectedArguments as $fieldname) {
-						$this->parentContainer->addFieldResult($this, $fieldname, $result);
+						$this->parentContainer->addArgumentResult(new AgaviValidationArgument($fieldname, $this->getParameter('source')), $result, $this);
 					}
 				}
 

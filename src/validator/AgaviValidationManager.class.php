@@ -403,6 +403,22 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	}
 
 	/**
+	 * Adds a intermediate result of an validator for the given argument
+	 *
+	 * @param      AgaviValidationArgument The argument
+	 * @param      int                     The arguments result.
+	 * @param      AgaviValidator          The validator (if the error was caused
+	 *                                     inside a validator).
+	 *
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function addArgumentResult(AgaviValidationArgument $argument, $result, $validator = null)
+	{
+		return $this->lastResult->addArgumentResult($argument, $result, $validator);
+	}
+
+	/**
 	 * Will return the highest error code for a field. This can be optionally 
 	 * limited to the highest error code of an validator. If the field was not 
 	 * "touched" by a validator null is returned.
