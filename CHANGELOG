@@ -81,8 +81,16 @@ CHG: Deprecated AgaviAdodbDatabase (#662) (David)
 FIX: Security filters cannot perform checks in addition to isSecure() (#671) (David)
 
 
-0.11.4 RC1 (September ??, 2008)
--------------------------------
+0.11.4 (October 14, 2008)
+-------------------------
+
+CHG: Update logging.xml in Sample app and code templates and add "log" dir to Sample app (#879) (David)
+
+FIX: Parameters are not merged in config_handlers.xml (#880) (David)
+
+
+0.11.4 RC1 (October 2, 2008)
+----------------------------
 
 ADD: Allow specifying of doctrine template implementations (#864) (David, TANAKA Koichi)
 

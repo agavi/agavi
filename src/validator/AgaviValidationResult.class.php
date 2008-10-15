@@ -33,10 +33,12 @@ class AgaviValidationResult
 	 * @var        array A List of result severities for each argument which has been validated.
 	 */
 	protected $argumentResults;
+	
 	/**
 	 * @var        int The highest error severity thrown by the validation run.
 	 */
 	protected $result = AgaviValidator::NOT_PROCESSED;
+	
 	/**
 	 * @var        array The incidents which were thrown by the validation run.
 	 */
@@ -89,7 +91,7 @@ class AgaviValidationResult
 		}
 		// store the result for the argument if it's not stored yet
 		foreach($incident->getArguments() as $argument) {
-			$argumentSeverity = $this->getArgumentErrorSeverity($argument);
+			$argumentSeverity = $this->getAuthoritativeArgumentSeverity($argument);
 			if($argumentSeverity === null || $argumentSeverity < $severity) {
 				$this->addArgumentResult($argument, $incident->getSeverity());
 			}
@@ -148,20 +150,20 @@ class AgaviValidationResult
 	}
 	
 	/**
-	 * Will return the highest error severity for a argument. This can be optionally 
-	 * limited to the highest error severity of an validator. If the field was not 
-	 * "touched" by a validator null is returned.
+	 * Will return the highest error severity for an argument. If the field was
+	 * not "touched" by a validator null is returned. Can optionally be resticted
+	 * to the severity of just one specific validator.
 	 *
 	 * @param      AgaviValidationArgument The argument.
-	 * @param      string The Validator name.
+	 * @param      string                  Optional name of a specific validator
+	 *                                     to get a result for.
 	 *
 	 * @return     int The error severity.
 	 *
 	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
 	 * @since      1.0.0
 	 */
-	// getArgumentSeverity ?
-	public function getArgumentErrorSeverity(AgaviValidationArgument $argument, $validatorName = null)
+	public function getAuthoritativeArgumentSeverity(AgaviValidationArgument $argument, $validatorName = null)
 	{
 		if(!isset($this->argumentResults[$argument->getHash()])) {
 			return null;
@@ -206,7 +208,7 @@ class AgaviValidationResult
 	 */
 	public function isArgumentFailed(AgaviValidationArgument $argument)
 	{
-		$severity = $this->getArgumentErrorSeverity($argument);
+		$severity = $this->getAuthoritativeArgumentSeverity($argument);
 		return ($severity > AgaviValidator::SUCCESS);
 	}
 	
@@ -256,7 +258,7 @@ class AgaviValidationResult
 	 */
 	public function getArgumentResult($nameOrArgument, $source = null)
 	{
-		if(!($nameOrArgument instanceof AgaviValidationArgumentResult)) {
+		if(!($nameOrArgument instanceof AgaviValidationArgument)) {
 			$nameOrArgument = new AgaviValidationArgument($nameOrArgument, $source);
 		}
 		return new AgaviValidationArgumentResult($this, $nameOrArgument);

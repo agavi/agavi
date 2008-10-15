@@ -80,8 +80,8 @@ abstract class AgaviFlowTestCase extends PHPUnit_Framework_TestCase implements A
 	{
 		$context = AgaviContext::getInstance();
 		
-		$ro = $context->getRouting();
-		$ro->disable();
+		// switch off routing
+		$context->getRouting()->setParameter('enabled', false);
 		
 		$rq = $context->getRequest();
 		$rq->setMethod($this->method);

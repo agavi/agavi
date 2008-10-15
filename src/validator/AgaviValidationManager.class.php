@@ -418,7 +418,7 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	 */
 	public function getFieldErrorCode($fieldname, $validatorName = null)
 	{
-		return $this->lastResult->getArgumentErrorSeverity(new AgaviValidationArgument($fieldname), $validatorName);
+		return $this->lastResult->getAuthoritativeArgumentSeverity(new AgaviValidationArgument($fieldname), $validatorName);
 	}
 
 	/**

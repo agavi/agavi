@@ -84,7 +84,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 
 		$rq = $this->getContext()->getRequest();
 
-		$vm = $container->getValidationManager();
+		$vr = $container->getValidationManager()->getLastResult();
 
 		$cfg = $rq->getAttributes('org.agavi.filter.FormPopulationFilter');
 
@@ -262,7 +262,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 		}
 
 		// an array of all validation incidents; errors inserted for fields or multiple fields will be removed in here
-		$allIncidents = $vm->getIncidents();
+		$allIncidents = $vr->getIncidents();
 
 		foreach($forms as $form) {
 			if($populate instanceof AgaviParameterHolder) {
@@ -355,8 +355,15 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 					continue;
 				}
 
+				$argument = new AgaviValidationArgument(
+					$pname,
+					($element->nodeName == 'input' && $element->getAttribute('type') == 'file')
+						? AgaviWebRequestDataHolder::SOURCE_FILES
+						: AgaviRequestDataHolder::SOURCE_PARAMETERS
+				);
+				
 				// there's an error with the element's name in the request? good. let's give the baby a class!
-				if($vm->isFieldFailed($pname)) {
+				if($vr->isArgumentFailed($argument)) {
 					// a collection of all elements that need an error class
 					$errorClassElements = array();
 					// the element itself of course
@@ -393,9 +400,19 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 					// up next: the error messages
 					$fieldIncidents = array();
 					$multiFieldIncidents = array();
-					foreach($vm->getFieldIncidents($pname) as $incident) {
+					// grab all incidents for this field
+					foreach($vr->getArgumentResult($argument)->getIncidents() as $incident) {
 						if(($incidentKey = array_search($incident, $allIncidents, true)) !== false) {
-							if(count($incident->getFields()) > 1) {
+							// does this one have more than one field?
+							// and is it really more than one parameter or file, not a cookie or header?
+							$incidentArgumentCount = 0;
+							$incidentArguments = $incident->getArguments();
+							foreach($incidentArguments as $incidentArgument) {
+								if(in_array($incidentArgument->getSource(), array(AgaviWebRequestDataHolder::SOURCE_FILES, AgaviRequestDataHolder::SOURCE_PARAMETERS))) {
+									$incidentArgumentCount++;
+								}
+							}
+							if($incidentArgumentCount > 1) {
 								$multiFieldIncidents[] = $incident;
 							} else {
 								$fieldIncidents[] = $incident;
@@ -414,6 +431,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 					}
 				}
 
+				// FPF only handles "normal" values, as file inputs cannot be re-populated, so getParameter() with no source-specific stuff is fine here
 				$value = $p->getParameter($pname);
 
 				if(is_array($value) && !($element->nodeName == 'select' || $checkValue)) {
@@ -499,6 +517,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 			}
 
 			// now output the remaining incidents
+			// might include errors for cookies, headers and whatnot, but that is okay
 			if($this->insertErrorMessages($form, $errorMessageRules, $allIncidents)) {
 				$allIncidents = array();
 			}

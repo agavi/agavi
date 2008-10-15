@@ -31,25 +31,22 @@
 class AgaviValidationArgument
 {
 	/**
-	 * @var        string the name of the argument
+	 * @var        string the name of the argument.
 	 */
 	protected $name;
 	
 	/**
-	 * @var        string the name of the source
+	 * @var        string the name of the source.
 	 */
 	protected $source;
 	
 	/**
-	 * create a new AgaviValidationArgument
+	 * create a new AgaviValidationArgument instance.
 	 * 
-	 * @param      string the name of the argument
-	 * @param      string the name of the source, if null, AgaviRequestDataHolder::SOURCE_PARAMETERS is used
+	 * @param      string the name of the argument.
+	 * @param      string the name of the source, if null, AgaviRequestDataHolder::SOURCE_PARAMETERS is used.
 	 * 
 	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
-	 * @copyright  Authors
-	 * @copyright  The Agavi Project
-	 *
 	 * @since      1.0.0
 	 */
 	public function __construct($name, $source = null)
@@ -62,14 +59,11 @@ class AgaviValidationArgument
 	}
 	
 	/**
-	 * retrieve the name of the argument
+	 * retrieve the name of the argument for this instance.
 	 * 
-	 * @return string
+	 * @return     string the name of the argument
 	 *
 	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
-	 * @copyright  Authors
-	 * @copyright  The Agavi Project
-	 *
 	 * @since      1.0.0
 	 */
 	public function getName()
@@ -78,14 +72,11 @@ class AgaviValidationArgument
 	}
 	
 	/**
-	 * retrieve the name of the source
+	 * retrieve the name of the source for this instance.
 	 * 
-	 * @return string
+	 * @return     string the name of the source.
 	 *
 	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
-	 * @copyright  Authors
-	 * @copyright  The Agavi Project
-	 *
 	 * @since      1.0.0
 	 */
 	public function getSource()
@@ -94,14 +85,11 @@ class AgaviValidationArgument
 	}
 	
 	/**
-	 * get a unique hash value for this AgaviValidationArgument
+	 * get a unique hash value for this AgaviValidationArgument.
 	 * 
-	 * @return string
+	 * @return     string the hash value
 	 *
 	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
-	 * @copyright  Authors
-	 * @copyright  The Agavi Project
-	 *
 	 * @since      1.0.0
 	 */
 	public function getHash()
