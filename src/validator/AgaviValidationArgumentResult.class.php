@@ -30,24 +30,22 @@
 class AgaviValidationArgumentResult
 {
 	/**
-	 * @var        AgaviValidationResult the validation result
+	 * @var        AgaviValidationResult The validation result.
 	 */
 	protected $validationResult;
+	
 	/**
-	 * @var        AgaviValidationArgument the argument
+	 * @var        AgaviValidationArgument The argument instance.
 	 */
 	protected $argument;
 	
 	/**
-	 * create a new AgaviValidationArgumentResult
+	 * Create a new AgaviValidationArgumentResult.
 	 * 
-	 * @param      AgaviValidationResult the result
-	 * @param      AgaviValidationArgument the argument the result is valid for
+	 * @param      AgaviValidationResult   The result.
+	 * @param      AgaviValidationArgument The argument the result is valid for.
 	 * 
 	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
-	 * @copyright  Authors
-	 * @copyright  The Agavi Project
-	 *
 	 * @since      1.0.0
 	 */
 	public function __construct(AgaviValidationResult $result, AgaviValidationArgument $argument)
@@ -57,14 +55,11 @@ class AgaviValidationArgumentResult
 	}
 	
 	/**
-	 * retrieve the argument 
+	 * Retrieve the argument in this result.
 	 * 
-	 * @return     AgaviValidationArgument
+	 * @return     AgaviValidationArgument The argument.
 	 * 
 	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
-	 * @copyright  Authors
-	 * @copyright  The Agavi Project
-	 *
 	 * @since      1.0.0
 	 */
 	public function getArgument()
@@ -73,14 +68,11 @@ class AgaviValidationArgumentResult
 	}
 	
 	/**
-	 * retrieve the results severity 
+	 * Retrieve the result's severity.
 	 * 
-	 * @return     integer
+	 * @return     int The severity.
 	 * 
 	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
-	 * @copyright  Authors
-	 * @copyright  The Agavi Project
-	 *
 	 * @since      1.0.0
 	 */
 	public function getSeverity()
@@ -89,14 +81,11 @@ class AgaviValidationArgumentResult
 	}
 	
 	/**
-	 * retrieve the incidents for this instances argument
+	 * Retrieve the incidents of this result.
 	 * 
-	 * @return     array an array of AgaviValidationIncidents
+	 * @return     array An array of AgaviValidationIncidents.
 	 * 
 	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
-	 * @copyright  Authors
-	 * @copyright  The Agavi Project
-	 *
 	 * @since      1.0.0
 	 */
 	public function getIncidents()
@@ -114,14 +103,11 @@ class AgaviValidationArgumentResult
 	}
 	
 	/**
-	 * retrieve the error messages for this instances argument
+	 * Retrieve the error messages of this result.
 	 * 
-	 * @return     array an array of error messages (strings)
+	 * @return     array An array of error message strings.
 	 * 
 	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
-	 * @copyright  Authors
-	 * @copyright  The Agavi Project
-	 *
 	 * @since      1.0.0
 	 */
 	public function getErrorMessages()
