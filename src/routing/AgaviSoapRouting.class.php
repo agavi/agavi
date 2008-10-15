@@ -41,7 +41,8 @@ class AgaviSoapRouting extends AgaviWebserviceRouting
 	public function initialize(AgaviContext $context, array $parameters = array())
 	{
 		// must always be on
-		unset($parameters['enabled']);
+		// don't do this after parent::initialize() as AgaviWebserviceRouting::initialize() checks the value already
+		$parameters['enabled'] = true;
 		
 		parent::initialize($context, $parameters);
 	}
