@@ -30,9 +30,9 @@
 class AgaviValidationArgumentResult
 {
 	/**
-	 * @var        AgaviValidationResult The validation result.
+	 * @var        AgaviValidationReport The validation result.
 	 */
-	protected $validationResult;
+	protected $validationReport;
 	
 	/**
 	 * @var        AgaviValidationArgument The argument instance.
@@ -42,15 +42,15 @@ class AgaviValidationArgumentResult
 	/**
 	 * Create a new AgaviValidationArgumentResult.
 	 * 
-	 * @param      AgaviValidationResult   The result.
+	 * @param      AgaviValidationReport   The report.
 	 * @param      AgaviValidationArgument The argument the result is valid for.
 	 * 
 	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
 	 * @since      1.0.0
 	 */
-	public function __construct(AgaviValidationResult $result, AgaviValidationArgument $argument)
+	public function __construct(AgaviValidationReport $report, AgaviValidationArgument $argument)
 	{
-		$this->validationResult = $result;
+		$this->validationReport = $report;
 		$this->argument = $argument;
 	}
 	
@@ -77,7 +77,7 @@ class AgaviValidationArgumentResult
 	 */
 	public function getSeverity()
 	{
-		return $this->validationResult->getAuthoritativeArgumentSeverity($this->argument);
+		return $this->validationReport->getAuthoritativeArgumentSeverity($this->argument);
 	}
 	
 	/**
@@ -91,7 +91,7 @@ class AgaviValidationArgumentResult
 	public function getIncidents()
 	{
 		$affectedIncidents = array();
-		$incidents = $this->validationResult->getIncidents();
+		$incidents = $this->validationReport->getIncidents();
 		foreach($incidents as $incident) {
 			foreach($incident->getErrors() as $error) {
 				if($error->hasArgument($this->argument)) {
@@ -114,7 +114,7 @@ class AgaviValidationArgumentResult
 	public function getErrorMessages()
 	{
 		$errorMessages = array();
-		$incidents = $this->validationResult->getIncidents();
+		$incidents = $this->validationReport->getIncidents();
 		foreach($incidents as $incident) {
 			foreach($incident->getErrors() as $error) {
 				if($error->hasArgument($this->argument)) {

@@ -84,7 +84,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 
 		$rq = $this->getContext()->getRequest();
 
-		$vr = $container->getValidationManager()->getLastResult();
+		$vr = $container->getValidationManager()->getReport();
 
 		$cfg = $rq->getAttributes('org.agavi.filter.FormPopulationFilter');
 

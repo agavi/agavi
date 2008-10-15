@@ -30,9 +30,9 @@
 class AgaviValidationValidatorResult
 {
 	/**
-	 * @var        AgaviValidationResult the validation result instance.
+	 * @var        AgaviValidationReport the validation result instance.
 	 */
-	protected $validationResult;
+	protected $validationReport;
 	
 	/**
 	 * @var        string the affected validators name.
@@ -42,15 +42,15 @@ class AgaviValidationValidatorResult
 	/**
 	 * Create a new AgaviValidationValidatorResult
 	 * 
-	 * @param      AgaviValidationResult the validation result instance.
+	 * @param      AgaviValidationReport the validation result instance.
 	 * @param      string the affected validators name.
 	 * 
 	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
 	 * @since      1.0.0
 	 */
-	public function __construct(AgaviValidationResult $result, $name)
+	public function __construct(AgaviValidationReport $report, $name)
 	{
-		$this->validationResult = $result;
+		$this->validationReport = $report;
 		$this->validatorName = $name;
 	}
 	
@@ -78,7 +78,7 @@ class AgaviValidationValidatorResult
 	public function getIncidents()
 	{
 		$affectedIncidents = array();
-		$incidents = $this->validationResult->getIncidents();
+		$incidents = $this->validationReport->getIncidents();
 		foreach($incidents as $incident) {
 			if($incident->getValidator()->getName() == $this->validatorName) {
 				$affectedIncidents[] = $incident;

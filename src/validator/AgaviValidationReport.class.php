@@ -14,7 +14,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviValidationResult stores the result of a validation run.
+ * AgaviValidationReport stores the result of a validation run.
  *
  * @package    agavi
  * @subpackage validator
@@ -27,7 +27,7 @@
  *
  * @version    $Id$
  */
-class AgaviValidationResult
+class AgaviValidationReport
 {
 	/**
 	 * @var        array A List of result severities for each argument which has been validated.

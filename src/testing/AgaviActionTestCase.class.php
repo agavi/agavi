@@ -221,8 +221,8 @@ abstract class AgaviActionTestCase extends AgaviFragmentTestCase
 	 */
 	protected function assertValidatedArgument($argumentName, $source = AgaviRequestDataHolder::SOURCE_PARAMETERS, $message = 'Failed asserting that the argument <%1$s> is validated.')
 	{
-		$result = $this->container->getValidationManager()->getLastResult();
-		$this->assertTrue($result->isArgumentValidated(new AgaviValidationArgument($argumentName, $source)), sprintf($message, $argumentName));
+		$report = $this->container->getValidationManager()->getReport();
+		$this->assertTrue($report->isArgumentValidated(new AgaviValidationArgument($argumentName, $source)), sprintf($message, $argumentName));
 	}
 
 	/**
@@ -237,8 +237,8 @@ abstract class AgaviActionTestCase extends AgaviFragmentTestCase
 	 */
 	protected function assertFailedArgument($argumentName, $source = AgaviRequestDataHolder::SOURCE_PARAMETERS, $message = 'Failed asserting that the argument <%1$s> is failed.')
 	{
-		$result = $this->container->getValidationManager()->getLastResult();
-		$this->assertTrue($result->isArgumentFailed(new AgaviValidationArgument($argumentName, $source)), sprintf($message, $argumentName));
+		$report = $this->container->getValidationManager()->getReport();
+		$this->assertTrue($report->isArgumentFailed(new AgaviValidationArgument($argumentName, $source)), sprintf($message, $argumentName));
 	}
 
 	/**
@@ -253,8 +253,8 @@ abstract class AgaviActionTestCase extends AgaviFragmentTestCase
 	 */
 	protected function assertSucceededArgument($argumentName, $source = AgaviRequestDataHolder::SOURCE_PARAMETERS, $message = 'Failed asserting that the argument <%1$s> is succeeded.')
 	{
-		$result = $this->container->getValidationManager()->getLastResult();
-		$success = $result->isArgumentValidated(new AgaviValidationArgument($argumentName, $source)) && ! $result->isArgumentFailed(new AgaviValidationArgument($argumentName, $source));
+		$report = $this->container->getValidationManager()->getReport();
+		$success = $report->isArgumentValidated(new AgaviValidationArgument($argumentName, $source)) && ! $report->isArgumentFailed(new AgaviValidationArgument($argumentName, $source));
 		$this->assertTrue($success, sprintf($message, $argumentName));
 	}
 
