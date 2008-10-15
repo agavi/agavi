@@ -258,7 +258,7 @@ class AgaviValidationResult
 	 */
 	public function getArgumentResult($nameOrArgument, $source = null)
 	{
-		if(!($nameOrArgument instanceof AgaviValidationArgumentResult)) {
+		if(!($nameOrArgument instanceof AgaviValidationArgument)) {
 			$nameOrArgument = new AgaviValidationArgument($nameOrArgument, $source);
 		}
 		return new AgaviValidationArgumentResult($this, $nameOrArgument);
