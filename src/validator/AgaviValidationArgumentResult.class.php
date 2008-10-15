@@ -96,6 +96,7 @@ class AgaviValidationArgumentResult
 			foreach($incident->getErrors() as $error) {
 				if($error->hasArgument($this->argument)) {
 					$affectedIncidents[] = $incident;
+					break;
 				}
 			}
 		}
