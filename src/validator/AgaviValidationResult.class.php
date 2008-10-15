@@ -33,10 +33,12 @@ class AgaviValidationResult
 	 * @var        array A List of result severities for each argument which has been validated.
 	 */
 	protected $argumentResults;
+	
 	/**
 	 * @var        int The highest error severity thrown by the validation run.
 	 */
 	protected $result = AgaviValidator::NOT_PROCESSED;
+	
 	/**
 	 * @var        array The incidents which were thrown by the validation run.
 	 */
@@ -148,12 +150,13 @@ class AgaviValidationResult
 	}
 	
 	/**
-	 * Will return the highest error severity for a argument. This can be optionally 
-	 * limited to the highest error severity of an validator. If the field was not 
-	 * "touched" by a validator null is returned.
+	 * Will return the highest error severity for an argument. If the field was
+	 * not "touched" by a validator null is returned. Can optionally be resticted
+	 * to the severity of just one specific validator.
 	 *
 	 * @param      AgaviValidationArgument The argument.
-	 * @param      string The Validator name.
+	 * @param      string                  Optional name of a specific validator
+	 *                                     to get a result for.
 	 *
 	 * @return     int The error severity.
 	 *
