@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 1.0.0 beta 4 (October ??, 2008)
 -------------------------------
 
+CHG: Validation system needs to be able to tell two fields of same names, but from different sources, apart (#785) (Dominik)
 CHG: Change singular/plural handling in AgaviXmlConfigDomElement convenience methods (#878) (David)
 
 FIX: XInclude failure leads to corrupt exception error message (#877) (David)
