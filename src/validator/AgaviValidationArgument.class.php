@@ -41,7 +41,7 @@ class AgaviValidationArgument
 	protected $source;
 	
 	/**
-	 * create a new AgaviValidationArgument instance.
+	 * Create a new AgaviValidationArgument instance.
 	 * 
 	 * @param      string the name of the argument.
 	 * @param      string the name of the source, if null, AgaviRequestDataHolder::SOURCE_PARAMETERS is used.
@@ -59,7 +59,7 @@ class AgaviValidationArgument
 	}
 	
 	/**
-	 * retrieve the name of the argument for this instance.
+	 * Retrieve the name of the argument for this instance.
 	 * 
 	 * @return     string the name of the argument
 	 *
@@ -72,7 +72,7 @@ class AgaviValidationArgument
 	}
 	
 	/**
-	 * retrieve the name of the source for this instance.
+	 * Retrieve the name of the source for this instance.
 	 * 
 	 * @return     string the name of the source.
 	 *
@@ -85,7 +85,7 @@ class AgaviValidationArgument
 	}
 	
 	/**
-	 * get a unique hash value for this AgaviValidationArgument.
+	 * Get a unique hash value for this AgaviValidationArgument.
 	 * 
 	 * @return     string the hash value
 	 *
