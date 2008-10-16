@@ -108,7 +108,8 @@
 			</handler>
 
 			<handler pattern="%core.module_dir%/*/validate/*.xml" class="AgaviValidatorConfigHandler">
-				<validation>%core.agavi_dir%/config/xsd/validators.xsd</validation>
+				<validation>%core.agavi_dir%/config/rng/validators.rng</validation>
+				<transformation>%core.agavi_dir%/config/xsl/validators.xsl</transformation>
 			</handler>
 
 			<handler pattern="%core.module_dir%/*/cache/*.xml" class="AgaviCachingConfigHandler">
