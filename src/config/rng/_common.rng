@@ -119,6 +119,12 @@
 		</list>
 	</define>
 	
+	<define name="data-nestring">
+		<data type="string">
+			<param name="minLength">1</param>
+		</data>
+	</define>
+	
 	<define name="data-identifier">
 		<data type="string">
 			<param name="pattern">[_A-Za-z\p{IsLatin-1Supplement}][_A-Za-z0-9\p{IsLatin-1Supplement}]+</param>
