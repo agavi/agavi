@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 1.0.0 beta 4 (October ??, 2008)
 -------------------------------
 
+CHG: Change Form Population Filter to use validation system's ability to more accurately handle different sources of input (#786) (David)
 CHG: Validation system needs to be able to tell two fields of same names, but from different sources, apart (#785) (Dominik)
 CHG: Change singular/plural handling in AgaviXmlConfigDomElement convenience methods (#878) (David)
 
