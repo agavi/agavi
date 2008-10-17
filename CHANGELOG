@@ -1,7 +1,7 @@
 AGAVI CHANGELOG
 ===============
 
-1.0.0 beta 4 (October ??, 2008)
+1.0.0 beta 4 (October 17, 2008)
 -------------------------------
 
 CHG: Change Form Population Filter to use validation system's ability to more accurately handle different sources of input (#786) (David)
