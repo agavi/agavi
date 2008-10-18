@@ -87,6 +87,8 @@
 			</fileset>
 		</copy>
 		<mkdir dir="${app.dir}/lib"/>
+		<mkdir dir="${app.dir}/log"/>
+		<chmod file="${app.dir}/log" mode="777"/>
 		<mkdir dir="${app.dir}/models"/>
 		<mkdir dir="${app.dir}/modules"/>
 		<mkdir dir="${app.dir}/templates"/>
