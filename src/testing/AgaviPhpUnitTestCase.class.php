@@ -14,8 +14,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviUnitTestCase is the base class for all unit testcases and provides
- * the necessary assertions
+ * AgaviPhpUnitTestCase is the base class for all Agavi Testcases.
  * 
  * 
  * @package    agavi
@@ -28,10 +27,13 @@
  *
  * @version    $Id$
  */
-abstract class AgaviUnitTestCase extends AgaviPhpUnitTestCase implements AgaviIUnitTestCase
+abstract class AgaviPhpUnitTestCase extends PHPUnit_Framework_TestCase
 {
-	protected $contextName = null;
-
+	/**
+	 * @var        string  the name of the environment to bootstrap in isolated tests.
+	 */
+	protected $isolationEnvironment;
+	
 	/**
 	 * Constructs a test case with the given name.
 	 *
@@ -41,13 +43,11 @@ abstract class AgaviUnitTestCase extends AgaviPhpUnitTestCase implements AgaviIU
 	 */
 	public function __construct($name = NULL, array $data = array(), $dataName = '')
 	{
+		if (!empty($this->isolationEnvironment)) {
+			$_GLOBALS['testing.environment'] = $_GLOBALS['core.environment'] = $this->isolationEnvironment;
+		}
+		
 		parent::__construct($name, $data, $dataName);
-		$this->setRunTestInSeparateProcess(true);
 	}
-
-	public function getContext()
-	{
-		return AgaviContext::getInstance($this->contextName);
-	}
-
+	
 }

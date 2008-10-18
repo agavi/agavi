@@ -28,7 +28,7 @@
  *
  * @version    $Id$
  */
-abstract class AgaviFlowTestCase extends PHPUnit_Framework_TestCase implements AgaviIFlowTestCase
+abstract class AgaviFlowTestCase extends AgaviPhpUnitTestCase implements AgaviIFlowTestCase
 {
 	/**
 	 * @var        AgaviRequestDataHolder the arguments to use for the dispatch
