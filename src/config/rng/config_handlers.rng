@@ -63,18 +63,18 @@
 	</define>
 	
 	<define name="content-transformations">
-		<interleave>
+		<choice>
 			<zeroOrMore>
 				<element name="transformation">
 					<ref name="config_handlers-content-transformation" />
 				</element>
 			</zeroOrMore>
-			<zeroOrMore>
+			<optional>
 				<element name="transformations">
 					<ref name="config_handlers-content-transformations" />
 				</element>
-			</zeroOrMore>
-		</interleave>
+			</optional>
+		</choice>
 	</define>
 	
 	<!-- Validations -->
@@ -102,18 +102,18 @@
 	</define>
 	
 	<define name="content-validations">
-		<interleave>
+		<choice>
 			<zeroOrMore>
 				<element name="validation">
 					<ref name="config_handlers-content-validation" />
 				</element>
 			</zeroOrMore>
-			<zeroOrMore>
+			<optional>
 				<element name="validations">
 					<ref name="config_handlers-content-validations" />
 				</element>
-			</zeroOrMore>
-		</interleave>
+			</optional>
+		</choice>
 	</define>
 	
 	<!-- Data -->

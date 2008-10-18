@@ -18,30 +18,41 @@
 		<attribute name="enabled">
 			<ref name="data-agaviboolean" />
 		</attribute>
-		<zeroOrMore>
-			<ref name="content-settings" />
-		</zeroOrMore>
+		<ref name="content-settings" />
 	</define>
 	
 	<define name="content-settings">
-		<element name="settings">
-			<optional>
-				<attribute name="prefix" />
-			</optional>
+		<choice>
 			<zeroOrMore>
-				<ref name="content-setting" />
+				<element name="settings">
+					<ref name="module-content-settings" />
+				</element>
 			</zeroOrMore>
-		</element>
+			<zeroOrMore>
+				<element name="setting">
+					<ref name="module-content-setting" />
+				</element>
+			</zeroOrMore>
+		</choice>
 	</define>
 	
-	<define name="content-setting">
-		<element name="setting">
-			<attribute name="name" />
-			<choice>
-				<ref name="content-parameters" />
-				<text />
-			</choice>
-		</element>
+	<define name="module-content-settings">
+		<optional>
+			<attribute name="prefix" />
+		</optional>
+		<zeroOrMore>
+			<element name="setting">
+				<ref name="module-content-setting" />
+			</element>
+		</zeroOrMore>
+	</define>
+	
+	<define name="module-content-setting">
+		<attribute name="name" />
+		<choice>
+			<ref name="content-parameters" />
+			<text />
+		</choice>
 	</define>
 	
 </grammar>

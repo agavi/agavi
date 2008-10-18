@@ -62,18 +62,16 @@
 			</attribute>
 		</optional>
 		<choice>
-			<interleave>
-				<zeroOrMore>
-					<element name="parameter">
-						<ref name="_common-content-parameter" />
-					</element>
-				</zeroOrMore>
-				<zeroOrMore>
-					<element name="parameters">
-						<ref name="_common-content-parameters" />
-					</element>
-				</zeroOrMore>
-			</interleave>
+			<zeroOrMore>
+				<element name="parameter">
+					<ref name="_common-content-parameter" />
+				</element>
+			</zeroOrMore>
+			<optional>
+				<element name="parameters">
+					<ref name="_common-content-parameters" />
+				</element>
+			</optional>
 			<text />
 		</choice>
 	</define>
@@ -87,18 +85,18 @@
 	</define>
 	
 	<define name="content-parameters">
-		<interleave>
+		<choice>
 			<zeroOrMore>
 				<element name="parameter">
 					<ref name="_common-content-parameter" />
 				</element>
 			</zeroOrMore>
-			<zeroOrMore>
+			<optional>
 				<element name="parameters">
 					<ref name="_common-content-parameters" />
 				</element>
-			</zeroOrMore>
-		</interleave>
+			</optional>
+		</choice>
 	</define>
 	
 	<!-- Data -->
