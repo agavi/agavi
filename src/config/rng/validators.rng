@@ -33,16 +33,12 @@
 	</define>
 	
 	<define name="validators-content-validator_definition">
-		<optional>
-			<attribute name="name">
-				<ref name="data-nestring" />
-			</attribute>
-		</optional>
-		<optional>
-			<attribute name="class">
-				<ref name="data-identifier" />
-			</attribute>
-		</optional>
+		<attribute name="name">
+			<ref name="data-nestring" />
+		</attribute>
+		<attribute name="class">
+			<ref name="data-identifier" />
+		</attribute>
 		<ref name="content-parameters" />
 	</define>
 	
@@ -55,18 +51,19 @@
 	</define>
 	
 	<define name="content-validators">
-		<interleave>
+		<choice>
 			<zeroOrMore>
 				<element name="validator">
 					<ref name="validators-content-validator" />
 				</element>
 			</zeroOrMore>
+			<!-- can have many plural <validators> elements due to "method" attribute -->
 			<zeroOrMore>
 				<element name="validators">
 					<ref name="validators-content-validators" />
 				</element>
 			</zeroOrMore>
-		</interleave>
+		</choice>
 	</define>
 	
 	<define name="validators-content-validator">
@@ -82,11 +79,9 @@
 				</list>
 			</attribute>
 		</optional>
-		<optional>
-			<attribute name="class">
-				<ref name="data-identifier" />
-			</attribute>
-		</optional>
+		<attribute name="class">
+			<ref name="data-identifier" />
+		</attribute>
 		<optional>
 			<attribute name="depends">
 				<list>
@@ -158,18 +153,18 @@
 	</define>
 	
 	<define name="content-arguments">
-		<interleave>
+		<choice>
 			<zeroOrMore>
 				<element name="argument">
 					<ref name="validators-content-argument" />
 				</element>
 			</zeroOrMore>
-			<zeroOrMore>
+			<optional>
 				<element name="arguments">
 					<ref name="validators-content-arguments" />
 				</element>
-			</zeroOrMore>
-		</interleave>
+			</optional>
+		</choice>
 	</define>
 	
 	<define name="validators-content-argument">
@@ -190,18 +185,18 @@
 	</define>
 	
 	<define name="content-errors">
-		<interleave>
+		<choice>
 			<zeroOrMore>
 				<element name="error">
 					<ref name="validators-content-error" />
 				</element>
 			</zeroOrMore>
-			<zeroOrMore>
+			<optional>
 				<element name="errors">
 					<ref name="validators-content-errors" />
 				</element>
-			</zeroOrMore>
-		</interleave>
+			</optional>
+		</choice>
 	</define>
 	
 	<define name="validators-content-error">

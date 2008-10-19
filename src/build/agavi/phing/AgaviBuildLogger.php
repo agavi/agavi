@@ -13,7 +13,7 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
-require_once('phing/listener/DefaultLogger.php');
+require_once('phing/listener/AnsiColorLogger.php');
 
 /**
  * Default logger for Agavi Phing build events.
@@ -29,7 +29,7 @@ require_once('phing/listener/DefaultLogger.php');
  *
  * @version    $Id$
  */
-class AgaviBuildLogger extends DefaultLogger
+class AgaviBuildLogger extends AnsiColorLogger
 {
 	public function buildStarted(BuildEvent $event)
 	{

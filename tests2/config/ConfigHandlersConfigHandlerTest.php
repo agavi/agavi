@@ -61,7 +61,7 @@ class ConfigHandlersConfigHandlerTest extends ConfigHandlerTestBase
 		$this->assertSame(1, count($handlers));
 		$this->assertTrue(isset($handlers[$hf]));
 		$this->assertSame('CHCHTestHandler', $handlers[$hf]['class']);
-		$this->assertSame(AgaviConfig::get('core.agavi_dir') . '/config/xsd/routing.xsd', $handlers[$hf]['validations']['single']['transformations_after']['xml_schema'][0]);
+		$this->assertSame(AgaviConfig::get('core.agavi_dir') . '/config/xsd/routing.xsd', $handlers[$hf]['validations']['single']['transformations_before']['xml_schema'][0]);
 		$this->assertSame(array('foo' => 'bar', 'dir' => AgaviConfig::get('core.agavi_dir')) , $handlers[$hf]['parameters']);
 	}
 

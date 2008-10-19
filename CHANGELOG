@@ -1,13 +1,16 @@
 AGAVI CHANGELOG
 ===============
 
-1.0.0 beta 4 (October ??, 2008)
+1.0.0 beta 4 (October 19, 2008)
 -------------------------------
 
+CHG: Clean up the Phing components of the project configuration system (#875) (Noah)
 CHG: Change Form Population Filter to use validation system's ability to more accurately handle different sources of input (#786) (David)
 CHG: Validation system needs to be able to tell two fields of same names, but from different sources, apart (#785) (Dominik)
 CHG: Change singular/plural handling in AgaviXmlConfigDomElement convenience methods (#878) (David)
 
+FIX: Build system output is unreadable in Terminal.app on Mac OS X Leopard (#885) (David)
+FIX: Project configuration system depends on Phing >= 2.3.0, but should depend on >= 2.3.1 (#884) (Noah)
 FIX: XInclude failure leads to corrupt exception error message (#877) (David)
 FIX: Configuration files with old-style handlers are never validated (#870) (David)
 FIX: Per-module config_handlers.xml will cause "unsupported operand types" fatal error with debug mode off (#867) (David)
@@ -81,6 +84,12 @@ CHG: Deprecated AgaviSecureWebRequest (#676) (David)
 CHG: Deprecated AgaviAdodbDatabase (#662) (David)
 
 FIX: Security filters cannot perform checks in addition to isSecure() (#671) (David)
+
+
+0.11.5 (November ??, 2008)
+--------------------------
+
+FIX: Build system does not create app/log folder in new projects (#881) (David, Noah)
 
 
 0.11.4 (October 14, 2008)

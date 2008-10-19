@@ -98,11 +98,12 @@ EOD;
 		$p2->setPackage('agavi');
 		$p2->addMaintainer('lead', 'david', 'David Zülke', 'david.zuelke@bitextender.com');
 		$p2->addMaintainer('developer', 'dominik', 'Dominik del Bondio', 'dominik.del.bondio@bitextender.com');
+		$p2->addMaintainer('developer', 'felix', 'Felix Gilcher', 'felix.gilcher@bitextender.com');
 		$p2->addMaintainer('developer', 'impl', 'Noah Fontes', 'nfontes@cynigram.com');
 		$p2->addMaintainer('developer', 'v-dogg', 'Veikko Mäkinen', 'mail@veikkomakinen.com');
 		$p2->setChannel('pear.agavi.org');
-		$p2->setReleaseVersion('1.0.0beta3');
-		$p2->setAPIVersion('1.0.0beta3');
+		$p2->setReleaseVersion('1.0.0beta4');
+		$p2->setAPIVersion('1.0.0beta4');
 		$p2->setReleaseStability('beta');
 		$p2->setAPIStability('beta');
 		$p2->setSummary($shortDesc);
@@ -120,7 +121,7 @@ EOD;
 		$p2->addInstallAs('bin/agavi-dist', 'agavi');
 		$p2->addIgnoreToRelease('bin/agavi.bat-dist');
 		
-		$p2->addPackageDepWithChannel( 'required', 'phing', 'pear.phing.info', '2.3.0');
+		$p2->addPackageDepWithChannel('required', 'phing', 'pear.phing.info', '2.3.1');
 		
 		$p2->addConflictingPackageDepWithChannel('phing', 'pear.php.net');
 		

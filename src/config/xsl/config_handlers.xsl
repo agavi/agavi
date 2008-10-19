@@ -23,7 +23,7 @@
 	<xsl:template match="envelope_0_11:handler[@validate]">
 		<xsl:element name="{local-name()}" namespace="{$config_handlers_1_0}">
 			<xsl:copy-of select="@*[local-name() != 'validate']" />
-			<config_handlers_1_0:validation>
+			<config_handlers_1_0:validation for="single" step="transformations_before">
 				<xsl:value-of select="@validate" />
 			</config_handlers_1_0:validation>
 			<xsl:apply-templates />
