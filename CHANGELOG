@@ -9,6 +9,7 @@ CHG: Change Form Population Filter to use validation system's ability to more ac
 CHG: Validation system needs to be able to tell two fields of same names, but from different sources, apart (#785) (Dominik)
 CHG: Change singular/plural handling in AgaviXmlConfigDomElement convenience methods (#878) (David)
 
+FIX: Project configuration system depends on Phing >= 2.3.0, but should depend on >= 2.3.1 (#884) (Noah)
 FIX: XInclude failure leads to corrupt exception error message (#877) (David)
 FIX: Configuration files with old-style handlers are never validated (#870) (David)
 FIX: Per-module config_handlers.xml will cause "unsupported operand types" fatal error with debug mode off (#867) (David)
