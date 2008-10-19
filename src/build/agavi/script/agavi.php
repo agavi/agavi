@@ -14,15 +14,16 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
+define('BUILD_DIRECTORY', realpath(dirname(__FILE__) . '/../..'));
+define('START_DIRECTORY', getcwd());
+define('MIN_PHING_VERSION', '2.3.1');
+
 require('phing/Phing.php');
 
 require(dirname(__FILE__) . '/../build.php');
 AgaviBuild::bootstrap();
 
 require(dirname(__FILE__) . '/AgaviOptionParser.class.php');
-
-define('BUILD_DIRECTORY', realpath(dirname(__FILE__) . '/../..'));
-define('START_DIRECTORY', getcwd());
 
 $GLOBALS['OUTPUT'] = new OutputStream(fopen('php://stdout', 'w'));
 $GLOBALS['ERROR'] = new OutputStream(fopen('php://stderr', 'w'));
@@ -33,10 +34,22 @@ try {
 	Phing::startup();
 	
 	Phing::setProperty('phing.home', getenv('PHING_HOME'));
+	
+	try {
+		if(!version_compare(preg_replace('/^Phing(?:\s*version)?\s*([0-9\.]+)/i', '$1', Phing::getPhingVersion()), MIN_PHING_VERSION, 'ge')) {
+			$GLOBALS['ERROR']->write(sprintf('Error: Phing version %s or later required', MIN_PHING_VERSION) . PHP_EOL);
+			exit(1);
+		}
+	} catch(Exception $e) {
+		$GLOBALS['ERROR']->write(sprintf('Error: Phing version could not be determined; Phing %s or later required', MIN_PHING_VERSION) . PHP_EOL);
+		$GLOBALS['ERROR']->write(sprintf('Error: Phing version could not be determined; Phing %s or later required', MIN_PHING_VERSION) . PHP_EOL);
+		exit(1);
+	}
 } catch(Exception $e) {
-	$GLOBALS['OUTPUT']->write($e->getMessage() . PHP_EOL);
+	$GLOBALS['ERROR']->write($e->getMessage() . PHP_EOL);
 	exit(1);
 }
+
 
 $GLOBALS['PROPERTIES'] = array();
 $GLOBALS['SHOW_LIST'] = false;
