@@ -99,6 +99,7 @@
 	<property name="project.directory.app.modules" value="${project.directory.app}/modules" />
 	<property name="project.directory.app.cache" value="${project.directory.app}/cache" />
 	<property name="project.directory.app.lib" value="${project.directory.app}/lib" />
+	<property name="project.directory.app.log" value="${project.directory.app}/log" />
 	<property name="project.directory.app.templates" value="${project.directory.app}/templates" />
 	<property name="project.directory.pub" value="pub" />
 
@@ -645,10 +646,12 @@
 		<mkdir dir="${project.directory}/${project.directory.app.models}" />
 		<mkdir dir="${project.directory}/${project.directory.app.cache}" />
 		<mkdir dir="${project.directory}/${project.directory.app.lib}" />
+		<mkdir dir="${project.directory}/${project.directory.app.log}" />
 		<mkdir dir="${project.directory}/${project.directory.app.templates}" />
 		<mkdir dir="${project.directory}/${project.directory.pub}" />
 
 		<chmod file="${project.directory}/${project.directory.app.cache}" mode="0777" />
+		<chmod file="${project.directory}/${project.directory.app.log}" mode="0777" />
 
 		<!-- Create config.php. -->
 		<copy file="${templates.directory.app}/config.php.tmpl" tofile="${project.directory}/${project.directory.app}/config.php">

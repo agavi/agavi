@@ -85,6 +85,12 @@ CHG: Deprecated AgaviAdodbDatabase (#662) (David)
 FIX: Security filters cannot perform checks in addition to isSecure() (#671) (David)
 
 
+0.11.5 (November ??, 2008)
+--------------------------
+
+FIX: Build system does not create app/log folder in new projects (#881) (David, Noah)
+
+
 0.11.4 (October 14, 2008)
 -------------------------
 
