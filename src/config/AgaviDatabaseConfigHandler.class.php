@@ -99,8 +99,8 @@ class AgaviDatabaseConfigHandler extends AgaviConfigHandler
 		foreach($databases as $name => $db) {
 			// append new data
 			$tmp = "\$database = new %s();\n" .
-							"\$database->initialize(\$this, %s);\n" .
-							"\$this->databases[%s] = \$database;";
+			       "\$this->databases[%s] = \$database;\n" . 
+			       "\$database->initialize(\$this, %s);";
 			$data[] = sprintf($tmp, $db['class'], var_export($db['params'], true), var_export($name, true));
 		}
 
