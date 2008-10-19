@@ -1,9 +1,10 @@
 AGAVI CHANGELOG
 ===============
 
-0.11.5 (November ??, 2008)
+0.11.5 RC1 (October 20, 2008)
 --------------------------
 
+FIX: Validation config handler is broken for nested validators (#886) (David)
 FIX: Build system does not create app/log folder in new projects (#881) (David, Noah)
 
 

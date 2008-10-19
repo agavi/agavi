@@ -242,7 +242,7 @@ class AgaviValidatorConfigHandler extends AgaviConfigHandler
 				$childRequired = AgaviToolkit::literalize($validator->validators->getAttribute('required'));
 			}
 			foreach($validator->validators as $v) {
-				$code = $this->getValidatorArray($v, $code, $childSeverity, $name, $childMethod, $childRequired);
+				$code = $this->getValidatorArray($v, $code, $childSeverity, '_validator_' . $name, $childMethod, $childRequired);
 			}
 				// create child validators
 		}
