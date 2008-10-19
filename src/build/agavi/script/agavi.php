@@ -40,6 +40,7 @@ try {
 
 $GLOBALS['PROPERTIES'] = array();
 $GLOBALS['SHOW_LIST'] = false;
+$GLOBALS['VERBOSE'] = false;
 $GLOBALS['LOGGER'] = 'AgaviProxyBuildLogger';
 $GLOBALS['BUILD'] = new PhingFile(BUILD_DIRECTORY . '/build.xml');
 
@@ -51,10 +52,11 @@ function input_help_display()
 	$GLOBALS['OUTPUT']->write('  -h -? --help                     Displays the help for this utility' . PHP_EOL);
 	$GLOBALS['OUTPUT']->write('  -v --version                     Displays relevant version information' . PHP_EOL);
 	$GLOBALS['OUTPUT']->write('  -l --list --targets              Displays the list of available targets' . PHP_EOL);
-	$GLOBALS['OUTPUT']->write('  -D --define <property> <value>   Defines a build property' . PHP_EOL);
+	$GLOBALS['OUTPUT']->write('  -D --define <property> <value>   Defines a configuration property' . PHP_EOL);
+	$GLOBALS['OUTPUT']->write('  --verbose                        Provides more verbose configuration information' . PHP_EOL);
 	$GLOBALS['OUTPUT']->write('  --agavi-source-directory <path>  Sets the Agavi source directory to <path>' . PHP_EOL);
 	$GLOBALS['OUTPUT']->write('  --include-path <path>            Appends <path> to the PHP include path' . PHP_EOL);
-	$GLOBALS['OUTPUT']->write('  --logger <class>                 Sets the build logger class to <class>' . PHP_EOL);
+	$GLOBALS['OUTPUT']->write('  --logger <class>                 Sets the configuration logger class to <class>' . PHP_EOL);
 }
 
 function input_help(AgaviOptionParser $parser, $name, $arguments, $scriptArguments)
@@ -65,7 +67,7 @@ function input_help(AgaviOptionParser $parser, $name, $arguments, $scriptArgumen
 
 function input_version(AgaviOptionParser $parser, $name, $arguments, $scriptArguments)
 {
-	$GLOBALS['OUTPUT']->write('Agavi build system, script version $Id$' . PHP_EOL);
+	$GLOBALS['OUTPUT']->write('Agavi project configuration system, script version $Id$' . PHP_EOL);
 	$GLOBALS['OUTPUT']->write(Phing::getPhingVersion() . PHP_EOL);
 	exit(0);
 }
@@ -81,6 +83,11 @@ function input_define(AgaviOptionParser $parser, $name, $arguments, $scriptArgum
 	$value = $arguments[1];
 	
 	$GLOBALS['PROPERTIES'][$name] = $value;
+}
+
+function input_verbose(AgaviOptionParser $parser, $name, $arguments, $scriptArguments)
+{
+	$GLOBALS['VERBOSE'] = true;
 }
 
 function input_agavi_source_directory(AgaviOptionParser $parser, $name, $arguments, $scriptArguments)
@@ -112,6 +119,7 @@ $parser->addOption('help', array('h', '?'), array('help'), 'input_help');
 $parser->addOption('version', array('v'), array('version'), 'input_version');
 $parser->addOption('list', array('l'), array('list', 'targets'), 'input_list');
 $parser->addOption('define', array('D'), array('define'), 'input_define', 2);
+$parser->addOption('verbose', array(), array('verbose'), 'input_verbose');
 $parser->addOption('agavi_source_directory', array(), array('agavi-source-directory'), 'input_agavi_source_directory', 1);
 $parser->addOption('include_path', array(), array('include-path'), 'input_include_path', 1);
 $parser->addOption('logger', array(), array('logger'), 'input_logger', 1);
@@ -221,7 +229,7 @@ try {
 		Phing::import($GLOBALS['LOGGER']);
 	}
 	$logger = new $GLOBALS['LOGGER']();
-	$logger->setMessageOutputLevel(Project::MSG_INFO);
+	$logger->setMessageOutputLevel($GLOBALS['VERBOSE'] ? Project::MSG_VERBOSE : Project::MSG_INFO);
 	$logger->setOutputStream($GLOBALS['OUTPUT']);
 	$logger->setErrorStream($GLOBALS['ERROR']);
 	
