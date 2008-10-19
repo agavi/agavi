@@ -246,6 +246,20 @@ try {
 	$logger->setOutputStream($GLOBALS['OUTPUT']);
 	$logger->setErrorStream($GLOBALS['ERROR']);
 	
+	// hax for Mac OS X 10.5 Leopard, where "dim" ANSI colors are broken...
+	if(
+		($logger instanceof AnsiColorLogger) && 
+		PHP_OS == 'Darwin' && 
+		(
+			(isset($_SERVER['TERM_PROGRAM']) && $_SERVER['TERM_PROGRAM'] == 'Apple_Terminal') ||
+			(isset($_ENV['TERM_PROGRAM']) && $_ENV['TERM_PROGRAM'] == 'Apple_Terminal')
+		) &&
+		version_compare(preg_replace('/.*ProductVersion:\s*([0-9\.]+).*/s', '$1', shell_exec('sw_vers')), '10.5', 'ge') && 
+		!Phing::getProperty('phing.logger.defaults')
+	) {
+		Phing::setProperty('phing.logger.defaults', new PhingFile(BUILD_DIRECTORY . '/agavi/phing/ansicolorlogger_osxleopard.properties'));
+	}
+	
 	$project->addBuildListener($logger);
 	$project->setInputHandler(new DefaultInputHandler());
 	
