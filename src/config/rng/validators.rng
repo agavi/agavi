@@ -8,12 +8,8 @@
 	
 	<define name="content-configuration" combine="interleave">
 		<interleave>
-			<optional>
-				<ref name="content-validator_definitions" />
-			</optional>
-			<zeroOrMore>
-				<ref name="content-validators" />
-			</zeroOrMore>
+			<ref name="content-validator_definitions" />
+			<ref name="content-validators" />
 		</interleave>
 	</define>
 	
