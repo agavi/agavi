@@ -39,6 +39,7 @@ require_once($here . '/testing/AgaviTesting.class.php');
 set_include_path($here . '/vendor' . PATH_SEPARATOR . get_include_path());
 
 // load PHPUnit basics
+require_once 'PHPUnit/Util/Getopt.php';
 require_once('PHPUnit/TextUI/TestRunner.php');
 
 ?>
