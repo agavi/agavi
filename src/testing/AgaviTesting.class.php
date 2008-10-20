@@ -13,6 +13,7 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
+
 /**
  * Main framework class used for autoloading and initial bootstrapping of the 
  * Agavi testing environment
@@ -59,12 +60,14 @@ class AgaviTesting
 		Agavi::bootstrap($environment);
 		
 		ini_set('include_path', get_include_path().PATH_SEPARATOR.dirname(dirname(__FILE__)));
-
+		
 		$GLOBALS['AGAVI_CONFIG'] = AgaviConfig::toArray();
 	}
 
 	public static function dispatch()
-	{
+	{		
+		$arguments = self::handleArguments(); // we need to parse the arguments here as we reset $_SERVER somewhere down the line.
+		
 		$GLOBALS['__PHPUNIT_BOOTSTRAP'] = dirname(__FILE__).'/templates/AgaviBootstrap.tpl.php';
 
 		$suites = include AgaviConfigCache::checkConfig(AgaviConfig::get('core.app_dir').'/../test/config/suites.xml');
@@ -78,8 +81,79 @@ class AgaviTesting
 			}
 			$master_suite->addTest($s);
 		}
+		
+		$runner = new PHPUnit_TextUI_TestRunner();
+		$runner->doRun($master_suite, $arguments);
+	}
+	
+	protected static function handleArguments()
+	{
+		$longOptions = array(
+			'coverage-html=',
+			'coverage-clover=',
+			'coverage-source=',
+			'coverage-xml=',
+			'report=',
+		);
+		
+		try {
+			$options = PHPUnit_Util_Getopt::getopt(
+				$_SERVER['argv'],
+				'd:',
+				$longOptions
+			);
+		} catch (RuntimeException $e) {
+			PHPUnit_TextUI_TestRunner::showError($e->getMessage());
+		}
+		
+		$arguments = array(); 
+		
+		foreach ($options[0] as $option) {
+			switch ($option[0]) {
+				case '--coverage-clover':
+				case '--coverage-xml': {
+					if (extension_loaded('tokenizer') && extension_loaded('xdebug')) {
+						$arguments['coverageClover'] = $option[1];
+					} else {
+						if (!extension_loaded('tokenizer')) {
+							throw new AgaviException('The tokenizer extension is not loaded.');
+						} else {
+							throw new AgaviException('The Xdebug extension is not loaded.');
+						}
+					}
+				}
+				break;
 
-		$runner = PHPUnit_TextUI_TestRunner::run($master_suite);
+				case '--coverage-source': {
+					if (extension_loaded('tokenizer') && extension_loaded('xdebug')) {
+						$arguments['coverageSource'] = $option[1];
+					} else {
+						if (!extension_loaded('tokenizer')) {
+							throw new AgaviException('The tokenizer extension is not loaded.');
+						} else {
+							throw new AgaviException('The Xdebug extension is not loaded.');
+						}
+					}
+				}
+				break;
+
+				case '--coverage-html':
+				case '--report': {
+					if (extension_loaded('tokenizer') && extension_loaded('xdebug')) {
+						$arguments['reportDirectory'] = $option[1];
+					} else {
+						if (!extension_loaded('tokenizer')) {
+							throw new AgaviException('The tokenizer extension is not loaded.');
+						} else {
+							throw new AgaviException('The Xdebug extension is not loaded.');
+						}
+					}
+				}
+				break;
+			}
+		}
+		
+		return $arguments;
 	}
 }
 

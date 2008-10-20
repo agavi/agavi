@@ -28,7 +28,7 @@
  *
  * @version    $Id$
  */
-abstract class AgaviUnitTestCase extends PHPUnit_Framework_TestCase implements AgaviIUnitTestCase
+abstract class AgaviUnitTestCase extends AgaviPhpUnitTestCase implements AgaviIUnitTestCase
 {
 	protected $contextName = null;
 

@@ -277,6 +277,7 @@
 			<autoload name="AgaviSeleniumTestCase">%core.agavi_dir%/testing/AgaviSeleniumTestCase.class.php</autoload>
 			<autoload name="AgaviUnitTestCase">%core.agavi_dir%/testing/AgaviUnitTestCase.class.php</autoload>
 			<autoload name="AgaviViewTestCase">%core.agavi_dir%/testing/AgaviViewTestCase.class.php</autoload>
+			<autoload name="AgaviPhpUnitTestCase">%core.agavi_dir%/testing/AgaviPhpUnitTestCase.class.php</autoload>
 			
 			<autoload name="AgaviTestSuite">%core.agavi_dir%/testing/AgaviTestSuite.class.php</autoload>
 			

@@ -28,7 +28,7 @@
  *
  * @version    $Id$
  */
-abstract class AgaviFragmentTestCase extends PHPUnit_Framework_TestCase implements AgaviIFragmentTestCase
+abstract class AgaviFragmentTestCase extends AgaviPhpUnitTestCase implements AgaviIFragmentTestCase
 {
 	
 	/**
