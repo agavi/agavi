@@ -88,9 +88,11 @@ CHG: Deprecated AgaviAdodbDatabase (#662) (David)
 FIX: Security filters cannot perform checks in addition to isSecure() (#671) (David)
 
 
-0.11.5 (November ??, 2008)
---------------------------
+0.11.5 RC1 (October 20, 2008)
+-----------------------------
 
+FIX: AgaviDatabase::getName() always returns false (#887) (David)
+FIX: Validation config handler is broken for nested validators (#886) (David)
 FIX: Build system does not create app/log folder in new projects (#881) (David, Noah)
 
 

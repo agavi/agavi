@@ -204,7 +204,7 @@ class AgaviValidatorConfigHandler extends AgaviXmlConfigHandler
 		}
 		
 		// more <validator> or <validators> children
-		$code = $this->processValidatorElements($validator, $code, $name, $stdSeverity, $stdMethod, $stdRequired);
+		$code = $this->processValidatorElements($validator, $code, '_validator_' . $name, $stdSeverity, $stdMethod, $stdRequired);
 		
 		return $code;
 	}
