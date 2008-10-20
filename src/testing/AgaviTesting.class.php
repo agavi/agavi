@@ -111,7 +111,7 @@ class AgaviTesting
 		foreach ($options[0] as $option) {
 			switch ($option[0]) {
 				case '--coverage-clover':
-				case '--coverage-xml': {
+				case '--coverage-xml': 
 					if (extension_loaded('tokenizer') && extension_loaded('xdebug')) {
 						$arguments['coverageClover'] = $option[1];
 					} else {
@@ -121,10 +121,9 @@ class AgaviTesting
 							throw new AgaviException('The Xdebug extension is not loaded.');
 						}
 					}
-				}
 				break;
-
-				case '--coverage-source': {
+				
+				case '--coverage-source': 
 					if (extension_loaded('tokenizer') && extension_loaded('xdebug')) {
 						$arguments['coverageSource'] = $option[1];
 					} else {
@@ -134,11 +133,10 @@ class AgaviTesting
 							throw new AgaviException('The Xdebug extension is not loaded.');
 						}
 					}
-				}
 				break;
-
+				
 				case '--coverage-html':
-				case '--report': {
+				case '--report': 
 					if (extension_loaded('tokenizer') && extension_loaded('xdebug')) {
 						$arguments['reportDirectory'] = $option[1];
 					} else {
@@ -148,7 +146,6 @@ class AgaviTesting
 							throw new AgaviException('The Xdebug extension is not loaded.');
 						}
 					}
-				}
 				break;
 			}
 		}
