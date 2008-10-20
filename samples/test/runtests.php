@@ -4,7 +4,7 @@ require('../../src/testing.php');
 
 require('config.php');
 
-$arguments = AgaviTesting::handleArguments(); 
+$arguments = AgaviTesting::processCommandlineOptions(); 
 
 if(isset($arguments['environment'])) {
 	$env = $arguments['environment'];

@@ -92,7 +92,7 @@ class AgaviTesting
 	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
 	 * @since      1.0.0
 	 */
-	public static function handleArguments()
+	public static function processCommandlineOptions()
 	{
 		$longOptions = array(
 			'coverage-html=',
