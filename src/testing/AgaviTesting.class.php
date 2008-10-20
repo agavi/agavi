@@ -64,10 +64,8 @@ class AgaviTesting
 		$GLOBALS['AGAVI_CONFIG'] = AgaviConfig::toArray();
 	}
 
-	public static function dispatch()
-	{
-		$arguments = self::handleArguments(); // we need to parse the arguments here as we reset $_SERVER somewhere down the line.
-		
+	public static function dispatch($arguments = array())
+	{		
 		$GLOBALS['__PHPUNIT_BOOTSTRAP'] = dirname(__FILE__).'/templates/AgaviBootstrap.tpl.php';
 		
 		$suites = include AgaviConfigCache::checkConfig(AgaviConfig::get('core.app_dir').'/../test/config/suites.xml');
@@ -94,7 +92,7 @@ class AgaviTesting
 	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
 	 * @since      1.0.0
 	 */
-	protected static function handleArguments()
+	public static function processCommandlineOptions()
 	{
 		$longOptions = array(
 			'coverage-html=',
@@ -102,6 +100,7 @@ class AgaviTesting
 			'coverage-source=',
 			'coverage-xml=',
 			'report=',
+			'environment=',
 		);
 		
 		try {
@@ -136,6 +135,10 @@ class AgaviTesting
 					if(self::checkCodeCoverageDeps()) {
 						$arguments['reportDirectory'] = $option[1];
 					}
+					break;
+					
+				case '--environment':
+					$arguments['environment'] = $option[1];
 					break;
 			}
 		}
