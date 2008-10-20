@@ -86,6 +86,14 @@ class AgaviTesting
 		$runner->doRun($master_suite, $arguments);
 	}
 	
+	/**
+	 * Handles the commandline arguments passed.
+	 * 
+	 * @return     array the commandline arguments
+	 * 
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */
 	protected static function handleArguments()
 	{
 		$longOptions = array(
@@ -112,45 +120,52 @@ class AgaviTesting
 			switch($option[0]) {
 				case '--coverage-clover':
 				case '--coverage-xml': 
-					if(extension_loaded('tokenizer') && extension_loaded('xdebug')) {
+					if(self::checkCodeCoverageDeps()) {
 						$arguments['coverageClover'] = $option[1];
-					} else {
-						if(!extension_loaded('tokenizer')) {
-							throw new AgaviException('The tokenizer extension is not loaded.');
-						} else {
-							throw new AgaviException('The Xdebug extension is not loaded.');
-						}
 					}
 					break;
 				
 				case '--coverage-source': 
-					if (extension_loaded('tokenizer') && extension_loaded('xdebug')) {
+					if(self::checkCodeCoverageDeps()) {
 						$arguments['coverageSource'] = $option[1];
-					} else {
-						if(!extension_loaded('tokenizer')) {
-							throw new AgaviException('The tokenizer extension is not loaded.');
-						} else {
-							throw new AgaviException('The Xdebug extension is not loaded.');
-						}
 					}
 					break;
 				
 				case '--coverage-html':
 				case '--report': 
-					if(extension_loaded('tokenizer') && extension_loaded('xdebug')) {
+					if(self::checkCodeCoverageDeps()) {
 						$arguments['reportDirectory'] = $option[1];
-					} else {
-						if(!extension_loaded('tokenizer')) {
-							throw new AgaviException('The tokenizer extension is not loaded.');
-						} else {
-							throw new AgaviException('The Xdebug extension is not loaded.');
-						}
 					}
 					break;
 			}
 		}
 		
 		return $arguments;
+	}
+	
+	/**
+	 * Checks whether all dependencies for writing code coverage information
+	 * are met. 
+	 * 
+	 * @return     true if all deps are met
+	 * @throws     AgaviExecption if a dependency is missing
+	 * 
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */
+	protected function checkCodeCoverageDeps()
+	{
+		if(extension_loaded('tokenizer') && extension_loaded('xdebug')) {
+			return true;
+		} else {
+			if(!extension_loaded('tokenizer')) {
+				throw new AgaviException('The tokenizer extension is not loaded.');
+			} else {
+				throw new AgaviException('The Xdebug extension is not loaded.');
+			}
+		}
+		
+		return false;
 	}
 }
 
