@@ -65,11 +65,11 @@ class AgaviTesting
 	}
 
 	public static function dispatch()
-	{		
+	{
 		$arguments = self::handleArguments(); // we need to parse the arguments here as we reset $_SERVER somewhere down the line.
 		
 		$GLOBALS['__PHPUNIT_BOOTSTRAP'] = dirname(__FILE__).'/templates/AgaviBootstrap.tpl.php';
-
+		
 		$suites = include AgaviConfigCache::checkConfig(AgaviConfig::get('core.app_dir').'/../test/config/suites.xml');
 		$master_suite = new AgaviTestSuite('Master');
 		foreach ($suites as $name => $suite)
@@ -86,6 +86,14 @@ class AgaviTesting
 		$runner->doRun($master_suite, $arguments);
 	}
 	
+	/**
+	 * Handles the commandline arguments passed.
+	 * 
+	 * @return     array the commandline arguments
+	 * 
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */
 	protected static function handleArguments()
 	{
 		$longOptions = array(
@@ -102,58 +110,62 @@ class AgaviTesting
 				'd:',
 				$longOptions
 			);
-		} catch (RuntimeException $e) {
+		} catch(RuntimeException $e) {
 			PHPUnit_TextUI_TestRunner::showError($e->getMessage());
 		}
 		
 		$arguments = array(); 
 		
-		foreach ($options[0] as $option) {
-			switch ($option[0]) {
+		foreach($options[0] as $option) {
+			switch($option[0]) {
 				case '--coverage-clover':
-				case '--coverage-xml': {
-					if (extension_loaded('tokenizer') && extension_loaded('xdebug')) {
+				case '--coverage-xml': 
+					if(self::checkCodeCoverageDeps()) {
 						$arguments['coverageClover'] = $option[1];
-					} else {
-						if (!extension_loaded('tokenizer')) {
-							throw new AgaviException('The tokenizer extension is not loaded.');
-						} else {
-							throw new AgaviException('The Xdebug extension is not loaded.');
-						}
 					}
-				}
-				break;
-
-				case '--coverage-source': {
-					if (extension_loaded('tokenizer') && extension_loaded('xdebug')) {
+					break;
+				
+				case '--coverage-source': 
+					if(self::checkCodeCoverageDeps()) {
 						$arguments['coverageSource'] = $option[1];
-					} else {
-						if (!extension_loaded('tokenizer')) {
-							throw new AgaviException('The tokenizer extension is not loaded.');
-						} else {
-							throw new AgaviException('The Xdebug extension is not loaded.');
-						}
 					}
-				}
-				break;
-
+					break;
+				
 				case '--coverage-html':
-				case '--report': {
-					if (extension_loaded('tokenizer') && extension_loaded('xdebug')) {
+				case '--report': 
+					if(self::checkCodeCoverageDeps()) {
 						$arguments['reportDirectory'] = $option[1];
-					} else {
-						if (!extension_loaded('tokenizer')) {
-							throw new AgaviException('The tokenizer extension is not loaded.');
-						} else {
-							throw new AgaviException('The Xdebug extension is not loaded.');
-						}
 					}
-				}
-				break;
+					break;
 			}
 		}
 		
 		return $arguments;
+	}
+	
+	/**
+	 * Checks whether all dependencies for writing code coverage information
+	 * are met. 
+	 * 
+	 * @return     true if all deps are met
+	 * @throws     AgaviExecption if a dependency is missing
+	 * 
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */
+	protected function checkCodeCoverageDeps()
+	{
+		if(extension_loaded('tokenizer') && extension_loaded('xdebug')) {
+			return true;
+		} else {
+			if(!extension_loaded('tokenizer')) {
+				throw new AgaviException('The tokenizer extension is not loaded.');
+			} else {
+				throw new AgaviException('The Xdebug extension is not loaded.');
+			}
+		}
+		
+		return false;
 	}
 }
 
