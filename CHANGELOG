@@ -1,6 +1,12 @@
 AGAVI CHANGELOG
 ===============
 
+1.0.0 beta 5 (October 20, 2008)
+-------------------------------
+
+FIX: Validator config handler might produce undefined variable notices and subsequent errors with nested validators (#888) (David)
+
+
 1.0.0 beta 4 (October 19, 2008)
 -------------------------------
 
