@@ -93,7 +93,7 @@ class AgaviTesting
 			'coverage-clover=',
 			'coverage-source=',
 			'coverage-xml=',
-			'report',
+			'report=',
 		);
 		
 		try {
@@ -116,9 +116,9 @@ class AgaviTesting
 						$arguments['coverageClover'] = $option[1];
 					} else {
 						if (!extension_loaded('tokenizer')) {
-							self::showMissingDependency('The tokenizer extension is not loaded.');
+							throw new AgaviException('The tokenizer extension is not loaded.');
 						} else {
-							self::showMissingDependency('The Xdebug extension is not loaded.');
+							throw new AgaviException('The Xdebug extension is not loaded.');
 						}
 					}
 				}
@@ -129,9 +129,9 @@ class AgaviTesting
 						$arguments['coverageSource'] = $option[1];
 					} else {
 						if (!extension_loaded('tokenizer')) {
-							self::showMissingDependency('The tokenizer extension is not loaded.');
+							throw new AgaviException('The tokenizer extension is not loaded.');
 						} else {
-							self::showMissingDependency('The Xdebug extension is not loaded.');
+							throw new AgaviException('The Xdebug extension is not loaded.');
 						}
 					}
 				}
@@ -143,9 +143,9 @@ class AgaviTesting
 						$arguments['reportDirectory'] = $option[1];
 					} else {
 						if (!extension_loaded('tokenizer')) {
-							self::showMissingDependency('The tokenizer extension is not loaded.');
+							throw new AgaviException('The tokenizer extension is not loaded.');
 						} else {
-							self::showMissingDependency('The Xdebug extension is not loaded.');
+							throw new AgaviException('The Xdebug extension is not loaded.');
 						}
 					}
 				}
@@ -155,16 +155,6 @@ class AgaviTesting
 		
 		return $arguments;
 	}
-	
-	/**
-     * @param string $message
-     */
-    public static function showMissingDependency($message)
-    {
-        PHPUnit_TextUI_TestRunner::printVersionString();
-        print $message . "\n";
-        exit(PHPUnit_TextUI_TestRunner::EXCEPTION_EXIT);
-    }
 }
 
 ?>
