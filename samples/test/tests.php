@@ -4,11 +4,20 @@ require('../../src/testing.php');
 
 require('config.php');
 
-AgaviTesting::bootstrap('testing-felix');
+$arguments = AgaviTesting::handleArguments(); 
+
+if(isset($arguments['environment'])) {
+	$env = $arguments['environment'];
+	unset($arguments['environment']);
+} else {
+	$env = 'testing';
+}
+
+AgaviTesting::bootstrap($env);
 
 PHPUnit_Util_Filter::addDirectoryToFilter(AgaviConfig::get('core.cache_dir'));
 PHPUnit_Util_Filter::addDirectoryToFilter(AgaviConfig::get('core.agavi_dir'));
 
-AgaviTesting::dispatch();
+AgaviTesting::dispatch($arguments);
 
 ?>
