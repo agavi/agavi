@@ -13,8 +13,11 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
+require_once(dirname(__FILE__) . '/AgaviType.php');
+
 /**
- * Represents any Agavi phing datatype.
+ * Represents a reference to a path from which additional information is
+ * loaded.
  *
  * @package    agavi
  * @subpackage build
@@ -27,9 +30,51 @@
  *
  * @version    $Id$
  */
-abstract class AgaviType extends DataType
+class AgaviFromType extends AgaviType
 {
-
+	protected $path = null;
+	
+	/**
+	 * Sets the path.
+	 *
+	 * @param      string The path.
+	 */
+	public function setPath($path)
+	{
+		/* This must be created here to prevent the directory from
+		 * becoming automatically converted to an absolute path. */
+		$this->path = new PhingFile($path);
+	}
+	
+	/**
+	 * Gets the path.
+	 *
+	 * @return     PhingFile The specified path.
+	 */
+	public function getPath()
+	{
+		return $this->path;
+	}
+	
+	/**
+	 * Returns the referenced object type.
+	 *
+	 * @return     AgaviObjectType The object type.
+	 */
+	public function getRef(Project $project)
+	{
+		if(!$this->checked) {
+			$stack = array($this);
+			$this->dieOnCircularReference($stack, $project);
+		}
+		
+		$object = $this->ref->getReferencedObject($project);
+		if(!$object instanceof AgaviObjectType) {
+			throw new BuildException(sprintf('%s is not an instance of %s', $this->ref->getRefId(), get_class()));
+		}
+		
+		return $object;
+	}
 }
 
 ?>

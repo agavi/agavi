@@ -1,8 +1,18 @@
 AGAVI CHANGELOG
 ===============
 
+1.0.0 beta 5 (October 20, 2008)
+-------------------------------
+
+ADD: Allow for a fallback directory for template resolution in the project configuration system (#876) (Noah)
+
+FIX: Validator config handler might produce undefined variable notices and subsequent errors with nested validators (#888) (David)
+
+
 1.0.0 beta 4 (October 19, 2008)
 -------------------------------
+
+ADD: Add support for new validation configs to build system and introduce best practices (#882) (David)
 
 CHG: Clean up the Phing components of the project configuration system (#875) (Noah)
 CHG: Change Form Population Filter to use validation system's ability to more accurately handle different sources of input (#786) (David)
@@ -86,9 +96,11 @@ CHG: Deprecated AgaviAdodbDatabase (#662) (David)
 FIX: Security filters cannot perform checks in addition to isSecure() (#671) (David)
 
 
-0.11.5 (November ??, 2008)
---------------------------
+0.11.5 RC1 (October 20, 2008)
+-----------------------------
 
+FIX: AgaviDatabase::getName() always returns false (#887) (David)
+FIX: Validation config handler is broken for nested validators (#886) (David)
 FIX: Build system does not create app/log folder in new projects (#881) (David, Noah)
 
 

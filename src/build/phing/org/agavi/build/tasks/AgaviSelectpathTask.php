@@ -16,7 +16,7 @@
 require_once(dirname(__FILE__) . '/AgaviTask.php');
 
 /**
- * Validates that a given directory is a module directory for a project.
+ * Selects the first available file from a list of paths.
  *
  * @package    agavi
  * @subpackage build
@@ -29,11 +29,15 @@ require_once(dirname(__FILE__) . '/AgaviTask.php');
  *
  * @version    $Id$
  */
-class AgaviCheckmoduleTask extends AgaviTask
+class AgaviSelectpathTask extends AgaviTask
 {
+	const TYPE_FILE = 'file';
+	const TYPE_DIRECTORY = 'directory';
+	
 	protected $property = null;
-	protected $path = null;
-	protected $value = true;
+	protected $path = '';
+	protected $type = null;
+	protected $froms = array();
 	
 	/**
 	 * Sets the property that this task will modify.
@@ -46,49 +50,65 @@ class AgaviCheckmoduleTask extends AgaviTask
 	}
 	
 	/**
-	 * Sets the path to use to validate the module.
+	 * Sets the path to locate.
 	 *
-	 * @param      string The path to use.
+	 * @param      string The path to locate.
 	 */
-	public function setPath(PhingFile $path)
+	public function setPath($path)
 	{
-		$this->path = $path;
+		/* This must be created here to prevent the directory from
+		 * becoming automatically converted to an absolute path. */
+		$this->path = new PhingFile($path);
 	}
 	
 	/**
-	 * Sets the value that the property will contain if the module is valid.
+	 * Sets the type that the path must have.
 	 *
-	 * @param      string The value to which the property will be set.
+	 * @param      string One of <code>file</code> or <code>directory</code>.
 	 */
-	public function setValue($value)
+	public function setType($type)
 	{
-		$this->value = $value;
+		$this->type = $type;
 	}
-
+	
 	/**
-	 * Executes this target.
+	 * Adds a new path to the search list.
+	 *
+	 * @param      PhingFile The path to add.
+	 */
+	public function createFrom()
+	{
+		$from = new AgaviFromType();
+		$this->froms[] = $from;
+		return $from;
+	}
+	
+	/**
+	 * Executes the task.
 	 */
 	public function main()
 	{
 		if($this->property === null) {
 			throw new BuildException('The property attribute must be specified');
 		}
-		if($this->path === null) {
-			throw new BuildException('The path attribute must be specified');
+		if(count($this->froms) === 0) {
+			throw new BuildException('At least one from tag must be specified');
 		}
 		
-		$check = new AgaviModuleFilesystemCheck();
-		$check->setActionsDirectory($this->project->getProperty('module.directory.actions'));
-		$check->setViewsDirectory($this->project->getProperty('module.directory.views'));
-		$check->setTemplatesDirectory($this->project->getProperty('module.directory.templates'));
-		$check->setConfigDirectory($this->project->getProperty('module.directory.config'));
-		
-		$check->setPath($this->path->getAbsolutePath());
-		if($check->check()) {
-			$this->project->setUserProperty($this->property, $this->value);
-		}
-		else {
-			$this->project->setUserProperty($this->property, null);
+		foreach($this->froms as $from) {
+			$path = new PhingFile($from->getPath()->getAbsolutePath() . DIRECTORY_SEPARATOR . $this->path->getPath());
+			var_dump($from->getPath()->getPath());
+			var_dump($this->property);
+			var_dump($path->getPath());
+			var_dump($path->getAbsolutePath());
+			if(
+				($this->type === null && file_exists($path->getPath())) ||
+				($this->type === self::TYPE_FILE && is_file($path->getPath())) ||
+				($this->type === self::TYPE_DIRECTORY && is_dir($path->getPath()))
+			) {
+				$this->project->setUserProperty($this->property, $path->getPath());
+				return;
+			}
 		}
 	}
 }
