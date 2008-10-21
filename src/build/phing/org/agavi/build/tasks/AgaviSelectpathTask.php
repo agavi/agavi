@@ -97,10 +97,6 @@ class AgaviSelectpathTask extends AgaviTask
 		
 		foreach($this->froms as $from) {
 			$path = new PhingFile($from->getPath()->getAbsolutePath() . DIRECTORY_SEPARATOR . $this->path->getPath());
-			var_dump($from->getPath()->getPath());
-			var_dump($this->property);
-			var_dump($path->getPath());
-			var_dump($path->getAbsolutePath());
 			if(
 				($this->type === null && file_exists($path->getPath())) ||
 				($this->type === self::TYPE_FILE && is_file($path->getPath())) ||
