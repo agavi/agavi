@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurations xmlns="http://agavi.org/agavi/1.0/config">
+	<configuration>
+		
+		<autoload name="SandboxDefaultBaseAction">%core.module_dir%/Default/lib/action/SandboxDefaultBaseAction.class.php</autoload>
+		<autoload name="SandboxDefaultBaseModel">%core.module_dir%/Default/lib/model/SandboxDefaultBaseModel.class.php</autoload>
+		<autoload name="SandboxDefaultBaseView">%core.module_dir%/Default/lib/view/SandboxDefaultBaseView.class.php</autoload>
+		
+	</configuration>
+</configurations>

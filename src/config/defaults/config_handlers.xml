@@ -79,7 +79,7 @@
 				<validation>%core.agavi_dir%/config/xsd/validators.xsd</validation>
 			</handler>
 
-			<handler pattern="%core.app_dir%/../test/config/suites.xml" class="AgaviTestSuitesConfigHandler">
+			<handler pattern="%core.testing_dir%/config/suites.xml" class="AgaviTestSuitesConfigHandler">
 				<!-- <validation>%core.agavi_dir%/config/rng/module.rng</validation>-->
 				<!-- <transformation>%core.agavi_dir%/config/xsl/module.xsl</transformation> --> 
 			</handler>
