@@ -2,11 +2,9 @@
 <configurations xmlns="http://agavi.org/agavi/1.0/config">
 	<configuration>
 		<routes>
-			<!-- This shows the welcome page after creating a project. Remove the
-			     route and action once you're done admiring its shininess. -->
-			<route pattern="" module="%actions.default_module%" action="Welcome" />
-			
-			<route pattern="^/$" module="%actions.default_module%" action="%actions.default_action%" />
+			<route name="user_logged_in" pattern="1" source="user[authenticated]" module="Auth" action="LoggedIn" />
+			<route name="server" pattern="foo" source="_SERVER[routing_test]" module="Server" action="Matched" />
+			<route name="index" pattern="^/$" module="%actions.default_module%" action="%actions.default_action%" />
 		</routes>
 	</configuration>
 </configurations>
