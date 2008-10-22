@@ -169,9 +169,9 @@ class AgaviTesting
 					$arguments['tapLogfile'] = $option[1];
 					break;
 					
-					case '--log-xml':
-						$arguments['xmlLogfile'] = $option[1];
-					break;
+				case '--log-xml':
+					$arguments['xmlLogfile'] = $option[1];
+				break;
 					
 				case '--log-pmd':
 					if(self::checkCodeCoverageDeps()) {
