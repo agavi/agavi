@@ -49,14 +49,15 @@
 		</settings>
 
 		<exception_templates>
-			<exception_template>%core.agavi_dir%/exception/templates/shiny.php</exception_template>
+			<exception_template>%core.agavi_dir%/exception/templates/plaintext.php</exception_template>
 			<exception_template context="console">%core.agavi_dir%/exception/templates/plaintext.php</exception_template>
 		</exception_templates>
 
 	</configuration>
 
-	<configuration environment="development.*">
+	<configuration environment="testing.*">
 		<settings>
+			<setting name="default_context">web</setting>
 			<setting name="debug">true</setting>
 		</settings>
 	</configuration>

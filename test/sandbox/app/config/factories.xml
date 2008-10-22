@@ -37,6 +37,10 @@
 		
 	</ae:configuration>
 	
+	<ae:configuration environment="testing.*">
+		<storage class="AgaviNullStorage" />
+	</ae:configuration>
+	
 	<ae:configuration environment="development.*">
 		
 		<response class="AgaviWebResponse">
