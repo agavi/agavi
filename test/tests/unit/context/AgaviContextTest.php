@@ -21,11 +21,6 @@ class AgaviContextTest extends AgaviPhpUnitTestCase
 		$instance1 = AgaviContext::getInstance('foo');
 		$instance2 = AgaviContext::getInstance('bar');
 		$this->assertNotSame($instance1, $instance2);
-	}
-	
-	
+	}	
 }
-
-
-
 ?>
