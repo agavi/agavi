@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" xmlns="http://agavi.org/agavi/config/parts/factories/1.0">
+	
+	<ae:configuration>
+		
+		<controller class="AgaviController" />
+		
+		<database_manager class="AgaviDatabaseManager" />
+		
+		<dispatch_filter class="AgaviDispatchFilter" />
+		
+		<execution_container class="AgaviExecutionContainer" />
+		
+		<execution_filter class="AgaviExecutionFilter" />
+		
+		<filter_chain class="AgaviFilterChain" />
+		
+		<logger_manager class="AgaviLoggerManager" />
+		
+		<request class="AgaviWebRequest" />
+		
+		<response class="AgaviWebResponse" />
+		
+		<routing class="AgaviWebRouting" />
+		
+		<security_filter class="AgaviSecurityFilter" />
+		
+		<storage class="AgaviSessionStorage" />
+		
+		<user class="AgaviSampleAppUser" />
+		
+		<translation_manager class="AgaviTranslationManager" />
+		
+		<validation_manager class="AgaviValidationManager">
+			<ae:parameter name="mode">strict</ae:parameter>
+		</validation_manager>
+		
+	</ae:configuration>
+	
+	<ae:configuration environment="development.*">
+		
+		<validation_manager class="AgaviValidationManager">
+			<ae:parameter name="mode">conditional</ae:parameter>
+		</validation_manager>
+		
+	</ae:configuration>
+	
+	<ae:configuration context="web" environment="development.*">
+		
+		<response class="AgaviWebResponse">
+			<ae:parameter name="send_content_length">false</ae:parameter>
+		</response>
+	
+	</ae:configuration>
+	
+	<ae:configuration context="soap">
+		
+		<controller class="AgaviSoapController" />
+		
+		<request class="AgaviSoapRequest" />
+		
+		<response class="AgaviSoapResponse" />
+		
+		<routing class="AgaviSoapRouting">
+			<ae:parameter name="wsdl_generator">
+				<ae:parameter name="soap">
+					<ae:parameter name="address">
+						<ae:parameter name="location">http://localhost/~dzuelke/_projects/agavi/branches/0.11/samples/pub/soap.php</ae:parameter>
+					</ae:parameter>
+				</ae:parameter>
+			</ae:parameter>
+		</routing>
+		
+		<user class="AgaviSecurityUser" />
+		
+	</ae:configuration>
+	
+	<ae:configuration context="wsdl">
+		
+		<storage class="AgaviSessionStorage">
+			<ae:parameter name="auto_start">false</ae:parameter>
+		</storage>
+		
+		<user class="AgaviSecurityUser" />
+		
+	</ae:configuration>
+	
+	<ae:configuration context="xmlrpc">
+		
+		<request class="AgaviXmlrpcepiphpRequest" />
+		
+		<response class="AgaviXmlrpcepiphpResponse" />
+		
+		<routing class="AgaviXmlrpcepiphpRouting" />
+		
+		<user class="AgaviSecurityUser" />
+		
+	</ae:configuration>
+	
+</ae:configurations>

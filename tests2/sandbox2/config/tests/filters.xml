@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurations xmlns="http://agavi.org/agavi/1.0/config">
+	<configuration>
+		<filters>
+			<filter name="filter1" class="FCHTestFilter1">
+				<parameters>
+					<parameter name="comment">On</parameter>
+				</parameters>
+			</filter>
+			<filter name="filter2" class="FCHTestFilter2" enabled="false" />
+			<filter name="filter3" class="FCHTestFilter3" />
+		</filters>
+	</configuration>
+	<configuration>
+		<filters>
+			<filter name="filter2" enabled="true" />
+			<filter name="filter3" enabled="false" />
+		</filters>
+	</configuration>
+</configurations>

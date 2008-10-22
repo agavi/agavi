@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurations xmlns="http://agavi.org/agavi/1.0/config">
+	<configuration>
+	</configuration>
+
+	<configuration context="SameNameDirectChild">
+		<routes>
+			<route name="sndcRoute1" pattern="^/route1">
+				<routes>
+					<route name="sndcRoute1" pattern="^/route2" />
+				</routes>
+			</route>
+		</routes>
+	</configuration>
+
+	<configuration context="SameNameIndirectChild">
+		<routes>
+			<route name="snicRoute1" pattern="^/route1">
+				<routes>
+<!--					<route pattern="^/route2">
+						<routes>
+-->							<route name="snicRoute2" pattern="^/route3">
+								<routes>
+									<route name="snicRoute1" pattern="^/route4" />
+								</routes>
+							</route>
+<!--						</routes>
+					</route>
+-->				</routes>
+			</route>
+		</routes>
+	</configuration>
+
+
+	<configuration context="SameNameInOverwrittenHierarchy">
+		<routes>
+			<route name="snohRoute1" pattern="^/route1">
+				<routes>
+					<route name="snohRoute2" pattern="^/route2" />
+				</routes>
+			</route>
+		</routes>
+	</configuration>
+
+	<configuration context="SameNameInOverwrittenHierarchy">
+		<routes>
+			<route name="snohRoute2" pattern="^/route3">
+				<routes>
+					<route name="snohRoute1" pattern="^/route4" />
+				</routes>
+			</route>
+		</routes>
+	</configuration>
+</configurations>

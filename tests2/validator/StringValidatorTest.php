@@ -41,6 +41,7 @@ class StringValidatorTest extends AgaviTestCase
 		);
 		$this->_sv->setParameter('max', 4);
 		$this->_sv->setParameter('max_error', 'Some other error');
+		$error = '';
 		foreach ($good as &$value) {
 			$this->assertTrue($this->_sv->execute($value, $error), "True got False: $value");
 		}
@@ -64,6 +65,7 @@ class StringValidatorTest extends AgaviTestCase
 		);
 		$this->_sv->setParameter('min', 3);
 		$this->_sv->setParameter('min_error', 'Some other error');
+		$error = '';
 		foreach ($good as &$value) {
 			$this->assertTrue($this->_sv->execute($value, $error), "True got False: $value");
 		}
@@ -87,6 +89,7 @@ class StringValidatorTest extends AgaviTestCase
 		);
 		$this->_sv->setParameter('values', $good);
 		$this->_sv->setParameter('values_error', 'Some other error');
+		$error = '';
 		foreach ($good as &$value) {
 			$this->assertTrue($this->_sv->execute($value, $error), "True got False: $value");
 		}
@@ -112,6 +115,7 @@ class StringValidatorTest extends AgaviTestCase
 		$this->_sv->setParameter('values', array('bob', 'bill', 'jack!'));
 		$this->_sv->setParameter('insensitive', true);
 		$this->_sv->setParameter('values_error', 'Some other error');
+		$error = '';
 		foreach ($good as &$value) {
 			$this->assertTrue($this->_sv->execute($value, $error), "True got False: $value");
 		}

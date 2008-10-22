@@ -2,19 +2,18 @@
 
 class SampleModel extends AgaviModel {}
 
-class TestModel extends AgaviTestCase
+class ModelTest extends AgaviTestCase
 {
-
-	public function testinitialize()
+	public function testInitialize()
 	{
-		$context = AgaviContext::getInstance();
+		$context = AgaviContext::getInstance('test');
 		$model = new SampleModel();
-		$this->assertTrue($model->initialize($context));
+		$model->initialize($context);
 	}
 
-	public function testgetContext()
+	public function testGetContext()
 	{
-		$context = AgaviContext::getInstance();
+		$context = AgaviContext::getInstance('test');
 		$model = new SampleModel();
 		$model->initialize($context);
 		$mContext = $model->getContext();

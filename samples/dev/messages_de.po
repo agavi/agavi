@@ -1,0 +1,167 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Agavi Sample App, de\n"
+"POT-Creation-Date: 2006-10-12 23:57+0200\n"
+"PO-Revision-Date: 2006-10-13 00:38+0200\n"
+"Last-Translator: David Zülke\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: KBabel 1.11.1\n"
+
+#: ../app/modules/Default/templates/Error404Success.php:1
+msgid "File not found."
+msgstr "Datei nicht gefunden."
+
+#: ../app/modules/Default/templates/LoginInput.php:3
+msgid "Username:"
+msgstr "Benutzername:"
+
+#: ../app/modules/Default/templates/LoginInput.php:5
+msgid "Password:"
+msgstr "Kennwort:"
+
+#: ../app/modules/Default/templates/LoginInput.php:8
+msgid "Log me in automatically."
+msgstr "Benutzerdaten speichern."
+
+#: ../app/modules/Default/templates/LoginInput.php:10
+#: ../app/modules/Default/templates/Master.php:145
+#: ../app/modules/Default/views/LoginInputView.class.php:33
+msgid "Login"
+msgstr "Login"
+
+#: ../app/modules/Default/templates/LoginSuccess.php:1
+msgid "Thank you for logging in!"
+msgstr "Vielen Dank!"
+
+#: ../app/modules/Default/templates/LogoutSuccess.php:1
+msgid "Thank you for logging out!"
+msgstr "Vielen Dank!"
+
+#: ../app/modules/Default/templates/Master.php:5
+msgid "Default Agavi Module"
+msgstr "Default Agavi Modul"
+
+#: ../app/modules/Default/templates/Master.php:124
+msgid "Agavi Sample Application"
+msgstr "Agavi Beispielapplikation"
+
+#: ../app/modules/Default/templates/Master.php:136
+msgid "Current language:"
+msgstr "Gewählte Sprache:"
+
+#: ../app/modules/Default/templates/Master.php:136
+msgid "Alternative language:"
+msgid_plural "Alternative languages:"
+msgstr[0] "Alternative Sprache:"
+msgstr[1] "Alternative Sprachen:"
+
+#: ../app/modules/Default/templates/Master.php:138
+msgid "You are logged in."
+msgstr "Sie sind angemeldet."
+
+#: ../app/modules/Default/templates/Master.php:138
+msgid "Log Out"
+msgstr "Abmelden"
+
+#: ../app/modules/Default/templates/Master.php:141
+msgid "Menu"
+msgstr "Menü"
+
+#: ../app/modules/Default/templates/Master.php:143
+msgid "Home"
+msgstr "Startseite"
+
+#: ../app/modules/Default/templates/Master.php:147
+msgid "A Secure Action"
+msgstr "Gesicherte Action"
+
+#: ../app/modules/Default/templates/Master.php:148
+msgid "Another Secure Action"
+msgstr "Zweite gesicherte Action"
+
+#: ../app/modules/Default/templates/Master.php:149
+msgid "Call invalid URL"
+msgstr "Ungültige URL aufrufen"
+
+#: ../app/modules/Default/templates/Master.php:150
+msgid "Try Disabled Module"
+msgstr "Deaktiviertes Modul testen"
+
+#: ../app/modules/Default/templates/Master.php:151
+msgid "Search Engine Spam"
+msgstr "Suchmaschinen-Spam"
+
+#: ../app/modules/Default/templates/ModuleDisabledSuccess.php:1
+msgid "I'm sorry, this module has been disabled."
+msgstr "Dieses Modul ist leider deaktiviert."
+
+#: ../app/modules/Default/templates/SearchEngineSpamSuccess.php:1
+#, php-format
+msgid "You just found the #1 place to buy <strong>%s</strong> at low prices!"
+msgstr "Sie haben soeben den besten Ort gefunden, um <strong>%s</strong> zu günstigen Preisen zu kaufen!"
+
+#: ../app/modules/Default/templates/SearchEngineSpamSuccess.php:4
+msgid "Product Name"
+msgstr "Produktname"
+
+#: ../app/modules/Default/templates/SearchEngineSpamSuccess.php:5
+msgid "Price"
+msgstr "Preis"
+
+#: ../app/modules/Default/templates/Secure1Success.php:1
+msgid "You found the secret!"
+msgstr "Sie haben das Geheimnis entdeckt!"
+
+#: ../app/modules/Default/templates/Secure2Success.php:1
+msgid "You'll never see this."
+msgstr "Sie werden diesen Text niemals zu Gesicht bekommen."
+
+#: ../app/modules/Default/templates/SecureSuccess.php:1
+msgid "You do not have sufficient credentials to execute this Action."
+msgstr "Sie haben keine ausreichenden Berechtigungen, um diesen Vorgang auszuführen."
+
+#: ../app/modules/Default/templates/UnavailableSuccess.php:1
+msgid "This application is currently unavailable."
+msgstr "Diese Applikation ist derzeit nicht verfügbar."
+
+#: ../app/modules/Default/views/Error404SuccessView.class.php:33
+msgid "404 Not Found"
+msgstr "404 nicht gefunden"
+
+#: ../app/modules/Default/views/IndexSuccessView.class.php:33
+msgid "Welcome to the Agavi Sample Application"
+msgstr "Willkommen zur Agavi Beispielapplikation"
+
+#: ../app/modules/Default/views/LoginSuccessView.class.php:63
+msgid "Login Successful"
+msgstr "Login erfolgreich"
+
+#: ../app/modules/Default/views/LogoutSuccessView.class.php:33
+msgid "Logout Successful"
+msgstr "Abmeldung erfolgreich"
+
+#: ../app/modules/Default/views/ModuleDisabledSuccessView.class.php:33
+msgid "This Module is Disabled"
+msgstr "Dieses Modul ist deaktiviert"
+
+#: ../app/modules/Default/views/SearchEngineSpamSuccessView.class.php:17
+msgid "Congratulations!"
+msgstr "Gratulation!"
+
+#: ../app/modules/Default/views/Secure1SuccessView.class.php:17
+#: ../app/modules/Default/views/Secure2SuccessView.class.php:17
+msgid "Secure Action"
+msgstr "Gesicherte Action"
+
+#: ../app/modules/Default/views/SecureSuccessView.class.php:33
+msgid "Permission Denied"
+msgstr "Zugriff verweigert"
+
+#: ../app/modules/Default/views/UnavailableSuccessView.class.php:33
+msgid "This Application is Unavailable"
+msgstr "Diese Anwendung ist nicht verfügbar"
+

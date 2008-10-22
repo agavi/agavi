@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurations xmlns="http://agavi.org/agavi/1.0/config">
+	<configuration>
+		<settings>
+			<setting name="app_name">My Project</setting>
+			
+			<setting name="available">true</setting>
+			<setting name="debug">true</setting>
+
+			<setting name="use_database">false</setting>
+			<setting name="use_logging">false</setting>
+			<setting name="use_security">false</setting>
+			<setting name="use_translation">true</setting>
+		</settings>
+
+		<exception_templates>
+			<exception_template>%core.agavi_dir%/exception/templates/plaintext.php</exception_template>
+		</exception_templates>
+
+	</configuration>
+
+</configurations>

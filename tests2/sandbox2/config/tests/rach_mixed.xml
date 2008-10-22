@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurations xmlns="http://agavi.org/agavi/1.0/config">
+	<configuration>
+		<section1>
+			<One>A</One>
+			<Two>B</Two>
+			<Three>C</Three>
+		</section1>
+		<section2 Three="Z" Two="Y" One="X" />
+		<section3 One="1" Three="3">
+			<Two>2</Two>
+		</section3>
+	</configuration>
+</configurations>
+

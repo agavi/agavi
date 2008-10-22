@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://agavi.org/agavi/1.0/config" targetNamespace="http://agavi.org/agavi/1.0/config" elementFormDefault="qualified">
+
+  <xs:include schemaLocation="default_tags.xsd"/>  
+
+  <xs:complexType name="configuration">
+    <xs:complexContent>
+      <xs:extension base="base_configuration_with_context">
+        <xs:group ref="roles" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:group name="roles">
+    <xs:sequence>
+      <xs:element name="roles" type="roles" />
+    </xs:sequence>
+  </xs:group>
+  
+	<xs:complexType name="roles">
+		<xs:sequence>
+			<xs:element name="role" type="role" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="role">
+		<xs:all>
+			<xs:element name="roles" type="roles" minOccurs="0" />
+			<xs:element name="permissions" type="permissions" minOccurs="1" />
+		</xs:all>
+		<xs:attribute name="name" type="xs:string" use="required" />
+	</xs:complexType>
+
+	<xs:complexType name="permissions">
+		<xs:sequence>
+			<xs:element maxOccurs="unbounded" name="permission">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:string" />
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+</xs:schema>

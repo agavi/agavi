@@ -1,21 +1,27 @@
 <?php
 
-class SampleAppender extends AgaviAppender
+class Sample2Layout extends AgaviLoggerLayout
 {
-	public function initialize($params) {}
+	public function format(AgaviLoggerMessage $message){}
+}
+
+class SampleAppender extends AgaviLoggerAppender
+{
+	public function initialize(AgaviContext $context, array $params = array()) {}
 	public function shutdown() {}
 	public function write($message) {}
 }
 
 class AppenderTest extends AgaviTestCase
 {
-
-	public function testgetsetLayout()
+	public function testGetSetLayout()
 	{
 		$a = new SampleAppender();
 		$this->assertNull($a->getLayout());
-		$this->assertReference($a, $a->setLayout('bill'));
-		$this->assertEquals('bill', $a->getLayout());
+		$l = new Sample2Layout();
+		$a_test = $a->setLayout($l);
+		$this->assertReference($a, $a_test);
+		$this->assertEquals($l, $a->getLayout());
 	}
 
 }

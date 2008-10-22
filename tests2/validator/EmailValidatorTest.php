@@ -1,17 +1,52 @@
 <?php
 
-class EmailValidatorTest extends AgaviTestCase
+class EmailValidatorWrapper extends AgaviEmailValidator
 {
-	public function setUp()
+	protected $data;
+
+
+	public function setData($data)
 	{
-		$this->_ev = new AgaviEmailValidator();
+		$this->data = $data;
 	}
 
+	public function &getData($paramname)
+	{
+		return $this->data;
+	}
+
+	public function validate()
+	{
+		return parent::validate();
+	}
+
+}
+
+class EmailValidatorTest extends AgaviTestCase
+{
+	protected $_vm, $validator;
+	
+	public function setUp()
+	{
+		$this->_vm = AgaviContext::getInstance('test')->getValidationManager();
+		$this->validator = new EmailValidatorWrapper($this->_vm, array());
+	}
+
+	public function tearDown()
+	{
+		unset($this->validator);
+	}
+
+	public function testgetContext()
+	{
+		$this->assertTrue($this->validator->getContext() instanceof AgaviContext);
+	}
+	
 	public function testexecute()
 	{
 		$good = array(
 			'bob@agavi.org',
-			'me+bob@agavi.org',
+			'me.bob@agavi.org',
 			'stupidmonkey@example.com',
 			'anotherbunk@bunk-domain.com',
 			'somethingelse@ez-bunk-domain.biz'
@@ -24,10 +59,12 @@ class EmailValidatorTest extends AgaviTestCase
 		);
 		$error = '';
 		foreach ($good as &$value) {
-			$this->assertTrue($this->_ev->execute($value, $error), "True got False: $value");
+			$this->validator->setData($value);
+			$this->assertTrue($this->validator->validate(), "False negative: $value");
 		}
 		foreach ($bad as &$value) {
-			$this->assertFalse($this->_ev->execute($value, $error), "False got true: $value");
+			$this->validator->setData($value);
+			$this->assertFalse($this->validator->validate(), "False positive: $value");
 		}
 	}
 }

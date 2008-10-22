@@ -1,15 +1,5 @@
-Agavi - an MVC framework for PHP.
-Authors
- Sean Kerr (skerr@mojavi.org)
- Agavi Project (info@agavi.org)
-Copyright (c) 2003-2005 Authors.
-
-For more information about Agavi, visit the homepage:
-http://www.agavi.org/ 
-
-Based on Mojavi3 r775 by Sean Kerr.
-For more information about Mojavi, visit the homepage:
-http://www.mojavi.org/
+AGAVI LICENSE INFORMATION
+=========================
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -24,3 +14,100 @@ Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+
+DETAILED LICENSE INFORMATION PER COMPONENT
+==========================================
+
+Agavi
+-----
+
+Agavi is originally based on Mojavi3 r775 by Sean Kerr.
+
+For more information about Agavi, visit the homepage:
+http://www.agavi.org/ 
+
+The corresponding license can be found in LICENSE-AGAVI.
+
+--
+
+
+PHPUnit
+-------
+
+Agavi bundles PHPUnit in a development version to facilitate software testing.
+
+For more information about PHPUnit, visit the homepage:
+http://phpunit.de/
+
+The corresponding license can be found in LICENSE-PHPUNIT.
+
+--
+
+
+International Components for Unicode
+------------------------------------
+
+This software contains a port of parts of the International Components for
+Unicode library.
+
+For more information about ICU, visit the homepages:
+http://www.ibm.com/software/globalization/icu/
+http://icu.sourceforge.net/
+
+The corresponding license can be found in LICENSE-ICU.
+
+--
+
+
+Unicode Common Locale Data Repository
+-------------------------------------
+
+This software bundles a subset of the Unicode Common Locale Data Repository.
+
+Fore more information about the Unicode CLDR, visit the homepage:
+http://www.unicode.org/cldr/
+
+The corresponding license can be found in LICENSE-UNICODE_CLDR.
+
+--
+
+
+ISO Schematron
+--------------
+
+This software uses the ISO Schematron Skeleton, and the ISO Schematron ISO SVRL
+implementation, by Rick Jelliffe.
+
+For more information about ISO Schematron, visit the homepage:
+http://www.schematron.com/
+
+The corresponding license can be found in LICENSE-SCHEMATRON.
+
+--
+
+
+Zoneinfo Database
+-----------------
+
+This software uses data from the Zoneinfo Database, also known as "tz database"
+or "Olson database".
+
+For more information about the Zoneinfo Database, visit the homepage:
+http://www.twinsun.com/tz/tz-link.htm
+
+The Zoneinfo Database is licensed as Public Domain.
+
+--
+
+
+Tango Icon Theme
+----------------
+
+This software uses some icons from the Tango Desktop Project Icon Theme in their
+original SVG versions.
+
+For more information about the Tango Desktop Project, visit the homepage:
+http://tango.freedesktop.org/
+
+The corresponding license can be found in LICENSE-TANGO_ICON_THEME.

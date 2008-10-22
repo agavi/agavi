@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://agavi.org/agavi/1.0/config" targetNamespace="http://agavi.org/agavi/1.0/config" elementFormDefault="qualified">
+
+  <xs:simpleType name="php_label">
+  	<xs:restriction base="xs:string">
+  		<xs:pattern value="[a-zA-Z_\p{IsLatin-1Supplement}][a-zA-Z0-9_\p{IsLatin-1Supplement}]*"/>
+  	</xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="php_label_list">
+    <xs:list itemType="php_label" />
+  </xs:simpleType>
+
+	<xs:simpleType name="non_empty_string">
+		<xs:restriction base="xs:string">
+			<xs:pattern value=".+"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+  <xs:element name="configurations" type="configurations" />
+  <xs:complexType name="configurations">
+    <xs:sequence>
+      <xs:any namespace="##other" minOccurs="0" maxOccurs="unbounded" processContents="lax" />
+      <xs:element name="sandbox" type="sandbox" minOccurs="0" />
+      <!-- 
+      The type "configuration" is not defined, so your favorite validating XML editor might throw a warning.
+      This is, however, intentional, as the individual schemas that include this file define that type based on either "base_configuration" or "base_configuration_with_context" (both defined below).
+      We do this to avoid having to define both "configurations" and "configuration" over and over again in each individual schema file.
+      -->
+      <xs:element name="configuration" type="configuration" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+    <xs:attribute name="parent" type="xs:string" />
+    <xs:anyAttribute namespace="##any" processContents="lax" />
+  </xs:complexType>
+  <xs:complexType name="base_configuration">
+    <xs:attribute name="environment">
+      <xs:simpleType>
+        <xs:list itemType="xs:string" />
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:anyAttribute namespace="##any" processContents="lax" />
+  </xs:complexType>
+  <xs:complexType name="base_configuration_with_context">
+    <xs:complexContent>
+      <xs:extension base="base_configuration">
+        <xs:attribute name="context">
+          <xs:simpleType>
+            <xs:list itemType="xs:string" />
+          </xs:simpleType>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  
+  <xs:complexType name="sandbox">
+    <xs:sequence minOccurs="1" maxOccurs="1">
+      <xs:any namespace="##any" minOccurs="0" maxOccurs="unbounded" processContents="lax" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="innerParameters">
+    <xs:sequence>
+      <xs:group ref="parameters" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="innerParameter" mixed="true">
+    <xs:choice minOccurs="1" maxOccurs="1">
+      <xs:element name="parameters" type="innerParameters" minOccurs="0" />
+      <xs:element name="parameter" type="innerParameter" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:choice>
+    <xs:attribute name="name" type="xs:string" use="optional" />
+  </xs:complexType>
+
+  <xs:group name="parameters">
+    <xs:choice>
+      <xs:element name="parameters" type="innerParameters" minOccurs="0" />
+      <xs:element name="parameter" type="innerParameter" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:choice>
+  </xs:group>
+
+</xs:schema>

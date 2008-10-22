@@ -1,29 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:element name="configurations" type="configurations" />
-  <xs:complexType name="configurations">
-    <xs:sequence>
-      <xs:element name="configuration" minOccurs="0" maxOccurs="unbounded">
-        <xs:complexType>
-          <xs:sequence>
-            <xs:element name="routes" type="routes" />
-          </xs:sequence>
-          <xs:attribute name="environment" type="xs:string" />
-          <xs:attribute name="context" type="xs:string" />
-        </xs:complexType>
-      </xs:element>
-    </xs:sequence>
-    <xs:attribute name="parent" type="xs:string" />
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://agavi.org/agavi/1.0/config" targetNamespace="http://agavi.org/agavi/1.0/config" elementFormDefault="qualified">
+
+  <xs:include schemaLocation="default_tags.xsd"/>  
+
+  <xs:simpleType name="route_name">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[^\+\-]+" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:complexType name="configuration">
+    <xs:complexContent>
+      <xs:extension base="base_configuration_with_context">
+        <xs:sequence>
+          <xs:any namespace="##other" minOccurs="0" maxOccurs="unbounded" processContents="lax" />
+          <xs:group ref="routes" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
   </xs:complexType>
 
-  <xs:complexType name="routes">
-    <xs:sequence>
-      <xs:element name="route" type="route" maxOccurs="unbounded" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="route">
-    <xs:all>
-      <xs:element name="parameters" type="parameters" minOccurs="0" />
+  <xs:group name="routes">
+    <xs:choice>
+      <xs:element name="routes" type="routes" minOccurs="0" />
+      <xs:element name="route" type="route" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:choice>
+  </xs:group>
+
+  <xs:group name="ignores">
+    <xs:choice>
       <xs:element name="ignores" minOccurs="0">
         <xs:complexType>
           <xs:sequence>
@@ -31,45 +36,61 @@
           </xs:sequence>
         </xs:complexType>
       </xs:element>
+      <xs:element name="ignore" type="xs:string" maxOccurs="unbounded" />
+    </xs:choice>
+  </xs:group>
+
+  <xs:element name="default">
+    <xs:complexType>
+     <xs:simpleContent>
+       <xs:extension base="xs:string">
+         <xs:attribute name="for" type="xs:string" use="required" />
+       </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:group name="defaults">
+    <xs:choice>
       <xs:element name="defaults" minOccurs="0">
         <xs:complexType>
           <xs:sequence>
-            <xs:element name="default" maxOccurs="unbounded">
-              <xs:complexType>
-               <xs:simpleContent>
-                 <xs:extension base="xs:string">
-                   <xs:attribute name="for" type="xs:string" use="required" />
-                 </xs:extension>
-                </xs:simpleContent>
-              </xs:complexType>
-            </xs:element>
+            <xs:element ref="default" maxOccurs="unbounded" />
           </xs:sequence>
         </xs:complexType>
       </xs:element>
-      <xs:element name="routes" type="routes" minOccurs="0" />
-    </xs:all>
-    <xs:attribute name="name" type="xs:string" />
+      <xs:element ref="default" minOccurs="0" maxOccurs="unbounded" />
+    </xs:choice>
+  </xs:group>
+
+  <xs:complexType name="routes">
+    <xs:sequence>
+      <xs:element name="route" type="route" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="route">
+    <xs:sequence minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="parameters" />
+      <xs:group ref="ignores" />
+      <xs:group ref="defaults" />
+      <xs:group ref="routes" />
+      <xs:any namespace="##other" minOccurs="0" maxOccurs="unbounded" processContents="lax" />
+    </xs:sequence>
+    <xs:attribute name="name" type="route_name" />
     <xs:attribute name="pattern" type="xs:string" use="required" />
     <xs:attribute name="imply" type="xs:string" />
     <xs:attribute name="cut" type="xs:string" />
-    <xs:attribute name="stopping" type="xs:string" />
-    <xs:attribute name="output_type" type="xs:string" />
-    <xs:attribute name="module" type="xs:string" />
+    <xs:attribute name="stop" type="xs:string" />
+    <xs:attribute name="callback" type="php_label" />
+    <xs:attribute name="source" type="xs:string" />
+    <xs:attribute name="constraint" type="xs:string" />
+    <!-- values to be set on match -->
     <xs:attribute name="action" type="xs:string" />
-    <xs:attribute name="callback" type="xs:string" />
+    <xs:attribute name="locale" type="xs:string" />
+    <xs:attribute name="method" type="xs:string" />
+    <xs:attribute name="module" type="xs:string" />
+    <xs:attribute name="output_type" type="xs:string" />
   </xs:complexType>
 
-  <xs:complexType name="parameters">
-    <xs:sequence>
-      <xs:element name="parameter" maxOccurs="unbounded">
-        <xs:complexType>
-          <xs:simpleContent>
-            <xs:extension base="xs:string">
-              <xs:attribute name="name" type="xs:string" use="required" />
-            </xs:extension>
-          </xs:simpleContent>
-        </xs:complexType>
-      </xs:element>
-    </xs:sequence>
-  </xs:complexType>
 </xs:schema>

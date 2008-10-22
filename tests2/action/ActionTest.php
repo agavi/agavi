@@ -1,12 +1,10 @@
 <?php
 
 class SampleAction extends AgaviAction {
-	public function execute() {}
-
-	// public function registerValidator($validationManager){}
+	public function execute(AgaviParameterHolder $parameters){}
 }
 
-class TestAction extends AgaviTestCase
+class ActionTest extends AgaviTestCase
 {
 	private $_action = null,
 					$_controller = null,
@@ -14,10 +12,11 @@ class TestAction extends AgaviTestCase
 
 	public function setUp()
 	{
-		$this->_context = AgaviContext::getInstance();
+		$this->_context = AgaviContext::getInstance('test');
 		$this->_controller = $this->_context->getController();
-		
+
 		$this->_action = new SampleAction();
+		$this->_action->initialize($this->_controller->createExecutionContainer('Foo', 'Bar'));
 	}
 
 	public function tearDown()
@@ -29,34 +28,23 @@ class TestAction extends AgaviTestCase
 
 	public function testgetContext()
 	{
-		$this->_action->initialize($this->_context);
 		$c = $this->_action->getContext();
 		$this->assertReference($this->_context, $c);
 	}
 
-	public function testgetCredentials()
+	public function testCredentials()
 	{
 		$this->assertNull($this->_action->getCredentials());
 	}
 
 	public function testgetDefaultViewName()
 	{
-		$this->assertEquals(AgaviView::INPUT, $this->_action->getDefaultViewName());
-	}
-
-	public function testgetRequestMethods()
-	{
-		$this->assertEquals((AgaviRequest::GET | AgaviRequest::POST | AgaviRequest::NONE), $this->_action->getRequestMethods());
+		$this->assertEquals('Input', $this->_action->getDefaultViewName());
 	}
 
 	public function testhandleError()
 	{
-		$this->assertEquals(AgaviView::ERROR, $this->_action->handleError());
-	}
-
-	public function testinitialize()
-	{
-		$this->assertTrue($this->_action->initialize($this->_context));
+		$this->assertEquals('Error', $this->_action->handleError(new AgaviRequestDataHolder()));
 	}
 
 	public function testisSecure()
@@ -66,7 +54,7 @@ class TestAction extends AgaviTestCase
 
 	public function testvalidate()
 	{
-		$this->assertTrue($this->_action->validate());
+		$this->assertTrue($this->_action->validate(new AgaviRequestDataHolder()));
 	}
 }
 ?>

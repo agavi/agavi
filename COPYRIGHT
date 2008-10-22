@@ -1,0 +1,100 @@
+AGAVI COPYRIGHT INFORMATION
+===========================
+
+
+Agavi
+-----
+
+Agavi is originally based on Mojavi3 r775 by Sean Kerr.
+
+For more information about Agavi, visit the homepage:
+http://www.agavi.org/ 
+
+Authors
+ Sean Kerr (skerr@mojavi.org)
+ Agavi Project (info@agavi.org)
+
+Copyright (c) Authors.
+
+--
+
+
+PHPUnit
+-------
+
+Agavi bundles PHPUnit in a development version to facilitate software testing.
+
+For more information about PHPUnit, visit the homepage:
+http://phpunit.de/
+
+Copyright (c) 2002-2007 Sebastian Bergmann.
+
+--
+
+
+International Components for Unicode
+------------------------------------
+
+This software contains a port of parts of the International Components for
+Unicode library.
+
+For more information about ICU, visit the homepages:
+http://www.ibm.com/software/globalization/icu/
+http://icu.sourceforge.net/
+
+Copyright (c) 1995-2006 International Business Machines Corporation and others.
+
+--
+
+
+Unicode Common Locale Data Repository
+-------------------------------------
+
+This software bundles a subset of the Unicode Common Locale Data Repository.
+
+Fore more information about the Unicode CLDR, visit the homepage:
+http://www.unicode.org/cldr/
+
+Copyright (c) 1991-2006 Unicode, Inc. All rights reserved.
+
+--
+
+
+ISO Schematron
+--------------
+
+This software uses the ISO Schematron Skeleton, and the ISO Schematron ISO SVRL
+implementation, by Rick Jelliffe.
+
+For more information about ISO Schematron, visit the homepage:
+http://www.schematron.com/
+
+Copyright (c) 2000-2007 Rick Jelliffe and Academia Sinica Computing Center, TW
+
+--
+
+
+Zoneinfo Database
+-----------------
+
+This software uses data from the Zoneinfo Database, also known as "tz database"
+or "Olson database".
+
+For more information about the Zoneinfo Database, visit the homepage:
+http://www.twinsun.com/tz/tz-link.htm
+
+Copyright (c) Authors.
+
+--
+
+
+Tango Icon Theme
+----------------
+
+This software uses some icons from the Tango Desktop Project Icon Theme in their
+original SVG versions.
+
+For more information about the Tango Desktop Project, visit the homepage:
+http://tango.freedesktop.org/
+
+Copyright (c) Authors.

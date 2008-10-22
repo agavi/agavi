@@ -1,0 +1,168 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2006-10-13 21:51+0100\n"
+"Last-Translator: Koen Van Daele <koen.vandaele@rwo.vlaanderen.be>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-Language: Dutch\n"
+"X-Poedit-Country: BELGIUM\n"
+
+#: ../app/modules/Default/templates/Error404Success.php:1
+msgid "File not found."
+msgstr "Bestand niet gevonden."
+
+#: ../app/modules/Default/templates/LoginInput.php:3
+msgid "Username:"
+msgstr "Gebruikersnaam:"
+
+#: ../app/modules/Default/templates/LoginInput.php:5
+msgid "Password:"
+msgstr "Wachtwoord:"
+
+#: ../app/modules/Default/templates/LoginInput.php:8
+msgid "Log me in automatically."
+msgstr "Meld me automatisch aan."
+
+#: ../app/modules/Default/templates/LoginInput.php:10
+#: ../app/modules/Default/templates/Master.php:145
+#: ../app/modules/Default/views/LoginInputView.class.php:33
+msgid "Login"
+msgstr "Aanmelden"
+
+#: ../app/modules/Default/templates/LoginSuccess.php:1
+msgid "Thank you for logging in!"
+msgstr "Bedankt om u aan te melden."
+
+#: ../app/modules/Default/templates/LogoutSuccess.php:1
+msgid "Thank you for logging out!"
+msgstr "Bedankt om u af te melden."
+
+#: ../app/modules/Default/templates/Master.php:5
+msgid "Default Agavi Module"
+msgstr "Standaard Agavi Module"
+
+#: ../app/modules/Default/templates/Master.php:124
+msgid "Agavi Sample Application"
+msgstr "Agavi Voorbeeld Toepassing"
+
+#: ../app/modules/Default/templates/Master.php:136
+msgid "Current language:"
+msgstr "Huidige taal:"
+
+#: ../app/modules/Default/templates/Master.php:136
+msgid "Alternative language:"
+msgid_plural "Alternative languages:"
+msgstr[0] "Alternatieve taal:"
+msgstr[1] "Alternatieve talen:"
+
+#: ../app/modules/Default/templates/Master.php:138
+msgid "You are logged in."
+msgstr "U bent aangemeld."
+
+#: ../app/modules/Default/templates/Master.php:138
+msgid "Log Out"
+msgstr "Afmelden"
+
+#: ../app/modules/Default/templates/Master.php:141
+msgid "Menu"
+msgstr "Menu"
+
+#: ../app/modules/Default/templates/Master.php:143
+msgid "Home"
+msgstr "Home"
+
+#: ../app/modules/Default/templates/Master.php:147
+msgid "A Secure Action"
+msgstr "Een Beveiligde Actie"
+
+#: ../app/modules/Default/templates/Master.php:148
+msgid "Another Secure Action"
+msgstr "Een Andere Beveiligde Actie "
+
+#: ../app/modules/Default/templates/Master.php:149
+msgid "Call invalid URL"
+msgstr "Roep ongeldige URL op"
+
+#: ../app/modules/Default/templates/Master.php:150
+msgid "Try Disabled Module"
+msgstr "Probeer Uitgezette Module"
+
+#: ../app/modules/Default/templates/Master.php:151
+msgid "Search Engine Spam"
+msgstr "Zoekmachine Spam"
+
+#: ../app/modules/Default/templates/ModuleDisabledSuccess.php:1
+msgid "I'm sorry, this module has been disabled."
+msgstr "Het spijt me, deze module werd uitgezet."
+
+#: ../app/modules/Default/templates/SearchEngineSpamSuccess.php:1
+#, php-format
+msgid "You just found the #1 place to buy <strong>%s</strong> at low prices!"
+msgstr "U hebt net de #1 plaats gevonden om <strong>%s</strong> te kopen aan lage prijzen!"
+
+#: ../app/modules/Default/templates/SearchEngineSpamSuccess.php:4
+msgid "Product Name"
+msgstr "Produkt Naam"
+
+#: ../app/modules/Default/templates/SearchEngineSpamSuccess.php:5
+msgid "Price"
+msgstr "Prijs"
+
+#: ../app/modules/Default/templates/Secure1Success.php:1
+msgid "You found the secret!"
+msgstr "U hebt het geheim gevonden!"
+
+#: ../app/modules/Default/templates/Secure2Success.php:1
+msgid "You'll never see this."
+msgstr "Dit zul je nooit zien."
+
+#: ../app/modules/Default/templates/SecureSuccess.php:1
+msgid "You do not have sufficient credentials to execute this Action."
+msgstr "U hebt niet de nodige bevoegdheden om deze Actie uit te voeren."
+
+#: ../app/modules/Default/templates/UnavailableSuccess.php:1
+msgid "This application is currently unavailable."
+msgstr "De toepassing is momenteel niet beschikbaar."
+
+#: ../app/modules/Default/views/Error404SuccessView.class.php:33
+msgid "404 Not Found"
+msgstr "404 Niet Gevonden"
+
+#: ../app/modules/Default/views/IndexSuccessView.class.php:33
+msgid "Welcome to the Agavi Sample Application"
+msgstr "Welkom bij de Agavi Voorbeeld Toepassing"
+
+#: ../app/modules/Default/views/LoginSuccessView.class.php:63
+msgid "Login Successful"
+msgstr "Inloggen gelukt"
+
+#: ../app/modules/Default/views/LogoutSuccessView.class.php:33
+msgid "Logout Successful"
+msgstr "Uitloggen gelukt"
+
+#: ../app/modules/Default/views/ModuleDisabledSuccessView.class.php:33
+msgid "This Module is Disabled"
+msgstr "Deze module werd uitgezet"
+
+#: ../app/modules/Default/views/SearchEngineSpamSuccessView.class.php:17
+msgid "Congratulations!"
+msgstr "Gefeliciteerd!"
+
+#: ../app/modules/Default/views/Secure1SuccessView.class.php:17
+#: ../app/modules/Default/views/Secure2SuccessView.class.php:17
+msgid "Secure Action"
+msgstr "Veilige Actie"
+
+#: ../app/modules/Default/views/SecureSuccessView.class.php:33
+msgid "Permission Denied"
+msgstr "Toestemming Geweigerd"
+
+#: ../app/modules/Default/views/UnavailableSuccessView.class.php:33
+msgid "This Application is Unavailable"
+msgstr "Deze Toepassing is Niet Beschikbaar"
+

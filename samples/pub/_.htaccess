@@ -1,0 +1,26 @@
+# rename this file to .htaccess to remove the necessity to have index.php in front of routes
+# make sure mod_rewrite is on and AllowOverride settings are okay
+
+# these two aren't really necessary
+DirectoryIndex index.php
+Options -MultiViews -Indexes
+
+<IfDefine APACHE2>
+AcceptPathInfo On
+</IfDefine>
+
+<IfModule mod_rewrite.c>
+# enable rewrite engine
+RewriteEngine On
+
+# ********** THIS IS THE ONLY SETTING YOU SHOULD HAVE TO CHANGE **********
+RewriteBase /WEBSERVER/PATH/TO/pub/
+# e.g. RewriteBase /~dzuelke/_projects/agavi/trunk/samples/pub/
+# usually just "/" if your application's pub dir is the document root
+
+# if requested url does not exist (i.e. it's likely an agavi route), pass it as path info to index.php
+RewriteRule ^$ index.php?/ [QSA,L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule (.*) index.php?/$1 [QSA,L]
+</IfModule>

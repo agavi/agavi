@@ -1,0 +1,83 @@
+AGAVI UPGRADING INSTRUCTIONS
+============================
+
+Upgrading to 1.0 Series from 0.11 Series
+========================================
+
+Upgrading to Agavi 1.0 requires very little effort as the API remained identical.
+
+It is recommended that you refer to the RELEASE_NOTES to see a list of deprecated elements, and change your application accordingly.
+
+However, a couple of changes might affect your application:
+
+Configuration file XML namespace changes
+----------------------------------------
+Legacy support for configuration files with no namespace (from 0.11 unstable versions) has been dropped.
+That means <configurations> without xmlns="http://agavi.org/agavi/1.0/config" as the namespace will not work anymore.
+
+New namespaces for all configuration files have been introduced, and envelope namespaces and actual content namespaces are now separate:
+<a:configurations xmlns:a="http://agavi.org/agavi/config/global/envelope/1.0">
+  <a:configuration>
+    <handlers xmlns="http://agavi.org/agavi/config/parts/config_handlers/1.0">
+      <handler pattern="%core.config_dir%/autoload.xml" class="AgaviAutoloadConfigHandler">
+        <a:parameter name="foo">bar</a:parameter>
+      </handler>
+    </handlers>
+  </a:configuration>
+</a:configurations>
+
+Please refer to the documentation for a full list of configuration namespaces and their roles.
+
+Template layer output availability
+----------------------------------
+By default, the output of the previous template layer is only available in $inner, not anymore through $slots['layername']. This can be changed through a configuration setting for the execution filter, but is strongly discouraged, as $inner is more portable (and also more logical).
+
+Previously Deprecated Elements that have been removed
+-----------------------------------------------------
+The following methods and attributes were deprecated in Agavi 0.11 and have been removed in this following release:
+
+- AgaviRequest::getActionAccessor(), use AgaviRequest::getParameter('action_accessor')
+- AgaviRequest::getModuleAccessor(), use AgaviRequest::getParameter('module_accessor')
+- AgaviTranslationManager::getClosestMatchingLocale(), superseded by AgaviTranslationManager::getLocaleIdentifier()
+- AgaviTranslationManager::getLocaleFromIdentifier(), superseded by AgaviTranslationManager::getLocale()
+- request attribute "matchedRoutes" in namespace "org.agavi.routing" is now called "matched_routes" to go with the general convention
+
+Behavior changes resulting from bug fixes
+-----------------------------------------
+Some bugfixes resulted in minor behavioral changes and might require that you perform minor updates to your code:
+
+- The Security Filter now always runs if "core.use_security" is enabled and per-
+  forms the Action::isSecure() check itself.
+  
+  Previous behavior:
+    This was previously done in the Execution Container, where the Security
+    Filter was only added to the filter chain if the Action's isSecure() method
+    returned true.
+  
+  New behavior:
+    The Security Filter is now always run in the Action Fiter Chain, and no
+    check against Action::isSecure() is performed in the Execution Container.
+    Instead, the Security Filter is supposed to perform this check and act
+    accordingly.
+    The updated AgaviSecurityFilter instance does this by calling isSecure() on
+    the action instance before performing any other checks against credentials
+    or even authentication status, and will, if the method returns false, simply
+    continue in the Filter Chain and leave the execute() method afterwards.
+  
+  This affects you if:
+  - you have a custom Security Filter implementation or
+  - you subclassed AgaviSecurityFilter to perform additional checks.
+  
+  What you need to do:
+  - you need to add a check to see if the Action is flagged as secure, and if
+    not, continue in the Filter Chain and leave the filter afterwards.
+
+  Steps to update your code:
+  - Open your custom Security Filter implementation.
+  - As far to the top in execute() as possible, but in any case before you are
+    making any checks against isAuthenticated() or even getCredentials(),
+    insert code that corresponds to the following snippet:
+  - Compare your change to the change made to Agavi's own Security Filter to
+    determine whether or not your new implementation is correct. The update
+    was made in trunk in revision 2267:
+    http://trac.agavi.org/changeset/2267#file1

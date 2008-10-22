@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurations xmlns="http://agavi.org/agavi/1.0/config">
+	<configuration>
+		<controller class="FCHTestController">
+			<parameters>
+				<parameter name="p1">v1</parameter>
+				<parameter name="p2">v2</parameter>
+			</parameters>
+		</controller>
+
+		<dispatch_filter class="FCHTestDispatchFilter">
+			<parameters>
+				<parameter name="p1">v1</parameter>
+				<parameter name="p2">v2</parameter>
+			</parameters>
+		</dispatch_filter>
+
+		<execution_container class="FCHTestExecutionContainer">
+			<parameters>
+				<parameter name="p1">v1</parameter>
+				<parameter name="p2">v2</parameter>
+			</parameters>
+		</execution_container>
+
+		<execution_filter class="FCHTestExecutionFilter">
+			<parameters>
+				<parameter name="p1">v1</parameter>
+				<parameter name="p2">v2</parameter>
+			</parameters>
+		</execution_filter>
+
+		<filter_chain class="FCHTestFilterChain">
+			<parameters>
+				<parameter name="p1">v1</parameter>
+				<parameter name="p2">v2</parameter>
+			</parameters>
+		</filter_chain>
+
+		<logger_manager class="FCHTestLoggerManager">
+			<parameters>
+				<parameter name="p1">v1</parameter>
+				<parameter name="p2">v2</parameter>
+			</parameters>
+		</logger_manager>
+
+		<request class="FCHTestRequest">
+			<parameters>
+				<parameter name="p1">v1</parameter>
+				<parameter name="p2">v2</parameter>
+			</parameters>
+		</request>
+
+		<response class="FCHTestResponse">
+			<parameters>
+				<parameter name="p1">v1</parameter>
+				<parameter name="p2">v2</parameter>
+			</parameters>
+		</response>
+
+		<routing class="FCHTestRouting">
+			<parameters>
+				<parameter name="p1">v1</parameter>
+				<parameter name="p2">v2</parameter>
+			</parameters>
+		</routing>
+
+		<storage class="FCHTestStorage">
+			<parameters>
+				<parameter name="p1">v1</parameter>
+				<parameter name="p2">v2</parameter>
+			</parameters>
+		</storage>
+
+		<validation_manager class="FCHTestValidationManager">
+			<parameters>
+				<parameter name="p1">v1</parameter>
+				<parameter name="p2">v2</parameter>
+			</parameters>
+		</validation_manager>
+
+
+
+
+		<database_manager class="FCHTestDBManager">
+			<parameters>
+				<parameter name="p1">v1</parameter>
+				<parameter name="p2">v2</parameter>
+			</parameters>
+		</database_manager>
+
+		<security_filter class="FCHTestSecurityFilter">
+			<parameters>
+				<parameter name="p1">v1</parameter>
+				<parameter name="p2">v2</parameter>
+			</parameters>
+		</security_filter>
+
+		<user class="FCHTestUser">
+			<parameters>
+				<parameter name="p1">v1</parameter>
+				<parameter name="p2">v2</parameter>
+			</parameters>
+		</user>
+
+	</configuration>
+	
+</configurations>

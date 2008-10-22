@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
+<book>
+  <title>An Introduction to Agavi</title>
+
+  <bookinfo>
+    <releaseinfo>$Id$</releaseinfo>
+  </bookinfo>
+
+  <preface>
+    <title>Preface</title>
+
+    <para>Agavi is a Web Application Framework for PHP 5. While it lies in the
+    nature of a framework to simplify the application development process,
+    Agavi won't do that at any cost. The primary goals are flexibility,
+    cleanliness and structure. You won't find HTML Form helper methods in
+    Agavi (because they aren't necessary, we have something better, more on
+    that later), and we use XML configuration files because we believe that
+    they offer better structuring abilites than alternatives such as YAML. If
+    you're looking for a solution that assists you in serious high-end
+    development, that has smart and innovative solutions to common problems
+    that haven't been solved properly before, and that encourages and enforces
+    a clean development process to ensure your code remains maintainable and
+    extensible, you've come to the right place.</para>
+  </preface>
+
+  <chapter>
+    <title>Introduction</title>
+
+    <section>
+      <title>Elements of an Application</title>
+
+      <para>Every Agavi Application consists of one or more Modules. Modules
+      are a means of structuring an application, and offer various
+      configuration and control abilities, such as per-module autoloading,
+      dedicated filters, bundled models and more.</para>
+
+      <para>Each Module contains one or more Actions. Actions contain logic
+      code and are totally independent of the way you're using them, be it
+      through a normal web application, or via a SOAP interface - the code
+      remains exactly the same, you usually never touch them again once they
+      are finished. If you're wondering what role Actions play in the MVC
+      pattern, the most accurate explanation would likely be that they are a
+      bridge between Controller and Model, but a lot closer to the Controller
+      than to the Model - think of Actions as parts of the Controller which
+      are loaded on demand.</para>
+
+      <para>Once an Action finished execution, control is passed to the View,
+      which handles all presentational aspects of the Action that was
+      executed, like redirection, forwarding to other Actions, HTTP headers,
+      the layout and Templates to use, Cookies and so on. This separation
+      reduces a lot of redundant code and guarantees maximum flexibility of
+      your business logic - as aforementioned, it's simply a matter of
+      throwing in a new Template if you want an existing Action to output,
+      say, JSON in addition to plain HTML.</para>
+
+      <para>Models encapsulate business logic transactions and offer a fully
+      transparent API to the Actions that use it, thereby allowing you to
+      change the underlying implementation without having to adjust any other
+      code. The more logic you put into Models, the fewer lines you have to
+      write in your Actions, and you get the benefit of universal code
+      reusability - not only within your application! While Models may be
+      bundled with a Module, they can also be "global" to your application,
+      and you may, of course, share Models across applications. You don't even
+      have to re-implement existing code - if you already have classes that
+      serve as models, you can use them as Models with Agavi, too.</para>
+
+      <para>Last but not least, there's a whole bunch of configuration files
+      (of which only three are mandatory!) that allow you to configure all
+      aspects of the Framework. You may even have different configuration
+      settings per Environment and Context (see <xref
+      endterm="environmentsandcontexts-title"
+      linkend="environmentsandcontexts" />) for maximum flexibility and
+      convenience. Also, it's easy to centralize single parts or complete
+      chunks of configuration files, or you can offer smart presets for your
+      applications, by referencing other configuration files and using them as
+      "parents" from within your application configuration files. This cascade
+      of configuration files that are used is not limited in length, so you
+      can have multiple levels of global definitions for your applications if
+      you like. For example, the default <filename>autoload.xml</filename>
+      uses Agavi's own autoloading definitions as the parent, making upgrades
+      totally painless because your application's
+      <filename>autoload.xml</filename> contains only your own
+      declarations.</para>
+    </section>
+
+    <section id="environmentsandcontexts">
+      <title id="environmentsandcontexts-title">Environments and
+      Contexts</title>
+
+      <para>The framework is started by bootstrapping an environment. Typical
+      environments would be "development", "testing" or "production". You may
+      configure any number of environments, but only one of them is used
+      during execution.</para>
+
+      <para>Environments allow for extremely fine-grained settings for each
+      machine an application is running on. The various Environments may have
+      different database configurations, logging settings and levels, debug
+      settings and even filters or factories. Also, each developer in a team
+      may have his own Environment for development, with his or her own
+      database settings etc. which eliminates the need for people constantly
+      having to change their settings, accidentally committing changed files
+      to SCM repositories or missing changes because configuration files were
+      set to <emphasis>ignore</emphasis>.</para>
+
+      <para>A Context encapsulates a running instance of the framework. While
+      any aspect of the framework, even system settings and autoloads may be
+      configured per Environment, you're a bit more restricted in Context
+      configuration, and that's intentional. A Context's job is to hold the
+      proper implementations that are needed to execute the application in the
+      current <emphasis>context</emphasis> (therefore the name), such as "web"
+      for normal requests to an application through a browser, "xmlrpc" for an
+      XMLRPC interface of an application, or "console" for a Context that
+      exposes the application to the command line.</para>
+
+      <para>All configuration files support the configuration per Environment
+      and Context (if applicable) without any performance disadvantage - Agavi
+      compiles them into highly optimized variants for each Environment and
+      Context when needed for minimum overhead.</para>
+
+      <section>
+        <title>A Closer Look at Context Initialization</title>
+
+        <para>Agavi's context class (AgaviContext) is initialized according to
+        settings defined in <filename>factories.xml</filename>. Normally you
+        don't have to worry about how it is done but if you decide to
+        specialize some of the Agavi's core classes the order of
+        initialization might become important.</para>
+
+        <para>Agavi's core classes are initialized in the following order by
+        default:<orderedlist>
+            <listitem>
+              <para>DatabaseManager</para>
+            </listitem>
+
+            <listitem>
+              <para>SessionStorage</para>
+            </listitem>
+
+            <listitem>
+              <para>ValidatorManager</para>
+            </listitem>
+
+            <listitem>
+              <para>User</para>
+            </listitem>
+
+            <listitem>
+              <para>LoggerManager</para>
+            </listitem>
+
+            <listitem>
+              <para>Controller</para>
+            </listitem>
+
+            <listitem>
+              <para>Request</para>
+            </listitem>
+
+            <listitem>
+              <para>Routing</para>
+            </listitem>
+          </orderedlist>This means that for example a User implementation
+        cannot use <classname>LoggerManager</classname> in its
+        <function>initialize</function> method. The initialization order of
+        these framework core classes is defined in
+        <classname>AgaviFactoryConfigHandler</classname> and it cannot be
+        changed.</para>
+      </section>
+    </section>
+
+    <section>
+      <title>How a Request is Processed</title>
+
+      <para>If you call an URL that is handled by pub/index.php, Agavi will
+      bootstrap the specified (or default) Environment and then create an
+      instance of the specified (or default) Context (this instantiation sets
+      up all of the core components of the framework). Finally, the request is
+      dispatched from the Context's Controller instance.</para>
+
+      <para>The dispatch method first executes the routing (if enabled) to
+      determine the Module/Action that are to be executed. Then, a filter
+      chain containing all Global Filters is created, and the DispatchFilter
+      is added to that chain as the last element. Each filter will be called
+      in nested sequence, with the last filter being the DispatchFilter, which
+      calls the first forward to the requested Module and Action. After that,
+      the control passes back through the filters to the dispatch method,
+      which sends the Response contents and exits. Filters are given the
+      global Response as a parameter to work with, so they can modify content,
+      send Cookies and so on.</para>
+
+      <para>When a forward happens, Agavi does some checks to determine if the
+      requested Module/Action exists, if the Module the Action belongs to is
+      enabled and so on. Then, a filter chain is created, with the first
+      filter being the Security Filter if security is enabled. This filter
+      will forward unauthenticated users to the default "Login Action" if a
+      requested Action requires authentication, and also prevent access of
+      Actions an user doesn't have sufficient credentials for by forwarding to
+      the default "Secure Action". After that, the Action Filters are added to
+      the chain, followed by the Action Filters defined by the Action's
+      Module. The last filter in the chain is the Execution Filter, usually
+      either AgaviExecutionFilter or AgaviCachingExecutionFilter. Again, each
+      filter in the chain is called and may do modifications to the Response
+      instance, which is a new one for each Action that is processed and will
+      be merged to the global Response by the Controller once control returns
+      to the forward method.</para>
+
+      <para>The Execution Filter, once reached, will handle Validation, run
+      the Action (or skip execution if the Action doesn't serve the Request
+      method), determine the View to execute and then execute the View and,
+      after that, start the rendering of the output.</para>
+    </section>
+  </chapter>
+</book>

@@ -1,0 +1,165 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Agavi Sample App, fa\n"
+"POT-Creation-Date: 2006-10-13 16:20+0200\n"
+"PO-Revision-Date: 2006-10-13 16:20+0200\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-Country: IRAN\n"
+
+#: ../app/modules/Default/templates/Error404Success.php:1
+msgid "File not found."
+msgstr "فایل مورد نظر یافت نشد."
+
+#: ../app/modules/Default/templates/LoginInput.php:3
+msgid "Username:"
+msgstr "نام کاربری:"
+
+#: ../app/modules/Default/templates/LoginInput.php:5
+msgid "Password:"
+msgstr "کلمه‌ی عبور:"
+
+#: ../app/modules/Default/templates/LoginInput.php:8
+msgid "Log me in automatically."
+msgstr "به صورت اتوماتیک وارد شو."
+
+#: ../app/modules/Default/templates/LoginInput.php:10
+#: ../app/modules/Default/templates/Master.php:145
+#: ../app/modules/Default/views/LoginInputView.class.php:33
+msgid "Login"
+msgstr "ورود"
+
+#: ../app/modules/Default/templates/LoginSuccess.php:1
+msgid "Thank you for logging in!"
+msgstr "برای ورود متشکریم!"
+
+#: ../app/modules/Default/templates/LogoutSuccess.php:1
+msgid "Thank you for logging out!"
+msgstr "باتشکر از بازدید شما!"
+
+#: ../app/modules/Default/templates/Master.php:5
+msgid "Default Agavi Module"
+msgstr "ماژول پیشفرض Agavi"
+
+#: ../app/modules/Default/templates/Master.php:124
+msgid "Agavi Sample Application"
+msgstr "‌برنامه‌ی نمونه‌ی Agavi"
+
+#: ../app/modules/Default/templates/Master.php:136
+msgid "Current language:"
+msgstr "زبان فعلی:"
+
+#: ../app/modules/Default/templates/Master.php:136
+msgid "Alternative language:"
+msgid_plural "Alternative languages:"
+msgstr[0] "زبان دیگر:"
+msgstr[1] "زبانهای دیگر:"
+
+#: ../app/modules/Default/templates/Master.php:138
+msgid "You are logged in."
+msgstr "شما وارد شده اید."
+
+#: ../app/modules/Default/templates/Master.php:138
+msgid "Log Out"
+msgstr "خروج"
+
+#: ../app/modules/Default/templates/Master.php:141
+msgid "Menu"
+msgstr "منو"
+
+#: ../app/modules/Default/templates/Master.php:143
+msgid "Home"
+msgstr "خانه"
+
+#: ../app/modules/Default/templates/Master.php:147
+msgid "A Secure Action"
+msgstr "اکشن امن نمونه"
+
+#: ../app/modules/Default/templates/Master.php:148
+msgid "Another Secure Action"
+msgstr "اکشن امن نمونه‌ی دوم"
+
+#: ../app/modules/Default/templates/Master.php:149
+msgid "Call invalid URL"
+msgstr "فراخوانی URL نامعتبر"
+
+#: ../app/modules/Default/templates/Master.php:150
+msgid "Try Disabled Module"
+msgstr "امتحان ماژول غیر فعال"
+
+#: ../app/modules/Default/templates/Master.php:151
+msgid "Search Engine Spam"
+msgstr "اسپم متور جستجو"
+
+#: ../app/modules/Default/templates/ModuleDisabledSuccess.php:1
+msgid "I'm sorry, this module has been disabled."
+msgstr "این ماژول غیر فعال شده است."
+
+#: ../app/modules/Default/templates/SearchEngineSpamSuccess.php:1
+msgid "You just found the #1 place to buy <strong>%s</strong> at low prices!"
+msgstr "شما بهترین مکان را برای خرید <strong>%s</strong> با حداقل قیمت، پیدا کرده اید!"
+
+#: ../app/modules/Default/templates/SearchEngineSpamSuccess.php:4
+msgid "Product Name"
+msgstr "نام محصول"
+
+#: ../app/modules/Default/templates/SearchEngineSpamSuccess.php:5
+msgid "Price"
+msgstr "قیمت"
+
+#: ../app/modules/Default/templates/Secure1Success.php:1
+msgid "You found the secret!"
+msgstr "شما به بخش محرمانه راه پیدا کردید!"
+
+#: ../app/modules/Default/templates/Secure2Success.php:1
+msgid "You'll never see this."
+msgstr "شما هرگز این قسمت را نخواهید دید."
+
+#: ../app/modules/Default/templates/SecureSuccess.php:1
+msgid "You do not have sufficient credentials to execute this Action."
+msgstr "شما حقوق دسترسی کافی برای اجرای این اکشن را ندارید."
+
+#: ../app/modules/Default/templates/UnavailableSuccess.php:1
+msgid "This application is currently unavailable."
+msgstr "این برنامه در حال حاضر غیر قابل دسترس است."
+
+#: ../app/modules/Default/views/Error404SuccessView.class.php:33
+msgid "404 Not Found"
+msgstr "404 یافت نشد"
+
+#: ../app/modules/Default/views/IndexSuccessView.class.php:33
+msgid "Welcome to the Agavi Sample Application"
+msgstr "به برنامه‌ی نمونه‌ی agavi خوش آمدید"
+
+#: ../app/modules/Default/views/LoginSuccessView.class.php:63
+msgid "Login Successful"
+msgstr "باموفقیت وارد شدید"
+
+#: ../app/modules/Default/views/LogoutSuccessView.class.php:33
+msgid "Logout Successful"
+msgstr "با موفقیت خارج شدید"
+
+#: ../app/modules/Default/views/ModuleDisabledSuccessView.class.php:33
+msgid "This Module is Disabled"
+msgstr "این ماژول غیر فعال است"
+
+#: ../app/modules/Default/views/SearchEngineSpamSuccessView.class.php:17
+msgid "Congratulations!"
+msgstr "تبریک!"
+
+#: ../app/modules/Default/views/Secure1SuccessView.class.php:17
+#: ../app/modules/Default/views/Secure2SuccessView.class.php:17
+msgid "Secure Action"
+msgstr "اکشن امن"
+
+#: ../app/modules/Default/views/SecureSuccessView.class.php:33
+msgid "Permission Denied"
+msgstr "دسترسی غیر مجاز"
+
+#: ../app/modules/Default/views/UnavailableSuccessView.class.php:33
+msgid "This Application is Unavailable"
+msgstr "این برنامه غیر قابل دسترس است"

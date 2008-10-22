@@ -1,0 +1,167 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Agavi Sample App, fi\n"
+"POT-Creation-Date: 2006-10-13 16:20+0200\n"
+"PO-Revision-Date: 2006-10-13 16:20+0200\n"
+"Last-Translator: Veikko Mäkinen\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-Country: FINLAND\n"
+
+#: ../app/modules/Default/templates/Error404Success.php:1
+msgid "File not found."
+msgstr "Tiedostoa ei löytynyt."
+
+#: ../app/modules/Default/templates/LoginInput.php:3
+msgid "Username:"
+msgstr "Käyttäjätunnus:"
+
+#: ../app/modules/Default/templates/LoginInput.php:5
+msgid "Password:"
+msgstr "Salasana:"
+
+#: ../app/modules/Default/templates/LoginInput.php:8
+msgid "Log me in automatically."
+msgstr "Kirjaudu sisään automaattisesti."
+
+#: ../app/modules/Default/templates/LoginInput.php:10
+#: ../app/modules/Default/templates/Master.php:145
+#: ../app/modules/Default/views/LoginInputView.class.php:33
+msgid "Login"
+msgstr "Kirjaudu sisään"
+
+#: ../app/modules/Default/templates/LoginSuccess.php:1
+msgid "Thank you for logging in!"
+msgstr "Kiitos, kun kirjauduit sisään!"
+
+#: ../app/modules/Default/templates/LogoutSuccess.php:1
+msgid "Thank you for logging out!"
+msgstr "Kiitos, kun kirjauduit ulos!"
+
+#: ../app/modules/Default/templates/Master.php:5
+msgid "Default Agavi Module"
+msgstr "Agavin oletusmoduuli"
+
+#: ../app/modules/Default/templates/Master.php:124
+msgid "Agavi Sample Application"
+msgstr "Agavi "
+
+#: ../app/modules/Default/templates/Master.php:136
+msgid "Current language:"
+msgstr "Kieli:"
+
+#: ../app/modules/Default/templates/Master.php:136
+msgid "Alternative language:"
+msgid_plural "Alternative languages:"
+msgstr[0] "Vaihtoehtoinen kieli:"
+msgstr[1] "Vaihtoehtoiset kielet:"
+
+#: ../app/modules/Default/templates/Master.php:138
+msgid "You are logged in."
+msgstr "Olet sisäänkirjautuneena."
+
+#: ../app/modules/Default/templates/Master.php:138
+msgid "Log Out"
+msgstr "Kirjaudu ulos"
+
+#: ../app/modules/Default/templates/Master.php:141
+msgid "Menu"
+msgstr "Valikko"
+
+#: ../app/modules/Default/templates/Master.php:143
+msgid "Home"
+msgstr "Etusivu"
+
+#: ../app/modules/Default/templates/Master.php:147
+msgid "A Secure Action"
+msgstr "Suojattu toiminto"
+
+#: ../app/modules/Default/templates/Master.php:148
+msgid "Another Secure Action"
+msgstr "Toinen suojattu toiminto"
+
+#: ../app/modules/Default/templates/Master.php:149
+msgid "Call invalid URL"
+msgstr "Koita virheellistä URL"
+
+#: ../app/modules/Default/templates/Master.php:150
+msgid "Try Disabled Module"
+msgstr "Koita käytöstä poistettua toimintoa"
+
+#: ../app/modules/Default/templates/Master.php:151
+msgid "Search Engine Spam"
+msgstr "Hakukonespämmiä"
+
+#: ../app/modules/Default/templates/ModuleDisabledSuccess.php:1
+msgid "I'm sorry, this module has been disabled."
+msgstr "Tämä toiminto on valitettavasti poissa käytöstä"
+
+#: ../app/modules/Default/templates/SearchEngineSpamSuccess.php:1
+#, php-format
+msgid "You just found the #1 place to buy <strong>%s</strong> at low prices!"
+msgstr "Löysit juuri ykköspaikan ostaa <strong>%s</strong> edullisimmin!"
+
+#: ../app/modules/Default/templates/SearchEngineSpamSuccess.php:4
+msgid "Product Name"
+msgstr "Tuotenimi"
+
+#: ../app/modules/Default/templates/SearchEngineSpamSuccess.php:5
+msgid "Price"
+msgstr "Hinta"
+
+#: ../app/modules/Default/templates/Secure1Success.php:1
+msgid "You found the secret!"
+msgstr "Löysit salaisuuden!"
+
+#: ../app/modules/Default/templates/Secure2Success.php:1
+msgid "You'll never see this."
+msgstr "Tätä et näe koskaan."
+
+#: ../app/modules/Default/templates/SecureSuccess.php:1
+msgid "You do not have sufficient credentials to execute this Action."
+msgstr "Käyttöoikeutesi eivät riitä tämän toiminno suorittamiseen."
+
+#: ../app/modules/Default/templates/UnavailableSuccess.php:1
+msgid "This application is currently unavailable."
+msgstr "Sovellus on toistaiseksi poissa käytöstä."
+
+#: ../app/modules/Default/views/Error404SuccessView.class.php:33
+msgid "404 Not Found"
+msgstr "404, Ei löytynyt"
+
+#: ../app/modules/Default/views/IndexSuccessView.class.php:33
+msgid "Welcome to the Agavi Sample Application"
+msgstr "Tervetuloa Agavin kokeiluohjelmaan"
+
+#: ../app/modules/Default/views/LoginSuccessView.class.php:63
+msgid "Login Successful"
+msgstr "Sisään kirjautuminen onnistui"
+
+#: ../app/modules/Default/views/LogoutSuccessView.class.php:33
+msgid "Logout Successful"
+msgstr "Uloskirjautuminen onnistui"
+
+#: ../app/modules/Default/views/ModuleDisabledSuccessView.class.php:33
+msgid "This Module is Disabled"
+msgstr "Tämä moduuli on poissa käytöstä"
+
+#: ../app/modules/Default/views/SearchEngineSpamSuccessView.class.php:17
+msgid "Congratulations!"
+msgstr "Onneksi olkoon!"
+
+#: ../app/modules/Default/views/Secure1SuccessView.class.php:17
+#: ../app/modules/Default/views/Secure2SuccessView.class.php:17
+msgid "Secure Action"
+msgstr "Suojattu toiminto"
+
+#: ../app/modules/Default/views/SecureSuccessView.class.php:33
+msgid "Permission Denied"
+msgstr "Pääsy estetty"
+
+#: ../app/modules/Default/views/UnavailableSuccessView.class.php:33
+msgid "This Application is Unavailable"
+msgstr "Tämä sovellus on poissa käytöstä"
+

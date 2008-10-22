@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurations xmlns="http://agavi.org/agavi/1.0/config">
+	<configuration>
+		<handlers>
+			<handler pattern="%core.config_dir%/routing.xml" validate="%core.agavi_dir%/config/xsd/routing.xsd" class="CHCHTestHandler">
+				<parameters>
+					<parameter name="foo">bar</parameter>
+					<parameter name="dir">%core.agavi_dir%</parameter>
+				</parameters>
+			</handler>
+		</handlers>
+	</configuration>
+</configurations>

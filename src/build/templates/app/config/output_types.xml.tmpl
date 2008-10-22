@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurations xmlns="http://agavi.org/agavi/1.0/config">
+
+	<configuration>
+		
+		<output_types default="html">
+
+			<output_type name="html">
+				
+				<renderers default="php">
+					<renderer name="php" class="AgaviPhpRenderer">
+						<parameter name="assigns">
+							<parameter name="routing">ro</parameter>
+							<parameter name="request">rq</parameter>
+							<parameter name="controller">ct</parameter>
+							<parameter name="user">us</parameter>
+							<parameter name="translation_manager">tm</parameter>
+							<parameter name="request_data">rd</parameter>
+						</parameter>
+					</renderer>
+				</renderers>
+				
+				<layouts default="default">
+					<layout name="default">
+						<layer name="content" />
+					</layout>
+				</layouts>
+				
+				<parameter name="http_headers">
+					<parameter name="Content-Type">text/html; charset=UTF-8</parameter>
+				</parameter>
+				
+			</output_type>
+
+		</output_types>
+		
+	</configuration>
+
+</configurations>

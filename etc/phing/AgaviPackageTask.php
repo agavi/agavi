@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2005-2008 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -13,14 +13,15 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
-class AgaviPackageTask extends Task {
+class AgaviPackageTask extends Task
+{
 	private $dir = '';
-
+	
 	public function setDir($dir)
 	{
 		$this->dir = (string) $dir;
 	}
-
+	
 	public function main()
 	{
 		if (!@require_once('PEAR/PackageFileManager2.php')) {
@@ -31,11 +32,24 @@ class AgaviPackageTask extends Task {
 		if (!$this->dir || !file_exists($this->dir)) {
 			throw new BuildException('Build dir is not defined or does not exist.');
 		}
-
-		$this->log("Building package contents in: {$this->dir}", PROJECT_MSG_INFO);
-
+		
 		set_time_limit(0);
-
+		
+		$this->log("Adding .keep files to empty directories", PROJECT_MSG_INFO);
+		
+		foreach(new RecursiveIteratorIterator(new RecursiveDirectoryIterator(realpath('samples')), RecursiveIteratorIterator::CHILD_FIRST) as $dir) {
+			if($dir->isDir()) {
+				foreach(new DirectoryIterator($dir->getPathname()) as $d) {
+					if(!in_array($d->getFilename(), array('.', '..'))) {
+						continue 2;
+					}
+				}
+				touch($dir->getPathname() . '/.keep');
+			}
+		}
+		
+		$this->log("Building package contents in: {$this->dir}", PROJECT_MSG_INFO);
+		
 		// Modify short description. Try to keep under 80 chars width
 $shortDesc = <<<EOD
 PHP5 MVC Application Framework
@@ -43,8 +57,7 @@ EOD;
 
 		// Modify long description. Try to keep under 80 chars width
 $longDesc = <<<EOD
-Agavi is a fork of the Mojavi project.  It aims to provide an MVC
-application framework for PHP5.
+Agavi is a full-featured MVC-style framework for PHP5 with a strong focus on structure, code reusability and flexibility.
 EOD;
 
 		$p2 = new PEAR_PackageFileManager2;
@@ -53,76 +66,105 @@ EOD;
 			'packagedirectory' => $this->dir,
 			'baseinstalldir' => 'agavi',
 			'ignore' => array(
-				'.svn/'
-			), 
+				'.svn/',
+			),
+			'addhiddenfiles' => true,
+			'dir_roles' => array(
+				'/' => 'php',
+				'bin' => 'script',
+				'samples' => 'data',
+			),
 			'installexceptions' => array(
-				'scripts/agavi-dist' => '/',
-				'scripts/agavi.bat-dist' => '/'
+				'bin/agavi-dist' => '/',
+				'bin/agavi.bat-dist' => '/',
 			),
 			'exceptions' => array(
+				'API_CHANGELOG' => 'doc',
 				'CHANGELOG' => 'doc',
-				'LICENSE' => 'doc',
+				'COPYRIGHT' => 'doc',
 				'INSTALL' => 'doc',
+				'KNOWN_ISSUES' => 'doc',
+				'LICENSE' => 'doc',
+				'LICENSE-AGAVI' => 'doc',
+				'LICENSE-ICU' => 'doc',
+				'LICENSE-TANGO_ICON_THEME' => 'doc',
+				'LICENSE-UNICODE_CLDR' => 'doc',
 				'RELEASE_NOTES' => 'doc',
-				'scripts/agavi-dist' => 'script',
-				'scripts/agavi.bat-dist' => 'script'
-			)
+				'TODO' => 'doc',
+				'UPGRADING' => 'doc',
+			),
 		));
 		$p2->setPackageType('php');
 		$p2->setPackage('agavi');
-		$p2->addMaintainer('developer', 'bob', 'Bob Zoller', 'bob@agavi.org');
-		$p2->addMaintainer('developer', 'mike', 'Mike Vincent', 'mike@agavi.org');
-		$p2->addMaintainer('lead', 'david', 'David Zuelke', 'dz@bitxtender.com');
-		$p2->addMaintainer('developer', 'v-dogg', 'Veikko Makinen', 'mail@veikkomakinen.com');
+		$p2->addMaintainer('lead', 'david', 'David Zülke', 'david.zuelke@bitextender.com');
+		$p2->addMaintainer('developer', 'dominik', 'Dominik del Bondio', 'dominik.del.bondio@bitextender.com');
+		$p2->addMaintainer('developer', 'felix', 'Felix Gilcher', 'felix.gilcher@bitextender.com');
+		$p2->addMaintainer('developer', 'impl', 'Noah Fontes', 'nfontes@cynigram.com');
+		$p2->addMaintainer('developer', 'v-dogg', 'Veikko Mäkinen', 'mail@veikkomakinen.com');
 		$p2->setChannel('pear.agavi.org');
-		$p2->setReleaseVersion('0.10.2');
-		$p2->setAPIVersion('0.10.0');
+		$p2->setReleaseVersion('1.0.0beta5');
+		$p2->setAPIVersion('1.0.0beta5');
 		$p2->setReleaseStability('beta');
-		$p2->setAPIStability('alpha');
+		$p2->setAPIStability('beta');
 		$p2->setSummary($shortDesc);
 		$p2->setDescription($longDesc);
-		$p2->setNotes('See the CHANGELOG for full list of changes');
-
+		$p2->setNotes("To see what's new, please refer to the RELEASE_NOTES. Also, the CHANGELOG contains a full list of changes.\n\nFor installation instructions, consult INSTALL. Information on how to migrate existing Agavi 0.11.x applications can be found in UPGRADING.");
+		
 		// this must be the most stupid syntax I've ever seen.
 		$p2->addRelease();
 		$p2->setOSInstallCondition('windows');
-		$p2->addInstallAs('scripts/agavi.bat-dist', 'agavi.bat');
-		$p2->addIgnoreToRelease('scripts/agavi-dist');
-
+		$p2->addInstallAs('bin/agavi.bat-dist', 'agavi.bat');
+		$p2->addIgnoreToRelease('bin/agavi-dist');
+		
 		// and the next release... very cool, eh? how utterly stupid is that
 		$p2->addRelease();
-		$p2->addInstallAs('scripts/agavi-dist', 'agavi');
-		$p2->addIgnoreToRelease('scripts/agavi.bat-dist');
-
-		$p2->addPackageDepWithChannel( 'required', 'phing', 'pear.phing.info', '2.2.0RC1');
-		$p2->addPackageDepWithChannel( 'optional', 'creole', 'pear.phpdb.org', '1.1.0RC1');
-		$p2->addPackageDepWithChannel( 'optional', 'propel_generator', 'pear.phpdb.org', '1.2.0RC1');
-		$p2->addPackageDepWithChannel( 'optional', 'propel_runtime', 'pear.phpdb.org', '1.2.0RC1');
-		$p2->setPhpDep('5.0.0');
+		$p2->addInstallAs('bin/agavi-dist', 'agavi');
+		$p2->addIgnoreToRelease('bin/agavi.bat-dist');
+		
+		$p2->addPackageDepWithChannel('required', 'phing', 'pear.phing.info', '2.3.1');
+		
+		$p2->addConflictingPackageDepWithChannel('phing', 'pear.php.net');
+		
+		$p2->setPhpDep('5.1.3');
+		
+		$p2->addExtensionDep('required', 'dom');
+		$p2->addExtensionDep('required', 'libxml');
+		$p2->addExtensionDep('required', 'SPL');
+		$p2->addExtensionDep('required', 'Reflection');
+		$p2->addExtensionDep('required', 'pcre');
+		$p2->addExtensionDep('optional', 'xsl');
+		$p2->addExtensionDep('optional', 'tokenizer');
+		$p2->addExtensionDep('optional', 'session');
+		$p2->addExtensionDep('optional', 'xmlrpc');
+		$p2->addExtensionDep('optional', 'PDO');
+		$p2->addExtensionDep('optional', 'iconv');
+		$p2->addExtensionDep('optional', 'gettext');
+		
 		$p2->setPearinstallerDep('1.4.0');
-		//$p2->addPackageDepWithUri('required', 'phing', 'http://phing.info/pear/phing-current.tgz');
+		
 		$p2->setLicense('LGPL', 'http://www.gnu.org/copyleft/lesser.html');
-		$p2->addReplacement('scripts/agavi-dist', 'pear-config', '@PEAR-DIR@', 'php_dir');
-		$p2->addReplacement('scripts/agavi.bat-dist', 'pear-config', '@PEAR-DIR@', 'php_dir');
+		
+		$p2->addReplacement('bin/agavi-dist', 'pear-config', '@PEAR-DIR@', 'php_dir');
+		$p2->addReplacement('bin/agavi-dist', 'pear-config', '@PHP-BIN@', 'php_bin');
+		$p2->addReplacement('bin/agavi.bat-dist', 'pear-config', '@PEAR-DIR@', 'php_dir');
+		$p2->addReplacement('bin/agavi.bat-dist', 'pear-config', '@PHP-BIN@', 'php_bin');
+		$p2->addReplacement('src/build/build.xml', 'pear-config', '@PEAR-DIR@', 'php_dir');
 		$p2->generateContents();
-
-//		$pkg = &$p2->exportCompatiblePackageFile1();
-
+		
 		try {
-//			$pkg->writePackageFile();
 			$p2->writePackageFile();
-		} catch (PEAR_Exception $e) {
-			$this->log("Oops!  Caught PEAR Exception: ".$e->getMessage());
+		} catch(PEAR_Exception $e) {
+			$this->log("Oops! Caught PEAR Exception: ".$e->getMessage());
 		}
 	}
 }
 
 function PEAR_ErrorToPEAR_Exception($err)
 {
-    if ($err->getCode()) {
-        throw new PEAR_Exception($err->getMessage(),
-            $err->getCode());
-    }
-    throw new PEAR_Exception($err->getMessage());
+	if($err->getCode()) {
+		throw new PEAR_Exception($err->getMessage(), $err->getCode());
+	}
+	throw new PEAR_Exception($err->getMessage());
 }
+
 ?>

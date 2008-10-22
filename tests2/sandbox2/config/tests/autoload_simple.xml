@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurations xmlns="http://agavi.org/agavi/1.0/config">
+	<configuration>
+		<autoloads>
+			<autoload name="TestClass1">lib/config/autoload/test/Class1.class.php</autoload>
+			<autoload name="TestClass2">AutoloadHandlerTestClass.class.php</autoload>
+			<autoload name="TestClass3">AutoloadHandlerTestClass.class.php</autoload>
+		</autoloads>
+	</configuration>
+	<configuration>
+		<autoloads>
+			<autoload name="TestClass2">%core.app_dir%/lib/config/autoload/Test2.class.php</autoload>
+		</autoloads>
+	</configuration>
+</configurations>

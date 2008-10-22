@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://agavi.org/agavi/1.0/config" targetNamespace="http://agavi.org/agavi/1.0/config" elementFormDefault="qualified">
+
+  <xs:include schemaLocation="default_tags.xsd"/>  
+
+  <xs:complexType name="configuration">
+    <xs:complexContent>
+      <xs:extension base="base_configuration_with_context">
+        <xs:all>
+          <xs:element name="translators" type="translators" minOccurs="0"/>
+          <xs:element name="available_locales" type="available_locales" minOccurs="0"/>
+        </xs:all>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="translators">
+    <xs:sequence>
+      <xs:element name="translator" type="translator" maxOccurs="unbounded" />
+    </xs:sequence>
+    <xs:attribute name="default_domain" type="xs:string" use="required" />
+  </xs:complexType>
+  <xs:complexType name="translator">
+    <xs:sequence maxOccurs="unbounded">
+      <xs:element name="message_translator" type="translatordef" minOccurs="0" />
+      <xs:element name="number_formatter" type="formatterdef" minOccurs="0" />
+      <xs:element name="currency_formatter" type="formatterdef" minOccurs="0" />
+      <xs:element name="date_formatter" type="formatterdef" minOccurs="0" />
+      <xs:group ref="inner_translators" />
+    </xs:sequence>
+    <xs:attribute name="domain" type="xs:string" use="required" />
+  </xs:complexType>
+
+  <xs:group name="inner_translators">
+    <xs:choice>
+      <xs:element name="translators" type="inner_translators" minOccurs="0" />
+      <xs:element name="translator" type="translator" minOccurs="0" maxOccurs="unbounded" />
+    </xs:choice>
+  </xs:group>
+  <xs:complexType name="inner_translators">
+    <xs:sequence>
+      <xs:element name="translator" type="translator" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="translatordef">
+    <xs:sequence maxOccurs="unbounded">
+      <xs:element name="filters" type="filters" minOccurs="0" />
+      <xs:group ref="parameters" />
+    </xs:sequence>
+    <xs:attribute name="class" type="php_label" />
+  </xs:complexType>
+  <xs:complexType name="formatterdef">
+    <xs:complexContent>
+      <xs:extension base="translatordef">
+        <xs:attribute name="translation_domain" type="xs:string" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="filters">
+    <xs:sequence>
+      <xs:element name="filter" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="available_locales">
+    <xs:sequence>
+      <xs:element name="available_locale" type="available_locale" maxOccurs="unbounded" />
+    </xs:sequence>
+    <xs:attribute name="default_locale" type="xs:string" />
+    <xs:attribute name="default_timezone" type="xs:string" />
+  </xs:complexType>
+  <xs:complexType name="available_locale">
+    <xs:sequence>
+      <xs:group ref="parameters" />
+    </xs:sequence>
+    <xs:attribute name="identifier" type="xs:string" use="required" />
+    <xs:attribute name="ldml_file" type="xs:string" />
+    <xs:attribute name="fallback" type="xs:string" />
+  </xs:complexType>
+
+</xs:schema>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurations xmlns="http://agavi.org/agavi/1.0/config">
+	<configuration>
+		
+		<system_actions>
+			
+			<system_action name="default">
+				<module>Default</module>
+				<action>Index</action>
+			</system_action>
+			
+			<system_action name="error_404">
+				<module>ErrorModule</module>
+				<action>Error404</action>
+			</system_action>
+			
+			<system_action name="login">
+				<module>Default</module>
+				<action>Login</action>
+			</system_action>
+			
+			<system_action name="module_disabled">
+				<module>ErrorModule</module>
+				<action>DisabledModule</action>
+			</system_action>
+			
+			<system_action name="secure">
+				<module>Default</module>
+				<action>Secure</action>
+			</system_action>
+			
+			<system_action name="unavailable">
+				<module>ErrorModule</module>
+				<action>ModuleUnavailable</action>
+			</system_action>
+			
+		</system_actions>
+		
+		<settings>
+			<setting name="app_name">Test Project</setting>
+			
+			<setting name="available">true</setting>
+			<setting name="debug">true</setting>
+			<setting name="modpub">/modpub</setting>
+			
+			<setting name="use_database">false</setting>
+			<setting name="use_logging">true</setting>
+			<setting name="use_security">false</setting>
+			<setting name="use_translation">true</setting>
+			
+		</settings>
+		
+		<exception_templates>
+			<exception_template>%core.agavi_dir%/exception/templates/plaintext.php</exception_template>
+		</exception_templates>
+		
+	</configuration>
+</configurations>

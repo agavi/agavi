@@ -7,7 +7,7 @@ class DatabaseManagerTest extends AgaviTestCase
 	
 	public function setUp()
 	{
-		$this->_context = AgaviContext::getInstance();
+		$this->_context = AgaviContext::getInstance('test');
 		
 		$this->_dbm = $this->_context->getDatabaseManager();
 	}
@@ -18,10 +18,12 @@ class DatabaseManagerTest extends AgaviTestCase
 		$this->_context = null;
 	}
 
-	public function testWhatever()
+	public function testInitialization()
 	{
 		$this->assertType('AgaviDatabaseManager', $this->_dbm);
 		$this->assertType('AgaviContext', $this->_dbm->getContext());
+		$ctx_test = $this->_dbm->getContext();
+		$this->assertReference($this->_context, $ctx_test);
 	}
 
 }

@@ -1,13 +1,13 @@
 <?php
 
-class SampleLayout extends AgaviLayout
+class SampleLayout extends AgaviLoggerLayout
 {
-	public function & format($message){}
+	public function format(AgaviLoggerMessage $message){}
 }
 
 class LayoutTest extends AgaviTestCase
 {
-	public function testgetsetLayout()
+	public function testGetSetLayout()
 	{
 		$layout = new SampleLayout;
 		$this->assertNull($layout->getLayout());

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurations xmlns="http://agavi.org/agavi/1.0/config">
+	<configuration>
+		<databases default="test1">
+
+			<database name="test1" class="DCHTestDatabase">
+				<parameters>
+					<parameter name="host">localhost1</parameter>
+					<parameter name="user">username1</parameter>
+					<parameter name="config">%core.app_dir%/config/project-conf.php</parameter>
+				</parameters>
+			</database>
+			
+		</databases>
+	</configuration>
+	<configuration environment="env1 env2">
+		<databases default="test1" />
+	</configuration>
+	<configuration environment="env2">
+		<databases default="test2">
+			<database name="test1">
+				<parameters>
+					<parameter name="user">testuser1</parameter>
+				</parameters>
+			</database>
+		</databases>
+	</configuration>
+</configurations>

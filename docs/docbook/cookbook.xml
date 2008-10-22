@@ -1,0 +1,517 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
+<book>
+  <title>The Agavi Cookbook</title>
+
+  <bookinfo>
+    <releaseinfo>$Id: cookbook.xml 1823 2007-03-06 08:47:59Z david
+    $</releaseinfo>
+  </bookinfo>
+
+  <chapter>
+    <title>Best Practices</title>
+
+    <section>
+      <title>Separating Business and Presentation Logic</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Sharing and Passing Around Data Inside Your Application</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Decorators and Slots</title>
+
+      <para>why decorate, setting up slots, passing around data between
+      slots</para>
+    </section>
+  </chapter>
+
+  <chapter>
+    <title>Popular Recipes</title>
+
+    <section>
+      <title>Removing the "index.php" Part From URLs</title>
+
+      <para>You need mod_rewrite for Apache or something similar for other web
+      servers, such as ISAPI_Rewrite for Microsoft IIS to get rid of the
+      "index.php" part in incoming and generated URLs.</para>
+
+      <section>
+        <title>Apache with mod_rewrite</title>
+
+        <para>Make sure mod_rewrite is enabled and the required AllowOverride
+        settings are active, and rename <filename>dist.htaccess</filename> to
+        <filename>.htaccess</filename> in your <filename>pub</filename>
+        directory which has the the following contents:</para>
+
+        <para><programlisting># rename this file to .htaccess to remove the necessity to have index.php in front of routes
+# make sure mod_rewrite is on and AllowOverride settings are okay
+
+# these two aren't really necessary
+DirectoryIndex index.php
+Options -MultiViews -Indexes
+
+&lt;IfDefine APACHE2&gt;
+AcceptPathInfo On
+&lt;/IfDefine&gt;
+
+&lt;IfModule mod_rewrite.c&gt;
+# enable rewrite engine
+RewriteEngine Off
+
+# ********** THIS IS THE ONLY SETTING YOU SHOULD HAVE TO CHANGE **********
+RewriteBase /WEBSERVER/PATH/TO/pub/
+# e.g. RewriteBase /~dzuelke/_projects/agavi/trunk/samples/pub/
+# usually just "/" if your application's pub dir is the document root
+
+# if requested url does not exist (i.e. it's likely an agavi route), pass it as path info to index.php
+RewriteRule ^$ index.php?/ [QSA,L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule (.*) index.php?/$1 [QSA,L]
+&lt;/IfModule&gt;</programlisting></para>
+
+        <para>All you must do is enable rewriting:</para>
+
+        <para><programlisting>RewriteEngine On</programlisting></para>
+
+        <para>and change the rewrite base to point to your pub directory URL
+        path:</para>
+
+        <para><programlisting>RewriteBase /~cbrown/projects/win-a-baseball-match/pub/</programlisting></para>
+
+        <para>The important thing is that you use the
+        <emphasis>external</emphasis> path to the <filename>pub</filename>
+        directory as the RewriteBase, i.e. the path that you would have to
+        enter in your web browser location bar to reach the index page - in
+        our example, the project is located at
+        <filename>/~cbrown/projects/win-a-baseball-match/</filename>. If the
+        <filename>pub</filename> directory is the document root, then the
+        RewriteBase is just <filename>/</filename>.</para>
+
+        <para>The RewriteCond is a condition that executes the following
+        RewriteRule if the requested filename (that is the incoming URL
+        already mapped to a filesystem name by Apache) does
+        <emphasis>not</emphasis> exist. If the requested URL exists, for
+        instance, when an image on the webserver is requested, Agavi won't be
+        called. Otherwise, the framework is started and the given URL is
+        handed to Agavi as so-called Path Info which the WebRouting will use
+        to match a route.</para>
+
+        <tip>
+          <para>Of course you can also use the rewrite rules in your virtual
+          host configuration. However, keep the following things in mind when
+          doing that:</para>
+
+          <para><orderedlist>
+              <listitem>
+                <para>You cannot use a RewriteBase, so you have to use the
+                full relative path in the rewrite rules and destinations,
+                including the leading slash.</para>
+              </listitem>
+
+              <listitem>
+                <para>The RewriteCond on <code>%{REQUEST_FILENAME}</code> only
+                work if the request filename has the full document root
+                prepended to it, i.e.
+                <code>%{DOCUMENT_ROOT}%{REQUEST_FILENAME}</code></para>
+              </listitem>
+            </orderedlist>Assuming your application is in the webserver root,
+          i.e. called via "/" from the outside, that would mean:</para>
+
+          <para><programlisting>RewriteRule ^/$ /index.php?/ [QSA,L]
+RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME} !-f
+RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME} !-d
+RewriteRule ^/(.*)$ /index.php?/$1 [QSA,L]</programlisting></para>
+        </tip>
+      </section>
+
+      <section>
+        <title>LightTPD</title>
+
+        <para>In your <filename>lighttpd.conf</filename>, add the following
+        lines (this example assumes that our project is in
+        <filename>/~cbrown/projects/win-a-baseball-match/</filename>):</para>
+
+        <para><programlisting>url.rewrite-once = ( 
+  "^<filename>/~cbrown/projects/win-a-baseball-match/</filename>pub/([^?]*)(?:\?(.*))?$" =&gt; "<filename>/~cbrown/projects/win-a-baseball-match/</filename>pub/index.php?/$1&amp;$2"
+)</programlisting></para>
+
+        <para>While the pattern looks a bit ugly-ish, it is strongly
+        recommended that you don't use your own in order for the routing to
+        work reliably. Don't worry, it's been engineered by a German, it won't
+        let you down.</para>
+
+        <para>Restart Lighty, and everything should work.</para>
+
+        <para>However, we're not there yet. The pattern works and does it's
+        job, but unfortunately, it's a bit overzealus and will rewrite any
+        URL. That's not exactly what we want, because our images, stylesheets
+        and other static files must remain accessible. So we have to add
+        another rewrite that catches URLs that shouldn't be rewritten, in our
+        case any that begins on "modpub", "img", "css" or "files":</para>
+
+        <para><programlisting>url.rewrite-once = ( 
+  "^/~cbrown/projects/win-a-baseball-match/pub/(modpub|img|css|files).*" =&gt; "$0", 
+  "^<filename>/~cbrown/projects/win-a-baseball-match/</filename>pub/([^?]*)(?:\?(.*))?$" =&gt; "<filename>/~cbrown/projects/win-a-baseball-match/</filename>pub/index.php?/$1&amp;$2"
+)</programlisting></para>
+
+        <para>Don't forget to restart Lighty again for the changes to take
+        effect.</para>
+      </section>
+
+      <section>
+        <title>Microsoft IIS with ISAPI_Rewrite</title>
+
+        <para>This example assumes you're using the Lite version of
+        ISAPI_Rewrite, which does not allow per-directory
+        <filename>htaccess.ini</filename> files - all rewrite rules have to be
+        put into the <filename>httpd.ini</filename> in the directory where
+        ISAPI_Rewrite was installed. For now, we use these rules (assuming
+        your project is sitting in
+        <filename>/users/cbrown/projects/win-a-baseball-match/</filename>):</para>
+
+        <para><programlisting>UriMatchPrefix /users/cbrown/projects/win-a-baseball-match/pub/
+UriFormatPrefix /users/cbrown/projects/win-a-baseball-match/pub/
+RewriteRule ([^?]*)(?:\?(.*))? index.php?/$1&amp;$2 [L]</programlisting></para>
+
+        <para>While the pattern looks a bit ugly-ish, it is strongly
+        recommended that you don't use your own in order for the routing to
+        work reliably. Don't worry, it's been engineered by a German, it won't
+        let you down.</para>
+
+        <para>Restart IIS, and everything should work.</para>
+
+        <para>However, we're not there yet. The pattern works and does it's
+        job, but unfortunately, it's a bit overzealus and will rewrite any
+        URL. That's not exactly what we want, because our images, stylesheets
+        and other static files must remain accessible. So we have to add a
+        rewrite condition that prevents rewriting for URLs that shouldn't be
+        rewritten, in our case any that begins on "modpub", "img", "css" or
+        "files":</para>
+
+        <para><programlisting>UriMatchPrefix /users/cbrown/projects/win-a-baseball-match/pub/
+UriFormatPrefix /users/cbrown/projects/win-a-baseball-match/pub/
+RewriteCond URL (?!modpub|img|css|files).*
+RewriteRule ([^?]*)(?:\?(.*))? index.php?/$1&amp;$2 [L]</programlisting></para>
+
+        <para>Don't forget to restart IIS again for the settings to take
+        effect (unless you'd like to wait until ISAPI_Rewrite figures out
+        something has changed, but that will take up to an hour).</para>
+      </section>
+    </section>
+
+    <section>
+      <title>Serving "application/xhtml+xml" to capable browsers</title>
+
+      <caution>
+        <para>Serving XHTML as <code>application/xhtml+xml</code> might not be
+        a good idea under all circumstances. DOM changes the behavior
+        (<code>innerHTML</code> often does not work, and neither does
+        <code>document.write</code>; Element/Attribute names are not
+        normalized to upper-case; <code>document.createElement</code> does not
+        work, only <code>createElementNS</code> and so on), CSS is applied
+        slightly different, <code>&lt;script&gt;</code> and
+        <code>&lt;style&gt;</code> blocks must use <code>CDATA</code> sections
+        instead of HTML comments, Mozilla Gecko will not render documents
+        incrementally etc.</para>
+
+        <para>For more information on <code>application/xhtml+xml</code> vs
+        <code>text/html</code>, read the following documents:</para>
+
+        <para><itemizedlist>
+            <listitem>
+              <para><ulink
+              url="http://www.mozilla.org/docs/web-developer/faq.html#xhtmldiff">http://www.mozilla.org/docs/web-developer/faq.html#xhtmldiff</ulink></para>
+            </listitem>
+
+            <listitem>
+              <para><ulink
+              url="http://webkit.org/blog/?p=68">http://webkit.org/blog/?p=68</ulink></para>
+            </listitem>
+
+            <listitem>
+              <para><ulink
+              url="http://www.hixie.ch/advocacy/xhtml">http://www.hixie.ch/advocacy/xhtml</ulink></para>
+            </listitem>
+          </itemizedlist></para>
+      </caution>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Propel Integration</title>
+
+      <para>Agavi was the first framework to feature autoloading support for
+      Propel. This does not only include your model classes, but also Propel
+      itself - Propel will be loaded and initialized on demand, and only if
+      you access your data model. This JIT loading mechanism guarantees
+      maximum performance because it eliminates any overhead. You can then
+      simply use any of your model classes in the code, without having to
+      require or init Propel first or anything.</para>
+
+      <para><note>
+          <para>This requires at least Propel 1.2.0!</para>
+        </note>To set up the advanced Propel support, you have to follow one
+      or two simple steps:</para>
+
+      <section>
+        <title>Register the Runtime Configuration File</title>
+
+        <para>Go to <filename>databases.xml</filename> and insert a new
+        database configuration for your Propel model:</para>
+
+        <para><programlisting>&lt;database name="propel" class="AgaviPropelDatabase"&gt;
+  &lt;parameters&gt;
+    &lt;parameter name="config"&gt;%core.app_dir%/config/bookstore-conf.php&lt;/parameter&gt;
+  &lt;/parameters&gt;
+&lt;/database&gt;</programlisting></para>
+
+        <para><filename>bookstore-conf.php</filename> is the name of the
+        runtime configuration file Propel generated for you.</para>
+      </section>
+
+      <section>
+        <title>Add Your Object and Peer Classes to autoload.xml</title>
+
+        <para><important>
+            <para>This step is not necessary for Propel 1.3</para>
+          </important></para>
+
+        <para>For each Object and Peer, you now have to create an entry in
+        <filename>autoload.xml</filename>:</para>
+
+        <para><programlisting>&lt;autoload name="Book"&gt;bookstore/Book.php&lt;/autoload&gt;
+&lt;autoload name="BookPeer"&gt;bookstore/BookPeer.php&lt;/autoload&gt;</programlisting>You
+        do not have to add the <filename>om/*.php</filename> files or the
+        <filename>map/*.php</filename> files!</para>
+
+        <para><note>
+            <para>It is a good idea to add the Criteria class to the list of
+            autoloads, too:</para>
+
+            <para><programlisting>&lt;autoload name="Criteria"&gt;propel/util/Criteria.php&lt;/autoload&gt;</programlisting></para>
+          </note></para>
+      </section>
+    </section>
+
+    <section>
+      <title>Cookie-Based Auto-Login</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Redirecting Back to the Originally Requested Page After
+      Login</title>
+
+      <para>If a unautheticated user tries to fire an action he is not allowed
+      to execute he is forwarded to the login action (configured in
+      <filename>settings.xml</filename>). To make a good user experience it's
+      nice to redirect the user back to the action he tried to execute after a
+      successful login. This is especially important if the user's session had
+      timed out and he was in the middle of something when he was logged
+      out.</para>
+
+      <para>Because Agavi forwards to the login action the URL is still the
+      one pointing to the original action. Agavi also stores the information
+      about the forward into the request object under
+      <code>org.agavi.controller.forwards.login</code> namespace. So if the
+      login action was actually triggered because of a denied access the first
+      thing we want to do is save the current URL for later use. The place to
+      do this is usually <classname>LoginInputView</classname> (remember, this
+      is all presentational application logic so the action itself shouldn't
+      do it).</para>
+
+      <programlisting>if($this-&gt;getContext()-&gt;getRequest()-&gt;hasAttributeNamespace('org.agavi.controller.forwards.login')) {
+  // we were redirected to the login form by the controller because the requested action required security
+  // so store the input URL in the session for a redirect after login
+  $this-&gt;getContext()-&gt;getUser()-&gt;setAttribute('redirect', $this-&gt;getContext()-&gt;getRequest()-&gt;getUrl(), 'org.agavi.SampleApp.login');
+}
+else {
+  // clear the redirect URL just to be sure 
+  $this-&gt;getContext()-&gt;getUser()-&gt;removeAttribute('redirect', 'org.agavi.SampleApp.login');
+}</programlisting>
+
+      <para>Now after a successful login we want to redirect the user back to
+      the action he requested. To do so we need this in the
+      <classname>LoginSuccessView</classname>:</para>
+
+      <programlisting>if($usr-&gt;hasAttribute('redirect', 'org.agavi.SampleApp.login')) {
+  $this-&gt;getResponse()-&gt;setRedirect($usr-&gt;removeAttribute('redirect', 'org.agavi.SampleApp.login'));
+  return;
+}
+// else redirect to the welcome page or just proceed with the default behaviour of the view</programlisting>
+
+      <para>And that's it. Enjoy the user experience!</para>
+    </section>
+
+    <section>
+      <title>Serving Output Variants of the Same Content</title>
+
+      <para>a quick example using a LatestProductsAction or whatever</para>
+    </section>
+
+    <section>
+      <title>Running Agavi Behind a Reverse Proxy</title>
+
+      <para>If you are developping an Agavi application that needs to run
+      behind a <ulink url="http://en.wikipedia.org/wiki/Reverse_proxy">Reverse
+      Proxy</ulink> , you need to be aware of a few things. The main issue is
+      that there is a difference between the public DNS for you applciation
+      and the internal, unregistered DNS. A reverse proxy intercepts all calls
+      for the public IP address and decides what to do with them. It will
+      decide what internal webserver to forward to (there can be several
+      webservers running the same application to help balance the load). As a
+      result your application receives a call from the Reverse Proxy and not
+      from the client.</para>
+
+      <para>This means that some of the <code>$_SERVER[]</code> variables just
+      contain the info for the reverse proxy and not for the client (e.g.
+      <code>$_SERVER[REMOTE_ADDR]</code> will be the IP address for the
+      reverse proxy). This is one of the reasons why it's a bad idea to rely
+      on the client's IP address for security. You'll also notice that
+      variables like <code>$_SERVER['SERVER_NAME']</code> contain info about
+      the server within the network, but this address is unknown to the
+      outside world. E.g A client makes a request for
+      <code>http://www.foo.com</code>. A Reverse Proxy intercepts this and
+      forwards this request to an internal server
+      <code>http://internal1.foo.com</code>. In this case the
+      <code>SERVER_NAME</code> variable will be set to 'internal1.foo.com' and
+      not to 'www.foo.com'.</para>
+
+      <para>Now if you're using Agavi you should seldom have to deal with the
+      contents of <code>$_SERVER[]</code>. But sometimes you have to generate
+      an absolute url (e.g. as a link in a rss feed or a <code> &lt;base
+      href="..." /&gt;</code> tag in html). You can do this by calling the
+      <methodname>gen()</methodname> method on Agavi's Routing class with the
+      optional parameter 'relative' set to false</para>
+
+      <programlisting>&lt;link&gt;&lt;?php echo $ro-&gt;gen( 'Newsitem' , array( 'id' =&gt; 5 ) , array ( 'relative' =&gt; false ) ); ?&gt;&lt;/link&gt;</programlisting>
+
+      <para>In a setup with a Reverse Proxy this would generate an url like
+      <code>http://internal1.foo.com/news/1</code>. This is not what we want.
+      Since internal1 is not known to a public dns server any user that
+      follows the link will receive a host not found error.</para>
+
+      <para>One way to deal with this is to let the Reverse Proxy rewrite all
+      html it sends back to the client. Information for this kind of setup can
+      be found in the manual for the Reverse Proxy. E.g. for Apache 2 see
+      <ulink
+      url="http://www.apachetutor.org/admin/reverseproxies">http://www.apachetutor.org/admin/reverseproxies</ulink>
+      . Another option is to use some of the alternate variables that are set
+      by Apache (I have no idea how other webservers handle this). You can
+      view these by looking at the output of the <code>phpinfo()</code>
+      function. With php 5.1.6 under Apache2 I have access to
+      HTTP_X_FORWARDED_FOR, HTTP_X_FORWARDED_HOST and
+      HTTP_X_FORWARDED_SERVER.</para>
+
+      <para>Armed with this information we can tell Agavi where to get the
+      name of the server. This information is needed by the
+      <classname>AgaviWebRequest</classname> object. To do this we need to
+      edit <filename>factories.xml</filename>.</para>
+
+      <programlisting>&lt;request class="AgaviWebRequest"&gt;
+  &lt;parameters&gt;
+    &lt;parameter name="sources"&gt;
+      &lt;parameter name="SERVER_NAME"&gt;HTTP_X_FORWARDED_SERVER&lt;/parameter&gt;
+    &lt;/parameter&gt;
+  &lt;/parameters&gt;
+&lt;/request&gt;</programlisting>
+
+      <para>This tells Agavi to use the value of <code>HTTP_X_FORWARDED_SERVER
+      </code> for <code>SERVER_NAME</code>, ensuring that absolute urls are
+      correct.</para>
+    </section>
+
+    <section>
+      <title>Role-Based Access Control and Rules for Unauthenticated
+      Users</title>
+
+      <para>Because of the way Agavi's <classname>SecurityFilter</classname>
+      works Agavi's Role-Based Access Control (RBAC) and the user credential
+      handling in general assume that the user has been authenticated. By
+      default if the user is not authenticated no credentials are checked.
+      This can become an issue if you want to build an application where the
+      same action can be public in one set-up but requires a certain
+      credential in another. For example a project management software's
+      calendar could be public in one firm but protected in another.</para>
+
+      <para>To enable role-based access control for unauthenticated users you
+      need to do two things - grant a role for unauthenticated users and put
+      some logic into your base action's <methodname>isSecure()</methodname>
+      method.</para>
+
+      <programlisting>class MyProjectUser extends AgaviRbacSecurityUser
+{
+
+  public function initialize(AgaviContext $context, array $parameters = array())
+  {
+    parent::initialize($context, $parameters);
+
+    if(!$this-&gt;authenticated) {
+      $this-&gt;grantRole('unauthenticated');
+    }
+  }</programlisting>
+
+      <programlisting>class MyProjectBaseAction extends AgaviAction
+{
+  public function isSecure()
+  {
+    $cred = $this-&gt;getCredentials();
+    return $cred &amp;&amp; !$this-&gt;getContext()-&gt;getUser()-&gt;hasCredentials($cred);
+  }
+}</programlisting>
+
+      <para>The first bit is pretty obvious.
+      <classname>AgaviRbacSecurityUser</classname> initializes unauthenticated
+      users to have no roles but we want to override this and grant them a
+      special role called <code><varname>unauthenticated</varname></code>. The
+      code for <methodname>isSecure()</methodname> then again might require
+      some reasoning. The action is marked as secure only if the user doesn't
+      have the required credential. What this means is that if the user is
+      authenticated but doesn't have the required credential
+      <code>%actions.secure_action%</code> is triggered. If the user is not
+      authenticated and <code>unauthenticated</code> role doesn't allow this
+      action <code>%actions.login_action%</code> is triggered.</para>
+    </section>
+  </chapter>
+
+  <chapter>
+    <title>In-Depth Tutorials</title>
+
+    <section>
+      <title>Populating and Validating Forms</title>
+
+      <para>explain the FormPopulationFilter</para>
+    </section>
+
+    <section>
+      <title>Caching</title>
+
+      <para>document the execution filter here, with examples, explanation of
+      how decorators are cached or not and slots can be included, variable
+      caching, groups, request methods, cache lifetime</para>
+    </section>
+
+    <section>
+      <title>Routing Examples</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Adding an XMLRPC or Other Interface to Your Web
+      Application</title>
+
+      <para>walk people through the basic steps/ideas</para>
+    </section>
+  </chapter>
+</book>

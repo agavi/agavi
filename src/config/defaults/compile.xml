@@ -1,53 +1,27 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!--
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
-| This file is part of the Agavi package.                                    |
-| Copyright (c) 2006 the Agavi Project                                       |
-| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
-| AGAVI COMPILE CONFIGURATION                                                |
-| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
-| Any file in here will be stripped of comments and blank lines and will be  |
-| loaded into a single cache file.                                           |
-|                                                                            |
-| NOTE: When you change one of your classes it will not be reflected in the  |
-|       cache file until you remove the cache file or you change the         |
-|       modified time of this file.                                          |
-| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
-| KEYWORDS:                                                                  |
-| You may reference any configuration directive by enclosing the name in     |
-| "%" signs. Example: %core.agavi_dir%                                         |
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
-
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
-| Core Agavi classes.                                                        |
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
--->
-<configurations>
+<?xml version="1.0" encoding="UTF-8"?>
+<configurations xmlns="http://agavi.org/agavi/1.0/config">
 	<configuration>
 		<compiles>
 			<compile>%core.agavi_dir%/util/AgaviAttributeHolder.class.php</compile>
-			<compile>%core.agavi_dir%/action/Action.class.php</compile>
-			<compile>%core.agavi_dir%/action/ActionStack.class.php</compile>
-			<compile>%core.agavi_dir%/action/ActionStackEntry.class.php</compile>
-			<compile>%core.agavi_dir%/core/Context.class.php</compile>
-			<compile>%core.agavi_dir%/controller/Controller.class.php</compile>
-			<compile>%core.agavi_dir%/filter/Filter.class.php</compile>
+			<compile>%core.agavi_dir%/util/AgaviArrayPathDefinition.class.php</compile>
+			<compile>%core.agavi_dir%/action/AgaviAction.class.php</compile>
+			<compile>%core.agavi_dir%/core/AgaviContext.class.php</compile>
+			<compile>%core.agavi_dir%/controller/AgaviController.class.php</compile>
+			<compile>%core.agavi_dir%/controller/AgaviExecutionContainer.class.php</compile>
+			<compile>%core.agavi_dir%/controller/AgaviOutputType.class.php</compile>
+			<compile>%core.agavi_dir%/filter/AgaviFilter.class.php</compile>
 			<compile>%core.agavi_dir%/filter/AgaviDispatchFilter.class.php</compile>
-			<compile>%core.agavi_dir%/filter/ExecutionFilter.class.php</compile>
-			<compile>%core.agavi_dir%/filter/FilterChain.class.php</compile>
-			<compile>%core.agavi_dir%/logging/Appender.class.php</compile>
-			<compile>%core.agavi_dir%/logging/Layout.class.php</compile>
-			<compile>%core.agavi_dir%/logging/Logger.class.php</compile>
-			<compile>%core.agavi_dir%/logging/LoggerManager.class.php</compile>
-			<compile>%core.agavi_dir%/logging/Message.class.php</compile>
-			<compile>%core.agavi_dir%/logging/PassthruLayout.class.php</compile>
+			<compile>%core.agavi_dir%/filter/AgaviExecutionFilter.class.php</compile>
+			<compile>%core.agavi_dir%/filter/AgaviFilterChain.class.php</compile>
 			<compile>%core.agavi_dir%/renderer/AgaviRenderer.class.php</compile>
-			<compile>%core.agavi_dir%/request/Request.class.php</compile>
-			<compile>%core.agavi_dir%/storage/Storage.class.php</compile>
-			<compile>%core.agavi_dir%/user/User.class.php</compile>
-			<compile>%core.agavi_dir%/validator/Validator.class.php</compile>
-			<compile>%core.agavi_dir%/validator/ValidatorManager.class.php</compile>
-			<compile>%core.agavi_dir%/view/View.class.php</compile>
+			<compile>%core.agavi_dir%/request/AgaviRequestDataHolder.class.php</compile>
+			<compile>%core.agavi_dir%/request/AgaviRequest.class.php</compile>
+			<compile>%core.agavi_dir%/response/AgaviResponse.class.php</compile>
+			<compile>%core.agavi_dir%/routing/AgaviRouting.class.php</compile>
+			<compile>%core.agavi_dir%/storage/AgaviStorage.class.php</compile>
+			<compile>%core.agavi_dir%/user/AgaviUser.class.php</compile>
+			<compile>%core.agavi_dir%/view/AgaviTemplateLayer.class.php</compile>
+			<compile>%core.agavi_dir%/view/AgaviView.class.php</compile>
 		</compiles>
 	</configuration>
 </configurations>

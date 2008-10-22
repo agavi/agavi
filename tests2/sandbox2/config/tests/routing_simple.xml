@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurations xmlns="http://agavi.org/agavi/1.0/config">
+	<configuration context="test1">
+		<routes>
+			<route name="testWithChild" pattern="^/anchor" module="test1">
+				<routes>
+					<route name="t1child1" pattern="^/child1" action="action1" />
+					<route name="t1child2" pattern="^/(foo:child2)" action="action2" />
+					<route name="t1child3" pattern="^/(child3)/(bar:(child2)?)" module="module3" action="action3" />
+					<route name="t1child4" pattern="^/(foo:child4)/(bar:(nextChild))?" module="module4" action="action4">
+						<defaults>
+							<!--<default for="foo">child4</default>-->
+							<default for="bar">baz</default>
+						</defaults>
+						<ignores>
+							<ignore>foo</ignore>
+						</ignores>
+					</route>
+				</routes>
+			</route>
+		</routes>
+	</configuration>
+
+	<configuration context="test2">
+		<routes>
+			<route name="test2parent" pattern="^/parent">
+				<routes>
+					<route name="test2child1" pattern="^(/{category:[a-z0-9]+})?/({machine:[A-Z]+}/?)" module="t1Module1" action="t2Action1">
+<!--						<defaults>
+							<default for="category">/{}</default>
+						</defaults>
+-->					</route>
+				</routes>
+			</route>
+		</routes>
+	</configuration>
+
+</configurations>

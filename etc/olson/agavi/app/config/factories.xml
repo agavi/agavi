@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurations xmlns="http://agavi.org/agavi/1.0/config">
+	
+	<configuration>
+		
+		<controller class="AgaviController">
+			<parameter name="send_response">false</parameter>
+		</controller>
+		
+		<dispatch_filter class="AgaviDispatchFilter" />
+		
+		<execution_container class="AgaviExecutionContainer" />
+		
+		<execution_filter class="AgaviExecutionFilter" />
+		
+		<filter_chain class="AgaviFilterChain" />
+		
+		<request class="AgaviWebRequest" />
+		
+		<response class="AgaviWebResponse" />
+		
+		<routing class="AgaviWebserviceRouting">
+			<parameter name="enabled">false</parameter>
+		</routing>
+		
+		<security_filter class="AgaviSecurityFilter" />
+		
+		<storage class="AgaviNullStorage" />
+		
+		<translation_manager class="AgaviTranslationManager" />
+		
+		<user class="AgaviUser" />
+		
+		<validation_manager class="AgaviValidationManager" />
+		
+	</configuration>
+	
+</configurations>

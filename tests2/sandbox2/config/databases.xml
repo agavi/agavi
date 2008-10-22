@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurations xmlns="http://agavi.org/agavi/1.0/config">
+	<configuration>
+		<databases default="postgres">
+			
+			<database name="postgres" class="AgaviPostgresqlDatabase">
+				<parameters>
+					<parameter name="host">localhost</parameter>
+					<parameter name="user">username</parameter>
+					<parameter name="password">passphrase</parameter>
+					<parameter name="database">sample</parameter>
+				</parameters>
+			</database>
+		</databases>
+	</configuration>
+</configurations>

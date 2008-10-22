@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2003-2008 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -20,71 +20,32 @@
  *
  * @author     Sean Kerr <skerr@mojavi.org>
  * @author     Mike Vincent <mike@agavi.org>
- * @author     David Zuelke <dz@bitxtender.com>
- * @copyright  (c) Authors
+ * @author     David Zülke <dz@bitxtender.com>
+ * @copyright  Authors
+ * @copyright  The Agavi Project
+ *
  * @since      0.9.0
  *
  * @version    $Id$
  */
 
 // load the AgaviConfig class
-require_once(dirname(__FILE__) . '/config/AgaviConfig.class.php');
+require(dirname(__FILE__) . '/config/AgaviConfig.class.php');
 
-/*
-	Minimum requirement check
-	
-	Things arent going to work unless we're running with php5,
-	so dont assume we are. 
-*/
-AgaviConfig::set('core.minimum_php_version', '5.0.0');
-
+// check minimum PHP version
+AgaviConfig::set('core.minimum_php_version', '5.2.0');
 if(!version_compare(PHP_VERSION, AgaviConfig::get('core.minimum_php_version'), 'ge') ) {
 	die('You must be using PHP version ' . AgaviConfig::get('core.minimum_php_version') . ' or greater.');
 }
 
 // define a few filesystem paths
-AgaviConfig::set('core.agavi_dir', dirname(__FILE__), false);
+AgaviConfig::set('core.agavi_dir', dirname(__FILE__), true, true);
 
 // default exception template
-AgaviConfig::set('exception.default_template', AgaviConfig::get('core.agavi_dir') . '/exception/templates/shiny.php', false);
+AgaviConfig::set('exception.default_template', AgaviConfig::get('core.agavi_dir') . '/exception/templates/shiny.php');
 
 // required files
 require(AgaviConfig::get('core.agavi_dir') . '/version.php');
 require(AgaviConfig::get('core.agavi_dir') . '/core/Agavi.class.php');
-
-
-
-/**
- * Handles autoloading of classes
- *
- * @param      string A class name.
- *
- * @author     David Zuelke <dz@bitxtender.com>
- * @author     Sean Kerr <skerr@mojavi.org>
- * @since      0.9.0
- */
-function __autoload($class)
-{
-	if(Agavi::$autoloads === null) {
-		Agavi::$autoloads = array();
-		// catch parse errors of autoload.xml
-		try {
-			include(AgaviConfigCache::checkConfig(AgaviConfig::get('core.config_dir') . '/autoload.xml'));
-		} catch(Exception $e) {
-			trigger_error($e->getMessage(), E_USER_ERROR);
-		}
-	}
-	if(isset(Agavi::$autoloads[$class])) {
-		// class exists, let's include it
-		require(Agavi::$autoloads[$class]);
-	}
-	
-	/*	
-		If the class doesn't exist in autoload.xml there's not a lot we can do. Because 
-		PHP's class_exists resorts to __autoload we cannot throw exceptions
-		for this might break some 3rd party lib autoloading mechanism.
-	*/
-
-}
 
 ?>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+| This file is part of the Agavi package.                                    |
+| Copyright (c) 2006 the Agavi Project.                                      |
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+-->
+<configurations xmlns="http://agavi.org/agavi/1.0/config">
+	<configuration>
+		<enabled>On</enabled>
+		<title>An Error Module</title>
+		<name>ErrorModule</name>
+		<authors>
+			<author>Dominik del Bondio (ddb@bitxtender.com)</author>
+		</authors>
+		<homepage>http://www.agavi.org</homepage>
+	</configuration>
+</configurations>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurations xmlns="http://agavi.org/agavi/1.0/config">
+	<configuration>
+		<cachings>
+			<caching name="Browse" enabled="true">
+				<action>%core.app_dir%</action>
+				<groups foo="bar">
+					<group name="categories" />
+					<group name="id" source="request.parameter" />
+					<group name="LANG" source="constant" />
+					<group name="admin" source="user.credential" />
+				</groups>
+				<decorator include="false">
+					<slots>
+						<slot>breadcrumb</slot>
+					</slots>
+					<variables bar="baz">
+						<variable>_title</variable>
+						<variable>_section</variable>
+					</variables>
+				</decorator>
+
+				<variable name="categoryId" source="request.attribute" />
+				<variable name="isRootCat" source="request.attribute" />
+			</caching>
+		</cachings>
+	</configuration>
+</configurations>
+

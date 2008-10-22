@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurations xmlns="http://agavi.org/agavi/1.0/config">
+	<configuration>
+		
+		<available_locales default_locale="en_US" default_timezone="GMT+0">
+			<available_locale identifier="en_US" />
+		</available_locales>
+		
+		<translators default_domain="default">
+			<translator domain="default">
+
+				<message_translator class="AgaviGettextTranslator" />
+			</translator>
+		</translators>
+		
+	</configuration>
+</configurations>

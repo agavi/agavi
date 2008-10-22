@@ -1,0 +1,148 @@
+
+body {
+	margin: 0;
+	padding: 0;
+	background-color: #fff;
+	color: #000;
+	font-size: 62.5%; /* Explain @ www.clagnut.com/blog/348/ */
+}
+
+/* common definitions */
+
+h1 {
+	color: #444444;
+	font-size: 2em;
+	font-family: Arial, Helvetica, sans-serif;
+	margin-left: 1em;
+}
+
+h2 {
+	color: #444444;
+	font-size: 1.6em;
+	font-family: Arial, Helvetica, sans-serif;
+	margin-left: 1em;
+	border-bottom: 1px solid #000;
+}
+
+h3 {
+	color: #444444;
+	font-size: 1.6em;
+	font-family: Arial, Helvetica, sans-serif;
+	margin-left: 1em;
+}
+
+p {
+	color: #444444;
+	font-size: 1.2em;
+	font-family: serif;
+	margin-left: 2em;
+}
+
+a {
+	color: #16009A;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+a:hover {
+	color: #0E0062;
+	text-decoration: underline;
+}
+
+code {
+	font-size: 1.2em;
+}
+
+.command {
+	background: #efefff;
+	padding-left: 0.5em;
+	padding-right: 0.5em;
+}
+
+.programlisting {
+	background: #efefff;
+	font-size: 1.2em;
+	margin-left: 3em;	
+	margin-right: 3em;
+	padding-left: 0.5em;
+	padding-right: 0.5em;
+}
+
+.strikethrough {
+	text-decoration: line-through;
+}
+
+hr {
+	display: none;
+}
+
+/*
+ Navigation
+*/
+
+div.navheader, div.navfooter {
+	background: #f5f5f5;
+	border-bottom: 1px solid #000;
+	margin: 0;
+	padding: 0;
+	letter-spacing: 0.1em;
+	font-size: 1.2em;
+}
+
+div.navheader th, div.navfooter th{
+	color: #444444;
+	font-size: 2em;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+/* title */
+
+h1.title {
+	background: #f5f5f5;
+	border-bottom: 1px solid #000;
+	margin: 0;
+	padding: 0.5em;
+	letter-spacing: 0.1em;
+}
+
+/* toc  */
+
+div.toc {
+	margin: 1em;
+	background: #efefef;
+	border: 1px solid #000;
+	font-size: 1.4em;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+div.toc a {
+	font-weight: normal;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+div.toc p {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 1.4em;
+	margin: 0.5em;
+}
+
+div.toc dd, div.toc dt{
+	margin-left: 2em;
+}
+
+div.toc dt{
+	margin-top: 0.2em;
+}
+
+/* footer  */
+
+div.footer {
+	background: #f5f5f5;
+	border-top: 1px solid #000;
+	margin: 0;
+	margin-top: 5em;
+	padding: 0.1em;
+	text-align: center;
+	font-size: 0.8em;
+	letter-spacing: 0.1em;
+}

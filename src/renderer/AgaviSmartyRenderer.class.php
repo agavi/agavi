@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2005-2008 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -19,36 +19,84 @@
  * @package    agavi
  * @subpackage renderer
  *
- * @author     David Zuelke <dz@bitxtender.com>
- * @author     Agavi Project <info@agavi.org>
- * @copyright  (c) Authors
+ * @author     David Zülke <dz@bitxtender.com>
+ * @author     TANAKA Koichi <tanaka@ensites.com>
+ * @copyright  Authors
+ * @copyright  The Agavi Project
+ *
  * @since      0.11.0
  *
  * @version    $Id$
  */
-abstract class AgaviSmartyRenderer
+class AgaviSmartyRenderer extends AgaviRenderer implements AgaviIReusableRenderer
 {
+	/**
+	 * @constant   string The directory inside the cache dir where templates will
+	 *                    be stored in compiled form.
+	 */
 	const COMPILE_DIR = 'templates';
+	
+	/**
+	 * @constant   string The subdirectory inside the compile dir where templates
+	 *                    will be stored in compiled form.
+	 */
 	const COMPILE_SUBDIR = 'smarty';
+	
+	/**
+	 * @constant   string The directory inside the cache dir where cached content
+	 *                    will be stored.
+	 */
 	const CACHE_DIR = 'content';
 
-	protected static
-		$smarty = null;
+	/**
+	 * @var        Smarty Smarty template engine.
+	 */
+	protected $smarty = null;
 
-	public function getEngine()
+	/**
+	 * @var        string A string with the default template file extension,
+	 *                    including the dot.
+	 */
+	protected $defaultExtension = '.tpl';
+
+	/**
+	 * Pre-serialization callback.
+	 *
+	 * Excludes the Smarty instance to prevent excessive serialization load.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function __sleep()
+	{
+		$keys = parent::__sleep();
+		unset($keys[array_search('smarty', $keys)]);
+		return $keys;
+	}
+
+	/**
+	 * Grab a cleaned up smarty instance.
+	 *
+	 * @return     Smarty A Smarty instance.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @author     TANAKA Koichi <tanaka@ensites.com>
+	 * @since      0.9.0
+	 */
+	protected function getEngine()
 	{
 		if($this->smarty) {
+			$this->smarty->clear_all_assign();
+			$this->smarty->clear_config();
 			return $this->smarty;
 		}
-		
-		if (!class_exists('Smarty')) {
 
-			// if SMARTY_DIR constant is defined, we'll use it
-			if ( defined('SMARTY_DIR') ) {
+		if(!class_exists('Smarty')) {
+			if(defined('SMARTY_DIR') ) {
+				// if SMARTY_DIR constant is defined, we'll use it
 				require(SMARTY_DIR . 'Smarty.class.php');
-			}
-			// otherwise we resort to include_path
-			else {
+			} else {
+				// otherwise we resort to include_path
 				require('Smarty.class.php');
 			}
 		}
@@ -58,70 +106,67 @@ abstract class AgaviSmartyRenderer
 		$this->smarty->clear_config();
 		$this->smarty->config_dir = AgaviConfig::get('core.config_dir');
 
+		$parentMode = fileperms(AgaviConfig::get('core.cache_dir'));
+
 		$compileDir = AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . self::COMPILE_DIR . DIRECTORY_SEPARATOR . self::COMPILE_SUBDIR;
-		@mkdir($compileDir, null, true);
+		AgaviToolkit::mkdir($compileDir, $parentMode, true);
 		$this->smarty->compile_dir = $compileDir;
 
 		$cacheDir = AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . self::CACHE_DIR;
-		@mkdir($cacheDir, null, true);
+		AgaviToolkit::mkdir($cacheDir, $parentMode, true);
 		$this->smarty->cache_dir = $cacheDir;
 
-		$this->smarty->plugins_dir  = array("plugins","plugins_local");
-		
+		if(AgaviConfig::get('core.debug', false)) {
+			$this->smarty->debugging = true;
+		}
+
+		foreach((array)$this->getParameter('smarty_variables') as $key => $value) {
+			$this->smarty->$key = $value;
+		}
+
 		return $this->smarty;
 	}
 
-	public function & render()
+	/**
+	 * Render the presentation and return the result.
+	 *
+	 * @param      AgaviTemplateLayer The template layer to render.
+	 * @param      array              The template variables.
+	 * @param      array              The slots.
+	 * @param      array              Associative array of additional assigns.
+	 *
+	 * @return     string A rendered result.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function render(AgaviTemplateLayer $layer, array &$attributes = array(), array &$slots = array(), array &$moreAssigns = array())
 	{
-		$retval = null;
-
-		// execute pre-render check
-		$this->preRenderCheck();
-
 		$engine = $this->getEngine();
-		$view = $this->getView();
-
-		// get the render mode
-		$mode = $this->getContext()->getController()->getRenderMode();
-
-		$engine->template_dir = $this->getDirectory();
-
-		$attribs = $view->getAttributesByRef();
-
-		foreach($attribs as $name => &$value) {
-			$engine->assign_by_ref($name, $value);
-		}
-
-		if ($mode == AgaviView::RENDER_CLIENT && !$this->isDecorator()) {
-			// render directly to the client
-			$this->getEngine()->display($this->getTemplate());
-		} else if ($mode != AgaviView::RENDER_NONE) {
-			// render to variable
-			$retval = $this->getEngine()->fetch($this->getTemplate());
-
-			// now render our decorator template, if one exists
-			if ($this->isDecorator()) {
-				$retval =& $this->decorate($retval);
+		
+		if($this->extractVars) {
+			foreach($attributes as $name => &$value) {
+				$engine->assign_by_ref($name, $value);
 			}
-
-			if ($mode == AgaviView::RENDER_CLIENT) {
-				echo($retval);
-				$retval = null;
-			}
+		} else {
+			$engine->assign_by_ref($this->varName, $attributes);
 		}
-		return $retval;
-	}
-
-	public function & decorate(&$content)
-	{
-		// call our parent decorate() method
-		parent::decorate($content);
-
-		// render the decorator template and return the result
-		$decoratorTemplate = $this->getDecoratorDirectory() . '/' . $this->getDecoratorTemplate();
-
-		$retval = $this->getEngine()->fetch($decoratorTemplate);
-
-		return $retval;
+		
+		$engine->assign_by_ref($this->slotsVarName, $slots);
+		
+		foreach($this->assigns as $key => $getter) {
+			$engine->assign($key, $this->context->$getter());
+		}
+		
+		$finalMoreAssigns =& self::buildMoreAssigns($moreAssigns, $this->moreAssignNames);
+		foreach($finalMoreAssigns as $key => &$value) {
+			$engine->assign_by_ref($key, $value);
+		}
+		
+		// hack because stupid smarty cannot handle php streams... my god
+		$resource = str_replace('://', ':', $layer->getResourceStreamIdentifier());
+		return $engine->fetch($resource);
 	}
 }
+
+?>

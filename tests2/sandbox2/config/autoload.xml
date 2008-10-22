@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurations xmlns="http://agavi.org/agavi/1.0/config" parent="%core.system_config_dir%/autoload.xml">
+	<configuration>
+		<autoloads>
+			<autoload name="TestRouting">%tests.dir%/sandbox2/lib/routing/TestRouting.class.php</autoload>
+			<!-- config/ConfigCacheTest -->
+			<autoload name="ImportTestHandler">%tests.dir%/sandbox2/lib/config/ImportTestHandler.class.php</autoload>
+			<autoload name="ImportTestOnceHandler">%tests.dir%/sandbox2/lib/config/ImportTestOnceHandler.class.php</autoload>
+			<autoload name="PtConfigParser">%tests.dir%/sandbox2/lib/config/ParseTestParser.class.php</autoload>
+			<autoload name="NoHeadersAgaviWebResponse">%tests.dir%/sandbox2/lib/response/NoHeadersAgaviWebResponse.class.php</autoload>
+			<autoload name="TestResponse">%tests.dir%/sandbox2/lib/response/TestResponse.class.php</autoload>
+
+
+		</autoloads>
+	</configuration>
+</configurations>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurations xmlns="http://agavi.org/agavi/1.0/config">
+	<configuration>
+		<autoloads>
+			<autoload name="AgaviSampleAppDisabledBaseAction">%core.module_dir%/Disabled/lib/action/AgaviSampleAppDisabledBaseAction.class.php</autoload>
+			<autoload name="AgaviSampleAppDisabledBaseModel">%core.module_dir%/Disabled/lib/model/AgaviSampleAppDisabledBaseModel.class.php</autoload>
+			<autoload name="AgaviSampleAppDisabledBaseView">%core.module_dir%/Disabled/lib/view/AgaviSampleAppDisabledBaseView.class.php</autoload>
+		</autoloads>
+	</configuration>
+</configurations>

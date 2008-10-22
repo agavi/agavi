@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+	xmlns:factories_1_0="http://agavi.org/agavi/config/parts/factories/1.0"
+	ns="http://agavi.org/agavi/config/parts/factories/1.0"
+	datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+	
+	<include href="_common.rng" />
+	
+	<define name="content-configuration" combine="interleave">
+		<optional>
+			<attribute name="context">
+				<ref name="data-list-context" />
+			</attribute>
+		</optional>
+		<interleave>
+			<!-- Required factories, but may be defined elsewhere -->
+			<optional>
+				<element name="execution_container">
+					<ref name="content-factory" />
+				</element>
+			</optional>
+			<optional>
+				<element name="validation_manager">
+					<ref name="content-factory" />
+				</element>
+			</optional>
+			<optional>
+				<element name="dispatch_filter">
+					<ref name="content-factory" />
+				</element>
+			</optional>
+			<optional>
+				<element name="execution_filter">
+					<ref name="content-factory" />
+				</element>
+			</optional>
+			<optional>
+				<element name="filter_chain">
+					<ref name="content-factory" />
+				</element>
+			</optional>
+			<optional>
+				<element name="response">
+					<ref name="content-factory" />
+				</element>
+			</optional>
+			<optional>
+				<element name="request">
+					<ref name="content-factory" />
+				</element>
+			</optional>
+			<optional>
+				<element name="routing">
+					<ref name="content-factory" />
+				</element>
+			</optional>
+			<optional>
+				<element name="controller">
+					<ref name="content-factory" />
+				</element>
+			</optional>
+			<optional>
+				<element name="storage">
+					<ref name="content-factory" />
+				</element>
+			</optional>
+			<optional>
+				<element name="user">
+					<ref name="content-factory" />
+				</element>
+			</optional>
+		
+			<!-- Optional factories -->
+			<optional>
+				<element name="database_manager">
+					<ref name="content-factory" />
+				</element>
+			</optional>
+			<optional>
+				<element name="logger_manager">
+					<ref name="content-factory" />
+				</element>
+			</optional>
+			<optional>
+				<element name="security_filter">
+					<ref name="content-factory" />
+				</element>
+			</optional>
+			<optional>
+				<element name="translation_manager">
+					<ref name="content-factory" />
+				</element>
+			</optional>
+		</interleave>
+	</define>
+	
+	<define name="content-factory">
+		<attribute name="class">
+			<ref name="data-identifier" />
+		</attribute>
+		<ref name="content-parameters" />
+	</define>
+	
+</grammar>

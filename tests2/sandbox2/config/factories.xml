@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurations xmlns="http://agavi.org/agavi/1.0/config">
+	<configuration>
+		<controller class="AgaviController" />
+		<database_manager class="AgaviDatabaseManager" />
+		<dispatch_filter class="AgaviDispatchFilter" />
+		<execution_container class="AgaviExecutionContainer" />
+		<execution_filter class="AgaviExecutionFilter" />
+		<filter_chain class="AgaviFilterChain" />
+		<logger_manager class="AgaviLoggerManager" />
+		<request class="AgaviWebRequest" />
+		<response class="TestResponse" />
+		<routing class="TestRouting">
+			<parameter name="enabled">false</parameter>
+		</routing>
+		<security_filter class="AgaviSecurityFilter" />
+		<storage class="AgaviNullStorage" />
+		<translation_manager class="AgaviTranslationManager" />
+		<user class="AgaviSecurityUser" />
+		<validation_manager class="AgaviValidationManager" />
+	</configuration>
+</configurations>

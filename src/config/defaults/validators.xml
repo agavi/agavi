@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ae:configurations xmlns="http://agavi.org/agavi/config/parts/validators/1.0" xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0">
+	
+	<ae:configuration>
+		<validator_definitions>
+			
+			<validator_definition name="and" class="AgaviAndoperatorValidator">
+				<ae:parameter name="break">true</ae:parameter>
+			</validator_definition>
+			
+			<validator_definition name="datetime" class="AgaviDateTimeValidator">
+				<ae:parameter name="check">true</ae:parameter>
+			</validator_definition>
+			
+			<validator_definition name="email" class="AgaviEmailValidator" />
+			
+			<validator_definition name="equals" class="AgaviEqualsValidator" />
+			
+			<validator_definition name="file" class="AgaviFileValidator" />
+			
+			<validator_definition name="imagefile" class="AgaviImageFileValidator" />
+			
+			<validator_definition name="inarray" class="AgaviInarrayValidator">
+				<ae:parameter name="sep">,</ae:parameter>
+			</validator_definition>
+			
+			<validator_definition name="isset" class="AgaviIssetValidator" />
+			
+			<validator_definition name="isnotempty" class="AgaviIsNotEmptyValidator" />
+			
+			<validator_definition name="not" class="AgaviNotoperatorValidator" />
+			
+			<validator_definition name="number" class="AgaviNumberValidator">
+				<ae:parameter name="type">int</ae:parameter>
+			</validator_definition>
+			
+			<validator_definition name="or" class="AgaviOroperatorValidator">
+				<ae:parameter name="break">true</ae:parameter>
+			</validator_definition>
+			
+			<validator_definition name="regex" class="AgaviRegexValidator">
+				<ae:parameter name="match">true</ae:parameter>
+			</validator_definition>
+			
+			<validator_definition name="set" class="AgaviSetValidator" />
+			
+			<validator_definition name="string" class="AgaviStringValidator">
+				<ae:parameter name="min">1</ae:parameter>
+			</validator_definition>
+			
+			<validator_definition name="xor" class="AgaviXoroperatorValidator" />
+			
+		</validator_definitions>
+	</ae:configuration>
+	
+</ae:configurations>

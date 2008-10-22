@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2005-2008 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -17,9 +17,11 @@
  * Version initialization script.
  *
  * @package    agavi
- * 
- * @author     David Zuelke <dz@bitxtender.com>
- * @copyright  (c) Authors
+ *
+ * @author     David Zülke <dz@bitxtender.com>
+ * @copyright  Authors
+ * @copyright  The Agavi Project
+ *
  * @since      0.9.0
  *
  * @version    $Id$
@@ -27,23 +29,23 @@
 
 AgaviConfig::set('agavi.name', 'Agavi');
 
-AgaviConfig::set('agavi.major_version', '0');
-AgaviConfig::set('agavi.minor_version', '11');
+AgaviConfig::set('agavi.major_version', '1');
+AgaviConfig::set('agavi.minor_version', '0');
 AgaviConfig::set('agavi.micro_version', '0');
-AgaviConfig::set('agavi.status', 'DEV');
-AgaviConfig::set('agavi.branch', 'trunk');
+AgaviConfig::set('agavi.status', 'beta5');
+AgaviConfig::set('agavi.branch', '1.0');
 
 AgaviConfig::set('agavi.version',
 	AgaviConfig::get('agavi.major_version') . '.' .
 	AgaviConfig::get('agavi.minor_version') . '.' .
-	AgaviConfig::get('agavi.micro_version') . 
+	AgaviConfig::get('agavi.micro_version') .
 	(AgaviConfig::has('agavi.status')
 		? '-' . AgaviConfig::get('agavi.status')
 		: '')
 );
 
 AgaviConfig::set('agavi.release',
-	AgaviConfig::get('agavi.name') . ' ' .
+	AgaviConfig::get('agavi.name') . '/' .
 	AgaviConfig::get('agavi.version')
 );
 

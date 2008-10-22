@@ -1,89 +1,95 @@
 <?php
+require_once(dirname(__FILE__) . '/ConfigHandlerTestBase.php');
 
-class ReturnArrayConfigHandlerTest extends AgaviTestCase
+class ReturnArrayConfigHandlerTest extends ConfigHandlerTestBase
 {
-	public function testParseSimpleIniFileIntoArray()
+	public function testParseMixed()
 	{
 		$RACH = new AgaviReturnArrayConfigHandler();
-		$this->assertType('AgaviReturnArrayConfigHandler', $RACH);
-		$simple = $RACH->execute(AgaviConfig::get('core.config_dir') . '/RACHsimple.ini');
-		$simple_array = array(
+		$simple = $this->includeCode($RACH->execute(AgaviConfig::get('core.config_dir') . '/tests/rach_mixed.xml'));
+		$ex_simple = array(
 			'section1' => array('One' => 'A', 'Two' => 'B', 'Three' => 'C'), 
-			'section2' => array('Three' => 'Z', 'Two' => 'Y', 'One' => 'X'));
-		$ex_simple = '<?php return '. var_export($simple_array, true) .';?>';
-		$this->assertEquals($simple, $ex_simple);
-	}
-
-	public function testParseDottedIniFileIntoNestedArray()
-	{
-		$RACH = new AgaviReturnArrayConfigHandler();
-		$this->assertType('AgaviReturnArrayConfigHandler', $RACH);
-		
-		$dotted = $RACH->execute(AgaviConfig::get('core.config_dir') . '/RACHwithDots.ini');
-		$dotted_array = array(
-			'one' => array(
-				'type' => 'associative',
-				'sub' => array(
-					'a' => 'apple',
-					'b' => 'bubble',
-					'c' => 'candy'
-				)
-			),
-			'two' => array(
-				'type' => 'numeric',
-				'sub' => array('dot', 'dot dot', 'dot dot dot')
-			),
-			'three' => array(
-				'type' => 'withdots',
-				'three' => array(
-					'sub' => array(
-						'a' => 'A',
-						'b' => 'B'
-					)
-				)
-			),
-			'four' => array(
-				'type' => 'moredots',
-				'four' => array(
-					'sub' => array('dot', 'dot dot')
-				)
-			),
-			'five' => array(
-				'type' => 'numeric',
-				'sub' => array(
-					0 => array(
-						'foo' => 'first foo',
-						'bar' => 'first bar'
-					),
-					1 => array(
-						'foo' => 'second foo',
-						'bar' => 'second bar'
-					)
-				)
-			)
+			'section2' => array('Three' => 'Z', 'Two' => 'Y', 'One' => 'X', 'value' => ''),
+			'section3' => array('One' => '1', 'Three' => '3', 'Two' => '2')
 		);
-		$ex_dotted = '<?php return '. var_export($dotted_array, true) .';?>';
-		$this->assertSame($dotted, $ex_dotted);
+		$this->assertSame($ex_simple, $simple);
 	}
 
-	public function testBooleanValuesParsedCorrectly()
+
+	public function testParseAttributes()
 	{
 		$RACH = new AgaviReturnArrayConfigHandler();
-		$this->assertType('AgaviReturnArrayConfigHandler', $RACH);
-		
-		$cfg_array = include(AgaviConfigCache::checkConfig('config/RACHwithBools.ini'));
-		$this->assertTrue(is_array($cfg_array));
-		foreach ($cfg_array['truths'] as $key => $val) {
-			$this->assertTrue(is_bool($val));
-			$this->assertTrue($val);
-		}
-		foreach ($cfg_array['nots'] as $key => $val) {
-			$this->assertTrue(is_bool($val));
-			$this->assertFalse($val);
-		}
-		$this->assertTrue(is_bool($cfg_array['nots']['One']));
-		$this->assertFalse($cfg_array['nots']['One']);
+		$simple = $this->includeCode($RACH->execute(AgaviConfig::get('core.config_dir') . '/tests/rach_attributes.xml'));
+		$ex_simple = array(
+			'section1' => array('One' => 'A', 'Two' => 'B', 'Three' => 'C', 'value' => ''), 
+			'section2' => array('Three' => AgaviConfig::get('core.config_dir'), 'Two' => false, 'One' => true, 'value' => ''),
+		);
+		$this->assertSame($ex_simple, $simple);
 	}
 
+
+	public function testParseTags()
+	{
+		$RACH = new AgaviReturnArrayConfigHandler();
+		$simple = $this->includeCode($RACH->execute(AgaviConfig::get('core.config_dir') . '/tests/rach_tags.xml'));
+		$ex_simple = array(
+			'section1' => array('One' => 'A', 'Two' => 'B', 'Three' => 'C'), 
+			'section2' => array('Three' => 'Z', 'Two' => 'Y', 'One' => 'X'),
+		);
+		$this->assertSame($ex_simple, $simple);
+	}
+
+	public function testParseComplex()
+	{
+		$RACH = new AgaviReturnArrayConfigHandler();
+		$simple = $this->includeCode($RACH->execute(AgaviConfig::get('core.config_dir') . '/tests/rach_complex.xml'));
+
+		$ex_simple = array(
+			'cachings' => array(
+				'Browse' => array(
+					'enabled' => true,
+					'action' => AgaviConfig::get('core.app_dir'),
+					'groups' => array(
+						'foo' => 'bar',
+						'categories' => '',
+						'id' => array(
+							'source' => 'request.parameter',
+							'value' => '',
+						),
+						'LANG' => array(
+							'source' => 'constant',
+							'value' => '',
+						),
+						'admin' => array(
+							'source' => 'user.credential',
+							'value' => '',
+						),
+					),
+					'decorator' => array(
+						'include' => false,
+						'slots' => array(
+							'breadcrumb',
+						),
+						'variables' => array(
+							'bar' => 'baz',
+							'_title',
+							'_section',
+						),
+					),
+					'variables' => array(
+						'categoryId' => array(
+							'source' => 'request.attribute',
+							'value' => '',
+						),
+						'isRootCat' => array(
+							'source' => 'request.attribute',
+							'value' => '',
+						),
+					),
+				),
+			),
+		);
+		$this->assertEquals(var_export($ex_simple,1), var_export($simple,1));
+	}
 }
 ?>

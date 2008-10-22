@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurations xmlns="http://agavi.org/agavi/1.0/config">
+	<configuration context="test_callbacks">
+		<routes>
+			<route name="left_anchored_nonstop" pattern="^/(language:[a-z]\{2\}(?=/))" stop="false" cut="true" callback="TestCallbackLAN">
+				<default for="language">de</default>
+			</route>
+
+			<!-- the callback makes this route never match -->
+			<route name="right_anchored_nonstop" pattern="/(type:[a-z]+)$" stop="false" cut="true" callback="TestCallbackRAN">
+				<default for="type">rss</default>
+			</route>
+
+			<route name="parent" pattern="^/parent(/{parent_id:[0-9]+})?" module="module_parent" callback="TestCallbackParent">
+				<default for="parent_id">/{23}</default>
+
+				<routes>
+					<route name="child_nonstop" pattern="(title:(?&lt;=/)[a-z_-]+)$" cut="true" stop="false" callback="TestCallbackCN" />
+					<route name="child_complex" pattern="^/(opt,{optional1:35}/)?p1/(part1:[a-z0-9]+)/p2/(part2:[a-z0-9]+)?$" action="action_child_complex" callback="TestCallbackCC" />
+					<route name="child_simple" pattern="^/({part1:\w*}/)?({part2:\w+}/)?({part3:\w*}/)?$" action="action_child_simple" callback="TestCallbackCS">
+						<default for="part1">{part1_default}/</default>
+						<default for="part2">{part2_default}/</default>
+						<default for="part3">xx{part3_default}xx/</default>
+					</route>
+				</routes>
+			</route>
+		</routes>
+	</configuration>
+
+</configurations>

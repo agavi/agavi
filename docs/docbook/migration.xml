@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
+<book>
+  <title>Agavi Migration Guide</title>
+
+  <bookinfo>
+    <releaseinfo>$Id$</releaseinfo>
+  </bookinfo>
+
+  <chapter>
+    <title>Migrating from Agavi 0.10 to 0.11</title>
+
+    <section>
+      <title>Migrating from Agavi 0.10 to 0.11</title>
+
+      <para>Migrating from Agavi 0.10 is unfortunately quite a lot of work
+      because of the more-or-less complete overhaul of the framework.</para>
+
+      <para>The easiest way to get started is to create a completely new
+      project with the <filename>agavi</filename> script and start moving
+      modules and actions one by one, copying the execute method from the old
+      action to the new one, testing if it works and fix whatever
+      breaks.</para>
+
+      <para>A few pointers to help on the way:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Parameters set with <literal>$this-&gt;setAttribute('foo',
+          'bar')</literal> in the action's execute-method are now directly
+          available in the template. You no longer need to manually set the
+          template attributes in the view.</para>
+        </listitem>
+
+        <listitem>
+          <para>Read up on the new templating system (<link
+          linkend="???">http://groups.google.com/group/agavi-users/browse_thread/thread/6e1a1033b4b8b77c</link>)</para>
+        </listitem>
+
+        <listitem>
+          <para>Routing, the request object, the controller, user, translation
+          manager and the request data are now available directly in the
+          templates via <literal>$ro</literal>, <literal>$rq</literal>,
+          <literal>$ct</literal>, <literal>$us</literal>,
+          <literal>$tm</literal> and <literal>$rd</literal> , no need to pass
+          these objects to the view. The name of the variables is configurabe
+          through <literal>output_types.xml</literal></para>
+        </listitem>
+
+        <listitem>
+          <para><literal>Action::getRequestMethod()</literal> is deprecated.
+          Actions now have <literal>executeRead()</literal> and
+          <literal>executeWrite()</literal> that handle HTTP GET and HTTP POST
+          respectively. If you really need, you can also use a plain
+          <literal>execute()</literal> which would handle both GET and
+          POST.</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>$this-&gt;getContext()-&gt;getRequest()-&gt;getParameter()</literal>
+          is no longer needed. The action's execute -method takes an
+          <literal>AgaviRequestDataHolder</literal> -object as it's parameter
+          and the request parameters are available via that object's
+          <literal>getParameter</literal>-method.</para>
+        </listitem>
+
+        <listitem>
+          <para>Actions no longer return attributes of the View-class
+          (<literal>r<literal>eturn View::SUCCESS</literal></literal>), but
+          strings. For an action that wants to indicate it was successful, you
+          would return the string "Success".</para>
+        </listitem>
+
+        <listitem>
+          <para>Views do not need to set the template file manually anymore.
+          The view makes an educated guess as to the filename
+          (<literal>&lt;Name&gt;&lt;ReturnValueFromAction&gt;.php</literal>).
+          For example, if <literal>IndexAction</literal> returns 'Success',
+          <literal>IndexSuccessView</literal> would use the template
+          <filename>IndexSuccess.php</filename>.</para>
+        </listitem>
+
+        <listitem>
+          <para>Application config variables are now available via
+          <literal>AgaviConfig::get()</literal>. For instance, the modpub
+          -directory would be
+          <literal>AgaviConfig::get('core.modpub')</literal>. No need for
+          constants anymore (<literal>AG_MOD_PUB</literal>)</para>
+        </listitem>
+
+        <listitem>
+          <para>Views now have multiple execute-methods (eg executeHtml,
+          executeRss, executeXml etc), agavi chooses which one to run based on
+          the output type. This means one view can handle HTML, RSS, XML and,
+          say, PDF output at once, and will choose the proper template based
+          on the configuration in output_types.xml. All you need to do is add
+          a new execute-method to the view (and of course configure the output
+          type in output_types.xml).</para>
+
+          <para><emphasis role="bold"> !!!! DO NOT USE THE PLAIN FALLBACK
+          execute() METHOD IN THE VIEWS !!!!</emphasis></para>
+
+          <para>This is simply because if you set the output type to, say, RSS
+          but the view does not support it, you don't really want to display a
+          HTML page or whatever, you probably want to throw an exception or
+          something similar.</para>
+
+          <para><emphasis role="bold">!!!! ALWAYS ALWAYS ALWAYS USE THE
+          OUTPUT-TYPE BASED EXECUTE METHODS !!!!</emphasis></para>
+        </listitem>
+
+        <listitem>
+          <para>Use the agavi build script to generate your actions, modules
+          and so on. This can take advantage of code templates. Simply put a
+          <filename>build.properties</filename> -file where your agavi-script
+          resides and add the line<literal></literal></para>
+
+          <para><programlisting>template.dir=${project.dir}/dev/code_templates</programlisting></para>
+
+          <para>(write documentation about code templates)</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+  </chapter>
+</book>

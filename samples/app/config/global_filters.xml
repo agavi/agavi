@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurations xmlns="http://agavi.org/agavi/1.0/config">
+	
+	<configuration context="web">
+		<filters>
+			
+			<filter name="FormPopulationFilter" class="AgaviFormPopulationFilter">
+				<parameter name="methods">
+					<parameter>write</parameter>
+				</parameter>
+				<parameter name="output_types">
+					<parameter>html</parameter>
+					<parameter>xhtml</parameter>
+				</parameter>
+				<!-- for all field error messages. errors that yield no match and those that have no corresponding field are inserted using rules defined in "error_messages". errors that belong to more than one field (e.g. date validator) can be handled using "multi_field_error_messages" -->
+				<parameter name="field_error_messages">
+					<!-- ${htmlnsPrefix} is either empty (for HTML) or something like "html:" for XHTML documents with xmlns="..." notation. Always use this, makes your code more bullet proof. XPath needs the namespaces when the document is namespaced -->
+					<parameter name="parent::${htmlnsPrefix}dd">
+						<!-- can be any of "before", "after" or "child" (to insert as prev, next sibling or last child) -->
+						<parameter name="location">after</parameter>
+						<!-- a container groups all errors for one element -->
+						<parameter name="container"><![CDATA[<dd>${errorMessages}</dd>]]></parameter>
+						<parameter name="markup"><![CDATA[<p class="error">${errorMessage}</p>]]></parameter>
+					</parameter>
+					<!-- you could have more rules above, e.g. ${htmlnsPrefix}input[@type="checkbox"]... to have a rule that only applies to checkbox elements. first match is used. -->
+				</parameter>
+			</filter>
+			
+			<!-- <filter name="TidyFilter" class="AgaviTidyFilter">
+				<parameter name="tidy_options">
+					<parameter name="output-xhtml">true</parameter>
+					<parameter name="numeric-entities">true</parameter>
+				</parameter>
+				<parameter name="tidy_encoding">utf8</parameter>
+			</filter> -->
+			
+		</filters>
+	</configuration>
+	
+</configurations>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations
+	xmlns="http://agavi.org/agavi/config/parts/validators/1.0"
+	xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0"
+	parent="%core.agavi_dir%/config/defaults/validators.xml"
+>
+	<ae:configuration>
+		<validators>
+
+			<!-- just a simple example. no error message here, since the error view redirects to the 404 page anyway. usually, you'd have a ProductValidator that looks into the database, and then also exports the record into the request data so you don't have to fetch it again in the action -->
+			<validator class="string" required="false">
+				<argument>name</argument>
+				<ae:parameter name="min">1</ae:parameter>
+			</validator>
+
+			<validator class="number">
+				<argument>id</argument>
+			</validator>
+
+		</validators>
+	</ae:configuration>
+</ae:configurations>

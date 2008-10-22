@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2003-2006 the Agavi Project.                                |
+// | Copyright (c) 2005-2008 the Agavi Project.                                |
 // | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
@@ -22,35 +22,33 @@
  * @package    agavi
  * @subpackage filter
  *
- * @author     David Zuelke <dz@bitxtender.com>
- * @copyright  (c) Authors
+ * @author     David Zülke <dz@bitxtender.com>
+ * @copyright  Authors
+ * @copyright  The Agavi Project
+ *
  * @since      0.11.0
  *
  * @version    $Id$
  */
-class AgaviDispatchFilter extends AgaviFilter
+class AgaviDispatchFilter extends AgaviFilter implements AgaviIGlobalFilter
 {
-
 	/**
 	 * Execute this filter.
 	 *
-	 * The DispatchFilter makes the first forward().
+	 * The DispatchFilter executes the execution container.
 	 *
-	 * @param      AgaviFilterChain The filter chain.
+	 * @param      AgaviFilterChain        The filter chain.
+	 * @param      AgaviExecutionContainer The current execution container.
 	 *
 	 * @throws     <b>AgaviFilterException</b> If an error occurs during execution.
 	 *
-	 * @author     David Zuelke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function execute ($filterChain)
+	public function execute(AgaviFilterChain $filterChain, AgaviExecutionContainer $container)
 	{
-		$request = $this->context->getRequest();
-		$moduleName = $request->getParameter($request->getModuleAccessor());
-		$actionName = $request->getParameter($request->getActionAccessor());
-		$this->context->getController()->forward($moduleName, $actionName);
+		$container->setResponse($container->execute());
 	}
-
 }
 
 ?>

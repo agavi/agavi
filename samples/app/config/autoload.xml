@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurations xmlns="http://agavi.org/agavi/1.0/config" parent="%core.system_config_dir%/autoload.xml">
+	<configuration>
+		<autoloads>
+			<autoload name="AgaviSampleAppBaseAction">%core.lib_dir%/action/AgaviSampleAppBaseAction.class.php</autoload>
+			<autoload name="AgaviSampleAppBaseModel">%core.lib_dir%/model/AgaviSampleAppBaseModel.class.php</autoload>
+			<autoload name="AgaviSampleAppBaseView">%core.lib_dir%/view/AgaviSampleAppBaseView.class.php</autoload>
+			
+			<autoload name="AgaviSampleAppLanguageRoutingCallback">%core.lib_dir%/routing/AgaviSampleAppLanguageRoutingCallback.class.php</autoload>
+			
+			<autoload name="AgaviSampleAppUser">%core.lib_dir%/user/AgaviSampleAppUser.class.php</autoload>
+		</autoloads>
+	</configuration>
+</configurations>
