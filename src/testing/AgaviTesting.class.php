@@ -101,6 +101,13 @@ class AgaviTesting
 			'coverage-xml=',
 			'report=',
 			'environment=',
+			'help',
+			'log-graphviz=',
+			'log-json=',
+			'log-metrics=',
+			'log-pmd=',
+			'log-tap=',
+			'log-xml=',
 		);
 		
 		try {
@@ -140,6 +147,43 @@ class AgaviTesting
 				case '--environment':
 					$arguments['environment'] = $option[1];
 					break;
+					
+				case '--help':
+					self::showHelp();
+					exit(PHPUnit_TextUI_TestRunner::SUCCESS_EXIT);
+					break;
+					
+				case '--log-json':
+					$arguments['jsonLogfile'] = $option[1];
+					break;
+					
+				case '--log-graphviz':
+					if(PHPUnit_Util_Filesystem::fileExistsInIncludePath('Image/GraphViz.php')) {
+						$arguments['graphvizLogfile'] = $option[1];
+					} else {
+						throw new AgaviException('The Image_GraphViz package is not installed.');
+					}
+					break;
+					
+				case '--log-tap':
+					$arguments['tapLogfile'] = $option[1];
+					break;
+					
+					case '--log-xml':
+						$arguments['xmlLogfile'] = $option[1];
+					break;
+					
+				case '--log-pmd':
+					if(self::checkCodeCoverageDeps()) {
+						$arguments['pmdXML'] = $option[1];
+					}
+					break;
+					
+				case '--log-metrics':
+					if(self::checkCodeCoverageDeps()) {
+						$arguments['metricsXML'] = $option[1];
+					}
+					break;
 			}
 		}
 		
@@ -156,7 +200,7 @@ class AgaviTesting
 	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
 	 * @since      1.0.0
 	 */
-	protected function checkCodeCoverageDeps()
+	protected static function checkCodeCoverageDeps()
 	{
 		if(extension_loaded('tokenizer') && extension_loaded('xdebug')) {
 			return true;
@@ -169,6 +213,35 @@ class AgaviTesting
 		}
 		
 		return false;
+	}
+	
+	/**
+	 * shows the help for the commandline call
+	 * 
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */
+	protected static function showHelp()
+	{
+		PHPUnit_TextUI_TestRunner::printVersionString();
+
+		print <<<EOT
+Usage: phpunit [switches] UnitTest [UnitTest.php]
+       phpunit [switches] <directory>
+
+  --log-graphviz <file>    Log test execution in GraphViz markup.
+  --log-json <file>        Log test execution in JSON format.
+  --log-tap <file>         Log test execution in TAP format to file.
+  --log-xml <file>         Log test execution in XML format to file.
+  --log-metrics <file>     Write metrics report in XML format.
+  --log-pmd <file>         Write violations report in PMD XML format.
+
+  --coverage-html <dir>    Generate code coverage report in HTML format.
+  --coverage-clover <file> Write code coverage data in Clover XML format.
+  --coverage-source <dir>  Write code coverage / source data in XML format.
+
+  --help                   Prints this usage information.
+EOT;
 	}
 }
 
