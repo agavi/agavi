@@ -2,8 +2,14 @@
 <ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" xmlns="http://agavi.org/agavi/config/parts/testing/suites/1.0">
 	<ae:configuration>
 		<suites>
-			<suite name="Default">
+			<suite name="Context">
 				<testfiles>
+					<testfile>unit/context/AgaviContextTest.php</testfile>
+				</testfiles>				
+			</suite>
+			<suite name="Routing">
+				<testfiles>
+					<testfile>unit/routing/AgaviRoutingTest.php</testfile>
 				</testfiles>
 			</suite>
 		</suites>
