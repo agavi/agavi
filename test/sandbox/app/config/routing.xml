@@ -2,9 +2,18 @@
 <configurations xmlns="http://agavi.org/agavi/1.0/config">
 	<configuration>
 		<routes>
-			<route name="user_logged_in" pattern="1" source="user[authenticated]" module="Auth" action="LoggedIn" />
-			<route name="server" pattern="foo" source="_SERVER[routing_test]" module="Server" action="Matched" />
-			<route name="testingsource" pattern="foo" source="testingsource[bar]" module="TestingSource" action="Matched" />
+			<route name="user_logged_in" pattern="^1$" source="user[authenticated]" module="Auth" action="LoggedIn" />
+			<route name="server" pattern="^foo$" source="_SERVER[routing_test]" module="Server" action="Matched" />
+			<route name="testingsource" pattern="^foo$" source="testingsource[bar]" module="TestingSource" action="Matched" />
+			<route name="with_param" pattern="^/withparam/(number:\d+)$" module="TestWithParam" action="MatchedParam" />
+			<route name="with_two_params" pattern="^/withmultipleparams/(number:\d+)/(string:\w+)$" module="TestWithParam" action="MatchedMultipleParams" />
+			<route name="callbacks" pattern="^/callbacks" module="Callback">
+				<route name=".nonmatching_callback" pattern="^/nonmatching_callback$" callback="NonMatchingRoutingCallback" action="NonMatching" />
+				<route name=".matching_callback" pattern="^/matching_callback$" callback="NonMatchingRoutingCallback" action="Matching" />
+				<route name=".on_not_matched" pattern="^/on_not_matched">
+					<route name=".callback" pattern="^/callback$" callback="OnNotMatchedRoutingCallback" action="NonMatching" />
+				</route>
+			</route>
 			<route name="index" pattern="^/$" module="%actions.default_module%" action="%actions.default_action%" />
 		</routes>
 	</configuration>
