@@ -61,6 +61,19 @@ class AgaviRoutingTest extends AgaviPhpUnitTestCase
 		$this->assertEquals('Server', $container->getModuleName());
 		$this->assertEquals(array('server'), $ctx->getRequest()->getAttribute('matched_routes', 'org.agavi.routing'));
 	}
+	
+	public function testExecuteRandomSource()
+	{	
+		$data = array();
+		$data['bar'] = 'foo';
+		$ctx = AgaviContext::getInstance(null);
+		$this->routing->setInput('/');
+		$this->routing->setRoutingSource('testingsource', $data);
+		$container = $this->routing->execute();
+		$this->assertEquals('Matched', $container->getActionName());
+		$this->assertEquals('TestingSource', $container->getModuleName());
+		$this->assertEquals(array('testingsource'), $ctx->getRequest()->getAttribute('matched_routes', 'org.agavi.routing'));
+	}
 }
 
 

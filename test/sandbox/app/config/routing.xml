@@ -4,6 +4,7 @@
 		<routes>
 			<route name="user_logged_in" pattern="1" source="user[authenticated]" module="Auth" action="LoggedIn" />
 			<route name="server" pattern="foo" source="_SERVER[routing_test]" module="Server" action="Matched" />
+			<route name="testingsource" pattern="foo" source="testingsource[bar]" module="TestingSource" action="Matched" />
 			<route name="index" pattern="^/$" module="%actions.default_module%" action="%actions.default_action%" />
 		</routes>
 	</configuration>
