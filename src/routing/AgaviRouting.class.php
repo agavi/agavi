@@ -472,6 +472,220 @@ abstract class AgaviRouting extends AgaviParameterHolder
 		}
 		throw new AgaviException('Undefined Routing gen() options preset "' . $input . '"');
 	}
+	
+	protected function onGenerateParamDiffCallback($a, $b)
+	{
+		return ($a === $b) ? 0 : 1;
+	}
+	
+	protected function assembleRoutes(array $options, array $routeNames, array $params)
+	{
+		$uri = '';
+		$defaultParams = array();
+		$availableParams = array();
+		$matchedParams = array(); // the merged incoming matched params of implied routes
+		$optionalParams = array();
+		$firstRoute = true;
+		foreach($routeNames as $routeName) {
+			$r = $this->routes[$routeName];
+
+			$myDefaults = $r['opt']['defaults'];
+
+			if(isset($r['opt']['callback'])) {
+				if(!isset($r['cb'])) {
+					$cb = $r['opt']['callback'];
+					$r['cb'] = new $cb();
+					$r['cb']->initialize($this->context, $r);
+				}
+				$paramsCopy = $params;
+				if(!$r['cb']->onGenerate($myDefaults, $params, $options)) {
+					continue;
+				}
+				// TODO: discuss using an interface again.
+				$diff = array_diff_uassoc($params, $paramsCopy, array($this, 'onGenerateParamDiffCallback'));
+				if(count($diff)) {
+					$diffKeys = array_keys($diff);
+					foreach($diffKeys as $key) {
+						$value =& $params[$key];
+						if(is_array($value) && array_key_exists('pre', $value) && array_key_exists('val', $value) && array_key_exists('post', $value)) {
+							$value = new AgaviRoutingValue($value['val'], $value['pre'], $value['post']);
+						} elseif(!($value instanceof AgaviRoutingValue)) {
+							$value = new AgaviRoutingValue($value, isset($myDefaults[$key]['pre']) ? $myDefaults[$key]['pre'] : null, isset($myDefaults[$key]['post']) ? $myDefaults[$key]['post'] : null, true);
+						}
+						// TODO: when setting a AgaviRoutingValue from a callback you have to insert the defaults yourself, needs discussion
+					}
+				}
+			}
+
+			// if the route has a source we shouldn't put its stuff in the generated string
+			if($r['opt']['source']) {
+				continue;
+			}
+
+			$matchedParams = array_merge($matchedParams, $r['matches']);
+			$optionalParams = array_merge($optionalParams, $r['opt']['optional_parameters']);
+
+			$availableParams = array_merge($availableParams, array_reverse($r['opt']['pattern_parameters']));
+
+			if($firstRoute || $r['opt']['cut'] || (count($r['opt']['childs']) && $r['opt']['cut'] === null)) {
+				if($r['opt']['anchor'] & self::ANCHOR_START || $r['opt']['anchor'] == self::ANCHOR_NONE) {
+					$uri = $r['opt']['reverseStr'] . $uri;
+				} else {
+					$uri = $uri . $r['opt']['reverseStr'];
+				}
+			}
+
+			$defaultParams = array_merge($defaultParams, $myDefaults);
+			$firstRoute = false;
+		}
+		
+		$availableParams = array_reverse($availableParams);
+		
+		return array(
+			'uri' => $uri,
+			'user_parameters' => $params,
+			'available_parameters' => $availableParams,
+			'matched_parameters' => $matchedParams,
+			'optional_parameters' => $optionalParams,
+			'default_parameters' => $defaultParams,
+		);
+	}
+	
+	protected function refillAllMatchedParameters(array $options, array $params, array $matchedParams)
+	{
+		if(!empty($options['refill_all_parameters'])) {
+			foreach($matchedParams as $name => $value) {
+				if(!(isset($params[$name]) || array_key_exists($name, $params))) {
+					$params[$name] = $value;
+				}
+			}
+		}
+		
+		return $params;
+	}
+	
+	protected function refillMatchedAndDefaultParameters(array $options, array $params, array $availableParams, array $matchedParams, array $optionalParams, array $defaultParams)
+	{
+		$refillValue = true;
+		$finalParams = array();
+		foreach($availableParams as $name) {
+			// loop all params and fill all with the matched parameters
+			// until a user (not callback) supplied parameter is encountered.
+			// After that only check defaults. Parameters supplied from the user
+			// or via callback always have precedence
+
+			// keep track if a user supplied has already been encountered
+			if($refillValue && (isset($params[$name]) || array_key_exists($name, $params))) {
+				$refillValue = false;
+			}
+
+			// these 'aliases' are just for readability of the lower block
+			$isOptional = isset($optionalParams[$name]);
+			$hasMatched = isset($matchedParams[$name]);
+			$hasDefault = isset($defaultParams[$name]);
+			$hasUserCallbackParam = (isset($params[$name]) || array_key_exists($name, $params));
+
+			if($hasUserCallbackParam) {
+				// anything a user or callback supplied has precedence
+				// and since the user params are handled afterwards, skip them here
+			} elseif($refillValue && $hasMatched) {
+				// Use the matched input
+				if($hasDefault && ($defaultParams[$name]['pre'] || $defaultParams[$name]['post'])) {
+					$finalParams[$name] = new AgaviRoutingValue($matchedParams[$name], $defaultParams[$name]['pre'], $defaultParams[$name]['post']);
+				} else {
+					$finalParams[$name] = $matchedParams[$name];
+				}
+			} elseif($hasDefault) {
+				// now we just need to check if there are defaults for this available param and fill them in if applicable
+				$default = $defaultParams[$name];
+				if(!$isOptional || strlen($default['val']) > 0) {
+					$finalParams[$name] = new AgaviRoutingValue($default['val'], $default['pre'], $default['post']);
+				} elseif($isOptional) {
+					// there is no default or incoming match for this optional param, so remove it
+					$finalParams[$name] = null;
+				}
+			}
+		}
+		
+		return $finalParams;
+	}
+	
+	protected function fillUserParameters(array $options, array $params, array $finalParams, array $availableParams, array $optionalParams, array $defaultParams)
+	{
+		$availableParamsAsKeys = array_flip($availableParams);
+
+		foreach($params as $name => $param) {
+			if(!(isset($finalParams[$name]) || array_key_exists($name, $finalParams))) {
+				if($param === null && isset($optionalParams[$name])) {
+					$finalParams[$name] = $param;
+				} else {
+					if(isset($defaults[$name])) {
+						$param = $param !== null ? $param : $defaultParams[$name]['val'];
+						if($defaultParams[$name]['pre'] || $defaultParams[$name]['post']) {
+							$param = new AgaviRoutingValue($param, $defaultParams[$name]['pre'], $defaultParams[$name]['post']);
+						}
+						$finalParams[$name] = $param;
+					} elseif(isset($availableParamsAsKeys[$name]) || array_key_exists($name, $availableParamsAsKeys) || $param === null) {
+						// when the parameter was available in one of the routes or has explicitly been unset
+						$finalParams[$name] = $param;
+					}
+				}
+			}
+		}
+		
+		return $finalParams;
+	}
+
+	protected function removeMatchingDefaults(array $options, array $finalParams, array $availableParams, array $optionalParams, array $defaultParams)
+	{
+		if(!empty($options['omit_defaults'])) {
+			// remove the optional parameters from the right to the left from the pattern when they match
+			// their default
+			foreach(array_reverse($availableParams) as $name) {
+				if(isset($optionalParams[$name])) {
+					// the isset() could be replaced by
+					// "!array_key_exists($name, $finalParams) || $finalParams[$name] === null"
+					// to clarify that null is explicitly allowed here
+					if(!isset($finalParams[$name]) || (
+							isset($defaultParams[$name]) && (
+								($finalParams[$name] instanceof AgaviRoutingValue && $finalParams[$name]->equals($defaultParams[$name])) ||
+								(!($finalParams[$name] instanceof AgaviRoutingValue) && $finalParams[$name] == $defaultParams[$name]['val'])
+							)
+						)
+					) {
+						$finalParams[$name] = null;
+					} else {
+						break;
+					}
+				} else {
+					break;
+				}
+			}
+		}
+		
+		return $finalParams;
+	}
+	
+	protected function encodeParameters(array $options, array $params)
+	{
+		foreach($params as &$param) {
+			$param = $this->escapeOutputParameter($param);
+		}
+		return $params;
+	}
+	
+	protected function encodeParameter($parameter)
+	{
+		if($parameter instanceof AgaviRoutingValue) {
+			return sprintf('%s%s%s', 
+				$parameter->isPrefixEncoded()  ? $parameter->getPrefix()  : $this->escapeOutputParameter($parameter->getPrefix()),
+				$parameter->isValueEncoded()   ? $parameter->getValue()   : $this->escapeOutputParameter($parameter->getValue()),
+				$parameter->isPostfixEncoded() ? $parameter->getPostfix() : $this->escapeOutputParameter($parameter->getPostfix())
+			);
+		} else {
+			return $this->escapeOutputParameter($parameter);
+		}
+	}
 
 	/**
 	 * Generate a formatted Agavi URL.
@@ -493,159 +707,34 @@ abstract class AgaviRouting extends AgaviParameterHolder
 		// we need to store the original params since we will be trying to fill the
 		// parameters up to the first user supplied parameter
 		$originalParams = $params;
-
-		$refillAllParams = false;
-		if(!empty($options['refill_all_parameters'])) {
-			$refillAllParams = true;
-		}
-
-
+		
 		$routes = $route;
 		if(is_string($route)) {
 			$routes = $this->getAffectedRoutes($routes);
 		}
+		
+		$assembledInformation = $this->assembleRoutes($options, $routes, $params);
+		
+		$params = $assembledInformation['user_parameters'];
 
-		$url = '';
-		$defaults = array();
-		$availableParams = array();
-		$matchedParams = array(); // the merged incoming matched params of implied routes
-		$optionalParams = array();
-		$firstRoute = true;
-		foreach($routes as $route) {
-			$r = $this->routes[$route];
-
-			$myDefaults = $r['opt']['defaults'];
-
-			if(isset($r['opt']['callback'])) {
-				if(!isset($r['cb'])) {
-					$cb = $r['opt']['callback'];
-					$r['cb'] = new $cb();
-					$r['cb']->initialize($this->context, $r);
-				}
-				if(!$r['cb']->onGenerate($myDefaults, $params, $options)) {
-					continue;
-				}
-			}
-
-			// if the route has a source we shouldn't put its stuff in the generated string
-			if($r['opt']['source']) {
-				continue;
-			}
-
-			$matchedParams = array_merge($matchedParams, $r['matches']);
-			$optionalParams = array_merge($optionalParams, $r['opt']['optional_parameters']);
-
-			$availableParams = array_merge($availableParams, array_reverse($r['opt']['pattern_parameters']));
-
-			if($firstRoute || $r['opt']['cut'] || (count($r['opt']['childs']) && $r['opt']['cut'] === null)) {
-				if($r['opt']['anchor'] & self::ANCHOR_START || $r['opt']['anchor'] == self::ANCHOR_NONE) {
-					$url = $r['opt']['reverseStr'] . $url;
-				} else {
-					$url = $url . $r['opt']['reverseStr'];
-				}
-			}
-
-			$defaults = array_merge($defaults, $myDefaults);
-			$firstRoute = false;
-		}
-
-		$availableParams = array_reverse($availableParams);
-
-		if($refillAllParams) {
-			foreach($matchedParams as $name => $value) {
-				if(!(isset($params[$name]) || array_key_exists($name, $params))) {
-					$params[$name] = $this->escapeOutputParameter($value);
-				}
-			}
-		}
-
-		$refillValue = true;
-		$finalParams = array();
-		foreach($availableParams as $name) {
-			// loop all params and fill all with the matched parameters
-			// until a user (not callback) supplied parameter is encountered.
-			// After that only check defaults. Parameters supplied from the user
-			// or via callback always have precedence
-
-			// keep track if a user supplied has already been encountered
-			if($refillValue && (isset($originalParams[$name]) || array_key_exists($name, $originalParams))) {
-				$refillValue = false;
-			}
-
-			// these 'aliases' are just for readability of the lower block
-			$isOptional = isset($optionalParams[$name]);
-			$hasMatched = isset($matchedParams[$name]);
-			$hasDefault = isset($defaults[$name]);
-			$hasUserCallbackParam = (isset($params[$name]) || array_key_exists($name, $params));
-
-			if($hasUserCallbackParam) {
-				// anything a user or callback supplied has precedence
-				// and since the user params are handled afterwards, skip them here
-			} elseif($refillValue && $hasMatched) {
-				// Use the matched input
-				if($hasDefault) {
-					$finalParams[$name] = $defaults[$name]['pre'] . $this->escapeOutputParameter($matchedParams[$name]) . $defaults[$name]['post'];
-				} else {
-					$finalParams[$name] = $this->escapeOutputParameter($matchedParams[$name]);
-				}
-			} elseif($hasDefault) {
-				// now we just need to check if there are defaults for this available param and fill them in if applicable
-				$default = $defaults[$name];
-				if(!$isOptional || strlen($default['val']) > 0) {
-					$finalParams[$name] = $default['pre'] . $this->escapeOutputParameter($default['val']) . $default['post'];
-				} elseif($isOptional) {
-					// there is no default or incoming match for this optional param, so remove it
-					$finalParams[$name] = null;
-				}
-			}
-		}
-
-		$availableParamsAsKeys = array_flip($availableParams);
-
-		foreach($params as $name => $param) {
-			if(!(isset($finalParams[$name]) || array_key_exists($name, $finalParams))) {
-				if($param === null && isset($optionalParams[$name])) {
-					$finalParams[$name] = $param;
-				} else {
-					if(isset($defaults[$name])) {
-						$finalParams[$name] = $defaults[$name]['pre'] . ($param !== null ? $param : $this->escapeOutputParameter($defaults[$name]['val'])) . $defaults[$name]['post'];
-					} elseif(isset($availableParamsAsKeys[$name]) || array_key_exists($name, $availableParamsAsKeys) || $param === null) {
-						// when the parameter was available in one of the routes or has explicitly been unset
-						$finalParams[$name] = $param;
-					}
-				}
-			}
-		}
-
-		if(!empty($options['omit_defaults'])) {
-			// remove the optional parameters from the right to the left from the pattern when they match
-			// their default
-			foreach(array_reverse($availableParams) as $name) {
-				if(isset($optionalParams[$name])) {
-					// the isset() could be replaced by
-					// "!array_key_exists($name, $finalParams) || $finalParams[$name] === null"
-					// to clarify that null is explicitly allowed here
-					if(!isset($finalParams[$name]) || (isset($defaults[$name]) && $finalParams[$name] == $defaults[$name]['pre'] . $this->escapeOutputParameter($defaults[$name]['val']) . $defaults[$name]['post'])) {
-						$finalParams[$name] = null;
-					} else {
-						break;
-					}
-				} else {
-					break;
-				}
-			}
-		}
+		$params = $this->refillAllMatchedParameters($options, $params, $assembledInformation['matched_parameters']);
+		$finalParams = $this->refillMatchedAndDefaultParameters($options, $params, $assembledInformation['available_parameters'], $assembledInformation['matched_parameters'], $assembledInformation['optional_parameters'], $assembledInformation['default_parameters']);
+		$finalParams = $this->fillUserParameters($options, $params, $finalParams, $assembledInformation['available_parameters'], $assembledInformation['optional_parameters'], $assembledInformation['default_parameters']);
+		$finalParams = $this->removeMatchingDefaults($options, $finalParams, $assembledInformation['available_parameters'], $assembledInformation['optional_parameters'], $assembledInformation['default_parameters']);
 
 		// remember the params that are not in any pattern (could be extra query params, for example, set by a callback)
 		$extras = array_diff_key($params, $finalParams);
 
 		$params = $finalParams;
 
+		$params = $this->encodeParameters($options, $params);
+
 		$from = array();
 		$to = array();
+		
 
 		// remove not specified available parameters
-		foreach(array_unique($availableParams) as $name) {
+		foreach(array_unique($assembledInformation['available_parameters']) as $name) {
 			if(!isset($params[$name])) {
 				$from[] = '(:' . $name . ':)';
 				$to[] = '';
@@ -657,10 +746,11 @@ abstract class AgaviRouting extends AgaviParameterHolder
 			$to[] = $p;
 		}
 
-		$url = str_replace($from, $to, $url);
-		return array($this->prefix . $url, $params, $options, $extras);
+		$uri = str_replace($from, $to, $assembledInformation['uri']);
+		return array($this->prefix . $uri, $params, $options, $extras);
 	}
-
+	
+	
 	/**
 	 * Escapes an argument to be used in an generated route.
 	 *
