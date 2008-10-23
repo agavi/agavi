@@ -102,6 +102,12 @@ CHG: Deprecated AgaviAdodbDatabase (#662) (David)
 FIX: Security filters cannot perform checks in addition to isSecure() (#671) (David)
 
 
+0.11.5 (October ??, 2008)
+-------------------------
+
+FIX: AgaviSoapResponse::searchSoapHeader() compares namespaces incorrectly (#892) (David)
+
+
 0.11.5 RC1 (October 20, 2008)
 -----------------------------
 
