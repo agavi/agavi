@@ -34,6 +34,14 @@ class AgaviTestingRouting extends AgaviRouting
 	{
 		$this->input = $input;
 	}
+	
+	public function setRoutingSource($name, $data, $type = null)
+	{
+		if (null === $type) {
+			$type = 'AgaviRoutingArraySource';
+		}
+		$this->sources[$name] = new $type($data);
+	}
 }
 
 ?>

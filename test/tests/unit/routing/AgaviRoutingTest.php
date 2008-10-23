@@ -55,6 +55,7 @@ class AgaviRoutingTest extends AgaviPhpUnitTestCase
 		$_SERVER['routing_test'] = 'foo';
 		$ctx = AgaviContext::getInstance(null);
 		$this->routing->setInput('/');
+		$this->routing->setRoutingSource('_SERVER', $_SERVER);
 		$container = $this->routing->execute();
 		$this->assertEquals('Matched', $container->getActionName());
 		$this->assertEquals('Server', $container->getModuleName());
