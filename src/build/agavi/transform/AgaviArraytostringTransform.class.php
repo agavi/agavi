@@ -55,7 +55,7 @@ class AgaviArraytostringTransform extends AgaviTransform
 		}
 		
 		$input = str_replace('"', '\\"', $input);
-		$input = '"' . implode('" "', $input) . '"';
+		$input = '"' . implode('"' . $this->delimiter . '"', $input) . '"';
 		
 		return $input;
 	}

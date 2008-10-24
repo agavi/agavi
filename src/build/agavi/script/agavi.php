@@ -54,7 +54,7 @@ try {
 $GLOBALS['PROPERTIES'] = array();
 $GLOBALS['SHOW_LIST'] = false;
 $GLOBALS['VERBOSE'] = false;
-$GLOBALS['LOGGER'] = 'AgaviProxyBuildLogger';
+$GLOBALS['LOGGER'] = 'phing.listener.AnsiColorLogger';
 $GLOBALS['BUILD'] = new PhingFile(BUILD_DIRECTORY . '/build.xml');
 
 /* Define parser callbacks. */
@@ -238,17 +238,8 @@ $GLOBALS['PROPERTIES']['project.directory'] = $GLOBALS['PROJECT_DIRECTORY'];
 try {
 	$project = new Project();
 	
-	if(!class_exists($GLOBALS['LOGGER'])) {
-		Phing::import($GLOBALS['LOGGER']);
-	}
-	$logger = new $GLOBALS['LOGGER']();
-	$logger->setMessageOutputLevel($GLOBALS['VERBOSE'] ? Project::MSG_VERBOSE : Project::MSG_INFO);
-	$logger->setOutputStream($GLOBALS['OUTPUT']);
-	$logger->setErrorStream($GLOBALS['ERROR']);
-	
 	// hax for Mac OS X 10.5 Leopard, where "dim" ANSI colors are broken...
 	if(
-		($logger instanceof AnsiColorLogger) && 
 		PHP_OS == 'Darwin' && 
 		(
 			(isset($_SERVER['TERM_PROGRAM']) && $_SERVER['TERM_PROGRAM'] == 'Apple_Terminal') ||
@@ -259,6 +250,17 @@ try {
 	) {
 		Phing::setProperty('phing.logger.defaults', new PhingFile(BUILD_DIRECTORY . '/agavi/phing/ansicolorlogger_osxleopard.properties'));
 	}
+	// hax for Windows, which doesn't support ANSI colors at all
+	elseif(stripos(PHP_OS, 'Win') === 0) {
+		$GLOBALS['LOGGER'] = 'phing.listener.DefaultLogger';
+	}
+	
+	$GLOBALS['LOGGER'] = Phing::import($GLOBALS['LOGGER']);
+	
+	$logger = new AgaviProxyBuildLogger(new $GLOBALS['LOGGER']());
+	$logger->setMessageOutputLevel($GLOBALS['VERBOSE'] ? Project::MSG_VERBOSE : Project::MSG_INFO);
+	$logger->setOutputStream($GLOBALS['OUTPUT']);
+	$logger->setErrorStream($GLOBALS['ERROR']);
 	
 	$project->addBuildListener($logger);
 	$project->setInputHandler(new DefaultInputHandler());

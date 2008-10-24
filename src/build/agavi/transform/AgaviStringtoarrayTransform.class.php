@@ -55,7 +55,7 @@ class AgaviStringtoarrayTransform extends AgaviTransform
 		}
 		
 		$delimiter = preg_quote($this->delimiter, '#');
-		$pattern = sprintf('#(?:(?P<unquoted>[^"\'%s].+)|\'(?P<single_quoted>(?:\\\\\'|[^\'])+)\'|"(?P<double_quoted>(?:\\\\"|[^"])+)")(?=%s|$)#U',
+		$pattern = sprintf('#(?:(?P<unquoted>[^"\'%s].+)|\'(?P<single_quoted>(?:\\\\\'|[^\'])+)\'|"(?P<double_quoted>(?:\\\\"|[^"])+)")(?=[%s]|$)#U',
 			$delimiter, $delimiter);
 		
 		$matches = array();
