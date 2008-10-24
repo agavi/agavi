@@ -290,11 +290,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 					$val = $value;
 				}
 
-				$value = array(
-					'pre' => $pre,
-					'val' => $val,
-					'post' => $post,
-				);
+				$value = new AgaviRoutingValue($val, $pre, $post, false, true, true);
 			}
 		}
 
@@ -314,7 +310,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 
 			if(!isset($options['defaults'][$name]) && ($param['pre'] || $param['val'] || $param['post'])) {
 				unset($param['is_optional']);
-				$options['defaults'][$name] = $param;
+				$options['defaults'][$name] = new AgaviRoutingValue($param['val'], $param['pre'], $param['post'], false, true, true);;
 			}
 		}
 
@@ -501,17 +497,33 @@ abstract class AgaviRouting extends AgaviParameterHolder
 				if(!$r['cb']->onGenerate($myDefaults, $params, $options)) {
 					continue;
 				}
+				
 				// TODO: discuss using an interface again.
-				$diff = array_diff_uassoc($params, $paramsCopy, array($this, 'onGenerateParamDiffCallback'));
+				$diff = array_udiff_assoc($params, $paramsCopy, array($this, 'onGenerateParamDiffCallback'));
 				if(count($diff)) {
 					$diffKeys = array_keys($diff);
 					foreach($diffKeys as $key) {
-						$value =& $params[$key];
+						// do NEVER assign this value as reference, php will completely go bonkers if we use a reference here (it actually marks the entry in the array as reference and hence in a callback when modifying the value in $params it actually gets modified in $paramsCopy as well)
+						$value = $params[$key];
 						if(is_array($value) && array_key_exists('pre', $value) && array_key_exists('val', $value) && array_key_exists('post', $value)) {
 							$value = new AgaviRoutingValue($value['val'], $value['pre'], $value['post']);
 						} elseif(!($value instanceof AgaviRoutingValue)) {
-							$value = new AgaviRoutingValue($value, isset($myDefaults[$key]['pre']) ? $myDefaults[$key]['pre'] : null, isset($myDefaults[$key]['post']) ? $myDefaults[$key]['post'] : null, true);
+							$routingValue = new AgaviRoutingValue($value, null, null, true);
+							if(isset($myDefaults[$key])) {
+								if($myDefaults[$key] instanceof AgaviRoutingValue) {
+									// clone the default value so pre and postfix are reserved
+									$routingValue = clone $myDefaults[$key];
+									// BC: When setting a value in a callback it was supposed to be already encoded
+									$routingValue->setValue($value, true);
+								} else {
+									// $myDefaults[$key] can only be an array at this stage
+									$routingValue->setPrefix($myDefaults[$key]['pre'], true);
+									$routingValue->setPostfix($myDefaults[$key]['post'], true);
+								}
+							}
+							$value = $routingValue;
 						}
+						$params[$key] = $value;
 						// TODO: when setting a AgaviRoutingValue from a callback you have to insert the defaults yourself, needs discussion
 					}
 				}
@@ -598,15 +610,15 @@ abstract class AgaviRouting extends AgaviParameterHolder
 			} elseif($hasDefault) {
 				// now we just need to check if there are defaults for this available param and fill them in if applicable
 				$default = $defaultParams[$name];
-				if(!$isOptional || strlen($default['val']) > 0) {
-					$finalParams[$name] = new AgaviRoutingValue($default['val'], $default['pre'], $default['post']);
+				if(!$isOptional || strlen($default->getValue()) > 0) {
+					$finalParams[$name] = clone $default;
 				} elseif($isOptional) {
 					// there is no default or incoming match for this optional param, so remove it
 					$finalParams[$name] = null;
 				}
 			}
 		}
-		
+
 		return $finalParams;
 	}
 	
@@ -620,9 +632,11 @@ abstract class AgaviRouting extends AgaviParameterHolder
 					$finalParams[$name] = $param;
 				} else {
 					if(isset($defaults[$name])) {
-						$param = $param !== null ? $param : $defaultParams[$name]['val'];
-						if($defaultParams[$name]['pre'] || $defaultParams[$name]['post']) {
-							$param = new AgaviRoutingValue($param, $defaultParams[$name]['pre'], $defaultParams[$name]['post']);
+						$param = $param !== null ? $param : $defaultParams[$name]->getValue();
+						if($defaultParams[$name]->hasPrefixOrPostfix()) {
+							$routeParam = clone $defaultParams[$name];
+							$routeParam->setValue($param);
+							$param = $routeParam;
 						}
 						$finalParams[$name] = $param;
 					} elseif(isset($availableParamsAsKeys[$name]) || array_key_exists($name, $availableParamsAsKeys) || $param === null) {
@@ -632,7 +646,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 				}
 			}
 		}
-		
+
 		return $finalParams;
 	}
 
@@ -649,7 +663,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 					if(!isset($finalParams[$name]) || (
 							isset($defaultParams[$name]) && (
 								($finalParams[$name] instanceof AgaviRoutingValue && $finalParams[$name]->equals($defaultParams[$name])) ||
-								(!($finalParams[$name] instanceof AgaviRoutingValue) && $finalParams[$name] == $defaultParams[$name]['val'])
+								(!($finalParams[$name] instanceof AgaviRoutingValue) && $finalParams[$name] == $defaultParams[$name]->getValue())
 							)
 						)
 					) {
@@ -669,7 +683,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 	protected function encodeParameters(array $options, array $params)
 	{
 		foreach($params as &$param) {
-			$param = $this->escapeOutputParameter($param);
+			$param = $this->encodeParameter($param);
 		}
 		return $params;
 	}
@@ -832,8 +846,8 @@ abstract class AgaviRouting extends AgaviParameterHolder
 						}
 
 						foreach($opts['defaults'] as $key => $value) {
-							if(!isset($ign[$key]) && $value['val']) {
-								$vars[$key] = $value['val'];
+							if(!isset($ign[$key]) && $value->getValue()) {
+								$vars[$key] = $value->getValue();
 							}
 						}
 

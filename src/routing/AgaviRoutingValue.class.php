@@ -27,7 +27,7 @@
  *
  * @version    $Id$
  */
-class AgaviRoutingValue
+class AgaviRoutingValue implements ArrayAccess
 {
 	protected $value;
 	protected $prefix;
@@ -35,6 +35,12 @@ class AgaviRoutingValue
 	protected $valueEncoded = false;
 	protected $prefixEncoded = true;
 	protected $postfixEncoded = true;
+	
+	protected static $arrayMap = array(
+		'pre'  => 'prefix',
+		'val'  => 'value',
+		'post' => 'postfix',
+	);
 	
 	public function __construct($value, $prefix = null, $postfix = null, $valueEncoded = false, $prefixEncoded = true, $postfixEncoded = true)
 	{
@@ -46,14 +52,38 @@ class AgaviRoutingValue
 		$this->postfixEncoded = $postfixEncoded;
 	}
 	
+	public function setValue($value, $isEncoded = null)
+	{
+		$this->value = $value;
+		if($isEncoded !== null) {
+			$this->valueEncoded = $isEncoded;
+		}
+	}
+	
 	public function getValue()
 	{
 		return $this->value;
 	}
 	
+	public function setPrefix($value, $isEncoded = null)
+	{
+		$this->prefix = $value;
+		if($isEncoded !== null) {
+			$this->prefixEncoded = $isEncoded;
+		}
+	}
+	
 	public function getPrefix()
 	{
 		return $this->prefix;
+	}
+	
+	public function setPostfix($value, $isEncoded = null)
+	{
+		$this->postfix = $value;
+		if($isEncoded !== null) {
+			$this->postfixEncoded = $isEncoded;
+		}
 	}
 	
 	public function getPostfix()
@@ -76,6 +106,12 @@ class AgaviRoutingValue
 		return $this->postfixEncoded;
 	}
 	
+	// TODO: naming
+	public function hasPrefixOrPostfix()
+	{
+		return $this->prefix || $this->postfix;
+	}
+	
 	public function equals($other)
 	{
 		if($other instanceof self) {
@@ -87,9 +123,40 @@ class AgaviRoutingValue
 		}
 	}
 	
+	public function offsetExists($offset)
+	{
+		return isset(self::$arrayMap[$offset]);
+	}
+	
+	public function offsetGet($offset)
+	{
+		if(isset(self::$arrayMap[$offset])) {
+			return $this->{self::$arrayMap[$offset]};
+		}
+	}
+	
+	public function offsetSet($offset, $value)
+	{
+		if(isset(self::$arrayMap[$offset])) {
+			$this->{self::$arrayMap[$offset]} = $value;
+		}
+	}
+	
+	public function offsetUnset($offset)
+	{
+		if(isset(self::$arrayMap[$offset])) {
+			$this->{self::$arrayMap[$offset]} = null;
+		}
+	}
+	
 	public function __toString()
 	{
 		return $this->prefix . $this->value . $this->postfix;
+	}
+	
+	public static function __set_state(array $data)
+	{
+		return new self($data['value'], $data['prefix'], $data['postfix'], $data['valueEncoded'], $data['prefixEncoded'], $data['postfixEncoded']);
 	}
 }
 
