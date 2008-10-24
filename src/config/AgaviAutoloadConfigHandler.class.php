@@ -52,7 +52,7 @@ class AgaviAutoloadConfigHandler extends AgaviXmlConfigHandler
 	public function execute(AgaviXmlConfigDomDocument $document)
 	{
 		// set up our default namespace
-		$document->setDefaultNamespace(self::XML_NAMESPACE, 'config_handlers');
+		$document->setDefaultNamespace(self::XML_NAMESPACE, 'autoload');
 
 		$data = array();
 		
