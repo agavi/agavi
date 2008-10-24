@@ -10,6 +10,7 @@
 			<suite name="Routing">
 				<testfiles>
 					<testfile>unit/routing/AgaviRoutingTest.php</testfile>
+					<testfile>unit/routing/AgaviWebRoutingTest.php</testfile>
 				</testfiles>
 			</suite>
 		</suites>
