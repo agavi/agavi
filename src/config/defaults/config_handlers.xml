@@ -12,11 +12,13 @@
 				+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
 			-->
 			<handler pattern="%core.config_dir%/autoload.xml" class="AgaviAutoloadConfigHandler">
-				<validation>%core.agavi_dir%/config/xsd/autoload.xsd</validation>
+				<validation>%core.agavi_dir%/config/rng/autoload.rng</validation>
+				<transformation>%core.agavi_dir%/config/xsl/autoload.xsl</transformation>
 			</handler>
 			
 			<handler pattern="%core.system_config_dir%/autoload.xml" class="AgaviAutoloadConfigHandler">
-				<validation>%core.agavi_dir%/config/xsd/autoload.xsd</validation>
+				<validation>%core.agavi_dir%/config/rng/autoload.rng</validation>
+				<transformation>%core.agavi_dir%/config/xsl/autoload.xsl</transformation>
 			</handler>
 
 			<handler pattern="%core.config_dir%/compile.xml" class="AgaviCompileConfigHandler">
@@ -95,7 +97,8 @@
 				+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
 			-->
 			<handler pattern="%core.module_dir%/*/config/autoload.xml" class="AgaviAutoloadConfigHandler">
-				<validation>%core.agavi_dir%/config/xsd/autoload.xsd</validation>
+				<validation>%core.agavi_dir%/config/rng/autoload.rng</validation>
+				<transformation>%core.agavi_dir%/config/xsl/autoload.xsl</transformation>
 			</handler>
 
 			<handler pattern="%core.module_dir%/*/config/action_filters.xml" class="AgaviFilterConfigHandler">

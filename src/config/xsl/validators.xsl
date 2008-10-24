@@ -3,7 +3,7 @@
 	version="1.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:envelope_0_11="http://agavi.org/agavi/1.0/config"
-	xmlns:config_handlers_1_0="http://agavi.org/agavi/config/parts/validators/1.0"
+	xmlns:validators_1_0="http://agavi.org/agavi/config/parts/validators/1.0"
 >
 	<xsl:output method="xml" version="1.0" encoding="utf-8" indent="yes" />
 	

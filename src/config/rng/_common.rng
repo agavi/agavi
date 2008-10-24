@@ -117,7 +117,7 @@
 		</list>
 	</define>
 	
-	<define name="data-nestring">
+	<define name="data-non-empty-string">
 		<data type="string">
 			<param name="minLength">1</param>
 		</data>
@@ -133,7 +133,7 @@
 		<data type="boolean" />
 	</define>
 	
-	<define name="data-agaviboolean">
+	<define name="data-boolean">
 		<data type="string">
 			<param name="pattern">([tT][rR][uU][eE]|[fF][aA][lL][sS][eE]|[yY][eE][sS]|[nN][oO]|[oO][nN]|[oO][fF][fF])</param>
 		</data>
