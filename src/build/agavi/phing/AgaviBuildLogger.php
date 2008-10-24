@@ -89,7 +89,6 @@ class AgaviBuildLogger extends DefaultLogger
 	
 	public function buildStarted(BuildEvent $event)
 	{
-		$this->logger->buildStarted($event);
 	}
 	
 	public function buildFinished(BuildEvent $event)
