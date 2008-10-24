@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 1.0.0 beta 6 (October 25, 2008)
 -------------------------------
 
+FIX: Build system output is unreadable in Windows PowerShell (#891) (Noah)
 FIX: Calling AgaviValidationReport::getSucceededArguments() on virgin report object causes "Invalid argument supplied for foreach()" warning (#890) (David)
 
 
