@@ -20,6 +20,7 @@ class AgaviWebRoutingTest extends AgaviPhpUnitTestCase
 	
 	public function setUp()
 	{
+		$_SERVER['SCRIPT_NAME'] = '';
 		$this->routing = new AgaviWebRouting();
 		$this->routing->initialize(AgaviContext::getInstance(null), $this->parameters);
 		$this->routing->startup();
@@ -30,5 +31,35 @@ class AgaviWebRoutingTest extends AgaviPhpUnitTestCase
 		$this->routing->setParameter('enabled', false);
 		$url = $this->routing->gen('foo', array('bar' => '/shouldbeencoded'));
 		$this->assertEquals('foo?bar=%2Fshouldbeencoded', $url);
+	}
+	
+	public function testGenNonExistingRoute()
+	{
+		$url = $this->routing->gen('foo', array('bar' => '/shouldbeencoded'));
+		$this->assertEquals('foo?bar=%2Fshouldbeencoded', $url);		
+	}
+	
+	public function testGenSimpleRoute()
+	{
+		$url = $this->routing->gen('index');
+		$this->assertEquals('/', $url);		
+	}
+	
+	public function testGenSimpleRouteWithParam()
+	{
+		$url = $this->routing->gen('index', array('extra' => 'contains spaces'));
+		$this->assertEquals('/?extra=contains+spaces', $url);		
+	}
+	
+	public function testGenWithParam()
+	{
+		$url = $this->routing->gen('with_param', array('number' => 5));
+		$this->assertEquals('/withparam/5', $url);		
+	}
+	
+	public function testGenWithParamAndExtraParam()
+	{
+		$url = $this->routing->gen('with_param', array('number' => 5, 'extra' => 'contains spaces'));
+		$this->assertEquals('/withparam/5?extra=contains+spaces', $url);		
 	}
 }
