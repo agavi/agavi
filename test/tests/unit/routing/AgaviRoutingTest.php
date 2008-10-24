@@ -140,6 +140,27 @@ class AgaviRoutingTest extends AgaviPhpUnitTestCase
 		$this->assertEquals(AgaviConfig::get('actions.error_404_module'), $container->getModuleName());
 		$this->assertEquals(AgaviConfig::get('actions.error_404_action'), $container->getActionName());
 	}
+	
+	public function testMatchingCallback()
+	{
+		$ctx = AgaviContext::getInstance(null);
+		$this->routing->setInput('/callbacks/matching_callback');
+		$container = $this->routing->execute();
+		$this->assertEquals(array('callbacks', 'callbacks.matching_callback'), $ctx->getRequest()->getAttribute('matched_routes', 'org.agavi.routing'));
+		$this->assertEquals('Callback', $container->getModuleName());
+		$this->assertEquals('Matching', $container->getActionName());
+		$this->assertEquals('set', $ctx->getRequest()->getRequestData()->getParameter('callback'));
+	}
+	
+	public function testOnNotMatchedStopper()
+	{
+		$this->routing->setInput('/callbacks/stopper');
+		try {
+			$container = $this->routing->execute();
+		} catch (AgaviException $e) {
+			$this->fail('The onNotMatched callback of the childroute should not get called');
+		}
+	}
 }
 
 

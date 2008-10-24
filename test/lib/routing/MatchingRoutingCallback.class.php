@@ -4,7 +4,7 @@ class MatchingRoutingCallback extends AgaviRoutingCallback
 {
 	public function onMatched(array &$parameters, AgaviExecutionContainer $container)
 	{
-		$paramters['callback'] = 'set';
+		$parameters['callback'] = 'set';
 		return true;
 	}
 }

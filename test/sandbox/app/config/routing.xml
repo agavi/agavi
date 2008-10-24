@@ -9,10 +9,11 @@
 			<route name="with_two_params" pattern="^/withmultipleparams/(number:\d+)/(string:\w+)$" module="TestWithParam" action="MatchedMultipleParams" />
 			<route name="callbacks" pattern="^/callbacks" module="Callback">
 				<route name=".nonmatching_callback" pattern="^/nonmatching_callback$" callback="NonMatchingRoutingCallback" action="NonMatching" />
-				<route name=".matching_callback" pattern="^/matching_callback$" callback="NonMatchingRoutingCallback" action="Matching" />
+				<route name=".matching_callback" pattern="^/matching_callback$" callback="MatchingRoutingCallback" action="Matching" />
 				<route name=".on_not_matched" pattern="^/on_not_matched">
 					<route name=".callback" pattern="^/callback$" callback="OnNotMatchedRoutingCallback" action="NonMatching" />
 				</route>
+				<route name=".on_not_matched_stopper" pattern="^/stopper" action="Stopper" />
 			</route>
 			<route name="index" pattern="^/$" module="%actions.default_module%" action="%actions.default_action%" />
 		</routes>
