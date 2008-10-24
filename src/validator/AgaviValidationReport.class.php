@@ -32,7 +32,7 @@ class AgaviValidationReport
 	/**
 	 * @var        array A List of result severities for each argument which has been validated.
 	 */
-	protected $argumentResults;
+	protected $argumentResults = array();
 	
 	/**
 	 * @var        int The highest error severity thrown by the validation run.

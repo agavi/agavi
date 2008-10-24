@@ -309,7 +309,7 @@ class AgaviSoapResponse extends AgaviResponse
 	protected function searchSoapHeader($namespace, $name)
 	{
 		foreach($this->soapHeaders as $key => $soapHeader) {
-			if($soapHeader->namespace = $namespace && $soapHeader->name == $name) {
+			if($soapHeader->namespace == $namespace && $soapHeader->name == $name) {
 				return $key;
 			}
 		}

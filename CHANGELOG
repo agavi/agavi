@@ -1,6 +1,12 @@
 AGAVI CHANGELOG
 ===============
 
+1.0.0 beta 6 (October 25, 2008)
+-------------------------------
+
+FIX: Calling AgaviValidationReport::getSucceededArguments() on virgin report object causes "Invalid argument supplied for foreach()" warning (#890) (David)
+
+
 1.0.0 beta 5 (October 20, 2008)
 -------------------------------
 
@@ -94,6 +100,12 @@ CHG: Deprecated AgaviSecureWebRequest (#676) (David)
 CHG: Deprecated AgaviAdodbDatabase (#662) (David)
 
 FIX: Security filters cannot perform checks in addition to isSecure() (#671) (David)
+
+
+0.11.5 (October ??, 2008)
+-------------------------
+
+FIX: AgaviSoapResponse::searchSoapHeader() compares namespaces incorrectly (#892) (David)
 
 
 0.11.5 RC1 (October 20, 2008)
