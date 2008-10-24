@@ -20,7 +20,7 @@ class AgaviWebRoutingTest extends AgaviPhpUnitTestCase
 	
 	public function setUp()
 	{
-		$_SERVER['SCRIPT_NAME'] = '';
+		$_SERVER['SCRIPT_NAME'] = ''; // takes care of php setting the commandline scriptname in $_SERVER, throwing the routing off guard
 		$this->routing = new AgaviWebRouting();
 		$this->routing->initialize(AgaviContext::getInstance(null), $this->parameters);
 		$this->routing->startup();
