@@ -62,4 +62,28 @@ class AgaviWebRoutingTest extends AgaviPhpUnitTestCase
 		$url = $this->routing->gen('with_param', array('number' => 5, 'extra' => 'contains spaces'));
 		$this->assertEquals('/withparam/5?extra=contains+spaces', $url);		
 	}
+	
+	public function testGenWithTwoParams()
+	{
+		$url = $this->routing->gen('with_two_params', array('number' => 5, 'string' => 'needs escaping /'));
+		$this->assertEquals('/withmultipleparams/5/needs%20escaping%20%2F', $url);
+	}
+	
+	public function testGenWithTwoParamsAndExtraParam()
+	{
+		$url = $this->routing->gen('with_two_params', array('number' => 5, 'string' => 'needs escaping /', 'extra' => 'contains spaces'));
+		$this->assertEquals('/withmultipleparams/5/needs%20escaping%20%2F?extra=contains+spaces', $url);
+	}
+	
+	public function testGenWithCallback()
+	{
+		$url = $this->routing->gen('callbacks.gen_with_param', array('number' => 5));
+		$this->assertEquals('/callbacks/10', $url);		
+	}
+	
+	public function testGenWithCallbackUnescapedParam()
+	{
+		$url = $this->routing->gen('callbacks.gen_with_unescaped_param', array('number' => 5));
+		$this->assertEquals('/callbacks//10', $url);		
+	}
 }

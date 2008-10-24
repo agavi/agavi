@@ -14,6 +14,8 @@
 					<route name=".callback" pattern="^/callback$" callback="OnNotMatchedRoutingCallback" action="NonMatching" />
 				</route>
 				<route name=".on_not_matched_stopper" pattern="^/stopper" action="Stopper" />
+				<route name=".gen_with_param" pattern="^/(number:\d+)" callback="GenWithParamRoutingCallback" />
+				<route name=".gen_with_unescaped_param" pattern="^/(number:\d+)" callback="GenWithUnescapedParamRoutingCallback" />
 			</route>
 			<route name="index" pattern="^/$" module="%actions.default_module%" action="%actions.default_action%" />
 		</routes>
