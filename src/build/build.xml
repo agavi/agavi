@@ -287,7 +287,7 @@
 	</target>
 
 	<target name="project-wizard-system-action-default" depends="project-locate">
-		<agavi.car property="module.name" list="${target.project-wizard.modules.names}" />
+		<agavi.car property="module.name" list="${target.project-wizard.modules.names}" delimiter=" ," />
 		<agavi.input property="module.name" message="Module for default system action" default="${module.name}" promptCharacter=":" failIfEmpty="true" useExistingAsDefault="false" />
 		<agavi.execute-target name="module-locate" exceptionsFatal="false" />
 		<if>
@@ -574,7 +574,7 @@
 		<agavi.execute-target name="public-web-create" />
 
 		<agavi.input property="target.project-wizard.modules.names" message="Space-separated list of modules to create for ${project.name}" default="Default" promptCharacter=":" useExistingAsDefault="false" />
-		<agavi.iterate property="module.name" target="module-wizard" list="${target.project-wizard.modules.names}" delimiter=" " exceptionsFatal="false" />
+		<agavi.iterate property="module.name" target="module-wizard" list="${target.project-wizard.modules.names}" delimiter=" ," exceptionsFatal="false" />
 
 		<!-- System action: default. -->
 		<agavi.execute-target name="project-wizard-system-action-default" />
@@ -973,7 +973,7 @@
 		<agavi.execute-target name="module-create" />
 		
 		<agavi.input property="target.module-wizard.actions.names" message="Space-separated list of actions to create for ${module.name}" promptCharacter=":" useExistingAsDefault="false" />
-		<agavi.iterate property="action.name" target="action-wizard" list="${target.module-wizard.actions.names}" delimiter=" " exceptionsFatal="false" />
+		<agavi.iterate property="action.name" target="action-wizard" list="${target.module-wizard.actions.names}" delimiter=" ," exceptionsFatal="false" />
 	</target>
 
 	<target name="module" depends="module-wizard" description="Creates a module and user-specified actions, views, and templates" />
@@ -1076,10 +1076,10 @@
 		<agavi.execute-target name="action-create" />
 
 		<agavi.input property="target.action-wizard.views.names" message="Space-separated list of views to create for ${action.name}" default="Success" promptCharacter=":" useExistingAsDefault="false" />
-		<agavi.iterate property="view.name" target="view-create" list="${target.action-wizard.views.names}" delimiter=" " exceptionsFatal="false" />
+		<agavi.iterate property="view.name" target="view-create" list="${target.action-wizard.views.names}" delimiter=" ," exceptionsFatal="false" />
 
 		<property userProperty="true" name="template.extension" value="${template.extension.default}" />
-		<agavi.iterate property="view.name" target="view-template-create" list="${target.action-wizard.views.names}" delimiter=" " exceptionsFatal="false" />
+		<agavi.iterate property="view.name" target="view-template-create" list="${target.action-wizard.views.names}" delimiter=" ," exceptionsFatal="false" />
 	</target>
 
 	<target name="action" depends="action-wizard" description="Creates an action and corresponding views and templates" />
