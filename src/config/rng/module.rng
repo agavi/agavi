@@ -16,7 +16,7 @@
 	
 	<define name="content-module">
 		<attribute name="enabled">
-			<ref name="data-agaviboolean" />
+			<ref name="data-boolean" />
 		</attribute>
 		<ref name="content-settings" />
 	</define>
