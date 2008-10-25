@@ -140,4 +140,22 @@ class AgaviWebRoutingTest extends AgaviPhpUnitTestCase
 		$url = $this->routing->gen('callbacks.gen_nullify_extra_param', array('number' => 5, 'extra' => 'query string data'));
 		$this->assertEquals('/callbacks/5', $url);
 	}
+	
+	public function testGenWithCallbackSetPrefixAndPostfix()
+	{
+		$url = $this->routing->gen('callbacks.gen_set_prefix_and_postfix', array());
+		$this->assertEquals('/callbacks/prefix-value-postfix', $url);
+	}
+	
+	public function testGenWithCallbackSetPrefixAndPostfixWithoutDefault()
+	{
+		$url = $this->routing->gen('callbacks.gen_set_prefix_and_postfix_without_default', array());
+		$this->assertEquals('/callbacks/prefix-value-postfix', $url);
+	}
+	
+	public function testGenWithCallbackSetPrefixAndPostfixIntoRoute()
+	{
+		$url = $this->routing->gen('callbacks.gen_set_prefix_and_postfix_into_route', array());
+		$this->assertEquals('/callbacks/23/', $url);
+	}
 }

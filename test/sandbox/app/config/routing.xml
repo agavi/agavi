@@ -34,6 +34,12 @@
 					<default for="number">23</default>
 				</route>
 				<route name=".gen_nullify_extra_param" pattern="^/(number:\d+)" callback="GenNullifyExtraParamRoutingCallback" />
+				
+				<route name=".gen_set_prefix_and_postfix" pattern="^/({number:\d+}/)" callback="GenSetPrefixAndPostfixRoutingCallback" />
+				<route name=".gen_set_prefix_and_postfix_without_default" pattern="^/(number:\d+)" callback="GenSetPrefixAndPostfixRoutingCallback" />
+				<route name=".gen_set_prefix_and_postfix_into_route" pattern="^/({number:\d+}/)" callback="GenSetPrefixAndPostfixIntoRouteRoutingCallback">
+					<default for="number">{23}/</default>
+				</route>
 			</route>
 			<route name="index" pattern="^/$" module="%actions.default_module%" action="%actions.default_action%" />
 		</routes>
