@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+	xmlns:autoload_1_0="http://agavi.org/agavi/config/parts/databases/1.0"
+	ns="http://agavi.org/agavi/config/parts/databases/1.0"
+	datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+	
+	<include href="_common.rng" />
+	
+	<define name="content-configuration" combine="interleave">
+		<choice>
+			<optional>
+				<element name="databases">
+					<ref name="content-databases" />
+				</element>
+			</optional>
+			<zeroOrMore>
+				<element name="database">
+					<ref name="content-database" />
+				</element>
+			</zeroOrMore>
+		</choice>
+	</define>
+	
+	<define name="content-database">
+		<attribute name="name">
+			<data type="string" />
+		</attribute>
+		<optional>
+			<attribute name="class">
+				<ref name="data-identifier" />
+			</attribute>
+		</optional>
+		<ref name="content-parameters" />
+	</define>
+	
+	<define name="content-databases">
+		<optional>
+			<attribute name="default">
+				<data type="string" />
+			</attribute>
+		</optional>
+		<zeroOrMore>
+			<element name="database">
+				<ref name="content-database" />
+			</element>
+		</zeroOrMore>
+	</define>
+	
+</grammar>
