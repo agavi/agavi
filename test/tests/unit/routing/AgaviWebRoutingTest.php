@@ -78,12 +78,66 @@ class AgaviWebRoutingTest extends AgaviPhpUnitTestCase
 	public function testGenWithCallback()
 	{
 		$url = $this->routing->gen('callbacks.gen_with_param', array('number' => 5));
-		$this->assertEquals('/callbacks/10', $url);		
+		$this->assertEquals('/callbacks/10', $url);
 	}
 	
 	public function testGenWithCallbackUnescapedParam()
 	{
 		$url = $this->routing->gen('callbacks.gen_with_unescaped_param', array('number' => 5));
-		$this->assertEquals('/callbacks//10', $url);		
+		$this->assertEquals('/callbacks//10', $url);
+	}
+	
+	public function testGenWithCallbackUnsetRouteParam()
+	{
+		$url = $this->routing->gen('callbacks.gen_unset_route_param', array('number' => 5));
+		$this->assertEquals('/callbacks/?number=5', $url);
+	}
+	
+	public function testGenWithCallbackUnsetRouteParamWithDefault()
+	{
+		$url = $this->routing->gen('callbacks.gen_unset_route_param_with_default', array('number' => 5));
+		$this->assertEquals('/callbacks/23', $url);
+	}
+	
+	public function testGenWithCallbackUnsetOptionalRouteParam()
+	{
+		$url = $this->routing->gen('callbacks.gen_unset_route_optional_param', array('number' => 5));
+		$this->assertEquals('/callbacks/optional/?number=5', $url);
+	}
+	
+	public function testGenWithCallbackUnsetOptionalRouteParamWithDefault()
+	{
+		$url = $this->routing->gen('callbacks.gen_unset_route_optional_param_with_default', array('number' => 5));
+		$this->assertEquals('/callbacks/optional/23', $url);
+	}
+	
+	public function testGenWithCallbackUnsetExtraParam()
+	{
+		$url = $this->routing->gen('callbacks.gen_unset_extra_param', array('number' => 5, 'extra' => 'query string data'));
+		$this->assertEquals('/callbacks/5?extra=query+string+data', $url);
+	}
+	
+	public function testGenWithCallbackNullifyRouteParam()
+	{
+		$url = $this->routing->gen('callbacks.gen_nullify_route_param', array('number' => 5));
+		$this->assertEquals('/callbacks/', $url);
+	}
+	
+	public function testGenWithCallbackNullifyRouteParamWithDefault()
+	{
+		$url = $this->routing->gen('callbacks.gen_nullify_route_param_with_default', array('number' => 5));
+		$this->assertEquals('/callbacks/23', $url);
+	}
+	
+	public function testGenWithCallbackNullifyRouteParamWithOptionalDefault()
+	{
+		$url = $this->routing->gen('callbacks.gen_nullify_route_param_with_optional_default', array('number' => 5));
+		$this->assertEquals('/callbacks/optional/', $url);
+	}
+	
+	public function testGenWithCallbackNullifyExtraParam()
+	{
+		$url = $this->routing->gen('callbacks.gen_nullify_extra_param', array('number' => 5, 'extra' => 'query string data'));
+		$this->assertEquals('/callbacks/5', $url);
 	}
 }

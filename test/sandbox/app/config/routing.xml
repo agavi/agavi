@@ -16,6 +16,24 @@
 				<route name=".on_not_matched_stopper" pattern="^/stopper" action="Stopper" />
 				<route name=".gen_with_param" pattern="^/(number:\d+)" callback="GenWithParamRoutingCallback" />
 				<route name=".gen_with_unescaped_param" pattern="^/(number:\d+)" callback="GenWithUnescapedParamRoutingCallback" />
+				<route name=".gen_unset_route_param" pattern="^/(number:\d+)" callback="GenUnsetRouteParamRoutingCallback" />
+				<route name=".gen_unset_route_param_with_default" pattern="^/(number:\d+)" callback="GenUnsetRouteParamRoutingCallback">
+					<default for="number">23</default>
+				</route>
+				<route name=".gen_unset_route_optional_param" pattern="^/optional/(number:\d+)?" callback="GenUnsetRouteParamRoutingCallback" />
+				<route name=".gen_unset_route_optional_param_with_default" pattern="^/optional/(number:\d+)?" callback="GenUnsetRouteParamRoutingCallback">
+					<default for="number">23</default>
+				</route>
+				<route name=".gen_unset_extra_param" pattern="^/(number:\d+)" callback="GenUnsetExtraParamRoutingCallback" />
+				
+				<route name=".gen_nullify_route_param" pattern="^/(number:\d+)" callback="GenNullifyRouteParamRoutingCallback" />
+				<route name=".gen_nullify_route_param_with_default" pattern="^/(number:\d+)" callback="GenNullifyRouteParamRoutingCallback">
+					<default for="number">23</default>
+				</route>
+				<route name=".gen_nullify_route_param_with_optional_default" pattern="^/optional/(number:\d+)?" callback="GenNullifyRouteParamRoutingCallback">
+					<default for="number">23</default>
+				</route>
+				<route name=".gen_nullify_extra_param" pattern="^/(number:\d+)" callback="GenNullifyExtraParamRoutingCallback" />
 			</route>
 			<route name="index" pattern="^/$" module="%actions.default_module%" action="%actions.default_action%" />
 		</routes>
