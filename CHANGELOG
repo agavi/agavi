@@ -108,6 +108,8 @@ FIX: Security filters cannot perform checks in addition to isSecure() (#671) (Da
 0.11.5 (October ??, 2008)
 -------------------------
 
+CHG: Update timezone database to 2008h (#896) (David)
+
 FIX: AgaviSoapResponse::searchSoapHeader() compares namespaces incorrectly (#892) (David)
 
 
