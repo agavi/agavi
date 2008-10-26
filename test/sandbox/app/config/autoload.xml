@@ -7,6 +7,8 @@
 		<autoload name="SandboxBaseView">%core.lib_dir%/view/SandboxBaseView.class.php</autoload>
 		
 		<autoload name="AgaviTestingRouting">%core.app_dir%/../../lib/routing/AgaviTestingRouting.class.php</autoload>
+		<autoload name="AgaviTestingWebRouting">%core.app_dir%/../../lib/routing/AgaviTestingWebRouting.class.php</autoload>
+		
 		<autoload name="MatchingRoutingCallback">%core.app_dir%/../../lib/routing/MatchingRoutingCallback.class.php</autoload>
 		<autoload name="NonMatchingRoutingCallback">%core.app_dir%/../../lib/routing/NonMatchingRoutingCallback.class.php</autoload>
 		<autoload name="OnNotMatchedRoutingCallback">%core.app_dir%/../../lib/routing/OnNotMatchedRoutingCallback.class.php</autoload>

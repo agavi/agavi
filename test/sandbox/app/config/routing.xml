@@ -55,6 +55,8 @@
 			  <default for="zomg">/{zomg}</default>
 			</route>
 			
+			<route name="test_ticket_609" pattern="^/test_ticket_609(/{page:\d+})?(/{order:(name|date)})?(/{set:(DESC|ASC)})?$" />
+			
 			<route name="index" pattern="^/$" module="%actions.default_module%" action="%actions.default_action%" />
 		</routes>
 	</configuration>

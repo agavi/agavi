@@ -21,7 +21,7 @@ class AgaviWebRoutingTest extends AgaviPhpUnitTestCase
 	public function setUp()
 	{
 		$_SERVER['SCRIPT_NAME'] = ''; // takes care of php setting the commandline scriptname in $_SERVER, throwing the routing off guard
-		$this->routing = new AgaviWebRouting();
+		$this->routing = new AgaviTestingWebRouting();
 		$this->routing->initialize(AgaviContext::getInstance(null), $this->parameters);
 		$this->routing->startup();
 	}
@@ -177,4 +177,13 @@ class AgaviWebRoutingTest extends AgaviPhpUnitTestCase
 		$url = $this->routing->gen('test_ticket_713');
 		$this->assertEquals('/test_ticket_713/lol', $url);
 	}
+	
+	public function testTicket609()
+	{
+		$this->routing->setInput('/test_ticket_609/name/DESC');
+		$this->routing->execute();
+		$url = $this->routing->gen('test_ticket_609', array('order' => 'name', 'set' => 'ASC'));
+		$this->assertEquals('/test_ticket_609/name/ASC', $url);
+	}
+	
 }
