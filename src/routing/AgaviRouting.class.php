@@ -917,8 +917,8 @@ abstract class AgaviRouting extends AgaviParameterHolder
 
 						$matchedRoutes[] = $opts['name'];
 
-						// matches are arrays with value and offset due to PREG_OFFSET_CAPTURE, and we want index 0, the value, which current() will give us
-						$matchvals = array_map('current', $match);
+						// matches are arrays with value and offset due to PREG_OFFSET_CAPTURE, and we want index 0, the value, which reset() will give us. Long story short, this removes the offset from the individual match
+						$matchvals = array_map('reset', $match);
 
 						if($opts['module']) {
 							$vars[$ma] = AgaviToolkit::expandVariables($opts['module'], $matchvals);
