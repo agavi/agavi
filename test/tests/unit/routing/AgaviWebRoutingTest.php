@@ -159,6 +159,27 @@ class AgaviWebRoutingTest extends AgaviPhpUnitTestCase
 		$this->assertEquals('/callbacks/23/', $url);
 	}
 	
+	public function testGenShortestPossibleUrl()
+	{
+		$url = $this->routing->gen('gen_shortest_possible_url');
+		$this->assertEquals('/gen_shortest_possible_url', $url);
+		
+		$url = $this->routing->gen('gen_shortest_possible_url', array('param1' => 1));
+		$this->assertEquals('/gen_shortest_possible_url', $url);
+		
+		$url = $this->routing->gen('gen_shortest_possible_url', array('param1' => 2));
+		$this->assertEquals('/gen_shortest_possible_url/2', $url);
+		
+		$url = $this->routing->gen('gen_shortest_possible_url', array('param2' => 2));
+		$this->assertEquals('/gen_shortest_possible_url', $url);
+		
+		$url = $this->routing->gen('gen_shortest_possible_url', array('param2' => 1));
+		$this->assertEquals('/gen_shortest_possible_url/1/1', $url);
+		
+		$url = $this->routing->gen('gen_shortest_possible_url', array('param3' => 4));
+		$this->assertEquals('/gen_shortest_possible_url/1/2/4', $url);
+	}
+	
 	public function testTicket437()
 	{
 		$url = $this->routing->gen('test_ticket_437');
@@ -210,5 +231,6 @@ class AgaviWebRoutingTest extends AgaviPhpUnitTestCase
 		$url = $this->routing->gen('test_ticket_609', array('order' => 'name', 'set' => 'ASC'));
 		$this->assertEquals('/test_ticket_609/name/ASC', $url);
 	}
+	
 	
 }

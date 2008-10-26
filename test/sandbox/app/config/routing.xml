@@ -7,6 +7,11 @@
 			<route name="testingsource" pattern="^foo$" source="testingsource[bar]" module="TestingSource" action="Matched" />
 			<route name="with_param" pattern="^/withparam/(number:\d+)$" module="TestWithParam" action="MatchedParam" />
 			<route name="with_two_params" pattern="^/withmultipleparams/(number:\d+)/(string:\w+)$" module="TestWithParam" action="MatchedMultipleParams" />
+			<route name="gen_shortest_possible_url" pattern="^/gen_shortest_possible_url(/{param1:\d+})(/{param2:\d+})(/{param3:\d+})">
+				<default for="param1">/{1}</default>
+				<default for="param2">/{2}</default>
+				<default for="param3">/{3}</default>
+			</route>
 			<route name="callbacks" pattern="^/callbacks" module="Callback">
 				<route name=".nonmatching_callback" pattern="^/nonmatching_callback$" callback="NonMatchingRoutingCallback" action="NonMatching" />
 				<route name=".matching_callback" pattern="^/matching_callback$" callback="MatchingRoutingCallback" action="Matching" />
