@@ -21,7 +21,7 @@ class AgaviWebRoutingTest extends AgaviPhpUnitTestCase
 	public function setUp()
 	{
 		$_SERVER['SCRIPT_NAME'] = ''; // takes care of php setting the commandline scriptname in $_SERVER, throwing the routing off guard
-		$this->routing = new AgaviWebRouting();
+		$this->routing = new AgaviTestingWebRouting();
 		$this->routing->initialize(AgaviContext::getInstance(null), $this->parameters);
 		$this->routing->startup();
 	}
@@ -159,10 +159,25 @@ class AgaviWebRoutingTest extends AgaviPhpUnitTestCase
 		$this->assertEquals('/callbacks/23/', $url);
 	}
 	
-	public function testTicket464()
+	public function testGenShortestPossibleUrl()
 	{
-		$url = $this->routing->gen('test_ticket_464', array('page' => 5));
-		$this->assertEquals('/test_ticket_464/0/5', $url);
+		$url = $this->routing->gen('gen_shortest_possible_url');
+		$this->assertEquals('/gen_shortest_possible_url', $url);
+		
+		$url = $this->routing->gen('gen_shortest_possible_url', array('param1' => 1));
+		$this->assertEquals('/gen_shortest_possible_url', $url);
+		
+		$url = $this->routing->gen('gen_shortest_possible_url', array('param1' => 2));
+		$this->assertEquals('/gen_shortest_possible_url/2', $url);
+		
+		$url = $this->routing->gen('gen_shortest_possible_url', array('param2' => 2));
+		$this->assertEquals('/gen_shortest_possible_url', $url);
+		
+		$url = $this->routing->gen('gen_shortest_possible_url', array('param2' => 1));
+		$this->assertEquals('/gen_shortest_possible_url/1/1', $url);
+		
+		$url = $this->routing->gen('gen_shortest_possible_url', array('param3' => 4));
+		$this->assertEquals('/gen_shortest_possible_url/1/2/4', $url);
 	}
 	
 	public function testTicket437()
@@ -171,10 +186,51 @@ class AgaviWebRoutingTest extends AgaviPhpUnitTestCase
 		$this->assertEquals('/test_ticket_437/0', $url);
 	}
 	
+	public function testTicket444()
+	{
+		$this->routing->setInput('/test_ticket_444/agavi/13/');
+		$this->routing->execute();
+		$url = $this->routing->gen('test_ticket_444', array('page' => 14));
+		$this->assertEquals('/test_ticket_444/agavi/14/', $url);
+		$url = $this->routing->gen('test_ticket_444', array('term' => 'snoopy', 'page' => 1));
+		$this->assertEquals('/test_ticket_444/snoopy/', $url);
+		$url = $this->routing->gen('test_ticket_444', array('term' => 'snoopy'));
+		$this->assertEquals('/test_ticket_444/snoopy/', $url);
+	}
+	
+	public function testTicket444Sample2()
+	{
+		$this->routing->setInput('/test_ticket_444_sample2/woodstock/2006/07/13');
+		$this->routing->execute();
+		$url = $this->routing->gen('test_ticket_444_sample2_external');
+		$this->assertEquals('/test_ticket_444_sample2_external//', $url);
+		$url = $this->routing->gen('test_ticket_444_sample2.archive', array('month' => 11));
+		$this->assertEquals('/test_ticket_444_sample2/woodstock/2006/11/', $url);
+		$url = $this->routing->gen('test_ticket_444_sample2.entry', array('id' => 22));
+		$this->assertEquals('/test_ticket_444_sample2/woodstock/22.html', $url);
+		$url = $this->routing->gen('test_ticket_444_sample2.archive', array('name' => 'snoopy'));
+		$this->assertEquals('/test_ticket_444_sample2/snoopy/2007', $url);
+	}
+	
+	public function testTicket464()
+	{
+		$url = $this->routing->gen('test_ticket_464', array('page' => 5));
+		$this->assertEquals('/test_ticket_464/0/5', $url);
+	}
 	
 	public function testTicket713()
 	{
 		$url = $this->routing->gen('test_ticket_713');
 		$this->assertEquals('/test_ticket_713/lol', $url);
 	}
+	
+	public function testTicket609()
+	{
+		$this->routing->setInput('/test_ticket_609/name/DESC');
+		$this->routing->execute();
+		$url = $this->routing->gen('test_ticket_609', array('order' => 'name', 'set' => 'ASC'));
+		$this->assertEquals('/test_ticket_609/name/ASC', $url);
+	}
+	
+	
 }

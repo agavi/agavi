@@ -7,6 +7,11 @@
 			<route name="testingsource" pattern="^foo$" source="testingsource[bar]" module="TestingSource" action="Matched" />
 			<route name="with_param" pattern="^/withparam/(number:\d+)$" module="TestWithParam" action="MatchedParam" />
 			<route name="with_two_params" pattern="^/withmultipleparams/(number:\d+)/(string:\w+)$" module="TestWithParam" action="MatchedMultipleParams" />
+			<route name="gen_shortest_possible_url" pattern="^/gen_shortest_possible_url(/{param1:\d+})(/{param2:\d+})(/{param3:\d+})">
+				<default for="param1">/{1}</default>
+				<default for="param2">/{2}</default>
+				<default for="param3">/{3}</default>
+			</route>
 			<route name="callbacks" pattern="^/callbacks" module="Callback">
 				<route name=".nonmatching_callback" pattern="^/nonmatching_callback$" callback="NonMatchingRoutingCallback" action="NonMatching" />
 				<route name=".matching_callback" pattern="^/matching_callback$" callback="MatchingRoutingCallback" action="Matching" />
@@ -42,18 +47,36 @@
 				</route>
 			</route>
 			
+			<route name="test_ticket_437" pattern="^/test_ticket_437/(default:\d+)?$" module="Portal" action='Index'>
+				<default for="default">0</default>
+			</route>
+						
+			<route name="test_ticket_444" pattern="^/test_ticket_444/(term:[^/]+)/({page:\d+}/)?$">
+			  <default for="page">{1}/</default>
+			</route>
+			
+			<route name="test_ticket_444_sample2" pattern="^/test_ticket_444_sample2/(name:[^/]+)" module="Blog">
+				<route name=".index" pattern="^/$" action="Index" />
+				<route name=".entry" pattern="^/(id:\d+).html$" action="Entry" />
+				<route name=".archive" pattern="^/({year:20\d{2}})/({month:\d{2}/})?({day:\d{2}/})?" action="Archive">
+					<default for="year">2007</default>
+					<default for="month">{1}/</default>
+					<default for="day">{1}/</default>
+				</route>
+			</route>
+			<route name="test_ticket_444_sample2_external" pattern="^/test_ticket_444_sample2_external/(name:[^/]+)/$"/>
+			
 			<route name="test_ticket_464" pattern="^/test_ticket_464(/{type:[^/]+})?(/{page:\d+})?$" module="Portal" action='Index'>
 				<default for="type">/{0}</default>
 				<default for="page">/{1}</default>
 			</route>
 			
-			<route name="test_ticket_437" pattern="^/test_ticket_437/(default:\d+)?$" module="Portal" action='Index'>
-				<default for="default">0</default>
-			</route>
-			
 			<route name="test_ticket_713" pattern="^/test_ticket_713(/{zomg:(zomg|lol)})?" module="Default" action="Index" callback="TestTicket713RoutingCallback">
 			  <default for="zomg">/{zomg}</default>
 			</route>
+			
+			<route name="test_ticket_609" pattern="^/test_ticket_609(/{page:\d+})?(/{order:(name|date)})?(/{set:(DESC|ASC)})?$" />
+			
 			
 			<route name="index" pattern="^/$" module="%actions.default_module%" action="%actions.default_action%" />
 		</routes>
