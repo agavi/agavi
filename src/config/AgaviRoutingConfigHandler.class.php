@@ -72,7 +72,9 @@ class AgaviRoutingConfigHandler extends AgaviXmlConfigHandler
 			}
 		}
 
-		$code = '$this->importRoutes(' . var_export($routing->exportRoutes(), true) . ');';
+		$code = array(
+			'$this->importRoutes(' . var_export($routing->exportRoutes(), true) . ');',
+		);
 
 		return $this->generate($code);
 	}
