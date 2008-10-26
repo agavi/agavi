@@ -283,7 +283,7 @@ class AgaviWebRouting extends AgaviRouting
 				}
 			}
 			
-			$hasRoutes = false;
+			$hasRoutes = true;
 
 			$routes = $this->getAffectedRoutes($route);
 
