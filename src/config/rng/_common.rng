@@ -16,12 +16,17 @@
 	<!-- Configurations -->
 	
 	<define name="content-configurations">
+		<optional>
+			<attribute name="parent">
+				<data type="string" />
+			</attribute>
+		</optional>
+		<optional>
+			<attribute name="targetNamespace">
+				<data type="anyURI" />
+			</attribute>
+		</optional>
 		<interleave>
-			<optional>
-				<attribute name="parent">
-					<data type="string" />
-				</attribute>
-			</optional>
 			<zeroOrMore>
 				<element name="sandbox">
 					<ref name="content-sandbox" />
@@ -117,7 +122,7 @@
 		</list>
 	</define>
 	
-	<define name="data-nestring">
+	<define name="data-non-empty-string">
 		<data type="string">
 			<param name="minLength">1</param>
 		</data>
@@ -129,11 +134,17 @@
 		</data>
 	</define>
 	
+	<define name="data-namespace-identifier">
+		<data type="string">
+			<param name="pattern">([_A-Za-z\p{IsLatin-1Supplement}][_A-Za-z0-9\p{IsLatin-1Supplement}]+\.)*[_A-Za-z\p{IsLatin-1Supplement}][_A-Za-z0-9\p{IsLatin-1Supplement}]+</param>
+		</data>
+	</define>
+	
 	<define name="data-matched">
 		<data type="boolean" />
 	</define>
 	
-	<define name="data-agaviboolean">
+	<define name="data-boolean">
 		<data type="string">
 			<param name="pattern">([tT][rR][uU][eE]|[fF][aA][lL][sS][eE]|[yY][eE][sS]|[nN][oO]|[oO][nN]|[oO][fF][fF])</param>
 		</data>

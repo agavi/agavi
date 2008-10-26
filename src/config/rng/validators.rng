@@ -30,7 +30,7 @@
 	
 	<define name="validators-content-validator_definition">
 		<attribute name="name">
-			<ref name="data-nestring" />
+			<ref name="data-non-empty-string" />
 		</attribute>
 		<attribute name="class">
 			<ref name="data-identifier" />
@@ -65,7 +65,7 @@
 	<define name="validators-content-validator">
 		<optional>
 			<attribute name="name">
-				<ref name="data-nestring" />
+				<ref name="data-non-empty-string" />
 			</attribute>
 		</optional>
 		<optional>
@@ -87,12 +87,12 @@
 		</optional>
 		<optional>
 			<attribute name="export">
-				<ref name="data-nestring" />
+				<ref name="data-non-empty-string" />
 			</attribute>
 		</optional>
 		<optional>
 			<attribute name="method">
-				<ref name="data-nestring" />
+				<ref name="data-non-empty-string" />
 			</attribute>
 		</optional>
 		<optional>
@@ -104,7 +104,7 @@
 		</optional>
 		<optional>
 			<attribute name="required">
-				<ref name="data-agaviboolean" />
+				<ref name="data-boolean" />
 			</attribute>
 		</optional>
 		<optional>
@@ -114,12 +114,12 @@
 		</optional>
 		<optional>
 			<attribute name="source">
-				<ref name="data-nestring" />
+				<ref name="data-non-empty-string" />
 			</attribute>
 		</optional>
 		<optional>
 			<attribute name="translation_domain">
-				<ref name="data-nestring" />
+				<ref name="data-non-empty-string" />
 			</attribute>
 		</optional>
 		<interleave>
@@ -170,7 +170,7 @@
 	<define name="validators-content-arguments">
 		<optional>
 			<attribute name="base">
-				<ref name="data-nestring" />
+				<ref name="data-non-empty-string" />
 			</attribute>
 		</optional>
 		<zeroOrMore>
@@ -198,7 +198,7 @@
 	<define name="validators-content-error">
 		<optional>
 			<attribute name="for">
-				<ref name="data-nestring" />
+				<ref name="data-non-empty-string" />
 			</attribute>
 		</optional>
 		<text />

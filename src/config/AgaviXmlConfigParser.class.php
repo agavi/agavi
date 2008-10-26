@@ -498,21 +498,10 @@ class AgaviXmlConfigParser
 			throw new AgaviParseException(sprintf('Configuration file "%s" could not be parsed: %s', $document->documentURI, $dome->getMessage()));
 		}
 		
-		/*
 		// remove all xml:base attributes inserted by XIncludes
 		$nodes = $document->getXpath()->query('//@xml:base', $document);
 		foreach($nodes as $node) {
 			$node->ownerElement->removeAttributeNode($node);
-		}
-		*/
-		
-		// necessary due to a PHP bug, see http://trac.agavi.org/ticket/621 and http://bugs.php.net/bug.php?id=43364
-		if(version_compare(PHP_VERSION, '5.2.6', '<')) {
-			// we need to remember the document URI and restore it, just in case
-			$documentUri = $document->documentURI;
-			// reload, and all is good
-			$document->loadXML($document->saveXML());
-			$document->documentURI = $documentUri;
 		}
 	}
 	
