@@ -255,15 +255,16 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 		$moduleName = $this->getModuleName();
 		$actionName = $this->getActionName();
 		
-		// TODO: cleanup and merge with createActionInstance once Exceptions have been cleaned up and specced properly so that the two error conditions can be told apart
-		if(false === $controller->checkActionFile($moduleName, $actionName)) {
-			$this->setNext($this->createSystemActionForwardContainer('error_404'));
-			return $this->proceed();
-		}
-		
-		$this->setActionName(AgaviToolkit::canonicalName($actionName));
 		
 		try {
+			// TODO: cleanup and merge with createActionInstance once Exceptions have been cleaned up and specced properly so that the two error conditions can be told apart
+			if(false === $controller->checkActionFile($moduleName, $actionName)) {
+				$this->setNext($this->createSystemActionForwardContainer('error_404'));
+				return $this->proceed();
+			}
+			
+			$this->setActionName(AgaviToolkit::canonicalName($actionName));
+			
 			$this->actionInstance = $controller->createActionInstance($moduleName, $actionName);
 		} catch(AgaviDisabledModuleException $e) {
 			$this->setNext($this->createSystemActionForwardContainer('module_disabled'));

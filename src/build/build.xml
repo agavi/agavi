@@ -18,6 +18,9 @@
   -->
 <project name="Agavi" basedir="." default="status">
 
+	<!-- Dear Phing: Go fuck yourself. You fucking worthless piece of shit. -->
+	<property userProperty="true" name="property-specifier" value="$" override="true" />
+
 	<!-- Load tasks relative to the build system. -->
 	<taskdef name="agavi.input" classname="org.agavi.build.tasks.AgaviInputTask" classpath="phing" />
 
@@ -298,6 +301,7 @@
 				<agavi.execute-target name="module-create" />
 			</then>
 		</if>
+
 		<agavi.input property="action.name" message="Action for default system action" default="Index" promptCharacter=":" failIfEmpty="true" useExistingAsDefault="false" />
 		<agavi.execute-target name="action-locate" exceptionsFatal="false" />
 		<if>
@@ -665,11 +669,20 @@
 		<mkdir dir="${project.directory}" />
 
 		<!-- Create or update build.properties. -->
+		<if>
+			<equals arg1="${templates.directory}" arg2="${agavi.directory.src.build.templates}" />
+			<then>
+				<property userProperty="true" name="project.file.build-properties.templates-directory" value="${property-specifier}{agavi.directory.src.build.templates}" override="true" />
+			</then>
+			<else>
+				<property userProperty="true" name="project.file.build-properties.templates-directory" value="${templates.directory}" />
+			</else>
+		</if>
 		<agavi.write-properties file="${project.file.build-properties}" update="true">
 			<property name="project.name" value="${project.name}" />
 			<property name="project.prefix" value="${project.prefix}" />
 			<property name="template.extension.default" value="${template.extension.default}" />
-			<property name="templates.directory" value="${templates.directory}" />
+			<property name="templates.directory" value="${project.file.build-properties.templates-directory}" />
 		</agavi.write-properties>
 		<property userProperty="true" file="${project.file.build-properties}" override="true" />
 

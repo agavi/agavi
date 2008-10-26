@@ -194,6 +194,13 @@ $errors[] = sprintf("Line %d: %s", $error->line, $error->message);
 		
 		libxml_use_internal_errors($luie);
 		
+		// necessary due to a PHP bug, see http://trac.agavi.org/ticket/621 and http://bugs.php.net/bug.php?id=43364
+		if(version_compare(PHP_VERSION, '5.2.6', '<')) {
+			$documentUri = $this->documentURI;
+			$this->loadXml($this->saveXml());
+			$this->documentURI = $documentUri;
+		}
+		
 		return $result;
 	}
 	

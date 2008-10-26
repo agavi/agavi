@@ -38,7 +38,8 @@
 			</handler>
 
 			<handler pattern="%core.config_dir%/databases.xml" class="AgaviDatabaseConfigHandler">
-				<validation>%core.agavi_dir%/config/xsd/databases.xsd</validation>
+				<validation>%core.agavi_dir%/config/rng/databases.rng</validation>
+				<transformation>%core.agavi_dir%/config/xsl/databases.xsl</transformation>
 			</handler>
 
 			<handler pattern="%core.config_dir%/action_filters.xml" class="AgaviFilterConfigHandler">
