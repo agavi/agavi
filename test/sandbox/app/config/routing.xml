@@ -50,6 +50,17 @@
 			  <default for="page">{1}/</default>
 			</route>
 			
+			<route name="test_ticket_444_sample2" pattern="^/test_ticket_444_sample2/(name:[^/]+)" module="Blog">
+				<route name=".index" pattern="^/$" action="Index" />
+				<route name=".entry" pattern="^/(id:\d+).html$" action="Entry" />
+				<route name=".archive" pattern="^/({year:20\d{2}})/({month:\d{2}/})?({day:\d{2}/})?" action="Archive">
+					<default for="year">2007</default>
+					<default for="month">{1}/</default>
+					<default for="day">{1}/</default>
+				</route>
+			</route>
+			<route name="test_ticket_444_sample2_external" pattern="^/test_ticket_444_sample2_external/(name:[^/]+)/$"/>
+			
 			<route name="test_ticket_464" pattern="^/test_ticket_464(/{type:[^/]+})?(/{page:\d+})?$" module="Portal" action='Index'>
 				<default for="type">/{0}</default>
 				<default for="page">/{1}</default>
