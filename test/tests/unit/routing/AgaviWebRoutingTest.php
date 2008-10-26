@@ -180,6 +180,18 @@ class AgaviWebRoutingTest extends AgaviPhpUnitTestCase
 		$this->assertEquals('/gen_shortest_possible_url/1/2/4', $url);
 	}
 	
+	public function testTicket358()
+	{
+		$ctx = AgaviContext::getInstance(null);
+		$rq = $ctx->getRequest();
+		
+		$url = $this->routing->gen('index', array(), array('scheme' => 'https', 'authority' => 'localhost.localdomain:80443', 'fragment' => 'foo'));
+		$this->assertEquals('https://localhost.localdomain:80443/#foo', $url);
+		
+		$url = $this->routing->gen('index', array(), array('scheme' => 'https', 'host' => 'localhost.localdomain', 'port' => '80443', 'fragment' => 'foo'));
+		$this->assertEquals('https://localhost.localdomain:80443/#foo', $url);
+	}
+	
 	public function testTicket437()
 	{
 		$url = $this->routing->gen('test_ticket_437');
