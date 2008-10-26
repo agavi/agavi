@@ -158,4 +158,23 @@ class AgaviWebRoutingTest extends AgaviPhpUnitTestCase
 		$url = $this->routing->gen('callbacks.gen_set_prefix_and_postfix_into_route', array());
 		$this->assertEquals('/callbacks/23/', $url);
 	}
+	
+	public function testTicket464()
+	{
+		$url = $this->routing->gen('test_ticket_464', array('page' => 5));
+		$this->assertEquals('/test_ticket_464/0/5', $url);
+	}
+	
+	public function testTicket437()
+	{
+		$url = $this->routing->gen('test_ticket_437');
+		$this->assertEquals('/test_ticket_437/0', $url);
+	}
+	
+	
+	public function testTicket713()
+	{
+		$url = $this->routing->gen('test_ticket_713');
+		$this->assertEquals('/test_ticket_713/lol', $url);
+	}
 }
