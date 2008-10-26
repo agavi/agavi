@@ -232,5 +232,12 @@ class AgaviWebRoutingTest extends AgaviPhpUnitTestCase
 		$this->assertEquals('/test_ticket_609/name/ASC', $url);
 	}
 	
-	
+	public function testTicket717()
+	{
+		$this->routing->setInput('/');
+		$this->routing->setInputParameters(array('foo' => '"><script>alert(\'hi\');</script>'));
+		$this->routing->execute();
+		$url = $this->routing->gen(null, array('bar' => 'baz'));
+		$this->assertEquals('/?foo=%22%3E%3Cscript%3Ealert%28%27hi%27%29%3B%3C%2Fscript%3E&amp;bar=baz', $url);
+	}
 }
