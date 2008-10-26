@@ -315,7 +315,7 @@ class AgaviWebRouting extends AgaviRouting
 							$myDefaults = array();
 
 							foreach($r['opt']['defaults'] as $key => $default) {
-								$myDefaults[$key] = $default['val'];
+								$myDefaults[$key] = $default->getValue();
 							}
 							if($r['opt']['module']) {
 								$myDefaults[$ma] = $r['opt']['module'];
