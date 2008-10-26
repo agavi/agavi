@@ -159,18 +159,29 @@ class AgaviWebRoutingTest extends AgaviPhpUnitTestCase
 		$this->assertEquals('/callbacks/23/', $url);
 	}
 	
-	public function testTicket464()
-	{
-		$url = $this->routing->gen('test_ticket_464', array('page' => 5));
-		$this->assertEquals('/test_ticket_464/0/5', $url);
-	}
-	
 	public function testTicket437()
 	{
 		$url = $this->routing->gen('test_ticket_437');
 		$this->assertEquals('/test_ticket_437/0', $url);
 	}
 	
+	public function testTicket444()
+	{
+		$this->routing->setInput('/test_ticket_444/agavi/13/');
+		$this->routing->execute();
+		$url = $this->routing->gen('test_ticket_444', array('page' => 14));
+		$this->assertEquals('/test_ticket_444/agavi/14/', $url);
+		$url = $this->routing->gen('test_ticket_444', array('term' => 'snoopy', 'page' => 1));
+		$this->assertEquals('/test_ticket_444/snoopy/', $url);
+		$url = $this->routing->gen('test_ticket_444', array('term' => 'snoopy'));
+		$this->assertEquals('/test_ticket_444/snoopy/', $url);
+	}
+	
+	public function testTicket464()
+	{
+		$url = $this->routing->gen('test_ticket_464', array('page' => 5));
+		$this->assertEquals('/test_ticket_464/0/5', $url);
+	}
 	
 	public function testTicket713()
 	{

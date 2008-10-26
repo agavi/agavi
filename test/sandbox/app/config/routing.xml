@@ -42,13 +42,17 @@
 				</route>
 			</route>
 			
+			<route name="test_ticket_437" pattern="^/test_ticket_437/(default:\d+)?$" module="Portal" action='Index'>
+				<default for="default">0</default>
+			</route>
+						
+			<route name="test_ticket_444" pattern="^/test_ticket_444/(term:[^/]+)/({page:\d+}/)?$">
+			  <default for="page">{1}/</default>
+			</route>
+			
 			<route name="test_ticket_464" pattern="^/test_ticket_464(/{type:[^/]+})?(/{page:\d+})?$" module="Portal" action='Index'>
 				<default for="type">/{0}</default>
 				<default for="page">/{1}</default>
-			</route>
-			
-			<route name="test_ticket_437" pattern="^/test_ticket_437/(default:\d+)?$" module="Portal" action='Index'>
-				<default for="default">0</default>
 			</route>
 			
 			<route name="test_ticket_713" pattern="^/test_ticket_713(/{zomg:(zomg|lol)})?" module="Default" action="Index" callback="TestTicket713RoutingCallback">
@@ -56,6 +60,7 @@
 			</route>
 			
 			<route name="test_ticket_609" pattern="^/test_ticket_609(/{page:\d+})?(/{order:(name|date)})?(/{set:(DESC|ASC)})?$" />
+			
 			
 			<route name="index" pattern="^/$" module="%actions.default_module%" action="%actions.default_action%" />
 		</routes>
