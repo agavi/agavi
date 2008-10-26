@@ -107,13 +107,13 @@ class AgaviRoutingConfigHandler extends AgaviXmlConfigHandler
 			if($route->hasAttribute('module'))				$opts['module']				= AgaviToolkit::literalize($route->getAttribute('module'));
 			if($route->hasAttribute('output_type'))		$opts['output_type']	= AgaviToolkit::literalize($route->getAttribute('output_type'));
 
-			if($route->hasChildren('ignores')) {
+			if($route->has('ignores')) {
 				foreach($route->get('ignores') as $ignore) {
 					$opts['ignores'][] = $ignore->getValue();
 				}
 			}
 
-			if($route->hasChildren('defaults')) {
+			if($route->has('defaults')) {
 				foreach($route->get('defaults') as $default) {
 					$opts['defaults'][$default->getAttribute('for')] = $default->getValue();
 				}
