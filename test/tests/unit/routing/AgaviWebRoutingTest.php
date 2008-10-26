@@ -220,7 +220,7 @@ class AgaviWebRoutingTest extends AgaviPhpUnitTestCase
 	
 	public function testTicket713()
 	{
-		$url = $this->routing->gen('test_ticket_713');
+		$url = $this->routing->gen('test_ticket_713', array('zomg' => 'lol'));
 		$this->assertEquals('/test_ticket_713/lol', $url);
 	}
 	
