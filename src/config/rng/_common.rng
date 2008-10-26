@@ -16,17 +16,12 @@
 	<!-- Configurations -->
 	
 	<define name="content-configurations">
-		<optional>
-			<attribute name="parent">
-				<data type="string" />
-			</attribute>
-		</optional>
-		<optional>
-			<attribute name="targetNamespace">
-				<data type="anyURI" />
-			</attribute>
-		</optional>
 		<interleave>
+			<optional>
+				<attribute name="parent">
+					<data type="string" />
+				</attribute>
+			</optional>
 			<zeroOrMore>
 				<element name="sandbox">
 					<ref name="content-sandbox" />
@@ -131,12 +126,6 @@
 	<define name="data-identifier">
 		<data type="string">
 			<param name="pattern">[_A-Za-z\p{IsLatin-1Supplement}][_A-Za-z0-9\p{IsLatin-1Supplement}]+</param>
-		</data>
-	</define>
-	
-	<define name="data-namespace-identifier">
-		<data type="string">
-			<param name="pattern">([_A-Za-z\p{IsLatin-1Supplement}][_A-Za-z0-9\p{IsLatin-1Supplement}]+\.)*[_A-Za-z\p{IsLatin-1Supplement}][_A-Za-z0-9\p{IsLatin-1Supplement}]+</param>
 		</data>
 	</define>
 	
