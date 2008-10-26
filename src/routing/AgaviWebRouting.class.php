@@ -278,45 +278,26 @@ class AgaviWebRouting extends AgaviRouting
 			}
 
 			if($route === null) {
-				if($this->isEnabled()) {
-					$routes = array_reverse($req->getAttribute('matched_routes', 'org.agavi.routing'));
-					$route = join('+', $routes);
-					$routeMatches = array();
-					foreach($routes as $myRoute) {
-						$r = $this->routes[$myRoute];
-						$routeMatches = array_merge($routeMatches, $r['matches']);
-					}
-					$params = array_merge($routeMatches, $params);
+				if(!$this->isEnabled()) {
+					$params = array_merge($this->inputParameters, $params);
 				}
-				$params = array_merge($this->inputParameters, $params);
 			}
+			
+			$hasRoutes = false;
 
 			$routes = $this->getAffectedRoutes($route);
 
 			if(count($routes)) {
 				if($this->isEnabled()) {
 					// the route exists and routing is enabled, the parent method handles it
+					$hasRoutes = true;
 
 					$append = '';
 
 					list($path, $usedParams, $options, $extraParams) = parent::gen($routes, $params, $options);
-
-					$p = $params;
-					// get the parameters which are not defined in this route an append them as query string
-					foreach($usedParams as $name => $value) {
-						if(isset($p[$name]) || array_key_exists($name, $p)) {
-							unset($p[$name]);
-						}
-					}
 					
-					// decode the extra params, not all of the rest
-					array_walk_recursive($extraParams, array($this, 'rawurldecodeCallback'));
-					
-					// and do not forget those set by routing callbacks
-					$p = array_merge($p, $extraParams);
-
-					if(count($p) > 0) {
-						$append = '?' . http_build_query($p, '', $aso);
+					if(count($extraParams) > 0) {
+						$append = '?' . http_build_query($extraParams, '', $aso);
 					}
 				} else {
 					// the route exists, but we must create a normal index.php?foo=bar URL.
@@ -348,12 +329,12 @@ class AgaviWebRouting extends AgaviRouting
 					}
 
 					$params = array_merge($defaults, $params);
-					$route = null;
+					$hasRoutes = false;
 				}
 			}
 			// the route does not exist. we generate a normal index.php?foo=bar URL.
 
-			if($route === null) {
+			if(!$hasRoutes) {
 				$path = $_SERVER['SCRIPT_NAME'];
 				$append = '?' . http_build_query($params, '', $aso);
 			} else {
