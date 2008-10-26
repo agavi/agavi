@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" xmlns="http://agavi.org/agavi/config/parts/config_handlers/1.0" parent="%core.system_config_dir%/config_handlers.xml">
+</ae:configurations>

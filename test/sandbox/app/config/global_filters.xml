@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurations xmlns="http://agavi.org/agavi/1.0/config">
+
+	<configuration>
+		<filters>
+
+			<filter name="FormPopulationFilter" class="AgaviFormPopulationFilter">
+				<parameter name="methods">
+					<parameter>write</parameter>
+				</parameter>
+			</filter>
+
+			<!-- <filter name="TidyFilter" class="AgaviTidyFilter">
+				<parameter name="tidy_options">
+					<parameter name="output-xhtml">true</parameter>
+					<parameter name="numeric-entities">true</parameter>
+				</parameter>
+				<parameter name="tidy_encoding">utf8</parameter>
+			</filter> -->
+
+		</filters>
+
+	</configuration>
+
+</configurations>
