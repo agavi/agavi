@@ -39,6 +39,15 @@
 	
 	<ae:configuration environment="testing.*">
 		<storage class="AgaviNullStorage" />
+		
+		<request class="AgaviWebRequest">
+			<ae:parameter name="sources">
+				<ae:parameter name="SERVER_NAME">localhost</ae:parameter>
+				<ae:parameter name="SERVER_PORT">80</ae:parameter>
+				<ae:parameter name="SERVER_PROTOCOL">http</ae:parameter>
+			</ae:parameter>
+		</request>
+		
 	</ae:configuration>
 	
 	<ae:configuration environment="development.*">

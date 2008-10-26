@@ -180,6 +180,21 @@ class AgaviWebRoutingTest extends AgaviPhpUnitTestCase
 		$this->assertEquals('/gen_shortest_possible_url/1/2/4', $url);
 	}
 	
+	public function testAbsoluteUrl()
+	{
+		$url = $this->routing->gen('index', array(), array('relative' => false));
+		$this->assertEquals('http://localhost/', $url);
+	}
+	
+	public function testTicket358()
+	{
+		$url = $this->routing->gen('index', array(), array('scheme' => 'https', 'authority' => 'localhost.localdomain:80443', 'fragment' => 'foo'));
+		$this->assertEquals('https://localhost.localdomain:80443/#foo', $url);
+		
+		$url = $this->routing->gen('index', array(), array('scheme' => 'https', 'host' => 'localhost.localdomain', 'port' => '80443', 'fragment' => 'foo', 'relative'));
+		$this->assertEquals('https://localhost.localdomain:80443/#foo', $url);
+	}
+	
 	public function testTicket437()
 	{
 		$url = $this->routing->gen('test_ticket_437');
@@ -218,12 +233,6 @@ class AgaviWebRoutingTest extends AgaviPhpUnitTestCase
 		$this->assertEquals('/test_ticket_464/0/5', $url);
 	}
 	
-	public function testTicket713()
-	{
-		$url = $this->routing->gen('test_ticket_713');
-		$this->assertEquals('/test_ticket_713/lol', $url);
-	}
-	
 	public function testTicket609()
 	{
 		$this->routing->setInput('/test_ticket_609/name/DESC');
@@ -232,5 +241,18 @@ class AgaviWebRoutingTest extends AgaviPhpUnitTestCase
 		$this->assertEquals('/test_ticket_609/name/ASC', $url);
 	}
 	
-	
+	public function testTicket713()
+	{
+		$url = $this->routing->gen('test_ticket_713', array('zomg' => 'lol'));
+		$this->assertEquals('/test_ticket_713/lol', $url);
+	}
+
+	public function testTicket717()
+	{
+		$this->routing->setInput('/');
+		$this->routing->setInputParameters(array('foo' => '"><script>alert(\'hi\');</script>'));
+		$this->routing->execute();
+		$url = $this->routing->gen(null, array('bar' => 'baz'));
+		$this->assertEquals('/?foo=%22%3E%3Cscript%3Ealert%28%27hi%27%29%3B%3C%2Fscript%3E&amp;bar=baz', $url);
+	}
 }

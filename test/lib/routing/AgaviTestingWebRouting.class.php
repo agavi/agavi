@@ -42,6 +42,11 @@ class AgaviTestingWebRouting extends AgaviWebRouting
 		}
 		$this->sources[$name] = new $type($data);
 	}
+	
+	public function setInputParameters(array $parameters)
+	{
+		$this->inputParameters = $parameters;
+	}
 }
 
 ?>
