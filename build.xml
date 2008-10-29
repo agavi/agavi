@@ -42,6 +42,7 @@
 			<fileset dir="./src">
 				<include name="**/*.php" />
 				<exclude name="vendor/**" />
+				<exclude name="translation/data/**" />
 			</fileset>
 		</phpdoc>
 	</target>
