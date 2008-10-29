@@ -41,6 +41,7 @@
 		<phpdoc title="Agavi Documentation" destdir="apidocs" output="HTML:frames:DOM/earthli -i translation/data/timezones/">
 			<fileset dir="./src">
 				<include name="**/*.php" />
+				<exclude name="vendor/**" />
 			</fileset>
 		</phpdoc>
 	</target>
