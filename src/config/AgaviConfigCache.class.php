@@ -40,6 +40,16 @@ final class AgaviConfigCache
 	private static $handlers = null;
 
 	/**
+	 * @var        array A string=>bool array containing config handler files and their loaded status
+	 */
+	private static $handlerFiles = array();
+
+	/**
+	 * @var        bool Whether there is an entry in self::$handlerFiles which needs processing
+	 */
+	private static $handlersDirty = true;
+
+	/**
 	 * Load a configuration handler.
 	 *
 	 * @param      string The handler to use when parsing a configuration file.
@@ -62,6 +72,17 @@ final class AgaviConfigCache
 			self::$handlers = array();
 			self::loadConfigHandlers();
 		}
+		if(self::$handlersDirty) {
+			// load additional config handlers
+			foreach(self::$handlerFiles as $filename => &$loaded) {
+				if(!$loaded) {
+					$loaded = true;
+					self::loadConfigHandlersFile($filename);
+				}
+			}
+			self::$handlersDirty = false;
+		}
+		
 
 		// grab the base name of the handler
 		$basename = basename($name);
@@ -348,7 +369,7 @@ final class AgaviConfigCache
 	}
 	
 	/**
-	 * Add the config handlers from the given config file.
+	 * Load the config handlers from the given config file.
 	 * Existing handlers will not be overwritten.
 	 * 
 	 * @param      string The path to a config_handlers.xml file.
@@ -356,9 +377,29 @@ final class AgaviConfigCache
 	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
 	 * @since      1.0.0
 	 */
-	public static function loadConfigHandlersFile($cfg)
+	protected static function loadConfigHandlersFile($cfg)
 	{
 		self::$handlers = (array)self::$handlers + include(AgaviConfigCache::checkConfig($cfg));
+	}
+
+	/**
+	 * Schedules a config handlers file to be loaded.
+	 * 
+	 * @param      string The path to a config_handlers.xml file.
+	 * 
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public static function addConfigHandlersFile($filename)
+	{
+		if(!isset(self::$handlerFiles[$filename])) {
+			if(!is_readable($filename)) {
+				throw new AgaviUnreadableException('Configuration file "' . $filename . '" does not exist or is unreadable.');
+			}
+			
+			self::$handlerFiles[$filename] = false;
+			self::$handlersDirty = true;
+		}
 	}
 
 	/**
