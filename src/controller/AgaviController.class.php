@@ -164,17 +164,19 @@ class AgaviController extends AgaviParameterHolder
 			} catch(AgaviUnreadableException $e) {
 				// swallow, not every module does have an autoload
 			}
+			
+			if (AgaviConfig::get('modules.' . $lowerModuleName . '.enabled')) {
+				try {
+					$moduleConfigHandlers = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/config/config_handlers.xml';
+					AgaviConfigCache::loadConfigHandlersFile($moduleConfigHandlers);
+				} catch(AgaviUnreadableException $e) {
+					// swallow, not every module does have a config handlers file
+				}
+			}
 		}
 		
 		if(!AgaviConfig::get('modules.' . $lowerModuleName . '.enabled')) {
 			throw new AgaviDisabledModuleException(sprintf('The module "%1$s" is disabled.', $moduleName));
-		}
-		
-		try {
-			$moduleConfigHandlers = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/config/config_handlers.xml';
-			AgaviConfigCache::loadConfigHandlersFile($moduleConfigHandlers);
-		} catch(AgaviUnreadableException $e) {
-			// swallow, not every module does have a config handlers file
 		}
 		
 		// check for a module config.php
