@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 1.0.0 beta 6 (October ??, 2008)
 -------------------------------
 
+FIX: Config handlers definition loading sequence may cause exceptions with debug mode off (#905) (Dominik)
 FIX: Less aggressive inclusion of per module config handlers, they are only loaded at first module initialization (#906) (Felix)
 FIX: Regression: xml:base attributes left behind by XIncludes cause config validations to fail (#895) (Noah)
 FIX: Regression: nested XIncludes cause segfaults in PHP 5.2.5 and lower (#894) (Noah)
