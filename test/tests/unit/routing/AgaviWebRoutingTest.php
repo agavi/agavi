@@ -15,7 +15,7 @@ class AgaviWebRoutingTest extends AgaviPhpUnitTestCase
 	public function __construct($name = NULL, array $data = array(), $dataName = '')
 	{
 		parent::__construct($name, $data, $dataName);
-		$this->setRunTestInSeparateProcess(false);
+		$this->setRunTestInSeparateProcess(true);
 	}
 	
 	public function setUp()
