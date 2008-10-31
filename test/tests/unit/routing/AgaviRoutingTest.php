@@ -185,7 +185,7 @@ class AgaviRoutingTest extends AgaviPhpUnitTestCase
 														  0,
 													     )
 												  ),
-					 'escape_quote'       => array('#static#with#quote',
+					 '#789'               => array('#static#with#quote',
 													array('#\#static\#with\#quote#',
 														  '#static#with#quote',
 														  array(),
