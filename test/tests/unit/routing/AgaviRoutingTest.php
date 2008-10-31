@@ -173,7 +173,7 @@ class AgaviRoutingTest extends AgaviPhpUnitTestCase
 	
 	public function dataParseRouteString()
 	{
-		return array('escaped_balanced'    => array('static\(text(prefix{foo:1\(2\{3\}4\)5}postfix)', 
+		return array('escaped_balanced'    => array('static\(text(prefix{foo:1\(2\{3\}4\)5}postfix)',
 													array('#static\(text(prefix(?P<foo>1(2{3}4)5)postfix)#',
 														  'static(text(:foo:)',
 														  array('foo' => array( 'pre'  => 'prefix',
