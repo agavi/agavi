@@ -42,6 +42,11 @@ class AgaviTestingRouting extends AgaviRouting
 		}
 		$this->sources[$name] = new $type($data);
 	}
+	
+	public function parseRouteString($str)
+	{
+		return parent::parseRouteString($str);
+	}
 }
 
 ?>

@@ -161,6 +161,33 @@ class AgaviRoutingTest extends AgaviPhpUnitTestCase
 			$this->fail('The onNotMatched callback of the childroute should not get called');
 		}
 	}
+	
+	/**
+	 * @dataProvider dataParseRouteString
+	 */
+	public function testParseRouteString($routeString, $expected)
+	{
+		$parsed = $this->routing->parseRouteString($routeString);
+		$this->assertEquals($expected, $parsed);
+	}
+	
+	public function dataParseRouteString()
+	{
+		return array('escaped_balanced'    => array('static\(text(prefix{foo:1\(2\{3\}4\)5}postfix)', 
+													array('#static\(text(prefix(?P<foo>1(2{3}4)5)postfix)#',
+														  'static(text(:foo:)',
+														  array('foo' => array( 'pre'  => 'prefix',
+																				'val'  => '',
+																				'post' => 'postfix',
+																				'is_optional' => false,
+																			   ),
+																),
+														  0,
+													     )
+												  ),
+					);
+	}
+	
 }
 
 
