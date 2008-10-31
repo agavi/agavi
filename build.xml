@@ -37,8 +37,13 @@
 	</target>
 
 	<target name="apidocs" description="API docs">
-		<!-- HAXOR! we need to inject an 'ignore' cmdline argument to prevent the inclusion of the compiled timezone data and the buildtools, hence the weird 'output' attribute contents - the phing phpdoc task doesn't have an 'ignore' attribute -->
-		<phpdoc title="Agavi Documentation" destdir="apidocs" sourcepath="src" output="HTML:frames:DOM/earthli -i translation/data/timezones/"/>
+		<phpdoc title="Agavi Documentation" destdir="apidocs" output="HTML:frames:DOM/earthli">
+			<fileset dir="./src">
+				<include name="**/*.php" />
+				<exclude name="vendor/**" />
+				<exclude name="translation/data/**" />
+			</fileset>
+		</phpdoc>
 	</target>
 
 	<target name="manuals" description="generate all manuals">

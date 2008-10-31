@@ -21,7 +21,6 @@
  * @subpackage config
  *
  * @author     Dominik del Bondio <ddb@bitxtender.com>
- * @author     Noah Fontes <noah.fontes@bitextender.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
  *
@@ -29,10 +28,8 @@
  *
  * @version    $Id$
  */
-class AgaviRoutingConfigHandler extends AgaviXmlConfigHandler
+class AgaviRoutingConfigHandler extends AgaviConfigHandler
 {
-	const XML_NAMESPACE = 'http://agavi.org/agavi/config/parts/routing/1.0';
-	
 	/**
 	 * @var        array Stores the generated names of unnamed routes.
 	 */
@@ -41,40 +38,45 @@ class AgaviRoutingConfigHandler extends AgaviXmlConfigHandler
 	/**
 	 * Execute this configuration handler.
 	 *
-	 * @param      AgaviXmlConfigDomDocument The document to parse.
+	 * @param      string An absolute filesystem path to a configuration file.
+	 * @param      string Name of the executing context (if any).
 	 *
 	 * @return     string Data to be written to a cache file.
 	 *
+	 * @throws     <b>AgaviUnreadableException</b> If a requested configuration 
+	 *                                             file does not exist or is not
+	 *                                             readable.
 	 * @throws     <b>AgaviParseException</b> If a requested configuration file is
 	 *                                        improperly formatted.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     Noah Fontes <noah.fontes@bitextender.com>
 	 * @since      0.11.0
 	 */
-	public function execute(AgaviXmlConfigDomDocument $document)
+	public function execute($config, $context = null)
 	{
-		$routing = $this->context->getRouting();
+		$routing = AgaviContext::getInstance($context)->getRouting();
+
+		if($context == null) {
+			$context = '';
+		}
 
 		// reset the stored route names
 		$this->unnamedRoutes = array();
 
-		// set up our default namespace
-		$document->setDefaultNamespace(self::XML_NAMESPACE, 'routing');
+		// parse the config file
+		$configurations = $this->orderConfigurations(AgaviConfigCache::parseConfig($config, true, $this->getValidationFile(), $this->parser)->configurations, AgaviConfig::get('core.environment'), $context);
 
 		// clear the routing
 		$routing->importRoutes(array());
 		$data = array();
 		
-		foreach($document->getConfigurationElements() as $configuration) {
-			if($configuration->has('routes')) {
-				$this->parseRoutes($routing, $configuration->get('routes'));
+		foreach($configurations as $cfg) {
+			if(isset($cfg->routes)) {
+				$this->parseRoutes($routing, $cfg->routes);
 			}
 		}
 
-		$code = array(
-			'$this->importRoutes(' . var_export($routing->exportRoutes(), true) . ');',
-		);
+		$code = '$this->importRoutes(' . var_export($routing->exportRoutes(), true) . ');';
 
 		return $this->generate($code);
 	}
@@ -109,19 +111,21 @@ class AgaviRoutingConfigHandler extends AgaviXmlConfigHandler
 			if($route->hasAttribute('module'))				$opts['module']				= AgaviToolkit::literalize($route->getAttribute('module'));
 			if($route->hasAttribute('output_type'))		$opts['output_type']	= AgaviToolkit::literalize($route->getAttribute('output_type'));
 
-			if($route->has('ignores')) {
-				foreach($route->get('ignores') as $ignore) {
+			if($route->hasChildren('ignores')) {
+				foreach($route->ignores as $ignore) {
 					$opts['ignores'][] = $ignore->getValue();
 				}
 			}
 
-			if($route->has('defaults')) {
-				foreach($route->get('defaults') as $default) {
+			if($route->hasChildren('defaults')) {
+				foreach($route->defaults as $default) {
 					$opts['defaults'][$default->getAttribute('for')] = $default->getValue();
 				}
 			}
 
-			$opts['parameters'] = $route->getAgaviParameters();
+			if($route->hasChildren('parameters')) {
+				$opts['parameters'] = $this->getItemParameters($route);
+			}
 
 			if(isset($opts['name']) && $parent) {
 				// don't overwrite $parent since it's used later
@@ -152,8 +156,8 @@ class AgaviRoutingConfigHandler extends AgaviXmlConfigHandler
 			if(!isset($opts['name']) || $opts['name'] !== $name) {
 				$this->unnamedRoutes[$name] = true;
 			}
-			if($route->has('routes')) {
-				$this->parseRoutes($routing, $route->get('routes'), $name);
+			if($route->hasChildren('routes')) {
+				$this->parseRoutes($routing, $route->routes, $name);
 			}
 		}
 	}

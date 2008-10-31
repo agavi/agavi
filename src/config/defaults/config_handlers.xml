@@ -63,8 +63,7 @@
 			</handler>
 
 			<handler pattern="%core.config_dir%/routing.xml" class="AgaviRoutingConfigHandler">
-				<validation>%core.agavi_dir%/config/rng/routing.rng</validation>
-				<transformation>%core.agavi_dir%/config/xsl/routing.xsl</transformation>
+				<validation>%core.agavi_dir%/config/xsd/routing.xsd</validation>
 			</handler>
 
 			<handler pattern="%core.agavi_dir%/routing/soap/wsdl.xml" class="AgaviWsdlConfigHandler">
