@@ -21,5 +21,7 @@
 		<autoload name="GenSetPrefixAndPostfixRoutingCallback">%core.app_dir%/../../lib/routing/GenSetPrefixAndPostfixRoutingCallback.class.php</autoload>
 		<autoload name="GenSetPrefixAndPostfixIntoRouteRoutingCallback">%core.app_dir%/../../lib/routing/GenSetPrefixAndPostfixIntoRouteRoutingCallback.class.php</autoload>
 		<autoload name="TestTicket713RoutingCallback">%core.app_dir%/../../lib/routing/TestTicket713RoutingCallback.class.php</autoload>
+		<autoload name="TestTicket695RoutingCallback">%core.app_dir%/../../lib/routing/TestTicket695RoutingCallback.class.php</autoload>
+		<autoload name="TestTicket698RoutingCallback">%core.app_dir%/../../lib/routing/TestTicket698RoutingCallback.class.php</autoload>
 	</configuration>
 </configurations>
