@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 0.11.6 RC1 (November ?, 2008)
 -----------------------------
 
+CHG: Update timezone database to 2008i (#912) (David)
 CHG: Add standard warning about broken libxml versions (#909) (David)
 
 FIX: Filename patterns are escaped incorrectly in config_handlers.xml (#913) (Noah)
