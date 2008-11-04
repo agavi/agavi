@@ -195,6 +195,23 @@ class AgaviWebRoutingTest extends AgaviPhpUnitTestCase
 		$this->assertEquals('https://localhost.localdomain:80443/#foo', $url);
 	}
 	
+	
+	/**
+	 * 
+	 * @dataProvider dataTicket365
+	 */
+	public function testTicket365($expected, $data)
+	{
+		$url = $this->routing->gen('index', array('data' => $data));
+		$this->assertEquals($expected, $url);
+	}
+	
+	public function dataTicket365()
+	{
+		return array('indexed' => array('/?data%5B0%5D=baz&amp;data%5B1%5D=bar', array('baz', 'bar')),
+					 'hashed'  => array('/?data%5Bfoo%5D=bar&amp;data%5Blol%5D=baz', array('foo' => 'bar', 'lol' => 'baz')));
+	}
+	
 	public function testTicket437()
 	{
 		$url = $this->routing->gen('test_ticket_437');
