@@ -7,7 +7,7 @@
 			<route name="testingsource" pattern="^foo$" source="testingsource[bar]" module="TestingSource" action="Matched" />
 			<route name="with_param" pattern="^/withparam/(number:\d+)$" module="TestWithParam" action="MatchedParam" />
 			<route name="with_two_params" pattern="^/withmultipleparams/(number:\d+)/(string:\w+)$" module="TestWithParam" action="MatchedMultipleParams" />
-			<route name="gen_shortest_possible_url" pattern="^/gen_shortest_possible_url(/{param1:\d+})(/{param2:\d+})(/{param3:\d+})">
+			<route name="gen_shortest_possible_url" pattern="^/gen_shortest_possible_url(/{param1:\d+})?(/{param2:\d+})?(/{param3:\d+})?">
 				<default for="param1">/{1}</default>
 				<default for="param2">/{2}</default>
 				<default for="param3">/{3}</default>
@@ -48,6 +48,13 @@
 				
 				<route name=".ticket_695" pattern="foo" source="bar" callback="TestTicket695RoutingCallback" />
 			</route>
+			
+			<route name="test_ticket_277" pattern="/test_ticket_277" module="%actions.login_module%" action="%actions.login_action%">
+				<defaults>
+					<default for="foo">bar</default>
+				</defaults>
+			</route>
+			
 			
 			<route name="test_ticket_437" pattern="^/test_ticket_437/(default:\d+)?$" module="Portal" action="Index">
 				<default for="default">0</default>

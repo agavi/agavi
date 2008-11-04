@@ -161,22 +161,22 @@ class AgaviWebRoutingTest extends AgaviPhpUnitTestCase
 	
 	public function testGenShortestPossibleUrl()
 	{
-		$url = $this->routing->gen('gen_shortest_possible_url');
+		$url = $this->routing->gen('gen_shortest_possible_url', array(), array('omit_defaults' => true));
 		$this->assertEquals('/gen_shortest_possible_url', $url);
 		
-		$url = $this->routing->gen('gen_shortest_possible_url', array('param1' => 1));
+		$url = $this->routing->gen('gen_shortest_possible_url', array('param1' => 1), array('omit_defaults' => true));
 		$this->assertEquals('/gen_shortest_possible_url', $url);
 		
-		$url = $this->routing->gen('gen_shortest_possible_url', array('param1' => 2));
+		$url = $this->routing->gen('gen_shortest_possible_url', array('param1' => 2), array('omit_defaults' => true));
 		$this->assertEquals('/gen_shortest_possible_url/2', $url);
 		
-		$url = $this->routing->gen('gen_shortest_possible_url', array('param2' => 2));
+		$url = $this->routing->gen('gen_shortest_possible_url', array('param2' => 2), array('omit_defaults' => true));
 		$this->assertEquals('/gen_shortest_possible_url', $url);
 		
-		$url = $this->routing->gen('gen_shortest_possible_url', array('param2' => 1));
+		$url = $this->routing->gen('gen_shortest_possible_url', array('param2' => 1), array('omit_defaults' => true));
 		$this->assertEquals('/gen_shortest_possible_url/1/1', $url);
 		
-		$url = $this->routing->gen('gen_shortest_possible_url', array('param3' => 4));
+		$url = $this->routing->gen('gen_shortest_possible_url', array('param3' => 4), array('omit_defaults' => true));
 		$this->assertEquals('/gen_shortest_possible_url/1/2/4', $url);
 	}
 	
