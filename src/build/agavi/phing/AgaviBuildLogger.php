@@ -102,6 +102,8 @@ class AgaviBuildLogger extends DefaultLogger
 	 *
 	 * This logger does not output anything when a build is started.
 	 *
+	 * @param      BuildEvent An event containing the data to be logged.
+	 *
 	 * @see        DefaultLogger::buildStarted()
 	 *
 	 * @author     Noah Fontes <noah.fontes@bitextender.com>
@@ -113,6 +115,8 @@ class AgaviBuildLogger extends DefaultLogger
 	
 	/**
 	 * Logs the end of a build.
+	 *
+	 * @param      BuildEvent An event containing the data to be logged.
 	 *
 	 * @see        DefaultLogger::buildFinished()
 	 *
@@ -131,6 +135,8 @@ class AgaviBuildLogger extends DefaultLogger
 	 * Logs the start of a target by proxying the event to this logger's inner
 	 * logger.
 	 *
+	 * @param      BuildEvent An event containing the data to be logged.
+	 *
 	 * @see        DefaultLogger::targetStarted()
 	 *
 	 * @author     Noah Fontes <noah.fontes@bitextender.com>
@@ -144,6 +150,8 @@ class AgaviBuildLogger extends DefaultLogger
 	/**
 	 * Logs the end of a target by proxying the event to this logger's inner
 	 * logger.
+	 *
+	 * @param      BuildEvent An event containing the data to be logged.
 	 *
 	 * @see        DefaultLogger::targetFinished()
 	 *
@@ -159,6 +167,8 @@ class AgaviBuildLogger extends DefaultLogger
 	 * Logs the start of a task by proxying the event to this logger's inner
 	 * logger.
 	 *
+	 * @param      BuildEvent An event containing the data to be logged.
+	 *
 	 * @see        DefaultLogger::taskStarted()
 	 *
 	 * @author     Noah Fontes <noah.fontes@bitextender.com>
@@ -171,6 +181,8 @@ class AgaviBuildLogger extends DefaultLogger
 	
 	/**
 	 * Logs the end of a task by proxying the event to this logger's inner logger.
+	 *
+	 * @param      BuildEvent An event containing the data to be logged.
 	 *
 	 * @see        DefaultLogger::taskFinished()
 	 *
@@ -185,6 +197,8 @@ class AgaviBuildLogger extends DefaultLogger
 	/**
 	 * Logs each instance of a recorded message by proxying the event to this
 	 * logger's inner logger.
+	 *
+	 * @param      BuildEvent An event containing the data to be logged.
 	 *
 	 * @see        DefaultLogger::messageLogged()
 	 *
