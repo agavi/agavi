@@ -29,12 +29,18 @@
  */
 abstract class AgaviTransform
 {
+	/**
+	 * @var        mixed The input to transform.
+	 */
 	protected $input = null;
 
 	/**
 	 * Sets the input.
 	 *
 	 * @param      mixed The input to transform.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
 	 */
 	public function setInput($input)
 	{
@@ -45,6 +51,9 @@ abstract class AgaviTransform
 	 * Gets the input.
 	 *
 	 * @return     mixed The input to be transformed.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
 	 */
 	public function getInput()
 	{
@@ -55,6 +64,9 @@ abstract class AgaviTransform
 	 * Transforms the input according to the parameters of the transformation.
 	 *
 	 * @return     mixed The result of the transformation.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
 	 */
 	abstract public function transform();
 }

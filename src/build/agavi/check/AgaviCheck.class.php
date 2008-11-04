@@ -33,6 +33,9 @@ abstract class AgaviCheck
 	 * Determines whether the given requirement is successfully met.
 	 *
 	 * @return     bool True if the check is successful; false otherwise.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
 	 */
 	abstract public function check();
 }

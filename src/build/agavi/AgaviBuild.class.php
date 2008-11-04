@@ -14,7 +14,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- *
+ * Build system utility class.
  *
  * @package    agavi
  * @subpackage build
@@ -29,6 +29,9 @@
  */
 final class AgaviBuild
 {
+	/**
+	 * @var        bool Whether or not the build system has been bootstrapped yet.
+	 */
 	protected static $bootstrapped = false;
 	
 	/**
@@ -76,6 +79,7 @@ final class AgaviBuild
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
 	 */
 	public static function __autoload($class)
 	{
@@ -90,6 +94,10 @@ final class AgaviBuild
 
 	/**
 	 * Prepares the build environment classes for use.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
 	 */
 	public static function bootstrap()
 	{
@@ -105,6 +113,10 @@ final class AgaviBuild
 	 *
 	 * @return     boolean True if the build system has been bootstrapped, false
 	 *                     otherwise.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
 	 */
 	public static function isBootstrapped()
 	{

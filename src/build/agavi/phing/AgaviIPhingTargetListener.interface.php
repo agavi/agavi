@@ -33,6 +33,9 @@ interface AgaviIPhingTargetListener extends AgaviIPhingListener
 	 * Invoked when a target is entered.
 	 *
 	 * @param      AgaviPhingTargetEvent The raised event.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
 	 */
 	public function targetEntered(AgaviPhingTargetEvent $event);
 	
@@ -40,6 +43,9 @@ interface AgaviIPhingTargetListener extends AgaviIPhingListener
 	 * Invoked when a target is left.
 	 *
 	 * @param      AgaviPhingTargetEvent The raised event.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
 	 */
 	public function targetLeft(AgaviPhingTargetEvent $event);
 }

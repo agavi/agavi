@@ -14,6 +14,21 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
+/**
+ * Command-line script for the build system.
+ *
+ * @package    agavi
+ * @subpackage build
+ *
+ * @author     Noah Fontes <noah.fontes@bitextender.com>
+ * @copyright  Authors
+ * @copyright  The Agavi Project
+ *
+ * @since      1.0.0
+ *
+ * @version    $Id$
+ */
+
 define('BUILD_DIRECTORY', realpath(dirname(__FILE__) . '/../..'));
 define('START_DIRECTORY', getcwd());
 define('MIN_PHING_VERSION', '2.3.1');

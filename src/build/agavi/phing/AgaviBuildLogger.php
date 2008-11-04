@@ -32,9 +32,7 @@ require_once('phing/listener/DefaultLogger.php');
 class AgaviBuildLogger extends DefaultLogger
 {
 	/**
-	 * The inner logger to which this logger will write.
-	 *
-	 * @var        DefaultLogger
+	 * @var        DefaultLogger The inner logger to which this logger will write.
 	 */
 	protected $logger = null;
 	
@@ -42,6 +40,9 @@ class AgaviBuildLogger extends DefaultLogger
 	 * Creates a new build logger.
 	 *
 	 * @param      DefaultLogger The logger to which this logger should write.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
 	 */
 	public function __construct(DefaultLogger $logger)
 	{
@@ -54,6 +55,9 @@ class AgaviBuildLogger extends DefaultLogger
 	 * @param      int The logging level.
 	 *
 	 * @see        DefaultLogger::setMessageOutputLevel()
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
 	 */
 	public function setMessageOutputLevel($level)
 	{
@@ -67,6 +71,9 @@ class AgaviBuildLogger extends DefaultLogger
 	 * @param      OutputStream The output stream.
 	 *
 	 * @see        DefaultLogger::setOutputStream()
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
 	 */
 	public function setOutputStream(OutputStream $output)
 	{
@@ -80,6 +87,9 @@ class AgaviBuildLogger extends DefaultLogger
 	 * @param      OutputStream The error stream.
 	 *
 	 * @see        DefaultLogger::setOutputStream()
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
 	 */
 	public function setErrorStream(OutputStream $error)
 	{

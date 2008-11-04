@@ -30,27 +30,23 @@
 class AgaviModuleFilesystemCheck extends AgaviFilesystemCheck
 {
 	/**
-	 * @var        string The relative path to the project actions
-	 *                    directory.
+	 * @var        string The relative path to the project actions directory.
 	 */
 	protected $actionsDirectory = 'actions';
 	
 	/**
-	 * @var        string The relative path to the project views
-	 *                    directory.
+	 * @var        string The relative path to the project views directory.
 	 */
 	protected $viewsDirectory = 'views';
 	
 	/**
-	 * @var        string The relative path to the project templates
-	 *                    directory.
+	 * @var        string The relative path to the project templates directory.
 	 *
 	 */
 	protected $templatesDirectory = 'templates';
 	
 	/**
-	 * @var        string The relative path to the project configuration
-	 *                    directory.
+	 * @var        string The relative path to the project configuration directory
 	 */
 	protected $configDirectory = 'config';
 
@@ -58,6 +54,9 @@ class AgaviModuleFilesystemCheck extends AgaviFilesystemCheck
 	 * Sets the actions directory.
 	 *
 	 * @param      string The actions directory.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
 	 */
 	public function setActionsDirectory($actionsDirectory)
 	{
@@ -68,6 +67,9 @@ class AgaviModuleFilesystemCheck extends AgaviFilesystemCheck
 	 * Gets the actions directory.
 	 *
 	 * @return     string The actions directory.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
 	 */
 	public function getActionsDirectory()
 	{
@@ -78,6 +80,9 @@ class AgaviModuleFilesystemCheck extends AgaviFilesystemCheck
 	 * Sets the views directory.
 	 *
 	 * @param      string The views directory.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
 	 */
 	public function setViewsDirectory($viewsDirectory)
 	{
@@ -88,6 +93,9 @@ class AgaviModuleFilesystemCheck extends AgaviFilesystemCheck
 	 * Gets the views directory.
 	 *
 	 * @return     string The views directory.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
 	 */
 	public function getViewsDirectory()
 	{
@@ -98,6 +106,9 @@ class AgaviModuleFilesystemCheck extends AgaviFilesystemCheck
 	 * Sets the templates directory.
 	 *
 	 * @param      string The templates directory.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
 	 */
 	public function setTemplatesDirectory($templatesDirectory)
 	{
@@ -108,6 +119,9 @@ class AgaviModuleFilesystemCheck extends AgaviFilesystemCheck
 	 * Gets the templates directory.
 	 *
 	 * @return     string The templates directory.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
 	 */
 	public function getTemplatesDirectory()
 	{
@@ -118,6 +132,9 @@ class AgaviModuleFilesystemCheck extends AgaviFilesystemCheck
 	 * Sets the configuration directory.
 	 *
 	 * @param      string The configuration directory.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
 	 */
 	public function setConfigDirectory($configDirectory)
 	{
@@ -128,6 +145,9 @@ class AgaviModuleFilesystemCheck extends AgaviFilesystemCheck
 	 * Gets the configuration directory.
 	 *
 	 * @return     string The configuration directory.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
 	 */
 	public function getConfigDirectory()
 	{
@@ -138,6 +158,9 @@ class AgaviModuleFilesystemCheck extends AgaviFilesystemCheck
 	 * Determines whether a given directory is a valid Agavi module.
 	 *
 	 * @return     bool True if the directory is valid; false otherwise.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
 	 */
 	public function check()
 	{

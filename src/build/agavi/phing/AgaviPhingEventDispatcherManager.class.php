@@ -29,7 +29,10 @@
  */
 final class AgaviPhingEventDispatcherManager
 {
-	protected static $dispatchers;
+	/**
+	 * @var        array List of AgaviPhingEventDispatcher instances.
+	 */
+	protected static $dispatchers = array();
 	
 	/**
 	 * Retrieves a dispatcher for a project.
@@ -37,6 +40,9 @@ final class AgaviPhingEventDispatcherManager
 	 * @param      Project The project that governs the dispatcher.
 	 *
 	 * @return     AgaviPhingEventDispatcher The dispatcher.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
 	 */
 	public static function get(Project $project)
 	{
@@ -56,6 +62,9 @@ final class AgaviPhingEventDispatcherManager
 	 *
 	 * @return     boolean True if the dispatcher is successfully removed, false
 	 *                     otherwise.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
 	 */
 	public static function remove(Project $project)
 	{
