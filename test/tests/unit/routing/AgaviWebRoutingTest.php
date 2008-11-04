@@ -193,15 +193,38 @@ class AgaviWebRoutingTest extends AgaviPhpUnitTestCase
 		$this->assertEquals('?foo=bar&amp;module=Default&amp;action=Login', $url);
 	}
 	
-	public function testTicket358()
+	/**
+	 * @dataProvider dataTicket358
+	 * 
+	 */
+	public function testTicket358($expected, $data)
 	{
-		$url = $this->routing->gen('index', array(), array('scheme' => 'https', 'authority' => 'localhost.localdomain:80443', 'fragment' => 'foo'));
-		$this->assertEquals('https://localhost.localdomain:80443/#foo', $url);
-		
-		$url = $this->routing->gen('index', array(), array('scheme' => 'https', 'host' => 'localhost.localdomain', 'port' => '80443', 'fragment' => 'foo', 'relative'));
-		$this->assertEquals('https://localhost.localdomain:80443/#foo', $url);
+		$url = $this->routing->gen('index', array(), $data);
+		$this->assertEquals($expected, $url);
 	}
 	
+	public function dataTicket358()
+	{
+		return array('authority' => array('https://localhost.localdomain:80443/#foo',  
+										  array('scheme' => 'https', 'authority' => 'localhost.localdomain:80443', 'fragment' => 'foo', 'relative' => false)),
+					 'host_port' => array('https://localhost.localdomain:80443/#foo',
+					 			          array('scheme' => 'https', 'host' => 'localhost.localdomain', 'port' => 80443, 'fragment' => 'foo', 'relative' => false)),
+					 'frag_only' => array('http://localhost/#foo',
+					 			          array('fragment' => 'foo', 'relative' => false)),
+					 'port_only' => array('http://localhost:80443/',
+					 			          array('port' => 80443, 'relative' => false)),
+					 'host_only' => array('http://localhost.localdomain/',
+					 			          array('host' => 'localhost.localdomain', 'relative' => false)),
+					 'scheme_only' => array('https://localhost/',
+					 			          array('scheme' => 'https', 'relative' => false)),
+					 'scheme_port_1' => array('https://localhost/',
+					 			          array('scheme' => 'https', 'port' => 443, 'relative' => false)),
+					 'scheme_port_2' => array('https://localhost:80443/',
+					 			          array('scheme' => 'https', 'port' => 80443, 'relative' => false)),
+					 'authority_host_port' => array('https://localhost2.localdomain:80445/#foo',
+					 			          array('scheme' => 'https', 'authority' => 'localhost2.localdomain:80445', 'host' => 'localhost.localdomain', 'port' => 80443, 'fragment' => 'foo', 'relative' => false)),
+					);
+	}
 	
 	/**
 	 * 
