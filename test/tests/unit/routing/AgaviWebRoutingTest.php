@@ -3,7 +3,7 @@
 class AgaviWebRoutingTest extends AgaviPhpUnitTestCase
 {
 	protected $routing;
-	protected $parameters = array('enabled' => true);
+	protected $parameters = array('enabled' => true, 'gen_options_presets' => array('redirect' => array('separator' => '&', 'relative' => false)));
 	
 	/**
 	 * Constructs a test case with the given name.
@@ -217,6 +217,12 @@ class AgaviWebRoutingTest extends AgaviPhpUnitTestCase
 	{
 		return array('indexed' => array('/?data%5B0%5D=baz&amp;data%5B1%5D=bar', array('baz', 'bar')),
 					 'hashed'  => array('/?data%5Bfoo%5D=bar&amp;data%5Blol%5D=baz', array('foo' => 'bar', 'lol' => 'baz')));
+	}
+	
+	public function testTicket432()
+	{
+		$url = $this->routing->gen('index', array('foo' => 'bar', 'baz' => 'lol'), 'redirect');
+		$this->assertEquals('http://localhost/?foo=bar&baz=lol', $url);
 	}
 	
 	public function testTicket437()
