@@ -63,6 +63,7 @@
 				</replacetokens>
 			</filterchain>
 		</copy>
+		<property name="templates.dir.current" value="${templates.dir.default}" override="true" />
 		<available file="${templates.dir}/dist.htaccess.tmpl" property="templates.dir.current" value="${templates.dir}" />
 		<copy file="${templates.dir.current}/dist.htaccess.tmpl" tofile="${project.dir}/pub/dist.htaccess" />
 		<mkdir dir="${project.dir}/pub/modpub"/>
