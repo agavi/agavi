@@ -71,7 +71,9 @@
 		<optional>
 			<attribute name="affects">
 				<list>
-					<data type="string" />
+					<oneOrMore>
+						<data type="string" />
+					</oneOrMore>
 				</list>
 			</attribute>
 		</optional>
@@ -81,7 +83,9 @@
 		<optional>
 			<attribute name="depends">
 				<list>
-					<data type="string" />
+					<oneOrMore>
+						<data type="string" />
+					</oneOrMore>
 				</list>
 			</attribute>
 		</optional>
@@ -98,7 +102,9 @@
 		<optional>
 			<attribute name="provides">
 				<list>
-					<data type="string" />
+					<oneOrMore>
+						<data type="string" />
+					</oneOrMore>
 				</list>
 			</attribute>
 		</optional>

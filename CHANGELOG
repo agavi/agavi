@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 1.0.0 beta 6 (October ??, 2008)
 -------------------------------
 
+FIX: Build system fails to find or generate default action (#899) (Noah)
 FIX: Config handlers definition loading sequence may cause exceptions with debug mode off (#905) (Dominik)
 FIX: Less aggressive inclusion of per module config handlers, they are only loaded at first module initialization (#906) (Felix)
 FIX: Regression: xml:base attributes left behind by XIncludes cause config validations to fail (#895) (Noah)
@@ -107,7 +108,16 @@ CHG: Deprecated AgaviAdodbDatabase (#662) (David)
 FIX: Security filters cannot perform checks in addition to isSecure() (#671) (David)
 
 
-0.11.5 (October ??, 2008)
+0.11.6 RC1 (November ?, 2008)
+-----------------------------
+
+CHG: Update timezone database to 2008i (#912) (David)
+CHG: Add standard warning about broken libxml versions (#909) (David)
+
+FIX: Filename patterns are escaped incorrectly in config_handlers.xml (#913) (Noah)
+
+
+0.11.5 (October 25, 2008)
 -------------------------
 
 CHG: Update timezone database to 2008h (#896) (David)

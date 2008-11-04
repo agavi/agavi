@@ -88,10 +88,12 @@ Existing "core.use_routing" directives will be used as a fallback until the dire
 - Validation severity "none" is now called "silent".
 
 
-Version 0.11.5 - October ??, 2008
+Version 0.11.5 - October 25, 2008
 =================================
 
 This maintenance release fixes a small number of issues and does not add any new features. Please refer to the CHANGELOG for details.
+
+The timezone database was updated to version 2008h.
 
 
 Version 0.11.4 - October 14, 2008

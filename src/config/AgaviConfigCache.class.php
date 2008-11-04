@@ -100,7 +100,7 @@ final class AgaviConfigCache
 			// this basename
 			foreach(self::$handlers as $key => $value)	{
 				// replace wildcard chars in the configuration and create the pattern
-				$pattern = sprintf('#%s#', str_replace('\*', '.*?', preg_quote($key)));
+				$pattern = sprintf('#%s#', str_replace('\*', '.*?', preg_quote($key, '#')));
 
 				if(preg_match($pattern, $name)) {
 					$handlerInfo = $value;
@@ -291,6 +291,11 @@ final class AgaviConfigCache
 	 */
 	private static function loadConfigHandlers()
 	{
+		// some checks first
+		if(!defined('LIBXML_DOTTED_VERSION') || (!AgaviConfig::get('core.ignore_broken_libxml', false) && !version_compare(LIBXML_DOTTED_VERSION, '2.6.16', 'gt'))) {
+			throw new AgaviException("A libxml version greater than 2.6.16 is highly recommended. With version 2.6.16 and possibly later releases, validation of XML configuration files will not work and Form Population Filter will eventually fail randomly on some documents due to *severe bugs* in older libxml releases (2.6.16 was released in November 2004, so it is really getting time to update).\n\nIf you still would like to try your luck, disable this message by doing\nAgaviConfig::set('core.ignore_broken_libxml', true);\nand\nAgaviConfig::set('core.skip_config_validation', true);\nbefore calling\nAgavi::bootstrap();\nin index.php (app/config.php is not the right place for this).\n\nBut be advised that you *will* run into segfaults and other sad situations eventually, so what you should really do is upgrade your libxml install.");
+		}
+		
 		$agaviDir = AgaviConfig::get('core.agavi_dir');
 		// since we only need the parser and handlers when the config is not cached
 		// it is sufficient to include them at this stage
@@ -323,7 +328,7 @@ final class AgaviConfigCache
 		// extended XSL* classes
 		if(!AgaviConfig::get('core.skip_config_transformations', false)) {
 			if(!extension_loaded('xsl')) {
-				throw new AgaviConfigurationException('The XSL extension is required for performing transformations in the configuration system; transformations may be disabled by setting the core.skip_config_transformations directive');
+				throw new AgaviConfigurationException("The XSL extension for PHP is used by Agavi for performing transformations in the configuration system; this may be disabled by setting\nAgaviConfig::set('core.skip_config_transformations', true);\nbefore calling\nAgavi::bootstrap();\nin index.php (app/config.php is not the right place for this).\n\nAs a result, you *will* have to use the latest configuration file formats and namespaces as backwards compatibility is implemented through XSLT. Also, certain additional configuration file validations implemented via Schematron will not be performed.");
 			}
 			require($agaviDir . '/config/util/xsl/AgaviXmlConfigXsltProcessor.class.php');
 		}
