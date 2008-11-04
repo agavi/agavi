@@ -6,6 +6,8 @@ AGAVI CHANGELOG
 
 CHG: Add standard warning about broken libxml versions (#909) (David)
 
+FIX: Filename patterns are escaped incorrectly in config_handlers.xml (#913) (Noah)
+
 
 0.11.5 (October 25, 2008)
 -------------------------
