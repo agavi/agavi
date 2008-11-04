@@ -45,7 +45,6 @@
 			<autoload name="AgaviXmlConfigDomEntity">%core.agavi_dir%/config/util/dom/AgaviXmlConfigDomEntity.class.php</autoload>
 			<autoload name="AgaviXmlConfigDomEntityReference">%core.agavi_dir%/config/util/dom/AgaviXmlConfigDomEntityReference.class.php</autoload>
 			<autoload name="AgaviXmlConfigDomNode">%core.agavi_dir%/config/util/dom/AgaviXmlConfigDomNode.class.php</autoload>
-			<autoload name="AgaviXmlConfigDomNodeListIterator">%core.agavi_dir%/config/util/dom/AgaviXmlConfigDomNodeListIterator.class.php</autoload>
 			<autoload name="AgaviXmlConfigDomNotation">%core.agavi_dir%/config/util/dom/AgaviXmlConfigDomNotation.class.php</autoload>
 			<autoload name="AgaviXmlConfigDomProcessingInstruction">%core.agavi_dir%/config/util/dom/AgaviXmlConfigDomProcessingInstruction.class.php</autoload>
 			<autoload name="AgaviXmlConfigDomText">%core.agavi_dir%/config/util/dom/AgaviXmlConfigDomText.class.php</autoload>
