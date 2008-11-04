@@ -88,6 +88,12 @@
 			
 			<route name="test_ticket_698" pattern="^/test_ticket_698/(overwritten_by_callback:\w+)?$" module="Portal" action="Index" callback="TestTicket698RoutingCallback" />
 			
+			<route name="test_ticket_764" pattern="^/test_ticket_764" module="Default" action="Foo">
+				<route pattern="^/dummy">
+					<route name=".child" pattern="^/child" action=".Bar" />
+				</route>
+			</route>
+			
 			<route name="index" pattern="^/$" module="%actions.default_module%" action="%actions.default_action%" />
 		</routes>
 	</configuration>

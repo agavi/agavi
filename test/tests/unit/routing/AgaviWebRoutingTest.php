@@ -299,4 +299,10 @@ class AgaviWebRoutingTest extends AgaviPhpUnitTestCase
 		$url = $this->routing->gen(null, array('bar' => 'baz'));
 		$this->assertEquals('/?foo=%22%3E%3Cscript%3Ealert%28%27hi%27%29%3B%3C%2Fscript%3E&amp;bar=baz', $url);
 	}
+	
+	public function testTicket764()
+	{
+		$url = $this->routing->gen('test_ticket_764.child');
+		$this->assertEquals('/test_ticket_764/dummy/child', $url);
+	}
 }
