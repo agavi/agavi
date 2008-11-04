@@ -79,7 +79,7 @@ final class AgaviConfigCache
 			// this basename
 			foreach(self::$handlers as $key => $value)	{
 				// replace wildcard chars in the configuration and create the pattern
-				$pattern = sprintf('#%s#', str_replace('\*', '.*?', preg_quote($key)));
+				$pattern = sprintf('#%s#', str_replace('\*', '.*?', preg_quote($key, '#')));
 
 				if(preg_match($pattern, $name)) {
 					$handlerInfo = $value;
