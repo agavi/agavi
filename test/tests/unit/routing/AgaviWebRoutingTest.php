@@ -186,6 +186,13 @@ class AgaviWebRoutingTest extends AgaviPhpUnitTestCase
 		$this->assertEquals('http://localhost/', $url);
 	}
 	
+	public function testTicket277()
+	{
+		$this->routing->setParameter('enabled', false);
+		$url = $this->routing->gen('test_ticket_277');
+		$this->assertEquals('?foo=bar&amp;module=Default&amp;action=Login', $url);
+	}
+	
 	public function testTicket358()
 	{
 		$url = $this->routing->gen('index', array(), array('scheme' => 'https', 'authority' => 'localhost.localdomain:80443', 'fragment' => 'foo'));
