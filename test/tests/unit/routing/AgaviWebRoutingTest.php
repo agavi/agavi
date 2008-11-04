@@ -232,9 +232,9 @@ class AgaviWebRoutingTest extends AgaviPhpUnitTestCase
 		$url = $this->routing->gen('test_ticket_444', array('page' => 14));
 		$this->assertEquals('/test_ticket_444/agavi/14/', $url);
 		$url = $this->routing->gen('test_ticket_444', array('term' => 'snoopy', 'page' => 1));
-		$this->assertEquals('/test_ticket_444/snoopy/', $url);
+		$this->assertEquals('/test_ticket_444/snoopy/1/', $url);
 		$url = $this->routing->gen('test_ticket_444', array('term' => 'snoopy'));
-		$this->assertEquals('/test_ticket_444/snoopy/', $url);
+		$this->assertEquals('/test_ticket_444/snoopy/1/', $url);
 	}
 	
 	public function testTicket444Sample2()
@@ -244,11 +244,11 @@ class AgaviWebRoutingTest extends AgaviPhpUnitTestCase
 		$url = $this->routing->gen('test_ticket_444_sample2_external');
 		$this->assertEquals('/test_ticket_444_sample2_external//', $url);
 		$url = $this->routing->gen('test_ticket_444_sample2.archive', array('month' => 11));
-		$this->assertEquals('/test_ticket_444_sample2/woodstock/2006/11/', $url);
+		$this->assertEquals('/test_ticket_444_sample2/woodstock/2006/11/1/', $url);
 		$url = $this->routing->gen('test_ticket_444_sample2.entry', array('id' => 22));
 		$this->assertEquals('/test_ticket_444_sample2/woodstock/22.html', $url);
 		$url = $this->routing->gen('test_ticket_444_sample2.archive', array('name' => 'snoopy'));
-		$this->assertEquals('/test_ticket_444_sample2/snoopy/2007', $url);
+		$this->assertEquals('/test_ticket_444_sample2/snoopy/2007/1/1/', $url);
 	}
 	
 	public function testTicket464()
