@@ -195,6 +195,17 @@ class AgaviRoutingTest extends AgaviPhpUnitTestCase
 					);
 	}
 	
+	public function testTicket263()
+	{
+		try {
+			$this->routing->addRoute('rxp', array('name' => 'foo'));
+			$this->routing->addRoute('rxp', array('name' => 'foo'), 'foo');
+			$this->fail('succeeded in adding a route with the same name as a child');
+		} catch (AgaviException $e) {
+			$this->assertEquals('You are trying to overwrite a route but are not staying in the same hierarchy', $e->getMessage());
+		}
+		
+	}
 }
 
 
