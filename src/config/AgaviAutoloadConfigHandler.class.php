@@ -81,7 +81,7 @@ class AgaviAutoloadConfigHandler extends AgaviXmlConfigHandler
 						// the class path doesn't exist
 						$error = 'Configuration file "%s" specifies class "%s" with ' .
 								 'nonexistent or unreadable file "%s"';
-						$error = sprintf($error, $config, $class, $file);
+						$error = sprintf($error, $document->documentURI, $class, $file);
 
 						throw new AgaviParseException($error);
 					}

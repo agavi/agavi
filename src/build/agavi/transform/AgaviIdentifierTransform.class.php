@@ -34,6 +34,9 @@ class AgaviIdentifierTransform extends AgaviTransform
 	 * Transforms the input into a valid PHP identifier.
 	 *
 	 * @return     string The result of the transformation.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
 	 */
 	public function transform()
 	{

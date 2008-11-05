@@ -35,6 +35,9 @@ class AgaviStringtoarrayTransform extends AgaviTransform
 	 * Sets the delimiter.
 	 *
 	 * @param      string The delimiter for parsing the input string.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
 	 */
 	public function setDelimiter($delimiter)
 	{
@@ -45,6 +48,9 @@ class AgaviStringtoarrayTransform extends AgaviTransform
 	 * Transforms an input string to an array.
 	 *
 	 * @return     array The transformed array.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
 	 */
 	public function transform()
 	{

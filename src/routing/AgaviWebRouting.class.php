@@ -385,36 +385,29 @@ class AgaviWebRouting extends AgaviRouting
 			$authority = '';
 
 			if($options['authority'] === null) {
-				if(
-					($options['host'] !== null && $options['host'] !== false) &&
-					($options['port'] !== null && $options['port'] !== false)
-				) {
-					$authority = $req->getUrlAuthority();
+				if($options['host'] !== null && $options['host'] !== false) {
+					$authority = $options['host'];
+				} elseif($options['host'] === false) {
+					$authority = '';
 				} else {
-					if($options['host'] !== null && $options['host'] !== false) {
-						$authority = $options['host'];
-					} elseif($options['host'] === false) {
-						$authority = '';
+					$authority = $req->getUrlHost();
+				}
+				$port = null;
+				if($options['port'] !== null && $options['port'] !== false) {
+					if(AgaviToolkit::isPortNecessary($options['scheme'] !== null && $options['scheme'] !== false ? $options['scheme'] : $req->getUrlScheme(), $options['port'])) {
+						$port = $options['port'];
 					} else {
-						$authority = $req->getUrlHost();
-					}
-					$port = null;
-					if($options['port'] !== null && $options['port'] !== false) {
-						if(AgaviToolkit::isPortNecessary($options['scheme'] !== null && $options['scheme'] !== false ? $options['scheme'] : $req->getUrlScheme(), $options['port'])) {
-							$port = $options['port'];
-						} else {
-							$port = null;
-						}
-					} elseif($options['port'] === false) {
 						$port = null;
-					} elseif($options['scheme'] === null) {
-						if(!AgaviToolkit::isPortNecessary($req->getUrlScheme(), $port = $req->getUrlPort())) {
-							$port = null;
-						}
 					}
-					if($port !== null) {
-						$authority .= ':' . $port;
+				} elseif($options['port'] === false) {
+					$port = null;
+				} elseif($options['scheme'] === null) {
+					if(!AgaviToolkit::isPortNecessary($req->getUrlScheme(), $port = $req->getUrlPort())) {
+						$port = null;
 					}
+				}
+				if($port !== null) {
+					$authority .= ':' . $port;
 				}
 			} elseif($options['authority'] !== false) {
 				$authority = $options['authority'];

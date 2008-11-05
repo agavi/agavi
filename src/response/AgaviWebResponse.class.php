@@ -199,7 +199,7 @@ class AgaviWebResponse extends AgaviResponse
 			}
 		}
 		$this->sendHttpResponseHeaders($outputType);
-		if(!$this->redirect) {
+		if(!$this->redirect || $this->getParameter('send_redirect_content', false)) {
 			$this->sendContent();
 		}
 	}

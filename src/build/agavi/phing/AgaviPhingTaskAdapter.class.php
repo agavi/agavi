@@ -33,6 +33,9 @@ class AgaviPhingTaskAdapter implements AgaviIPhingTaskListener
 	 * Invoked when a task is entered.
 	 *
 	 * @param      AgaviPhingTaskEvent The raised event.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
 	 */
 	public function taskEntered(AgaviPhingTaskEvent $event)
 	{
@@ -43,6 +46,9 @@ class AgaviPhingTaskAdapter implements AgaviIPhingTaskListener
 	 * Invoked when a task is left.
 	 *
 	 * @param      AgaviPhingTaskEvent The raised event.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
 	 */
 	public function taskLeft(AgaviPhingTaskEvent $event)
 	{

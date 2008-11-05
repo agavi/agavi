@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 1.0.0 beta 6 (October ??, 2008)
 -------------------------------
 
+FIX: AgaviXmlConfigParser::transformProcessingInstructions() is broken completely (#918) (David)
 FIX: Build system fails to find or generate default action (#899) (Noah)
 FIX: Config handlers definition loading sequence may cause exceptions with debug mode off (#905) (Dominik)
 FIX: Less aggressive inclusion of per module config handlers, they are only loaded at first module initialization (#906) (Felix)
@@ -111,9 +112,14 @@ FIX: Security filters cannot perform checks in addition to isSecure() (#671) (Da
 0.11.6 RC1 (November ?, 2008)
 -----------------------------
 
+ADD: Optionally allow sending of response content when redirecting in AgaviWebResponse (#916) (David)
+
+CHG: Always merge slot response metadata even if response content is null (#917) (David)
 CHG: Update timezone database to 2008i (#912) (David)
 CHG: Add standard warning about broken libxml versions (#909) (David)
 
+FIX: Wrong urls when passing host and port to WebRouting::gen() (#902) (Felix)
+FIX: build.xml is missing reset of code templates dir to default before copying dist.htaccess (#914) (David)
 FIX: Filename patterns are escaped incorrectly in config_handlers.xml (#913) (Noah)
 
 

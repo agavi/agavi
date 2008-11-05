@@ -29,12 +29,18 @@
  */
 class AgaviPhingTargetEvent extends AgaviPhingEvent
 {
+	/**
+	 * @var        Target The phing target instance.
+	 */
 	protected $target = null;
 	
 	/**
 	 * Sets the target that generated this event.
 	 *
 	 * @param      Target The target.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
 	 */
 	public function setTarget(Target $target)
 	{
@@ -45,6 +51,9 @@ class AgaviPhingTargetEvent extends AgaviPhingEvent
 	 * Gets the target that generated this event.
 	 *
 	 * @return     Target The target.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
 	 */
 	public function getTarget()
 	{

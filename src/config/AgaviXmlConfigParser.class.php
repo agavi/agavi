@@ -418,7 +418,7 @@ class AgaviXmlConfigParser
 		
 		if(!AgaviConfig::get('core.skip_config_transformations', false)) {
 			// run inline transformations
-			self::transformProcessingInstructions($this->doc);
+			$this->doc = self::transformProcessingInstructions($this->doc, $this->environment, $this->context);
 			
 			// perform XSL transformations
 			$this->doc = self::transform($this->doc, $this->environment, $this->context, $transformationInfo);
@@ -550,6 +550,7 @@ class AgaviXmlConfigParser
 	 * @param      string The environment name.
 	 * @param      string The context name.
 	 * @param      array  An array of transformation information.
+	 * @param      array  An array of XSL stylesheets in DOMDocument instances.
 	 *
 	 * @return     AgaviXmlConfigDomDocument The transformed document.
 	 *
@@ -557,10 +558,8 @@ class AgaviXmlConfigParser
 	 * @author     Noah Fontes <noah.fontes@bitextender.com>
 	 * @since      0.11.0
 	 */
-	public static function transform(AgaviXmlConfigDomDocument $document, $environment, $context, array $transformationInfo = array())
+	public static function transform(AgaviXmlConfigDomDocument $document, $environment, $context, array $transformationInfo = array(), $transformations = array())
 	{
-		$transformations = array();
-		
 		// loop over all the paths we found and load the files
 		foreach($transformationInfo as $href) {
 			try {
@@ -620,13 +619,20 @@ class AgaviXmlConfigParser
 	 * instructions
 	 *
 	 * @param      AgaviXmlConfigDomDocument The document to act upon.
+	 * @param      string The environment name.
+	 * @param      string The context name.
+	 *
+	 * @return     AgaviXmlConfigDomDocument The transformed document.
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @author     Noah Fontes <noah.fontes@bitextender.com>
 	 * @since      1.0.0
 	 */
-	public static function transformProcessingInstructions(AgaviXmlConfigDomDocument $document)
+	public static function transformProcessingInstructions(AgaviXmlConfigDomDocument $document, $environment, $context)
 	{
+		$transformations = array();
+		$transformationInfo = array();
+		
 		$xpath = $document->getXpath();
 		
 		// see if there are <?xml-stylesheet... processing instructions
@@ -667,6 +673,8 @@ class AgaviXmlConfigParser
 				$pi->parentNode->removeChild($pi);
 			}
 		}
+		
+		return self::transform($document, $environment, $context, $transformationInfo, $transformations);
 	}
 	
 	/**
