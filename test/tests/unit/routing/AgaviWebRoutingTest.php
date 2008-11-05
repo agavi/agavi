@@ -304,7 +304,6 @@ class AgaviWebRoutingTest extends AgaviPhpUnitTestCase
 		}
 	}
 	
-	
 	public function testTicket698()
 	{
 		$this->routing->setInput('/test_ticket_698/incoming');
@@ -318,7 +317,6 @@ class AgaviWebRoutingTest extends AgaviPhpUnitTestCase
 		$url = $this->routing->gen('test_ticket_713', array('zomg' => 'lol'));
 		$this->assertEquals('/test_ticket_713/lol', $url);
 	}
-	
 
 	public function testTicket717()
 	{
