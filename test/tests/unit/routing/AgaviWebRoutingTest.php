@@ -299,7 +299,7 @@ class AgaviWebRoutingTest extends AgaviPhpUnitTestCase
 		try {
 			$this->routing->gen('callbacks.ticket_695');
 			$this->fail('Failed asserting that onGenerate() is called');
-		} catch (AgaviException $e) {
+		} catch(AgaviException $e) {
 			// successfully called
 		}
 	}
