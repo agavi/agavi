@@ -16,7 +16,7 @@
 require_once(dirname(__FILE__) . '/AgaviOptionException.class.php');
 
 /**
- * Parses input options to the Agavi script.
+ * Parses input options and arguments to the Agavi script.
  *
  * @package    agavi
  * @subpackage build
@@ -31,39 +31,111 @@ require_once(dirname(__FILE__) . '/AgaviOptionException.class.php');
  */
 class AgaviOptionParser
 {
+	/**
+	 * @var        array The data from which options are read.
+	 */
 	protected $source = array();
 	
+	/**
+	 * @var        array All of the arguments that are passed to the program via
+	 *                   the source.
+	 *
+	 * @see        AgaviOptionParser::$source
+	 */
 	protected $passedArguments = array();
+	
+	/**
+	 * @var        array All of the options that are passed to the program via
+	 *                   the source.
+	 *
+	 * @see        AgaviOptionParser::$source
+	 */
 	protected $passedOptions = array();
 	
+	/**
+	 * @var        string The separator character for long option names.
+	 */
 	protected $nameSeparator = '=';
 	
+	/**
+	 * @var        string The characters that must precede each short option name.
+	 */
 	protected $shortNamePrefix = '-';
+	
+	/**
+	 * @var        string The characters that must precede each long option name.
+	 */
 	protected $longNamePrefix = '--';
 	
+	/**
+	 * @var        string The characters that separate the options from the
+	 *                    program arguments.
+	 */
 	protected $optionTerminator = '--';
 	
+	/**
+	 * @var        array Default values for each option.
+	 */
 	protected $defaults = array(
 		'short_names' => array(),
 		'long_names' => array(),
 		'arguments' => 0,
 	);
 	
+	/**
+	 * Creates a new option parser.
+	 *
+	 * @param      array The source data.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
+	 */
 	public function __construct(array $source)
 	{
 		$this->source = $source;
 	}
 	
+	/**
+	 * Retrieves the value in the source data that must exist for an option to be
+	 * parsed in its short form.
+	 *
+	 * @param      string The short option name.
+	 *
+	 * @return     string The value that must be matched in the source data.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
+	 */
 	protected function getSourceNameForShortName($option)
 	{
 		return $this->shortNamePrefix . $option;
 	}
 	
+	/**
+	 * Retrieves the value in the source data that must exist for an option to be
+	 * parsed in its long form.
+	 *
+	 * @param      string The long option name.
+	 *
+	 * @return     string The value that must be matched in the source data.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
+	 */
 	protected function getSourceNameForLongName($option)
 	{
 		return $this->longNamePrefix . $option;
 	}
 	
+	/**
+	 * Parses the source data and calls callbacks for each option passed in the
+	 * source.
+	 *
+	 * @return     string The value that must be matched in the source data.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
+	 */
 	public function parse()
 	{
 		$options = array();
@@ -143,31 +215,94 @@ class AgaviOptionParser
 		}
 	}
 	
+	/**
+	 * Retrieves the arguments that have been parsed.
+	 *
+	 * @return     array The arguments passed through the source data.
+	 *
+	 * @see        AgaviOptionParser::parse()
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
+	 */
 	public function getPassedArguments()
 	{
 		return $this->passedArguments;
 	}
 	
+	/**
+	 * Determines whether a given argument was passed in the source.
+	 *
+	 * @param      string The argument name.
+	 *
+	 * @return     bool True if the argument exists in the array of passed
+	 *                  arguments; false otherwise.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
+	 */
 	public function hasPassedArgument($name)
 	{
 		return in_array($name, $this->passedArguments);
 	}
 	
+	/**
+	 * Retrieves the names of the options that have been parsed.
+	 *
+	 * @return     array The option names passed through the source data.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
+	 */
 	public function getPassedOptions()
 	{
 		return array_keys($this->passedOptions);
 	}
 	
+	/**
+	 * Determines whether a given option was passed in the source.
+	 *
+	 * @param      string The option name.
+	 *
+	 * @return     bool True if the option exists in the array of passed
+	 *                  arguments; false otherwise.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
+	 */
 	public function hasPassedOption($name)
 	{
 		return isset($this->passedOptions[(string)$name]);
 	}
 	
+	/**
+	 * Retrieves a given option from the parsed source data.
+	 *
+	 * @param      string The option name.
+	 *
+	 * @return     array Details about the option, including its arguments; null
+	 *                   if the option does not exist in the parsed data.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
+	 */
 	public function getPassedOption($name)
 	{
 		return $this->hasPassedOption($name) ? $this->passedOptions[(string)$name] : null;
 	}
 	
+	/**
+	 * Adds a new option to the list of parseable options.
+	 *
+	 * @param      string A unique identifier for the option.
+	 * @param      array The short names (often characters) that identify the
+	 *                   option in source data.
+	 * @param      array The long names that identify the option in source data.
+	 * @param      int The number of options that this option expects.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
+	 */
 	public function addOption($name, array $shortNames, array $longNames, $handler, $arguments = 0)
 	{
 		$this->options[(string)$name] = array(
@@ -178,6 +313,14 @@ class AgaviOptionParser
 		);
 	}
 	
+	/**
+	 * Retrieves the list of all possible parseable options.
+	 *
+	 * @return     array This option parser's available options.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
+	 */
 	public function getOptions()
 	{
 		return $this->options;
