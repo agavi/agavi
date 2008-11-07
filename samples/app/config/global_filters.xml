@@ -10,7 +10,6 @@
 				</parameter>
 				<parameter name="output_types">
 					<parameter>html</parameter>
-					<parameter>xhtml</parameter>
 				</parameter>
 				<!-- for all field error messages. errors that yield no match and those that have no corresponding field are inserted using rules defined in "error_messages". errors that belong to more than one field (e.g. date validator) can be handled using "multi_field_error_messages" -->
 				<parameter name="field_error_messages">
