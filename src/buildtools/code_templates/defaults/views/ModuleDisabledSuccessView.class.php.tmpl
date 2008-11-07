@@ -7,6 +7,8 @@ class %%MODULE%%_%%ACTION_NAME%%SuccessView extends ProjectBaseView
 		$this->setAttribute('_title', 'Module Disabled');
 		
 		$this->setupHtml($rd);
+		
+		$this->getResponse()->setHttpStatusCode('503');
 	}
 }
 
