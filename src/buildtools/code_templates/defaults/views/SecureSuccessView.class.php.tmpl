@@ -7,6 +7,8 @@ class %%MODULE%%_%%ACTION_NAME%%SuccessView extends ProjectBaseView
 		$this->setAttribute('_title', 'Access Denied');
 		
 		$this->setupHtml($rd);
+		
+		$this->getResponse()->setHttpStatusCode('401');
 	}
 }
 
