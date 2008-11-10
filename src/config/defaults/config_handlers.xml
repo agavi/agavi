@@ -22,10 +22,12 @@
 			</handler>
 
 			<handler pattern="%core.config_dir%/compile.xml" class="AgaviCompileConfigHandler">
-				<validation>%core.agavi_dir%/config/xsd/compile.xsd</validation>
+				<validation>%core.agavi_dir%/config/rng/compile.rng</validation>
+				<transformation>%core.agavi_dir%/config/xsl/compile.xsl</transformation>
 			</handler>
 			<handler pattern="%core.system_config_dir%/compile.xml" class="AgaviCompileConfigHandler">
-				<validation>%core.agavi_dir%/config/xsd/compile.xsd</validation>
+				<validation>%core.agavi_dir%/config/rng/compile.rng</validation>
+				<transformation>%core.agavi_dir%/config/xsl/compile.xsl</transformation>
 			</handler>
 
 			<handler pattern="%core.config_dir%/settings.xml" class="AgaviSettingConfigHandler">
@@ -43,11 +45,13 @@
 			</handler>
 
 			<handler pattern="%core.config_dir%/action_filters.xml" class="AgaviFilterConfigHandler">
-				<validation>%core.agavi_dir%/config/xsd/filters.xsd</validation>
+				<validation>%core.agavi_dir%/config/rng/filters.rng</validation>
+				<transformation>%core.agavi_dir%/config/xsl/filters.xsl</transformation>
 			</handler>
 
 			<handler pattern="%core.config_dir%/global_filters.xml" class="AgaviFilterConfigHandler">
-				<validation>%core.agavi_dir%/config/xsd/filters.xsd</validation>
+				<validation>%core.agavi_dir%/config/rng/filters.rng</validation>
+				<transformation>%core.agavi_dir%/config/xsl/filters.xsl</transformation>
 			</handler>
 
 			<handler pattern="%core.config_dir%/output_types.xml" class="AgaviOutputTypeConfigHandler">
@@ -72,7 +76,8 @@
 			</handler>
 
 			<handler pattern="%core.config_dir%/translation.xml" class="AgaviTranslationConfigHandler">
-				<validation>%core.agavi_dir%/config/xsd/translation.xsd</validation>
+				<validation>%core.agavi_dir%/config/rng/translation.rng</validation>
+				<transformation>%core.agavi_dir%/config/xsl/translation.xsl</transformation>
 			</handler>
 
 			<handler pattern="%core.config_dir%/validators.xml" class="AgaviReturnArrayConfigHandler">
@@ -103,7 +108,8 @@
 			</handler>
 
 			<handler pattern="%core.module_dir%/*/config/action_filters.xml" class="AgaviFilterConfigHandler">
-				<validation>%core.agavi_dir%/config/xsd/filters.xsd</validation>
+				<validation>%core.agavi_dir%/config/rng/filters.rng</validation>
+				<transformation>%core.agavi_dir%/config/xsl/filters.xsl</transformation>
 			</handler>
 
 			<handler pattern="%core.module_dir%/*/config/module.xml" class="AgaviModuleConfigHandler">
