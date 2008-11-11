@@ -270,6 +270,7 @@
 		<property name="templates.directory.defaults.app.modules.actions" value="${templates.directory.defaults.app.modules}/actions" override="true" />
 		<property name="templates.directory.defaults.app.modules.views" value="${templates.directory.defaults.app.modules}/views" override="true" />
 		<property name="templates.directory.defaults.app.modules.templates" value="${templates.directory.defaults.app.modules}/templates" override="true" />
+		<property name="templates.directory.defaults.app.templates" value="${templates.directory.defaults.app}/templates" override="true" />
 		<property name="templates.directory.defaults.pub" value="${templates.directory.defaults}/pub" override="true" />
 
 		<!-- Define version control properties. -->
@@ -351,13 +352,19 @@
 		<agavi.execute-target name="view-create" />
 
 		<agavi.execute-target name="project-wizard-welcome-template" />
+	</target>
 
-		<!-- And fuck this routing too! -->
-		<agavi.select-path property="template.path" path="${templates.directory.defaults.app.config}/routing.xml.tmpl">
+	<target name="project-wizard-defaults">
+		<!-- Copy special "default" configurations. -->
+		<agavi.select-path property="template.path" path="${templates.directory.defaults.app.config}">
 			<from path="${templates.directory}" />
 			<from path="${agavi.directory.src.build.templates}" />
 		</agavi.select-path>
-		<copy overwrite="true" file="${template.path}" tofile="${project.directory}/${project.directory.app.config}/routing.xml">
+		<copy overwrite="true" todir="${project.directory}/${project.directory.app.config}">
+			<mapper type="glob" from="*.xml.tmpl" to="*.xml" />
+			<fileset dir="${template.path}">
+				<include name="**/*.xml.tmpl" />
+			</fileset>
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">
 					<token key="AGAVI_SOURCE_LOCATION" value="${agavi.directory.src}" />
@@ -368,8 +375,29 @@
 				</replacetokens>
 			</filterchain>
 		</copy>
-
-		<!-- And fuck the pub directory! -->
+		
+		<!-- Default global templates. -->
+		<agavi.select-path property="template.path" path="${templates.directory.defaults.app.templates}">
+			<from path="${templates.directory}" />
+			<from path="${agavi.directory.src.build.templates}" />
+		</agavi.select-path>
+		<copy todir="${project.directory}/${project.directory.app.templates}">
+			<mapper type="glob" from="*.tmpl" to="*" />
+			<fileset dir="${template.path}">
+				<include name="**/*.tmpl" />
+			</fileset>
+			<filterchain>
+				<replacetokens begintoken="%%" endtoken="%%">
+					<token key="AGAVI_SOURCE_LOCATION" value="${agavi.directory.src}" />
+					<token key="PROJECT_LOCATION" value="${project.directory}" />
+					<token key="PROJECT_NAME" value="${project.name}" />
+					<token key="PROJECT_PREFIX" value="${project.prefix}" />
+					<token key="TEMPLATES_LOCATION" value="${templates.directory}" />
+				</replacetokens>
+			</filterchain>
+		</copy>
+		
+		<!-- stuff from the pub directory -->
 		<agavi.select-path property="template.path" path="${templates.directory.defaults.pub}">
 			<from path="${templates.directory}" />
 			<from path="${agavi.directory.src.build.templates}" />
@@ -576,6 +604,8 @@
 	<target name="project-wizard" description="Creates a project and corresponding default actions, views, and templates">
 		<agavi.execute-target name="project-create" />
 		<agavi.execute-target name="public-web-create" />
+
+		<agavi.execute-target name="project-wizard-defaults" />
 
 		<agavi.input property="target.project-wizard.modules.names" message="Space-separated list of modules to create for ${project.name}" default="Default" promptCharacter=":" useExistingAsDefault="false" />
 		<agavi.iterate property="module.name" target="module-wizard" list="${target.project-wizard.modules.names}" delimiter=" ," exceptionsFatal="false" />
