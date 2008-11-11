@@ -97,16 +97,16 @@
 		<available file="${templates.dir}/defaults/templates/MasterTemplate.php.tmpl" property="templates.dir.current" value="${templates.dir}" />
 		<copy file="${templates.dir.current}/defaults/templates/MasterTemplate.php.tmpl" tofile="${app.dir}/templates/Master.php" />
 
-		<mkdir dir="${app.dir}/templates"/>
+		<mkdir dir="${app.dir}/templates/exceptions"/>
 		<property name="templates.dir.current" value="${templates.dir.default}" override="true" />
-		<available file="${templates.dir}/defaults/templates/exception/_default.php.tmpl" property="templates.dir.current" value="${templates.dir}" />
-		<copy file="${templates.dir.current}/defaults/templates/exception/_default.php.tmpl" tofile="${app.dir}/templates/exception/_default.php" />
+		<available file="${templates.dir}/defaults/templates/exceptions/_default.php.tmpl" property="templates.dir.current" value="${templates.dir}" />
+		<copy file="${templates.dir.current}/defaults/templates/exceptions/_default.php.tmpl" tofile="${app.dir}/templates/exceptions/_default.php" />
 		<property name="templates.dir.current" value="${templates.dir.default}" override="true" />
-		<available file="${templates.dir}/defaults/templates/exception/web.php.tmpl" property="templates.dir.current" value="${templates.dir}" />
-		<copy file="${templates.dir.current}/defaults/templates/exception/web.php.tmpl" tofile="${app.dir}/templates/exception/web.php" />
+		<available file="${templates.dir}/defaults/templates/exceptions/web.php.tmpl" property="templates.dir.current" value="${templates.dir}" />
+		<copy file="${templates.dir.current}/defaults/templates/exceptions/web.php.tmpl" tofile="${app.dir}/templates/exceptions/web.php" />
 		<property name="templates.dir.current" value="${templates.dir.default}" override="true" />
-		<available file="${templates.dir}/defaults/templates/exception/web-html.php.tmpl" property="templates.dir.current" value="${templates.dir}" />
-		<copy file="${templates.dir.current}/defaults/templates/exception/web-html.php.tmpl" tofile="${app.dir}/templates/exception/web-html.php" />
+		<available file="${templates.dir}/defaults/templates/exceptions/web-html.php.tmpl" property="templates.dir.current" value="${templates.dir}" />
+		<copy file="${templates.dir.current}/defaults/templates/exceptions/web-html.php.tmpl" tofile="${app.dir}/templates/exceptions/web-html.php" />
 		
 		<mkdir dir="${app.dir}/lib/action"/>
 		<property name="templates.dir.current" value="${templates.dir.default}"  override="true"  />
