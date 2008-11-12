@@ -1,8 +1,8 @@
 AGAVI CHANGELOG
 ===============
 
-1.0.0 beta 6 (October ??, 2008)
--------------------------------
+1.0.0 beta 6 (November 12, 2008)
+--------------------------------
 
 CHG: Assume "strict" validation mode directly inside AgaviValidationManager in addition to code templates and remove "conditional" default for development environments (#919) (David)
 
