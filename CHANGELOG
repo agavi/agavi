@@ -111,8 +111,8 @@ CHG: Deprecated AgaviAdodbDatabase (#662) (David)
 FIX: Security filters cannot perform checks in addition to isSecure() (#671) (David)
 
 
-0.11.6 RC1 (November ?, 2008)
------------------------------
+0.11.6 RC1 (November ??, 2008)
+------------------------------
 
 ADD: Optionally allow sending of response content when redirecting in AgaviWebResponse (#916) (David)
 
