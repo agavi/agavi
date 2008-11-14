@@ -31,6 +31,11 @@
 abstract class AgaviTimeZone
 {
 	/**
+	 * The identifier of a custom timezone
+	 */
+	const CUSTOM = 'Custom';
+	
+	/**
 	 * The translation manager instance.
 	 *
 	 * @var        AgaviTranslationManager
@@ -531,7 +536,7 @@ abstract class AgaviTimeZone
 		if($negative)
 			$offset = -$offset;
 
-		return new AgaviSimpleTimeZone($tm, $offset * 60000.0, 'Custom');
+		return new AgaviSimpleTimeZone($tm, $offset * 60000.0, self::CUSTOM);
 	}
 
 	/**
