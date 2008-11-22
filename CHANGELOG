@@ -122,6 +122,7 @@ CHG: Always merge slot response metadata even if response content is null (#917)
 CHG: Update timezone database to 2008i (#912) (David)
 CHG: Add standard warning about broken libxml versions (#909) (David)
 
+FIX: Invalid CSS in project wizard's WelcomeSuccess template (#928) (TANAKA Koichi, David)
 FIX: Converting an AgaviCalendar with a custom unnamed Timezone an DateTime object fails (#922) (Dominik)
 FIX: logging.xml and output_types.xml handlers have variable name escaping problems (#921) (David)
 FIX: Wrong urls when passing host and port to WebRouting::gen() (#902) (Felix)
