@@ -32,7 +32,7 @@ div {
 	margin-top: 50px;
 	padding-top: 340px;
 	background-image: url('plant.png');
-	background-position: center top;
+	background-position: top center;
 	background-repeat: no-repeat;
 	text-align: center;
 }
