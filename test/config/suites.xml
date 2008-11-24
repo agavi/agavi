@@ -13,6 +13,11 @@
 					<testfile>unit/routing/AgaviWebRoutingTest.php</testfile>
 				</testfiles>
 			</suite>
+			<suite name="Request">
+				<testfiles>
+					<testfile>unit/request/AgaviWebRequestDataHolderTest.php</testfile>
+				</testfiles>
+			</suite>
 		</suites>
 	</ae:configuration>
 </ae:configurations>
