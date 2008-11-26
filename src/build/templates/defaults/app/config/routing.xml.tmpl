@@ -2,10 +2,31 @@
 <configurations xmlns="http://agavi.org/agavi/1.0/config">
 	<configuration>
 		<routes>
-			<!-- This shows the welcome page after creating a project. Remove the
-			     route and action once you're done admiring its shininess. -->
+			<!-- this shows the welcome page after creating a project. remove it once you're done admiring its shininess. -->
 			<route pattern="" module="%actions.default_module%" action="Welcome" />
 			
+			<!-- an example for a CRUD-style set of routes -->
+			<route name="products" pattern="^/products" module="Products">
+				<!-- do not put the action into the parent route, because that one is not anchored at the end of the pattern! -->
+				<route name=".index" pattern="^$" action="Index" />
+				<route name=".latest" pattern="^/latest$" action="Latest" />
+				
+				<route name=".create" pattern="^/add$" action="Add" />
+				<!-- "Product" is not an action, but just a folder with sub-actions. if only this route, without children, matches, then the action cannot be resolved and a 404 is shown - exactly what we want! -->
+				<route name=".product" pattern="^/(id:\d+)" action="Product">
+					<route name=".view" pattern="^$" action=".View" />
+					<route name=".edit" pattern="^/edit$" action=".Edit" />
+					<route name=".delete" pattern="^/delete$" action=".Delete" />
+					
+					<!-- the gallery page is optional here, but the request parameter should not contain the leading slash, so our special syntax is in order -->
+					<route name=".gallery" pattern="^/gallery(/{page:\d+})?$" action=".Gallery">
+						<!-- assume the "1" by default and tell the routing what the rest of the string will look like when generating a URL -->
+						<default for="page">/{1}</default>
+					</route>
+				</route>
+			</route>
+			
+			<!-- default action for "/" -->
 			<route pattern="^/$" module="%actions.default_module%" action="%actions.default_action%" />
 		</routes>
 	</configuration>

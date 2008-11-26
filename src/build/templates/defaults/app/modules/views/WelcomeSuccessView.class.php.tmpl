@@ -1,14 +1,14 @@
 <?php
 
-class %%VIEW_CLASS%% extends AgaviView
+class %%VIEW_CLASS%% extends %%PROJECT_PREFIX%%%%MODULE_NAME%%BaseView
 {
-	public function execute(AgaviRequestDataHolder $rd)
+	public function executeHtml(AgaviRequestDataHolder $rd)
 	{
-		/* Create a PHP renderer and corresponding layer for this action. This way,
-		   it is guaranteed to work across output type or renderer changes. */
-		$renderer = new AgaviPhpRenderer();
-		$renderer->initialize($this->context, array());
-		$this->appendLayer($this->createLayer('AgaviFileTemplateLayer', 'content', $renderer));
+		// we load a "simple" layout with just one template layer
+		// as this is a special welcome page, completely standalone
+		$this->setupHtml($rd, 'simple');
+		
+		$this->setAttribute('agavi_release', AgaviConfig::get('agavi.release'));
 	}
 }
 

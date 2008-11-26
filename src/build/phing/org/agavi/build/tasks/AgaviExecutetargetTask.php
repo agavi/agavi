@@ -97,7 +97,8 @@ class AgaviExecutetargetTask extends AgaviTask
 				throw $be;
 			}
 			else {
-				$this->log($be->getMessage(), Project::MSG_WARN);
+				$this->log('Ignoring build exception: ' . $be->getMessage(), Project::MSG_WARN);
+				$this->log('Continuing build', Project::MSG_INFO);
 			}
 		}
 		

@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configurations xmlns="http://agavi.org/agavi/1.0/config">
 
-	<configuration environment="development.*">
+	<!-- only for web contexts in development envs -->
+	<configuration environment="development.*" context="web">
 		<filters>
 
 			<filter name="ExecutionTimeFilter" class="AgaviExecutionTimeFilter">
-				<parameter name="comment">On</parameter>
+				<!-- insert a comment with the container runtime -->
+				<parameter name="comment">true</parameter>
+				
+				<!-- only run for "html" output type so it doesn't ruin JSON responses etc -->
 				<parameter name="output_types">
 					<parameter>html</parameter>
 				</parameter>

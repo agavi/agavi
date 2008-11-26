@@ -49,7 +49,11 @@
 		</settings>
 
 		<exception_templates>
+			<!-- this is the exception template that's used by default unless one for a specific context has been defined, or for the current output type -->
+			<!-- note that exceptions that occur before a context is even fully initialized, or an exception that happens before the output types are loaded and determined, will use a template defined here -->
 			<exception_template>%core.agavi_dir%/exception/templates/shiny.php</exception_template>
+			<!-- an example for per-context exception templates -->
+			<!-- per-output-type templates can be set in output_types.xml -->
 			<exception_template context="console">%core.agavi_dir%/exception/templates/plaintext.php</exception_template>
 		</exception_templates>
 
@@ -61,4 +65,13 @@
 		</settings>
 	</configuration>
 
+	<configuration environment="production.*">
+		<exception_templates>
+			<!-- a different exception template for production -->
+			<!-- it really doesn't do much -->
+			<exception_template>%core.template_dir%/exceptions/_default.php</exception_template>
+			<!-- for the web, we want one that returns a 500 status -->
+			<exception_template context="web">%core.template_dir%/exceptions/web.php</exception_template>
+		</exception_templates>
+	</configuration>
 </configurations>

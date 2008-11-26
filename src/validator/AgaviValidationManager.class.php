@@ -82,7 +82,7 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 				throw new AgaviConfigurationException('Invalid validation mode "' . $parameters['mode'] . '" specified');
 			}
 		} else {
-			$parameters['mode'] = self::MODE_RELAXED;
+			$parameters['mode'] = self::MODE_STRICT;
 		}
 
 		$this->context = $context;

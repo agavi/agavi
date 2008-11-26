@@ -31,20 +31,22 @@
 		
 		<user class="AgaviSecurityUser" />
 		
-		<validation_manager class="AgaviValidationManager">
-			<ae:parameter name="mode">strict</ae:parameter>
-		</validation_manager>
+		<validation_manager class="AgaviValidationManager" />
 		
 	</ae:configuration>
 	
 	<ae:configuration environment="development.*">
 		
 		<response class="AgaviWebResponse">
+			<!-- in case you do var_dump() or something, as the content length is determined from the response content -->
 			<ae:parameter name="send_content_length">false</ae:parameter>
 		</response>
 	
 		<validation_manager class="AgaviValidationManager">
-			<ae:parameter name="mode">conditional</ae:parameter>
+			<!-- "conditional" mode would allow your actions to work without validation as long as no validators are defined at all -->
+			<!-- this is disabled by default so you don't run into surprises when deploying to production envs (which have "strict" mode enabled) without testing on a staging machine first -->
+			<!-- also, it's not recommended to use any mode other than "strict" -->
+			<!-- <ae:parameter name="mode">conditional</ae:parameter> -->
 		</validation_manager>
 		
 	</ae:configuration>
