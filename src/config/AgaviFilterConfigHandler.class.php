@@ -94,7 +94,7 @@ class AgaviFilterConfigHandler extends AgaviXmlConfigHandler
 			}
 		}
 
-		return $this->generate($data);
+		return $this->generate($data, $config);
 	}
 }
 

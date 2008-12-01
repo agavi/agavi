@@ -99,7 +99,7 @@ class AgaviModuleConfigHandler extends AgaviXmlConfigHandler
 			$code[] = 'AgaviConfig::fromArray($moduleConfig);';
 		}
 		
-		return $this->generate($code);
+		return $this->generate($code, $config);
 	}
 }
 

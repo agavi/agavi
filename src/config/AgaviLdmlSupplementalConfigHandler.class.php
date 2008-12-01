@@ -170,7 +170,7 @@ class AgaviLdmlSupplementalConfigHandler extends AgaviConfigHandler
 		$code = array();
 		$code[] = 'return ' . var_export($data, true) . ';';
 
-		return $this->generate($code);
+		return $this->generate($code, $config);
 	}
 
 	protected function resolveTerritoryToCountries($territoryContainments, $territory)
