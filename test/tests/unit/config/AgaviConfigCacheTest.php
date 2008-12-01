@@ -50,6 +50,16 @@ class AgaviConfigCacheTest extends AgaviPhpUnitTestCase
 		clearstatcache(); // make shure we don't get fooled by the stat cache
 		$this->assertTrue(AgaviConfigCache::isModified($config, $cacheName), 'Failed asserting that the config file has been modified.');
 	}
+
+	public function testModifiedNonexistantFile()
+	{
+		$config = AgaviConfig::get('core.config_dir').'/autoload.xml';
+		$cacheName = AgaviConfigCache::getCacheName($config);
+		if(file_exists($cacheName)) {
+			unlink($cacheName);
+		}	
+		$this->assertTrue(AgaviConfigCache::isModified($config, $cacheName), 'Failed asserting that the config file has been modified.');
+	}
 	
 	public function testWriteCacheFile()
 	{
