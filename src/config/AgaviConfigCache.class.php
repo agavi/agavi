@@ -249,8 +249,23 @@ final class AgaviConfigCache
 		}
 
 		// replace unfriendly filename characters with an underscore and postfix the name with a php extension
-		$config  = str_replace(array('\\', '/'), '_', $config) . '_' . $environment . '_' . $context . '.php';
-		return AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . self::CACHE_SUBDIR . DIRECTORY_SEPARATOR . $config;
+		// see http://trac.agavi.org/wiki/RFCs/Ticket932 for an explantion how cache names are constructed
+		$cacheName = sprintf(
+			'%1$s_%2$s.php',
+			preg_replace(
+				'/[^\w-_.]/i', 
+				'_', 
+				sprintf(
+					'%1$s_%2$s_%3$s', 
+					basename($config), 
+					$environment, 
+					$context
+				)
+			),
+			sha1($config.'_'.$environment.'_'.$context)
+		);
+		
+		return AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . self::CACHE_SUBDIR . DIRECTORY_SEPARATOR . $cacheName;
 
 	}
 
