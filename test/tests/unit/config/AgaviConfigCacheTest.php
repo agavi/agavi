@@ -51,6 +51,25 @@ class AgaviConfigCacheTest extends AgaviPhpUnitTestCase
 		$this->assertTrue(AgaviConfigCache::isModified($config, $cacheName), 'Failed asserting that the config file has been modified.');
 	}
 	
+	public function testWriteCacheFile()
+	{
+		$expected = 'This is a config cache test.';
+		$config = AgaviConfig::get('core.config_dir').'/foo.xml';
+		$cacheName = AgaviConfigCache::getCacheName($config);
+		if(file_exists($cacheName)) {
+			unlink($cacheName);
+		}
+		AgaviConfigCache::writeCacheFile($config, $cacheName, $expected);
+		$this->assertFileExists($cacheName);
+		$content = file_get_contents($cacheName);
+		$this->assertEquals($expected, $content);
+		
+		$append = "\nAnd a second line appended.";
+		AgaviConfigCache::writeCacheFile($config, $cacheName, $append, true);
+		$content = file_get_contents($cacheName);
+		$this->assertEquals($expected.$append, $content);
+	}
+	
 	public function testTicket931()
 	{
 		$config = 'project/foo.xml';
@@ -66,6 +85,4 @@ class AgaviConfigCacheTest extends AgaviPhpUnitTestCase
 		
 		$this->assertNotEquals(AgaviConfigCache::getCacheName($config1), AgaviConfigCache::getCacheName($config2));
 	}
-	
-	
 }
