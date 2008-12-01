@@ -262,7 +262,14 @@ final class AgaviConfigCache
 					$context
 				)
 			),
-			sha1($config.'_'.$environment.'_'.$context)
+			sha1(
+				sprintf(
+					'%1$s_%2$s_%3$s',
+					$config,
+					$environment,
+					$context
+				)
+			)
 		);
 		
 		return AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . self::CACHE_SUBDIR . DIRECTORY_SEPARATOR . $cacheName;
