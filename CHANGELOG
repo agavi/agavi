@@ -1,6 +1,12 @@
 AGAVI CHANGELOG
 ===============
 
+1.0.0 beta 7 (December ?, 2008)
+-------------------------------
+
+FIX: AgaviConfigCache::getCacheName() possibly creating ambiguous cache names (#932) (Felix)
+
+
 1.0.0 beta 6 (November 12, 2008)
 --------------------------------
 
