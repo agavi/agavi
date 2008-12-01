@@ -9,7 +9,7 @@ class AgaviConfigCacheTest extends AgaviPhpUnitTestCase
 	public function testGenerateCacheName($configname, $context, $expected)
 	{
 		$cachename = AgaviConfigCache::getCacheName($configname, $context);
-		$expected = AgaviConfig::get('core.cache_dir').'/config/'.$expected; 
+		$expected = AgaviConfig::get('core.cache_dir').DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.$expected; 
 		$this->assertEquals($expected, $cachename);
 	}
 	
@@ -28,7 +28,7 @@ class AgaviConfigCacheTest extends AgaviPhpUnitTestCase
 	
 	public function testCheckConfig()
 	{
-		$config = AgaviConfig::get('core.config_dir').'/autoload.xml';
+		$config = AgaviConfig::get('core.config_dir').DIRECTORY_SEPARATOR.'autoload.xml';
 		$expected = AgaviConfigCache::getCacheName($config);
 		if(file_exists($expected)) {
 			unlink($expected);
@@ -40,7 +40,7 @@ class AgaviConfigCacheTest extends AgaviPhpUnitTestCase
 	
 	public function testModified()
 	{
-		$config = AgaviConfig::get('core.config_dir').'/autoload.xml';
+		$config = AgaviConfig::get('core.config_dir').DIRECTORY_SEPARATOR.'autoload.xml';
 		$cacheName = AgaviConfigCache::getCacheName($config);
 		if(!file_exists($cacheName)) {
 			$cacheName = AgaviConfigCache::checkConfig($config);
@@ -53,7 +53,7 @@ class AgaviConfigCacheTest extends AgaviPhpUnitTestCase
 
 	public function testModifiedNonexistantFile()
 	{
-		$config = AgaviConfig::get('core.config_dir').'/autoload.xml';
+		$config = AgaviConfig::get('core.config_dir').DIRECTORY_SEPARATOR.'autoload.xml';
 		$cacheName = AgaviConfigCache::getCacheName($config);
 		if(file_exists($cacheName)) {
 			unlink($cacheName);
@@ -64,7 +64,7 @@ class AgaviConfigCacheTest extends AgaviPhpUnitTestCase
 	public function testWriteCacheFile()
 	{
 		$expected = 'This is a config cache test.';
-		$config = AgaviConfig::get('core.config_dir').'/foo.xml';
+		$config = AgaviConfig::get('core.config_dir').DIRECTORY_SEPARATOR.'foo.xml';
 		$cacheName = AgaviConfigCache::getCacheName($config);
 		if(file_exists($cacheName)) {
 			unlink($cacheName);
@@ -97,7 +97,7 @@ class AgaviConfigCacheTest extends AgaviPhpUnitTestCase
 	{
 		$config = 'project/foo.xml';
 		$cachename = AgaviConfigCache::getCacheName($config, 'with/slash');
-		$expected = AgaviConfig::get('core.cache_dir').'/config/project_foo.xml_'.AgaviConfig::get('core.environment').'_with_slash.php'; 
+		$expected = AgaviConfig::get('core.cache_dir').DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'project_foo.xml_'.AgaviConfig::get('core.environment').'_with_slash.php'; 
 		$this->assertEquals($expected, $cachename);
 	}
 	
