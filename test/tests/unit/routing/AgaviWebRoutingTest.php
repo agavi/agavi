@@ -299,11 +299,10 @@ class AgaviWebRoutingTest extends AgaviPhpUnitTestCase
 		try {
 			$this->routing->gen('callbacks.ticket_695');
 			$this->fail('Failed asserting that onGenerate() is called');
-		} catch (AgaviException $e) {
+		} catch(AgaviException $e) {
 			// successfully called
 		}
 	}
-	
 	
 	public function testTicket698()
 	{
@@ -318,7 +317,6 @@ class AgaviWebRoutingTest extends AgaviPhpUnitTestCase
 		$url = $this->routing->gen('test_ticket_713', array('zomg' => 'lol'));
 		$this->assertEquals('/test_ticket_713/lol', $url);
 	}
-	
 
 	public function testTicket717()
 	{

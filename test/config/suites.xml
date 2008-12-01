@@ -7,6 +7,11 @@
 					<testfile>unit/context/AgaviContextTest.php</testfile>
 				</testfiles>				
 			</suite>
+			<suite name="Config">
+				<testfiles>
+					<testfile>unit/config/AgaviConfigCacheTest.php</testfile>
+				</testfiles>
+			</suite>
 			<suite name="Routing">
 				<testfiles>
 					<testfile>unit/routing/AgaviRoutingTest.php</testfile>
@@ -16,6 +21,11 @@
 			<suite name="Request">
 				<testfiles>
 					<testfile>unit/request/AgaviWebRequestDataHolderTest.php</testfile>
+				</testfiles>
+			</suite>
+			<suite name="Util">
+				<testfiles>
+					<testfile>unit/util/AgaviToolkitTest.php</testfile>
 				</testfiles>
 			</suite>
 		</suites>
