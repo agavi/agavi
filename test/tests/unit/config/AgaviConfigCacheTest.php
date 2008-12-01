@@ -80,6 +80,19 @@ class AgaviConfigCacheTest extends AgaviPhpUnitTestCase
 		$this->assertEquals($expected.$append, $content);
 	}
 	
+	public function testClear()
+	{
+		$cacheDir = AgaviConfig::get('core.cache_dir').DIRECTORY_SEPARATOR.'config';
+		AgaviConfigCache::clear();
+		$directory = new DirectoryIterator($cacheDir);
+		foreach($directory as $item) {
+			if($directory->current()->isDot()) {
+				continue;
+			}
+			$this->fail(sprintf('Failed asserting that the cache dir "%1$s" is empty, it contains at least "%2$s"', $cacheDir, $item->getFileName()));
+		}
+	}
+	
 	public function testTicket931()
 	{
 		$config = 'project/foo.xml';
