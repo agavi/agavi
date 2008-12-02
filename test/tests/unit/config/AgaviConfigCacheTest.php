@@ -3,6 +3,19 @@
 class AgaviConfigCacheTest extends AgaviPhpUnitTestCase
 {
 	/**
+	 * Constructs a test case with the given name.
+	 *
+	 * @param  string $name
+	 * @param  array  $data
+	 * @param  string $dataName
+	 */
+	public function __construct($name = NULL, array $data = array(), $dataName = '')
+	{
+		parent::__construct($name, $data, $dataName);
+		$this->setRunTestInSeparateProcess(true);
+	}
+	
+	/**
 	 * @dataProvider dataGenerateCacheName 
 	 * 
 	 */
@@ -95,9 +108,11 @@ class AgaviConfigCacheTest extends AgaviPhpUnitTestCase
 	
 	/**
      * @expectedException AgaviUnreadableException
+     * this does not seem to work in isolation
      */
 	public function testAddNonexistantConfigHandlersFile()
 	{
+		$this->setExpectedException('AgaviUnreadableException');
 		AgaviConfigCache::addConfigHandlersFile('does/not/exist');
 	}
 	
@@ -108,6 +123,24 @@ class AgaviConfigCacheTest extends AgaviPhpUnitTestCase
 		$this->assertTrue(AgaviTestingConfigCache::handlersDirty(), 'Failed asserting that the handlersDirty flag is set after adding a config handlers file.');
 		$handlerFiles = AgaviTestingConfigCache::getHandlerFiles();
 		$this->assertFalse($handlerFiles[$config], sprintf('Failed asserting that the config file "%1$s" has not been loaded.', $config));
+	}
+	
+	public function testCallHandlers()
+	{
+		
+		$this->markTestIncomplete();
+	}
+	
+	public function testSetupHandlers()
+	{	
+		// this is not possible to test with the agavi unit tests as this needs
+		// a really clean env with no framework bootstrapped. Need to think about that.
+		$this->markTestIncomplete();
+		AgaviTestingConfigCache::resetHandlers();
+		$this->assertEquals(null, AgaviTestingConfigCache::getHandlers());
+		AgaviTestingConfigCache::setUpHandlers();
+		$handlers = AgaviTestingConfigCache::getHandlers();
+		$this->assertNotEquals(null, $handlers);
 	}
 	
 	public function testTicket931()
