@@ -22,6 +22,31 @@ class ConfigCacheTest extends AgaviTestCase
 
 */
 
+	private static function makeCacheName($config, $environment, $context = '')
+	{
+		return sprintf(
+			'%1$s_%2$s.php',
+			preg_replace(
+				'/[^\w-_.]/i', 
+				'_', 
+				sprintf(
+					'%1$s_%2$s_%3$s', 
+					basename(str_replace('\\', '/', $config)), 
+					$environment, 
+					$context
+				)
+			),
+			sha1(
+				sprintf(
+					'%1$s_%2$s_%3$s',
+					$config,
+					$environment,
+					$context
+				)
+			)
+		);
+	}
+
 	public function testCheckConfig()
 	{
 		$filename = AgaviConfigCache::checkConfig(AgaviConfig::get('core.config_dir') . '/factories.xml');
@@ -52,13 +77,13 @@ class ConfigCacheTest extends AgaviTestCase
 
 
 		$name = 'bleh/blah.xml';
-		$this->assertEquals($csd . 'bleh_blah.xml_' . $env . '_.php', AgaviConfigCache::getCacheName($name));
+		$this->assertEquals($csd . self::makeCacheName('bleh/blah.xml', $env), AgaviConfigCache::getCacheName($name));
 
 		$name = 'bleh\\blah.xml';
-		$this->assertEquals($csd . 'bleh_blah.xml_' . $env . '_.php', AgaviConfigCache::getCacheName($name) );
+		$this->assertEquals($csd . self::makeCacheName('bleh\\blah.xml', $env), AgaviConfigCache::getCacheName($name));
 
 		$name = 'bleh/blah.xml';
-		$this->assertEquals($csd . 'bleh_blah.xml_' . $env . '_' . $ctx . '.php', AgaviConfigCache::getCacheName($name, $ctx) );
+		$this->assertEquals($csd . self::makeCacheName('bleh/blah.xml', $env, $ctx), AgaviConfigCache::getCacheName($name, $ctx));
 	}
 
 	public function testload()
