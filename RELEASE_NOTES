@@ -16,6 +16,7 @@ A new configuration subsystem that natively deals with XML files replaces the cu
 Backwards compabibility requires PHP's XSL extension enabled; other than that, everything still works as usual. Old-style configuration file handlers are still supported (but deprecated), but don't support the new features explained above.
 Also, the namespaces of configuration files have been changed, with envelope namespaces (<configurations> and other elements) decoupled from the actual config content namespaces. Again, backwards compatibility is maintained, but you should upgrade your configuration files when moving to 1.0 in order to be able to fully leverage all features and make future transitions easier.
 Of note, the legacy support for configuration files with no namespace at all (just <configurations>) has been dropped completely, so your files at the very least have to be in the global 0.11 namespace (http://agavi.org/agavi/1.0/config).
+Names of compiled configuration files are now different from before; they now consist of the file base name, environment, context, and then a sha1 hash of these three components to make the filename unique. This prevents theoretical situations where configuration file names are ambiguous, and at the same time makes it easier to find a specific file in the cache directory. The files now contain the path to the source file in a header comment so configs with the same base name can be told apart.
 
 Module/Action/View/Model
 ------------------------
