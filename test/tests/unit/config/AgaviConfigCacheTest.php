@@ -143,6 +143,49 @@ class AgaviConfigCacheTest extends AgaviPhpUnitTestCase
 		$this->assertNotEquals(null, $handlers);
 	}
 	
+	public function testGetHandlerInfo()
+	{
+		$handlerInfo = AgaviTestingConfigCache::getHandlerInfo('notregistered');
+		$this->assertEquals(null, $handlerInfo);
+		
+		$expected = array(
+			'class' => 'AgaviReturnArrayConfigHandler',
+			'parameters' => array(),
+			'transformations' => array(
+				'single' => array('confighandler-testing.xsl',),
+				'compilation' => array(),
+			),
+			'validations' => array(
+				'single' => array(
+					'transformations_before' => array(
+						'relax_ng' => array(),
+						'schematron' => array(),
+						'xml_schema' => array(),
+					),
+					'transformations_after' => array(
+						'relax_ng' => array('confighandler-testing.rng'),
+						'schematron' => array(),
+						'xml_schema' => array(),
+					),
+				),
+				'compilation' => array(
+					'transformations_before' => array(
+						'relax_ng' => array(),
+						'schematron' => array(),
+						'xml_schema' => array(),
+					),
+					'transformations_after' => array(
+						'relax_ng' => array(),
+						'schematron' => array(),
+						'xml_schema' => array(),
+					),
+				),
+			),
+		);
+		$handlerInfo = AgaviTestingConfigCache::getHandlerInfo('confighandler-testing');
+		$this->assertEquals($expected, $handlerInfo);
+	}
+	
 	public function testTicket931()
 	{
 		$config = 'project/foo.xml';
