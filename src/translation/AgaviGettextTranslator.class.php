@@ -236,7 +236,7 @@ class AgaviGettextTranslator extends AgaviBasicTranslator
 			if(preg_match('#nplurals=\d+;\s+plural=(.*)$#D', $pf, $match)) {
 				$funcCode = $match[1];
 				$validOpChars = array(' ', 'n', '!', '&', '|', '<', '>', '(', ')', '?', ':', ';', '=', '+', '*', '/', '%', '-');
-				if(preg_match('#[^\d' . preg_quote(implode('', $validOpChars)) . ']#', $funcCode, $errorMatch)) {
+				if(preg_match('#[^\d' . preg_quote(implode('', $validOpChars), '#') . ']#', $funcCode, $errorMatch)) {
 					throw new AgaviException('Illegal character ' . $errorMatch[0] . ' in plural form ' . $funcCode);
 				}
 				

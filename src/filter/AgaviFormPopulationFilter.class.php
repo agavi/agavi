@@ -109,7 +109,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 			$cfg['skip'] = null;
 		}
 		if($cfg['skip'] !== null && count($cfg['skip'])) {
-			$skip = '/(\A' . str_replace('\[\]', '\[[^\]]*\]', implode('|\A', array_map('preg_quote', $cfg['skip']))) . ')/';
+			$skip = '/(\A' . str_replace('\[\]', '\[[^\]]*\]', implode('|\A', array_map('preg_quote', $cfg['skip'], array_fill(0, count($cfg['skip']), '/')))) . ')/';
 		}
 
 		if($cfg['force_request_uri'] !== false) {
