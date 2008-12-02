@@ -98,7 +98,7 @@ class AgaviConfigCacheTest extends AgaviPhpUnitTestCase
      */
 	public function testAddNonexistantConfigHandlersFile()
 	{
-		AgaviConfigCache::addConfigHandlersFile('does/note/exist');
+		AgaviConfigCache::addConfigHandlersFile('does/not/exist');
 	}
 	
 	public function testAddConfigHandlersFile()
