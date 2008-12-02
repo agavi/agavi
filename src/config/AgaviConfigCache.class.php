@@ -243,7 +243,7 @@ final class AgaviConfigCache
 	{
 		$environment = AgaviConfig::get('core.environment');
 
-		if(strlen($config) > 3 && ctype_alpha($config{0}) &&	$config{1} == ':' && ($config{2} == '\\' || $config{2} == '/')) {
+		if(strlen($config) > 3 && ctype_alpha($config[0]) && $config[1] == ':' && ($config[2] == '\\' || $config[2] == '/')) {
 			// file is a windows absolute path, strip off the drive letter
 			$config = substr($config, 3);
 		}

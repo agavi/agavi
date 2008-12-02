@@ -437,7 +437,7 @@ class AgaviDecimalFormatter
 						break;
 				}
 
-				if($roundUp){
+				if($roundUp) {
 					$integralLen = strlen($integralPart);
 					if($inIntegral) {
 						$pos = $integralLen - 1;
