@@ -29,9 +29,14 @@
  */
 class AgaviTestingConfigCache extends AgaviConfigCache
 {
-	public function handlersDirty()
+	public static function handlersDirty()
 	{
 		return self::$handlersDirty;
+	}
+	
+	public static function getHandlerFiles()
+	{
+		return self::$handlerFiles;
 	}
 }
 
