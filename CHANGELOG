@@ -8,6 +8,7 @@ CHG: Add configuration file path to header comments in compiled files if possibl
 
 FIX: Off-by-one error in AgaviToolkit::stringBase() (#936) (Felix)
 FIX: AgaviConfigCache::getCacheName() possibly creating ambiguous cache names (#932) (Felix)
+FIX: AgaviConfigCache::getCacheName() path escaping problems (#931) (Felix)
 
 
 1.0.0 beta 6 (November 12, 2008)
