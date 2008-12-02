@@ -72,7 +72,7 @@ class AgaviSoapControllerCallHandler
 		$functions = $ct->getSoapClient()->__getFunctions();
 		foreach($functions as $function) {
 			// now we try to match the called method against the function signatures
-			if(preg_match('/^(?:\S+|list\([^\)]*\))\s' . preg_quote($name) . '\(([^\)]*)\)$/', $function, $matches)) {
+			if(preg_match('/^(?:\S+|list\([^\)]*\))\s' . preg_quote($name, '/') . '\(([^\)]*)\)$/', $function, $matches)) {
 				// we found something, so we can extract all method argument names
 				preg_match_all('/\$([\w]+)/', $matches[1], $params);
 				for($i = 0; $i < count($params[1]); $i++) {
@@ -119,7 +119,7 @@ class AgaviSoapControllerCallHandler
 			//   typeName returnValueName;
 			// }
 			foreach($ct->getSoapClient()->__getTypes() as $type) {
-				if(preg_match('/^struct ' . preg_quote($returnType) . ' {\s+\w+\s(\w+);\s+}/m', $type, $matches)) {
+				if(preg_match('/^struct ' . preg_quote($returnType, '/') . ' {\s+\w+\s(\w+);\s+}/m', $type, $matches)) {
 					$returnName = $matches[1];
 					break;
 				}
