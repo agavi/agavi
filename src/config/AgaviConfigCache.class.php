@@ -42,7 +42,7 @@ final class AgaviConfigCache
 	/**
 	 * Load a configuration handler.
 	 *
-	 * @param      string The handler to use when parsing a configuration file.
+	 * @param      string The path of the originally requested configuration file.
 	 * @param      string An absolute filesystem path to a configuration file.
 	 * @param      string An absolute filesystem path to the cache file that
 	 *                    will be written.
@@ -63,7 +63,7 @@ final class AgaviConfigCache
 			self::loadConfigHandlers();
 		}
 
-		// grab the base name of the handler
+		// grab the base name of the originally requested config path
 		$basename = basename($name);
 
 		$handlerInfo = null;
