@@ -120,7 +120,7 @@ final class AgaviToolkit
 		$base = '';
 		for($i = 0; isset($baseString[$i]) && isset($compString[$i]) && $baseString[$i] == $compString[$i]; ++$i) {
 			$base .= $baseString[$i];
-			$equalAmount = $i;
+			$equalAmount = $i + 1;
 		}
 		return $base;
 	}

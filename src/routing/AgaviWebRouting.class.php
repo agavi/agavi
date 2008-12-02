@@ -177,9 +177,9 @@ class AgaviWebRouting extends AgaviRouting
 
 			$appendFrom = 0;
 			$this->prefix = AgaviToolkit::stringBase($sn, $path, $appendFrom);
-			$this->prefix .= substr($sn, $appendFrom + 1);
+			$this->prefix .= substr($sn, $appendFrom);
 
-			$this->input = substr($path, $appendFrom + 1);
+			$this->input = substr($path, $appendFrom);
 			if(!isset($_SERVER['SERVER_SOFTWARE']) || strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') === false || isset($_SERVER['HTTP_X_REWRITE_URL']) || !isset($_SERVER['GATEWAY_INTERFACE']) || strpos($_SERVER['GATEWAY_INTERFACE'], 'CGI') === false) {
 				// don't do that for IIS-CGI, it's already rawurldecode()d there
 				$this->input = rawurldecode($this->input);
