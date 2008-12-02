@@ -96,7 +96,7 @@ class AgaviAutoloadConfigHandler extends AgaviXmlConfigHandler
 			'return ' . var_export($data, true) . ';',
 		);
 
-		return $this->generate($code);
+		return $this->generate($code, $document->documentURI);
 	}
 }
 

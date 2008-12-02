@@ -157,7 +157,7 @@ class AgaviConfigHandlersConfigHandler extends AgaviXmlConfigHandler
 			'return ' . var_export($handlers, true),
 		);
 		
-		return $this->generate($data);
+		return $this->generate($data, $document->documentURI);
 	}
 	
 	/**

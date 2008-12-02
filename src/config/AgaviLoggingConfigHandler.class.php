@@ -137,7 +137,7 @@ class AgaviLoggingConfigHandler extends AgaviConfigHandler
 			$code[] = sprintf('$this->setDefaultLoggerName(%s);', var_export($defaultLogger, true));
 		}
 
-		return $this->generate($code);
+		return $this->generate($code, $config);
 	}
 }
 

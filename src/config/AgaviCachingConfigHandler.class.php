@@ -178,7 +178,7 @@ class AgaviCachingConfigHandler extends AgaviConfigHandler
 			'}',
 		);
 		
-		return $this->generate($code);
+		return $this->generate($code, $config);
 	}
 }
 

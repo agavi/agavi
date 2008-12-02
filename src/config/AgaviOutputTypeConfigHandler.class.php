@@ -153,7 +153,7 @@ class AgaviOutputTypeConfigHandler extends AgaviConfigHandler
 		}
 		$code[] = sprintf('$this->defaultOutputType = %s;', var_export($defaultOt, true));
 		
-		return $this->generate($code);
+		return $this->generate($code, $config);
 	}
 }
 

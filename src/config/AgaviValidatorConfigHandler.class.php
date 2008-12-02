@@ -94,7 +94,7 @@ class AgaviValidatorConfigHandler extends AgaviXmlConfigHandler
 			$newCode[] = '}';
 		}
 
-		return $this->generate($newCode);
+		return $this->generate($newCode, $config);
 	}
 
 	/**
