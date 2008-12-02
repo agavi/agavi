@@ -101,6 +101,12 @@ class AgaviConfigCacheTest extends AgaviPhpUnitTestCase
 		AgaviConfigCache::addConfigHandlersFile('does/note/exist');
 	}
 	
+	public function testAddConfigHandlersFile()
+	{
+		AgaviTestingConfigCache::addConfigHandlersFile(AgaviConfig::get('core.module_dir').'/Default/config/config_handlers.xml');
+		$this->assertTrue(AgaviTestingConfigCache::handlersDirty(), 'Failed asserting that the handlersDirty flag is set after adding a config handlers file.');
+	}
+	
 	public function testTicket931()
 	{
 		$config = 'project/foo.xml';
