@@ -30,24 +30,24 @@
  *
  * @version    $Id$
  */
-final class AgaviConfigCache
+class AgaviConfigCache
 {
 	const CACHE_SUBDIR = 'config';
 
 	/**
 	 * @var        array An array of AgaviConfigHandlers
 	 */
-	private static $handlers = null;
+	protected static $handlers = null;
 
 	/**
 	 * @var        array A string=>bool array containing config handler files and their loaded status
 	 */
-	private static $handlerFiles = array();
+	protected static $handlerFiles = array();
 
 	/**
 	 * @var        bool Whether there is an entry in self::$handlerFiles which needs processing
 	 */
-	private static $handlersDirty = true;
+	protected static $handlersDirty = true;
 
 	/**
 	 * Load a configuration handler.
@@ -65,55 +65,20 @@ final class AgaviConfigCache
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	private static function callHandler($name, $config, $cache, $context)
+	protected static function callHandler($name, $config, $cache, $context, $handlerInfo = null)
 	{
-		if(self::$handlers === null) {
-			// we need to load the handlers first
-			self::$handlers = array();
-			self::loadConfigHandlers();
-		}
-		if(self::$handlersDirty) {
-			// load additional config handlers
-			foreach(self::$handlerFiles as $filename => &$loaded) {
-				if(!$loaded) {
-					$loaded = true;
-					self::loadConfigHandlersFile($filename);
-				}
-			}
-			self::$handlersDirty = false;
-		}
+		self::setupHandlers();
 		
+		if (null === $handlerInfo)
+		{
+			$handlerInfo = self::getHandlerInfo($name);
 
-		// grab the base name of the handler
-		$basename = basename($name);
-
-		$handlerInfo = null;
-
-		if(isset(self::$handlers[$name])) {
-			// we have a handler associated with the full configuration path
-			$handlerInfo = self::$handlers[$name];
-		} elseif(isset(self::$handlers[$basename])) {
-			// we have a handler associated with the configuration base name
-			$handlerInfo = self::$handlers[$basename];
-		} else {
-			// let's see if we have any wildcard handlers registered that match
-			// this basename
-			foreach(self::$handlers as $key => $value)	{
-				// replace wildcard chars in the configuration and create the pattern
-				$pattern = sprintf('#%s#', str_replace('\*', '.*?', preg_quote($key, '#')));
-
-				if(preg_match($pattern, $name)) {
-					$handlerInfo = $value;
-					break;
-				}
+			if($handlerInfo === null) {
+				// we do not have a registered handler for this file
+				$error = 'Configuration file "%s" does not have a registered handler';
+				$error = sprintf($error, $config);
+				throw new AgaviConfigurationException($error);
 			}
-		}
-
-		if($handlerInfo === null) {
-			// we do not have a registered handler for this file
-			$error = 'Configuration file "%s" does not have a registered handler';
-			$error = sprintf($error, $config);
-			throw new AgaviConfigurationException($error);
 		}
 
 		// call the handler and retrieve the cache data
@@ -146,6 +111,74 @@ final class AgaviConfigCache
 		self::writeCacheFile($config, $cache, $data, false);
 	}
 
+	/**
+	 * set up the config handler.
+	 * 
+	 * check whether the handlers have been loaded or the dirtyHandlers
+	 * flag is set. Load any handler that has not been loaded.
+	 * 
+	 * @author       Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since        1.0.0
+	 */
+	protected static function setupHandlers()
+	{
+		if(self::$handlers === null) {
+			// we need to load the handlers first
+			self::$handlers = array();
+			self::loadConfigHandlers();
+		}
+		if(self::$handlersDirty) {
+			// load additional config handlers
+			foreach(self::$handlerFiles as $filename => &$loaded) {
+				if(!$loaded) {
+					self::loadConfigHandlersFile($filename);
+					$loaded = true;
+				}
+			}
+			self::$handlersDirty = false;
+		}
+	}
+	
+	/**
+	 * get the handler information for the given filename.
+	 * 
+	 * @param        string the name of the config file (partial path)
+	 * 
+	 * @return       array  the handler info
+	 * 
+	 * @author       Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since        1.0.0
+	 */
+	protected static function getHandlerInfo($name)
+	{
+		// grab the base name of the handler
+		$basename = basename($name);
+
+		$handlerInfo = null;
+
+		if(isset(self::$handlers[$name])) {
+			// we have a handler associated with the full configuration path
+			$handlerInfo = self::$handlers[$name];
+		} elseif(isset(self::$handlers[$basename])) {
+			// we have a handler associated with the configuration base name
+			$handlerInfo = self::$handlers[$basename];
+		} else {
+			// let's see if we have any wildcard handlers registered that match
+			// this basename
+			foreach(self::$handlers as $key => $value)	{
+				// replace wildcard chars in the configuration and create the pattern
+				$pattern = sprintf('#%s#', str_replace('\*', '.*?', preg_quote($key, '#')));
+
+				if(preg_match($pattern, $name)) {
+					$handlerInfo = $value;
+					break;
+				}
+			}
+		}
+		
+		return $handlerInfo;
+	}
+	
 	/**
 	 * Check to see if a configuration file has been modified and if so
 	 * recompile the cache file associated with it.
@@ -223,7 +256,7 @@ final class AgaviConfigCache
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
-	private static function clearCache($directory = '')
+	protected static function clearCache($directory = '')
 	{
 		AgaviToolkit::clearCache(self::CACHE_SUBDIR . DIRECTORY_SEPARATOR . $directory);
 	}
@@ -311,7 +344,7 @@ final class AgaviConfigCache
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	private static function loadConfigHandlers()
+	protected static function loadConfigHandlers()
 	{
 		// some checks first
 		if(!defined('LIBXML_DOTTED_VERSION') || (!AgaviConfig::get('core.ignore_broken_libxml', false) && !version_compare(LIBXML_DOTTED_VERSION, '2.6.16', 'gt'))) {
