@@ -93,6 +93,14 @@ class AgaviConfigCacheTest extends AgaviPhpUnitTestCase
 		}
 	}
 	
+	/**
+     * @expectedException AgaviUnreadableException
+     */
+	public function testAddNonexistantConfigHandlersFile()
+	{
+		AgaviConfigCache::addConfigHandlersFile('does/note/exist');
+	}
+	
 	public function testTicket931()
 	{
 		$config = 'project/foo.xml';
