@@ -248,20 +248,6 @@ class AgaviConfigCache
 	}
 
 	/**
-	 * Clear all configuration cache files.
-	 *
-	 * @param      string The subdirectory to clear in the cache directory.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @author     David Zülke <dz@bitxtender.com>
-	 * @since      0.9.0
-	 */
-	protected static function clearCache($directory = '')
-	{
-		AgaviToolkit::clearCache(self::CACHE_SUBDIR . DIRECTORY_SEPARATOR . $directory);
-	}
-
-	/**
 	 * Convert a normal filename into a cache filename.
 	 *
 	 * @param      string A normal filename.
