@@ -125,7 +125,7 @@ function isTest($name)
 
 function isHidden($name)
 {
-	return ($name{0} == ".");
+	return ($name[0] == ".");
 }
 
 function findTests($path, $title="Agavi")
