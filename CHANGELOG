@@ -6,7 +6,7 @@ AGAVI CHANGELOG
 
 ADD: Allow optional marshalling of document/literal wrapped request and response elements (#940) (Felix, David)
 
-CHG: refactor AgaviToolkit::stringBase() (#935) (Felix)
+CHG: Refactor AgaviToolkit::stringBase() (#935) (Felix)
 CHG: Add configuration file path to header comments in compiled files if possible (#938) (David)
 
 FIX: Off-by-one error in AgaviToolkit::stringBase() (#936) (Felix)
