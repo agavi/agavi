@@ -38,6 +38,31 @@ class AgaviTestingConfigCache extends AgaviConfigCache
 	{
 		return self::$handlerFiles;
 	}
+	
+	public static function getHandlers()
+	{
+		return self::$handlers;
+	}
+
+	public static function resetHandlers()
+	{
+		self::$handlers = null;
+	}
+
+	public static function setupHandlers()
+	{
+		parent::setupHandlers();
+	}
+
+	public static function getHandlerInfo($name)
+	{
+		return parent::getHandlerInfo($name);
+	}
+
+	public static function callHandler($name, $config, $cache, $context, $handlerInfo = null)
+	{
+		parent::callHandler($name, $config, $cache, $context, $handlerInfo);
+	}
 }
 
 
