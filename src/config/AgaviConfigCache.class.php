@@ -99,6 +99,8 @@ class AgaviConfigCache
 		self::loadConfigHandlers();
 		
 		if(self::$handlersDirty) {
+			// set handlersdirty to false, prevent an infinite loop
+			self::$handlersDirty = false;
 			// load additional config handlers
 			foreach(self::$handlerFiles as $filename => &$loaded) {
 				if(!$loaded) {
@@ -106,7 +108,6 @@ class AgaviConfigCache
 					$loaded = true;
 				}
 			}
-			self::$handlersDirty = false;
 		}
 	}
 	

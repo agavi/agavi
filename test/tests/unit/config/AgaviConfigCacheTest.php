@@ -135,7 +135,7 @@ class AgaviConfigCacheTest extends AgaviPhpUnitTestCase
 	{	
 		// this is not possible to test with the agavi unit tests as this needs
 		// a really clean env with no framework bootstrapped. Need to think about that.
-		$this->markTestIncomplete();
+		//$this->markTestIncomplete();
 		AgaviTestingConfigCache::resetHandlers();
 		$this->assertEquals(null, AgaviTestingConfigCache::getHandlers());
 		AgaviTestingConfigCache::setUpHandlers();
@@ -207,5 +207,16 @@ class AgaviConfigCacheTest extends AgaviPhpUnitTestCase
 		$config2 = 'project_foo.xml';
 		
 		$this->assertNotEquals(AgaviConfigCache::getCacheName($config1), AgaviConfigCache::getCacheName($config2));
+	}
+	
+	public function testTicket941()
+	{
+		if (!extension_loaded('xdebug')) {
+			$this->markSkipped('This test check for an infinite loop, you need xdebug as protection.');
+		}
+		
+		$config = AgaviConfig::get('core.module_dir').'/Default/config/config_handlers.xml';
+		AgaviTestingConfigCache::addConfigHandlersFile($config);
+		AgaviConfigCache::checkConfig(AgaviConfig::get('core.module_dir').'/Default/config/autoload.xml');
 	}
 }
