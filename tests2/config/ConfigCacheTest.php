@@ -79,11 +79,22 @@ class ConfigCacheTest extends AgaviTestCase
 		$name = 'bleh/blah.xml';
 		$this->assertEquals($csd . self::makeCacheName('bleh/blah.xml', $env), AgaviConfigCache::getCacheName($name));
 
-		$name = 'bleh\\blah.xml';
-		$this->assertEquals($csd . self::makeCacheName('bleh\\blah.xml', $env), AgaviConfigCache::getCacheName($name));
-
 		$name = 'bleh/blah.xml';
 		$this->assertEquals($csd . self::makeCacheName('bleh/blah.xml', $env, $ctx), AgaviConfigCache::getCacheName($name, $ctx));
+	}
+
+	public function testgetCacheNameWin()
+	{
+		if(strtoupper(substr(PHP_OS, 0, 3)) != 'WIN') {
+			$this->markTestSkipped('Skipping AgaviConfigCache::getCacheName() tests for Windows.');
+		}
+		
+		$env = AgaviConfig::get('core.environment');
+		$ctx = 'testContext';
+		$csd = AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . AgaviConfigCache::CACHE_SUBDIR . DIRECTORY_SEPARATOR;
+
+		$name = 'bleh\\blah.xml';
+		$this->assertEquals($csd . self::makeCacheName('bleh\\blah.xml', $env), AgaviConfigCache::getCacheName($name));
 	}
 
 	public function testload()
