@@ -3,6 +3,19 @@
 class AgaviConfigCacheTest extends AgaviPhpUnitTestCase
 {
 	/**
+	 * Constructs a test case with the given name.
+	 *
+	 * @param  string $name
+	 * @param  array  $data
+	 * @param  string $dataName
+	 */
+	public function __construct($name = NULL, array $data = array(), $dataName = '')
+	{
+		parent::__construct($name, $data, $dataName);
+		$this->setRunTestInSeparateProcess(true);
+	}
+	
+	/**
 	 * @dataProvider dataGenerateCacheName 
 	 * 
 	 */
@@ -91,6 +104,86 @@ class AgaviConfigCacheTest extends AgaviPhpUnitTestCase
 			}
 			$this->fail(sprintf('Failed asserting that the cache dir "%1$s" is empty, it contains at least "%2$s"', $cacheDir, $item->getFileName()));
 		}
+	}
+	
+	/**
+     * @expectedException AgaviUnreadableException
+     * this does not seem to work in isolation
+     */
+	public function testAddNonexistantConfigHandlersFile()
+	{
+		$this->setExpectedException('AgaviUnreadableException');
+		AgaviConfigCache::addConfigHandlersFile('does/not/exist');
+	}
+	
+	public function testAddConfigHandlersFile()
+	{
+		$config = AgaviConfig::get('core.module_dir').'/Default/config/config_handlers.xml';
+		AgaviTestingConfigCache::addConfigHandlersFile($config);
+		$this->assertTrue(AgaviTestingConfigCache::handlersDirty(), 'Failed asserting that the handlersDirty flag is set after adding a config handlers file.');
+		$handlerFiles = AgaviTestingConfigCache::getHandlerFiles();
+		$this->assertFalse($handlerFiles[$config], sprintf('Failed asserting that the config file "%1$s" has not been loaded.', $config));
+	}
+	
+	public function testCallHandlers()
+	{
+		
+		$this->markTestIncomplete();
+	}
+	
+	public function testSetupHandlers()
+	{	
+		// this is not possible to test with the agavi unit tests as this needs
+		// a really clean env with no framework bootstrapped. Need to think about that.
+		$this->markTestIncomplete();
+		AgaviTestingConfigCache::resetHandlers();
+		$this->assertEquals(null, AgaviTestingConfigCache::getHandlers());
+		AgaviTestingConfigCache::setUpHandlers();
+		$handlers = AgaviTestingConfigCache::getHandlers();
+		$this->assertNotEquals(null, $handlers);
+	}
+	
+	public function testGetHandlerInfo()
+	{
+		$handlerInfo = AgaviTestingConfigCache::getHandlerInfo('notregistered');
+		$this->assertEquals(null, $handlerInfo);
+		
+		$expected = array(
+			'class' => 'AgaviReturnArrayConfigHandler',
+			'parameters' => array(),
+			'transformations' => array(
+				'single' => array('confighandler-testing.xsl',),
+				'compilation' => array(),
+			),
+			'validations' => array(
+				'single' => array(
+					'transformations_before' => array(
+						'relax_ng' => array(),
+						'schematron' => array(),
+						'xml_schema' => array(),
+					),
+					'transformations_after' => array(
+						'relax_ng' => array('confighandler-testing.rng'),
+						'schematron' => array(),
+						'xml_schema' => array(),
+					),
+				),
+				'compilation' => array(
+					'transformations_before' => array(
+						'relax_ng' => array(),
+						'schematron' => array(),
+						'xml_schema' => array(),
+					),
+					'transformations_after' => array(
+						'relax_ng' => array(),
+						'schematron' => array(),
+						'xml_schema' => array(),
+					),
+				),
+			),
+		);
+		$handlerInfo = AgaviTestingConfigCache::getHandlerInfo('confighandler-testing');
+		$this->assertEquals($expected, $handlerInfo);
 	}
 	
 	public function testTicket931()
