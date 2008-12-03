@@ -17,11 +17,11 @@ class AgaviConfigCacheTest extends AgaviPhpUnitTestCase
 	{
 		return array(	'slashes_null' =>     array('foo/bar/back\\slash.xml', 
 													null, 
-													'foo_bar_back_slash.xml_'.AgaviConfig::get('core.environment').'_.php',
+													'back_slash.xml_'.AgaviConfig::get('core.environment').'__'.sha1('foo/bar/back\\slash.xml_'.AgaviConfig::get('core.environment').'_').'.php',
 													),
 						'<contextname>' =>    array('foo/bar/back\\slash.xml',
 													'<contextname>',
-													'foo_bar_back_slash.xml_'.AgaviConfig::get('core.environment').'_<contextname>.php',
+													'back_slash.xml_'.AgaviConfig::get('core.environment').'__contextname__'.sha1('foo/bar/back\\slash.xml_'.AgaviConfig::get('core.environment').'_<contextname>').'.php',
 													),
 					);
 	}
@@ -96,8 +96,15 @@ class AgaviConfigCacheTest extends AgaviPhpUnitTestCase
 	public function testTicket931()
 	{
 		$config = 'project/foo.xml';
-		$cachename = AgaviConfigCache::getCacheName($config, 'with/slash');
-		$expected = AgaviConfig::get('core.cache_dir').DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'project_foo.xml_'.AgaviConfig::get('core.environment').'_with_slash.php'; 
+		$context = 'with/slash';
+		$cachename = AgaviConfigCache::getCacheName($config, $context);
+		
+		$expected = AgaviConfig::get('core.cache_dir').DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR;
+		$expected .= 'foo.xml';
+		$expected .= '_'.preg_replace('/[^\w-_]/i', '_', AgaviConfig::get('core.environment'));
+		$expected .= '_'.preg_replace('/[^\w-_]/i', '_', $context).'_';
+		$expected .= sha1($config.'_'.AgaviConfig::get('core.environment').'_'.$context).'.php'; 
+		
 		$this->assertEquals($expected, $cachename);
 	}
 	

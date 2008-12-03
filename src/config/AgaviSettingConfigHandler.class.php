@@ -101,7 +101,7 @@ class AgaviSettingConfigHandler extends AgaviConfigHandler
 
 		$code = 'AgaviConfig::fromArray(' . var_export($data, true) . ');';
 
-		return $this->generate($code);
+		return $this->generate($code, $config);
 	}
 }
 

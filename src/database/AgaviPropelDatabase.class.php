@@ -145,7 +145,7 @@ class AgaviPropelDatabase extends AgaviDatabase
 		} else {
 			// trigger Propel autoload and go go go
 			if(class_exists('Propel')) {
-				$this->connection = Propel::getConnection();
+				$this->connection = Propel::getConnection($this->getParameter('datasource'));
 				
 				foreach((array)$this->getParameter('init_queries') as $query) {
 					$this->connection->exec($query);

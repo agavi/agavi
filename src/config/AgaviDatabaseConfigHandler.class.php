@@ -113,7 +113,7 @@ class AgaviDatabaseConfigHandler extends AgaviXmlConfigHandler
 
 		$data[] = sprintf("\$this->defaultDatabaseName = %s;", var_export($default, true));
 
-		return $this->generate($data);
+		return $this->generate($data, $document->documentURI);
 	}
 }
 

@@ -262,7 +262,7 @@ class AgaviFactoryConfigHandler extends AgaviXmlConfigHandler
 		
 		$code[] = sprintf('$this->shutdownSequence = array(%s);', implode(",\n", $shutdownSequence));
 		
-		return $this->generate($code);
+		return $this->generate($code, $config);
 	}
 }
 

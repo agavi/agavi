@@ -72,7 +72,7 @@ class AgaviSoapControllerCallHandler
 		$functions = $ct->getSoapClient()->__getFunctions();
 		foreach($functions as $function) {
 			// now we try to match the called method against the function signatures
-			if(preg_match('/^(?:\S+|list\([^\)]*\))\s' . preg_quote($name) . '\(([^\)]*)\)$/', $function, $matches)) {
+			if(preg_match('/^(?:\S+|list\([^\)]*\))\s' . preg_quote($name, '/') . '\(([^\)]*)\)$/', $function, $matches)) {
 				// we found something, so we can extract all method argument names
 				preg_match_all('/\$([\w]+)/', $matches[1], $params);
 				for($i = 0; $i < count($params[1]); $i++) {
@@ -80,10 +80,26 @@ class AgaviSoapControllerCallHandler
 					$arguments[$params[1][$i]] = $arguments[$i];
 					unset($arguments[$i]);
 				}
+				// and while we're at it, please get us the name of the return value as well, we need it in document/literal wrapped WSDL styles
+				$returnType = '';
+				if(preg_match('/^(\w+) /', $function, $matches)) {
+					$returnType = $matches[1];
+				}
 				break;
 			}
 		}
 		// all that was done because PHP's SOAP extension doesn't allow us to get information about the request. In SOAP, remote methods are always defined using named parameters, but that naming gets lost as PHP calls the respective function on the server directly, and PHP doesn't have named arguments. So all we know is the values that were given for the first, second, and so on parameter. But in Agavi, we want to access parameters by their names. We made it. With an ugly hack. Thank you, Zend.
+		
+		// for document/literal wrapped style services, unpack the complex type passed in by php, see http://bugs.php.net/bug.php?id=30302 - PHP produces an stdClass object with named members.
+		if($ct->getParameter('force_document_literal_wrapped_marshalling', false)) {
+			$unpackedArguments = array();
+			foreach($arguments as $argument) {
+				foreach($argument as $name => $value) {
+					$unpackedArguments[$name] = $value;
+				}
+			}
+			$arguments = $unpackedArguments;
+		}
 		
 		// finally, we can populate the request with the final data and call the _real_ dispatch() method on the "normal" controller. We hand it the arguments we got in the SOAP request. Everyone's happy.
 		$rd = $rq->getRequestData();
@@ -94,7 +110,25 @@ class AgaviSoapControllerCallHandler
 		$response = $ct->doDispatch();
 		
 		// return the content. that's an array, or a float, or whatever, and PHP's SOAP extension will handle the response envelope creation, sending etc for us
-		return $response->getContent();
+		$responseContent = $response->getContent();
+		
+		// repack the document/literal wrapped content if required
+		if($ct->getParameter('force_document_literal_wrapped_marshalling', false)) {
+			// the return type is a complex type with a single element, but what's the name of that element?
+			// struct methodNameResponse {
+			//   typeName returnValueName;
+			// }
+			foreach($ct->getSoapClient()->__getTypes() as $type) {
+				if(preg_match('/^struct ' . preg_quote($returnType, '/') . ' {\s+\w+\s(\w+);\s+}/m', $type, $matches)) {
+					$returnName = $matches[1];
+					break;
+				}
+			}
+			$responseContent = new stdClass();
+			$responseContent->$returnName = $responseContent;
+		}
+		
+		return $responseContent;
 	}
 }
 

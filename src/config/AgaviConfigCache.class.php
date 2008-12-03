@@ -52,7 +52,7 @@ final class AgaviConfigCache
 	/**
 	 * Load a configuration handler.
 	 *
-	 * @param      string The handler to use when parsing a configuration file.
+	 * @param      string The path of the originally requested configuration file.
 	 * @param      string An absolute filesystem path to a configuration file.
 	 * @param      string An absolute filesystem path to the cache file that
 	 *                    will be written.
@@ -84,7 +84,7 @@ final class AgaviConfigCache
 		}
 		
 
-		// grab the base name of the handler
+		// grab the base name of the originally requested config path
 		$basename = basename($name);
 
 		$handlerInfo = null;
@@ -243,14 +243,36 @@ final class AgaviConfigCache
 	{
 		$environment = AgaviConfig::get('core.environment');
 
-		if(strlen($config) > 3 && ctype_alpha($config{0}) &&	$config{1} == ':' && ($config{2} == '\\' || $config{2} == '/')) {
+		if(strlen($config) > 3 && ctype_alpha($config[0]) && $config[1] == ':' && ($config[2] == '\\' || $config[2] == '/')) {
 			// file is a windows absolute path, strip off the drive letter
 			$config = substr($config, 3);
 		}
 
 		// replace unfriendly filename characters with an underscore and postfix the name with a php extension
-		$config  = str_replace(array('\\', '/'), '_', $config) . '_' . $environment . '_' . $context . '.php';
-		return AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . self::CACHE_SUBDIR . DIRECTORY_SEPARATOR . $config;
+		// see http://trac.agavi.org/wiki/RFCs/Ticket932 for an explantion how cache names are constructed
+		$cacheName = sprintf(
+			'%1$s_%2$s.php',
+			preg_replace(
+				'/[^\w-_.]/i', 
+				'_', 
+				sprintf(
+					'%1$s_%2$s_%3$s', 
+					basename($config), 
+					$environment, 
+					$context
+				)
+			),
+			sha1(
+				sprintf(
+					'%1$s_%2$s_%3$s',
+					$config,
+					$environment,
+					$context
+				)
+			)
+		);
+		
+		return AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . self::CACHE_SUBDIR . DIRECTORY_SEPARATOR . $cacheName;
 
 	}
 

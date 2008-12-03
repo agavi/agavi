@@ -118,9 +118,10 @@ final class AgaviToolkit
 	{
 		$equalAmount = 0;
 		$base = '';
-		for($i = 0; isset($baseString[$i]) && isset($compString[$i]) && $baseString[$i] == $compString[$i]; ++$i) {
+		$maxEqualAmount = min(strlen($baseString), strlen($compString));
+		for($i = 0; ($i < $maxEqualAmount) && $baseString[$i] == $compString[$i]; ++$i) {
 			$base .= $baseString[$i];
-			$equalAmount = $i;
+			$equalAmount = $i + 1;
 		}
 		return $base;
 	}

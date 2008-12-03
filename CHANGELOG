@@ -1,6 +1,19 @@
 AGAVI CHANGELOG
 ===============
 
+1.0.0 beta 7 (December ?, 2008)
+-------------------------------
+
+ADD: Allow optional marshalling of document/literal wrapped request and response elements (#940) (Felix, David)
+
+CHG: Refactor AgaviToolkit::stringBase() (#935) (Felix)
+CHG: Add configuration file path to header comments in compiled files if possible (#938) (David)
+
+FIX: Off-by-one error in AgaviToolkit::stringBase() (#936) (Felix)
+FIX: AgaviConfigCache::getCacheName() possibly creating ambiguous cache names (#932) (Felix)
+FIX: AgaviConfigCache::getCacheName() path escaping problems (#931) (Felix)
+
+
 1.0.0 beta 6 (November 12, 2008)
 --------------------------------
 
@@ -116,12 +129,15 @@ FIX: Security filters cannot perform checks in addition to isSecure() (#671) (Da
 
 ADD: Optionally allow sending of response content when redirecting in AgaviWebResponse (#916) (David)
 
+CHG: Add +FollowSymLinks to .htaccess code templates and samples (#893) (David)
 CHG: Add more best practices to code templates (#910) (David)
 CHG: Use standard layouts etc for system actions instead of hand-built renderers and layers in code templates (#911) (David)
 CHG: Always merge slot response metadata even if response content is null (#917) (David)
 CHG: Update timezone database to 2008i (#912) (David)
 CHG: Add standard warning about broken libxml versions (#909) (David)
 
+FIX: Pattern delimiter is not passed to several preg_quote calls (#939) (David)
+FIX: AgaviPropelDatabase::connect() doesn't honor datasource parameter (#937) (David, Sven Kretschmann)
 FIX: Invalid CSS in project wizard's WelcomeSuccess template (#928) (TANAKA Koichi, David)
 FIX: Converting an AgaviCalendar with a custom unnamed Timezone an DateTime object fails (#922) (Dominik)
 FIX: logging.xml and output_types.xml handlers have variable name escaping problems (#921) (David)

@@ -47,7 +47,7 @@ class AgaviReturnArrayConfigHandler extends AgaviConfigHandler
 		// compile data
 		$code = 'return ' . var_export($data, true) . ';';
 
-		return $this->generate($code);
+		return $this->generate($code, $config);
 	}
 
 	/**

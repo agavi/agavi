@@ -445,7 +445,7 @@ class AgaviOlsonTimeZone extends AgaviTimeZone
 	 */
 	public function getDSTSavings()
 	{
-		if($this->finalZone !== null){
+		if($this->finalZone !== null) {
 			return $this->finalZone->getDSTSavings();
 		}
 		return parent::getDSTSavings();
