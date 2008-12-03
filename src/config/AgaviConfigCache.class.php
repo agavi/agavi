@@ -30,24 +30,29 @@
  *
  * @version    $Id$
  */
-final class AgaviConfigCache
+class AgaviConfigCache
 {
 	const CACHE_SUBDIR = 'config';
 
 	/**
 	 * @var        array An array of AgaviConfigHandlers
 	 */
-	private static $handlers = null;
+	protected static $handlers = null;
 
 	/**
 	 * @var        array A string=>bool array containing config handler files and their loaded status
 	 */
-	private static $handlerFiles = array();
+	protected static $handlerFiles = array();
 
 	/**
 	 * @var        bool Whether there is an entry in self::$handlerFiles which needs processing
 	 */
-	private static $handlersDirty = true;
+	protected static $handlersDirty = true;
+	
+	/**
+	 * @var        bool Whether the config handler files have been required
+	 */
+	protected static $filesIncluded = false;
 
 	/**
 	 * Load a configuration handler.
@@ -57,6 +62,7 @@ final class AgaviConfigCache
 	 * @param      string An absolute filesystem path to the cache file that
 	 *                    will be written.
 	 * @param      string The context which we're currently running.
+	 * @param      array  optional config handler info
 	 *
 	 * @throws     <b>AgaviConfigurationException</b> If a requested configuration
 	 *                                                file does not have an
@@ -65,25 +71,57 @@ final class AgaviConfigCache
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	private static function callHandler($name, $config, $cache, $context)
+	protected static function callHandler($name, $config, $cache, $context, $handlerInfo = null)
 	{
-		if(self::$handlers === null) {
+		self::setupHandlers();
+		
+		if (null === $handlerInfo)
+		{
 			// we need to load the handlers first
-			self::$handlers = array();
-			self::loadConfigHandlers();
+			$handlerInfo = self::getHandlerInfo($name);
 		}
+
+		$data =  self::executeHandler($config, $context, $handlerInfo);
+		self::writeCacheFile($config, $cache, $data, false);
+	}
+
+	/**
+	 * set up the config handler.
+	 * 
+	 * check whether the handlers have been loaded or the dirtyHandlers
+	 * flag is set. Load any handler that has not been loaded.
+	 * 
+	 * @author       Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since        1.0.0
+	 */
+	protected static function setupHandlers()
+	{
+		self::loadConfigHandlers();
+		
 		if(self::$handlersDirty) {
 			// load additional config handlers
 			foreach(self::$handlerFiles as $filename => &$loaded) {
 				if(!$loaded) {
-					$loaded = true;
 					self::loadConfigHandlersFile($filename);
+					$loaded = true;
 				}
 			}
 			self::$handlersDirty = false;
 		}
-		
-
+	}
+	
+	/**
+	 * get the handler information for the given filename.
+	 * 
+	 * @param        string the name of the config file (partial path)
+	 * 
+	 * @return       array  the handler info
+	 * 
+	 * @author       Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since        1.0.0
+	 */
+	protected static function getHandlerInfo($name)
+	{
 		// grab the base name of the originally requested config path
 		$basename = basename($name);
 
@@ -108,14 +146,31 @@ final class AgaviConfigCache
 				}
 			}
 		}
-
+		
+		return $handlerInfo;
+	}
+	
+	/**
+	 * get the handler information for the given filename.
+	 * 
+	 * @param        string the path to the config file (full path)
+	 * @param        string The context which we're currently running.
+	 * @param        array  the config handler info
+	 * 
+	 * @return       string the compiled data
+	 * 
+	 * @author       Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since        1.0.0
+	 */
+	protected static function executeHandler($config, $context, $handlerInfo)
+	{
 		if($handlerInfo === null) {
 			// we do not have a registered handler for this file
 			$error = 'Configuration file "%s" does not have a registered handler';
 			$error = sprintf($error, $config);
 			throw new AgaviConfigurationException($error);
 		}
-
+		
 		// call the handler and retrieve the cache data
 		$handler = new $handlerInfo['class'];
 		if($handler instanceof AgaviIXmlConfigHandler) {
@@ -142,10 +197,10 @@ final class AgaviConfigCache
 			$handler->initialize($validationFile, null, $handlerInfo['parameters']);
 			$data = $handler->execute($config, $context);
 		}
-
-		self::writeCacheFile($config, $cache, $data, false);
+		
+		return $data;
 	}
-
+	
 	/**
 	 * Check to see if a configuration file has been modified and if so
 	 * recompile the cache file associated with it.
@@ -212,20 +267,6 @@ final class AgaviConfigCache
 	public static function clear()
 	{
 		AgaviToolkit::clearCache(self::CACHE_SUBDIR);
-	}
-
-	/**
-	 * Clear all configuration cache files.
-	 *
-	 * @param      string The subdirectory to clear in the cache directory.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @author     David Zülke <dz@bitxtender.com>
-	 * @since      0.9.0
-	 */
-	private static function clearCache($directory = '')
-	{
-		AgaviToolkit::clearCache(self::CACHE_SUBDIR . DIRECTORY_SEPARATOR . $directory);
 	}
 
 	/**
@@ -311,48 +352,62 @@ final class AgaviConfigCache
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	private static function loadConfigHandlers()
+	protected static function loadConfigHandlers()
 	{
+		if(self::$handlers !== null) {
+			return;
+		} else {
+			self::$handlers = array();
+		}
+		
 		// some checks first
 		if(!defined('LIBXML_DOTTED_VERSION') || (!AgaviConfig::get('core.ignore_broken_libxml', false) && !version_compare(LIBXML_DOTTED_VERSION, '2.6.16', 'gt'))) {
 			throw new AgaviException("A libxml version greater than 2.6.16 is highly recommended. With version 2.6.16 and possibly later releases, validation of XML configuration files will not work and Form Population Filter will eventually fail randomly on some documents due to *severe bugs* in older libxml releases (2.6.16 was released in November 2004, so it is really getting time to update).\n\nIf you still would like to try your luck, disable this message by doing\nAgaviConfig::set('core.ignore_broken_libxml', true);\nand\nAgaviConfig::set('core.skip_config_validation', true);\nbefore calling\nAgavi::bootstrap();\nin index.php (app/config.php is not the right place for this).\n\nBut be advised that you *will* run into segfaults and other sad situations eventually, so what you should really do is upgrade your libxml install.");
 		}
 		
 		$agaviDir = AgaviConfig::get('core.agavi_dir');
-		// since we only need the parser and handlers when the config is not cached
-		// it is sufficient to include them at this stage
-		require_once($agaviDir . '/config/AgaviILegacyConfigHandler.interface.php');
-		require($agaviDir . '/config/AgaviIXmlConfigHandler.interface.php');
-		require_once($agaviDir . '/config/AgaviBaseConfigHandler.class.php');
-		require_once($agaviDir . '/config/AgaviConfigHandler.class.php');
-		require($agaviDir . '/config/AgaviXmlConfigHandler.class.php');
-		require($agaviDir . '/config/AgaviAutoloadConfigHandler.class.php');
-		require($agaviDir . '/config/AgaviConfigHandlersConfigHandler.class.php');
-		require($agaviDir . '/config/AgaviConfigValueHolder.class.php');
-		require($agaviDir . '/config/AgaviConfigParser.class.php');
-		require($agaviDir . '/config/AgaviXmlConfigParser.class.php');
-		// extended DOM* classes
-		require($agaviDir . '/config/util/dom/AgaviXmlConfigDomAttr.class.php');
-		require($agaviDir . '/config/util/dom/AgaviXmlConfigDomCharacterData.class.php');
-		require($agaviDir . '/config/util/dom/AgaviXmlConfigDomComment.class.php');
-		require($agaviDir . '/config/util/dom/AgaviXmlConfigDomDocument.class.php');
-		require($agaviDir . '/config/util/dom/AgaviXmlConfigDomDocumentFragment.class.php');
-		require($agaviDir . '/config/util/dom/AgaviXmlConfigDomDocumentType.class.php');
-		require($agaviDir . '/config/util/dom/AgaviXmlConfigDomElement.class.php');
-		require($agaviDir . '/config/util/dom/AgaviXmlConfigDomEntity.class.php');
-		require($agaviDir . '/config/util/dom/AgaviXmlConfigDomEntityReference.class.php');
-		require($agaviDir . '/config/util/dom/AgaviXmlConfigDomNode.class.php');
-		require($agaviDir . '/config/util/dom/AgaviXmlConfigDomNotation.class.php');
-		require($agaviDir . '/config/util/dom/AgaviXmlConfigDomProcessingInstruction.class.php');
-		require($agaviDir . '/config/util/dom/AgaviXmlConfigDomText.class.php');
-		// schematron processor
-		require($agaviDir . '/config/util/schematron/AgaviXmlConfigSchematronProcessor.class.php');
-		// extended XSL* classes
-		if(!AgaviConfig::get('core.skip_config_transformations', false)) {
-			if(!extension_loaded('xsl')) {
-				throw new AgaviConfigurationException("The XSL extension for PHP is used by Agavi for performing transformations in the configuration system; this may be disabled by setting\nAgaviConfig::set('core.skip_config_transformations', true);\nbefore calling\nAgavi::bootstrap();\nin index.php (app/config.php is not the right place for this).\n\nAs a result, you *will* have to use the latest configuration file formats and namespaces as backwards compatibility is implemented through XSLT. Also, certain additional configuration file validations implemented via Schematron will not be performed.");
+		
+		// :NOTE: fgilcher, 2008-12-03
+		// we need this method reentry safe for unit testing
+		// sorry for the testing code in the class, but I don't have
+		// any other idea to solve the issue
+		if (!self::$filesIncluded) {
+			// since we only need the parser and handlers when the config is not cached
+			// it is sufficient to include them at this stage
+			require_once($agaviDir . '/config/AgaviILegacyConfigHandler.interface.php');
+			require($agaviDir . '/config/AgaviIXmlConfigHandler.interface.php');
+			require_once($agaviDir . '/config/AgaviBaseConfigHandler.class.php');
+			require_once($agaviDir . '/config/AgaviConfigHandler.class.php');
+			require($agaviDir . '/config/AgaviXmlConfigHandler.class.php');
+			require($agaviDir . '/config/AgaviAutoloadConfigHandler.class.php');
+			require($agaviDir . '/config/AgaviConfigHandlersConfigHandler.class.php');
+			require($agaviDir . '/config/AgaviConfigValueHolder.class.php');
+			require($agaviDir . '/config/AgaviConfigParser.class.php');
+			require($agaviDir . '/config/AgaviXmlConfigParser.class.php');
+			// extended DOM* classes
+			require($agaviDir . '/config/util/dom/AgaviXmlConfigDomAttr.class.php');
+			require($agaviDir . '/config/util/dom/AgaviXmlConfigDomCharacterData.class.php');
+			require($agaviDir . '/config/util/dom/AgaviXmlConfigDomComment.class.php');
+			require($agaviDir . '/config/util/dom/AgaviXmlConfigDomDocument.class.php');
+			require($agaviDir . '/config/util/dom/AgaviXmlConfigDomDocumentFragment.class.php');
+			require($agaviDir . '/config/util/dom/AgaviXmlConfigDomDocumentType.class.php');
+			require($agaviDir . '/config/util/dom/AgaviXmlConfigDomElement.class.php');
+			require($agaviDir . '/config/util/dom/AgaviXmlConfigDomEntity.class.php');
+			require($agaviDir . '/config/util/dom/AgaviXmlConfigDomEntityReference.class.php');
+			require($agaviDir . '/config/util/dom/AgaviXmlConfigDomNode.class.php');
+			require($agaviDir . '/config/util/dom/AgaviXmlConfigDomNotation.class.php');
+			require($agaviDir . '/config/util/dom/AgaviXmlConfigDomProcessingInstruction.class.php');
+			require($agaviDir . '/config/util/dom/AgaviXmlConfigDomText.class.php');
+			// schematron processor
+			require($agaviDir . '/config/util/schematron/AgaviXmlConfigSchematronProcessor.class.php');
+			// extended XSL* classes
+			if(!AgaviConfig::get('core.skip_config_transformations', false)) {
+				if(!extension_loaded('xsl')) {
+					throw new AgaviConfigurationException("The XSL extension for PHP is used by Agavi for performing transformations in the configuration system; this may be disabled by setting\nAgaviConfig::set('core.skip_config_transformations', true);\nbefore calling\nAgavi::bootstrap();\nin index.php (app/config.php is not the right place for this).\n\nAs a result, you *will* have to use the latest configuration file formats and namespaces as backwards compatibility is implemented through XSLT. Also, certain additional configuration file validations implemented via Schematron will not be performed.");
+				}
+				require($agaviDir . '/config/util/xsl/AgaviXmlConfigXsltProcessor.class.php');
 			}
-			require($agaviDir . '/config/util/xsl/AgaviXmlConfigXsltProcessor.class.php');
+			self::$filesIncluded = true;
 		}
 		
 		// manually create our config_handlers.xml handler
