@@ -212,7 +212,7 @@ class AgaviConfigCacheTest extends AgaviPhpUnitTestCase
 	public function testTicket941()
 	{
 		if (!extension_loaded('xdebug')) {
-			$this->markSkipped('This test check for an infinite loop, you need xdebug as protection.');
+			$this->markTestSkipped('This test check for an infinite loop, you need xdebug as protection.');
 		}
 		
 		$config = AgaviConfig::get('core.module_dir').'/Default/config/config_handlers.xml';
