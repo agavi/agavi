@@ -335,10 +335,10 @@ class AgaviWebRequest extends AgaviRequest
 
 		$SERVER_NAME = self::getSourceValue($sources['SERVER_NAME'], $sourceDefaults['SERVER_NAME']);
 		$port = $this->getUrlPort();
-		if(preg_match_all('/\:/', preg_quote($SERVER_NAME), $m) > 1) {
-			$this->urlHost = preg_replace('/\]\:' . preg_quote($port) . '$/', '', $SERVER_NAME);
+		if(preg_match_all('/\:/', $SERVER_NAME, $m) > 1) {
+			$this->urlHost = preg_replace('/\]\:' . preg_quote($port, '/') . '$/', '', $SERVER_NAME);
 		} else {
-			$this->urlHost = preg_replace('/\:' . preg_quote($port) . '$/', '', $SERVER_NAME);
+			$this->urlHost = preg_replace('/\:' . preg_quote($port, '/') . '$/', '', $SERVER_NAME);
 		}
 
 		if(isset($_SERVER['HTTP_X_REWRITE_URL']) && isset($_SERVER['SERVER_SOFTWARE']) && strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') !== false) {

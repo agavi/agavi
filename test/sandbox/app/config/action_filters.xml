@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configurations xmlns="http://agavi.org/agavi/1.0/config">
+<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" xmlns="http://agavi.org/agavi/config/parts/filters/1.0">
 
-	<configuration environment="development.*">
+	<ae:configuration environment="development.*">
 		<filters>
 
 			<filter name="ExecutionTimeFilter" class="AgaviExecutionTimeFilter">
-				<parameter name="comment">On</parameter>
-				<parameter name="output_types">
-					<parameter>html</parameter>
-				</parameter>
+				<ae:parameter name="comment">On</ae:parameter>
+				<ae:parameter name="output_types">
+					<ae:parameter>html</ae:parameter>
+				</ae:parameter>
 			</filter>
 
 		</filters>
-	</configuration>
+	</ae:configuration>
 
-</configurations>
+</ae:configurations>

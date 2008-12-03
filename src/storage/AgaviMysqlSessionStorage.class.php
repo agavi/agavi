@@ -185,7 +185,7 @@ class AgaviMysqlSessionStorage extends AgaviSessionStorage
 		// delete the records that are expired
 		$sql = sprintf('DELETE FROM %s WHERE %s < %s', $db_table, $db_time_col, $time);
 
-		if(@mysql_query($sql, $this->resource)){
+		if(@mysql_query($sql, $this->resource)) {
 			return true;
 		}
 

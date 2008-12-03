@@ -4,7 +4,9 @@ AGAVI CHANGELOG
 1.0.0 beta 7 (December ?, 2008)
 -------------------------------
 
-CHG: refactor AgaviToolkit::stringBase() (#935) (Felix)
+ADD: Allow optional marshalling of document/literal wrapped request and response elements (#940) (Felix, David)
+
+CHG: Refactor AgaviToolkit::stringBase() (#935) (Felix)
 CHG: Add configuration file path to header comments in compiled files if possible (#938) (David)
 
 FIX: Off-by-one error in AgaviToolkit::stringBase() (#936) (Felix)
@@ -134,6 +136,7 @@ CHG: Always merge slot response metadata even if response content is null (#917)
 CHG: Update timezone database to 2008i (#912) (David)
 CHG: Add standard warning about broken libxml versions (#909) (David)
 
+FIX: Pattern delimiter is not passed to several preg_quote calls (#939) (David)
 FIX: AgaviPropelDatabase::connect() doesn't honor datasource parameter (#937) (David, Sven Kretschmann)
 FIX: Invalid CSS in project wizard's WelcomeSuccess template (#928) (TANAKA Koichi, David)
 FIX: Converting an AgaviCalendar with a custom unnamed Timezone an DateTime object fails (#922) (Dominik)

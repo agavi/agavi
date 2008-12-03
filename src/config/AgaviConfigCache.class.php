@@ -52,7 +52,7 @@ class AgaviConfigCache
 	/**
 	 * Load a configuration handler.
 	 *
-	 * @param      string The handler to use when parsing a configuration file.
+	 * @param      string The path of the originally requested configuration file.
 	 * @param      string An absolute filesystem path to a configuration file.
 	 * @param      string An absolute filesystem path to the cache file that
 	 *                    will be written.
@@ -151,7 +151,7 @@ class AgaviConfigCache
 	 */
 	protected static function getHandlerInfo($name)
 	{
-		// grab the base name of the handler
+		// grab the base name of the originally requested config path
 		$basename = basename($name);
 
 		$handlerInfo = null;
@@ -262,7 +262,7 @@ class AgaviConfigCache
 	{
 		$environment = AgaviConfig::get('core.environment');
 
-		if(strlen($config) > 3 && ctype_alpha($config{0}) &&	$config{1} == ':' && ($config{2} == '\\' || $config{2} == '/')) {
+		if(strlen($config) > 3 && ctype_alpha($config[0]) && $config[1] == ':' && ($config[2] == '\\' || $config[2] == '/')) {
 			// file is a windows absolute path, strip off the drive letter
 			$config = substr($config, 3);
 		}
