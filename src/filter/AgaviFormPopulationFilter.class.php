@@ -776,20 +776,24 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 
 			foreach($errorElements as $errorElement) {
 				foreach($targets as $target) {
+					// in case the target yielded more than one location, we need to clone the element
+					// because the document fragment node will be corrupted after an insert
+					$clonedErrorElement = $errorElement->cloneNode(true);
+					
 					if($errorLocation == 'before') {
-						$target->parentNode->insertBefore($errorElement, $target);
+						$target->parentNode->insertBefore($clonedErrorElement, $target);
 					} elseif($errorLocation == 'after') {
 						// check if there is a following sibling, then insert before that one
 						// if not, append to parent
 						if($target->nextSibling) {
-							$target->parentNode->insertBefore($errorElement, $target->nextSibling);
+							$target->parentNode->insertBefore($clonedErrorElement, $target->nextSibling);
 						} else {
-							$target->parentNode->appendChild($errorElement);
+							$target->parentNode->appendChild($clonedErrorElement);
 						}
 					} elseif($errorLocation == 'replace') {
-						$target->parentNode->replaceChild($errorElement, $target);
+						$target->parentNode->replaceChild($clonedErrorElement, $target);
 					} else {
-						$target->appendChild($errorElement);
+						$target->appendChild($clonedErrorElement);
 					}
 				}
 			}
