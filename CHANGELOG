@@ -10,6 +10,7 @@ CHG: Allow passing of configuration handler information (class/parameters) to Ag
 CHG: Refactor AgaviToolkit::stringBase() (#935) (Felix)
 CHG: Add configuration file path to header comments in compiled files if possible (#938) (David)
 
+FIX: Arguments are unable to be named in validators configuration (#942) (Noah)
 FIX: AgaviConfigCache reaches Maximum function nesting level (#941) (Felix)
 FIX: Off-by-one error in AgaviToolkit::stringBase() (#936) (Felix)
 FIX: AgaviConfigCache::getCacheName() possibly creating ambiguous cache names (#932) (Felix)
