@@ -42,6 +42,7 @@ class AgaviStderrLoggerAppender extends AgaviStreamLoggerAppender
 	{
 		$parameters['destination'] = 'php://stderr';
 		// 'a' doesn't work on Linux
+		// http://bugs.php.net/bug.php?id=45303
 		$parameters['mode'] = 'w';
 		
 		parent::initialize($context, $parameters);
