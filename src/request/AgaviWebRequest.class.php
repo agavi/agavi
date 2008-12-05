@@ -231,10 +231,17 @@ class AgaviWebRequest extends AgaviRequest
 	 */
 	public final static function clearMagicQuotes($input, $firstLevel = true)
 	{
+		if($firstLevel && version_compare(PHP_VERSION, '5.2.2', 'ge')) {
+			// the problem described below was fixed in PHP 5.2.2
+			// see http://trac.agavi.org/ticket/944
+			$firstLevel = false;
+		}
+		
 		$retval = array();
 
 		foreach($input as $key => $value) {
 			// the first level of keys (i.e. the actual var names from the root of $_WHATEVER) isn't magic_quoted if the corresponding value is an array. Yay PHP.
+			// http://bugs.php.net/bug.php?id=41093
 			if(!$firstLevel || !is_array($value)) {
 				$key = stripslashes($key);
 			}

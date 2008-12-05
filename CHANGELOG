@@ -13,6 +13,7 @@ CHG: Always merge slot response metadata even if response content is null (#917)
 CHG: Update timezone database to 2008i (#912) (David)
 CHG: Add standard warning about broken libxml versions (#909) (David)
 
+FIX: Make workaround for PHP Bug #41093 conditional (#944) (David)
 FIX: FPF error insertion fails if XPath expression yields more than one location in the document (#943) (David)
 FIX: Possible to run any action by passing module/action parameters to invalid URL (#934) (David)
 FIX: Pattern delimiter is not passed to several preg_quote calls (#939) (David)
