@@ -771,7 +771,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 		$array = $this->validationParameters->getAll($paramType);
 		$names = $this->curBase->getValue($array, array());
 
-		return array_keys($names);
+		return is_array($names) ? array_keys($names) : array();
 	}
 
 	/**
