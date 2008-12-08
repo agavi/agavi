@@ -130,6 +130,7 @@ FIX: Security filters cannot perform checks in addition to isSecure() (#671) (Da
 0.11.6 RC1 (November ??, 2008)
 ------------------------------
 
+ADD: Add an arraylength validator (#948) (Dominik)
 ADD: Optionally allow sending of response content when redirecting in AgaviWebResponse (#916) (David)
 
 CHG: Add +FollowSymLinks to .htaccess code templates and samples (#893) (David)
