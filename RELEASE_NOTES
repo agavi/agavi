@@ -16,6 +16,7 @@ A new configuration subsystem that natively deals with XML files replaces the cu
 Backwards compabibility requires PHP's XSL extension enabled; other than that, everything still works as usual. Old-style configuration file handlers are still supported (but deprecated), but don't support the new features explained above.
 Also, the namespaces of configuration files have been changed, with envelope namespaces (<configurations> and other elements) decoupled from the actual config content namespaces. Again, backwards compatibility is maintained, but you should upgrade your configuration files when moving to 1.0 in order to be able to fully leverage all features and make future transitions easier.
 Of note, the legacy support for configuration files with no namespace at all (just <configurations>) has been dropped completely, so your files at the very least have to be in the global 0.11 namespace (http://agavi.org/agavi/1.0/config).
+
 Names of compiled configuration files are now different from before; they now consist of the file base name, environment, context, and then a sha1 hash of these three components to make the filename unique. This prevents theoretical situations where configuration file names are ambiguous, and at the same time makes it easier to find a specific file in the cache directory. The files now contain the path to the source file in a header comment so configs with the same base name can be told apart.
 
 Module/Action/View/Model
@@ -79,6 +80,10 @@ A new API for accessing information about the result of a validation run is avai
 When using new-style validation XML configs, it is necessary to explicitly import Agavi's default definitions of validator shortcuts ("string", "isset" and so on) in %core.agavi_dir%/config/defaults/validators.xml to be able to use them; the most convenient way to achieve this is using the "parent" attribute on the <configurations> element, which also is the approach the build system takes by default. Existing configuration files from the 0.11 namespace are automatically handled this way and thus are not affected.
 
 Validators are not handed a "method" parameter anymore with the request method they should run for. This was extremely redundant since the validators weren't even registered if the request method was "wrong". For manual registering, registerReadValidators(), registerWriteValidators() etc are always used in actions anyway, so no problem here, either. As a result, AgaviValidator::validatesInMethod() is gone, too.
+
+SOAP
+----
+Agavi can now automatically pack and unpack document/literal wrapped style web service requests and responses if the Controller config parameter "force_document_literal_wrapped_marshalling" is set to true. Future releases of Agavi will enhance this functionality further and add automatic detection for these service styles.
 
 Deprecated elements
 -------------------
