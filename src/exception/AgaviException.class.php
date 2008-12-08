@@ -61,7 +61,7 @@ class AgaviException extends Exception
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      1.0.0
 	 */
-	public function render(Exception $e, AgaviContext $context = null, AgaviExecutionContainer $container = null)
+	public static function render(Exception $e, AgaviContext $context = null, AgaviExecutionContainer $container = null)
 	{
 		// discard any previous output waiting in the buffer
 		while(@ob_end_clean());
