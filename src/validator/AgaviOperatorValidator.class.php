@@ -89,6 +89,7 @@ abstract class AgaviOperatorValidator extends AgaviValidator implements AgaviIVa
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
+	 *
 	 * @deprecated 1.0.0
 	 */
 	public function addFieldResult($validator, $fieldname, $result)
