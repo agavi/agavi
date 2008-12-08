@@ -32,7 +32,7 @@
  *
  * @version    $Id$
  */
-class AgaviAndOperatorValidator extends AgaviOperatorValidator
+class AgaviAndoperatorValidator extends AgaviOperatorValidator
 {
 	/**
 	 * Validates the operator by executing the child valdators.
