@@ -2783,11 +2783,11 @@ abstract class AgaviCalendar
 	 * @var        array The flags which tell if a specified time field for the
 	 *                   calendar is set.
 	 *
-	 * @deprecated ICU 2.8 use (fStamp[n]!=kUnset)
-	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
+	 *
+	 * @deprecated ICU 2.8 use (fStamp[n]!=kUnset)
 	 */
 	protected $fIsSet;
 
