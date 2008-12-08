@@ -34,7 +34,7 @@ if(!ini_get('display_errors')) {
 	throw $e;
 }
 
-if (!headers_sent()) {
+if(!headers_sent()) {
 	header('Content-Type: text/plain');	
 }
 
