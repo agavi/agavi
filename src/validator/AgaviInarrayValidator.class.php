@@ -52,6 +52,11 @@ class AgaviInarrayValidator extends AgaviValidator
 		}
 		$value = $this->getData($this->getArgument());
 		
+		if(!is_scalar($value)) {
+			$this->throwError();
+			return false;
+		}
+		
 		if(!$this->getParameter('case')) {
 			$value = strtolower($value);
 			$list = array_map(create_function('$a', 'return strtolower($a);'), $list);
