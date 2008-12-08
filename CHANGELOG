@@ -4,7 +4,7 @@ AGAVI CHANGELOG
 0.11.6 RC1 (November ??, 2008)
 ------------------------------
 
-ADD: Add an arraylength validator (#948) (Dominik)
+ADD: AgaviArraylengthValidator (#948) (Dominik)
 ADD: Optionally allow sending of response content when redirecting in AgaviWebResponse (#916) (David)
 
 CHG: Re-throw exception instead of printing stack trace and info in exception templates when display_errors is off (#952) (David)
