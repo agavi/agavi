@@ -257,7 +257,7 @@ class AgaviController extends AgaviParameterHolder
 			return $response;
 			
 		} catch(Exception $e) {
-			AgaviException::printStackTrace($e, $this->context, $container);
+			AgaviException::render($e, $this->context, $container);
 		}
 	}
 	

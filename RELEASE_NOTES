@@ -91,6 +91,8 @@ Existing "core.use_routing" directives will be used as a fallback until the dire
 
 - Validation severity "none" is now called "silent".
 
+- AgaviException::printStackTrace() is now called AgaviException::render()
+
 
 Version 0.11.5 - October 25, 2008
 =================================

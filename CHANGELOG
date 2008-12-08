@@ -6,6 +6,7 @@ AGAVI CHANGELOG
 
 ADD: Allow optional marshalling of document/literal wrapped request and response elements (#940) (Felix, David)
 
+CHG: Rename AgaviException::printStackTrace() (#949) (David)
 CHG: Allow passing of configuration handler information (class/parameters) to AgaviConfigCache::checkConfig() and AgaviConfigCache::load() (#929) (Felix)
 CHG: Refactor AgaviToolkit::stringBase() (#935) (Felix)
 CHG: Add configuration file path to header comments in compiled files if possible (#938) (David)
