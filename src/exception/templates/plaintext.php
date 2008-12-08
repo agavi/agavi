@@ -28,6 +28,12 @@
  * @version    $Id$
  */
 
+// we're not supposed to display errors
+// let's throw the exception so it shows up in error logs
+if(!ini_get('display_errors')) {
+	throw $e;
+}
+
 if (!headers_sent()) {
 	header('Content-Type: text/plain');	
 }
@@ -63,13 +69,19 @@ by the exception along with a stack trace below.
   Stack Trace
 ===============
 <?php
-foreach ($fixedTrace as $no => $trace) {
+foreach($fixedTrace as $no => $trace) {
 	echo "$no: ";
-	if(isset($trace['file'])) { echo $trace['file']; }
-	else { echo "Unknown file" ; }
+	if(isset($trace['file'])) {
+		echo $trace['file'];
+	} else {
+		echo "Unknown file";
+	}
 
-	if(isset($trace['line'])) { echo " (line: " .$trace['line'] .')'; }
-	else { echo "(Unknown line)"; }
+	if(isset($trace['line'])) {
+		echo " (line: " .$trace['line'] .')';
+	} else {
+		echo "(Unknown line)";
+	}
 	echo "\n";
 }
 ?>

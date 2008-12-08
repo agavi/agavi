@@ -72,6 +72,12 @@ if (!function_exists('buildParamList'))
 	}
 }
 
+// we're not supposed to display errors
+// let's throw the exception so it shows up in error logs
+if(!ini_get('display_errors')) {
+	throw $e;
+}
+
 $svg = false;
 $ua = '';
 if(isset($_SERVER['HTTP_USER_AGENT'])) {
