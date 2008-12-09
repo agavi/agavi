@@ -628,7 +628,15 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 		if($actionInstance->isSimple() || ($useGenericMethods && !method_exists($actionInstance, $executeMethod))) {
 			// this action will skip validation/execution for this method
 			// get the default view
-			$viewName = $actionInstance->getDefaultViewName();
+			$key = $request->toggleLock();
+			try {
+				$viewName = $actionInstance->getDefaultViewName();
+			} catch(Exception $e) {
+				// we caught an exception... unlock the request and rethrow!
+				$request->toggleLock($key);
+				throw $e;
+			}
+			$request->toggleLock($key);
 		} else {
 			// set default validated status
 			$validated = true;
