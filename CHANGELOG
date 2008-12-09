@@ -7,6 +7,7 @@ AGAVI CHANGELOG
 ADD: AgaviArraylengthValidator (#948) (Dominik)
 ADD: Optionally allow sending of response content when redirecting in AgaviWebResponse (#916) (David)
 
+CHG: Change magic_quotes_gpc handling to require PHP 5.2.8 and use the fixes introduced there (#953) (David)
 CHG: Re-throw exception instead of printing stack trace and info in exception templates when display_errors is off (#952) (David)
 CHG: Add +FollowSymLinks to .htaccess code templates and samples (#893) (David)
 CHG: Add more best practices to code templates (#910) (David)
