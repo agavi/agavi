@@ -6,15 +6,14 @@ Version 0.11.6 - December ?, 2008
 
 This maintenance release fixes a number of issues and provides several minor enhancements and additions.
 
-Of note, an AgaviArraylengthValidator was added
+A couple of changes are worth mentioning:
+- AgaviArraylengthValidator was added.
+- PHP 5.2.8 or later is now required in combination with magic_quotes_gpc. This is due to security reasons unrelated to the issue in the PHP 5.2.7 release. Ticket #953 explains things in detail.
+- Slot responses are now merged into the parent even if the response content is empty.
+- Several best practices have been added and improved in the sample app and the code templates, and warnings are now thrown for outdated libxml versions, all intended to make it easier for new users to dive into Agavi.
+- The timezone database was updated to version 2008i.
 
-Compatibility with magic_quotes_gpc enabled and PHP 5.2.7 and later has been improved, too.
-
-Slot responses are now merged into the parent even if the response content is empty.
-
-Several best practices have been added and improved in the sample app and the code templates, and warnings are now thrown for outdated libxml versions, all intended to make it easier for new users to dive into Agavi.
-
-The timezone database was updated to version 2008i.
+As always, CHANGELOG knows it best.
 
 
 Version 0.11.5 - October 25, 2008
