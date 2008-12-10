@@ -23,6 +23,11 @@
 					<testfile>unit/request/AgaviWebRequestDataHolderTest.php</testfile>
 				</testfiles>
 			</suite>
+			<suite name="Translation">
+				<testfiles>
+					<testfile>unit/translation/AgaviTranslationManagerTest.php</testfile>
+				</testfiles>
+			</suite>
 			<suite name="Util">
 				<testfiles>
 					<testfile>unit/util/AgaviToolkitTest.php</testfile>
