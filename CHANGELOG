@@ -143,6 +143,7 @@ CHG: Always merge slot response metadata even if response content is null (#917)
 CHG: Update timezone database to 2008i (#912) (David)
 CHG: Add standard warning about broken libxml versions (#909) (David)
 
+FIX: Access to global request data holder is not locked during AgaviAction::getDefaultViewName() (#954) (David)
 FIX: The class name of AgaviAndoperatorValidator and AgaviNotoperatorValidator don't match the coding guidelines (#951) (David)
 FIX: Several validators might raise notices or break altogether on incorrect argument types (#946) (Dominik)
 FIX: AgaviValidator::getKeysInCurrentBase triggers a warning if the current validator base is no array (#947) (Dominik)
