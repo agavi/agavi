@@ -193,6 +193,7 @@ class AgaviValidationIncident
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
+	 *
 	 * @deprecated 1.0.0
 	 */
 	public function hasFieldError($fieldname)
@@ -214,6 +215,7 @@ class AgaviValidationIncident
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
+	 *
 	 * @deprecated 1.0.0
 	 */
 	public function getFields()
@@ -235,6 +237,7 @@ class AgaviValidationIncident
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
+	 *
 	 * @deprecated 1.0.0
 	 */
 	public function getFieldErrors($fieldname)

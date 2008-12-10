@@ -275,7 +275,7 @@ class AgaviContext
 			}
 			return self::$instances[$profile];
 		} catch(Exception $e) {
-			AgaviException::printStackTrace($e);
+			AgaviException::render($e);
 		}
 	}
 	
@@ -306,7 +306,7 @@ class AgaviContext
 		try {
 			include(AgaviConfigCache::checkConfig(AgaviConfig::get('core.config_dir') . '/factories.xml', $this->name));
 		} catch(Exception $e) {
-			AgaviException::printStackTrace($e, $this);
+			AgaviException::render($e, $this);
 		}
 		
 		register_shutdown_function(array($this, 'shutdown'));

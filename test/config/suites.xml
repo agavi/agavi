@@ -12,6 +12,12 @@
 					<testfile>unit/config/AgaviConfigCacheTest.php</testfile>
 				</testfiles>
 			</suite>
+			<suite name="Date">
+				<testfiles>
+					<testfile>unit/date/AgaviTimezoneTest.php</testfile>
+					<testfile>unit/date/AgaviDateFormatTest.php</testfile>
+				</testfiles>
+			</suite>
 			<suite name="Routing">
 				<testfiles>
 					<testfile>unit/routing/AgaviRoutingTest.php</testfile>
@@ -21,6 +27,11 @@
 			<suite name="Request">
 				<testfiles>
 					<testfile>unit/request/AgaviWebRequestDataHolderTest.php</testfile>
+				</testfiles>
+			</suite>
+			<suite name="Translation">
+				<testfiles>
+					<testfile>unit/translation/AgaviTranslationManagerTest.php</testfile>
 				</testfiles>
 			</suite>
 			<suite name="Util">

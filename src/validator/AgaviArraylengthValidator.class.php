@@ -14,38 +14,55 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviStdoutLoggerAppender appends an AgaviLoggerMessage to stdout.
+ * AgaviArraylengthValidator verifies the length (count()) constraints for an array
+ *
+ * Parameters:
+ *   'min'       The array should contain at least 'min' elements
+ *   'max'       The array should contain at most 'max' elements
  *
  * @package    agavi
- * @subpackage logging
+ * @subpackage validator
  *
- * @author     Bob Zoller <bob@agavi.org>
+ * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
  *
- * @since      0.10.0
+ * @since      0.11.6
  *
- * @version    $Id$
+ * @version    $id$
  */
-class AgaviStdoutLoggerAppender extends AgaviStreamLoggerAppender
+class AgaviArraylengthValidator extends AgaviValidator
 {
 	/**
-	 * Initialize the object.
-	 *
-	 * @param      AgaviContext An AgaviContext instance.
-	 * @param      array        An associative array of initialization parameters.
-	 *
-	 * @author     Bob Zoller <bob@agavi.org>
-	 * @since      0.10.0
+	 * Validates the input.
+	 * 
+	 * @return     bool
+	 * 
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @since      0.11.6
 	 */
-	public function initialize(AgaviContext $context, array $parameters = array())
+	protected function validate()
 	{
-		$parameters['destination'] = 'php://stdout';
-		// 'a' doesn't work on Linux
-		// http://bugs.php.net/bug.php?id=45303
-		$parameters['mode'] = 'w';
+		$data = $this->getData($this->getArgument());
+		if(!is_array($data)) {
+			// we can only count() arrays
+			$this->throwError();
+			return false;
+		}
 		
-		parent::initialize($context, $parameters);
+		$count = count($data);
+		
+		if($this->hasParameter('min') && $count < $this->getParameter('min')) {
+			$this->throwError('min');
+			return false;
+		}
+		
+		if($this->hasParameter('max') && $count > $this->getParameter('max')) {
+			$this->throwError('max');
+			return false;
+		}
+		
+		return true;
 	}
 }
 

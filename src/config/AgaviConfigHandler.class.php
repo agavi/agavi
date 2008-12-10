@@ -28,9 +28,9 @@
  * @copyright  Authors
  * @copyright  The Agavi Project
  *
- * @deprecated Superseded by AgaviXmlConfigHandler, will be removed in Agavi 1.1
- *
  * @since      0.9.0
+ *
+ * @deprecated Superseded by AgaviXmlConfigHandler, will be removed in Agavi 1.1
  *
  * @version    $Id$
  */

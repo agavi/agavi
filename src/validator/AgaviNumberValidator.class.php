@@ -50,6 +50,12 @@ class AgaviNumberValidator extends AgaviValidator
 	{
 		$value =& $this->getData($this->getArgument());
 
+		if(!is_scalar($value)) {
+			// non scalar values would cause notices
+			$this->throwError();
+			return false;
+		}
+
 		$hasExtraChars = false;
 
 		if(AgaviConfig::get('core.use_translation') && !$this->getParameter('no_locale', false)) {
@@ -103,12 +109,12 @@ class AgaviNumberValidator extends AgaviValidator
 
 		}
 
-		if($this->hasParameter('min') and $value < $this->getParameter('min')) {
+		if($this->hasParameter('min') && $value < $this->getParameter('min')) {
 			$this->throwError('min');
 			return false;
 		}
 
-		if($this->hasParameter('max') and $value > $this->getParameter('max')) {
+		if($this->hasParameter('max') && $value > $this->getParameter('max')) {
 			$this->throwError('max');
 			return false;
 		}

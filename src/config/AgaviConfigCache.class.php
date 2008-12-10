@@ -99,6 +99,8 @@ class AgaviConfigCache
 		self::loadConfigHandlers();
 		
 		if(self::$handlersDirty) {
+			// set handlersdirty to false, prevent an infinite loop
+			self::$handlersDirty = false;
 			// load additional config handlers
 			foreach(self::$handlerFiles as $filename => &$loaded) {
 				if(!$loaded) {
@@ -106,7 +108,6 @@ class AgaviConfigCache
 					$loaded = true;
 				}
 			}
-			self::$handlersDirty = false;
 		}
 	}
 	
@@ -534,12 +535,12 @@ class AgaviConfigCache
 	 * @throws     <b>AgaviConfigurationException</b> If the parser for the
 	 *             extension couldn't be found.
 	 *
-	 * @deprecated New-style config handlers don't call this method anymore. To be
-	 *             removed in Agavi 1.1
-	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
+	 *
+	 * @deprecated New-style config handlers don't call this method anymore. To be
+	 *             removed in Agavi 1.1
 	 */
 	public static function parseConfig($config, $autoloadParser = true, $validationFile = null, $parserClass = null)
 	{

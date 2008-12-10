@@ -111,6 +111,10 @@ class AgaviDateTimeValidator extends AgaviValidator
 				} elseif(!is_numeric($calField)) {
 					throw new AgaviValidatorException('Unknown argument name "' . $calField . '" for argument "' . $field . '" supplied. This needs to be one of the constants defined in AgaviDateDefinitions.');
 				}
+				if(!is_scalar($param)) {
+					// everything which is non scalar is ignored, since it couldn't be handled anyways
+					continue;
+				}
 
 				if($calField == AgaviDateDefinitions::MONTH) {
 					$param -= 1;
@@ -134,6 +138,10 @@ class AgaviDateTimeValidator extends AgaviValidator
 				$param = vsprintf($argFormat, $values);
 			} else {
 				$param = $this->getData($this->getArgument());
+				if(!is_scalar($param)) {
+					$this->throwError();
+					return false;
+				}
 			}
 
 			$matchedFormat = false;

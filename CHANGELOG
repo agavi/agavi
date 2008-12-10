@@ -6,10 +6,13 @@ AGAVI CHANGELOG
 
 ADD: Allow optional marshalling of document/literal wrapped request and response elements (#940) (Felix, David)
 
+CHG: Rename AgaviException::printStackTrace() (#949) (David)
 CHG: Allow passing of configuration handler information (class/parameters) to AgaviConfigCache::checkConfig() and AgaviConfigCache::load() (#929) (Felix)
 CHG: Refactor AgaviToolkit::stringBase() (#935) (Felix)
 CHG: Add configuration file path to header comments in compiled files if possible (#938) (David)
 
+FIX: Arguments are unable to be named in validators configuration (#942) (Noah)
+FIX: AgaviConfigCache reaches Maximum function nesting level (#941) (Felix)
 FIX: Off-by-one error in AgaviToolkit::stringBase() (#936) (Felix)
 FIX: AgaviConfigCache::getCacheName() possibly creating ambiguous cache names (#932) (Felix)
 FIX: AgaviConfigCache::getCacheName() path escaping problems (#931) (Felix)
@@ -128,8 +131,11 @@ FIX: Security filters cannot perform checks in addition to isSecure() (#671) (Da
 0.11.6 RC1 (November ??, 2008)
 ------------------------------
 
+ADD: AgaviArraylengthValidator (#948) (Dominik)
 ADD: Optionally allow sending of response content when redirecting in AgaviWebResponse (#916) (David)
 
+CHG: Change magic_quotes_gpc handling to require PHP 5.2.8 and use the fixes introduced there (#953) (David)
+CHG: Re-throw exception instead of printing stack trace and info in exception templates when display_errors is off (#952) (David)
 CHG: Add +FollowSymLinks to .htaccess code templates and samples (#893) (David)
 CHG: Add more best practices to code templates (#910) (David)
 CHG: Use standard layouts etc for system actions instead of hand-built renderers and layers in code templates (#911) (David)
@@ -137,6 +143,12 @@ CHG: Always merge slot response metadata even if response content is null (#917)
 CHG: Update timezone database to 2008i (#912) (David)
 CHG: Add standard warning about broken libxml versions (#909) (David)
 
+FIX: Access to global request data holder is not locked during AgaviAction::getDefaultViewName() (#954) (David)
+FIX: The class name of AgaviAndoperatorValidator and AgaviNotoperatorValidator don't match the coding guidelines (#951) (David)
+FIX: Several validators might raise notices or break altogether on incorrect argument types (#946) (Dominik)
+FIX: AgaviValidator::getKeysInCurrentBase triggers a warning if the current validator base is no array (#947) (Dominik)
+FIX: FPF error insertion fails if XPath expression yields more than one location in the document (#943) (David)
+FIX: Possible to run any action by passing module/action parameters to invalid URL (#934) (David)
 FIX: Pattern delimiter is not passed to several preg_quote calls (#939) (David)
 FIX: AgaviPropelDatabase::connect() doesn't honor datasource parameter (#937) (David, Sven Kretschmann)
 FIX: Invalid CSS in project wizard's WelcomeSuccess template (#928) (TANAKA Koichi, David)
