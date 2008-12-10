@@ -15,6 +15,7 @@
 			<suite name="Date">
 				<testfiles>
 					<testfile>unit/date/AgaviTimezoneTest.php</testfile>
+					<testfile>unit/date/AgaviDateFormatTest.php</testfile>
 				</testfiles>
 			</suite>
 			<suite name="Routing">
