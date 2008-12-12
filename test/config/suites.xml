@@ -37,6 +37,7 @@
 			<suite name="Util">
 				<testfiles>
 					<testfile>unit/util/AgaviToolkitTest.php</testfile>
+					<testfile>unit/util/AgaviParameterHolderTest.php</testfile>
 				</testfiles>
 			</suite>
 		</suites>
