@@ -7,6 +7,7 @@ class AgaviWebRequestDataHolderTest extends AgaviPhpUnitTestCase
 			array(
 				AgaviWebRequestDataHolder::SOURCE_COOKIES => $this->getDefaultNestedInputData(),
 				AgaviWebRequestDataHolder::SOURCE_PARAMETERS => $this->getDefaultNestedInputData(),
+				AgaviWebRequestDataHolder::SOURCE_HEADERS => $this->getDefaultHeaders(),
 			)
 		);
 	}
@@ -31,7 +32,7 @@ class AgaviWebRequestDataHolderTest extends AgaviPhpUnitTestCase
 	}
 	
 	/**
-	 * returns information on the default data set
+	 * returns information on the default nested data set
 	 * 
 	 *  each row has the following information:
 	 * 
@@ -155,7 +156,131 @@ class AgaviWebRequestDataHolderTest extends AgaviPhpUnitTestCase
 			$readInformation[$key][4] = false;
 			$readInformation[$key.',default'] = $parameterInfo;
 			$readInformation[$key.',default'][4] = true;
-			if(false == $parameterInfo[2])
+			if(true == $parameterInfo[3])
+			{
+				$readInformation[$key.',default'][1] = 'default';
+			}
+		}
+		
+		return $readInformation;
+	}
+	
+	public function getDefaultHeaders()
+	{
+		return array(
+			'FLAT_HEADER' => 'flatvalue',
+			'NESTED_HEADER' => array(          // array headers don't exist, but we need to check 
+				'NESTED_KEY' => 'nestedvalue', // that virtual array access does indeed not work
+			),
+			'NULL_VALUE' => null,
+			'ZERO_VALUE' => 0,
+			'FALSE_VALUE' => false,
+			'EMPTY_STRING' => '',
+			'CONTAINS[BRACKETS]' => 'contains_brackets',
+		);
+	}
+	
+	/**
+	 * returns information on the default header data set
+	 * 
+	 *  each row has the following information:
+	 * 
+	 *   - keyname
+	 *   - expected return
+	 *   - key exists
+	 *   - key considered empty
+	 */
+	public function getDefaultHeaderInformation()
+	{
+		return array(
+			'FLAT_HEADER,caps,underscore' => array(
+				'FLAT_HEADER',
+				'flatvalue',
+				true,
+				false,
+			),
+			'FLAT_HEADER,caps,hyphen' => array(
+				'FLAT-HEADER',
+				'flatvalue',
+				true,
+				false,
+			),
+			'FLAT_HEADER,non-caps,underscore' => array(
+				'flat_header',
+				'flatvalue',
+				true,
+				false,
+			),
+			'FLAT_HEADER,non-caps,hyphen' => array(
+				'flat-header',
+				'flatvalue',
+				true,
+				false,
+			),
+			'MISSING_HEADER' => array(
+				'MISSING_HEADER',
+				null,
+				false,
+				true,
+			),
+			'NESTED_HEADER' => array(
+				'NESTED_HEADER',
+				array(
+					'NESTED_KEY' => 'nestedvalue',
+				),
+				true,
+				false,
+			),
+			'NESTED_HEADER-1' => array(
+				'NESTED_HEADER[NESTED_KEY]',
+				null,
+				false,
+				true,
+			),
+			'NULL_VALUE' => array(
+				'NULL_VALUE',
+				null,
+				true,
+				true,
+			),
+			'ZERO_VALUE' => array(
+				'ZERO_VALUE',
+				0,
+				true,
+				false,
+			),
+			'FALSE_VALUE' => array(
+				'FALSE_VALUE',
+				false,
+				true,
+				false,
+			),
+			'EMPTY_STRING' => array(
+				'EMPTY_STRING',
+				'',
+				true,
+				true,
+			),
+			'CONTAINS[BRACKETS]' => array(
+				'CONTAINS[BRACKETS]',
+				'contains_brackets',
+				true,
+				false,
+			),
+		);
+	}
+	
+	public function getHeaderReadInformation()
+	{
+		$readInformation = array();
+		
+		foreach ($this->getDefaultHeaderInformation() as $key => $info)
+		{
+			$readInformation[$key] = $info;
+			$readInformation[$key][4] = false;
+			$readInformation[$key.',default'] = $info;
+			$readInformation[$key.',default'][4] = true;
+			if(true == $info[3])
 			{
 				$readInformation[$key.',default'][1] = 'default';
 			}
@@ -545,6 +670,165 @@ class AgaviWebRequestDataHolderTest extends AgaviPhpUnitTestCase
 		);
 	}
 	
+	/*  ------   header tests ------ */
+		
+	/**
+	 * @dataProvider getHeaderReadInformation
+	 */
+	public function testGetHeader($key, $expected, $exists, $empty, $hasDefault)
+	{
+		$dh = $this->getDefaultDataHolder();
+		
+		if($hasDefault) {
+			$value = $dh->getHeader($key, 'default');
+		} else {
+			$value = $dh->getHeader($key);
+		}
+		
+		$this->assertEquals($expected, $value);
+	}
+	
+	/**
+	 * @dataProvider getDefaultHeaderInformation
+	 * 
+	 */
+	public function testRemoveHeader($key, $expected, $exists, $empty)
+	{
+		$dh = $this->getDefaultDataHolder();
+		
+		$message = 'Failed asserting that the header value is returned when removing an existing header.';
+		if(!$exists) {
+			$message = 'Failed asserting that the return value is null when removing a nonexistant header.';
+		}
+		
+		$value = $dh->removeHeader($key);
+		
+		$this->assertEquals($expected, $value, $message);
+		$this->assertFalse($dh->hasParameter($key), sprintf('Failed asserting that the key %1$s has been removed.', $key));
+	}
+	
+	/**
+	 * @dataProvider getDefaultHeaderInformation
+	 * 
+	 */
+	public function testHasHeader($key, $expected, $exists, $empty)
+	{
+		$dh = $this->getDefaultDataHolder();
+		
+		if(!$exists) {
+			$this->assertFalse($dh->hasHeader($key), sprintf('Failed asserting the the header named %1$s does not exist.', $key));
+		} else {
+			$this->assertTrue($dh->hasHeader($key), sprintf('Failed asserting the the header named %1$s exists.', $key));
+		}
+	}
+	
+	/**
+	 * @dataProvider getDefaultHeaderInformation
+	 * 
+	 */
+	public function testIsHeaderValueEmpty($key, $expected, $exists, $empty)
+	{
+		$dh = $this->getDefaultDataHolder();
+		
+		if(!$empty) {
+			$this->assertFalse($dh->isHeaderValueEmpty($key), sprintf('Failed asserting the the header named %1$s has a non-empty value.', $key));
+		} else {
+			$this->assertTrue($dh->isHeaderValueEmpty($key), sprintf('Failed asserting the the header named %1$s has an empty value.', $key));
+		}
+	}
+	
+	public function testGetHeaders()
+	{
+		$dh = $this->getDefaultDataHolder();
+		
+		$this->assertEquals($this->getDefaultHeaders(), $dh->getHeaders());
+	}
+	
+	public function testSetHeaders()
+	{
+		$dh = $this->getDefaultDataHolder();
+		
+		$addHeaders = array(
+			'FLAT_HEADER' => 'flatvalue merged',
+			'SET'  => 'setHeaders',
+		);
+		
+		$dh->setHeaders($addHeaders);
+		
+		$expected = array_merge(
+			$this->getDefaultHeaders(),
+			$addHeaders
+		);
+		
+		$this->assertEquals($expected, $dh->getHeaders());
+	}
+	
+	public function testMergeHeaders()
+	{
+		$dh = $this->getDefaultDataHolder();
+		
+		$addHeaders = array(
+			'FLAT_HEADER' => 'flatvalue merged',
+			'SET'  => 'setHeaders',
+		);
+		
+		$dh2 = new AgaviWebRequestDataHolder(
+			array(
+				AgaviWebRequestDataHolder::SOURCE_HEADERS => $addHeaders,
+			)
+		);
+		
+		$dh->mergeHeaders($dh2);
+		
+		$expected = array_merge(
+			$this->getDefaultHeaders(), 
+			$addHeaders
+		);
+		
+		$this->assertEquals($expected, $dh->getHeaders());
+	}
+	
+	public function testMergeHeaders2()
+	{
+		$dh = $this->getDefaultDataHolder();
+		
+		$addHeaders = array(
+			'FLAT_HEADER' => 'flatvalue merged',
+			'SET'  => 'setHeaders',
+		);
+		
+		$dh2 = new AgaviRequestDataHolder(
+			array(
+				AgaviWebRequestDataHolder::SOURCE_HEADERS => $addHeaders,
+			)
+		);
+		
+		$dh->mergeHeaders($dh2);
+		
+		$expected = $this->getDefaultHeaders();
+		
+		$this->assertEquals(
+			$expected,
+			$dh->getHeaders(),
+			'Failed asserting that headers from a dataholder not implementing AgaviIHeadersRequestDataHolder are not merged.'
+		);
+	}
+	
+	public function testClearHeaders()
+	{
+		$dh = $this->getDefaultDataHolder();
+		
+		$dh->clearHeaders();
+		
+		$this->assertEquals(array(), $dh->getHeaders());
+	}
+	
+	
+	public function testGetHeaderNames()
+	{
+		$dh = $this->getDefaultDataHolder();
+		$this->assertEquals(array_keys($this->getDefaultHeaders()), $dh->getHeaderNames());
+	}
 }
 
 ?>
