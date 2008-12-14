@@ -70,18 +70,48 @@ class AgaviTesting
 		
 		$suites = include AgaviConfigCache::checkConfig(AgaviConfig::get('core.testing_dir').'/config/suites.xml');
 		$master_suite = new AgaviTestSuite('Master');
-		foreach ($suites as $name => $suite)
-		{
-			$s = new $suite['class']($name);
-			foreach ($suite['testfiles'] as $file)
+		
+		if(!empty($arguments['include-suite'])) {
+			
+			$names = explode(',', $arguments['include-suite']);
+			unset($arguments['include-suite']);
+			
+			foreach($names as $name)
 			{
-				$s->addTestFile('tests/'.$file);
+				if(empty($suites[$name])) {
+					throw new InvalidArgumentException(sprintf('Invalid suite name %1$s.', $name));
+				}
+
+				$master_suite->addTest(self::createSuite($name, $suites[$name]));		
 			}
-			$master_suite->addTest($s);
+				
+		} else {
+			$excludes = array();
+			if(!empty($arguments['exclude-suite'])) {
+				$excludes = explode(',', $arguments['exclude-suite']);
+				unset($arguments['exclude-suite']);
+			}
+			foreach($suites as $name => $suite)
+			{
+				if(!in_array($name, $excludes))
+				{
+					$master_suite->addTest(self::createSuite($name, $suite));	
+				}
+			}
 		}
 		
 		$runner = new PHPUnit_TextUI_TestRunner();
 		$runner->doRun($master_suite, $arguments);
+	}
+	
+	protected static function createSuite($name, $suite) 
+	{
+		$s = new $suite['class']($name);
+		foreach ($suite['testfiles'] as $file)
+		{
+			$s->addTestFile('tests/'.$file);
+		}
+		return $s;
 	}
 	
 	/**
@@ -108,6 +138,8 @@ class AgaviTesting
 			'log-pmd=',
 			'log-tap=',
 			'log-xml=',
+			'include-suite=',
+			'exclude-suite=',
 		);
 		
 		try {
@@ -184,6 +216,12 @@ class AgaviTesting
 						$arguments['metricsXML'] = $option[1];
 					}
 					break;
+				case '--include-suite':
+					$arguments['include-suite'] = $option[1];
+					break;
+				case '--exclude-suite':
+					$arguments['exclude-suite'] = $option[1];
+					break;
 			}
 		}
 		
@@ -239,6 +277,9 @@ Usage: phpunit [switches] UnitTest [UnitTest.php]
   --coverage-html <dir>    Generate code coverage report in HTML format.
   --coverage-clover <file> Write code coverage data in Clover XML format.
   --coverage-source <dir>  Write code coverage / source data in XML format.
+
+  --include-suite <suites> run only suites named <suite>, accepts a list of suites, comma separated.
+  --exclude-suite <suites> run all but suites named <suite>, accepts a list of suites, comma separated.
 
   --help                   Prints this usage information.
 EOT;
