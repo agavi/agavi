@@ -41,6 +41,7 @@
 				<testfiles>
 					<testfile>unit/util/AgaviToolkitTest.php</testfile>
 					<testfile>unit/util/AgaviParameterHolderTest.php</testfile>
+					<testfile>unit/util/AgaviArrayPathDefinitionTest.php</testfile>
 				</testfiles>
 			</suite>
 		</suites>
