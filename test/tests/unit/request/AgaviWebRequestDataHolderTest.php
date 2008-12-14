@@ -1,14 +1,167 @@
 <?php
 class AgaviWebRequestDataHolderTest extends AgaviPhpUnitTestCase
 {
-	public function testRemoveCookieArrayPart()
+	protected function getDefaultDataHolder()
 	{
-		$dh = new AgaviWebRequestDataHolder(array(AgaviWebRequestDataHolder::SOURCE_COOKIES => array('nested' => array('foo' => 'bar'))));
-		$this->assertTrue($dh->hasCookie('nested[foo]'));
-		$this->assertFalse($dh->isCookieValueEmpty('nested[foo]'));
-		$this->assertEquals('bar', $dh->getCookie('nested[foo]'), 'Failed asserting that the cookie value is "bar" when reading nested[foo].');
-		$this->assertEquals('bar', $dh->removeCookie('nested[foo]'), 'Failed asserting that the return value is "bar" when removing nested[foo].');
-		$this->$this->assertFalse($dh->hasCookie('nested[foo]'), 'Failed asserting that the nested cookie part "foo" was removed.');
+		return new AgaviWebRequestDataHolder(
+			array(
+				AgaviWebRequestDataHolder::SOURCE_COOKIES => $this->getDefaultNestedInputData(),
+				AgaviWebRequestDataHolder::SOURCE_PARAMETERS => $this->getDefaultNestedInputData(),
+			)
+		);
+	}
+	
+	protected function getDefaultNestedInputData()
+	{
+		return  array(
+			'flat'   => 'flatvalue',
+			'nested' => array(
+				'level1' => 'level1 value',
+				'level2' => array(
+					'level3' => 'level3 value',
+					'nullkey' => null,
+					'emptystring' => '',
+				),
+			),
+			'nullvalue'   => null,
+			'falsevalue'  => false,
+			'emptystring' => '',
+			'zerovalue'   => 0,
+		);
+	}
+	
+	/**
+	 * returns information on the default data set
+	 * 
+	 *  each row has the following information:
+	 * 
+	 *   - keyname
+	 *   - expected return
+	 *   - key exists
+	 *   - key considered empty
+	 */
+	public function parameterData()
+	{
+		return array(
+			'unsetkey' => array(
+				'unset key', 
+				null, 
+				false,
+				true,
+			),
+			'flatkey' => array(
+				'flat',
+				'flatvalue',
+				true,
+				false,
+			),
+			'nestedkey-1' => array(
+				'nested',
+				array(
+					'level1' => 'level1 value',
+					'level2' => array(
+						'level3' => 'level3 value',
+						'nullkey' => null,
+						'emptystring' => '',
+					),
+				),
+				true,
+				false,
+			),
+			'nestedkey-2' => array(
+				'nested[level1]',
+				'level1 value',
+				true,
+				false,
+			),
+			'nestedkey-3' => array(
+				'nested[level2][level3]',
+				'level3 value',
+				true,
+				false,
+			),
+			'nestedkey-null' => array(
+				'nested[level2][nullkey]',
+				null,
+				true,
+				true,
+			),
+			'nestedkey-emptystring' => array(
+				'nested[level2][emptystring]',
+				'',
+				true,
+				true,
+			),
+			'nestedkey-missing' => array(
+				'nested[missing]', 
+				null,
+				false,
+				true,
+			),
+			'nullvalue' => array(
+				'nullvalue',
+				null, 
+				true, 
+				true,
+			),
+			'zerovalue' => array(
+				'zerovalue',
+				0,
+				true,
+				false,
+			),
+			'emptystring' => array(
+				'emptystring',
+				'',
+				true,
+				true,
+			),
+			'falsevalue' => array(
+				'falsevalue',
+				false,
+				true,
+				false,
+			)
+		);
+	}
+	
+	public function getFlatDefaultParameterNames()
+	{
+		return array(
+			'flat', 
+			'nested[level1]', 
+			'nested[level2][level3]', 
+			'nested[level2][nullkey]',
+			'nested[level2][emptystring]',
+			'nullvalue', 
+			'falsevalue', 
+			'emptystring',
+			'zerovalue'
+		);
+	}
+	
+	public function getDefaultParameterNames()
+	{
+		return array('flat', 'nested', 'nullvalue', 'falsevalue', 'emptystring', 'zerovalue');
+	}
+	
+	public function getParameterReadInformation()
+	{
+		$readInformation = array();
+		
+		foreach ($this->parameterData() as $key => $parameterInfo)
+		{
+			$readInformation[$key] = $parameterInfo;
+			$readInformation[$key][4] = false;
+			$readInformation[$key.',default'] = $parameterInfo;
+			$readInformation[$key.',default'][4] = true;
+			if(false == $parameterInfo[2])
+			{
+				$readInformation[$key.',default'][1] = 'default';
+			}
+		}
+		
+		return $readInformation;
 	}
 	
 	public function testSetGetCookie()
@@ -23,173 +176,179 @@ class AgaviWebRequestDataHolderTest extends AgaviPhpUnitTestCase
 	}
 	
 	/**
-	 * @dataProvider parameterData
-	 * 
+	 * @dataProvider getParameterReadInformation
 	 */
-	public function testGetCookie($key, $expected, $default, $exists, $message)
+	public function testGetCookie($key, $expected, $exists, $empty, $hasDefault)
 	{
-		$dh = new AgaviWebRequestDataHolder(
-			array(
-				AgaviWebRequestDataHolder::SOURCE_COOKIES => array(
-					'flat'   => 'flatvalue',
-					'nested' => array(
-						'level1' => 'level1 value',
-						'level2' => array('level3' => 'level3 value'),
-					)
-				)
-			)
-		);
+		$dh = $this->getDefaultDataHolder();
 		
-		if(null !== $default) {
-			$value = $dh->getCookie($key, $default);
+		if($hasDefault) {
+			$value = $dh->getCookie($key, 'default');
 		} else {
 			$value = $dh->getCookie($key);
 		}
 		
-		$this->assertEquals($expected, $value, $message);
+		$this->assertEquals($expected, $value);
 	}
 	
 	/**
 	 * @dataProvider parameterData
 	 * 
 	 */
-	public function testUnsetCookie($key, $expected, $default, $exists, $message)
+	public function testRemoveCookie($key, $expected, $exists, $empty)
 	{
-		$dh = new AgaviWebRequestDataHolder(
-			array(
-				AgaviWebRequestDataHolder::SOURCE_COOKIES => array(
-					'flat'   => 'flatvalue',
-					'nested' => array(
-						'level1' => 'level1 value',
-						'level2' => array('level3' => 'level3 value'),
-					)
-				)
-			)
-		);
+		$dh = $this->getDefaultDataHolder();
 		
+		$message = 'Failed asserting that the cookie value is returned when removing an existing cookie.';
 		if(!$exists) {
-			$expected = null;
+			$message = 'Failed asserting that the return value is null when removing a nonexistant cookie.';
 		}
 		
 		$value = $dh->removeCookie($key);
 		
 		$this->assertEquals($expected, $value, $message);
-		$this->assertFalse($dh->hasCookie($key), sprintf('Failed asserting that the key %1$s has been unset.', $key));
+		$this->assertFalse($dh->hasCookie($key), sprintf('Failed asserting that the key %1$s has been removed.', $key));
 	}
 	
-	public function parameterData()
+	/**
+	 * @dataProvider parameterData
+	 * 
+	 */
+	public function testHasCookie($key, $expected, $exists, $empty)
 	{
-		return array(
-			'unsetkey,null' => array(
-				'unset key', 
-				null, 
-				null,
-				false,
-				'Failed asserting that an unset key returns null when no default value is passed.',
-			),
-			'unsetkey,default' => array(
-				'unset key', 
-				'unset default value', 
-				'unset default value',
-				false,
-				'Failed asserting that an unset key returns the passed default value.',
-			),
-			'flatkey' => array(
-				'flat',
-				'flatvalue',
-				null,
-				true,
-				'Failed asserting that a flat key returns the proper value.',
-			),
-			'flatkey,default' => array(
-				'flat',
-				'flatvalue',
-				'flatdefault',
-				true,
-				'Failed asserting that a flat key returns the proper value, not the default.',
-			),
-			'nestedkey-1,null' => array(
-				'nested',
-				array(
-					'level1' => 'level1 value',
-					'level2' => array('level3' => 'level3 value'),
-				),
-				null,
-				true,
-				'Failed asserting that a nested key returns the proper value.',
-			),
-			'nestedkey-1,default' => array(
-				'nested',
-				array(
-					'level1' => 'level1 value',
-					'level2' => array('level3' => 'level3 value'),
-				),
-				'nested-default',
-				true,
-				'Failed asserting that a nested key returns the proper value, not the default.',
-			),
-			'nestedkey-2,null' => array(
-				'nested[level1]',
-				'level1 value',
-				null,
-				true,
-				'Failed asserting that a nested key returns the proper value.',
-			),
-			'nestedkey-2,default' => array(
-				'nested[level1]',
-				'level1 value',
-				'nested-default',
-				true,
-				'Failed asserting that a nested key returns the proper value, not the default.',
-			),
-			'nestedkey-3,null' => array(
-				'nested[level2][level3]',
-				'level3 value',
-				null,
-				true,
-				'Failed asserting that a nested key returns the proper value.',
-			),
-			'nestedkey-3,default' => array(
-				'nested[level2][level3]',
-				'level3 value',
-				'nested-default',
-				true,
-				'Failed asserting that a nested key returns the proper value, not the default.',
-			),
-			'missing-nested,null' => array(
-				'nested[missing]', 
-				null,
-				null,
-				false,
-				'Failed asserting that a nonexistent nested key returns null when no default value is passed.',
-			),			
-			'missing-nested,default' => array(
-				'nested[missing]', 
-				'missing-nested-default',
-				'missing-nested-default',
-				false,
-				'Failed asserting that a nonexistent nested cookie key returns the passed default value.',
-			),
-		);
+		$dh = $this->getDefaultDataHolder();
+		
+		if(!$exists) {
+			$this->assertFalse($dh->hasCookie($key), sprintf('Failed asserting the the cookie named %1$s does not exist.', $key));
+		} else {
+			$this->assertTrue($dh->hasCookie($key), sprintf('Failed asserting the the cookie named %1$s exists.', $key));
+		}
 	}
 	
-	public function testNullParameterValue()
+	/**
+	 * @dataProvider parameterData
+	 * 
+	 */
+	public function testIsCookieValueEmpty($key, $expected, $exists, $empty)
 	{
-		$dh = new AgaviWebRequestDataHolder(array(AgaviWebRequestDataHolder::SOURCE_PARAMETERS => array('nullvalue' => null)));
-		$this->assertTrue(
-			$dh->hasParameter('nullvalue'), 
-			'Failed asserting that the dataholder has a parameter named "nullvalue".'
-		);
-		$this->assertTrue(
-			$dh->isParameterValueEmpty('nullvalue'), 
-			'Failed asserting that the dh->isParameterValueEmpty() returns true on the parameter named "nullvalue".'
-		);
+		$dh = $this->getDefaultDataHolder();
+		
+		if(!$empty) {
+			$this->assertFalse($dh->isCookieValueEmpty($key), sprintf('Failed asserting the the cookie named %1$s has a non-empty value.', $key));
+		} else {
+			$this->assertTrue($dh->isCookieValueEmpty($key), sprintf('Failed asserting the the cookie named %1$s has an empty value.', $key));
+		}
+	}
+	
+	public function testGetCookies()
+	{
+		$dh = $this->getDefaultDataHolder();
+		
 		$this->assertEquals(
-			null, 
-			$dh->getParameter('nullvalue'), 
-			'Failed asserting that the parameter named "nullvalue" has the value "null".'
+			$this->getDefaultNestedInputData(),
+			$dh->getCookies()
 		);
 	}
+	
+	public function testSetCookies()
+	{
+		$dh = $this->getDefaultDataHolder();
+		
+		$dh->setCookies(
+			array(
+				'flat' => 'flatvalue merged',
+				'set'  => 'setCookies',
+			)
+		);
+		
+		$expected = array_merge(
+			$this->getDefaultNestedInputData(), 
+			array(
+				'flat' => 'flatvalue merged',
+				'set'  => 'setCookies',
+			)
+		);
+		
+		$this->assertEquals($expected, $dh->getCookies());
+	}
+	
+	public function testMergeCookies()
+	{
+		$dh = $this->getDefaultDataHolder();
+		
+		$dh2 = new AgaviWebRequestDataHolder(
+			array(
+				AgaviWebRequestDataHolder::SOURCE_COOKIES => array(
+					'flat' => 'flatvalue merged',
+					'set'  => 'setCookies',
+				)
+			)
+		);
+		
+		$dh->mergeCookies($dh2);
+		
+		$expected = array_merge(
+			$this->getDefaultNestedInputData(), 
+			array(
+				'flat' => 'flatvalue merged',
+				'set'  => 'setCookies',
+			)
+		);
+		
+		$this->assertEquals($expected, $dh->getCookies());
+	}
+	
+	public function testMergeCookies2()
+	{
+		$dh = $this->getDefaultDataHolder();
+		
+		$dh2 = new AgaviRequestDataHolder(
+			array(
+				AgaviWebRequestDataHolder::SOURCE_COOKIES => array(
+					'flat' => 'flatvalue merged',
+					'set'  => 'setCookies',
+				)
+			)
+		);
+		
+		$dh->mergeCookies($dh2);
+		
+		$expected = $this->getDefaultNestedInputData();
+		
+		$this->assertEquals(
+			$expected,
+			$dh->getCookies(),
+			'Failed asserting that cookies from a dataholder not implementing AgaviICookiesRequestDataHolder are not merged.'
+		);
+	}
+	
+	public function testClearCookies()
+	{
+		$dh = $this->getDefaultDataHolder();
+		
+		$dh->clearCookies();
+		
+		$this->assertEquals(array(), $dh->getCookies());
+	}
+	
+	public function testGetCookieNames()
+	{
+		$dh = $this->getDefaultDataHolder();
+		
+		$this->assertEquals($this->getDefaultParameterNames(), $dh->getCookieNames());
+	}
+	
+	public function testGetFlatCookieNames()
+	{
+		$dh = $this->getDefaultDataHolder();
+		
+		$this->assertEquals(
+			$this->getFlatDefaultParameterNames(), 
+			$dh->getFlatCookieNames()
+		);
+	}
+	
+	/*** --------- parameter tests ------ ***/
 	
 	/**
 	 * @dataProvider dataTestParameterSet
@@ -236,6 +395,156 @@ class AgaviWebRequestDataHolderTest extends AgaviPhpUnitTestCase
 			),
 		);
 	}
+	
+	/**
+	 * @dataProvider getParameterReadInformation
+	 */
+	public function testGetParameter($key, $expected, $exists, $empty, $hasDefault)
+	{
+		$dh = $this->getDefaultDataHolder();
+		
+		if($hasDefault) {
+			$value = $dh->getParameter($key, 'default');
+		} else {
+			$value = $dh->getParameter($key);
+		}
+		
+		$this->assertEquals($expected, $value);
+	}
+	
+	/**
+	 * @dataProvider parameterData
+	 * 
+	 */
+	public function testRemoveParameter($key, $expected, $exists, $empty)
+	{
+		$dh = $this->getDefaultDataHolder();
+		
+		$message = 'Failed asserting that the parameter value is returned when removing an existing parameter.';
+		if(!$exists) {
+			$message = 'Failed asserting that the return value is null when removing a nonexistant parameter.';
+		}
+		
+		$value = $dh->removeParameter($key);
+		
+		$this->assertEquals($expected, $value, $message);
+		$this->assertFalse($dh->hasParameter($key), sprintf('Failed asserting that the key %1$s has been removed.', $key));
+	}
+	
+	/**
+	 * @dataProvider parameterData
+	 * 
+	 */
+	public function testHasParameter($key, $expected, $exists, $empty)
+	{
+		$dh = $this->getDefaultDataHolder();
+		
+		if(!$exists) {
+			$this->assertFalse($dh->hasParameter($key), sprintf('Failed asserting the the parameter named %1$s does not exist.', $key));
+		} else {
+			$this->assertTrue($dh->hasParameter($key), sprintf('Failed asserting the the parameter named %1$s exists.', $key));
+		}
+	}
+	
+	/**
+	 * @dataProvider parameterData
+	 * 
+	 */
+	public function testIsParameterValueEmpty($key, $expected, $exists, $empty)
+	{
+		$dh = $this->getDefaultDataHolder();
+		
+		if(!$empty) {
+			$this->assertFalse($dh->isParameterValueEmpty($key), sprintf('Failed asserting the the parameter named %1$s has a non-empty value.', $key));
+		} else {
+			$this->assertTrue($dh->isParameterValueEmpty($key), sprintf('Failed asserting the the parameter named %1$s has an empty value.', $key));
+		}
+	}
+	
+	public function testGetParameters()
+	{
+		$dh = $this->getDefaultDataHolder();
+		
+		$this->assertEquals(
+			$this->getDefaultNestedInputData(),
+			$dh->getParameters()
+		);
+	}
+	
+	public function testSetParameters()
+	{
+		$dh = $this->getDefaultDataHolder();
+		
+		$dh->setParameters(
+			array(
+				'flat' => 'flatvalue merged',
+				'set'  => 'setCookies',
+			)
+		);
+		
+		$expected = array_merge(
+			$this->getDefaultNestedInputData(), 
+			array(
+				'flat' => 'flatvalue merged',
+				'set'  => 'setCookies',
+			)
+		);
+		
+		$this->assertEquals($expected, $dh->getParameters());
+	}
+	
+	public function testMergeParameters()
+	{
+		$dh = $this->getDefaultDataHolder();
+		
+		$dh2 = new AgaviWebRequestDataHolder(
+			array(
+				AgaviWebRequestDataHolder::SOURCE_PARAMETERS => array(
+					'flat' => 'flatvalue merged',
+					'set'  => 'setCookies',
+				)
+			)
+		);
+		
+		$dh->mergeParameters($dh2);
+		
+		$expected = array_merge(
+			$this->getDefaultNestedInputData(), 
+			array(
+				'flat' => 'flatvalue merged',
+				'set'  => 'setCookies',
+			)
+		);
+		
+		$this->assertEquals($expected, $dh->getParameters());
+	}
+	
+	public function testClearParameters()
+	{
+		$dh = $this->getDefaultDataHolder();
+		
+		$dh->clearParameters();
+		
+		$this->assertEquals(array(), $dh->getParameters());
+	}
+	
+	public function testGetParameterNames()
+	{
+		$dh = $this->getDefaultDataHolder();
+		
+		$this->assertEquals($this->getDefaultParameterNames(), $dh->getParameterNames());
+	}
+	
+	public function testGetFlatParameterNames()
+	{
+		$dh = $this->getDefaultDataHolder();
+		
+		$this->assertEquals(
+			$this->getFlatDefaultParameterNames(), 
+			$dh->getFlatParameterNames()
+		);
+	}
+	
 }
 
 ?>
