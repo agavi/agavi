@@ -35,6 +35,7 @@
 			<suite name="Translation">
 				<testfiles>
 					<testfile>unit/translation/AgaviTranslationManagerTest.php</testfile>
+    				<testfile>unit/translation/AgaviLocaleTest.php</testfile>
 				</testfiles>
 			</suite>
 			<suite name="Util">
