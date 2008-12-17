@@ -264,8 +264,9 @@ class AgaviTesting
 		PHPUnit_TextUI_TestRunner::printVersionString();
 
 		print <<<EOT
-Usage: phpunit [switches] UnitTest [UnitTest.php]
-       phpunit [switches] <directory>
+Usage: run-tests.php [switches]
+
+  --environment <envname>  use environment named <envname> to run the tests. Defaults to "testing".
 
   --log-graphviz <file>    Log test execution in GraphViz markup.
   --log-json <file>        Log test execution in JSON format.
