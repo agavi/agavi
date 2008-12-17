@@ -282,6 +282,8 @@ Usage: phpunit [switches] UnitTest [UnitTest.php]
   --exclude-suite <suites> run all but suites named <suite>, accepts a list of suites, comma separated.
 
   --help                   Prints this usage information.
+
+
 EOT;
 	}
 }
