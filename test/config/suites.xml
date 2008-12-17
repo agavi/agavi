@@ -27,15 +27,15 @@
 			<suite name="Request">
 				<testfiles>
 					<testfile>unit/request/AgaviWebRequestDataHolderTest.php</testfile>
-    				<testfile>unit/request/AgaviWebRequestDataHolderParameterTest.php</testfile>
-    				<testfile>unit/request/AgaviWebRequestDataHolderHeaderTest.php</testfile>
-    				<testfile>unit/request/AgaviWebRequestDataHolderCookieTest.php</testfile>
+					<testfile>unit/request/AgaviWebRequestDataHolderParameterTest.php</testfile>
+					<testfile>unit/request/AgaviWebRequestDataHolderHeaderTest.php</testfile>
+					<testfile>unit/request/AgaviWebRequestDataHolderCookieTest.php</testfile>
 				</testfiles>
 			</suite>
 			<suite name="Translation">
 				<testfiles>
 					<testfile>unit/translation/AgaviTranslationManagerTest.php</testfile>
-    				<testfile>unit/translation/AgaviLocaleTest.php</testfile>
+					<testfile>unit/translation/AgaviLocaleTest.php</testfile>
 				</testfiles>
 			</suite>
 			<suite name="Util">
