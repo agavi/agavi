@@ -671,13 +671,12 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	 */
 	public function getFailedFields($minSeverity = null)
 	{
-		$arguments = $this->report->getFailedArguments(null, $minSeverity);
-		$names = array();
-		foreach($arguments as $argument) {
-			$names[] = $argument->getName();
+		$fields = array();
+		foreach($this->getIncidents($minSeverity) as $incident) {
+			$fields = array_merge($fields, $incident->getFields());
 		}
 		
-		return array_values(array_unique($names));
+		return array_values(array_unique($fields));
 	}
 	
 	/**
