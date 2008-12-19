@@ -68,7 +68,7 @@
 				</message_translator>
 				
 				<date_formatter>
-					<ae:parameter name="type">date</ae:parameter>
+					<ae:parameter name="type">datetime</ae:parameter>
 					<ae:parameter name="format">full</ae:parameter>
 				</date_formatter>
 				

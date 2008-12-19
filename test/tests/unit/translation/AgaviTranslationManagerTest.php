@@ -27,6 +27,20 @@ class AgaviTranslationManagerTest extends AgaviUnitTestCase
 			array('2008-11-19 23:00:00+02:30', (2 * 60 + 30) * 60 * 1000),
 		);
 	}
+	
+	public function testTicket962()
+	{
+        $ctx = AgaviContext::getInstance();
+        $tm = $ctx->getTranslationManager();
+        $locale = $tm->getLocale('de');
+        $inputFormat = new AgaviDateFormat('yyyy-MM-dd HH:mm:ssZZZ');
+
+        $cal = $inputFormat->parse('2008-11-19 23:00:00America/Los_Angeles', $locale, false);
+        
+        $this->assertEquals('2008-11-19 23:00:00-0800', $inputFormat->format($cal, 'gregorian', $locale));
+        $this->assertEquals('Donnerstag, 20. November 2008 2:00 Uhr GMT-05:00', $tm->_d($cal, null, 'de@timezone=America/New_York'));
+        $this->assertEquals('Donnerstag, 20. November 2008 2:00 Uhr GMT-08:00', $tm->_d($cal, null, 'de'));
+	}
 }
 
 ?>
