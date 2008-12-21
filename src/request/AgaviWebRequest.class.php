@@ -281,7 +281,7 @@ class AgaviWebRequest extends AgaviRequest
 			// http://bugs.php.net/bug.php?id=46313
 			if(version_compare(PHP_VERSION, '5.2.8', 'lt')) {
 				throw new AgaviException(
-					"For security reasons, PHP 5.2.8 or later is required with magic_quotes_gpc enabled.\n" . 
+					"For security reasons, PHP 5.2.8 or later is required when magic_quotes_gpc is enabled. Upgrade to the latest PHP release or disable magic_quotes_gpc.\n" . 
 					"\nMore info:\n" .
 					"- http://trac.agavi.org/ticket/953\n" .
 					"- http://trac.agavi.org/ticket/945\n" .
