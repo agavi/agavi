@@ -13,7 +13,6 @@ CHG: Add configuration file path to header comments in compiled files if possibl
 
 FIX: AgaviValidationManager::getFailedFields() calls invalid method (#963) (Dominik)
 FIX: Arguments are unable to be named in validators configuration (#942) (Noah)
-FIX: AgaviConfigCache reaches Maximum function nesting level (#941) (Felix)
 FIX: Off-by-one error in AgaviToolkit::stringBase() (#936) (Felix)
 FIX: AgaviConfigCache::getCacheName() possibly creating ambiguous cache names (#932) (Felix)
 FIX: AgaviConfigCache::getCacheName() path escaping problems (#931) (Felix)
