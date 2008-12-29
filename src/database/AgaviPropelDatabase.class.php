@@ -30,6 +30,11 @@
  *                                       use the Propel autoloading feature.
  *                                       Instead, Propel will be initialized 
  *                                       on connect(). This is for 0.9.0 B/C.
+ * # <b>enable_instance_pooling</b> - [none] - set this to false if you want to 
+ *                                             explicitly disable propel 1.3 
+ *                                             instance pooling, to true if 
+ *                                             you want to explicitly enable it.
+ *                                             Leave empty to use propels default.
  * 
  *
  * @package    agavi
@@ -239,6 +244,15 @@ class AgaviPropelDatabase extends AgaviDatabase
 		
 		// set the new config
 		Propel::setConfiguration($config);
+		
+		
+		if(!$is12) {
+			if(true === $this->getParameter('enable_instance_pooling')) {
+				Propel::enableInstancePooling();
+			} elseif(false === $this->getParameter('enable_instance_pooling')) {
+				Propel::disableInstancePooling();
+			}
+		}
 	}
 
 	/**
