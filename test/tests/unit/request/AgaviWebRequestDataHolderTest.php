@@ -1,5 +1,5 @@
 <?php
-class AgaviWebRequestDataHolderTest extends AgaviPhpUnitTestCase
+abstract class AgaviWebRequestDataHolderTest extends AgaviPhpUnitTestCase
 {
 	protected function getDefaultDataHolder()
 	{
@@ -38,92 +38,46 @@ class AgaviWebRequestDataHolderTest extends AgaviPhpUnitTestCase
 	 * 
 	 *   - keyname
 	 *   - expected return
-	 *   - key exists
-	 *   - key considered empty
+	 *   - key exists (returns 'true' on hasParameter/Cookie/...)
+	 *   - key considered empty (returns 'true' on isParameter/Cookie/...ValueEmpty)
 	 */
 	public function parameterData()
 	{
-		return array(
-			'unsetkey' => array(
-				'unset key', 
-				null, 
-				false,
-				true,
-			),
-			'flatkey' => array(
-				'flat',
-				'flatvalue',
-				true,
-				false,
-			),
-			'nestedkey-1' => array(
-				'nested',
-				array(
-					'level1' => 'level1 value',
-					'level2' => array(
-						'level3' => 'level3 value',
-						'nullkey' => null,
-						'emptystring' => '',
-					),
-				),
-				true,
-				false,
-			),
-			'nestedkey-2' => array(
-				'nested[level1]',
-				'level1 value',
-				true,
-				false,
-			),
-			'nestedkey-3' => array(
-				'nested[level2][level3]',
-				'level3 value',
-				true,
-				false,
-			),
-			'nestedkey-null' => array(
-				'nested[level2][nullkey]',
-				null,
-				true,
-				true,
-			),
-			'nestedkey-emptystring' => array(
-				'nested[level2][emptystring]',
-				'',
-				true,
-				true,
-			),
-			'nestedkey-missing' => array(
-				'nested[missing]', 
-				null,
-				false,
-				true,
-			),
-			'nullvalue' => array(
-				'nullvalue',
-				null, 
-				true, 
-				true,
-			),
-			'zerovalue' => array(
-				'zerovalue',
-				0,
-				true,
-				false,
-			),
-			'emptystring' => array(
-				'emptystring',
-				'',
-				true,
-				true,
-			),
-			'falsevalue' => array(
-				'falsevalue',
-				false,
-				true,
-				false,
-			)
-		);
+		
+	}
+	
+	/**
+	 * returns information on what to expect when reading the default nested data set 
+	 * 
+	 * duplicates the parameter information to have a test with 
+	 * and without a default value
+	 * 
+	 * 
+	 *  each row has the following information:
+	 * 
+	 *   - keyname
+	 *   - expected return
+	 *   - key exists (returns 'true' on hasParameter/Cookie/...)
+	 *   - key considered empty (returns 'true' on isParameter/Cookie/...ValueEmpty)
+	 *   - whether the dataset expected the default value
+	 */
+	public function getParameterReadInformation()
+	{
+		$readInformation = array();
+		
+		foreach ($this->parameterData() as $key => $parameterInfo)
+		{
+			$readInformation[$key] = $parameterInfo;
+			$readInformation[$key][4] = false;
+			$readInformation[$key.',default'] = $parameterInfo;
+			$readInformation[$key.',default'][4] = true;
+			if(false == $parameterInfo[2])
+			{
+				$readInformation[$key.',default'][1] = 'default';
+			}
+		}
+		
+		return $readInformation;
 	}
 	
 	public function getFlatDefaultParameterNames()
@@ -144,25 +98,6 @@ class AgaviWebRequestDataHolderTest extends AgaviPhpUnitTestCase
 	public function getDefaultParameterNames()
 	{
 		return array('flat', 'nested', 'nullvalue', 'falsevalue', 'emptystring', 'zerovalue');
-	}
-	
-	public function getParameterReadInformation()
-	{
-		$readInformation = array();
-		
-		foreach ($this->parameterData() as $key => $parameterInfo)
-		{
-			$readInformation[$key] = $parameterInfo;
-			$readInformation[$key][4] = false;
-			$readInformation[$key.',default'] = $parameterInfo;
-			$readInformation[$key.',default'][4] = true;
-			if(true == $parameterInfo[3])
-			{
-				$readInformation[$key.',default'][1] = 'default';
-			}
-		}
-		
-		return $readInformation;
 	}
 	
 	public function getDefaultHeaders()
@@ -259,7 +194,7 @@ class AgaviWebRequestDataHolderTest extends AgaviPhpUnitTestCase
 				'EMPTY_STRING',
 				'',
 				true,
-				true,
+				false,
 			),
 			'CONTAINS[BRACKETS]' => array(
 				'CONTAINS[BRACKETS]',
@@ -287,33 +222,6 @@ class AgaviWebRequestDataHolderTest extends AgaviPhpUnitTestCase
 		}
 		
 		return $readInformation;
-	}
-	
-	public function testSetGetCookie()
-	{
-		$dh = new AgaviWebRequestDataHolder(array());
-		$dh->setCookie('foo', 'bar');
-		$this->assertEquals('bar', $dh->getCookie('foo'));
-		
-		$dh->setCookie('foo', array('bar' => 'baz'));
-		$this->assertEquals(array('bar' => 'baz'), $dh->getCookie('foo'));
-		$this->assertEquals('baz', $dh->getCookie('foo[bar]'));
-	}
-	
-	/**
-	 * @dataProvider getParameterReadInformation
-	 */
-	public function testGetCookie($key, $expected, $exists, $empty, $hasDefault)
-	{
-		$dh = $this->getDefaultDataHolder();
-		
-		if($hasDefault) {
-			$value = $dh->getCookie($key, 'default');
-		} else {
-			$value = $dh->getCookie($key);
-		}
-		
-		$this->assertEquals($expected, $value);
 	}
 
 }

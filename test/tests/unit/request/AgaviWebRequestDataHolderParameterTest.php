@@ -1,7 +1,102 @@
 <?php
 
 class AgaviWebRequestDataHolderParameterTest extends AgaviWebRequestDataHolderTest
-{	
+{	    
+	/**
+	 * returns information on the default nested data set
+	 * 
+	 *  each row has the following information:
+	 * 
+	 *   - keyname
+	 *   - expected return
+	 *   - key exists (returns 'true' on hasParameter/Cookie/...)
+	 *   - key considered empty (returns 'true' on isParameter/Cookie/...ValueEmpty)
+	 */
+	public function parameterData()
+	{
+		return array(
+			'unsetkey' => array(
+				'unsetkey', 
+				null, 
+				false,
+				true,
+			),
+			'nestedkey-unset' => array(
+				'nested[unset]', 
+				null,
+				false,
+				true,
+			),
+			'nullvalue' => array(
+				'nullvalue',
+				null, 
+				true, 
+				true,
+			),	
+			'falsevalue' => array(
+				'falsevalue',
+				false,
+				true,
+				false,
+			),
+			'zerovalue' => array(
+				'zerovalue',
+				0,
+				true,
+				false,
+			),
+			'emptystring' => array(
+				'emptystring',
+				'',
+				true,
+				true,
+			),
+			'flatkey' => array(
+				'flat',
+				'flatvalue',
+				true,
+				false,
+			),
+			'nestedkey-1' => array(
+				'nested',
+				array(
+					'level1' => 'level1 value',
+					'level2' => array(
+						'level3' => 'level3 value',
+						'nullkey' => null,
+						'emptystring' => '',
+					),
+				),
+				true,
+				false,
+			),
+			'nestedkey-2' => array(
+				'nested[level1]',
+				'level1 value',
+				true,
+				false,
+			),
+			'nestedkey-3' => array(
+				'nested[level2][level3]',
+				'level3 value',
+				true,
+				false,
+			),
+			'nestedkey-null' => array(
+				'nested[level2][nullkey]',
+				null,
+				true,
+				true,
+			),
+			'nestedkey-emptystring' => array(
+				'nested[level2][emptystring]',
+				'',
+				true,
+				true,
+			),
+		);
+	}
+	
 	/**
 	 * @dataProvider dataTestParameterSet
 	 */ 
