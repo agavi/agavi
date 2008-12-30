@@ -1,5 +1,5 @@
 <?php
-abstract class AgaviWebRequestDataHolderTest extends AgaviPhpUnitTestCase
+abstract class AgaviWebRequestDataHolderTest extends AgaviUnitTestCase
 {
 	protected function getDefaultDataHolder()
 	{
@@ -28,6 +28,7 @@ abstract class AgaviWebRequestDataHolderTest extends AgaviPhpUnitTestCase
 			'falsevalue'  => false,
 			'emptystring' => '',
 			'zerovalue'   => 0,
+			'objectvalue' => new StdClass(),
 		);
 	}
 	
@@ -91,13 +92,14 @@ abstract class AgaviWebRequestDataHolderTest extends AgaviPhpUnitTestCase
 			'nullvalue', 
 			'falsevalue', 
 			'emptystring',
-			'zerovalue'
+			'zerovalue',
+			'objectvalue',
 		);
 	}
 	
 	public function getDefaultParameterNames()
 	{
-		return array('flat', 'nested', 'nullvalue', 'falsevalue', 'emptystring', 'zerovalue');
+		return array('flat', 'nested', 'nullvalue', 'falsevalue', 'emptystring', 'zerovalue', 'objectvalue',);
 	}
 	
 	public function getDefaultHeaders()

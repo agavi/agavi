@@ -24,6 +24,8 @@
 		<autoload name="TestTicket695RoutingCallback">%core.app_dir%/../../lib/routing/TestTicket695RoutingCallback.class.php</autoload>
 		<autoload name="TestTicket698RoutingCallback">%core.app_dir%/../../lib/routing/TestTicket698RoutingCallback.class.php</autoload>
 		
-		<autoload name="AgaviTestingConfigCache">%core.app_dir%/../../lib/config/AgaviTestingConfigCache.class.php</autoload>		
+		<autoload name="AgaviTestingConfigCache">%core.app_dir%/../../lib/config/AgaviTestingConfigCache.class.php</autoload>
+		
+		<autoload name="AgaviWebRequestDataHolderTest">%core.app_dir%/../../tests/unit/request/AgaviWebRequestDataHolderTest.php</autoload>
 	</ae:configuration>
 </ae:configurations>

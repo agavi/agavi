@@ -26,7 +26,6 @@
 			</suite>
 			<suite name="Request">
 				<testfiles>
-					<testfile>unit/request/AgaviWebRequestDataHolderTest.php</testfile>
 					<testfile>unit/request/AgaviWebRequestDataHolderParameterTest.php</testfile>
 					<testfile>unit/request/AgaviWebRequestDataHolderHeaderTest.php</testfile>
 					<testfile>unit/request/AgaviWebRequestDataHolderCookieTest.php</testfile>
