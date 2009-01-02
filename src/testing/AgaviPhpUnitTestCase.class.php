@@ -59,6 +59,15 @@ abstract class AgaviPhpUnitTestCase extends PHPUnit_Framework_TestCase
 		return $result;
 	}
 	
+	/**
+	 * set the environment to bootstrap in isolated tests
+	 * 
+	 * @param        string the name of the environment
+	 * 
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 *
+	 * @since      1.0.0
+	 */
 	public function setIsolationEnvironment($environmentName)
 	{
 		$this->isolationEnvironment = $environmentName;
