@@ -98,7 +98,7 @@ class AgaviWebRequestDataHolderParameterTest extends AgaviWebRequestDataHolderTe
 				'objectvalue',
 				new StdClass(),
 				true, 
-				falsevalue,
+				false,
 			),
 		);
 	}
