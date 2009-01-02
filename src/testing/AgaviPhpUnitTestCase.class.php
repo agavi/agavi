@@ -35,19 +35,32 @@ abstract class AgaviPhpUnitTestCase extends PHPUnit_Framework_TestCase
 	protected $isolationEnvironment;
 	
 	/**
-	 * Constructs a test case with the given name.
+	 * Runs the test case and collects the results in a TestResult object.
+	 * If no TestResult object is passed a new one will be created.
 	 *
-	 * @param  string $name
-	 * @param  array  $data
-	 * @param  string $dataName
+	 * @param  PHPUnit_Framework_TestResult $result
+	 * @return PHPUnit_Framework_TestResult
+	 * @throws InvalidArgumentException
 	 */
-	public function __construct($name = NULL, array $data = array(), $dataName = '')
+	public function run(PHPUnit_Framework_TestResult $result = NULL)
 	{
+		
 		if (!empty($this->isolationEnvironment)) {
-			$_GLOBALS['testing.environment'] = $_GLOBALS['core.environment'] = $this->isolationEnvironment;
+			$GLOBALS['test.isolationEnvironment'] = $this->isolationEnvironment;
 		}
 		
-		parent::__construct($name, $data, $dataName);
+		$result = parent::run($result);
+		
+		/**
+		 * restore the testing environment
+		 */
+		$GLOBALS['test.isolationEnvironment'] = null;
+		
+		return $result;
 	}
 	
+	public function setIsolationEnvironment($environmentName)
+	{
+		$this->isolationEnvironment = $environmentName;
+	}
 }

@@ -31,5 +31,9 @@ require_once('testing.php');
 AgaviConfig::fromArray($GLOBALS['AGAVI_CONFIG']);
 unset($GLOBALS['AGAVI_CONFIG']);
 
-AgaviTesting::bootstrap();
+if(!isset($GLOBALS['test.isolationEnvironment'])) {
+	$GLOBALS['test.isolationEnvironment'] = null;
+}
+
+AgaviTesting::bootstrap($GLOBALS['test.isolationEnvironment']);
 ?>
