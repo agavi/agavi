@@ -250,7 +250,7 @@ class AgaviFactoryConfigHandler extends AgaviXmlConfigHandler
 							'class' => $data[$factory]['class'],
 							'parameters' => $data[$factory]['params'],
 						), true)
- 					);
+					);
 				}
 			} else {
 				if($factories[$info]['required']) {

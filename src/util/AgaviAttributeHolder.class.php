@@ -86,7 +86,7 @@ abstract class AgaviAttributeHolder extends AgaviParameterHolder
 
 		if(isset($this->attributes[$ns])) {
 			if(isset($this->attributes[$ns][$name]) || array_key_exists($name, $this->attributes[$ns])) {
- 				return $this->attributes[$ns][$name];
+				return $this->attributes[$ns][$name];
 			}
 
 			$parts = AgaviArrayPathDefinition::getPartsFromPath($name);
