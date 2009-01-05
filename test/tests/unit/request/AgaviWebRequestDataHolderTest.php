@@ -14,7 +14,7 @@ abstract class AgaviWebRequestDataHolderTest extends AgaviUnitTestCase
 	
 	protected function getDefaultNestedInputData()
 	{
-		return  array(
+		return array(
 			'flat'   => 'flatvalue',
 			'nested' => array(
 				'level1' => 'level1 value',
@@ -28,7 +28,7 @@ abstract class AgaviWebRequestDataHolderTest extends AgaviUnitTestCase
 			'falsevalue'  => false,
 			'emptystring' => '',
 			'zerovalue'   => 0,
-			'objectvalue' => new StdClass(),
+			'objectvalue' => new stdClass(),
 		);
 	}
 	
@@ -66,8 +66,7 @@ abstract class AgaviWebRequestDataHolderTest extends AgaviUnitTestCase
 	{
 		$readInformation = array();
 		
-		foreach ($this->parameterData() as $key => $parameterInfo)
-		{
+		foreach($this->parameterData() as $key => $parameterInfo) {
 			$readInformation[$key] = $parameterInfo;
 			$readInformation[$key][4] = false;
 			$readInformation[$key.',default'] = $parameterInfo;
@@ -211,14 +210,12 @@ abstract class AgaviWebRequestDataHolderTest extends AgaviUnitTestCase
 	{
 		$readInformation = array();
 		
-		foreach ($this->getDefaultHeaderInformation() as $key => $info)
-		{
+		foreach($this->getDefaultHeaderInformation() as $key => $info) {
 			$readInformation[$key] = $info;
 			$readInformation[$key][4] = false;
 			$readInformation[$key.',default'] = $info;
 			$readInformation[$key.',default'][4] = true;
-			if(true == $info[3])
-			{
+			if(true == $info[3]) {
 				$readInformation[$key.',default'][1] = 'default';
 			}
 		}
