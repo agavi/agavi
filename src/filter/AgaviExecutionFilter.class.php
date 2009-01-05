@@ -637,6 +637,12 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 				throw $e;
 			}
 			$request->toggleLock($key);
+			
+			// run the validation manager - it's going to take care of cleaning up the request data, and retain "conditional" mode behavior etc.
+			// but only if the action is not simple; otherwise, the (safe) arguments in the request data holder will all be removed
+			if(!$actionInstance->isSimple()) {
+				$validationManager->execute($requestData);
+			}
 		} else {
 			// set default validated status
 			$validated = true;
