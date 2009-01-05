@@ -919,7 +919,11 @@ class AgaviTranslationManager
 		}
 
 		if($time instanceof DateTime) {
-			$c->setTimeZone($this->createTimeZone($time->getTimezone()->getName()));
+			$tzName = $time->getTimezone()->getName();
+			if(preg_match('/^[+-0-9]/', $tzName)) {
+				$tzName = 'GMT' . $tzName;
+			}
+			$c->setTimeZone($this->createTimeZone($tzName));
 			$dateStr = $time->format('Y z G i s');
 			list($year, $doy, $hour, $minute, $second) = explode(' ', $dateStr);
 			$c->set(AgaviDateDefinitions::YEAR, $year);

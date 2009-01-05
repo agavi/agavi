@@ -17,6 +17,7 @@ CHG: Always merge slot response metadata even if response content is null (#917)
 CHG: Update timezone database to 2008i (#912) (David)
 CHG: Add standard warning about broken libxml versions (#909) (David)
 
+FIX: AgaviTranslationManager::createCalendar() forgets TZ offset when called with DateTime object (#957) (Dominik)
 FIX: Missing variable declaration in AgaviGettextTranslator (#968) (Dominik)
 FIX: AgaviWebRequestDataHolder method implementations are all over the place (#955) (David)
 FIX: Request data is not cleared if default View is run in absence of suitable Action::execute*() method (#967) (David)
