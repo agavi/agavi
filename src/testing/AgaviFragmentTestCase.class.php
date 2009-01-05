@@ -285,11 +285,11 @@ class %1$s extends %2$s
 	 * @param      string  the attribute name
 	 * @param      string  the attribute namespace
 	 * @param      string  an optional message to display if the test fails
-     * @param      float   $delta
-     * @param      integer $maxDepth
-     * @param      boolean $canonicalizeEol
-     * 
-     * @see        PHPUnit_Framework_Assert::assertEquals()
+	 * @param      float   $delta
+	 * @param      integer $maxDepth
+	 * @param      boolean $canonicalizeEol
+	 * 
+	 * @see        PHPUnit_Framework_Assert::assertEquals()
 	 * 
 	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
 	 * @since      1.0.0
@@ -305,8 +305,8 @@ class %1$s extends %2$s
 	 * @param      string  the attribute name
 	 * @param      string  the attribute namespace
 	 * @param      string  an optional message to display if the test fails
-     * 
-     * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * 
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
 	 * @since      1.0.0
 	 */
 	protected function assertContainerAttributeExists($attributeName, $namespace = null, $message = 'Failed asserting that the container has an attribute named <%1$s/%2$s>.')

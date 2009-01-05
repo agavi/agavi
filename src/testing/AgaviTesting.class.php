@@ -175,20 +175,20 @@ class AgaviTesting
 						$arguments['reportDirectory'] = $option[1];
 					}
 					break;
-					
+				
 				case '--environment':
 					$arguments['environment'] = $option[1];
 					break;
-					
+				
 				case '--help':
 					self::showHelp();
 					exit(PHPUnit_TextUI_TestRunner::SUCCESS_EXIT);
 					break;
-					
+				
 				case '--log-json':
 					$arguments['jsonLogfile'] = $option[1];
 					break;
-					
+				
 				case '--log-graphviz':
 					if(PHPUnit_Util_Filesystem::fileExistsInIncludePath('Image/GraphViz.php')) {
 						$arguments['graphvizLogfile'] = $option[1];
@@ -196,29 +196,31 @@ class AgaviTesting
 						throw new AgaviException('The Image_GraphViz package is not installed.');
 					}
 					break;
-					
+				
 				case '--log-tap':
 					$arguments['tapLogfile'] = $option[1];
 					break;
-					
+				
 				case '--log-xml':
 					$arguments['xmlLogfile'] = $option[1];
 				break;
-					
+				
 				case '--log-pmd':
 					if(self::checkCodeCoverageDeps()) {
 						$arguments['pmdXML'] = $option[1];
 					}
 					break;
-					
+				
 				case '--log-metrics':
 					if(self::checkCodeCoverageDeps()) {
 						$arguments['metricsXML'] = $option[1];
 					}
 					break;
+				
 				case '--include-suite':
 					$arguments['include-suite'] = $option[1];
 					break;
+				
 				case '--exclude-suite':
 					$arguments['exclude-suite'] = $option[1];
 					break;
