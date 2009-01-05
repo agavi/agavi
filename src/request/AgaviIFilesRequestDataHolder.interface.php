@@ -29,11 +29,11 @@
  */
 interface AgaviIFilesRequestDataHolder
 {
-	public function hasFile($file);
+	public function hasFile($name);
 	
-	public function isFileValueEmpty($file);
+	public function isFileValueEmpty($name);
 	
-	public function &getFile($file, $default = null);
+	public function &getFile($name, $default = null);
 	
 	public function &getFiles();
 	
@@ -41,11 +41,11 @@ interface AgaviIFilesRequestDataHolder
 	
 	public function getFlatFileNames();
 	
-	public function setFile($name, $value);
+	public function setFile($name, AgaviUploadedFile $file);
 	
 	public function setFiles(array $files);
 	
-	public function &removeFile($file);
+	public function &removeFile($name);
 	
 	public function clearFiles();
 	
