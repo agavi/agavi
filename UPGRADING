@@ -26,6 +26,8 @@ New namespaces for all configuration files have been introduced, and envelope na
   </a:configuration>
 </a:configurations>
 
+Old-style configuration files are still supported and will be converted to their new versions at runtime using XSL transformations. If you do not have ext/xsl enabled, you need to migrate your configuration files by hand.
+
 Please refer to the documentation for a full list of configuration namespaces and their roles.
 
 Validation Mode
