@@ -29,11 +29,11 @@
  */
 interface AgaviIParametersRequestDataHolder
 {
-	public function hasParameter($parameter);
+	public function hasParameter($name);
 	
-	public function isParameterValueEmpty($parameter);
+	public function isParameterValueEmpty($name);
 	
-	public function &getParameter($parameter, $default = null);
+	public function &getParameter($name, $default = null);
 	
 	public function &getParameters();
 	
@@ -45,7 +45,7 @@ interface AgaviIParametersRequestDataHolder
 	
 	public function setParameters(array $parameters);
 	
-	public function &removeParameter($parameter);
+	public function &removeParameter($name);
 	
 	public function clearParameters();
 	

@@ -73,12 +73,14 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	 *
 	 * @return     bool The result.
 	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function isParameterValueEmpty($field)
 	{
-		return ($this->getParameter($field, '') === '');
+		$value = $this->getParameter($field);
+		return ($value === null || $value === '');
 	}
 
 	/**
@@ -104,7 +106,7 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	 */
 	public function hasCookie($name)
 	{
-		if(isset($this->cookies[$name])) {
+		if(isset($this->cookies[$name]) || array_key_exists($name, $this->cookies)) {
 			return true;
 		}
 		$parts = AgaviArrayPathDefinition::getPartsFromPath($name);
@@ -118,12 +120,13 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	 *
 	 * @return     bool The result.
 	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function isCookieValueEmpty($name)
 	{
-		return ($this->getCookie($name, '') === '');
+		return ($this->getCookie($name) === null);
 	}
 
 	/**
@@ -141,7 +144,7 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	 */
 	public function &getCookie($name, $default = null)
 	{
-		if(isset($this->cookies[$name])) {
+		if(isset($this->cookies[$name]) || array_key_exists($name, $this->cookies)) {
 			return $this->cookies[$name];
 		}
 		$parts = AgaviArrayPathDefinition::getPartsFromPath($name);
@@ -187,18 +190,19 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	 *
 	 * @return     string The value of the removed cookie, if it had been set.
 	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function &removeCookie($name)
 	{
-		$retval = null;
-		if(isset($this->cookies[$name])) {
+		if(isset($this->cookies[$name]) || array_key_exists($name, $this->cookies)) {
 			$retval =& $this->cookies[$name];
 			unset($this->cookies[$name]);
+			return $retval;
 		}
-
-		return $retval;
+		$parts = AgaviArrayPathDefinition::getPartsFromPath($name);
+		return AgaviArrayPathDefinition::unsetValue($parts['parts'], $this->cookies);
 	}
 
 	/**
@@ -281,7 +285,7 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	public function &getHeader($name, $default = null)
 	{
 		$name = str_replace('-', '_', strtoupper($name));
-		if(isset($this->headers[$name])) {
+		if(isset($this->headers[$name]) || array_key_exists($name, $this->headers)) {
 			return $this->headers[$name];
 		}
 
@@ -301,7 +305,8 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	 */
 	public function hasHeader($name)
 	{
-		return isset($this->headers[str_replace('-', '_', strtoupper($name))]);
+		$name = str_replace('-', '_', strtoupper($name));
+		return (isset($this->headers[$name]) || array_key_exists($name, $this->headers));
 	}
 	
 	/**
@@ -311,12 +316,13 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	 *
 	 * @return     bool The result.
 	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function isHeaderValueEmpty($name)
 	{
-		return ($this->getHeader($name, '') === '');
+		return ($this->getHeader($name) === null);
 	}
 	/**
 	 * Set a header.
@@ -326,6 +332,7 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	 * @param      string A header name.
 	 * @param      mixed  A header value.
 	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
@@ -362,7 +369,7 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	{
 		$retval = null;
 		$name = str_replace('-', '_', strtoupper($name));
-		if(isset($this->headers[$name])) {
+		if(isset($this->headers[$name]) || array_key_exists($name, $this->headers)) {
 			$retval =& $this->headers[$name];
 			unset($this->headers[$name]);
 		}
@@ -389,16 +396,20 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	 * @param      mixed  A default return value.
 	 *
 	 * @return     mixed An AgaviUploadedFile object with file information, or an
-	 *                   array if the field name has child elements, or null if
-	 *                   no such file exists.
+	 *                   array if the field name has child elements, or null (or
+	 *                   the supplied default return value) no such file exists.
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function &getFile($name, $default = null)
 	{
-		$parts = AgaviArrayPathDefinition::getPartsFromPath($name);
-		$retval =& AgaviArrayPathDefinition::getValue($parts['parts'], $this->files);
+		if((isset($this->files[$name]) || array_key_exists($name, $this->files))) {
+			$retval =& $this->files[$name];
+		} else {
+			$parts = AgaviArrayPathDefinition::getPartsFromPath($name);
+			$retval =& AgaviArrayPathDefinition::getValue($parts['parts'], $this->files);
+		}
 		if(is_array($retval) || $retval instanceof AgaviUploadedFile) {
 			return $retval;
 		}
@@ -433,9 +444,13 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	 */
 	public function hasFile($name)
 	{
-		$parts = AgaviArrayPathDefinition::getPartsFromPath($name);
-		$val = AgaviArrayPathDefinition::getValue($parts['parts'], $this->files);
-		return is_array($val) || $val instanceof AgaviUploadedFile;
+		if((isset($this->files[$name]) || array_key_exists($name, $this->files))) {
+			$val = $this->files[$name];
+		} else {
+			$parts = AgaviArrayPathDefinition::getPartsFromPath($name);
+			$val = AgaviArrayPathDefinition::getValue($parts['parts'], $this->files);
+		}
+		return (is_array($val) || $val instanceof AgaviUploadedFile);
 	}
 
 	/**
@@ -443,6 +458,7 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	 *
 	 * @return     bool true, if any files exist, otherwise false.
 	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.11.0
 	 */
@@ -452,12 +468,13 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	}
 
 	/**
-	 * Checks if there is a value of a file is empty or not set.
+	 * Checks if a file is empty, i.e. not set or set, but not actually uploaded.
 	 *
 	 * @param      string The file name.
 	 *
 	 * @return     bool The result.
 	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
@@ -475,22 +492,21 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	 *
 	 * @param      string A file name
 	 *
-	 * @return     array The old information array, if it was set.
+	 * @return     mixed The old AgaviUploadedFile instance or array of elements.
 	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function &removeFile($name)
 	{
-		$parts = AgaviArrayPathDefinition::getPartsFromPath($name);
-		$oldValue =& AgaviArrayPathDefinition::unsetValue($parts['parts'], $this->files);
-		if(count($parts['parts']) > 1) {
-			array_pop($parts['parts']);
-			if(AgaviArrayPathDefinition::getValue($parts['parts'], $this->files) == array()) {
-				AgaviArrayPathDefinition::unsetValue($parts['parts'], $this->files);
-			}
+		if(isset($this->files[$name]) || array_key_exists($name, $this->files)) {
+			$retval =& $this->files[$name];
+			unset($this->files[$name]);
+			return $retval;
 		}
-		return $oldValue;
+		$parts = AgaviArrayPathDefinition::getPartsFromPath($name);
+		return AgaviArrayPathDefinition::unsetValue($parts['parts'], $this->files);
 	}
 
 	/**
@@ -498,21 +514,21 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	 *
 	 * If a file with the name already exists the value will be overridden.
 	 *
-	 * @param      string A file name.
-	 * @param      mixed  A file information array.
+	 * @param      string            A file name.
+	 * @param      AgaviUploadedFile An AgaviUploadedFile object.
 	 *
-	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     David Zülke <david.zuelke@bitextender.com>
 	 * @since      0.11.0
 	 */
-	public function setFile($name, $value)
+	public function setFile($name, AgaviUploadedFile $file)
 	{
-		$this->files[$name] = $value;
+		$this->files[$name] = $file;
 	}
 
 	/**
 	 * Set an array of files.
 	 *
-	 * @param      array An associative array of files and their values.
+	 * @param      array An assoc array of names and AgaviUploadedFile objects.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
@@ -563,7 +579,7 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	
 	/**
 	 * Corrects the order of $_FILES for arrays of files.
-	 * The cleaned up array is put into $this->files.
+	 * The cleaned up array of AgaviUploadedFile objects is put into $this->files.
 	 *
 	 * @param      array Array of indices used during recursion, initially empty.
 	 *
