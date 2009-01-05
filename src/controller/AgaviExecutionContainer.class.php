@@ -482,7 +482,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 			if(!$actionInstance->isSimple()) {
 				$validationManager->execute($requestData);
 			}
-		} else {			
+		} else {
 			if($this->performValidation()) {
 				// execute the action
 				// prevent access to Request::getParameters()
