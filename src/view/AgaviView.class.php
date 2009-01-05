@@ -347,6 +347,8 @@ abstract class AgaviView
 		}
 		$container = $this->container->createExecutionContainer($moduleName, $actionName, $arguments, $outputType, $requestMethod);
 		$container->setParameter('is_slot', true);
+		// just in case it was carried over by AgaviContainer::createExecutionContainer()
+		$container->removeParameter('is_forward');
 		return $container;
 	}
 
