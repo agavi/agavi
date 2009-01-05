@@ -33,6 +33,14 @@ Validation Mode
 AgaviValidationManager now assumes "strict" mode by default when no "mode" configuration parameter was given. Agavi code templates shipped with "strict" for production and "conditional" for development.* environments before, so you shouldn't be affected at all.
 If you rely on the less secure "relaxed" mode being default (which you shouldn't), then you might need to adjust your factories.xml configuration.
 
+Request method isolation
+------------------------
+Every Execution Container now has its own request method. This makes the reuse of Actions, particularly as slots, vastly more convenient. For containers created using any of the convenience methods
+- AgaviExecutionContainer::createExecutionContainer()
+- AgaviView::createForwardContainer()
+- AgaviView::createSlotContainer()
+the "current" container's request method is used for the new container. If your application previously relied on changing the global request method prior to spawning new containers as a workaround for the lack of this functionality in previous versions of Agavi, you need to adjust your code accordingly.
+
 Template layer output availability
 ----------------------------------
 By default, the output of the previous template layer is only available in $inner, not anymore through $slots['layername']. This can be changed through a configuration setting for the execution filter, but is strongly discouraged, as $inner is more portable (and also more logical).
