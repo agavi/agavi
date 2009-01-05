@@ -215,7 +215,7 @@ abstract class AgaviWebRequestDataHolderTest extends AgaviUnitTestCase
 			$readInformation[$key][4] = false;
 			$readInformation[$key.',default'] = $info;
 			$readInformation[$key.',default'][4] = true;
-			if(true == $info[3]) {
+			if(true == $info[3] && false === $info[2]) {
 				$readInformation[$key.',default'][1] = 'default';
 			}
 		}
