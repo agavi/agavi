@@ -83,7 +83,7 @@ final class AgaviDateDefinitions
 	 */
 	const WEEK_OF_YEAR            = 3;
 
- /**
+	/**
 	 * Field number indicating the week number within the current month.
 	 * 
 	 * The first week of the month, as defined by <kbd>FIRST_DAY_OF_WEEK</kbd> and
@@ -98,7 +98,7 @@ final class AgaviDateDefinitions
 	 */
 	const WEEK_OF_MONTH           = 4;
 
- /**
+	/**
 	 * Field number indicating the day of the month.
 	 * 
 	 * This is a synonym for {@link DAY_OF_MONTH}. The first day of the month 
@@ -110,7 +110,7 @@ final class AgaviDateDefinitions
 	 */
 	const DATE                    = 5;
 
- /**
+	/**
 	 * Field number indicating the day number within the current year.
 	 * 
 	 * The first day of the year has value 1.
@@ -119,7 +119,7 @@ final class AgaviDateDefinitions
 	 */
 	const DAY_OF_YEAR             = 6;
 
- /**
+	/**
 	 * Field number indicating the day of the week.
 	 * 
 	 * This field takes values {@link SUNDAY}, {@link MONDAY}, {@link TUESDAY}, 
@@ -137,7 +137,7 @@ final class AgaviDateDefinitions
 	 */
 	const DAY_OF_WEEK             = 7;
 
- /**
+	/**
 	 * Field number indicating the ordinal number of the day of the week within 
 	 * the current month.
 	 * 
@@ -166,7 +166,7 @@ final class AgaviDateDefinitions
 	 */
 	const DAY_OF_WEEK_IN_MONTH    = 8;
 
- /**
+	/**
 	 * Field number indicating  whether the {@link HOUR} is before or after noon.
 	 * 
 	 * E.g., at 10:04:15.250 PM the <kbd>AM_PM</kbd> is {@link PM}.
@@ -274,7 +274,7 @@ final class AgaviDateDefinitions
 	 * @since      0.11.0
 	 */
 	const EXTENDED_YEAR           = 19;
- 
+
 	/**
 	 * Field number indicating the modified Julian day number.
 	 * 
