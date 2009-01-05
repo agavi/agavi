@@ -2151,10 +2151,13 @@ abstract class AgaviCalendar
 			}
 		} else {
 			if($bestField == AgaviDateDefinitions::WEEK_OF_YEAR) {  // ------------------------------------- WOY -------------
-				if(!$this->_isSet(AgaviDateDefinitions::YEAR_WOY) ||  // YWOY not set at all or
-						( ($this->resolveFields(self::$kYearPrecedence) != AgaviDateDefinitions::YEAR_WOY) // YWOY doesn't have precedence
-						&& ($this->fStamp[AgaviDateDefinitions::YEAR_WOY] != self::kInternallySet) ) ) // (excluding where all fields are internally set - then YWOY is used)
-				{
+				if(
+					!$this->_isSet(AgaviDateDefinitions::YEAR_WOY) ||  // YWOY not set at all or
+					(
+						($this->resolveFields(self::$kYearPrecedence) != AgaviDateDefinitions::YEAR_WOY) // YWOY doesn't have precedence
+						&& ($this->fStamp[AgaviDateDefinitions::YEAR_WOY] != self::kInternallySet) // (excluding where all fields are internally set - then YWOY is used)
+					)
+				) {
 					// need to be sure to stay in 'real' year.
 					$woy = $this->internalGet($bestField);
 
@@ -2165,12 +2168,13 @@ abstract class AgaviCalendar
 						$nextFirst += 7;
 					}
 
-					if($woy==1) {  // FIRST WEEK ---------------------------------
+					if($woy == 1) {  // FIRST WEEK ---------------------------------
 
 						// nextFirst is now the localized DOW of Jan 1  of y-woy+1
-						if(($nextFirst > 0) &&   // Jan 1 starts on FDOW
-							(7 - $nextFirst) >= $this->getMinimalDaysInFirstWeek()) // or enough days in the week
-						{
+						if(
+							($nextFirst > 0) &&   // Jan 1 starts on FDOW
+							(7 - $nextFirst) >= $this->getMinimalDaysInFirstWeek() // or enough days in the week
+						) {
 							// Jan 1 of (yearWoy+1) is in yearWoy+1 - recalculate JD to next year
 							$julianDay = $nextJulianDay;
 
