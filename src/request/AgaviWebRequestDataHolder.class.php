@@ -139,7 +139,7 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function &getCookie($name, $default=null)
+	public function &getCookie($name, $default = null)
 	{
 		if(isset($this->cookies[$name])) {
 			return $this->cookies[$name];
