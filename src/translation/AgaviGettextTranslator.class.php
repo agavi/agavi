@@ -43,6 +43,11 @@ class AgaviGettextTranslator extends AgaviBasicTranslator
 	 * @var        array The data for each domain
 	 */
 	protected $domainData = array();
+	
+	/**
+	 * @var        string The locale identifier of the current locale
+	 */
+	protected $locale = null;
 
 	/**
 	 * @var        string The name of the plural form function
