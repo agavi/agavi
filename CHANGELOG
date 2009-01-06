@@ -11,6 +11,7 @@ CHG: Refactor AgaviConfigCache::callHandler() to be more modular and testable (#
 CHG: Refactor AgaviToolkit::stringBase() (#935) (Felix)
 CHG: Add configuration file path to header comments in compiled files if possible (#938) (David)
 
+FIX: AgaviValidationValidatorResult missing from autoload.xml (#969) (Veikko)
 FIX: Caching does not support customized view name schemes (#970) (David)
 FIX: AgaviValidationManager::getFailedFields() calls invalid method (#963) (Dominik)
 FIX: Arguments are unable to be named in validators configuration (#942) (Noah)

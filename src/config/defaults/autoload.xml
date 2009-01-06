@@ -250,11 +250,11 @@
 			<autoload name="AgaviStringValidator">%core.agavi_dir%/validator/AgaviStringValidator.class.php</autoload>
 			<autoload name="AgaviValidationArgument">%core.agavi_dir%/validator/AgaviValidationArgument.class.php</autoload>
 			<autoload name="AgaviValidationArgumentResult">%core.agavi_dir%/validator/AgaviValidationArgumentResult.class.php</autoload>
-			<autoload name="AgaviValidationValidatorResult">%core.agavi_dir%/validator/AgaviValidationValidatorResult.class.php</autoload>
 			<autoload name="AgaviValidationError">%core.agavi_dir%/validator/AgaviValidationError.class.php</autoload>
 			<autoload name="AgaviValidationIncident">%core.agavi_dir%/validator/AgaviValidationIncident.class.php</autoload>
 			<autoload name="AgaviValidationManager">%core.agavi_dir%/validator/AgaviValidationManager.class.php</autoload>
 			<autoload name="AgaviValidationReport">%core.agavi_dir%/validator/AgaviValidationReport.class.php</autoload>
+			<autoload name="AgaviValidationValidatorResult">%core.agavi_dir%/validator/AgaviValidationValidatorResult.class.php</autoload>
 			<autoload name="AgaviValidator">%core.agavi_dir%/validator/AgaviValidator.class.php</autoload>
 			<autoload name="AgaviXoroperatorValidator">%core.agavi_dir%/validator/AgaviXoroperatorValidator.class.php</autoload>
 
