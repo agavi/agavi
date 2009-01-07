@@ -1,0 +1,87 @@
+AGAVI CHANGELOG (0.10.x)
+========================
+
+0.10.2 (February 27, 2006)
+--------------------------
+
+CHG: Changed to new PEAR package task, package.xml v2 format, using PEAR channel pear.agavi.org (David)
+CHG: Declared API stability alpha (David)
+
+FIX: Fixed PHP 5.0.5 / 5.1 return by reference problem in logging/PassthruLayout (Markus Lervik, David)
+FIX: Fixed incorrect Phing dependendy (David)
+
+
+0.10.1 (January 6, 2006)
+------------------------
+
+FIX: Fixed critical bug that prevented parameters to be passed in config_handlers.ini
+
+
+0.10.0 (December 20, 2005)
+--------------------------
+
+CHG: Updated TODO
+CHG: Bumped Version Numbers
+
+FIX: ReturnArrayConfigHandler did not convert foo.bar.baz keys into multi-dimensional arrays
+FIX: RELEASE_NOTES and INSTALL were missing in AgaviPackageTask
+
+
+0.10.0 RC1 (December 16, 2005)
+------------------------------
+
+ADD: ShutdownListener support (Veikko)
+ADD: Cookie support for WebRequest (Veikko)
+ADD: Session Cookie parameter support (Veikko)
+ADD: CreoleSessionStorage (Veikko)
+ADD: HTTPSRequest (Markus Lervik, David)
+ADD: XSLView (Wes Hays)
+ADD: AdoDBDatabase (Steven Weiss, David)
+ADD: Sub-actions support for "agavi" helper script (David)
+ADD: code_templates have Template templates (David)
+ADD: Multiple credentials support (David)
+ADD: Support for setting session ID in SessionStorage (Mike)
+ADD: Constants support for config files (Bob, Johan)
+ADD: Logging functionality (Bob)
+ADD: WEBAPP_NAME setting in settings.ini (Mike)
+ADD: Request::getAttributes() (Bob)
+ADD: Auto-detection of modules for "agavi" helper script when executed inside or below a module's dir.
+ADD: ReturnArrayConfigHandler (David, Mike)
+ADD: Support for custom ExecutionFilters (David)
+ADD: Support for Singleton Models (David)
+ADD: FormPHPView (xardion)
+ADD: ValidatorManager, DateValidator (Graeme Foster, Mike)
+ADD: Test directory structure and stubs are auto-created when using the "agavi" helper script to add stuff.
+ADD: Advanced Propel integration via PropelAutoload, PropelDatabase still backwards compatible to old method (David)
+ADD: appendAttribute() methods for Request, User and View (Bob)
+
+CHG: Unified parameter names for database users to "username" everywhere (Veikko, David)
+CHG: Beefed up NumberValidator with min/max and integer support (Veikko)
+CHG: All AG_* configuration directives except AG_WEBAPP_DIR are optional (David)
+CHG: AG_WEBAPP_DIR and AG_APP_DIR will be auto-determined if possible (David)
+CHG: Action and View class names can now also be like Module_Some_Sub_MarineAction (and also Some_Sub_MarineAction)
+CHG: Config Handlers will throw UnreadableExceptions when appropriate (David)
+CHG: Added some helper methods and changed visibility of some methods in Views to allow for more control in ExecutionFilters (David)
+CHG: SmartyView uses the SMARTY_CACHE_DIR setting if set, AG_CACHE_DIR otherwise.
+CHG: Realigns configuration away from configuring controllers to configuring contexts (Mike)
+CHG: autoload.ini handling changed to support include_path (Bob)
+CHG: Autoload support for Controller::getGlobalModel() (Mike)
+CHG: Refactored helper script (Mike)
+CHG: Reworked Test infrastructure (Mike)
+CHG: Improved, changed and refactored many, many tests and the intrastructure for tests; "agavi test" runs tests (Mike)
+
+FIX: PHP 5.1 compatibility for ConfigCache::getCacheName() (Markus Lervik, David)
+FIX: Re-wrote broken directory and module recognition routines in AgaviFixPathsTask, fixed "agavi model" to work correctly (David, Miroslaw Wrobel)
+FIX: __autoload() won't throw exceptions anymore (Veikko)
+FIX: Plain text formating for AgaviException::printStackTrace (Veikko)
+FIX: Autostart sessions only after all initializations have finished (Veikko)
+FIX: Action::validate() to be called even when a ini validation criteria failed (David, Steven Weiss)
+FIX: Support for username and password in PDODatabase (David, Benjamin Muskalla)
+FIX: PHP 5.1.0 Compatibility for PDODatabase (David)
+FIX: Strict comparison for credentials (David)
+FIX: Avoid notices in ValidatorManager (Bob)
+FIX: Request::extractParameters() returns null for non-existent parameters (Mike)
+FIX: Set a default if calling agavi action from inside a module's dir or subdirs (Mike)
+FIX: Windows support for helper script (David)
+FIX: Use proper type "::" or "->" in stack trace (David)
+
