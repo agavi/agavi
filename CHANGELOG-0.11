@@ -675,7 +675,7 @@ CHG: Make the framework E_STRICT compliant and remove all those "&"s (#34) (Davi
 FIX: use of unititalized variable in AgaviWebRequest::getFileError() (#305) (David)
 FIX: Logging layouts need context and they need to be initialized even if there are no parameters (#297) (Veikko)
 FIX: Appender needs context and needs to be initialized even if there are no parameters (#295) (Veikko)
-FIX: Controller::getView() should throw an Exception if View is ultimately not found	closed (#268) (David)
+FIX: Controller::getView() should throw an Exception if View is ultimately not found (#268) (David)
 FIX: User must be available even with security disabled (#261) (David)
 FIX: Controller::getAction() should throw an Exception if Action is ultimately not found (#252) (David)
 FIX: Return subaction view with array syntax (#176) (David)
