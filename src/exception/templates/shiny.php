@@ -28,9 +28,7 @@
  * @version    $Id$
  */
 
-
-if (!function_exists('buildParamList'))
-{
+if(!function_exists('buildParamList')) {
 	/**
 	 * Build a list of parameters passed to a method. Example:
 	 * array([object AgaviFilter], 'baz' => array(1, 2), 'log' => [resource stream])

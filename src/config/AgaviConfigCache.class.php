@@ -75,8 +75,7 @@ class AgaviConfigCache
 	{
 		self::setupHandlers();
 		
-		if (null === $handlerInfo)
-		{
+		if(null === $handlerInfo) {
 			// we need to load the handlers first
 			$handlerInfo = self::getHandlerInfo($name);
 		}
@@ -372,7 +371,7 @@ class AgaviConfigCache
 		// we need this method reentry safe for unit testing
 		// sorry for the testing code in the class, but I don't have
 		// any other idea to solve the issue
-		if (!self::$filesIncluded) {
+		if(!self::$filesIncluded) {
 			// since we only need the parser and handlers when the config is not cached
 			// it is sufficient to include them at this stage
 			require_once($agaviDir . '/config/AgaviILegacyConfigHandler.interface.php');

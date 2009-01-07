@@ -292,8 +292,7 @@ abstract class AgaviViewTestCase extends AgaviFragmentTestCase
 	 */
 	protected function assertForwards($expectedModule, $expectedAction, $message = '')
 	{
-		if (!($this->viewResult instanceof AgaviExecutionContainer))
-		{
+		if(!($this->viewResult instanceof AgaviExecutionContainer)) {
 			$this->fail('Failed asserting that the view result is a forward.');
 		}
 	}
@@ -312,8 +311,7 @@ abstract class AgaviViewTestCase extends AgaviFragmentTestCase
 		$viewInstance = $this->container->getViewInstance();
 		$layer = $viewInstance->getLayer($expectedLayer);
 		
-		if (null == $layer)
-		{
+		if(null === $layer) {
 			$this->fail('Failed asserting that the view contains the layer.');
 		}
 	}

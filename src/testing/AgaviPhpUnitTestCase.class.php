@@ -45,15 +45,13 @@ abstract class AgaviPhpUnitTestCase extends PHPUnit_Framework_TestCase
 	public function run(PHPUnit_Framework_TestResult $result = NULL)
 	{
 		
-		if (!empty($this->isolationEnvironment)) {
+		if(!empty($this->isolationEnvironment)) {
 			$GLOBALS['test.isolationEnvironment'] = $this->isolationEnvironment;
 		}
 		
 		$result = parent::run($result);
 		
-		/**
-		 * restore the testing environment
-		 */
+		// restore the testing environment
 		$GLOBALS['test.isolationEnvironment'] = null;
 		
 		return $result;

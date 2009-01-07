@@ -137,8 +137,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	public function __sleep()
 	{
 		$this->contextName = $this->context->getName();
-		if (!empty($this->outputType))
-		{
+		if(!empty($this->outputType)) {
 			$this->outputTypeName = $this->outputType->getName();	
 		}
 		$arr = get_object_vars($this);
@@ -159,8 +158,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	{
 		$this->context = AgaviContext::getInstance($this->contextName);
 		
-		if (!empty($this->outputTypeName))
-		{
+		if(!empty($this->outputTypeName)) {
 			$this->outputType = $this->context->getController()->getOutputType($this->outputTypeName);
 		}
 		

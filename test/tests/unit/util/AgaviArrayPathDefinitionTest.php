@@ -8,8 +8,7 @@ class AgaviArrayPathDefintionTest extends AgaviPhpUnitTestCase
 	 */
 	public function testGetPartsFromPath($path, $expected, $expectedException)
 	{
-		if (!empty($expectedException))
-		{
+		if(!empty($expectedException)) {
 			$this->setExpectedException($expectedException);
 		}
 		$this->assertEquals($expected, AgaviArrayPathDefinition::getPartsFromPath($path));

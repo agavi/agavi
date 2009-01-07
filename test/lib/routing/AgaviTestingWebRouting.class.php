@@ -37,7 +37,7 @@ class AgaviTestingWebRouting extends AgaviWebRouting
 	
 	public function setRoutingSource($name, $data, $type = null)
 	{
-		if (null === $type) {
+		if(null === $type) {
 			$type = 'AgaviRoutingArraySource';
 		}
 		$this->sources[$name] = new $type($data);
