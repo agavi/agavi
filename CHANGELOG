@@ -47,18 +47,27 @@ FIX: Validator config handler might produce undefined variable notices and subse
 -------------------------------
 
 ADD: Add support for new validation configs to build system and introduce best practices (#882) (David)
+ADD: Allow specifying of doctrine template implementations (#864) (David, TANAKA Koichi)
 
 CHG: Clean up the Phing components of the project configuration system (#875) (Noah)
 CHG: Change Form Population Filter to use validation system's ability to more accurately handle different sources of input (#786) (David)
 CHG: Validation system needs to be able to tell two fields of same names, but from different sources, apart (#785) (Dominik)
+CHG: Update logging.xml in Sample app and code templates and add "log" dir to Sample app (#879) (David)
 CHG: Change singular/plural handling in AgaviXmlConfigDomElement convenience methods (#878) (David)
 
+FIX: AgaviDatabase::getName() always returns false (#887) (David)
+FIX: Validation config handler is broken for nested validators (#886) (David)
 FIX: Build system output is unreadable in Terminal.app on Mac OS X Leopard (#885) (David)
 FIX: Project configuration system depends on Phing >= 2.3.0, but should depend on >= 2.3.1 (#884) (Noah)
+FIX: Build system does not create app/log folder in new projects (#881) (David, Noah)
+FIX: Parameters are not merged in config_handlers.xml (#880) (David)
 FIX: XInclude failure leads to corrupt exception error message (#877) (David)
 FIX: Configuration files with old-style handlers are never validated (#870) (David)
+FIX: Default autoload.xml is missing AgaviMysqliDatabase entry (#868) (David)
 FIX: Per-module config_handlers.xml will cause "unsupported operand types" fatal error with debug mode off (#867) (David)
+FIX: SOAP and XMLRPC test scripts in sample app are broken (#866) (David)
 FIX: AgaviXmlConfigDomElement::hasChild() does not pass on $namespaceUri argument (#865) (David)
+FIX: Certain validator names will cause a fatal error (#863) (David)
 
 
 1.0.0 beta 3 (September 21, 2008)
@@ -196,30 +205,4 @@ FIX: Filename patterns are escaped incorrectly in config_handlers.xml (#913) (No
 CHG: Update timezone database to 2008h (#896) (David)
 
 FIX: AgaviSoapResponse::searchSoapHeader() compares namespaces incorrectly (#892) (David)
-
-
-0.11.5 RC1 (October 20, 2008)
------------------------------
-
-FIX: AgaviDatabase::getName() always returns false (#887) (David)
-FIX: Validation config handler is broken for nested validators (#886) (David)
-FIX: Build system does not create app/log folder in new projects (#881) (David, Noah)
-
-
-0.11.4 (October 14, 2008)
--------------------------
-
-CHG: Update logging.xml in Sample app and code templates and add "log" dir to Sample app (#879) (David)
-
-FIX: Parameters are not merged in config_handlers.xml (#880) (David)
-
-
-0.11.4 RC1 (October 2, 2008)
-----------------------------
-
-ADD: Allow specifying of doctrine template implementations (#864) (David, TANAKA Koichi)
-
-FIX: Default autoload.xml is missing AgaviMysqliDatabase entry (#868) (David)
-FIX: SOAP and XMLRPC test scripts in sample app are broken (#866) (David)
-FIX: Certain validator names will cause a fatal error (#863) (David)
 
