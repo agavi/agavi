@@ -49,7 +49,7 @@ class AgaviListActionsTask extends Task
 
 	public function main()
 	{
-		if ($this->moduleDir && $this->property) {
+		if($this->moduleDir && $this->property) {
 			$actions = $this->getActions();
 			$this->project->setProperty($this->defaultProperty, $actions[0]);
 			$this->project->setProperty($this->property, implode(',', $actions));
@@ -72,8 +72,7 @@ class AgaviListActionsTask extends Task
 			$continue = false;
 			if(in_array($iterator->getFilename(), $ignores)) {
 				$continue = true;
-			}
-			else {
+			} else {
 				foreach($ignores as $ignore) {
 					if(strpos($pathname, '/' . $ignore . '/') !== false) {
 						$continue = true;
@@ -92,7 +91,7 @@ class AgaviListActionsTask extends Task
 
 			if($iterator->isFile()) {
 				$matches = array();
-				if (preg_match("/\/actions\/(.+)Action\.class\.php/", $pathname, $matches)) {
+				if(preg_match("/\/actions\/(.+)Action\.class\.php/", $pathname, $matches)) {
 					$result[] = str_replace('/', '.', $matches[1]);
 				}
 			}

@@ -24,12 +24,12 @@ class AgaviPackageTask extends Task
 
 	public function main()
 	{
-		if (!@require_once('PEAR/PackageFileManager2.php')) {
+		if(!@require_once('PEAR/PackageFileManager2.php')) {
 			throw new BuildException('Requires PEAR_PackageFileManager >=1.6.0a1');
 		}
 		require_once('PEAR/Exception.php');
 		PEAR::setErrorHandling(PEAR_ERROR_CALLBACK,'PEAR_ErrorToPEAR_Exception');
-		if (!$this->dir || !file_exists($this->dir)) {
+		if(!$this->dir || !file_exists($this->dir)) {
 			throw new BuildException('Build dir is not defined or does not exist.');
 		}
 
