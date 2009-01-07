@@ -84,7 +84,7 @@ class AgaviConfigCache
 			$handlerInfo = self::getHandlerInfo($name);
 		}
 
-		$data =  self::executeHandler($config, $context, $handlerInfo);
+		$data = self::executeHandler($config, $context, $handlerInfo);
 		self::writeCacheFile($config, $cache, $data, false);
 	}
 
