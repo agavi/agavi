@@ -115,8 +115,7 @@ class AgaviAdodbDatabase extends AgaviDatabase
 			// connect to our lovely database ;-)
 			if(isset($dsn) && $dsn != "") {
 				$this->connection = &ADONewConnection($dsn);
-			}
-			else  {
+			} else {
 				// set our flags
 				$persistent = $this->getParameter('persistent', false);
 					
