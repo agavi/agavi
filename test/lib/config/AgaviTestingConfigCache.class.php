@@ -59,7 +59,7 @@ class AgaviTestingConfigCache extends AgaviConfigCache
 		return parent::getHandlerInfo($name);
 	}
 
-	public static function callHandler($name, $config, $cache, $context, $handlerInfo = null)
+	public static function callHandler($name, $config, $cache, $context, array $handlerInfo = null)
 	{
 		parent::callHandler($name, $config, $cache, $context, $handlerInfo);
 	}
