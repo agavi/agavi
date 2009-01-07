@@ -40,17 +40,19 @@ class AgaviConfigCache
 	protected static $handlers = null;
 
 	/**
-	 * @var        array A string=>bool array containing config handler files and their loaded status
+	 * @var        array A string=>bool array containing config handler files and
+	 *                   their loaded status
 	 */
 	protected static $handlerFiles = array();
 
 	/**
-	 * @var        bool Whether there is an entry in self::$handlerFiles which needs processing
+	 * @var        bool Whether there is an entry in self::$handlerFiles that
+	 *                  needs processing.
 	 */
 	protected static $handlersDirty = true;
 	
 	/**
-	 * @var        bool Whether the config handler files have been required
+	 * @var        bool Whether the config handler files have been required.
 	 */
 	protected static $filesIncluded = false;
 
@@ -62,16 +64,18 @@ class AgaviConfigCache
 	 * @param      string An absolute filesystem path to the cache file that
 	 *                    will be written.
 	 * @param      string The context which we're currently running.
-	 * @param      array  optional config handler info
+	 * @param      array  Optional config handler info array.
 	 *
 	 * @throws     <b>AgaviConfigurationException</b> If a requested configuration
 	 *                                                file does not have an
 	 *                                                associated config handler.
 	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
 	 * @since      0.9.0
 	 */
-	protected static function callHandler($name, $config, $cache, $context, $handlerInfo = null)
+	protected static function callHandler($name, $config, $cache, $context, array $handlerInfo = null)
 	{
 		self::setupHandlers();
 		
@@ -85,10 +89,10 @@ class AgaviConfigCache
 	}
 
 	/**
-	 * set up the config handler.
+	 * Set up all config handler definitions.
 	 * 
-	 * check whether the handlers have been loaded or the dirtyHandlers
-	 * flag is set. Load any handler that has not been loaded.
+	 * Checks whether the handlers have been loaded or the dirtyHandlers flat is
+	 * set, and loads any handler that has not been loaded.
 	 * 
 	 * @author       Felix Gilcher <felix.gilcher@bitextender.com>
 	 * @since        1.0.0
@@ -111,11 +115,11 @@ class AgaviConfigCache
 	}
 	
 	/**
-	 * get the handler information for the given filename.
+	 * Fet the handler information for the given filename.
 	 * 
-	 * @param        string the name of the config file (partial path)
+	 * @param        string The name of the config file (partial path).
 	 * 
-	 * @return       array  the handler info
+	 * @return       array  The handler info.
 	 * 
 	 * @author       Felix Gilcher <felix.gilcher@bitextender.com>
 	 * @since        1.0.0
@@ -151,13 +155,13 @@ class AgaviConfigCache
 	}
 	
 	/**
-	 * get the handler information for the given filename.
+	 * Execute the config handler for the given file.
 	 * 
-	 * @param        string the path to the config file (full path)
+	 * @param        string The path to the config file (full path).
 	 * @param        string The context which we're currently running.
-	 * @param        array  the config handler info
+	 * @param        array  The config handler info.
 	 * 
-	 * @return       string the compiled data
+	 * @return       string The compiled data.
 	 * 
 	 * @author       Felix Gilcher <felix.gilcher@bitextender.com>
 	 * @since        1.0.0
@@ -523,8 +527,8 @@ class AgaviConfigCache
 	 * file.
 	 *
 	 * @param      string An absolute filesystem path to a configuration file.
-	 * @param      bool Whether the config parser class should be autoloaded if
-	 *                  the class doesn't exist.
+	 * @param      bool   Whether the config parser class should be autoloaded if
+	 *                    the class doesn't exist.
 	 * @param      string A path to a validation file for this config file.
 	 * @param      string A class name which specifies an parser to be used.
 	 *
