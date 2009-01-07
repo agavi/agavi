@@ -23,10 +23,21 @@ FIX: AgaviConfigCache::getCacheName() path escaping problems (#931) (Felix)
 1.0.0 beta 6 (November 12, 2008)
 --------------------------------
 
+ADD: Optionally allow sending of response content when redirecting in AgaviWebResponse (#916) (David)
+
 CHG: Assume "strict" validation mode directly inside AgaviValidationManager in addition to code templates and remove "conditional" default for development environments (#919) (David)
+CHG: Add more best practices to code templates (#910) (David)
+CHG: Use standard layouts etc for system actions instead of hand-built renderers and layers in code templates (#911) (David)
+CHG: Always merge slot response metadata even if response content is null (#917) (David)
+CHG: Update timezone database to 2008i (#912) (David)
+CHG: Add standard warning about broken libxml versions (#909) (David)
 CHG: Update timezone database to 2008h (#896) (David)
 
+FIX: logging.xml and output_types.xml handlers have variable name escaping problems (#921) (David)
 FIX: AgaviXmlConfigParser::transformProcessingInstructions() is broken completely (#918) (David)
+FIX: Wrong urls when passing host and port to WebRouting::gen() (#902) (Felix)
+FIX: build.xml is missing reset of code templates dir to default before copying dist.htaccess (#914) (David)
+FIX: Filename patterns are escaped incorrectly in config_handlers.xml (#913) (Noah)
 FIX: Build system fails to find or generate default action (#899) (Noah)
 FIX: Config handlers definition loading sequence may cause exceptions with debug mode off (#905) (Dominik)
 FIX: Less aggressive inclusion of per module config handlers, they are only loaded at first module initialization (#906) (Felix)
@@ -168,16 +179,10 @@ FIX: Security filters cannot perform checks in addition to isSecure() (#671) (Da
 
 ADD: Add option to control Propel 1.3 instance pooling (#960) (Felix)
 ADD: AgaviArraylengthValidator (#948) (Dominik)
-ADD: Optionally allow sending of response content when redirecting in AgaviWebResponse (#916) (David)
 
 CHG: Change magic_quotes_gpc handling to require PHP 5.2.8 and use the fixes introduced there (#953) (David)
 CHG: Re-throw exception instead of printing stack trace and info in exception templates when display_errors is off (#952) (David)
 CHG: Add +FollowSymLinks to .htaccess code templates and samples (#893) (David)
-CHG: Add more best practices to code templates (#910) (David)
-CHG: Use standard layouts etc for system actions instead of hand-built renderers and layers in code templates (#911) (David)
-CHG: Always merge slot response metadata even if response content is null (#917) (David)
-CHG: Update timezone database to 2008i (#912) (David)
-CHG: Add standard warning about broken libxml versions (#909) (David)
 
 FIX: Using the timezone option in a locale string passed to _d() can possibly change the timezone of the given calendar object (#962) (Dominik)
 FIX: AgaviTranslationManager::createCalendar() forgets TZ offset when called with DateTime object (#957) (Dominik)
@@ -195,8 +200,4 @@ FIX: Pattern delimiter is not passed to several preg_quote calls (#939) (David)
 FIX: AgaviPropelDatabase::connect() doesn't honor datasource parameter (#937) (David, Sven Kretschmann)
 FIX: Invalid CSS in project wizard's WelcomeSuccess template (#928) (TANAKA Koichi, David)
 FIX: Converting an AgaviCalendar with a custom unnamed Timezone an DateTime object fails (#922) (Dominik)
-FIX: logging.xml and output_types.xml handlers have variable name escaping problems (#921) (David)
-FIX: Wrong urls when passing host and port to WebRouting::gen() (#902) (Felix)
-FIX: build.xml is missing reset of code templates dir to default before copying dist.htaccess (#914) (David)
-FIX: Filename patterns are escaped incorrectly in config_handlers.xml (#913) (Noah)
 
