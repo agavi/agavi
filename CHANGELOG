@@ -67,19 +67,30 @@ FIX: AgaviXmlConfigDomElement::hasChild() does not pass on $namespaceUri argumen
 ADD: Build system support for per-module config_handlers.xml (#855) (Noah)
 ADD: Build system support for models in subdirectories (#851) (Noah)
 ADD: Support for cache group callbacks (#854) (David)
+ADD: Allow runtime configuration of Smarty via parameters in AgaviSmartyRenderer (#846) (David, TANAKA Koichi)
 ADD: AgaviTidyFilter (#845) (David)
+ADD: Allow convenience array index access in AgaviAttributeHolder (#843) (David)
+ADD: Caching group element with array value support (#809) (David)
 ADD: Allow customization of the way Actions, Views etc. are laid out in the filesystem (#668) (David)
 ADD: AgaviXmlConfigDomElement::hasAgaviParameters() (#841) (David)
 
+CHG: Update zoneinfo database to 2008f (#860) (David)
+CHG: Improve sample app SearchEngineSpamAction to use ID and optionally name (#859) (David)
 CHG: Factor out creation of frequently used classes from factories.xml to separate method (#857) (David)
 CHG: Update ISO Schematron to latest release (#844) (Noah)
+CHG: AgaviSmartyRenderer should not set a Smarty plugins dir (#848) (David)
 CHG: Redesign module.xml completely to allow arbitrary settings (#834) (David)
 
+FIX: Sample app SearchEngineSpamAction works with invalid product names (#861) (David)
 FIX: Regression in AgaviXmlConfigDomElement::getAgaviParameters() (#856) (Noah)
 FIX: XML namespace declarations are not carried over when transforming or merging configs (#853) (David)
 FIX: AgaviXmlConfigParser does not copy <configurations> attributes when merging Agavi config files (#852) (David)
 FIX: RELAX NG list definitions for "context" and "environment" attributes of <configuration> element allow only one value (#850) (David)
+FIX: AgaviXmlrpcepiphpResponse::setHttpStatusCode() is not implemented but gets called in sample app Error404SuccessView (#849) (David)
 FIX: System actions' templates are always copied to the first module (#805) (Noah)
+FIX: Empty redirect in response may cause uninitialized string offset notice (#847) (David)
+FIX: AgaviParameterHolder::removeParameter() does not try literal key lookup first (#842) (David)
+FIX: module.xml must not be per-context (#839) (David)
 FIX: AgaviXmlConfigDomElement::getIterator() uses incorrect XPath expressions (#840) (David)
 FIX: AgaviXmlConfigXsltProcessor::transformToDoc() does not throw exceptions on runtime warnings (#837) (David)
 FIX: AgaviXmlConfigXsltProcessor::transformToDoc() does not check parent return value (#836) (David)
@@ -211,28 +222,4 @@ ADD: Allow specifying of doctrine template implementations (#864) (David, TANAKA
 FIX: Default autoload.xml is missing AgaviMysqliDatabase entry (#868) (David)
 FIX: SOAP and XMLRPC test scripts in sample app are broken (#866) (David)
 FIX: Certain validator names will cause a fatal error (#863) (David)
-FIX: Sample app SearchEngineSpamAction works with invalid product names (#861) (David)
-
-
-0.11.3 (September 19, 2008)
----------------------------
-
-CHG: Update zoneinfo database to 2008f (#860) (David)
-CHG: Improve sample app SearchEngineSpamAction to use ID and optionally name (#859) (David)
-
-FIX: AgaviXmlrpcepiphpResponse::setHttpStatusCode() is not implemented but gets called in sample app Error404SuccessView (#849) (David)
-
-
-0.11.3 RC2 (September 9, 2008)
-------------------------------
-
-ADD: Allow runtime configuration of Smarty via parameters in AgaviSmartyRenderer (#846) (David, TANAKA Koichi)
-ADD: Caching group element with array value support (#809) (David)
-ADD: Allow convenience array index access in AgaviAttributeHolder (#843) (David)
-
-CHG: AgaviSmartyRenderer should not set a Smarty plugins dir (#848) (David)
-
-FIX: Empty redirect in response may cause uninitialized string offset notice (#847) (David)
-FIX: AgaviParameterHolder::removeParameter() does not try literal key lookup first (#842) (David)
-FIX: module.xml must not be per-context (#839) (David)
 
