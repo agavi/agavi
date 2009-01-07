@@ -1,8 +1,8 @@
 AGAVI CHANGELOG
 ===============
 
-1.0.0 beta 7 (December ?, 2008)
--------------------------------
+1.0.0 beta7 (December ?, 2008)
+------------------------------
 
 ADD: Add option to control Propel 1.3 instance pooling (#960) (Felix)
 ADD: AgaviArraylengthValidator (#948) (Dominik)
@@ -41,8 +41,8 @@ FIX: Invalid CSS in project wizard's WelcomeSuccess template (#928) (TANAKA Koic
 FIX: Converting an AgaviCalendar with a custom unnamed Timezone an DateTime object fails (#922) (Dominik)
 
 
-1.0.0 beta 6 (November 12, 2008)
---------------------------------
+1.0.0 beta6 (November 12, 2008)
+-------------------------------
 
 ADD: Optionally allow sending of response content when redirecting in AgaviWebResponse (#916) (David)
 
@@ -69,8 +69,8 @@ FIX: AgaviSoapResponse::searchSoapHeader() compares namespaces incorrectly (#892
 FIX: Calling AgaviValidationReport::getSucceededArguments() on virgin report object causes "Invalid argument supplied for foreach()" warning (#890) (David)
 
 
-1.0.0 beta 5 (October 20, 2008)
--------------------------------
+1.0.0 beta5 (October 20, 2008)
+------------------------------
 
 ADD: Allow for a fallback directory for template resolution in the project configuration system (#876) (Noah)
 
@@ -79,8 +79,8 @@ FIX: AgaviDatabase::getName() always returns false (#887) (David)
 FIX: Validation config handler is broken for nested validators (#886) (David)
 
 
-1.0.0 beta 4 (October 19, 2008)
--------------------------------
+1.0.0 beta4 (October 19, 2008)
+------------------------------
 
 ADD: Add support for new validation configs to build system and introduce best practices (#882) (David)
 ADD: Allow specifying of doctrine template implementations (#864) (David, TANAKA Koichi)
@@ -104,8 +104,8 @@ FIX: AgaviXmlConfigDomElement::hasChild() does not pass on $namespaceUri argumen
 FIX: Certain validator names will cause a fatal error (#863) (David)
 
 
-1.0.0 beta 3 (September 21, 2008)
----------------------------------
+1.0.0 beta3 (September 21, 2008)
+--------------------------------
 
 ADD: Build system support for per-module config_handlers.xml (#855) (Noah)
 ADD: Build system support for models in subdirectories (#851) (Noah)
@@ -140,8 +140,8 @@ FIX: AgaviXmlConfigXsltProcessor::transformToDoc() does not check parent return 
 FIX: Undefined variable notice when file for requested action does not exist (#835) (Felix)
 
 
-1.0.0 beta 2 (August 31, 2008)
-------------------------------
+1.0.0 beta2 (August 31, 2008)
+-----------------------------
 
 ADD: Add config option to run arbitrary SQL commands after connecting to a database (#646) (David)
 ADD: Allow per-module config_handlers.xml (#826) (Felix)
@@ -169,8 +169,8 @@ FIX: Some config handlers use PHP-5.3-reserved-word "NAMESPACE" as constant (#81
 FIX: src/config/xsl/routing.xsl is missing (#811) (David)
 
 
-1.0.0 beta 1 (August 10, 2008)
-------------------------------
+1.0.0 beta1 (August 10, 2008)
+-----------------------------
 
 ADD: Implement Schematron support (#761) (David, Noah)
 ADD: XSL Transformations done by XML Config Parser should have some information available in template parameters (#710) (David, Noah)
