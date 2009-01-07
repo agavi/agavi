@@ -24,6 +24,7 @@ FIX: AgaviConfigCache::getCacheName() path escaping problems (#931) (Felix)
 --------------------------------
 
 CHG: Assume "strict" validation mode directly inside AgaviValidationManager in addition to code templates and remove "conditional" default for development environments (#919) (David)
+CHG: Update timezone database to 2008h (#896) (David)
 
 FIX: AgaviXmlConfigParser::transformProcessingInstructions() is broken completely (#918) (David)
 FIX: Build system fails to find or generate default action (#899) (Noah)
@@ -32,6 +33,7 @@ FIX: Less aggressive inclusion of per module config handlers, they are only load
 FIX: Regression: xml:base attributes left behind by XIncludes cause config validations to fail (#895) (Noah)
 FIX: Regression: nested XIncludes cause segfaults in PHP 5.2.5 and lower (#894) (Noah)
 FIX: Build system output is unreadable in Windows PowerShell (#891) (Noah)
+FIX: AgaviSoapResponse::searchSoapHeader() compares namespaces incorrectly (#892) (David)
 FIX: Calling AgaviValidationReport::getSucceededArguments() on virgin report object causes "Invalid argument supplied for foreach()" warning (#890) (David)
 
 
@@ -41,6 +43,8 @@ FIX: Calling AgaviValidationReport::getSucceededArguments() on virgin report obj
 ADD: Allow for a fallback directory for template resolution in the project configuration system (#876) (Noah)
 
 FIX: Validator config handler might produce undefined variable notices and subsequent errors with nested validators (#888) (David)
+FIX: AgaviDatabase::getName() always returns false (#887) (David)
+FIX: Validation config handler is broken for nested validators (#886) (David)
 
 
 1.0.0 beta 4 (October 19, 2008)
@@ -55,8 +59,6 @@ CHG: Validation system needs to be able to tell two fields of same names, but fr
 CHG: Update logging.xml in Sample app and code templates and add "log" dir to Sample app (#879) (David)
 CHG: Change singular/plural handling in AgaviXmlConfigDomElement convenience methods (#878) (David)
 
-FIX: AgaviDatabase::getName() always returns false (#887) (David)
-FIX: Validation config handler is broken for nested validators (#886) (David)
 FIX: Build system output is unreadable in Terminal.app on Mac OS X Leopard (#885) (David)
 FIX: Project configuration system depends on Phing >= 2.3.0, but should depend on >= 2.3.1 (#884) (Noah)
 FIX: Build system does not create app/log folder in new projects (#881) (David, Noah)
@@ -197,12 +199,4 @@ FIX: logging.xml and output_types.xml handlers have variable name escaping probl
 FIX: Wrong urls when passing host and port to WebRouting::gen() (#902) (Felix)
 FIX: build.xml is missing reset of code templates dir to default before copying dist.htaccess (#914) (David)
 FIX: Filename patterns are escaped incorrectly in config_handlers.xml (#913) (Noah)
-
-
-0.11.5 (October 25, 2008)
--------------------------
-
-CHG: Update timezone database to 2008h (#896) (David)
-
-FIX: AgaviSoapResponse::searchSoapHeader() compares namespaces incorrectly (#892) (David)
 
