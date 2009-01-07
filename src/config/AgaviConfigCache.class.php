@@ -35,13 +35,13 @@ class AgaviConfigCache
 	const CACHE_SUBDIR = 'config';
 
 	/**
-	 * @var        array An array of AgaviConfigHandlers
+	 * @var        array An array of config handler instructions.
 	 */
 	protected static $handlers = null;
 
 	/**
 	 * @var        array A string=>bool array containing config handler files and
-	 *                   their loaded status
+	 *                   their loaded status.
 	 */
 	protected static $handlerFiles = array();
 
