@@ -318,7 +318,6 @@ class AgaviConfigCache
 		);
 		
 		return AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . self::CACHE_SUBDIR . DIRECTORY_SEPARATOR . $cacheName;
-
 	}
 
 	/**
@@ -344,7 +343,6 @@ class AgaviConfigCache
 		} else {
 			include($cache);
 		}
-
 	}
 
 	/**
