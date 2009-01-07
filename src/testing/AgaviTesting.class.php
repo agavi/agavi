@@ -76,8 +76,7 @@ class AgaviTesting
 			$names = explode(',', $arguments['include-suite']);
 			unset($arguments['include-suite']);
 			
-			foreach($names as $name)
-			{
+			foreach($names as $name) {
 				if(empty($suites[$name])) {
 					throw new InvalidArgumentException(sprintf('Invalid suite name %1$s.', $name));
 				}
@@ -91,10 +90,8 @@ class AgaviTesting
 				$excludes = explode(',', $arguments['exclude-suite']);
 				unset($arguments['exclude-suite']);
 			}
-			foreach($suites as $name => $suite)
-			{
-				if(!in_array($name, $excludes))
-				{
+			foreach($suites as $name => $suite) {
+				if(!in_array($name, $excludes)) {
 					$master_suite->addTest(self::createSuite($name, $suite));	
 				}
 			}
@@ -107,8 +104,7 @@ class AgaviTesting
 	protected static function createSuite($name, $suite) 
 	{
 		$s = new $suite['class']($name);
-		foreach ($suite['testfiles'] as $file)
-		{
+		foreach($suite['testfiles'] as $file) {
 			$s->addTestFile('tests/'.$file);
 		}
 		return $s;

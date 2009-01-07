@@ -95,8 +95,7 @@ class AgaviExecutetargetTask extends AgaviTask
 		catch(BuildException $be) {
 			if($this->exceptionsFatal) {
 				throw $be;
-			}
-			else {
+			} else {
 				$this->log('Ignoring build exception: ' . $be->getMessage(), Project::MSG_WARN);
 				$this->log('Continuing build', Project::MSG_INFO);
 			}

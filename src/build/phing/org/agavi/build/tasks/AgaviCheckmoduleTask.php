@@ -86,8 +86,7 @@ class AgaviCheckmoduleTask extends AgaviTask
 		$check->setPath($this->path->getAbsolutePath());
 		if($check->check()) {
 			$this->project->setUserProperty($this->property, $this->value);
-		}
-		else {
+		} else {
 			$this->project->setUserProperty($this->property, null);
 		}
 	}

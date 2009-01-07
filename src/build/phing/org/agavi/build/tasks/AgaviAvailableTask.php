@@ -109,8 +109,7 @@ class AgaviAvailableTask extends AgaviTask
 			if($this->value !== null) {
 				$this->project->setUserProperty($this->property, $this->value);
 			}
-		}
-		else {
+		} else {
 			/* Unset. */
 			$this->project->setUserProperty($this->property, null);
 		}

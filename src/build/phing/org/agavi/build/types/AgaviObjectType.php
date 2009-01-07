@@ -64,8 +64,7 @@ class AgaviObjectType extends AgaviType
 	{
 		if($this->classpath === null) {
 			$this->classpath = $classpath;
-		}
-		else {
+		} else {
 			$this->classpath->append($classpath);
 		}
 	}

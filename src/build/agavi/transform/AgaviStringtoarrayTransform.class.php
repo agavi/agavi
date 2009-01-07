@@ -73,11 +73,9 @@ class AgaviStringtoarrayTransform extends AgaviTransform
 			 * Watch it. */
 			if(!empty($match['double_quoted'])) {
 				$result[] = str_replace('\\"', '"', $match['double_quoted']);
-			}
-			elseif(!empty($match['single_quoted'])) {
+			} elseif(!empty($match['single_quoted'])) {
 				$result[] = str_replace('\\\'', '\'', $match['single_quoted']);
-			}
-			else {
+			} else {
 				$result[] = $match['unquoted'];
 			}
 		}
