@@ -16,6 +16,7 @@ CHG: Refactor AgaviToolkit::stringBase() (#935) (Felix)
 CHG: Add configuration file path to header comments in compiled files if possible (#938) (David)
 CHG: Add +FollowSymLinks to .htaccess code templates and samples (#893) (David)
 
+FIX: AgaviWebResponse sends Content-Length header with value 0 even if 'send_redirect_content' option is enabled (#972) (David)
 FIX: Using the timezone option in a locale string passed to _d() can possibly change the timezone of the given calendar object (#962) (Dominik)
 FIX: AgaviValidationValidatorResult missing from autoload.xml (#969) (Veikko)
 FIX: Caching does not support customized view name schemes (#970) (David)
