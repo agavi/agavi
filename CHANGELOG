@@ -1,8 +1,8 @@
 AGAVI CHANGELOG
 ===============
 
-1.0.0 beta7 (December ?, 2008)
-------------------------------
+1.0.0 beta7 (January ?, 2009)
+-----------------------------
 
 ADD: Add option to control Propel 1.3 instance pooling (#960) (Felix)
 ADD: AgaviArraylengthValidator (#948) (Dominik)
