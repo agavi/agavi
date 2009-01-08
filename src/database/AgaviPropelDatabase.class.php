@@ -135,8 +135,7 @@ class AgaviPropelDatabase extends AgaviDatabase
 	/**
 	 * Connect to the database.
 	 * 
-	 *
-	 * @throws     <b>agaviCreoleDatabaseException</b> If a connection could not be 
+	 * @throws     <b>AgaviDatabaseException</b> If a connection could not be 
 	 *                                           created.
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
@@ -168,7 +167,7 @@ class AgaviPropelDatabase extends AgaviDatabase
 	 *
 	 * @return     mixed A database connection.
 	 *
-	 * @throws     <b>agaviCreoleDatabaseException</b> If a connection could not be
+	 * @throws     <b>AgaviDatabaseException</b> If a connection could not be
 	 *                                           retrieved.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
@@ -245,7 +244,6 @@ class AgaviPropelDatabase extends AgaviDatabase
 		// set the new config
 		Propel::setConfiguration($config);
 		
-		
 		if(!$is12) {
 			if(true === $this->getParameter('enable_instance_pooling')) {
 				Propel::enableInstancePooling();
@@ -272,7 +270,7 @@ class AgaviPropelDatabase extends AgaviDatabase
 	/**
 	 * Execute the shutdown procedure.
 	 *
-	 * @throws     <b>agaviCreoleDatabaseException</b> If an error occurs while shutting
+	 * @throws     <b>AgaviDatabaseException</b> If an error occurs while shutting
 	 *                                           down this database.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
