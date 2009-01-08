@@ -8,6 +8,7 @@ ADD: Add option to control Propel 1.3 instance pooling (#960) (Felix)
 ADD: AgaviArraylengthValidator (#948) (Dominik)
 ADD: Allow optional marshalling of document/literal wrapped request and response elements (#940) (Felix, David)
 
+CHG: Harden path string handling in AgaviArrayPathDefinition (#973) (David, Dominik)
 CHG: Change magic_quotes_gpc handling to require PHP 5.2.8 and use the fixes introduced there (#953) (David)
 CHG: Rename AgaviException::printStackTrace() (#949) (David)
 CHG: Re-throw exception instead of printing stack trace and info in exception templates when display_errors is off (#952) (David)

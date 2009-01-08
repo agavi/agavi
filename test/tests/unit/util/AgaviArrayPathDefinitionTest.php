@@ -80,7 +80,7 @@ class AgaviArrayPathDefintionTest extends AgaviPhpUnitTestCase
 					),
 					'absolute' => true,
 				),
-				'AgaviException',
+				'InvalidArgumentException',
 			),
 			'brokenpath-2' => array(
 				'absolute[broken]]',
@@ -91,7 +91,7 @@ class AgaviArrayPathDefintionTest extends AgaviPhpUnitTestCase
 					),
 					'absolute' => true,
 				),
-				false,
+				'InvalidArgumentException',
 			),
 			'brokenpath-3' => array(
 				'absolute[[broken]',
@@ -102,7 +102,7 @@ class AgaviArrayPathDefintionTest extends AgaviPhpUnitTestCase
 					),
 					'absolute' => true,
 				),
-				false,
+				'InvalidArgumentException',
 			),
 			
 		);

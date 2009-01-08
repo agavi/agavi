@@ -89,8 +89,11 @@ abstract class AgaviAttributeHolder extends AgaviParameterHolder
 				return $this->attributes[$ns][$name];
 			}
 
-			$parts = AgaviArrayPathDefinition::getPartsFromPath($name);
-			return AgaviArrayPathDefinition::getValue($parts['parts'], $this->attributes[$ns], $default);
+			try {
+				return AgaviArrayPathDefinition::getValue($name, $this->attributes[$ns], $default);
+			} catch(InvalidArgumentException $e) {
+				return $default;
+			}
 		}
 
 		return $default;
@@ -228,8 +231,11 @@ abstract class AgaviAttributeHolder extends AgaviParameterHolder
 				return true;
 			}
 			
-			$parts = AgaviArrayPathDefinition::getPartsFromPath($name);
-			return AgaviArrayPathDefinition::hasValue($parts['parts'], $this->attributes[$ns]);
+			try {
+				return AgaviArrayPathDefinition::hasValue($name, $this->attributes[$ns]);
+			} catch(InvalidArgumentException $e) {
+				return false;
+			}
 		}
 
 		return false;
@@ -275,8 +281,10 @@ abstract class AgaviAttributeHolder extends AgaviParameterHolder
 				$retval =& $this->attributes[$ns][$name];
 				unset($this->attributes[$ns][$name]);
 			} else {
-				$parts = AgaviArrayPathDefinition::getPartsFromPath($name);
-				$retval = AgaviArrayPathDefinition::unsetValue($parts['parts'], $this->attributes[$ns]);
+				try {
+					$retval = AgaviArrayPathDefinition::unsetValue($name, $this->attributes[$ns]);
+				} catch(InvalidArgumentException $e) {
+				}
 			}
 		}
 
