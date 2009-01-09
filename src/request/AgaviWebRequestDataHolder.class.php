@@ -416,7 +416,7 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 			$retval =& $this->files[$name];
 		} else {
 			try {
-				$retval =& AgaviArrayPathDefinition::getValue($names, $this->files);
+				$retval =& AgaviArrayPathDefinition::getValue($name, $this->files);
 			} catch(InvalidArgumentException $e) {
 				$retval = $default;
 			}
