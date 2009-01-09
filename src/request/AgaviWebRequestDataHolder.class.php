@@ -109,8 +109,11 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 		if(isset($this->cookies[$name]) || array_key_exists($name, $this->cookies)) {
 			return true;
 		}
-		$parts = AgaviArrayPathDefinition::getPartsFromPath($name);
-		return AgaviArrayPathDefinition::hasValue($parts['parts'], $this->cookies);
+		try {
+			return AgaviArrayPathDefinition::hasValue($name, $this->cookies);
+		} catch(InvalidArgumentException $e) {
+			return false;
+		}
 	}
 
 	/**
@@ -147,8 +150,11 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 		if(isset($this->cookies[$name]) || array_key_exists($name, $this->cookies)) {
 			return $this->cookies[$name];
 		}
-		$parts = AgaviArrayPathDefinition::getPartsFromPath($name);
-		return AgaviArrayPathDefinition::getValue($parts['parts'], $this->cookies, $default);
+		try {
+			return AgaviArrayPathDefinition::getValue($name, $this->cookies, $default);
+		} catch(InvalidArgumentException $e) {
+			return $default;
+		}
 	}
 
 	/**
@@ -201,8 +207,10 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 			unset($this->cookies[$name]);
 			return $retval;
 		}
-		$parts = AgaviArrayPathDefinition::getPartsFromPath($name);
-		return AgaviArrayPathDefinition::unsetValue($parts['parts'], $this->cookies);
+		try {
+			return AgaviArrayPathDefinition::unsetValue($name, $this->cookies);
+		} catch(InvalidArgumentException $e) {
+		}
 	}
 
 	/**
@@ -407,8 +415,11 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 		if((isset($this->files[$name]) || array_key_exists($name, $this->files))) {
 			$retval =& $this->files[$name];
 		} else {
-			$parts = AgaviArrayPathDefinition::getPartsFromPath($name);
-			$retval =& AgaviArrayPathDefinition::getValue($parts['parts'], $this->files);
+			try {
+				$retval =& AgaviArrayPathDefinition::getValue($name, $this->files);
+			} catch(InvalidArgumentException $e) {
+				$retval = $default;
+			}
 		}
 		if(is_array($retval) || $retval instanceof AgaviUploadedFile) {
 			return $retval;
@@ -447,8 +458,11 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 		if((isset($this->files[$name]) || array_key_exists($name, $this->files))) {
 			$val = $this->files[$name];
 		} else {
-			$parts = AgaviArrayPathDefinition::getPartsFromPath($name);
-			$val = AgaviArrayPathDefinition::getValue($parts['parts'], $this->files);
+			try {
+				$val = AgaviArrayPathDefinition::getValue($name, $this->files);
+			} catch(InvalidArgumentException $e) {
+				return false;
+			}
 		}
 		return (is_array($val) || $val instanceof AgaviUploadedFile);
 	}
@@ -505,8 +519,10 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 			unset($this->files[$name]);
 			return $retval;
 		}
-		$parts = AgaviArrayPathDefinition::getPartsFromPath($name);
-		return AgaviArrayPathDefinition::unsetValue($parts['parts'], $this->files);
+		try {
+			return AgaviArrayPathDefinition::unsetValue($name, $this->files);
+		} catch(InvalidArgumentException $e) {
+		}
 	}
 
 	/**
