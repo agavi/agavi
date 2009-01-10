@@ -17,6 +17,7 @@ A couple of changes are worth mentioning:
 - Access to global request data is now locked during AgaviAction::getDefaultViewName() execution.
 - Handling of array keys has been unified across AgaviWebRequestDataHolder sources.
 - Unvalidated request data is not available anymore in the View if the Action didn't serve the current request method.
+- New projects now generate separate exception templates for production environments, and the built-in exception templates now simply re-throw the exception instead of displaying any information if the display_errors php.ini setting is disabled.
 
 As always, CHANGELOG knows it best.
 
