@@ -148,13 +148,7 @@ class AgaviPropelDatabase extends AgaviDatabase
 			$this->connection = $this->agaviCreoleDatabase->getConnection();
 		} else {
 			// trigger Propel autoload and go go go
-			if(class_exists('Propel')) {
-				$this->connection = Propel::getConnection($this->getParameter('datasource'));
-				
-				foreach((array)$this->getParameter('init_queries') as $query) {
-					$this->connection->exec($query);
-				}
-			}
+			$this->connection = Propel::getConnection($this->getParameter('datasource'));
 		}
 	}
 
@@ -239,6 +233,12 @@ class AgaviPropelDatabase extends AgaviDatabase
 		if(!$is12) {
 			// for 1.3+, also the autoload classes
 			$config['datasources'][$datasource]['classes'] = array_merge($config['datasources'][$datasource]['classes'], $this->getParameter('overrides[classes]', array()));
+			
+			// append our list of "init queries" to propel's
+			if(!isset($config['datasources'][$datasource]['connection']['settings']['queries']) || !is_array($config['datasources'][$datasource]['connection']['settings']['queries'])) {
+				$config['datasources'][$datasource]['connection']['settings']['queries'] = array();
+			}
+			$config['datasources'][$datasource]['connection']['settings']['queries'] = array_merge($config['datasources'][$datasource]['connection']['settings']['queries'], (array)$this->getParameter('init_queries'));
 		}
 		
 		// set the new config
