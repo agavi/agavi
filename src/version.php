@@ -32,7 +32,7 @@ AgaviConfig::set('agavi.name', 'Agavi');
 AgaviConfig::set('agavi.major_version', '1');
 AgaviConfig::set('agavi.minor_version', '0');
 AgaviConfig::set('agavi.micro_version', '0');
-AgaviConfig::set('agavi.status', 'beta6');
+AgaviConfig::set('agavi.status', 'beta7');
 AgaviConfig::set('agavi.branch', '1.0');
 
 AgaviConfig::set('agavi.version',
