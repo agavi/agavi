@@ -1,6 +1,47 @@
 AGAVI CHANGELOG (0.11.x)
 ========================
 
+0.11.6 RC1 (January 10, 2009)
+-----------------------------
+
+ADD: Add option to control Propel 1.3 instance pooling (#960) (Felix)
+ADD: AgaviArraylengthValidator (#948) (Dominik)
+ADD: Optionally allow sending of response content when redirecting in AgaviWebResponse (#916) (David)
+
+CHG: Harden path string handling in AgaviArrayPathDefinition (#973) (David, Dominik)
+CHG: Change magic_quotes_gpc handling to require PHP 5.2.8 and use the fixes introduced there (#953) (David)
+CHG: Re-throw exception instead of printing stack trace and info in exception templates when display_errors is off (#952) (David)
+CHG: Add +FollowSymLinks to .htaccess code templates and samples (#893) (David)
+CHG: Add more best practices to code templates (#910) (David)
+CHG: Use standard layouts etc for system actions instead of hand-built renderers and layers in code templates (#911) (David)
+CHG: Always merge slot response metadata even if response content is null (#917) (David)
+CHG: Update timezone database to 2008i (#912) (David)
+CHG: Add standard warning about broken libxml versions (#909) (David)
+
+FIX: Init queries are not run correctly for Propel 1.3 (#975) (David)
+FIX: AgaviWebResponse sends Content-Length header with value 0 even if 'send_redirect_content' option is enabled (#972) (David)
+FIX: Using the timezone option in a locale string passed to _d() can possibly change the timezone of the given calendar object (#962) (Dominik)
+FIX: AgaviTranslationManager::createCalendar() forgets TZ offset when called with DateTime object (#957) (Dominik)
+FIX: Missing variable declaration in AgaviGettextTranslator (#968) (Dominik)
+FIX: AgaviWebRequestDataHolder method implementations are all over the place (#955) (David)
+FIX: Request data is not cleared if default View is run in absence of suitable Action::execute*() method (#967) (David)
+FIX: Slot container created inside a forward container retains "is_forward" parameter (#966) (David)
+FIX: Access to global request data holder is not locked during AgaviAction::getDefaultViewName() (#954) (David)
+FIX: The class name of AgaviAndoperatorValidator and AgaviNotoperatorValidator don't match the coding guidelines (#951) (David)
+FIX: Several validators might raise notices or break altogether on incorrect argument types (#946) (Dominik)
+FIX: AgaviValidator::getKeysInCurrentBase triggers a warning if the current validator base is no array (#947) (Dominik)
+FIX: FPF error insertion fails if XPath expression yields more than one location in the document (#943) (David)
+FIX: Possible to run any action by passing module/action parameters to invalid URL (#934) (David)
+FIX: Pattern delimiter is not passed to several preg_quote calls (#939) (David)
+FIX: AgaviPropelDatabase::connect() doesn't honor datasource parameter (#937) (David, Sven Kretschmann)
+FIX: Invalid CSS in project wizard's WelcomeSuccess template (#928) (TANAKA Koichi, David)
+FIX: Converting an AgaviCalendar with a custom unnamed Timezone an DateTime object fails (#922) (Dominik)
+FIX: logging.xml and output_types.xml handlers have variable name escaping problems (#921) (David)
+FIX: Wrong urls when passing host and port to WebRouting::gen() (#902) (Felix)
+FIX: build.xml is missing reset of code templates dir to default before copying dist.htaccess (#914) (David)
+FIX: Filename patterns are escaped incorrectly in config_handlers.xml (#913) (Noah)
+
+
 0.11.5 (October 25, 2008)
 -------------------------
 
