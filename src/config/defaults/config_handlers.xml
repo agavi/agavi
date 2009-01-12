@@ -59,7 +59,8 @@
 			</handler>
 
 			<handler pattern="%core.config_dir%/logging.xml" class="AgaviLoggingConfigHandler">
-				<validation>%core.agavi_dir%/config/xsd/logging.xsd</validation>
+				<!-- <validation>%core.agavi_dir%/config/xsd/logging.xsd</validation> -->
+				<transformation>%core.agavi_dir%/config/xsl/logging.xsl</transformation>
 			</handler>
 
 			<handler pattern="%core.config_dir%/rbac_definitions.xml" class="AgaviRbacDefinitionConfigHandler">
