@@ -31,7 +31,8 @@
 			</handler>
 
 			<handler pattern="%core.config_dir%/settings.xml" class="AgaviSettingConfigHandler">
-				<validation>%core.agavi_dir%/config/xsd/settings.xsd</validation>
+				<!-- <validation>%core.agavi_dir%/config/xsd/settings.xsd</validation> -->
+				<transformation>%core.agavi_dir%/config/xsl/settings.xsl</transformation>
 			</handler>
 
 			<handler pattern="%core.config_dir%/factories.xml" class="AgaviFactoryConfigHandler">
