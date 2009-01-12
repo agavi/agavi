@@ -55,7 +55,8 @@
 			</handler>
 
 			<handler pattern="%core.config_dir%/output_types.xml" class="AgaviOutputTypeConfigHandler">
-				<validation>%core.agavi_dir%/config/xsd/output_types.xsd</validation>
+				<!-- <validation>%core.agavi_dir%/config/xsd/output_types.xsd</validation> -->
+				<transformation>%core.agavi_dir%/config/xsl/output_types.xsl</transformation>
 			</handler>
 
 			<handler pattern="%core.config_dir%/logging.xml" class="AgaviLoggingConfigHandler">
