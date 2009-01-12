@@ -41,8 +41,7 @@ class AgaviRoutingConfigHandler extends AgaviXmlConfigHandler
 	/**
 	 * Execute this configuration handler.
 	 *
-	 * @param      string An absolute filesystem path to a configuration file.
-	 * @param      string Name of the executing context (if any).
+	 * @param      AgaviXmlConfigDomDocument The document to parse.
 	 *
 	 * @return     string Data to be written to a cache file.
 	 *
