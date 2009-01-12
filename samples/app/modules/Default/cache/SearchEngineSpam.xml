@@ -1,30 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configurations xmlns="http://agavi.org/agavi/1.0/config">
+<configurations xmlns="http://agavi.org/agavi/1.0/config" xmlns:xi="http://www.w3.org/2001/XInclude">
 	<configuration>
-		
 		<cachings>
-			
-			<caching method="read" lifetime="2 hours">
-				
-				<group>products</group>
-				<!-- we need to vary by both id and name, as they can both be valid -->
-				<group source="request_parameter">id</group>
-				<group source="request_parameter">name</group>
+			<caching method="read" lifetime="2 minutes" enabled="true">
+				<group>Item</group>
+				<group>Watch</group>
+				<group source="request_parameter">itemId</group>
+				<group source="request_parameter">page</group>
+				<group source="user_authenticated" />
+				<group source="user_attribute">username</group>
 				<group source="locale" />
 				
 				<view>Success</view>
 				
 				<output_type name="html">
-					
 					<layer name="content" />
 					
-					<template_variable>title</template_variable>
+					<template_variable />
 					
+					<request_attribute_namespace>com.sevenload.javascript.Item.Slots/List</request_attribute_namespace>
+					<request_attribute_namespace>com.sevenload.css.Item.Slots/List</request_attribute_namespace>
+					
+					<request_attribute_namespace>com.sevenload.css.Supplements.Comment/Slots/Show</request_attribute_namespace>
+					<request_attribute_namespace>com.sevenload.javascript.Supplements.Comment/Slots/Show</request_attribute_namespace>
+					
+					<request_attribute_namespace>com.sevenload.css.Supplements.Rating/Slots/Display</request_attribute_namespace>
+					<request_attribute_namespace>com.sevenload.javascript.Supplements.Rating/Slots/Display</request_attribute_namespace>
+					
+					<request_attribute_namespace>com.sevenload.css.Supplements.Tag/Slots/Display</request_attribute_namespace>
+					<request_attribute_namespace>com.sevenload.javascript.Supplements.Tag/Slots/Display</request_attribute_namespace>
+					
+					<request_attribute_namespace>com.sevenload.css.Supplements.Tag/Slots/Compose</request_attribute_namespace>
+					<request_attribute_namespace>com.sevenload.javascript.Supplements.Tag/Slots/Compose</request_attribute_namespace>
+					
+					<request_attribute_namespace>com.sevenload.css.Item.Slots/VideoPlayer</request_attribute_namespace>
+					<request_attribute_namespace>com.sevenload.javascript.Item.Slots/VideoPlayer</request_attribute_namespace>
+					
+					<request_attribute_namespace>com.sevenload.css.Item.Watch/Index</request_attribute_namespace>
+					<request_attribute_namespace>com.sevenload.javascript.Item.Watch/Index</request_attribute_namespace>
+					
+					<request_attribute_namespace>com.sevenload.css.Item.Slots/VideoPlayer</request_attribute_namespace>
+					<request_attribute_namespace>com.sevenload.javascript.Item.Slots/VideoPlayer</request_attribute_namespace>
+					
+					<request_attribute_namespace>com.sevenload.javascript.Item.Watch/MoreItems</request_attribute_namespace>
+					
+					<request_attribute_namespace>com.sevenload.css.Item.Watch/Navigation/Box</request_attribute_namespace>
+					<request_attribute_namespace>com.sevenload.javascript.Item.Watch/Navigation/Box</request_attribute_namespace>
+					
+					<request_attribute_namespace>com.sevenload.javascript.Supplements.Rating/Slots/Display</request_attribute_namespace>
 				</output_type>
 				
 			</caching>
-			
 		</cachings>
-		
 	</configuration>
 </configurations>

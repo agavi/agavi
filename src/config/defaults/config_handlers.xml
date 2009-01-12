@@ -123,7 +123,8 @@
 			</handler>
 
 			<handler pattern="%core.module_dir%/*/cache/*.xml" class="AgaviCachingConfigHandler">
-				<validation>%core.agavi_dir%/config/xsd/caching.xsd</validation>
+				<!-- <validation>%core.agavi_dir%/config/xsd/caching.xsd</validation> -->
+				<transformation>%core.agavi_dir%/config/xsl/caching.xsl</transformation>
 			</handler>
 
 			<handler pattern="%core.cldr_dir%/locales/*.xml" class="AgaviLdmlConfigHandler" />
