@@ -1,10 +1,129 @@
 AGAVI CHANGELOG
 ===============
 
-0.11.3 RC1 (July ??, 2008)
---------------------------
+0.11.6 RC1 (January 10, 2009)
+-----------------------------
 
+ADD: Add option to control Propel 1.3 instance pooling (#960) (Felix)
+ADD: AgaviArraylengthValidator (#948) (Dominik)
+ADD: Optionally allow sending of response content when redirecting in AgaviWebResponse (#916) (David)
+
+CHG: Harden path string handling in AgaviArrayPathDefinition (#973) (David, Dominik)
+CHG: Change magic_quotes_gpc handling to require PHP 5.2.8 and use the fixes introduced there (#953) (David)
+CHG: Re-throw exception instead of printing stack trace and info in exception templates when display_errors is off (#952) (David)
+CHG: Add +FollowSymLinks to .htaccess code templates and samples (#893) (David)
+CHG: Add more best practices to code templates (#910) (David)
+CHG: Use standard layouts etc for system actions instead of hand-built renderers and layers in code templates (#911) (David)
+CHG: Always merge slot response metadata even if response content is null (#917) (David)
+CHG: Update timezone database to 2008i (#912) (David)
+CHG: Add standard warning about broken libxml versions (#909) (David)
+
+FIX: Init queries are not run correctly for Propel 1.3 (#975) (David)
+FIX: AgaviWebResponse sends Content-Length header with value 0 even if 'send_redirect_content' option is enabled (#972) (David)
+FIX: Using the timezone option in a locale string passed to _d() can possibly change the timezone of the given calendar object (#962) (Dominik)
+FIX: AgaviTranslationManager::createCalendar() forgets TZ offset when called with DateTime object (#957) (Dominik)
+FIX: Missing variable declaration in AgaviGettextTranslator (#968) (Dominik)
+FIX: AgaviWebRequestDataHolder method implementations are all over the place (#955) (David)
+FIX: Request data is not cleared if default View is run in absence of suitable Action::execute*() method (#967) (David)
+FIX: Slot container created inside a forward container retains "is_forward" parameter (#966) (David)
+FIX: Access to global request data holder is not locked during AgaviAction::getDefaultViewName() (#954) (David)
+FIX: The class name of AgaviAndoperatorValidator and AgaviNotoperatorValidator don't match the coding guidelines (#951) (David)
+FIX: Several validators might raise notices or break altogether on incorrect argument types (#946) (Dominik)
+FIX: AgaviValidator::getKeysInCurrentBase triggers a warning if the current validator base is no array (#947) (Dominik)
+FIX: FPF error insertion fails if XPath expression yields more than one location in the document (#943) (David)
+FIX: Possible to run any action by passing module/action parameters to invalid URL (#934) (David)
+FIX: Pattern delimiter is not passed to several preg_quote calls (#939) (David)
+FIX: AgaviPropelDatabase::connect() doesn't honor datasource parameter (#937) (David, Sven Kretschmann)
+FIX: Invalid CSS in project wizard's WelcomeSuccess template (#928) (TANAKA Koichi, David)
+FIX: Converting an AgaviCalendar with a custom unnamed Timezone an DateTime object fails (#922) (Dominik)
+FIX: logging.xml and output_types.xml handlers have variable name escaping problems (#921) (David)
+FIX: Wrong urls when passing host and port to WebRouting::gen() (#902) (Felix)
+FIX: build.xml is missing reset of code templates dir to default before copying dist.htaccess (#914) (David)
+FIX: Filename patterns are escaped incorrectly in config_handlers.xml (#913) (Noah)
+
+
+0.11.5 (October 25, 2008)
+-------------------------
+
+CHG: Update timezone database to 2008h (#896) (David)
+
+FIX: AgaviSoapResponse::searchSoapHeader() compares namespaces incorrectly (#892) (David)
+
+
+0.11.5 RC1 (October 20, 2008)
+-----------------------------
+
+FIX: AgaviDatabase::getName() always returns false (#887) (David)
+FIX: Validation config handler is broken for nested validators (#886) (David)
+FIX: Build system does not create app/log folder in new projects (#881) (David, Noah)
+
+
+0.11.4 (October 14, 2008)
+-------------------------
+
+CHG: Update logging.xml in Sample app and code templates and add "log" dir to Sample app (#879) (David)
+
+FIX: Parameters are not merged in config_handlers.xml (#880) (David)
+
+
+0.11.4 RC1 (October 2, 2008)
+----------------------------
+
+ADD: Allow specifying of doctrine template implementations (#864) (David, TANAKA Koichi)
+
+FIX: Default autoload.xml is missing AgaviMysqliDatabase entry (#868) (David)
+FIX: SOAP and XMLRPC test scripts in sample app are broken (#866) (David)
+FIX: Certain validator names will cause a fatal error (#863) (David)
+FIX: Sample app SearchEngineSpamAction works with invalid product names (#861) (David)
+
+
+0.11.3 (September 19, 2008)
+---------------------------
+
+CHG: Update zoneinfo database to 2008f (#860) (David)
+CHG: Improve sample app SearchEngineSpamAction to use ID and optionally name (#859) (David)
+
+FIX: AgaviXmlrpcepiphpResponse::setHttpStatusCode() is not implemented but gets called in sample app Error404SuccessView (#849) (David)
+
+
+0.11.3 RC2 (September 9, 2008)
+------------------------------
+
+ADD: Allow runtime configuration of Smarty via parameters in AgaviSmartyRenderer (#846) (David, TANAKA Koichi)
+ADD: Caching group element with array value support (#809) (David)
+ADD: Allow convenience array index access in AgaviAttributeHolder (#843) (David)
+
+CHG: AgaviSmartyRenderer should not set a Smarty plugins dir (#848) (David)
+
+FIX: Empty redirect in response may cause uninitialized string offset notice (#847) (David)
+FIX: AgaviParameterHolder::removeParameter() does not try literal key lookup first (#842) (David)
+FIX: module.xml must not be per-context (#839) (David)
+
+
+0.11.3 RC1 (August 31, 2008)
+----------------------------
+
+ADD: AgaviMysqliDatabase (#601) (Blake Matheny, David)
+ADD: Add config option to run arbitrary SQL commands after connecting to a database (#646) (David)
+ADD: Allow ignoring of (X)HTML parse errors in FPF (#613) (David)
+ADD: Set current Context instance on Doctrine connections (#800, #808) (David)
+ADD: Assigning of "inner" content to $slots template array should be configurable (#793) (David)
+ADD: Support for doctrine connection settings and options (#788) (David)
+ADD: Allow using the resolved datetime constants for the argument names in the datetime validator (#760) (Dominik)
+
+CHG: Improve AgaviInflector performance (#823) (Thomas Bachem, David)
+CHG: Change the Pricefinder Model in the Sample App to have a more useful name (#819) (Felix)
+CHG: Enhance HTTP status code validation for AgaviWebResponse::setRedirect() (#804) (David)
+CHG: Update timezone database to 2008e (#806) (David)
+CHG: Dump "xhtml" output type from sample app and introduce a replacement (#802) (David)
+
+FIX: AgaviEqualsValidator's docs do not match the actual validation process (#833) (Dominik)
+FIX: Invalid argument name in AgaviValidationManager::hasError() (#832) (David)
+FIX: The gettext translator doesn't interpret the plural forms like the original gettext implementation (#821) (Dominik)
+FIX: AgaviView::initialize() incorrectly assigns container's response to a property (#813) (David)
+FIX: AgaviExecutionTimeFilter runs only once (#801) (David)
 FIX: PEAR installations place src/routing/soap files in the data directory rather than the source directory (#799) (Noah)
+
 
 0.11.2 (July 8, 2008)
 ---------------------
@@ -559,7 +678,7 @@ CHG: Make the framework E_STRICT compliant and remove all those "&"s (#34) (Davi
 FIX: use of unititalized variable in AgaviWebRequest::getFileError() (#305) (David)
 FIX: Logging layouts need context and they need to be initialized even if there are no parameters (#297) (Veikko)
 FIX: Appender needs context and needs to be initialized even if there are no parameters (#295) (Veikko)
-FIX: Controller::getView() should throw an Exception if View is ultimately not found	closed (#268) (David)
+FIX: Controller::getView() should throw an Exception if View is ultimately not found (#268) (David)
 FIX: User must be available even with security disabled (#261) (David)
 FIX: Controller::getAction() should throw an Exception if Action is ultimately not found (#252) (David)
 FIX: Return subaction view with array syntax (#176) (David)
@@ -577,89 +696,3 @@ FIX: agavi script doens't work on Solaris (#90) (David)
 FIX: Some tests will not work on windows (#64) (David)
 FIX: Building many modules/actions etc. will make agavi run out of memory (#35) (David)
 
-
-0.10.2 (February 27, 2006)
---------------------------
-
-CHG: Changed to new PEAR package task, package.xml v2 format, using PEAR channel pear.agavi.org (David)
-CHG: Declared API stability alpha (David)
-FIX: Fixed PHP 5.0.5 / 5.1 return by reference problem in logging/PassthruLayout (Markus Lervik, David)
-FIX: Fixed incorrect Phing dependendy (David)
-
-
-0.10.1 (January 6, 2006)
-------------------------
-
-FIX: Fixed critical bug that prevented parameters to be passed in config_handlers.ini
-
-
-0.10.0 (December 20, 2005)
---------------------------
-
-CHG: Updated TODO
-CHG: Bumped Version Numbers
-FIX: ReturnArrayConfigHandler did not convert foo.bar.baz keys into multi-dimensional arrays
-FIX: RELEASE_NOTES and INSTALL were missing in AgaviPackageTask
-
-
-0.10.0 RC1 (December 16, 2005)
-------------------------------
-
-ADD: ShutdownListener support (Veikko)
-ADD: Cookie support for WebRequest (Veikko)
-ADD: Session Cookie parameter support (Veikko)
-ADD: CreoleSessionStorage (Veikko)
-ADD: HTTPSRequest (Markus Lervik, David)
-ADD: XSLView (Wes Hays)
-ADD: AdoDBDatabase (Steven Weiss, David)
-ADD: Sub-actions support for "agavi" helper script (David)
-ADD: code_templates have Template templates (David)
-ADD: Multiple credentials support (David)
-ADD: Support for setting session ID in SessionStorage (Mike)
-ADD: Constants support for config files (Bob, Johan)
-ADD: Logging functionality (Bob)
-ADD: WEBAPP_NAME setting in settings.ini (Mike)
-ADD: Request::getAttributes() (Bob)
-ADD: Auto-detection of modules for "agavi" helper script when executed inside or below a module's dir.
-ADD: ReturnArrayConfigHandler (David, Mike)
-ADD: Support for custom ExecutionFilters (David)
-ADD: Support for Singleton Models (David)
-ADD: FormPHPView (xardion)
-ADD: ValidatorManager, DateValidator (Graeme Foster, Mike)
-ADD: Test directory structure and stubs are auto-created when using the "agavi" helper script to add stuff.
-ADD: Advanced Propel integration via PropelAutoload, PropelDatabase still backwards compatible to old method (David)
-ADD: appendAttribute() methods for Request, User and View (Bob)
-CHG: Unified parameter names for database users to "username" everywhere (Veikko, David)
-CHG: Beefed up NumberValidator with min/max and integer support (Veikko)
-CHG: All AG_* configuration directives except AG_WEBAPP_DIR are optional (David)
-CHG: AG_WEBAPP_DIR and AG_APP_DIR will be auto-determined if possible (David)
-CHG: Action and View class names can now also be like Module_Some_Sub_MarineAction (and also Some_Sub_MarineAction)
-CHG: Config Handlers will throw UnreadableExceptions when appropriate (David)
-CHG: Added some helper methods and changed visibility of some methods in Views to allow for more control in ExecutionFilters (David)
-CHG: SmartyView uses the SMARTY_CACHE_DIR setting if set, AG_CACHE_DIR otherwise.
-CHG: Realigns configuration away from configuring controllers to configuring contexts (Mike)
-CHG: autoload.ini handling changed to support include_path (Bob)
-CHG: Autoload support for Controller::getGlobalModel() (Mike)
-CHG: Refactored helper script (Mike)
-CHG: Reworked Test infrastructure (Mike)
-CHG: Improved, changed and refactored many, many tests and the intrastructure for tests; "agavi test" runs tests (Mike)
-FIX: PHP 5.1 compatibility for ConfigCache::getCacheName() (Markus Lervik, David)
-FIX: Re-wrote broken directory and module recognition routines in AgaviFixPathsTask, fixed "agavi model" to work correctly (David, Miroslaw Wrobel)
-FIX: __autoload() won't throw exceptions anymore (Veikko)
-FIX: Plain text formating for AgaviException::printStackTrace (Veikko)
-FIX: Autostart sessions only after all initializations have finished (Veikko)
-FIX: Action::validate() to be called even when a ini validation criteria failed (David, Steven Weiss)
-FIX: Support for username and password in PDODatabase (David, Benjamin Muskalla)
-FIX: PHP 5.1.0 Compatibility for PDODatabase (David)
-FIX: Strict comparison for credentials (David)
-FIX: Avoid notices in ValidatorManager (Bob)
-FIX: Request::extractParameters() returns null for non-existent parameters (Mike)
-FIX: Set a default if calling agavi action from inside a module's dir or subdirs (Mike)
-FIX: Windows support for helper script (David)
-FIX: Use proper type "::" or "->" in stack trace (David)
-
-
-0.9.0 (June 8, 2005)
---------------------
-
-- Initial Release

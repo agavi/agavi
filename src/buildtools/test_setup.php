@@ -122,7 +122,7 @@ class ClassFinder extends RecursiveDirectoryIterator
 	public function isHidden()
 	{
 		$name = $this->getFilename();
-		return ($name{0} == ".");
+		return ($name[0] == ".");
 	}
 
 	public function isClass()

@@ -33,7 +33,7 @@
  *
  * @version    $Id$
  */
-class AgaviNotOperatorValidator extends AgaviOperatorValidator
+class AgaviNotoperatorValidator extends AgaviOperatorValidator
 {
 	/**
 	 * Checks if operator has more then one child validator.

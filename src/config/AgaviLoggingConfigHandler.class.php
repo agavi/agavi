@@ -114,27 +114,27 @@ class AgaviLoggingConfigHandler extends AgaviConfigHandler
 
 		if(count($loggers) > 0) {
 			foreach($layouts as $name => $layout) {
-				$code[] = sprintf('$%s = new %s();', $name, $layout['class']);
-				$code[] = sprintf('$%s->initialize($this->context, %s);', $name, var_export($layout['params'], true));
+				$code[] = sprintf('${%s} = new %s();', var_export('_layout_' . $name, true), $layout['class']);
+				$code[] = sprintf('${%s}->initialize($this->context, %s);', var_export('_layout_' . $name, true), var_export($layout['params'], true));
 			}
 
 			foreach($appenders as $name => $appender) {
-				$code[] = sprintf('$%s = new %s();', $name, $appender['class']);
-				$code[] = sprintf('$%s->initialize($this->context, %s);', $name, var_export($appender['params'], true));
-				$code[] = sprintf('$%s->setLayout($%s);', $name, $appender['layout']);
+				$code[] = sprintf('${%s} = new %s();', var_export('_appender_' . $name, true), $appender['class']);
+				$code[] = sprintf('${%s}->initialize($this->context, %s);', var_export('_appender_' . $name, true), var_export($appender['params'], true));
+				$code[] = sprintf('${%s}->setLayout(${%s});', var_export('_appender_' . $name, true), var_export('_layout_' . $appender['layout'], true));
 			}
 
 			foreach($loggers as $name => $logger) {
-				$code[] = sprintf('$%s = new %s();', $name, $logger['class']);
+				$code[] = sprintf('${%s} = new %s();', var_export('_logger_' . $name, true), $logger['class']);
 				foreach($logger['appenders'] as $appender) {
-					$code[] = sprintf('$%s->setAppender("%s", $%s);', $name, $appender, $appender);
+					$code[] = sprintf('${%s}->setAppender(%s, ${%s});', var_export('_logger_' . $name, true), var_export($appender, true), var_export('_appender_' . $appender, true));
 				}
 				if($logger['level'] !== null) {
-					$code[] = sprintf('$%s->setLevel(%s);', $name, $logger['level']);
+					$code[] = sprintf('${%s}->setLevel(%s);', var_export('_logger_' . $name, true), $logger['level']);
 				}
-				$code[] = sprintf('$this->context->getLoggerManager()->setLogger("%s", $%s);', $name, $name);
+				$code[] = sprintf('$this->setLogger(%s, ${%s});', var_export($name, true), var_export('_logger_' . $name, true));
 			}
-			$code[] = sprintf('$this->context->getLoggerManager()->setDefaultLoggerName(%s);', var_export($defaultLogger, true));
+			$code[] = sprintf('$this->setDefaultLoggerName(%s);', var_export($defaultLogger, true));
 		}
 
 		return $this->generate($code);

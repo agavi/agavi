@@ -25,7 +25,7 @@ class DatabaseConfigHandlerTest extends ConfigHandlerTestBase
 	{
 		$DBCH = new AgaviDatabaseConfigHandler();
 
-		$this->includeCode($c= $DBCH->execute(AgaviConfig::get('core.config_dir') . '/tests/databases.xml'));
+		$this->includeCode($c = $DBCH->execute(AgaviConfig::get('core.config_dir') . '/tests/databases.xml'));
 
 		$this->assertType('DCHTestDatabase', $this->databases['test1']);
 		$params_ex = array(

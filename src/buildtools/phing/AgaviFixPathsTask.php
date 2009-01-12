@@ -87,7 +87,7 @@ class AgaviFixPathsTask extends Task
 
 		$base = str_replace('\\', '/', $this->base);
 
-		$needle = implode('/', array_diff(explode('/', $pattern), explode('/', ($base{0} != '/' ? '/' : '') . $base)));
+		$needle = implode('/', array_diff(explode('/', $pattern), explode('/', ($base[0] != '/' ? '/' : '') . $base)));
 
 		preg_match('#(.*?)' . $pattern . '#', $base . '/' . $needle, $matches);
 		

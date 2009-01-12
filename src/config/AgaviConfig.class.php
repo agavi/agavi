@@ -165,10 +165,10 @@ final class AgaviConfig
 	 *
 	 * @return     array An associative array of configuration values.
 	 *
-	 * @deprecated Use toArray() instead.
-	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
+	 *
+	 * @deprecated Use toArray() instead.
 	 */
 	public static function export()
 	{

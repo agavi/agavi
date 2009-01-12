@@ -29,11 +29,11 @@
  */
 interface AgaviICookiesRequestDataHolder
 {
-	public function hasCookie($cookie);
+	public function hasCookie($name);
 	
-	public function isCookieValueEmpty($cookie);
+	public function isCookieValueEmpty($name);
 	
-	public function &getCookie($cookie, $default = null);
+	public function &getCookie($name, $default = null);
 	
 	public function &getCookies();
 	
@@ -45,7 +45,7 @@ interface AgaviICookiesRequestDataHolder
 	
 	public function setCookies(array $cookies);
 	
-	public function &removeCookie($cookie);
+	public function &removeCookie($name);
 	
 	public function clearCookies();
 	

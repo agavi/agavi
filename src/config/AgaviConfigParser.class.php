@@ -25,9 +25,9 @@
  * @copyright  Authors
  * @copyright  The Agavi Project
  *
- * @deprecated Superseded by AgaviXmlConfigParser
- *
  * @since      0.11.0
+ *
+ * @deprecated Superseded by AgaviXmlConfigParser
  *
  * @version    $Id$
  */

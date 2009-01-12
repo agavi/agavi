@@ -55,6 +55,7 @@
 			<autoload name="AgaviDatabaseManager">%core.agavi_dir%/database/AgaviDatabaseManager.class.php</autoload>
 			<autoload name="AgaviDoctrineDatabase">%core.agavi_dir%/database/AgaviDoctrineDatabase.class.php</autoload>
 			<autoload name="AgaviMysqlDatabase">%core.agavi_dir%/database/AgaviMysqlDatabase.class.php</autoload>
+			<autoload name="AgaviMysqliDatabase">%core.agavi_dir%/database/AgaviMysqliDatabase.class.php</autoload>
 			<autoload name="AgaviPdoDatabase">%core.agavi_dir%/database/AgaviPdoDatabase.class.php</autoload>
 			<autoload name="AgaviPostgresqlDatabase">%core.agavi_dir%/database/AgaviPostgresqlDatabase.class.php</autoload>
 			<autoload name="AgaviPropelDatabase">%core.agavi_dir%/database/AgaviPropelDatabase.class.php</autoload>
@@ -210,6 +211,7 @@
 
 			<!-- agavi/validator -->
 			<autoload name="AgaviAndoperatorValidator">%core.agavi_dir%/validator/AgaviAndoperatorValidator.class.php</autoload>
+			<autoload name="AgaviArraylengthValidator">%core.agavi_dir%/validator/AgaviArraylengthValidator.class.php</autoload>
 			<autoload name="AgaviBaseFileValidator">%core.agavi_dir%/validator/AgaviBaseFileValidator.class.php</autoload>
 			<autoload name="AgaviDateTimeValidator">%core.agavi_dir%/validator/AgaviDateTimeValidator.class.php</autoload>
 			<autoload name="AgaviDependencyManager">%core.agavi_dir%/validator/AgaviDependencyManager.class.php</autoload>

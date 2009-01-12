@@ -323,7 +323,7 @@ class AgaviDecimalFormatter
 			str_replace('-', '%2$s', $negativeFormat);
 		}
 		$hasMinus = true;
-		$negativeFormat = preg_replace('/[' . preg_quote(implode('', $numberChars)) . ']+/', $formatStr, $negativeFormat);
+		$negativeFormat = preg_replace('/[' . preg_quote(implode('', $numberChars), '/') . ']+/', $formatStr, $negativeFormat);
 		// replace the currency specifier from the old string if it was specified extra in the negative one
 		if(($pos = strpos($negativeFormat, /*'¤'*/ chr(194) . chr(164))) !== false) {
 			$negativeFormat = str_replace('%3$s', '', $negativeFormat);
@@ -437,7 +437,7 @@ class AgaviDecimalFormatter
 						break;
 				}
 
-				if($roundUp){
+				if($roundUp) {
 					$integralLen = strlen($integralPart);
 					if($inIntegral) {
 						$pos = $integralLen - 1;
@@ -635,7 +635,7 @@ class AgaviDecimalFormatter
 			$decimalSeparator = '.';
 		}
 
-		$rx = '#(?P<sign>\+|-)?(?P<num>[0-9' . preg_quote($groupingSeparator) . ']*)(' . preg_quote($decimalSeparator) . '(?P<dec>[0-9]+))?(e(?P<exp>(\+|-)?[0-9]+))?#';
+		$rx = '#(?P<sign>\+|-)?(?P<num>[0-9' . preg_quote($groupingSeparator, '#') . ']*)(' . preg_quote($decimalSeparator, '#') . '(?P<dec>[0-9]+))?(e(?P<exp>(\+|-)?[0-9]+))?#';
 		if(preg_match($rx, $string, $match)) {
 
 			if(strlen($match[0]) < strlen($string)) {

@@ -132,12 +132,12 @@ abstract class AgaviBaseConfigHandler extends AgaviParameterHolder
 	 *
 	 * @return     string A literalized value.
 	 *
-	 * @deprecated Use AgaviToolkit::expandDirectives() instead.
-	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
+	 *
+	 * @deprecated Use AgaviToolkit::expandDirectives() instead.
 	 */
 	public static function literalize($value)
 	{
@@ -151,12 +151,12 @@ abstract class AgaviBaseConfigHandler extends AgaviParameterHolder
 	 *
 	 * @return     string The new value.
 	 *
-	 * @deprecated Use AgaviToolkit::expandDirectives() instead.
-	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @author     Johan Mjones <johan.mjones@ongame.com>
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
+	 *
+	 * @deprecated Use AgaviToolkit::expandDirectives() instead.
 	 */
 	public static function replaceConstants($value)
 	{

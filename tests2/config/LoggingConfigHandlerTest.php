@@ -70,6 +70,26 @@ class LoggingConfigHandlerTest extends ConfigHandlerTestBase
 		$this->context = AgaviContext::getInstance('test');
 	}
 
+	/**
+	 * Proxied because we include a compiled config that assumes it runs in the LM
+	 *
+	 * @see      AgaviLoggerManager::setLogger()
+	 */
+	protected function setLogger($name, AgaviILogger $logger)
+	{
+		return $this->context->getLoggerManager()->setLogger($name, $logger);
+	}
+	
+	/**
+	 * Proxied because we include a compiled config that assumes it runs in the LM
+	 *
+	 * @see      AgaviLoggerManager::setDefaultLoggerName()
+	 */
+	public function setDefaultLoggerName($name)
+	{
+		return $this->context->getLoggerManager()->setDefaultLoggerName($name);
+	}
+	
 	public function testLoggingConfigHandler()
 	{
 		$LCH = new AgaviLoggingConfigHandler();

@@ -84,13 +84,19 @@ abstract class AgaviAttributeHolder extends AgaviParameterHolder
 			$ns = $this->defaultNamespace;
 		}
 
-		$retval =& $default;
+		if(isset($this->attributes[$ns])) {
+			if(isset($this->attributes[$ns][$name]) || array_key_exists($name, $this->attributes[$ns])) {
+				return $this->attributes[$ns][$name];
+			}
 
-		if(isset($this->attributes[$ns]) && (isset($this->attributes[$ns][$name]) || array_key_exists($name, $this->attributes[$ns]))) {
-			$retval =& $this->attributes[$ns][$name];
+			try {
+				return AgaviArrayPathDefinition::getValue($name, $this->attributes[$ns], $default);
+			} catch(InvalidArgumentException $e) {
+				return $default;
+			}
 		}
 
-		return $retval;
+		return $default;
 	}
 
 	/**
@@ -112,6 +118,30 @@ abstract class AgaviAttributeHolder extends AgaviParameterHolder
 
 		if(isset($this->attributes[$ns])) {
 			return array_keys($this->attributes[$ns]);
+		}
+	}
+
+	/**
+	 * Retrieve an array of flattened attribute names. This means if an attribute
+	 * is an array you wont get the name of the attribute in the result but 
+	 * instead all child keys appended to the name (like foo[0],foo[1][0], ...)
+	 *
+	 * @param      string An attribute namespace.
+	 *
+	 * @return     array An indexed array of attribute names, if the namespace
+	 *                   exists, otherwise null.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      0.11.3
+	 */
+	public function getFlatAttributeNames($ns = null)
+	{
+		if($ns === null) {
+			$ns = $this->defaultNamespace;
+		}
+
+		if(isset($this->attributes[$ns])) {
+			return AgaviArrayPathDefinition::getFlatKeyNames($this->attributes[$ns]);
 		}
 	}
 
@@ -197,7 +227,15 @@ abstract class AgaviAttributeHolder extends AgaviParameterHolder
 		}
 
 		if(isset($this->attributes[$ns])) {
-			return isset($this->attributes[$ns][$name]) || array_key_exists($name, $this->attributes[$ns]);
+			if(isset($this->attributes[$ns][$name]) || array_key_exists($name, $this->attributes[$ns])) {
+				return true;
+			}
+			
+			try {
+				return AgaviArrayPathDefinition::hasValue($name, $this->attributes[$ns]);
+			} catch(InvalidArgumentException $e) {
+				return false;
+			}
 		}
 
 		return false;
@@ -238,9 +276,16 @@ abstract class AgaviAttributeHolder extends AgaviParameterHolder
 
 		$retval = null;
 
-		if(isset($this->attributes[$ns]) && (isset($this->attributes[$ns][$name]) || array_key_exists($name, $this->attributes[$ns]))) {
-			$retval =& $this->attributes[$ns][$name];
-			unset($this->attributes[$ns][$name]);
+		if(isset($this->attributes[$ns])) {
+			if(isset($this->attributes[$ns][$name]) || array_key_exists($name, $this->attributes[$ns])) {
+				$retval =& $this->attributes[$ns][$name];
+				unset($this->attributes[$ns][$name]);
+			} else {
+				try {
+					$retval = AgaviArrayPathDefinition::unsetValue($name, $this->attributes[$ns]);
+				} catch(InvalidArgumentException $e) {
+				}
+			}
 		}
 
 		return $retval;

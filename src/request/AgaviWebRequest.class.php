@@ -229,18 +229,23 @@ class AgaviWebRequest extends AgaviRequest
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public final static function clearMagicQuotes($input, $firstLevel = true)
+	public final static function clearMagicQuotes($input)
 	{
+		// this method only works with PHP 5.2.7+
+		// there used to be special code for versions < 5.2.2
+		// http://bugs.php.net/bug.php?id=41093
+		// but we now require 5.2.8 anyway in combination with magic_quotes_gpc, see initialize()
+		// http://trac.agavi.org/ticket/953
+		// http://trac.agavi.org/ticket/944
+		// http://bugs.php.net/bug.php?id=41093
+		
 		$retval = array();
 
 		foreach($input as $key => $value) {
-			// the first level of keys (i.e. the actual var names from the root of $_WHATEVER) isn't magic_quoted if the corresponding value is an array. Yay PHP.
-			if(!$firstLevel || !is_array($value)) {
-				$key = stripslashes($key);
-			}
+			$key = stripslashes($key);
 
 			if(is_array($value)) {
-				$retval[$key] = self::clearMagicQuotes($value, false);
+				$retval[$key] = self::clearMagicQuotes($value);
 			} elseif(is_string($value)) {
 				$retval[$key] = stripslashes($value);
 			} else {
@@ -301,21 +306,29 @@ class AgaviWebRequest extends AgaviRequest
 
 		// very first thing to do: remove magic quotes
 		if(function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
+			// check if we're on PHP < 5.2.8
+			// http://trac.agavi.org/ticket/953
+			// http://trac.agavi.org/ticket/945
+			// http://bugs.php.net/bug.php?id=46313
+			if(version_compare(PHP_VERSION, '5.2.8', 'lt')) {
+				throw new AgaviException(
+					"For security reasons, PHP 5.2.8 or later is required when magic_quotes_gpc is enabled. Upgrade to the latest PHP release or disable magic_quotes_gpc.\n" . 
+					"\nMore info:\n" .
+					"- http://trac.agavi.org/ticket/953\n" .
+					"- http://trac.agavi.org/ticket/945\n" .
+					"- http://bugs.php.net/bug.php?id=46313\n" .
+					"\nAlso related:\n" .
+					"- http://trac.agavi.org/ticket/944\n" .
+					"- http://bugs.php.net/bug.php?id=41093\n"
+				);
+			}
+			
 			$rla = ini_get('register_long_arrays');
 			$_GET = self::clearMagicQuotes($_GET);
 			$_POST = self::clearMagicQuotes($_POST);
 			$_COOKIE = self::clearMagicQuotes($_COOKIE);
 			$_REQUEST = self::clearMagicQuotes($_REQUEST);
-			foreach($_FILES as $key => $value) {
-				// DO NOT STRIP FROM tmp_name !
-				foreach(array_keys($value) as $entry) {
-					$val = array($entry => $value[$entry]);
-					if($entry != 'tmp_name') {
-						$val = self::clearMagicQuotes($val);
-					}
-					$_FILES[$key][$entry] = $val[$entry];
-				}
-			}
+			$_FILES = self::clearMagicQuotes($_FILES);
 			if($rla) {
 				$GLOBALS['HTTP_GET_VARS'] = $_GET;
 				$GLOBALS['HTTP_POST_VARS'] = $_POST;
@@ -366,10 +379,10 @@ class AgaviWebRequest extends AgaviRequest
 
 		$SERVER_NAME = self::getSourceValue($sources['SERVER_NAME'], $sourceDefaults['SERVER_NAME']);
 		$port = $this->getUrlPort();
-		if(preg_match_all('/\:/', preg_quote($SERVER_NAME), $m) > 1) {
-			$this->urlHost = preg_replace('/\]\:' . preg_quote($port) . '$/', '', $SERVER_NAME);
+		if(preg_match_all('/\:/', $SERVER_NAME, $m) > 1) {
+			$this->urlHost = preg_replace('/\]\:' . preg_quote($port, '/') . '$/', '', $SERVER_NAME);
 		} else {
-			$this->urlHost = preg_replace('/\:' . preg_quote($port) . '$/', '', $SERVER_NAME);
+			$this->urlHost = preg_replace('/\:' . preg_quote($port, '/') . '$/', '', $SERVER_NAME);
 		}
 
 		if(isset($_SERVER['HTTP_X_REWRITE_URL']) && isset($_SERVER['SERVER_SOFTWARE']) && strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') !== false) {

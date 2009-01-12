@@ -148,6 +148,10 @@ class AgaviCreoleDatabase extends AgaviDatabase
 			// get our resource
 			$this->resource = $this->connection->getResource();
 			
+			foreach((array)$this->getParameter('init_queries') as $query) {
+				$this->connection->executeUpdate($query);
+			}
+			
 		} catch(SQLException $e) {
 			// the connection's foobar'd
 			throw new AgaviDatabaseException($e->toString());

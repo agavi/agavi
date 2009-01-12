@@ -21,6 +21,7 @@
  *
  * @author     Ross Lawley <ross.lawley@gmail.com>
  * @author     David Zülke <dz@bitxtender.com>
+ * @author     TANAKA Koichi <tanaka@ensites.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
  *
@@ -73,6 +74,7 @@ class AgaviDoctrineDatabase extends AgaviDatabase
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @author     Ross Lawley <ross.lawley@gmail.com>
+	 * @author     TANAKA Koichi <tanaka@ensites.com>
 	 * @since      0.11.0
 	 */
 	public function initialize(AgaviDatabaseManager $databaseManager, array $parameters = array())
@@ -111,6 +113,24 @@ class AgaviDoctrineDatabase extends AgaviDatabase
 			// do not assign the resource here. that would connect to the database
 			// $this->resource = $this->connection->getDbh();
 			
+			// set the context instance as a connection parameter
+			$this->connection->setParam('context', $databaseManager->getContext(), 'org.agavi');
+			
+			// charset
+			if($this->hasParameter('charset')) {
+				$this->connection->setCharset($this->getParameter('charset'));
+			}
+			
+			// date format
+			if($this->hasParameter('date_format')) {
+				$this->connection->setDateFormat($this->getParameter('date_format'));
+			}
+			
+			// options
+			foreach((array)$this->getParameter('options') as $optionName => $optionValue) {
+				$this->connection->setOption($optionName, $optionValue);
+			}
+			
 			foreach((array)$this->getParameter('attributes', array()) as $attributeName => $attributeValue) {
 				$this->connection->setAttribute($attributeName, $attributeValue);
 			}
@@ -119,10 +139,22 @@ class AgaviDoctrineDatabase extends AgaviDatabase
 				$this->doctrineManager->setAttribute($attributeName, $attributeValue);
 			}
 			
+			foreach((array)$this->getParameter('impls', array()) as $templateName => $className) {
+				$this->connection->setImpl($templateName, $className);
+			}
+			
+			foreach((array)$this->getParameter('manager_impls', array()) as $templateName => $className) {
+				$this->doctrineManager->setImpl($templateName, $className);
+			}
+			
 			Doctrine::loadModels($this->getParameter('load_models')); 
 			
 			foreach((array)$this->getParameter('bind_components', array()) as $componentName) {
 				$this->doctrineManager->bindComponent($componentName, $name);
+			}
+			
+			foreach((array)$this->getParameter('init_queries') as $query) {
+				$this->connection->exec($query);
 			}
 		} catch(Doctrine_Exception $e) {
 			// the connection's foobar'd

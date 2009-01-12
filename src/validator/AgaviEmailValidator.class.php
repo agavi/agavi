@@ -42,8 +42,15 @@ class AgaviEmailValidator extends AgaviValidator
 	 */
 	protected function validate()
 	{
+		$data = $this->getData($this->getArgument());
+		if(!is_scalar($data)) {
+			// non scalar values would cause notices
+			$this->throwError();
+			return false;
+		}
+		
 		$extraChars = preg_quote('!#$%&\'*+-/=?^_`{|}~', '/');
-		if(!preg_match('/^[a-z0-9' . $extraChars . ']+(\.[a-z0-9' . $extraChars . ']+)*@[a-z0-9-]+(\.[a-z0-9-]+)*\.[a-z]{2,6}$/iD', $this->getData($this->getArgument()))) {
+		if(!preg_match('/^[a-z0-9' . $extraChars . ']+(\.[a-z0-9' . $extraChars . ']+)*@[a-z0-9-]+(\.[a-z0-9-]+)*\.[a-z]{2,6}$/iD', $data)) {
 			$this->throwError();
 			return false;
 		}

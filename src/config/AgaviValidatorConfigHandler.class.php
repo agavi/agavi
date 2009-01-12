@@ -58,6 +58,7 @@ class AgaviValidatorConfigHandler extends AgaviConfigHandler
 	{
 		$this->classMap = array(
 			'and' => array('class' => 'AgaviAndoperatorValidator', 'parameters' => array('break' => '1')),
+			'arraylength' => array('class' => 'AgaviArraylengthValidator', 'parameters' => array()),
 			'datetime' => array('class' => 'AgaviDateTimeValidator', 'parameters' => array('check' => '1')),
 			'email' => array('class' => 'AgaviEmailValidator', 'parameters' => array()),
 			'equals' => array('class' => 'AgaviEqualsValidator', 'parameters' => array()),
@@ -216,12 +217,12 @@ class AgaviValidatorConfigHandler extends AgaviConfigHandler
 			$code[$method][$name] = implode("\n", array(
 				sprintf(
 					'${%s} = new %s();',
-					var_export($name, true),
+					var_export('_validator_' . $name, true),
 					$class
 				),
 				sprintf(
 					'${%s}->initialize($this->getContext(), %s, %s, %s);',
-					var_export($name, true),
+					var_export('_validator_' . $name, true),
 					var_export($parameters, true),
 					var_export($arguments, true),
 					var_export($errors, true)
@@ -229,7 +230,7 @@ class AgaviValidatorConfigHandler extends AgaviConfigHandler
 				sprintf(
 					'${%s}->addChild(${%s});',
 					var_export($parent, true),
-					var_export($name, true)
+					var_export('_validator_' . $name, true)
 				),
 			));
 		}
@@ -242,7 +243,7 @@ class AgaviValidatorConfigHandler extends AgaviConfigHandler
 				$childRequired = AgaviToolkit::literalize($validator->validators->getAttribute('required'));
 			}
 			foreach($validator->validators as $v) {
-				$code = $this->getValidatorArray($v, $code, $childSeverity, $name, $childMethod, $childRequired);
+				$code = $this->getValidatorArray($v, $code, $childSeverity, '_validator_' . $name, $childMethod, $childRequired);
 			}
 				// create child validators
 		}

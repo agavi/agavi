@@ -146,10 +146,10 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	 *
 	 * @return     string The module accessor name.
 	 *
-	 * @deprecated Use getParameter('module_accessor') instead.
-	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
+	 *
+	 * @deprecated Use getParameter('module_accessor') instead.
 	 */
 	public function getModuleAccessor()
 	{
@@ -161,10 +161,10 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	 *
 	 * @return     string The action accessor name.
 	 *
-	 * @deprecated Use getParameter('action_accessor') instead.
-	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
+	 *
+	 * @deprecated Use getParameter('action_accessor') instead.
 	 */
 	public function getActionAccessor()
 	{

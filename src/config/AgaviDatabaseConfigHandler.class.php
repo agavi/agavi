@@ -78,7 +78,7 @@ class AgaviDatabaseConfigHandler extends AgaviConfigHandler
 				$name = $db->getAttribute('name');
 
 				if(!isset($databases[$name])) {
-					$databases[$name] = array('params' => array());
+					$databases[$name] = array('parameters' => array());
 
 					if(!$db->hasAttribute('class')) {
 						$error = 'Configuration file "%s" specifies database "%s" with missing class key';
@@ -90,7 +90,7 @@ class AgaviDatabaseConfigHandler extends AgaviConfigHandler
 
 				$databases[$name]['class'] = $db->hasAttribute('class') ? $db->getAttribute('class') : $databases[$name]['class'];
 
-				$databases[$name]['params'] = $this->getItemParameters($db, $databases[$name]['params']);
+				$databases[$name]['parameters'] = $this->getItemParameters($db, $databases[$name]['parameters']);
 			}
 		}
 
@@ -98,10 +98,9 @@ class AgaviDatabaseConfigHandler extends AgaviConfigHandler
 
 		foreach($databases as $name => $db) {
 			// append new data
-			$tmp = "\$database = new %s();\n" .
-							"\$database->initialize(\$this, %s);\n" .
-							"\$this->databases[%s] = \$database;";
-			$data[] = sprintf($tmp, $db['class'], var_export($db['params'], true), var_export($name, true));
+			$data[] = sprintf('$database = new %s();', $db['class']);
+			$data[] = sprintf('$this->databases[%s] = $database;', var_export($name, true));
+			$data[] = sprintf('$database->initialize($this, %s);', var_export($db['parameters'], true));
 		}
 
 		if(!isset($databases[$default])) {

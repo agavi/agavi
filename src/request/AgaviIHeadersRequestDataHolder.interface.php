@@ -29,11 +29,11 @@
  */
 interface AgaviIHeadersRequestDataHolder
 {
-	public function hasHeader($header);
+	public function hasHeader($name);
 	
-	public function isHeaderValueEmpty($header);
+	public function isHeaderValueEmpty($name);
 	
-	public function &getHeader($header, $default = null);
+	public function &getHeader($name, $default = null);
 	
 	public function &getHeaders();
 	
@@ -43,7 +43,7 @@ interface AgaviIHeadersRequestDataHolder
 	
 	public function setHeaders(array $headers);
 	
-	public function &removeHeader($header);
+	public function &removeHeader($name);
 	
 	public function clearHeaders();
 	

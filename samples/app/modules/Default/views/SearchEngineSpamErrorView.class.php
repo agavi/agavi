@@ -12,13 +12,25 @@ class Default_SearchEngineSpamErrorView extends AgaviSampleAppDefaultBaseView
 	}
 
 	/**
+	 * Execute any presentation logic for JSON requests.
+	 */
+	public function executeJson(AgaviRequestDataHolder $rd)
+	{
+		return json_encode(
+			array(
+				'_error' => 404,
+			)
+		);
+	}
+
+	/**
 	 * Execute any presentation logic for SOAP requests.
 	 */
 	public function executeSoap(AgaviRequestDataHolder $rd)
 	{
 		// fault code must be "Server", check the SOAP spec
 		// do not throw the exception please. it can be done with some fiddling, but returning it is a much better idea
-		return new SoapFault('Server', 'Unknown Product "' . $this->getAttribute('product_name') . '"');
+		return new SoapFault('Server', 'Unknown Product ' . $rd->getParameter('id'));
 	}
 
 	/**
@@ -26,7 +38,7 @@ class Default_SearchEngineSpamErrorView extends AgaviSampleAppDefaultBaseView
 	 */
 	public function executeXmlrpc(AgaviRequestDataHolder $rd)
 	{
-		return array('faultCode' => 101, 'faultString' => 'Unknown Product "' . $this->getAttribute('product_name') . '"');
+		return array('faultCode' => 101, 'faultString' => 'Unknown Product ' . $rd->getParameter('id'));
 	}
 }
 

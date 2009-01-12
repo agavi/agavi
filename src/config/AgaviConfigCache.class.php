@@ -42,7 +42,7 @@ final class AgaviConfigCache
 	/**
 	 * Load a configuration handler.
 	 *
-	 * @param      string The handler to use when parsing a configuration file.
+	 * @param      string The path of the originally requested configuration file.
 	 * @param      string An absolute filesystem path to a configuration file.
 	 * @param      string An absolute filesystem path to the cache file that
 	 *                    will be written.
@@ -63,7 +63,7 @@ final class AgaviConfigCache
 			self::loadConfigHandlers();
 		}
 
-		// grab the base name of the handler
+		// grab the base name of the originally requested config path
 		$basename = basename($name);
 
 		$handlerInfo = null;
@@ -79,7 +79,7 @@ final class AgaviConfigCache
 			// this basename
 			foreach(self::$handlers as $key => $value)	{
 				// replace wildcard chars in the configuration and create the pattern
-				$pattern = sprintf('#%s#', str_replace('\*', '.*?', preg_quote($key)));
+				$pattern = sprintf('#%s#', str_replace('\*', '.*?', preg_quote($key, '#')));
 
 				if(preg_match($pattern, $name)) {
 					$handlerInfo = $value;
@@ -223,7 +223,7 @@ final class AgaviConfigCache
 	{
 		$environment = AgaviConfig::get('core.environment');
 
-		if(strlen($config) > 3 && ctype_alpha($config{0}) &&	$config{1} == ':' && ($config{2} == '\\' || $config{2} == '/')) {
+		if(strlen($config) > 3 && ctype_alpha($config[0]) && $config[1] == ':' && ($config[2] == '\\' || $config[2] == '/')) {
 			// file is a windows absolute path, strip off the drive letter
 			$config = substr($config, 3);
 		}
@@ -271,6 +271,11 @@ final class AgaviConfigCache
 	 */
 	private static function loadConfigHandlers()
 	{
+		// some checks first
+		if(!defined('LIBXML_DOTTED_VERSION') || (!AgaviConfig::get('core.ignore_broken_libxml', false) && !version_compare(LIBXML_DOTTED_VERSION, '2.6.16', 'gt'))) {
+			throw new AgaviException("A libxml version greater than 2.6.16 is highly recommended. With version 2.6.16 and possibly later releases, validation of XML configuration files will not work and Form Population Filter will eventually fail randomly on some documents due to *severe bugs* in older libxml releases (2.6.16 was released in November 2004, so it is really getting time to update).\n\nIf you still would like to try your luck, disable this message by doing\nAgaviConfig::set('core.ignore_broken_libxml', true);\nand\nAgaviConfig::set('core.skip_config_validation', true);\nbefore calling\nAgavi::bootstrap();\nin index.php (app/config.php is not the right place for this).\n\nBut be advised that you *will* run into segfaults and other sad situations eventually, so what you should really do is upgrade your libxml install.");
+		}
+		
 		// since we only need the parser and handlers when the config is not cached
 		// it is sufficient to include them at this stage
 		require_once(AgaviConfig::get('core.agavi_dir') . '/config/AgaviILegacyConfigHandler.interface.php');
@@ -354,11 +359,11 @@ final class AgaviConfigCache
 	 * @throws     <b>AgaviConfigurationException</b> If the parser for the
 	 *             extension couldn't be found.
 	 *
-	 * @deprecated New-style config handlers don't call this method anymore.
-	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
+	 *
+	 * @deprecated New-style config handlers don't call this method anymore.
 	 */
 	public static function parseConfig($config, $autoloadParser = true, $validationFile = null, $parserClass = null)
 	{

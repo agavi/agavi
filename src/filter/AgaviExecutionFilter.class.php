@@ -583,6 +583,9 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 
 					$attributes =& $viewInstance->getAttributes();
 
+					// whether or not we should assign the previous' layer's output to the $slots array
+					$assignInnerToSlots = $this->getParameter('assign_inner_to_slots', true);
+					
 					// $lm->log('Starting rendering...');
 					for($i = 0; $i < count($layers); $i++) {
 						$layer = $layers[$i];
@@ -601,12 +604,10 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 								}
 							}
 							// set the presentation data as a template attribute
-							if(($output[$slotName] = $slotResponse->getContent()) !== null) {
-								// $lm->log('Merging in response from slot "' . $slotName . '"...');
-								// the slot really output something
-								// let our response grab the stuff it needs from the slot's response
-								$response->merge($slotResponse);
-							}
+							$output[$slotName] = $slotResponse->getContent();
+							// and merge the other slot's response (this used to be conditional and done only when the content was not null)
+							// $lm->log('Merging in response from slot "' . $slotName . '"...');
+							$response->merge($slotResponse);
 						}
 						$moreAssigns = array(
 							'container' => $container,
@@ -634,7 +635,9 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 						}
 
 						$output = array();
-						$output[$layer->getName()] = $nextOutput;
+						if($assignInnerToSlots) {
+							$output[$layer->getName()] = $nextOutput;
+						}
 					}
 				}
 
@@ -684,8 +687,6 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 	 *
 	 * @return     mixed The processed View information returned by the Action.
 	 *
-	 * @throws     AgaviViewException If the returned View does not exist.
-	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
@@ -719,7 +720,21 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 		if($actionInstance->isSimple() || ($useGenericMethods && !method_exists($actionInstance, $executeMethod))) {
 			// this action will skip validation/execution for this method
 			// get the default view
-			$viewName = $actionInstance->getDefaultViewName();
+			$key = $request->toggleLock();
+			try {
+				$viewName = $actionInstance->getDefaultViewName();
+			} catch(Exception $e) {
+				// we caught an exception... unlock the request and rethrow!
+				$request->toggleLock($key);
+				throw $e;
+			}
+			$request->toggleLock($key);
+			
+			// run the validation manager - it's going to take care of cleaning up the request data, and retain "conditional" mode behavior etc.
+			// but only if the action is not simple; otherwise, the (safe) arguments in the request data holder will all be removed
+			if(!$actionInstance->isSimple()) {
+				$validationManager->execute($requestData);
+			}
 		} else {
 			// set default validated status
 			$validated = true;

@@ -24,12 +24,12 @@ class AgaviPackageTask extends Task
 
 	public function main()
 	{
-		if (!@require_once('PEAR/PackageFileManager2.php')) {
+		if(!@require_once('PEAR/PackageFileManager2.php')) {
 			throw new BuildException('Requires PEAR_PackageFileManager >=1.6.0a1');
 		}
 		require_once('PEAR/Exception.php');
 		PEAR::setErrorHandling(PEAR_ERROR_CALLBACK,'PEAR_ErrorToPEAR_Exception');
-		if (!$this->dir || !file_exists($this->dir)) {
+		if(!$this->dir || !file_exists($this->dir)) {
 			throw new BuildException('Build dir is not defined or does not exist.');
 		}
 
@@ -108,10 +108,10 @@ EOD;
 		$p2->addMaintainer('developer', 'impl', 'Noah Fontes', 'impl@cynigram.com');
 		$p2->addMaintainer('developer', 'v-dogg', 'Veikko Mäkinen', 'mail@veikkomakinen.com');
 		$p2->setChannel('pear.agavi.org');
-		$p2->setReleaseVersion('0.11.2');
-		$p2->setAPIVersion('0.11.2');
-		$p2->setReleaseStability('stable');
-		$p2->setAPIStability('stable');
+		$p2->setReleaseVersion('0.11.6RC1');
+		$p2->setAPIVersion('0.11.6RC1');
+		$p2->setReleaseStability('beta');
+		$p2->setAPIStability('beta');
 		$p2->setSummary($shortDesc);
 		$p2->setDescription($longDesc);
 		$p2->setNotes("To see what's new, please refer to the RELEASE_NOTES. Also, the CHANGELOG contains a full list of changes. \n\nFor installation instructions, consult INSTALL.");

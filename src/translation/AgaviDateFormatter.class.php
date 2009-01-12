@@ -154,6 +154,7 @@ class AgaviDateFormatter extends AgaviDateFormat implements AgaviITranslator
 		}
 
 		if(($zoneId = $locale->getLocaleTimeZone()) && !$localesEqual) {
+			$cal = clone $cal;
 			$cal->setTimeZone($this->context->getTranslationManager()->createTimeZone($zoneId));
 		}
 

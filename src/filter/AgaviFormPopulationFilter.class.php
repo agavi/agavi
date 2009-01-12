@@ -109,7 +109,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 			$cfg['skip'] = null;
 		}
 		if($cfg['skip'] !== null && count($cfg['skip'])) {
-			$skip = '/(\A' . str_replace('\[\]', '\[[^\]]*\]', implode('|\A', array_map('preg_quote', $cfg['skip']))) . ')/';
+			$skip = '/(\A' . str_replace('\[\]', '\[[^\]]*\]', implode('|\A', array_map('preg_quote', $cfg['skip'], array_fill(0, count($cfg['skip']), '/')))) . ')/';
 		}
 
 		if($cfg['force_request_uri'] !== false) {
@@ -191,6 +191,12 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 				$m = new $mc($lmsg, $cfg['logging_severity']);
 				$lm->log($m, $cfg['logging_logger']);
 			}
+			
+			// all in all, that didn't go so well. let's see if we should just silently abort instead of throwin an exception
+			if($cfg['ignore_parse_errors']) {
+				return;
+			}
+			
 			throw new AgaviParseException($emsg);
 		}
 
@@ -770,20 +776,24 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 
 			foreach($errorElements as $errorElement) {
 				foreach($targets as $target) {
+					// in case the target yielded more than one location, we need to clone the element
+					// because the document fragment node will be corrupted after an insert
+					$clonedErrorElement = $errorElement->cloneNode(true);
+					
 					if($errorLocation == 'before') {
-						$target->parentNode->insertBefore($errorElement, $target);
+						$target->parentNode->insertBefore($clonedErrorElement, $target);
 					} elseif($errorLocation == 'after') {
 						// check if there is a following sibling, then insert before that one
 						// if not, append to parent
 						if($target->nextSibling) {
-							$target->parentNode->insertBefore($errorElement, $target->nextSibling);
+							$target->parentNode->insertBefore($clonedErrorElement, $target->nextSibling);
 						} else {
-							$target->parentNode->appendChild($errorElement);
+							$target->parentNode->appendChild($clonedErrorElement);
 						}
 					} elseif($errorLocation == 'replace') {
-						$target->parentNode->replaceChild($errorElement, $target);
+						$target->parentNode->replaceChild($clonedErrorElement, $target);
 					} else {
-						$target->appendChild($errorElement);
+						$target->appendChild($clonedErrorElement);
 					}
 				}
 			}
@@ -910,6 +920,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 			'field_error_messages'       => array(),
 			'multi_field_error_messages' => array(),
 
+			'ignore_parse_errors'        => false,
 			'log_parse_errors'           => true,
 			'logging_severity'           => AgaviLogger::FATAL,
 			'logging_logger'             => null,
