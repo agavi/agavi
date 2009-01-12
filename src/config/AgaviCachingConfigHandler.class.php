@@ -28,15 +28,14 @@
  *
  * @version    $Id$
  */
-class AgaaviCachingConfigHandler extends AgaviXmlConfigHandler
+class AgaviCachingConfigHandler extends AgaviXmlConfigHandler
 {
 	const XML_NAMESPACE = 'http://agavi.org/agavi/config/parts/caching/1.0';
 	
 	/**
 	 * Execute this configuration handler.
 	 *
-	 * @param      string An absolute filesystem path to a configuration file.
-	 * @param      string An optional context in which we are currently running.
+	 * @param      AgaviXmlConfigDomDocument The document to parse.
 	 *
 	 * @return     string Data to be written to a cache file.
 	 *
