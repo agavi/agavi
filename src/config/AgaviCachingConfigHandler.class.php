@@ -51,7 +51,7 @@ class AgaviCachingConfigHandler extends AgaviXmlConfigHandler
 	public function execute(AgaviXmlConfigDomDocument $document)
 	{
 		// set up our default namespace
-		$document->setDefaultNamespace(self::XML_NAMESPACE, 'autoload');
+		$document->setDefaultNamespace(self::XML_NAMESPACE, 'caching');
 		
 		$cachings = array();
 		
