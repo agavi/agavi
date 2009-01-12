@@ -27,7 +27,7 @@
  *
  * @version    $Id$
  */
-class aAgaviOutputTypeConfigHandler extends AgaviXmlConfigHandler
+class AgaviOutputTypeConfigHandler extends AgaviXmlConfigHandler
 {
 	const XML_NAMESPACE = 'http://agavi.org/agavi/config/parts/output_types/1.0';
 	
