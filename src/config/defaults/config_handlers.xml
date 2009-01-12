@@ -65,7 +65,8 @@
 			</handler>
 
 			<handler pattern="%core.config_dir%/rbac_definitions.xml" class="AgaviRbacDefinitionConfigHandler">
-				<validation>%core.agavi_dir%/config/xsd/rbac_definitions.xsd</validation>
+				<!-- <validation>%core.agavi_dir%/config/xsd/rbac_definitions.xsd</validation> -->
+				<transformation>%core.agavi_dir%/config/xsl/rbac_definitions.xsl</transformation>
 			</handler>
 
 			<handler pattern="%core.config_dir%/routing.xml" class="AgaviRoutingConfigHandler">

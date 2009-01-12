@@ -28,13 +28,14 @@
  *
  * @version    $Id$
  */
-class AgaviRbacDefinitionConfigHandler extends AgaviConfigHandler
+class AgaviRbacDefinitionConfigHandler extends AgaviXmlConfigHandler
 {
+	const XML_NAMESPACE = 'http://agavi.org/agavi/config/parts/rbac_definitions/1.0';
+	
 	/**
 	 * Execute this configuration handler.
 	 *
-	 * @param      string An absolute filesystem path to a configuration file.
-	 * @param      string An optional context in which we are currently running.
+	 * @param      AgaviXmlConfigDomDocument The document to parse.
 	 *
 	 * @return     string Data to be written to a cache file.
 	 *
@@ -47,50 +48,50 @@ class AgaviRbacDefinitionConfigHandler extends AgaviConfigHandler
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function execute($config, $context = null)
+	public function execute(AgaviXmlConfigDomDocument $document)
 	{
-		// parse the config file
-		$configurations = $this->orderConfigurations(AgaviConfigCache::parseConfig($config, false, $this->getValidationFile(), $this->parser)->configurations, AgaviConfig::get('core.environment'), $context);
-
+		// set up our default namespace
+		$document->setDefaultNamespace(self::XML_NAMESPACE, 'rbac_definitions');
+		
 		$data = array();
 
-		foreach($configurations as $cfg) {
-			if(!isset($cfg->roles)) {
+		foreach($document->getConfigurationElements() as $cfg) {
+			if(!$cfg->has('roles')) {
 				continue;
 			}
 			
-			$this->parseRoles($cfg->roles, null, $data);
+			$this->parseRoles($cfg->get('roles'), null, $data);
 		}
 
 		$code = "return " . var_export($data, true) . ";";
 		
-		return $this->generate($code, $config);
+		return $this->generate($code, $document->documentURI);
 	}
 	
 	/**
 	 * Parse a 'roles' node.
 	 *
-	 * @param      AgaviConfigValueHolder The "roles" node.
-	 * @param      string                 The name of the parent role, or null.
-	 * @param      array                  A reference to the output data array.
+	 * @param      mixed  The "roles" node (element or node list)
+	 * @param      string The name of the parent role, or null.
+	 * @param      array  A reference to the output data array.
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	protected function parseRoles(AgaviConfigValueHolder $roles, $parent, &$data)
+	protected function parseRoles($roles, $parent, &$data)
 	{
 		foreach($roles as $role) {
 			$name = $role->getAttribute('name');
 			$entry = array();
 			$entry['parent'] = $parent;
 			$entry['permissions'] = array();
-			if(isset($role->permissions)) {
-				foreach($role->permissions as $permission) {
+			if($role->has('permissions')) {
+				foreach($role->get('permissions') as $permission) {
 					$entry['permissions'][] = $permission->getValue();
 				}
 			}
-			if(isset($role->roles)) {
-				$this->parseRoles($role->roles, $name, $data);
+			if($role->has('roles')) {
+				$this->parseRoles($role->get('roles'), $name, $data);
 			}
 			$data[$name] = $entry;
 		}
