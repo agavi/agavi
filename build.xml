@@ -6,11 +6,10 @@
 	<property environment="env"/>
 	<property file="build.properties"/>
 	<property name="package"  value="${phing.project.name}" override="true" />
-	<property name="builddir" value="build" override="true" />
+	<property name="builddir" value="pear-build" override="true" />
 	<property name="srcdir"   value="${project.basedir}" override="true" />
 	<taskdef classname="etc.phing.AgaviPackageTask" name="agavipackage"/>
 	<taskdef classname="etc.phing.AgaviOlsonCompileTask" name="agaviolsoncompile"/>
-	<taskdef classname="src.buildtools.phing.AgaviTestTask" name="agavitest"/>
 
 	<!-- fileset for -dist files -->
 	<fileset dir="." id="distfiles">
@@ -38,8 +37,13 @@
 	</target>
 
 	<target name="apidocs" description="API docs">
-		<!-- HAXOR! we need to inject an 'ignore' cmdline argument to prevent the inclusion of the compiled timezone data and the buildtools, hence the weird 'output' attribute contents - the phing phpdoc task doesn't have an 'ignore' attribute -->
-		<phpdoc title="Agavi Documentation" destdir="apidocs" sourcepath="src" output="HTML:frames:DOM/earthli -i buildtools/,translation/data/timezones/"/>
+		<phpdoc title="Agavi Documentation" destdir="apidocs" output="HTML:frames:DOM/earthli">
+			<fileset dir="./src">
+				<include name="**/*.php" />
+				<exclude name="vendor/**" />
+				<exclude name="translation/data/**" />
+			</fileset>
+		</phpdoc>
 	</target>
 
 	<target name="manuals" description="generate all manuals">
@@ -204,17 +208,11 @@
 		<!-- prepare -->
 		<delete dir="${builddir}" includeemptydirs="true" verbose="true" failonerror="false" />
 		<mkdir dir="${builddir}" />
-		<copy todir="${builddir}">
-			<fileset dir="src/">
-				<exclude name="**/*.svn" />
-				<include name="**/**" />
-			</fileset>
-		</copy>
-		<mkdir dir="${builddir}/samples" />
+
 		<copy todir="${builddir}/samples">
 			<fileset dir="samples/">
 				<exclude name="**/*.svn" />
-				<include name="**/**" />
+				<include name="**/*" />
 			</fileset>
 		</copy>
 		<copy file="API_CHANGELOG" todir="${builddir}" />
@@ -229,36 +227,36 @@
 		<copy file="LICENSE-UNICODE_CLDR" todir="${builddir}" />
 		<copy file="RELEASE_NOTES" todir="${builddir}" />
 		<copy file="TODO" todir="${builddir}" />
-		<mkdir dir="${builddir}/scripts" />
-		<copy file="etc/agavi-dist" todir="${builddir}/scripts" />
-		<copy file="etc/agavi.bat-dist" todir="${builddir}/scripts" />
+
+		<copy todir="${builddir}">
+			<fileset dir="src/">
+				<exclude name="**/*.svn" />
+				<include name="**/*" />
+			</fileset>
+		</copy>
+
+		<copy todir="${builddir}/bin">
+			<fileset dir="bin/">
+				<exclude name="**/*.svn" />
+				<include name="**/*" />
+			</fileset>
+		</copy>
 
 		<!-- generate package.xml -->
 		<agavipackage dir="${builddir}" />
 
-		<echo msg="package.xml generated to '${builddir}'. Use &quot;pear package&quot; in build/ to create the package." />
-	</target>
-
-	<target name="test" description="run test suite">
-		<agavitest exit="true"/>
+		<echo msg="package.xml generated to '${builddir}'. Use &quot;pear package&quot; in ${builddir}/ to create the package." />
 	</target>
 
 	<target name="clean" description="clean out the cruft">
 		<delete dir="manuals" includeemptydirs="true" failonerror="true" />
-		<delete dir="build" includeemptydirs="true" failonerror="true" />
+		<delete dir="pear-build" includeemptydirs="true" failonerror="true" />
 		<delete dir="apidocs" includeemptydirs="true" quiet="true" failonerror="false" />
 		<delete file="tests.html" includeemptydirs="true" quiet="true" failonerror="false" />
 	</target>
 
 	<target name="olson" description="build timezone datebase">
 		<agaviolsoncompile olsonDir="${srcdir}/etc/olson/tzdata" outputDir="${srcdir}/src/translation/data/timezones" />
-	</target>
-
-	<target name="damagecontrol" description="damagecontrol target">
-		<phingcall target="docs"/>
-		<phingcall target="package"/>
-		<agavitest exit="true" outfile="tests.html" reporter="html"/>
-		<!-- sync docs, packages, tests.html -->
 	</target>
 
 </project>

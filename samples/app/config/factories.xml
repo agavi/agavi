@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configurations xmlns="http://agavi.org/agavi/1.0/config">
+<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" xmlns="http://agavi.org/agavi/config/parts/factories/1.0">
 	
-	<configuration>
+	<ae:configuration>
 		
 		<controller class="AgaviController" />
 		
@@ -31,29 +31,30 @@
 		
 		<translation_manager class="AgaviTranslationManager" />
 		
-		<validation_manager class="AgaviValidationManager">
-			<parameter name="mode">strict</parameter>
-		</validation_manager>
+		<validation_manager class="AgaviValidationManager" />
 		
-	</configuration>
+	</ae:configuration>
 	
-	<configuration environment="development.*">
+	<ae:configuration environment="development.*">
 		
 		<validation_manager class="AgaviValidationManager">
-			<parameter name="mode">conditional</parameter>
+			<!-- "conditional" mode would allow your actions to work without validation as long as no validators are defined at all -->
+			<!-- this is disabled by default so you don't run into surprises when deploying to production envs (which have "strict" mode enabled) without testing on a staging machine first -->
+			<!-- also, it's not recommended to use any mode other than "strict" -->
+			<!-- <ae:parameter name="mode">conditional</ae:parameter> -->
 		</validation_manager>
 		
-	</configuration>
+	</ae:configuration>
 	
-	<configuration context="web" environment="development.*">
+	<ae:configuration context="web" environment="development.*">
 		
 		<response class="AgaviWebResponse">
-			<parameter name="send_content_length">false</parameter>
+			<ae:parameter name="send_content_length">false</ae:parameter>
 		</response>
 	
-	</configuration>
+	</ae:configuration>
 	
-	<configuration context="soap">
+	<ae:configuration context="soap">
 		
 		<controller class="AgaviSoapController" />
 		
@@ -62,30 +63,30 @@
 		<response class="AgaviSoapResponse" />
 		
 		<routing class="AgaviSoapRouting">
-			<parameter name="wsdl_generator">
-				<parameter name="soap">
-					<parameter name="address">
-						<parameter name="location">http://localhost/~dzuelke/_projects/agavi/branches/0.11/samples/pub/soap.php</parameter>
-					</parameter>
-				</parameter>
-			</parameter>
+			<ae:parameter name="wsdl_generator">
+				<ae:parameter name="soap">
+					<ae:parameter name="address">
+						<ae:parameter name="location">http://localhost/~dzuelke/_projects/agavi/branches/0.11/samples/pub/soap.php</ae:parameter>
+					</ae:parameter>
+				</ae:parameter>
+			</ae:parameter>
 		</routing>
 		
 		<user class="AgaviSecurityUser" />
 		
-	</configuration>
+	</ae:configuration>
 	
-	<configuration context="wsdl">
+	<ae:configuration context="wsdl">
 		
 		<storage class="AgaviSessionStorage">
-			<parameter name="auto_start">false</parameter>
+			<ae:parameter name="auto_start">false</ae:parameter>
 		</storage>
 		
 		<user class="AgaviSecurityUser" />
 		
-	</configuration>
+	</ae:configuration>
 	
-	<configuration context="xmlrpc">
+	<ae:configuration context="xmlrpc">
 		
 		<request class="AgaviXmlrpcepiphpRequest" />
 		
@@ -95,6 +96,6 @@
 		
 		<user class="AgaviSecurityUser" />
 		
-	</configuration>
+	</ae:configuration>
 	
-</configurations>
+</ae:configurations>

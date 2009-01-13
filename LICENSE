@@ -32,6 +32,19 @@ The corresponding license can be found in LICENSE-AGAVI.
 --
 
 
+PHPUnit
+-------
+
+Agavi bundles PHPUnit in a development version to facilitate software testing.
+
+For more information about PHPUnit, visit the homepage:
+http://phpunit.de/
+
+The corresponding license can be found in LICENSE-PHPUNIT.
+
+--
+
+
 International Components for Unicode
 ------------------------------------
 
@@ -56,6 +69,20 @@ Fore more information about the Unicode CLDR, visit the homepage:
 http://www.unicode.org/cldr/
 
 The corresponding license can be found in LICENSE-UNICODE_CLDR.
+
+--
+
+
+ISO Schematron
+--------------
+
+This software uses the ISO Schematron Skeleton, and the ISO Schematron ISO SVRL
+implementation, by Rick Jelliffe.
+
+For more information about ISO Schematron, visit the homepage:
+http://www.schematron.com/
+
+The corresponding license can be found in LICENSE-SCHEMATRON.
 
 --
 

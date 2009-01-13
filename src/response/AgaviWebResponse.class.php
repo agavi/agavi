@@ -675,11 +675,7 @@ class AgaviWebResponse extends AgaviResponse
 				$values['path'] = $basePath;
 			}
 			
-			if(version_compare(phpversion(), '5.2', 'ge')) {
-				setcookie($name, $values['value'], $expire, $values['path'], $values['domain'], $values['secure'], $values['httponly']);
-			} else {
-				setcookie($name, $values['value'], $expire, $values['path'], $values['domain'], $values['secure']);
-			}
+			setcookie($name, $values['value'], $expire, $values['path'], $values['domain'], $values['secure'], $values['httponly']);
 		}
 		
 		// send headers

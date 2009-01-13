@@ -30,13 +30,14 @@
  *
  * @version    $Id$
  */
-class AgaviSettingConfigHandler extends AgaviConfigHandler
+class AgaviSettingConfigHandler extends AgaviXmlConfigHandler
 {
+	const XML_NAMESPACE = 'http://agavi.org/agavi/config/parts/settings/1.0';
+	
 	/**
 	 * Execute this configuration handler.
 	 *
-	 * @param      string An absolute filesystem path to a configuration file.
-	 * @param      string An optional context in which we are currently running.
+	 * @param      AgaviXmlConfigDomDocument The document to parse.
 	 *
 	 * @return     string Data to be written to a cache file.
 	 *
@@ -51,39 +52,47 @@ class AgaviSettingConfigHandler extends AgaviConfigHandler
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	public function execute($config, $context = null)
+	public function execute(AgaviXmlConfigDomDocument $document)
 	{
-		$configurations = $this->orderConfigurations(AgaviConfigCache::parseConfig($config, false, $this->getValidationFile(), $this->parser)->configurations, AgaviConfig::get('core.environment'));
-
+		// set up our default namespace
+		$document->setDefaultNamespace(self::XML_NAMESPACE, 'settings');
+		
 		// init our data array
 		$data = array();
-
-		foreach($configurations as $cfg) {
+		
+		$prefix = 'core.';
+		
+		foreach($document->getConfigurationElements() as $cfg) {
 			// let's do our fancy work
-			if($cfg->hasChildren('system_actions')) {
-				foreach($cfg->system_actions->getChildren() as $action) {
+			if($cfg->has('system_actions')) {
+				foreach($cfg->get('system_actions') as $action) {
 					$name = $action->getAttribute('name');
-					$data[sprintf('actions.%s_module', $name)] = $action->module->getValue();
-					$data[sprintf('actions.%s_action', $name)] = $action->action->getValue();
+					$data[sprintf('actions.%s_module', $name)] = $action->getChild('module')->getValue();
+					$data[sprintf('actions.%s_action', $name)] = $action->getChild('action')->getValue();
 				}
 			}
-
-			if(isset($cfg->settings)) {
-				$multiSettings = $cfg->getChildren('settings');
-				foreach($multiSettings as $settings) {
-					$prefix = $settings->getAttribute('prefix', 'core.');
-					foreach($settings as $setting) {
-						if($setting->hasChildren()) {
-							$data[$prefix . $setting->getAttribute('name')] = $this->getItemParameters($setting);
-						} else {
-							$data[$prefix . $setting->getAttribute('name')] = AgaviToolkit::literalize($setting->getValue());
-						}
+			
+			// loop over <setting> elements; there can be many of them
+			foreach($cfg->get('settings') as $setting) {
+				$localPrefix = $prefix;
+				
+				// let's see if this buddy has a <settings> parent with valuable information
+				if($setting->parentNode->localName == 'settings') {
+					if($setting->parentNode->hasAttribute('prefix')) {
+						$localPrefix = $setting->parentNode->getAttribute('prefix');
 					}
 				}
+				
+				$settingName = $localPrefix . $setting->getAttribute('name');
+				if($setting->hasAgaviParameters()) {
+					$data[$settingName] = $setting->getAgaviParameters();
+				} else {
+					$data[$settingName] = AgaviToolkit::literalize($setting->getValue());
+				}
 			}
-
-			if($cfg->hasChildren('exception_templates')) {
-				foreach($cfg->exception_templates->getChildren() as $exception_template) {
+			
+			if($cfg->has('exception_templates')) {
+				foreach($cfg->get('exception_templates') as $exception_template) {
 					$tpl = AgaviToolkit::expandDirectives($exception_template->getValue());
 					if(!is_readable($tpl)) {
 						throw new AgaviConfigurationException('Exception template "' . $tpl . '" does not exist or is unreadable');
@@ -101,7 +110,7 @@ class AgaviSettingConfigHandler extends AgaviConfigHandler
 
 		$code = 'AgaviConfig::fromArray(' . var_export($data, true) . ');';
 
-		return $this->generate($code);
+		return $this->generate($code, $document->documentURI);
 	}
 }
 

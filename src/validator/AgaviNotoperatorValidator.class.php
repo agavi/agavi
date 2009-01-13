@@ -60,8 +60,26 @@ class AgaviNotoperatorValidator extends AgaviOperatorValidator
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
+	 *
+	 * @deprecated 1.0.0
 	 */
 	public function addFieldResult($validator, $fieldname, $result)
+	{
+		// prevent reporting of any child validators
+	}
+
+	/**
+	 * Adds a intermediate result of an validator for the given argument
+	 *
+	 * @param      AgaviValidationArgument The argument
+	 * @param      int                     The arguments result.
+	 * @param      AgaviValidator          The validator (if the error was caused
+	 *                                     inside a validator).
+	 *
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function addArgumentResult(AgaviValidationArgument $argument, $result, $validator = null)
 	{
 		// prevent reporting of any child validators
 	}
@@ -103,7 +121,7 @@ class AgaviNotoperatorValidator extends AgaviOperatorValidator
 			// lets mark the fields of the child validator all as successful
 			$affectedFields = $child->getFullArgumentNames();
 			foreach($affectedFields as $field) {
-				parent::addFieldResult($this, $field, AgaviValidator::SUCCESS);
+				parent::addArgumentResult(new AgaviValidationArgument($field, $this->getParameter('source')), AgaviValidator::SUCCESS, $this);
 			}
 			return true;
 		}

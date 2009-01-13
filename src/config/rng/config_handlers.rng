@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+	xmlns:config_handlers_1_0="http://agavi.org/agavi/config/parts/config_handlers/1.0"
+	ns="http://agavi.org/agavi/config/parts/config_handlers/1.0"
+	datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+	
+	<include href="_common.rng" />
+	
+	<define name="content-configuration" combine="interleave">
+		<choice>
+			<optional>
+				<element name="handlers">
+					<ref name="content-handlers" />
+				</element>
+			</optional>
+			<zeroOrMore>
+				<element name="handler">
+					<ref name="content-handler" />
+				</element>
+			</zeroOrMore>
+		</choice>
+	</define>
+	
+	<define name="content-handler">
+		<attribute name="pattern">
+			<data type="string" />
+		</attribute>
+		<attribute name="class">
+			<ref name="data-identifier" />
+		</attribute>
+		<interleave>
+			<ref name="content-transformations" />
+			<ref name="content-validations" />
+			<ref name="content-parameters" />
+		</interleave>
+	</define>
+	
+	<define name="content-handlers">
+		<zeroOrMore>
+			<element name="handler">
+				<ref name="content-handler" />
+			</element>
+		</zeroOrMore>
+	</define>
+	
+	<!-- Transformations -->
+	
+	<define name="config_handlers-content-transformation">
+		<optional>
+			<attribute name="for">
+				<ref name="data-for" />
+			</attribute>
+		</optional>
+		<data type="string" />
+	</define>
+	
+	<define name="config_handlers-content-transformations">
+		<zeroOrMore>
+			<element name="transformation">
+				<ref name="config_handlers-content-transformation" />
+			</element>
+		</zeroOrMore>
+	</define>
+	
+	<define name="content-transformations">
+		<choice>
+			<zeroOrMore>
+				<element name="transformation">
+					<ref name="config_handlers-content-transformation" />
+				</element>
+			</zeroOrMore>
+			<optional>
+				<element name="transformations">
+					<ref name="config_handlers-content-transformations" />
+				</element>
+			</optional>
+		</choice>
+	</define>
+	
+	<!-- Validations -->
+	
+	<define name="config_handlers-content-validation">
+		<optional>
+			<attribute name="for">
+				<ref name="data-for" />
+			</attribute>
+		</optional>
+		<optional>
+			<attribute name="step">
+				<ref name="data-step" />
+			</attribute>
+		</optional>
+		<data type="string" />
+	</define>
+	
+	<define name="config_handlers-content-validations">
+		<zeroOrMore>
+			<element name="validation">
+				<ref name="config_handlers-content-validation" />
+			</element>
+		</zeroOrMore>
+	</define>
+	
+	<define name="content-validations">
+		<choice>
+			<zeroOrMore>
+				<element name="validation">
+					<ref name="config_handlers-content-validation" />
+				</element>
+			</zeroOrMore>
+			<optional>
+				<element name="validations">
+					<ref name="config_handlers-content-validations" />
+				</element>
+			</optional>
+		</choice>
+	</define>
+	
+	<!-- Data -->
+	
+	<define name="data-for">
+		<choice>
+			<value type="string">single</value>
+			<value type="string">compilation</value>
+		</choice>
+	</define>
+	
+	<define name="data-step">
+		<choice>
+			<value type="string">transformations_before</value>
+			<value type="string">transformations_after</value>
+		</choice>
+	</define>
+	
+</grammar>

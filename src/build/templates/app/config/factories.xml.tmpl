@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" xmlns="http://agavi.org/agavi/config/parts/factories/1.0">
+	
+	<ae:configuration>
+		
+		<controller class="AgaviController" />
+		
+		<database_manager class="AgaviDatabaseManager" />
+		
+		<dispatch_filter class="AgaviDispatchFilter" />
+		
+		<execution_container class="AgaviExecutionContainer" />
+		
+		<execution_filter class="AgaviExecutionFilter" />
+		
+		<filter_chain class="AgaviFilterChain" />
+		
+		<logger_manager class="AgaviLoggerManager" />
+		
+		<request class="AgaviWebRequest" />
+		
+		<response class="AgaviWebResponse" />
+		
+		<routing class="AgaviWebRouting" />
+		
+		<security_filter class="AgaviSecurityFilter" />
+		
+		<storage class="AgaviSessionStorage" />
+		
+		<translation_manager class="AgaviTranslationManager" />
+		
+		<user class="AgaviSecurityUser" />
+		
+		<validation_manager class="AgaviValidationManager" />
+		
+	</ae:configuration>
+	
+	<ae:configuration environment="development.*">
+		
+		<response class="AgaviWebResponse">
+			<!-- in case you do var_dump() or something, as the content length is determined from the response content -->
+			<ae:parameter name="send_content_length">false</ae:parameter>
+		</response>
+	
+		<validation_manager class="AgaviValidationManager">
+			<!-- "conditional" mode would allow your actions to work without validation as long as no validators are defined at all -->
+			<!-- this is disabled by default so you don't run into surprises when deploying to production envs (which have "strict" mode enabled) without testing on a staging machine first -->
+			<!-- also, it's not recommended to use any mode other than "strict" -->
+			<!-- <ae:parameter name="mode">conditional</ae:parameter> -->
+		</validation_manager>
+		
+	</ae:configuration>
+	
+</ae:configurations>

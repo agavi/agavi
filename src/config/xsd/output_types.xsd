@@ -104,6 +104,7 @@
     <xs:attribute name="module" type="php_label" use="required" />
     <xs:attribute name="action" type="xs:string" use="required" />
     <xs:attribute name="output_type" type="php_label" />
+    <xs:attribute name="method" type="php_label" />
   </xs:complexType>
 
 </xs:schema>

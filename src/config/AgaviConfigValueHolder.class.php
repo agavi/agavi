@@ -25,6 +25,8 @@
  *
  * @since      0.11.0
  *
+ * @deprecated Not used anymore by XML config handlers, to be removed in Agavi 1.1
+ *
  * @version    $Id$
  */
 class AgaviConfigValueHolder implements ArrayAccess, IteratorAggregate

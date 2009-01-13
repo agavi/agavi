@@ -36,24 +36,16 @@ class ControllerTest extends AgaviTestCase
 		$this->assertReference($ctx1, $ctx2);
 	}
 
-	public function testactionExists()
+	public function testactionFileExists()
 	{
 		// actionExists actually checks the filesystem, 
 		$this->assertTrue(file_exists(AgaviConfig::get('core.app_dir') . '/modules/Test/actions/TestAction.class.php'));
 		$this->assertFalse(file_exists(AgaviConfig::get('core.app_dir') . '/modules/Test/actions/BunkAction.class.php'));
 		$this->assertFalse(file_exists(AgaviConfig::get('core.app_dir') . '/modules/Bunk/actions/BunkAction.class.php'));
 		$controller = $this->_controller;
-		$this->assertEquals('Test', $controller->resolveAction('Test', 'Test'));
-		try {
-			$controller->resolveAction('Test', 'Bunk');
-			$this->fail('resolveAction did not throw an exception for non-existing action in existing module');
-		} catch (AgaviControllerException $e) {
-		}
-		try {
-			$controller->resolveAction('Bunk', 'Bunk');
-			$this->fail('resolveAction did not throw an exception for non-existing action in non-existing module');
-		} catch (AgaviControllerException $e) {
-		}
+		$this->assertEquals(AgaviConfig::get('core.app_dir') . '/modules/Test/actions/TestAction.class.php', $controller->checkActionFile('Test', 'Test'));
+		$this->assertFalse($controller->checkActionFile('Test', 'Bunk'), 'actionFileExists did not return false for non-existing action in existing module');
+		$this->assertFalse($controller->checkActionFile('Bunk', 'Bunk'), 'actionFileExists did not return false for non-existing action in non-existing module');
 	}
 
 	public function testGetActionFromModule()

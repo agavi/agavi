@@ -43,8 +43,7 @@
 			<setting name="debug">false</setting>
 			
 			<setting name="use_database">false</setting>
-			<setting name="use_logging">false</setting>
-			<setting name="use_routing">true</setting>
+			<setting name="use_logging">true</setting>
 			<setting name="use_security">true</setting>
 			<setting name="use_translation">true</setting>
 		</settings>
@@ -61,5 +60,12 @@
 			<setting name="debug">true</setting>
 		</settings>
 	</configuration>
+	
+	<configuration environment="testing.*">
+		<settings>
+			<setting name="default_context">web</setting>
+		</settings>
+	</configuration>
+	
 	
 </configurations>

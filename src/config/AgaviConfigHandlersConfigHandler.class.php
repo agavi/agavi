@@ -22,6 +22,8 @@
  * @subpackage config
  *
  * @author     Dominik del Bondio <ddb@bitxtender.com>
+ * @author     Noah Fontes <noah.fontes@bitextender.com>
+ * @author     David Zülke <david.zuelke@bitextender.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
  *
@@ -29,13 +31,14 @@
  *
  * @version    $Id$
  */
-class AgaviConfigHandlersConfigHandler extends AgaviConfigHandler
+class AgaviConfigHandlersConfigHandler extends AgaviXmlConfigHandler
 {
+	const XML_NAMESPACE = 'http://agavi.org/agavi/config/parts/config_handlers/1.0';
+	
 	/**
 	 * Execute this configuration handler.
 	 *
-	 * @param      string An absolute filesystem path to a configuration file.
-	 * @param      string An optional context in which we are currently running.
+	 * @param      AgaviXmlConfigDomDocument The document to handle.
 	 *
 	 * @return     string Data to be written to a cache file.
 	 *
@@ -46,56 +49,144 @@ class AgaviConfigHandlersConfigHandler extends AgaviConfigHandler
 	 *                                        improperly formatted.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @author     David Zülke <david.zuelke@bitextender.com>
 	 * @since      0.11.0
 	 */
-	public function execute($config, $context = null)
+	public function execute(AgaviXmlConfigDomDocument $document)
 	{
-		// parse the config file
-		$configurations = $this->orderConfigurations(AgaviConfigCache::parseConfig($config, false, $this->getValidationFile(), $this->parser)->configurations, AgaviConfig::get('core.environment'));
+		// set up our default namespace
+		$document->setDefaultNamespace(self::XML_NAMESPACE, 'config_handlers');
 		
 		// init our data arrays
 		$handlers = array();
 		
-		foreach($configurations as $cfg) {
-			if(!isset($cfg->handlers)) {
+		foreach($document->getConfigurationElements() as $configuration) {
+			if(!$configuration->has('handlers')) {
 				continue;
 			}
 			
 			// let's do our fancy work
-			foreach($cfg->handlers as $handler) {
+			foreach($configuration->get('handlers') as $handler) {
 				$pattern = $handler->getAttribute('pattern');
 				
 				$category = AgaviToolkit::normalizePath(AgaviToolkit::expandDirectives($pattern));
 				
 				$class = $handler->getAttribute('class');
 				
-				$validation = array(
-					AgaviXmlConfigParser::VALIDATION_TYPE_RELAXNG    => array(
-					),
-					AgaviXmlConfigParser::VALIDATION_TYPE_SCHEMATRON => array(
-					),
-					AgaviXmlConfigParser::VALIDATION_TYPE_XMLSCHEMA  => array(
-					),
+				$transformations = array(
+					AgaviXmlConfigParser::STAGE_SINGLE => array(),
+					AgaviXmlConfigParser::STAGE_COMPILATION => array(),
 				);
-				if($handler->hasAttribute('validate')) {
-					$validation[AgaviXmlConfigParser::VALIDATION_TYPE_XMLSCHEMA][] = AgaviToolkit::literalize($handler->getAttribute('validate'));
-				} elseif(false) {
-					// TODO: check for <validations><validation type="schematron"> children here
+				if($handler->has('transformations')) {
+					foreach($handler->get('transformations') as $transformation) {
+						$path = AgaviToolkit::literalize($transformation->getValue());
+						$for = $transformation->getAttribute('for', AgaviXmlConfigParser::STAGE_SINGLE);
+						$transformations[$for][] = $path;
+					}
 				}
 				
+				$validations = array(
+					AgaviXmlConfigParser::STAGE_SINGLE => array(
+						AgaviXmlConfigParser::STEP_TRANSFORMATIONS_BEFORE => array(
+							AgaviXmlConfigParser::VALIDATION_TYPE_RELAXNG => array(
+							),
+							AgaviXmlConfigParser::VALIDATION_TYPE_SCHEMATRON => array(
+							),
+							AgaviXmlConfigParser::VALIDATION_TYPE_XMLSCHEMA => array(
+							),
+						),
+						AgaviXmlConfigParser::STEP_TRANSFORMATIONS_AFTER => array(
+							AgaviXmlConfigParser::VALIDATION_TYPE_RELAXNG => array(
+							),
+							AgaviXmlConfigParser::VALIDATION_TYPE_SCHEMATRON => array(
+							),
+							AgaviXmlConfigParser::VALIDATION_TYPE_XMLSCHEMA => array(
+							),
+						),
+					),
+					AgaviXmlConfigParser::STAGE_COMPILATION => array(
+						AgaviXmlConfigParser::STEP_TRANSFORMATIONS_BEFORE => array(
+							AgaviXmlConfigParser::VALIDATION_TYPE_RELAXNG => array(
+							),
+							AgaviXmlConfigParser::VALIDATION_TYPE_SCHEMATRON => array(
+							),
+							AgaviXmlConfigParser::VALIDATION_TYPE_XMLSCHEMA => array(
+							),
+						),
+						AgaviXmlConfigParser::STEP_TRANSFORMATIONS_AFTER => array(
+							AgaviXmlConfigParser::VALIDATION_TYPE_RELAXNG => array(
+							),
+							AgaviXmlConfigParser::VALIDATION_TYPE_SCHEMATRON => array(
+							),
+							AgaviXmlConfigParser::VALIDATION_TYPE_XMLSCHEMA => array(
+							),
+						),
+					),
+				);
+				if($handler->has('validations')) {
+					foreach($handler->get('validations') as $validation) {
+						$path = AgaviToolkit::literalize($validation->getValue());
+						$type = null;
+						if(!$validation->hasAttribute('type')) {
+							$type = $this->guessValidationType($path);
+						} else {
+							$type = $validation->getAttribute('type');
+						}
+						$for = $validation->getAttribute('for', AgaviXmlConfigParser::STAGE_SINGLE);
+						$step = $validation->getAttribute('step', AgaviXmlConfigParser::STEP_TRANSFORMATIONS_AFTER);
+						$validations[$for][$step][$type][] = $path;
+					}
+				}
+				
+				$handlers[$category] = isset($handlers[$category])
+					? $handlers[$category]
+					: array(
+						'parameters' => array(),
+						);
 				$handlers[$category] = array(
 					'class' => $class,
-					'parameters' => $this->getItemParameters($handler, isset($handlers[$category]['parameters']) ? $handlers[$category]['parameters'] : array()),
-					'validation' => $validation,
+					'parameters' => $handler->getAgaviParameters($handlers[$category]['parameters']),
+					'transformations' => $transformations,
+					'validations' => $validations,
 				);
 			}
 		}
 		
 		$data = array(
-			'self::$handlers += ' . var_export($handlers, true),
+			'return ' . var_export($handlers, true),
 		);
 		
-		return $this->generate($data);
+		return $this->generate($data, $document->documentURI);
+	}
+	
+	/**
+	 * Convenience method to quickly guess the type of a validation file using its
+	 * file extension.
+	 *
+	 * @param      string The path to the file.
+	 *
+	 * @return     string An AgaviXmlConfigParser::VALIDATION_TYPE_* const value.
+	 *
+	 * @throws     AgaviException If the type could not be determined.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.0.0
+	 */
+	protected function guessValidationType($path)
+	{
+		switch(pathinfo($path, PATHINFO_EXTENSION)) {
+			case 'rng':
+				return AgaviXmlConfigParser::VALIDATION_TYPE_RELAXNG;
+			case 'rnc':
+				return AgaviXmlConfigParser::VALIDATION_TYPE_RELAXNG;
+			case 'sch':
+				return AgaviXmlConfigParser::VALIDATION_TYPE_SCHEMATRON;
+			case 'xsd':
+				return AgaviXmlConfigParser::VALIDATION_TYPE_XMLSCHEMA;
+			default:
+				throw new AgaviException(sprintf('Could not determine validation type for file "%s"', $path));
+		}
 	}
 }
 

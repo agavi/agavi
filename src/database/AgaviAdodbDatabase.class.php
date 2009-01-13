@@ -48,6 +48,8 @@
  *
  * @since      0.10.0
  *
+ * @deprecated To be removed in Agavi 1.1
+ *
  * @version    $Id$
  */
 class AgaviAdodbDatabase extends AgaviDatabase

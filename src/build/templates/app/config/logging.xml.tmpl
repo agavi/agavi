@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurations xmlns="http://agavi.org/agavi/1.0/config">
+
+	<configuration>
+
+		<loggers default="default">
+
+			<!-- logs only DEBUG messages -->
+			<logger name="debug" class="AgaviLogger" level="AgaviLogger::DEBUG">
+				<appenders>
+					<appender>DebugLogAppender</appender>
+				</appenders>
+			</logger>
+
+			<!-- logs only INFO messages -->
+			<logger name="default" class="AgaviLogger" level="AgaviLogger::INFO">
+				<appenders>
+					<appender>ApplicationLogAppender</appender>
+				</appenders>
+			</logger>
+
+			<!-- logs everything but DEBUG and INFO messages -->
+			<logger name="error" class="AgaviLogger" level="AgaviLogger::ALL ^ AgaviLogger::DEBUG ^ AgaviLogger::INFO">
+				<appenders>
+					<appender>ErrorLogAppender</appender>
+					<appender>StdErrorAppender</appender> 
+				</appenders>
+			</logger>
+		</loggers>
+		<appenders>
+
+			<!--
+				Debug logs are rotated in a 7 day (AgaviRotatingFileLoggerAppender default) cycle
+				Use 'cycle' parameter to alter the cycle.
+			-->
+			<appender name="DebugLogAppender" class="AgaviRotatingFileLoggerAppender" layout="DateTimeLayout">
+				<parameters>
+					<parameter name="dir">%core.app_dir%/log/</parameter>
+					<parameter name="prefix">debug-</parameter>
+				</parameters>
+			</appender>
+
+			<appender name="ApplicationLogAppender" class="AgaviFileLoggerAppender" layout="DateTimeLayout">
+				<parameters>
+					<parameter name="file">%core.app_dir%/log/application.log</parameter>
+				</parameters>
+			</appender>
+
+			<appender name="ErrorLogAppender" class="AgaviRotatingFileLoggerAppender" layout="DateTimeLayout">
+				<parameters>
+					<parameter name="dir">%core.app_dir%/log/</parameter>
+					<parameter name="prefix">error-</parameter>
+				</parameters>
+			</appender>
+
+			<appender name="StdErrorAppender" class="AgaviStderrLoggerAppender" layout="DateTimeLayout" />
+		</appenders>
+
+		<layouts>
+			<layout name="DateTimeLayout" class="AgaviTimestampLoggerLayout" />
+		</layouts>
+
+	</configuration>
+
+</configurations>

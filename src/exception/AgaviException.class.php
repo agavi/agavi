@@ -43,8 +43,25 @@ class AgaviException extends Exception
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
+	 *
+	 * @deprecated Superseded by AgaviException::render()
 	 */
 	public static function printStackTrace(Exception $e, AgaviContext $context = null, AgaviExecutionContainer $container = null)
+	{
+		return self::render($e, $context, $container);
+	}
+	
+	/**
+	 * Pretty-print this exception using a template.
+	 *
+	 * @param      Exception     The original exception.
+	 * @param      AgaviContext  The context instance.
+	 * @param      AgaviResponse The response instance.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      1.0.0
+	 */
+	public static function render(Exception $e, AgaviContext $context = null, AgaviExecutionContainer $container = null)
 	{
 		// discard any previous output waiting in the buffer
 		while(@ob_end_clean());

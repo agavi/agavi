@@ -116,11 +116,6 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	protected $validationParameters = null;
 
 	/**
-	 * @var        array The request methods where this validator should validate
-	 */
-	protected $requestMethods = array();
-
-	/**
 	 * @var        array The name of the request parameters serving as argument to
 	 *                   this validator.
 	 */
@@ -204,25 +199,6 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	}
 
 	/**
-	 * Checks whether this validator validates in the given request method.
-	 *
-	 * @param      string The request method.
-	 *
-	 * @return     bool Whether the validator validates.
-	 *
-	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function validatesInMethod($requestMethod)
-	{
-		if(count($this->requestMethods) > 0) {
-			return in_array($requestMethod, $this->requestMethods);
-		} else {
-			return true;
-		}
-	}
-
-	/**
 	 * Initialize this validator.
 	 *
 	 * @param      AgaviContext The Context.
@@ -249,12 +225,6 @@ abstract class AgaviValidator extends AgaviParameterHolder
 
 		if(!isset($parameters['source'])) {
 			$parameters['source'] = AgaviRequestDataHolder::SOURCE_PARAMETERS;
-		}
-
-		if(isset($parameters['method'])) {
-			foreach(explode(' ', $parameters['method']) as $method) {
-				$this->requestMethods[] = trim($method);
-			}
 		}
 
 		$this->setParameters($parameters);
@@ -520,6 +490,10 @@ abstract class AgaviValidator extends AgaviParameterHolder
 			$this->incident = new AgaviValidationIncident($this, self::mapErrorCode($this->getParameter('severity', 'error')));
 		}
 
+		foreach($affectedArguments as &$argument) {
+			$argument = new AgaviValidationArgument($argument, $this->getParameter('source'));
+		}
+		
 		if($error !== null || count($affectedArguments) != 0) {
 			// don't throw empty error messages without affected fields
 			$this->incident->addError(new AgaviValidationError($error, $index, $affectedArguments));
@@ -564,10 +538,10 @@ abstract class AgaviValidator extends AgaviParameterHolder
 			if(is_array($value)) {
 				// for arrays all child elements need to be marked as not processed
 				foreach(AgaviArrayPathDefinition::getFlatKeyNames($value) as $keyName) {
-					$this->parentContainer->addFieldResult($this, $cp->pushRetNew($keyName)->__toString(), AgaviValidator::NOT_PROCESSED);
+					$this->parentContainer->addArgumentResult(new AgaviValidationArgument($cp->pushRetNew($keyName)->__toString(), $this->getParameter('source')), AgaviValidator::NOT_PROCESSED, $this);
 				}
 			}
-			$this->parentContainer->addFieldResult($this, $cp->__toString(), AgaviValidator::NOT_PROCESSED);
+			$this->parentContainer->addArgumentResult(new AgaviValidationArgument($cp->__toString(), $this->getParameter('source')), AgaviValidator::NOT_PROCESSED, $this);
 		}
 	}
 
@@ -618,7 +592,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 			if($this->parentContainer !== null) {
 				if($result != self::NOT_PROCESSED) {
 					foreach($this->affectedArguments as $fieldname) {
-						$this->parentContainer->addFieldResult($this, $fieldname, $result);
+						$this->parentContainer->addArgumentResult(new AgaviValidationArgument($fieldname, $this->getParameter('source')), $result, $this);
 					}
 				}
 

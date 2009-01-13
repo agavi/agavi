@@ -264,6 +264,9 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 		$val = $name;
 		
 		switch($source) {
+			case 'callback':
+				$val = $container->getActionInstance()->$name();
+				break;
 			case 'constant':
 				$val = constant($name);
 				break;
@@ -318,6 +321,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 	 *                                                 executing the View.
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
@@ -338,7 +342,15 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 		$request = $this->context->getRequest();
 
 		$isCacheable = false;
-		if($this->getParameter('enable_caching', true) && is_readable($cachingDotXml = AgaviConfig::get('core.module_dir') . '/' . $moduleName . DIRECTORY_SEPARATOR . 'cache' . DIRECTORY_SEPARATOR . $actionName . '.xml')) {
+		$cachingDotXml = AgaviToolkit::evaluateModuleDirective(
+			$moduleName,
+			'agavi.cache.path',
+			array(
+				'moduleName' => $moduleName,
+				'actionName' => $actionName,
+			)
+		);
+		if($this->getParameter('enable_caching', true) && is_readable($cachingDotXml)) {
 			// $lm->log('Caching enabled, configuration file found, loading...');
 			// no _once please!
 			include(AgaviConfigCache::checkConfig($cachingDotXml, $this->context->getName()));
@@ -347,10 +359,17 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 		$isActionCached = false;
 
 		if($isCacheable) {
-			$groups = $this->determineGroups($config["groups"], $container);
-			$actionGroups = array_merge($groups, array(self::ACTION_CACHE_ID));
-			
-			$isActionCached = $this->checkCache($actionGroups, $config['lifetime']);
+			try {
+				$groups = $this->determineGroups($config["groups"], $container);
+				$actionGroups = array_merge($groups, array(self::ACTION_CACHE_ID));
+			} catch(Exception $e) {
+				// a group callback threw an exception. that means we're not allowed t cache
+				$isCacheable = false;
+			}
+			if($isCacheable) {
+				// this is not wrapped in the try/catch block above as it might throw an exception itself
+				$isActionCached = $this->checkCache(array_merge($groups, array(self::ACTION_CACHE_ID)), $config['lifetime']);
+			}
 			
 			if(!$isActionCached) {
 				// cacheable, but action is not cached. notify our callback so it can prevent the stampede that follows
@@ -383,7 +402,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 			
 				// $lm->log('Action not cached, executing...');
 				// execute the Action and get the View to execute
-				list($actionCache['view_module'], $actionCache['view_name']) = $this->runAction($container);
+				list($actionCache['view_module'], $actionCache['view_name']) = $container->runAction();
 				
 				// check if we've just run the action again after a previous cache read revealed that the view is not cached for this output type and we need to go back to square one due to the lack of action attribute caching configuration...
 				// if yes: is the view module/name that we got just now different from what was in the cache?
@@ -491,22 +510,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 					}
 				
 					$viewCache = array();
-
-					// $lm->log('View is not cached, executing...');
-					// view initialization completed successfully
-					$executeMethod = 'execute' . $outputType;
-					if(!method_exists($viewInstance, $executeMethod)) {
-						$executeMethod = 'execute';
-					}
-					$key = $request->toggleLock();
-					try {
-						$viewCache['next'] = $viewInstance->$executeMethod($container->getRequestData());
-					} catch(Exception $e) {
-						// we caught an exception... unlock the request and rethrow!
-						$request->toggleLock($key);
-						throw $e;
-					}
-					$request->toggleLock($key);
+					$viewCache['next'] = $this->executeView($container);
 				}
 
 				if($viewCache['next'] instanceof AgaviExecutionContainer) {
@@ -584,7 +588,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 					$attributes =& $viewInstance->getAttributes();
 
 					// whether or not we should assign the previous' layer's output to the $slots array
-					$assignInnerToSlots = $this->getParameter('assign_inner_to_slots', true);
+					$assignInnerToSlots = $this->getParameter('assign_inner_to_slots', false);
 					
 					// $lm->log('Starting rendering...');
 					for($i = 0; $i < count($layers); $i++) {
@@ -688,127 +692,49 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 	 * @return     mixed The processed View information returned by the Action.
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
 	 * @since      0.11.0
+	 * 
+	 * @deprecated since 1.0.0, use AgaviExecutionContainer::runAction()
 	 */
 	protected function runAction(AgaviExecutionContainer $container)
 	{
-		$viewName = null;
-
-		$controller = $this->context->getController();
-		$request = $this->context->getRequest();
-		$validationManager = $container->getValidationManager();
-
-		// get the current action instance
-		$actionInstance = $container->getActionInstance();
-
-		// get the current action information
-		$moduleName = $container->getModuleName();
-		$actionName = $container->getActionName();
-
-		// get the (already formatted) request method
-		$method = $request->getMethod();
-
-		$requestData = $container->getRequestData();
-
-		$useGenericMethods = false;
-		$executeMethod = 'execute' . $method;
-		if(!method_exists($actionInstance, $executeMethod)) {
-			$executeMethod = 'execute';
-			$useGenericMethods = true;
-		}
-
-		if($actionInstance->isSimple() || ($useGenericMethods && !method_exists($actionInstance, $executeMethod))) {
-			// this action will skip validation/execution for this method
-			// get the default view
-			$key = $request->toggleLock();
-			try {
-				$viewName = $actionInstance->getDefaultViewName();
-			} catch(Exception $e) {
-				// we caught an exception... unlock the request and rethrow!
-				$request->toggleLock($key);
-				throw $e;
-			}
-			$request->toggleLock($key);
-			
-			// run the validation manager - it's going to take care of cleaning up the request data, and retain "conditional" mode behavior etc.
-			// but only if the action is not simple; otherwise, the (safe) arguments in the request data holder will all be removed
-			if(!$actionInstance->isSimple()) {
-				$validationManager->execute($requestData);
-			}
-		} else {
-			// set default validated status
-			$validated = true;
-
-			// get the current action validation configuration
-			$validationConfig = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/validate/' . $actionName . '.xml';
-
-			if(is_readable($validationConfig)) {
-				// load validation configuration
-				// do NOT use require_once
-				require(AgaviConfigCache::checkConfig($validationConfig, $this->context->getName()));
-			}
-
-			// manually load validators
-			$registerValidatorsMethod = 'register' . $method . 'Validators';
-			if(!method_exists($actionInstance, $registerValidatorsMethod)) {
-				$registerValidatorsMethod = 'registerValidators';
-			}
-			$actionInstance->$registerValidatorsMethod();
-
-			// process validators
-			$validated = $validationManager->execute($requestData);
-
-			$validateMethod = 'validate' . $method;
-			if(!method_exists($actionInstance, $validateMethod)) {
-				$validateMethod = 'validate';
-			}
-
-			// prevent access to Request::getParameters()
-			// process manual validation
-			if($actionInstance->$validateMethod($requestData) && $validated) {
-				// execute the action
-				$key = $request->toggleLock();
-				try {
-					$viewName = $actionInstance->$executeMethod($requestData);
-				} catch(Exception $e) {
-					// we caught an exception... unlock the request and rethrow!
-					$request->toggleLock($key);
-					throw $e;
-				}
-				$request->toggleLock($key);
-			} else {
-				// validation failed
-				$handleErrorMethod = 'handle' . $method . 'Error';
-				if(!method_exists($actionInstance, $handleErrorMethod)) {
-					$handleErrorMethod = 'handleError';
-				}
-				$key = $request->toggleLock();
-				try {
-					$viewName = $actionInstance->$handleErrorMethod($requestData);
-				} catch(Exception $e) {
-					// we caught an exception... unlock the request and rethrow!
-					$request->toggleLock($key);
-					throw $e;
-				}
-				$request->toggleLock($key);
-			}
-		}
-
-		if(is_array($viewName)) {
-			// we're going to use an entirely different action for this view
-			$viewModule = $viewName[0];
-			$viewName   = $viewName[1];
-		} elseif($viewName !== AgaviView::NONE) {
-			// use a view related to this action
-			$viewName = $actionName . $viewName;
-			$viewModule = $moduleName;
-		} else {
-			$viewName = AgaviView::NONE;
-			$viewModule = AgaviView::NONE;
-		}
-
-		return array($viewModule, $viewName);
+		return $container->runAction();
 	}
+	
+	/**
+	 * execute this containers view instance
+	 * 
+	 * @return     mixed the view's result
+	 * 
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */
+	protected function executeView(AgaviExecutionContainer $container)
+	{
+		$outputType = $container->getOutputType()->getName();
+		$request = $this->context->getRequest();
+		$viewInstance = $container->getViewInstance();
+		
+		// $lm->log('View is not cached, executing...');
+		// view initialization completed successfully
+		$executeMethod = 'execute' . $outputType;
+		if(!method_exists($viewInstance, $executeMethod)) {
+			$executeMethod = 'execute';
+		}
+		$key = $request->toggleLock();
+		try {
+			$viewResult = $viewInstance->$executeMethod($container->getRequestData());
+		} catch(Exception $e) {
+			// we caught an exception... unlock the request and rethrow!
+			$request->toggleLock($key);
+			throw $e;
+		}
+		$request->toggleLock($key);
+		return $viewResult;
+	}
+	
 }
 
 ?>

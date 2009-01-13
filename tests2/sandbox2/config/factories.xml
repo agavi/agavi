@@ -10,7 +10,9 @@
 		<logger_manager class="AgaviLoggerManager" />
 		<request class="AgaviWebRequest" />
 		<response class="TestResponse" />
-		<routing class="TestRouting" />
+		<routing class="TestRouting">
+			<parameter name="enabled">false</parameter>
+		</routing>
 		<security_filter class="AgaviSecurityFilter" />
 		<storage class="AgaviNullStorage" />
 		<translation_manager class="AgaviTranslationManager" />

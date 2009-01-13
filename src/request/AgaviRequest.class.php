@@ -142,36 +142,6 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	}
 
 	/**
-	 * Get the name of the request parameter that defines which module to use.
-	 *
-	 * @return     string The module accessor name.
-	 *
-	 * @author     David Zülke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 *
-	 * @deprecated Use getParameter('module_accessor') instead.
-	 */
-	public function getModuleAccessor()
-	{
-		return $this->getParameter('module_accessor');
-	}
-
-	/**
-	 * Get the name of the request parameter that defines which action to use.
-	 *
-	 * @return     string The action accessor name.
-	 *
-	 * @author     David Zülke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 *
-	 * @deprecated Use getParameter('action_accessor') instead.
-	 */
-	public function getActionAccessor()
-	{
-		return $this->getParameter('action_accessor');
-	}
-
-	/**
 	 * Set the data holder instance of this request.
 	 *
 	 * @param      AgaviRequestDataHolder The request data holder.
@@ -253,6 +223,37 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	{
 	}
 	
+	/**
+	 * Get a value by trying to find the given key in $_SERVER first, then in
+	 * $_ENV. If nothing was found, return the key, or the given default value.
+	 *
+	 * @param      mixed  The key (or an array of keys) of the value to fetch.
+	 * @param      mixed  A default return value, or null if the key should be
+	 *                    returned (static return values can be defined this way).
+	 *
+	 * @author     David Zülke
+	 * @since      0.11.0
+	 */
+	public static function getSourceValue($keys, $default = null)
+	{
+		$keys = (array)$keys;
+		// walk over all possible keys
+		foreach($keys as $key) {
+			if(isset($_SERVER[$key])) {
+				return $_SERVER[$key];
+			} elseif(isset($_ENV[$key])) {
+				return $_ENV[$key];
+			}
+		}
+		if($default !== null) {
+			return $default;
+		}
+		// nothing found so far. remember that the keys list is an array
+		if($keys) {
+			return end($keys);
+		}
+	}
+
 	/**
 	 * Whether or not the Request is locked.
 	 *

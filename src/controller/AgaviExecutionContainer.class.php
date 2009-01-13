@@ -41,9 +41,15 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	protected $validationManager = null;
 
 	/**
+	 * @var        string The request method for this container.
+	 */
+	protected $requestMethod = null;
+
+	/**
 	 * @var        AgaviRequestDataHolder A request data holder with request info.
 	 */
-	private $requestData = null;
+	protected $requestData = null; // TODO: check if this can actually be protected 
+	                               // or whether it should be private (would break actiontests though)
 
 	/**
 	 * @var        AgaviRequestDataHolder A pointer to the global request data.
@@ -106,6 +112,20 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	protected $next = null;
 
 	/**
+	 * action names can contain any valid php token, dots and slashes for subactions
+	 */
+	const SANE_ACTION_NAME = '/[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff\/.]*/';
+	
+	/**
+	 * view names can contain any valid php token, dots and slashes for subactions
+	 */
+	const SANE_VIEW_NAME   = '/[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff\/.]*/';
+	/**
+	 * only php tokens are allowed as module names
+	 */
+	const SANE_MODULE_NAME = '/[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*/';
+	
+	/**
 	 * Pre-serialization callback.
 	 *
 	 * Will set the name of the context instead of the instance, and the name of
@@ -117,7 +137,9 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	public function __sleep()
 	{
 		$this->contextName = $this->context->getName();
-		$this->outputTypeName = $this->outputType->getName();
+		if(!empty($this->outputType)) {
+			$this->outputTypeName = $this->outputType->getName();	
+		}
 		$arr = get_object_vars($this);
 		unset($arr['context'], $arr['outputType'], $arr['requestData'], $arr['globalRequestData']);
 		return array_keys($arr);
@@ -135,7 +157,11 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	public function __wakeup()
 	{
 		$this->context = AgaviContext::getInstance($this->contextName);
-		$this->outputType = $this->context->getController()->getOutputType($this->outputTypeName);
+		
+		if(!empty($this->outputTypeName)) {
+			$this->outputType = $this->context->getController()->getOutputType($this->outputTypeName);
+		}
+		
 		try {
 			$this->globalRequestData = $this->context->getRequest()->getRequestData();
 		} catch(AgaviException $e) {
@@ -161,13 +187,12 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 
 		$this->parameters = $parameters;
 
-		$rfi = $this->context->getFactoryInfo('response');
-		$this->response = new $rfi['class'];
-		$this->response->initialize($this->context, $rfi['parameters']);
+		$this->response = $this->context->createInstanceFor('response');
 	}
 
 	/**
-	 * Creates a new container instance with the same output type as this one.
+	 * Creates a new container instance with the same output type and request
+	 * method as this one.
 	 *
 	 * @param      string                 The name of the module.
 	 * @param      string                 The name of the action.
@@ -175,6 +200,8 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	 *                                    request arguments.
 	 * @param      string                 Optional name of an initial output type
 	 *                                    to set.
+	 * @param      string                 Optional name of the request method to
+	 *                                    be used in this container.
 	 *
 	 * @return     AgaviExecutionContainer A new execution container instance,
 	 *                                     fully initialized.
@@ -182,13 +209,16 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function createExecutionContainer($moduleName = null, $actionName = null, AgaviRequestDataHolder $arguments = null, $outputType = null)
+	public function createExecutionContainer($moduleName = null, $actionName = null, AgaviRequestDataHolder $arguments = null, $outputType = null, $requestMethod = null)
 	{
 		if($outputType === null) {
 			$outputType = $this->getOutputType()->getName();
 		}
+		if($requestMethod === null) {
+			$requestMethod = $this->getRequestMethod();
+		}
 		
-		$container = $this->context->getController()->createExecutionContainer($moduleName, $actionName, $arguments, $outputType);
+		$container = $this->context->getController()->createExecutionContainer($moduleName, $actionName, $arguments, $outputType, $requestMethod);
 		
 		// copy over parameters (could be is_slot, is_forward etc)
 		$container->setParameters($this->getParameters());
@@ -222,159 +252,142 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 
 		$moduleName = $this->getModuleName();
 		$actionName = $this->getActionName();
-
-		if(!AgaviConfig::get('core.available', false)) {
-			// application is unavailable
-			$request->setAttributes(array(
-				'requested_module' => $moduleName,
-				'requested_action' => $actionName
-			), 'org.agavi.controller.forwards.unavailable');
-			$moduleName = AgaviConfig::get('actions.unavailable_module');
-			$actionName = AgaviConfig::get('actions.unavailable_action');
-
-			try {
-				$actionName = $controller->resolveAction($moduleName, $actionName);
-			} catch(AgaviControllerException $e) {
-				$error = 'Invalid configuration settings: actions.unavailable_module "%s", actions.unavailable_action "%s"';
-				$error = sprintf($error, $moduleName, $actionName);
-				throw new AgaviConfigurationException($error);
+		
+		
+		try {
+			// TODO: cleanup and merge with createActionInstance once Exceptions have been cleaned up and specced properly so that the two error conditions can be told apart
+			if(false === $controller->checkActionFile($moduleName, $actionName)) {
+				$this->setNext($this->createSystemActionForwardContainer('error_404'));
+				return $this->proceed();
 			}
-
-		} else {
-			try {
-				$actionName = $controller->resolveAction($moduleName, $actionName);
-			} catch(AgaviControllerException $e) {
-				// track the requested module so we have access to the data
-				// in the error 404 page
-				$request->setAttributes(array(
-					'requested_module' => $moduleName,
-					'requested_action' => $actionName,
-					'exception' => $e,
-				), 'org.agavi.controller.forwards.error_404');
-
-				// switch to error 404 action
-				$moduleName = AgaviConfig::get('actions.error_404_module');
-				$actionName = AgaviConfig::get('actions.error_404_action');
-
-				try {
-					$actionName = $controller->resolveAction($moduleName, $actionName);
-				} catch(AgaviControllerException $e) {
-					// cannot find unavailable module/action
-					$error = 'Invalid configuration settings: actions.error_404_module "%s", actions.error_404_action "%s"';
-					$error = sprintf($error, $moduleName, $actionName);
-
-					throw new AgaviConfigurationException($error);
-				}
-			}
+			
+			$this->setActionName(AgaviToolkit::canonicalName($actionName));
+			
+			$this->actionInstance = $controller->createActionInstance($moduleName, $actionName);
+		} catch(AgaviDisabledModuleException $e) {
+			$this->setNext($this->createSystemActionForwardContainer('module_disabled'));
+			return $this->proceed();
 		}
+		
+ 
+		// initialize the action
+		$this->actionInstance->initialize($this);
 
-		$this->setModuleName($moduleName);
-		$this->setActionName($actionName);
-
-		// include the module configuration
-		// loaded only once due to the way load() (former import()) works
-		if(is_readable(AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/config/module.xml')) {
-			AgaviConfigCache::load(AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/config/module.xml');
-		} else {
-			AgaviConfig::set('modules.' . strtolower($moduleName) . '.enabled', true);
-		}
-
-		// save autoloads so we can restore them later
-		$oldAutoloads = Agavi::$autoloads;
-
-		static $moduleAutoloads = array();
-		if(!isset($moduleAutoloads[$moduleName])) {
-			$moduleAutoloads[$moduleName] = array();
-			$moduleAutoload = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/config/autoload.xml';
-			if(is_readable($moduleAutoload)) {
-				include(AgaviConfigCache::checkConfig($moduleAutoload));
-				$moduleAutoloads[$moduleName] = Agavi::$autoloads;
-			}
-		} else {
-			Agavi::$autoloads = array_merge($moduleAutoloads[$moduleName], Agavi::$autoloads);
-		}
-
-		if(AgaviConfig::get('modules.' . strtolower($moduleName) . '.enabled')) {
-			// check for a module config.php
-			$moduleConfig = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/config.php';
-			if(is_readable($moduleConfig)) {
-				require_once($moduleConfig);
-			}
-
-			$this->actionInstance = $controller->createActionInstance($this->moduleName, $this->actionName);
-
-			// initialize the action
-			$this->actionInstance->initialize($this);
-
-			if($this->actionInstance->isSimple()) {
-				if($this->arguments !== null) {
-					// clone it so mutating it has no effect on the "outside world"
-					$this->requestData = clone $this->arguments;
-				} else {
-					$rdhc = $request->getParameter('request_data_holder_class');
-					$this->requestData = new $rdhc();
-				}
-				// run the execution filter, without a proper chain
-				$controller->getFilter('execution')->execute(new AgaviFilterChain(), $this);
+		if($this->actionInstance->isSimple()) {
+			if($this->arguments !== null) {
+				// clone it so mutating it has no effect on the "outside world"
+				$this->requestData = clone $this->arguments;
 			} else {
-				// mmmh I smell awesomeness... clone the RD JIT, yay, that's the spirit
-				$this->requestData = clone $this->globalRequestData;
-
-				if($this->arguments !== null) {
-					$this->requestData->merge($this->arguments);
-				}
-
-				// create a new filter chain
-				$fcfi = $this->context->getFactoryInfo('filter_chain');
-				$filterChain = new $fcfi['class']();
-				$filterChain->initialize($this->context, $fcfi['parameters']);
-
-				if(AgaviConfig::get('core.available', false)) {
-					// the application is available so we'll register
-					// global and module filters, otherwise skip them
-
-					// does this action require security?
-					if(AgaviConfig::get('core.use_security', false) && $this->actionInstance->isSecure()) {
-						// register security filter
-						$filterChain->register($controller->getFilter('security'));
-					}
-
-					// load filters
-					$controller->loadFilters($filterChain, 'action');
-					$controller->loadFilters($filterChain, 'action', $moduleName);
-				}
-
-				// register the execution filter
-				$filterChain->register($controller->getFilter('execution'));
-
-				// process the filter chain
-				$filterChain->execute($this);
+				$rdhc = $request->getParameter('request_data_holder_class');
+				$this->requestData = new $rdhc();
 			}
-
-			// restore autoloads
-			Agavi::$autoloads = $oldAutoloads;
-
+			// run the execution filter, without a proper chain
+			$controller->getFilter('execution')->execute(new AgaviFilterChain(), $this);
 		} else {
+			// mmmh I smell awesomeness... clone the RD JIT, yay, that's the spirit
+			$this->requestData = clone $this->globalRequestData;
 
-			$request->setAttributes(array(
-				'requested_module' => $moduleName,
-				'requested_action' => $actionName
-			), 'org.agavi.controller.forwards.module_disabled');
-			$moduleName = AgaviConfig::get('actions.module_disabled_module');
-			$actionName = AgaviConfig::get('actions.module_disabled_action');
-
-			try {
-				$actionName = $controller->resolveAction($moduleName, $actionName);
-			} catch(AgaviControllerException $e) {
-				// cannot find mod disabled module/action
-				$error = 'Invalid configuration settings: actions.module_disabled_module "%s", actions.module_disabled_action "%s"';
-				$error = sprintf($error, $moduleName, $actionName);
-				throw new AgaviConfigurationException($error);
+			if($this->arguments !== null) {
+				$this->requestData->merge($this->arguments);
 			}
 
-			$this->setNext($this->createExecutionContainer($moduleName, $actionName));
-		}
+			// create a new filter chain
+			$filterChain = $this->context->createInstanceFor('filter_chain');
 
+			if(AgaviConfig::get('core.available', false)) {
+				// the application is available so we'll register
+				// globally defined and module-specific action filters, otherwise skip them
+
+				// does this action require security?
+				if(AgaviConfig::get('core.use_security', false)) {
+					// register security filter
+					$filterChain->register($controller->getFilter('security'));
+				}
+
+				// load filters
+				$controller->loadFilters($filterChain, 'action');
+				$controller->loadFilters($filterChain, 'action', $moduleName);
+			}
+
+			// register the execution filter
+			$filterChain->register($controller->getFilter('execution'));
+
+			// process the filter chain
+			$filterChain->execute($this);
+		}
+		
+		return $this->proceed();
+	}
+	
+	
+	/**
+	 * create a system forward container
+	 *
+	 * calling this method will set the attributes 
+	 * 
+	 *  - requested_module
+	 *  - requested_action
+	 *  - an optional system exception 
+	 * 
+	 * in the appropriate namespace on the created container and the request 
+	 * (for legacy reasons)
+	 *
+	 *
+	 * @param      string          the type of forward to create (error_404, 
+	 *                             module_disabled, secure, login, unavailable)
+	 * @param      AgaviException  optional the exception thrown by the controller
+	 *                             when resolving the module/action
+	 *
+	 * @return     AgaviExecutionContainer The forward container
+	 *
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function createSystemActionForwardContainer($type, AgaviException $e = null)
+	{
+		if(!in_array($type, array('error_404', 'module_disabled', 'secure', 'login', 'unavailable'))) {
+			throw new AgaviException(sprintf('Unknown system forward type "%1$s"', $type));
+		}
+		
+		// track the requested module so we have access to the data in the error 404 page
+		$forwardInfoData = array(
+			'requested_module' => $this->getModuleName(),
+			'requested_action' => $this->getActionName(),
+			'exception'        => $e,
+		);
+		$forwardInfoNamespace = 'org.agavi.controller.forwards.' . $type;
+		
+		$moduleName = AgaviConfig::get('actions.' . $type . '_module');
+		$actionName = AgaviConfig::get('actions.' . $type . '_action');
+		
+		if(false === $this->context->getController()->checkActionFile($moduleName, $actionName)) {
+			// cannot find unavailable module/action
+			$error = 'Invalid configuration settings: actions.%3$s_module "%1$s", actions.%3$s_action "%2$s"';
+			$error = sprintf($error, $moduleName, $actionName, $type);
+			
+			throw new AgaviConfigurationException($error);
+		}
+		
+		$forwardContainer = $this->createExecutionContainer($moduleName, $actionName);
+		
+		$forwardContainer->setAttributes($forwardInfoData, $forwardInfoNamespace);
+		// legacy
+		$this->context->getRequest()->setAttributes($forwardInfoData, $forwardInfoNamespace);
+		
+		return $forwardContainer;
+	}
+	
+	/**
+	 * Proceed to the "next" container by running it and returning its response,
+	 * or return our response if there is no "next" container.
+	 *
+	 * @return     AgaviResponse The "real" response.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      1.0.0
+	 */
+	protected function proceed()
+	{
 		if($this->next !== null) {
 			return $this->next->execute();
 		} else {
@@ -407,11 +420,225 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	public function getValidationManager()
 	{
 		if($this->validationManager === null) {
-			$vmfi = $this->context->getFactoryInfo('validation_manager');
-			$this->validationManager = new $vmfi['class']();
-			$this->validationManager->initialize($this->context, $vmfi['parameters']);
+			$this->validationManager = $this->context->createInstanceFor('validation_manager');
 		}
 		return $this->validationManager;
+	}
+	
+	
+	/**
+	 * Execute the Action
+	 *
+	 * @return     mixed The processed View information returned by the Action.
+	 *
+	 * @author     David Zülke <david.zuelke@bitxtender.com>
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function runAction()
+	{
+		$viewName = null;
+
+		$controller = $this->context->getController();
+		$request = $this->context->getRequest();
+		$validationManager = $this->getValidationManager();
+
+		// get the current action instance
+		$actionInstance = $this->getActionInstance();
+
+		// get the current action information
+		$moduleName = $this->getModuleName();
+		$actionName = $this->getActionName();
+
+		// get the (already formatted) request method
+		$method = $this->getRequestMethod();
+
+		$requestData = $this->getRequestData();
+
+		$useGenericMethods = false;
+		$executeMethod = 'execute' . $method;
+		if(!method_exists($actionInstance, $executeMethod)) {
+			$executeMethod = 'execute';
+			$useGenericMethods = true;
+		}
+
+		if($actionInstance->isSimple() || ($useGenericMethods && !method_exists($actionInstance, $executeMethod))) {
+			// this action will skip validation/execution for this method
+			// get the default view
+			$key = $request->toggleLock();
+			try {
+				$viewName = $actionInstance->getDefaultViewName();
+			} catch(Exception $e) {
+				// we caught an exception... unlock the request and rethrow!
+				$request->toggleLock($key);
+				throw $e;
+			}
+			$request->toggleLock($key);
+			
+			// run the validation manager - it's going to take care of cleaning up the request data, and retain "conditional" mode behavior etc.
+			// but only if the action is not simple; otherwise, the (safe) arguments in the request data holder will all be removed
+			if(!$actionInstance->isSimple()) {
+				$validationManager->execute($requestData);
+			}
+		} else {
+			if($this->performValidation()) {
+				// execute the action
+				// prevent access to Request::getParameters()
+				$key = $request->toggleLock();
+				try {
+					$viewName = $actionInstance->$executeMethod($requestData);
+				} catch(Exception $e) {
+					// we caught an exception... unlock the request and rethrow!
+					$request->toggleLock($key);
+					throw $e;
+				}
+				$request->toggleLock($key);
+			} else {
+				// validation failed
+				$handleErrorMethod = 'handle' . $method . 'Error';
+				if(!method_exists($actionInstance, $handleErrorMethod)) {
+					$handleErrorMethod = 'handleError';
+				}
+				$key = $request->toggleLock();
+				try {
+					$viewName = $actionInstance->$handleErrorMethod($requestData);
+				} catch(Exception $e) {
+					// we caught an exception... unlock the request and rethrow!
+					$request->toggleLock($key);
+					throw $e;
+				}
+				$request->toggleLock($key);
+			}
+		}
+
+		if(is_array($viewName)) {
+			// we're going to use an entirely different action for this view
+			$viewModule = $viewName[0];
+			$viewName   = $viewName[1];
+		} elseif($viewName !== AgaviView::NONE) {
+			// use a view related to this action
+			$viewName = AgaviToolkit::evaluateModuleDirective(
+				$moduleName,
+				'agavi.view.name',
+				array(
+					'actionName' => $actionName,
+					'viewName' => $viewName,
+				)
+			);
+			$viewModule = $moduleName;
+		} else {
+			$viewName = AgaviView::NONE;
+			$viewModule = AgaviView::NONE;
+		}
+
+		return array($viewModule, $viewName);
+	}
+	
+	/**
+	 * performs the validation for this container
+	 * 
+	 * @return     bool true if the data validated successfully, false in any other case
+	 * 
+	 * @author     David Zülke <david.zuelke@bitxtender.com>
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function performValidation()
+	{
+		$validationManager = $this->getValidationManager();
+
+		// get the current action instance
+		$actionInstance = $this->getActionInstance();
+		// get the (already formatted) request method
+		$method = $this->getRequestMethod();
+
+		$requestData = $this->getRequestData();
+		
+		// set default validated status
+		$validated = true;
+
+		$this->registerValidators();
+
+		// process validators
+		$validated = $validationManager->execute($requestData);
+
+		$validateMethod = 'validate' . $method;
+		if(!method_exists($actionInstance, $validateMethod)) {
+			$validateMethod = 'validate';
+		}
+
+		// process manual validation
+		return $actionInstance->$validateMethod($requestData) && $validated;
+	}
+
+	/**
+	 * register the validators for this container
+	 * 
+	 * @author     David Zülke <david.zuelke@bitxtender.com>
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function registerValidators()
+	{
+		$validationManager = $this->getValidationManager();
+
+		// get the current action instance
+		$actionInstance = $this->getActionInstance();
+		
+		// get the current action information
+		$moduleName = $this->getModuleName();
+		$actionName = $this->getActionName();
+		
+		// get the (already formatted) request method
+		$method = $this->getRequestMethod();
+
+		// get the current action validation configuration
+		$validationConfig = AgaviToolkit::evaluateModuleDirective(
+			$moduleName,
+			'agavi.validate.path',
+			array(
+				'moduleName' => $moduleName,
+				'actionName' => $actionName,
+			)
+		);
+		if(is_readable($validationConfig)) {
+			// load validation configuration
+			// do NOT use require_once
+			require(AgaviConfigCache::checkConfig($validationConfig, $this->context->getName()));
+		}
+
+		// manually load validators
+		$registerValidatorsMethod = 'register' . $method . 'Validators';
+		if(!method_exists($actionInstance, $registerValidatorsMethod)) {
+			$registerValidatorsMethod = 'registerValidators';
+		}
+		$actionInstance->$registerValidatorsMethod();
+	}
+	
+	/**
+	 * Retrieve this container's request method name.
+	 *
+	 * @return     string The request method name.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      1.0.0
+	 */
+	public function getRequestMethod()
+	{
+		return $this->requestMethod;
+	}
+
+	/**
+	 * Set this container's request method name.
+	 *
+	 * @param      string The request method name.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      1.0.0
+	 */
+	public function setRequestMethod($requestMethod)
+	{
+		$this->requestMethod = $requestMethod;
 	}
 
 	/**
@@ -638,7 +865,13 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	 */
 	public function setModuleName($moduleName)
 	{
-		$this->moduleName = preg_replace('/[^a-z0-9\-_]+/i', '', $moduleName);
+		if(null === $moduleName) {
+			$this->moduleName = null;
+		} elseif(preg_match(self::SANE_MODULE_NAME, $moduleName)) {
+			$this->moduleName = $moduleName;
+		} else {
+			throw new AgaviException(sprintf('Invalid module name "%1$s"', $moduleName));
+		}
 	}
 
 	/**
@@ -651,7 +884,13 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	 */
 	public function setActionName($actionName)
 	{
-		$this->actionName = preg_replace(array('/\./', '/[^a-z0-9\-_\/]+/i'), array('/', ''), $actionName);
+		if(null === $actionName) {
+			$this->actionName = null;
+		} elseif(preg_match(self::SANE_ACTION_NAME, $actionName)) {
+			$this->actionName = $actionName;
+		} else {
+			throw new AgaviException(sprintf('Invalid action name "%1$s"', $actionName));
+		}
 	}
 
 	/**
@@ -664,7 +903,13 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	 */
 	public function setViewModuleName($viewModuleName)
 	{
-		$this->viewModuleName = $viewModuleName;
+		if(null === $viewModuleName) {
+			$this->viewModuleName = null;
+		} elseif(preg_match(self::SANE_MODULE_NAME, $viewModuleName)) {
+			$this->viewModuleName = $viewModuleName;
+		} else {
+			throw new AgaviException(sprintf('Invalid view module name "%1$s"', $viewModuleName));
+		}
 	}
 
 	/**
@@ -677,7 +922,13 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	 */
 	public function setViewName($viewName)
 	{
-		$this->viewName = $viewName;
+		if(null === $viewName) {
+			$this->viewName = null;
+		} elseif(preg_match(self::SANE_VIEW_NAME, $viewName)) {
+			$this->viewName = $viewName;
+		} else {
+			throw new AgaviException(sprintf('Invalid view name "%1$s"', $viewName));
+		}
 	}
 
 	 /**

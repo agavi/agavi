@@ -84,7 +84,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 
 		$rq = $this->getContext()->getRequest();
 
-		$vm = $container->getValidationManager();
+		$vr = $container->getValidationManager()->getReport();
 
 		$cfg = $rq->getAttributes('org.agavi.filter.FormPopulationFilter');
 
@@ -96,7 +96,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 
 		if(is_array($cfg['populate']) || $cfg['populate'] instanceof AgaviParameterHolder) {
 			$populate = $cfg['populate'];
-		} elseif($cfg['populate'] === true || (in_array($rq->getMethod(), $cfg['methods']) && $cfg['populate'] !== false)) {
+		} elseif($cfg['populate'] === true || (in_array($container->getRequestMethod(), $cfg['methods']) && $cfg['populate'] !== false)) {
 			$populate = $rq->getRequestData();
 		} else {
 			return;
@@ -262,7 +262,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 		}
 
 		// an array of all validation incidents; errors inserted for fields or multiple fields will be removed in here
-		$allIncidents = $vm->getIncidents();
+		$allIncidents = $vr->getIncidents();
 
 		foreach($forms as $form) {
 			if($populate instanceof AgaviParameterHolder) {
@@ -355,8 +355,15 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 					continue;
 				}
 
+				$argument = new AgaviValidationArgument(
+					$pname,
+					($element->nodeName == 'input' && $element->getAttribute('type') == 'file')
+						? AgaviWebRequestDataHolder::SOURCE_FILES
+						: AgaviRequestDataHolder::SOURCE_PARAMETERS
+				);
+				
 				// there's an error with the element's name in the request? good. let's give the baby a class!
-				if($vm->isFieldFailed($pname)) {
+				if($vr->isArgumentFailed($argument)) {
 					// a collection of all elements that need an error class
 					$errorClassElements = array();
 					// the element itself of course
@@ -393,9 +400,19 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 					// up next: the error messages
 					$fieldIncidents = array();
 					$multiFieldIncidents = array();
-					foreach($vm->getFieldIncidents($pname) as $incident) {
+					// grab all incidents for this field
+					foreach($vr->getArgumentResult($argument)->getIncidents() as $incident) {
 						if(($incidentKey = array_search($incident, $allIncidents, true)) !== false) {
-							if(count($incident->getFields()) > 1) {
+							// does this one have more than one field?
+							// and is it really more than one parameter or file, not a cookie or header?
+							$incidentArgumentCount = 0;
+							$incidentArguments = $incident->getArguments();
+							foreach($incidentArguments as $incidentArgument) {
+								if(in_array($incidentArgument->getSource(), array(AgaviWebRequestDataHolder::SOURCE_FILES, AgaviRequestDataHolder::SOURCE_PARAMETERS))) {
+									$incidentArgumentCount++;
+								}
+							}
+							if($incidentArgumentCount > 1) {
 								$multiFieldIncidents[] = $incident;
 							} else {
 								$fieldIncidents[] = $incident;
@@ -414,6 +431,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 					}
 				}
 
+				// FPF only handles "normal" values, as file inputs cannot be re-populated, so getParameter() with no source-specific stuff is fine here
 				$value = $p->getParameter($pname);
 
 				if(is_array($value) && !($element->nodeName == 'select' || $checkValue)) {
@@ -499,6 +517,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 			}
 
 			// now output the remaining incidents
+			// might include errors for cookies, headers and whatnot, but that is okay
 			if($this->insertErrorMessages($form, $errorMessageRules, $allIncidents)) {
 				$allIncidents = array();
 			}
@@ -507,7 +526,6 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 		$rq->setAttribute('orphaned_errors', $allIncidents, 'org.agavi.filter.FormPopulationFilter');
 
 		if($xhtml) {
-			$fiveTwo = version_compare(PHP_VERSION, '5.2', 'ge');
 			$firstError = null;
 
 			if(!$cfg['parse_xhtml_as_xml']) {
@@ -558,69 +576,55 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 				// http://www.456bereastreet.com/archive/200501/the_perils_of_using_xhtml_properly/
 				// http://www.hixie.ch/advocacy/xhtml
 				$out = preg_replace('/<style([^>]*)>\s*<!\[CDATA\[\s*?/iU' . ($utf8 ? 'u' : ''), '<style$1><!--/*--><![CDATA[/*><!--*/' . "\n", $out);
-				if(!$firstError && $fiveTwo) {
+				if(!$firstError) {
 					$firstError = preg_last_error();
 				}
 				// we can't clean up whitespace before the closing element because a preg with a leading \s* expression would be horribly slow
 				$out = preg_replace('/\]\]>\s*<\/style>/iU' . ($utf8 ? 'u' : ''), "\n" . '/*]]>*/--></style>', $out);
-				if(!$firstError && $fiveTwo) {
+				if(!$firstError) {
 					$firstError = preg_last_error();
 				}
 				$out = preg_replace('/<script([^>]*)>\s*<!\[CDATA\[\s*?/iU' . ($utf8 ? 'u' : ''), '<script$1><!--//--><![CDATA[//><!--' . "\n", $out);
-				if(!$firstError && $fiveTwo) {
+				if(!$firstError) {
 					$firstError = preg_last_error();
 				}
 				// we can't clean up whitespace before the closing element because a preg with a leading \s* expression would be horribly slow
 				$out = preg_replace('/\]\]>\s*<\/script>/iU' . ($utf8 ? 'u' : ''), "\n" . '//--><!]]></script>', $out);
-				if(!$firstError && $fiveTwo) {
+				if(!$firstError) {
 					$firstError = preg_last_error();
 				}
 			}
 			if($cfg['remove_auto_xml_prolog'] && !$hasXmlProlog) {
 				// there was no xml prolog in the document before, so we remove the one generated by DOM now
 				$out = preg_replace('/<\?xml.*?\?>\s+/iU' . ($utf8 ? 'u' : ''), '', $out);
-				if(!$firstError && $fiveTwo) {
+				if(!$firstError) {
 					$firstError = preg_last_error();
 				}
 			} elseif(!$cfg['parse_xhtml_as_xml']) {
 				// yes, DOM sucks and inserts another XML prolog _after_ the DOCTYPE... and it has two question marks at the end, not one, don't ask me why
 				$out = preg_replace('/<\?xml.*?\?\?>\s+/iU' . ($utf8 ? 'u' : ''), '', $out);
-				if(!$firstError && $fiveTwo) {
+				if(!$firstError) {
 					$firstError = preg_last_error();
 				}
 			}
-
-			$hasError = false;
-			if($fiveTwo) {
-				$hasError = $firstError;
-			} else {
-				$hasError = $out == '';
-			}
-
-			if($hasError) {
+			
+			if($firstError) {
 				$error = "Form Population Filter encountered an error while performing final regular expression replaces on the output.\n";
 				// the preg_replaces failed and produced an empty string. let's find out why
-				if($fiveTwo) {
-					$error .= "The error reported by preg_last_error() indicates that ";
-					switch($firstError) {
-						case PREG_BAD_UTF8_ERROR:
-							$error .= "the input contained malformed UTF-8 data.";
-							break;
-						case PREG_RECURSION_LIMIT_ERROR:
-							$error .= "the recursion limit (defined by \"pcre.recursion_limit\") was hit. This shouldn't happen unless you changed that limit yourself in php.ini or using ini_set(). If the problem is not on your end, please file a bug report with a reproduce case on the Agavi issue tracker or drop by on the IRC support channel.";
-							break;
-						case PREG_BACKTRACK_LIMIT_ERROR:
-							$error .= "the backtrack limit (defined by \"pcre.backtrack_limit\") was hit. This shouldn't happen unless you changed that limit yourself in php.ini or using ini_set(). If the problem is not on your end, please file a bug report with a reproduce case on the Agavi issue tracker or drop by on the IRC support channel.";
-							break;
-						case PREG_INTERNAL_ERROR:
-						default:
-							$error .= "an internal PCRE error occured. As a quick countermeasure, try to upgrade PHP (and the bundled PCRE) as well as libxml (yes!) to the latest versions to see if the problem goes away. If the issue persists, file a bug report with a reproduce case on the Agavi issue tracker or drop by on the IRC support channel.";
-					}
-				} else {
-					$error .= "Unfortunately, no error information is available due to your PHP version being lower than 5.2.";
-					if($utf8) {
-						$error .= "\nHowever, your document is encoded as UTF-8, and an empty result from preg_replace() typically means that the input contained malformed UTF-8 data.";
-					}
+				$error .= "The error reported by preg_last_error() indicates that ";
+				switch($firstError) {
+					case PREG_BAD_UTF8_ERROR:
+						$error .= "the input contained malformed UTF-8 data.";
+						break;
+					case PREG_RECURSION_LIMIT_ERROR:
+						$error .= "the recursion limit (defined by \"pcre.recursion_limit\") was hit. This shouldn't happen unless you changed that limit yourself in php.ini or using ini_set(). If the problem is not on your end, please file a bug report with a reproduce case on the Agavi issue tracker or drop by on the IRC support channel.";
+						break;
+					case PREG_BACKTRACK_LIMIT_ERROR:
+						$error .= "the backtrack limit (defined by \"pcre.backtrack_limit\") was hit. This shouldn't happen unless you changed that limit yourself in php.ini or using ini_set(). If the problem is not on your end, please file a bug report with a reproduce case on the Agavi issue tracker or drop by on the IRC support channel.";
+						break;
+					case PREG_INTERNAL_ERROR:
+					default:
+						$error .= "an internal PCRE error occured. As a quick countermeasure, try to upgrade PHP (and the bundled PCRE) as well as libxml (yes!) to the latest versions to see if the problem goes away. If the issue persists, file a bug report with a reproduce case on the Agavi issue tracker or drop by on the IRC support channel.";
 				}
 				throw new AgaviException($error);
 			}

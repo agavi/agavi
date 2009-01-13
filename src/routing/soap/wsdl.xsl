@@ -2,7 +2,9 @@
 <xsl:stylesheet
 version="1.0"
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-xmlns:agavi="http://agavi.org/agavi/1.0/config"
+xmlns:agavi_annotations="http://agavi.org/agavi/config/global/annotations/1.0"
+xmlns:agavi_envelope="http://agavi.org/agavi/config/global/envelope/1.0"
+xmlns:agavi_routing="http://agavi.org/agavi/config/parts/routing/1.0"
 xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
 xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
@@ -10,14 +12,14 @@ xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
 xmlns="http://schemas.xmlsoap.org/wsdl/"
 >
 	<xsl:output method="xml" version="1.0" encoding="utf-8" indent="yes" />
-	<xsl:variable name="tns" select="name(/agavi:configurations/namespace::*[.=../@targetNamespace])" />
-	<xsl:variable name="targetNamespace" select="/agavi:configurations/@targetNamespace" />
+	<xsl:variable name="tns" select="name(/agavi_envelope:configurations/namespace::*[.=../@targetNamespace])" />
+	<xsl:variable name="targetNamespace" select="/agavi_envelope:configurations/@targetNamespace" />
 	<xsl:variable name="request_postfix" select="'Request'" />
 	<xsl:variable name="request_headers_postfix" select="'RequestHeaders'" />
 	<xsl:variable name="response_postfix" select="'Response'" />
 	<xsl:variable name="response_headers_postfix" select="'ResponseHeaders'" />
 	<xsl:variable name="fault_postfix" select="'Fault'" />
-	<xsl:template match="/agavi:configurations">
+	<xsl:template match="/agavi_envelope:configurations">
 		<wsdl:definitions name="Dummy">
 			<xsl:copy-of select="namespace::*"/>
 			<!-- copy targetNamespace -->
@@ -25,25 +27,25 @@ xmlns="http://schemas.xmlsoap.org/wsdl/"
 			<!-- copy type defs -->
 			<xsl:apply-templates select="wsdl:types | wsdl:message" />
 			<!-- all the rest -->
-			<xsl:apply-templates select="agavi:configuration[.//agavi:route//wsdl:* | .//agavi:route//soap:*]" />
+			<xsl:apply-templates select="agavi_envelope:configuration[.//agavi_routing:route//wsdl:* | .//agavi_routing:route//soap:*]" />
 		</wsdl:definitions>
 	</xsl:template>
-	<xsl:template match="agavi:configuration">
+	<xsl:template match="agavi_envelope:configuration[@agavi_annotations:matched]">
 		<wsdl:portType name="DummyPortType">
-			<xsl:apply-templates select=".//agavi:route" mode="port" />
+			<xsl:apply-templates select=".//agavi_routing:route" mode="port" />
 		</wsdl:portType>
 		<binding name="DummyBinding" type="tns:DummyPortType">
 			<soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
-			<xsl:apply-templates select=".//agavi:route" mode="binding" />
+			<xsl:apply-templates select=".//agavi_routing:route" mode="binding" />
 		</binding>
 		<service name="DummyService">
 			<port name="DummyPort" binding="tns:DummyBinding">
 				<soap:address location="DummySoapLocation" />
 			</port>
 		</service>
-		<xsl:apply-templates select=".//agavi:route" mode="messages" />
+		<xsl:apply-templates select=".//agavi_routing:route" mode="messages" />
 	</xsl:template>
-	<xsl:template match="agavi:route" mode="port">
+	<xsl:template match="agavi_routing:route" mode="port">
 		<xsl:variable name="name" select="translate(@pattern, '^$', '')" />
 		<wsdl:operation name="{$name}">
 			<xsl:apply-templates select="wsdl:input | wsdl:output | wsdl:fault" mode="portType_operation">
@@ -71,7 +73,7 @@ xmlns="http://schemas.xmlsoap.org/wsdl/"
 			<xsl:copy-of select="@name" />
 		</wsdl:fault>
 	</xsl:template>
-	<xsl:template match="agavi:route" mode="messages">
+	<xsl:template match="agavi_routing:route" mode="messages">
 		<xsl:variable name="name" select="translate(@pattern, '^$', '')" />
 		<xsl:apply-templates select="wsdl:input | wsdl:output | wsdl:fault" mode="message">
 			<xsl:with-param name="name" select="$name" />
@@ -109,7 +111,7 @@ xmlns="http://schemas.xmlsoap.org/wsdl/"
 			<xsl:copy-of select="wsdl:part | wsdl:message/wsdl:part | soap:fault[not(@message)]/wsdl:part | soap:fault[not(@message)]/wsdl:message/wsdl:part" />
 		</wsdl:message>
 	</xsl:template>
-	<xsl:template match="agavi:route" mode="binding">
+	<xsl:template match="agavi_routing:route" mode="binding">
 		<xsl:variable name="name" select="translate(@pattern, '^$', '')" />
 		<wsdl:operation name="{$name}">
 			<soap:operation soapAction="{$targetNamespace}#{$name}" />
@@ -162,7 +164,7 @@ xmlns="http://schemas.xmlsoap.org/wsdl/"
 			</soap:fault>
 		</xsl:copy>
 	</xsl:template>
-	<xsl:template match="/agavi:configurations/wsdl:types | /agavi:configurations/wsdl:message">
+	<xsl:template match="/agavi_envelope:configurations/wsdl:types | /agavi_envelope:configurations/agavi_envelope:configuration[@agavi_annotations:matched]/wsdl:types | /agavi_envelope:configurations/wsdl:message | /agavi_envelope:configurations/agavi_envelope:configuration[@agavi_annotations:matched]/wsdl:message">
 		<xsl:copy>
 			<xsl:copy-of select="node() | @*" />
 		</xsl:copy>

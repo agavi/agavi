@@ -40,6 +40,8 @@
  *                    datetime: The value is a date specifier or null
  *                    translation_domain: The value will be translated in the 
  *                              domain given in the 'translation_domain' key.
+ *                    unix:     Always null/empty
+ *                    unix_milliseconds: Always null/empty
  *                   
  *     'locale'     The optional locale which will be used for this format.
  *     'translation_domain' Only applicable when the type is translation_domain
@@ -161,17 +163,29 @@ class AgaviDateTimeValidator extends AgaviValidator
 				} elseif($type == 'translation_domain') {
 					$td = $item['translation_domain'];
 					$formatString = $tm->_($item['format'], $td, $itemLocale);
+				} elseif($type == 'unix') {
+					$cal = $tm->createCalendar($itemLocale);
+					$cal->setUnixTimestamp($param);
+					// no format to match, so always true
+					$matchedFormat = true;
+				} elseif($type == 'unix_milliseconds') {
+					$cal = $tm->createCalendar($itemLocale);
+					$cal->setTime($param);
+					// no format to match, so always true
+					$matchedFormat = true;
 				}
 
-				try {
-					$format = new AgaviDateFormat($formatString);
-					$cal = $format->parse($param, $itemLocale, $check);
+				if(!$cal) {
+					try {
+						$format = new AgaviDateFormat($formatString);
+						$cal = $format->parse($param, $itemLocale, $check);
 
-					// no exception got thrown so the parsing was successful
-					$matchedFormat = true;
-					break;
-				} catch(Exception $e) {
-					// nop
+						// no exception got thrown so the parsing was successful
+						$matchedFormat = true;
+						break;
+					} catch(Exception $e) {
+						// nop
+					}
 				}
 			}
 

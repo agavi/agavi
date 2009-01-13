@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" xmlns="http://agavi.org/agavi/config/parts/translation/1.0">
+	<ae:configuration>
+		
+		<available_locales default_locale="en_US">
+			<!-- German, Germany -->
+			<available_locale identifier="de_DE">
+				<ae:parameter name="description">Deutsch</ae:parameter>
+			</available_locale>
+			<!-- English, United States -->
+			<available_locale identifier="en_US">
+				<ae:parameter name="description">English</ae:parameter>
+			</available_locale>
+			<!-- Farsi, Iran -->
+			<available_locale identifier="fa_IR">
+				<ae:parameter name="description">فارسی</ae:parameter>
+			</available_locale>
+			<!-- Finnish, Finland -->
+			<available_locale identifier="fi_FI">
+				<ae:parameter name="description">Suomi</ae:parameter>
+			</available_locale>
+			<!-- Dutch, Belgium -->
+			<available_locale identifier="nl_BE">
+				<ae:parameter name="description">Nederlands (België)</ae:parameter>
+			</available_locale>
+			<!-- Dutch, The Netherlands -->
+			<available_locale identifier="nl_NL">
+				<ae:parameter name="description">Nederlands</ae:parameter>
+			</available_locale>
+			<!-- Polish, Poland -->
+			<available_locale identifier="pl_PL">
+				<ae:parameter name="description">Polski</ae:parameter>
+			</available_locale>
+			<!-- Chinese Simplified, China (alias for zh_Hans_CN, Simplified Han) -->
+			<available_locale identifier="zh_CN">
+				<ae:parameter name="description">简体中文</ae:parameter>
+			</available_locale>
+			<!-- Chinese Traditional, Taiwan (alias for zh_Hant_TW, Traditional Han) -->
+			<available_locale identifier="zh_TW">
+				<ae:parameter name="description">繁體中文</ae:parameter>
+			</available_locale>
+		</available_locales>
+		
+		<translators default_domain="default">
+			<translator domain="default">
+				
+				<translator domain="errors">
+					<message_translator class="AgaviSimpleTranslator">
+						<ae:parameter name="Login">
+							<ae:parameter name="de">
+								<ae:parameter name="Wrong Password">Falsches Passwort</ae:parameter>
+								<ae:parameter name="Wrong Username">Ungültiger Benutzername</ae:parameter>
+								<ae:parameter name="Please supply a password.">Bitte geben Sie ein Kennwort ein.</ae:parameter>
+								<ae:parameter name="The username you supplied is fewer than 5 characters long.">Der angegebene Benutzername ist weniger als fünf Zeichen lang.</ae:parameter>
+							</ae:parameter>
+						</ae:parameter>
+					</message_translator>
+				</translator>
+				
+				<message_translator class="AgaviGettextTranslator">
+					<ae:parameter name="text_domains">
+						<ae:parameter name="menu">%core.app_dir%/data/i18n</ae:parameter>
+						<ae:parameter name="layout">%core.app_dir%/data/i18n</ae:parameter>
+						<ae:parameter name="Login">%core.app_dir%/data/i18n</ae:parameter>
+						<ae:parameter name="SearchEngineSpam">%core.app_dir%/data/i18n</ae:parameter>
+						<ae:parameter name="ErrorActions">%core.app_dir%/data/i18n</ae:parameter>
+					</ae:parameter>
+				</message_translator>
+				
+				<date_formatter>
+					<ae:parameter name="type">date</ae:parameter>
+					<ae:parameter name="format">full</ae:parameter>
+				</date_formatter>
+				
+			</translator>
+		</translators>
+		
+	</ae:configuration>
+	
+</ae:configurations>

@@ -87,14 +87,19 @@ class ContextTest extends AgaviTestCase
 	{
 		$ctx = AgaviContext::getInstance('test');
 		$this->assertType('Test_TestModel', $ctx->getModel('Test', 'Test'));
-		$this->assertType('Test2Model', $ctx->getModel('Test2', 'Test'));
 		$this->assertType('Test_SingletonTestModel', $ctx->getModel('SingletonTest', 'Test'));
-		$this->assertType('SingletonTest2Model', $ctx->getModel('SingletonTest2', 'Test'));
 		$firstSingleton = $ctx->getModel('SingletonTest', 'Test');
 		$firstSingleton->setFoo('bar');
 		$secondSingleton = $ctx->getModel('SingletonTest', 'Test');
 		$this->assertReference($firstSingleton, $secondSingleton);
 		$this->assertEquals($firstSingleton->getFoo(), $secondSingleton->getFoo());
+	}
+	
+	public function testGetDotStyleModel()
+	{
+		$ctx = AgaviContext::getInstance('test');
+		$this->assertType('Foo_Bar_BazModel', $ctx->getModel('Foo.Bar.Baz'));
+		$this->assertType('Test_Foo_Bar_BazModel', $ctx->getModel('Foo.Bar.Baz', 'Test'));
 	}
 
 	public function testGetFactoryInfo()

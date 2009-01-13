@@ -12,7 +12,10 @@
   <xs:complexType name="configuration">
     <xs:complexContent>
       <xs:extension base="base_configuration_with_context">
-        <xs:group ref="routes" />
+        <xs:sequence>
+          <xs:any namespace="##other" minOccurs="0" maxOccurs="unbounded" processContents="lax" />
+          <xs:group ref="routes" />
+        </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>

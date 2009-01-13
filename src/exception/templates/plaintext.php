@@ -34,7 +34,9 @@ if(!ini_get('display_errors')) {
 	throw $e;
 }
 
-header('Content-Type: text/plain');
+if(!headers_sent()) {
+	header('Content-Type: text/plain');	
+}
 
 // fix stack trace in case it doesn't contain the exception origin as the first entry
 $fixedTrace = $e->getTrace();

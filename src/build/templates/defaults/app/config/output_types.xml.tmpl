@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurations xmlns="http://agavi.org/agavi/1.0/config">
+	
+	<configuration>
+		
+		<output_types default="html">
+			
+			<output_type name="html">
+				
+				<renderers default="php">
+					<renderer name="php" class="AgaviPhpRenderer">
+						<parameter name="assigns">
+							<parameter name="routing">ro</parameter>
+							<parameter name="request">rq</parameter>
+							<parameter name="controller">ct</parameter>
+							<parameter name="user">us</parameter>
+							<parameter name="translation_manager">tm</parameter>
+							<parameter name="request_data">rd</parameter>
+						</parameter>
+						<!-- this changes the name of the variable with all template attributes from the default $template to $t -->
+						<parameter name="var_name">t</parameter>
+					</renderer>
+				</renderers>
+				
+				<layouts default="standard">
+					<!-- standard layout with a content and a decorator layer -->
+					<layout name="standard">
+						<!-- content layer without further params. this means the standard template is used, i.e. the one with the same name as the current view -->
+						<layer name="content" />
+						<!-- decorator layer with the HTML skeleton, navigation etc; set to a specific template here -->
+						<layer name="decorator">
+							<parameter name="directory">%core.template_dir%</parameter>
+							<parameter name="template">Master</parameter>
+						</layer>
+					</layout>
+					
+					<!-- another example layout that has an intermediate wrapper layer in between content and decorator -->
+					<!-- it also shows how to use slots etc -->
+					<layout name="wrapped">
+						<!-- content layer without further params. this means the standard template is used, i.e. the one with the same name as the current view -->
+						<layer name="content" />
+						<layer name="wrapper">
+							<!-- use CurrentView.wrapper.php instead of CurrentView.php as the template for this one -->
+							<parameter name="extension">.wrapper.php</parameter>
+						</layer>
+						<!-- decorator layer with the HTML skeleton, navigation etc; set to a specific template here -->
+						<layer name="decorator">
+							<parameter name="directory">%core.template_dir%</parameter>
+							<parameter name="template">Master</parameter>
+							<!-- an example for a slot -->
+							<slot name="nav" module="Default" action="Widgets.Navigation" />
+						</layer>
+					</layout>
+					
+					<!-- special layout for slots that only has a content layer to prevent the obvious infinite loop that would otherwise occur if the decorator layer has slots assigned in the layout; this is loaded automatically by ProjectBaseView::setupHtml() in case the current container is run as a slot -->
+					<layout name="simple">
+						<layer name="content" />
+					</layout>
+				</layouts>
+				
+				<parameter name="http_headers">
+					<parameter name="Content-Type">text/html; charset=UTF-8</parameter>
+				</parameter>
+				
+			</output_type>
+			
+		</output_types>
+		
+	</configuration>
+	
+	<configuration environment="production.*">
+		
+		<output_types default="html">
+			
+			<!-- use a different exception template in production envs -->
+			<!-- others are defined in settings.xml -->
+			<output_type name="html" exception_template="%core.template_dir%/exceptions/web-html.php" />
+			
+		</output_types>
+		
+	</configuration>
+	
+</configurations>

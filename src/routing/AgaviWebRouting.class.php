@@ -93,13 +93,7 @@ class AgaviWebRouting extends AgaviRouting
 		$rd = $rq->getRequestData();
 
 		// 'scheme://authority' is necessary so parse_url doesn't stumble over '://' in the request URI
-		$ru = parse_url('scheme://authority' . $rq->getRequestUri());
-		if(!isset($ru['path'])) {
-			$ru['path'] = '';
-		}
-		if(!isset($ru['query'])) {
-			$ru['query'] = '';
-		}
+		$ru = array_merge(array('path' => '', 'query' => ''), parse_url('scheme://authority' . $rq->getRequestUri()));
 
 		if(isset($_SERVER['QUERY_STRING'])) {
 			$qs = $_SERVER['QUERY_STRING'];
@@ -110,7 +104,7 @@ class AgaviWebRouting extends AgaviRouting
 		// when rewriting, apache strips one (not all) trailing ampersand from the end of QUERY_STRING... normalize:
 		$rewritten = (preg_replace('/&+$/D', '', $qs) !== preg_replace('/&+$/D', '', $ru['query']));
 
-		if(AgaviConfig::get("core.use_routing", false) && $rewritten) {
+		if($this->isEnabled() && $rewritten) {
 			// strip the one trailing ampersand, see above
 			$queryWasEmptied = false;
 			if($ru['query'] !== '' && isset($_SERVER['SERVER_SOFTWARE']) && strpos($_SERVER['SERVER_SOFTWARE'], 'Apache') !== false) {
@@ -183,9 +177,9 @@ class AgaviWebRouting extends AgaviRouting
 
 			$appendFrom = 0;
 			$this->prefix = AgaviToolkit::stringBase($sn, $path, $appendFrom);
-			$this->prefix .= substr($sn, $appendFrom + 1);
+			$this->prefix .= substr($sn, $appendFrom);
 
-			$this->input = substr($path, $appendFrom + 1);
+			$this->input = substr($path, $appendFrom);
 			if(!isset($_SERVER['SERVER_SOFTWARE']) || strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') === false || isset($_SERVER['HTTP_X_REWRITE_URL']) || !isset($_SERVER['GATEWAY_INTERFACE']) || strpos($_SERVER['GATEWAY_INTERFACE'], 'CGI') === false) {
 				// don't do that for IIS-CGI, it's already rawurldecode()d there
 				$this->input = rawurldecode($this->input);
@@ -284,7 +278,7 @@ class AgaviWebRouting extends AgaviRouting
 			}
 
 			if($route === null) {
-				if(AgaviConfig::get('core.use_routing')) {
+				if($this->isEnabled()) {
 					$routes = array_reverse($req->getAttribute('matched_routes', 'org.agavi.routing'));
 					$route = join('+', $routes);
 					$routeMatches = array();
@@ -300,7 +294,7 @@ class AgaviWebRouting extends AgaviRouting
 			$routes = $this->getAffectedRoutes($route);
 
 			if(count($routes)) {
-				if(AgaviConfig::get('core.use_routing')) {
+				if($this->isEnabled()) {
 					// the route exists and routing is enabled, the parent method handles it
 
 					$append = '';

@@ -30,53 +30,54 @@
  *
  * @version    $Id$
  */
-class AgaviCompileConfigHandler extends AgaviConfigHandler
+class AgaviCompileConfigHandler extends AgaviXmlConfigHandler
 {
+	const XML_NAMESPACE = 'http://agavi.org/agavi/config/parts/compile/1.0';
+	
 	/**
 	 * Execute this configuration handler.
 	 *
-	 * @param      string An absolute filesystem path to a configuration file.
-	 * @param      string An optional context in which we are currently running.
+	 * @param      AgaviXmlConfigDomDocument The document to parse.
 	 *
 	 * @return     string Data to be written to a cache file.
 	 *
-	 * @throws     <b>AgaviUnreadableException</b> If a requested configuration
-	 *                                             file does not exist or is not
-	 *                                             readable.
 	 * @throws     <b>AgaviParseException</b> If a requested configuration file is
 	 *                                        improperly formatted.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     David Zülke <david.zuelke@bitextender.com>
 	 * @since      0.9.0
 	 */
-	public function execute($config, $context = null)
+	public function execute(AgaviXmlConfigDomDocument $document)
 	{
-		// parse the config file
-		$configurations = $this->orderConfigurations(AgaviConfigCache::parseConfig($config, false, $this->getValidationFile(), $this->parser)->configurations, AgaviConfig::get('core.environment'));
-
+		// set up our default namespace
+		$document->setDefaultNamespace(self::XML_NAMESPACE, 'compile');
+		
+		$config = $document->documentURI;
+		
 		$data = array();
-
+		
 		// let's do our fancy work
-		foreach($configurations as $configuration) {
-			if(!isset($configuration->compiles)) {
+		foreach($document->getConfigurationElements() as $configuration) {
+			if(!$configuration->has('compiles')) {
 				continue;
 			}
 			
-			foreach($configuration->compiles as $compileFile) {
+			foreach($configuration->get('compiles') as $compileFile) {
 				$file = trim($compileFile->getValue());
-
+				
 				$file = AgaviToolkit::expandDirectives($file);
 				$file = self::replacePath($file);
 				$file = realpath($file);
-
+				
 				if(!is_readable($file)) {
 					// file doesn't exist
 					$error = 'Configuration file "%s" specifies nonexistent ' . 'or unreadable file "%s"';
 					$error = sprintf($error, $config, $compileFile->getValue());
 					throw new AgaviParseException($error);
 				}
-
+				
 				if(AgaviConfig::get('core.debug', false)) {
 					// debug mode, just require() the files, makes for nicer stack traces
 					$contents = 'require(' . var_export($file, true) . ');';
@@ -84,13 +85,13 @@ class AgaviCompileConfigHandler extends AgaviConfigHandler
 					// no debug mode, so make things fast
 					$contents = $this->formatFile(file_get_contents($file));
 				}
-
+				
 				// append file data
 				$data[$file] = $contents;
 			}
 		}
-
-		return $this->generate($data);
+		
+		return $this->generate($data, $config);
 	}
 
 	/**

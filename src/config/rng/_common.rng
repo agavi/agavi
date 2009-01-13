@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+	xmlns:envelope_1_0="http://agavi.org/agavi/config/global/envelope/1.0"
+	xmlns:annotations_1_0="http://agavi.org/agavi/config/global/annotations/1.0"
+	ns="http://agavi.org/agavi/config/global/envelope/1.0"
+	datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+	
+	<!-- Structure -->
+	
+	<start>
+		<element name="configurations">
+			<ref name="content-configurations" />
+		</element>
+	</start>
+	
+	<!-- Configurations -->
+	
+	<define name="content-configurations">
+		<interleave>
+			<optional>
+				<attribute name="parent">
+					<data type="string" />
+				</attribute>
+			</optional>
+			<zeroOrMore>
+				<element name="sandbox">
+					<ref name="content-sandbox" />
+				</element>
+			</zeroOrMore>
+			<zeroOrMore>
+				<element name="configuration">
+					<ref name="content-configuration" />
+				</element>
+			</zeroOrMore>
+			<ref name="content-externals" />
+		</interleave>
+	</define>
+	
+	<define name="content-sandbox">
+		<ref name="content-externals" />
+	</define>
+	
+	<define name="content-configuration">
+		<!-- XXX: Here, or no? -->
+		<optional>
+			<attribute name="annotations_1_0:matched">
+				<ref name="data-matched" />
+			</attribute>
+		</optional>
+		<optional>
+			<attribute name="environment">
+				<ref name="data-list-environment" />
+			</attribute>
+		</optional>
+		<ref name="content-external-attributes" />
+	</define>
+	
+	<define name="_common-content-parameter">
+		<optional>
+			<attribute name="name">
+				<data type="string" />
+			</attribute>
+		</optional>
+		<choice>
+			<zeroOrMore>
+				<element name="parameter">
+					<ref name="_common-content-parameter" />
+				</element>
+			</zeroOrMore>
+			<optional>
+				<element name="parameters">
+					<ref name="_common-content-parameters" />
+				</element>
+			</optional>
+			<text />
+		</choice>
+	</define>
+	
+	<define name="_common-content-parameters">
+		<zeroOrMore>
+			<element name="parameter">
+				<ref name="_common-content-parameter" />
+			</element>
+		</zeroOrMore>
+	</define>
+	
+	<define name="content-parameters">
+		<choice>
+			<zeroOrMore>
+				<element name="parameter">
+					<ref name="_common-content-parameter" />
+				</element>
+			</zeroOrMore>
+			<optional>
+				<element name="parameters">
+					<ref name="_common-content-parameters" />
+				</element>
+			</optional>
+		</choice>
+	</define>
+	
+	<!-- Data -->
+	
+	<define name="data-list-environment">
+		<list>
+			<oneOrMore>
+				<data type="string" />
+			</oneOrMore>
+		</list>
+	</define>
+	
+	<define name="data-list-context">
+		<list>
+			<oneOrMore>
+				<data type="string" />
+			</oneOrMore>
+		</list>
+	</define>
+	
+	<define name="data-non-empty-string">
+		<data type="string">
+			<param name="minLength">1</param>
+		</data>
+	</define>
+	
+	<!-- TODO: rename to 'data-php-identifier'? we might have 'data-locale-identifier' and whatnot -->
+	<define name="data-identifier">
+		<data type="string">
+			<param name="pattern">[_A-Za-z\p{IsLatin-1Supplement}][_A-Za-z0-9\p{IsLatin-1Supplement}]+</param>
+		</data>
+	</define>
+	
+	<define name="data-matched">
+		<data type="boolean" />
+	</define>
+	
+	<define name="data-boolean">
+		<data type="string">
+			<param name="pattern">([tT][rR][uU][eE]|[fF][aA][lL][sS][eE]|[yY][eE][sS]|[nN][oO]|[oO][nN]|[oO][fF][fF])</param>
+		</data>
+	</define>
+	
+	<!-- External definitions -->
+	
+	<define name="content-anything">
+		<zeroOrMore>
+			<choice>
+				<element>
+					<anyName />
+					<ref name="content-anything" />
+				</element>
+				<attribute>
+					<anyName />
+				</attribute>
+				<text />
+			</choice>
+		</zeroOrMore>
+	</define>
+	
+	<define name="content-external-elements">
+		<zeroOrMore>
+			<element>
+				<anyName>
+					<except>
+						<nsName />
+						<nsName ns="" />
+						<nsName ns="http://agavi.org/agavi/config/global/envelope/1.0" />
+						<nsName ns="http://agavi.org/agavi/config/global/annotations/1.0" />
+					</except>
+				</anyName>
+				<ref name="content-anything" />
+			</element>
+		</zeroOrMore>
+	</define>
+	
+	<define name="content-external-attributes">
+		<zeroOrMore>
+			<attribute>
+				<anyName>
+					<except>
+						<nsName />
+						<nsName ns="" />
+						<nsName ns="http://agavi.org/agavi/config/global/envelope/1.0" />
+						<nsName ns="http://agavi.org/agavi/config/global/annotations/1.0" />
+					</except>
+				</anyName>
+			</attribute>
+		</zeroOrMore>
+	</define>
+	
+	<define name="content-externals">
+		<ref name="content-external-elements" />
+		<ref name="content-external-attributes" />
+	</define>
+	
+</grammar>

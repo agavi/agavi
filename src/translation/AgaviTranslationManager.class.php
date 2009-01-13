@@ -589,16 +589,6 @@ class AgaviTranslationManager
 	}
 
 	/**
-	 * @see        AgaviTranslationManager::getLocaleIdentifier
-	 *
-	 * @deprecated Superseded by AgaviTranslationManager::getLocaleIdentifier()
-	 */
-	public function getClosestMatchingLocale($identifier)
-	{
-		return $this->getLocaleIdentifier($identifier);
-	}
-	
-	/**
 	 * Returns the identifier of the available locale which matches the given 
 	 * locale identifier most.
 	 *
@@ -657,16 +647,6 @@ class AgaviTranslationManager
 		return $availableLocale['identifier'];
 	}
 
-	/**
-	 * @see        AgaviTranslationManager::getLocale
-	 *
-	 * @deprecated Superseded by AgaviTranslationManager::getLocale()
-	 */
-	public function getLocaleFromIdentifier($identifier)
-	{
-		return $this->getLocale($identifier);
-	}
-	
 	/**
 	 * Returns a new AgaviLocale object from the given identifier.
 	 *

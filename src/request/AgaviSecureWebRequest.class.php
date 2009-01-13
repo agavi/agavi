@@ -26,6 +26,8 @@
  *
  * @since      0.10.0.0
  *
+ * @deprecated To be removed in Agavi 1.1
+ *
  * @version    $Id$
  */
 class AgaviSecureWebRequest extends AgaviWebRequest {

@@ -48,8 +48,6 @@ class AgaviSecurityFilter extends AgaviFilter implements AgaviIActionFilter, Aga
 	{
 		// get the cool stuff
 		$context    = $this->getContext();
-		$controller = $context->getController();
-		$request    = $context->getRequest();
 		$user       = $context->getUser();
 
 		// get the current action instance
@@ -58,6 +56,11 @@ class AgaviSecurityFilter extends AgaviFilter implements AgaviIActionFilter, Aga
 		// get the credential required for this action
 		$credential = $actionInstance->getCredentials();
 
+		if(!$actionInstance->isSecure()) {
+			// the action instance does not require authentication, so we can continue in the chain and then bail out early
+			return $filterChain->execute($container);
+		}
+
 		// credentials can be anything you wish; a string, array, object, etc.
 		// as long as you add the same exact data to the user as a credential,
 		// it will use it and authorize the user as having the credential
@@ -65,28 +68,17 @@ class AgaviSecurityFilter extends AgaviFilter implements AgaviIActionFilter, Aga
 		// NOTE: the nice thing about the Action class is that getCredential()
 		//       is vague enough to describe any level of security and can be
 		//       used to retrieve such data and should never have to be altered
-		if($user->isAuthenticated()) {
-			// the user is authenticated
-			
-			if($credential === null || $user->hasCredentials($credential)) {
-				// the user has access, continue
-				$filterChain->execute($container);
-			} else {
-				// the user doesn't have access, set info regarding next action and leave
-				$request->setAttributes(array(
-					'requested_module' => $container->getModuleName(),
-					'requested_action' => $container->getActionName()
-				), 'org.agavi.controller.forwards.secure');
-				$container->setNext($container->createExecutionContainer(AgaviConfig::get('actions.secure_module'), AgaviConfig::get('actions.secure_action')));
-			}
-
+		if($user->isAuthenticated() && ($credential === null || $user->hasCredentials($credential))) {
+			// the user has access, continue
+			$filterChain->execute($container);
 		} else {
-			// the user is not authenticated
-			$request->setAttributes(array(
-				'requested_module' => $container->getModuleName(),
-				'requested_action' => $container->getActionName()
-			), 'org.agavi.controller.forwards.login');
-			$container->setNext($container->createExecutionContainer(AgaviConfig::get('actions.login_module'), AgaviConfig::get('actions.login_action')));
+			if($user->isAuthenticated()) {
+				// the user doesn't have access
+				$container->setNext($container->createSystemActionForwardContainer('secure'));
+			} else {
+				// the user is not authenticated
+				$container->setNext($container->createSystemActionForwardContainer('login'));
+			}
 		}
 	}
 }

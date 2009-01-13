@@ -55,7 +55,7 @@ final class Agavi
 						return;
 					}
 				}
-				include(AgaviConfigCache::checkConfig($cfg));
+				self::$autoloads = include(AgaviConfigCache::checkConfig($cfg));
 				// if(class_exists($class, false)) {
 				// 	return;
 				// }
@@ -161,7 +161,7 @@ final class Agavi
 			AgaviConfigCache::load($compile);
 
 		} catch(Exception $e) {
-			AgaviException::printStackTrace($e);
+			AgaviException::render($e);
 		}
 	}
 }

@@ -42,7 +42,7 @@ class AgaviValidationError
 	/**
 	 * @var        array The fields this error affects.
 	 */
-	protected $fields = array();
+	protected $arguments = array();
 
 	/**
 	 * @var        AgaviValidationIncident The incident in which this error 
@@ -55,16 +55,18 @@ class AgaviValidationError
 	 *
 	 * @param      string The message of this error.
 	 * @param      string The index of the message.
-	 * @param      array The fields affected by this error.
+	 * @param      array The arguments affected by this error.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function __construct($message, $messageIdx, array $fields)
+	public function __construct($message, $messageIdx, array $arguments)
 	{
 		$this->message = $message;
 		$this->messageIndex = $messageIdx;
-		$this->fields = $fields;
+		foreach($arguments as $argument) {
+			$this->arguments[$argument->getHash()] = $argument;
+		}
 	}
 
 	/**
@@ -146,6 +148,34 @@ class AgaviValidationError
 	}
 
 	/**
+	 * Retrieves the arguments which caused this error.
+	 *
+	 * @return     array An array of AgaviValidationArgument.
+	 *
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function getArguments()
+	{
+		return $this->arguments;
+	}
+
+	/**
+	 * Checks if this error was caused for the given argument
+	 *
+	 * @param      AgaviValidationArgument The argument.
+	 *
+	 * @return     bool The result.
+	 *
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function hasArgument(AgaviValidationArgument $argument)
+	{
+		return isset($this->arguments[$argument->getHash()]);
+	}
+	
+	/**
 	 * Retrieves the fields which caused this error.
 	 *
 	 * @return     array An array of field names.
@@ -155,7 +185,11 @@ class AgaviValidationError
 	 */
 	public function getFields()
 	{
-		return $this->fields;
+		$fields = array();
+		foreach($this->arguments as $argument) {
+			$fields[] = $argument->getName();
+		}
+		return $fields;
 	}
 
 	/**
@@ -170,7 +204,7 @@ class AgaviValidationError
 	 */
 	public function hasField($fieldname)
 	{
-		return in_array($fieldname, $this->fields);
+		return $this->hasArgument(new AgaviValidationArgument($fieldname));
 	}
 
 }

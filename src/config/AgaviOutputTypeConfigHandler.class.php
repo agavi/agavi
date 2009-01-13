@@ -27,13 +27,14 @@
  *
  * @version    $Id$
  */
-class AgaviOutputTypeConfigHandler extends AgaviConfigHandler
+class AgaviOutputTypeConfigHandler extends AgaviXmlConfigHandler
 {
+	const XML_NAMESPACE = 'http://agavi.org/agavi/config/parts/output_types/1.0';
+	
 	/**
 	 * Execute this configuration handler.
 	 *
-	 * @param      string An absolute filesystem path to a configuration file.
-	 * @param      string An optional context in which we are currently running.
+	 * @param      AgaviXmlConfigDomDocument The document to parse.
 	 *
 	 * @return     string Data to be written to a cache file.
 	 *
@@ -46,20 +47,23 @@ class AgaviOutputTypeConfigHandler extends AgaviConfigHandler
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function execute($config, $context = null)
+	public function execute(AgaviXmlConfigDomDocument $document)
 	{
-		// parse the config file
-		$configurations = $this->orderConfigurations(AgaviConfigCache::parseConfig($config, false, $this->getValidationFile(), $this->parser)->configurations, AgaviConfig::get('core.environment'), $context);
-
+		// set up our default namespace
+		$document->setDefaultNamespace(self::XML_NAMESPACE, 'output_types');
+		
+		// remember the config file path
+		$config = $document->documentURI;
+		
 		$data = array();
 		$defaultOt = null;
-		foreach($configurations as $cfg) {
-			if(!isset($cfg->output_types)) {
+		foreach($document->getConfigurationElements() as $cfg) {
+			if(!$cfg->has('output_types')) {
 				continue;
 			}
 			
 			$otnames = array();
-			foreach($cfg->output_types as $outputType) {
+			foreach($cfg->get('output_types') as $outputType) {
 				$otname = $outputType->getAttribute('name');
 				if(in_array($otname, $otnames)) {
 					throw new AgaviConfigurationException('Duplicate Output Type "' . $otname . '" in ' . $config);
@@ -67,50 +71,51 @@ class AgaviOutputTypeConfigHandler extends AgaviConfigHandler
 				$otnames[] = $otname;
 			}
 
-			if(!$cfg->output_types->hasAttribute('default')) {
+			if(!$cfg->getChild('output_types')->hasAttribute('default')) {
 				throw new AgaviConfigurationException('No default Output Type specified in ' . $config);
 			}
 
-			if(!in_array($cfg->output_types->getAttribute('default'), $otnames)) {
-				throw new AgaviConfigurationException('Non-existent Output Type "' . $cfg->output_types->getAttribute('default') . '" specified as default in ' . $config);
+			if(!in_array($cfg->getChild('output_types')->getAttribute('default'), $otnames)) {
+				throw new AgaviConfigurationException('Non-existent Output Type "' . $cfg->getChild('output_types')->getAttribute('default') . '" specified as default in ' . $config);
 			}
 
-			foreach($cfg->output_types as $outputType) {
+			foreach($cfg->get('output_types') as $outputType) {
 				$outputTypeName = $outputType->getAttribute('name');
 				$data[$outputTypeName] = isset($data[$outputTypeName]) ? $data[$outputTypeName] : array('parameters' => array(), 'default_renderer' => null, 'renderers' => array(), 'layouts' => array(), 'default_layout' => null, 'exception_template' => null);
-				if(isset($outputType->renderers)) {
-					foreach($outputType->renderers as $renderer) {
+				if($outputType->has('renderers')) {
+					foreach($outputType->get('renderers') as $renderer) {
 						$rendererName = $renderer->getAttribute('name');
 						$data[$outputTypeName]['renderers'][$rendererName] = array(
 							'class' => $renderer->getAttribute('class'),
 							'instance' => null,
-							'parameters' => $this->getItemParameters($renderer, array()),
+							'parameters' => $renderer->getAgaviParameters(array()),
 						);
 					}
-					$data[$outputTypeName]['default_renderer'] = $outputType->renderers->getAttribute('default');
+					$data[$outputTypeName]['default_renderer'] = $outputType->getChild('renderers')->getAttribute('default');
 				}
-				if(isset($outputType->layouts)) {
-					foreach($outputType->layouts as $layout) {
+				if($outputType->has('layouts')) {
+					foreach($outputType->get('layouts') as $layout) {
 						$layers = array();
 						
-						if(isset($layout->layers)) {
-							foreach($layout->layers as $layer) {
+						if($layout->has('layers')) {
+							foreach($layout->get('layers') as $layer) {
 								$slots = array();
 								
-								if(isset($layer->slots)) {
-									foreach($layer->slots as $slot) {
+								if($layer->has('slots')) {
+									foreach($layer->get('slots') as $slot) {
 										$slots[$slot->getAttribute('name')] = array(
 											'action' => $slot->getAttribute('action'),
 											'module' => $slot->getAttribute('module'),
 											'output_type' => $slot->getAttribute('output_type'),
-											'parameters' => $this->getItemParameters($slot, array()),
+											'request_method' => $slot->getAttribute('method'),
+											'parameters' => $slot->getAgaviParameters(array()),
 										);
 									}
 								}
 								
 								$layers[$layer->getAttribute('name')] = array(
 									'class' => $layer->getAttribute('class', $this->getParameter('default_layer_class', 'AgaviFileTemplateLayer')),
-									'parameters' => $this->getItemParameters($layer, array()),
+									'parameters' => $layer->getAgaviParameters(array()),
 									'renderer' => $layer->getAttribute('renderer'),
 									'slots' => $slots,
 								);
@@ -119,10 +124,10 @@ class AgaviOutputTypeConfigHandler extends AgaviConfigHandler
 						
 						$data[$outputTypeName]['layouts'][$layout->getAttribute('name')] = array(
 							'layers' => $layers,
-							'parameters' => $this->getItemParameters($layout, array()),
+							'parameters' => $layout->getAgaviParameters(array()),
 						);
 					}
-					$data[$outputTypeName]['default_layout'] = $outputType->layouts->getAttribute('default');
+					$data[$outputTypeName]['default_layout'] = $outputType->getChild('layouts')->getAttribute('default');
 				}
 				if($outputType->hasAttribute('exception_template')) {
 					$data[$outputTypeName]['exception_template'] = AgaviToolkit::expandDirectives($outputType->getAttribute('exception_template'));
@@ -130,9 +135,9 @@ class AgaviOutputTypeConfigHandler extends AgaviConfigHandler
 						throw new AgaviConfigurationException('Exception template "' . $data[$outputTypeName]['exception_template'] . '" does not exist or is unreadable');
 					}
 				}
-				$data[$outputTypeName]['parameters'] = $this->getItemParameters($outputType, $data[$outputTypeName]['parameters']);
+				$data[$outputTypeName]['parameters'] = $outputType->getAgaviParameters($data[$outputTypeName]['parameters']);
 			}
-			$defaultOt = $cfg->output_types->getAttribute('default');
+			$defaultOt = $cfg->getChild('output_types')->getAttribute('default');
 		}
 
 		$code = array();
@@ -152,7 +157,7 @@ class AgaviOutputTypeConfigHandler extends AgaviConfigHandler
 		}
 		$code[] = sprintf('$this->defaultOutputType = %s;', var_export($defaultOt, true));
 		
-		return $this->generate($code);
+		return $this->generate($code, $config);
 	}
 }
 
