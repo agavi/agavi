@@ -369,11 +369,11 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 			if($isCacheable) {
 				// this is not wrapped in the try/catch block above as it might throw an exception itself
 				$isActionCached = $this->checkCache(array_merge($groups, array(self::ACTION_CACHE_ID)), $config['lifetime']);
-			}
 			
-			if(!$isActionCached) {
-				// cacheable, but action is not cached. notify our callback so it can prevent the stampede that follows
-				$this->startedCacheCreationCallback(self::CACHE_CALLBACK_ACTION_NOT_CACHED, $actionGroups, $config);
+				if(!$isActionCached) {
+					// cacheable, but action is not cached. notify our callback so it can prevent the stampede that follows
+					$this->startedCacheCreationCallback(self::CACHE_CALLBACK_ACTION_NOT_CACHED, $actionGroups, $config);
+				}
 			}
 		} else {
 			// $lm->log('Action is not cacheable!');
