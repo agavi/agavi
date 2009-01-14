@@ -845,8 +845,8 @@
 		</if>
 
 		<agavi.execute-target name="action-locate" />
-		<agavi.write-configuration file="${project.directory}/${project.directory.app.config}/settings.xml" path="/agavi:configurations/agavi:configuration/agavi:system_actions/agavi:system_action[@name='${system-action.name}']/agavi:module" value="${module.name}" />
-		<agavi.write-configuration file="${project.directory}/${project.directory.app.config}/settings.xml" path="/agavi:configurations/agavi:configuration/agavi:system_actions/agavi:system_action[@name='${system-action.name}']/agavi:action" value="${action.name}" />
+		<agavi.write-configuration file="${project.directory}/${project.directory.app.config}/settings.xml" path="/envelope:configurations/envelope:configuration/document:system_actions/document:system_action[@name='${system-action.name}']/document:module" value="${module.name}" />
+		<agavi.write-configuration file="${project.directory}/${project.directory.app.config}/settings.xml" path="/envelope:configurations/envelope:configuration/document:system_actions/document:system_action[@name='${system-action.name}']/document:action" value="${action.name}" />
 	</target>
 
 	<!--

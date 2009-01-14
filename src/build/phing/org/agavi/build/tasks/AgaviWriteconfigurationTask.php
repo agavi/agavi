@@ -85,7 +85,8 @@ class AgaviWriteconfigurationTask extends AgaviTask
 		$document->load($this->file->getAbsolutePath());
 		
 		$path = new DOMXPath($document);
-		$path->registerNamespace('agavi', $document->documentElement->namespaceURI);
+		$path->registerNamespace('document', $document->documentElement->getAttribute('xmlns'));
+		$path->registerNamespace('envelope', 'http://agavi.org/agavi/config/global/envelope/1.0');
 		
 		$entries = $path->query($this->path);
 		foreach($entries as $entry) {
