@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configurations xmlns="http://agavi.org/agavi/1.0/config">
+<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" xmlns="http://agavi.org/agavi/config/parts/output_types/1.0">
 	
-	<configuration>
+	<ae:configuration>
 		
 		<output_types default="html">
 			
@@ -9,16 +9,16 @@
 				
 				<renderers default="php">
 					<renderer name="php" class="AgaviPhpRenderer">
-						<parameter name="assigns">
-							<parameter name="routing">ro</parameter>
-							<parameter name="request">rq</parameter>
-							<parameter name="controller">ct</parameter>
-							<parameter name="user">us</parameter>
-							<parameter name="translation_manager">tm</parameter>
-							<parameter name="request_data">rd</parameter>
-						</parameter>
+						<ae:parameter name="assigns">
+							<ae:parameter name="routing">ro</ae:parameter>
+							<ae:parameter name="request">rq</ae:parameter>
+							<ae:parameter name="controller">ct</ae:parameter>
+							<ae:parameter name="user">us</ae:parameter>
+							<ae:parameter name="translation_manager">tm</ae:parameter>
+							<ae:parameter name="request_data">rd</ae:parameter>
+						</ae:parameter>
 						<!-- this changes the name of the variable with all template attributes from the default $template to $t -->
-						<parameter name="var_name">t</parameter>
+						<ae:parameter name="var_name">t</ae:parameter>
 					</renderer>
 				</renderers>
 				
@@ -29,8 +29,8 @@
 						<layer name="content" />
 						<!-- decorator layer with the HTML skeleton, navigation etc; set to a specific template here -->
 						<layer name="decorator">
-							<parameter name="directory">%core.template_dir%</parameter>
-							<parameter name="template">Master</parameter>
+							<ae:parameter name="directory">%core.template_dir%</ae:parameter>
+							<ae:parameter name="template">Master</ae:parameter>
 						</layer>
 					</layout>
 					
@@ -41,12 +41,12 @@
 						<layer name="content" />
 						<layer name="wrapper">
 							<!-- use CurrentView.wrapper.php instead of CurrentView.php as the template for this one -->
-							<parameter name="extension">.wrapper.php</parameter>
+							<ae:parameter name="extension">.wrapper.php</ae:parameter>
 						</layer>
 						<!-- decorator layer with the HTML skeleton, navigation etc; set to a specific template here -->
 						<layer name="decorator">
-							<parameter name="directory">%core.template_dir%</parameter>
-							<parameter name="template">Master</parameter>
+							<ae:parameter name="directory">%core.template_dir%</ae:parameter>
+							<ae:parameter name="template">Master</ae:parameter>
 							<!-- an example for a slot -->
 							<slot name="nav" module="Default" action="Widgets.Navigation" />
 						</layer>
@@ -58,17 +58,17 @@
 					</layout>
 				</layouts>
 				
-				<parameter name="http_headers">
-					<parameter name="Content-Type">text/html; charset=UTF-8</parameter>
-				</parameter>
+				<ae:parameter name="http_headers">
+					<ae:parameter name="Content-Type">text/html; charset=UTF-8</ae:parameter>
+				</ae:parameter>
 				
 			</output_type>
 			
 		</output_types>
 		
-	</configuration>
+	</ae:configuration>
 	
-	<configuration environment="production.*">
+	<ae:configuration environment="production.*">
 		
 		<output_types default="html">
 			
@@ -78,6 +78,6 @@
 			
 		</output_types>
 		
-	</configuration>
+	</ae:configuration>
 	
-</configurations>
+</ae:configurations>

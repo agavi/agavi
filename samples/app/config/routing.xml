@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configurations xmlns="http://agavi.org/agavi/1.0/config" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:yay="http://agavi.org/sampleapp" targetNamespace="http://agavi.org/sampleapp">
+<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" xmlns="http://agavi.org/agavi/config/parts/routing/1.0" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:yay="http://agavi.org/sampleapp" targetNamespace="http://agavi.org/sampleapp">
 	
-	<configuration context="web">
+	<ae:configuration context="web">
 		<routes>
 			<!-- matches "/de" or "/en" at the beginning of the URL and uses either value to set the locale, with British Pounds Sterling as the currency. Execution will not stop if this route matches. If it matches, the matched fragment will be stripped from the input URL for the following routes. This route has the "imply" flag, which means that it will be included in generated routes even if the gen() call does not explicitly mention it. The matched "language" parameter will not be available as a request parameter in the code, because it's "ignore"d -->
 			<route pattern="^/({locale:[a-z]{2}(_[A-Z]{2})?})" stop="false" imply="true" cut="true" locale="${locale}@currency=GBP" callback="AgaviSampleAppLanguageRoutingCallback">
@@ -36,9 +36,9 @@
 			
 			<!-- If no route matched here, the 404 action will be used. You could change that behavior by setting the last route above to use an empty pattern. -->
 		</routes>
-	</configuration>
+	</ae:configuration>
 	
-	<configuration context="soap">
+	<ae:configuration context="soap">
 		<routes>
 			<!-- SOAP calls include the name of a remote method to call. The WebserviceRouting applies patterns to this method name, not to the URL of the request. We set the request method to "read" here so executeRead() is run in the Action. -->
 			<route pattern="^getItemPrice$" module="Default" action="SearchEngineSpam" method="read">
@@ -50,9 +50,9 @@
 				</wsdl:output>
 			</route>
 		</routes>
-	</configuration>
+	</ae:configuration>
 	
-	<configuration context="soap2">
+	<ae:configuration context="soap2">
 		<routes>
 			<!-- SOAP calls include the name of a remote method to call. The WebserviceRouting applies patterns to this method name, not to the URL of the request. We set the request method to "read" here so executeRead() is run in the Action. -->
 			<route pattern="^getItemPrice2$" module="Default" action="SearchEngineSpam" method="read">
@@ -64,18 +64,18 @@
 				</wsdl:output>
 			</route>
 		</routes>
-	</configuration>
+	</ae:configuration>
 	
-	<configuration context="wsdl">
+	<ae:configuration context="wsdl">
 		<routes>
 			<route pattern="(dummy:.*)" module="Default" action="SendWsdl" />
 		</routes>
-	</configuration>
+	</ae:configuration>
 	
-	<configuration context="xmlrpc">
+	<ae:configuration context="xmlrpc">
 		<routes>
 			<!-- XMLRPC calls include the name of a remote method to call. The WebserviceRouting applies patterns to this method name, not to the URL of the request. We set the request method to "read" here so executeRead() is run in the Action. -->
 			<route pattern="^getItemPrice$" module="Default" action="SearchEngineSpam" method="read" />
 		</routes>
-	</configuration>
-</configurations>
+	</ae:configuration>
+</ae:configurations>

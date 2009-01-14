@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configurations xmlns="http://agavi.org/agavi/1.0/config">
-	<configuration>
+<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" xmlns="http://agavi.org/agavi/config/parts/caching/1.0">
+	<ae:configuration>
 		
 		<cachings>
 			
@@ -26,5 +26,5 @@
 			
 		</cachings>
 		
-	</configuration>
-</configurations>
+	</ae:configuration>
+</ae:configurations>

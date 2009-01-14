@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configurations xmlns="http://agavi.org/agavi/1.0/config">
-	<configuration>
+<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" xmlns="http://agavi.org/agavi/config/parts/routing/1.0">
+	<ae:configuration>
 		<routes>
 			<!-- this shows the welcome page after creating a project. remove it once you're done admiring its shininess. -->
 			<route pattern="" module="%actions.default_module%" action="Welcome" />
@@ -29,5 +29,5 @@
 			<!-- default action for "/" -->
 			<route pattern="^/$" module="%actions.default_module%" action="%actions.default_action%" />
 		</routes>
-	</configuration>
-</configurations>
+	</ae:configuration>
+</ae:configurations>

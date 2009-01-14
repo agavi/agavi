@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configurations xmlns="http://agavi.org/agavi/1.0/config">
+<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" xmlns="http://agavi.org/agavi/config/parts/logging/1.0">
 
-	<configuration>
+	<ae:configuration>
 
 		<loggers default="any">
 
@@ -27,17 +27,17 @@
 				Use 'cycle' parameter to alter the cycle.
 			-->
 			<appender name="DebugLogAppender" class="AgaviRotatingFileLoggerAppender" layout="DateTimeLayout">
-				<parameters>
-					<parameter name="dir">%core.app_dir%/log/</parameter>
-					<parameter name="prefix">debug-</parameter>
-				</parameters>
+				<ae:parameters>
+					<ae:parameter name="dir">%core.app_dir%/log/</ae:parameter>
+					<ae:parameter name="prefix">debug-</ae:parameter>
+				</ae:parameters>
 			</appender>
 
 			<appender name="ErrorLogAppender" class="AgaviRotatingFileLoggerAppender" layout="DateTimeLayout">
-				<parameters>
-					<parameter name="dir">%core.app_dir%/log/</parameter>
-					<parameter name="prefix">error-</parameter>
-				</parameters>
+				<ae:parameters>
+					<ae:parameter name="dir">%core.app_dir%/log/</ae:parameter>
+					<ae:parameter name="prefix">error-</ae:parameter>
+				</ae:parameters>
 			</appender>
 
 			<appender name="StdErrorAppender" class="AgaviStderrLoggerAppender" layout="DateTimeLayout" />
@@ -47,6 +47,6 @@
 			<layout name="DateTimeLayout" class="AgaviTimestampLoggerLayout" />
 		</layouts>
 
-	</configuration>
+	</ae:configuration>
 
-</configurations>
+</ae:configurations>
