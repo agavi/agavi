@@ -647,7 +647,12 @@ class AgaviDateFormat
 				if($strict && $numberLen > 2 && $numberLen > $token[1]) {
 					$numberLen = $token[1];
 				}
-				$number = (int) substr($dateString, $datePos, $numberLen);
+				if($dateField == AgaviDateDefinitions::MILLISECOND && $numberLen > 3) {
+					// we only store in millisecond precision so only use the first 3 digits of the fractional second
+					$number = (int) substr($dateString, $datePos, 3);
+				} else {
+					$number = (int) substr($dateString, $datePos, $numberLen);
+				}
 
 				$datePos += $numberLen;
 				// since the month is 0-indexed in the calendar and 1-indexed in the
