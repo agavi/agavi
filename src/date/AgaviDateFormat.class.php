@@ -262,7 +262,9 @@ class AgaviDateFormat
 					break;
 
 				case self::T_FRACTIONAL_SECOND:
-					$out .= substr($data[AgaviDateDefinitions::MILLISECOND], 0, $count);
+					$value = str_pad($data[AgaviDateDefinitions::MILLISECOND], 3, '0', STR_PAD_LEFT);
+					$value = substr($value, 0, $count);
+					$out .= $value;
 					break;
 
 				case self::T_DAY_OF_WEEK:
