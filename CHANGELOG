@@ -4,6 +4,8 @@ AGAVI CHANGELOG
 1.0.0 beta8 (January ??, 2009)
 ------------------------------
 
+CHG: Allow arbitrary number of fractional seconds for parsing date formats (#977) (Dominik)
+
 FIX: Module setting values are not literalized (#976) (David)
 
 
