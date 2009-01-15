@@ -94,7 +94,15 @@ class AgaviSessionStorage extends AgaviStorage
 				$path = $this->context->getRouting()->getBasePath();
 			}
 			$domain = $this->getParameter('session_cookie_domain', $cookieDefaults['domain']);
-			$secure = (bool) $this->getParameter('session_cookie_secure', $cookieDefaults['secure']);
+			
+			$secure = $this->getParameter('session_cookie_secure', $cookieDefaults['secure']);
+			$request = $this->context->getRequest();
+			if($secure === null && $request instanceof AgaviWebRequest) {
+				$secure = $request->isHttps();
+			} else {
+				$secure = (bool) $secure;
+			}
+			
 			$httpOnly = (bool) $this->getParameter('session_cookie_httponly', $cookieDefaults['httponly']);
 			
 			session_set_cookie_params($lifetime, $path, $domain, $secure, $httpOnly);

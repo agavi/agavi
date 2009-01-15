@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 1.0.0 beta8 (January ??, 2009)
 ------------------------------
 
+ADD: Optionally set 'secure' flag on session cookies automatically (#981) (David)
 ADD: Add AgaviWebRequest::isHttps() convenience method (#980) (David)
 ADD: Allow setting of session save path in AgaviSessionStorage (#979) (David)
 
