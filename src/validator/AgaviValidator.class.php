@@ -564,8 +564,8 @@ abstract class AgaviValidator extends AgaviParameterHolder
 		if($base->length() == 0) {
 			// we have an empty base so we do the actual validation
 			if($this->getDependencyManager() && (count($this->getParameter('depends')) > 0 && !$this->getDependencyManager()->checkDependencies($this->getParameter('depends'), $this->curBase))) {
-				// dependencies not met, exit with not processed
-				return self::NOT_PROCESSED;
+				// dependencies not met, exit with success
+				return self::SUCCESS;
 			}
 
 			$this->affectedArguments = $this->getFullArgumentNames();
