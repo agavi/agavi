@@ -206,6 +206,19 @@ class AgaviWebRequest extends AgaviRequest
 	}
 
 	/**
+	 * Whether or not HTTPS was used for this request.
+	 *
+	 * @return     bool True, if it's an HTTPS request, false otherwise.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      0.11.6
+	 */
+	public function isHttps()
+	{
+		return $this->getUrlScheme() == 'https';
+	}
+
+	/**
 	 * Constructor.
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
