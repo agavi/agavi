@@ -4,7 +4,7 @@ AGAVI CHANGELOG
 1.0.0 beta8 (January ??, 2009)
 ------------------------------
 
-ADD: Allow setting of session save path in AgaviSessionStorage (#979) (David) 
+ADD: Allow setting of session save path in AgaviSessionStorage (#979) (David)
 
 CHG: Allow arbitrary number of fractional seconds for parsing date formats (#977) (Dominik)
 
