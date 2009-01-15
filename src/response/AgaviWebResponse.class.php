@@ -153,6 +153,13 @@ class AgaviWebResponse extends AgaviResponse
 	{
 		parent::initialize($context, $parameters);
 		
+		$request = $context->getRequest();
+		
+		// if 'cookie_secure' is set, and null, then we need to set whatever AgaviWebRequest::isHttps() returns
+		if(array_key_exists('cookie_secure', $parameters) && $parameters['cookie_secure'] === null) {
+			$parameters['cookie_secure'] = $request->isHttps();
+		}
+		
 		$this->setParameters(array(
 			'cookie_lifetime' => isset($parameters['cookie_lifetime']) ? $parameters['cookie_lifetime'] : 0,
 			'cookie_path'     => isset($parameters['cookie_path'])     ? $parameters['cookie_path']     : null,
@@ -161,7 +168,7 @@ class AgaviWebResponse extends AgaviResponse
 			'cookie_httponly' => isset($parameters['cookie_httponly']) ? $parameters['cookie_httponly'] : false,
 		));
 		
-		switch($context->getRequest()->getProtocol()) {
+		switch($request->getProtocol()) {
 			case 'HTTP/1.1':
 				$this->httpStatusCodes = $this->http11StatusCodes;
 				break;
