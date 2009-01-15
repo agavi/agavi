@@ -62,10 +62,6 @@ class AgaviSessionStorage extends AgaviStorage
 	 */
 	public function startup()
 	{
-		if($this->hasParameter('session_save_path')) {
-			session_save_path($this->getParameter('session_save_path'));
-		}
-		
 		session_name($this->getParameter('session_name', 'Agavi'));
 		
 		if($this->hasParameter('session_id')) {

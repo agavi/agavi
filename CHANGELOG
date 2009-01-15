@@ -4,7 +4,6 @@ AGAVI CHANGELOG
 0.11.6 RC1 (January 10, 2009)
 -----------------------------
 
-ADD: Allow setting of session save path in AgaviSessionStorage (#979) (David)
 ADD: Add option to control Propel 1.3 instance pooling (#960) (Felix)
 ADD: AgaviArraylengthValidator (#948) (Dominik)
 ADD: Optionally allow sending of response content when redirecting in AgaviWebResponse (#916) (David)
