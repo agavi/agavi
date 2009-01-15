@@ -65,6 +65,9 @@ class AgaviValidationError
 		$this->message = $message;
 		$this->messageIndex = $messageIdx;
 		foreach($arguments as $argument) {
+			if(!($argument instanceof AgaviValidationArgument)) {
+				$argument = new AgaviValidationArgument($argument);
+			}
 			$this->arguments[$argument->getHash()] = $argument;
 		}
 	}

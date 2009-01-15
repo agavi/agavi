@@ -11,6 +11,7 @@ ADD: Allow setting of session save path in AgaviSessionStorage (#979) (David)
 
 CHG: Allow arbitrary number of fractional seconds for parsing date formats (#977) (Dominik)
 
+FIX: AgaviValidationErrror::__construct() does not check type of arguments (#983) (Dominik)
 FIX: The Milliseconds 1-99 are missing the leading 0 when a date is formatted (#978) (Dominik)
 FIX: Module setting values are not literalized (#976) (David)
 
