@@ -1,6 +1,12 @@
 AGAVI CHANGELOG
 ===============
 
+0.11.6 RC2 (January ??, 2009)
+-----------------------------
+
+ADD: Allow setting of session save path in AgaviSessionStorage (#979) (David) 
+
+
 0.11.6 RC1 (January 10, 2009)
 -----------------------------
 
