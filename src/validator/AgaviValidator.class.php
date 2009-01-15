@@ -633,11 +633,19 @@ abstract class AgaviValidator extends AgaviParameterHolder
 			// if the names array is empty this means we need to throw an error since
 			// this means the input doesn't exist
 			if(count($names) == 0) {
-				if($this->getParameter('required', true)) {
-					$this->throwError();
-					return self::mapErrorCode($this->getParameter('severity', 'error'));
+				if($this->getDependencyManager() && (count($this->getParameter('depends')) > 0 && !$this->getDependencyManager()->checkDependencies($this->getParameter('depends'), $this->curBase))) {
+					// since the dependencies are only ever checked if the base gets empty (which happens when
+					// the validation is about to validate an argument), but we are already bailing out in an earlier
+					// stage, lets do the dependency check so the validator doesn't accidently return an error even
+					// if it's dependencies aren't met
+					return self::SUCCESS;
 				} else {
-					return self::NOT_PROCESSED;
+					if($this->getParameter('required', true)) {
+						$this->throwError();
+						return self::mapErrorCode($this->getParameter('severity', 'error'));
+					} else {
+						return self::NOT_PROCESSED;
+					}
 				}
 			}
 
