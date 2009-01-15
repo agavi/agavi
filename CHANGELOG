@@ -4,6 +4,8 @@ AGAVI CHANGELOG
 1.0.0 beta8 (January ??, 2009)
 ------------------------------
 
+ADD: Allow setting of session save path in AgaviSessionStorage (#979) (David) 
+
 CHG: Allow arbitrary number of fractional seconds for parsing date formats (#977) (Dominik)
 
 FIX: The Milliseconds 1-99 are missing the leading 0 when a date is formatted (#978) (Dominik)
