@@ -54,7 +54,8 @@
 	
 	<configuration context="wsdl">
 		<routes>
-			<route pattern="(dummy:.*)" module="Default" action="SendWsdl" />
+			<!-- matches anything -->
+			<route pattern="" module="Default" action="SendWsdl" />
 		</routes>
 	</configuration>
 	
