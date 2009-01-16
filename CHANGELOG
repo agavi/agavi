@@ -12,6 +12,7 @@ ADD: Allow setting of session save path in AgaviSessionStorage (#979) (David)
 CHG: Remove unused property AgaviOperatorValidator::$errors (#987) (David)
 CHG: Allow arbitrary number of fractional seconds for parsing date formats (#977) (Dominik)
 
+FIX: Validation marks fields that weren't processed due to unsatisfied dependencies as sucessful (#984) (Dominik, David)
 FIX: Form Population Filter reveals errors from validators with severities "silent" and "info" (#986) (David)
 FIX: Validators with argument arrays might not perform dependency checks (#985) (David, Dominik)
 FIX: The Milliseconds 1-99 are missing the leading 0 when a date is formatted (#978) (Dominik)
