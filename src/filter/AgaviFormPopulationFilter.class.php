@@ -356,7 +356,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 				}
 
 				// there's an error with the element's name in the request? good. let's give the baby a class!
-				if($vm->isFieldFailed($pname)) {
+				if($vm->getFieldErrorCode($pname) > AgaviValidator::SILENT) {
 					// a collection of all elements that need an error class
 					$errorClassElements = array();
 					// the element itself of course
@@ -655,6 +655,9 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 
 		$errorMessages = array();
 		foreach($incidents as $incident) {
+			if($incident->getSeverity() <= AgaviValidator::SILENT) {
+				continue;
+			}
 			foreach($incident->getErrors() as $error) {
 				$errorMessages[] = $error->getMessage();
 			}
