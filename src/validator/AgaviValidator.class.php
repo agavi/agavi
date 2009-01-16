@@ -565,7 +565,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 			// we have an empty base so we do the actual validation
 			if($this->getDependencyManager() && (count($this->getParameter('depends')) > 0 && !$this->getDependencyManager()->checkDependencies($this->getParameter('depends'), $this->curBase))) {
 				// dependencies not met, exit with success
-				return self::SUCCESS;
+				return self::NOT_PROCESSED;
 			}
 
 			$this->affectedArguments = $this->getFullArgumentNames();
@@ -638,7 +638,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 					// the validation is about to validate an argument), but we are already bailing out in an earlier
 					// stage, lets do the dependency check so the validator doesn't accidently return an error even
 					// if it's dependencies aren't met
-					return self::SUCCESS;
+					return self::NOT_PROCESSED;
 				} else {
 					if($this->getParameter('required', true)) {
 						$this->throwError();
@@ -652,7 +652,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 			// throw the wildcard away
 			$base->shift();
 
-			$ret = self::SUCCESS;
+			$ret = self::NOT_PROCESSED;
 
 			// validate in every name defined in the request
 			foreach($names as $name) {
