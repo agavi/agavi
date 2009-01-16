@@ -38,11 +38,6 @@ abstract class AgaviOperatorValidator extends AgaviValidator implements AgaviIVa
 	protected $children = array();
 
 	/**
-	 * @var        array The errors of the child validators.
-	 */
-	protected $errors = array();
-	
-	/**
 	 * @var        int The highest error severity in the container.
 	 */
 	protected $result = AgaviValidator::SUCCESS;
