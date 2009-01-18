@@ -804,7 +804,7 @@ class AgaviXmlConfigParser
 			try {
 				@$document->schemaValidate($validationFile);
 			} catch(DOMException $dome) {
-				throw new AgaviParseException(sprintf('XML Schema validation of configuration file "%s" failed: %s', $document->documentURI, $dome->getMessage()));
+				throw new AgaviParseException(sprintf('XML Schema validation of configuration file "%s" failed:' . "\n\n%s", $document->documentURI, $dome->getMessage()));
 			}
 		}
 	}
@@ -825,7 +825,7 @@ class AgaviXmlConfigParser
 			try {
 				@$document->schemaValidateSource($validationSource);
 			} catch(DOMException $dome) {
-				throw new AgaviParseException(sprintf('XML Schema validation of configuration file "%s" failed: ' . "\n\n%s", $document->documentURI, $dome->getMessage()));
+				throw new AgaviParseException(sprintf('XML Schema validation of configuration file "%s" failed:' . "\n\n%s", $document->documentURI, $dome->getMessage()));
 			}
 		}
 	}
@@ -851,7 +851,7 @@ class AgaviXmlConfigParser
 			try {
 				@$document->relaxNGValidate($validationFile);
 			} catch(DOMException $dome) {
-				throw new AgaviParseException(sprintf('RELAX NG validation of configuration file "%s" failed: ' . "\n\n%s", $document->documentURI, $dome->getMessage()));
+				throw new AgaviParseException(sprintf('RELAX NG validation of configuration file "%s" failed:' . "\n\n%s", $document->documentURI, $dome->getMessage()));
 			}
 		}
 	}
@@ -904,7 +904,7 @@ class AgaviXmlConfigParser
 			try {
 				$result = $schematron->transform($sch);
 			} catch(Exception $e) {
-				throw new AgaviParseException(sprintf('Schematron validation of configuration file "%s" failed: %s', $document->documentURI, $e->getMessage()));
+				throw new AgaviParseException(sprintf('Schematron validation of configuration file "%s" failed: Transformation failed: %s', $document->documentURI, $e->getMessage()));
 			}
 			
 			// validation ran okay, now we need to look at the result document to see if there are errors
@@ -916,7 +916,7 @@ class AgaviXmlConfigParser
 				// TODO: grab error info from <svrl:failed-assert> and <svrl:successful-report> elements. note that the child <svrl:text> element is optional. also, the <sch:pattern> can have a "name" attribute, but that value never occurs in an SVRL result...
 				$errors = array();
 				
-				throw new AgaviParseException(sprintf('Schematron validation of configuration file "%s" failed due to the following error%s:' . "\n\n%s", $document->documentURI, count($errors) > 1 ? 's' : '', implode("\n", $errors)));
+				throw new AgaviParseException(sprintf('Schematron validation of configuration file "%s" failed:' . "\n\n%s", $document->documentURI, implode("\n", $errors)));
 			}
 		}
 	}
