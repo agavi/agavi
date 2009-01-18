@@ -15,6 +15,11 @@ class Default_SearchEngineSpamSuccessView extends AgaviSampleAppDefaultBaseView
 		$this->setAttribute('title', $this->getContext()->getTranslationManager()->_('Congratulations!', 'default.SearchEngineSpam'));
 	}
 
+	public function executeText(AgaviRequestDataHolder $rd)
+	{
+		return $this->getAttribute('product_price');
+	}
+
 	/**
 	 * Execute any presentation logic for JSON requests.
 	 */

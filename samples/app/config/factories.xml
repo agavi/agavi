@@ -54,6 +54,18 @@
 	
 	</ae:configuration>
 	
+	<ae:configuration context="console">
+		
+		<request class="AgaviConsoleRequest" />
+		
+		<response class="AgaviConsoleResponse" />
+		
+		<routing class="AgaviConsoleRouting" />
+		
+		<user class="AgaviSecurityUser" />
+	
+	</ae:configuration>
+	
 	<ae:configuration context="soap">
 		
 		<controller class="AgaviSoapController" />

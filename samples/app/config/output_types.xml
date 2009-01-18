@@ -62,6 +62,14 @@
 		</output_types>
 	</ae:configuration>
 
+	<ae:configuration context="console">
+		<output_types default="text">
+
+			<output_type name="text" />
+
+		</output_types>
+	</ae:configuration>
+
 	<ae:configuration context="xmlrpc">
 		<output_types default="xmlrpc">
 

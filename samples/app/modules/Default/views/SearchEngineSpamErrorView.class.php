@@ -22,6 +22,11 @@ class Default_SearchEngineSpamErrorView extends AgaviSampleAppDefaultBaseView
 			)
 		);
 	}
+	
+	public function executeText(AgaviRequestDataHolder $rd)
+	{
+		return 'No such product';
+	}
 
 	/**
 	 * Execute any presentation logic for SOAP requests.

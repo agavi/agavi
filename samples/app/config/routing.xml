@@ -38,6 +38,12 @@
 		</routes>
 	</ae:configuration>
 	
+	<ae:configuration context="console">
+		<routes>
+			<route pattern="^getprice(\s+{id:\d+})$" module="Default" action="SearchEngineSpam" />
+		</routes>
+	</ae:configuration>
+	
 	<ae:configuration context="soap">
 		<routes>
 			<!-- SOAP calls include the name of a remote method to call. The WebserviceRouting applies patterns to this method name, not to the URL of the request. We set the request method to "read" here so executeRead() is run in the Action. -->

@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 1.0.0 beta8 (January ??, 2009)
 ------------------------------
 
+ADD: Command line support (request/response/routing) (#480) (David)
 ADD: Optionally set 'secure' flag on response cookies automatically (#982) (David)
 ADD: Optionally set 'secure' flag on session cookies automatically (#981) (David)
 ADD: Add AgaviWebRequest::isHttps() convenience method (#980) (David)
