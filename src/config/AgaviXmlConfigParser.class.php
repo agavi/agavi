@@ -696,18 +696,28 @@ class AgaviXmlConfigParser
 			return;
 		}
 		
+		$errors = array();
+		
 		foreach($validationInfo as $type => $files) {
-			switch($type) {
-				case self::VALIDATION_TYPE_XMLSCHEMA:
-					self::validateXmlschema($document, (array) $files);
-					break;
-				case self::VALIDATION_TYPE_RELAXNG:
-					self::validateRelaxng($document, (array) $files);
-					break;
-				case self::VALIDATION_TYPE_SCHEMATRON:
-					self::validateSchematron($document, $environment, $context, (array) $files);
-					break;
+			try {
+				switch($type) {
+					case self::VALIDATION_TYPE_XMLSCHEMA:
+						self::validateXmlschema($document, (array) $files);
+						break;
+					case self::VALIDATION_TYPE_RELAXNG:
+						self::validateRelaxng($document, (array) $files);
+						break;
+					case self::VALIDATION_TYPE_SCHEMATRON:
+						self::validateSchematron($document, $environment, $context, (array) $files);
+						break;
+				}
+			} catch(AgaviParseException $e) {
+				$errors[] = $e->getMessage();
 			}
+		}
+		
+		if($errors) {
+			throw new AgaviParseException(sprintf('Validation of configuration file "%s" failed:' . "\n\n%s", $document->documentURI, implode("\n\n", $errors)));
 		}
 	}
 
