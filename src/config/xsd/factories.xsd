@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:types_1_0="http://agavi.org/agavi/config/global/types/1.0"
+	xmlns:factories_1_0="http://agavi.org/agavi/config/parts/factories/1.0"
+	targetNamespace="http://agavi.org/agavi/config/global/envelope/1.0"
+	elementFormDefault="qualified"
+	version="$Id$">
+
+	<xs:import namespace="http://agavi.org/agavi/config/global/types/1.0"
+	           schemaLocation="_types.xsd" />
+	<xs:import namespace="http://agavi.org/agavi/config/parts/factories/1.0"
+	           schemaLocation="parts/factories.xsd" />
+
+	<xs:redefine schemaLocation="_envelope.xsd">
+
+		<xs:complexType name="configuration">
+			<xs:complexContent>
+				<xs:extension base="configuration">
+					<xs:group ref="factories_1_0:configuration" />
+					<xs:attributeGroup ref="types_1_0:contexts" />
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+
+	</xs:redefine>
+
+</xs:schema>

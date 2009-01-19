@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:module_1_0="http://agavi.org/agavi/config/parts/module/1.0"
+	targetNamespace="http://agavi.org/agavi/config/global/envelope/1.0"
+	elementFormDefault="qualified"
+	version="$Id$">
+
+	<xs:import namespace="http://agavi.org/agavi/config/parts/module/1.0"
+	           schemaLocation="parts/module.xsd" />
+
+	<xs:redefine schemaLocation="_envelope.xsd">
+
+		<xs:complexType name="configuration">
+			<xs:complexContent>
+				<xs:extension base="configuration">
+					<xs:group ref="module_1_0:configuration" />
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+
+	</xs:redefine>
+
+</xs:schema>

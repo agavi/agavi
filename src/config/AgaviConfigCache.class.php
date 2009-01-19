@@ -429,8 +429,8 @@ class AgaviConfigCache
 					AgaviXmlConfigParser::STEP_TRANSFORMATIONS_BEFORE => array(
 					),
 					AgaviXmlConfigParser::STEP_TRANSFORMATIONS_AFTER => array(
-						AgaviXmlConfigParser::VALIDATION_TYPE_RELAXNG => array(
-							$agaviDir . '/config/rng/config_handlers.rng',
+						AgaviXmlConfigParser::VALIDATION_TYPE_XMLSCHEMA => array(
+							$agaviDir . '/config/xsd/config_handlers.xsd',
 						),
 						AgaviXmlConfigParser::VALIDATION_TYPE_SCHEMATRON => array(
 							$agaviDir . '/config/sch/config_handlers.sch',
