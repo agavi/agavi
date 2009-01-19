@@ -23,6 +23,7 @@
 	<xs:complexType name="configuration">
 		<xs:attributeGroup ref="annotations_1_0:match" />
 		<xs:attributeGroup ref="types_1_0:environments" />
+		<xs:anyAttribute namespace="##any" processContents="lax" />
 	</xs:complexType>
 
 	<xs:complexType name="configurations">
