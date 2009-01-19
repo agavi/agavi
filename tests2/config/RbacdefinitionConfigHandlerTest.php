@@ -15,7 +15,7 @@ class RbacDefinitionConfigHandlerTest extends ConfigHandlerTestBase
 			array (
 				'single' => 
 				array (
-					0 => '/Users/dzuelke/Code/oss/agavi/branches/1.0/src/config/xsl/rbac_definitions.xsl',
+					0 => AgaviConfig::get('core.agavi_dir') . '/config/xsl/rbac_definitions.xsl',
 				),
 				'compilation' => 
 				array (
@@ -47,7 +47,7 @@ class RbacDefinitionConfigHandlerTest extends ConfigHandlerTestBase
 						),
 						'xml_schema' => 
 						array (
-							0 => '/Users/dzuelke/Code/oss/agavi/branches/1.0/src/config/xsd/rbac_definitions.xsd',
+							0 => AgaviConfig::get('core.agavi_dir') . '/config/xsd/rbac_definitions.xsd',
 						),
 					),
 				),
