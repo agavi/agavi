@@ -25,6 +25,8 @@ class Default_SearchEngineSpamErrorView extends AgaviSampleAppDefaultBaseView
 	
 	public function executeText(AgaviRequestDataHolder $rd)
 	{
+		$this->getResponse()->setExitCode(1);
+		
 		return 'No such product';
 	}
 

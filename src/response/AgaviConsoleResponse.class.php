@@ -35,6 +35,11 @@ class AgaviConsoleResponse extends AgaviResponse
 	protected $content = '';
 	
 	/**
+	 * @var        int The shell exit code.
+	 */
+	protected $exitCode = 0;
+	
+	/**
 	 * Import response metadata (nothing in this case) from another response.
 	 *
 	 * @param      AgaviResponse The other response to import information from.
@@ -105,6 +110,32 @@ class AgaviConsoleResponse extends AgaviResponse
 	}
 	
 	/**
+	 * Set the shell exit code of this response.
+	 *
+	 * @param      int The exit code.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function setExitCode($exitCode)
+	{
+		$this->exitCode = (int)$exitCode;
+	}
+	
+	/**
+	 * Get the shell exit code of this response.
+	 *
+	 * @return     int The exit code.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function getExitCode()
+	{
+		return $this->exitCode;
+	}
+	
+	/**
 	 * Determine whether the content in the response may be modified by appending
 	 * or prepending data using string operations. Typically false for streams, 
 	 * and for responses like XMLRPC where the content is an array.
@@ -128,6 +159,8 @@ class AgaviConsoleResponse extends AgaviResponse
 	public function send(AgaviOutputType $outputType = null)
 	{
 		$this->sendContent();
+		
+		register_shutdown_function(array($this, 'sendExit'));
 	}
 	
 	/**
@@ -139,6 +172,7 @@ class AgaviConsoleResponse extends AgaviResponse
 	public function clear()
 	{
 		$this->clearContent();
+		$this->setExitCode(0);
 	}
 	
 	/**
@@ -156,6 +190,19 @@ class AgaviConsoleResponse extends AgaviResponse
 		if($isContentMutable && $this->getParameter('append_eol', true)) {
 			echo PHP_EOL;
 		}
+	}
+	
+	/**
+	 * Call exit() and submit the exit code.
+	 * This is called by PHP during script shutdown.
+	 * It gets registered as a shutdown function in AgaviConsoleResponse::send().
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function sendExit()
+	{
+		exit($this->exitCode);
 	}
 }
 
