@@ -911,10 +911,22 @@ class AgaviXmlConfigParser
 			$xpath = $result->getXpath();
 			$xpath->registerNamespace('svrl', self::NAMESPACE_SVRL_ISO);
 			
-			$results = $xpath->query('//svrl:failed-assert | //svrl:successful-report');
+			$results = $xpath->query('/svrl:schematron-output/svrl:failed-assert/svrl:text');
 			if($results->length) {
-				// TODO: grab error info from <svrl:failed-assert> and <svrl:successful-report> elements. note that the child <svrl:text> element is optional. also, the <sch:pattern> can have a "name" attribute, but that value never occurs in an SVRL result...
-				$errors = array();
+				$errors = array('Failed assertions:');
+				
+				foreach($results as $result) {
+					$errors[] = $result->nodeValue;
+				}
+				
+				$results = $xpath->query('/svrl:schematron-output/svrl:successful-report/svrl:text');
+				if($results->length) {
+					$errors[] = '';
+					$errors[] = 'Successful reports:';
+					foreach($results as $result) {
+						$errors[] = $result->nodeValue;
+					}
+				}
 				
 				throw new AgaviParseException(sprintf('Schematron validation of configuration file "%s" failed:' . "\n\n%s", $document->documentURI, implode("\n", $errors)));
 			}
