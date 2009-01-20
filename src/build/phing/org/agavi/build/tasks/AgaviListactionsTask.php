@@ -67,9 +67,6 @@ class AgaviListactionsTask extends AgaviTask
 		}
 	
 		$check = new AgaviModuleFilesystemCheck();
-		$check->setActionsDirectory($this->project->getProperty('module.directory.actions'));
-		$check->setViewsDirectory($this->project->getProperty('module.directory.views'));
-		$check->setTemplatesDirectory($this->project->getProperty('module.directory.templates'));
 		$check->setConfigDirectory($this->project->getProperty('module.directory.config'));
 		
 		$check->setPath($this->path->getAbsolutePath());

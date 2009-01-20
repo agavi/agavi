@@ -16,6 +16,7 @@ CHG: Rename AgaviTranslationManager::getCurrentTimeZone() to getDefaultTimeZone(
 CHG: Remove unused property AgaviOperatorValidator::$errors (#987) (David)
 CHG: Allow arbitrary number of fractional seconds for parsing date formats (#977) (Dominik)
 
+FIX: Build system does not always identify modules correctly (#924) (Noah)
 FIX: The AgaviDateTimeValidator doesn't check input value types for unix and unix_milliseconds formats
 FIX: AgaviConfigCache::loadConfigHandlers() may trigger "cannot redeclare class" fatal error (#989) (David)
 FIX: Caching generates invalid group values in some cases (#988) (David)
