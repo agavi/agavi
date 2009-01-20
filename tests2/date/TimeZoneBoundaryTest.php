@@ -62,7 +62,7 @@ class TimeZoneBoundaryTest extends BaseCalendarTest
 	protected function findDaylightBoundaryUsingTimeZone($d, $startsInDST, $expectedBoundary, $tz = null)
 	{
 		if(!$tz) {
-			$tz = $this->tm->getCurrentTimeZone();
+			$tz = $this->tm->getDefaultTimeZone();
 		}
 		$min = $d;
 		$max = $min + $this->SIX_MONTHS;
@@ -187,7 +187,7 @@ TimeZoneBoundaryTest::showNN(int32_t n)
 		$utccal =  $this->tm->createCalendar($utc);
 		$this->verifyMapping($utccal, 1997, AgaviDateDefinitions::APRIL, 6, 0, 238968.0);
 
-		$save = $this->tm->getCurrentTimeZone();
+		$save = $this->tm->getDefaultTimeZone();
 		//AgaviTimeZone::setDefault($pst);
 		$this->tm->setDefaultTimeZone($pst->getId());
 		
