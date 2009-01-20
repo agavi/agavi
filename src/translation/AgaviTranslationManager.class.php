@@ -124,8 +124,6 @@ class AgaviTranslationManager
 	public function initialize(AgaviContext $context, array $parameters = array())
 	{
 		$this->context = $context;
-		
-		$this->defaultTimeZone = isset($parameters['default_timezone']) ? $parameters['default_timezone'] : date_default_timezone_get();
 
 		include(AgaviConfigCache::checkConfig(AgaviConfig::get('core.config_dir') . '/translation.xml'));
 		$this->loadSupplementalData();
@@ -766,25 +764,15 @@ class AgaviTranslationManager
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
-	 *
-	 * @deprecated Superseded by AgaviTranslationManager::getDefaultTimeZone()
 	 */
 	public function getCurrentTimeZone()
 	{
-		return $this->getDefaultTimeZone();
-	}
-
-	/**
-	 * Get the default timezone instance.
-	 *
-	 * @return     AgaviTimeZone The default timezone instance.
-	 *
-	 * @author     David Zülke <david.zuelke@bitextender.com>
-	 * @since      1.0.0
-	 */
-	public function getDefaultTimeZone()
-	{
-		return $this->createTimeZone($this->defaultTimeZone);
+		if($this->defaultTimeZone !== null) {
+			$tz = $this->defaultTimeZone;
+		} else {
+			$tz = date_default_timezone_get();
+		}
+		return $this->createTimeZone($tz);
 	}
 
 	/**

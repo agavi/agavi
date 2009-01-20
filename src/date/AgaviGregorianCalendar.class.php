@@ -105,11 +105,11 @@ class AgaviGregorianCalendar extends AgaviCalendar
 			$locale = $this->translationManager->getCurrentLocale();
 		} elseif($zoneOrLocale instanceof AgaviLocale) {
 			$this->translationManager = $zoneOrLocale->getTranslationManager();
-			$zone = $this->translationManager->getDefaultTimeZone();
+			$zone = $this->translationManager->getCurrentTimeZone();
 			$locale = $zoneOrLocale;
 		} elseif($zoneOrLocale instanceof AgaviTranslationManager) {
 			$this->translationManager = $zoneOrLocale;
-			$zone = $this->translationManager->getDefaultTimeZone();
+			$zone = $this->translationManager->getCurrentTimeZone();
 			$locale = $this->translationManager->getCurrentLocale();
 		} else {
 			throw new InvalidArgumentException('Object of type ' . get_class($zoneOrLocale) . ' was not expected');
@@ -129,7 +129,7 @@ class AgaviGregorianCalendar extends AgaviCalendar
 
 	protected function constructorOIII($tm, $year, $month, $date)
 	{
-		parent::constructorOO($tm->getDefaultTimeZone(), $tm->getCurrentLocale());
+		parent::constructorOO($tm->getCurrentTimeZone(), $tm->getCurrentLocale());
 		$this->set(AgaviDateDefinitions::ERA, self::AD);
 		$this->set(AgaviDateDefinitions::YEAR, $year);
 		$this->set(AgaviDateDefinitions::MONTH, $month);
@@ -138,7 +138,7 @@ class AgaviGregorianCalendar extends AgaviCalendar
 
 	protected function constructorOIIIII($tm, $year, $month, $date, $hour, $minute)
 	{
-		parent::constructorOO($tm->getDefaultTimeZone(), $tm->getCurrentLocale());
+		parent::constructorOO($tm->getCurrentTimeZone(), $tm->getCurrentLocale());
 		$this->set(AgaviDateDefinitions::ERA, self::AD);
 		$this->set(AgaviDateDefinitions::YEAR, $year);
 		$this->set(AgaviDateDefinitions::MONTH, $month);
@@ -149,7 +149,7 @@ class AgaviGregorianCalendar extends AgaviCalendar
 
 	protected function constructorOIIIIII($tm, $year, $month, $date, $hour, $minute, $second)
 	{
-		parent::constructorOO($tm->getDefaultTimeZone(), $tm->getCurrentLocale());
+		parent::constructorOO($tm->getCurrentTimeZone(), $tm->getCurrentLocale());
 		$this->set(AgaviDateDefinitions::ERA, self::AD);
 		$this->set(AgaviDateDefinitions::YEAR, $year);
 		$this->set(AgaviDateDefinitions::MONTH, $month);
