@@ -164,15 +164,33 @@ class AgaviDateTimeValidator extends AgaviValidator
 					$td = $item['translation_domain'];
 					$formatString = $tm->_($item['format'], $td, $itemLocale);
 				} elseif($type == 'unix') {
+					$matchedFormat = ($param === (string)(int)$param);
 					$cal = $tm->createCalendar($itemLocale);
 					$cal->setUnixTimestamp($param);
-					// no format to match, so always true
-					$matchedFormat = true;
+					if($matchedFormat) {
+						try {
+							if($cal->getUnixTimestamp() !== (int)$param) {
+								$this->throwError('check');
+								return false;
+							}
+						} catch(Exception $e) {
+							$matchedFormat = false;
+						}
+					}
 				} elseif($type == 'unix_milliseconds') {
+					$matchedFormat = is_numeric($param);
 					$cal = $tm->createCalendar($itemLocale);
 					$cal->setTime($param);
-					// no format to match, so always true
-					$matchedFormat = true;
+					if($matchedFormat) {
+						try {
+							if($cal->getTime() !== $param) {
+								$this->throwError('check');
+								return false;
+							}
+						} catch(Exception $e) {
+							$matchedFormat = false;
+						}
+					}
 				}
 
 				if(!$cal) {
