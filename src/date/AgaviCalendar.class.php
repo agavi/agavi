@@ -286,6 +286,52 @@ abstract class AgaviCalendar
 		$this->setTimeInMillis($timestamp * AgaviDateDefinitions::MILLIS_PER_SECOND);
 	}
 
+	/**
+	 * @see        AgaviCalendar::getAll()
+	 *
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function toArray()
+	{
+		return $this->getAll();
+	}
+
+	/**
+	 * Sets all given time field values.
+	 *
+	 * @param      array An array using the AgaviDateDefinitions::XXX as key 
+	 *                   and the respective value as value.
+	 *
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function fromArray(array $data)
+	{
+		foreach($data as $key => $value) {
+			$this->set1($key, $value);
+		}
+	}
+	
+	/**
+	 * Returns the locale option string containing the timezone option set 
+	 * to the timezone of this calendar.
+	 * 
+	 * @param      string The prefix which will be applied to the timezone option
+	 *                    string. Use ';' here if you intend to use several 
+	 *                    locale options and append the result of this method
+	 *                    to your locale string.
+	 *
+	 * @return     string 
+	 * 
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function getTimeZoneLocaleOptionString($prefix = '@')
+	{
+		return AgaviLocale::getTimeZoneOptionString($this, $prefix);
+	}
+
 	public function __is_equal($that)
 	{
 		return $this->isEquivalentTo($that) && $this->getTimeInMillis() == $that->getTimeInMillis();

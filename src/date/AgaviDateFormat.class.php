@@ -41,6 +41,11 @@ class AgaviDateFormat
 	protected $formatString = '';
 
 	/**
+	 * @var        AgaviContext An AgaviContext instance.
+	 */
+	protected $context = null;
+
+	/**
 	 * Constructs a new date formatter.
 	 *
 	 * @param      string Format to be used for formatting.
@@ -54,6 +59,34 @@ class AgaviDateFormat
 			$this->setFormat($format);
 		}
 	}
+	
+	/**
+	 * Initialize this Format.
+	 *
+	 * @param      AgaviContext The current application context.
+	 * @param      array        An associative array of initialization parameters
+	 *
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function initialize(AgaviContext $context, array $parameters = array())
+	{
+		$this->context = $context;
+	}
+	
+	/**
+	 * Retrieve the current application context.
+	 *
+	 * @return     AgaviContext The current Context instance.
+	 *
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public final function getContext()
+	{
+		return $this->context;
+	}
+	
 
 	const T_TEXT                  = -1;
 
@@ -180,23 +213,78 @@ class AgaviDateFormat
 	 *                   AgaviCalendar instance.
 	 * @param      string The calendar type this date should be formatted in 
 	 *                    (this will usually be gregorian)
-	 * @param      AgaviLocale The locale to format the date in.
+	 * @param      AgaviLocale|string The locale to format the date in.
 	 *
 	 * @return     string The formatted date.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function format($data, $calendarType, $locale)
+	public function format($data, $calendarType = AgaviCalendar::GREGORIAN, $locale = null)
 	{
-		$tm = $locale->getContext()->getTranslationManager();
-		$tzid = null;
-		if($data instanceof AgaviCalendar) {
-			$tzid = $data->getTimeZone()->getResolvedId();
-			$data = $data->getAll();
-		} elseif(!is_array($data)) {
-			throw new AgaviException('Invalid argument ' . $data);
+		if($locale instanceof AgaviLocale) {
+			$tm = $locale->getContext()->getTranslationManager();
+		} elseif($this->context) {
+			$tm = $this->context->getTranslationManager();
+			if($locale) {
+				$locale = $tm->getLocale($locale);
+			} else {
+				$locale = $tm->getCurrentLocale();
+			}
+		} else {
+			throw new InvalidArgumentException('This AgaviDateFormat has not been initialize()d. To be able to pass a string as locale you need to call initialize() or create this AgaviDateFormat using AgaviTranslationManager::createDateFormat()');
 		}
+		
+		$tzid = null;
+		if($locale->getLocaleTimeZone()) {
+			// use the timezone from the current/provided locale if available
+			$tzid = $tm->resolveTimeZoneId($locale->getLocaleTimeZone());
+		} else {
+			// otherwise use the default timezone
+			$tzid = $tm->getDefaultTimeZone()->getResolvedId();
+		}
+		
+		$cal = null;
+		// remember if cloning the calendar is required on changes
+		// (this is only true if the calendar was passed to this method and not
+		// implicitly created)
+		$calNeedsClone = false;
+		if($data instanceof AgaviCalendar) {
+			$cal = $data;
+			$calNeedsClone = true;
+		} elseif($data instanceof DateTime) {
+			$cal = $this->context->getTranslationManager()->createCalendar($data);
+		} elseif(is_int($data)) {
+			$cal = $this->context->getTranslationManager()->createCalendar($locale);
+			$cal->setUnixTimestamp($data);
+		} elseif(is_array($data)) {
+			$cal = $tm->createCalendar();
+			$cal->fromArray($data);
+		} else {
+			// $data is most likely a string a this point (or something which can be 
+			// implicitly converted to a string, so there is no explicit is_string check)
+			try {
+				// maybe it is a date/time string we can parse...
+				$cal = $tm->createCalendar(new DateTime($data));
+			} catch(Exception $e) {
+				// err... no, it isn't. try to use the message as a calendar name
+				$cal = $tm->createCalendar($data);
+			}
+		}
+		
+		if($tzid != $cal->getTimeZone()->getResolvedId()) {
+			// the requested timezone for use in the output differs from the timezone
+			// set in the calendar: make the calendar reside in the new timezone
+			// so it calculates the correct date values for that timezone
+			
+			if($calNeedsClone) {
+				$cal = clone $cal;
+			}
+			$cal->setTimeZone($tm->createTimeZone($tzid));
+		}
+		
+		$data = $cal->toArray();
+		
 		$out = '';
 
 		foreach($this->tokenList as $token) {
@@ -544,10 +632,25 @@ class AgaviDateFormat
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function parse($dateString, $locale, $strict = false)
+	public function parse($dateString, $locale = null, $strict = false)
 	{
-		$tm = $locale->getContext()->getTranslationManager();
-		$cal = $tm->createCalendar();
+		if($locale instanceof AgaviLocale) {
+			$tm = $locale->getContext()->getTranslationManager();
+		} elseif($this->context) {
+			$tm = $this->context->getTranslationManager();
+			if($locale) {
+				$locale = $tm->getLocale($locale);
+			} else {
+				$locale = $tm->getCurrentLocale();
+			}
+		} else {
+			throw new InvalidArgumentException('This AgaviDateFormat has not been initialize()d. To be able to pass a string as locale you need to call initialize() or create this AgaviDateFormat using AgaviTranslationManager::createDateFormat()');
+		}
+		
+		$cal = $tm->createCalendar($locale);
+		// we need to extract the era from the current date and set that 
+		// era after reinitialising the calendar because if this is not 
+		// done all dates would be BC instead of AD
 		$era = $cal->get(AgaviDateDefinitions::ERA);
 		$cal->clear();
 		$cal->set(AgaviDateDefinitions::ERA, $era);
@@ -835,9 +938,12 @@ class AgaviDateFormat
 			}
 		}
 
+		// make sure the calendar has it's time calculated, 
+		// so there aren't any strange effects when setting a new timezone 
+		// or a new date
+		$cal->getTime();
 		if($strict) {
 			// calculate the time to get errors for invalid dates
-			$cal->getTime();
 			if($datePos < strlen($dateString)) {
 				throw new AgaviException('Input string "' . $dateString . '" has characters after the date');
 			}

@@ -811,6 +811,33 @@ class AgaviTranslationManager
 
 		return null;
 	}
+	
+	/**
+	 * Resolved the given timezone identifier to its 'real' timezone id.
+	 *
+	 * This provides the same functionality like 
+	 * $tm->createTimeZone(id)->getResolvedId() with the difference, that using
+	 * this method will not create a new timezone instance and look up the 
+	 * resolved id there, but instead directly returns the resolved id by using
+	 * a simple lookup.
+	 *
+	 * @param      int The timezone id to be resolved
+	 * @return     int The resolved timezone id
+	 *
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function resolveTimeZoneId($id)
+	{
+		if(isset($this->timeZoneList[$id])) {
+			while($this->timeZoneList[$id]['type'] == 'link') {
+				$id = $this->timeZoneList[$id]['to'];
+			}
+		}
+		
+		return $id;
+	}
+	
 
 	/**
 	 * Creates a new timezone instance for the given identifier.
@@ -934,6 +961,24 @@ class AgaviTranslationManager
 
 		return $c;
 	}
+	
+	/**
+	 * Creates a new date format instance with the given format.
+	 *
+	 * @param      string The date format.
+	 *
+	 * @return     AgaviDateFormat The dateformat instance.
+	 *
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @since      0.11.0
+	 */
+	public function createDateFormat($format)
+	{
+		$dateFormat = new AgaviDateFormat($format);
+		$dateFormat->initialize($this->getContext());
+		return $dateFormat;
+	}
+	
 
 	/**
 	 * Returns the stored information from the ldml supplemental data about a 
