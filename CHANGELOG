@@ -11,6 +11,7 @@ ADD: Optionally set 'secure' flag on session cookies automatically (#981) (David
 ADD: Add AgaviWebRequest::isHttps() convenience method (#980) (David)
 ADD: Allow setting of session save path in AgaviSessionStorage (#979) (David)
 
+CHG: Rename AgaviTranslationManager::getCurrentTimeZone() to getDefaultTimeZone() (#994) (David)
 CHG: Remove unused property AgaviOperatorValidator::$errors (#987) (David)
 CHG: Allow arbitrary number of fractional seconds for parsing date formats (#977) (Dominik)
 

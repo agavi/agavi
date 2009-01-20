@@ -98,3 +98,4 @@ Existing "core.use_routing" directives will be used as a fallback until the dire
 
 - AgaviException::printStackTrace() is now called AgaviException::render()
 
+- AgaviTranslationManager::getCurrentTimeZone() is now called AgaviTranslationManager::getDefaultTimeZone()

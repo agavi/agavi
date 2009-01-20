@@ -133,6 +133,10 @@ class AgaviTranslationManager
 			throw new AgaviException('Tried to use the translation system without a default locale and without a locale set');
 		}
 		$this->setLocale($this->defaultLocaleIdentifier);
+
+		if($this->defaultTimeZone === null) {
+			$this->defaultTimeZone = date_default_timezone_get();
+		}
 	}
 
 	/**
@@ -764,15 +768,25 @@ class AgaviTranslationManager
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
+	 *
+	 * @deprecated Superseded by AgaviTranslationManager::getDefaultTimeZone()
 	 */
 	public function getCurrentTimeZone()
 	{
-		if($this->defaultTimeZone !== null) {
-			$tz = $this->defaultTimeZone;
-		} else {
-			$tz = date_default_timezone_get();
-		}
-		return $this->createTimeZone($tz);
+		return $this->getDefaultTimeZone();
+	}
+
+	/**
+	 * Get the default timezone instance.
+	 *
+	 * @return     AgaviTimeZone The default timezone instance.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function getDefaultTimeZone()
+	{
+		return $this->createTimeZone($this->defaultTimeZone);
 	}
 
 	/**
