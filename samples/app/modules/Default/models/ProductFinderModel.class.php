@@ -1,6 +1,6 @@
 <?php
 
-class Default_PriceFinderModel extends AgaviSampleAppDefaultBaseModel implements AgaviISingletonModel
+class Default_ProductFinderModel extends AgaviSampleAppDefaultBaseModel implements AgaviISingletonModel
 {
 	// imagine this stuff is in a database :)
 	protected static $products = array(
@@ -31,43 +31,44 @@ class Default_PriceFinderModel extends AgaviSampleAppDefaultBaseModel implements
 		),
 	);
 	
-	public function getProducts()
+	public function retrieveAll()
 	{
+		$retval = array();
+		
+		foreach(self::$products as $product) {
+			$retval[] = $this->context->getModel('Product', 'Default', array($product));
+		}
 		return self::$products;
 	}
 	
-	public function getPriceByProductName($productName)
+	public function retrieveRandom()
+	{
+		return $this->context->getModel('Product', 'Default', array(self::$products[array_rand(self::$products)]));
+	}
+	
+	public function retrieveByName($productName)
 	{
 		foreach(self::$products as $product) {
 			if($product['name'] == $productName) {
-				return $product['price'];
+				return $this->context->getModel('Product', 'Default', array($product));
 			}
 		}
 	}
 	
-	public function getPriceByProductId($productId)
+	public function retrieveById($productId)
 	{
 		foreach(self::$products as $product) {
 			if($product['id'] == $productId) {
-				return $product['price'];
+				return $this->context->getModel('Product', 'Default', array($product));
 			}
 		}
 	}
 	
-	public function getNameByProductId($productId)
-	{
-		foreach(self::$products as $product) {
-			if($product['id'] == $productId) {
-				return $product['name'];
-			}
-		}
-	}
-	
-	public function getPriceByProductInfo($productId, $productName)
+	public function retrieveByIdAndName($productId, $productName)
 	{
 		foreach(self::$products as $product) {
 			if($product['id'] == $productId && $product['name'] == $productName) {
-				return $product['price'];
+				return $this->context->getModel('Product', 'Default', array($product));
 			}
 		}
 	}

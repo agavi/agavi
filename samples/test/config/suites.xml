@@ -4,7 +4,7 @@
 		<suites>
 			<suite name="Default">
 				<testfiles>
-					<testfile>unit/PriceFinderModelTest.php</testfile>
+					<testfile>unit/ProductFinderModelTest.php</testfile>
 					<testfile>fragment/SearchEngineSpamActionTest.php</testfile>
 					<testfile>fragment/SearchEngineSpamSuccessViewTest.php</testfile>
 					<testfile>fragment/LoginSuccessViewTest.php</testfile>

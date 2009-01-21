@@ -48,8 +48,8 @@ class SearchEngineSpamActionTest extends AgaviActionTestCase
 		$this->assertValidatedArgument('id');
 		$this->assertViewNameEquals('Success');
 		$this->assertViewModuleNameEquals('Default');
-		$this->assertContainerAttributeExists('product_price');
-		$this->assertContainerAttributeEquals($price, 'product_price');
+		$this->assertContainerAttributeExists('product');
+		$this->assertEquals($price, $this->getAttribute('product')->getPrice());
 	}
 	
 	public function successViewValidProductsData()

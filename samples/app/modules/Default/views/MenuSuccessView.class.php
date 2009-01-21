@@ -22,8 +22,8 @@ class Default_MenuSuccessView extends AgaviSampleAppDefaultBaseView
 		$this->setupHtml($rd);
 
 		// pick a random product and set it as a template var
-		$products = $this->getContext()->getModel('PriceFinder', 'Default')->getProducts();
-		$this->setAttribute('product', $products[array_rand($products)]);
+		$randomProduct = $this->getContext()->getModel('ProductFinder', 'Default')->retrieveRandom();
+		$this->setAttribute('product', $randomProduct);
 	}
 
 }

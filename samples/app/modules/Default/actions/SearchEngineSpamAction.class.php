@@ -4,21 +4,18 @@ class Default_SearchEngineSpamAction extends AgaviSampleAppDefaultBaseAction
 {
 	public function executeRead(AgaviRequestDataHolder $rd)
 	{
-		$pfm = $this->getContext()->getModel('PriceFinder', 'Default');
+		$pfm = $this->getContext()->getModel('ProductFinder', 'Default');
 		$id = $rd->getParameter('id');
 		
 		// was the name in the url? then validate that, too
 		if($rd->hasParameter('name')) {
 			$name = $rd->getParameter('name');
-			$price = $pfm->getPriceByProductInfo($id, $name);
+			$product = $pfm->retrieveByIdAndName($id, $name);
 		} else {
-			$name = $pfm->getNameByProductId($id);
-			$price = $pfm->getPriceByProductId($id);
+			$product = $pfm->retrieveById($id);
 		}
-		if($price !== null) {
-			$this->setAttribute('product_id', $id);
-			$this->setAttribute('product_name', $name);
-			$this->setAttribute('product_price', $price);
+		if($product !== null) {
+			$this->setAttribute('product', $product);
 			return 'Success';
 		} else {
 			return 'Error';
