@@ -183,7 +183,7 @@ class AgaviDateTimeValidator extends AgaviValidator
 					$cal->setTime($param);
 					if($matchedFormat) {
 						try {
-							if($cal->getTime() !== $param) {
+							if($cal->getTime() !== (float)$param) {
 								$this->throwError('check');
 								return false;
 							}
