@@ -1,6 +1,6 @@
 <?php
 
-class Default_ProductFinderModel extends AgaviSampleAppDefaultBaseModel implements AgaviISingletonModel
+class ProductFinderModel extends AgaviSampleAppBaseModel implements AgaviISingletonModel
 {
 	// imagine this stuff is in a database :)
 	protected static $products = array(
@@ -36,21 +36,21 @@ class Default_ProductFinderModel extends AgaviSampleAppDefaultBaseModel implemen
 		$retval = array();
 		
 		foreach(self::$products as $product) {
-			$retval[] = $this->context->getModel('Product', 'Default', array($product));
+			$retval[] = $this->context->getModel('Product', null, array($product));
 		}
 		return self::$products;
 	}
 	
 	public function retrieveRandom()
 	{
-		return $this->context->getModel('Product', 'Default', array(self::$products[array_rand(self::$products)]));
+		return $this->context->getModel('Product', null, array(self::$products[array_rand(self::$products)]));
 	}
 	
 	public function retrieveByName($productName)
 	{
 		foreach(self::$products as $product) {
 			if($product['name'] == $productName) {
-				return $this->context->getModel('Product', 'Default', array($product));
+				return $this->context->getModel('Product', null, array($product));
 			}
 		}
 	}
@@ -59,7 +59,7 @@ class Default_ProductFinderModel extends AgaviSampleAppDefaultBaseModel implemen
 	{
 		foreach(self::$products as $product) {
 			if($product['id'] == $productId) {
-				return $this->context->getModel('Product', 'Default', array($product));
+				return $this->context->getModel('Product', null, array($product));
 			}
 		}
 	}
@@ -68,7 +68,7 @@ class Default_ProductFinderModel extends AgaviSampleAppDefaultBaseModel implemen
 	{
 		foreach(self::$products as $product) {
 			if($product['id'] == $productId && $product['name'] == $productName) {
-				return $this->context->getModel('Product', 'Default', array($product));
+				return $this->context->getModel('Product', null, array($product));
 			}
 		}
 	}

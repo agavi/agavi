@@ -35,7 +35,7 @@ class ProductFinderModelTest extends AgaviUnitTestCase
 	 */
 	public function testValidProductPricesByName($productName, $price)
 	{
-		$finder = $this->getContext()->getModel('ProductFinder', 'Default');
+		$finder = $this->getContext()->getModel('ProductFinder');
 		$this->assertEquals($price, $finder->retrieveByName($productName)->getPrice());
 	}
 	
@@ -56,7 +56,7 @@ class ProductFinderModelTest extends AgaviUnitTestCase
 	 */
 	public function testValidProductPricesById($productId, $price)
 	{
-		$finder = $this->getContext()->getModel('ProductFinder', 'Default');
+		$finder = $this->getContext()->getModel('ProductFinder');
 		$this->assertEquals($price, $finder->retrieveById($productId)->getPrice());
 	}
 	
@@ -77,7 +77,7 @@ class ProductFinderModelTest extends AgaviUnitTestCase
 	 */
 	public function testValidProductPricesByInfo($productId, $productName, $price)
 	{
-		$finder = $this->getContext()->getModel('ProductFinder', 'Default');
+		$finder = $this->getContext()->getModel('ProductFinder');
 		$this->assertEquals($price, $finder->retrieveByIdAndName($productId, $productName)->getPrice());
 	}
 	
@@ -96,23 +96,23 @@ class ProductFinderModelTest extends AgaviUnitTestCase
 	
 	public function testNullForUnknownProductName()
 	{
-		$this->assertNull($this->getContext()->getModel('ProductFinder', 'Default')->retrieveByName('unknown product'));
+		$this->assertNull($this->getContext()->getModel('ProductFinder')->retrieveByName('unknown product'));
 	}
 	
 	public function testNullForUnknownProductId()
 	{
-		$this->assertNull($this->getContext()->getModel('ProductFinder', 'Default')->retrieveById(-1));
+		$this->assertNull($this->getContext()->getModel('ProductFinder')->retrieveById(-1));
 	}
 	
 	public function testNullForUnknownProductInfo()
 	{
-		$this->assertNull($this->getContext()->getModel('ProductFinder', 'Default')->retrieveByIdAndName(-1, 'unknown product'));
+		$this->assertNull($this->getContext()->getModel('ProductFinder')->retrieveByIdAndName(-1, 'unknown product'));
 	}
 	
 	public function testNullForPartiallyValidProductInfo()
 	{
-		$this->assertNull($this->getContext()->getModel('ProductFinder', 'Default')->retrieveByIdAndName(123456, 'nonsenseZOMG'));
-		$this->assertNull($this->getContext()->getModel('ProductFinder', 'Default')->retrieveByIdAndName(1234567, 'nonsense'));
+		$this->assertNull($this->getContext()->getModel('ProductFinder')->retrieveByIdAndName(123456, 'nonsenseZOMG'));
+		$this->assertNull($this->getContext()->getModel('ProductFinder')->retrieveByIdAndName(1234567, 'nonsense'));
 	}
 }
 

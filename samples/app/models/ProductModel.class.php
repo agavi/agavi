@@ -1,6 +1,6 @@
 <?php
 
-class Default_ProductModel extends AgaviSampleAppDefaultBaseModel
+class ProductModel extends AgaviSampleAppBaseModel
 {
 	protected $id;
 	protected $name;

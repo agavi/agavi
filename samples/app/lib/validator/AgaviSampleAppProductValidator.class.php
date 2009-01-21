@@ -12,11 +12,11 @@ class AgaviSampleAppProductValidator extends AgaviValidator
 			$id = $this->getData($arguments['id']);
 			$name = $this->getData($arguments['name']);
 			
-			$product = $this->getContext()->getModel('ProductFinder', 'Default')->retrieveByIdAndName($id, $name);
+			$product = $this->getContext()->getModel('ProductFinder')->retrieveByIdAndName($id, $name);
 		} else {
 			$id = $this->getData($this->getArgument());
 			
-			$product = $this->getContext()->getModel('ProductFinder', 'Default')->retrieveById($id);
+			$product = $this->getContext()->getModel('ProductFinder')->retrieveById($id);
 		}
 		
 		if(!$product) {
