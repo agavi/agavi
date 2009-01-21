@@ -1785,6 +1785,8 @@ abstract class AgaviCalendar
 	 */
 	protected function setTimeInMillis($millis)
 	{
+		$millis = (float) $millis;
+		
 		if($millis > self::MAX_MILLIS) {
 			$millis = self::MAX_MILLIS;
 		} elseif($millis < self::MIN_MILLIS) {

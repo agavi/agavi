@@ -13,6 +13,7 @@ ADD: Allow setting of session save path in AgaviSessionStorage (#979) (David)
 CHG: Remove unused property AgaviOperatorValidator::$errors (#987) (David)
 CHG: Allow arbitrary number of fractional seconds for parsing date formats (#977) (Dominik)
 
+FIX: AgaviCalendar::setTimeInMillis() doesn't explicitly cast value to float (#996) (David)
 FIX: AgaviConfigCache::loadConfigHandlers() may trigger "cannot redeclare class" fatal error (#989) (David)
 FIX: Caching generates invalid group values in some cases (#988) (David)
 FIX: Validation marks fields that weren't processed due to unsatisfied dependencies as sucessful (#984) (Dominik, David)
