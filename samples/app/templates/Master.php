@@ -158,7 +158,7 @@ $otherLanguages = array_diff_key($languages, array($currentLanguage => null));
 <?php echo $slots['menu']; ?>
 		</div>
 		<div id="content">
-			<h2><?php echo $template['title']; ?></h2>
+			<h2><?php echo $t['_title']; ?></h2>
 <?php echo $inner; // print the content layer output ?>
 		</div>
 	</body>

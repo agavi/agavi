@@ -83,7 +83,7 @@ class AgaviSampleAppBaseView extends AgaviView
 		$this->loadLayout($layoutName);
 		
 		// also set a default title just to avoid warnings
-		$this->setAttribute('title', '');
+		$this->setAttribute('_title', '');
 	}
 }
 

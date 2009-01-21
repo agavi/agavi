@@ -47,7 +47,7 @@ class SearchEngineSpamSuccessViewTest extends AgaviViewTestCase
 		$this->assertHasLayer('content');
 		$this->assertHasLayer('decorator');
 		$this->assertResponseHasNoRedirect();
-		$this->assertContainerAttributeExists('title');
+		$this->assertContainerAttributeExists('_title');
 	}
 	
 	public function testResponseJson()

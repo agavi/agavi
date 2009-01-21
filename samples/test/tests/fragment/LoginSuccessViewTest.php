@@ -34,7 +34,7 @@ class LoginSuccessViewTest extends AgaviViewTestCase
 		$this->assertHasLayer('content');
 		$this->assertHasLayer('decorator');
 		$this->assertResponseHasNoRedirect();
-		$this->assertContainerAttributeExists('title');
+		$this->assertContainerAttributeExists('_title');
 	}
 	
 	public function testResponseHasCookiesWhenRememberSet()
@@ -46,7 +46,7 @@ class LoginSuccessViewTest extends AgaviViewTestCase
 		$this->assertHasLayer('content');
 		$this->assertHasLayer('decorator');
 		$this->assertResponseHasNoRedirect();
-		$this->assertContainerAttributeExists('title');
+		$this->assertContainerAttributeExists('_title');
 		$this->assertResponseHasCookie('autologon[username]', array('value' => 'Chuck Norris', 'lifetime' => '1209600', 'path' => null, 'domain' => null, 'secure' => null, 'httponly' => null));
 		$this->assertResponseHasCookie('autologon[password]', array('value' => 'd436130cf2f5024cfdb3aa7325322d530336b95f', 'lifetime' => '1209600', 'path' => null, 'domain' => null, 'secure' => null, 'httponly' => null));
 	}

@@ -20,7 +20,7 @@ class Default_ModuleDisabledSuccessView extends AgaviSampleAppDefaultBaseView
 		$this->setupHtml($rd);
 
 		// set the title
-		$this->setAttribute('title', $this->getContext()->getTranslationManager()->_('This Module is Disabled', 'default.ErrorActions'));
+		$this->setAttribute('_title', $this->getContext()->getTranslationManager()->_('This Module is Disabled', 'default.ErrorActions'));
 		
 		$this->getResponse()->setHttpStatusCode('503');
 	}
