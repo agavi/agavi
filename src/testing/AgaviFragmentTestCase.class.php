@@ -208,9 +208,10 @@ class %1$s extends %2$s
 class %1$s extends %2$s
 {
 	protected $validationResult = null;
+	protected $doneCloneArgumentsToRequestData = false;
 
 	public function performValidation()
-	{	
+	{
 		if(null === $this->validationResult) {
 			$this->cloneArgumentsToRequestData();
 			$this->validationResult = parent::performValidation();
@@ -226,7 +227,10 @@ class %1$s extends %2$s
 	
 	public function cloneArgumentsToRequestData()
 	{
-		$this->requestData = clone $this->arguments;
+		if(!$this->doneCloneArgumentsToRequestData) {
+			$this->requestData = clone $this->arguments;
+			$this->doneCloneArgumentsToRequestData = true;
+		}
 	}
 
 	public function setActionInstance(AgaviAction $action)
