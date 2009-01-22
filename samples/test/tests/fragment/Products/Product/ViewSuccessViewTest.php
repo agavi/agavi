@@ -24,7 +24,8 @@ class Products_Product_ViewSuccessViewTest extends AgaviViewTestCase
 	{
 		return array(
 			'html'   => array('html'),
-			'json'   => array('json'),
+			'html'   => array('text'),
+			// 'json'   => array('json'),
 			'soap'   => array('soap'),
 			'xmlrpc' => array('xmlrpc'),
 		);
@@ -35,6 +36,7 @@ class Products_Product_ViewSuccessViewTest extends AgaviViewTestCase
 		$this->assertNotHandlesOutputType('xml');
 	}
 	
+	// FIXME: needs to be updated
 	public function testResponseHtml()
 	{		
 		$this->setArguments($this->createRequestDataHolder(array(AgaviWebRequestDataHolder::SOURCE_PARAMETERS => array('product_name' => 'spam'))));
@@ -51,18 +53,18 @@ class Products_Product_ViewSuccessViewTest extends AgaviViewTestCase
 		$this->assertContainerAttributeExists('_title');
 	}
 	
-	public function testResponseJson()
-	{		
-		$this->setArguments($this->createRequestDataHolder(array(AgaviWebRequestDataHolder::SOURCE_PARAMETERS => array('product_name' => 'spam'))));
-
-		$this->setAttribute('product_id', 1234);
-		$this->setAttribute('product_name', 'spam');
-		$this->setAttribute('product_price', '123.45');
-		$this->runView('json');
-		$this->assertResponseHasHTTPStatus(200);
-		$this->assertViewResultEquals('{"product_price":"123.45"}');
-		$this->assertResponseHasNoRedirect();
-	}
+	// public function testResponseJson()
+	// {		
+	// 	$this->setArguments($this->createRequestDataHolder(array(AgaviWebRequestDataHolder::SOURCE_PARAMETERS => array('product_name' => 'spam'))));
+	// 
+	// 	$this->setAttribute('product_id', 1234);
+	// 	$this->setAttribute('product_name', 'spam');
+	// 	$this->setAttribute('product_price', '123.45');
+	// 	$this->runView('json');
+	// 	$this->assertResponseHasHTTPStatus(200);
+	// 	$this->assertViewResultEquals('{"product_price":"123.45"}');
+	// 	$this->assertResponseHasNoRedirect();
+	// }
 }
 
 ?>
