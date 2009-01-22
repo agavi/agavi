@@ -23,7 +23,7 @@
 			<xs:element name="roles" type="roles"
 			            minOccurs="0" />
 			<xs:element name="permissions" type="permissions"
-			            minOccurs="1" />
+			            minOccurs="0" />
 		</xs:all>
 		<xs:attribute name="name" type="xs:string" use="required" />
 	</xs:complexType>
