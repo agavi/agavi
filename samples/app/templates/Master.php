@@ -20,13 +20,13 @@ $rtl = ($locale->getCharacterOrientation() == 'right-to-left');
 		}
 
 		#content {
-<?php if($rtl): ?>
-			margin-left:  15px;
-			margin-right: 200px;
-<?php else: ?>
 			margin-left:  200px;
 			margin-right: 15px;
-<?php endif; ?>
+		}
+
+		html[dir=rtl] #content {
+			margin-left:  15px;
+			margin-right: 200px;
 		}
 
 		h1 {
@@ -55,13 +55,13 @@ $rtl = ($locale->getCharacterOrientation() == 'right-to-left');
 
 		#menu {
 			border:           solid 1px #505050;
-<?php if($rtl): ?>
-			float: right;
-<?php else: ?>
 			float: left;
-<?php endif; ?>
 			margin:           0 1em 1em 1em;
 			width:            14em;
+		}
+
+		html[dir=rtl] #menu {
+			float: right;
 		}
 
 		#menu a {
@@ -128,14 +128,14 @@ $rtl = ($locale->getCharacterOrientation() == 'right-to-left');
 		}
 
 		p.runin {
-<?php if($rtl): ?>
-			float: left;
-<?php else: ?>
 			float: right;
-<?php endif; ?>
 			padding: 0.3em 0.5em;
 			border:  1px solid #DDD;
 			background-color: #FFF;
+		}
+
+		html[dir=rtl] p.runin {
+			float: left;
 		}
 
 		</style>
