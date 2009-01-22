@@ -207,6 +207,7 @@ class AgaviXmlConfigParser
 		$isAgaviConfigFormat = true;
 		// build an array of documents (this one, and the parents)
 		$docs = array();
+		$previousPaths = array();
 		$nextPath = $path;
 		while($nextPath !== null) {
 			// run the single stage parser
@@ -224,7 +225,17 @@ class AgaviXmlConfigParser
 			// is it an Agavi <configurations> element? does it have a parent attribute? yes? good. parse that next
 			// TODO: support future namespaces
 			if($isAgaviConfigFormat && $doc->documentElement->hasAttribute('parent')) {
-				$nextPath = AgaviToolkit::literalize($doc->documentElement->getAttribute('parent'));
+				$theNextPath = AgaviToolkit::literalize($doc->documentElement->getAttribute('parent'));
+				
+				// no infinite loop plz, kthx
+				if($nextPath === $theNextPath) {
+					throw new AgaviParseException(sprintf("Agavi detected an infinite loop while processing parent configuration files of \n%s\n\nFile\n%s\nincludes itself as a parent.", $path, $theNextPath));
+				} elseif(isset($previousPaths[$theNextPath])) {
+					throw new AgaviParseException(sprintf("Agavi detected an infinite loop while processing parent configuration files of \n%s\n\nFile\n%s\nhas previously been included by\n%s", $path, $theNextPath, $previousPaths[$theNextPath]));
+				} else {
+					$previousPaths[$theNextPath] = $nextPath;
+					$nextPath = $theNextPath;
+				}
 			} else {
 				$nextPath = null;
 			}
