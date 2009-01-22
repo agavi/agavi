@@ -10,11 +10,13 @@ $locale = $tm->getCurrentLocale();
 		<link rel="stylesheet" type="text/css" href="css/style.css" />
 	</head>
 	<body>
-		<p class="runin"><?php echo $tm->_d($tm->createCalendar()); ?></p>
-<?php if($us->isAuthenticated()): ?>
-		<p class="runin"><?php echo $tm->_('You are logged in.', 'default.layout'); ?> <a href="<?php echo $ro->gen('logout'); ?>"><?php echo $tm->_('Log Out', 'default.layout'); ?></a></p>
-<?php endif; ?>
-		<h1><?php echo $tm->_('Agavi Sample Application', 'default.layout'); ?></h1>
+		<div id="header">
+			<p class="runin"><?php echo $tm->_d($tm->createCalendar()); ?></p>
+	<?php if($us->isAuthenticated()): ?>
+			<p class="runin"><?php echo $tm->_('You are logged in.', 'default.layout'); ?> <a href="<?php echo $ro->gen('logout'); ?>"><?php echo $tm->_('Log Out', 'default.layout'); ?></a></p>
+	<?php endif; ?>
+			<h1><?php echo $tm->_('Agavi Sample Application', 'default.layout'); ?></h1>
+		</div>
 		
 		<div id="menu">
 <?php echo $slots['menu']; ?>
