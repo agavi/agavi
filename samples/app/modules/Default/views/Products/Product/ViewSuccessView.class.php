@@ -25,18 +25,6 @@ class Default_Products_Product_ViewSuccessView extends AgaviSampleAppDefaultBase
 	}
 
 	/**
-	 * Execute any presentation logic for JSON requests.
-	 */
-	public function executeJson(AgaviRequestDataHolder $rd)
-	{
-		return json_encode(
-			array(
-				'product_price' => $this->getAttribute('product_price'),
-			)
-		);
-	}
-
-	/**
 	 * Execute any presentation logic for SOAP requests.
 	 */
 	public function executeSoap(AgaviRequestDataHolder $rd)
@@ -49,7 +37,13 @@ class Default_Products_Product_ViewSuccessView extends AgaviSampleAppDefaultBase
 	 */
 	public function executeXmlrpc(AgaviRequestDataHolder $rd)
 	{
-		return array($this->getAttribute('product_price'));
+		$product = $this->getAttribute('product');
+		
+		return array(
+			'id'    => $product->getId(),
+			'name'  => $product->getName(),
+			'price' => $product->getPrice(),
+		);
 	}
 }
 
