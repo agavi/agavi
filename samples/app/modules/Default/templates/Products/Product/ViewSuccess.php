@@ -1,4 +1,3 @@
-<p><?php echo $tm->_('You just found the #1 place to buy <strong>%s</strong> at low prices!', 'default.SearchEngineSpam', null, array($t['product']->getName())); ?></p>
 <dl>
 	<dt><?php echo $tm->_('Product Name', 'default.SearchEngineSpam'); ?></dt>
 	<dd><?php echo $t['product']->getName(); ?></dd>

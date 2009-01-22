@@ -20,10 +20,6 @@ class Default_MenuSuccessView extends AgaviSampleAppDefaultBaseView
 	{
 		// will automatically load "slot" layout for us
 		$this->setupHtml($rd);
-
-		// pick a random product and set it as a template var
-		$randomProduct = $this->getContext()->getModel('ProductFinder')->retrieveRandom();
-		$this->setAttribute('product', $randomProduct);
 	}
 
 }

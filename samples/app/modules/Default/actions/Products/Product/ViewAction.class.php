@@ -1,6 +1,6 @@
 <?php
 
-class Default_SearchEngineSpamAction extends AgaviSampleAppDefaultBaseAction
+class Default_Products_Product_ViewAction extends AgaviSampleAppDefaultBaseAction
 {
 	public function executeRead(AgaviRequestDataHolder $rd)
 	{

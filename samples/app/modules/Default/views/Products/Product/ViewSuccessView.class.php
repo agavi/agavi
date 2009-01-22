@@ -1,6 +1,6 @@
 <?php
 
-class Default_SearchEngineSpamSuccessView extends AgaviSampleAppDefaultBaseView
+class Default_Products_Product_ViewSuccessView extends AgaviSampleAppDefaultBaseView
 {
 
 	/**

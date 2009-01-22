@@ -1,6 +1,6 @@
 <?php
 
-class Default_SearchEngineSpamErrorView extends AgaviSampleAppDefaultBaseView
+class Default_Products_Product_ViewErrorView extends AgaviSampleAppDefaultBaseView
 {
 	/**
 	 * Execute any presentation logic and set template attributes.

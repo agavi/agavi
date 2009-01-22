@@ -38,7 +38,8 @@ class ProductFinderModel extends AgaviSampleAppBaseModel implements AgaviISingle
 		foreach(self::$products as $product) {
 			$retval[] = $this->context->getModel('Product', null, array($product));
 		}
-		return self::$products;
+		
+		return $retval;
 	}
 	
 	public function retrieveRandom()
