@@ -1,26 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" xmlns="http://agavi.org/agavi/config/parts/routing/1.0" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:asa="http://agavi.org/sampleapp" xmlns:tns="http://agavi.org/sampleapp/types" targetNamespace="http://agavi.org/sampleapp">
 	
-	<wsdl:types>
-		<xsd:schema xmlns:soap-enc="http://schemas.xmlsoap.org/soap/encoding/" targetNamespace="http://agavi.org/sampleapp/types">
-			<xsd:complexType name="Product">
-				<xsd:sequence>
-					<xsd:element name="id" type="xsd:int" />
-					<xsd:element name="name" type="xsd:string" />
-					<xsd:element name="price" type="xsd:float" />
-				</xsd:sequence>
-			</xsd:complexType>
-			<xsd:complexType name="ArrayOfProducts">
-				<xsd:complexContent>
-					<xsd:extension base="soap-enc:Array">
-						<xsd:attribute ref="soap-enc:arrayType"
-							wsdl:arrayType="tns:Product[]" />
-					</xsd:extension>
-				</xsd:complexContent>
-			</xsd:complexType>
-		</xsd:schema>
-	</wsdl:types>
-	
 	<ae:configuration context="web">
 		<routes>
 			<!-- matches "/de" or "/en" at the beginning of the URL and uses either value to set the locale, with British Pounds Sterling as the currency. Execution will not stop if this route matches. If it matches, the matched fragment will be stripped from the input URL for the following routes. This route has the "imply" flag, which means that it will be included in generated routes even if the gen() call does not explicitly mention it. The matched "language" parameter will not be available as a request parameter in the code, because it's "ignore"d -->
@@ -77,6 +57,25 @@
 	</ae:configuration>
 	
 	<ae:configuration context="soap">
+		<wsdl:types>
+			<xsd:schema xmlns:soap-enc="http://schemas.xmlsoap.org/soap/encoding/" targetNamespace="http://agavi.org/sampleapp/types">
+				<xsd:complexType name="Product">
+					<xsd:sequence>
+						<xsd:element name="id" type="xsd:int" />
+						<xsd:element name="name" type="xsd:string" />
+						<xsd:element name="price" type="xsd:float" />
+					</xsd:sequence>
+				</xsd:complexType>
+				<xsd:complexType name="ArrayOfProducts">
+					<xsd:complexContent>
+						<xsd:extension base="soap-enc:Array">
+							<xsd:attribute ref="soap-enc:arrayType"
+								wsdl:arrayType="tns:Product[]" />
+						</xsd:extension>
+					</xsd:complexContent>
+				</xsd:complexType>
+			</xsd:schema>
+		</wsdl:types>
 		<routes>
 			<!-- SOAP calls include the name of a remote method to call. The WebserviceRouting applies patterns to this method name, not to the URL of the request. We set the request method to "read" here so executeRead() is run in the Action. -->
 			<route pattern="^getProduct$" module="Default" action="Products.Product.View" method="read">

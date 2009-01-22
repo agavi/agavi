@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 1.0.0 beta8 (January ??, 2009)
 ------------------------------
 
+ADD: Complete support for multiple SOAP services in the same application (#1001) (David)
 ADD: AgaviException::render() should send shell exit code (#990) (David)
 ADD: Command line support (request/response/routing) (#480) (David)
 ADD: Optionally set 'secure' flag on response cookies automatically (#982) (David)
