@@ -17,7 +17,11 @@ class Default_Products_Product_ViewSuccessView extends AgaviSampleAppDefaultBase
 
 	public function executeText(AgaviRequestDataHolder $rd)
 	{
-		return $this->getAttribute('product_price');
+		$product = $this->getAttribute('product');
+		
+		return
+			'Name:  ' . $product->getName() . PHP_EOL .
+			'Price: ' . sprintf('%01.2f', $product->getPrice());
 	}
 
 	/**
@@ -37,7 +41,7 @@ class Default_Products_Product_ViewSuccessView extends AgaviSampleAppDefaultBase
 	 */
 	public function executeSoap(AgaviRequestDataHolder $rd)
 	{
-		return $this->getAttribute('product_price');
+		return $this->getAttribute('product')->getPrice();
 	}
 
 	/**
