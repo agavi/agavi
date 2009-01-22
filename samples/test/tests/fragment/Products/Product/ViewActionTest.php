@@ -1,6 +1,6 @@
 <?php 
 
-class SearchEngineSpamActionTest extends AgaviActionTestCase
+class Products_Product_ViewActionTest extends AgaviActionTestCase
 {
 	protected static $products = array(
 		array(
@@ -33,7 +33,7 @@ class SearchEngineSpamActionTest extends AgaviActionTestCase
 	public function __construct($name = NULL, array $data = array(), $dataName = '')
 	{
 		parent::__construct($name, $data, $dataName);
-		$this->actionName = 'SearchEngineSpam';
+		$this->actionName = 'Products/Product/View';
 		$this->moduleName = 'Default';
 	}
 	

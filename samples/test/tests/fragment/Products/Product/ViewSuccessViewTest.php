@@ -1,12 +1,13 @@
 <?php 
 
-class SearchEngineSpamSuccessViewTest extends AgaviViewTestCase
+class Products_Product_ViewSuccessViewTest extends AgaviViewTestCase
 {
 
 	public function __construct($name = NULL, array $data = array(), $dataName = '')
 	{
 		parent::__construct($name, $data, $dataName);
-		$this->actionName = 'SearchEngineSpam';
+		// FIXME: the underlying issue must be solved
+		$this->actionName = 'Products/Product/View';
 		$this->moduleName = 'Default';
 		$this->viewName   = 'Success';
 	}
