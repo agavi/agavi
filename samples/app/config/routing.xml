@@ -1,5 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" xmlns="http://agavi.org/agavi/config/parts/routing/1.0" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:asa="http://agavi.org/sampleapp" targetNamespace="http://agavi.org/sampleapp">
+<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" xmlns="http://agavi.org/agavi/config/parts/routing/1.0" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:asa="http://agavi.org/sampleapp" xmlns:tns="http://agavi.org/sampleapp/types" targetNamespace="http://agavi.org/sampleapp">
+	
+	<wsdl:types>
+		<xsd:schema xmlns:soap-enc="http://schemas.xmlsoap.org/soap/encoding/" targetNamespace="http://agavi.org/sampleapp/types">
+			<xsd:complexType name="Product">
+				<xsd:sequence>
+					<xsd:element name="id" type="xsd:int" />
+					<xsd:element name="name" type="xsd:string" />
+					<xsd:element name="price" type="xsd:float" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="ArrayOfProducts">
+				<xsd:complexContent>
+					<xsd:extension base="soap-enc:Array">
+						<xsd:attribute ref="soap-enc:arrayType"
+							wsdl:arrayType="tns:Product[]" />
+					</xsd:extension>
+				</xsd:complexContent>
+			</xsd:complexType>
+		</xsd:schema>
+	</wsdl:types>
 	
 	<ae:configuration context="web">
 		<routes>
@@ -49,31 +69,38 @@
 		</routes>
 	</ae:configuration>
 	
+	<ae:configuration context="xmlrpc">
+		<routes>
+			<!-- XMLRPC calls include the name of a remote method to call. The WebserviceRouting applies patterns to this method name, not to the URL of the request. We set the request method to "read" here so executeRead() is run in the Action. -->
+			<route pattern="^getItemPrice$" module="Default" action="SearchEngineSpam" method="read" />
+		</routes>
+	</ae:configuration>
+	
 	<ae:configuration context="soap">
 		<routes>
 			<!-- SOAP calls include the name of a remote method to call. The WebserviceRouting applies patterns to this method name, not to the URL of the request. We set the request method to "read" here so executeRead() is run in the Action. -->
-			<route pattern="^getItemPrice$" module="Default" action="Products.Product.View" method="read">
+			<route pattern="^getProduct$" module="Default" action="Products.Product.View" method="read">
 				<wsdl:input>
 					<wsdl:part name="id" type="xsd:int" />
 				</wsdl:input>
 				<wsdl:output>
-					<wsdl:part name="price" type="xsd:float" />
+					<wsdl:part name="product" type="tns:Product" />
+				</wsdl:output>
+			</route>
+			<route pattern="^listProducts$" module="Default" action="Products.Index" method="read">
+				<wsdl:output>
+					<wsdl:part name="products" type="tns:ArrayOfProducts" />
 				</wsdl:output>
 			</route>
 		</routes>
 	</ae:configuration>
 	
+	<!-- this simple context is used to deliver the WSDL for the soap service above in a "normal" web request -->
 	<ae:configuration context="wsdl">
 		<routes>
 			<!-- matches anything -->
+			<!-- this action simply makes a soap context, requests the WSDL and returns it -->
 			<route pattern="" module="Default" action="SendWsdl" />
-		</routes>
-	</ae:configuration>
-	
-	<ae:configuration context="xmlrpc">
-		<routes>
-			<!-- XMLRPC calls include the name of a remote method to call. The WebserviceRouting applies patterns to this method name, not to the URL of the request. We set the request method to "read" here so executeRead() is run in the Action. -->
-			<route pattern="^getItemPrice$" module="Default" action="SearchEngineSpam" method="read" />
 		</routes>
 	</ae:configuration>
 </ae:configurations>

@@ -26,11 +26,11 @@ class Default_Products_IndexSuccessView extends AgaviSampleAppDefaultBaseView
 		
 		return implode(PHP_EOL, $ret);
 	}
-	// 
-	// public function executeSoap(AgaviRequestDataHolder $rd)
-	// {
-	// 	return $this->getAttribute('product_price');
-	// }
+	
+	public function executeSoap(AgaviRequestDataHolder $rd)
+	{
+		return $this->getAttribute('products');
+	}
 	// 
 	// public function executeXmlrpc(AgaviRequestDataHolder $rd)
 	// {

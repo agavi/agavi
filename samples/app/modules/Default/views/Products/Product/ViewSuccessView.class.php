@@ -41,7 +41,7 @@ class Default_Products_Product_ViewSuccessView extends AgaviSampleAppDefaultBase
 	 */
 	public function executeSoap(AgaviRequestDataHolder $rd)
 	{
-		return $this->getAttribute('product')->getPrice();
+		return $this->getAttribute('product');
 	}
 
 	/**

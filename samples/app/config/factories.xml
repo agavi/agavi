@@ -78,7 +78,7 @@
 			<ae:parameter name="wsdl_generator">
 				<ae:parameter name="soap">
 					<ae:parameter name="address">
-						<ae:parameter name="location">http://localhost/~dzuelke/_projects/agavi/branches/0.11/samples/pub/soap.php</ae:parameter>
+						<ae:parameter name="location">http://localhost/~dzuelke/Code/oss/agavi/branches/1.0/samples/pub/soap.php</ae:parameter>
 					</ae:parameter>
 				</ae:parameter>
 			</ae:parameter>
