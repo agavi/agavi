@@ -32,14 +32,15 @@ class AgaviTranslationManagerTest extends AgaviUnitTestCase
 	{
 		$ctx = AgaviContext::getInstance();
 		$tm = $ctx->getTranslationManager();
-		$locale = $tm->getLocale('de');
+		$locale = $tm->getLocale('de@timezone=America/Los_Angeles');
 		$inputFormat = new AgaviDateFormat('yyyy-MM-dd HH:mm:ssZZZ');
 
 		$cal = $inputFormat->parse('2008-11-19 23:00:00America/Los_Angeles', $locale, false);
-
-		$this->assertEquals('2008-11-19 23:00:00-0800', $inputFormat->format($cal, 'gregorian', $locale));
+		$originalTimeZoneId = $cal->getTimeZone()->getId();
+		
+		$this->assertEquals('America/Los_Angeles', $cal->getTimeZone()->getId());
 		$this->assertEquals('Donnerstag, 20. November 2008 2:00 Uhr GMT-05:00', $tm->_d($cal, null, 'de@timezone=America/New_York'));
-		$this->assertEquals('Donnerstag, 20. November 2008 2:00 Uhr GMT-08:00', $tm->_d($cal, null, 'de'));
+		$this->assertEquals($originalTimeZoneId, $cal->getTimeZone()->getId());
 	}
 }
 
