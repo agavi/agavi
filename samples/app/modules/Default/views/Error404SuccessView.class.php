@@ -40,11 +40,10 @@ class Default_Error404SuccessView extends AgaviSampleAppDefaultBaseView
 			'Usage: console.php <command> [OPTION]...' . PHP_EOL .
 			PHP_EOL .
 			'Commands:' . PHP_EOL .
-			'  getprice <id>' . PHP_EOL .
-			'    Finds the price of the given product ID.' . PHP_EOL .
-			'    Optionally accepts a name, too, which must match the ID.' . PHP_EOL .
-			'    Options:' . PHP_EOL .
-			'      -name Name of the product to validate against' . PHP_EOL;
+			'  viewproduct <id>' . PHP_EOL .
+			'    Retrieves product details given a product ID.' . PHP_EOL .
+			'  listproducts' . PHP_EOL .
+			'    Lists all products in the application.' . PHP_EOL;
 	}
 }
 
