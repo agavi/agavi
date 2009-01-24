@@ -159,6 +159,16 @@ class AgaviWebRoutingTest extends AgaviPhpUnitTestCase
 		$this->assertEquals('/callbacks/23/', $url);
 	}
 	
+	public function testGenWithCallbackExpectIncomingParameterIsEncodedAndCanBeDecoded()
+	{
+		$url = $this->routing->gen('callbacks.gen_expect_incoming_parameter_is_encoded_and_can_be_decoded', array('string' => 'foo/bar/'));
+		$this->assertEquals('/callbacks/foo/bar/', $url);
+		// if the callback would receive an already decoded value, this first test would still succeed, so we test with something which would fail if
+		// decoded twice
+		$url = $this->routing->gen('callbacks.gen_expect_incoming_parameter_is_encoded_and_can_be_decoded', array('string' => '%32'));
+		$this->assertEquals('/callbacks/%32', $url);
+	}
+	
 	public function testGenShortestPossibleUrl()
 	{
 		$url = $this->routing->gen('gen_shortest_possible_url', array(), array('omit_defaults' => true));
