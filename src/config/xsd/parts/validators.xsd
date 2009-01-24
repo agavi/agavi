@@ -103,7 +103,7 @@
 	<xs:complexType name="validators">
 		<xs:sequence>
 			<xs:element name="validator" type="validator"
-			            maxOccurs="unbounded" />
+			            minOccurs="0" maxOccurs="unbounded" />
 		</xs:sequence>
 		<xs:attribute name="method" type="xs:string" />
 		<xs:attribute name="severity" type="severity" />
@@ -129,7 +129,7 @@
 	<xs:complexType name="validator_definitions">
 		<xs:sequence>
 			<xs:element name="validator_definition" type="validator_definition"
-			            maxOccurs="unbounded" />
+			            minOccurs="0" maxOccurs="unbounded" />
 		</xs:sequence>
 	</xs:complexType>
 
