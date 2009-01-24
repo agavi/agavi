@@ -31,16 +31,17 @@
 		
 		<translation_manager class="AgaviTranslationManager" />
 		
-		<validation_manager class="AgaviValidationManager">
-			<ae:parameter name="mode">strict</ae:parameter>
-		</validation_manager>
+		<validation_manager class="AgaviValidationManager" />
 		
 	</ae:configuration>
 	
 	<ae:configuration environment="development.*">
 		
 		<validation_manager class="AgaviValidationManager">
-			<ae:parameter name="mode">conditional</ae:parameter>
+			<!-- "conditional" mode would allow your actions to work without validation as long as no validators are defined at all -->
+			<!-- this is disabled by default so you don't run into surprises when deploying to production envs (which have "strict" mode enabled) without testing on a staging machine first -->
+			<!-- also, it's not recommended to use any mode other than "strict" -->
+			<!-- <ae:parameter name="mode">conditional</ae:parameter> -->
 		</validation_manager>
 		
 	</ae:configuration>
@@ -50,6 +51,18 @@
 		<response class="AgaviWebResponse">
 			<ae:parameter name="send_content_length">false</ae:parameter>
 		</response>
+	
+	</ae:configuration>
+	
+	<ae:configuration context="console">
+		
+		<request class="AgaviConsoleRequest" />
+		
+		<response class="AgaviConsoleResponse" />
+		
+		<routing class="AgaviConsoleRouting" />
+		
+		<user class="AgaviSecurityUser" />
 	
 	</ae:configuration>
 	
@@ -65,7 +78,7 @@
 			<ae:parameter name="wsdl_generator">
 				<ae:parameter name="soap">
 					<ae:parameter name="address">
-						<ae:parameter name="location">http://localhost/~dzuelke/_projects/agavi/branches/0.11/samples/pub/soap.php</ae:parameter>
+						<ae:parameter name="location">http://localhost/~dzuelke/Code/oss/agavi/branches/1.0/samples/pub/soap.php</ae:parameter>
 					</ae:parameter>
 				</ae:parameter>
 			</ae:parameter>

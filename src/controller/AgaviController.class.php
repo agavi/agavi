@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
@@ -159,22 +159,20 @@ class AgaviController extends AgaviParameterHolder
 			}
 			
 			$moduleAutoload = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/config/autoload.xml';
-			try {
+			if(is_readable($moduleAutoload)) {
 				Agavi::$autoloads = array_merge(Agavi::$autoloads, include(AgaviConfigCache::checkConfig($moduleAutoload)));
-			} catch(AgaviUnreadableException $e) {
-				// swallow, not every module does have an autoload
+			}
+			
+			if(AgaviConfig::get('modules.' . $lowerModuleName . '.enabled')) {
+				$moduleConfigHandlers = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/config/config_handlers.xml';
+				if(is_readable($moduleConfigHandlers)) {
+					AgaviConfigCache::addConfigHandlersFile($moduleConfigHandlers);
+				}
 			}
 		}
 		
 		if(!AgaviConfig::get('modules.' . $lowerModuleName . '.enabled')) {
 			throw new AgaviDisabledModuleException(sprintf('The module "%1$s" is disabled.', $moduleName));
-		}
-		
-		try {
-			$moduleConfigHandlers = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/config/config_handlers.xml';
-			AgaviConfigCache::loadConfigHandlersFile($moduleConfigHandlers);
-		} catch(AgaviUnreadableException $e) {
-			// swallow, not every module does have a config handlers file
 		}
 		
 		// check for a module config.php
@@ -259,7 +257,7 @@ class AgaviController extends AgaviParameterHolder
 			return $response;
 			
 		} catch(Exception $e) {
-			AgaviException::printStackTrace($e, $this->context, $container);
+			AgaviException::render($e, $this->context, $container);
 		}
 	}
 	

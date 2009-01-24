@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
@@ -275,7 +275,7 @@ class AgaviContext
 			}
 			return self::$instances[$profile];
 		} catch(Exception $e) {
-			AgaviException::printStackTrace($e);
+			AgaviException::render($e);
 		}
 	}
 	
@@ -306,7 +306,7 @@ class AgaviContext
 		try {
 			include(AgaviConfigCache::checkConfig(AgaviConfig::get('core.config_dir') . '/factories.xml', $this->name));
 		} catch(Exception $e) {
-			AgaviException::printStackTrace($e, $this);
+			AgaviException::render($e, $this);
 		}
 		
 		register_shutdown_function(array($this, 'shutdown'));
@@ -370,7 +370,7 @@ class AgaviContext
 			if(!class_exists($class)) {
 				// it's not there. the hunt is on
 				$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/models/' . $modelName . 'Model.class.php';
-			}		
+			}
 		}
 
 		if(null !== $file && is_readable($file)) {
@@ -380,14 +380,11 @@ class AgaviContext
 		if(!class_exists($class)) {
 			// it's not there. 
 			throw new AgaviAutoloadException("Couldn't find class for Model " . $origModelName);
-		}		
-
+		}
 		
 		// so if we're here, we found something, right? good.
 		
-		if(!$rc) {
-			$rc = new ReflectionClass($class);
-		}
+		$rc = new ReflectionClass($class);
 		
 		if($rc->implementsInterface('AgaviISingletonModel')) {
 			// it's a singleton

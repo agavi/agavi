@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -70,18 +70,44 @@ class AgaviTesting
 		
 		$suites = include AgaviConfigCache::checkConfig(AgaviConfig::get('core.testing_dir').'/config/suites.xml');
 		$master_suite = new AgaviTestSuite('Master');
-		foreach ($suites as $name => $suite)
-		{
-			$s = new $suite['class']($name);
-			foreach ($suite['testfiles'] as $file)
-			{
-				$s->addTestFile('tests/'.$file);
+		
+		if(!empty($arguments['include-suite'])) {
+			
+			$names = explode(',', $arguments['include-suite']);
+			unset($arguments['include-suite']);
+			
+			foreach($names as $name) {
+				if(empty($suites[$name])) {
+					throw new InvalidArgumentException(sprintf('Invalid suite name %1$s.', $name));
+				}
+
+				$master_suite->addTest(self::createSuite($name, $suites[$name]));		
 			}
-			$master_suite->addTest($s);
+				
+		} else {
+			$excludes = array();
+			if(!empty($arguments['exclude-suite'])) {
+				$excludes = explode(',', $arguments['exclude-suite']);
+				unset($arguments['exclude-suite']);
+			}
+			foreach($suites as $name => $suite) {
+				if(!in_array($name, $excludes)) {
+					$master_suite->addTest(self::createSuite($name, $suite));	
+				}
+			}
 		}
 		
 		$runner = new PHPUnit_TextUI_TestRunner();
 		$runner->doRun($master_suite, $arguments);
+	}
+	
+	protected static function createSuite($name, $suite) 
+	{
+		$s = new $suite['class']($name);
+		foreach($suite['testfiles'] as $file) {
+			$s->addTestFile('tests/'.$file);
+		}
+		return $s;
 	}
 	
 	/**
@@ -108,6 +134,8 @@ class AgaviTesting
 			'log-pmd=',
 			'log-tap=',
 			'log-xml=',
+			'include-suite=',
+			'exclude-suite=',
 		);
 		
 		try {
@@ -143,20 +171,20 @@ class AgaviTesting
 						$arguments['reportDirectory'] = $option[1];
 					}
 					break;
-					
+				
 				case '--environment':
 					$arguments['environment'] = $option[1];
 					break;
-					
+				
 				case '--help':
 					self::showHelp();
 					exit(PHPUnit_TextUI_TestRunner::SUCCESS_EXIT);
 					break;
-					
+				
 				case '--log-json':
 					$arguments['jsonLogfile'] = $option[1];
 					break;
-					
+				
 				case '--log-graphviz':
 					if(PHPUnit_Util_Filesystem::fileExistsInIncludePath('Image/GraphViz.php')) {
 						$arguments['graphvizLogfile'] = $option[1];
@@ -164,25 +192,33 @@ class AgaviTesting
 						throw new AgaviException('The Image_GraphViz package is not installed.');
 					}
 					break;
-					
+				
 				case '--log-tap':
 					$arguments['tapLogfile'] = $option[1];
 					break;
-					
+				
 				case '--log-xml':
 					$arguments['xmlLogfile'] = $option[1];
 				break;
-					
+				
 				case '--log-pmd':
 					if(self::checkCodeCoverageDeps()) {
 						$arguments['pmdXML'] = $option[1];
 					}
 					break;
-					
+				
 				case '--log-metrics':
 					if(self::checkCodeCoverageDeps()) {
 						$arguments['metricsXML'] = $option[1];
 					}
+					break;
+				
+				case '--include-suite':
+					$arguments['include-suite'] = $option[1];
+					break;
+				
+				case '--exclude-suite':
+					$arguments['exclude-suite'] = $option[1];
 					break;
 			}
 		}
@@ -226,8 +262,9 @@ class AgaviTesting
 		PHPUnit_TextUI_TestRunner::printVersionString();
 
 		print <<<EOT
-Usage: phpunit [switches] UnitTest [UnitTest.php]
-       phpunit [switches] <directory>
+Usage: run-tests.php [switches]
+
+  --environment <envname>  use environment named <envname> to run the tests. Defaults to "testing".
 
   --log-graphviz <file>    Log test execution in GraphViz markup.
   --log-json <file>        Log test execution in JSON format.
@@ -240,7 +277,12 @@ Usage: phpunit [switches] UnitTest [UnitTest.php]
   --coverage-clover <file> Write code coverage data in Clover XML format.
   --coverage-source <dir>  Write code coverage / source data in XML format.
 
+  --include-suite <suites> run only suites named <suite>, accepts a list of suites, comma separated.
+  --exclude-suite <suites> run all but suites named <suite>, accepts a list of suites, comma separated.
+
   --help                   Prints this usage information.
+
+
 EOT;
 	}
 }

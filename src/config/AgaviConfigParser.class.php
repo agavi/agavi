@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
@@ -25,9 +25,9 @@
  * @copyright  Authors
  * @copyright  The Agavi Project
  *
- * @deprecated Superseded by AgaviXmlConfigParser, will be removed in Agavi 1.1
- *
  * @since      0.11.0
+ *
+ * @deprecated Superseded by AgaviXmlConfigParser, will be removed in Agavi 1.1
  *
  * @version    $Id$
  */

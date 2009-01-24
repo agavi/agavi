@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -31,11 +31,6 @@
 class AgaviDateFormatter extends AgaviDateFormat implements AgaviITranslator
 {
 	/**
-	 * @var        AgaviContext An AgaviContext instance.
-	 */
-	protected $context = null;
-
-	/**
 	 * @var        AgaviLocale An AgaviLocale instance.
 	 */
 	protected $locale = null;
@@ -56,14 +51,6 @@ class AgaviDateFormatter extends AgaviDateFormat implements AgaviITranslator
 	protected $translationDomain = null;
 
 	/**
-	 * @see        AgaviITranslator::getContext()
-	 */
-	public final function getContext()
-	{
-		return $this->context;
-	}
-
-	/**
 	 * Initialize this Translator.
 	 *
 	 * @param      AgaviContext The current application context.
@@ -75,7 +62,7 @@ class AgaviDateFormatter extends AgaviDateFormat implements AgaviITranslator
 	 */
 	public function initialize(AgaviContext $context, array $parameters = array())
 	{
-		$this->context = $context;
+		parent::initialize($context, $parameters);
 		$type = 'datetime';
 
 		if(isset($parameters['translation_domain'])) {
@@ -117,9 +104,6 @@ class AgaviDateFormatter extends AgaviDateFormat implements AgaviITranslator
 			$fmt = $this;
 			$locale = $this->locale;
 		}
-		// HACK! for some reason php decides to separate the zvals of $locale and $this->locale
-		// when $this is cloned, so we need to to do this check before we clone
-		$localesEqual = $locale === $this->locale;
 
 		if($this->customFormat && $this->translationDomain) {
 			if($fmt === $this) {
@@ -136,28 +120,7 @@ class AgaviDateFormatter extends AgaviDateFormat implements AgaviITranslator
 			$fmt->setFormat($format);
 		}
 
-		if(is_int($message)) {
-			$cal = $this->context->getTranslationManager()->createCalendar($locale);
-			$cal->setUnixTimestamp($message);
-		} elseif($message instanceof DateTime) {
-			$cal = $this->context->getTranslationManager()->createCalendar($message);
-		} elseif(!($message instanceof AgaviCalendar)) {
-			try {
-				// maybe it is a date/time string we can parse...
-				$cal = $this->context->getTranslationManager()->createCalendar(new DateTime($message));
-			} catch(Exception $e) {
-				// err... no, it isn't. try to use the message as a calendar name
-				$cal = $this->context->getTranslationManager()->createCalendar($message);
-			}
-		} else {
-			$cal = $message;
-		}
-
-		if(($zoneId = $locale->getLocaleTimeZone()) && !$localesEqual) {
-			$cal->setTimeZone($this->context->getTranslationManager()->createTimeZone($zoneId));
-		}
-
-		return $fmt->format($cal, AgaviCalendar::GREGORIAN, $locale);
+		return $fmt->format($message, AgaviCalendar::GREGORIAN, $locale);
 	}
 
 	/**

@@ -1,8 +1,8 @@
 AGAVI RELEASE NOTES
 ===================
 
-Version 1.0 - October ??, 2008
-==============================
+Version 1.0.0 - Feburary ??, 2009
+=================================
 
 The following is a brief summary of the most important changes in this release. For a full list of new features, changes and bugfixes, please refer to the CHANGELOG.
 
@@ -16,6 +16,8 @@ A new configuration subsystem that natively deals with XML files replaces the cu
 Backwards compabibility requires PHP's XSL extension enabled; other than that, everything still works as usual. Old-style configuration file handlers are still supported (but deprecated), but don't support the new features explained above.
 Also, the namespaces of configuration files have been changed, with envelope namespaces (<configurations> and other elements) decoupled from the actual config content namespaces. Again, backwards compatibility is maintained, but you should upgrade your configuration files when moving to 1.0 in order to be able to fully leverage all features and make future transitions easier.
 Of note, the legacy support for configuration files with no namespace at all (just <configurations>) has been dropped completely, so your files at the very least have to be in the global 0.11 namespace (http://agavi.org/agavi/1.0/config).
+
+Names of compiled configuration files are now different from before; they now consist of the file base name, environment, context, and then a sha1 hash of these three components to make the filename unique. This prevents theoretical situations where configuration file names are ambiguous, and at the same time makes it easier to find a specific file in the cache directory. The files now contain the path to the source file in a header comment so configs with the same base name can be told apart.
 
 Module/Action/View/Model
 ------------------------
@@ -70,11 +72,18 @@ The check against isSecure() is now performed in the Security Filter, which alwa
 
 Validation
 ----------
-A new API for accessing information about the result of a validation run is available through AgaviValidationManager::getReport(). It is more consistent and capable of the previous APIs which have been deprecated. This change also fixes some problems where the validation system could not reliably tell input from different sources apart.
+AgaviValidationManager now assumes "strict" mode by default when no "mode" configuration parameter was given. Agavi code templates always shipped with "strict" for production and "conditional" for development.* environments, so you shouldn't be affected at all.
+If you rely on the less secure "relaxed" mode being default (which you shouldn't), then you might need to adjust your factories.xml configuration.
+
+A new API for accessing information about the result of a validation run is available through AgaviValidationManager::getReport(). It is more consistent and capable of the previous APIs which have been deprecated. This change also fixes some problems where the validation system could not reliably tell input from different sources apart. The old API has been deprecated.
 
 When using new-style validation XML configs, it is necessary to explicitly import Agavi's default definitions of validator shortcuts ("string", "isset" and so on) in %core.agavi_dir%/config/defaults/validators.xml to be able to use them; the most convenient way to achieve this is using the "parent" attribute on the <configurations> element, which also is the approach the build system takes by default. Existing configuration files from the 0.11 namespace are automatically handled this way and thus are not affected.
 
 Validators are not handed a "method" parameter anymore with the request method they should run for. This was extremely redundant since the validators weren't even registered if the request method was "wrong". For manual registering, registerReadValidators(), registerWriteValidators() etc are always used in actions anyway, so no problem here, either. As a result, AgaviValidator::validatesInMethod() is gone, too.
+
+SOAP
+----
+Agavi can now automatically pack and unpack document/literal wrapped style web service requests and responses if the Controller config parameter "force_document_literal_wrapped_marshalling" is set to true. Future releases of Agavi will enhance this functionality further and add automatic detection for these service styles.
 
 Deprecated elements
 -------------------
@@ -87,310 +96,8 @@ Existing "core.use_routing" directives will be used as a fallback until the dire
 
 - Validation severity "none" is now called "silent".
 
+- AgaviException::printStackTrace() is now called AgaviException::render()
 
-Version 0.11.5 - October ??, 2008
-=================================
+- AgaviTranslationManager::getCurrentTimeZone() is now called AgaviTranslationManager::getDefaultTimeZone()
 
-This maintenance release fixes a small number of issues and does not add any new features. Please refer to the CHANGELOG for details.
-
-
-Version 0.11.4 - October 14, 2008
-=================================
-
-This is a maintenance release that fixes a couple of minor issues, such as problems in the sample app introduced in 0.11.3 and a missing class in autoload.xml.
-
-Also, it is now possible to specify template implementation mappings in AgaviDoctrineDatabase.
-
-As always, the CHANGELOG has all the details.
-
-
-Version 0.11.3 - September 19, 2008
-===================================
-
-This maintenance release fixes a couple of minor problems like PEAR package generation, gettext plural form expression handling etc, and introduces some new features:
-- Accessing array values in attribute holders via foo[bar] is now possible, as it is already with parameter holders
-- Database handlers now can send arbitrary SQL statements after connecting; useful for "SET NAMES utf8" in MySQL etc.
-- AgaviDoctrineDatabase improvements
-- AgaviMysqliDatabase adapter added
-- New timezone database version
-- Sample app cleanup
-- FPF has the option to ignore errors during document parsing and skip population (good for production environments)
-- Assigning of "inner" content to $slots template array can be disabled
-
-The sample app's SearchEngineSpamAction and the associated elements (PriceFinderModel etc) have been updated to work as the routing pattern always suggested - identify the product by ID, and allow an optional part including the name of the product. This also shows off some more Agavi features now.
-
-A full list of changes can be found in the CHANGELOG file.
-
-
-Version 0.11.2 - July 8, 2008
-=============================
-
-This maintenance release fixes a number of bugs, comes with several changes to improve consistency, and also features a couple of new features. Some of these include:
-
-- AgaviStringValidator can now trim an input string.
-- AgaviDoctrineDatabase has been improved.
-- <setting> elements in settings.xml can now be arrays by using <parameter>s.
-- Data returned from a View is now available through $inner in the first template.
-- File locking is now used anywhere files are being written (config compilation, caching).
-- AgaviValidationManager::hasError() behavior was fixed to be consistent with getError().
-- Incorrect namespace for disabled module forwarding information got fixed (was: org.agavi.controller.forwards.disabled, now: org.agavi.controller.forwards.module_disabled).
-
-As always, the CHANGELOG has a comprehensive list of changes.
-
-
-Version 0.11.1 - May 9, 2008
-============================
-
-This is a bugfix release. The most important changes are:
-
-- Form Population Filter now correctly casts boolean values to '0', not to an empty string. This change is only relevant during programmatical population and was done to be able to distinguish from null values (consider a <select> dropdown with a "please choose..." initial value and settings for "on" and "off", where so far, "please choose..." would have been selected for both null and false). If you have previously relied on this incorrect behavior, you will need to adjust your forms. Note that for bool values populated into regular text fields, a "0" will now appear for a false value, not an empty string as it was the case before.
-
-- When forwarding, using a different output type for the forward container now works properly. As a result of the fix, a response now has an output type, too. It is strongly recommended to determine the output type of the response from the response's output type object, not from the execution container's, which might be the one of the container that ordered the forward. Agavi's built-in filters have been changed to accommodate for this enhancement where possible. This is not a breaking chance.
-
-- The global request data is now correctly locked away during rendering of templates.
-
-- Several fixes were done to the database session storage. Of note, no implementation forces a garbage collection run anymore before opening a session. An issue with date formats in queries has been fixed, too, for all implementations, and storages will not create a blank session entry anymore if the requested session ID was not found during a read operation.
-
-- The Execution Container creation methods in AgaviView now use null as the default values for the optional arguments array/object, and createForwardContainer() will now forward arguments from the current Container if no arguments are given in the call.
-
-- AgaviExecutionFilter::writeCache() now is passed the lifetime as the third argument.
-
-For a complete list of changes in this release, please refer to the CHANGELOG file.
-
-Please be advised that development versions of 0.11.1 contained a security vulnerability in the routing, see tickets #717 and #718 for details. The issue did not exist in the 0.11.0 Agavi release.
-
-
-Version 0.11.0 - November 3, 2007
-=================================
-
-The following is a brief summary of the most important changes in this release. For a full list of new features, changes and bugfixes, please refer to the CHANGELOG. For a list of API changes, please refer to the API_CHANGELOG. For detailed information on how to upgrade from 0.10.x to 0.11, please refer to the "Agavi 0.10 to 0.11 Migration Guide".
-
-Core
-----
-A new class 'Agavi' now handles bootstrapping etc. All classes got an "Agavi" prefix.
-
-The concept of environments and contexts was introduced:
-Typical environments would be 'production', 'development' or 'testing'. All configuration settings can be specific to an environment. Thus, it's easy to have multiple database settings for each environment. The name of the environment is passed to the bootstrap method that starts up the core framework. Thus, application deployment is greatly simplified.
-Typical Contexts (which basically represent a certain way of accessing an application) would be 'web', 'soap' or 'console', and may use different request, response, controller etc implementations. Most configuration settings can be specific to a context.
-In configuration files, regular expressions can be used to restrict the environment or context names. For example, each developer could boostrap a "development-<username>" environment, and debug mode would be enabled for environments "development(-\w+)?".
-
-Rendering has been decoupled from the Views, because of the introduction of Output Types. This means it is now possible to serve different output variants using different renderers (i.e. PHP for HTML and XSL for RSS).
-Examples of Output Types would be "html", "rss" or "pdf". With the new structure, an Action doesn't contain any more presentational information at all, and Views may use separate execution methods for each Output Type. As a result, it is possible to write code once, and then expose it to the web as HTML, as PDF or whatever, and at the same time even make it available as an XMLRPC service or write a console interface to the application.
-This is especially important for AJAX applications that are supposed to degrade gracefully. The same action could return data as a full HTML page, and as an HTML fragment or JSON response, without the need to write the code twice.
-Output Types will typically be set via the routing, based on certain information in the URL (like "/rss" at the end of the URL), request headers (like "Accept: text/javascript") or something else (e.g. a part of the host name).
-
-A very powerful Routing and extensive i18n support have been added. The validation system has been rewritten completely to allow for more control and flexibility. And last but not least, there finally is a caching system.
-
-Models
-------
-Models are now retrieved from the Context, through one single method 'getModel'. The first argument to that method is the name of the model, the optional second argument is either the name of a module the model belongs to, or null for global models. The third argument can be an array that will be passed to the initialize() method of the model (if implemented), as well as the constructor.
-Model classes do not have to have a "Model" postfix anymore, they may also simply extend 'AgaviModel' or implement the 'AgaviIModel' interface.
-To declare a model a singleton, it simply has to implement the 'AgaviISingletonModel' interface.
-
-Execution Flow, Actions and Request Information
-------------------------------------------------------
-The ActionStack is gone. Instead, each action is run in it's own, isolated container. The container also has it's own output type, request data and so forth. This removes a lot of the ugliness that originated from the ActionStack's rather... stacky nature, and odd hacks such as grabbing the last but one element from the stack to determine information about a previous action etc. To applications, this change does not make too much of a difference (unless you fiddled with the action stack directly). Internally however, the execution code has become much, much cleaner, and even a bit faster.
-
-Request methods such as GET or POST are now mapped to verbs, by default "read" (GET), "write" (POST), "create" (PUT) and "remove" (DELETE). This is necessary because RPC web services always use POST, and on the command line, there is no such thing as GET or POST etc. As you may have guessed, this also enables full support for RESTful services.
-
-An Action does not use getRequestMethods() to indicate which request methods it serves anymore. Instead, it implements execute() to indicate that it serves all request methods, or it implements executeRead() etc to serve that specific request method.
-
-Inside Actions and Views, it is not possible to access request parameters directly. Instead, a RequestDataHolder passed to the execute() method will contain the request parameters, cookies, files, HTTP headers and so on. The idea behind this decision is that these parameters are safe for use if they have been filtered and normalized by validation or by some generic preprocessing filter (which, for instance, could remove any XSS related stuff). Also, with any strict validation mode enabled, only those variables that have been validated will be available for use. Also, files are objects with various methods such as getSize() and move(), which allows for much nicer file handling code: $rd->getFile('foo')->move('/path/to/dest');
-
-As an additional incentive to use validation, number, and date/time validators will cast values to native types if desired and also integrate with i18n to parse localized formats.
-
-Inside a controller's dispatch() method, global filters now run first. This finally allows to implement features such as cookie based auto-logins etc, and also guarantees that these filters modify the actual final output of a request. The now-called "action filters" are identical to filters in 0.10 and earlier.
-
-Forwarding or redirecting is also not possible anymore from within Actions, because these operations are presentational. Imagine you have an Action that adds a product to the database. Displaying the product is what you want to do in the web interface, but not in case of XMLRPC, where you have to return a response that indicates success. Instead, you may return an execution container with information about the action to forward to, conveniently done using $this->createForwardContainer() inside the view. This forwarding will occur once the control of the current action execution has passed back to the controller. If a forward occurs, no rendering will occur in the current view.
-A Redirect can be done by calling setRedirect() on the container's response (available via $this->getResponse() in a view).
-
-Request attributes now support namespaces, and attributes that should be available to a view must now be set on the action itself, not on the request. It is not necessary to retrieve or assign them again in the view - they are also automatically assigned to templates.
-
-Actions may now return true from their isSimple() method to indicate they are a "simple" action. Simple actions do not pass any filters (and thus not the security filter, either!), don't pass validation and their execution is skipped, too - instead, control jumps directly to the view indicated by getDefaultViewName(). Also, you cannot access any request data except for the arguments that were set on the container itself. This is perfect for slots, and you could place an isSimple() method in your base action that returns the value of the parameter "is_slot" on the container to automatically make all slots "simple".
-
-All error-related methods have been moved into the validation manager, so there are no more getErrors() etc methods in the request. Each container has it's own validation manager holding all the data about errors, incidents and so on. To learn more about the new validation and it's extended capabilities, please refer to the manual.
-
-Views and Rendering
--------------------
-With the new concept of output types, Views may implement execute() methods specifically for an output type by containing an executeSomething() methods, with "something" being the name of the output type.
-
-Inside the views, a lot has changed. Templates and Decorator Templates are gone, and instead, there are now template layers. Each layer has a template, and each layer may have slots. The layers may even use different renderers! Layers are rendered in the order they are defined, with the output of a rendered layer being available to the next layer's template as $inner (what used to be $template['content']).
-
-For added convenience, the layers can be grouped together into layouts that are defined for each output type in output_types.xml. A simple call to loadLayout() in a view will load these layers and their slots.
-
-Each of the slots can be given additional request arguments to work with, as well as an output type different from the current container's. To create an execution container for a slot, createSlotContainer can be used for more convenience. But remember that in most cases, it's better to define the slots in the layout configuration.
-
-The entire new layered rendering system is very flexible and allows runtime changes to already loaded layouts etc. For instance, you could inject an intermediate layer between two registered layers in one of your views, or you could retrieve a slot that has been loaded for you by loadLayout and then change it's output type or set additional request arguments.
-
-Also, each layer is represented by a class, usually AgaviFileTemplateLayer, but there is a generic AgaviStreamTemplateLayer class that allows you to fetch templates from databases, via HTTP, through SSH tunnels or even from inline strings using data:// streams! And implementing a custom layer that reads templates from a database, without writing a PHP stream wrapper, is possible, too, and very easy to do!
-
-It's a tad more complicated than the old system, and it needs getting used to, but it is all you ever wanted ;) Check out the documentation for it to learn more and see additional examples of what it's capable of.
-
-Also, you don't specify the template extension anymore when setting template names. The extension automatically appended by the system will be the default one for the specific renderer (.php, .tpl etc) unless you explicitly specify an extension you want to use instead. One of the reasons why this is done is that if you have i18n enabled, Agavi will automatically look for localized versions of your templates.
-
-For templates, it is now possible to have Agavi's objects (Response, Request, Controller and so on) auto-assigned to variables. Also, the name of the variable that contains the template attributes can be configured to be different from 'template', just like the variable that stores the output of slots (which now defaults to 'slots'). Optionally, the template variable array can be extracted, so the attributes become available as variables by their names.
-
-The current response instance is available by calling getResponse() on the current view. This way, you could insert content into the response and then not set a template to skip rendering and return content in a different form. Typical situations would be when you set PHP data into the response which gets encoded to XMLRPC, or where you encode PHP data to JSON that is then set in the response.
-
-Also, you can set a stream on a response, that stream will then be output using fpassthru() for better performance. This is perfect for serving binary content. Simply do $this->getResponse()->setContent(fopen('/path/to/image.png', 'rb')); or something equivalent to make this happen. Keep in mind that you should do this in a dedicated output type for this response type, which obviously also needs the respective headers (like Content-Type: image/png in this case).
-
-Configuration
--------------
-All configuration files use the XML format now. All configuration files are validated against XML schemas, which means incorrect configuration files often result in an error right away. Also, XInclude (with XPointer) is supported, as well as "parent" configuration files that allow to enforce common settings for all projects in your organization. Of course, you can use any encoding you like for the XML files, but the default is UTF-8.
-
-All configuration settings can either be valid under all situations, or only in one or more specific environments and/or contexts. This allows for very fine-grained control over what's happening. For instance, you can enable debug mode for the 'production' environment, or enable certain filters only in the 'web' context.
-
-'contexts.ini' is gone, and we re-introduced 'factories.xml'. New config files are 'output_types.xml', 'routing.xml' and 'translation.xml'. 'filters.xml' was split up into separate files for global- and action filters.
-
-'autoload.xml' 'compile.xml' and 'config_handlers.xml' use the "global" Agavi configuration files as their parents so it's not necessary anymore to sync them after each upgrade of Agavi.
-
-Only 'output_types.xml', 'factories.xml' and 'settings.xml' are now required for the system to run.
-
-Routing
--------
-A routing was added for this release. Some of the features:
-- supports regular expressions directly inside the URL patterns, including optional parts, pre- and postfixes to parameters that will not be included in the resulting match, anchoring (e.g. match end of a URL).
-- non-stopping and cutting rules (route processing continues on match, with matched portion being stripped from the input), with ability to "imply" such a matched route for the next generation call
-- callbacks for match, non-match and before generation of URLs
-- support for nested routes (recommended for better structure and increased performance)
-- flexible input data support, not limited to URLs
-- routes are generated based on
-Some examples of what it's capable of:
-- "/rss" at the end of the URL sets output type to RSS
-- "text/javascript" in the HTTP "Accept:" header sets output type to JSON
-- XMLRPC methods are mapped to modules and actions
-- language part at the beginning of the URL is set as the locale and automatically included in route generations while callbacks handle writing and reading the language to cookies for the next visit
-- match against HTTP host so server names like username.myapp.com are processed, with the callback checking that user exists (route fails if not)
-- commands for an IRC bot are defined as routing rules
-- match command line arguments for a CLI interface to control the application
-
-Internationalization
---------------------
-Agavi's i18n uses the Unicode Common Locale Data Repository to use and expose the most universal locale data in the world and make it available to applications. Currency formatting, number formatting, date formatting including all localized rules are possible. Supports variants such as Latin and Cyrillic script in the same language, pays attention to regional differences (different number formatting rules in countries with the same language). Also allows getting a list of country names or language names in the current language. Day and Month names are localized for date formatting etc.
-A text translator that can process Gettext .mo files is bundled, and writing a custom translator that reads from your database etc is extremely simple.
-The "Olson" timezone database is used, including all(!) historic, current and known future static and dynamic daylight savings time transition rules.
-A date/time/calendar system heavily inspired by the International Components for Unicode project implements a complete calendar system for date and time calculations, including the ability to roll in the calendar, add and substract dates, and format dates according to an extensive amount of rules.
-All of this works completely independent of system locales, making your applications 100% guaranteed portable.
-
-Caching
--------
-The new caching system works via the execution filter. For each action, you can define caching rules by creating a file with the action name in the module's "cache" directory. It is possible to define caching rules per request method, and the caching rules themselve may contain separate sections for each of your output types to allow maximum flexibility. Caches are grouped, the system for that is similar to Smarty's caching groups, and you can use various sources for these groups, such as request parameters, user authenticated status, the current locale etc.
-
-It is possible to define the contents of the cache on a per-layer level. You could have the whole page cached, or only the innermost layer plus a slot on the outer, decorator layer, or everything except the decorator layer and so on.
-
-Of course, the cache can also include request attributes, template variables and action attributes which will be restored when the contents are read from the cache.
-
-To learn more about the caching system and how your application can benefit from using it, please refer to the documentation.
-
-Form Handling
--------------
-FormPopulationFilter can automatically (or manually) (re-)insert data into HTML forms, e.g. on an error, when the form is shown again to the user. A broad range of configuration options and features guarantees maximum flexibility.
-
-FPF can also automatically insert error messages into the document, with options for fine tuning of container elements for multiple messages, errors for multiple form fields and more.
-
-Validation
-----------
-The validation system has been rewritten completely, and can now handle multi-level (i.e. array-) input data, supports different error severities, value casting and normalization, validation dependencies, boolean grouping and a lot more.
-
-New Kids on the Block
----------------------
-Agavi now has an RbacUser implementation you can easily extend to load your role defintions from somewhere else than an XML configuration file. Granting a user a role will then give him the corresponding credentials.
-
-A PhptalRenderer allows you to use the PHPTAL template engine for rendering.
-
-AgaviDoctrineDatabase offers Doctrine integration.
-
-A PdoSessionStorage complements the PdoDatabase class.
-
-Agavi has comprehensive support for SOAP web services; the SOAP server implementation automatically generates WSDL files from information embedded in the routing, and can handle automatic class mapping, request and response headers and much more.
-
-Request, Routing and Response implementations for PHP's XMLRPC extension make the creation of web services a piece of cake.
-
-Agavi now supports RESTful web services.
-
-
-Version 0.10.0 - December 20, 2005
-==================================
-
-The following is a brief summary of the most important changes in this release. For a full list of new features, changes and bugfixes, please refer to the CHANGELOG
-
-Core
-----
-Several changes to the system core and its structure have been made since 0.9.0. Most noticeably, the core configuration has been shifted away from configuring Controllers to configuring Contexts. Thus, factories.ini has been dropped in favor of a contexts.ini, and the way initial requests are dispatched has been altered to support the new functionality. See the samples directory to learn how to use the new structure. This very powerful new structure allows for much more flexibility than before, especially because you can define contexts and quickly change between them (for example, you could have a "development" and a "production" context with different storage settings or execution filters).
-
-Controllers may now notify registered listener classes on system shutdown. Use Controller::addShutdownListener() to add a listener that implements the ShutdownListener interface to the list of callbacks.
-
-Action and View class names now support more naming schemes for maximum efficency when using Sub-Actions. The class name for webapp/modules/Default/Yellow/Sub/MarineAction.class.php can now be any of the following: MarineAction, Default_MarineAction, Yellow_Sub_MarineAction, Default_YellowSubMarineAction. The code templates used by the "agavi" helper script now use the last naming scheme. The Agavi team recommends to use this scheme for maximum flexibility and avoiding class name collisions when using Slots or forwarding to other actions. View classes can be named accordingly (MarineInputView, Default_YellowSubMarineSuccessView etc).
-
-ExecutionFilters are now user-definable in contexts.ini. This allows developers to build and use their own execution filters and integrate caching mechanisms and other features into the system core.
-
-Models can now be implemented as singletons. The framework will auto-detect a singleton implementation if it extends SingletonModel instead of Model. Developers do not have to implement the getInstance() method, as the framework will take care of managing instances automatically.
-
-Security
---------
-Actions may now return more than one credential the User needs to have, as well as lists of credentials out of which the User needs to have at least one. To make use of this capability, return an array of strings in your Action's getCredential() method. If you wish to specify a list of credentials and require the User to have at least one of them, use an array instead of a string. Some examples:
-return array('editor', 'tech'); // User must have "editor" and "tech" credential
-return array(array('male', 'female')); // User must have either "male" or "female" credential (or both... consider this sample a joke toolkit)
-return array('editor', array('tech', 'sports')); // only for Tech or Sports Editors. Or... you guessed it! Both.
-
-Configuration
--------------
-A new ReturnArrayConfigHandler makes it easier to deal with home-made config files. It is able to convert keys of whatever depth to a multi-dimensional array and builds numeric arrays if you use numbers as keys:
- [cfgsample]
-  foo.bar.one     = "yay"
-  foo.bar.two     = "hooray"
-  settings.0.name = "some"
-  settings.0.type = "thing"
-Will result in
- array('cfgsample' => array(
-  'foo' => array(
-   'bar' => array(
-    'one' => 'yay',
-    'two' => 'hooray'
-   )
-  ),
-  'settings' => array(
-   0 => array(
-    'name' => 'some',
-    'type' => 'thing'
-   )
-  )
- ))
-As usual, sections may be used (or not!). If you supply param.real_booleans = true, it will convert "true", "false", "yes", "no", "on" and "off" to their respective booleans. To get the contents of a config file, do
- $config = include(ConfigHandler::checkConfig('path/to/my/config.ini'));
-As usual, you have to register the configuration file in config_handlers.ini. Use ReturnArrayConfigHandler as the handler name.
-
-Database
---------
-As of Agavi 0.10.0, all database drivers will use "username" as the parameter name for storing the database user name. You might have to adapt your databases.ini settings accordingly if you are using a driver that previously used "user" as the parameter name.
-
-Agavi 0.10.0 ships with new drivers for AdoDB and PDO. For detailed usage information, refer to the sample databases.ini and to the documentation comments inside the database driver class files.
-
-Also, Propel is now tightly integrated with the framework. The new PropelDatabase driver allows you to benefit from on-demand loading and initialization of Propel, as well as transparent access via Creole using the same configuration file.
-After enabling the autoloading mechanism in autoload.ini and registering a propel runtime configuration file in database.ini, including and initializing Propel by hand is no longer necessary; a call to getConnection() will retrieve a Creole connection instance which uses the same connection as Propel.
-For maximum flexibility and convenience, it is strongly recommended that you add the Criteria class and all of your OM Object and Peer classes to autoload.ini. This will also guarantee maximum performance.
-Please note that this new feature requires  Propel 1.2.0 or later and Creole 1.0.3 or later to work.
-
-Logging
--------
-Agavi 0.10.0 features a brand-new logging infrastructure. All aspects of logging are configurable via the logging.ini configuration file. Loggers handle all the logging operations and use Layouts to format messages and output them to the desired destination using Appenders.
-
-Request
--------
-WebRequest now supports setting and retrieving Cookies. Please note that while the parameter order of setCookie is identical to PHP's internal setcookie() method, WebRequest::setCookie() requires a lifetime to be passed in instead of an expiry date.
-
-A new HTTPSRequest (extends WebRequest) will allow developers to access HTTPS connection information. To simply detect if a connection has been secured via SSL or TLS, use the isHTTPS() method. Advanced information on certificates etc. is available through several methods; refer to the class file documentation for further reference.
-
-Session
--------
-A CreoleSessionStorage class has been added. For usage information, refer to the class file's documentation comments.
-
-The Session ID and session cookie parameters can now be fully configured.
-
-View
-----
-A FormPHPView features various helper methods for creating form elements inside templates.
-
-An XSLView has been added.
-
-Visibility of previously internal methods in all Views have been made public and helper methods to control decorators and slots at runtime have been added to allow for more control in ExecutionFilters.
+- Several methods in AgaviValidationManager have been deprecated in favor of the new Report object available through AgaviValidationManager::getReport() (see above)

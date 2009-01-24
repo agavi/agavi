@@ -1,40 +1,24 @@
-<?xml version="1.0" encoding="utf-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://agavi.org/agavi/1.0/config" targetNamespace="http://agavi.org/agavi/1.0/config" elementFormDefault="qualified">
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:module_1_0="http://agavi.org/agavi/config/parts/module/1.0"
+	targetNamespace="http://agavi.org/agavi/config/global/envelope/1.0"
+	elementFormDefault="qualified"
+	version="$Id$">
 
-  <xs:include schemaLocation="default_tags.xsd"/>  
+	<xs:import namespace="http://agavi.org/agavi/config/parts/module/1.0"
+	           schemaLocation="parts/module.xsd" />
 
-  <xs:complexType name="configuration">
-    <xs:complexContent>
-      <xs:extension base="base_configuration_with_context">
-        <xs:group ref="module_entries" />
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  
-  <xs:group name="module_entries">
-    <xs:all>
-      <xs:element name="enabled" type="xs:string" />
-      <xs:element name="title" type="xs:string" minOccurs="0" />
-      <xs:element name="version" type="xs:string" minOccurs="0" />
-      <xs:element name="name" type="php_label" />
-      <xs:element name="authors" minOccurs="0">
-        <xs:complexType>
-          <xs:sequence>
-            <xs:element name="author" maxOccurs="unbounded">
-              <xs:complexType>
-                <xs:simpleContent>
-                  <xs:extension base="xs:string">
-                    <xs:attribute name="email" type="xs:string" />
-                  </xs:extension>
-                </xs:simpleContent>
-              </xs:complexType>
-            </xs:element>
-          </xs:sequence>
-        </xs:complexType>
-      </xs:element>
-      <xs:element name="homepage" type="xs:string" minOccurs="0" />
-      <xs:element name="update_url" type="xs:string" minOccurs="0" />
-      <xs:element name="description" type="xs:string" minOccurs="0" />
-    </xs:all>
-  </xs:group>
+	<xs:redefine schemaLocation="_envelope.xsd">
+
+		<xs:complexType name="configuration">
+			<xs:complexContent>
+				<xs:extension base="configuration">
+					<xs:group ref="module_1_0:configuration" />
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+
+	</xs:redefine>
+
 </xs:schema>

@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -21,7 +21,7 @@
  * @subpackage config
  *
  * @author     Dominik del Bondio <ddb@bitxtender.com>
- * @author     Noah Fontes <noah.fontes@bitextender.com>
+ * @author     David Zülke <david.zuelke@bitextender.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
  *
@@ -45,38 +45,39 @@ class AgaviRoutingConfigHandler extends AgaviXmlConfigHandler
 	 *
 	 * @return     string Data to be written to a cache file.
 	 *
+	 * @throws     <b>AgaviUnreadableException</b> If a requested configuration 
+	 *                                             file does not exist or is not
+	 *                                             readable.
 	 * @throws     <b>AgaviParseException</b> If a requested configuration file is
 	 *                                        improperly formatted.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @author     David Zülke <david.zuelke@bitextender.com>
 	 * @since      0.11.0
 	 */
 	public function execute(AgaviXmlConfigDomDocument $document)
 	{
-		$routing = $this->context->getRouting();
+		// set up our default namespace
+		$document->setDefaultNamespace(self::XML_NAMESPACE, 'routing');
+		
+		$routing = AgaviContext::getInstance($this->context)->getRouting();
 
 		// reset the stored route names
 		$this->unnamedRoutes = array();
-
-		// set up our default namespace
-		$document->setDefaultNamespace(self::XML_NAMESPACE, 'routing');
 
 		// clear the routing
 		$routing->importRoutes(array());
 		$data = array();
 		
-		foreach($document->getConfigurationElements() as $configuration) {
-			if($configuration->has('routes')) {
-				$this->parseRoutes($routing, $configuration->get('routes'));
+		foreach($document->getConfigurationElements() as $cfg) {
+			if($cfg->has('routes')) {
+				$this->parseRoutes($routing, $cfg->get('routes'));
 			}
 		}
 
-		$code = array(
-			'$this->importRoutes(' . var_export($routing->exportRoutes(), true) . ');',
-		);
+		$code = '$this->importRoutes(' . var_export($routing->exportRoutes(), true) . ');';
 
-		return $this->generate($code);
+		return $this->generate($code, $document->documentURI);
 	}
 
 	/**
@@ -84,8 +85,8 @@ class AgaviRoutingConfigHandler extends AgaviXmlConfigHandler
 	 * information and creates the routes in the given routing.
 	 *
 	 * @param      AgaviRouting The routing instance to create the routes in.
-	 * @param      array A possibly nested array of AgaviConfigValueHolders.
-	 * @param      string The name of the parent route (if any).
+	 * @param      mixed        The "roles" node (element or node list)
+	 * @param      string       The name of the parent route (if any).
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0

@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
@@ -77,8 +77,11 @@ class AgaviParameterHolder
 		if(isset($this->parameters[$name]) || array_key_exists($name, $this->parameters)) {
 			return $this->parameters[$name];
 		}
-		$parts = AgaviArrayPathDefinition::getPartsFromPath($name);
-		return AgaviArrayPathDefinition::getValue($parts['parts'], $this->parameters, $default);
+		try {
+			return AgaviArrayPathDefinition::getValue($name, $this->parameters, $default);
+		} catch(InvalidArgumentException $e) {
+			return $default;
+		}
 	}
 
 	/**
@@ -137,8 +140,11 @@ class AgaviParameterHolder
 		if(isset($this->parameters[$name]) || array_key_exists($name, $this->parameters)) {
 			return true;
 		}
-		$parts = AgaviArrayPathDefinition::getPartsFromPath($name);
-		return AgaviArrayPathDefinition::hasValue($parts['parts'], $this->parameters);
+		try {
+			return AgaviArrayPathDefinition::hasValue($name, $this->parameters);
+		} catch(InvalidArgumentException $e) {
+			return false;
+		}
 	}
 
 	/**
@@ -159,8 +165,10 @@ class AgaviParameterHolder
 			unset($this->parameters[$name]);
 			return $retval;
 		}
-		$parts = AgaviArrayPathDefinition::getPartsFromPath($name);
-		return AgaviArrayPathDefinition::unsetValue($parts['parts'], $this->parameters);
+		try {
+			return AgaviArrayPathDefinition::unsetValue($name, $this->parameters);
+		} catch(InvalidArgumentException $e) {
+		}
 	}
 
 	/**

@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -63,15 +63,15 @@ class AgaviExecutetargetTask extends AgaviTask
 			throw new BuildException('The name attribute must be specified');
 		}
 		
+		/* Words cannot describe how ridiculously fucking stupid this is. Phing
+		 * seems to resolve properties only once, ever, so in order to run a
+		 * target multiple times with different properties we'll have to create
+		 * a new project, parse the build file all over again, copy everything
+		 * over from the current project, execute the new target, and then copy
+		 * everything back. Fuck. */
+		$project = new Project();
+		
 		try {
-			/* Words cannot describe how ridiculously fucking stupid this is. Phing
-			 * seems to resolve properties only once, ever, so in order to run a
-			 * target multiple times with different properties we'll have to create
-			 * a new project, parse the build file all over again, copy everything
-			 * over from the current project, execute the new target, and then copy
-			 * everything back. Fuck. */
-			$project = new Project();
-			
 			foreach($this->project->getBuildListeners() as $listener) {
 				$project->addBuildListener($listener);
 			}
@@ -91,28 +91,28 @@ class AgaviExecutetargetTask extends AgaviTask
 			Phing::setCurrentProject($project);
 			
 			$project->executeTarget($this->name);
-			
-			Phing::setCurrentProject($this->project);
-			
-			$project->copyUserProperties($this->project);
-			$project->copyInheritedProperties($this->project);
-			foreach($project->getProperties() as $name => $property) {
-				if($this->project->getProperty($name) === null) {
-					$this->project->setNewProperty($name, $property);
-				}
-			}
-			
-			/* Fuck. */
-			unset($project);
 		}
 		catch(BuildException $be) {
 			if($this->exceptionsFatal) {
 				throw $be;
-			}
-			else {
-				$this->log($be->getMessage(), Project::MSG_WARN);
+			} else {
+				$this->log('Ignoring build exception: ' . $be->getMessage(), Project::MSG_WARN);
+				$this->log('Continuing build', Project::MSG_INFO);
 			}
 		}
+		
+		Phing::setCurrentProject($this->project);
+		
+		$project->copyUserProperties($this->project);
+		$project->copyInheritedProperties($this->project);
+		foreach($project->getProperties() as $name => $property) {
+			if($this->project->getProperty($name) === null) {
+				$this->project->setNewProperty($name, $property);
+			}
+		}
+		
+		/* Fuck. */
+		unset($project);
 	}
 }
 

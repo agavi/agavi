@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -208,9 +208,10 @@ class %1$s extends %2$s
 class %1$s extends %2$s
 {
 	protected $validationResult = null;
+	protected $doneCloneArgumentsToRequestData = false;
 
 	public function performValidation()
-	{	
+	{
 		if(null === $this->validationResult) {
 			$this->cloneArgumentsToRequestData();
 			$this->validationResult = parent::performValidation();
@@ -226,7 +227,10 @@ class %1$s extends %2$s
 	
 	public function cloneArgumentsToRequestData()
 	{
-		$this->requestData = clone $this->arguments;
+		if(!$this->doneCloneArgumentsToRequestData) {
+			$this->requestData = clone $this->arguments;
+			$this->doneCloneArgumentsToRequestData = true;
+		}
 	}
 
 	public function setActionInstance(AgaviAction $action)
@@ -285,11 +289,11 @@ class %1$s extends %2$s
 	 * @param      string  the attribute name
 	 * @param      string  the attribute namespace
 	 * @param      string  an optional message to display if the test fails
-     * @param      float   $delta
-     * @param      integer $maxDepth
-     * @param      boolean $canonicalizeEol
-     * 
-     * @see        PHPUnit_Framework_Assert::assertEquals()
+	 * @param      float   $delta
+	 * @param      integer $maxDepth
+	 * @param      boolean $canonicalizeEol
+	 * 
+	 * @see        PHPUnit_Framework_Assert::assertEquals()
 	 * 
 	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
 	 * @since      1.0.0
@@ -305,8 +309,8 @@ class %1$s extends %2$s
 	 * @param      string  the attribute name
 	 * @param      string  the attribute namespace
 	 * @param      string  an optional message to display if the test fails
-     * 
-     * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * 
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
 	 * @since      1.0.0
 	 */
 	protected function assertContainerAttributeExists($attributeName, $namespace = null, $message = 'Failed asserting that the container has an attribute named <%1$s/%2$s>.')

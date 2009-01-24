@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -24,12 +24,12 @@ class AgaviPackageTask extends Task
 	
 	public function main()
 	{
-		if (!@require_once('PEAR/PackageFileManager2.php')) {
+		if(!@require_once('PEAR/PackageFileManager2.php')) {
 			throw new BuildException('Requires PEAR_PackageFileManager >=1.6.0a1');
 		}
 		require_once('PEAR/Exception.php');
 		PEAR::setErrorHandling(PEAR_ERROR_CALLBACK,'PEAR_ErrorToPEAR_Exception');
-		if (!$this->dir || !file_exists($this->dir)) {
+		if(!$this->dir || !file_exists($this->dir)) {
 			throw new BuildException('Build dir is not defined or does not exist.');
 		}
 		
@@ -102,8 +102,8 @@ EOD;
 		$p2->addMaintainer('developer', 'impl', 'Noah Fontes', 'nfontes@cynigram.com');
 		$p2->addMaintainer('developer', 'v-dogg', 'Veikko Mäkinen', 'mail@veikkomakinen.com');
 		$p2->setChannel('pear.agavi.org');
-		$p2->setReleaseVersion('1.0.0beta5');
-		$p2->setAPIVersion('1.0.0beta5');
+		$p2->setReleaseVersion('1.0.0beta7');
+		$p2->setAPIVersion('1.0.0beta7');
 		$p2->setReleaseStability('beta');
 		$p2->setAPIStability('beta');
 		$p2->setSummary($shortDesc);

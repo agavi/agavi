@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configurations xmlns="http://agavi.org/agavi/1.0/config" parent="%core.system_config_dir%/autoload.xml">
-	<configuration>
+<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" xmlns="http://agavi.org/agavi/config/parts/autoload/1.0" parent="%core.system_config_dir%/autoload.xml">
+	<ae:configuration>
 		
 		<autoload name="SandboxBaseAction">%core.lib_dir%/action/SandboxBaseAction.class.php</autoload>
 		<autoload name="SandboxBaseModel">%core.lib_dir%/model/SandboxBaseModel.class.php</autoload>
@@ -21,5 +21,11 @@
 		<autoload name="GenSetPrefixAndPostfixRoutingCallback">%core.app_dir%/../../lib/routing/GenSetPrefixAndPostfixRoutingCallback.class.php</autoload>
 		<autoload name="GenSetPrefixAndPostfixIntoRouteRoutingCallback">%core.app_dir%/../../lib/routing/GenSetPrefixAndPostfixIntoRouteRoutingCallback.class.php</autoload>
 		<autoload name="TestTicket713RoutingCallback">%core.app_dir%/../../lib/routing/TestTicket713RoutingCallback.class.php</autoload>
-	</configuration>
-</configurations>
+		<autoload name="TestTicket695RoutingCallback">%core.app_dir%/../../lib/routing/TestTicket695RoutingCallback.class.php</autoload>
+		<autoload name="TestTicket698RoutingCallback">%core.app_dir%/../../lib/routing/TestTicket698RoutingCallback.class.php</autoload>
+		
+		<autoload name="AgaviTestingConfigCache">%core.app_dir%/../../lib/config/AgaviTestingConfigCache.class.php</autoload>
+		
+		<autoload name="AgaviWebRequestDataHolderTest">%core.app_dir%/../../tests/unit/request/AgaviWebRequestDataHolderTest.php</autoload>
+	</ae:configuration>
+</ae:configurations>

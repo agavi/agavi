@@ -1,7 +1,9 @@
 <?php
 
 class SampleAction extends AgaviAction {
-	public function execute(AgaviParameterHolder $parameters){}
+	public function execute(AgaviParameterHolder $parameters)
+	{
+	}
 }
 
 class ActionTest extends AgaviTestCase

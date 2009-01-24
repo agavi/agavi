@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -30,6 +30,11 @@
  *                                       use the Propel autoloading feature.
  *                                       Instead, Propel will be initialized 
  *                                       on connect(). This is for 0.9.0 B/C.
+ * # <b>enable_instance_pooling</b> - [none] - set this to false if you want to 
+ *                                             explicitly disable propel 1.3 
+ *                                             instance pooling, to true if 
+ *                                             you want to explicitly enable it.
+ *                                             Leave empty to use propels default.
  * 
  *
  * @package    agavi
@@ -130,8 +135,7 @@ class AgaviPropelDatabase extends AgaviDatabase
 	/**
 	 * Connect to the database.
 	 * 
-	 *
-	 * @throws     <b>agaviCreoleDatabaseException</b> If a connection could not be 
+	 * @throws     <b>AgaviDatabaseException</b> If a connection could not be 
 	 *                                           created.
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
@@ -144,13 +148,7 @@ class AgaviPropelDatabase extends AgaviDatabase
 			$this->connection = $this->agaviCreoleDatabase->getConnection();
 		} else {
 			// trigger Propel autoload and go go go
-			if(class_exists('Propel')) {
-				$this->connection = Propel::getConnection();
-				
-				foreach((array)$this->getParameter('init_queries') as $query) {
-					$this->connection->exec($query);
-				}
-			}
+			$this->connection = Propel::getConnection($this->getParameter('datasource'));
 		}
 	}
 
@@ -163,7 +161,7 @@ class AgaviPropelDatabase extends AgaviDatabase
 	 *
 	 * @return     mixed A database connection.
 	 *
-	 * @throws     <b>agaviCreoleDatabaseException</b> If a connection could not be
+	 * @throws     <b>AgaviDatabaseException</b> If a connection could not be
 	 *                                           retrieved.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
@@ -235,10 +233,24 @@ class AgaviPropelDatabase extends AgaviDatabase
 		if(!$is12) {
 			// for 1.3+, also the autoload classes
 			$config['datasources'][$datasource]['classes'] = array_merge($config['datasources'][$datasource]['classes'], $this->getParameter('overrides[classes]', array()));
+			
+			// append our list of "init queries" to propel's
+			if(!isset($config['datasources'][$datasource]['connection']['settings']['queries']) || !is_array($config['datasources'][$datasource]['connection']['settings']['queries'])) {
+				$config['datasources'][$datasource]['connection']['settings']['queries'] = array();
+			}
+			$config['datasources'][$datasource]['connection']['settings']['queries'] = array_merge($config['datasources'][$datasource]['connection']['settings']['queries'], (array)$this->getParameter('init_queries'));
 		}
 		
 		// set the new config
 		Propel::setConfiguration($config);
+		
+		if(!$is12) {
+			if(true === $this->getParameter('enable_instance_pooling')) {
+				Propel::enableInstancePooling();
+			} elseif(false === $this->getParameter('enable_instance_pooling')) {
+				Propel::disableInstancePooling();
+			}
+		}
 	}
 
 	/**
@@ -258,7 +270,7 @@ class AgaviPropelDatabase extends AgaviDatabase
 	/**
 	 * Execute the shutdown procedure.
 	 *
-	 * @throws     <b>agaviCreoleDatabaseException</b> If an error occurs while shutting
+	 * @throws     <b>AgaviDatabaseException</b> If an error occurs while shutting
 	 *                                           down this database.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>

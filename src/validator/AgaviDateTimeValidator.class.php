@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -40,6 +40,8 @@
  *                    datetime: The value is a date specifier or null
  *                    translation_domain: The value will be translated in the 
  *                              domain given in the 'translation_domain' key.
+ *                    unix:     Always null/empty
+ *                    unix_milliseconds: Always null/empty
  *                   
  *     'locale'     The optional locale which will be used for this format.
  *     'translation_domain' Only applicable when the type is translation_domain
@@ -111,6 +113,10 @@ class AgaviDateTimeValidator extends AgaviValidator
 				} elseif(!is_numeric($calField)) {
 					throw new AgaviValidatorException('Unknown argument name "' . $calField . '" for argument "' . $field . '" supplied. This needs to be one of the constants defined in AgaviDateDefinitions.');
 				}
+				if(!is_scalar($param)) {
+					// everything which is non scalar is ignored, since it couldn't be handled anyways
+					continue;
+				}
 
 				if($calField == AgaviDateDefinitions::MONTH) {
 					$param -= 1;
@@ -134,6 +140,10 @@ class AgaviDateTimeValidator extends AgaviValidator
 				$param = vsprintf($argFormat, $values);
 			} else {
 				$param = $this->getData($this->getArgument());
+				if(!is_scalar($param)) {
+					$this->throwError();
+					return false;
+				}
 			}
 
 			$matchedFormat = false;
@@ -153,17 +163,47 @@ class AgaviDateTimeValidator extends AgaviValidator
 				} elseif($type == 'translation_domain') {
 					$td = $item['translation_domain'];
 					$formatString = $tm->_($item['format'], $td, $itemLocale);
+				} elseif($type == 'unix') {
+					$matchedFormat = ($param === (string)(int)$param);
+					$cal = $tm->createCalendar($itemLocale);
+					$cal->setUnixTimestamp($param);
+					if($matchedFormat) {
+						try {
+							if($cal->getUnixTimestamp() !== (int)$param) {
+								$this->throwError('check');
+								return false;
+							}
+						} catch(Exception $e) {
+							$matchedFormat = false;
+						}
+					}
+				} elseif($type == 'unix_milliseconds') {
+					$matchedFormat = is_numeric($param);
+					$cal = $tm->createCalendar($itemLocale);
+					$cal->setTime($param);
+					if($matchedFormat) {
+						try {
+							if($cal->getTime() !== (float)$param) {
+								$this->throwError('check');
+								return false;
+							}
+						} catch(Exception $e) {
+							$matchedFormat = false;
+						}
+					}
 				}
 
-				try {
-					$format = new AgaviDateFormat($formatString);
-					$cal = $format->parse($param, $itemLocale, $check);
+				if(!$cal) {
+					try {
+						$format = new AgaviDateFormat($formatString);
+						$cal = $format->parse($param, $itemLocale, $check);
 
-					// no exception got thrown so the parsing was successful
-					$matchedFormat = true;
-					break;
-				} catch(Exception $e) {
-					// nop
+						// no exception got thrown so the parsing was successful
+						$matchedFormat = true;
+						break;
+					} catch(Exception $e) {
+						// nop
+					}
 				}
 			}
 

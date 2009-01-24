@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -29,15 +29,33 @@
  */
 final class AgaviPhingEventDispatcher extends AgaviEventDispatcher implements BuildListener
 {
+	/**
+	 * @var        Project The phing project that governs the dispatcher.
+	 */
 	protected $project = null;
+	
+	/**
+	 * @var        array An array of AgaviIPhingTargetListener instances.
+	 */
 	protected $targetListeners = array();
+	
+	/**
+	 * @var        array An array of AgaviIPhingTaskListener instances.
+	 */
 	protected $taskListeners = array();
+	
+	/**
+	 * @var        array An array of AgaviIPhingMessageListener instances.
+	 */
 	protected $messageListeners = array();
 	
 	/**
 	 * Creates a new event dispatcher.
 	 *
 	 * @param      Project The project that governs the dispatcher.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
 	 */
 	public function __construct(Project $project)
 	{
@@ -49,6 +67,9 @@ final class AgaviPhingEventDispatcher extends AgaviEventDispatcher implements Bu
 	 * Adds a new target listener.
 	 *
 	 * @param      AgaviIPhingTargetListener The target listener.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
 	 */
 	public function addTargetListener(AgaviIPhingTargetListener $listener)
 	{
@@ -59,6 +80,9 @@ final class AgaviPhingEventDispatcher extends AgaviEventDispatcher implements Bu
 	 * Adds a new task listener.
 	 *
 	 * @param      AgaviIPhingTaskListener The task listener.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
 	 */
 	public function addTaskListener(AgaviIPhingTaskListener $listener)
 	{
@@ -69,6 +93,9 @@ final class AgaviPhingEventDispatcher extends AgaviEventDispatcher implements Bu
 	 * Adds a new message listener.
 	 *
 	 * @param      AgaviIPhingMessageListener The message listener.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
 	 */
 	public function addMessageListener(AgaviIPhingMessageListener $listener)
 	{
@@ -79,6 +106,9 @@ final class AgaviPhingEventDispatcher extends AgaviEventDispatcher implements Bu
 	 * Handles the Phing build started event.
 	 *
 	 * @param       BuildEvent The Phing build event.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
 	 */
 	public function buildStarted(BuildEvent $phingEvent)
 	{
@@ -89,6 +119,9 @@ final class AgaviPhingEventDispatcher extends AgaviEventDispatcher implements Bu
 	 * Handles the Phing build finished event.
 	 *
 	 * @param       BuildEvent The Phing build event.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
 	 */
 	public function buildFinished(BuildEvent $phingEvent)
 	{
@@ -99,6 +132,9 @@ final class AgaviPhingEventDispatcher extends AgaviEventDispatcher implements Bu
 	 * Handles the Phing target started event.
 	 *
 	 * @param       BuildEvent The Phing build event.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
 	 */
 	public function targetStarted(BuildEvent $phingEvent)
 	{
@@ -117,6 +153,9 @@ final class AgaviPhingEventDispatcher extends AgaviEventDispatcher implements Bu
 	 * Handles the Phing target finished event.
 	 *
 	 * @param       BuildEvent The Phing build event.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
 	 */
 	public function targetFinished(BuildEvent $phingEvent)
 	{
@@ -135,6 +174,9 @@ final class AgaviPhingEventDispatcher extends AgaviEventDispatcher implements Bu
 	 * Handles the Phing task started event.
 	 *
 	 * @param       BuildEvent The Phing build event.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
 	 */
 	public function taskStarted(BuildEvent $phingEvent)
 	{
@@ -156,6 +198,9 @@ final class AgaviPhingEventDispatcher extends AgaviEventDispatcher implements Bu
 	 * Handles the Phing task finished event.
 	 *
 	 * @param       BuildEvent The Phing build event.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
 	 */
 	public function taskFinished(BuildEvent $phingEvent)
 	{
@@ -177,6 +222,9 @@ final class AgaviPhingEventDispatcher extends AgaviEventDispatcher implements Bu
 	 * Handles the Phing message logged event.
 	 *
 	 * @param       BuildEvent The Phing build event.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
 	 */
 	public function messageLogged(BuildEvent $phingEvent)
 	{

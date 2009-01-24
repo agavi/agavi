@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:envelope_1_0="http://agavi.org/agavi/config/global/envelope/1.0"
+	xmlns:types_1_0="http://agavi.org/agavi/config/global/types/1.0"
+	xmlns="http://agavi.org/agavi/config/parts/config_handlers/1.0"
+	targetNamespace="http://agavi.org/agavi/config/parts/config_handlers/1.0"
+	elementFormDefault="qualified"
+	version="$Id$">
+
+	<xs:import namespace="http://agavi.org/agavi/config/global/types/1.0"
+	           schemaLocation="../_types.xsd" />
+	<xs:import namespace="http://agavi.org/agavi/config/global/envelope/1.0"
+	           schemaLocation="../_envelope.xsd" />
+
+	<!-- For -->
+
+	<xs:simpleType name="for">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="single" />
+			<xs:enumeration value="compilation" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<!-- Step -->
+
+	<xs:simpleType name="step">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="transformations_before" />
+			<xs:enumeration value="transformations_after" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<!-- Transformations -->
+
+	<xs:complexType name="transformation" mixed="true">
+		<xs:attribute name="for" type="for" use="optional" />
+	</xs:complexType>
+
+	<xs:complexType name="transformations">
+		<xs:sequence>
+			<xs:element name="transformation" type="xs:string"
+			            minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:group name="transformations">
+		<xs:choice>
+			<xs:element name="transformations" type="transformations"
+			            minOccurs="0" />
+			<xs:element name="transformation" type="transformation"
+			            minOccurs="0" maxOccurs="unbounded" />
+		</xs:choice>
+	</xs:group>
+
+	<!-- Validations -->
+
+	<xs:complexType name="validation" mixed="true">
+		<xs:attribute name="for" type="for" use="optional" />
+		<xs:attribute name="step" type="step" use="optional" />
+	</xs:complexType>
+
+	<xs:complexType name="validations">
+		<xs:sequence>
+			<xs:element name="validation" type="validation"
+			            minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:group name="validations">
+		<xs:choice>
+			<xs:element name="validations" type="validations"
+			            minOccurs="0" />
+			<xs:element name="validation" type="validation"
+			            minOccurs="0" maxOccurs="unbounded" />
+		</xs:choice>
+	</xs:group>
+
+	<!-- Handlers -->
+
+	<xs:complexType name="handler">
+		<xs:sequence maxOccurs="unbounded">
+			<xs:group ref="envelope_1_0:parameters"/>
+			<xs:group ref="transformations" />
+			<xs:group ref="validations" />
+		</xs:sequence>
+		<xs:attribute name="pattern" type="xs:string" use="required" />
+		<xs:attribute name="class" type="types_1_0:identifier" use="required" />
+	</xs:complexType>
+
+	<xs:complexType name="handlers">
+		<xs:sequence>
+			<xs:element name="handler" type="handler"
+			            maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:group name="configuration">
+		<xs:choice>
+			<xs:element name="handlers" type="handlers"
+			            minOccurs="0" />
+			<xs:element name="handler" type="handler"
+			            minOccurs="0" maxOccurs="unbounded"/>
+		</xs:choice>
+	</xs:group>
+
+</xs:schema>

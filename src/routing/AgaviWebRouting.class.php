@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -177,9 +177,9 @@ class AgaviWebRouting extends AgaviRouting
 
 			$appendFrom = 0;
 			$this->prefix = AgaviToolkit::stringBase($sn, $path, $appendFrom);
-			$this->prefix .= substr($sn, $appendFrom + 1);
+			$this->prefix .= substr($sn, $appendFrom);
 
-			$this->input = substr($path, $appendFrom + 1);
+			$this->input = substr($path, $appendFrom);
 			if(!isset($_SERVER['SERVER_SOFTWARE']) || strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') === false || isset($_SERVER['HTTP_X_REWRITE_URL']) || !isset($_SERVER['GATEWAY_INTERFACE']) || strpos($_SERVER['GATEWAY_INTERFACE'], 'CGI') === false) {
 				// don't do that for IIS-CGI, it's already rawurldecode()d there
 				$this->input = rawurldecode($this->input);
@@ -366,36 +366,29 @@ class AgaviWebRouting extends AgaviRouting
 			$authority = '';
 
 			if($options['authority'] === null) {
-				if(
-					($options['host'] !== null && $options['host'] !== false) &&
-					($options['port'] !== null && $options['port'] !== false)
-				) {
-					$authority = $req->getUrlAuthority();
+				if($options['host'] !== null && $options['host'] !== false) {
+					$authority = $options['host'];
+				} elseif($options['host'] === false) {
+					$authority = '';
 				} else {
-					if($options['host'] !== null && $options['host'] !== false) {
-						$authority = $options['host'];
-					} elseif($options['host'] === false) {
-						$authority = '';
+					$authority = $req->getUrlHost();
+				}
+				$port = null;
+				if($options['port'] !== null && $options['port'] !== false) {
+					if(AgaviToolkit::isPortNecessary($options['scheme'] !== null && $options['scheme'] !== false ? $options['scheme'] : $req->getUrlScheme(), $options['port'])) {
+						$port = $options['port'];
 					} else {
-						$authority = $req->getUrlHost();
-					}
-					$port = null;
-					if($options['port'] !== null && $options['port'] !== false) {
-						if(AgaviToolkit::isPortNecessary($options['scheme'] !== null && $options['scheme'] !== false ? $options['scheme'] : $req->getUrlScheme(), $options['port'])) {
-							$port = $options['port'];
-						} else {
-							$port = null;
-						}
-					} elseif($options['port'] === false) {
 						$port = null;
-					} elseif($options['scheme'] === null) {
-						if(!AgaviToolkit::isPortNecessary($req->getUrlScheme(), $port = $req->getUrlPort())) {
-							$port = null;
-						}
 					}
-					if($port !== null) {
-						$authority .= ':' . $port;
+				} elseif($options['port'] === false) {
+					$port = null;
+				} elseif($options['scheme'] === null) {
+					if(!AgaviToolkit::isPortNecessary($req->getUrlScheme(), $port = $req->getUrlPort())) {
+						$port = null;
 					}
+				}
+				if($port !== null) {
+					$authority .= ':' . $port;
 				}
 			} elseif($options['authority'] !== false) {
 				$authority = $options['authority'];

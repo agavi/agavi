@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="utf-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+	xmlns:validators_1_0="http://agavi.org/agavi/config/parts/translation/1.0"
+	ns="http://agavi.org/agavi/config/parts/translation/1.0"
+	datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+	
+	<include href="_common.rng" />
+	
+	<define name="content-configuration" combine="interleave">
+		<optional>
+			<attribute name="context">
+				<ref name="data-list-context" />
+			</attribute>
+		</optional>
+		<interleave>
+			<optional>
+				<element name="available_locales">
+					<ref name="content-available_locales" />
+				</element>
+			</optional>
+			<optional>
+				<element name="translators">
+					<ref name="content-top-translators" />
+				</element>
+			</optional>
+		</interleave>
+	</define>
+	
+	<define name="content-available_locales">
+		<!-- this can be defined in another configuration block, so it is optional here, too -->
+		<optional>
+			<attribute name="default_locale">
+				<!-- TODO: data-locale-identifier? -->
+				<ref name="data-non-empty-string" />
+			</attribute>
+		</optional>
+		<optional>
+			<attribute name="default_timezone">
+				<!-- TODO: data-timezone-identifier? -->
+				<ref name="data-non-empty-string" />
+			</attribute>
+		</optional>
+		<oneOrMore>
+			<element name="available_locale">
+				<ref name="content-available_locale" />
+			</element>
+		</oneOrMore>
+	</define>
+	
+	<define name="content-available_locale">
+		<attribute name="identifier">
+			<ref name="data-non-empty-string" />
+		</attribute>
+		<optional>
+			<attribute name="ldml_file">
+				<ref name="data-non-empty-string" />
+			</attribute>
+		</optional>
+		<optional>
+			<attribute name="fallback">
+				<ref name="data-non-empty-string" />
+			</attribute>
+		</optional>
+		<ref name="content-parameters" />
+	</define>
+	
+	<define name="content-top-translators">
+		<attribute name="default_domain">
+			<ref name="data-non-empty-string" />
+		</attribute>
+		<ref name="content-translators" />
+	</define>
+	
+	<define name="content-translators">
+		<zeroOrMore>
+			<element name="translator">
+				<ref name="content-translator" />
+			</element>
+		</zeroOrMore>
+	</define>
+	
+	<define name="content-translator">
+		<attribute name="domain">
+			<ref name="data-non-empty-string" />
+		</attribute>
+		<interleave>
+			<optional>
+				<element name="message_translator">
+					<ref name="content-message_translator" />
+				</element>
+			</optional>
+			<optional>
+				<element name="currency_formatter">
+					<ref name="content-formatter" />
+				</element>
+			</optional>
+			<optional>
+				<element name="date_formatter">
+					<ref name="content-formatter" />
+				</element>
+			</optional>
+			<optional>
+				<element name="number_formatter">
+					<ref name="content-formatter" />
+				</element>
+			</optional>
+			<choice>
+				<optional>
+					<element name="translators">
+						<ref name="content-translators" />
+					</element>
+				</optional>
+				<zeroOrMore>
+					<element name="translator">
+						<ref name="content-translator" />
+					</element>
+				</zeroOrMore>
+			</choice>
+		</interleave>
+	</define>
+	
+	<define name="content-message_translator">
+		<optional>
+			<attribute name="class">
+				<ref name="data-identifier" />
+			</attribute>
+		</optional>
+		<interleave>
+			<!-- TODO: it is like this in the XSD... <filters> plural parent must not be omitted -->
+			<optional>
+				<element name="filters">
+					<ref name="content-filters" />
+				</element>
+			</optional>
+			<ref name="content-parameters" />
+		</interleave>
+	</define>
+	
+	<define name="content-formatter">
+		<ref name="content-message_translator" />
+		<optional>
+			<attribute name="translation_domain">
+				<ref name="data-non-empty-string" />
+			</attribute>
+		</optional>
+	</define>
+	
+	<define name="content-filters">
+		<zeroOrMore>
+			<element name="filter">
+				<ref name="content-filter" />
+			</element>
+		</zeroOrMore>
+	</define>
+	
+	<define name="content-filter">
+		<!-- TODO: more accurate content rule... can be a function or class method (make it a choice between identifier and identifier::identifier or so)-->
+		<ref name="data-non-empty-string" />
+	</define>
+	
+	<define name="validators-content-validator_definition">
+		<attribute name="name">
+			<ref name="data-non-empty-string" />
+		</attribute>
+		<attribute name="class">
+			<ref name="data-identifier" />
+		</attribute>
+		<ref name="content-parameters" />
+	</define>
+	
+	<define name="validators-content-validator_definitions">
+		<zeroOrMore>
+			<element name="validator_definition">
+				<ref name="validators-content-validator_definition" />
+			</element>
+		</zeroOrMore>
+	</define>
+	
+	<define name="content-validators">
+		<choice>
+			<zeroOrMore>
+				<element name="validator">
+					<ref name="validators-content-validator" />
+				</element>
+			</zeroOrMore>
+			<!-- can have many plural <validators> elements due to "method" attribute -->
+			<zeroOrMore>
+				<element name="validators">
+					<ref name="validators-content-validators" />
+				</element>
+			</zeroOrMore>
+		</choice>
+	</define>
+	
+	<define name="validators-content-validator">
+		<optional>
+			<attribute name="name">
+				<ref name="data-non-empty-string" />
+			</attribute>
+		</optional>
+		<optional>
+			<attribute name="affects">
+				<list>
+					<oneOrMore>
+						<data type="string" />
+					</oneOrMore>
+				</list>
+			</attribute>
+		</optional>
+		<attribute name="class">
+			<ref name="data-identifier" />
+		</attribute>
+		<optional>
+			<attribute name="depends">
+				<list>
+					<oneOrMore>
+						<data type="string" />
+					</oneOrMore>
+				</list>
+			</attribute>
+		</optional>
+		<optional>
+			<attribute name="export">
+				<ref name="data-non-empty-string" />
+			</attribute>
+		</optional>
+		<optional>
+			<attribute name="method">
+				<ref name="data-non-empty-string" />
+			</attribute>
+		</optional>
+		<optional>
+			<attribute name="provides">
+				<list>
+					<oneOrMore>
+						<data type="string" />
+					</oneOrMore>
+				</list>
+			</attribute>
+		</optional>
+		<optional>
+			<attribute name="required">
+				<ref name="data-boolean" />
+			</attribute>
+		</optional>
+		<optional>
+			<attribute name="severity">
+				<ref name="data-severity" />
+			</attribute>
+		</optional>
+		<optional>
+			<attribute name="source">
+				<ref name="data-non-empty-string" />
+			</attribute>
+		</optional>
+		<optional>
+			<attribute name="translation_domain">
+				<ref name="data-non-empty-string" />
+			</attribute>
+		</optional>
+		<interleave>
+			<ref name="content-arguments" />
+			<ref name="content-errors" />
+			<ref name="content-parameters" />
+			<ref name="content-validators" />
+		</interleave>
+	</define>
+	
+	<define name="validators-content-validators">
+		<zeroOrMore>
+			<element name="validator">
+				<ref name="validators-content-validator" />
+			</element>
+		</zeroOrMore>
+		<optional>
+			<attribute name="method">
+				<data type="string" />
+			</attribute>
+		</optional>
+		<optional>
+			<attribute name="severity">
+				<data type="string" />
+			</attribute>
+		</optional>
+	</define>
+	
+	<define name="content-arguments">
+		<choice>
+			<zeroOrMore>
+				<element name="argument">
+					<ref name="validators-content-argument" />
+				</element>
+			</zeroOrMore>
+			<optional>
+				<element name="arguments">
+					<ref name="validators-content-arguments" />
+				</element>
+			</optional>
+		</choice>
+	</define>
+	
+	<define name="validators-content-argument">
+		<text />
+	</define>
+	
+	<define name="validators-content-arguments">
+		<optional>
+			<attribute name="base">
+				<ref name="data-non-empty-string" />
+			</attribute>
+		</optional>
+		<zeroOrMore>
+			<element name="argument">
+				<ref name="validators-content-argument" />
+			</element>
+		</zeroOrMore>
+	</define>
+	
+	<define name="content-errors">
+		<choice>
+			<zeroOrMore>
+				<element name="error">
+					<ref name="validators-content-error" />
+				</element>
+			</zeroOrMore>
+			<optional>
+				<element name="errors">
+					<ref name="validators-content-errors" />
+				</element>
+			</optional>
+		</choice>
+	</define>
+	
+	<define name="validators-content-error">
+		<optional>
+			<attribute name="for">
+				<ref name="data-non-empty-string" />
+			</attribute>
+		</optional>
+		<text />
+	</define>
+	
+	<define name="validators-content-errors">
+		<zeroOrMore>
+			<element name="error">
+				<ref name="validators-content-error" />
+			</element>
+		</zeroOrMore>
+	</define>
+	
+	<!-- Data -->
+	
+	<define name="data-severity">
+		<choice>
+			<value type="string">info</value>
+			<value type="string">silent</value>
+			<value type="string">none</value>
+			<value type="string">notice</value>
+			<value type="string">error</value>
+			<value type="string">critical</value>
+		</choice>
+	</define>
+	
+</grammar>

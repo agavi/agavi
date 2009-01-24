@@ -7,6 +7,11 @@
 	<include href="_common.rng" />
 	
 	<define name="content-configuration" combine="interleave">
+		<optional>
+			<attribute name="context">
+				<ref name="data-list-context" />
+			</attribute>
+		</optional>
 		<interleave>
 			<ref name="content-validator_definitions" />
 			<ref name="content-validators" />
@@ -71,7 +76,9 @@
 		<optional>
 			<attribute name="affects">
 				<list>
-					<data type="string" />
+					<oneOrMore>
+						<data type="string" />
+					</oneOrMore>
 				</list>
 			</attribute>
 		</optional>
@@ -81,7 +88,9 @@
 		<optional>
 			<attribute name="depends">
 				<list>
-					<data type="string" />
+					<oneOrMore>
+						<data type="string" />
+					</oneOrMore>
 				</list>
 			</attribute>
 		</optional>
@@ -98,7 +107,9 @@
 		<optional>
 			<attribute name="provides">
 				<list>
-					<data type="string" />
+					<oneOrMore>
+						<data type="string" />
+					</oneOrMore>
 				</list>
 			</attribute>
 		</optional>
@@ -164,6 +175,11 @@
 	</define>
 	
 	<define name="validators-content-argument">
+		<optional>
+			<attribute name="name">
+				<ref name="data-non-empty-string" />
+			</attribute>
+		</optional>
 		<text />
 	</define>
 	

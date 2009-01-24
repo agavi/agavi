@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -109,7 +109,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 			$cfg['skip'] = null;
 		}
 		if($cfg['skip'] !== null && count($cfg['skip'])) {
-			$skip = '/(\A' . str_replace('\[\]', '\[[^\]]*\]', implode('|\A', array_map('preg_quote', $cfg['skip']))) . ')/';
+			$skip = '/(\A' . str_replace('\[\]', '\[[^\]]*\]', implode('|\A', array_map('preg_quote', $cfg['skip'], array_fill(0, count($cfg['skip']), '/')))) . ')/';
 		}
 
 		if($cfg['force_request_uri'] !== false) {
@@ -363,7 +363,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 				);
 				
 				// there's an error with the element's name in the request? good. let's give the baby a class!
-				if($vr->isArgumentFailed($argument)) {
+				if($vr->getAuthoritativeArgumentSeverity($argument) > AgaviValidator::SILENT) {
 					// a collection of all elements that need an error class
 					$errorClassElements = array();
 					// the element itself of course
@@ -659,6 +659,9 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 
 		$errorMessages = array();
 		foreach($incidents as $incident) {
+			if($incident->getSeverity() <= AgaviValidator::SILENT) {
+				continue;
+			}
 			foreach($incident->getErrors() as $error) {
 				$errorMessages[] = $error->getMessage();
 			}
@@ -780,20 +783,24 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 
 			foreach($errorElements as $errorElement) {
 				foreach($targets as $target) {
+					// in case the target yielded more than one location, we need to clone the element
+					// because the document fragment node will be corrupted after an insert
+					$clonedErrorElement = $errorElement->cloneNode(true);
+					
 					if($errorLocation == 'before') {
-						$target->parentNode->insertBefore($errorElement, $target);
+						$target->parentNode->insertBefore($clonedErrorElement, $target);
 					} elseif($errorLocation == 'after') {
 						// check if there is a following sibling, then insert before that one
 						// if not, append to parent
 						if($target->nextSibling) {
-							$target->parentNode->insertBefore($errorElement, $target->nextSibling);
+							$target->parentNode->insertBefore($clonedErrorElement, $target->nextSibling);
 						} else {
-							$target->parentNode->appendChild($errorElement);
+							$target->parentNode->appendChild($clonedErrorElement);
 						}
 					} elseif($errorLocation == 'replace') {
-						$target->parentNode->replaceChild($errorElement, $target);
+						$target->parentNode->replaceChild($clonedErrorElement, $target);
 					} else {
-						$target->appendChild($errorElement);
+						$target->appendChild($clonedErrorElement);
 					}
 				}
 			}

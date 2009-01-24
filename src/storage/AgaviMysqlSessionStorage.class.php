@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
@@ -185,7 +185,7 @@ class AgaviMysqlSessionStorage extends AgaviSessionStorage
 		// delete the records that are expired
 		$sql = sprintf('DELETE FROM %s WHERE %s < %s', $db_table, $db_time_col, $time);
 
-		if(@mysql_query($sql, $this->resource)){
+		if(@mysql_query($sql, $this->resource)) {
 			return true;
 		}
 

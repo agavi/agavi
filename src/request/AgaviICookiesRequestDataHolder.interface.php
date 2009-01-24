@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -29,11 +29,11 @@
  */
 interface AgaviICookiesRequestDataHolder
 {
-	public function hasCookie($cookie);
+	public function hasCookie($name);
 	
-	public function isCookieValueEmpty($cookie);
+	public function isCookieValueEmpty($name);
 	
-	public function &getCookie($cookie, $default = null);
+	public function &getCookie($name, $default = null);
 	
 	public function &getCookies();
 	
@@ -45,7 +45,7 @@ interface AgaviICookiesRequestDataHolder
 	
 	public function setCookies(array $cookies);
 	
-	public function &removeCookie($cookie);
+	public function &removeCookie($name);
 	
 	public function clearCookies();
 	

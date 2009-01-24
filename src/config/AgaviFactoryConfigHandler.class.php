@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -250,7 +250,7 @@ class AgaviFactoryConfigHandler extends AgaviXmlConfigHandler
 							'class' => $data[$factory]['class'],
 							'parameters' => $data[$factory]['params'],
 						), true)
- 					);
+					);
 				}
 			} else {
 				if($factories[$info]['required']) {
@@ -262,7 +262,7 @@ class AgaviFactoryConfigHandler extends AgaviXmlConfigHandler
 		
 		$code[] = sprintf('$this->shutdownSequence = array(%s);', implode(",\n", $shutdownSequence));
 		
-		return $this->generate($code);
+		return $this->generate($code, $config);
 	}
 }
 

@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -137,8 +137,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	public function __sleep()
 	{
 		$this->contextName = $this->context->getName();
-		if (!empty($this->outputType))
-		{
+		if(!empty($this->outputType)) {
 			$this->outputTypeName = $this->outputType->getName();	
 		}
 		$arr = get_object_vars($this);
@@ -159,8 +158,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	{
 		$this->context = AgaviContext::getInstance($this->contextName);
 		
-		if (!empty($this->outputTypeName))
-		{
+		if(!empty($this->outputTypeName)) {
 			$this->outputType = $this->context->getController()->getOutputType($this->outputTypeName);
 		}
 		
@@ -467,8 +465,22 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 		if($actionInstance->isSimple() || ($useGenericMethods && !method_exists($actionInstance, $executeMethod))) {
 			// this action will skip validation/execution for this method
 			// get the default view
-			$viewName = $actionInstance->getDefaultViewName();
-		} else {			
+			$key = $request->toggleLock();
+			try {
+				$viewName = $actionInstance->getDefaultViewName();
+			} catch(Exception $e) {
+				// we caught an exception... unlock the request and rethrow!
+				$request->toggleLock($key);
+				throw $e;
+			}
+			$request->toggleLock($key);
+			
+			// run the validation manager - it's going to take care of cleaning up the request data, and retain "conditional" mode behavior etc.
+			// but only if the action is not simple; otherwise, the (safe) arguments in the request data holder will all be removed
+			if(!$actionInstance->isSimple()) {
+				$validationManager->execute($requestData);
+			}
+		} else {
 			if($this->performValidation()) {
 				// execute the action
 				// prevent access to Request::getParameters()

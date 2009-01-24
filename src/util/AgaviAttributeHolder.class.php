@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -86,11 +86,14 @@ abstract class AgaviAttributeHolder extends AgaviParameterHolder
 
 		if(isset($this->attributes[$ns])) {
 			if(isset($this->attributes[$ns][$name]) || array_key_exists($name, $this->attributes[$ns])) {
- 				return $this->attributes[$ns][$name];
+				return $this->attributes[$ns][$name];
 			}
 
-			$parts = AgaviArrayPathDefinition::getPartsFromPath($name);
-			return AgaviArrayPathDefinition::getValue($parts['parts'], $this->attributes[$ns], $default);
+			try {
+				return AgaviArrayPathDefinition::getValue($name, $this->attributes[$ns], $default);
+			} catch(InvalidArgumentException $e) {
+				return $default;
+			}
 		}
 
 		return $default;
@@ -228,8 +231,11 @@ abstract class AgaviAttributeHolder extends AgaviParameterHolder
 				return true;
 			}
 			
-			$parts = AgaviArrayPathDefinition::getPartsFromPath($name);
-			return AgaviArrayPathDefinition::hasValue($parts['parts'], $this->attributes[$ns]);
+			try {
+				return AgaviArrayPathDefinition::hasValue($name, $this->attributes[$ns]);
+			} catch(InvalidArgumentException $e) {
+				return false;
+			}
 		}
 
 		return false;
@@ -275,8 +281,10 @@ abstract class AgaviAttributeHolder extends AgaviParameterHolder
 				$retval =& $this->attributes[$ns][$name];
 				unset($this->attributes[$ns][$name]);
 			} else {
-				$parts = AgaviArrayPathDefinition::getPartsFromPath($name);
-				$retval = AgaviArrayPathDefinition::unsetValue($parts['parts'], $this->attributes[$ns]);
+				try {
+					$retval = AgaviArrayPathDefinition::unsetValue($name, $this->attributes[$ns]);
+				} catch(InvalidArgumentException $e) {
+				}
 			}
 		}
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ae:configurations xmlns="http://agavi.org/agavi/config/parts/routing/1.0" xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:yay="http://agavi.org/sampleapp" targetNamespace="http://agavi.org/sampleapp">
-
+<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" xmlns="http://agavi.org/agavi/config/parts/routing/1.0" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:asa="http://agavi.org/sampleapp" xmlns:tns="http://agavi.org/sampleapp/types" targetNamespace="http://agavi.org/sampleapp">
+	
 	<ae:configuration context="web">
 		<routes>
 			<!-- matches "/de" or "/en" at the beginning of the URL and uses either value to set the locale, with British Pounds Sterling as the currency. Execution will not stop if this route matches. If it matches, the matched fragment will be stripped from the input URL for the following routes. This route has the "imply" flag, which means that it will be included in generated routes even if the gen() call does not explicitly mention it. The matched "language" parameter will not be available as a request parameter in the code, because it's "ignore"d -->
@@ -25,10 +25,14 @@
 			<route name="secure" pattern="^/secure" module="Default" action="Secure1" />
 			
 			<!-- This route uses a prefix and a postfix for a value, and the entire block is optional. That means that you can omit "buy-cheap-whatever-at-agavi-dot-org" from the URL, and the route still matches! If there is no value given for the parameter "name" when you enerate a route, the entire block will be missing. Since we specified a default value here, you have to explicitly set that parameter to 'null' when generating, so it gets skipped. -->
-			<route name="search_engine_spam" pattern="^/products(/buy-cheap-{name:[\S\s]+}-at-agavi-dot-org)?/(id:\d+)" module="Default" action="SearchEngineSpam">
-				<defaults>
-					<default for="name">/buy-cheap-{}-at-agavi-dot-org</default>
-				</defaults>
+			<route name="products" pattern="^/products" module="Default" action="Products">
+				<route name=".index" pattern="^$" action=".Index" />
+				<route name=".product" pattern="^(/buy-cheap-{name:[\S\s]+}-at-agavi-dot-org)?/(id:\d+)" action=".Product">
+					<defaults>
+						<default for="name">/buy-cheap-{}-at-agavi-dot-org</default>
+					</defaults>
+					<route name=".view" pattern="^$" action=".View" />
+				</route>
 			</route>
 			
 			<!-- The last route in case the input URL is just "/". -->
@@ -38,45 +42,64 @@
 		</routes>
 	</ae:configuration>
 	
-	<ae:configuration context="soap">
+	<ae:configuration context="console">
 		<routes>
-			<!-- SOAP calls include the name of a remote method to call. The WebserviceRouting applies patterns to this method name, not to the URL of the request. We set the request method to "read" here so executeRead() is run in the Action. -->
-			<route pattern="^getItemPrice$" module="Default" action="SearchEngineSpam" method="read">
-				<wsdl:input>
-					<wsdl:part name="id" type="xsd:int" />
-				</wsdl:input>
-				<wsdl:output>
-					<wsdl:part name="price" type="xsd:float" />
-				</wsdl:output>
-			</route>
-		</routes>
-	</ae:configuration>
-	
-	<ae:configuration context="soap2">
-		<routes>
-			<!-- SOAP calls include the name of a remote method to call. The WebserviceRouting applies patterns to this method name, not to the URL of the request. We set the request method to "read" here so executeRead() is run in the Action. -->
-			<route pattern="^getItemPrice2$" module="Default" action="SearchEngineSpam" method="read">
-				<wsdl:input>
-					<wsdl:part name="name" type="xsd:string" />
-				</wsdl:input>
-				<wsdl:output>
-					<wsdl:part name="price" type="xsd:float" />
-				</wsdl:output>
-			</route>
-		</routes>
-	</ae:configuration>
-	
-	<ae:configuration context="wsdl">
-		<routes>
-			<route pattern="(dummy:.*)" module="Default" action="SendWsdl" />
+			<route pattern="^listproducts$" module="Default" action="Products.Index" />
+			<route pattern="^viewproduct(\s+{id:\d+})$" module="Default" action="Products.Product.View" />
 		</routes>
 	</ae:configuration>
 	
 	<ae:configuration context="xmlrpc">
 		<routes>
 			<!-- XMLRPC calls include the name of a remote method to call. The WebserviceRouting applies patterns to this method name, not to the URL of the request. We set the request method to "read" here so executeRead() is run in the Action. -->
-			<route pattern="^getItemPrice$" module="Default" action="SearchEngineSpam" method="read" />
+			<route pattern="^getProduct$" module="Default" action="Products.Product.View" method="read" />
 		</routes>
 	</ae:configuration>
-
+	
+	<ae:configuration context="soap">
+		<wsdl:types>
+			<xsd:schema xmlns:soap-enc="http://schemas.xmlsoap.org/soap/encoding/" targetNamespace="http://agavi.org/sampleapp/types">
+				<xsd:complexType name="Product">
+					<xsd:sequence>
+						<xsd:element name="id" type="xsd:int" />
+						<xsd:element name="name" type="xsd:string" />
+						<xsd:element name="price" type="xsd:float" />
+					</xsd:sequence>
+				</xsd:complexType>
+				<xsd:complexType name="ArrayOfProducts">
+					<xsd:complexContent>
+						<xsd:extension base="soap-enc:Array">
+							<xsd:attribute ref="soap-enc:arrayType"
+								wsdl:arrayType="tns:Product[]" />
+						</xsd:extension>
+					</xsd:complexContent>
+				</xsd:complexType>
+			</xsd:schema>
+		</wsdl:types>
+		<routes>
+			<!-- SOAP calls include the name of a remote method to call. The WebserviceRouting applies patterns to this method name, not to the URL of the request. We set the request method to "read" here so executeRead() is run in the Action. -->
+			<route pattern="^getProduct$" module="Default" action="Products.Product.View" method="read">
+				<wsdl:input>
+					<wsdl:part name="id" type="xsd:int" />
+				</wsdl:input>
+				<wsdl:output>
+					<wsdl:part name="product" type="tns:Product" />
+				</wsdl:output>
+			</route>
+			<route pattern="^listProducts$" module="Default" action="Products.Index" method="read">
+				<wsdl:output>
+					<wsdl:part name="products" type="tns:ArrayOfProducts" />
+				</wsdl:output>
+			</route>
+		</routes>
+	</ae:configuration>
+	
+	<!-- this simple context is used to deliver the WSDL for the soap service above in a "normal" web request -->
+	<ae:configuration context="wsdl">
+		<routes>
+			<!-- matches anything -->
+			<!-- this action simply makes a soap context, requests the WSDL and returns it -->
+			<route pattern="" module="Default" action="SendWsdl" />
+		</routes>
+	</ae:configuration>
 </ae:configurations>

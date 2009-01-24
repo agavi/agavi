@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+	xmlns:compile_1_0="http://agavi.org/agavi/config/parts/compile/1.0"
+	ns="http://agavi.org/agavi/config/parts/compile/1.0"
+	datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+	
+	<include href="_common.rng" />
+	
+	<define name="content-configuration" combine="interleave">
+		<choice>
+			<optional>
+				<element name="compiles">
+					<ref name="content-compiles" />
+				</element>
+			</optional>
+			<zeroOrMore>
+				<element name="compile">
+					<ref name="content-compile" />
+				</element>
+			</zeroOrMore>
+		</choice>
+	</define>
+	
+	<define name="content-compile">
+		<ref name="data-non-empty-string" />
+	</define>
+	
+	<define name="content-compiles">
+		<zeroOrMore>
+			<element name="compile">
+				<ref name="content-compile" />
+			</element>
+		</zeroOrMore>
+	</define>
+	
+</grammar>

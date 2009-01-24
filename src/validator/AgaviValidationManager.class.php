@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -82,7 +82,7 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 				throw new AgaviConfigurationException('Invalid validation mode "' . $parameters['mode'] . '" specified');
 			}
 		} else {
-			$parameters['mode'] = self::MODE_RELAXED;
+			$parameters['mode'] = self::MODE_STRICT;
 		}
 
 		$this->context = $context;
@@ -378,6 +378,7 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	 *
 	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
 	 * @since      0.11.0
+	 *
 	 * @deprecated 1.0.0
 	 */
 	public function getResult()
@@ -394,6 +395,7 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
+	 *
 	 * @deprecated 1.0.0
 	 */
 	public function addFieldResult($validator, $fieldname, $result)
@@ -430,6 +432,7 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
+	 *
 	 * @deprecated 1.0.0
 	 */
 	public function getFieldErrorCode($fieldname, $validatorName = null)
@@ -446,6 +449,7 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
+	 *
 	 * @deprecated 1.0.0
 	 */
 	public function isFieldFailed($fieldname)
@@ -464,6 +468,7 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
+	 *
 	 * @deprecated 1.0.0
 	 */
 	public function isFieldValidated($fieldname)
@@ -482,6 +487,7 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
+	 *
 	 * @deprecated 1.0.0
 	 */
 	public function getSucceededFields($source)
@@ -506,6 +512,7 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
+	 *
 	 * @deprecated 1.0.0
 	 */
 	public function hasIncidents($minSeverity = null)
@@ -522,6 +529,7 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
+	 *
 	 * @deprecated 1.0.0
 	 */
 	public function getIncidents($minSeverity = null)
@@ -549,6 +557,7 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
+	 *
 	 * @deprecated 1.0.0
 	 */
 	public function getValidatorIncidents($validatorName, $minSeverity = null)
@@ -577,6 +586,7 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
+	 *
 	 * @deprecated 1.0.0
 	 */
 	public function getFieldIncidents($fieldname, $minSeverity = null)
@@ -607,6 +617,7 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
+	 *
 	 * @deprecated 1.0.0
 	 */
 	public function getFieldErrors($fieldname, $minSeverity = null)
@@ -630,6 +641,7 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
+	 *
 	 * @deprecated 1.0.0
 	 */
 	public function getValidatorFieldErrors($validatorName, $fieldname, $minSeverity = null)
@@ -654,17 +666,17 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
+	 *
 	 * @deprecated 1.0.0
 	 */
 	public function getFailedFields($minSeverity = null)
 	{
-		$arguments = $this->report->getFailedArguments(null, $minSeverity);
-		$names = array();
-		foreach($arguments as $argument) {
-			$names[] = $argument->getName();
+		$fields = array();
+		foreach($this->getIncidents($minSeverity) as $incident) {
+			$fields = array_merge($fields, $incident->getFields());
 		}
 		
-		return array_values(array_unique($names));
+		return array_values(array_unique($fields));
 	}
 	
 	/**
@@ -677,6 +689,7 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.9.0
+	 *
 	 * @deprecated 1.0.0
 	 */
 	public function getError($name)
@@ -699,6 +712,7 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.9.0
+	 *
 	 * @deprecated 1.0.0
 	 */
 	public function getErrorNames()
@@ -718,6 +732,7 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.9.0
+	 *
 	 * @deprecated 1.0.0
 	 */
 	public function getErrors($name = null)
@@ -758,6 +773,7 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
+	 *
 	 * @deprecated 1.0.0
 	 */
 	public function getErrorMessages($name = null)
@@ -797,6 +813,7 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     David Zülke <david.zuelke@bitextender.com>
 	 * @since      0.9.0
+	 *
 	 * @deprecated 1.0.0
 	 */
 	public function hasError($name)
@@ -814,6 +831,7 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.9.0
+	 *
 	 * @deprecated 1.0.0
 	 */
 	public function hasErrors()
@@ -830,6 +848,7 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.9.0
+	 *
 	 * @deprecated 1.0.0
 	 */
 	public function setError($name, $message)
@@ -851,6 +870,7 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.9.0
+	 *
 	 * @deprecated 1.0.0
 	 */
 	public function setErrors(array $errors)

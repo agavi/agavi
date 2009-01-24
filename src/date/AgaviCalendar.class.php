@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -223,14 +223,28 @@ abstract class AgaviCalendar
 	 */
 	public function getNativeDateTime()
 	{
-		$date = new DateTime(
-			sprintf(
-				'%d-%d-%d %d:%d:%d',
-				$this->get(AgaviDateDefinitions::YEAR), $this->get(AgaviDateDefinitions::MONTH) + 1, $this->get(AgaviDateDefinitions::DATE),
-				$this->get(AgaviDateDefinitions::HOUR_OF_DAY), $this->get(AgaviDateDefinitions::MINUTE), $this->get(AgaviDateDefinitions::SECOND)
-			),
-			new DateTimeZone($this->getTimeZone()->getId())
+		$dateTimeString = sprintf(
+			'%d-%d-%d %d:%d:%d',
+			$this->get(AgaviDateDefinitions::YEAR), $this->get(AgaviDateDefinitions::MONTH) + 1, $this->get(AgaviDateDefinitions::DATE),
+			$this->get(AgaviDateDefinitions::HOUR_OF_DAY), $this->get(AgaviDateDefinitions::MINUTE), $this->get(AgaviDateDefinitions::SECOND)
 		);
+		
+		$tzId = $this->getTimeZone()->getId();
+		if($tzId == AgaviTimeZone::CUSTOM) {
+			$offsetInMinutes = $this->getTimeZone()->getRawOffset() / 60000;
+			$sign = '+';
+			if($offsetInMinutes < 0) {
+				$sign = '-';
+			}
+			$offsetInMinutes = abs($offsetInMinutes);
+			$hours = (int) ($offsetInMinutes / 60);
+			$minutes = ($offsetInMinutes % 60);
+			$tzId = sprintf('%s%02d:%02d', $sign, $hours, $minutes);
+			return new DateTime($dateTimeString . $tzId);
+		} else {
+			return new DateTime($dateTimeString, new DateTimeZone($tzId));
+		}
+		
 		return $date;
 	}
 
@@ -270,6 +284,52 @@ abstract class AgaviCalendar
 	public function setUnixTimestamp($timestamp)
 	{
 		$this->setTimeInMillis($timestamp * AgaviDateDefinitions::MILLIS_PER_SECOND);
+	}
+
+	/**
+	 * @see        AgaviCalendar::getAll()
+	 *
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function toArray()
+	{
+		return $this->getAll();
+	}
+
+	/**
+	 * Sets all given time field values.
+	 *
+	 * @param      array An array using the AgaviDateDefinitions::XXX as key 
+	 *                   and the respective value as value.
+	 *
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function fromArray(array $data)
+	{
+		foreach($data as $key => $value) {
+			$this->set1($key, $value);
+		}
+	}
+	
+	/**
+	 * Returns the locale option string containing the timezone option set 
+	 * to the timezone of this calendar.
+	 * 
+	 * @param      string The prefix which will be applied to the timezone option
+	 *                    string. Use ';' here if you intend to use several 
+	 *                    locale options and append the result of this method
+	 *                    to your locale string.
+	 *
+	 * @return     string 
+	 * 
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function getTimeZoneLocaleOptionString($prefix = '@')
+	{
+		return AgaviLocale::getTimeZoneOptionString($this, $prefix);
 	}
 
 	public function __is_equal($that)
@@ -1771,6 +1831,8 @@ abstract class AgaviCalendar
 	 */
 	protected function setTimeInMillis($millis)
 	{
+		$millis = (float) $millis;
+		
 		if($millis > self::MAX_MILLIS) {
 			$millis = self::MAX_MILLIS;
 		} elseif($millis < self::MIN_MILLIS) {
@@ -2137,10 +2199,13 @@ abstract class AgaviCalendar
 			}
 		} else {
 			if($bestField == AgaviDateDefinitions::WEEK_OF_YEAR) {  // ------------------------------------- WOY -------------
-				if(!$this->_isSet(AgaviDateDefinitions::YEAR_WOY) ||  // YWOY not set at all or
-						( ($this->resolveFields(self::$kYearPrecedence) != AgaviDateDefinitions::YEAR_WOY) // YWOY doesn't have precedence
-						&& ($this->fStamp[AgaviDateDefinitions::YEAR_WOY] != self::kInternallySet) ) ) // (excluding where all fields are internally set - then YWOY is used)
-				{
+				if(
+					!$this->_isSet(AgaviDateDefinitions::YEAR_WOY) ||  // YWOY not set at all or
+					(
+						($this->resolveFields(self::$kYearPrecedence) != AgaviDateDefinitions::YEAR_WOY) // YWOY doesn't have precedence
+						&& ($this->fStamp[AgaviDateDefinitions::YEAR_WOY] != self::kInternallySet) // (excluding where all fields are internally set - then YWOY is used)
+					)
+				) {
 					// need to be sure to stay in 'real' year.
 					$woy = $this->internalGet($bestField);
 
@@ -2151,12 +2216,13 @@ abstract class AgaviCalendar
 						$nextFirst += 7;
 					}
 
-					if($woy==1) {  // FIRST WEEK ---------------------------------
+					if($woy == 1) {  // FIRST WEEK ---------------------------------
 
 						// nextFirst is now the localized DOW of Jan 1  of y-woy+1
-						if(($nextFirst > 0) &&   // Jan 1 starts on FDOW
-							(7 - $nextFirst) >= $this->getMinimalDaysInFirstWeek()) // or enough days in the week
-						{
+						if(
+							($nextFirst > 0) &&   // Jan 1 starts on FDOW
+							(7 - $nextFirst) >= $this->getMinimalDaysInFirstWeek() // or enough days in the week
+						) {
 							// Jan 1 of (yearWoy+1) is in yearWoy+1 - recalculate JD to next year
 							$julianDay = $nextJulianDay;
 
@@ -2769,11 +2835,11 @@ abstract class AgaviCalendar
 	 * @var        array The flags which tell if a specified time field for the
 	 *                   calendar is set.
 	 *
-	 * @deprecated ICU 2.8 use (fStamp[n]!=kUnset)
-	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
+	 *
+	 * @deprecated ICU 2.8 use (fStamp[n]!=kUnset)
 	 */
 	protected $fIsSet;
 

@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
@@ -62,6 +62,10 @@ class AgaviSessionStorage extends AgaviStorage
 	 */
 	public function startup()
 	{
+		if($this->hasParameter('session_save_path')) {
+			session_save_path($this->getParameter('session_save_path'));
+		}
+		
 		session_name($this->getParameter('session_name', 'Agavi'));
 		
 		if($this->hasParameter('session_id')) {
@@ -90,7 +94,15 @@ class AgaviSessionStorage extends AgaviStorage
 				$path = $this->context->getRouting()->getBasePath();
 			}
 			$domain = $this->getParameter('session_cookie_domain', $cookieDefaults['domain']);
-			$secure = (bool) $this->getParameter('session_cookie_secure', $cookieDefaults['secure']);
+			
+			$secure = $this->getParameter('session_cookie_secure', $cookieDefaults['secure']);
+			$request = $this->context->getRequest();
+			if($secure === null && $request instanceof AgaviWebRequest) {
+				$secure = $request->isHttps();
+			} else {
+				$secure = (bool) $secure;
+			}
+			
 			$httpOnly = (bool) $this->getParameter('session_cookie_httponly', $cookieDefaults['httponly']);
 			
 			session_set_cookie_params($lifetime, $path, $domain, $secure, $httpOnly);

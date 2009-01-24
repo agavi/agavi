@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
@@ -161,13 +161,17 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 		foreach($groups as $group) {
 			$group += array('name' => null, 'source' => null, 'namespace' => null);
 			$val = $this->getVariable($group['name'], $group['source'], $group['namespace'], $container);
-			if($val === null) {
-				$val = "0";
-			} elseif(is_object($val) && is_callable(array($val, '__toString'))) {
+			
+			if(is_object($val) && is_callable(array($val, '__toString'))) {
 				$val = $val->__toString();
 			} elseif(is_object($val) && function_exists('spl_object_hash')) {
 				$val = spl_object_hash($val);
 			}
+			
+			if($val === null || $val === false || $val === '') {
+				$val = '0';
+			}
+			
 			$retval[] = $val;
 		}
 
@@ -518,12 +522,10 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 								}
 							}
 							// set the presentation data as a template attribute
-							if(($output[$slotName] = $slotResponse->getContent()) !== null) {
-								// $lm->log('Merging in response from slot "' . $slotName . '"...');
-								// the slot really output something
-								// let our response grab the stuff it needs from the slot's response
-								$response->merge($slotResponse);
-							}
+							$output[$slotName] = $slotResponse->getContent();
+							// and merge the other slot's response (this used to be conditional and done only when the content was not null)
+							// $lm->log('Merging in response from slot "' . $slotName . '"...');
+							$response->merge($slotResponse);
 						}
 						$moreAssigns = array(
 							'container' => $container,

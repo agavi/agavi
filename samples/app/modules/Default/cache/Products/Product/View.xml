@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" xmlns="http://agavi.org/agavi/config/parts/caching/1.0">
+	<ae:configuration>
+		
+		<cachings>
+			
+			<caching method="read" lifetime="2 hours">
+				
+				<group>products</group>
+				<!-- we need to vary by both id and name, as they can both be valid -->
+				<group source="request_parameter">id</group>
+				<group source="request_parameter">name</group>
+				<group source="locale" />
+				
+				<view>Success</view>
+				
+				<output_type name="html">
+					
+					<layer name="content" />
+					
+					<template_variable>title</template_variable>
+					
+				</output_type>
+				
+			</caching>
+			
+		</cachings>
+		
+	</ae:configuration>
+</ae:configurations>

@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -29,26 +29,31 @@
  *
  * @version    $Id$
  */
-class AgaviTranslationConfigHandler extends AgaviConfigHandler
+class AgaviTranslationConfigHandler extends AgaviXmlConfigHandler
 {
+	const XML_NAMESPACE = 'http://agavi.org/agavi/config/parts/translation/1.0';
+	
 	/**
 	 * Execute this configuration handler.
 	 *
-	 * @param      string An absolute filesystem path to a configuration file.
-	 * @param      string An optional context in which we are currently running.
+	 * @param      AgaviXmlConfigDomDocument The document to parse.
 	 *
 	 * @return     string Data to be written to a cache file.
 	 *
-	 * @throws     <b>AgaviConfigurationException</b> on error in the config.
+	 * @throws     <b>AgaviParseException</b> If a requested configuration file is
+	 *                                        improperly formatted.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @author     David Zülke <dz@bitxtender.com>
+	 * @author     David Zülke <dz@bitextender.com>
 	 * @since      0.11.0
 	 */
-	public function execute($config, $context = null)
+	public function execute(AgaviXmlConfigDomDocument $document)
 	{
-		$configurations = $this->orderConfigurations(AgaviConfigCache::parseConfig($config, false, $this->getValidationFile(), $this->parser)->configurations, AgaviConfig::get('core.environment'), $context);
-
+		// set up our default namespace
+		$document->setDefaultNamespace(self::XML_NAMESPACE, 'translation');
+		
+		$config = $document->documentURI;
+		
 		$translatorData = array();
 		$localeData = array();
 
@@ -56,25 +61,28 @@ class AgaviTranslationConfigHandler extends AgaviConfigHandler
 		$defaultLocale = null;
 		$defaultTimeZone = null;
 
-		foreach($configurations as $cfg) {
+		foreach($document->getConfigurationElements() as $cfg) {
 
-			if(isset($cfg->available_locales)) {
-				$defaultLocale = $cfg->available_locales->getAttribute('default_locale', $defaultLocale);
-				$defaultTimeZone = $cfg->available_locales->getAttribute('default_timezone', $defaultTimeZone);
-				foreach($cfg->available_locales as $locale) {
+			if($cfg->hasChild('available_locales')) {
+				$availableLocales = $cfg->getChild('available_locales');
+				// TODO: is this really optional? according to the schema: yes...
+				$defaultLocale = $availableLocales->getAttribute('default_locale', $defaultLocale);
+				$defaultTimeZone = $availableLocales->getAttribute('default_timezone', $defaultTimeZone);
+				foreach($availableLocales as $locale) {
 					$name = $locale->getAttribute('identifier');
 					if(!isset($localeData[$name])) {
 						$localeData[$name] = array('name' => $name, 'params' => array(), 'fallback' => null, 'ldml_file' => null);
 					}
-					$localeData[$name]['params'] = $this->getItemParameters($locale, $localeData[$name]['params']);
+					$localeData[$name]['params'] = $locale->getAgaviParameters($localeData[$name]['params']);
 					$localeData[$name]['fallback'] = $locale->getAttribute('fallback', $localeData[$name]['fallback']);
 					$localeData[$name]['ldml_file'] = $locale->getAttribute('ldml_file', $localeData[$name]['ldml_file']);
 				}
 			}
 
-			if(isset($cfg->translators)) {
-				$defaultDomain = $cfg->translators->getAttribute('default_domain', $defaultDomain);
-				$this->getTranslators($cfg->translators, $translatorData);
+			if($cfg->hasChild('translators')) {
+				$translators = $cfg->getChild('translators');
+				$defaultDomain = $translators->getAttribute('default_domain', $defaultDomain);
+				$this->getTranslators($translators, $translatorData);
 			}
 		}
 
@@ -105,7 +113,7 @@ class AgaviTranslationConfigHandler extends AgaviConfigHandler
 			}
 		}
 
-		return $this->generate($data);
+		return $this->generate($data, $config);
 	}
 	
 	/**
@@ -121,8 +129,8 @@ class AgaviTranslationConfigHandler extends AgaviConfigHandler
 	protected function getFilters($translator)
 	{
 		$filters = array();
-		if(isset($translator->filters)) {
-			foreach($translator->filters as $filter) {
+		if($translator->has('filters')) {
+			foreach($translator->get('filters') as $filter) {
 				$func = explode('::', $filter->getValue());
 				if(count($func) != 2) {
 					$func = $func[0];
@@ -171,23 +179,24 @@ class AgaviTranslationConfigHandler extends AgaviConfigHandler
 
 			$domainData =& $data[$domain];
 
-			foreach(array('msg' => 'message_translator', 'num' => 'number_formatter', 'cur' => 'currency_formatter', 'date' => 'date_formatter') as $type => $node) {
-				if(isset($translator->$node)) {
+			foreach(array('msg' => 'message_translator', 'num' => 'number_formatter', 'cur' => 'currency_formatter', 'date' => 'date_formatter') as $type => $nodeName) {
+				if($translator->hasChild($nodeName)) {
+					$node = $translator->getChild($nodeName);
 					if(!isset($domainData[$type])) {
 						$domainData[$type] = $defaultData[$type];
 					}
 					
-					if($translator->$node->hasAttribute('translation_domain')) {
-						$domainData[$type]['params']['translation_domain'] = $translator->$node->getAttribute('translation_domain');
+					if($node->hasAttribute('translation_domain')) {
+						$domainData[$type]['params']['translation_domain'] = $node->getAttribute('translation_domain');
 					}
-					$domainData[$type]['class'] = $translator->$node->getAttribute('class', $domainData[$type]['class']);
-					$domainData[$type]['params'] = $this->getItemParameters($translator->$node, $domainData[$type]['params']);
-					$domainData[$type]['filters'] = $this->getFilters($translator->$node);
+					$domainData[$type]['class'] = $node->getAttribute('class', $domainData[$type]['class']);
+					$domainData[$type]['params'] = $node->getAgaviParameters($domainData[$type]['params']);
+					$domainData[$type]['filters'] = $this->getFilters($node);
 				}
 			}
 
-			if(isset($translator->translators)) {
-				$this->getTranslators($translator->translators, $data, $domain);
+			if($translator->has('translators')) {
+				$this->getTranslators($translator->get('translators'), $data, $domain);
 			}
 		}
 	}
