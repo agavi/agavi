@@ -5,27 +5,27 @@ class ProductFinderModelTest extends AgaviUnitTestCase
 	protected static $products = array(
 		array(
 			'id'    => 8172401,
-			'name'  => 'brains',
+			'name'  => 'TPS Report Cover Sheet',
 			'price' => 0.89,
 		),
 		array(
 			'id'    => 917246,
-			'name'  => 'chainsaws',
+			'name'  => 'Weighted Companion Cube',
 			'price' => 129.99,
 		),
 		array(
 			'id'    => 7856122,
-			'name'  => 'mad coding skills',
+			'name'  => 'Longcat',
 			'price' => 14599,
 		),
 		array(
 			'id'    => 123456,
-			'name'  => 'nonsense',
+			'name'  => 'Red Stapler',
 			'price' => 3.14,
 		),
 		array(
 			'id'    => 3165463,
-			'name'  => 'viagra',
+			'name'  => 'Sildenafil Citrate',
 			'price' => 14.69,
 		),
 	);
@@ -111,8 +111,8 @@ class ProductFinderModelTest extends AgaviUnitTestCase
 	
 	public function testNullForPartiallyValidProductInfo()
 	{
-		$this->assertNull($this->getContext()->getModel('ProductFinder')->retrieveByIdAndName(123456, 'nonsenseZOMG'));
-		$this->assertNull($this->getContext()->getModel('ProductFinder')->retrieveByIdAndName(1234567, 'nonsense'));
+		$this->assertNull($this->getContext()->getModel('ProductFinder')->retrieveByIdAndName(123456, 'Red StaplerZOMG'));
+		$this->assertNull($this->getContext()->getModel('ProductFinder')->retrieveByIdAndName(1234567, 'Red Stapler'));
 	}
 }
 

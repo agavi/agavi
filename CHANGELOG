@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 1.0.0 beta8 (January ??, 2009)
 ------------------------------
 
+ADD: AgaviResponse::hasContent() (#1007) (David)
 ADD: Complete support for multiple SOAP services in the same application (#1001) (David)
 ADD: AgaviException::render() should send shell exit code (#990) (David)
 ADD: Command line support (request/response/routing) (#480) (David)
@@ -17,6 +18,8 @@ CHG: Rename AgaviTranslationManager::getCurrentTimeZone() to getDefaultTimeZone(
 CHG: Remove unused property AgaviOperatorValidator::$errors (#987) (David)
 CHG: Allow arbitrary number of fractional seconds for parsing date formats (#977) (Dominik)
 
+FIX: [EXPLETIVE] Fucking Debian fucking ruined their fucking PHP package once again, and now we need to waste fucking time to fucking fix it (#1008)
+FIX: AgaviSoapController does not handle some SoapServer/SoapClient options properly (#1006) (David)
 FIX: Marshalling of document/literal wrapped SOAP responses is broken (#1004) (David)
 FIX: Infinite loop is infinite (#1000) (David)
 FIX: Default compile.xml and Sample app's Disabled module module.xml are still in old configuration format (#999) (David)

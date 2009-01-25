@@ -15,13 +15,13 @@ class Default_Products_IndexSuccessView extends AgaviSampleAppDefaultBaseView
 		$products = $this->getAttribute('products');
 		
 		$ret = array();
-		$ret[] = sprintf('+%\'-32s+%\'-12s+', '', '');
-		$ret[] = sprintf('| %-30s | %-10s |', 'Name:', 'Price:');
-		$ret[] = sprintf('+%\'-32s+%\'-12s+', '', '');
+		$ret[] = sprintf('+%\'-12s+%\'-32s+%\'-12s+', '', '', '');
+		$ret[] = sprintf('| %-10s | %-30s | %-10s |', 'ID:', 'Name:', 'Price:');
+		$ret[] = sprintf('+%\'-12s+%\'-32s+%\'-12s+', '', '', '');
 		
 		foreach($products as $product) {
-			$ret[] = sprintf('| %-30s | %10.2f |', $product->getName(), $product->getPrice());
-			$ret[] = sprintf('+%\'-32s+%\'-12s+', '', '');
+			$ret[] = sprintf('| %-10d | %-30s | %10.2f |', $product->getId(), $product->getName(), $product->getPrice());
+			$ret[] = sprintf('+%\'-12s+%\'-32s+%\'-12s+', '', '', '');
 		}
 		
 		return implode(PHP_EOL, $ret);

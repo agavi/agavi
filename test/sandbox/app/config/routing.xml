@@ -12,6 +12,10 @@
 				<default for="param2">/{2}</default>
 				<default for="param3">/{3}</default>
 			</route>
+			<route name="with_prefix_and_postfix" pattern="^/with_prefix_and_postfix(/{param:.*})" module="TestPrefixPostfix" action="Matched">
+				<default for="param">/{default}</default>
+			</route>
+			<route name="with_prefix_and_postfix_auto_detected" pattern="^/with_prefix_and_postfix(/myprefix/{param:.*}/my-postfix)" module="TestPrefixPostfix" action="Matched" />
 			<route name="callbacks" pattern="^/callbacks" module="Callback">
 				<route name=".nonmatching_callback" pattern="^/nonmatching_callback$" callback="NonMatchingRoutingCallback" action="NonMatching" />
 				<route name=".matching_callback" pattern="^/matching_callback$" callback="MatchingRoutingCallback" action="Matching" />

@@ -36,6 +36,19 @@ class AgaviXmlrpcepiphpResponse extends AgaviResponse
 	protected $content = array();
 	
 	/**
+	 * Check whether or not some content is set.
+	 *
+	 * @return     bool If any content is set, false otherwise.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      0.11.6
+	 */
+	public function hasContent()
+	{
+		return $this->content !== array();
+	}
+	
+	/**
 	 * Set the content for this Response.
 	 *
 	 * @see        AgaviResponse::setContent()

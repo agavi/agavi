@@ -6,11 +6,35 @@ class ProductModel extends AgaviSampleAppBaseModel
 	protected $name;
 	protected $price;
 	
+	protected static $fields = array(
+		'id',
+		'name',
+		'price'
+	);
+	
 	public function __construct(array $data = array())
 	{
-		foreach($data as $key => $value) {
-			$this->$key = $value;
+		$this->fromArray($data);
+	}
+	
+	public function fromArray(array $data)
+	{
+		foreach(self::$fields as $field) {
+			if(isset($data[$field])) {
+				$this->$field = $data[$field];
+			}
 		}
+	}
+	
+	public function toArray()
+	{
+		$retval = array();
+		
+		foreach(self::$fields as $field) {
+			$retval[$field] = $this->$field;
+		}
+		
+		return $retval;
 	}
 	
 	public function getId()

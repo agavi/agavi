@@ -20,6 +20,7 @@ class Default_Products_Product_ViewSuccessView extends AgaviSampleAppDefaultBase
 		$product = $this->getAttribute('product');
 		
 		return
+			'ID:    ' . $product->getId() . PHP_EOL .
 			'Name:  ' . $product->getName() . PHP_EOL .
 			'Price: ' . sprintf('%01.2f', $product->getPrice());
 	}
