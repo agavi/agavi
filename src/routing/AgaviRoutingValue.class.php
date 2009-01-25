@@ -113,6 +113,11 @@ class AgaviRoutingValue implements ArrayAccess
 		return $this->prefix;
 	}
 	
+	public function hasPrefix()
+	{
+		return $this->prefix !== null;
+	}
+	
 	public function setPostfix($value, $needsEncoding = false)
 	{
 		$this->postfix = $value;
@@ -122,6 +127,11 @@ class AgaviRoutingValue implements ArrayAccess
 	public function getPostfix()
 	{
 		return $this->postfix;
+	}
+	
+	public function hasPostfix()
+	{
+		return $this->postfix !== null;
 	}
 	
 	public function getValueNeedsEncoding()
@@ -137,12 +147,6 @@ class AgaviRoutingValue implements ArrayAccess
 	public function getPostfixNeedsEncoding()
 	{
 		return $this->postfixNeedsEncoding;
-	}
-	
-	// TODO: naming
-	public function hasPrefixOrPostfix()
-	{
-		return $this->prefix || $this->postfix;
 	}
 	
 	public function equals($other)

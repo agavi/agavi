@@ -598,7 +598,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 		if(!empty($options['refill_all_parameters'])) {
 			foreach($matchedParams as $name => $value) {
 				if(!(isset($params[$name]) || array_key_exists($name, $params))) {
-					$params[$name] = $value;
+					$params[$name] = $this->createValue($value, null, null, true);
 				}
 			}
 		}
@@ -632,11 +632,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 				// and since the user params are handled afterwards, skip them here
 			} elseif($refillValue && $hasMatched) {
 				// Use the matched input
-				if($hasDefault && ($defaultParams[$name]['pre'] || $defaultParams[$name]['post'])) {
-					$finalParams[$name] = $this->createValue($matchedParams[$name], $defaultParams[$name]['pre'], $defaultParams[$name]['post']);
-				} else {
-					$finalParams[$name] = $matchedParams[$name];
-				}
+				$finalParams[$name] = $this->createValue($matchedParams[$name], null, null, true);
 			} elseif($hasDefault) {
 				// now we just need to check if there are defaults for this available param and fill them in if applicable
 				$default = $defaultParams[$name];
@@ -659,18 +655,11 @@ abstract class AgaviRouting extends AgaviParameterHolder
 		foreach($params as $name => $param) {
 			if(!(isset($finalParams[$name]) || array_key_exists($name, $finalParams))) {
 				if($param === null && isset($optionalParams[$name])) {
+					// null was set for an optional parameter
 					$finalParams[$name] = $param;
 				} else {
 					if(isset($defaultParams[$name])) {
-						if($param !== null) {
-							if(!($param instanceof AgaviRoutingValue)) {
-								// if it's not already a routing value (which contains pre and postfix) determine the pre- and postfix 
-								// from the default value
-								$routeParam = clone $defaultParams[$name];
-								$routeParam->setValue($param, true);
-								$param = $routeParam;
-							}
-						} else {
+						if($param === null) {
 							// the user set the parameter to null, to signal that the default value should be used
 							$param = clone $defaultParams[$name];
 						}
@@ -696,12 +685,13 @@ abstract class AgaviRouting extends AgaviParameterHolder
 					// the isset() could be replaced by
 					// "!array_key_exists($name, $finalParams) || $finalParams[$name] === null"
 					// to clarify that null is explicitly allowed here
-					if(!isset($finalParams[$name]) || (
-							isset($defaultParams[$name]) && (
-								($finalParams[$name] instanceof AgaviRoutingValue && $finalParams[$name]->equals($defaultParams[$name])) ||
-								(!($finalParams[$name] instanceof AgaviRoutingValue) && $finalParams[$name] == $defaultParams[$name]->getValue())
+					if(!isset($finalParams[$name]) ||
+							(
+								isset($defaultParams[$name]) && 
+								$finalParams[$name]->getValue() == $defaultParams[$name]->getValue() &&
+								(!$finalParams[$name]->hasPrefix() || $finalParams[$name]->getPrefix() == $defaultParams[$name]->getPrefix()) && 
+								(!$finalParams[$name]->hasPostfix() || $finalParams[$name]->getPostfix() == $defaultParams[$name]->getPostfix())
 							)
-						)
 					) {
 						$finalParams[$name] = null;
 					} else {
@@ -713,6 +703,27 @@ abstract class AgaviRouting extends AgaviParameterHolder
 			}
 		}
 		
+		return $finalParams;
+	}
+	
+	protected function updatePrefixAndPostfix(array $finalParams, array $defaultParams)
+	{
+		foreach($finalParams as $name => $param) {
+			if($param === null) {
+				continue;
+			}
+			
+			if(isset($defaultParams[$name])) {
+				// update the pre- and postfix from the default if they are not set in the routing value
+				$default = $defaultParams[$name];
+				if(!$param->hasPrefix() && $default->hasPrefix()) {
+					$param->setPrefix($default->getPrefix(), $default->getPrefixNeedsEncoding());
+				}
+				if(!$param->hasPostfix() && $default->hasPostfix()) {
+					$param->setPostfix($default->getPostfix(), $default->getPostfixNeedsEncoding());
+				}
+			}
+		}
 		return $finalParams;
 	}
 	
@@ -736,6 +747,26 @@ abstract class AgaviRouting extends AgaviParameterHolder
 			return $this->escapeOutputParameter($parameter);
 		}
 	}
+	
+	protected function convertParametersToRoutingValues(array $parameters)
+	{
+		if(count($parameters)) {
+			// make sure everything in $parameters is a routing value
+			foreach($parameters as &$param) {
+				if(!$param instanceof AgaviRoutingValue) {
+					if($param !== null) {
+						$param = $this->createValue($param, null, null, true);
+					}
+				} else {
+					// make sure the routing value the user passed to gen() is not modified
+					$param = clone $param;
+				}
+			}
+			return $parameters;
+		} else {
+			return array();
+		}
+	}
 
 	/**
 	 * Generate a formatted Agavi URL.
@@ -754,6 +785,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 	 */
 	public function gen($route, array $params = array(), $options = array())
 	{
+		$params = $this->convertParametersToRoutingValues($params);
 		// we need to store the original params since we will be trying to fill the
 		// parameters up to the first user supplied parameter
 		$originalParams = $params;
@@ -766,14 +798,20 @@ abstract class AgaviRouting extends AgaviParameterHolder
 		$assembledInformation = $this->assembleRoutes($options, $routes, $params);
 		
 		$params = $assembledInformation['user_parameters'];
-
+		
 		$params = $this->refillAllMatchedParameters($options, $params, $assembledInformation['matched_parameters']);
 		$finalParams = $this->refillMatchedAndDefaultParameters($options, $originalParams, $params, $assembledInformation['available_parameters'], $assembledInformation['matched_parameters'], $assembledInformation['optional_parameters'], $assembledInformation['default_parameters']);
 		$finalParams = $this->fillUserParameters($options, $params, $finalParams, $assembledInformation['available_parameters'], $assembledInformation['optional_parameters'], $assembledInformation['default_parameters']);
 		$finalParams = $this->removeMatchingDefaults($options, $finalParams, $assembledInformation['available_parameters'], $assembledInformation['optional_parameters'], $assembledInformation['default_parameters']);
+		$finalParams = $this->updatePrefixAndPostfix($finalParams, $assembledInformation['default_parameters']);
 
 		// remember the params that are not in any pattern (could be extra query params, for example, set by a callback)
 		$extras = array_diff_key($originalParams, $finalParams);
+		// but since the values are expected as plain values and not routing values, convert the routing values back to 
+		// 'plain' values
+		foreach($extras as &$extra) {
+			$extra = $extra->getValue();
+		}
 
 		$params = $finalParams;
 
