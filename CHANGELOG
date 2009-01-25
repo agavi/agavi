@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 0.11.6 RC2 (January ??, 2009)
 -----------------------------
 
+ADD: AgaviResponse::hasContent() (#1007) (David)
 ADD: AgaviException::render() should send shell exit code (#990) (David)
 ADD: Optionally set 'secure' flag on response cookies automatically (#982) (David)
 ADD: Optionally set 'secure' flag on session cookies automatically (#981) (David)
