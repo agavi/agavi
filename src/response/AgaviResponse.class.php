@@ -180,6 +180,19 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	}
 	
 	/**
+	 * Check whether or not some content is set.
+	 *
+	 * @return     bool If any content is set, false otherwise.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      0.11.6
+	 */
+	public function hasContent()
+	{
+		return $this->content !== null;
+	}
+	
+	/**
 	 * Retrieve the size (in bytes) of the content set for this Response.
 	 *
 	 * @return     int The content size in bytes.

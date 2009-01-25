@@ -245,6 +245,19 @@ class AgaviWebResponse extends AgaviResponse
 	}
 	
 	/**
+	 * Check whether or not some content is set.
+	 *
+	 * @return     bool If any content is set, false otherwise.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      0.11.6
+	 */
+	public function hasContent()
+	{
+		return $this->content !== null && $this->content !== '';
+	}
+	
+	/**
 	 * Set the content type for the response.
 	 *
 	 * @param      string A content type.
