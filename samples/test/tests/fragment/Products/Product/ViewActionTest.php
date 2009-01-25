@@ -5,27 +5,27 @@ class Products_Product_ViewActionTest extends AgaviActionTestCase
 	protected static $products = array(
 		array(
 			'id'    => 8172401,
-			'name'  => 'brains',
+			'name'  => 'TPS Report Cover Sheet',
 			'price' => 0.89,
 		),
 		array(
 			'id'    => 917246,
-			'name'  => 'chainsaws',
+			'name'  => 'Weighted Companion Cube',
 			'price' => 129.99,
 		),
 		array(
 			'id'    => 7856122,
-			'name'  => 'mad coding skills',
+			'name'  => 'Longcat',
 			'price' => 14599,
 		),
 		array(
 			'id'    => 123456,
-			'name'  => 'nonsense',
+			'name'  => 'Red Stapler',
 			'price' => 3.14,
 		),
 		array(
 			'id'    => 3165463,
-			'name'  => 'viagra',
+			'name'  => 'Sildenafil Citrate',
 			'price' => 14.69,
 		),
 	);
@@ -91,12 +91,12 @@ class Products_Product_ViewActionTest extends AgaviActionTestCase
 	public function errorViewInvalidProductsData()
 	{
 		return array(
-			'only product name given' => array(array('name' => 'nonsense')),
+			'only product name given' => array(array('name' => 'Red Stapler')),
 			'invalid product id given' => array(array('id' => 81236123)),
 			'negative product id given' => array(array('id' => -1)),
-			'id and name given, id invalid' => array(array('id' => 123457, 'name' => 'nonsense')),
-			'id and name given, name invalid' => array(array('id' => 123456, 'name' => 'nonsenseZOMG')),
-			'id and name given, both invalid' => array(array('id' => -1, 'name' => 'nonsenseZOMG')),
+			'id and name given, id invalid' => array(array('id' => 123457, 'name' => 'Red Stapler')),
+			'id and name given, name invalid' => array(array('id' => 123456, 'name' => 'Red StaplerZOMG')),
+			'id and name given, both invalid' => array(array('id' => -1, 'name' => 'Red StaplerZOMG')),
 		);
 	}
 	
@@ -118,18 +118,6 @@ class Products_Product_ViewActionTest extends AgaviActionTestCase
 	public function testWriteMethod()
 	{
 		$this->assertNotHandlesMethod('write');
-	}
-	
-	public function products()
-	{
-		
-		return array(
-			'brains'    => array('brains'),
-			'chainsaws' => array('chainsaws'),
-			'coding'    => array('mad coding skills'),
-			'nonsense'  => array('nonsense'),
-			'viagra'    => array('viagra'),
-		);
 	}
 }
 
