@@ -5,12 +5,12 @@ error_reporting(E_ALL | E_STRICT);
 // +---------------------------------------------------------------------------+
 // | An absolute filesystem path to the agavi/agavi.php script.                |
 // +---------------------------------------------------------------------------+
-require('../../src/agavi.php');
+require(dirname(__FILE__) . '/../../src/agavi.php');
 
 // +---------------------------------------------------------------------------+
 // | An absolute filesystem path to our app/config.php script.                 |
 // +---------------------------------------------------------------------------+
-require('../app/config.php');
+require(dirname(__FILE__) . '/../app/config.php');
 
 // +---------------------------------------------------------------------------+
 // | Initialize the framework. You may pass an environment name to this method.|
