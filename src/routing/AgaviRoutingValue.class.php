@@ -54,6 +54,38 @@ class AgaviRoutingValue implements ArrayAccess
 		$this->postfixNeedsEncoding = $postfixNeedsEncoding;
 	}
 	
+	/**
+	 * Pre-serialization callback.
+	 *
+	 * Will set the name of the context instead of the instance, which will later
+	 * be restored by __wakeup().
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function __sleep()
+	{
+		$this->contextName = $this->context->getName();
+		$arr = get_object_vars($this);
+		unset($arr['context']);
+		return array_keys($arr);
+	}
+
+	/**
+	 * Post-unserialization callback.
+	 *
+	 * Will restore the context instance based on their names set by __sleep().
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function __wakeup()
+	{
+		$this->context = AgaviContext::getInstance($this->contextName);
+		
+		unset($this->contextName);
+	}
+
 	public function initialize(AgaviContext $context, array $parameters = array())
 	{
 		$this->context = $context;
