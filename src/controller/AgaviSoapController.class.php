@@ -118,8 +118,21 @@ class AgaviSoapController extends AgaviController
 		// get the name of the class to use for handling soap calls, defaults to Agavi's "AgaviSoapControllerCallHandler"
 		$soapHandlerClass = $this->getParameter('soap_handler_class', 'AgaviSoapControllerCallHandler');
 		
+		// force client's soap version to be the same as the server's
 		if(isset($soapServerOptions['soap_version'])) {
 			$soapClientOptions['soap_version'] = $soapServerOptions['soap_version'];
+		}
+		
+		// force client's cache_wsdl setting to be the same as the server's
+		if(isset($soapServerOptions['cache_wsdl'])) {
+			// and cast it to an int
+			$soapServerOptions['cache_wsdl'] = (int)$soapServerOptions['cache_wsdl'];
+			$soapClientOptions['cache_wsdl'] = $soapServerOptions['cache_wsdl'];
+		}
+		
+		if(isset($soapServerOptions['features'])) {
+			// cast this to an int
+			$soapServerOptions['features'] = (int)$soapServerOptions['features'];
 		}
 		
 		// create a client, so we can grab the functions and types defined in the wsdl (not possible from the server, duh)
