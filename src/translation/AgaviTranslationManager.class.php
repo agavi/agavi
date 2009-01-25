@@ -792,6 +792,12 @@ class AgaviTranslationManager
 		} else {
 			$tz = date_default_timezone_get();
 		}
+		
+		if($tz === 'System/Localtime') {
+			// http://trac.agavi.org/ticket/1008
+			throw new AgaviException("Your default timezone is 'System/Localtime', which likely means that you're running Debian, Ubuntu or some other Linux distribution that chose to include a useless and broken patch for system timezone database lookups into their PHP package, despite this very change being declined by the PHP development team for inclusion into PHP itself.\nThis pseudo-timezone, which is not defined in the standard 'tz' database used across many operating systems and applications, works for internal PHP classes and functions because the 'real' system timezone is resolved instead, but there is no way for an application to obtain the actual timezone name that 'System/Localtime' resolves to internally - information Agavi needs to perform accurate calculations and operations on dates and times.\n\nPlease set a correct timezone name (e.g. Europe/London) via 'date.timezone' in php.ini, use date_default_timezone_set() to set it in your code, or define a default timezone for Agavi to use in translation.xml. If you have some minutes to spare, file a bug report with your operating system vendor about this problem.\n\nIf you'd like to learn more about this issue, please refer to http://trac.agavi.org/ticket/1008");
+		}
+		
 		return $this->createTimeZone($tz);
 	}
 
