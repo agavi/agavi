@@ -1,7 +1,7 @@
 <table>
 	<tr>
 		<th><?php echo $tm->_('Product Name', 'default.SearchEngineSpam'); ?></th>
-		<th><?php echo $tm->_('Price', 'default.SearchEngineSpam'); ?></th></th>
+		<th><?php echo $tm->_('Price', 'default.SearchEngineSpam'); ?></th>
 	</tr>
 <?php foreach($t['products'] as $product): ?>
 	<tr>
