@@ -290,7 +290,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 					$val = $value;
 				}
 
-				$value = new AgaviRoutingValue($val, $pre, $post, false, true, true);
+				$value = $this->createValue($val, $pre, $post, true, false, false);
 			}
 		}
 
@@ -310,7 +310,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 
 			if(!isset($options['defaults'][$name]) && ($param['pre'] || $param['val'] || $param['post'])) {
 				unset($param['is_optional']);
-				$options['defaults'][$name] = new AgaviRoutingValue($param['val'], $param['pre'], $param['post'], false, true, true);;
+				$options['defaults'][$name] = $this->createValue($param['val'], $param['pre'], $param['post'], true, false, false);
 			}
 		}
 
@@ -536,19 +536,19 @@ abstract class AgaviRouting extends AgaviParameterHolder
 						// do NEVER assign this value as reference, php will completely go bonkers if we use a reference here (it actually marks the entry in the array as reference and hence in a callback when modifying the value in $params it actually gets modified in $paramsCopy as well)
 						$value = $params[$key];
 						if(is_array($value) && array_key_exists('pre', $value) && array_key_exists('val', $value) && array_key_exists('post', $value)) {
-							$value = new AgaviRoutingValue($value['val'], $value['pre'], $value['post']);
+							$value = $this->createValue($value['val'], $value['pre'], $value['post'], true, false, false);
 						} elseif($value !== null && !($value instanceof AgaviRoutingValue)) {
-							$routingValue = new AgaviRoutingValue($value, null, null, true);
+							$routingValue = $this->createValue($value, null, null, false);
 							if(isset($myDefaults[$key])) {
 								if($myDefaults[$key] instanceof AgaviRoutingValue) {
 									// clone the default value so pre and postfix are reserved
 									$routingValue = clone $myDefaults[$key];
 									// BC: When setting a value in a callback it was supposed to be already encoded
-									$routingValue->setValue($value, true);
+									$routingValue->setValue($value, false);
 								} else {
 									// $myDefaults[$key] can only be an array at this stage
-									$routingValue->setPrefix($myDefaults[$key]['pre'], true);
-									$routingValue->setPostfix($myDefaults[$key]['post'], true);
+									$routingValue->setPrefix($myDefaults[$key]['pre'], false);
+									$routingValue->setPostfix($myDefaults[$key]['post'], false);
 								}
 							}
 							$value = $routingValue;
@@ -616,7 +616,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 			// After that only check defaults. Parameters supplied from the user
 			// or via callback always have precedence
 
-			// keep track if a user supplied has already been encountered
+			// keep track if a user supplied parameter has already been encountered
 			if($refillValue && (isset($originalUserParams[$name]) || array_key_exists($name, $originalUserParams))) {
 				$refillValue = false;
 			}
@@ -633,7 +633,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 			} elseif($refillValue && $hasMatched) {
 				// Use the matched input
 				if($hasDefault && ($defaultParams[$name]['pre'] || $defaultParams[$name]['post'])) {
-					$finalParams[$name] = new AgaviRoutingValue($matchedParams[$name], $defaultParams[$name]['pre'], $defaultParams[$name]['post']);
+					$finalParams[$name] = $this->createValue($matchedParams[$name], $defaultParams[$name]['pre'], $defaultParams[$name]['post']);
 				} else {
 					$finalParams[$name] = $matchedParams[$name];
 				}
@@ -662,11 +662,17 @@ abstract class AgaviRouting extends AgaviParameterHolder
 					$finalParams[$name] = $param;
 				} else {
 					if(isset($defaultParams[$name])) {
-						$param = $param !== null ? $param : $defaultParams[$name]->getValue();
-						if($defaultParams[$name]->hasPrefixOrPostfix()) {
-							$routeParam = clone $defaultParams[$name];
-							$routeParam->setValue($param);
-							$param = $routeParam;
+						if($param !== null) {
+							if(!($param instanceof AgaviRoutingValue)) {
+								// if it's not already a routing value (which contains pre and postfix) determine the pre- and postfix 
+								// from the default value
+								$routeParam = clone $defaultParams[$name];
+								$routeParam->setValue($param, true);
+								$param = $routeParam;
+							}
+						} else {
+							// the user set the parameter to null, to signal that the default value should be used
+							$param = clone $defaultParams[$name];
 						}
 						$finalParams[$name] = $param;
 					} elseif(isset($availableParamsAsKeys[$name]) || array_key_exists($name, $availableParamsAsKeys) || $param === null) {
@@ -722,9 +728,9 @@ abstract class AgaviRouting extends AgaviParameterHolder
 	{
 		if($parameter instanceof AgaviRoutingValue) {
 			return sprintf('%s%s%s', 
-				$parameter->isPrefixEncoded()  ? $parameter->getPrefix()  : $this->escapeOutputParameter($parameter->getPrefix()),
-				$parameter->isValueEncoded()   ? $parameter->getValue()   : $this->escapeOutputParameter($parameter->getValue()),
-				$parameter->isPostfixEncoded() ? $parameter->getPostfix() : $this->escapeOutputParameter($parameter->getPostfix())
+				$parameter->getPrefixNeedsEncoding()  ? $this->escapeOutputParameter($parameter->getPrefix())  : $parameter->getPrefix(),
+				$parameter->getValueNeedsEncoding()   ? $this->escapeOutputParameter($parameter->getValue())   : $parameter->getValue(),
+				$parameter->getPostfixNeedsEncoding() ? $this->escapeOutputParameter($parameter->getPostfix()) : $parameter->getPostfix()
 			);
 		} else {
 			return $this->escapeOutputParameter($parameter);
@@ -911,6 +917,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 							if(!$route['cb']->onMatched($cbVars, $container)) {
 								// reset the matches array. it must be populated by the time onMatched() is called so matches can be modified in a callback
 								$route['matches'] = array();
+								// reset all relevant container data we already set in the container for this (now non matching) route
 								continue;
 							}
 						}
@@ -1247,6 +1254,14 @@ abstract class AgaviRouting extends AgaviParameterHolder
 		preg_match('#([a-z0-9_-]+:)?(.*)#i', $def, $match);
 		return array(substr($match[1], 0, -1), $match[2]);
 	}
+	
+	public function createValue($value, $prefix = null, $postfix = null, $valueNeedsEncoding = true, $prefixNeedsEncoding = false, $postfixNeedsEncoding = false)
+	{
+		$value = new AgaviRoutingValue($value, $prefix, $postfix, $valueNeedsEncoding, $prefixNeedsEncoding, $postfixNeedsEncoding);
+		$value->initialize($this->context);
+		return $value;
+	}
+	
 }
 
 ?>

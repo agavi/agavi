@@ -29,12 +29,14 @@
  */
 class AgaviRoutingValue implements ArrayAccess
 {
+	protected $context;
+	
 	protected $value;
 	protected $prefix;
 	protected $postfix;
-	protected $valueEncoded = false;
-	protected $prefixEncoded = true;
-	protected $postfixEncoded = true;
+	protected $valueNeedsEncoding = true;
+	protected $prefixNeedsEncoding = false;
+	protected $postfixNeedsEncoding = false;
 	
 	protected static $arrayMap = array(
 		'pre'  => 'prefix',
@@ -42,22 +44,25 @@ class AgaviRoutingValue implements ArrayAccess
 		'post' => 'postfix',
 	);
 	
-	public function __construct($value, $prefix = null, $postfix = null, $valueEncoded = false, $prefixEncoded = true, $postfixEncoded = true)
+	public function __construct($value, $prefix = null, $postfix = null, $valueNeedsEncoding = true, $prefixNeedsEncoding = false, $postfixNeedsEncoding = false)
 	{
 		$this->value = $value;
 		$this->prefix = $prefix;
 		$this->postfix = $postfix;
-		$this->valueEncoded = $valueEncoded;
-		$this->prefixEncoded = $prefixEncoded;
-		$this->postfixEncoded = $postfixEncoded;
+		$this->valueNeedsEncoding = $valueNeedsEncoding;
+		$this->prefixNeedsEncoding = $prefixNeedsEncoding;
+		$this->postfixNeedsEncoding = $postfixNeedsEncoding;
 	}
 	
-	public function setValue($value, $isEncoded = null)
+	public function initialize(AgaviContext $context, array $parameters = array())
+	{
+		$this->context = $context;
+	}
+	
+	public function setValue($value, $needsEncoding = true)
 	{
 		$this->value = $value;
-		if($isEncoded !== null) {
-			$this->valueEncoded = $isEncoded;
-		}
+		$this->valueNeedsEncoding = $needsEncoding;
 	}
 	
 	public function getValue()
@@ -65,12 +70,10 @@ class AgaviRoutingValue implements ArrayAccess
 		return $this->value;
 	}
 	
-	public function setPrefix($value, $isEncoded = null)
+	public function setPrefix($value, $needsEncoding = false)
 	{
 		$this->prefix = $value;
-		if($isEncoded !== null) {
-			$this->prefixEncoded = $isEncoded;
-		}
+		$this->prefixNeedsEncoding = $needsEncoding;
 	}
 	
 	public function getPrefix()
@@ -78,12 +81,10 @@ class AgaviRoutingValue implements ArrayAccess
 		return $this->prefix;
 	}
 	
-	public function setPostfix($value, $isEncoded = null)
+	public function setPostfix($value, $needsEncoding = false)
 	{
 		$this->postfix = $value;
-		if($isEncoded !== null) {
-			$this->postfixEncoded = $isEncoded;
-		}
+		$this->postfixNeedsEncoding = $needsEncoding;
 	}
 	
 	public function getPostfix()
@@ -91,19 +92,19 @@ class AgaviRoutingValue implements ArrayAccess
 		return $this->postfix;
 	}
 	
-	public function isValueEncoded()
+	public function getValueNeedsEncoding()
 	{
-		return $this->valueEncoded;
+		return $this->valueNeedsEncoding;
 	}
 	
-	public function isPrefixEncoded()
+	public function getPrefixNeedsEncoding()
 	{
-		return $this->prefixEncoded;
+		return $this->prefixNeedsEncoding;
 	}
 	
-	public function isPostfixEncoded()
+	public function getPostfixNeedsEncoding()
 	{
-		return $this->postfixEncoded;
+		return $this->postfixNeedsEncoding;
 	}
 	
 	// TODO: naming
@@ -151,12 +152,17 @@ class AgaviRoutingValue implements ArrayAccess
 	
 	public function __toString()
 	{
-		return $this->prefix . $this->value . $this->postfix;
+		$ro = $this->context->getRouting();
+		return sprintf('%s%s%s', 
+			$this->prefixNeedsEncoding ? $ro->escapeOutputParameter($this->prefix) : $this->prefix,
+			$this->valueNeedsEncoding ? $ro->escapeOutputParameter($this->value) : $this->value,
+			$this->postfixNeedsEncoding ? $ro->escapeOutputParameter($this->postfix) : $this->postfix
+		);
 	}
 	
 	public static function __set_state(array $data)
 	{
-		return new self($data['value'], $data['prefix'], $data['postfix'], $data['valueEncoded'], $data['prefixEncoded'], $data['postfixEncoded']);
+		return new self($data['value'], $data['prefix'], $data['postfix'], $data['valueNeedsEncoding'], $data['prefixNeedsEncoding'], $data['postfixNeedsEncoding']);
 	}
 }
 
