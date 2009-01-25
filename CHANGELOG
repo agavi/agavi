@@ -17,6 +17,7 @@ CHG: Rename AgaviTranslationManager::getCurrentTimeZone() to getDefaultTimeZone(
 CHG: Remove unused property AgaviOperatorValidator::$errors (#987) (David)
 CHG: Allow arbitrary number of fractional seconds for parsing date formats (#977) (Dominik)
 
+FIX: AgaviSoapController does not handle some SoapServer/SoapClient options properly (#1006) (David)
 FIX: Marshalling of document/literal wrapped SOAP responses is broken (#1004) (David)
 FIX: Infinite loop is infinite (#1000) (David)
 FIX: Default compile.xml and Sample app's Disabled module module.xml are still in old configuration format (#999) (David)
