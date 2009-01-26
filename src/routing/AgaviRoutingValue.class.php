@@ -44,14 +44,10 @@ class AgaviRoutingValue implements ArrayAccess
 		'post' => 'postfix',
 	);
 	
-	public function __construct($value, $prefix = null, $postfix = null, $valueNeedsEncoding = true, $prefixNeedsEncoding = false, $postfixNeedsEncoding = false)
+	public function __construct($value, $valueNeedsEncoding = true)
 	{
 		$this->value = $value;
-		$this->prefix = $prefix;
-		$this->postfix = $postfix;
 		$this->valueNeedsEncoding = $valueNeedsEncoding;
-		$this->prefixNeedsEncoding = $prefixNeedsEncoding;
-		$this->postfixNeedsEncoding = $postfixNeedsEncoding;
 	}
 	
 	/**
@@ -95,6 +91,7 @@ class AgaviRoutingValue implements ArrayAccess
 	{
 		$this->value = $value;
 		$this->valueNeedsEncoding = $needsEncoding;
+		return $this;
 	}
 	
 	public function getValue()
@@ -106,6 +103,7 @@ class AgaviRoutingValue implements ArrayAccess
 	{
 		$this->prefix = $value;
 		$this->prefixNeedsEncoding = $needsEncoding;
+		return $this;
 	}
 	
 	public function getPrefix()
@@ -122,6 +120,7 @@ class AgaviRoutingValue implements ArrayAccess
 	{
 		$this->postfix = $value;
 		$this->postfixNeedsEncoding = $needsEncoding;
+		return $this;
 	}
 	
 	public function getPostfix()
@@ -134,14 +133,32 @@ class AgaviRoutingValue implements ArrayAccess
 		return $this->postfix !== null;
 	}
 	
+	public function setValueNeedsEncoding($needsEncoding)
+	{
+		$this->valueNeedsEncoding = $needsEncoding;
+		return $this;
+	}
+	
 	public function getValueNeedsEncoding()
 	{
 		return $this->valueNeedsEncoding;
 	}
 	
+	public function setPrefixNeedsEncoding($needsEncoding)
+	{
+		$this->prefixNeedsEncoding = $needsEncoding;
+		return $this;
+	}
+	
 	public function getPrefixNeedsEncoding()
 	{
 		return $this->prefixNeedsEncoding;
+	}
+	
+	public function setPostfixNeedsEncoding($needsEncoding)
+	{
+		$this->postfixNeedsEncoding = $needsEncoding;
+		return $this;
 	}
 	
 	public function getPostfixNeedsEncoding()

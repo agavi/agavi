@@ -281,7 +281,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 
 		if(isset($options['defaults'])) {
 			foreach($options['defaults'] as $name => &$value) {
-				$val = $pre = $post = '';
+				$val = $pre = $post = null;
 				if(preg_match('#(.*)\{(.*)\}(.*)#', $value, $match)) {
 					$pre = $match[1];
 					$val = $match[2];
@@ -290,7 +290,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 					$val = $value;
 				}
 
-				$value = $this->createValue($val, $pre, $post, true, false, false);
+				$value = $this->createValue($val, true)->setPrefix($pre, false)->setPostfix($post, false);
 			}
 		}
 
@@ -310,7 +310,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 
 			if(!isset($options['defaults'][$name]) && ($param['pre'] || $param['val'] || $param['post'])) {
 				unset($param['is_optional']);
-				$options['defaults'][$name] = $this->createValue($param['val'], $param['pre'], $param['post'], true, false, false);
+				$options['defaults'][$name] = $this->createValue($param['val'], true)->setPrefix($param['pre'], false)->setPostfix($param['post'], false);
 			}
 		}
 
@@ -536,9 +536,9 @@ abstract class AgaviRouting extends AgaviParameterHolder
 						// do NEVER assign this value as reference, php will completely go bonkers if we use a reference here (it actually marks the entry in the array as reference and hence in a callback when modifying the value in $params it actually gets modified in $paramsCopy as well)
 						$value = $params[$key];
 						if(is_array($value) && array_key_exists('pre', $value) && array_key_exists('val', $value) && array_key_exists('post', $value)) {
-							$value = $this->createValue($value['val'], $value['pre'], $value['post'], true, false, false);
+							$value = $this->createValue($value['val'], true)->setPrefix($value['pre'], false)->setPostfix($value['post'], false);
 						} elseif($value !== null && !($value instanceof AgaviRoutingValue)) {
-							$routingValue = $this->createValue($value, null, null, false);
+							$routingValue = $this->createValue($value, false);
 							if(isset($myDefaults[$key])) {
 								if($myDefaults[$key] instanceof AgaviRoutingValue) {
 									// clone the default value so pre and postfix are reserved
@@ -598,7 +598,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 		if(!empty($options['refill_all_parameters'])) {
 			foreach($matchedParams as $name => $value) {
 				if(!(isset($params[$name]) || array_key_exists($name, $params))) {
-					$params[$name] = $this->createValue($value, null, null, true);
+					$params[$name] = $this->createValue($value, true);
 				}
 			}
 		}
@@ -632,7 +632,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 				// and since the user params are handled afterwards, skip them here
 			} elseif($refillValue && $hasMatched) {
 				// Use the matched input
-				$finalParams[$name] = $this->createValue($matchedParams[$name], null, null, true);
+				$finalParams[$name] = $this->createValue($matchedParams[$name], true);
 			} elseif($hasDefault) {
 				// now we just need to check if there are defaults for this available param and fill them in if applicable
 				$default = $defaultParams[$name];
@@ -755,7 +755,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 			foreach($parameters as &$param) {
 				if(!$param instanceof AgaviRoutingValue) {
 					if($param !== null) {
-						$param = $this->createValue($param, null, null, true);
+						$param = $this->createValue($param, true);
 					}
 				} else {
 					// make sure the routing value the user passed to gen() is not modified
@@ -1293,9 +1293,9 @@ abstract class AgaviRouting extends AgaviParameterHolder
 		return array(substr($match[1], 0, -1), $match[2]);
 	}
 	
-	public function createValue($value, $prefix = null, $postfix = null, $valueNeedsEncoding = true, $prefixNeedsEncoding = false, $postfixNeedsEncoding = false)
+	public function createValue($value, $valueNeedsEncoding = true)
 	{
-		$value = new AgaviRoutingValue($value, $prefix, $postfix, $valueNeedsEncoding, $prefixNeedsEncoding, $postfixNeedsEncoding);
+		$value = new AgaviRoutingValue($value, $valueNeedsEncoding);
 		$value->initialize($this->context);
 		return $value;
 	}
