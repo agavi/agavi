@@ -22,7 +22,7 @@ class Default_SecureSuccessView extends AgaviSampleAppDefaultBaseView
 		// set the title
 		$this->setAttribute('title', $this->getContext()->getTranslationManager()->_('Permission Denied', 'default.ErrorActions'));
 		
-		$this->getResponse()->setHttpStatusCode('401');
+		$this->getResponse()->setHttpStatusCode('403');
 	}
 
 }
