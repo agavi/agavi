@@ -607,6 +607,7 @@ foreach($fixedTrace as $trace):
 $lines = array_slice($highlights[$trace['file']], $start - 1, 7, true);
 foreach($lines as $key => &$line) {
 	if($key + 1 == $trace['line']): ?><li class="highlight"><?php if($svg): ?><div style="float:left; width:1em; height:1em; margin-left:-1.35em; background-color:#FFF;"><svg:svg viewBox="2 1 45 43" preserveAspectRatio="xMaxYMax meet" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><svg:use xlink:href="#stopSign" /></svg:svg></div><?php endif; else: ?><li><?php endif; ?><code><?php
+file_put_contents(AgaviConfig::get('core.cache_dir') . '/lolcat', $line . PHP_EOL, FILE_APPEND);
 	if($line == '') {
 		$line = '&#160;';
 	}
@@ -623,9 +624,12 @@ foreach($lines as $key => &$line) {
 	if((strrpos($line, '</span>') < strrpos($line, '<span') || strpos($line, '</span>') === false) && strpos($line, '<span') !== false) {
 		$line .= '</span>';
 	}
-	if(strpos($line, ' ', 20) == 29) {
-		$line = substr_replace($line, '&#160;', 29, 1);
-	}
+	// Whoever figures out what the point of this is gets a free Agavi t-shirt shipped right to his doorstep.
+	// It shall be left here, commented out, to serve as a reminder for any programmer to comment their code properly.
+	// http://trac.agavi.org/ticket/1009 is the associated ticket, patiently waiting for an explanation.
+	// if(strpos($line, ' ', 20) == 29) {
+	// 	$line = substr_replace($line, '&#160;', 29, 1);
+	// }
 	echo $line;
 ?></code></li>
 <?php } ?></ol><?php else: // no info about origin file ?><em>unknown</em><?php endif; ?></li>
