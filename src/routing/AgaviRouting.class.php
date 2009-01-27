@@ -410,10 +410,10 @@ abstract class AgaviRouting extends AgaviParameterHolder
 		$excludedRoutes = array();
 		
 		if($route === null) {
-			$includedRoutes = array_reverse($this->getContext()->getRequest()->getAttribute('matched_routes', 'org.agavi.routing'));
+			$includedRoutes = array_reverse($this->getContext()->getRequest()->getAttribute('matched_routes', 'org.agavi.routing', array()));
 		} elseif(strlen($route) > 0) {
 			if($route[0] == '-' || $route[0] == '+') {
-				$includedRoutes = array_reverse($this->getContext()->getRequest()->getAttribute('matched_routes', 'org.agavi.routing'));
+				$includedRoutes = array_reverse($this->getContext()->getRequest()->getAttribute('matched_routes', 'org.agavi.routing', array()));
 			}
 			
 			$routeParts = preg_split('#(-|\+)#', $route, -1, PREG_SPLIT_DELIM_CAPTURE);
@@ -433,9 +433,12 @@ abstract class AgaviRouting extends AgaviParameterHolder
 		
 		$excludedRoutes = array_flip($excludedRoutes);
 
-		$route = $includedRoutes[0];
-		unset($includedRoutes[0]);
-
+		if($includedRoutes) {
+			$route = $includedRoutes[0];
+			// TODO: useful comment here
+			unset($includedRoutes[0]);
+		}
+		
 		$myRoutes = array();
 		foreach($includedRoutes as $r) {
 			$myRoutes[$r] = true;

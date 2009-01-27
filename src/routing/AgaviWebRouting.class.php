@@ -281,14 +281,13 @@ class AgaviWebRouting extends AgaviRouting
 				$params = array_merge($this->inputParameters, $params);
 			}
 			
-			$hasRoutes = true;
-
 			$routes = $this->getAffectedRoutes($route);
 
-			if(count($routes)) {
+			$hasRoutes = count($routes);
+
+			if($hasRoutes) {
 				if($this->isEnabled()) {
 					// the route exists and routing is enabled, the parent method handles it
-					$hasRoutes = true;
 
 					$append = '';
 
@@ -327,21 +326,23 @@ class AgaviWebRouting extends AgaviRouting
 					}
 
 					$params = array_merge($defaults, $params);
-					$hasRoutes = false;
 				}
-			}
-			// the route does not exist. we generate a normal index.php?foo=bar URL.
-
-			if(!$hasRoutes) {
-				$path = $_SERVER['SCRIPT_NAME'];
-				$append = '?' . http_build_query($params, '', $aso);
 			} else {
-				if(!isset($path)) {
+				if($this->isEnabled() || $route !== null) {
 					$path = $route;
 				}
-				if(!isset($append)) {
-					$append = '?' . http_build_query($params, '', $aso);
-				}
+			}
+			
+			if(!isset($path)) {
+				// the route does not exist. we generate a normal index.php?foo=bar URL.
+				$path = $_SERVER['SCRIPT_NAME'];
+			}
+			
+			if(!isset($path)) {
+				// routing was off; the name of the route is the input
+			}
+			if(!isset($append)) {
+				$append = '?' . http_build_query($params, '', $aso);
 			}
 
 			$retval = $path . $append;

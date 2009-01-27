@@ -33,6 +33,14 @@ class AgaviWebRoutingTest extends AgaviPhpUnitTestCase
 		$this->assertEquals('foo?bar=%2Fshouldbeencoded', $url);
 	}
 	
+	public function testGenNullDisabled()
+	{
+		$_SERVER['SCRIPT_NAME'] = 'lol.cats';
+		$this->routing->setParameter('enabled', false);
+		$url = $this->routing->gen(null, array('bar' => '/shouldbeencoded'));
+		$this->assertEquals('lol.cats?bar=%2Fshouldbeencoded', $url);
+	}
+	
 	public function testGenNonExistingRoute()
 	{
 		$url = $this->routing->gen('foo', array('bar' => '/shouldbeencoded'));
