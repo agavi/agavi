@@ -607,7 +607,6 @@ foreach($fixedTrace as $trace):
 $lines = array_slice($highlights[$trace['file']], $start - 1, 7, true);
 foreach($lines as $key => &$line) {
 	if($key + 1 == $trace['line']): ?><li class="highlight"><?php if($svg): ?><div style="float:left; width:1em; height:1em; margin-left:-1.35em; background-color:#FFF;"><svg:svg viewBox="2 1 45 43" preserveAspectRatio="xMaxYMax meet" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><svg:use xlink:href="#stopSign" /></svg:svg></div><?php endif; else: ?><li><?php endif; ?><code><?php
-file_put_contents(AgaviConfig::get('core.cache_dir') . '/lolcat', $line . PHP_EOL, FILE_APPEND);
 	if($line == '') {
 		$line = '&#160;';
 	}
