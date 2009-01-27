@@ -247,7 +247,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 	 *                    <li>ignores</li>
 	 *                    <li>defaults</li>
 	 *                    <li>childs</li>
-	 *                    <li>callback</li>
+	 *                    <li>callbacks</li>
 	 *                    <li>imply</li>
 	 *                    <li>cut</li>
 	 *                    <li>source</li>
@@ -276,7 +276,12 @@ abstract class AgaviRouting extends AgaviParameterHolder
 				$defaultOpts['parent'] = $parent;
 			}
 		} else {
-			$defaultOpts = array('name' => AgaviToolkit::uniqid(), 'stop' => true, 'output_type' => null, 'module' => null, 'action' => null, 'parameters' => array(), 'ignores' => array(), 'defaults' => array(), 'childs' => array(), 'callback' => null, 'imply' => false, 'cut' => null, 'source' => null, 'method' => null, 'constraint' => array(), 'locale' => null, 'pattern_parameters' => array(), 'optional_parameters' => array(), 'parent' => $parent, 'reverseStr' => '', 'nostops' => array(), 'anchor' => self::ANCHOR_NONE);
+			$defaultOpts = array('name' => AgaviToolkit::uniqid(), 'stop' => true, 'output_type' => null, 'module' => null, 'action' => null, 'parameters' => array(), 'ignores' => array(), 'defaults' => array(), 'childs' => array(), 'callbacks' => array(), 'imply' => false, 'cut' => null, 'source' => null, 'method' => null, 'constraint' => array(), 'locale' => null, 'pattern_parameters' => array(), 'optional_parameters' => array(), 'parent' => $parent, 'reverseStr' => '', 'nostops' => array(), 'anchor' => self::ANCHOR_NONE);
+		}
+		// retain backwards compatibility to 0.11
+		if(isset($options['callback'])) {
+			$options['callbacks'] = array(array('class' => $options['callback'], 'parameters' => array()));
+			unset($options['callback']);
 		}
 
 		if(isset($options['defaults'])) {
@@ -517,44 +522,48 @@ abstract class AgaviRouting extends AgaviParameterHolder
 
 			$myDefaults = $r['opt']['defaults'];
 
-			if(isset($r['opt']['callback'])) {
-				if(!isset($r['cb'])) {
-					$cb = $r['opt']['callback'];
-					$r['cb'] = new $cb();
-					$r['cb']->initialize($this->context, $r);
+			if(count($r['opt']['callbacks']) > 0) {
+				if(!isset($r['callback_instances'])) {
+					foreach($r['opt']['callbacks'] as $key => $callback) {
+						$instance = new $callback['class']();
+						$instance->initialize($this->context, $r);
+						$instance->setParameters($callback['parameters']);
+						$r['callback_instances'][$key] = $instance;
+					}
 				}
-				$paramsCopy = $params;
-				if(!$r['cb']->onGenerate($myDefaults, $params, $options)) {
-					continue;
-				}
+				foreach($r['callback_instances'] as $callbackInstance) {
+					$paramsCopy = $params;
+					if(!$callbackInstance->onGenerate($myDefaults, $params, $options)) {
+						continue 2;
+					}
 				
-				// TODO: discuss using an interface again.
-				$diff = array_udiff_assoc($params, $paramsCopy, array($this, 'onGenerateParamDiffCallback'));
-				if(count($diff)) {
-					$diffKeys = array_keys($diff);
-					foreach($diffKeys as $key) {
-						// do NEVER assign this value as reference, php will completely go bonkers if we use a reference here (it actually marks the entry in the array as reference and hence in a callback when modifying the value in $params it actually gets modified in $paramsCopy as well)
-						$value = $params[$key];
-						if(is_array($value) && array_key_exists('pre', $value) && array_key_exists('val', $value) && array_key_exists('post', $value)) {
-							$value = $this->createValue($value['val'], true)->setPrefix($value['pre'], false)->setPostfix($value['post'], false);
-						} elseif($value !== null && !($value instanceof AgaviRoutingValue)) {
-							$routingValue = $this->createValue($value, false);
-							if(isset($myDefaults[$key])) {
-								if($myDefaults[$key] instanceof AgaviRoutingValue) {
-									// clone the default value so pre and postfix are reserved
-									$routingValue = clone $myDefaults[$key];
-									// BC: When setting a value in a callback it was supposed to be already encoded
-									$routingValue->setValue($value, false);
-								} else {
-									// $myDefaults[$key] can only be an array at this stage
-									$routingValue->setPrefix($myDefaults[$key]['pre'], false);
-									$routingValue->setPostfix($myDefaults[$key]['post'], false);
+					// TODO: discuss using an interface again.
+					$diff = array_udiff_assoc($params, $paramsCopy, array($this, 'onGenerateParamDiffCallback'));
+					if(count($diff)) {
+						$diffKeys = array_keys($diff);
+						foreach($diffKeys as $key) {
+							// do NEVER assign this value as reference, php will completely go bonkers if we use a reference here (it actually marks the entry in the array as reference and hence in a callback when modifying the value in $params it actually gets modified in $paramsCopy as well)
+							$value = $params[$key];
+							if(is_array($value) && array_key_exists('pre', $value) && array_key_exists('val', $value) && array_key_exists('post', $value)) {
+								$value = $this->createValue($value['val'], true)->setPrefix($value['pre'], false)->setPostfix($value['post'], false);
+							} elseif($value !== null && !($value instanceof AgaviRoutingValue)) {
+								$routingValue = $this->createValue($value, false);
+								if(isset($myDefaults[$key])) {
+									if($myDefaults[$key] instanceof AgaviRoutingValue) {
+										// clone the default value so pre and postfix are reserved
+										$routingValue = clone $myDefaults[$key];
+										// BC: When setting a value in a callback it was supposed to be already encoded
+										$routingValue->setValue($value, false);
+									} else {
+										// $myDefaults[$key] can only be an array at this stage
+										$routingValue->setPrefix($myDefaults[$key]['pre'], false);
+										$routingValue->setPostfix($myDefaults[$key]['post'], false);
+									}
 								}
+								$value = $routingValue;
 							}
-							$value = $routingValue;
+							$params[$key] = $value;
 						}
-						$params[$key] = $value;
-						// TODO: when setting a AgaviRoutingValue from a callback you have to insert the defaults yourself, needs discussion
 					}
 				}
 			}
@@ -906,10 +915,13 @@ abstract class AgaviRouting extends AgaviParameterHolder
 				$route =& $this->routes[$key];
 				$opts =& $route['opt'];
 				if(count($opts['constraint']) == 0 || in_array($requestMethod, $opts['constraint'])) {
-					if($opts['callback'] && !isset($route['cb'])) {
-						$cb = $opts['callback'];
-						$route['cb'] = new $cb();
-						$route['cb']->initialize($this->context, $route);
+					if(count($opts['callbacks']) > 0 && !isset($route['callback_instances'])) {
+						foreach($opts['callbacks'] as $key => $callback) {
+							$instance = new $callback['class']();
+							$instance->initialize($this->context, $route);
+							$instance->setParameters($callback['parameters']);
+							$route['callback_instances'][$key] = $instance;
+						}
 					}
 
 					$match = array();
@@ -937,7 +949,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 							}
 						}
 
-						if($opts['callback']) {
+						if(count($opts['callbacks']) > 0) {
 							if(count($opts['ignores']) > 0) {
 								$cbVars = array();
 								// add ignored variables to the callback vars
@@ -952,10 +964,22 @@ abstract class AgaviRouting extends AgaviParameterHolder
 							} else {
 								$cbVars =& $vars;
 							}
-							if(!$route['cb']->onMatched($cbVars, $container)) {
+							$callbackSuccess = true;
+							foreach($route['callback_instances'] as $callbackInstance) {
+								// call onMatched on all callbacks until one of them returns false, then
+								// call onNotMatched for all following callbacks on that route
+								if($callbackSuccess) {
+									if(!$callbackInstance->onMatched($cbVars, $container)) {
+										$callbackSuccess = false;
+									}
+								} else {
+									$callbackInstance->onNotMatched($container);
+								}
+							}
+							if(!$callbackSuccess) {
 								// reset the matches array. it must be populated by the time onMatched() is called so matches can be modified in a callback
 								$route['matches'] = array();
-								// reset all relevant container data we already set in the container for this (now non matching) route
+								// TODO: reset all relevant container data we already set in the container for this (now non matching) route
 								continue;
 							}
 						}
@@ -1012,8 +1036,10 @@ abstract class AgaviRouting extends AgaviParameterHolder
 						}
 
 					} else {
-						if($opts['callback']) {
-							$route['cb']->onNotMatched($container);
+						if(count($opts['callbacks']) > 0) {
+							foreach($route['callback_instances'] as $callbackInstance) {
+								$callbackInstance->onNotMatched($container);
+							}
 						}
 					}
 				}

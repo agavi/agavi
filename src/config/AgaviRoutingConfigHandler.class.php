@@ -101,7 +101,6 @@ class AgaviRoutingConfigHandler extends AgaviXmlConfigHandler
 			if($route->hasAttribute('cut'))						$opts['cut']					= AgaviToolkit::literalize($route->getAttribute('cut'));
 			if($route->hasAttribute('stop'))					$opts['stop']					= AgaviToolkit::literalize($route->getAttribute('stop'));
 			if($route->hasAttribute('name'))					$opts['name']					= $route->getAttribute('name');
-			if($route->hasAttribute('callback'))			$opts['callback']			= $route->getAttribute('callback');
 			if($route->hasAttribute('source'))				$opts['source']				= $route->getAttribute('source');
 			if($route->hasAttribute('constraint'))		$opts['constraint']		= array_map('trim', explode(' ', trim($route->getAttribute('constraint'))));
 			// values which will be set when the route matched
@@ -120,6 +119,16 @@ class AgaviRoutingConfigHandler extends AgaviXmlConfigHandler
 			if($route->has('defaults')) {
 				foreach($route->get('defaults') as $default) {
 					$opts['defaults'][$default->getAttribute('for')] = $default->getValue();
+				}
+			}
+
+			if($route->has('callbacks')) {
+				$opts['callbacks'] = array();
+				foreach($route->get('callbacks') as $callback) {
+					$opts['callbacks'][] = array(
+						'class' => $callback->getAttribute('class'),
+						'parameters' => $callback->getAgaviParameters(),
+					);
 				}
 			}
 
