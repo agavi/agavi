@@ -100,7 +100,6 @@
 		<xs:attribute name="imply" type="xs:string" />
 		<xs:attribute name="cut" type="xs:string" />
 		<xs:attribute name="stop" type="xs:string" />
-		<xs:attribute name="callback" type="types_1_0:identifier" />
 		<xs:attribute name="source" type="xs:string" />
 		<xs:attribute name="constraint" type="xs:string" />
 

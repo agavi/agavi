@@ -20,4 +20,14 @@
 		</xsl:element>
 	</xsl:template>
 	
+	<xsl:template match="envelope_0_11:route[@callback]">
+		<xsl:element name="{local-name()}" namespace="{$routing_1_0}">
+			<xsl:copy-of select="@*[local-name() != 'callback']" />
+			<routing_1_0:callbacks>
+				<routing_1_0:callback class="{@callback}" />
+			</routing_1_0:callbacks>
+			<xsl:apply-templates />
+		</xsl:element>
+	</xsl:template>
+	
 </xsl:stylesheet>
