@@ -18,6 +18,7 @@ CHG: Rename AgaviTranslationManager::getCurrentTimeZone() to getDefaultTimeZone(
 CHG: Remove unused property AgaviOperatorValidator::$errors (#987) (David)
 CHG: Allow arbitrary number of fractional seconds for parsing date formats (#977) (Dominik)
 
+FIX: Sample App's and code templates' SecureSuccessView responds with a 401 HTTP status code instead of 403 (#1010) (David)
 FIX: [EXPLETIVE] Fucking Debian fucking ruined their fucking PHP package once again, and now we need to waste fucking time to fucking fix it (#1008)
 FIX: AgaviSoapController does not handle some SoapServer/SoapClient options properly (#1006) (David)
 FIX: Marshalling of document/literal wrapped SOAP responses is broken (#1004) (David)
