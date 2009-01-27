@@ -949,7 +949,50 @@ abstract class AgaviRouting extends AgaviParameterHolder
 							}
 						}
 
+						// matches are arrays with value and offset due to PREG_OFFSET_CAPTURE, and we want index 0, the value, which reset() will give us. Long story short, this removes the offset from the individual match
+						$matchvals = array_map('reset', $match);
+
+						if($opts['module']) {
+							$vars[$ma] = AgaviToolkit::expandVariables($opts['module'], $matchvals);
+						}
+
+						if($opts['action']) {
+							$vars[$aa] = AgaviToolkit::expandVariables($opts['action'], $matchvals);
+						}
+
+						if($opts['output_type']) {
+							// set the output type if necessary
+							// here no explicit check is done, since in 0.11 this is compared against null
+							// which can never be the result of expandVariables
+							$ot = AgaviToolkit::expandVariables($opts['output_type'], $matchvals);
+							$container->setOutputType($this->context->getController()->getOutputType($ot));
+						}
+
+						if($opts['locale']) {
+							// set the locale if necessary
+							if($locale = AgaviToolkit::expandVariables($opts['locale'], $matchvals)) {
+								// the if is here for bc reasons, since if $opts['locale'] only contains variable parts
+								// expandVariables could possibly return an empty string in which case the pre 1.0 routing
+								// didn't set the variable
+								$this->context->getTranslationManager()->setLocale($locale);
+							}
+						}
+
+						if($opts['method']) {
+							// set the request method if necessary
+							if($method = AgaviToolkit::expandVariables($opts['method'], $matchvals)) {
+								// the if is here for bc reasons, since if $opts['method'] only contains variable parts
+								// expandVariables could possibly return an empty string in which case the pre 1.0 routing
+								// didn't set the variable
+								$req->setMethod($method);
+								// and on the already created container, too!
+								$container->setRequestMethod($method);
+							}
+						}
+
 						if(count($opts['callbacks']) > 0) {
+							$oldContainer = $container;
+							$container = clone $container;
 							if(count($opts['ignores']) > 0) {
 								$cbVars = array();
 								// add ignored variables to the callback vars
@@ -966,8 +1009,15 @@ abstract class AgaviRouting extends AgaviParameterHolder
 							}
 							$callbackSuccess = true;
 							foreach($route['callback_instances'] as $callbackInstance) {
+								// backup stuff which could be changed in the callback so we are 
+								// able to determine which values were changed in the callback
+								$oldOutputTypeName = $container->getOutputType() ? $container->getOutputType()->getName() : null;
+								$oldLocale = $this->context->getTranslationManager()->getCurrentLocaleIdentifier();
+								$oldRequestMethod = $req->getMethod();
+								$oldContainerMethod = $container->getRequestMethod();
+								
 								// call onMatched on all callbacks until one of them returns false, then
-								// call onNotMatched for all following callbacks on that route
+								// call onNotMatched for all following callbacks of that route
 								if($callbackSuccess) {
 									if(!$callbackInstance->onMatched($cbVars, $container)) {
 										$callbackSuccess = false;
@@ -975,39 +1025,45 @@ abstract class AgaviRouting extends AgaviParameterHolder
 								} else {
 									$callbackInstance->onNotMatched($container);
 								}
+								// if the callback didn't change the value execute expandVariables again since 
+								// the validator could have changed one of the values which expandVariables uses
+								if($opts['output_type'] && $oldOutputTypeName == ($container->getOutputType() ? $container->getOutputType()->getName() : null)) {
+									$ot = AgaviToolkit::expandVariables($opts['output_type'], $matchvals);
+									$container->setOutputType($this->context->getController()->getOutputType($ot));
+								}
+								if($opts['locale'] && $oldLocale == $this->context->getTranslationManager()->getCurrentLocaleIdentifier()) {
+									if($locale = AgaviToolkit::expandVariables($opts['locale'], $matchvals)) {
+										// see above for the reason of the if
+										$this->context->getTranslationManager()->setLocale($locale);
+									}
+								}
+								if($opts['method']) {
+									if($oldRequestMethod == $req->getMethod() && $oldContainerMethod == $container->getRequestMethod()) {
+										if($method = AgaviToolkit::expandVariables($opts['method'], $matchvals)) {
+											// see above for the reason of the if
+											$req->setMethod($method);
+											$container->setRequestMethod($method);
+										}
+									} elseif($oldContainerMethod != $container->getRequestMethod()) {
+										// copy the request method to the request (a method set on the container 
+										// in a callback always has precedence over request methods set on the request)
+										$request->setMethod($container->getRequestMethod());
+									} elseif($oldRequestMethod != $req->getMethod()) {
+										// copy the request method to the container
+										$container->setRequestMethod($req->getMethod());
+									}
+								}
 							}
 							if(!$callbackSuccess) {
 								// reset the matches array. it must be populated by the time onMatched() is called so matches can be modified in a callback
 								$route['matches'] = array();
-								// TODO: reset all relevant container data we already set in the container for this (now non matching) route
+								// reset all relevant container data we already set in the container for this (now non matching) route
+								$container = $oldContainer;
 								continue;
 							}
 						}
 
 						$matchedRoutes[] = $opts['name'];
-
-						// matches are arrays with value and offset due to PREG_OFFSET_CAPTURE, and we want index 0, the value, which reset() will give us. Long story short, this removes the offset from the individual match
-						$matchvals = array_map('reset', $match);
-
-						if($opts['module']) {
-							$vars[$ma] = AgaviToolkit::expandVariables($opts['module'], $matchvals);
-						}
-
-						if($opts['action']) {
-							$vars[$aa] = AgaviToolkit::expandVariables($opts['action'], $matchvals);
-						}
-
-						if($opts['output_type']) {
-							$ot = AgaviToolkit::expandVariables($opts['output_type'], $matchvals);
-						}
-
-						if($opts['locale']) {
-							$locale = AgaviToolkit::expandVariables($opts['locale'], $matchvals);
-						}
-
-						if($opts['method']) {
-							$method = AgaviToolkit::expandVariables($opts['method'], $matchvals);
-						}
 
 						if($opts['cut'] || (count($opts['childs']) && $opts['cut'] === null)) {
 							if($route['opt']['source'] !== null) {
@@ -1045,23 +1101,6 @@ abstract class AgaviRouting extends AgaviParameterHolder
 				}
 			}
 		} while(count($routeStack) > 0);
-
-		// set the output type if necessary
-		if($ot !== null) {
-			$container->setOutputType($this->context->getController()->getOutputType($ot));
-		}
-
-		// set the locale if necessary
-		if($locale) {
-			$this->context->getTranslationManager()->setLocale($locale);
-		}
-
-		// set the request method if necessary
-		if($method) {
-			$req->setMethod($method);
-			// and on the already created container, too!
-			$container->setRequestMethod($method);
-		}
 
 		// put the vars into the request
 		$reqData->setParameters($vars);
