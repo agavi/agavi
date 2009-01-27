@@ -277,10 +277,8 @@ class AgaviWebRouting extends AgaviRouting
 				$params = array_merge($params, array(session_name() => session_id()));
 			}
 
-			if($route === null) {
-				if(!$this->isEnabled()) {
-					$params = array_merge($this->inputParameters, $params);
-				}
+			if($route === null || (strlen($route) > 0 && ($route[0] == '+' || $route[0] == '-'))) {
+				$params = array_merge($this->inputParameters, $params);
 			}
 			
 			$hasRoutes = true;
