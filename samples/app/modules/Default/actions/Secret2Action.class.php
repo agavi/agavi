@@ -1,6 +1,6 @@
 <?php
 
-class Default_Secure2Action extends AgaviSampleAppDefaultBaseAction
+class Default_Secret2Action extends AgaviSampleAppDefaultBaseAction
 {
 	/**
 	 * This Action does not yet serve any Request methods.

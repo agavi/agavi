@@ -28,8 +28,11 @@ $locale = $tm->getCurrentLocale();
 		</div>
 		
 		<div id="footer">
-			<p><?php echo $tm->__('Alternative language:', 'Alternative languages:', count($availableLocales = $tm->getAvailableLocales()), 'default.layout'); ?>
-<?php foreach($availableLocales as $availableLocale): ?>
+			<p>
+<?php
+$availableLocales = $tm->getAvailableLocales();
+echo $tm->__('Alternative language:', 'Alternative languages:', count($availableLocales), 'default.layout');
+foreach($availableLocales as $availableLocale): ?>
 				<a href="<?php echo $ro->gen(null, array('locale' => $availableLocale['identifier'])); ?>" hreflang="<?php echo $availableLocale['identifier']; ?>"<?php if($availableLocale['identifier'] == $tm->getCurrentLocaleIdentifier()): ?> style="font-weight:bold"<?php endif;?>><?php echo htmlspecialchars($availableLocale['parameters']['description']); ?></a>
 <?php endforeach; ?>
 			</p>

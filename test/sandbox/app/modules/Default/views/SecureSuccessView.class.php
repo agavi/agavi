@@ -6,7 +6,7 @@ class Default_SecureSuccessView extends SandboxDefaultBaseView
 	{
 		$this->setupHtml($rd);
 		
-		$this->getResponse()->setHttpStatusCode('401');
+		$this->getResponse()->setHttpStatusCode('403');
 	}
 }
 

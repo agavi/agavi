@@ -255,7 +255,7 @@ class AgaviValidationReport
 	 * @param      string The name of the argument or an instance of an AgaviValidationArgument
 	 * @param      string The source. Only used when the first parameter is a string
 	 * 
-	 * @return     AgaviValidationArgument
+	 * @return     AgaviValidationArgumentResult
 	 * 
 	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
 	 * @since      1.0.0

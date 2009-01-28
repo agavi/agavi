@@ -625,9 +625,12 @@ foreach($lines as $key => &$line) {
 	if((strrpos($line, '</span>') < strrpos($line, '<span') || strpos($line, '</span>') === false) && strpos($line, '<span') !== false) {
 		$line .= '</span>';
 	}
-	if(strpos($line, ' ', 20) == 29) {
-		$line = substr_replace($line, '&#160;', 29, 1);
-	}
+	// Whoever figures out what the point of this is gets a free Agavi t-shirt shipped right to his doorstep.
+	// It shall be left here, commented out, to serve as a reminder for any programmer to comment their code properly.
+	// http://trac.agavi.org/ticket/1009 is the associated ticket, patiently waiting for an explanation.
+	// if(strpos($line, ' ', 20) == 29) {
+	// 	$line = substr_replace($line, '&#160;', 29, 1);
+	// }
 	echo $line;
 ?></code></li>
 <?php } ?></ol><?php else: // no info about origin file ?><em>unknown</em><?php endif; ?></li>
