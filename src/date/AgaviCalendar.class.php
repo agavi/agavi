@@ -286,12 +286,12 @@ abstract class AgaviCalendar
 		$this->setTimeInMillis($timestamp * AgaviDateDefinitions::MILLIS_PER_SECOND);
 	}
 
-	public function __is_equal($that)
+	public function __is_equal(AgaviCalendar $that)
 	{
 		return $this->isEquivalentTo($that) && $this->getTimeInMillis() == $that->getTimeInMillis();
 	}
 
-	public function __is_not_equal($that)
+	public function __is_not_equal(AgaviCalendar $that)
 	{
 		return !$this->isEquivalentTo($that) || $this->getTimeInMillis() != $that->getTimeInMillis();
 	}
@@ -311,7 +311,7 @@ abstract class AgaviCalendar
 	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
-	public function isEquivalentTo($other)
+	public function isEquivalentTo(AgaviCalendar $other)
 	{
 		return	get_class($this)                   == get_class($other) &&
 						$this->isLenient()                 == $other->isLenient() &&
@@ -335,7 +335,7 @@ abstract class AgaviCalendar
 	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
-	public function equals($when)
+	public function equals(AgaviCalendar $when)
 	{
 		return ($this->__is_equal($when) || $this->getTime() == $when->getTime());
 	}
@@ -354,7 +354,7 @@ abstract class AgaviCalendar
 	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
-	public function before($when)
+	public function before(AgaviCalendar $when)
 	{
 		return ($this->__is_not_equal($when) && $this->getTimeInMillis() < $when->getTimeInMillis());
 	}
@@ -373,7 +373,7 @@ abstract class AgaviCalendar
 	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
-	public function after($when)
+	public function after(AgaviCalendar $when)
 	{
 		return ($this->__is_not_equal($when) && $this->getTimeInMillis() > $when->getTimeInMillis());
 	}
@@ -868,45 +868,46 @@ abstract class AgaviCalendar
 	 * positive.  If this calendar is set <em>after</em> the given
 	 * time, the returned value will be negative.  The
 	 * <code>field</code> parameter specifies the units of the return
-	 * value.  For example, if <code>fieldDifference(when,
-	 * Calendar::MONTH)</code> returns 3, then this calendar is set to
+	 * value.  For example, if <code>fieldDifference($when,
+	 * AgaviDateDefinitions::MONTH)</code> returns 3, then this calendar is set to
 	 * 3 months before <code>when</code>, and possibly some addition
 	 * time less than one month.
 	 *
 	 * <p>As a side effect of this call, this calendar is advanced
-	 * toward <code>when</code> by the given amount.  That is, calling
-	 * this method has the side effect of calling <code>add(field,
-	 * n)</code>, where <code>n</code> is the return value.
+	 * toward <code>$when</code> by the given amount.  That is, calling
+	 * this method has the side effect of calling <code>add($field,
+	 * $n)</code>, where <code>n</code> is the return value.
 	 *
 	 * <p>Usage: To use this method, call it first with the largest
 	 * field of interest, then with progressively smaller fields.  For
 	 * example:
 	 *
 	 * <pre>
-	 * int y = cal->fieldDifference(when, Calendar::YEAR, err);
-	 * int m = cal->fieldDifference(when, Calendar::MONTH, err);
-	 * int d = cal->fieldDifference(when, Calendar::DATE, err);</pre>
+	 * $y = $cal->fieldDifference($when, AgaviDateDefinitions::YEAR);
+	 * $m = $cal->fieldDifference($when, AgaviDateDefinitions::MONTH);
+	 * $d = $cal->fieldDifference($when, AgaviDateDefinitions::DATE);</pre>
 	 *
-	 * computes the difference between <code>cal</code> and
-	 * <code>when</code> in years, months, and days.
+	 * computes the difference between <code>$cal</code> and
+	 * <code>$when</code> in years, months, and days.
 	 *
 	 * <p>Note: <code>fieldDifference()</code> is
 	 * <em>asymmetrical</em>.  That is, in the following code:
 	 *
 	 * <pre>
-	 * cal->setTime(date1, err);
-	 * int m1 = cal->fieldDifference(date2, Calendar::MONTH, err);
-	 * int d1 = cal->fieldDifference(date2, Calendar::DATE, err);
-	 * cal->setTime(date2, err);
-	 * int m2 = cal->fieldDifference(date1, Calendar::MONTH, err);
-	 * int d2 = cal->fieldDifference(date1, Calendar::DATE, err);</pre>
+	 * $cal->setTime($date1);
+	 * $m1 = $cal->fieldDifference($date2, AgaviDateDefinitions::MONTH);
+	 * $d1 = $cal->fieldDifference($date2, AgaviDateDefinitions::DATE);
+	 * $cal->setTime($date2);
+	 * $m2 = $cal->fieldDifference($date1, AgaviDateDefinitions::MONTH);
+	 * $d2 = $cal->fieldDifference($date1, AgaviDateDefinitions::DATE);</pre>
 	 *
-	 * one might expect that <code>m1 == -m2 && d1 == -d2</code>.
+	 * one might expect that <code>$m1 == -$m2 && $d1 == -$d2</code>.
 	 * However, this is not generally the case, because of
 	 * irregularities in the underlying calendar system (e.g., the
 	 * Gregorian calendar has a varying number of days per month).
 	 *
-	 * @param      float     When the date to compare this calendar's time to
+	 * @param      float|AgaviCalendar     When the date to compare this 
+	 *                                     calendar's time to
 	 * @param      int       The field in which to compute the result
 	 *
 	 * @return     int       The difference, either positive or negative, between
@@ -1009,16 +1010,16 @@ abstract class AgaviCalendar
 
 	/**
 	 * Sets the calendar's time zone to be the same as the one passed in. The
-	 * TimeZone passed in is _not_ adopted; the client is still responsible for
-	 * deleting it.
+	 * TimeZone passed in is _not_ cloned.
 	 *
-	 * @param      AgaviTimeZone The given time zone.
+	 * @param      AgaviTimeZone The given time zone. If null is passed nothing
+	 *                           is done.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
-	public function setTimeZone($zone)
+	public function setTimeZone(AgaviTimeZone $zone = null)
 	{
 		// Do nothing if passed-in zone is NULL
 		if(!$zone) {
@@ -1067,8 +1068,6 @@ abstract class AgaviCalendar
 	 * time field values representing the dates.
 	 *
 	 * @param      bool True specifies date/time interpretation to be lenient.
-	 *
-	 * @see        DateFormat#setLenient
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
@@ -1163,7 +1162,7 @@ abstract class AgaviCalendar
 	 * Gets the minimum value for the given time field. e.g., for Gregorian
 	 * DAY_OF_MONTH, 1.
 	 *
-	 * @param      string The given time field.
+	 * @param      int    The given time field.
 	 *
 	 * @return     int    The minimum value for the given time field.
 	 *
@@ -1180,7 +1179,7 @@ abstract class AgaviCalendar
 	 * Gets the maximum value for the given time field. e.g., for Gregorian
 	 * DAY_OF_MONTH, 31.
 	 *
-	 * @param      string The given time field.
+	 * @param      int    The given time field.
 	 *
 	 * @return     int    The maximum value for the given time field.
 	 *
@@ -1197,7 +1196,7 @@ abstract class AgaviCalendar
 	 * Gets the highest minimum value for the given field if varies. Otherwise
 	 * same as getMinimum(). For Gregorian, no difference.
 	 *
-	 * @param      string The given time field.
+	 * @param      int    The given time field.
 	 *
 	 * @return     int    The highest minimum value for the given time field.
 	 *
@@ -1214,7 +1213,7 @@ abstract class AgaviCalendar
 	 * Gets the lowest maximum value for the given field if varies. Otherwise same
 	 * as getMaximum(). e.g., for Gregorian DAY_OF_MONTH, 28.
 	 *
-	 * @param      string The given time field.
+	 * @param      int    The given time field.
 	 *
 	 * @return     int    The lowest maximum value for the given time field.
 	 *
@@ -1238,7 +1237,7 @@ abstract class AgaviCalendar
 	 * getMinimum()).  GregorianCalendar overrides this function with a more
 	 * efficient implementation.
 	 *
-	 * @param      string the field to determine the minimum of
+	 * @param      int    the field to determine the minimum of
 	 *
 	 * @return     int    the minimum of the given field for the current date of
 	 *                    this Calendar
@@ -1290,10 +1289,10 @@ abstract class AgaviCalendar
 	 * The version of this function on Calendar uses an iterative algorithm to
 	 * determine the actual maximum value for the field.  There is almost always a
 	 * more efficient way to accomplish this (in most cases, you can simply return
-	 * getMaximum()).  GregorianCalendar overrides this function with a more
+	 * getMaximum()). AgaviGregorianCalendar overrides this function with a more
 	 * efficient implementation.
 	 *
-	 * @param      string the field to determine the maximum of
+	 * @param      int    the field to determine the maximum of
 	 *
 	 * @return     int    the maximum of the given field for the current date of
 	 *                    this Calendar
@@ -1371,7 +1370,7 @@ abstract class AgaviCalendar
 	 * set(). To force a recomputation of all fields regardless of the previous
 	 * state, call complete().
 	 *
-	 * @param      string The given time field.
+	 * @param      int    The given time field.
 	 *
 	 * @return     int    The value for the given time field, or zero if the field
 	 *                    is unset, and set() has been called for any other field.
@@ -1394,7 +1393,7 @@ abstract class AgaviCalendar
 	 * resolving of time in Calendar. Unset fields have a value of zero, by
 	 * definition.
 	 *
-	 * @param      string The given time field.
+	 * @param      int    The given time field.
 	 *
 	 * @return     bool   True if the given time field has a value set; false
 	 *                    otherwise.
@@ -1409,7 +1408,12 @@ abstract class AgaviCalendar
 	}
 
 	/**
-	 * TODO: describe overload bla
+	 * Overloaded
+	 * 
+	 * @see        AgaviCalendar::set1()
+	 * @see        AgaviCalendar::set2()
+	 * @see        AgaviCalendar::set3()
+	 * @see        AgaviCalendar::set4()
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
@@ -1530,8 +1534,11 @@ abstract class AgaviCalendar
 	}
 
 	/**
-	 * TODO: describe overload bla
+	 * Overloaded
 	 *
+	 * @see        AgaviCalendar::clear1()
+	 * @see        AgaviCalendar::clear2()
+	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -1825,7 +1832,7 @@ abstract class AgaviCalendar
 	 * get field values without forcing recomputation of time. If the field's
 	 * stamp is UNSET, the defaultValue is used.
 	 *
-	 * @param      string The given time field.
+	 * @param      int    The given time field.
 	 * @param      int    a default value used if the field is unset.
 	 * @return     int    The value for the given time field.
 	 *
@@ -1843,7 +1850,7 @@ abstract class AgaviCalendar
 	 * subclasses.  It does not affect the fAreFieldsInSync, isTimeSet, or
 	 * areAllFieldsSet flags.
 	 *
-	 * @param      string The given time field.
+	 * @param      int    The given time field.
 	 * @param      int    The value for the given time field.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
@@ -1862,7 +1869,7 @@ abstract class AgaviCalendar
 	 * This method modifies this calendar's fields; it is called on a
 	 * temporary calendar.
 	 *
-	 * @param      string The given time field
+	 * @param      int    The given time field
 	 * @param      bool
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
@@ -1920,20 +1927,22 @@ abstract class AgaviCalendar
 	 * Subclasses must implement this method to return limits for the
 	 * following fields:
 	 *
-	 * <pre>UCAL_ERA
-	 * UCAL_YEAR
-	 * UCAL_MONTH
-	 * UCAL_WEEK_OF_YEAR
-	 * UCAL_WEEK_OF_MONTH
-	 * UCAL_DATE (DAY_OF_MONTH on Java)
-	 * UCAL_DAY_OF_YEAR
-	 * UCAL_DAY_OF_WEEK_IN_MONTH
-	 * UCAL_YEAR_WOY
-	 * UCAL_EXTENDED_YEAR</pre>
+	 * <pre>AgaviDateDefinitions::ERA
+	 * AgaviDateDefinitions::YEAR
+	 * AgaviDateDefinitions::MONTH
+	 * AgaviDateDefinitions::WEEK_OF_YEAR
+	 * AgaviDateDefinitions::WEEK_OF_MONTH
+	 * AgaviDateDefinitions::DATE
+	 * AgaviDateDefinitions::DAY_OF_YEAR
+	 * AgaviDateDefinitions::DAY_OF_WEEK_IN_MONTH
+	 * AgaviDateDefinitions::YEAR_WOY
+	 * AgaviDateDefinitions::EXTENDED_YEAR</pre>
 	 *
-	 * @param      string one of the above field numbers
-	 * @param      int one of <code>MINIMUM</code>, <code>GREATEST_MINIMUM</code>,
-	 *                 <code>LEAST_MAXIMUM</code>, or <code>MAXIMUM</code>
+	 * @param      int one of the above field numbers
+	 * @param      int one of <code>self::LIMIT_MINIMUM</code>, 
+	 *                        <code>self::LIMIT_GREATEST_MINIMUM</code>,
+	 *                        <code>self::LIMIT_LEAST_MAXIMUM</code>,
+	 *                    or  <code>self::LIMIT_MAXIMUM</code>
 	 *
 	 * @return     int
 	 *
@@ -1946,10 +1955,8 @@ abstract class AgaviCalendar
 	/**
 	 * Return a limit for a field.
 	 *
-	 * @param      string the field, from <code>0..UCAL_MAX_FIELD</code>
+	 * @param      int the field
 	 * @param      int the type specifier for the limit
-	 *
-	 * @see        #ELimitType
 	 *
 	 * @return     int
 	 *
@@ -2032,8 +2039,8 @@ abstract class AgaviCalendar
 
 	/**
 	 * Return the extended year defined by the current fields.  This will
-	 * use the UCAL_EXTENDED_YEAR field or the UCAL_YEAR and supra-year fields
-	 * (such as UCAL_ERA) specific to the calendar system, depending on which set
+	 * use the EXTENDED_YEAR field or the YEAR and supra-year fields
+	 * (such as ERA) specific to the calendar system, depending on which set
 	 * of fields is newer.
 	 *
 	 * @return     int the extended year
@@ -2476,8 +2483,8 @@ abstract class AgaviCalendar
 	/**
 	 * Determine the best stamp in a range.
 	 *
-	 * @param      string first enum to look at
-	 * @param      string last enum to look at
+	 * @param      int    first enum to look at
+	 * @param      int    last enum to look at
 	 * @param      int    stamp prior to function call
 	 *
 	 * @return     int    the stamp value of the best stamp
@@ -2680,7 +2687,7 @@ abstract class AgaviCalendar
 	/**
 	 * Helper function for calculating limits by trial and error
 	 *
-	 * @param      string The field being investigated
+	 * @param      int    The field being investigated
 	 * @param      int    starting (least max) value of field
 	 * @param      int    ending (greatest max) value of field
 	 *
@@ -2819,12 +2826,12 @@ abstract class AgaviCalendar
 	 * Subclasses may override this method to compute several fields
 	 * specific to each calendar system.  These are:
 	 *
-	 * <ul><li>ERA
-	 * <li>YEAR
-	 * <li>MONTH
-	 * <li>DAY_OF_MONTH
-	 * <li>DAY_OF_YEAR
-	 * <li>EXTENDED_YEAR</ul>
+	 * <ul><li>AgaviDateDefinitions::ERA
+	 * <li>AgaviDateDefinitions::YEAR
+	 * <li>AgaviDateDefinitions::MONTH
+	 * <li>AgaviDateDefinitions::DAY_OF_MONTH
+	 * <li>AgaviDateDefinitions::DAY_OF_YEAR
+	 * <li>AgaviDateDefinitions::EXTENDED_YEAR</ul>
 	 *
 	 * Subclasses can refer to the DAY_OF_WEEK and DOW_LOCAL fields, which
 	 * will be set when this method is called.  Subclasses can also call
@@ -2898,7 +2905,7 @@ abstract class AgaviCalendar
 	/**
 	 * Return the day of year (1-based) on the Gregorian calendar as
 	 * computed by <code>computeGregorianFields()</code>.
-	 * @see #computeGregorianFields
+	 * @see        AgaviCalendar::computeGregorianFields
 	 * @internal
 	 *
 	 * @return     int The gregorian day of year
@@ -2915,7 +2922,7 @@ abstract class AgaviCalendar
 	/**
 	 * Return the day of month (1-based) on the Gregorian calendar as
 	 * computed by <code>computeGregorianFields()</code>.
-	 * @see #computeGregorianFields
+	 * @see        AgaviCalendar::computeGregorianFields
 	 * @internal
 	 *
 	 * @return     int The gregorian day of month
@@ -3450,7 +3457,7 @@ abstract class AgaviCalendar
 	 * @see #validateField(int, int, int, int&)
 	 * @internal
 	 *
-	 * @param      string The field
+	 * @param      int The field
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
@@ -3483,10 +3490,12 @@ abstract class AgaviCalendar
 	/**
 	 * Validate a single field of this calendar given its minimum and
 	 * maximum allowed value.  If the field is out of range,
-	 * <code>U_ILLEGAL_ARGUMENT_ERROR</code> will be set.  Subclasses may
+	 * <code>InvalidArgumentException</code> will be thrown.  Subclasses may
 	 * use this method in their implementation of {@link
 	 * #validateField(int, int&)}.
 	 * @internal
+	 * 
+	 * @throws     <b>InvalidArgumentException</b>
 	 *
 	 * @param      string
 	 * @param      int

@@ -187,7 +187,7 @@ class AgaviDateFormat
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function format($data, $calendarType, $locale)
+	public function format($data, $calendarType, AgaviLocale $locale)
 	{
 		$tm = $locale->getContext()->getTranslationManager();
 		$tzid = null;
@@ -432,7 +432,7 @@ class AgaviDateFormat
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	protected function getGmtZoneString($data)
+	protected function getGmtZoneString(array $data)
 	{
 		$value = $data[AgaviDateDefinitions::ZONE_OFFSET] + $data[AgaviDateDefinitions::DST_OFFSET];
 
@@ -458,7 +458,7 @@ class AgaviDateFormat
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	protected function internalParseFormat($format, $charToTokenMap)
+	protected function internalParseFormat($format, array $charToTokenMap)
 	{
 		if($this->originalFormatString == $format) {
 			return;
@@ -544,7 +544,7 @@ class AgaviDateFormat
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function parse($dateString, $locale, $strict = false)
+	public function parse($dateString, AgaviLocale $locale, $strict = false)
 	{
 		$tm = $locale->getContext()->getTranslationManager();
 		$cal = $tm->createCalendar();
