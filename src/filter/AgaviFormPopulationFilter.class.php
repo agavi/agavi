@@ -293,11 +293,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 			$remember = array();
 
 			// build the XPath query
-			$query = sprintf('descendant::%1$stextarea[@name] | descendant::%1$sselect[@name] | descendant::%1$sinput[@name and (not(@type) or @type="text" or (@type="checkbox" and not(contains(@name, "[]"))) or (@type="checkbox" and contains(@name, "[]") and @value) or @type="radio" or @type="password" or @type="file"', $this->xmlnsPrefix);
-			if($cfg['include_hidden_inputs']) {
-				$query .= ' or @type="hidden"';
-			}
-			$query .= ')]';
+			$query = sprintf('descendant::%1$stextarea[@name] | descendant::%1$sselect[@name] | descendant::%1$sbutton[@name and @type="submit"] | descendant::%1$sinput[@name and (not(@type) or @type="text" or (@type="checkbox" and not(contains(@name, "[]"))) or (@type="checkbox" and contains(@name, "[]") and @value) or @type="radio" or @type="password" or @type="file" or @type="submit" %2$s)]', $this->xmlnsPrefix, $cfg['include_hidden_inputs'] ? 'or @type="hidden"' : '');
 			foreach($this->xpath->query($query, $form) as $element) {
 
 				$pname = $name = $element->getAttribute('name');
