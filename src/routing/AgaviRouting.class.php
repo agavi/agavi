@@ -536,20 +536,46 @@ abstract class AgaviRouting extends AgaviParameterHolder
 				}
 				foreach($r['callback_instances'] as $callbackInstance) {
 					$paramsCopy = $params;
-					if(!$callbackInstance->onGenerate($myDefaults, $params, $options)) {
-						continue 2;
+					$isLegacyCallback = false;
+					if($callbackInstance instanceof AgaviILegacyRoutingCallback) {
+						$isLegacyCallback = true;
+						// convert all routing values to strings so legacy callbacks don't break
+						$defaultsCopy = $myDefaults;
+						foreach($paramsCopy as &$param) {
+							if($param instanceof AgaviRoutingValue) {
+								$param = $param->getValue();
+							}
+						}
+						foreach($defaultsCopy as &$default) {
+							if($default instanceof AgaviRoutingValue) {
+								$default = array(
+									'pre' => $default->getPrefix(),
+									'val' => $default->getValue(),
+									'post' => $default->getPostfix(),
+								);
+							}
+						}
+						$changedParamsCopy = $paramsCopy;
+						if(!$callbackInstance->onGenerate($defaultsCopy, $paramsCopy, $options)) {
+							continue 2;
+						}
+						// find all params changed in the callback
+						$diff = array_udiff_assoc($paramsCopy, $changedParamsCopy, array($this, 'onGenerateParamDiffCallback'));
+					} else {
+						if(!$callbackInstance->onGenerate($myDefaults, $params, $options)) {
+							continue 2;
+						}
+						// find all params changed in the callback
+						$diff = array_udiff_assoc($params, $paramsCopy, array($this, 'onGenerateParamDiffCallback'));
 					}
-				
-					// TODO: discuss using an interface again.
-					$diff = array_udiff_assoc($params, $paramsCopy, array($this, 'onGenerateParamDiffCallback'));
+					
 					if(count($diff)) {
 						$diffKeys = array_keys($diff);
 						foreach($diffKeys as $key) {
 							// do NEVER assign this value as reference, php will completely go bonkers if we use a reference here (it actually marks the entry in the array as reference and hence in a callback when modifying the value in $params it actually gets modified in $paramsCopy as well)
-							$value = $params[$key];
-							if(is_array($value) && array_key_exists('pre', $value) && array_key_exists('val', $value) && array_key_exists('post', $value)) {
-								$value = $this->createValue($value['val'], true)->setPrefix($value['pre'], false)->setPostfix($value['post'], false);
-							} elseif($value !== null && !($value instanceof AgaviRoutingValue)) {
+							// if the callback was a legacy callback, the array to read the values from is different (since everything was casted to strings before running the callback)
+							$value = $isLegacyCallback ? $paramsCopy[$key] : $params[$key];
+							if($value !== null && !($value instanceof AgaviRoutingValue)) {
 								$routingValue = $this->createValue($value, false);
 								if(isset($myDefaults[$key])) {
 									if($myDefaults[$key] instanceof AgaviRoutingValue) {
@@ -565,6 +591,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 								}
 								$value = $routingValue;
 							}
+							// for writing no legacy check mustn't be done, since that would mean the changed value would get lost
 							$params[$key] = $value;
 						}
 					}
