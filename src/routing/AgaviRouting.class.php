@@ -506,11 +506,36 @@ abstract class AgaviRouting extends AgaviParameterHolder
 		throw new AgaviException('Undefined Routing gen() options preset "' . $input . '"');
 	}
 	
+	/**
+	 * Callback function to be used with array_diff and friends. Used to find out
+	 * which parameters where changed in an onGenerate() callback.
+	 * 
+	 * @param      mixed Value A
+	 * @param      mixed Value B
+	 * 
+	 * @return     bool
+	 * 
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @since      1.0.0
+	 */
 	protected function onGenerateParamDiffCallback($a, $b)
 	{
 		return ($a === $b) ? 0 : 1;
 	}
 	
+	/**
+	 * Builds the routing information (result string, all kinds of parameters)
+	 * for the given routes.
+	 * 
+	 * @param      array The options
+	 * @param      array The names of the routes to generate
+	 * @param      array The parameters supplied by the user
+	 * 
+	 * @return     array
+	 * 
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @since      1.0.0
+	 */
 	protected function assembleRoutes(array $options, array $routeNames, array $params)
 	{
 		$uri = '';
@@ -632,6 +657,19 @@ abstract class AgaviRouting extends AgaviParameterHolder
 		);
 	}
 	
+	/**
+	 * Adds all matched parameters to the supplied parameters. Will not overwrite
+	 * already existing parameters.
+	 * 
+	 * @param      array The options
+	 * @param      array The parameters supplied by the user
+	 * @param      array The parameters which matched in execute()
+	 * 
+	 * @return     array The $params with the added matched parameters
+	 * 
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @since      1.0.0
+	 */
 	protected function refillAllMatchedParameters(array $options, array $params, array $matchedParams)
 	{
 		if(!empty($options['refill_all_parameters'])) {
@@ -645,6 +683,25 @@ abstract class AgaviRouting extends AgaviParameterHolder
 		return $params;
 	}
 	
+	/**
+	 * Adds all parameters which were matched in the incoming routes to the 
+	 * generated route up the first user supplied parameter (from left to right)
+	 * Also adds the default value for all non optional parameters the user 
+	 * didn't supply.
+	 * 
+	 * @param      array The options
+	 * @param      array The parameters originally passed to gen()
+	 * @param      array The parameters
+	 * @param      array A list of parameter names available for the route
+	 * @param      array The matched parameters from execute() for the route
+	 * @param      array the optional parameters for the route
+	 * @param      array the default parameters for the route
+	 * 
+	 * @return     array The 'final' parameters
+	 * 
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @since      1.0.0
+	 */
 	protected function refillMatchedAndDefaultParameters(array $options, array $originalUserParams, array $params, array $availableParams, array $matchedParams, array $optionalParams, array $defaultParams)
 	{
 		$refillValue = true;
@@ -687,6 +744,21 @@ abstract class AgaviRouting extends AgaviParameterHolder
 		return $finalParams;
 	}
 	
+	/**
+	 * Adds the user supplied parameters to the 'final' parameters for the route.
+	 * 
+	 * @param      array The options
+	 * @param      array The user parameters
+	 * @param      array The 'final' parameters 
+	 * @param      array A list of parameter names available for the route
+	 * @param      array the optional parameters for the route
+	 * @param      array the default parameters for the route
+	 * 
+	 * @return     array The 'final' parameters
+	 * 
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @since      1.0.0
+	 */
 	protected function fillUserParameters(array $options, array $params, array $finalParams, array $availableParams, array $optionalParams, array $defaultParams)
 	{
 		$availableParamsAsKeys = array_flip($availableParams);
@@ -714,6 +786,21 @@ abstract class AgaviRouting extends AgaviParameterHolder
 		return $finalParams;
 	}
 
+	/**
+	 * Adds the user supplied parameters to the 'final' parameters for the route.
+	 * 
+	 * @param      array The options
+	 * @param      array The user parameters
+	 * @param      array The 'final' parameters 
+	 * @param      array A list of parameter names available for the route
+	 * @param      array the optional parameters for the route
+	 * @param      array the default parameters for the route
+	 * 
+	 * @return     array The 'final' parameters
+	 * 
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @since      1.0.0
+	 */
 	protected function removeMatchingDefaults(array $options, array $finalParams, array $availableParams, array $optionalParams, array $defaultParams)
 	{
 		if(!empty($options['omit_defaults'])) {
@@ -745,6 +832,18 @@ abstract class AgaviRouting extends AgaviParameterHolder
 		return $finalParams;
 	}
 	
+	/**
+	 * Updates the pre and postfixes in the final params from the default
+	 * pre and postfix if available and if it hasn't been set yet by the user.
+	 * 
+	 * @param      array The 'final' parameters 
+	 * @param      array the default parameters for the route
+	 * 
+	 * @return     array The 'final' parameters
+	 * 
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @since      1.0.0
+	 */
 	protected function updatePrefixAndPostfix(array $finalParams, array $defaultParams)
 	{
 		foreach($finalParams as $name => $param) {
@@ -766,6 +865,17 @@ abstract class AgaviRouting extends AgaviParameterHolder
 		return $finalParams;
 	}
 	
+	/**
+	 * Encodes all 'final' parameters.
+	 * 
+	 * @param      array The 'final' parameters 
+	 * @param      array the default parameters for the route
+	 * 
+	 * @return     array The 'final' parameters
+	 * 
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @since      1.0.0
+	 */
 	protected function encodeParameters(array $options, array $params)
 	{
 		foreach($params as &$param) {
@@ -774,6 +884,16 @@ abstract class AgaviRouting extends AgaviParameterHolder
 		return $params;
 	}
 	
+	/**
+	 * Encodes a single parameter.
+	 * 
+	 * @param      mixed A AgaviRoutingValue object or a string
+	 * 
+	 * @return     string The encoded parameter
+	 * 
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @since      1.0.0
+	 */
 	protected function encodeParameter($parameter)
 	{
 		if($parameter instanceof AgaviRoutingValue) {
@@ -787,6 +907,16 @@ abstract class AgaviRouting extends AgaviParameterHolder
 		}
 	}
 	
+	/**
+	 * Converts all members of an array to AgaviRoutingValues.
+	 * 
+	 * @param      array The parameters
+	 * 
+	 * @return     array An array containing all parameters as AgaviRoutingValues
+	 * 
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @since      1.0.0
+	 */
 	protected function convertParametersToRoutingValues(array $parameters)
 	{
 		if(count($parameters)) {
@@ -1388,6 +1518,17 @@ abstract class AgaviRouting extends AgaviParameterHolder
 		return array(substr($match[1], 0, -1), $match[2]);
 	}
 	
+	/**
+	 * Creates and initializes a new AgaviRoutingValue.
+	 * 
+	 * @param      mixed The value of the returned routing value
+	 * @param      bool  Whether the $value needs to be encoded
+	 * 
+	 * @return     AgaviRoutingValue
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @since      1.0.0
+	 */
 	public function createValue($value, $valueNeedsEncoding = true)
 	{
 		$value = new AgaviRoutingValue($value, $valueNeedsEncoding);

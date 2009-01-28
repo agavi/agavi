@@ -44,6 +44,13 @@ class AgaviRoutingValue implements ArrayAccess
 		'post' => 'postfix',
 	);
 	
+	/**
+	 * Constructor
+	 * 
+	 * 
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @since      1.0.0
+	 */
 	public function __construct($value, $valueNeedsEncoding = true)
 	{
 		$this->value = $value;
@@ -81,12 +88,30 @@ class AgaviRoutingValue implements ArrayAccess
 		
 		unset($this->contextName);
 	}
-
+	
+	/**
+	 * Initialize the routing value.
+	 *
+	 * @param      AgaviContext The Context.
+	 * @param      array        An array of initialization parameters.
+	 *
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @since      1.0.0
+	 */
 	public function initialize(AgaviContext $context, array $parameters = array())
 	{
 		$this->context = $context;
 	}
 	
+	/**
+	 * Sets the value.
+	 * 
+	 * @param      mixed  The value
+	 * @param      bool   Whether the value needs to be encoded
+	 * 
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @since      1.0.0
+	 */
 	public function setValue($value, $needsEncoding = true)
 	{
 		$this->value = $value;
@@ -94,11 +119,28 @@ class AgaviRoutingValue implements ArrayAccess
 		return $this;
 	}
 	
+	/**
+	 * Retrieves the value.
+	 * 
+	 * @param      mixed
+	 * 
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @since      1.0.0
+	 */
 	public function getValue()
 	{
 		return $this->value;
 	}
 	
+	/**
+	 * Sets the prefix.
+	 * 
+	 * @param      string The prefix
+	 * @param      bool   Whether the prefix needs to be encoded
+	 * 
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @since      1.0.0
+	 */
 	public function setPrefix($value, $needsEncoding = false)
 	{
 		$this->prefix = $value;
@@ -106,16 +148,41 @@ class AgaviRoutingValue implements ArrayAccess
 		return $this;
 	}
 	
+	/**
+	 * Retrieve the prefix.
+	 * 
+	 * @return     string
+	 * 
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @since      1.0.0
+	 */
 	public function getPrefix()
 	{
 		return $this->prefix;
 	}
 	
+	/**
+	 * Checks if an prefix was set.
+	 * 
+	 * @return     bool
+	 * 
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @since      1.0.0
+	 */
 	public function hasPrefix()
 	{
 		return $this->prefix !== null;
 	}
 	
+	/**
+	 * Set the postfix.
+	 * 
+	 * @param      string The postfix
+	 * @param      bool   Whether the postfix needs to be encoded
+	 * 
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @since      1.0.0
+	 */
 	public function setPostfix($value, $needsEncoding = false)
 	{
 		$this->postfix = $value;
@@ -123,49 +190,123 @@ class AgaviRoutingValue implements ArrayAccess
 		return $this;
 	}
 	
+	/**
+	 * Retrieve the postfix.
+	 * 
+	 * @return     string
+	 * 
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @since      1.0.0
+	 */
 	public function getPostfix()
 	{
 		return $this->postfix;
 	}
 	
+	/**
+	 * Checks if an postfix was set.
+	 * 
+	 * @return     bool
+	 * 
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @since      1.0.0
+	 */
 	public function hasPostfix()
 	{
 		return $this->postfix !== null;
 	}
 	
+	/**
+	 * Sets whether the value needs to be encoded or not.
+	 * 
+	 * @param      bool
+	 * 
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @since      1.0.0
+	 */
 	public function setValueNeedsEncoding($needsEncoding)
 	{
 		$this->valueNeedsEncoding = $needsEncoding;
 		return $this;
 	}
 	
+	/**
+	 * Retrieves whether the value needs to be encoded.
+	 * 
+	 * @return     bool
+	 * 
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @since      1.0.0
+	 */
 	public function getValueNeedsEncoding()
 	{
 		return $this->valueNeedsEncoding;
 	}
 	
+	/**
+	 * Sets whether the prefix needs to be encoded or not.
+	 * 
+	 * @param      bool
+	 * 
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @since      1.0.0
+	 */
 	public function setPrefixNeedsEncoding($needsEncoding)
 	{
 		$this->prefixNeedsEncoding = $needsEncoding;
 		return $this;
 	}
 	
+	/**
+	 * Retrieves whether the prefix needs to be encoded.
+	 * 
+	 * @return     bool
+	 * 
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @since      1.0.0
+	 */
 	public function getPrefixNeedsEncoding()
 	{
 		return $this->prefixNeedsEncoding;
 	}
 	
+	/**
+	 * Sets whether the postfix needs to be encoded or not.
+	 * 
+	 * @param      bool
+	 * 
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @since      1.0.0
+	 */
 	public function setPostfixNeedsEncoding($needsEncoding)
 	{
 		$this->postfixNeedsEncoding = $needsEncoding;
 		return $this;
 	}
 	
+	/**
+	 * Retrieves whether the postfix needs to be encoded.
+	 * 
+	 * @return     bool
+	 * 
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @since      1.0.0
+	 */
 	public function getPostfixNeedsEncoding()
 	{
 		return $this->postfixNeedsEncoding;
 	}
 	
+	/**
+	 * Checks if this routing value is equal to the given parameter.
+	 * 
+	 * @param      mixed The value to compare $this against
+	 * 
+	 * @return     bool Whether the value matches $this
+	 * 
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @since      1.0.0
+	 */
 	public function equals($other)
 	{
 		if($other instanceof self) {
@@ -177,11 +318,31 @@ class AgaviRoutingValue implements ArrayAccess
 		}
 	}
 	
+	/**
+	 * ArrayAccess method
+	 * 
+	 * @param      mixed The offset
+	 * 
+	 * @return     bool
+	 * 
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @since      1.0.0
+	 */
 	public function offsetExists($offset)
 	{
 		return isset(self::$arrayMap[$offset]);
 	}
 	
+	/**
+	 * ArrayAccess method
+	 * 
+	 * @param      mixed The offset
+	 * 
+	 * @return     mixed The value
+	 * 
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @since      1.0.0
+	 */
 	public function offsetGet($offset)
 	{
 		if(isset(self::$arrayMap[$offset])) {
@@ -189,6 +350,15 @@ class AgaviRoutingValue implements ArrayAccess
 		}
 	}
 	
+	/**
+	 * ArrayAccess method
+	 * 
+	 * @param      mixed The offset
+	 * @param      mixed The value
+	 * 
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @since      1.0.0
+	 */
 	public function offsetSet($offset, $value)
 	{
 		if(isset(self::$arrayMap[$offset])) {
@@ -196,6 +366,14 @@ class AgaviRoutingValue implements ArrayAccess
 		}
 	}
 	
+	/**
+	 * ArrayAccess method
+	 * 
+	 * @param      mixed The offset
+	 * 
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @since      1.0.0
+	 */
 	public function offsetUnset($offset)
 	{
 		if(isset(self::$arrayMap[$offset])) {
@@ -203,19 +381,17 @@ class AgaviRoutingValue implements ArrayAccess
 		}
 	}
 	
+	/**
+	 * Returns the encoded value (without pre- or postfix)
+	 * 
+	 * @return     string
+	 * 
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @since      1.0.0
+	 */
 	public function __toString()
 	{
-		$ro = $this->context->getRouting();
-		return sprintf('%s%s%s', 
-			$this->prefixNeedsEncoding ? $ro->escapeOutputParameter($this->prefix) : $this->prefix,
-			$this->valueNeedsEncoding ? $ro->escapeOutputParameter($this->value) : $this->value,
-			$this->postfixNeedsEncoding ? $ro->escapeOutputParameter($this->postfix) : $this->postfix
-		);
-	}
-	
-	public static function __set_state(array $data)
-	{
-		return new self($data['value'], $data['prefix'], $data['postfix'], $data['valueNeedsEncoding'], $data['prefixNeedsEncoding'], $data['postfixNeedsEncoding']);
+		return $this->valueNeedsEncoding ? $this->context->getRouting()->escapeOutputParameter($this->value) : $this->value;
 	}
 }
 
