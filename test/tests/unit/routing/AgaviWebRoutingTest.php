@@ -218,6 +218,91 @@ class AgaviWebRoutingTest extends AgaviPhpUnitTestCase
 		$this->assertEquals('/gen_shortest_possible_url/1/2/4', $url);
 	}
 	
+	public function testGenWithRoutingValue()
+	{
+		$url = $this->routing->gen('with_param', array('number' => $this->routing->createValue(5)));
+		$this->assertEquals('/withparam/5', $url);
+		
+		$url = $this->routing->gen('with_param', array('number' => $this->routing->createValue('foo/bar')));
+		$this->assertEquals('/withparam/foo%2Fbar', $url);
+		
+		$url = $this->routing->gen('with_param', array('number' => $this->routing->createValue('foo/bar', false)));
+		$this->assertEquals('/withparam/foo/bar', $url);
+	}
+	
+	public function testGenWithNullRoutingValuePrePost()
+	{
+		$url = $this->routing->gen('with_prefix_and_postfix', array('param' => null));
+		$this->assertEquals('/with_prefix_and_postfix/default', $url);
+		
+		$url = $this->routing->gen('with_prefix_and_postfix', array('param' => $this->routing->createValue(null)));
+		$this->assertEquals('/with_prefix_and_postfix/default', $url);
+	}
+	
+	public function testGenWithRoutingValuePrePost()
+	{
+		$url = $this->routing->gen('with_prefix_and_postfix', array('param' => $this->routing->createValue('foo')));
+		$this->assertEquals('/with_prefix_and_postfix/foo', $url);
+		
+		$url = $this->routing->gen('with_prefix_and_postfix', array('param' => $this->routing->createValue('foo')->setPrefix('-')));
+		$this->assertEquals('/with_prefix_and_postfix-foo', $url);
+		
+		$url = $this->routing->gen('with_prefix_and_postfix', array('param' => $this->routing->createValue('foo/bar')));
+		$this->assertEquals('/with_prefix_and_postfix/foo%2Fbar', $url);
+		
+		$url = $this->routing->gen('with_prefix_and_postfix', array('param' => $this->routing->createValue('foo/bar')->setPrefix('-')));
+		$this->assertEquals('/with_prefix_and_postfix-foo%2Fbar', $url);
+		
+		$url = $this->routing->gen('with_prefix_and_postfix', array('param' => $this->routing->createValue('foo/bar', false)->setPrefix('-')));
+		$this->assertEquals('/with_prefix_and_postfix-foo/bar', $url);
+		
+		$url = $this->routing->gen('with_prefix_and_postfix', array('param' => $this->routing->createValue('foo/bar', false)->setPrefix('/')));
+		$this->assertEquals('/with_prefix_and_postfix/foo/bar', $url);
+		
+		$url = $this->routing->gen('with_prefix_and_postfix', array('param' => $this->routing->createValue('foo/bar', false)->setPrefix('/', true)));
+		$this->assertEquals('/with_prefix_and_postfix%2Ffoo/bar', $url);
+		
+		$url = $this->routing->gen('with_prefix_and_postfix', array('param' => $this->routing->createValue('foo/bar')->setPostfix('-')));
+		$this->assertEquals('/with_prefix_and_postfix/foo%2Fbar-', $url);
+		
+		$url = $this->routing->gen('with_prefix_and_postfix', array('param' => $this->routing->createValue('foo/bar', false)->setPostfix('-')));
+		$this->assertEquals('/with_prefix_and_postfix/foo/bar-', $url);
+		
+		$url = $this->routing->gen('with_prefix_and_postfix', array('param' => $this->routing->createValue('foo/bar', false)->setPostfix('/')));
+		$this->assertEquals('/with_prefix_and_postfix/foo/bar/', $url);
+		
+		$url = $this->routing->gen('with_prefix_and_postfix', array('param' => $this->routing->createValue('foo/bar', false)->setPostfix('/', true)));
+		$this->assertEquals('/with_prefix_and_postfix/foo/bar%2F', $url);
+		
+		$url = $this->routing->gen('with_prefix_and_postfix', array('param' => $this->routing->createValue('foo/bar')->setPrefix('-')->setPostfix('-')));
+		$this->assertEquals('/with_prefix_and_postfix-foo%2Fbar-', $url);
+		
+		$url = $this->routing->gen('with_prefix_and_postfix', array('param' => $this->routing->createValue('foo/bar', false)->setPrefix('-')->setPostfix('/')));
+		$this->assertEquals('/with_prefix_and_postfix-foo/bar/', $url);
+		
+		$url = $this->routing->gen('with_prefix_and_postfix', array('param' => $this->routing->createValue('foo/bar', false)->setPrefix('/')->setPostfix('/', true)));
+		$this->assertEquals('/with_prefix_and_postfix/foo/bar%2F', $url);
+		
+		$url = $this->routing->gen('with_prefix_and_postfix', array('param' => $this->routing->createValue('foo/bar', false)->setPrefix('/', true)->setPostfix('/', true)));
+		$this->assertEquals('/with_prefix_and_postfix%2Ffoo/bar%2F', $url);
+		
+		
+		$url = $this->routing->gen('with_prefix_and_postfix', array('param' => $this->routing->createValue('foo/bar', false)->setPrefix(null)->setPostfix(null)));
+		$this->assertEquals('/with_prefix_and_postfix/foo/bar', $url);
+		
+		$url = $this->routing->gen('with_prefix_and_postfix', array('param' => $this->routing->createValue('foo/bar', false)->setPrefix('')->setPostfix('')));
+		$this->assertEquals('/with_prefix_and_postfixfoo/bar', $url);
+	}
+	
+	public function testGenWithNullRoutingValue()
+	{
+		$url = $this->routing->gen('with_prefix_and_postfix', array('param' => null));
+		$this->assertEquals('/with_prefix_and_postfix/default', $url);
+		
+		$url = $this->routing->gen('with_prefix_and_postfix', array('param' => $this->routing->createValue(null)));
+		$this->assertEquals('/with_prefix_and_postfix/default', $url);
+	}
+	
 	public function testAbsoluteUrl()
 	{
 		$url = $this->routing->gen('index', array(), array('relative' => false));
