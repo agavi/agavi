@@ -75,10 +75,14 @@ class AgaviRoutingConfigHandler extends AgaviXmlConfigHandler
 			}
 		}
 
-#		$code = '$this->importRoutes(' . var_export($routing->exportRoutes(), true) . ');';
-		$code = '$this->importRoutes(unserialize(' . var_export(serialize($routing->exportRoutes()), true) . '));';
-
-		return $this->generate($code, $document->documentURI);
+		// we cannot do this:
+		// $code = '$this->importRoutes(unserialize(' . var_export(serialize($routing->exportRoutes()), true) . '));';
+		// return $this->generate($code, $document->documentURI);
+		// because var_export() incorrectly escapes null-byte sequences as \000, which results in a corrupted string, and unserialize() doesn't like corrupted strings
+		// this was fixed in PHP 5.2.6, but we're compatible with 5.2.0+
+		// see http://bugs.php.net/bug.php?id=37262 and http://bugs.php.net/bug.php?id=42272
+		
+		return serialize($routing->exportRoutes());
 	}
 
 	/**

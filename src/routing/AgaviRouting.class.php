@@ -130,7 +130,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 		$cfg = AgaviConfig::get("core.config_dir") . "/routing.xml";
 		// allow missing routing.xml when routing is not enabled
 		if($this->isEnabled() || is_readable($cfg)) {
-			include(AgaviConfigCache::checkConfig($cfg, $this->context->getName()));
+			$this->importRoutes(unserialize(file_get_contents(AgaviConfigCache::checkConfig($cfg, $this->context->getName()))));
 		}
 	}
 
