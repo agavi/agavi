@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -133,6 +133,15 @@ class AgaviTranslationManager
 			throw new AgaviException('Tried to use the translation system without a default locale and without a locale set');
 		}
 		$this->setLocale($this->defaultLocaleIdentifier);
+
+		if($this->defaultTimeZone === null) {
+			$this->defaultTimeZone = date_default_timezone_get();
+		}
+		
+		if($this->defaultTimeZone === 'System/Localtime') {
+			// http://trac.agavi.org/ticket/1008
+			throw new AgaviException("Your default timezone is 'System/Localtime', which likely means that you're running Debian, Ubuntu or some other Linux distribution that chose to include a useless and broken patch for system timezone database lookups into their PHP package, despite this very change being declined by the PHP development team for inclusion into PHP itself.\nThis pseudo-timezone, which is not defined in the standard 'tz' database used across many operating systems and applications, works for internal PHP classes and functions because the 'real' system timezone is resolved instead, but there is no way for an application to obtain the actual timezone name that 'System/Localtime' resolves to internally - information Agavi needs to perform accurate calculations and operations on dates and times.\n\nPlease set a correct timezone name (e.g. Europe/London) via 'date.timezone' in php.ini, use date_default_timezone_set() to set it in your code, or define a default timezone for Agavi to use in translation.xml. If you have some minutes to spare, file a bug report with your operating system vendor about this problem.\n\nIf you'd like to learn more about this issue, please refer to http://trac.agavi.org/ticket/1008");
+		}
 	}
 
 	/**
@@ -764,15 +773,25 @@ class AgaviTranslationManager
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
+	 *
+	 * @deprecated Superseded by AgaviTranslationManager::getDefaultTimeZone()
 	 */
 	public function getCurrentTimeZone()
 	{
-		if($this->defaultTimeZone !== null) {
-			$tz = $this->defaultTimeZone;
-		} else {
-			$tz = date_default_timezone_get();
-		}
-		return $this->createTimeZone($tz);
+		return $this->getDefaultTimeZone();
+	}
+
+	/**
+	 * Get the default timezone instance.
+	 *
+	 * @return     AgaviTimeZone The default timezone instance.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function getDefaultTimeZone()
+	{
+		return $this->createTimeZone($this->defaultTimeZone);
 	}
 
 	/**
@@ -797,6 +816,33 @@ class AgaviTranslationManager
 
 		return null;
 	}
+	
+	/**
+	 * Resolved the given timezone identifier to its 'real' timezone id.
+	 *
+	 * This provides the same functionality like 
+	 * $tm->createTimeZone(id)->getResolvedId() with the difference, that using
+	 * this method will not create a new timezone instance and look up the 
+	 * resolved id there, but instead directly returns the resolved id by using
+	 * a simple lookup.
+	 *
+	 * @param      int The timezone id to be resolved
+	 * @return     int The resolved timezone id
+	 *
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function resolveTimeZoneId($id)
+	{
+		if(isset($this->timeZoneList[$id])) {
+			while($this->timeZoneList[$id]['type'] == 'link') {
+				$id = $this->timeZoneList[$id]['to'];
+			}
+		}
+		
+		return $id;
+	}
+	
 
 	/**
 	 * Creates a new timezone instance for the given identifier.
@@ -900,6 +946,19 @@ class AgaviTranslationManager
 
 		if($time instanceof DateTime) {
 			$tzName = $time->getTimezone()->getName();
+			if(version_compare(PHP_VERSION, '5.3', '<')) {
+				// when a datetime object is created with an timezone offset like in '2005-02-21 00:00:00+01:00'
+				// php falsely returns the name of the current default timezone as the name of the datetimes timezone
+				// but luckily timezone abbreviation (T) is GMT name (GMT-0200) of the timezone
+				// to not accidently report dates which are really in the default timezone the name is explictly checked
+				if($tzName == date_default_timezone_get()) {
+					$abbr = $time->format('T');
+					if(preg_match('/^GMT[+-]\d{4}$/', $abbr)) {
+						$tzName = $abbr;
+					}
+				}
+			}
+
 			if(preg_match('/^[+-0-9]/', $tzName)) {
 				$tzName = 'GMT' . $tzName;
 			}
@@ -920,6 +979,24 @@ class AgaviTranslationManager
 
 		return $c;
 	}
+	
+	/**
+	 * Creates a new date format instance with the given format.
+	 *
+	 * @param      string The date format.
+	 *
+	 * @return     AgaviDateFormat The dateformat instance.
+	 *
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @since      0.11.0
+	 */
+	public function createDateFormat($format)
+	{
+		$dateFormat = new AgaviDateFormat($format);
+		$dateFormat->initialize($this->getContext());
+		return $dateFormat;
+	}
+	
 
 	/**
 	 * Returns the stored information from the ldml supplemental data about a 

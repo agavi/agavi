@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:envelope_1_0="http://agavi.org/agavi/config/global/envelope/1.0"
+	xmlns:types_1_0="http://agavi.org/agavi/config/global/types/1.0"
+	xmlns="http://agavi.org/agavi/config/parts/filters/1.0"
+	targetNamespace="http://agavi.org/agavi/config/parts/filters/1.0"
+	elementFormDefault="qualified"
+	version="$Id$">
+
+	<xs:import namespace="http://agavi.org/agavi/config/global/types/1.0"
+	           schemaLocation="../_types.xsd" />
+	<xs:import namespace="http://agavi.org/agavi/config/global/envelope/1.0"
+	           schemaLocation="../_envelope.xsd" />
+
+	<xs:complexType name="filter">
+		<xs:sequence>
+			<xs:group ref="envelope_1_0:parameters" />
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" />
+		<xs:attribute name="class" type="types_1_0:identifier" />
+		<xs:attribute name="enabled" type="types_1_0:boolean" />
+	</xs:complexType>
+
+	<xs:complexType name="filters">
+		<xs:sequence>
+			<xs:element name="filter" type="filter"
+			            maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:group name="configuration">
+		<xs:choice>
+			<xs:element name="filters" type="filters"
+			            minOccurs="0" />
+			<xs:element name="filter" type="filter"
+			            minOccurs="0" maxOccurs="unbounded"/>
+		</xs:choice>
+	</xs:group>
+
+</xs:schema>

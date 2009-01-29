@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
@@ -109,25 +109,30 @@ class AgaviSoapControllerCallHandler
 		// call doDispatch on the controller
 		$response = $ct->doDispatch();
 		
-		// return the content. that's an array, or a float, or whatever, and PHP's SOAP extension will handle the response envelope creation, sending etc for us
-		$responseContent = $response->getContent();
-		
 		// repack the document/literal wrapped content if required
 		if($ct->getParameter('force_document_literal_wrapped_marshalling', false)) {
 			// the return type is a complex type with a single element, but what's the name of that element?
 			// struct methodNameResponse {
 			//   typeName returnValueName;
 			// }
+			$returnName = null;
 			foreach($ct->getSoapClient()->__getTypes() as $type) {
 				if(preg_match('/^struct ' . preg_quote($returnType, '/') . ' {\s+\w+\s(\w+);\s+}/m', $type, $matches)) {
 					$returnName = $matches[1];
 					break;
 				}
 			}
-			$responseContent = new stdClass();
-			$responseContent->$returnName = $responseContent;
+			if($returnName === null) {
+				$responseContent = new SoapFault('Server', 'Failed to marshal document/literal wrapped response: no suitable type found.');
+			} else {
+				$responseContent = new stdClass();
+				$responseContent->$returnName = $response->getContent();
+			}
+		} else {
+			$responseContent = $response->getContent();
 		}
 		
+		// return the content. that's an array, or a float, or whatever, and PHP's SOAP extension will handle the response envelope creation, sending etc for us
 		return $responseContent;
 	}
 }

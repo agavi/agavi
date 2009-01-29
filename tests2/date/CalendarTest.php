@@ -149,7 +149,7 @@ class CalendarTest extends BaseCalendarTest
 			$this->assertFalse($cal->getMinimum($i) >= $cal->getMaximum($i), 'getMinimum not less than getMaximum for field ' . $i);
 		}
 
-		$cal->adoptTimeZone($this->tm->getCurrentTimeZone());
+		$cal->adoptTimeZone($this->tm->getDefaultTimeZone());
 		$cal->clear();
 		$cal->set2(1984, 5, 24);
 		$this->assertEquals($this->date(84, 5, 24), $cal->getTime(), 'AgaviCalendarCalendar::set(3 args) failed');
@@ -675,7 +675,7 @@ class CalendarTest extends BaseCalendarTest
 	public function testEpochStartFields()
 	{
 		$EPOCH_FIELDS = array(1, 1970, 0, 1, 1, 1, 1, 5, 1, 0, 0, 0, 0, 0, 0, - 28800000, 0);
-		$z = $this->tm->getCurrentTimeZone();
+		$z = $this->tm->getDefaultTimeZone();
 		$c = $this->tm->createCalendar();
 		$d = - $z->getRawOffset();
 		$gc = $this->tm->createCalendar();

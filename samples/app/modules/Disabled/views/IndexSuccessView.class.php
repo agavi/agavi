@@ -7,7 +7,7 @@ class Disabled_IndexSuccessView extends AgaviSampleAppDisabledBaseView
 		$this->setupHtml($rd);
 
 		// set the title
-		$this->setAttribute('title', 'Index Action');
+		$this->setAttribute('_title', 'Index Action');
 	}
 }
 

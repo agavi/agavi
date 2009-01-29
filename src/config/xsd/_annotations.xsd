@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:annotations_1_0="http://agavi.org/agavi/config/global/annotations/1.0"
+	xmlns:types_1_0="http://agavi.org/agavi/config/global/types/1.0"
+	targetNamespace="http://agavi.org/agavi/config/global/annotations/1.0"
+	elementFormDefault="qualified"
+	attributeFormDefault="qualified"
+	version="$Id$">
+
+	<xs:import namespace="http://agavi.org/agavi/config/global/types/1.0"
+	           schemaLocation="_types.xsd" />
+
+	<xs:attributeGroup name="match">
+		<xs:attribute name="matched" type="types_1_0:matched" />
+	</xs:attributeGroup>
+
+</xs:schema>

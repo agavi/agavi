@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
@@ -203,6 +203,19 @@ class AgaviWebRequest extends AgaviRequest
 			$this->getUrlScheme() . '://' .
 			$this->getUrlAuthority() .
 			$this->getRequestUri();
+	}
+
+	/**
+	 * Whether or not HTTPS was used for this request.
+	 *
+	 * @return     bool True, if it's an HTTPS request, false otherwise.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      0.11.6
+	 */
+	public function isHttps()
+	{
+		return $this->getUrlScheme() == 'https';
 	}
 
 	/**

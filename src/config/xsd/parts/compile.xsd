@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:types_1_0="http://agavi.org/agavi/config/global/types/1.0"
+	xmlns="http://agavi.org/agavi/config/parts/compile/1.0"
+	targetNamespace="http://agavi.org/agavi/config/parts/compile/1.0"
+	elementFormDefault="qualified"
+	version="$Id$">
+
+	<xs:import namespace="http://agavi.org/agavi/config/global/types/1.0"
+	           schemaLocation="../_types.xsd" />
+
+	<xs:simpleType name="compile">
+		<xs:restriction base="types_1_0:non_empty_string" />
+	</xs:simpleType>
+
+	<xs:complexType name="compiles">
+		<xs:sequence>
+			<xs:element name="compile" type="compile"
+			            maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:group name="configuration">
+		<xs:choice>
+			<xs:element name="compiles" type="compiles"
+			            minOccurs="0" />
+			<xs:element name="compile" type="compile"
+			            minOccurs="0" maxOccurs="unbounded"/>
+		</xs:choice>
+	</xs:group>
+
+</xs:schema>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
   This file is part of the Agavi package.
-  Copyright (c) 2005-2008 the Agavi Project.
+  Copyright (c) 2005-2009 the Agavi Project.
   Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.
 
   For the full copyright and license information, please view the LICENSE file
@@ -845,8 +845,8 @@
 		</if>
 
 		<agavi.execute-target name="action-locate" />
-		<agavi.write-configuration file="${project.directory}/${project.directory.app.config}/settings.xml" path="/agavi:configurations/agavi:configuration/agavi:system_actions/agavi:system_action[@name='${system-action.name}']/agavi:module" value="${module.name}" />
-		<agavi.write-configuration file="${project.directory}/${project.directory.app.config}/settings.xml" path="/agavi:configurations/agavi:configuration/agavi:system_actions/agavi:system_action[@name='${system-action.name}']/agavi:action" value="${action.name}" />
+		<agavi.write-configuration namespace="http://agavi.org/agavi/config/parts/settings/1.0" file="${project.directory}/${project.directory.app.config}/settings.xml" path="/envelope:configurations/envelope:configuration/document:system_actions/document:system_action[@name='${system-action.name}']/document:module" value="${module.name}" />
+		<agavi.write-configuration namespace="http://agavi.org/agavi/config/parts/settings/1.0" file="${project.directory}/${project.directory.app.config}/settings.xml" path="/envelope:configurations/envelope:configuration/document:system_actions/document:system_action[@name='${system-action.name}']/document:action" value="${action.name}" />
 	</target>
 
 	<!--

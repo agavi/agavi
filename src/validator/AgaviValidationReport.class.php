@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -255,7 +255,7 @@ class AgaviValidationReport
 	 * @param      string The name of the argument or an instance of an AgaviValidationArgument
 	 * @param      string The source. Only used when the first parameter is a string
 	 * 
-	 * @return     AgaviValidationArgument
+	 * @return     AgaviValidationArgumentResult
 	 * 
 	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
 	 * @since      1.0.0

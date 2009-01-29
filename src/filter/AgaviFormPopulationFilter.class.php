@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -293,11 +293,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 			$remember = array();
 
 			// build the XPath query
-			$query = sprintf('descendant::%1$stextarea[@name] | descendant::%1$sselect[@name] | descendant::%1$sinput[@name and (not(@type) or @type="text" or (@type="checkbox" and not(contains(@name, "[]"))) or (@type="checkbox" and contains(@name, "[]") and @value) or @type="radio" or @type="password" or @type="file"', $this->xmlnsPrefix);
-			if($cfg['include_hidden_inputs']) {
-				$query .= ' or @type="hidden"';
-			}
-			$query .= ')]';
+			$query = sprintf('descendant::%1$stextarea[@name] | descendant::%1$sselect[@name] | descendant::%1$sbutton[@name and @type="submit"] | descendant::%1$sinput[@name and (not(@type) or @type="text" or (@type="checkbox" and not(contains(@name, "[]"))) or (@type="checkbox" and contains(@name, "[]") and @value) or @type="radio" or @type="password" or @type="file" or @type="submit" %2$s)]', $this->xmlnsPrefix, $cfg['include_hidden_inputs'] ? 'or @type="hidden"' : '');
 			foreach($this->xpath->query($query, $form) as $element) {
 
 				$pname = $name = $element->getAttribute('name');
@@ -363,7 +359,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 				);
 				
 				// there's an error with the element's name in the request? good. let's give the baby a class!
-				if($vr->isArgumentFailed($argument)) {
+				if($vr->getAuthoritativeArgumentSeverity($argument) > AgaviValidator::SILENT) {
 					// a collection of all elements that need an error class
 					$errorClassElements = array();
 					// the element itself of course
@@ -659,6 +655,9 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 
 		$errorMessages = array();
 		foreach($incidents as $incident) {
+			if($incident->getSeverity() <= AgaviValidator::SILENT) {
+				continue;
+			}
 			foreach($incident->getErrors() as $error) {
 				$errorMessages[] = $error->getMessage();
 			}

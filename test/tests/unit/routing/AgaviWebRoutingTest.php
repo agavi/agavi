@@ -75,6 +75,26 @@ class AgaviWebRoutingTest extends AgaviPhpUnitTestCase
 		$this->assertEquals('/withmultipleparams/5/needs%20escaping%20%2F?extra=contains+spaces', $url);
 	}
 	
+	public function testGenWithPrefixAndPostfix()
+	{
+		$url = $this->routing->gen('with_prefix_and_postfix', array('param' => 'value'));
+		$this->assertEquals('/with_prefix_and_postfix/value', $url);
+		$url = $this->routing->gen('with_prefix_and_postfix', array('param' => null));
+		$this->assertEquals('/with_prefix_and_postfix/default', $url);
+		$url = $this->routing->gen('with_prefix_and_postfix', array());
+		$this->assertEquals('/with_prefix_and_postfix/default', $url);
+	}
+	
+	public function testGenWithPrefixAndPostfixAutoDetected()
+	{
+		$url = $this->routing->gen('with_prefix_and_postfix_auto_detected', array('param' => 'value'));
+		$this->assertEquals('/with_prefix_and_postfix/myprefix/value/my-postfix', $url);
+		$url = $this->routing->gen('with_prefix_and_postfix_auto_detected', array('param' => null));
+		$this->assertEquals('/with_prefix_and_postfix/myprefix//my-postfix', $url);
+		$url = $this->routing->gen('with_prefix_and_postfix_auto_detected', array());
+		$this->assertEquals('/with_prefix_and_postfix/myprefix//my-postfix', $url);
+	}
+	
 	public function testGenWithCallback()
 	{
 		$url = $this->routing->gen('callbacks.gen_with_param', array('number' => 5));
@@ -157,6 +177,16 @@ class AgaviWebRoutingTest extends AgaviPhpUnitTestCase
 	{
 		$url = $this->routing->gen('callbacks.gen_set_prefix_and_postfix_into_route', array());
 		$this->assertEquals('/callbacks/23/', $url);
+	}
+	
+	public function testGenWithCallbackExpectIncomingParameterIsEncodedAndCanBeDecoded()
+	{
+		$url = $this->routing->gen('callbacks.gen_expect_incoming_parameter_is_encoded_and_can_be_decoded', array('string' => 'foo/bar/'));
+		$this->assertEquals('/callbacks/foo/bar/', $url);
+		// if the callback would receive an already decoded value, this first test would still succeed, so we test with something which would fail if
+		// decoded twice
+		$url = $this->routing->gen('callbacks.gen_expect_incoming_parameter_is_encoded_and_can_be_decoded', array('string' => '%32'));
+		$this->assertEquals('/callbacks/%32', $url);
 	}
 	
 	public function testGenShortestPossibleUrl()

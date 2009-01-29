@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:types_1_0="http://agavi.org/agavi/config/global/types/1.0"
+	xmlns="http://agavi.org/agavi/config/parts/rbac_definitions/1.0"
+	targetNamespace="http://agavi.org/agavi/config/parts/rbac_definitions/1.0"
+	elementFormDefault="qualified"
+	version="$Id$">
+
+	<xs:simpleType name="permission">
+		<xs:restriction base="xs:string" />
+	</xs:simpleType>
+
+	<xs:complexType name="permissions">
+		<xs:sequence>
+			<xs:element name="permission" type="permission"
+			            maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="role">
+		<xs:all>
+			<xs:element name="roles" type="roles"
+			            minOccurs="0" />
+			<xs:element name="permissions" type="permissions"
+			            minOccurs="0" />
+		</xs:all>
+		<xs:attribute name="name" type="xs:string" use="required" />
+	</xs:complexType>
+
+	<xs:complexType name="roles">
+		<xs:sequence>
+			<xs:element name="role" type="role"
+			            maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:group name="configuration">
+		<xs:sequence>
+			<xs:element name="roles" type="roles" />
+		</xs:sequence>
+	</xs:group>
+
+</xs:schema>

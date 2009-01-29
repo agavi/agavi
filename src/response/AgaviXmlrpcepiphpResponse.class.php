@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -34,6 +34,19 @@ class AgaviXmlrpcepiphpResponse extends AgaviResponse
 	 * @var        array The content to send back with this response.
 	 */
 	protected $content = array();
+	
+	/**
+	 * Check whether or not some content is set.
+	 *
+	 * @return     bool If any content is set, false otherwise.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      0.11.6
+	 */
+	public function hasContent()
+	{
+		return $this->content !== array();
+	}
 	
 	/**
 	 * Set the content for this Response.

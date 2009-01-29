@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:types_1_0="http://agavi.org/agavi/config/global/types/1.0"
+	targetNamespace="http://agavi.org/agavi/config/global/types/1.0"
+	version="$Id$">
+
+	<xs:simpleType name="environment_list">
+		<xs:list itemType="xs:string" />
+	</xs:simpleType>
+
+	<xs:attributeGroup name="environments">
+		<xs:attribute name="environment" type="types_1_0:environment_list" use="optional" />
+	</xs:attributeGroup>
+
+	<xs:simpleType name="context_list">
+		<xs:list itemType="xs:string" />
+	</xs:simpleType>
+
+	<xs:attributeGroup name="contexts">
+		<xs:attribute name="context" type="types_1_0:context_list" use="optional" />
+	</xs:attributeGroup>
+
+	<xs:simpleType name="non_empty_string">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="identifier">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[_A-Za-z\p{IsLatin-1Supplement}][_A-Za-z0-9\p{IsLatin-1Supplement}]+" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="identifier_list">
+		<xs:list itemType="types_1_0:identifier" />
+	</xs:simpleType>
+
+	<xs:simpleType name="boolean">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="([tT][rR][uU][eE]|[fF][aA][lL][sS][eE]|[yY][eE][sS]|[nN][oO]|[oO][nN]|[oO][fF][fF])" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="matched">
+		<xs:restriction base="types_1_0:boolean" />
+	</xs:simpleType>
+
+</xs:schema>

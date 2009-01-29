@@ -4,6 +4,40 @@ AGAVI CHANGELOG
 1.0.0 beta8 (January ??, 2009)
 ------------------------------
 
+ADD: AgaviResponse::hasContent() (#1007) (David)
+ADD: Complete support for multiple SOAP services in the same application (#1001) (David)
+ADD: AgaviException::render() should send shell exit code (#990) (David)
+ADD: Command line support (request/response/routing) (#480) (David)
+ADD: Optionally set 'secure' flag on response cookies automatically (#982) (David)
+ADD: Optionally set 'secure' flag on session cookies automatically (#981) (David)
+ADD: Add AgaviWebRequest::isHttps() convenience method (#980) (David)
+ADD: Allow setting of session save path in AgaviSessionStorage (#979) (David)
+
+CHG: Update timezone database to 2009a (#1013) (David)
+CHG: Steamline date formatting and parsing behaviors when using timezones (#964) (Dominik, David, Felix)
+CHG: Rename AgaviTranslationManager::getCurrentTimeZone() to getDefaultTimeZone() (#994) (David)
+CHG: Remove unused property AgaviOperatorValidator::$errors (#987) (David)
+CHG: Allow arbitrary number of fractional seconds for parsing date formats (#977) (Dominik)
+
+FIX: Several date classes are lacking type hints in method signatures (#997) (Dominik)
+FIX: FPF does not insert error messages or classes for submit buttons (#1011) (David)
+FIX: Shiny exception template produces invalid XHTML (#1009) (David)
+FIX: Sample App's and code templates' SecureSuccessView responds with a 401 HTTP status code instead of 403 (#1010) (David)
+FIX: [EXPLETIVE] Fucking Debian fucking ruined their fucking PHP package once again, and now we need to waste fucking time to fucking fix it (#1008)
+FIX: AgaviSoapController does not handle some SoapServer/SoapClient options properly (#1006) (David)
+FIX: Marshalling of document/literal wrapped SOAP responses is broken (#1004) (David)
+FIX: Infinite loop is infinite (#1000) (David)
+FIX: Default compile.xml and Sample app's Disabled module module.xml are still in old configuration format (#999) (David)
+FIX: AgaviCalendar::setTimeInMillis() doesn't explicitly cast value to float (#996) (David)
+FIX: Build system does not always identify modules correctly (#924) (Noah)
+FIX: The AgaviDateTimeValidator doesn't check input value types for unix and unix_milliseconds formats
+FIX: AgaviConfigCache::loadConfigHandlers() may trigger "cannot redeclare class" fatal error (#989) (David)
+FIX: Caching generates invalid group values in some cases (#988) (David)
+FIX: Validation marks fields that weren't processed due to unsatisfied dependencies as sucessful (#984) (Dominik, David)
+FIX: Form Population Filter reveals errors from validators with severities "silent" and "info" (#986) (David)
+FIX: Validators with argument arrays might not perform dependency checks (#985) (David, Dominik)
+FIX: AgaviValidationErrror::__construct() does not check type of arguments (#983) (Dominik)
+FIX: The Milliseconds 1-99 are missing the leading 0 when a date is formatted (#978) (Dominik)
 FIX: Module setting values are not literalized (#976) (David)
 
 

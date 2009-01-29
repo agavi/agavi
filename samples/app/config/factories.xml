@@ -35,6 +35,7 @@
 		
 	</ae:configuration>
 	
+	
 	<ae:configuration environment="development.*">
 		
 		<validation_manager class="AgaviValidationManager">
@@ -46,6 +47,7 @@
 		
 	</ae:configuration>
 	
+	
 	<ae:configuration context="web" environment="development.*">
 		
 		<response class="AgaviWebResponse">
@@ -53,6 +55,20 @@
 		</response>
 	
 	</ae:configuration>
+	
+	
+	<ae:configuration context="console">
+		
+		<request class="AgaviConsoleRequest" />
+		
+		<response class="AgaviConsoleResponse" />
+		
+		<routing class="AgaviConsoleRouting" />
+		
+		<user class="AgaviSecurityUser" />
+	
+	</ae:configuration>
+	
 	
 	<ae:configuration context="soap">
 		
@@ -66,7 +82,7 @@
 			<ae:parameter name="wsdl_generator">
 				<ae:parameter name="soap">
 					<ae:parameter name="address">
-						<ae:parameter name="location">http://localhost/~dzuelke/_projects/agavi/branches/0.11/samples/pub/soap.php</ae:parameter>
+						<ae:parameter name="location">http://localhost/YOUR/PATH/TO/samples/pub/soap.php</ae:parameter>
 					</ae:parameter>
 				</ae:parameter>
 			</ae:parameter>
@@ -75,6 +91,23 @@
 		<user class="AgaviSecurityUser" />
 		
 	</ae:configuration>
+	
+	
+	<!-- example of Context- and Environment-specific configuration: this is the correct SOAP endpoint URL for David's computer -->
+	<ae:configuration context="soap" environment="development-david">
+		
+		<routing class="AgaviSoapRouting">
+			<ae:parameter name="wsdl_generator">
+				<ae:parameter name="soap">
+					<ae:parameter name="address">
+						<ae:parameter name="location">http://localhost/~dzuelke/Code/oss/agavi/branches/1.0/samples/pub/soap.php</ae:parameter>
+					</ae:parameter>
+				</ae:parameter>
+			</ae:parameter>
+		</routing>
+		
+	</ae:configuration>
+	
 	
 	<ae:configuration context="wsdl">
 		
@@ -85,6 +118,7 @@
 		<user class="AgaviSecurityUser" />
 		
 	</ae:configuration>
+	
 	
 	<ae:configuration context="xmlrpc">
 		

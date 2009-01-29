@@ -156,6 +156,7 @@
 			
 			<!-- agavi/request -->
 			<autoload name="AgaviConsoleRequest">%core.agavi_dir%/request/AgaviConsoleRequest.class.php</autoload>
+			<autoload name="AgaviConsoleRequestDataHolder">%core.agavi_dir%/request/AgaviConsoleRequestDataHolder.class.php</autoload>
 			<autoload name="AgaviICookiesRequestDataHolder">%core.agavi_dir%/request/AgaviICookiesRequestDataHolder.interface.php</autoload>
 			<autoload name="AgaviIFilesRequestDataHolder">%core.agavi_dir%/request/AgaviIFilesRequestDataHolder.interface.php</autoload>
 			<autoload name="AgaviIHeadersRequestDataHolder">%core.agavi_dir%/request/AgaviIHeadersRequestDataHolder.interface.php</autoload>
@@ -174,11 +175,13 @@
 
 			<!-- agavi/response -->
 			<autoload name="AgaviResponse">%core.agavi_dir%/response/AgaviResponse.class.php</autoload>
+			<autoload name="AgaviConsoleResponse">%core.agavi_dir%/response/AgaviConsoleResponse.class.php</autoload>
 			<autoload name="AgaviSoapResponse">%core.agavi_dir%/response/AgaviSoapResponse.class.php</autoload>
 			<autoload name="AgaviWebResponse">%core.agavi_dir%/response/AgaviWebResponse.class.php</autoload>
 			<autoload name="AgaviXmlrpcepiphpResponse">%core.agavi_dir%/response/AgaviXmlrpcepiphpResponse.class.php</autoload>
 
 			<!-- agavi/routing -->
+			<autoload name="AgaviConsoleRouting">%core.agavi_dir%/routing/AgaviConsoleRouting.class.php</autoload>
 			<autoload name="AgaviIRoutingSource">%core.agavi_dir%/routing/AgaviIRoutingSource.interface.php</autoload>
 			<autoload name="AgaviRouting">%core.agavi_dir%/routing/AgaviRouting.class.php</autoload>
 			<autoload name="AgaviRoutingArraySource">%core.agavi_dir%/routing/AgaviRoutingArraySource.class.php</autoload>

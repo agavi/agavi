@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configurations xmlns="http://agavi.org/agavi/1.0/config">
+<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" xmlns="http://agavi.org/agavi/config/parts/output_types/1.0">
 
-	<configuration>
+	<ae:configuration>
 		
 		<output_types default="html">
 
@@ -9,14 +9,14 @@
 				
 				<renderers default="php">
 					<renderer name="php" class="AgaviPhpRenderer">
-						<parameter name="assigns">
-							<parameter name="routing">ro</parameter>
-							<parameter name="request">rq</parameter>
-							<parameter name="controller">ct</parameter>
-							<parameter name="user">us</parameter>
-							<parameter name="translation_manager">tm</parameter>
-							<parameter name="request_data">rd</parameter>
-						</parameter>
+						<ae:parameter name="assigns">
+							<ae:parameter name="routing">ro</ae:parameter>
+							<ae:parameter name="request">rq</ae:parameter>
+							<ae:parameter name="controller">ct</ae:parameter>
+							<ae:parameter name="user">us</ae:parameter>
+							<ae:parameter name="translation_manager">tm</ae:parameter>
+							<ae:parameter name="request_data">rd</ae:parameter>
+						</ae:parameter>
 					</renderer>
 				</renderers>
 				
@@ -26,14 +26,14 @@
 					</layout>
 				</layouts>
 				
-				<parameter name="http_headers">
-					<parameter name="Content-Type">text/html; charset=UTF-8</parameter>
-				</parameter>
+				<ae:parameter name="http_headers">
+					<ae:parameter name="Content-Type">text/html; charset=UTF-8</ae:parameter>
+				</ae:parameter>
 				
 			</output_type>
 
 		</output_types>
 		
-	</configuration>
+	</ae:configuration>
 
-</configurations>
+</ae:configurations>

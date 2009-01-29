@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
@@ -377,31 +377,31 @@ class AgaviConfigCache
 			// since we only need the parser and handlers when the config is not cached
 			// it is sufficient to include them at this stage
 			require_once($agaviDir . '/config/AgaviILegacyConfigHandler.interface.php');
-			require($agaviDir . '/config/AgaviIXmlConfigHandler.interface.php');
+			require_once($agaviDir . '/config/AgaviIXmlConfigHandler.interface.php');
 			require_once($agaviDir . '/config/AgaviBaseConfigHandler.class.php');
 			require_once($agaviDir . '/config/AgaviConfigHandler.class.php');
-			require($agaviDir . '/config/AgaviXmlConfigHandler.class.php');
-			require($agaviDir . '/config/AgaviAutoloadConfigHandler.class.php');
-			require($agaviDir . '/config/AgaviConfigHandlersConfigHandler.class.php');
-			require($agaviDir . '/config/AgaviConfigValueHolder.class.php');
-			require($agaviDir . '/config/AgaviConfigParser.class.php');
-			require($agaviDir . '/config/AgaviXmlConfigParser.class.php');
+			require_once($agaviDir . '/config/AgaviXmlConfigHandler.class.php');
+			require_once($agaviDir . '/config/AgaviAutoloadConfigHandler.class.php');
+			require_once($agaviDir . '/config/AgaviConfigHandlersConfigHandler.class.php');
+			require_once($agaviDir . '/config/AgaviConfigValueHolder.class.php');
+			require_once($agaviDir . '/config/AgaviConfigParser.class.php');
+			require_once($agaviDir . '/config/AgaviXmlConfigParser.class.php');
 			// extended DOM* classes
-			require($agaviDir . '/config/util/dom/AgaviXmlConfigDomAttr.class.php');
-			require($agaviDir . '/config/util/dom/AgaviXmlConfigDomCharacterData.class.php');
-			require($agaviDir . '/config/util/dom/AgaviXmlConfigDomComment.class.php');
-			require($agaviDir . '/config/util/dom/AgaviXmlConfigDomDocument.class.php');
-			require($agaviDir . '/config/util/dom/AgaviXmlConfigDomDocumentFragment.class.php');
-			require($agaviDir . '/config/util/dom/AgaviXmlConfigDomDocumentType.class.php');
-			require($agaviDir . '/config/util/dom/AgaviXmlConfigDomElement.class.php');
-			require($agaviDir . '/config/util/dom/AgaviXmlConfigDomEntity.class.php');
-			require($agaviDir . '/config/util/dom/AgaviXmlConfigDomEntityReference.class.php');
-			require($agaviDir . '/config/util/dom/AgaviXmlConfigDomNode.class.php');
-			require($agaviDir . '/config/util/dom/AgaviXmlConfigDomNotation.class.php');
-			require($agaviDir . '/config/util/dom/AgaviXmlConfigDomProcessingInstruction.class.php');
-			require($agaviDir . '/config/util/dom/AgaviXmlConfigDomText.class.php');
+			require_once($agaviDir . '/config/util/dom/AgaviXmlConfigDomAttr.class.php');
+			require_once($agaviDir . '/config/util/dom/AgaviXmlConfigDomCharacterData.class.php');
+			require_once($agaviDir . '/config/util/dom/AgaviXmlConfigDomComment.class.php');
+			require_once($agaviDir . '/config/util/dom/AgaviXmlConfigDomDocument.class.php');
+			require_once($agaviDir . '/config/util/dom/AgaviXmlConfigDomDocumentFragment.class.php');
+			require_once($agaviDir . '/config/util/dom/AgaviXmlConfigDomDocumentType.class.php');
+			require_once($agaviDir . '/config/util/dom/AgaviXmlConfigDomElement.class.php');
+			require_once($agaviDir . '/config/util/dom/AgaviXmlConfigDomEntity.class.php');
+			require_once($agaviDir . '/config/util/dom/AgaviXmlConfigDomEntityReference.class.php');
+			require_once($agaviDir . '/config/util/dom/AgaviXmlConfigDomNode.class.php');
+			require_once($agaviDir . '/config/util/dom/AgaviXmlConfigDomNotation.class.php');
+			require_once($agaviDir . '/config/util/dom/AgaviXmlConfigDomProcessingInstruction.class.php');
+			require_once($agaviDir . '/config/util/dom/AgaviXmlConfigDomText.class.php');
 			// schematron processor
-			require($agaviDir . '/config/util/schematron/AgaviXmlConfigSchematronProcessor.class.php');
+			require_once($agaviDir . '/config/util/schematron/AgaviXmlConfigSchematronProcessor.class.php');
 			// extended XSL* classes
 			if(!AgaviConfig::get('core.skip_config_transformations', false)) {
 				if(!extension_loaded('xsl')) {
@@ -429,8 +429,8 @@ class AgaviConfigCache
 					AgaviXmlConfigParser::STEP_TRANSFORMATIONS_BEFORE => array(
 					),
 					AgaviXmlConfigParser::STEP_TRANSFORMATIONS_AFTER => array(
-						AgaviXmlConfigParser::VALIDATION_TYPE_RELAXNG => array(
-							$agaviDir . '/config/rng/config_handlers.rng',
+						AgaviXmlConfigParser::VALIDATION_TYPE_XMLSCHEMA => array(
+							$agaviDir . '/config/xsd/config_handlers.xsd',
 						),
 						AgaviXmlConfigParser::VALIDATION_TYPE_SCHEMATRON => array(
 							$agaviDir . '/config/sch/config_handlers.sch',

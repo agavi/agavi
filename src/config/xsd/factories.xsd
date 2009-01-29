@@ -1,37 +1,28 @@
-<?xml version="1.0" encoding="utf-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://agavi.org/agavi/1.0/config" targetNamespace="http://agavi.org/agavi/1.0/config" elementFormDefault="qualified">
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:types_1_0="http://agavi.org/agavi/config/global/types/1.0"
+	xmlns:factories_1_0="http://agavi.org/agavi/config/parts/factories/1.0"
+	targetNamespace="http://agavi.org/agavi/config/global/envelope/1.0"
+	elementFormDefault="qualified"
+	version="$Id$">
 
-  <xs:include schemaLocation="default_tags.xsd"/>  
+	<xs:import namespace="http://agavi.org/agavi/config/global/types/1.0"
+	           schemaLocation="_types.xsd" />
+	<xs:import namespace="http://agavi.org/agavi/config/parts/factories/1.0"
+	           schemaLocation="parts/factories.xsd" />
 
-  <xs:complexType name="factorydef">
-    <xs:sequence maxOccurs="unbounded">
-      <xs:group ref="parameters" />
-    </xs:sequence>
-    <xs:attribute name="class" type="php_label" use="required" />
-  </xs:complexType>
-  
-  <xs:complexType name="configuration">
-    <xs:complexContent>
-      <xs:extension base="base_configuration_with_context">
-        <xs:all>
-          <xs:element type="factorydef" minOccurs="0" name="controller" />
-          <xs:element type="factorydef" minOccurs="0" name="database_manager" />
-          <xs:element type="factorydef" minOccurs="0" name="dispatch_filter" />
-          <xs:element type="factorydef" minOccurs="0" name="execution_container" />
-          <xs:element type="factorydef" minOccurs="0" name="execution_filter" />
-          <xs:element type="factorydef" minOccurs="0" name="filter_chain" />
-          <xs:element type="factorydef" minOccurs="0" name="logger_manager" />
-          <xs:element type="factorydef" minOccurs="0" name="request" />
-          <xs:element type="factorydef" minOccurs="0" name="response" />
-          <xs:element type="factorydef" minOccurs="0" name="routing" />
-          <xs:element type="factorydef" minOccurs="0" name="security_filter" />
-          <xs:element type="factorydef" minOccurs="0" name="storage" />
-          <xs:element type="factorydef" minOccurs="0" name="translation_manager" />
-          <xs:element type="factorydef" minOccurs="0" name="user" />
-          <xs:element type="factorydef" minOccurs="0" name="validation_manager" />
-        </xs:all>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
+	<xs:redefine schemaLocation="_envelope.xsd">
+
+		<xs:complexType name="configuration">
+			<xs:complexContent>
+				<xs:extension base="configuration">
+					<xs:group ref="factories_1_0:configuration" />
+					<xs:attributeGroup ref="types_1_0:contexts" />
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+
+	</xs:redefine>
 
 </xs:schema>
