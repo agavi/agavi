@@ -769,7 +769,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 					$finalParams[$name] = $param;
 				} else {
 					if(isset($defaultParams[$name])) {
-						if($param === null) {
+						if($param === null || ($param instanceof AgaviRoutingValue && $param->getValue() === null)) {
 							// the user set the parameter to null, to signal that the default value should be used
 							$param = clone $defaultParams[$name];
 						}
