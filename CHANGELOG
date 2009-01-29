@@ -1,7 +1,7 @@
 AGAVI CHANGELOG
 ===============
 
-0.11.6 RC2 (January ??, 2009)
+0.11.6 RC2 (January 29, 2009)
 -----------------------------
 
 ADD: AgaviResponse::hasContent() (#1007) (David)
