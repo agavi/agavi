@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 1.0.0 beta8 (January ??, 2009)
 ------------------------------
 
+ADD: Support for anti-stampede callbacks in Execution Filter (#744) (David)
 ADD: AgaviResponse::hasContent() (#1007) (David)
 ADD: Complete support for multiple SOAP services in the same application (#1001) (David)
 ADD: AgaviException::render() should send shell exit code (#990) (David)
