@@ -481,7 +481,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 							}
 						}
 					} else {
-						$this->abortedCacheCreationCallback(self::CACHE_CALLBACK_OUTPUT_TYPE_NOT_CACHEABLE, $viewGroups, $config);
+						$this->abortedCacheCreationCallback(self::CACHE_CALLBACK_OUTPUT_TYPE_NOT_CACHEABLE, $actionGroups, $config);
 						$isCacheable = false;
 					}
 				}
