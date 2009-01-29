@@ -70,8 +70,8 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 	 * @param      array The groups.
 	 * @param      array The caching configuration.
 	 *
-	 * @author     David Zülke <dz@bitxtender.com>
-	 * @since      0.11.0
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.0.0
 	 */
 	public function startedCacheCreationCallback($eventType, array $groups, array $config)
 	{
@@ -88,8 +88,8 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 	 * @param      array The groups.
 	 * @param      array The caching configuration.
 	 *
-	 * @author     David Zülke <dz@bitxtender.com>
-	 * @since      0.11.0
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.0.0
 	 */
 	public function abortedCacheCreationCallback($eventType, array $groups, array $config)
 	{
@@ -106,8 +106,8 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 	 * @param      array The groups.
 	 * @param      array The caching configuration.
 	 *
-	 * @author     David Zülke <dz@bitxtender.com>
-	 * @since      0.11.0
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.0.0
 	 */
 	public function finishedCacheCreationCallback($eventType, array $groups, array $config)
 	{
