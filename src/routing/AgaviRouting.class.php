@@ -507,23 +507,6 @@ abstract class AgaviRouting extends AgaviParameterHolder
 	}
 	
 	/**
-	 * Callback function to be used with array_diff and friends. Used to find out
-	 * which parameters where changed in an onGenerate() callback.
-	 * 
-	 * @param      mixed Value A
-	 * @param      mixed Value B
-	 * 
-	 * @return     bool
-	 * 
-	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
-	 * @since      1.0.0
-	 */
-	protected function onGenerateParamDiffCallback($a, $b)
-	{
-		return ($a === $b) ? 0 : 1;
-	}
-	
-	/**
 	 * Builds the routing information (result string, all kinds of parameters)
 	 * for the given routes.
 	 * 
@@ -585,13 +568,29 @@ abstract class AgaviRouting extends AgaviParameterHolder
 							continue 2;
 						}
 						// find all params changed in the callback
-						$diff = array_udiff_assoc($paramsCopy, $changedParamsCopy, array($this, 'onGenerateParamDiffCallback'));
+						$diff = array();
+						foreach($paramsCopy as $key => $value) {
+							if(!array_key_exists($key, $changedParamsCopy) || $changedParamsCopy[$key] !== $value) {
+								$diff[$key] = $value;
+							}
+						}
+						// do *not* use this instead, it will segfault in PHP < 5.2.6:
+						// $diff = array_udiff_assoc($paramsCopy, $changedParamsCopy, array($this, 'onGenerateParamDiffCallback'));
+						// likely caused by http://bugs.php.net/bug.php?id=42838 / http://cvs.php.net/viewvc.cgi/php-src/ext/standard/array.c?r1=1.308.2.21.2.51&r2=1.308.2.21.2.52
 					} else {
 						if(!$callbackInstance->onGenerate($myDefaults, $params, $options)) {
 							continue 2;
 						}
 						// find all params changed in the callback
-						$diff = array_udiff_assoc($params, $paramsCopy, array($this, 'onGenerateParamDiffCallback'));
+						$diff = array();
+						foreach($params as $key => $value) {
+							if(!array_key_exists($key, $paramsCopy) || $paramsCopy[$key] !== $value) {
+								$diff[$key] = $value;
+							}
+						}
+						// do *not* use this instead, it will segfault in PHP < 5.2.6:
+						// $diff = array_udiff_assoc($params, $paramsCopy, array($this, 'onGenerateParamDiffCallback'));
+						// likely caused by http://bugs.php.net/bug.php?id=42838 / http://cvs.php.net/viewvc.cgi/php-src/ext/standard/array.c?r1=1.308.2.21.2.51&r2=1.308.2.21.2.52
 					}
 					
 					if(count($diff)) {
