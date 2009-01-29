@@ -35,8 +35,14 @@ class AgaviGregorianCalendar extends AgaviCalendar
 	const PAPAL_CUTOVER      = -12219292800000.0;
 
 	/**
-	 * Constructor.
+	 * Overloaded.
 	 *
+	 * @see        AgaviGregorianCalendar::constructorO()
+	 * @see        AgaviGregorianCalendar::constructorOO()
+	 * @see        AgaviGregorianCalendar::constructorOIII()
+	 * @see        AgaviGregorianCalendar::constructorOIIIII()
+	 * @see        AgaviGregorianCalendar::constructorOIIIIII()
+	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -94,6 +100,15 @@ class AgaviGregorianCalendar extends AgaviCalendar
 		$this->fInvertGregorian = false;
 	}
 
+	/**
+	 * Constructor.
+	 * 
+	 * @param      AgaviTimeZone|AgaviLocale|AgaviTranslationManager
+	 * 
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @author     The ICU Project
+	 * @since      0.11.0
+	 */
 	protected function constructorO($zoneOrLocale)
 	{
 		$zone = null;
@@ -120,6 +135,15 @@ class AgaviGregorianCalendar extends AgaviCalendar
 		$this->set(AgaviDateDefinitions::ERA, self::AD);
 	}
 
+	/**
+	 * Constructor.
+	 * 
+	 * @param      AgaviTimeZone|AgaviLocale|AgaviTranslationManager
+	 * 
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @author     The ICU Project
+	 * @since      0.11.0
+	 */
 	protected function constructorOO(AgaviTimeZone $zone, AgaviLocale $locale)
 	{
 		parent::constructorOO($zone, $locale);
@@ -127,7 +151,19 @@ class AgaviGregorianCalendar extends AgaviCalendar
 		$this->set(AgaviDateDefinitions::ERA, self::AD);
 	}
 
-	protected function constructorOIII($tm, $year, $month, $date)
+	/**
+	 * Constructor.
+	 * 
+	 * @param      AgaviTranslationManager
+	 * @param      int
+	 * @param      int
+	 * @param      int
+	 * 
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @author     The ICU Project
+	 * @since      0.11.0
+	 */
+	protected function constructorOIII(AgaviTranslationManager $tm, $year, $month, $date)
 	{
 		parent::constructorOO($tm->getDefaultTimeZone(), $tm->getCurrentLocale());
 		$this->set(AgaviDateDefinitions::ERA, self::AD);
@@ -136,7 +172,21 @@ class AgaviGregorianCalendar extends AgaviCalendar
 		$this->set(AgaviDateDefinitions::DATE, $date);
 	}
 
-	protected function constructorOIIIII($tm, $year, $month, $date, $hour, $minute)
+	/**
+	 * Constructor.
+	 * 
+	 * @param      AgaviTranslationManager
+	 * @param      int
+	 * @param      int
+	 * @param      int
+	 * @param      int
+	 * @param      int
+	 * 
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @author     The ICU Project
+	 * @since      0.11.0
+	 */
+	protected function constructorOIIIII(AgaviTranslationManager $tm, $year, $month, $date, $hour, $minute)
 	{
 		parent::constructorOO($tm->getDefaultTimeZone(), $tm->getCurrentLocale());
 		$this->set(AgaviDateDefinitions::ERA, self::AD);
@@ -147,7 +197,22 @@ class AgaviGregorianCalendar extends AgaviCalendar
 		$this->set(AgaviDateDefinitions::MINUTE, $minute);
 	}
 
-	protected function constructorOIIIIII($tm, $year, $month, $date, $hour, $minute, $second)
+	/**
+	 * Constructor.
+	 * 
+	 * @param      AgaviTranslationManager
+	 * @param      int
+	 * @param      int
+	 * @param      int
+	 * @param      int
+	 * @param      int
+	 * @param      int
+	 * 
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @author     The ICU Project
+	 * @since      0.11.0
+	 */
+	protected function constructorOIIIIII(AgaviTranslationManager $tm, $year, $month, $date, $hour, $minute, $second)
 	{
 		parent::constructorOO($tm->getDefaultTimeZone(), $tm->getCurrentLocale());
 		$this->set(AgaviDateDefinitions::ERA, self::AD);
@@ -269,14 +334,14 @@ class AgaviGregorianCalendar extends AgaviCalendar
 	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
-	public function isEquivalentTo($other)
+	public function isEquivalentTo(AgaviCalendar $other)
 	{
 		// Calendar override.
 		return AgaviCalendar::isEquivalentTo($other) && $this->getGregorianChange() == $other->getGregorianChange();
 	}
 
 	/**
-	 * @see        AgaviCalendar::getActualMinimum
+	 * @see        AgaviCalendar::getActualMinimum()
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
@@ -288,7 +353,7 @@ class AgaviGregorianCalendar extends AgaviCalendar
 	}
 
 	/**
-	 * @see        AgaviCalendar::getActualMaximum
+	 * @see        AgaviCalendar::getActualMaximum()
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
@@ -409,7 +474,7 @@ class AgaviGregorianCalendar extends AgaviCalendar
 	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
-	protected function handleComputeMonthStart($eyear, $month,$useMonth)
+	protected function handleComputeMonthStart($eyear, $month, $useMonth)
 	{
 		// If the month is out of range, adjust it into range, and
 		// modify the extended year value accordingly.

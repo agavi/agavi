@@ -193,11 +193,13 @@ class AgaviOlsonTimeZone extends AgaviTimeZone
 	/**
 	 * Returns true if the two TimeZone objects are equal.
 	 *
+	 * @param      AgaviTimeZone The timezone to compare against.
+	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
-	function __is_equal($that)
+	function __is_equal(AgaviTimeZone $that)
 	{
 		// TODO: we need to compare finalyear and the transitions and finalzone
 		return ($this === $that ||
@@ -209,6 +211,8 @@ class AgaviOlsonTimeZone extends AgaviTimeZone
 	/**
 	 * AgaviTimeZone API.
 	 *
+	 * @see        AgaviTimeZone::getOffsetIIIIII()
+	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -225,6 +229,8 @@ class AgaviOlsonTimeZone extends AgaviTimeZone
 	/**
 	 * AgaviTimeZone API.
 	 *
+	 * @see        AgaviTimeZone::getOffsetIIIIIII()
+	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -263,6 +269,8 @@ class AgaviOlsonTimeZone extends AgaviTimeZone
 	/**
 	 * AgaviTimeZone API.
 	 *
+	 * @see        AgaviTimeZone::getOffsetRef()
+	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -304,6 +312,8 @@ class AgaviOlsonTimeZone extends AgaviTimeZone
 	/**
 	 * AgaviTimeZone API.
 	 *
+	 * @see        AgaviTimeZone::setRawOffset()
+	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -317,8 +327,10 @@ class AgaviOlsonTimeZone extends AgaviTimeZone
 	}
 
 	/**
-	 * TimeZone API.
+	 * AgaviTimeZone API.
 	 *
+	 * @see        AgaviTimeZone::getRawOffset()
+	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -391,7 +403,9 @@ class AgaviOlsonTimeZone extends AgaviTimeZone
 	}
 
 	/**
-	 * TimeZone API.
+	 * AgaviTimeZone API.
+	 * 
+	 * @see        AgaviTimeZone::useDaylightTime()
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
@@ -437,8 +451,10 @@ class AgaviOlsonTimeZone extends AgaviTimeZone
 	}
 
 	/**
-	 * TimeZone API.
+	 * AgaviTimeZone API.
 	 *
+	 * @see        AgaviTimeZone::getDSTSavings()
+	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0
@@ -452,8 +468,10 @@ class AgaviOlsonTimeZone extends AgaviTimeZone
 	}
 
 	/**
-	 * TimeZone API.
+	 * AgaviTimeZone API.
 	 *
+	 * @see        AgaviTimeZone::inDaylightTime()
+	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     The ICU Project
 	 * @since      0.11.0

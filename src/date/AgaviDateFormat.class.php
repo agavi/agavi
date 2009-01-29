@@ -520,7 +520,7 @@ class AgaviDateFormat
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	protected function getGmtZoneString($data)
+	protected function getGmtZoneString(array $data)
 	{
 		$value = $data[AgaviDateDefinitions::ZONE_OFFSET] + $data[AgaviDateDefinitions::DST_OFFSET];
 
@@ -546,7 +546,7 @@ class AgaviDateFormat
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	protected function internalParseFormat($format, $charToTokenMap)
+	protected function internalParseFormat($format, array $charToTokenMap)
 	{
 		if($this->originalFormatString == $format) {
 			return;
@@ -620,8 +620,8 @@ class AgaviDateFormat
 	 * the english locale.
 	 *
 	 * @param      string The string containing the date.
-	 * @param      AgaviLocale The locale which should be used for parsing local 
-	 *                         day, month, etc names.
+	 * @param      mixed The locale name or instance which should be used for
+	 *                   parsing local day, month, etc names.
 	 * @param      bool Whether the parsing should be strict. (not allowing 
 	 *                  numbers to exceed the defined length, not allowing missing
 	 *                  additional parts). The returned calendar object will be 

@@ -18,6 +18,7 @@ CHG: Rename AgaviTranslationManager::getCurrentTimeZone() to getDefaultTimeZone(
 CHG: Remove unused property AgaviOperatorValidator::$errors (#987) (David)
 CHG: Allow arbitrary number of fractional seconds for parsing date formats (#977) (Dominik)
 
+FIX: Several date classes are lacking type hints in method signatures (#997) (Dominik)
 FIX: FPF does not insert error messages or classes for submit buttons (#1011) (David)
 FIX: Shiny exception template produces invalid XHTML (#1009) (David)
 FIX: Sample App's and code templates' SecureSuccessView responds with a 401 HTTP status code instead of 403 (#1010) (David)

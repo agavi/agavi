@@ -61,7 +61,7 @@ class AgaviSimpleTimeZone extends AgaviTimeZone
 	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
-	function __is_equal($that)
+	function __is_equal(AgaviTimeZone $that)
 	{
 		return ($this === $that ||
 						(get_class($this) == get_class($that) &&
@@ -70,6 +70,18 @@ class AgaviSimpleTimeZone extends AgaviTimeZone
 						));
 	}
 
+	/**
+	 * Overloaded.
+	 * 
+	 * @see        AgaviSimpleTimeZone::constructorOIS()
+	 * @see        AgaviSimpleTimeZone::constructorOISIIIIIIII()
+	 * @see        AgaviSimpleTimeZone::constructorOISIIIIIIIII()
+	 * @see        AgaviSimpleTimeZone::constructorOISIIIIIIIIIII()
+	 * 
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @author     The ICU Project
+	 * @since      0.11.0
+	 */
 	public function __construct()
 	{
 		$arguments = func_get_args();
@@ -285,6 +297,20 @@ class AgaviSimpleTimeZone extends AgaviTimeZone
 		$this->startYear = $year;
 	}
 
+	/**
+	 * Overloaded.
+	 * 
+	 * @see        AgaviSimpleTimeZone::setStartRuleIIII()
+	 * @see        AgaviSimpleTimeZone::setStartRuleIIIIF()
+	 * @see        AgaviSimpleTimeZone::setStartRuleIII()
+	 * @see        AgaviSimpleTimeZone::setStartRuleIIIF()
+	 * @see        AgaviSimpleTimeZone::setStartRuleIIIIB()
+	 * @see        AgaviSimpleTimeZone::setStartRuleIIIIFB()
+	 * 
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     The ICU Project
+	 * @since      0.11.0
+	 */
 	public function setStartRule()
 	{
 		$arguments = func_get_args();
@@ -517,6 +543,20 @@ class AgaviSimpleTimeZone extends AgaviTimeZone
 		$this->setStartRuleIIIIF($month, $after ? $dayOfMonth : -$dayOfMonth, -$dayOfWeek, $time, $mode);
 	}
 
+	/**
+	 * Overloaded.
+	 * 
+	 * @see        AgaviSimpleTimeZone::setEndRuleIIII()
+	 * @see        AgaviSimpleTimeZone::setEndRuleIIIIF()
+	 * @see        AgaviSimpleTimeZone::setEndRuleIII()
+	 * @see        AgaviSimpleTimeZone::setEndRuleIIIF()
+	 * @see        AgaviSimpleTimeZone::setEndRuleIIIIB()
+	 * @see        AgaviSimpleTimeZone::setEndRuleIIIIFB()
+	 * 
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @author     The ICU Project
+	 * @since      0.11.0
+	 */
 	public function setEndRule()
 	{
 		$arguments = func_get_args();
@@ -692,6 +732,17 @@ class AgaviSimpleTimeZone extends AgaviTimeZone
 		$this->setEndRuleIIIIF($month, $after ? $dayOfMonth : -$dayOfMonth, -$dayOfWeek, $time, $mode);
 	}
 
+	/**
+	 * Overloaded.
+	 * 
+	 * @see        AgaviSimpleTimeZone::getOffsetIIIIII()
+	 * @see        AgaviSimpleTimeZone::getOffsetIIIIIII()
+	 * @see        AgaviSimpleTimeZone::getOffsetIIIIIIII()
+	 * 
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @author     The ICU Project
+	 * @since      0.11.0
+	 */
 	public function getOffset()
 	{
 		$arguments = func_get_args();
@@ -962,7 +1013,7 @@ class AgaviSimpleTimeZone extends AgaviTimeZone
 	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
-	public function hasSameRules($other)
+	public function hasSameRules(AgaviTimeZone $other)
 	{
 		if($this === $other) {
 			return true;
