@@ -603,7 +603,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 								$routingValue = $this->createValue($value, false);
 								if(isset($myDefaults[$key])) {
 									if($myDefaults[$key] instanceof AgaviRoutingValue) {
-										// clone the default value so pre and postfix are reserved
+										// clone the default value so pre and postfix are preserved
 										$routingValue = clone $myDefaults[$key];
 										// BC: When setting a value in a callback it was supposed to be already encoded
 										$routingValue->setValue($value, false);
