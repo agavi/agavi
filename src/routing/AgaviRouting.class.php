@@ -1086,6 +1086,8 @@ abstract class AgaviRouting extends AgaviParameterHolder
 
 					$match = array();
 					if($this->parseInput($route, $input, $match)) {
+						$varsBackup = $vars;
+						
 						$ign = array();
 						if(count($opts['ignores']) > 0) {
 							$ign = array_flip($opts['ignores']);
@@ -1109,15 +1111,30 @@ abstract class AgaviRouting extends AgaviParameterHolder
 							}
 						}
 
+						// /* ! Only use the parameters from this route for expandVariables !
 						// matches are arrays with value and offset due to PREG_OFFSET_CAPTURE, and we want index 0, the value, which reset() will give us. Long story short, this removes the offset from the individual match
 						$matchvals = array_map('reset', $match);
+						// */
+						/* ! Use the parameters from ALL routes for expandVariables !
+						$matchvals = $vars;
+						// ignores need of the current route need to be added
+						$foreach($opts['ignores'] as $ignore) {
+							if(isset($match[$ignore]) && $match[$ignore][1] != -1) {
+								$matchvals[$ignore] = $match[$ignore][0];
+							}
+						}
+						// */
 
 						if($opts['module']) {
-							$vars[$ma] = AgaviToolkit::expandVariables($opts['module'], $matchvals);
+							$module = AgaviToolkit::expandVariables($opts['module'], $matchvals);
+							$container->setModuleName($module);
+							$vars[$ma] = $module;
 						}
 
 						if($opts['action']) {
-							$vars[$aa] = AgaviToolkit::expandVariables($opts['action'], $matchvals);
+							$action = AgaviToolkit::expandVariables($opts['action'], $matchvals);
+							$container->setActionName($action);
+							$vars[$aa] = $action;
 						}
 
 						if($opts['output_type']) {
@@ -1154,23 +1171,22 @@ abstract class AgaviRouting extends AgaviParameterHolder
 							$oldContainer = $container;
 							$container = clone $container;
 							if(count($opts['ignores']) > 0) {
-								$cbVars = array();
 								// add ignored variables to the callback vars
 								foreach($vars as $name => &$var) {
-									$cbVars[$name] =& $var;
+									$vars[$name] =& $var;
 								}
 								foreach($opts['ignores'] as $ignore) {
 									if(isset($match[$ignore]) && $match[$ignore][1] != -1) {
-										$cbVars[$ignore] = $match[$ignore][0];
+										$vars[$ignore] = $match[$ignore][0];
 									}
 								}
-							} else {
-								$cbVars =& $vars;
 							}
 							$callbackSuccess = true;
 							foreach($route['callback_instances'] as $callbackInstance) {
 								// backup stuff which could be changed in the callback so we are 
 								// able to determine which values were changed in the callback
+								$oldModule = $container->getModuleName();
+								$oldAction = $container->getActionName();
 								$oldOutputTypeName = $container->getOutputType() ? $container->getOutputType()->getName() : null;
 								$oldLocale = $this->context->getTranslationManager()->getCurrentLocaleIdentifier();
 								$oldRequestMethod = $req->getMethod();
@@ -1179,27 +1195,51 @@ abstract class AgaviRouting extends AgaviParameterHolder
 								// call onMatched on all callbacks until one of them returns false, then
 								// call onNotMatched for all following callbacks of that route
 								if($callbackSuccess) {
-									if(!$callbackInstance->onMatched($cbVars, $container)) {
+									if(!$callbackInstance->onMatched($vars, $container)) {
 										$callbackSuccess = false;
 									}
 								} else {
 									$callbackInstance->onNotMatched($container);
 								}
+								
+								// /* ! Only use the parameters from this route for expandVariables !
+								$expandVars = $vars;
+								$routeParamsAsKey = array_flip($route['par']);
+								// only use parameters which are defined in this route or are new
+								foreach($expandVars as $name => $value) {
+									if(!isset($routeParamsAsKey[$name]) && array_key_exists($name, $varsBackup)) {
+										unset($expandVars[$name]);
+									}
+								} 
+								// */
+								/* ! Use the parameters from ALL routes for expandVariables !
+								$expandVars = $vars;
+								// */
+								
+								
 								// if the callback didn't change the value execute expandVariables again since 
 								// the validator could have changed one of the values which expandVariables uses
+								if($opts['module'] && $oldModule == $container->getModuleName()) {
+									$module = AgaviToolkit::expandVariables($opts['module'], $expandVars);
+									$container->setModuleName($module);
+								}
+								if($opts['action'] && $oldAction == $container->getActionName()) {
+									$action = AgaviToolkit::expandVariables($opts['action'], $expandVars);
+									$container->setActionName($action);
+								}
 								if($opts['output_type'] && $oldOutputTypeName == ($container->getOutputType() ? $container->getOutputType()->getName() : null)) {
-									$ot = AgaviToolkit::expandVariables($opts['output_type'], $matchvals);
+									$ot = AgaviToolkit::expandVariables($opts['output_type'], $expandVars);
 									$container->setOutputType($this->context->getController()->getOutputType($ot));
 								}
 								if($opts['locale'] && $oldLocale == $this->context->getTranslationManager()->getCurrentLocaleIdentifier()) {
-									if($locale = AgaviToolkit::expandVariables($opts['locale'], $matchvals)) {
+									if($locale = AgaviToolkit::expandVariables($opts['locale'], $expandVars)) {
 										// see above for the reason of the if
 										$this->context->getTranslationManager()->setLocale($locale);
 									}
 								}
 								if($opts['method']) {
 									if($oldRequestMethod == $req->getMethod() && $oldContainerMethod == $container->getRequestMethod()) {
-										if($method = AgaviToolkit::expandVariables($opts['method'], $matchvals)) {
+										if($method = AgaviToolkit::expandVariables($opts['method'], $expandVars)) {
 											// see above for the reason of the if
 											$req->setMethod($method);
 											$container->setRequestMethod($method);
@@ -1217,9 +1257,23 @@ abstract class AgaviRouting extends AgaviParameterHolder
 							if(!$callbackSuccess) {
 								// reset the matches array. it must be populated by the time onMatched() is called so matches can be modified in a callback
 								$route['matches'] = array();
+								// restore the variables from the variables which were set before this route matched
+								$vars = $varsBackup;
 								// reset all relevant container data we already set in the container for this (now non matching) route
 								$container = $oldContainer;
 								continue;
+							} else {
+								// We added the ignores to the route variables so the callback receives them, so restore them from vars backup.
+								// Restoring them from the backup is necessary since otherwise a value which has been set before this route
+								// and which was ignored in this route would take the ignored value instead of keeping the old one.
+								// And variables which have not been set in an earlier routes need to be removed again
+								foreach($opts['ignores'] as $ignore) {
+									if(array_key_exists($varsBackup[$ignore])) {
+										$vars[$ignore] = $varsBackup[$ignore];
+									} else {
+										unset($vars[$ignore]);
+									}
+								}
 							}
 						}
 
