@@ -17,6 +17,7 @@
 							<ae:parameter name="translation_manager">tm</ae:parameter>
 							<ae:parameter name="request_data">rd</ae:parameter>
 						</ae:parameter>
+						<ae:parameter name="default_extension">.%%TEMPLATE_EXTENSION%%</ae:parameter>
 						<!-- this changes the name of the variable with all template attributes from the default $template to $t -->
 						<ae:parameter name="var_name">t</ae:parameter>
 					</renderer>
@@ -74,7 +75,7 @@
 			
 			<!-- use a different exception template in production envs -->
 			<!-- others are defined in settings.xml -->
-			<output_type name="html" exception_template="%core.template_dir%/exceptions/web-html.php" />
+			<output_type name="html" exception_template="%core.template_dir%/exceptions/web-html.%%TEMPLATE_EXTENSION%%" />
 			
 		</output_types>
 		
