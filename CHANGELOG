@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 0.11.6 (Feburary ?, 2009)
 -------------------------
 
+FIX: Content-Type and Content-Length request headers are treated incorrectly (#1017) (David)
 FIX: AgaviWebRequest HTTP PUT support ignores Content-Type header (#1014) (David)
 
 

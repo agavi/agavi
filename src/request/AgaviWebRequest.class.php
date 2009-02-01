@@ -445,6 +445,9 @@ class AgaviWebRequest extends AgaviRequest
 		foreach($_SERVER as $key => $value) {
 			if(substr($key, 0, 5) == 'HTTP_') {
 				$headers[substr($key, 5)] = $value;
+			} elseif($key == 'CONTENT_TYPE' || $key == 'CONTENT_LENGTH') {
+				// yeah, whatever, PHP...
+				$headers[$key] = $value;
 			}
 		}
 
@@ -479,7 +482,7 @@ class AgaviWebRequest extends AgaviRequest
 			}
 			
 			foreach($_SERVER as $key => $value) {
-				if(substr($key, 0, 5) == 'HTTP_') {
+				if(substr($key, 0, 5) == 'HTTP_' || $key == 'CONTENT_TYPE' || $key == 'CONTENT_LENGTH') {
 					unset($_SERVER[$key]);
 					unset($_ENV[$key]);
 					if($rla) {
