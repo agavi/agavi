@@ -379,16 +379,17 @@ class AgaviRoutingValue implements ArrayAccess
 	}
 	
 	/**
-	 * Returns the encoded value (without pre- or postfix)
+	 * Returns the encoded value (without pre- or postfix) for BC.
 	 * 
 	 * @return     string
 	 * 
 	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @author     David Zülke <david.zuelke@bitextender.com>
 	 * @since      1.0.0
 	 */
 	public function __toString()
 	{
-		return $this->valueNeedsEncoding ? $this->context->getRouting()->escapeOutputParameter($this->value) : $this->value;
+		return $this->context->getRouting()->escapeOutputParameter($this->value);
 	}
 }
 
