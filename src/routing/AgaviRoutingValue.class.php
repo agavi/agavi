@@ -19,7 +19,7 @@
  * @package    agavi
  * @subpackage routing
  *
- * @author     Dominik del Bondio <ddb@bitxtender.com>
+ * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
  *
@@ -107,15 +107,14 @@ class AgaviRoutingValue implements ArrayAccess
 	 * Sets the value.
 	 * 
 	 * @param      mixed  The value
-	 * @param      bool   Whether the value needs to be encoded
 	 * 
 	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @author     David Zülke <david.zuelke@bitextender.com>
 	 * @since      1.0.0
 	 */
-	public function setValue($value, $needsEncoding = true)
+	public function setValue($value)
 	{
 		$this->value = $value;
-		$this->valueNeedsEncoding = $needsEncoding;
 		return $this;
 	}
 	
@@ -136,15 +135,14 @@ class AgaviRoutingValue implements ArrayAccess
 	 * Sets the prefix.
 	 * 
 	 * @param      string The prefix
-	 * @param      bool   Whether the prefix needs to be encoded
 	 * 
 	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @author     David Zülke <david.zuelke@bitextender.com>
 	 * @since      1.0.0
 	 */
-	public function setPrefix($value, $needsEncoding = false)
+	public function setPrefix($value)
 	{
 		$this->prefix = $value;
-		$this->prefixNeedsEncoding = $needsEncoding;
 		return $this;
 	}
 	
@@ -178,15 +176,14 @@ class AgaviRoutingValue implements ArrayAccess
 	 * Set the postfix.
 	 * 
 	 * @param      string The postfix
-	 * @param      bool   Whether the postfix needs to be encoded
 	 * 
 	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @author     David Zülke <david.zuelke@bitextender.com>
 	 * @since      1.0.0
 	 */
-	public function setPostfix($value, $needsEncoding = false)
+	public function setPostfix($value)
 	{
 		$this->postfix = $value;
-		$this->postfixNeedsEncoding = $needsEncoding;
 		return $this;
 	}
 	

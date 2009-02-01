@@ -259,7 +259,7 @@ class AgaviWebRoutingTest extends AgaviPhpUnitTestCase
 		$url = $this->routing->gen('with_prefix_and_postfix', array('param' => $this->routing->createValue('foo/bar', false)->setPrefix('/')));
 		$this->assertEquals('/with_prefix_and_postfix/foo/bar', $url);
 		
-		$url = $this->routing->gen('with_prefix_and_postfix', array('param' => $this->routing->createValue('foo/bar', false)->setPrefix('/', true)));
+		$url = $this->routing->gen('with_prefix_and_postfix', array('param' => $this->routing->createValue('foo/bar', false)->setPrefix('/')->setPrefixNeedsEncoding(true)));
 		$this->assertEquals('/with_prefix_and_postfix%2Ffoo/bar', $url);
 		
 		$url = $this->routing->gen('with_prefix_and_postfix', array('param' => $this->routing->createValue('foo/bar')->setPostfix('-')));
@@ -271,7 +271,7 @@ class AgaviWebRoutingTest extends AgaviPhpUnitTestCase
 		$url = $this->routing->gen('with_prefix_and_postfix', array('param' => $this->routing->createValue('foo/bar', false)->setPostfix('/')));
 		$this->assertEquals('/with_prefix_and_postfix/foo/bar/', $url);
 		
-		$url = $this->routing->gen('with_prefix_and_postfix', array('param' => $this->routing->createValue('foo/bar', false)->setPostfix('/', true)));
+		$url = $this->routing->gen('with_prefix_and_postfix', array('param' => $this->routing->createValue('foo/bar', false)->setPostfix('/')->setPostfixNeedsEncoding(true)));
 		$this->assertEquals('/with_prefix_and_postfix/foo/bar%2F', $url);
 		
 		$url = $this->routing->gen('with_prefix_and_postfix', array('param' => $this->routing->createValue('foo/bar')->setPrefix('-')->setPostfix('-')));
@@ -280,10 +280,10 @@ class AgaviWebRoutingTest extends AgaviPhpUnitTestCase
 		$url = $this->routing->gen('with_prefix_and_postfix', array('param' => $this->routing->createValue('foo/bar', false)->setPrefix('-')->setPostfix('/')));
 		$this->assertEquals('/with_prefix_and_postfix-foo/bar/', $url);
 		
-		$url = $this->routing->gen('with_prefix_and_postfix', array('param' => $this->routing->createValue('foo/bar', false)->setPrefix('/')->setPostfix('/', true)));
+		$url = $this->routing->gen('with_prefix_and_postfix', array('param' => $this->routing->createValue('foo/bar', false)->setPrefix('/')->setPostfix('/')->setPostfixNeedsEncoding(true)));
 		$this->assertEquals('/with_prefix_and_postfix/foo/bar%2F', $url);
 		
-		$url = $this->routing->gen('with_prefix_and_postfix', array('param' => $this->routing->createValue('foo/bar', false)->setPrefix('/', true)->setPostfix('/', true)));
+		$url = $this->routing->gen('with_prefix_and_postfix', array('param' => $this->routing->createValue('foo/bar', false)->setPrefix('/')->setPrefixNeedsEncoding(true)->setPostfix('/')->setPostfixNeedsEncoding(true)));
 		$this->assertEquals('/with_prefix_and_postfix%2Ffoo/bar%2F', $url);
 		
 		
@@ -304,9 +304,9 @@ class AgaviWebRoutingTest extends AgaviPhpUnitTestCase
 	public function testGenWithObjectRoutingValue()
 	{
 		$fi = new SplFileInfo(__FILE__);
-		$url = $this->routing->gen('with_param', array('number' => new AgaviRoutingValue($fi)));
+		$url = $this->routing->gen('with_param', array('number' => $this->routing->createValue($fi)));
 		$this->assertEquals('/withparam/' . rawurlencode(__FILE__), $url);
-		$url = $this->routing->gen('with_param', array('number' => new AgaviRoutingValue($fi, false)));
+		$url = $this->routing->gen('with_param', array('number' => $this->routing->createValue($fi, false)));
 		$this->assertEquals('/withparam/' . __FILE__, $url);
 	}
 	
@@ -317,10 +317,10 @@ class AgaviWebRoutingTest extends AgaviPhpUnitTestCase
 		$url = $this->routing->gen('callbacks.object', array('value' => $fi));
 		$this->assertEquals('/callbacks/foo/' . rawurlencode(dirname(__FILE__)), $url);
 		
-		$url = $this->routing->gen('callbacks.object', array('value' => new AgaviRoutingValue($fi)));
+		$url = $this->routing->gen('callbacks.object', array('value' => $this->routing->createValue($fi)));
 		$this->assertEquals('/callbacks/foo/' . rawurlencode(dirname(__FILE__)), $url);
 		
-		$url = $this->routing->gen('callbacks.object', array('value' => new AgaviRoutingValue($fi, false)));
+		$url = $this->routing->gen('callbacks.object', array('value' => $this->routing->createValue($fi, false)));
 		$this->assertEquals('/callbacks/foo/' . dirname(__FILE__), $url);
 	}
 	

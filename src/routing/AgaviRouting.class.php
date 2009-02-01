@@ -295,7 +295,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 					$val = $value;
 				}
 
-				$value = $this->createValue($val, true)->setPrefix($pre, false)->setPostfix($post, false);
+				$value = $this->createValue($val)->setPrefix($pre)->setPostfix($post);
 			}
 		}
 
@@ -315,7 +315,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 
 			if(!isset($options['defaults'][$name]) && ($param['pre'] || $param['val'] || $param['post'])) {
 				unset($param['is_optional']);
-				$options['defaults'][$name] = $this->createValue($param['val'], true)->setPrefix($param['pre'], false)->setPostfix($param['post'], false);
+				$options['defaults'][$name] = $this->createValue($param['val'])->setPrefix($param['pre'])->setPostfix($param['post']);
 			}
 		}
 
@@ -606,11 +606,11 @@ abstract class AgaviRouting extends AgaviParameterHolder
 										// clone the default value so pre and postfix are preserved
 										$routingValue = clone $myDefaults[$key];
 										// BC: When setting a value in a callback it was supposed to be already encoded
-										$routingValue->setValue($value, false);
+										$routingValue->setValue($value)->setValueNeedsEncoding(false);
 									} else {
 										// $myDefaults[$key] can only be an array at this stage
-										$routingValue->setPrefix($myDefaults[$key]['pre'], false);
-										$routingValue->setPostfix($myDefaults[$key]['post'], false);
+										$routingValue->setPrefix($myDefaults[$key]['pre'])->setPrefixNeedsEncoding(false);
+										$routingValue->setPostfix($myDefaults[$key]['post'])->setPostfixNeedsEncoding(false);
 									}
 								}
 								$value = $routingValue;
@@ -854,10 +854,10 @@ abstract class AgaviRouting extends AgaviParameterHolder
 				// update the pre- and postfix from the default if they are not set in the routing value
 				$default = $defaultParams[$name];
 				if(!$param->hasPrefix() && $default->hasPrefix()) {
-					$param->setPrefix($default->getPrefix(), $default->getPrefixNeedsEncoding());
+					$param->setPrefix($default->getPrefix());
 				}
 				if(!$param->hasPostfix() && $default->hasPostfix()) {
-					$param->setPostfix($default->getPostfix(), $default->getPostfixNeedsEncoding());
+					$param->setPostfix($default->getPostfix());
 				}
 			}
 		}
@@ -923,7 +923,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 			foreach($parameters as &$param) {
 				if(!$param instanceof AgaviRoutingValue) {
 					if($param !== null) {
-						$param = $this->createValue($param, true);
+						$param = $this->createValue($param);
 					}
 				} else {
 					// make sure the routing value the user passed to gen() is not modified

@@ -21,7 +21,7 @@ class GenObjectRoutingCallback extends AgaviRoutingCallback
 			if($this->getParameter('set_as_string', false)) {
 				$userParameters['value'] = $userParameters['value']->getValue()->getPath();
 			} else {
-				$userParameters['value']->setValue($userParameters['value']->getValue()->getPath(), $userParameters['value']->getValueNeedsEncoding());
+				$userParameters['value']->setValue($userParameters['value']->getValue()->getPath());
 			}
 		}
 		
