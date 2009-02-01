@@ -397,7 +397,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 	 * Retrieves the routes which need to be taken into account when generating
 	 * the reverse string of a routing to be generated.
 	 *
-	 * @param      string  The route name(s, delimited by +) to calculate.
+	 * @param      string The route name(s, delimited by +) to calculate.
 	 *
 	 * @return     array A list of names of affected routes.
 	 *
@@ -567,7 +567,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 						if(!$callbackInstance->onGenerate($defaultsCopy, $paramsCopy, $options)) {
 							continue 2;
 						}
-						// find all params changed in the callback
+						// find all params that were changed by the callback
 						$diff = array();
 						foreach($paramsCopy as $key => $value) {
 							if(!array_key_exists($key, $changedParamsCopy) || $changedParamsCopy[$key] !== $value) {
@@ -596,8 +596,8 @@ abstract class AgaviRouting extends AgaviParameterHolder
 					if(count($diff)) {
 						$diffKeys = array_keys($diff);
 						foreach($diffKeys as $key) {
-							// do NEVER assign this value as reference, php will completely go bonkers if we use a reference here (it actually marks the entry in the array as reference and hence in a callback when modifying the value in $params it actually gets modified in $paramsCopy as well)
-							// if the callback was a legacy callback, the array to read the values from is different (since everything was casted to strings before running the callback)
+							// NEVER assign this value as a reference, as PHP will go completely bonkers if we use a reference here (it marks the entry in the array as a reference, so modifying the value in $params in a callback means it gets modified in $paramsCopy as well)
+							// if the callback was a legacy callback, the array to read the values from is different (since everything was cast to strings before running the callback)
 							$value = $isLegacyCallback ? $paramsCopy[$key] : $params[$key];
 							if($value !== null && !($value instanceof AgaviIRoutingValue)) {
 								$routingValue = $this->createValue($value, false);
@@ -802,9 +802,9 @@ abstract class AgaviRouting extends AgaviParameterHolder
 	 */
 	protected function removeMatchingDefaults(array $options, array $finalParams, array $availableParams, array $optionalParams, array $defaultParams)
 	{
+		// if omit_defaults is set, we should not put optional values into the result string in case they are equal to their default value - even if they were given as a param
 		if(!empty($options['omit_defaults'])) {
-			// remove the optional parameters from the right to the left from the pattern when they match
-			// their default
+			// remove the optional parameters from the pattern beginning from right to the left, in case they are equal to their default
 			foreach(array_reverse($availableParams) as $name) {
 				if(isset($optionalParams[$name])) {
 					// the isset() could be replaced by
