@@ -392,22 +392,30 @@ class AgaviWebRequest extends AgaviRequest
 		unset($parts);
 
 		if($this->getMethod() == $methods['PUT']) {
-			// PUT. We now gotta set a flag for that and populate $_FILES manually
 
-			$putFile = tempnam(AgaviConfig::get('core.cache_dir'), "PUTUpload_");
-			$size = stream_copy_to_stream(fopen("php://input", "rb"), $handle = fopen($putFile, "wb"));
-			fclose($handle);
+			if(isset($_SERVER['CONTENT_TYPE']) && $this->getParameter('http_put_decode_urlencoded', true) && preg_match('#^application/x-www-form-urlencoded(;[^;]+)*?$#', $_SERVER['CONTENT_TYPE'])) {
+				// urlencoded data was sent, we can decode that
+				parse_str(file_get_contents('php://input'), $_POST);
+				if(function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
+					$_POST = self::clearMagicQuotes($_POST);
+				}
+			} else {
+				// some other data via PUT. we need to populate $_FILES manually
+				$putFile = tempnam(AgaviConfig::get('core.cache_dir'), "PUTUpload_");
+				$size = stream_copy_to_stream(fopen("php://input", "rb"), $handle = fopen($putFile, "wb"));
+				fclose($handle);
 
-			$_FILES = array(
-				$this->getParameter('http_put_file_name', 'put_file') => array(
-					'name' => $putFile,
-					'type' => isset($_SERVER['CONTENT_TYPE']) ? $_SERVER['CONTENT_TYPE'] : 'application/octet-stream',
-					'size' => $size,
-					'tmp_name' => $putFile,
-					'error' => UPLOAD_ERR_OK,
-					'is_uploaded_file' => false,
-				)
-			);
+				$_FILES = array(
+					$this->getParameter('http_put_file_name', 'put_file') => array(
+						'name' => $putFile,
+						'type' => isset($_SERVER['CONTENT_TYPE']) ? $_SERVER['CONTENT_TYPE'] : 'application/octet-stream',
+						'size' => $size,
+						'tmp_name' => $putFile,
+						'error' => UPLOAD_ERR_OK,
+						'is_uploaded_file' => false,
+					)
+				);
+			}
 		}
 
 		$headers = array();
