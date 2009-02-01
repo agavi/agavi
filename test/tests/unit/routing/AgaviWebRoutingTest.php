@@ -324,6 +324,34 @@ class AgaviWebRoutingTest extends AgaviPhpUnitTestCase
 		$this->assertEquals('/callbacks/foo/' . dirname(__FILE__), $url);
 	}
 	
+	public function testRoutingValue()
+	{
+		$rv = $this->routing->createValue('foo');
+		
+		$this->assertEquals('foo', $rv->getValue());
+		$this->assertTrue('foo' == $rv);
+		
+		$rv = $this->routing->createValue('foo', true);
+		$this->assertEquals('foo', $rv->getValue());
+		$this->assertTrue('foo' == $rv);
+		
+		$rv = $this->routing->createValue('foo', false);
+		$this->assertEquals('foo', $rv->getValue());
+		$this->assertTrue('foo' == $rv);
+		
+		$rv = $this->routing->createValue('foo/bar');
+		$this->assertEquals('foo/bar', $rv->getValue());
+		$this->assertTrue('foo%2Fbar' == $rv);
+		
+		$rv = $this->routing->createValue('foo/bar', true);
+		$this->assertEquals('foo/bar', $rv->getValue());
+		$this->assertTrue('foo%2Fbar' == $rv);
+		
+		$rv = $this->routing->createValue('foo/bar', false);
+		$this->assertEquals('foo/bar', $rv->getValue());
+		$this->assertTrue('foo%2Fbar' == $rv);
+	}
+	
 	public function testAbsoluteUrl()
 	{
 		$url = $this->routing->gen('index', array(), array('relative' => false));
