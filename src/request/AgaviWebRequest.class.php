@@ -416,6 +416,22 @@ class AgaviWebRequest extends AgaviRequest
 					)
 				);
 			}
+		} elseif($this->getMethod() == $methods['POST'] && (!isset($_SERVER['CONTENT_TYPE']) || (isset($_SERVER['CONTENT_TYPE']) && !preg_match('#^(application/x-www-form-urlencoded|multipart/form-data)(;[^;]+)*?$#', $_SERVER['CONTENT_TYPE'])))) {
+			// POST, but no regular urlencoded data or file upload. lets put the request payload into a file
+			$postFile = tempnam(AgaviConfig::get('core.cache_dir'), "POSTUpload_");
+			$size = stream_copy_to_stream(fopen("php://input", "rb"), $handle = fopen($postFile, "wb"));
+			fclose($handle);
+
+			$_FILES = array(
+				$this->getParameter('http_post_file_name', 'post_file') => array(
+					'name' => $postFile,
+					'type' => isset($_SERVER['CONTENT_TYPE']) ? $_SERVER['CONTENT_TYPE'] : 'application/octet-stream',
+					'size' => $size,
+					'tmp_name' => $postFile,
+					'error' => UPLOAD_ERR_OK,
+					'is_uploaded_file' => false,
+				)
+			);
 		}
 
 		$headers = array();
