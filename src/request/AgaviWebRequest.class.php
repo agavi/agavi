@@ -432,7 +432,7 @@ class AgaviWebRequest extends AgaviRequest
 			$_FILES = array(
 				$this->getParameter('http_put_file_name', 'put_file') => array(
 					'name' => $putFile,
-					'type' => isset($_SERVER['HTTP_CONTENT_TYPE']) ? $_SERVER['HTTP_CONTENT_TYPE'] : 'application/octet-stream',
+					'type' => isset($_SERVER['CONTENT_TYPE']) ? $_SERVER['CONTENT_TYPE'] : 'application/octet-stream',
 					'size' => $size,
 					'tmp_name' => $putFile,
 					'error' => UPLOAD_ERR_OK,
