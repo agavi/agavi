@@ -17,7 +17,7 @@ class GenObjectRoutingCallback extends AgaviRoutingCallback
 	 */
 	public function onGenerate(array $defaultParameters, array &$userParameters, array &$userOptions)
 	{
-		if(isset($userParameters['value']) && $userParameters['value'] instanceof AgaviRoutingValue) {
+		if(isset($userParameters['value']) && $userParameters['value'] instanceof AgaviIRoutingValue) {
 			if($this->getParameter('set_as_string', false)) {
 				$userParameters['value'] = $userParameters['value']->getValue()->getPath();
 			} else {

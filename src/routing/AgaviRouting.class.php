@@ -550,12 +550,12 @@ abstract class AgaviRouting extends AgaviParameterHolder
 						// convert all routing values to strings so legacy callbacks don't break
 						$defaultsCopy = $myDefaults;
 						foreach($paramsCopy as &$param) {
-							if($param instanceof AgaviRoutingValue) {
+							if($param instanceof AgaviIRoutingValue) {
 								$param = $param->getValue();
 							}
 						}
 						foreach($defaultsCopy as &$default) {
-							if($default instanceof AgaviRoutingValue) {
+							if($default instanceof AgaviIRoutingValue) {
 								$default = array(
 									'pre' => $default->getPrefix(),
 									'val' => $default->getValue(),
@@ -599,10 +599,10 @@ abstract class AgaviRouting extends AgaviParameterHolder
 							// do NEVER assign this value as reference, php will completely go bonkers if we use a reference here (it actually marks the entry in the array as reference and hence in a callback when modifying the value in $params it actually gets modified in $paramsCopy as well)
 							// if the callback was a legacy callback, the array to read the values from is different (since everything was casted to strings before running the callback)
 							$value = $isLegacyCallback ? $paramsCopy[$key] : $params[$key];
-							if($value !== null && !($value instanceof AgaviRoutingValue)) {
+							if($value !== null && !($value instanceof AgaviIRoutingValue)) {
 								$routingValue = $this->createValue($value, false);
 								if(isset($myDefaults[$key])) {
-									if($myDefaults[$key] instanceof AgaviRoutingValue) {
+									if($myDefaults[$key] instanceof AgaviIRoutingValue) {
 										// clone the default value so pre and postfix are preserved
 										$routingValue = clone $myDefaults[$key];
 										// BC: When setting a value in a callback it was supposed to be already encoded
@@ -769,7 +769,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 					$finalParams[$name] = $param;
 				} else {
 					if(isset($defaultParams[$name])) {
-						if($param === null || ($param instanceof AgaviRoutingValue && $param->getValue() === null)) {
+						if($param === null || ($param instanceof AgaviIRoutingValue && $param->getValue() === null)) {
 							// the user set the parameter to null, to signal that the default value should be used
 							$param = clone $defaultParams[$name];
 						}
@@ -886,7 +886,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 	/**
 	 * Encodes a single parameter.
 	 * 
-	 * @param      mixed A AgaviRoutingValue object or a string
+	 * @param      mixed An AgaviIRoutingValue object or a string
 	 * 
 	 * @return     string The encoded parameter
 	 * 
@@ -895,7 +895,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 	 */
 	protected function encodeParameter($parameter)
 	{
-		if($parameter instanceof AgaviRoutingValue) {
+		if($parameter instanceof AgaviIRoutingValue) {
 			return sprintf('%s%s%s', 
 				$parameter->getPrefixNeedsEncoding()  ? $this->escapeOutputParameter($parameter->getPrefix())  : $parameter->getPrefix(),
 				$parameter->getValueNeedsEncoding()   ? $this->escapeOutputParameter($parameter->getValue())   : $parameter->getValue(),
@@ -907,11 +907,11 @@ abstract class AgaviRouting extends AgaviParameterHolder
 	}
 	
 	/**
-	 * Converts all members of an array to AgaviRoutingValues.
+	 * Converts all members of an array to AgaviIRoutingValues.
 	 * 
 	 * @param      array The parameters
 	 * 
-	 * @return     array An array containing all parameters as AgaviRoutingValues
+	 * @return     array An array containing all parameters as AgaviIRoutingValues
 	 * 
 	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
 	 * @since      1.0.0
@@ -921,7 +921,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 		if(count($parameters)) {
 			// make sure everything in $parameters is a routing value
 			foreach($parameters as &$param) {
-				if(!$param instanceof AgaviRoutingValue) {
+				if(!$param instanceof AgaviIRoutingValue) {
 					if($param !== null) {
 						$param = $this->createValue($param);
 					}
@@ -1572,12 +1572,12 @@ abstract class AgaviRouting extends AgaviParameterHolder
 	}
 	
 	/**
-	 * Creates and initializes a new AgaviRoutingValue.
+	 * Creates and initializes a new AgaviIRoutingValue.
 	 * 
-	 * @param      mixed The value of the returned routing value
-	 * @param      bool  Whether the $value needs to be encoded
+	 * @param      mixed The value of the returned routing value.
+	 * @param      bool  Whether the $value needs to be encoded.
 	 * 
-	 * @return     AgaviRoutingValue
+	 * @return     AgaviIRoutingValue
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      1.0.0
