@@ -20,6 +20,7 @@ CHG: Rename AgaviTranslationManager::getCurrentTimeZone() to getDefaultTimeZone(
 CHG: Remove unused property AgaviOperatorValidator::$errors (#987) (David)
 CHG: Allow arbitrary number of fractional seconds for parsing date formats (#977) (Dominik)
 
+FIX: AgaviWebRequest HTTP PUT support ignores Content-Type header (#1014) (David)
 FIX: Project configuration system does not reflect user-specified template extension in configuration (#1003) (Noah)
 FIX: Project configuration system does not copy all templates according to user-specified extension (#1002) (Noah)
 FIX: Several date classes are lacking type hints in method signatures (#997) (Dominik)
