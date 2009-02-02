@@ -27,7 +27,7 @@
  *
  * @version    $Id$
  */
-abstract class AgaviRoutingCallback
+abstract class AgaviRoutingCallback extends AgaviParameterHolder
 {
 	/**
 	 * @var        AgaviContext An AgaviContext instance.

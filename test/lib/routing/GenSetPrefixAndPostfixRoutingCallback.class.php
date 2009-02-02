@@ -4,7 +4,7 @@ class GenSetPrefixAndPostfixRoutingCallback extends AgaviRoutingCallback
 {
 	public function onGenerate(array $defaultParameters, array &$userParameters, array &$userOptions)
 	{
-		$userParameters['number'] = array('pre' => 'prefix-', 'val' => 'value', 'post' => '-postfix');
+		$userParameters['number'] = $this->context->getRouting()->createValue('value')->setPrefix('prefix-')->setPostfix('-postfix');
 		return true;
 	}
 }

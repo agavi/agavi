@@ -53,6 +53,8 @@
 				<route name=".gen_expect_incoming_parameter_is_encoded_and_can_be_decoded" pattern="^/(string:\s+)" callback="GenDecodeParameterCallback" />
 				
 				<route name=".ticket_695" pattern="foo" source="bar" callback="TestTicket695RoutingCallback" />
+				
+				<route name=".object" pattern="^/foo/(value:.+)$" callback="GenObjectRoutingCallback" />
 			</route>
 			
 			<route name="test_ticket_277" pattern="/test_ticket_277" module="%actions.login_module%" action="%actions.login_action%">

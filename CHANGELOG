@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 1.0.0 beta8 (January ??, 2009)
 ------------------------------
 
+ADD: AgaviController::dispatch() should accept an AgaviExecutionContainer as optional second argument (#1012) (David)
 ADD: Allow relative min and max values using strtotime syntax in AgaviDateTimeValidator (#1018) (Dominik)
 ADD: Support for arbitrary HTTP POST Content Types (#1015) (David)
 ADD: Automatically decode HTTP PUT payload into request parameters for application/x-www-form-urlencoded Content-Type in AgaviWebRequest (#1016) (David)
@@ -17,6 +18,8 @@ ADD: Optionally set 'secure' flag on session cookies automatically (#981) (David
 ADD: Add AgaviWebRequest::isHttps() convenience method (#980) (David)
 ADD: Allow setting of session save path in AgaviSessionStorage (#979) (David)
 
+CHG: Rewrite Routing (#448) (Dominik, David, Felix)
+CHG: Make populating of module and action names into request data configurable and remove overwriting behavior (#812) (David)
 CHG: Polish the Sample App (#998) (David)
 CHG: Update timezone database to 2009a (#1013) (David)
 CHG: Steamline date formatting and parsing behaviors when using timezones (#964) (Dominik, David, Felix)

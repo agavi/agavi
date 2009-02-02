@@ -75,9 +75,14 @@ class AgaviRoutingConfigHandler extends AgaviXmlConfigHandler
 			}
 		}
 
-		$code = '$this->importRoutes(' . var_export($routing->exportRoutes(), true) . ');';
-
-		return $this->generate($code, $document->documentURI);
+		// we cannot do this:
+		// $code = '$this->importRoutes(unserialize(' . var_export(serialize($routing->exportRoutes()), true) . '));';
+		// return $this->generate($code, $document->documentURI);
+		// because var_export() incorrectly escapes null-byte sequences as \000, which results in a corrupted string, and unserialize() doesn't like corrupted strings
+		// this was fixed in PHP 5.2.6, but we're compatible with 5.2.0+
+		// see http://bugs.php.net/bug.php?id=37262 and http://bugs.php.net/bug.php?id=42272
+		
+		return serialize($routing->exportRoutes());
 	}
 
 	/**
@@ -100,7 +105,6 @@ class AgaviRoutingConfigHandler extends AgaviXmlConfigHandler
 			if($route->hasAttribute('cut'))						$opts['cut']					= AgaviToolkit::literalize($route->getAttribute('cut'));
 			if($route->hasAttribute('stop'))					$opts['stop']					= AgaviToolkit::literalize($route->getAttribute('stop'));
 			if($route->hasAttribute('name'))					$opts['name']					= $route->getAttribute('name');
-			if($route->hasAttribute('callback'))			$opts['callback']			= $route->getAttribute('callback');
 			if($route->hasAttribute('source'))				$opts['source']				= $route->getAttribute('source');
 			if($route->hasAttribute('constraint'))		$opts['constraint']		= array_map('trim', explode(' ', trim($route->getAttribute('constraint'))));
 			// values which will be set when the route matched
@@ -119,6 +123,16 @@ class AgaviRoutingConfigHandler extends AgaviXmlConfigHandler
 			if($route->has('defaults')) {
 				foreach($route->get('defaults') as $default) {
 					$opts['defaults'][$default->getAttribute('for')] = $default->getValue();
+				}
+			}
+
+			if($route->has('callbacks')) {
+				$opts['callbacks'] = array();
+				foreach($route->get('callbacks') as $callback) {
+					$opts['callbacks'][] = array(
+						'class' => $callback->getAttribute('class'),
+						'parameters' => $callback->getAgaviParameters(),
+					);
 				}
 			}
 

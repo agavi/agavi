@@ -97,6 +97,7 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	public function __construct()
 	{
 		$this->setParameters(array(
+			'use_module_action_parameters' => false,
 			'module_accessor' => 'module',
 			'action_accessor' => 'action',
 			'request_data_holder_class' => 'AgaviRequestDataHolder',

@@ -9,7 +9,7 @@ class SampleRouting extends AgaviRouting
 
 	public function loadTestConfig($cfg, $ctx = null)
 	{
-		include(AgaviConfigCache::checkConfig($cfg, $ctx));
+		$this->importRoutes(unserialize(file_get_contents(AgaviConfigCache::checkConfig($cfg, $ctx))));
 	}
 }
 
@@ -126,6 +126,7 @@ class RoutingTest extends AgaviTestCase
 		$r->loadTestConfig(AgaviConfig::get('core.config_dir') . '/tests/routing_simple.xml', 'test1');
 
 		$rq = $r->getContext()->getRequest();
+		$rq->setParameter('use_module_action_parameters', true);
 		$rd = $rq->getRequestData();
 
 		$rd->clearParameters();

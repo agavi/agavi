@@ -59,6 +59,28 @@
 		</xs:choice>
 	</xs:group>
 
+	<xs:complexType name="callback">
+		<xs:sequence>
+			<xs:group ref="envelope_1_0:parameters" />
+		</xs:sequence>
+		<xs:attribute name="class" type="types_1_0:identifier" />
+	</xs:complexType>
+	
+	<xs:complexType name="callbacks">
+		<xs:sequence>
+			<xs:element name="callback" type="callback" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:group name="callbacks">
+		<xs:choice>
+			<xs:element name="callbacks" type="callbacks"
+			            minOccurs="0" />
+			<xs:element name="callback" type="callback"
+			            minOccurs="0" maxOccurs="unbounded"/>
+		</xs:choice>
+	</xs:group>
+
 	<!-- Routes -->
 
 	<xs:complexType name="route">
@@ -71,13 +93,13 @@
 			<xs:group ref="ignores" />
 			<xs:group ref="defaults" />
 			<xs:group ref="routes" />
+			<xs:group ref="callbacks" />
 		</xs:sequence>
 		<xs:attribute name="name" type="route_name" />
 		<xs:attribute name="pattern" type="xs:string" use="required" />
 		<xs:attribute name="imply" type="xs:string" />
 		<xs:attribute name="cut" type="xs:string" />
 		<xs:attribute name="stop" type="xs:string" />
-		<xs:attribute name="callback" type="types_1_0:identifier" />
 		<xs:attribute name="source" type="xs:string" />
 		<xs:attribute name="constraint" type="xs:string" />
 

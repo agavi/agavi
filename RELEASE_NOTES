@@ -46,6 +46,30 @@ You can also customize these aspects:
 This allows you to put all the files for a feature into a single subdirectory, instead of having the separate files cluttered over action/, template/, view/ etc. subfolders inside the module directory.
 Ticket #668 has more details and an example.
 
+Routing
+-------
+Large parts of the routing have been rewritten; gen() and execute() have seen the most changes.
+
+Most notably, the encoding of values in the result string has been moved to the very end of the generation process, which has a bunch of nice benefits:
+- gen() can now handle objects and arrays as input parameters (__toString() is called on objects unless callbacks do something something more intelligent)
+- gen() now wraps all values in AgaviRoutingValue objects, which hold encoding information for the value, as well as for the prefix and postfix (which can now be set this way, too). The object has a fluent interface, and a new instance for use in gen() can be created by calling AgaviRouting::createValue()
+- callbacks don't have to do something as stupid as rawurldecode() on a value that should appear literally anymore; instead, it's sufficient to call the routing value's setValueNeedsEncoding() method and passing false.
+
+Furthermore, gen() accepts strings in the form of "+rss" and "-locale", i.e. with leading "+" or "-" signs, in which case this modification will be applied to the list of incoming matched routes (think of it as null+"rss").
+
+This new implementation should be backwards compatible in virtually all cases, especially since AgaviRoutingValue has a __toString() overload now that returns the encoded representation of its value. Setting literal strings into parameter arrays still works as before, but using the routing value object is of course recommended. If you run into BC problems, try implementing the AgaviILegacyRoutingCallback interface in your callback class.
+
+Multiple callbacks per route are now supported. The new configuration schema uses <callback> elements inside the route instead of the "callback" attribute on the <route> element itself. Every callback definition can hold <parameter>s, which are then available inside the callback object (AgaviRoutingCallback now extends AgaviParameterHolder), which should make it easier to write generic and re-usable callbacks.
+Callbacks are run in the order they are defined; once an onMatched() callback returns false, onNotMatched() will be called on subsequent callbacks of that route.
+
+Inside a callback's onMatched() and onNotMatched() methods it is now possible to perform any kind of modifications on the execution container directly. Specifically, it is recommended you use AgaviExecutionContainer::setModuleName() and AgaviExecutionContainer::setActionName() inside callbacks instead of modifying the request parameter array from now on, because the "module" and "action" parameters might not be available anymore depending on the setting inside the application (see "Request" below).
+The execution container instance passed to the callback now reflects the actual current state of the routing execution, so checks can be performed against values on the container, and containers can be mutated (as mentioned above). As before, developers are advised not to perform any changes on containers or request data in onMatched() methods if the method will return false.
+
+Request
+-------
+By default, the old "module" and "action" request data parameters are not assigned or used anymore, and also do not receive special treatment by the validation system.
+To re-enable their use and availability, set the configuration parameter "use_module_action_parameters" to true for the request implementation in factories.xml.
+
 Project development environment
 -------------------------------
 Agavi 1.0 introduces a new environment for creating and managing Agavi-based projects. This environment effectively replaces the older agavi script and Phing build environment. The new environment is also based on Phing. It adds a few useful features:
