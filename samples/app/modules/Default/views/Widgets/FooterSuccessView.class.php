@@ -23,6 +23,7 @@ class Default_Widgets_FooterSuccessView extends AgaviSampleAppDefaultBaseView
 		
 		$this->setAttribute('locales', $this->tm->getAvailableLocales());
 		$this->setAttribute('current_locale', $this->tm->getCurrentLocaleIdentifier());
+		$this->setAttribute('agavi_plug', AgaviConfig::get('agavi.release'));
 	}
 
 }
