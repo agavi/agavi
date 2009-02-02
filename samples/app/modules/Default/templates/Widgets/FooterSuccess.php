@@ -1,10 +1,9 @@
 <div id="footer">
 	<p>
 <?php
-$availableLocales = $tm->getAvailableLocales();
-echo $tm->__('Alternative language:', 'Alternative languages:', count($availableLocales), 'default.layout');
-foreach($availableLocales as $availableLocale): ?>
-		<a href="<?php echo $ro->gen(null, array('locale' => $availableLocale['identifier'])); ?>" hreflang="<?php echo $availableLocale['identifier']; ?>"<?php if($availableLocale['identifier'] == $tm->getCurrentLocaleIdentifier()): ?> style="font-weight:bold"<?php endif;?>><?php echo htmlspecialchars($availableLocale['parameters']['description']); ?></a>
+echo $tm->__('Alternative language:', 'Alternative languages:', count($t['locales']), 'default.layout');
+foreach($t['locales'] as $locale): ?>
+		<a href="<?php echo $ro->gen(null, array('locale' => $locale['identifier'])); ?>" hreflang="<?php echo $locale['identifier']; ?>"<?php if($locale['identifier'] == $t['current_locale']): ?> style="font-weight:bold"<?php endif;?>><?php echo htmlspecialchars($locale['parameters']['description']); ?></a>
 <?php endforeach; ?>
 	</p>
 	<p>Copyright © 2005-2009 The Agavi Project</p>

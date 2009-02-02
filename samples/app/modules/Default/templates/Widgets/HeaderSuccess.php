@@ -1,5 +1,5 @@
 <div id="header">
-	<p class="runin"><?php echo $tm->_d($tm->createCalendar()); ?></p>
+	<p class="runin"><?php echo $tm->_d(time()); ?></p>
 <?php if($us->isAuthenticated()): ?>
 	<p class="runin"><?php echo $tm->_('You are logged in.', 'default.layout'); ?> <a href="<?php echo $ro->gen('logout'); ?>"><?php echo $tm->_('Log Out', 'default.layout'); ?></a></p>
 <?php endif; ?>

@@ -1,14 +1,8 @@
 <div id="menu">
 	<h3><?php echo $tm->_('Menu', 'default.layout'); ?></h3>
 	<ul>
-		<li><a href="<?php echo $ro->gen('index'); ?>"><?php echo $tm->_('Home', 'default.menu'); ?></a></li>
-	<?php if(!$us->isAuthenticated()): ?>
-		<li><a href="<?php echo $ro->gen('login'); ?>"><?php echo $tm->_('Login', 'default.menu'); ?></a></li>
-	<?php endif; ?>
-		<li><a href="<?php echo $ro->gen('confidential.secret'); ?>"><?php echo $tm->_('A Secure Action', 'default.menu'); ?></a></li>
-		<li><a href="<?php echo $ro->gen('confidential.topsecret'); ?>"><?php echo $tm->_('Another Secure Action', 'default.menu'); ?></a></li>
-		<li><a href="<?php echo $ro->gen('asdjashdasd'); ?>" onclick="return alert('<?php echo $tm->_('You will now be redirected to an invalid URL. If no rewrite rules are in place, this means you will see a standard 404 page of your web server, unless you configured an ErrorDocument 404 or some similar setting. If rewrite rules are in place (i.e. no index.php part in the URL), you will be shown the Agavi 404 document. This is correct and expected behavior.', 'default.menu'); ?>');"><?php echo $tm->_('Call invalid URL', 'default.menu'); ?></a></li>
-		<li><a href="<?php echo $ro->gen('disabled'); ?>"><?php echo $tm->_('Try Disabled Module', 'default.menu'); ?></a></li>
-		<li><a href="<?php echo $ro->gen('products.index'); ?>"><b><?php echo $tm->_('Search Engine Spam', 'default.menu'); ?></b></a></li>
+<?php foreach($t['items'] as $url => $description): ?>
+		<li><a href="<?php echo $url; ?>"><?php echo htmlspecialchars($description); ?></a></li>
+<?php endforeach; ?>
 	</ul>
 </div>

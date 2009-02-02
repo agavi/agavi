@@ -20,6 +20,9 @@ class Default_Widgets_FooterSuccessView extends AgaviSampleAppDefaultBaseView
 	{
 		// will automatically load "slot" layout for us
 		$this->setupHtml($rd);
+		
+		$this->setAttribute('locales', $this->tm->getAvailableLocales());
+		$this->setAttribute('current_locale', $this->tm->getCurrentLocaleIdentifier());
 	}
 
 }
