@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $t['_locale']['language'] ?>" lang="<?php echo $t['_locale']['language']; ?>"<?php if($t['_locale']['rtl']): ?> dir="rtl"<?php endif; ?>>
 	<head>
 		<meta http-equiv="Content-Type" content="<?php echo $t['_content_type']; ?>" />
-		<title><?php echo $tm->_('Default Agavi Module', 'default.layout'); ?></title>
+		<title><?php echo $tm->_('Agavi Sample Application', 'default.layout'); ?></title>
 		<base href="<?php echo $t['_base_href']; ?>" />
 		<link rel="stylesheet" type="text/css" href="css/style.css" />
 	</head>
