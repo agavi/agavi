@@ -33,8 +33,8 @@ class Products_Product_ViewActionTest extends AgaviActionTestCase
 	public function __construct($name = NULL, array $data = array(), $dataName = '')
 	{
 		parent::__construct($name, $data, $dataName);
-		$this->actionName = 'Products/Product/View';
-		$this->moduleName = 'Default';
+		$this->actionName = 'Product/View';
+		$this->moduleName = 'Products';
 	}
 	
 	/**
@@ -47,7 +47,7 @@ class Products_Product_ViewActionTest extends AgaviActionTestCase
 		$this->runAction();
 		$this->assertValidatedArgument('id');
 		$this->assertViewNameEquals('Success');
-		$this->assertViewModuleNameEquals('Default');
+		$this->assertViewModuleNameEquals('Products');
 		$this->assertContainerAttributeExists('product');
 		$this->assertEquals($price, $this->getAttribute('product')->getPrice());
 	}
@@ -74,7 +74,7 @@ class Products_Product_ViewActionTest extends AgaviActionTestCase
 		$this->runAction();
 		$this->assertValidatedArgument('id');
 		$this->assertViewNameEquals('Error');
-		$this->assertViewModuleNameEquals('Default');
+		$this->assertViewModuleNameEquals('Products');
 	}
 	
 	public function testErrorViewFailedProductValidation()
@@ -85,7 +85,7 @@ class Products_Product_ViewActionTest extends AgaviActionTestCase
 		$this->assertValidatedArgument('id');
 		$this->assertFailedArgument('id');
 		$this->assertViewNameEquals('Error');
-		$this->assertViewModuleNameEquals('Default');
+		$this->assertViewModuleNameEquals('Products');
 	}
 	
 	public function errorViewInvalidProductsData()

@@ -7,8 +7,8 @@ class Products_Product_ViewSuccessViewTest extends AgaviViewTestCase
 	{
 		parent::__construct($name, $data, $dataName);
 		// FIXME: the underlying issue must be solved
-		$this->actionName = 'Products/Product/View';
-		$this->moduleName = 'Default';
+		$this->actionName = 'Product/View';
+		$this->moduleName = 'Products';
 		$this->viewName   = 'Success';
 	}
 	
