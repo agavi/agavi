@@ -15,9 +15,9 @@
 			
 			<route name="disabled" pattern="^/disabled$" module="Disabled" action="Index" />
 			
-			<route name="login" pattern="^/login" module="%actions.login_module%">
+			<route pattern="^/auth" module="%actions.login_module%">
 				<routes>
-					<route pattern="^$" action="%actions.login_action%" />
+					<route name="login" pattern="^/login$" action="%actions.login_action%" />
 					<!-- A nested route. This will match the URL "/login/logout" - matched fragments from the parent route are stripped from the URL string for child routs. -->
 					<route name="logout" pattern="^/logout$" action="Logout" />
 				</routes>
