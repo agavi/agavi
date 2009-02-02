@@ -31,9 +31,9 @@
 abstract class AgaviFlowTestCase extends AgaviPhpUnitTestCase implements AgaviIFlowTestCase
 {
 	/**
-	 * @var        AgaviRequestDataHolder the arguments to use for the dispatch
+	 * @var        string the fake routing input
 	 */
-	protected $arguments;
+	protected $input;
 	
 	/**
 	 * @var        string the name of the action to use
@@ -49,11 +49,6 @@ abstract class AgaviFlowTestCase extends AgaviPhpUnitTestCase implements AgaviIF
 	 * @var        AgaviResponse the response after the dispatch call
 	 */
 	protected $response;
-	
-	/**
-	 * @var        string the request method to use
-	 */
-	protected $method = 'read';
 	
 	/**
 	 * Constructs a test case with the given name.
@@ -75,41 +70,21 @@ abstract class AgaviFlowTestCase extends AgaviPhpUnitTestCase implements AgaviIF
 	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
 	 * @since      1.0.0 
 	 */
-	public function dispatch()
+	public function dispatch($arguments = null, $outputType = null, $requestMethod = null)
 	{
+		$_SERVER['REQUEST_URI'] = '/index.php' . $this->input;
+		$_SERVER['SCRIPT_NAME'] = '/index.php';
+		
 		$context = AgaviContext::getInstance();
 		
-		$rq = $context->getRequest();
-		$rq->setMethod($this->method);
+		$controller = $context->getController();
+		$controller->setParameter('send_response', false);
 		
-		$ma = $rq->getParameter('module_accessor');
-		$aa = $rq->getParameter('action_accessor');
+		if(!($arguments instanceof AgaviRequestDataHolder)) {
+			$arguments = $this->createRequestDataHolder(array(AgaviRequestDataHolder::SOURCE_PARAMETERS => $arguments));
+		}
 		
-		$this->getArguments()->setParameter($ma, $this->moduleName);
-		$this->getArguments()->setParameter($aa, $this->actionName);
-	
-		$ctrl = $context->getController();
-		$ctrl->setParameter('send_response', false);
-		$this->response = $ctrl->dispatch($this->getArguments());
-	}
-	
-	public function setInput($input)
-	{
-		$_SERVER['REQUEST_URI'] = '/index.php' . $input;
-		$_SERVER['SCRIPT_NAME'] = '/index.php';
-	}
-	
-	/**
-	 * set the request method to use
-	 * 
-	 * @param      string the normalized method name
-	 * 
-	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
-	 * @since      1.0.0
-	 */
-	public function setRequestMethod($method)
-	{
-		$this->method = $method;
+		$this->response = $controller->dispatch(null, $controller->createExecutionContainer($this->moduleName, $this->actionName, $arguments, $outputType, $requestMethod));
 	}
 	
 	/**
@@ -140,28 +115,6 @@ abstract class AgaviFlowTestCase extends AgaviPhpUnitTestCase implements AgaviIF
 	public function assertResponseHasNotTag($matcher, $message = '', $isHtml = true)
 	{
 		$this->assertNotTag($matcher, $this->response->getContent(), $message, $isHtml);
-	}
-
-	/**
-	 * set the argument to be used in simulating the request
-	 * 
-	 * @param      AgaviRequestDataHolder the arguments
-	 * 
-	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
-	 * @since      1.0.0
-	 */
-	protected function setArguments(AgaviRequestDataHolder $arguments)
-	{
-		$this->arguments = $arguments;
-	}
-	
-	protected function getArguments()
-	{
-		if(null === $this->arguments) {
-			$this->arguments = $this->createRequestDataHolder();
-		}
-		
-		return $this->arguments;
 	}
 
 	/**

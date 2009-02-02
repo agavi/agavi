@@ -191,17 +191,17 @@ class AgaviController extends AgaviParameterHolder
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
-	public function dispatch(AgaviRequestDataHolder $arguments = null)
+	public function dispatch(AgaviRequestDataHolder $arguments = null, AgaviExecutionContainer $container = null)
 	{
-		$container = null;
-		
 		try {
 			
 			$rq = $this->context->getRequest();
 			$rd = $rq->getRequestData();
 			
-			// match routes and assign returned initial execution container
-			$container = $this->context->getRouting()->execute();
+			if($container === null) {
+				// match routes and assign returned initial execution container
+				$container = $this->context->getRouting()->execute();
+			}
 			
 			// merge in any arguments given. they need to have precedence over what the routing found
 			if($arguments !== null) {
