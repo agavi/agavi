@@ -1,6 +1,6 @@
 <?php
 
-class Default_Products_Product_ViewErrorView extends AgaviSampleAppDefaultBaseView
+class Products_Product_ViewErrorView extends AgaviSampleAppProductsBaseView
 {
 	/**
 	 * Execute any presentation logic and set template attributes.

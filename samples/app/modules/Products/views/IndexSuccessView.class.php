@@ -1,6 +1,6 @@
 <?php
 
-class Default_Products_IndexSuccessView extends AgaviSampleAppDefaultBaseView
+class Products_IndexSuccessView extends AgaviSampleAppProductsBaseView
 {
 	public function executeHtml(AgaviRequestDataHolder $rd)
 	{

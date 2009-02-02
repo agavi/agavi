@@ -1,6 +1,6 @@
 <?php
 
-class Default_Secret2Action extends AgaviSampleAppDefaultBaseAction
+class Confidential_SecretAction extends AgaviSampleAppConfidentialBaseAction
 {
 	/**
 	 * This Action does not yet serve any Request methods.
@@ -56,18 +56,6 @@ class Default_Secret2Action extends AgaviSampleAppDefaultBaseAction
 	public function getDefaultViewName()
 	{
 		return 'Success';
-	}
-
-	public function isSecure()
-	{
-		return true;
-	}
-
-	public function getCredentials()
-	{
-		return array(
-			'photos.edit'
-		);
 	}
 }
 

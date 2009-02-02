@@ -1,7 +1,8 @@
 <?php
 
-class Default_Secret2SuccessView extends AgaviSampleAppDefaultBaseView
+class Confidential_SecretSuccessView extends AgaviSampleAppConfidentialBaseView
 {
+
 	public function executeHtml(AgaviRequestDataHolder $rd)
 	{
 		$this->setupHtml($rd);

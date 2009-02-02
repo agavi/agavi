@@ -1,6 +1,6 @@
 <?php
 
-class Default_Products_IndexAction extends AgaviSampleAppDefaultBaseAction
+class Products_IndexAction extends AgaviSampleAppProductsBaseAction
 {
 	public function execute(AgaviRequestDataHolder $rd)
 	{

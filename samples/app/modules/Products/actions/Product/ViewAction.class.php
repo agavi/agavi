@@ -1,6 +1,6 @@
 <?php
 
-class Default_Products_Product_ViewAction extends AgaviSampleAppDefaultBaseAction
+class Products_Product_ViewAction extends AgaviSampleAppProductsBaseAction
 {
 	public function executeRead(AgaviRequestDataHolder $rd)
 	{
