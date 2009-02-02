@@ -56,6 +56,21 @@
 	
 	</ae:configuration>
 	
+	<ae:configuration context="web" environment="testing.*">
+		
+		<request class="AgaviWebRequest">
+			<!-- static values for unit tests -->
+			<ae:parameter name="sources">
+				<ae:parameter name="HTTPS" />
+				<ae:parameter name="REQUEST_METHOD">GET</ae:parameter>
+				<ae:parameter name="SERVER_NAME">samples.agavi.dev</ae:parameter>
+				<ae:parameter name="SERVER_PORT">80</ae:parameter>
+				<ae:parameter name="SERVER_PROTOCOL">HTTP/1.1</ae:parameter>
+			</ae:parameter>
+		</request>
+		
+	</ae:configuration>
+	
 	
 	<ae:configuration context="console">
 		

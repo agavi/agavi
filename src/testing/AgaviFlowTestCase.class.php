@@ -66,7 +66,6 @@ abstract class AgaviFlowTestCase extends AgaviPhpUnitTestCase implements AgaviIF
 	{
 		parent::__construct($name, $data, $dataName);
 		$this->setRunTestInSeparateProcess(true);
-		$this->setArguments($this->createRequestDataHolder());
 	}
 	
 	
@@ -80,20 +79,24 @@ abstract class AgaviFlowTestCase extends AgaviPhpUnitTestCase implements AgaviIF
 	{
 		$context = AgaviContext::getInstance();
 		
-		// switch off routing
-		$context->getRouting()->setParameter('enabled', false);
-		
 		$rq = $context->getRequest();
 		$rq->setMethod($this->method);
+		
 		$ma = $rq->getParameter('module_accessor');
 		$aa = $rq->getParameter('action_accessor');
 		
-		$this->arguments->setParameter($ma, $this->moduleName);
-		$this->arguments->setParameter($aa, $this->actionName);
+		$this->getArguments()->setParameter($ma, $this->moduleName);
+		$this->getArguments()->setParameter($aa, $this->actionName);
 	
 		$ctrl = $context->getController();
 		$ctrl->setParameter('send_response', false);
-		$this->response = $ctrl->dispatch($this->arguments);
+		$this->response = $ctrl->dispatch($this->getArguments());
+	}
+	
+	public function setInput($input)
+	{
+		$_SERVER['REQUEST_URI'] = '/index.php' . $input;
+		$_SERVER['SCRIPT_NAME'] = '/index.php';
 	}
 	
 	/**
@@ -150,6 +153,15 @@ abstract class AgaviFlowTestCase extends AgaviPhpUnitTestCase implements AgaviIF
 	protected function setArguments(AgaviRequestDataHolder $arguments)
 	{
 		$this->arguments = $arguments;
+	}
+	
+	protected function getArguments()
+	{
+		if(null === $this->arguments) {
+			$this->arguments = $this->createRequestDataHolder();
+		}
+		
+		return $this->arguments;
 	}
 
 	/**
